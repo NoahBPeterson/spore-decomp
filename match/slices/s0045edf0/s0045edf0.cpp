@@ -5,23 +5,84 @@
 extern "C" __declspec(dllimport) void* memmove(void* d, const void* s, unsigned int n);
 extern "C" void* memcpy(void* d, const void* s, unsigned int n);
 extern "C" void* memset(void* d, int c, unsigned int n);
-extern "C" void* EaAlloc(unsigned int n, const char* tag, int a, int b, const char* file, int line);
+extern "C" void* EaAlloc(unsigned int n, const char* tag, int a, int b, const char* file, int line);  // 0xf473a0
 
+// Fixed-buffer/overflow allocator subobject held at +0xc.  Its EASTL operator==
+// is `return &a == &b;` (fixed_vector_allocator, fixed_pool.h), which is why the
+// string's swap compares the subobject addresses.
+struct FixedAlloc {
+    uint32_t mOverflowAllocator;  // +0xc (empty eastl::allocator, padded)
+    char*    mpPoolBegin;         // +0x10
+
+    void* allocate(unsigned int n)
+    {
+        return EaAlloc(n, "Editor", 0, 0,
+                       "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h", 0xd1);
+    }
+};
+
+inline bool operator==(const FixedAlloc& a, const FixedAlloc& b) { return &a == &b; }
+inline bool operator!=(const FixedAlloc& a, const FixedAlloc& b) { return &a != &b; }
+
+// eastl::basic_string<char, fixed_vector_allocator<...>>: {begin,end,cap} plus
+// the allocator subobject; the fixed buffer pointer lives at +0x10.
 struct StrBuf {
-    char* begin;   // +0
-    char* end;     // +4
-    char* cap;     // +8
+    typedef unsigned int size_type;
+    enum { npos = -1 };
+
+    char*        begin;      // +0
+    char*        end;        // +4
+    char*        cap;        // +8
+    FixedAlloc   mAllocator; // +0xc
+
+    StrBuf(const StrBuf& o);                                    // 0x45f240
+    ~StrBuf() { DeallocateSelf(); }
+
+    char* DoAllocate(size_type n) { char* p = (char*)mAllocator.allocate(n); return p; }
+    static char* CharStringUninitializedCopy(const char* pSource, const char* pSourceEnd, char* pDestination)
+    {
+        memcpy(pDestination, pSource, (size_t)(pSourceEnd - pSource));
+        return pDestination + (pSourceEnd - pSource);
+    }
+    // eastl::basic_string::GetNewCapacity
+    static size_type GetNewCapacity(size_type currentCapacity)
+    {
+        return (currentCapacity > 8) ? (2 * currentCapacity) : (size_type)8;
+    }
 
     char* erase(char* first, char* last);                       // 0x45f080
     void  reserve(unsigned int n);                              // 0x45f0e0
     void  reallocate(unsigned int n);                           // 0x45f140
     void  swap(StrBuf& o);                                      // 0x45f2a0
     StrBuf* assign(const char* first, const char* last);        // 0x45f390
-    void  appendGrow(const char* first, const char* last);      // 0x45f430
+    StrBuf& appendGrow(const char* first, const char* last);    // 0x45f430
     void  appendFill(unsigned int n, char c);                   // 0x45efa0
-    void  split_swap_dummy();                                   // placeholder for FUN_0045f240/f2a0 pair
-    void  release();                                            // 0x429300
+    void  resize(unsigned int n);                               // 0x45ebd0
+    void  DeallocateSelf();                                     // 0x429300
+
+    StrBuf& operator=(const StrBuf& o)
+    {
+        if (&o != this) {
+            assign(o.begin, o.end);
+        }
+        return *this;
+    }
 };
+
+template <typename T>
+static inline void SwapRef(T& a, T& b)
+{
+    T tmp(a);
+    a = b;
+    b = tmp;
+}
+
+// eastl::max_alt
+template <typename T>
+static inline const T& MaxRef(const T& a, const T& b)
+{
+    return (a < b) ? b : a;
+}
 
 // =====================================================================
 // @ 0x45f080  erase [first,last) from the string buffer
@@ -56,25 +117,25 @@ void StrBuf::reserve(unsigned int n)
 }
 
 // =====================================================================
-// @ 0x45f140  grow the buffer to at least n bytes
+// @ 0x45f140  set the buffer capacity to n (shrink-to-fit / realloc)
 // =====================================================================
 void StrBuf::reallocate(unsigned int n)
 {
     if (n == 0xffffffff || n <= (unsigned int)(end - begin)) {
         if (n < (unsigned int)(end - begin)) {
-            reserve(n);
+            resize(n);
         }
-        split_swap_dummy();
+        StrBuf temp(*this);
+        swap(temp);
     } else {
-        char* dst = (char*)EaAlloc(n, "Editor", 0, 0,
-                                   "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h", 0xd1);
-        int used = (int)(end - begin);
-        memcpy(dst, begin, (unsigned int)used);
-        dst[used] = 0;
-        release();
-        begin = dst;
-        end = dst + used;
-        cap = dst + n;
+        char* pNewBegin = DoAllocate(n);
+        char* pNewEnd = pNewBegin;
+        pNewEnd = CharStringUninitializedCopy(begin, end, pNewBegin);
+        *pNewEnd = 0;
+        DeallocateSelf();
+        begin = pNewBegin;
+        end = pNewEnd;
+        cap = pNewBegin + n;
     }
     return;
 }
@@ -84,9 +145,17 @@ void StrBuf::reallocate(unsigned int n)
 // =====================================================================
 void StrBuf::swap(StrBuf& o)
 {
-    char* t0 = begin; begin = o.begin; o.begin = t0;
-    char* t1 = end;   end = o.end;     o.end = t1;
-    char* t2 = cap;   cap = o.cap;     o.cap = t2;
+    if (mAllocator == o.mAllocator) {
+        // Same allocator object: swap the three pointers (eastl::swap).
+        SwapRef(begin, o.begin);
+        SwapRef(end, o.end);
+        SwapRef(cap, o.cap);
+    } else {
+        // Different allocators: swap the contents.
+        const StrBuf temp(*this);
+        *this = o;
+        o = temp;
+    }
     return;
 }
 
@@ -109,40 +178,33 @@ StrBuf* StrBuf::assign(const char* first, const char* last)
 // =====================================================================
 // @ 0x45f430  append a range, growing if needed
 // =====================================================================
-void StrBuf::appendGrow(const char* first, const char* last)
+StrBuf& StrBuf::appendGrow(const char* pBegin, const char* pEnd)
 {
-    if (first == last) {
-        return;
-    }
-    int used = (int)(end - begin);
-    int add = (int)(last - first);
-    unsigned int room = (unsigned int)((cap - begin) - 1);
-    if (room < (unsigned int)(used + add)) {
-        unsigned int want = (unsigned int)(used + add);
-        unsigned int newCap = room < 9 ? 8 : room * 2;
-        if (newCap < want) {
-            newCap = want;
+    if (pBegin != pEnd) {
+        const size_type nOldSize = (size_type)(end - begin);
+        const size_type n = (size_type)(pEnd - pBegin);
+        const size_type nCapacity = (size_type)((cap - begin) - 1);
+        if ((nOldSize + n) > nCapacity) {
+            const size_type nLength = MaxRef(GetNewCapacity(nCapacity), (size_type)(nOldSize + n)) + 1;
+            char* const pNewBegin = DoAllocate(nLength);
+            char* pNewEnd = pNewBegin;
+            pNewEnd = CharStringUninitializedCopy(begin, end, pNewBegin);
+            pNewEnd = CharStringUninitializedCopy(pBegin, pEnd, pNewEnd);
+            *pNewEnd = 0;
+            DeallocateSelf();
+            begin = pNewBegin;
+            end = pNewEnd;
+            cap = pNewBegin + nLength;
+        } else {
+            const char* pTemp = pBegin;
+            ++pTemp;
+            CharStringUninitializedCopy(pTemp, pEnd, end + 1);
+            end[n] = 0;
+            *end = *pBegin;
+            end += n;
         }
-        unsigned int alloc = newCap + 1;
-        char* dst = (char*)EaAlloc(alloc, "Editor", 0, 0,
-                                   "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h", 0xd1);
-        memcpy(dst, begin, (unsigned int)used);
-        char* p = dst + used;
-        memcpy(p, first, (unsigned int)add);
-        p = p + add;
-        *p = 0;
-        release();
-        begin = dst;
-        end = p;
-        cap = dst + alloc;
-    } else {
-        char* p = end + 1;
-        memcpy(p, first, (unsigned int)(last - p));
-        *end = first[0];
-        end = end + (last - first);
-        *end = 0;
     }
-    return;
+    return *this;
 }
 
 // =====================================================================
@@ -187,15 +249,5 @@ void TransformVec4(float* out, const float* v, const float* m)
     // right before the epilogue; keep the destination in a local so the /Od codegen ends the same.
     float* const pOut = out;
     (void)pOut;
-    return;
-}
-
-void StrBuf::split_swap_dummy()
-{
-    return;
-}
-
-void StrBuf::release()
-{
     return;
 }
