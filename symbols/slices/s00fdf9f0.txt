@@ -1,15 +1,5 @@
-; slice s00fdf9f0 = 0x00fdf9f0..0x00fe056b (SP::cAppModeSpace planet / space-mode cluster)
-00fdf9f0 SP::cAppModeSpace::FUN_00fdf9f0(void)             ; 0x00fdf9f0  thiscall ret 0: rebuild the high-LOD planet simulator -- operator_new(0x1e8,"Simulator")/FUN_00ff8970 into [mp_15c+0x54] with a vtable AddRef(vtbl+4)/Release(vtbl+8) swap, GetActivePlanet(), mp_15c->FUN_01005130(), ActivatePlanet(planet), TerraformingManager()->FUN_00bbe740/FUN_00bc1450(planet), then NounManager()->GetGameDataVector() and a per-element UpdateSpaceGrid(o->mSub_120.s2c(), DAT_013ec4d0)  byte-exact (MATCH)
-00fdfb10 SP::cAppModeSpace::FUN_00fdfb10(void)             ; 0x00fdfb10  thiscall ret 0: "first wild planet" query -- NounManager()->GetGameDataVector(cd7d10,d3d420,ae5ea0,b1e500,0x403df5c), GetUFOSimulator()->GetPlayerInventory(), copy the +0x34 sub-object Vec3, FUN_00fdb280(vec+4,&v,flags) and return result+0x34 after r00()/r04()
+00fdf9f0 ?FUN_00fdf9f0@cAppModeSpace_s00fd_f9f0@SP@@QAEXXZ  # FUN_00fdf9f0 migrated from s00fdf9f0 (verbatim, slice spelling)
+00fdfb10 ?FUN_00fdfb10@cAppModeSpace_s00fd_f9f0@SP@@QAEPAXXZ  # FUN_00fdfb10 migrated from s00fdf9f0 (verbatim, slice spelling)
 00fdfbc0 SP::cAppModeSpace::HandleMessage(void)            ; 0x00fdfbc0  thiscall ret 0: the space-mode message dispatcher -- editor-terrain-sphere + NounManager() state gather, the mission-list walk, the rare-ambush feedback events and the "first barren/wild planet in empty system" SPG events
-00fe0160 SP::cAppModeSpace::FUN_00fe0160(void)             ; 0x00fe0160  thiscall ret 0: civilisation -> space transition setup -- planet refresh, PlanetModel/UFOSimulator bring-up, FUN_00fdf9f0(), the +0x24 transition-data flag, MessageServer slot dispatch, the +0xc73xxx list resets and TransitionFromCivToSpace(1,1)
-; helpers: operator_new 0x00f473a0, FUN_00ff8970 0x00ff8970 (planet high-LOD build), FUN_01021260 0x01021260 (GetActivePlanet),
-;          FUN_00b3d300 0x00b3d300 (NounManager), FUN_00b3d430 0x00b3d430 (TerraformingManager), FUN_00b3d350 0x00b3d350 (PlanetModel),
-;          FUN_00ffbe50 0x00ffbe50 (GetUFOSimulator), FUN_00b21340 0x00b21340 (cGameNounManager::GetGameDataVector),
-;          FUN_00a1ad60 0x00a1ad60 (cSPSimulatorSpaceGame::GetPlayerInventory), FUN_00fdb280 0x00fdb280, FUN_00fdc340 0x00fdc340 (UpdateSpaceGrid),
-;          FUN_00ff9800 0x00ff9800 (cSPSimPlanetHighLOD::ActivatePlanet), FUN_01005130 0x01005130 (SimGame::f5130), FUN_00bbe740 0x00bbe740, FUN_00bc1450 0x00bc1450,
-;          FUN_00cd7d10/FUN_00d3d420/FUN_00acdff0/FUN_00ae5ea0/FUN_00b1e500 0x00cd7d10.. (GetGameDataVector filter functors),
-;          FUN_00f67d90 0x00f67d90 (cTerrainEditor::GetCurrentTerrainSphere), FUN_00fdba50 0x00fdba50 (TransitionFromCivToSpace)
-; globals: DAT_013ec4d0 0x013ec4d0 (planet-grid scale f32), DAT_018c43e8 0x018c43e8, "Simulator" 0x013f09b4, RefBaseA22 vtables 0x013eb90c / 0x013eb844
-; fields: cAppModeSpace +0x24 transition-data initialised byte, +0x15c mp_15c (SimGame); SimGame +0x54 mp_54 (cSPSimPlanetHighLOD*);
+00fe0160 ?FUN_00fe0160@cAppModeSpace_s00fd_f9f0@SP@@QAEXXZ  # FUN_00fe0160 migrated from s00fdf9f0 (verbatim, slice spelling)
 ;         cDataVec +0x04 mpBegin / +0x08 mpEnd; cSpaceObj +0x120 embedded grid query (vtbl slot +0x2c); cPlayerInventory +0x34 embedded grid query (vtbl slot +0x2c)

@@ -1,1 +1,1 @@
-00fe1a20 cAppModeSpace::LoadStateMachine  # decompile name from card
+00fe1a20 ?cAppModeSpace_LoadStateMachine@@YGXH@Z  # cAppModeSpace_LoadStateMachine migrated from s00fe1a20 (verbatim, slice spelling)

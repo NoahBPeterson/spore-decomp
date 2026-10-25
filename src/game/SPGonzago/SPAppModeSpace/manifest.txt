@@ -1,0 +1,8 @@
+# source  symbol  va  flags
+../src/game/SPGonzago/SPAppModeSpace.cpp  ?f9c90@AppMode@@QAEXH@Z  00fd9c90  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPAppModeSpace.cpp  ?f9ce0@AppMode@@QAEDHH@Z  00fd9ce0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPAppModeSpace.cpp  ?f9d30@AppMode@@QAEXXZ  00fd9d30  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPAppModeSpace.cpp  ?f9e80@@YADHPAH@Z  00fd9e80  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPAppModeSpace.cpp  ?ShutdownGonzagoSubsystem@cAppModeSpace@SP@@QAEXXZ  00fda4f0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPAppModeSpace.cpp  ?FUN_00fdb9a0@cAppModeSpace_s00fd_ade0@SP@@QAEXXZ  00fdb9a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPAppModeSpace.cpp  ?FUN_00fdf9f0@cAppModeSpace_s00fd_f9f0@SP@@QAEXXZ  00fdf9f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

@@ -1,1 +1,2 @@
-00fe2ec0 SP::cAppModeSpace::HandleMessage  # cAppModeSpace vtable 0x1493f60 group, IHandler subobject slot at 0x1493fb4; calls SetDefaultPickPriority/LoadStateMachine via this-4
+00d06240 ?RecordEvent@cRelationshipManager@SP@@QAEMIIW4eRelationshipEvents@2@M@Z  # SP::cRelationshipManager::RecordEvent (callee of s00fe2ec0, named from the dev publics; slice address comment)
+00fe2ec0 ?HandleMessage@cAppModeSpace_s00fe_2ec0@SP@@UAE_NIPAX@Z  # cAppModeSpace_s00fe_2ec0::HandleMessage migrated from s00fe2ec0 (verbatim, slice spelling)

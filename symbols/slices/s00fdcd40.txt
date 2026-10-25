@@ -1,0 +1,6 @@
+00fdcd40 ?Init@cAppModeSpace_s00fd_cd40@SP@@QAE_NPAX@Z  # Init migrated from s00fdcd40 (verbatim, slice spelling)
+00fdcee0 ?PreGameModeTransition@cAppModeSpace_s00fd_cd40@SP@@QAEXHPAX@Z  # PreGameModeTransition migrated from s00fdcd40 (verbatim, slice spelling)
+00fdd200 ?FUN_00fdd200@@YAPAXXZ  # FUN_00fdd200 migrated from s00fdcd40 (verbatim, slice spelling)
+00fdd320 ?FUN_00fdd320@cAppModeSpace_s00fd_cd40@SP@@QAEXHPAX@Z  # FUN_00fdd320 migrated from s00fdcd40 (verbatim, slice spelling)
+00fdd390 ?TransitionFromPlanetToSolar@cAppModeSpace_s00fd_cd40@SP@@QAEXPAXH@Z  # TransitionFromPlanetToSolar migrated from s00fdcd40 (verbatim, slice spelling)
+00fdd5a0 ?TransitionFromGalaxyToSolar@cAppModeSpace_s00fd_cd40@SP@@QAEXXZ  # TransitionFromGalaxyToSolar migrated from s00fdcd40 (verbatim, slice spelling)

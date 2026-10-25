@@ -1,0 +1,39 @@
+# va  diff-bytes  reason
+00fd9d00 24 InputManager mode test: complete and equivalence PASSes (399 valid, 100% coverage); cl factors the second comparison into `sete` instead of the original's shared `mov eax,1` tail. flags /O2 /MD /Gy /TP /arch:SSE
+00fd9d90 13 universe-context graphics refresh: complete and equivalence WEAK (400 valid, no mismatch, 16% coverage); the else-block is laid out before the final return instead of after it. flags /O2 /MD /Gy /TP /arch:SSE
+00fd9f70 1 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 628 bytes - cAppModeSpace::OnMouseUp not reconstructed.
+00fda1f0 1 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 228 bytes - space-mode helper not reconstructed.
+00fda2e0 1 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 162 bytes - space-mode helper not reconstructed.
+00fda390 1 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 230 bytes - cAppModeSpace::Deactivate not reconstructed.
+00fda480 1 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 109 bytes - space-mode helper not reconstructed.
+00fda530 1 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 172 bytes - cAppModeSpace::SetPlanetTimeOnFirstEntry not reconstructed.
+00fda5e0 1 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 360 bytes - space-mode helper not reconstructed.
+00fda750 1 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 489 bytes - space-mode helper not reconstructed.
+00fda940 1 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 162 bytes - space-mode helper not reconstructed.
+00fda9f0 1 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 148 bytes - space-mode helper not reconstructed.
+00fdaa90 1 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 165 bytes - cAppModeSpace::Write not reconstructed.
+00fdab40 1 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 162 bytes - space-mode helper not reconstructed.
+00fdabf0 1 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 492 bytes - space-mode helper not reconstructed.
+00fdade0 370 FUN_00fdade0: size 735 vs 742; equiv UNSUPPORTED (only 0/400 inputs valid, fault(read)=400)
+00fdb0c0 223 FUN_00fdb0c0: size 360 vs 320; equiv WEAK (400 valid, coverage 16.7% < 60%)
+00fdb230 53 FUN_00fdb230: size 68 vs 68; equiv FAIL (eax is caller-saved; function is void, original happens to leave `out` in eax, ours leaves `begin`; benign)
+00fdb330 670 FUN_00fdb330: size 985 vs 918; equiv WEAK (244 valid, coverage 40.8% < 60%)
+00fdba50 249 TransitionFromCivToSpace: size 454 vs 413; equiv WEAK (220 valid, coverage 16.0% < 60%)
+00fdbc20 204 CompleteTransitionFromEntryToNewGame: size 312 vs 326; equiv UNSUPPORTED (only 0/400 inputs valid; fault(read)=277, fault(write)=111, budget=10)
+00fdbd60 71 (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) space-game bring-up; the effects reset, gonzago world, starmap manager and terrain lookups are unresolved so the bounds vector and the mode switch collapse; equiv UNSUPPORTED (unresolved space services)
+00fdbee0 59 (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) space-game entry; the mission tuning load, the score query and the inventory write are unresolved so the body reduces to the ui toggles; equiv UNSUPPORTED (unresolved mission services)
+00fdbf90 198 (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) space achievement sweep; the empire item walk, the property keys and the inventory add are unresolved so the nested key tests collapse; equiv UNSUPPORTED (unresolved property and inventory services)
+00fdc150 119 (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) space-game shutdown; the space teardown, starmap reset, handler posts and cursor restores are unresolved; equiv UNSUPPORTED (unresolved teardown services)
+00fdc240 110 (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) new-game planet load; the planet view creation, the model view switch and the star record selection are unresolved; equiv UNSUPPORTED (unresolved planet services)
+00fdc520 241 (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) mode mouse-down; the local input forward, the input manager, the starmap drag tests and the player/camera chain are unresolved so the two button arms collapse; equiv UNSUPPORTED (unresolved input and camera services)
+00fdcba0 162 (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) mode destructor; the gonzago subsystem teardown, the handler removal and the vector destroys are modelled through plain releases; equiv UNSUPPORTED (unresolved teardown services)
+00fdcd40 39 Init: size 412 vs 412; equiv WEAK (162 valid, coverage 55.2% < 60%)
+00fdcee0 563 PreGameModeTransition: size 794 vs 797; equiv UNSUPPORTED (only 0/400 inputs valid; fake-arity=394, fault(read)=4, fault(write)=2)
+00fdd200 212 FUN_00fdd200: size 277 vs 282; equiv WEAK (275 valid, coverage 49.0% < 60%)
+00fdd320 95 FUN_00fdd320: size 108 vs 114; equiv PASS (281 valid, coverage 71.7%)
+00fdd390 187 TransitionFromPlanetToSolar: size 346 vs 346; equiv UNSUPPORTED (only 0/400 inputs valid; fault(read)=320, fault(write)=51, import:VirtualFree=14)
+00fdd5a0 692 TransitionFromGalaxyToSolar: size 1132 vs 1116; equiv UNSUPPORTED (only 0/400 inputs valid; fault(read)=351, fault=39, fault(write)=7)
+00fdfb10 29 cAppModeSpace::FUN_00fdfb10(void): the "first wild planet" target query.  The whole body matches instruction-for-instruction -- the 5-argument GetGameDataVector call, GetUFOSimulator()->GetPlayerInventory(), the +0x34 embedded sub-object's vtbl+0x2c getter, the 3-float Vec3 copy, the 4-byte flag built from a single zeroed low byte, FUN_00fdb280(vec+4,&v,flag) and the r00()/r04() calls with the +0x34 tail passed back.  The original is 166 bytes; ours 162.  The only difference is MSVC register scheduling: the original materialises the return address `r+0x34` into the callee-saved edi BEFORE the second virtual call (`lea edi,[esi+0x34]` ... `mov eax,edi; pop edi`, with a shrink-wrapped `push edi` inside the branch), whereas ours rematerialises it after the call as `lea eax,[esi+0x34]`.  The value is trivially recomputable from the still-live esi, so MSVC prefers rematerialisation here; the edi materialisation cannot be forced from C++.  equiv UNSUPPORTED only 0/400 inputs valid (discards: fault(read)=400 -- both sides dereference the null simulator returned by the emulated FUN_00ffbe50).
+00fe0160 145 cAppModeSpace::FUN_00fe0160(void): civilisation -> space transition setup.  The main call sequence is recovered -- the FUN_01021260 planet refresh guarded by FUN_0102f660, the GetGameDataVector gather, the PlanetModel/UFOSimulator bring-up (FUN_00b8d750 with the FUN_00c713c0/FUN_00c713e0 counts, FUN_00b88420, FUN_00ffd390), the FUN_01003690 + FUN_00fdf9f0() calls, the `this+0x24 = 1` transition flag, the MessageServer slot dispatch, the +0xc70xxx/+0xc73xxx list resets, the FUN_00c710c0/FUN_00c71030 player-civilisation loop, FUN_00b87bb0(PlanetModel), FUN_00fdba50(this,1,1) and the trailing GetCurrentTerrainSphere/FUN_00c75770 position copy.  The original is 1035 bytes; ours 343 -- the stack SlotMessage/RefBaseA22 theatre (frame +0x10..+0x74), the two inline vector walks with their operator_delete_array cleanup, the eastl string helpers and the exact argument/stack layout of the many +0xc6xxxx table resets are only reproduced in outline, so the store scheduling and block layout differ throughout.  equiv UNSUPPORTED 1 unresolved reference (FUN_00a1c4e0 -- the annotation address is implausible as a function start); resolution conflict for the FUN_00c75770 call site (hex-name 00c75770 vs aligned 01066d60) because the outline places that call at a different position in the sequence.
+00fe1a20 3047 complete; frame layout/locals (single raw frame array) and vector<bool> temp shape differ
+00fe2ec0 2164 complete (all 20 message cases); stack-slot packing of temporaries, player-ID register spill (orig spills ID, cl here spills this unless ID is re-read) and merged flag test (test byte 2 / 0x10 -> 0x12) shift offsets; size 3140/3149, 171/171 calls, vtable slots+constants identical

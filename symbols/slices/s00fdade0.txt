@@ -1,0 +1,7 @@
+00fdade0 ?FUN_00fdade0@cAppModeSpace_s00fd_ade0@SP@@QAEXXZ  # FUN_00fdade0 migrated from s00fdade0 (verbatim, slice spelling)
+00fdb0c0 ?FUN_00fdb0c0@@YAXPAUVector3@@@Z  # FUN_00fdb0c0 migrated from s00fdade0 (verbatim, slice spelling)
+00fdb230 ?FUN_00fdb230@@YAXPAPAIPAI1PBI@Z  # FUN_00fdb230 migrated from s00fdade0 (verbatim, slice spelling)
+00fdb330 ?FUN_00fdb330@cAppModeSpace_s00fd_ade0@SP@@QAE_NHMM@Z  # FUN_00fdb330 migrated from s00fdade0 (verbatim, slice spelling)
+00fdb9a0 ?FUN_00fdb9a0@cAppModeSpace_s00fd_ade0@SP@@QAEXXZ  # FUN_00fdb9a0 migrated from s00fdade0 (verbatim, slice spelling)
+00fdba50 ?TransitionFromCivToSpace@cAppModeSpace_s00fd_ade0@SP@@QAEXHH@Z  # TransitionFromCivToSpace migrated from s00fdade0 (verbatim, slice spelling)
+00fdbc20 ?CompleteTransitionFromEntryToNewGame@cAppModeSpace_s00fd_ade0@SP@@QAEXXZ  # CompleteTransitionFromEntryToNewGame migrated from s00fdade0 (verbatim, slice spelling)
