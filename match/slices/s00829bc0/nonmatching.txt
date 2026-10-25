@@ -1,8 +1,13 @@
 00829c50 167 complete translation; register allocation of the refcounted-vector push_back differs
 00829f30 185 complete logic; the matrix-pointer argument (ecx) mapping is uncertain
-0082a450 127 complete translation; AutoRef release sequence codegen differs
-0082aa20 26  complete translation; callee schedule differs when the callee body is visible in the TU
+0082a450 133 complete translation; AutoRef release sequence codegen differs
+0082aa20 23  complete translation; callee schedule differs when the callee body is visible in the TU
 0082aa70 23  complete translation; original keeps a dead store to +0x10 that cl eliminates
 0082aac0 23  complete translation; original keeps a dead store to +0x10 that cl eliminates
 0082ab00 11  complete translation; parameter register allocation differs (a in ecx vs eax)
 0082ab40 134 complete translation; retail's TableLookup is __stdcall (callee pops both args, ret 8), so the source now declares it __stdcall: saved replay identical, fresh gate PASS 397/400 valid, 100%. The inlined wide-string compare schedule still differs (chk diff 134; 131 orig vs 136 ours).
+0082a040 22  complete translation; cl groups the operator-new argument pushes instead of interleaving them with the vptr/member stores
+0082a140 693 complete translation; local frame is 0x2c vs the retail 0x3c and the early-failure path/rect copy schedule differs
+0082a500 839 complete translation; retail 16-byte-aligns the frame and builds the rect corners with unary-negation xorps/movss pairs; cl emits movdqa copies and different stack offsets
+0082a8a0 273 complete translation; register allocation differs (retail this=ebp, msg=esi with edi shrink-wrapped into case 9; cl picks this=esi, msg=edi), shifting the case-9 schedule
+0082abd0 190 complete translation; allocator register allocation differs (retail spills `this` via push ecx and restores it on every return, so entry ecx survives; cl keeps `this` in esi, so equiv reports a benign ecx-clobber FAIL under the standard ABI)
