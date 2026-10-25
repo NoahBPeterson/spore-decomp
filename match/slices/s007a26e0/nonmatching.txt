@@ -1,1 +1,4 @@
 # va  diff-bytes  reason (none: every function below is byte-exact)
+007a26e0  709  complete translation (converter functor virtual: swap source vector, reserve dest, per-pair FUN_007a1a80 out-record, 2 tagged shared-ptr push_backs, out dtor FUN_79aeb0, temp vector dtor FUN_79b0d0+free); 506 vs 786 bytes, no fs:[0] SEH frame/EH state stores (no destructible locals modelled), InitOut/PushPair not inlined; equiv WEAK 179 valid 35.6% coverage, no mismatches. Flags /O2 /MD /Gy /EHsc /TP /GS-.
+007a2a00  709  same as 007a26e0 with per-pair converter FUN_007a1bc0; 506 vs 786 bytes; equiv WEAK 145 valid 35.6% coverage, no mismatches. Flags /O2 /MD /Gy /EHsc /TP /GS-.
+007a2d20  1221  two-out-record/dual-dest-vector variant (FUN_007a1d00, Group2 = 2x20-byte Group, reserve count*2); 787 vs 1340 bytes; equiv WEAK 157 valid 30.9% coverage, no mismatches. Flags /O2 /MD /Gy /EHsc /TP /GS-.
