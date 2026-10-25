@@ -1,0 +1,2 @@
+# source  symbol  va  flags
+../src/game/SPGonzago/SPCityWalls.cpp  ?PointInsideInnerWall@cCityWalls@@QAEIABUVector3@@@Z  00bec140  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include

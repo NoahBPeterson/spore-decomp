@@ -1,0 +1,3 @@
+00bec140 ?PointInsideInnerWall@cCityWalls@@QAEIABUVector3@@@Z  # cCityWalls::PointInsideInnerWall migrated from s00beb6d0 (verbatim, slice spelling)
+00c884f0 ?AsInterface@cSpatialObject@SP@@UAEPAXW4InterfaceId@COM@EA@@@Z  # SP::cSpatialObject::AsInterface (callee of s00beb6d0, named from the dev publics; slice address comment)
+00c88b00 ?Read@cSpatialObject@SP@@UAE_NAAVcIObjectDatabaseIStream@2@@Z  # SP::cSpatialObject::Read (callee of s00beb6d0, named from the dev publics; slice address comment)
