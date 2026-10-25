@@ -407,7 +407,7 @@ void glyph_StartLine(GlyphClass* g, int32 x, int32 y)
 }
 
 // @ 0x008b0480
-GlyphClass* New_EmptyGlyph(tsiMemObject* mem, int32 unused, int16 a, int16 b)
+GlyphClass* New_EmptyGlyph(tsiMemObject* mem, int32 unused, int16 a, int16 b, int16 c)
 {
     GlyphClass* g = (GlyphClass*)tsi_FastAllocN(mem, 0x78, 0);
     g->field34 = 2;
@@ -449,7 +449,7 @@ GlyphClass* New_EmptyGlyph(tsiMemObject* mem, int32 unused, int16 a, int16 b)
     pxs[1] = pxs[0] + a;
     pys[2] = g->field72 + b;
     pxs[2] = 0;
-    pys[3] = pys[2] - b;
+    pys[3] = pys[2] - c;
     pxs[3] = 0;
     g->pointCount = 0;
     return g;
