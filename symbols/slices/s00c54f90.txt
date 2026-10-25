@@ -28,4 +28,4 @@
 00c56000 ?CollectMissionHerds@cSPMissionFlight101@@QAEXXZ  # cSPMissionFlight101::CollectMissionHerds migrated from s00c54f90 (verbatim, slice spelling)
 00c560c0 ?HandleMessage@cSPMissionFlight101@@QAEXHPAX@Z  # cSPMissionFlight101::HandleMessage migrated from s00c54f90 (verbatim, slice spelling)
 00c56170 ?OnSubMissionComplete@cSPMissionFlight101@@QAEXXZ  # cSPMissionFlight101::OnSubMissionComplete migrated from s00c54f90 (verbatim, slice spelling)
-00c56260 ?OnAbort@cSPMissionFlight101@@QAEXXZ  # void cSPMissionFlight101::OnAbort()
+00c56260 ?OnAbort@cSPMissionFlight101@@QAEXXZ  # cSPMissionFlight101::OnAbort migrated from s00c54f90 (verbatim, slice spelling)
