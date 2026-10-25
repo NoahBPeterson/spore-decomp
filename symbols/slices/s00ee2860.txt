@@ -1,2 +1,7 @@
 00ee2860 SP::cScenarioEditModeBehaviorUI::SetTooltip  # reads cString/hint at +0x184
 00ee2960 f00ee2960  # palette item refresh (window, item, flag, flag); PDB candidate SP::cSPUISpace::SetToolTipForItem unverified
+00ee3020 Beh::F3020  # thiscall (); refreshes 8 palette windows at stride 0x188, window ids 0x715cde0+i
+00ee3230 f00ee3230  # cdecl (int key, void* behaviour); palette selection rebuild + audio cue + checklist hints
+00ee3430 f00ee3430  # cdecl (int key, void* behaviour, char flag); tutorial index text handler
+00ee3540 Beh::F3540  # thiscall (void* item, void* list); writes list->item[slot].count
+00ee3630 Beh::F3630  # thiscall (int arg); resyncs selected behaviour with the tutorial system

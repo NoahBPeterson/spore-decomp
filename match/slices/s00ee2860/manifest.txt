@@ -3,3 +3,5 @@ slices/s00ee2860/s00ee2860.cpp  ?F30D0@Beh@@QAEXXZ       00ee30d0  /O2 /MD /Gy /
 slices/s00ee2860/s00ee2860.cpp  ?F3140@Beh@@QAEXH@Z      00ee3140  /O2 /MD /Gy /EHsc /TP /fp:fast
 slices/s00ee2860/s00ee2860.cpp  ?f00ee3400@@YAXPAX@Z     00ee3400  /O2 /MD /Gy /EHsc /TP /fp:fast
 slices/s00ee2860/s00ee2860.cpp  ?F3710@Beh@@QAEXH@Z      00ee3710  /O2 /MD /Gy /EHsc /TP /fp:fast
+slices/s00ee2860/s00ee2860.cpp  ?F3540@Beh@@QAEXPAX0@Z  00ee3540  /O2 /MD /Gy /EHsc /TP /fp:fast
+slices/s00ee2860/s00ee2860.cpp  ?F31D0@Beh@@QAEXXZ  00ee31d0  /O2 /MD /Gy /EHsc /TP /fp:fast

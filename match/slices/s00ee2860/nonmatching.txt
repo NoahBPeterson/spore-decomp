@@ -1,4 +1,8 @@
 # va  diff-bytes  short reason
-00ee31d0  32   tail-call to the empty palette refresh changes scheduling (behavior complete)
 00ee3760  68   callee-saved register allocation around the callback install (behavior complete)
 00ee2960  941  (with /O2 /MD /Gy /TP /GS-, file s00ee2860b.cpp) stack-slot order (sret temp below cStrings) and ebx/ebp swap for window locals; complete palette item refresh
+00ee2860  38   /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-  CharStrlen/assign end-pointer and tooltip-id constant selection codegen only; complete
+00ee3020  59   /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-  size matches (173); ebp/stack-slot swap for this vs palette object; complete 8-window refresh loop
+00ee3230  401  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-  stack/register allocation of the 454-byte palette rebuild (size 537); complete
+00ee3430  189  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-  local frame size (text container modelled as 0x14 not 0x188); complete tutorial-index handler
+00ee3630  6    /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-  inner-object call site (lea+load) and loop base register; complete selection sync
