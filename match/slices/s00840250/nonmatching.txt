@@ -9,3 +9,11 @@
 00841220  68   complete: parser event dispatch (vtable slot 0x38); try/catch EH frame differs
 00841290  68   complete: parser event dispatch (vtable slot 0x3c); try/catch EH frame differs
 00841300  68   complete: parser event dispatch (vtable slot 0x40); try/catch EH frame differs
+00840250  162  complete: cFileParser dtor; SEH frame and hash_map/spec-vector teardown schedule differ
+00840340  198  complete: ClearFilePaths; node walk/hash free and spec-vector clear codegen differs
+00840420  562  complete: AddFilePath; spec insert and watcher-map/watcher setup differ from inlined retail path
+00840700  126  complete: cFileParser ctor; member-init store schedule and EH frame differ
+008409f0  343  complete: string split helper; temp-buffer build and string member call shapes differ
+00840cc0  108  complete: MakeCaseInsensitive(char*,string8); register allocation and tolower import call form differ
+00840ec0  262  complete: StripCommentsAndWhiteSpace; register allocation and throw/helper frames differ
+00841000  23   complete: Output; local string ctor store scheduling differs, strlen/format path identical
