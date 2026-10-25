@@ -1,0 +1,3 @@
+# va  diff-bytes  reason
+00e91060 185 complete; MakeView factory, size 312 vs 296, colour materialisation and vtable-store scheduling differ; equiv FAIL memory pool @4d460014
+00e91190 35 complete; flag test folded to test dword vs shr/test cl and the comiss operand order is reversed; equiv PASS

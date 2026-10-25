@@ -1,6 +1,6 @@
 00e90e00 cSpatialObjectView::Update_90e00  # partial: distance-scaled colour view update reconstructed only structurally, 516 vs 604 bytes
-00e91060 cSpatialObjectView::MakeView_91060  # complete; colour materialisation / vtable-store scheduling differ, 312 vs 296 bytes
-00e91190 cDamageView::HandleSimulationUpdate_91190  # complete; flag test folded to test dword and comiss operand order reversed; equiv PASS
+00e91060 ?MakeView_91060@cSpatialObjectView@@QAEPAV1@PAX@Z  # cSpatialObjectView::MakeView_91060 migrated from s00e90e00 (verbatim, slice spelling)
+00e91190 ?HandleSimulationUpdate_91190@cDamageView@@QAEXHH@Z  # cDamageView::HandleSimulationUpdate_91190 migrated from s00e90e00 (verbatim, slice spelling)
 00e911f0 cSpatialObjectView::MakeView_911f0  # partial: factory reconstructed only structurally, 421 vs 523 bytes
 00e91400 ?GetFlag0@cViewA@@QAE_NXZ  # cViewA::GetFlag0 migrated from s00e90e00 (verbatim, slice spelling)
 00e91410 ?GetPropertyV3a@@YAPAUV3@@PAU1@IHIU1@@Z  # GetPropertyV3a migrated from s00e90e00 (verbatim, slice spelling)
