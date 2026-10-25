@@ -1,5 +1,6 @@
 # va  diff-bytes  reason (compiled with /O2 /MD /Gy /TP /arch:SSE /fp:fast)
 00621bf0   47  cXHTMLControlAppearance::Apply: complete; this/param callee-saved register assignment (ebx/ebp vs ebp/edi)
+00621db0  203  cXHTMLControlAppearance::CreateHitMaskFromResource: complete behaviour port (FNV1_String16 over the wide name; two 3-dword request descriptors {hash, 0x19aef76/0x2f7d0004, appearance}; resource-manager slot-3 lookup with the req AddRef/Release balance; appearance slot-3(0xf074e1c8) hit-mask fetch, live-object AddRef, both cleanup paths). Non-exact: /O2 register allocation saves an extra callee-saved register (original keeps `out` in edi and `appearance` in edx with no frame pointer; ours materializes the descriptors through ebp), so the frame is offset by 4 (222 vs 234 bytes). equiv UNSUPPORTED: 0/400 inputs valid (all fault reading the wide-name pointer the harness cannot supply), no differential coverage possible
 00621d50   10  uninitialized_copy_backward: complete; load order of the new/old drawable pointers around the --dest
 00621ee0    2  cXHTMLControlAppearance ctor: complete; vptr store scheduled after mPad4 in the original
 00621f50   92  vector<ControlDrawable>::erase: complete; helper thiscall form and element-destroy loop shape; equiv WEAK (58.7% cov)
