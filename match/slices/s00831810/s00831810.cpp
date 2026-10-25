@@ -30,8 +30,12 @@ struct ImageInfo2 {
     void CopyFrom(const ImageInfo2 *src);   // 0x008310a0 (other TU)
 };
 
-struct Stopwatch { double GetElapsed(); };  // 0x93a3a0
-struct Animator  { void Dtor(); };          // 0x7f8c20
+struct Stopwatch {
+    double GetElapsed();                    // 0x0093a3a0
+};
+struct Animator  {
+    void Dtor();                            // 0x007f8c20
+};
 
 // The console's timer slot (+0x10): the low/high pair is tested as a unit and the
 // same object provides the restart / property-flush helpers the retail code calls.
