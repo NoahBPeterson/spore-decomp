@@ -1,1 +1,8 @@
 00762890 SP::hashtable::erase  # eastl hashtable bucket unlink + node free (Ghidra shape)
+00761f90 ?FUN_00761f90@@YAXHIH@Z  # overlay/rect upload setup (slice spelling, nonmatching)
+007624c0 ?FUN_007624c0@@YAHMMMHHHM@Z  # descriptor builder (slice spelling, nonmatching)
+007625d0 ?FUN_007625d0@@YAPAXPBD@Z  # vertex-declaration parser (slice spelling, nonmatching)
+00762900 ?insert@Map262900@@QAEXPAXPBI1@Z  # eastl hashtable bucket insert (member so ecx binds; slice spelling, nonmatching)
+00762a60 ?FUN_00762a60@@YAXPAX@Z  # nested map cleanup (byte-exact, in manifest.txt)
+00762b70 ?FUN_00762b70@@YAPAXHHHPAX@Z  # index-buffer resource wrapper (slice spelling, nonmatching)
+00762c60 ?FUN_00762c60@@YAPAXHHHHHPAX@Z  # index-buffer initialize wrapper (slice spelling, nonmatching)
