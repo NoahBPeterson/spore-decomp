@@ -1,3 +1,8 @@
 # va  diff-bytes  reason
-007e7260  50  PropWatcher constructor: behaviour complete but the original carries an SEH frame (state 0) around the vf0/Read calls; no destructor-bearing local in the reconstruction
-007e72d0  99  cQuitCheat::Execute complete; register allocation (ebx/edi) and crafted-object field-store order differ
+007e70b0  417  cAppSystem::HandleMessage complete behavioural reconstruction; register allocation and message-dispatch branch layout differ
+007e7260  110  PropWatcher constructor: behaviour complete but the original carries an SEH frame (state 0) around the vf0/Read calls; no destructor-bearing local in the reconstruction
+007e72d0  165  cQuitCheat::Execute complete; register allocation (ebx/edi) and crafted-object field-store order differ
+007e7380  673  cAppSystem::Configure complete behavioural reconstruction; SEH-framed locals and graphics-device call/branch layout differ
+007e7630  631  cAppSystem::cAppSystem complete behavioural reconstruction; the original carries an SEH frame (state 1) around the member constructions
+007e78d0  632  cAppSystem::~cAppSystem complete behavioural reconstruction; the original carries an SEH frame (state 1) around the member destructions
+007e7b50  427  cAppSystem logging-directory setup complete behavioural reconstruction; the original carries an SEH frame (state 0) around the string locals
