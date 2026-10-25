@@ -1,20 +1,234 @@
 // Slice s007bfaa0 -- SP::cTestScript::HandleMessage renderer, an empty EH-framed stub, and the
 // ambient-occlusion capture routine 0x007bfee0 (a sibling of 0x007c0780 in slice s007c0780: same
 // per-direction shadow viewer / AO job loop, but the bounds, shadow rect and meshes come from the caller).
-// Flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-.  See partial.txt for the two skeletons.
+// Flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-.  See nonmatching.txt for the completion
+// diffs and equivalence verdicts.
 #include "types.h"
 #include <math.h>
 #include <intrin.h>
 
 struct RectID { int mPageID; int mAllocID; };
 
-// @ 0x007bfaa0  SP::cTestScript::HandleMessage (this + 4 stack args)
-void FUN_007bfaa0(void* pThis, void* a, void* b, void* c, void* d)
-{ (void)pThis; (void)a; (void)b; (void)c; (void)d; }
+// ---------------------------------------------------------------------------
+// 0x007bfaa0: cTestScript mesh-stream renderer.
+// Globals carry their VA so the equivalence resolver can bind them.
+// ---------------------------------------------------------------------------
+extern uint32_t g_16f9528;                             // softStateDirty
+extern int32_t  g_16f96a0;                             // transformType
+extern void*    g_16fa380;                             // current transform pointer
+extern __declspec(align(16)) float g_16fa4f0[16];      // transformLocalCopy
+extern uint32_t g_16fa38c;                             // renderStateDirty
+extern int32_t  g_16f9218;
+extern int32_t  g_16f923c;
+
+extern "C" int  FUN_011f13a0();                        // 0x011f13a0 GetBlendMode
+extern "C" void FUN_011f1340(int);                     // 0x011f1340 SetBlendMode
+extern "C" void FUN_00777bf0();                        // 0x00777bf0
+extern "C" void FUN_00777c10();                        // 0x00777c10
+extern "C" void __fastcall FUN_007789d0(void* state);  // 0x007789d0
+extern "C" void FUN_0072ace0(void*, void*, void*, void*, int, void*);  // 0x0072ace0
+extern "C" void* FUN_0067dcc0();                       // 0x0067dcc0
+extern "C" void* FUN_0067dd50();                       // 0x0067dd50
+
+namespace SP {
+
+struct IntMap {                                        // 0x18 bytes
+    int m00, m04, m08, m0C, m10, m14;
+    int& operator[](const int* key);                   // 0x004210f0
+};
+
+struct RenderViewer {
+    void SetRaster(RectID* rect, bool flag);           // 0x007c4be0
+    bool Update();                                     // 0x007c4fd0
+    void Clear(int flags);                             // 0x007c3c50
+    void FlushEnd();                                   // 0x007c3c10
+};
+
+struct MeshStreamEntry {                               // 0x38 bytes
+    int   mField00;                                    // +0x00
+    float mTranslation[3];                             // +0x04
+    float mScale;                                      // +0x10
+    float mMatrix[9];                                  // +0x14
+};
+
+struct ItemList {
+    void Fn(int, int, int, int);                       // 0x007b49f0
+};
+
+struct LayerDesc {                                     // 0x2c bytes
+    int      mFlags;                                   // +0x00
+    int      mField04;                                 // +0x04
+    bool     mbField08;                                // +0x08
+    int      mField0C;                                 // +0x0c
+    int      mField10;                                 // +0x10
+    uint32_t mDoneMessageID;                           // +0x14
+    void*    mpDoneMessage;                            // +0x18
+    int      mField1C;                                 // +0x1c
+    int      mField20;                                 // +0x20
+    int      mField24;                                 // +0x24
+    int      mField28;                                 // +0x28
+};
+
+struct cTestScript {
+    char              pad00[0x0c];
+    void**            mMeshBegin;                      // +0x0c
+    void**            mMeshEnd;                        // +0x10
+    char              pad14[0x0c];
+    void**            mpShaderStates;                  // +0x20
+    char              pad24[0x10];
+    IntMap            mMap34;                          // +0x34
+    void*             mpMapsBegin;                     // +0x4c
+    void*             mpMapsEnd;                       // +0x50
+    char              pad54[0x0c];
+    ItemList*         mpItemList;                      // +0x60
+    RectID            mRect64;                         // +0x64
+    RenderViewer*     mpViewer;                        // +0x6c
+    int               mIndex70;                        // +0x70
+    int               mCount74;                        // +0x74
+    char              pad78[4];
+    MeshStreamEntry*  mpEntries;                       // +0x7c
+    char              pad80[0x10];
+    void*             mpMessage;                       // +0x90
+    void HandleMessage(void* a, void* b, void* c, void* stats);
+};
+
+}  // namespace SP
+
+// @ 0x007bfaa0  SP::cTestScript::HandleMessage
+void SP::cTestScript::HandleMessage(void* a, void* b, void* c, void* stats)
+{
+    bool reachedEnd = false;
+
+    if (mMeshBegin == mMeshEnd)
+        goto tail;
+
+    g_16f9528 |= 1;
+    g_16f96a0 = 4;
+    g_16fa380 = g_16fa4f0;
+
+    {
+        __m128 r0 = _mm_setr_ps(1.0f, 0.0f, 0.0f, 0.0f);
+        __m128 r1 = _mm_setr_ps(0.0f, 1.0f, 0.0f, 0.0f);
+        __m128 r2 = _mm_setr_ps(0.0f, 0.0f, 1.0f, 0.0f);
+        __m128 r3 = _mm_setzero_ps();
+        __declspec(align(16)) float ident[16];
+        _mm_store_ps(&ident[0], r0);
+        _mm_store_ps(&ident[4], r1);
+        _mm_store_ps(&ident[8], r2);
+        _mm_store_ps(&ident[12], r3);
+        _mm_store_ps(&g_16fa4f0[0], r0);
+        _mm_store_ps(&g_16fa4f0[4], r1);
+        _mm_store_ps(&g_16fa4f0[8], r2);
+        _mm_store_ps(&g_16fa4f0[12], r3);
+
+        int savedBlend = FUN_011f13a0();
+        FUN_011f1340(0x10002);
+        int saved9218 = g_16f9218;
+        bool was4 = (g_16f923c == 4);
+        g_16f923c = 8;
+        g_16fa38c |= 0x10080;
+        g_16f9218 = 0;
+
+        int count = (int)(mMeshEnd - mMeshBegin);
+        int start = mIndex70;
+        int end = count;
+        if (count - start > mCount74) {
+            end = start + mCount74;
+            reachedEnd = true;
+        }
+
+        FUN_00777bf0();
+        mpViewer->SetRaster(&mRect64, true);
+        if (mpViewer->Update()) {
+            if (mIndex70 == 0)
+                mpViewer->Clear(7);
+            for (int i = mIndex70; i < end; ++i) {
+                MeshStreamEntry* e = &mpEntries[i];
+                float s = e->mScale;
+                __declspec(align(16)) float m[16];
+                m[0]  = e->mMatrix[0] * s;
+                m[1]  = e->mMatrix[1] * s;
+                m[2]  = e->mMatrix[2] * s;
+                m[4]  = e->mMatrix[3] * s;
+                m[5]  = e->mMatrix[4] * s;
+                m[6]  = e->mMatrix[5] * s;
+                m[8]  = e->mMatrix[6] * s;
+                m[9]  = e->mMatrix[7] * s;
+                m[10] = e->mMatrix[8] * s;
+                m[12] = e->mTranslation[0];
+                m[13] = e->mTranslation[1];
+                m[14] = e->mTranslation[2];
+                _mm_store_ps(&g_16fa4f0[0],  _mm_load_ps(&m[0]));
+                _mm_store_ps(&g_16fa4f0[4],  _mm_load_ps(&m[4]));
+                _mm_store_ps(&g_16fa4f0[8],  _mm_load_ps(&m[8]));
+                _mm_store_ps(&g_16fa4f0[12], _mm_load_ps(&m[12]));
+                g_16f96a0 = 2;
+                g_16fa380 = g_16fa4f0;
+                FUN_00777bf0();
+                int key = i;
+                int meshId = mMap34[&key];
+                void* state = mpShaderStates[meshId];
+                if (state)
+                    FUN_007789d0(state);
+                void* mapPtr = (mpMapsBegin == mpMapsEnd) ? 0
+                              : (char*)mpMapsBegin + i * 0x18;
+                FUN_0072ace0(mMeshBegin[i], stats, 0, mapPtr, 0, 0);
+                FUN_00777c10();
+            }
+            mpViewer->FlushEnd();
+        }
+        FUN_00777c10();
+        FUN_011f1340(savedBlend);
+        g_16fa38c |= 0x10000;
+        _mm_store_ps(&g_16fa4f0[0],  _mm_load_ps(&ident[0]));
+        _mm_store_ps(&g_16fa4f0[4],  _mm_load_ps(&ident[4]));
+        _mm_store_ps(&g_16fa4f0[8],  _mm_load_ps(&ident[8]));
+        _mm_store_ps(&g_16fa4f0[12], _mm_load_ps(&ident[12]));
+        g_16f923c = was4 ? 4 : 8;
+        g_16f9218 = saved9218;
+        g_16f96a0 = 4;
+        g_16fa380 = g_16fa4f0;
+        mIndex70 = end;
+        if (reachedEnd) {
+            LayerDesc info;
+            info.mFlags = 1;
+            info.mField04 = 0;
+            info.mbField08 = true;
+            info.mField0C = 0;
+            info.mField10 = 0;
+            info.mDoneMessageID = 0;
+            info.mpDoneMessage = 0;
+            info.mField1C = 0;
+            info.mField20 = 0;
+            info.mField24 = 0;
+            info.mField28 = 0;
+            void* mgr = FUN_0067dd50();
+            typedef void (__thiscall *AddWorkFn)(void*, void*, int, LayerDesc*);
+            AddWorkFn fn = (AddWorkFn)(*(void***)mgr)[0x78 / 4];
+            fn(mgr, this, 0, &info);
+            return;
+        }
+    }
+
+tail:
+    if (mpItemList)
+        mpItemList->Fn((int)(size_t)a, (int)(size_t)b, (int)(size_t)c, (int)(size_t)stats);
+    if (mpMessage) {
+        void* server = FUN_0067dcc0();
+        typedef void (__thiscall *MsgFn)(void*, int, void*, int, int);
+        MsgFn fn = (MsgFn)(*(void***)server)[0x18 / 4];
+        fn(server, 0x1c91270, mpMessage, 0, 0);
+    }
+}
 
 // @ 0x007bfeb0  empty EH-framed stub (5 stack args)
 void __stdcall FUN_007bfeb0(int a, int b, int c, int d, int e)
-{ (void)a; (void)b; (void)c; (void)d; (void)e; }
+{
+    (void)a; (void)b; (void)c; (void)d; (void)e;
+    try {
+    } catch (...) {
+    }
+}
 
 namespace AO {
 
