@@ -1,0 +1,1 @@
+00c4bd60 ?GetDiseaseEffectID@cSPMissionEradicate@SP@@QAEIXZ  # cSPMissionEradicate::GetDiseaseEffectID migrated from s00c4bc00 (verbatim, slice spelling)

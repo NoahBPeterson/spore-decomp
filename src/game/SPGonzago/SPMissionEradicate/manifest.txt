@@ -1,0 +1,13 @@
+# source  symbol  va  flags
+../src/game/SPGonzago/SPMissionEradicate.cpp  ?GetDiseaseEffectID@cSPMissionEradicate@SP@@QAEIXZ  00c4bd60  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPMissionEradicate.cpp  ?FUN_00c4ee90@@YIHPAX0HH@Z  00c4ee90  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPMissionEradicate.cpp  ?GetUIMediumDescription@cSPMissionEradicate_s00c4_ef00@@QAEXPAX@Z  00c4ef00  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPMissionEradicate.cpp  ?GetUILongDescription@cSPMissionEradicate_s00c4_ef00@@QAEXPAX@Z  00c4ef90  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPMissionEradicate.cpp  ?CheckType@cSPMissionEradicate_s00c4_ef00@@QAEDXZ  00c4f060  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPMissionEradicate.cpp  ?FUN_00c4f0e0@cSPMissionEradicate_s00c4_ef00@@QAEMPAUcEradicateTarget@@PAX@Z  00c4f0e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPMissionEradicate.cpp  ?FUN_00c4f160@cSPMissionEradicate_s00c4_ef00@@QAEXXZ  00c4f160  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPMissionEradicate.cpp  ?FUN_00c4f320@cSPMissionEradicate_s00c4_ef00@@QAEXXZ  00c4f320  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPMissionEradicate.cpp  ?FUN_00c50190@@YIXPAX00@Z  00c50190  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPGonzago/SPMissionEradicate.cpp  ?FUN_00c501e0@@YIDPAX0H0@Z  00c501e0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPGonzago/SPMissionEradicate.cpp  ?FUN_00c50460@@YIXPAX0@Z  00c50460  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPGonzago/SPMissionEradicate.cpp  ?FUN_00c505a0@@YIXPAX0@Z  00c505a0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include

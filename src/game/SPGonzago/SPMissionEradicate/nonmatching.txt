@@ -1,0 +1,16 @@
+# va  diff-bytes  reason
+00c4ed50 5 Complete counter comparison predicate; residual is add-vs-sub encoding of the negative constant (semantically identical).
+00c4eee0 15 Complete duration recompute; residual is imul operand form (msvc folds memory operand into dst).
+00c4f220 43 nonmatching: ValidateHerds; remaining diff is register allocation/scheduling noise; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast; verdict WEAK (400 valid, 7.6% coverage)
+00c4f750 3 nonmatching: Update; single-instruction scheduling difference (93 vs 93 bytes); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast; verdict WEAK (256 valid, 41.2% coverage)
+00c4f7b0 13 nonmatching: Init; mState(+0x1f4) store scheduled before the vtable stores instead of after; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast; verdict PASS (320 valid, 100.0% coverage)
+00c4f890 89 nonmatching: GetUIShortDescription; stack-frame/string-buffer layout difference only (our 140 bytes vs 207); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast; verdict WEAK (111 valid, 47.7% coverage)
+00c4f960 37 nonmatching: PostAlertEvent; inlined UintVec::push_back register allocation/block layout differs (96 vs 98); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast; verdict WEAK (400 valid, 22.2% coverage)
+00c4f9d0 37 nonmatching: PostWarningEvent; inlined UintVec::push_back register allocation/block layout differs (96 vs 98); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast; verdict WEAK (400 valid, 22.2% coverage)
+00c4fa40 193 nonmatching: FUN_00c4fa40; switch-case body + event-log call sequencing/register layout differ (424 vs 444); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast; verdict WEAK (398 valid, 19.1% coverage)
+00c4fc00 413 nonmatching: OnAbduction; vcall/feedback-event sequence and register allocation differ (581 vs 597); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast; verdict WEAK (400 valid, 10.7% coverage)
+00c50300 246 complete: cSPMissionEradicate::GetClosestDiseasedAnimal herd walk; not byte-exact (frame/loop shape) flags /O2 /MD /Gy /EHsc /TP
+00c504a0 188 complete: cSPMissionEradicate::DestroyHerds herd walk; not byte-exact (frame layout) flags /O2 /MD /Gy /EHsc /TP
+00c50600 268 complete: cSPMissionEradicate::OnPlanetActivate; not byte-exact (frame/inline schedule) flags /O2 /MD /Gy /EHsc /TP
+00c50740 423 complete: cSPMissionEradicate::HandleMessage dispatch; not byte-exact (frame/EH layout) flags /O2 /MD /Gy /EHsc /TP
+01340070 57 disease-state registrar, 10 records (/O2 /MD /Gy /EHsc /TP): the closest of the five — every immediate, the store order and the per-record `rep movsd` match; only the callee-saved register phase differs. Original maps the three shared callbacks 0x692ca0 -> edx, 0xb1fbf0 -> ebp, 0x57cde0 -> ebx; ours lands them on a cyclic permutation (0x692ca0 -> ebx, 0xb1fbf0 -> edx, 0x57cde0 -> ebp). Both re-materialise the last record's f34/f38 (mCanFail uses 0x57ce00) as immediates (size 956 vs 960); difftest PASS (400/400 valid, 100% coverage)

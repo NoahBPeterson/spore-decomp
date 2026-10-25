@@ -1,0 +1,7 @@
+00c50a80 ?FUN_00c50a80@@YIHPAX0@Z  # FUN_00c50a80 migrated from s00c4fe60 (verbatim, slice spelling)
+00c50aa0 ?FUN_00c50aa0@@YIHPAX0@Z  # FUN_00c50aa0 migrated from s00c4fe60 (verbatim, slice spelling)
+00c50ac0 ?FUN_00c50ac0@@YI_NPAX0@Z  # FUN_00c50ac0 migrated from s00c4fe60 (verbatim, slice spelling)
+00c50c30 ?FUN_00c50c30@@YIXPAX00@Z  # FUN_00c50c30 migrated from s00c4fe60 (verbatim, slice spelling)
+00c50dd0 ?FUN_00c50dd0@@YIXPAX00@Z  # FUN_00c50dd0 migrated from s00c4fe60 (verbatim, slice spelling)
+00c50e70 ?FUN_00c50e70@@YAXPAURec20f@@00@Z  # FUN_00c50e70 migrated from s00c4fe60 (verbatim, slice spelling)
+00c50eb0 ?FUN_00c50eb0@@YIHPAX0@Z  # FUN_00c50eb0 migrated from s00c4fe60 (verbatim, slice spelling)
