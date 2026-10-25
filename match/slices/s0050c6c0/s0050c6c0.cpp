@@ -238,3 +238,68 @@ void Skin::Append(const Skin& other)
 }
 
 void __fastcall ProcessD(int self) { (void)self; }
+
+// ---------------------------------------------------------------------------
+// @ 0x0050d070  eastl::vector<Rec18>::operator=  (thiscall, ret 4)
+//
+// `Rec18` is the 0x18-byte element (six dwords, trivially destructible); the function is
+// eastl's vector copy-assignment: grow+copy when the source is larger than our capacity,
+// uninitialized-copy when it is larger than our size, plain copy + destruct of the tail otherwise.
+// ---------------------------------------------------------------------------
+struct Rec18 { uint32_t w[6]; };
+
+struct Iter18 {                       // eastl::generic_iterator<Rec18*>; non-POD -> returned via sret
+    Rec18* mpNode;
+    Iter18() {}
+    Iter18(Rec18* p) { mpNode = p; }
+};
+
+struct FalseType18 { FalseType18() {} };
+
+void operator_delete__(void* p);                    // 0x00f47380
+Iter18 UninitCopy18(Iter18 first, Iter18 last, Iter18 dest, FalseType18); // 0x004b2400 (uninitialized_copy_impl)
+
+struct VecRec18 {
+    Rec18* mpBegin;
+    Rec18* mpEnd;
+    Rec18* mpCap;
+
+    Rec18* Grow(int n, Rec18* first, Rec18* last);   // 0x0050e750 (ret 0xc): allocate+copy
+    __forceinline void DoFree(Rec18* p, int n) {
+        (void)n;
+        if (p != 0 && *(int*)((char*)p - 4) != 0)
+            operator_delete__(p);
+    }
+    VecRec18& Assign(const VecRec18& x);
+};
+
+// @ 0x0050d070
+VecRec18& VecRec18::Assign(const VecRec18& x)
+{
+    if (this != &x) {
+        int n = (int)(x.mpEnd - x.mpBegin);
+        if ((uint32_t)n > (uint32_t)(mpCap - mpBegin)) {
+            Rec18* pNew = Grow(n, x.mpBegin, x.mpEnd);
+            for (Rec18* p = mpBegin; p < mpEnd; p++) {}
+            DoFree(mpBegin, (int)(mpCap - mpBegin) / (int)sizeof(Rec18));
+            mpBegin = pNew;
+            mpCap = mpBegin + n;
+        }
+        else if ((uint32_t)n > (uint32_t)(mpEnd - mpBegin)) {
+            Rec18* d = mpBegin;
+            Rec18* s = x.mpBegin;
+            Rec18* sEnd = x.mpBegin + (mpEnd - mpBegin);
+            while (s != sEnd) { *d = *s; ++s; ++d; }
+            UninitCopy18(Iter18(x.mpBegin + (mpEnd - mpBegin)), Iter18(x.mpEnd), Iter18(mpEnd),
+                         FalseType18());
+        }
+        else {
+            Rec18* d = mpBegin;
+            Rec18* sEnd = x.mpEnd;
+            for (Rec18* s = x.mpBegin; s != sEnd; s++, d++) *d = *s;
+            for (Rec18* p = d; p < mpEnd; p++) {}
+        }
+        mpEnd = mpBegin + n;
+    }
+    return *this;
+}

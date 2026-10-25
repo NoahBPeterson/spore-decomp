@@ -5,3 +5,7 @@ slices/s00471b50/s00471b50.cpp  ?get@StridedArr@@  00472640  /Od /Ob1 /MD /Gy /T
 slices/s00471b50/s00471b50.cpp  ?Init72660@@  00472660  /Od /Ob1 /MD /Gy /TP
 slices/s00471b50/s00471b50.cpp  ?Init726d0@@  004726d0  /Od /Ob1 /MD /Gy /TP
 slices/s00471b50/s00471b50.cpp  ?Init72a00@@  00472a00  /Od /Ob1 /MD /Gy /TP
+slices/s00471b50/s00471b50.cpp  ??0cSerializedEditorBlock@SP@@QAE@ABU01@@Z  004721e0  /Od /Ob1 /MD /Gy /TP
+slices/s00471b50/s00471b50.cpp  ??0IntVecObj@@QAE@XZ  00472860  /Od /Ob1 /MD /Gy /TP
+slices/s00471b50/s00471b50.cpp  ??0FixedVecInt1@@QAE@HABH@Z  00472990  /Od /Ob1 /MD /Gy /TP
+slices/s00471b50/s00471b50.cpp  ??1IntVecObj@@QAE@XZ  00472aa0  /Od /Ob1 /MD /Gy /TP

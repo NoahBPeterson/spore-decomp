@@ -1,4 +1,4 @@
-0051fb90 ?FUN_0051fb90@@YAXPAX@Z  # FUN_0051fb90 migrated from s0051fb90 (verbatim, slice spelling)
+0051fb90 ?FUN_0051fb90@@YAXHPAUV3_s0051_fb90@@HUVector2_s0051_fb90@@PAUS0051HitFlags@@PAUS0051Mapper@@PAUS0051Skinner@@0@Z  # FUN_0051fb90 reconstructed (slice spelling): 8 args = kind, v2, idx, by-value Vector2, self(HitFlags), mapper, skinner, out
 00520110 ?FUN_00520110@@YAIHI@Z  # FUN_00520110 migrated from s0051fb90 (verbatim, slice spelling)
 00520140 ?FUN_00520140@@YAXHHPAM0@Z  # FUN_00520140 migrated from s0051fb90 (verbatim, slice spelling)
 00520220 ?FUN_00520220@@YAXHPAM0@Z  # FUN_00520220 migrated from s0051fb90 (verbatim, slice spelling)

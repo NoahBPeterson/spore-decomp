@@ -1,2 +1,4 @@
 # source (relative to match/)   symbol   original VA   [cl flags override]
 slices/s0088f1b0/s0088f1b0.cpp  ?Decrement@TextRunIterator@Text@EA@@QAEAAV123@XZ  0088f420  /O2 /MD /Gy /EHsc /TP
+slices/s0088f1b0/s0088f1b0.cpp  ?DoNukeSubtree@FontSelection@Text@EA@@QAEXPAUNode@123@@Z  0088fda0  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast
+slices/s0088f1b0/s0088f1b0.cpp  ?UpdateFontSelection@Layout@Text@EA@@QAEXPBUTextStyle@23@PAV123@PAVFontServer@23@@Z  0088ffa0  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast

@@ -1,2 +1,0 @@
-0049c630  -  skeleton: spine-ancestor surface snap, container logic not reconstructed
-0049c8f0  -  approximate: recursive transform accumulation, several paths guessed

@@ -107,8 +107,54 @@ inline Elem16* FindElem(Elem16* first, Elem16* last, PartPtr value) {
 
 inline Elem16* Elem16Vec::Find(PartHandle id) { return FindElem(begin(), end(), id.mValue); }
 
+// Block key: the type/part pair a block contributes; 0x004ef880 looks it up in the
+// 16-byte-element map at 0x015da960 (keys held as {+0 part, +8 type}).
+struct BlockKeySrc;
+struct BlockKey {
+    uint32_t mPartID;               // +0
+    uint32_t mTypeID;               // +4
+    BlockKey() {}
+    BlockKey(const BlockKeySrc& s);
+};
+struct BlockKeySrc {
+    uint32_t mTypeID;               // +0
+    uint32_t mPartID;               // +4
+    BlockKeySrc(uint32_t typeID, uint32_t partID) : mTypeID(typeID), mPartID(partID) {}
+};
+BlockKey::BlockKey(const BlockKeySrc& s) { mPartID = s.mPartID; mTypeID = s.mTypeID; }
+struct BlockKeyElem {
+    uint32_t mTypeID;               // +0
+    uint32_t pad4;
+    uint32_t mPartID;               // +8
+    uint32_t padC;
+    bool Matches(BlockKey k) { return mPartID == k.mPartID && mTypeID == k.mTypeID; }
+};
+struct BlockKeyElemVec {
+    BlockKeyElem* mpBegin;
+    BlockKeyElem* mpEnd;
+    BlockKeyElem* begin() { return mpBegin; }
+    BlockKeyElem* end() { return mpEnd; }
+    bool empty() const;             // @ 0x00526430
+    BlockKeyElem* Find(BlockKey key);
+};
+struct BlockKeyMap {
+    BlockKeyElemVec& operator[](const uint32_t& key);   // @ 0x004f6720
+};
+extern BlockKeyMap g_BlockKeys;      // 0x015da960
+
+inline BlockKeyElem* FindBlockKey(BlockKeyElem* first, BlockKeyElem* last, BlockKey value) {
+    while (first != last && !first->Matches(value))
+        ++first;
+    return first;
+}
+inline BlockKeyElem* BlockKeyElemVec::Find(BlockKey key) {
+    return FindBlockKey(begin(), end(), key);
+}
+
 struct cEditorBlock {
-    uint32_t pad0[0xd4 / 4];
+    uint32_t mTypeID;               // +0
+    uint32_t mPartID;               // +4
+    uint32_t pad0[(0xd4 - 8) / 4];
     int mnPartCount;                // +0xd4
     uint32_t pad1[(0xf8 - 0xd8) / 4];
     uint32_t mPartIDs[1];           // +0xf8
@@ -131,10 +177,37 @@ struct cEditorModel {
     BlockVec mBlocks;               // +0x98
 };
 
-// @ 0x004ef880  (INCOMPLETE skeleton)
-void FUN_004ef880(void* a, void* b)
+// @ 0x004ef880
+// Checks the model's block list against the per-key allowed block keys: every block of the
+// model must appear in the map at 0x015da960. Bit 5 reports a missing block. An empty allowed
+// list makes the check vacuously true.
+bool CheckBlockParts(cEditorModel* model, const uint32_t& key, ValidityBits* validity)
 {
-    (void)a; (void)b;
+    bool isValid = true;
+    uint32_t modelType = model->mModelType;     // read and dropped, as in the original
+    (void)modelType;
+    ScratchSlots<17>();
+    BlockKeyElemVec& allowed = g_BlockKeys[key];
+    if (allowed.empty()) {
+        if (validity)
+            validity->set(5, false);
+        return true;
+    }
+
+    BlockVec* blocks = &model->mBlocks;
+    cEditorBlock* pBlock = 0;
+    for (int i = 0, nCount = (int)(blocks->mpEnd - blocks->mpBegin); i < nCount && isValid; i++) {
+        pBlock = blocks->mpBegin + i;
+        BlockKeySrc src(pBlock->mTypeID, pBlock->mPartID);
+        BlockKey blockKey(src);
+        if (allowed.Find(blockKey) == allowed.end())
+            isValid = false;
+        TouchProfileTick();
+    }
+
+    if (validity)
+        validity->set(5, !isValid);
+    return isValid;
 }
 
 // @ 0x004efb20

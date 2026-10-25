@@ -4,3 +4,12 @@
 0049c8f0 ?BuildBlockTransforms@EditorUtils@SP@@YAXPAUcSPEditorBlock_s0049_c210@@PAU?$vector@UTrackerRecord@@@@_N@Z  # BuildBlockTransforms migrated from s0049c210 (verbatim, slice spelling)
 0049cb90 ?FUN_49cb90@EditorUtils@SP@@YAXPAU?$vector@UTrackerRecord@@@@@Z  # FUN_49cb90 migrated from s0049c210 (verbatim, slice spelling)
 0049ce40 ?RepinBlocks@EditorUtils@SP@@YAXPAU?$vector@UTrackerRecord@@@@@Z  # RepinBlocks migrated from s0049c210 (verbatim, slice spelling)
+004a9fa0 ?push_back@?$vector@UTrackerRecord@@@@QAEXABUTrackerRecord@@@Z  # TrackerRecord output push_back; real retail symbol at 0x4a9fa0 is ?push_back@?$evector@UKeyedPair@SP@@@SP@@QAEXABUKeyedPair@2@@Z (TrackerRecord == SP::KeyedPair)
+004aa100 ?1PartDeque@EditorUtils@SP@@QAE@XZ  # PartDeque ctor; real retail deque<SP::cSPEditorPart> ops at 0x4aa100
+004aa120 ?0PartDeque@EditorUtils@SP@@QAE@XZ  # PartDeque dtor; real retail deque<SP::cSPEditorPart> ops at 0x4aa120
+004aa170 ?GetSize@PartDeque@EditorUtils@SP@@QBEIXZ  # PartDeque::GetSize; real retail at 0x4aa170
+004aa1d0 ?APartDeque@EditorUtils@SP@@QAEAAPAUcSPEditorBlock@@I@Z  # PartDeque::operator[]; real retail at 0x4aa1d0
+004aa230 ?push_front@PartDeque@EditorUtils@SP@@QAEXABQAUcSPEditorBlock@@@Z  # PartDeque::push_front; real retail at 0x4aa230
+004c4d30 ?GetBlockOnSkin@cSPEditorModel@EditorUtils@SP@@QAEPAUcSPEditorBlock@@HUcSPVector3@@@Z  # cSPEditorModel::GetBlockOnSkin (callee of BuildBlockTransforms' sibling)
+00698b30 DistancePointSegment  # point-to-segment distance helper (callee of 0049c630)
+00698e00 ClosestPointOnSegment  # closest-point-on-segment helper (callee of 0049c630)

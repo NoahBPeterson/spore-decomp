@@ -5,9 +5,21 @@
 
 typedef unsigned int uint32_t;
 
-void ea_delete(void* p);              // operator_delete__
+void ea_delete(void* p);              // operator_delete__ (0x00f47380)
 
 struct Container;
+
+// ---------------------------------------------------------------------------
+// Member sub-destructors (thiscall, ecx = member address).
+// ---------------------------------------------------------------------------
+void __fastcall VecRelease4(void* member);       // 0x00425990  stride-4 release
+void __fastcall VecRelease8(void* member);       // 0x0045daf0  stride-8 release
+void __fastcall VSetDestroy(void* member);       // 0x00540520
+void __fastcall VecFDestroy(void* member);       // 0x004e1bf0
+void __fastcall Vec24Destroy(void* member);      // 0x0041e730
+void __fastcall Vec30Destroy(void* member);      // 0x004cddd0
+void __fastcall ElementDestroyVectors(void* el); // 0x00507b30
+void __fastcall Ptr164Destroy(void* obj);        // 0x004fdd60
 
 void __fastcall DestroySubA(void* self);   // 0x005156b0
 void __fastcall DestroySubB(void* self);   // 0x00425990
@@ -47,29 +59,7 @@ struct Container {                  // 0x94-byte element ("Skinner" allocation)
     Container(const Container& src);      // 0x00508320 (copy constructor)
 };
 
-// @ 0x00507670  (container destructor)
-void __fastcall Container_dtor(Container* self)
-{
-    char* base = (char*)self;
-    uint32_t* begin = *(uint32_t**)(base + 0xe4);
-    uint32_t* end   = *(uint32_t**)(base + 0xe8);
-    for (uint32_t i = 0; i < (uint32_t)(end - begin); ++i) {
-        void* p = (void*)begin[i];
-        if (p != 0) {
-            DestroyVectors((Container*)p);
-            ea_delete(p);
-        }
-        begin[i] = 0;
-    }
-    void* p59 = *(void**)(base + 0x164);
-    if (p59 != 0) {
-        ((Container*)p59)->~Container();
-        ea_delete(p59);
-    }
-    *(void**)(base + 0x164) = 0;
-}
-
-Container::~Container() {}   // placeholder for the inlined sub-destructor call
+// (the Skin destructor at 0x00507670 is defined below, after the Skin layout)
 
 // ---------------------------------------------------------------------------
 // @ 0x00507c70  copy constructor of the 0x1d0-byte ref-counted container (vtable 0x013f18cc):
@@ -82,7 +72,7 @@ void* operator new(unsigned int size, const char* pName, int flags, unsigned int
 struct Alloc { Alloc() {} };
 struct SpAlloc { char pad[8]; SpAlloc(const Alloc& a); };                 // 0x00429360
 struct VSetImpl {                                            // vector_set<unsigned>, 0x14 bytes
-    char pad[0x14];
+    void* mpBegin; void* mpEnd; void* mpCap; SpAlloc mAlloc;
     VSetImpl(const Alloc& a);                                // 0x00540470
 };
 template <int K> struct VSetK : VSetImpl {
@@ -93,10 +83,11 @@ typedef VSetK<0> VSet;
 typedef VSetK<1> VSetB;
 typedef VSetK<2> VSetC;
 struct VSetD : VSetImpl { VSetD() : VSetImpl(Alloc()) {} };
-struct Vec {                                                 // 0x14-byte vector
+struct Vec {                                                 // 0x14-byte vector (4-byte elements)
     void* mpBegin; void* mpEnd; void* mpCap; SpAlloc mAlloc;
     Vec(const Alloc& a) : mpBegin(0), mpEnd(0), mpCap(0), mAlloc(a) {}
     Vec& operator=(const Vec& o);                            // 0x0050d4e0
+    void Destroy();                                          // 0x00425990 (stride-4 release)
 };
 struct VecP {                                                // vector of element pointers
     Container** mpBegin; Container** mpEnd; Container** mpCap; SpAlloc mAlloc;
@@ -104,22 +95,26 @@ struct VecP {                                                // vector of elemen
     VecP& operator=(const VecP& o);                          // 0x0050d4e0
     unsigned int size() const { return mpEnd - mpBegin; }
     Container*& operator[](unsigned int i) { return mpBegin[i]; }
+    void Destroy();                                          // 0x00425990 (stride-4 release)
 };
 struct VecG {
     void* mpBegin; void* mpEnd; void* mpCap; SpAlloc mAlloc;
     VecG(const Alloc& a) : mpBegin(0), mpEnd(0), mpCap(0), mAlloc(a) {}
     VecG& operator=(const VecG& o);                          // 0x0050d750
+    void Destroy();                                          // 0x0045daf0 (stride-8 release)
 };
 struct VecU {                                                // SP::SimpleVector<unsigned>
     unsigned int* mpBegin; unsigned int* mpEnd; unsigned int* mpCap; SpAlloc mAlloc;
     VecU(const Alloc& a) : mpBegin(0), mpEnd(0), mpCap(0), mAlloc(a) {}
     unsigned int* erase(unsigned int* first, unsigned int* last);   // 0x004769b0
     void clear() { erase(mpBegin, mpEnd); }
+    void Destroy();                                          // 0x00425990 (stride-4 release)
 };
 struct VecT {                                                // member at +0x17c
     void* mpBegin; void* mpEnd; void* mpCap; SpAlloc mAlloc;
     VecT(const Alloc& a) : mpBegin(0), mpEnd(0), mpCap(0), mAlloc(a) {}
     void Clear();                                            // 0x004208f0
+    void Destroy();                                          // 0x00425990 (stride-4 release)
 };
 struct BBox { char pad[0x18]; BBox() { Reset(); } void Reset(); };                     // BoundingBox_Reset 0x00409c00
 
@@ -186,6 +181,76 @@ Skin::Skin(const Skin& o)
     m190 = o.m190;
     m168.clear();
     m17c.Clear();
+}
+
+__forceinline void SkinStoreVtable(Skin* self, void* vt) { *(void**)self = vt; }
+
+// Touch-loop form of a vector release: the element destructor loop is trivial
+// for these element types but is still emitted, then the backing block is freed.
+__forceinline void TouchedRelease4(void* begin, void* end, void* member)
+{
+    for (char* p = (char*)begin; p < (char*)end; p += 4) {}
+    VecRelease4(member);
+}
+__forceinline void TouchedRelease8(void* begin, void* end, void* member)
+{
+    for (char* p = (char*)begin; p < (char*)end; p += 8) {}
+    VecRelease8(member);
+}
+
+// ---------------------------------------------------------------------------
+// @ 0x00507670  Skin::~Skin()
+// Stores the derived vtable, frees every element of the pointer vector at +0xe4
+// (destroying each element's sub-vectors first), destroys the object at +0x164,
+// then destroys every remaining vector/set member in reverse declaration order
+// and finishes by restoring the base refcount vtable.
+// ---------------------------------------------------------------------------
+void __fastcall FUN_00507670(Skin* self)
+{
+    SkinStoreVtable(self, (void*)0x013f18cc);                // derived vtable
+    for (unsigned int i = 0; i < self->me4.size(); ++i) {
+        Container* el = self->me4[i];
+        Container* res = 0;
+        if (el != 0) {
+            ElementDestroyVectors(el);
+            if ((1 & 1) != 0)
+                ea_delete(el);
+            res = el;
+        }
+        (void)res;
+        self->me4[i] = 0;
+    }
+    if (self->m164 != 0) {
+        void* p = self->m164;
+        if (p != 0) {
+            Ptr164Destroy(p);
+            if ((1 & 1) != 0)
+                ea_delete(p);
+        }
+        self->m164 = 0;
+    }
+    TouchedRelease8(self->m1b8.mpBegin, self->m1b8.mpEnd, &self->m1b8);
+    TouchedRelease4(self->m1a4.mpBegin, self->m1a4.mpEnd, &self->m1a4);
+    TouchedRelease4(self->m190.mpBegin, self->m190.mpEnd, &self->m190);
+    TouchedRelease4(self->m17c.mpBegin, self->m17c.mpEnd, &self->m17c);
+    TouchedRelease4(self->m168.mpBegin, self->m168.mpEnd, &self->m168);
+    TouchedRelease4(self->m138.mpBegin, self->m138.mpEnd, &self->m138);
+    TouchedRelease8(self->m124.mpBegin, self->m124.mpEnd, &self->m124);
+    TouchedRelease4(self->m110.mpBegin, self->m110.mpEnd, &self->m110);
+    TouchedRelease4(self->mf8.mpBegin, self->mf8.mpEnd, &self->mf8);
+    TouchedRelease4(self->me4.mpBegin, self->me4.mpEnd, &self->me4);
+    VSetDestroy(&self->md0);
+    TouchedRelease4(self->mbc.mpBegin, self->mbc.mpEnd, &self->mbc);
+    TouchedRelease4(self->ma8.mpBegin, self->ma8.mpEnd, &self->ma8);
+    TouchedRelease4(self->m94.mpBegin, self->m94.mpEnd, &self->m94);
+    TouchedRelease4(self->m80.mpBegin, self->m80.mpEnd, &self->m80);
+    VecFDestroy(&self->m6c);
+    VecFDestroy(&self->m58);
+    Vec24Destroy(&self->m44);
+    Vec30Destroy(&self->m30);
+    VSetDestroy(&self->m1c);
+    VSetDestroy(&self->m08);
+    SkinStoreVtable(self, (void*)0x013ef094);                // base refcount vtable
 }
 
 // ---------------------------------------------------------------------------

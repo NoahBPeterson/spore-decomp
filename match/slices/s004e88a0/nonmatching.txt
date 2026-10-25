@@ -1,2 +1,10 @@
 # va  diff-bytes  reason
 004e89c0  28  rbtree lower_bound: complete; /Od slot order (current/candidate) and one reserved inline frame slot
+004e88a0  167  RBTree::FindOrInsert (find-or-insert + zero tail): equiv PASS (286 valid, 100% coverage); /Od frame/loop shape
+004e8a80  297  RBTree::InsertUnique (hinted insert_unique): equiv PASS (330 valid, 66.7% coverage); /Od frame shape + inlined helper copies
+004e8be0  102  RBTree::InsertNode (allocate + relink + count++): equiv PASS (334 valid, 100% coverage); /Od frame shape
+004e8c80  157  Body8c80 (refcounted pointer range copy w/ AddRef): equiv UNSUPPORTED (0/400 valid, fault(read)=376) - body only dereferences raw caller pointers, so no valid input can be synthesized
+004e8ee0  126  ApplyCopyLoop8ee0 (same range copy, writes end through out): equiv UNSUPPORTED (0/400 valid, fault(read)=383) - same raw-pointer dereference limitation
+004e8f70  151  RWXform::RWXform (null pointers, default basis/matrix, reset sentinels): equiv PASS (400 valid, 88.1% coverage); /Od frame shape
+004e9050  680  RWXform::Build (rebuild transform from render object + optional matrix/vector): equiv PASS (253 valid, 100% coverage); /Od frame shape
+004e9500  195  RWXform::Attach (bind render object, drive builder vtable slot): equiv PASS (354 valid, 100% coverage); /Od frame shape

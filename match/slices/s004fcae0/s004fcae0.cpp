@@ -14,6 +14,8 @@ template <int N> inline void ScratchSlots() { uint32_t s[N]; }
 
 struct Pod16 { void* p0; void* p1; float f; void* p2; };
 
+struct Elem24 { float m[5]; int i; };
+
 struct Vec24 {
     char* mpBegin;
     char* mpEnd;
@@ -22,6 +24,7 @@ struct Vec24 {
     int  size() const { return (int)(mpEnd - mpBegin) / 0x18; }
     void f_004fd940();                                                    // 0x004fd940 (ecx = this)
     void f_0050e690(void* begin, void* end);                              // 0x0050e690 (ecx = this)
+    void insert(void* pos, const void* value);                            // 0x004fd6d0
 };
 
 struct Vec16 {
@@ -35,6 +38,9 @@ struct Vec16 {
     void f_004fd9a0(void* pos, const void* val);                          // 0x004fd9a0 (ecx = this)
 };
 
+struct Owner;
+struct Stepper;
+
 struct Ability {
     void* vptr;                                   // +0
     int m4;                                       // +4
@@ -47,6 +53,7 @@ struct Ability {
     int Add(const Vector3* pos, float a, float b, int c);
     int Add2(void* a, void* b, float c, void* d);
     void Dispose();
+    void Steppers(Owner* owner);                   // 0x004fd380
 };
 
 // @ 0x004fcae0
@@ -132,6 +139,11 @@ void Vec16::push_back(const void* val)
     }
 }
 
+// Vector growth/copy helpers used by Vec24::insert.
+void* EASTL_Allocate(void* allocator, int size, int align, int flags);   // 0x0042dee0
+char* eastl_copy(char* first, char* last, char* dst);                   // 0x004fdc10
+void FreeRawBlock(void* p);                                             // 0x00f47380
+
 struct Pod24 { Pod24* Copy(const void* src); };
 
 // @ 0x004fd670
@@ -147,6 +159,46 @@ Pod24* Pod24::Copy(const void* src)
     *(float*)((char*)dst + 0x10) = *(const float*)((char*)src + 0x10);
     *(int*)((char*)dst + 0x14) = *(const int*)((char*)src + 0x14);
     return this;
+}
+
+// @ 0x004fd6d0
+void Vec24::insert(void* pos, const void* value)
+{
+    if (mpEnd != mpCapacity) {
+        const char* v = (const char*)value;
+        if (v >= (const char*)pos && v < mpEnd)
+            v += 0x18;
+        if (mpEnd != 0)
+            ((Pod24*)mpEnd)->Copy(mpEnd - 0x18);
+        char* dst = mpEnd;
+        char* src = mpEnd - 0x18;
+        char* d = dst;
+        char* s = src;
+        while (s != (char*)pos) {
+            s -= 0x18;
+            d -= 0x18;
+            *(Elem24*)d = *(const Elem24*)s;
+        }
+        *(Elem24*)pos = *(const Elem24*)v;
+        mpEnd += 0x18;
+    } else {
+        int size = (int)(mpEnd - mpBegin) / 0x18;
+        int newCap = (uint32_t)size > 0 ? size * 2 : 1;
+        char* newBuf;
+        if (newCap == 0)
+            newBuf = 0;
+        else
+            newBuf = (char*)EASTL_Allocate((char*)this + 0xc, newCap * 0x18, 4, 0);
+        char* p = eastl_copy(mpBegin, (char*)pos, newBuf);
+        if (p != 0)
+            ((Pod24*)p)->Copy(value);
+        char* newEnd = eastl_copy((char*)pos, mpEnd, p + 0x18);
+        if (mpBegin != 0 && *(int*)(mpBegin - 4) != 0)
+            FreeRawBlock(mpBegin);
+        mpBegin = newBuf;
+        mpEnd = newEnd;
+        mpCapacity = newBuf + newCap * 0x18;
+    }
 }
 
 // ---------------------------------------------------------------------------
@@ -250,7 +302,27 @@ void Stepper::Run(Owner* owner, float k0, Vec3f* pA, float pSpeed, float p5, Vec
 }
 
 // @ 0x004fd380
-void FUN_004fd380() {}
-// @ 0x004fd6d0
-void FUN_004fd6d0() {}
+void Ability::Steppers(Owner* pOwner)
+{
+    Owner* owner = pOwner;
+    uint32_t n8 = (uint32_t)mVec8.size();
+    for (uint32_t i = 0; i < n8; i++) {
+        Elem24* e = (Elem24*)(mVec8.mpBegin + i * 0x18);
+        owner->Emit((const Vec3f*)e, e->m[3], e->m[4], e->i);
+    }
+    uint32_t n16 = (uint32_t)mVec1c.size();
+    for (uint32_t i = 0; i < n16; i++) {
+        Pod16* e = (Pod16*)(mVec1c.mpBegin + (i << 4));
+        int a = *(int*)e;
+        int b = *((int*)e + 1);
+        float ac = *(float*)(mVec8.mpBegin + a * 0x18 + 0xc);
+        float bc = *(float*)(mVec8.mpBegin + b * 0x18 + 0xc);
+        float ad = *(float*)(mVec8.mpBegin + a * 0x18 + 0x10);
+        float bd = *(float*)(mVec8.mpBegin + b * 0x18 + 0x10);
+        Vec3f* ap = (Vec3f*)(mVec8.mpBegin + a * 0x18);
+        Vec3f* bp = (Vec3f*)(mVec8.mpBegin + b * 0x18);
+        ((Stepper*)this)->Run(owner, e->f, ap, ac, ad, bp, bc, bd,
+                              *(int*)((char*)e + 0xc));
+    }
+}
 

@@ -1,0 +1,3 @@
+slices/s0088d2a0/s0088d2a0.cpp  ?DoFreeNodes@SubstMapRT@RT@@QAEXPAPAUSubstNode@2@I@Z  0088df70  /O2 /MD /GS- /GR- /TP /arch:SSE /fp:fast
+slices/s0088d2a0/s0088d2a0.cpp  ?DoClear@FaceSourceList@RT@@QAEXXZ  0088def0  /O2 /MD /GS- /GR- /TP /arch:SSE /fp:fast
+slices/s0088d2a0/s0088d2a0.cpp  ?AddFont@FontServer@RT@@UAE_NPAVFont@2@@Z  0088d940  /O2 /MD /GS- /GR- /TP /arch:SSE /fp:fast

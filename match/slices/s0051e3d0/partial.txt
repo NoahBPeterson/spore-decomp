@@ -1,2 +1,1 @@
-# <va>  <diff-bytes>  <reason>
-0051ec70  1083  nSPSkinner::cPaintSystem::Shutdown; entry skeleton only
+# va  reason

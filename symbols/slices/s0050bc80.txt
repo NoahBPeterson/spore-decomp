@@ -1,0 +1,7 @@
+0050bd90 ?TraverseA@TravMesh@@QAEDPBX0EPAIPAM222@Z  # TravMesh::TraverseA (host in ecx; migrated marker had hidden-this missing)
+0050bff0 ?TraverseB@TravMesh@@QAEXPBXPAMPAIPAX11@Z  # TravMesh::TraverseB (host in ecx; migrated marker had hidden-this missing)
+004f7c00 ?TraverseTrisA@@YADPBXHPBHI00EHPAIPAXPAMH@Z  # ray/triangle walk, 12 args (callee of 0050bd90)
+004f7e70 ?TraverseTrisB@@YADPBXHPBHI00PAIPAMH@Z  # ray/triangle walk, 9 args (callee of 0050bff0)
+004fe070 ?Query@TravBuilder@@QAEXHHHH@Z  # per-triangle distance query (thiscall, callee of 0050bd90)
+00526430 ?Empty@TravIndexVector@@QAEDXZ  # VectorU32::empty on the index array (callee of 0050bd90)
+011e0738 ?sqrtf@@YAMM@Z  # lib_crt::sqrt (callee of 0050bff0)

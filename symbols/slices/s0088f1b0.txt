@@ -1,0 +1,10 @@
+0088f1b0 ?AddFaceSource@FontServer@Text@EA@@QAE_NPBVFontDescription@23@@Z  # EA::Text::FontServer::AddFaceSource (PDB caller-single)
+0088f4e0 ?GetLayoutMetrics@Layout@Text@EA@@SAXPBUGlyphAttributes@23@IPAULayoutMetrics@23@@Z  # EA::Text::Layout::GetLayoutMetrics
+0088f570 ?MeasureNextSegment@Text@EA@@YAHPAVTextRunIterator@12@PAG@Z  # EA::Text::MeasureNextSegment
+0088f6a0 ?PlaceGlyphs@Layout@Text@EA@@SGIPBURunInfo@23@IPBIPBUGlyphAttributes@23@IMMPAU523@@Z  # EA::Text::Layout::PlaceGlyphs (PDB callee-scored)
+0088f860 ?GetGlyphs@Layout@Text@EA@@QAEIPBGIMMPAVFont@23@PAUGlyphAttributes@23@@Z  # EA::Text::Layout::GetGlyphs
+0088f9b0 ?ShapeGlyphs@Layout@Text@EA@@QAEIPAII0PBUTextRun@23@IPAUGlyphAttributes@23@I0@Z  # EA::Text::Layout::ShapeGlyphs (PDB anchor)
+0088fbc0 ?DistributeWhitespace@Layout@Text@EA@@QAEXPBUTextRun@23@IIIPBIPAUGlyphAttributes@23@IIM_N@Z  # EA::Text::Layout::DistributeWhitespace
+0088fda0 ?DoNukeSubtree@FontSelection@Text@EA@@QAEXPAUNode@123@@Z  # eastl::rbtree<AutoRefCount<Font>>::DoNukeSubtree
+0088fe00 ?DoInsertValues@RunInfoVector@Text@EA@@QAEXPAURunInfo@23@IABU423@@Z  # eastl::vector<RunInfo>::DoInsertValues
+0088ffa0 ?UpdateFontSelection@Layout@Text@EA@@QAEXPBUTextStyle@23@PAV123@PAVFontServer@23@@Z  # EA::Text::Layout::UpdateFontSelection

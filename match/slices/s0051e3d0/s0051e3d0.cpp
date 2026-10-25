@@ -2,6 +2,9 @@
 // Unoptimized editor module: /Od /Ob1 /MD /Gy /TP /arch:SSE (no /EHsc).
 #include "types.h"
 
+extern "C" long __cdecl _InterlockedIncrement(long volatile*);
+#pragma intrinsic(_InterlockedIncrement)
+
 void __fastcall DefaultRefCounted_Release(void* self);   // 0x00453540 (thiscall)
 void __fastcall FUN_00402420(void* self);                // 0x00402420 (thiscall)
 void __fastcall SP_cJob_GetStatus(void* self);           // 0x00690120 (thiscall)
@@ -67,6 +70,11 @@ struct RCObj {                      // refcount at +4, Release = 0x00453540 (thi
     int AddRef() { return mRef++ + 1; }
     void __thiscall Release();  // 0x00453540
 };
+struct AtomicObj {                  // refcount at +8, atomic AddRef, Release = 0x00402420
+    void* vt; unsigned pad; long mRef;
+    void AddRef() { _InterlockedIncrement(&mRef); }
+    void Rel() { FUN_00402420(this); }
+};
 struct VObj {                       // slot0 AddRef, slot1 Release
     virtual void AddRef();
     virtual void Rel();
@@ -74,7 +82,11 @@ struct VObj {                       // slot0 AddRef, slot1 Release
     virtual void S3(int);
 };
 struct Job {
+    int __thiscall Continue();  // 0x0068f970
+    void __thiscall Cancel(bool);  // 0x00692400
+    int __thiscall AddRef();  // 0x0068f950
     void __thiscall Done();  // 0x00690120
+    bool IsStopped() { return ((1 << Continue()) & 0x3c) != 0; }
 };
 struct AllocT {
     void __thiscall Init(unsigned, unsigned, unsigned, unsigned, unsigned, void*, void*, unsigned);  // 0x009266b0
@@ -83,6 +95,8 @@ struct MsgServer {
     virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3();
     virtual void v4(); virtual void v5(); virtual void v6(); virtual void v7();
     virtual void Subscribe(void* who, unsigned id);   // +0x20
+    virtual void v8(); virtual void v9();
+    virtual void Unsubscribe(void* who, unsigned id, int mask);  // +0x2c
 };
 struct FxMgr {
     virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3();
@@ -91,6 +105,7 @@ struct FxMgr {
     virtual void v12(); virtual void v13(); virtual void v14(); virtual void v15();
     virtual void v16(); virtual void v17(); virtual void v18();
     virtual VObj* CreateEffect(unsigned id, int flag);  // +0x4c
+    virtual void Func50(unsigned id);                   // +0x50
 };
 struct JobMgr {
     virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3();
@@ -115,16 +130,39 @@ struct AOR : VObj {
 };
 struct JobSlot { void* fn; void* owner; uint32_t pad[4]; uint32_t flag; };
 struct JobHandle {
-    JobSlot* p;
+    union { Job* p; JobSlot* slot; };
     JobHandle* __thiscall Reset();  // 0x0041d940 (returns this)
+    JobHandle& operator=(Job* n)
+    {
+        if (n != p) {
+            Job* old = p;
+            if (n) n->AddRef();
+            p = n;
+            if (old) old->Done();
+        }
+        return *this;
+    }
 };
 
+inline void ResetJob(JobHandle* h)
+{
+    if (h->p) {
+        Job* old = (Job*)h->p;
+        h->p = 0;
+        if (old) old->Done();
+    }
+}
+
 extern AllocT g_FixedAlloc;                 // 0x015de2a0
+extern char g_015de470;                     // 0x015de470
 extern unsigned g_015de57c;                 // 0x015de57c
 void* operator_new(unsigned size, const char* name, int a, int b, int c, int d);   // 0x00f473a0
 MsgServer* GetMessageServer();              // 0x0067dcc0
 FxMgr* GetEffectsManager();                 // 0x0067ddd0
 JobMgr* GetJobMgr();                        // 0x0068f4d0
+void __fastcall FUN_00516d30(void* self);   // 0x00516d30 (AOR::Unload)
+void __fastcall FUN_009265b0(void* self);   // 0x009265b0
+struct FixedCfg { void __thiscall ShutdownCfg(int arg); };  // 0x005264d0
 void __cdecl FUN_00541600(void*);   // 0x00541600
 void __cdecl FUN_00541660(void*);   // 0x00541660
 extern char ParticleTickJobCallback[];      // 0x005248a0
@@ -137,6 +175,15 @@ inline void SetRC(RCObj** slot, RCObj* p)
         if (p) p->AddRef();
         *slot = p;
         if (old) old->Release();
+    }
+}
+inline void SetRCA(AtomicObj** slot, AtomicObj* p)
+{
+    if (p != *slot) {
+        AtomicObj* old = *slot;
+        if (p) p->AddRef();
+        *slot = p;
+        if (old) old->Rel();
     }
 }
 template<class T> struct Ref { T* mp; T* operator->() const { return mp; } };
@@ -165,9 +212,11 @@ struct PS {
     uint32_t mec;
     Ref<VObj> mf0; Ref<VObj> mf4;
     JobHandle mf8; JobHandle mfc;
-    uint32_t m100;
+    AtomicObj* m100;
     RCObj* m104;
     void DeviceRestore();
+    void SetCreatureSkin(void* skin, int flag);  // 0x00522b40
+    void Shutdown();
 };
 
 // @ 0x0051e5b0 `anonymous namespace'::DeviceRestore
@@ -205,21 +254,21 @@ void PS::DeviceRestore()
     m14->AddRef();
     ((AOR*)m14.mp)->Setup(0x46e92e0, g_015de57c);
     GetJobMgr()->Schedule(mf8.Reset());
-    JobSlot* a1 = mf8.p;
-    JobSlot* a2 = mf8.p;
+    JobSlot* a1 = mf8.slot;
+    JobSlot* a2 = mf8.slot;
     a2->fn = ParticleTickJobCallback;
     a2->owner = this;
-    JobSlot* a3 = mf8.p;
+    JobSlot* a3 = mf8.slot;
     a3->flag = 1;
     JobMgr* jm2 = GetJobMgr();
     JobHandle* h = &mfc;
-    if (h->p) { JobSlot* t = h->p; h->p = 0; ((Job*)t)->Done(); }
+    if (h->p) { JobSlot* t = h->slot; h->p = 0; ((Job*)t)->Done(); }
     jm2->Schedule(h);
-    JobSlot* b1 = mfc.p;
-    JobSlot* b2 = mfc.p;
+    JobSlot* b1 = mfc.slot;
+    JobSlot* b2 = mfc.slot;
     b2->fn = BuildMeshJobCallback;
     b2->owner = this;
-    JobSlot* b3 = mfc.p;
+    JobSlot* b3 = mfc.slot;
     b3->flag = 1;
     {
         mem4 = operator_new(0x1d0, "Skinner", 0, 0, 0, 0);
@@ -227,5 +276,49 @@ void PS::DeviceRestore()
     }
 }
 
-// @ 0x0051ec70 nSPSkinner::cPaintSystem::Shutdown -- PARTIAL skeleton (1083-byte /Od body)
-void FUN_0051ec70(void* self) { (void)self; }
+// @ 0x0051ec70 nSPSkinner::cPaintSystem::Shutdown
+void PS::Shutdown()
+{
+    {
+        Job* pJob = mf8.p;
+        if (pJob) {
+            Job* job = mf8.p;
+            if (job->IsStopped()) {
+                Job* stop = mf8.p;
+                stop->Cancel(true);
+            }
+            mf8 = (Job*)0;
+        }
+    }
+    {
+        Job* pJob = mfc.p;
+        if (pJob) {
+            Job* job = mfc.p;
+            if (job->IsStopped()) {
+                Job* stop = mfc.p;
+                stop->Cancel(true);
+            }
+            mfc = (Job*)0;
+        }
+    }
+    SetRC(&m104, 0);
+    SetCreatureSkin(0, 0);
+    {
+        VObj* pAor = m14.mp;
+        if (pAor) {
+            VObj* p = m14.mp;
+            FUN_00516d30(p);
+            VCall1(p);
+        }
+    }
+    SetV(&m14, 0);
+    SetRCA(&m100, 0);
+    SetRC(&m18, 0);
+    SetRC(&m0c, 0);
+    SetV(&mf4, 0);
+    GetEffectsManager()->Func50(0x37f23d0);
+    FUN_009265b0(&g_FixedAlloc);
+    ((FixedCfg*)(void*)&g_015de470)->ShutdownCfg(0);
+    GetMessageServer()->Unsubscribe(this, 0x44edd9c, 0xffffd8f1);
+    GetMessageServer()->Unsubscribe(this, 0x247ca7b, 0xffffd8f1);
+}

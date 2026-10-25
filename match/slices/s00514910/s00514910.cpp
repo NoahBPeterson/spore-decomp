@@ -66,14 +66,21 @@ DequeIterator<T>& DequeIterator<T>::operator--()
 template DequeIterator<Elem48>& DequeIterator<Elem48>::operator--();
 template void DequeIterator<Elem48>::SetSubarray(Elem48**);
 
+namespace eastl {
+template <typename T>
+inline const T& max(const T& a, const T& b) { return (a < b) ? b : a; }
+}
+
 template <typename T>
 struct DequeBase {
     T** mpPtrArray;
-    int mnPtrArraySize;
+    uint32_t mnPtrArraySize;     // +0x04
     DequeIterator<T> mItBegin;   // +0x08
     DequeIterator<T> mItEnd;     // +0x18
     uint32_t mAlloc;             // +0x28
     T* DoAllocateSubarray();
+    T** DoAllocatePtrArray(uint32_t n);   // @ 0x0056a240
+    void Construct(uint32_t n);      // @ 0x00515000
 };
 
 // @ 0x00514e10
@@ -116,32 +123,141 @@ void** RangeInsertOut(void** out, void* first, int last, void* dst)
 }
 
 // ---------------------------------------------------------------------------
-// large deque routines -- partial
+// vector insert routines: 0x00514910 is the copy-insert of 0x1c-byte elements,
+// 0x005151b0 the byte-strided Insert(position, n, value).
 // ---------------------------------------------------------------------------
-struct BigDequeBase {
-    void* pad[0x28 / 4];
-    void DoInsertValues(void* position, uint32_t n, void* value);   // 0x00514910
-    void Construct(uint32_t n);                                     // 0x00515000
-    void Insert(void* position, uint32_t n, char* value);           // 0x005151b0
+extern "C" void* __cdecl memmove(void*, const void*, uint32_t);
+extern "C" void* __cdecl memset(void*, int, uint32_t);
+void FreeRawBlock(void* p);                                     // 0x00f47380
+
+// 7-dword element (0x1c bytes, same shape as the Fill7 target).
+struct Elem28 {
+    uint32_t m[7];
+};
+
+// memcpy of [first, last) to dst; returns dst advanced by the element count.
+template <typename T>
+inline T* CopyRange(T* dst, const T* first, const T* last)
+{
+    const uint32_t len = (uint32_t)((const char*)last - (const char*)first);
+    memcpy(dst, first, len);
+    return (T*)((char*)dst + (len / sizeof(T)) * sizeof(T));
+}
+
+struct Vec28 {
+    Elem28* mpBegin;
+    Elem28* mpEnd;
+    Elem28* mpCap;
+    void*   mAlloc;             // +0x0c
+    void DoInsertValues(Elem28* position, uint32_t n, const Elem28& value);   // 0x00514910
+};
+
+struct ByteVec {
+    uint8_t* mpBegin;
+    uint8_t* mpEnd;
+    uint8_t* mpCap;
+    void*    mAlloc;            // +0x0c
+    void Insert(uint8_t* position, uint32_t n, const uint8_t& value);        // 0x005151b0
 };
 
 // @ 0x00515000
-void BigDequeBase::Construct(uint32_t n)
+template <typename T>
+void DequeBase<T>::Construct(uint32_t n)
 {
-    // PARTIAL (246-byte body not fully reproduced).
-    (void)n;
+    const uint32_t subarrayCount = (n / kSubarraySize) + 1;
+    mnPtrArraySize = eastl::max<uint32_t>(8, subarrayCount + 2);
+    mpPtrArray = DoAllocatePtrArray(mnPtrArraySize);
+    T** pPtrArrayBegin = mpPtrArray + ((mnPtrArraySize - subarrayCount) >> 1);
+    T** pPtrArrayEnd = pPtrArrayBegin + subarrayCount;
+    for (T** pPtrArray = pPtrArrayBegin; pPtrArray < pPtrArrayEnd; ++pPtrArray)
+        *pPtrArray = DoAllocateSubarray();
+    mItBegin.SetSubarray(pPtrArrayBegin);
+    mItBegin.mpCurrent = mItBegin.mpBegin;
+    mItEnd.SetSubarray(pPtrArrayEnd - 1);
+    mItEnd.mpCurrent = mItEnd.mpBegin + (n % kSubarraySize);
 }
+template void DequeBase<Elem48>::Construct(uint32_t);
 
 // @ 0x00514910
-void BigDequeBase::DoInsertValues(void* position, uint32_t n, void* value)
+void Vec28::DoInsertValues(Elem28* position, uint32_t n, const Elem28& value)
 {
-    // PARTIAL (1279-byte body not reproduced).
-    (void)position; (void)n; (void)value;
+    const uint32_t count = (uint32_t)((const char*)mpEnd - (const char*)mpBegin) / sizeof(Elem28);
+    if (n > count) {
+        const uint32_t newCap = count ? count * 2 : 1;
+        const uint32_t newCount = (count + n < newCap) ? newCap : (count + n);
+        Elem28* newBegin = newCount ? (Elem28*)EASTL_Allocate(&mAlloc, newCount * sizeof(Elem28), 4, 0) : 0;
+        Elem28* newPos = CopyRange(newBegin, mpBegin, position);
+        void* out;
+        Fill7(&out, newPos, (int)n, (void*)&value);
+        Elem28* newEnd = CopyRange(newPos + n, position, mpEnd);
+        if (mpBegin && ((uint32_t*)mpBegin)[-1])
+            FreeRawBlock(mpBegin);
+        mpBegin = newBegin;
+        mpEnd = newEnd;
+        mpCap = (Elem28*)((char*)newBegin + newCount * sizeof(Elem28));
+        return;
+    }
+    if (n == 0)
+        return;
+
+    Elem28 valueSaved = value;
+    const uint32_t nAfter = (uint32_t)((const char*)mpEnd - (const char*)position) / sizeof(Elem28);
+    Elem28* pOldEnd = mpEnd;
+    if (n < nAfter) {
+        Elem28* p = pOldEnd - n;
+        CopyRange(pOldEnd, p, pOldEnd);
+        mpEnd = pOldEnd + n;
+        memmove(position + n, position, (uint32_t)((const char*)p - (const char*)position));
+        for (Elem28* q = position; q != position + n; ++q)
+            *q = valueSaved;
+    } else {
+        const uint32_t nExtra = n - nAfter;
+        void* out;
+        Fill7(&out, mpEnd, (int)nExtra, (void*)&valueSaved);
+        mpEnd += nExtra;
+        CopyRange(mpEnd, position, pOldEnd);
+        mpEnd = pOldEnd + n;
+        for (Elem28* q = position; q != pOldEnd; ++q)
+            *q = valueSaved;
+    }
 }
 
 // @ 0x005151b0
-void BigDequeBase::Insert(void* position, uint32_t n, char* value)
+void ByteVec::Insert(uint8_t* position, uint32_t n, const uint8_t& value)
 {
-    // PARTIAL (1088-byte body not reproduced).
-    (void)position; (void)n; (void)value;
+    const uint32_t count = (uint32_t)(mpEnd - mpBegin);
+    if (n > count) {
+        const uint32_t newCap = count ? count * 2 : 1;
+        const uint32_t newCount = (count + n < newCap) ? newCap : (count + n);
+        uint8_t* newBegin = newCount ? (uint8_t*)EASTL_Allocate(&mAlloc, newCount, 1, 0) : 0;
+        uint8_t* newPos = CopyRange(newBegin, mpBegin, position);
+        memset(newPos, value, n);
+        uint8_t* newEnd = CopyRange(newPos + n, position, mpEnd);
+        if (mpBegin && ((uint32_t*)mpBegin)[-1])
+            FreeRawBlock(mpBegin);
+        mpBegin = newBegin;
+        mpEnd = newEnd;
+        mpCap = newBegin + newCount;
+        return;
+    }
+    if (n == 0)
+        return;
+
+    const uint8_t valueSaved = value;
+    const uint32_t nAfter = (uint32_t)(mpEnd - position);
+    uint8_t* pOldEnd = mpEnd;
+    if (n < nAfter) {
+        uint8_t* p = pOldEnd - n;
+        CopyRange(pOldEnd, p, pOldEnd);
+        mpEnd = pOldEnd + n;
+        memmove(position + n, position, (uint32_t)(p - position));
+        memset(position, valueSaved, n);
+    } else {
+        const uint32_t nExtra = n - nAfter;
+        memset(mpEnd, valueSaved, nExtra);
+        mpEnd += nExtra;
+        CopyRange(mpEnd, position, pOldEnd);
+        mpEnd = pOldEnd + n;
+        memset(position, valueSaved, (uint32_t)(pOldEnd - position));
+    }
 }
