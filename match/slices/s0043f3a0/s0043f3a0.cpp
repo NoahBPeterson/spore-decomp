@@ -4,6 +4,7 @@
 namespace SP {
 
 struct Vec3 { float x, y, z; };
+class cSPEditorBlock;
 struct Matrix3 {
     float m[9];
     Matrix3() {}
@@ -13,10 +14,55 @@ struct Matrix3 {
 struct cSPBoundingBox {                       // 24 bytes: mMin, mMax
     Vec3 mMin, mMax;
     Vec3 GetCorner(uint32_t mask) const;      // 0043F290
+    Vec3 Center();                            // 00409B90
 };
 
-struct Node { bool Check(); };                 // 004ADC40
-struct DefaultRefCounted { void Release(); };
+Vec3 operator-(const Vec3& a, const Vec3& b); // 0041DB10
+float VectorLength(const Vec3* v);            // 0040AE50
+void Vector3_Add(Vec3* a, const Vec3* b);     // 0041DDB0
+
+// Transform message (0x434040 ctor).  flags/count + pos + scale + 3x3 rotation.
+struct XformMsg {
+    uint16_t flags;
+    uint16_t count;
+    Vec3     pos;
+    float    scale;
+    Matrix3  rot;
+    XformMsg();
+    void SetRot(const Matrix3& m) { rot = m; flags |= 2; ++count; }
+    void SetPos(const Vec3& v)    { pos = v; flags |= 4; ++count; }
+    void SetScale(float s)        { scale = s; ++count; }
+};
+
+// SP::cSPEditorModel: vfptr, EA ref-count block at +4 (count at +8), then the
+// editor grid fields read by the getters below.
+struct cSPEditorModel {
+    struct RefCount {
+        uint32_t pad04;
+        int      mnRefCount;                  // model+0x08
+        void     Release();                   // 0x00453540
+    };
+    uint32_t        vfptr;                    // +0x00
+    RefCount        mRef;                     // +0x04
+    char            pad0c[0x38 - 0x0c];
+    float           mScale;                   // +0x38
+    char            pad3c[0x40 - 0x3c];
+    float           mMinHeight;               // +0x40
+    float           mMaxHeight;               // +0x44
+    char            pad48[0x4f - 0x48];
+    bool            mbUsingSymmetry;          // +0x4f
+    float GetScale();                       // 0x004ADAA0
+    float GetMinHeight();                   // 0x004ADB00
+    float GetMaxHeight();                   // 0x004ADB40
+    bool  UsingSymmetry();                  // 0x004ADC40
+    void  SetUsingSymmetry(bool b);         // 0x004ADC20
+};
+
+struct Basis { Vec3 rows[3]; };
+
+int ClassifyAgainstSymmetryPlane(Vec3* p, float width, float zmin, float zmax, Basis* out); // 00493640
+bool FUN_0049b340(void* owner);               // 0049B340
+void FUN_004c5030(uint32_t id, cSPEditorBlock* block);   // 004C5030
 
 struct BitSet60 {
     uint32_t data[2];
@@ -26,10 +72,42 @@ struct BitSet60 {
     }
 };
 
+struct DefaultRefCounted { void Release(); };
+
+class cSPEditorBlock;
+
+struct cSPEditorEffects {
+    int  Get(cSPEditorBlock* block);                             // 0045B210
+    void Stop(cSPEditorBlock* block);                            // 0045B150
+    void SetTransform(cSPEditorBlock* block, const XformMsg* m); // 0045B040
+};
+
+struct cEffectsWorld {
+    void SetEffectTransform(uint32_t id, int flags, const XformMsg* m,
+                            cSPEditorBlock* block);              // 0045AC20
+};
+
+struct cMessageManager {
+    void PostMSG(uint32_t id, int a, cSPEditorBlock* block, void* b);  // 0045AE40
+};
+
+cSPEditorEffects* EditorEffects();            // 00401050
+cEffectsWorld*    GetEditorEffectsWorld();    // 00401050
+cMessageManager*  MessageManager();           // 00401050
+
+struct Node { bool Check(); };
+
 class cSPEditorBlock { public:
     char             pad00[0x28];
-    Node*            node;        // +0x28
-    char             pad2c[0x33C - 0x2C];
+    union {
+        cSPEditorModel* mEditorModel; // +0x28
+        Node*           node;         // +0x28 (legacy alias)
+    };
+    char             pad2c[0x60 - 0x2C];
+    Matrix3          mOrientation;    // +0x60
+    char             pad84[0x144 - 0x84];
+    Vec3             mReplacePartDisplacement;  // +0x144
+    char             pad150[0x33C - 0x150];
     cSPEditorBlock*  link33c;     // +0x33C
     struct PtrVec {
         cSPEditorBlock** begin;
@@ -52,6 +130,10 @@ class cSPEditorBlock { public:
     void  F40420(float v, uint8_t b);          // 00440420
     void  F40520(float v, uint8_t b, int c);   // 00440520
     void  F3a5e0(int type, uint8_t a, uint8_t b, char c);  // 0043A5E0
+    void  SetUIState(int state, bool a, bool b, bool c);   // 0043A5E0
+    void  SetFlag(int flag, bool value);                   // 00435A10
+    bool  Paint();                                         // 0044C030
+    cSPBoundingBox GetBBox(int a, bool b, int c);          // 0044AE00
     void  SetValid(char valid, int arg);       // 0043F6B0
     bool  F3fc20(void* pos);                   // 0043FC20
 
@@ -161,44 +243,96 @@ void cSPEditorBlock::F4090(float v, uint8_t b)
 // @ 0x0043FC20
 bool cSPEditorBlock::F3fc20(void* pos)
 {
-    int n = (int)node;
-    if (n != 0) *(int*)(n + 8) = *(int*)(n + 8) + 1;
-    uint8_t saved = node ? (uint8_t)(node->Check() ? 1 : 0) : 0;
-    Sub_4ADC20(0);
-    bool flag = (bits.data[1] & 0x80000u) != 0;
-    uint8_t result = 0;
-    if ((bits.data[0] & 0x80u) == 0) {
-        Vec3* src = pos ? (Vec3*)pos : (Vec3*)((char*)this + 0x48);
-        Vec3 local = *src;
-        float f = F3eed0();
-        (void)f;
-        int r = Sub_493640(&local, f);
-        uint8_t notThree = (uint8_t)(r != 3);
-        if (notThree && !flag) result = 1;
-        if (link33c == 0 && !F49b340()) result = 1;
-        if ((bits.data[0] & 0x100000u) != 0) result = 0;
-        if ((bits.data[1] & 0x400u) != 0) result = 1;
-        if (link33c != 0 && (link33c->bits.data[0] & 2u) != 0) result = 1;
+    cSPEditorModel* model = mEditorModel;
+    if (model != 0) {
+        model->mRef.mnRefCount = model->mRef.mnRefCount + 1;
     }
-    Sub_4ADC20((int)saved);
+    uint8_t result = 0;
+    bool saved = model ? model->UsingSymmetry() : false;
+    if (model != 0) model->SetUsingSymmetry(false);
+
+    bool flag51 = bits.Get(0x33);
+    if (!bits.Get(7)) {
+        Vec3 local;
+        if (pos != 0) {
+            local = *(Vec3*)pos;
+        } else {
+            local = *(Vec3*)((char*)this + 0x48);
+        }
+        Basis basis;
+        int r = ClassifyAgainstSymmetryPlane(&local, model->GetScale(),
+                                             model->GetMinHeight(),
+                                             model->GetMaxHeight(), &basis);
+        uint8_t notThree = (uint8_t)(r != 3);
+        if (notThree && !flag51) result = 1;
+        if (link33c == 0 && !FUN_0049b340(this)) result = 1;
+        if (bits.Get(0x14)) result = 0;
+        if (bits.Get(0x2a)) result = 1;
+        if (link33c != 0 && link33c->bits.Get(1)) result = 1;
+    }
+
+    if (model != 0) model->SetUsingSymmetry(saved);
     bool b = result == 0;
-    if (n != 0) ((DefaultRefCounted*)(n + 4))->Release();
+    if (model != 0) {
+        model->mRef.Release();
+    }
     return b;
 }
 
-// @ 0x0043F6B0 (SP::cSPEditorBlock::SetValid) — complex; approximated.
+// @ 0x0043F6B0
 void cSPEditorBlock::SetValid(char valid, int arg)
 {
-    uint8_t wasLinked = (uint8_t)((bits.data[1] & 2u) != 0);
-    F3a5e0(1, (uint8_t)(valid == 0), 1, 0);
-    if (valid == 0) {
-        F3a5e0(1, 1, 0, 1);
-        if (arg != 0 && (bits.data[1] & 0x400u) != 0) { }
+    uint8_t wasLinked = bits.Get(1) ? 1 : 0;
+    SetFlag(1, valid == 0);
+    if (valid != 0) {
+        SetUIState(0, true, false, false);
+        if (arg != 0 && bits.Get(10)) {
+            FUN_004c5030(0xca9bb36f, this);
+        }
+        SetFlag(0x25, true);
+        if (!wasLinked) return;
+        if (EditorEffects()->Get(this) != 0) {
+            EditorEffects()->Stop(this);
+        }
+        if (!Paint()) return;
+
+        cSPBoundingBox bbox = GetBBox(0, false, 0);
+        Vec3 width = bbox.mMax - bbox.mMin;
+        float len = VectorLength(&width);
+
+        XformMsg msg;
+        msg.SetRot(mOrientation);
+        Vec3 center = bbox.Center();
+        msg.SetPos(center);
+        msg.SetScale(len);
+        GetEditorEffectsWorld()->SetEffectTransform(0xabf6fbdd, 1, &msg, this);
         return;
     }
-    F3a5e0(0, 1, 0, 0);
-    if (arg != 0 && (bits.data[1] & 0x400u) != 0) { }
-    (void)wasLinked;
+
+    SetUIState(1, true, false, true);
+    if (arg != 0 && bits.Get(10)) {
+        FUN_004c5030(0xf691ee89, this);
+    }
+    if (!Paint()) return;
+    if (!(wasLinked && EditorEffects()->Get(this) != 0)) {
+        if (EditorEffects()->Get(this) != 0) {
+            EditorEffects()->Stop(this);
+        }
+        MessageManager()->PostMSG(0x406ed5d0, 1, this, this);
+    }
+
+    cSPBoundingBox bbox = GetBBox(0, false, 0);
+    Vec3 width = bbox.mMax - bbox.mMin;
+    float len = VectorLength(&width);
+
+    XformMsg msg;
+    Vec3 center = bbox.Center();
+    if (bits.Get(0x2a)) {
+        Vector3_Add(&center, &mReplacePartDisplacement);
+    }
+    msg.SetPos(center);
+    msg.SetScale(len);
+    EditorEffects()->SetTransform(this, &msg);
 }
 
 } // namespace SP
