@@ -1,1 +1,8 @@
 # source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00552af0/s00552af0.cpp  ?DoInsertValue@Tbl64I@@QAE?AUInsertResultV@@AB_KUTrueType@@@Z  00552d00  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s00552af0/s00552af0.cpp  ?Find@Tbl3F@@QAE?AUIter@@ABUKey3@@@Z  00552f80  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s00552af0/s00552af0.cpp  ?Find@Tbl3Fb@@QAE?AUIterR@@ABUKey3@@@Z  00553090  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s00552af0/s00552af0.cpp  ?DoInsertValue@Tbl3I@@QAE?AUInsertResultV@@ABUKey3@@UTrueType@@@Z  005532f0  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s00552af0/s00552af0.cpp  ?Find@Tbl64F@@QAE?AUIter@@AB_K@Z  00553510  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s00552af0/s00552af0.cpp  ?DoInsertValue@Tbl2I@@QAE?AUInsertResult@@AB_KUTrueType@@@Z  00553750  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s00552af0/s00552af0.cpp  ?Find@Tbl32F@@QAE?AUIterR@@ABI@Z  005538f0  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast
