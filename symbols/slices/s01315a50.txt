@@ -1,2 +1,2 @@
-01315a50 Simulator::InitCommEventAttributes  # $E240: 16-record cCommEvent serializer attribute table at 0x01566db0 (mEventType, mSource, ..., mElapsedTime); names/offsets match ModAPI cCommEvent.h; descriptive name
+01315a50 ?InitCommEventAttributes@Simulator@@YAXXZ  # InitCommEventAttributes migrated from s01315a50 (verbatim, slice spelling)
 01317720 ?InitPlantAttributes@Simulator@@YAXXZ  # InitPlantAttributes migrated from s01315a50 (verbatim, slice spelling)

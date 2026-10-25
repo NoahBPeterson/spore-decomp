@@ -1,0 +1,2 @@
+# source  symbol  va  flags
+../src/game/SPGonzago/SPCommManager.cpp  ?InitCommEventAttributes@Simulator@@YAXXZ  01315a50  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
