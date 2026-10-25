@@ -1,7 +1,8 @@
+00812160 ?Init@cSPUILayout@@QAE_NPB_WH_NI@Z  # cSPUILayout::Init (callee of s00e06220, named from the dev publics; slice address comment)
 00e06220 ?Update@cSPUIGlobalUICiv@@QAEXH@Z  # void cSPUIGlobalUICiv::Update(int32_t) - the per-turn civilization panel update: comm-screen visibility, comm-rel panel slots, rel data binding and the two progress bars
 00e063d0 ?SetCommScreenVisibility@cSPUIGlobalUICiv@@QAEXPAVcCivilization@@_N@Z  # void cSPUIGlobalUICiv::SetCommScreenVisibility(cCivilization*, bool) - shows/hides the relationship panels of one civilization
-00e064f0 ?AssignCommRelPanel@cSPUIGlobalUICiv@@QAEXHPAVcCivilization@@@Z  # void cSPUIGlobalUICiv::AssignCommRelPanel(int32_t, cCivilization*) - binds a civilization to a comm-rel panel slot and activates the panel
-00e06560 ?HandleMessage@cSPUIGlobalUICiv@@QAEXIPAX@Z  # void cSPUIGlobalUICiv::HandleMessage(uint32_t, void*) - reacts to the comm-screen open/close messages, then forwards to the base handler
+00e064f0 ?AssignCommRelPanel@cSPUIGlobalUICiv_s00e0_6220@@QAEXHPAVcCivilization_s00e0_6220@@@Z  # cSPUIGlobalUICiv_s00e0_6220::AssignCommRelPanel migrated from s00e06220 (verbatim, slice spelling)
+00e06560 ?HandleMessage@cSPUIGlobalUICiv_s00e0_6220@@QAEXIPAX@Z  # cSPUIGlobalUICiv_s00e0_6220::HandleMessage migrated from s00e06220 (verbatim, slice spelling)
 00e065c0 ?InitCommRelPanels@cSPUIGlobalUICiv@@QAEXXZ  # void cSPUIGlobalUICiv::InitCommRelPanels() - assigns a panel to every visible non-player civilization
 00e06630 ?AssignFreeCommRelPanel@cSPUIGlobalUICiv@@QAEXPAVcCivilization@@@Z  # void cSPUIGlobalUICiv::AssignFreeCommRelPanel(cCivilization*) - puts a civilization into the first free comm-rel panel
 00e066a0 ?AsInterface@cSPUILoyaltyMeter@@QAEPAV1@I@Z  # cSPUILoyaltyMeter* cSPUILoyaltyMeter::AsInterface(uint32_t) - returns this for the four loyalty-meter interface ids

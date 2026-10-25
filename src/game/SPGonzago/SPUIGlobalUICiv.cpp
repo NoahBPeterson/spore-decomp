@@ -1,4 +1,4 @@
-// src/game/SPGonzago/SPUIGlobalUICiv.cpp -- migrated from slice(s) s00e052d0, s00e043c0, s00e033d0, s00bad7a0, s00bac830, s00baa930, s00ba9810 by tools/migrate/rewrite.py
+// src/game/SPGonzago/SPUIGlobalUICiv.cpp -- migrated from slice(s) s00e06220, s00e052d0, s00e043c0, s00e033d0, s00bad7a0, s00bac830, s00baa930, s00ba9810 by tools/migrate/rewrite.py
 // Object file: SPGonzago/SPUIGlobalUICiv.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -11,6 +11,8 @@
 #include "EA/UTFWin/RenderContext.h"
 #include "SP/cString.h"
 #include "SP/cVehicle.h"
+#include "EA/Random/RandomLinearCongruential.h"
+#include "cSPUILayout.h"
 
 // ---- items of slice s00ba9810 begin (TODO(rewrite): local stubs, replace by canonical classes)
 struct cSortTriple {                                                    // 12-byte sort / run key
@@ -699,6 +701,198 @@ public:
 };
 int32_t GetSuperweaponKind(uint32_t nButtonId);                        // 0x00e053c0
 // ---- items of slice s00e052d0 end
+
+// ---- items of slice s00e06220 begin (TODO(rewrite): local stubs, replace by canonical classes)
+#define PVCAT2(a, b) a##b
+#define PVCAT(a, b) PVCAT2(a, b)
+#define PV virtual void PVCAT(pv_, __COUNTER__)();
+#define PV2 PV PV
+#define PV4 PV2 PV2
+#define PV8 PV4 PV4
+#define PV16 PV8 PV8
+class cCivilization_s00e0_6220;
+class cSPUIMeter;
+struct ILink {
+    virtual void AddRef();                       // +0x00
+    virtual void Release();                      // +0x04
+    virtual void S08();                          // +0x08
+    virtual void* GetObject(uint32_t nKey);      // +0x0c
+    PV16 PV8 PV2 PV                              // 0x10 .. 0x78
+    virtual bool GetRange(uint8_t nType, float* pOut);   // +0x7c
+    PV8 PV4 PV2 PV                               // 0x80 .. 0xb8
+    virtual void AddRef2();                      // +0xbc
+    virtual void Release2();                     // +0xc0
+
+    int32_t GetValue();                          // 0x00b8de30
+};
+struct IWindow {
+    virtual void AddRef();                       // +0x00
+    virtual void S04();                          // +0x04
+    virtual void Release();                      // +0x08
+    virtual struct ISubWindow* GetSubWindow(uint32_t nKey);   // +0x0c
+    virtual IWindow* GetDecorator();             // +0x10
+    PV2                                          // 0x14, 0x18
+    virtual void Select();                       // +0x1c
+    virtual void S20();                          // +0x20
+    virtual void S24();                          // +0x24
+    virtual bool IsVisible();                    // +0x28
+    PV2                                          // 0x2c, 0x30
+    virtual float* GetArea();                    // +0x34
+    PV8 PV2 PV                                   // 0x38 .. 0x60
+    virtual void SetProgress(float fValue, float fRange);   // +0x64
+    PV4 PV                                       // 0x68 .. 0x78
+    virtual void SetState(int32_t nState, bool bOn);      // +0x7c
+    PV4                                          // 0x80 .. 0x8c
+    virtual void Refresh();                      // +0x90
+    PV16 PV4 PV                                  // 0x94 .. 0xe4
+    virtual void BringToFront(IWindow* pWindow); // +0xe8
+    virtual void AttachChild(IWindow* pWindow);  // +0xec
+    virtual IWindow* CreateChild(void* pOwner, int32_t nFlags);   // +0xf0
+    PV4                                          // 0xf4 .. 0x100
+    virtual void AttachOwner(cSPUIMeter* pOwner);   // +0x104
+};
+struct ISubWindow {
+    PV16 PV8 PV2 PV                              // 0x00 .. 0x24
+    virtual void SetState(int32_t nState, bool bOn);      // +0x28
+};
+class cSPUILayout_s00e0_6220 {
+public:
+    bool Init(const wchar_t* pName, uint32_t nID, bool bDeep, uint32_t nFlags);   // 0x00812160
+    IWindow* FindWindowByID(uint32_t nID, bool bDeep);          // 0x008105b0
+    void Shutdown(uint32_t nFlags);                             // 0x00811ad0
+    bool IsVisible();                                           // 0x00810070
+
+    IWindow* m_pRoot;                            // +0x00
+};
+class cCivilization_s00e0_6220 {
+public:
+    virtual void AddRef();                       // +0x00
+    virtual void Release();                      // +0x04
+
+    uint32_t m_nFlags04;                         // +0x04
+    uint8_t m_pad008[0x82];                      // +0x08
+    bool m_bNotPlayable;                         // +0x8a
+    bool m_bVisible;                             // +0x8b
+    uint8_t m_pad08c[0x20c];                     // +0x8c
+    int32_t m_nStage;                            // +0x298
+    int32_t m_nPanelIndex;                       // +0x29c
+
+    int32_t GetTurn();                           // 0x00bf01e0
+};
+class cCivIndexMap_s00e0_6220 {
+public:
+    struct Node {
+        void* m_pLeft;                           // +0x00
+        void* m_pRight;                          // +0x04
+        void* m_pParent;                         // +0x08
+        uint32_t m_nColor;                       // +0x0c
+        uint32_t m_nKey;                         // +0x10
+        uint32_t m_nValue;                       // +0x14
+    };
+
+    Node*& Find(cCivilization_s00e0_6220* const& pCiv);                // 0x00e5c780
+    uint32_t& GetCounter(cCivilization_s00e0_6220* const& pCiv);       // 0x00badea0
+
+    void* m_pAllocator;                          // +0x00
+    Node m_stHeader;                             // +0x04
+    Node* m_pRoot;                               // +0x0c
+    uint32_t m_nSize;                            // +0x10
+};
+struct cCommRelPanel {
+    cCivilization_s00e0_6220* m_pData;                      // +0x00
+    bool m_bActive;                              // +0x04
+    bool m_bShown;                               // +0x05
+    uint8_t m_pad006[2];                         // +0x06
+    cCivilization_s00e0_6220* m_pCiv;                       // +0x08
+};
+class cSPUIGlobalUI_s00e0_6220 {
+public:
+    IWindow* FindWindowByID(uint32_t nID);               // 0x00e012b0
+    void HandleMessage(uint32_t nMessage, void* pData);  // 0x00e03f80
+
+    uint8_t m_pad000[0x88];
+};
+class cSPUIGlobalUICiv_s00e0_6220 : public cSPUIGlobalUI_s00e0_6220 {
+public:
+    void Update(int32_t nDelta);                                       // 0x00e06220
+    void SetCommScreenVisibility(cCivilization_s00e0_6220* pCiv, bool bOn);       // 0x00e063d0
+    void AssignCommRelPanel(int32_t nIndex, cCivilization_s00e0_6220* pCiv);      // 0x00e064f0
+    void HandleMessage(uint32_t nMessage, void* pData);                // 0x00e06560
+    void InitCommRelPanels();                                          // 0x00e065c0
+    void AssignFreeCommRelPanel(cCivilization_s00e0_6220* pCiv);                  // 0x00e06630
+
+    void SetMinimapStateFromButton(int32_t nState);                    // 0x00e04560
+    void UpdateCommRelPanel(int32_t nDelta, int32_t nIndex);           // 0x00e04d10
+    void ActivateCommRelPanel(int32_t nIndex);                         // 0x00e04770
+    void BindCommRelData(uint32_t nKey, void** ppData, int32_t nIndex);   // 0x00e060c0
+    void RefreshCommRelPanels();                                       // 0x00e04aa0
+    void SetCommRelProgress(uint32_t a, uint32_t b, uint32_t c, int32_t nValue);  // 0x00e05ab0
+
+    bool m_bFlag88;                              // +0x88
+    bool m_bCommScreenActive;                    // +0x89
+    uint8_t m_pad08a[2];                         // +0x8a
+    cCommRelPanel m_commRelPanels[4];            // +0x8c
+    float m_fCommRelTimer;                       // +0xbc
+    uint8_t m_pad0c0[8];                         // +0xc0
+    void* m_apCommRelData[4];                    // +0xc8
+    uint32_t m_nFlags0d8;                        // +0xd8
+    cCivIndexMap_s00e0_6220 mCivToIndex;                    // +0xdc
+};
+void __stdcall FUN_00e05930(int32_t nMode);                     // 0x00e05930
+struct cCivMessage {
+    uint8_t m_pad000[8];
+    int32_t m_nType;                             // +0x08
+    uint8_t m_pad00c[4];                         // +0x0c
+    cCivilization_s00e0_6220* m_pCiv;                       // +0x10
+};
+static const uint32_t kMessageCommCivA = 0x03ac86ad;
+static const uint32_t kMessageCommCivB = 0x03ac86b5;
+static const uint32_t kMessageCommClose = 0x052f1544;
+class cSPUIMeterBaseA {
+public:
+    virtual void V00();                                 // +0x00
+    PV8                                                 // 0x04 .. 0x20
+    ~cSPUIMeterBaseA() {}
+};
+class cSPUIMeterBaseB {
+public:
+    virtual void V00();                                 // +0x00
+    ~cSPUIMeterBaseB() {}
+};
+class cSPUIMeter : public cSPUIMeterBaseA, public cSPUIMeterBaseB {
+public:
+    cSPUIMeter(int32_t nRootID, uint32_t nFlags, const wchar_t* pName, uint32_t nLayoutFlags);  // 0x00e06790
+    ~cSPUIMeter();                                      // 0x00e06870
+
+    void SetStart(uint32_t nStart);                     // 0x00e066d0
+    void SetTrackedObject(ILink* pObject);              // 0x00e066e0
+    bool Update(int32_t nDelta, void* pMessage);        // 0x00e068e0
+    void Shutdown(uint32_t nFlags);                     // 0x00e06940
+    bool IsVisible();                                   // 0x00e06970
+    void UpdateFromSource();                            // 0x00e06990
+    void SetLink(ILink* pLink);                         // 0x00e06c50
+    void SetLinkB(ILink* pLink);                        // 0x00e06ca0
+    void SetSource(ILink* pSource);                     // 0x00e06cf0
+
+    virtual void OnValueChanged();                      // +0x24
+    virtual void OnLayoutChanged();                     // +0x28
+
+    uint32_t m_nFlags08;                                // +0x08
+    bool m_bRangeType;                                  // +0x0c
+    uint8_t m_pad00d[3];                                // +0x0d
+    cSPUILayout_s00e0_6220* mLayout;                               // +0x10
+    ILink* m_pSource;                                   // +0x14
+    uint32_t m_nRootID;                                 // +0x18
+    uint32_t m_nLayoutFlags;                            // +0x1c
+    uint32_t m_nStart;                                  // +0x20
+    uint32_t m_nNext;                                   // +0x24
+    int32_t m_nModel;                                   // +0x28
+    int32_t m_nModelExtra;                              // +0x2c
+    ILink* m_pTracked;                                  // +0x30
+    ILink* m_pLinkA;                                    // +0x34
+    ILink* m_pLinkB;                                    // +0x38
+};
+// ---- items of slice s00e06220 end
 
 // @ 0x00baa810
 cSortTriple* PartitionTriples(cSortTriple* pFirst, cSortTriple* pLast, cSortTriple value, char (*pPredicate)(const cSortTriple*, const cSortTriple*))
@@ -1792,4 +1986,40 @@ void cSPUIGlobalUICiv::SuperweaponClick(uint32_t nButtonId)
         return;
     }
     GetCivModeStrategy()->ExecuteMessage(0x1b, 0);
+}
+
+// @ 0x00e064f0
+void cSPUIGlobalUICiv_s00e0_6220::AssignCommRelPanel(int32_t nIndex, cCivilization_s00e0_6220* pCiv)
+{
+    mCivToIndex.GetCounter(pCiv) = nIndex;
+
+    cCommRelPanel* pPanel = &m_commRelPanels[nIndex];
+    pPanel->m_bActive = true;
+    pPanel->m_bShown = false;
+
+    cCivilization_s00e0_6220* pOld = pPanel->m_pCiv;
+    if (pCiv != pOld) {
+        if (pCiv != nullptr)
+            pCiv->AddRef();
+        pPanel->m_pCiv = pCiv;
+        if (pOld != nullptr)
+            pOld->Release();
+    }
+
+    ActivateCommRelPanel(nIndex);
+}
+
+// @ 0x00e06560
+void cSPUIGlobalUICiv_s00e0_6220::HandleMessage(uint32_t nMessage, void* pData)
+{
+    switch (nMessage) {
+    case kMessageCommCivA:
+    case kMessageCommCivB:
+        SetCommScreenVisibility(((cCivMessage*)pData)->m_pCiv, nMessage == kMessageCommCivA);
+        break;
+    case kMessageCommClose:
+        FUN_00e05930(-1);
+        break;
+    }
+    cSPUIGlobalUI_s00e0_6220::HandleMessage(nMessage, pData);
 }
