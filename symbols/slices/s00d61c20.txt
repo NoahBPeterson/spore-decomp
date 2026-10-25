@@ -1,0 +1,2 @@
+00d62010 ?FUN_00d62010@@YA_NPAVcSPCreatureBase@@HHHHPAH@Z  # FUN_00d62010 migrated from s00d61c20 (verbatim, slice spelling)
+00d624f0 ?FUN_00d624f0@@YA_NPAVcSPCreatureBase@@HHHHPAH@Z  # FUN_00d624f0 migrated from s00d61c20 (verbatim, slice spelling)
