@@ -38,7 +38,7 @@ int   CompareKey8(u32 a0, u32 a1, u32 b0, u32 b1);                          // 0
 void* Partition12(void* pBegin, void* pEnd, const void* pPivot, void* pPred); // 0x00baa810
 void  TriplesBaseSort(void* pBegin, void* pMid, void* pEnd, void* pPred);   // 0x00ba9810
 void  Free5(void* a, void* b, void* c, void* d, void* e);                   // 0x00571db0
-void* EraseToEnd(void* pBegin, void* pEnd, void* pValue);                   // 0x006782c0
+void* CopyImpl(void* pFirst, void* pLast, void* pResult);                   // 0x006782c0
 void* MessageServer();                                                      // 0x006abf00
 void* PropertyServer();                                                     // 0x0067de30
 void* TheManager();                                                         // 0x0067dcd0
@@ -269,8 +269,115 @@ void FUN_00babd30(void* pBegin, void* pEnd, int nDepth, SortPred12 pPred)
 // ---------------------------------------------------------------------------
 // The star-manager.  Only the fields the teardown passes touch are named.
 // ---------------------------------------------------------------------------
-struct VecRows { void* mpBegin; void* mpEnd; void* mpCap; u32 mAlloc[2]; };   // 0x14
+struct VecRows { void** mpBegin; void** mpEnd; void** mpCap; u32 mAlloc[2]; }; // 0x14
 struct Ctr12   { void* mpA; void* mpB; void* mpC; void* mpD; };                // 0x10
+
+// ---- vectors --------------------------------------------------------------
+// SPVector<AutoRefCount<T>>: erase(first,last) inlined as a CopyImpl call over
+// [last, end), a Release of every element from the copied position to the old
+// end, then "end -= last - first".
+struct RefVec {
+    void** pBegin;      // +0x00
+    void** pEnd;        // +0x04
+    void** pCap;        // +0x08
+    void Clear()
+    {
+        void** pB = pBegin;
+        void** pE = pEnd;
+        u32    n  = (u32)(pE - pB);
+        void** pNew = (void**)CopyImpl(pE, pE, pB);
+        for (void** p = pNew; p < pE; ++p)
+            if (*p)
+                VCall(*p, 0x04);            // Release
+        pEnd -= n;
+    }
+};
+
+// SPVector<unsigned int>: POD elements, so erase() only copies and rewinds.
+struct U32Vec {
+    u32* pBegin;        // +0x00
+    u32* pEnd;          // +0x04
+    u32* pCap;          // +0x08
+    void DoInsertValue(u32* pPos, const u32& value);   // 0x004558a0
+    void Clear()
+    {
+        u32* pB = pBegin;
+        u32* pE = pEnd;
+        u32  n  = (u32)(pE - pB);
+        MemMove(pB, pE, (u32)(pEnd - pE) * 4);   // copy [last,end) == empty
+        pEnd -= n;
+    }
+};
+
+// One grid cell: two smart-pointer vectors at +0x84 and +0x98.
+struct GridElem {
+    u8     mGap00[0x84];   // +0x00
+    RefVec mVec84;         // +0x84
+    u8     mGap90[0x08];   // +0x90
+    RefVec mVec98;         // +0x98
+};
+
+// ---- message-server event plumbing ---------------------------------------
+struct EventKey {          // listener/event key passed to the message server
+    void* mpVtbl;          // +0x00  (0x013eb428)
+    u32   mTag;            // +0x04  (0x05220cb8)
+};
+
+struct EventNode {         // intrusive circular-list node
+    EventNode* pNext;      // +0x00
+    EventNode* pPrev;      // +0x04
+    void*      pValue;     // +0x08
+};
+
+struct MsgServer {
+    virtual void s00(); virtual void s04(); virtual void s08(); virtual void s0c();
+    virtual void s10(); virtual void s14(); virtual void s18(); virtual void s1c();
+    virtual void s20();
+    virtual void Query(void* pList, void* pEvent);   // +0x24
+    virtual void Fire(void* pEvent);                 // +0x28
+};
+
+struct PendingVec {        // vector of 12-byte pending entries
+    void* pBegin;          // +0x00
+    void* pEnd;            // +0x04
+    void* pCap;            // +0x08
+};
+
+struct PendingSource {     // the object at Manager::mp224
+    virtual void s00(); virtual void s04(); virtual void s08(); virtual void s0c();
+    virtual void s10(); virtual void s14(); virtual void s18(); virtual void s1c();
+    virtual void s20();
+    virtual void Finish();                           // +0x24
+    virtual void s28(); virtual void s2c();
+    virtual void Collect(PendingVec* pOut, int nFlag);   // +0x30
+    virtual void s34(); virtual void s38(); virtual void s3c();
+    virtual void Visit(void* pEntry);                // +0x40
+};
+
+struct GlobalMgr {
+    virtual void s00(); virtual void s04(); virtual void s08(); virtual void s0c();
+    virtual void s10(); virtual void s14(); virtual void s18(); virtual void s1c();
+    virtual void Dispatch(void* pValue, int a, void* pSrc, int b, int c);  // +0x20
+};
+
+struct PropertyRef {
+    virtual void s00(); virtual void s04(); virtual void s08(); virtual void s0c();
+    virtual void s10(); virtual void s14(); virtual void s18(); virtual void s1c();
+    virtual void s20();
+    virtual char Read(u32 key, void** pOut);         // +0x24
+};
+
+struct PropertyMgr {
+    virtual void s00(); virtual void s04(); virtual void s08(); virtual void s0c();
+    virtual void s10(); virtual void s14(); virtual void s18(); virtual void s1c();
+    virtual void s20();
+    virtual void s24();                               // +0x24
+    virtual void s28();
+    virtual char Resolve(u32 id, u32 key, void** pOut);   // +0x2c
+    virtual void s30(); virtual void s34(); virtual void s38(); virtual void s3c();
+    virtual void s40(); virtual void s44();
+    virtual void Query(u32 key, void** pOut);        // +0x48
+};
 
 struct Manager {
     void*   mpVtbl;         // +0x000
@@ -287,8 +394,8 @@ struct Manager {
     void*   mp70;           // +0x070
     void*   mp74;           // +0x074
     u8      mGap78[0x28];   // +0x078
-    void*   mpBufA0;        // +0x0a0
-    u8      mGapA4[0x10];   // +0x0a4
+    U32Vec  mIdsA0;         // +0x0a0
+    u8      mGapAc[0x08];   // +0x0ac
     void*   mpB4;           // +0x0b4
     void*   mpB8;           // +0x0b8
     void*   mpBc;           // +0x0bc
@@ -302,18 +409,20 @@ struct Manager {
     VecRows mRows104;       // +0x104
     VecRows mRows118;       // +0x118
     Ctr12   mCtr12c;        // +0x12c
+    u8      mGap13c[0x0c];  // +0x13c
     void*   mp148;          // +0x148
     void*   mp14c;          // +0x14c
     Ctr12   mCtr150;        // +0x150
+    u8      mGap160[0x0c];  // +0x160
     Ctr12   mCtr16c;        // +0x16c
     u8      mGap17c[0x08];  // +0x17c
     void*   mp184;          // +0x184
     u8      mGap188[0x08];  // +0x188
     void*   mp190;          // +0x190
     Ctr12   mCtr194;        // +0x194  (only +0x1a0/+0x1a4 used)
+    u8      mGap1a4[0x04];  // +0x1a4
     u8      mGap1a8[0x34];  // +0x1a8
     void*   mp1dc;          // +0x1dc
-    u8      mGap1e0[0x04];  // +0x1e0  (sub-object starts here)
     u8      mSub1e0[0x24];  // +0x1e0..+0x203
     void*   mp204;          // +0x204
     void*   mp208;          // +0x208
@@ -377,8 +486,8 @@ void Manager::FUN_00babe70()
         Free5(mpB4, mpB8, mpBc, mpC0, mpC4);
         mpB4 = 0;
     }
-    if (mpBufA0 && ((u32*)mpBufA0)[-1] != 0)
-        EAFree(mpBufA0);
+    if (mIdsA0.pBegin && ((u32*)mIdsA0.pBegin)[-1] != 0)
+        EAFree(mIdsA0.pBegin);
 
     if (((u32)((u8*)mp74 - (u8*)mp6c) & 0xfffffffe) > 2 && mp6c)
         EAFree(mp6c);
@@ -392,104 +501,87 @@ void Manager::FUN_00babe70()
     SUB(this, 0)->FUN_00b5b9a0();
 }
 
-// ---------------------------------------------------------------------------
-// Release helper shared by the two grid passes: destroy [pNewEnd, pOldEnd)
-// of a smart-pointer vector and publish the new end.
-// ---------------------------------------------------------------------------
-static void ReleaseTail(void** pNewEnd, void** pOldEnd)
-{
-    for (void** pp = pNewEnd; pp < pOldEnd; ++pp)
-        if (*pp)
-            VCall(*pp, 0x04);
-}
-
 // @ 0x00bac150
 void Manager::FUN_00bac150()
 {
-    u32 nRows = (u32)((u8*)mpGridEnd - (u8*)mpGrid) / 0x14;
-    for (u32 i = 0; i < nRows; ++i) {
-        u8* pRow = (u8*)mpGrid + i * 0x14;          // row: vector of element ptrs
-        void** pElem = *(void***)pRow;
-        u32 nElems = (u32)((u8*)((void**)pRow)[1] - (u8*)pElem) / 4;
-        for (u32 j = 0; j < nElems; ++j) {
-            u8* pObj = (u8*)((void**)pElem)[j];
-            void** pB84 = (void**)(pObj + 0x84);
-            void** pE84 = (void**)(pObj + 0x88);
-            void** pNew = (void**)EraseToEnd(pB84, pE84, pE84);
-            ReleaseTail(pNew, pE84);
-            *pE84 = pNew;
+    EventKey event;
+    event.mpVtbl = (void*)0x13eb428;
+    event.mTag   = 0x5220cb8;
 
-            void** pB98 = (void**)(pObj + 0x98);
-            void** pE98 = (void**)(pObj + 0x9c);
-            void** pNew2 = (void**)EraseToEnd(pB98, pE98, pE98);
-            ReleaseTail(pNew2, pE98);
-            *pE98 = pNew2;
+    u32 rowOffset = 0;
+    for (u32 i = 0; i < (u32)((int)((u8*)mpGridEnd - (u8*)mpGrid) / 0x14); ++i) {
+        VecRows* pRow = (VecRows*)((u8*)mpGrid + rowOffset);
+        for (u32 j = 0; j < (u32)(pRow->mpEnd - pRow->mpBegin); ++j) {
+            GridElem* pElem = (GridElem*)pRow->mpBegin[j];
+            pElem->mVec84.Clear();
+            pElem->mVec98.Clear();
         }
+        rowOffset += 0x14;
     }
 
-    void* pSrv = MessageServer();
-    u8 local[0x10];
-    *(u32*)&local[0x0] = 0x13eb428;
-    *(u32*)&local[0x4] = 0x5220cb8;
-    *(void**)&local[0x8] = this;
-    VCallObj(pSrv, 0x28, local);
+    ((MsgServer*)MessageServer())->Fire(&event);
 
     if (mp224) {
-        void* pTemp[3] = { 0, 0, 0 };
-        VCallObj2(mp224, 0x30, 0, pTemp);           // fill a temp list
-        void** pB = (void**)pTemp[0];
-        void** pE = (void**)pTemp[1];
-        u32 n = (u32)((u8*)pE - (u8*)pB) / 0xc;
-        for (u32 k = 0; k < n; ++k)
-            VCallObj(mp224, 0x40, (u8*)pB + k * 0xc);
-        VCall(mp224, 0x24);
-        if (pTemp[0] && ((u32*)pTemp[0])[-1] != 0)
-            EAFree(pTemp[0]);
+        PendingVec pending;
+        pending.pBegin = 0;
+        pending.pEnd   = 0;
+        pending.pCap   = 0;
+        ((PendingSource*)mp224)->Collect(&pending, 0);
+        for (int k = 0; k < (int)((u8*)pending.pEnd - (u8*)pending.pBegin) / 0xc; ++k)
+            ((PendingSource*)mp224)->Visit((u8*)pending.pBegin + k * 0xc);
+        ((PendingSource*)mp224)->Finish();
+        if (pending.pBegin && ((u32*)pending.pBegin)[-1] != 0)
+            EAFree(pending.pBegin);
     }
 }
 
 // @ 0x00bac3a0
 void Manager::FUN_00bac3a0()
 {
-    if (mp224) {
-        void* pTemp[3] = { 0, 0, 0 };
-        VCallObj(mp224, 0x24, pTemp);
-        void* pHead = pTemp[0];
-        while (pHead) {
-            void* pNext = *(void**)((u8*)pHead + 8);
-            void* pMgr = TheManager();
-            VCallObj(pMgr, 0x20, *(void**)((u8*)pHead + 0xc));
-            (void)pNext;
-            void* pN = pTemp[0];
-            if (pN) {
-                ((void**)pN)[1] = 0;                // hmm: unlink
-            }
-            if (pHead) EAFree(pHead);
-            pTemp[0] = pTemp[1];
-            pHead = pTemp[0];
-        }
-        VCall(mp224, 0x24);
+    EventKey event;
+    event.mpVtbl = (void*)0x13eb428;
+    event.mTag   = 0x5220cb8;
+
+    EventNode list;
+    list.pNext = &list;
+    list.pPrev = &list;
+
+    ((MsgServer*)MessageServer())->Query(&list, &event);
+
+    while (list.pNext != &list) {
+        EventNode* pNode = list.pNext;
+        ((GlobalMgr*)TheManager())->Dispatch(pNode->pValue, 0, mp224, 0, 0);
+        pNode->pPrev->pNext = pNode->pNext;
+        pNode->pNext->pPrev = pNode->pPrev;
+        if (pNode->pValue)
+            VCall(pNode->pValue, 0x04);             // Release
+        EAFree(pNode);
     }
 
-    u32 nRows = (u32)((u8*)mpGridEnd - (u8*)mpGrid) / 0x14;
-    for (u32 i = 0; i < nRows; ++i) {
-        u8* pRow = (u8*)mpGrid + i * 0x14;
-        void** pElem = *(void***)pRow;
-        u32 nElems = (u32)((u8*)((void**)pRow)[1] - (u8*)pElem) / 4;
-        for (u32 j = 0; j < nElems; ++j) {
-            u8* pObj = (u8*)((void**)pElem)[j];
-            void** pB84 = (void**)(pObj + 0x84);
-            void** pE84 = (void**)(pObj + 0x88);
-            void** pNew = (void**)EraseToEnd(pB84, pE84, pE84);
-            ReleaseTail(pNew, pE84);
-            *pE84 = pNew;
+    ((PendingSource*)mp224)->Finish();
 
-            void** pB98 = (void**)(pObj + 0x98);
-            void** pE98 = (void**)(pObj + 0x9c);
-            void** pNew2 = (void**)EraseToEnd(pB98, pE98, pE98);
-            ReleaseTail(pNew2, pE98);
-            *pE98 = pNew2;
+    u32 rowOffset = 0;
+    for (u32 i = 0; i < (u32)((int)((u8*)mpGridEnd - (u8*)mpGrid) / 0x14); ++i) {
+        VecRows* pRow = (VecRows*)((u8*)mpGrid + rowOffset);
+        for (u32 j = 0; j < (u32)(pRow->mpEnd - pRow->mpBegin); ++j) {
+            GridElem* pElem = (GridElem*)pRow->mpBegin[j];
+            pElem->mVec84.Clear();
+            pElem->mVec98.Clear();
         }
+        rowOffset += 0x14;
+    }
+
+    ((MsgServer*)MessageServer())->Fire(&event);
+
+    ((PendingSource*)mp224)->Finish();
+
+    EventNode* pNode = list.pNext;
+    while (pNode != &list) {
+        EventNode* pNext = pNode->pNext;
+        if (pNode->pValue)
+            VCall(pNode->pValue, 0x04);             // Release
+        EAFree(pNode);
+        pNode = pNext;
     }
 }
 
@@ -497,66 +589,65 @@ void Manager::FUN_00bac3a0()
 // 0x00bac620 -- enumerate the property-id list returned by the property server
 // and grow the +0xa0 vector with one element per id.
 // ---------------------------------------------------------------------------
-struct SmallCtr { void* mpBegin; void* mpEnd; void* mpCap; };   // 0x0c
-
 // @ 0x00bac620
-void Manager::FUN_00bac620(int)
+void Manager::FUN_00bac620(int nType)
 {
-    if (mpBufA0 != *(void**)((u8*)this + 0xa4))
+    U32Vec& ids = mIdsA0;
+
+    if (ids.pBegin != ids.pEnd)
         return;                                     // only when the vector is empty
 
-    u32 nIds;
-    {
-        void* pList[2];
-        void* pSrv = PropertyServer();
-        void (*pGet)(void*, u32, void*) = (void (*)(void*, u32, void*))(*(void**)((u8*)*(void**)pSrv + 0x48));
-        pGet(pSrv, 0xe38475d9, pList);
-        nIds = (u32)((u8*)pList[1] - (u8*)pList[0]) / 4;
+    ids.Clear();
 
-        for (u32 i = 0; i < nIds; ++i) {
-            void* pObj = 0;
-            void* pSrv2 = PropertyServer();
-            char ok = ((char (*)(void*, u32, u32, void*))(*(void**)((u8*)*(void**)pSrv2 + 0x2c)))
-                          (pSrv2, 0xe38475d9, ((u32*)pList[0])[i], &pObj);
-            if (!ok)
-                continue;
+    U32Vec props;
+    props.pBegin = 0;
+    props.pEnd   = 0;
+    props.pCap   = 0;
 
-            u8 b0 = 0, b1 = 0;
-            if (pObj) {
-                void* pVal = 0;
-                if (((char (*)(void*, u32, void*))(*(void**)((u8*)*(void**)pObj + 0x24)))(pObj, 0xea288a88, &pVal)) {
-                    if (pVal && *(u16*)((u8*)pVal + 0x12) == 1) {
-                        void* pD = pVal;
-                        if (*(u8*)((u8*)pVal + 0x10) & 0x30)
-                            pD = *(void**)pVal;
-                        b0 = *(u8*)pD;
-                    }
-                }
-                void* pVal2 = 0;
-                if (((char (*)(void*, u32, void*))(*(void**)((u8*)*(void**)pObj + 0x24)))(pObj, 0xb57908c6, &pVal2)) {
-                    if (pVal2 && *(u16*)((u8*)pVal2 + 0x12) == 1) {
-                        void* pD = pVal2;
-                        if (*(u8*)((u8*)pVal2 + 0x10) & 0x30)
-                            pD = *(void**)pVal2;
-                        b1 = *(u8*)pD;
-                    }
-                }
+    ((PropertyMgr*)PropertyServer())->Query(0xe38475d9, (void**)&props);
+
+    for (u32 i = 0; i < (u32)(props.pEnd - props.pBegin); ++i) {
+        u8  b0 = 0;
+        u8  b1;
+        void* pRef = 0;
+
+        char ok = ((PropertyMgr*)PropertyServer())->Resolve(props.pBegin[i], 0xe38475d9, &pRef);
+        if (ok && pRef) {
+            void* pVal;
+            if (((PropertyRef*)pRef)->Read(0xea288a88, &pVal)
+                && *(u16*)((u8*)pVal + 0x12) == 1) {
+                void* pD = pVal;
+                if (*(u8*)((u8*)pVal + 0x10) & 0x30)
+                    pD = *(void**)pVal;
+                b0 = *(u8*)pD;
             }
-
-            // push_back into the +0xa0 vector.
-            {
-                void** pEnd = *(void***)((u8*)this + 0xa4);
-                void** pCap = *(void***)((u8*)this + 0xa8);
-                if (pEnd < pCap) {
-                    *pEnd = pObj;
-                    *(void***)((u8*)this + 0xa4) = pEnd + 1;
-                } else {
-                    void* tmp = pObj;
-                    SUB(this, 0xa0)->FUN_004558a0(pEnd, &tmp);
-                }
+            void* pVal2;
+            if (((PropertyRef*)pRef)->Read(0xb57908c6, &pVal2)
+                && *(u16*)((u8*)pVal2 + 0x12) == 1) {
+                void* pD = pVal2;
+                if (*(u8*)((u8*)pVal2 + 0x10) & 0x30)
+                    pD = *(void**)pVal2;
+                b1 = *(u8*)pD;
             }
         }
+
+        if (!ok || (b1 == (u8)nType && b0 == 0)) {
+            if (ids.pEnd < ids.pCap) {
+                u32* pSlot = ids.pEnd;
+                ids.pEnd = pSlot + 1;
+                if (pSlot)
+                    *pSlot = props.pBegin[i];
+            } else {
+                ids.DoInsertValue(ids.pEnd, props.pBegin[i]);
+            }
+        }
+
+        if (pRef)
+            VCall(pRef, 0x04);                      // Release
     }
+
+    if (props.pBegin && ((u32*)props.pBegin)[-1] != 0)
+        EAFree(props.pBegin);
 }
 
 // @ 0x00bac7d0
