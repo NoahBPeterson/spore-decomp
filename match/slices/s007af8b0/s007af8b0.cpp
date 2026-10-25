@@ -30,13 +30,35 @@ struct JobOps {
     void DoWait();                                              // 0x006926B0 __thiscall
 };
 
+struct IEditorResource;
 struct CJob {
-    int pad0[7];
-    int   mSlot;              // +0x1c
-    void* mpReturn;           // +0x20
-    void* mpCleanup;          // +0x24
-    bool Continuation(void* fn, void* arg);   // 0x0068F9F0 __thiscall
+    void* mpCallback;                 // +0x00
+    void* mpCallbackData;             // +0x04
+    IEditorResource* mpExtraObject;   // +0x08
+    void* mpDebugName;                // +0x0c
+    int   mPriority;                  // +0x10
+    int   mStatus;                    // +0x14
+    unsigned mThreadAffinity;         // +0x18
+    int   mSlot;                      // +0x1c
+    void* mpReturn;                   // +0x20
+    void* mpCleanup;                  // +0x24
+    int   Release();                          // 0x00690120 __thiscall
+    void  Attach(IEditorResource* d);         // 0x0068F9B0 __thiscall
+    void  GetStatus();                        // 0x006909B0 __thiscall
+    void  Wait();                             // 0x006926B0 __thiscall
+    bool  Continuation(void* fn, void* arg);  // 0x0068F9F0 __thiscall
 };
+struct AutoJob {
+    CJob* p;
+    AutoJob() : p(0) {}
+    ~AutoJob() { if (p) p->Release(); }
+    void Reset() { CJob* t = p; if (t) { p = 0; t->Release(); } }
+};
+struct Sched {                                     // job scheduler singleton
+    virtual void s0(); virtual void s1(); virtual void s2(); virtual void s3();
+    virtual bool Acquire(AutoJob* out);            // vtable +0x10
+};
+Sched* __cdecl GetSched();                         // 0x0068F4D0
 struct VecCore  { void DestroyRange(void* b, void* e); };        // 0x0070F520 __thiscall
 struct VecReserve { void Reserve(int n); };                      // 0x004E0880 __thiscall
 struct VecAssignOp { void Assign(void*, void*, void*, void*, void*); }; // 0x004E8EE0
@@ -67,12 +89,14 @@ struct IRefCounted { virtual int AddRef(); virtual int Release(); int mRef; }; /
 struct Elem { char pad[0x28]; unsigned char* data; };           // pixel element at +0x28
 struct VecObj { char pad[0xc]; Elem** begin; Elem** end; };     // vector at +0xc
 
-struct cImageDataRaw {
-    char pad0[0x1c];
+class cImageDataRaw : public IEditorResource {   // ctor 0x00704B30, 0x2c bytes
+public:
+    char pad4[0x18];          // +0x04
     int mWidth;               // +0x1c
     int mHeight;              // +0x20
     int mFormat;              // +0x24
     unsigned char* mData;     // +0x28
+    cImageDataRaw();
 };
 
 struct cDXTCompressJobData {
@@ -390,22 +414,117 @@ bool FUN_007af8b0(ImgRef a, ImgRef b)
 }
 
 // ---------------------------------------------------------------------------
+// ref-counted job record (ctor 0x007AE9F0, 0x28 bytes) + allocation helpers
+// ---------------------------------------------------------------------------
+struct IUnknown32 { virtual int Query(); virtual int AddRef(); virtual int Release(); };
+struct IDxtBase2 { virtual void v0(); virtual void v1(); };
+struct DxtRefCount { long mCount; };
+
+void* operator new(unsigned int, const char*, int, int, int, int);   // 0x00F473A0
+
+template<class T> struct RcPtr {
+    T* p;
+    RcPtr() : p(0) {}
+    RcPtr& operator=(T* q) {
+        T* old = p;
+        if (q != old) {
+            if (q) q->AddRef();
+            p = q;
+            if (old) old->Release();
+        }
+        return *this;
+    }
+    void Reset() { T* t = p; if (t) { p = 0; t->Release(); } }
+};
+template<class T> struct AutoRC {
+    T* p;
+    AutoRC(T* q) : p(q) { if (p) p->AddRef(); }
+    ~AutoRC() { if (p) p->Release(); }
+};
+
+class DxtJobData : public IEditorResource, public IDxtBase2, public DxtRefCount {
+public:
+    RcPtr<cImageDataRaw> mSource;     // +0x0c
+    RcPtr<cImageDataRaw> mOutput;     // +0x10
+    int      mMode;                   // +0x14
+    int      mQuality;                // +0x18
+    int      mBlockSize;              // +0x1c
+    unsigned mMessageID;              // +0x20
+    RcPtr<IUnknown32> mMessage;       // +0x24
+    DxtJobData();                     // 0x007AE9F0
+};
+
+// ---------------------------------------------------------------------------
 // @ 0x007b0430  (create the DXT compress job for a texture)
 // ---------------------------------------------------------------------------
-bool FUN_007b0430(cRowJobData* self, int mode, void* arg, void** out)
+bool FUN_007b0430(cImageDataRaw* src, int mode, int quality, CJob** out)
 {
-    if (self->mFlag18) { /* not a job-data object in this path */ }
-    (void)mode; (void)arg; (void)out;
+    if (src->mFormat != 2)
+        return false;
+    int blockBytes;
+    int extra;
+    switch (mode) {
+    case 4:  extra = 0;     blockBytes = 8;    break;
+    case 5:  extra = 0x100; blockBytes = 0x10; break;
+    case 6:  extra = 0x200; blockBytes = 0x10; break;
+    default: return false;
+    }
+
+    AutoJob job;
+    Sched* s = GetSched();
+    job.Reset();
+    if (s->Acquire(&job)) {
+        cImageDataRaw* outData = new("Graphics", 0, 0, 0, 0) cImageDataRaw;
+        AutoRC<cImageDataRaw> d(outData);
+        outData->mWidth  = src->mWidth;
+        outData->mHeight = src->mHeight;
+        outData->mFormat = mode;
+        outData->mData = (unsigned char*)EAAlloc(
+            ((src->mHeight + 3) >> 2) * ((src->mWidth + 3) >> 2) * blockBytes,
+            "Graphics", 0, 0, 0, 0);
+        {
+            DxtJobData* rec = new("Graphics", 0, 0, 0, 0) DxtJobData;
+            AutoRC<DxtJobData> r(rec);
+            rec->mSource = src;
+            rec->mOutput = outData;
+            rec->mMode = extra;
+            rec->mQuality = quality;
+            rec->mBlockSize = blockBytes;
+            rec->mMessageID = 0;
+            rec->mMessage.Reset();
+            job.p->Attach(rec);
+            job.p->mSlot = 0;
+            job.p->mpCallback = (void*)&FUN_007b0030;
+            job.p->mpCallbackData = rec;
+            *out = job.p;
+            job.p = 0;
+        }
+        return true;
+    }
     return false;
 }
 
 // ---------------------------------------------------------------------------
-// @ 0x007b06c0
+// @ 0x007b06c0  (start the compress job and hand back its output image)
 // ---------------------------------------------------------------------------
-bool FUN_007b06c0(void* a, void** b, void* c, void* d, void* e, void* f)
+bool FUN_007b06c0(cImageDataRaw* src, cImageDataRaw** out, int mode, int quality,
+                  unsigned msgId, IUnknown32* handler)
 {
-    (void)a; (void)b; (void)c; (void)d; (void)e; (void)f;
-    return false;
+    AutoJob job;
+    if (!FUN_007b0430(src, mode, quality, &job.p))
+        return false;
+    DxtJobData* rec = static_cast<DxtJobData*>(job.p->mpExtraObject);
+    rec->mMessageID = msgId;
+    rec->mMessage = handler;
+    cImageDataRaw* img = rec->mOutput.p;
+    *out = img;
+    img->AddRef();
+    job.p->GetStatus();
+    if (msgId == 0) {
+        job.p->Wait();
+        return job.p->mpReturn == rec->mOutput.p;
+    }
+    return true;
 }
 
 // ---------------------------------------------------------------------------

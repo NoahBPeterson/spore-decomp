@@ -69,15 +69,6 @@ int cRuntimeModelBuilder::setBoneB(int unused, const float* v, float w, int unus
 }
 
 // ---------------------------------------------------------------------------
-// Large EH-framed routines -- skeletons (partial).
-// @ 0x00775760, 0x007760a0, 0x00776320, 0x00776590, 0x00776680
-// ---------------------------------------------------------------------------
-int FUN_00776320(int a, int b, int c, int d, int e) {
-    (void)a; (void)b; (void)c; (void)d; (void)e;
-    return 1;
-}
-
-// ---------------------------------------------------------------------------
 // 0x00775760: bake the runtime meshes of a model instance against its model resource
 // (SP::cRuntimeModelBuilder area).  Stub layouts; member names carry the callee VA.
 // ---------------------------------------------------------------------------
@@ -160,10 +151,14 @@ struct SInfo {
     ~SInfo() { if (ref) ref->Release(); }
 };
 struct Drawer { void sub_740550(void* boneBuf); };            // ret 4
+struct ArenaRes {                                             // GetArenaResource record
+    char pad08[8];
+    uint32_t keyInst, keyType, keyGroup;                      // +0x08, +0x0c, +0x10
+};
 struct Inst {
     char pad[0xf0]; Drawer* draw;
     bool sub_73eb90(RefVec* out);                             // GetMeshes, ret 4
-    void* sub_73d160();                                       // GetArenaResource
+    ArenaRes* sub_73d160();                                   // GetArenaResource
     void sub_73ba50(void (*fn)());                            // ret 4
 };
 struct Builder { void sub_775230(void** p); };                // ret 4
@@ -173,6 +168,7 @@ void FUN_007740f0();
 int FUN_006ac0a0(int a, void* p);
 bool FUN_00757d20(void* p);
 void FUN_0072fff0(void* p, RefVec* out);
+void FUN_0072c100(RefVec* meshes, void* obj, int a, int b);
 bool FUN_00774f80(Mesh* a, void* b);
 int FUN_0071ddc0(void* m, int a, int b, int c, int d);
 BakeRec* FUN_0076fb10(void* p);
@@ -284,13 +280,194 @@ int FUN_00775760(Inst* inst, RefVec* outMeshes, void** out3, void** out4, ResKey
     return 0;
 }
 
-int FUN_007760a0(int a, void* b, int c, int d, int e) {
-    (void)a; (void)b; (void)c; (void)d; (void)e;
-    return 0;
+// ---------------------------------------------------------------------------
+// 0x007760a0: build a runtime model instance from an arena resource key.
+// 0x00776590 / 0x00776680: tear down a shader-preview object.
+// ---------------------------------------------------------------------------
+void* EAAllocate(size_t size, const char* name, int flags, int debugFlags, int file, int line);  // 0x00f473a0
+void SetKeyKind(ResKey3* key, int kind, int flags);           // 0x0068c6d0
+
+struct EABlockCookie { int users; };                          // EAAllocate keeps its owner count just before a block
+inline bool EABlockInUse(void* block) { return ((EABlockCookie*)block)[-1].users != 0; }
+
+struct Matrix3 {
+    float rows[9];
+    void Assign(const float* src);                            // 0x0041cb40
+};
+struct TransformPose {
+    short flags;                                              // +0x00
+    short id;                                                 // +0x02
+    float qx, qy, qz, qw;                                     // +0x04..+0x13
+    Matrix3 matrix;                                           // +0x14
+};
+struct BuilderOut;                                            // refcount at +0x04, Destroy at slot 0
+struct Elem7c {
+    Elem7c* Init(const TransformPose* src, IRefObj* sub, BuilderOut* builder);  // 0x00757e20
+    void Destroy();                                           // 0x0041f2d0
+    char bytes[0x7c];
+};
+struct ElemVec {
+    Elem7c* begin; Elem7c* end; Elem7c* cap;
+    void PushBack(Elem7c* elem);                              // 0x0041f650
+};
+struct MeshObj {
+    virtual void AddRef();                                    // slot 0
+    virtual void Release();                                   // slot 1
+    MeshObj* Init();                                          // 0x007004d0
+    char pad04[0x104];                                        // +0x004
+    ElemVec elems;                                            // +0x108
+    char pad114[0x20];                                        // +0x114
+    float field134;                                           // +0x134
+    char pad138[8];                                           // +0x138
+};
+struct BuilderOut {
+    virtual void Destroy(int arg);                            // slot 0
+    int refs;                                                 // +0x04
+};
+extern const float g_poseQuatX;                               // 0x01630b8c
+extern const float g_poseQuatY;                               // 0x01630b90
+extern const float g_poseQuatZ;                               // 0x01630b94
+extern const float g_realOne;                                 // 0x01485720
+extern const float g_bindMatrix[];                            // 0x01630ccc
+
+// @ 0x007760a0  FUN_007760a0
+int FUN_007760a0(Inst* inst, void** out, ResKey3 key, int arg8) {
+    RefVec meshes;
+    void* out3 = 0;
+    void* out4 = 0;
+    if (key.inst == 0xffffffff) {
+        ArenaRes* arena = inst->sub_73d160();
+        if (arena) {
+            arena = inst->sub_73d160();
+            key.inst = arena->keyInst;
+            key.type = arena->keyType;
+            key.group = arena->keyGroup;
+            SetKeyKind(&key, 0x61, 0);
+        }
+    }
+    int res = FUN_00775760(inst, &meshes, &out3, &out4, key, arg8);
+    if (res == 0) {
+        MeshObj* obj = (MeshObj*)EAAllocate(0x140, "Graphics", 0, 0, 0, 0);
+        if (obj) obj = obj->Init();
+        if (obj) obj->AddRef();
+        obj->field134 = 0.0f;
+        FUN_0072c100(&meshes, obj, -1, 0);
+
+        TransformPose pose;
+        pose.flags = 0;
+        pose.id = 0;
+        pose.qx = g_poseQuatX;
+        pose.qy = g_poseQuatY;
+        pose.qz = g_poseQuatZ;
+        pose.qw = g_realOne;
+        pose.matrix.Assign(g_bindMatrix);
+
+        Elem7c elem;
+        Elem7c* built = elem.Init(&pose, (IRefObj*)out3, (BuilderOut*)out4);
+        obj->elems.PushBack(built);
+        elem.Destroy();
+
+        obj->AddRef();
+        *out = obj;
+        obj->Release();
+    }
+    int result = res;
+    if (out4) {
+        BuilderOut* builder = (BuilderOut*)out4;
+        int refs = builder->refs - 1;
+        builder->refs = refs;
+        if (refs == 0) {
+            builder->refs = 1;
+            builder->Destroy(1);
+        }
+    }
+    if (out3) ((IRefObj*)out3)->Release();
+    return result;
 }
-void FUN_00776590(int* p) {
-    (void)p;
+
+// @ 0x00776320  FUN_00776320
+int FUN_00776320(int instArg, int outMeshesArg, int out3Arg, int out4Arg, int arg8) {
+    Inst* inst = (Inst*)instArg;
+    if (inst) {
+        ArenaRes* arena = inst->sub_73d160();
+        if (arena) {
+            ResKey3 key;
+            key.inst = arena->keyInst;
+            key.type = arena->keyType;
+            key.group = arena->keyGroup;
+            SetKeyKind(&key, 0x61, 0);
+            return FUN_00775760(inst, (RefVec*)outMeshesArg, (void**)out3Arg, (void**)out4Arg, key, arg8);
+        }
+    }
+    return 1;
 }
-void FUN_00776680(int* p) {
-    (void)p;
+
+struct Counted {
+    void* vptr;                                               // +0x00
+    int field04;                                              // +0x04
+    volatile long refs;                                       // +0x08
+    void Release() {
+        _InterlockedDecrement(&refs);
+        if (_InterlockedExchangeAdd(&refs, 0) < 1) _InterlockedIncrement(&refs);
+        else _InterlockedExchangeAdd(&refs, 0);
+    }
+};
+struct HtTable {
+    void* base;                                               // +0x00
+    void* buckets;                                            // +0x04
+    unsigned bucketCount;                                     // +0x08
+    unsigned elementCount;                                    // +0x0c
+    void DoFreeNodes(void* buckets, unsigned bucketCount);    // 0x007611f0
+    void FreeAll() {
+        DoFreeNodes(buckets, bucketCount);
+        elementCount = 0;
+        if (bucketCount > 1) operator_delete_array(buckets);
+    }
+};
+struct PtrVec {
+    void** begin; void** end;
+    void DestroyRange(void** begin, void** end);              // 0x0070f520
+    void FreeAll() {
+        DestroyRange(begin, end);
+        if (begin && EABlockInUse(begin)) operator_delete_array(begin);
+    }
+};
+struct ShaderPreview {
+    void* vtbl0;                                              // +0x000
+    int field04;                                              // +0x004
+    void* vtbl8;                                              // +0x008
+    char pad0c[0x100];                                        // +0x00c
+    void* buffer10c;                                          // +0x10c
+    char pad110[0x30];                                        // +0x110
+    HtTable table;                                            // +0x140
+    char pad150[0x10];                                        // +0x150
+    PtrVec meshes;                                            // +0x160
+    char pad168[0x0c];                                        // +0x168
+    Counted* counted;                                         // +0x174
+};
+struct ShaderPreviewA : ShaderPreview { void Destroy(); };
+struct ShaderPreviewB : ShaderPreview { void Destroy(); };
+
+// @ 0x00776590  ShaderPreviewA::Destroy
+void ShaderPreviewA::Destroy() {
+    vtbl0 = (void*)0x140e670;
+    vtbl8 = (void*)0x140e660;
+    _ReadWriteBarrier();
+    if (counted) counted->Release();
+    meshes.FreeAll();
+    table.FreeAll();
+    if (buffer10c && EABlockInUse(buffer10c)) operator_delete_array(buffer10c);
+    vtbl8 = (void*)0x13eb394;
+    vtbl0 = (void*)0x13ec458;
+}
+
+// @ 0x00776680  ShaderPreviewB::Destroy
+void ShaderPreviewB::Destroy() {
+    vtbl0 = (void*)0x140e698;
+    vtbl8 = (void*)0x140e688;
+    meshes.FreeAll();
+    table.FreeAll();
+    if (buffer10c && EABlockInUse(buffer10c)) operator_delete_array(buffer10c);
+    vtbl8 = (void*)0x13eb394;
+    vtbl0 = (void*)0x13ec458;
 }

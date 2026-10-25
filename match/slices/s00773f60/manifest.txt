@@ -3,3 +3,7 @@ slices/s00773f60/s00773f60.cpp  ?get_partition@@  00773f60  /O2 /MD /Gy /EHsc /T
 slices/s00773f60/s00773f60.cpp  ?partial_sort@@   00774010  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 slices/s00773f60/s00773f60.cpp  ?introsort_loop@@ 00774290  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 slices/s00773f60/s00773f60.cpp  ?FUN_007740f0@@   007740f0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00773f60/s00773f60.cpp  ?resize@VecIdx2@@QAEXI@Z  00774b50  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00773f60/s00773f60.cpp  ?resize@Vec30@@QAEXI@Z  00774bb0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00773f60/s00773f60.cpp  ?resize@VecB0@@QAEXI@Z  00774c30  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00773f60/s00773f60.cpp  ?resize@VecM34@@QAEXI@Z  00774cc0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast

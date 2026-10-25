@@ -124,6 +124,9 @@ struct cViewer {
     void Clear(unsigned flags);                         // 0x007C3C50
     void SetViewportRectArgs(unsigned short x, unsigned short y,
                              unsigned short w, unsigned short h);   // 0x007C5310
+    bool Update();                                      // 0x007C4FD0
+    void PostUpdate();                                  // 0x007C3C10
+    void FUN_007c4b50(float f);                         // 0x007C4B50
     void Shutdown();                                    // 0x007C3BA0
     ~cViewer();                                         // 0x007C4000
 };
@@ -542,7 +545,199 @@ void RtJob40::Doit(int a0, int a1, RtDesc* d, int a3)
     m14->SetViewportRectArgs(v0, v1, v2, v3);
     FUN_0067ddb0()->v21(m14, handle1, h2, a3, col[3]);
 }
-void FUN_007b35a0(void*) {}
-void FUN_007b3630(void*) {}
-void FUN_007b3760(void*) {}
-void FUN_007b3820(void*) {}
+// ---------------------------------------------------------------------------
+// (types) timeline-context raster submit (0x7b35a0)
+// ---------------------------------------------------------------------------
+struct JobCtx35 {
+    int m0;                         // +0x00
+    int m4;                         // +0x04
+    JobObj2e10* mJob;               // +0x08
+};
+struct ThumbJobE {
+    char pad0[0x14];                // +0x00
+    JobCtx35* mCtx;                 // +0x14
+    void Submit();
+};
+
+// @ 0x007B35A0
+void ThumbJobE::Submit()
+{
+    JobObj2e10* job = mCtx->mJob;
+    if (!(job->mFlags & 1))
+        FUN_0067dd60()->v13(job);
+    GpuHandle2e10* h = (GpuHandle2e10*)job->mHandle;
+    int local[9];
+    if (h->Lock(2, 0, &local[2])) {
+        local[0] = -1;
+        local[1] = -1;
+        FUN_0067ddb0()->v6(&local[0]);
+        FUN_0067dda0()->v12(local[0], local[1], local[2]);
+        h->Unlock(&local[2]);
+    }
+}
+
+// ---------------------------------------------------------------------------
+// (types) property-driven animated GSA/GIF capture (0x7b3630)
+// ---------------------------------------------------------------------------
+struct JobCtx36 {
+    char pad0[0x18];                // +0x00
+    void* m18;                      // +0x18
+};
+struct ThumbJobF {
+    char pad0[0x14];                // +0x00
+    JobCtx36* mCtx;                 // +0x14
+    void Capture(void* arg);
+};
+
+extern "C" float g_defaultColor;    // 0x015D1168
+extern "C" bool WriteAnimatedCSAGIF(void* bitmap, void* arg, void* ctx,
+                                    int a, int b, float color,
+                                    int c, int d);          // 0x007C3410
+
+// @ 0x007B3630
+void ThumbJobF::Capture(void* arg)
+{
+    int local[2] = {-1, -1};
+    FUN_0067dd40()->GetHandle49(&local[0]);
+    PropHandle* h = g_sAppProperties->v10(0x69710d4);
+    float* color;
+    if (h->type == 0xd || h->type == 0x10) {
+        if (h->flags & 0x30)
+            color = (float*)*(void**)h;
+        else
+            color = (float*)(h->type ? (void*)h : 0);
+    } else {
+        color = &g_defaultColor;
+    }
+    float col = *color;
+    IRenderDev2e10* dev = FUN_0067dda0();
+    void* ctx = mCtx->m18;
+    void* capArg = arg;
+    WriteAnimatedCSAGIF(
+        dev->Info(local[0], local[1]),
+        capArg,
+        ctx,
+        0,
+        0x24,
+        col,
+        0,
+        0);
+}
+
+// ---------------------------------------------------------------------------
+// (types) one-time viewer/target setup (0x7b3760)
+// ---------------------------------------------------------------------------
+struct ThumbJobG {
+    char pad0[0xc];                 // +0x00
+    bool m0c;                       // +0x0c
+    cViewer* m10;                   // +0x10
+    cThumbTgt* m14;                 // +0x14
+    void Init(cThumbTgt* tgt);
+};
+
+// @ 0x007B3760
+void ThumbJobG::Init(cThumbTgt* tgt)
+{
+    if (m0c)
+        return;
+    AssignT(m14, tgt);
+    m10 = new ("Graphics", 0, 0, 0, 0) cViewer;
+    m10->Init(false);
+    m10->FUN_007c4b50(1.0f);
+    m0c = true;
+}
+
+// ---------------------------------------------------------------------------
+// (types) draw the source-mesh list through a viewer (0x7b3820)
+// ---------------------------------------------------------------------------
+struct SourceMesh;
+struct DrawStats;
+void StreamMeshToRw(SourceMesh* mesh, DrawStats* stats, void* shaderData,
+                    void* shaderMap, int flags, void* embeddedState); // 0x0072ACE0
+
+struct __declspec(align(16)) Matrix44Affine {
+    float m[4][4];
+    Matrix44Affine() {}
+    Matrix44Affine(float a00, float a01, float a02, float a03,
+                   float a10, float a11, float a12, float a13,
+                   float a20, float a21, float a22, float a23)
+    {
+        m[0][0] = a00; m[0][1] = a01; m[0][2] = a02; m[0][3] = a03;
+        m[1][0] = a10; m[1][1] = a11; m[1][2] = a12; m[1][3] = a13;
+        m[2][0] = a20; m[2][1] = a21; m[2][2] = a22; m[2][3] = a23;
+        m[3][0] = 0.0f; m[3][1] = 0.0f; m[3][2] = 0.0f; m[3][3] = 0.0f;
+    }
+    void SetIdentity()
+    {
+        m[0][0] = 1.0f; m[0][1] = 0.0f; m[0][2] = 0.0f; m[0][3] = 0.0f;
+        m[1][0] = 0.0f; m[1][1] = 1.0f; m[1][2] = 0.0f; m[1][3] = 0.0f;
+        m[2][0] = 0.0f; m[2][1] = 0.0f; m[2][2] = 1.0f; m[2][3] = 0.0f;
+        m[3][0] = 0.0f; m[3][1] = 0.0f; m[3][2] = 0.0f; m[3][3] = 0.0f;
+    }
+};
+
+void* operator new(unsigned int, void*);            // standard placement new
+
+extern "C" Matrix44Affine  g_transformLocalCopy;    // 0x016FA4F0
+extern "C" Matrix44Affine* g_transform;             // 0x016FA380
+extern "C" uint32_t g_softStateDirty;               // 0x016F9528
+extern "C" uint32_t g_transformType;                // 0x016F96A0
+extern "C" uint32_t g_renderStateDirty;             // 0x016FA38C
+extern "C" uint32_t g_blendState;                   // 0x016F923C
+extern "C" uint32_t g_rasterStateA;                 // 0x016F9218
+extern "C" float g_HKRealOne;                       // 0x01485720
+extern "C" int  FUN_011f13a0();                     // 0x011F13A0 GetBlendMode
+extern "C" void FUN_011f1340(int mode);             // 0x011F1340 SetBlendMode
+extern "C" void FUN_00777bf0();                     // 0x00777BF0 pushShaderDataNull
+extern "C" void FUN_00777c10();                     // 0x00777C10 popShaderData
+
+struct RenderMeshList {
+    char pad0[0xac];                // +0x00
+    SourceMesh** mpBegin;           // +0xac
+    SourceMesh** mpEnd;             // +0xb0
+};
+struct ThumbRenderer {
+    RenderMeshList mMeshes;         // +0x00
+    void Draw(cViewer* viewer, int* handle, DrawStats* stats);
+};
+
+// @ 0x007B3820
+void ThumbRenderer::Draw(cViewer* viewer, int* handle, DrawStats* stats)
+{
+    if (mMeshes.mpBegin == mMeshes.mpEnd)
+        return;
+
+    g_softStateDirty |= 1;
+    g_transformType = 4;
+    g_transform = &g_transformLocalCopy;
+    __m128 one  = _mm_load_ss(&g_HKRealOne);
+    __m128 zero = _mm_setzero_ps();
+    __m128 row0 = _mm_unpacklo_ps(one, zero);
+    __m128 row1 = _mm_unpacklo_ps(zero, one);
+    __m128 row2 = _mm_unpacklo_ps(row1, zero);
+    _mm_store_ps(g_transformLocalCopy.m[0], row0);
+    _mm_store_ps(g_transformLocalCopy.m[3], zero);
+    _mm_store_ps(g_transformLocalCopy.m[1], row1);
+    _mm_store_ps(g_transformLocalCopy.m[2], row2);
+
+    int savedBlend = FUN_011f13a0();
+    FUN_011f1340(0x10002);
+    uint32_t savedRaster = g_rasterStateA;
+    bool was4 = (g_blendState == 4);
+    g_renderStateDirty |= 0x10080;
+    g_blendState = 8;
+    g_rasterStateA = 0;
+    FUN_00777bf0();
+    viewer->SetRaster(handle, true);
+    if (viewer->Update()) {
+        viewer->Clear(7);
+        for (unsigned i = 0; i < (unsigned)(mMeshes.mpEnd - mMeshes.mpBegin); i++)
+            StreamMeshToRw(mMeshes.mpBegin[i], stats, 0, 0, 0, 0);
+        viewer->PostUpdate();
+    }
+    FUN_00777c10();
+    FUN_011f1340(savedBlend);
+    g_renderStateDirty |= 0x10080;
+    g_rasterStateA = savedRaster;
+    g_blendState = was4 ? 4 : 8;
+}

@@ -1,6 +1,7 @@
 // Slice s00767ee0: "RenderAsset" raster writer, resource reload/arm helpers,
-// 0x7c-stride vector resize and the BakeSprites job object ctors/dtors.
-// /O2 /MD /Gy /EHsc /TP.
+// 0x7c-stride vector resize and the BakeSprites job ctors/dtors.
+// /O2 /MD /Gy /EHsc /TP.  The BakeSprites ctor/dtor rows need /GS- (retail has no
+// stack cookie there; every manifest row states its own flags).
 #include "types.h"
 #include <intrin.h>
 #include <string.h>
@@ -11,21 +12,20 @@ extern char g_file[];
 extern "C" {
 void* __cdecl Alloc6(uint32_t size, const char* name, int a, int b, const char* file, int line); // 0xf473a0
 void  __cdecl Dealloc(void* p);                                             // 0xf47380
-void  __cdecl UnionDestroy(void* p, int type);                              // 0x7668c0 (slice 30)
-void  __fastcall FUN_007642c0(void* self);                                // 0x7642c0 (thiscall)
 void  __cdecl FUN_00764760(void* self, int v);                              // 0x764760 (thiscall)
 void  __cdecl FUN_0041f2d0(void* p);                                        // 0x41f2d0
 void  __cdecl FUN_00700670(void* a, void* b);                               // 0x700670
 void  __cdecl FUN_00767760(void* p);                                        // 0x767760
-void  __cdecl FUN_004b5440(void* p);                                        // 0x4b5440
 void  __cdecl FUN_00767350(void* self, void* pos, uint32_t n, void* value); // 0x767350
-void* __cdecl FUN_0093b530(int a, int b, void* c);                          // 0x93b530
 void  __cdecl FUN_0041cc60(void* p);                                        // 0x41cc60
-void* __cdecl FUN_007003a0(void* a, int n);                                 // 0x7003a0
-void  __cdecl FUN_00700670b(void* a, void* b);
+void  __cdecl FUN_007003a0(void* a, int n);                                 // 0x7003a0
 bool  __cdecl ReadValue68(void* stream, void* dst, int n);   // 0x93a6c0
 bool  __cdecl WriteValue68(void* stream, int a, uint32_t b); // 0x93a890
 }
+// C++ linkage on purpose: the dtor calls these from an EH-tracked cleanup sequence,
+// so /EHsc (correctly) treats them as throwing and emits the unwind state stores.
+void __cdecl UnionDestroy(void* p, int type);          // 0x7668c0
+void __fastcall FUN_007642c0(void* self);              // 0x7642c0
 
 // ===========================================================================
 // @ 0x00767ee0  SP::cGraphicsResourceFactory::WriteResourceRaster
@@ -125,67 +125,167 @@ void V7cB::Resize(uint32_t n) {
 }
 
 // ===========================================================================
-// @ 0x00768370  BakeSprites job ctor (vtable + refcounted members + fan-out)
+// BakeSprites job object (0x00768370 ctor / 0x00768540 dtor)
 // ===========================================================================
-struct C68370 {
-    void* m0; void* m4; void* m8; void* mc; void* m10; void* m14;
-    int   m18; int m1c; int m20; int m24; void* m28;
-    char pad2c[0xd0];
-    int   mFC; int m100; void* m104; void* m108; void* m10c; void* m118;
-    void* m19c; void* m1a0; void* m1a4; void* m1b0; char m334;
-    C68370(void* a, int* b, void* c, int* d, void* e);
+// EA::Thread::AtomicInt<int>
+struct AtomicInt {
+    volatile long mValue;
+    AtomicInt(long n = 0) { _InterlockedExchange(&mValue, n); }
 };
-C68370::C68370(void* a, int* b, void* c, int* d, void* e) {
-    m0 = (void*)0;            // vtable (masked)
-    m4 = (void*)0;
-    _InterlockedExchange((volatile long*)&m8, 0);
-    m0 = (void*)0;
-    m4 = (void*)0;
-    mc = b;
-    if (b) ((void(__thiscall**)(void*))*(void***)b)[1](b);
-    m10 = e;
-    if (e) ((void(__thiscall**)(void*))*(void***)e)[1](e);
-    m14 = a;
-    if (a) ((void(__thiscall**)(void*))*(void***)a)[0](a);
-    m18 = 0; // param_6 (int) - approximated
-    m1c = d[0];
-    m20 = d[1];
-    m24 = d[2];
-    m28 = 0;
-    mFC = 0; m100 = 0;
-    m104 = (char*)this + 0x11c;
-    m108 = (char*)this + 0x11c;
-    m10c = (char*)this + 0x19c;
-    m118 = 0;
-    m19c = (char*)this + 0x1b4;
-    m1a0 = (char*)this + 0x1b4;
-    m1a4 = (char*)this + 0x334;
-    m1b0 = 0;
-    m334 = 0;
+
+// primary base chain: BakeIRef (vtable 0x13f1ab0) <- BakeLayer
+struct BakeIRef {
+    virtual int AddRef() = 0;
+    virtual int Release() = 0;
+    virtual ~BakeIRef() {}
+};
+struct BakeLayer : BakeIRef {
+    virtual void DrawLayer() = 0;
+};
+// secondary base (vtable 0x13ef094), its refcount lives inside the subobject
+struct BakeRef {
+    virtual ~BakeRef() {}
+    AtomicInt mRefCount;
+};
+
+// IObj: AddRef = slot 1, Release = slot 2, kind query = slot 3, child factory = slot 6
+struct IObj {
+    virtual void v0();
+    virtual int  AddRef();
+    virtual int  Release();
+    virtual int  GetKind();
+    virtual void v4();
+    virtual void v5();
+    virtual IObj* GetChild();
+};
+// IRefB: AddRef = slot 0, Release = slot 1
+struct IRefB {
+    virtual int AddRef() = 0;
+    virtual int Release() = 0;
+};
+
+template <class T>
+struct AutoRef {
+    T* mpObject;
+    AutoRef() : mpObject(0) {}
+    AutoRef(T* p) : mpObject(p) { if (mpObject) mpObject->AddRef(); }
+    ~AutoRef() { if (mpObject) mpObject->Release(); }
+    AutoRef& operator=(T* p) {
+        if (p != mpObject) {
+            T* old = mpObject;
+            if (p) p->AddRef();
+            mpObject = p;
+            if (old) old->Release();
+        }
+        return *this;
+    }
+    operator T*() const { return mpObject; }
+    T* operator->() const { return mpObject; }
+};
+
+// discriminated union member at +0x2c, tag at its end (+0xd0)
+struct UnionState {
+    char mBytes[0xd0];
+    int  mType;
+    UnionState() : mType(0) {}
+    ~UnionState();
+};
+UnionState::~UnionState()
+{
+    if (mType) {
+        if (mType == 5) FUN_007642c0(mBytes);
+        else            UnionDestroy(mBytes, mType);
+        mType = 0;
+    }
 }
 
-// ===========================================================================
-// @ 0x00768540  BakeSprites job destructor
-// ===========================================================================
-void __fastcall C68370Dtor(C68370* self) {
-    self->m0 = (void*)0;
-    self->m4 = (void*)0;
-    if (self->m19c && ((int*)self->m19c)[-1] != 0)
-        Dealloc(self->m19c);
-    FUN_004b5440((char*)self + 0x104);
-    if (self->m100) ((void(__thiscall**)(void*))*(void***)self->m100)[1]((void*)self->m100);
-    int u = self->mFC;
-    if (u) {
-        if (u == 5) FUN_007642c0((char*)self + 0x2c);
-        else UnionDestroy((char*)self + 0x2c, u);
-        *(int*)((char*)self + 0xfc) = 0;
+// fixed-capacity vectors
+struct VecA {
+    IRefB** mpBegin;                    // +0x00
+    IRefB** mpEnd;                      // +0x04
+    IRefB** mpCapacity;                 // +0x08
+    uint32_t mAllocator[2];             // +0x0c
+    uint32_t mFlag;                     // +0x14
+    void*   mStorage[0x80 / 4];         // +0x18
+    VecA()
+    {
+        mpBegin = (IRefB**)mStorage;
+        mpEnd   = mpBegin;
+        mFlag = 0;
+        mpCapacity = (IRefB**)((char*)mpBegin + 0x80);
     }
-    if (self->m28) ((void(__thiscall**)(void*))*(void***)self->m28)[2](self->m28);
-    if (self->m14) ((void(__thiscall**)(void*))*(void***)self->m14)[1](self->m14);
-    if (self->m10) ((void(__thiscall**)(void*))*(void***)self->m10)[2](self->m10);
-    if (self->mc) ((void(__thiscall**)(void*))*(void***)self->mc)[2](self->mc);
-    self->m0 = (void*)0;
-    self->m4 = (void*)0;
+    ~VecA();                            // 0x4b5440
+};
+struct VecB {
+    void** mpBegin;                     // +0x00
+    void** mpEnd;                       // +0x04
+    void** mpCapacity;                  // +0x08
+    uint32_t mAllocator[2];             // +0x0c
+    uint32_t mFlag;                     // +0x14
+    void*  mStorage[0x180 / 4];         // +0x18
+    VecB()
+    {
+        mpBegin = mStorage;
+        mpEnd   = mpBegin;
+        mFlag = 0;
+        mpCapacity = (void**)((char*)mpBegin + 0x180);
+    }
+    ~VecB()
+    {
+        if (mpBegin && ((int*)mpBegin)[-1] != 0)
+            Dealloc(mpBegin);
+    }
+};
+
+// object built by the ctor's child step (0x34 bytes; allocated through the global
+// operator new 0xf473a0, ctor 0x93b530)
+void* operator new(unsigned size, const char* name, int, int, int, int);
+void  operator delete(void* p, const char* name, int, int, int, int);
+struct Child : IObj {
+    Child(int, int, IObj*);             // 0x93b530
+    char mPad[0x30];                    // sizeof == 0x34
+};
+
+class C68370 : public BakeLayer, public BakeRef {
+public:
+    virtual int  AddRef();
+    virtual int  Release();
+    virtual void DrawLayer();
+
+    C68370(IRefB* a, IObj* b, int* c, IObj* d, int e);
+    ~C68370();
+
+    AutoRef<IObj> m_pC;                 // +0x0c
+    AutoRef<IObj> m_pE;                 // +0x10
+    AutoRef<IRefB> m_pA;                // +0x14
+    int   m_v18;                        // +0x18
+    int   m_v1c;                        // +0x1c
+    int   m_v20;                        // +0x20
+    int   m_v24;                        // +0x24
+    AutoRef<IObj> m_p28;                // +0x28
+    UnionState m_state;                 // +0x2c
+    AutoRef<IRefB> m_100;               // +0x100
+    VecA  m_vecA;                       // +0x104
+    VecB  m_vecB;                       // +0x19c
+    char  m334;                         // +0x334
+};
+
+// @ 0x00768370
+C68370::C68370(IRefB* a, IObj* b, int* c, IObj* d, int e)
+    : m_pC(b), m_pE(d), m_pA(a), m_v18(e), m_v1c(c[0]), m_v20(c[1]), m_v24(c[2])
+{
+    m334 = 0;
+    IObj* p = m_pE->GetChild();
+    if (p) {
+        if (p->GetKind() == 0x34722300)
+            p = new ("Graphics", 0, 0, 0, 0) Child(0x2000, 0, p);
+        m_p28 = p;
+    }
+}
+
+// @ 0x00768540
+C68370::~C68370()
+{
 }
 
 // ===========================================================================

@@ -3,6 +3,10 @@
 #include "types.h"
 
 // ---- EASTL-ish container helpers ---------------------------------------------------------
+struct Float4_77d800 { float x, y, z, w; };
+
+void __cdecl operator_delete__(void* p);   // 0x00f47380
+
 struct U32Vec {
     unsigned* begin;   // +0
     unsigned* end;     // +4
@@ -111,31 +115,198 @@ void CamThing::FUN_0077ef60(float* v) {
 
 // ---- partial skeletons (see partial.txt) -------------------------------------------------
 
-// @ 0x0077d800  (partial) vector assign/grow
-void Vec8Thing::FUN_0077d800(void* first, void* last) {
-    (void)first; (void)last;
+// A 16-byte-stride EASTL vector with inline storage.  begin/end/cap at +0/+4/+8; the
+// inline buffer address (used to decide whether the heap block must be freed) is at +0x10.
+struct Vec4_77d800 {
+  char*  begin;    // +0x00
+  char*  end;      // +0x04
+  char*  cap;      // +0x08
+  char   pad0c[4]; // +0x0c
+  char*  inlineCap;// +0x10  address of the inline buffer (== cap for the inline case)
+  void Assign(char* first, char* last, void* unused);
+};
+
+extern "C" char* FUN_0077d6c0_va(void* self, char* first, char* last, unsigned count); // 0x0077d6c0
+extern "C" char* UninitCopy_va(char* first, char* last, char* dst);                    // 0x00706ab0
+
+// @ 0x0077d800  (191 bytes) assign a [first,last) range of 16-byte elements into the vector.
+void Vec4_77d800::Assign(char* first, char* last, void* unused) {
+  (void)unused;
+  char* begin = this->begin;
+  const unsigned count = (unsigned)((last - first) >> 4);
+  if ((unsigned)((this->cap - begin) >> 4) < count) {
+    char* nbeg = FUN_0077d6c0_va(this, first, last, count);
+    char* obeg = this->begin;
+    if (obeg != 0 && obeg != this->inlineCap)
+      operator_delete__(obeg);
+    char* nend = count * 0x10 + nbeg;
+    this->begin = nbeg;
+    this->cap   = nend;
+    this->end   = nend;
+    return;
+  }
+  const unsigned have = (unsigned)((this->end - begin) >> 4);
+  if (count <= have) {
+    char* d = begin;
+    for (char* s = first; s != last; s += 0x10, d += 0x10)
+      *(Float4_77d800*)d = *(Float4_77d800*)s;
+    this->end = d;
+    return;
+  }
+  char* mid = first + have * 0x10;
+  char* d = begin;
+  for (char* s = first; s != mid; s += 0x10, d += 0x10)
+    *(Float4_77d800*)d = *(Float4_77d800*)s;
+  this->end = UninitCopy_va(mid, last, this->end);
 }
 
-// @ 0x0077d8c0  (partial) EH destructor: release elements, reset vector, restore vftable
-void __fastcall FUN_0077d8c0(void* p) {
-    (void)p;
+// @ 0x0077d8c0  (168 bytes) EH destructor: release every element, reset the vector, swap vftable.
+struct ElemVec_77d8c0 {
+  void*   m00;   // +0x00 vftable
+  char    pad04[4];
+  void**  begin;// +0x08
+  void**  end;  // +0x0c
+  void Dtor();
+};
+extern "C" void* __cdecl memcpy_vd(void*, const void*, size_t);    // 0x011e0744
+
+void ElemVec_77d8c0::Dtor() {
+  this->m00 = (void*)0x140e878;                 // ??_7...@@6B@ intermediate vftable
+  int n = (int)(this->end - this->begin) >> 2;
+  for (int i = 0; i < n; ++i) {
+    void* p = this->begin[i];
+    if (p != 0)
+      (*(void(__thiscall**)(void*, int))(*(void***)p)[0])(p, 1);   // vcall slot 0 with 1
+  }
+  void** b = this->begin;
+  void** e = this->end;
+  // The original emits memcpy(begin, end, 0): an EASTL move the compiler folded to a no-op.
+  memcpy_vd(b, e, 0);
+  int bytes = (int)((char*)e - (char*)b);
+  this->end = (void**)((char*)this->end + (-(bytes >> 2)) * 4);
+  void* nb = this->begin;
+  if (nb != 0 && ((int*)nb)[-1] != 0)
+    operator_delete__(nb);
+  this->m00 = (void*)0x13ef094;                 // ??_7hkReferencedObject@@6B@
 }
 
-// @ 0x0077e260  (partial) EH constructor with inline 0x100-byte storage
-void* BigVec::FUN_0077e260(unsigned a, unsigned b) {
-    (void)a; (void)b;
-    return this;
+// @ 0x0077e260  (93 bytes) EH ctor: vector with a 0x100-byte inline buffer at +0x18.
+struct Inline100_77e260 {
+  char* begin;    // +0x00
+  char* end;      // +0x04
+  char* cap;      // +0x08
+  char  pad0c[4]; // +0x0c
+  char* inlineCap;// +0x10  == this+0x18
+  char  pad14[4]; // +0x14
+  char  buf[0x100]; // +0x18
+  void* Ctor(unsigned a, void* b);
+};
+
+void* Inline100_77e260::Ctor(unsigned a, void* b) {
+  char* inl = (char*)this + 0x18;
+  this->inlineCap = inl;
+  this->end = inl;
+  this->begin = inl;
+  this->cap = inl + 0x100;
+  ((Vec8Thing*)this)->FUN_0077d9c0(a, b);   // 0x0077d9c0 eastl_vector_Resize
+  return this;
 }
 
-// @ 0x0077e2c0  (partial) EH constructor with inline 0x40-byte storage
-void* BigVec::FUN_0077e2c0(void* a, void* b) {
-    (void)a; (void)b;
-    return this;
+// @ 0x0077e2c0  (471 bytes) EH ctor: vector with a 0x40-byte inline buffer at +0x20, assign range.
+struct Inline40_77e2c0 {
+  char* begin;    // +0x00
+  char* end;      // +0x04
+  char* cap;      // +0x08
+  char  pad0c[4]; // +0x0c
+  char* inlineCap;// +0x10  == this+0x20
+  char  pad14[0xc]; // +0x14
+  char  buf[0x40];  // +0x20
+  void* Ctor(void* a, char* b);
+};
+void* Inline40_77e2c0::Ctor(void* a, char* b) {
+  char* inl = (char*)this + 0x20;
+  this->inlineCap = inl;
+  this->end = inl;
+  this->begin = inl;
+  this->cap = inl + 0x40;
+  ((Vec4_77d800*)this)->Assign((char*)a, b, b);
+  return this;
 }
 
-// @ 0x0077e4a0  (partial) inverse-transform + normalization-constant setup
-void __cdecl FUN_0077e4a0(unsigned reg, unsigned p2, int isVS) {
-    (void)reg; (void)p2; (void)isVS;
+// @ 0x0077e4a0  (560 bytes) set up the normalization shader constants and apply them.
+extern unsigned* g_matrixActive;      // 0x016f85ac -> Matrix44Affine* ActiveState
+extern int       g_matrixType;        // 0x016f8b50
+extern void*     g_d3d9Device;        // 0x016f89d0
+extern unsigned  g_shaderState_cn;    // 0x016f6e0c
+
+extern "C" void* FUN_00778060_cn(void* out, void* src, int type);       // 0x00778060
+extern "C" void  FUN_0041cb40_cn(void* self, void* src);                // 0x0041cb40 (cSPMatrix3::Assign)
+extern "C" void  FUN_006b92d0_cn(void* self);                           // 0x006b92d0 (Basis3::Normalize)
+extern "C" void  RemoveNormConsts_cn(int n, void* p);                   // 0x00783830
+extern "C" void  thunk_7864c0_cn(void* a, int b, void* c, void* d);     // 0x00795eb0
+extern "C" void  ApplyNormConsts_cn(int n, void* p);                    // 0x00783590
+
+// A 3x4 affine matrix: 0x40 bytes, copied a xmmword at a time.
+struct Matrix44Affine_cn { float m[16]; };
+// The 0x34-byte matrix33 the assign/normalize pair builds on the stack.
+struct Matrix33_cn { char m[0x34]; };
+
+// Named globals at their retail addresses.
+static Matrix44Affine_cn& g_normalizationMat  = *(Matrix44Affine_cn*)0x01632c90;
+static Matrix33_cn&       g_normalizationMat33 = *(Matrix33_cn*)0x01632c90;
+static void*&             g_inverseTransform  = *(void**)0x016f9120;
+static Matrix44Affine_cn& g_normalizationRows = *(Matrix44Affine_cn*)0x01633b90;
+
+void FUN_0077e4a0(unsigned reg, unsigned p2, int isVS) {
+  unsigned state = g_shaderState_cn;
+  if (state == 0 || *(unsigned char*)(state + 1) < 4)
+    return;
+
+  // Snapshot the active transform, invert it, store the inverse back.
+  g_normalizationMat = *(Matrix44Affine_cn*)g_matrixActive;
+  Matrix33_cn scratch;
+  Matrix44Affine_cn* inv =
+      (Matrix44Affine_cn*)FUN_00778060_cn(&scratch, &g_normalizationMat, g_matrixType);
+  g_normalizationMat = *inv;
+
+  // Build the 3x3 basis from the fixed normalisation constants.
+  float n0 = *(float*)0x01632bfc;
+  float n1 = *(float*)0x01632c00;
+  float n2 = *(float*)0x01632c04;
+  g_inverseTransform = &g_normalizationMat33;
+
+  struct { float x, y, z; short a, b; } rows;   // +0x18 window (12 bytes + 2 shorts)
+  rows.x = n0; rows.y = n1; rows.z = n2;
+  rows.a = 0; rows.b = 0;
+
+  FUN_0041cb40_cn(&rows, (void*)0x01632d7c);
+  rows.z = 1.0f;
+  FUN_006b92d0_cn(&g_normalizationMat33);
+  ++rows.a;
+  rows.y = 1.0f;
+
+  Inline40_77e2c0 vec;
+  vec.Ctor((void*)(state + 0x30), (char*)(state + 0x70));
+
+  RemoveNormConsts_cn(2, vec.begin);
+  Matrix33_cn basis;
+  thunk_7864c0_cn(&basis, 2, vec.begin, (void*)0x01633b80);
+  ApplyNormConsts_cn(2, (void*)0x01633b80);
+
+  // Scale the three normalisation rows by 2/3.
+  const float s = *(float*)0x0140e87c;
+  for (int i = 0; i < 12; ++i)
+    g_normalizationRows.m[i] *= s;
+
+  void* dev = g_d3d9Device;
+  void** vt = *(void***)dev;
+  if (isVS != 0)
+    ((void(__thiscall*)(void*, unsigned))vt[0x178 / 4])(dev, reg);
+  else
+    ((void(__thiscall*)(void*, unsigned, void*, int))vt[0x1b4 / 4])(dev, reg, (void*)0x01633b80, 4);
+
+  if (vec.begin != 0 && vec.begin != vec.inlineCap)
+    operator_delete__(vec.begin);
 }
 
 // @ 0x0077e6d0  registers the whole rw shader-constant table: SetShaderDef(id, a, b, c, setter),

@@ -1,2 +1,4 @@
 00730210  21   Complete trivial forwarder; argument-evaluation scheduling differs.
 0072f9b0  1254  Complete: same 23 calls/vcalls in order, 1539 vs 1592 B; stack layout of the two section vectors, the 12 matrix-row temps and EH states differ (flags /O2 /MD /Gy /EHsc /TP /arch:SSE /GS-)
+0072f8d0  122  Complete: 203 vs 220 B, same MakeEntry/MergeMeshesIntoModels calls in order; loop-body register allocation and the dst-address spill differ, the two source-range size reloads keep the wrong second bound (flags /O2 /MD /Gy /EHsc /TP /arch:SSE /GS-; equiv WEAK 177/200 valid, 70.1% cov)
+0072fff0  458  Complete: 445 vs 544 B, same calls (GetResource/CEditorRes/FUN_0072f9b0/FUN_006acfe0/SetCachingType + PartHolder push_back in order); desc held in esi vs ebp, the new-CEditorRes scratch slot and EH state stores are scheduled differently (flags /O2 /MD /Gy /EHsc /TP /arch:SSE /GS-; equiv UNSUPPORTED 0/400 valid, pointer-soup read faults)

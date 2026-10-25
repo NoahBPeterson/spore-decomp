@@ -9,3 +9,6 @@ slices/s007b29a0/s007b29a0.cpp  ??1cThumbResA@@UAE@XZ  007b2eb0  /O2 /MD /Gy /EH
 slices/s007b29a0/s007b29a0.cpp  ?Run@cThumbJobC@@QAEXPAUcThumbRef@@0PAUcThumbTgt@@@Z  007b2f40  /O2 /MD /Gy /EHsc /TP /GS-
 slices/s007b29a0/s007b29a0.cpp  ?Run@cThumbJobD@@QAEXPAUcThumbRef@@PAUcThumbTgt@@@Z  007b31f0  /O2 /MD /Gy /EHsc /TP /GS-
 slices/s007b29a0/s007b29a0.cpp  ??1cThumbResB@@UAE@XZ  007b32e0  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s007b29a0/s007b29a0.cpp  ?Submit@ThumbJobE@@QAEXXZ  007b35a0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s007b29a0/s007b29a0.cpp  ?Capture@ThumbJobF@@QAEXPAX@Z  007b3630  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s007b29a0/s007b29a0.cpp  ?Init@ThumbJobG@@QAEXPAUcThumbTgt@@@Z  007b3760  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast

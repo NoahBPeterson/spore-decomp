@@ -2,6 +2,8 @@
 // SP::cRTTManager page-table accessors plus render-target record helpers. Default flags + SSE2.
 #include "types.h"
 
+inline void* operator new(unsigned int, void* p) { return p; }
+
 extern "C" void* EASTL_allocator_allocate(uint32_t n, const char* name, int a, int b, const char* f, int line); // 0x00f473a0
 extern "C" void  EASTL_allocator_deallocate(void* p);   // 0x00f47380
 
@@ -326,14 +328,88 @@ void SomeObj3::Destroy()
 }
 
 // ------------------------------------------------------------------ record copy/relocate
-struct BigRec {
+// 0x3c-stride record. The 0x28-byte base carries the two embedded containers: its copy
+// constructor is 0x0076e670 and its assignment delegates to 0x0076e4b0 / 0x0050d4e0.
+struct PageRecVec {                       // +0x00 (vector<PageRecord>)
     char pad00[0x14];
-    char padVec[0x14];   // +0x14 vector<float,sp_vector_allocator>
-    char pad28[0x10];
-    void* mRef;          // +0x38
+    void Assign(const PageRecVec& src);                        // 0x0076e4b0 (thiscall, src pushed)
 };
-void CopyBigRec(BigRec* dst, BigRec* src);        // 0x0076e4b0
-void AssignFloatVec(void* dst, void* src);        // 0x0050d4e0
+struct FloatVec {                         // +0x14 (vector<float,sp_vector_allocator>)
+    char pad00[0x14];
+    void Assign(const FloatVec& src);                          // 0x0050d4e0 (thiscall, src pushed)
+};
+struct BigRecBase {
+    PageRecVec mPages;    // +0x00
+    FloatVec   mFloats;   // +0x14
+    BigRecBase(const BigRecBase& src);                         // 0x0076e670 (thiscall, src pushed)
+    __forceinline BigRecBase& operator=(const BigRecBase& o)
+    {
+        mPages.Assign(o.mPages);
+        mFloats.Assign(o.mFloats);
+        return *this;
+    }
+};
+struct BigRef {                            // +0x38 refcounted texture handle (AutoRef)
+    void* p;
+    __forceinline BigRef(const BigRef& o) : p(o.p)
+    {
+        if (p)
+            _InterlockedIncrement((volatile long*)((char*)p + 8));
+    }
+    __forceinline ~BigRef()
+    {
+        if (p) {
+            volatile long* rc = (volatile long*)((char*)p + 8);
+            _InterlockedExchangeAdd(rc, -1);
+            if (_InterlockedExchangeAdd(rc, 0) < 1)
+                _InterlockedIncrement(rc);
+            else
+                _InterlockedExchangeAdd(rc, 0);
+        }
+    }
+    __forceinline BigRef& operator=(const BigRef& o)
+    {
+        void* nv = o.p;
+        void* ov = p;
+        if (nv != ov) {
+            if (nv)
+                _InterlockedIncrement((volatile long*)((char*)nv + 8));
+            p = nv;
+            if (ov) {
+                volatile long* rc = (volatile long*)((char*)ov + 8);
+                _InterlockedExchangeAdd(rc, -1);
+                if (_InterlockedExchangeAdd(rc, 0) < 1)
+                    _InterlockedIncrement(rc);
+                else
+                    _InterlockedExchangeAdd(rc, 0);
+            }
+        }
+        return *this;
+    }
+};
+struct BigRec : BigRecBase {              // implicit copy ctor / operator=
+    int   f28;            // +0x28
+    int   f2c;            // +0x2c
+    int   f30;            // +0x30
+    int   f34;            // +0x34
+    BigRef mRef;          // +0x38
+
+    __forceinline BigRec(const BigRec& o)
+        : BigRecBase(o), f28(o.f28), f2c(o.f2c), f30(o.f30), f34(o.f34), mRef(o.mRef) {}
+    __forceinline BigRec& operator=(const BigRec& o)
+    {
+        BigRecBase::operator=(o);
+        f28 = o.f28;
+        f2c = o.f2c;
+        f30 = o.f30;
+        f34 = o.f34;
+        mRef = o.mRef;
+        return *this;
+    }
+};
+typedef char sizeof_check_BigRecC[(sizeof(BigRec) == 0x3c) ? 1 : -1];
+void __fastcall CopyBigRec(void* self, int, void* src);        // 0x0076e4b0 (this=dest, src pushed)
+void __fastcall AssignFloatVec(void* self, int, void* src);    // 0x0050d4e0 (this=dest, src pushed)
 
 // 0x0076e610  0x2c-byte object factory (three vtables: +0, +4 and +8; RefCount at +0xc).
 // The base-class constructors' vtable stores (GB1 at +4, RefCountVTemplate at +8) are kept as volatile
@@ -434,24 +510,38 @@ void __stdcall DestroyBigRecArray(BigRec2* first, BigRec2* last)
     }
 }
 
-// @ 0x0076e840  (skeleton; see partial.txt)
+// @ 0x0076e840  uninitialized copy of a 0x3c-stride record range; a null dest still advances the counter.
 int __cdecl CopyBigRecRange(BigRec* first, BigRec* last, BigRec* out)
 {
-    (void)first; (void)last;
+    for (; first != last; ++first, ++out) {
+        if (out)
+            ::new (out) BigRec(*first);
+    }
     return (int)(size_t)out;
 }
 
-// @ 0x0076e900  (skeleton; see partial.txt)
-void* __cdecl CopyBigRecRange2(void* first, void* last, void* out)
+// @ 0x0076e900  assign-copy a 0x3c-stride range (vectors + refcounted texture ref transfer).
+void* __cdecl CopyBigRecRange2(void* first_, void* last_, void* out_)
 {
-    (void)first; (void)last;
+    BigRec* first = (BigRec*)first_;
+    BigRec* last = (BigRec*)last_;
+    BigRec* out = (BigRec*)out_;
+    for (; first != last; ++first, ++out)
+        *out = *first;
     return out;
 }
 
-// @ 0x0076e9b0  (skeleton; see partial.txt)
-void* __cdecl CopyBigRecRangeBack(void* first, void* last, void* out)
+// @ 0x0076e9b0  same as CopyBigRecRange2, walking the range from the back.
+void* __cdecl CopyBigRecRangeBack(void* first_, void* last_, void* out_)
 {
-    (void)first; (void)last;
+    BigRec* first = (BigRec*)first_;
+    BigRec* last = (BigRec*)last_;
+    BigRec* out = (BigRec*)out_;
+    while (first != last) {
+        --first;
+        --out;
+        *out = *first;
+    }
     return out;
 }
 
@@ -507,25 +597,46 @@ void __cdecl RegisterCaptureJob(void* arg)
     ((void(__thiscall*)(void*))((void**)a)[1])(a);
 }
 
-// @ 0x0076ea60
+// ---- cRTTCheat::Construct support (0x0076ea60)
 struct cRTTCheat {
-    void* Construct();
+    void* Construct(int owner);
     void  Execute(void* args);
 };
-void* cRTTCheat::Construct()
-{
-    return this;   // skeleton: cRTTCheat ctor (see partial.txt)
-}
-
-// ---- cRTTCheat::Execute support (0x0076eb00)
 namespace EA { namespace ArgScript {
 struct cArguments;
 struct cIParser;
-// 0x0083b9d0  cArgumentSpec::Parse(cArguments*, cIParser*)
+// 0x0083c800  cCommandBase::cCommandBase (thiscall)
+struct cCommandBase {
+    void* vtbl;       // +0x00
+    void* mParser;    // +0x04
+    int   mRefCount;  // +0x08
+    cCommandBase();
+};
+// 0x0083a9f0  cArgumentSpec::cArgumentSpec(bool); 0x0083bcd0 ConstructSpec (cdecl, `this` pushed first)
 struct cArgumentSpec {
-    void Parse(cArguments* args, cIParser* parser);
+    cArgumentSpec(bool respectHelp);
+    void Parse(cArguments* args, cIParser* parser);            // 0x0083b9d0
+    int  ConstructSpec(const char* name, const char* spec, ...);   // 0x0083bcd0
 };
 } }  // namespace EA::ArgScript
+
+// @ 0x0076ea60
+void* cRTTCheat::Construct(int owner)
+{
+    ::new (this) EA::ArgScript::cCommandBase;
+    *(void**)this = (void*)0x140e468;
+    ::new ((char*)this + 0x10) EA::ArgScript::cArgumentSpec(true);
+    *(int*)((char*)this + 0xd8) = owner;
+    ((EA::ArgScript::cArgumentSpec*)((char*)this + 0x10))->ConstructSpec(
+        "Controls the render target manager",
+        "-list^", 0,
+        "List currently allocated pages",
+        "-dump^", 1,
+        "Dump all the render target textures in memory", 0);
+    return this;
+}
+
+// ---- cRTTCheat::Execute support (0x0076eb00)
 
 // 0x00841000  EA::ArgScript::Output(cIParser*, const char*, ...)
 namespace EA { namespace ArgScript {

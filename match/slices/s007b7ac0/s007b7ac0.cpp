@@ -325,11 +325,153 @@ void cThumbnailManager::Render(int p1, int p2, const RenderInfo* ri, int p4)
     SetShaderData(0x223, savedShaderData, 1);
 }
 
-// @ 0x007b8550  (partial)
-void partial_007b8550(void) {}
-// @ 0x007b8680  (partial)
-void partial_007b8680(void) {}
-// @ 0x007b8700  (partial)
-void partial_007b8700(void) {}
-// @ 0x007b8780  (partial)
-void partial_007b8780(void) {}
+// ---- summarizer record ---------------------------------------------------------------------
+// 0x7b8550 is its constructor and 0x7b8680 its scalar deleting destructor.  The two vtables are
+// installed over the MSVC base-subobject vtables 0x13ec458 / 0x13eb938.
+struct Summarizer {
+    void* volatile mVt0; // +0x00
+    void* mVt4;          // +0x04 written twice: base subobject, then final vtable
+    volatile int m08;    // +0x08
+    int   m0c;           // +0x0c
+    volatile int m10;    // +0x10
+    volatile int m14;    // +0x14
+    volatile int m18;    // +0x18
+    volatile int m1c;    // +0x1c
+    volatile int m20;    // +0x20
+    void* volatile m24;  // +0x24 heap block with an AllocHeader immediately before it
+    volatile int m28;    // +0x28
+    volatile int m2c;    // +0x2c
+    char  pad30[8];      // +0x30..+0x37
+    volatile int m38;    // +0x38
+    char  pad3c[0x40];   // +0x3c..+0x7b
+    volatile int m7c;    // +0x7c
+    volatile unsigned char m80;   // +0x80
+    volatile unsigned char m81;   // +0x81
+    volatile unsigned char m82;   // +0x82
+    volatile unsigned char m83;   // +0x83
+    char  pad84[0x24];   // +0x84..+0xa7
+    volatile unsigned char ma8;   // +0xa8
+    char  padA9[3];      // +0xa9..+0xab
+    float mac;           // +0xac
+    float mb0;           // +0xb0
+    float mb4;           // +0xb4
+    float mb8;           // +0xb8
+    float mbc;           // +0xbc
+    float mc0;           // +0xc0
+    float mc4;           // +0xc4
+    float mc8;           // +0xc8
+    float mcc;           // +0xcc
+    float md0;           // +0xd0
+    float md4;           // +0xd4
+    float md8;           // +0xd8
+    float mdc;           // +0xdc
+    float me0;           // +0xe0
+    Summarizer* Delete(int flags);
+};
+
+struct AllocHeader { int mSize; };
+
+extern "C" void __cdecl F_00f47380(void* p);       // 0x00f47380 operator delete
+extern const float g_1635640;                      // 0x01635640
+extern const float g_1635644;                      // 0x01635644
+extern const float g_1485720;                      // 0x01485720
+
+// @ 0x007b8550
+Summarizer* __fastcall FUN_007b8550(Summarizer* self) {
+    *(void* volatile*)&self->mVt4 = (void*)0x13ec458;
+    self->m08 = 0;
+    self->mVt0 = (void*)0x140ff9c;
+    *(void* volatile*)&self->mVt4 = (void*)0x140ff8c;
+    self->m10 = -1;
+    self->m14 = -1;
+    self->m18 = 0;
+    self->m1c = -1;
+    self->m20 = -1;
+    self->m24 = 0;
+    self->m28 = 0;
+    self->m2c = 0;
+    self->m38 = 0;
+    self->m7c = 0;
+    self->m80 = 0;
+    self->m81 = 0;
+    self->m82 = 0;
+    self->m83 = 0;
+    self->ma8 = 0;
+    self->mac = g_1635640;
+    self->mb0 = g_1635644;
+    self->mb4 = g_1635640;
+    self->mb8 = g_1635644;
+    self->mbc = g_1635640;
+    self->mc0 = g_1635644;
+    self->mc4 = g_1635640;
+    self->mc8 = g_1635644;
+    self->mcc = 0.0f;
+    self->md0 = 0.0f;
+    self->md4 = g_1635640;
+    self->md8 = g_1635644;
+    float v = g_1485720;
+    self->mdc = v;
+    self->me0 = v;
+    return self;
+}
+
+// @ 0x007b8680
+Summarizer* Summarizer::Delete(int flags) {
+    mVt0 = (void*)0x140ff9c;
+    *(void* volatile*)&mVt4 = (void*)0x140ff8c;
+    void* p = *(void* volatile*)&m24;
+    if (p != 0 && ((AllocHeader*)p)[-1].mSize != 0)
+        F_00f47380(p);
+    mVt4 = (void*)0x13ec458;
+    mVt0 = (void*)0x13eb938;
+    if (flags & 1)
+        F_00f47380(this);
+    return this;
+}
+
+// ---- EH destructors (SEH frame makes byte-exactness unreachable) ----------------------------
+extern "C" void __fastcall F_00a23920(void* p);    // 0x00a23920 member destructor
+extern "C" void __fastcall F_007b6b60(void* p);    // 0x007b6b60 member destructor
+
+struct IRefCounted {
+    virtual void v0();
+    virtual void v1();
+    virtual int  v2();
+};
+
+struct Dtor8700 {
+    void* mVt0;          // +0x00
+    void* mVt4;          // +0x04
+    char  pad8[4];       // +0x08
+    char  m0c[0x24];     // +0x0c destroyed by 0x00a23920
+    IRefCounted* m30;    // +0x30 released through vtable slot 2
+};
+
+// @ 0x007b8700
+void __fastcall FUN_007b8700(Dtor8700* self) {
+    self->mVt0 = (void*)0x140ffe0;
+    self->mVt4 = (void*)0x140ffd0;
+    if (self->m30 != 0)
+        self->m30->v2();
+    F_00a23920(&self->m0c[0]);
+    self->mVt4 = (void*)0x13ec458;
+    self->mVt0 = (void*)0x13eb938;
+}
+
+struct Dtor8780 {
+    void* mVt0;          // +0x00
+    void* mVt4;          // +0x04
+    char  pad8[4];       // +0x08
+    char  m0c[0x14];     // +0x0c destroyed by 0x007b6b60
+    char  m20[8];        // +0x20 destroyed by 0x00a23920
+};
+
+// @ 0x007b8780
+void __fastcall FUN_007b8780(Dtor8780* self) {
+    self->mVt0 = (void*)0x1410000;
+    self->mVt4 = (void*)0x140fff0;
+    F_00a23920(&self->m20[0]);
+    F_007b6b60(&self->m0c[0]);
+    self->mVt4 = (void*)0x13ec458;
+    self->mVt0 = (void*)0x13eb938;
+}

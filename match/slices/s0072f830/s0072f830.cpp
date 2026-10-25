@@ -3,12 +3,44 @@
 #include "types.h"
 #include <xmmintrin.h>
 
-// @ 0x0072f830  (PARTIAL — skeleton; opaque sink so callers are not collapsed)
-volatile int g_sink_72f830;
-__declspec(noinline)
-void FUN_0072f830(int count, int base, int b8, int a4, int a5)
+// ---- external helpers the three entry points call ----
+// Local small-vector (0x58 bytes, 0x40-byte inline buffer at +0x18); constructed with a count hint.
+void operator delete[](void* p) throw();                                        // 0x00f47380
+struct SmallVec {
+    void* mpBegin;      // +0x00
+    void* mpEnd;        // +0x04
+    void* mpCapacity;   // +0x08
+    void* pad0;         // +0x0c
+    void* mpInline;     // +0x10  points at +0x18 (the inline buffer)
+    void* pad1;         // +0x14
+    void* mBuffer[16];  // +0x18  0x40-byte inline storage
+    SmallVec(unsigned count);                   // 0x0072c180, thiscall ret 4
+    ~SmallVec() { if (mpBegin && mpBegin != mpInline) operator delete[](mpBegin); }
+};
+// The global material manager singleton and the resource manager singleton.
+struct MaterialManagerStub {
+    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
+    virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1c();
+    virtual void v20(); virtual void v24(); virtual void v28(); virtual void v2c();
+    virtual void v30(); virtual void v34();
+    virtual void MakeMesh(unsigned count, void* aux, void* meshes);  // +0x38 vtable slot 14 (ret 0xc)
+    virtual void v3c();
+    virtual void* MakeEntry(void* obj, void* a5);                    // +0x40 vtable slot 16 (ret 8)
+};
+MaterialManagerStub* __cdecl SP_MaterialManager();                            // 0x0067dd70
+
+void __cdecl FUN_0072d6a0(unsigned count, void* first, void* array, void* a4, void* a5); // 0x0072d6a0
+void __cdecl FUN_0072f9b0(void* resource, void* outMeshes);                   // 0x0072f9b0
+void __cdecl MergeMeshesIntoModels(unsigned count, void* first, void* array, void* a4, void* a5);
+
+// @ 0x0072f830  (local mesh-list builder: size a local vector, make the mesh, merge into models)
+// 5 cdecl args: count / first / aux([p+0xb8]) / a3 / a4 (see FUN_00730210).
+void __cdecl FUN_0072f830(unsigned count, void* first, void* aux, void* a3, void* a4)
 {
-    g_sink_72f830 = count + base + b8 + a4 + a5;
+    MaterialManagerStub* mgr = SP_MaterialManager();
+    SmallVec local(count);
+    mgr->MakeMesh(count, aux, local.mpBegin);
+    FUN_0072d6a0(count, first, local.mpBegin, a3, a4);
 }
 
 // @ 0x00730210
@@ -17,16 +49,10 @@ void FUN_00730210(int* p, int param_2)
     int  b8    = *(int*)((char*)p + 0xb8);
     int  base  = p[6];
     int  count = (p[7] - base) >> 2;
-    FUN_0072f830(count, base, b8, param_2, (int)p);
+    FUN_0072f830(count, (void*)base, (void*)b8, (void*)param_2, (void*)p);
 }
 
-// @ 0x0072f8d0  (PARTIAL)
-void FUN_0072f8d0(void* a, void* b, void* c, void* d)
-{
-    (void)a; (void)b; (void)c; (void)d;
-}
-
-// @ 0x0072f9b0  build the per-mesh bone-matrix palette stream
+// mesh materialisation (0072f9b0): build the per-mesh bone-matrix palette stream
 // (flags /O2 /MD /Gy /EHsc /TP /arch:SSE /GS-)
 //   1. walk the arena's exported objects: 0x2001a mesh sections (collected), 0x200af vertex data
 //      (hands the whole arena to FUN_0072e010, which builds the meshes);
@@ -35,7 +61,6 @@ void FUN_0072f8d0(void* a, void* b, void* c, void* d)
 //      palette and attach its buffer as stream 0x12 to every built mesh.
 void* operator new(unsigned int size, const char* name, int flags, unsigned debugFlags,
                    const char* file, int line);                                 // 0x00f473a0
-void operator delete[](void* p) throw();                                        // 0x00f47380
 inline void* operator new(unsigned int, void* p) throw() { return p; }
 
 namespace palette {
@@ -110,6 +135,7 @@ struct PtrVector {
     void** mpEnd;
     void** mpCapacity;
     u32 mAllocator[2];                           // allocator payload (never initialised)
+    int size() const { return (int)(mpEnd - mpBegin); }
     PtrVector() : mpBegin(0), mpEnd(0), mpCapacity(0) {}
     ~PtrVector() { if (mpBegin && ((int*)mpBegin)[-1]) operator delete[](mpBegin); }
     void DoInsertValue(void** pos, void* const& value);      // 0x006ec4a0, thiscall ret 8
@@ -195,7 +221,23 @@ struct MatrixPalette : IObject {
 
 namespace palette {
 void __cdecl FUN_0072e010(RWResource& resource, vector<intrusive_ptr<Mesh> >& outMeshes);   // 0x0072e010
-void __cdecl Fn0072f8d0(PtrVector* sections, PtrVector* ranges, void* meshes, void* resource); // 0x0072f8d0
+
+// @ 0x0072f8d0  (build one output mesh per source range: MakeEntry for each range element,
+//                then merge the model array into the meshes)
+// 4 cdecl args: modelVec / srcVec / meshes / resource.
+void __cdecl Fn0072f8d0_impl(PtrVector* modelVec, PtrVector* srcVec, void* meshes, void* resource)
+{
+    MaterialManagerStub* mgr = SP_MaterialManager();
+
+    SmallVec local((unsigned)srcVec->size());
+    int n = srcVec->size();
+
+    for (int i = 0; i < n; ++i)
+        ((void**)local.mpBegin)[i] = mgr->MakeEntry(srcVec->mpBegin[i], resource);
+
+    FUN_0072d6a0(modelVec->size(), modelVec->mpBegin,
+                 local.mpBegin, meshes, resource);
+}
 }
 
 // @ 0x0072f9b0
@@ -229,7 +271,7 @@ void FUN_0072f9b0(palette::RWResource* resource, palette::vector<palette::intrus
         }
     }
     if (!builtFromVertexData && sectionObjs.mpBegin != sectionObjs.mpEnd) {
-        Fn0072f8d0(&sectionObjs, &sectionRanges, meshes, resource);
+        Fn0072f8d0_impl(&sectionObjs, &sectionRanges, meshes, resource);
         sectionObjs.clear();
         sectionRanges.clear();
     }
@@ -254,8 +296,115 @@ void FUN_0072f9b0(palette::RWResource* resource, palette::vector<palette::intrus
     }
 }
 
-// @ 0x0072fff0  (PARTIAL)
-void FUN_0072fff0(void* a)
+namespace resfac {
+
+typedef unsigned int u32;
+
+// EA::ResourceMan::Key: three dwords (instance, type, group).
+struct Key {
+    u32 mInstance; u32 mType; u32 mGroup;
+    Key(u32 instance, u32 type, u32 group) : mInstance(instance), mType(type), mGroup(group) {}
+};
+
+// Refcounted base: vtable slot 0 = AddRef, slot 1 = Release.
+struct IRefObj {
+    virtual int AddRef();    // +0x00
+    virtual int Release();   // +0x04
+};
+
+// EA::AutoRefCount<T>: one pointer, AddRef on copy/assign, Release on destruction.
+template<class T> struct RefPtr {
+    T* mpObject;
+    RefPtr() : mpObject(0) {}
+    RefPtr(T* p) : mpObject(p) { if (mpObject) mpObject->AddRef(); }
+    RefPtr(const RefPtr& o) : mpObject(o.mpObject) { if (mpObject) mpObject->AddRef(); }
+    ~RefPtr() { if (mpObject) mpObject->Release(); }
+    RefPtr& operator=(T* p)
+    {
+        if (p != mpObject) {
+            if (p) p->AddRef();
+            T* old = mpObject;
+            mpObject = p;
+            if (old) old->Release();
+        }
+        return *this;
+    }
+    T* get() const { return mpObject; }
+    T* operator->() const { return mpObject; }
+};
+
+// Descriptor passed in by the caller: the same Key triple lives at +0x08.
+struct ResDesc {
+    u32 pad00;       // +0x00
+    u32 pad04;       // +0x04
+    u32 mInstance;   // +0x08
+    u32 mType;       // +0x0c
+    u32 mGroup;      // +0x10
+};
+
+// PartHolder (0x58 bytes): refcounted wrapper around a mesh/part.
+struct PartHolder : IRefObj {
+    uint32_t mData[21];                      // +0x04  opaque holder state (0x58 total)
+    PartHolder(const palette::Mesh* part);   // 0x0040f070, thiscall ret 4
+};
+
+// Ref-vector (begin / end / capacity + allocator payload), grown out of line.
+template<class T> struct RV {
+    T* mpBegin; T* mpEnd; T* mpCapacity; u32 mAlloc[2];
+    void DoInsertValue(T* pos, const T& value);   // 0x00424430, thiscall ret 8
+    void push_back(const T& value)
+    {
+        if (mpEnd < mpCapacity)
+            ::new((void*)mpEnd++) T(value);
+        else
+            DoInsertValue(mpEnd, value);
+    }
+};
+
+// Resource entry created when the resource is not cached (0x2c bytes).
+struct CEditorRes : IRefObj {
+    u32 pad04[5];
+    RV<palette::intrusive_ptr<palette::Mesh> > mParts;   // +0x18
+    CEditorRes();                                        // 0x00763100
+};
+
+// Resource manager: vtable slot 5 (0x14) looks a resource up by key.
+struct ResourceManager {
+    virtual void r00(); virtual void r04(); virtual void r08(); virtual void r0c(); virtual void r10();
+    virtual bool GetResource(const Key& key, void* outRef);   // +0x14
+};
+ResourceManager* __cdecl GetManager();       // 0x0067dcd0
+
+bool __cdecl FUN_006acfe0(void* key, void* desc);   // 0x006acfe0
+bool __cdecl SetCachingType(int type, void* desc);  // 0x006ac040
+
+} // namespace resfac
+
+// @ 0x0072fff0  build/lookup the cached editor resource then fill the output part vector
+//   1. build the resource key from the descriptor, look it up in the resource manager;
+//   2. on a miss, create a CEditorRes, build its meshes (FUN_0072f9b0) and register it;
+//   3. wrap every mesh of the resource in a PartHolder and append it to the output vector.
+void __cdecl FUN_0072fff0(resfac::ResDesc* desc,
+                          resfac::RV<palette::intrusive_ptr<resfac::PartHolder> >* out)
 {
-    (void)a;
+    using namespace resfac;
+
+    Key key(desc->mInstance, 0x1c135da, desc->mGroup);
+    RefPtr<CEditorRes> resource;
+
+    if (!GetManager()->GetResource(key, &resource)) {
+        resource = new("Graphics", 0, 0, 0, 0) CEditorRes();
+        FUN_0072f9b0(desc, &resource->mParts);
+        desc->mInstance = key.mInstance;
+        desc->mType     = key.mType;
+        desc->mGroup    = key.mGroup;
+        FUN_006acfe0(&key, desc);
+        SetCachingType(4, desc);
+    }
+
+    int count = (int)(resource->mParts.mpEnd - resource->mParts.mpBegin);
+    for (int i = 0; i < count; ++i) {
+        PartHolder* holder = new("Graphics", 0, 0, 0, 0) PartHolder(resource->mParts.mpBegin[i].get());
+        out->push_back(palette::intrusive_ptr<PartHolder>(holder));
+    }
 }

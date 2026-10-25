@@ -1,3 +1,4 @@
 # source  symbol  original VA  [flags override]
 slices/s007af8b0/s007af8b0.cpp  ?StepDown@cRowJobData@@QAE_NPAUCJob@@@Z  007afae0
 slices/s007af8b0/s007af8b0.cpp  ??0C00d0@@QAE@XZ  007b00d0
+slices/s007af8b0/s007af8b0.cpp  ?FUN_007b06c0@@YA_NPAVcImageDataRaw@@PAPAV1@HHIPAUIUnknown32@@@Z  007b06c0  /O2 /MD /Gy /EHsc /TP /GS-

@@ -27,6 +27,8 @@ public:
     void  Cancel(int bWait);   // 0x00692400
     void  Wait();              // 0x006926b0
     int   GetStatus();         // 0x00690120
+    int   AddRef();            // 0x0068f950
+    int   Release();           // 0x00690120
 private:
     char mData[0x28];
 };
@@ -200,7 +202,7 @@ public:
 class cTextureManager {
 public:
     void UnregisterArena(void* pArena);             // 0x007aaf90
-    bool StallFinishBackgroundLoad(ResourceKey* pKey); // 0x007aafc0
+    void StallFinishBackgroundLoad(cTextureAsyncInfo* pInfo); // 0x007aafc0
     bool HasTexture(ResourceKey key);               // 0x007ab5f0
     bool ReloadTexture(ResourceKey key);            // 0x007ab6c0
     void RegisterArenaContents(void* pArena);       // 0x007ab730
@@ -370,12 +372,26 @@ bool cTextureManager::CreateTextureRaster(Raster* a, void** b, bool c, int d)
     return true;
 }
 
+// Manager-side pump that hands a finished load back to its async info.
+void __fastcall FUN_007aa430(cTextureManager* self, int unused, cTextureAsyncInfo* pInfo); // 0x007aa430
+
 // @ 0x007aafc0
-bool cTextureManager::StallFinishBackgroundLoad(ResourceKey* pKey)
+void cTextureManager::StallFinishBackgroundLoad(cTextureAsyncInfo* pInfo)
 {
-    // PARTIAL: EH job-completion path.
-    (void)pKey;
-    return false;
+    cJob* pLoad = (cJob*)pInfo->mpLoad;
+    if (pLoad == 0) {
+        FUN_007aa430(this, 0, pInfo);
+        return;
+    }
+    pLoad->AddRef();                 // keep the job alive across the wait
+    pLoad->AddRef();                 // and for the second (exception) keep
+    mMutex.Unlock();
+    pLoad->Wait();
+    mMutex.Lock(&g_mutexAttribute);
+    if ((cJob*)pInfo->mpLoad == pLoad)
+        FUN_007aa430(this, 0, pInfo);
+    pLoad->Release();
+    pLoad->Release();
 }
 
 // @ 0x007ab2f0

@@ -1,1 +1,6 @@
 # va  diff-bytes  reason (compiled with /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast)
+0077d800  216/191  Vec4_77d800::Assign; complete EASTL 16-byte-stride assign/grow (grow via 0x77d6c0 + UninitCopy 0x706ab0). equiv WEAK (283 valid, 45.5% coverage).
+0077d8c0  151/168  ElemVec_77d8c0::Dtor; complete EH dtor (vftable 0x140e878/0x13ef094, release each +0 element via slot 0, memcpy(begin,end,0), shrink end, free begin when [begin-4]!=0). equiv PASS (266 valid, 80.6%).
+0077e260   84/93   Inline100_77e260::Ctor; complete ctor with inline 0x100 buffer at +0x18, calls 0x77d9c0. equiv PASS (301 valid, 100.0%).
+0077e2c0  463/471  Inline40_77e2c0::Ctor; complete ctor with inline 0x40 buffer at +0x20, calls 0x77d800 with (first,last,last). equiv WEAK (112 valid, 100.0%).
+0077e4a0  336/560  FUN_0077e4a0; complete inverse-transform + SP::*NormalizationConstants setup (matrix 0x16f85ac, type 0x16f8b50, device 0x16f89d0, state 0x16f6e0c; 0x778060/0x41cb40/0x6b92d0/0x783830/0x795eb0/0x783590; D3D vtbl slot 0x178/0x1b4). equiv WEAK (400 valid, 14.4%).
