@@ -1,3 +1,4 @@
+00cf0cf0 ?FUN_00cf0cf0@cCityGameTuning_s00cf_0cf0@@QAEXXZ  # cCityGameTuning_s00cf_0cf0::FUN_00cf0cf0 migrated from s00cf0cf0 (verbatim, slice spelling)
 00cf0e20 ?FUN_00cf0e20@cCityInputStrategy@@QAEXII@Z  # cCityInputStrategy::FUN_00cf0e20 migrated from s00cf0cf0 (verbatim, slice spelling)
 00cf1060 ?FUN_00cf1060@@YGIPAXI@Z  # FUN_00cf1060 migrated from s00cf0cf0 (verbatim, slice spelling)
 00cf10d0 ?FUN_00cf10d0@@YAXPAPAX0@Z  # FUN_00cf10d0 migrated from s00cf0cf0 (verbatim, slice spelling)
