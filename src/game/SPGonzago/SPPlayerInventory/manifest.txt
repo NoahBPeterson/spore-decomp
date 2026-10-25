@@ -1,0 +1,6 @@
+# source  symbol  va  flags
+../src/game/SPGonzago/SPPlayerInventory.cpp  ?FUN_00ff3b30@@YIXPAUInv@@PAXH@Z  00ff3b30  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/SPGonzago/SPPlayerInventory.cpp  ?FUN_00ff3b70@@YIXPAUInv@@@Z  00ff3b70  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/SPGonzago/SPPlayerInventory.cpp  ?FUN_00ff3fb0@@YIIPAUInv@@PAX1@Z  00ff3fb0  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/SPGonzago/SPPlayerInventory.cpp  ?FUN_00ff3ff0@@YIXPAUInv@@@Z  00ff3ff0  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/SPGonzago/SPPlayerInventory.cpp  ?FUN_00ff4090@@YIHPAUGameData@@PAX1@Z  00ff4090  /O2 /MD /Gy /TP /Isrc/game/include

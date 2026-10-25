@@ -11,16 +11,16 @@
 00ff38a0  FUN_00ff38a0  # ImageModifier destructor [MATCH]
 00ff38e0  FUN_00ff38e0  # image-modify loop (per-sample lerp/threshold)
 00ff3ab0  FUN_00ff3ab0  # ImageModifier copy-ctor / clone [MATCH]
-00ff3b30  FUN_00ff3b30  # cSpaceInventory::AddCargoSlots [MATCH]
-00ff3b70  FUN_00ff3b70  # cSpaceInventory::func54h (base release + tool detach) [MATCH]
+00ff3b30 ?FUN_00ff3b30@@YIXPAUInv@@PAXH@Z  # FUN_00ff3b30 migrated from s00ff3190 (verbatim, slice spelling)
+00ff3b70 ?FUN_00ff3b70@@YIXPAUInv@@@Z  # FUN_00ff3b70 migrated from s00ff3190 (verbatim, slice spelling)
 00ff3bb0  FUN_00ff3bb0  # has-tool-with-flag test (ToolSet slot 0x68 + byte +0x28) [MATCH]
 00ff3bf0  FUN_00ff3bf0  # has any of the 11 interstellardrive tool keys [MATCH]
 00ff3cf0  FUN_00ff3cf0  # CbObj callback: *p = global byte 0x16daddc [MATCH]
 00ff3d10  FUN_00ff3d10  # is the named resource key present in m74..m78? [MATCH]
-00ff3d40  FUN_00ff3d40  # cSPPlayerInventory::GetToolFromToolID (two-list lookup)
-00ff3df0  FUN_00ff3df0  # release every tool instance held by the inventory
-00ff3e80  FUN_00ff3e80  # cSPPlayerInventory::SetActiveTool
-00ff3f20  FUN_00ff3f20  # cSPPlayerInventory::Write (tag + base write + serializer)
-00ff3fb0  FUN_00ff3fb0  # resolve a serialised reference (sub-iface slot 0xc) [MATCH]
-00ff3ff0  FUN_00ff3ff0  # cSpaceInventory teardown (release vectors + tool) [MATCH]
-00ff4090  FUN_00ff4090  # Simulator::cGameData::WriteAsText (3 field blocks) [MATCH]
+00ff3d40 ?FUN_00ff3d40@@YIPAXPAUInv@@PAXPBI@Z  # FUN_00ff3d40 migrated from s00ff3190 (verbatim, slice spelling)
+00ff3df0 ?FUN_00ff3df0@@YIXPAUInv@@@Z  # FUN_00ff3df0 migrated from s00ff3190 (verbatim, slice spelling)
+00ff3e80 ?FUN_00ff3e80@@YIXPAUInv@@@Z  # FUN_00ff3e80 migrated from s00ff3190 (verbatim, slice spelling)
+00ff3f20 ?FUN_00ff3f20@@YI_NPAUInv@@PAX1@Z  # FUN_00ff3f20 migrated from s00ff3190 (verbatim, slice spelling)
+00ff3fb0 ?FUN_00ff3fb0@@YIIPAUInv@@PAX1@Z  # FUN_00ff3fb0 migrated from s00ff3190 (verbatim, slice spelling)
+00ff3ff0 ?FUN_00ff3ff0@@YIXPAUInv@@@Z  # FUN_00ff3ff0 migrated from s00ff3190 (verbatim, slice spelling)
+00ff4090 ?FUN_00ff4090@@YIHPAUGameData@@PAX1@Z  # FUN_00ff4090 migrated from s00ff3190 (verbatim, slice spelling)
