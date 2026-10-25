@@ -1,0 +1,5 @@
+# source  symbol  va  flags
+../src/game/SPGonzago/SPEditModeCheats.cpp  ?Description@cCommandGameplayMarker@@QAEPBDH@Z  00d14460  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPEditModeCheats.cpp  ?ParseTypeEnum@cCommandGameplayMarker@@SAPAXPBD@Z  00d14600  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPEditModeCheats.cpp  ?Init@cCommandGameplayMarker@@QAEPAXXZ  00d14e50  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPEditModeCheats.cpp  ?Init@cCommandGameplayMarkerTemplate@@QAEPAXPBUcVec3@@0@Z  00d14f70  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
