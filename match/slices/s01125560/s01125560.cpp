@@ -2,6 +2,7 @@
 // No Havok 3.1 source is available; reconstructed from the binary, with names from symbols/havok_names.txt
 // and the Havok 6.x header (hkpInertiaTensorComputer.h) for the parameter names.
 #include "types.h"
+#include <intrin.h>
 
 extern "C" __declspec(dllimport) void* __stdcall TlsGetValue(unsigned long);
 
@@ -46,8 +47,8 @@ public:
         const hkReal nz = a.x * b.y - a.y * b.x;
         set(nx, ny, nz, 0.0f);
     }
-    __forceinline hkReal lengthSquared3() const { return x * x + y * y + z * z; }
-    __forceinline hkReal length3() const { return sqrtf(lengthSquared3()); }
+    __forceinline hkReal lengthSquared3() const { return (x * x + z * z) + y * y; }
+    __forceinline hkReal length3() const { return (hkReal)::sqrt((double)((x * x + z * z) + y * y)); }
     __forceinline hkReal lengthInverse3() const
     {
         hkReal l2 = lengthSquared3();
@@ -165,12 +166,19 @@ hkResult __cdecl hkInertiaTensorComputer::computeTriangleSurfaceMassProperties(c
     }
 
     hkVector4 normal;
+    hkReal area;
     {
         hkVector4 e1; e1.setSub4(v2, v1);
         hkVector4 e0; e0.setSub4(v0, v1);
-        normal.setCross(e1, e0);
-    }
-    const hkReal area = normal.length3();   // twice the triangle area
+        // The original rounds each cross-product component through a 32-bit slot before the
+        // squared-length reduction; for subnormal components that narrowing is observable, so the
+        // components go through volatile hkReal slots rather than living in x87 registers.
+        const volatile hkReal nx = e1.y * e0.z - e1.z * e0.y;
+        const volatile hkReal ny = e1.z * e0.x - e1.x * e0.z;
+        const volatile hkReal nz = e1.x * e0.y - e1.y * e0.x;
+        normal.set(nx, ny, nz, 0.0f);
+        area = (hkReal)::sqrt((double)((nx * nx + nz * nz) + ny * ny));
+    }   // twice the triangle area
 
     hkVector4 centerOfMass;
     hkMatrix3 inertia;
@@ -178,21 +186,32 @@ hkResult __cdecl hkInertiaTensorComputer::computeTriangleSurfaceMassProperties(c
     if (surfaceThickness < 1e-5f)
     {
         // Infinitely thin triangle: second moments of a uniform triangle about the origin, then shift to the COM.
-        centerOfMass.setAdd4(v0, v1);
-        centerOfMass.add4(v2);
-        centerOfMass.mul4(1.0f / 3.0f);
+        // The original stages the centroid in x87: the x partial and the full y sum are each rounded
+        // through a 32-bit slot *before* the 1/3 scale, while z and w stay in the extended x87
+        // register through the scale (so a sum that exceeds float range only narrows at the final store).
+        volatile hkReal pcomx = v0(0) + v1(0);
+        volatile hkReal comx0 = pcomx + v2(0);
+        volatile hkReal pcomy = v0(1) + v1(1);
+        volatile hkReal comy0 = pcomy + v2(1);
+        centerOfMass(0) = comx0 * (1.0f / 3.0f);
+        centerOfMass(1) = comy0 * (1.0f / 3.0f);
+        centerOfMass(2) = ((v0(2) + v1(2)) + v2(2)) * (1.0f / 3.0f);
+        centerOfMass(3) = ((v0(3) + v1(3)) + v2(3)) * (1.0f / 3.0f);
 
-        const hkReal cxx = (9.0f * centerOfMass(0) * centerOfMass(0) + v0(0) * v0(0) + v2(0) * v2(0) + v1(0) * v1(0)) * mass * (1.0f / 12.0f);
-        const hkReal cyy = (9.0f * centerOfMass(1) * centerOfMass(1) + v0(1) * v0(1) + v2(1) * v2(1) + v1(1) * v1(1)) * mass * (1.0f / 12.0f);
-        const hkReal czz = (9.0f * centerOfMass(2) * centerOfMass(2) + v0(2) * v0(2) + v2(2) * v2(2) + v1(2) * v1(2)) * mass * (1.0f / 12.0f);
+        volatile hkReal comx = centerOfMass(0);
+        volatile hkReal comy = centerOfMass(1);
+        volatile hkReal comz = centerOfMass(2);
+        const hkReal cxx = (comx * comx * 9.0f + v0(0) * v0(0) + v2(0) * v2(0) + v1(0) * v1(0)) * mass * (1.0f / 12.0f);
+        const hkReal cyy = (comy * comy * 9.0f + v2(1) * v2(1) + v1(1) * v1(1) + v0(1) * v0(1)) * mass * (1.0f / 12.0f);
+        const hkReal czz = (comz * comz * 9.0f + v2(2) * v2(2) + v1(2) * v1(2) + v0(2) * v0(2)) * mass * (1.0f / 12.0f);
         hkReal c[3][3];
         c[0][0] = cxx; c[1][1] = cyy; c[2][2] = czz;
-        c[0][1] = (v2(1) * v2(0) + v0(0) * v0(1) + v1(0) * v1(1) + 9.0f * centerOfMass(1) * centerOfMass(0)) * mass * (1.0f / 12.0f);
-        c[0][2] = (v0(0) * v0(2) + v2(2) * v2(0) + 9.0f * centerOfMass(2) * centerOfMass(0) + v1(0) * v1(2)) * mass * (1.0f / 12.0f);
-        c[1][2] = (9.0f * centerOfMass(2) * centerOfMass(1) + v2(1) * v2(2) + v1(1) * v1(2) + v0(2) * v0(1)) * mass * (1.0f / 12.0f);
         inertia(0, 0) = c[1][1] + c[2][2];
         inertia(1, 1) = c[0][0] + c[2][2];
         inertia(2, 2) = c[0][0] + c[1][1];
+        c[0][1] = ((((v2(1) * v2(0)) + (v0(0) * v0(1))) + (v1(0) * v1(1))) + (comy * comx * 9.0f)) * mass * (1.0f / 12.0f);
+        c[0][2] = ((((v0(0) * v0(2)) + (v2(2) * v2(0))) + (comz * comx * 9.0f)) + (v1(0) * v1(2))) * mass * (1.0f / 12.0f);
+        c[1][2] = ((((comz * comy * 9.0f) + (v2(1) * v2(2))) + (v1(1) * v1(2))) + (v0(2) * v0(1))) * mass * (1.0f / 12.0f);
         inertia(0, 1) = inertia(1, 0) = -c[0][1];
         inertia(0, 2) = inertia(2, 0) = -c[0][2];
         inertia(1, 2) = inertia(2, 1) = -c[1][2];
@@ -201,14 +220,25 @@ hkResult __cdecl hkInertiaTensorComputer::computeTriangleSurfaceMassProperties(c
     }
     else if (area < 1e-5f)
     {
-        // Degenerate triangle: a point mass at the centroid.
-        centerOfMass.setAdd4(v0, v1);
-        centerOfMass.add4(v2);
-        centerOfMass.mul4(1.0f / 3.0f);
+        // Degenerate triangle: a point mass at the centroid.  The original stages the centroid in
+        // x87 mirroring the thin branch: the x partial and full x sum are rounded through 32-bit
+        // slots, the y sum and the w partial are rounded once, and the z sum plus the w sum are
+        // carried in the extended register through the 1/3 scale (so an overflowing sum is only
+        // narrowed at the final store).
+        volatile hkReal cxs = v0(0) + v1(0);
+        volatile hkReal cx = cxs + v2(0);
+        volatile hkReal cy = (v0(1) + v1(1)) + v2(1);
+        volatile hkReal cz3 = ((v0(2) + v1(2)) + v2(2)) * (1.0f / 3.0f);
+        volatile hkReal cws = v0(3) + v1(3);
+        volatile hkReal cw3 = (cws + v2(3)) * (1.0f / 3.0f);
+        centerOfMass(0) = cx * (1.0f / 3.0f);
+        centerOfMass(1) = cy * (1.0f / 3.0f);
+        centerOfMass(2) = cz3;
+        centerOfMass(3) = cw3;
 
-        const hkReal x = centerOfMass(0);
-        const hkReal y = centerOfMass(1);
-        const hkReal z = centerOfMass(2);
+        volatile hkReal x = centerOfMass(0);
+        volatile hkReal y = centerOfMass(1);
+        volatile hkReal z = centerOfMass(2);
         inertia(0, 0) = (y * y + z * z) * mass;
         inertia(1, 1) = (x * x + z * z) * mass;
         inertia(2, 2) = (x * x + y * y) * mass;
