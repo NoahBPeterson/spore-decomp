@@ -1,2 +1,3 @@
 # source (relative to match/)   symbol   original VA   [cl flags override]
 slices/s00f338c0/s00f338c0.cpp  ?resetParent@PObj@@QAEXPAUCPL@@@Z  00f33bb0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00f338c0/s00f338c0.cpp  ?UpdateTerrainState@cTerrainSphere@@QAEXD@Z  00f343a0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
