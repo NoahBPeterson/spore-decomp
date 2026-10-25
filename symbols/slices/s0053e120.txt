@@ -1,1 +1,12 @@
-0x0053e120 `anonymous namespace'::cSPSkinPaintParticle helper  # unresolved name
+0053e120 ?FUN_0053e120@@YAHHHPAH@Z  # anonymous-namespace floor-division helper (slice spelling)
+0053e190 ?Set@cColor32@@QAEPAU1@EEEE@Z  # cColor32::Set(r,g,b,a): packs mB/mG/mR/mA (slice spelling)
+0053e1d0 ?Init@cPaintKey@@QAEPAU1@EPAI0000@Z  # cPaintKey::Init: per-channel mask, apply mode, variable bits
+0053e3a0 ?ApplyMask@cPaintKey@@QAEEE@Z  # cPaintKey::ApplyMask: mMaskAll & mask, shifted by mVariable
+0053e470 ?Destroy@cPaintVarCtx@@QAEXXZ  # cPaintVarCtx destructor body (releases the two evaluators, drops the buffers)
+0053e580 ?Reset@cPaintVarCtx@@QAEXXZ  # cPaintVarCtx::Reset: resizes and 0xff-fills the ring/table/point buffers
+0053e690 ?Generate@cPaintVarCtx@@QAEDXZ  # cPaintVarCtx::Generate: probe blocks, refine, register the painted entry
+0053eaa0 ?VecAdd3@@YAPAUcColor32@@PAU1@PBU1@1@Z  # packed-color sum (cdecl, out first), w cleared
+0053eb10 ?ToLocal@cPaintVarCtx@@QAEPAUVector3@@PAU2@I@Z  # cPaintVarCtx::ToLocal: mOffset + mScale * unpacked color
+0053eba0 ?MapColor@@YAPAUcColor32@@PAU2@PBUUVector3@@@Z  # cPaintVarCtx::MapColor: truncates (p - mOffset) * mInvScale to BGRA
+0053eca0 ?ResetOffset@cPaintVarCtx@@QAEXXZ  # cPaintVarCtx::ResetOffset: mOffset = evaluator bounds min
+0053ece0 ?Register@cPaintVarCtx@@QAEPAURingEntry@@II@Z  # cPaintVarCtx::Register: ring/table store, returns the ring slot

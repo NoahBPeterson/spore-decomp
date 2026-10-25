@@ -1,12 +1,1 @@
-0053e120  -1  partial skeleton
-0053e190  -1  partial skeleton
-0053e1d0  -1  partial skeleton; 451-byte query routine
-0053e3a0  -1  partial skeleton
-0053e470  -1  partial skeleton
-0053e580  -1  partial skeleton
-0053e690  -1  partial skeleton; 1038-byte dispatcher
-0053eaa0  -1  partial skeleton
-0053eb10  -1  partial skeleton
-0053eba0  -1  partial skeleton
-0053eca0  -1  partial skeleton
-0053ece0  -1  partial skeleton
+0053e690  -  cPaintVarCtx::Generate probe/refine/register pass (1038 bytes): reconstruction is written but not equivalent (equiv FAIL: return value differs) -- the evaluator combine entry is a raw function pointer stored at evaluator+8 and called with ecx = evaluator, which our code cannot reproduce without inline asm, so the refine loop diverges; /Od frame is 0x178 bytes
