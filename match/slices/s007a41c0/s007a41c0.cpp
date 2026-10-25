@@ -7,39 +7,51 @@ typedef unsigned short u16;
 typedef unsigned int   u32;
 typedef float          f32;
 
+#include <math.h>
+#include <stdlib.h>
+#include <intrin.h>
+
+extern "C" long _InterlockedExchange(volatile long* target, long value);
+
 // ---------------------------------------------------------------------------
 // External entry points still referenced by the not-yet-ported naked blocks.
 // ---------------------------------------------------------------------------
-extern "C" void EXT_67dd10();
-extern "C" void EXT_67dd60();
-extern "C" void EXT_67df60();
-extern "C" void EXT_6a25a0();
-extern "C" void EXT_6ad7c0();
-extern "C" void EXT_6de350();
-extern "C" void EXT_6ec4a0();
-extern "C" void EXT_720200();
-extern "C" void EXT_75fb90();
-extern "C" void EXT_762a00();
-extern "C" void EXT_762a30();
-extern "C" void EXT_762b70();
-extern "C" void EXT_762c60();
-extern "C" void EXT_7a3ce0();
-extern "C" void EXT_7a3df0();
-extern "C" void EXT_7a4380();
-extern "C" void EXT_7a44b0();
-extern "C" void EXT_7a4600();
-extern "C" void EXT_7a4650();
-extern "C" void EXT_7a4710();
-extern "C" void EXT_7a47c0();
-extern "C" void EXT_7c3d30();
-extern "C" void EXT_cc8b50();
-extern "C" void EXT_f47380();
-extern "C" void EXT_f473a0();
-extern "C" void EXT_11f3620();
-extern "C" void EXT_11f36a0();
-extern "C" void EXT_11f4f20();
-extern "C" void EXT_11f4fd0();
-extern "C" void EXT_11f8af0();
+// Retail-address entry points.  Declared variadic so that every call shape
+// used below type-checks; only the returned value and call-site placement
+// matter for the byte comparison (the target address is a masked reloc).
+extern "C" void* EXT_67dd10();
+extern "C" void  EXT_67df60(...);
+extern "C" void  EXT_6a25a0();
+extern "C" void  EXT_6ad7c0(...);
+extern "C" void  EXT_6de350(...);
+extern "C" void  EXT_6ec4a0(...);
+extern "C" void* EXT_720200(...);
+extern "C" void* EXT_75fb90();
+extern "C" void* EXT_67dd60();
+extern "C" void  EXT_762a00(...);
+extern "C" void  EXT_762a30(...);
+extern "C" void  EXT_762b70();
+extern "C" void  EXT_762c60();
+extern "C" void  EXT_7a3ce0(...);
+extern "C" void* EXT_7a3df0(...);
+extern "C" void  EXT_7a4380();
+extern "C" void  EXT_7a44b0();
+extern "C" void  EXT_7a4600();
+extern "C" void  EXT_7a4650();
+extern "C" void  EXT_7a4710();
+extern "C" void  EXT_7a47c0();
+extern "C" void  EXT_7c3d30(...);
+extern "C" void  EXT_cc8b50(...);
+extern "C" void  EXT_f47380(...);
+extern "C" void* EXT_f473a0(...);
+extern "C" void  EXT_11f3620();
+extern "C" void* FUN_011f3620(...);
+extern "C" void  EXT_11f36a0();
+extern "C" void  EXT_11f4f20();
+extern "C" void  EXT_11f4fd0(...);
+extern "C" void* EXT_11f8af0();
+extern "C" void** FUN_11f8af0(...);
+extern "C" void* FUN_00762b70(...);
 
 // ---------------------------------------------------------------------------
 // Types touched by the ported functions.  Offsets were read off the original
@@ -140,10 +152,13 @@ struct cGraphicsSystem {
   u8            mByteFlags[4];                    // +0xcc
   TextureRectID mSplatterTextureRectID;           // +0xd0
   TextureRectID mGIFExportRectID;                 // +0xd8
-  u32           mUnkE0[4];                        // +0xe0
+  TextureRectID mRectE0;                          // +0xe0
+  TextureRectID mRectE8;                          // +0xe8
   TextureRectID mFinalBakedTextureRectID;         // +0xf0
   TextureRectID mSmallFinalBakedTextureRectID;    // +0xf8
-  u32           mUnk100[14];                      // +0x100
+  TextureRectID mUnk100;                          // +0x100
+  TextureRectID mUnk108;                          // +0x108
+  u32           mUnk110[10];                      // +0x110
   TextureRectID mBakeBufferRectIDs[6];            // +0x138
   u32           mUnk168[2];                       // +0x168
   u16           mDebugParam;                      // +0x170
@@ -170,6 +185,44 @@ struct cGraphicsSystem {
   void  RecycleEffectsBuffers();
   void* GetLazyBuffer();
   void  GetBakeBuffer(u32* out, int index);
+
+  u32   SwapRendererDevice();                            // 0x007a4cb0
+  void  UpdateManagers(u32 param_1, f32 param_2);        // 0x007a4d90
+  void  RecycleBakingRTTs(u32 param_1, u32 param_2);     // 0x007a5020
+  void  ReleaseRTT(void*& texture, const TextureRectID& rect);
+};
+
+// SP::cDebugDraw — the debug-overlay interpolator updated once per frame.
+struct cDebugDraw {
+  u8   mUnk00[0x174];
+  f32  mDebugRadius;    // +0x174
+  f32  mDebugNear;      // +0x178
+  f32  mDebugFar;       // +0x17c
+  f32  mDebugRange;     // +0x180
+  f32  mDebugDistance;  // +0x184
+  u8   mUnk188[8];      // +0x188
+  void Update(u32 param_1, f32 param_2);  // 0x007a4e40
+};
+
+// The application singleton reached through 0x67dd10; only the camera accessor
+// at vtable slot 0x58 is called from this slice.
+struct cApp {
+  u8  mUnk00[0x58];
+  virtual void a00(); virtual void a01(); virtual void a02(); virtual void a03();
+  virtual void a04(); virtual void a05(); virtual void a06(); virtual void a07();
+  virtual void a08(); virtual void a09(); virtual void a10(); virtual void a11();
+  virtual void a12(); virtual void a13(); virtual void a14(); virtual void a15();
+  virtual void a16(); virtual void a17(); virtual void a18(); virtual void a19();
+  virtual void a20(); virtual void a21();
+  virtual char* GetCameraViewer(u32* outPos, u32 a, u32 b, u32 c);};
+extern "C" cApp* APP_GetApp();  // 0x67dd10
+
+// The camera/viewer object returned by cApp::GetCameraViewer.  Only the
+// refiner at 0x7c3d30 (this-call) is reached from this slice.
+struct cViewer {
+  virtual void r00(); virtual void r01(); virtual void r02(); virtual void r03();
+  virtual void r04(); virtual void r05(); virtual void r06(); virtual void r07();
+  void Refine(u32* pos, u32 a, u32 b, u32 c);
 };
 
 // ---------------------------------------------------------------------------
@@ -292,3076 +345,577 @@ void cGraphicsSystem::GetBakeBuffer(u32* out, int index) {
   }
   out[0] = mBakeBufferRectIDs[index + 2].mPageID;
   out[1] = mBakeBufferRectIDs[index + 2].mAllocID;
-}// @ 0x007a41c0
-__declspec(naked) void FUN_007a41c0() {
-  __asm {
-    _emit 06Ah
-    _emit 0FFh
-    _emit 068h
-    _emit 08Ah
-    _emit 03Dh
-    _emit 021h
-    _emit 001h
-    _emit 064h
-    _emit 0A1h
-    _emit 000h
-    _emit 000h
-    _emit 000h
-    _emit 000h
-    _emit 050h
-    _emit 064h
-    _emit 089h
-    _emit 025h
-    _emit 000h
-    _emit 000h
-    _emit 000h
-    _emit 000h
-    _emit 051h
-    _emit 06Ah
-    _emit 000h
-    _emit 06Ah
-    _emit 000h
-    _emit 06Ah
-    _emit 000h
-    _emit 06Ah
-    _emit 000h
-    _emit 068h
-    _emit 028h
-    _emit 0F6h
-    _emit 040h
-    _emit 001h
-    _emit 06Ah
-    _emit 044h
-    call EXT_f473a0
-    _emit 083h
-    _emit 0C4h
-    _emit 018h
-    _emit 089h
-    _emit 004h
-    _emit 024h
-    _emit 0C7h
-    _emit 044h
-    _emit 024h
-    _emit 00Ch
-    _emit 000h
-    _emit 000h
-    _emit 000h
-    _emit 000h
-    _emit 085h
-    _emit 0C0h
-    _emit 074h
-    _emit 007h
-    _emit 08Bh
-    _emit 0C8h
-    call EXT_7a3df0
-    _emit 08Bh
-    _emit 04Ch
-    _emit 024h
-    _emit 004h
-    _emit 064h
-    _emit 089h
-    _emit 00Dh
-    _emit 000h
-    _emit 000h
-    _emit 000h
-    _emit 000h
-    _emit 083h
-    _emit 0C4h
-    _emit 010h
-    _emit 0C3h
+}
+// ===========================================================================
+// Static-buffer subsystem (cStaticBuffer / cStaticBufferDraw).
+// Support types come first so that no declaration sits between a
+// `// @ 0x<va>` marker and the function definition it names.
+// ===========================================================================
+
+// One accumulated element: 6 dwords (0x18 bytes).
+struct MeshElement {
+  u32 v0;  // +0x00
+  u32 v1;  // +0x04
+  u32 v2;  // +0x08
+  u32 v3;  // +0x0c
+  u32 v4;  // +0x10
+  u32 v5;  // +0x14
+};
+
+// Growable element vector (EASTL sp_vector layout).
+struct MeshVector {
+  MeshElement* mpBegin;     // +0x00
+  MeshElement* mpEnd;       // +0x04
+  MeshElement* mpCapacity;  // +0x08
+
+  void grow(MeshElement* at, MeshElement* src);  // 0x007a44b0
+  void push_back(MeshElement* src);              // 0x007a4600
+};
+
+// SP::cStaticBuffer — the per-draw merged static geometry buffer.
+// Field offsets are exactly those touched by the routines below.
+struct cStaticBuffer {
+  virtual void sb00();  // +0x00
+  virtual void sb01();  // +0x04  scalar deleting destructor
+
+  u32         mUnk04;             // +0x04
+  u32         mUnk08;             // +0x08  element count of vector A
+  u32         mUnk0c;             // +0x0c  vector A data pointer
+  u32         mUnk10;             // +0x10  pending cursor
+  u32         mUnk14;             // +0x14
+  u32         mUnk18;             // +0x18
+  MeshVector  mVertexBuffers;     // +0x1c .. +0x24
+  u32         mUnk28;             // +0x28
+  u32         mUnk2c;             // +0x2c  vector B data pointer
+  MeshVector  mDrawVector;        // +0x30 .. +0x38
+  u32         mUnk3c;             // +0x3c
+  u32         mUnk40;             // +0x40  pending-cursor flag byte
+  u32         mUnk44;             // +0x44
+  u32         mUnk48;             // +0x48
+
+  cStaticBuffer* Ctor(u32 param_1, u32 param_2);   // 0x007a4380
+  ~cStaticBuffer();                                // 0x007a4220
+  void Flush();                                    // 0x007a4710
+  u32  GetVertexBuffer(u32 numVertices, u32* outCount, u32* outStride);  // 0x007a47c0
+  void SnapshotPending();                          // 0x007a4650
+};
+
+// The singleton owning the shared cStaticBuffer.
+struct cStaticBufferDraw {
+  cStaticBuffer buffer;  // +0x00  (0x4c bytes; the ctor sets +0x48)
+
+  void Ctor(u32 param_1, u32 param_2, u32 param_3, u32 count);  // 0x007a4420
+};
+
+extern cStaticBufferDraw* g_pStaticBufferDraw;  // 0x15ddc84
+
+// The retail entry points (EXT_*) are declared in this file's preamble.
+
+// ---------------------------------------------------------------------------
+// @ 0x007a41c0  cStaticBufferDraw factory: allocate a 0x44-byte
+// cStaticBufferDraw and run its constructor.  The retail SEH frame exists only
+// to unwind the constructor; expressed here as a plain allocation + ctor call.
+// ---------------------------------------------------------------------------
+void* __cdecl FUN_007a41c0(void* param_1) {
+  cStaticBufferDraw* p =
+      (cStaticBufferDraw*)EXT_f473a0(0x44, "Graphics/StaticBufferDraw",
+                                     0, 0, 0, 0, (const char*)param_1);
+  if (p != 0) {
+    EXT_7a3df0(p);
+  }
+  return p;
+}
+
+// ---------------------------------------------------------------------------
+// @ 0x007a4220  SP::cStaticBuffer::~cStaticBuffer — release every retained
+// vertex/index buffer, then free the three element arrays.
+// ---------------------------------------------------------------------------
+cStaticBuffer::~cStaticBuffer() {
+  int nVertex = (int)(mVertexBuffers.mpEnd - mVertexBuffers.mpBegin);
+  for (int i = 0; i < nVertex; ++i) {
+    if (mVertexBuffers.mpBegin[i].v0 != 0) {
+      EXT_762a00((void*)mVertexBuffers.mpBegin[i].v0);
+    }
+    mVertexBuffers.mpBegin[i].v0 = 0;
+  }
+  int nIndex = (int)(mDrawVector.mpBegin - mVertexBuffers.mpBegin);
+  for (int i = 0; i < nIndex; ++i) {
+    if (mDrawVector.mpBegin[i].v0 != 0) {
+      EXT_762a30((void*)mDrawVector.mpBegin[i].v0);
+    }
+    mDrawVector.mpBegin[i].v0 = 0;
+  }
+  if (mDrawVector.mpCapacity != 0) {
+    EXT_f47380(mDrawVector.mpCapacity);
+  }
+  if (mVertexBuffers.mpBegin != 0) {
+    EXT_f47380(mVertexBuffers.mpBegin);
   }
 }
 
-// @ 0x007a4220
-__declspec(naked) void FUN_007a4220() {
-  __asm {
-    _emit 06Ah
-    _emit 0FFh
-    _emit 068h
-    _emit 0C9h
-    _emit 03Dh
-    _emit 021h
-    _emit 001h
-    _emit 064h
-    _emit 0A1h
-    _emit 000h
-    _emit 000h
-    _emit 000h
-    _emit 000h
-    _emit 050h
-    _emit 064h
-    _emit 089h
-    _emit 025h
-    _emit 000h
-    _emit 000h
-    _emit 000h
-    _emit 000h
-    _emit 051h
-    _emit 053h
-    _emit 056h
-    _emit 08Bh
-    _emit 0F1h
-    _emit 057h
-    _emit 089h
-    _emit 074h
-    _emit 024h
-    _emit 00Ch
-    _emit 0C7h
-    _emit 006h
-    _emit 044h
-    _emit 0F6h
-    _emit 040h
-    _emit 001h
-    _emit 0C7h
-    _emit 046h
-    _emit 044h
-    _emit 000h
-    _emit 000h
-    _emit 000h
-    _emit 000h
-    _emit 08Bh
-    _emit 05Eh
-    _emit 00Ch
-    _emit 02Bh
-    _emit 05Eh
-    _emit 008h
-    _emit 033h
-    _emit 0FFh
-    _emit 0C1h
-    _emit 0FBh
-    _emit 002h
-    _emit 0C7h
-    _emit 044h
-    _emit 024h
-    _emit 018h
-    _emit 003h
-    _emit 000h
-    _emit 000h
-    _emit 000h
-    _emit 085h
-    _emit 0DBh
-    _emit 07Eh
-    _emit 026h
-    _emit 08Bh
-    _emit 046h
-    _emit 008h
-    _emit 083h
-    _emit 03Ch
-    _emit 0B8h
-    _emit 000h
-    _emit 08Dh
-    _emit 004h
-    _emit 0B8h
-    _emit 074h
-    _emit 00Bh
-    _emit 08Bh
-    _emit 008h
-    _emit 051h
-    call EXT_762a00
-    _emit 083h
-    _emit 0C4h
-    _emit 004h
-    _emit 08Bh
-    _emit 056h
-    _emit 008h
-    _emit 0C7h
-    _emit 004h
-    _emit 0BAh
-    _emit 000h
-    _emit 000h
-    _emit 000h
-    _emit 000h
-    _emit 047h
-    _emit 03Bh
-    _emit 0FBh
-    _emit 07Ch
-    _emit 0DAh
-    _emit 08Bh
-    _emit 05Eh
-    _emit 020h
-    _emit 02Bh
-    _emit 05Eh
-    _emit 01Ch
-    _emit 033h
-    _emit 0FFh
-    _emit 0C1h
-    _emit 0FBh
-    _emit 002h
-    _emit 085h
-    _emit 0DBh
-    _emit 07Eh
-    _emit 02Eh
-    _emit 0EBh
-    _emit 006h
-    _emit 08Dh
-    _emit 09Bh
-    _emit 000h
-    _emit 000h
-    _emit 000h
-    _emit 000h
-    _emit 08Bh
-    _emit 046h
-    _emit 01Ch
-    _emit 083h
-    _emit 03Ch
-    _emit 0B8h
-    _emit 000h
-    _emit 08Dh
-    _emit 004h
-    _emit 0B8h
-    _emit 074h
-    _emit 00Bh
-    _emit 08Bh
-    _emit 008h
-    _emit 051h
-    call EXT_762a30
-    _emit 083h
-    _emit 0C4h
-    _emit 004h
-    _emit 08Bh
-    _emit 056h
-    _emit 01Ch
-    _emit 0C7h
-    _emit 004h
-    _emit 0BAh
-    _emit 000h
-    _emit 000h
-    _emit 000h
-    _emit 000h
-    _emit 047h
-    _emit 03Bh
-    _emit 0FBh
-    _emit 07Ch
-    _emit 0DAh
-    _emit 08Bh
-    _emit 046h
-    _emit 030h
-    _emit 085h
-    _emit 0C0h
-    _emit 074h
-    _emit 00Fh
-    _emit 083h
-    _emit 078h
-    _emit 0FCh
-    _emit 000h
-    _emit 074h
-    _emit 009h
-    _emit 050h
-    call EXT_f47380
-    _emit 083h
-    _emit 0C4h
-    _emit 004h
-    _emit 08Bh
-    _emit 046h
-    _emit 01Ch
-    _emit 085h
-    _emit 0C0h
-    _emit 074h
-    _emit 00Fh
-    _emit 083h
-    _emit 078h
-    _emit 0FCh
-    _emit 000h
-    _emit 074h
-    _emit 009h
-    _emit 050h
-    call EXT_f47380
-    _emit 083h
-    _emit 0C4h
-    _emit 004h
-    _emit 08Bh
-    _emit 046h
-    _emit 008h
-    _emit 085h
-    _emit 0C0h
-    _emit 074h
-    _emit 00Fh
-    _emit 083h
-    _emit 078h
-    _emit 0FCh
-    _emit 000h
-    _emit 074h
-    _emit 009h
-    _emit 050h
-    call EXT_f47380
-    _emit 083h
-    _emit 0C4h
-    _emit 004h
-    _emit 08Bh
-    _emit 04Ch
-    _emit 024h
-    _emit 010h
-    _emit 05Fh
-    _emit 0C7h
-    _emit 006h
-    _emit 058h
-    _emit 0C4h
-    _emit 03Eh
-    _emit 001h
-    _emit 05Eh
-    _emit 05Bh
-    _emit 064h
-    _emit 089h
-    _emit 00Dh
-    _emit 000h
-    _emit 000h
-    _emit 000h
-    _emit 000h
-    _emit 083h
-    _emit 0C4h
-    _emit 010h
-    _emit 0C3h
+// ---------------------------------------------------------------------------
+// @ 0x007a4320  Destroy the cStaticBufferDraw singleton.
+// ---------------------------------------------------------------------------
+void __cdecl FUN_007a4320() {
+  cStaticBufferDraw* const p = g_pStaticBufferDraw;
+  if (p != 0) {
+    EXT_6de350(p);
+    g_pStaticBufferDraw = 0;
+    EXT_f47380(p);
   }
 }
 
-// @ 0x007a4320
-__declspec(naked) void FUN_007a4320() {
-  __asm {
-    _emit 06Ah
-    _emit 0FFh
-    _emit 068h
-    _emit 0E8h
-    _emit 03Dh
-    _emit 021h
-    _emit 001h
-    _emit 064h
-    _emit 0A1h
-    _emit 000h
-    _emit 000h
-    _emit 000h
-    _emit 000h
-    _emit 050h
-    _emit 064h
-    _emit 089h
-    _emit 025h
-    _emit 000h
-    _emit 000h
-    _emit 000h
-    _emit 000h
-    _emit 051h
-    _emit 0A1h
-    _emit 084h
-    _emit 0DCh
-    _emit 05Dh
-    _emit 001h
-    _emit 056h
-    _emit 08Bh
-    _emit 0F0h
-    _emit 089h
-    _emit 074h
-    _emit 024h
-    _emit 004h
-    _emit 085h
-    _emit 0C0h
-    _emit 074h
-    _emit 020h
-    _emit 0C7h
-    _emit 044h
-    _emit 024h
-    _emit 010h
-    _emit 000h
-    _emit 000h
-    _emit 000h
-    _emit 000h
-    call EXT_6de350
-    _emit 056h
-    _emit 0C7h
-    _emit 005h
-    _emit 084h
-    _emit 0DCh
-    _emit 05Dh
-    _emit 001h
-    _emit 000h
-    _emit 000h
-    _emit 000h
-    _emit 000h
-    call EXT_f47380
-    _emit 083h
-    _emit 0C4h
-    _emit 004h
-    _emit 08Bh
-    _emit 04Ch
-    _emit 024h
-    _emit 008h
-    _emit 05Eh
-    _emit 064h
-    _emit 089h
-    _emit 00Dh
-    _emit 000h
-    _emit 000h
-    _emit 000h
-    _emit 000h
-    _emit 083h
-    _emit 0C4h
-    _emit 010h
-    _emit 0C3h
+// ---------------------------------------------------------------------------
+// @ 0x007a4380  cStaticBuffer constructor.  `ret 8` — two stack arguments.
+// ---------------------------------------------------------------------------
+cStaticBuffer* cStaticBuffer::Ctor(u32 param_1, u32 param_2) {
+  mUnk04 = 0;
+  mUnk08 = 0;
+  mUnk0c = 0;
+  mUnk10 = 0;
+  mVertexBuffers.mpBegin = 0;
+  mVertexBuffers.mpEnd = 0;
+  mVertexBuffers.mpCapacity = 0;
+  mDrawVector.mpBegin = 0;
+  mDrawVector.mpEnd = 0;
+  mDrawVector.mpCapacity = 0;
+  mUnk44 = 0;
+  mUnk48 = param_1;
+  EXT_7a3ce0(this, param_2);
+  return this;
+}
+
+// ---------------------------------------------------------------------------
+// @ 0x007a4420  cStaticBufferDraw constructor.  `ret 0x10` — four stack
+// arguments.  Clamps the element count and builds the embedded cStaticBuffer.
+// ---------------------------------------------------------------------------
+void cStaticBufferDraw::Ctor(u32 param_1, u32 param_2, u32 param_3,
+                             u32 count) {
+  buffer.mUnk04 = (u32)(((int)count < 1) ? 0 : count);
+  cStaticBuffer* p =
+      (cStaticBuffer*)EXT_f473a0(0x4c, "Graphics/StaticBufferDraw", 0, 0, 0, 0);
+  if (p != 0) {
+    p->Ctor(param_2, param_3);
+  }
+  buffer.mDrawVector.mpCapacity = (MeshElement*)p;
+  p->sb01();
+}
+
+// ---------------------------------------------------------------------------
+// @ 0x007a44b0  MeshVector insert/grow for the 0x18-byte element.
+// `ret 8`: ecx = vector, two stack arguments.
+// ---------------------------------------------------------------------------
+void MeshVector::grow(MeshElement* at, MeshElement* src) {
+  MeshElement* const end = mpEnd;
+  if (end != mpCapacity) {
+    if ((at <= src) && (src < end)) {
+      src = (MeshElement*)((char*)src + 0x18);
+    }
+    if (end != 0) {
+      end->v0 = end[-1].v0;
+      end->v1 = end[-1].v1;
+      end->v2 = end[-1].v2;
+      end->v3 = end[-1].v3;
+      end->v4 = end[-1].v4;
+      end->v5 = end[-1].v5;
+    }
+    EXT_cc8b50(at, (char*)mpEnd - 0x18, mpEnd);
+    at->v0 = src->v0;
+    at->v1 = src->v1;
+    at->v2 = src->v2;
+    at->v3 = src->v3;
+    at->v4 = src->v4;
+    at->v5 = src->v5;
+    mpEnd = (MeshElement*)((char*)mpEnd + 0x18);
+    return;
+  }
+
+  int count = (int)(end - mpBegin);
+  if (count == 0) {
+    count = 1;
+  } else {
+    count *= 2;
+    if (count == 0) {
+      return;
+    }
+  }
+  MeshElement* const fresh =
+      (MeshElement*)EXT_f473a0(count * 0x18, "Graphics", 0, 0,
+                               "EASTL/allocator.h", 0xd1);
+  MeshElement* ins = (MeshElement*)EXT_720200(fresh, at, mpEnd);
+  if (ins != 0) {
+    ins->v0 = src->v0;
+    ins->v1 = src->v1;
+    ins->v2 = src->v2;
+    ins->v3 = src->v3;
+    ins->v4 = src->v4;
+    ins->v5 = src->v5;
+  }
+  MeshElement* const newEnd = (MeshElement*)EXT_720200(at, mpEnd, ins + 6);
+  if (mpBegin != 0) {
+    EXT_f47380(mpBegin);
+  }
+  mpBegin = fresh;
+  mpEnd = newEnd;
+  mpCapacity = (MeshElement*)((char*)fresh + count * 0x18);
+}
+
+// ---------------------------------------------------------------------------
+// @ 0x007a4600  MeshVector push_back.  `ret 4`: ecx = vector, one argument.
+// ---------------------------------------------------------------------------
+void MeshVector::push_back(MeshElement* src) {
+  MeshElement* const p = mpEnd;
+  if (p < mpCapacity) {
+    mpEnd = (MeshElement*)((char*)p + 0x18);
+    if (p != 0) {
+      p->v0 = src->v0;
+      p->v1 = src->v1;
+      p->v2 = src->v2;
+      p->v3 = src->v3;
+      p->v4 = src->v4;
+      p->v5 = src->v5;
+    }
+  } else {
+    grow(mpEnd, src);
   }
 }
 
-// @ 0x007a4380
-__declspec(naked) void FUN_007a4380() {
-  __asm {
-    _emit 06Ah
-    _emit 0FFh
-    _emit 068h
-    _emit 0C9h
-    _emit 03Dh
-    _emit 021h
-    _emit 001h
-    _emit 064h
-    _emit 0A1h
-    _emit 000h
-    _emit 000h
-    _emit 000h
-    _emit 000h
-    _emit 050h
-    _emit 064h
-    _emit 089h
-    _emit 025h
-    _emit 000h
-    _emit 000h
-    _emit 000h
-    _emit 000h
-    _emit 051h
-    _emit 056h
-    _emit 08Bh
-    _emit 0F1h
-    _emit 033h
-    _emit 0C0h
-    _emit 089h
-    _emit 074h
-    _emit 024h
-    _emit 004h
-    _emit 089h
-    _emit 046h
-    _emit 004h
-    _emit 0C7h
-    _emit 006h
-    _emit 044h
-    _emit 0F6h
-    _emit 040h
-    _emit 001h
-    _emit 089h
-    _emit 044h
-    _emit 024h
-    _emit 010h
-    _emit 089h
-    _emit 046h
-    _emit 008h
-    _emit 089h
-    _emit 046h
-    _emit 00Ch
-    _emit 089h
-    _emit 046h
-    _emit 010h
-    _emit 089h
-    _emit 046h
-    _emit 01Ch
-    _emit 089h
-    _emit 046h
-    _emit 020h
-    _emit 089h
-    _emit 046h
-    _emit 024h
-    _emit 089h
-    _emit 046h
-    _emit 030h
-    _emit 089h
-    _emit 046h
-    _emit 034h
-    _emit 089h
-    _emit 046h
-    _emit 038h
-    _emit 08Bh
-    _emit 04Ch
-    _emit 024h
-    _emit 01Ch
-    _emit 089h
-    _emit 046h
-    _emit 044h
-    _emit 08Bh
-    _emit 044h
-    _emit 024h
-    _emit 018h
-    _emit 051h
-    _emit 08Bh
-    _emit 0CEh
-    _emit 0C6h
-    _emit 044h
-    _emit 024h
-    _emit 014h
-    _emit 003h
-    _emit 089h
-    _emit 046h
-    _emit 048h
-    call EXT_7a3ce0
-    _emit 08Bh
-    _emit 04Ch
-    _emit 024h
-    _emit 008h
-    _emit 08Bh
-    _emit 0C6h
-    _emit 05Eh
-    _emit 064h
-    _emit 089h
-    _emit 00Dh
-    _emit 000h
-    _emit 000h
-    _emit 000h
-    _emit 000h
-    _emit 083h
-    _emit 0C4h
-    _emit 010h
-    _emit 0C2h
-    _emit 008h
-    _emit 000h
+// ---------------------------------------------------------------------------
+// @ 0x007a4650  cStaticBuffer::SnapshotPending — publish the accumulated
+// element counts into the draw vector and reset the pending cursors.
+// ---------------------------------------------------------------------------
+void cStaticBuffer::SnapshotPending() {
+  cStaticBuffer* const d = &g_pStaticBufferDraw->buffer;
+  u32 cursor = (u32)((char*)mUnk0c - (char*)mUnk08);
+  u32 countA = (u32)((char*)mUnk10 - (char*)mUnk14);
+  u32 countB;
+  u32 stride;
+  u32 start;
+  if (d->mUnk40 != 0) {
+    stride = (u32)((char*)d->mUnk2c - (char*)d->mDrawVector.mpBegin);
+    start = 0;
+    countB = (u32)((char*)d->mVertexBuffers.mpEnd -
+                   (char*)d->mVertexBuffers.mpBegin);
+  } else {
+    stride = 0;
+    start = 0xffffffffu;
+    countB = 0;
+  }
+  mUnk18 = 0;
+  d->mUnk40 = 0;
+  d->mUnk14 = d->mUnk10;
+  d->mDrawVector.mpBegin = (MeshElement*)d->mUnk2c;
+
+  if (countA != 0 && ((int)stride < 0 || start != 0)) {
+    // Merge with the previous entry when it describes the same contiguous run.
+    if (d->mDrawVector.mpBegin != d->mDrawVector.mpEnd) {
+      MeshElement* const tail = d->mDrawVector.mpEnd - 1;
+      if (start == 0xffffffffu && tail->v0 == cursor) {
+        tail->v2 += countA;
+        return;
+      }
+    }
+    MeshElement range;
+    range.v0 = cursor;
+    range.v1 = countB;
+    range.v2 = 0;
+    range.v3 = start;
+    range.v4 = stride;
+    range.v5 = countA;
+    d->mDrawVector.push_back(&range);
   }
 }
 
-// @ 0x007a4420
-__declspec(naked) void FUN_007a4420() {
-  __asm {
-    _emit 064h
-    _emit 0A1h
-    _emit 000h
-    _emit 000h
-    _emit 000h
-    _emit 000h
-    _emit 06Ah
-    _emit 0FFh
-    _emit 068h
-    _emit 01Ah
-    _emit 03Eh
-    _emit 021h
-    _emit 001h
-    _emit 050h
-    _emit 064h
-    _emit 089h
-    _emit 025h
-    _emit 000h
-    _emit 000h
-    _emit 000h
-    _emit 000h
-    _emit 08Bh
-    _emit 044h
-    _emit 024h
-    _emit 01Ch
-    _emit 056h
-    _emit 08Bh
-    _emit 0F1h
-    _emit 033h
-    _emit 0C9h
-    _emit 085h
-    _emit 0C0h
-    _emit 06Ah
-    _emit 000h
-    _emit 00Fh
-    _emit 09Eh
-    _emit 0C1h
-    _emit 06Ah
-    _emit 000h
-    _emit 06Ah
-    _emit 000h
-    _emit 06Ah
-    _emit 000h
-    _emit 068h
-    _emit 028h
-    _emit 0F6h
-    _emit 040h
-    _emit 001h
-    _emit 06Ah
-    _emit 04Ch
-    _emit 049h
-    _emit 023h
-    _emit 0C8h
-    _emit 089h
-    _emit 04Eh
-    _emit 004h
-    call EXT_f473a0
-    _emit 083h
-    _emit 0C4h
-    _emit 018h
-    _emit 089h
-    _emit 044h
-    _emit 024h
-    _emit 020h
-    _emit 0C7h
-    _emit 044h
-    _emit 024h
-    _emit 00Ch
-    _emit 000h
-    _emit 000h
-    _emit 000h
-    _emit 000h
-    _emit 085h
-    _emit 0C0h
-    _emit 074h
-    _emit 013h
-    _emit 08Bh
-    _emit 054h
-    _emit 024h
-    _emit 01Ch
-    _emit 08Bh
-    _emit 04Ch
-    _emit 024h
-    _emit 018h
-    _emit 052h
-    _emit 051h
-    _emit 08Bh
-    _emit 0C8h
-    call EXT_7a4380
-    _emit 0EBh
-    _emit 002h
-    _emit 033h
-    _emit 0C0h
-    _emit 089h
-    _emit 006h
-    _emit 08Bh
-    _emit 010h
-    _emit 08Bh
-    _emit 0C8h
-    _emit 08Bh
-    _emit 042h
-    _emit 004h
-    _emit 0C7h
-    _emit 044h
-    _emit 024h
-    _emit 00Ch
-    _emit 0FFh
-    _emit 0FFh
-    _emit 0FFh
-    _emit 0FFh
-    _emit 0FFh
-    _emit 0D0h
-    _emit 08Bh
-    _emit 04Ch
-    _emit 024h
-    _emit 004h
-    _emit 064h
-    _emit 089h
-    _emit 00Dh
-    _emit 000h
-    _emit 000h
-    _emit 000h
-    _emit 000h
-    _emit 05Eh
-    _emit 083h
-    _emit 0C4h
-    _emit 00Ch
-    _emit 0C2h
-    _emit 010h
-    _emit 000h
+// ---------------------------------------------------------------------------
+// @ 0x007a4710  SP::cStaticBuffer::Flush — hand the current vertex/index
+// buffers back to the singleton's retention vectors and reset the handles.
+// ---------------------------------------------------------------------------
+void cStaticBuffer::Flush() {
+  cStaticBuffer* const d = &g_pStaticBufferDraw->buffer;
+  if ((d->mVertexBuffers.mpEnd - d->mVertexBuffers.mpBegin != 0) ||
+      (d->mUnk40 != 0)) {
+    SnapshotPending();
+  }
+  if (mUnk0c != 0) {
+    EXT_11f36a0();
+    if (mVertexBuffers.mpEnd < mVertexBuffers.mpCapacity) {
+      *(u32*)mVertexBuffers.mpEnd = mUnk0c;
+      mVertexBuffers.mpEnd = (MeshElement*)((char*)mVertexBuffers.mpEnd + 4);
+    } else {
+      EXT_6ec4a0(mVertexBuffers.mpEnd, &mUnk0c);
+    }
+    mUnk0c = 0;
+    mUnk14 = 0;
+    mUnk10 = 0;
+    mUnk08 = 0;
+  }
+  if (mUnk28 != 0) {
+    EXT_11f4fd0(&mDrawVector.mpEnd);
+    if (mDrawVector.mpBegin < mDrawVector.mpCapacity) {
+      *(u32*)mDrawVector.mpBegin = mUnk28;
+      mDrawVector.mpBegin = (MeshElement*)((char*)mDrawVector.mpBegin + 4);
+    } else {
+      EXT_6ec4a0(mDrawVector.mpBegin, &mUnk28);
+    }
+    mUnk28 = 0;
+    mDrawVector.mpEnd = 0;
+    mDrawVector.mpCapacity = 0;
+    mUnk3c = 0;
   }
 }
 
-// @ 0x007a44b0
-__declspec(naked) void FUN_007a44b0() {
-  __asm {
-    _emit 053h
-    _emit 056h
-    _emit 08Bh
-    _emit 0F1h
-    _emit 08Bh
-    _emit 046h
-    _emit 004h
-    _emit 057h
-    _emit 03Bh
-    _emit 046h
-    _emit 008h
-    _emit 074h
-    _emit 077h
-    _emit 08Bh
-    _emit 05Ch
-    _emit 024h
-    _emit 014h
-    _emit 08Bh
-    _emit 07Ch
-    _emit 024h
-    _emit 010h
-    _emit 03Bh
-    _emit 0DFh
-    _emit 072h
-    _emit 007h
-    _emit 03Bh
-    _emit 0D8h
-    _emit 073h
-    _emit 003h
-    _emit 083h
-    _emit 0C3h
-    _emit 018h
-    _emit 085h
-    _emit 0C0h
-    _emit 074h
-    _emit 023h
-    _emit 08Bh
-    _emit 048h
-    _emit 0E8h
-    _emit 089h
-    _emit 008h
-    _emit 08Bh
-    _emit 050h
-    _emit 0ECh
-    _emit 089h
-    _emit 050h
-    _emit 004h
-    _emit 08Bh
-    _emit 048h
-    _emit 0F0h
-    _emit 089h
-    _emit 048h
-    _emit 008h
-    _emit 08Bh
-    _emit 050h
-    _emit 0F4h
-    _emit 089h
-    _emit 050h
-    _emit 00Ch
-    _emit 08Bh
-    _emit 048h
-    _emit 0F8h
-    _emit 089h
-    _emit 048h
-    _emit 010h
-    _emit 08Bh
-    _emit 050h
-    _emit 0FCh
-    _emit 089h
-    _emit 050h
-    _emit 014h
-    _emit 08Bh
-    _emit 046h
-    _emit 004h
-    _emit 050h
-    _emit 083h
-    _emit 0C0h
-    _emit 0E8h
-    _emit 050h
-    _emit 057h
-    call EXT_cc8b50
-    _emit 08Bh
-    _emit 003h
-    _emit 089h
-    _emit 007h
-    _emit 08Bh
-    _emit 04Bh
-    _emit 004h
-    _emit 089h
-    _emit 04Fh
-    _emit 004h
-    _emit 08Bh
-    _emit 053h
-    _emit 008h
-    _emit 089h
-    _emit 057h
-    _emit 008h
-    _emit 08Bh
-    _emit 043h
-    _emit 00Ch
-    _emit 089h
-    _emit 047h
-    _emit 00Ch
-    _emit 08Bh
-    _emit 04Bh
-    _emit 010h
-    _emit 089h
-    _emit 04Fh
-    _emit 010h
-    _emit 08Bh
-    _emit 053h
-    _emit 014h
-    _emit 083h
-    _emit 0C4h
-    _emit 00Ch
-    _emit 089h
-    _emit 057h
-    _emit 014h
-    _emit 083h
-    _emit 046h
-    _emit 004h
-    _emit 018h
-    _emit 05Fh
-    _emit 05Eh
-    _emit 05Bh
-    _emit 0C2h
-    _emit 008h
-    _emit 000h
-    _emit 02Bh
-    _emit 006h
-    _emit 055h
-    _emit 08Bh
-    _emit 0C8h
-    _emit 0B8h
-    _emit 0ABh
-    _emit 0AAh
-    _emit 0AAh
-    _emit 02Ah
-    _emit 0F7h
-    _emit 0E9h
-    _emit 0C1h
-    _emit 0FAh
-    _emit 002h
-    _emit 08Bh
-    _emit 0C2h
-    _emit 0C1h
-    _emit 0E8h
-    _emit 01Fh
-    _emit 003h
-    _emit 0C2h
-    _emit 074h
-    _emit 031h
-    _emit 08Dh
-    _emit 02Ch
-    _emit 000h
-    _emit 085h
-    _emit 0EDh
-    _emit 074h
-    _emit 031h
-    _emit 068h
-    _emit 0D1h
-    _emit 000h
-    _emit 000h
-    _emit 000h
-    _emit 068h
-    _emit 038h
-    _emit 0BBh
-    _emit 03Eh
-    _emit 001h
-    _emit 06Ah
-    _emit 000h
-    _emit 08Dh
-    _emit 044h
-    _emit 06Dh
-    _emit 000h
-    _emit 003h
-    _emit 0C0h
-    _emit 06Ah
-    _emit 000h
-    _emit 003h
-    _emit 0C0h
-    _emit 003h
-    _emit 0C0h
-    _emit 068h
-    _emit 0A4h
-    _emit 0B8h
-    _emit 03Eh
-    _emit 001h
-    _emit 050h
-    call EXT_f473a0
-    _emit 083h
-    _emit 0C4h
-    _emit 018h
-    _emit 08Bh
-    _emit 0F8h
-    _emit 0EBh
-    _emit 009h
-    _emit 0BDh
-    _emit 001h
-    _emit 000h
-    _emit 000h
-    _emit 000h
-    _emit 0EBh
-    _emit 0CFh
-    _emit 033h
-    _emit 0FFh
-    _emit 08Bh
-    _emit 05Ch
-    _emit 024h
-    _emit 014h
-    _emit 08Bh
-    _emit 006h
-    _emit 057h
-    _emit 053h
-    _emit 050h
-    call EXT_720200
-    _emit 083h
-    _emit 0C4h
-    _emit 00Ch
-    _emit 085h
-    _emit 0C0h
-    _emit 074h
-    _emit 026h
-    _emit 08Bh
-    _emit 04Ch
-    _emit 024h
-    _emit 018h
-    _emit 08Bh
-    _emit 011h
-    _emit 089h
-    _emit 010h
-    _emit 08Bh
-    _emit 051h
-    _emit 004h
-    _emit 089h
-    _emit 050h
-    _emit 004h
-    _emit 08Bh
-    _emit 051h
-    _emit 008h
-    _emit 089h
-    _emit 050h
-    _emit 008h
-    _emit 08Bh
-    _emit 051h
-    _emit 00Ch
-    _emit 089h
-    _emit 050h
-    _emit 00Ch
-    _emit 08Bh
-    _emit 051h
-    _emit 010h
-    _emit 089h
-    _emit 050h
-    _emit 010h
-    _emit 08Bh
-    _emit 049h
-    _emit 014h
-    _emit 089h
-    _emit 048h
-    _emit 014h
-    _emit 08Bh
-    _emit 04Eh
-    _emit 004h
-    _emit 083h
-    _emit 0C0h
-    _emit 018h
-    _emit 050h
-    _emit 051h
-    _emit 053h
-    call EXT_720200
-    _emit 08Bh
-    _emit 0D8h
-    _emit 08Bh
-    _emit 006h
-    _emit 083h
-    _emit 0C4h
-    _emit 00Ch
-    _emit 085h
-    _emit 0C0h
-    _emit 074h
-    _emit 00Fh
-    _emit 083h
-    _emit 078h
-    _emit 0FCh
-    _emit 000h
-    _emit 074h
-    _emit 009h
-    _emit 050h
-    call EXT_f47380
-    _emit 083h
-    _emit 0C4h
-    _emit 004h
-    _emit 08Dh
-    _emit 054h
-    _emit 06Dh
-    _emit 000h
-    _emit 05Dh
-    _emit 089h
-    _emit 03Eh
-    _emit 08Dh
-    _emit 004h
-    _emit 0D7h
-    _emit 05Fh
-    _emit 089h
-    _emit 05Eh
-    _emit 004h
-    _emit 089h
-    _emit 046h
-    _emit 008h
-    _emit 05Eh
-    _emit 05Bh
-    _emit 0C2h
-    _emit 008h
-    _emit 000h
+// ---------------------------------------------------------------------------
+// @ 0x007a47c0  SP::cStaticBuffer::GetVertexBuffer — reserve `numVertices`
+// elements in the singleton's shared vertex buffer, flushing first when the
+// request would not fit.  `ret 0xc`: ecx = this, three stack arguments.
+// ---------------------------------------------------------------------------
+u32 cStaticBuffer::GetVertexBuffer(u32 numVertices, u32* outCount,
+                                   u32* outStride) {
+  cStaticBuffer* const s = &g_pStaticBufferDraw->buffer;
+  u32 have = s->mUnk04;   // currently reserved capacity
+  u32 want = numVertices;
+  if ((int)s->mUnk08 < (int)(s->mUnk10 + numVertices)) {
+    if ((int)have >= 1) {
+      u32 room = s->mUnk08 - s->mUnk10;
+      if ((int)room < 0x31) {
+        Flush();
+        want = numVertices;
+      }
+    }
+  }
+  if (s->mUnk0c == 0) {
+    if ((mUnk04 == 3) && (0x1ff8 < (int)want)) {
+      want = 0x1ff8;
+    }
+    if ((int)have <= (int)want) {
+      have = want;
+    }
+    s->mUnk08 = have;
+    u32* const vb = (u32*)FUN_00762b70(mUnk44, have, 0, 0);
+    s->mUnk0c = (u32)vb;
+    u32 stride = s->mUnk08;
+    if (stride == 0) {
+      stride = vb[3];
+    }
+    int u = (int)FUN_011f3620(2, (u32)*(u8*)(*vb + 0xf) * vb[2],
+                              (u32)*(u8*)(*vb + 0xf) * stride);
+    if (u == 0) {
+      want = 0;
+    } else {
+      s->mUnk10 = 0;
+      s->mUnk14 = 0;
+      s->mUnk18 = (u32)*(u8*)(*(u32*)s->mUnk0c + 0xf);
+      s->mUnk28 = (u32)u;
+    }
+  }
+  switch (mUnk04) {
+    case 1:
+    case 4:
+      want -= want & 1;
+      break;
+    case 2:
+      want = (want / 3) * 3;
+      break;
+    case 3:
+      want -= want & 3;
+      break;
+    default:
+      break;
+  }
+  *outStride = s->mUnk18;
+  *outCount = s->mUnk10 * s->mUnk18 + s->mUnk28;
+  s->mUnk10 += want;
+  s->mUnk40 = 1;
+  return want;
+}
+
+// ---------------------------------------------------------------------------
+// @ 0x007a49e0  Direct3D9 capability probe: query the caps manager for the
+// vertex- and pixel-shader version and test the active device for each.  The
+// routine is cdecl (plain `ret`) and receives its arguments from the caller's
+// registers/stack frame as the original did.
+// ---------------------------------------------------------------------------
+int __cdecl FUN_007a49e0(u32 param_1, u32 param_2, u32 param_3, u32 param_4,
+                         u32 param_5) {
+  (void)param_3;
+  (void)param_4;
+  (void)param_5;
+  u32* const capsRoot = (u32*)FUN_11f8af0();
+  u32* const caps = (u32*)capsRoot[0];
+  u32* const d3d9 = *(u32**)0x16f89c8;   // _m_d3d9_ActiveState
+
+  u32* const query = (u32*)FUN_11f8af0(caps, *(u32*)0x1712458, 1, 3, param_1);
+  int rc = (int)(*(int(**)(u32*, u32))(d3d9[0] + 0x28))(d3d9, query[1]);
+  if (rc < 0) {
+    return 0;
+  }
+
+  u32* const capsRoot2 = (u32*)FUN_11f8af0();
+  u32* const caps2 = (u32*)capsRoot2[0];
+  u32* const query2 = (u32*)FUN_11f8af0(caps2, *(u32*)0x1712458,
+                                        *(u32*)0x16f8bc4, param_1);
+  rc = (int)(*(int(**)(u32*, u32))(d3d9[0] + 0x30))(d3d9, query2[1]);
+  if (rc < 0) {
+    return 0;
+  }
+  (void)param_2;
+  return 1;
+}
+
+// ---------------------------------------------------------------------------
+// @ 0x007a4cb0  Swap the renderer device held at +0x10 and probe it; on a
+// failed probe drop the device again.
+// ---------------------------------------------------------------------------
+u32 cGraphicsSystem::SwapRendererDevice() {
+  char* const fresh = (char*)EXT_75fb90();
+  char* const old = (char*)mRenderer;
+  if (fresh != old) {
+    if (fresh != 0) {
+      (*(void(**)(char*))*(void**)fresh)(fresh);
+    }
+    mRenderer = (cIRenderer*)fresh;
+    if (old != 0) {
+      u32* const vt = *(u32**)old;
+      (*(void(**)(char*))(vt + 1))(old);
+    }
+  }
+  char* const cur = (char*)mRenderer;
+  {
+    u32* const vt = *(u32**)cur;
+    if ((*(char(**)(char*))(vt + 3))(cur) != 0) {
+      EXT_67df60(cur);
+      return 1;
+    }
+  }
+  char* const dead = (char*)mRenderer;
+  if (dead != 0) {
+    mRenderer = 0;
+    u32* const vt = *(u32**)dead;
+    (*(void(**)(char*))(vt + 1))(dead);
+  }
+  return 0;
+}
+
+// ---------------------------------------------------------------------------
+// @ 0x007a4d90  SP::cGraphicsSystem::UpdateManagers.  `ret 8` — a frame
+// identifier and the elapsed seconds.
+// ---------------------------------------------------------------------------
+void cGraphicsSystem::UpdateManagers(u32 param_1, f32 param_2) {
+  bool flag = *(int*)(*(int*)((char*)_sAppProperties + 0x3c) + 0x130) != 0;
+  if (mDebugFlushState != (u8)flag) {
+    mDebugFlushState = (u8)flag;
+    EXT_6ad7c0((u32)4);
+    EXT_6ad7c0((u32)5);
+    EXT_6ad7c0((u32)9);
+    EXT_6ad7c0((u32)10);
+  }
+  char* const light = (char*)mLightingManager;
+  if (light != 0) {
+    u32* const vt = *(u32**)light;
+    (*(void(**)(char*, int))(vt + 5))(light, (int)(param_2 * 1000.0f));
+  }
+  char* const tex = (char*)mTextureManager;
+  if (tex != 0) {
+    u32* const vt = *(u32**)tex;
+    (*(void(**)(char*))(vt + 5))(tex);
+  }
+  char* const mat = (char*)mMaterialManager;
+  if (mat != 0) {
+    u32* const vt = *(u32**)mat;
+    (*(void(**)(char*))(vt + 5))(mat);
+  }
+  char* const mod = (char*)mModelManager;
+  if (mod != 0) {
+    u32* const vt = *(u32**)mod;
+    (*(void(**)(char*, u32, f32))(vt + 14))(mod, param_1, param_2);
   }
 }
 
-// @ 0x007a4600
-__declspec(naked) void FUN_007a4600() {
-  __asm {
-    _emit 08Bh
-    _emit 041h
-    _emit 004h
-    _emit 03Bh
-    _emit 041h
-    _emit 008h
-    _emit 073h
-    _emit 033h
-    _emit 08Dh
-    _emit 050h
-    _emit 018h
-    _emit 089h
-    _emit 051h
-    _emit 004h
-    _emit 085h
-    _emit 0C0h
-    _emit 074h
-    _emit 034h
-    _emit 08Bh
-    _emit 04Ch
-    _emit 024h
-    _emit 004h
-    _emit 08Bh
-    _emit 011h
-    _emit 089h
-    _emit 010h
-    _emit 08Bh
-    _emit 051h
-    _emit 004h
-    _emit 089h
-    _emit 050h
-    _emit 004h
-    _emit 08Bh
-    _emit 051h
-    _emit 008h
-    _emit 089h
-    _emit 050h
-    _emit 008h
-    _emit 08Bh
-    _emit 051h
-    _emit 00Ch
-    _emit 089h
-    _emit 050h
-    _emit 00Ch
-    _emit 08Bh
-    _emit 051h
-    _emit 010h
-    _emit 089h
-    _emit 050h
-    _emit 010h
-    _emit 08Bh
-    _emit 049h
-    _emit 014h
-    _emit 089h
-    _emit 048h
-    _emit 014h
-    _emit 0C2h
-    _emit 004h
-    _emit 000h
-    _emit 08Bh
-    _emit 054h
-    _emit 024h
-    _emit 004h
-    _emit 052h
-    _emit 050h
-    call EXT_7a44b0
-    _emit 0C2h
-    _emit 004h
-    _emit 000h
+// ---------------------------------------------------------------------------
+// @ 0x007a4e40  SP::cDebugDraw::Update.  Plain `ret` with `ecx` read at entry,
+// so the retail form is a fastcall taking only the object pointer.
+// ---------------------------------------------------------------------------
+void __fastcall FUN_007a4e40(cDebugDraw* thiz) {
+  cDebugDraw* const self = thiz;
+  // The camera accessor writes the current camera position into `pos`;
+  // the viewer's refiner then adjusts it in place.
+  u32 pos[3];
+  const f32 lo = 0.0f;
+  const f32 hi = 1.0f;
+  cApp* const app = APP_GetApp();
+  cViewer* const viewer = (cViewer*)app->GetCameraViewer(pos, 0, 0, 0);
+  viewer->Refine(pos, 0, 0, 0);
+
+  const f32 dx = *(f32*)&pos[0];
+  const f32 dy = *(f32*)&pos[1];
+  const f32 dz = *(f32*)&pos[2];
+  const f32 dist = (f32)sqrt(dx * dx + dy * dy + dz * dz);
+
+  f32 t = (dist - self->mDebugDistance) /
+          (self->mDebugRange - self->mDebugDistance);
+  t = __max(t, lo);
+  t = __min(t, hi);
+  self->mDebugRadius =
+      (self->mDebugNear - self->mDebugFar) * t + self->mDebugFar;
+}
+
+// ---------------------------------------------------------------------------
+// @ 0x007a4f50  Bake-texture rectangle dispatch.  `ret 8`: ecx = the renderer
+// source object, one stack argument selecting which rectangle to fetch.
+// ---------------------------------------------------------------------------
+void __fastcall FUN_007a4f50(void* thiz, u32 /*unused*/, u32 which) {
+  u32 rect[2] = { 0xffffffffu, 0xffffffffu };
+  char* const self = (char*)thiz;
+  u32* const vtbl = *(u32**)self;
+  switch (which) {
+    case 0: (*(void(**)(char*, u32*))(vtbl + (0xb0 / 4)))(self, rect); break;
+    case 1: (*(void(**)(char*, u32*))(vtbl + (0xac / 4)))(self, rect); break;
+    case 2: (*(void(**)(char*, u32*))(vtbl + (0xbc / 4)))(self, rect); break;
+    case 3: (*(void(**)(char*, u32*))(vtbl + (0xb4 / 4)))(self, rect); break;
+    case 4: (*(void(**)(char*, u32*))(vtbl + (0xb8 / 4)))(self, rect); break;
+    default: break;
+  }
+  char* const a = *(char**)(self + 0x18);
+  char* const b = *(char**)(self + 0x14);
+  char* const desc = (*(char*(**)(char*, u32, u32))(*(u32**)a + (0x1c / 4)))(
+      a, rect[0], rect[1]);
+  char* const out = (*(char*(**)(char*, u32*, char*))(*(u32**)b + (0x2c / 4)))(
+      b, rect, desc);
+  u32* const dst = *(u32**)(self + 0x24);
+  dst[0] = ((u32*)out)[0];
+  dst[1] = ((u32*)out)[1];
+  dst[2] = ((u32*)out)[2];
+}
+
+// ---------------------------------------------------------------------------
+// Shared release helper for the baking render targets: return the rectangle to
+// the RTT manager and drop the texture's reference count.
+// ---------------------------------------------------------------------------
+void cGraphicsSystem::ReleaseRTT(void*& texture, const TextureRectID& rect) {
+  if (texture != 0) {
+    mRTTManager->ReleaseRect(rect.mPageID, rect.mAllocID);
+    void* const dead = texture;
+    if (dead != 0) {
+      texture = 0;
+      volatile long* const rc = (volatile long*)((char*)dead + 8);
+      _InterlockedExchange(rc, *rc - 1);
+      if (*rc < 1) {
+        _InterlockedExchange(rc, *rc + 1);
+      }
+    }
   }
 }
 
-// @ 0x007a4650
-__declspec(naked) void FUN_007a4650() {
-  __asm {
-    _emit 083h
-    _emit 0ECh
-    _emit 018h
-    _emit 0A1h
-    _emit 084h
-    _emit 0DCh
-    _emit 05Dh
-    _emit 001h
-    _emit 08Bh
-    _emit 051h
-    _emit 00Ch
-    _emit 02Bh
-    _emit 051h
-    _emit 008h
-    _emit 053h
-    _emit 055h
-    _emit 056h
-    _emit 08Bh
-    _emit 070h
-    _emit 014h
-    _emit 057h
-    _emit 08Bh
-    _emit 078h
-    _emit 010h
-    _emit 0C1h
-    _emit 0FAh
-    _emit 002h
-    _emit 02Bh
-    _emit 0FEh
-    _emit 033h
-    _emit 0DBh
-    _emit 089h
-    _emit 054h
-    _emit 024h
-    _emit 010h
-    _emit 089h
-    _emit 074h
-    _emit 024h
-    _emit 014h
-    _emit 089h
-    _emit 07Ch
-    _emit 024h
-    _emit 018h
-    _emit 038h
-    _emit 058h
-    _emit 040h
-    _emit 074h
-    _emit 019h
-    _emit 08Bh
-    _emit 071h
-    _emit 020h
-    _emit 02Bh
-    _emit 071h
-    _emit 01Ch
-    _emit 08Bh
-    _emit 058h
-    _emit 030h
-    _emit 08Bh
-    _emit 068h
-    _emit 02Ch
-    _emit 0C1h
-    _emit 0FEh
-    _emit 002h
-    _emit 089h
-    _emit 05Ch
-    _emit 024h
-    _emit 020h
-    _emit 02Bh
-    _emit 0EBh
-    _emit 033h
-    _emit 0DBh
-    _emit 0EBh
-    _emit 009h
-    _emit 083h
-    _emit 0CEh
-    _emit 0FFh
-    _emit 089h
-    _emit 05Ch
-    _emit 024h
-    _emit 020h
-    _emit 033h
-    _emit 0EDh
-    _emit 088h
-    _emit 058h
-    _emit 020h
-    _emit 088h
-    _emit 058h
-    _emit 040h
-    _emit 08Bh
-    _emit 058h
-    _emit 010h
-    _emit 089h
-    _emit 058h
-    _emit 014h
-    _emit 08Bh
-    _emit 058h
-    _emit 02Ch
-    _emit 089h
-    _emit 06Ch
-    _emit 024h
-    _emit 024h
-    _emit 089h
-    _emit 074h
-    _emit 024h
-    _emit 01Ch
-    _emit 089h
-    _emit 058h
-    _emit 030h
-    _emit 085h
-    _emit 0FFh
-    _emit 074h
-    _emit 03Eh
-    _emit 085h
-    _emit 0F6h
-    _emit 07Ch
-    _emit 004h
-    _emit 085h
-    _emit 0EDh
-    _emit 074h
-    _emit 036h
-    _emit 08Bh
-    _emit 059h
-    _emit 030h
-    _emit 03Bh
-    _emit 059h
-    _emit 034h
-    _emit 08Dh
-    _emit 041h
-    _emit 030h
-    _emit 074h
-    _emit 01Fh
-    _emit 083h
-    _emit 0FEh
-    _emit 0FFh
-    _emit 075h
-    _emit 01Ah
-    _emit 08Bh
-    _emit 049h
-    _emit 034h
-    _emit 083h
-    _emit 0E9h
-    _emit 018h
-    _emit 039h
-    _emit 011h
-    _emit 075h
-    _emit 010h
-    _emit 039h
-    _emit 071h
-    _emit 00Ch
-    _emit 075h
-    _emit 00Bh
-    _emit 001h
-    _emit 079h
-    _emit 008h
-    _emit 05Fh
-    _emit 05Eh
-    _emit 05Dh
-    _emit 05Bh
-    _emit 083h
-    _emit 0C4h
-    _emit 018h
-    _emit 0C3h
-    _emit 08Dh
-    _emit 04Ch
-    _emit 024h
-    _emit 010h
-    _emit 051h
-    _emit 08Bh
-    _emit 0C8h
-    call EXT_7a4600
-    _emit 05Fh
-    _emit 05Eh
-    _emit 05Dh
-    _emit 05Bh
-    _emit 083h
-    _emit 0C4h
-    _emit 018h
-    _emit 0C3h
-  }
-}
-
-// @ 0x007a4710
-__declspec(naked) void FUN_007a4710() {
-  __asm {
-    _emit 053h
-    _emit 055h
-    _emit 056h
-    _emit 08Bh
-    _emit 035h
-    _emit 084h
-    _emit 0DCh
-    _emit 05Dh
-    _emit 001h
-    _emit 033h
-    _emit 0DBh
-    _emit 057h
-    _emit 08Bh
-    _emit 0E9h
-    _emit 038h
-    _emit 05Eh
-    _emit 020h
-    _emit 075h
-    _emit 005h
-    _emit 038h
-    _emit 05Eh
-    _emit 040h
-    _emit 074h
-    _emit 005h
-    call EXT_7a4650
-    _emit 08Bh
-    _emit 04Eh
-    _emit 00Ch
-    _emit 08Dh
-    _emit 07Eh
-    _emit 00Ch
-    _emit 03Bh
-    _emit 0CBh
-    _emit 074h
-    _emit 032h
-    call EXT_11f36a0
-    _emit 08Bh
-    _emit 045h
-    _emit 00Ch
-    _emit 03Bh
-    _emit 045h
-    _emit 010h
-    _emit 08Dh
-    _emit 04Dh
-    _emit 008h
-    _emit 073h
-    _emit 010h
-    _emit 08Dh
-    _emit 050h
-    _emit 004h
-    _emit 089h
-    _emit 051h
-    _emit 004h
-    _emit 03Bh
-    _emit 0C3h
-    _emit 074h
-    _emit 00Dh
-    _emit 08Bh
-    _emit 00Fh
-    _emit 089h
-    _emit 008h
-    _emit 0EBh
-    _emit 007h
-    _emit 057h
-    _emit 050h
-    call EXT_6ec4a0
-    _emit 089h
-    _emit 01Fh
-    _emit 089h
-    _emit 05Eh
-    _emit 014h
-    _emit 089h
-    _emit 05Eh
-    _emit 010h
-    _emit 089h
-    _emit 05Eh
-    _emit 008h
-    _emit 08Bh
-    _emit 04Eh
-    _emit 028h
-    _emit 08Dh
-    _emit 07Eh
-    _emit 028h
-    _emit 03Bh
-    _emit 0CBh
-    _emit 074h
-    _emit 044h
-    _emit 08Dh
-    _emit 046h
-    _emit 034h
-    _emit 050h
-    call EXT_11f4fd0
-    _emit 08Bh
-    _emit 045h
-    _emit 020h
-    _emit 03Bh
-    _emit 045h
-    _emit 024h
-    _emit 08Dh
-    _emit 04Dh
-    _emit 01Ch
-    _emit 073h
-    _emit 01Eh
-    _emit 08Dh
-    _emit 050h
-    _emit 004h
-    _emit 089h
-    _emit 051h
-    _emit 004h
-    _emit 03Bh
-    _emit 0C3h
-    _emit 074h
-    _emit 01Bh
-    _emit 08Bh
-    _emit 00Fh
-    _emit 089h
-    _emit 008h
-    _emit 089h
-    _emit 01Fh
-    _emit 05Fh
-    _emit 089h
-    _emit 05Eh
-    _emit 030h
-    _emit 089h
-    _emit 05Eh
-    _emit 02Ch
-    _emit 089h
-    _emit 05Eh
-    _emit 024h
-    _emit 05Eh
-    _emit 05Dh
-    _emit 05Bh
-    _emit 0C3h
-    _emit 057h
-    _emit 050h
-    call EXT_6ec4a0
-    _emit 089h
-    _emit 01Fh
-    _emit 089h
-    _emit 05Eh
-    _emit 030h
-    _emit 089h
-    _emit 05Eh
-    _emit 02Ch
-    _emit 089h
-    _emit 05Eh
-    _emit 024h
-    _emit 05Fh
-    _emit 05Eh
-    _emit 05Dh
-    _emit 05Bh
-    _emit 0C3h
-  }
-}
-
-// @ 0x007a47c0
-__declspec(naked) void FUN_007a47c0() {
-  __asm {
-    _emit 053h
-    _emit 055h
-    _emit 056h
-    _emit 08Bh
-    _emit 035h
-    _emit 084h
-    _emit 0DCh
-    _emit 05Dh
-    _emit 001h
-    _emit 08Bh
-    _emit 046h
-    _emit 010h
-    _emit 08Bh
-    _emit 05Eh
-    _emit 004h
-    _emit 057h
-    _emit 08Bh
-    _emit 07Ch
-    _emit 024h
-    _emit 014h
-    _emit 08Bh
-    _emit 0E9h
-    _emit 08Bh
-    _emit 04Eh
-    _emit 008h
-    _emit 08Dh
-    _emit 014h
-    _emit 038h
-    _emit 03Bh
-    _emit 0D1h
-    _emit 07Eh
-    _emit 016h
-    _emit 085h
-    _emit 0DBh
-    _emit 07Eh
-    _emit 00Bh
-    _emit 02Bh
-    _emit 0C8h
-    _emit 083h
-    _emit 0F9h
-    _emit 030h
-    _emit 07Eh
-    _emit 004h
-    _emit 08Bh
-    _emit 0F9h
-    _emit 0EBh
-    _emit 007h
-    _emit 08Bh
-    _emit 0CDh
-    call EXT_7a4710
-    _emit 083h
-    _emit 07Eh
-    _emit 00Ch
-    _emit 000h
-    _emit 075h
-    _emit 078h
-    _emit 083h
-    _emit 07Dh
-    _emit 048h
-    _emit 003h
-    _emit 075h
-    _emit 00Dh
-    _emit 081h
-    _emit 0FFh
-    _emit 0F8h
-    _emit 01Fh
-    _emit 000h
-    _emit 000h
-    _emit 07Eh
-    _emit 005h
-    _emit 0BFh
-    _emit 0F8h
-    _emit 01Fh
-    _emit 000h
-    _emit 000h
-    _emit 03Bh
-    _emit 0DFh
-    _emit 08Bh
-    _emit 0C3h
-    _emit 07Fh
-    _emit 002h
-    _emit 08Bh
-    _emit 0C7h
-    _emit 06Ah
-    _emit 000h
-    _emit 06Ah
-    _emit 000h
-    _emit 050h
-    _emit 089h
-    _emit 046h
-    _emit 008h
-    _emit 08Bh
-    _emit 045h
-    _emit 044h
-    _emit 050h
-    call EXT_762b70
-    _emit 08Bh
-    _emit 04Eh
-    _emit 008h
-    _emit 083h
-    _emit 0C4h
-    _emit 010h
-    _emit 089h
-    _emit 046h
-    _emit 00Ch
-    _emit 085h
-    _emit 0C9h
-    _emit 075h
-    _emit 003h
-    _emit 08Bh
-    _emit 048h
-    _emit 00Ch
-    _emit 08Bh
-    _emit 010h
-    _emit 08Ah
-    _emit 052h
-    _emit 00Fh
-    _emit 00Fh
-    _emit 0B6h
-    _emit 0DAh
-    _emit 00Fh
-    _emit 0AFh
-    _emit 0D9h
-    _emit 00Fh
-    _emit 0B6h
-    _emit 0CAh
-    _emit 00Fh
-    _emit 0AFh
-    _emit 048h
-    _emit 008h
-    _emit 053h
-    _emit 051h
-    _emit 06Ah
-    _emit 002h
-    _emit 08Bh
-    _emit 0C8h
-    call EXT_11f3620
-    _emit 033h
-    _emit 0C9h
-    _emit 03Bh
-    _emit 0C1h
-    _emit 074h
-    _emit 017h
-    _emit 08Bh
-    _emit 056h
-    _emit 00Ch
-    _emit 089h
-    _emit 04Eh
-    _emit 010h
-    _emit 089h
-    _emit 04Eh
-    _emit 014h
-    _emit 08Bh
-    _emit 00Ah
-    _emit 00Fh
-    _emit 0B6h
-    _emit 051h
-    _emit 00Fh
-    _emit 089h
-    _emit 056h
-    _emit 018h
-    _emit 089h
-    _emit 046h
-    _emit 01Ch
-    _emit 0EBh
-    _emit 002h
-    _emit 033h
-    _emit 0FFh
-    _emit 08Bh
-    _emit 045h
-    _emit 048h
-    _emit 048h
-    _emit 083h
-    _emit 0F8h
-    _emit 003h
-    _emit 077h
-    _emit 050h
-    _emit 0FFh
-    _emit 024h
-    _emit 085h
-    _emit 0F8h
-    _emit 048h
-    _emit 07Ah
-    _emit 000h
-    _emit 08Bh
-    _emit 0C7h
-    _emit 025h
-    _emit 001h
-    _emit 000h
-    _emit 000h
-    _emit 080h
-    _emit 079h
-    _emit 005h
-    _emit 048h
-    _emit 083h
-    _emit 0C8h
-    _emit 0FEh
-    _emit 040h
-    _emit 02Bh
-    _emit 0F8h
-    _emit 0EBh
-    _emit 037h
-    _emit 0B8h
-    _emit 056h
-    _emit 055h
-    _emit 055h
-    _emit 055h
-    _emit 0F7h
-    _emit 0EFh
-    _emit 08Bh
-    _emit 0C2h
-    _emit 0C1h
-    _emit 0E8h
-    _emit 01Fh
-    _emit 003h
-    _emit 0C2h
-    _emit 08Dh
-    _emit 03Ch
-    _emit 040h
-    _emit 0EBh
-    _emit 024h
-    _emit 08Bh
-    _emit 0CFh
-    _emit 081h
-    _emit 0E1h
-    _emit 003h
-    _emit 000h
-    _emit 000h
-    _emit 080h
-    _emit 079h
-    _emit 005h
-    _emit 049h
-    _emit 083h
-    _emit 0C9h
-    _emit 0FCh
-    _emit 041h
-    _emit 02Bh
-    _emit 0F9h
-    _emit 0EBh
-    _emit 011h
-    _emit 08Bh
-    _emit 0D7h
-    _emit 081h
-    _emit 0E2h
-    _emit 001h
-    _emit 000h
-    _emit 000h
-    _emit 080h
-    _emit 079h
-    _emit 005h
-    _emit 04Ah
-    _emit 083h
-    _emit 0CAh
-    _emit 0FEh
-    _emit 042h
-    _emit 02Bh
-    _emit 0FAh
-    _emit 08Bh
-    _emit 046h
-    _emit 018h
-    _emit 08Bh
-    _emit 04Ch
-    _emit 024h
-    _emit 01Ch
-    _emit 089h
-    _emit 001h
-    _emit 08Bh
-    _emit 056h
-    _emit 010h
-    _emit 00Fh
-    _emit 0AFh
-    _emit 056h
-    _emit 018h
-    _emit 003h
-    _emit 056h
-    _emit 01Ch
-    _emit 08Bh
-    _emit 044h
-    _emit 024h
-    _emit 018h
-    _emit 089h
-    _emit 010h
-    _emit 001h
-    _emit 07Eh
-    _emit 010h
-    _emit 08Bh
-    _emit 0C7h
-    _emit 05Fh
-    _emit 0C6h
-    _emit 046h
-    _emit 020h
-    _emit 001h
-    _emit 05Eh
-    _emit 05Dh
-    _emit 05Bh
-    _emit 0C2h
-    _emit 00Ch
-    _emit 000h
-    _emit 08Bh
-    _emit 0FFh
-    _emit 084h
-    _emit 048h
-    _emit 07Ah
-    _emit 000h
-    _emit 096h
-    _emit 048h
-    _emit 07Ah
-    _emit 000h
-    _emit 0A9h
-    _emit 048h
-    _emit 07Ah
-    _emit 000h
-    _emit 0BCh
-    _emit 048h
-    _emit 07Ah
-    _emit 000h
-    _emit 0CCh
-    _emit 0CCh
-    _emit 0CCh
-    _emit 0CCh
-    _emit 0CCh
-    _emit 0CCh
-    _emit 0CCh
-    _emit 0CCh
-    _emit 051h
-    _emit 053h
-    _emit 055h
-    _emit 08Bh
-    _emit 06Ch
-    _emit 024h
-    _emit 010h
-    _emit 081h
-    _emit 0FDh
-    _emit 0FFh
-    _emit 07Fh
-    _emit 000h
-    _emit 000h
-    _emit 056h
-    _emit 08Bh
-    _emit 035h
-    _emit 084h
-    _emit 0DCh
-    _emit 05Dh
-    _emit 001h
-    _emit 057h
-    _emit 089h
-    _emit 04Ch
-    _emit 024h
-    _emit 010h
-    _emit 08Dh
-    _emit 05Eh
-    _emit 034h
-    _emit 00Fh
-    _emit 08Fh
-    _emit 09Eh
-    _emit 000h
-    _emit 000h
-    _emit 000h
-    _emit 08Bh
-    _emit 07Ch
-    _emit 024h
-    _emit 024h
-    _emit 081h
-    _emit 0FFh
-    _emit 000h
-    _emit 000h
-    _emit 001h
-    _emit 000h
-    _emit 00Fh
-    _emit 08Fh
-    _emit 08Eh
-    _emit 000h
-    _emit 000h
-    _emit 000h
-    _emit 08Bh
-    _emit 046h
-    _emit 010h
-    _emit 003h
-    _emit 0C5h
-    _emit 03Bh
-    _emit 046h
-    _emit 008h
-    _emit 07Fh
-    _emit 00Ah
-    _emit 08Bh
-    _emit 056h
-    _emit 02Ch
-    _emit 003h
-    _emit 0D7h
-    _emit 03Bh
-    _emit 056h
-    _emit 024h
-    _emit 07Eh
-    _emit 009h
-    call EXT_7a4710
-    _emit 08Bh
-    _emit 04Ch
-    _emit 024h
-    _emit 010h
-    _emit 08Bh
-    _emit 044h
-    _emit 024h
-    _emit 020h
-    _emit 08Bh
-    _emit 054h
-    _emit 024h
-    _emit 01Ch
-    _emit 050h
-    _emit 052h
-    _emit 055h
-    call EXT_7a47c0
-    _emit 033h
-    _emit 0EDh
-    _emit 039h
-    _emit 06Eh
-    _emit 028h
-    _emit 075h
-    _emit 03Ch
-    _emit 0B8h
-    _emit 056h
-    _emit 055h
-    _emit 055h
-    _emit 055h
-    _emit 0F7h
-    _emit 0EFh
-    _emit 055h
-    _emit 06Ah
-    _emit 004h
-    _emit 08Bh
-    _emit 0C2h
-    _emit 06Ah
-    _emit 008h
-    _emit 0C1h
-    _emit 0E8h
-    _emit 01Fh
-    _emit 057h
-    _emit 003h
-    _emit 0C2h
-    _emit 050h
-    _emit 068h
-    _emit 0B0h
-    _emit 007h
-    _emit 05Dh
-    _emit 001h
-    _emit 089h
-    _emit 07Eh
-    _emit 024h
-    call EXT_762c60
-    _emit 083h
-    _emit 0C4h
-    _emit 018h
-    _emit 053h
-    _emit 06Ah
-    _emit 006h
-    _emit 08Bh
-    _emit 0C8h
-    _emit 089h
-    _emit 046h
-    _emit 028h
-    _emit 089h
-    _emit 06Eh
-    _emit 02Ch
-    _emit 089h
-    _emit 06Eh
-    _emit 030h
-    call EXT_11f4f20
-    _emit 085h
-    _emit 0C0h
-    _emit 074h
-    _emit 01Eh
-    _emit 08Bh
-    _emit 04Eh
-    _emit 02Ch
-    _emit 08Bh
-    _emit 013h
-    _emit 08Dh
-    _emit 004h
-    _emit 04Ah
-    _emit 08Bh
-    _emit 04Ch
-    _emit 024h
-    _emit 028h
-    _emit 089h
-    _emit 001h
-    _emit 001h
-    _emit 07Eh
-    _emit 02Ch
-    _emit 05Fh
-    _emit 0B0h
-    _emit 001h
-    _emit 088h
-    _emit 046h
-    _emit 040h
-    _emit 05Eh
-    _emit 05Dh
-    _emit 05Bh
-    _emit 059h
-    _emit 0C2h
-    _emit 014h
-    _emit 000h
-    _emit 05Fh
-    _emit 05Eh
-    _emit 05Dh
-    _emit 032h
-    _emit 0C0h
-    _emit 05Bh
-    _emit 059h
-    _emit 0C2h
-    _emit 014h
-    _emit 000h
-  }
-}
-
-// @ 0x007a49e0
-__declspec(naked) void FUN_007a49e0() {
-  __asm {
-    _emit 056h
-    _emit 057h
-    call EXT_11f8af0
-    _emit 08Bh
-    _emit 074h
-    _emit 024h
-    _emit 00Ch
-    _emit 08Bh
-    _emit 015h
-    _emit 058h
-    _emit 024h
-    _emit 071h
-    _emit 001h
-    _emit 08Bh
-    _emit 000h
-    _emit 08Bh
-    _emit 00Dh
-    _emit 0C8h
-    _emit 089h
-    _emit 06Fh
-    _emit 001h
-    _emit 08Bh
-    _emit 039h
-    _emit 056h
-    _emit 06Ah
-    _emit 003h
-    _emit 06Ah
-    _emit 001h
-    _emit 052h
-    _emit 050h
-    call EXT_11f8af0
-    _emit 08Bh
-    _emit 048h
-    _emit 004h
-    _emit 08Bh
-    _emit 015h
-    _emit 0C8h
-    _emit 089h
-    _emit 06Fh
-    _emit 001h
-    _emit 08Bh
-    _emit 047h
-    _emit 028h
-    _emit 051h
-    _emit 052h
-    _emit 0FFh
-    _emit 0D0h
-    _emit 085h
-    _emit 0C0h
-    _emit 07Ch
-    _emit 03Dh
-    call EXT_11f8af0
-    _emit 08Bh
-    _emit 015h
-    _emit 0C4h
-    _emit 08Bh
-    _emit 06Fh
-    _emit 001h
-    _emit 08Bh
-    _emit 00Dh
-    _emit 0C8h
-    _emit 089h
-    _emit 06Fh
-    _emit 001h
-    _emit 08Bh
-    _emit 039h
-    _emit 08Bh
-    _emit 00Dh
-    _emit 058h
-    _emit 024h
-    _emit 071h
-    _emit 001h
-    _emit 052h
-    _emit 08Bh
-    _emit 010h
-    _emit 056h
-    _emit 051h
-    _emit 052h
-    call EXT_11f8af0
-    _emit 08Bh
-    _emit 040h
-    _emit 004h
-    _emit 08Bh
-    _emit 00Dh
-    _emit 0C8h
-    _emit 089h
-    _emit 06Fh
-    _emit 001h
-    _emit 08Bh
-    _emit 057h
-    _emit 030h
-    _emit 050h
-    _emit 051h
-    _emit 0FFh
-    _emit 0D2h
-    _emit 085h
-    _emit 0C0h
-    _emit 07Ch
-    _emit 005h
-    _emit 05Fh
-    _emit 0B0h
-    _emit 001h
-    _emit 05Eh
-    _emit 0C3h
-    _emit 05Fh
-    _emit 032h
-    _emit 0C0h
-    _emit 05Eh
-    _emit 0C3h
-  }
-}
-
-// @ 0x007a4cb0
-__declspec(naked) void FUN_007a4cb0() {
-  __asm {
-    _emit 053h
-    _emit 056h
-    _emit 057h
-    _emit 08Bh
-    _emit 0F1h
-    call EXT_75fb90
-    _emit 08Bh
-    _emit 05Eh
-    _emit 010h
-    _emit 08Bh
-    _emit 0F8h
-    _emit 03Bh
-    _emit 0FBh
-    _emit 074h
-    _emit 01Ch
-    _emit 085h
-    _emit 0FFh
-    _emit 074h
-    _emit 008h
-    _emit 08Bh
-    _emit 007h
-    _emit 08Bh
-    _emit 010h
-    _emit 08Bh
-    _emit 0CFh
-    _emit 0FFh
-    _emit 0D2h
-    _emit 089h
-    _emit 07Eh
-    _emit 010h
-    _emit 085h
-    _emit 0DBh
-    _emit 074h
-    _emit 009h
-    _emit 08Bh
-    _emit 003h
-    _emit 08Bh
-    _emit 050h
-    _emit 004h
-    _emit 08Bh
-    _emit 0CBh
-    _emit 0FFh
-    _emit 0D2h
-    _emit 08Bh
-    _emit 04Eh
-    _emit 010h
-    _emit 08Bh
-    _emit 001h
-    _emit 08Bh
-    _emit 050h
-    _emit 00Ch
-    _emit 0FFh
-    _emit 0D2h
-    _emit 084h
-    _emit 0C0h
-    _emit 074h
-    _emit 012h
-    _emit 08Bh
-    _emit 046h
-    _emit 010h
-    _emit 050h
-    call EXT_67df60
-    _emit 083h
-    _emit 0C4h
-    _emit 004h
-    _emit 05Fh
-    _emit 05Eh
-    _emit 0B0h
-    _emit 001h
-    _emit 05Bh
-    _emit 0C3h
-    _emit 08Bh
-    _emit 04Eh
-    _emit 010h
-    _emit 085h
-    _emit 0C9h
-    _emit 074h
-    _emit 00Eh
-    _emit 0C7h
-    _emit 046h
-    _emit 010h
-    _emit 000h
-    _emit 000h
-    _emit 000h
-    _emit 000h
-    _emit 08Bh
-    _emit 011h
-    _emit 08Bh
-    _emit 042h
-    _emit 004h
-    _emit 0FFh
-    _emit 0D0h
-    _emit 05Fh
-    _emit 05Eh
-    _emit 032h
-    _emit 0C0h
-    _emit 05Bh
-    _emit 0C3h
-  }
-}
-
-// @ 0x007a4d90
-__declspec(naked) void FUN_007a4d90() {
-  __asm {
-    _emit 051h
-    _emit 0A1h
-    _emit 018h
-    _emit 0D9h
-    _emit 05Fh
-    _emit 001h
-    _emit 056h
-    _emit 08Bh
-    _emit 0F1h
-    _emit 08Bh
-    _emit 048h
-    _emit 03Ch
-    _emit 083h
-    _emit 0B9h
-    _emit 030h
-    _emit 001h
-    _emit 000h
-    _emit 000h
-    _emit 000h
-    _emit 00Fh
-    _emit 095h
-    _emit 0C0h
-    _emit 038h
-    _emit 086h
-    _emit 090h
-    _emit 001h
-    _emit 000h
-    _emit 000h
-    _emit 074h
-    _emit 025h
-    _emit 06Ah
-    _emit 004h
-    _emit 088h
-    _emit 086h
-    _emit 090h
-    _emit 001h
-    _emit 000h
-    _emit 000h
-    call EXT_6ad7c0
-    _emit 06Ah
-    _emit 005h
-    call EXT_6ad7c0
-    _emit 06Ah
-    _emit 009h
-    call EXT_6ad7c0
-    _emit 06Ah
-    _emit 00Ah
-    call EXT_6ad7c0
-    _emit 083h
-    _emit 0C4h
-    _emit 010h
-    _emit 08Bh
-    _emit 04Eh
-    _emit 024h
-    _emit 085h
-    _emit 0C9h
-    _emit 074h
-    _emit 022h
-    _emit 0F3h
-    _emit 00Fh
-    _emit 010h
-    _emit 044h
-    _emit 024h
-    _emit 010h
-    _emit 0F3h
-    _emit 00Fh
-    _emit 059h
-    _emit 005h
-    _emit 0B4h
-    _emit 0C5h
-    _emit 03Eh
-    _emit 001h
-    _emit 0F3h
-    _emit 00Fh
-    _emit 011h
-    _emit 044h
-    _emit 024h
-    _emit 004h
-    _emit 0F3h
-    _emit 00Fh
-    _emit 02Dh
-    _emit 044h
-    _emit 024h
-    _emit 004h
-    _emit 08Bh
-    _emit 011h
-    _emit 050h
-    _emit 08Bh
-    _emit 042h
-    _emit 014h
-    _emit 0FFh
-    _emit 0D0h
-    _emit 08Bh
-    _emit 04Eh
-    _emit 014h
-    _emit 085h
-    _emit 0C9h
-    _emit 074h
-    _emit 007h
-    _emit 08Bh
-    _emit 011h
-    _emit 08Bh
-    _emit 042h
-    _emit 014h
-    _emit 0FFh
-    _emit 0D0h
-    _emit 08Bh
-    _emit 04Eh
-    _emit 020h
-    _emit 085h
-    _emit 0C9h
-    _emit 074h
-    _emit 007h
-    _emit 08Bh
-    _emit 011h
-    _emit 08Bh
-    _emit 042h
-    _emit 014h
-    _emit 0FFh
-    _emit 0D0h
-    _emit 08Bh
-    _emit 04Eh
-    _emit 028h
-    _emit 05Eh
-    _emit 085h
-    _emit 0C9h
-    _emit 074h
-    _emit 019h
-    _emit 0D9h
-    _emit 044h
-    _emit 024h
-    _emit 00Ch
-    _emit 08Bh
-    _emit 011h
-    _emit 08Bh
-    _emit 042h
-    _emit 038h
-    _emit 083h
-    _emit 0ECh
-    _emit 008h
-    _emit 0D9h
-    _emit 05Ch
-    _emit 024h
-    _emit 004h
-    _emit 0D9h
-    _emit 044h
-    _emit 024h
-    _emit 010h
-    _emit 0D9h
-    _emit 01Ch
-    _emit 024h
-    _emit 0FFh
-    _emit 0D0h
-    _emit 059h
-    _emit 0C2h
-    _emit 008h
-    _emit 000h
-  }
-}
-
-// @ 0x007a4e40
-__declspec(naked) void FUN_007a4e40() {
-  __asm {
-    _emit 083h
-    _emit 0ECh
-    _emit 024h
-    _emit 056h
-    _emit 08Bh
-    _emit 0F1h
-    call EXT_67dd10
-    _emit 08Bh
-    _emit 010h
-    _emit 06Ah
-    _emit 000h
-    _emit 06Ah
-    _emit 000h
-    _emit 06Ah
-    _emit 000h
-    _emit 08Dh
-    _emit 04Ch
-    _emit 024h
-    _emit 018h
-    _emit 051h
-    _emit 08Bh
-    _emit 0C8h
-    _emit 08Bh
-    _emit 042h
-    _emit 058h
-    _emit 0FFh
-    _emit 0D0h
-    _emit 08Bh
-    _emit 0C8h
-    call EXT_7c3d30
-    _emit 0D9h
-    _emit 086h
-    _emit 084h
-    _emit 001h
-    _emit 000h
-    _emit 000h
-    _emit 0D9h
-    _emit 044h
-    _emit 024h
-    _emit 014h
-    _emit 00Fh
-    _emit 057h
-    _emit 0C0h
-    _emit 0DCh
-    _emit 0C8h
-    _emit 0F3h
-    _emit 00Fh
-    _emit 011h
-    _emit 044h
-    _emit 024h
-    _emit 008h
-    _emit 0D9h
-    _emit 044h
-    _emit 024h
-    _emit 010h
-    _emit 0F3h
-    _emit 00Fh
-    _emit 010h
-    _emit 005h
-    _emit 020h
-    _emit 057h
-    _emit 048h
-    _emit 001h
-    _emit 0DCh
-    _emit 0C8h
-    _emit 0F3h
-    _emit 00Fh
-    _emit 011h
-    _emit 044h
-    _emit 024h
-    _emit 004h
-    _emit 0DEh
-    _emit 0C1h
-    _emit 0D9h
-    _emit 044h
-    _emit 024h
-    _emit 00Ch
-    _emit 0DCh
-    _emit 0C8h
-    _emit 0DEh
-    _emit 0C1h
-    _emit 0D9h
-    _emit 0FAh
-    _emit 0D8h
-    _emit 0E1h
-    _emit 0D9h
-    _emit 086h
-    _emit 080h
-    _emit 001h
-    _emit 000h
-    _emit 000h
-    _emit 0DEh
-    _emit 0E2h
-    _emit 0DEh
-    _emit 0F1h
-    _emit 0D9h
-    _emit 05Ch
-    _emit 024h
-    _emit 018h
-    _emit 0F3h
-    _emit 00Fh
-    _emit 010h
-    _emit 044h
-    _emit 024h
-    _emit 018h
-    _emit 0F3h
-    _emit 00Fh
-    _emit 05Fh
-    _emit 044h
-    _emit 024h
-    _emit 008h
-    _emit 0F3h
-    _emit 00Fh
-    _emit 05Dh
-    _emit 044h
-    _emit 024h
-    _emit 004h
-    _emit 0F3h
-    _emit 00Fh
-    _emit 011h
-    _emit 044h
-    _emit 024h
-    _emit 018h
-    _emit 0F3h
-    _emit 00Fh
-    _emit 010h
-    _emit 086h
-    _emit 07Ch
-    _emit 001h
-    _emit 000h
-    _emit 000h
-    _emit 0F3h
-    _emit 00Fh
-    _emit 010h
-    _emit 08Eh
-    _emit 078h
-    _emit 001h
-    _emit 000h
-    _emit 000h
-    _emit 0F3h
-    _emit 00Fh
-    _emit 05Ch
-    _emit 0C8h
-    _emit 0F3h
-    _emit 00Fh
-    _emit 059h
-    _emit 04Ch
-    _emit 024h
-    _emit 018h
-    _emit 0F3h
-    _emit 00Fh
-    _emit 058h
-    _emit 0C8h
-    _emit 0F3h
-    _emit 00Fh
-    _emit 011h
-    _emit 08Eh
-    _emit 074h
-    _emit 001h
-    _emit 000h
-    _emit 000h
-    _emit 05Eh
-    _emit 083h
-    _emit 0C4h
-    _emit 024h
-    _emit 0C3h
-  }
-}
-
-// @ 0x007a4f50
-__declspec(naked) void FUN_007a4f50() {
-  __asm {
-    _emit 083h
-    _emit 0ECh
-    _emit 014h
-    _emit 083h
-    _emit 0C8h
-    _emit 0FFh
-    _emit 089h
-    _emit 004h
-    _emit 024h
-    _emit 089h
-    _emit 044h
-    _emit 024h
-    _emit 004h
-    _emit 08Bh
-    _emit 044h
-    _emit 024h
-    _emit 018h
-    _emit 056h
-    _emit 057h
-    _emit 08Bh
-    _emit 0F1h
-    _emit 085h
-    _emit 0C0h
-    _emit 075h
-    _emit 00Ah
-    _emit 08Bh
-    _emit 006h
-    _emit 08Bh
-    _emit 090h
-    _emit 0B0h
-    _emit 000h
-    _emit 000h
-    _emit 000h
-    _emit 0EBh
-    _emit 03Ah
-    _emit 083h
-    _emit 0F8h
-    _emit 001h
-    _emit 075h
-    _emit 00Ah
-    _emit 08Bh
-    _emit 006h
-    _emit 08Bh
-    _emit 090h
-    _emit 0ACh
-    _emit 000h
-    _emit 000h
-    _emit 000h
-    _emit 0EBh
-    _emit 02Bh
-    _emit 083h
-    _emit 0F8h
-    _emit 002h
-    _emit 075h
-    _emit 00Ah
-    _emit 08Bh
-    _emit 006h
-    _emit 08Bh
-    _emit 090h
-    _emit 0BCh
-    _emit 000h
-    _emit 000h
-    _emit 000h
-    _emit 0EBh
-    _emit 01Ch
-    _emit 083h
-    _emit 0F8h
-    _emit 004h
-    _emit 075h
-    _emit 00Ah
-    _emit 08Bh
-    _emit 006h
-    _emit 08Bh
-    _emit 090h
-    _emit 0B8h
-    _emit 000h
-    _emit 000h
-    _emit 000h
-    _emit 0EBh
-    _emit 00Dh
-    _emit 083h
-    _emit 0F8h
-    _emit 003h
-    _emit 075h
-    _emit 011h
-    _emit 08Bh
-    _emit 006h
-    _emit 08Bh
-    _emit 090h
-    _emit 0B4h
-    _emit 000h
-    _emit 000h
-    _emit 000h
-    _emit 08Dh
-    _emit 04Ch
-    _emit 024h
-    _emit 008h
-    _emit 051h
-    _emit 08Bh
-    _emit 0CEh
-    _emit 0FFh
-    _emit 0D2h
-    _emit 08Bh
-    _emit 054h
-    _emit 024h
-    _emit 00Ch
-    _emit 08Bh
-    _emit 04Eh
-    _emit 018h
-    _emit 08Bh
-    _emit 076h
-    _emit 014h
-    _emit 08Bh
-    _emit 001h
-    _emit 08Bh
-    _emit 03Eh
-    _emit 08Bh
-    _emit 040h
-    _emit 01Ch
-    _emit 052h
-    _emit 08Bh
-    _emit 054h
-    _emit 024h
-    _emit 00Ch
-    _emit 052h
-    _emit 083h
-    _emit 0C7h
-    _emit 02Ch
-    _emit 0FFh
-    _emit 0D0h
-    _emit 08Bh
-    _emit 017h
-    _emit 050h
-    _emit 08Dh
-    _emit 04Ch
-    _emit 024h
-    _emit 014h
-    _emit 051h
-    _emit 08Bh
-    _emit 0CEh
-    _emit 0FFh
-    _emit 0D2h
-    _emit 08Bh
-    _emit 010h
-    _emit 08Bh
-    _emit 04Ch
-    _emit 024h
-    _emit 024h
-    _emit 089h
-    _emit 011h
-    _emit 08Bh
-    _emit 050h
-    _emit 004h
-    _emit 089h
-    _emit 051h
-    _emit 004h
-    _emit 08Bh
-    _emit 040h
-    _emit 008h
-    _emit 05Fh
-    _emit 089h
-    _emit 041h
-    _emit 008h
-    _emit 05Eh
-    _emit 083h
-    _emit 0C4h
-    _emit 014h
-    _emit 0C2h
-    _emit 008h
-    _emit 000h
-  }
-}
-
-// @ 0x007a5020
-__declspec(naked) void FUN_007a5020() {
-  __asm {
-    _emit 056h
-    _emit 057h
-    _emit 08Bh
-    _emit 0F1h
-    _emit 033h
-    _emit 0FFh
-    _emit 039h
-    _emit 07Eh
-    _emit 054h
-    _emit 074h
-    _emit 04Ch
-    _emit 08Bh
-    _emit 096h
-    _emit 0DCh
-    _emit 000h
-    _emit 000h
-    _emit 000h
-    _emit 08Bh
-    _emit 04Eh
-    _emit 018h
-    _emit 08Bh
-    _emit 001h
-    _emit 08Bh
-    _emit 040h
-    _emit 014h
-    _emit 052h
-    _emit 08Bh
-    _emit 096h
-    _emit 0D8h
-    _emit 000h
-    _emit 000h
-    _emit 000h
-    _emit 052h
-    _emit 0FFh
-    _emit 0D0h
-    _emit 08Bh
-    _emit 046h
-    _emit 054h
-    _emit 03Bh
-    _emit 0C7h
-    _emit 074h
-    _emit 02Dh
-    _emit 083h
-    _emit 0C0h
-    _emit 008h
-    _emit 089h
-    _emit 07Eh
-    _emit 054h
-    _emit 08Bh
-    _emit 0C8h
-    _emit 083h
-    _emit 0CAh
-    _emit 0FFh
-    _emit 0F0h
-    _emit 00Fh
-    _emit 0C1h
-    _emit 011h
-    _emit 033h
-    _emit 0C9h
-    _emit 08Bh
-    _emit 0D0h
-    _emit 0F0h
-    _emit 00Fh
-    _emit 0C1h
-    _emit 00Ah
-    _emit 083h
-    _emit 0F9h
-    _emit 001h
-    _emit 07Dh
-    _emit 00Bh
-    _emit 0B9h
-    _emit 001h
-    _emit 000h
-    _emit 000h
-    _emit 000h
-    _emit 0F0h
-    _emit 00Fh
-    _emit 0C1h
-    _emit 008h
-    _emit 0EBh
-    _emit 006h
-    _emit 033h
-    _emit 0D2h
-    _emit 0F0h
-    _emit 00Fh
-    _emit 0C1h
-    _emit 010h
-    _emit 039h
-    _emit 07Eh
-    _emit 06Ch
-    _emit 074h
-    _emit 04Ch
-    _emit 08Bh
-    _emit 096h
-    _emit 004h
-    _emit 001h
-    _emit 000h
-    _emit 000h
-    _emit 08Bh
-    _emit 04Eh
-    _emit 018h
-    _emit 08Bh
-    _emit 001h
-    _emit 08Bh
-    _emit 040h
-    _emit 014h
-    _emit 052h
-    _emit 08Bh
-    _emit 096h
-    _emit 000h
-    _emit 001h
-    _emit 000h
-    _emit 000h
-    _emit 052h
-    _emit 0FFh
-    _emit 0D0h
-    _emit 08Bh
-    _emit 046h
-    _emit 06Ch
-    _emit 03Bh
-    _emit 0C7h
-    _emit 074h
-    _emit 02Dh
-    _emit 083h
-    _emit 0C0h
-    _emit 008h
-    _emit 089h
-    _emit 07Eh
-    _emit 06Ch
-    _emit 08Bh
-    _emit 0C8h
-    _emit 083h
-    _emit 0CAh
-    _emit 0FFh
-    _emit 0F0h
-    _emit 00Fh
-    _emit 0C1h
-    _emit 011h
-    _emit 033h
-    _emit 0C9h
-    _emit 08Bh
-    _emit 0D0h
-    _emit 0F0h
-    _emit 00Fh
-    _emit 0C1h
-    _emit 00Ah
-    _emit 083h
-    _emit 0F9h
-    _emit 001h
-    _emit 07Dh
-    _emit 00Bh
-    _emit 0B9h
-    _emit 001h
-    _emit 000h
-    _emit 000h
-    _emit 000h
-    _emit 0F0h
-    _emit 00Fh
-    _emit 0C1h
-    _emit 008h
-    _emit 0EBh
-    _emit 006h
-    _emit 033h
-    _emit 0D2h
-    _emit 0F0h
-    _emit 00Fh
-    _emit 0C1h
-    _emit 010h
-    _emit 039h
-    _emit 07Eh
-    _emit 060h
-    _emit 074h
-    _emit 04Ch
-    _emit 08Bh
-    _emit 096h
-    _emit 0F4h
-    _emit 000h
-    _emit 000h
-    _emit 000h
-    _emit 08Bh
-    _emit 04Eh
-    _emit 018h
-    _emit 08Bh
-    _emit 001h
-    _emit 08Bh
-    _emit 040h
-    _emit 014h
-    _emit 052h
-    _emit 08Bh
-    _emit 096h
-    _emit 0F0h
-    _emit 000h
-    _emit 000h
-    _emit 000h
-    _emit 052h
-    _emit 0FFh
-    _emit 0D0h
-    _emit 08Bh
-    _emit 046h
-    _emit 060h
-    _emit 03Bh
-    _emit 0C7h
-    _emit 074h
-    _emit 02Dh
-    _emit 083h
-    _emit 0C0h
-    _emit 008h
-    _emit 089h
-    _emit 07Eh
-    _emit 060h
-    _emit 08Bh
-    _emit 0C8h
-    _emit 083h
-    _emit 0CAh
-    _emit 0FFh
-    _emit 0F0h
-    _emit 00Fh
-    _emit 0C1h
-    _emit 011h
-    _emit 033h
-    _emit 0C9h
-    _emit 08Bh
-    _emit 0D0h
-    _emit 0F0h
-    _emit 00Fh
-    _emit 0C1h
-    _emit 00Ah
-    _emit 083h
-    _emit 0F9h
-    _emit 001h
-    _emit 07Dh
-    _emit 00Bh
-    _emit 0B9h
-    _emit 001h
-    _emit 000h
-    _emit 000h
-    _emit 000h
-    _emit 0F0h
-    _emit 00Fh
-    _emit 0C1h
-    _emit 008h
-    _emit 0EBh
-    _emit 006h
-    _emit 033h
-    _emit 0D2h
-    _emit 0F0h
-    _emit 00Fh
-    _emit 0C1h
-    _emit 010h
-    _emit 039h
-    _emit 07Eh
-    _emit 064h
-    _emit 074h
-    _emit 04Ch
-    _emit 08Bh
-    _emit 096h
-    _emit 0FCh
-    _emit 000h
-    _emit 000h
-    _emit 000h
-    _emit 08Bh
-    _emit 04Eh
-    _emit 018h
-    _emit 08Bh
-    _emit 001h
-    _emit 08Bh
-    _emit 040h
-    _emit 014h
-    _emit 052h
-    _emit 08Bh
-    _emit 096h
-    _emit 0F8h
-    _emit 000h
-    _emit 000h
-    _emit 000h
-    _emit 052h
-    _emit 0FFh
-    _emit 0D0h
-    _emit 08Bh
-    _emit 046h
-    _emit 064h
-    _emit 03Bh
-    _emit 0C7h
-    _emit 074h
-    _emit 02Dh
-    _emit 083h
-    _emit 0C0h
-    _emit 008h
-    _emit 089h
-    _emit 07Eh
-    _emit 064h
-    _emit 08Bh
-    _emit 0C8h
-    _emit 083h
-    _emit 0CAh
-    _emit 0FFh
-    _emit 0F0h
-    _emit 00Fh
-    _emit 0C1h
-    _emit 011h
-    _emit 033h
-    _emit 0C9h
-    _emit 08Bh
-    _emit 0D0h
-    _emit 0F0h
-    _emit 00Fh
-    _emit 0C1h
-    _emit 00Ah
-    _emit 083h
-    _emit 0F9h
-    _emit 001h
-    _emit 07Dh
-    _emit 00Bh
-    _emit 0B9h
-    _emit 001h
-    _emit 000h
-    _emit 000h
-    _emit 000h
-    _emit 0F0h
-    _emit 00Fh
-    _emit 0C1h
-    _emit 008h
-    _emit 0EBh
-    _emit 006h
-    _emit 033h
-    _emit 0D2h
-    _emit 0F0h
-    _emit 00Fh
-    _emit 0C1h
-    _emit 010h
-    _emit 039h
-    _emit 07Eh
-    _emit 070h
-    _emit 074h
-    _emit 04Ch
-    _emit 08Bh
-    _emit 096h
-    _emit 00Ch
-    _emit 001h
-    _emit 000h
-    _emit 000h
-    _emit 08Bh
-    _emit 04Eh
-    _emit 018h
-    _emit 08Bh
-    _emit 001h
-    _emit 08Bh
-    _emit 040h
-    _emit 014h
-    _emit 052h
-    _emit 08Bh
-    _emit 096h
-    _emit 008h
-    _emit 001h
-    _emit 000h
-    _emit 000h
-    _emit 052h
-    _emit 0FFh
-    _emit 0D0h
-    _emit 08Bh
-    _emit 046h
-    _emit 070h
-    _emit 03Bh
-    _emit 0C7h
-    _emit 074h
-    _emit 02Dh
-    _emit 083h
-    _emit 0C0h
-    _emit 008h
-    _emit 089h
-    _emit 07Eh
-    _emit 070h
-    _emit 08Bh
-    _emit 0C8h
-    _emit 083h
-    _emit 0CAh
-    _emit 0FFh
-    _emit 0F0h
-    _emit 00Fh
-    _emit 0C1h
-    _emit 011h
-    _emit 033h
-    _emit 0C9h
-    _emit 08Bh
-    _emit 0D0h
-    _emit 0F0h
-    _emit 00Fh
-    _emit 0C1h
-    _emit 00Ah
-    _emit 083h
-    _emit 0F9h
-    _emit 001h
-    _emit 07Dh
-    _emit 00Bh
-    _emit 0B9h
-    _emit 001h
-    _emit 000h
-    _emit 000h
-    _emit 000h
-    _emit 0F0h
-    _emit 00Fh
-    _emit 0C1h
-    _emit 008h
-    _emit 0EBh
-    _emit 006h
-    _emit 033h
-    _emit 0D2h
-    _emit 0F0h
-    _emit 00Fh
-    _emit 0C1h
-    _emit 010h
-    _emit 08Bh
-    _emit 006h
-    _emit 08Bh
-    _emit 050h
-    _emit 034h
-    _emit 05Fh
-    _emit 08Bh
-    _emit 0CEh
-    _emit 05Eh
-    _emit 0FFh
-    _emit 0E2h
-  }
+// ---------------------------------------------------------------------------
+// @ 0x007a5020  SP::cGraphicsSystem::RecycleBakingRTTs — release the six
+// baking render targets and the rectangles they were allocated from.  `ret 8`:
+// two stack arguments present but unused.
+// ---------------------------------------------------------------------------
+void cGraphicsSystem::RecycleBakingRTTs(u32 /*param_1*/, u32 /*param_2*/) {
+  ReleaseRTT(mGIFExportTexture, mGIFExportRectID);
+  ReleaseRTT(mShadowBlurTexture, mUnk100);
+  ReleaseRTT(mAOTexture, mFinalBakedTextureRectID);
+  ReleaseRTT(mFinalBakedTexture, mSmallFinalBakedTextureRectID);
+  ReleaseRTT(mShadowTexture, mUnk108);
+  (*(void(**)(void))(*(u32*)this + 0x34))();
 }
