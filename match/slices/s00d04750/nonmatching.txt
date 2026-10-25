@@ -1,2 +1,15 @@
 00d051e0 26 vector erase-range; MSVC assigns this to ebx and arg2 to edi (original keeps this in edi, arg2 in ebx) and reorders the loop setup, same 93 bytes
 00d05560 72 map-key erase; MSVC assigns this to esi and end to edi (original keeps this in edi, end in esi); block layout of the p==end||key<p->key test differs, 100 vs 109 bytes
+00d04750 292 rbtree insert-with-hint (eastl RBTreeIncrement/insert, node copy); same control flow, register allocation and inlined node allocation differ (equiv PASS)
+00d04910 157 relationship message dispatch (four vtable-slot calls); same dispatch tree, tail/register layout differs (equiv WEAK)
+00d04aa0 472 world-map serializer (stream reads + cVarListSerializer); eastl copy-constructor inlined differently (equiv WEAK)
+00d04d10 167 destructor (map nukes, vector frees, RemoveHandler); loop setup and tail layout differ (equiv WEAK, 100% coverage)
+00d04e90 241 find-or-insert (lower_bound + insert + two temp-tree nukes); lower_bound and tree copy-constructor inlined (equiv PASS, 100% coverage)
+00d05010 182 constructor (vtable/field init + two map anchors); extra byte/word stores and store order differ (equiv PASS, 100% coverage)
+00d05140 116 vector reserve (deep copy, destroy old range, free); copy/destroy helpers inlined differently (equiv PASS)
+00d05240 249 vector insert/grow helper; element move/copy and growth path layout differ (equiv UNSUPPORTED)
+00d053e0 271 manager reset (map/vector/bit-vector clears, global class-tree reset); inlined resets and pointer arithmetic differ (equiv PASS, 100% coverage)
+00d055d0 199 map find-or-append; inlined lower_bound and element insert differ (equiv PASS)
+00d056c0 81 embassy lookup (active planet record -> comm context -> nested map); same calls, 111 vs 105 bytes (equiv WEAK, 100% coverage)
+00d05730 169 map insert path; same call sequence, tail/register layout differs (equiv WEAK)
+00d05830 135 map erase/reset; extra inlined clear path, 134 vs 107 bytes (equiv PASS, 100% coverage)
