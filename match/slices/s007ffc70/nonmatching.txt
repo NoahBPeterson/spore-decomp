@@ -3,3 +3,4 @@
 00801980 2   arg-home-slot-reuse (complete)
 008016e0 268 member-float/SSE-shape (complete)
 008017f0 276 member-vtable-sequence: restored the success path's `t->v64(0,0)`, `m4c->v7c(1,1)`, `t->v7c(1,1)`, `f_804ed0(&x,&y)`, and `this->v38(x,y)` sequence; replay None, equiv PASS 209 valid/66.1% coverage (default) and PASS 1023 valid/66.1% (--inputs 2000); --src PASS. Not byte-exact (288 vs 292; register allocation/vtable sequence shape).
+007ffc70  887/1004  cSPUIBehaviorPredicateWinState::Evaluate complete (20-case switch: window-state bits 0x28/0x2c, parent/child window queries 0x48, geometry compare, id matches 0x30/0xa4, hex-param search 0xf0/iterator, rect compare 0xc4/0x38, 0x10-0x12 window geometry 0xf8). [equiv: WEAK, 348 valid, 4.5% coverage]

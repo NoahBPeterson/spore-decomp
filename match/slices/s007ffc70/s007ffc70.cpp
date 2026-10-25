@@ -24,6 +24,7 @@ void  __cdecl f_804f10(float a, float b);
 void  __cdecl f_804ed0(float* a, float* b);
 bool  __cdecl f_806a60(void* a, void* b, int c, int d);
 void* __cdecl f_805070(uint32_t id);          // SPUIHelpers::GetLayoutManager
+void* __stdcall f_spuiLayoutMgr(uint32_t id); // 0x805070 callee-cleans variant (ret 4)
 void* __cdecl f_80620(void* manager);         // cSPUILayoutManager::GetWorldMainWindow
 void* __cdecl f_962a10(void* p);              // UI::Window::Window
 void  __fastcall f_800060_base(void* p);
@@ -49,7 +50,14 @@ struct CanvasObj { virtual void c0();  virtual void c1();  virtual void c2();  v
                    virtual void c24(); virtual void c25(); virtual void c26(); virtual void c27();
                    virtual void c28(); virtual void c29(); virtual void c30(); };
 struct RCBase { virtual void rc0(); virtual void Release(); };
-class cSPUILayout { public: void* FindWindowByID(uint32_t id, bool recursive); };
+class cSPUILayout { public:
+  void* Ctor();                                   // 0x00810000
+  void* FindWindowByID(uint32_t id, bool recursive);
+  bool  Init(const wchar_t* name, int group, int b, unsigned id);   // 0x00812160
+  void  SetVisibility(bool v);                    // 0x00810590
+};
+struct WindowObj { void* WindowCtor(); };         // EA::UTFWin::Window::Window (0x00962a10)
+struct LayoutMgr { void* GetWorldMainWindow(); }; // cSPUILayoutManager (0x00810620)
 
 struct cSPUIFrameSequencer { cSPUIFrameSequencer(); };
 class cSPUIBehaviorWinEventBase { public: cSPUIBehaviorWinEventBase(int, int, int); };
@@ -70,6 +78,9 @@ extern char g_1543460[], g_1543464[], g_1543468[], g_154346c[], g_1543470[];
 extern char dv_a[], dv_b[];
 extern char ca_a[], ca_b[], ca_c[];
 extern char cl_a[], cl_b[], cl_c[], cl_d[];
+extern char vt_1414b10[], vt_14431f8[];       // Window base / IWindow vftables
+extern float g_140c6e8;                       // 8.0f cursor-window scale
+void* __cdecl f_ea_new(unsigned size, const char* name, int, int, int, int);  // 0x00f473a0
 
 // ===========================================================================
 // @ 0x007FFC70  cSPUIBehaviorPredicateWinState::Evaluate (vtable slot 6)
@@ -437,21 +448,26 @@ struct C_8014c0 {
   char pad0[0x28];
   uint8_t m28;          // +0x28
   char pad29[0x23];
-  void* m4c;            // +0x4c
-  int Init();
+  void* m4c;            // +0x4c  parent cursor-info window
+  void* m50;            // +0x50  cursor window
+  void* m54;            // +0x54  drop-cursor layout
+  bool Init();
 };
 // @ 0x008014c0
-int C_8014c0::Init() {
+bool C_8014c0::Init() {
   if (m28)
     return 1;
+
+  // Cursor info parent window, allocated and vftable-patched (IWindow lives at +4).
   void* mem = f_9512d0(0x20c, 4, "UI/UI/Cursor info parent window", f_9512c0());
-  void* win = 0;
+  void* win;
   if (mem) {
-    f_962a10(mem);
-    *(void**)mem = (void*)0;
-    *(void**)((char*)mem + 4) = (void*)0;
-    win = mem;
-  }
+    ((WindowObj*)mem)->WindowCtor();
+    *(void**)mem = (void*)vt_1414b10;
+    win = (char*)mem + 4;
+    *(void**)win = (void*)vt_14431f8;
+  } else
+    win = 0;
   void* old = m4c;
   if (win != old) {
     if (win)
@@ -463,9 +479,48 @@ int C_8014c0::Init() {
   ((void (__thiscall*)(void*, int, int))VFN(m4c, 0x7c))(m4c, 0x10, 1);
   ((void (__thiscall*)(void*, int, int))VFN(m4c, 0x7c))(m4c, 1, 0);
   ((void (__thiscall*)(void*, int))VFN(m4c, 0xac))(m4c, 0);
-  void* mainWin = f_80620(f_805070(0x5b598fa));
+  void* mainWin = ((LayoutMgr*)f_spuiLayoutMgr(0x5b598fa))->GetWorldMainWindow();
   ((void (__thiscall*)(void*, void*))VFN(mainWin, 0xd8))(mainWin, m4c);
   ((void (__thiscall*)(void*, float, float))VFN(m4c, 0x68))(m4c, 1.0f, 1.0f);
+  float x, y;
+  f_804ed0(&x, &y);
+  ((void (__thiscall*)(void*, float, float))VFN(this, 0x38))(this, x, y);
+
+  // Cursor window (IWindow at +4 of the freshly constructed Window).
+  void* mem2 = f_9512d0(0x20c, 4, "UI/CursorWindow", f_9512c0());
+  void* win2;
+  if (mem2) {
+    void* r = ((WindowObj*)mem2)->WindowCtor();
+    win2 = r ? (char*)r + 4 : 0;
+  } else
+    win2 = 0;
+  void* old2 = m50;
+  if (win2 != old2) {
+    if (win2)
+      ((void (__thiscall*)(void*))VFN(win2, 0))(win2);
+    m50 = win2;
+    if (old2)
+      ((void (__thiscall*)(void*))VFN(old2, 4))(old2);
+  }
+  ((void (__thiscall*)(void*, int, int))VFN(m50, 0x7c))(m50, 0x10, 1);
+  ((void (__thiscall*)(void*, int, int))VFN(m50, 0x7c))(m50, 1, 0);
+  ((void (__thiscall*)(void*, void*))VFN(mainWin, 0xd8))(mainWin, m50);
+  ((void (__thiscall*)(void*, float, float))VFN(m50, 0x68))(m50, g_140c6e8, g_140c6e8);
+
+  // Drop-cursor layout object (cSPUILayout ctor returns the object).
+  void* raw = f_ea_new(0x18, "Simulator/DropCursorIcons", 0, 0, 0, 0);
+  void* layout = raw ? ((cSPUILayout*)raw)->Ctor() : 0;
+  void* old3 = m54;
+  if (layout != old3) {
+    if (layout)
+      ((void (__thiscall*)(void*))VFN(layout, 4))(layout);
+    m54 = layout;
+    if (old3)
+      ((void (__thiscall*)(void*))VFN(old3, 8))(old3);
+  }
+  if (((cSPUILayout*)m54)->Init(L"DropCursorIcons", 0x40464100, 1, 0x5b598fa))
+    ((cSPUILayout*)m54)->SetVisibility(false);
+
   m28 = 1;
   return 1;
 }
