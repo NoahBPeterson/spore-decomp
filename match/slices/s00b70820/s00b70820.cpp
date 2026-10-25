@@ -82,6 +82,8 @@ struct cTuning_b708d0 {
     float f8c, f90, f94, f98, f9c, fa0, fa4, fa8, fac, fb0, fb4, fb8, fbc, fc0, fc4, fc8;
 
     void Load(uint32_t instanceID);
+    void Init(uint32_t instanceID);
+    void SerializeObject(void* object);
 };
 
 // @ 0x00b708d0
@@ -210,21 +212,33 @@ struct MapView
     TreeNode* m_begin;           // +0x08
 };
 
-struct EraseMap
+struct MotiveMap
 {
-    int       m_pad0[4];         // +0x00
-    int       m_size;            // +0x14
+    int    m_pad0;               // +0x00
+    void*  m_end;                // +0x04 (sentinel address = this+4)
+    void*  m_begin;              // +0x08
+    void*  m_root;               // +0x0c
+    unsigned char m_flag10;      // +0x10
+    unsigned char m_pad11[3];    // +0x11
+    int    m_size;               // +0x14
+
+    void  erase(void** out, TreeNode* node);      // 0x00b71730
+    void  deleteTree(TreeNode* node);             // 0x00b71790
 };
 
-struct MotiveTree
+struct MotiveObjectTree
 {
-    unsigned char m_pad0[0x20];  // +0x00
-    void*     m_end;             // +0x20
-    void*     m_leftmost;        // +0x24
-    void*     m_root;            // +0x28
-    unsigned char m_pad2c;       // +0x2c
-    unsigned char m_pad2d[3];
-    int       m_size;            // +0x30
+    unsigned char m_pad0[0x1c];  // +0x00
+    MotiveMap     m_map;         // +0x1c
+
+    bool findEvent(void* event);                  // 0x00b71510
+};
+
+// node factory used by the feedback-event map insert path (this unused)
+struct RefPair;
+struct NodeFactory
+{
+    void* newNode(RefPair* pair);                 // 0x00b715c0
 };
 
 struct RefPair
@@ -274,26 +288,51 @@ void* __fastcall FUN_00b70820(MotiveObject* self)
 }
 
 // @ 0x00b71480
-void __fastcall FUN_00b71480(cTuning_b708d0* self, uint32_t instanceID)
+void cTuning_b708d0::Init(uint32_t instanceID)
 {
-    self->Load(instanceID ? instanceID : 0xf71fa311u);
+    Load(instanceID ? instanceID : 0xf71fa311u);
 }
 
-// @ 0x00b714a0
-void __fastcall FUN_00b714a0(void* self, void* object)
+// --- serialization helpers (called by the map/varlist writers) ---
+void __cdecl WriteUint32(void* stream, const void* value, int count, int flags);   // 0x0093aa70
+
+struct cVarListSerializer
 {
-    // Serializes the object's varlist; kept as a skeleton because the
-    // serializer helpers use EA's private varint layout.
-    (void)self;
-    (void)object;
+    char m_data[0xa14];
+    void ctor(void* owner, void* name, int line);        // 0x00692f90
+    void Serialize(void* object);                        // 0x00692900
+};
+
+struct RBTreeFind
+{
+    void** find(void** out, void** key);                 // 0x00e5c780
+};
+
+// @ 0x00b714a0
+void cTuning_b708d0::SerializeObject(void* object)
+{
+    void* writer = ((void* (__thiscall*)(void*))VTFN(object, 0x20 / 4))(object);
+    void* stream = ((void* (__thiscall*)(void*))VTFN(writer, 0x18 / 4))(writer);
+    uint32_t id = 0x6ef3ce7;
+    WriteUint32(stream, &id, 1, 0);
+    cVarListSerializer serializer;
+    serializer.ctor(this, (void*)0x0156b308, 0x01a80d26);
+    serializer.Serialize(object);
 }
 
 // @ 0x00b71510
-bool __fastcall FUN_00b71510(void* self, void* event)
+bool MotiveObjectTree::findEvent(void* event)
 {
-    (void)self;
-    (void)event;
-    return false;
+    if (event)
+        ((void (__thiscall*)(void*))VTFN(event, 0xbc / 4))(event);
+
+    void* it = 0;
+    void** slot = ((RBTreeFind*)&m_map)->find(&it, &event);
+    bool found = *slot != (void*)&m_map.m_end;
+
+    if (event)
+        ((void (__thiscall*)(void*))VTFN(event, 0xc0 / 4))(event);
+    return found;
 }
 
 // @ 0x00b71570
@@ -311,9 +350,12 @@ bool __cdecl FUN_00b71570(void* arg, MapView* map)
 }
 
 // @ 0x00b715c0
-void* __cdecl FUN_00b715c0(RefPair* pair)
+void* NodeFactory::newNode(RefPair* pair)
 {
-    NewNode* node = (NewNode*)FUN_00f473a0(0x18, "Simulator", 0, 0, "allocator", 0xd1);
+    NewNode* node = (NewNode*)FUN_00f473a0(
+        0x18, "Simulator", 0, 0,
+        "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h",
+        0xd1);
     if (node != 0) {
         node->m_ref10 = pair->m_first;
         if (node->m_ref10 != 0)
@@ -327,19 +369,39 @@ void* __cdecl FUN_00b715c0(RefPair* pair)
 }
 
 // @ 0x00b71680
-void __fastcall FUN_00b71680(void* self, MotiveTree* map)
+void FUN_00b71680(void* serial, MotiveMap* map)
 {
-    // Map serialization skeleton; the iterator helpers are EASTL-internal.
-    (void)self;
-    (void)map;
+    uint32_t count = (uint32_t)map->m_size;
+    void* writer = ((void* (__thiscall*)(void*))VTFN(serial, 0x20 / 4))(serial);
+    void* stream = ((void* (__thiscall*)(void*))VTFN(writer, 0x18 / 4))(writer);
+    WriteUint32(stream, &count, 1, 0);
+
+    void* const end = (char*)map + 4;
+    for (void* node = map->m_begin; node != end;
+         node = FUN_00921580(node)) {
+        void* value = 0;
+        void* ref = *(void**)((char*)node + 0x10);
+        if (ref)
+            value = ((void* (__thiscall*)(void*, int))VTFN(ref, 0xb8 / 4))(ref, 0x179c807);
+        ((void (__thiscall*)(void*, void*))VTFN(serial, 0x2c / 4))(serial, value);
+        ((void (__thiscall*)(void*))VTFN(serial, 0x1c / 4))(serial);
+
+        value = 0;
+        ref = *(void**)((char*)node + 0x14);
+        if (ref)
+            value = ((void* (__thiscall*)(void*, int))VTFN(ref, 0x0c / 4))(ref, 0x179c807);
+        ((void (__thiscall*)(void*, void*))VTFN(serial, 0x2c / 4))(serial, value);
+        ((void (__thiscall*)(void*))VTFN(serial, 0x1c / 4))(serial);
+    }
+    ((void (__thiscall*)(void*))VTFN(serial, 0x1c / 4))(serial);
 }
 
 // @ 0x00b71730
-void __fastcall FUN_00b71730(EraseMap* self, TreeNode** out, TreeNode* node)
+void MotiveMap::erase(void** out, TreeNode* node)
 {
-    self->m_size--;
+    m_size--;
     TreeNode* next = (TreeNode*)FUN_00921580(node);
-    FUN_00921880(node, &self->m_pad0[1]);
+    FUN_00921880(node, &m_end);
 
     if (node->m_ref14 != 0)
         ((void (__thiscall*)(void*))VTFN(node->m_ref14, 4 / 4))(node->m_ref14);
@@ -351,16 +413,18 @@ void __fastcall FUN_00b71730(EraseMap* self, TreeNode** out, TreeNode* node)
 }
 
 // @ 0x00b71790
-void __fastcall FUN_00b71790(TreeNode* node)
+void MotiveMap::deleteTree(TreeNode* node)
 {
     while (node != 0) {
-        FUN_00b71790(node->m_left);
+        deleteTree(node->m_left);
         TreeNode* next = node->m_right;
 
-        if (node->m_ref14 != 0)
-            ((void (__thiscall*)(void*))VTFN(node->m_ref14, 4 / 4))(node->m_ref14);
-        if (node->m_ref10 != 0)
-            ((void (__thiscall*)(void*))VTFN(node->m_ref10, 0xc0 / 4))(node->m_ref10);
+        void* ref14 = node->m_ref14;
+        if (ref14 != 0)
+            ((void (__thiscall*)(void*))VTFN(ref14, 4 / 4))(ref14);
+        void* ref10 = node->m_ref10;
+        if (ref10 != 0)
+            ((void (__thiscall*)(void*))VTFN(ref10, 0xc0 / 4))(ref10);
 
         FUN_00f47380(node);
         node = next;
@@ -368,12 +432,13 @@ void __fastcall FUN_00b71790(TreeNode* node)
 }
 
 // @ 0x00b71a30
-void __fastcall FUN_00b71a30(MotiveTree* self)
+void __fastcall FUN_00b71a30(MotiveObjectTree* self)
 {
-    FUN_00b71790((TreeNode*)self->m_root);
-    self->m_leftmost = (void*)&self->m_end;
-    self->m_end = (void*)&self->m_end;
-    self->m_root = 0;
-    self->m_pad2c = 0;
-    self->m_size = 0;
+    MotiveMap* map = &self->m_map;
+    map->deleteTree((TreeNode*)map->m_root);
+    map->m_begin = &map->m_end;
+    map->m_end = &map->m_end;
+    map->m_root = 0;
+    map->m_flag10 = 0;
+    map->m_size = 0;
 }
