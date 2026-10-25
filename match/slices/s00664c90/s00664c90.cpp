@@ -8,36 +8,29 @@ typedef void(__thiscall* FnPi)(void*, int);
 typedef void(__thiscall* FnPv)(void*, void*);
 typedef void*(__thiscall* FnRetP)(void*);
 typedef int(__thiscall* FnRetI)(void*);
+typedef bool(__thiscall* FnGetProp)(void*, int, int, void**);
+typedef bool(__thiscall* FnGetSubProp)(void*, int, void**);
+typedef unsigned __int64(__thiscall* FnGetU64)(void*);
 
 static inline void* Vslot(void* o, int off) { return ((void**)(*(void**)o))[off / 4]; }
 
 extern "C" void* EASTL_allocator_allocate(unsigned int size, const char* tag, int a, int b, const char* file, int line); // 0x00f473a0
 extern "C" void  EASTL_allocator_deallocate(void* p); // 0x00f47380
-extern "C" void* CopyImpl(void* first, void* last, void* dest);
+extern "C" void* CopyImpl(void* first, void* last, void* dest); // 0x006782c0 eastl CopyImpl::do_copy
 extern "C" void  FUN_00646d70(void* first, void* last);
 extern "C" void  EA_Messaging_RemoveHandler(void* a, void* b, void* c, void* d, void* e);
-extern "C" void* SP_PropertyManager();
-extern "C" void* FUN_0067cb30();
-extern "C" void* FUN_00607a60();
-extern "C" void* FUN_005467e0();
-extern "C" int   __cdecl _wcsicmp(const wchar_t* a, const wchar_t* b);
+extern "C" void* SP_PropertyManager();  // 0x0067de30
+extern "C" void* FUN_0067cb30();        // 0x0067cb30
+extern "C" void* FUN_00607a60();        // 0x00607a60 SP::Pollen::AuthManager
+extern "C" __declspec(dllimport) int __cdecl _wcsicmp(const wchar_t* a, const wchar_t* b);
 extern "C" void __stdcall FUN_00601b40(void* pos, void* val);
 extern "C" void  FUN_00b2af00(int* a, int* b);
 extern "C" void  FUN_00ac97a0(void* a, void* b, void* c);
-extern "C" void  FUN_005467e0_v();
-extern "C" char  FUN_00666450(void* p);
-extern "C" void  FUN_006664f0(void* p);
-extern "C" void  FUN_006657f0(void* a, void* b, void* c);
-extern "C" void  FUN_00669410(void* p);
-extern "C" void* FUN_006676f0(void* p);
-extern "C" char  cSPUIFeedListItem_Init(void* self, void* a, void* b, void* c, void* d, void* e);
+extern "C" void  FUN_006657f0(void* first, void* last, void* feed);  // 0x006657f0
 extern "C" void  FUN_009512c0();
 extern "C" void* FUN_009512d0(int a, int b, const char* name, int c);
 
 extern int gVtA, gVtB, gVtC, gVtD, gVtE, gVtF, gVtG, gVtH;
-extern "C" void  FUN_00665000(void*, void*, void*);
-extern "C" void  FUN_00665050(void*, void*, void*);
-extern "C" void  FUN_00664ad0(void*, int, int, int);
 extern "C" void* FUN_00660b30(void*, void*, void*);
 
 // ---------------------------------------------------------------------------
@@ -50,6 +43,129 @@ struct VecAutoRef4 {
     void erase(void* first, void* last);
     void FUN_006650c0(void* pos, void* value);
 };
+
+// ---------------------------------------------------------------------------
+// SP::cSPUIFeedListItem, refcounted handle and the feed comparator.
+struct FeedItem {
+    virtual int  AddRef();             // +0x00
+    virtual int  Release();            // +0x04
+    char     pad08[8];
+    void*    m0c;                      // +0x0c
+    int      m10;                      // +0x10
+    bool     m14;                      // +0x14
+    char     m15;                      // +0x15  visited marker used by RefreshAll
+    char     pad16[2];
+    wchar_t* mName;                    // +0x18
+    char     pad1c[0xc0 - 0x1c];
+    char     mC0;                      // +0xc0
+    char     padc1[3];
+    int      mGroup;                   // +0xc4
+    char     padc8[0x134 - 0xc8];
+    int      m134;                     // +0x134
+};
+
+struct AutoRefCountT {
+    FeedItem* mpObject;
+    AutoRefCountT() : mpObject(0) {}
+    AutoRefCountT(const AutoRefCountT& o) : mpObject(o.mpObject) { if (mpObject) mpObject->AddRef(); }
+    ~AutoRefCountT() { if (mpObject) mpObject->Release(); }
+    AutoRefCountT& operator=(const AutoRefCountT& o) {
+        FeedItem* old = mpObject;
+        if (o.mpObject != old) {
+            if (o.mpObject) o.mpObject->AddRef();
+            mpObject = o.mpObject;
+            if (old) old->Release();
+        }
+        return *this;
+    }
+    AutoRefCountT& operator=(FeedItem* o) {
+        FeedItem* old = mpObject;
+        if (o != old) {
+            if (o) o->AddRef();
+            mpObject = o;
+            if (old) old->Release();
+        }
+        return *this;
+    }
+    FeedItem* operator->() const { return mpObject; }
+    operator FeedItem*() const { return mpObject; }
+};
+
+struct AlphabeticalFeedSort {
+    bool operator()(const FeedItem* a, const FeedItem* b) const {
+        if (a && b) {
+            if (a->mGroup == b->mGroup)
+                return a->mName && b->mName && _wcsicmp(a->mName, b->mName) < 0;
+            return a->mGroup < b->mGroup;
+        }
+        return false;
+    }
+};
+
+// One entry of the Pollen feed-directory arrays (+0xc8/+0xcc and +0xb4/+0xb8, stride 0x70).
+struct FeedDirEntry {
+    char             pad00[0x10];
+    unsigned __int64 mAuth;            // +0x10
+    char             pad18[0x68 - 0x18];
+    int              mCategory;        // +0x68
+    char             pad6c[4];         // -> 0x70
+};
+
+// Property objects returned by the property-list manager.
+struct FeedProp {
+    char           pad00[0x10];
+    unsigned short mFlags;             // +0x10
+    unsigned short mType;              // +0x12
+};
+
+// { property value, feed id } pushed on the category's Vec8 at +0xa0.
+struct FeedPair {
+    int value;
+    int id;
+};
+
+// Heap primitives from the sort helper slices (comparator passed by value).
+void FUN_00665000(AutoRefCountT* first, AutoRefCountT* last, AlphabeticalFeedSort compare); // 0x00665000 make_heap
+void FUN_00664ad0(AutoRefCountT* first, int top, int heapSize, int pos, AutoRefCountT value,
+                  AlphabeticalFeedSort compare); // 0x00664ad0 adjust_heap
+void FUN_00665050(AutoRefCountT* first, AutoRefCountT* last, AlphabeticalFeedSort compare); // 0x00665050 sort_heap
+
+// ---------------------------------------------------------------------------
+// Cross-function helpers (fastcall keeps the original ecx argument; the dummy
+// int/second parameter stands in for the non-stack register).
+void __fastcall FUN_00669410(void* p);          // 0x00669410
+bool __fastcall FUN_00666450(void* p);          // 0x00666450  IsKnownState
+void __fastcall FUN_006664f0(void* p);          // 0x006664f0  Teardown
+int  __fastcall FUN_005467e0(void* p);          // 0x005467e0
+void* __fastcall FUN_006676f0(void* p);         // 0x006676f0  cSPUIFeedListItem ctor
+bool __fastcall cSPUIFeedListItem_Init(void* self, int, void* a, void* b, void* c, void* d, void* e); // 0x00669f50
+int* __fastcall PropDataPtr(void* prop);        // 0x0041e990  Property::GetInt
+
+extern "C" char  FUN_006a1360(void* obj, int k, void* out);
+extern "C" char  FUN_006a0ae0(void* obj, int k, void** ptr, int* count);
+
+static FeedItem* NewFeedItem() {
+    FeedItem* item = (FeedItem*)EASTL_allocator_allocate(
+        0x190, (const char*)0x13f6b3c, 0, 0, 0, 0);
+    if (item) item = (FeedItem*)FUN_006676f0(item);
+    return item;
+}
+
+// Push an AutoRefCount onto the child vector at +0x88 (inline fast path, insert on realloc).
+static void PushChild(char* p, FeedItem* item) {
+    char* v = p + 0x88;
+    char* end = *(char**)(v + 4);
+    if (end < *(char**)(v + 8)) {
+        *(char**)(v + 4) = end + 4;
+        if (end) {
+            *(FeedItem**)end = item;
+            if (item) item->AddRef();
+        }
+    } else {
+        FeedItem* value = item;
+        ((VecAutoRef4*)v)->FUN_006650c0(end, &value);
+    }
+}
 
 // @ 0x00665330
 void Vec8::push_back(void* val) {
@@ -95,7 +211,7 @@ struct cSPUIFeedListCategory {
     void  Dtor();
     __declspec(noinline) void  ShutdownChildren();
     __declspec(noinline) void  Populate();
-    __declspec(noinline) void* Refresh(int param, int* count);
+    __declspec(noinline) void* Refresh(int id, int* group);
 };
 
 __declspec(dllexport) void keepalive75(cSPUIFeedListCategory* c, Vec8* v, VecAutoRef4* r) {
@@ -115,7 +231,7 @@ void* cSPUIFeedListCategory::Ctor() {
     char* p = (char*)this;
     *(void* volatile*)&p[4] = &gVtA;
     *(void* volatile*)&p[8] = &gVtB;
-    *(void**)(p + 0xc) = &gVtC;
+    *(void**)&p[0xc] = &gVtC;
     *(int*)(p + 0x10) = 0;
     *(void**)(p + 0) = &gVtD;
     *(void**)(p + 4) = &gVtE;
@@ -173,38 +289,23 @@ void cSPUIFeedListCategory::Dtor() {
     *(void**)(p + 0) = &gVtB;
 }
 
-// @ 0x00664f30  partition-by-comparator helper
-int* PartitionByFeed(int* first, int* last, int* key) {
-    int* lo = first;
-    do {
-        while (lo < last) {
-            int* v = (int*)*lo;
-            if (!v || !key) break;
-            int* kv = (int*)0;
-            (void)kv;
-            if (v[0x31] != *(int*)((char*)key + 0xc4)) { break; }
-            const wchar_t* sa = (const wchar_t*)v[6];
-            const wchar_t* sb = (const wchar_t*)key[6];
-            if (!sa || !sb) break;
-            if (_wcsicmp(sa, sb) < 0) { ++lo; break; }
-            break;
-        }
-        while (last > lo) {
-            int* v = (int*)*(last - 1);
-            if (!key || !v) break;
-            if (key[0x31] != *(int*)((char*)v + 0xc4)) { break; }
-            const wchar_t* sa = (const wchar_t*)key[6];
-            const wchar_t* sb = (const wchar_t*)v[6];
-            if (!sa || !sb) break;
-            if (_wcsicmp(sa, sb) < 0) { --last; continue; }
-            break;
-        }
-        if (lo >= last) break;
-        FUN_00b2af00(lo, last - 1);
-        ++lo;
-    } while (true);
-    if (key) (*(FnP)Vslot(key, 4))(key);
-    return lo;
+// Swap helper for the partition step (the original calls the out-of-line swap).
+__declspec(noinline) void swapT(AutoRefCountT& a, AutoRefCountT& b) {
+    AutoRefCountT t(a);
+    a = b;
+    b = t;
+}
+
+// @ 0x00664f30  eastl get_partition<AutoRefCountT*, AlphabeticalFeedSort>
+AutoRefCountT* PartitionByFeed(AutoRefCountT* first, AutoRefCountT* last,
+                               AutoRefCountT pivotValue, AlphabeticalFeedSort& compare) {
+    for (;; ++first) {
+        while (compare(*first, pivotValue)) ++first;
+        --last;
+        while (compare(pivotValue, *last)) --last;
+        if (first >= last) return first;
+        swapT(*first, *last);
+    }
 }
 
 // @ 0x006650c0  vector<AutoRefCount4>::insert(position, value)
@@ -249,28 +350,18 @@ void VecAutoRef4::FUN_006650c0(void* pos, void* value) {
     }
 }
 
-// @ 0x00665210  partial_sort
-void FUN_00665210(void* first, void* mid, void* last, void* cmp) {
-    FUN_00665000(first, mid, cmp);
-    while (mid < last) {
-        void* v = *(void**)mid;
-        void* f = *(void**)first;
-        bool less = false;
-        if (v && f) {
-            int a = *(int*)((char*)v + 0xc4), b = *(int*)((char*)f + 0xc4);
-            if (a != b) less = a < b;
-            else {
-                const wchar_t* sa = *(const wchar_t**)((char*)v + 0x18);
-                const wchar_t* sb = *(const wchar_t**)((char*)f + 0x18);
-                if (sa && sb && _wcsicmp(sa, sb) < 0) less = true;
-            }
+// @ 0x00665210  eastl::partial_sort<AutoRefCountT*, AlphabeticalFeedSort>
+void FUN_00665210(AutoRefCountT* first, AutoRefCountT* middle, AutoRefCountT* last,
+                  AlphabeticalFeedSort compare) {
+    FUN_00665000(first, middle, compare);
+    for (AutoRefCountT* i = middle; i < last; ++i) {
+        if (compare(*i, *first)) {
+            const AutoRefCountT temp(*i);
+            *i = *first;
+            FUN_00664ad0(first, 0, (int)(middle - first), 0, temp, compare);
         }
-        if (less) {
-            FUN_00664ad0(first, 0, ((char*)mid - (char*)first) >> 2, 0);
-        }
-        mid = (char*)mid + 4;
     }
-    FUN_00665050(first, mid, cmp);
+    FUN_00665050(first, middle, compare);
 }
 
 // @ 0x006657a0
@@ -282,23 +373,178 @@ void cSPUIFeedListCategory::ShutdownChildren() {
     ((VecAutoRef4*)v)->erase(*(void**)v, *(void**)(v + 4));
 }
 
-// @ 0x00665410  Refresh
-void* cSPUIFeedListCategory::Refresh(int param, int* count) {
+// @ 0x00665410  SP::cSPUIFeedListCategory::Refresh
+void* cSPUIFeedListCategory::Refresh(int id, int* groupArg) {
     char* p = (char*)this;
-    (void)count;
-    int n = (int)((*(char**)(p + 0x8c) - *(char**)(p + 0x88)) >> 2);
-    (void)n;
-    if (param == -1) param = (*(int*)(p + 0x8c) - *(int*)(p + 0x88)) >> 2;
+    int group = (int)groupArg;
+    if (groupArg == (int*)-1)
+        group = (int)((*(char**)(p + 0x8c) - *(char**)(p + 0x88)) >> 2);
+
+    AutoRefCountT itemRef;
+    AutoRefCountT propRef;
+    FeedPair pair;
+
     void* pm = SP_PropertyManager();
-    void* local = 0;
-    (*(char(__thiscall*)(void*, int, void**))Vslot(pm, 0x2c))(pm, 0x4e5892eb, &local);
-    return 0;
+    propRef = 0;
+    if (((FnGetProp)Vslot(pm, 0x2c))(pm, id, 0x4e5892eb, (void**)&propRef)) {
+        bool didLoops = false;
+        FeedProp* prop = 0;
+        if (propRef.mpObject &&
+            ((FnGetSubProp)Vslot(propRef.mpObject, 0x24))(propRef.mpObject, 0x744717c7, (void**)&prop) &&
+            prop->mType == 9) {
+            pair.value = *PropDataPtr(prop);
+            if (pair.value > 0) {
+                didLoops = true;
+                pair.id = id;
+                ((Vec8*)(p + 0xa0))->push_back(&pair);
+
+                char* mgr = (char*)FUN_0067cb30();
+                FeedDirEntry* e = *(FeedDirEntry**)(mgr + 0xc8);
+                FeedDirEntry* eEnd = *(FeedDirEntry**)(mgr + 0xcc);
+                for (; e != eEnd; e = (FeedDirEntry*)((char*)e + 0x70)) {
+                    if (e->mCategory != pair.value) continue;
+                    FeedItem* item = NewFeedItem();
+                    itemRef = item;
+                    cSPUIFeedListItem_Init(item, 0, *(void**)(p + 0x7c), *(void**)(p + 0x6c), (void*)id, this, e);
+                    item->mGroup = group;
+                    PushChild(p, item);
+                }
+
+                mgr = (char*)FUN_0067cb30();
+                e = *(FeedDirEntry**)(mgr + 0xb4);
+                eEnd = *(FeedDirEntry**)(mgr + 0xb8);
+                for (; e != eEnd; e = (FeedDirEntry*)((char*)e + 0x70)) {
+                    int cat = e->mCategory;
+                    if (cat == 1) {
+                        void* am = FUN_00607a60();
+                        unsigned __int64 auth = ((FnGetU64)Vslot(am, 0x40))(am);
+                        if (e->mAuth == auth) cat = 8;
+                    }
+                    if (cat != pair.value) continue;
+                    FeedItem* item = NewFeedItem();
+                    itemRef = item;
+                    cSPUIFeedListItem_Init(item, 0, *(void**)(p + 0x7c), *(void**)(p + 0x6c), (void*)id, this, e);
+                    item->mGroup = group;
+                    PushChild(p, item);
+                }
+            }
+        }
+
+        if (!didLoops) {
+            FeedItem* item = NewFeedItem();
+            itemRef = item;
+            if (cSPUIFeedListItem_Init(itemRef.mpObject, 0, *(void**)(p + 0x7c), *(void**)(p + 0x6c), (void*)id, this, 0)) {
+                itemRef->mGroup = group;
+                PushChild(p, itemRef.mpObject);
+            }
+        }
+    }
+
+    FeedItem* ret = itemRef.mpObject;
+    return ret;
 }
 
-// @ 0x00665870  RefreshAll
-void FUN_00665870(char* p) {
-    for (int i = 0; i < (int)((*(char**)(p + 0x8c) - *(char**)(p + 0x88)) >> 2); ++i)
-        FUN_00669410(p);
+// @ 0x00665870  SP::cSPUIFeedListCategory::RefreshAll
+void __fastcall FUN_00665870(char* self, int) {
+    char* p = self;
+    char* children = p + 0x88;
+
+    int n = (int)((*(char**)(children + 4) - *(char**)children) >> 2);
+    for (int i = 0; i < n; ++i) {
+        FeedItem* child = *(FeedItem**)(*(char**)children + i * 4);
+        if (*(char*)((char*)child + 0xc0)) FUN_00669410(child);
+        child->m15 = 0;
+    }
+
+    FeedDirEntry* lastA1;              // original reads this uninitialised when there are no pairs
+    if (*(char**)(p + 0xa0) != *(char**)(p + 0xa4)) {
+        char* mgr1 = (char*)FUN_0067cb30();
+        char* mgr2 = (char*)FUN_0067cb30();
+        FeedDirEntry* a1b = *(FeedDirEntry**)(mgr1 + 0xc8);
+        FeedDirEntry* a1e = *(FeedDirEntry**)(mgr1 + 0xcc);
+        FeedDirEntry* a2b = *(FeedDirEntry**)(mgr2 + 0xb4);
+        FeedDirEntry* a2e = *(FeedDirEntry**)(mgr2 + 0xb8);
+        lastA1 = a1e;
+
+        int pairCount = (int)((*(char**)(p + 0xa4) - *(char**)(p + 0xa0)) >> 3);
+        FeedDirEntry* e = a1b;
+        if (e == a1e) e = a2b;
+        while (e != a2e) {
+            int cat = e->mCategory;
+            if (cat == 1) {
+                void* am = FUN_00607a60();
+                unsigned __int64 auth = ((FnGetU64)Vslot(am, 0x40))(am);
+                if (e->mAuth == auth) cat = 8;
+            }
+            for (int j = 0; j < pairCount; ++j) {
+                FeedPair* pairs = (FeedPair*)*(char**)(p + 0xa0);
+                if (cat != pairs[j].value) continue;
+
+                bool found = false;
+                int cn = (int)((*(char**)(children + 4) - *(char**)children) >> 2);
+                for (int k = 0; k < cn; ++k) {
+                    FeedItem* child = *(FeedItem**)(*(char**)children + k * 4);
+                    if (FUN_005467e0(e) == child->m134) {
+                        found = true;
+                        child->m15 = 1;
+                    }
+                }
+                if (found) continue;
+
+                AutoRefCountT itemRef;
+                FeedItem* item = NewFeedItem();
+                itemRef = item;
+                PushChild(p, item);
+                cSPUIFeedListItem_Init(item, 0, *(void**)(p + 0x7c), *(void**)(p + 0x6c),
+                                       (void*)pairs[j].id, p, e);
+                item->m15 = 1;
+
+                void* feed = 0;
+                int count = 0;
+                if (FUN_006a0ae0(*(void**)(p + 0xb8), 0x744717c1, &feed, &count)) {
+                    for (int q = 0; q < count; ++q) {
+                        AutoRefCountT propRef;
+                        void* pm = SP_PropertyManager();
+                        propRef = 0;
+                        int pid = *(int*)((char*)feed + q * 0xc);
+                        if (((FnGetProp)Vslot(pm, 0x2c))(pm, pid, 0x4e5892eb, (void**)&propRef) &&
+                            propRef.mpObject) {
+                            FeedProp* prop = 0;
+                            if (((FnGetSubProp)Vslot(propRef.mpObject, 0x24))(propRef.mpObject,
+                                                                             0x744717c7, (void**)&prop) &&
+                                prop->mType == 9) {
+                                if (*(unsigned char*)((char*)prop + 0x10) & 0x30)
+                                    prop = *(FeedProp**)prop;
+                                if (pairs[j].value == *(int*)prop)
+                                    item->mGroup = q;
+                            }
+                        }
+                    }
+                }
+            }
+            e = (FeedDirEntry*)((char*)e + 0x70);
+            if (e == a1e) e = a2b;
+        }
+    }
+
+    char* v = p + 0x88;
+    char* pos = *(char**)v;
+    char* end = *(char**)(v + 4);
+    while (pos != end) {
+        FeedItem* child = *(FeedItem**)pos;
+        if (FUN_00666450(child) && !child->m15) {
+            FUN_006664f0(child);
+            if (pos + 4 < end) CopyImpl(pos + 4, end, pos);
+            end -= 4;
+            *(char**)(v + 4) = end;
+            FeedItem* stale = *(FeedItem**)end;
+            if (stale) stale->Release();
+        } else {
+            pos += 4;
+        }
+    }
+
+    FUN_006657f0(*(void**)v, *(void**)(v + 4), lastA1);
 }
 
 struct cStringLocal {                   // SP::cString (0x14 bytes), used as a stack buffer
@@ -307,8 +553,6 @@ struct cStringLocal {                   // SP::cString (0x14 bytes), used as a s
     void        FUN_006b5240();         // @ 0x006b5240  dtor
     const char* FUN_006b55c0();         // @ 0x006b55c0  c_str
 };
-extern "C" char  FUN_006a1360(void* obj, int k, void* out);
-extern "C" char  FUN_006a0ae0(void* obj, int k, void** ptr, int* count);
 
 // @ 0x00665c50
 void cSPUIFeedListCategory::Populate() {
