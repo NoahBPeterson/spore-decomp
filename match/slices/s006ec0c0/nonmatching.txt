@@ -8,3 +8,10 @@
 006ecfc0  141  complete; struct copy-assign with dword pointer compare, thiscall FUN_006ebd20 on d+4, returns this; field schedule differs. equiv WEAK (148 valid, 100% cov, no mismatch).
 006ed1a0  101  complete; cVecU16::push_back thiscall on self+0x5c; register/schedule differs. equiv PASS (351 valid, 100% cov).
 006ed210  144  complete; teardown + SPVector<unsigned int>::DoInsertValue thiscall on self+0x19c (p==0 returns); schedule differs. equiv PASS (321 valid, 93.1% cov).
+006ec0c0  229  complete; ResTable record copy (lazy 0x100-byte block from tag-0x206 item, memcpy of count*4); 217 vs 253 bytes, gap is the name-hash/slot loop shape + register allocation. equiv FAIL 5/209 (clobber only: writes ecx which retail leaves untouched).
+006ec260  248  complete; VecC::DoInsert (3-int records): fast path + growth via memcpy/allocator with file/line 0xd1; 285 vs 299 bytes, frame/register allocation differs. equiv WEAK (129 valid, 92.4% cov).
+006ec4a0  259  complete; ResTable record release (0x100 block free + list walk of tag-0x206 payloads); 291 vs 269 bytes, allocator arg setup + schedule differs. equiv UNSUPPORTED 0/400 (import:memmove).
+006ec840  42  complete; EaVector<int> range erase: erase helper called as f(b, m_end, a), then ReleaseObj walk and `m_end -= (b-a)>>2` elements; 80 vs 82 bytes, loop register/schedule differs. equiv WEAK (124 valid, 76.3% cov) after the arg-order fix.
+006ec8a0  378  complete; EaVector<int> single-element insert: fast path (refcounted) + growth path with two memcpy halves and allocator free of the old block; 338 vs 422 bytes, refcount temp lifetimes + schedule differ. equiv WEAK (117 valid, 93.4% cov).
+006ecb40  441  complete; EaVector<ushort> insert-n (fill_n): growth path max(2*cur, cur+n) plus the two in-place shift paths; 446 vs 505 bytes, loop/fill shapes and reload schedule differ. equiv WEAK (186 valid, 11.2% cov).
+006ed070  277  complete; resource record teardown (three refcounted members, vtbl slot 8 owner, manager slot 0x20 free, block free) + free-list push (p==0 returns); 299 vs 300 bytes, register/flag ordering differs. equiv WEAK (340 valid, 27.2% cov).
