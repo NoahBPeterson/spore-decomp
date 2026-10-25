@@ -1,11 +1,14 @@
 # va  diff-bytes  reason (compiled with /O2 /MD /Gy /TP /arch:SSE /fp:fast)
+00e52d80  589  mission HUD update: complete (timer decay, 5 window vcalls, inlined guard lookups, accumulator clamp); local/frame + vcall schedule differs [equiv: UNSUPPORTED - derefs global gspCellGame state, 0/400 valid]
 00e530e0  113  count collectable slots not in {1,2}: complete; table byte arg/loop schedule differs [equiv: PASS 254 valid, 100% cov]
 00e53210   38  slot count (1 -> 6 - count): complete; range test folds to lea/cmp/ja (orig 2 cmps), scratch regs swap [equiv: PASS 357 valid, 72% cov]
 00e53250   28  reset one 0x10 slot: complete (index in EAX); register-convention differs
 00e53280   37  should-show predicate: complete; SP::sGetSourceLevel arg convention differs [equiv: PASS 400 valid, 100% cov]
 00e532e0    5  mark creature + hint: complete; key load lands in ecx (orig edx) so push/lea order swaps [equiv: PASS 336 valid, 71% cov]
 00e53340   89  build HUD descriptor: complete field init sequence; global/MOVSS schedule differs
+00e53460  184  mission slot transition: complete (sound + slot stores + inlined guard/==1/==2); arg arrives in EAX (custom register ABI) so prologue/schedule differs [equiv: UNSUPPORTED - original reads eax at entry]
 00e53580  137  mission panel teardown: complete (window, 3 gfx vtable[0xc], messaging); vcall schedule differs
+00e53660  370  mission-complete toggle: complete (cString load/tooltip, 3 gfx vtable[0xc], SetBoolProperty, messaging); frame + vcall schedule differs [equiv: UNSUPPORTED - derefs globals, 0/400 valid]
 00e53860   35  toggle window + FUN_00b3d3f0: complete; schedule differs [equiv: WEAK 105 valid inputs (need 200), 96% cov]
 00e538b0   80  OnKeyDown handler: complete (both message ids); FIND/schedule differs
 00e53920   26  toggle bit 1: complete; compare shape differs
