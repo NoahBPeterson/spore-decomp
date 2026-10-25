@@ -1,6 +1,6 @@
-00f4baa0 FUN_00f4baa0  # __thiscall (int,undefined4,undefined4,undefined4,undefined4*); naked asm, byte-exact
-00f4bcb0 FUN_00f4bcb0  # __thiscall (int,undefined4,undefined4*); naked asm, byte-exact
-00f4bf30 FUN_00f4bf30  # __thiscall (int*,undefined4*,undefined4*); naked asm, byte-exact
-00f4c150 FUN_00f4c150  # __fastcall thunk to FUN_00f4bf30; naked asm, byte-exact
-00f4c180 eastl::vector<SP::cRibbonBrushPoly,eastl::sp_vector_allocator>::DoInsertValue  # PDB name; naked asm, byte-exact
-00f4c2c0 FUN_00f4c2c0  # __fastcall (int); naked asm, byte-exact
+00f4baa0 ?ApplyBrush@cTerrainBrushEffect@@QAEXMHPAUcRibbonBrushPoly@SP@@PBUcRibbonFalloffParams@3@@Z  # SP::cTerrainBrushEffect::ApplyBrush(float,int,cRibbonBrushPoly*,cRibbonFalloffParams const*)
+00f4bcb0 ?ApplyGlobalBrush@cTerrainBrushEffect@@QAEXMPBUcRibbonFalloffParams@SP@@@Z  # SP::cTerrainBrushEffect::ApplyGlobalBrush(float,cRibbonFalloffParams const*)
+00f4bf30 ?DoInsertValue@?$vector@UcBrushVertex@SP@@Usp_vector_allocator@eastl@@@eastl@@QAEXPAUcBrushVertex@SP@@ABU34@@Z  # eastl::vector<cBrushVertex>::DoInsertValue
+00f4c150 ?push_back@?$vector@UcBrushVertex@SP@@Usp_vector_allocator@eastl@@@eastl@@QAEXXZ  # eastl::vector<cBrushVertex>::push_back
+00f4c180 ?DoInsertValue@?$vector@UcRibbonBrushPoly@SP@@Usp_vector_allocator@eastl@@@eastl@@QAEXPAUcRibbonBrushPoly@SP@@ABU34@@Z  # eastl::vector<cRibbonBrushPoly>::DoInsertValue
+00f4c2c0 ?Start@cTerrainBrushEffect@@QAEXH@Z  # SP::cTerrainBrushEffect::Start(int)

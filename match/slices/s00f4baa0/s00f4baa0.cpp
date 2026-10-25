@@ -364,14 +364,11 @@ void cTerrainBrushEffect::ApplyGlobalBrush(float vary, const cRibbonFalloffParam
     }
 
     cBrushTextureInfo texInfo;
-    texInfo.mField04 = 0;
-    if (mpTexture == 0) {
+    texInfo.mTexture.mpObject = 0;
+    if (mpTexture == 0 || mDesc->mDoGaussian)
         texInfo.mField04 = 1;
-    } else if (mDesc->mDoGaussian) {
-        texInfo.mField04 = 1;
-    } else {
+    else
         texInfo.mField04 = 0;
-    }
 
     cTerrainBrushDescription* desc = mDesc;
     texInfo.mGaussianSlope = desc->mGaussianSlope;
@@ -380,15 +377,14 @@ void cTerrainBrushEffect::ApplyGlobalBrush(float vary, const cRibbonFalloffParam
     rx = RandomRange(desc->mRot[0], desc->mRotVary[0]);
     ry = RandomRange(desc->mRot[1], desc->mRotVary[1]);
     rz = RandomRange(desc->mRot[2], desc->mRotVary[2]);
-    int drawMode = desc->mDrawMode;
     texInfo.mVary = mVary + localVary;
     texInfo.mRotationX = rx;
     texInfo.mRotationY = ry;
     texInfo.mRotationZ = rz;
-    texInfo.mDrawMode = drawMode;
+    texInfo.mDrawMode = desc->mDrawMode;
     texInfo.mLevelRangeValue1 = desc->mLevelRangeValue1;
     texInfo.mLevelRangeValue2 = desc->mLevelRangeValue2;
-    if (drawMode != 5 && drawMode != 6) {
+    if (texInfo.mDrawMode != 5 && texInfo.mDrawMode != 6) {
         texInfo.mLevelRangeValue1 = texInfo.mLevelRangeValue1 + localVary;
         texInfo.mLevelRangeValue2 = texInfo.mLevelRangeValue2 + localVary;
     }
