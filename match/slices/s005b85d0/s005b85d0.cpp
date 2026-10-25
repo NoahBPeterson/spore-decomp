@@ -21,11 +21,28 @@ struct cSPVector3 : public rw::math::fpu::Vector3Template<float, 0> {
   typedef rw::math::fpu::Vector3Template<float, 0> base;
   cSPVector3() {}
   cSPVector3(float ax, float ay, float az) : base(ax, ay, az) {}
-  cSPVector3(const cSPVector3& v) { x = v.x; y = v.y; z = v.z; }
-  cSPVector3& operator=(const cSPVector3& v) { x = v.x; y = v.y; z = v.z; return *this; }
   float Dot(const cSPVector3& o) const { return x * o.x + y * o.y + z * o.z; }
+  cSPVector3 operator-(const cSPVector3& o) const { return cSPVector3(x - o.x, y - o.y, z - o.z); }
+  cSPVector3 operator*(float s) const { return cSPVector3(x * s, y * s, z * s); }
 };
-struct cSPMatrix3 { float m[9]; };
+struct cSPMatrix3 {
+  float m[9];
+  cSPMatrix3& Assign(const cSPMatrix3& o);  // 0x0041cb40
+};
+struct cSPVector2 { float x, y; };
+
+struct TorsoFlags {
+  TorsoFlags() : mA(false), mB(false) {}
+  TorsoFlags(bool a, bool b) : mA(a), mB(b) {}
+  bool mA;
+  bool mB;
+};
+
+struct Leg {
+  char pad[0xdc0];
+  float mParam0;  // +0xdc0
+  float mParam1;  // +0xdc4
+};
 
 struct eastl_bitset54 {
   uint32_t mWord[2];
@@ -106,6 +123,30 @@ class cSPEditorSkinManager;
 class cSPEditorAppEconomy;
 class cSPEditorSpine;
 class cSPEditorLimbStructure;
+struct cSPEditorTuning;
+
+// 3-pointer float vector; push_back is inline with an out-of-line DoInsertValue slow path.
+class FloatVector {
+ public:
+  float* mpBegin;
+  float* mpEnd;
+  float* mpCapacity;
+  FloatVector() : mpBegin(0), mpEnd(0), mpCapacity(0) {}
+  ~FloatVector() {
+    if (mpBegin && ((int*)mpBegin)[-1] != 0)
+      EASTL_allocator_deallocate(mpBegin);
+  }
+  void push_back(const float& v) {
+    if (mpEnd < mpCapacity) {
+      float* p = mpEnd++;
+      if (p)
+        *p = v;
+    } else {
+      DoInsertValue(mpEnd, v);
+    }
+  }
+  void DoInsertValue(float* position, const float& value);  // 0x00455660
+};
 
 class cSPEditorBlock {
  public:
@@ -116,11 +157,17 @@ class cSPEditorBlock {
   cSPEditorModel* mEditorModel;  // +0x28
   char pad2c[0x48 - 0x2c];
   cSPVector3 mPosition;          // +0x48
-  char pad54[0x340 - 0x54];
+  char pad54[0x60 - 0x54];
+  cSPMatrix3 mOrientation;       // +0x60
+  char pad84[0x1d8 - 0x84];
+  float mScale;                  // +0x1d8
+  char pad1dc[0x340 - 0x1dc];
   cSPEditorBlock** mChildrenBegin;  // +0x340
   cSPEditorBlock** mChildrenEnd;    // +0x344
-  char pad348[0xdc8 - 0x348];
-  eastl_bitset54 mFlags;            // +0xdc8
+  char pad348[0xdc0 - 0x348];
+  float mParam0;                 // +0xdc0
+  float mParam1;                 // +0xdc4
+  eastl_bitset54 mFlags;         // +0xdc8
   void SetHighlight(int color, int a, int b, int c);
 };
 
@@ -141,6 +188,7 @@ class cSPEditorSkinManager {
   virtual void Release();
   char pad[0x200];
   cSPEditorSkinPart* GetSkinPart(cSPEditorBlock* block, int flags);  // FUN_004c44c0
+  void UpdateTorso(TorsoFlags flags, int x);                         // FUN_004c3230
 };
 
 #define PV(n) virtual void pv##n();
@@ -157,9 +205,22 @@ class cSPEditorSpine {
   void Rebuild(bool a, bool b);                        // FUN_005d1600
   bool Check();                                        // FUN_005d4970
   void Rebuild2();                                     // FUN_005d1640
-  char pad[0xe8];
+  Leg* GetFirstLeg();                                  // FUN_005d0ce0
+  Leg* GetLastLeg();                                   // FUN_005d0d90
+  cSPVector2* NearestParam(cSPVector2* res, Leg* node);  // FUN_005cf110
+  void Rescale(FloatVector* front, FloatVector* back);   // FUN_005d1780
+  void RepinArea(float lo, float hi, cSPEditorSkinManager* skin);  // FUN_005d19e0
+  float GetRadius();                                   // FUN_005cd990
+  void Interp(float t, float s, float* a, float* b);   // FUN_005cd870
+  cSPEditorBlock* GrowVertebra(cSPEditorBlock* block, cSPVector3* dir, cSPMatrix3* mat);  // FUN_005d27e0
+  void RemoveVertebra(cSPEditorBlock* block);          // FUN_005d3300
+  char pad[0xe0];
+  unsigned int mCount;          // +0xe0
+  int mUnkE4;                   // +0xe4
   cSPEditorBlock* mFrontBlock;  // +0xe8
   cSPEditorBlock* mBackBlock;   // +0xec
+  char padF0[0x11c - 0xf0];
+  float mRadius;                // +0x11c
 };
 
 class cSPEditorLimbStructure {
@@ -168,7 +229,55 @@ class cSPEditorLimbStructure {
   ~cSPEditorLimbStructure();  // FUN_00488900
   void Cleanup();             // FUN_00488980
   void SetSource(cSPEditorLimbStructure* src, int a, int b);  // FUN_004891a0
+  void Refresh(bool a);       // FUN_004890e0
+  void FixAllJoints();        // FUN_00489ae0
 };
+
+class cSPEditorModel {
+ public:
+  char pad[0x4f];
+  bool mUsingSymmetry;  // +0x4f
+  bool IsUsingSymmetry() const;          // FUN_004adc40
+  void SetUsingSymmetry(bool on);        // FUN_004adc20
+};
+
+class cSPEditorAppEconomy {
+ public:
+  virtual void e0();
+  virtual void e1();
+  virtual void e2();
+  virtual void e3();
+  virtual void e4();
+  virtual void e5();
+  virtual void e6();
+  virtual void e7();
+  virtual void e8();
+  virtual void e9();
+  virtual bool CanAffordBlock(cSPEditorBlock* block);  // vtable +0x28
+};
+
+class cSPEditorTuning {
+ public:
+  char pad[0x1c];
+  float mSpineHandleDistance;  // +0x1c
+};
+cSPEditorTuning* EditorTuning();  // FUN_00401070
+
+// free helpers
+void quick_sort(float* begin, float* end);                                   // FUN_005b8560
+void AxisAngleMatrix(cSPMatrix3* out, const cSPVector3* axis, float angle);   // FUN_00576b00
+float FUN_0069b760(const cSPVector3* a, const cSPVector3* b, const cSPVector3* axis);  // FUN_0069b760
+void SetSoundSymbol(uint32_t a, uint32_t b, const char* name);               // FUN_00572070
+void RecordEvent4(uint32_t a, uint32_t b, float c, int d);                   // FUN_00435f40
+void KillSeti(int id);                                                       // FUN_004a88d0
+
+extern const cSPVector3 g_spineAxisFront;   // 0x015134c8
+extern const cSPVector3 g_spineAxisBack;    // 0x015134bc
+extern const cSPVector3 g_spineAxisX;       // 0x01513350
+extern float g_spineAngleLimit;             // 0x01513340
+extern float g_spineAngleAdjust;            // 0x015ea4c8
+extern float g_eps;                         // 0x013f7748
+extern float g_soundScale;                  // 0x013ec478
 
 namespace EditorUtils {
 void GetAllLimbs(cSPEditorBlock* block, eastl::sp_vector<cSPEditorBlock*>* out, int flag);  // FUN_004a0020
@@ -254,6 +363,7 @@ class BlockLimbMap {
   // hint as parent corrupts a warm tree, so this stays a separate entry point.
   rbtree_iterator DoInsertValueWithHint(rbtree_node_base* pHint, const BlockLimbPair& value, bool bForceToLeft);  // 0x005b8340
   void DoNukeSubtree(rbtree_node* pNode);
+  void clear();  // 0x005b8310 (defined in another slice)
   EA::AutoRefCount<cSPEditorSkinPart>* FindOrCreate(cSPEditorBlock* const& key);
 };
 }  // namespace eastl
@@ -300,6 +410,8 @@ class cSPEditorManipulationSpineResize : public cSPEditorManipulationObject, pub
   void DoOnMouseMove();
   void SetBlockHighlight(cSPEditorBlock* block, bool highlight);
   void Update(float dt);
+  cSPEditorBlock* GetNextVertebra();  // FUN_005b7a40
+  void RepinSimple();                 // FUN_005b7cf0
 };
 
 cSPEditorManipulationObject::cSPEditorManipulationObject() {}
@@ -454,15 +566,152 @@ void cSPEditorManipulationSpineResize::Update(float dt) {
   }
 }
 
-// @ 0x005b8950 -- PARTIAL
+// @ 0x005b8950
 bool cSPEditorManipulationSpineResize::RepinBlocks() {
-  return false;
+  mSkinManager->UpdateTorso(TorsoFlags(false, false), 0);
+  if (!mHasRoutes) {
+    if (!mSpine->Check())
+      return false;
+    mSpine->Rebuild2();
+    mFrontAnchor = mSpine->mFrontBlock->mParam0;
+    mBackAnchor = mSpine->mBackBlock->mParam0;
+    mHasRoutes = true;
+    return false;
+  }
+  FloatVector front;
+  FloatVector back;
+  front.push_back(0.0f);
+  front.push_back(1.0f);
+  back.push_back(0.0f);
+  back.push_back(1.0f);
+  if (!mSpine->Check())
+    return false;
+  cSPEditorBlock* frontBlock = mSpine->mFrontBlock;
+  cSPEditorBlock* backBlock = mSpine->mBackBlock;
+  float lo = 0.0f;
+  float hi = 1.0f;
+  bool keep = true;
+  if (mBlock == frontBlock) {
+    Leg* leg = mSpine->GetFirstLeg();
+    if (leg) {
+      cSPVector2 legPos;
+      legPos.x = leg->mParam0;
+      legPos.y = leg->mParam1;
+      cSPVector2 nearest;
+      mSpine->NearestParam(&nearest, leg);
+      keep = (mFrontAnchor + g_eps < legPos.x);
+      front.push_back(legPos.x);
+      back.push_back(nearest.x);
+      hi = nearest.x - g_eps;
+    }
+    if (keep) {
+      front.push_back(mFrontAnchor);
+      back.push_back(frontBlock->mParam0);
+    }
+    front.push_back(mBackAnchor);
+    back.push_back(backBlock->mParam0);
+  } else {
+    Leg* leg = mSpine->GetLastLeg();
+    if (leg) {
+      cSPVector2 legPos;
+      legPos.x = leg->mParam0;
+      legPos.y = leg->mParam1;
+      cSPVector2 nearest;
+      mSpine->NearestParam(&nearest, leg);
+      keep = (legPos.x < mBackAnchor - g_eps);
+      front.push_back(legPos.x);
+      back.push_back(nearest.x);
+      lo = nearest.x + g_eps;
+    }
+    front.push_back(mFrontAnchor);
+    back.push_back(frontBlock->mParam0);
+    if (keep) {
+      front.push_back(mBackAnchor);
+      back.push_back(backBlock->mParam0);
+    }
+  }
+  quick_sort(front.mpBegin, front.mpEnd);
+  quick_sort(back.mpBegin, back.mpEnd);
+  mSpine->Rescale(&front, &back);
+  mSpine->RepinArea(lo, hi, mSkinManager);
+  mFrontAnchor = mSpine->mFrontBlock->mParam0;
+  mBackAnchor = mSpine->mBackBlock->mParam0;
+  return true;
 }
 
-volatile int g_scratch_s005b85d0;
-
-// @ 0x005b8fb0 -- PARTIAL
-__declspec(noinline) void cSPEditorManipulationSpineResize::DoOnMouseMove() { g_scratch_s005b85d0 = 1; }
+// @ 0x005b8fb0
+void cSPEditorManipulationSpineResize::DoOnMouseMove() {
+  if (!mBlock || !mSpine)
+    return;
+  cSPMatrix3 mat;
+  mat.Assign(mBlock->mOrientation);
+  const cSPVector3& axis = (mBlock == mSpine->mFrontBlock) ? g_spineAxisFront : g_spineAxisBack;
+  float ny = axis.z * mat.m[7] + axis.y * mat.m[4] + axis.x * mat.m[1];
+  float nz = axis.z * mat.m[8] + axis.y * mat.m[5] + axis.x * mat.m[2];
+  float invLen = 1.0f / sqrtf(ny * ny + nz * nz);
+  cSPVector3 dir;
+  dir = cSPVector3(0.0f, ny, nz) * invLen;
+  cSPVector3 delta = mPlanePoint - mBlock->mPosition;
+  if (!mSpine->GetPart(mBlock))
+    return;
+  float dist = delta.z * dir.z + delta.y * dir.y + delta.x * dir.x;
+  dist -= EditorTuning()->mSpineHandleDistance;
+  if (fabsf(dist) > mSpine->GetRadius() * 2.0f) {
+    if (dist > 0.0f && mSpine->mCount < 0x14 && mEconomy->CanAffordBlock(mBlock)) {
+      float scale = mBlock->mScale;
+      float angLo;
+      float angHi;
+      mSpine->Interp(scale, scale, &angLo, &angHi);
+      float angle = FUN_0069b760(&dir, &delta, &g_spineAxisX);
+      if (angle > g_spineAngleLimit)
+        angle -= g_spineAngleAdjust;
+      angle = (angle < angLo) ? angLo : angle;
+      angle = (angle > angHi) ? angHi : angle;
+      AxisAngleMatrix(&mat, &g_spineAxisX, angle);
+      cSPEditorBlock* grown = mSpine->GrowVertebra(mBlock, &dir, &mat);
+      if (grown) {
+        mColorTimer = 0.0f;
+        SetBlockHighlight(mBlock, false);
+        mBlockLimbs.clear();
+        mBlock = grown;
+        RepinBlocks();
+        int count = mSpine->mCount;
+        SetSoundSymbol(0xb07c3bbf, 0x1e8bda2a, "creature_spine");
+        RecordEvent4(0xb07c3bbf, 0xfdedb725, (float)count * g_soundScale, 0);
+        mFrameDelay = mUnk8c;
+        mChangedObject = true;
+      }
+    } else if (dist < 0.0f) {
+      if (mSpine->mCount > 2) {
+        if (HighlightDeleteBlockers(mBlock)) {
+          cSPEditorBlock* next = GetNextVertebra();
+          mSpine->RemoveVertebra(mBlock);
+          mBlock = next;
+          if (!RepinBlocks())
+            RepinSimple();
+          int count = mSpine->mCount;
+          SetSoundSymbol(0xb07c3bbf, 0x1e8bda2a, "creature_spine");
+          RecordEvent4(0xb07c3bbf, 0xfdedb725, (float)count * g_soundScale, 0);
+          mFrameDelay = mUnk8c;
+          mChangedObject = true;
+        } else if (mColorTimer == 0.0f) {
+          mColorTimer = 1.0f;
+          KillSeti(0xc355901a);
+        }
+      }
+    }
+  }
+  if (mChangedObject) {
+    bool symmetry = mBlock->mEditorModel->IsUsingSymmetry();
+    mBlock->mEditorModel->SetUsingSymmetry(false);
+    int count = mLimbs.size();
+    for (int i = 0; i < count; i++) {
+      mLimbs[i]->Refresh(true);
+      mLimbs[i]->FixAllJoints();
+    }
+    mBlock->mEditorModel->SetUsingSymmetry(symmetry);
+  }
+}
 
 }  // namespace SP
 
