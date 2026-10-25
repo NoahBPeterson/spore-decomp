@@ -1,0 +1,2 @@
+00ba9370 ?GetEmpireByID@cStarManager@SP@@QBEPAVcEmpire@2@I@Z  # SP::cStarManager::GetEmpireByID (callee of s00e2d6a0, named from the dev publics; slice address comment)
+00e2d6a0 ?ShowRelationshipRollover@cSPUIRolloverCivRelationship_s00e2_d6a0@@QAEXPAUIWindow@@HH@Z  # cSPUIRolloverCivRelationship_s00e2_d6a0::ShowRelationshipRollover migrated from s00e2d6a0 (verbatim, slice spelling)
