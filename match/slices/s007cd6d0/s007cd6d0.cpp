@@ -274,16 +274,143 @@ float* __cdecl cConfigManagerUnnamedBE0(float* param_1, void* param_2)
     dst[2] = (float)v;
     return dst;
 }
+// ---------------------------------------------------------------- ground-cover config
+extern "C" long __cdecl _InterlockedIncrement(volatile long*);
+#pragma intrinsic(_InterlockedIncrement)
+
+struct cModList { int GetModificationCount(); };                 // 0x006237a0
+
+// A property value (EA::Variant layout): type tag at +0x12, float payload via
+// the __thiscall GetValueFloat helper at 0x0041ea70.
+struct GcProperty {
+    unsigned int   pad00[4];
+    unsigned short pad10;
+    short          mnType;                                       // +0x12
+    float* GetValueFloat();
+};
+
+struct GroundCoverConfig {
+    virtual void AddRef();                                       // +0x00
+    virtual void Release();                                      // +0x04
+    virtual void v08(); virtual void v0c();
+    virtual void v10(); virtual void v14();
+    virtual void v18(); virtual void v1c();
+    virtual void v20();
+    virtual bool GetProperty(unsigned int key, GcProperty*& out); // +0x24
+    char pad28[0x30 - 0x04];
+    cModList* mList;                                             // +0x30
+    int       mModCount;                                         // +0x34
+};
+
+extern GroundCoverConfig* sGroundCoverConfig;                    // 0x01636e18
+extern float gGroundCoverInfo;                                   // 0x0153d638
+extern float gGroundCoverRange;                                  // 0x0153d63c
+extern int   gGroundCoverConfigModCount;                         // 0x01636c20
+
+extern "C" {
+    void  __cdecl    FUN_00aa7fa0(int, void*);                    // 0x00aa7fa0
+}
+
+// 16-byte property element: {u32 key0, u32 key1, ref-counted pointer, u32 pad}.
+struct GcRef {
+    void* p;
+    GcRef() {}
+    GcRef(const GcRef& o) {
+        p = o.p;
+        if (p) _InterlockedIncrement((volatile long*)((char*)p + 8));
+    }
+};
+struct GcElem { unsigned ka, kb; GcRef ref; unsigned d; };
+
+// Linear transform object: flags +0, translation +4, scale +0x10, 3x3 matrix +0x14.
+struct GcXform {
+    char  pad00[4];
+    float tx, ty, tz;       // +0x04
+    float scale;            // +0x10
+    float m00, m01, m02;    // +0x14
+    float m10, m11, m12;    // +0x20
+    float m20, m21, m22;    // +0x2c
+    void TransformVectorByMatrix(float* v);
+};
+
 // @ 0x007cdcd0
-void UpdateFromGroundCoverConfig(void*) {}
+extern "C" __declspec(noinline) void UpdateFromGroundCoverConfig()
+{
+    GroundCoverConfig* p = sGroundCoverConfig;
+    if (p) {
+        GcProperty* prop;
+        if (p->GetProperty(0xc5e2ea1bu, prop) && prop->mnType == 0xd)
+            gGroundCoverInfo = *prop->GetValueFloat();
+        if (sGroundCoverConfig && sGroundCoverConfig->GetProperty(0x352f7423u, prop) && prop->mnType == 0xd)
+            gGroundCoverRange = *prop->GetValueFloat();
+        p = sGroundCoverConfig;
+    }
+    gGroundCoverConfigModCount = p->mModCount + (p->mList ? p->mList->GetModificationCount() : 0);
+}
+
 // @ 0x007cdd80
-void cConfigManagerUnnamedD80(void*) {}
+extern "C" void FUN_007cdd80()
+{
+    FUN_00aa7fa0(3, 0);
+    FUN_00aa7fa0(4, 0);
+    GroundCoverConfig* p = sGroundCoverConfig;
+    if (p) {
+        sGroundCoverConfig = 0;
+        p->Release();
+    }
+}
+
 // @ 0x007cddc0
-void cConfigManagerUnnamedDC0(void*) {}
+extern "C" void FUN_007cddc0()
+{
+    GroundCoverConfig* p = sGroundCoverConfig;
+    if (p) {
+        int n = p->mList ? p->mList->GetModificationCount() : 0;
+        if (p->mModCount + n != gGroundCoverConfigModCount)
+            UpdateFromGroundCoverConfig();
+    }
+}
+
 // @ 0x007cde30
-void cConfigManagerUnnamedE30(void*) {}
+extern "C" void* __cdecl FUN_007cde30(GcElem* first, GcElem* last, GcElem* dst)
+{
+    for (; first != last; ++first, ++dst) {
+        if (dst) {
+            dst->ka = first->ka;
+            dst->kb = first->kb;
+            const GcRef& srcRef = first->ref;
+            GcRef& dstRef = dst->ref;
+            dstRef.p = srcRef.p;
+            if (dstRef.p) _InterlockedIncrement((volatile long*)((char*)dstRef.p + 8));
+        }
+    }
+    return dst;
+}
+
+// 12-byte vector result of the matrix product.
+struct GcV3 { float x, y, z; };
+
 // @ 0x007cdee0
-void TransformVectorByMatrix(void*, float*) {}
+void GcXform::TransformVectorByMatrix(float* v)
+{
+    volatile float t[3];
+    if ((*(unsigned char*)this & 2) != 0) {
+        float x = v[0], y = v[1], z = v[2];
+        t[0] = (m10 * y + m20 * z) + m00 * x;
+        t[1] = (m01 * x + m11 * y) + m21 * z;
+        t[2] = (m02 * x + m12 * y) + m22 * z;
+        v[0] = t[0];
+        v[1] = t[1];
+        v[2] = t[2];
+    }
+    float s = scale;
+    v[1] *= s;
+    v[2] *= s;
+    v[0] *= s;
+    v[1] += ty;
+    v[2] += tz;
+    v[0] += tx;
+}
 // ---------------------------------------------------------------- draw/animation
 struct Vec3f { float x, y, z; };
 
