@@ -31,6 +31,7 @@ extern "C" {
   void   __cdecl FUN_00e4ce40_dummy();
 }
 extern char* g_16b3c04;
+extern char* g_16b3c08;
 extern char* g_16b3c0c;
 extern int  g_15a7bb0, g_15a7bac;
 
@@ -52,6 +53,43 @@ struct cSPUILayout18 {
   void* FindWindowByID(int id, int flag);   // 0x8105b0
   void  SetVisibility(int v);               // 0x810590
   void  Init(void* a, int b, int c);        // 0x8120d0
+  void  Shutdown(int a);                    // 0x811ad0
+};
+
+// Grid/list helper reached through the cell UI state at +0x9c (0xb72260 remove,
+// 0xb720e0 destroy).
+struct cCellGrid18 {
+  void Remove(void* e);                     // 0xb72260
+  void Destroy();                           // 0xb720e0
+};
+
+// The scoped helper object at 0x743b50/0xe82130 (stack object) and the float
+// object returned by 0xe4ce40 (its field at +0x68 feeds the camera offset).
+struct cGuard18b { void* p; };
+struct GuardOps { void Ctor(); void Dtor(); };   // 0x743b50 / 0xe82130 (thiscall)
+
+// The global cViewer at 0x016b42b8 (methods thiscall; float arg on the stack).
+struct cViewer18 {
+  void SetViewAngle(float a);                       // 0x7c5350
+  void SetNearClip(float a);                        // 0x7c4ba0
+  void SetFarClip(float a);                         // 0x7c4bc0
+  void SetCameraToWorld(void* m);                   // 0x7c4c40
+  void SetRaster(void* p, int b);                   // 0x7c4be0
+  void Clear(int v);                                // 0x7c3c50
+};
+extern "C" void* FUN_0067dd40();                // 0x67dd40  render service
+extern "C" void  FUN_01043580(void* out, void* pos, void* target, void* scratch);  // 0x1043580 view matrix
+extern const float kF1483bcc;                   // 0x1483bcc
+extern const float kF145c12c;                   // 0x145c12c
+extern float g_15a7c40, g_15a7c44, g_15a7c48;   // 0x15a7c40..48
+extern cViewer18 g_16b42b8;                     // 0x16b42b8 cViewer global
+extern void* g_winSlots[0x40];                  // 0x16b4178 window table
+extern unsigned char g_winUsed[0x40];           // 0x16b4278 slot-used flags
+
+// Object returned by 0xe4ce40 (read for its +0x68 scalar, a focus/depth value).
+struct cFocusRef18 {
+  char  pad0[0x68];
+  float mField68;           // +0x68
 };
 
 // Cell object whose medal/UI flags the two helpers below write (layout from usage).
@@ -81,9 +119,21 @@ struct cCell18 {
 
 // Cell UI state object reached through the global pointer at 0x016b3c0c.
 struct cCellUI18 {
-  char  pad0[0xe4];
+  char  pad0[0x48];
+  float mCamX;               // +0x48  camera target x (cell origin)
+  float mCamY;               // +0x4c
+  float mCamZ;               // +0x50
+  char  pad1[0x6c - 0x54];
+  float mCamOfsX;            // +0x6c  camera offset from the target
+  float mCamOfsY;            // +0x70
+  float mCamOfsZ;            // +0x74
+  char  pad2[0x90 - 0x78];
+  void* mpLayout;            // +0x90
+  void* mpRefObj;            // +0x94
+  void* mpOptions;           // +0x98
+  char  pad3[0xe4 - 0x9c];
   unsigned char mbActive;    // +0xe4
-  char  pad1[0xe8 - 0xe5];
+  char  pad4[0xe8 - 0xe5];
   float mCenterX;            // +0xe8
   float mCenterY;            // +0xec
   float mCenterZ;            // +0xf0
@@ -212,9 +262,7 @@ void FUN_00e53e30(float* out, float* box, float* ext) {
   o[2] = r2;
 }
 
-// ---- remaining slice-18 functions: not reconstructed ---------------------
-// @ 0x00e540b0
-__declspec(noinline) void FUN_00e540b0(void* a, void* b, int mode) { (void)a; (void)b; (void)mode; }
+// ---- remaining slice-18 functions: reconstructed below the type definitions --
 // ---- HUD initialisation (0x00e54270) ---------------------------------------------------------
 // Class and field names below are Claude-coined from usage.
 #define V4(n) virtual void n##0(); virtual void n##1(); virtual void n##2(); virtual void n##3();
@@ -239,6 +287,7 @@ struct UILayout {                       // cSPUILayout-like (vtable: dtor, AddRe
   UILayout();                                                // 0x00810000
   void Init(const ResKey* key, int a, int b);                // 0x008120d0
   UIWindow* FindWindowByID(int id, int flag);                // 0x008105b0
+  void Shutdown(int a);                                      // 0x00811ad0
 };
 struct UIOptions {                      // cSPUIGlobalOptions-like (vtable: AddRef, Release)
   virtual void AddRef();
@@ -247,6 +296,7 @@ struct UIOptions {                      // cSPUIGlobalOptions-like (vtable: AddR
   UIOptions();                                               // 0x00e00ec0
   void CreateDialog();                                       // 0x00e02430
   UIWindow* GetWindow();                                     // 0x00ff0420 (mov eax,[ecx+0x14])
+  void Destroy();                                            // 0x00e02e10
 };
 struct UIRefObj {                       // non-virtual refcount at +4, virtual deleting dtor
   virtual ~UIRefObj();
@@ -254,6 +304,7 @@ struct UIRefObj {                       // non-virtual refcount at +4, virtual d
   char pad[0x30];
   UIRefObj(UILayout* layout, const char* name);              // 0x00e28a10
   void Setup();                                              // 0x00e29c80
+  void Teardown();                                           // 0x00e28a80
 };
 struct UIPreload {                      // cTexturePreload-like (vtable: AddRef, Release)
   virtual void AddRef();
@@ -262,7 +313,7 @@ struct UIPreload {                      // cTexturePreload-like (vtable: AddRef,
   UIPreload(int a);                                          // 0x007b07e0
   void PreloadTextureList(const ResKey* key);                // 0x007b1e90
 };
-struct UIGrid { char pad[0x1c]; void Init(int a, int b); };  // 0x00b72080
+struct UIGrid { char pad[0x1c]; void Init(int a, int b); void Remove(void* e); void Destroy(); };  // 0x00b72080 / 0xb72260 / 0xb720e0
 
 struct Vec3f { float x, y, z; };
 struct CellCtl {
@@ -295,7 +346,12 @@ struct CellCtl {
   float f93c, f940;
   void Reset();                                              // 0x00697980 cLocalInputState::Reset
 };
-struct CellGfx { char pad[0x3c]; UIPreload* mPreload; };      // +0x3c
+struct CellGfx {
+  char pad[0x3c];
+  UIPreload* mPreload;        // +0x3c
+  char pad2[0x161b0 - 0x40];
+  void* mRenderObj;           // +0x161b0 render-target provider
+};
 struct TestSystem { char pad[0x70]; char* mListHead; };       // list anchor at +0x70
 
 extern CellCtl* g_pCell;           // 0x016b3c0c
@@ -425,11 +481,158 @@ void FUN_00e54270(char skipPreload) {
   }
 }
 
-// @ 0x00e54880
-void FUN_00e54880() {}
-// @ 0x00e548d0
-void FUN_00e548d0() {}
-// @ 0x00e549b0
-void FUN_00e549b0() {}
-// @ 0x00e54ab0
-void FUN_00e54ab0() {}
+// @ 0x00e540b0  reposition two windows according to mode (0=right,1=centred,2=left)
+void FUN_00e540b0(void* a, void* b, int mode) {
+  UIWindow* wa = (UIWindow*)a;
+  UIWindow* wb = (UIWindow*)b;
+  float rectLeft[4];
+  float rectCentre[4];
+  float rectRight[4];
+  wa->GetArea();
+  wb->GetArea();
+  float* rb = wb->GetArea();
+  float widthBefore = rb[2] - rb[0];
+  AutoSizeWindowForText(wb, 0, 0);
+  float* ra = wa->GetArea();
+  float* rb2 = wb->GetArea();
+  float delta = (rb2[2] - rb2[0]) - widthBefore;
+  switch (mode) {
+    case 0: {
+      rectRight[0] = ra[0];
+      rectRight[1] = ra[1];
+      rectRight[2] = ra[2] + delta;
+      rectRight[3] = ra[3];
+      wa->SetArea(rectRight);
+      break;
+    }
+    case 1: {
+      float half = delta * 0.5f;
+      rectCentre[0] = ra[0] - half;
+      rectCentre[1] = ra[1];
+      rectCentre[2] = ra[2] + half;
+      rectCentre[3] = ra[3];
+      wa->SetArea(rectCentre);
+      break;
+    }
+    case 2: {
+      rectLeft[0] = ra[0] - delta;
+      rectLeft[1] = ra[1];
+      rectLeft[2] = ra[2];
+      rectLeft[3] = ra[3];
+      wa->SetArea(rectLeft);
+      wb->SetPosition(rb2[0] - delta, rb2[1]);
+      break;
+    }
+  }
+}
+
+// @ 0x00e54880  hide a window slot, mark it unused, drop it from the grid
+struct cHideWin18 {
+  int            mGridKey;   // +0x00  key handed to the grid remove
+  char           pad04[0x30];
+  cSPUILayout18* mpSub;      // +0x34  layout sub-object (visibility target)
+};
+void FUN_00e54880(void* win) {
+  cHideWin18* w = (cHideWin18*)win;
+  cSPUILayout18* sub = w->mpSub;
+  sub->SetVisibility(0);
+  int i = 0;
+  do {
+    if (g_winSlots[i] == sub) {
+      g_winUsed[i] = 0;
+      break;
+    }
+    ++i;
+  } while (i < 0x40);
+  g_pCell->mGrid.Remove((void*)w->mGridKey);
+}
+
+// @ 0x00e548d0  cell HUD teardown: grid slots, options, layout, ref object, grid dtor
+void FUN_00e548d0() {
+  for (int i = 0; i < 0x40; ++i) {
+    void* w = g_winSlots[i];
+    if (w) {
+      g_winSlots[i] = 0;
+      (*(void(__thiscall**)(void*))((char*)Vt(w) + 8))(w);
+    }
+  }
+  g_pCell->mOptions->Destroy();
+  UIOptions* opts = g_pCell->mOptions;
+  if (opts) {
+    g_pCell->mOptions = 0;
+    (*(void(__thiscall**)(void*))((char*)Vt(opts) + 4))(opts);
+  }
+  g_pCell->mLayout->Shutdown(1);
+  UILayout* layout = g_pCell->mLayout;
+  if (layout) {
+    g_pCell->mLayout = 0;
+    (*(void(__thiscall**)(void*))((char*)Vt(layout) + 8))(layout);
+  }
+  g_pCell->mObj94->Teardown();
+  UIRefObj* obj = g_pCell->mObj94;
+  if (obj) {
+    g_pCell->mObj94 = 0;
+    int n = obj->mRefCount - 1;
+    obj->mRefCount = n;
+    if (n == 0) {
+      obj->mRefCount = 1;
+      (*(void(__thiscall**)(void*, int))((char*)Vt(obj) + 0))(obj, 1);
+    }
+  }
+  g_pCell->mGrid.Destroy();
+}
+
+// @ 0x00e549b0  build cell view matrix from the focused object and apply to the viewer
+void FUN_00e549b0() {
+  cGuard18 guard;
+  cFocusRef18* u = (cFocusRef18*)FUN_00e4ce40((void*)&guard);
+  float fz = u->mField68;
+  ((GuardOps*)&guard)->Dtor();
+  float sx = g_pCell->v48.x + g_pCell->v6c.x;
+  float sy = g_pCell->v48.y + g_pCell->v6c.y;
+  float sz = g_pCell->v48.z + g_pCell->v6c.z;
+  float pos[3];
+  pos[0] = sx + g_15a7c40 * fz;
+  pos[1] = sy + g_15a7c44 * fz;
+  pos[2] = sz + g_15a7c48 * fz;
+  float view[16];
+  FUN_01043580(pos, &g_pCell->v48, (void*)0x15a7c34, view);
+  g_16b42b8.SetViewAngle(kF1483bcc);
+  g_16b42b8.SetNearClip(1.0f);
+  g_16b42b8.SetFarClip(kF145c12c);
+  g_16b42b8.SetCameraToWorld(view);
+}
+
+// @ 0x00e54ab0  set raster/clear and issue two rendering passes (stdcall, 4 args)
+struct RenderParams18 {
+  unsigned pad0;      // +0x00
+  unsigned x;         // +0x04
+  unsigned y;         // +0x08
+  unsigned z;         // +0x0c
+};
+struct RenderArg18 {
+  unsigned viewer;    // +0x00 cViewer address
+  unsigned x;         // +0x04
+  unsigned y;         // +0x08
+  unsigned z;         // +0x0c
+};
+void __stdcall FUN_00e54ab0(void* a, void* b, RenderParams18* c, void* d) {
+  (void)b;
+  unsigned local14 = 0xffffffff;
+  unsigned local18 = 0xffffffff;
+  void* s = FUN_0067dd40();
+  (*(void(__thiscall**)(void*, int, void*, int, void*))((char*)Vt(s) + 0xa8))(s, 0, &local14, 0, &local14);
+  g_16b42b8.SetRaster(&local18, 1);
+  g_16b42b8.Clear(7);
+  RenderArg18 ra;
+  ra.viewer = 0x16b42b8;
+  ra.x = c->x;
+  ra.y = c->y;
+  ra.z = c->z;
+  void* o = g_pCellGfx->mRenderObj;
+  void* r = (*(void*(__thiscall**)(void*))((char*)Vt(o) + 0xa0))(o);
+  (*(void(__thiscall**)(void*, void*, int, void*, void*))((char*)Vt(r) + 0xc))(r, a, 3, &ra, d);
+  o = g_pCellGfx->mRenderObj;
+  r = (*(void*(__thiscall**)(void*))((char*)Vt(o) + 0xa0))(o);
+  (*(void(__thiscall**)(void*, void*, int, void*, void*))((char*)Vt(r) + 0xc))(r, a, 0x12, &ra, d);
+}
