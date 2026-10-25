@@ -1,1 +1,2 @@
 # source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00af1910/s00af1910.cpp  ??4cSweepResult@@QAEAAU0@ABU0@@Z  00af1910  /O2 /MD /Gy /TP /arch:SSE /fp:fast
