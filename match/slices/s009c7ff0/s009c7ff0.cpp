@@ -323,9 +323,9 @@ bool creature_mesh_instance_data::Init(creature_instance_data* c, cIModelWorld* 
         mesh_lo.model->pad_044[0] &= 0xffffefff;
     world->AssignModel(mesh_lo.model, *(void**)((char*)data + 8), -1);
 
-    ulong nparts = (ulong)(*(unsigned char**)(*(char**)data + 0x9c) -
-                           *(unsigned char**)(*(char**)data + 0x98)) / 0x8c;
-    ulong nbodies = (ulong)(creature->mpAnimsEnd - creature->mpAnimsBegin) / 0x2bc;
+    int nparts = (int)(*(unsigned char**)(*(char**)data + 0x9c) -
+                       *(unsigned char**)(*(char**)data + 0x98)) / 0x8c;
+    int nbodies = (int)(creature->mpAnimsEnd - creature->mpAnimsBegin) / 0x2bc;
     BodyMeshes.SetBodyCount(nparts);
     if (nbodies != 0) {
         int off = 0;
