@@ -17,6 +17,8 @@ void NotifyAdd(void* info, void* blender, void* other, int arg);   // 0x006c1cd0
 void NotifyAlloc();                    // 0x007c5490
 struct cBindInfo;
 void __fastcall FinishNotify(cBindInfo* info);   // 0x01200940 (thiscall, no args)
+struct cFileAllocator;
+struct cResourceSet;
 
 // 8-byte animation/bone group record.
 struct cAnimGroupInfo {
@@ -105,9 +107,11 @@ public:
     long long mCounter;             // +0x90
     char pad98[0xc8 - 0x98];
     unsigned short mFlags;          // +0xc8
-    char padca[0xec - 0xca];
+    char padca[0xcc - 0xca];
+    cFileAllocator* mFieldCC;       // +0xcc (packed-file allocator)
+    char padd0[0xec - 0xd0];
     void* mDynDraw;                 // +0xec
-    char padec[0x8];
+    cResourceSet* mFieldF0;         // +0xf0 (bound resource set)
     char padf4[0x60];
 
 public:
@@ -121,6 +125,9 @@ public:
     void SetBoneTable(int a, void* b);                      // @ 0x0073B800
     cMaterial* SetBoneCallback(int boneIndex, void* a2, void* a3, void* a4);   // @ 0x0073B840
     void SetDynamicDraw(void* p, bool flag);                // @ 0x0073B8E0
+    bool QueryAllocator(int* a1, int* a2, int* a3, int* a4, int* a5, int* a6, void** a7);  // @ 0x0073B980
+    bool Reseat(int v);                                     // @ 0x0073BA50
+    void BuildBoneMatrices(void* state);                    // @ 0x0073BB40
 };
 
 // @ 0x0073B7E0 — number of bones = last group's bone count + bone offset.
@@ -485,26 +492,284 @@ struct Model47 {
 void Model47::Collect(void* a, void* b)
 {
     void** p = mMatBegin;
-    while (p != mMatEnd) {
+    void** end = mMatEnd;
+    for (; p != end; ++p) {
         if (*p != 0)
             TextureCollect(*p, a, b);
-        ++p;
     }
-    void** q = mTexBegin;
-    while (q != mTexEnd) {
-        MaterialCollect(*q, a, b);
-        ++q;
+    p = mTexBegin;
+    end = mTexEnd;
+    for (; p != end; ++p)
+        MaterialCollect(*p, a, b);
+}
+
+namespace SP {
+
+// ---------------------------------------------------------------------------
+// @ 0x0073B980 — describe the packed-file allocator bound at +0xcc: element
+// size (0x10), the two capacity limits and the format table entries.
+// ---------------------------------------------------------------------------
+struct cAllocLayout {
+    char pad0[0x34];
+    int  m34;                       // +0x34
+    int  m38;                       // +0x38
+    int* m3c;                       // +0x3c (vertex format table)
+};
+
+struct cFileAllocator {
+    void**        vftable;          // +0
+    cAllocLayout* GetLayout();      // 0x007F54D0
+    int           GetFormat();      // 0x00762380
+};
+
+bool cModelInstance::QueryAllocator(int* a1, int* a2, int* a3, int* a4, int* a5, int* a6,
+                                    void** a7)
+{
+    if (mFieldCC != 0) {
+        cAllocLayout* layout = mFieldCC->GetLayout();
+        *a1 = 0x10;
+        *a2 = 0x10;
+        *a5 = layout->m38;
+        *a6 = layout->m34;
+        *a3 = mFieldCC->GetFormat();
+        *a4 = layout->m3c[2];
+        ((void(__thiscall*)(cFileAllocator*))mFieldCC->vftable[0])(mFieldCC);
+        *a7 = mFieldCC;
+        return true;
     }
+    *a2 = 0;
+    *a1 = 0;
+    *a5 = 0;
+    *a6 = 0;
+    *a4 = 0;
+    *a3 = 0;
+    *a7 = 0;
+    return false;
 }
 
 // ---------------------------------------------------------------------------
-// Remaining slice functions: large animation drivers and helpers.
+// @ 0x0073BA50 — rebind the first material of the resource set at +0xf0 to a
+// new bind-info value, prepare it, then restore the previous value.
 // ---------------------------------------------------------------------------
-// @ 0x0073B980 — query a packed-file allocator (195 bytes)
-void QueryAllocatorStub() {}
-// @ 0x0073BA50 — reseat a resource (85 bytes)
-void ReseatStub() {}
-// @ 0x0073BB40 — animation driver (529 bytes)
-void AnimDriverStub() {}
-// @ 0x0073BDF0 — bone lookup (277 bytes)
-void BoneLookupStub() {}
+struct cBindCtx {
+    int  GetValue();                // 0x00FCC210 (thiscall)
+    void SetValue(int v);           // 0x00FCCDD0 (thiscall)
+};
+void __cdecl    F796650(void* p);                              // 0x00796650
+void __cdecl    PrepareMaterial(cMaterial* m, void* extra);    // 0x0073A900
+
+struct cResourceSet {
+    char  pad0[0x28];
+    cMaterial* mBegin;              // +0x28
+    cMaterial* mEnd;                // +0x2c
+};
+
+bool cModelInstance::Reseat(int v)
+{
+    if (mFieldF0->mBegin == mFieldF0->mEnd)
+        return false;
+    cMaterial* m = mFieldF0->mBegin;
+    cBindCtx* ctx = (cBindCtx*)m->mInfo;
+    int saved = ctx->GetValue();
+    ctx->SetValue(v);
+    PrepareMaterial(m, 0);
+    ctx->SetValue(saved);
+    F796650(0);
+    return true;
+}
+
+// ---------------------------------------------------------------------------
+// @ 0x0073BB40 — rebuild the per-bone 3x4 matrices in the shared table:
+// per-group material preparation, then identity-filling of unbound ranges and
+// a final upload of the instance's own bone table.
+// ---------------------------------------------------------------------------
+struct cBoneMatrix {                // 0x30 (3x4 floats)
+    float m[12];
+};
+
+struct cBoneArg {                   // argument block for PrepareMaterial
+    cBoneMatrix* mMatrices;         // +0x00
+    int          mCount;            // +0x04
+};
+
+struct cBoneState {                 // caller-owned scratch
+    char pad0[0x48];
+    bool mDone;                     // +0x48
+    char pad49[3];
+    int  mCount;                    // +0x4c
+};
+
+cBoneMatrix    gBoneMatrices[0x100];                // 0x0162B870
+extern unsigned char* gShaderFlag;                  // 0x016F6EE0
+void __cdecl SetShaderParam(int id, int value, int extra);   // 0x00777AE0
+
+void cModelInstance::BuildBoneMatrices(void* statev)
+{
+    cBoneState* state = (cBoneState*)statev;
+    int nGroups = (int)(mGroupEnd - mGroupBegin);
+    state->mCount = mFieldC;
+    bool done = (mFieldC == 0) ? (mBlendBegin == mBlendEnd) : (mField10 == 0);
+    state->mDone = done;
+    if (mGroupBegin != mGroupEnd && mGroupBegin->mBindingIdx == -1 &&
+        mGroupBegin->mBoneCount > 0 && mField10 == 0)
+        state->mDone = true;
+    if (state->mDone)
+        return;
+    if (nGroups > 1) {
+        cAnimGroupInfo* last = mGroupEnd - 1;
+        int n = (int)last->mBoneCount + (int)last->mBoneOffset;
+        if (state->mCount < n)
+            state->mCount = n;
+    }
+    if (state->mCount >= 0x100)
+        state->mCount = mFieldC;
+    if (mFieldC != 0 && mFieldC >= state->mCount)
+        return;
+
+    bool failed = false;
+    for (int i = 0; i < nGroups; i++) {
+        cAnimGroupInfo* g = &mGroupBegin[i];
+        if (g->mBindingIdx != -1) {
+            cMaterial* mat = &mMaterials[(signed char)g->mBindingIdx];
+            cBoneArg arg;
+            void* parg = 0;
+            if (state->mCount != 0) {
+                arg.mMatrices = &gBoneMatrices[g->mBoneOffset];
+                arg.mCount = g->mBoneCount;
+                parg = &arg;
+            }
+            PrepareMaterial(mat, parg);
+            cBlender* b = mat->mBlender;
+            if (b != 0) {
+                if ((unsigned char)(*(unsigned int*)((char*)b + 0xc) >> 8) > 3)
+                    failed = true;
+            }
+        } else {
+            int cnt = g->mBoneCount;
+            if (cnt <= 0)
+                continue;
+            int off = g->mBoneOffset;
+            int last = cnt + off;
+            if (last <= mFieldC)
+                continue;
+            if (off < mFieldC)
+                off = mFieldC;
+            int count = last - off;
+            cBoneMatrix identity;
+            memset(&identity, 0, sizeof(identity));
+            identity.m[0] = 1.0f;
+            identity.m[5] = 1.0f;
+            identity.m[10] = 1.0f;
+            cBoneMatrix* dst = &gBoneMatrices[off];
+            if (count != 0) {
+                memcpy(dst, &identity, sizeof(identity));
+                memcpy(dst + 1, dst, (count - 1) * sizeof(identity));
+            }
+        }
+    }
+    int v = 0;
+    if (failed && gShaderFlag != 0 && (*gShaderFlag & 1))
+        v = 8;
+    SetShaderParam(0x207, v, 0);
+    if (mFieldC != 0)
+        memcpy(gBoneMatrices, mField10, mFieldC * sizeof(cBoneMatrix));
+}
+
+} // namespace SP
+
+// ---------------------------------------------------------------------------
+// @ 0x0073BDF0 — bone/weight vertex-attribute lookup.
+//
+// Walks the section's vertex format table looking for the element array that
+// matches the requested format id (and the optional key filters), then
+// resolves the value through the two element-array indirections.
+// ---------------------------------------------------------------------------
+struct cEltRefV {                   // 0x10
+    int            mNumElts;        // +0x00
+    unsigned char* mData;           // +0x04
+    unsigned short mEltSize;        // +0x08
+    unsigned short mEltStride;      // +0x0a
+    void*          mDataRC;         // +0x0c
+};
+
+struct cFmtEntryV {                 // 4 bytes
+    short mElts;                    // +0x00 (element-array index)
+    short mIndices;                 // +0x02 (per-bone array index)
+};
+
+struct cMDEltsV {                   // 0x20
+    int      m0;                    // +0x00
+    int      m4;                    // +0x04
+    int      m8;                    // +0x08
+    int      mC;                    // +0x0c
+    cEltRefV mRef;                  // +0x10
+};
+
+struct cMDSectionV {                // 0x8c
+    cEltRefV      mVertIndices;     // +0x00
+    int           mNumVertices;     // +0x10
+    cFmtEntryV*   mFormatBegin;     // +0x14
+    cFmtEntryV*   mFormatEnd;       // +0x18
+    char          pad1c[0x44 - 0x1c];
+    cEltRefV*     mEltsBegin;       // +0x44
+    cEltRefV*     mEltsEnd;         // +0x48
+};
+
+struct cMeshDataV {                 // 0x58
+    void*       vftable;            // +0x00
+    int         mRefCount;          // +0x04
+    cMDEltsV*   mEltBegin;          // +0x08
+    cMDEltsV*   mEltEnd;            // +0x0c
+    cMDEltsV*   mEltCap;            // +0x10
+    char        pad14[0x8];
+    cMDSectionV* mSectionBegin;     // +0x1c
+};
+
+extern const int gEltMask[8];       // 0x0140D5AC (mask per element size)
+
+struct cBoneVertexRef {
+    void* mMesh;                    // +0x00
+    char  pad4[4];
+    int   mSection;                 // +0x08
+    char  padc[4];
+    int   mVertexBase;              // +0x10
+    int   mVertexCount;             // +0x14
+    bool LookupBone(int* out, int match, int vertexIdx, int key, int key2);
+};
+
+bool cBoneVertexRef::LookupBone(int* out, int match, int vertexIdx, int key, int key2)
+{
+    if (vertexIdx < 0 || vertexIdx >= mVertexCount)
+        return false;
+    vertexIdx += mVertexBase;
+    cMeshDataV* md = (cMeshDataV*)mMesh;
+    cMDSectionV* sec = (cMDSectionV*)((char*)md->mSectionBegin + mSection * 0x8c);
+    cMDEltsV* elts = md->mEltBegin;
+    int nFmt = (int)(sec->mFormatEnd - sec->mFormatBegin);
+    int fmt;
+    int i;
+    for (i = 0; i < nFmt; i++) {
+        fmt = sec->mFormatBegin[i].mElts;
+        cMDEltsV* e = &elts[fmt];
+        if ((key == 0 || e->m0 == key) && (key2 == -1 || e->m4 == key2) &&
+            e->m8 == match)
+            break;
+    }
+    if (i >= nFmt)
+        return false;
+
+    cMDEltsV* ea = &elts[fmt];
+    int val;
+    if (sec->mVertIndices.mData != 0)
+        val = *(int*)(sec->mVertIndices.mData + sec->mVertIndices.mEltStride * vertexIdx)
+              & gEltMask[sec->mVertIndices.mEltSize];
+    else
+        val = vertexIdx;
+    if (sec->mEltsBegin != sec->mEltsEnd) {
+        cEltRefV* r = &sec->mEltsBegin[sec->mFormatBegin[i].mIndices];
+        if (r->mData != 0)
+            val = *(int*)(r->mData + r->mEltStride * val) & gEltMask[r->mEltSize];
+    }
+    *out = *(int*)(ea->mRef.mData + ea->mRef.mEltStride * val);
+    return true;
+}
