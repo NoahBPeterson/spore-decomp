@@ -1,1 +1,3 @@
+01364f50 ?init_15836c8@@YAXXZ  # init_15836c8 migrated from s01364b20 (verbatim, slice spelling)
+01365320 ?init_1583b00@@YAXXZ  # init_1583b00 migrated from s01364b20 (verbatim, slice spelling)
 0136bfb0 ?init_16a0dc4@@YAXXZ  # init_16a0dc4 migrated from s01364b20 (verbatim, slice spelling)

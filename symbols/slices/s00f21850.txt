@@ -1,0 +1,1 @@
+00f21cd0 ?equal_range@DramaEventMultiMap@eastl@@QAEXPAPAXPBI@Z  # DramaEventMultiMap::equal_range migrated from s00f21850 (verbatim, slice spelling)

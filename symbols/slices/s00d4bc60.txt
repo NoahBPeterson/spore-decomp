@@ -1,22 +1,23 @@
-00d4bc60 SP::cRainStormEvent::TriggerEvent  # place nest pos at +0x74 and start the storm via FUN_00fc6f00
-00d4bd10 SP::cDramaEventInstanceData::FUN_00d4bd10  # nest position non-zero and time-of-day == 2
-00d4c1b0 FUN_00d4c1b0  # spawn a UFO at the nest with surface orientation and scaled offset
-00d4c470 FUN_00d4c470  # nudge the avatar
-00d4c5e0 FUN_00d4c5e0  # SP::SEA_MONSTER_KILL_Tick: fire the creature-mode strategy event 0xd3353639
-00d4c650 SP::cSeaMonsterEvent::ShouldActivate  # different continents + unvisited + count/raycast test
-00d4ca70 SP::cDramaEventInstanceData::FUN_00d4ca70  # deleting destructor, returns this
-00d4cad0 SP::cSPDramaManager::GetActiveEvent  # first active drama event of a type from the multimap at +0x50
-00d4cb30 SP::cSPDramaManager::IsDramaEventActive
-00d4cb50 SP::cSPDramaManager::GetActiveEventTuning
+00b88590 ?GetContinent@cPlanetModel@SP@@QBEHABUcSPVector3@@@Z  # SP::cPlanetModel::GetContinent (callee of s00d4bc60, named from the dev publics; slice address comment)
+00d4bc60 ?TriggerEvent@cRainStormEvent@SP@@QAEXXZ  # cRainStormEvent::TriggerEvent migrated from s00d4bc60 (verbatim, slice spelling)
+00d4bd10 ?FUN_00d4bd10@cDramaEventInstanceData_s00d4_bc60@SP@@QAEEXZ  # cDramaEventInstanceData_s00d4_bc60::FUN_00d4bd10 migrated from s00d4bc60 (verbatim, slice spelling)
+00d4c1b0 ?FUN_00d4c1b0@@YGPAXPAUVec3@@MD@Z  # FUN_00d4c1b0 migrated from s00d4bc60 (verbatim, slice spelling)
+00d4c470 ?FUN_00d4c470@@YAXXZ  # FUN_00d4c470 migrated from s00d4bc60 (verbatim, slice spelling)
+00d4c5e0 ?FUN_00d4c5e0@@YAXXZ  # FUN_00d4c5e0 migrated from s00d4bc60 (verbatim, slice spelling)
+00d4c650 ?ShouldActivate@cSeaMonsterEvent@SP@@QAE_NXZ  # cSeaMonsterEvent::ShouldActivate migrated from s00d4bc60 (verbatim, slice spelling)
+00d4ca70 ?FUN_00d4ca70@cDramaEventInstanceData_s00d4_bc60@SP@@QAEPAU12@E@Z  # cDramaEventInstanceData_s00d4_bc60::FUN_00d4ca70 migrated from s00d4bc60 (verbatim, slice spelling)
+00d4cad0 ?GetActiveEvent@cSPDramaManager_s00d4_bc60@SP@@QAEPAUcDramaEventInstanceData_s00d4_bc60@2@I_N@Z  # cSPDramaManager_s00d4_bc60::GetActiveEvent migrated from s00d4bc60 (verbatim, slice spelling)
+00d4cb30 ?IsDramaEventActive@cSPDramaManager_s00d4_bc60@SP@@QAE_NI@Z  # cSPDramaManager_s00d4_bc60::IsDramaEventActive migrated from s00d4bc60 (verbatim, slice spelling)
+00d4cb50 ?GetActiveEventTuning@cSPDramaManager_s00d4_bc60@SP@@QAEPAXI@Z  # cSPDramaManager_s00d4_bc60::GetActiveEventTuning migrated from s00d4bc60 (verbatim, slice spelling)
 00d4cb70 SP::cSPDramaManager::HandleMeteorImpact  # trigger creatures in an impact radius (approximate)
 00d4cce0 WriteSTLMapT  # serialise the u32->AutoRefCount map
 00d4cda0 DElemVec::insert  # eastl vector<ControlDrawable> insert with growth
-00d4cf10 SP::cDramaEventInstanceData::FUN_00d4cf10  # game-data lookup by key, AsInterface; returns 0 when absent
-00d4cf70 SP::cDramaEventInstanceData::FUN_00d4cf70  # clear stimuli on each game-data creature and remove event 0xe2def8b4
-00d4d030 SP::cDramaEventInstanceData::GetGameDataIsUsable  # usable when activation >= 0 and a non-empty game-data array
-00d4d0b0 SP::cNightPredatorEvent::ShouldActivate  # not already spawned and random < chance property
-00d4d180 SP::cDramaEventInstanceData::PostLoadEvent  # rebuild property list, mark loaded, replay the game-data object
-00d4d220 SP::cDramaEventInstanceData::PlayIdleIfFlagged  # play idle on the game-data object when flagged
-00d4d2b0 SP::cDramaEventInstanceData::ReleaseGameDataObject  # remove the game-data object's noun
-00d4d340 SP::cDramaEventInstanceData::AnyGameDataFlagged  # true when no game-data element has the +0x135 byte set
-00d4d530 SP::cSPDramaManager::TriggerEvent  # mark active, countdown, refresh tuning and update the active-event bitmask
+00d4cf10 ?FUN_00d4cf10@cDramaEventInstanceData_s00d4_bc60@SP@@QAEPAXII@Z  # cDramaEventInstanceData_s00d4_bc60::FUN_00d4cf10 migrated from s00d4bc60 (verbatim, slice spelling)
+00d4cf70 ?FUN_00d4cf70@cDramaEventInstanceData_s00d4_bc60@SP@@QAEXXZ  # cDramaEventInstanceData_s00d4_bc60::FUN_00d4cf70 migrated from s00d4bc60 (verbatim, slice spelling)
+00d4d030 ?GetGameDataIsUsable@cDramaEventInstanceData_s00d4_bc60@SP@@QAEEXZ  # cDramaEventInstanceData_s00d4_bc60::GetGameDataIsUsable migrated from s00d4bc60 (verbatim, slice spelling)
+00d4d0b0 ?ShouldActivate@cNightPredatorEvent@SP@@QAE_NXZ  # cNightPredatorEvent::ShouldActivate migrated from s00d4bc60 (verbatim, slice spelling)
+00d4d180 ?PostLoadEvent@cDramaEventInstanceData_s00d4_bc60@SP@@QAEXPAX@Z  # cDramaEventInstanceData_s00d4_bc60::PostLoadEvent migrated from s00d4bc60 (verbatim, slice spelling)
+00d4d220 ?PlayIdleIfFlagged@cDramaEventInstanceData_s00d4_bc60@SP@@QAEEXZ  # cDramaEventInstanceData_s00d4_bc60::PlayIdleIfFlagged migrated from s00d4bc60 (verbatim, slice spelling)
+00d4d2b0 ?ReleaseGameDataObject@cDramaEventInstanceData_s00d4_bc60@SP@@QAEXH@Z  # cDramaEventInstanceData_s00d4_bc60::ReleaseGameDataObject migrated from s00d4bc60 (verbatim, slice spelling)
+00d4d340 ?AnyGameDataFlagged@cDramaEventInstanceData_s00d4_bc60@SP@@QAEEXZ  # cDramaEventInstanceData_s00d4_bc60::AnyGameDataFlagged migrated from s00d4bc60 (verbatim, slice spelling)
+00d4d530 ?TriggerEvent@cSPDramaManager_s00d4_bc60@SP@@QAEXPAUcDramaEventInstanceData_s00d4_bc60@2@H@Z  # cSPDramaManager_s00d4_bc60::TriggerEvent migrated from s00d4bc60 (verbatim, slice spelling)

@@ -1,32 +1,20 @@
-# slice s00d4a930 - Spore Simulator drama-event / VerbTray cluster
-# Modelled types (retail member offsets):
-#   cSPDramaManager           vtable @0x00, mate-teacher AutoRefCount @0x14, stream @0x30,
-#                             tuning @0x34, mate AutoRefCount @0x38, mate-check timer @0x3c,
-#                             tuning list @0x40, nest progress @0x48, eastl multimap @0x54
-#   cDramaEventInstanceData   eastl vector {begin,end} @0x00/@0x04, vtables @0x00/@0x04,
-#                             bit mask @0x10, fields @0x18/@0x1c, vector2 @0x20, floats @0x28/@0x2c,
-#                             bool flag @0x30, property list @0x40, nest position @0x74
-#   cSPCreatureAnimal         vtable @0x00, flag @0x135, order id @0xb48, sub-object pointer @0xb4c,
-#                             flags @0xb58, flag @0xb5e; sub-object flags @0x5fc
-#   RBTree / RBNode           anchor node @+4 (left/right/parent/color), root @+0xc; node key @0x10,
-#                             value AutoRefCount @0x14
 00d4a930  VerbTray_Update() -> void  # game-mode dispatch (current-game-mode vs mode globals; tribe strategy instance / NounManager avatar), UTFWin manager window lookup, VerbTray context rebind, then per-frame verb walk with per-entry verb-kind switch and panel activation
 00d4ac40  FUN_00d4ac40(t, start, end) -> bool  # interval membership: scale start/end by 3600, wrap start above end, return start<=t<=end
-00d4af70  ModeSetter::SetValue(v) -> void  # if v<=3 store into +0x44
-00d4af80  cDramaEventInstanceData::InitFromTuning(unused) -> void  # property-list lookups by hash: 0xc55c98bb -> bit mask +0x10, 0x06bfe2ed -> +0x1c, 0xd2e804ee -> vector2 +0x20, 0x346dbe16 -> bool +0x30; then if !unused: 0x332c289d -> +0x18, 0x920a2318 -> float +0x28, 0xb1f42539 -> float +0x2c
+00d4af70 ?SetValue@ModeSetter@@QAEXI@Z  # ModeSetter::SetValue migrated from s00d4a930 (verbatim, slice spelling)
+00d4af80 ?InitFromTuning@cDramaEventInstanceData@@QAEXH@Z  # cDramaEventInstanceData::InitFromTuning migrated from s00d4a930 (verbatim, slice spelling)
 00d4b0f0  cSPDramaManager::Write(pOut) -> void  # serialize the manager (stream +0x30, tuning +0x34, mate +0x38) through cISerializableObject
-00d4b180  cSPDramaManager::MatedWith(mate) -> void  # clear mate-creature flag +0xb58 bit4 and +0xb4c->+0x5fc bit14, release mate AutoRefCount +0x38, reset mate-check timer +0x3c
-00d4b1d0  cSPDramaManager::ClearMate(mate) -> void  # clear mate-creature flag +0xb58 bit4 and +0xb4c->+0x5fc bit14; if it is our mate, release +0x38 and reset timer +0x3c
+00d4b180 ?MatedWith@cSPDramaManager@@QAEXPAUcSPCreatureAnimal@@@Z  # cSPDramaManager::MatedWith migrated from s00d4a930 (verbatim, slice spelling)
+00d4b1d0 ?ClearMate@cSPDramaManager@@QAEXPAUcSPCreatureAnimal@@@Z  # cSPDramaManager::ClearMate migrated from s00d4a930 (verbatim, slice spelling)
 00d4b220  cSPDramaManager::CheckBabyTeacher() -> void*  # validate/clear the mate-teacher AutoRefCount +0x14, then scan the avatar's neighbour list for a valid mate candidate and adopt it
-00d4b2f0  cSPDramaManager::IsValidBabyTeacher(c) -> int  # c!=0 && !c->vtable[0x2c]() && c->+0x135 && !c->+0xb5e && FUN_00c0b770(c) && species matches avatar && !c->+0xc0->vtable[0x58]() && c!=mate-teacher && FindSlot == -1
-00d4b390  FUN_00d4b390(param, range) -> u8  # for each 8-byte ref entry in [ begin, end ): if entry->obj, call obj->vtable[0x1c](param); return 1
-00d4b3c0  TuningOwner::ReloadTuning(unused) -> void  # release tuning +0x40 (vtable[1], after clearing), rebuild it via PropertyManager->vtable[0x2c](+0x34,+0x3c,&+0x40), then this->vtable[0x28](1)
-00d4b410  cSPDramaManager::PostLoad(p) -> void  # walk the eastl multimap (+0x54) from root to the anchor, calling each node value's vtable[0x24](p)
-00d4b450  RBTree::equal_range(out, key) -> void  # lower/upper bound walk over the rbtree anchor; writes {lo, hi} into out
-00d4b4b0  cDramaEventInstanceData::DestroyMembers() -> void  # for each 8-byte ref entry in [ begin, end ): if entry->obj, obj->vtable[1](); then operator_delete_array(begin)
+00d4b2f0 ?IsValidBabyTeacher@cSPDramaManager@@QAEHPAUcSPCreatureAnimal@@@Z  # cSPDramaManager::IsValidBabyTeacher migrated from s00d4a930 (verbatim, slice spelling)
+00d4b390 ?FUN_00d4b390@@YAEPAXPAURefRange@@@Z  # FUN_00d4b390 migrated from s00d4a930 (verbatim, slice spelling)
+00d4b3c0 ?ReloadTuning@TuningOwner@@QAEXH@Z  # TuningOwner::ReloadTuning migrated from s00d4a930 (verbatim, slice spelling)
+00d4b410 ?PostLoad@cSPDramaManager@@QAEXPAX@Z  # cSPDramaManager::PostLoad migrated from s00d4a930 (verbatim, slice spelling)
+00d4b450 ?equal_range@RBTree@@QAEXPAPAURBNode@@PAI@Z  # RBTree::equal_range migrated from s00d4a930 (verbatim, slice spelling)
+00d4b4b0 ?DestroyMembers@cDramaEventInstanceData@@QAEXXZ  # cDramaEventInstanceData::DestroyMembers migrated from s00d4a930 (verbatim, slice spelling)
 00d4b4f0  RBTree::insert_unique(hint, value, isInsert) -> void  # compute is-left hint, allocate 0x18-byte node, copy key + AutoRefCount value (addref), RBTreeInsert, count++
 00d4b5a0  RegisterDramaEventsFactories() -> void  # static-init chain registering the drama-event factories (FUN_00ab30c0 / FUN_00692850 / FUN_00692f60 / atexit blocks)
 00d4b860  cSPDramaManager::SetNestUpgradeLevel(delta) -> void  # progress +0x48 -= delta, clamp to 1.0f when negative, then scan neighbour entries for a nest entrance and run the upgrade path
-00d4ba40  cDramaEventInstanceData::Construct() -> void  # install vtable pair, zero scalar/pointer fields, set bool +0x30, copy nest position into +0x74/+0x78/+0x7c
-00d4bbb0  Thresholded::IsBelowZero() -> bool  # return 0.0f > +0x2c
-00d4bbd0  GetNestPosition(out) -> void*  # resolve current game mode (local avatar +0xc0 / tribe +0x120 / fallback nest triple) and read the position via vtable[0x2c]
+00d4ba40 ?Construct@cDramaEventInstanceData@@QAEXXZ  # cDramaEventInstanceData::Construct migrated from s00d4a930 (verbatim, slice spelling)
+00d4bbb0 ?IsBelowZero@Thresholded@@QAE_NXZ  # Thresholded::IsBelowZero migrated from s00d4a930 (verbatim, slice spelling)
+00d4bbd0 ?FUN_00d4bbd0@@YAPAXPAUVec3@@@Z  # FUN_00d4bbd0 migrated from s00d4a930 (verbatim, slice spelling)

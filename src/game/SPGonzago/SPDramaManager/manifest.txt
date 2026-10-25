@@ -1,0 +1,20 @@
+# source  symbol  va  flags
+../src/game/SPGonzago/SPDramaManager.cpp  ?SetValue@ModeSetter@@QAEXI@Z  00d4af70  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPDramaManager.cpp  ?MatedWith@cSPDramaManager@@QAEXPAUcSPCreatureAnimal@@@Z  00d4b180  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPDramaManager.cpp  ?ClearMate@cSPDramaManager@@QAEXPAUcSPCreatureAnimal@@@Z  00d4b1d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPDramaManager.cpp  ?IsValidBabyTeacher@cSPDramaManager@@QAEHPAUcSPCreatureAnimal@@@Z  00d4b2f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPDramaManager.cpp  ?FUN_00d4b390@@YAEPAXPAURefRange@@@Z  00d4b390  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPDramaManager.cpp  ?ReloadTuning@TuningOwner@@QAEXH@Z  00d4b3c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPDramaManager.cpp  ?PostLoad@cSPDramaManager@@QAEXPAX@Z  00d4b410  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPDramaManager.cpp  ?DestroyMembers@cDramaEventInstanceData@@QAEXXZ  00d4b4b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPDramaManager.cpp  ?IsBelowZero@Thresholded@@QAE_NXZ  00d4bbb0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPDramaManager.cpp  ?FUN_00d4bd10@cDramaEventInstanceData_s00d4_bc60@SP@@QAEEXZ  00d4bd10  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPDramaManager.cpp  ?FUN_00d4c470@@YAXXZ  00d4c470  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPDramaManager.cpp  ?FUN_00d4c5e0@@YAXXZ  00d4c5e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPDramaManager.cpp  ?FUN_00d4ca70@cDramaEventInstanceData_s00d4_bc60@SP@@QAEPAU12@E@Z  00d4ca70  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPDramaManager.cpp  ?IsDramaEventActive@cSPDramaManager_s00d4_bc60@SP@@QAE_NI@Z  00d4cb30  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPDramaManager.cpp  ?GetActiveEventTuning@cSPDramaManager_s00d4_bc60@SP@@QAEPAXI@Z  00d4cb50  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPDramaManager.cpp  ?PostLoadEvent@cDramaEventInstanceData_s00d4_bc60@SP@@QAEXPAX@Z  00d4d180  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPDramaManager.cpp  ?insert_00d4d9b0@RefVec@@QAEPAXPAURefPair@@PBU2@@Z  00d4d9b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPDramaManager.cpp  ?ShutdownEvent@cMeteorStrikeEvent_s00d5_0380@SP@@QAEXXZ  00d50960  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPDramaManager.cpp  ?TickEvent@cMeteorStrikeEvent_s00d5_0380@SP@@QAEXM@Z  00d509c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
