@@ -1,51 +1,10 @@
-# slice s00c99140 - cTribe totem pole / reservation grid / tool slots, inferred from the cards
-# Modelled types (retail member offsets):
-#   Vec3        {float x@0x00, y@0x04, z@0x08}
-#   WString     {wchar_t* mpBegin@0x00, mpEnd@0x04, mpCap@0x08}; heap owned when
-#               ((cap - begin) & 0xfffffffe) > 2 and begin != 0; Assign@0xb6f380
-#   VtblObj     {void* mpVtbl@0x00}; sub-object whose first dword is its vtable
-#   RefObj      {void* mpVtbl@0x00}; refcounted: slot 0 = AddRef, slot 4 = Release
-#   TribeToolBody 0x58-byte body copied inside a tool-reference element:
-#               CopyFrom@0xc93dc0 (this + src), operator=@0xc95010
-#   TribeToolRef  0x60-byte vector element: mpVtbl@0x00, miUnk04@0x04, mBody@0x08
-#   ToolVec     EASTL vector<TribeToolRef>: mpBegin@0x00, mpEnd@0x04, mpCap@0x08,
-#               mpUnk0C@0x0c, mpAllocator@0x10; Insert@0xc993f0, PushBack@0xc9a000,
-#               grow allocates cap*0x60 bytes (op_new 0x13ebb38 "Simulator" line 0xd1),
-#               free via op_delete_array 0xf47380
-#   ActionSlot  0x18-byte slot: mf0C@0x0c, mf10@0x10, mf14@0x14; Clear@0xafa0a0,
-#               Reserve@0xafa030
-#   ActionCircle at +0x3b4: mfRadius@0x14, mf18@0x18, mf1C@0x1c, mb28@0x28;
-#               Clear@0xafaec0, FindSlot@0xafad70, AssignSlot@0xafc410
-#   TribeHut    mSpatial(VtblObj)@0x34, mQueue@0x120 (slot 0x58 predicate, setter
-#               0xf924e0), mf14C@0x14c; RefreshModelProps@0xc9c680
-#   TribeTool   mSpatial(VtblObj)@0x34, mbA5@0xa5
-#   cSpeciesProfile  mp52C@0x52c, mi608@0x608, mi60C@0x60c; GetUiName@0x4da330
-#   RbTree      find@0xe5c780 (key -> node, value at node+0x14)
-#   ReservationGrid at +0x558: mEntries(ToolVec)@0x984;
-#               GetReservedList@0xcc7070 (this+0x984, no stack args),
-#               RemoveReservedByID@0xcc86a0 (handle,id) ret 8,
-#               AddReserved@0xcc8350 (handle, vec, float, id) ret 0x10,
-#               ComputeGridResolution@0xcc7830 (float,float) -> float
-#   cPlanetModel  DirectionToSurfacePosition@0xb815a0 (out, dir) ret 8,
-#               BuildSurfaceOrientation@0xb7f250 (out, a, b) ret 0xc
-#   cTribe      base VtblObj@0x34, mQueue120(VtblObj)@0x120, mName230(WString)@0x230,
-#               mTree238@0x238, mpHut260@0x260, mfRadius268@0x268, mpTool2d4@0x2d4,
-#               mVec2e8(Vec3)@0x2e8, mpHut368@0x368, mCircle3b4@0x3b4,
-#               mpSlotsBegin@0x404 / mpSlotsEnd@0x408 / mpSlotsCap@0x40c,
-#               mRGrid558@0x558, mpProfile18CC@0x18cc, mpTool19C4@0x19c4,
-#               mpTool19C8@0x19c8, mpTotem19D0@0x19d0
-#   helpers     GetPropertyAsVector3@0x6a1110, FUN_0059aed0@0x59aed0,
-#               FUN_00a1ad10@0xa1ad10, NounManager@0xb3d300,
-#               cGameNounManager::CreateNoun@0xb20c60, AttachNoun@0xb1fe00,
-#               PropertyManager@0x67de30, TerraformingManager@0xb3d430,
-#               GetPlayerEmpireID@0x1021090, GetSetting9@0x401090,
-#               GetAvatarProfile@0x4df420, FUN_006a0ae0@0x6a0ae0 (model reserve),
-#               cReserveParams@0x1581208 (GetRadius@0xce6a40, GetHeight@0xce6910)
+004df420 ?GetAvatarProfile@cSPEditorSpeciesManager@SP@@QAEPBUcSpeciesProfile@2@XZ  # SP::cSPEditorSpeciesManager::GetAvatarProfile (callee of s00c99140, named from the dev publics; slice address comment)
+00c8fef0 ?InitDomesticatedAnimalsHerd@cTribe@SP@@QAE_NXZ  # SP::cTribe::InitDomesticatedAnimalsHerd (callee of s00c99140, named from the dev publics; slice address comment)
 00c99140  cTribe::SetupTotemPole() -> bool  # if a tool is bound and no totem yet: read the totem offset, create the totem noun, project it onto the surface and reserve its grid spot
 00c993f0  ToolVec::InsertAt(TribeToolRef* pos, const TribeToolRef* val) -> void  # in-place shift-left fast path or grow to max(2*count,1) and rebuild
-00c99550  cTribe::UpdateGridAndHutArea(int) -> void  # re-read the bound tool, derive the hut radius from its property and (re)submit the hut/tool/totem grid reservations
-00c99840  cTribe::NotifyToolSelection() -> void  # map FUN_00a1ad10() (0/1/2) to 0x093256ba/b9/b8, fire totem vtable slot 0x94 and finish task 0xd (byte-exact)
-00c998c0  cTribe::ReserveToolsSlots(bool active) -> void  # clear and refill the action-circle slots for the active tool, the hut and every social tool
-00c99c30  cTribe::ChooseNewHutModel() -> void  # pick one of 0x653f6b9/b7/b8/b6 from the queue predicate and the profile counters, then apply it to the hut
-00c99dc0  CreatePlayerTribe(int, int, int, cSpeciesProfile*) -> cTribe*  # create the player tribe noun, wire the profile/name/chief and reserve the totem grid spot
-00c9a000  ToolVec::PushBackAt(TribeToolRef* pos, const TribeToolRef* val) -> TribeToolRef*  # append in place when pos is the end and there is capacity, else insert; returns the element index
+00c99550 ?UpdateGridAndHutArea@cTribe_s00c9_9140@@QAEXH@Z  # cTribe_s00c9_9140::UpdateGridAndHutArea migrated from s00c99140 (verbatim, slice spelling)
+00c99840 ?NotifyToolSelection@cTribe_s00c9_9140@@QAEXXZ  # cTribe_s00c9_9140::NotifyToolSelection migrated from s00c99140 (verbatim, slice spelling)
+00c998c0 ?ReserveToolsSlots@cTribe_s00c9_9140@@QAEX_N@Z  # cTribe_s00c9_9140::ReserveToolsSlots migrated from s00c99140 (verbatim, slice spelling)
+00c99c30 ?ChooseNewHutModel@cTribe_s00c9_9140@@QAEXXZ  # cTribe_s00c9_9140::ChooseNewHutModel migrated from s00c99140 (verbatim, slice spelling)
+00c99dc0 ?CreatePlayerTribe@@YAPAUcTribe_s00c9_9140@@HHHPAUcSpeciesProfile_s00c9_9140@@@Z  # CreatePlayerTribe migrated from s00c99140 (verbatim, slice spelling)
+00c9a000 ?PushBackAt@ToolVec@@QAEPAUTribeToolRef@@PAU2@PBU2@@Z  # ToolVec::PushBackAt migrated from s00c99140 (verbatim, slice spelling)

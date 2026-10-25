@@ -1,0 +1,3 @@
+00c96950 ?FUN_00c96950@CHash@@QAEPAXPAX@Z  # CHash::FUN_00c96950 migrated from s00c96950 (verbatim, slice spelling)
+00c96a00 ?FUN_00c96a00@CHash@@QAEIPAX@Z  # CHash::FUN_00c96a00 migrated from s00c96950 (verbatim, slice spelling)
+00c96e80 ?FUN_00c96e80@CRes@@QAEXI@Z  # CRes::FUN_00c96e80 migrated from s00c96950 (verbatim, slice spelling)

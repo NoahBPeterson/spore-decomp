@@ -1,1 +1,1 @@
-013551e0 Simulator::InitTribeAttributes  # $E247 dynamic initializer: builds the cTribe serializer Attribute table (names mbMotiveCheatOn.. cTribe::sFishEndTime)
+013551e0 ?InitTribeAttributes@Simulator@@YAXXZ  # InitTribeAttributes migrated from s013551e0 (verbatim, slice spelling)

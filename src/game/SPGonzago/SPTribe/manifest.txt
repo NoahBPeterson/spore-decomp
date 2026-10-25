@@ -1,0 +1,40 @@
+# source  symbol  va  flags
+../src/game/SPGonzago/SPTribe.cpp  ?Tribe_AsInterface@@YIPAXPAUTribe@@HI@Z  00c8e420  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/SPGonzago/SPTribe.cpp  ?Community_IsPlayer@@YI_NPAUTribe@@@Z  00c8e4d0  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/SPGonzago/SPTribe.cpp  ?F8e570@@YGXPAX@Z  00c8e570  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/SPGonzago/SPTribe.cpp  ?Tribe_GetPlayer@@YIPAHPAUTribe@@@Z  00c8e650  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/SPGonzago/SPTribe.cpp  ?F8e680@@YIXPAXHH@Z  00c8e680  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/SPGonzago/SPTribe.cpp  ?F8e720@@YGXH@Z  00c8e720  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/SPGonzago/SPTribe.cpp  ?F8e830@@YIXPAUTribe@@HPAXH@Z  00c8e830  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/SPGonzago/SPTribe.cpp  ?F8e850@@YI_NPAUTribe@@@Z  00c8e850  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/SPGonzago/SPTribe.cpp  ?F8e870@@YI_NPAUTribe@@@Z  00c8e870  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/SPGonzago/SPTribe.cpp  ?F8ea70@@YAPAXI@Z  00c8ea70  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/SPGonzago/SPTribe.cpp  ?Tribe_GetMaxPopulation@@YIHPAUTribe@@@Z  00c8eae0  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/SPGonzago/SPTribe.cpp  ?F8eb50@@YI_NPAUTribe@@HPAUVec3@@@Z  00c8eb50  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/SPGonzago/SPTribe.cpp  ?F8eb90@@YI_NPAUTribe@@@Z  00c8eb90  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/SPGonzago/SPTribe.cpp  ?F8ebe0@@YIXPAUTribe@@HI@Z  00c8ebe0  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/SPGonzago/SPTribe.cpp  ?F8ec00@@YI_NPAUTribe@@HI@Z  00c8ec00  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/SPGonzago/SPTribe.cpp  ?Init@cPointerVector@@QAEPAV1@HH@Z  00c8ed30  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPTribe.cpp  ?func58h@cCommunity@@QAEXH@Z  00c8f2b0  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPTribe.cpp  ?FUN_00c8f2e0@@YGPAVcSPVector3_s00c8_ec60@@PAV1@PAVcSpatialThing@@@Z  00c8f2e0  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPTribe.cpp  ?GetAdultPopulation@cTribe@@QAEHXZ  00c8f370  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPTribe.cpp  ?FUN_00c8f3a0@cTribe@@QAEHXZ  00c8f3a0  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPTribe.cpp  ?GetToolOfType@cTribe@@QAEPAVcTool@@H@Z  00c8f6e0  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPTribe.cpp  ?FUN_00c8f730@cTribe@@QAE_NH@Z  00c8f730  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPTribe.cpp  ?FUN_00c8fb50@cTribe@@QAEXXZ  00c8fb50  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPTribe.cpp  ?FUN_00c8fc50@cTribe_s00c8_fbb0@SP@@QAEX_N@Z  00c8fc50  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPTribe.cpp  ?GetCenter@cTribe_s00c8_fbb0@SP@@QAEPAUtVec3@2@PAU32@@Z  00c8fcc0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPTribe.cpp  ?GetPoliticalCenter@cTribe_s00c8_fbb0@SP@@QAEPAUtVec3@2@PAU32@@Z  00c8fcf0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPTribe.cpp  ?GetChieftain@cTribe_s00c8_fbb0@SP@@QAEPAXXZ  00c8fd30  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPTribe.cpp  ?FUN_00c90470@cTribe_s00c8_fbb0@SP@@QAEXXZ  00c90470  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPTribe.cpp  ?FUN_00c905a0@cTribe_s00c8_fbb0@SP@@QAE_NXZ  00c905a0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPTribe.cpp  ?CheckFoodTutorialComplete@cTribe_s00c9_0b40@@QAEXXZ  00c91970  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include
+../src/game/SPGonzago/SPTribe.cpp  ?GetWaterOrHeight@cTribeToolView@SP@@QAEMXZ  00c91c80  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPTribe.cpp  ?FUN_00c92c70@@YAPAPAHPAPAH000@Z  00c92c70  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPTribe.cpp  ?FUN_00c93690@@YGXII@Z  00c93690  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPTribe.cpp  ??0cFishingHotSpot@@QAE@ABU0@@Z  00c93dc0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPTribe.cpp  ??4cFishingHotSpot_s00c9_47d0@@QAEAAU0@ABU0@@Z  00c95010  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPTribe.cpp  ?AddPanicBubble@cTribe_s00c9_47d0@@QAEXABUVector3_s00c9_47d0@@MH@Z  00c95540  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPTribe.cpp  ?FreeBubbleLists@@YGXPAPAUcBubbleNode@@I@Z  00c95930  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPTribe.cpp  ?FUN_00c96e80@CRes@@QAEXI@Z  00c96e80  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPTribe.cpp  ?NotifyToolSelection@cTribe_s00c9_9140@@QAEXXZ  00c99840  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

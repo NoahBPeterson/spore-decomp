@@ -1,0 +1,5 @@
+00c93a40 ?TribeUpdate@@YIXPAUcTribe_s00c9_3a40@@@Z  # TribeUpdate migrated from s00c93a40 (verbatim, slice spelling)
+00c93dc0 ??0cFishingHotSpot@@QAE@ABU0@@Z  # cFishingHotSpot::cFishingHotSpot migrated from s00c93a40 (verbatim, slice spelling)
+00c940d0 ?PartitionPositions@@YAXPAUVec3_s00c9_3a40@@0MMMMMM@Z  # PartitionPositions migrated from s00c93a40 (verbatim, slice spelling)
+00c94430 ?findHotSpot@@YAPAUcFishingHotSpot@@I@Z  # findHotSpot migrated from s00c93a40 (verbatim, slice spelling)
+00c94470 ?GetDebugToolTip@cSpatialView@@QAEXPAUcString@@@Z  # cSpatialView::GetDebugToolTip migrated from s00c93a40 (verbatim, slice spelling)

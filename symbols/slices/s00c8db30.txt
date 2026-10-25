@@ -7,27 +7,27 @@
 00c8e000  Spatial::LoadModel  # cSpatialObject::LoadModel (this = cTotemPole+0x34) [partial]
 00c8e310  F8e310  # stream writer: 3 x EA::IO::WriteUint32 via v08()->v06()
 00c8e3a0  F8e3a0  # stream reader: 3 x EA::IO::ReadInt32 via v08()->v06()
-00c8e420  Tribe_AsInterface  # cTribe::AsInterface(id) interface queries [MATCH]
-00c8e490  Tribe_ReleaseRel  # release mpRel_19d4 through the planet owner's vtable slot 0x58
-00c8e4d0  Community_IsPlayer  # cCommunity predicate (this = cTribe+0x120) [MATCH]
-00c8e4f0  SP::cTribe::InitRelationships  # assign terrain sphere, classify + add tribe
-00c8e570  F8e570  # set byte [p+0xa3]=1 (stdcall) [MATCH]
-00c8e5a0  SP::cTribe::CreateCreature  # create noun, init slots, editor hook
-00c8e650  Tribe_GetPlayer  # cTribe::GetPlayer [MATCH]
-00c8e680  F8e680  # vcall slot 0x9c(arg, 1) [MATCH]
-00c8e6d0  F8e6d0  # (int) cast of the float at +0x20c (0xcee380)
-00c8e720  F8e720  # call 0xc00b00(0, arg) (stdcall) [MATCH]
-00c8e730  Tribe_SetEditorMode  # cTribe editor-mode setter + iterator loop
-00c8e830  F8e830  # cTribe table[b+0x18cc+nIndex*4] = value [MATCH]
-00c8e850  F8e850  # cTribe grid counter A (0x60c) > 0 [MATCH]
-00c8e870  F8e870  # cTribe grid counter B (0x608) > 0 [MATCH]
+00c8e420 ?Tribe_AsInterface@@YIPAXPAUTribe@@HI@Z  # Tribe_AsInterface migrated from s00c8db30 (verbatim, slice spelling)
+00c8e490 ?Tribe_ReleaseRel@@YIXPAUTribe@@@Z  # Tribe_ReleaseRel migrated from s00c8db30 (verbatim, slice spelling)
+00c8e4d0 ?Community_IsPlayer@@YI_NPAUTribe@@@Z  # Community_IsPlayer migrated from s00c8db30 (verbatim, slice spelling)
+00c8e4f0 ?Tribe_InitRelationships@@YIXPAUTribe@@@Z  # Tribe_InitRelationships migrated from s00c8db30 (verbatim, slice spelling)
+00c8e570 ?F8e570@@YGXPAX@Z  # F8e570 migrated from s00c8db30 (verbatim, slice spelling)
+00c8e5a0 ?Tribe_CreateCreature@@YIPAHPAUTribe@@HH@Z  # Tribe_CreateCreature migrated from s00c8db30 (verbatim, slice spelling)
+00c8e650 ?Tribe_GetPlayer@@YIPAHPAUTribe@@@Z  # Tribe_GetPlayer migrated from s00c8db30 (verbatim, slice spelling)
+00c8e680 ?F8e680@@YIXPAXHH@Z  # F8e680 migrated from s00c8db30 (verbatim, slice spelling)
+00c8e6d0 ?F8e6d0@@YIHPAX@Z  # F8e6d0 migrated from s00c8db30 (verbatim, slice spelling)
+00c8e720 ?F8e720@@YGXH@Z  # F8e720 migrated from s00c8db30 (verbatim, slice spelling)
+00c8e730 ?Tribe_SetEditorMode@@YIXPAUTribe@@HE@Z  # Tribe_SetEditorMode migrated from s00c8db30 (verbatim, slice spelling)
+00c8e830 ?F8e830@@YIXPAUTribe@@HPAXH@Z  # F8e830 migrated from s00c8db30 (verbatim, slice spelling)
+00c8e850 ?F8e850@@YI_NPAUTribe@@@Z  # F8e850 migrated from s00c8db30 (verbatim, slice spelling)
+00c8e870 ?F8e870@@YI_NPAUTribe@@@Z  # F8e870 migrated from s00c8db30 (verbatim, slice spelling)
 00c8e890  F8e890  # copy mSegmentTable_1868[row] six dwords to out; null row for other kinds
-00c8e930  F8e930  # combined relation A/B check
+00c8e930 ?F8e930@@YI_NPAUTribe@@HPAH@Z  # F8e930 migrated from s00c8db30 (verbatim, slice spelling)
 00c8e990  F8e990  # relation state 1/2/3 from grid counters
-00c8e9f0  F8e9f0  # relation status id 0x268e/0x268d/0x268f
-00c8ea70  F8ea70  # population-cap table lookup (0x1695458 + ...) [MATCH]
-00c8eae0  SP::cTribe::GetMaxPopulation  # pop-cap table / interface fallback [MATCH]
-00c8eb50  F8eb50  # read grid position vector into out3 [MATCH]
-00c8eb90  F8eb90  # cTribe relation check against the player tribe [MATCH]
-00c8ebe0  F8ebe0  # mpRel_19d8 |= 1 << nBit [MATCH]
-00c8ec00  F8ec00  # cTribe flag test (slot + 1 << nBit) [MATCH]
+00c8e9f0 ?F8e9f0@@YIIPAUTribe@@@Z  # F8e9f0 migrated from s00c8db30 (verbatim, slice spelling)
+00c8ea70 ?F8ea70@@YAPAXI@Z  # F8ea70 migrated from s00c8db30 (verbatim, slice spelling)
+00c8eae0 ?Tribe_GetMaxPopulation@@YIHPAUTribe@@@Z  # Tribe_GetMaxPopulation migrated from s00c8db30 (verbatim, slice spelling)
+00c8eb50 ?F8eb50@@YI_NPAUTribe@@HPAUVec3@@@Z  # F8eb50 migrated from s00c8db30 (verbatim, slice spelling)
+00c8eb90 ?F8eb90@@YI_NPAUTribe@@@Z  # F8eb90 migrated from s00c8db30 (verbatim, slice spelling)
+00c8ebe0 ?F8ebe0@@YIXPAUTribe@@HI@Z  # F8ebe0 migrated from s00c8db30 (verbatim, slice spelling)
+00c8ec00 ?F8ec00@@YI_NPAUTribe@@HI@Z  # F8ec00 migrated from s00c8db30 (verbatim, slice spelling)
