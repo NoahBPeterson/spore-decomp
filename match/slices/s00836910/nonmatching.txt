@@ -5,3 +5,6 @@
 008371e0  8  cDataURI::cDataURI - complete; the second SSO capacity lea is scheduled one slot early
 00837270  134  RawFixed::AppendN - complete append(count,char) with memset fill, returns this; equiv: PASS 61.5% cov
 00837310  47  RawFixed::Resize - complete; register assignment (edi vs esi for this) differs
+00836bd0  428  cSPUIXHTMLUTFResourceHandler::ProcessRequest - complete; property lookup + stream dispatch present, object size/scheduling differs; equiv: WEAK 400 valid, 11.0% cov
+00836d50  922  cDataURI::init - complete; scheme/charset parsing implemented, codec resets and buffer setup schedule differently; equiv: WEAK 197 valid, 23.5% cov
+00837360  951  cSPUIXHTMLDataURIHandler::PackDataIntoURIString - complete; percent/base64 encoder implemented, SSO/temp shape differs; equiv: WEAK 287 valid, 12.9% cov
