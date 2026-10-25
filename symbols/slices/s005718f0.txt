@@ -1,3 +1,4 @@
+00571cf0 ?SPIDFromName@@YAIPBD@Z  # SPIDFromName migrated from s005718f0
 00571d40 ?SetKey@DirtyState@@QAEXABUKey12@@@Z  # DirtyState::SetKey migrated from s005718f0 (verbatim, slice spelling)
 00571d60 ??4VecPair@@QAEAAU0@ABU0@@Z  # VecPair::operator= migrated from s005718f0 (verbatim, slice spelling)
 00571d90 ?Notify@OwnerHandle@@QAEXXZ  # OwnerHandle::Notify migrated from s005718f0 (verbatim, slice spelling)

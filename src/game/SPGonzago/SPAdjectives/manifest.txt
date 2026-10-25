@@ -1,0 +1,2 @@
+# source  symbol  va  flags
+../src/game/SPGonzago/SPAdjectives.cpp  ?SPIDFromName@@YAIPBD@Z  00571cf0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
