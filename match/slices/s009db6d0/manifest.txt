@@ -6,3 +6,6 @@ slices/s009db6d0/s009db6d0.cpp  ?Copy1C@@YAPAURec1C@@PBU1@0PAU1@@Z  009dc1d0  /O
 slices/s009db6d0/s009db6d0.cpp  ?vcopyGaitC@@YAPAUGaitC@@PBU1@0PAU1@@Z  009dc2b0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 slices/s009db6d0/s009db6d0.cpp  ?CopyVal3b@@YAPAUVal3b@@PBU1@0PAU1@@Z  009dc300  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 slices/s009db6d0/s009db6d0.cpp  ?vcopyGaitCBack@@YAPAUGaitC@@PBU1@0PAU1@@Z  009dc3c0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s009db6d0/s009db6d0.cpp  ?CopyMasked@Inner@@QAEXPBU1@I@Z  009dba90  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s009db6d0/s009db6d0.cpp  ?Assign@Inner@@QAEXPBU1@@Z  009dbc60  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s009db6d0/s009db6d0.cpp  ?Set@Grid@@QAEPAXPAXHH@Z  009dbe10  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
