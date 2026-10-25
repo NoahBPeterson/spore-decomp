@@ -535,27 +535,26 @@ float* __cdecl FUN_009cda70(float* out, const float* m)
 // 0x009cdb20  FUN_009cdb20  (biased pow clamp) -- x87, uses _CIpow
 // =====================================================================
 // @ 0x009cdb20
-// Best-effort reconstruction: the x87 argument order of the two _CIpow calls
-// (0x011e08f0, constant 2.0 at 0x013f1298) could not be pinned down from the
-// disassembly, so the pow branch below is approximate (see partial.txt).
-float __cdecl FUN_009cdb20(float a, float b)
+static float FUN_009cdb20(float a, float b)
 {
     float res;
     if ((float)fabs((double)b) < 1.0f) {
-        res = a * (a * b - b + 1.0f);
+        res = (a * b - b + 1.0f) * a;
     }
-    else if (0.0f <= b) {
-        res = (float)pow(pow(2.0, (double)b), (double)a);
+    else if (0.0f > b) {
+        res = (float)(1.0 - pow((double)(1.0f - a), pow(2.0, (double)-b)));
     }
     else {
-        float d = (float)fabs((double)b) - a;
-        res = 1.0f - (float)pow(pow((double)b, 2.0), (double)d);
+        res = (float)pow((double)a, pow(2.0, (double)b));
     }
-    if (res <= 0.0f)
-        return 0.0f;
-    if (1.0f < res)
-        return 1.0f;
+    if (!(res > 0.0f)) return 0.0f;
+    if (res > 1.0f) return 1.0f;
     return res;
+}
+
+float __cdecl probe_bias_009cdb20(float a, float b)
+{
+    return a + FUN_009cdb20(a, b);
 }
 
 // =====================================================================
