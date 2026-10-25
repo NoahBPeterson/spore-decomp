@@ -1,0 +1,8 @@
+# va  diff-bytes  reason
+007b4b10  257  SetTerrainFilterRects: complete (writes the three terrain-filter rects and calls filter vtbl+0xc); only scheduling differs - cl reloads this->mp10d4 after every field store while retail reloads after each pair, and cl hoists the first filter load above the setup init, so mine carries 36 extra bytes of filter-pointer reloads [equiv: WEAK 337/400 valid, 9.8% coverage]
+007b4cd0  110  RtRequestA::Dtor: complete; MSVC EH frame (push -1 / handler / fs:[0] prolog + trylevel store) not reproduced; the refcount-clamp release of +0x1c and the virtual Release of +0x10 match [equiv: PASS 336/400 valid, 100.0% coverage]
+007b4d70  104  RtRequestB::Dtor: complete; MSVC EH frame not reproduced; the virtual Release of +0x0c and refcount-clamp release of +0x08 match [equiv: PASS 316/400 valid, 100.0% coverage]
+007b4e10  140  RawImage::Ctor: complete; MSVC EH frame not reproduced (vtable stores, InterlockedExchange refcount at +4, w*h*4 "Graphics" heap alloc and memcpy all match) [equiv: PASS 207/400 valid, 100.0% coverage]
+007b4ee0  404  cThumbnailManager::Ctor: complete; MSVC EH frame plus the _eh_vector_constructor_iterator trylevels for the two JobSlot arrays are not reproduced [equiv: PASS 400/400 valid, 100.0% coverage]
+007b5090  544  cThumbnailManager::Dtor: complete; MSVC EH frame plus the _eh_vector_destructor_iterator trylevels are not reproduced; the refcount teardown order matches [equiv: UNSUPPORTED 0/400 valid, 0.0% coverage]
+007b5320  389  FrameBoundingBoxPalette: complete; x87 sqrt/mul register allocation and stack frame size differ (0x80 vs 0x84); the SSE box math, camera setup and control flow match [equiv: PASS 230/400 valid, 94.2% coverage]
