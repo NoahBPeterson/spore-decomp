@@ -34,20 +34,12 @@ extern "C" uint32_t g_folderTable[];
 extern void FreeMem(void*);
 __declspec(dllimport) int __cdecl Snprintf16(wchar_t*, int, const wchar_t*, ...);
 int __cdecl DetectEncoding(const void*, unsigned, int, int);
-bool __cdecl DeleteDirectoryContents(const wchar_t*, int);
-uint32_t __cdecl MakeDirectoryPath(const wchar_t*);
-uint32_t __cdecl SplitPathComponents(const wchar_t*, int*, void*, void*);
-uint32_t __cdecl MakeOneDirectory(const wchar_t*);
-void __cdecl CopyMkdirPath(wchar_t*, const wchar_t*, wchar_t);
-void __cdecl DeleteTreeInternal();
-uint32_t __cdecl SymlinkDirectory(const wchar_t*);
-uint32_t __cdecl IsDirectoryEmpty(const wchar_t*);
-bool __cdecl DeleteOneDir(const wchar_t*);
-uint32_t __cdecl WalkDirectory(const wchar_t*, int);
-void __cdecl FreeIteratorList();
-void __cdecl InitIteratorList(uint32_t);
-uint32_t __cdecl MakeFileLink(const wchar_t*, const wchar_t*, int);
-void __cdecl ConcatenatePathComponents(wchar_t*, const wchar_t*, const wchar_t*);
+bool DeleteDirectoryContents(wchar_t* path, uint32_t len);
+bool __cdecl MakeOneDirectory(const wchar_t*);                   // 0x009322e0
+void __cdecl FUN_00930dd0(const wchar_t* path, const wchar_t** outDir,
+                          const wchar_t** outName, const wchar_t** outExt);
+wchar_t* __cdecl FUN_00930a30(const wchar_t* src, wchar_t* dst, wchar_t sep);
+int __cdecl ConcatenatePathComponents(wchar_t*, const wchar_t*, const wchar_t*);   // 0x0092fe60
 
 namespace EA { namespace IO {
 bool FileExists(const wchar_t* path);
@@ -462,94 +454,244 @@ bool EA_IO_IniFile::Open(uint32_t flags) {
 }
 
 // ---------------------------------------------------------------------------
-// Complex recursive directory routines (behaviourally reconstructed)
+// Recursive directory routines.  They run on the eastl::deque<Entry> that
+// EA::IO::DirectoryIterator::Read fills; only the container types are declared
+// here (their bodies live in other translation units).
 // ---------------------------------------------------------------------------
+struct ICoreAllocator;
 
-// @ 0x009326B0
-static bool DeleteDirectoryContents2(const wchar_t* path, uint32_t len) {
-    wchar_t buf[520];
-    const wchar_t* s = path;
-    wchar_t* d = buf;
-    while ((*d++ = *s++) != 0)
-        ;
+struct WString {
+    wchar_t* mpBegin;      // +0x00
+    wchar_t* mpEnd;        // +0x04
+    wchar_t* mpCapacity;   // +0x08
+    int      mAlloc;       // +0x0c
+};
+
+struct Entry {
+    int      mType;      // +0x00  1 = directory, 2 = file
+    WString  mName;      // +0x04
+    int      mPad;       // +0x14
+    int64_t  mTimes[3];  // +0x18  create / write / access, seconds
+};
+
+struct DequeIter {
+    Entry*  mpCurrent;          // +0x00
+    Entry*  mpBegin;            // +0x04
+    Entry*  mpEnd;              // +0x08
+    Entry** mpCurrentArrayPtr;  // +0x0c
+
+    DequeIter& operator++() {
+        if (++mpCurrent == mpEnd) {
+            ++mpCurrentArrayPtr;
+            mpBegin = *mpCurrentArrayPtr;
+            mpEnd = mpBegin + 4;
+            mpCurrent = mpBegin;
+        }
+        return *this;
+    }
+    bool operator!=(const DequeIter& other) const { return mpCurrent != other.mpCurrent; }
+    Entry& operator*() const { return *mpCurrent; }
+};
+
+struct Deque {
+    Entry**         mpPtrArray;      // +0x00
+    unsigned        mnPtrArraySize;  // +0x04
+    DequeIter       mItBegin;        // +0x08
+    DequeIter       mItEnd;          // +0x18
+    ICoreAllocator* mpAllocator;     // +0x28
+    const char*     mpName;          // +0x2c
+
+    void DoInit(unsigned n);            // 0x005f8840
+    void InitAlloc(ICoreAllocator* a);  // 0x005f9680
+    void Destroy();                     // 0x005f96c0
+};
+
+struct DirectoryIterator {
+    uint32_t mnListSize;            // +0x00
+    int      mnRecursionIndex;      // +0x04
+    wchar_t* mpBaseDirectory;       // +0x08
+    uint32_t mBaseDirectoryLength;  // +0x0c
+
+    unsigned Read(const wchar_t* dir, Deque* list, const wchar_t* pattern,   // 0x0092ef40
+                  unsigned flags, unsigned maxCount, bool wantTimes);
+};
+
+extern "C" ICoreAllocator* __cdecl GetDefaultAllocatorX();       // 0x00925cb0
+extern "C" void* __cdecl memcpy(void*, const void*, unsigned);   // 0x011e0744
+
+static inline bool IsPathSeparator(wchar_t c) {
+    return c == L'\\' || c == L'/' || c == L':';
+}
+
+// @ 0x009326B0  DeleteDirectoryContents
+bool DeleteDirectoryContents(wchar_t* path, uint32_t len) {
+    DirectoryIterator it = {};
+    ICoreAllocator* alloc = GetDefaultAllocatorX();
+    Deque list;
+    list.mpPtrArray = 0;
+    list.mnPtrArraySize = 0;
+    list.mItBegin = DequeIter();
+    list.mItEnd = DequeIter();
+    list.mpAllocator = alloc;
+    list.mpName = 0;
+    list.DoInit(0);
+
     bool ok = true;
-    uint32_t n = 0;
-    {
-        const wchar_t* q = buf;
-        while (*q)
-            q++;
-        n = (uint32_t)(q - buf);
+    if (it.Read(path, &list, 0, 3, 0x100000, 0)) {
+        if (len != 0 && !IsPathSeparator(path[len - 1]) && len < 0x103) {
+            path[len] = L'\\';
+            len++;
+        }
+        for (DequeIter i = list.mItBegin; i != list.mItEnd; ++i) {
+            Entry& e = *i;
+            uint32_t n = (uint32_t)(e.mName.mpEnd - e.mName.mpBegin);
+            if (len + n < 0x104) {
+                memcpy(path + len, e.mName.mpBegin, n * 2);
+                path[len + n] = 0;
+                if (e.mType == 1) {
+                    if (!DeleteDirectoryContents(path, len + n))
+                        ok = false;
+                } else if (!DeleteFileW(path)) {
+                    ok = false;
+                }
+            } else {
+                ok = false;
+            }
+        }
     }
-    if (n != 0 && buf[n - 1] != L'\\' && buf[n - 1] != L'/' &&
-        buf[n - 1] != L':' && n < 0x103) {
-        buf[n] = L'\\';
-        buf[n + 1] = 0;
-        n++;
-    }
-    void* list = 0;
-    if (WalkDirectory(buf, 0x100000) != 0) {
-        /* entries walked by WalkDirectory via callback is not modelled here */
-        ok = false;
-    }
-    buf[len] = 0;
-    if (!DeleteOneDir(buf))
-        ok = false;
-    return ok;
+    path[len] = 0;
+    bool result = false;
+    if (RemoveDirectoryRecursive(path, 0))
+        result = ok;
+    list.Destroy();
+    return result;
 }
 
-// @ 0x009326B0
-bool DeleteDirectoryContents(const wchar_t* path, int len) {
-    return DeleteDirectoryContents2(path, (uint32_t)len);
-}
-
-// @ 0x00932B20
+// @ 0x00932B20  EA::IO::Directory::CopyTree
 bool CopyDirectoryTree(const wchar_t* src, const wchar_t* dst, char recursive, int overwrite) {
     wchar_t sPath[260];
     wchar_t dPath[260];
-    CopyMkdirPath(sPath, src, L'\\');
-    CopyMkdirPath(dPath, dst, L'\\');
-    (void)recursive;
-    (void)overwrite;
+    FUN_00930a30(src, sPath, L'\\');
+    FUN_00930a30(dst, dPath, L'\\');
     if (sPath[0] == 0)
         return false;
-    unsigned int a = GetFileAttributesW(sPath);
-    if (a == 0xffffffff || (a & 0x10) == 0 || dPath[0] == 0)
+    uint32_t a = GetFileAttributesW(sPath);
+    if (a == 0xffffffff || (a & 0x10) == 0)
         return false;
-    unsigned int b = GetFileAttributesW(dPath);
-    if (!((b != 0xffffffff && (b & 0x10) != 0) || MakeDirectoryPath(dPath))) {
-        bool ok = true;
-        (void)ok;
+    if (dPath[0] == 0)
+        return false;
+    uint32_t b = GetFileAttributesW(dPath);
+    if (!(b != 0xffffffff && (b & 0x10) != 0)) {
+        if (!CreateDirectoryPath(dPath))
+            return false;
     }
-    bool ok = true;
-    void* list = 0;
-    uint32_t it = WalkDirectory(sPath, 0x100000);
-    (void)it;
-    (void)list;
+
+    DirectoryIterator it = {};
+    ICoreAllocator* alloc = GetDefaultAllocatorX();
+    Deque list;
+    list.InitAlloc(alloc);
+
+    bool ok = it.Read(sPath, &list, 0, 2 + (recursive != 0), 0x100000, 0) != 0;
+    if (ok) {
+        for (DequeIter i = list.mItBegin; i != list.mItEnd; ++i) {
+            Entry& e = *i;
+            wchar_t sFile[260];
+            wchar_t dFile[260];
+            ConcatenatePathComponents(sFile, sPath, e.mName.mpBegin);
+            ConcatenatePathComponents(dFile, dPath, e.mName.mpBegin);
+            if (e.mType == 1 && recursive != 0) {
+                if (!CopyDirectoryTree(sFile, dFile, (char)overwrite, 1))
+                    ok = false;
+            } else if (e.mType == 2) {
+                if (!CopyFileW(sFile, dFile, overwrite == 0))
+                    ok = false;
+            }
+        }
+    }
+    list.Destroy();
     return ok;
 }
 
-// @ 0x00932960  (partial: component splitting via FUN_00930dd0 not reconstructed)
+// @ 0x00932960  EA::IO::Directory::CreatePath
 bool CreateDirectoryPath(const wchar_t* path) {
     wchar_t buf[260];
     const wchar_t* s = path;
     wchar_t* d = buf;
     while ((*d++ = *s++) != 0)
         ;
-    if (buf[0] == 0)
-        return false;
-    unsigned int a = GetFileAttributesW(buf);
-    if (a != 0xffffffff && (a & 0x10) != 0)
-        return true;
-    for (wchar_t* p = buf + 1; *p != 0; p++) {
-        if (*p == L'\\' || *p == L'/') {
-            wchar_t save = *p;
-            *p = 0;
-            if (!MakeOneDirectory(buf)) {
-                *p = save;
-                return false;
+
+    const wchar_t* pDir;
+    const wchar_t* pName;
+    const wchar_t* pExt;
+    FUN_00930dd0(buf, &pDir, &pName, &pExt);
+
+    wchar_t* pEnd = (wchar_t*)pDir;
+    if (*pDir != 0) {
+        do {
+            pEnd++;
+        } while (*pEnd != 0);
+        if (pEnd > pDir && IsPathSeparator(pEnd[-1]))
+            pEnd--;
+    }
+
+    // Walk back to the deepest existing directory, blanking each separator so
+    // the truncation is visible in buf.
+    wchar_t* p = pEnd;
+    if (pDir < pEnd) {
+        for (;;) {
+            if (buf[0] != 0) {
+                uint32_t a = GetFileAttributesW(buf);
+                if (a != 0xffffffff && (a & 0x10) != 0)
+                    break;
             }
-            *p = save;
+            if (p <= pDir)
+                break;
+            bool found = false;
+            do {
+                wchar_t c = p[-1];
+                p--;
+                if (IsPathSeparator(c)) {
+                    found = true;
+                    break;
+                }
+            } while (p > pDir);
+            if (!found)
+                break;
+            while (p > pDir && IsPathSeparator(p[-1]))
+                p--;
+            *p = 0;
+            if (p <= pDir)
+                break;
         }
     }
-    return MakeOneDirectory(buf) != 0;
+
+    bool result = true;
+    if (p == pDir && *p != 0) {
+        result = MakeOneDirectory(buf);
+        if (!result)
+            return result;
+    }
+    // Re-create the blanked components one by one, restoring each separator.
+    wchar_t* f = p;
+    for (;;) {
+        if (f >= pEnd)
+            return result;
+        if (*f == 0) {
+            *f = L'\\';
+            if (f >= pEnd)
+                return result;
+            if (!MakeOneDirectory(buf)) {
+                result = false;
+                for (; f > p; f--) {
+                    if (*f == L'\\') {
+                        *f = 0;
+                        RemoveDirectoryRecursive(buf, 0);
+                    }
+                }
+                return result;
+            }
+        } else {
+            f++;
+        }
+    }
 }
