@@ -1,0 +1,10 @@
+# va  diff-bytes  reason
+00ea18c0 28 flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast; difftest WEAK (no mismatch, 41.2% coverage)
+00ea1900 151 (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) large asset view constructor; the music object and viewer factories are modelled as external creators instead of the retail inlined constructors; equiv UNSUPPORTED (unresolved construction helpers)
+00ea1a30 126 (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) large asset view destructor; the base teardown and the layout shutdown go through an unresolved call so the release cascade is not fully emitted; equiv UNSUPPORTED (unresolved layout teardown)
+00ea1b00 20 (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) hide; the viewer stop and the layout shutdown are unresolved and the window release tail is the same shape; equiv UNSUPPORTED (unresolved layout and music calls)
+00ea1b40 2 (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) view update; retail tail-jumps to the viewer stop helper, the modelled call is a normal call plus return; equiv UNSUPPORTED (unresolved viewer helper)
+00ea1b50 123 (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) release windows; the reset helper is unresolved and the six window releases use a shared pattern the retail code interleaves differently; equiv FAIL (first mismatch execution)
+00ea1c10 497 (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) bind windows; the six layout lookups, the area helper and the viewer init are unresolved so the text assignments collapse; equiv UNSUPPORTED (unresolved layout services)
+00ea1ee0 92 (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) init layout; the placement new, the centring helper and the keyed layout init are unresolved; equiv UNSUPPORTED (unresolved layout services)
+00ea1f90 126 (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) show; the asset data test and the music load path are unresolved so the body reduces to the ref-count swaps; equiv UNSUPPORTED (unresolved asset and music services)

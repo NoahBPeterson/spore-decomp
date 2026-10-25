@@ -10,4 +10,4 @@
 00ea1570 ?FUN_00ea1570@@YIXPAUcCityMusicEditor_s00ea_0910@@@Z  # FUN_00ea1570 migrated from s00ea0910 (verbatim, slice spelling)
 00ea1710 SP::Audio::cCityMusicEditor::HandleMessage  # config reload / redraw token (this = editor+4)
 00ea17b0 ?Init@cCityMusicEditor_s00ea_0910@@QAEDXZ  # cCityMusicEditor_s00ea_0910::Init migrated from s00ea0910 (verbatim, slice spelling)
-00ea18c0 SP::Audio::cCityMusicLargeAssetView::DoMessage  # msg 0x287259f6/0x74174c59 -> server s14
+00ea18c0 ?DoMessage@cCityMusicLargeAssetView@@QAEDHPAUMessage@@@Z  # cCityMusicLargeAssetView::DoMessage migrated from s00ea0910 (verbatim, slice spelling)

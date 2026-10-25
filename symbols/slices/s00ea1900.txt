@@ -1,11 +1,11 @@
-00ea1900 ??0cCityMusicLargeAssetView@@QAE@XZ  # cCityMusicLargeAssetView::cCityMusicLargeAssetView
-00ea1a30 ??1cCityMusicLargeAssetView@@QAE@XZ  # cCityMusicLargeAssetView::~cCityMusicLargeAssetView
-00ea1b00 ?Hide@cCityMusicLargeAssetView@@QAEXXZ  # void cCityMusicLargeAssetView::Hide
-00ea1b40 ?Update@cCityMusicLargeAssetView@@QAEXXZ  # void cCityMusicLargeAssetView::Update
-00ea1b50 ?ReleaseWindows@cCityMusicLargeAssetView@@QAEXXZ  # void cCityMusicLargeAssetView::ReleaseWindows
-00ea1c10 ?BindWindows@cCityMusicLargeAssetView@@QAEXXZ  # void cCityMusicLargeAssetView::BindWindows
-00ea1ee0 ?InitLayout@cCityMusicLargeAssetView@@QAEXXZ  # void cCityMusicLargeAssetView::InitLayout
-00ea1f90 ?Show@cCityMusicLargeAssetView@@QAE_NPAVIWindow@@PAVcSPAssetData@@@Z  # bool cCityMusicLargeAssetView::Show
+00ea1900 ??0cCityMusicLargeAssetView_s00ea_1900@@QAE@XZ  # cCityMusicLargeAssetView_s00ea_1900::cCityMusicLargeAssetView migrated from s00ea1900 (verbatim, slice spelling)
+00ea1a30 ??1cCityMusicLargeAssetView_s00ea_1900@@QAE@XZ  # cCityMusicLargeAssetView_s00ea_1900::~cCityMusicLargeAssetView migrated from s00ea1900 (verbatim, slice spelling)
+00ea1b00 ?Hide@cCityMusicLargeAssetView_s00ea_1900@@QAEXXZ  # cCityMusicLargeAssetView_s00ea_1900::Hide migrated from s00ea1900 (verbatim, slice spelling)
+00ea1b40 ?Update@cCityMusicLargeAssetView_s00ea_1900@@QAEXXZ  # cCityMusicLargeAssetView_s00ea_1900::Update migrated from s00ea1900 (verbatim, slice spelling)
+00ea1b50 ?ReleaseWindows@cCityMusicLargeAssetView_s00ea_1900@@QAEXXZ  # cCityMusicLargeAssetView_s00ea_1900::ReleaseWindows migrated from s00ea1900 (verbatim, slice spelling)
+00ea1c10 ?BindWindows@cCityMusicLargeAssetView_s00ea_1900@@QAEXXZ  # cCityMusicLargeAssetView_s00ea_1900::BindWindows migrated from s00ea1900 (verbatim, slice spelling)
+00ea1ee0 ?InitLayout@cCityMusicLargeAssetView_s00ea_1900@@QAEXXZ  # cCityMusicLargeAssetView_s00ea_1900::InitLayout migrated from s00ea1900 (verbatim, slice spelling)
+00ea1f90 ?Show@cCityMusicLargeAssetView_s00ea_1900@@QAE_NPAVIWindow@@PAVcSPAssetData@@@Z  # cCityMusicLargeAssetView_s00ea_1900::Show migrated from s00ea1900 (verbatim, slice spelling)
 00ea20a0 ?Load@cCityMusicLoadSave@@QAEXXZ  # cCityMusicLoadSave::Load migrated from s00ea1900 (verbatim, slice spelling)
 00ea20d0 ?StartDialog@cCityMusicLoadSave@@QAEXPAVIWindow@@@Z  # cCityMusicLoadSave::StartDialog migrated from s00ea1900 (verbatim, slice spelling)
 00ea2120 ?StopDialog@cCityMusicLoadSave@@QAEXPAVIWindow@@@Z  # cCityMusicLoadSave::StopDialog migrated from s00ea1900 (verbatim, slice spelling)
