@@ -1,0 +1,2 @@
+# source  symbol  va  flags
+../src/game/SPGonzago/SPMissionBalance.cpp  ?Update@cSPMissionMultiDelivery@@QAEHPAX@Z  00c4b7a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
