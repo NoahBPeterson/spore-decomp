@@ -15,43 +15,45 @@ extern "C" char g_vft_008e49e0[];      // 0x01436f60  (shared Element ctor vftab
 extern "C" char g_vtbl_element2[];      // 0x013fcc88  Form-ish vftable
 extern "C" char g_vtbl_element3[];      // 0x01436d60
 extern "C" char g_vtbl_node[];      // 0x01436fd0  Node vftable
-extern "C" char g_w_013f3858[];        // 0x013f3858  L"name"
-extern "C" char g_w_01436c8c[];        // 0x01436c8c  L"class"
-extern "C" char g_wstr_id2[];        // 0x0154c5fc  L"id"
-extern "C" char g_wstr_class2[];        // 0x0154c608
-extern "C" char g_wstr_style[];        // 0x0154c60c
-extern "C" char g_wstr_a[];        // 0x0154c618
-extern "C" char g_wstr_b[];        // 0x0154c6e8
-extern "C" char g_wstr_src[];        // 0x0154c6ec
-extern "C" char g_wstr_c[];        // 0x0154c6f4
-extern "C" char g_wstr_name[];        // 0x0154c6f8  L"name"
-extern "C" char g_wstr_type[];        // 0x0154c6fc  L"type"
-extern "C" char g_wstr_value[];        // 0x0154c700  L"value"
-extern "C" char g_wstr_text[];        // 0x0154c718
-extern "C" char g_w_013fd97c[];        // 0x013fd97c  L"text"
-extern "C" char g_w_01436fb4[];        // 0x01436fb4  L"password"
-extern "C" char g_w_013fcd3c[];        // 0x013fcd3c  L"hidden"
-extern "C" char g_w_01436fa0[];        // 0x01436fa0  L"checkbox"
-extern "C" char g_w_013ec468[];        // 0x013ec468  L""
-extern "C" char g_emptyStr16[];        // 0x01667bac  eastl::gEmptyString16
-extern "C" char g_defs_a[];        // 0x0154df28  static def table for Form::ExcludeGroups
+extern "C" char g_w_013f3858[];        // 0x013f3858  L"id"    (literal in AppendAttr)
+extern "C" char g_w_01436c8c[];        // 0x01436c8c  L"class" (literal in AppendAttr)
+extern "C" char g_wstr_src[];        // 0x0154c6ec  "src" attribute name
 extern "C" char g_defs_b[];             // 0x0154c618
 extern "C" char g_defs_c[];             // 0x0154c6e8
 extern "C" void* g_wcsicmpPtr;         // 0x013cc50c  msvcr90!_wcsicmp
 
+// Attribute-name pointer variables (retail dereferences these const wchar_t*).
+extern "C" const u16* g_pAttrId;        // 0x0154c604  -> L"id"
+extern "C" const u16* g_pAttrClass;     // 0x0154c608  -> L"class"
+extern "C" const u16* g_pAttrHref;      // 0x0154c60c  -> L"href"
+extern "C" const u16* g_pAttrTarget;    // 0x0154c610  -> L"target"
+extern "C" const u16* g_pAttrDisabled;  // 0x0154c6f4  -> L"disabled"
+extern "C" const u16* g_pAttrName;      // 0x0154c6f8  -> L"name"
+extern "C" const u16* g_pAttrType;      // 0x0154c6fc  -> L"type"
+extern "C" const u16* g_pAttrValue;     // 0x0154c700  -> L"value"
+extern "C" const u16* g_pAttrChecked;   // 0x0154c704  -> L"checked"
+extern "C" const u16* g_pAttrCheckbox;  // 0x0154c714  -> L"checkbox"
+extern "C" const u16* g_pAttrRadio;     // 0x0154c718  -> L"radio"
+extern "C" u16 g_wEmpty[];              // 0x01667bac  L""
+extern "C" u16 g_wEmptyLiteral[];       // 0x013ec468  L""
+extern "C" void* g_pEmptyBuckets[2];    // 0x0154df28  eastl empty bucket array {0, -1}
+
+// ---- CRT imports ----------------------------------------------------------
+extern "C" __declspec(dllimport) int __cdecl _wcsicmp(const wchar_t*, const wchar_t*);
+extern "C" int __cdecl wcscmp(const wchar_t*, const wchar_t*);
+#pragma intrinsic(wcscmp)
+
 // ---- real callees ---------------------------------------------------------
 void* Fn8e25d0(void* p, void* s, int f);                 // 0x008e25d0
+u32   Fnfc7e50(void* n);                                 // 0x00fc7e50  Node::Type (free spelling)
 
 void  Fn8f3790(void* out, const void* first, const void* last, const void* key); // 0x008f3790
 void  Fn8e52e0(void* node);                              // 0x008e52e0  Node::~Node (thiscall)
 void  Fn620230(void* list);                              // 0x00620230  IntrusiveList::~IntrusiveList (thiscall)
 void  Fn1154f90(void* p);                                // 0x01154f90
 void  Fn10829f0(void* self, void* v);                    // 0x010829f0
-void* Fn693230(void* h, ...);                            // 0x00693230 eastl hashtable alloc buckets
-void* Fn8e2540(void** alloc, u32 n);                     // 0x008e2540 operator_new
+void* Fn8e2540(u32 n, void* alloc);                      // 0x008e2540 operator new(size, allocator*)
 void* Fn8e3fa0(void** a, u16* b, u16* c);                // 0x008e3fa0
-int   Fnfc7e50(void* node);                              // 0x00fc7e50  Node::Type
-void* Fnff0420(void* node);                              // 0x00ff0420  Node::Parent
 void  Fn429580(void* wstr, const u16* b, const u16* e);  // 0x00429580  WStr::Append
 void  Fn011e0744(void* d, const void* s, u32 n);         // 0x011e0744 memcpy
 
@@ -63,15 +65,20 @@ void* Fn8e52b0(void* self, void* doc, int type);         // 0x008e52b0  Node::In
 struct Node;
 struct Element;
 struct Attr;
+struct Document;
+struct IFormControlMgr;
+struct WStr16;
+
 struct Node {                 // sizeof 0x18
     void* vftable;            // 0x00
     void* link0;              // 0x04
     void* link1;              // 0x08
     u32   mnType;             // 0x0c
-    void* mpDocument;         // 0x10
-    void* mpParent;           // 0x14
-    Element* AsElement();     // 0x008e52f0
-    void*    Init(void* doc, int type);              // 0x008e52b0
+    void* mpDocument;         // 0x10  Document*
+    void* mpParent;           // 0x14  Element*
+    int      Type();                                // 0x00fc7e50
+    Element* AsElement();                           // 0x008e52f0
+    void*    Init(void* doc, int type);             // 0x008e52b0
 };
 
 struct IntList {
@@ -94,32 +101,60 @@ static __forceinline Node* ListEndP(void* sentinel) {
     return (Node*)(sentinel ? (char*)sentinel - 4 : 0);
 }
 
-struct Element {              // sizeof 0x44
-    void* vftable;            // 0x00
-    void* link0;              // 0x04
-    void* link1;              // 0x08
-    u32   mnType;             // 0x0c
-    void* mpDocument;         // 0x10
-    void* mpParent;           // 0x14
-    void* childrenSelf;       // 0x18   IntrusiveList children (sentinel head)
-    void* childrenSelf2;      // 0x1c
-    void* attrsSelf;          // 0x20   IntrusiveList attrs
-    void* attrsSelf2;         // 0x24
-    const u16* mpTagName;     // 0x28
-    int   mnAttrId;           // 0x2c   initialised to -1
-    u32   mFlags30;           // 0x30
-    const u16* mpClassName;   // 0x34
-    const u16* mpIdValue;     // 0x38
-    const u16* mpNameValue;   // 0x3c
-    void* mpExtra40;          // 0x40
+struct WStr16 {               // 0x0c, eastl::basic_string<wchar_t> header
+    u16* mpBegin;             // 0x00
+    u16* mpEnd;               // 0x04
+    u16* mpCapacity;          // 0x08
+};
 
-    void    HandleEvent(void* ev, int phase);          // 0x008e4310
+struct Link {                 // 0x14, Element::mpLink
+    const u16* mpURI;         // 0x00
+    const u16* mpName;        // 0x04
+    u32        mLinkType;     // 0x08
+    u32        mState;        // 0x0c
+    u8         mbVisited;     // 0x10
+    u8         _pad11[3];     // 0x11
+};
+
+struct Element : Node {       // sizeof 0x44
+    IntList mChildNodes;      // 0x18
+    IntList mAttributes;      // 0x20
+    union {
+        u32        mElementType;    // 0x28
+        const u16* mpTagName;       // legacy alias used by the ctor bodies
+    };
+    union {
+        u32 mResourceIndex;         // 0x2c
+        int mnAttrId;
+    };
+    union {
+        u32 mElementState;          // 0x30
+        u32 mFlags30;
+    };
+    union {
+        const u16* mpName;          // 0x34
+        const u16* mpClassName;
+    };
+    union {
+        const u16* mpId;            // 0x38
+        const u16* mpIdValue;
+    };
+    union {
+        const u16* mpClass;         // 0x3c
+        const u16* mpNameValue;
+    };
+    union {
+        Link* mpLink;               // 0x40
+        void* mpExtra40;
+    };
+
+    __declspec(noinline) void HandleEvent(void* ev, int phase); // 0x008e4310
     void    AppendChild(Element* child);               // 0x008e4350
     void*   AppendAttr(Attr* attr);                    // 0x008e4380
     void*   ScalarDeletingDtor(u8 flags);              // 0x008e4450
     Element* FindChildNodeByName(const u16* name);     // 0x008e4480
     Attr*   GetAttr(const u16* name);                  // 0x008e4530
-    u16*    GetAttrValue(const u16* name);             // 0x008e45b0
+    __declspec(noinline) u16* GetAttrValue(const u16* name); // 0x008e45b0
     int     SetAttrValue(const u16*, const u16*, u8);  // 0x008e45d0
     void    SetAttrChecked(const u16*, const u16*);    // 0x008e46e0
     void    ReleaseChildren();                         // 0x008e48a0
@@ -133,16 +168,10 @@ struct Element {              // sizeof 0x44
     u8      AddSubElement(const u16* name);            // 0x008e4b10
     void    Dtor2();                                   // 0x008e4ba0
     void    Dtor1();                                   // 0x008e4bd0
-    void    ExcludeGroups(void* elem, const u16*, const u16*, void*); // 0x008e4c00
-    __declspec(noinline) void GatherControlValues(Element*, void*, void*, void*);  // 0x008e4ce0
-    void    GatherValues(void*, void*);                // 0x008e4f00
-    void    GatherControlValues2(void*, void*, int, void*); // 0x008e4f20
-    void    ExcludeHiddenGroups();                     // 0x008e5130
-    void    HandleEvent2(void* ev, void* arg);         // 0x008e5210
+    void    GatherValues(void* a, void* b);            // 0x008e4f00
     Element* Ctor1(void* doc, const u16* tag);         // 0x008e4940
     Element* Ctor2(void* doc, void* tag);              // 0x008e4400
 };
-
 
 struct Attr {                 // sizeof 0x20
     void* vftable;            // 0x00
@@ -155,24 +184,61 @@ struct Attr {                 // sizeof 0x20
     u16*  mpValue;            // 0x1c
 };
 
-struct CustomId {             // 0x14, allocated by Element_SetAttrChecked
-    void* v0;                 // 0x00
-    void* v2;                 // 0x04
-    void* v3;                 // 0x08
-    u32   v4;                 // 0x0c
-    u8    b10;                // 0x10
-    u8    pad11[3];
-    const u16* name;          // 0x14
-    void* value;
+struct Document {             // sizeof 0x50
+    u32 mField00[2];          // 0x00
+    u8  mAllocator[0x24];     // 0x08  allocator block (only its address is used)
+    u8  mbDocumentChanged;    // 0x2c
+    u8  _pad2d[3];            // 0x2d
+    u32 mField30;             // 0x30
+    u32 mField34;             // 0x34
+    IFormControlMgr* mpFormControlMgr; // 0x38
+    void* mpEventListener;    // 0x3c
+    u32 mField40;             // 0x40
+    u32 mField44;             // 0x44
+    const u16* mpDocumentURI; // 0x48
+    const u16* mpBaseURI;     // 0x4c
 };
 
-struct Doc {
-    u32  mnKind;              // 0x00 (filler; Document layout not needed beyond these)
-    u32  pad04[0x0d];
-    void* mpEventListener;    // 0x38
-    u32  pad3c;
-    void* mpSomething48;      // 0x48
-    void* mpSomething4c;      // 0x4c
+struct IFormControlMgr {
+    virtual void Vf00(); virtual void Vf04(); virtual void Vf08(); virtual void Vf0c();
+    virtual void Vf10(); virtual void Vf14();
+    virtual void GetValue(Element* elem, WStr16* value);      // +0x18
+    virtual void SetValue(Element* elem, const u16* value);   // +0x1c
+};
+
+// eastl::hash_map<const wchar_t*, const wchar_t*> (0x20 bytes)
+namespace Style {
+struct CounterMap {
+    struct node { const wchar_t* key; const wchar_t* value; node* mpNext; };
+    struct iterator {
+        node*  mpNode;        // +0
+        node** mpBucket;      // +4
+        iterator(node* n, node** b) : mpNode(n), mpBucket(b) {}
+        iterator() {}
+        iterator(node** b) : mpNode(*b), mpBucket(b) {}
+        iterator(const iterator& o) : mpNode(o.mpNode), mpBucket(o.mpBucket) {}
+    };
+    u32    mField00;          // 0x00
+    node** mpBucketArray;     // 0x04
+    u32    mnBucketCount;     // 0x08
+    u32    mnElementCount;    // 0x0c
+    float  mfMaxLoadFactor;   // 0x10
+    float  mfGrowthFactor;    // 0x14
+    u32    mnNextResize;      // 0x18
+    u32    mField1c;          // 0x1c
+    iterator find(const wchar_t* const& k);                     // 0x008fbbf0
+    const wchar_t*& operator[](const wchar_t* const& k);        // 0x008fc610
+    void DoFreeBuckets(node** pBuckets, u32 nCount);            // 0x00693230
+};
+}
+
+struct Form : Element {       // sizeof 0x48
+    Element* mpActiveSubmit;  // 0x44
+    void GatherControlValues(Element* elem, void* cb, void* ctx, void* arg4); // 0x008e4ce0
+    void ResetControlValues(Element* elem, Style::CounterMap* map);          // 0x008e4f20
+    void Reset();                                                            // 0x008e5130
+    void ExcludeGroups(Element* elem, const u16* group, const u16* value);   // 0x008e4c00
+    void HandleEvent(void* ev, int arg);                                     // 0x008e5210
 };
 #pragma pack(pop)
 
@@ -218,7 +284,7 @@ void* Element::AppendAttr(Attr* attr)
     Element* self = this;
     int (__cdecl* wcsicmp)(const u16*, const u16*) = (int (__cdecl*)(const u16*, const u16*))g_wcsicmpPtr;
     *(u8*)((char*)self->mpDocument + 0x2c) = 1;
-    void* prev = self->attrsSelf2;
+    void* prev = self->mAttributes.link1;
     void* sentinel = (char*)self + 0x20;
     *(void**)((char*)attr + 8) = prev;
     void* link = (char*)attr + 4;
@@ -380,30 +446,42 @@ int Element::SetAttrValue(const u16* name, const u16* value, u8 removeOrAdd)
 void Element::SetAttrChecked(const u16* name, const u16* value)
 {
     Element* self = this;
-    int (__cdecl* wcsicmp)(const u16*, const u16*) = (int (__cdecl*)(const u16*, const u16*))g_wcsicmpPtr;
-    if (wcsicmp(name, (const u16*)g_wstr_id2) == 0) { self->mpIdValue = value; return; }
-    if (wcsicmp(name, (const u16*)g_wstr_class2) == 0) { self->mpNameValue = value; return; }
-    if (wcsicmp(name, (const u16*)g_wstr_style) == 0) {
-        CustomId* ci = (CustomId*)self->mpExtra40;
-        if (value != 0) {
-            if (ci == 0) {
-                void** alloc = (void**)((char*)self->mpDocument + 8);
-                ci = (CustomId*)Fn8e2540(alloc, 0x14);
-                if (ci != 0) {
-                    ci->v0 = 0; ci->v2 = 0; ci->v3 = 0; ci->b10 = 0;
-                } else {
-                    ci = 0;
-                }
-                self->mpExtra40 = (void*)ci;
-            }
-            ci->name = (const u16*)value;
-            Attr* a = self->GetAttr( (const u16*)value);
-            CustomId* c2 = (CustomId*)self->mpExtra40;
-            c2->value = a ? a->mpValue : 0;
-        } else if (ci != 0) {
-            ci->name = 0;
-        }
+    if (wcscmp((const wchar_t*)name, (const wchar_t*)g_pAttrId) == 0) {
+        self->mpIdValue = value;
+        return;
     }
+    if (wcscmp((const wchar_t*)name, (const wchar_t*)g_pAttrClass) == 0) {
+        self->mpNameValue = value;
+        return;
+    }
+    if (wcscmp((const wchar_t*)name, (const wchar_t*)g_pAttrHref) == 0) {
+        if (value != 0) {
+            if (self->mpLink == 0) {
+                Link* link = (Link*)Fn8e2540(0x14, (char*)self->mpDocument + 8);
+                if (link != 0) {
+                    link->mpURI = 0;
+                    link->mLinkType = 0;
+                    link->mState = 0;
+                    link->mbVisited = 0;
+                } else {
+                    link = 0;
+                }
+                self->mpLink = link;
+            }
+            self->mpLink->mLinkType = 1;
+            self->mpLink->mState = 1;
+            self->mpLink->mpURI = value;
+            Attr* a = self->GetAttr(g_pAttrTarget);
+            self->mpLink->mpName = a != 0 ? a->mpValue : 0;
+        } else if (self->mpLink != 0) {
+            self->mpLink->mLinkType = 0;
+            self->mpLink->mpURI = 0;
+            self->mpLink->mpName = 0;
+        }
+        return;
+    }
+    if (wcscmp((const wchar_t*)name, (const wchar_t*)g_pAttrTarget) == 0 && self->mpLink != 0)
+        self->mpLink->mpName = value;
 }
 
 // @ 0x008e48a0
@@ -557,60 +635,211 @@ void Element::Dtor1()
 }
 
 // @ 0x008e4c00
-void Element::ExcludeGroups(void* elem, const u16* a, const u16* b, void* c)
+void Form::ExcludeGroups(Element* elem, const u16* group, const u16* value)
 {
-    Element* self = this;
-    if (((u8 (__thiscall*)(void*))(*(void***)elem)[0x18 / 4])(elem) == 0)
-        return;
-    if (*(u32*)((char*)elem + 0x28) != 0x17)
-        return;
-    const u16* t1 = ((Element*)elem)->GetAttrValue((const u16*)g_wstr_type);
-    const u16* t2 = ((Element*)elem)->GetAttrValue((const u16*)g_wstr_name);
-    int (__cdecl* wcsicmp)(const u16*, const u16*) = (int (__cdecl*)(const u16*, const u16*))g_wcsicmpPtr;
-    if (wcsicmp(t1, (const u16*)g_wstr_text) != 0)
-        return;
-    if (wcsicmp(t2, b) != 0)
-        return;
-    void* mgr = *(void**)((char*)self->mpDocument + 0x38);
-    ((void (__thiscall*)(void*, void*, void*))(*(void***)mgr)[0x1c / 4])(mgr, elem, c);
+    Form* self = this;
+    IFormControlMgr* mgr = (IFormControlMgr*)((Document*)self->mpDocument)->mpFormControlMgr;
+    if (((u8 (__thiscall*)(Element*))(*(void***)elem)[0x18 / 4])(elem) != 0 &&
+        elem->mElementType == 0x17) {
+        const u16* type = elem->GetAttrValue(g_pAttrType);
+        const u16* name = elem->GetAttrValue(g_pAttrName);
+        if (_wcsicmp((const wchar_t*)type, (const wchar_t*)g_pAttrRadio) == 0 &&
+            _wcsicmp((const wchar_t*)group, (const wchar_t*)name) == 0)
+            mgr->SetValue(elem, value);
+    }
+    IntList* list = &elem->mChildNodes;
+    void* end = (char*)elem + 0x18;
+    for (Node* n = ListHead(list); n != ListEndP(end); n = ListNext(n)) {
+        if (n->Type() == 1)
+            self->ExcludeGroups((Element*)n, group, value);
+    }
 }
 
+typedef void (__cdecl* GatherCallback)(const u16*, const u16*, void*);
+
 // @ 0x008e4ce0
-void Element::GatherControlValues(Element* a, void* b, void* c, void* d)
+void Form::GatherControlValues(Element* elem, void* cb, void* ctx, void* arg4)
 {
-    Element* self = this;
-    // Walks the form's element tree collecting named control values into the
-    // paired containers in [b] / [c].  Reconstructed at the structural level.
-    if (a == (Element*)1) { *(volatile u32*)&self->mFlags30 = (u32)b + (u32)c + (u32)d; }
-    (void)a; (void)b; (void)c; (void)d; (void)self;
+    Form* self = this;
+    IFormControlMgr* mgr;
+    WStr16 str;
+    u32 elementType;
+    const u16* type;
+    const u16* value;
+    const u16* name;
+
+    if (((u8 (__thiscall*)(Element*))(*(void***)elem)[0x18 / 4])(elem) == 0)
+        goto children;
+    if (elem->GetAttr(g_pAttrDisabled) != 0)
+        goto children;
+    mgr = (IFormControlMgr*)((Document*)elem->mpDocument)->mpFormControlMgr;
+    elementType = elem->mElementType;
+    str.mpBegin = g_wEmpty;
+    str.mpEnd = g_wEmpty;
+    str.mpCapacity = g_wEmpty + 1;
+    if (elementType == 0x17) {
+        type = elem->GetAttrValue(g_pAttrType);
+        if (type == 0) goto collect;
+        if (_wcsicmp((const wchar_t*)type, L"text") == 0) goto collect;
+        if (_wcsicmp((const wchar_t*)type, L"password") == 0) goto collect;
+        if (_wcsicmp((const wchar_t*)type, L"hidden") == 0) goto collect;
+        if (_wcsicmp((const wchar_t*)type, L"checkbox") == 0) goto collectChecked;
+        if (_wcsicmp((const wchar_t*)type, L"radio") == 0) goto collectChecked;
+        if (_wcsicmp((const wchar_t*)type, L"submit") != 0) {
+            if (_wcsicmp((const wchar_t*)type, L"file") != 0)
+                _wcsicmp((const wchar_t*)type, L"image");
+            goto done;
+        }
+        value = elem->GetAttrValue(g_pAttrValue);
+        name = elem->GetAttrValue(g_pAttrName);
+        if (value == 0 || name == 0 || elem != self->mpActiveSubmit)
+            goto done;
+        ((GatherCallback)cb)(name, value, ctx);
+        goto done;
+    } else if (elementType != 0x18 && elementType != 0x1a) {
+        goto done;
+    }
+collect:
+    mgr->GetValue(elem, &str);
+    ((GatherCallback)cb)(elem->GetAttrValue(g_pAttrName), str.mpBegin, ctx);
+    goto done;
+collectChecked:
+    mgr->GetValue(elem, &str);
+    if (str.mpBegin != str.mpEnd)
+        ((GatherCallback)cb)(elem->GetAttrValue(g_pAttrName), str.mpBegin, ctx);
+done:
+    if ((int)(((u32)str.mpCapacity - (u32)str.mpBegin) & 0xfffffffeu) > 2 && str.mpBegin != 0)
+        operator_delete__(str.mpBegin);
+children:
+    {
+        IntList* list = &elem->mChildNodes;
+        void* end = (char*)elem + 0x18;
+        for (Node* n = ListHead(list); n != ListEndP(end); n = ListNext(n)) {
+            if (n->Type() == 1)
+                self->GatherControlValues((Element*)n, cb, ctx, arg4);
+        }
+    }
 }
 
 // @ 0x008e4f00
 void Element::GatherValues(void* a, void* b)
 {
     Element* self = this;
-    self->GatherControlValues(self, a, b, 0);
+    ((Form*)self)->GatherControlValues(self, a, b, 0);
 }
 
 // @ 0x008e4f20
-void Element::GatherControlValues2(void* x, void* y, int z, void* out)
+void Form::ResetControlValues(Element* elem, Style::CounterMap* map)
 {
-    Element* self = this;
-    (void)self; (void)x; (void)y; (void)z; (void)out;
+    Form* self = this;
+    IFormControlMgr* mgr = (IFormControlMgr*)((Document*)self->mpDocument)->mpFormControlMgr;
+    if (((u8 (__thiscall*)(Element*))(*(void***)elem)[0x18 / 4])(elem) != 0) {
+        switch (elem->mElementType) {
+        case 0x17: {
+            const u16* type = elem->GetAttrValue(g_pAttrType);
+            const u16* value = elem->GetAttrValue(g_pAttrValue);
+            if (_wcsicmp((const wchar_t*)type, (const wchar_t*)g_pAttrCheckbox) == 0) {
+                const u16* checked = elem->GetAttrValue(g_pAttrChecked);
+                mgr->SetValue(elem, checked != 0 ? value : 0);
+            } else if (_wcsicmp((const wchar_t*)type, (const wchar_t*)g_pAttrRadio) == 0) {
+                const wchar_t* name = (const wchar_t*)elem->GetAttrValue(g_pAttrName);
+                const u16* checked = elem->GetAttrValue(g_pAttrChecked);
+                if (name != 0 && value != 0) {
+                    Style::CounterMap::iterator it = map->find(name);
+                    if (it.mpNode == map->mpBucketArray[map->mnBucketCount] || checked != 0)
+                        (*map)[name] = (const wchar_t*)value;
+                }
+            } else {
+                mgr->SetValue(elem, value != 0 ? value : g_wEmptyLiteral);
+            }
+            break;
+        }
+        case 0x18: {
+            const u16* value = elem->GetAttrValue(g_pAttrValue);
+            mgr->SetValue(elem, value != 0 ? value : g_wEmptyLiteral);
+            break;
+        }
+        case 0x1a: {
+            void (__thiscall* collect)(Element*, WStr16*) =
+                (void (__thiscall*)(Element*, WStr16*))(*(void***)elem)[0x8 / 4];
+            WStr16 str;
+            str.mpBegin = g_wEmpty;
+            str.mpEnd = g_wEmpty;
+            str.mpCapacity = g_wEmpty + 1;
+            collect(elem, &str);
+            mgr->SetValue(elem, str.mpBegin);
+            if ((int)(((u32)str.mpCapacity - (u32)str.mpBegin) & 0xfffffffeu) > 2 && str.mpBegin != 0)
+                operator_delete__(str.mpBegin);
+            break;
+        }
+        }
+    }
+    IntList* list = &elem->mChildNodes;
+    void* end = (char*)elem + 0x18;
+    for (Node* n = ListHead(list); n != ListEndP(end); n = ListNext(n)) {
+        if (n->Type() == 1)
+            self->ResetControlValues((Element*)n, map);
+    }
 }
 
 // @ 0x008e5130
-void Element::ExcludeHiddenGroups()
+void Form::Reset()
 {
-    Element* self = this;
-    (void)self;
+    Style::CounterMap map;
+    map.mfMaxLoadFactor = 1.0f;
+    map.mfGrowthFactor = 2.0f;
+    map.mnBucketCount = 1;
+    map.mpBucketArray = (Style::CounterMap::node**)g_pEmptyBuckets;
+    map.mnElementCount = 0;
+    map.mnNextResize = 0;
+    ResetControlValues(this, &map);
+
+    Style::CounterMap::node** pb = map.mpBucketArray;
+    Style::CounterMap::node* p = *pb;
+    if (p == 0) {
+        ++pb;
+        while (*pb == 0)
+            ++pb;
+        p = *pb;
+    }
+    while (p != map.mpBucketArray[map.mnBucketCount]) {
+        ExcludeGroups(this, (const u16*)p->key, (const u16*)p->value);
+        p = p->mpNext;
+        if (p == 0) {
+            while ((p = *++pb) == 0) {}
+        }
+    }
+    map.DoFreeBuckets(map.mpBucketArray, map.mnBucketCount);
+    map.mnElementCount = 0;
+    if (map.mnBucketCount > 1)
+        operator_delete__(map.mpBucketArray);
 }
 
 // @ 0x008e5210
-void Element::HandleEvent2(void* ev, void* arg)
+void Form::HandleEvent(void* ev, int arg)
 {
-    Element* self = this;
-    (void)self; (void)ev; (void)arg;
+    Form* self = this;
+    u32 phase = ((u32*)ev)[1];
+    if (phase == 3) {
+        self->mpActiveSubmit = 0;
+        self->Reset();
+        return;
+    }
+    if (phase == 2) {
+        self->mpActiveSubmit = (Element*)((u32*)ev)[0];
+        ((u32*)ev)[1] = 4;
+        ((u32*)ev)[0] = (u32)self;
+    } else if (phase == 5) {
+        Element* elem = (Element*)((u32*)ev)[0];
+        if (elem != 0) {
+            const u16* name = elem->GetAttrValue(g_pAttrName);
+            const u16* value = elem->GetAttrValue(g_pAttrValue);
+            if (name != 0 && value != 0)
+                self->ExcludeGroups(self, name, value);
+        }
+        return;
+    }
+    Element::HandleEvent(ev, arg);
 }
 
 // @ 0x008e52b0
