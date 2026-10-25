@@ -6,6 +6,7 @@
 // unused named locals.
 
 typedef unsigned int uint32_t;
+typedef unsigned int size_t;
 
 struct DeclareParam { int key; int a; int b; };
 
@@ -29,7 +30,7 @@ bool GetPropertyAsKeyInstance(void* holder, int key, int* out);  // 0x006a12a0
 bool GetPropertyAsKeyArray(void* holder, int key, int* count, void** array); // 0x006a0ae0
 void* InterfaceCast(void** ref);                                 // 0x00421eb0-ish
 void* Alloc(uint32_t size, const char* name, int, int, int, int); // 0x00f473a0
-void* operator new(uint32_t size, const char* name, int, int, int, int); // 0x00f473a0
+void* operator new(size_t size, const char* name, int, int, int, int); // 0x00f473a0
 
 // Refcounted-object vtable shape used by the palette helpers (+4 AddRef, +8 Release).
 struct Iface {
@@ -38,22 +39,98 @@ struct Iface {
     virtual void Release();  // +8
 };
 
-// Palette double-buffered iterator helper (0x005c7b80).
-struct PaletteIter : Iface {
-    PaletteIter();
-    virtual void v01();
-    virtual void v02();
-    virtual void v03();
-    virtual void v04();
-    virtual void SetPalette(void* p);              // 0x005c7bc0
-    virtual void* GetFirst(int, int, int, int);    // 0x005c7e80
-    virtual void* GetNext(int, int, int, int);     // 0x005c7e20
+namespace EA { namespace ResourceMan {
+struct Key { uint32_t instance; uint32_t type; uint32_t group; };   // 0xc bytes
+}}
+
+// ---------------------------------------------------------------------------
+// Vector / matrix math shared with the 0x41dc10 family of helpers.  The type
+// names are the original's (global Vector3, cSPVector3, cSPVector3R,
+// cSPMatrix3) so the operator spellings below mangle as in the image.
+// ---------------------------------------------------------------------------
+struct Vector3 {
+    float x, y, z;
 };
 
-struct cSPPalette : Iface {
-    cSPPalette();
-    bool Init(void* a, int b, int c, int d, int e, int f, int g); // 0x005c6340
+struct cSPVector3 : Vector3 { };
+
+// Homogeneous result of a vector/matrix product (xyz plus w).
+struct cSPVector3R : Vector3 {
+    float w;
 };
+
+struct cSPMatrix3 {
+    Vector3 mRow[3];                    // +0x00 / +0x0c / +0x18
+};
+
+Vector3 operator*(const Vector3& v, const float& scale);            // 0x0041dca0
+Vector3 operator+(const Vector3& a, const Vector3& b);             // 0x0041dc10
+cSPVector3R operator*(const cSPVector3& v, const cSPMatrix3& m);   // 0x0041daf0
+cSPMatrix3 operator*(const cSPMatrix3& a, const cSPMatrix3& b);    // 0x0041de20 (_Unchecked_idl0)
+Vector3* BuildBasisMatrix(cSPMatrix3* pMatrix, Vector3 a, Vector3 b, Vector3 c); // 0x00499f10
+// Scratch block the world-transform builder fills: handed a pointer, it writes a
+// 36-byte matrix at +0x14 of it.
+struct cWorldSlot {
+    uint32_t pad00[0x14 / 4];           // +0x00 .. +0x13
+    cSPMatrix3 mMatrix;                 // +0x14 .. +0x37
+    uint32_t pad38[2];                  // +0x38 .. +0x3f
+};
+
+void StoreRows(cWorldSlot* pMatrix, Vector3* pValues);             // 0x0049ef80 (3 rows)
+
+// Objects the basis source points at.
+struct ICorners {                       // provider behind the basis source's +0x4
+    virtual void v00();
+    virtual void v01();
+    virtual void v02();
+    virtual void GetCorners(Vector3* pCorners);   // +0xc (4 vectors)
+};
+
+struct cTransformSource {               // owner behind the basis source's +0x0
+    uint32_t pad00[4];                  // +0x00 .. +0x0f
+    void* mpPrimary;                    // +0x10
+    uint32_t pad14;                     // +0x14
+    void* mpSecondary;                  // +0x18
+    uint32_t pad1c[0x1d8 / 4 - 0x7];    // +0x1c .. +0x1d7
+    float mVectorScale;                 // +0x1d8
+    cWorldSlot* ComposeInto(cWorldSlot* pOut);    // 0x004363d0 (thiscall)
+};
+
+// Palette double-buffered iterator helper (0x005c7b80).
+namespace SP {
+
+struct cSPPalette : Iface {
+    uint32_t mData[0x40 / 4 - 1];       // +0x04 .. +0x3c (sizeof 0x40)
+    cSPPalette();                       // 0x005c5e30
+    bool Init(const EA::ResourceMan::Key& key, unsigned int a, unsigned int b,
+              unsigned int c, unsigned int d, int e, int modelType);  // 0x005c6340
+};
+
+// One palette entry: the 12-byte payload sits at +0xc.
+struct cPaletteEntry {
+    uint32_t pad00[3];                  // +0x00 .. +0x0b
+    DeclareParam mParam;                // +0x0c
+};
+
+struct cSPPaletteCursor : Iface {
+    uint32_t mData[0x20 / 4 - 1];       // +0x04 .. +0x1c (sizeof 0x20)
+    cSPPaletteCursor();                 // 0x005c7b80
+    void SetPalette(cSPPalette* pPalette);          // 0x005c7bc0
+    cPaletteEntry* First(void*, int*, int*, int*);  // 0x005c7e80
+    cPaletteEntry* Next(void*, int*, int*, int*);   // 0x005c7e20
+};
+
+// The editor model-type holder the basis builder is called on.
+struct cBasisSource {
+    cTransformSource* mpObject;         // +0x00
+    ICorners* mpProvider;               // +0x04
+    cSPVector3 mOrigin;                 // +0x08
+    Vector3 mScale;                     // +0x14
+    cSPMatrix3 mBasis;                  // +0x20
+    void BuildBasis(Vector3* pOutVector, cSPMatrix3* pOutMatrix);   // 0x004e95e0
+};
+
+}   // namespace SP
 
 struct ResourceMgr {
     virtual void v00();
@@ -77,12 +154,38 @@ struct PaletteMgr {
     virtual void GetPalette(int type, void* a, void* b); // +0x2c
 };
 
+// Property manager query used by the palette enumerator.
+struct PropertyListIface {              // the property list's own vtable: +4 release
+    virtual void v00();
+    virtual void Release();             // +4
+};
+
+struct AutoRefCountPropertyList {       // EA::AutoRefCount<PropertyList> handle
+    PropertyListIface* mpObject;        // +0x0
+    AutoRefCountPropertyList() : mpObject(0) { }
+    void** AsPPVoidParam();             // 0x0041d870
+};
+
+struct PropertyManager {
+    virtual void v00(); virtual void v01(); virtual void v02(); virtual void v03();
+    virtual void v04(); virtual void v05(); virtual void v06(); virtual void v07();
+    virtual void v08(); virtual void v09(); virtual void v10();
+    virtual void GetPropertyList(int typeId, void* pUser, void** ppOut);  // +0x2c
+};
+
+namespace SP {
+PropertyManager* PropertyManager();      // 0x0067de30
+namespace Editor { int GetConfigFromModelType(int typeId); }   // 0x00432f10
+}
+
+extern void* g_pPropertyRequest;         // 0x015daa00
+
 extern DeclareParam g_15dacc8;
 extern DeclareParam g_15dabcc;
 void FUN_004e9ca0(Vec* out);
 
 // ===========================================================================
-// @ 0x004e9c40  (MATCH)
+// @ 0x004e9c40
 // ===========================================================================
 void UpgradeParts(DeclareParam param, Vec* out)
 {
@@ -100,7 +203,7 @@ void UpgradeParts(DeclareParam param, Vec* out)
 }
 
 // ===========================================================================
-// @ 0x004e9b40  (MATCH)
+// @ 0x004e9b40
 // ===========================================================================
 void AddPaintKeys(DeclareParam param, Vec* out)
 {
@@ -135,10 +238,6 @@ void AddPaintKeys(DeclareParam param, Vec* out)
         }
     }
 }
-
-// ===========================================================================
-// @ 0x004e9c40  (already above; kept order aligned with the slice listing)
-// ===========================================================================
 
 // ===========================================================================
 // @ 0x004ea190  (complete; not byte-exact)
@@ -221,27 +320,24 @@ void Collect9950(DeclareParam param, Vec* out)
 // Builds a palette for one model type and dispatches each entry to the
 // AddPaintKey/UpgradeParts collector chosen by `kind`.
 // ===========================================================================
-void FUN_004e9fc0(int modelType, Vec* out, int kind)
+void FUN_004e9fc0(const EA::ResourceMan::Key* pKey, Vec* out, int kind)
 {
-    cSPPalette* pal = new ("Editor", 0, 0, 0, 0) cSPPalette();
+    SP::cSPPalette* pal = new ("Editor", 0, 0, 0, 0) SP::cSPPalette();
     if (pal != 0) {
         pal->AddRef();
-        if (pal->Init((void*)modelType, -1, 0, 0, 0, 0, 0)) {
-            PaletteIter* it = new ("Editor", 0, 0, 0, 0) PaletteIter();
+        if (pal->Init(*pKey, (unsigned)-1, 0, 0, 0, 0, 0)) {
+            SP::cSPPaletteCursor* it = new ("Editor", 0, 0, 0, 0) SP::cSPPaletteCursor();
             if (it != 0) {
                 it->AddRef();
                 it->SetPalette(pal);
-                void* node = it->GetFirst(0, 0, 0, 0);
+                SP::cPaletteEntry* node = it->First(0, 0, 0, 0);
                 while (node != 0) {
-                    DeclareParam d;
-                    d.key = *(int*)((char*)node + 0xc);
-                    d.a = *(int*)((char*)node + 0x10);
-                    d.b = *(int*)((char*)node + 0x14);
+                    DeclareParam d = node->mParam;
                     if (kind == 0)
                         Collect9950(d, out);
                     else if (kind == 1)
                         AddPaintKeys(d, out);
-                    node = it->GetNext(0, 0, 0, 0);
+                    node = it->Next(0, 0, 0, 0);
                 }
             }
             if (it != 0)
@@ -252,22 +348,88 @@ void FUN_004e9fc0(int modelType, Vec* out, int kind)
 }
 
 // ===========================================================================
-// @ 0x004e9ca0  (INCOMPLETE skeleton)
-// 792-byte /Od enumator building a palette list for a model type.  Left as a
-// skeleton; the allocation/refcount/interator sequence is not yet reproduced.
+// @ 0x004e9ca0
+// Palette enumerator for one model type: fetches the model's property list,
+// walks every palette entry and feeds the once/twice/thrice key holders to
+// UpgradeParts.
 // ===========================================================================
 void FUN_004e9ca0(Vec* out)
 {
-    (void)out;
+    AutoRefCountPropertyList handle;                  // ebp-8
+    int typeId = SP::Editor::GetConfigFromModelType(0xdfad9f51);   // ebp-4
+    PropertyManager* pPropMgr = SP::PropertyManager();              // ebp-0x5c
+    void** ppOut = handle.AsPPVoidParam();                          // ebp-0x3c
+    pPropMgr->GetPropertyList(typeId, g_pPropertyRequest, ppOut);
+    if (handle.mpObject != 0) {
+        EA::ResourceMan::Key key;                     // ebp-0x14
+        key.instance = 0;
+        key.type = 0;
+        key.group = 0;
+        if (GetPropertyAsKey(handle.mpObject, 0xf5cbe065, &key)) {
+            SP::cSPPalette* pPalette =
+                new ("Editor", 0, 0, 0, 0) SP::cSPPalette();        // ebp-0x18
+            if (pPalette != 0)
+                pPalette->AddRef();
+            if (pPalette != 0) {
+                if (pPalette->Init(key, 0xdfad9f51, 0, 0, 0, 0, 0)) {
+                    SP::cSPPaletteCursor* pCursor =
+                        new ("Editor", 0, 0, 0, 0) SP::cSPPaletteCursor();  // ebp-0x1c
+                    if (pCursor != 0)
+                        pCursor->AddRef();
+                    if (pCursor != 0) {
+                        pCursor->SetPalette(pPalette);
+                        SP::cPaletteEntry* pNode = pCursor->First(0, 0, 0, 0);  // ebp-0x20
+                        while (pNode != 0) {
+                            DeclareParam d = pNode->mParam;         // ebp-0x30
+                            void* pHolder = ((Manager*)GetMgr401010())->Find(d.key, d.b);
+                            if (pHolder != 0) {
+                                UpgradeParts(d, out);
+                                if (GetPropertyAsKey(pHolder, 0x3a3b9d21, &d.key))
+                                    UpgradeParts(d, out);
+                                if (GetPropertyAsKey(pHolder, 0x18c1dbe0, &d.key))
+                                    UpgradeParts(d, out);
+                                if (GetPropertyAsKey(pHolder, 0xf48eb09, &d.key))
+                                    UpgradeParts(d, out);
+                            }
+                            pNode = pCursor->Next(0, 0, 0, 0);
+                        }
+                    }
+                    if (pCursor != 0)
+                        pCursor->Release();
+                }
+            }
+            if (pPalette != 0)
+                pPalette->Release();
+        }
+    }
+    if (handle.mpObject != 0)
+        handle.mpObject->Release();
 }
 
 // ===========================================================================
-// @ 0x004e95e0  (INCOMPLETE skeleton)
-// 868-byte /Od helper that composes a transform/validity blob from a preview
-// object.  Left as a skeleton: it mixes several vector-math helpers whose
-// exact inline expansions are not yet reproduced.
+// @ 0x004e95e0
+// Composes the preview object's basis: the provider hands out four corner
+// vectors, the owner supplies the world transform, and the result is the
+// scaled origin plus the weighted corner sum.
 // ===========================================================================
-void FUN_004e95e0(int* self, void* out1, void* out2)
+void SP::cBasisSource::BuildBasis(Vector3* pOutVector, cSPMatrix3* pOutMatrix)
 {
-    (void)self; (void)out1; (void)out2;
+    cTransformSource* pOwner = mpObject;
+    if (pOwner == 0)
+        return;
+    ICorners* pProvider = mpProvider;
+    if (pProvider == 0)
+        return;
+    void* pSecondary = pOwner->mpSecondary;   // read-only, as the original does
+    void* pPrimary = pOwner->mpPrimary;       // read-only, as the original does
+    float scale = pOwner->mVectorScale;
+    Vector3 corners[4];                 // ebp-0x5c .. ebp-0x2c
+    pProvider->GetCorners(corners);
+    cWorldSlot world;                   // ebp-0x98; the callee fills a matrix at +0x14
+    StoreRows(pOwner->ComposeInto(&world), corners);
+    Vector3 sum = corners[0] * mScale.x + corners[1] * mScale.y + corners[2] * mScale.z;
+    cSPMatrix3 basis;                   // ebp-0x30
+    BuildBasisMatrix(&basis, corners[0], corners[1], corners[2]);
+    *pOutMatrix = mBasis * basis;
+    *pOutVector = (mOrigin * basis) * scale + sum;
 }

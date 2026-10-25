@@ -2,3 +2,5 @@
 004ea190  -  complete; frame size differs (bitfield-flag construction not reproduced)
 004e9950  372  complete; recursive child-property walk not byte-exact
 004e9fc0  349  complete; palette build/dispatch loop not byte-exact
+004e95e0  744  complete; basis composer rebuilt around the real 0x41dca0/0x41dc10/0x41daf0/0x41de20 operators and a 0x40-byte world scratch block (the 0x4363d0 fallback writes a matrix at +0x14); cl keeps a tighter /Od frame (793 vs 868 bytes); equiv PASS
+004e9ca0  603  complete; palette enumerator (RemapTypeId 0xdfad9f51, PropertyManager vt+0x2c, 0x40-byte palette from 0xf473a0, 0x20-byte cursor, 12-byte entries at +0xc, three collection keys re-running UpgradeParts); cl keeps a tighter /Od frame (762 vs 792 bytes); equiv WEAK
