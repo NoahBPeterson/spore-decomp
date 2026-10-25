@@ -654,3 +654,22 @@ skip:
     }
     return true;
 }
+
+// Death-from-being-eaten ending: either reload the level immediately in game mode, or destroy the
+// eaten cell and reload around the resulting level. (gold8 00e80660)
+int __cdecl SP_sDestroyCell(int handle);              // 0x00e4ef60
+
+namespace SP {
+
+// @ 0x00e80660
+void __cdecl sDeathFromBeingEaten_End(uint32 cell)
+{
+    if (gspCellGame->mbEditor) {
+        sLoadLevel(0, 0, 0, 0, true, cell, false);
+        return;
+    }
+    int level = SP_sDestroyCell(cell);
+    sLoadLevel(level, level, 0, 0, false, 0, false);
+}
+
+}
