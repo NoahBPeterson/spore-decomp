@@ -1,2 +1,1 @@
-# va  diff-bytes  reason (compiled with /O2 /MD /Gy /TP /arch:SSE /fp:fast)
-0061f670   881  cFeedManager::Load: all control-flow paths present, but the file-marker scan is rewritten and the eastl vector<bool> insert path is not reproduced
+# va  size  description   (none: all claimed functions finished)

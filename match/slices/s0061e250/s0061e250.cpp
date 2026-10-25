@@ -4,9 +4,10 @@
 
 extern "C" unsigned int __cdecl strlen(const char*);
 extern "C" unsigned int __cdecl wcslen(const wchar_t*);
+extern "C" int __cdecl wcscmp(const wchar_t*, const wchar_t*);
 extern "C" void* __cdecl memmove(void*, const void*, unsigned int);
 #pragma intrinsic(memmove)
-#pragma intrinsic(strlen, wcslen)
+#pragma intrinsic(strlen, wcslen, wcscmp)
 
 extern "C" long __cdecl _InterlockedExchange(volatile long*, long);
 #pragma intrinsic(_InterlockedExchange)
@@ -46,7 +47,7 @@ struct String8 {
   char* mpCapacity;
   void* mAllocator;
   String8* TrimLeft();
-  String8* TrimRight();
+  void TrimRight();
   unsigned int find_last_not_of(const char* p, unsigned int position, unsigned int n) const;
   unsigned int find_last_not_of(const char* p, unsigned int position) const;
 };
@@ -76,16 +77,21 @@ String8* String8::TrimLeft() {
 }
 
 // @ 0x0061ec30
-String8* String8::TrimRight() {
-  const char* const ws = " \t";
-  const char* const p = FindLastNotOf(mpEnd, mpBegin, ws, ws + 2);
-  const unsigned int n = (p == mpBegin) ? 0xffffffffu : (unsigned int)(p - mpBegin + 1);
-  char* pDst = mpBegin + n;
-  if (mpBegin != pDst) {
-    memmove(mpBegin, pDst, (mpEnd - pDst) + 1);
-    mpEnd = (char*)mpEnd + (mpBegin - pDst);
+void String8::TrimRight() {
+  char ws[4];
+  ws[0] = ' ';
+  ws[1] = '\t';
+  ws[2] = 0;
+  const unsigned int npos = 0xffffffffu;
+  const unsigned int pos = find_last_not_of(ws, npos) + 1;
+  unsigned int count = npos;
+  count = eastl::min_alt(count, (unsigned int)(mpEnd - mpBegin) - pos);
+  char* const pSrc = mpBegin + count + pos;
+  char* const pDst = mpBegin + pos;
+  if (pDst != pSrc) {
+    memmove(pDst, pSrc, (unsigned int)(mpEnd - pSrc) + 1);
+    mpEnd = (char*)mpEnd + (pDst - pSrc);
   }
-  return this;
 }
 
 // ---------------------------------------------------------------------------------------------
@@ -182,6 +188,70 @@ void ConvertToString8(void* out, const wchar_t* wide) {
 }
 
 // ---------------------------------------------------------------------------------------------
+// Ref-counted Pollen objects: the header file stream (0x22c bytes), the header parser (0xb0
+// bytes) and the 0x14-byte message that carries both.  Only the vtable slots this slice uses
+// are named; the layout matches the call order in the original code.
+// ---------------------------------------------------------------------------------------------
+extern "C" bool __cdecl CreateTempFileW(wchar_t* path, const wchar_t* dir, const wchar_t* prefix,
+                                        const wchar_t* suffix);  // 0x00932580
+extern "C" bool __cdecl FileRemoveW(const wchar_t* path);        // 0x00931fd0
+extern "C" wchar_t* PTR_DAT_01520730;                            // temp-file prefix
+extern "C" wchar_t* PTR_u__evt_01520734;                         // temp-file suffix
+extern "C" char* PTR_s_events_01520728;                          // "<events>"
+extern "C" char* PTR_s_events_0152072c;                          // "<_events>"
+extern "C" unsigned short DAT_015f5880;
+extern "C" unsigned short DAT_015f5888;
+
+struct IPollenObject {
+  virtual void v00();
+  virtual void AddRef();                                       // +0x04
+  virtual void Release();                                      // +0x08
+  virtual void v0c();
+  virtual void v10();
+  virtual void v14();
+  virtual void v18();                                          // +0x18
+  virtual void v1c();
+  virtual void v20();
+  virtual void v24();
+  virtual bool v28(int a, int b);                              // +0x28
+  virtual void v2c();
+  virtual void v30();
+  virtual void v34();
+  virtual bool v38(const char* p, unsigned short id);          // +0x38
+  virtual bool v3c(const char* path);                          // +0x3c
+  virtual void v40();
+  virtual unsigned int v44(wchar_t* buf, unsigned int count);  // +0x44
+  virtual void v48();
+  virtual bool v4c(int a, int b, int c, int d);                // +0x4c
+  IPollenObject* InitStream(const wchar_t* path);              // 0x00931e10
+  IPollenObject* InitPollen(IPollenObject* stream);            // 0x00609790
+  IPollenObject* InitEvent(IPollenObject* a, IPollenObject* b);  // 0x0061e1a0
+};
+
+struct AutoPollenRef {
+  IPollenObject* mpObject;
+  AutoPollenRef() {}
+  AutoPollenRef(IPollenObject* p);          // 0x0061df40
+  void SetFromField(IPollenObject*& p);     // 0x005725d0
+  ~AutoPollenRef() {
+    if (mpObject) mpObject->Release();
+  }
+  IPollenObject* operator->() const { return mpObject; }
+  operator IPollenObject*() const { return mpObject; }
+};
+
+// Message server slot used to post the pollinator event (4 arguments at vtable +0x18).
+struct IMessagePoster {
+  virtual void m00();
+  virtual void m04();
+  virtual void m08();
+  virtual void m0c();
+  virtual void m10();
+  virtual void m14();
+  virtual void PostEvent(uint32_t id, void* p1, void* p2, void* p3);  // +0x18
+};
+
+// ---------------------------------------------------------------------------------------------
 // SP::Skinner::PaintSystem (two vtable pointers, critical section, refcounted members).
 // ---------------------------------------------------------------------------------------------
 struct PBase0 {
@@ -190,11 +260,6 @@ struct PBase0 {
 };
 struct PBase38 {
   void Ctor3(void* a, void* b, int c);
-};
-struct IRel8 {
-  virtual void v0();
-  virtual void v1();
-  virtual int Release();
 };
 
 // Interface used by the Pollen file-processing object (m3c): buffer fetch at vtbl +0x44.
@@ -227,8 +292,8 @@ struct PaintSystem {
   char pad04[0x20];             // +0x04..0x23
   int m24, m28, m2c, m30, m34;  // +0x24
   void* mVt2;                   // +0x38
-  IRel8* m3c;                   // +0x3c
-  IRel8* m40;                   // +0x40
+  IPollenObject* m3c;           // +0x3c
+  IPollenObject* m40;           // +0x40
   char pad44[4];                // +0x44
   uint32_t mCS[6];              // +0x48 (CRITICAL_SECTION)
   char pad60[8];                // +0x60
@@ -287,20 +352,122 @@ void PaintSystem::Dtor() {
 }
 
 // ---------------------------------------------------------------------------------------------
-// Remaining functions outlined (see partial.txt).
+// SP::Pollen::HeaderHandler — builds the pollinator header file/parser pair from a temp file.
 // ---------------------------------------------------------------------------------------------
-// @ 0x0061e5b0  (HeaderHandler::operator())
-bool HeaderHandlerCall(void* self, void* a, void* b);
-bool HeaderHandlerCall(void* self, void* a, void* b) {
-  (void)self;
-  (void)a;
-  (void)b;
+struct HeaderHandler {
+  char pad00[0x3c];
+  IPollenObject* m3c;  // +0x3c header file stream
+  IPollenObject* m40;  // +0x40 header parser
+  char pad44[0x2c];
+  wchar_t* m70;        // +0x70 directory for the temporary file
+  bool Invoke();
+};
+
+// @ 0x0061e5b0
+bool HeaderHandler::Invoke() {
+  wchar_t path[0x104];
+  if (!CreateTempFileW(path, m70, PTR_DAT_01520730, PTR_u__evt_01520734)) return false;
+  void* const memStream = operator new(0x22c, "Pollinator", 0, 0, 0, 0);
+  IPollenObject* stream = memStream ? ((IPollenObject*)memStream)->InitStream(path) : 0;
+  IPollenObject* const oldStream = m3c;
+  if (stream != oldStream) {
+    if (stream) stream->AddRef();
+    m3c = stream;
+    if (oldStream) oldStream->Release();
+  }
+  void* const memParser = operator new(0xb0, "Pollinator", 0, 0, 0, 0);
+  IPollenObject* parser = memParser ? ((IPollenObject*)memParser)->InitPollen(m3c) : 0;
+  IPollenObject* const oldParser = m40;
+  if (parser != oldParser) {
+    if (parser) parser->AddRef();
+    m40 = parser;
+    if (oldParser) oldParser->Release();
+  }
+  String8Tmp tmp;
+  ConvertToString8(&tmp, path);
+  if (m40->v3c((const char*)&tmp)) {
+    if (m3c->v4c(2, 3, 1, 0)) {
+      if (m40->v38(PTR_s_events_01520728, DAT_015f5880)) return true;
+      m3c->v18();
+    }
+  }
+  if (m3c) {
+    IPollenObject* const p = m3c;
+    m3c = 0;
+    p->Release();
+  }
+  if (m40) {
+    IPollenObject* const p = m40;
+    m40 = 0;
+    p->Release();
+  }
+  FileRemoveW(path);
   return false;
 }
 
 // @ 0x0061e740
 bool PaintSystem::Helper886(FileArg* arg) {
   (void)arg;
+  if (m3c) {
+    wchar_t next[0x104];
+    wchar_t cur[0x104];
+    if (F_61e040(cur, 1)) {
+      const unsigned int n = m3c->v44(next, 0x104u);
+      if (n > 0) {
+        if (wcscmp(next, cur) == 0) {
+          if (m3c->v4c(3, 3, 1, 0) && m3c->v28(0, 2) &&
+              m40->v38(PTR_s_events_0152072c, DAT_015f5888)) {
+            AutoPollenRef parser;
+            parser.SetFromField(m40);
+            AutoPollenRef stream;
+            stream.SetFromField(m3c);
+            if (m3c) {
+              IPollenObject* const p = m3c;
+              m3c = 0;
+              p->Release();
+            }
+            if (m40) {
+              IPollenObject* const p = m40;
+              m40 = 0;
+              p->Release();
+            }
+            if (parser->v28(0, 0)) {
+              void* const mem = operator new(0x14, "Pollinator", 0, 0, 0, 0);
+              IPollenObject* ev = mem ? ((IPollenObject*)mem)->InitEvent(parser, stream) : 0;
+              AutoPollenRef ref((IPollenObject*)ev);
+              ((IMessagePoster*)SP::MessageServer())
+                  ->PostEvent(0x5fff3ffu, (IPollenObject*)ref, 0, 0);
+              return true;
+            }
+          }
+        } else if (!m69) {
+          void* const memStream = operator new(0x22c, "Pollinator", 0, 0, 0, 0);
+          IPollenObject* stream = memStream ? ((IPollenObject*)memStream)->InitStream(cur) : 0;
+          AutoPollenRef refStream((IPollenObject*)stream);
+          void* const memParser = operator new(0xb0, "Pollinator", 0, 0, 0, 0);
+          IPollenObject* parser =
+              memParser ? ((IPollenObject*)memParser)->InitPollen((IPollenObject*)refStream) : 0;
+          AutoPollenRef refParser((IPollenObject*)parser);
+          String8Tmp tmp;
+          ConvertToString8(&tmp, cur);
+          if (parser->v3c((const char*)&tmp) && stream->v4c(1, 3, 1, 0)) {
+            void* const mem = operator new(0x14, "Pollinator", 0, 0, 0, 0);
+            IPollenObject* ev = mem ? ((IPollenObject*)mem)->InitEvent((IPollenObject*)refParser,
+                                                                      (IPollenObject*)refStream)
+                                    : 0;
+            AutoPollenRef ref((IPollenObject*)ev);
+            ((IMessagePoster*)SP::MessageServer())
+                ->PostEvent(0x5fff3ffu, (IPollenObject*)ref, 0, 0);
+            return true;
+          }
+        }
+      }
+    }
+  }
+  void* const cs = mCS;
+  EnterCriticalSection(cs);
+  m68 = 0;
+  LeaveCriticalSection(cs);
   return true;
 }
 

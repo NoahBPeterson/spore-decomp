@@ -4,9 +4,11 @@
 0062cb90 SP::cSPPlayMode_Creature::ClearPathList  # releases vector at +0x3c back-to-front
 0062cbc0 SP::cPlayModePath world-position match  # fabs compare against 1.5258789e-05
 0062cc20 SP::cSPPlayMode_Creature::SetPathTarget  # SetTargetPosition + angle
+00628960 ?FUN_00628960@PlayMode@@QAEXPAUAnimCreature@@I@Z  # play-mode helper called by AddPathTarget (callee, thiscall with 2 stack args)
+005c8480 ?PushBack@PathVec@@QAEXPAU?$ARC@UPathT@@@@0@Z  # EA vector push_back(end, value&) used by AddPathTarget (callee)
 0062cd30 SP::cSPPlayMode_Creature::cSPPlayMode_Creature  # vtbl 0x13fe1bc
 0062cdb0 SP::cSPPlayMode_Creature::~cSPPlayMode_Creature  # deleting dtor, vtbl 0x13fe1bc/0x13ec458
-0062ce00 ?FUN_0062ce00@@YIXPAX0D@Z  # FUN_0062ce00 migrated from s0062ca80 (verbatim, slice spelling)
+0062ce00 ?AddPathTarget@PlayModeCreature@@QAEXPAUPathT@@_N@Z  # SP::cSPPlayMode_Creature::AddPathTarget (AutoRefCount path push/replace)
 0062cef0 ?FUN_0062cef0@@YIXPAX@Z  # FUN_0062cef0 migrated from s0062ca80 (verbatim, slice spelling)
 0062d0f0 SP::cSPPlayMode_Creature movement helper  # 1956 bytes
-0062d8a0 SP::cSPPlayMode_Creature grid-table builder  # 64x64, neighbour switch
+0062d8a0 ?Build@GridTable@@QAEXMM@Z  # SP::cSPPlayMode_Creature grid-table builder (64x64, neighbour switch)

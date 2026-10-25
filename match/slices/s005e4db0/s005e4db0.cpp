@@ -2,6 +2,7 @@
 // Retail layout recovered from the constructor at 0x005e5a70 (PDB offsets differ).
 #include "types.h"
 #include <intrin.h>
+#include <new>
 
 #define PV(n) virtual void _pv##n();
 
@@ -64,6 +65,7 @@ namespace EA {
 template <typename T>
 class RefCountVTemplate {
  public:
+  RefCountVTemplate() : mRefCount(0) {}
   virtual int AddRef();
   virtual int Release();
   T mRefCount;
@@ -79,18 +81,45 @@ class IUnknown32 {
 }  // namespace EA
 
 namespace SP {
+struct CreatureStats;
+
+struct cPropertyList;
+
+// Property record: the value type tag lives at +0x12.
+struct cPropertyRecord {
+  char pad[0x12];
+  short mType;
+};
+
+// Raw storage for the members the constructor builds in place (the class has no member destructors).
+struct cStringStorage {
+  uint32_t mData[5];
+};
+struct wstringStorage {
+  void* mpBegin;
+  void* mpEnd;
+  void* mpCapacity;
+  uint32_t mPad;  // empty allocator + padding (sizeof(eastl::wstring) == 0x10)
+};
+
+void __fastcall cString_Construct(void* self);  // cString::cString @ 0x006b5060
+
 // Refcounted payload stored at cSPCreatureVerbIconData::mData (+0xc4).
 class cRefObj {
  public:
-  virtual void Release(int value);
-  int mRefCount;
+  virtual int Release();           // +0x04
+  virtual int Release(int value);  // +0x00
+  int mRefCount;                   // +0x04
+  void AddRef() { ++mRefCount; }
 };
 
 class cSPEditorVerbIconData : public EA::COM::IUnknown32, public EA::RefCountVTemplate<int> {
  public:
   cSPEditorVerbIconData();
   virtual ~cSPEditorVerbIconData();
-  PV(2) PV(3) PV(4) PV(5) PV(6) PV(7)
+  PV(2) PV(3) PV(4) PV(5)
+  virtual void _pv6(int level);
+  PV(7)
   bool mUseDescription;  // +0x0c
   bool mShowLevel;       // +0x0d
   bool mShowHotKey;      // +0x0e
@@ -102,36 +131,39 @@ class cSPEditorVerbIconData : public EA::COM::IUnknown32, public EA::RefCountVTe
   float mMaxLevel;       // +0x18
   float mType;           // +0x1c
   uint32_t mPad20;       // +0x20
-  uint32_t mPad24;       // +0x24
+  int mField24;          // +0x24
   int mField28;          // +0x28
-  uint32_t mPad2c[5];    // +0x2c..0x3f
+  float mVec2c[4];       // +0x2c..0x3b
+  int mField3c;          // +0x3c
   int mField40;          // +0x40
   int mField44;          // +0x44
   int mField48;          // +0x48
-  uint32_t mField4c;     // +0x4c
-  uint32_t mPad50;       // +0x50
-  cString mName;         // +0x54..0x67
-  eastl::wstring mHotKeyString;  // +0x68..0x77
+  bool mField4c;         // +0x4c
+  bool mField4d;         // +0x4d
+  short mPad4e;          // +0x4e
+  int mField50;          // +0x50
+  cStringStorage mName;         // +0x54..0x67
+  wstringStorage mHotKeyString;  // +0x68..0x77
   uint32_t mHotKeyID;    // +0x78
   int mField7c;          // +0x7c
   int mField80;          // +0x80
   uint32_t mPad84;       // +0x84
   uint32_t mPad88;       // +0x88
   uint32_t mPad8c;       // +0x8c
-  uint32_t mPad90;       // +0x90
-  uint32_t mPad94;       // +0x94
-  uint32_t mPad98;       // +0x98
-  uint32_t mPad9c;       // +0x9c
-  uint32_t mPadA0;       // +0xa0
-  uint32_t mPadA4;       // +0xa4
-  uint32_t mPadA8;       // +0xa8
-  uint32_t mPadAc;       // +0xac
-  uint32_t mPadB0;       // +0xb0
-  uint32_t mPadB4;       // +0xb4
-  uint32_t mPadB8;       // +0xb8
-  uint32_t mPadBc;       // +0xbc
-  uint32_t mPadC0;       // +0xc0
-  void Init(uint32_t level);
+  int mField90;          // +0x90
+  int mField94;          // +0x94
+  int mField98;          // +0x98
+  int mField9c;          // +0x9c
+  int mFieldA0;          // +0xa0
+  int mFieldA4;          // +0xa4
+  int mFieldA8;          // +0xa8
+  int mFieldAc;          // +0xac
+  int mFieldB0;          // +0xb0
+  int mFieldB4;          // +0xb4
+  int mFieldB8;          // +0xb8
+  int mFieldBc;          // +0xbc
+  cPropertyList* mConfig;  // +0xc0
+  void Init(cPropertyList* config);
   void SetHotKey(uint32_t key);
   eastl::wstring GetIconName(bool withLevel);
 };
@@ -143,9 +175,35 @@ class cSPCreatureVerbIconData : public cSPEditorVerbIconData {
   static void operator delete(void* p) { EASTL_allocator_deallocate(p); }
   cRefObj* mData;  // +0xc4
   int mFieldC8;    // +0xc8
-  void Init(uint32_t type, cSPCreatureVerbIconData* data);
+  float mFieldCC;  // +0xcc
+  void Init(const CreatureStats* stats, cRefObj* data, int extra);
   void ReleaseData();
 };
+
+struct cPropertyList {
+  virtual void AddRef();                                // +0x00
+  virtual void Release();                               // +0x04
+  virtual void v08();                                   // +0x08
+  virtual void v0c();                                   // +0x0c
+  virtual void v10();                                   // +0x10
+  virtual void v14();                                   // +0x14
+  virtual void v18();                                   // +0x18
+  virtual bool HasProperty(unsigned id);                // +0x1c
+  virtual void v20();                                   // +0x20
+  virtual bool QueryProperty(unsigned id, void** out);  // +0x24
+};
+
+void ConfigGetVector(cPropertyList* cfg, unsigned id, float* out);    // 0x006a1200
+void ConfigGetFloat(cPropertyList* cfg, unsigned id, float* out);     // 0x006a1250
+void ConfigGetInt(cPropertyList* cfg, unsigned id, int* out);         // 0x006a12a0
+void ConfigGetString(cPropertyList* cfg, unsigned id, cString* out);  // 0x006a1360
+
+bool* __fastcall Property_GetBool(void* prop);    // 0x0041e920 thiscall, ret 0
+int* __fastcall Property_GetInt(void* prop);      // 0x0041e990 thiscall, ret 0
+float* __fastcall Property_GetFloat(void* prop);  // 0x0041ea70 thiscall, ret 0
+
+extern float g_01485720;  // 0x01485720  1.0f
+extern float g_013f9544;  // 0x013f9544  default creature verb type
 
 // @ 0x005e5910
 void cSPCreatureVerbIconData::ReleaseData() {
@@ -179,6 +237,8 @@ cSPCreatureVerbIconData::~cSPCreatureVerbIconData() {
 
 // @ 0x005e5a70
 cSPEditorVerbIconData::cSPEditorVerbIconData() {
+  mMaxLevel = 0.0f;
+  mType = g_013f9544;
   mUseDescription = true;
   mShowLevel = true;
   mShowHotKey = true;
@@ -186,21 +246,148 @@ cSPEditorVerbIconData::cSPEditorVerbIconData() {
   mField10 = false;
   mField11 = false;
   mField14 = -2;
-  mMaxLevel = 0.0f;
-  mType = 5.0f;
+  mField24 = 0;
   mField28 = -1;
   mField40 = 0;
   mField44 = 0;
   mField48 = 0;
-  mField4c = 0;
+  mField4d = false;
+  cString_Construct(&mName);
+  // Empty eastl::wstring: begin/end point at the shared empty buffer, capacity is one past it.
+  mHotKeyString.mpBegin = eastl::gEmptyString.mEmpty16;
+  mHotKeyString.mpEnd = mHotKeyString.mpBegin;
+  mHotKeyString.mpCapacity = (void*)(eastl::gEmptyString.mEmpty16 + 1);
   mHotKeyID = 0;
   mField7c = -1;
   mField80 = -1;
+  mPad84 = 0;
+  mPad88 = 0;
+  mPad8c = 0;
+  mField94 = 0;
+  mField9c = 0;
+  mFieldA0 = 0;
+  mFieldA4 = 0;
+  mFieldA8 = 0;
+  mFieldAc = 0;
+  mFieldB0 = 0;
+  mFieldB4 = 0;
+  mFieldB8 = 0;
+  mFieldBc = 0;
+  mConfig = 0;
 }
 
 // @ 0x005e5470
-void cSPEditorVerbIconData::Init(uint32_t level) {
-  (void)level;
+void cSPEditorVerbIconData::Init(cPropertyList* config) {
+  cPropertyList* old = mConfig;
+  if (config != old) {
+    if (config)
+      config->AddRef();
+    mConfig = config;
+    if (old)
+      old->Release();
+  }
+  if (mConfig->HasProperty(0x4abbb0d)) {
+    int value;
+    ConfigGetInt(mConfig, 0x4abbb0d, &value);
+    mField24 = value;
+  } else {
+    mField24 = 0;
+  }
+  mField28 = -1;
+  ConfigGetInt(mConfig, 0x4d7ff37, &mField28);
+  mField90 = 0;
+  ConfigGetInt(mConfig, 0x626efe0, &mField90);
+  mField94 = 0;
+  ConfigGetInt(mConfig, 0x62cc8d9, &mField94);
+  mField98 = 0;
+  ConfigGetInt(mConfig, 0xc4548d94, &mField98);
+  mField3c = 0;
+  ConfigGetInt(mConfig, 0x631d7b6, &mField3c);
+  ConfigGetFloat(mConfig, 0x64a5775, (float*)&mField40);
+  mField44 = 0x510a95b;
+  mField48 = 0x40464100;
+  mField4c = true;
+  if (mConfig) {
+    void* rec;
+    if (mConfig->QueryProperty(0x64a5c75, &rec) && ((cPropertyRecord*)rec)->mType == 1)
+      mField4c = *Property_GetBool(rec);
+  }
+  ConfigGetFloat(mConfig, 0x4a20fe7, (float*)&mField9c);
+  mFieldA0 = 0x510a95b;
+  mFieldA4 = 0x40464100;
+  ConfigGetFloat(mConfig, 0x62f16d8, (float*)&mFieldA8);
+  mFieldAc = 0x510a95b;
+  mFieldB0 = 0x40464100;
+  ConfigGetFloat(mConfig, 0x62f16cf, (float*)&mFieldB4);
+  float one[4] = {1.0f, 1.0f, 1.0f, 1.0f};
+  unsigned* dst = (unsigned*)mVec2c;
+  dst[0] = *(unsigned*)&one[0];
+  dst[1] = *(unsigned*)&one[1];
+  dst[2] = *(unsigned*)&one[2];
+  dst[3] = *(unsigned*)&one[3];
+  mFieldB8 = 0x510a95b;
+  mFieldBc = 0x40464100;
+  ConfigGetVector(mConfig, 0x631704a, mVec2c);
+  mShowLevel = true;
+  if (mConfig) {
+    void* rec;
+    if (mConfig->QueryProperty(0x4c1ab51, &rec) && ((cPropertyRecord*)rec)->mType == 1)
+      mShowLevel = *Property_GetBool(rec);
+  }
+  mShowZeroLevel = mShowLevel;
+  if (mConfig) {
+    void* rec;
+    if (mConfig->QueryProperty(0x63955a8, &rec) && ((cPropertyRecord*)rec)->mType == 1)
+      mShowZeroLevel = *Property_GetBool(rec);
+  }
+  mShowHotKey = mShowLevel;
+  if (mConfig) {
+    void* rec;
+    if (mConfig->QueryProperty(0x639558f, &rec) && ((cPropertyRecord*)rec)->mType == 1)
+      mShowHotKey = *Property_GetBool(rec);
+  }
+  mField11 = false;
+  if (mConfig) {
+    void* rec;
+    if (mConfig->QueryProperty(0x5a5f41e, &rec) && ((cPropertyRecord*)rec)->mType == 1)
+      mField11 = *Property_GetBool(rec);
+  }
+  ConfigGetString(mConfig, 0x1b7c544, (cString*)&mName);
+  if (mConfig) {
+    void* rec;
+    if (mConfig->QueryProperty(0x4dad031, &rec) && ((cPropertyRecord*)rec)->mType == 9)
+      mField14 = *Property_GetInt(rec);
+  }
+  if (mField14 > -1)
+    _pv6(mField14);
+  mMaxLevel = 0.0f;
+  if (mConfig) {
+    void* rec;
+    if (mConfig->QueryProperty(0x5483e7f, &rec) && ((cPropertyRecord*)rec)->mType == 1)
+      mUseDescription = *Property_GetBool(rec);
+  }
+  if (mConfig->HasProperty(0x6678640)) {
+    int value = 0;
+    if (mConfig) {
+      void* rec;
+      if (mConfig->QueryProperty(0x6678640, &rec) && ((cPropertyRecord*)rec)->mType == 9)
+        value = *Property_GetInt(rec);
+    }
+    mType = (float)value;
+  }
+  mField4d = false;
+  if (mConfig) {
+    void* rec;
+    if (mConfig->QueryProperty(0x6678623, &rec) && ((cPropertyRecord*)rec)->mType == 1)
+      mField4d = *Property_GetBool(rec);
+  }
+  int key = -1;
+  if (mConfig) {
+    void* rec;
+    if (mConfig->QueryProperty(0x1ef3be2, &rec) && ((cPropertyRecord*)rec)->mType == 9)
+      key = *Property_GetInt(rec);
+  }
+  mField50 = key;
 }
 
 // Reads one creature-capability stat out of the stats block (+0x590..+0x6ac), keyed by the
@@ -283,9 +470,41 @@ float GetLevelForType(const CreatureStats* obj, int type) {
   }
 }
 // @ 0x005e5950
-void cSPCreatureVerbIconData::Init(uint32_t type, cSPCreatureVerbIconData* data) {
-  (void)type;
-  (void)data;
+void cSPCreatureVerbIconData::Init(const CreatureStats* stats, cRefObj* data, int extra) {
+  cSPEditorVerbIconData::Init(*(cPropertyList**)((char*)data + 0x130));
+  cRefObj* old = mData;
+  if (data != old) {
+    data->AddRef();
+    mData = data;
+    if (old) {
+      int count = old->mRefCount - 1;
+      old->mRefCount = count;
+      if (count == 0) {
+        old->mRefCount = 1;
+        old->Release(1);
+      }
+    }
+  }
+  if (mData && mConfig && !mConfig->HasProperty(0x4d7ff37))
+    mField28 = 0;
+  mMaxLevel = GetLevelForType(stats, mField24);
+  float type;
+  if (mConfig->HasProperty(0x6678640)) {
+    int value = 5;
+    if (mConfig) {
+      void* rec;
+      if (mConfig->QueryProperty(0x6678640, &rec) && ((cPropertyRecord*)rec)->mType == 9)
+        value = *Property_GetInt(rec);
+    }
+    type = (float)value;
+  } else {
+    type = g_013f9544;
+  }
+  mType = type;
+  if (mField4d && mMaxLevel > type)
+    mMaxLevel = type;
+  mFieldCC = *(float*)((char*)mData + 0x9c);
+  mFieldC8 = extra;
 }
 
 // @ 0x005e5c00
@@ -293,7 +512,7 @@ void cSPEditorVerbIconData::SetHotKey(uint32_t key) {
   mHotKeyID = key;
   cString first(0x841536d5, key, L"<Key>");
   cString second(0xd1726890, 0x4dacd21, L"<Key>");
-  WStr_Format(&mHotKeyString, L"%ls: %ls", second.GetText(), first.GetText());
+  WStr_Format((eastl::wstring*)&mHotKeyString, L"%ls: %ls", second.GetText(), first.GetText());
 }
 
 // @ 0x005e5c80
@@ -301,13 +520,14 @@ eastl::wstring cSPEditorVerbIconData::GetIconName(bool withLevel) {
   eastl::wstring result;
   cString label(0xd1726890, 0x4ace6b0, L"Level");
   if (!withLevel) {
-    const wchar_t* text = mName.GetText();
+    const wchar_t* text = ((cString*)&mName)->GetText();
     const wchar_t* end = text;
     while (*end)
       ++end;
     result.assign(text, end);
   } else {
-    WStr_Format(&result, L"%ls - %ls %d", label.GetText(), mName.GetText(), (int)mMaxLevel);
+    WStr_Format(&result, L"%ls - %ls %d", label.GetText(), ((cString*)&mName)->GetText(),
+                (int)mMaxLevel);
   }
   return result;
 }

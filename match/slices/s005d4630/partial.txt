@@ -1,4 +1,0 @@
-005d4630  389   curve/segment helper not reconstructed (skeleton)
-005d47c0  398   curve/segment helper not reconstructed (skeleton)
-005d5050  203   curve/segment virtual-walk helper not reconstructed (skeleton)
-005d5250  390   curve/segment helper not reconstructed (skeleton)

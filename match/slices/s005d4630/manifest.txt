@@ -2,3 +2,4 @@
 slices/s005d4630/s005d4630.cpp  ?AbsAngleTimes@  005d4fe0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s005d4630/s005d4630.cpp  ?CrossSideCcw@  005d4ff0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s005d4630/s005d4630.cpp  ?SegmentLength@  005d51e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005d4630/s005d4630.cpp  ?Walk@PathCurve@@QAEPAMPAMM@Z  005d5050  /O2 /MD /Gy /TP /arch:SSE /fp:fast

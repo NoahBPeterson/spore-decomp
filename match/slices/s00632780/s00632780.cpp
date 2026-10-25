@@ -32,6 +32,17 @@ struct wstring16 {
     uint32_t mAlloc;
     wstring16() : mpBegin(sEmptyWStr), mpEnd(sEmptyWStr), mpCapacity(sEmptyWStr + 1) {}
     wstring16(const wstring16& o);              // 0x0056e2d0
+    // Build from a character range: zeroed (as the copy ctor does) then assign.
+    wstring16(const wchar_t* b, const wchar_t* e) : mpBegin(0), mpEnd(0), mpCapacity(0) { assign(b, e); }
+    void Reserve(uint32_t capacity);            // 0x00429760
+    void assign(const wchar_t* b, const wchar_t* e) {   // 0x00423820
+        uint32_t n = (uint32_t)(e - b);
+        Reserve(n + 1);
+        wchar_t* p = mpBegin;
+        memcpy(p, b, n * 2);
+        mpEnd = p + n;
+        *mpEnd = 0;
+    }
     struct NoInit {};
     wstring16(NoInit) {}
     ~wstring16() {
@@ -306,7 +317,7 @@ struct cSPPlayModePhotoBrowser {
     bool FUN_00631810(HeaderInfo* hdr, uint32_t u, int kind, wstring16 s);
     void FUN_00631df0(cPlayModePhoto* p);
     void GetPhotoDir(uint32_t guid, wstring16* out);                 // 0x00631e50
-    bool FUN_006312f0(void* a, void* b, void* c, wstring16 s);
+    bool FUN_006312f0(wstring16 s, void* a, void* b, void* c);   // 0x006312f0, ret 0x1c
     uint32_t PhotoCountChanged();                                    // 0x00631b30
 };
 void FUN_00632660();
@@ -624,20 +635,15 @@ bool cSPPlayModePhotoBrowser::LoadPhotoThumb(uint32_t idx)
             GetPhotoDir(ph->photo_guid, &dirName);
             wstring16 fileName;
             WStr_Format(&fileName, L"CRE_%s-%08x_sml.jpg", dirName.mpBegin, ph->photo_guid);
-            uint32_t outA;
-            uint32_t outB;
-            uint32_t outC;
+            uint32_t outA = 0;
+            uint32_t outB = (uint32_t)-1;
             wstring16 tmp;
-            bool ok = FUN_006312f0(&outA, &outB, &outC, tmp);
+            bool ok = FUN_006312f0(fileName, &outA, &outB, &tmp);
             GetSaveArea(0x11ac196);
-            if (ok) {
-                if (CheckGuidAndType(tmp, outB, outC, fileName))
-                    ok = true;
-                else
-                    ok = false;
-            } else {
+            if (ok && CheckGuidAndType(fileName, outA, outB, tmp))
+                ok = true;
+            else
                 ok = false;
-            }
             result = ok;
         }
     }
@@ -677,24 +683,17 @@ bool cSPPlayModePhotoBrowser::MarkPhotoTypeForGuid(uint32_t guid, int kind, Reso
 // @ 0x006332c0
 bool cSPPlayModePhotoBrowser::LoadPhotoByKey(const ResourceKey* key)
 {
-    wstring16 s1;
     uint32_t outA = 0;
     uint32_t outB = (uint32_t)-1;
+    wstring16 s1;
     wstring16 s2;
     GetResourceManager()->GetPathForKey(key, &s2);
-    wstring16 s3(s2);
-    bool ok = FUN_006312f0(&outA, &outB, &s1, s3);
+    bool ok = FUN_006312f0(wstring16(s2.mpBegin, s2.mpEnd), &outA, &outB, &s1);
     GetSaveArea(0x11ac196);
-    if (ok) {
-        if (CheckGuidAndType(s2, outA, outB, s1)) {
-            if (MarkPhotoTypeForGuid(outA, outB, *key))
-                ok = true;
-            else
-                ok = false;
-        } else {
-            ok = false;
-        }
-    }
+    if (ok && CheckGuidAndType(s2, outA, outB, s1) && MarkPhotoTypeForGuid(outA, outB, *key))
+        ok = true;
+    else
+        ok = false;
     return ok;
 }
 

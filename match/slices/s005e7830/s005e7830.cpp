@@ -132,8 +132,24 @@ class cSPUILayout {
   PV(0)
   virtual int AddRef();                                              // +0x04
   virtual int Release();                                             // +0x08
+  PV(3) PV(4) PV(5)
+  virtual void SetIconKeyIndex(int index);                           // +0x18
   void Init(const Key* key, int a, uint32_t b);                      // 0x8120d0
   IWindow* FindWindowByID(uint32_t id, int flag);                    // 0x8105b0
+};
+
+// Layout object handed to the verb-icon helpers (icon key at +0x9c); not the small
+// cSPUILayout resource handle that Init creates.
+class cSPVerbIconLayout {
+ public:
+  uint32_t mPad[5];
+  char mPadToIconKey[0x9c - 0x18];
+  Key mIconKey;                                                      // +0x9c
+  PV(0)
+  virtual int AddRef();                                              // +0x04
+  virtual int Release();                                             // +0x08
+  PV(3) PV(4) PV(5)
+  virtual void SetIconKeyIndex(int index);                           // +0x18
 };
 
 namespace SPUIHelpers {
@@ -145,8 +161,25 @@ enum eLayoutJustification { kJustificationRight = -401149879 };
 
 class cSPEditorVerbIcon {
  public:
-  virtual int AddRef();
-  virtual int Release();
+  virtual int AddRef();                                // +0x00
+  virtual int Release();                               // +0x04
+  PV(2) PV(3) PV(4) PV(5) PV(6)
+  virtual void SetIconLayout(IWindow* panel, Key key, cSPVerbIconLayout* layout, uint32_t rolloverLayout,
+                             bool animate, int justification, bool forceEnabled, bool chargeDials);  // +0x1c
+  virtual void SetIconLayoutCollapsed(cSPVerbIconLayout* layout, bool flag, bool animate);          // +0x20
+  PV(9) PV(10) PV(11)
+  virtual void UpdateIcon(cSPVerbIconLayout* layout);  // +0x30
+  char mPadTo17c[0x17c - 4];
+  AutoRefCount<IWindow> mField17c;                     // +0x17c
+  uint32_t mPad180;                                    // +0x180
+  cSPEditorVerbIcon();                                 // 0x5e2000
+  void FUN_005e3920();                                 // 0x5e3920
+  float FUN_005e1f80();                                // 0x5e1f80
+  void FUN_005e1f90(bool value);                       // 0x5e1f90
+  void SetEnabled(bool value);                         // 0x5e2cc0
+  void FUN_005e2890(Math::Rectangle* out);             // 0x5e2890
+  void SetArea(Math::Rectangle area);                  // 0x5e2960
+  void SetState2();                                    // 0x5e3d40
 };
 class cSPVerbIconRollover {
  public:
@@ -165,10 +198,12 @@ struct IconVector {
   T* mpEnd;
   T* mpCapacity;
   uint32_t mAllocator;
+  IconVector(unsigned int n, const uint32_t& allocator);   // 0x66aec0
   unsigned int size() const { return (unsigned int)(mpEnd - mpBegin); }
   struct RawRef { void* p; };
   void insert(T* pos, unsigned int n, const RawRef& value);   // 0x5e7400
   void erase(T* first, T* last);                         // 0xe25bd0
+  void Resize(unsigned int n);                           // 0x5e77e0
   void resize(unsigned int n) {
     RawRef value;
     value.p = 0;
@@ -178,6 +213,11 @@ struct IconVector {
       erase(mpBegin + n, mpEnd);
   }
 };
+
+void EASTL_allocator_deallocate(void* p);              // 0xf47380
+void IconCopy(AutoRefCount<cSPEditorVerbIcon>** out, AutoRefCount<cSPEditorVerbIcon>* first,
+              AutoRefCount<cSPEditorVerbIcon>* last, AutoRefCount<cSPEditorVerbIcon>* dest,
+              int index);                              // 0x829110
 
 class cSPEditorVerbIconTray : public EA::UTFWin::IWinProc, public EA::RefCountVTemplate<int> {
  public:
@@ -246,9 +286,11 @@ class cSPEditorVerbIconTray : public EA::UTFWin::IWinProc, public EA::RefCountVT
   AutoRefCount<cSPVerbIconRollover> mRollover;                 // +0x110
   uint32_t* mAbilityArray;                                     // +0x114
   uint32_t mRepresentativeAnimation;                           // +0x118
+  IWindow* mField11c;                                          // +0x11c
 
   void SetVerbIconSize();                                      // 0x5e6030
   void SetLevelText(float level);                              // 0x5e7030
+  cSPEditorVerbIcon* FUN_005e8130(int index, cSPVerbIconLayout* layout);   // 0x5e8130
   void Init(IWindow* parent, Key trayKey, uint32_t justification, bool animateIcons, int unused);   // @ 0x5e7830
 };
 
@@ -417,5 +459,66 @@ void cSPEditorVerbIconTray::Init(IWindow* parent, Key trayKey, uint32_t justific
 }
 
 // @ 0x005e8130
-void FUN_005e8130() {}
+cSPEditorVerbIcon* cSPEditorVerbIconTray::FUN_005e8130(int index, cSPVerbIconLayout* layout) {
+  int count = (int)mVerbIcons.size();
+  if (index >= count) {
+    IconVector<AutoRefCount<cSPEditorVerbIcon> > temp((unsigned int)count, mVerbIcons.mAllocator);
+    AutoRefCount<cSPEditorVerbIcon>* endOut;
+    IconCopy(&endOut, mVerbIcons.mpBegin, mVerbIcons.mpEnd, temp.mpBegin, index);
+    mVerbIcons.Resize(index + 1);
+    for (int i = 0; i < count; i++)
+      mVerbIcons.mpBegin[i] = temp.mpBegin[i].mpObject;
+    for (AutoRefCount<cSPEditorVerbIcon>* p = temp.mpBegin; p < endOut; p++) {
+      if (p->mpObject != 0)
+        p->mpObject->Release();
+    }
+    if (temp.mpBegin != 0 && ((uint32_t*)temp.mpBegin)[-1] != 0)
+      EASTL_allocator_deallocate(temp.mpBegin);
+  }
+
+  AutoRefCount<cSPEditorVerbIcon>& slot = mVerbIcons.mpBegin[index];
+  if (slot.mpObject != 0) {
+    slot.mpObject->UpdateIcon(layout);
+    slot.mpObject->FUN_005e3920();
+    return mVerbIcons.mpBegin[index].mpObject;
+  }
+
+  cSPEditorVerbIcon* icon = new ("Editor", 0, 0, 0, 0) cSPEditorVerbIcon();
+  if (icon != 0)
+    icon->AddRef();
+
+  if (mShowIcons) {
+    Key key = layout->mIconKey;
+    if (mIconKey.instanceID != 0)
+      key = mIconKey;
+
+    layout->SetIconKeyIndex(index);
+    icon->SetIconLayout(mWinIconPanel.mpObject, key, layout, mRolloverLayout.instanceID,
+                        mAnimateIcons, mLayoutJustification, mIconsForceEnabled,
+                        mIconsHaveChargeDials);
+    icon->mField17c = mField11c;
+    icon->SetEnabled(mIsEnabled);
+    icon->FUN_005e1f90(mIgnoreKeyPress);
+    if (mVerbIconAspectRatio == -1.0f) {
+      mVerbIconAspectRatio = icon->FUN_005e1f80();
+      SetVerbIconSize();
+    }
+    Math::Rectangle current;
+    icon->FUN_005e2890(&current);
+    Math::Rectangle area;
+    area.x1 = 0.0f;
+    area.y1 = 0.0f;
+    area.x2 = current.x2 - current.x1;
+    area.y2 = current.y2 - current.y1;
+    icon->SetArea(area);
+    icon->SetState2();
+  } else {
+    bool show = mShowVerbIconWhenCollapsed && mShowRollover;
+    icon->SetIconLayoutCollapsed(layout, show, mAnimateIcons);
+  }
+
+  mVerbIcons.mpBegin[index] = icon;
+  icon->Release();
+  return icon;
+}
 }  // namespace SP

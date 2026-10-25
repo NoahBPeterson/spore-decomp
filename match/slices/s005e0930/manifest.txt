@@ -1,2 +1,4 @@
 # source  symbol  original VA  [cl flags override]
 slices/s005e0930/s005e0930.cpp  ?Shutdown@CShut@@QAEXXZ  005e0e50  /O2 /MD /Gy /TP /arch:SSE /GS-
+slices/s005e0930/s005e0930.cpp  ??1VehicleTray@@QAE@XZ  005e0d80  /O2 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s005e0930/s005e0930.cpp  ?Update@VehicleTray@@UAEXI@Z  005e0e80  /O2 /MD /Gy /TP /arch:SSE /GS- /fp:fast

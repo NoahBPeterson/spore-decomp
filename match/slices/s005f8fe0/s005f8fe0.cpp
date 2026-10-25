@@ -73,12 +73,15 @@ class allocator { public:
 struct true_type {};
 struct false_type {};
 
+extern wchar_t gEmptyString16[];  // 0x01667bac (shared empty string16 buffer)
+
 // eastl::basic_string<wchar_t> (4 dwords: begin / end / capacity + empty allocator padding)
 struct WStr {
   wchar_t* mpBegin;
   wchar_t* mpEnd;
   wchar_t* mpCapacity;
   allocator mAllocator;
+  WStr() : mpBegin(gEmptyString16), mpEnd(gEmptyString16), mpCapacity(gEmptyString16 + 1) {}
   WStr(const WStr& o);                     // 0x0056e2d0
   WStr& operator=(const WStr& o);          // 0x0057cb60
   void assign(const wchar_t* b, const wchar_t* e);  // 0x00423650
@@ -464,6 +467,7 @@ struct StringProps {
   WStr m164;               // +0x164
   WStr m174;               // +0x174
   bool Prop(uint32 code, WStr& out);
+  bool FUN_005f97c0(const wchar_t* name, uint32 code, WStr* out, int flag, const wchar_t* suffix);
 };
 
 // @ 0x005F9230
@@ -544,7 +548,73 @@ bool SP::Thumbnail::cImportExport::SetupExportFolderPath(uint32 a, void* path, u
   return EnsureDirectoryExists(pPath->mpBegin);
 }
 
+// ---------------------------------------------------------------------------------------------
+// Hashtable bucket-array teardown: walk each bucket's node chain, destroy the node's string16
+// value (releasing a grown buffer) and free the node, then null the bucket head.
+
 // @ 0x005F9760
-void FUN_005f9760() {}
+void __stdcall FUN_005f9760(NodeW** buckets, uint32 count) {
+  for (uint32 i = 0; i < count; ++i) {
+    NodeW* p = buckets[i];
+    while (p) {
+      NodeW* pCur = p;
+      p = p->mpNext;
+      pCur->mValue.~WStr();
+      EASTL_allocator_deallocate(pCur);
+    }
+    buckets[i] = 0;
+  }
+}
+
+// ---------------------------------------------------------------------------------------------
+// Thumbnail output-filename builder: resolve a property string, ensure its directory exists,
+// format "<prop><name>.png" (or "<prop><name> (n).png" while the name collides) into out.
+
+namespace eastl {
+template <typename T>
+const T& min(const T& a, const T& b) {
+  return (a < b) ? a : b;
+}
+}  // namespace eastl
+
+namespace EA {
+namespace IO {
+namespace File {
+bool Exists(const wchar_t* path);  // 0x00931fa0
+}
+}  // namespace IO
+}  // namespace EA
+
+void __cdecl WStr_Format(WStr* out, const wchar_t* fmt, ...);          // 0x0041e050
+bool __cdecl FUN_005f8da0(WStr* out, const wchar_t* suffix);           // 0x005f8da0
+int __cdecl CompareI16(const wchar_t* a, const wchar_t* b, unsigned n);  // 0x00572930
+
 // @ 0x005F97C0
-void FUN_005f97c0() {}
+bool eastl::StringProps::FUN_005f97c0(const wchar_t* name, uint32 code, WStr* out, int flag, const wchar_t* suffix) {
+  WStr prop;
+  bool result = true;
+  Prop(code, prop);
+  EnsureDirectoryExists(prop.mpBegin);
+  WStr_Format(out, L"%s%s.png", prop.mpBegin, name);
+  if (flag == 0 && !FUN_005f8da0(out, suffix)) {
+    uint32 n = 1;
+    do {
+      WStr_Format(out, L"%s%s (%d).png", prop.mpBegin, name, n);
+      if (suffix) {
+        const wchar_t* pEnd = suffix;
+        while (*pEnd) ++pEnd;
+        const uint32 olen = (uint32)(out->mpEnd - out->mpBegin);
+        const uint32 slen = (uint32)(pEnd - suffix);
+        if (CompareI16(out->mpBegin, suffix, eastl::min(slen, olen)) == 0 && slen <= olen && olen <= slen)
+          break;
+      }
+      const bool bMissing = !EA::IO::File::Exists(out->mpBegin);
+      if (bMissing) {
+        break;
+      }
+      ++n;
+    } while (n < 1000);
+    result = (n != 1000);
+  }
+  return result;
+}

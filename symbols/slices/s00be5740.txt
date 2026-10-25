@@ -44,3 +44,4 @@
 #   00be5be0  WEAK  168/400 valid, 35.9% coverage, no mismatch
 #   00be5dd0  FAIL  5/114 valid, 16.7% coverage
 #   00be60a0  FAIL  5/5 valid, 47.3% coverage
+00be6180  ?FUN_00be6180@@YAXPAUcIOStream@@PAUcBlockVecOwner@@@Z  # block-vector load (byte-exact, 339 B): clears the 0x80-byte-record cBlockVecOwner, reads the record count through the stream's +0x20/+0x18 vtable chain into EA::IO::ReadInt32, sizes with FUN_00be0cd0, then per record builds a CBlock temp (two cGonzagoTimer ctors, p70/p78 zeroed), reads it with SP::cVarListSerializer (0x156e448/0x1a80d26), appends through the inline push_back fast path (CElement::CopyConstructFrom 0x00bdd380) or FUN_00be30e0 slow path, releases p78/p70 through vtable+0xc0, destroys the timers, and finally calls the stream's +0x1c slot.  Built /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-.

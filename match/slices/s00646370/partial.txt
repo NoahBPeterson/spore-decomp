@@ -1,1 +1,1 @@
-00646ae0  283   outline only: ObjectTemplateDB constraint/vector manipulation (stubbed)
+# no partial functions: every function of s00646370 is either byte-exact (manifest.txt) or complete (nonmatching.txt)

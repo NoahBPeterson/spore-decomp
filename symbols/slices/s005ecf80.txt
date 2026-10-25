@@ -1,4 +1,5 @@
-005ed360 ?cSPPaletteItemRolloverCtor@SP@@YAXPAVcSPPaletteItemRollover_s005e_cf80@1@_N@Z  # cSPPaletteItemRolloverCtor migrated from s005ecf80 (verbatim, slice spelling)
-005ed420 ?cSPPaletteItemRolloverInit@SP@@YAXPAVcSPPaletteItemRollover_s005e_cf80@1@@Z  # cSPPaletteItemRolloverInit migrated from s005ecf80 (verbatim, slice spelling)
-005ed650 ?Destroy@cSPPaletteItemRollover_s005e_cf80@SP@@QAEXXZ  # cSPPaletteItemRollover_s005e_cf80::Destroy migrated from s005ecf80 (verbatim, slice spelling)
-005ed700 ?cSPPaletteItemRolloverDtor@SP@@YAXPAVcSPPaletteItemRollover_s005e_cf80@1@I@Z  # cSPPaletteItemRolloverDtor migrated from s005ecf80 (verbatim, slice spelling)
+005ecf80 ?GetName@cSPNameGenerator@@QAEPAXPAXI@Z  # cSPNameGenerator::GetName(out,key): seven-key part dispatch to CreateRandomName / PickName / CreateRandomCompoundName, empty wstring otherwise
+005ed360 ??0cSPPaletteItemRollover@SP@@QAE@_N@Z  # cSPPaletteItemRollover::cSPPaletteItemRollover(bool): base ctor, vtables, field zeroing, SetKey + SetRootWindowId
+005ed420 ?Init@cSPPaletteItemRollover@SP@@QAEEXZ  # cSPPaletteItemRollover::Init(): returns the base Init byte; window lookup/rect-delta/attach logic
+005ed650 ?Destroy@cSPPaletteItemRollover@SP@@QAEXXZ  # cSPPaletteItemRollover::Destroy(): detach window, release +0xb4, base func24
+005ed700 ?ScalarDeletingDtor@cSPPaletteItemRollover@SP@@QAEPAXI@Z  # cSPPaletteItemRollover::ScalarDeletingDtor(flags): release +0xb4/+0xb0, base dtor, conditional operator delete, returns this

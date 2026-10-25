@@ -1,2 +1,0 @@
-005f9760  -  unnamed 92-byte helper: skeleton only
-005f97c0  -  unnamed 350-byte helper: skeleton only

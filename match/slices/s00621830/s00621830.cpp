@@ -104,6 +104,10 @@ struct WinXHTML {
   void SetScrollbarDrawable(int which, void* p);
 };
 
+// 3-dword resource-manager request descriptors used by CreateHitMaskFromResource.
+struct DESC1 { uint32_t hash; uint32_t kind;  int* owner; };
+struct DESC2 { uint32_t hash; uint32_t magic; int* owner; };
+
 struct cXHTMLControlAppearance {
   virtual void v0();          // +0x00
   uint32_t mPad4;             // +0x04
@@ -177,29 +181,43 @@ ControlDrawable* UninitCopyBackward(ControlDrawable* first, ControlDrawable* las
 }
 
 // @ 0x00621db0
-bool cXHTMLControlAppearance::CreateHitMaskFromResource(int* p1, int* p2, void** out) {
-  uint32_t hash = Hash_FNV1_String16(p2, 0x811c9dc5, 0);
-  void* local18 = (void*)0x2f7d0004;
-  (void)local18;
-  uint32_t localc = hash;
-  (void)localc;
+// Look up a hit-mask drawable by name: hash the name, ask the resource manager
+// (slot 3) for the "HitMask" resource descriptor, then bind the appearance object
+// (arg2) to the returned drawable id (slot 3 with id 0xf074e1c8).  arg2 arrives in
+// ECX (this), name/appearance/out on the stack (ret 0xc).
+bool cXHTMLControlAppearance::CreateHitMaskFromResource(int* name, int* appearance, void** out) {
+  uint32_t hash = Hash_FNV1_String16(name, 0x811c9dc5, 0);   // FNV over the wide name
+
+  // Two 3-dword request descriptors built on the stack; slot 3 takes desc2 first
+  // and desc1 last.
+  DESC1 desc1;
+  desc1.hash  = hash;
+  desc1.kind  = 0x19aef76u;
+  desc1.owner = appearance;
+
+  DESC2 desc2;
+  desc2.hash  = hash;
+  desc2.magic = 0x2f7d0004u;
+  desc2.owner = appearance;
+
   *out = 0;
   void* req = 0;
   void* mgr = FUN_008de1a0();
   if (req) { void* o = req; req = 0; ((void(__thiscall*)(void*))Vt(o)[1])(o); }
+
   bool ok = ((bool(__thiscall*)(void*, void*, void**, int, int, int, void*))Vt(mgr)[3])
-               (mgr, &localc, &req, 0, 0, 0, &local18);
+                (mgr, &desc2, &req, 0, 0, 0, &desc1);
   if (ok) {
-    if (p1 == 0) return false;
-    void* r = ((void*(__thiscall*)(void*, uint32_t))Vt(p1)[3])(p1, 0xf074e1c8);
+    if (appearance == 0) return false;
+    void* r = ((void*(__thiscall*)(void*, uint32_t))Vt(appearance)[3])(appearance, 0xf074e1c8);
     if (r) {
       *out = r;
       ((void(__thiscall*)(void*))Vt(r)[0])(r);
-      if (p1) ((void(__thiscall*)(void*))Vt(p1)[1])(p1);
+      if (appearance) ((void(__thiscall*)(void*))Vt(appearance)[1])(appearance);
       return true;
     }
   }
-  if (p1) ((void(__thiscall*)(void*))Vt(p1)[1])(p1);
+  if (appearance) ((void(__thiscall*)(void*))Vt(appearance)[1])(appearance);
   return false;
 }
 

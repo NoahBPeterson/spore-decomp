@@ -1,2 +1,11 @@
+005d4630 ?Drag@SpineHandle@SPB@@QAE_NPAPAUSpineNode@2@MMMMMM@Z  # SPB::SpineHandle::Drag (mouse-move continuation of StartDrag)
+005d47c0 ?DoInsertValue@CircleVec@SPB@@QAEXPAUCircle@2@ABU32@@Z  # SPB::CircleVec::DoInsertValue
+005d4970 ?FUN_005d4970@SpineHandle@SPB@@QAE_NXZ  # SPB::SpineHandle belt-of-circles builder
+005d4fe0 ?AbsAngleTimes@@YIMPAX@Z  # AbsAngleTimes (slice spelling)
 005d4ff0 ?CrossSideCcw@@YA_NPAM00@Z  # CrossSideCcw migrated from s005d4630 (verbatim, slice spelling)
-005d5050 ?FUN_005d5050@@YAXH@Z  # FUN_005d5050 migrated from s005d4630 (verbatim, slice spelling)
+005d5050 ?Walk@PathCurve@@QAEPAMPAMM@Z  # PathCurve::Walk
+005d5120 ?CopyE20Range@@YAPAUE20@@UE20Iter@@00@Z  # eastl::uninitialized_copy_ptr<PathIntersection>
+005d5160 ?Arc@Curve2D@@QAEXPAMM@Z  # Curve2D::Arc
+005d51e0 ?SegmentLength@@YIMPAX@Z  # SegmentLength (slice spelling)
+005d5200 ?Lerp@Curve2D@@QAEXPAMM@Z  # Curve2D::Lerp
+005d5250 ?Intersect@CircXY@@QAEHPBU1@PAM@Z  # CircXY::Intersect

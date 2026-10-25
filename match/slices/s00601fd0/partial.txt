@@ -1,1 +1,0 @@
-006026f0  -  SP::cTerrainUI::LoadScriptFromGrid / DoMessage: skeleton (large message switch not reconstructed).
