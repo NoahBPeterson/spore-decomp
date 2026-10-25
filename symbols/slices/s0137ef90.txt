@@ -1,2 +1,7 @@
 0137ef90  Simulator::InitCellDataAttributes  # preserved; dynamic initializer of the cCellSerialiazibleData attribute table (22 records at 0x015a7e38)
 01387660  Simulator::InitMusicDataAttributes  # newly claimed; dynamic initializer of the cMusicData attribute table (8 records at 0x015a9198)
+0137f820  Simulator::InitNestMissions  # constructs six cSPCreatureNestMission objects at 0x016b3de8 (base ctor 0x00c2f340) and installs vtables 0x1485240/0x148522c/0x148521c; atexit(0x013c7db0)
+0137f8d0  Simulator::InitZeroedArray  # clears 0x40 dwords at 0x016b4178; atexit(0x013c7e80)
+0137f950  Simulator::InitCellCollisionSounds  # initializer of the ten 0x18-byte CollisionSoundPair records at 0x015a8448 (FNV1_String8 hashes 0x00932e80, basis 0x811c9dc5)
+01388f50  Simulator::InitMyCaptainLevels  # registers the MyCaptainLevels node 0x016c7a18 at list head 0x015aca38; atexit(0x013c8c90)
+01389390  Simulator::InitLimitStopwatch  # constructs EA::LimitStopwatch at 0x016c7b60 with (5,false) and SetTimeLimit(0,false); atexit(0x013c8f90)

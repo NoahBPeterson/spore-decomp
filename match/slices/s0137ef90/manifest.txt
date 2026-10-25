@@ -1,2 +1,7 @@
 # source (relative to match/)   symbol   original VA   [cl flags override]
 slices/s0137ef90/s0137ef90.cpp  ?InitCellDataAttributes@Simulator@@YAXXZ  0137ef90
+slices/s0137ef90/s0137ef90.cpp  ?InitNestMissions@Simulator@@YAXXZ  0137f820  /O2 /MD /Gy /EHsc /TP
+slices/s0137ef90/s0137ef90.cpp  ?InitZeroedArray@Simulator@@YAXXZ  0137f8d0  /O2 /MD /Gy /EHsc /TP
+slices/s0137ef90/s0137ef90.cpp  ?InitCellCollisionSounds@Simulator@@YAXXZ  0137f950  /O2 /MD /Gy /EHsc /TP
+slices/s0137ef90/s0137ef90.cpp  ?InitMyCaptainLevels@Simulator@@YAXXZ  01388f50  /O2 /MD /Gy /EHsc /TP
+slices/s0137ef90/s0137ef90.cpp  ?InitLimitStopwatch@Simulator@@YAXXZ  01389390  /O2 /MD /Gy /EHsc /TP

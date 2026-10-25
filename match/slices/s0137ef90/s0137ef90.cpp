@@ -14,6 +14,24 @@
 namespace eastl { struct string8; }
 typedef eastl::string8 string8;
 
+inline void* operator new(unsigned int, void* p) { return p; }
+
+namespace EA {
+namespace Hash {
+uint32_t __cdecl FNV1_String8(const char* pString, uint32_t basis, int lower); // 0x00932e80
+}
+
+class Stopwatch {
+public:
+    Stopwatch(int period, bool start);              // 0x0093a560
+};
+
+class LimitStopwatch : public Stopwatch {
+public:
+    void SetTimeLimit(uint32_t limit, bool start);  // 0x0093a480
+};
+}
+
 namespace Simulator {
 
 class ISerializerReadStream;
@@ -196,6 +214,181 @@ void InitMusicDataAttributes()
     ADD_MUSIC(5, "mInstrument", 0x4226189, 0x1c8, INT_ATTR)
     ADD_MUSIC(6, "mNotePitches", 0x4e551ee, 0x1cc, Read_00eae9b0, Write_00c761c0, ReadText_00c2e4e0, WriteText_00692fb0, AlwaysValid<int>, ToXml_00eafe40)
     ADD_MUSIC(7, "mNoteDurations", 0x4f7c02d, 0x1e0, Read_00eaea80, Write_00f26ca0, ReadText_00c2e4e0, WriteText_00692fb0, AlwaysValid<int>, ToXml_0103c3a0)
+}
+
+// ---------------------------------------------------------------------------
+// Static-initializer helpers in the same module.
+// ---------------------------------------------------------------------------
+
+extern "C" int __cdecl atexit(void (__cdecl*)(void));   // 0x011e07ef
+
+void FUN_013c7db0();                                    // 0x013c7db0
+void FUN_013c7e80();                                    // 0x013c7e80
+void FUN_013c8c90();                                    // 0x013c8c90
+void FUN_013c8f90();                                    // 0x013c8f90
+
+// Array of six Simulator::cSPCreatureNestMission objects at 0x016b3de8.
+// cSPCreatureNestMission is the multiple-inheritance subclass; its inlined constructor
+// calls the cCreatureTutorialMission base constructor and then replaces the three vtables.
+class cCreatureTutorialMission {
+public:
+    cCreatureTutorialMission();                    // 0x00c2f340
+    void* mpVtable0;                               // +0x00
+    void* mpVtable4;                               // +0x04
+    char  mData08[0x2c];                           // +0x08
+    void* mpVtable34;                              // +0x34
+    char  mData38[0x60];                           // +0x38
+};
+
+class cSPCreatureNestMission : public cCreatureTutorialMission {
+};
+
+extern cSPCreatureNestMission g_nestMissions[6];   // 0x016b3de8
+
+// @ 0x0137f820
+void InitNestMissions()
+{
+    cSPCreatureNestMission* p = g_nestMissions;
+    int i = 5;
+    do {
+        __assume(p != 0);
+        new (p) cSPCreatureNestMission();
+        p->mpVtable0  = (void*)0x1485240;
+        p->mpVtable4  = (void*)0x148522c;
+        p->mpVtable34 = (void*)0x148521c;
+        ++p;
+    } while (--i >= 0);
+    atexit(FUN_013c7db0);
+}
+
+extern uint32_t g_zeroedArray[0x40];               // 0x016b4178
+
+// @ 0x0137f8d0
+void InitZeroedArray()
+{
+    for (int i = 0; i < 0x40; ++i)
+        g_zeroedArray[i] = 0;
+    atexit(FUN_013c7e80);
+}
+
+// Cell collision sound-pair table (10 records, 0x18 bytes each) at 0x015a8448.
+// The last two words are material/impact indices; the first four are the FNV keys and
+// display names of the impact and drag sound resources.
+struct CollisionSoundPair {
+    uint32_t    mImpactHash;
+    const char* mpImpactSound;
+    uint32_t    mDragHash;
+    const char* mpDragSound;
+    uint32_t    mImpactIndex;
+    uint32_t    mDragIndex;
+};
+
+extern CollisionSoundPair g_cellCollisionSounds[10];  // 0x015a8448
+
+// @ 0x0137f950
+void InitCellCollisionSounds()
+{
+    g_cellCollisionSounds[0].mImpactHash = EA::Hash::FNV1_String8("cell_collision_creature_creature_impact", 0x811c9dc5, 1);
+    g_cellCollisionSounds[0].mpImpactSound = "cell_collision_creature_creature_impact";
+    g_cellCollisionSounds[0].mDragHash = EA::Hash::FNV1_String8("cell_collision_creature_creature_drag", 0x811c9dc5, 1);
+    g_cellCollisionSounds[0].mpDragSound = "cell_collision_creature_creature_drag";
+    g_cellCollisionSounds[0].mImpactIndex = 2;
+    g_cellCollisionSounds[0].mDragIndex = 1;
+
+    g_cellCollisionSounds[1].mImpactHash = EA::Hash::FNV1_String8("cell_collision_creature_plant_impact", 0x811c9dc5, 1);
+    g_cellCollisionSounds[1].mpImpactSound = "cell_collision_creature_plant_impact";
+    g_cellCollisionSounds[1].mDragHash = EA::Hash::FNV1_String8("cell_collision_creature_plant_drag", 0x811c9dc5, 1);
+    g_cellCollisionSounds[1].mpDragSound = "cell_collision_creature_plant_drag";
+    g_cellCollisionSounds[1].mImpactIndex = 2;
+    g_cellCollisionSounds[1].mDragIndex = 2;
+
+    g_cellCollisionSounds[2].mImpactHash = EA::Hash::FNV1_String8("cell_collision_plant_plant_impact", 0x811c9dc5, 1);
+    g_cellCollisionSounds[2].mpImpactSound = "cell_collision_plant_plant_impact";
+    g_cellCollisionSounds[2].mDragHash = EA::Hash::FNV1_String8("cell_collision_plant_plant_drag", 0x811c9dc5, 1);
+    g_cellCollisionSounds[2].mpDragSound = "cell_collision_plant_plant_drag";
+    g_cellCollisionSounds[2].mImpactIndex = 3;
+    g_cellCollisionSounds[2].mDragIndex = 1;
+
+    g_cellCollisionSounds[3].mImpactHash = EA::Hash::FNV1_String8("cell_collision_creature_rock_impact", 0x811c9dc5, 1);
+    g_cellCollisionSounds[3].mpImpactSound = "cell_collision_creature_rock_impact";
+    g_cellCollisionSounds[3].mDragHash = EA::Hash::FNV1_String8("cell_collision_creature_rock_drag", 0x811c9dc5, 1);
+    g_cellCollisionSounds[3].mpDragSound = "cell_collision_creature_rock_drag";
+    g_cellCollisionSounds[3].mImpactIndex = 3;
+    g_cellCollisionSounds[3].mDragIndex = 2;
+
+    g_cellCollisionSounds[4].mImpactHash = EA::Hash::FNV1_String8("cell_collision_plant_rock_impact", 0x811c9dc5, 1);
+    g_cellCollisionSounds[4].mpImpactSound = "cell_collision_plant_rock_impact";
+    g_cellCollisionSounds[4].mDragHash = EA::Hash::FNV1_String8("cell_collision_plant_rock_drag", 0x811c9dc5, 1);
+    g_cellCollisionSounds[4].mpDragSound = "cell_collision_plant_rock_drag";
+    g_cellCollisionSounds[4].mImpactIndex = 3;
+    g_cellCollisionSounds[4].mDragIndex = 3;
+
+    g_cellCollisionSounds[5].mImpactHash = EA::Hash::FNV1_String8("cell_collision_rock_rock_impact", 0x811c9dc5, 1);
+    g_cellCollisionSounds[5].mpImpactSound = "cell_collision_rock_rock_impact";
+    g_cellCollisionSounds[5].mDragHash = EA::Hash::FNV1_String8("cell_collision_rock_rock_drag", 0x811c9dc5, 1);
+    g_cellCollisionSounds[5].mpDragSound = "cell_collision_rock_rock_drag";
+    g_cellCollisionSounds[5].mImpactIndex = 4;
+    g_cellCollisionSounds[5].mDragIndex = 1;
+
+    g_cellCollisionSounds[6].mImpactHash = EA::Hash::FNV1_String8("cell_collision_creature_bubble_impact", 0x811c9dc5, 1);
+    g_cellCollisionSounds[6].mpImpactSound = "cell_collision_creature_bubble_impact";
+    g_cellCollisionSounds[6].mDragHash = EA::Hash::FNV1_String8("cell_collision_creature_bubble_drag", 0x811c9dc5, 1);
+    g_cellCollisionSounds[6].mpDragSound = "cell_collision_creature_bubble_drag";
+    g_cellCollisionSounds[6].mImpactIndex = 4;
+    g_cellCollisionSounds[6].mDragIndex = 2;
+
+    g_cellCollisionSounds[7].mImpactHash = EA::Hash::FNV1_String8("cell_collision_plant_bubble_impact", 0x811c9dc5, 1);
+    g_cellCollisionSounds[7].mpImpactSound = "cell_collision_plant_bubble_impact";
+    g_cellCollisionSounds[7].mDragHash = EA::Hash::FNV1_String8("cell_collision_plant_bubble_drag", 0x811c9dc5, 1);
+    g_cellCollisionSounds[7].mpDragSound = "cell_collision_plant_bubble_drag";
+    g_cellCollisionSounds[7].mImpactIndex = 4;
+    g_cellCollisionSounds[7].mDragIndex = 3;
+
+    g_cellCollisionSounds[8].mImpactHash = EA::Hash::FNV1_String8("cell_collision_rock_bubble_impact", 0x811c9dc5, 1);
+    g_cellCollisionSounds[8].mpImpactSound = "cell_collision_rock_bubble_impact";
+    g_cellCollisionSounds[8].mDragHash = EA::Hash::FNV1_String8("cell_collision_rock_bubble_drag", 0x811c9dc5, 1);
+    g_cellCollisionSounds[8].mpDragSound = "cell_collision_rock_bubble_drag";
+    g_cellCollisionSounds[8].mImpactIndex = 4;
+    g_cellCollisionSounds[8].mDragIndex = 4;
+
+    g_cellCollisionSounds[9].mImpactHash = EA::Hash::FNV1_String8("cell_collision_bubble_bubble_impact", 0x811c9dc5, 1);
+    g_cellCollisionSounds[9].mpImpactSound = "cell_collision_bubble_bubble_impact";
+    g_cellCollisionSounds[9].mDragHash = EA::Hash::FNV1_String8("cell_collision_bubble_bubble_drag", 0x811c9dc5, 1);
+    g_cellCollisionSounds[9].mpDragSound = "cell_collision_bubble_bubble_drag";
+}
+
+// MyCaptainLevels registry node at 0x016c7a18; +0x08 is the previous list head.
+struct MyCaptainLevels {
+    void*             mpVtable;                    // +0x00
+    uint32_t          mNameHash;                   // +0x04
+    MyCaptainLevels*  mpNext;                      // +0x08
+    uint32_t          mField0c;                    // +0x0c
+    uint32_t          mField10;                    // +0x10
+};
+
+extern MyCaptainLevels  g_myCaptainLevels;         // 0x016c7a18
+extern MyCaptainLevels* g_myCaptainLevelsHead;     // 0x015aca38
+
+// @ 0x01388f50
+void InitMyCaptainLevels()
+{
+    g_myCaptainLevels.mNameHash = EA::Hash::FNV1_String8("MyCaptainLevels", 0x811c9dc5, 1);
+    g_myCaptainLevels.mpNext = g_myCaptainLevelsHead;
+    g_myCaptainLevelsHead = &g_myCaptainLevels;
+    g_myCaptainLevels.mpVtable = (void*)0x148ad9c;
+    g_myCaptainLevels.mField0c = 0;
+    g_myCaptainLevels.mField10 = 0;
+    atexit(FUN_013c8c90);
+}
+
+extern ::EA::LimitStopwatch g_limitStopwatch;      // 0x016c7b60
+
+// @ 0x01389390
+void InitLimitStopwatch()
+{
+    new (&g_limitStopwatch) ::EA::Stopwatch(5, false);
+    g_limitStopwatch.SetTimeLimit(0, false);
+    atexit(FUN_013c8f90);
 }
 
 }  // namespace Simulator
