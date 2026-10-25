@@ -1,6 +1,7 @@
 // Slice s00dfa5c0 -- editor/asset-browser GUI helper methods.
 // Flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 #include "types.h"
+#include <new>
 
 extern void* g_panels;        // 0x016a1344
 extern void* g_lay;           // 0x015a4318
@@ -32,8 +33,9 @@ void  FUN_00de86d0(void* a, int b, int c);  // 0x00de86d0
 void  FUN_00de5330(void* a, int b);         // 0x00de5330
 void  FUN_00de07a0(float f);                // 0x00de07a0
 void  FUN_00de5470(void* a, int b);         // 0x00de5470
-void  FUN_00dd9190();                       // 0x00dd9190
-void  FUN_00ddb760(void* a);                // 0x00ddb760
+struct Swarm;
+Swarm* __fastcall FUN_00dd9190();           // 0x00dd9190
+void   __fastcall FUN_00ddb760(Swarm* a);   // 0x00ddb760
 void* GetSaveArea(int a, int b);            // 0x006b1f90
 void  SaveResource(void* a, void* b);       // 0x006b1d50
 void  GetPropertyAsKeyArray2();
@@ -41,6 +43,7 @@ void  cString_ctor(void* self, int a, int b, int c); // 0x006b5770
 void* cString_GetText(void* self);          // 0x006b55c0
 void  SetTooltipText(void* w, void* txt, int a, int b); // 0x00806de0
 void* AssetBrowser();                        // 0x00401030
+struct AssetBrowserT { void Update(); };     // 0x0064ab20 thiscall
 void  cSPUIAssetBrowser_Update(void* a);    // 0x0064ab20
 void  KillSetiEffects2(void* a, int b);     // 0x00435ed0
 void* GetSystemAT();                         // 0x00a206f0
@@ -57,6 +60,11 @@ struct UI {
     void FUN_a810();             // 0xdfa810
     void FUN_a930();             // 0xdfa930
     void FUN_ab20(bool enable);  // 0xdfab20
+    void FUN_9990();             // 0xdf9990
+    void FUN_9a00();             // 0xdf9a00
+    void FUN_9a70();             // 0xdf9a70
+    void FUN_a370();             // 0xdfa370
+    void FUN_a460(void* a, int b); // 0xdfa460
     void FUN_aca0(int* pos);     // 0xdfaca0
     void FUN_ad50(int* pos);     // 0xdfad50
     UI*  FUN_ae00(void* other);  // 0xdfae00
@@ -64,10 +72,7 @@ struct UI {
     void FUN_ae90();             // 0xdfae90
     void FUN_af80();             // 0xdfaf80
     void FUN_b040(int key, int arg2); // 0xdfb040
-    void FUN_b0d0();             // 0xdfb0d0
-    void FUN_b130(void* o);      // 0xdfb130
-    void FUN_b280(void* o);      // 0xdfb280
-    void FUN_b3c0(void* o);      // 0xdfb3c0
+    void FUN_b0d0(char unused);  // 0xdfb0d0
     void FUN_b430(int a);        // 0xdfb430
     void FUN_b450();             // 0xdfb450
     void FUN_b470(int a);        // 0xdfb470
@@ -617,13 +622,187 @@ void UI::FUN_b040(int key, int arg2)
         *(int*)((char*)this + 0x20) = 0;
     }
 }
-// @ 0x00dfb0d0
-void UI::FUN_b0d0() {}
+// Element types for the editor collection vectors (0x24 / 0x38 / 0x44 bytes).
+typedef void (*CtorFn)(void* self, const void* src);   // 0x429760 (eastl::string AllocateSelf)
+extern "C" void __cdecl MemThunk(void* dst, const void* src, unsigned int n); // 0x11e0744
+
+struct EltStr {                 // eastl::basic_string<wchar_t> (12 bytes)
+    wchar_t* mpBegin;           // +0x00
+    wchar_t* mpEnd;             // +0x04
+    wchar_t* mpCapacity;        // +0x08
+    void AllocateSelf(int n);   // 0x429760
+    void assign(void* b, void* e); // 0x423650
+};
+
+struct CStrData {               // SP::cString (0x14 bytes)
+    int f[5];
+    void Assign(const void* src);    // 0x6b5430
+    void CStrCtor(const void* src);  // 0x6b56f0
+};
+
+struct TypeA {                  // 0x24-byte collection element
+    int  f0;                    // +0x00
+    int  f4;                    // +0x04
+    int  f8;                    // +0x08
+    unsigned char fC;           // +0x0c
+    EltStr s;                   // +0x10
+    int  pad1C;                 // +0x1c (not copied)
+    int  f20;                   // +0x20
+    TypeA* CopyCtor(const TypeA* o);
+};
+
+struct TypeC {                  // 0x38-byte collection element
+    CStrData cs;                // +0x00
+    EltStr s1;                  // +0x14
+    int  pad20;                 // +0x20 (not copied)
+    int  f24;                   // +0x24
+    int  f28;                   // +0x28
+    EltStr s2;                  // +0x2c
+    TypeC* CopyCtor(const TypeC* o);
+};
+
+struct TypeD {                  // 0x44-byte collection element
+    int   f0;                   // +0x00
+    TypeC c;                    // +0x04
+    int   pad3c;                // +0x3c (not copied)
+    int   f40;                  // +0x40
+    TypeD& Assign(const TypeD& o);
+};
+
 // @ 0x00dfb130
-void UI::FUN_b130(void* o) { (void)o; }
+TypeA* TypeA::CopyCtor(const TypeA* o)
+{
+    f0 = o->f0; f4 = o->f4; f8 = o->f8; fC = o->fC;
+    s.mpBegin = s.mpEnd = s.mpCapacity = 0;
+    int n = (int)((char*)o->s.mpEnd - (char*)o->s.mpBegin) >> 1;
+    s.AllocateSelf(n + 1);
+    wchar_t* d = s.mpBegin;
+    MemThunk(d, o->s.mpBegin, (unsigned int)(n * 2));
+    s.mpEnd = (wchar_t*)((char*)d + n * 2);
+    *s.mpEnd = 0;
+    f20 = o->f20;
+    return this;
+}
+
 // @ 0x00dfb280
-void UI::FUN_b280(void* o) { (void)o; }
+TypeC* TypeC::CopyCtor(const TypeC* o)
+{
+    cs.CStrCtor(o);
+    s1.mpBegin = s1.mpEnd = s1.mpCapacity = 0;
+    int n1 = (int)((char*)o->s1.mpEnd - (char*)o->s1.mpBegin) >> 1;
+    s1.AllocateSelf(n1 + 1);
+    wchar_t* d1 = s1.mpBegin;
+    MemThunk(d1, o->s1.mpBegin, (unsigned int)(n1 * 2));
+    s1.mpEnd = (wchar_t*)((char*)d1 + n1 * 2);
+    *s1.mpEnd = 0;
+    f24 = o->f24;
+    f28 = o->f28;
+    s2.mpBegin = s2.mpEnd = s2.mpCapacity = 0;
+    int n2 = (int)((char*)o->s2.mpEnd - (char*)o->s2.mpBegin) >> 1;
+    s2.AllocateSelf(n2 + 1);
+    wchar_t* d2 = s2.mpBegin;
+    MemThunk(d2, o->s2.mpBegin, (unsigned int)(n2 * 2));
+    s2.mpEnd = (wchar_t*)((char*)d2 + n2 * 2);
+    *s2.mpEnd = 0;
+    return this;
+}
+
 // @ 0x00dfb3c0
-void UI::FUN_b3c0(void* o) { (void)o; }
+TypeD& TypeD::Assign(const TypeD& o)
+{
+    TypeC& src = *(TypeC*)&o.c;
+    TypeC& dst = c;
+    f0 = o.f0;
+    dst.cs.Assign(&src.cs);
+    EltStr* sp1 = &src.s1;
+    if (sp1 != &dst.s1)
+        dst.s1.assign(sp1->mpBegin, sp1->mpEnd);
+    dst.f24 = src.f24;
+    dst.f28 = src.f28;
+    EltStr* sp2 = &src.s2;
+    if (sp2 != &dst.s2)
+        dst.s2.assign(sp2->mpBegin, sp2->mpEnd);
+    f40 = o.f40;
+    return *this;
+}
+
+// @ 0x00dfb1b0
+TypeC* __stdcall Vec38_AllocCopy(int n, const void* first, const void* last)
+{
+    TypeC* buf;
+    if (n != 0)
+        buf = (TypeC*)operator_new((unsigned int)n * 0x38, (const char*)0x13f09b4, 0, 0,
+                                  (const char*)0x13ebb38, 0xd1);
+    else
+        buf = 0;
+    int count = n;
+    FUN_00dfa3c0(&n, (void*)first, (void*)last, buf, count);
+    return buf;
+}
+
+// @ 0x00dfb0d0
+void UI::FUN_b0d0(char unused)
+{
+    (void)unused;
+    int mode = *(int*)((char*)this + 0x20);
+    if (mode == 7 || mode == 5)
+        return;
+    void* ab = AssetBrowser();
+    if (*(char*)((char*)ab + 0x1c) == 0)
+        return;
+    char* gp = (char*)g_panels;
+    if (*(char*)(gp + 0xc9) == 0)
+        return;
+    if (*(int*)(gp + 0x108) != 0xd)
+        return;
+    ((AssetBrowserT*)AssetBrowser())->Update();
+    FUN_9ad0();
+    FUN_ab20(true);
+}
 // @ 0x00dfb470
-void UI::FUN_b470(int a) { (void)a; }
+void UI::FUN_b470(int a)
+{
+    (void)a;
+    ((Obj*)g_panels)->M_de5470(0);
+    FUN_a710(1);
+    void* w = ((Obj*)((char*)g_panels + 0x144))->M_8105b0(0x615a5ff, 1);
+    if (w != 0)
+        ((void(__thiscall*)(void*, int, int))(*(void***)w)[0x7c / 4])(w, 1, 0);
+    int mode = *(int*)((char*)this + 0x20);
+    switch (mode) {
+    case 2:
+    case 4:
+    case 6: {
+        V3 local = { 0, 0, 0 };
+        if (a != 0) {
+            local.x = *(int*)(a + 0x18);
+            local.y = *(int*)(a + 0x1c);
+            local.z = *(int*)(a + 0x20);
+            if (local.x != 0) {
+                ((void(__thiscall*)(void*, V3*))(*(void***)this)[0x40 / 4])(this, &local);
+                break;
+            }
+        }
+        if (mode == 4)
+            FUN_a5c0(*(int*)((char*)this + 0x34));
+        else
+            FUN_a460((char*)this + 0xa4, 0);
+        break;
+    }
+    case 1:
+        FUN_9990();
+        break;
+    case 5:
+        FUN_9a70();
+        break;
+    case 7:
+        FUN_9a00();
+        break;
+    default:
+        FUN_ab20(true);
+        break;
+    }
+    ((cSPUIGlobalUIX*)*(void**)((char*)g_panels + 0x184))->SetVisibility(0);
+    FUN_00ddb760(FUN_00dd9190());
+    FUN_a370();
+}
