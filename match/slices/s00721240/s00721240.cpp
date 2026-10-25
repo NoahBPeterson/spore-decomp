@@ -6,8 +6,17 @@
 
 extern "C" void  __cdecl EASTL_allocator_deallocate(void* p); // 0x00f47380
 extern "C" void* __cdecl EASTL_allocator_allocate(uint32_t size, const char* name, int a, int b,
-                                                  const char* file, int line);
+                                                  const char* file, int line); // 0x00f473a0
 extern "C" void  __cdecl op_new_array(void* dst, int zero, uint32_t size);
+extern "C" void* __cdecl MoveCopy34(void* first, void* last, void* dest); // 0x00720dd0
+extern "C" void  __cdecl UninitCopy8(void** outEnd, const void* first, const void* last,
+                                     void* dest, const void* tag); // 0x00479c00
+extern char vtbl_13ef094[];          // 0x013ef094
+extern char vtbl_13eb938[];          // 0x013eb938
+extern char vtbl_140d0c8[];          // 0x0140d0c8
+extern float g_chartInitZero;        // 0x013eb1bc
+extern const char kEastlAllocName[]; // 0x013eb8a4  "Graphics"
+extern const char kEastlAllocFile[]; // 0x013ebb38  ".../EASTL/allocator.h"
 extern "C" void  __cdecl qsort(void* base, uint32_t n, uint32_t sz, int (__cdecl* cmp)(const void*, const void*));
 extern "C" uint32_t __stdcall HashVec(const float* v);   // 0x00720590 (callee pops its arg: ret 4)
 extern "C" int   __cdecl ComparePairs(const void* a, const void* b);
@@ -40,7 +49,100 @@ struct Chart68 {
     char  p3[0x1c];
 };
 
-struct TwoVtbl { void* vt0; void* vt1; char pad[4]; void* p0c; };
+struct TwoVtbl {
+    void* vt0;     // +0x00
+    void* vt1;     // +0x04
+    void* pad08;   // +0x08
+    void* p0c;     // +0x0c
+    void* DeleteObject(uint32_t flags);
+};
+
+// 8-byte element of the vector at chart+0x50 (begin/end/cap at +0x50/+0x54/+0x58).
+struct ChartElem8 { uint32_t x; uint32_t y; };
+struct ChartVec8 {
+    ChartElem8* mpBegin;    // +0x00
+    ChartElem8* mpEnd;      // +0x04
+    ChartElem8* mpCap;      // +0x08
+    void Allocate(uint32_t n, const void* tag);   // 0x006a40a0
+};
+struct ChartCopy {
+    uint32_t m00;                                                      // +0x00
+    float    m04, m08, m0c, m10, m14, m18, m1c;                        // +0x04..+0x1c
+    float    m20, m24, m28, m2c, m30, m34;                             // +0x20..+0x34
+    uint32_t m38, m3c, m40, m44, m48, m4c;                             // +0x38..+0x4c
+    ChartVec8 mTail;                                                   // +0x50
+    const void* mAlloc;                                                // +0x5c
+    void* CopyFrom(ChartCopy* src);
+};
+
+// Virtual interfaces whose calls the destructor at 0x7220c0 performs.
+struct RefObj {
+    virtual void slot0();     // vtable +0x00
+    virtual void Release();   // vtable +0x04
+};
+struct RefCounted {
+    virtual void* DestroyObject(uint32_t flags);   // vtable +0x00
+    uint32_t mRefCount;                            // +0x04
+};
+struct BigVec {
+    void* mpBegin;      // +0x00
+    void* mpEnd;        // +0x04
+    void* mpCap;        // +0x08
+    void DestroyRange(void* first, void* last);   // 0x00721810
+};
+// Owner initialised by 0x722010 and torn down by 0x7220c0.
+struct BigObj {
+    void*       mpVtbl;    // +0x00
+    void*       m04;       // +0x04
+    RefCounted* mRef8;     // +0x08
+    BigVec      mVec;      // +0x0c
+    uint32_t    pad18;     // +0x18  (left untouched by the initialiser)
+    uint32_t    pad1c;     // +0x1c
+    void*       m20;       // +0x20
+    void*       m24;       // +0x24
+    uint16_t    m28;       // +0x28
+    uint16_t    m2a;       // +0x2a
+    RefObj*     m2c;       // +0x2c
+    void*       m30;       // +0x30
+    void*       m34;       // +0x34
+    void*       m38;       // +0x38
+    uint16_t    m3c;       // +0x3c
+    uint16_t    m3e;       // +0x3e
+    RefObj*     m40;       // +0x40
+    void*       m44;       // +0x44
+    void*       m48;       // +0x48
+    void*       m4c;       // +0x4c
+    void*       m50;       // +0x50
+    uint32_t    pad54;     // +0x54  (left untouched)
+    uint32_t    pad58;     // +0x58
+    void*       m5c;       // +0x5c
+    void*       m60;       // +0x60
+    void*       m64;       // +0x64
+    uint32_t    pad68;     // +0x68  (left untouched)
+    uint32_t    pad6c;     // +0x6c
+    void*       m70;       // +0x70
+    void*       m74;       // +0x74
+    void*       m78;       // +0x78
+    uint32_t    pad7c;     // +0x7c  (left untouched)
+    uint32_t    pad80;     // +0x80
+    float       m84;       // +0x84
+    void*       m88;       // +0x88
+    void*       m8c;       // +0x8c
+    BigObj* InitFields();
+    void FreeObject();
+};
+
+// 0x34-byte element of the vector inserted by 0x7222f0.
+struct Elem34 {
+    uint32_t w[13];
+    void CopyConstruct(const Elem34& src);   // 0x006de7f0
+};
+struct Vec34 {
+    Elem34* mpBegin;   // +0x00
+    Elem34* mpEnd;     // +0x04
+    Elem34* mpCap;     // +0x08
+    void Insert(Elem34* pos, const Elem34* val);
+};
 
 struct ChartRef;
 struct ChartVec { char pad[0xc]; void** begin; void** end; ChartRef* MakeChartRef(ChartRef* out); };
@@ -266,13 +368,15 @@ void __stdcall DestroyChartRange(Chart68* first, Chart68* last)
 }
 
 // @ 0x00721980
-void* __cdecl DeleteTwoVtbl(TwoVtbl* this_, uint32_t flags)
+void* TwoVtbl::DeleteObject(uint32_t flags)
 {
-    if (this_->p0c != 0 && ((int*)this_->p0c)[-1] != 0)
-        EASTL_allocator_deallocate(this_->p0c);
+    if (p0c != 0 && ((int*)p0c)[-1] != 0)
+        EASTL_allocator_deallocate(p0c);
+    vt1 = vtbl_13ef094;
+    vt0 = vtbl_13eb938;
     if (flags & 1)
-        EASTL_allocator_deallocate(this_);
-    return this_;
+        EASTL_allocator_deallocate(this);
+    return this;
 }
 
 // @ 0x007219f0
@@ -385,28 +489,96 @@ void ChartHash::InsertI(int* out, int* key)
 }
 
 // @ 0x00721d80
-void* __cdecl CopyChart68(void* dst, void* src)
+void* ChartCopy::CopyFrom(ChartCopy* src)
 {
-    unsigned char* d = (unsigned char*)dst;
-    unsigned char* s = (unsigned char*)src;
-    for (int i = 0; i < 0x50; i += 4)
-        *(int*)(d + i) = *(int*)(s + i);
-    return dst;
+    const ChartCopy& s = *src;
+    m00 = s.m00;
+    m04 = s.m04;
+    m08 = s.m08;
+    m0c = s.m0c;
+    m10 = s.m10;
+    m14 = s.m14;
+    m18 = s.m18;
+    m1c = s.m1c;
+    m20 = s.m20;
+    m24 = s.m24;
+    m28 = s.m28;
+    m2c = s.m2c;
+    m30 = s.m30;
+    m34 = s.m34;
+    m38 = s.m38;
+    m3c = s.m3c;
+    m40 = s.m40;
+    m44 = s.m44;
+    m48 = s.m48;
+    m4c = s.m4c;
+    uint32_t n = (uint32_t)(((char*)s.mTail.mpEnd - (char*)s.mTail.mpBegin) >> 3);
+    mTail.Allocate(n, &s.mAlloc);
+    void* outEnd;
+    UninitCopy8(&outEnd, s.mTail.mpBegin, s.mTail.mpEnd, mTail.mpBegin, src);
+    mTail.mpEnd = (ChartElem8*)outEnd;
+    return this;
 }
 
 // @ 0x00722010
-void __cdecl InitChartHash(ChartHash* this_)
+BigObj* BigObj::InitFields()
 {
-    this_->mBuckets = 0;
-    this_->mCapacity = 0;
-    this_->mCount = 0;
+    m04 = 0;
+    mpVtbl = vtbl_140d0c8;
+    mRef8 = 0;
+    mVec.mpBegin = 0;
+    mVec.mpEnd = 0;
+    mVec.mpCap = 0;
+    m20 = 0;
+    m24 = 0;
+    m28 = 4;
+    m2a = 4;
+    m2c = 0;
+    m30 = 0;
+    m34 = 0;
+    m38 = 0;
+    m3c = 4;
+    m3e = 4;
+    m40 = 0;
+    m44 = 0;
+    m48 = 0;
+    m4c = 0;
+    m50 = 0;
+    m5c = 0;
+    m60 = 0;
+    m64 = 0;
+    m70 = 0;
+    m74 = 0;
+    m78 = 0;
+    m88 = 0;
+    m8c = 0;
+    m84 = g_chartInitZero;
+    return this;
 }
 
 // @ 0x007220c0
-void __cdecl FreeChartThing(ChartHash* this_)
+void BigObj::FreeObject()
 {
-    if (this_->mBuckets != 0 && ((int*)this_->mBuckets)[-1] != 0)
-        EASTL_allocator_deallocate(this_->mBuckets);
+    if (m70 != 0 && ((int*)m70)[-1] != 0)
+        EASTL_allocator_deallocate(m70);
+    if (m5c != 0 && ((int*)m5c)[-1] != 0)
+        EASTL_allocator_deallocate(m5c);
+    if (m48 != 0 && ((int*)m48)[-1] != 0)
+        EASTL_allocator_deallocate(m48);
+    if (m40 != 0)
+        m40->Release();
+    if (m2c != 0)
+        m2c->Release();
+    mVec.DestroyRange(mVec.mpBegin, mVec.mpEnd);
+    if (mVec.mpBegin != 0 && ((int*)mVec.mpBegin)[-1] != 0)
+        EASTL_allocator_deallocate(mVec.mpBegin);
+    if (mRef8 != 0) {
+        if (--mRef8->mRefCount == 0) {
+            mRef8->mRefCount = 1;
+            mRef8->DestroyObject(1);
+        }
+    }
+    mpVtbl = vtbl_13ef094;
 }
 
 // @ 0x007221c0
@@ -445,8 +617,42 @@ void CMeshClusterer2::CollapseEdges()
 }
 
 // @ 0x007222f0
-void* __cdecl Insert34Vec(void* v, void* pos, void* val)
+void Vec34::Insert(Elem34* pos, const Elem34* val)
 {
-    (void)v; (void)pos; (void)val;
-    return 0;
+    if (mpEnd != mpCap) {
+        const Elem34* v = val;
+        if (v >= pos && v < mpEnd)
+            ++v;
+        if (mpEnd != 0)
+            mpEnd->CopyConstruct(mpEnd[-1]);
+        Elem34* s = mpEnd - 1;
+        Elem34* d = mpEnd;
+        while (s != pos) {
+            --s;
+            --d;
+            *d = *s;
+        }
+        *pos = *v;
+        mpEnd++;
+    } else {
+        uint32_t count = (uint32_t)(mpEnd - mpBegin);
+        uint32_t newCap;
+        if (count != 0)
+            newCap = count * 2;
+        else
+            newCap = 1;
+        Elem34* newBuf = newCap == 0 ? 0 :
+            (Elem34*)EASTL_allocator_allocate(newCap * 0x34, kEastlAllocName, 0, 0,
+                                              kEastlAllocFile, 0xd1);
+        Elem34* out = (Elem34*)MoveCopy34(mpBegin, pos, newBuf);
+        if (out != 0)
+            out->CopyConstruct(*val);
+        ++out;
+        Elem34* end = (Elem34*)MoveCopy34(pos, mpEnd, out);
+        if (mpBegin != 0 && ((int*)mpBegin)[-1] != 0)
+            EASTL_allocator_deallocate(mpBegin);
+        mpCap = newBuf + newCap;
+        mpEnd = end;
+        mpBegin = newBuf;
+    }
 }

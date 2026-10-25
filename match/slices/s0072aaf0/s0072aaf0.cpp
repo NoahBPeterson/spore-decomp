@@ -6,11 +6,14 @@
 
 void operator_delete(void* p);   // 0x00f47380
 
+extern "C" long __cdecl _InterlockedExchange(volatile long*, long);  // msvcr90
+
+const char kEastlAllocatorFile[] =
+    "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h";
+
 extern "C" {
     void* FUN_00f473a0(unsigned size, const char* name, int f, int df, const char* file, int line);
     void  FUN_007409d0(void* pos, void* value);
-    void  FUN_0072a1a0();
-    void  FUN_0072aa80();
 }
 
 struct TriRegionEntry {
@@ -75,25 +78,143 @@ void cTriToRegionMap::AddRegion(int param_2, int param_3, int param_4)
     }
 }
 
-// @ 0x0072ac10  (PARTIAL)
-void FUN_0072ac10(void* a, void* b)
+// ---- 0072aaf0: eastl fixed_vector<T,16>::DoInsertValue for 4-byte elements -----
+// Layout: mpBegin/mpEnd/mpCap at +0/+4/+8, mPool at +0x10 (inline-buffer base to test
+// before freeing). `pos`/`value` are stack args, so the callee pops 8 bytes: thiscall.
+struct Vec4 {
+    int* mpBegin;      // +0x00
+    int* mpEnd;        // +0x04
+    int* mpCap;        // +0x08
+    void* mpAlloc;     // +0x0c
+    int* mpPool;       // +0x10  (inline buffer start)
+
+    void DoInsertValue(int* pos, const int* value);   // 0x0072aaf0
+};
+
+// @ 0x0072aaf0  fixed_vector<int,16>::DoInsertValue  (in-place shift + grow path)
+void Vec4::DoInsertValue(int* pos, const int* value)
 {
-    (void)a; (void)b;
+    if (mpEnd != mpCap) {
+        // Room for one more: shift [pos, mpEnd) up by one dword, then store *value.
+        int* insertAt = pos;
+        if (pos >= value && value < mpEnd)
+            insertAt = pos + 1;
+        if (mpEnd)
+            *mpEnd = mpEnd[-1];
+        int* src = mpEnd;
+        int* dst = src;
+        while (dst - 1 != insertAt) {
+            --dst;
+            *dst = src[-2];
+            --src;
+        }
+        *insertAt = *value;
+        mpEnd = mpEnd + 1;
+        return;
+    }
+
+    int count = (int)(mpEnd - mpBegin);
+    int newCap;
+    if (count == 0)
+        newCap = 1;
+    else
+        newCap = count * 2;
+
+    int* buf;
+    if (newCap == 0)
+        buf = 0;
+    else
+        buf = (int*)FUN_00f473a0((unsigned)(newCap * 4), "Graphics", 0, 0, kEastlAllocatorFile, 0xd1);
+
+    // Copy [mpBegin, pos), then *value, then [pos, mpEnd).
+    int* out = buf;
+    for (int* p = mpBegin; p != pos; ++p) {
+        if (out) *out = *p;
+        ++out;
+    }
+    if (out) *out = *value;
+    int* srcEnd = mpEnd;
+    int* writePos = out + 1;
+    if (pos != srcEnd) {
+        int* rd = pos;
+        int* wr = writePos;
+        do {
+            if (wr) *wr = *rd;
+            ++rd;
+            ++wr;
+        } while (rd != srcEnd);
+    }
+    if (mpBegin && mpBegin != mpPool)
+        operator_delete(mpBegin);
+    mpBegin = buf;
+    mpEnd = writePos;
+    mpCap = buf + newCap;
 }
 
-// @ 0x0072ac60  (PARTIAL: refcounted ctor with EH)
-void FUN_0072ac60(void* a, int b)
+// ---- 0072ac10: a small span-owning wrapper's ctor -----------------------------
+// thiscall (ret 4): `src` is a span {begin,end,+0xc} and `this` is a 2-field holder.
+// 0x0072a1a0 is a thiscall helper on the holder taking (count, poolPtr): callee pops 8.
+// Declared with a hex name so the equivalence harness resolves the call target by VA.
+extern "C" void FUN_0072a1a0(void* self, int count, void* pool);  // 0x0072a1a0
+
+// span-holder ctor: allocate `n` elements, memcpy the span, set end.
+struct SpanHolder {
+    int* mpBegin;   // +0
+    int* mpEnd;     // +4
+    SpanHolder* Init(const int* span);   // 0x0072ac10
+};
+struct IntSpan {
+    int* mpBegin;   // +0
+    int* mpEnd;     // +4
+    int  mpPad8;    // +8
+    int* mpPool;    // +0xc
+};
+
+// @ 0x0072ac10  span-holder ctor
+SpanHolder* SpanHolder::Init(const int* sp)
 {
-    (void)a; (void)b;
+    const IntSpan* span = (const IntSpan*)sp;
+    FUN_0072a1a0(this, (int)(span->mpEnd - span->mpBegin), span->mpPool);
+    int nbytes = (int)((char*)span->mpEnd - (char*)span->mpBegin);
+    memcpy(mpBegin, span->mpBegin, (size_t)nbytes);
+    mpEnd = (int*)((char*)mpBegin + (nbytes & ~3));
+    return this;
 }
 
-// @ 0x0072aaf0  (PARTIAL: vector insert with EH)
-void FUN_0072aaf0(void* a, void* b, void* c)
+// ---- 0072ac60: refcounted object ctor with vtable install and SEH frame -------
+// 0x0072aa80 is a thiscall helper on the payload taking (arg, &arg): callee pops 8.
+// Declared with a hex name so the equivalence harness resolves the call target by VA.
+extern "C" void* FUN_0072aa80(void* self, int a, int* b);         // 0x0072aa80
+
+// refcounted ctor (definition and its marker further below).
+struct RefObj {
+    void** mpVtbl0;      // +0x00  (ITracerBase then AddRef thunk vtable)
+    void** mpVtbl1;      // +0x04
+    volatile long mRef;  // +0x08
+    char  mPayload[0x14];// +0x0c
+    int   mField20;      // +0x20
+    RefObj* Ctor(int arg);   // 0x0072ac60
+};
+
+extern void* const vtbl_Init0;  // 0x013eb938  (??_7ITracerBase@Trace@EA@@6B@)
+extern void* const vtbl_Init1;  // 0x013ef094  (??_7hkReferencedObject@@6B@)
+extern void* const vtbl_Final0; // 0x0140a660  (AddRef thunk)
+extern void* const vtbl_Final1; // 0x0140d178
+
+// @ 0x0072ac60  refcounted ctor
+RefObj* RefObj::Ctor(int arg)
 {
-    (void)a; (void)b; (void)c;
+    mpVtbl0 = (void**)&vtbl_Init0;
+    mpVtbl1 = (void**)&vtbl_Init1;
+    _InterlockedExchange(&mRef, 0);
+    mpVtbl0 = (void**)&vtbl_Final0;
+    mpVtbl1 = (void**)&vtbl_Final1;
+    FUN_0072aa80(&mPayload[0], arg, &arg);
+    mField20 = 0;
+    return this;
 }
 
-// @ 0x0072ace0  SP::StreamMeshToRw
+// SP::StreamMeshToRw support types and helpers (definition and its marker further below).
 // Streams one SourceMesh (vertex elements, sub-meshes, primitive groups) into RenderWare:
 // per sub-mesh it builds a vertex descriptor from the usable elements, then for every
 // primitive group of that sub-mesh draws the triangles in index-buffer-sized chunks.

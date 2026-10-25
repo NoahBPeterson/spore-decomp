@@ -1,3 +1,6 @@
 00725e40 ?AssignCharts@cMeshClusterer@SP@@QAEXH_N0@Z  # SP::cMeshClusterer::AssignCharts (callee of s00728c90, named from the dev publics; slice address comment)
 00728c90 ?FUN_00728c90@@YAXPAUPtrVec@UV@@MPBMPBUMeshXform@2@@Z  # FUN_00728c90 migrated from s00728c90 (verbatim, slice spelling)
-00729290 ?FUN_00729290@@YAHPAX@Z  # FUN_00729290 migrated from s00728c90 (verbatim, slice spelling)
+00729290 ?Run@UVJob@@QAE_NH@Z  # UVJob::Run (this=ecx, one stack int, ret 4) -- retail 0x729290 is a __thiscall member, not the int(void*) the old name claimed
+00729300 ?FUN_00729300@@YA_NHMPAPAUJobRecord@@HHHH@Z  # UV job factory (bool __cdecl(int, float, JobRecord**, int x4))
+00729990 ?FUN_00729990@@YAXHPAUOutBuf@@@Z  # cluster-graph flattener (void __cdecl(int root, OutBuf*))
+00729b20 ?FUN_00729b20@@YAPAXPAUVBi@@PAXPAPAX@Z  # vertex-buffer lock/copy helper (void* __cdecl(VBi*, void*, void**))

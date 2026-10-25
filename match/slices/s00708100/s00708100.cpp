@@ -42,6 +42,14 @@ struct SlotVecC4 {
     uint32_t mField1c;
     uint32_t Next(uint32_t idx);
     void DestroyEntry(uint32_t idx);
+    void ReleaseDestroy(uint32_t idx)
+    {
+        uint32_t* e = (uint32_t*)((char*)mpBlocks[idx >> 7] + (idx & 0x7f) * 0x1e0);
+        *e = (*e & 0xc0000000u) | (mField1c & 0x3fffffffu) | 0x80000000u;
+        mField1c = idx;
+        if (mField18 == idx)
+            mField18 = Next(idx);
+    }
 };
 
 // ===========================================================================
@@ -278,37 +286,32 @@ void cLightingWorld::DestroyLightingInfo(void* e)
     }
 }
 
+static inline void* NodeFromLink(void* link)
+{
+    return link ? (void*)((char*)link - 4) : 0;
+}
+
 // @ 0x007085a0
 void cLightingWorld::RemoveLight(uint32_t id)
 {
-    int iVar7 = (id & 0x7f) * 0xc4;
-    int iVar1 = *(int*)(*(int*)((char*)this + 0x428) + ((uint32_t)id >> 7) * 4);
-    char* entry = (char*)iVar1 + iVar7 + 4;
-    if (*(char*)(iVar1 + 0x28 + iVar7) != 0) {
-        char* cells = (char*)this + 0x5d4;
-        RemoveLightFromList(id, 0, (int*)cells);
-        if (*(int*)cells == *(int*)((char*)this + 0x5d8)) {
-            char* head = (char*)this + 0x600;
-            void* node = *(void**)((char*)this + 0x600);
-            void* end = *(void**)head ? (void*)(*(int*)((char*)this + 0x600) - 4) : 0;
-            void* tail = *(void**)head ? (void*)(head - 4) : 0;
-            (void)tail;
-            void* last = *(void**)((char*)this + 0x600);
-            void* stop = last ? (void*)(*(int*)((char*)this + 0x600) - 4) : 0;
-            while (node != stop) {
-                char* e = (char*)node;
-                int cacheId = *(int*)(e + 0x28);
-                if (cacheId >= 0)
-                    *(void**)e = (void*)(*(int*)(*(int*)((char*)this + 0x594) + ((uint32_t)cacheId >> 7) * 4)
-                                         + 0x10 + (cacheId & 0x7f) * 0x1f0);
+    int* block = (int*)(*(int**)((char*)this + 0x428))[id >> 7];
+    char* entry = (char*)block + (id & 0x7f) * 0xc4 + 4;
+    if (entry[0x24] != 0) {
+        int* list = (int*)((char*)this + 0x5d4);
+        RemoveLightFromList(id, 0, list);
+        if (list[0] == *(int*)((char*)this + 0x5d8)) {
+            char* node = (char*)NodeFromLink(*(void**)((char*)this + 0x600));
+            char* end = (char*)NodeFromLink((char*)this + 0x600);
+            for (; node != end; node = (char*)NodeFromLink(*(void**)(node + 4))) {
+                int cache = *(int*)(node + 0x28);
+                if (cache >= 0)
+                    *(void**)node = (char*)(*(int*)(*(int*)((char*)this + 0x594)
+                                                      + ((uint32_t)cache >> 7) * 4))
+                                     + 0x10 + (cache & 0x7f) * 0x1f0;
                 else
-                    *(void**)e = (char*)this + 0x260;
-                ((SlotVec28*)((char*)this + 0x608))->ReleaseDestroy(*(uint32_t*)(e + 0x24));
-                *(int*)(e + 0x24) = -1;
-                int* nx = *(int**)(e + 4);
-                node = nx ? (void*)(nx - 1) : 0;
-                if (node == end)
-                    break;
+                    *(void**)node = (char*)this + 0x260;
+                ((SlotVecC4*)((char*)this + 0x608))->ReleaseDestroy(*(uint32_t*)(node + 0x24));
+                *(int*)(node + 0x24) = -1;
             }
             *(char*)((char*)this + 0x660) = 1;
         }
@@ -324,60 +327,168 @@ void cLightingWorld::RemoveLight(uint32_t id)
 }
 
 // ===========================================================================
-// cLightingConfig-like full-structure copies
+// cLightingConfig: memberwise copy ctor (0x00708100) and operator= (0x007089a0)
 // ===========================================================================
-struct cLightingConfig {
-    cLightingConfig& operator=(const cLightingConfig& x);
+typedef void (__thiscall *FnV)(void*);
+
+struct Light { float f[7]; Light(const Light&); };
+struct RectF { float x1, y1, x2, y2; RectF(const RectF&); };
+struct F8 {
+    float f[8];
+    F8() {}
+    F8(const F8& s) { for (int i = 0; i < 8; ++i) f[i] = s.f[i]; }
+};
+struct F3 {
+    float f[3];
+    F3() {}
+    F3(const F3& s) { for (int i = 0; i < 3; ++i) f[i] = s.f[i]; }
+};
+struct F4 {
+    float f[4];
+    F4() {}
+    F4(const F4& s) { for (int i = 0; i < 4; ++i) f[i] = s.f[i]; }
+};
+struct AutoRef {
+    void* p;
+    AutoRef(const AutoRef& s) : p(s.p)
+    {
+        if (p)
+            ((FnV)(*(void***)p)[0])(p);
+    }
+    AutoRef& operator=(const AutoRef& s)
+    {
+        void* o = p;
+        void* n = s.p;
+        if (n != o) {
+            if (n)
+                ((FnV)(*(void***)n)[0])(n);
+            p = n;
+            if (o)
+                ((FnV)(*(void***)o)[1])(o);
+        }
+        return *this;
+    }
+    ~AutoRef();
+};
+struct VecSHO {
+    void* a, *b, *c;
+    char alloc[8];
+    VecSHO(const VecSHO&);
+    VecSHO& operator=(const VecSHO&);
+    ~VecSHO();
+};
+void* __cdecl UninitCopyVec4(void* first, void* last, void* dst);
+struct Vec4 {
+    void* a, *b, *c;
+    char alloc[8];
+    void init(int, int);
+    Vec4(const Vec4& s)
+    {
+        init((int)(((char*)s.b - (char*)s.a) >> 4), (int)&s.alloc);
+        b = UninitCopyVec4(s.a, s.b, a);
+    }
+    Vec4& operator=(const Vec4&);
+    ~Vec4();
 };
 
-void release(void* p);
+// 00708100 cLightingConfig::cLightingConfig (implicit memberwise copy ctor emitted for ForceCopy)
+struct cLightingConfig {
+    AutoRef mOwner;          // +0x00
+    int mFlags;              // +0x04
+    Light mLights[4];        // +0x08
+    F8 m78;                  // +0x78
+    F3 m98;                  // +0x98
+    unsigned char mA4;       // +0xa4
+    VecSHO mA8;              // +0xa8
+    Vec4 mBC;                // +0xbc
+    float mD0, mD4, mD8, mDC, mE0;                 // +0xd0..0xe0
+    RectF mRects[3];         // +0xe4
+    float m114, m118, m11c, m120;                  // +0x114
+    F4 m124;                 // +0x124
+    unsigned char m134;      // +0x134
+    float m138, m13c, m140;  // +0x138..0x140
+};
 
-// @ 0x007089a0
-cLightingConfig& cLightingConfig::operator=(const cLightingConfig& x)
+__declspec(noinline) void ForceCopy(cLightingConfig* d, const cLightingConfig* s)
 {
-    if (this != &x) {
-        const char* s = (const char*)&x;
-        char* d = (char*)this;
-        for (int i = 0; i < 0xa4; ++i) d[i] = s[i];
-        d[0xa4] = s[0xa4];
-        release(d + 0x18);
-        for (int i = 0xb0; i < 0x13c; ++i) d[i] = s[i];
-    }
-    return *this;
+    new (d) cLightingConfig(*s);
 }
 
-// ===========================================================================
-// small placement / construction helpers marked incomplete
-// ===========================================================================
-// @ 0x00708100  (EH construct-range helper)
-void* ConstructRange(void* self, void* src)
+__declspec(noinline) void ForceAssign(cLightingConfig* d, const cLightingConfig* s)
 {
-    (void)self;
-    (void)src;
-    return self;
+    *d = *s;
 }
 
-// @ 0x00708500  (EH uninitialized-copy helper)
-void* CopyConstructRange(void* first, void* last, void* dst)
+// @ 0x00708500
+cLightingConfig* CopyConstructRange(const cLightingConfig* first, const cLightingConfig* last,
+                                    cLightingConfig* dst)
 {
-    (void)first;
-    (void)last;
+    for (; first != last; ++first, ++dst)
+        ::new (dst) cLightingConfig(*first);
     return dst;
 }
 
+// ===========================================================================
+// 0x00708df0: fixed-vector constructor with the inline 0x400-byte buffer
+// ===========================================================================
+struct Vector4 { float x, y, z, w; };
+
+struct PoolBase {
+    Vector4* mpBegin;
+    ~PoolBase();
+};
+
+struct ScratchVec : PoolBase {
+    Vector4* mpEnd;
+    Vector4* mpCap;
+    unsigned pad0c;
+    Vector4* mpPoolBegin;
+    unsigned pad14[3];
+    Vector4 mBuf[64];
+    void assign(const Vector4* first, const Vector4* last, const Vector4* extra);
+    ScratchVec(const Vector4* first, const Vector4* last);
+};
+
 // @ 0x00708df0
-void* ConstructVec(int* self, int a, int b)
+ScratchVec::ScratchVec(const Vector4* first, const Vector4* last)
+    : PoolBase()
 {
-    (void)a;
-    (void)b;
-    return self;
+    Vector4* p = mBuf;
+    mpPoolBegin = p;
+    mpEnd = p;
+    mpBegin = p;
+    mpCap = p + 64;
+    assign(first, last, last);
 }
 
+// ===========================================================================
+// 0x00708900: cLightingManager destructor
+// ===========================================================================
+struct CfgVec {
+    int a, b, c, d, e;
+    ~CfgVec();
+};
+
+struct WorldMap {
+    char pad0[0xc];
+    void* mRoot;
+    void clear(void*);
+    ~WorldMap() { clear(mRoot); }
+};
+
+struct BaseA { virtual ~BaseA() {} virtual void a0(); virtual void a1(); };
+struct BaseB { virtual ~BaseB() {} virtual void b0(); };
+struct BaseC { virtual ~BaseC() {} virtual void c0(); };
+
+struct cLightingManager : BaseA, BaseB, BaseC {
+    int mC, m10, m14;
+    CfgVec mVec;
+    WorldMap mMap;
+    virtual ~cLightingManager();
+};
+
 // @ 0x00708900
-void DestroyLightingManager(int* self)
-{
-    (void)self;
-}
+cLightingManager::~cLightingManager() {}
 
 // force out-of-line emission of otherwise-unreferenced members
 void (Vec8b::*volatile g_pResize8)(uint32_t) = &Vec8b::resize;

@@ -6,3 +6,13 @@
 007635b0  72   complete: EH destructor iterating two EhItem[4] arrays at +0x44/+0x64; frame layout differs
 00763770  67   complete: raster-from-gimmmex create; original uses early-return branch layout, ours merges the two checks
 00763c60  24   complete: int-vector add-unique; original keeps the count in esi (ours edx)
+00762d70  303  complete: two-level light-array teardown (dedupe set + per-item add-ref/release + vector push) rewritten in full; original has an SEH/fs:[0] frame and inlines a std::vector, cl emits neither; equiv WEAK 23.1% coverage
+00762fa0  296  complete: lock-free map insert rewritten with AtomicRead64/AtomicExchange64 (__fastcall, 0x68c140/0x68c1b0) and a cmpxchg8b retry loop; the atomic node/value layout cannot be recovered exactly, so the 64-bit counter update differs; equiv FAIL
+00763130  162  complete: lock-free map append (Insert + cmpxchg8b counter bump on this+8) modelled on the disasm; same atomic-layout limitation; equiv FAIL (98.4% coverage)
+00763250  24   complete: interlocked refcount release rewritten byte-for-byte except cl fusing the guard's "cmp [mem],0 + reload" into "mov+test"; decl also fixed to compare the raw fs:[0x18] TID value, not *TID; equiv PASS 78.2% coverage
+00763620  261  complete: Gimex raster-header load (stream open/read-header/decode-record/alloc/decompress/release) rewritten with the 0x87cde0..0x87d070 stream helpers; original SEH frame and inlined stream dtor differ; equiv FAIL
+007637d0  167  complete: load-header + create-raster wrapper; original SEH frame and scratch-vector alloc differ; build order of the two early-return checks also differs; equiv FAIL (call-trace differs at depth 1)
+00763950  251  complete: Gimex PCA-weight header reader (10 sequential int reads, magic-tag flag, count = (*[resource+0x18] * 0x110) >> 2) rewritten in full; cl hoists the arg-slot reuse into separate locals so the frame is 0x18 vs 0xc; equiv WEAK 21.7% coverage
+00763a80  195  complete: resource-arena write (scope ctor, begin, scan-to-end, install 0x763490 callback, scan, teardown) rewritten; original SEH frame + deep 0x11e2fe0..0x11e2690 arena API; equiv UNSUPPORTED (0/400 valid: import _decode_pointer)
+00763b80  320  complete: raster draw/upload (texture vfn 0x48, object vfn 0x30, device vfns 0x90/0x80, vfn 0x34, memcpy, three vfn-8 releases) rewritten with explicit vtable thunks; cl's vcall arg materialisation and frame differ; equiv UNSUPPORTED (0/400 valid: all inputs fault on read)
+

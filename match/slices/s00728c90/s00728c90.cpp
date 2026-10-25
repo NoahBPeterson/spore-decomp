@@ -471,18 +471,122 @@ void __cdecl FUN_00728c90(UV::PtrVec* meshes, float clusterParam, const float* s
     }
 }
 
-// @ 0x00729290  (PARTIAL)
-int FUN_00729290(void* self)
+// ---------------------------------------------------------------------------
+// 0x00729290  UV job run + its __cdecl adjustor thunk; 0x00729300 the factory
+// that installs the thunk into a vtable slot.
+// ---------------------------------------------------------------------------
+
+void __cdecl FUN_00722d00(int mesh);                          // 0x00722d00 BuildTextureChart
+
+// The job object 0x00729290 runs on: a mesh-pointer vector, the cluster
+// parameter and two optional side vectors.  Only the members it reads are named.
+struct UVJob {
+    uint8_t   pad00[0xc];
+    UV::PtrVec meshes;                                         // +0x0c
+    uint8_t   pad14[0xc];
+    float     clusterParam;                                    // +0x20
+    int       scaleBegin;                                      // +0x24
+    int       scaleEnd;                                        // +0x28
+    uint8_t   pad2c[0xc];
+    int       infoBegin;                                       // +0x38
+    int       infoEnd;                                         // +0x3c
+
+    bool Run(int unused);
+};
+
+// @ 0x00729290  UVJob::Run -- rebuild one mesh's texture charts
+bool UVJob::Run(int unused)
 {
-    (void)self;
-    return 1;
+    (void)unused;
+    int n = (int)(meshes.mpEnd - meshes.mpBegin);
+    for (int i = 0; i < n; ++i)
+        FUN_00722d00((int)meshes.mpBegin[i]);
+
+    int infoRaw = infoBegin;
+    if (infoBegin == infoEnd)
+        infoRaw = 0;
+    int scalesRaw = scaleBegin;
+    if (scaleBegin == scaleEnd)
+        scalesRaw = 0;
+
+    const float* scales = (const float*)scalesRaw;
+    const UV::MeshXform* info = (const UV::MeshXform*)infoRaw;
+
+    // Retail reaches the 4-parameter CreateUVsAndCharts through a slot that also
+    // passes a trailing 0; call it through a 5-argument view of the same address.
+    typedef void (__cdecl *CreateUVs5)(UV::PtrVec*, float, const float*, const UV::MeshXform*, int);
+    ((CreateUVs5)::FUN_00728c90)(&meshes, clusterParam, scales, info, 0);
+    return true;
 }
 
-// @ 0x00729300  (PARTIAL)
-int FUN_00729300(int a, int b, int* c, int d, int e, int f)
+// @ 0x007292f0  the __cdecl adjustor thunk stored in the job record's first slot
+int FUN_007292f0(void* mesh, UVJob* self)
 {
-    (void)a; (void)b; (void)c; (void)d; (void)e; (void)f;
-    return 0;
+    return self->Run((int)mesh) ? 1 : 0;
+}
+
+// --- the singleton lock the factory brackets the job creation with ----------
+
+struct SingLock {
+    virtual void v00();                                        // +0x00
+    virtual void v04();                                        // +0x04
+    virtual void v08();                                        // +0x08
+    virtual void v0c();                                        // +0x0c
+    virtual char v10(void* key);                               // +0x10
+    virtual void v14();                                        // +0x14
+    virtual void v18();                                        // +0x18
+    virtual void v1c();                                        // +0x1c
+    virtual void v20();                                        // +0x20
+    virtual void v24();                                        // +0x24
+};
+SingLock* __cdecl FUN_0068f4d0();                              // 0x0068f4d0 singleton accessor
+void __cdecl FUN_0068f9b0(void* key, void* job);               // 0x0068f9b0
+
+// The 0x4c-byte job info FUN_007280b0 initialises.
+struct UVGenJobInfo {
+    void** vptr;                                               // +0x00
+    UVGenJobInfo* Init(void* a, float b, void* c, void* d);    // 0x007280b0 (this + 5 stack slots)
+};
+
+void* __cdecl FUN_00f473a0(unsigned size, const char* name, int f, int df, void* file, int line);  // 0x00f473a0
+
+// The record the factory fills in: a thunk pointer plus the job object, and a
+// flag at +0x18.
+struct JobRecord {
+    void*        mpThunk;                                      // +0x00
+    UVGenJobInfo* mpJob;                                       // +0x04
+    uint8_t      pad08[0x10];
+    unsigned     mFlags;                                       // +0x18
+};
+
+// @ 0x00729300  build one UV job and hand it to the consumer
+bool __cdecl FUN_00729300(int a1, float a2, JobRecord** a3, int a4, int a5, int a6, int a7)
+{
+    (void)a1; (void)a4; (void)a6;
+
+    SingLock* lock = FUN_0068f4d0();
+    lock->v20();
+
+    UVGenJobInfo* job = 0;
+    if (FUN_0068f4d0()->v10(a3)) {
+        UVGenJobInfo* mem = (UVGenJobInfo*)FUN_00f473a0(0x4c, "Graphics", 0, 0, 0, 0);
+        if (mem != 0)
+            job = mem->Init(a3, a2, (void*)a5, (void*)a7);
+        if (job != 0)
+            ((void(__thiscall*)(void*))job->vptr[0])(job);      // AddRef
+        FUN_0068f9b0(a3, job);
+        JobRecord* rec = *a3;
+        rec->mpThunk  = (void*)&FUN_007292f0;
+        rec->mpJob    = job;
+        rec->mFlags   = 0x80000000u;
+        if (job != 0)
+            ((void(__thiscall*)(void*))job->vptr[1])(job);     // Release
+        lock->v24();
+        return true;
+    }
+
+    lock->v24();
+    return false;
 }
 
 // x87 area helper.  `b` is really a pointer to a struct holding two unsigned
@@ -505,16 +609,182 @@ double FUN_007298b0(float* a, int b)
            (2.0f * (wz * wy + wz * wx + wx * wy) * (float)(t0 + t1));
 }
 
-// @ 0x00729990  (PARTIAL)
-int FUN_00729990(void* a, void* b)
+// ---------------------------------------------------------------------------
+// 0x00729990  flatten a cluster graph into 0x20-byte output records
+// ---------------------------------------------------------------------------
+
+// A cluster-graph node.  The two child links (mpA/mpB) lead to the same node
+// shape but read their per-vertex slot arrays at different offsets, so both
+// arrays are modelled on the shared layout.
+struct ChartNode {
+    uint8_t  pad00[0x08];
+    int      mSlotLo[3];                                       // +0x08  (read through mpB)
+    int      mSlotHi[3];                                       // +0x14  (read through mpA)
+    int      mA20;                                             // +0x20
+    int      mA24;                                             // +0x24
+    int      mIndex;                                           // +0x28
+    ChartNode* mpA;                                            // +0x2c
+    ChartNode* mpB;                                            // +0x30
+};
+
+// One emitted record (0x20 bytes).  The buffer's first record doubles as the
+// head of the {parent, child} link table the builder indexes as ints.
+struct OutRec {
+    int mNode;                                                 // +0x00
+    int mIndex;                                                // +0x04
+    int mLoA;                                                  // +0x08
+    int mLoB;                                                  // +0x0c
+    int mMarkA;                                                // +0x10
+    int mMarkB;                                                // +0x14
+    int mValA;                                                 // +0x18
+    int mValB;                                                 // +0x1c
+};
+struct OutBuf {
+    OutRec* mpRec;                                             // +0x00
+    int     mCount;                                            // +0x04
+};
+
+// One frame of the explicit stack the builder walks the graph with.
+struct Win29990 {
+    int        mParent;                                        // +0x00
+    int        mFlag;                                          // +0x04
+    ChartNode* mpDesc;                                         // +0x08
+};
+
+// @ 0x00729990  FUN_00729990  walk the cluster graph rooted at `root`, emitting
+// one 0x20-byte record per visited node/edge
+void __cdecl FUN_00729990(int root, OutBuf* buf)
 {
-    (void)a; (void)b;
-    return 0;
+    if (buf->mCount == 0)
+        return;
+
+    // One {parent, flag, descendant} frame; the walk keeps a single stack
+    // pointer and moves all three fields together (retail increments the three
+    // lockstep pointers once per descendant pushed).
+    enum { kSlots = 32 };
+    Win29990  win[kSlots];
+    win[0].mParent = 0;                                        // sentinel frame
+    win[0].mFlag   = 0;
+    win[0].mpDesc  = (ChartNode*)root;
+
+    Win29990* sp      = &win[1];
+    unsigned  pending = 1;
+    int       offset  = 0;
+    int       i       = 0;
+
+    do {
+        --sp;                                                  // pop one frame
+        int        node = sp->mParent;
+        int        flag = sp->mFlag;
+        ChartNode* desc = sp->mpDesc;
+        --pending;
+
+        if (i != 0)
+            ((int*)buf->mpRec)[3 + (flag + node * 4) * 2] = i;
+
+        OutRec* out = (OutRec*)((char*)buf->mpRec + offset);
+        out->mNode  = node;
+        int idx = desc->mIndex;
+        out->mIndex = idx;
+        out->mValA  = desc->mpA->mSlotHi[idx];
+        out->mValB  = desc->mpB->mSlotLo[idx];
+
+        ChartNode* eB = desc->mpB;
+        if (eB->mpA == 0) {                                    // B is a leaf
+            out->mMarkA = eB->mA24;
+            out->mMarkB = eB->mA20;
+        } else {                                               // descend into B
+            sp->mpDesc  = eB;
+            sp->mParent = i;
+            sp->mFlag   = 1;
+            ++pending;
+            ++sp;
+            out->mMarkA = -1;
+            out->mMarkB = -1;
+        }
+
+        ChartNode* eA = desc->mpA;
+        if (eA->mpA == 0) {                                    // A is a leaf
+            out->mLoA = eA->mA24;
+            out->mLoB = eA->mA20;
+        } else {                                               // descend into A
+            sp->mpDesc  = eA;
+            sp->mParent = i;
+            sp->mFlag   = 0;
+            ++pending;
+            ++sp;
+            out->mLoA = -1;
+            out->mLoB = -1;
+        }
+
+        offset += 0x20;
+        ++i;
+    } while (pending != 0);
 }
 
-// @ 0x00729b20  (PARTIAL: VertexBuffer lock/copy)
-int* FUN_00729b20(void* vb, int* a, int* b)
+// ---------------------------------------------------------------------------
+// 0x00729b20  lock a vertex buffer, copy it into a fresh element buffer
+// ---------------------------------------------------------------------------
+
+// The vertex descriptor only the byte stride of which is read here.
+struct VDesc {
+    uint8_t pad00[0x0f];
+    uint8_t mStride;                                           // +0x0f
+};
+
+// rw::graphics::VertexBuffer (the members the helper touches).
+struct VBi {
+    VDesc*   m_desc;                                           // +0x00
+    uint8_t  pad04[4];
+    int      m_base;                                           // +0x08
+    int      m_numVertices;                                    // +0x0c
+    uint8_t  pad10[8];
+    void*    m_disposableBuffer;                               // +0x18
+
+    unsigned Lock(unsigned char flag, unsigned start, unsigned count);   // 0x011f3620
+    void*    Unlock();                                                   // 0x011f36a0
+};
+
+// The buffers hand back bare vtable-bearing pointers; only slot 0 (a no-argument
+// refresh) is ever invoked on them.
+typedef void (__thiscall *VSlot0)(void*);
+static inline void CallSlot0(void* p)
 {
-    (void)vb; (void)a; (void)b;
-    return 0;
+    VSlot0* vt = *(VSlot0**)p;
+    vt[0](p);
+}
+
+void* __cdecl FUN_00720010(int size);                          // 0x00720010 AllocEltBuffer
+void* __cdecl MemCopy(void* dst, const void* src, unsigned n); // 0x011e0744 memcpy
+
+// @ 0x00729b20  FUN_00729b20
+void* FUN_00729b20(VBi* p1, void* p2, void** p3)
+{
+    void* rb = p1->m_disposableBuffer;
+    if (rb != 0) {
+        if (p2 != 0) {
+            *p3 = p2;
+            CallSlot0(p2);
+        }
+        return rb;
+    }
+
+    VDesc* desc = p1->m_desc;
+    void* locked = (void*)p1->Lock(1, desc->mStride * p1->m_base,
+                                      desc->mStride * p1->m_numVertices);
+    if (locked == 0)
+        return rb;
+
+    unsigned size = desc->mStride * p1->m_numVertices;
+    void*    seg  = FUN_00720010((int)size);
+    if (seg == 0) {
+        p1->Unlock();
+        return 0;
+    }
+    void* out = (char*)seg + 0xc;
+    MemCopy(out, locked, size);
+    *p3 = seg;
+    CallSlot0(seg);
+    p1->Unlock();
+    return out;
 }

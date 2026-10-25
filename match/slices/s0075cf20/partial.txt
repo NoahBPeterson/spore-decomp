@@ -1,3 +1,3 @@
 0075cf20  0  huge (0x11d4 frame, 2400 B) per-node SSE blend rebuild; only observable contract reproduced
 0075d4b0  0  large EH/stack-cookie scene-cache/PNG-encode builder; not reconstructed
-0075d6a0  0  large EH/stack-cookie PNG-encode helper (0x2a8c stack frame, _chkstk); stream/bitmap writer calls (0x87cf40/0x87cf60/0x87d030/0x87cff0/0x87d260) not reconstructed; equiv would resolve our symbol to the neighbouring ~PropGroup -> would report FAIL
+0075d6a0  0  large EH/stack-cookie scene-cache manager update (0x2a88 stack frame, _chkstk), near-clone of 0075d4b0; stream/bitmap writer calls (0x87cf40/0x87cf60/0x87d030/0x87cff0/0x87d260) not reconstructed; with no definition emitted equiv would resolve our symbol to the neighbouring function -> would report FAIL

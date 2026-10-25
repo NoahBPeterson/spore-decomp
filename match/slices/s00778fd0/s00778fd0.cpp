@@ -13,6 +13,8 @@ typedef void (__stdcall *PFN_SetConstF)(void* self, unsigned reg, const float* d
 #define SETPS(dev, reg, data, n) (((PFN_SetConstF)(((D3D9Vtbl*)(*(void**)(dev)))->slots[109]))((dev), (reg), (data), (n)))
 
 extern float g_one;   // 0x1485720 = 1.0f
+extern float g_1539ef8;   // 0x1539ef8: degrees-per-radian constant used by the projector angle
+extern float g_1470f1c;   // 0x1470f1c = 2.0f
 
 // ---- constants sources -------------------------------------------------------------------
 extern int*   g_178fd0;   // 0x16f6e68
@@ -244,33 +246,42 @@ void FUN_007795a0(unsigned reg, unsigned count, int isVS) {
 }
 
 // @ 0x007799f0  projector / texture-scale constants
-void FUN_007799f0(unsigned reg, unsigned count, int isVS) {
-    int obj = (int)FUN_011f1120();
+// v = { texW, texH, 1/texW, 1/texH,                     // render-target size block
+//       projW, projH, 1/projW, 1/projH,                 // (count > 1 only)
+//       obj+0x70, obj+0x74, angle*360/kDegPerRad, 1.0 } // (count > 1 only)
+// When FUN_011f1120() has no active texture object the block is filled from the four
+// 0x01632c08.. globals (v[0] is left untouched, exactly as in the original).
+// (0-3 only; declared before the marker so the marker binds to the function definition)
+namespace rw { namespace graphics {
+void RWShader_SetShConst_projector(unsigned reg, unsigned count, int isVS);   // 0x007799f0
+} }
+void rw::graphics::RWShader_SetShConst_projector(unsigned reg, unsigned count, int isVS) {
     float v[12];
-    if (obj == 0) {
-        v[0] = g_1632c08;  v[1] = g_1632c0c;  v[2] = g_1632c10;  v[3] = g_1632c14;
-        v[4] = g_1632c08;  v[5] = g_1632c0c;  v[6] = g_1632c10;  v[7] = g_1632c14;
-        v[8] = g_1632c08;  v[9] = g_1632c0c;  v[10] = g_1632c10; v[11] = g_1632c14;
-    } else {
+    int obj = (int)FUN_011f1120();
+    if (obj != 0) {
         int tex = *(int*)(obj + 0x40);
         float w = (float)*(unsigned short*)(tex + 0xc);
         float h = (float)*(unsigned short*)(tex + 0xe);
         v[0] = w;   v[1] = h;   v[2] = 1.0f / w; v[3] = 1.0f / h;
-        v[4] = 0.0f; v[5] = 0.0f; v[6] = 0.0f; v[7] = 0.0f;
-        v[8] = 0.0f; v[9] = 0.0f; v[10] = 1.0f; v[11] = 1.0f;
         if (count > 1) {
-            float angle = (float)atan2(*(float*)(obj + 0x5c), 1.0f);
             float pw = (float)*(unsigned short*)(obj + 0x80);
             float ph = (float)*(unsigned short*)(obj + 0x84);
+            float angle = (float)atan2(*(float*)(obj + 0x5c), 1.0f);
             v[4] = pw;
             v[5] = ph;
             v[6] = 1.0f / pw;
             v[7] = 1.0f / ph;
             v[8] = *(float*)(obj + 0x70);
             v[9] = *(float*)(obj + 0x74);
-            v[10] = angle;
-            v[11] = 1.0f;
+            v[10] = (360.0f / g_1539ef8) * angle;
         }
+        v[11] = 1.0f;
+    } else {
+        v[1] = g_1632c08;  v[2] = g_1632c0c;  v[3] = g_1632c10;
+        v[4] = g_1632c14;
+        v[5] = g_1632c08;  v[6] = g_1632c0c;  v[7] = g_1632c10;
+        v[8] = g_1632c14;
+        v[9] = g_1632c08;  v[10] = g_1632c0c; v[11] = g_1632c10;
     }
     if (isVS)
         SETVS(g_pDevice, reg, v, count);
@@ -278,21 +289,48 @@ void FUN_007799f0(unsigned reg, unsigned count, int isVS) {
         SETPS(g_pDevice, reg, v, count);
 }
 
-// @ 0x00779c10  (partial) camera-relative light vector; only the fallback path is exact
-void FUN_00779c10(unsigned reg, unsigned p2, int isVS) {
+// Support layout for 0x00779c10's transform read (declared before the marker so the marker
+// binds to the function definition and not to this type).
+struct __declspec(align(16)) Transform3030 { float mOrigin[4]; };
+struct LightParams {
+    float m0;   // +0x00
+    float m1;   // +0x04
+    float m2;   // +0x08
+    float m3;   // +0x0c  radius
+    float m4;   // +0x10  enabled/interest (<= 0 disables the disc solve)
+    float m5;   // +0x14
+    float m6;   // +0x18
+    float m7;   // +0x1c
+    float m8;   // +0x20
+    float m9;   // +0x24  x-axis weight
+    float m10;  // +0x28  y-axis weight
+    float m11;  // +0x2c  z-axis weight
+    float m12;  // +0x30  falloff start
+};
+
+// @ 0x00779c10  camera-relative light vector.
+// Reads the active transform's origin (g_17a5b8+0x30) and a focus point (g_16f6e40 or the
+// 0x16f85ac transform), computes the eye->focus distance and a clamped attenuation ratio from
+// the light parameters at g_16f6e38, and uploads a single float4 to the current shader.
+namespace rw { namespace graphics {
+void RWShader_SetShConst_cameraLight(unsigned reg, unsigned p2, int isVS);   // 0x00779c10
+} }
+void rw::graphics::RWShader_SetShConst_cameraLight(unsigned reg, unsigned p2, int isVS) {
     if (g_17a5b8 == 0)
         return;
-    float v[4];
+
+    __declspec(align(16)) float out[4];
     if (g_16f6e38 == 0) {
-        v[0] = g_1632c08;
-        v[1] = g_1632c0c;
-        v[2] = g_1632c10;
-        v[3] = g_1632c14;
+        out[0] = g_1632c08;
+        out[1] = g_1632c0c;
+        out[2] = g_1632c10;
+        out[3] = g_1632c14;
     } else {
-        // simplified: direction from the transform origin toward the focus point
-        float a0 = *(float*)((char*)g_17a5b8 + 0x30);
-        float a1 = *(float*)((char*)g_17a5b8 + 0x34);
-        float a2 = *(float*)((char*)g_17a5b8 + 0x38);
+        const Transform3030* xform = (const Transform3030*)((const char*)g_17a5b8 + 0x30);
+        const float a0 = xform->mOrigin[0];
+        const float a1 = xform->mOrigin[1];
+        const float a2 = xform->mOrigin[2];
+
         float b0, b1, b2;
         if (g_16f6e40) {
             b0 = g_16f6e40[0]; b1 = g_16f6e40[1]; b2 = g_16f6e40[2];
@@ -301,15 +339,59 @@ void FUN_00779c10(unsigned reg, unsigned p2, int isVS) {
             b1 = *(float*)(g_16f85ac + 0x34);
             b2 = *(float*)(g_16f85ac + 0x38);
         }
-        float d0 = b0 - a0, d1 = b1 - a1, d2 = b2 - a2;
-        float len = (float)sqrt(d0 * d0 + d1 * d1 + d2 * d2);
-        v[0] = len;
-        v[1] = g_16f6e38[1];
-        v[2] = 0.0f;
-        v[3] = 1.0f;
+
+        const float d0 = a0 - b0;
+        const float d1 = a1 - b1;
+        const float d2 = a2 - b2;
+        const float len = (float)sqrt((double)(d2 * d2 + (d1 * d1 + d0 * d0)));
+        const float inv = 1.0f / len;
+
+        LightParams* lp = (LightParams*)g_16f6e38;
+
+        // Distance along the light direction to the sphere's near intersection, clamped to
+        // [0, len]; falls back to len when the parameters are disabled.
+        float reach;
+        if (0.0f < lp->m4) {
+            const float n = -((d2 * inv) * a2 + ((d1 * inv) * a1 + (d0 * inv) * a0));
+            float disc = n * n - ((a2 * a2 + (a1 * a1 + a0 * a0)) - lp->m3 * lp->m3);
+            if (disc > 0.0f) {
+                float t = (float)sqrt((double)disc) - n;
+                if (t < 0.0f)
+                    t = 0.0f;
+                reach = (t <= len) ? t : len;
+            } else {
+                reach = 0.0f;
+            }
+        } else {
+            reach = len;
+        }
+
+        // Normalised focus direction dotted with the light's axis weights.
+        const float r = 1.0f / (float)sqrt((double)(b2 * b2 + (b1 * b1 + b0 * b0) + 1e-08f));
+        const float fVar3 = lp->m11 * (a2 * r) + (lp->m10 * (a1 * r) + (r * a0) * lp->m9);
+
+        float falloff = fVar3 + 0.95f;
+        if (falloff < 0.0f)
+            falloff = 0.0f;
+        if (falloff > 1.0f)
+            falloff = 1.0f;
+
+        float ratio = 1.0f;
+        if (fVar3 <= lp->m12) {
+            float start = fVar3 + lp->m12;
+            if (start < 0.001f)
+                start = 0.001f;
+            ratio = start / (lp->m12 * g_1470f1c);
+        }
+
+        out[0] = (len - reach) + lp->m0;
+        out[1] = lp->m1;
+        out[2] = ratio;
+        out[3] = falloff;
     }
+
     if (isVS)
-        SETVS(g_pDevice, reg, v, 1);
+        SETVS(g_pDevice, reg, out, 1);
     else
-        SETPS(g_pDevice, reg, v, 1);
+        SETPS(g_pDevice, reg, out, 1);
 }

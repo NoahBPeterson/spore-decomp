@@ -7,6 +7,8 @@
 typedef unsigned int uint32_t;
 typedef unsigned short uint16_t;
 typedef short int16_t;
+typedef int int32_t;
+typedef unsigned char uint8_t;
 
 #include <intrin.h>
 
@@ -22,10 +24,10 @@ public:
 
 struct RefPtr {
     RefObj* mpObj;                  // +0
-    // @ 0x0073A820
     void Release();
 };
 
+// @ 0x0073A820
 void RefPtr::Release()
 {
     RefObj* p = mpObj;
@@ -307,19 +309,231 @@ bool cModelInstance::SetActive(int key, int groupIdx, bool animating, float t, b
 // below / summarised; see partial.txt and nonmatching.txt for status.
 // ---------------------------------------------------------------------------
 
-// @ 0x0073A110 — large model update pass (927 bytes).
-void ModelUpdatePass(void* self)
+// ---------------------------------------------------------------------------
+// 0x0073A110 — select the model's vertex streams, mirror the selected slot
+// headers into the mesh buffers and dispatch the merge/convert step.
+// ---------------------------------------------------------------------------
+struct StreamSlot {
+    int32_t mType;          // +0x00
+    int32_t mField04;       // +0x04
+    int32_t mSelector;      // +0x08
+    int32_t mField0C;       // +0x0c
+    uint8_t mPayload[0x10]; // +0x10 (element-stream header / EltArray)
+};
+
+struct SampledModel {
+    char pad0[8];
+    StreamSlot* mpSlots;    // +0x08
+};
+
+struct MeshBuffers {
+    char pad0[8];
+    StreamSlot* mpSlots;    // +0x08
+    StreamSlot* mpSlotsEnd; // +0x0c
+    void AssignModel(SampledModel* model);                // 0x00738e50
+};
+
+struct EltArray {
+    int32_t  mNumElts;      // +0x00
+    uint8_t* mData;         // +0x04
+    uint16_t mEltSize;      // +0x08
+    uint16_t mEltStride;    // +0x0a
+    void*    mDataRC;       // +0x0c
+    void Assign(const uint8_t* payload);                  // 0x00424f70
+};
+
+void SelectStreams(SampledModel* model, int count, int* out,
+                   const int* ids, int, const int* kinds, int);   // 0x0071ded0
+void CopySlot15(const uint8_t* src, uint8_t* dst);                 // 0x007201d0
+void UpdateStreamSet(uint32_t count, int selector, EltArray* a, EltArray* b,
+                     EltArray* c, EltArray* d, EltArray* e, EltArray* f,
+                     EltArray* g, EltArray* h, uint8_t* verts);    // 0x00731e70
+
+// @ 0x0073A110
+bool ModelUpdatePass(uint8_t* verts, SampledModel* model, MeshBuffers* buffers)
 {
-    (void)self;
+    int out[5];
+    const int ids[5]   = { 1, 2, 3, 9, 10 };
+    const int kinds[5] = { 3, 0, 0, 0, 0 };
+    SelectStreams(model, 5, out, ids, 0, kinds, 0);
+
+    if (out[0] < 0 || out[3] < 0)
+        return false;
+
+    StreamSlot* modelSlots = model->mpSlots;
+    EltArray*   selected0  = (EltArray*)(modelSlots[out[0]].mPayload);
+
+    EltArray a = { 0, 0, 0, 0, 0 };
+    EltArray b = { 0, 0, 0, 0, 0 };
+    EltArray c = { 0, 0, 0, 0, 0 };
+    EltArray d = { 0, 0, 0, 0, 0 };
+    EltArray e = { 0, 0, 0, 0, 0 };
+    if (out[1] >= 0)
+        a.Assign(modelSlots[out[1]].mPayload);
+    if (out[2] >= 0)
+        b.Assign(modelSlots[out[2]].mPayload);
+
+    if (buffers->mpSlots == buffers->mpSlotsEnd) {
+        buffers->AssignModel(model);
+        CopySlot15((const uint8_t*)selected0, buffers->mpSlots[out[0]].mPayload);
+        if (out[1] >= 0)
+            CopySlot15((const uint8_t*)&a, buffers->mpSlots[out[1]].mPayload);
+        if (out[2] >= 0)
+            CopySlot15((const uint8_t*)&b, buffers->mpSlots[out[2]].mPayload);
+    }
+
+    StreamSlot* bufferSlots = buffers->mpSlots;
+    EltArray* selected3 = (EltArray*)(bufferSlots[out[0]].mPayload);
+    if (out[1] >= 0)
+        c.Assign(bufferSlots[out[1]].mPayload);
+    if (out[2] >= 0)
+        d.Assign(bufferSlots[out[2]].mPayload);
+
+    int selector = 1;
+    if (out[4] >= 0) {
+        e.Assign(modelSlots[out[4]].mPayload);
+        int fmt = modelSlots[out[4]].mSelector;
+        if ((unsigned)(fmt - 1) <= 3)
+            selector = fmt;
+        else if (fmt == 10)
+            selector = 4;
+    }
+
+    UpdateStreamSet((uint32_t)selector, modelSlots[out[3]].mSelector,
+                    (EltArray*)modelSlots[out[3]].mPayload, &e, selected0,
+                    selected3, &a, &c, &b, &d, verts);
+    return true;
 }
 
-// @ 0x0073A4B0 — eastl::vector<SP::cQuadric,sp_vector_allocator>::resize (556 bytes).
-void QuadricVectorResize(void* self, uint32_t n)
+// ---------------------------------------------------------------------------
+// 0x0073A4B0 — drop the inactive quadric records, remap the per-cluster
+// quadric indices and truncate both vectors.
+// ---------------------------------------------------------------------------
+struct QRecRef {
+    virtual void AddRef();      // +0x00
+    virtual void Release();     // +0x04
+};
+
+struct FixedIdVector6 {         // 0x30-byte id list at QuadricRec+0x14
+    uint32_t mData[0x0c];
+    FixedIdVector6& operator=(const FixedIdVector6& rhs);      // 0x00719170
+};
+
+struct FixedEntryVector3 {      // 0x48-byte entry list at QuadricRec+0x44
+    uint32_t mData[0x12];
+    void Free(uint32_t* begin, uint32_t* end);                  // 0x004772a0
+    void DoAssign(const FixedEntryVector3& rhs, void* ctx);     // 0x0042d020
+};
+
+struct QuadricRec {             // 0x8c stride
+    uint32_t        mType;      // +0x00
+    uint32_t        mFlags04;   // +0x04
+    int16_t         mFmt;       // +0x08
+    uint16_t        mStride;    // +0x0a
+    QRecRef*        mpRef;      // +0x0c
+    uint32_t        mIndex;     // +0x10
+    FixedIdVector6  mIds;       // +0x14
+    FixedEntryVector3 mVerts;   // +0x44
+};
+
+struct FaceCluster {            // 0x14 stride at ctx+0x30
+    uint32_t mField00;          // +0x00
+    int32_t  mQuadIndex;        // +0x04
+    int32_t  mBegin;            // +0x08
+    int32_t  mEnd;              // +0x0c
+    uint32_t mField10;          // +0x10
+};
+
+struct SectionVec {              // eastl::vector<QuadricRec>::resize at 0x0071f7e0
+    QuadricRec* mpBegin;        // +0x1c
+    QuadricRec* mpEnd;          // +0x20
+    void resize(int n);
+};
+
+struct VecFC {                  // eastl::vector<FaceCluster>::resize at 0x0071efa0
+    FaceCluster* mpBegin;       // +0x30
+    FaceCluster* mpEnd;         // +0x34
+    void resize(unsigned n);
+};
+
+struct QuadricCtx {
+    char pad0[0x1c];
+    SectionVec  mQuads;         // +0x1c
+    char pad24[0xc];
+    VecFC       mClusters;      // +0x30
+};
+
+struct IndexVec {               // inline-capacity int vector built by 0x00737e80
+    int* mpBegin;               // +0x00
+    int* mpEnd;                 // +0x04
+    int* mpCap;                 // +0x08
+    char pad0c[4];              // +0x0c
+    int* mpInline;              // +0x10 (start of the inline buffer)
+    int  mBuf[16];              // +0x18
+    void Init_00737e80(int n, int fill);
+};
+
+void EASTL_allocator_deallocate(void* p);                        // 0x00f47380
+
+static void CopyQuadric(QuadricRec* dst, QuadricRec* src, void* ctx)
 {
-    (void)self; (void)n;
+    dst->mType    = src->mType;
+    dst->mFlags04 = src->mFlags04;
+    dst->mFmt     = src->mFmt;
+    dst->mStride  = src->mStride;
+    if (dst->mpRef != src->mpRef) {
+        if (src->mpRef)
+            src->mpRef->AddRef();
+        QRecRef* old = dst->mpRef;
+        dst->mpRef = src->mpRef;
+        if (old)
+            old->Release();
+    }
+    dst->mIndex = src->mIndex;
+    dst->mIds   = src->mIds;
+    dst->mVerts.Free(dst->mVerts.mData, dst->mVerts.mData + 1);
+    dst->mVerts.DoAssign(src->mVerts, ctx);
 }
 
-// @ 0x0073A6E0 — ability-object constructor (130 bytes).
+// @ 0x0073A4B0
+void QuadricVectorResize(QuadricCtx* ctx)
+{
+    const int count = (int)(ctx->mQuads.mpEnd - ctx->mQuads.mpBegin);
+
+    IndexVec map;
+    map.Init_00737e80(count, -1);
+
+    int out = 0;
+    for (int i = 0; i < count; ++i) {
+        QuadricRec* src = &ctx->mQuads.mpBegin[i];
+        if (src->mType == 0)
+            continue;
+        if (out < i)
+            CopyQuadric(&ctx->mQuads.mpBegin[out], src, ctx);
+        map.mpBegin[i] = out;
+        ++out;
+    }
+    ctx->mQuads.resize(out);
+
+    const int clusterCount = (int)(ctx->mClusters.mpEnd - ctx->mClusters.mpBegin);
+    int written = 0;
+    for (int j = 0; j < clusterCount; ++j) {
+        FaceCluster* c = &ctx->mClusters.mpBegin[j];
+        int idx = map.mpBegin[c->mQuadIndex];
+        c->mQuadIndex = idx;
+        if (idx != -1 && c->mBegin < c->mEnd) {
+            if (written < j)
+                ctx->mClusters.mpBegin[written] = *c;
+            ++written;
+        }
+    }
+    ctx->mClusters.resize((unsigned)written);
+
+    if (map.mpBegin && map.mpBegin != map.mpInline)
+        EASTL_allocator_deallocate(map.mpBegin);
+}
+
+// 0x0073A6E0 — ability-object constructor (130 bytes).
 struct __declspec(align(16)) Vec4a { float x, y, z, w; };
 
 class __declspec(align(16)) BigObj {
@@ -366,30 +580,120 @@ void BigObj::Ctor(int a, int b, int c, Vec4a* p4, Vec4a* p5)
     f108 = 0;
 }
 
-// @ 0x0073A900 — release a bound render resource (203 bytes).
-void ReleaseBoundResource(void* self, void* p)
-{
-    (void)self; (void)p;
-}
+// ---------------------------------------------------------------------------
+// 0x0073A900 — flush the bound resource of a mesh/model owner into its
+// hand-off slot, refreshing the cached transforms and the global cell/triple
+// state on the way.
+// ---------------------------------------------------------------------------
+struct ResourceObj {
+    virtual void v0();          // +0x00
+    void** mpSecondaryVtbl;     // +0x04 (slot 3 is called with this = ResourceObj)
+};
+typedef void (__thiscall *FnResSlot3)(ResourceObj*);
 
-// @ 0x0073A9E0 — destructor that resets two vtables and releases a ref (108 bytes).
-void AbilityDtorBase(void* self)
+struct ResSlot {
+    void* mpObj;                // +0x00
+    void* mpDispatch;           // +0x04
+    void* mpAux;                // +0x08
+    void Reset();               // 0x007966a0
+    void Commit();              // 0x01200940
+};
+
+struct BoundTransform {
+    uint8_t mFlags;             // +0x00
+    char pad01[0xf];
+    float mScale;               // +0x10
+    char pad14[0x2c];           // +0x40
+};
+struct BoundTransformB {
+    uint8_t mFlags;             // +0x00
+    char pad01[0xf];
+    float mScale;               // +0x10
+    char pad14[0x24];           // +0x38
+};
+
+struct BoundResource {
+    ResourceObj*    mpResource; // +0x00
+    char pad04[4];
+    ResSlot*        mpSlot;     // +0x08
+    void*           mpCell;     // +0x0c
+    BoundTransform  mXformA;    // +0x10
+    char pad50[0x30];           // +0x50 .. +0x80
+    BoundTransformB mXformB;    // +0x80
+    void*           mpTripleA;  // +0xb8
+    void*           mpTripleB;  // +0xbc
+    void*           mpTripleC;  // +0xc0
+};
+
+void SetGlobalCellId(void* cell);                      // 0x00796650
+void BuildTransformA(BoundTransformB* t);               // 0x007966f0
+void BuildTransformB(BoundTransform* t);                // 0x00796800
+void SetGlobalTriple(void* a, void* b, void* c);       // 0x00796680
+
+// @ 0x0073A900
+void ReleaseBoundResource(BoundResource* self, void* newObj)
 {
-    (void)self;
+    ResSlot* slot = self->mpSlot;
+    if (!slot)
+        return;
+    if (!self->mpResource)
+        return slot->Reset();
+
+    ResourceObj* res = self->mpResource;
+    ((FnResSlot3)res->mpSecondaryVtbl[3])(res);
+    SetGlobalCellId(self->mpCell);
+    if (self->mXformB.mScale != 1.0f || (self->mXformB.mFlags & 6) != 0)
+        BuildTransformA(&self->mXformB);
+    if (self->mXformA.mScale != 1.0f || (self->mXformA.mFlags & 6) != 0)
+        BuildTransformB(&self->mXformA);
+    if (self->mpTripleA)
+        SetGlobalTriple(self->mpTripleA, self->mpTripleC, self->mpTripleB);
+
+    slot->mpObj = self->mpResource;
+    if (!newObj)
+        return slot->Commit();
+    void* old = slot->mpAux;
+    slot->mpAux = newObj;
+    slot->Commit();
+    slot->mpAux = old;
 }
 
 // Ability object constructor setting two vtables (81 bytes).
 struct AbIface { virtual void ifn0(); };
 struct AbRC { AbRC() : mRC(0) {} virtual void rcfn0(); virtual void rcfn1(); int mRC; };
-struct AbHeld { virtual void dtor(int) = 0; int mnRefCount; };
+struct AbHeld {
+    virtual void dtor(int) = 0;     // +0x00
+    virtual void release();         // +0x04
+    int mnRefCount;                 // +0x08 (retail reads +4 on the secondary view)
+};
+
+// Owning pointer at AbilityA+0xc: destructor drops the held reference.
+struct HeldRef {
+    AbHeld* mp;
+    ~HeldRef()
+    {
+        AbHeld* p = mp;
+        if (p) {
+            if (--p->mnRefCount == 0) {
+                p->mnRefCount = 1;
+                p->dtor(1);
+            }
+        }
+    }
+};
 struct AbilityA : AbIface, AbRC {
-    AbilityA(AbHeld* h, int v) { mHeld = h; if (h) ++h->mnRefCount; mVal = v; }
+    AbilityA(AbHeld* h, int v) { mHeld.mp = h; if (h) ++h->mnRefCount; mVal = v; }
     virtual void a0();
     virtual void a1();
-    AbHeld* mHeld;      // +0xc
+    HeldRef mHeld;      // +0xc
     int mVal;           // +0x10
+    ~AbilityA();
 };
-struct AbPtr { AbHeld* p; AbPtr() : p(0) {} };
+struct AbPtr {
+    AbHeld* p;
+    AbPtr() : p(0) {}
+    ~AbPtr() { if (p) p->release(); }
+};
 struct AbilityB : AbilityA {
     AbilityB(AbHeld* h, int v, int a, int b);
     virtual void b0();
@@ -397,6 +701,7 @@ struct AbilityB : AbilityA {
     AbPtr mHeld2;       // +0x14
     int mB18;           // +0x18
     int mB1c;           // +0x1c
+    ~AbilityB();
 };
 
 // @ 0x0073AA70
@@ -404,10 +709,14 @@ AbilityB::AbilityB(AbHeld* h, int v, int a, int b) : AbilityA(h, v), mB18(a), mB
 {
 }
 
-// @ 0x0073AAE0 — ability-object destructor (95 bytes).
-void AbilityDtorB(void* self)
+// @ 0x0073A9E0 — reset the two AbilityA vtables and release the held reference.
+AbilityA::~AbilityA()
 {
-    (void)self;
+}
+
+// @ 0x0073AAE0 — release the secondary held pointer, then run the AbilityA dtor.
+AbilityB::~AbilityB()
+{
 }
 
 // @ 0x0073AB40 — assign a refcounted controller field and refresh two words (96 bytes).

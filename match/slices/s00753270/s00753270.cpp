@@ -29,8 +29,123 @@ void* __cdecl operator_new_753d10(unsigned size, const char* name, int, int, int
 struct CompactMap_74f200 { void** Subscript(const uint32_t& key); };            // 0x0074f200
 struct Ctor753900 { void* ctor(void* a, void* b); };                            // 0x00753900
 
-// @ 0x00753270  (708 bytes) large cModelWorld helper; skeleton
-void FUN_00753270(void* self) { (void)self; }
+// Drain one pending background load of a cModelWorld.
+//
+// Runs under an SEH scope.  Takes a load-queue entry by value-pointer: it
+// AddRefs the entry's model and job, waits for the job, then walks the five
+// intrusive model-owner lists collected in the entry, sorting each and
+// dispatching every node through its vtable slot +0x34.
+struct MwModel_mw {
+  virtual void mv0();
+  virtual void mv1();
+  uint32_t  m4;          // +0x04 (high bit used as a flag)
+  char      pad08[0x38]; // +0x08
+  int       m40;         // +0x40 refcount
+  void      AddRefOrDestroy();
+};
+struct cJob_mw {
+  void AddRef();     // 0x0068f950
+  void Wait();       // 0x006926b0
+  void GetStatus();  // 0x00690120 (Release is used here in practice)
+  void Release();    // 0x00690120
+};
+struct LoadEntry_mw {
+  MwModel_mw* mpModel;   // +0x00
+  char      pad04[0x18];     // +0x04
+  uint8_t   m1c;             // +0x1c
+  char      pad1d[3];        // +0x1d
+  cJob_mw* mpJob;        // +0x20
+  char      pad24[0x10];     // +0x24
+  void*     mpLists[5];      // +0x34  five intrusive model-owner lists
+};
+
+struct VecBase_mw { void* begin; void* end; void* cap; void* pad0c; void* pad10; };
+
+extern "C" void* eastl_copydispatch_copy_intrusive(void*, void*, void*);  // 0x006f43e0
+extern "C" void  DestroyRange_mw(void* a, void* b);                   // 0x0070f520
+extern "C" void  SortWithCmp_mw(void* range, void* cmp);              // 0x0073bd60
+extern "C" int   Cmp_mw(void* a, void* b);                            // 0x00743910
+extern "C" void* AllocIntro_mw();                                     // 0x0067dd60
+extern "C" void  FinishBackgroundLoad_mw(void* self, void* entry);    // 0x00751560
+
+static void CModelWorld_ReleaseModel753270(MwModel_mw* m)
+{
+  if (m == 0)
+    return;
+  const int n = m->m40;
+  if (n < 2)
+    (*(void(__thiscall**)(MwModel_mw*, unsigned))(*(void***)m)[0x170 / 4])(m, m->m4 >> 0x1f);
+  else
+    m->m40 = n - 1;
+}
+
+// @ 0x00753270  (708 bytes)
+void FUN_00753270(void* self, LoadEntry_mw* entry)
+{
+  MwModel_mw* model = entry->mpModel;
+  if (model != 0)
+    ++model->m40;
+
+  cJob_mw* job = entry->mpJob;
+  if (job != 0)
+    job->AddRef();
+  entry->mpJob->Wait();
+
+  if (entry->m1c != 0 && entry->mpJob == job) {
+    char* obj = (char*)AllocIntro_mw();
+
+    // Local growable vector<P> scratch (begin/end/cap + allocator).
+    void* vec[2] = { 0, 0 };
+    void* scratch[2] = { 0, 0 };
+    char* work = (char*)vec;  // work area reused for the temporary block
+
+    for (int i = 0; i < 5; ++i) {
+      void** list = (void**)((char*)entry + 0x34 + i * 4);
+      if (*list == 0)
+        continue;
+
+      void* endRec = eastl_copydispatch_copy_intrusive(scratch, scratch, vec);
+      DestroyRange_mw(endRec, scratch);
+      // Sorting the collected range with the model comparator.
+      SortWithCmp_mw(&scratch[0], (void*)Cmp_mw);
+
+      void** p   = (void**)scratch[0];
+      void** end = (void**)scratch[1];
+      while (p != end) {
+        (*(void(__thiscall**)(void*))(*(void***)obj + 0x34))(*p);
+
+        if (entry->m1c == 0 || entry->mpJob != job) {
+          DestroyRange_mw(scratch[0], scratch[1]);
+          if (scratch[0] != 0 && ((int*)scratch[0])[-1] != 0)
+            operator_delete__(scratch[0]);
+          if (job != 0)
+            job->Release();
+          CModelWorld_ReleaseModel753270(model);
+          return;
+        }
+        ++p;
+      }
+    }
+
+    FinishBackgroundLoad_mw(self, entry);
+    DestroyRange_mw(scratch[0], scratch[1]);
+    if (scratch[0] != 0 && ((int*)scratch[0])[-1] != 0)
+      operator_delete__(scratch[0]);
+    if (job != 0)
+      job->Release();
+    CModelWorld_ReleaseModel753270(model);
+    return;
+  }
+
+  if (job != 0)
+    job->Release();
+  if (model != 0) {
+    if (model->m40 < 2)
+      (*(void(__thiscall**)(MwModel_mw*, unsigned))(*(void***)model)[0x170 / 4])(model, model->m4 >> 0x1f);
+    else
+      --model->m40;
+  }
+}
 
 // @ 0x00753540  (62 bytes) tree foreach
 struct TreeNode_00753540 {
@@ -70,8 +185,74 @@ cMWGroupInternal_00753580::~cMWGroupInternal_00753580() {
     operator_delete__(p);
 }
 
-// @ 0x00753630  (316 bytes) job queue lookup; skeleton
-void FUN_00753630(void* self, int* p) { (void)self; (void)p; }
+// @ 0x00753630  (316 bytes) cLoadQueue lookup/start for a job's model chunks.
+//
+// Scans the queue's 8 fixed slots (0x50 stride at self+4) for a free one, or
+// reuses the slot already bound to the incoming job, then dispatches any ready
+// chunk range to the feedback-job starter and drains it with FUN_00753270.
+struct QueueSlot_lq {
+  void*   mpJob;    // +0x00
+  char    pad04[0x18];
+  uint8_t m1c;      // +0x1c occupied flag
+};
+
+struct ChunkRange_lq { int m[4]; };
+
+extern "C" int  ChunkFind_lq(void* p, void* a, void* b);              // 0x00745560
+extern "C" void StartFeedbackJobs_lq(void* self, void** range);       // 0x0074fea0
+extern "C" void helper_50180_lq(void* dst, void* a);                  // 0x00750180
+
+void FUN_00753630(void* self, void* param)
+{
+  char* base = (char*)self;
+  for (;;) {
+    // Phase 1: look for a free / matching slot among the 8 fixed ones.
+    QueueSlot_lq* found = 0;
+    do {
+      void* job = *(void**)param;
+      if (((*(uint32_t*)((char*)job + 4) >> 0xe) & 1) != 0 || found != 0) {
+        // A job with the busy bit (or we already found a slot): try to start.
+        if (((*(uint32_t*)((char*)job + 4) >> 0xe) & 1) == 0) {
+          int range[4];
+          int rc = ChunkFind_lq(&range[0], *(void**)(base + 0x28c),
+                                    *(void**)(base + 0x29c));
+          (void)rc;
+          if (range[0] != *(int*)(base + 0x29c)) {
+            StartFeedbackJobs_lq(found, (void**)range[0]);
+            helper_50180_lq((char*)base + 0x284, &range[0]);
+            FUN_00753270(*(void**)base, (LoadEntry_mw*)found);
+          }
+        }
+        return;
+      }
+
+      QueueSlot_lq* slot = (QueueSlot_lq*)(base + 4);
+      found = 0;
+      for (unsigned i = 0; i < 8; ++i) {
+        if (slot->m1c != 0 && slot->mpJob == job) {
+          found = slot;
+          break;
+        }
+        slot = (QueueSlot_lq*)((char*)slot + 0x50);
+      }
+
+      if (found == 0) {
+        uint32_t n = *(uint32_t*)(base + 0x2b0);
+        found = (QueueSlot_lq*)(base + 4 + n * 0x50);
+        ++n;
+        *(uint32_t*)(base + 0x2b0) = n;
+        if (n >= 8)
+          *(uint32_t*)(base + 0x2b0) = 0;
+      }
+
+      if (found->m1c == 0)
+        break;
+      FUN_00753270(*(void**)base, (LoadEntry_mw*)found);
+      if (found->m1c == 0)
+        break;
+    } while (true);
+  }
+}
 
 // @ 0x00753770  (126 bytes) model-info element constructor (inlined cSPTransform/Matrix ctor)
 struct Matrix3_41cb40 { float m[9]; void Assign(const void* src); };   // 0x0041cb40
@@ -148,8 +329,183 @@ cLoadQueue_00753880::cLoadQueue_00753880() : m0(0) {
   m2b0 = 0;
 }
 
-// @ 0x00753900  (678 bytes) cModelWorld constructor (EH); skeleton
-void cModelWorld_ctor_00753900(void* self) { (void)self; }
+// @ 0x00753900  (678 bytes) SP::cModelWorld::cModelWorld (EH).
+//
+// Sets the multi-vtable header, constructs the cHierGrid at +0x118, three
+// self-referential list heads at +0x19c/+0x1a4/+0x1ac, three EH vector blocks,
+// the cLoadQueue at +0x314, and initialises the tuning scalars.
+class cModelWorld_00753900 {
+ public:
+  cModelWorld_00753900(unsigned arg0, unsigned char arg1);
+
+  char     pad00[0x04];     // +0x000
+  void*    mvptr04;         // +0x004
+  void*    mvptr08;         // +0x008
+  void*    mvptr0c;         // +0x00c
+  void*    mvptr10;         // +0x010
+  uint32_t m14;             // +0x014
+  uint32_t m18;             // +0x018
+  uint8_t  m1c;             // +0x01c
+  uint8_t  m1d;             // +0x01d
+  uint8_t  m1e;             // +0x01e
+  char     pad1f[0x01];     // +0x01f
+  void*    m20;             // +0x020
+  uint8_t  m24;             // +0x024
+  char     pad25[0x118 - 0x25]; // +0x025
+  char     m118[0x84];      // +0x118 cHierGrid (ends at +0x19c)
+  // list heads
+  void*    m19c_prev;       // +0x19c
+  void*    m1a0_next;       // +0x1a0
+  void*    m1a4_prev;       // +0x1a4
+  void*    m1a8_next;       // +0x1a8
+  void*    m1ac_prev;       // +0x1ac
+  void*    m1b0_next;       // +0x1b0
+  char     m1b4[8 * 0x20];  // +0x1b4 (8 x 0x20)
+  float    m2b4;            // +0x2b4
+  float    m2b8;            // +0x2b8
+  uint32_t m2bc;            // +0x2bc
+  uint32_t m2c0;            // +0x2c0
+  uint32_t m2c4;            // +0x2c4
+  char     pad2c8[0x2d0 - 0x2c8];
+  uint32_t m2d0;            // +0x2d0
+  uint32_t m2d4;            // +0x2d4
+  uint32_t m2d8;            // +0x2d8
+  uint32_t m2dc;            // +0x2dc
+  uint32_t m2e0;            // +0x2e0
+  char     pad2e4[0x2ec - 0x2e4];
+  uint32_t m2ec;            // +0x2ec
+  uint32_t m2f0;            // +0x2f0
+  uint32_t m2f4;            // +0x2f4
+  char     pad2f8[0x300 - 0x2f8];
+  uint32_t m300;            // +0x300
+  uint32_t m304;            // +0x304
+  uint32_t m308;            // +0x308
+  cLoadQueue_00753880 m314; // +0x314
+  uint32_t m5c8;            // +0x5c8
+  uint8_t  m5cc;            // +0x5cc
+  char     m5d0[16 * 0x14]; // +0x5d0
+  char     m710[16 * 0x14]; // +0x710
+  float    m850;            // +0x850
+  float    m854;            // +0x854
+  float    m858;            // +0x858
+  float    m85c;            // +0x85c
+  float    m860;            // +0x860
+  uint32_t m864;            // +0x864
+  uint32_t m868;            // +0x868
+  uint32_t m86c;            // +0x86c
+  char     pad870[0x878 - 0x870];
+  float    m878;            // +0x878
+  float    m87c;            // +0x87c
+  uint32_t m880;            // +0x880
+  uint32_t m884;            // +0x884
+  float    m888;            // +0x888
+  float    m88c;            // +0x88c
+  float    m890;            // +0x890
+  uint32_t m894;            // +0x894
+  uint32_t m898;            // +0x898
+  uint32_t m89c;            // +0x89c
+  uint32_t m8a0;            // +0x8a0
+  uint32_t m8a4;            // +0x8a4
+  uint32_t m8a8;            // +0x8a8
+  uint32_t m8ac;            // +0x8ac
+  uint8_t  m8b0;            // +0x8b0
+  uint32_t m8b4;            // +0x8b4
+};
+
+extern "C" void cHierGrid_ctor_cw(void* p);                            // 0x00703ce0
+extern "C" void __stdcall eh_vec_ctor_cw(void* p, unsigned sz, int n,
+                                   void* ctor, void* dtor);                // 0x011e0b85
+extern "C" void Small7_Init_cw(void* p);                               // 0x007453a0
+extern "C" void Small7_Dtor_cw(void* p);                               // 0x007445a0
+extern "C" void IPtrVec_Ctor_cw(void* p);                              // 0x006e5790
+extern "C" void IPtrVec_Dtor_cw(void* p);                              // 0x0041e640
+extern "C" void cLoadQueue_ctor_cw(void* p);                           // 0x00753880
+
+extern float g_f1485720;   // 0x01485720 = 1.0
+extern float g_f1470f1c;   // 0x01470f1c = 2.0
+extern float g_f1473c70;   // 0x01473c70
+extern float g_f1471064;   // 0x01471064 = 0.5
+extern float g_f1486110;   // 0x01486110
+extern float g_f1537b10, g_f1537b14, g_f1537b18, g_f1537b1c;
+
+cModelWorld_00753900::cModelWorld_00753900(unsigned arg0, unsigned char arg1)
+{
+  mvptr04 = (void*)0x013f1ab0;   // cILayer vtable
+  mvptr08 = (void*)0x013eb384;   // cListenerBase vtable
+  mvptr0c = (void*)0x013f1ab0;
+  mvptr10 = (void*)0x013ef094;   // hkReferencedObject vtable
+  m14     = 0;
+  m1e     = arg1;
+
+  // Final vtables / model-world header.
+  *(void**)this      = (void*)0x0140d790;
+  mvptr04            = (void*)0x0140d780;
+  mvptr08            = (void*)0x0140d770;
+  mvptr0c            = (void*)0x0140d760;
+  mvptr10            = (void*)0x0140d75c;
+  m18                = arg0;
+  m1c                = 0;
+  m1d                = 0;
+  m20                = 0;
+  m24                = 1;
+
+  cHierGrid_ctor_cw(m118);
+
+  m19c_prev = &m19c_prev;  m1a0_next = &m19c_prev;
+  m1a4_prev = &m1a4_prev;  m1a8_next = &m1a4_prev;
+  m1ac_prev = &m1ac_prev;  m1b0_next = &m1ac_prev;
+
+  eh_vec_ctor_cw(m1b4, 0x20, 8, (void*)Small7_Init_cw, (void*)Small7_Dtor_cw);
+
+  m2b4 = 0.0f;
+  m2b8 = g_f1485720;
+  m2bc = 0;
+  m2c0 = 0;
+  m2c4 = 0;
+  m2d0 = 0x3fffffff;
+  m2d4 = 0x3fffffff;
+  m2d8 = 0;
+  m2dc = 0;
+  m2e0 = 0;
+  m2ec = 0;
+  m2f0 = 0;
+  m2f4 = 0;
+  m300 = 0;
+  m304 = 0;
+  m308 = 0;
+
+  cLoadQueue_ctor_cw(&m314);
+
+  m5c8 = 0;
+  m5cc = 0;
+  eh_vec_ctor_cw(m5d0, 0x14, 0x10, (void*)IPtrVec_Ctor_cw, (void*)IPtrVec_Dtor_cw);
+  eh_vec_ctor_cw(m710, 0x14, 0x10, (void*)IPtrVec_Ctor_cw, (void*)IPtrVec_Dtor_cw);
+
+  m850 = g_f1537b10;
+  m854 = g_f1537b14;
+  m858 = g_f1537b18;
+  m85c = g_f1537b1c;
+  m860 = 0.0f;
+  m864 = 0;
+  m868 = 0;
+  m86c = 0;
+  m878 = g_f1470f1c;
+  m87c = g_f1485720;
+  m880 = 0;
+  m888 = g_f1473c70;
+  m88c = g_f1471064;
+  m890 = g_f1486110;
+  m894 = 0;
+  m898 = 0;
+  m89c = 0;
+  m8a0 = 0;
+  m8a4 = 0;
+  m8a8 = 0;
+  m8ac = 0;
+  m8b0 = 0;
+  m8b4 = 0;
+  m884 = 0xc8;
+}
 
 // @ 0x00753bb0  (155 bytes) fixed-allocator node acquire + intrusive circular-list push
 struct MwOwner_753bb0 {
@@ -278,8 +634,67 @@ void FUN_00753dc0(int param_1, unsigned char param_2) {
   }
 }
 
-// @ 0x00753e00  (383 bytes) skeleton
-void FUN_00753e00(void* self) { (void)self; }
+// @ 0x00753e00  (383 bytes) load vertex attribute arrays from a property set.
+//
+// Three property arrays keyed 0x61b99cd/0x61b99ce/0x61b99cf are copied into a
+// record array at stride 8: float at +0 (clamped/filled), byte at +5, and a
+// split 3/3-bit pair at +4 (>>3) and +6 (&7).
+struct ARec_ar {
+  float  f0;    // +0x00
+  uint8_t m4;   // +0x04
+  uint8_t m5;   // +0x05
+  uint8_t m6;   // +0x06
+  char   pad7;  // +0x07
+};
+
+extern "C" char GetPropertyAsFloatArray_ar(void* obj, int key, int* count, float** out); // 0x006a08b0
+extern "C" char GetPropertyAsIntArray_ar(void* obj, int key, int* count, void** out);    // 0x006a07d0
+
+void FUN_00753e00(void* propSet, ARec_ar* dst, int n)
+{
+  {
+    int    count;
+    float* src;
+    if (GetPropertyAsFloatArray_ar(propSet, 0x61b99cd, &count, &src)) {
+      if (n < count)
+        count = n;
+      for (int i = 0; i < count; ++i)
+        dst[i].f0 = src[i];
+      for (int i = count; i < n; ++i)   // fill remainder from src[0]
+        dst[i].f0 = src[0];
+    }
+  }
+  {
+    int    count;
+    void*  src;
+    if (GetPropertyAsIntArray_ar(propSet, 0x61b99ce, &count, &src)) {
+      if (n < count)
+        count = n;
+      for (int i = 0; i < count; ++i)
+        dst[i].m5 = *(uint8_t*)((char*)src + i * 4);
+      for (int i = count; i < n; ++i)
+        dst[i].m5 = *(uint8_t*)src;
+    }
+  }
+  {
+    int    count;
+    void*  src;
+    if (GetPropertyAsIntArray_ar(propSet, 0x61b99cf, &count, &src)) {
+      if (n < count)
+        count = n;
+      for (int i = 0; i < count; ++i) {
+        const int v = *(int*)((char*)src + i * 4);
+        dst[i].m4 = (uint8_t)(v >> 3);
+        dst[i].m6 = (uint8_t)(v & 7);
+      }
+      for (int i = count; i < n; ++i) {
+        const int v = *(int*)src;
+        dst[i].m4 = (uint8_t)(v >> 3);
+        dst[i].m6 = (uint8_t)(v & 7);
+      }
+    }
+  }
+}
 
 // @ 0x00753fc0  (31 bytes) callback refcount release; register allocation differs
 struct RC_00753fc0 {
@@ -298,8 +713,58 @@ void FUN_00753fc0(RC_00753fc0* param_1) {
   }
 }
 
-// @ 0x00753fe0  (301 bytes) KDTree asset build (EH); skeleton
-void FUN_00753fe0(void* self, void* a) { (void)self; (void)a; }
+// @ 0x00753fe0  (301 bytes) build the RenderAsset/KDTree resource (EH).
+//
+// Local 4-element pointer array is EH-constructed; a resource of type 0x10 is
+// created from the argument, then a KDTree object is allocated and handed to
+// FUN_006c24b0, and its caching type is set to 2.
+typedef void* (__thiscall* Fn762250_kd)(void* self, void* arg0);        // 0x00762250
+extern "C" void* FUN_0072d5a0(void* a, int b, int c, int d, void* e);       // 0x0072d5a0
+extern "C" void* FUN_00762250(void* a, void* b);                            // 0x00762250
+extern "C" unsigned FUN_006c24b0_kd(void* a, void* b, void* c, int d,
+                                        void* e, int f, const char* g);     // 0x006c24b0
+extern "C" char SetCachingType_kd(int a, void* b);                      // 0x006ac040
+extern "C" void __stdcall eh_vec_ctor_kd(void* p, unsigned sz, int n, void* ctor, void* dtor); // 0x011e0b85
+extern "C" void __stdcall eh_vec_dtor_kd(void* p, unsigned sz, int n, void* dtor);             // 0x011e0b22
+extern "C" void  BaseResourceDescriptor_ctor_kd(void* p);               // 0x006c0fa0
+extern "C" void  ReadText_dtor_kd(void* p);                             // 0x00c2e4e0
+
+struct KDTreeForeign_kd {
+  virtual void kv0();
+  virtual void kv1();
+};
+
+void FUN_00753fe0(void* param_1, void* param_2)
+{
+  // The original zeroes the first six dwords with individual stores; MSVC folds
+  // any zero-init here into a memset whose stack cleanup it then mis-emits, so
+  // leave the scratch block uninitialised and let the EH vector ctor below fill
+  // the descriptor array at +0x18.
+  char local[0x44];
+  void* const arg_dst = param_1;   // snapshot args before any frame-shifting call
+  void* const arg_src = param_2;
+
+  eh_vec_ctor_kd((char*)local + 0x18, 8, 4, (void*)BaseResourceDescriptor_ctor_kd,
+                     (void*)ReadText_dtor_kd);
+
+  char* loc = (char*)local;
+  void* res = (void*)FUN_0072d5a0(arg_src, 0, 0, 0x10, loc);
+  if (res != 0) {
+    void* mem = operator_new_753d10(0x4c, "Graphics", 0, 0, 0, 0);
+    KDTreeForeign_kd* kd = 0;
+    if (mem != 0)
+      kd = (KDTreeForeign_kd*)((Fn762250_kd)FUN_00762250)((void*)mem, loc);
+    if (kd != 0)
+      (*(void(__thiscall**)(KDTreeForeign_kd*))(*(void***)kd)[0])(kd);
+
+    FUN_006c24b0_kd(arg_dst, kd, loc, 1, loc, 1, "RenderAsset/KDTree");
+    SetCachingType_kd(2, *(void**)arg_dst);
+    if (kd != 0)
+      (*(void(__thiscall**)(KDTreeForeign_kd*))(*(void***)kd)[1])(kd);
+  }
+
+  eh_vec_dtor_kd(loc + 0x18, 8, 4, (void*)ReadText_dtor_kd);
+}
 
 // @ 0x00754110  (25 bytes)
 class Stub_754110 {

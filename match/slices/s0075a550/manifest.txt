@@ -6,3 +6,6 @@ slices/s0075a550/s0075a550.cpp  ?F7d0@cMultiBlender@@QAEHM@Z  0075a7d0  /O2 /MD 
 slices/s0075a550/s0075a550.cpp  ?F880@cMultiBlender@@QAEXM@Z  0075a880  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 slices/s0075a550/s0075a550.cpp  ?F8c0@cMultiBlender@@QAEXUB4@@@Z  0075a8c0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 slices/s0075a550/s0075a550.cpp  ?Fb410@cMultiBlender@@QAEXXZ  0075b410  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s0075a550/s0075a550.cpp  ?FUN_0075a980@@YAXPAXPAEHH@Z  0075a980  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s0075a550/s0075a550.cpp  ?FUN_0075ac40@@YIXPAUcMultiBlender@@@Z  0075ac40  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s0075a550/s0075a550.cpp  ?FUN_0075b4d0@@YIPAXPAUcMultiBlender@@@Z  0075b4d0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-

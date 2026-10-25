@@ -15,10 +15,10 @@ void* __cdecl App6750();                                                   // 0x
 void* __cdecl App6740();                                                   // 0x67dd40
 void* __cdecl App67dda0();                                                 // 0x67dda0
 void* __cdecl Sub67de70();                                                 // 0x67de70
-void  __cdecl InitPhysics(void* p, int v);                                 // 0x7c4dd0
-void* __cdecl NewPhys(void* p);                                            // 0x7c3f70
-void  __cdecl PhysFini(void* p);                                           // 0x7c3ba0
-void  __cdecl PhysDel(void* p);                                            // 0x7c4000
+void  __fastcall InitPhysics(void* self, int unused, int v);               // 0x7c4dd0
+void* __fastcall NewPhys(void* self, int unused);                          // 0x7c3f70
+void  __fastcall PhysFini(void* self, int unused);                         // 0x7c3ba0
+void  __fastcall PhysDel(void* self, int unused);                          // 0x7c4000
 void  __cdecl FUN_00761110(void* p);                                       // 0x761110
 void* __cdecl CreateRaster(int a, int b, int c, int d, int e);             // 0x761420
 void  __cdecl SetCubeMap(void* a, void* b, int c, int d, int e);          // 0x6e51b0
@@ -35,7 +35,12 @@ void  __cdecl FUN_7c40f0(void* p);                                         // 0x
 void  __cdecl QuatFromMatrix(void* out, void* m, float f);          // 0x472b80
 void  __cdecl Matrix3Assign(void* p, void* src);                           // 0x41cb40
 void  __cdecl Basis3Build(void* out, void* a, void* b);                    // 0x6b9440
-void  __cdecl CaptureCubeMap(void* a, void* b, void* c, void* d, int e, int f); // 0x6e4210
+void  __cdecl CaptureCubeMap(void* worlds, float* w, void* center, int size, float nearDist,
+                             float farDist, void* dir, int flags);          // 0x6e4210
+extern float g_f1630698;                                         // 0x01630698
+extern float g_f163069c;                                         // 0x0163069c
+extern float g_f16306a0;                                         // 0x016306a0
+extern float g_m16307d8;                                         // 0x016307d8
 extern char vtbl_13eb938[];
 extern char vtbl_13ec458[];
 extern char vtbl_140e254[];
@@ -45,47 +50,92 @@ extern char vtbl_140e268[];
 }
 
 // ---------------------------------------------------------------------------
-// @ 0x0076acd0  register a graphics-resource message listener
-// ---------------------------------------------------------------------------
-struct CAlloc {
-    char pad[0x64];
-    void* m64;
+struct Vec3 { float x, y, z; };
+struct Matrix33 { void Assign(const void* src); };   // 0x0041cb40
+struct cSPTransform {
+    unsigned short mFlags;              // +0x00
+    unsigned short mModificationCount;  // +0x02
+    Vec3 mTranslation;                  // +0x04
+    float mScale;                       // +0x10
+    float mRotation[9];                 // +0x14
 };
-bool __fastcall RegisterListener(void* self, int, int unused) {
-    (void)unused;
-    CAlloc* s = (CAlloc*)self;
-    void* ms = MessageServer();
-    if (ms) {
-        int tags[11] = {0x1c91267, 0x3ea7e1b, 0x1c7f3db, 0x1c7f90a, 0x1c7fd85,
-                        0x202ce02, 0x1fb2458, 0x1c91276, 0x1c9127b, 0, 0};
-        for (int i = 0; i < 9; i++) {
-            void* p = self ? (char*)self + 8 : 0;
-            ((void(__thiscall**)(void*, void*, int))*(void***)ms)[8](ms, p, tags[i]);
+
+// SP::cRTTCapture - the cube-map capture object (0x174 bytes of state).
+struct RTTCapture {
+    void* mVt0;              // +0x00
+    void* mVt1;              // +0x04
+    void* mListenerBase;     // +0x08 base address handed to the message server
+    void* mRes0c;            // +0x0c refcounted resource
+    void* mRes10;            // +0x10 refcounted resource
+    void* mPhysA[6];         // +0x14 six physics worlds (mode 0)
+    void* mPhysB[6];         // +0x2c six physics worlds (mode 1)
+    float mBasis[3];         // +0x44
+    int   mFaceSize;         // +0x50 face dimension
+    unsigned char m54;       // +0x54
+    int   m58;               // +0x58
+    unsigned char m5c;       // +0x5c
+    unsigned char m5d;       // +0x5d
+    void* m60;               // +0x60
+    void* mPhysMain;         // +0x64 main physics world
+    int   m68;               // +0x68
+    void* mRenderTarget;     // +0x6c
+    void* mRenderCtx;        // +0x70
+    unsigned char pad74[0x9c - 0x74];
+    void* mRes9c;            // +0x9c refcounted resource
+};
+
+// Refcounted pointer swap used by the viewer constructor.
+static void SwapRefOwner(void** slot, void* value)
+{
+    void* old = *slot;
+    if (value != old) {
+        if (value) {                                                        // AddRef (vtable slot 0)
+            void* vt = *(void**)value;
+            ((void(__cdecl*)(void))*(void**)vt)();
+        }
+        *slot = value;
+        if (old) {                                                          // Release (vtable slot 1)
+            void* vt = *(void**)old;
+            ((void(__cdecl*)(void))*((void**)((char*)vt + 4)))();
         }
     }
+}
+
+// @ 0x0076acd0  register a graphics-resource message listener
+// ---------------------------------------------------------------------------
+bool __fastcall RegisterListener(RTTCapture* self, int unused) {
+    (void)unused;
+    void* ms = MessageServer();
+    if (ms) {
+        static const int tags[9] = {0x1c91267, 0x3ea7e1b, 0x1c7f3db, 0x1c7f90a, 0x1c7fd85,
+                                    0x202ce02, 0x1fb2458, 0x1c91276, 0x1c9127b};
+        void* base = self ? &self->mListenerBase : 0;
+        for (int i = 0; i < 9; i++)
+            ((void(__thiscall**)(void*, void*, int))*(void***)ms)[8](ms, base, tags[i]);
+    }
     void* a = Alloc6(0x174, "Graphics", 0, 0, 0, 0);
-    void* obj = a ? NewPhys(a) : 0;
-    s->m64 = obj;
-    InitPhysics(obj, 0);
+    void* obj = a ? NewPhys(a, 0) : 0;
+    self->mPhysMain = obj;
+    InitPhysics(obj, 0, 0);
     for (int i = 0; i < 6; i++) {
         void* q = Alloc6(0x174, "Graphics", 0, 0, 0, 0);
-        void* o = q ? NewPhys(q) : 0;
-        *(void**)((char*)self + 0x14 + i * 4) = o;
-        InitPhysics(o, 0);
-        FUN_7c53d0(o, 1.0f);
+        void* o = q ? NewPhys(q, 0) : 0;
+        self->mPhysA[i] = o;
+        InitPhysics(o, 0, 0);
+        FUN_7c53d0(o, 90.0f);
     }
     for (int i = 0; i < 6; i++) {
         void* q = Alloc6(0x174, "Graphics", 0, 0, 0, 0);
-        void* o = q ? NewPhys(q) : 0;
-        *(void**)((char*)self + 0x2c + i * 4) = o;
-        InitPhysics(o, 1);
-        FUN_7c53d0(o, 1.0f);
-        FUN_7c4ba0(o, 1.0f);
+        void* o = q ? NewPhys(q, 0) : 0;
+        self->mPhysB[i] = o;
+        InitPhysics(o, 0, 1);
+        FUN_7c53d0(o, 90.0f);
+        FUN_7c4ba0(o, 2.0f);
     }
     void* app = App6750();
     ((void(__thiscall**)(void*))*(void***)app)[7](app);
-    *(void**)((char*)self + 0x6c) = App67dda0();
-    *(void**)((char*)self + 0x70) = App6740();
+    self->mRenderTarget = App67dda0();
+    self->mRenderCtx = App6740();
     return true;
 }
 
@@ -115,40 +165,39 @@ void DeleteDaf(Daf* p) { delete p; }
 // ===========================================================================
 // @ 0x0076b000  tear down a viewer's arrays and physics objects
 // ===========================================================================
-bool __fastcall TeardownViewer(void* self, int, int unused) {
+static void FreePhysWorld(void*& slot)
+{
+    if (slot == 0)
+        return;
+    PhysFini(slot, 0);
+    void* p = slot;
+    if (p) {
+        PhysDel(p, 0);
+        Dealloc(p);
+    }
+}
+
+bool __fastcall TeardownViewer(RTTCapture* self, int unused) {
     (void)unused;
     void* ms = MessageServer();
     if (ms) {
-        int tags[9] = {0x1c91267, 0x3ea7e1b, 0x1c7f3db, 0x1c7f90a, 0x1c7fd85,
-                       0x202ce02, 0x1fb2458, 0x1c91276, 0x1c9127b};
-        for (int i = 0; i < 9; i++) {
-            void* p = self ? (char*)self + 8 : 0;
-            ((void(__thiscall**)(void*, int, void*, int))*(void***)ms)[11](ms, (int)p, p, tags[i]);
-        }
+        static const int tags[9] = {0x1c91267, 0x3ea7e1b, 0x1c7f3db, 0x1c7f90a, 0x1c7fd85,
+                                    0x202ce02, 0x1fb2458, 0x1c91276, 0x1c9127b};
+        void* base = self ? &self->mListenerBase : 0;
+        for (int i = 0; i < 9; i++)
+            ((void(__thiscall**)(void*, void*, int, int))*(void***)ms)[11](ms, base, tags[i], -9999);
     }
-    if (*(void**)((char*)self + 0x64)) {
-        PhysFini(*(void**)((char*)self + 0x64));
-        void* p = *(void**)((char*)self + 0x64);
-        if (p) { PhysDel(p); Dealloc(p); }
-    }
+    FreePhysWorld(self->mPhysMain);
     for (int i = 0; i < 6; i++)
-        if (*(void**)((char*)self + 0x14 + i * 4)) {
-            PhysFini(*(void**)((char*)self + 0x14 + i * 4));
-            void* p = *(void**)((char*)self + 0x14 + i * 4);
-            if (p) { PhysDel(p); Dealloc(p); }
-        }
+        FreePhysWorld(self->mPhysA[i]);
     for (int i = 0; i < 6; i++)
-        if (*(void**)((char*)self + 0x2c + i * 4)) {
-            PhysFini(*(void**)((char*)self + 0x2c + i * 4));
-            void* p = *(void**)((char*)self + 0x2c + i * 4);
-            if (p) { PhysDel(p); Dealloc(p); }
-        }
-    int* r = *(int**)((char*)self + 0x9c);
+        FreePhysWorld(self->mPhysB[i]);
+    int* r = (int*)self->mRes9c;
     if (r) {
-        ((void(__thiscall**)(int*, int))*(void***)r)[3](r, 6);
-        r = *(int**)((char*)self + 0x9c);
+        ((void(__thiscall**)(int*, int))*(void***)r)[3](r, 0);
+        r = (int*)self->mRes9c;
         if (r) {
-            *(void**)((char*)self + 0x9c) = 0;
+            self->mRes9c = 0;
             ((void(__thiscall**)(int*))*(void***)r)[1](r);
         }
     }
@@ -252,23 +301,52 @@ void DeleteD350(D350* p) { delete p; }
 // ===========================================================================
 // @ 0x0076b460  ctor with a 0x2c-byte argument block + refcounted member set
 // ===========================================================================
-void __fastcall Ctor76b460(void* self, int, int a4, int a5, int a6, int a7, int a8,
-                           int a9, int a10, int a11, int a12) {
-    char* s = (char*)self;
+// Editor resource viewer (the class whose ctor/dtor/render helpers follow).
+struct Viewer76 {
+    void* mVt0;                 // +0x00
+    void* mVt1;                 // +0x04
+    void* m8;                   // +0x08
+    void* mRes0c;               // +0x0c refcounted resource
+    void* mRes10;               // +0x10 refcounted resource
+    void* mRes14;               // +0x14 refcounted resource
+    void* mPhys18;              // +0x18 physics world
+    int   m1c;                  // +0x1c
+    int   m20;                  // +0x20
+    unsigned char m24;          // +0x24
+    int   m28;                  // +0x28
+    int   m2c;                  // +0x2c
+    int   m30;                  // +0x30
+    char  mName[0x138 - 0x34];  // +0x34 resource name
+    unsigned char mHasName;     // +0x138
+    unsigned char m139;         // +0x139
+    void* mJob13c;              // +0x13c refcounted render job
+};
+
+void __fastcall Ctor76b460(Viewer76* self, int unused, int* block, void* res0c, void* res10,
+                           void* res14, int a6, int a7, const char* name, int a9,
+                           unsigned char a10, int a11, unsigned char a12) {
+    (void)unused;
     void* q = Alloc6(0x174, "Graphics", 0, 0, 0, 0);
-    void* o = q ? NewPhys(q) : 0;
-    *(void**)(s + 0x18) = o;
-    InitPhysics(o, 0);
-    *(int*)(s + 0x1c) = a4;
-    *(int*)(s + 0x20) = a5;
-    // refcounted pointer swaps (approximated)
-    *(int*)(s + 0x28) = a6;
-    *(int*)(s + 0x2c) = a7;
-    *(int*)(s + 0x30) = a8;
-    *(char*)(s + 0x24) = (char)a9;
-    *(char*)(s + 0x138) = (char)(int)(size_t)(void*)a10;
-    *(char*)(s + 0x139) = (char)a11;
-    (void)a12;
+    void* o = q ? NewPhys(q, 0) : 0;
+    self->mPhys18 = o;
+    InitPhysics(o, 0, 0);
+    self->m1c = block[0];
+    self->m20 = block[1];
+    SwapRefOwner(&self->mRes0c, res0c);
+    SwapRefOwner(&self->mRes10, res10);
+    SwapRefOwner(&self->mRes14, res14);
+    self->m24 = a10;
+    self->m30 = a7;
+    self->m28 = a11;
+    self->m2c = a6;
+    self->mHasName = a9 != 0;
+    self->m139 = a12;
+    if (name) {
+        char* d = self->mName;
+        do { *d++ = *name; } while (*name++);
+    } else {
+        self->mName[0] = 0;
+    }
 }
 
 // ===========================================================================
@@ -422,13 +500,47 @@ E28* __cdecl CopyRange28(E28* first, E28* last, E28* dest) {
 // ===========================================================================
 // @ 0x0076ba30  capture a cube map from a viewer basis
 // ===========================================================================
-void __fastcall CaptureCubeMap76ba(void* self, int, void* a1, void* a2, void* a3,
-                                   int a4, char a5, int a6, void* a7, char a8,
-                                   void* a9, int a10) {
-    char* s = (char*)self;
-    float zero[3] = {0, 0, 0};
-    *(int*)(s + 0x44) = *(int*)&zero[0];
-    *(int*)(s + 0x48) = *(int*)&zero[1];
-    *(int*)(s + 0x4c) = *(int*)&zero[2];
-    (void)a1; (void)a2; (void)a3; (void)a4; (void)a5; (void)a6; (void)a7; (void)a8; (void)a9; (void)a10;
+void __fastcall CaptureCubeMap76ba(RTTCapture* self, int unused, int faceSize, Vec3* center,
+                                   int a4, int a5, char orient, char a7, unsigned char a8,
+                                   int a9, unsigned char a10, Vec3* dir, int a12) {
+    (void)unused; (void)a4; (void)a5;
+    self->mBasis[0] = 0.0f;
+    self->mBasis[1] = 0.0f;
+    self->mBasis[2] = 0.0f;
+    Vec3 from = {0.0f, 0.0f, 0.0f};
+    if (center)
+        from = *center;
+    if (dir) {
+        self->mBasis[0] = dir->x;
+        self->mBasis[1] = dir->y;
+        self->mBasis[2] = dir->z;
+    }
+    float w = 1.0f;
+    if (orient) {
+        cSPTransform xf;                       // orientation basis for the capture
+        xf.mFlags = 0;
+        xf.mModificationCount = 0;
+        xf.mTranslation.x = g_f1630698;
+        xf.mTranslation.y = g_f163069c;
+        xf.mTranslation.z = g_f16306a0;
+        xf.mScale = 1.0f;
+        ((Matrix33*)xf.mRotation)->Assign(&g_m16307d8);
+        int* app = (int*)App6740();
+        int* ctx = (int*)(*(int(__thiscall**)(int*))(*app + 0x50))(app);
+        (*(void(__thiscall**)(int*, cSPTransform*))(*ctx + 0x1c))(ctx, &xf);
+        FUN_7c40f0(&xf);
+        from = xf.mTranslation;
+        float basis[16];                        // 4x4 basis the quaternion is read from
+        Basis3Build(basis, &xf, 0);
+        float* quat = (float*)QuatFromBasis(&basis[8], basis, 0.0f);
+        w = quat[3];
+    }
+    self->m58 = a9;
+    self->m54 = a8;
+    self->m60 = (void*)a5;
+    self->m5d = a7;
+    self->mFaceSize = faceSize;
+    self->m5c = a10;
+    ((void(__thiscall**)(void*, int))*(void***)self->mRenderCtx)[0x44 / 4](self->mRenderCtx, 1);
+    CaptureCubeMap(self->mPhysA, &w, &from, faceSize, 0.1f, 10000.0f, dir, a12);
 }

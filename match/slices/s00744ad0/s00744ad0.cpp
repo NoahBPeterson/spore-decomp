@@ -10,6 +10,7 @@ void  __cdecl EA_Free(void*);       // 0x00f47380
 void* __cdecl EA_New2(unsigned, const char*, int, int, const char*, int); // 0x00f473a0
 void  __cdecl MemMove(void*, const void*, unsigned); // 0x13cc480 msvcr90!memmove
 int   __cdecl VecDoInsertValue();   // 0x011e0744
+void* __cdecl MemCopy(void*, const void*, unsigned); // 0x011e0744 memcpy
 void  __cdecl PropertyGetFloatArray(void*, const char*, void*, void*); // 0x006a08b0
 bool  __stdcall Check434b0(void*);   // 0x007434b0
 bool  __cdecl RuntimeModelBuilder_GetRuntimeMeshes(cModelInstance*, int, int, int, int); // 0x007763b0
@@ -616,72 +617,120 @@ void DequeInit(int* self, unsigned count) {
 }
 
 // 0x007457a0
-void DequeInsert(int* self, unsigned count, int flag) {
-    int* begin = (int*)self[5];
-    int n = (self[9] - (int)begin) >> 2;
-    int i6 = n + 1;
-    unsigned total = i6 + count;
-    unsigned cap = self[1];
-    if (total * 2 < cap) {
-        int* dst = (int*)(self[0] + ((cap - total >> 1) + (flag ? count : 0)) * 4);
-        if (dst < begin)
-            VecDoInsertValue();
-        else
-            MemMove(dst + (i6 - (((int)(n * 4 + 4)) >> 2)), begin, n * 4 + 4);
+// The deque of 0xe0-byte chunks: mpBlock holds mCapacity chunk slots, of which [mpFirst, mpLast] are live.
+struct ChunkQueue {
+    int*     mpBlock;                  // +0x00  chunk-slot block
+    uint32_t mCapacity;                // +0x04  slots in mpBlock
+    char     pad08[4];                 // +0x08
+    int*     mpFrontBegin;             // +0x0c  first element of the front chunk
+    int*     mpFrontEnd;               // +0x10
+    char*    mpFirst;                  // +0x14  slot of the front chunk
+    char     pad18[4];                 // +0x18
+    int*     mpBackBegin;              // +0x1c
+    int*     mpBackEnd;                // +0x20
+    char*    mpLast;                   // +0x24  slot of the back chunk
+    char     pad28[0x28 - 0x28];
+
+    void DequeInsert(uint32_t count, int flag);
+};
+
+// @ 0x007457a0
+void ChunkQueue::DequeInsert(uint32_t count, int flag)
+{
+    int*  begin = (int*)mpFirst;
+    int   bytes = (int)mpLast - (int)begin;
+    int   i6    = (bytes >> 2) + 1;
+    uint32_t total = i6 + count;
+    uint32_t cap = mCapacity;
+    int*  dst;
+
+    if (cap <= total * 2) {
+        uint32_t big    = cap >= count ? cap : count;
+        uint32_t newcap = cap + 2 + big;
+        int* p = (int*)EA_New2(newcap * 4, "Graphics", 0, 0,
+                               "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h", 0xd1);
+        dst = (int*)((char*)p + ((int)((begin - mpBlock) + (flag ? count : 0))) * 4);
+        if (mpBlock)
+            MemCopy(dst, begin, (int)mpLast - (int)begin + 4);
+        if (mpBlock)
+            EA_Free(mpBlock);
+        mpBlock = p;
+        mCapacity = newcap;
     } else {
-        int newcap = i6 + 2 + cap;
-        int* p = (int*)EA_New(newcap * 4, "Graphics", 0, 0,
-                              "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h", 0xd1);
-        int* dst = (int*)((char*)p + (((int)begin - self[0]) / 4 + (flag ? count : 0)) * 4);
-        if (self[0])
-            VecDoInsertValue();
-        if (self[0])
-            EA_Free((void*)self[0]);
-        self[0] = (int)p;
-        self[1] = newcap;
-        self[5] = (int)dst;
-        int v = *dst;
-        self[3] = v;
-        self[4] = v + 0xe0;
-        self[9] = (int)(dst + n);
-        v = dst[n];
-        self[7] = v;
-        self[8] = v + 0xe0;
+        dst = (int*)(mpBlock + (((cap - total) >> 1) + (flag ? count : 0)));
+        if (dst < begin)
+            MemCopy(dst, begin, bytes + 4);
+        else
+            MemMove(dst + (i6 - ((bytes + 4) >> 2)), begin, bytes + 4);
     }
+
+    mpFirst = (char*)dst;
+    int v = *dst;
+    mpFrontBegin = (int*)v;
+    mpFrontEnd = (int*)(v + 0xe0);
+    mpLast = (char*)(dst + i6 - 1);
+    v = dst[i6 - 1];
+    mpBackBegin = (int*)v;
+    mpBackEnd = (int*)(v + 0xe0);
 }
 
 // 0x00745340
 struct RCObj { virtual int AddRef(); virtual int Release(); };
+
+// The two ref-counted handles released by the world's teardown.
+struct cMWRefHandles {
+    char   pad00[0x64];
+    RCObj* mpModelInstance;           // +0x64
+    char   pad68[0x90 - 0x68];
+    RCObj* mpAnimations;              // +0x90
+};
+
+// @ 0x00745340
 void cModelWorld::ReleaseRefs() {
-    RCObj* a = *(RCObj**)((char*)this + 0x90);
-    if (a)
-        a->Release();
-    RCObj* b = *(RCObj**)((char*)this + 0x64);
-    if (b)
-        b->Release();
+    cMWRefHandles* h = (cMWRefHandles*)this;
+    if (h->mpAnimations)
+        h->mpAnimations->Release();
+    if (h->mpModelInstance)
+        h->mpModelInstance->Release();
 }
 
 // 0x007453d0
-void* __fastcall GetThing(void*);   // 0x00bddd00
-bool __cdecl FactoryNew(void** out, void* arg2, unsigned flags) {
-    cModelInstance* inst = (cModelInstance*)EA_New(0xa0, "Graphics/ModelManager/Animations", 0, 0, 0, 0);
+struct IGameModelProvider {
+    void* GetResourceManager();                                  // +? (0x00bddd00)
+};
+
+struct IResourceManager {
+    virtual void r00(); virtual void r04(); virtual void r08();
+    virtual void* Get(uint32_t id);                              // slot 3
+};
+
+// @ 0x007453d0
+void __cdecl FactoryNew(void** out, IGameModelProvider* provider, uint32_t flags) {
+    // The shipped code allocates through the placement form new("Graphics/ModelManager/Animations") and then
+    // runs the ctor (0x007400f0, which returns `this`); the same two steps here, spelled out.
+    cModelInstance* inst = (cModelInstance*)EA_New2(0xa0, "Graphics/ModelManager/Animations", 0, 0, 0, 0);
     if (inst)
         inst = inst->Init();
     if (inst)
         *(int*)((char*)inst + 4) += 1;
-    inst->SetFlags(flags & 1, (flags >> 1) & 1);
-    void* r1 = 0;
-    void* h = GetThing(arg2);
-    if (h) r1 = (void*)((int (__thiscall*)(void*, int))((*(void***)h)[3]))(h, 0x2f4e681b);
-    void* r2 = 0;
-    void* h2 = GetThing(arg2);
-    if (h2) r2 = (void*)((int (__thiscall*)(void*, int))((*(void***)h2)[3]))(h2, 0xe6bce5);
-    if (r1)
+    inst->SetFlags((uint8_t)flags & 1, (uint8_t)(flags >> 1) & 1);
+
+    IResourceManager* mgr = (IResourceManager*)provider->GetResourceManager();
+    void* r1 = mgr ? mgr->Get(0x2f4e681b) : 0;
+    IResourceManager* mgr2 = (IResourceManager*)provider->GetResourceManager();
+    void* r2 = mgr2 ? mgr2->Get(0xe6bce5) : 0;
+
+    if (r1) {
         inst->Method742cf0(r1);
-    else if (r2)
+        *out = inst;
+        return;
+    }
+    if (r2) {
         inst->ConstructFromGameModelResource(r2);
+        *out = inst;
+        return;
+    }
     *out = inst;
-    return true;
 }
 
 // 0x007459c0

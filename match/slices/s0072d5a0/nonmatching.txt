@@ -1,2 +1,3 @@
 # va  diff-bytes  reason
 0072d6a0  1842  MergeIntoModels complete (vertex-element table, per-group sections/ranges, material list, output push; all direct calls in order); frame 0xc0 vs 0xcc, loop-pointer and VBView temp scheduling differ
+0072d5a0  229  complete refcounted KD-tree wrapper (zero-init GmePtrVec, push_back of one GmePtr, MakeKDTree, then ~GmePtrVec); all calls, refcount ops and the temp's anonymous-temporary lifetime match; the original's 16-byte fs:[0] C++ EH prologue (push -1 / push 0x1210f90) is absent because under these flags MSVC 2008 only emits it when the body itself contains a catch (see work/match/scratch_s0072d5a0_papercut.md) [equiv: PASS 237 valid, 78% cov]

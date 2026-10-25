@@ -23,11 +23,19 @@ static inline void RCRelease(RCObj* p) {
     }
 }
 
+// one refcounted vector slot (this == &slot[0])
+struct RCSlot {
+    RCObj* p;
+    void Assign(RCObj** src);       // 0x006df280
+};
+
 // vector of intrusive pointers {begin,end,cap}
 struct RCArray {
     RCObj** mBegin;
     RCObj** mEnd;
     RCObj** mCap;
+    void Resize(unsigned n);                  // 0x0041ee90
+    void Insert(RCObj** pos, RCObj** src);    // 0x00424430
 };
 
 // The big job/model object.
@@ -55,18 +63,50 @@ struct C0755 {
 
 // small 0x58 value produced by the two paths of FUN_007571a0.
 struct C0058 {
-    void* vptr;      // +0
-    long refcount;   // +4
-    char pad[0x58 - 8];
+    void* vptr;      // +0x00
+    long refcount;   // +0x04
+    void* p08;       // +0x08
+    void* p0c;       // +0x0c
+    void* p10;       // +0x10
+    void* p14;       // +0x14 (left untouched)
+    void* p18;       // +0x18 (left untouched)
+    void* p1c;       // +0x1c
+    void* p20;       // +0x20
+    void* p24;       // +0x24
+    void* p28;       // +0x28 (left untouched)
+    void* p2c;       // +0x2c (left untouched)
+    void* p30;       // +0x30
+    void* p34;       // +0x34
+    void* p38;       // +0x38
+    void* p3c;       // +0x3c (left untouched)
+    void* p40;       // +0x40 (left untouched)
+    void* p44;       // +0x44
+    void* p48;       // +0x48
+    void* p4c;       // +0x4c
+    char pad50[0x58 - 0x50];
+};
+
+// owning reference used by both factory paths (refcount at +4, dtor through vtable[0]).
+struct AutoRefC {
+    RCObj* p;
+    explicit AutoRefC(void* q) : p((RCObj*)q) {
+        if (p) _InterlockedIncrement(&p->refcount);
+    }
+    ~AutoRefC() {
+        if (p && _InterlockedDecrement(&p->refcount) == 0) {
+            _InterlockedExchange(&p->refcount, 1);
+            ((void (__thiscall*)(RCObj*, int))(*(void***)p)[0])(p, 1);
+        }
+    }
 };
 
 extern "C" void  __cdecl FUN_007391f0(void* vec, void* p);        // push into vector
-extern "C" void  __cdecl FUN_0041ee90(int n);                      // vector resize
-extern "C" void  __cdecl FUN_006df280(void* p);                     // release holder
 extern "C" void  __cdecl FUN_007361e0(void* p);                     // front hook A
 extern "C" void  __cdecl FUN_00734970(void* p);                     // front hook B
 extern "C" void  __cdecl FUN_00756fc0(void* a, void* b);            // vector reset
-extern "C" void* __cdecl FUN_0040d160(void);                        // 0x58 factory
+extern "C" void* __fastcall FUN_0040d160(void* p);                  // 0x58 factory ctor
+extern "C" void* __cdecl FUN_00f473a0(unsigned size, const char* name,
+                                      int a, int b, int c, int d);  // operator new
 extern "C" void  __cdecl FUN_0041ebe0(void* p);                     // refarray assign
 extern "C" void  __cdecl FUN_0041f320(void* p);                     // refarray assign 2
 extern "C" void  __cdecl FUN_007552e0(void* p);                     // refarray assign 3
@@ -90,6 +130,7 @@ extern "C" void  __cdecl eh_vec_dtor(void* p, unsigned sz, unsigned n, void* dto
 // @ 0x00757d10
 // ---------------------------------------------------------------------------
 extern int g_vtbl_13ef094[];
+extern int g_vtbl_13eb8d0[];
 void __fastcall FUN_00757d10(int* self) {
     self[1] = (int)g_vtbl_13ef094;
 }
@@ -239,31 +280,52 @@ int __cdecl FUN_00757d20(ArenaHolder* h) {
 // ---------------------------------------------------------------------------
 // @ 0x007571a0
 // ---------------------------------------------------------------------------
-C0058* __cdecl MakeC0058(int kind, void* src);
 bool C0755::EnsureFront(void* arg) {
-    C0755* self = this;
-    RCArray* v = &self->mVec;
+    (void)arg;
+    RCArray* v = &this->mVec;
     FUN_00756fc0(v, v);
-    unsigned count = (unsigned)(v->mEnd - v->mBegin);
     bool empty = (v->mBegin == v->mEnd);
+    unsigned count = (unsigned)(v->mEnd - v->mBegin);
     if (count > 1) {
-        C0058* p = MakeC0058(1, self);
-        FUN_007391f0(v, p);
-        FUN_0041ee90(1);
-        FUN_006df280(&p);
-    } else if (!empty) {
-        C0058* p = MakeC0058(2, arg);
-        if (v->mEnd < v->mCap) {
-            *v->mEnd = (RCObj*)p;
-            v->mEnd = v->mEnd + 1;
-            if (p) _InterlockedIncrement(&p->refcount);
-        } else {
-            FUN_00424430(v->mEnd, &p);
+        C0058* p = (C0058*)FUN_00f473a0(0x58, "Graphics", 0, 0, 0, 0);
+        if (p) {
+            p->vptr = g_vtbl_13ef094;
+            _InterlockedExchange(&p->refcount, 0);
+            p->vptr = g_vtbl_13eb8d0;
+            p->p08 = 0;
+            p->p0c = 0;
+            p->p10 = 0;
+            p->p1c = 0;
+            p->p20 = 0;
+            p->p24 = 0;
+            p->p30 = 0;
+            p->p34 = 0;
+            p->p38 = 0;
+            p->p44 = 0;
+            p->p48 = 0;
+            p->p4c = 0;
         }
-        RCRelease((RCObj*)p);
+        AutoRefC hold(p);
+        FUN_007391f0(v, p);
+        v->Resize(1);
+        ((RCSlot*)v->mBegin)->Assign(&hold.p);
+    } else if (empty) {
+        C0058* p = (C0058*)FUN_00f473a0(0x58, "Graphics", 0, 0, 0, 0);
+        if (p) p = (C0058*)FUN_0040d160(p);
+        AutoRefC hold(p);
+        if (v->mEnd < v->mCap) {
+            RCObj** slot = v->mEnd;
+            v->mEnd = slot + 1;
+            if (slot) {
+                *slot = (RCObj*)p;
+                if (p) _InterlockedIncrement(&p->refcount);
+            }
+        } else {
+            v->Insert(v->mEnd, &hold.p);
+        }
     }
     FUN_007361e0(*(void**)v->mBegin);
-    if (!self->mbC5) FUN_00734970(*(void**)v->mBegin);
+    if (!this->mbC5) FUN_00734970(*(void**)v->mBegin);
     return true;
 }
 

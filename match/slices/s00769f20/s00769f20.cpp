@@ -34,29 +34,148 @@ struct M69d80 { char Meth(int a, int b, int c); };
 struct C69f { char pad0[0xfc]; int mFC; };
 struct C69a9 { char pad0[0x10]; void* m10; char pad14[4]; int m18; char pad1c[0x18]; };
 
+// ---------------------------------------------------------------------------
+// shared SP::cJob / job-manager protocol used by the async chains below.
+// (Declarations only: every call binds to its retail address through the
+//  matching-sector symbol table.)
+// ---------------------------------------------------------------------------
+struct cJob;
+struct JobRefL;
+
+struct cJob {
+    void* mpCallback;              // +0x00
+    void* mpCallbackData;          // +0x04
+    char pad08[0x10];
+    uint32_t mFlags;               // +0x18
+    void SetCallback(void* f, void* d) { mpCallback = f; mpCallbackData = d; }
+    int  AddRef();                 // 0x0068f950
+    int  Release();                // 0x00690120
+    void SetExtra(void* owner);    // 0x0068f9b0
+    void Submit();                 // 0x006909b0
+    void AddDependency(cJob* other);       // 0x00691380
+    void AddWeakDependency(cJob* other);   // 0x006913c0
+};
+
+struct JobRefL {
+    cJob* p;
+    JobRefL() : p(0) {}
+    ~JobRefL() { Reset(); }
+    void Reset() { if (p) { cJob* t = p; p = 0; t->Release(); } }
+};
+
+struct IJobMgr {
+    virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3();
+    virtual bool CreateJob(JobRefL* out);     // slot 4 (+0x10)
+    virtual void v5(); virtual void v6(); virtual void v7();
+    virtual void Lock();                      // slot 8 (+0x20)
+    virtual void Unlock();                    // slot 9 (+0x24)
+};
+
+struct JobLockTable {
+    bool TryLockJobs(JobRefL* a, JobRefL* b); // 0x0068f350
+};
+
+struct RecInfo { uint32_t f0, f4; };
+struct IConvCtx {
+    virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3();
+    virtual RecInfo* Info();          // slot 4 (+0x10)
+    virtual void v5(); virtual void v6(); virtual void v7();
+    virtual void Begin();             // slot 8 (+0x20)
+    virtual void End();               // slot 9 (+0x24)
+};
+
+struct IRefObj { virtual void AddRef(); virtual void Release(); };
+
+// subset of SP::cGraphicsResourceFactory touched by this slice
+struct Grf {
+    char pad0[0xc];
+    void* pC;                      // +0x0c
+    IConvCtx* p10;                 // +0x10
+    char pad14[4];
+    uint32_t type18;               // +0x18
+    char pad1c[0xe0];
+    uint32_t stateFC;              // +0xfc
+};
+
+struct ConvObj { void* Init(void* res, void* a, void* b, void* c, void* d); }; // 0x00768370
+struct AsyncResMgr { bool AllocateRequest(void* type, IRefObj** req, JobRefL* job); }; // 0x006af150
+
+// retail-shaped entry points for the async request starters (ecx = self,
+// single stack argument, callee pops it).
+char __fastcall StartReqA(void* self, int, void** out);   // 0x007652c0
+char __fastcall StartReqB(void* self, int, void** out);   // 0x00765b30
+char __fastcall StartReqC(void* self, int, void** out);   // 0x00765d30
+char __fastcall CreateByType(void* self, int, void** out, void* p5, uint32_t type); // 0x007666a0
+
+static __forceinline IJobMgr* GetJobManager() { return (IJobMgr*)Node8F4d0(); }
+
+static __forceinline bool CreateJobInto(IJobMgr* jm, JobRefL& r) {
+    r.Reset();
+    return jm->CreateJob(&r);
+}
+
+static __forceinline JobLockTable* LockTable(void* self) {
+    return *(JobLockTable**)((char*)*(void**)((char*)self + 0xc) + 8);
+}
+
 // ===========================================================================
 // @ 0x00769f20  async job chain setup (3 sub-jobs + a callback job)
 // ===========================================================================
-bool __fastcall SetupJobChain(void* self, int, int unused) {
-    (void)unused;
-    C69f* s = (C69f*)self;
-    s->mFC = 3;
-    void* a = Node8F4d0();
-    ((void(__thiscall**)(void*))*(void***)a)[8](a);
-    void* b = Node8F4d0();
-    if (b && !((bool(__thiscall**)(void*, int*))*(void***)b)[4](b, (int*)&b))
+bool __fastcall SetupJobChain(void* self, int, void** out) {
+    Grf* s = (Grf*)self;
+    s->stateFC = 3;
+    IJobMgr* jm = GetJobManager();
+    jm->Lock();
+
+    JobRefL j1, j2, j3, j4;
+    if (!CreateJobInto(GetJobManager(), j1)) { jm->Unlock(); return false; }
+    if (!CreateJobInto(GetJobManager(), j2)) { j1.Reset(); jm->Unlock(); return false; }
+    if (!CreateJobInto(GetJobManager(), j3)) { j2.Reset(); j1.Reset(); jm->Unlock(); return false; }
+    if (!CreateJobInto(GetJobManager(), j4)) { j3.Reset(); j2.Reset(); j1.Reset(); jm->Unlock(); return false; }
+
+    JobRefL l1, l2;
+    if (!LockTable(self)->TryLockJobs(&l1, &l2)) {
+        l2.Reset(); l1.Reset();
+        j4.Reset(); j3.Reset(); j2.Reset(); j1.Reset();
+        jm->Unlock();
         return false;
-    void* c = Node8F4d0();
-    if (c && !((bool(__thiscall**)(void*, int*))*(void***)c)[4](c, (int*)&c))
-        return false;
-    void* d = Node8F4d0();
-    if (d && !((bool(__thiscall**)(void*, int*))*(void***)d)[4](d, (int*)&d))
-        return false;
-    void* e = Node8F4d0();
-    if (e && !((bool(__thiscall**)(void*, int*))*(void***)e)[4](e, (int*)&e))
-        return false;
-    FUN_0068f9b0(self);
-    FUN_006909b0(self);
+    }
+
+    j1.p->SetCallback((void*)0x767330, self);
+    j1.p->mFlags = 4;
+    j1.p->SetExtra(self);
+    j1.p->Submit();
+
+    j2.p->SetCallback((void*)0x767340, self);
+    j2.p->mFlags = 0x80000000;
+    j2.p->SetExtra(self);
+    j2.p->AddDependency(j1.p);
+    j2.p->Submit();
+
+    l1.p->AddDependency(j2.p);
+    l1.p->Submit();
+
+    j3.p->SetCallback((void*)0x765190, self);
+    j3.p->mFlags = 4;
+    j3.p->SetExtra(self);
+    j3.p->AddDependency(l1.p);
+    j3.p->Submit();
+
+    j4.p->SetCallback((void*)0x769d70, self);
+    j4.p->mFlags = 1;
+    j4.p->SetExtra(self);
+    j4.p->AddDependency(j3.p);
+    j4.p->Submit();
+
+    l2.p->AddDependency(j4.p);
+    l2.p->Submit();
+
+    *out = j4.p;
+    j4.p = 0;
+
+    l2.Reset(); l1.Reset();
+    j4.Reset(); j3.Reset(); j2.Reset(); j1.Reset();
+    jm->Unlock();
     return true;
 }
 
@@ -125,73 +244,187 @@ bool __fastcall CreateRequestJob(void* self, int, void* out) {
 // ===========================================================================
 // @ 0x0076a4d0  try-lock two jobs and chain a 4-step job
 // ===========================================================================
-bool __fastcall TryLockChain(void* self, int, int unused) {
-    (void)unused;
-    void* a = Node8F4d0();
-    ((void(__thiscall**)(void*))*(void***)a)[8](a);
-    void* b = Node8F4d0();
-    if (!((bool(__thiscall**)(void*, int*))*(void***)b)[4](b, (int*)&b))
+bool __fastcall TryLockChain(void* self, int, void** out) {
+    IJobMgr* jm = GetJobManager();
+    jm->Lock();
+
+    JobRefL j1, j2;
+    if (!CreateJobInto(GetJobManager(), j1)) { jm->Unlock(); return false; }
+    if (!CreateJobInto(GetJobManager(), j2)) { j1.Reset(); jm->Unlock(); return false; }
+
+    JobRefL a, b;
+    if (!LockTable(self)->TryLockJobs(&a, &b)) {
+        b.Reset(); a.Reset();
+        j2.Reset(); j1.Reset();
+        jm->Unlock();
         return false;
-    void* c = Node8F4d0();
-    if (!((bool(__thiscall**)(void*, int*))*(void***)c)[4](c, (int*)&c))
-        return false;
-    int x = 0, y = 0;
-    if (!FUN_0068f350(&x, &y))
-        return false;
-    FUN_0068f9b0(self);
+    }
+
+    a.p->Submit();
+
+    j1.p->SetCallback((void*)0x765190, self);
+    j1.p->mFlags = 4;
+    j1.p->SetExtra(self);
+    j1.p->AddDependency(a.p);
+    j1.p->Submit();
+
+    j2.p->SetCallback((void*)0x76a3f0, self);
+    j2.p->mFlags = 1;
+    j2.p->SetExtra(self);
+    j2.p->AddDependency(j1.p);
+    j2.p->Submit();
+
+    b.p->AddDependency(j2.p);
+    b.p->Submit();
+
+    *out = j2.p;
+    j2.p = 0;
+
+    b.Reset(); a.Reset();
+    j2.Reset(); j1.Reset();
+    jm->Unlock();
     return true;
 }
 
 // ===========================================================================
 // @ 0x0076a720  SP::cGraphicsResourceFactory::CanConvert
 // ===========================================================================
-bool __fastcall CanConvert(void* self, int, void* out) {
-    C69a9* s = (C69a9*)self;
-    void* a = Node8F4d0();
-    ((void(__thiscall**)(void*))*(void***)a)[8](a);
-    int holder = 0;
-    int type = s->m18;
-    char r;
-    if (type < 0x2f4e681c) {
-        if (type == 0x2f4e681b) r = FUN_00765b30v(self, &holder);
-        else if (type == 0xe6bce5) r = SetupJobChain(self, 0, 0);
-        else if (type == 0x1c135da) r = TryLockChain(self, 0, 0);
-        else r = CreateRequestJob(self, 0, &holder);
+bool __fastcall CanConvert(void* self, int, void** out) {
+    Grf* s = (Grf*)self;
+    IJobMgr* jm = GetJobManager();
+    jm->Lock();
+
+    JobRefL job;
+    uint32_t type = s->type18;
+    char ok;
+    if (type <= 0x2f4e681b) {
+        if (type == 0x2f4e681b)
+            ok = StartReqB(self, 0, (void**)&job.p);
+        else if (type == 0xe6bce5)
+            ok = SetupJobChain(self, 0, (void**)&job.p);
+        else if (type == 0x1c135da)
+            ok = TryLockChain(self, 0, (void**)&job.p);
+        else
+            ok = CreateRequestJob(self, 0, &job.p);
     } else if (type == 0x2f4e681c) {
-        void* p = (void*)((int(__thiscall**)(void*))*(void***)s->m10)[4](s->m10);
-        uint32_t sub = *(uint32_t*)((char*)p + 4);
-        if (sub < 0x2f7d0005) {
-            if (sub == 0x2f7d0004) r = FUN_007652c0v(self, &holder);
-            else if (sub == 0x2f4e681b) r = FUN_00765d30v(self, &holder);
-            else if (sub == 0x2f4e681c) r = ArmDecodeB(self, 0, 0);
-            else return false;
-        } else if (sub == 0x2f7d0007) r = FUN_007652c0v(self, &holder);
-        else return false;
+        RecInfo* info = s->p10->Info();
+        uint32_t sub = info->f4;
+        if (sub <= 0x2f7d0004) {
+            if (sub == 0x2f7d0004)
+                ok = StartReqA(self, 0, (void**)&job.p);
+            else if (sub == 0x2f4e681b)
+                ok = StartReqC(self, 0, (void**)&job.p);
+            else if (sub == 0x2f4e681c)
+                ok = ArmDecodeB(self, 0, (int)(size_t)&job.p);
+            else {
+                jm->Unlock();
+                return false;
+            }
+        } else if (sub == 0x2f7d0007) {
+            ok = StartReqA(self, 0, (void**)&job.p);
+        } else {
+            jm->Unlock();
+            return false;
+        }
     } else {
-        r = CreateRequestJob(self, 0, &holder);
+        ok = CreateRequestJob(self, 0, &job.p);
     }
-    if (!r)
+
+    if (!ok) {
+        job.Reset();
+        jm->Unlock();
         return false;
-    *(void**)out = (void*)holder;
+    }
+
+    JobRefL j2;
+    if (!CreateJobInto(GetJobManager(), j2)) {
+        j2.Reset();
+        job.Reset();
+        jm->Unlock();
+        return false;
+    }
+
+    j2.p->SetCallback((void*)0x765180, self);
+    j2.p->SetExtra(self);
+    j2.p->AddWeakDependency(job.p);
+
+    *out = j2.p;
+    j2.p = 0;
+
+    job.Reset();
+    jm->Unlock();
     return true;
 }
 
 // ===========================================================================
 // @ 0x0076a940  SP::cGraphicsResourceFactory::CreateConvertedResourceAsync
 // ===========================================================================
-bool __cdecl CreateConvertedResourceAsync(void* a, void* b, void* c, int* d, void* e) {
-    if (!FUN_0067de70())
+bool __cdecl CreateConvertedResourceAsync(void* out, void* a, void* b, IConvCtx* c, void* d) {
+    void* mgr = FUN_0067de70();
+    if (!mgr)
         return false;
-    void* res = 0;
-    int t = ((int(__thiscall**)(int*))*(void***)d)[4](d);
-    if (!FUN_007666a0v(&res, e, *(void**)((char*)t + 4)))
+
+    IRefObj* res = 0;
+    RecInfo* info = c->Info();
+    if (!CreateByType(a, 0, (void**)&res, d, info->f4)) {
+        if (res)
+            res->Release();
         return false;
-    void* job = Alloc6(0x338, "Graphics", 0, 0, 0, 0);
-    if (job)
-        job = FUN_00768370v(res, b, c, d, e);
-    if (job)
-        ((void(__thiscall**)(void*))*(void***)job)[0](job);
-    ((void(__thiscall**)(int*))*(void***)d)[8](d);
+    }
+
+    void* mem = Alloc6(0x338, "Graphics", 0, 0, 0, 0);
+    ConvObj* conv = mem ? (ConvObj*)((ConvObj*)mem)->Init(res, a, b, c, d) : 0;
+    if (conv)
+        ((IRefObj*)conv)->AddRef();
+
+    c->Begin();
+
+    IJobMgr* jm = GetJobManager();
+    jm->Lock();
+
+    JobRefL job;
+    if (!CanConvert(conv, 0, (void**)&job.p)) {
+        c->End();
+        job.Reset();
+        jm->Unlock();
+        if (conv)
+            ((IRefObj*)conv)->Release();
+        if (res)
+            res->Release();
+        return false;
+    }
+
+    JobRefL jobcopy;
+    jobcopy.p = job.p;
+    if (jobcopy.p)
+        jobcopy.p->AddRef();
+
+    IRefObj* req = 0;
+    bool ok = ((AsyncResMgr*)mgr)->AllocateRequest(b, &req, &jobcopy);
+    job.p->Submit();
+
+    if (!ok) {
+        if (req)
+            req->Release();
+        jobcopy.Reset();
+        job.Reset();
+        jm->Unlock();
+        if (conv)
+            ((IRefObj*)conv)->Release();
+        if (res)
+            res->Release();
+        return false;
+    }
+
+    *(void**)out = req;
+
+    jobcopy.Reset();
+    job.Reset();
+    jm->Unlock();
+    if (conv)
+        ((IRefObj*)conv)->Release();
+    if (res)
+        res->Release();
     return true;
 }
 

@@ -7,3 +7,11 @@ slices/s00713e40/s00713e40.cpp  ?SetName@ResourceAdapter@@QAEXPBX@Z  00714310  /
 slices/s00713e40/s00713e40.cpp  ?SetNameAndCall@ResourceAdapter@@QAEXPBX0@Z  00714350  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE
 slices/s00713e40/s00713e40.cpp  ?SetFlag@ResourceAdapter@@QAEXH@Z  007143a0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE
 slices/s00713e40/s00713e40.cpp  ?Copy24@@YAXPAI0PBI@Z  007144b0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE
+slices/s00713e40/s00713e40.cpp  ?MinOfThree@@YAPAIPAI00URecordCmp@@@Z  00714880  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00713e40/s00713e40.cpp  ?HeapSiftUp@@YAXPAIHHIURecordCmp@@@Z  00714ab0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00713e40/s00713e40.cpp  ?DestroyRes50Range@@YGXPAX0@Z  00714b40  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00713e40/s00713e40.cpp  ?HeapSiftDown@@YAXPAIHHHIURecordCmp@@@Z  00714c00  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00713e40/s00713e40.cpp  ?DestroyRes50@@YAPAXPAX0PAD@Z  00714a20  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00713e40/s00713e40.cpp  ?DestroyRes28@@YAPAXPAX0PAD@Z  00714c70  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00713e40/s00713e40.cpp  ?Reserve@Vec4@@QAEXI@Z  00714cd0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00713e40/s00713e40.cpp  ??0AdapterCtor@@QAE@XZ  00714e10  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast

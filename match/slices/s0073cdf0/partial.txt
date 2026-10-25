@@ -1,1 +1,0 @@
-0073cdf0  868  partial: prologue/cleanup state machine reproduced, but the multi-stage dynamic-draw query + vertex walk is omitted

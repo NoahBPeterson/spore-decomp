@@ -1,12 +1,11 @@
 // Slice s0073cdf0 (0x0073cdf0-0x0073d1e0): SP::cModelInstance arena/deformation helpers.
-// Region: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast (SSE scalar floats, EH frames, no frame pointer).
+// Region: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- (SSE scalar floats, EH frames, no frame pointer).
 #include "types.h"
 #include <math.h>
+#include <intrin.h>
 
 // External callees (masked relocations; only convention/arity must be right).
 extern "C" void FUN_0073a900(void* p, int v);   // 0x73a900
-extern "C" void FUN_007c5490();                 // 0x7c5490
-extern "C" void FUN_01200940();                 // 0x1200940
 
 // ---------------------------------------------------------------------------
 // Stub resource object at cModelInstance+0xc4 (RenderWareFilePtr / arena resource).
@@ -61,7 +60,7 @@ int cModelInstance_GetArenaResource::GetArenaResource()
 }
 
 // ===========================================================================
-// Deformation / pose machinery (large, still being reconstructed).
+// Deformation / pose machinery (arena-resource lookup, transform fill, handles).
 // ===========================================================================
 
 // rw::BaseResourceDescriptor (0x6c0fa0 ctor {0,1}; 0xc2e4e0 is its empty dtor).
@@ -132,26 +131,125 @@ struct cModelInstance_Deform {
 };
 
 // ---------------------------------------------------------------------------
+// Deformation-query machinery (retail: a manager + a query record).
+// ---------------------------------------------------------------------------
+
+// Reference-counted object: vfptr at +0x00, refcount at +0x04.
+struct IRefObj {
+    virtual void Dtor(int flag);
+};
+
+// The query record handed to the reader's Get() and walked by Find().  Its destructor
+// releases mObj (the retail code inlines the interlocked release at every exit).
+struct DeformQuery {
+    void* mObj;    // +0x00  owning object (ref-counted)
+    int   m04;     // +0x04
+    int   m08;     // +0x08
+    int   m0c;     // +0x0c  component count, must be 3
+    int   m10;     // +0x10
+    int   m14;     // +0x14
+    bool  Find(void* v, int count, int index, int a, int b);   // 0x73c290
+    ~DeformQuery();
+};
+
+__forceinline DeformQuery::~DeformQuery()
+{
+    void* o = mObj;
+    if (o != 0) {
+        volatile long* rc = (volatile long*)((char*)o + 4);
+        if (_InterlockedDecrement(rc) == 0) {
+            _InterlockedExchange(rc, 1);
+            if (o != 0)
+                ((IRefObj*)o)->Dtor(1);
+        }
+    }
+}
+
+// Reader interface at cModelInstance+0x14; slot 2 fills a query record.
+struct DeformReader {
+    virtual void v0();
+    virtual void v1();
+    virtual bool Get(DeformQuery* q);
+};
+
+// The two callback objects stashed through cModelInstance+0x1c.
+struct Mc1cTarget {
+    void Notify();   // 0x007c5490
+    void Commit();   // 0x01200940
+};
+
+// Hand-rolled vtable (the object's vfptr lives at +0x04, so it is called explicitly).
+struct McVtbl { void* fn[4]; };
+typedef void (__thiscall *McSlotFn)(void*);
+
+// Fills idx[4] (vertex indices, pre-divided by 3) and w[4] (sample weights).
+extern "C" bool FUN_0073c4b0(void* q, int index, int* idx, float* w);   // 0x73c4b0
+
+// ---------------------------------------------------------------------------
 // @ 0x0073cdf0  (deformation query: fills a 3x3 float matrix, returns success)
 // ---------------------------------------------------------------------------
 bool cModelInstance_Deform::FillTransform(float* out)
 {
-    // Partial: the multi-stage query/vertex walk is not yet recovered
-    // (see partial.txt).  The prologue state machine is reproduced.
     if (m18 != 0)
         FUN_0073a900(m18, 0);
-    if (m1c != 0 && m1c[2] != 0) {
-        if (m1c[0] == 0)
-            FUN_007c5490();
-        else {
-            FUN_007c5490();
-            *(int*)m1c[2] = m1c[0];
-            FUN_01200940();
+
+    int* p = m1c;
+    if (p != 0 && p[2] != 0) {
+        if (p[0] == 0) {
+            ((Mc1cTarget*)p[2])->Notify();
+        } else {
+            McVtbl* vt = *(McVtbl**)((char*)p[0] + 4);
+            ((McSlotFn)vt->fn[3])((void*)p[0]);
+            *(int*)p[2] = p[0];
+            ((Mc1cTarget*)p[2])->Commit();
         }
     }
+
+    DeformQuery q;
+    q.mObj = 0;
+    q.m04 = -1;
+    q.m08 = -1;
+    q.m0c = 0;
+    q.m10 = -1;
+    q.m14 = 0;
+
+    if (!((DeformReader*)m14)->Get(&q) || q.m0c != 3)
+        return false;
+
     for (int i = 0; i < 9; ++i)
         out[i] = 0.0f;
-    return false;
+
+    for (int i = 0; i < 3; ++i) {
+        float v[3];
+        if (!q.Find(v, 3, i, 1, -1))
+            return false;
+
+        int   idx[4];
+        float w[4];
+        if (FUN_0073c4b0(&q, i, idx, w)) {
+            int base = *(int*)(*(int*)(*(int*)((char*)m18 + 8) + 8));
+            float r0 = 0.0f, r1 = 0.0f, r2 = 0.0f;
+            for (int k = 0; k < 4; ++k) {
+                float* V = (float*)(base + idx[k] * 0x30);
+                float ox = V[0] * v[0] + V[1] * v[1] + V[2] * v[2] + V[3];
+                float oy = V[4] * v[0] + V[5] * v[1] + V[6] * v[2] + V[7];
+                float oz = V[8] * v[0] + V[9] * v[1] + V[10] * v[2] + V[11];
+                float ww = w[k];
+                r0 += ox * ww;
+                r1 += oy * ww;
+                r2 += oz * ww;
+            }
+            out[3 * i + 0] = r0;
+            out[3 * i + 1] = r1;
+            out[3 * i + 2] = r2;
+        } else {
+            out[3 * i + 0] = v[0];
+            out[3 * i + 1] = v[1];
+            out[3 * i + 2] = v[2];
+        }
+    }
+
+    return true;
 }
 
 // ---------------------------------------------------------------------------
