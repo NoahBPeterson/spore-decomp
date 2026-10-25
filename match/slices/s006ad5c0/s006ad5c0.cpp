@@ -324,6 +324,8 @@ void RBTree::DoNukeSubtree(RBNode* n)
 // ===========================================================================
 extern void* vtbl_154df28;
 extern void* vtbl_14093bc;
+extern const char DAT_013ebc58[];   // 0x013ebc58  EASTL zone name "App"
+extern const char DAT_013ebb38[];   // 0x013ebb38  allocator file string
 extern void* vtbl_14093cc;
 extern void* vtbl_13effb8;
 extern void* vtbl_13eb938;
@@ -339,7 +341,7 @@ struct Sub140 { void Init(void* a); };      // FUN_006ac140
 struct KRSub  { void Destroy(); };          // FUN_006ad0f0
 struct Job0   { void GetStatus(); };        // 0x690120
 struct Job2   { void Add(); };              // FUN_0068f950
-struct Sub970 { void Do(void* x, void* y, void* a); }; // FUN_006ad970
+struct Sub970 { void Do6ad970(void* x, void* y, void* a); }; // 0x6ad970
 struct Sub26b0{ void fn(); };               // FUN_006926b0
 
 // ---------------------------------------------------------------------------
@@ -388,7 +390,7 @@ void* __fastcall FUN_006adb40(void* self);
 void __fastcall FUN_006adc90(void* self, int* arg)
 {
     (void)self;
-    void* p = ea_zone_new2(0x58, &vtbl_14093bc);
+    void* p = ea_zone_new2(0x58, (void*)DAT_013ebc58);
     if (!p)
         g_pRegistry = 0;
     else
@@ -407,7 +409,7 @@ struct SList {
 };
 
 // @ 0x006add30
-unsigned SList::Init(void* a)
+__declspec(noinline) unsigned SList::Init(void* a)
 {
     char* s = (char*)this;
     char* p = s + 0x18;
@@ -415,7 +417,7 @@ unsigned SList::Init(void* a)
     *(void**)(s + 4) = p;
     *(void**)s = p;
     *(void**)(s + 8) = p + 0x20;
-    ((Sub970*)s)->Do(*(void**)a, *(void**)((char*)a + 4), a);
+    ((Sub970*)s)->Do6ad970(*(void**)a, *(void**)((char*)a + 4), a);
     return (unsigned)this;
 }
 
@@ -426,9 +428,7 @@ unsigned SList::Init(void* a)
 void* __stdcall FUN_006adda0(void* a)
 {
     void* n = ea_eastl_alloc(
-        0x40, &vtbl_14093bc, 0, 0,
-        "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h",
-        0xd1);
+        0x40, (void*)DAT_013ebc58, 0, 0, DAT_013ebb38, 0xd1);
     if (n) {
         *(void**)n = *(void**)a;
         ((SList*)((char*)n + 4))->Init((char*)a + 4);
@@ -529,24 +529,29 @@ void* __fastcall FUN_006ae510(void* self, int unused, void* arg)
 }
 
 // ---------------------------------------------------------------------------
-// 006ae660  pool node alloc from freelist  (partial)
+// 006ae660  pool node alloc from freelist: pop the +0x18 free list, else allocate
+// 0x28-sized nodes; build the node's +0x10 sub-object by copying four dwords and
+// AddRef'ing the embedded object.  __thiscall, ret 4 (one stack argument).
 // ---------------------------------------------------------------------------
-void* __fastcall FUN_006ae660(void* self, void* val)
+struct FreeNode { FreeNode* pNext; };   // only the leading link is used
+
+// @ 0x006ae660
+void* __fastcall FUN_006ae660(void* self, int unused, void* val)
 {
-    void* n = *(void**)((char*)self + 0x18);
+    (void)unused;
+    FreeNode* n = *(FreeNode**)((char*)self + 0x18);
     if (n)
-        *(void**)((char*)self + 0x18) = *(void**)n;
+        *(void**)((char*)self + 0x18) = n->pNext;
     else
-        n = ea_eastl_alloc(*(unsigned*)((char*)self + 0x28), &vtbl_14093bc, 0, 0,
-                           "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h",
-                           0xd1);
+        n = (FreeNode*)ea_eastl_alloc(*(unsigned*)((char*)self + 0x28), (void*)DAT_013ebc58, 0, 0,
+                                      DAT_013ebb38, 0xd1);
     void* d = (char*)n + 0x10;
     if (d) {
         *(void**)d = *(void**)val;
         *(void**)((char*)d + 4) = *(void**)((char*)val + 4);
         *(void**)((char*)d + 8) = *(void**)((char*)val + 8);
-        *(void**)((char*)d + 0xc) = *(void**)((char*)val + 0xc);
-        void* r = *(void**)((char*)d + 0xc);
+        void* r = *(void**)((char*)val + 0xc);
+        *(void**)((char*)d + 0xc) = r;
         if (r)
             (*(void(__thiscall**)(void*))(*(void***)r))(r);
     }
@@ -792,30 +797,33 @@ int* __fastcall FUN_006adee0(void* self, void* key)
 }
 
 // ---------------------------------------------------------------------------
-// 006ae880  cAsyncResourceManager::RequestComplete
+// 006ae880  cAsyncResourceManager::RequestComplete(void* p, PFRecord* rec)
+// __thiscall, ret 8.  Copies three fields from p into rec, hands rec to the
+// resource manager's vtable+0x6c registration entry, then erases the request's
+// map node under the mutex.
 // ---------------------------------------------------------------------------
-extern "C" void* F_67dcd0(void);                 // 0x67dcd0
-extern char g_mapLock[];                         // 0x1409448
-struct Inserter { void Insert(void* p, int one); };
+extern "C" void* F_67dcd0(void);                 // 0x67dcd0 ResourceMan::GetManager
+extern char g_mapLock[];                         // 0x1409448 (lock arg, unused)
 struct MapLookup { void Find(void** out, void* key); };  // 0xa21dc0
 
 // @ 0x006ae880
-void __fastcall FUN_006ae880(void* self, void* p, void* rec)
+void __fastcall FUN_006ae880(void* self, int unused, void* p, void* rec)
 {
+    (void)unused;
     char* s = (char*)self;
     if (rec) {
         *(void**)((char*)rec + 8)   = *(void**)p;
         *(void**)((char*)rec + 0xc) = *(void**)((char*)p + 4);
         *(void**)((char*)rec + 0x10) = *(void**)((char*)p + 8);
-        Inserter* m = (Inserter*)F_67dcd0();
-        m->Insert(rec, 1);
+        void* mgr = F_67dcd0();
+        ((void(__thiscall*)(void*, void*, int))(*(void***)mgr)[0x6c / 4])(mgr, rec, 1);
     }
-    F_9221b0(g_mapLock);
+    F_9221b0(s + 0x10);
     void* it = 0;
     ((MapLookup*)(s + 0x40))->Find(&it, p);
     if (it != s + 0x44)
-        ((RBTreeX*)(s + 0x24))->Remove(&it, (RBNodeX*)it);
-    F_922270(g_mapLock);
+        ((RBTreeX*)(s + 0x40))->Remove(&it, (RBNodeX*)it);
+    F_922270(s + 0x10);
 }
 
 
