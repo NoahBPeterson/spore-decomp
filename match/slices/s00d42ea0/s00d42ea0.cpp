@@ -82,9 +82,15 @@ public:
     cEditorLaunchData();           // 0x005a9080
 };
 
-namespace SP { namespace Editor { void Launch(cEditorLaunchData* data); } }   // 0x005a9200
+namespace SP { namespace Editor {
+void Launch(cEditorLaunchData* data);   // 0x005a9200
+} }
 
-class cPlanetRecord { public: uint32_t GetID(); };   // 0x00596e60
+class cPlanetRecord
+{
+public:
+    uint32_t GetID();                   // 0x00596e60
+};
 
 class SlotMessage : public cRefCounted
 {
