@@ -1,0 +1,2 @@
+# source  symbol  va  flags
+../src/game/SPGonzago/SPObstacleManager.cpp  ?SetChar@Variant@@QAEPAU1@PBD@Z  00422e20  /Od /Ob1 /MD /Gy /TP /arch:SSE /Isrc/game/include
