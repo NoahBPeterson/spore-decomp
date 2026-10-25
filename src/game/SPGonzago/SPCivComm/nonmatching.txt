@@ -1,0 +1,7 @@
+# va  diff-bytes  reason
+00cfeb40 1 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 102 bytes - summarizer helper not reconstructed.
+00cfec10 8 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 8 bytes - summarizer constructor: size 85 exact and every store matches (two base vptrs, +8/+0xc/+0x10 zeroed, +0x14/+0x18 set to -1 through one `or edx,-1`, three float fields copied from the globals at 0x169d388/38c/390 and +0x28 zeroed); only the placement of the `or edx,-1` differs (MSVC schedules it before the +0x0c/+0x10 stores here).
+00cfecc0 16 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 43 bytes - subsystem constructor: base ctor call plus the two vptr stores and the +0x1c/+0x20/+0x24 zeroed fields are known, but sizeof(cGonzagoSubsystem) is unknown so the second base's placement at +4 (and thus the field offsets) could not be derived from a legal hierarchy (43 vs 36).
+00cfee00 1 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 162 bytes - SP::FindTargetCity not reconstructed.
+00cfeeb0 2213 complete; compare tree, case order, constants and calls match; remaining diffs are cl tail-merge choices (target-city/reply tails), one 4-byte spill slot (frame 0x14 vs 0x18) and register choice for source; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+01361ef0 246 property-descriptor dynamic initializer; complete, extra callee-saved constant hoist (ebx) vs original flags /O2 /MD /Gy /EHsc /TP difftest PASS 100%

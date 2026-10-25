@@ -1,2 +1,6 @@
 00cfe160 ?FUN_00cfe160@@YAXXZ  # FUN_00cfe160 migrated from s00cfe160 (verbatim, slice spelling)
 00cfe5b0 ?FUN_00cfe5b0@@YAXXZ  # FUN_00cfe5b0 migrated from s00cfe160 (verbatim, slice spelling)
+00cfeb40 ?FUN_00cfeb40@@YAXXZ  # FUN_00cfeb40 migrated from s00cfe160 (verbatim, slice spelling)
+00cfec10 ??0cSummarizer@@QAE@XZ  # cSummarizer::cSummarizer migrated from s00cfe160 (verbatim, slice spelling)
+00cfecc0 ??0cGonzagoChild@@QAE@XZ  # cGonzagoChild::cGonzagoChild migrated from s00cfe160 (verbatim, slice spelling)
+00cfee00 ?FindTargetCity@@YAXXZ  # FindTargetCity migrated from s00cfe160 (verbatim, slice spelling)
