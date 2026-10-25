@@ -36,6 +36,35 @@ struct Thunk1 { void One(int a); };                       // 0x006781d0
 struct Thunk4 { Thunk4* Init(int a, int b, int c, int d); }; // 0x00679080
 struct Thunk7 { void Seven(int,int,int,int,int,int,int); }; // 0x00929e70
 
+// ---- HUD animation / text helpers -----------------------------------------
+extern "C" void* __cdecl FUN_0082f6e0();                                 // 0x0082f6e0
+extern "C" void* __cdecl FUN_0082f630();                                 // 0x0082f630
+extern "C" void __cdecl FUN_00678310(void* text, void* w, char flag);    // 0x00678310
+extern "C" unsigned __cdecl GetRecorderState();                          // 0x00435e90
+extern "C" void __cdecl RecordEvent2(unsigned id, unsigned state);       // 0x00435ed0
+extern float g_013f9428;   // 0x013f9428 = 0.001f
+
+struct WinText {
+    void SetFromArgScript(void* s);              // 0x0082f9a0
+    float FUN_0082e360(int i);                   // 0x0082e360
+    float* FUN_0082e3f0(int i);                  // 0x0082e3f0
+    void FUN_0082e340(float v, int i);           // 0x0082e340
+    void FUN_0082e380(float* vec, int i, int n); // 0x0082e380
+};
+struct AutoRefText {
+    WinText* mpPtr;
+    AutoRefText& operator=(void* p);             // 0x00b5f950
+};
+struct CallbackSlot1 { void FUN_0092a7a0(int ms); };  // 0x0092a7a0
+struct CallbackSlot2 { void FUN_00929c60(void); };    // 0x00929c60
+
+typedef bool   (__thiscall *FnVb)(void*);
+typedef void   (__thiscall *FnVf)(void*, float);
+typedef float  (__thiscall *FnVr)(void*);
+typedef float* (__thiscall *FnVR)(void*);
+typedef void   (__thiscall *FnV2)(void*, int, int);
+typedef void   (__thiscall *FnVF2)(void*, float, float);
+
 // ---- 0x00678ed0 : (a == b) ------------------------------------------
 // @ 0x00678ed0
 bool __fastcall FUN_00678ed0(char* p) {
@@ -296,10 +325,178 @@ void __stdcall FUN_006783c0(char* p) {
     FUN_00808230(target, params);
 }
 
-// ---- 0x00678670 : show/enable animation (partial) --------------------
+// ---- 0x00678670 : show/enable animation (complete, non-matching) -------
 // @ 0x00678670
-void __fastcall FUN_00678670(char* p) { (void)p; }
+void FUN_00678670(char* p) {
+    if (p) ((FnV1)((VObj*)p)->vt[1])(p);
+    char* q = p + 0x3c;
+    if (*(char*)(p + 0x3c) != 0 && *(int*)(q + 0xb4) != 0 && *(int*)(q + 0xac) != 0 &&
+        FUN_00816ca0() != 0) {
+        AutoRefText* text = (AutoRefText*)(p + 0x194);
+        *text = FUN_0082f6e0();
+        if ((*(int*)(q + 0xdc) - *(int*)(q + 0xd8)) >> 1 != 0) {
+            *text = FUN_0082f630();
+            text->mpPtr->SetFromArgScript(*(void**)(q + 0xd8));
+            unsigned n = (unsigned)((*(int*)(q + 0x18) - *(int*)(q + 0x14)) >> 2);
+            for (unsigned i = 0; i < n; i++) {
+                void* w = *(void**)(*(int*)(q + 0x14) + i * 4);
+                if (w) FUN_00678310(text->mpPtr, w, *(char*)(q + 0x12c));
+            }
+        }
+        { void* o = *(void**)(p + 0x1a4); ((FnV1)((VObj*)o)->vt[9])(o); }
+        { void* o = *(void**)(p + 0x1a8); ((FnV1)((VObj*)o)->vt[9])(o); }
+        { void* o = *(void**)(p + 0x1ac); ((FnV1)((VObj*)o)->vt[9])(o); }
+        { void* o = *(void**)(p + 0x1b0); ((FnV1)((VObj*)o)->vt[9])(o); }
+        FUN_006783c0(q);
+        void* fB4 = *(void**)(q + 0xb4);
+        ((FnV2)((VObj*)fB4)->vt[31])(fB4, 1, 1);
+        float* r = ((FnVR)((VObj*)fB4)->vt[14])(fB4);
+        float r0 = r[0];
+        float r1 = r[1];
+        float rr = r[2] - r0;
+        *(float*)(p + 0x17c) = r0;
+        *(float*)(p + 0x180) = r1;
+        *(float*)(p + 0x174) = *(float*)(p + 0x17c) - *(float*)(q + 0xd0) * rr;
+        *(float*)(p + 0x178) = *(float*)(p + 0x180) - *(float*)(q + 0xd4) * rr;
+        WinText* wt = text->mpPtr;
+        *(float*)(p + 0x190) = wt->FUN_0082e360(4);
+        float* v = wt->FUN_0082e3f0(0);
+        *(float*)(p + 0x184) = v[0];
+        *(float*)(p + 0x188) = v[1];
+        *(float*)(p + 0x18c) = v[2];
+        wt->FUN_0082e340(g_01485720, 4);
+        float vec[3];
+        vec[0] = g_01485720;
+        vec[1] = g_01485720;
+        vec[2] = g_01485720;
+        wt->FUN_0082e380(vec, 0, 3);
+        ((FnVF2)((VObj*)fB4)->vt[28])(fB4,
+            *(float*)(p + 0x17c) - *(float*)(q + 0xd0) * g_015fc748,
+            *(float*)(p + 0x180) - *(float*)(q + 0xd4) * g_015fc748);
+        *(char*)(p + 0x1a0) = 1;
+        ((CallbackSlot1*)(p + 0x1d8))->FUN_0092a7a0(0);
+    }
+    ((CallbackSlot2*)(p + 0x1b4))->FUN_00929c60();
+    if (p) ((FnV1)((VObj*)p)->vt[2])(p);
+}
 
-// ---- 0x00678910 : update animation (partial) -------------------------
+// ---- 0x00678910 : update animation (complete, non-matching) ------------
 // @ 0x00678910
-void __fastcall FUN_00678910(char* p, int a, int b) { (void)p; (void)a; (void)b; }
+void FUN_00678910(char* p, int arg2, int ts) {
+    (void)arg2;
+    if (p) ((FnV1)((VObj*)p)->vt[1])(p);
+    char* q = p + 0x3c;
+    if (*(char*)(p + 0x3c) != 0 && *(int*)(q + 0xb4) != 0 && *(int*)(q + 0xac) != 0 &&
+        FUN_00816ca0() != 0) {
+        void* fB4 = *(void**)(q + 0xb4);
+        if (*(int*)(q + 0xb0) != 0) {
+            float rect[4];
+            GetBoundingScreenRect(rect, *(void**)(q + 0xb0), 0);
+            rect[0] -= g_01485720;
+            rect[2] += g_01485720;
+            rect[3] += g_01485720;
+            rect[1] -= g_01485720;
+            float cx = (rect[2] + rect[0]) * g_01471064;
+            float cy = (rect[3] + rect[1]) * g_01471064;
+            float dx = cx - *(float*)(q + 0xc8);
+            float dy = cy - *(float*)(q + 0xcc);
+            if (HudFabs(dx) > 0.0f || HudFabs(dy) > 0.0f) {
+                *(float*)(q + 0xbc) = cx;
+                *(float*)(q + 0xc8) = cx;
+                *(float*)(q + 0xc0) = cy;
+                *(float*)(q + 0xcc) = cy;
+                float params[4];
+                params[0] = 0.0f;
+                params[1] = 0.0f;
+                params[2] = g_01485720;
+                params[3] = 0.0f;
+                FUN_00808230(fB4, params);
+                FUN_006783c0(q);
+                float* r = ((FnVR)((VObj*)fB4)->vt[14])(fB4);
+                float r0 = r[0];
+                float r1 = r[1];
+                float rr = r[2] - r0;
+                *(float*)(p + 0x17c) = r0;
+                *(float*)(p + 0x180) = r1;
+                *(float*)(p + 0x174) = *(float*)(p + 0x17c) - *(float*)(q + 0xd0) * rr;
+                *(float*)(p + 0x178) = *(float*)(p + 0x180) - *(float*)(q + 0xd4) * rr;
+            }
+        }
+
+        float fT = (float)(unsigned)ts * g_013f9428;
+        void* a = *(void**)(p + 0x1a4);
+        void* b = *(void**)(p + 0x1a8);
+        void* c = *(void**)(p + 0x1ac);
+        void* d = *(void**)(p + 0x1b0);
+        WinText* text = ((AutoRefText*)(p + 0x194))->mpPtr;
+        float px = 0.0f;
+        float py = 0.0f;
+
+        if (!((FnVb)((VObj*)a)->vt[15])(a)) {
+            px = *(float*)(p + 0x174);
+            py = *(float*)(p + 0x178);
+            if (*(char*)(p + 0x1a0) != 0) {
+                px = *(float*)(p + 0x17c) - *(float*)(q + 0xd0) * g_015fc748;
+                py = *(float*)(p + 0x180) - *(float*)(q + 0xd4) * g_015fc748;
+            }
+            ((FnVf)((VObj*)a)->vt[11])(a, fT);
+            float fU = ((FnVr)((VObj*)a)->vt[6])(a);
+            px = (*(float*)(p + 0x17c) - px) * fU + px;
+            py = (*(float*)(p + 0x180) - py) * fU + py;
+            if (((FnVb)((VObj*)a)->vt[15])(a)) {
+                *(char*)(p + 0x1a0) = 0;
+                ((FnV1)((VObj*)b)->vt[9])(b);
+                ((FnV1)((VObj*)c)->vt[9])(c);
+            }
+        } else {
+            if (((FnVb)((VObj*)b)->vt[15])(b)) goto L_setpos;
+
+            ((FnVf)((VObj*)b)->vt[11])(b, fT);
+            float fV = ((FnVr)((VObj*)b)->vt[6])(b);
+            px = (*(float*)(p + 0x174) - *(float*)(p + 0x17c)) * fV + *(float*)(p + 0x17c);
+            py = *(float*)(p + 0x180) + (*(float*)(p + 0x178) - *(float*)(p + 0x180)) * fV;
+
+            if (((FnVb)((VObj*)c)->vt[15])(c)) {
+                if (!((FnVb)((VObj*)d)->vt[15])(d)) {
+                    ((FnVf)((VObj*)d)->vt[11])(d, fT);
+                    float fW = ((FnVr)((VObj*)d)->vt[6])(d);
+                    float f1 = *(float*)(p + 0x184);
+                    float f2 = *(float*)(p + 0x188);
+                    float f3 = *(float*)(p + 0x18c);
+                    float f4 = *(float*)(p + 0x190);
+                    float vec[3];
+                    vec[0] = (g_01485720 - f1) * fW + f1;
+                    vec[1] = (g_01485720 - f2) * fW + f2;
+                    vec[2] = (g_01485720 - f3) * fW + f3;
+                    text->FUN_0082e340((g_01485720 - f4) * fW + f4, 4);
+                    text->FUN_0082e380(vec, 0, 3);
+                }
+            } else {
+                ((FnVf)((VObj*)c)->vt[11])(c, fT);
+                float fA = ((FnVr)((VObj*)c)->vt[6])(c);
+                float f1 = *(float*)(p + 0x184);
+                float f2 = *(float*)(p + 0x188);
+                float f3 = *(float*)(p + 0x18c);
+                float f4 = *(float*)(p + 0x190);
+                float vec[3];
+                vec[0] = (f1 - g_01485720) * fA + g_01485720;
+                vec[1] = (f2 - g_01485720) * fA + g_01485720;
+                vec[2] = (f3 - g_01485720) * fA + g_01485720;
+                text->FUN_0082e340((f4 - g_01485720) * fA + g_01485720, 4);
+                text->FUN_0082e380(vec, 0, 3);
+                if (((FnVb)((VObj*)c)->vt[15])(c))
+                    ((FnV1)((VObj*)d)->vt[9])(d);
+            }
+
+            if (((FnVb)((VObj*)b)->vt[15])(b)) {
+                unsigned st = GetRecorderState();
+                RecordEvent2(0x1104b3ab, st);
+                ((FnV1)((VObj*)a)->vt[9])(a);
+            }
+        }
+L_setpos:
+        ((FnVF2)((VObj*)fB4)->vt[28])(fB4, px, py);
+    }
+    ((CallbackSlot2*)(p + 0x1b4))->FUN_00929c60();
+    if (p) ((FnV1)((VObj*)p)->vt[2])(p);
+}
