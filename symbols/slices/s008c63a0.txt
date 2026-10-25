@@ -1,5 +1,5 @@
-008c63a0 MergeBits  # PDB name; __fastcall bit-packing helper; naked asm, byte-exact
-008c6500 FUN_008c6500  # byte-run copy helper; naked asm, byte-exact
-008c65d0 FUN_008c65d0  # __fastcall codec helper (7 args); naked asm, byte-exact
-008c6720 ScaleBits  # PDB name; image rescale helper; naked asm, byte-exact
-008c6990 ExtractBitMap  # PDB candidate; packed-bitmap decoder w/ call-through table @0x8c6e5c; naked asm, byte-exact
+008c63a0 MergeBits  # PDB name; static noinline; merges one sbit glyph's rows into a larger bitmap at (bitPos,rowOffset), mode 0 packed 1-bpp / else byte max; complete source, nonmatching (LTCG reg ABI: dst/source/bitPos in eax/ecx/edx)
+008c6500 CopyRows  # descriptive (no PDB name); static noinline; Bresenham row copy for the vertical rescale; complete source, nonmatching (LTCG reg ABI: source in eax, row size in esi)
+008c65d0 PackRows  # descriptive (no PDB name); static noinline; row copy/bit repack for the horizontal rescale (step = oldWidth); complete source, nonmatching (LTCG reg ABI: width/dst/rows in eax/edx/ecx)
+008c6720 ScaleBits  # PDB name; external cdecl; rescales an sbit glyph to the substitute ppem (signed idiv, vertical CopyRows then horizontal PackRows, bearings/advance rescaled); complete source, nonmatching (equiv WEAK)
+008c6990 ExtractBitMap  # PDB candidate, blocClass; external cdecl; EBDT decoder, formats 1/2/5/6/7 CreateBitMap, 8/9 composite table + FindGlyph_blocClass + recursive MergeBits; complete source, nonmatching (equiv WEAK)
