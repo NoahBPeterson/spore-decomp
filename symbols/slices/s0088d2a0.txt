@@ -1,1 +1,7 @@
 0088d2a0 EA::Text::FontServer::GetFont  # retail GetFont: no duplicate test / score sort, +0x2fb0 CRITICAL_SECTION, virtual CreateNewFont(+0x14) and GetFontDescriptionScore(+0x3c); structure confirmed by call/vcall sequence
+0088d940 EA::Text::FontServer::AddFont  # byte-exact (retail RT layout)
+0088daf0 EA::Text::FontServer::CreateNewFont  # retail layout, same size, 14 bytes differ in the texture FileStream block
+0088def0 eastl::ListBase::DoClear  # FaceSourceList<FontServer::FaceSource,...>::DoClear, byte-exact
+0088df70 eastl::hashtable::DoFreeNodes  # FamilySubstitutionMap (string16 -> string16), byte-exact
+0088e020 EA::Text::FontServer::GetFont  # FontSet overload; retail layout, register/slot assignment differs
+0088e0e0 EA::Text::FontServer::AddSubstitution  # retail layout, same size, register assignment differs

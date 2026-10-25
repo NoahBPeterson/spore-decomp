@@ -1,2 +1,5 @@
 # va  diff-bytes  reason
 0088d2a0 1246 FontServer::GetFont (retail RT layout): complete, not byte-exact (stack slot/register assignment differs); flags /O2 /MD /GS- /GR- /TP /arch:SSE /fp:fast
+0088daf0 14 FontServer::CreateNewFont: complete, 1018/1018 bytes; only the FileStream texture-stream block keeps eax/edx swapped (and one `mov edi,[edi]` vs `mov ecx,[edi]`), same length; flags /O2 /MD /GS- /GR- /TP /arch:SSE /fp:fast
+0088e020 105 FontServer::GetFont(FontSet&): complete, 177/186 bytes; capacity/index/selection use EDI/ESI/EBP instead of retail's EBP/EDI/EBX+ESI (pPrimaryFont and AutoRefCount temp slots are swapped); flags /O2 /MD /GS- /GR- /TP /arch:SSE /fp:fast
+0088e0e0 217 FontServer::AddSubstitution: complete, 303/303 bytes; mutex pointer stays in EDI (retail spills it) so the two Str16 begin pointers are reloaded at scope exit instead of held in EBP/EDI; flags /O2 /MD /GS- /GR- /TP /arch:SSE /fp:fast
