@@ -1,0 +1,3 @@
+# Slice s0101c780 names.
+# 0101c780  cSPSpacePlanetCameraController::FUN_0101c780  nonmatching (2260 diff, 1663 vs 2469)
+0101c780 ?FUN_0101c780@cSPSpacePlanetCameraController@SP@@QAEXMPAM00MHMM@Z  # nonmatching: space-planet camera orbit/target update (2260 diff)
