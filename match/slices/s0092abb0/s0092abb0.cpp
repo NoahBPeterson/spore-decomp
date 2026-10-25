@@ -38,6 +38,7 @@ extern "C" __declspec(dllimport) HMODULE __stdcall GetModuleHandleW(LPCWSTR);
 extern "C" __declspec(dllimport) FARPROC __stdcall GetProcAddress(HMODULE, LPCSTR);
 extern "C" __declspec(dllimport) DWORD __stdcall GetVersion();
 extern "C" __declspec(dllimport) long __stdcall DefWindowProcA(HWND, UINT, unsigned, long);
+extern "C" __declspec(dllimport) long __stdcall SendMessageA(HWND, UINT, unsigned, long);
 extern "C" __declspec(dllimport) int __cdecl _wcsicmp(const wchar_t*, const wchar_t*);
 extern "C" __declspec(dllimport) wchar_t* __cdecl wcsstr(const wchar_t*, const wchar_t*);
 
@@ -53,7 +54,7 @@ bool  FUN_006ab760(void* p, const wchar_t* s); // 0x6ab760
 int   Stristr16_real(const wchar_t* s, const wchar_t* sub); // 0x92cc90
 
 void  Clipboard_Clear(void* c, unsigned type); // 0x92a940
-void  Win32Clipboard_WriteText(void* w, const wchar_t* t, int n); // 0x92aa20
+void  Win32Clipboard_WriteText(void* w, const wchar_t* t, int n); // 0x92aa20  (unused free form)
 // SP::cSPMemPool::LockedAlloc(this = *g_SPMemPool) and the Clipboard::DataText16 ctor (this = raw
 // storage): member stubs so cl emits a __thiscall call, bound to their address by the annotation
 struct PoolStub {
@@ -114,7 +115,7 @@ struct IData {
     virtual void i1();                 // +0x04
     virtual void i2();
     virtual unsigned i3();             // +0x0c
-    virtual const wchar_t* i4(int n);  // +0x10
+    virtual const wchar_t* i4();       // +0x10
     virtual unsigned i5();             // +0x14
 };
 
@@ -147,6 +148,7 @@ struct Win32Clipboard {
     DWORD mnLocale;      // +0x18
     Win32Clipboard(Clipboard* owner);   // @ 0092afb0
     bool WindowProcedure(WString* text); // @ 0092adb0
+    bool WriteText(const wchar_t* t, int n);   // 0x92aa20
 };
 
 // global AutoOSGlobalPtr-like object with the Clipboard at +0x10
@@ -278,6 +280,43 @@ bool Win32Clipboard::WindowProcedure(WString* text) {
     return got;
 }
 
+// @ 0x0092ae80  Win32 clipboard window procedure (local helper inside the 0x92adb0 chunk)
+bool SetClipboardText(Clipboard* clipboard, const wchar_t* s, int len);
+
+long __stdcall FUN_0092ae80(HWND hwnd, UINT msg, unsigned wp, long lp) {
+    Win32Clipboard* w = (Win32Clipboard*)GetWindowLongA(hwnd, -0x15);
+    if (w == 0 || !w->mbEnabled)
+        return DefWindowProcA(hwnd, msg, wp, lp);
+    if (msg == 0x30d) {  // WM_CHANGECBCHAIN
+        HWND next = w->mNextHWND;
+        if ((HWND)(size_t)wp == next) {
+            w->mNextHWND = (HWND)(size_t)lp;
+            return 0;
+        }
+        if (next != 0)
+            SendMessageA(next, 0x30d, wp, lp);
+        return 0;
+    }
+    if (msg == 0x308) {  // WM_DRAWCLIPBOARD
+        WString local;
+        if (w->mpPrimary != 0) {
+            if (w->WindowProcedure(&local)) {
+                ++w->mnGettingText;
+                int len = (int)(local.mpEnd - local.mpBegin);
+                typedef bool (__cdecl *SetClipboardText4)(Clipboard*, const wchar_t*, int, bool);
+                ((SetClipboardText4)SetClipboardText)(w->mpPrimary, local.mpBegin, len, true);
+                --w->mnGettingText;
+            }
+        }
+        if (w->mNextHWND != 0)
+            SendMessageA(w->mNextHWND, 0x308, wp, lp);
+        if (((((char*)local.mpCapacity - (char*)local.mpBegin) & 0xfffffffe) > 2) && local.mpBegin)
+            operator_delete__(local.mpBegin);
+        return 0;
+    }
+    return DefWindowProcA(hwnd, msg, wp, lp);
+}
+
 // @ 0x0092abb0
 bool Clipboard::SetClipboardData(IData* pData, bool b) {
     mMutex.Lock((void*)0x143e3a0);
@@ -302,10 +341,9 @@ bool Clipboard::SetClipboardData(IData* pData, bool b) {
         }
         if (mnId == 1 && type == 3 && mpOSData != 0) {
             mMutex.Unlock();
-            unsigned n = pData->i5();
-            int len = (int)(n >> 1) - 1;
-            const wchar_t* t = pData->i4(len);
-            Win32Clipboard_WriteText(mpOSData, t, len);
+            Win32Clipboard* os = (Win32Clipboard*)mpOSData;
+            int len = (int)(pData->i5() >> 1) - 1;
+            os->WriteText(pData->i4(), len);
             mMutex.Lock((void*)0x143e3a0);
         }
     }
@@ -430,23 +468,21 @@ WString* WStringVector::Erase(WString* pos) {
 
 // @ 0x0092b7b0
 void CommandLine::InsertArgument(const wchar_t* arg, unsigned index) {
-    unsigned n = (unsigned)((char*)mpEnd - (char*)mpBegin) >> 4;
-    if (index > n)
-        index = n;
+    int n = (int)((char*)mpEnd - (char*)mpBegin) >> 4;
+    index = index > (unsigned)n ? (unsigned)n : index;
     WString tmp;
     tmp.mpBegin = 0;
     tmp.mpEnd = 0;
     tmp.mpCapacity = 0;
     ((WStringRaw*)&tmp)->RangeInitialize(arg);
-    void* at = (char*)mpBegin + (index << 4);
-    void* ins = 0;
-    (void)at;
-    (void)ins;
+    WString* at = (WString*)((char*)mpBegin + (index << 4));
+    ((WStringVector*)((char*)this + 4))->insert(at, tmp);
     if (msCommandLine.mpBegin != msCommandLine.mpEnd) {
         *msCommandLine.mpBegin = 0;
         msCommandLine.mpEnd = msCommandLine.mpBegin;
     }
-    if ((((char*)tmp.mpCapacity - (char*)tmp.mpBegin) & 0xfffffffe) > 2 && tmp.mpBegin)
+    int cap = (int)(((char*)tmp.mpCapacity - (char*)tmp.mpBegin) & ~1);
+    if (cap > 2 && tmp.mpBegin)
         operator_delete__(tmp.mpBegin);
 }
 
@@ -473,6 +509,9 @@ int GetCurrentAppPath(WString* out) {
     return (int)((char*)out->mpEnd - (char*)out->mpBegin) >> 1;
 }
 
+wchar_t* __cdecl StrIStrW(const wchar_t* s, const wchar_t* sub);   // 0x0092CC90
+typedef wchar_t* (__cdecl *StrSearchFn)(const wchar_t*, const wchar_t*);
+
 // @ 0x0092b200
 unsigned CommandLine::FindArgument(const wchar_t* arg, bool exact, bool sub, WString* out, int start) {
     unsigned result = 0xffffffff;
@@ -483,16 +522,16 @@ unsigned CommandLine::FindArgument(const wchar_t* arg, bool exact, bool sub, WSt
         for (; (unsigned)start < count; ++start) {
             WString* cur = (WString*)((char*)mpBegin + (start << 4));
             bool hit;
-            if (!sub) {
+            if (sub) {
+                if (exact)
+                    hit = FUN_006ab760(cur, arg);
+                else
+                    hit = cur->find(arg, 0) != (unsigned)-1;
+            } else {
                 if (exact)
                     hit = _wcsicmp(cur->mpBegin, arg) == 0;
                 else
-                    hit = Stristr16_real(cur->mpBegin, arg) != 0;
-            } else {
-                if (exact)
-                    hit = cur->find(arg, 0) != -1;
-                else
-                    hit = 0;
+                    hit = StrIStrW(cur->mpBegin, arg) != 0;
             }
             if (hit) {
                 result = (unsigned)start;
@@ -513,9 +552,6 @@ unsigned CommandLine::FindArgument(const wchar_t* arg, bool exact, bool sub, WSt
     }
     return result;
 }
-
-wchar_t* __cdecl StrIStrW(const wchar_t* s, const wchar_t* sub);   // 0x0092CC90
-typedef wchar_t* (__cdecl *StrSearchFn)(const wchar_t*, const wchar_t*);
 
 // @ 0x0092b300  find a switch (starting with '-' or '/') in the argument vector
 unsigned CommandLine::FindSwitch(const wchar_t* sw, bool exact, WString* out, unsigned start) {
@@ -595,28 +631,53 @@ unsigned CommandLine::FindSwitch(const wchar_t* sw, bool exact, WString* out, un
     return 0xffffffff;
 }
 
-// @ 0x0092b4d0  rebuild the command line, quoting arguments that contain spaces
-void FUN_0092b4d0(WString* cmdline, WString* args) {
+// @ 0x0092b4d0  rebuild the command line, quoting arguments that contain whitespace
+void FUN_0092b4d0(WString* args, WString* cmdline) {
     cmdline->erase(0, 0xffffffff);
     unsigned count = (unsigned)((char*)args->mpEnd - (char*)args->mpBegin) >> 4;
-    for (unsigned i = 0; i < count; ++i) {
-        WString* cur = (WString*)((char*)args->mpBegin + (i << 4));
-        const wchar_t* s = cur->mpBegin;
-        bool quote = false;
-        for (const wchar_t* q = s; *q; ++q) {
-            if (*q == L' ' || *q == L'\t' || *q == L'\n' || *q == L'\r') {
-                quote = true;
-                break;
+    if (count == 0)
+        return;
+    unsigned i = 0;
+    unsigned off = 0;
+    do {
+        WString* cur = (WString*)((char*)args->mpBegin + off);
+        unsigned len = (unsigned)((char*)cur->mpEnd - (char*)cur->mpBegin) >> 1;
+        bool space = false;
+        bool nonSpace = false;
+        if (len != 0) {
+            unsigned j = 0;
+            for (;;) {
+                if (space)
+                    break;
+                if (nonSpace)
+                    goto doAppend;
+                wchar_t ch = cur->mpBegin[j];
+                for (int k = 0; k < 4; ++k) {
+                    if (ch == L" \t\n\r"[k]) {
+                        space = true;
+                        goto nextChar;
+                    }
+                }
+                nonSpace = true;
+            nextChar:
+                if (++j >= len)
+                    break;
             }
+            if (!nonSpace)
+                goto nextArg;
+            if (space)
+                cmdline->push_back(L'"');
+        doAppend:
+            cmdline->append(cur->mpBegin, cur->mpEnd);
+            if (space)
+                cmdline->push_back(L'"');
+            if (i + 1 < count)
+                cmdline->push_back(L' ');
         }
-        if (quote)
-            cmdline->push_back(L'"');
-        cmdline->append(cur->mpBegin, cur->mpEnd);
-        if (quote)
-            cmdline->push_back(L'"');
-        if (i + 1 < count)
-            cmdline->push_back(L' ');
-    }
+    nextArg:
+        ++i;
+        off += 0x10;
+    } while (i < count);
 }
 // --- equivalence checker address annotations
     void operator_new(...); // 0x00f473a0

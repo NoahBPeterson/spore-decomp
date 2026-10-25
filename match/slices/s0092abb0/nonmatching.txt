@@ -7,3 +7,7 @@
 0092b690  55   CommandLineB ctor: vtable-last field-init order differs
 0092b5f0  106  GetCurrentAppPath: cached GetModuleFileNameW call/loop schedule differs
 0092b300  310  COMPLETE CommandLine::FindSwitch (quote strip, ":" value, both search fns); this/start/sw register allocation differs [equiv: WEAK 309 valid inputs, 34.9% coverage, no mismatch]
+0092adb0  297  COMPLETE read path + hidden WndProc FUN_0092ae80 (separately annotated); chunk spans two functions (505 bytes, 0092ae80 absent from load_funcs), single-symbol extent 208 [equiv: WEAK 376 valid inputs, 35.1% coverage, no mismatch]
+0092b200  215  COMPLETE FindArgument (four search arms, output clear/assign); count/offset register allocation differs [equiv: PASS 302 valid inputs, 84.2% coverage]
+0092b4d0  228  COMPLETE command-line requoting (whitespace scan, quoting, spacing); loop counter/offset register allocation differs [equiv: WEAK 160 valid inputs, 20.8% coverage]
+0092b7b0  99  COMPLETE InsertArgument (clamp, temp string, vector insert, command-line reset, temp free); clamp branch vs retail `cmova`, 1 byte larger [equiv: PASS 212 valid inputs, 100% coverage]
