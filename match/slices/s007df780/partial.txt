@@ -1,4 +1,1 @@
-# Non-target VAs in the slice region with no implementation written.
-007e0200  -  FUN_007e0200; not in the assigned target list
-007e0280  -  FUN_007e0280; not in the assigned target list
-007e02f0  -  FUN_007e02f0; not in the assigned target list
+# va  diff-bytes  reason

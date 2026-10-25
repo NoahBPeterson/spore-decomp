@@ -9,7 +9,7 @@
 007dfd90  -  cDescCtx::FUN_007dfd90 (SetKernelType helper); complete (228 vs 158: our SEH/__EHsc frame is larger than the original's compact one) [equiv: WEAK - 100 valid inputs (need 200), 82.1% coverage]
 007dfe80  -  ArgScript::SplitModelKernelEffect::SplitModelKernelEffect; complete (68 = 68 bytes) — differs only in store *scheduling* (the compiler emits [this]=vtbl and [+0x34]=imm immediately after the base ctor, then interleaves the zero-inits; ours groups them) [equiv: PASS - 400 valid inputs, 100.0% coverage]
 007dfed0  -  cEffectCommand::FUN_007dfed0; complete (564 vs 446: 6 inlined `new` command registrations + EH state machine; ours outlined the registration loop) [equiv: WEAK - 154 valid inputs (need 200), 96.8% coverage]
-007e0110  -  cMapDescription::FUN_007e0110; complete (80 vs 38: original has an SEH frame) [equiv: WEAK - 123 valid inputs (need 200), 100.0% coverage]
+007e0110  68  cMapDescription::cMapDescription(int) (was FUN_007e0110); complete (80 vs 38: original has an SEH frame; ours inlines ConstructFrom) [equiv: WEAK - 123 valid inputs (need 200), 100.0% coverage]
 007e01a0  -  cEffectCommand::FUN_007e01a0; complete (90 = 90 bytes, 16 diff) — the p==0 else-branch: original reloads m30 into ecx *after* materialising the zero arg (`xor eax,eax; push eax`), ours hoists the m40 load into ecx first [equiv: WEAK - 392 valid inputs, 18.2% coverage]
 
 # --- non-target VAs in this slice's region ---

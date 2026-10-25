@@ -2,3 +2,6 @@
 slices/s007df780/s007df780.cpp  ?FUN_007dfbf0@@YAPAXXZ  007dfbf0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 slices/s007df780/s007df780.cpp  ?FUN_007dfbd0@@YAXPAX0@Z  007dfbd0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 slices/s007df780/s007df780.cpp  ?FUN_007e0160@cEffectCommand@@QAEXPAXH@Z  007e0160  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s007df780/s007df780.cpp  ?FUN_007e0200@cEffectCommand@@QAEXD@Z  007e0200  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s007df780/s007df780.cpp  ?FUN_007e0280@@YAPAXPAX@Z  007e0280  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s007df780/s007df780.cpp  ?FUN_007e02f0@cEffectCommand@@QAEPAXD@Z  007e02f0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-

@@ -328,10 +328,12 @@ struct SplitModelKernelEffect : AppPropsFields {
     void* m4c;
     void* m50;
     void* m54;
+    int   m58;                           // +0x58 (size 0x5c)
 };
 }}
 
 // @ 0x007dfe80
+__declspec(noinline)
 EA::ArgScript::SplitModelKernelEffect::SplitModelKernelEffect()
 {
     *(void**)this = (void*)0x1412d64;
@@ -368,10 +370,17 @@ struct cEffectCommand {
     void* m38;                           // +0x38
     void* m3c;                           // +0x3c
     void* m40;                           // +0x40
+    void* m44;                           // +0x44
+    void* m48;                           // +0x48
+    void* m4c;                           // +0x4c
+    void* m50;                           // +0x50
+    void* m54;                           // +0x54
 
     void FUN_007e0160(void* a, int b);          // 0x007e0160
     void FUN_007e01a0(char flag);               // 0x007e01a0
     void FUN_007dfed0(void* server, int state); // 0x007dfed0
+    void FUN_007e0200(char flag);               // 0x007e0200
+    void* FUN_007e02f0(char flag);              // 0x007e02f0
 };
 
 // @ 0x007dfed0
@@ -392,18 +401,17 @@ void cEffectCommand::FUN_007dfed0(void* server, int state)
 struct cMapDescription {
     void* mVtbl;                         // +0x00
     int   mRef;                          // +0x04
-    char  mPad08[4];
+    cSafeDynamicKernelStorage mStorage;  // +0x08
 
-    void* FUN_007e0110(int other);       // 0x007e0110
+    __declspec(noinline) cMapDescription(int other);          // 0x007e0110
 };
 
 // @ 0x007e0110
-void* cMapDescription::FUN_007e0110(int other)
+cMapDescription::cMapDescription(int other)
 {
     mRef = 0;
     mVtbl = (void*)0x1453948;
-    ((cSafeDynamicKernelStorage*)((char*)this + 8))->ConstructFrom(*(cSafeDynamicKernelStorage*)(other + 8));
-    return this;
+    mStorage.ConstructFrom(*(cSafeDynamicKernelStorage*)(other + 8));
 }
 
 // @ 0x007e0160
@@ -428,9 +436,59 @@ void cEffectCommand::FUN_007e01a0(char flag)
         ((cEffectsFactory*)m30)->Add(m40, 0x29, p);
     }
 }
-void FUN_007e0200() { /* 126B */ }                 // 007e0200
-void FUN_007e0280() { /* 112B */ }                 // 007e0280
-void FUN_007e02f0() { /* 65B  deleting dtor */ }   // 007e02f0
+// ---- 0x007e0200: cSplitModelKernelEffectCommand::OnEndBlock ----
+struct DescInstaller { void InstallB(const char* name, int a, int b); };   // 0x00a6fa50
+
+inline void* operator new(unsigned int size, const char* name)
+{
+    return EAllocSwarm(size, name, 0, 0, 0, 0);
+}
+inline void operator delete(void* p, const char*)
+{
+    EFree2(p);
+}
+
+// @ 0x007e0200
+void cEffectCommand::FUN_007e0200(char flag)
+{
+    if (flag != 0)
+        return;
+    cMapDescription* d = new ("Swarm") cMapDescription((int)&m38);
+    ((DescInstaller*)m30)->InstallB((const char*)m4c, 0x10, (int)d);
+}
+
+// ---- 0x007e0280: SplitModelKernelEffect description factory ----
+struct IEffectHost {
+    virtual void v00(); virtual void v01(); virtual void v02();
+    virtual void v03(); virtual void v04();
+    virtual void* AddDescription(void* splitter, void* desc);   // +0x14
+};
+
+extern void* gSplitter;    // 0x0153f1ac
+
+// @ 0x007e0280
+void* __cdecl FUN_007e0280(void* host)
+{
+    EA::ArgScript::SplitModelKernelEffect* effect =
+        new ("ArgScript/SplitModelKernelEffect") EA::ArgScript::SplitModelKernelEffect();
+    return ((IEffectHost*)host)->AddDescription(gSplitter, effect);
+}
+
+// ---- 0x007e02f0: cSplitModelKernelEffectCommand scalar deleting destructor ----
+struct CmdDtor { void Dtor(); };       // 0x0083cd90
+
+// @ 0x007e02f0
+void* cEffectCommand::FUN_007e02f0(char flag)
+{
+    void* p = m4c;
+    if ((int)m54 - (int)p > 1 && p != 0)
+        EFree2(p);
+    m38 = (void*)0x13ef094;
+    ((CmdDtor*)this)->Dtor();
+    if (flag & 1)
+        EFree2(this);
+    return this;
+}
 
 struct KernelData16 { uint32_t v[4]; };
 struct KernelData28 { uint32_t v[7]; };
