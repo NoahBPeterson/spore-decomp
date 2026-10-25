@@ -1,0 +1,9 @@
+# source  symbol  va  flags
+../src/game/SPGonzago/SPCreatureMate.cpp  ?FUN_00d6cab0@@YADPAXHHHH0HM@Z  00d6cab0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCreatureMate.cpp  ?FUN_00d6cbc0@@YADPAXHHHH0HM@Z  00d6cbc0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCreatureMate.cpp  ?FUN_00d6cca0@@YADPAXHHHH0HM@Z  00d6cca0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCreatureMate.cpp  ?FUN_00d6ccd0@@YAXPAXHHHH0HM@Z  00d6ccd0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCreatureMate.cpp  ?FUN_00d6cdb0@@YADPAXHHHH0HM@Z  00d6cdb0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCreatureMate.cpp  ?FUN_00d6cdd0@@YAXPAXHHHH0HM@Z  00d6cdd0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCreatureMate.cpp  ?FUN_00d6cdf0@@YADPAXHHHH0HM@Z  00d6cdf0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCreatureMate.cpp  ?FUN_00d6d3c0@@YADPAXHHHH0HM@Z  00d6d3c0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
