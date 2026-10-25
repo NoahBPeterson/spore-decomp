@@ -1,8 +1,8 @@
-00834a00 UI::TextZoomName::Activate  # animates title/subtitle via Anim1/Anim2
-00834c60 UI::TextZoomName::Deactivate  # reverse animation pass
-00834e30 UI::TextZoomName::Shutdown  # releases windows/layout/props
-00834f30 TextZoomName message dispatch  # msg ids 0x1b/0x1c, layout id
-00834fa0 UI::TextZoomName::SetTargetWindow  # "UI/cSPUITextZoom", layout init
+00834a00 ?Activate@TextZoomName@@QAEII@Z  # UI::TextZoomName::Activate (animates title/subtitle via Anim1/Anim2)
+00834c60 ?Deactivate@TextZoomName@@QAEXI@Z  # UI::TextZoomName::Deactivate (reverse animation pass)
+00834e30 ?Shutdown@TextZoomName@@QAEXXZ  # UI::TextZoomName::Shutdown (releases windows/layout/props)
+00834f30 ?OnMessage@TextZoomProc@@QAEIII@Z  # TextZoomName message dispatch (msg ids 0x1b/0x1c, layout id)
+00834fa0 ?SetTargetWindow@TextZoomName@@QAEIPAX0II000@Z  # UI::TextZoomName::SetTargetWindow ("UI/cSPUITextZoom", layout init)
 008352a0 ?GetEventMask@cSPUITooltipWinProc@@UBEIXZ  # cSPUITooltipWinProc::GetEventMask migrated from s00834a00
 008352c0 ?FUN_008352c0@@YAPAXXZ  # FUN_008352c0 migrated from s00834a00 (verbatim, slice spelling)
 008352d0 ??0TooltipManager@@QAE@XZ  # TooltipManager::TooltipManager migrated from s00834a00 (verbatim, slice spelling)
@@ -14,4 +14,4 @@
 008354a0 ?SetTooltipText@TooltipManager@@QAEXHH@Z  # TooltipManager::SetTooltipText migrated from s00834a00 (verbatim, slice spelling)
 00835520 ?MakeFullyVisibleInMainWindow@TooltipManager@@QAEXH@Z  # TooltipManager::MakeFullyVisibleInMainWindow migrated from s00834a00 (verbatim, slice spelling)
 00835610 ?LoadProps@TooltipManager@@QAE_NXZ  # TooltipManager::LoadProps migrated from s00834a00 (verbatim, slice spelling)
-00835660 ?FUN_00835660@@YAXPAXHHH@Z  # FUN_00835660 migrated from s00834a00 (verbatim, slice spelling)
+00835660 ?ShowWindow@TooltipManager@@QAEXIII@Z  # TooltipManager::ShowWindow (FindWindowByID/bounding-box path)
