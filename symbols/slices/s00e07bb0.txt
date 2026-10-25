@@ -1,0 +1,1 @@
+00e07bb0 ?UpdateMeter@cSPUIMineralBar@SP@@QAEXXZ  # cSPUIMineralBar::UpdateMeter migrated from s00e07bb0 (verbatim, slice spelling)

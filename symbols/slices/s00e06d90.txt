@@ -1,0 +1,4 @@
+00e07950 ?Show@cSPUILoyaltyMeter_s00e0_6d90@SP@@QAEXXZ  # cSPUILoyaltyMeter_s00e0_6d90::Show migrated from s00e06d90 (verbatim, slice spelling)
+00e07990 ?Hide@cSPUILoyaltyMeter_s00e0_6d90@SP@@QAEXXZ  # cSPUILoyaltyMeter_s00e0_6d90::Hide migrated from s00e06d90 (verbatim, slice spelling)
+00e07b20 ?ShowExpanded@cSPUILoyaltyMeter_s00e0_6d90@SP@@QAEXXZ  # cSPUILoyaltyMeter_s00e0_6d90::ShowExpanded migrated from s00e06d90 (verbatim, slice spelling)
+00e07b70 ?HideExpanded@cSPUILoyaltyMeter_s00e0_6d90@SP@@QAEXXZ  # cSPUILoyaltyMeter_s00e0_6d90::HideExpanded migrated from s00e06d90 (verbatim, slice spelling)

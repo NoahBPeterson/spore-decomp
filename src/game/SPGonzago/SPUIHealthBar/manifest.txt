@@ -1,0 +1,17 @@
+# source  symbol  va  flags
+../src/game/SPGonzago/SPUIHealthBar.cpp  ?AsInterface@cSPUILoyaltyMeter@@QAEPAV1@I@Z  00e066a0  /O2 /Ob2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPUIHealthBar.cpp  ?SetStart@cSPUIMeter@@QAEXI@Z  00e066d0  /O2 /Ob2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPUIHealthBar.cpp  ?SetTrackedObject@cSPUIMeter@@QAEXPAUILink@@@Z  00e066e0  /O2 /Ob2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPUIHealthBar.cpp  ?SetModel@cSPUILoyaltyMeter@@QAEXHH@Z  00e06710  /O2 /Ob2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPUIHealthBar.cpp  ??1cSPUIMeter@@QAE@XZ  00e06870  /O2 /Ob2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPUIHealthBar.cpp  ?Update@cSPUIMeter@@QAE_NHPAX@Z  00e068e0  /O2 /Ob2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPUIHealthBar.cpp  ?Shutdown@cSPUIMeter@@QAEXI@Z  00e06940  /O2 /Ob2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPUIHealthBar.cpp  ?IsVisible@cSPUIMeter@@QAE_NXZ  00e06970  /O2 /Ob2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPUIHealthBar.cpp  ?SetLink@cSPUIMeter@@QAEXPAUILink@@@Z  00e06c50  /O2 /Ob2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPUIHealthBar.cpp  ?SetLinkB@cSPUIMeter@@QAEXPAUILink@@@Z  00e06ca0  /O2 /Ob2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPUIHealthBar.cpp  ?SetSource@cSPUIMeter@@QAEXPAUILink@@@Z  00e06cf0  /O2 /Ob2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPUIHealthBar.cpp  ?PullToFront@cSPUILoyaltyMeter@@QAEXXZ  00e06d50  /O2 /Ob2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPUIHealthBar.cpp  ?Show@cSPUILoyaltyMeter_s00e0_6d90@SP@@QAEXXZ  00e07950  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPUIHealthBar.cpp  ?Hide@cSPUILoyaltyMeter_s00e0_6d90@SP@@QAEXXZ  00e07990  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPUIHealthBar.cpp  ?ShowExpanded@cSPUILoyaltyMeter_s00e0_6d90@SP@@QAEXXZ  00e07b20  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPUIHealthBar.cpp  ?HideExpanded@cSPUILoyaltyMeter_s00e0_6d90@SP@@QAEXXZ  00e07b70  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
