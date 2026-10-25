@@ -2,6 +2,11 @@
 // Module flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 #include "types.h"
 
+// Codegen-only compiler barrier (emits no instructions); used to pin store order where cl's
+// scheduler would otherwise move an independent store above its neighbours.
+extern "C" void _ReadWriteBarrier(void);
+#pragma intrinsic(_ReadWriteBarrier)
+
 // ----------------------------------------------------------------- shared stubs
 struct VObj {
     virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
@@ -29,12 +34,16 @@ struct SpatialObj   { void SetModelKey(void* key); };
 extern "C" int gMorphData18;   // 0x1693d74
 extern "C" int gMorphData1c;   // 0x1693d78
 extern "C" int gMorphData20;   // 0x1693d7c
-extern void* gVtblMorph0;
-extern void* gVtblMorph1;
-extern void* gVtblMorphSpatial;
-extern void* gVtblTarget0;
-extern void* gVtblTarget1;
-extern void* gVtblTargetSpatial;
+// The image is not relocatable, so the retail constructors store their vftable addresses as plain
+// 32-bit immediates; writing them as integer constants reproduces those immediates byte for byte.
+enum {
+    kVtblMorph0  = 0x1470eb8,   // cMorphHandle primary vftable
+    kVtblMorph1  = 0x147112c,   // cMorphHandle second base vftable
+    kVtblMorphSp = 0x1470df0,   // cMorphHandle spatial sub-object vftable
+    kVtblTgt0    = 0x1470ff8,   // cTargetMorphHandle primary vftable
+    kVtblTgt1    = 0x1470fe4,   // cTargetMorphHandle second base vftable
+    kVtblTgtSp   = 0x1470f20    // cTargetMorphHandle spatial sub-object vftable
+};
 extern void* gModelKey;
 
 // @ 0x00c63b20
@@ -110,16 +119,15 @@ void HandleThing::Fn() {
         p->v40(1.0f);
 }
 
-// @ 0x00c643a0  (complete, near miss)
+// @ 0x00c643a0  (complete, near miss: vftable load not hoisted above the flag store)
 void HandleThing::SetEnabled(bool v) {
-    if (mEn != v) {
-        VObj* p = (VObj*)((char*)this + 0x34);
-        mEn = v;
-        if (v)
-            p->v40(mC * mA + mB);
-        else
-            p->v40(1.0f);
-    }
+    if (mEn == v)
+        return;
+    mEn = v;
+    if (v)
+        ((VObj*)((char*)this + 0x34))->v40(mC * mA + mB);
+    else
+        ((VObj*)((char*)this + 0x34))->v40(1.0f);
 }
 
 // ------------------------------------------------------------------ morph tgt
@@ -153,50 +161,95 @@ void* MorphB::QueryInterface(unsigned id) {
     return (id == 0x7a309fb) ? (void*)this : ((MorphCastHelper*)this)->FUN_00b18460(id);
 }
 
-// @ 0x00c63be0  (complete, near miss: store ordering)
 struct cMorphHandle {
-    char data[0x200];
+    void*   mpVtbl;          // +0x000  primary vftable
+    void*   mpVtbl04;        // +0x004  second base vftable
+    char    pad08[0x2c];     // +0x008
+    void*   mpVtblSpatial;   // +0x034  spatial sub-object vftable
+    char    pad38[0xa2];     // +0x038 ... +0x0d9
+    uint8_t mVis;            // +0x0da
+    char    padDb[0x2d];     // +0x0db ... +0x107
+    float   mF108;           // +0x108
+    float   mF10c;           // +0x10c
+    float   mF110;           // +0x110
+    uint8_t mB114;           // +0x114
+    uint8_t mB115;           // +0x115
+    char    pad116[2];       // +0x116 ... +0x117
     cMorphHandle();
+    void Offset(float* p, int a);
 };
+
+// @ 0x00c63be0  (complete, near miss: only the `xorps` placement differs)
+// Without the barriers cl reorders the six stores of this block (it hoists the [edi] vftable store
+// and the two flag bytes above the [esi]/[esi+4] stores); the original keeps strict source order.
 cMorphHandle::cMorphHandle() {
     ((GameDataBase*)this)->ctorGameData();
-    ((SpatialBase*)((char*)this + 0x34))->ctorSpatialObject();
-    *(void**)((char*)this + 0) = &gVtblMorph0;
-    *(void**)((char*)this + 4) = &gVtblMorph1;
-    *(void**)((char*)this + 0x34) = &gVtblMorphSpatial;
-    *(float*)((char*)this + 0x108) = 0.0f;
-    *(float*)((char*)this + 0x10c) = 0.0f;
-    *(float*)((char*)this + 0x110) = 0.0f;
-    *(uint8_t*)((char*)this + 0x114) = 1;
-    *(uint8_t*)((char*)this + 0x115) = 1;
-    *(uint8_t*)((char*)this + 0xda) = 0;
+    ((SpatialBase*)&mpVtblSpatial)->ctorSpatialObject();
+    _ReadWriteBarrier();
+    mpVtbl = (void*)kVtblMorph0;
+    _ReadWriteBarrier();
+    mpVtbl04 = (void*)kVtblMorph1;
+    _ReadWriteBarrier();
+    mpVtblSpatial = (void*)kVtblMorphSp;
+    _ReadWriteBarrier();
+    mF108 = 0.0f;
+    _ReadWriteBarrier();
+    mF10c = 0.0f;
+    _ReadWriteBarrier();
+    mF110 = 0.0f;
+    _ReadWriteBarrier();
+    mB114 = 1;
+    _ReadWriteBarrier();
+    mB115 = 1;
+    _ReadWriteBarrier();
+    mVis = 0;
 }
 
-// @ 0x00c63e30  (Simulator::cTargetMorphHandle::cTargetMorphHandle)
-extern void* gVtblTgtMorph0;    // 0x1470ff8
-extern void* gVtblTgtMorph1;    // 0x1470fe4
-extern void* gVtblTgtMorphSpr;  // 0x1470f20
 extern uint8_t gTgtMorphKeyData; // 0x15777e4
 
 struct cTargetMorphHandle : cMorphHandle {
+    float   mF118;              // +0x118
+    float   mF11c;              // +0x11c
+    float   mF120;              // +0x120
+    uint8_t mB124;              // +0x124
+    char    pad125[3];          // +0x125 ... +0x127
+    int     mI128;              // +0x128
+    float   mF12c;              // +0x12c
+    int     mI130;              // +0x130
+    Ref*    mpRef;              // +0x134
+    char    pad138[0x200 - 0x138];
     cTargetMorphHandle();
+    void Dtor();
+    void Release();
 };
 
+// @ 0x00c63e30
 cTargetMorphHandle::cTargetMorphHandle()
 {
-    char* self = (char*)this;
-    *(void**)(self + 0) = &gVtblTgtMorph0;
-    *(void**)(self + 4) = &gVtblTgtMorph1;
-    *(void**)(self + 0x34) = &gVtblTgtMorphSpr;
-    *(int*)(self + 0x130) = 3;
-    *(float*)(self + 0x118) = 0.0f;
-    *(float*)(self + 0x11c) = 0.0f;
-    *(float*)(self + 0x120) = 0.0f;
-    *(uint8_t*)(self + 0x124) = 0;
-    *(int*)(self + 0x128) = 0;
-    *(float*)(self + 0x12c) = 0.0f;
-    *(int*)(self + 0x134) = 0;
-    ((SpatialObj*)(self + 0x34))->SetModelKey(&gTgtMorphKeyData);
+    mpVtbl = (void*)kVtblTgt0;
+    _ReadWriteBarrier();
+    mpVtbl04 = (void*)kVtblTgt1;
+    _ReadWriteBarrier();
+    mpVtblSpatial = (void*)kVtblTgtSp;
+    _ReadWriteBarrier();
+    SpatialObj* spatial = (SpatialObj*)&mpVtblSpatial;
+    mF118 = 0.0f;
+    _ReadWriteBarrier();
+    mF11c = 0.0f;
+    _ReadWriteBarrier();
+    mF120 = 0.0f;
+    _ReadWriteBarrier();
+    mB124 = 0;
+    _ReadWriteBarrier();
+    mI128 = 0;
+    _ReadWriteBarrier();
+    mF12c = 0.0f;
+    _ReadWriteBarrier();
+    mI130 = 3;
+    _ReadWriteBarrier();
+    mpRef = 0;
+    _ReadWriteBarrier();
+    spatial->SetModelKey(&gTgtMorphKeyData);
 }
 
 // @ 0x00c63dd0  (complete, near miss: vcall register)
@@ -212,54 +265,42 @@ struct AppObj {
 AppObj* SP_App();                // 0x0067dd10
 struct Ctx { bool Check(); };    // 0x007c4900
 
-struct Target {
-    char  pad00[0x108];
-    float f108;   // 0x108
-    float f10c;   // 0x10c
-    float f110;   // 0x110
-    void Offset(float* p, int a);
-};
-void Target::Offset(float* p, int a) {
+void cMorphHandle::Offset(float* p, int a) {
     Ctx* c = (Ctx*)((AppObj*)SP_App())->v58(p, a);
     if (c->Check()) {
-        float x = f108 + p[0];
-        float y = f10c + p[1];
-        float z = f110 + p[2];
+        float x = mF108 + p[0];
+        float y = mF10c + p[1];
+        float z = mF110 + p[2];
         p[0] = x;
         p[1] = y;
         p[2] = z;
     }
 }
 
-// @ 0x00c63ef0  (complete, near miss: store schedule)
-struct Target2 {
-    char pad00[0x134];
-    Ref* mp134;   // 0x134
-    void Dtor();
-    void Release();
-};
-void Target2::Dtor() {
-    *(void**)this = &gVtblTarget0;
-    *(void**)((char*)this + 4) = &gVtblTarget1;
-    *(void**)((char*)this + 0x34) = &gVtblTargetSpatial;
-    if (mp134)
-        mp134->v1();
-    *(void**)this = &gVtblMorph0;
-    *(void**)((char*)this + 4) = &gVtblMorph1;
-    *(void**)((char*)this + 0x34) = &gVtblMorphSpatial;
-    ((SpatialBase*)((char*)this + 0x34))->ctorSpatialObject();
+// @ 0x00c63ef0  (complete, near miss: the +0x134 load is hoisted above the vftable stores)
+void cTargetMorphHandle::Dtor() {
+    mpVtbl = (void*)kVtblTgt0;
+    mpVtbl04 = (void*)kVtblTgt1;
+    mpVtblSpatial = (void*)kVtblTgtSp;
+    _ReadWriteBarrier();
+    if (mpRef)
+        mpRef->v1();
+    mpVtbl = (void*)kVtblMorph0;
+    mpVtbl04 = (void*)kVtblMorph1;
+    mpVtblSpatial = (void*)kVtblMorphSp;
+    ((SpatialBase*)&mpVtblSpatial)->ctorSpatialObject();
     ((GameDataBase*)this)->ctorGameData();
 }
 
 // @ 0x00c63f40
-void Target2::Release() {
-    if (mp134) {
-        if (mp134->v4())
-            mp134->v3(0);
+void cTargetMorphHandle::Release() {
+    if (mpRef) {
+        if (mpRef->v4())
+            mpRef->v3(0);
     }
-    Ref* p = mp134;
+    Ref* p = mpRef;
     if (p) {
-        mp134 = 0;
+        mpRef = 0;
         p->v1();
     }
 }
