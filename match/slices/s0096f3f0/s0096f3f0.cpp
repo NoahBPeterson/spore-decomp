@@ -3,9 +3,10 @@
 //
 // Module flags: /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast (UTFWin region, see s0096c6f0).
 //
-// CreateRenderables (0x96f3f0, 2620 bytes) is a full 2D frame/outline renderer; only a
-// faithful fragment of it is reconstructed here (see partial.txt).  OnMouseMove (0x970460)
-// updates the row-extra-data hash map and is likewise only approximated.
+// CreateRenderables (0x96f3f0, 2620 bytes) is a full 2D frame/outline renderer: it is
+// reconstructed completely (all 11 style cases) but not instruction-exactly; see
+// nonmatching.txt for the residual diff.  OnMouseMove (0x970460) updates the
+// row-extra-data hash map and is likewise only approximated.
 
 #include "types.h"
 #include <intrin.h>
@@ -19,6 +20,55 @@ struct RenderContext_s0096_f3f0 {
     void End2D();                       // 0x0095bb20
 };
 
+// A float rectangle as used by the 2D drawing layer (left/top/right/bottom).
+struct RectF_s96 {
+    float mLeft;    // +0x00
+    float mTop;     // +0x04
+    float mRight;   // +0x08
+    float mBottom;  // +0x0c
+};
+
+// The 2D canvas returned by RenderCtx::Begin2D; the frame renderer only needs slots
+// +0x04 (solid colour) and +0x38 (axis-aligned rectangle).
+struct Canvas_s96 {
+    virtual void v00();                                        // +0x00
+    virtual void SetColor(unsigned int color);                 // +0x04
+    virtual void v08();                                        // +0x08
+    virtual void v0c();                                        // +0x0c
+    virtual void v10();                                        // +0x10
+    virtual void v14();                                        // +0x14
+    virtual void v18();                                        // +0x18
+    virtual void v1c();                                        // +0x1c
+    virtual void v20();                                        // +0x20
+    virtual void v24();                                        // +0x24
+    virtual void v28();                                        // +0x28
+    virtual void v2c();                                        // +0x2c
+    virtual void v30();                                        // +0x30
+    virtual void v34();                                        // +0x34
+    virtual void DrawRect(float l, float t, float r, float b); // +0x38
+};
+
+// The render context passed in the first stack slot (Begin2D entry point).
+struct RenderCtx_s96 {
+    Canvas_s96* Begin2D(int mode);                             // 0x0095bc10
+};
+
+// Frame description passed in the third stack slot.
+struct FrameInfo_s96 {
+    int          mStyleIndex;    // +0x00  index handed to FrameDrawable::GetStyle
+    unsigned int mPad04;         // +0x04
+    unsigned int mOutlineColor;  // +0x08  non-zero: stroke the outer rect first
+};
+
+// Style record returned by FrameDrawable::GetStyle.
+struct FrameStyle_s96 {
+    int          mStyle;         // +0x00  switch selector 0..10
+    unsigned int mColor;         // +0x04  base colour, four Lerp variants are derived
+    unsigned int mUnknown08;     // +0x08
+    unsigned int mReserved[0x15];// +0x0c
+    unsigned int mEdgeColor;     // +0x5c  slant-edge colour for styles 9 and 10
+};
+
 } // namespace UTFWin
 
 namespace UTFWinControls {
@@ -29,7 +79,14 @@ namespace UTFWinControls {
 int   __cdecl FUN_009512c0();                                                  // 0x009512c0
 void* __cdecl FUN_009512d0(int size, int align, const char* type, void* fac);  // 0x009512d0
 void  __fastcall FadeEffect_ctor(void*);                                       // 0x00963db0
-void  __fastcall FUN_0096f280(void* this_, int arg);                           // 0x0096f280
+UTFWin::FrameStyle_s96* __fastcall FUN_0096f280(void* this_, int unused, int arg); // 0x0096f280
+unsigned int __cdecl Color_Lerp(unsigned int a, unsigned int b, float t);       // 0x007f5eb0
+void __cdecl Drawing_GradientBox(UTFWin::Canvas_s96* canvas,                    // 0x0095d540
+                                 const float* outer, const float* inner,
+                                 const float* colOuter, const float* colInner);
+void __fastcall FUN_0096f1b0(UTFWin::Canvas_s96* canvas, float* unused,        // 0x0096f1b0
+                             float* rect, float v);
+double __cdecl iat_floor(double x);                                             // 0x011e0906
 
 struct FloatSink {
     void Push(float* v);          // 0x0095e890
@@ -83,7 +140,9 @@ class FrameDrawable { public:
     int   mOutlineColor;   // +0x5c
 
     FrameDrawable();                                                        // 0x0096fe30
-    int CreateRenderables(UTFWin::RenderContext_s0096_f3f0* ctx, void* pRect);  // 0x0096f3f0
+    void CreateRenderables(UTFWin::RenderCtx_s96* ctx,
+                          const UTFWin::RectF_s96* pClip,
+                          const UTFWin::FrameInfo_s96* pInfo);                  // 0x0096f3f0
 };
 
 // @ 0x0096fe30
@@ -119,14 +178,217 @@ FrameDrawable::FrameDrawable()
     *(int*)((char*)this + 0x0c) = 2;
 }
 
-// @ 0x0096f3f0
-int FrameDrawable::CreateRenderables(UTFWin::RenderContext_s0096_f3f0* ctx, void* pRect)
+// The border-width block of FrameDrawable (+0x4c..+0x58) with per-edge names.
+struct FrameBorderView_s96 {
+    char  pad00[0x4c];
+    float mBorderLeft;    // +0x4c
+    float mBorderTop;     // +0x50
+    float mBorderRight;   // +0x54
+    float mBorderBottom;  // +0x58
+};
+
+// Colours are handed to the drawing layer as float slots holding the packed u32 bits.
+static inline float s96_colorSlot(unsigned int color)
 {
-    UTFWin::RenderContext_s0096_f3f0* pRC = ctx;
-    void* p = pRC->Begin2D(0);
-    (*(void(__fastcall**)(void*, int))((char*)*(void**)p + 4))(p, -1);
-    FUN_0096f280(this, *(int*)pRect);
-    return 0;
+    union { unsigned int mBits; float mValue; } slot;
+    slot.mBits = color;
+    return slot.mValue;
+}
+
+// @ 0x0096f3f0
+void FrameDrawable::CreateRenderables(UTFWin::RenderCtx_s96* ctx,
+                                     const UTFWin::RectF_s96* pClip,
+                                     const UTFWin::FrameInfo_s96* pInfo)
+{
+    UTFWin::Canvas_s96* canvas = ctx->Begin2D(0);
+    canvas->SetColor(0xffffffffu);
+
+    UTFWin::FrameStyle_s96* style = FUN_0096f280(this, 0, pInfo->mStyleIndex);
+
+    // ---- border widths, clamped so that opposite borders never exceed the extent
+    float borderLeft   = ((FrameBorderView_s96*)this)->mBorderLeft;
+    float borderTop    = ((FrameBorderView_s96*)this)->mBorderTop;
+    float borderRight  = ((FrameBorderView_s96*)this)->mBorderRight;
+    float borderBottom = ((FrameBorderView_s96*)this)->mBorderBottom;
+
+    float extentX = pClip->mRight - pClip->mLeft;
+    if (extentX < borderLeft + borderRight) {
+        float half = (float)iat_floor((double)(extentX * 0.5f));
+        if (half < borderLeft)
+            borderLeft = half;
+        borderRight = extentX - borderLeft;
+    }
+    float extentY = pClip->mBottom - pClip->mTop;
+    if (extentY < borderTop + borderBottom) {
+        float half = (float)iat_floor((double)(extentY * 0.5f));
+        if (half < borderTop)
+            borderTop = half;
+        borderBottom = extentY - borderTop;
+    }
+
+    // ---- inner (content) rect; style 9 shrinks it by one pixel on every side
+    float innerLeft   = pClip->mLeft;
+    float innerTop    = pClip->mTop;
+    float innerRight  = pClip->mRight;
+    float innerBottom = pClip->mBottom;
+    if (style->mStyle == 9) {
+        innerLeft   += 1.0f;
+        innerTop    += 1.0f;
+        innerRight  -= 1.0f;
+        innerBottom -= 1.0f;
+    }
+
+    // ---- outer rect = inner rect grown by the border widths
+    float outerLeft   = innerLeft + borderLeft;
+    float outerTop    = innerTop + borderTop;
+    float outerRight  = innerRight - borderRight;
+    float outerBottom = innerBottom - borderBottom;
+
+    float gradLeft   = outerLeft;
+    float gradTop    = outerTop;
+    float gradRight  = outerRight;
+    float gradBottom = outerBottom;
+
+    // style 10 additionally shrinks the stroked outer rect by one pixel
+    if (style->mStyle == 10) {
+        outerLeft   += 1.0f;
+        outerTop    += 1.0f;
+        outerRight  -= 1.0f;
+        outerBottom -= 1.0f;
+    }
+
+    // ---- optional outline stroke of the (unshrunk) outer rect
+    if (pInfo->mOutlineColor != 0) {
+        canvas->SetColor(pInfo->mOutlineColor);
+        canvas->DrawRect(gradLeft, gradTop, gradRight, gradBottom);
+    }
+
+    // ---- the four frame colours derived from the style colour
+    unsigned int color = style->mColor;
+    unsigned int darkLow  = Color_Lerp(color, color & 0xff000000u, 0.2f);
+    unsigned int darkHigh = Color_Lerp(color, color & 0xff000000u, 0.6f);
+    unsigned int litLow   = Color_Lerp(color, color | 0x00ffffffu, 0.2f);
+    unsigned int litHigh  = Color_Lerp(color, color | 0x00ffffffu, 0.6f);
+
+    float innerRect[4] = { innerLeft, innerTop, innerRight, innerBottom };
+    float outerRect[4] = { outerLeft, outerTop, outerRight, outerBottom };
+    // Two colour pairs as expected by Drawing::GradientBox (two packed colours per pair).
+    float shadePair[4] = { s96_colorSlot(litLow), s96_colorSlot(litLow),
+                           s96_colorSlot(litHigh), s96_colorSlot(litHigh) };
+    float lightPair[4] = { s96_colorSlot(darkLow), s96_colorSlot(darkLow),
+                           s96_colorSlot(darkHigh), s96_colorSlot(darkHigh) };
+
+    switch (style->mStyle) {
+    case 0:
+    case 2: {
+        // Flat frame: three solid bands plus a zero-height top edge.
+        canvas->SetColor(color);
+        canvas->DrawRect(innerLeft, innerTop, innerRight, outerTop);
+        canvas->DrawRect(innerLeft, outerBottom, innerRight, innerBottom);
+        canvas->DrawRect(innerLeft, outerTop, outerLeft, innerBottom);
+        canvas->DrawRect(outerRight, outerTop, innerRight, innerBottom);
+        break;
+    }
+    case 3:
+    case 4: {
+        // Dashed frame, dash length = scale * border width, two dash lengths per stride.
+        float scale = (style->mStyle == 4) ? 3.0f : 1.0f;
+        canvas->SetColor(color);
+
+        float step = scale * borderTop;
+        if (innerLeft + step <= innerRight) {
+            float stride = step * 2.0f;
+            float x = innerLeft;
+            do {
+                float end = x + step;
+                if (end + step > innerRight)
+                    end = innerRight;
+                canvas->DrawRect(x, innerTop, end, outerTop);
+                x = stride + x;
+            } while (x <= innerRight);
+        }
+
+        step = scale * borderBottom;
+        if (innerLeft + step <= innerRight) {
+            float stride = step * 2.0f;
+            float x = innerLeft;
+            do {
+                float end = x + step;
+                if (end + step > innerRight)
+                    end = innerRight;
+                canvas->DrawRect(x, outerBottom, end, innerBottom);
+                x = stride + x;
+            } while (x <= innerRight);
+        }
+
+        step = scale * borderLeft;
+        float y = step + outerTop;
+        if (y <= outerBottom) {
+            float stride = step * 2.0f;
+            do {
+                float end = y + step;
+                if (end + step > outerBottom)
+                    end = outerBottom;
+                canvas->DrawRect(innerLeft, y, outerLeft, end);
+                y = stride + y;
+            } while (y <= outerBottom);
+        }
+
+        step = scale * borderRight;
+        y = step + outerTop;
+        if (y <= outerBottom) {
+            float stride = step * 2.0f;
+            do {
+                float end = y + step;
+                if (end + step > outerBottom)
+                    end = outerBottom;
+                canvas->DrawRect(outerRight, y, innerRight, end);
+                y = stride + y;
+            } while (y <= outerBottom);
+        }
+        break;
+    }
+    case 5:
+        canvas->SetColor(0xffffffffu);
+        Drawing_GradientBox(canvas, innerRect, outerRect, shadePair, lightPair);
+        break;
+    case 6:
+        canvas->SetColor(0xffffffffu);
+        Drawing_GradientBox(canvas, innerRect, outerRect, lightPair, shadePair);
+        break;
+    case 7:
+    case 8: {
+        // Two-stage gradient through the mid ring between the inner and outer rects.
+        float midRect[4];
+        midRect[0] = (outerLeft + innerLeft) * 0.5f;
+        midRect[1] = (outerTop + innerTop) * 0.5f;
+        midRect[2] = (outerRight + innerRight) * 0.5f;
+        midRect[3] = (outerBottom + innerBottom) * 0.5f;
+        canvas->SetColor(0xffffffffu);
+        if (style->mStyle == 8) {
+            Drawing_GradientBox(canvas, innerRect, midRect, lightPair, lightPair);
+            Drawing_GradientBox(canvas, midRect, outerRect, shadePair, shadePair);
+        } else {
+            Drawing_GradientBox(canvas, innerRect, midRect, shadePair, shadePair);
+            Drawing_GradientBox(canvas, midRect, outerRect, lightPair, lightPair);
+        }
+        break;
+    }
+    case 9:
+        canvas->SetColor(0xffffffffu);
+        Drawing_GradientBox(canvas, innerRect, outerRect, shadePair, lightPair);
+        canvas->SetColor(style->mEdgeColor);
+        FUN_0096f1b0(canvas, 0, innerRect, 1.0f);
+        break;
+    case 10:
+        canvas->SetColor(0xffffffffu);
+        Drawing_GradientBox(canvas, innerRect, outerRect, lightPair, shadePair);
+        canvas->SetColor(style->mEdgeColor);
+        FUN_0096f1b0(canvas, 0, outerRect, 1.0f);
+        break;
+    default:
+        break;
+    }
 }
 
 // ---------------------------------------------------------------------------
