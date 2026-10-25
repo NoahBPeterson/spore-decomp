@@ -1,0 +1,5 @@
+00b12890 ?Construct@cTerrainCameraController@@QAEPAU1@PAX@Z  # SP::cTerrainCameraController ctor
+00b12dd0 ?FUN_00b12dd0@cTerrainCameraController@@QAEXPAMH_N@Z  # camera-anchor update (no PDB name in slice spelling)
+00b12f90 ?SlerpOrientation@@YAXPAUcSPQuaternion@@PBUVector3@@1PBU1@1@Z  # free SlerpOrientation helper
+00b134a0 ?FUN_00b134a0@cTerrainCameraController@@QAEXXZ  # camera-to-world transform build
+00b13790 ?FUN_00b13790@cTerrainCameraController@@QAEXPAX@Z  # matrix readback helper
