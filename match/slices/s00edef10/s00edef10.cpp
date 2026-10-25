@@ -29,6 +29,8 @@ struct Mgrs {
 #define VCP0(p,off)     (((void*(__thiscall*)(void*))     VTP(p)[(off)/4])((void*)(p)))
 #define VCP1(p,off,a)   (((void*(__thiscall*)(void*,int)) VTP(p)[(off)/4])((void*)(p),(int)(a)))
 #define VCP2(p,off,a,b) (((void*(__thiscall*)(void*,int,int))VTP(p)[(off)/4])((void*)(p),(int)(a),(int)(b)))
+#define VCP3(p,off,a,b,c) (((void*(__thiscall*)(void*,int,int,int))VTP(p)[(off)/4])((void*)(p),(int)(a),(int)(b),(int)(c)))
+#define VCP2F(p,off,a,b,f) (((void*(__thiscall*)(void*,int,int,float))VTP(p)[(off)/4])((void*)(p),(int)(a),(int)(b),(float)(f)))
 
 extern "C" int FindWindowByID(void*, int, int);
 extern "C" int FUN_00eece20(int);
@@ -38,21 +40,50 @@ extern "C" int FUN_00f3e8a0(int, int);
 extern "C" int FUN_00f26440(void*, int);
 extern "C" int FUN_00f28c10(void*, int);
 extern "C" void* SP_WindowManager(); // 0x0067caa0
-extern "C" void* SP_MessageServer();
-extern "C" void* SP_PropertyManager();
-extern "C" int  SP_GetPropertyAsFloatArray(void*, int, void*, void*);
+extern "C" void* SP_MessageServer(); // 0x0067dcc0
+extern "C" void* SP_PropertyManager(); // 0x0067de30
+extern "C" int  SP_GetPropertyAsFloatArray(void*, int, void*, void*); // 0x006a08b0
 extern "C" void SPUIHelpers_RemoveWindowCallback(void*, void*);
 extern "C" void SPUIHelpers_CreateCallbackWinProc(void*, void*, int, int, void*);
 extern "C" void SPUIHelpers_SetDrawableImage(void*, int, int, int);
 extern "C" void* EA_UTFWin_MultiHeapObject_operator_new(int);   // 0x0080fee0 (equiv t2)
-extern "C" void  FUN_00b3d320();
-extern "C" void* FUN_00b1de80();
-extern "C" void  FUN_00ed39a0(int);
-extern "C" void  FUN_00edce20(int);
-extern "C" void  FUN_00644b10(void*);
-extern "C" void  FUN_00644b60(void*);
-extern "C" void  SP_cSPUIAssetBrowser_AdvancedLaunch(void*);
-extern "C" int   FNVHash(int, int, int);
+extern "C" void* FUN_00b3d320(); // 0x00b3d320
+extern "C" void* FUN_00b1de80(); // 0x00b1de80
+extern "C" void  FUN_00ed39a0(int); // 0x00ed39a0
+extern "C" void  FUN_00edce20(int); // 0x00edce20
+extern "C" void  FUN_00644b10(void*); // 0x00644b10
+extern "C" void  FUN_00644b60(void*); // 0x00644b60
+extern "C" void  SP_cSPUIAssetBrowser_AdvancedLaunch(void*); // 0x0064a990
+extern "C" int   FNVHash(int, int, int); // 0x00932e80
+
+// ---- completion helpers (0x00edf090 .. 0x00edfb30) ------------------------
+extern int DAT_015ac654;
+extern int DAT_0148a720[];
+extern int DAT_0148a754[];
+extern int DAT_0148a764[];
+extern int DAT_0148a774[];
+extern unsigned DAT_0148a734;
+extern unsigned DAT_0148a760;
+extern unsigned DAT_0148a770;
+extern unsigned DAT_0148a788;
+
+struct Key3 { int h0, h4, h8; };
+
+extern "C" void* FUN_00f473a0(int, const char*, int, int, int, int);  // 0x00f473a0
+extern "C" void* FUN_005c66a0(void*);                                // 0x005c66a0
+extern "C" void* FUN_005c64e0(void*);                                // 0x005c64e0
+extern "C" void* FUN_005c6810(void*, Key3*, int, int);               // 0x005c6810
+extern "C" void* FUN_00ece990(void*);                                // 0x00ece990
+extern "C" char  FUN_008068d0(void*, int, int);                      // 0x008068d0
+extern "C" int   FUN_00edcec0(int*, int*, unsigned*);                // 0x00edcec0
+extern "C" void  FUN_00edcf60(void*, float);                         // 0x00edcf60
+extern "C" int   FUN_0040cf10(void*, int, float*);                   // 0x0040cf10
+extern "C" int   FUN_00881ae0(long long, wchar_t*, int);             // 0x00881ae0
+extern "C" int   FUN_00b5b800();                                     // 0x00b5b800
+extern "C" void  FUN_0064a990(void*);                                // 0x0064a990
+extern "C" void  FUN_005f2290(void*, int);                           // 0x005f2290
+extern "C" void  FUN_00ecd990(void*, float);                         // 0x00ecd990
+
 
 struct VHide { void f00edd440(float*, float*); };
 struct Viso   { bool F26440(int); int F28c10(int); };
@@ -304,21 +335,43 @@ void* Ed::FE10(int* p2, int p3, int p4)
 // ============================================================ 0x00edfb30
 struct Host { char pad[0x18]; void FB30(int, int, char, int); };
 extern char g_host_15ac6f0[];
+struct LaunchBlock {
+    int  id;           // +0x00
+    int  gameMode;     // +0x04
+    int  m08, m0c;
+    char b10, b11, b12, b13, b14; char p15[3];
+    int  m18, m1c, m20;
+    char b24; char p25[3];
+    int  m28;
+    char b2c; char p2d[3];
+    int  m30, m34, m38, m3c, m40, m44;
+};
 // @ 0x00edfb30
 void Host::FB30(int p2, int p3, char p4, int p5)
 {
-    int* self = (int*)this;
-    char* t = (char*)self;
+    char* t = (char*)this;
     *(int*)(t + 0x10) = p5;
     *(char*)(t + 0x14) = p4;
     *(int*)(t + 0xc) = p3;
     *(int*)(t + 8) = p2;
-    MGR()->F3e8a0(p2);
-    FUN_00644b10(t + 8);
-    FUN_00644b60(t + 8);
+    int edi = MGR()->F3e8a0(p2);
+
+    LaunchBlock L;
+    ((void(__thiscall*)(void*))FUN_00644b10)(&L);
+    L.id = FNVHash((int)"ScenarioGameplaySkinning", 0x811c9dc5, 1);
+    L.gameMode = FUN_00b5b800();
+    L.m30 = 0xad0e52;
+    L.m18 = *(int*)(edi + 0x28);
+    L.m1c = *(int*)(edi + 0x2c);
+    L.m20 = *(int*)(edi + 0x30);
+    L.m38 = (int)this;
+    L.b24 = 0;
+    L.b11 = 1;
+
     void* ms = SP_MessageServer();
     VC2(ms, 0x24, (int)(t + 4), 0x30c11c7);
-    SP_cSPUIAssetBrowser_AdvancedLaunch(t + 8);
+    SP_cSPUIAssetBrowser_AdvancedLaunch(&L);
+    ((void(__thiscall*)(void*))FUN_00644b60)(&L);
 }
 
 // ============================================================ 0x00edfcc0
@@ -373,36 +426,82 @@ void Ed::FBF0(int* param)
 
 // ============================================================ 0x00edfa30
 // @ 0x00edfa30
-bool __cdecl f00edfa30(int p1, int p2, int p3, int p4)
+bool __cdecl f00edfa30(int index, float* out, char* lowClipped, char* highClipped, int propId)
 {
-    if (p2 == 0 || p3 == 0 || p4 == 0)
+    if (out == 0 || lowClipped == 0 || highClipped == 0)
         return false;
-    void* local = 0;
+    void* volatile obj = 0;
     void* pm = SP_PropertyManager();
-    VCP2(pm, 0x2c, 0x2980610e, (int)&local);
-    int cnt = 0;
-    int rem = 0;
-    int n = SP_GetPropertyAsFloatArray((void*)p3, p2, &cnt, &rem);
-    (void)n;
-    if (0 == 0) return false;
-    return false;
+    void* old = obj;
+    if (old != 0) {
+        obj = 0;
+        ((void(__thiscall*)(void*))VTP(old)[1])(old);
+    }
+    VCP3(pm, 0x2c, 0x2980610e, DAT_015ac654, &obj);
+    if (obj == 0)
+        return false;
+    int count = 0;
+    float* arr = 0;
+    SP_GetPropertyAsFloatArray(obj, propId, &count, &arr);
+    if (arr == 0 || count <= 2) {
+        if (obj != 0)
+            VC0(obj, 4);
+        return false;
+    }
+    int i = index;
+    *lowClipped = 0;
+    *highClipped = 0;
+    if (i <= 0) {
+        i = 0;
+        *lowClipped = 1;
+    }
+    int hi = count - 1;
+    if (i >= hi) {
+        i = hi;
+        *highClipped = 1;
+    }
+    *out = arr[i];
+    if (obj != 0)
+        VC0(obj, 4);
+    return true;
 }
 
 // ============================================================ 0x00edf730
 // @ 0x00edf730
-bool __cdecl f00edf730(int p1, int p2, int p3, int p4)
+bool __cdecl f00edf730(float value, int* outIndex, int* outLow, int* outHigh, int propId)
 {
-    if (p2 == 0 || p3 == 0 || p4 == 0)
+    if (outIndex == 0 || outLow == 0 || outHigh == 0)
         return false;
-    void* local = 0;
+    void* volatile obj = 0;
     void* pm = SP_PropertyManager();
-    VCP2(pm, 0x2c, 0x2980610e, (int)&local);
-    int cnt = 0, rem = 0;
-    float* arr = 0;
-    SP_GetPropertyAsFloatArray((void*)p3, p2, &arr, &cnt);
-    (void)rem;
-    if (0 == 0)
+    void* old = obj;
+    if (old != 0) {
+        obj = 0;
+        ((void(__thiscall*)(void*))VTP(old)[1])(old);
+    }
+    VCP3(pm, 0x2c, 0x2980610e, DAT_015ac654, &obj);
+    if (obj == 0)
         return false;
+    int count = 0;
+    float* arr = 0;
+    SP_GetPropertyAsFloatArray(obj, propId, &count, &arr);
+    if (arr == 0 || count <= 2) {
+        if (obj != 0)
+            VC0(obj, 4);
+        return false;
+    }
+    *outLow = 0;
+    *outHigh = count - 1;
+    for (int i = 0; i < count; ++i) {
+        if (arr[i] >= value) {
+            *outIndex = i;
+            if (obj != 0)
+                VC0(obj, 4);
+            return true;
+        }
+    }
+    if (obj != 0)
+        VC0(obj, 4);
     return false;
 }
 
@@ -480,7 +579,7 @@ void Ed::FEF10()
     }
 }
 
-// ============================================================ 0x00edf090  (partial)
+// ============================================================ 0x00edf090
 // @ 0x00edf090
 void Ed::F090(int arg)
 {
@@ -491,10 +590,11 @@ void Ed::F090(int arg)
         return;
     int base = FUN_00efc520() * 0x4e0 + *(int*)(o + 0x70);
     *(int*)(t + 0x24) = arg;
-    void* ecx = *(void**)(t + 0x18);
+
+    void* w = *(void**)(t + 0x18);
     void* esi;
-    if (ecx != 0) {
-        esi = VCP2(ecx, 0xf0, arg, 1);
+    if (w != 0) {
+        esi = VCP2(w, 0xf0, arg, 1);
         if (esi != 0) {
             void* p = VCP1(esi, 0xc, 0x8ed27e7a);
             if (p != 0)
@@ -506,23 +606,182 @@ void Ed::F090(int arg)
     void* q = VCP2(esi, 0xf0, 0x742be58, 1);
     if (q != 0)
         VC2(q, 0x7c, 1, 1);
-    (void)base;
+
+    int id = 0x742cbe0;
+    switch (arg) {
+    case 0x742bd98:
+        id = FUN_00edcec0((int*)(base + 0x4a8), DAT_0148a720, &DAT_0148a734) + 0x742cbe0;
+        break;
+    case 0x742bdb0:
+        id = FUN_00edcec0((int*)(base + 0x4b0), DAT_0148a754, &DAT_0148a760) + 0x742cbe0;
+        break;
+    case 0x742bdc0:
+        id = FUN_00edcec0((int*)(base + 0x4b4), DAT_0148a764, &DAT_0148a770) + 0x742cbe0;
+        break;
+    case 0x742bdd0:
+        id = FUN_00edcec0((int*)(base + 0x4b8), DAT_0148a774, &DAT_0148a788) + 0x742cbe0;
+        break;
+    }
+
+    void* r = VCP2(esi, 0xf0, id, 1);
+    if (r != 0) {
+        void* p = VCP1(r, 0xc, 0x8ed27e7a);
+        if (p != 0)
+            VC2(p, 0x28, 4, 1);
+    }
 }
 
-// ============================================================ 0x00edf510  (partial skeleton)
+// ============================================================ 0x00edf510
+struct BehaviorUI {
+    char  pad00[0x14];
+    void* m14;        // +0x14  swatch item
+    void* m18;        // +0x18  palette window
+    char  pad1c[4];
+    int   m20;        // +0x20  owner/game-object id
+    int   m24;        // +0x24  selected item id
+};
+struct SwatchItem {
+    char  pad00[0x24];
+    void* m24;        // +0x24  embedded cSPPaletteItemUI vtable
+    char  pad28[0x24];
+    void* m4c;        // +0x4c
+};
+struct PaletteInfo {
+    char  pad00[8];
+    void* m08;        // +0x08
+    char  pad0c[4];
+    void* m10;        // +0x10
+    char  pad14[4];
+    u16   m18;        // +0x18
+};
 // @ 0x00edf510
 void Ed::F510()
 {
-    (void)this;
-    // Large palette-item / swatch construction not reconstructed (see partial.txt).
+    BehaviorUI* self = (BehaviorUI*)this;
+    if (self->m14 != 0)
+        return;
+    if (self->m18 == 0)
+        return;
+    void* palWin = VCP2(self->m18, 0xf0, 0x792e8a8, 1);
+    if (palWin == 0)
+        return;
+
+    FUN_008068d0(palWin, 0, -1);
+
+    void* pal = FUN_00f473a0(0x54, "UI/cScenarioEditModeBehaviorUI/PaletteItem", 0, 0, 0, 0);
+    if (pal != 0) {
+        pal = FUN_005c66a0(pal);
+        if (pal != 0)
+            VC0(pal, 4);
+    }
+    Key3 key;
+    key.h0 = FNVHash((int)"BehaviorUIObject", 0x811c9dc5, 1);
+    key.h4 = 0xb1b104;
+    key.h8 = 0xd87454e6;
+    if (!((char(__thiscall*)(void*, Key3*, int, int))FUN_005c6810)(pal, &key, 0, 0)) {
+        if (pal != 0)
+            VC0(pal, 8);
+        return;
+    }
+
+    SwatchItem* sw = (SwatchItem*)FUN_00f473a0(0x6c, "UI/cScenarioEditModeBehaviorUI/SwatchItemUI", 0, 0, 0, 0);
+    if (sw != 0)
+        sw = (SwatchItem*)FUN_00ece990(sw);
+    self->m14 = sw;
+    VC0(sw, 4);
+
+    PaletteInfo* info = (PaletteInfo*)FUN_00f473a0(0x34, "UI/cScenarioEditModeBehaviorUI/PaletteInfo", 0, 0, 0, 0);
+    if (info != 0) {
+        info = (PaletteInfo*)FUN_005c64e0(info);
+        if (info != 0)
+            VC0(info, 4);
+    }
+    if (info->m08 != 0) {
+        int* rc = (int*)info->m08;
+        info->m08 = 0;
+        int n = rc[1] - 1;
+        rc[1] = n;
+        if (n == 0) {
+            rc[1] = 1;
+            ((void(__thiscall*)(void*, int))((void**)rc[0])[0])(rc, 1);
+        }
+    }
+    if (info->m10 != 0) {
+        void* p = info->m10;
+        info->m10 = 0;
+        VC0(p, 4);
+    }
+    info->m18 = 0x268a;
+
+    VC2(palWin, 0x7c, 0x10, 1);
+
+    void* sub = (char*)sw + 0x24;
+    void* prev = VCP1(palWin, 0x10, (int)info);
+    void** secVt = *(void***)((char*)this + 4);
+    ((void(__thiscall*)(void*, int, int, int))secVt[1])(sub, (int)sw->m24, (int)palWin, (int)prev);
+
+    ((void(__thiscall*)(void*, int))FUN_005f2290)(sw->m4c, 0);
+
+    void* mgr = FUN_00b3d320();
+    void* pl = ((void*(__thiscall*)(void*))FUN_00b1de80)(mgr);
+    float h = 1.0f;
+    FUN_0040cf10(pl, 0xa25ab8e0, &h);
+    ((void(__thiscall*)(void*, float))FUN_00ecd990)(sw, h);
+    ((void(__thiscall*)(void*, int))FUN_00edce20)(this, 0);
+    VC0(info, 8);
+    if (pal != 0)
+        VC0(pal, 8);
 }
 
-// ============================================================ 0x00edf830  (partial skeleton)
+// ============================================================ 0x00edf830
 // @ 0x00edf830
-void __cdecl f00edf830(void* a, int b, int c, void* d)
+void __cdecl f00edf830(void* wnd, float value, char a, char b, int propId, void* text)
 {
-    (void)a; (void)b; (void)c; (void)d;
-    // Large grid/string formatting handler not reconstructed (see partial.txt).
+    if (wnd == 0)
+        return;
+    VC2(wnd, 0x7c, 1, 1);
+    void* caption = VCP2(wnd, 0xf0, 0x7918378, 1);
+    if (caption != 0) {
+        if (text != 0) {
+            VC1(caption, 0x80, (int)text);
+        } else {
+            wchar_t buf[0x20];
+            FUN_00881ae0((long long)value, buf, 0x20);
+            VC1(caption, 0x80, (int)buf);
+        }
+        bool flag = (a == 0 && b == 0);
+        VC2(caption, 0x7c, 1, flag);
+    }
+
+    int idx = 0;
+    int low = 0;
+    int high = 0;
+    f00edf730(value, &idx, &low, &high, propId);
+
+    void* ctrl = VCP2(wnd, 0xf0, 0x742cd10, 1);
+    if (ctrl != 0) {
+        void* cast = VCP1(ctrl, 0xc, 0xf00a8a0);
+        if (cast != 0) {
+            VC2(cast, 0x24, low, 0);
+            VC2(cast, 0x2c, high, 0);
+        }
+    }
+
+    float ratio = ((float)idx - (float)low) / (float)(high - low);
+    FUN_00edcf60(VCP2(wnd, 0xf0, 0x742cd10, 1), ratio);
+
+    void* v = VCP2(wnd, 0xf0, 0x769d5a63, 1);
+    if (v != 0)
+        VC2(v, 0x7c, 1, a);
+    v = VCP2(wnd, 0xf0, 0x769d5a64, 1);
+    if (v != 0)
+        VC2(v, 0x7c, 1, b);
+    v = VCP2(wnd, 0xf0, 0xb698347b, 1);
+    if (v != 0)
+        VC2(v, 0x7c, 1, a);
+    v = VCP2(wnd, 0xf0, 0xb698347a, 1);
+    if (v != 0)
+        VC2(v, 0x7c, 1, b);
 }
 // --- equivalence checker address annotations
 
