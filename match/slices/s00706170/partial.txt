@@ -1,2 +1,0 @@
-00706b50  -  skeleton only (289-byte vector push_back of 0xb0-byte records)
-00706dd0  -  skeleton only (756-byte SP::cLightingConfig constructor)

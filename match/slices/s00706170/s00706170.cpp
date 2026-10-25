@@ -8,7 +8,11 @@ void  sub_f47380(void*);                          // operator delete
 void* sub_f473d0(int, int, int, const char*, int, int, const char*, int);
 void* sub_f473a0(unsigned, const char*, int, int, int, int);
 void  sub_705b50(void);                           // copy-ctor body (0x00705b50)
+void  sub_705c80(void);                           // pool grow helper (0x00705c80)
 void  sub_e5c780(void);                           // rbtree find (0x00e5c780)
+
+extern const char s_013eb8a4[];                   // 0x013eb8a4 "Graphics"
+extern const char s_013ebb38[];                   // 0x013ebb38 EA allocator tag
 
 struct IVoid { virtual void v0(); virtual void v1(); };
 
@@ -291,14 +295,58 @@ struct SHGroundQuery {
     virtual float* Query(float* scratch, const Vec3f* pos);                      // +0x2c
 };
 
+// Default-lighting constants read by the config constructor.
+struct Q4 { uint32_t x, y, z, w; };
+extern const float  kOne;                 // 0x01485720  1.0f
+extern const float  g_negOne;             // 0x013eb1bc -1.0f
+extern const float  g_f13ec480;           // 0x013ec480
+extern const float  g_f140c6e4;           // 0x0140c6e4
+extern const float  g_f13ec5b4;           // 0x013ec5b4
+extern const float  g_f1471064;           // 0x01471064
+extern const float  g_f13f08c0;           // 0x013f08c0
+extern const Vec3f  g_litTriple;          // 0x01629884  (g84,g88,g8c)
+extern const Q4     g_litQuad;            // 0x01629864
+
+// SP::cLightingConfig (0x144 bytes). Only the members the constructor writes are named;
+// the two embedded vectors live at +0xa8 (void*) and +0xbc (__m128*).
 struct LightCfg {
-    char pad00[0xbc];
+    void* m00; void* m04;            // +0x00 (zeroed as integers, like the two embedded vectors)
+    float m08, m0c, m10;             // +0x08
+    float m14;                       // +0x14
+    float m18, m1c;                  // +0x18
+    float m20;                       // +0x20
+    float m24, m28, m2c;             // +0x24
+    float m30;                       // +0x30
+    float m34, m38;                  // +0x34
+    float m3c;                       // +0x3c
+    float m40, m44, m48;             // +0x40
+    float m4c;                       // +0x4c
+    float m50, m54;                  // +0x50
+    float m58;                       // +0x58
+    float m5c, m60, m64;             // +0x5c
+    float m68;                       // +0x68
+    float m6c, m70;                  // +0x6c
+    float m74;                       // +0x74
+    float m78, m7c, m80;             // +0x78
+    float m84, m88;                  // +0x84
+    float m8c, m90, m94;             // +0x8c
+    float m98, m9c, ma0;             // +0x98
+    char  ma4;                       // +0xa4
+    char  pada5[3];                  // +0xa5
+    void** a8Begin;                  // +0xa8
+    void** a8End;                    // +0xac
+    void** a8Cap;                    // +0xb0
+    uint32_t padb4[2];               // +0xb4
     __m128* vecBegin;                // +0xbc
     __m128* vecEnd;                  // +0xc0
-    char padc4[0x18];
+    __m128* vecCap;                  // +0xc4
+    uint32_t padc8[2];               // +0xc8
+    float md0;                       // +0xd0
+    float md4, md8;                  // +0xd4
     float groundScaleB;              // +0xdc
     float groundScaleA;              // +0xe0
-    char pade4[0x20];
+    Q4    me4;                       // +0xe4
+    Q4    mf4;                       // +0xf4
     float zhColor[4];                // +0x104
     float riseBias;                  // +0x114
     float riseScale;                 // +0x118
@@ -306,7 +354,98 @@ struct LightCfg {
     float setScale;                  // +0x120
     float baseA;                     // +0x124
     float baseB;                     // +0x128
+    float m12c;                      // +0x12c
+    float m130;                      // +0x130
+    char  m134;                      // +0x134
+    char  pad135[3];                 // +0x135
+    float m138, m13c, m140;          // +0x138
+    LightCfg();
 };
+
+// @ 0x00706dd0  SP::cLightingConfig::cLightingConfig (default environment lighting)
+LightCfg::LightCfg()
+{
+    const float one = kOne;
+    const float negOne = g_negOne;
+
+    m00 = 0;
+    m04 = 0;
+    m08 = g_litTriple.x;
+    m0c = g_litTriple.y;
+    m10 = g_litTriple.z;
+    m14 = one;
+    m20 = negOne;
+    m18 = 0.0f;
+    m1c = 0.0f;
+    m24 = g_litTriple.x;
+    m28 = g_litTriple.y;
+    m2c = g_litTriple.z;
+    m30 = one;
+    m34 = 0.0f;
+    m38 = 0.0f;
+    m3c = negOne;
+    m40 = g_litTriple.x;
+    m44 = g_litTriple.y;
+    m48 = g_litTriple.z;
+    m4c = one;
+    m50 = 0.0f;
+    m54 = 0.0f;
+    m58 = negOne;
+    m5c = g_litTriple.x;
+    m60 = g_litTriple.y;
+    m64 = g_litTriple.z;
+    m68 = one;
+    m6c = 0.0f;
+    m70 = 0.0f;
+    m74 = negOne;
+    m78 = g_litTriple.x;
+    m7c = g_litTriple.y;
+    m80 = g_litTriple.z;
+    m84 = one;
+    m88 = g_f140c6e4;
+    m8c = 0.0f;
+    m90 = 0.0f;
+    m94 = 0.0f;
+    m98 = g_litTriple.x;
+    m9c = g_litTriple.y;
+    ma0 = g_litTriple.z;
+    ma4 = 0;
+    a8Begin = 0;
+    a8End = 0;
+    a8Cap = 0;
+    vecBegin = 0;
+    vecEnd = 0;
+    vecCap = 0;
+    md4 = one;
+    md8 = one;
+    md0 = 0.0f;
+    groundScaleB = 0.0f;
+    groundScaleA = 0.0f;
+    riseBias = g_f13ec480;
+    riseScale = g_f140c6e4;
+    setBias = g_f13ec480;
+    setScale = g_f140c6e4;
+    baseA = 0.0f;
+    baseB = 0.0f;
+    m12c = g_f13ec5b4;
+    m130 = 0.0f;
+    m134 = 1;
+    m138 = g_f1471064;
+    m13c = g_f13f08c0;
+    m140 = 0.0f;
+    me4.x = g_litQuad.x;
+    me4.y = g_litQuad.y;
+    me4.z = g_litQuad.z;
+    me4.w = g_litQuad.w;
+    mf4.x = g_litQuad.x;
+    mf4.y = g_litQuad.y;
+    mf4.z = g_litQuad.z;
+    mf4.w = g_litQuad.w;
+    *(uint32_t*)&zhColor[0] = g_litQuad.x;
+    *(uint32_t*)&zhColor[1] = g_litQuad.y;
+    *(uint32_t*)&zhColor[2] = g_litQuad.z;
+    *(uint32_t*)&zhColor[3] = g_litQuad.w;
+}
 
 struct EnvSample {
     char pad00;
@@ -440,11 +579,62 @@ void EnvLW::UpdateEnvLightSample(EnvSample* out)
 }
 
 // ==========================================================================
-// @ 0x00706b50  PARTIAL: vector push_back of 0xb0-byte records
+// @ 0x00706b50  pool push_back of 0xb0-byte records
 // ==========================================================================
-void FUN_00706b50(void* self, void* a) { (void)self; (void)a; }
+struct CfgRec {
+    int   i00, i04, i08;             // +0x00
+    float f0c, f10, f14, f18, f1c;   // +0x0c
+    int   i20, i24, i28;             // +0x20
+};
+struct CfgPool {
+    CfgRec** begin;                  // +0x00
+    int      cap;                    // +0x04
+    uint32_t pad08[4];               // +0x08
+    CfgRec*  last;                   // +0x18
+    CfgRec*  cur;                    // +0x1c
+    CfgRec*  curEnd;                 // +0x20
+    CfgRec** end;                    // +0x24
+    void push(const CfgRec* src);
+};
+void CfgPool::push(const CfgRec* src)
+{
+    CfgRec tmp;
+    tmp.i00 = src->i00;
+    tmp.i04 = src->i04;
+    tmp.i08 = src->i08;
+    tmp.f0c = src->f0c;
+    tmp.f10 = src->f10;
+    tmp.f14 = src->f14;
+    tmp.f18 = src->f18;
+    tmp.f1c = src->f1c;
+    tmp.i20 = src->i20;
+    tmp.i24 = src->i24;
+    tmp.i28 = src->i28;
 
-// ==========================================================================
-// @ 0x00706dd0  PARTIAL: 756-byte SP::cLightingConfig constructor
-// ==========================================================================
-void FUN_00706dd0(void* self) { (void)self; }
+    if ((int)(end - begin) + 1 >= cap)
+        ((void(__thiscall*)(CfgPool*, int, int))sub_705c80)(this, 1, 1);
+
+    CfgRec* node = (CfgRec*)sub_f473a0(0xb0, s_013eb8a4, 0, 0, (int)s_013ebb38, 0xd1);
+    end[1] = node;
+
+    CfgRec* dst = last;
+    if (dst != 0) {
+        dst->i00 = tmp.i00;
+        dst->i04 = tmp.i04;
+        dst->i08 = tmp.i08;
+        dst->f0c = tmp.f0c;
+        dst->f10 = tmp.f10;
+        dst->f14 = tmp.f14;
+        dst->f18 = tmp.f18;
+        dst->f1c = tmp.f1c;
+        dst->i20 = tmp.i20;
+        dst->i24 = tmp.i24;
+        dst->i28 = tmp.i28;
+    }
+
+    CfgRec** p = end + 1;
+    end = p;
+    cur = *p;
+    curEnd = (CfgRec*)((char*)cur + 0xb0);
+    last = cur;
+}
