@@ -1,0 +1,5 @@
+00b88590 ?GetContinent@cPlanetModel@SP@@QBEHABUcSPVector3@@@Z  # SP::cPlanetModel::GetContinent (callee of s00ce90c0, named from the dev publics; slice address comment)
+00ce9460 ?SetVehicleTask@CDS@@QAEXPAUcGameData@@0@Z  # CDS::SetVehicleTask migrated from s00ce90c0 (verbatim, slice spelling)
+00ce9560 ?ResetPosses@CDS@@QAEXXZ  # CDS::ResetPosses migrated from s00ce90c0 (verbatim, slice spelling)
+00ce9590 ?UpdateUI@CDS@@QAEXH@Z  # CDS::UpdateUI migrated from s00ce90c0 (verbatim, slice spelling)
+00cea030 ?FUN_00cea030@@YIPAXPAX0PAPAX@Z  # FUN_00cea030 migrated from s00ce90c0 (verbatim, slice spelling)

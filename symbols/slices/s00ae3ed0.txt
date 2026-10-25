@@ -1,0 +1,1 @@
+00ae4ec0 ?UpdateMinimapCityIcon@cCityDisplayStrategy@SP@@QAEXH@Z  # cCityDisplayStrategy::UpdateMinimapCityIcon migrated from s00ae3ed0 (verbatim, slice spelling)

@@ -1,0 +1,5 @@
+00cea090 ?Init@CDS_s00ce_a090@@QAEXXZ  # CDS_s00ce_a090::Init migrated from s00cea090 (verbatim, slice spelling)
+00ceaac0 ?RemoveVehicle@CDS_s00ce_a090@@QAEXPAX0@Z  # CDS_s00ce_a090::RemoveVehicle migrated from s00cea090 (verbatim, slice spelling)
+00ceab20 ?EraseKey@CDS_s00ce_a090@@QAEHPAX@Z  # CDS_s00ce_a090::EraseKey migrated from s00cea090 (verbatim, slice spelling)
+00ceac50 ?Destruct@CDS_s00ce_a090@@QAEXXZ  # CDS_s00ce_a090::Destruct migrated from s00cea090 (verbatim, slice spelling)
+00ceb090 ?ctor@CDS_s00ce_a090@@QAEPAXPAX@Z  # CDS_s00ce_a090::ctor migrated from s00cea090 (verbatim, slice spelling)

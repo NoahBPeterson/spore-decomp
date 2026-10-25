@@ -1,0 +1,1 @@
+00ceb710 ?Render@cBillboardRenderer@@QAEXPAUIVertexSink@@@Z  # cBillboardRenderer::Render migrated from s00ceb710 (verbatim, slice spelling)

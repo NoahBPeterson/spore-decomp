@@ -1,0 +1,2 @@
+00cec6d0 ?FUN_00cec6d0@cCityDisplayStrategy_s00ce_c6d0@Simulator@@QAEXXZ  # cCityDisplayStrategy_s00ce_c6d0::FUN_00cec6d0 migrated from s00cec6d0 (verbatim, slice spelling)
+00cec7a0 ?DestroyAndRecreateCivUI@cCityDisplayStrategy_s00ce_c6d0@Simulator@@QAEXE@Z  # cCityDisplayStrategy_s00ce_c6d0::DestroyAndRecreateCivUI migrated from s00cec6d0 (verbatim, slice spelling)
