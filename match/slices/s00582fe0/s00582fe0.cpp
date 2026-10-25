@@ -28,6 +28,12 @@ extern const float kAngleScale;                                  // 0x015e50a0
 extern const Vector3 kApproachDir;                               // 0x015e50a4
 extern const float kCreatureSpeed;                               // 0x015e4f9c
 
+extern const Matrix3 kIdentityBasis;                             // 0x015e505c (cSPTransform rotation default)
+extern const float kOne;                                         // 0x01485720 (_HK_REAL_ONE)
+extern const float kHalf;                                        // 0x01471064
+extern const float kThreeTenths;                                 // 0x013eb8c8
+extern float g_defaultFloat;                                     // 0x015d1168 (Property default)
+
 // cdecl helpers
 float RandomFloatRange(float lo, float hi);                      // 0x00572a10
 float RandomFloat(float range);                                  // 0x00572a60
@@ -81,9 +87,96 @@ struct cCreatureStructure {
     void FUN_0059b390();                                         // 0x0059b390
 };
 
+// ---- GIF capture support -------------------------------------------------
+// 0x0067ddb0 returns the thumbnail/capture service; the grid of creature boxes goes to its
+// virtual slot +0x50 together with the viewer, the box centre and the box shrink factor.
+struct cViewer;                                                  // 0x7c3f70 (xform accessors only)
+
+void EASTL_allocator_deallocate(void* p);                        // 0x00f47380
+
+struct Box24 {                                                   // 24-byte box: two Vector3
+    Vector3 mMin;
+    Vector3 mMax;
+};
+
+struct cSPTransform {                                            // the viewer's basis
+    uint16_t mFlags;                                             // +0x00
+    uint16_t mModificationCount;                                 // +0x02
+    Vector3 mTranslation;                                        // +0x04
+    float mScale;                                                // +0x10
+    Matrix3 mRotation;                                           // +0x14
+    cSPTransform()
+        : mFlags(0), mModificationCount(0), mTranslation(kVecDefault), mScale(kOne),
+          mRotation(kIdentityBasis) {}
+};
+
+struct BoxVector {                                               // EASTL vector<Box24>
+    Box24* mpBegin;                                              // +0x00
+    Box24* mpEnd;                                                // +0x04
+    Box24* mpCapacity;                                           // +0x08
+    uint32_t mAllocator;                                         // +0x0c
+    BoxVector() : mpBegin(0), mpEnd(0), mpCapacity(0) {}
+    ~BoxVector()
+    {
+        if (mpBegin && ((int*)mpBegin)[-1])
+            EASTL_allocator_deallocate(mpBegin);
+    }
+    void DoInsertValue(Box24* position, const Box24& value);     // 0x00424010
+    void push_back(const Box24& value)
+    {
+        if (mpEnd < mpCapacity)
+            ::new ((void*)mpEnd++) Box24(value);
+        else
+            DoInsertValue(mpEnd, value);
+    }
+};
+
+struct IThumbnailService {                                       // 0x0067ddb0
+    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
+    virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1c();
+    virtual void v20(); virtual void v24(); virtual void v28(); virtual void v2c();
+    virtual void v30(); virtual void v34(); virtual void v38(); virtual void v3c();
+    virtual void v40(); virtual void v44(); virtual void v48(); virtual void v4c();
+    virtual void CaptureBoxes(BoxVector* boxes, cViewer* viewer, int flag,
+                              const Vector3* center, float inset, float height);   // +0x50
+};
+IThumbnailService* ThumbnailService();                           // 0x0067ddb0
+
+struct cViewer {
+    void GetXform(cSPTransform* out);                            // 0x007c40f0
+    void SetXform(const cSPTransform* in);                       // 0x007c4d00
+};
+
+struct Property {                                                // variant property record
+    char* mpData;                                                // +0x00
+    uint32_t pad04[3];
+    uint16_t mFlags;                                             // +0x10
+    uint16_t mType;                                              // +0x12
+    __forceinline void* GetStorage()
+    {
+        if (mFlags & 0x30) return mpData;
+        if (mType) return this;
+        return 0;
+    }
+    __forceinline float* GetFloat()
+    {
+        if (mType == 13 || mType == 0x10) return (float*)GetStorage();
+        return &g_defaultFloat;
+    }
+};
+
+struct cDirectPropertyList {                                     // sAppProperties (0x015fd918)
+    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
+    virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1c();
+    virtual void v20(); virtual void v24();
+    virtual Property* GetProperty(uint32_t key);                 // +0x28
+};
+extern cDirectPropertyList* sAppProperties;                      // 0x015fd918
+
 struct cCreatureExtra {                                          // creature +0x180
     uint32_t pad00[0x6c / 4];
     float mSize;                                                 // +0x6c
+    Box24 mBoundingBox;                                          // +0x70
 };
 
 struct cCreatureEffects {
@@ -186,7 +279,9 @@ public:
     uint32_t pad158[(0x2b5 - 0x158) / 4];
     uint8_t pad2b4[1];
     bool mb2b5;                                                  // +0x2b5
-    uint8_t pad2b6[(0x31c - 0x2b6)];
+    uint8_t pad2b6[2];
+    float mGIFBoxInset;                                          // +0x2b8 (GIF box shrink factor)
+    uint8_t pad2bc[(0x31c - 0x2bc)];
     int mEditorMode;                                             // +0x31c
     uint32_t pad320[(0x34c - 0x320) / 4];
     int m34c;                                                    // +0x34c
@@ -195,8 +290,16 @@ public:
     uint32_t mTorsoCreatureId;                                   // +0x364
     uint32_t mPainterCreatureId;                                 // +0x368
     cRecVector mRecs;                                            // +0x36c
+    uint8_t pad380[(0x3d8 - 0x380)];
+    cViewer* mpCaptureViewer;                                    // +0x3d8
+    uint8_t pad3dc[4];
+    bool mIsRecordingGIF;                                        // +0x3e0
+    bool mbCountGIFFrames;                                       // +0x3e1
+    uint8_t pad3e2[2];
+    int mGIFFrameCount;                                          // +0x3e4
 
     bool RunSkinPaintOnEditorModel(int kind, void* pExisting);
+    void FUN_00583900();
 
     __forceinline void RebuildSkin(cSkinHolder* pHolder, cSkinObject* pSkin)
     {
@@ -349,7 +452,57 @@ bool cAppModeEditorBase::RunSkinPaintOnEditorModel(int kind, void* pExisting)
     return pId && *pId != 0;
 }
 
-}  // namespace SP
+// @ 0x00583900
+// cAppModeEditorBase::FUN_00583900 -- start a GIF recording of the animated torso creature: mark
+// the capture live, take the creature's render box, shrink it toward its own centre by the property
+// factor, hand the box to the thumbnail service with the capture viewer, then park the viewer on
+// the creature's position.
+void cAppModeEditorBase::FUN_00583900()
+{
+    mIsRecordingGIF = true;
+    mGIFFrameCount = 0;
 
-// @ 0x00583900  (837 bytes)
-void FUN_00583900() {}
+    cEditorCreature* pCreature = mpCreatureMgr->GetCreature(mTorsoCreatureId);
+    cCreatureExtra* pExtra = pCreature->mpExtra;
+    Box24 box = pExtra->mBoundingBox;
+
+    float inset = *sAppProperties->GetProperty(0x5d2cbfb)->GetFloat();
+
+    Vector3 pos;
+    mpCreatureMgr->GetCreaturePosition(mTorsoCreatureId, &pos);
+
+    int count = (int)(mRecs.mpEnd - mRecs.mpBegin);
+    float scale = inset;
+    if (count != 0)
+        scale = inset + kThreeTenths;
+
+    float midX = (box.mMin.x + box.mMax.x) * kHalf;
+    float midY = (box.mMin.y + box.mMax.y) * kHalf;
+    float midZ = (box.mMin.z + box.mMax.z) * kHalf;
+    box.mMin.x = (box.mMin.x - midX) * scale + midX;
+    box.mMin.y = (box.mMin.y - midY) * scale + midY;
+    box.mMin.z = (box.mMin.z - midZ) * scale + midZ;
+    box.mMax.x = (box.mMax.x - midX) * scale + midX;
+    box.mMax.y = (box.mMax.y - midY) * scale + midY;
+    box.mMax.z = (box.mMax.z - midZ) * scale + midZ;
+
+    BoxVector boxes;
+    boxes.push_back(box);
+
+    Vector3 center;
+    center.x = (box.mMin.x + box.mMax.x) * kHalf;
+    center.y = (box.mMin.y + box.mMax.y) * kHalf;
+    center.z = (box.mMin.z + box.mMax.z) * kHalf;
+    ThumbnailService()->CaptureBoxes(&boxes, mpCaptureViewer, 0, &center, mGIFBoxInset, 0.0f);
+
+    cSPTransform xf;
+    mpCaptureViewer->GetXform(&xf);
+    xf.mTranslation.x += pos.x;
+    xf.mTranslation.y += pos.y;
+    xf.mTranslation.z += pos.z;
+    xf.mFlags |= 4;
+    xf.mModificationCount++;
+    mpCaptureViewer->SetXform(&xf);
+}
+
+}  // namespace SP
