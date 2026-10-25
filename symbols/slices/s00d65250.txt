@@ -1,0 +1,2 @@
+00d65c40 ?FIGHT_Tick@@YAIHPAXPAH@Z  # FIGHT_Tick migrated from s00d65250 (verbatim, slice spelling)
+00d660a0 ?FindNext@RecordArray@@QAEHH@Z  # RecordArray::FindNext migrated from s00d65250 (verbatim, slice spelling)

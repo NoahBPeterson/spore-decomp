@@ -1,0 +1,1 @@
+00d67d30 ?FIGHT_Tick@SP@@YA_NPAVcSPCreatureBase_s00d6_7d30@1@HHIIPAUFightMem_s00d6_7d30@1@HM@Z  # FIGHT_Tick migrated from s00d67d30 (verbatim, slice spelling)

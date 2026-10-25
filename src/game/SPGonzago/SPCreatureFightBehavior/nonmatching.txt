@@ -1,0 +1,14 @@
+# va  diff-bytes  reason
+00d65c40 134 FIGHT_Tick state machine abbreviated; 148 vs 913 bytes
+00d660a0 57 FindNext: bit tests folded to test/jns instead of shr/test; 61 bytes
+00d66320 62 complete source (all paths); not byte-exact: register allocation - compiler keeps id in esi and mpData in edi (extra push/pop edi), original uses ecx/edx/esi; size 75 vs 72; equiv: UNSUPPORTED (unresolved global sTribeFightSlotsPool); flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+00d66400 347 complete source (all paths/calls); not byte-exact: stack-slot assignment and callee-saved-register choice for the exclude argument differ (frame 0x24 vs 0x28); size 496 vs 507; equiv: WEAK (392 valid inputs, 9.6% coverage); flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+00d66600 281 region in index covers two functions: bound is 946 bytes but 00d66600 itself is 272 (next function 00d66710 is not indexed); source covers 00d66600 only (336 bytes); equiv: FAIL (ours reads unmapped where original succeeds - the harness exercises both regions); flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+00d669c0 492 complete source (all paths/calls, call targets and vtable slots equal); not byte-exact: only stack-slot numbering differs (locals at +4 offset; frame 0x2c vs 0x2c, d reuses arg slot in original); size 917 vs 923; equiv: WEAK (202 valid inputs, 9.6% coverage); flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+00d66d60 59 complete source (all paths); not byte-exact: register allocation only - id lands in eax instead of ecx, shifting every modrm; size 72 vs 71; equiv: PASS (285 valid inputs, 100% coverage); flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+00d67660 96 Acquire a fresh fight-slot payload: zero a payload, allocate it from the pool,
+00d67700 172 FindGroup(Creature*): look the "Fight" group up in the B4C object's stimulus
+00d678d0 211 FightAction group refresh (FightAction*, flag): reset the action, re-find the
+00d679e0 697 SP::FIGHT_Activate(creature, ..., bits, FightAction*, ctx): bind the action to
+00d67d30 5771 complete source (all paths/calls; direct-call and per-vtable-slot call counts equal the original); not byte-exact: stack-slot sharing and x87/SSE scheduling differ; flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+00d697a0 3712 complete source; frame/scheduling differs (4004 vs 4746 bytes), flags /O2 /arch:SSE /fp:fast; arg slots 2-5,7 unknown/unused; difftest WEAK --inputs 3000 (1612 valid, no mismatch, 7.2% cov: real callees FUN_00c26c90/PlayIdleAnimation gate the body on creature state random inputs rarely satisfy). Fixed: GetPropertyT_float mapped to 0x4e1c70; FUN_00c26c90 is a thiscall member (ret 8), was declared as a free cdecl function

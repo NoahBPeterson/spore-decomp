@@ -1,0 +1,1 @@
+00d697a0 ?TRIBE_FIGHT_Tick@SP@@YA_NPAVcSPCreatureBase_s00d6_97a0@1@HHHHPAUFightState@1@HM@Z  # TRIBE_FIGHT_Tick migrated from s00d697a0 (verbatim, slice spelling)
