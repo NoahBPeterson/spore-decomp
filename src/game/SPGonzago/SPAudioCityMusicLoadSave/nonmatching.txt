@@ -1,0 +1,11 @@
+# va  diff-bytes  reason
+00ea20a0 18 (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) load; the asset browser launch takes the callback in ecx, the modelled free helper passes it on the stack; equiv FAIL (first mismatch call #0)
+00ea20d0 22 (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) start dialog; the modal begin and the two window calls are unresolved; equiv UNSUPPORTED (only 0/40 inputs valid)
+00ea2120 41 (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) stop dialog; the modal end and the two window calls are unresolved and the flag clear follows the wrong call; equiv FAIL (first mismatch execution)
+00ea2170 203 (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) load-save constructor; the viewer and two layout creations are modelled as external creators; equiv UNSUPPORTED (unresolved construction helpers)
+00ea22c0 29 (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) query key; retail masks the value with a compare on the key pair, the modelled early-out keeps two branches; equiv FAIL (first mismatch esp)
+00ea2310 84 (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) load-save init; the two layout inits, the viewer init and the two subscriptions are unresolved so the early-out chain collapses; equiv UNSUPPORTED (unresolved layout services)
+00ea23a0 15 (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) set music; the ref-count swap matches but the viewer set call is unresolved; equiv FAIL (first mismatch execution)
+00ea23e0 126 (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) save thumbnail; the dialog lookups, metadata creation, resource writes and thumbnail upload are unresolved so most of the body collapses; equiv UNSUPPORTED (unresolved thumbnail services)
+00ea25f0 83 (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) finish save; the thumbnail manager, layout manager and dialog lookup are unresolved; equiv UNSUPPORTED (unresolved thumbnail services)
+00ea2670 87 (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) do message; the controller lookup and auto-test award are unresolved and the message button test is folded differently; equiv UNSUPPORTED (unresolved achievement helpers)

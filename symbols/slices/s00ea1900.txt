@@ -6,15 +6,15 @@
 00ea1c10 ?BindWindows@cCityMusicLargeAssetView@@QAEXXZ  # void cCityMusicLargeAssetView::BindWindows
 00ea1ee0 ?InitLayout@cCityMusicLargeAssetView@@QAEXXZ  # void cCityMusicLargeAssetView::InitLayout
 00ea1f90 ?Show@cCityMusicLargeAssetView@@QAE_NPAVIWindow@@PAVcSPAssetData@@@Z  # bool cCityMusicLargeAssetView::Show
-00ea20a0 ?Load@cCityMusicLoadSave@@QAEXXZ  # void cCityMusicLoadSave::Load
-00ea20d0 ?StartDialog@cCityMusicLoadSave@@QAEXPAVIWindow@@@Z  # void cCityMusicLoadSave::StartDialog
-00ea2120 ?StopDialog@cCityMusicLoadSave@@QAEXPAVIWindow@@@Z  # void cCityMusicLoadSave::StopDialog
-00ea2170 ??0cCityMusicLoadSave@@QAE@XZ  # cCityMusicLoadSave::cCityMusicLoadSave
-00ea22c0 ?QueryKey@cCityMusicLoadSave@@QAEIIH@Z  # uint32_t cCityMusicLoadSave::QueryKey
-00ea2310 ?Init@cCityMusicLoadSave@@QAEXXZ  # void cCityMusicLoadSave::Init
-00ea23a0 ?SetMusic@cCityMusicLoadSave@@QAEXPAVcPlayerCityMusic@@@Z  # void cCityMusicLoadSave::SetMusic
-00ea23e0 ?SaveThumbnail@cCityMusicLoadSave@@QAEXXZ  # void cCityMusicLoadSave::SaveThumbnail
-00ea25f0 ?FinishSave@cCityMusicLoadSave@@QAEXXZ  # void cCityMusicLoadSave::FinishSave
-00ea2670 ?DoMessage@cCityMusicLoadSave@@QAE_NPAXPAH@Z  # bool cCityMusicLoadSave::DoMessage
+00ea20a0 ?Load@cCityMusicLoadSave@@QAEXXZ  # cCityMusicLoadSave::Load migrated from s00ea1900 (verbatim, slice spelling)
+00ea20d0 ?StartDialog@cCityMusicLoadSave@@QAEXPAVIWindow@@@Z  # cCityMusicLoadSave::StartDialog migrated from s00ea1900 (verbatim, slice spelling)
+00ea2120 ?StopDialog@cCityMusicLoadSave@@QAEXPAVIWindow@@@Z  # cCityMusicLoadSave::StopDialog migrated from s00ea1900 (verbatim, slice spelling)
+00ea2170 ??0cCityMusicLoadSave@@QAE@XZ  # cCityMusicLoadSave::cCityMusicLoadSave migrated from s00ea1900 (verbatim, slice spelling)
+00ea22c0 ?QueryKey@cCityMusicLoadSave@@QAEIIH@Z  # cCityMusicLoadSave::QueryKey migrated from s00ea1900 (verbatim, slice spelling)
+00ea2310 ?Init@cCityMusicLoadSave@@QAEXXZ  # cCityMusicLoadSave::Init migrated from s00ea1900 (verbatim, slice spelling)
+00ea23a0 ?SetMusic@cCityMusicLoadSave@@QAEXPAVcPlayerCityMusic@@@Z  # cCityMusicLoadSave::SetMusic migrated from s00ea1900 (verbatim, slice spelling)
+00ea23e0 ?SaveThumbnail@cCityMusicLoadSave@@QAEXXZ  # cCityMusicLoadSave::SaveThumbnail migrated from s00ea1900 (verbatim, slice spelling)
+00ea25f0 ?FinishSave@cCityMusicLoadSave@@QAEXXZ  # cCityMusicLoadSave::FinishSave migrated from s00ea1900 (verbatim, slice spelling)
+00ea2670 ?DoMessage@cCityMusicLoadSave@@QAE_NPAXPAH@Z  # cCityMusicLoadSave::DoMessage migrated from s00ea1900 (verbatim, slice spelling)
 00ea26f0 ?Shutdown@cCityMusicLoadSave@@QAEXXZ  # void cCityMusicLoadSave::Shutdown
 00ea2790 ?LoadKey@cCityMusicLoadSave@@QAE_NHHH@Z  # bool cCityMusicLoadSave::LoadKey
