@@ -1,0 +1,4 @@
+# source  symbol  va  flags
+../src/game/SPGonzago/SPSpaceGameBehaviorSlowDeath.cpp  ?FUN_01033de0@@YAPAXXZ  01033de0  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPSpaceGameBehaviorSlowDeath.cpp  ?FUN_01033e60@SlowDeathCore@@QAEPAXE@Z  01033e60  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPSpaceGameBehaviorSlowDeath.cpp  ?FUN_01033ea0@Behavior@@QAE_NH@Z  01033ea0  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
