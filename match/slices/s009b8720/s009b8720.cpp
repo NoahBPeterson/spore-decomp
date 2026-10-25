@@ -230,7 +230,7 @@ struct creature_instance_data {
     float    f_1a0;                              // 0x1a0
     uint32_t pad_1a4[47];                        // 0x1a4
     bool     flag_260;                           // 0x260
-    bool     flag_261;                           // 0x261
+    char     flag_261;                           // 0x261
     uint16_t pad_262;                            // 0x262
     float    walk_linear_x;                      // 0x264
     float    walk_linear_y;                      // 0x268
@@ -293,29 +293,29 @@ void creature_instance_data::FUN_009b8720(float param_2)
 // @ 0x009b8760
 void creature_instance_data::FUN_009b8760(float param_2)
 {
-    float local_3c;
-    float local_38 = f_188 + f_140;
     float fVar1 = f_194;
     float fVar9 = (float)(1.0 / ((double)param_2 + *(double*)&DAT_014470a0));
     float fVar2 = f_154;
     float fVar3 = f_198;
-    float local_34 = f_18c + f_144;
     float fVar4 = f_158;
-    float local_20 = ((fVar1 * fVar4 + f_14c * f_1a0) - f_150 * f_19c) + fVar2 * fVar3;
-    float local_1c = ((fVar3 * fVar4 + f_19c * f_14c) + f_150 * f_1a0) - fVar2 * fVar1;
-    float local_14 = ((fVar4 * f_1a0 - fVar1 * f_14c) - fVar3 * f_150) - fVar2 * f_19c;
-    float local_18 = ((f_19c * fVar4 - fVar3 * f_14c) + f_150 * fVar1) + fVar2 * f_1a0;
-    float local_2c = (f_184 + f_13c) * fVar9;
-    float local_28 = local_38 * fVar9;
-    float local_24 = local_34 * fVar9;
-    FUN_009b4ba0(&local_3c, &local_20, 0);
+    // first quaternion (input) and its rectifying-output vector
+    float q1_20 = ((fVar1 * fVar4 + f_14c * f_1a0) - f_150 * f_19c) + fVar2 * fVar3;
+    float q1_1c = ((fVar3 * fVar4 + f_19c * f_14c) + f_150 * f_1a0) - fVar2 * fVar1;
+    float q1_14 = ((fVar4 * f_1a0 - fVar1 * f_14c) - fVar3 * f_150) - fVar2 * f_19c;
+    float q1_18 = ((f_19c * fVar4 - fVar3 * f_14c) + f_150 * fVar1) + fVar2 * f_1a0;
+    // scaled increments (computed before the call; the call may reuse their slots)
+    float s_x = (f_184 + f_13c) * fVar9;
+    float s_y = (f_188 + f_140) * fVar9;
+    float s_z = (f_18c + f_144) * fVar9;
+    float m1[4];                       // first call output (x,y,z,w)
+    FUN_009b4ba0(m1, &q1_20, 0);
     float fA = f_40;
     float fB = f_3c;
     float fC = f_48;
     float fD = f_44;
     float fVar10 = f_58;
-    float fVar13 = local_34 * (1.0f - (fB * fB + fA * fA) * 2.0f);
-    float fVar11 = local_38 * ((fD * fA - fB * fC) * 2.0f);
+    float fVar13 = m1[2] * (1.0f - (fB * fB + fA * fA) * 2.0f);
+    float fVar11 = m1[1] * ((fD * fA - fB * fC) * 2.0f);
     float fVar5 = f_54;
     float fVar6 = f_50;
     float fVar7 = f_90;
@@ -334,34 +334,34 @@ void creature_instance_data::FUN_009b8760(float param_2)
     float fVar6b = f_48;
     float fVar7b = f_54;
     float fVar8b = f_40;
-    local_20 = ((f_3c * fVar5b - fVar10b * fVar6b) + f_50 * f_44) - fVar7b * fVar8b;
+    float q2_20 = ((f_3c * fVar5b - fVar10b * fVar6b) + f_50 * f_44) - fVar7b * fVar8b;
     float fVar12b = f_3c;
-    local_1c = ((fVar8b * fVar5b - f_44 * fVar10b) - f_50 * fVar6b) + fVar7b * fVar12b;
-    local_18 = ((fVar8b * fVar10b + f_44 * fVar5b) - f_50 * fVar12b) - fVar7b * fVar6b;
-    local_14 = ((fVar8b * f_50 + fVar7b * f_44) + fVar10b * fVar12b) + fVar6b * fVar5b;
-    float local_10;
-    float local_c;
-    float local_8;
-    float local_4;
-    FUN_009b4ba0(&local_10, &local_20, 0);
+    float q2_1c = ((fVar8b * fVar5b - f_44 * fVar10b) - f_50 * fVar6b) + fVar7b * fVar12b;
+    float q2_18 = ((fVar8b * fVar10b + f_44 * fVar5b) - f_50 * fVar12b) - fVar7b * fVar6b;
+    float q2_14 = ((fVar8b * f_50 + fVar7b * f_44) + fVar10b * fVar12b) + fVar6b * fVar5b;
+    float m2[4];                       // second call output (x,y,z,w)
+    FUN_009b4ba0(m2, &q2_20, 0);
     float fVar10c = f_40;
     float fVar5c = f_3c;
     walk_angular =
-        (local_4 * fVar9) *
-        (local_c * ((f_44 * fVar10c - fVar5c * f_48) * 2.0f) +
-         (local_8 * (1.0f - (fVar5c * fVar5c + fVar10c * fVar10c) * 2.0f) +
-          ((fVar5c * f_44 + fVar10c * f_48) * 2.0f) * local_10));
-    float fVar10d = (f_108 * local_24 + f_104 * local_28) + f_100 * local_2c;
-    local_24 = local_24 - f_108 * fVar10d;
-    local_2c = local_2c - f_100 * fVar10d;
-    local_28 = local_28 - f_104 * fVar10d;
-    if (((local_2c * local_2c + local_28 * local_28) + local_24 * local_24 <= *(float*)&DAT_01550b18) &&
-        ((float)fabs(((((fB * fD + fA * fC) * 2.0f) * local_3c + fVar13) + fVar11) *
-               (local_34 * fVar9)) <= *(float*)&DAT_01550b18)) {
-        flag_261 = false;
-        return;
+        (m2[3] * fVar9) *
+        (m2[1] * ((f_44 * fVar10c - fVar5c * f_48) * 2.0f) +
+         (m2[2] * (1.0f - (fVar5c * fVar5c + fVar10c * fVar10c) * 2.0f) +
+          ((fVar5c * f_44 + fVar10c * f_48) * 2.0f) * m2[0]));
+    float fVar10d = (f_108 * s_z + f_104 * s_y) + f_100 * s_x;
+    float d_z = s_z - f_108 * fVar10d;
+    float d_x = s_x - f_100 * fVar10d;
+    float d_y = s_y - f_104 * fVar10d;
+    int result;
+    if ((d_x * d_x + d_y * d_y) + d_z * d_z > *(float*)&DAT_01550b18) {
+        result = 1;
+    } else if ((float)fabs(((((fB * fD + fA * fC) * 2.0f) * m1[0] + fVar13) + fVar11) *
+                         (m1[2] * fVar9)) > *(float*)&DAT_01550b18) {
+        result = 1;
+    } else {
+        result = 0;
     }
-    flag_261 = true;
+    flag_261 = result;
 }
 
 // ===========================================================================
