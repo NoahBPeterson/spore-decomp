@@ -1,1 +1,2 @@
+00e5a850 ?sLevelGetTextureCoord@SP@@YAXHPAMPAI1@Z  # sLevelGetTextureCoord migrated from s00e5a430 (verbatim, slice spelling)
 SP::sLevelGetTextureCoord  # PDB name (pdb_names.json); byte-diff 118, body checked by hand

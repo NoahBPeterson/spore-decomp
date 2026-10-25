@@ -1,14 +1,14 @@
-00e558c0  fluid-sample + reflect force
-00e55c40  fluid-sample force (wide)
-00e55f60  fluid-sample push-out force
-00e560d0  apply impulse to fluid cell + accumulate
+00e558c0 ?FUN_00e558c0@@YA_NPAM000MMMHM0@Z  # FUN_00e558c0 migrated from s00e558c0 (verbatim, slice spelling)
+00e55c40 ?FUN_00e55c40@@YAXPAM000MMMHM0@Z  # FUN_00e55c40 migrated from s00e558c0 (verbatim, slice spelling)
+00e55f60 ?FUN_00e55f60@@YAXPAM00MH0@Z  # FUN_00e55f60 migrated from s00e558c0 (verbatim, slice spelling)
+00e560d0 ?FUN_00e560d0@@YAXHPAM@Z  # FUN_00e560d0 migrated from s00e558c0 (verbatim, slice spelling)
 00e56200  cell population getter (x100)
 00e56300  cell growth getter (x20)
-00e563e0  level-relative scale  # kLevelSize table / source level
-00e56450  level-relative multiplier curve
+00e563e0 ?FUN_00e563e0@@YAMPAX@Z  # FUN_00e563e0 migrated from s00e558c0 (verbatim, slice spelling)
+00e56450 ?FUN_00e56450@@YANH@Z  # FUN_00e56450 migrated from s00e558c0 (verbatim, slice spelling)
 00e56510  cell size/capacity getter
 00e56560  cell gravity/velocity vector
-00e56690  reset gfx-state byte + init level+0x80
-00e566e0  clear gfx-state byte + call
-00e56700  keyframe-interp table lookup
-00e567c0  hide UI window + init level+0x80
+00e56690 ?FUN_00e56690@@YAXXZ  # FUN_00e56690 migrated from s00e558c0 (verbatim, slice spelling)
+00e566e0 ?FUN_00e566e0@@YAXXZ  # FUN_00e566e0 migrated from s00e558c0 (verbatim, slice spelling)
+00e56700 ?FUN_00e56700@@YANHHM@Z  # FUN_00e56700 migrated from s00e558c0 (verbatim, slice spelling)
+00e567c0 ?FUN_00e567c0@@YAXXZ  # FUN_00e567c0 migrated from s00e558c0 (verbatim, slice spelling)

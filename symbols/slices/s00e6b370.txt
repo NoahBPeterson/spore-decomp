@@ -1,0 +1,5 @@
+00e6b370 ?FUN_00e6b370@@YAXPAX@Z  # FUN_00e6b370 migrated from s00e6b370 (verbatim, slice spelling)
+00e6b500 ?FUN_00e6b500@@YA_NPAX@Z  # FUN_00e6b500 migrated from s00e6b370 (verbatim, slice spelling)
+00e6b5d0 ?FUN_00e6b5d0@@YAXPAMPBMPAX@Z  # FUN_00e6b5d0 migrated from s00e6b370 (verbatim, slice spelling)
+00e6b9b0 ?sUpdateElectricRibbonEffect@@YAXPAXPAPAUcIVisualEffect@@0HH@Z  # sUpdateElectricRibbonEffect migrated from s00e6b370 (verbatim, slice spelling)
+00e6bc10 ?sUpdateChargingEffect@@YAXPAXPAUIntVec@@PAI00EM@Z  # sUpdateChargingEffect migrated from s00e6b370 (verbatim, slice spelling)

@@ -1,16 +1,16 @@
-00e63ac0  update/cull cell-effect array  # sPartIntersectTarget per cell, swap-remove dead
-00e63bf0  create/destroy cell-call effect
-00e63d10  assign DNA-effect ref object then call
-00e63d60  EASTL vector<PairIU(8)> DoInsertValue
-00e63e70  EASTL vector<SoundElem(0x2c)> DoInsertValue
+00e63ac0 ?FUN_00e63ac0@@YAXPAUCellArray@@@Z  # FUN_00e63ac0 migrated from s00e63ac0 (verbatim, slice spelling)
+00e63bf0 ?FUN_00e63bf0@@YAXPAHH0PAGD@Z  # FUN_00e63bf0 migrated from s00e63ac0 (verbatim, slice spelling)
+00e63d10 ?FUN_00e63d10@@YAXH@Z  # FUN_00e63d10 migrated from s00e63ac0 (verbatim, slice spelling)
+00e63d60 ?DoInsertValue@FixedVec8@@QAEXPAUPairIU@@ABU2@@Z  # FixedVec8::DoInsertValue migrated from s00e63ac0 (verbatim, slice spelling)
+00e63e70 ?DoInsertValue@FixedVec44@@QAEXPAUSoundElem@@ABU2@@Z  # FixedVec44::DoInsertValue migrated from s00e63ac0 (verbatim, slice spelling)
 00e63f90  deleting-dtor thunk (BigObj)
 00e64090  deleting-dtor thunk (GfxObj)
 00e642a0  build/update DNA-effect HUD string object
-00e64390  FmtObj::Format  # writes "%d/%d" from vtable getters
-00e643e0  forward cell source-triple to context
-00e644e0  VecInsert44::insert
+00e64390 ?Format@FmtObj@@QAEXPA_W@Z  # FmtObj::Format migrated from s00e63ac0 (verbatim, slice spelling)
+00e643e0 ?FUN_00e643e0@@YAXH@Z  # FUN_00e643e0 migrated from s00e63ac0 (verbatim, slice spelling)
+00e644e0 ?insert@VecInsert44@@QAEPAUSoundElem@@PAU2@ABU2@@Z  # VecInsert44::insert migrated from s00e63ac0 (verbatim, slice spelling)
 00e645b0  EASTL rbtree insert-hint  # returns value
-00e646d0  cell init/ctor  # many 0x1c/0x1c-stride subobjects
-00e647d0  cell reset  # zero 0x5c bytes + free subobject
+00e646d0 ?FUN_00e646d0@@YIPAXPAX@Z  # FUN_00e646d0 migrated from s00e63ac0 (verbatim, slice spelling)
+00e647d0 ?FUN_00e647d0@@YIPAXPAX@Z  # FUN_00e647d0 migrated from s00e63ac0 (verbatim, slice spelling)
 00e648d0  empty stub
-00e64980  spawn cell-gfx effect + push to gfx vector
+00e64980 ?FUN_00e64980@@YAXH@Z  # FUN_00e64980 migrated from s00e63ac0 (verbatim, slice spelling)

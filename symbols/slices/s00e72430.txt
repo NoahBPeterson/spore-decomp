@@ -1,13 +1,13 @@
-00e72430  ability-activate: build effect record (tag 0x2a)
-00e72530  ability event emit  # 16-arg FUN_00e51ee0 builder
-00e725c0  link/attach ability
-00e727e0  combine ability
-00e72910  detach ability
-00e72ac0  exit cell-mode: clear gfx-state + create effect
-00e72b40  self-cast ability (record tag 0x1f)
-00e72c80  enter-cell-mode trigger
-00e72e70  ability-record writer (tag 0x27)
-00e72fb0  ability-record writer (tag 0x28)
+00e72430 ?FUN_00e72430@@YAXPAH@Z  # FUN_00e72430 migrated from s00e72430 (verbatim, slice spelling)
+00e72530 ?FUN_00e72530@@YAXPAHHHHH@Z  # FUN_00e72530 migrated from s00e72430 (verbatim, slice spelling)
+00e725c0 ?FUN_00e725c0@@YAHPAH0H@Z  # FUN_00e725c0 migrated from s00e72430 (verbatim, slice spelling)
+00e727e0 ?FUN_00e727e0@@YAHPAH0H@Z  # FUN_00e727e0 migrated from s00e72430 (verbatim, slice spelling)
+00e72910 ?FUN_00e72910@@YAHPAH0H@Z  # FUN_00e72910 migrated from s00e72430 (verbatim, slice spelling)
+00e72ac0 ?FUN_00e72ac0@@YAXXZ  # FUN_00e72ac0 migrated from s00e72430 (verbatim, slice spelling)
+00e72b40 ?FUN_00e72b40@@YAXPAH@Z  # FUN_00e72b40 migrated from s00e72430 (verbatim, slice spelling)
+00e72c80 ?FUN_00e72c80@@YAXXZ  # FUN_00e72c80 migrated from s00e72430 (verbatim, slice spelling)
+00e72e70 ?FUN_00e72e70@@YAXPAHH@Z  # FUN_00e72e70 migrated from s00e72430 (verbatim, slice spelling)
+00e72fb0 ?FUN_00e72fb0@@YAXPAHH@Z  # FUN_00e72fb0 migrated from s00e72430 (verbatim, slice spelling)
 00e730d0  ability dispatch by element type
-00e73140  area-cast ability
-00e732d0  special-ability driver
+00e73140 ?FUN_00e73140@@YA_NPAH0H@Z  # FUN_00e73140 migrated from s00e72430 (verbatim, slice spelling)
+00e732d0 ?FUN_00e732d0@@YAXPAH0HHH@Z  # FUN_00e732d0 migrated from s00e72430 (verbatim, slice spelling)

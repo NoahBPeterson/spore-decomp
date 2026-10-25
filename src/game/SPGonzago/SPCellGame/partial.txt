@@ -1,0 +1,3 @@
+# va  diff-bytes  reason
+00e599b0  -  complete; landed verbatim (marker in the TU) but the function is `static`, so it has no object symbol: run_all/equiv cannot bind it. The slice manifest had this row byte-exact; module-TU byte-exactness is unverified for that reason.
+00e59a70  -  complete; landed verbatim (marker in the TU) but the function is `static`, so it has no object symbol: run_all/equiv cannot bind it. The slice manifest had this row byte-exact; module-TU byte-exactness is unverified for that reason.

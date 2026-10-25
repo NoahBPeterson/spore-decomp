@@ -1,0 +1,6 @@
+00e7dd90 ?FUN_00e7dd90@@YAXHHHHM@Z  # FUN_00e7dd90 migrated from s00e7dd90 (verbatim, slice spelling)
+00e7df40 ?FUN_00e7df40@@YAXHHHM@Z  # FUN_00e7df40 migrated from s00e7dd90 (verbatim, slice spelling)
+00e7e020 ?FUN_00e7e020@@YAHPAX0HH@Z  # FUN_00e7e020 migrated from s00e7dd90 (verbatim, slice spelling)
+00e7e130 ?sDoEnd@@YAXPAXMHH@Z  # sDoEnd migrated from s00e7dd90 (verbatim, slice spelling)
+00e7e6c0 ?sUpdateInteraction@@YAXPAXM@Z  # sUpdateInteraction migrated from s00e7dd90 (verbatim, slice spelling)
+00e7e7a0 ?FUN_00e7e7a0@@YAXM@Z  # FUN_00e7e7a0 migrated from s00e7dd90 (verbatim, slice spelling)

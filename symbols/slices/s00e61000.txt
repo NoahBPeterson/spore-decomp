@@ -1,3 +1,8 @@
+00e61140 ?FUN_00e61140@@YAXXZ  # FUN_00e61140 migrated from s00e61000 (verbatim, slice spelling)
+00e61320 ?FUN_00e61320@@YA_NH@Z  # FUN_00e61320 migrated from s00e61000 (verbatim, slice spelling)
+00e61370 ?FUN_00e61370@@YAXPAMPAUcSPTransform_s00e6_1000@@M@Z  # FUN_00e61370 migrated from s00e61000 (verbatim, slice spelling)
+00e61550 FUN_00e61550  # noinline so the object keeps its own symbol
+00e61630 ?FUN_00e61630@@YAPAUCellAbility@@XZ  # FUN_00e61630 migrated from s00e61000 (verbatim, slice spelling)
 00e616c0 RegisterAppMode_cCellMode  # pdb anchor; registers the Game_Cell app mode
 00e61830 eastl::lower_bound<eastl::pair<int,SP::cCollisionSound>*,...>  # pdb callee-single name
-00e61550 FUN_00e61550  # noinline so the object keeps its own symbol
+00e61a50 ?CreateInstance_SaveGame@@YGPAXPAX0@Z  # CreateInstance_SaveGame migrated from s00e61000 (verbatim, slice spelling)

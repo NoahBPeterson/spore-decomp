@@ -1,0 +1,5 @@
+00e76880 ?FUN_00e76880@@YAXPAXM@Z  # FUN_00e76880 migrated from s00e76880 (verbatim, slice spelling)
+00e76a80 ?FUN_00e76a80@@YAXPAXM@Z  # FUN_00e76a80 migrated from s00e76880 (verbatim, slice spelling)
+00e76af0 ?sCreateLeakAttachment@@YAHPAXPAMHHH@Z  # sCreateLeakAttachment migrated from s00e76880 (verbatim, slice spelling)
+00e76d70 ?sCreateCellAttachment@@YAHPAXDPAMHHH@Z  # sCreateCellAttachment migrated from s00e76880 (verbatim, slice spelling)
+00e771d0 ?sDropLoot@@YAXHPAXHPAMMHHH0PAH@Z  # sDropLoot migrated from s00e76880 (verbatim, slice spelling)

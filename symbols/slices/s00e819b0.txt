@@ -1,7 +1,7 @@
 00e81ba0 SP::cCellMode::Shutdown
 00e81cf0 SP::cCellMode::StaticInit
 00e81f30 SP::cCellMode::Init
-00e82130 FUN_00e82130  # Release() on intrusive resource (dec refcount at [*it+0xc])
+00e82130 ?FUN_00e82130@@YIXPAH@Z  # FUN_00e82130 migrated from s00e819b0 (verbatim, slice spelling)
 00e82140 SP::sCellResourceLoadFailure
 00e821d0 FUN_00e821d0  # load resource by id (returns bool)
 00e82280 FUN_00e82280  # Release every node ref in the global list
