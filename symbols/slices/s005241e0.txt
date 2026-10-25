@@ -2,4 +2,4 @@
 005247b0 ?Get@Model@@QAEHH@Z  # Model::Get migrated from s005241e0 (verbatim, slice spelling)
 005247d0 ?GetChecked@Model@@QAEHH@Z  # Model::GetChecked migrated from s005241e0 (verbatim, slice spelling)
 00524870 ?AddPair@Y@@QAEXHH@Z  # Y::AddPair migrated from s005241e0 (verbatim, slice spelling)
-005248a0 ?FUN_005248a0@@YAXPAX@Z  # FUN_005248a0 migrated from s005241e0 (verbatim, slice spelling)
+005248a0 ?ParticleTickJobCallback@@YA_NAAUJobSW@@PAX@Z  # ParticleTickJobCallback migrated from s005241e0 (verbatim, slice spelling)

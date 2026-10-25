@@ -1,2 +1,4 @@
 # <va>  <diff-bytes>  <reason>
+005241e0  1486  nSPSkinner::cPaintSystem::RebuildBones; 1486-byte /Od rig-block rebuild not reconstructed within the compile budget (honest entry skeleton only -- `void FUN_005241e0(void*)` in the source); equiv UNSUPPORTED (our symbol >5x smaller than the original)
 005247d0  140  /Od packed-value unpack inlining / slot layout differs; complete GetChecked
+005248a0  316  flags /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast; complete behavioural reconstruction (drains the brush-hit queue under a 4ms LimitStopwatch, cPaintSystem::Tick, cPaintList::ProcessBrushHit, re-arms via cJob::Continuation); instruction stream and compared size match (403 vs 403; original is 425 bytes); differs only in /Od stack-slot order, the missing mpMaterial intermediate temp, break encoding and the per-return bool temps; difftest PASS 223 valid / 81.9% cov
