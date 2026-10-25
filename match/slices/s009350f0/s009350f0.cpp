@@ -1,6 +1,7 @@
 // Slice s009350f0 -- EA::IO::IniFile core + EA OSGlobal manager + EA::Process spawn/search/open.
 // Module flags: /O2 /MD /Gy /EHsc /TP /GS-
 #include "types.h"
+#include <string.h>
 
 extern "C" {
 __declspec(dllimport) void* __stdcall GetProcessHeap(void);
@@ -255,38 +256,144 @@ public:
 
 extern void* IniFile_vtable;   // 0x0143e7d8
 
-// @ 0x009350f0  (partial: EASTL rbtree loop not reconstructed)
-int IniFile_LoadSectionNames(EA_IO_IniFile* self, int param_2) {
-    (void)self;
-    (void)param_2;
-    return 0;
+// =====================================================================
+// eastl-style wide string shared by the Process open helpers and IniFile.
+// =====================================================================
+extern wchar_t gEmptyWString[];   // 0x01667bac
+
+const wchar_t* __cdecl CharTypeStringFindFirstNotOf(const wchar_t* p1Begin, const wchar_t* p1End,
+                                                    const wchar_t* p2Begin, const wchar_t* p2End);  // 0x005497e0
+extern "C" __declspec(dllimport) int __cdecl tolower(int);
+
+struct WString {
+    typedef unsigned size_type;
+    static const size_type npos = (size_type)-1;
+
+    wchar_t* mpBegin;
+    wchar_t* mpEnd;
+    wchar_t* mpCapacity;
+    uint32_t mAlloc;
+
+    WString() {
+        mpBegin = gEmptyWString;
+        mpEnd = gEmptyWString;
+        mpCapacity = gEmptyWString + 1;
+    }
+    WString(const wchar_t* p) : mpBegin(0), mpEnd(0), mpCapacity(0) {
+        RangeInitialize(p);
+    }
+    ~WString() {
+        if ((((int)((char*)mpCapacity - (char*)mpBegin)) & ~1) > 2 && mpBegin)
+            EASTL_allocator_deallocate(mpBegin);
+    }
+
+    static size_type CharStrlen(const wchar_t* p) {
+        const wchar_t* q = p;
+        while (*q) ++q;
+        return (size_type)(q - p);
+    }
+
+    void RangeInitialize(const wchar_t* p);                          // 0x00579a90
+    WString& assign(const wchar_t* first, const wchar_t* last);      // 0x00423650
+    void make_lower();                                               // 0x005e8e80
+    void rtrim();                                                    // 0x005541e0
+    int  find(const wchar_t* p, size_type position);                 // 0x00608340
+    void insert(wchar_t* position, const wchar_t* first, const wchar_t* last);  // 0x005f7da0
+    void append(const wchar_t* first, const wchar_t* last);          // 0x00429580
+
+    void insert(wchar_t* position, const wchar_t* p) {
+        insert(position, p, p + CharStrlen(p));
+    }
+    void append(const wchar_t* p) {
+        append(p, p + CharStrlen(p));
+    }
+
+    size_type find_first_not_of(const wchar_t* p, size_type position, size_type n) const {
+        if (position <= (size_type)(mpEnd - mpBegin)) {
+            const wchar_t* result = CharTypeStringFindFirstNotOf(mpBegin + position, mpEnd, p, p + n);
+            if (result != mpEnd)
+                return (size_type)(result - mpBegin);
+        }
+        return npos;
+    }
+    size_type find_first_not_of(const wchar_t* p) const {
+        return find_first_not_of(p, 0, CharStrlen(p));
+    }
+    size_type find_first_not_of(const wchar_t* p, size_type position) const;  // 0x00579af0
+
+    WString& erase(size_type position, size_type n) {
+        const size_type length = (size_type)(mpEnd - mpBegin);
+        if (position < length) {
+            size_type count = n;
+            if (count > length - position)
+                count = length - position;
+            wchar_t* dest = mpBegin + position;
+            wchar_t* src = dest + count;
+            if (src != dest) {
+                memmove(dest, src, (size_type)(mpEnd - src + 1) * sizeof(wchar_t));
+                mpEnd -= count;
+            }
+        }
+        return *this;
+    }
+};
+
+inline void* operator new(unsigned int, void* p) { return p; }
+
+struct ArrayCookie { uint32_t mSize; };   // operator new[] cookie before the payload
+
+// =====================================================================
+// EA::Process open helpers
+// =====================================================================
+__declspec(dllimport) unsigned __stdcall ShellExecuteW(void* hwnd, const wchar_t* op,
+                                                      const wchar_t* file, const wchar_t* params,
+                                                      const wchar_t* dir, int show);
+extern "C" void* gShell32Module;   // 0x01669940
+typedef unsigned (__stdcall* ShellExecuteWPtr)(void*, const wchar_t*, const wchar_t*,
+                                               const wchar_t*, const wchar_t*, int);
+extern "C" ShellExecuteWPtr gShellExecuteWPtr;   // 0x0166993c
+
+int __cdecl ConvertString8ToWide(wchar_t* dst, int dstLen, const char* src, int srcLen);  // 0x0093cf60
+
+namespace EA { namespace Process {
+
+// @ 0x00935e60
+bool OpenFile(const wchar_t* path) {
+    WString temp(path);
+    unsigned result = 0;
+    gShell32Module = LoadLibraryW(L"shell32.dll");
+    if (gShell32Module)
+        gShellExecuteWPtr = (ShellExecuteWPtr)GetProcAddress(gShell32Module, "ShellExecuteW");
+    if (gShellExecuteWPtr) {
+        if (temp.find(L"http://", 0) == 0) {
+            temp.insert(temp.mpBegin, L"url:");
+            result = gShellExecuteWPtr(0, L"open", temp.mpBegin, 0, 0, 1);
+        } else {
+            result = gShellExecuteWPtr(0, L"open", path, 0, 0, 1);
+        }
+    }
+    if (gShell32Module)
+        FreeLibrary(gShell32Module);
+    return result > 0x20;
 }
 
-// @ 0x00935560  (partial: EASTL rbtree/string reconstruction not completed)
-int IniFile_EnumEntries(EA_IO_IniFile* self, int a, void* cb, int d) {
-    (void)self;
-    (void)a;
-    (void)cb;
-    (void)d;
-    return 0;
+// @ 0x00935f80
+void OpenFile(const char* path) {
+    wchar_t buffer[260];
+    ConvertString8ToWide(buffer, 260, path, -1);
+    OpenFile((const wchar_t*)buffer);
 }
 
-// @ 0x00935e60  (partial)
-bool Process_OpenFileW(const wchar_t* url) {
-    (void)url;
-    return false;
+// @ 0x00935fb0
+bool OpenBrowser(const wchar_t* url, int flag) {
+    bool result = false;
+    WString temp(L"url:");
+    temp.append(url);
+    if (ShellExecuteW(0, L"open", url, 0, 0, 1) > 0x20)
+        result = true;
+    return result;
 }
-
-// @ 0x00935f80  (partial)
-void Process_OpenFileA(const char* path) {
-    (void)path;
-}
-
-// @ 0x00935fb0  (partial)
-bool Process_OpenBrowser(const wchar_t* url) {
-    (void)url;
-    return false;
-}
+}}
 
 // @ 0x00935450
 EA_IO_IniFile* EA_IO_IniFile::ctor(int path, uint8_t flag) {
@@ -331,4 +438,294 @@ EA_IO_IniFile* EA_IO_IniFile::scalar_deleting_destructor(uint8_t flag) {
     if (flag & 1)
         EASTL_allocator_deallocate(this);
     return this;
+}
+
+// =====================================================================
+// EA::IO::IniFile -- vtable-based reconstruction of the section cache.
+// Uses the same object layout as EA_IO_IniFile above, but with real
+// virtual declarations so the helper calls go through the retail slots.
+// =====================================================================
+struct PosNode;
+struct NameNode;
+struct PairPos;
+struct PairStr;
+
+struct InsertResult {
+    void* mpNode;
+    uint8_t mbInserted;
+    char mPad[3];
+    InsertResult() {}
+    InsertResult(const InsertResult& o) { mpNode = o.mpNode; mbInserted = o.mbInserted; }
+};
+
+struct PosIter {
+    PosNode* p;
+    PosIter() {}
+    PosIter(const PosIter& o) { p = o.p; }
+};
+
+struct PosNode {                     // map<WString,long> node
+    PosNode* mpLeft;                 // +0x00
+    PosNode* mpRight;                // +0x04
+    PosNode* mpParent;               // +0x08
+    uint32_t mColor;                 // +0x0c
+    WString  mKey;                   // +0x10
+    long     mValue;                 // +0x20
+};
+
+struct PairPos {                     // pair<WString, long>
+    WString first;
+    long second;
+    PairPos(const WString& a, const long& b);   // 0x008d6580
+};
+
+struct PairStr {                     // pair<const WString, WString>
+    WString first;
+    WString second;
+    PairStr(const WString& a, const WString& b);   // 0x0088c0d0
+    PairStr(const PairStr& o);                     // 0x00614990
+};
+
+struct PosMap {                      // map<WString,long>, 0x1c bytes
+    uint32_t mPad00;                 // +0x00
+    PosNode* mpAnchorSelf;           // +0x04
+    PosNode* mpAnchorParent;         // +0x08
+    PosNode* mpRoot;                 // +0x0c
+    uint8_t  mColor;                 // +0x10
+    char     mPad11[3];              // +0x11
+    uint32_t mSize;                  // +0x14
+    uint32_t mPad18;                 // +0x18
+
+    void DoNukeSubtree(PosNode* node);                      // 0x00934460
+    PosIter find(const WString& key);                       // 0x005e96f0
+    InsertResult insert(const PairPos& value, bool bUnique); // 0x00934260
+    char* end() { return (char*)&mpAnchorSelf; }
+
+    void clear() {
+        DoNukeSubtree(mpRoot);
+        mpAnchorSelf = (PosNode*)&mpAnchorSelf;
+        mpAnchorParent = (PosNode*)&mpAnchorSelf;
+        mpRoot = 0;
+        mColor = 0;
+        mSize = 0;
+    }
+};
+
+struct NameMap {                     // map<WString,WString>, 0x1c bytes
+    uint32_t mPad00;                 // +0x00
+    NameNode* mpAnchorSelf;          // +0x04
+    NameNode* mpAnchorParent;        // +0x08
+    NameNode* mpRoot;                // +0x0c
+    uint8_t  mColor;                 // +0x10
+    char     mPad11[3];              // +0x11
+    uint32_t mSize;                  // +0x14
+    uint32_t mPad18;                 // +0x18
+
+    InsertResult insert(const PairStr& value, bool bUnique); // 0x00614f20
+    char* end() { return (char*)&mpAnchorSelf; }
+};
+
+struct PairVec {                     // eastl::vector<PairStr>
+    PairStr* mpBegin;                // +0x00
+    PairStr* mpEnd;                  // +0x04
+    PairStr* mpCapacity;             // +0x08
+
+    PairVec() : mpBegin(0), mpEnd(0), mpCapacity(0) {}
+    ~PairVec() {
+        if (mpBegin) {
+            DoDestroy(mpBegin, mpEnd);
+            if (((ArrayCookie*)mpBegin - 1)->mSize != 0)
+                EASTL_allocator_deallocate(mpBegin);
+        }
+    }
+
+    void reserve(size_t n);                                // 0x009343c0
+    void DoDestroy(PairStr* first, PairStr* last);         // 0x00933df0
+    void insert(PairStr* position, const PairStr& value);  // 0x00934ef0
+
+    void push_back(const PairStr& value) {
+        if (mpEnd != mpCapacity) {
+            if (mpEnd)
+                new (mpEnd) PairStr(value);
+            ++mpEnd;
+        } else {
+            insert(mpEnd, value);
+        }
+    }
+};
+
+struct IStream {
+    virtual void s0(); virtual void s1(); virtual void s2(); virtual void s3();
+    virtual int  GetAccessFlags();                // +0x10
+    virtual int  GetState();                      // +0x14
+    virtual void Open();                          // +0x18
+    virtual unsigned Size();                      // +0x1c
+    virtual void SetSize(unsigned n);             // +0x20
+    virtual int  GetPosition(int type);           // +0x24
+    virtual bool SetPosition(int pos, int type);  // +0x28
+};
+
+class IniFile {
+public:
+    virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3(); virtual void v4();
+    virtual void v5(); virtual void v6();
+    virtual bool Close();                         // +0x1c
+    virtual void v8(); virtual void v9(); virtual void v10(); virtual void v11(); virtual void v12();
+    virtual void v13(); virtual void v14(); virtual void v15(); virtual void v16(); virtual void v17();
+    virtual bool OpenForWrite(int mode);          // +0x48
+    virtual void v19();
+    virtual bool CacheSections(int mode);         // +0x50
+    virtual void v21(); virtual void v22();
+    virtual bool GetFileLine(WString* out);       // +0x5c
+    virtual void WriteString(const wchar_t*, int);// +0x60
+
+    wchar_t  mPath[260];          // +0x004
+    char     mFileStream[0x22c];  // +0x20c
+    IStream* mpStream;            // +0x438
+    uint32_t mEncoding;           // +0x43c
+    uint8_t  m440;                // +0x440
+    uint8_t  m441;                // +0x441
+    uint8_t  m442;                // +0x442
+    uint8_t  m443;                // +0x443
+    PosMap   mSectionPositionMap; // +0x444
+    NameMap  mSectionNameMap;     // +0x460
+
+    bool LoadSectionNames(int mode);
+    int  EnumEntries(const wchar_t* section,
+                     bool (__cdecl* callback)(const wchar_t*, const wchar_t*, void*),
+                     void* user);
+};
+
+typedef bool (__cdecl* SectionEntryCallback)(const wchar_t*, const wchar_t*, void*);
+
+// @ 0x009350f0
+bool IniFile::LoadSectionNames(int mode) {
+    mSectionPositionMap.clear();
+    m442 = 0;
+    if (!mpStream)
+        return false;
+    if (mpStream->GetAccessFlags() != mode) {
+        if (!OpenForWrite(mode))
+            return false;
+    }
+
+    WString line;
+    WString section;
+    WString lowerSection;
+
+    mpStream->SetPosition(0, 0);
+    for (;;) {
+        long position = mpStream->GetPosition(0);
+        if (!GetFileLine(&line))
+            break;
+
+        wchar_t whitespace[3] = { L' ', L'\t', 0 };
+        line.erase(0, line.find_first_not_of(whitespace));
+
+        if (line.mpBegin == line.mpEnd)
+            continue;
+        if (line.mpBegin[0] != L'[')
+            continue;
+
+        unsigned length = (unsigned)(line.mpEnd - line.mpBegin);
+        if (length <= 1)
+            continue;
+
+        unsigned close = 1;
+        while (close < length && line.mpBegin[close] != L']')
+            ++close;
+        if (close >= length)
+            continue;
+        if (close < 2)
+            continue;
+
+        section.assign(line.mpBegin + 1, line.mpBegin + close);
+        lowerSection.assign(section.mpBegin, section.mpEnd);
+        lowerSection.make_lower();
+
+        {
+            PairPos positionEntry(lowerSection, position);
+            mSectionPositionMap.insert(positionEntry, false);
+            PairStr nameEntry(lowerSection, section);
+            mSectionNameMap.insert(nameEntry, false);
+        }
+    }
+
+    m442 = 1;
+    return true;
+}
+
+// @ 0x00935560
+int IniFile::EnumEntries(const wchar_t* section, bool (__cdecl* callback)(const wchar_t*, const wchar_t*, void*), void* user) {
+    WString key;
+    WString line;
+    WString lowerSection(section);
+    int count = 0;
+
+    if (!m442) {
+        if (!CacheSections(1))
+            count = -1;
+    }
+
+    if (count >= 0) {
+        for (wchar_t* p = lowerSection.mpBegin; p != lowerSection.mpEnd; ++p) {
+            uint32_t ch = (uint32_t)*p;
+            if (ch <= 0xff)
+                ch = (uint32_t)(uint16_t)tolower((int)(ch & 0xff));
+            *p = (wchar_t)ch;
+        }
+
+        PosIter it = mSectionPositionMap.find(lowerSection);
+        if (it.p != (PosNode*)mSectionPositionMap.end()) {
+            if (mpStream->SetPosition(it.p->mValue, 0)) {
+                if (GetFileLine(&line)) {
+                    PairVec entries;
+                    entries.reserve(0x40);
+
+                    while (GetFileLine(&line)) {
+                        wchar_t whitespace[3] = { L' ', L'\t', 0 };
+                        line.erase(0, line.find_first_not_of(whitespace));
+
+                        if (line.mpBegin == line.mpEnd)
+                            continue;
+                        if (line.mpBegin[0] == L';')
+                            continue;
+                        if (line.mpBegin[0] == L'[')
+                            break;
+
+                        wchar_t* equals = line.mpBegin;
+                        while (equals != line.mpEnd && *equals != L'=')
+                            ++equals;
+                        if (equals == line.mpEnd)
+                            continue;
+
+                        unsigned equalsPos = (unsigned)(equals - line.mpBegin);
+                        key.assign(line.mpBegin, line.mpBegin + equalsPos);
+                        key.rtrim();
+                        if (key.mpBegin == key.mpEnd)
+                            continue;
+
+                        line.erase(0, equalsPos + 1);
+
+                        wchar_t valueWhitespace[3] = { L' ', L'\t', 0 };
+                        line.erase(0, line.find_first_not_of(valueWhitespace, 0));
+                        line.rtrim();
+
+                        entries.push_back(PairStr(key, line));
+                        ++count;
+                    }
+
+                    for (PairStr* entry = entries.mpBegin; entry != entries.mpEnd; ++entry) {
+                        PairStr copy(*entry);
+                        if (!callback(copy.first.mpBegin, copy.second.mpBegin, user))
+                            break;
+                    }
+                }
+            }
+        }
+    }
+
+    if (!m441)
+        Close();
+    return count;
 }
