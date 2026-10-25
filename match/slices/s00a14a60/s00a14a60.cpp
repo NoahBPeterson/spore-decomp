@@ -39,12 +39,10 @@ extern "C" void FUN_00a149b0(void* node);                 // 0x00a149b0, takes `
 extern "C" int FUN_00a150e0(void* node, int size);        // 0x00a150e0
 extern "C" char FUN_00a15150(void* obj, int count);       // 0x00a15150
 extern "C" void __fastcall FUN_00a151a0(void* ecx_p, void* edx_unused);   // 0x00a151a0
-extern "C" void* __fastcall FUN_00a151d0(void* p, void*);         // 0x00a151d0
+extern "C" void __fastcall FUN_00a151d0(void* p, void*);          // 0x00a151d0
 extern "C" char FUN_00a15890(void* obj, int count);       // 0x00a15890
 extern "C" void FUN_00a15c80(void* obj, int count);       // 0x00a15c80
 #pragma inline_depth()
-extern "C" void _eh_vector_destructor_iterator_(void* first, unsigned stride, int count,
-                                                void (__fastcall* dtor)(void*, void*));
 
 // ---------------------------------------------------------------------------------------------
 struct ChorusVoice {              // 0x28 bytes per voice at +0xa0
@@ -388,7 +386,7 @@ extern "C" int FUN_00a150e0(void* node, int size)
     }
     if (size != 0)
         *(void**)((char*)node + 0xc) = (char*)node + size;
-    return 0;
+    return size;
 }
 #pragma optimize("g", on)
 
@@ -419,13 +417,18 @@ extern "C" void __fastcall FUN_00a151a0(void* ecx_p, void* edx_unused)
 
 // @ 0x00a151d0
 // Destroys the 6-entry vector of Chorus lines (+0x24, stride 0xc) and installs the vftable. `p`
-// arrives in ecx (__thiscall). The original's C++ EH scope-table frame (push -1; push <table>;
-// fs-registration; push ecx; push esi) is not reproducible at /O2 -- see nonmatching.txt.
-extern "C" void* __fastcall FUN_00a151d0(void* p, void*)
+// arrives in ecx (__thiscall) and the original returns void (eax is incidental). The original's C++
+// EH scope-table frame (push -1; push <table>; fs-registration; push ecx; push esi) is not
+// reproducible at /O2 -- see nonmatching.txt. The destructor loop is open-coded here (the original
+// calls the compiler helper 0x011e0b22) so the reconstruction is behaviourally self-contained.
+extern "C" void __fastcall FUN_00a151d0(void* p, void*)
 {
-    _eh_vector_destructor_iterator_((char*)p + 0x24, 0xc, 6, FUN_00a151a0);
+    char* line = (char*)p + 0x24;
+    for (int i = 6; i != 0; i--) {
+        FUN_00a151a0(line, 0);
+        line += 0xc;
+    }
     *(void**)p = (void*)0x14bc0fc;
-    return p;
 }
 
 // @ 0x00a15890

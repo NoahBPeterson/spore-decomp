@@ -2,6 +2,6 @@
 00a150e0 _FUN_00a150e0  # no PDB entry; cdecl (node, size); calls 0x00a149b0 (node's ctor, `this` in ecx) and records the block end node+size at node+0xc; original wraps it in a C++ try/catch (scope-table EH frame)
 00a15150 _FUN_00a15150  # no PDB entry; cdecl (obj); constructs the 0xa0-byte Chorus sub-object via 0x00a150e0 then zeroes 0x1e float-interleaved slots at +0xa0
 00a151a0 _FUN_00a151a0  # no PDB entry; __fastcall (vector element in ecx); frees the delay buffer through the audio allocator 0x016e61a8 (System::Free 0x0112c850); used as the eh-vector destructor
-00a151d0 _FUN_00a151d0  # no PDB entry; __thiscall (this in ecx); destroys the 6-entry Chorus line vector at +0x24 (stride 0xc) via _eh_vector_destructor_iterator_ 0x011e0b22 and installs the vftable 0x014bc0fc
+00a151d0 _FUN_00a151d0  # no PDB entry; __thiscall (this in ecx, void return); destroys the 6-entry Chorus line vector at +0x24 (stride 0xc, via the compiler helper 0x011e0b22) and installs the vftable 0x014bc0fc
 00a15220 ?Process@MultiDelay@core@audio@rw@@SAHPAU1234@PAUMixCtx@234@@Z  # MultiDelay::Process migrated from s00a14a60 (verbatim, slice spelling)
 00a15890 _FUN_00a15890  # no PDB entry; cdecl (obj); constructs the 0x70-byte sub-object via 0x00a15c80 then zeroes 0xd float-interleaved slots at +0x70
