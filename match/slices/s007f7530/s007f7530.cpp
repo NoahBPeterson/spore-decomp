@@ -34,9 +34,9 @@ inline void RefAssign(void** slot, void* p) {
     }
 }
 
-// Stub vtable symbols (addresses are masked in verification).
+// Vtable symbols (addresses are masked in verification).
 void* g_vtblAnim[1] = {0};
-void* g_vtblTimer[1] = {0};
+extern char g_vtblTimer[];      // 0x013f63fc (cSPUIAnimationTimer vtable)
 
 // ---------------------------------------------------------------------------
 // Layouts
@@ -118,8 +118,8 @@ struct InterpResult {             // matches cAnimationTimer
 // ---------------------------------------------------------------------------
 extern "C" float __cdecl SPUIHelpers_GetElapsedSeconds();
 extern "C" void* __cdecl FUN_007f6170(void* out, float total, float a3, float a4, int a5, int a6, float a7, float a8);
-extern "C" void* __cdecl FUN_007f60d0(InterpResult* out, float a, int b, int c, int d, int e);
-extern "C" void* __cdecl FUN_007f6040(InterpResult* out, float a, int b, int c);
+extern "C" InterpResult* __cdecl FUN_007f60d0(InterpResult* out, float total, float a, float b, float ratio, float c);
+extern "C" InterpResult* __cdecl FUN_007f6040(InterpResult* out, float total, float ratio, float c);
 
 void FUN_007f6c30() {}
 void FUN_007f6d20() {}
@@ -365,32 +365,51 @@ AInfo8c* fill_copy_backward_animinfo(AInfo8c* first, AInfo8c* last, AInfo8c* src
 InterpResult* SPUICreateAnimationTimerInterpolation(InterpResult* dest, float duration, float param3, int type) {
     float elapsed = SPUIHelpers_GetElapsedSeconds();
     float remain = duration - elapsed;
-    float ratio = 0.0f;
     float total = param3;
+    float ratio = 0.0f;
+    void* tempRelease;
     if (0.001f < duration && 0.001f < remain && 0.001f < param3) {
         total = remain + param3;
         ratio = remain / total;
     }
     dest->vf = (void*)g_vtblTimer;
     dest->mpTimeFunction = 0;
-    if (type == 1) {
+    void* timerVtbl = (void*)g_vtblTimer;
+    switch (type) {
+    case 1: {
         InterpResult tmp;
-        FUN_007f60d0(&tmp, total, 0x3f000000, 0, (int)ratio, 0);
-        RefAssign(&dest->mpTimeFunction, tmp.mpTimeFunction);
-    } else if (type == 2) {
-        InterpResult tmp;
-        FUN_007f60d0(&tmp, total, 0, 0x3f000000, (int)ratio, 0);
-        RefAssign(&dest->mpTimeFunction, tmp.mpTimeFunction);
-    } else if (type == 3) {
-        InterpResult tmp;
-        FUN_007f60d0(&tmp, total, 0x3f000000, 0x3f000000, (int)ratio, 0);
-        RefAssign(&dest->mpTimeFunction, tmp.mpTimeFunction);
-    } else {
-        InterpResult tmp;
-        FUN_007f6040(&tmp, total, (int)ratio, 0);
-        RefAssign(&dest->mpTimeFunction, tmp.mpTimeFunction);
+        InterpResult* r = FUN_007f60d0(&tmp, total, 0.5f, 0.0f, ratio, 0.0f);
+        RefAssign(&dest->mpTimeFunction, r->mpTimeFunction);
+        tempRelease = tmp.mpTimeFunction;
+        tmp.vf = timerVtbl;
+        break;
     }
-    if (dest->mpTimeFunction) RcRel(dest->mpTimeFunction);
+    case 2: {
+        InterpResult tmp;
+        InterpResult* r = FUN_007f60d0(&tmp, total, 0.0f, 0.5f, ratio, 0.0f);
+        RefAssign(&dest->mpTimeFunction, r->mpTimeFunction);
+        tempRelease = tmp.mpTimeFunction;
+        tmp.vf = timerVtbl;
+        break;
+    }
+    case 3: {
+        InterpResult tmp;
+        InterpResult* r = FUN_007f60d0(&tmp, total, 0.5f, 0.5f, ratio, 0.0f);
+        RefAssign(&dest->mpTimeFunction, r->mpTimeFunction);
+        tempRelease = tmp.mpTimeFunction;
+        tmp.vf = timerVtbl;
+        break;
+    }
+    default: {
+        InterpResult tmp;
+        InterpResult* r = FUN_007f6040(&tmp, total, ratio, 0.0f);
+        RefAssign(&dest->mpTimeFunction, r->mpTimeFunction);
+        tempRelease = tmp.mpTimeFunction;
+        tmp.vf = timerVtbl;
+        break;
+    }
+    }
+    if (tempRelease) RcRel(tempRelease);
     return dest;
 }
 
