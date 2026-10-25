@@ -3,7 +3,7 @@
 00429370 Record::Assign  # copies two 0x38 blocks, int, intrusive ptr, smart ptr
 00429410 ByteFixedBuf::DeletingDtor  # flags&1 -> deallocate(this)
 00429480 Holder::~Holder  # two byte vectors + Elem32Vec
-00429520 WStr::Resize  # erase / append-fill by size compare
-00429580 WStr::Append  # append(first,last) with growth, "Editor" allocator tag
-00429760 WStr::AllocateSelf  # allocate(n*2,"Editor"), else shared empty string
+00429520 ?Resize@WStr_s0042_92a0@@QAEXI@Z  # WStr_s0042_92a0::Resize migrated from s004292a0 (verbatim, slice spelling)
+00429580 ?Append@WStr_s0042_92a0@@QAEPAU1@PBG0@Z  # WStr_s0042_92a0::Append migrated from s004292a0 (verbatim, slice spelling)
+00429760 ?AllocateSelf@WStr_s0042_92a0@@QAEXI@Z  # WStr_s0042_92a0::AllocateSelf migrated from s004292a0 (verbatim, slice spelling)
 004297f0 WSearch  # char16 substring search

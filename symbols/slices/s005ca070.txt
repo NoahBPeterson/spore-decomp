@@ -3,7 +3,7 @@
 005c2cd0 ?IsPaintByNumber@cSPPaletteCategoryUI@SP@@QAE_NXZ  # SP::cSPPaletteCategoryUI::IsPaintByNumber (callee of s005ca070, named from the dev publics; slice address comment)
 005c53c0 ?Init@cSPPaletteCategoryUI@SP@@QAEXPAVcSPPaletteCategory@2@PAVIWindow@UTFWin@EA@@PAUcSPPaletteInfo@2@@Z  # SP::cSPPaletteCategoryUI::Init (callee of s005ca070, named from the dev publics; slice address comment)
 005ca070 ?Init@cSPPaletteSubCategoryUI@@QAEXPAVIWindow_s005c_a070@UTFWin@EA@@PAVcSPPaletteCategory@@I@Z  # cSPPaletteSubCategoryUI::Init migrated from s005ca070 (verbatim, slice spelling)
-005ca880 SetGlobalProperty  # drives the audio system vtable (SetId/SetInt/SetFloat/Flush)
+005ca880 ?SetGlobalProperty@@YAXHM@Z  # SetGlobalProperty migrated from s005ca070 (verbatim, slice spelling)
 005ca920 SP::cSPPaletteUI::IsPaintByNumber  # forwards to the selected category UI
 005ca980 SP::cSPPaletteUI::UpdateCategories  # calls Update(delta) on every category UI
 005ca9c0 SP::cSPPaletteUI::FindCategoryIndex  # index of mSelectedCategory in mCategories, else -1
