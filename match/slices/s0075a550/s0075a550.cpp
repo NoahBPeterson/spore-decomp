@@ -4,6 +4,8 @@
 // rw::oldanimation::Controller at +0).  Built /O2 /arch:SSE with /EHsc.
 #include "../../include/types.h"
 #include <intrin.h>
+#include <string.h>
+#include <xmmintrin.h>
 
 extern "C" void* __cdecl operator_new_graph(unsigned size);
 extern "C" void  __cdecl eastl_dealloc(void* p);
@@ -18,11 +20,22 @@ extern "C" void  __stdcall VecVecInt_dtor(void* b, void* e);
 extern "C" void  __cdecl FUN_0071dcc0(void* p);
 
 // ---------------------------------------------------------------------------
-// rw::oldanimation::Controller base (layout opaque here)
+// rw::oldanimation::Controller base: field prefix shared by the blender and by
+// each interpolator element it owns (+0x00 frame list, +0x04 vfptr, +0x08 data,
+// +0x0c per-pose layout word, +0x10 bytes per frame, +0x14 frame count).
 // ---------------------------------------------------------------------------
-struct Controller { char pad[0x1c]; };
-
 struct B4 { unsigned char b[4]; };
+
+struct Controller {
+    void*    mpFrameList;       // +0x00
+    void*    mpVtbl;            // +0x04
+    char*    mpData;            // +0x08
+    B4       mFlags;            // +0x0c
+    int      mFrameStride;      // +0x10  bytes per frame
+    int      mNumFrames;        // +0x14
+    int      mDirty;            // +0x18
+    void* Alloc(unsigned size, int nAdd, int numFrames, B4 flags, int hasFrames);  // 0x011fda60
+};
 
 // rw::BaseResourceDescriptor: {size, alignment}; its ctor/dtor are out of line so that arrays of
 // it go through __ehvec_ctor / __ehvec_dtor as in the original.
@@ -44,11 +57,16 @@ struct Interp : InterpBase {
     virtual void v3();
     virtual float Virt16();
     virtual void  Virt14(float);
-    char pad0[0x1c - 8];
+    char* mpFrameData;   // +0x08
+    B4    mFlags;        // +0x0c
+    int   mFrameStride;  // +0x10
+    int   mNumFrames;    // +0x14
+    int   mDirty;        // +0x18
     void* mp1c;      // +0x1c
     float mf20;      // +0x20
     void Fb220();
     void Fb600(float);
+    void* FrameAt(int frame);   // 0x011fda50
     static ResourceDescriptor GetResourceDescriptor(int n, B4 flags, int x);   // 0x011fe550
 };
 
@@ -81,7 +99,6 @@ struct cMultiBlender : Controller {
     void  F880(float arg);          // 0075a880
     void  F8c0(B4 arg);             // 0075a8c0
     int   F900(void* arg);          // 0075a900
-    void  F980(void* a, unsigned char* b, int c, int d);  // 0075a980
     void  Fb410();                  // 0075b410
     int   Fb440(float arg);         // 0075b440
     static ResourceDescriptor GetResourceDescriptor(int n, B4 flags, int count, int addA, int addB);  // 0075b190
@@ -234,13 +251,6 @@ int cMultiBlender::F900(void* arg) {
 }
 
 // ---------------------------------------------------------------------------
-// @ 0x0075a980
-// ---------------------------------------------------------------------------
-void cMultiBlender::F980(void* a, unsigned char* b, int c, int d) {
-    (void)a; (void)b; (void)c; (void)d;
-}
-
-// ---------------------------------------------------------------------------
 // neighbouring class (vtable 0x140dab0): dtor @ 0x0075a550, New70 @ 0x0075a620
 // ---------------------------------------------------------------------------
 struct RawVec { void* mBegin; void* mEnd; void* mCap; };
@@ -338,15 +348,234 @@ ResourceDescriptor cMultiBlender::GetResourceDescriptor(int n, B4 flags, int cou
 }
 
 // ---------------------------------------------------------------------------
-// @ 0x0075aa30 / 0x0075ac40 / 0x0075ad80 / 0x0075b2c0 / 0x0075b4d0
+// @ 0x0075a980   zero/identity fill of a pose row (free function: dest, layout,
+//                count, stride), then lay the blending channel of the row out
+//                according to layout[1].
 // ---------------------------------------------------------------------------
-struct Big700;   // 0x70-byte cMultiBlender-related object
-void __fastcall FUN_0075aa30(cMultiBlender* self, void* a, void* b, void* c) {
-    (void)self; (void)a; (void)b; (void)c;
+void __cdecl FUN_0075a980(void* dest, unsigned char* layout, int count, int stride) {
+    const float zero = 0.0f;
+    const float one  = 1.0f;
+    while (count--) {
+        float* p = (float*)dest;
+        for (unsigned n = layout[0]; n-- != 0; ) {
+            p[2] = zero;
+            p[1] = zero;
+            p[0] = zero;
+            p[3] = one;
+            p += 4;
+        }
+        switch (layout[1]) {
+        default: {
+            unsigned i = layout[1];
+            do {
+                --i;
+                p[i] = zero;
+            } while (i > 6);
+            // fall through
+        }
+        case 6: p[5] = one;
+        case 5: p[4] = one;
+        case 4: p[3] = one;
+        case 3: p[2] = zero;
+        case 2: p[1] = zero;
+        case 1: p[0] = zero;
+        case 0: break;
+        }
+        dest = (char*)dest + stride;
+    }
 }
-void __fastcall FUN_0075ac40(cMultiBlender* self, void* a, void* b) {
-    (void)self; (void)a; (void)b;
+
+// ---------------------------------------------------------------------------
+// @ 0x0075aa30   build one blend pose into mpData for every frame
+// ---------------------------------------------------------------------------
+void __fastcall FUN_0075aa30(cMultiBlender* self) {
+    int      first  = self->mFirstBlend;
+    unsigned frames = (unsigned)self->mNumFrames;
+    float    weight = 0.0f;
+
+    if (first == self->mMaxAnims) {
+        memset(self->mpData, 0, self->mFrameStride * (int)frames);
+    } else if (self->mTotalWeight >= 1.0f) {
+        weight = self->mWeights[first];
+        memcpy(self->mpData, self->At(first)->FrameAt(0), self->mFrameStride * (int)frames);
+        ++first;
+    } else {
+        weight = 1.0f - self->mTotalWeight;
+        memset(self->mpData, 0, self->mFrameStride * (int)frames);
+    }
+
+    float* dst = (float*)self->mpData;
+    for (unsigned f = 0; f < frames; ++f) {
+        int n = self->mNumAnims;
+        float total = weight;
+        for (int i = first; i < n; ++i) {
+            if (self->mBlending[i]) {
+                float w = self->mWeights[i];
+                total += w;
+                if (w > 0.0f) {
+                    float* src = (float*)self->At(i)->FrameAt((int)f);
+                    for (int c = 0; c < self->mFlags.b[1]; ++c)
+                        dst[c] = (src[c] - dst[c]) * (w / total) + dst[c];
+                }
+            }
+        }
+        n = self->mNumAnims;
+        for (int i = self->mFirstAdd; i < n; ++i) {
+            if (!self->mBlending[i]) {
+                float* src = (float*)self->At(i)->FrameAt((int)f);
+                for (int c = 0; c < self->mFlags.b[1]; ++c)
+                    dst[c] += src[c];
+            }
+        }
+        dst = (float*)((char*)dst + self->mFrameStride);
+    }
 }
-void* __fastcall FUN_0075ad80(cMultiBlender* self) { (void)self; return 0; }
-void __fastcall FUN_0075b2c0(cMultiBlender* self, void* a) { (void)self; (void)a; }
-void* __fastcall FUN_0075b4d0(int* self) { (void)self; return 0; }
+
+// ---------------------------------------------------------------------------
+// @ 0x0075ac40   locate the first blending animation and total its weight, then
+//                locate the first additive (non-blending) animation
+// ---------------------------------------------------------------------------
+void __fastcall FUN_0075ac40(cMultiBlender* self) {
+    int n = self->mNumAnims;
+    self->mFirstBlend = self->mMaxAnims;
+    for (int i = 0; i < n; ++i) {
+        if (self->mBlending[i] && self->mWeights[i] > 0.0f) {
+            self->mFirstBlend = i;
+            self->mTotalWeight += self->mWeights[i];
+            break;
+        }
+    }
+
+    self->mTotalWeight = 0.0f;
+    int i;
+    for (i = 0; i < n; ++i) {
+        if (self->mBlending[i] && self->mWeights[i] > 0.0f)
+            self->mTotalWeight += self->mWeights[i];
+    }
+
+    self->mFirstAdd = self->mMaxAnims;
+    int numAnims = self->mNumAnims;
+    for (i = 0; i < numAnims; ++i) {
+        if (!self->mBlending[i]) {
+            self->mFirstAdd = i;
+            break;
+        }
+    }
+}
+
+// ---------------------------------------------------------------------------
+// @ 0x0075ad80   quaternion from a column-major 4x4 rotation matrix, using the
+//                usual four-branch trace algorithm and a Newton-refined SSE
+//                reciprocal square root for the scale.
+// ---------------------------------------------------------------------------
+static inline float HkSqrt(float v) {
+    const __m128 vv   = _mm_set1_ps(v);
+    const __m128 one  = _mm_set1_ps(1.0f);
+    const __m128 half = _mm_set1_ps(0.5f);
+    __m128 e = _mm_rsqrt_ps(vv);
+    e = _mm_add_ps(_mm_mul_ps(_mm_sub_ps(one, _mm_mul_ps(_mm_mul_ps(e, e), vv)), _mm_mul_ps(e, half)), e);
+    e = _mm_add_ps(_mm_mul_ps(_mm_sub_ps(one, _mm_mul_ps(_mm_mul_ps(e, e), vv)), _mm_mul_ps(e, half)), e);
+    __m128 r = _mm_andnot_ps(_mm_cmpeq_ps(vv, _mm_setzero_ps()), _mm_mul_ps(e, vv));
+    return _mm_cvtss_f32(r);
+}
+
+void __cdecl FUN_0075ad80(float* out, const float* m, const float* threshold) {
+    float trace = (m[5] + m[0]) + m[10];
+    float v, r, inv;
+    float x, y, z, w;
+    if (trace > *threshold) {
+        v = trace + 1.0f;
+        r = HkSqrt(v);
+        inv = 0.5f / r;
+        x = (m[6] - m[9]) * inv;
+        y = (m[8] - m[2]) * inv;
+        z = (m[1] - m[4]) * inv;
+        w = 0.5f * r;
+    } else if (m[0] > m[5] && m[0] > m[10]) {
+        v = (m[0] - (m[5] + m[10])) + 1.0f;
+        r = HkSqrt(v);
+        inv = 0.5f / r;
+        x = 0.5f * r;
+        y = (m[1] + m[4]) * inv;
+        z = (m[2] + m[8]) * inv;
+        w = (m[6] - m[9]) * inv;
+    } else if (m[5] > m[10]) {
+        v = (m[5] - (m[10] + m[0])) + 1.0f;
+        r = HkSqrt(v);
+        inv = 0.5f / r;
+        x = (m[1] + m[4]) * inv;
+        y = 0.5f * r;
+        z = (m[6] + m[9]) * inv;
+        w = (m[8] - m[2]) * inv;
+    } else {
+        v = (m[10] - (m[5] + m[0])) + 1.0f;
+        r = HkSqrt(v);
+        inv = 0.5f / r;
+        x = (m[2] + m[8]) * inv;
+        y = (m[9] + m[6]) * inv;
+        z = 0.5f * r;
+        w = (m[1] - m[4]) * inv;
+    }
+    out[0] = x;
+    out[1] = y;
+    out[2] = z;
+    out[3] = w;
+}
+
+// ---------------------------------------------------------------------------
+// @ 0x0075b2c0   initialise the blender: lay the weight/flag/interpolator/pose
+//                arrays out inside the object and allocate the frame storage
+// ---------------------------------------------------------------------------
+extern int g_vt153813c[];
+cMultiBlender* __fastcall FUN_0075b2c0(cMultiBlender* self, int, int numFrames, B4 flags,
+                                      int maxAnims, int usePoseKeys, int allocArg) {
+    self->m_maxNumQuats  = flags.b[0];
+    self->m_BlendCallBack = 0;
+    self->mMaxAnims      = maxAnims;
+    self->mpVtbl         = (void*)g_vt153813c;
+
+    ResourceDescriptor base = Interp::GetResourceDescriptor(numFrames, flags, 0);
+
+    self->mWeights   = (float*)((char*)self + 0x54);
+    int off = maxAnims * 4 + 0x54;
+    self->mAnimating = (bool*)((char*)self + off);
+    off += maxAnims;
+    self->mBlending  = (bool*)((char*)self + off);
+    off += maxAnims;
+
+    self->mInterpolatorStride = base.d[0].mSize;
+    unsigned align = base.d[0].mAlign;
+    if (align > 1) {
+        --align;
+        off = (int)(((unsigned)off + align) & ~align);
+    }
+    self->mInterpolators = (char*)self + off;
+    off += (int)base.d[0].mSize * maxAnims;
+    self->mpData     = (char*)self + off;
+
+    int rowBytes = ((flags.b[2] + flags.b[0] * 4 + flags.b[1]) * 4) + 4;
+    unsigned a = 4;
+    if (flags.b[0] != 0) a = 0x10;
+    off += (int)((((a - 1) + (unsigned)rowBytes) & ~(a - 1)) * (unsigned)numFrames);
+
+    if (usePoseKeys != 0) {
+        self->mPoseKeys = (char*)self + off;
+        unsigned b = 4;
+        if (flags.b[0] != 0) b = 0x10;
+        off += (int)((((b - 1) + (unsigned)rowBytes) & ~(b - 1)) * (unsigned)numFrames);
+    } else {
+        self->mPoseKeys = 0;
+    }
+
+    self->Alloc((unsigned)off, 2, numFrames, flags, allocArg);
+    return self;
+}
+
+// ---------------------------------------------------------------------------
+// @ 0x0075b4d0   size of the storage this blender needs
+// ---------------------------------------------------------------------------
+void* __fastcall FUN_0075b4d0(cMultiBlender* self) {
+    return (void*)cMultiBlender::GetResourceDescriptor(
+        (int)self->mNumFrames, self->mFlags, (int)self->mMaxAnims,
+        self->mPoseKeys != 0, self->mpFrameList != 0).d[0].mSize;
+}
