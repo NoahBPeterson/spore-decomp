@@ -381,7 +381,7 @@ struct cMessage {
 // 4-byte id -> entry table, the pieces the interface keeps for the galaxy screen
 class cEntryTable {
 public:
-  cGalaxyGameEntry* GetEntry(int index) {
+  cGalaxyGameEntry*& GetEntry(int index) {
     return *(cGalaxyGameEntry**)((char*)this + index * 4);
   }
 };
