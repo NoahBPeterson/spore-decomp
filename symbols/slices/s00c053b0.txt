@@ -1,0 +1,1 @@
+00c06320 ?GetRank@cGameBundleContainer@SP@@UAEMPAVcSPCreatureBase@2@@Z  # SP::cGameBundleContainer::GetRank migrated from s00c053b0

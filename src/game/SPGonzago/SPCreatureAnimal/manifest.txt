@@ -1,0 +1,2 @@
+# source  symbol  va  flags
+../src/game/SPGonzago/SPCreatureAnimal.cpp  ?GetRank@cGameBundleContainer@SP@@UAEMPAVcSPCreatureBase@2@@Z  00c06320  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
