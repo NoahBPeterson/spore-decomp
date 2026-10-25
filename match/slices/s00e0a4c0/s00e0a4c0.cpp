@@ -367,19 +367,18 @@ bool __fastcall FUN_00e0a780(cPaletteGrid* ecx_this, void* edx, Float3* key, u32
 bool __fastcall FUN_00e0a800(cPaletteGrid* ecx_this, void* edx, u32 val)
 {
     bool ok = false;
-    u32 v = val;
-    if (!ecx_this->AddPages(v))
+    if (!ecx_this->AddPages(val))
         return ok;
     if (ecx_this->mSel.mBegin != ecx_this->mSel.mEnd) {
         u32* end = ecx_this->mSel.mEnd;
         if (end < ecx_this->mSel.mCap) {
             ecx_this->mSel.mEnd = end + 1;
             if (end != 0) {
-                *end = v;
+                *end = val;
                 return ecx_this->LayoutCells();
             }
         } else {
-            ecx_this->mSel.DoInsertValueI(end, v);
+            ecx_this->mSel.DoInsertValueI(end, val);
         }
     }
     return ecx_this->LayoutCells();
