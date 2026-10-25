@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+00dc2720 1405 SP::UFO_FOLLOW_AVATAR_Tick: leader pick, the four-state steer and the gather/PostEvent path are reconstructed, but the callee scheduling around the six GetPropertyT reads, the stack frame (0xe0 vs 0x100) and the FindObjects hit loop differ (1836 vs 1812 B); equiv WEAK (400/400 valid inputs, 3.6% coverage, no mismatch)
