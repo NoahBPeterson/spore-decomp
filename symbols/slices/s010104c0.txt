@@ -1,0 +1,4 @@
+01010720 ?FUN_01010720@@YGXHH@Z  # FUN_01010720 migrated from s010104c0 (verbatim, slice spelling)
+01010870 ?FUN_01010870@tGrobShockData@@QAEPAU1@ABU1@@Z  # tGrobShockData::FUN_01010870 migrated from s010104c0 (verbatim, slice spelling)
+01010bb0 ?FUN_01010bb0@@YAPAUtGrobShockData@@PAU1@00@Z  # FUN_01010bb0 migrated from s010104c0 (verbatim, slice spelling)
+01010e30 ?FUN_01010e30@@YAPAUtGrobShockData@@PAU1@00@Z  # FUN_01010e30 migrated from s010104c0 (verbatim, slice spelling)

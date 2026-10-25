@@ -1,0 +1,5 @@
+0100d960 ?CompareProtectorDistances@@YA_NPAUcGameNoun@@0@Z  # CompareProtectorDistances migrated from s0100d0d0 (verbatim, slice spelling)
+0100d9f0 ?Reset@cGrobShockSelection@@QAEXXZ  # cGrobShockSelection::Reset migrated from s0100d0d0 (verbatim, slice spelling)
+0100da10 ?Get@cGrobShockSelection@@QAE_NPAI@Z  # cGrobShockSelection::Get migrated from s0100d0d0 (verbatim, slice spelling)
+0100da40 ?sCompareGrobShockData@@YA_NPAX0@Z  # sCompareGrobShockData migrated from s0100d0d0 (verbatim, slice spelling)
+0100daa0 ?DestroyTimerRange@@YAPAXPAX00@Z  # DestroyTimerRange migrated from s0100d0d0 (verbatim, slice spelling)

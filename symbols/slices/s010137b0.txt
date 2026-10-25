@@ -1,0 +1,4 @@
+01013ba0 ?UpdateAwareness@cSimulatorUniverse_s0101_37b0@@QAEXII@Z  # cSimulatorUniverse_s0101_37b0::UpdateAwareness migrated from s010137b0 (verbatim, slice spelling)
+01013ec0 ?erase@ShockVec@@QAEPAUtGrobShockData_s0101_37b0@@PAU2@0@Z  # ShockVec::erase migrated from s010137b0 (verbatim, slice spelling)
+01013f20 ?DoInsertValue@ShockVec@@QAEXPAUtGrobShockData_s0101_37b0@@ABU2@@Z  # ShockVec::DoInsertValue migrated from s010137b0 (verbatim, slice spelling)
+010144c0 ?FUN_010144c0@@YAXPAXPAUcStarRefVec@@@Z  # FUN_010144c0 migrated from s010137b0 (verbatim, slice spelling)

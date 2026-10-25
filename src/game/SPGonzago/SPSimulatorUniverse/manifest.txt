@@ -1,0 +1,10 @@
+# source  symbol  va  flags
+../src/game/SPGonzago/SPSimulatorUniverse.cpp  ?CompareProtectorDistances@@YA_NPAUcGameNoun@@0@Z  0100d960  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPSimulatorUniverse.cpp  ?Reset@cGrobShockSelection@@QAEXXZ  0100d9f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPSimulatorUniverse.cpp  ?Get@cGrobShockSelection@@QAE_NPAI@Z  0100da10  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPSimulatorUniverse.cpp  ?sCompareGrobShockData@@YA_NPAX0@Z  0100da40  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPSimulatorUniverse.cpp  ?DestroyTimerRange@@YAPAXPAX00@Z  0100daa0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPSimulatorUniverse.cpp  ?TryCreateMission@PirateRaidAllyEvent@@QAEHPAUIMission@@H@Z  0100e3c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPSimulatorUniverse.cpp  ?TryCreateMission@BiosphereCollapseEvent@@QAEHPAUIPlanetMission@@H@Z  0100e690  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPSimulatorUniverse.cpp  ?PickWeightedIndex@@YAHPAUIntVector@@@Z  0100e970  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPSimulatorUniverse.cpp  ?FUN_01010720@@YGXHH@Z  01010720  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include

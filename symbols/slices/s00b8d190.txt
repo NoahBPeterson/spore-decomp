@@ -16,7 +16,7 @@
 00b8db70 FUN_00b8db70  # Ghidra FUN; minimap cell hit-test/tooltip: format the hovered cell text in a 0xa18-byte buffer and forward it; not reconstructed
 00b8dd60 FUN_00b8dd60  # Ghidra FUN; read/cache the model key: query the key service (virtual slot +4) when the cached word at +0x1a4 is set, else fall back to the empty star key; not byte-exact
 00b8dde0 FUN_00b8dde0  # Ghidra FUN; cache the caller's key in the three words at +0x1a4/+0x1a8/+0x1ac when it differs; not byte-exact
-00b8de30 cBioElemSort::SortBanners  # PDB name `anonymous_namespace'::BioProtectorSort::operator(); resort the star's bio-protector banner list through FUN_00ba6440 / FUN_00ba6d80; not byte-exact
+00b8de30 ?SortBanners@cBioElemSort@@QAEIXZ  # cBioElemSort::SortBanners migrated from s00b8d190 (verbatim, slice spelling)
 00b8de60 FUN_00b8de60  # Ghidra FUN; drain the first owned-pointer container (+0x15c/+0x160): destroy and free each element; not byte-exact
 00b8dec0 FUN_00b8dec0  # Ghidra FUN; indexed access into the first owned-pointer container, null when out of range; not byte-exact
 00b8def0 FUN_00b8def0  # Ghidra FUN; indexed access into the second owned-pointer container (+0x170/+0x174); not byte-exact
