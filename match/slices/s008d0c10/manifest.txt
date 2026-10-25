@@ -5,3 +5,8 @@ slices/s008d0c10/s008d0c10.cpp  ?tsi_DeleteMemhandler@@YAXH@Z  008d1570  /O2 /MD
 slices/s008d0c10/s008d0c10.cpp  ?util_FixDiv@@YAHII@Z  008d16d0  /O2 /MD /Gy /EHsc /TP
 slices/s008d0c10/s008d0c10.cpp  ?util_FixSin@@YAHH@Z  008d1730  /O2 /MD /Gy /EHsc /TP
 slices/s008d0c10/s008d0c10.cpp  ?util_EuclidianDistance@@YAHHH@Z  008d17d0  /O2 /MD /Gy /EHsc /TP
+slices/s008d0c10/s008d0c10.cpp  ?tsi_Error@@YAXHH@Z  008d10c0  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s008d0c10/s008d0c10.cpp  _tsi_AllocMem  008d1260  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s008d0c10/s008d0c10.cpp  ?tsi_ReAllocMem@@YAPAXHPADH@Z  008d1330  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s008d0c10/s008d0c10.cpp  _tsi_DeAllocMem  008d1440  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s008d0c10/s008d0c10.cpp  ?FUN_008d1960@@YIHI@Z  008d1960  /O2 /MD /Gy /EHsc /TP /arch:SSE

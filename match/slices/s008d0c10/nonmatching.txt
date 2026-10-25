@@ -2,3 +2,7 @@
 008d1670 72 util_ShortFracMul(a,b): 16.16 x 2.14 fixed multiply; same math, regalloc/imul scheduling differs. flags /O2 /MD /Gy /EHsc /TP /arch:SSE; difftest PASS (400 valid, 100.0% coverage)
 008d1890 158 util_ComputeIntersection(...): segment intersection via util_FixDiv/FixMul; same results, regalloc differs. flags /O2 /MD /Gy /EHsc /TP /arch:SSE; difftest PASS (400 valid, 73.7% coverage)
 008d1ac0 60 get_using_uint16_hashClass(h,key,out): open-address probe of uint16 hash table; same results, regalloc differs. flags /O2 /MD /Gy /EHsc /TP /arch:SSE; difftest PASS (230 valid, 75.6% coverage)
+008d0c10 997 FF_New_sfntClass: sfnt class factory (setjmp/alloc/init/variant-dispatch); block layout and regalloc differ. flags /O2 /MD /Gy /EHsc /TP /arch:SSE; difftest WEAK (90 valid, 5.3% coverage)
+008d10f0 11 tsi_NewCustomSizeMemhandler: alloc handler + slot table + init flag array; error-tail instruction scheduling differs. flags /O2 /MD /Gy /EHsc /TP /arch:SSE; difftest UNSUPPORTED (0/400 valid, fault)
+008d1600 71 util_FixMulDiv(a,b): 16.16 multiply scaled by 2^-6 with 0x400 term; same results, register allocation differs. flags /O2 /MD /Gy /EHsc /TP /arch:SSE; difftest PASS (400 valid, 100.0% coverage)
+008d1a00 4 New_hashClass(tbl,size,a,b): alloc hash struct + prime-size search + table fill; xor/sar instruction scheduling differs. flags /O2 /MD /Gy /EHsc /TP /arch:SSE; difftest UNSUPPORTED (0/400 valid, fault)
