@@ -180,10 +180,13 @@ void f010a9d30(float* a, float* b)
     b[2] = a[2];
     b[3] = a[3];
     int i = 0;
-    int l38 = 0;
-    int l50[6] = { 0, 0, 0, 0, 0, 0 };
-    float* l14 = b;
-    int l20 = 0;
+    // solver state handed to f010a98c0: 4 basis slots (3 words each), then
+    // count, lambda, context a, context b
+    int st[16];
+    st[12] = 0;
+    st[13] = 0;
+    st[14] = (int)a;
+    st[15] = (int)b;
     float l1c = 0.0f;
     if (0 < (int)a[0x13]) {
         int off = 0;
@@ -200,15 +203,14 @@ void f010a9d30(float* a, float* b)
     }
     if (0.0f <= l74) {
         for (;;) {
-            int n = l20;
             float l78 = l74;
             int l70 = -1;
             if (0 < (int)a[0x13]) {
                 int idx = 0, c64 = 0, i8 = 0;
                 do {
-                    if ((((l20 < 1) || (l50[0] != idx)) &&
-                         ((l20 < 2 || (l50[3] != idx)))) &&
-                        (((l20 < 3 || (l38 != idx)) &&
+                    if ((((st[12] < 1) || (st[0] != idx)) &&
+                         ((st[12] < 2 || (st[3] != idx)))) &&
+                        (((st[12] < 3 || (st[6] != idx)) &&
                          (*(int*)((char*)(int)b[9] + 0xc + i8) == 0)))) {
                         float* e = (float*)((char*)(int)a[0x12] + c64);
                         float f1 = -((b[5] - e[5]) * e[1] +
@@ -220,7 +222,7 @@ void f010a9d30(float* a, float* b)
                                   ((f2 * e[4] + b[0]) * e[0] +
                                    (f2 * e[6] + b[2]) * e[2])) + e[3];
                             if (f2 < 1.1920929e-07f != (f2 == 1.1920929e-07f)) f2 = 0.0f;
-                            f2 = f2 + *(float*)((char*)(int)l14[9] + 8 + i8);
+                            f2 = f2 + *(float*)((char*)(int)b[9] + 8 + i8);
                             if (f2 < f1 * l78) {
                                 l78 = f2 / f1;
                                 l70 = idx;
@@ -239,9 +241,9 @@ void f010a9d30(float* a, float* b)
                 b[1] = l78 * b[5] + b[1];
                 b[2] = l78 * b[6] + b[2];
                 b[3] = l78 * b[7] + b[3];
-                if (0 < l20) {
-                    int* pi = l50 + 2;
-                    int k = l20;
+                if (0 < st[12]) {
+                    int* pi = st + 2;
+                    int k = st[12];
                     do {
                         char* e = (char*)*pi;
                         pi += 3;
@@ -254,17 +256,16 @@ void f010a9d30(float* a, float* b)
                 if (a[0x11] < l1c) return;
             }
             if (l70 < 0) break;
-            int i7 = l20 * 3;
-            int i8 = l20 * 3;
-            l20 = l20 + 1;
-            l50[i8 + 1] = l70 * 0x40 + (int)a[0x12];
-            i8 = l70 * 0x10 + (int)b[9];
+            int i7 = st[12] * 3;
+            st[12] = st[12] + 1;
+            st[i7 + 1] = l70 * 0x40 + (int)a[0x12];
+            int i8 = l70 * 0x10 + (int)b[9];
             float f1 = *(float*)(l70 * 0x10 + 8 + (int)b[9]) + 1.1920929e-07f;
-            l50[i7 + 2] = i8;
+            st[i7 + 2] = i8;
             *(float*)(i8 + 8) = f1 + f1;
-            l50[i7] = l70;
-            f010a98c0(l50);
-            if (l74 < 0.0f) return;
+            st[i7] = l70;
+            f010a98c0(st);
+            if (!(l74 >= 0.0f)) return;
         }
         b[8] = a[0x10];
     }
