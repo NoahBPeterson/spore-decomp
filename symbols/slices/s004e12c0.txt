@@ -5,5 +5,5 @@
 004e18e0 eastl::vector<SP::FunctionalMatch::Constraint>::push_back  # Ghidra
 004e1a20 hashtable iterator helper  # inferred
 004e1a90 rbtree insert/assign helper  # inferred
-004e1c30 SP::cTribeTool::GetTutorialToolPrice  # PDB
+004e1c30 ?GetTutorialToolPrice@@YAHPAUPropertyHolder@@HH@Z  # GetTutorialToolPrice migrated from s004e12c0 (verbatim, slice spelling)
 004e1c70 SP::GetPropertyT<float>  # PDB
