@@ -352,10 +352,9 @@ void __fastcall FUN_00adde00(void* self, int /*edx*/, unsigned int param_2)
 // 0x00adde90 -- cStringContext lookup / insert
 // ================================================================================
 // @ 0x00adde90
-void __fastcall FUN_00adde90(void* self, int /*edx*/, unsigned int* param_2, unsigned int param_3, unsigned int param_4)
+void __fastcall FUN_00adde90(void* self, int /*edx*/, unsigned int /*unused*/, unsigned int* param_2, unsigned int param_4)
 {
     char* s = (char*)self;
-    (void)param_3;
     if (param_4 == 0) {
         if (*(int*)(s + 0x118) == *(int*)(s + 0x128))
             param_4 = *(unsigned int*)(s + 0x148);
