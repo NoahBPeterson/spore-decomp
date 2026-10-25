@@ -1,7 +1,7 @@
-00767ee0 ?WriteResourceRaster@@YGHPAXPAH@Z  # WriteResourceRaster migrated from s00767ee0 (verbatim, slice spelling)
-00768200 ?Release@C68200@@QAEXXZ  # C68200::Release migrated from s00767ee0 (verbatim, slice spelling)
-00768240 C68240::C68240  # inline 0x7c vector ctor; registers job via FUN_00767760
-007682a0 ?Resize@V7cB@@QAEXI@Z  # V7cB::Resize migrated from s00767ee0 (verbatim, slice spelling)
-00768370 ??0C68370@@QAE@PAXPAH010@Z  # C68370::C68370 migrated from s00767ee0 (verbatim, slice spelling)
-00768540 C68370Dtor  # BakeSprites job destructor
-00768650 LoadRecords  # PDB candidate SP::cEffectsRenderer::UpdateViewerParams; loads 0x7c records
+00767ee0 ?WriteResourceRaster@@YGHPAXPAH@Z  # SP::cGraphicsResourceFactory::WriteResourceRaster (retail 791 B); skeleton model only, see fixlog
+00768200 ?Release@C68200@@QAEXXZ  # C68200::Release (retail 57 B) byte-exact MATCH
+00768240 C68240::C68240  # inline 0x7c vector ctor; registers job via FUN_00767760 (retail 84 B, nonmatching)
+007682a0 ?Resize@V7cB@@QAEXI@Z  # V7cB::Resize (retail 194 B, nonmatching; equivalence PASS)
+00768370 C68370::C68370  # BakeSprites job ctor (retail 419 B); complete, residual MSVC scheduling only
+00768540 C68370::~C68370  # BakeSprites job dtor (retail 267 B); byte-exact MATCH with /GS-
+00768650 LoadRecords  # PDB candidate SP::cEffectsRenderer::UpdateViewerParams; loads 0x7c records (retail 839 B); skeleton model only, see fixlog
