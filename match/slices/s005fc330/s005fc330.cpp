@@ -144,11 +144,218 @@ struct KeyGuidMapX : SP::Thumbnail::KeyGuidMap {
   insert_return_type DoInsertValue(const SP::Thumbnail::KeyGuidPair& v, eastl::true_type);   // 0x005f8240
 };
 }  // namespace IN
+
+// ---------------------------------------------------------------------------------------------
+// Containers and IO types used by ScanFolder (0x005fc9f0) and ScanForImports (0x005fd0a0).
+// ---------------------------------------------------------------------------------------------
+extern "C" __declspec(dllimport) int __cdecl tolower(int);
+
+namespace eastl {
+struct false_type {};
+}
+
+namespace EA {
+namespace IO {
+// FilePath (PDB: wchar_t mPath[520], size 0x410). The original reaches these helpers through
+// renamed stubs, so they are called by address name.
+struct FilePath {
+  wchar_t mPath[520];                          // +0x000
+  void FUN_0092fcc0();                         // 0x0092fcc0  constructor: mPath[0] = 0
+  bool FUN_00930da0(const wchar_t* path);      // 0x00930da0  assign the directory component
+  void FUN_00931100(const wchar_t* name, bool flag);  // 0x00931100  replace the name component
+  wchar_t* FUN_00572590();                     // 0x00572590  UintArray::Self
+};
+}  // namespace IO
+}  // namespace EA
+
+namespace IN {
+
+// eastl::basic_string<wchar_t> value as stored in a map/set node (0x10 bytes including the
+// empty allocator's padding).
+struct WText16 {
+  wchar_t* mpBegin;                            // +0x00
+  wchar_t* mpEnd;                              // +0x04
+  wchar_t* mpCapacity;                         // +0x08
+  uint32_t mAllocator;                         // +0x0c
+  void FUN_00429760(size_t n);                 // 0x00429760  AllocateSelf
+};
+
+// pair<wstring, Key> and pair<Key, wstring>.
+struct WKPair {
+  WText16 first;
+  Key second;
+  WKPair() {}
+  WKPair(const WText16& name, const Key& key) : first(name), second(key) {}
+};
+struct KWPair {
+  Key first;
+  WText16 second;
+  KWPair() {}
+  KWPair(const Key& key, const WText16& name) : first(key), second(name) {}
+};
+struct WKNode {
+  WKPair mValue;                               // +0x00
+  WKNode* mpNext;                              // +0x1c
+};
+struct KWNode {
+  KWPair mValue;                               // +0x00
+  KWNode* mpNext;                              // +0x1c
+};
+
+struct WKIter {
+  WKNode* mpNode;                              // +0x00
+  WKNode** mpBucket;                           // +0x04
+};
+struct WKInsert {
+  WKIter first;
+  bool second;
+};
+struct KWIter {
+  KWNode* mpNode;
+  KWNode** mpBucket;
+};
+struct KWInsert {
+  KWIter first;
+  bool second;
+};
+
+// hashtable<pair<wstring, Key>> : normalised path -> Key (mNameToKeyMap at +0x04).
+struct MapWK {
+  uint32_t mHash;                              // +0x00  empty hash object
+  WKNode** mpBucketArray;                      // +0x04
+  uint32_t mnBucketCount;                      // +0x08
+  uint32_t mnElementCount;                     // +0x0c
+  float mfMaxLoadFactor;                       // +0x10
+  float mfGrowthFactor;                        // +0x14
+  uint32_t mnNextResize;                       // +0x18
+  uint32_t mAllocator;                         // +0x1c  empty allocator object
+  WKIter find(const WText16& name);                                // 0x005f8fe0
+  WKInsert DoInsertValue(const WKPair& value, eastl::true_type);   // 0x005f9470
+};
+
+// hashtable<pair<Key, wstring>> : Key -> normalised path (mKeyToNameMap at +0x24).
+struct MapKW {
+  uint32_t mHash;                              // +0x00
+  KWNode** mpBucketArray;                      // +0x04
+  uint32_t mnBucketCount;                      // +0x08
+  uint32_t mnElementCount;                     // +0x0c
+  float mfMaxLoadFactor;                       // +0x10
+  float mfGrowthFactor;                        // +0x14
+  uint32_t mnNextResize;                       // +0x18
+  uint32_t mAllocator;                         // +0x1c
+  KWInsert DoInsertValue(const KWPair& value, eastl::false_type);  // 0x005f95a0
+};
+
+// hashtable<wstring> : the scratch set of already imported names handed to ScanFolder.
+struct SetWStr {
+  struct Node {
+    WText16 mKey;                              // +0x00
+    Node* mpNext;                              // +0x10
+  };
+  struct Iter {
+    Node* mpNode;
+    Node** mpBucket;
+  };
+  struct Insert {
+    Iter first;
+    bool second;
+  };
+
+  uint32_t mHash;                              // +0x00
+  Node** mpBucketArray;                        // +0x04
+  uint32_t mnBucketCount;                      // +0x08
+  uint32_t mnElementCount;                     // +0x0c
+  float mfMaxLoadFactor;                       // +0x10
+  float mfGrowthFactor;                        // +0x14
+  uint32_t mnNextResize;                       // +0x18
+  uint32_t mAllocator;                         // +0x1c
+
+  SetWStr() {
+    mHash = 0;
+    mpBucketArray = (Node**)&eastl::gEmptyBucketArray;
+    mnBucketCount = 1;
+    mnElementCount = 0;
+    mfMaxLoadFactor = 1.0f;
+    mfGrowthFactor = 2.0f;
+    mnNextResize = 0;
+    mAllocator = 0;
+  }
+  Insert DoInsertValue(const WText16& value, eastl::true_type);    // 0x005f9100
+};
+
+struct StrTable : SetWStr {
+  uint32_t erase(const WText16* key);                              // 0x005fa100
+};
+void FUN_005f9760(SetWStr::Node** buckets, uint32_t count);        // 0x005f9760
+
+// EA::IO::DirectoryIterator::Entry (0x30 bytes) and the deque<Entry> DirectoryIterator::Read
+// fills in (0x30 bytes, four entries per subarray).
+struct DirEntry {
+  uint32_t mType;                              // +0x00
+  WText16 mName;                               // +0x04
+  uint32_t mPad;                               // +0x14
+  uint32_t mTimes[6];                          // +0x18
+};
+struct DirIter {
+  DirEntry* mpCurrent;                         // +0x00
+  DirEntry* mpBegin;                           // +0x04
+  DirEntry* mpEnd;                             // +0x08
+  DirEntry** mpCurrentArrayPtr;                // +0x0c
+};
+struct DirDeque {
+  DirEntry** mpPtrArray;                       // +0x00
+  uint32_t mnPtrArraySize;                     // +0x04
+  DirIter mItBegin;                            // +0x08
+  DirIter mItEnd;                              // +0x18
+  void* mpAllocator;                           // +0x28
+  uint32_t mnAllocatorFlags;                   // +0x2c
+  DirDeque();
+  void FUN_005f8840(size_t n);                 // 0x005f8840  DequeBase::DoInit
+  void FUN_005f96c0();                         // 0x005f96c0  DequeBase destructor
+};
+
+void* FUN_00925cb0();                          // 0x00925cb0  GetDefaultAllocator
+unsigned __stdcall FUN_0092ef40(const wchar_t* dir, DirDeque* list, const wchar_t* pattern,
+                                unsigned char flags, uint32_t maxCount, int wantTimes); // 0x0092ef40
+
+inline DirDeque::DirDeque()
+    : mpPtrArray(0), mnPtrArraySize(0), mpAllocator(0), mnAllocatorFlags(0) {
+  mItBegin.mpCurrent = 0;
+  mItBegin.mpBegin = 0;
+  mItBegin.mpEnd = 0;
+  mItBegin.mpCurrentArrayPtr = 0;
+  mItEnd.mpCurrent = 0;
+  mItEnd.mpBegin = 0;
+  mItEnd.mpEnd = 0;
+  mItEnd.mpCurrentArrayPtr = 0;
+  mpAllocator = FUN_00925cb0();
+  FUN_005f8840(0);
+}
+
+// Allocate `len + 1` wchar_t and copy [src, src + len), NUL terminated (retail keeps the empty
+// string in the shared eastl buffer).
+static void TextAlloc(WText16* s, const wchar_t* src, uint32_t len) {
+  s->mpBegin = 0;
+  s->mpEnd = 0;
+  s->mpCapacity = 0;
+  s->mAllocator = 0;
+  s->FUN_00429760((size_t)len + 1);
+  memcpy(s->mpBegin, src, (size_t)len * 2);
+  s->mpEnd = s->mpBegin + len;
+  *s->mpEnd = 0;
+}
+
+static void TextFree(WText16* s) {
+  if (s->mpCapacity - s->mpBegin > 1 && s->mpBegin) operator delete(s->mpBegin);
+}
+
+}  // namespace IN
+
 void* operator new(size_t, const char*, int, int, int, int);   // 0x00f473a0
 
 struct cImportExportCtor : IHandlerBase8 {
-  eastl::NameKeyMap mNameToKeyMap;             // +0x04
-  eastl::KeyNameMap mKeyToNameMap;             // +0x24
+  IN::MapWK mNameToKeyMap;                     // +0x04
+  IN::MapKW mKeyToNameMap;                     // +0x24
   uint32_t mnMachineID;                        // +0x44
   SP::Thumbnail::GuidKeyMap mGuidToKeyMap;     // +0x48
   SP::Thumbnail::KeyGuidMap mKeyToGuidMap;     // +0x68
@@ -171,8 +378,29 @@ cImportExportCtor::cImportExportCtor() {}
 // @ 0x005fd0a0
 unsigned char cImportExportCtor::ScanForImports()
 {
-  // Reconstructed (behavioural) skeleton: scans the eight folder paths.
-  return 0;
+  uint32_t count = 0;
+
+  // Snapshot every name already present in the name -> key cache into a scratch set; ScanFolder
+  // removes the entries it finds on disk again (leaving the names whose files have disappeared).
+  IN::StrTable seen;
+  for (uint32_t i = 0; i < mNameToKeyMap.mnBucketCount; ++i) {
+    for (IN::WKNode* node = mNameToKeyMap.mpBucketArray[i]; node; node = node->mpNext)
+      seen.DoInsertValue(node->mValue.first, eastl::true_type());
+  }
+
+  unsigned char found = (unsigned char)ScanFolder(&s104, &seen, &count);
+  found |= (unsigned char)ScanFolder(&s114, &seen, &count);
+  found |= (unsigned char)ScanFolder(&s124, &seen, &count);
+  found |= (unsigned char)ScanFolder(&s134, &seen, &count);
+  found |= (unsigned char)ScanFolder(&s144, &seen, &count);
+  found |= (unsigned char)ScanFolder(&s154, &seen, &count);
+  found |= (unsigned char)ScanFolder(&s164, &seen, &count);
+  found |= (unsigned char)ScanFolder(&s174, &seen, &count);
+
+  IN::FUN_005f9760(seen.mpBucketArray, seen.mnBucketCount);
+  seen.mnElementCount = 0;
+  if (seen.mnBucketCount > 1) operator delete(seen.mpBucketArray);
+  return found;
 }
 
 // @ 0x005fc330
@@ -284,10 +512,81 @@ bool cImportExportCtor::ImportNewAsset(const wchar_t* path, Key* pOut)
 
 
 // @ 0x005fc9f0
-bool cImportExportCtor::ScanFolder(const void* a, void* b, void* c)
+bool cImportExportCtor::ScanFolder(const void* folderArg, void* tableArg, void* countArg)
 {
-  (void)a;
-  (void)b;
-  (void)c;
-  return false;
+  const eastl::string16* folder = (const eastl::string16*)folderArg;
+  IN::StrTable* known = (IN::StrTable*)tableArg;
+  uint32_t* count = (uint32_t*)countArg;
+  unsigned char found = 0;
+
+  IN::DirDeque entries;
+  IN::FUN_0092ef40(folder->mpBegin, &entries, L"*.png", 2, 0x100000, 0);
+
+  IN::DirEntry* cur = entries.mItBegin.mpCurrent;
+  IN::DirEntry* subEnd = entries.mItBegin.mpEnd;
+  IN::DirEntry** block = entries.mItBegin.mpCurrentArrayPtr;
+  IN::DirEntry* end = entries.mItEnd.mpCurrent;
+
+  while (cur != end) {
+    EA::IO::FilePath path;
+    path.FUN_0092fcc0();
+    path.FUN_00930da0(folder->mpBegin);
+    path.FUN_00931100(cur->mName.mpBegin, false);
+    const wchar_t* full = path.FUN_00572590();
+
+    // Lowercase the full path and use '/' separators for the cache key.
+    uint32_t len = 0;
+    while (full[len]) ++len;
+    IN::WText16 norm;
+    IN::TextAlloc(&norm, full, len);
+    for (wchar_t* p = norm.mpBegin; p < norm.mpEnd; ++p) {
+      uint32_t ch = (uint32_t)*p;
+      if (ch < 0x100) *p = (wchar_t)tolower((int)(ch & 0xff));
+    }
+    for (uint32_t i = 0; i < len; ++i)
+      if (norm.mpBegin[i] == L'\\') norm.mpBegin[i] = L'/';
+
+    IN::WKIter it = mNameToKeyMap.find(norm);
+    if (it.mpNode != mNameToKeyMap.mpBucketArray[mNameToKeyMap.mnBucketCount] || *count >= 500) {
+      // Already imported (or the per-call cap is reached): drop the name from the scratch set.
+      known->erase(&cur->mName);
+    } else {
+      Key key;
+      key.instanceID = 0;
+      key.typeID = 0;
+      key.groupID = 0;
+      bool imported = ImportNewAsset(full, &key);
+
+      // A valid key is either the freshly generated one or a cache hit reported by CreateKey.
+      if (imported || key.instanceID != 0xffffffffu || key.typeID != 0xffffffffu ||
+          key.groupID != 0xffffffffu) {
+        IN::WText16 nameCopy;
+        IN::TextAlloc(&nameCopy, norm.mpBegin, len);
+        IN::KWPair kp(key, nameCopy);
+        mKeyToNameMap.DoInsertValue(kp, eastl::false_type());
+        IN::TextFree(&nameCopy);
+        ++*count;
+        found = 1;
+      }
+
+      // Cache the attempt under the normalised path (failed imports keep the all-ones key).
+      IN::WText16 nameCopy;
+      IN::TextAlloc(&nameCopy, norm.mpBegin, len);
+      IN::WKPair wp(nameCopy, key);
+      mNameToKeyMap.DoInsertValue(wp, eastl::true_type());
+      IN::TextFree(&nameCopy);
+    }
+
+    IN::TextFree(&norm);
+
+    ++cur;
+    if (cur == subEnd) {
+      ++block;
+      cur = *block;
+      subEnd = cur + 4;
+    }
+  }
+
+  entries.FUN_005f96c0();
+  return found != 0;
 }
