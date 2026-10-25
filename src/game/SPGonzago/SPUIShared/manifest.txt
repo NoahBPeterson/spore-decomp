@@ -1,0 +1,3 @@
+# source  symbol  va  flags
+../src/game/SPGonzago/SPUIShared.cpp  ?Init@cSPUIRelationshipStrip@@QAEXPAVtIWindow@@@Z  00e2ec60  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPUIShared.cpp  ?FUN_00ec6a00@@YAHH@Z  00ec6a00  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
