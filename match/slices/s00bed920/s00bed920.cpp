@@ -37,23 +37,115 @@ struct cSpatialObject{ void ctor(); };               // 0x00c89630
 // --- misc engine stubs used by the helpers ---
 void* __cdecl PropertyManager();                     // 0x0067de30
 void  __cdecl GetPropertyAsKey(int prop, uint32_t key, void* dest);   // 0x006a1250
-void  __cdecl FUN_00bed3e0(void* keys, int n);       // 0x00bed3e0
 void  __cdecl FUN_011e073e(void* dest, int val, uint32_t size);       // 0x011e073e
 void* __cdecl GonzagoModelWorld();                   // 0x00b3d520
-struct GonzagoWorld { void v18(void* propList, uint32_t arg); };      // vtable slot 0x18
 
-struct cPropertyList {
-    void ctor();                                     // 0x006a1c40  ??0cPropertyList@SP@@QAE@XZ
-    void SetProperty(uint32_t key, void* variant);   // 0x006a2e20
+// COM-style ref-counted object; every released pointer goes through vtable slot 1.
+struct RefCounted {
+    virtual void Slot00();
+    virtual void Release();                          // vtable slot 0x04
 };
+
+// Gonzago model world object; only slot 0x18 (apply a property list) is used here.
+struct GonzagoWorld {
+    virtual void Slot00();
+    virtual void Slot04();
+    virtual void Slot08();
+    virtual void Slot0c();
+    virtual void Slot10();
+    virtual void Slot14();
+    virtual void v18(void* propList, uint32_t value); // vtable slot 0x18
+};
+
+// 0xc-byte property-key element.
+struct Key { uint32_t k0, k1, k2; };
+
+// {begin,end,capacity} vector of 0xc-byte elements with a six-element inline
+// buffer; resize lives at 0x00bed3e0.  The storage pointer at +0x10 records the
+// inline buffer so the destructor knows when the vector still owns the stack block.
+struct KeyVector {
+    Key*     mpBegin;                                // 0x00
+    Key*     mpEnd;                                  // 0x04
+    Key*     mpCapacity;                             // 0x08
+    uint32_t mPad0c;                                 // 0x0c
+    Key*     mpStorage;                              // 0x10
+    uint32_t mPad14;                                 // 0x14
+    Key      mInlineKeys[6];                         // 0x18
+    void resize(int n);                              // 0x00bed3e0  __thiscall, ret 4
+};
+
+// EA::Variant, 0x14 bytes.
 struct Variant {
-    uint32_t raw[8];
-    void ctor();                                     // implicit
-    bool Construct(uint32_t a, uint32_t b, void* data, uint32_t elem, uint32_t n);  // 0x0093dd80
+    const void* mpData;                              // 0x00
+    uint32_t    mSize;                               // 0x04
+    uint32_t    mExtra;                              // 0x08
+    uint32_t    mPad0c;                              // 0x0c
+    uint16_t    mFlags;                              // 0x10
+    uint16_t    mType;                               // 0x12
+    Variant() : mFlags(0), mType(0) {}               // default ctor only clears the flag word
+    bool Construct(uint32_t a, uint32_t b, const void* data, uint32_t elem, uint32_t n);  // 0x0093dd80
     void Destruct(int flag);                         // 0x0093db80
 };
+
+// eastl::pair<unsigned int, EA::Variant>, 0x18 bytes, the mPropertyMap element.
+struct PropertyPair {
+    uint32_t mKey;                                   // 0x00
+    Variant  mValue;                                 // 0x04
+};
+
+// SP::cPropertyList, retail size 0x38.
+struct cPropertyList {
+    void*         mpVtable;                          // 0x00
+    uint32_t      mRefCount;                         // 0x04
+    uint32_t      mField08;                          // 0x08
+    uint32_t      mField0c;                          // 0x0c
+    uint32_t      mField10;                          // 0x10
+    uint32_t      mField14;                          // 0x14
+    PropertyPair* mpPropertyMapBegin;                // 0x18  mPropertyMap
+    PropertyPair* mpPropertyMapEnd;                  // 0x1c
+    PropertyPair* mpPropertyMapCapacity;             // 0x20
+    uint32_t      mField24;                          // 0x24
+    uint32_t      mField28;                          // 0x28
+    uint32_t      mField2c;                          // 0x2c
+    RefCounted*   mpParent;                          // 0x30  EA::AutoRefCount<cPropertyList>
+    uint32_t      mModificationCount;                // 0x34
+
+    void ctor();                                     // 0x006a1c40  ??0cPropertyList@SP@@QAE@XZ
+    void SetProperty(uint32_t key, const Variant& value);   // 0x006a2e20
+    void dtor();
+};
+
+// Inlined ~cPropertyList: drop the parent, destroy the map's pairs, free the map
+// buffer and finally repoint the vtable at the base-class destructor state.
+__forceinline void cPropertyList::dtor()
+{
+    if (mpParent) {
+        mpParent->Release();
+    }
+    for (PropertyPair* p = mpPropertyMapBegin; p != mpPropertyMapEnd; ++p) {
+        if (p->mValue.mFlags & 4) {
+            p->mValue.Destruct(0);
+        }
+    }
+    if (mpPropertyMapBegin) {
+        ::operator delete(mpPropertyMapBegin);
+    }
+    mpVtable = (void*)0x13eb938;
+}
+
 struct PropManager {
-    char Resolve(uint32_t prop, uint32_t key, void** out);   // vtable slot 0x2c
+    virtual void Slot00();
+    virtual void Slot04();
+    virtual void Slot08();
+    virtual void Slot0c();
+    virtual void Slot10();
+    virtual void Slot14();
+    virtual void Slot18();
+    virtual void Slot1c();
+    virtual void Slot20();
+    virtual void Slot24();
+    virtual void Slot28();
+    virtual char Resolve(uint32_t prop, uint32_t key, void** out);   // vtable slot 0x2c
 };
 
 struct Combatant { int GetDamageState(); };          // 0x008e7f80  ([this+0x34])
@@ -340,41 +432,56 @@ void CityWalls::FUN_00bee200()
 }
 
 // ---------------------------------------------------------------------------
-// 0x00bed920  free helper (__cdecl, 1 arg)
+// 0x00bed920  build + apply a property list on the Gonzago model world
+//             (__cdecl, 2 args: property id and a value forwarded to slot 0x18)
 // ---------------------------------------------------------------------------
-struct Key { uint32_t k0, k1, k2; };
-
 // @ 0x00bed920
-void FUN_00bed920(uint32_t prop)
+void __cdecl FUN_00bed920(uint32_t prop, uint32_t value)
 {
-    void* propObj = 0;
+    RefCounted* propObj = 0;
     PropManager* mgr = (PropManager*)PropertyManager();
     if (propObj) {
-        void* p = propObj; propObj = 0;
-        ((void(__thiscall*)(void*))(*(void***)p)[1])(p);
+        RefCounted* old = propObj;
+        propObj = 0;
+        old->Release();
     }
-    if (mgr->Resolve(prop, 0x2e4b4cc, &propObj)) {
-        Key keys[6];
-        FUN_00bed3e0(keys, 6);
-        GetPropertyAsKey((int)propObj, 0x44449ba, &keys[0]);
-        GetPropertyAsKey((int)propObj, 0x44449bb, &keys[1]);
-        GetPropertyAsKey((int)propObj, 0x44449bc, &keys[2]);
-        GetPropertyAsKey((int)propObj, 0x44449bd, &keys[3]);
-        GetPropertyAsKey((int)propObj, 0x653e65e, &keys[4]);
-        GetPropertyAsKey((int)propObj, 0x653e66a, &keys[5]);
-        for (int i = 0; i < 6; ++i) keys[i].k2 = 0x40828100;
-
-        cPropertyList list;
-        list.ctor();
+    if (mgr->Resolve(prop, 0x2e4b4cc, (void**)&propObj)) {
         Variant var;
-        var.Construct(0x20, 0x98, keys, 0xc, 6);
-        list.SetProperty(0x49b48ee, &var);
-        ((GonzagoWorld*)GonzagoModelWorld())->v18(&list, prop);
-        if ((var.raw[4] & 4) != 0) var.Destruct(0);
+        KeyVector keys;
+        cPropertyList list;
+
+        keys.mpBegin = keys.mInlineKeys;
+        keys.mpEnd = keys.mInlineKeys;
+        keys.mpCapacity = keys.mInlineKeys + 6;
+        keys.mpStorage = keys.mInlineKeys;
+        keys.resize(6);
+
+        GetPropertyAsKey((int)propObj, 0x44449ba, &keys.mpBegin[0]);
+        GetPropertyAsKey((int)propObj, 0x44449bb, &keys.mpBegin[1]);
+        GetPropertyAsKey((int)propObj, 0x44449bc, &keys.mpBegin[2]);
+        GetPropertyAsKey((int)propObj, 0x44449bd, &keys.mpBegin[3]);
+        GetPropertyAsKey((int)propObj, 0x653e65e, &keys.mpBegin[4]);
+        GetPropertyAsKey((int)propObj, 0x653e66a, &keys.mpBegin[5]);
+        for (int i = 0; i < 6; ++i) {
+            keys.mpBegin[i].k2 = 0x40828100;
+        }
+
+        list.ctor();
+        var.Construct(0x20, 0x98, keys.mpBegin, 0xc,
+                      (uint32_t)(keys.mpEnd - keys.mpBegin));
+        list.SetProperty(0x49b48ee, var);
+        ((GonzagoWorld*)GonzagoModelWorld())->v18(&list, value);
+
+        if (var.mFlags & 4) {
+            var.Destruct(0);
+        }
+        list.dtor();
+        if (keys.mpBegin && keys.mpBegin != keys.mpStorage) {
+            ::operator delete(keys.mpBegin);
+        }
     }
     if (propObj) {
-        void* p = propObj; propObj = 0;
-        ((void(__thiscall*)(void*))(*(void***)p)[1])(p);
+        propObj->Release();
     }
 }
 
