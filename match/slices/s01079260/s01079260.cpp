@@ -4,6 +4,13 @@
 
 typedef unsigned int uint;
 
+// eastl::max-style helper: selects the larger of two values by reference, so
+// the inlined form picks the address of one operand.
+template<class T> const T& maxref(const T& a, const T& b)
+{
+    return a < b ? b : a;
+}
+
 struct IWindow;                              // UTfWin::IWindow (opaque)
 
 // ---------------------------------------------------------------------------
@@ -79,10 +86,12 @@ struct Painter {
 struct Item {
     float F1050a60();                                                           // 0x01050a60
     bool  F104feb0();                                                           // 0x0104feb0
+    bool  F104ccf0();                                                           // 0x0104ccf0
+    bool  F104ccd0();                                                           // 0x0104ccd0
     float F0ce6920();                                                           // 0x00ce6920 (fld [ecx+0x1a8])
 };
 struct Inventory {
-    Item* F00ff3fb0(IObj* o);    // 0x00ff3fb0 ret 4
+    Item* F00ff3fb0(void* win);    // 0x00ff3fb0
 };
 struct Game {
     Inventory* GetPlayerInventory();    // 0x00a1ad60
@@ -124,25 +133,27 @@ void* __cdecl operator_new_eastl(uint size, const char* file, int line, int a,
 void __cdecl operator_delete_eastl(int p);                                   // 0x00f47380
 
 // callees used by the toolbar-cell / connection-dialog paths (cdecl / thiscall)
-void*    __cdecl FUN_01077ae0(IWin* win);           // 0x01077ae0 (ret 4)
+void*    __stdcall FUN_01077ae0(IWin* win);          // 0x01077ae0 (ret 4)
 void     __cdecl FUN_01079040(uint index);          // 0x01079040
 void     __cdecl FUN_010799d0(void* buf, const char* fmt, uint n);   // 0x010799d0
 
 // callees used by the connection-dialog path
 void*    __cdecl FUN_010666a0();                    // 0x010666a0
-void*    __fastcall FUN_0106edc0(void* self, void* dummy);   // 0x0106edc0 (thiscall)
-void*    __fastcall FUN_00ff3fb0(void* self, void* dummy);   // 0x00ff3fb0 (thiscall)
-uint8_t  __fastcall FUN_0104ccf0(void* self, void* dummy);   // 0x0104ccf0 (thiscall)
-uint8_t  __fastcall FUN_0104feb0(void* self, void* dummy);   // 0x0104feb0 (thiscall)
-uint8_t  __fastcall FUN_0104ccd0(void* self, void* dummy);   // 0x0104ccd0 (thiscall)
+struct UIGameCtx {
+    char  pad000[0x254];
+    void* mp254;                                    // +0x254
+    void* F106edc0(void* win);                      // 0x0106edc0 (ret 4)
+};
 uint8_t  __cdecl FUN_00807c70(void* node, uint a, int idx, int b);  // 0x00807c70
 uint8_t  __cdecl FUN_00806b20(void* node, int a, int b);            // 0x00806b20
-void*    __fastcall cConnectionDialog_ctor(void* self, void* dummy);  // 0x00810000
 
-// The window object (arg to 0107a070): +0x24 holds the remembered row index.
+// The window object (arg to 0107a070): +0xc is the handler id passed to slot
+// 0xb8, +0x24 holds the remembered row index.
 struct ISpaceWin {
-    char pad00[0x24];
-    int  mSel24;                                // +0x24
+    char  pad00[0xc];
+    void* mp0c;                                 // +0x0c
+    char  pad10[0x14];
+    int   mSel24;                               // +0x24
 };
 int      __cdecl FUN_0107a300(void);                // placeholder (unused)
 void*    __cdecl FUN_0107a070(void);                // placeholder (unused)
@@ -160,8 +171,9 @@ struct IRefObj {
 
 // cSPUILayout: the window/layout object (ctor 0x00810000, Init 0x008120d0).
 struct cSPUILayout {
+    cSPUILayout* Ctor();                                           // 0x00810000 (ret 0)
     bool Init(const void* key, uint a, uint b);                    // 0x008120d0 (ret 0xc)
-    bool SetParentWin(IWin* parent, uint a, uint b, uint key);      // 0x008121b0 (ret 0x10)
+    bool SetParentWin(IWin* parent, bool a, uint key);             // 0x008121b0 (ret 0xc)
 };
 
 // The UI node/widget interface reached from the cells.  Slot names encode the
@@ -250,6 +262,9 @@ struct UICell {
     uint8_t mFlag;      // +8
 };
 
+// The word eastl stores just before an allocated block (allocator cookie).
+struct AllocHeader { int mCookie; };
+
 // The cell vector's control block (begin/end/cap), at UISpace+0x30.
 struct CellVec {
     UICell* begin;      // +0
@@ -285,7 +300,7 @@ struct UISpace {
     char pad84[0x4];                          // +0x84
     int   mCols88;                            // +0x88
     int   mRows8c;                            // +0x8c
-    int   mSel90;                             // +0x90
+    uint  mSel90;                             // +0x90
     float mX94;                               // +0x94
     float mY98;                               // +0x98
     char  mFlag9c;                            // +0x9c
@@ -313,7 +328,7 @@ struct UISpace {
     bool F1077b70(uint a, uint* out);         // 0x01077b70 (ret 8)
     void F1079890(uint index);                // 0x01079890 (ret 4)
     void F1079f90();                          // 0x01079f90 (ret 0)
-    INode* F1079d10(IWin* parent, uint index);   // 0x01079d10 (ret 8)
+    INode* F1079d10(cSPUILayout* parent, uint index);   // 0x01079d10 (ret 8)
     void   F107a070(ISpaceWin* win);          // 0x0107a070 (ret 4)
     void   F107a300();                        // 0x0107a300 (ret 0)
     void F1077d30();                          // 0x01077d30
@@ -498,9 +513,41 @@ void CellVec::F1079ff0(uint n)
 // @ 0x01079a60
 void CellVec::F1079a60(UICell* pos, uint n, const UICell* val)
 {
-    if ((uint)((cap - end) / 0xc) < n)
+    if (n <= (uint)(cap - end))
     {
-        int size = (int)((end - begin) / 0xc);
+        if (n > 0)
+        {
+            UICell tmp;
+            tmp.mNode = val->mNode;
+            if (tmp.mNode != 0)
+                ((IRefObj*)tmp.mNode)->v01();
+            tmp.mFlag = val->mFlag;
+            tmp.mPos  = val->mPos;
+            UICell* oldend = end;
+            uint avail = (uint)(end - pos);
+            if (n < avail)
+            {
+                UICell* moveto = oldend - n;
+                FUN_01077f10((int)&val, (int)moveto, (int)oldend, (int)oldend, (int)pos);
+                end = end + n;
+                FUN_01078060((int)pos, (int)moveto, (int)oldend);
+                FUN_01078d30((int)pos, (int)(pos + n), (int)&tmp);
+            }
+            else
+            {
+                FUN_01077f70((int)oldend, n - avail, (int)&tmp, (int)pos);
+                end = end + (n - avail);
+                FUN_01077f10((int)&pos, (int)pos, (int)oldend, (int)end, (int)pos);
+                end = end + avail;
+                FUN_01078d30((int)pos, (int)oldend, (int)&tmp);
+            }
+            if (tmp.mNode != 0)
+                ((IRefObj*)tmp.mNode)->v02();
+        }
+    }
+    else
+    {
+        int size = (int)(end - begin);
         uint newcap = (uint)(size * 2);
         if (size == 0)
             newcap = 1;
@@ -516,44 +563,15 @@ void CellVec::F1079a60(UICell* pos, uint n, const UICell* val)
         UICell* p = (UICell*)FUN_01077fb0((int)oldbegin, (int)pos, (int)buf);
         FUN_010779a0((int)oldbegin, (int)endpos, (int)buf);
         FUN_01077f70((int)p, n, (int)val, (int)p);
-        UICell* mid = (UICell*)((char*)p + n * 0xc);
+        UICell* mid = p + n;
         UICell* oldend = end;
         UICell* r = (UICell*)FUN_01077fb0((int)endpos, (int)oldend, (int)mid);
         FUN_010779a0((int)endpos, (int)oldend, (int)mid);
-        if (begin != 0 && ((int*)begin)[-1] != 0)
+        if (begin != 0 && ((AllocHeader*)begin)[-1].mCookie != 0)
             operator_delete_eastl((int)begin);
         begin = buf;
         end   = r;
-        cap   = (UICell*)((char*)buf + room * 0xc);
-    }
-    else if (n != 0)
-    {
-        UICell tmp;
-        tmp.mNode = val->mNode;
-        if (tmp.mNode != 0)
-            ((IRefObj*)tmp.mNode)->v01();
-        tmp.mPos  = val->mPos;
-        tmp.mFlag = val->mFlag;
-        UICell* oldend = end;
-        uint avail = (uint)((end - pos) / 0xc);
-        if (n < avail)
-        {
-            UICell* moveto = (UICell*)((char*)oldend - n * 0xc);
-            FUN_01077f10((int)&val, (int)moveto, (int)oldend, (int)oldend, (int)pos);
-            end = (UICell*)((char*)end + n * 0xc);
-            FUN_01078060((int)pos, (int)moveto, (int)oldend);
-            FUN_01078d30((int)pos, (int)((char*)pos + n * 0xc), (int)&tmp);
-        }
-        else
-        {
-            FUN_01077f70((int)oldend, n - avail, (int)&tmp, (int)pos);
-            end = (UICell*)((char*)end + (n - avail) * 0xc);
-            FUN_01077f10((int)&pos, (int)pos, (int)oldend, (int)end, (int)pos);
-            end = (UICell*)((char*)end + avail * 0xc);
-            FUN_01078d30((int)pos, (int)oldend, (int)&tmp);
-        }
-        if (tmp.mNode != 0)
-            ((IRefObj*)tmp.mNode)->v02();
+        cap   = buf + room;
     }
 }
 
@@ -561,45 +579,64 @@ void CellVec::F1079a60(UICell* pos, uint n, const UICell* val)
 // 0x01079d10 - build the toolbar cell at `index`: create the widget, place it
 // on the grid, then fill in its label / state.
 // ===========================================================================
+// Inline-buffer 16-bit string used for the "%d" cell label.  Layout:
+//   +0x00 begin, +0x04 end, +0x08 cap, +0x0c pad, +0x10 inline-buffer pointer,
+//   +0x14 two-wchar buffer.  An empty string is one NUL wchar (cap = begin+1).
+struct WStr {
+    wchar_t* mpBegin;       // +0x00
+    wchar_t* mpEnd;         // +0x04
+    wchar_t* mpCap;         // +0x08
+    void*    mPad;          // +0x0c
+    wchar_t* mpInline;      // +0x10
+    wchar_t  mBuf[2];       // +0x14
+
+    WStr()
+    {
+        mpInline = mBuf;
+        mpEnd    = mBuf;
+        mpBegin  = mpEnd;
+        mpCap    = mpBegin + 1;
+        mBuf[0]  = 0;
+    }
+};
+
 // @ 0x01079d10
-INode* UISpace::F1079d10(IWin* parent, uint index)
+INode* UISpace::F1079d10(cSPUILayout* parent, uint index)
 {
-    INode* node = (INode*)FUN_01077ae0(parent);
-    if (node == 0)
-        return node;
-
-    cSPUILayout* layout = (cSPUILayout*)node;
-    layout->SetParentWin(parent, (uint)mp2c, 0, 0x5b598fa);
-
-    float fx, fy;
-    if (mFlags80 == 0x120ad1fb)
+    INode* node = (INode*)FUN_01077ae0((IWin*)parent);
+    if (node != 0)
     {
-        uint col = index % (uint)mCols88;
-        uint row = index / (uint)mCols88;
-        fx = (float)(int)col * (mSpacingB4 + mX94);
-        fy = (float)(int)row * (mSpacingB8 + mY98);
-    }
-    else
-    {
-        uint col = index % (uint)mRows8c;
-        uint row = index / (uint)mRows8c;
-        fx = (float)(int)row * (mSpacingB4 + mX94);
-        fy = (float)(int)col * (mSpacingB8 + mY98);
-    }
-    node->v070(fx, fy);
+        parent->SetParentWin((IWin*)mp2c, 0, 0x5b598fa);
 
-    INode* child = (INode*)node->v0f0(0x62840d8, 0);
-    if (child != 0)
-    {
-        wchar_t buf[8] = {0};
-        uint rem = index % (uint)(mRows8c * mCols88);
-        if (rem < 10)
-            FUN_010799d0(&buf, g_fmt_013f01bc, (rem + 1) % 10);
-        child->v080(buf);
-        child->v05c(mKeyA8);
-        child->v07c(1, mFlagE9);
+        uint a, b;
+        if (mFlags80 == 0x120ad1fb)
+        {
+            b = index / (uint)mCols88;
+            a = index % (uint)mCols88;
+        }
+        else
+        {
+            a = index / (uint)mRows8c;
+            b = index % (uint)mRows8c;
+        }
+        node->v070((float)a * (mSpacingB4 + mX94), (float)b * (mSpacingB8 + mY98));
+
+        INode* child = (INode*)node->v0f0(0x62840d8, 0);
+        if (child != 0)
+        {
+            WStr buf;
+            uint rem = index % (uint)(mRows8c * mCols88);
+            if (rem < 10)
+                FUN_010799d0(&buf, g_fmt_013f01bc, (uint)((rem + 1) % 10));
+            child->v080(buf.mpBegin);
+            child->v05c(mKeyA8);
+            child->v07c(1, mFlagE9);
+            if ((int)(((int)buf.mpCap - (int)buf.mpBegin) & 0xfffffffe) > 2 &&
+                buf.mpBegin != 0 && buf.mpBegin != buf.mpInline)
+                operator_delete_eastl((int)buf.mpBegin);
+        }
     }
-    return (INode*)layout;
+    return node;
 }
 
 // ===========================================================================
@@ -609,36 +646,27 @@ INode* UISpace::F1079d10(IWin* parent, uint index)
 // @ 0x0107a300
 void UISpace::F107a300()
 {
+    uint cells  = (uint)(mCells.end - mCells.begin);
     uint perRow = (uint)(mRows8c * mCols88);
-    uint cells  = (uint)((mCells.end - mCells.begin) / 0xc);
 
-    uint top = cells;
-    uint one = 1;
-    uint* pick = (one < top) ? &top : &one;
-    uint lastUsed = 0;
-    uint u = *pick - 1;
+    uint u = maxref(cells, 1u) - 1;
     if (u != 0)
     {
-        UICell* pc = (UICell*)((char*)mCells.begin + 8 + u * 0xc);
+        uint8_t* pc = &mCells.begin[u].mFlag;
         do
         {
-            if (pc->mFlag == 0)
+            if (*pc == 0)
                 break;
             u -= 1;
-            pc = (UICell*)((char*)pc - 0xc);
-        } while (u != 0);
-        lastUsed = u;
+            pc -= 0xc;
+        } while (u > 0);
     }
 
     uint total;
-    if (mSel90 == -1)
-        total = (lastUsed / perRow + 1) * perRow;
-    else if ((uint)mSel90 < lastUsed + 1)
-        total = lastUsed + 1;
+    if (mSel90 == 0xffffffffu)
+        total = (u / perRow + 1) * perRow;
     else
-        total = (uint)mSel90;
-    if (mSel90 != -1 && total < lastUsed + 1)
-        total = lastUsed + 1;
+        total = maxref(mSel90, u + 1);
 
     uint n = total;
     mCells.F1079ff0(n);
@@ -650,26 +678,33 @@ void UISpace::F107a300()
         {
             cSPUILayout* node = (cSPUILayout*)operator_new_eastl(0x18, (const char*)g_key_13f6b3c,
                                                                  0, 0, 0, 0);
-            if (node == 0)
-            {
-                cell->mNode = 0;
-            }
+            cSPUILayout* made;
+            if (node != 0)
+                made = node->Ctor();
             else
+                made = 0;
+
+            cSPUILayout* old = (cSPUILayout*)cell->mNode;
+            if (made != old)
             {
-                cSPUILayout* made = (cSPUILayout*)node->Init(&mp74, 0, 0x5b598fa);
-                (void)made;
-                cell->mNode = node;
-                node->Init(&mp74, 0, 0x5b598fa);
-                F1079d10(0, i);
+                if (made != 0)
+                    ((IRefObj*)made)->v01();
+                cell->mNode = made;
+                if (old != 0)
+                    ((IRefObj*)old)->v02();
             }
+
+            ((cSPUILayout*)cell->mNode)->Init(&mp74, 0, 0x5b598fa);
+            F1079d10((cSPUILayout*)cell->mNode, i);
         }
     }
 
-    uint rows = (n - 1) / perRow + 1;
+    uint rows = maxref(total, 1u);
+    rows = (rows - 1) / perRow + 1;
     if (mFlags80 == 0x120ad1fb)
-        ((INode*)mp2c)->v074((float)(int)rows * mScaleBc, mScaleC0);
+        ((INode*)mp2c)->v074(mScaleBc, (float)rows * mScaleC0);
     else
-        ((INode*)mp2c)->v074(mScaleBc, (float)(int)rows * mScaleC0);
+        ((INode*)mp2c)->v074((float)rows * mScaleBc, mScaleC0);
     F1077e20();
 }
 
@@ -681,8 +716,8 @@ void UISpace::F107a300()
 // @ 0x0107a070
 void UISpace::F107a070(ISpaceWin* win)
 {
-    int sel;
-    if (mFlag9c == 0 || (sel = win->mSel24) == -1)
+    uint sel;
+    if (mFlag9c == 0 || (sel = (uint)win->mSel24) == 0xffffffffu)
     {
         sel = 0;
         UICell* c = mCells.begin;
@@ -694,44 +729,40 @@ void UISpace::F107a070(ISpaceWin* win)
         }
     }
 
-    if ((int)((mCells.end - mCells.begin) / 0xc) <= sel)
-        mCells.F1079ff0((uint)(sel + 1));
+    if (sel >= (uint)(mCells.end - mCells.begin))
+        mCells.F1079ff0(sel + 1);
 
     UICell* cell = mCells.begin + sel;
     if (cell->mFlag != 0)
     {
-        uint k44 = mKey44, k48 = mKey48;
-        void* p4c = mp4c;
-        void* sg = FUN_010666a0();
-        void* game = SpaceGameGet();
-        void* inv = FUN_0106edc0(game, 0);
-        Item* it = (Item*)FUN_00ff3fb0(inv, 0);
+        struct Key { uint a; uint b; void* c; } key;
+        key.a = mKey44;
+        key.b = mKey48;
+        key.c = mp4c;
+
+        Item* it = SpaceGameGet()->GetPlayerInventory()->F00ff3fb0(win);
         if (it != 0)
         {
-            if (FUN_0104ccf0(it, 0))
+            if (it->F104ccf0())
             {
-                k44 = mKey68; k48 = mKey6c; p4c = mp70;
+                key.a = mKey68; key.b = mKey6c; key.c = mp70;
             }
-            else if (FUN_0104feb0(it, 0))
+            else if (it->F104feb0())
             {
-                k44 = mKey5c; k48 = mKey60; p4c = mp64;
+                key.a = mKey5c; key.b = mKey60; key.c = mp64;
             }
-            else if (FUN_0104ccd0(it, 0))
+            else if (it->F104ccd0())
             {
-                k44 = mKey50; k48 = mKey54; p4c = mp58;
+                key.a = mKey50; key.b = mKey54; key.c = mp58;
             }
         }
-        (void)sg;
-
-        struct Key { uint a; uint b; void* c; } key;
-        key.a = k44; key.b = k48; key.c = p4c;
 
         cSPUILayout* node = (cSPUILayout*)operator_new_eastl(0x18, (const char*)g_key_13f6b3c,
                                                              0, 0, 0, 0);
-        if (node == 0)
-            node = 0;
+        if (node != 0)
+            node = node->Ctor();
         else
-            node = (cSPUILayout*)cConnectionDialog_ctor(node, 0);
+            node = 0;
 
         cSPUILayout* old = (cSPUILayout*)cell->mNode;
         if (node != old)
@@ -755,28 +786,26 @@ void UISpace::F107a070(ISpaceWin* win)
         }
         else
         {
-            INode* n2 = F1079d10(0, (uint)sel);
+            INode* n2 = F1079d10(cur, (uint)sel);
             if (n2 != 0)
             {
-                void* sg2 = FUN_010666a0();
-                INode* sp = (INode*)FUN_0106edc0(sg2, 0);
-                n2->v050(sp);
+                n2->v050(((UIGameCtx*)FUN_010666a0())->F106edc0(win));
                 uint en = ((INode*)win)->v020();
                 n2->v054((-(uint)(en != 0) & 0x92ea67df) + 0x70648eae);
-                n2->v0b8(0x600db9c, (char*)cell + 0xc);
+                n2->v0b8(0x600db9c, &win->mp0c);
                 n2->v104(FUN_010666a0());
-                void* host = p4c;
-                ((INode*)host)->v030(&cell->mNode);
-                void* sg3 = FUN_010666a0();
-                FUN_00807c70(n2, *(uint*)((char*)sg3 + 0x254), sel, -1);
-                if (((INode*)host)->v034(&node, (char*)&node - 0xc))
-                    FUN_00806b20(n2, cell->mNode ? 0 : 0, 0);
-                F1077bf0(host);
+                uint out;
+                ((INode*)win)->v030(&out);
+                FUN_00807c70(n2, (uint)((UIGameCtx*)FUN_010666a0())->mp254, (int)out, -1);
+                uint v18, v14;
+                if (((INode*)win)->v034(&v18, &v14))
+                    FUN_00806b20(n2, (int)v18, (int)v14);
+                F1077bf0(win);
                 cell->mFlag = 0;
             }
         }
     }
 
     if (mFlag9c != 0)
-        win->mSel24 = sel;
+        win->mSel24 = (int)sel;
 }
