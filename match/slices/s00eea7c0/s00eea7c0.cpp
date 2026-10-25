@@ -12,6 +12,7 @@
 
 struct View;  struct Entry;
 struct Vec3 { float x, y, z; };
+struct Vec2 { float x, y; };
 
 // cSPUILayout: ref-counted layout object; +0x04 Release, +0x08 Shutdown.
 struct IWindow;
@@ -26,7 +27,7 @@ class cSPUILayout { public:
 };
 
 // ------------------------------------------------------------------ callees
-cSPUILayout* MakeLayout();                                                       // 0x810000
+cSPUILayout* MakeLayout(void* pThis);                                            // 0x810000
 
 void*  EAAllocate(uint32_t size, const char* pTag, int a, int b, int c, int d);  // 0xf473a0
 void   RemoveHandler(void* a, void* b, void* c, void* d, void* e);               // 0x571db0
@@ -44,14 +45,15 @@ void     FUN_00e26410(void* b, void* e, int depth, int cmp);        // 0xe26410
 void     FUN_00e25bd0(void* b, void* e);                            // 0xe25bd0 (vector erase)
 void     FUN_00aea5d0(void* pEnd, void** pValue);                   // 0xaea5d0 (vector push)
 struct RawVec { void* begin; void* end; void* cap;
-                void dtor(); void erase(void* b, void* e); };      // 0xae6970 / 0xe25bd0
+                void dtor(); void erase(void* b, void* e); };       // 0xae6970 / 0xe25bd0
 
 // local constants
 static const float kOne  = 1.0f;      // 0x1485720
 static const float kHalf = 0.5f;      // 0x1471064
-static const float kDefR = 0.3254902f;
-static const float kDefG = 0.3254902f;
-static const float kDefB = 0.3254902f;
+static const float kZero = 0.0f;      // 0x1485378
+static const float kDefR = 0.3254902f; // 0x148ad3c
+static const float kDefG = 0.6862745f; // 0x148ad40
+static const float kDefB = 0.3254902f; // 0x148ad3c
 
 // ------------------------------------------------------------------ interfaces
 // IWindow: the game's UI window interface. Only the vtable slots this slice
@@ -123,6 +125,16 @@ static inline void vcallA(T* p, A a) {
     (p->*f)(a);
 }
 
+// shared_ptr-style ref assignment: AddRef the new object, then Release the old.
+template <class T>
+static inline void SetRefCounted(T*& field, T* neu) {
+    if (neu == field) return;
+    if (neu != 0) neu->AddRef();
+    T* old = field;
+    field = neu;
+    if (old != 0) old->Release();
+}
+
 // Slice helpers (defined at the bottom) — forward decls.
 
 // ------------------------------------------------------------------ Entry
@@ -152,7 +164,7 @@ struct Entry {
     uint8_t  mUnk50;      // +0x50
 
     void SetColor(float r, float g, float b);            // 0xeea190
-    void Ctor();                                         // 0xee9be0
+    Entry* Ctor();                                       // 0xee9be0 (returns this)
 };
 typedef Entry* EntryPtr;
 
@@ -163,7 +175,7 @@ struct View {
     void*    mpVtbl2;        // +0x08 -> 0x148acf0
     int      mUnk0c;         // +0x0c
     IWindow* mWinParent;     // +0x10
-    IRefObj* mAssetView;     // +0x14  (ref-counted asset view)
+    IWindow* mAssetView;     // +0x14  (ref-counted asset view)
     IWindow* mWinB;          // +0x18
     IWindow* mWinRenderWindow;      // +0x1c
     IWindow* mWinBakingIndicator;   // +0x20
@@ -197,8 +209,11 @@ struct View {
     void     Rebuild(uint8_t notify);                    // 0xeeaf00
     uint8_t  Init(IWindow* pParent);                     // 0xeeb280
     void     SetPoints(int* pPositions, int* pColors);   // 0xeeb580
-    void     NotifyEntryChanged();                       // 0xeea260
 };
+
+// Sends the "entry changed" message for an object whose +0x14 is a ref-counted
+// window (called with an Entry* from View::Rebuild).
+void NotifyEntryChanged(Entry* p);                              // 0xeea260
 
 // ================================================================== functions
 
@@ -391,41 +406,41 @@ void* View::Ctor()
 // @ 0x00eeab90
 void View::SampleColor(float* pOut, float x)
 {
-    Entry** begin = this->mEntriesBegin;
-    int nbytes = (int)(this->mEntriesEnd - begin);
-    int n = nbytes >> 2;
-    if (n == 0) {
+    if ((((int)this->mEntriesEnd - (int)this->mEntriesBegin) >> 2) == 0) {
         pOut[0] = *(float*)0x16c78a8;
         pOut[1] = *(float*)0x16c78ac;
         pOut[2] = *(float*)0x16c78b0;
         return;
     }
+    Entry** begin = this->mEntriesBegin;
+    int nbytes = (int)this->mEntriesEnd - (int)begin;
     int i = 0;
-    if ((nbytes & 0xfffffffc) > 0) {
+    if ((int)(nbytes & 0xfffffffc) > 0) {
         do {
             Entry* e = begin[i];
             if (e->mPos > x) {
-                break;
-            }
-            ++i;
-        } while (i < n);
-        if (i < n) {
-            if (i == 0) {
-                Entry* e = begin[0];
-                pOut[0] = e->mColorR; pOut[1] = e->mColorG; pOut[2] = e->mColorB;
+                if (i == 0) {
+                    Entry* f = begin[0];
+                    pOut[0] = f->mColorR;
+                    pOut[1] = f->mColorG;
+                    pOut[2] = f->mColorB;
+                    return;
+                }
+                Entry* lo = begin[i - 1];
+                Entry* hi = begin[i];
+                float t = (x - lo->mPos) / (hi->mPos - lo->mPos);
+                pOut[0] = (hi->mColorR - lo->mColorR) * t + lo->mColorR;
+                pOut[1] = (hi->mColorG - lo->mColorG) * t + lo->mColorG;
+                pOut[2] = (hi->mColorB - lo->mColorB) * t + lo->mColorB;
                 return;
             }
-            Entry* lo = begin[i - 1];
-            Entry* hi = begin[i];
-            float t = (x - lo->mPos) / (hi->mPos - lo->mPos);
-            pOut[0] = (hi->mColorR - lo->mColorR) * t + lo->mColorR;
-            pOut[1] = (hi->mColorG - lo->mColorG) * t + lo->mColorG;
-            pOut[2] = (hi->mColorB - lo->mColorB) * t + lo->mColorB;
-            return;
-        }
+            ++i;
+        } while (i < (((int)this->mEntriesEnd - (int)begin) >> 2));
     }
-    Entry* e = begin[n - 1];
-    pOut[0] = e->mColorR; pOut[1] = e->mColorG; pOut[2] = e->mColorB;
+    Entry* e = begin[(((int)this->mEntriesEnd - (int)begin) >> 2) - 1];
+    pOut[0] = e->mColorR;
+    pOut[1] = e->mColorG;
+    pOut[2] = e->mColorB;
 }
 
 // @ 0x00eeacc0
@@ -433,38 +448,43 @@ void View::Bake(void* pTarget)
 {
     if (this->mWinB != 0) {
         float* box = this->mWinB->GetBox();
-        float y0 = box[1];
-        int count = (int)(box[3] - y0);
-        float x0 = -box[0];
-        float ybaseA = x0 + box[0];
-        float ybase = -y0 + y0;
-        float xOrigin = box[2] + x0;
+        float bx0 = box[0];
+        float by0 = box[1];
+        int   count = (int)(box[3] - by0);
+        float x0  = -bx0;
+        float vB  = -by0 + by0;
+        float vC  = box[2] + x0;
+        float vA  = x0 + bx0;
         if (count > 0) {
-            int denom = count - 1;
+            float denom = (float)(count - 1);
             for (int i = 0; i < count; ++i) {
                 float col[3];
-                SampleColor(col, (float)i / (float)denom);
+                SampleColor(col, (float)i / denom);
                 uint32_t c = ColorRGBToU32(col);
-                void** vt = *(void***)pTarget;
-                ((void (*)(void*, uint32_t))vt[1])(pTarget, c);
-                float yTop = ybase + (float)i;
-                float yBot = yTop + 1.0f;
-                float pa[4] = { x0, ybase, yBot, x0 + box[0] };
-                float pb[4] = { x0, ybase, yBot, yBot };
-                float pc[4] = { xOrigin, ybaseA, ybaseA, yBot };
-                ((void (*)(void*, float*, float*, float*, uint32_t*))vt[0x3c / 4])(pTarget, pa, pb, pc, &c);
+                ((void (__thiscall *)(void*, uint32_t))((*(void***)pTarget))[1])(pTarget, c);
+                float yTop = (float)i + vB;
+                float yBot = yTop + kOne;
+                float pts[4][2];
+                pts[0][0] = vA; pts[0][1] = yBot;
+                pts[1][0] = vC; pts[1][1] = yBot;
+                pts[2][0] = vC; pts[2][1] = yTop;
+                pts[3][0] = vA; pts[3][1] = yTop;
+                ((void (__thiscall *)(void*, void*, void*, void*, void*))((*(void***)pTarget))[0x3c / 4])
+                    (pTarget, pts[0], pts[1], pts[2], pts[3]);
             }
         }
     }
-    if (this->mWinRenderWindow != 0) {
+    {
         float col[3];
         SampleColor(col, 0.0f);
-        this->mWinRenderWindow->SetColor(ColorRGBToU32(col));
+        uint32_t c = ColorRGBToU32(col);
+        if (this->mWinRenderWindow != 0) this->mWinRenderWindow->SetColor(c);
     }
-    if (this->mWinBakingIndicator != 0) {
+    {
         float col[3];
         SampleColor(col, 1.0f);
-        this->mWinBakingIndicator->SetColor(ColorRGBToU32(col));
+        uint32_t c = ColorRGBToU32(col);
+        if (this->mWinBakingIndicator != 0) this->mWinBakingIndicator->SetColor(c);
     }
 }
 
@@ -502,15 +522,15 @@ void View::Rebuild(uint8_t notify)
     bool added = false;
     Entry** begin = this->mEntriesBegin;
     Entry** end = this->mEntriesEnd;
-    int n = (int)(end - begin);
+    int nbytes = (int)end - (int)begin;
     float x = 0.0f;
     float colR, colG, colB;
 
-    if (n == 0) {
+    if ((nbytes & 0xfffffffc) == 0) {
         colR = kDefR; colG = kDefG; colB = kDefB;
-    } else if (n == 1) {
+    } else if ((nbytes & 0xfffffffc) == 4) {
         Entry* e = begin[0];
-        x = (e->mPos < kHalf) ? kOne : 0.0f;
+        x = (e->mPos < kHalf) ? kOne : kZero;
         if (notify) {
             colR = e->mColorR; colG = e->mColorG; colB = e->mColorB;
         } else {
@@ -522,19 +542,20 @@ void View::Rebuild(uint8_t notify)
     } else {
         float best = 0.0f;
         int bestIdx = 0;
-        for (int i = 0; i <= n; ++i) {
-            float hi = (i < n) ? begin[i]->mPos : kOne;
+        int cnt = (((int)this->mEntriesEnd - (int)begin) >> 2);
+        for (int i = 0; i <= cnt; ++i) {
+            float hi = (i < cnt) ? begin[i]->mPos : kOne;
             float lo = (i > 0) ? begin[i - 1]->mPos : 0.0f;
             float d = hi - lo;
             if (d > best) { best = d; bestIdx = i; }
         }
         if (bestIdx == 0) {
-            Entry* e = begin[0];
+            Entry* e = begin[1];
             colR = e->mColorR; colG = e->mColorG; colB = e->mColorB;
-        } else if (bestIdx == n) {
-            Entry* e = begin[n - 1];
-            colR = e->mColorR; colG = e->mColorG; colB = e->mColorB;
+        } else if (bestIdx == cnt) {
+            Entry* e = begin[cnt - 1];
             x = kOne;
+            colR = e->mColorR; colG = e->mColorG; colB = e->mColorB;
         } else {
             Entry* lo = begin[bestIdx - 1];
             Entry* hi = begin[bestIdx];
@@ -546,34 +567,38 @@ void View::Rebuild(uint8_t notify)
         added = true;
     }
 
-    if (x < 0.0f || x > kOne) return;
+    if (x < kZero || x > kOne) return;
 
-    Entry* pEntry;
+    Entry* pEntry = 0;
     void* p = EAAllocate(0x54, (const char*)0x13f6b3c, 0, 0, 0, 0);
-    if (p != 0) { ((Entry*)p)->Ctor(); pEntry = (Entry*)p; } else pEntry = 0;
+    if (p != 0) pEntry = ((Entry*)p)->Ctor();
 
-    ((void (*)(Entry*, void*, float, float, float, View*))((*(void***)pEntry)[0x1c / 4]))
-        (pEntry, this->mAssetView, x, colR, colG, this);
-    ((void (*)(Entry*, int))((*(void***)pEntry)[0x28 / 4]))(pEntry, 1);
-    ((void (*)(Entry*))((*(void***)pEntry)[0]))(pEntry);
+    ((void (__thiscall *)(Entry*, void*, float, float, float, float, View*))((*(void***)pEntry)[0x1c / 4]))
+        (pEntry, this->mAssetView, x, colR, colG, colB, this);
+    ((void (__thiscall *)(Entry*, int))((*(void***)pEntry)[0x28 / 4]))(pEntry, 1);
+    EntryPtr tmp = pEntry;
+    ((void (__thiscall *)(Entry*))((*(void***)pEntry)[0]))(pEntry);
 
     if (this->mEntriesEnd < this->mEntriesCap) {
-        *this->mEntriesEnd = pEntry;
-        ++this->mEntriesEnd;
-        ((void (*)(Entry*))((*(void***)pEntry)[0]))(pEntry);
+        Entry** slot = this->mEntriesEnd;
+        this->mEntriesEnd = slot + 1;
+        if (slot != 0) {
+            *slot = pEntry;
+            ((void (__thiscall *)(Entry*))((*(void***)pEntry)[0]))(pEntry);
+        }
     } else {
-        EntryPtr tmp = pEntry;
-        FUN_00aea5d0(this->mEntriesEnd, (void**)&tmp);
+        ((void (__thiscall *)(void*, void*, void**))FUN_00aea5d0)
+            ((void*)&this->mEntriesBegin, this->mEntriesEnd, (void**)&tmp);
         pEntry = tmp;
     }
-    ((void (*)(Entry*))((*(void***)pEntry)[4 / 4]))(pEntry);
+    ((void (__thiscall *)(Entry*))((*(void***)pEntry)[4 / 4]))(pEntry);
 
     if (added) {
-        NotifyEntryChanged();
+        ((void (__thiscall *)(Entry*))NotifyEntryChanged)(pEntry);
     }
     if (notify) {
         void* ms = MessageServer();
-        ((void (*)(void*, uint32_t, void*, void*))(((void**)*(void***)ms)[0x14 / 4]))(ms, 0xd69290d7, 0, 0);
+        ((void (__thiscall *)(void*, uint32_t, void*, void*))(((void**)*(void***)ms)[0x14 / 4]))(ms, 0xd69290d7, 0, 0);
     }
 }
 
@@ -596,12 +621,13 @@ uint8_t View::Init(IWindow* pParent)
         this->mWinB = 0;
         q->Release();
     }
-    FUN_00e25bd0(this->mEntriesBegin, this->mEntriesEnd);
+    ((void (__thiscall *)(void*, void*, void*))FUN_00e25bd0)
+        ((void*)&this->mEntriesBegin, this->mEntriesBegin, this->mEntriesEnd);
 
     if (this->mWinParent != 0) {
         void* layout;
         void* p = EAAllocate(0x18, (const char*)0x13f6b3c, 0, 0, 0, 0);
-        if (p != 0) layout = MakeLayout(); else layout = 0;
+        if (p != 0) layout = ((cSPUILayout* (__thiscall*)(void*))MakeLayout)(p); else layout = 0;
         if (layout != this->mLayout) {
             if (layout != 0) ((IRefObj*)layout)->Release();
             cSPUILayout* old = this->mLayout;
@@ -609,7 +635,7 @@ uint8_t View::Init(IWindow* pParent)
             if (old != 0) old->Shutdown();
         }
         if (!this->mLayout->Init((const void*)0x15ac93c, 0, 0x5b598fa)) {
-            vcallA<cSPUILayout, 8>(this->mLayout, (uint32_t)1);
+            this->mLayout->Shutdown(1u);
             cSPUILayout* q = this->mLayout;
             if (q != 0) {
                 this->mLayout = 0;
@@ -619,13 +645,13 @@ uint8_t View::Init(IWindow* pParent)
         }
         this->mLayout->SetParentWin(this->mWinParent, 1, 0x5b598fa);
 
-        this->mAssetView = (IRefObj*)this->mLayout->FindWindowByID(0xf68ddb4a, 1);
+        SetRefCounted(this->mAssetView, this->mLayout->FindWindowByID(0xf68ddb4a, 1));
         if (this->mAssetView != 0) {
-            ((IWindow*)this->mAssetView)->SetTextId(0x7e4330b);
+            this->mAssetView->SetTextId(0x7e4330b);
         }
-        this->mWinB = this->mLayout->FindWindowByID(0x168f59fc, 1);
-        this->mWinRenderWindow = this->mLayout->FindWindowByID(0x7e23962, 1);
-        this->mWinBakingIndicator = this->mLayout->FindWindowByID(0x7e23963, 1);
+        SetRefCounted(this->mWinB, this->mLayout->FindWindowByID(0x168f59fc, 1));
+        SetRefCounted(this->mWinRenderWindow, this->mLayout->FindWindowByID(0x7e23962, 1));
+        SetRefCounted(this->mWinBakingIndicator, this->mLayout->FindWindowByID(0x7e23963, 1));
 
         char buf[0x80];
         FUN_00881ed0(*(double*)0x148ad68, buf, 0x40, 0);
@@ -673,30 +699,32 @@ void View::SetPoints(int* pPositions, int* pColors)
         vcallv<Entry, 0x20>(*it);
         ++it;
     }
-    FUN_00e25bd0(this->mEntriesBegin, this->mEntriesEnd);
+    ((void (__thiscall *)(void*, void*, void*))FUN_00e25bd0)
+        ((void*)&this->mEntriesBegin, this->mEntriesBegin, this->mEntriesEnd);
 
     for (int i = 0; i < n; ++i) {
         Entry* pEntry;
         void* p = EAAllocate(0x54, (const char*)0x13f6b3c, 0, 0, 0, 0);
-        if (p != 0) { ((Entry*)p)->Ctor(); pEntry = (Entry*)p; } else pEntry = 0;
+        if (p != 0) pEntry = ((Entry*)p)->Ctor(); else pEntry = 0;
 
         float* col = (float*)(pColors[0] + i * 0xc);
         float x = ((float*)pPositions[0])[i];
-        ((void (*)(Entry*, void*, float, float, float, View*))((*(void***)pEntry)[0x1c / 4]))
-            (pEntry, this->mAssetView, x, col[0], col[1], this);
-        ((void (*)(Entry*, int))((*(void***)pEntry)[0x28 / 4]))(pEntry, 1);
-        ((void (*)(Entry*))((*(void***)pEntry)[0]))(pEntry);
+        ((void (__thiscall *)(Entry*, void*, float, float, float, float, View*))((*(void***)pEntry)[0x1c / 4]))
+            (pEntry, this->mAssetView, x, col[0], col[1], col[2], this);
+        ((void (__thiscall *)(Entry*, int))((*(void***)pEntry)[0x28 / 4]))(pEntry, 1);
+        ((void (__thiscall *)(Entry*))((*(void***)pEntry)[0]))(pEntry);
 
         if (this->mEntriesEnd < this->mEntriesCap) {
             *this->mEntriesEnd = pEntry;
             ++this->mEntriesEnd;
-            ((void (*)(Entry*))((*(void***)pEntry)[0]))(pEntry);
+            ((void (__thiscall *)(Entry*))((*(void***)pEntry)[0]))(pEntry);
         } else {
             EntryPtr tmp = pEntry;
-            FUN_00aea5d0(this->mEntriesEnd, (void**)&tmp);
+            ((void (__thiscall *)(void*, void*, void**))FUN_00aea5d0)
+                ((void*)&this->mEntriesBegin, this->mEntriesEnd, (void**)&tmp);
             pEntry = tmp;
         }
-        ((void (*)(Entry*))((*(void***)pEntry)[4 / 4]))(pEntry);
+        ((void (__thiscall *)(Entry*))((*(void***)pEntry)[4 / 4]))(pEntry);
     }
 
     Entry** b = this->mEntriesBegin;
@@ -722,7 +750,7 @@ void View::SetPoints(int* pPositions, int* pColors)
 // ------------------------------------------------------------------ helpers
 
 // @ 0x00ee9be0
-void Entry::Ctor()
+Entry* Entry::Ctor()
 {
     this->mRefVtbl = (void*)0x13ec458;
     this->mRefCount = 0;
@@ -746,15 +774,16 @@ void Entry::Ctor()
     this->mUnk41 = 0;
     this->mUnk4c = 0.0f;
     this->mUnk50 = 0;
+    return this;
 }
 
 // @ 0x00eea260
-void View::NotifyEntryChanged()
+void NotifyEntryChanged(Entry* p)
 {
-    if (this->mAssetView == 0) return;
-    void* p = EAAllocate(0x40, (const char*)0x13f6b3c, 0, 0, 0, 0);
-    if (p == 0) return;
-    void* msg = p;
+    if (p->mWinA == 0) return;
+    void* q = EAAllocate(0x40, (const char*)0x13f6b3c, 0, 0, 0, 0);
+    if (q == 0) return;
+    void* msg = q;
     *(int*)((uint8_t*)msg + 0x30) = 0;
     *(void**)msg = (void*)0x13eb90c;
     _InterlockedExchange((volatile long*)((uint8_t*)msg + 4), 0);
@@ -762,7 +791,7 @@ void View::NotifyEntryChanged()
     *(int*)((uint8_t*)msg + 0x38) = 0;
     ((void (*)(void*))(((void**)*(void***)msg)[1]))(msg);
     *(int*)((uint8_t*)msg + 0x30) = 0x7e19b84;
-    SetIRefCount(msg, 0, this->mAssetView);
+    SetIRefCount(msg, 0, p->mWinA);
     void* ms = MessageServer();
     void* id = (void*)(unsigned)*(int*)((uint8_t*)msg + 0x30);
     ((void (*)(void*, void*, void*, void*))(((void**)*(void***)ms)[0x14 / 4]))(ms, id, msg, 0);
