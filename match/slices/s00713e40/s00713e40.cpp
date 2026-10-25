@@ -2,6 +2,7 @@
 // adapter methods, and the material/texture collection helpers.
 // /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
 #include <new>
+#include <string.h>
 #include <math.h>
 #include <intrin.h>
 #include "types.h"
@@ -481,58 +482,148 @@ uint32_t* MatrixTable::Set(uint32_t index, const uint32_t* mat)
     return dst + 8;
 }
 
-// @ 0x007147E0
-void __cdecl InsertionSortB(uint32_t* first, uint32_t* last)
+// @ 0x007147E0  insertion sort continuation over 0x18-byte records
+void __cdecl InsertionSortB(uint32_t* first, uint32_t* last, RecordCmp compare)
 {
-    (void)first; (void)last;
+    for (uint32_t* cur = first; cur != last; ++cur) {
+        uint32_t value = *cur;
+        uint32_t* hole = cur;
+        uint32_t* prev = cur - 1;
+        while (compare.less(value, *prev)) {
+            *hole = *prev;
+            hole = prev;
+            prev = hole - 1;
+        }
+        *hole = value;
+    }
 }
 
 // @ 0x00714880  min-of-three by record key
-uint32_t* __cdecl MinOfThree(uint32_t* a, uint32_t* b, uint32_t* c)
+uint32_t* __cdecl MinOfThree(uint32_t* a, uint32_t* b, uint32_t* c, RecordCmp compare)
 {
-    (void)a; (void)b; (void)c;
-    return a;
+    if (compare.less(*a, *b)) {
+        if (compare.less(*b, *c))
+            return b;
+        if (compare.less(*a, *c))
+            return c;
+        return a;
+    }
+    if (compare.less(*a, *c))
+        return a;
+    if (compare.less(*b, *c))
+        return c;
+    return b;
 }
 
 // @ 0x00714AB0  heap sift-up
-void __cdecl HeapSiftUp(uint32_t* base, int root, int hole, uint32_t value)
+void __cdecl HeapSiftUp(uint32_t* base, int root, int hole, uint32_t value, RecordCmp compare)
 {
-    (void)base; (void)root; (void)hole; (void)value;
+    int parent = (hole - 1) >> 1;
+    if (hole > root) {
+        do {
+            const uint32_t parentValue = base[parent];
+            if (!compare.less(parentValue, value))
+                break;
+            base[hole] = parentValue;
+            hole = parent;
+            parent = (hole - 1) >> 1;
+        } while (hole > root);
+    }
+    base[hole] = value;
 }
 
 // @ 0x00714C00  heap sift-down
-void __cdecl HeapSiftDown(uint32_t* base, int root, int n, int hole, uint32_t a, uint32_t b)
+void __cdecl HeapSiftDown(uint32_t* base, int root, int n, int hole, uint32_t value, RecordCmp compare)
 {
-    (void)base; (void)root; (void)n; (void)hole; (void)a; (void)b;
+    int child = hole * 2 + 2;
+    if (child < n) {
+        do {
+            if (compare.less(base[child], base[child - 1]))
+                --child;
+            base[hole] = base[child];
+            hole = child;
+            child = child * 2 + 2;
+        } while (child < n);
+    }
+    if (child == n) {
+        base[hole] = base[child - 1];
+        hole = child - 1;
+    }
+    HeapSiftUp(base, root, hole, value, compare);
 }
 
 // ---------------------------------------------------------------------------------------------
 // range destructors for arrays of resources
 // ---------------------------------------------------------------------------------------------
 // @ 0x00714A20
-void* __cdecl DestroyRes50(void* first, void* last, void* out)
+void* __cdecl DestroyRes50(void* first, void* last, char* out)
 {
-    (void)first; (void)last; return out;
+    while (first != last) {
+        EastlFreeGuarded(*(void**)((char*)first + 0x3c));
+        EastlFreeGuarded(*(void**)((char*)first + 0x28));
+        EastlFreeGuarded(*(void**)((char*)first + 0x14));
+        EastlFreeGuarded(*(void**)first);
+        first = (char*)first + 0x50;
+        out += 0x50;
+    }
+    return out;
 }
 
 // @ 0x00714B40
 void __stdcall DestroyRes50Range(void* first, void* last)
 {
-    (void)first; (void)last;
+    while ((uintptr_t)first < (uintptr_t)last) {
+        EastlFreeGuarded(*(void**)((char*)first + 0x3c));
+        EastlFreeGuarded(*(void**)((char*)first + 0x28));
+        EastlFreeGuarded(*(void**)((char*)first + 0x14));
+        EastlFreeGuarded(*(void**)first);
+        first = (char*)first + 0x50;
+    }
 }
 
 // @ 0x00714C70
-void* __cdecl DestroyRes28(void* first, void* last, void* out)
+void* __cdecl DestroyRes28(void* first, void* last, char* out)
 {
-    (void)first; (void)last; return out;
+    while (first != last) {
+        EastlFreeGuarded(*(void**)((char*)first + 0x14));
+        EastlFreeGuarded(*(void**)first);
+        first = (char*)first + 0x28;
+        out += 0x28;
+    }
+    return out;
 }
 
 // ---------------------------------------------------------------------------------------------
 // @ 0x00714CD0  vector reserve (4-byte elements)
 // ---------------------------------------------------------------------------------------------
-void __cdecl ReserveVec4(void* self, uint32_t n)
+struct Vec4 {
+    uint32_t* mpBegin;                      // +0x00
+    uint32_t* mpEnd;                        // +0x04
+    uint32_t* mpCap;                        // +0x08
+    void Reserve(uint32_t n);
+};
+
+// @ 0x00714CD0
+void Vec4::Reserve(uint32_t n)
 {
-    (void)self; (void)n;
+    if (n <= (uint32_t)((int)((char*)mpCap - (char*)mpBegin) >> 2))
+        return;
+    uint32_t* dst = n ? (uint32_t*)EastlNew(n * 4, "Graphics", 0, 0,
+        "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h", 0xd1) : 0;
+    uint32_t* end = mpEnd;
+    uint32_t* src = mpBegin;
+    uint32_t* cur = dst;
+    while (src != end) {
+        if (cur != 0)
+            *cur = *src;
+        ++src;
+        ++cur;
+    }
+    EastlFreeGuarded(mpBegin);
+    int count = (int)((char*)mpEnd - (char*)mpBegin) >> 2;
+    mpBegin = dst;
+    mpEnd = dst + count;
+    mpCap = dst + n;
 }
 
 // @ 0x00714310
@@ -589,20 +680,53 @@ void ResourceAdapter::Dispatch(uint8_t flags, uint32_t a, uint32_t b, uint32_t c
     }
 }
 
-// @ 0x007149A0  copy 0x30-byte float records (x87)
-void __cdecl CopyFloats48(float* dst, float* first, float* last)
+// @ 0x007149A0  copy 0x30-byte float records
+struct Float12 { float v[12]; };
+void __cdecl CopyFloats48(Float12* first, Float12* last, Float12* dst)
 {
-    for (; first != last; first += 12, dst += 12) {
+    for (; first != last; first += 1, dst += 1) {
         if (dst != 0) {
-            for (int i = 0; i < 12; ++i)
-                dst[i] = first[i];
+            float* d = dst->v;
+            const float* s = first->v;
+            d[0] = s[0];
+            float* d2 = d + 6;
+            const float* s2 = s + 6;
+            d2[-5] = s2[-5];
+            d2[-4] = s2[-4];
+            d2[-3] = s2[-3];
+            d2[-2] = s2[-2];
+            d2[-1] = s2[-1];
+            d2[0] = s2[0];
+            d2[1] = s2[1];
+            d2[2] = s2[2];
+            d2[3] = s2[3];
+            d2[4] = s2[4];
+            d2[5] = s2[5];
         }
     }
 }
 
+struct TElem {
+    void* m0; void* m4; void* m8;
+    uint32_t mC; uint32_t m10;
+    TElem() : m0(0), m4(0), m8(0) {}
+    ~TElem();
+};
+
+struct AdapterCtor {
+    uint32_t m0;            // +0x00
+    uint32_t m4;            // +0x04
+    TElem t1;               // +0x08
+    TElem t2;               // +0x1c
+    TElem arr4[4];          // +0x30
+    TElem arr2[2];          // +0x80
+    TElem t3;               // +0xa8
+    TElem t4;               // +0xbc
+    AdapterCtor();
+};
+
 // @ 0x00714E10
-void __fastcall ConstructAdapter(void* self)
+AdapterCtor::AdapterCtor() : m0(0)
 {
-    (void)self;
 }
 

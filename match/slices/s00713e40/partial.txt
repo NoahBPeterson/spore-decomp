@@ -1,11 +1,1 @@
 # va  reason
-007147e0 insertion sort variant: skeleton
-00714880 min-of-three records: skeleton
-007149a0 x87 copy of 0x30-byte float records: skeleton
-00714a20 destroy array of 0x50-byte resources: skeleton
-00714ab0 heap sift-up: skeleton
-00714b40 destroy range of 0x50-byte resources: skeleton
-00714c00 heap sift-down: skeleton
-00714c70 destroy array of 0x28-byte resources: skeleton
-00714cd0 vector reserve (4-byte elements): skeleton
-00714e10 resource-adapter constructor with two vector ctors: skeleton
