@@ -1,1 +1,3 @@
 00d80a50 MOVE_WITHIN_RANGE_Tick  # PDB candidate (caller-scored), behavior-tree tick walking a creature to its target
+00d81220 creature move-toward-target tick  # validity/vtable check, state 0 steering + near-goal transition, state 1 animation + AnimationFinished, defaults
+00d81340 SP::ALERT_Tick  # four-state alert sequence: alert animation, idle countdown, detach effect, wait for completion
