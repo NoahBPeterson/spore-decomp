@@ -938,6 +938,14 @@ extern RandomLinearCongruential sMathRandom;                                    
 
 typedef eastl::hashtable<map_pair<uint64_t, int>, eastl::allocator> ItemCountMap;
 
+// The two vtable pointers at the object head (a multiply-inherited ref-counted
+// content object; the +0x4 slot is the base IRefCount vtable).
+struct CollectableItemsVtables {
+    static void* primary()      { return (void*)0x013f626c; }   // Simulator::cCollectableItems
+    static void* refCounted()   { return (void*)0x013f625c; }   // the +0x4 slot
+    static void* construction() { return (void*)0x013ec458; }   // pre-construction +0x4 vtable
+};
+
 class cCollectableItems {
 public:
     virtual void _v0();
@@ -1119,37 +1127,46 @@ cCollectableItems::~cCollectableItems()
     mItemSets.DoNukeSubtree(mItemSets.mAnchor.mpNodeParent);
 }
 
-void ConstructItemSetTree(cItemSetRBTree* tree);   // 0x00597AD0
-struct FixedMapCtorArgs { uint8_t a, b; };
-void ConstructStaticInfoMap(StaticInfoMap* map, const uint8_t& h, const uint8_t& e);   // 0x00595C60
-void ConstructItemStatusMap(ItemStatusMap* map, const uint8_t& h, const uint8_t& e);   // 0x00595DD0
+void __fastcall ConstructItemSetTree(cItemSetRBTree* tree);   // 0x00597ad0
+// The two fixed_hash_map sub-objects are constructed in place by the storage
+// constructor at 0x00595c60 / 0x00595dd0; the original materialises the two
+// predicate/hash bytes as stack temporaries whose addresses it pushes.
+void __fastcall ConstructStaticInfoMap(StaticInfoMap* map, const uint8_t* h, const uint8_t* e);   // 0x00595c60
+void __fastcall ConstructItemStatusMap(ItemStatusMap* map, const uint8_t* h, const uint8_t* e);   // 0x00595dd0
 extern uint32_t gpEmptyBucketArray[2];   // 0x0154DF28
-
-// PARTIAL 0x00597e00: constructor member initialisers modelled with explicit helper calls; base-class vtables simplified
+extern const float kRealOne;             // 0x01485720  _HK_REAL_ONE
+// 0x00597e00: the constructor. The original writes the intermediate +0x4 vtable
+// (0x13ec458) first, then stores both final vtables, and initialises every member
+// in one tight group after the two map constructions.
 // @ 0x00597e00
 cCollectableItems::cCollectableItems()
 {
+    // Base-class construction: the +0x4 slot is first pointed at the
+    // construction-time vtable, then at the final ref-counted table.
+    vtbl4 = CollectableItemsVtables::construction();
     mRefCount = 0;
+    (*(void**)this) = CollectableItemsVtables::primary();
+    vtbl4 = CollectableItemsVtables::refCounted();
     mbUnknownItemsAreUnlocked = true;
     ConstructItemSetTree(&mItemSets);
-    uint8_t h, e;
-    ConstructStaticInfoMap(&mStaticItemInfos, e, h);
-    ConstructItemStatusMap(&mItemStatusInfos, e, h);
+    uint8_t e = 0, h = 0;
+    ConstructStaticInfoMap(&mStaticItemInfos, &h, &e);
+    ConstructItemStatusMap(&mItemStatusInfos, &h, &e);
     mNumUnlocksPerLevel.mpBegin = 0;
     mNumUnlocksPerLevel.mpEnd = 0;
     mNumUnlocksPerLevel.mpCapacity = 0;
     mUnlockPoints = 0;
     mDefaultItemGroupId = 0;
-    mFindPercentageLevelMultiplier = 1.0f;
-    mGlobalFindPercentageMultiplier = 1.0f;
+    mFindPercentageLevelMultiplier = kRealOne;
+    mGlobalFindPercentageMultiplier = kRealOne;
     mNewItems.mNode.mpNext = &mNewItems.mNode;
     mNewItems.mNode.mpPrev = &mNewItems.mNode;
-    mItemLevels.mRehashPolicy.mfMaxLoadFactor = 1.0f;
-    mItemLevels.mRehashPolicy.mfGrowthFactor = 2.0f;
-    mItemLevels.mnElementCount = 0;
-    mItemLevels.mRehashPolicy.mnNextResize = 0;
-    mItemLevels.mnBucketCount = 1;
     mItemLevels.mpBucketArray = (ItemCountMap::node_type**)gpEmptyBucketArray;
+    mItemLevels.mnBucketCount = 1;
+    mItemLevels.mnElementCount = 0;
+    mItemLevels.mRehashPolicy.mfMaxLoadFactor = kRealOne;
+    mItemLevels.mRehashPolicy.mfGrowthFactor = 2.0f;
+    mItemLevels.mRehashPolicy.mnNextResize = 0;
 }
 
 // fixed_hash_map<uint64_t, uint64_t, 64> local used by BuildSetSummary
