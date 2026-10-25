@@ -47,6 +47,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <wchar.h>
 
 namespace EA
 {
@@ -366,5 +367,103 @@ bool PolygonFont::Open(IO::IStream* pStream)
     return bResult;
 }
 
+// EATextStyle.cpp -- EA::Text::FontStyle / EA::Text::TextStyle scalar ctors and operator==.
+//
+// The vendored EATextStyle.cpp routes its family-name comparison through EA::Text::Strcmp, whose
+// inline body calls wcscmp; cl 15 refuses to inline that wrapper here and emits a local copy, so
+// the retail loop (wcscmp expanded in place) only appears when wcscmp is called directly. The
+// bodies below are otherwise the upstream EATextStyle.cpp bodies, and the member layout of the
+// vendored EATextStyle.h matches retail exactly (Char = wchar_t: family array 8 x 32 chars = 0x200,
+// FontStyle ends at 0x224, TextStyle ends at 0x278).
+
+// @ 0x00894030
+FontStyle::FontStyle()
+  : mfSize(12.f), mStyle(kStyleDefault), mfWeight(kWeightDefault),
+    mVariant(kVariantDefault), mPitch(kPitchDefault), mSmooth(kSmoothDefault),
+    mEffect(kEffectNone), mfEffectX(1.f), mfEffectY(1.f)
+{
+    for(uint32_t i = 0; i < kFamilyNameArrayCapacity; i++)
+        mFamilyNameArray[i][0] = 0;
+}
+
+// @ 0x008940B0
+bool operator==(const FontStyle& a, const FontStyle& b)
+{
+    // Compare built-in types.
+    if((a.mfSize     == b.mfSize)    &&
+       (a.mStyle     == b.mStyle)    &&
+       (a.mfWeight   == b.mfWeight)  &&
+       (a.mVariant   == b.mVariant)  &&
+       (a.mPitch     == b.mPitch)    &&
+       (a.mSmooth    == b.mSmooth)   &&
+       (a.mEffect    == b.mEffect)   &&
+       (a.mfEffectX  == b.mfEffectX) &&
+       (a.mfEffectY  == b.mfEffectY))
+    {
+        // Compare family name.
+        for(uint32_t i = 0; i < kFamilyNameArrayCapacity; i++)
+        {
+            if(wcscmp(a.mFamilyNameArray[i], b.mFamilyNameArray[i]) != 0)
+                return false;
+        }
+
+        return true;
+    }
+
+    return false;
+}
+
+// @ 0x008941D0
+TextStyle::TextStyle()
+  : mColor(0xffffffff), mColorBackground(0x00000000), mEffectBaseColor(0xffffffff), mEffectColor(0xffffffff),
+    mHighLightColor(0x00000000), mnDecorationFlags(kDFDefault), mDirection(kDirectionDefault),
+    mOrientation(kOrientationDefault), mHAlignment(kHADefault), mVAlignment(kVADefault),
+    mJustify(kJustifyDefault), mTextWrap(kTWDefault), mTextOverflow(kTODefault),
+    mEmphasisStyle(kESDefault), mEmphasisPosition(kEPDefault), mDigitSubstitution(kDSDefault),
+    mPasswordMode(kPMDefault), mfStretch(1.f), mfLetterSpacing(0.f), mfWordSpacing(0.f),
+    mfLineSpace(0.f)
+{
+}
+
+// @ 0x008942A0
+bool operator==(const TextStyle& a, const TextStyle& b)
+{
+    if(operator==((FontStyle&)a, (const FontStyle&)b)) // If the base class compares as equal...
+    {
+        return ((a.mColor             == b.mColor) &&
+                (a.mColorBackground   == b.mColorBackground) &&
+                (a.mnDecorationFlags  == b.mnDecorationFlags) &&
+                (a.mDirection         == b.mDirection) &&
+                (a.mOrientation       == b.mOrientation) &&
+                (a.mHAlignment        == b.mHAlignment) &&
+                (a.mVAlignment        == b.mVAlignment) &&
+                (a.mJustify           == b.mJustify) &&
+                (a.mTextWrap          == b.mTextWrap) &&
+                (a.mTextOverflow      == b.mTextOverflow) &&
+                (a.mEmphasisStyle     == b.mEmphasisStyle) &&
+                (a.mEmphasisPosition  == b.mEmphasisPosition) &&
+                (a.mDigitSubstitution == b.mDigitSubstitution) &&
+                (a.mPasswordMode      == b.mPasswordMode) &&
+                (a.mfStretch          == b.mfStretch) &&
+                (a.mfLetterSpacing    == b.mfLetterSpacing) &&
+                (a.mfWordSpacing      == b.mfWordSpacing) &&
+                (a.mfLineSpace        == b.mfLineSpace) &&
+                (a.mEffectColor       == b.mEffectColor) &&
+                (a.mHighLightColor    == b.mHighLightColor));
+    }
+
+    return false;
+}
+
 } // namespace Text
 } // namespace EA
+
+// EATextScript.cpp -- EA::Text::GetScriptFromChar.
+//
+// Included from the vendored drop because the function is a binary search over the (large) static
+// script table, which must stay data-identical to the retail image. With the default
+// EATEXT_SCRIPT_CHAR_SUPPORT=1 the table has 96 entries, matching the retail bound (count - 1 == 95)
+// and the `movsx` on the int8_t ScriptTableEntry::mnScript seen in the image.
+//
+// @ 0x00893FC0
+#include "../../../work/ext/EAWebKitSupportPackages/EATextEAWebKit/local/source/EATextScript.cpp"

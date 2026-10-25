@@ -1,1 +1,6 @@
 008934e0 EA::Text::PolygonFont::Open  # lib_eatext name in card; matches upstream EATextPolygonFont.cpp structure byte-exact
+00893fc0 EA::Text::GetScriptFromChar  # EATextScript.cpp; binary search over the 96-entry table, returns int8_t Script
+00894030 EA::Text::FontStyle::FontStyle  # EATextStyle.cpp upstream ctor; layout matches retail (mfSize@0x200 ... mfEffectY@0x220)
+008940b0 EA::Text::operator==(const FontStyle&, const FontStyle&)  # EATextStyle.cpp; wcscmp must be inlined (vendored Strcmp wrapper is not)
+008941d0 EA::Text::TextStyle::TextStyle  # EATextStyle.cpp upstream ctor; retail TextStyle is 0x278 bytes
+008942a0 EA::Text::operator==(const TextStyle&, const TextStyle&)  # EATextStyle.cpp; calls the FontStyle comparison then compares the 0x224..0x274 members

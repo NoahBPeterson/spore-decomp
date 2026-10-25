@@ -1,3 +1,8 @@
 # source  symbol  va  flags
 
 slices/s008934e0/s008934e0.cpp  ?Open@PolygonFont@Text@EA@@UAE_NPAVIStream@IO@3@@Z  008934e0  /O2 /MD /GS- /GR- /TP /arch:SSE /Iscratch_s00880170_inc
+slices/s008934e0/s008934e0.cpp  ?GetScriptFromChar@Text@EA@@YA?AW4Script@12@_W@Z  00893fc0  /O2 /MD /GS- /GR- /TP /arch:SSE /fp:fast /Iscratch_s00880170_inc
+slices/s008934e0/s008934e0.cpp  ??0FontStyle@Text@EA@@QAE@XZ  00894030  /O2 /MD /GS- /GR- /TP /arch:SSE /fp:fast /Iscratch_s00880170_inc
+slices/s008934e0/s008934e0.cpp  ??8Text@EA@@YA_NABUFontStyle@01@0@Z  008940b0  /O2 /MD /GS- /GR- /TP /arch:SSE /fp:fast /Iscratch_s00880170_inc
+slices/s008934e0/s008934e0.cpp  ??0TextStyle@Text@EA@@QAE@XZ  008941d0  /O2 /MD /GS- /GR- /TP /arch:SSE /fp:fast /Iscratch_s00880170_inc
+slices/s008934e0/s008934e0.cpp  ??8Text@EA@@YA_NABUTextStyle@01@0@Z  008942a0  /O2 /MD /GS- /GR- /TP /arch:SSE /fp:fast /Iscratch_s00880170_inc
