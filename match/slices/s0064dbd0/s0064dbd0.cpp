@@ -72,6 +72,15 @@ extern void* g_data15ee298;            // 0x015ee298 (object, field +0x3c)
 
 void* __cdecl EASTL_deallocate(void*);                     // FUN_00f47380
 
+// SP::cString (0x14 bytes): ctor 0x6b5060, Load 0x6b54b0, GetText 0x6b55c0, dtor 0x6b5240
+struct CStr14 { uint32_t mData[5]; };
+extern "C" void          cString_ctor(void*);
+extern "C" bool          cString_Load(void*, uint32_t, uint32_t, const wchar_t*);
+extern "C" const wchar_t* cString_GetText(void*);
+extern "C" void          cString_dtor(void*);
+extern float g_fNegTwo;                                // 0x013ef61c
+extern float g_fOne;                                   // 0x01485720
+
 // fabricated vtable symbols (immediates are relocations, masked by cmpobj)
 extern char g_vtbl_cSPUIAssetComments_primary[];    // 0x013ff9fc
 extern char g_vtbl_cSPUIAssetComments_secondary[];  // 0x013ff9ec
@@ -94,7 +103,7 @@ class cSPUIAssetComments : public PBase1, public PBase2 { public:
     cSPUIAssetComments();
     bool Init(void* win);
     void SetVisibility(int visible);
-    bool LoadAssetComments();
+    bool LoadAssetComments(uint64_t id);
     bool DoMessage(void* sender, int* msg);
     void* deleting_dtor(unsigned flags);
 };
@@ -275,31 +284,43 @@ void SP::cSPUIAssetComments::SetVisibility(int visible)
 // ---------------------------------------------------------------------------
 // @ 0x0064E460  SP::cSPUIAssetComments::LoadAssetComments
 // ---------------------------------------------------------------------------
-bool SP::cSPUIAssetComments::LoadAssetComments()
+// eastl::wstring16 (three pointers); the empty-string markers are the statics at
+// 0x1667bac (begin/end) and 0x1667bae (capacity).
+struct WStr16 {
+    const wchar_t* mBegin;
+    const wchar_t* mEnd;
+    const wchar_t* mCapacity;
+};
+
+bool SP::cSPUIAssetComments::LoadAssetComments(uint64_t id)
 {
     void* am = AuthManager();
     char auth = ((char(__thiscall*)(void*))VT(am)[0x24 / 4])(am);
     void* w = ((void*(__thiscall*)(void*, uint32_t, int))VT(mpContentWin)[0xf0 / 4])(mpContentWin, 0x561dd60, 1);
     if (w)
         ((void(__thiscall*)(void*, int, int))VT(w)[0x7c / 4])(w, 1, auth);
+    bool ok = false;
     void* fr = ((FrameSet*)((char*)this + 0xc))->GetFrame(g_CommentsFrame);
-    if (!fr)
-        return false;
-    void* frame = (char*)fr + 4;
-    ((void(__thiscall*)(void*, int, int))VT(frame)[0x7c / 4])(frame, 1, !auth);
-    if (auth)
-        return true;
-
-    uint32_t buf[5];
-    buf[0] = 0x1667bac;
-    buf[1] = 0x1667bac;
-    buf[2] = 0x1667bae;
-    PollenGetURL(0x53f0df9, buf);
-    int64_t val = *(int64_t*)(buf + 4);
-    FUN_4e0850(buf + 2, L"%I64u", val);
-    void* ms = MessageServer();
-    (void)ms;
-    return false;
+    if (fr) {
+        void* frame = (char*)fr + 4;
+        ((void(__thiscall*)(void*, int, int))VT(frame)[0x7c / 4])(frame, 1, !auth);
+        if (auth) {
+            ok = true;
+        } else {
+            WStr16 text;
+            text.mBegin = (const wchar_t*)0x1667bac;
+            text.mEnd = (const wchar_t*)0x1667bac;
+            text.mCapacity = (const wchar_t*)0x1667bae;
+            PollenGetURL(0x53f0df9, &text);
+            FUN_4e0850(&text, (const wchar_t*)0x13ffa18, (int64_t)id);   // L"%I64u"
+            void* loc = ((void*(__thiscall*)(void*, int, int, const wchar_t*))VT(fr)[0x8c / 4])
+                            (fr, 0, 0, text.mCapacity);
+            ok = ((FrameSet*)((char*)this + 0xc))->HandleLocationChange(loc, (void*)text.mCapacity, 0, 0);
+            if ((const char*)text.mCapacity - (const char*)text.mBegin > 2 && text.mBegin)
+                EASTL_deallocate((void*)text.mBegin);
+        }
+    }
+    return ok;
 }
 
 // ---------------------------------------------------------------------------
@@ -464,20 +485,23 @@ struct R7d0 {
 };
 bool R7d0::Test(uint32_t idx)
 {
-    if (idx < (uint32_t)((*(int*)((char*)this + 0xec) - *(int*)((char*)this + 0xe8)) >> 5)
-        && *(int*)((char*)this + 0x2c) != 0) {
-        float f1 = *(float*)((char*)this + 0x108);
-        float f2 = *(float*)(*(int*)((char*)this + 0xe8) + idx * 0x20 + 0x18);
-        float f3 = *(float*)((char*)this + 0x184);
-        void* o = *(void**)((char*)obj18c + 0x10);
-        void* r = ((void*(__thiscall*)(void*, float, float))VT(o)[0x38 / 4])(o, f1 + f2, f2);
-        if (f3 <= f1 + f2) {
-            float hi = *(float*)((char*)r + 0xc) - *(float*)((char*)r + 4) + f3;
-            if (f2 <= hi)
-                return true;
+    bool ok = false;
+    uint32_t count = (uint32_t)((*(int*)((char*)this + 0xec) - *(int*)((char*)this + 0xe8)) >> 5);
+    if (idx < count) {
+        if (*(int*)((char*)this + 0x2c) != 0) {
+            float f1 = *(float*)((char*)this + 0x108);
+            float f2 = *(float*)(*(int*)((char*)this + 0xe8) + idx * 0x20 + 0x18);
+            float f3 = *(float*)((char*)this + 0x184);
+            void* o = *(void**)((char*)obj18c + 0x10);
+            void* r = ((void*(__thiscall*)(void*, float, float))VT(o)[0x38 / 4])(o, f1 + f2, f2);
+            if (!(f3 > f1 + f2)) {
+                float hi = *(float*)((char*)r + 0xc) - *(float*)((char*)r + 4) + f3;
+                if (!(f2 > hi))
+                    ok = true;
+            }
         }
     }
-    return false;
+    return ok;
 }
 
 // ---------------------------------------------------------------------------
@@ -493,23 +517,35 @@ struct R880 {
 };
 void R880::Update(uint32_t visible, uint32_t arg)
 {
-    if (w30) {
-        ((void(__thiscall*)(void*, int, int))VT(w30)[0x7c / 4])(w30, 1, (int)visible);
+    void* w1 = w30;
+    if (w1) {
+        ((void(__thiscall*)(void*, int, uint32_t))VT(w1)[0x7c / 4])(w1, 1, visible);
         if ((visible & 0xff) != 0) {
             if (w38) {
                 *(uint32_t*)((char*)g_data15ee298 + 0x3c) = arg;
-                (void)w38;
+                void* p = w38;
+                CStr14 s;
+                ((void(__thiscall*)(void*))cString_ctor)(&s);
+                ((void(__thiscall*)(void*, uint32_t, uint32_t, const wchar_t*))cString_Load)
+                    (&s, 0x21671745, 0x30006, (const wchar_t*)0x13ffa78);
+                ((void(__thiscall*)(void*, const wchar_t*))VT(p)[0x80 / 4])
+                    (p, ((const wchar_t*(__thiscall*)(void*))cString_GetText)(&s));
+                ((void(__thiscall*)(void*))cString_dtor)(&s);
             }
-            if (w34) {
-                float t = GetElapsedSeconds() * -2.0f;
+            void* w2 = w34;
+            if (w2) {
                 float v[4];
-                v[0] = 0.0f; v[1] = 0.0f; v[2] = t; v[3] = 1.0f;
-                FUN_808230(w34, v);
+                v[3] = GetElapsedSeconds() * g_fNegTwo;
+                v[0] = 0.0f;
+                v[1] = 0.0f;
+                v[2] = g_fOne;
+                FUN_808230(w2, v);
             }
         }
     }
-    if (w2c)
-        ((void(__thiscall*)(void*, int, int))VT(w2c)[0x7c / 4])(w2c, 1, ((visible & 0xff) == 0) ? 1 : 0);
+    void* w4 = w2c;
+    if (w4)
+        ((void(__thiscall*)(void*, int, int))VT(w4)[0x7c / 4])(w4, 1, ((visible & 0xff) == 0) ? 1 : 0);
 }
 
 // ---------------------------------------------------------------------------
@@ -536,20 +572,17 @@ void R980::Layout(void* s1, void* s2, void* s3, bool flag)
         if (!s3) s3 = (void*)0x13ec468;
         ((void(__thiscall*)(void*, void*))VT(a44)[0x80 / 4])(a44, s3);
     }
-    void* pa = a3c ? ((void*(__thiscall*)(void*, uint32_t))VT(a3c)[0xc / 4])(a3c, 0xf15f4bd) : 0;
-    void* pb = a40 ? ((void*(__thiscall*)(void*, uint32_t))VT(a40)[0xc / 4])(a40, 0xf15f4bd) : 0;
-    void* pc = a44 ? ((void*(__thiscall*)(void*, uint32_t))VT(a44)[0xc / 4])(a44, 0xf15f4bd) : 0;
+    void* p3c = a3c ? ((void*(__thiscall*)(void*, uint32_t))VT(a3c)[0xc / 4])(a3c, 0xf15f4bd) : 0;
+    void* p40 = a40 ? ((void*(__thiscall*)(void*, uint32_t))VT(a40)[0xc / 4])(a40, 0xf15f4bd) : 0;
+    void* p44 = a44 ? ((void*(__thiscall*)(void*, uint32_t))VT(a44)[0xc / 4])(a44, 0xf15f4bd) : 0;
     float tmp[4];
-    ((void(__thiscall*)(void*, float*, int, int))VT(pa)[0x20 / 4])(pa, tmp, 0, 1);
-    float x = tmp[2] + 30.0f;
-    ((void(__thiscall*)(void*, float, float))VT(a44)[0x70 / 4])(a44, x, tmp[3]);
-    ((void(__thiscall*)(void*, float*, int, int))VT(pc)[0x20 / 4])(pc, tmp, 0, 1);
-    float x2 = tmp[2] + 30.0f;
-    ((void(__thiscall*)(void*, float, float))VT(a40)[0x70 / 4])(a40, x2, tmp[3]);
-    void* src = flag
-        ? ((void*(__thiscall*)(void*))VT(pb)[0x24 / 4])(pb)
-        : ((void*(__thiscall*)(void*))VT(pa)[0x24 / 4])(pa);
-    ((void(__thiscall*)(void*, void*))VT(pc)[0x28 / 4])(pc, src);
+    ((void(__thiscall*)(void*, float*, int, int))VT(p3c)[0x20 / 4])(p3c, tmp, 0, 1);
+    ((void(__thiscall*)(void*, float, float))VT(a44)[0x70 / 4])(a44, tmp[2] + 30.0f, tmp[1]);
+    ((void(__thiscall*)(void*, float*, int, int))VT(p44)[0x20 / 4])(p44, tmp, 0, 1);
+    ((void(__thiscall*)(void*, float, float))VT(a40)[0x70 / 4])(a40, tmp[2] + 30.0f, tmp[1]);
+    ((void(__thiscall*)(void*, void*))VT(p44)[0x28 / 4])(p44,
+        flag ? ((void*(__thiscall*)(void*))VT(p40)[0x24 / 4])(p40)
+             : ((void*(__thiscall*)(void*))VT(p3c)[0x24 / 4])(p3c));
 }
 
 // ---------------------------------------------------------------------------
