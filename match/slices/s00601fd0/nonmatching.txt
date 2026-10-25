@@ -1,2 +1,3 @@
 # va  diff-bytes  reason
 00601fd0  1172  complete cGameTab::Init (/O2 /MD /Gy /TP /arch:SSE /fp:fast); 94 vs 94 calls, identical vtable slot sequence; frame 0x24 vs 0x28 and register scheduling differ
+006026f0  469  complete SP::cOnlineTab::DoMessage (/O2 /MD /Gy /TP /arch:SSE /fp:fast); real thiscall takes 2 stack args (ret 8): dispatch on msg type 287259f6/af0b6441, button-state to ConfigManager SetValue, formatted label via %u; residual diff frame layout + regalloc (size 568 vs 588); equiv WEAK 400 valid inputs 0 mismatches 7.8% coverage
