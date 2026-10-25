@@ -1,48 +1,178 @@
-// Slice s00480320: cSPEditorHandleRotationRing geometry helpers, /Od /Ob1 /arch:SSE.
+// Slice s00480320: SP::cSPEditorHandleDeform pick-ray helpers (SetPickOffset, SetPickData),
+// plus the RingHandle::Update matched in an earlier wave.
+// Module flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast  (editor /Od region, no /EHsc).
 #include "types.h"
+// |v| via the x87 fabs the original folds in; the pragma must precede <math.h> so the
+// intrinsic wins and no CRT symbol is referenced.
+extern "C" double __cdecl fabs(double);
+#pragma intrinsic(fabs)
+#include <math.h>
 
-struct Vector3 { float x, y, z; };
+// ---- rw::math / cSP math types -------------------------------------------------
+struct Vector3 {
+    float x, y, z;
+    Vector3() {}
+    Vector3(float ax, float ay, float az) : x(ax), y(ay), z(az) {}
+    Vector3(const Vector3& o) : x(o.x), y(o.y), z(o.z) {}
+    float& operator[](int i) { return (&x)[i]; }
+    const float& operator[](int i) const { return (&x)[i]; }
+    float SquaredLength() const { return x * x + y * y + z * z; }
+};
 
-// vector helpers (masked relocations)
-Vector3* VecSubtract(Vector3* out, const Vector3* a, const Vector3* b);   // @ 0x0041db10
-Vector3* VecNormalize(Vector3* out, const Vector3* in);                  // @ 0x00436ce0
-Vector3* VecScale(Vector3* out, const float* s, const Vector3* v);       // @ 0x0041de40
-Vector3* VecCross(Vector3* out, const Vector3* a, const Vector3* b);     // @ 0x0041dca0
-void     GetLocalTransform(void* entity, void* matrix);                  // @ 0x00436380
+// The original funnels a handful of Vector3 copies through one shared out-of-line copy
+// constructor (0x004098a0); this derived type stands in for it so those sites stay calls.
+struct Vector3Copyable : Vector3 {
+    Vector3Copyable(const Vector3& o);                          // 0x004098a0
+    Vector3& Vec();                                             // opaque view, keeps the reload
+    const Vector3& Vec() const;                                 // opaque view, keeps the reload
+};
+Vector3Copyable::Vector3Copyable(const Vector3& o) { x = o.x; y = o.y; z = o.z; }
+Vector3& Vector3Copyable::Vec() { return *this; }
+const Vector3& Vector3Copyable::Vec() const { return *this; }
+
+Vector3 operator-(const Vector3& a, const Vector3& b);          // 0x0041db10
+Vector3 operator+(const Vector3& a, const Vector3& b);          // 0x0041dc10
+Vector3 operator*(const Vector3& a, const float& s);            // 0x0041dca0
+Vector3 operator*(const float& s, const Vector3& a);            // 0x0041de40
+float   Dot3(const Vector3& a, const Vector3& b);               // 0x00455cc0
+Vector3 Normalize(const Vector3& v);                            // 0x00436ce0
+inline float AbsF(float v) { return fabsf(v); }
+
+struct cSPMatrix3 {
+    Vector3 xAxis, yAxis, zAxis;                                // 3 rows, 0x24 bytes
+    cSPMatrix3() {}
+    cSPMatrix3(const cSPMatrix3& o);                            // 0x0041cb40
+};
+extern const cSPMatrix3 kIdentityMatrix;                        // 0x015d4ea8
+extern const Vector3 kZeroVector;                               // 0x015d4fd8
+
+struct cSPTransform {
+    unsigned short mFlags;                                      // +0
+    unsigned short mModificationCount;                          // +2
+    Vector3 mTranslation;                                       // +4
+    float mScale;                                               // +0x10
+    cSPMatrix3 mRotation;                                       // +0x14
+    cSPTransform();                                             // 0x00409930
+};
+
+struct cSPBoundingBox {
+    Vector3 mMin;                                               // +0
+    Vector3 mMax;                                               // +0xc
+    Vector3& GetCenter(Vector3& out) const;                     // 0x00409b90
+    void TransformBy(const cSPTransform& t);                    // 0x00409dd0
+};
+
+namespace SP {
+
+class cSPEditorBlock { public:
+    cSPBoundingBox GetBBox(int type, bool a, bool b);           // 0x0044ae00
+    cSPTransform GetLocalTransform();                           // 0x00436380
+};
+
+struct cModelDeformationHandle {
+    unsigned int mHandleType;                                   // +0
+    cSPTransform mTransform;                                    // +4
+    unsigned int mAnimationID;                                  // +0x3c
+    Vector3 mStartPt;                                           // +0x40
+    Vector3 mEndPt;                                             // +0x4c
+    float mRestVal;                                             // +0x58
+};
+
+class cSPEditorHandle {
+public:
+    virtual void v00();
+    char pad04[0x0c - 0x04];
+    void* mPropList;                                            // +0x0c
+    cSPEditorBlock* mBlock;                                     // +0x10
+    char pad14[0x50 - 0x14];
+};
+
+class cSPEditorHandleDeform : public cSPEditorHandle { public:
+    cModelDeformationHandle mData;                              // +0x50
+    unsigned int mPinningType;                                  // +0xac
+    unsigned int mAxisToIgnore;                                 // +0xb0
+    void* mSymmetricHandle;                                     // +0xb4
+    Vector3 mPickOrigin;                                        // +0xb8
+    Vector3 mPickDirection;                                     // +0xc4
+    Vector3 mHandleStart;                                       // +0xd0
+    Vector3 mHandleEnd;                                         // +0xdc
+    Vector3 mHandleStartLocal;                                  // +0xe8
+    Vector3 mHandleEndLocal;                                    // +0xf4
+    Vector3 mBlockPositionForPicking;                           // +0x100
+    Vector3 mBlockPickReference;                                // +0x10c
+    bool mSetPickData;                                          // +0x118
+
+    void SetPickOffset(float offset);                           // 0x004809c0
+    void SetPickData();                                         // 0x00480cf0
+};
+
+}  // namespace SP
 
 // @ 0x00480cf0
-void Ring_Reset(char* self)
+// Derives the pick ray from the deformation handle's start/end points: direction runs from
+// end to start, the origin sits five units behind the end point, and the local start point
+// and block reference are cached before refreshing the offset.
+void SP::cSPEditorHandleDeform::SetPickData()
 {
-    char matrix[0x38];
-    GetLocalTransform(*(void**)(self + 0x10), matrix);
+    cSPTransform local = mBlock->GetLocalTransform();           // 0x00436380
 
-    Vector3 diff, dir;
-    VecSubtract(&diff, (Vector3*)(self + 0x90), (Vector3*)(self + 0x9c));
-    VecNormalize(&dir, &diff);
-    *(Vector3*)(self + 0xc4) = dir;
+    Vector3 diff = mData.mStartPt - mData.mEndPt;                // 0x0041db10
+    Vector3 dir = Normalize(diff);                              // 0x00436ce0
+    mPickDirection = dir;
 
-    float scale = *(float*)0x13eb960;   // 5.0f
-    Vector3 scaled, offset;
-    VecScale(&scaled, &scale, (Vector3*)(self + 0xc4));
-    VecSubtract(&offset, (Vector3*)(self + 0x9c), &scaled);
-    *(Vector3*)(self + 0xb8) = offset;
+    Vector3 scaled = 5.0f * mPickDirection;                     // 0x0041de40
+    mPickOrigin = mData.mEndPt - scaled;                        // 0x0041db10
 
-    *(Vector3*)(self + 0xe8) = *(Vector3*)(self + 0x90);
-    *(Vector3*)(self + 0x10c) = *(Vector3*)(self + 0x9c);
+    mHandleStartLocal = mData.mStartPt;
+    mBlockPickReference = mData.mEndPt;
 
-    void Ring_Rotate(char*, float);      // @ 0x004809c0
-    Ring_Rotate(self, *(float*)0x13eb960);
-    *(uint8_t*)(self + 0x118) = 1;
+    SetPickOffset(0.01f);                                       // 0x004809c0
+    mSetPickData = true;
 }
 
-// @ 0x004809c0 -- PARTIAL: bounding-box / basis rebuild; only the entry BBox call
-// and the normalisation tail are reproduced, the inner branchy math is omitted.
-void Ring_Rotate(char* self, float angle)
+// @ 0x004809c0
+// Tilts the pick direction towards the current block bounds by "offset": the bounds are
+// normalised to world space, the ray from the pick origin to the bounds centre is nudged
+// along whichever axis is misaligned, then folded into the existing direction.
+void SP::cSPEditorHandleDeform::SetPickOffset(float offset)
 {
-    void GetBBox(void*, void*, int, int, int);   // @ 0x00480e90 region helper
-    char bbox[0x28];
-    GetBBox(*(void**)(self + 0x10), bbox, 1, 0, 0);
-    (void)angle;
+    cSPBoundingBox bounds = mBlock->GetBBox(1, false, false);   // 0x0044ae00
+
+    cSPTransform transform;                                     // 0x00409930
+    transform.mRotation = kIdentityMatrix;                      // 0x015d4ea8
+    transform.mScale = 1.0f;
+    transform.mTranslation = kZeroVector;                       // 0x015d4fd8
+    transform.mFlags = 0;
+    transform.mModificationCount = 0;
+    bounds.TransformBy(transform);                              // 0x00409dd0
+
+    Vector3 center;
+    bounds.GetCenter(center);                                   // 0x00409b90
+
+    Vector3 target = center - mPickOrigin;                      // 0x0041db10
+    Vector3 dir = Normalize(target);                            // 0x00436ce0
+
+    Vector3 scaled;
+    // The first alignment test is an inline dot the original folds into the compare; the
+    // second goes through the shared Dot3 helper.
+    if (AbsF(mPickDirection.x * dir.x + mPickDirection.y * dir.y + mPickDirection.z * dir.z) > 0.999f) {
+        Vector3Copyable adjusted(dir);                          // 0x004098a0
+        adjusted[0] += offset * 5.0f;
+        adjusted.Vec() = Normalize(adjusted.Vec());
+        if (AbsF(Dot3(mPickDirection, adjusted)) > 0.999f) {    // 0x00455cc0
+            adjusted.Vec() = dir;
+            adjusted[1] += offset * 5.0f;
+            adjusted.Vec() = Normalize(adjusted.Vec());
+        }
+        Vector3Copyable s1(adjusted * offset);                  // 0x0041dca0, 0x004098a0
+        scaled = s1;
+    } else {
+        Vector3Copyable s2(dir * offset);                       // 0x0041dca0, 0x004098a0
+        scaled = s2;
+    }
+
+    Vector3Copyable sum(mPickDirection + scaled);               // 0x0041dc10, 0x004098a0
+    mPickDirection = Normalize(sum);
 }
 
 // @ 0x00480320
