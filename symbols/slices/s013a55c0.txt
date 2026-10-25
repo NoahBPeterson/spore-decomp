@@ -1,0 +1,2 @@
+013a6f80 ?FUN_013a6f80@@YAXXZ  # FUN_013a6f80 migrated from s013a55c0 (verbatim, slice spelling)
+013a72b0 ?FUN_013a72b0@@YAXXZ  # FUN_013a72b0 migrated from s013a55c0 (verbatim, slice spelling)

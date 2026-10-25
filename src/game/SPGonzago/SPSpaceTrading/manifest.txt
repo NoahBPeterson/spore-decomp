@@ -1,0 +1,18 @@
+# source  symbol  va  flags
+../src/game/SPGonzago/SPSpaceTrading.cpp  ?MapRareToSpiceKey@SP@@YGXPAUResourceKey@@@Z  01039690  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPSpaceTrading.cpp  ?Cast@cHandlerIface@SP@@UAEPAXI@Z  010397b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPSpaceTrading.cpp  ?GetUserItem@cSPSpaceTrading@SP@@QAEPAUcSpaceInventoryItem@@I@Z  01039ab0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPSpaceTrading.cpp  ?GetNPCItem@cSPSpaceTrading@SP@@QAEPAUcSpaceInventoryItem@@I@Z  01039ad0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPSpaceTrading.cpp  ?MarkNPCStores@cSPSpaceTrading@SP@@QAEX_N@Z  01039b00  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPSpaceTrading.cpp  ?GetItemValue@cSPSpaceTrading@SP@@QAEHPAUcSpaceInventoryItem@@@Z  01039b70  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPSpaceTrading.cpp  ?GetTradeBalance@cSPSpaceTrading@SP@@QAEHXZ  01039ca0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPSpaceTrading.cpp  ?GetRareKeyCount@cSPSpaceTrading@SP@@QAEHI@Z  01039ff0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPSpaceTrading.cpp  ?eastl_insertion_sort@@YAXPAU?$intrusive_ptr@UcSpaceInventoryItem@@@@0P6AHPAUcSpaceInventoryItem@@1@Z@Z  0103a0e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPSpaceTrading.cpp  ?eastl_iter_swap@@YAXAAU?$intrusive_ptr@UcSpaceInventoryItem@@@@0@Z  0103a330  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPSpaceTrading.cpp  ?random_shuffle@@YAXPAUResourceKey@@0PAURandomLinearCongruential@@@Z  0103b3e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPSpaceTrading.cpp  ?FUN_0103be80@@YAPAUEntry24@@PAU1@00@Z  0103be80  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPSpaceTrading.cpp  ?ShutdownGonzagoSubsystem@cSPSpaceTrading_s0103_d380@@QAEXXZ  0103dd20  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPSpaceTrading.cpp  ?FUN_0103dd80@cSPSpaceTrading_s0103_d380@@QAEXXZ  0103dd80  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPSpaceTrading.cpp  ?FUN_010406d0@cSPSpaceTrading_s0103_fe90@@QAEXXZ  010406d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPSpaceTrading.cpp  ?FUN_013a6f80@@YAXXZ  013a6f80  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPSpaceTrading.cpp  ?FUN_013a72b0@@YAXXZ  013a72b0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include

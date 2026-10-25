@@ -1,1 +1,3 @@
-0103e8e0 SP::cSPSpaceTrading::CreateNPCInventory  # PDB name via card; refreshes/creates the NPC store for the visited planet and fills the spice-trade lists
+00ba9370 ?GetEmpireByID@cStarManager@SP@@QBEPAVcEmpire@2@I@Z  # SP::cStarManager::GetEmpireByID (callee of s0103e8e0, named from the dev publics; slice address comment)
+00c308d0 ?GetStars@cEmpire@SP@@QBEABV?$vector@V?$AutoRefCount@VcStarRecord@SP@@@EA@@Usp_vector_allocator@eastl@@@eastl@@XZ  # SP::cEmpire::GetStars (callee of s0103e8e0, named from the dev publics; slice address comment)
+0103e8e0 ?CreateNPCInventory@cSPSpaceTrading_s0103_e8e0@SP@@QAEXPAUcPlanetRef@@H@Z  # cSPSpaceTrading_s0103_e8e0::CreateNPCInventory migrated from s0103e8e0 (verbatim, slice spelling)

@@ -1,2 +1,4 @@
-01499cac ??_7cSpaceRelationshipTuning@@6B@  # SP::cSpaceRelationshipTuning vtable
+0103fe90 ?CollectSpicePile@cSPSpaceTrading_s0103_fe90@@SAXPAX0@Z  # cSPSpaceTrading_s0103_fe90::CollectSpicePile migrated from s0103fe90 (verbatim, slice spelling)
+010406d0 ?FUN_010406d0@cSPSpaceTrading_s0103_fe90@@QAEXXZ  # cSPSpaceTrading_s0103_fe90::FUN_010406d0 migrated from s0103fe90 (verbatim, slice spelling)
 013eb394 ??_7PaintSystem@@6B@               # SP::PaintSystem (base) vtable
+01499cac ??_7cSpaceRelationshipTuning@@6B@  # SP::cSpaceRelationshipTuning vtable
