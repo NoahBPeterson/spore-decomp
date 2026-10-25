@@ -139,7 +139,7 @@ void FUN_00bc17a0(void* param_1, void* param_2, int, int, int, void* root)
 // root record into each successive position
 // ===========================================================================
 // @ 0x00bc1830
-void FUN_00bc1830(void* param_1, void* param_2, void* param_3)
+void FUN_00bc1830(void* param_1, void* param_2, void* param_3, HeapCompare)
 {
     // Construct the eastl node temporary the sort helpers expect on the stack.
     uint32_t node[7];
@@ -176,19 +176,41 @@ void FUN_00bc1830(void* param_1, void* param_2, void* param_3)
 }
 
 // ===========================================================================
+// 0x00bc1940  FUN_00bc1940: introspective recursion for the record sort: while
+// the range is longer than 0x1c records, partition it around the median and
+// recurse into the right half; finish with a heap sort once the depth runs out.
+// ===========================================================================
+// @ 0x00bc1940
+void FUN_00bc1940(void* param_1, void* param_2, int depth, HeapCompare compare)
+{
+    while ((int)((char*)param_2 - (char*)param_1) / 0xc > 0x1c && depth > 0) {
+        ResourceKey* pivot = (ResourceKey*)FUN_00bbfbf0(param_1,
+            (char*)param_1 + ((int)((char*)param_2 - (char*)param_1) / 0xc / 2) * 0xc,
+            (char*)param_2 - 0xc, compare);
+        void* part = FUN_00bbfce0(param_1, param_2, *(Record12*)pivot, compare);
+        --depth;
+        FUN_00bc1940(part, param_2, depth, compare);
+        param_2 = part;
+    }
+    if (depth == 0)
+        FUN_00bc1830(param_1, param_2, param_2, compare);
+}
+
+// ===========================================================================
 // 0x00bc1a50  FUN_00bc1a50: introspective record sort entry point
 // ===========================================================================
 // @ 0x00bc1a50
 void FUN_00bc1a50(void* param_1, void* param_2)
 {
     if (param_1 != param_2) {
+        HeapCompare compare;
         uint32_t scratch[6];
         FUN_00af0d40(scratch);
         int n = 0;
         int cnt = (int)((char*)param_2 - (char*)param_1) / 0xc;
         for (int t = cnt; t != 0; t >>= 1)
             ++n;
-        FUN_00bc1940(param_1, param_2, n * 2 - 2);
+        FUN_00bc1940(param_1, param_2, n * 2 - 2, compare);
         FUN_00af0d40(scratch);
         if (cnt > 0x1c) {
             FUN_00bbfa30(param_1, (char*)param_1 + 0x150);

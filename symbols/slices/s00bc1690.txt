@@ -13,3 +13,4 @@
 00bc23d0 ?FUN_00bc23d0@@YIXPAUSoundSlots@@HHMMM@Z  # position one sound slot's listener
 00bc24c0 ?FUN_00bc24c0@@YGIM@Z  # classify a value against three thresholds
 00bc2520 ?FUN_00bc2520@@YAEPAX@Z  # planet rotation dot test
+00bc1940 ?FUN_00bc1940@@YAXPAX0HUHeapCompare@@@Z  # introspective record-sort recursion (median/get_partition)

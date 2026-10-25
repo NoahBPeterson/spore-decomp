@@ -10,18 +10,51 @@ void  FUN_00af0d40(void* out);                                  // 0x00AF0D40
 void  FUN_00bc0740(void* base, int a, int b, int c,
                    uint32_t v0, uint32_t v1, uint32_t v2);      // 0x00BC0740
 void  FUN_00bc0840(void* a, void* b);                           // 0x00BC0840
-void  FUN_00bc1940(void* a, void* b, int c);                    // 0x00BC1940
+// The stateful comparator (an eastl lookup tree) that the record-sort helpers take by
+// value; its tree is torn down by the destructor in the callee's epilogue.
+struct Record12 { uint32_t mType; uint32_t mGroup; uint32_t mInstance; };
+void  DoNukeSubtree(void* key);                                 // 0x009A9600
+void  operator_delete__(void* p);                               // 0x00F47380
+
+struct HeapCompare {
+    uint32_t mAllocator;                                        // +0x00
+    void*    mpLeft;                                            // +0x04
+    void*    mpRight;                                           // +0x08
+    void*    mpRoot;                                            // +0x0c
+    uint8_t  mColor;                                            // +0x10
+    uint8_t  mPad11[3];                                         // +0x11
+    uint32_t mSize;                                             // +0x14
+    uint32_t mPad18;                                            // +0x18
+
+    HeapCompare() : mAllocator(0), mpLeft(0), mpRight(0), mpRoot(0), mColor(0), mSize(0) {}
+    HeapCompare(const HeapCompare& src);                        // 0x00AF0D40
+    int* Key(const Record12& v);                                // 0x0103DE50
+    void DoNukeSubtree(void* node)
+    {
+        while (node) {
+            DoNukeSubtree(*(void**)node);
+            void* next = *(void**)((char*)node + 4);
+            operator_delete__(node);
+            node = next;
+        }
+    }
+    ~HeapCompare() { DoNukeSubtree(mpRoot); }
+};
+
+void  FUN_00bc1940(void* a, void* b, int depth, HeapCompare compare);  // 0x00BC1940
 void  FUN_00bbfa30(void* a, void* b);                           // 0x00BBFA30
 void  FUN_00bbfb10(void* a, void* b);                           // 0x00BBFB10
+
+// median / get_partition of the introspective sort (a 0xc-byte record is the pivot).
+void* FUN_00bbfbf0(void* a, void* b, void* c, HeapCompare compare);   // 0x00BBFBF0
+void* FUN_00bbfce0(void* first, void* last, Record12 pivot,
+                   HeapCompare compare);                              // 0x00BBFCE0
 void  FUN_0103de50();                                           // 0x0103DE50 (Key accessor)
 void  SpVector_DoInsertKey(void* a, void* b, void* c);          // 0x004E3E10
 
 // A 0x1c-byte eastl rbtree node/temporary, constructed through FUN_00af0d40.
 struct RcMapNode { void FUN_00af0d40(void* out); };             // 0x00AF0D40
 struct RcKeyAccessor { uint32_t* GetKey(void* record); };        // 0x0103DE50
-
-void  DoNukeSubtree(void* key);                                 // 0x009A9600
-void  operator_delete__(void* p);                               // 0x00F47380
 
 // --- game subsystems ---
 void* cSPLivingUniverse_GetUniverseContext();                   // 0x1021080
