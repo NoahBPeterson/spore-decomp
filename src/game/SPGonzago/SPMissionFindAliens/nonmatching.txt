@@ -1,0 +1,7 @@
+# va  diff-bytes  reason
+00c4e230 31 Complete mission setup helper; residual is initialisation ordering and register allocation.
+00c55390 203 (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) find aliens mission tick; the base tick, the planet and empire lookups and the mission state helpers are unresolved so the found/target sweep collapses to guarded calls; equiv UNSUPPORTED (unresolved mission services)
+00c55500 40 (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) contact grob handoff; the grob dispatch slot 0x6c and the accept/reject helpers are unresolved so the idempotence check and the UI refresh stay as dispatch helper calls; equiv UNSUPPORTED (unresolved grob services)
+00c55540 131 (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) find aliens init; the base init, the property list fingerprint lookup (key type word at +6) and the flag helper are unresolved; equiv UNSUPPORTED (unresolved property services)
+00c555d0 105 (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) mission message routing for the contact event; planet lookups and the progress predicates are unresolved so the target/found branches reduce to calls; equiv UNSUPPORTED (unresolved message services)
+00c55660 126 (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) short description text; the property list string assignment and the state dependent text lookup are unresolved; equiv UNSUPPORTED (unresolved text services)

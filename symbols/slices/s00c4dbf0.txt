@@ -1,3 +1,4 @@
+00c4e230 ?FUN_00c4e230@@YIXPAX0@Z  # FUN_00c4e230 migrated from s00c4dbf0 (verbatim, slice spelling)
 00c4ed50 ?FUN_00c4ed50@@YIHPAX0@Z  # FUN_00c4ed50 migrated from s00c4dbf0 (verbatim, slice spelling)
 00c4ee90 ?FUN_00c4ee90@@YIHPAX0HH@Z  # FUN_00c4ee90 migrated from s00c4dbf0 (verbatim, slice spelling)
 00c4eee0 ?FUN_00c4eee0@@YIXPAX0@Z  # FUN_00c4eee0 migrated from s00c4dbf0 (verbatim, slice spelling)
