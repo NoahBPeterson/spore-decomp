@@ -7,9 +7,9 @@
 //   0x01202fd0  segment triple: three SP::Segment constructions over the three
 //               16-byte points copied out of `this`, written into an output block.
 //   0x012030c0  SSE fragment: |v.x| + |v.y| + |v.z| for a vector whose address the
-//               caller leaves in EAX.  See work/match/scratch_s01202ca0_fixlog.txt
-//               -- it is a fragment Ghidra split out of a larger routine and no
-//               MSVC x86 convention delivers an argument in EAX.
+//               caller leaves in EAX.  No MSVC x86 convention delivers an argument in
+//               EAX, so this spelling (an ordinary pointer parameter) can never be
+//               byte-exact; see nonmatching.txt.
 #include <xmmintrin.h>
 
 typedef unsigned char u8;
@@ -193,15 +193,18 @@ u32 SegSrc::Build3(u32 a1, u32 a2, SegBlock* out)
 // The original consumes a pointer left in EAX by its caller.  No MSVC x86 calling
 // convention delivers an argument in EAX, so this spelling (an ordinary pointer
 // parameter) is the closest C++ can get; it can never be byte-exact or ABI
-// equivalent.  Logged as PARTIAL in work/match/scratch_s01202ca0_fixlog.txt.
+// equivalent.
 // --------------------------------------------------------------------------
 
 // @ 0x012030c0
-float AbsSum(const __m128* v)
+float AbsSum(const __m128* vp)
 {
-    __m128 abs = _mm_max_ps(_mm_mul_ps(_mm_set1_ps(-1.0f), *v), *v);
-    float z = _mm_cvtss_f32(_mm_shuffle_ps(abs, abs, 2));
-    float y = _mm_cvtss_f32(_mm_shuffle_ps(abs, abs, 1));
-    float x = _mm_cvtss_f32(abs);
+    __m128 abs = _mm_max_ps(_mm_mul_ps(_mm_set1_ps(-1.0f), *vp), *vp);
+    __m128 a = abs;
+    __m128 b = abs;
+    __m128 c = abs;
+    float z = a.m128_f32[2];
+    float y = b.m128_f32[1];
+    float x = c.m128_f32[0];
     return z + y + x;
 }
