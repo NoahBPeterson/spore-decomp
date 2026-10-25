@@ -1,1 +1,7 @@
-00c1b020 ?FUN_00c1b020@cSPCreatureBase@@QAEXH@Z  # cSPCreatureBase::FUN_00c1b020 migrated from s00c1aad0 (verbatim, slice spelling)
+00c1aad0 cSPCreatureBase::FUN_00c1aad0  # sprint/stealth timer step (species sprint pitch/rate, speed re-evaluation)
+00c1ac70 cSPCreatureBase::FUN_00c1ac70  # build a local frame, transform it to world, reach-point query
+00c1ad10 cSPCreatureBase::SetSprinting  # sprint on/off: game-mode check, +0xbb0 and speed-boost bits, speed re-evaluation
+00c1aed0 cSPCreatureBase::SetStealthed  # set stealth rate/flag, start the 3D stealth sound
+00c1b020 cSPCreatureBase::FUN_00c1b020  # creature leap-at-target step (migrated verbatim)
+00c1b790 cGoalVector::Assign  # copy-assign of the 60-byte-record vector (grow/copy/fill, restamp mpEnd)
+00c1b8c0 ?FUN_00c1b8c0@@YAXPAVIStreamNode@@PAUcQuad16Vector@@@Z  # deserialize 16-byte records into the vector
