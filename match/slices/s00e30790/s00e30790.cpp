@@ -5,6 +5,9 @@
 // 2008-PDB name survives.
 #include "types.h"
 #include <intrin.h>
+#include <math.h>
+extern "C" float __cdecl sinf(float);
+#pragma intrinsic(sinf)
 
 // ---------------------------------------------------------------- vtables (masked)
 extern void* g_vt_flash0;    // 0x1481948  vtbl_UI::cUIFlashWindowManager
@@ -20,13 +23,14 @@ extern void* g_vt_gon2;      // 0x14818c0
 extern void* g_data_154df28;
 
 // ---------------------------------------------------------------- free callees
-void* __cdecl operator_new(unsigned, const char*, int, int, const char*, int); // 0xf473a0
+void* __cdecl operator_new(unsigned, const char*, int, int, int, int);        // 0xf473a0
 void  __cdecl operator_delete(void*);                                          // 0xf47380
-void  __cdecl FUN_00847ff0(void*, void*, void*);                               // 0x847ff0
+void* __cdecl FUN_00847ff0(void*, void*, void*);                               // 0x847ff0
 void  __cdecl EA_RemoveHandler(int, int, int, int, int);                       // 0x571db0
 int   __cdecl SP_PropertyManager(void);                                        // 0x67de30
-void  __cdecl SPUIShader_AcquireShaderProxy(void);                             // 0x82f630
+void* __cdecl SPUIShader_AcquireShaderProxy(void);                             // 0x82f630
 void* __cdecl FUN_00e2e8a0(void*, void*, void*, int);                          // 0xe2e8a0
+void  __cdecl FUN_00ac9480(void*, void**);                                     // 0xac9480
 
 // thiscall callees (this in ecx); stubs to get the exact calling shape
 struct TC {
@@ -52,6 +56,11 @@ struct TC {
 };
 
 // ---------------------------------------------------------------- element / container types
+// header the array allocator keeps directly in front of every block
+struct AllocHeader {
+    int mRefCount;   // +0x00 (-4 from the element pointer)
+};
+
 struct Elem1c {
     uint32_t f0, f4, f8;
     void*    fc;
@@ -76,6 +85,7 @@ struct Vec1c {
     void  insert_(Elem1c* pos, const Elem1c* val);   // 0x00e30790
     void  push_back_default();                       // 0x00e30c00
     void  erase(void* a, void* b);                   // 0x00d018d0
+    Elem1c* erasedAt(Elem1c* p);                     // 0x00e30740
 };
 
 // Outer object whose Elem1c vector lives at +0x10/+0x14; remove-if helpers are members of
@@ -97,16 +107,45 @@ struct MgrVec {
     void  update(int dt);   // 0x00e30990
 };
 
+struct HashNode {
+    HashNode* mpNext;                             // +0x00
+    uint32_t  mKey;                               // +0x04  (pair<const unsigned int, wstring> starts here)
+    void*     mpNameBegin;                        // +0x08
+    void*     mpNameEnd;                          // +0x0c
+    void*     mpNameCap;                          // +0x10
+};
+
+struct HashIter {
+    HashNode* mpNode;                             // +0x00
+    uint32_t  mBucket;                            // +0x04
+};
+
+// value pushed into the table on a miss: key + name slots, then two ref-counted owners
+struct HashValue {
+    uint32_t  mKey;                               // +0x00
+    void*     mpName;                             // +0x04
+    uint32_t  mPad08;                             // +0x08
+    void*     mpOwner0;                           // +0x0c
+    void*     mpOwner1;                           // +0x10
+};
+
+struct RefOwner {
+    virtual void AddRef();                        // +0x00
+    virtual void Release();                       // +0x04
+};
+
 struct HT {
-    char   pad0[4];
-    void** buckets;   // +0x04
-    int    nbuckets;  // +0x08
-    char   pad1[4];
-    void  find(void* out, void* key);         // 0x00a3b2c0
-    void* find_or_add(void* key);             // 0x00e30b60
+    char       pad0[4];
+    HashNode** buckets;   // +0x04
+    int        nbuckets;  // +0x08
+    char       pad1[4];
+    void  find(HashIter* out, void* key);        // 0x00a3b2c0
+    void  insert(HashIter* out, const HashValue* v, int flag);  // 0x00e2ff50
+    void* find_or_add(void* key);                // 0x00e30b60
 };
 
 // ---------------------------------------------------------------- 0x00e30790
+// @ 0x00e30790
 void Vec1c::insert_(Elem1c* pos, const Elem1c* val)
 {
     if (end != cap) {
@@ -121,19 +160,19 @@ void Vec1c::insert_(Elem1c* pos, const Elem1c* val)
         return;
     }
     Elem1c* oldBegin = begin;
-    unsigned size = (unsigned)(end - begin);
-    unsigned ncap = size ? size * 2 : 1;
-    Elem1c* nb = (Elem1c*)operator_new(ncap * 0x1c, "Simulator", 0, 0,
-                                       "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\E", 0xd1);
-    Elem1c tmp = *val;
-    FUN_00847ff0(oldBegin, pos, nb);
-    FUN_00847ff0((void*)((char*)nb + 0x1c), (void*)(pos + 1), (void*)((char*)nb + 0x40));
-    if (begin && *(int*)((char*)begin - 4))
+    unsigned count = (unsigned)(end - begin);
+    unsigned ncap = count ? count * 2 : 1;
+    Elem1c* nb = 0;
+    if (ncap)
+        nb = (Elem1c*)operator_new(ncap * sizeof(Elem1c), "Simulator", 0, 0, 0x13ebb38, 0xd1);
+    Elem1c* at = (Elem1c*)FUN_00847ff0(oldBegin, pos, nb);
+    if (at != 0)
+        *at = *val;                                  // slot for the new element
+    Elem1c* ne = (Elem1c*)FUN_00847ff0(end, pos, nb + 1);
+    if (begin && ((AllocHeader*)begin)[-1].mRefCount)
         operator_delete(begin);
-    FUN_00847ff0((void*)end, (void*)end, (void*)((char*)nb + 0x1c));
-    *(Elem1c*)((char*)nb + ((char*)pos - (char*)oldBegin)) = tmp;
+    end = ne;
     begin = nb;
-    end = (Elem1c*)((char*)nb + 0x1c + ((char*)end - (char*)oldBegin));
     cap = nb + ncap;
 }
 
@@ -188,6 +227,7 @@ MgrA* MgrA::scalar_dtor(int flag)
 }
 
 // ---------------------------------------------------------------- 0x00e30990
+// @ 0x00e30990
 void MgrVec::update(int dt)
 {
     if (vec.begin == vec.end) {
@@ -195,19 +235,16 @@ void MgrVec::update(int dt)
         return;
     }
     counter += dt;
-    float t = (float)counter;
-    if (counter < 0)
-        t += 4294967296.0f;
-    float s = 0.0f;  // sinf(t * 0.01f); the original uses x87 fsin
-    Elem1c* e = vec.begin;
-    while (e != vec.end) {
+    float t = (float)(unsigned)counter;
+    float s = sinf(t * 0.01f);
+    unsigned c = ((unsigned)(uint8_t)(int)((s + 1.0f) * 0.5f * 255.0f) << 24) | 0xffffffu;
+    for (Elem1c* e = vec.begin; e != vec.end; ) {
         e->f10 += dt;
         uint32_t limit = e->f18 ? *(uint32_t*)e->f18 : 0x1388u;
         if (limit != 0xffffffffu && e->f10 >= limit) {
             ((TC*)this)->f_e2f480(e);
-            e = (Elem1c*)((TC*)((char*)this + 0x10))->f_e30740(e);
+            e = vec.erasedAt(e);
         } else {
-            unsigned c = ((unsigned)(uint8_t)(int)((s + 1.0f) * 0.5f * 255.0f) << 24) | 0xffffffu;
             ((TC*)this)->f_e2f3f0(e, c);
             e += 1;
         }
@@ -251,14 +288,25 @@ void VecHolder::remove_off8(uint32_t key)
 }
 
 // ---------------------------------------------------------------- 0x00e30b60
+// @ 0x00e30b60
 void* HT::find_or_add(void* key)
 {
-    char it[8];
-    find(it, key);
-    if (*(void**)((char*)this + 4) &&
-        *(void**)it != *(void**)((char*)*(void**)((char*)this + 4) + *(int*)((char*)this + 8) * 4))
-        return (char*)*(void**)it + 4;
-    return (char*)*(void**)it + 4;
+    HashIter it;
+    find(&it, key);
+    if (it.mpNode != buckets[nbuckets])
+        return &it.mpNode->mKey;
+    HashValue val;
+    val.mKey = *(const uint32_t*)key;
+    val.mpName = it.mpNode;
+    val.mPad08 = 0;
+    val.mpOwner0 = 0;
+    val.mpOwner1 = 0;
+    insert(&it, &val, 0);
+    if (val.mpOwner1)
+        ((RefOwner*)val.mpOwner1)->Release();
+    if (val.mpOwner0)
+        ((RefOwner*)val.mpOwner0)->Release();
+    return &it.mpNode->mKey;
 }
 
 // ---------------------------------------------------------------- 0x00e30c00
@@ -327,13 +375,42 @@ MgrA* __fastcall MgrA_ctor(MgrA* self)
 }
 
 // ---------------------------------------------------------------- 0x00e30d20
+struct AutoRefCount {
+    void* mp;                                      // +0x00
+    AutoRefCount& assign(void* p);                 // 0x00b5f950
+};
+
+// one entry of the flash frame table (value type of HT)
+struct FrameValue {
+    uint32_t     mDelay;                           // +0x00  milliseconds the frame stays up
+    AutoRefCount mText;                            // +0x04  IWinText reference
+    uint8_t      mFlag08;                          // +0x08
+    char         _pad09[3];
+    void*        mProp;                            // +0x0c  filled by 0x00ac9480
+    uint32_t     mPad10;                           // +0x10
+};
+
+struct FrameProp {
+    void AddRef();                                 // +0x00
+    void Release();                                // +0x04
+};
+
+struct PropertyManager {
+    char pad0[0x2c];
+    bool get(int key, const wchar_t* name, void** out);   // +0x2c
+};
+
 struct MgrCard {
-    char pad0[0x24];
-    char list[0x20];   // +0x24
+    char   pad0[0x10];
+    Vec1c  vec;                         // +0x10  element vector (see 0x00e30c00)
+    char   pad1[0x24 - 0x1c];
+    HT     ht;                          // +0x24  frame hash table
+    char   pad2[0x44 - 0x34];
     void Add(void** out, int p);
     void AddOrUpdate(int a, void* p, unsigned c, uint8_t flag, int e);
     void Wrapper(int a, int b, int c, int d);
     void Destroy();
+    void applyFrame(FrameValue* fv);   // 0x00e2fcb0
 };
 
 struct Card {
@@ -389,53 +466,55 @@ void MgrCard::Destroy()
 }
 
 // ---------------------------------------------------------------- 0x00e30e20
+// @ 0x00e30e20
 void MgrCard::AddOrUpdate(int a, void* p, unsigned c, uint8_t flag, int e)
 {
-    Elem1c* begin = *(Elem1c**)((char*)this + 0x10);
-    Elem1c* end = *(Elem1c**)((char*)this + 0x14);
-    for (Elem1c* q = begin; q != end; q += 1) {
-        if (q->f0 == (uint32_t)a && q->f4 == (uint32_t)e) {
-            q->f10 = 0;
-            return;
-        }
+    Elem1c* it = this->vec.begin;
+    Elem1c* end = this->vec.end;
+    while (it != end) {
+        if (it->f0 == (uint32_t)a && it->f4 == (uint32_t)e)
+            break;
+        it += 1;
     }
-    void* found = 0;
+    if (it != end) {
+        it->f10 = 0;
+        return;
+    }
+    Elem1c* found = 0;
     if (p) {
-        void* q = (void*)FUN_00e2e8a0(begin, end, p, 0);
-        (void)q;
+        Elem1c* r = (Elem1c*)FUN_00e2e8a0(this->vec.begin, this->vec.end, p, 0);
+        if (r != this->vec.end)
+            found = r;
     }
-    Vec1c* v = (Vec1c*)((char*)this + 0x10);
-    v->push_back_default();
-    Elem1c* el = (Elem1c*)(*(char**)((char*)this + 0x14) - 0x1c);
+    this->vec.push_back_default();
+    Elem1c* el = this->vec.end - 1;
     el->f0 = (uint32_t)a;
     el->f4 = (uint32_t)e;
     el->f8 = c;
     el->fc = p;
-    el->f10 = found ? *(uint32_t*)((char*)found + 0x10) : 0;
+    el->f10 = found ? found->f10 : 0;
     el->f14 = flag;
     el->f18 = 0;
 
-    HT* ht = (HT*)((char*)this + 0x24);
-    char it[4];
-    ht->find(it, &c);
-    if (ht->buckets && *(void**)it != *(void**)((char*)ht->buckets + ht->nbuckets * 4)) {
-        el->f18 = (uint32_t)((char*)*(void**)it + 4);
+    FrameProp* prop = 0;                         // frame-property object handed back by the manager
+    HashIter hit;
+    this->ht.find(&hit, &c);
+    if (hit.mpNode != this->ht.buckets[this->ht.nbuckets]) {
+        el->f18 = (uint32_t)&hit.mpNode->mKey;
     } else {
-        int pm = SP_PropertyManager();
-        if (p) ((void(__thiscall*)(void*))(*(void***)p)[1])(p);
-        char ok = ((char(__thiscall*)(int, unsigned, int, void*))(*(void***)pm)[0x2c / 4])(pm, c, 0x689fa1a, &p);
-        if (ok) {
-            void* x = ht->find_or_add(&c);
-            *(uint32_t*)x = 5000;
-            SPUIShader_AcquireShaderProxy();
-            ((TC*)((char*)x + 4))->f_b5f950(0);
-            *((uint8_t*)x + 8) = 0;
-            ((TC*)((char*)x + 0xc))->f_ac9480(&p);
-            ((TC*)this)->f_e2fcb0(x);
-            el->f18 = (uint32_t)x;
+        PropertyManager* pm = (PropertyManager*)SP_PropertyManager();
+        if (prop) { FrameProp* old = prop; prop = 0; old->Release(); }
+        if (pm->get((int)c, (const wchar_t*)0x689fa1a, (void**)&prop)) {
+            FrameValue* fv = (FrameValue*)this->ht.find_or_add(&c);
+            fv->mDelay = 0x1388;
+            fv->mText.assign(SPUIShader_AcquireShaderProxy());
+            fv->mFlag08 = 0;
+            FUN_00ac9480(&fv->mProp, (void**)&prop);
+            applyFrame(fv);
+            el->f18 = (uint32_t)fv;
         }
     }
-    if (p) ((void(__thiscall*)(void*))(*(void***)p)[1])(p);
+    if (prop) { FrameProp* old = prop; old->Release(); }
 }
 
 // ---------------------------------------------------------------- 0x00e30f90
