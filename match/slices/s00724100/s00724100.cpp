@@ -4,6 +4,7 @@
 //   +0x08 mesh, +0x44 section, +0x48 face clusters (0x28 each), +0x5c dual edges (0x18 each),
 //   +0x70 heap of edge pointers, +0x88 cluster count.
 #include <math.h>
+#include <string.h>
 #include "types.h"
 
 extern "C" void __cdecl EASTL_allocator_deallocate(void* p); // 0x00f47380
@@ -228,8 +229,115 @@ void cMeshClusterer::Setup() {
     }
 }
 
+// ---- helpers for the two free routines below ------------------------------------
+// element-range destructor for the +0x248 vector's (non-trivial) elements.
+void __stdcall DestroyRange58(void* first, void* last);   // 0x006df9d0  ?DestroyRange58@@YGXPAUElem58@@0@Z
+void __fastcall VecElt16_dtor(void* self);                // 0x006df3b0  eastl::vector<Elem16>::~vector
+void __fastcall RefVector_dtor(void* self);               // 0x0041eb80  RefVector::~RefVector
+
 // @ 0x00724700
-void __cdecl FUN_00724700(void* this_) { (void)this_; }
+// Destructor: tears down the three eastl vector buffers (+0x234, +0x248, +0x25c),
+// destroys the +0x248 element range, then the +0x18 and +0x04 members.
+void __fastcall FUN_00724700(void* self, int /*unused*/) {
+    char* p = (char*)self;
+
+    void* v25c = *(void**)(p + 0x25c);
+    if (v25c != 0 && *(int*)((char*)v25c - 4) != 0)
+        EASTL_allocator_deallocate(v25c);
+
+    void* vEnd = *(void**)(p + 0x24c);
+    void* vBegin = *(void**)(p + 0x248);
+    DestroyRange58(vBegin, vEnd);
+
+    void* v248 = *(void**)(p + 0x248);
+    if (v248 != 0 && *(int*)((char*)v248 - 4) != 0)
+        EASTL_allocator_deallocate(v248);
+
+    void* v234 = *(void**)(p + 0x234);
+    if (v234 != 0 && *(int*)((char*)v234 - 4) != 0)
+        EASTL_allocator_deallocate(v234);
+
+    VecElt16_dtor(p + 0x18);
+    RefVector_dtor(p + 0x04);
+}
+
+// ---- 2D convex hull (Graham scan) ------------------------------------------------
+// 8-byte planar point.
+struct Pt2 { float x, y; };
+
+// {begin,end,cap} 8-byte-element vector. DoInsertValues inserts `n` copies of `value`
+// at `pos` (grows the buffer); 8-byte-element slow-path append helper below.
+struct Pt2Vec {
+    Pt2* mpBegin;   // +0x00
+    Pt2* mpEnd;     // +0x04
+    Pt2* mpCap;     // +0x08
+    void DoInsertValues(Pt2* pos, int n, const Pt2& value);   // 0x00479830
+};
+
+struct VecAppend8 { void Append(void* end, void* value); };   // 0x00722410
 
 // @ 0x007247c0
-void __cdecl FUN_007247c0() {}
+// Builds the convex hull of `n` planar points (starting at the min-x point, CCW) into
+// a 64-element inline buffer with heap fallback, then assigns it to `out`.
+void __cdecl FUN_007247c0(const Pt2* pts, int n, Pt2Vec* out) {
+    Pt2 seed = pts[0];                 // fill value used by the assign growth path
+
+    int start = 0;
+    float minx = pts[0].x;
+    for (int i = 1; i < n; ++i) {
+        if (pts[i].x < minx) {
+            minx = pts[i].x;
+            start = i;
+        }
+    }
+
+    Pt2 inlineBuf[64];
+    Pt2Vec hull;
+    hull.mpBegin = inlineBuf;
+    hull.mpEnd = inlineBuf;
+    hull.mpCap = inlineBuf + 64;
+    Pt2* owner = inlineBuf;            // inline storage; a heap buffer differs from it
+
+    hull.mpEnd[0] = pts[start];
+    ++hull.mpEnd;
+
+    int i = (start + 1) % n;
+    if (i != start) {
+        do {
+            const Pt2* pAppend = &pts[i];
+            if (hull.mpEnd < hull.mpCap) {
+                if (hull.mpEnd != 0)
+                    hull.mpEnd[0] = *pAppend;
+                ++hull.mpEnd;
+            } else {
+                ((VecAppend8*)&hull)->Append(hull.mpEnd, (void*)pAppend);
+            }
+            i = (i + 1) % n;
+
+            int size = (int)(hull.mpEnd - hull.mpBegin);
+            while (size > 1) {
+                const Pt2& back = hull.mpBegin[size - 1];
+                const Pt2& prev = hull.mpBegin[size - 2];
+                const Pt2& cand = pts[i];
+                float cross = (back.x - prev.x) * (cand.y - back.y)
+                            - (back.y - prev.y) * (cand.x - back.x);
+                if (cross >= 0.0f)
+                    break;
+                --hull.mpEnd;
+                --size;
+            }
+        } while (i != start);
+    }
+
+    // out->assign(hull.begin(), hull.end())
+    int count = (int)(hull.mpEnd - hull.mpBegin);
+    int cur = (int)(out->mpEnd - out->mpBegin);
+    if (cur < count)
+        out->DoInsertValues(out->mpEnd, count - cur, seed);
+    else
+        out->mpEnd -= cur - count;
+    memcpy(out->mpBegin, hull.mpBegin, (size_t)count * sizeof(Pt2));
+
+    if (hull.mpBegin != 0 && hull.mpBegin != owner)
+        EASTL_allocator_deallocate(hull.mpBegin);
+}
