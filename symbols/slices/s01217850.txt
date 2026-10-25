@@ -1,0 +1,30 @@
+01217850 EH-funclet group  # no prologue, caller EBP, operator_delete + __ehhandler, funcinfo 0x1505958; orphaned
+01217b10 EH-funclet group  # hash_map/basic_string dtors + __ehhandler, funcinfo 0x1505a78; orphaned
+01217c10 EH-funclet group  # dtors + __ehhandler, funcinfo 0x1505b2c; orphaned
+01217d50 EH-funclet group  # dtors + __ehhandler, funcinfo 0x1505cac; orphaned
+01217df0 EH-funclet group  # dtors + __ehhandler, funcinfo 0x1505d88; orphaned
+01217e80 EH-funclet group  # dtors + __ehhandler, funcinfo 0x1505df4; orphaned
+01217f70 EH-funclet group  # dtors + __ehhandler, funcinfo 0x1505f30; orphaned
+01217fa0 EH-funclet group  # dtors + __ehhandler, funcinfo 0x1505f6c; orphaned
+012181a0 EH-funclet group  # dtors + __ehhandler, funcinfo 0x15061e4; orphaned
+01218200 EH-funclet group  # dtors + __ehhandler, funcinfo 0x1506278; orphaned
+01218290 EH-funclet group  # dtors + __ehhandler, funcinfo 0x1506320; orphaned
+01218370 EH-funclet group  # dtors + __ehhandler, funcinfo 0x15063cc; orphaned
+01218390 EH-funclet group  # dtors + __ehhandler, funcinfo 0x15063f0; orphaned
+012186c0 EH-funclet group  # MutexLock dtor/operator_delete + __ehhandler, funcinfo 0x1506784; orphaned
+01218810 EH cleanup funclet  # orphaned, enclosing function outside slice
+01218870 EH cleanup funclet  # orphaned
+012188a0 EH cleanup funclet  # orphaned
+01218950 EH cleanup funclet  # orphaned
+012189c0 EH cleanup funclet  # orphaned
+012189f0 EH cleanup funclet  # orphaned
+01218a20 EH cleanup funclet  # orphaned
+01218b60 EH cleanup funclet  # orphaned
+01218c10 EH cleanup funclet  # orphaned
+01218c40 EH cleanup funclet  # orphaned
+01218ce0 EH cleanup funclet  # orphaned
+01218d10 EH cleanup funclet  # orphaned
+01218d90 EH cleanup funclet  # orphaned
+01218de0 EH cleanup funclet  # orphaned
+01218ea0 EH cleanup funclet  # orphaned
+01218f10 EH cleanup funclet  # orphaned
