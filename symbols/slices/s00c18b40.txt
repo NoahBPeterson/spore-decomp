@@ -1,0 +1,7 @@
+00c18b40 ?FUN_00c18b40@cSPCreatureBase_s00c1_8b40@@QAEHH@Z  # cSPCreatureBase_s00c1_8b40::FUN_00c18b40 migrated from s00c18b40 (verbatim, slice spelling)
+00c190e0 ?TryJumpToTarget@cSPCreatureBase_s00c1_8b40@@QAE_NPBUVector3_s00c1_8b40@@0HM_N@Z  # cSPCreatureBase_s00c1_8b40::TryJumpToTarget migrated from s00c18b40 (verbatim, slice spelling)
+00c196a0 ?FUN_00c196a0@cSPCreatureBase_s00c1_8b40@@QAEII_N0@Z  # cSPCreatureBase_s00c1_8b40::FUN_00c196a0 migrated from s00c18b40 (verbatim, slice spelling)
+00c197a0 ?FUN_00c197a0@cSPCreatureBase_s00c1_8b40@@QAEXI@Z  # cSPCreatureBase_s00c1_8b40::FUN_00c197a0 migrated from s00c18b40 (verbatim, slice spelling)
+00c19870 ?FUN_00c19870@CreatureSubView@@QAEPAUVector3_s00c1_8b40@@PAU2@H@Z  # CreatureSubView::FUN_00c19870 migrated from s00c18b40 (verbatim, slice spelling)
+00c19940 ?FUN_00c19940@cSPCreatureBase_s00c1_8b40@@QAEX_N@Z  # cSPCreatureBase_s00c1_8b40::FUN_00c19940 migrated from s00c18b40 (verbatim, slice spelling)
+00c199e0 ?reserve@Vector003c@@QAEXI@Z  # Vector003c::reserve migrated from s00c18b40 (verbatim, slice spelling)

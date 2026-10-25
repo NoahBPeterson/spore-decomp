@@ -1,0 +1,6 @@
+00c13340 ?FUN_00c13340@@YIXPAUDestructOwner@@PAX@Z  # FUN_00c13340 migrated from s00c13340 (verbatim, slice spelling)
+00c13c60 ?FUN_00c13c60@@YIEPAUCCreature@@PAXPAHEE@Z  # FUN_00c13c60 migrated from s00c13340 (verbatim, slice spelling)
+00c13db0 ?FUN_00c13db0@@YIEPAUCCreature@@PAXHH@Z  # FUN_00c13db0 migrated from s00c13340 (verbatim, slice spelling)
+00c13eb0 ?FUN_00c13eb0@@YIXPAUCCreature@@PAX@Z  # FUN_00c13eb0 migrated from s00c13340 (verbatim, slice spelling)
+00c14070 ?FUN_00c14070@@YIXPAUCCreature@@PAXPAI@Z  # FUN_00c14070 migrated from s00c13340 (verbatim, slice spelling)
+00c141b0 ?FUN_00c141b0@@YAPAXPAUIStream@@PAH@Z  # FUN_00c141b0 migrated from s00c13340 (verbatim, slice spelling)

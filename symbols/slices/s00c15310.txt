@@ -1,0 +1,4 @@
+00c15310 ?func64h@cSPCreatureBase_s00c1_5310@@QAEXHM@Z  # cSPCreatureBase_s00c1_5310::func64h migrated from s00c15310 (verbatim, slice spelling)
+00c15470 ?FUN_00c15470@cSPCreatureBase_s00c1_5310@@QAEXHPAURefCnt@@E@Z  # cSPCreatureBase_s00c1_5310::FUN_00c15470 migrated from s00c15310 (verbatim, slice spelling)
+00c15920 ?FUN_00c15920@cSPCreatureBase_s00c1_5310@@QAEMXZ  # cSPCreatureBase_s00c1_5310::FUN_00c15920 migrated from s00c15310 (verbatim, slice spelling)
+00c15970 ?FUN_00c15970@cSPCreatureBase_s00c1_5310@@QAEMXZ  # cSPCreatureBase_s00c1_5310::FUN_00c15970 migrated from s00c15310 (verbatim, slice spelling)

@@ -1,4 +1,22 @@
 # va  diff-bytes  reason
+00c0b030
+00c0b100
+00c0b190
+00c0b220
+00c0b270
+00c0b2f0
+00c0b380
+00c0b410
+00c0b440
+00c0b510
+00c0b570
+00c0b710
+00c0b7c0
+00c0b810
+00c0b860
+00c0b8a0
+00c0b9d0
+00c0bb20
 00c0be70 6 cached-handle predicate: complete; bool return materialisation (setne/xor eax vs xor al)
 00c0c200 43 game-mode water render callback: complete; call/arg setup differs
 00c0c2d0 2 cCreatureBase::IsDefaultSpecies: complete; return materialisation
@@ -25,6 +43,26 @@
 00c0e480 52 UNSUPPORTED  cSPCreatureBase::GetTime; complete; 0 valid inputs (import decode_pointer)
 00c0e4f0 27 WEAK         creature radius/scale lookup; complete
 00c0e660 4 PASS         vector size (+0x6d4); complete
+00c0eae0 189 (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) creature steering; the rotation / validity helpers and the transform push are modelled with unresolved services, so the blend block collapses; equiv UNSUPPORTED (unresolved steering helpers)
+00c0ed60 174 (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) set creature target; the political-id and relation calls are unresolved and the animation check is inlined differently; equiv UNSUPPORTED (unresolved combatant services)
+00c0ee70 29 (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) target as creature; the interface query slot differs from retail so the null path is longer; equiv FAIL (first mismatch execution)
+00c0ee90 41 (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) apply combat target; the double interface query and the game-mode test are modelled with an unresolved accessor; equiv UNSUPPORTED (unresolved game-mode accessor)
+00c0eec0 473 (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) steering update; the velocity, surface-trace and move calls are unresolved helpers so most of the vector math is folded away; equiv UNSUPPORTED (unresolved locomotion helpers)
+00c0f280 10 (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) hide creature; the null check targets the epilogue instead of a tail call and the visibility call is unresolved; equiv FAIL (first mismatch execution)
+00c0f2e0 342 (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) trace to point; the terrain trace helper is unresolved and the distance compares are not folded into the retail sqrt form; equiv UNSUPPORTED (unresolved trace helper)
+00c0f490 107 (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) reset combatants; the three reference releases are modelled on the wrong sub-object offsets; equiv FAIL (first mismatch execution)
+00c0f510 68 (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) is slot empty; the slot count uses a pointer difference instead of the retail signed byte division; equiv FAIL (first mismatch eax&0xff)
+00c0f570 54 (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) count valid slots; the loop is a forward index scan rather than the retail raw-byte walk; equiv FAIL (first mismatch ecx (untouched by the original))
+00c0f5f0 47 (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) is full; count-valid is not inlined and the count division differs from retail; equiv FAIL (first mismatch eax&0xff)
+00c0f620 57 (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) find first empty; the slot scan is written with an index rather than the retail byte-offset walk; equiv FAIL (first mismatch ecx (untouched by the original))
+00c0f6b0 99 (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) find random empty; the random helper is unresolved and the scan order differs; equiv UNSUPPORTED (unresolved random generator)
+00c0f780 57 (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) find first valid (exported as Count); the scan loop shape differs from retail; equiv FAIL (first mismatch execution)
+00c0f810 67 (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) find next valid; the start-index clamp and byte walk differ from retail; equiv FAIL (first mismatch ecx (untouched by the original))
+00c0f8a0 55 (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) get slot combatant; the count division and bounds test are not in the retail order; equiv FAIL (first mismatch eax)
+00c0f8f0 65 (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) find slot by combatant; the pointer compare is widened to an integer compare; equiv FAIL (first mismatch ecx (untouched by the original))
+00c0f960 54 (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) find slot by key; the walk uses an index rather than the retail raw pointer stride; equiv FAIL (first mismatch eax)
+00c0f9b0 68 (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) find slot by key with index out; the out-parameter branch is ordered after the hit rather than inside it; equiv FAIL (first mismatch execution)
+00c0fa10 94 (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) find slot by combatant with index out; the compare and out-parameter order differ from retail; equiv FAIL (first mismatch eax)
 00c0fa70 102 FAIL         find animation entry by mask bit; complete; equiv eax mismatch
 00c0fba0 87 UNSUPPORTED  serialize vector via IO stream; complete; 0 valid inputs (read fault/fake-arity)
 00c0fc10 41 FAIL         dispatch element callback to +0x20 object; complete; equiv eax&0xffff mismatch
@@ -39,7 +77,30 @@
 00c10330 174 PASS         pack byte array -> remap id and apply; complete
 00c103f0 127 UNSUPPORTED  build cAnimationRemapping singleton; complete; 0 valid inputs (write fault)
 00c104d0 2043 (flags /O2 /MD /Gy /TP /arch:SSE /fp:fast) complete planet-surface aim helper: tangent-plane rejections, 3 eps-normalized cross axes, 4 wrapped signed angles (fmod/_CIfmod + pi wrap), PlanetModel()->0xb7e3b0 normal, 60-degree cone pull with smoothstep blend, |dp|<1 smoothstep blend, axis-angle rotate, exp(-3.0103 t) lerp into out; same 10 calls in order and identical ordered float-constant sequence; size 0.908x; not exact: /fp:fast operand order, xmm allocation and frame (0x9c vs 0xac)
+00c13340 97 complete: clear the four 0x34-byte ranged-attack records at +0xedc (Stop/Release/Detach on their ref-counted slots) and zero the counters at +0xc04/c08/c0c; not byte-exact (cl15 anchors the record pointer at the record base, the original anchors it at rec+0x28, so -0x28/+0/+4/-4 become +0/+0x28/+0x2c/+0x24) flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00c13c60 277 complete: can-attack / can-target predicate (record count, game mode, target flags +0x50, target byte +0x70, animator scalar +0x590, mode-dependent range ratio); not byte-exact (virtual-call and register scheduling differ; equivalence FAIL is only uint8-return eax residue, not the boolean) flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00c13db0 184 complete: swap two 0x24-byte interaction records by index and rebind their held pointers (AddRef/assign/SubRef); not byte-exact (prologue and register allocation differ; equivalence FAIL is only uint16-return eax residue, not the boolean) flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00c13eb0 373 complete: per-frame refresh of the creature's carried props (spawn/release the model world, keyword lookup, place the effect in the grasp, notify the prop); not byte-exact (inline expansion and register scheduling differ) flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00c14070 215 complete: create/bind the held-prop animation instance through the creature's animating object (Slot08/Slot0c/Slot18..Slot4c); not byte-exact (inline expansion and register scheduling differ) flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00c15310 363 cSPCreatureBase::func64h (Slice 64 bit-flag helper): complete translation of the flag get/set/clear path plus the 3 ability-state loop bodies; instruction stream diverges in the ability-state branch (retail inlines the cAbilityState accessor differently), written size 415 vs 340, /O2 /MD /Gy /EHsc /TP /arch:SSE2; equiv FAIL (execution)
+00c15470 934 cSPCreatureBase::FUN_00c15470 (body-effect slot install): full path incl. 4x0x34 slot search, ability lookup, spatial midpoint, effect create and matrix/template setup; written 1069 vs 1196; retail hoists several x87 expressions (fsqrt/fdivrp) into a different order, so the FP block cannot be reproduced from C++ source; equiv UNSUPPORTED (fake-arity)
+00c15920 44 cSPCreatureBase::FUN_00c15920 (wave amplitude A): 76 vs 69, /arch:SSE2 returns the float in XMM0 while retail uses the x87 ST0 path (fld/fmul/fadd/ret); scalar-return ABI, not expressible from C++ under this flag set; equiv UNSUPPORTED (unresolved ?gF_15826c@@3MA, external float not present in the test image)
+00c15970 44 cSPCreatureBase::FUN_00c15970 (wave amplitude B): same x87-vs-SSE float-return mismatch as 00c15920, 76 vs 69; equiv UNSUPPORTED (unresolved ?gF_158270@@3MA)
+00c18b40 1188 complete best-effort translation; difftest FAIL (return-register high bits / ABI artefact); flags +/GS-
+00c190e0 1164 complete best-effort translation; difftest WEAK (4.0% coverage, no mismatch observed); flags +/GS-
+00c196a0 171 complete; register allocation differs (index/result regs); difftest WEAK (36.9% coverage, no mismatch); flags +/GS-
+00c197a0 141 complete; ebx/ebp swap (index vs ability bit) in the allocator; difftest WEAK (42.0% coverage, no mismatch); flags +/GS-
+00c19870 161 complete; stack slot/register allocation differs (frame size now equal); difftest WEAK (44.1% coverage, no mismatch); flags +/GS-
+00c19940 151 complete; `this` held in a different callee-saved register + unsigned loop compare; difftest WEAK (32.7% coverage, no mismatch); flags +/GS-
 00c1a3c0 1405 cCreatureBase cCombatant::TakeDamage override: complete (size 1793 = 1793, 55 calls both, identical ordered call/vslot/const sequence); the two death-effect Post blocks (types 0/1) are laid out in a different order, ObjRef temp register caching and frame (0x14 vs 0x18) differ; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
 00c1b020 1429 creature leap-at-target step; complete (call/vcall sequence identical), register allocation and stack frame (0x11c vs 0x100) differ
+00c1cdd0 171 cSPCreatureBase::FUN_00c1cdd0(int): slow-effect strength update.  The structure is recovered -- the +0x0b54 null guard, FindIndex(0x0d) falling back to FindIndex(0x52), the +0xb4 slot lookup, the `t = dt * 0.001 * effect(+0x104)` scaling forwarded to +0xc15dc0 with a SetStealthed(0,0) when +0x0e58 is exactly zero, and the pow(base,+0x644-derived) interpolation against 0.2f/1.0f clamped at 0.95f and written to cEffect+0x80.  The original is 324 bytes of x87; ours is 339.  The remaining differences are the x87 materialisation itself -- the original loads the exponent with `fild`, conditionally `fadd` the 2^32 correction, `fmul` the global factor and calls the CRT `_CIpow`; MSVC /fp:fast emits a different sse/x87 mix for `pow()` and the `1.0 - x` combine.  equiv WEAK 261 valid inputs (need 200), 7.5% coverage (need 60%)
 00c1de20 1155 complete; scheduling/regalloc near-miss (K*score const load, i/bestAbility register choice, shared 1.0 constant); flags /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+00c1f650 28 cCurvePointVector::PushBackDefault; identical logic and instruction shape (126 vs 125 bytes), but MSVC sinks the cCurvePoint constructor's -1 constant store to the end of the field-init run where retail emits it first, our stack temporary lands four bytes lower in the frame, and the inlined destructor's virtual call is a call + epilogue here instead of retail's tail jmp. flags /O2 /MD /Gy /TP /arch:SSE /fp:fast  equiv: PASS 272/400 valid, 87.8% coverage
+00c1f8d0 907 SP::cSPCreatureBase::cSPCreatureBase; all seven sub-object constructions and roughly two hundred field stores are reproduced with named members, but the nine multiple-inheritance vtable re-stores (+0x00, +0x04, +0x34, +0x58, +0xc0, +0x194, +0x590, +0x5a8, +0x670) and their ecx/edi staging come from base classes that are not part of this slice, so every vtable store and the surrounding register allocation differ (1314 vs 1415 bytes). flags /O2 /MD /Gy /TP /arch:SSE /fp:fast  equiv: UNSUPPORTED 0/400 valid (8 unresolved references: the base-class constructors cGameData, cBundle34, cMotion58, cSampleC0 and cInteractionTarget)
+00c1fe80 201 SP::cSPCreatureBase::FUN_00c1fe80; the teardown is modelled (the sub-object releases, both curve erases, the behaviour-tree and reference-counted member releases, then the FUN_00c0ff80 / FUN_00c144b0 curve rebase and the FUN_00c29b00 hand-back), but the virtual slot numbers and the erase return-value plumbing are staged differently (303 vs 296 bytes). flags /O2 /MD /Gy /TP /arch:SSE /fp:fast  equiv: UNSUPPORTED 0/400 valid (fake-arity 391, fault(read) 9)
+00c1ffb0 312 cCreaturePart::FUN_00c1ffb0; the enable and disable paths are modelled (the curve re-seed, the sample count clamp, the holder fill and the two anchor appends), but retail computes the clamp in x87 double and reaches the holder and sample objects through different frame and register staging, so the body is 73 bytes shorter (409 vs 482 bytes). flags /O2 /MD /Gy /TP /arch:SSE /fp:fast  equiv: WEAK 220/400 valid, 20.1% coverage (need 200 valid / 60%)
+00c201a0 66 cCreatureFactory::FUN_00c201a0; identical logic and instruction shape, but MSVC pushes edi only after the flag test and gives the early "return 0" its own epilogue, while retail pushes esi and edi before the test and folds both zero returns into one shared tail block, so the prologue and both exits differ (112 vs 106 bytes). flags /O2 /MD /Gy /TP /arch:SSE /fp:fast  equiv: WEAK 173/400 valid, 89.1% coverage (need 200 valid / 60%)
+00c22240 132 loco-base pointer/vtable hoisted before vIdx32 call; frame+register allocation (169 vs 163)
+00c22470 111 early 'return true' block inline vs trailing; p1 register ebp vs ebx (188 vs 184)
 01335000 1432 complete table of 35 Simulator::Attribute records (all rows verified equal by store simulation); cl keeps different callback constants in ebp/ebx (original: validate/toXml, with region re-assignment) so store scheduling differs (original is the CRT dynamic initializer $E259)

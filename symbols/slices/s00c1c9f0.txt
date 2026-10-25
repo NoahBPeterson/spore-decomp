@@ -1,7 +1,6 @@
-; slice s00c1c9f0 = 0x00c1c9f0..0x00c1d5e0 (SP::cSPCreatureBase effect / ability cluster)
 00c1c9f0 SP::cSPCreatureBase::FUN_00c1c9f0(char)          ; 0x00c1c9f0  thiscall ret 4: FLEE deactivate reset (vtable +0x2c call, SetStealthed/SetSprinting(0), +0xbec..+0x0c0c clears, ability-record weight stamp, +0x0e7c release, InterruptAnimation 0x02481de5)
 00c1cc80 Simulator::cCreatureBase::funcACh(char)          ; 0x00c1cc80  thiscall ret 4: bool ability-list rebuild -- profile-sequence gate (+0x53c vs +0x0b24), vB0() count, +0x0c28 vector erase/clear, push fresh 1.0f-weight records, copy sequence/energy to +0x0b24/+0x0e58/+0x0e5c
-00c1cdd0 SP::cSPCreatureBase::FUN_00c1cdd0(int)           ; 0x00c1cdd0  thiscall ret 4: slow-effect strength update (FindIndex 0x0d/0x52, vB4 slot, dt*0.001*effect(+0x104) via +0xc15dc0, pow interpolation clamped at 0.95f written to cEffect(+0x80))
+00c1cdd0 ?FUN_00c1cdd0@cSPCreatureBase_s00c1_c9f0@@QAEXH@Z  # cSPCreatureBase_s00c1_c9f0::FUN_00c1cdd0 migrated from s00c1c9f0 (verbatim, slice spelling)
 00c1cf20 Simulator::cCreatureBase::funcBCh(void)          ; 0x00c1cf20  thiscall: teardown of the +0x0cc8/+0x0d68 hash tables (release +0x04 at vtbl+0xc, FreeBuckets) and the +0x0e08 rbtree, then tail jmp 0x00c151b0
 00c1d120 SP::cSPCreatureBase::FUN_00c1d120(uint,uint)     ; 0x00c1d120  thiscall ret 8: effect spawn via EffectsManager (+0x2c slot), +0xb76460(+0x0cc8) key, Matrix33::Assign(+0x168d964), quaternion from sub-object +0x0c0, key handed to vtbl+0x18, vtbl+0x04 release
 00c1d290 SP::cSPCreatureBase::FUN_00c1d290(uint)          ; 0x00c1d290  thiscall ret 4: same effect spawn as FUN_00c1d120, single-argument form
@@ -9,16 +8,4 @@
 00c1d430 SP::cSPCreatureBase::FUN_00c1d430(uint)          ; 0x00c1d430  thiscall ret 4: FUN_00c1d290(a) then vtbl+0x08(0) on the result  byte-exact (MATCH)
 00c1d460 SP::cSPCreatureBase::FUN_00c1d460(uint,uint)     ; 0x00c1d460  thiscall ret 8: effect spawn using the +0x0d68 table; ends with vtbl+0x08(0) then vtbl+0x04
 00c1d5e0 SP::cSPCreatureBase::FUN_00c1d5e0(char,uint,uint); 0x00c1d5e0  thiscall ret 0xc: tool/effect gate -- flag clear -> +0xc17350(c,0), else +0xc14e70(c) vtbl+0x10 test, then +0xc17350(c,0) and tail FUN_00c1d460(b,c)
-; helpers: cEffectsMgr 0x0067ddd0 (EffectsManagerPtr, +0x2c create slot), FUN_00b76460 0x00b76460 (PHTable key slot), Matrix3::Assign 0x0041cb40,
-;          Matrix3FromQuaternion 0x0059c190, copy_705250 0x00705250 (vector erase copy), FUN_00c53690 0x00c53690 / FUN_00c19d10 0x00c19d10 (vector grow),
-;          SetStealthed 0x00c1aed0, SetSprinting 0x00c1ad10, InterruptAnimation 0x00c12310, FUN_00c0bb20 0x00c0bb20 (float), FUN_00c0c080 0x00c0c080 (FindIndex),
-;          FUN_00c0d3a0 0x00c0d3a0, FUN_00c0d9b0 0x00c0d9b0, FUN_00bcb660 0x00bcb660, FUN_00bc9fe0 0x00bc9fe0 (order-manager release), FUN_00c41d60 0x00c41d60,
-;          FUN_00bfcae0 0x00bfcae0, FUN_00c14e70 0x00c14e70, FUN_00c17350 0x00c17350, FUN_00c19940 0x00c19940, FUN_00c151b0 0x00c151b0,
-;          FUN_00a24480 (PHTable::FreeBuckets) 0x00a24480, FUN_00921580 (RBTreeIncrement) 0x00921580, FUN_009a9600 (DoNukeSubtree) 0x009a9600,
-;          operator_delete_array 0x00f47380, memcpy 0x011e0744, _CIpow 0x011e08f0, pow
-; globals: _HK_REAL_ONE 0x01485720, _HK_REAL_ZERO 0x01485378, DAT_01687a00, DAT_0150c8c0, DAT_013f9428, DAT_013ec480, DAT_013f7344, DAT_01447a10 (f64),
-;          DAT_0168d910, DAT_0168d964, DAT_0168d988/8c/90
-; fields: +0x0c0 mSub (vptr), +0x110 flags, +0x328 flag, +0x5a8 mSub (vptr), +0x0b20 species profile (+0x53c seq, +0x644 energy), +0x0b24 seq cache,
-;         +0x0b48 order mgr, +0x0b4c, +0x0b54 cEffect (+0x80 strength), +0x0b58 flags, +0x0b5c/0b5e/0b5f/0b63 flags, +0x0b74/0b78/0b7c/0b80/0b84 floats,
-;         +0x0bb1 flag, +0x0bb4, +0x0bbc float, +0x0bec/0bf0/0bf4/0bf8/0bfc/0c00/0c04/0c08/0c0c ability bits, +0x0c28 cVec<cAbilityState> (0x10 elems),
 ;         +0x0cc8/+0x0d68 cPHTable, +0x0e08 cRBTree, +0x0e24/+0x0e98 two-pointer ranges, +0x0e58/0e5c floats, +0x0e7c cDetach, +0x0e8c/0e90/0e94 state, +0x0eac

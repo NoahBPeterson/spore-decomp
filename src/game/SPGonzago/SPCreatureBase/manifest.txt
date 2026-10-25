@@ -1,4 +1,22 @@
 # source  symbol  va  flags
+../src/game/SPGonzago/SPCreatureBase.cpp  ?FUN_00c0b000@@YI_NPAUcCreatureBase@Simulator@@@Z  00c0b000  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCreatureBase.cpp  ?FUN_00c0b1c0@@YA_NIPAII@Z  00c0b1c0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCreatureBase.cpp  ?FUN_00c0b5e0@@YAXPAUcCreatureBase@Simulator@@@Z  00c0b5e0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCreatureBase.cpp  ?Query@cCreatureBase@Simulator@@QAEHI@Z  00c0b670  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCreatureBase.cpp  ?FUN_00c0b780@@YI_NPAUcCreatureBase@Simulator@@@Z  00c0b780  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCreatureBase.cpp  ?FUN_00c0b7a0@@YI_NPAUcCreatureBase@Simulator@@@Z  00c0b7a0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCreatureBase.cpp  ?TimerDelta@cCreatureBase@Simulator@@QAEHPAU12@@Z  00c0b8e0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCreatureBase.cpp  ?SetLastInteractionEffect@cCreatureBase@Simulator@@QAEXI@Z  00c0b910  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCreatureBase.cpp  ?ForgetUpdateInteractionEffect@cCreatureBase@Simulator@@QAE_NXZ  00c0b930  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCreatureBase.cpp  ?FUN_00c0b950@@YIXPAUcCreatureBase@Simulator@@@Z  00c0b950  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCreatureBase.cpp  ?func90h@cCreatureBase@Simulator@@QAEXXZ  00c0b9a0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCreatureBase.cpp  ?FUN_00c0ba10@@YIXPAUcCreatureBase@Simulator@@@Z  00c0ba10  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCreatureBase.cpp  ?FUN_00c0ba30@@YI_NPAUcCreatureBase@Simulator@@@Z  00c0ba30  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCreatureBase.cpp  ?FUN_00c0ba70@@YI_NPAUcCreatureBase@Simulator@@@Z  00c0ba70  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCreatureBase.cpp  ?FUN_00c0bab0@@YI_NPAUcCreatureBase@Simulator@@@Z  00c0bab0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCreatureBase.cpp  ?FUN_00c0bb90@@YI_NPAUcCreatureBase@Simulator@@@Z  00c0bb90  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCreatureBase.cpp  ?FUN_00c0bbe0@@YIXPAUcCreatureBase@Simulator@@@Z  00c0bbe0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCreatureBase.cpp  ?FUN_00c0bc00@@YIPADPAUcCreatureBase@Simulator@@@Z  00c0bc00  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPCreatureBase.cpp  ?C0bee0@C@@QAEXHH@Z  00c0bee0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPCreatureBase.cpp  ?GetA@C@@QAEMXZ  00c0c010  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPCreatureBase.cpp  ?GetB@C@@QAEMXZ  00c0c040  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
@@ -18,6 +36,13 @@
 ../src/game/SPGonzago/SPCreatureBase.cpp  ?e5f0@CCM@@QAEXM@Z  00c0e5f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPCreatureBase.cpp  ?e640@CCM@@QAEXH@Z  00c0e640  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPCreatureBase.cpp  ?e680@CCM@@QAEHH@Z  00c0e680  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCreatureBase.cpp  ?Show@Simulator_cCreatureBase@@QAEXXZ  00c0f2b0  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPCreatureBase.cpp  ?fb80@CAN@@QAEXHH@Z  00c0fb80  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPCreatureBase.cpp  ?FUN_00c10210@@YAXHHHH@Z  00c10210  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPCreatureBase.cpp  ?FUN_00c10230@@YAXHHHH@Z  00c10230  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCreatureBase.cpp  ?FUN_00c141b0@@YAPAXPAUIStream@@PAH@Z  00c141b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCreatureBase.cpp  ?GetBodyPartIndex@cSPCreatureBase_s00c1_7350@@QAEIII@Z  00c17580  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPGonzago/SPCreatureBase.cpp  ?CreateBodyEffect@cSPCreatureBase_s00c1_7350@@QAEIIII@Z  00c17c80  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPGonzago/SPCreatureBase.cpp  ?reserve@Vector003c@@QAEXI@Z  00c199e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCreatureBase.cpp  ?FUN_00c20210@cCreatureFactory@@QAEXPAX0@Z  00c20210  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCreatureBase.cpp  ?FUN_00c22210@cSPCreatureBase_s00c2_2010@@QAEXH@Z  00c22210  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

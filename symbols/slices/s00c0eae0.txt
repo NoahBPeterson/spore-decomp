@@ -1,21 +1,21 @@
-00c0eae0 ?SteerTowards@Simulator_cCreatureBase@@QAEXPBUVec3@@H@Z  # void Simulator::cCreatureBase::SteerTowards
-00c0ed60 ?SetCreatureTarget@Simulator_cCreatureBase@@QAEXPAVcCombatant@@_NH@Z  # void Simulator::cCreatureBase::SetCreatureTarget
-00c0ee70 ?GetTargetAsCreature@Simulator_cCreatureBase@@QAEPAXXZ  # void* Simulator::cCreatureBase::GetTargetAsCreature
-00c0ee90 ?ApplyCombatTarget@Simulator_cCreatureBase@@QAEXXZ  # void Simulator::cCreatureBase::ApplyCombatTarget
-00c0eec0 ?UpdateSteering@Simulator_cCreatureBase@@QAEXHM@Z  # void Simulator::cCreatureBase::UpdateSteering
-00c0f280 ?Hide@Simulator_cCreatureBase@@QAEXXZ  # void Simulator::cCreatureBase::Hide
-00c0f2b0 ?Show@Simulator_cCreatureBase@@QAEXXZ  # void Simulator::cCreatureBase::Show
-00c0f2e0 ?TraceTo@Simulator_cCreatureBase@@QAE_NPBUVec3@@0PAU2@@Z  # bool Simulator::cCreatureBase::TraceTo
-00c0f490 ?ResetCombatants@Simulator_cCreatureBase@@QAEXXZ  # void Simulator::cCreatureBase::ResetCombatants
-00c0f510 ?IsSlotEmpty@Simulator_cCreatureBase@@QAE_NI@Z  # bool Simulator::cCreatureBase::IsSlotEmpty
-00c0f570 ?CountValid@Simulator_cCreatureBase@@QAEHXZ  # int Simulator::cCreatureBase::CountValid
-00c0f5f0 ?IsFull@Simulator_cCreatureBase@@QAE_NXZ  # bool Simulator::cCreatureBase::IsFull
-00c0f620 ?FindFirstEmpty@Simulator_cCreatureBase@@QAEIXZ  # uint32_t Simulator::cCreatureBase::FindFirstEmpty
-00c0f6b0 ?FindRandomEmpty@Simulator_cCreatureBase@@QAEIXZ  # uint32_t Simulator::cCreatureBase::FindRandomEmpty
-00c0f780 ?FindFirstValid@Simulator_cCreatureBase@@QAEIXZ  # uint32_t Simulator::cCreatureBase::FindFirstValid (PDB: Count)
-00c0f810 ?FindNextValid@Simulator_cCreatureBase@@QAEIH@Z  # uint32_t Simulator::cCreatureBase::FindNextValid
-00c0f8a0 ?GetAt@Simulator_cCreatureBase@@QAEPAVcCombatant@@I@Z  # cCombatant* Simulator::cCreatureBase::GetAt (PDB: At)
-00c0f8f0 ?FindByCombatant@Simulator_cCreatureBase@@QAEIH@Z  # uint32_t Simulator::cCreatureBase::FindByCombatant
-00c0f960 ?FindByKey@Simulator_cCreatureBase@@QAEIH@Z  # uint32_t Simulator::cCreatureBase::FindByKey
-00c0f9b0 ?FindSlotByKey@Simulator_cCreatureBase@@QAEPAUcCombatantSlot@@HPAI@Z  # cCombatantSlot* Simulator::cCreatureBase::FindSlotByKey
-00c0fa10 ?FindSlotByCombatant@Simulator_cCreatureBase@@QAEPAUcCombatantSlot@@HPAI@Z  # cCombatantSlot* Simulator::cCreatureBase::FindSlotByCombatant
+00c0eae0 ?SteerTowards@Simulator_cCreatureBase@@QAEXPBUVec3@@H@Z  # Simulator_cCreatureBase::SteerTowards migrated from s00c0eae0 (verbatim, slice spelling)
+00c0ed60 ?SetCreatureTarget@Simulator_cCreatureBase@@QAEXPAVcCombatant@@_NH@Z  # Simulator_cCreatureBase::SetCreatureTarget migrated from s00c0eae0 (verbatim, slice spelling)
+00c0ee70 ?GetTargetAsCreature@Simulator_cCreatureBase@@QAEPAXXZ  # Simulator_cCreatureBase::GetTargetAsCreature migrated from s00c0eae0 (verbatim, slice spelling)
+00c0ee90 ?ApplyCombatTarget@Simulator_cCreatureBase@@QAEXXZ  # Simulator_cCreatureBase::ApplyCombatTarget migrated from s00c0eae0 (verbatim, slice spelling)
+00c0eec0 ?UpdateSteering@Simulator_cCreatureBase@@QAEXHM@Z  # Simulator_cCreatureBase::UpdateSteering migrated from s00c0eae0 (verbatim, slice spelling)
+00c0f280 ?Hide@Simulator_cCreatureBase@@QAEXXZ  # Simulator_cCreatureBase::Hide migrated from s00c0eae0 (verbatim, slice spelling)
+00c0f2b0 ?Show@Simulator_cCreatureBase@@QAEXXZ  # Simulator_cCreatureBase::Show migrated from s00c0eae0 (verbatim, slice spelling)
+00c0f2e0 ?TraceTo@Simulator_cCreatureBase@@QAE_NPBUVec3@@0PAU2@@Z  # Simulator_cCreatureBase::TraceTo migrated from s00c0eae0 (verbatim, slice spelling)
+00c0f490 ?ResetCombatants@Simulator_cCreatureBase@@QAEXXZ  # Simulator_cCreatureBase::ResetCombatants migrated from s00c0eae0 (verbatim, slice spelling)
+00c0f510 ?IsSlotEmpty@Simulator_cCreatureBase@@QAE_NI@Z  # Simulator_cCreatureBase::IsSlotEmpty migrated from s00c0eae0 (verbatim, slice spelling)
+00c0f570 ?CountValid@Simulator_cCreatureBase@@QAEHXZ  # Simulator_cCreatureBase::CountValid migrated from s00c0eae0 (verbatim, slice spelling)
+00c0f5f0 ?IsFull@Simulator_cCreatureBase@@QAE_NXZ  # Simulator_cCreatureBase::IsFull migrated from s00c0eae0 (verbatim, slice spelling)
+00c0f620 ?FindFirstEmpty@Simulator_cCreatureBase@@QAEIXZ  # Simulator_cCreatureBase::FindFirstEmpty migrated from s00c0eae0 (verbatim, slice spelling)
+00c0f6b0 ?FindRandomEmpty@Simulator_cCreatureBase@@QAEIXZ  # Simulator_cCreatureBase::FindRandomEmpty migrated from s00c0eae0 (verbatim, slice spelling)
+00c0f780 ?FindFirstValid@Simulator_cCreatureBase@@QAEIXZ  # Simulator_cCreatureBase::FindFirstValid migrated from s00c0eae0 (verbatim, slice spelling)
+00c0f810 ?FindNextValid@Simulator_cCreatureBase@@QAEIH@Z  # Simulator_cCreatureBase::FindNextValid migrated from s00c0eae0 (verbatim, slice spelling)
+00c0f8a0 ?GetAt@Simulator_cCreatureBase@@QAEPAVcCombatant@@I@Z  # Simulator_cCreatureBase::GetAt migrated from s00c0eae0 (verbatim, slice spelling)
+00c0f8f0 ?FindByCombatant@Simulator_cCreatureBase@@QAEIH@Z  # Simulator_cCreatureBase::FindByCombatant migrated from s00c0eae0 (verbatim, slice spelling)
+00c0f960 ?FindByKey@Simulator_cCreatureBase@@QAEIH@Z  # Simulator_cCreatureBase::FindByKey migrated from s00c0eae0 (verbatim, slice spelling)
+00c0f9b0 ?FindSlotByKey@Simulator_cCreatureBase@@QAEPAUcCombatantSlot@@HPAI@Z  # Simulator_cCreatureBase::FindSlotByKey migrated from s00c0eae0 (verbatim, slice spelling)
+00c0fa10 ?FindSlotByCombatant@Simulator_cCreatureBase@@QAEPAUcCombatantSlot@@HPAI@Z  # Simulator_cCreatureBase::FindSlotByCombatant migrated from s00c0eae0 (verbatim, slice spelling)
