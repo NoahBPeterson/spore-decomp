@@ -1,0 +1,2 @@
+00c43f90 ?Shutdown@cLocomotiveObject_s00c4_32e0@SP@@QAEXXZ  # cLocomotiveObject_s00c4_32e0::Shutdown migrated from s00c432e0 (verbatim, slice spelling)
+00c43fe0 ?InsertUnique@cLocomotiveObject_s00c4_32e0@SP@@QAEXI@Z  # cLocomotiveObject_s00c4_32e0::InsertUnique migrated from s00c432e0 (verbatim, slice spelling)
