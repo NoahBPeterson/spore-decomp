@@ -347,6 +347,13 @@ struct __declspec(align(16)) hkVector4 { float x, y, z, w; };
 struct cPlanetModel {
     float GetWaterHeight();                                  // 0x00b7e390, ret 0
     float GetRadiusAt(const Vector3* p);                     // 0x00b7ef70, ret 4
+
+    // 0x00eba290's four-way projection/ray query, all __thiscall returning the projected
+    // point (eax = cursor into the out buffer):
+    Vector3* ProjectOpt(Vector3* out, void* obj, void* ctx, int flags);   // 0x00b82620, ret 0x10
+    Vector3* ProjectRay(Vector3* out, void* obj, void* ctx, int flags);   // 0x00b82470, ret 0x10
+    Vector3* QueryRadialOpt(Vector3* out, void* obj, void* ctx);          // 0x00b82110, ret 0xc
+    Vector3* QueryRadialRay(Vector3* out, void* obj, void* ctx);          // 0x00b82060, ret 0xc
 };
 cPlanetModel* __cdecl PlanetModel();                         // 0x00b3d350
 
@@ -485,8 +492,9 @@ int FUN_00eba170(const cFlagSrc* src, int* out)
     char c17 = FUN_008d3200(0x11, 0x3ff);
     if (c17 == 0 && c16 == 0) {
         *out = 1;
+        int r = src->mByte40 ? 3 : 1;
         g_16c7338 = 1;
-        return src->mByte40 ? 3 : 1;
+        return r;
     } else if (c17 == 1 && c16 == 0) {
         *out = 2;
         g_16c7338 = 2;
@@ -514,6 +522,40 @@ int FUN_00eba170(const cFlagSrc* src, int* out)
         *out = 1;
         return 1;
     }
+}
+
+// 0x00eba290: projects/rays a point through the planet model and reports whether the result
+// moved away from the cached point (g_16c733c/40/44).  Retail keeps the out Vector3* in the
+// incoming register `esi` and the context pointer in `edi`, so the two live-in registers are
+// modelled here as explicit trailing parameters (their source position is otherwise identical);
+// the incoming-register ABI itself is not expressible in plain C++.
+// @ 0x00eba290
+bool FUN_00eba290(void* obj, char mode, char flag, void* ctx, Vector3* out)
+{
+    cPlanetModel* model = PlanetModel();
+    Vector3 buf;
+    Vector3* p;
+    if (flag) {
+        if (mode)
+            p = model->ProjectOpt(&buf, obj, ctx, 0);
+        else
+            p = model->ProjectRay(&buf, obj, ctx, 0);
+    } else {
+        if (mode)
+            p = model->QueryRadialOpt(&buf, obj, ctx);
+        else
+            p = model->QueryRadialRay(&buf, obj, ctx);
+    }
+    out->x = p->x;
+    out->y = p->y;
+    out->z = p->z;
+    if (out->x != g_16c733c)
+        return true;
+    if (out->y != g_16c7340)
+        return true;
+    if (out->z != g_16c7344)
+        return true;
+    return false;
 }
 
 // @ 0x00eba340
