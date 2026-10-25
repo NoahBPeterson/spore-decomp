@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+00c74bd0 31 cPlanetaryArtifact destructor (vtable reset + m63c release + cMovOrnDtor): COMPLETE; ours hoists the `mov ecx,[esi+0x63c]` load above the vtable stores, original issues it afterwards. flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast  [equiv UNSUPPORTED: 0/400 valid, the emulator faults on the destructor's base-call]

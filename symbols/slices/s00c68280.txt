@@ -18,7 +18,7 @@
 00c68f30 ?Ef30@COrn@@QAEHH@Z  # COrn::Ef30 migrated from s00c68280 (verbatim, slice spelling)
 00c69030  FUN_00c69030  # shutdown: cLocomotiveObject::Shutdown + release +0x2c
 00c69090  FUN_00c69090  # alloc cGroundLocomotion and register with BehaviorManager
-00c69110  FUN_00c69110  # static-local accessor with atexit guard
+00c69110 ?FUN_00c69110@@YAPAXXZ  # FUN_00c69110 migrated from s00c68280 (verbatim, slice spelling)
 00c69150  Simulator::cNanoDrone::cNanoDrone  # PDB name
 00c691e0  FUN_00c691e0  # interface query (0x6ef0ec9 + 3 fallbacks)
 00c69290  FUN_00c69290  # Simulator helper
