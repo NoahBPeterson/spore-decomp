@@ -74,6 +74,29 @@ struct Job {
   void GetStatus();                     // 0x690120
 };
 
+// 12-byte world/photo record iterated by Cache::Refresh (0x6b15b0).
+struct Record12 { uint32_t a, b, c; };
+
+// The +0x0C sub-object that supplies the world records and the per-record job
+// used by Cache::Refresh (slots 0x30 and 0x34).
+struct RecordProvider {
+  virtual void p0(); virtual void p1(); virtual void p2(); virtual void p3();
+  virtual void p4(); virtual void p5(); virtual void p6(); virtual void p7();
+  virtual void p8(); virtual void p9(); virtual void p10(); virtual void p11();
+  virtual void GetRecords(void* out);                                             // +0x30
+  virtual bool GetRecordJob(Record12* rec, void** out, int a, int b, int c, int d); // +0x34
+};
+
+// Job object returned by RecordProvider::GetRecordJob (slots 0x18/0x1c/0x24).
+struct RecordJob {
+  virtual void j0(); virtual void j1(); virtual void j2(); virtual void j3();
+  virtual void j4(); virtual void j5();
+  virtual RecordJob* Step();            // +0x18
+  virtual uint32_t Value();             // +0x1c
+  virtual void j8(); virtual void j9();
+  virtual void Release();               // +0x24
+};
+
 // Allocator / free helpers (masked relocations).
 extern void*  EAlloc(uint32_t, const char*, int, int, const char*, int);   // 0x00f473a0
 extern void   EFree(void*);                                              // 0x00f47380
@@ -108,6 +131,8 @@ struct VectorBase {
   Entry* end;     // 0x14
   Entry* cap;     // 0x18
   void DoInsertValue(Entry* pos, const Entry& val); // 0x007efb70
+  void Reset();                                     // 0x00c53a90
+  void Prepare(uint32_t n);                         // 0x006b05e0
 };
 
 // Per-world cache node (class D) - `this` for 0x6b0b80/0f40/1000/10a0/1200.

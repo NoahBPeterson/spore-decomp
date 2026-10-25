@@ -9,3 +9,6 @@
 006b13b0  332  deserialize; key/entry struct and Insert/Read call shapes approximate
 006b14f0  163  load: AutoRefCount temporary and stream Call34 argument shape approximate
 006b17a0  168  init: needs the EH-managed AutoRefCount<MemStream> local (EH frame missing)
+006b09b0  449  UNSUPPORTED: equiv cannot bind the symbol (definition carries __declspec(noinline), which the marker parser reads as the name); retail body is a lock cmpxchg8b CAS loop over a 64-bit handle slot that cannot be emitted portably (no __asm), so only a forwarding stub is emitted
+006b1200  323  WEAK: reconstructed entry deserializer; 352/352 valid inputs behave identically (0 mismatches), coverage 23.5% (<60% bar); stack/register shape differs from retail
+006b15b0  463  UNSUPPORTED: original faults on all 400 inputs (discards fault(read)=399, fault=1), so equivalence is undecidable; per-world refresh loop reconstructed best-effort

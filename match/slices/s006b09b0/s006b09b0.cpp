@@ -5,7 +5,12 @@
 static const char* kAllocFile =
     "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h";
 
-// @ 0x6b09b0  (partial: lock-free refcount/map update; see partial.txt)
+// @ 0x6b09b0
+// Lock-free ref-counted update of the +0x60 sub-object's map. The retail body
+// performs a `lock cmpxchg8b` CAS loop over a 64-bit handle slot (see the
+// AtomicRead64/AtomicExchange64 helpers at 0x68c140/0x68c1b0); that instruction
+// cannot be emitted portably (no __asm allowed), so this remains a forwarding
+// stub. __declspec(noinline) keeps Cache::A/B/C calling it (they are byte-exact).
 extern void CacheSub60_Update(void*);
 __declspec(noinline) void CacheSub60::Update(Key20* p) {
   CacheSub60_Update(p);
@@ -228,14 +233,45 @@ bool CacheList::Load(Callback38* cb) {
   return false;
 }
 
-// @ 0x6b1200  (partial)
+// @ 0x6b1200
+// Deserializes one per-key cache list from `s`. `p` points at the caller's
+// remaining-byte counter and `q` receives the 64-bit running total read from the
+// head of the blob. The entry count is the low 32 bits of the counter *pointer*
+// (the engine reuses the argument slot as the loop counter), each entry consumes
+// 12 stream bytes and the header consumes a fixed 12 bytes.
 bool CacheList::Read(Stream* s, uint32_t* p, uint64_t* q) {
-  uint32_t cnt = p[0];
-  if (cnt < 0xc) return false;
-  p[0] = cnt - 0xc;
-  if (!IO_ReadBytes(s, &m00, 1, 0)) return false;
-  q[0] = *(uint64_t*)&m00;
-  if (!IO_ReadInt32(s, &p[1], 1, 0)) return false;
+  uint32_t size = p[0];
+  if (size < 0xc) return false;
+  p[0] = size - 0xc;
+  if (!IO_ReadBytes(s, &total, 1, 0)) return false;
+  *q = (uint64_t)total;
+  if (!IO_ReadInt32(s, p, 1, 0)) return false;
+  uint32_t count = (uint32_t)p;
+  uint32_t n = p[0];
+  if (n < count * 12) return false;
+  p[0] = n - count * 12;
+  uint64_t sum = 0;
+  vec.Reset();
+  vec.Prepare(count);
+  Entry tmp;
+  tmp.a = m00;
+  tmp.b = 0;
+  tmp.c = 0;
+  while (count != 0) {
+    --count;
+    if (!IO_ReadInt32(s, &tmp.c, 1, 0)) return false;
+    if (!IO_ReadInt32(s, &tmp.b, 1, 0)) return false;
+    if (!IO_ReadInt32(s, &tmp.score, 1, 0)) return false;
+    if (vec.end < vec.cap) {
+      Entry* pos = vec.end;
+      vec.end = pos + 1;
+      if (pos != 0) *pos = tmp;
+    } else {
+      vec.DoInsertValue(vec.end, tmp);
+    }
+    sum += tmp.score;
+  }
+  if (total != (int64_t)sum) return false;
   return true;
 }
 
@@ -290,8 +326,85 @@ void Cache::Load() {
   }
 }
 
-// @ 0x6b15b0  (partial)
+// @ 0x6b15b0
+// Rebuilds the per-world cache lists: asks the +0x0C provider for its 12-byte
+// world records, skips the 0x2e5a9763 marker records, looks each key up in the
+// map at +0x18, inserts a fresh list node when absent, and for keys not yet in
+// the list creates a job whose score is folded into the running total at +0x40.
 void Cache::Refresh() {
+  Record12* begin = 0;
+  Record12* end = 0;
+  Record12* cap = 0;
+  ((RecordProvider*)m0c)->GetRecords(&begin);
+
+  Record12* endSaved = end;
+  Record12* it = begin;
+  if (it != endSaved) {
+    do {
+      if (it->b != 0x2e5a9763) {
+        uint32_t raw = it->c;
+        uint32_t cls = raw & 0xc0000000;
+        uint32_t score = (cls == 0x40000000)
+                             ? (((raw & 0xff0000) | cls) & 0xffff00ff)
+                             : 0;
+
+        Key12 key;
+        key.a = it->a;
+        key.b = 0;
+        key.c = 0;
+        void* found = 0;
+        ((Map*)&m18)->Find((uint32_t*)&found, &key);
+        uint32_t listHead = (uint32_t)&nodeNext;
+        uint32_t node = (found != (void*)((uint32_t)&nodeNext - 0x18))
+                            ? *(uint32_t*)((uint32_t)found + 0x18)
+                            : listHead;
+        if (node == listHead) {
+          void* nodeOut = 0;
+          Insert(&nodeOut, key.a, score);
+          node = (uint32_t)nodeOut;
+        }
+
+        CacheList* cl = (node != listHead) ? (CacheList*)*(uint32_t*)(node + 8) : 0;
+        if (cl != 0) {
+          bool present = false;
+          for (Entry* e = cl->vec.begin; e != cl->vec.end; ++e) {
+            if (e->a == it->a && e->b == it->b && e->c == it->c) {
+              present = true;
+              break;
+            }
+          }
+          if (present) goto next;
+        }
+
+        {
+          RecordJob* job = 0;
+          if (((RecordProvider*)m0c)->GetRecordJob(it, (void**)&job, 1, 6, 1, 0)) {
+            job->Step();
+            uint32_t v = job->Value();
+            cl->AddOrUpdate(key, v);
+            m40 += (int64_t)v;
+            job->Release();
+            if (node != listHead) {
+              uint32_t head = (uint32_t)&nodeNext;
+              uint32_t nxt = *(uint32_t*)node;
+              if (head != node && head != nxt) {
+                *(uint32_t*)(*(uint32_t*)(nxt + 4)) = head;
+                *(uint32_t*)(*(uint32_t*)(node + 4)) = nxt;
+                *(uint32_t*)(*(uint32_t*)(head + 4)) = node;
+                *(uint32_t*)(node + 4) = *(uint32_t*)(nxt + 4);
+                *(uint32_t*)(nxt + 4) = *(uint32_t*)(node + 4);
+              }
+            }
+            ((uint8_t*)this)[0x15] = 1;
+          }
+        }
+      }
+    next:
+      it = (Record12*)((char*)it + 0xc);
+    } while (it != endSaved);
+  }
+  if (begin != 0 && ((uint32_t*)begin)[-1] != 0)
+    EFree(begin);
 }
 
 // @ 0x6b17a0
