@@ -2,5 +2,5 @@
 0040efa0 ?Invert@PartTransform@@QAEXXZ  # PartTransform::Invert migrated from s0040eb70 (verbatim, slice spelling)
 0040f070 ??0PartHolder@@QAE@PBU0@@Z  # PartHolder::PartHolder migrated from s0040eb70 (verbatim, slice spelling)
 0040f110 ?Rescan@EditorPartList@@QAE_NXZ  # EditorPartList::Rescan migrated from s0040eb70 (verbatim, slice spelling)
-0040f360 Counted::Release  # refcount at +0x40, owner vcall slot 92 at zero
-0040f3f0 SelectCommand::Execute  # settings key 0x1a91189c chooses service vcall
+0040f360 ?Release@Counted@@QAEHXZ  # Counted::Release migrated from s0040eb70 (verbatim, slice spelling)
+0040f3f0 ?Execute@SelectCommand@@QAE_NH@Z  # SelectCommand::Execute migrated from s0040eb70 (verbatim, slice spelling)

@@ -1,3 +1,5 @@
-0040fd50 UI::BehaviorMessage::BehaviorMessage  # sets vtbl 0x13eb918 then 0x13eb90c, zeroes refcount at +4 via xchg
-0040fd90 MessageBase::scalar_deleting_dtor  # vptr=0x13eb918; if (flags&1) EASTL_allocator_deallocate(this)
-0040fdc0 BehaviorMessage::scalar_deleting_dtor  # vptr=0x13eb90c then 0x13eb918; free if flags&1
+0040f820 ?Fn40f820@Obj@@QAE_NPAUMsgIn@@@Z  # Obj::Fn40f820 migrated from s0040f4a0 (verbatim, slice spelling)
+0040fc00 ?Fn40fc00@Obj@@QAE_NPAUMsgIn@@@Z  # Obj::Fn40fc00 migrated from s0040f4a0 (verbatim, slice spelling)
+0040fd50 ?Ctor@MsgRefInit@@QAEPAU1@XZ  # MsgRefInit::Ctor migrated from s0040f4a0 (verbatim, slice spelling)
+0040fd90 ?DelBase@MsgDel@@QAEPAU1@I@Z  # MsgDel::DelBase migrated from s0040f4a0 (verbatim, slice spelling)
+0040fdc0 ?DelRef@MsgDel@@QAEPAU1@I@Z  # MsgDel::DelRef migrated from s0040f4a0 (verbatim, slice spelling)

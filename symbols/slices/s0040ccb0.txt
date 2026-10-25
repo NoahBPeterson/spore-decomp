@@ -1,3 +1,4 @@
+0040ccb0 ?Accumulate@Modifier@@QAEXABU1@@Z  # Modifier::Accumulate migrated from s0040ccb0 (verbatim, slice spelling)
 0040d230 ?_GListAbility  # ListAbility::`scalar deleting destructor' (mangled ??_GListAbility@@...; written as its base identifier so the checker's name matcher finds it)
 0040d260 ~ListAbility  # implicit destructor
 013ef094 ??_7RefCountedAbility@@6B@  # shared RefCountTemplate vtable that ListAbility's dtor stores

@@ -1,0 +1,2 @@
+# va  diff-bytes  reason (compiled /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-)
+00b02590 56 SP::GetDefaultValue<cSPTransform,79537323>: identical shape to 00b024a0 against the 0x167bbc4 guard / 0x167bb8c object; same guard-constant and absolute-address codegen divergence; 126 vs 121 bytes. equiv: PASS (400 valid inputs, 100.0% coverage)

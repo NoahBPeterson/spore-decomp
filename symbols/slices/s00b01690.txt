@@ -14,3 +14,4 @@
 00b02430 ?Find@PairTreeOps@@QAEXPAXPBI@Z  # PairTreeOps::Find migrated from s00b01690 (verbatim, slice spelling)
 00b02480 ?Wrap@WrapperOps@@QAEPAXPAIPAX@Z  # WrapperOps::Wrap migrated from s00b01690 (verbatim, slice spelling)
 00b024a0 ?GetDefaultValue_A@@YAPAXXZ  # GetDefaultValue_A migrated from s00b01690 (verbatim, slice spelling)
+00b02590 ?GetDefaultValue_B@@YAPAXXZ  # GetDefaultValue_B migrated from s00b01690 (verbatim, slice spelling)

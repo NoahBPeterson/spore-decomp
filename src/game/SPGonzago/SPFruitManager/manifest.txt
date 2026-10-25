@@ -1,0 +1,12 @@
+# source  symbol  va  flags
+../src/game/SPGonzago/SPFruitManager.cpp  ?Accumulate@Modifier@@QAEXABU1@@Z  0040ccb0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPFruitManager.cpp  ?Release@Counted@@QAEHXZ  0040f360  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPFruitManager.cpp  ?Execute@SelectCommand@@QAE_NH@Z  0040f3f0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPFruitManager.cpp  ?Fn40f820@Obj@@QAE_NPAUMsgIn@@@Z  0040f820  /Od /Ob1 /MD /Gy /TP /Isrc/game/include
+../src/game/SPGonzago/SPFruitManager.cpp  ?Fn40fc00@Obj@@QAE_NPAUMsgIn@@@Z  0040fc00  /Od /Ob1 /MD /Gy /TP /Isrc/game/include
+../src/game/SPGonzago/SPFruitManager.cpp  ?Ctor@MsgRefInit@@QAEPAU1@XZ  0040fd50  /Od /Ob1 /MD /Gy /TP /Isrc/game/include
+../src/game/SPGonzago/SPFruitManager.cpp  ?DelBase@MsgDel@@QAEPAU1@I@Z  0040fd90  /Od /Ob1 /MD /Gy /TP /Isrc/game/include
+../src/game/SPGonzago/SPFruitManager.cpp  ?DelRef@MsgDel@@QAEPAU1@I@Z  0040fdc0  /Od /Ob1 /MD /Gy /TP /Isrc/game/include
+../src/game/SPGonzago/SPFruitManager.cpp  ?HandleMessage@EditorHandler@@QAE_NPAUEditorMessage@@@Z  0040fe00  /Od /Ob1 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPFruitManager.cpp  ?TryGetUIntProperty@@YA_NPAUIPropertyMap@@IPAI@Z  00410370  /Od /Ob1 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPFruitManager.cpp  ?SetFlag@Model@@QAEX_N@Z  00437f70  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

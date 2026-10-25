@@ -1,2 +1,2 @@
-0040fe00 EditorHandler::HandleMessage  # thiscall, ret 4; classifies msg target against 3 registry objects, FindObject + notify/perform
-00410370 TryGetUIntProperty  # cdecl; vcall slot 9 lookup, entry type 9 -> *out = *GetValue()
+0040fe00 ?HandleMessage@EditorHandler@@QAE_NPAUEditorMessage@@@Z  # EditorHandler::HandleMessage migrated from s0040fe00 (verbatim, slice spelling)
+00410370 ?TryGetUIntProperty@@YA_NPAUIPropertyMap@@IPAI@Z  # TryGetUIntProperty migrated from s0040fe00 (verbatim, slice spelling)
