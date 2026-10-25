@@ -1,19 +1,15 @@
-// Slice s00669430: SP::cSPUIFeedListItem::ReloadCallback (complete) and the constraint-lookup callback (outline only,
-// see partial.txt).
+// Slice s00669430: SP::cSPUIFeedListItem::ReloadCallback (complete) and the feed item's
+// constraint-lookup message handler (complete).
 // Flags: /O2 /MD /Gy /TP /arch:SSE /GS-.
 #include "types.h"
+#pragma pack(push, 4)
 
 typedef void  (__thiscall *FnVoid)(void*);
 typedef void  (__thiscall *FnVoidI)(void*, int);
 typedef void* (__thiscall *FnPtrV)(void*);
 #define VT(p) (*(void***)(p))
 
-void* __cdecl SP_ObjectTemplateDB();               // 0x0067cb40
-void* __cdecl SP_MessageServer();                  // 0x0067dcc0
 void* __cdecl cSPUILayout_FindWindow(void* self, unsigned id, int flag);
-void  __cdecl FUN_00644a80(void* a, void* b, void* c, int d);
-void  __cdecl FUN_006066f0(void* a);               // Constraint dtor
-bool  __cdecl FUN_00664550(int v);
 void  __cdecl FUN_00829d30_stub(void* p);
 
 // Window interface slots used by the feed item (retail UTFWin::IWindow layout).
@@ -112,6 +108,141 @@ struct FeedHelper {                                  // object created at +0x184
 
 void* operator new(unsigned size, const char* name, int a, int b, int c, int d);   // 0x00f473a0
 
+// ---------------------------------------------------------------------------------------------------------------
+// Shared machinery of the message handlers: refcounted interfaces, the 12-byte template-DB key, the
+// FunctionalMatch constraint used by the template database queries, and the message the item broadcasts.
+// ---------------------------------------------------------------------------------------------------------------
+struct IRefCounted {                                 // AddRef/Release pair every message sender implements
+    virtual void AddRef();                          // +0x00
+    virtual void Release();                         // +0x04
+};
+
+struct ResourceKey {                                // 12-byte template-DB key
+    unsigned mInstanceID;                           // +0x00
+    unsigned mTypeID;                               // +0x04
+    unsigned mGroupID;                              // +0x08
+};
+
+namespace eastl {
+
+struct sp_vector_allocator {
+    const char* mpName;                             // +0x0
+    uint32_t    mFlags;                             // +0x4
+};
+
+template<typename T, typename A>
+struct VectorBase {
+    T* mpBegin;                                     // +0x0
+    T* mpEnd;                                       // +0x4
+    T* mpCapacity;                                  // +0x8
+    A  mAllocator;                                  // +0xc
+};
+
+template<typename T, typename A = sp_vector_allocator>
+class vector : public VectorBase<T, A> {
+public:
+    ~vector();                                      // only ever destroyed by Constraint's out-of-line dtor
+};
+
+}
+
+namespace SP { namespace FunctionalMatch {
+
+enum eType { kInteger = 0x02e1a75d };               // parameter kind stored in Constraint::mType
+enum eCompare { kEqual = 0 };                       // comparison operator written by both ctors
+
+struct Constraint {                                 // 0x24 bytes
+    unsigned int mParameter;                        // +0x00  selected 12-byte-table entry
+    eType mType;                                    // +0x04  kInteger
+    union {
+        struct { int mMin; int mMax; } mIntVal;     // +0x08 / +0x0c
+        struct { float mMin; float mMax; } mFloatVal;
+    };
+    eastl::vector<Constraint, eastl::sp_vector_allocator> mNested;   // +0x10
+    Constraint(unsigned int param, eCompare, int value);             // 0x00558960 (max = value + 1)
+    Constraint(unsigned int param, eCompare, int min, int max);      // 0x005589c0
+    ~Constraint();                                                   // 0x006066f0
+};
+
+}}
+
+struct Message;                                     // built below
+
+namespace SP {
+
+struct ObjectTemplateDB {
+    virtual void v00(); virtual void v01(); virtual void v02(); virtual void v03();
+    virtual void v04(); virtual void v05(); virtual void v06(); virtual void v07();
+    virtual void v08(); virtual void v09(); virtual void v0a(); virtual void v0b();
+    virtual void v0c(); virtual void v0d(); virtual void v0e(); virtual void v0f();
+    virtual void v10(); virtual void v11(); virtual void v12(); virtual void v13();
+    virtual void v14(); virtual void v15(); virtual void v16(); virtual void v17();
+    virtual void v18(); virtual void v19(); virtual void v1a(); virtual void v1b();
+    virtual void v1c(); virtual void v1d(); virtual void v1e(); virtual void v1f();
+    virtual void v20();
+    // Does the template selected by `key` satisfy every constraint?
+    virtual bool Matches(const ResourceKey& key,
+                         const FunctionalMatch::Constraint& match);              // +0x84
+    virtual void v22(); virtual void v23(); virtual void v24(); virtual void v25();
+};
+
+ObjectTemplateDB* ObjectTemplateDB();               // 0x0067cb40 (singleton getter)
+
+struct MessageServer {
+    virtual void v00(); virtual void v01(); virtual void v02(); virtual void v03();
+    virtual void v04();
+    virtual int Send(unsigned int id, const Message& msg, int flags);            // +0x14
+};
+
+MessageServer* MessageServer();                     // 0x0067dcc0
+
+}
+
+namespace EA { namespace DateTime {
+
+struct DateTime {
+    __int64 mTicks;                                 // +0x00  one 64-bit clock value
+    void Set(int utc);                              // 0x0092e3d0
+};
+
+}}
+
+// Message posted when a feed item's subscriber count changes (0x00644a80 builds it).
+struct Message {
+    char pad00[0x0c];
+    IRefCounted* mpSender;                          // +0x0c
+    ResourceKey mKey;                               // +0x10
+    bool mMore;                                     // +0x1c
+    Message(IRefCounted* sender, const ResourceKey& key, bool more);   // 0x00644a80
+    ~Message() { if (mpSender) mpSender->Release(); }
+};
+
+struct cSPUIFeedListCategory;
+struct FeedItem;
+
+// Window procedure of a feed item.  Retail calls the handler with `this` pointing at the item's window-proc
+// sub-object, four bytes into the item, so the item's own fields sit 4 bytes lower in this view; the handler
+// recovers the item pointer with `(FeedItem*)((char*)this - 4)` and reads the subscriber count, the change
+// flag and the category through it, while the query state is read through the proc view.
+struct FeedItemProc {
+    char    pad00[0x10];
+    bool    mInitialised;               // +0x10  (item + 0x14)
+    char    pad11[0x4b];
+    int     mCount;                     // +0x5c  (item + 0x60) subscriber count
+    char    pad60[0x5c];
+    bool    mFiltered;                  // +0xbc  (item + 0xc0) property 0x744717c8
+    char    padbd[0x73];
+    unsigned int mFeedKey;              // +0x130 (item + 0x134) property 0x744717c6 key instance
+    int     mQueryKey;                  // +0x134 (item + 0x138) query selector
+    char    pad138[0x3c];
+    unsigned int mTypeKey;              // +0x174 (item + 0x178) feed type 0x11f44f6b
+    bool FUN_00669c90(int id, const unsigned int* params);          // 0x00669c90
+};
+
+struct cSPUIFeedListCategory {
+    bool IsLive(bool force);                        // 0x00664550
+};
+
 struct FeedItem {
     char    pad00[8];
     char    mSub08[0x10];               // +0x08 (address passed on)
@@ -125,7 +256,8 @@ struct FeedItem {
     uint32_t mIconKey[3];               // +0x78
     char    pad84[2];
     uint8_t mChanged;                   // +0x86
-    char    pad87[0xd];
+    char    pad87[9];
+    cSPUIFeedListCategory* mpCategory;  // +0x90
     cSPUILayout* mLayout;               // +0x94
     char    pad98[4];
     uint32_t mField9C;                  // +0x9c
@@ -152,6 +284,9 @@ struct FeedItem {
     char    pad140[0x44];
     RefObj* mpHelper;                   // +0x184
     int     CountItems();                                           // 0x006693c0
+    void    Recount();                                              // 0x00669410
+    // The item's own vtable starts with AddRef/Release, so it is the sender a broadcast message holds.
+    IRefCounted* Sender() { return (IRefCounted*)this; }
 };
 
 __forceinline void AssignWin(IWin** field, IWin* nw)
@@ -295,17 +430,104 @@ void __cdecl ReloadCallback(FeedItem* self, int a2, bool reload) {
 }
 
 // -----------------------------------------------------------------------------
-// @ 0x00669c90  constraint-lookup callback (IWinProc DoMessage override)
+// Messages the handler reacts to, and the one it broadcasts.
+// ---------------------------------------------------------------------------------------------------------------
+static const int kMsgFeedCountChanged = 0x064e5bda;             // {feed key, delta, key}
+static const int kMsgKeyAdded         = (int)0x9421c619;        // {12-byte key}
+static const int kMsgFeedItemChanged  = (int)0x3b60b3ad;        // broadcast: {key, more}
+
+// 12-byte-table parameters of the two template queries.
+static const unsigned int kParamSubscribed = 0x05fb4759;
+static const unsigned int kParamCreatedAt  = 0x061ef9b1;
+
 // -----------------------------------------------------------------------------
-bool __fastcall FUN_00669c90(void* self, int a1, unsigned* a2) {
-    void* item = (char*)self - 4;
-    if (!*(uint8_t*)((char*)self + 0x10)) return false;
-    if (!*(void**)((char*)item + 0x90)) return false;
-    if (!FUN_00664550(1)) return false;
-    if (*(int*)((char*)self + 0x174) != 0x11f44f6b) return false;
-    if (a1 != 0x064e5bda && a1 != (int)0x9421c619) return false;
-    (void)a2;
-    // Skeleton: the real body dispatches on the feed-type/query hashes, builds
-    // SP::FunctionalMatch::Constraint objects and probes SP::ObjectTemplateDB.
+// @ 0x00669c90  FeedItemProc::FUN_00669c90  (feed item window proc message handler)
+// -----------------------------------------------------------------------------
+bool FeedItemProc::FUN_00669c90(int id, const unsigned int* params)
+{
+    // retail addresses the whole item as `this - 1` and keeps that pointer in the frame
+    FeedItem* pItem = (FeedItem*)((char*)this - 4);
+    if (!mInitialised) return false;
+    if (!pItem->mpCategory) return false;
+    if (!pItem->mpCategory->IsLive(true)) return false;
+    if (mTypeKey != 0x11f44f6b) return false;
+    if (id != kMsgFeedCountChanged && id != kMsgKeyAdded) return false;
+
+    int old = mCount;
+    switch (mQueryKey) {
+    case (int)0xc84ea7b6:                       // template created/removed: subscribe when it matches
+    case (int)0xbadc8636: {
+        if (id != kMsgKeyAdded) break;
+        ResourceKey key;
+        key.mInstanceID = params[0];
+        key.mTypeID     = params[1];
+        key.mGroupID    = params[2];
+        {
+            SP::FunctionalMatch::Constraint match(kParamSubscribed, SP::FunctionalMatch::kEqual, 1);
+            bool matches = SP::ObjectTemplateDB()->Matches(key, match);
+            if (mQueryKey == (int)0xc84ea7b6) {
+                if (matches)
+                    ++mCount;
+            } else if (mQueryKey == (int)0xbadc8636) {
+                if (!matches) {
+                    // not subscribed yet: accept a template created within the last 0x30 hours
+                    EA::DateTime::DateTime now;
+                    now.Set(1);
+                    int hours = (int)((unsigned __int64)(now.mTicks - 0x0EBF0CD910LL) / 0xe10);
+                    SP::FunctionalMatch::Constraint recent(kParamCreatedAt, SP::FunctionalMatch::kEqual,
+                                                          hours - 0x30, hours + 1);
+                    if (SP::ObjectTemplateDB()->Matches(key, recent))
+                        ++mCount;
+                }
+            }
+        }
+        break;
+    }
+    case (int)0xb0449ead:                       // count carried by the message itself
+    case (int)0xe04bb957:
+    case (int)0x7f6198d6: {
+        if (id != kMsgFeedCountChanged) break;
+        unsigned int key = mFeedKey;
+        if (mQueryKey == (int)0xe04bb957)
+            key = 0x913b23be;
+        else if (mQueryKey == (int)0x7f6198d6)
+            key = 0xa86067e7;
+        else if (key == 0)
+            break;
+        if (params[0] != key) break;
+        mCount = params[1] + old;
+        break;
+    }
+    case (int)0xc0640133:                       // every new template counts once
+        if (id != kMsgKeyAdded) break;
+        mCount = old + 1;
+        break;
+    default:
+        if (id == kMsgKeyAdded && mFiltered)
+            pItem->Recount();
+        break;
+    }
+
+    if (mCount != old) {
+        if (pItem->mCount60 != pItem->mCount64)
+            pItem->mChanged = 1;
+        ResourceKey key;
+        bool more;
+        if (id == kMsgKeyAdded) {
+            key.mInstanceID = params[0];
+            key.mTypeID     = params[1];
+            key.mGroupID    = params[2];
+            more = true;
+        } else {
+            key.mInstanceID = params[2];
+            key.mTypeID     = params[3];
+            key.mGroupID    = params[4];
+            more = (int)params[1] > 0;
+        }
+        Message msg(pItem->Sender(), key, more);
+        SP::MessageServer()->Send(kMsgFeedItemChanged, msg, 0);
+    }
     return false;
 }
+
+#pragma pack(pop)
