@@ -1,5 +1,2 @@
-007e32c0  -  vector<cActionMessage> insert/grow; only a skeleton (grow path not reproduced)
-007e34f0  -  cTransitionCommand::Execute; skeleton (nesting check / arg parse not reproduced)
-007e3610  -  cAppStateManager::HandleMessage (1320B); skeleton
-007e3b40  -  FUN_007e3b40 (580B); skeleton
-007e3f00  -  cStateCommand::Execute (456B); skeleton
+# va  diff  reason (a partial.txt row alone does not settle a rework VA; it records what is left partial)
+007e3610  1315  cAppStateManager::HandleMessage skeleton (retail 1320 B, this = manager+4); documented in work/match/scratch_s007e32c0_fixlog.txt
