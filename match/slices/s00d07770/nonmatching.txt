@@ -3,3 +3,6 @@
 00d07ca0 65 equivalence WEAK
 00d081f0 144 equivalence WEAK
 00d082a0 490 equivalence UNSUPPORTED (only 0/400 inputs valid)
+00d078d0 220 nonmatching: C103::CreateLayout; 344 vs 354 bytes. difftest FAIL 5/5 (first memory pool @424e00f0: 40464200 vs 04044210); flags /O2 /MD /Gy /EHsc /TP /arch:SSE
+00d07bb0 116 nonmatching: C103::GetValue; 224 vs 228 bytes. difftest FAIL 5/221 (fake-arity: no call site before 4b8f0080); flags /O2 /MD /Gy /EHsc /TP /arch:SSE
+00d07e40 823 nonmatching: C103::CanAffordEmpire; 871 vs 935 bytes. difftest FAIL 5/5 (execution fault at 006a12a8); flags /O2 /MD /Gy /EHsc /TP /arch:SSE
