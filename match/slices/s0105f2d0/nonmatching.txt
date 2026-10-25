@@ -1,0 +1,3 @@
+0105f2d0  900  complete; 1120-byte reconstruction (retail 1156) of SP::cUFOLocomotion::UpdateSolarGalaxyLocomotion.  equiv: UNSUPPORTED (1 unresolved reference: ?GetPosition@cUFOWaypoint@@QAEPAVcSPVector3@@XZ).
+0105f760  892  complete; 766-byte reconstruction (retail 1109) of UpdateSolarAvoidance.  equiv: FAIL (5/5 valid inputs mismatched, first diff memory pool @40020718; coverage 46.5%).
+0105fbc0  1179  complete; 1304-byte reconstruction (retail 1414) of UpdateSolarBody.  equiv: UNSUPPORTED (2 unresolved references: g_ufoBodyFilter, ?GetCollisionPosition@cGameDataObject@@QAEPAVcSPVector3@@XZ; annotation-implausible 018ebadc).
