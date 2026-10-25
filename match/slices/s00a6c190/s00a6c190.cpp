@@ -10,17 +10,12 @@
 extern "C" void  operator_delete__(void* p);
 extern "C" void* operator_new(int size, const char* tag, int a, int b, const char* file, int line);
 extern "C" bool  FUN_00a72f70(int x);
-extern "C" void  FUN_00a6ae70(int v);
-extern "C" void  FUN_00a6c030(int v);
-extern "C" void  FUN_00a84da0(void* s, int a, int b);
-extern "C" void  IO_ReadInt32(void* s, void* buf, int n, int pad);
-extern "C" void  FUN_0093a700(void* s, void* buf, int n, int pad);
-extern "C" void  FUN_0093a800(void* s, void* buf, int n, int pad);
-extern "C" void  FUN_00594b60(void* dst, void* src, unsigned flag);
-extern "C" void  FUN_005302b0(void* s, void* vec);
-extern "C" void  FUN_00a6a810(void* dst, void* src, unsigned flag);
-extern "C" void  FUN_00a6aaa0(void* dst, int n, void* flag);
-extern "C" void  ht_DoFreeNodes(int first, int last);
+extern "C" void  FUN_00a84da0(void* stream, int version, void* rec);  // 0x00a84da0
+extern "C" void  IO_ReadInt32(void* s, void* buf, int n, int pad);    // 0x0093a780
+extern "C" void  FUN_0093a700(void* s, void* buf, int n, int pad);    // 0x0093a700
+extern "C" void  FUN_0093a800(void* s, void* buf, int n, int pad);    // 0x0093a800
+extern "C" void  FUN_005302b0(void* s, void* vec);                    // 0x005302b0
+extern "C" char  g_01667bac[];                                        // 0x01667bac eastl empty-string data
 
 // dispatch tables: 0x01675ebc stride 0x20 (8 ints), 0x01675a08 stride 0x24 (9 ints)
 extern int gTblB[];
@@ -105,7 +100,7 @@ struct FXParams {
     int   i1c;
 };
 
-struct EString { void* begin; void* end; void* cap; void* alloc; };
+struct EString { char* begin; char* end; char* cap; };   // 12-byte SSO string
 
 struct cEffectsManager {
     virtual void v00(); virtual void v01(); virtual void v02(); virtual void v03();
@@ -666,188 +661,247 @@ int GmeRefCount::ScalarDeletingDestructor(unsigned flags)
 }
 
 // ===========================================================================
-// @ 0x00a6c190
-struct Ctx2 {
-    char _p00[0xc];
-    int* mC0c;                 // 0x0c
-    char _p10[0x20 - 0x10];
-    int* mC20;                 // 0x20
-    char _p24[0x34 - 0x24];
-    int  mV34;                 // 0x34
-    int  mV38;                 // 0x38
-    char _p3c[0x4c - 0x3c];
-    int  mHt4c;                // 0x4c
-    int  mHt50;                // 0x50
-    int  mHt54;                // 0x54
-    char _p58[0x6c - 0x58];
-    int  mHt6c;                // 0x6c
-    int  mHt70;                // 0x70
-    int  mHt74;                // 0x74
-    char _p78[0x88 - 0x78];
-    int  mV88;                 // 0x88
-    int  mV8c;                 // 0x8c
+// ---------------------------------------------------------------------------
+// containers walked by the Ctx2 stream reader below
 
-    unsigned Read(void* stream);
+struct IRefCounted {                    // vptr @ 0, reference count @ +4
+    virtual void Destroy(int flags);
+    int mnRefCount;
 };
 
-unsigned Ctx2::Read(void* stream)
+struct RefVec {                         // 0x14-byte slot vector (this+0x0c / +0x20)
+    IRefCounted** mpBegin;              // 0x00
+    IRefCounted** mpEnd;                // 0x04
+    IRefCounted** mpCap;                // 0x08
+    int mPad0c[2];
+    void resize(unsigned count);                        // 0x00a6ae70
+};
+
+struct Rec58 { char mBytes[0x58]; };    // one 0x58-byte effect record
+
+struct Rec58Vec {
+    Rec58* mpBegin;                     // 0x00
+    Rec58* mpEnd;                       // 0x04
+    Rec58* mpCap;                       // 0x08
+    int mPad0c[2];
+    void resize(unsigned count);                        // 0x00a6c030
+};
+
+struct T8 { int m0; int m4; };          // one 8-byte vector element
+
+struct Vec8 {
+    T8* mpBegin;                        // 0x00
+    T8* mpEnd;                          // 0x04
+    T8* mpCap;                          // 0x08
+    int mPad0c[2];
+    void insert_n(T8* pos, unsigned n, const T8* elem);  // 0x00a6aaa0
+};
+
+struct HNode;
+struct HTInsertOut { int mWords[3]; };  // thin insert-return scratch
+
+struct HashTable {                      // node table (this+0x48 and this+0x68)
+    unsigned mx00;                      // 0x00
+    HNode** mpBuckets;                  // 0x04
+    unsigned mBucketCount;              // 0x08
+    unsigned mSize;                     // 0x0c
+    HashTable* insert_node(HTInsertOut* out, const EString* key, unsigned flag); // 0x00a6a810
+};
+
+struct Key { int m0; int m4; };         // 8-byte resource key
+struct KeyPair { Key mKey; int mValue; };
+
+struct Ctx2 {
+    char _pad00[0xc];
+    RefVec* mpSlotsB;                   // 0x0c
+    char _pad10[0x10];
+    RefVec* mpSlotsA;                   // 0x20
+    char _pad24[0x10];
+    Rec58Vec mRecs;                     // 0x34
+    HashTable mStrMap;                  // 0x48
+    char _pad58[0x10];
+    HashTable mKeyMap;                  // 0x68
+    char _pad78[0x10];
+    Vec8 mVec8;                         // 0x88
+
+    bool Read(void* stream);
+};
+
+static const char kAllocatorFile[] =
+    "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h";
+
+// @ 0x00a6c190
+bool Ctx2::Read(void* stream)
 {
-    char* self = (char*)this;
-    unsigned local_58 = 0;
-    unsigned local_48 = 0;
-    unsigned local_4c = 0;
-    unsigned local_44 = 0;
-    unsigned local_50 = 0;
-    unsigned uStack_40 = 0;
-    unsigned short tag = 0;
-    void* pv38 = 0;
-    void* pv34 = 0;
-    int   iStack_54 = 0;
-    EString str;
+    typedef IRefCounted* (__cdecl* RefFactory)(void* stream, unsigned version);
 
-    FUN_0093a700(stream, &local_58, 1, 0);
-    if ((short)local_58 != 4)
-        return 0;
+    unsigned version = 0;
+    unsigned tagB = 0;
+    unsigned tagA = 0;
+    unsigned skip = 0;
+    unsigned count = 0;
+    int      id = 0;
+    Key      key;
+    EString  str;
 
-    // ---- table B -----------------------------------------------------------
-    FUN_0093a700(stream, &tag, 1, 0);
-    while ((short)tag != -1) {
-        FUN_0093a700(stream, &local_58, 1, 0);
-        IO_ReadInt32(stream, &local_48, 1, 0);
-        unsigned t = (unsigned)tag & 0xffff;
-        if ((gTblB[t * 8] == 0) ||
-            ((int)(local_58 & 0xffff) < gTblB[t * 8 + 3]) ||
-            (gTblB[t * 8 + 4] < (int)(local_58 & 0xffff))) {
-            ((IStream*)stream)->Skip((int)local_48, 1);
+    FUN_0093a700(stream, &version, 1, 0);
+    if ((unsigned short)version != 4)
+        return false;
+
+    // ---- dispatch table B (stride 0x20) ------------------------------------
+    FUN_0093a700(stream, &tagB, 1, 0);
+    while ((unsigned short)tagB != 0xffff) {
+        unsigned t = (unsigned short)tagB;
+        FUN_0093a700(stream, &version, 1, 0);
+        IO_ReadInt32(stream, &skip, 1, 0);
+        if (gTblB[t * 8] == 0 ||
+            (int)(unsigned short)version < gTblB[t * 8 + 3] ||
+            gTblB[t * 8 + 4] < (int)(unsigned short)version) {
+            ((IStream*)stream)->Skip((int)skip, 1);
         }
         else {
-            IO_ReadInt32(stream, &local_4c, 1, 0);
-            FUN_00a6ae70((int)local_4c);
-            local_44 = local_4c;
-            for (unsigned i = 0; (int)i < (int)local_44; ++i) {
-                int* array = *(int**)(*(int*)(self + 0xc) + t * 0x14);
-                int* slot = (int*)((char*)array + i * 4);
-                void** nv = (void**)((void*(*)(void*, unsigned))((uintptr_t)gTblB[t * 8]))(stream, local_58 & 0xffff);
-                int* ov = (int*)*slot;
-                if (nv != (void**)ov) {
-                    if (nv)
-                        nv[1] = (void*)((int)nv[1] + 1);
-                    *slot = (int)nv;
-                    if (ov) {
-                        ov[1] = ov[1] - 1;
-                        if (ov[1] == 0) {
-                            ov[1] = 1;
-                            (*(void(**)(int))(*ov))(1);
+            IO_ReadInt32(stream, &count, 1, 0);
+            mpSlotsB[t].resize(count);
+            for (int i = 0; i < (int)count; ++i) {
+                IRefCounted** slot = mpSlotsB[t].mpBegin + i;
+                RefFactory make = (RefFactory)(void*)(uintptr_t)(unsigned)gTblB[t * 8];
+                IRefCounted* created = make(stream, (unsigned short)version);
+                IRefCounted* old = *slot;
+                if (created != old) {
+                    if (created)
+                        ++created->mnRefCount;
+                    *slot = created;
+                    if (old) {
+                        --old->mnRefCount;
+                        if (old->mnRefCount == 0) {
+                            old->mnRefCount = 1;
+                            old->Destroy(1);
                         }
                     }
                 }
             }
         }
-        FUN_0093a700(stream, &tag, 1, 0);
+        FUN_0093a700(stream, &tagB, 1, 0);
     }
 
-    // ---- table A -----------------------------------------------------------
+    // ---- dispatch table A (stride 0x24) ------------------------------------
+    FUN_0093a700(stream, &tagA, 1, 0);
+    while ((unsigned short)tagA != 0xffff) {
+        unsigned t = (unsigned short)tagA;
+        FUN_0093a700(stream, &version, 1, 0);
+        IO_ReadInt32(stream, &skip, 1, 0);
+        if (gTblA[t * 9] == 0 ||
+            (int)(unsigned short)version < gTblA[t * 9 + 3] ||
+            gTblA[t * 9 + 4] < (int)(unsigned short)version) {
+            ((IStream*)stream)->Skip((int)skip, 1);
+        }
+        else {
+            IO_ReadInt32(stream, &count, 1, 0);
+            mpSlotsA[t].resize(count);
+            for (int i = 0; i < (int)count; ++i) {
+                IRefCounted** slot = mpSlotsA[t].mpBegin + i;
+                RefFactory make = (RefFactory)(void*)(uintptr_t)(unsigned)gTblA[t * 9];
+                IRefCounted* created = make(stream, (unsigned short)version);
+                IRefCounted* old = *slot;
+                if (created != old) {
+                    if (created)
+                        ++created->mnRefCount;
+                    *slot = created;
+                    if (old) {
+                        --old->mnRefCount;
+                        if (old->mnRefCount == 0) {
+                            old->mnRefCount = 1;
+                            old->Destroy(1);
+                        }
+                    }
+                }
+            }
+        }
+        FUN_0093a700(stream, &tagA, 1, 0);
+    }
+
+    // ---- vector of 0x58-byte records ---------------------------------------
+    FUN_0093a700(stream, &version, 1, 0);
+    IO_ReadInt32(stream, &count, 1, 0);
+    mRecs.resize(count);
     {
-        unsigned short atag = 0;
-        FUN_0093a700(stream, &atag, 1, 0);
-        while (atag != 0xffff) {
-            FUN_0093a700(stream, &local_58, 1, 0);
-            IO_ReadInt32(stream, &local_44, 1, 0);
-            unsigned t = (unsigned)atag;
-            if ((gTblA[t * 9] == 0) ||
-                ((int)(local_58 & 0xffff) < gTblA[t * 9 + 3]) ||
-                (gTblA[t * 9 + 4] < (int)(local_58 & 0xffff))) {
-                ((IStream*)stream)->Skip((int)local_44, 1);
+        int records = (int)(((char*)mRecs.mpEnd - (char*)mRecs.mpBegin) / 0x58);
+        for (int i = 0; i < records; ++i)
+            FUN_00a84da0(stream, (unsigned short)version, &mRecs.mpBegin[i]);
+    }
+
+    // ---- 8-byte-keyed node table (this+0x68) -------------------------------
+    ((void (__thiscall*)(void*, void**, unsigned))0x007611f0)
+        (&mKeyMap, (void**)mKeyMap.mpBuckets, mKeyMap.mBucketCount);
+    mKeyMap.mSize = 0;
+    IO_ReadInt32(stream, &id, 1, 0);
+    while (id >= 0) {
+        FUN_0093a800(stream, &key, 1, 0);
+        KeyPair pair;
+        pair.mKey = key;
+        pair.mValue = id;
+        HTInsertOut out;
+        ((void (__thiscall*)(void*, void*, const void*, unsigned))0x00594b60)
+            (&mKeyMap, &out, &pair, 0);
+        IO_ReadInt32(stream, &id, 1, 0);
+    }
+
+    // ---- string-keyed node table (this+0x48) -------------------------------
+    ((void (__thiscall*)(void*, void**, unsigned))0x006a85b0)
+        (&mStrMap, (void**)mStrMap.mpBuckets, mStrMap.mBucketCount);
+    mStrMap.mSize = 0;
+    str.begin = g_01667bac;
+    str.end = g_01667bac;
+    str.cap = g_01667bac + 1;
+    IO_ReadInt32(stream, &id, 1, 0);
+    while (id >= 0) {
+        FUN_005302b0(stream, &str);
+        {
+            int len = (int)(str.end - str.begin);
+            char* dst;
+            char* cap;
+            if (len + 1 <= 1) {
+                dst = g_01667bac;
+                cap = g_01667bac + 1;
             }
             else {
-                IO_ReadInt32(stream, &local_4c, 1, 0);
-                FUN_00a6ae70((int)local_4c);
-                local_48 = local_4c;
-                for (unsigned i = 0; (int)i < (int)local_48; ++i) {
-                    int* array = *(int**)(*(int*)(self + 0x20) + t * 0x14);
-                    int* slot = (int*)((char*)array + i * 4);
-                    void** nv = (void**)((void*(*)(void*, unsigned))((uintptr_t)gTblA[t * 9]))(stream, local_58 & 0xffff);
-                    int* ov = (int*)*slot;
-                    if (nv != (void**)ov) {
-                        if (nv)
-                            nv[1] = (void*)((int)nv[1] + 1);
-                        *slot = (int)nv;
-                        if (ov) {
-                            ov[1] = ov[1] - 1;
-                            if (ov[1] == 0) {
-                                ov[1] = 1;
-                                (*(void(**)(int))(*ov))(1);
-                            }
-                        }
-                    }
-                }
+                dst = (char*)operator_new(len + 1, "EASTL", 0, 0, kAllocatorFile, 0xd1);
+                cap = dst + len + 1;
             }
-            FUN_0093a700(stream, &atag, 1, 0);
-        }
-    }
-
-    // ---- vector of 0x58-byte records at +0x34 ------------------------------
-    FUN_0093a700(stream, &local_58, 1, 0);
-    IO_ReadInt32(stream, &uStack_40, 1, 0);
-    {
-        int* begin = (int*)(self + 0x34);
-        FUN_00a6c030((int)uStack_40);
-        int n = (*(int*)(self + 0x38) - *begin) / 0x58;
-        for (int i = 0; i < n; ++i)
-            FUN_00a84da0(stream, local_58 & 0xffff, *begin + i * 0x58);
-    }
-
-    // ---- hashtable at +0x6c ------------------------------------------------
-    ht_DoFreeNodes(*(int*)(self + 0x6c), *(int*)(self + 0x70));
-    *(int*)(self + 0x74) = 0;
-    IO_ReadInt32(stream, &iStack_54, 1, 0);
-    while (-1 < iStack_54) {
-        FUN_0093a800(stream, &pv38, 1, 0);
-        local_44 &= 0xffffff00;
-        FUN_00594b60(&local_48, &pv38, local_44);
-        IO_ReadInt32(stream, &iStack_54, 1, 0);
-    }
-
-    // ---- hashtable (EString keys) at +0x4c ---------------------------------
-    ht_DoFreeNodes(*(int*)(self + 0x4c), *(int*)(self + 0x50));
-    *(int*)(self + 0x54) = 0;
-    IO_ReadInt32(stream, &iStack_54, 1, 0);
-    while (-1 < iStack_54) {
-        FUN_005302b0(stream, &str);
-        int len = (int)((char*)str.end - (char*)str.begin);
-        void* dst;
-        if (len < 2) {
-            dst = &str;
-        }
-        else {
-            dst = operator_new(len, "EASTL", 0, 0, "allocator.h", 0xd1);
-        }
-        if (len > 0)
             memcpy(dst, str.begin, (size_t)len);
-        *(char*)((char*)dst + len) = 0;
-        local_48 &= 0xffffff00;
-        FUN_00a6a810(&local_48, &dst, local_48);
-        if (len >= 2 && dst)
-            operator_delete__(dst);
-        IO_ReadInt32(stream, &iStack_54, 1, 0);
+            dst[len] = 0;
+            EString keyCopy;
+            keyCopy.begin = dst;
+            keyCopy.end = dst + len;
+            keyCopy.cap = cap;
+            HTInsertOut out;
+            mStrMap.insert_node(&out, &keyCopy, 0);
+            if (cap - dst > 1 && dst)
+                operator_delete__(dst);
+        }
+        IO_ReadInt32(stream, &id, 1, 0);
     }
 
-    // ---- vector at +0x88 ---------------------------------------------------
-    IO_ReadInt32(stream, &local_50, 1, 0);
+    // ---- vector of 8-byte records (this+0x88) ------------------------------
+    IO_ReadInt32(stream, &count, 1, 0);
     {
-        char* begin = *(char**)(self + 0x88);
-        char* end = *(char**)(self + 0x8c);
-        unsigned have = (unsigned)((end - begin) >> 3);
-        if (have < local_50) {
-            local_44 = 0;
-            FUN_00a6aaa0(end, (int)(local_50 - have), &local_44);
+        unsigned have = (unsigned)(mVec8.mpEnd - mVec8.mpBegin);
+        if (have < count) {
+            T8 zero;
+            zero.m0 = 0;
+            zero.m4 = 0;
+            mVec8.insert_n(mVec8.mpEnd, count - have, &zero);
         }
         else {
-            char* newEnd = begin + local_50 * 8;
-            *(int*)(self + 0x8c) = (int)(end - (newEnd - begin) * 0) - (int)(end - newEnd);
+            T8* newEnd = mVec8.mpBegin + count;
+            memcpy(newEnd, mVec8.mpEnd, 0);
+            mVec8.mpEnd = newEnd;
         }
-        for (unsigned i = 0; i < local_50; ++i)
-            FUN_0093a800(stream, (void*)(*(int*)(self + 0x88) + i * 8), 1, 0);
+        for (unsigned i = 0; i < count; ++i)
+            FUN_0093a800(stream, &mVec8.mpBegin[i], 1, 0);
     }
-    return 1;
+
+    if (str.cap - str.begin > 1 && str.begin)
+        operator_delete__(str.begin);
+    return true;
 }
