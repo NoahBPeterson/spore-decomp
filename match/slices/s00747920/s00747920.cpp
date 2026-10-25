@@ -15,21 +15,28 @@ struct cSPTransform {
 };
 
 // --- callees ---------------------------------------------------------------
-void* operator_new(uint32_t n, const char* name, int a, int b, const char* file, int line);
+// Retail thiscall helpers are modelled as extern "C" __fastcall(self, dummy, ...) so the
+// emulator sees this in ecx and the dummy in edx (MSVC 2008 rejects __thiscall on free
+// functions); the literal 0 dummy keeps the stack shape identical to the original.
+void* operator_new(uint32_t n, const char* name, int a, int b, const char* file, int line); // 0x00f473a0
 void  operator_delete_(void* p);
-void  FUN_007457a0(int a, int b);
+extern "C" void __fastcall FUN_007457a0(void* self, int dummy, int a, int b);   // 0x007457a0
 void  RBTreeInsert(void* node, void* parent, void* anchor, int flag);
-void  cSPTransform_Assign(void* dst, const void* src);
-void* FUN_00743fb0(void* p, float f, void* box);
-void  FUN_00745e00(void* first, int top, int size, int pos, float vx, float vy, u32 cmp);
-void  FUN_00745e80(void* first, int top, int size, int pos, float vx, float vy, u32 cmp);
+extern "C" void __fastcall cSPTransform_Assign(void* self, int dummy, const void* src);   // 0x00537dc0
+extern "C" void __fastcall Matrix3_Assign(void* self, int dummy, const void* src);   // 0x0041cb40
+extern "C" int  __fastcall cSPTransform_BackTransformPoint(void* self, int dummy, void* pt);   // 0x004ff6d0
+extern "C" int  __fastcall cModelInstance_PickLine(void* self, int dummy, void* pos, float radius, void* v, int flag);   // 0x0073f540
+void* FUN_00743fb0(void* p, float f, void* box);   // 0x00743fb0
+void  FUN_00745e00(void* first, int top, int size, int pos, float vx, float vy, u32 cmp);   // 0x00745e00
+void  FUN_00745e80(void* first, int top, int size, int pos, float vx, float vy, u32 cmp);   // 0x00745e80
 void  adjust_heap_occluder(void* first, int top, int size, int pos, float a, float b, float c,
                            float d, float e, float f, void* cmp);
-void  translateTransform(void* out, void* a, const void* b);
-int   cModelInstance_PickLine(void* inst, void* pt, float r, void* xf, bool b);
-int   cSPTransform_BackTransformPoint(const void* xf, void* pt);
-extern float g_f162eb0c, g_f162eb10, g_f162eb14, g_f162ec38, g_f1485720;
-void Matrix3_Assign(void* dst, const void* src);
+void  translateTransform(void* out, void* a, const void* b);   // 0x006271a0
+extern float g_f162eb0c;   // 0x0162eb0c
+extern float g_f162eb10;   // 0x0162eb10
+extern float g_f162eb14;   // 0x0162eb14
+extern float g_f162ec4c;   // 0x0162ec4c  Matrix3 identity source
+extern float g_f1485720;   // 0x01485720  _HK_REAL_ONE
 
 // refcounted object with refcount at +4 and releasing slot at vtable+4.
 struct RCObj {
@@ -73,35 +80,55 @@ void Stub00747920::F()
     }
 }
 
+// refcounted load-queue element: object pointer at +4, trailing dwords at +0xc..+0x18.
+struct LoadQueueEntry {
+    int    f00;   // +0x00
+    RCObj* obj;   // +0x04
+    int    f08;   // +0x08
+    int    f0c;   // +0x0c
+    int    f10;   // +0x10
+    int    f14;   // +0x14
+    int    f18;   // +0x18
+};
+// 0x1c-byte deque element: two object words then five payload dwords.
+struct LoadQueueSlot { RCObj* w0; RCObj* w1; int p0, p1, p2, p3, p4; };
+struct LoadQueue {
+    void** mMapBegin;   // +0x00
+    int    mMapCap;     // +0x04
+    unsigned char pad08[0x18 - 0x08];
+    void*  mCur;        // +0x18
+    void*  mNext;       // +0x1c
+    void*  mEnd;        // +0x20
+    void** mMapEnd;     // +0x24
+    void FUN_00747980(LoadQueueEntry* e);
+};
 // @ 0x00747980 : deque< cLoadQueueEntry >::push_back
-void FUN_00747980(int* d, int* entry)
+void LoadQueue::FUN_00747980(LoadQueueEntry* e)
 {
-    RCObj* o = (RCObj*)entry[1];
+    RCObj* o = e->obj;
     if (o) (*(void(__thiscall**)(RCObj*))(*(void**)o))(o);
-    if (d[1] <= (int)((unsigned)(d[9] - *d) >> 2) + 1)
-        FUN_007457a0(1, 1);
+    int c1 = e->f0c, c2 = e->f10, c3 = e->f14, c4 = e->f18;
+    if ((int)(((char*)mMapEnd - (char*)mMapBegin) >> 2) + 1 >= mMapCap)
+        FUN_007457a0(this, 0, 1, 1);
     void* blk = operator_new(0xe0, "Graphics", 0, 0,
         "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h", 0xd1);
-    *(void**)(d[9] + 4) = blk;
-    int* slot = (int*)d[6];
+    mMapEnd[1] = blk;
+    LoadQueueSlot* slot = (LoadQueueSlot*)mCur;
     if (slot) {
-        RCObj* o2 = (RCObj*)entry[1];
-        slot[0] = entry[0];
-        slot[1] = (int)o2;
-        if (o2) (*(void(__thiscall**)(RCObj*))(*(void**)o2))(o2);
-        slot[2] = entry[2];
-        slot[3] = entry[3];
-        slot[4] = entry[4];
-        slot[5] = entry[5];
-        slot[6] = entry[6];
+        slot->w0 = e->obj;
+        slot->w1 = e->obj;
+        if (o) (*(void(__thiscall**)(RCObj*))(*(void**)o))(o);
+        slot->p0 = c1;
+        slot->p1 = c2;
+        slot->p2 = c3;
+        slot->p3 = c4;
+        slot->p4 = c4;
     }
-    int m = d[9];
-    d[9] = m + 4;
-    int nb = *(int*)(m + 4);
-    d[7] = nb;
-    d[8] = nb + 0xe0;
-    d[6] = d[7];
-    RelObj(o);
+    mMapEnd = (void**)((char*)mMapEnd + 4);
+    mNext = *mMapEnd;
+    mEnd = (char*)*mMapEnd + 0xe0;
+    mCur = mNext;
+    if (o) (*(void(__thiscall**)(RCObj*))((char*)(*(void**)o) + 4))(o);
 }
 
 // copy of a 0x38-byte record (0x00747ac0) (dwords + Matrix3 copy ctor)
@@ -426,7 +453,7 @@ int* FUN_00748470(int first, int last, int* dst)
 struct CullModel {
     unsigned char pad0[0x0c];
     uint32_t mFlags;         // +0x0c
-    unsigned char pad10[0x4c - 0x10];
+    unsigned char mXformSrc[0x4c - 0x10];  // +0x10  source transform copied into the local
     uint32_t mMaskA;         // +0x4c
     uint32_t mMaskB;         // +0x50
     unsigned char pad54[0x65 - 0x54];
@@ -443,30 +470,35 @@ struct CullModel {
     unsigned char padb0[0xe4 - 0xb0];
     unsigned char mTransform[0x38]; // +0xe4
 };
+// callback slot: the original loads `model+8` into ecx *and* pushes it as a stack argument,
+// so model it as a __fastcall call whose this is `model+8` and whose first stack argument is
+// also `model+8` (the literal 0 dummy occupies edx).
+typedef bool (__fastcall *CbFn)(void* self, int dummy, void* arg);
 struct SphereArg {
     uint32_t a, b, c, d;
-    int (__cdecl* cb)(void*);
+    CbFn cb;
     unsigned char e, f;
 };
-int FilterModelSphere(CullModel* model, float* pos, SphereArg* arg)
+bool FilterModelSphere(CullModel* model, float* pos, float radius, SphereArg* arg)
 {
-    if (!(model->mFlags & 1)) return 1;
-    if (!((arg->a == 0 && arg->b == 0) ||
-          (model->mMaskB & arg->b) != 0 || (model->mMaskA & arg->a) != 0))
-        return 1;
-    if ((model->mMaskB & arg->d) != 0 || (model->mMaskA & arg->c) != 0)
-        return 1;
-    if (arg->cb != 0 && !arg->cb((char*)model + 8))
-        return 1;
-    unsigned char b = ((arg->f & 1) && ((model->mFlags >> 8) & 1)) ? model->mC0 : arg->e;
     cSPTransform local;
-    memset(&local, 0, sizeof(local));
+    local.mFlags = 0;
+    local.mModificationCount = 0;
     local.mTranslation.x = g_f162eb0c;
     local.mTranslation.y = g_f162eb10;
     local.mTranslation.z = g_f162eb14;
     local.mScale = g_f1485720;
-    Matrix3_Assign(local.mRotation, &g_f162ec38);
-    cSPTransform_Assign(&local, model->mTransform);
+    Matrix3_Assign(local.mRotation, 0, &g_f162ec4c);
+    if (!(model->mFlags & 1)) return 1;
+    if (!((arg->a == 0 && arg->b == 0) ||
+          (model->mMaskA & arg->a) != 0 || (model->mMaskB & arg->b) != 0))
+        return 1;
+    if ((model->mMaskA & arg->c) != 0 || (model->mMaskB & arg->d) != 0)
+        return 1;
+    if (arg->cb != 0 && !arg->cb((char*)model + 8, 0, (char*)model + 8))
+        return 1;
+    unsigned char b = ((arg->f & 1) && ((model->mFlags >> 8) & 1)) ? model->mC0 : arg->e;
+    cSPTransform_Assign(&local, 0, model->mXformSrc);
     if (((model->mFlags >> 7) & 1) || (arg->f & 2)) {
         local.mModificationCount++;
         local.mScale = g_f1485720;
@@ -474,10 +506,23 @@ int FilterModelSphere(CullModel* model, float* pos, SphereArg* arg)
     float dx = pos[0] - local.mTranslation.x;
     float dy = pos[1] - local.mTranslation.y;
     float dz = pos[2] - local.mTranslation.z;
-    float reach = model->mRadius * local.mScale;
-    if (dx * dx + dy * dy + dz * dz < reach * reach) {
-        if (b != 0 && model->mBoxMinX <= model->mBoxMaxX)
-            return FUN_00743fb0(pos, 0.0f, &model->mBoxMinX) == 0;
+    float reach = model->mRadius * local.mScale + radius;
+    if (reach * reach <= dx * dx + dy * dy + dz * dz) return 1;
+    if (b >= 3 && model->mInst1 != 0 && *(int*)((char*)model->mInst1 + 0xcc) != 0) {
+        Vec3 v;
+        translateTransform(&v, model->mTransform, &local);
+        return cModelInstance_PickLine(model->mInst1, 0, pos, radius, &v, b == 3) == 0;
     }
-    return 1;
+    if (b >= 2 && model->mInst2 != 0 && *(int*)((char*)model->mInst2 + 0xcc) != 0) {
+        Vec3 v;
+        translateTransform(&v, model->mTransform, &local);
+        return cModelInstance_PickLine(model->mInst2, 0, pos, radius, &v, 1) == 0;
+    }
+    if (b >= 1 && model->mBoxMinX <= model->mBoxMaxX) {
+        Vec3 v = *(Vec3*)pos;
+        cSPTransform_BackTransformPoint(&local, 0, &v);
+        float r = (local.mScale == g_f1485720) ? radius : radius / local.mScale;
+        return FUN_00743fb0(&v, r, &model->mBoxMinX) == 0;
+    }
+    return 0;
 }
