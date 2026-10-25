@@ -1,2 +1,19 @@
 00acb490 eastl::vector<EA::AutoRefCount<SP::cStarRecord>,eastl::sp_vector_allocator> copy/ctor  # 4 contained vectors
 00acbaf0 FUN_00acbaf0  # node copy ctor for 0x20 node with vector at +0xc
+0145a158 DAT_0145a158  # element vtable {0x00ac8e60, 0x00ac85e0, 0x00ac8620, 0x00ac9d00}
+00f473a0 ?operator_new@@YAPAXIPBDHH0H@Z  # EAAllocate(size, name, a3, a4, file, line)
+00f47380 ?operator_delete@@YAXPAX@Z  # heap free guarded by the array cookie
+011e0744 ?FUN_011e0744@@YAPAXPAX00@Z  # memcpy thunk used by the 4-stride uninitialized_copy
+00ac96b0 ?FUN_00ac96b0@@YAPAXPAX00@Z  # 0x2c-stride uninitialized_copy
+00ac95a0 ?FUN_00ac95a0@@YAPAXPAX00@Z  # 0xc-stride uninitialized_copy
+00ac89a0 ?FUN_00ac89a0@@YAPAXPAX00@Z  # 0xc-stride element copy loop
+00ac9560 ?FUN_00ac9560@@YAXPAXHPBX@Z  # 0xc-stride fill_n
+00ac9680 ?FUN_00ac9680@@YAXPAXHPBX@Z  # 4-stride uninitialized_fill_n
+00ac9510 ?FUN_00ac9510@@YAPAXPAX00@Z  # 0xc-stride assign(begin, end, val)
+00ac9630 ?FUN_00ac9630@@YAPAXPAX00@Z  # 4-stride assign(begin, end, val)
+00ac97f0 ?FUN_00ac97f0@@YAPAXPAX00@Z  # 0xc-stride move_backward
+00ac8a30 ?FUN_00ac8a30@@YAPAXPAX00@Z  # 4-stride move_backward
+00ac95f0 ?FUN_00ac95f0@@YAPAXPAX000@Z  # 4-stride uninitialized_copy with out-iterator record
+00ac94c0 ?FUN_00ac94c0@@YAPAXPAX0000@Z  # 0xc-stride uninitialized_copy with out-iterator record
+00a02c30 ?FUN_00a02c30@XC@@QAEXXZ  # AutoRefCount addref
+00a05270 ?FUN_00a05270@XC@@QAEXXZ  # AutoRefCount release
