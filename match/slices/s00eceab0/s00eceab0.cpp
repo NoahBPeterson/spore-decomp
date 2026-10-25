@@ -315,31 +315,27 @@ bool SwatchMsgHandler::FUN_00ecf6d0(int msg, int arg2, int arg3)
         ((ValueSink*)FUN_00401020())->SetValue(u, *(float*)0x13f9bb0);
     }
     char* base = param_1 - 0x6c;
-    int b;
     int c;
+    int b;
     *(char*)&b = 1;
     if (K0((int*)base, 0x28) == (int)0x867a9ee9)
         *(char*)&b = 0;
     *(char*)&c = *(int*)(param_1 - 0x5c) != -1;
     if (*(char*)(base + 0x79) == 0) {
-        *(char*)&c = *(int*)(param_1 - 0x5c) != -1;
         int* w = (int*)((LayoutQuery*)*(void**)(base + 0x50))->FindWindowByID(0x7b6b2cd, true);
         if (w) C2(w, 0x7c, 1, c);
     }
     *(char*)&c = *(int*)(param_1 - 0x5c) != -1;
     if (*(char*)(base + 0x79) == 0) {
-        *(char*)&c = *(int*)(param_1 - 0x5c) != -1;
         int* w = (int*)((LayoutQuery*)*(void**)(base + 0x50))->FindWindowByID(0x4a1cb6d, true);
         if (w) C2(w, 0x7c, 1, c);
         if (*(char*)(base + 0x79) == 0) {
-            *(char*)&c = *(int*)(param_1 - 0x5c) != -1;
             w = (int*)((LayoutQuery*)*(void**)(base + 0x50))->FindWindowByID(0x73272b0, true);
             if (w) C2(w, 0x7c, 1, b);
         }
     }
     *(char*)&c = *(int*)(param_1 - 0x5c) != -1;
     if (*(char*)(base + 0x79) == 0) {
-        *(char*)&c = *(int*)(param_1 - 0x5c) != -1;
         int* w = (int*)((LayoutQuery*)*(void**)(base + 0x50))->FindWindowByID(0x7464588, true);
         if (w) C2(w, 0x7c, 1, c);
     }
