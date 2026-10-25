@@ -477,23 +477,20 @@ PropertyManager* GetPropertyManager();                 // 0x0067de30
 // @ 0x00bcf530
 void cBuilding::FUN_00bcf530(void* owner)
 {
-    cBuilding* self = this;
-    self->SetGameDataOwner2(owner);
+    this->SetGameDataOwner2(owner);
 
-    RefObject* oldOwner = (RefObject*)self->m_owner1f0;
+    RefObject* oldOwner = (RefObject*)m_owner1f0;
     if (owner != oldOwner) {
         if (owner != 0)
             ((RefObject*)owner)->AddRef();
-        self->m_owner1f0 = owner;
+        m_owner1f0 = owner;
         if (oldOwner != 0)
             oldOwner->Release();
     }
 
     OwnerCity* city = (OwnerCity*)owner;
-    void* valueA = city->m_sub120.GetA();
-    self->m_spatial34.SetA(valueA);
-    void* valueB = city->m_sub120.GetB();
-    self->m_spatial34.SetB(valueB);
+    m_spatial34.SetA(city->m_sub120.GetA());
+    m_spatial34.SetB(city->m_sub120.GetB());
 
     NounMgr* nounManager = GetNounManager();
     cGameNoun* noun = (cGameNoun*)nounManager->CreateNoun(0x2e72cae);
@@ -501,21 +498,21 @@ void cBuilding::FUN_00bcf530(void* owner)
     if (noun != 0)
         child = (cBuildingObject*)noun->CreateChild(0x2e71a5a);
 
-    cBuildingObject* oldChild = self->m_object344;
+    cBuildingObject* oldChild = m_object344;
     if (child != oldChild) {
         if (child != 0)
             child->AddRef();
-        self->m_object344 = child;
+        m_object344 = child;
         if (oldChild != 0)
             oldChild->Release();
     }
 
-    int effectId = self->m_spatial34.GetEffectId(100.0f);
-    self->m_object344->SetEffectId(effectId);
-    self->m_object344->SetSomeFloat(0.0f, 3.402823466e38f);
-    self->m_object344->SetOwner(this);
+    int effectId = m_spatial34.GetEffectId(100.0f);
+    m_object344->SetEffectId(effectId);
+    m_object344->SetSomeFloat(0.0f, 3.402823466e38f);
+    m_object344->SetOwner(this);
 
-    float value = self->m_field158;
+    float value = m_field158;
     cProperty* property = 0;
     PropertyManager* propertyManager = GetPropertyManager();
     if (propertyManager->GetProperty(0xa4c2f6bd, 0, &property)) {
@@ -525,8 +522,8 @@ void cBuilding::FUN_00bcf530(void* owner)
                 subProperty != 0 && subProperty->m_type12 == 0xd)
                 value = *subProperty->GetFloat();
         }
-        self->m_field14c = value;
-        self->m_field158 = value;
+        m_field14c = value;
+        m_field158 = value;
     }
 
     if (property != 0)
