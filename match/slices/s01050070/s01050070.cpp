@@ -58,13 +58,14 @@ void* __cdecl GetCurrentGameMode();                              // 0x00b5b800
 void* __cdecl FUN_010666a0();                                    // 0x010666a0
 void* __cdecl MessageServer();                                   // 0x0067dcc0
 void* __cdecl SpaceGameGet();                                    // 0x01002bd0
-void  __cdecl FUN_00ff4540(void* p);                             // 0x00ff4540
-void  __cdecl FUN_00c31a00(int a);                               // 0x00c31a00
-void  __cdecl FUN_00c389f0(float a);                             // 0x00c389f0
+struct cPlayer { void Spend(int cost); };                        // 0x00c31a00
+struct UFOThing { float FUN_00c389f0(float v); };                // 0x00c389f0
+struct cSPPlayerInventory { void FUN_00ff4540(void* item); };    // 0x00ff4540
 
 struct cInventory { char pad00[0x34]; void* m34; };              // player inventory view
+struct cInventorySlot { char pad00[0x34]; int m34; };            // same view, item lives at +0x34
 
-void* __cdecl GetPlayerEmpire();                                 // cSPLivingUniverse::GetPlayerEmpire
+void* __cdecl GetPlayerEmpire();                                 // 0x01021300 cSPLivingUniverse::GetPlayerEmpire
 
 extern char DAT_01654c05;              // current game-mode identity
 
@@ -112,9 +113,7 @@ struct cSPToolManager {
   cSPTimer mTimerA8;             // +0xa8
   cSPTimer mTimerC8;             // +0xc8
   char     padE8[0x20];          // +0xe8..0x107
-  void*    m108;                 // +0x108
-  void*    m10c;                 // +0x10c
-  void*    m110;                 // +0x110
+  void*    mTools[3];            // +0x108..+0x113
   void*    m114;                 // +0x114
   void*    m118;                 // +0x118
   int      m11c;                 // +0x11c
@@ -226,7 +225,7 @@ char cSPToolManager::UseToolUpdate(cSPToolManager* self, int a2, int a3, int a4)
     if (g < 0)
       g = -1;
     cSPTimer& t = self->mTimerA8;
-    if (!t.IsRunning() || (g > -1 && t.GetElapsedTime() >= (uint64)(int64)g)) {
+    if (!t.IsRunning() || (g >= 0 && t.GetElapsedTime() >= (uint64)(int64)g)) {
       flag = mgr->UseToolStart(self, (int)self->m114, a2, a3, a4, (int)self->m118, 1);
       if (!flag)
         mgr->UseToolStop(self);
@@ -364,56 +363,56 @@ char cSPToolManager::UseToolStart(cSPToolManager* self, int a2, int a3, int a4,
     tool = FUN_00b3d390()->Lookup((uint)self->m178);
   if (!tool)
     tool = FUN_00b3d390()->Lookup(0xb0da49d9);
-  void* piVar5 = ((void*(__thiscall*)(void*, int))VT(tool, 0x44))(tool, self->m1a4);
+  void* toolObj = ((void*(__thiscall*)(void*, int))VT(tool, 0x44))(tool, self->m1a4);
+  float saved1a8 = self->m1a8;
 
   self->m13c = 0;
   void* p6 = 0;
   if (self->m178)
     p6 = FUN_00b3d390()->Lookup((uint)self->m178);
-  if (!p6) {
+  if (!p6)
     p6 = FUN_00b3d390()->Lookup(0xb0da49d9);
-  } else {
+  if (p6)
     ((void(__thiscall*)(void*))VT(p6, 0))(p6);
-  }
 
   void* old114 = self->m114;
-  if ((void*)self != old114) {
-    if (self)
-      ((void(__thiscall*)(void*))VT(self, 0xbc))(self);
-    self->m114 = self;
+  if ((void*)a2 != old114) {
+    if (a2)
+      ((void(__thiscall*)(void*))VT((void*)a2, 0xbc))((void*)a2);
+    self->m114 = (void*)a2;
     if (old114)
       ((void(__thiscall*)(void*))VT(old114, 0xc0))(old114);
   }
-  self->m11c = a3;
+  self->m11c = a4;
 
-  cVar4 = ((char(__thiscall*)(void*, void*, int))VT(p6, 0x24))(p6, (void*)a2, a7);
+  cVar4 = ((char(__thiscall*)(void*, void*, int, int))VT(p6, 0x24))(p6, self, a3, a7);
   if (cVar4 != 0) {
     self->m170 = 0;
-    void* pv = 0;
-    if (a2 != 0 &&
-        (pv = ((void*(__thiscall*)(void*, uint))VT((void*)a2, 0xb8))((void*)a2, 0x17f243b)) != 0 &&
-        ((char(__thiscall*)(void*))VT(pv, 0x2c))(pv) != 0) {
-      a2 = 0;
+    void* a6eff = (void*)a6;
+    if (a6eff) {
+      void* pv = ((void*(__thiscall*)(void*, uint))VT(a6eff, 0xb8))(a6eff, 0x17f243b);
+      if (pv && ((char(__thiscall*)(void*))VT(pv, 0x2c))(pv) != 0)
+        a6eff = 0;
     }
     void* old118 = self->m118;
-    if ((void*)a2 != old118) {
-      if (a2)
-        ((void(__thiscall*)(void*))VT((void*)a2, 0xbc))((void*)a2);
-      self->m118 = (void*)a2;
+    if (a6eff != old118) {
+      if (a6eff)
+        ((void(__thiscall*)(void*))VT(a6eff, 0xbc))(a6eff);
+      self->m118 = a6eff;
       if (old118)
         ((void(__thiscall*)(void*))VT(old118, 0xc0))(old118);
     }
 
-    float fVar2 = self->m1d4;
-    if (0 < (int)(fVar2 * 1000.0f)) {
+    int f = (int)(self->m1d4 * 1000.0f);
+    if (0 < f) {
       cSPTimer* tC8 = &self->mTimerC8;
       uint64 el = tC8->GetElapsedTime();
-      if (el < (uint64)(int64)(int)(fVar2 * 1000.0f)) {
+      if (el < (uint64)(int64)f) {
         if (!tC8->IsRunning()) {
           if (GetCurrentGameMode() == &DAT_01654c05) {
             cSPSimulatorSpaceGame* sim = (cSPSimulatorSpaceGame*)GetUFOSimulator();
-            int* inv = sim->GetPlayerInventory();
-            int* ip = inv ? (int*)((cInventory*)inv)->m34 : 0;
+            cSPPlayerInventory* inv = (cSPPlayerInventory*)sim->GetPlayerInventory();
+            int* ip = inv ? &((cInventorySlot*)inv)->m34 : 0;
             if ((int*)self->m114 == ip)
               ((cSPUISpace*)FUN_010666a0())->ShowToolChargeBar();
           }
@@ -425,17 +424,17 @@ char cSPToolManager::UseToolStart(cSPToolManager* self, int a2, int a3, int a4,
 
     if (GetCurrentGameMode() == &DAT_01654c05) {
       cSPSimulatorSpaceGame* sim = (cSPSimulatorSpaceGame*)GetUFOSimulator();
-      int* inv = sim->GetPlayerInventory();
-      int* ip = inv ? (int*)((cInventory*)inv)->m34 : 0;
+      cSPPlayerInventory* inv = (cSPPlayerInventory*)sim->GetPlayerInventory();
+      int* ip = inv ? &((cInventorySlot*)inv)->m34 : 0;
       if ((int*)self->m114 == ip) {
-        void** pk = &self->m108;
-        for (int i = 3; i != 0; i--, pk++) {
-          if (*pk != 0) {
-            ((void(__thiscall*)(void*, int))VT(*pk, 0xc))(*pk, 0);
-            void* pv2 = *pk;
-            if (pv2) {
-              *pk = 0;
-              ((void(__thiscall*)(void*))VT(pv2, 4))(pv2);
+        for (int i = 0; i < 3; i++) {
+          void* pk = self->mTools[i];
+          if (pk) {
+            ((void(__thiscall*)(void*, int))VT(pk, 0xc))(pk, 0);
+            pk = self->mTools[i];
+            if (pk) {
+              self->mTools[i] = 0;
+              ((void(__thiscall*)(void*))VT(pk, 4))(pk);
             }
           }
         }
@@ -443,13 +442,13 @@ char cSPToolManager::UseToolStart(cSPToolManager* self, int a2, int a3, int a4,
       }
     }
 
-    cVar4 = ((char(__thiscall*)(void*, int, void*))VT(piVar5, 0x34))(piVar5, 0, self);
+    cVar4 = ((char(__thiscall*)(void*, void*, int, int))VT(p6, 0x34))(p6, self, a3, a5);
     if (cVar4 != 0) {
       int iv = (int)(self->m1c4 * 1000.0f);
       if (iv < 0)
         iv = -1;
       if (0.0f <= (float)iv)
-        self->mTimerA8.Stop();
+        self->mTimer88.Stop();
       else
         self->mTimer88.Restart();
       self->mTimerA8.Restart();
@@ -459,15 +458,16 @@ char cSPToolManager::UseToolStart(cSPToolManager* self, int a2, int a3, int a4,
         self->m7c = self->m7c - self->m19c;
         if (GetCurrentGameMode() == &DAT_01654c05) {
           cSPSimulatorSpaceGame* sim = (cSPSimulatorSpaceGame*)GetUFOSimulator();
-          int* inv = sim->GetPlayerInventory();
-          int* ip = inv ? (int*)((cInventory*)inv)->m34 : 0;
+          cSPPlayerInventory* inv = (cSPPlayerInventory*)sim->GetPlayerInventory();
+          int* ip = inv ? &((cInventorySlot*)inv)->m34 : 0;
           if ((int*)self->m114 == ip) {
             void* ms = MessageServer();
             ((void(__thiscall*)(void*, uint, void*, int))VT(ms, 0x14))(ms, 0x635ae7e, self, 0);
             if (self->m7c < 1) {
               cSPSimulatorSpaceGame* s2 = (cSPSimulatorSpaceGame*)SpaceGameGet();
-              if (s2->GetPlayerInventory() != 0)
-                FUN_00ff4540(self);
+              cSPPlayerInventory* inv2 = (cSPPlayerInventory*)s2->GetPlayerInventory();
+              if (inv2)
+                inv2->FUN_00ff4540(self);
             }
           }
         }
@@ -475,29 +475,28 @@ char cSPToolManager::UseToolStart(cSPToolManager* self, int a2, int a3, int a4,
 
       if (GetCurrentGameMode() == &DAT_01654c05) {
         cSPSimulatorSpaceGame* sim = (cSPSimulatorSpaceGame*)GetUFOSimulator();
-        int* inv = sim->GetPlayerInventory();
-        int* ip = inv ? (int*)((cInventory*)inv)->m34 : 0;
+        cSPPlayerInventory* inv = (cSPPlayerInventory*)sim->GetPlayerInventory();
+        int* ip = inv ? &((cInventorySlot*)inv)->m34 : 0;
         if ((int*)self->m114 == ip) {
-          int   esi = 0;
-          float ebp = 0.0f;
+          int   esi = (int)toolObj;
+          float ebp = saved1a8;
           if ((int)(self->m1c4 * 1000.0f) == 0) {
-            float fv = (float)(int)self;
-            if ((int)self < 0)
-              fv = fv + 4.2949673e+09;
-            ebp = (fv * 0.001f) * ebp;
-            esi = (int)((float)esi * (fv * 0.001f));
+            float fv = (float)(uint)a5;
+            float t  = fv * 0.001f;
+            esi = (int)((float)esi * t);
+            ebp = t * ebp;
           }
-          GetPlayerEmpire();
-          FUN_00c31a00(-esi);
-          if ((int*)self->m114 != 0)
-            ((void(__thiscall*)(void*, uint))VT(self->m114, 0xb8))(self->m114, 0xb033b403);
-          FUN_00c389f0(-ebp);
+          ((cPlayer*)GetPlayerEmpire())->Spend(-esi);
+          void* user = 0;
+          if (self->m114)
+            user = ((void*(__thiscall*)(void*, uint))VT(self->m114, 0xb8))(self->m114, 0xb033b403);
+          ((UFOThing*)user)->FUN_00c389f0(-ebp);
         }
       }
     }
   }
 
 L262:
-  ((void(__thiscall*)(void*))VT(piVar5, 4))(piVar5);
+  ((void(__thiscall*)(void*))VT(p6, 4))(p6);
   return cVar4;
 }
