@@ -2,6 +2,8 @@
 // Built /Od /Ob1 /MD /Gy /TP.
 #include "types.h"
 
+inline void* operator new(unsigned int, void* p) { return p; }
+
 typedef unsigned int uint;
 void* EASTL_Allocate(void* alloc, uint bytes, uint align, uint flags);   // @ 0x0042dee0
 void  EASTL_allocator_deallocate(void* p);                               // @ 0x00f47380
@@ -88,6 +90,21 @@ void Vec3Scale(float* out, const float* scale, const float* vec);         // @ 0
 // ---- 3x3 float matrix -------------------------------------------------------------------
 struct Mat33 { float r[3][3]; };
 
+// ---- int vector whose storage may live in a buffer it does not own ----------------------
+// Layout: begin/end/capacity dwords, a 4-byte allocator object (passed by address to
+// EASTL_Allocate), then a pointer to the storage the vector was seeded with.  The grow path
+// skips the deallocation while mpBegin still points at that buffer (it is not heap-owned).
+struct VecIntBuf {
+    int* mpBegin;                                      // +0x00
+    int* mpEnd;                                        // +0x04
+    int* mpCapacity;                                   // +0x08
+    void* mAllocator;                                  // +0x0c allocator object (address only)
+    int* mpBuffer;                                     // +0x10 storage the vector was seeded with
+    void DoInsertValue(int* position, const int& value);
+};
+
+I4* CopyDestruct4(I4* first, I4* last, I4* dest);
+
 // @ 0x00476dd0
 void* AllocOwner::ReallocRefs4(uint n, void* first, void* last)
 {
@@ -96,16 +113,39 @@ void* AllocOwner::ReallocRefs4(uint n, void* first, void* last)
     return buf;
 }
 
-// @ 0x00476fe0
-void IntInsert(int* mpBegin, int* mpEnd, int* mpCapacity, int* position, const int& value)
+// @ 0x00476fe0  eastl::vector<int>::DoInsertValue(position, value)  (this in ECX, ret 8)
+void VecIntBuf::DoInsertValue(int* position, const int& value)
 {
-    if (mpEnd != mpCapacity) {
-        int* pEnd = mpEnd;
-        if (pEnd) *pEnd = *(pEnd - 1);
-        int* p = pEnd;
-        int* q = pEnd - 1;
-        while (q != position) { *--p = *--q; }
-        *position = value;
+    if (mpEnd != mpCapacity) // size < capacity
+    {
+        // If value comes from within the range to be moved, it will have shifted by one.
+        const int* pValue = &value;
+        if ((pValue >= position) && (pValue < mpEnd))
+            ++pValue;
+        ::new((void*)mpEnd) int(*(mpEnd - 1));      // construct the last slot from the one before it
+        int* last   = mpEnd - 1;
+        int* result = mpEnd;
+        while (last != position) {                  // eastl::copy_backward(position, mpEnd - 1, mpEnd)
+            --last;
+            --result;
+            *result = *last;
+        }
+        *position = *pValue;
+        ++mpEnd;
+    }
+    else // size == capacity -> grow
+    {
+        const uint nPrevSize = (uint)(mpEnd - mpBegin);
+        const uint nNewSize  = nPrevSize ? (nPrevSize * 2) : 1;
+        int* const pNewData  = nNewSize ? (int*)EASTL_Allocate((char*)this + 0xc, nNewSize * sizeof(int), 2, 0) : 0;
+        int* pNewEnd = (int*)CopyDestruct4((I4*)mpBegin, (I4*)position, (I4*)pNewData);
+        ::new((void*)pNewEnd) int(value);
+        pNewEnd = (int*)CopyDestruct4((I4*)position, (I4*)mpEnd, (I4*)++pNewEnd);
+        if (mpBegin && mpBegin != mpBuffer)        // do not free the storage we do not own
+            EASTL_allocator_deallocate(mpBegin);
+        mpBegin    = pNewData;
+        mpEnd      = pNewEnd;
+        mpCapacity = pNewData + nNewSize;
     }
 }
 

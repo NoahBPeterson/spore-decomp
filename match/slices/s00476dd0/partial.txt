@@ -1,2 +1,1 @@
 # va  diff-bytes  reason
-00476fe0  0  vector<int,2>::DoInsertValue: only the non-full insert path is reconstructed (free function with wrong signature; original is a 0x220-byte member taking position,value); equiv UNSUPPORTED: our symbol is under 1/5 of the original size, not a complete definition
