@@ -1,2 +1,0 @@
-# va  diff-bytes  reason
-007e6210  580  Loads cShaderDataGameInfo / effect properties from AppProperties; not reconstructed (many property-id/vf+0x24 reads)
