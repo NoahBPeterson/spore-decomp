@@ -1,0 +1,28 @@
+# Slice s00f9fef0 — SPTerrain/SPTerrainSphere.obj and neighbours (terrain sphere RTT,
+# surface copies, decal boxes, the geometry-changed message, the sort helpers).
+# Status: 4 byte-exact, 9 complete-but-inexact, 3 incomplete.
+00f9fef0  ?Register@TerrainSphereReg@@QAEXPAURegObj@@@Z    void TerrainSphereReg::Register(RegObj*)                  [nonmatching]
+00fa01e0  ?BuildDecalBox@@YAXPAX0I0@Z                      void __cdecl BuildDecalBox(void*, void*, unsigned, void*)   [partial]
+00fa0560  ?AddGeometryChangeMessage@GeomMsgOwner@@QAEXHH@Z void GeomMsgOwner::AddGeometryChangeMessage(int, int)       [partial]
+00fa0780  ?Dtor@TerrainSphereRes@@QAEXXZ                   void TerrainSphereRes::Dtor()                              [partial]
+00fa06e0  ?SortElem16Pass@@YAXPAUElem16@@00I@Z             void __cdecl SortElem16Pass(Elem16*, Elem16*, unsigned)     [MATCH]
+00fa0dc0  ?InitBuffer@DirtyFlag@@QAEXXZ                    void DirtyFlag::InitBuffer()                               [MATCH]
+00fa0e10  ?SetFlag@DirtyFlag@@QAEX_N@Z                     void DirtyFlag::SetFlag(bool)                              [MATCH]
+00fa0e60  ?TestFlag@DirtyFlag@@QAE_NEPAX@Z                 bool DirtyFlag::TestFlag(unsigned char, void*)             [MATCH]
+00fa0010  ?CopyFaceA@TerrainSphereLike@@QAE_NPBM@Z          bool TerrainSphereLike::CopyFaceA(const float*)            [nonmatching]
+00fa0070  ?CopyFaceB@TerrainSphereLike@@QAE_NPBM@Z          bool TerrainSphereLike::CopyFaceB(const float*)            [nonmatching]
+00fa00d0  ?CopyFaceC@TerrainSphereLike@@QAE_NPBM@Z          bool TerrainSphereLike::CopyFaceC(const float*)            [nonmatching]
+00fa0130  ?BuildSurfaceOrientationFromDir@@YA?AVQuaternion@@QBM@Z Quaternion __cdecl BuildSurfaceOrientationFromDir(const float*) [nonmatching]
+00fa0360  ?ShutdownRTTSphere@@YAXXZ                         void __cdecl ShutdownRTTSphere()                           [nonmatching]
+00fa0400  ?InitRTTSphere@@YAXXZ                             void __cdecl InitRTTSphere()                               [nonmatching]
+00fa0670  ?PartitionElem16@@YAHPAUElem16@@0I@Z              int __cdecl PartitionElem16(Elem16*, Elem16*, unsigned)    [nonmatching]
+00fa0e40  ?OrFlag@DirtyFlag@@QAEXEPAX@Z                     void DirtyFlag::OrFlag(unsigned char, void*)               [nonmatching]
+00fa0f10  ?Release@JobHolder@@QAEXXZ                         void JobHolder::Release()                                  [nonmatching]
+# Callees reached from this slice (owned elsewhere, declared here):
+006a25a0  ?GetDescription@cDirectPropertyList_s006a_22a0@SP@@QBE_NI@Z bool SP::cDirectPropertyList_s006a_22a0::GetDescription(unsigned) const
+00f96b40  ?InitializeStaticRTTTextures@cTerrainSphere@SP@@QAEXXZ      void SP::cTerrainSphere::InitializeStaticRTTTextures()
+0067dd80  ?ModelManager@SP@@YAPAXXZ                          void* SP::ModelManager()
+0067ddd0  ?EffectsManagerPtr@@YAPAXXZ                        void* EffectsManagerPtr()
+00f99f20  ?FUN_00f99f20@GeomHandlerOps@@QAEXPAXHH0@Z        void GeomHandlerOps::FUN_00f99f20(void*, int, int, void*)
+00f473a0  ??2@YAPAXIPBDHHHH@Z                               void* operator new(unsigned, const char*, int, int, int, int)
+00f47380  ??3@YAXPAX@Z                                       void operator delete(void*)
