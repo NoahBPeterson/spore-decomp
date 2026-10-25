@@ -1,10 +1,11 @@
+006960f0 ?BroadcastLocaleChange@SP@@YGHPB_WPAUList16@1@@Z  # __stdcall free function: walks the List16 of locale managers and dispatches a cLocaleChangeMessage to each; nonmatching (register/frame shape)
 00696230 eastl::fixed_string<wchar_t,16,1>::fixed_string(const fixed_string&)  # matches fixed_string copy ctor: pool+inline buffer init then append(x.begin,x.end)
 006962a0 eastl::fixed_string<wchar_t,16,1>::fixed_string(const wchar_t*)  # pool+inline buffer init then append(p,p+strlen(p))
 00696320 eastl::fixed_string<wchar_t,16,1>::operator=(const fixed_string&)  # clear() then external append(x.begin,x.end)
 00696350 App::cLocaleChangeMessage::cLocaleChangeMessage  # vtables 0x13eb918/0x13f65b4 base, 0x1403d6c/0x1403d5c derived; mLocaleId at +0xc
 006963d0 App::cLocaleChangeMessage::~cLocaleChangeMessage  # scalar deleting dtor (??_G), destroys mLocaleId at +0xc then restores base vtables +0/+4
 00696420 ??0cLocaleManager@SP@@QAE@XZ  # cLocaleManager::cLocaleManager migrated from s006960f0 (verbatim, slice spelling)
-006964c0 ?Init@cLocaleManager@SP@@QAE_NPAX0@Z  # cLocaleManager::Init migrated from s006960f0 (verbatim, slice spelling)
-006968f0 ?SetFromMatch@cLocaleManager@SP@@QAE_NABUFixedString16@eastl@@@Z  # cLocaleManager::SetFromMatch migrated from s006960f0 (verbatim, slice spelling)
-006969b0 ?FindMatchingLocale@cLocaleManager@SP@@QAEPB_WXZ  # cLocaleManager::FindMatchingLocale migrated from s006960f0 (verbatim, slice spelling)
-00696a60 SP::cLocaleManager::GetDefaultLanguage  # resolves "en-us" then language code via GetLocaleInfoString
+006964c0 ?Init@cLocaleManager@SP@@QAE_NPAX0@Z  # cLocaleManager::Init: CommandLine / locale-info / registry bootstrap; nonmatching (EH frame shape)
+006968f0 ?SetFromMatch@cLocaleManager@SP@@UAE_NABUWStr@eastl@@@Z  # cLocaleManager::SetFromMatch: longest-common-prefix match over g_localeTable, then ApplyLocaleId; nonmatching (register allocation)
+006969b0 ?FindMatchingLocale@cLocaleManager@SP@@UAEPB_WXZ  # cLocaleManager::FindMatchingLocale: probes g_localeTable via FUN_0087fd10, returns the matching mName or 0
+00696a60 ?GetDefaultLanguage@cLocaleManager@SP@@QAE_NABUFixedString16@eastl@@@Z  # cLocaleManager::GetDefaultLanguage: resolves "en-us" then the language code via GetLocaleInfoString; nonmatching (scope lifetimes)
