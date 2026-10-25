@@ -28,10 +28,11 @@ class cSPUIPieMenuItem { public:
   float mf2;    // +0x40
   float mf3;    // +0x44
   char pad01[0x4];
-  void SetId(int);
-  void SetText(int, int);
-  void SetTextColor(int);
-  void SetIcon(void*);
+  void SetId(unsigned);                        // 0x008188d0
+  void SetText(const wchar_t*, bool);          // 0x00819220
+  void SetTextColor(int);                      // 0x00817ee0
+  void SetIcon(int);                           // 0x00818000
+  void sub817fa0(int);                         // 0x00817fa0
 };
 
 class cSPUIPieMenu { public:
@@ -46,16 +47,62 @@ class cSPUIPieMenu { public:
   void** mpListEnd;            // +0x2c
   char pad02[0x2c];            // +0x30..0x5b
   char mChanged;               // +0x5c
+  char pad03[0xc4 - 0x5d];     // +0x5d..0xc3
+  unsigned char mFieldC4;      // +0xc4
 
   cSPUIPieMenuItem* get_unused_item();
   int AddItem(int a, int b, int c, int d);
 };
 
-extern void FUN_00817fa0(void*, int);
+// PieItemFull (the 0x4c-byte element constructed by the deque growth path).
+// thiscall helpers modelled as __fastcall(self, dummy, ...) so ecx carries `this`.
+extern "C" void __fastcall FUN_00818820(void* self, int dummy);                       // 0x818820 PieItemFull::PieItemFull()
+extern "C" void __fastcall FUN_00818650(void* self, int dummy, const void* src);      // 0x818650 PieItemFull copy ctor
+extern "C" void __fastcall FUN_00819880(void* self, int dummy);                       // 0x819880 cSPUIPieMenuItem dtor
+extern "C" void __fastcall FUN_0081a510(void* self, int dummy, void* a, const void* b);// 0x81a510 ItemVec::DoInsertValue
+extern "C" char __fastcall FUN_008198f0(void* self, int dummy, void* a, const void* key,
+                                        char b, unsigned c, char d, int e, int f, bool g); // 0x8198f0 cSPUIPieMenuItem::Init
 
-// @ 0x0081A790  cSPUIPieMenu::get_unused_item  (incomplete -- see partial.txt)
+// @ 0x0081A790  cSPUIPieMenu::get_unused_item
 cSPUIPieMenuItem* cSPUIPieMenu::get_unused_item() {
-  return 0;
+  int idx = -1;
+  int n = (int)((char*)mpEnd - (char*)mpBegin) / 0x4c;
+  if (n == mCount) {
+    int add = mCount ? 3 : 12;
+    for (int i = 0; i < add; i++) {
+      cSPUIPieMenuItem tmp;
+      FUN_00818820(&tmp, 0);
+      cSPUIPieMenuItem* slot = mpEnd;
+      if (slot < mpCap) {
+        mpEnd = (cSPUIPieMenuItem*)((char*)slot + 0x4c);
+        if (slot) {
+          FUN_00818650(slot, 0, &tmp);
+          slot->mf0 = tmp.mf0;
+          slot->mf1 = tmp.mf1;
+          slot->mf2 = tmp.mf2;
+          slot->mf3 = tmp.mf3;
+          *(int*)((char*)slot + 0x48) = *(int*)((char*)&tmp + 0x48);
+        }
+      } else {
+        FUN_0081a510(&mpBegin, 0, slot, &tmp);
+      }
+      FUN_00819880(&tmp, 0);
+      if (!FUN_008198f0(slot, 0, (void*)mItem, (void*)((char*)this + 0x50),
+                        (char)mFieldC4, 0xffffffff, 0, 0, 0, 0))
+        return 0;
+      if (idx < 0)
+        idx = (int)((char*)mpEnd - (char*)mpBegin) / 0x4c - 1;
+    }
+    if (idx >= 0)
+      return (cSPUIPieMenuItem*)((char*)mpBegin + idx * 0x4c);
+  }
+  int cnt = (int)((char*)mpEnd - (char*)mpBegin) / 0x4c;
+  if (cnt != 0) {
+    for (int i = 0; i < cnt; i++) {
+      if (*(int*)((char*)mpBegin + i * 0x4c + 4) == -1) { idx = i; break; }
+    }
+  }
+  return (cSPUIPieMenuItem*)((char*)mpBegin + idx * 0x4c);
 }
 
 // @ 0x0081A940  cSPUIPieMenu::AddItem
@@ -63,20 +110,15 @@ int cSPUIPieMenu::AddItem(int a, int b, int c, int d) {
   cSPUIPieMenuItem* item = get_unused_item();
   if (item == 0) return 0;
   item->mf0 = 0.f; item->mf1 = 0.f; item->mf2 = 0.f; item->mf3 = 0.f;
-  item->SetId(a);
-  item->SetText(b, 1);
+  item->SetId((unsigned)a);
+  item->SetText((const wchar_t*)b, true);
   item->SetTextColor(c);
-  FUN_00817fa0(item, d);
-  uint32_t n = (uint32_t)(mpListEnd - mpListBegin);
-  if (n != 0) {
-    uint32_t i = 0;
-    for (;;) {
-      void* p = mpListBegin[i];
-      int id = ((int (__thiscall*)(void*))VTSLOT(p, 0x1c))(p);
-      if (id == a) { item->SetIcon(p); break; }
-      i++;
-      if (i >= (uint32_t)(mpListEnd - mpListBegin)) break;
-    }
+  item->sub817fa0(d);
+  int cnt = (int)((char*)mpListEnd - (char*)mpListBegin) / 4;
+  for (int i = 0; i < cnt; i++) {
+    void* p = mpListBegin[i];
+    int id = ((int (__thiscall*)(void*))VTSLOT(p, 0x1c))(p);
+    if (id == a) { item->SetIcon((int)p); break; }
   }
   mCount++;
   mChanged = 1;

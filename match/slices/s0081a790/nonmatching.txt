@@ -8,3 +8,5 @@
 0081b650  2  AddMenuItem: first vtable call loads slot into eax instead of edx
 0081b6a0  159  AddMenuItem(layout): cSPUILayout local frame + Init/FindWindowByID not exact
 0081b240  289  cSPUIPopupMenuWin::MeasureItemHeight: complete; stack slot order of locals differs from original, and and-esp,-64 frame forced with an align(64) dummy [equiv: WEAK 398 valid, 46% coverage]
+0081a790  397  cSPUIPieMenu::get_unused_item: deque growth (PieItemFull ctor 0x818820 / copy-ctor 0x818650 / dtor 0x819880, ItemVec::DoInsertValue 0x81a510, cSPUIPieMenuItem::Init 0x8198f0) + unused-slot scan; chk diff 397 (size 433 vs 419); equiv WEAK 316/400 valid (44.1% cov, need 60%)
+0081a940  167  cSPUIPieMenu::AddItem: get_unused_item + SetId/SetText/SetTextColor/sub817fa0/SetIcon + scan of mpList for the matching id; chk diff 167 (size 194 vs 187); equiv UNSUPPORTED 0/400 valid inputs (fault(read)=224, fault(pool-limit)=69, fake-arity=67) — the harness cannot produce a valid run of the original, which dereferences unconstrained deque/list pointers
