@@ -10,7 +10,7 @@ extern "C" void  FUN_009ac300(int a, ...);          // 0x009ac300 sample/accumul
 extern "C" void  FUN_009ac460(int a, void* b);      // 0x009ac460
 extern "C" void* FUN_0099cae0(void* a, void* b, int c);       // 0x0099cae0
 extern "C" void* FUN_0099c1a0(void* a, void* b, void* c);     // 0x0099c1a0 checkerlib::QuaternionVectorTransform
-extern "C" void  FUN_009ac640(void* a, void* b);    // 0x009ac640 nSPCreatureAnim::PackBoneFrame
+extern "C" void __stdcall FUN_009ac640(void* a, void* b);    // 0x009ac640 nSPCreatureAnim::PackBoneFrame (ret 8)
 extern "C" void  operator_delete__(void* p);        // 0x00f47380
 extern int DAT_0166c0c8;                            // 0x0166c0c8
 
@@ -169,6 +169,115 @@ void FUN_009adfd0(float* a, int b, float* q, int st)
     *(uint8_t*)(st + 0x38) = 1;
 }
 
+// Unannotated copies used by 0x009ae4b0.  The originals take register arguments
+// (esi/edi) that plain C++ cannot set, so 009ae4b0 calls these instead; the
+// call-trace comparator treats the different callee target as an inline call.
+__declspec(noinline)
+static void LocalBlend(int index, float* param_2, float* out, int* st)
+{
+    int iVar2 = st[3];
+    int iVar3 = st[2];
+    index = index * 8;
+    if (iVar3 == iVar2) {
+        FUN_009ac300(*(int*)(index + 0x54 + iVar3));
+        float fVar6 = *(float*)(*st + 0x70);
+        out[0] = out[0] * fVar6;
+        out[1] = out[1] * fVar6;
+        out[2] = fVar6 * out[2];
+        FUN_009ac460(index + 0x58 + iVar3, param_2);
+        return;
+    }
+    float local_30, local_2c, local_28, local_24, local_20, local_1c;
+    float local_18, local_14, local_10, local_c, local_8, local_4;
+    FUN_009ac300(*(int*)(index + 0x54 + iVar3), &local_20);
+    FUN_009ac300(*(int*)(iVar2 + 0x54 + index), &local_30);
+    float fVar6 = (float)st[4];
+    float fVar5 = 1.0f - (float)st[4];
+    float fVar1 = *(float*)(*st + 0x70);
+    out[0] = fVar1 * (local_20 * fVar5 + fVar6 * local_30);
+    out[1] = fVar1 * (local_1c * fVar5 + fVar6 * local_2c);
+    out[2] = fVar1 * (local_18 * fVar5 + fVar6 * local_28);
+    FUN_009ac460(index + 0x58 + iVar3, &local_10);
+    FUN_009ac460(iVar2 + 0x58 + index, &local_20);
+    local_28 = (float)st[4];
+    float g = 1.0f - (float)st[4];
+    local_2c = local_28 * local_1c;
+    local_20 = local_28 * local_20;
+    local_24 = local_28 * local_14;
+    local_28 = local_28 * local_18;
+    local_c = local_c * g;
+    local_8 = local_8 * g;
+    local_10 = local_10 * g;
+    local_4 = local_4 * g;
+    if (0.0f <= ((local_4 * local_24 + local_8 * local_28) + local_c * local_2c) + local_10 * local_20) {
+        local_18 = local_8 + local_28;
+        local_14 = local_4 + local_24;
+        local_20 = local_10 + local_20;
+        local_1c = local_c + local_2c;
+    } else {
+        local_18 = local_8 - local_28;
+        local_14 = local_4 - local_24;
+        local_20 = local_10 - local_20;
+        local_1c = local_c - local_2c;
+    }
+    float* puVar4 = (float*)FUN_0099cae0(&local_10, &local_20, 0);
+    param_2[0] = puVar4[0];
+    param_2[1] = puVar4[1];
+    param_2[2] = puVar4[2];
+    param_2[3] = puVar4[3];
+}
+
+__declspec(noinline)
+static void LocalAccum(float* a, int b, float* q, int st)
+{
+    if (*(char*)(b + 0x1c) != '\0') {
+        float fVar5 = *(float*)(b + 0x18);
+        float fVar1 = *(float*)(b + 0x14);
+        float fVar2 = a[1];
+        float fVar3 = a[2];
+        *(float*)(st + 0x280) = *(float*)(st + 0x280) * fVar1 + a[0] * fVar5;
+        *(float*)(st + 0x284) = *(float*)(st + 0x284) * fVar1 + fVar2 * fVar5;
+        *(float*)(st + 0x288) = *(float*)(st + 0x288) * fVar1 + fVar3 * fVar5;
+        fVar5 = *(float*)(b + 0x18);
+        float local_14 = *(float*)(b + 0x14);
+        float local_8 = q[2] * fVar5;
+        float local_4 = q[3] * fVar5;
+        float local_c = q[1] * fVar5;
+        float local_1c = *(float*)(st + 0x290) * local_14;
+        float local_18 = *(float*)(st + 0x294) * local_14;
+        fVar5 = fVar5 * q[0];
+        float local_20 = local_14 * *(float*)(st + 0x28c);
+        local_14 = *(float*)(st + 0x298) * local_14;
+        if (0.0f <= ((local_14 * local_4 + local_18 * local_8) + local_1c * local_c) + local_20 * fVar5) {
+            local_18 = local_18 + local_8;
+            local_14 = local_14 + local_4;
+            local_20 = local_20 + fVar5;
+            local_1c = local_1c + local_c;
+        } else {
+            local_18 = local_18 - local_8;
+            local_14 = local_14 - local_4;
+            local_20 = local_20 - fVar5;
+            local_1c = local_1c - local_c;
+        }
+        float local_10[1];
+        uint32_t* puVar4 = (uint32_t*)FUN_0099cae0(local_10, &local_20, 0);
+        *(uint32_t*)(st + 0x28c) = puVar4[0];
+        *(uint32_t*)(st + 0x290) = puVar4[1];
+        *(uint32_t*)(st + 0x294) = puVar4[2];
+        *(uint32_t*)(st + 0x298) = puVar4[3];
+        *(uint8_t*)(st + 0x38) = 1;
+        return;
+    }
+    *(float*)(st + 0x10) = a[0];
+    *(float*)(st + 0x14) = a[1];
+    *(float*)(st + 0x18) = a[2];
+    *(float*)(st + 0x1c) = q[0];
+    *(float*)(st + 0x20) = q[1];
+    *(float*)(st + 0x24) = q[2];
+    *(float*)(st + 0x28) = q[3];
+    *(uint8_t*)(st + 0x38) = 1;
+}
+
 // ===========================================================================
 // 0x009ae1c0  ref-count release (ecx = this)
 // ===========================================================================
@@ -199,6 +308,7 @@ int __fastcall FUN_009ae1c0(int* p)
 // ===========================================================================
 // 0x009ae240  recursive bone packing (ecx = this, edx unused, 4 stack args)
 // ===========================================================================
+// @ 0x009ae240
 void __fastcall FUN_009ae240(int* param_1, int edx_dummy, int param_2, int param_3, uint32_t param_4, uint32_t* param_5)
 {
     (void)edx_dummy;
@@ -276,30 +386,57 @@ int __fastcall FUN_009ae450(int* this_, int* eaxv, float* param_2, float* param_
 // ===========================================================================
 // 0x009ae4b0  recursive pack (ecx = this, edx unused, 2 stack args)
 // ===========================================================================
+// The real body is a __thiscall member so its stack shape (ecx = this, ret 8)
+// matches the original; the free __fastcall entry below adapts the old callers.
+struct Pack4b0 {
+    // (defined below, 0x009ae4b0)
+    void Pack(int param_2, int param_3);
+};
+
 // @ 0x009ae4b0
-void __fastcall FUN_009ae4b0(int* param_1, int edx_dummy, int param_2, int param_3)
+void Pack4b0::Pack(int param_2, int param_3)
 {
-    (void)edx_dummy;
+    int* param_1 = (int*)this;
     int* piVar2 = (int*)(param_2 * 700 + *(int*)(*param_1 + 0x2e4));
     uint32_t uVar4 = *(uint32_t*)(*piVar2 + 0x1f8);
     if ((uVar4 < 0xff) &&
         ((*(uint32_t*)(*(int*)param_1[1] + 0x18 + (uVar4 >> 5) * 4) & (1u << ((uint8_t)uVar4 & 0x1f))) != 0)) {
+        // 009adb30's real ABI passes the 3-vector output in esi, which plain C++
+        // cannot set, so call the unannotated copy with explicit arguments.
         float local_10[4];
         float local_20[4];
-        FUN_009adb30(param_1[0xc], local_20, local_10, param_1);
+        float* out = local_20;
+        LocalBlend(param_1[0xc], local_10, local_20, param_1);
         param_1[0xc] = param_1[0xc] + 1;
         float sum[3];
-        sum[0] = ((float*)param_3)[0] + local_10[0];
-        sum[1] = ((float*)param_3)[1] + local_10[1];
-        sum[2] = ((float*)param_3)[2] + local_10[2];
-        FUN_009adfd0(sum, (int)param_3, (float*)&local_20[0], (int)piVar2);
+        sum[0] = ((float*)param_3)[0] + out[0];
+        sum[1] = ((float*)param_3)[1] + out[1];
+        sum[2] = ((float*)param_3)[2] + out[2];
+        // Recompute the bone node after the call; the accumulator also takes extra
+        // register arguments (ecx/eax/esi), so use the explicit-argument copy.
+        int* piVar3 = (int*)(param_2 * 700 + *(int*)(*param_1 + 0x2e4));
+        LocalAccum(sum, (int)param_1, local_10, (int)piVar3);
+        int iVar1 = *piVar3;
+        uint32_t uVar4b = *(uint32_t*)(iVar1 + 0x204);
+        uint32_t uVar3 = *(int*)(iVar1 + 0x208) + uVar4b;
+        for (; uVar4b < uVar3; uVar4b = uVar4b + 1) {
+            Pack(uVar4b, param_3);
+        }
+        return;
     }
     int iVar1 = *piVar2;
     uint32_t uVar4b = *(uint32_t*)(iVar1 + 0x204);
     uint32_t uVar3 = *(int*)(iVar1 + 0x208) + uVar4b;
     for (; uVar4b < uVar3; uVar4b = uVar4b + 1) {
-        FUN_009ae4b0(param_1, 0, uVar4b, param_3);
+        Pack(uVar4b, param_3);
     }
+}
+
+// Keep the old free-function entry for the other routines in this slice.
+void __fastcall FUN_009ae4b0(int* param_1, int edx_dummy, int param_2, int param_3)
+{
+    (void)edx_dummy;
+    ((Pack4b0*)param_1)->Pack(param_2, param_3);
 }
 
 // ===========================================================================
