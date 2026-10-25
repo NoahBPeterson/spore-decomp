@@ -10,6 +10,16 @@ void* __cdecl FUN_011e073e(void* p, int a, unsigned size);   // operator_new[]
 void* __cdecl FUN_011e0744(void* a, void* b, unsigned c);    // vector DoInsertValue
 void  __cdecl FUN_00928dc0();
 void  __cdecl EASTL_allocator_deallocate(void* p); // 0x00f47380
+void* __cdecl EASTL_allocator_allocate(unsigned size, const char* area, int a, int b,
+                                       void* allocator, int line);   // 0x00f473a0
+extern unsigned char g_eastlAllocator;                            // 0x13ebb38
+
+// EASTL vector<0x130-block> range helpers (defined elsewhere)
+char* __cdecl FUN_006fe2d0(char* first, char* last, char* dst);   // 0x006fe2d0 copy
+void  __cdecl FUN_006faa30(char* dst, unsigned n, void* value);   // 0x006faa30 fill_n
+void  __cdecl FUN_006fa800(void* out, char* first, char* last, char* dst, unsigned n);  // 0x006fa800
+void  __cdecl FUN_006fe310(char* first, char* src, char* last);   // 0x006fe310 move forward
+void  __cdecl FUN_006fa7d0(char* first, char* last, void* value); // 0x006fa7d0 fill
 
 // EA::IO helpers
 void __cdecl EA_WriteUint32(void* stream, const void* p, int n, int flag);
@@ -18,13 +28,19 @@ void __cdecl EA_operator_shl(void* stream, const void* p, int n);   // 0x0093a9a
 void __cdecl FUN_0093adb0(void* stream, const void* p, unsigned n, int flag);
 
 // slice-26 callees (declared, not defined here)
-char* __cdecl SP_TextCopy(char* d, const char* s);
-char* __cdecl SP_TextCopySubstitute(char* d, const char* s, int a3, int a4, int a5, int a6);
-char* __cdecl GenerateInputStruct(char* d, unsigned flags);
-char* __cdecl GenerateCurrentStruct(char* d, unsigned flags, unsigned ntex, const unsigned char* sizes);
-char* __cdecl GenerateOutputStruct(char* d, unsigned flags, unsigned ntex, const unsigned char* sizes);
-char* __cdecl GenerateFillCurrentStruct(char* d, unsigned flags, int ntex);
-char* __cdecl GenerateFillOutputStruct(char* d, unsigned flags, unsigned ntex);
+char* __cdecl SP_TextCopy(char* d, const char* s);                                   // 0x006fd9a0
+char* __cdecl SP_TextCopySubstitute(char* d, const char* s, int a3, int a4, int a5, int a6); // 0x006fd9c0
+char* __cdecl GenerateInputStruct(char* d, unsigned flags);                          // 0x006fdb90
+char* __cdecl GenerateCurrentStruct(char* d, unsigned flags, unsigned ntex, const unsigned char* sizes); // 0x006fdd50
+char* __cdecl GenerateOutputStruct(char* d, unsigned flags, unsigned ntex, const unsigned char* sizes);  // 0x006fdef0
+char* __cdecl GenerateFillCurrentStruct(char* d, unsigned flags, int ntex);          // 0x006fdfc0
+char* __cdecl GenerateFillOutputStruct(char* d, unsigned flags, unsigned ntex);      // 0x006fe170
+void* __cdecl VSProfileFromVersion(unsigned version);                  // 0x007776c0
+int   __cdecl D3DXCompileShader(const char* src, unsigned length, const void* defines,
+                                void* includes, const char* entry, void* profile,
+                                unsigned flags, void** shader, void** errors,
+                                void* pool);                           // 0x011e1fd4
+extern const char g_str140bb6c[];                                      // 0x140bb6c "main"
 bool  __cdecl FUN_006fe350(void* e);
 void  __cdecl FUN_006fe3c0(int a, int b);
 
@@ -145,9 +161,48 @@ void __cdecl FUN_006fe430(void* stream) {
     } while ((int)p < 0x1628B38);
 }
 
-// @ 0x006fe600  -- vector<0x130-block>::insert (stub, see partial.txt)
+// @ 0x006fe600
 __declspec(noinline) void Vec130::Insert(char* pos, unsigned n, void* value) {
-    (void)pos; (void)n; (void)value;
+    if (n > (unsigned)((cap - end) / 0x130)) {
+        unsigned count = (unsigned)((end - begin) / 0x130);
+        unsigned newCap = count != 0 ? count * 2 : 1;
+        unsigned total = count + n;
+        if (newCap > total)
+            total = newCap;
+        char* p = 0;
+        if (total != 0)
+            p = (char*)EASTL_allocator_allocate(total * 0x130, "Graphics", 0, 0, &g_eastlAllocator, 0xd1);
+        char* mid = FUN_006fe2d0(begin, pos, p);
+        FUN_006faa30(mid, n, value);
+        char* newEnd = FUN_006fe2d0(pos, end, mid + n * 0x130);
+        char* old = begin;
+        if (old != 0 && ((int*)old)[-1] != 0)
+            EASTL_allocator_deallocate(old);
+        begin = p;
+        end = newEnd;
+        cap = p + total * 0x130;
+    } else if (n != 0) {
+        char temp[0x130];
+        memcpy(temp, value, 0x130);
+        char* oldEnd = end;
+        unsigned count = (unsigned)((oldEnd - pos) / 0x130);
+        if (n < count) {
+            char* dst = oldEnd - n * 0x130;
+            char* scratch;
+            FUN_006fa800(&scratch, dst, oldEnd, oldEnd, (unsigned)dst);
+            end = oldEnd + n * 0x130;
+            FUN_006fe310(pos, dst, oldEnd);
+            FUN_006fa7d0(pos, pos + n * 0x130, temp);
+        } else {
+            unsigned extra = n - count;
+            FUN_006faa30(oldEnd, extra, temp);
+            end = oldEnd + extra * 0x130;
+            char* scratch;
+            FUN_006fa800(&scratch, pos, oldEnd, end, extra);
+            end += count * 0x130;
+            FUN_006fa7d0(pos, oldEnd, temp);
+        }
+    }
 }
 
 // @ 0x006fe7f0
@@ -283,15 +338,133 @@ char* AddFragmentDeclarations(char* buf, int idx, int* reg) {
 }
 } // namespace
 
-// @ 0x006fea30  -- GenerateVertexShader (stub, see partial.txt)
+// ---- vertex-shader generator context (first argument of GenerateVertexShader) ----
+struct VSGenCtx {
+    char           pad00[0x0e];  // +0x00
+    unsigned short w0e;          // +0x0e shader model version
+    char           pad10[0x34];  // +0x10
+    unsigned char  b44;          // +0x44 flags (bit 0 = software/pixel-1-1 mode)
+};
+
+// @ 0x006fea30
 void __cdecl FUN_006fea30(int a1, int a2) {
-    (void)a1; (void)a2;
+    VSGenCtx* gen = (VSGenCtx*)a1;
+    const unsigned char* frags = (const unsigned char*)a2;
+    char* buf = &g_1620300;
+    unsigned maskLo = 0;                       // union of the 0x38 words of the used fragments
+    unsigned maskHi = 0;                       // union of the 0x3c words
+    unsigned used = 0;                         // sampler count
+    unsigned char slots[8] = {0, 0, 0, 0, 0, 0, 0, 0};
+    unsigned reg = 0;
+    FUN_006fe890();
+    for (int i = 0; i < 0x20; i++) {
+        unsigned fi = frags[i];
+        if (fi == 0)
+            break;
+        unsigned char* rec = &g_fragInfoTable + fi * 0x44;
+        maskLo |= *(unsigned*)(rec + 0x38);
+        maskHi |= *(unsigned*)(rec + 0x3c);
+        if (rec[0x40] != 0 || *(int*)(rec + 0x14) != *(int*)(rec + 0x18))
+            buf = AddFragmentDeclarations(buf, (int)fi, (int*)&reg);
+        unsigned nreg = rec[0x41];
+        for (unsigned k = 0; k < nreg; k++) {
+            if (used >= 8) {
+                used = 8;
+                break;
+            }
+            slots[used] = rec[0x42];
+            ++used;
+        }
+    }
+    char* p = GenerateInputStruct(buf, maskLo);
+    p = GenerateCurrentStruct(p, maskHi | maskLo, used, slots);
+    p = GenerateOutputStruct(p, maskHi, used, slots);
+    p = SP_TextCopy(p, g_str1534e44);
+    p = GenerateFillCurrentStruct(p, maskLo, (int)used);
+    reg = 0;
+    int idx = 0;
+    do {
+        unsigned fi = frags[idx];
+        if (fi == 0)
+            break;
+        p = SP_TextCopySubstitute(p, *(const char**)(&g_fragInfoTable + fi * 0x44 + 4), 0, (int)reg, 0, 0);
+        ++idx;
+        reg += (unsigned char)(&g_fragInfoTable)[fi * 0x44 + 0x41];
+    } while (idx < 0x20);
+    p = GenerateFillOutputStruct(p, maskHi, reg);
+    char* end = SP_TextCopy(p, g_str1534e40);
+    *end = 0;
+    unsigned version = gen->w0e;
+    unsigned profileVersion = version != 0 ? (version | 0xfffe0000u) : 0;
+    void* profile = VSProfileFromVersion(profileVersion);
+    unsigned flags = (gen->b44 & 1) != 0 ? 0x32 : 0x12;
+    void* shaderBlob = 0;
+    void* errorBlob = 0;
+    int hr = D3DXCompileShader(&g_1620300, (unsigned)(end - &g_1620300), 0, 0, g_str140bb6c,
+                               profile, flags, &shaderBlob, &errorBlob, 0);
+    if (errorBlob != 0)
+        ((void(__stdcall*)(void*))(*(void***)errorBlob)[2])(errorBlob);
+    if (hr >= 0) {
+        void* device = g_16f89d0;
+        void** devvt = *(void***)device;
+        unsigned* table = (unsigned*)((void* (__stdcall*)(void*, void*))(*(void***)shaderBlob)[3])(shaderBlob, buf + 0x20);
+        ((void(__stdcall*)(void*, unsigned*))devvt[0x16c / 4])(device, table);
+        ((void(__stdcall*)(void*))(*(void***)shaderBlob)[2])(shaderBlob);
+    }
 }
 
-// @ 0x006fec40  -- GetGeneratedVertexShader (stub, see partial.txt)
+// ---- pixel/vs cache lookups ----
+int  __cdecl BinaryFindPixelShader(const char* key, const void* begin, unsigned count); // 0x006fdab0
+void __cdecl PixelFrag_PushBack();                                                    // 0x006fb0e0
+
+// @ 0x006fec40
 __declspec(noinline) int __cdecl FUN_006fec40(void* a1, void* a2) {
-    (void)a1; (void)a2;
-    return 0;
+    const char* key = (const char*)a2;
+    int count = (int)((g_vs_end - g_vs_begin) / 0x130);
+    int idx = BinaryFindPixelShader(key, (const void*)g_vs_begin, (unsigned)count);
+    if (idx < 0) {
+        if (g_15345b0 != 0 && (int)g_15345b0 <= count) {
+            int victim = 0;
+            for (int i = 1; i < count; i++) {
+                if (*(unsigned*)(g_vs_begin + i * 0x130 + 0x24) <
+                    *(unsigned*)(g_vs_begin + victim * 0x130 + 0x24))
+                    victim = i;
+            }
+            char* slot = g_vs_begin + victim * 0x130;
+            void* obj = *(void**)(slot + 0x20);
+            if (obj != 0) {
+                ((void(__stdcall*)(void*))(*(void***)obj)[2])(obj);
+                *(void**)(slot + 0x20) = 0;
+            }
+            memmove(slot, slot + 0x130, (size_t)((count - victim - 1) * 0x130));
+            g_vs_end -= 0x130;
+            count = (int)((g_vs_end - g_vs_begin) / 0x130);
+            idx = BinaryFindPixelShader(key, (const void*)g_vs_begin, (unsigned)count);
+        }
+        idx = -1 - idx;
+        PixelFrag_PushBack();
+        if (idx < count)
+            memmove(g_vs_begin + idx * 0x130 + 0x130, g_vs_begin + idx * 0x130,
+                    (size_t)((count - idx) * 0x130));
+        g_1624568 = g_vs_begin + idx * 0x130;
+        FUN_011e073e(g_1624568, 0, 0x130);
+        if (g_15345ac != 0)
+            FUN_006fea30((int)a1, (int)a2);
+        char* rec = (char*)g_1624568;
+        *(unsigned*)(rec + 0x24) = g_16f8cf8;
+        memcpy(rec, a2, 0x20);
+        int n1 = (int)(g_v1_end - g_v1_begin);
+        *(unsigned*)(rec + 0x28) = (unsigned)n1;
+        FUN_011e0744(rec + 0x2c, g_v1_begin, (unsigned)(n1 * 4));
+        FUN_011e0744(rec + 0xac, g_v2_begin, (unsigned)((int)(g_v2_end - g_v2_begin) * 4));
+        for (int i = 0; i < *(int*)(rec + 0x28); i++)
+            *(unsigned*)(rec + 0x12c) |= *(unsigned*)(*(int*)(rec + 0x2c + i * 4) + 0x18);
+        return *(int*)(rec + 0x20);
+    }
+    g_1624568 = g_vs_begin + idx * 0x130;
+    char* rec = (char*)g_1624568;
+    *(unsigned*)(rec + 0x24) = g_16f8cf8;
+    return *(int*)(rec + 0x20);
 }
 
 // @ 0x006feee0

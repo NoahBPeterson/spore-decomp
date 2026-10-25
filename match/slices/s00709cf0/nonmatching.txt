@@ -1,2 +1,8 @@
+00709cf0 921 complete; free 5-argument SH coefficient accumulation (color scale, vector/mirror/rotate, coefficient vector grow, final SH); size 923 vs 838; equiv FAIL 5/5 valid, fault at eip=00705eda (fake coefficient-vector/helper state)
+0070a070 79 complete; __fastcall simple_deque destructor loop + backing-store free; size 47 vs 93; equiv PASS 228 valid / 70.0% coverage
+0070a0d0 76 complete; SampleVec fixed inline-buffer construct (begin/end/pool at +0x18, capacity at +0x98) then Build; size 41 vs 84; equiv PASS 262 valid / 100.0% coverage
+0070a130 162 complete; LightCfgCopy config copy ctor (two vector copies + field copies); size 130 vs 183; equiv FAIL 5/5 valid, fault at eip=30000020 (fake nested-container pointers)
 0070a1f0 1 spstl::simple_deque<...>::ClearImpl: complete; element tag test compiles to `sar` where original emits `shr`
+0070a2a0 284 complete; app-property config query + env/local vector resize to 0x1800/0x600; size 313 vs 325; equiv FAIL 5/5 valid, first mismatch memory pool @4001062c (fake vector insert end pointer)
+0070a3f0 295 complete; cLightingWorld::Shutdown (PreUpdate, cache destroys, vector/slot/list/deque clears); size 323 vs 353; equiv UNSUPPORTED 0/400 valid (fault reads/writes in fake cache graph)
 0070a560 37 cLightingWorld::SetLightingState: complete; zero-register materialisation and store ordering differ

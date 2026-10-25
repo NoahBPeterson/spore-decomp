@@ -1,0 +1,1 @@
+00e80660 ?sDeathFromBeingEaten_End@SP@@YAXI@Z  # cdecl; eaten-cell ending: game mode reloads the level directly, otherwise destroys the cell (SP_sDestroyCell 0x00e4ef60) and reloads at the returned level

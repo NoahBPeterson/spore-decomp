@@ -1,0 +1,4 @@
+# va  diff-bytes  reason (compiled with /O2 /MD /Gy /EHsc /TP /GS-)
+007389c0  709  ScatterGroup: per-vertex accumulation loop reconstructed with named fields; EH/SEH guard synthesized; equiv WEAK
+00738d10  259  VecB::assign: grow/shrink/overlap schedule reconstructed; equiv WEAK
+00738e90  741  NormalizeGroup: stream copy/merge + two normalisation loops reconstructed; equiv WEAK

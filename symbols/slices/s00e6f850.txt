@@ -1,1 +1,10 @@
-00e70650 OrientToAvatar  # cdecl-ish static (self in EAX via stand-in caller, float on stack): orients a cell quaternion toward the avatar cell when within its radius
+00e6f850 ?FUN_00e6f850@@YAXPAUcEntity@@PBMMMIHM@Z  # FUN_00e6f850(cEntity*,float const*,float,float,unsigned int,int,float): steer a cell away from p toward a target record view (complete)
+00e6f940 ?FUN_00e6f940@@YAXPAUcEntity@@IMMIHM@Z  # FUN_00e6f940(cEntity*,unsigned int,float,float,unsigned int,int,float): steer toward another cell's target (byte-exact)
+00e6f990 ?FUN_00e6f990@@YAXPAUcEntity@@M@Z  # FUN_00e6f990(cEntity*,float): pick the record view for the current level view, find a cell or fall back to the avatar (complete)
+00e6fbb0 ?FUN_00e6fbb0@@YAXPAUcEntity@@M@Z  # FUN_00e6fbb0(cEntity*,float): step normally, or when mState1e4==1 find and follow the cell one level up (complete)
+00e6fce0 ?FUN_00e6fce0@@YAXPAUcEntity@@M@Z  # FUN_00e6fce0(cEntity*,float): tick mTimer1f8 and step while it is positive (complete)
+00e6fd70 ?FUN_00e6fd70@@YAXPAUcEntity@@M@Z  # FUN_00e6fd70(cEntity*,float): follow the avatar when it is within 5 units (or the anchor within 20), else head for the anchor (complete)
+00e6ff60 ?FUN_00e6ff60@@YAXPAUcEntity@@MMIEM@Z  # FUN_00e6ff60(cEntity*,float,float,unsigned int,unsigned char,float): collision-avoiding wander step; retries the cylinder probe up to 10 times (complete)
+00e702d0 ?FUN_00e702d0@@YAXPAUcEntity@@PAUCellRecordBase@@M@Z  # FUN_00e702d0(cEntity*,CellRecordBase*,float): chase the mHandle1e8 target and accumulate arrival velocity (complete)
+00e704b0 ?FUN_00e704b0@@YAXPAUcEntity@@PAUCellRecordBase@@M@Z  # FUN_00e704b0(cEntity*,CellRecordBase*,float): orbit the mHandle1dc target with a Z-axis rotation quaternion (complete)
+00e70650 ?OrientToAvatar@@YAXPAUcEntity@@M@Z  # OrientToAvatar(cEntity*,float): orient a cell toward the avatar when it is inside the record radius (complete)

@@ -1,8 +1,8 @@
-006fa2c0  SP::cFragmentDecl::operator=          # assignment / merge
-006fa480  SP::cFragmentDecl bulk assign
-006fa730  eastl::sp_vector_allocator::allocate<cFragmentDecl>   # n*0x1c
-006fa770  eastl::vector<SP::cFragmentDecl>::DoAllocate
-006fa850  SP::cFragmentDecl::cFragmentDecl(const char*)        # RangeInitialize + scalar copy
+006fa2c0  ?FragmentDeclAssign@@YAXHPBD@Z  # cFragmentDecl assignment/merge into the active-state sampler table (slice spelling s006fa2c0)
+006fa480  ?Serialize@PixelFrag@@QAEXPAUIStream@@@Z  # cFragmentDecl bulk serialization of the global pixel-fragment table (slice spelling s006fa2c0)
+006fa730  _allocN@4  # eastl::sp_vector_allocator::allocate<cFragmentDecl> (n*0x1c)
+006fa770  ?init@Vec28@@QAEPAU1@IPBX@Z  # eastl::vector<SP::cFragmentDecl>::DoAllocate
+006fa850  ??0FragDecl@@QAE@ABU0@@Z  # cFragmentDecl string-range constructor (RangeInitialize + scalar copy)
 006fabd0 ?do_fill28@@YAXPAUFragDecl@@0ABU1@@Z  # do_fill28 migrated from s006fa2c0 (verbatim, slice spelling)
 006fac30 ?do_copy28@@YAPAUFragDecl@@PAU1@00@Z  # do_copy28 migrated from s006fa2c0 (verbatim, slice spelling)
 006faca0 ?do_copy_backward28@@YAPAUFragDecl@@PAU1@00@Z  # do_copy_backward28 migrated from s006fa2c0 (verbatim, slice spelling)

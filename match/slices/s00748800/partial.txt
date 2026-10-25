@@ -1,1 +1,1 @@
-00748ad0 241 model pick/distance helper approximated
+# va  reason (approximate/incomplete: callee roles or allocator helper signatures inferred from Ghidra)

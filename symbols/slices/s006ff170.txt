@@ -1,1 +1,5 @@
+006ff170 SP::cVertexFragmentTable::Write  # 0x130-byte vertex-shader fragment records -> EA::IO stream (blob, shader blob, element list, lane array); nonmatching (register/frame shape)
+006ff3f0 SP::cVertexFragmentTable::Read  # mirror of 0x006ff170: rebuilds the 0x1628c20 vector and bump-allocates element lists from the 0x1628b98 StackAllocator; nonmatching (register/frame shape)
+006ff680 ?FUN_006ff680@@YAXH@Z  # ClearVSFragment: default cVertexFragmentInfo assigned into table slot 0x1624710+idx*0x44, temp destroyed, string/vector members reset
+006ff750 SP::cVertexFragmentTable::ReadTable  # reads the 255-entry global table at 0x1624710 (scalars, two sized strings, region vector, flags&2 space-filled string); nonmatching (loop/frame shape)
 006ffaf0 ?TestClip1@VertexCtx@@QAEHPBM0@Z  # VertexCtx::TestClip1 migrated from s006ff170 (verbatim, slice spelling)

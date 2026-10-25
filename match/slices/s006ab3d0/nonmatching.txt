@@ -5,3 +5,13 @@
 006ac0a0  38  cache-type setter via vtable+0xc; returns bool so SetCachingType tail-jumps; equiv PASS: 399 valid, 100.0% coverage
 006ac0d0  35  cache-type getter: complete; division/compare schedule differs
 006ac440  41  8-byte element copy loop; returns advanced dst pointer in eax; equiv PASS: 310 valid, 100.0% coverage
+006ab3d0  486  FixedAllocator size-class init ctor: complete (584 bytes vs 600); retail ctor SEH frame and different member init ordering; equiv PASS (400 valid, 100% cov); flags /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+006ab950  266  wstring hashtable rehash helper: complete (317 bytes vs 289); frame 0x24 vs retail 0x20 and ebx/ebp regalloc differ; equiv WEAK (323 valid, 45.2% cov); flags /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+006aba80  486  D3D9ShaderGeneric3DMorphingInitialize: complete (564 bytes vs 518); local FUN_006ab760 stub called 5x; equiv WEAK (320 valid, 37.3% cov); flags /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+006abc90  287  shader constant setup helper: complete (359 bytes vs 351); out kept in esi vs retail edi, vector-clear arithmetic differs; equiv UNSUPPORTED (import:RegOpenKeyExW path not emulated); flags /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+006abf20  49  SpinObj::RetireOne: complete (107 bytes vs 114); load-order/regalloc coin flip; equiv WEAK (220 valid, 40.9% cov); flags /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+006abfa0  73  SpinObj::RetireTwo: complete (139 bytes vs 148); ticket target is old _InterlockedIncrement value; regalloc differs; equiv WEAK (230 valid, 39.0% cov); flags /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+006ac140  87  FixedAlloc::InitDefaults: complete (64 bytes vs 112); retail is a derived constructor with SEH guard; equiv PASS (400 valid, 100% cov); flags /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+006ac260  129  HashTable::AllocateNode: complete (105 bytes vs 140); node alloc + value copy; extra retail frame; equiv PASS (337 valid, 86.5% cov); flags /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+006ac2f0  141  HashTable::Rehash: complete (188 bytes vs 193); register-allocation differences; equiv WEAK (166 valid, 100% cov); flags /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+006ac3c0  91  NodeFactory::NewNode: complete (57 bytes vs 117); SEH placement-new guard in retail; equiv PASS (333 valid, 100% cov); flags /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast

@@ -410,10 +410,88 @@ int* __fastcall FUN_006f5ed0(int* self) {
     return self;
 }
 
-// ---- vector helpers: skeletons (see partial.txt) ----------------------------------------
+// ---- dynamic vector operator= (3-pointer eastl::vector with refcounted allocator) ---------
 // @ 0x006f5bc0
 void FUN_006f5bc0(void* self, void* a, void* b) { (void)self; (void)a; (void)b; }
+
+struct Elem0C { unsigned d[3]; };   // Text::AnalysisInfo, 0xc bytes
+
+struct Vec0C {
+    Elem0C* mpBegin;
+    Elem0C* mpEnd;
+    Elem0C* mpCapacity;
+    Elem0C* AllocCopy(unsigned n, Elem0C* first, Elem0C* last);   // 0x006f4f30
+    Vec0C& Assign(const Vec0C* x);
+};
+
 // @ 0x006f5cd0
-void* FUN_006f5cd0(void* self, void* other) { (void)other; return self; }
+Vec0C& Vec0C::Assign(const Vec0C* x)
+{
+    if (x != this) {
+        Elem0C* xBegin = x->mpBegin;
+        int cap = (int)(mpCapacity - mpBegin);
+        int n = (int)(x->mpEnd - xBegin);
+        if ((unsigned)n > (unsigned)cap) {
+            Elem0C* p = AllocCopy((unsigned)n, xBegin, x->mpEnd);
+            if (mpBegin != 0 && ((int*)mpBegin)[-1] != 0)
+                operator_delete_((void*)mpBegin);
+            mpCapacity = p + n;
+            mpBegin = p;
+            mpEnd = p + n;
+            return *this;
+        }
+        int have = (int)(mpEnd - mpBegin);
+        if ((unsigned)n > (unsigned)have) {
+            FUN_00b84c80((int)x->mpBegin, (int)(x->mpBegin + (int)(mpEnd - mpBegin)), (int)mpBegin);
+            Elem0C* tail = x->mpEnd;
+            FUN_00951740((void**)&tail, (int)(x->mpBegin + (int)(mpEnd - mpBegin)), (int)tail,
+                         (int)mpEnd, (int)tail);
+            mpEnd = mpBegin + n;
+            return *this;
+        }
+        FUN_00b84c80((int)x->mpBegin, (int)x->mpEnd, (int)mpBegin);
+        mpEnd = mpBegin + n;
+    }
+    return *this;
+}
+
+struct Elem8 { unsigned d[2]; };   // Text::GlyphInfo, 8 bytes
+
+struct Vec8 {
+    Elem8* mpBegin;
+    Elem8* mpEnd;
+    Elem8* mpCapacity;
+    Elem8* AllocCopy(unsigned n, Elem8* first, Elem8* last);   // 0x006f4f90
+    Vec8& Assign(const Vec8* x);
+};
+
 // @ 0x006f5e00
-void* FUN_006f5e00(void* self, void* other) { (void)other; return self; }
+Vec8& Vec8::Assign(const Vec8* x)
+{
+    if (x != this) {
+        Elem8* xBegin = x->mpBegin;
+        int cap = (int)(mpCapacity - mpBegin);
+        int n = (int)(x->mpEnd - xBegin);
+        if ((unsigned)n > (unsigned)cap) {
+            Elem8* p = AllocCopy((unsigned)n, xBegin, x->mpEnd);
+            if (mpBegin != 0 && ((int*)mpBegin)[-1] != 0)
+                operator_delete_((void*)mpBegin);
+            mpCapacity = p + n;
+            mpBegin = p;
+            mpEnd = p + n;
+            return *this;
+        }
+        int have = (int)(mpEnd - mpBegin);
+        if ((unsigned)n > (unsigned)have) {
+            FUN_00ac4440((int)x->mpBegin, (int)(x->mpBegin + (int)(mpEnd - mpBegin)), (int)mpBegin);
+            Elem8* tail = x->mpEnd;
+            FUN_00714bc0((void**)&tail, (int)(x->mpBegin + (int)(mpEnd - mpBegin)), (int)tail,
+                         (int)mpEnd, (int)x);
+            mpEnd = mpBegin + n;
+            return *this;
+        }
+        FUN_00ac4440((int)x->mpBegin, (int)x->mpEnd, (int)mpBegin);
+        mpEnd = mpBegin + n;
+    }
+    return *this;
+}

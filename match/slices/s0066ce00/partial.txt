@@ -1,3 +1,1 @@
 # va  diff-bytes  reason (flags /O2 /MD /Gy /TP /arch:SSE /GS-)
-0066ce00  1150  list refresh: only a placeholder body
-0066d280  417   window refresh loop: only a placeholder body (SetWindowImage/property-key refresh)

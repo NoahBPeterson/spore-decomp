@@ -2,3 +2,6 @@
 006e8160  105  complete; x87 div scheduled as fld+fidiv instead of fild+fdivr (source-expression dependent)
 006e83e0  10  complete; std::min pointer-select but out2 pointer hoisted one slot early
 006e8480  639  complete; cl hoisted xor ebx/loop-pointer setup and reordered the three destroy/rebuild loops
+006e8810  1172  complete; large debug-render path rewritten in full from the disasm; cl picks a different frame size (0x48 vs 0x78) and register allocation (ebp/edi/esi) so only scratch-pool floats differ on the float-rounding input class
+006e8d70  72  complete; behaviourally exact (equiv PASS, 100% coverage) but cl saves esi and materialises the Vector3 temp with movs instead of the original's edx/eax fld+fstp (register-allocation difference)
+006e8dd0  88  complete; behaviourally exact (equiv PASS, 100% coverage) but cl saves esi and materialises the Vector3 temp with movs instead of the original's edx/eax fld+fstp (register-allocation difference)

@@ -29,10 +29,26 @@ struct HDeque { void Dtor(); };                                   // 0x0070c040
 struct HMap { void* Find(void* key); };                           // 0x0074f200
 struct HNuke { void Nuke(void* node); };                          // 0x00707690
 struct HSmall { void Op(); };                                     // 0x0070a2a0
-unsigned __cdecl SlotCreate(void* self, int* out);                // 0x0070cce0
-int __cdecl CellListBuild(int a, const float* colour, float size, int b); // 0x00705740
-int __cdecl CellListFilter(int a, int b);                         // 0x00705050
-void __cdecl NotifyLightAdded(void* info);                        // 0x00705f40
+unsigned __fastcall F_70cce0(void* self, int, void* entry);                         // 0x0070cce0
+int      __cdecl    F_705740(int n, const float* colour, float size, int* cells);   // 0x00705740
+int      __cdecl    F_705050(int count, int* cells);                                // 0x00705050
+void     __fastcall F_708d90(void* vec, int, unsigned n);                           // 0x00708d90
+void     __fastcall F_708810(void* self, int, unsigned slot, int index, void* sample); // 0x00708810
+unsigned __fastcall F_70c5e0(void* pool, int, void* sentinel);                      // 0x0070c5e0
+void     __fastcall F_70c410(void* self, int, int node);                            // 0x0070c410
+void     __fastcall F_705f40(void* self, int, void* info);                          // 0x00705f40
+
+// cLocalLightInfo (0xc0 bytes); its cell list is an eastl::fixed_vector at +0x28 with an
+// inline 0x80-byte buffer at +0x40 (header copied from the slot source in create()).
+struct LocalLightInfo {
+    unsigned char _d00[0x28];      // +0x00 position/size/colour/ratio/flags
+    void* mpVecBegin;              // +0x28
+    void* mpVecEnd;                // +0x2c
+    void* mpVecCap;                // +0x30
+    unsigned char _d34[4];         // +0x34
+    void* mpInline;                // +0x38
+    unsigned char mBuffer[0x80];   // +0x40
+};
 struct HShut { void Shutdown(); };                                // 0x0070a3f0
 struct HNode { void Dtor(void* node); };                          // 0x00d0c930
 struct HFill { void Fill(int id, void* cfg); };                   // 0x0070aed0
@@ -364,18 +380,28 @@ cLightingWorld* cLightingManager::MakeWorld(int owner, int a3, void* arg4)
     return world;
 }
 
-// @ 0x0070d850  (SP::cLightingWorld::AddLight - reconstructed outline)
-unsigned cLightingWorld_AddLight(cLightingWorld* self, const float* colour, const float* position,
-                                 float strength, float size)
+// @ 0x0070d850  (SP::cLightingWorld::AddLight)
+// thiscall: ecx = cLightingWorld*, 4 stack args (colour, position, strength, size), ret 0x10.
+unsigned __fastcall cLightingWorld_AddLight(void* self, int, const float* colour,
+                                            const float* position, float strength, float size)
 {
-    unsigned char* p = self->_b;
+    unsigned char* p = (unsigned char*)self;
     if (*(void**)(p + 0x10) == 0)
         return 0xffffffff;
 
-    // reserve a slot in mLocalLights (slot_deque create)
-    unsigned slot = SlotCreate(p + 0x428, 0);
-    unsigned char* info = (unsigned char*)(*(int*)(*(int*)(p + 0x628) + (slot >> 7) * 4)
-                                           + 4 + (slot & 0x7f) * 0xc4);
+    // Reserve a slot in the mLocalLightCells deque.  create() copy-constructs the slot's
+    // cLocalLightInfo from this source object, so its embedded fixed_vector must at least
+    // look empty (an inline buffer) or the copy would try to allocate.
+    LocalLightInfo seed;
+    seed.mpVecBegin = seed.mBuffer;
+    seed.mpVecEnd = seed.mBuffer;
+    seed.mpVecCap = seed.mBuffer + 0x80;
+    seed.mpInline = seed.mBuffer;
+    unsigned slot = F_70cce0(p + 0x428, 0, &seed);
+
+    // Resolve the pooled cLocalLightInfo storage for that slot (block + 4 + lane*0xc4).
+    unsigned char* info = (unsigned char*)(*(int*)(*(int*)(p + 0x428) + (slot >> 7) * 4)
+                                           + (slot & 0x7f) * 0xc4 + 4);
     InitAtmBuffer(info, 0, 0xc0);
 
     *(float*)(info + 0x10) = colour[0];
@@ -384,25 +410,117 @@ unsigned cLightingWorld_AddLight(cLightingWorld* self, const float* colour, cons
     *(float*)(info + 0x00) = position[0];
     *(float*)(info + 0x04) = position[1];
     *(float*)(info + 0x08) = position[2];
-    *(float*)(info + 0x0c) = size;
     *(float*)(info + 0x1c) = strength / (size + 1e-06f);
+    *(float*)(info + 0x0c) = size;
     *(unsigned char*)(info + 0x24) = 1;
     ++*(int*)(p + 0x5d0);
 
+    // Gather the grid cells the light overlaps.  In this build mFlags (+0x24) is
+    // always set, so the per-cell path below is never taken.
+    int cells[16 * 5]; // 16 x {z, xMin, yMin, xMax, yMax}
+    int buildCount = (int)slot;
+    int cellCount = (int)slot;
     if (*(unsigned char*)(info + 0x24) == 0)
     {
-        int cells = CellListBuild(0x10, colour, size, 0);
-        cells = CellListFilter(cells, 0);
+        buildCount = F_705740(0x10, colour, size, cells);
+        cellCount = F_705050(buildCount, cells);
     }
-    // ... build per-cell entries into mGlobalLights (omitted detail)
-    *(unsigned char*)(p + 0x660) = 1;
+
+    if ((*(unsigned char*)(info + 0x24) == 0) && (cellCount < 0x11))
+    {
+        F_708d90(info + 0x28, 0, (unsigned)cellCount);
+        int index = 0;
+        for (int c = 0; c < buildCount; ++c)
+        {
+            const int* cell = cells + c * 5;
+            for (int y = cell[2]; y < cell[4]; ++y)
+            {
+                for (int x = cell[1]; x < cell[3]; ++x)
+                {
+                    int gridIndex = (cell[0] * 0x10 + y) * 0x10 + x;
+                    int* gridEntry = (int*)(*(int*)(p + 0x628) + gridIndex * 4);
+                    unsigned sample = *(unsigned*)gridEntry;
+                    if ((int)sample < 0)
+                    {
+                        // Allocate a new global light sample through the pool, using a
+                        // scratch vector whose intrusive list is drained and freed here.
+                        unsigned char tmp[0x34];
+                        *(int*)(tmp + 0x00) = 0;
+                        *(int*)(tmp + 0x04) = 0;
+                        *(int*)(tmp + 0x08) = 0;
+                        *(int*)(tmp + 0x14) = 0;
+                        *(int*)(tmp + 0x18) = 0;
+                        *(int*)(tmp + 0x1c) = 0;
+                        *(int*)(tmp + 0x28) = 0;
+                        *(void**)(tmp + 0x2c) = tmp + 0x2c;
+                        *(void**)(tmp + 0x30) = tmp + 0x2c;
+
+                        sample = F_70c5e0(p + 0x63c, 0, tmp + 0x2c);
+
+                        unsigned char* node = *(unsigned char**)(tmp + 0x2c);
+                        while (node != tmp + 0x2c)
+                        {
+                            unsigned char* next = *(unsigned char**)node;
+                            *(void**)(node + 4) = 0;
+                            *(void**)node = 0;
+                            node = next;
+                        }
+                        *(void**)(tmp + 0x2c) = 0;
+                        *(void**)(tmp + 0x30) = 0;
+                        if ((*(int*)(tmp + 0x14) != 0) && (*(int*)(*(int*)(tmp + 0x14) - 4) != 0))
+                            EFree(*(void**)(tmp + 0x14));
+                        if ((*(int*)(tmp + 0x00) != 0) && (*(int*)(*(int*)(tmp + 0x00) - 4) != 0))
+                            EFree(*(void**)(tmp + 0x00));
+
+                        *gridEntry = (int)sample;
+                    }
+
+                    unsigned char* sampleData =
+                        (unsigned char*)(*(int*)(*(int*)(p + 0x63c) + (sample >> 7) * 4)
+                                         + (sample & 0x7f) * 0x38 + 4);
+                    *(unsigned*)(*(int*)(info + 0x28) + index * 8) = sample;
+                    F_708810(p, 0, slot, index, sampleData);
+                    ++index;
+                }
+            }
+        }
+        *(unsigned char*)(p + 0x660) = 1;
+    }
+    else
+    {
+        // Dense path: a single sample covers the whole light bounds.
+        bool wasEmpty = (*(int*)(p + 0x5d4) == *(int*)(p + 0x5d8));
+        F_708d90(info + 0x28, 0, 1);
+        *(int*)(*(int*)(info + 0x28)) = -1;
+        F_708810(p, 0, slot, 0, p + 0x5d4);
+
+        if (!wasEmpty)
+        {
+            *(unsigned char*)(p + 0x660) = 1;
+        }
+        else
+        {
+            // Drain the mPendingSamples intrusive list (sentinel at +0x600, nodes at link-4).
+            unsigned char* node = *(unsigned char**)(p + 0x600);
+            node = node ? node - 4 : 0;
+            unsigned char* end = (unsigned char*)(p + 0x600) - 4;
+            while (node != end)
+            {
+                F_70c410(p, 0, (int)node);
+                unsigned char* next = *(unsigned char**)(node + 4);
+                node = next ? next - 4 : 0;
+            }
+        }
+    }
+
     if ((*(unsigned char*)(*(int*)(p + 0x10) + 0x134) != 0) && (*(int*)(p + 0x448) != 0))
-        NotifyLightAdded(info);
+        F_705f40(p, 0, info);
+
     if (*(unsigned char*)(p + 0x590) == 0)
     {
         *(unsigned char*)(p + 0x590) = 1;
-        void* ms = MessageServer();
-        ((MServer*)ms)->m5(0x2495f34, 0, 0);
+        MServer* ms = (MServer*)MessageServer();
+        ms->m5(0x2495f34, 0, 0);
     }
     return slot;
 }

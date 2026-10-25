@@ -99,6 +99,9 @@ namespace App {
 
 struct ITokenTranslator;
 
+// The detokenizer vtable (retail 0x01400f40).
+extern void* vtbl_App_cStringDetokenizer[];
+
 struct intrusive_ptr {
     ITokenTranslator* ptr;   // +0
 
@@ -119,6 +122,13 @@ struct TranslatorVector {
     intrusive_ptr* erase(intrusive_ptr* first, intrusive_ptr* last);   // 0x005c2170
     void push_back(const intrusive_ptr& v);                            // 0x006b5f80
     void DoInsertValue(intrusive_ptr* pos, const intrusive_ptr* pValue);
+};
+
+// SEH guard for push_back: releases the slot that was appended when the AddRef
+// call unwinds out of the function.
+struct SlotGuard {
+    intrusive_ptr* mpSlot;
+    ~SlotGuard();
 };
 
 struct ITokenTranslator {
@@ -185,6 +195,8 @@ struct cStringDetokenizer : ITokenTranslator {
     virtual bool FindTokenTranslation(const wchar16* pToken, eastl::string16& dst); // +0x3c
     // Override of ITokenTranslator::TranslateToken (slot +0x10).
     virtual bool TranslateToken(const wchar16* pToken, eastl::string16& dst);
+
+    void ctor();                         // 0x006b6490 (thiscall constructor)
 
     TranslatorVector mTranslators;       // +0x08 (begin/end/cap)
     uint32_t mPad14;                     // +0x14
@@ -321,6 +333,30 @@ int SP::cStringTableResourceFactory::GetSupportedTypes(uint32_t* pTypes, int cou
 // ---------------------------------------------------------------------------
 namespace App {
 
+// TokenCursor: the caller owns the 9-byte state blob
+// (valid flag + record pointer) while the array bounds come from the owner.
+struct TokenCursor {
+    bool Next(char* mState, int* pOut1, int* pOut2);
+    // +0x18 begin / +0x1c end of the token-name buffer, +0x2c/+0x30 record array
+    char pad00[0x18];
+    int  mBegin;      // +0x18
+    int  mEnd;        // +0x1c
+    char pad20[0xc];  // +0x20..+0x2b
+    int* mRecBegin;   // +0x2c
+    int* mRecEnd;     // +0x30
+};
+
+// ByteStream: a reader over a pooled source buffer.
+struct ByteStream {
+    unsigned char ReadByte();
+    char pad00[0x08]; // +0x00..+0x07
+    unsigned mPool;   // +0x08 remaining pool bytes
+    int  mCursor;     // +0x0c
+    int  mLimit;      // +0x10
+    int  mBase;       // +0x14 current read base
+    void* mSource;    // +0x18 vtable-bearing source object
+};
+
 void ITokenTranslator::Slot00() {}
 int  ITokenTranslator::AddRef() { return 1; }
 int  ITokenTranslator::Release() { return 0; }
@@ -375,13 +411,68 @@ void App::TranslatorVector::DoInsertValue(App::intrusive_ptr* pos, const App::in
     }
 }
 
-// @ 0x006b5770
+// @ 0x006b5770 SP::cString::ctor
+// SP::cString::cString: initialise the resource slot, the lazily created
+// detokenized copy (null), the "***" source literal and the token flags, then
+// register with the manager's string detokenizer (vtable +4) and load the
+// caller's text. Wrapped in an SEH frame because the detokenizer registration
+// and Load can throw.
+void* __stdcall cStringManager_StringDetokenizer();       // 0x0067de50
+void  cString_Load(void* self, unsigned id, unsigned a, const wchar_t* s);  // 0x006b54b0
+extern "C" const wchar_t gSourcePlaceholder[] = L"***";    // 0x01409b1c: the "***" source literal
+
 namespace SP {
-class cString { public:
-    cString();
+struct cString {
+    void* mpTableResource;        // +0x00
+    eastl::string16* mpLocalString;   // +0x04
+    const wchar_t* mpSourceCStr;  // +0x08
+    unsigned mPlaceholderId;      // +0x0c
+    bool mbHasTokens;             // +0x10
+    bool mField11;                // +0x11
+    void ctor(unsigned id, unsigned arg, const wchar_t* src);
+    void Load(unsigned id, unsigned arg, const wchar_t* src);
 };
+
+// SEH guard for the constructor: destroys the partially built cString when a
+// throwing call (the detokenizer registration or Load) unwinds out of it.
+struct CStringCtorGuard {
+    cString* mpSelf;
+    ~CStringCtorGuard();
+};
+} // namespace SP
+
+__declspec(noinline) SP::CStringCtorGuard::~CStringCtorGuard()
+{
+    // EH state 0 unwinds a partially assigned table resource.
+    if (mpSelf->mpTableResource) {
+        (*(void(__thiscall**)(void*))((char*)*(void**)mpSelf->mpTableResource + 8))(
+            mpSelf->mpTableResource);
+        mpSelf->mpTableResource = 0;
+    }
 }
-SP::cString::cString() {}
+
+void SP::cString::ctor(unsigned id, unsigned arg, const wchar_t* src)
+{
+    CStringCtorGuard guard;
+    guard.mpSelf = this;
+    mpTableResource = 0;
+    mpLocalString = 0;
+    mpSourceCStr = gSourcePlaceholder;
+    mPlaceholderId = 0;
+    mbHasTokens = false;
+    mField11 = false;
+    void* detok = cStringManager_StringDetokenizer();
+    if (detok != 0) {
+        void* d = cStringManager_StringDetokenizer();
+        (*(void(__thiscall**)(void*, void*))((char*)*(void**)d + 4))(d, this);
+    }
+    Load(id, arg, src);
+}
+
+void SP::cString::Load(unsigned id, unsigned arg, const wchar_t* src)
+{
+    cString_Load(this, id, arg, src);
+}
 
 // @ 0x006b5bd0
 bool App::cStringDetokenizer::ProcessString(const wchar16* pStr, eastl::string16& dst)
@@ -469,8 +560,35 @@ bool App::cStringDetokenizer::ProcessStringEx(const wchar16* pStr, eastl::string
     return ok;
 }
 
-// @ 0x006b5f80
-void TranslatorVector_pushback_stub() {}
+// @ 0x006b5f80 App::TranslatorVector::push_back
+// eastl::vector<intrusive_ptr>::push_back: when there is in-place room the value
+// is copied into the next slot and AddRef'd on the freshly constructed pointer;
+// otherwise DoInsertValue performs the growth. Wrapped in an SEH frame so the
+// partially constructed slot is destroyed if the AddRef call throws.
+__declspec(noinline) App::SlotGuard::~SlotGuard()
+{
+    if (mpSlot && mpSlot->ptr)
+        mpSlot->ptr->Release();
+}
+
+void App::TranslatorVector::push_back(const intrusive_ptr& v)
+{
+    SlotGuard guard;                 // SEH: destroy the new slot if AddRef throws
+    guard.mpSlot = 0;
+    if (mpEnd < mpCapacity) {
+        intrusive_ptr* slot = mpEnd;
+        mpEnd = slot + 1;
+        guard.mpSlot = slot;
+        if (slot) {
+            ITokenTranslator* p = v.ptr;
+            slot->ptr = p;
+            if (p)
+                p->AddRef();
+        }
+    } else {
+        DoInsertValue(mpEnd, &v);
+    }
+}
 
 // @ 0x006b6000
 void App::cStringDetokenizer::func18h()
@@ -564,20 +682,219 @@ bool App::cStringDetokenizer::TranslateToken(const wchar16* tok, eastl::string16
     }
 }
 
-// @ 0x006b6490
-void App::cStringDetokenizer_ctor(App::cStringDetokenizer* self) { (void)self; }
+// 0x006b6490: App::cStringDetokenizer::cStringDetokenizer (see definition below).
+void __cdecl WString_DeallocateSelf(void* p);       // 0x00933960
+void __cdecl WString_AllocateSelf(void* p);         // 0x005e93a0
+// 0x006b58c0: __thiscall member taking the table size on the stack (ecx = table).
+struct InitTableFn {
+    void InitTable(int n);   // 0x006b58c0
+};
+void __stdcall __ehvec_ctor(void* ptr, unsigned size, int count,
+                             void (__thiscall* ctor)(void*), void (__thiscall* dtor)(void*));  // 0x011e0b85
 
-// @ 0x006b65d0
-void FUN_006b65d0() {}
+// SEH guard for the constructor: unwinds the four generic tokens when the table
+// init or func18h throws.
+struct DetokenizerCtorGuard {
+    eastl::string16* mpTokens;
+    ~DetokenizerCtorGuard();
+};
+__declspec(noinline) DetokenizerCtorGuard::~DetokenizerCtorGuard()
+{
+    for (int i = 0; i < 4; ++i) {
+        if (mpTokens[i].mpBegin && mpTokens[i].mpBegin != gEmptyStringRep)
+            eastl::operator_delete_array(mpTokens[i].mpBegin);
+    }
+}
 
-// @ 0x006b6620
-void FUN_006b6620() {}
+// App::cStringDetokenizer::cStringDetokenizer: set the refcount to 0 and the
+// vtable, empty the translator vector at +8, run the eastl vector-constructor
+// iterator over the four string16 generic tokens at +0x1c, then add the default
+// translation table (10 entries) and finish with func18h.
+// @ 0x006b6490 App::cStringDetokenizer::ctor
+void App::cStringDetokenizer::ctor()
+{
+    DetokenizerCtorGuard guard;
+    guard.mpTokens = mGenericTokens;
+    mnRefCount = 0;
+    *(void**)this = (void*)0x1400f40;      // vtbl_App::cStringDetokenizer
+    mTranslators.mpBegin = 0;
+    mTranslators.mpEnd = 0;
+    mTranslators.mpCapacity = 0;
+    __ehvec_ctor((char*)this + 0x1c, 0x10, 4,
+                 (void(__thiscall*)(void*))WString_AllocateSelf,
+                 (void(__thiscall*)(void*))WString_DeallocateSelf);
+    ((InitTableFn*)&mTranslators)->InitTable(10);
+    func18h();
+}
 
-// @ 0x006b6740
-void FUN_006b6740() {}
+// ---------------------------------------------------------------------------
+// Token-table cursor (0x006b65d0 / 0x006b6620) and the token hashtable
+// (0x006b6740 / 0x006b67b0 / 0x006b68a0).
+// ---------------------------------------------------------------------------
 
-// @ 0x006b67b0
-void FUN_006b67b0() {}
+// hashtable layout: +0 unused, +4 mpBucketArray, +8 mnBucketCount,
+// +0xc mnElementCount, +0x10 rehash policy, +0x18 pooled node block, +0x2c
+// hash-key bucket array (the derived temp-map field).
+struct HashInsertResult {
+    void* node;       // +0
+    void* bucket;     // +4
+    bool  inserted;   // +8
+};
 
-// @ 0x006b68a0
-void FUN_006b68a0() {}
+struct Hashtable {
+    int EraseKey(unsigned* pKey);                    // 0x006b6740 (thiscall)
+    void* Insert(HashInsertResult* out, unsigned* pKey, unsigned unused);  // 0x006b67b0 (thiscall)
+    void* ScalarDeletingDtor(unsigned deleteFlag);   // 0x006b68a0 (thiscall)
+    void Rebucket(int newBucketCount);               // 0x006b6690 (thiscall)
+};
+
+// @ 0x006b65d0 App::TokenCursor::Next
+// App::TokenCursor::Next: lazily seeds the cursor (+1 = record array begin at
+// this+0x2c) on first use, then advances by one 8-byte record {hash, offset} and
+// hands back the hash and the decoded source pointer (this+0x18 + offset*2).
+// Returns whether the read offset is still inside the token-name buffer.
+bool App::TokenCursor::Next(char* mState, int* pOut1, int* pOut2)
+{
+    if (*mState == 0) {
+        *mState = 1;
+        *(int*)(mState + 1) = *(int*)((char*)this + 0x2c);
+    }
+    int* rec = *(int**)(mState + 1);
+    if (rec != *(int**)((char*)this + 0x30)) {
+        *(int**)(mState + 1) = rec + 2;
+        *pOut2 = rec[0];
+        *pOut1 = *(int*)((char*)this + 0x18) + rec[1] * 2;
+        int len = (*(int*)((char*)this + 0x1c) - *(int*)((char*)this + 0x18)) >> 1;
+        return (unsigned)rec[1] < (unsigned)len;
+    }
+    return 0;
+}
+
+// @ 0x006b6620 App::ByteStream::ReadByte
+// App::ByteStream::ReadByte: return the byte at the read cursor (+0xc/+0x14),
+// advancing it; when exhausted refill through vtable +0x30 (with the pool size
+// at +8, clamped to the 0x200 fallback descriptor at 0x1400f2c) and retry once.
+unsigned char App::ByteStream::ReadByte()
+{
+    unsigned char result = 0;
+    int cur = mCursor;
+    if (cur == mLimit) {
+        if (mPool != 0) {
+            const unsigned* desc = (mPool < 0x200) ? &mPool : (const unsigned*)0x1400f2c;
+            int got = (*(int(__thiscall**)(int, unsigned))((char*)*(int**)mSource + 0x30))(
+                mBase, *desc);
+            mPool -= got;
+            mLimit = got;
+            mCursor = 0;
+            if (got >= 1) {
+                result = *(unsigned char*)mBase;
+                mCursor = 1;
+            } else {
+                mLimit = 0;
+                mPool = 0;
+            }
+        }
+    } else {
+        result = *(unsigned char*)(cur + mBase);
+        mCursor = cur + 1;
+    }
+    return result;
+}
+
+// @ 0x006b6740 Hashtable::EraseKey
+// eastl::hashtable<...>::erase(key): unlink and free every node in the bucket
+// whose key matches, decrementing the element count, and return the number of
+// nodes removed.
+int Hashtable::EraseKey(unsigned* pKey)
+{
+    int* self = (int*)this;
+    int before = self[3];           // +0xc element count
+    unsigned idx = *pKey % (unsigned)self[2];   // +0x8 bucket count
+    int** slot = (int**)(self[1] + idx * 4);    // +0x4 bucket array
+    if (*slot != 0) {
+        int* node = *slot;
+        while (*pKey != (unsigned)node[0]) {
+            slot = (int**)(node + 1);
+            node = (int*)node[1];
+            if (node == 0)
+                goto done;
+        }
+        while (*slot != 0) {
+            int* cur = *slot;
+            if (*pKey != (unsigned)cur[0])
+                break;
+            *slot = (int*)cur[1];
+            eastl::operator_delete_array(cur);
+            --self[3];
+        }
+    }
+done:
+    return before - self[3];
+}
+
+// @ 0x006b67b0 Hashtable::Insert
+// eastl::hashtable<...>::insert / operator[]: find the node for the key; when
+// absent, grow the bucket array through the rehash policy (0x00921440), allocate
+// a fresh 8-byte node, rebucket if the policy asked for it, then link the node
+// and report {node, bucket, inserted}.
+struct RehashResult {
+    bool rebucketed;       // +0 (local_8[0])
+    int  newBucketCount;   // +4 (local_4)
+};
+// 0x00921440: __thiscall member of the rehash policy living at hashtable +0x10.
+struct RehashPolicy { void Grow(void* out, unsigned bucketCount, unsigned size, int grow);  // 0x00921440
+};
+void* Hashtable::Insert(HashInsertResult* out, unsigned* pKey, unsigned unused)
+{
+    (void)unused;
+    int* self = (int*)this;
+    unsigned key = *pKey;
+    unsigned idx = key % (unsigned)self[2];
+    int** bucket = (int**)(self[1] + idx * 4);
+    int* node = *bucket;
+    while (node != 0) {
+        if (key == (unsigned)node[0]) {
+            out->node = node;
+            out->bucket = bucket;
+            out->inserted = false;
+            return out;
+        }
+        node = (int*)node[1];
+    }
+    RehashResult rh;
+    ((RehashPolicy*)((char*)this + 0x10))->Grow(&rh, self[2], self[3], 1);
+    int* fresh = (int*)SporeAlloc(8, "App", 0, 0,
+        "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h", 0xd1);
+    if (fresh != 0)
+        fresh[0] = (int)*pKey;
+    fresh[1] = 0;
+    if (rh.rebucketed) {
+        idx = key % (unsigned)rh.newBucketCount;
+        ((Hashtable*)this)->Rebucket(rh.newBucketCount);
+    }
+    int off = (int)idx * 4;
+    fresh[1] = *(int*)(off + self[1]);
+    *(int**)(off + self[1]) = fresh;
+    ++self[3];
+    out->node = fresh;
+    out->bucket = (void*)(off + self[1]);
+    out->inserted = true;
+    return out;
+}
+// @ 0x006b68a0 Hashtable::ScalarDeletingDtor
+// eastl::hashtable<SP::cString*>::~hashtable (scalar deleting): free the bucket
+// array (+0x2c) and the pooled node block (+0x18 when it owns one), reset the
+// vtable, and free `this` when the low bit of the delete flag is set.
+void* Hashtable::ScalarDeletingDtor(unsigned deleteFlag)
+{
+    int* self = (int*)this;
+    if (self[0xb] != 0)
+        eastl::operator_delete_array((void*)self[0xb]);
+    int pool = self[6];
+    if (pool != 0 && *(int*)(pool - 4) != 0)
+        eastl::operator_delete_array((void*)pool);
+    *(void**)self = (void*)0x13eb938;   // ??_7ITracerBase@Trace@EA@@6B@
+    if (deleteFlag & 1)
+        eastl::operator_delete_array(self);
+    return self;
+}

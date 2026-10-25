@@ -4,3 +4,4 @@
 0070d6d0  279   SP::cLightingWorld::~cLightingWorld; member chain reproduced, register order differs
 0070dc90  156   SP::cLightingManager world factory; thiscast/register allocation differs
 0070ddd0  117   SP::cLightingManager::Shutdown; range-clear + map teardown reproduced, registers differ
+0070d850  966   SP::cLightingWorld::AddLight; thiscall(ecx)+4 stack args; slot create/copy-seed + dense single-sample path reproduced, per-cell path is dead in this build (flag +0x24 always 1) so coverage caps at 44.6%; equiv WEAK (266 valid, 44.6% cov, 0 mismatched)

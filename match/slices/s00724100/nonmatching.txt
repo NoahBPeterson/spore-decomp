@@ -1,2 +1,4 @@
 # va  diff-bytes  reason
 00724100  1357  cMeshClusterer::Setup (per-triangle face clusters + dual-edge heap): complete; x87/SSE scheduling and register allocation differ
+00724700  147  SPGraphicsMeshJoin destructor: +0x234/+0x248/+0x25c vector-buffer teardowns, DestroyRange58 on the +0x248 range and the +0x18/+0x04 member dtors reproduced; MSVC EH prologue/funclet and state stores differ (size 114 vs 177); equiv WEAK (183 valid, 100% cov, 0 mismatched)
+007247c0  1418  SPGraphicsMeshJoin convex hull (Graham scan): min-x seed, 64-point inline buffer with heap fallback, pop-while-clockwise, assign to out; complete but size 1006 vs 548 (local vector grow path inlined differently); equiv WEAK (110 valid, 81.9% cov, 0 mismatched)

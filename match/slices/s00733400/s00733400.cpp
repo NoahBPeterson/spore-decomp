@@ -1,7 +1,12 @@
-// Slice s00733400 — EASTL container helpers (vector reserve/fill/insert) and four EH/unwind
-// constructors for a resource object; the two large functions are left as skeletons.
+// Slice s00733400 — EASTL container helpers (vector reserve/fill/insert), four EH/unwind
+// constructors for a resource object, and two stream-entry reformat/build routines (0x733a50/0x733f20).
 #include "types.h"
 #include <string.h>
+
+struct IRefCounted { virtual void AddRef(); virtual void Release(); };  // vt[0]=AddRef, vt[1]=Release
+
+static void RefAddRef(void* o)  { if (o) ((IRefCounted*)o)->AddRef(); }
+static void RefRelease(void* o) { if (o) ((IRefCounted*)o)->Release(); }
 
 struct EltArray
 {
@@ -10,7 +15,28 @@ struct EltArray
     uint16_t mEltSize;
     uint16_t mEltStride;
     void*    mRC;
+    void Assign(EltArray* other);   // 0x00424F70 (thiscall, ret 4) — addrefs other->mRC
 };
+
+// 0x20-byte stream entry: 4 ints then an embedded EltArray at +0x10.
+struct StreamEntry
+{
+    int      mIndexFmt;   // +0x00
+    int      mField04;    // +0x04
+    int      mFormat;     // +0x08
+    int      mField0c;    // +0x0c
+    EltArray mSrc;        // +0x10
+};
+
+// model object holding the stream-entry array at +0x08..+0x0c (stride 0x20).
+struct StreamVec
+{
+    int          mField00;   // +0x00
+    int          mField04;   // +0x04
+    StreamEntry* mBegin;     // +0x08
+    StreamEntry* mEnd;       // +0x0c
+};
+
 extern uint32_t g_masks[];
 
 struct VecHolder
@@ -33,6 +59,8 @@ void  EAFree(void*);
 void  FUN_00733a50(void*);
 void  FUN_00733a50_ext(void*);   // 0x00733A50 (external view of the same callee)
 void  FUN_00733f20(void*);
+void  FUN_006c2690(int, void*);
+int   FUN_0071ddc0(void*, int, int, int, int);
 
 // @ 0x00733400
 int* VecHolder::ZeroFill(int param_2, int param_3)
@@ -185,6 +213,10 @@ struct CtorObj
     void ctor_640(int arg);
     void ctor_6e0(int arg);
     void ctor_760(int arg);
+    EltArray* MakeChartRef(EltArray* tmp);   // 0x007217C0
+    EltArray* Make16(EltArray* tmp);         // 0x00732FB0
+    EltArray* Make4(EltArray* tmp);          // 0x00732FF0
+    EltArray* GetHandle(EltArray* tmp);      // 0x006C32F0
 };
 
 // @ 0x007335c0
@@ -246,18 +278,250 @@ void CtorObj::ctor_760(int arg)
     mLast = 0;
 }
 
-// @ 0x00733a50
-__declspec(noinline) void FUN_00733a50(void* p)
+// @ 0x00733a50  (reformat an element stream: index remap into a chartref handle, or unpack packed
+//                colour into float4/float2; each path re-tags the entry's mFormat.)
+void FUN_00733a50(void* p)
 {
-    // PARTIAL: 0x00733a50 is a ~1 KB element/sub-tree destructor; skeleton only.
-    *(volatile int*)p = *(volatile int*)p;
+    StreamEntry* e = (StreamEntry*)p;
+    switch (e->mFormat)
+    {
+    case 7:
+    case 10:
+    {
+        if ((uint32_t)(e->mIndexFmt - 2) <= 2)
+        {
+            // index path: 3-dword elements, remap each index through FUN_006c2690 into a handle array.
+            CtorObj* res = (CtorObj*)EAAlloc(0x24, "Graphics", 0, 0, 0, 0);
+            if (res)
+                res->ctor_c0(e->mSrc.mNumElts);
+            else
+                res = 0;
+            for (int i = 0; i < e->mSrc.mNumElts; ++i)
+            {
+                uint32_t h = *(uint32_t*)((char*)e->mSrc.mData + e->mSrc.mEltStride * i);
+                FUN_006c2690((int)h, (void*)(res->mArr + 0xc * i));
+            }
+            e->mFormat = 3;
+            EltArray tmp;
+            EltArray* h = res->MakeChartRef(&tmp);
+            e->mSrc.Assign(h);
+            if (tmp.mRC)
+                RefRelease(tmp.mRC);
+        }
+        else
+        {
+            // byte colour path: expand each packed byte4 into float4.
+            float scale = 1.0f;
+            if (e->mFormat == 10)
+                scale = 0.003921569f;    // 1/255
+            CtorObj* res = (CtorObj*)EAAlloc(0x24, "Graphics", 0, 0, 0, 0);
+            if (res)
+                res->ctor_640(e->mSrc.mNumElts);
+            else
+                res = 0;
+            float* dst = (float*)res->mArr;
+            for (int i = 0; i < e->mSrc.mNumElts; ++i)
+            {
+                uint32_t v = *(uint32_t*)((char*)e->mSrc.mData + e->mSrc.mEltStride * i);
+                dst[0] = (float)(v & 0xff) * scale;
+                dst[1] = (float)((v >> 8) & 0xff) * scale;
+                dst[2] = (float)((v >> 16) & 0xff) * scale;
+                dst[3] = (float)(v >> 24) * scale;
+                dst += 4;
+            }
+            e->mFormat = 4;
+            EltArray tmp;
+            EltArray* h = res->Make16(&tmp);
+            e->mSrc.Assign(h);
+            if (tmp.mRC)
+                RefRelease(tmp.mRC);
+        }
+        break;
+    }
+    case 8:
+    case 11:
+    {
+        // int16 pair -> float2
+        CtorObj* res = (CtorObj*)EAAlloc(0x24, "Graphics", 0, 0, 0, 0);
+        if (res)
+            res->ctor_6e0(e->mSrc.mNumElts);
+        else
+            res = 0;
+        float scale = 1.0f;
+        if (e->mFormat == 11)
+            scale = 3.051851e-05f;       // 1/32768
+        float* dst = (float*)res->mArr;
+        for (int i = 0; i < e->mSrc.mNumElts; ++i)
+        {
+            uint32_t v = *(uint32_t*)((char*)e->mSrc.mData + e->mSrc.mEltStride * i);
+            dst[0] = (float)(int)(short)v * scale;
+            dst[1] = (float)(int)(short)(v >> 16) * scale;
+            dst += 2;
+        }
+        EltArray tmp;
+        EltArray* h = res->GetHandle(&tmp);
+        e->mSrc.Assign(h);
+        if (tmp.mRC)
+            RefRelease(tmp.mRC);
+        e->mFormat = 2;
+        return;
+    }
+    case 9:
+    case 12:
+    {
+        // two int16 pairs -> float4
+        CtorObj* res = (CtorObj*)EAAlloc(0x24, "Graphics", 0, 0, 0, 0);
+        if (res)
+            res->ctor_640(e->mSrc.mNumElts);
+        else
+            res = 0;
+        float scale = 1.0f;
+        if (e->mFormat == 12)
+            scale = 3.051851e-05f;
+        float* dst = (float*)res->mArr;
+        for (int i = 0; i < e->mSrc.mNumElts; ++i)
+        {
+            int off = e->mSrc.mEltStride * i;
+            uint32_t a = *(uint32_t*)((char*)e->mSrc.mData + off);
+            uint32_t b = *(uint32_t*)((char*)e->mSrc.mData + off + 4);
+            dst[0] = (float)(int)(short)a * scale;
+            dst[1] = (float)(int)(short)(a >> 16) * scale;
+            dst[2] = (float)(int)(short)b * scale;
+            dst[3] = (float)(int)(short)(b >> 16) * scale;
+            dst += 4;
+        }
+        EltArray tmp;
+        EltArray* h = res->Make16(&tmp);
+        e->mSrc.Assign(h);
+        if (tmp.mRC)
+            RefRelease(tmp.mRC);
+        e->mFormat = 4;
+        break;
+    }
+    }
 }
 
-// @ 0x00733f20
-__declspec(noinline) void FUN_00733f20(void* p)
+// @ 0x00733f20  (build the derived index (10) and index (9) streams from a model's source streams.)
+void FUN_00733f20(void* pm)
 {
-    // PARTIAL: 0x00733f20 is a ~1.1 KB destructor walk; skeleton only.
-    *(volatile int*)p = *(volatile int*)p;
+    StreamVec* model = (StreamVec*)pm;
+    int gatherCount = 4;    // component count of the index-10 stream (defaults to 4)
+
+    int idx10 = FUN_0071ddc0(pm, 10, -1, 0, 0xe);
+    if (idx10 >= 0)
+    {
+        StreamEntry* e = (StreamEntry*)((char*)model->mBegin + idx10 * 0x20);
+        if (e->mFormat > 0 && e->mFormat < 5)
+        {
+            uint32_t count = (uint32_t)e->mSrc.mNumElts;
+            CtorObj* res = (CtorObj*)EAAlloc(0x24, "Graphics", 0, 0, 0, 0);
+            if (res)
+                res->ctor_760((int)count);
+            else
+                res = 0;
+            if (res)
+                RefAddRef(res);
+
+            gatherCount = e->mFormat;
+            float ftmp[4];
+            EltArray* tmp = (EltArray*)ftmp;
+            ftmp[1] = 0.0f;
+            ftmp[2] = 0.0f;
+            ftmp[3] = 0.0f;
+            for (uint32_t v = 0; v < count; ++v)
+            {
+                if (gatherCount != 0)
+                {
+                    float* src = (float*)((char*)e->mSrc.mData + e->mSrc.mEltStride * v);
+                    for (int k = 0; k < gatherCount; ++k)
+                        ftmp[k] = src[k];
+                }
+                float g = ftmp[1] * 255.0f;
+                float b = ftmp[2] * 255.0f;
+                float a = ftmp[3] * 255.0f;
+                *(uint32_t*)(res->mArr + 4 * (int)v) =
+                    ((((int)a << 8 | (int)b) << 8 | (int)g) << 8) |
+                    ((0xff - (int)a) - (int)b) - (int)g;
+            }
+
+            EltArray* h = res->Make4(tmp);
+            int f04 = e->mField04;
+            int f0c = e->mField0c;
+            EltArray localSrc = *h;
+            if (localSrc.mRC)
+                RefAddRef(localSrc.mRC);
+
+            e->mIndexFmt = 10;
+            e->mField04 = f04;
+            e->mFormat = 10;
+            e->mField0c = f0c;
+            e->mSrc.Assign(&localSrc);
+
+            if (localSrc.mRC)
+                RefRelease(localSrc.mRC);
+            if (tmp->mRC)
+                RefRelease(tmp->mRC);
+            if (res)
+                RefRelease(res);
+        }
+    }
+
+    int idx9 = FUN_0071ddc0(pm, 9, -1, 0, 0xe);
+    if (idx9 >= 0)
+    {
+        StreamEntry* e = (StreamEntry*)((char*)model->mBegin + idx9 * 0x20);
+        if (e->mFormat == 8 || e->mFormat == 9)
+        {
+            uint32_t count = (uint32_t)e->mSrc.mNumElts;
+            CtorObj* res = (CtorObj*)EAAlloc(0x24, "Graphics", 0, 0, 0, 0);
+            if (res)
+                res->ctor_760((int)count);
+            else
+                res = 0;
+            if (res)
+                RefAddRef(res);
+
+            for (uint32_t v = 0; v < count; ++v)
+            {
+                uint32_t stride = e->mSrc.mEltStride;
+                int data = (int)e->mSrc.mData;
+                uint32_t acc = 0;
+                for (uint32_t k = 0; k < (uint32_t)gatherCount; ++k)
+                    ((uint8_t*)&acc)[k] = *(uint8_t*)(stride * v + data + k * 2);
+                *(uint32_t*)(res->mArr + 4 * (int)v) = acc;
+            }
+
+            float ftmp[4];
+            EltArray* tmp = (EltArray*)ftmp;
+            EltArray* h = res->Make4(tmp);
+            int f04 = e->mField04;
+            int f0c = e->mField0c;
+            e->mIndexFmt = 9;
+            e->mField04 = f04;
+            e->mFormat = 7;
+            e->mField0c = f0c;
+            e->mSrc.mNumElts = h->mNumElts;
+            e->mSrc.mData = h->mData;
+            e->mSrc.mEltSize = h->mEltSize;
+            e->mSrc.mEltStride = h->mEltStride;
+            void* newRC = h->mRC;
+            void* oldRC = e->mSrc.mRC;
+            if (newRC != oldRC)
+            {
+                if (newRC)
+                    RefAddRef(newRC);
+                e->mSrc.mRC = newRC;
+                if (oldRC)
+                    RefRelease(oldRC);
+            }
+            if (newRC)
+                RefRelease(newRC);
+            if (tmp->mRC)
+                RefRelease(tmp->mRC);
+            if (res)
+                RefRelease(res);
+        }
+    }
 }
 // --- equivalence checker address annotations
 

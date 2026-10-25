@@ -1,0 +1,7 @@
+007280b0 229 complete; UVGenJobInfo job-info constructor (vector copy + two optional fills); size 171 vs 267; equiv FAIL 5/5 valid, fault at eip=0047c850 (fake source vector)
+007281d0 99 complete; UVGenJobInfo destructor (frees +0x24/+0x38, base teardown); size 67 vs 118; equiv FAIL 5/5 valid, fault at eip=004259c0 (fake base object)
+00728330 179 complete; cClusterInfo vector resize/grow; size 87 vs 193; equiv FAIL 5/5 valid, fault at eip=0072696d (fake element temp)
+00728400 351 complete; 0x68-stride vector insert with grow path; size 281 vs 410; equiv UNSUPPORTED 0/400
+007285a0 962 complete; cMeshClusterer::CreateClusterInfo union-find/cluster compaction; size 497 vs 1010; equiv FAIL 5/5 valid, fault at eip=007200db (fake cluster-face graph)
+007289a0 312 complete; __fastcall 0x68-stride vector push_back/in-place init; size 134 vs 329; equiv PASS 284 valid / 84.7% coverage
+00728af0 349 complete; cMeshClusterer::Cluster (property query, vector append, mesh build/collapse); size 220 vs 404; equiv FAIL 5/5 valid, fault at eip=00424f81 (fake mesh/temp object)

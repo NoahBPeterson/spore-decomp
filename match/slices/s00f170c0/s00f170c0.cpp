@@ -1,7 +1,8 @@
-// Slice s00f170c0: the "Simulator" UI screen (0x00f17870, 0x00f17a70, 0x00f17b00, 0x00f17ea0).
+// Slice s00f170c0: the "Simulator" UI screen (0x00f170c0, 0x00f17870, 0x00f17a70, 0x00f17b00, 0x00f17ea0).
 // 00f17b00 boots the Simulator screen (property flags, palette, category, category UI, space inventory, effect,
-// message handlers), 00f17a70 resizes the screen's item vector, 00f17870 ends the animation of the progress
-// panel and 00f17ea0 shuts the progress panel down.
+// message handlers), 00f17a70 resizes the screen's item vector, 00f170c0 handles the progress panel's
+// news/window messages, 00f17870 ends the animation of the progress panel and 00f17ea0 shuts the progress
+// panel down.
 // Flags: /O2 /MD /Gy /TP /vc71 /arch:SSE
 #include "types.h"
 
@@ -23,17 +24,33 @@ void  __cdecl operator delete(void* p);                                         
 struct IWin {
 	virtual void AddRef();                                   // +0x00
 	virtual void Release();                                  // +0x04
-	PV8 PV4
+	PV2 PV2 PV                                               // +0x08..+0x18
+	virtual int GetWindowType();                             // +0x1c
+	PV2                                                      // +0x20..+0x24
+	virtual bool IsVisible();                                // +0x28
+	PV2 PV                                                   // +0x2c..+0x34
 	virtual void GetRect(int id);                            // +0x38
-	PV8 PV8
+	PV8 PV8                                                  // +0x3c..+0x78
 	virtual void SetVisible(int a, bool b);                  // +0x7c
+	PV8 PV8 PV8 PV8 PV2 PV                                   // +0x80..+0x108
+	virtual int GetOwnerId(int a);                           // +0x10c
 };
 
 struct IWinContainer {
 	virtual void AddRef();                                   // +0x00
 	virtual void Release();                                  // +0x04
-	PV8 PV4 PV8 PV4 PV4 PV
+	PV2 PV2 PV                                               // +0x08..+0x18
+	virtual int GetWindowType();                             // +0x1c
+	PV2                                                      // +0x20..+0x24
+	virtual bool IsVisible();                                // +0x28
+	PV2 PV                                                   // +0x2c..+0x34
+	virtual void GetRect(int id);                            // +0x38
+	PV8 PV8                                                  // +0x3c..+0x78
 	virtual void SetVisible(int a, bool b);                  // +0x7c
+	PV8 PV8 PV8 PV4                                          // +0x80..+0xec
+	virtual IWin* FindChildWindow(uint id, int a, int b);    // +0xf0
+	PV2 PV2 PV                                               // +0xf4..+0x108
+	virtual int GetOwnerId(int a);                           // +0x10c
 };
 
 struct LayoutObj {
@@ -56,6 +73,7 @@ struct IObjB4 {
 	virtual void v0();                                       // +0x00
 	virtual void Release();                                  // +0x04
 	void Teardown();                                         // 0x00f128f0
+	void FUN_00f12970();                                     // 0x00f12970
 };
 
 // --------------------------------------------------------------------- messaging
@@ -123,6 +141,8 @@ struct WinOwner : WinOwnerBase, IWinContent {                // IWinContent live
 struct IWindowManager {
 	virtual void v0();                                       // +0x00
 	virtual IWinContent* GetActiveContent();                 // +0x04
+	PV8 PV8 PV2                                              // +0x08..+0x48
+	virtual void ContentSet(int a, IWin* w);                 // +0x4c
 };
 IWindowManager* WindowManager();                             // 0x0067caa0
 void SPUIHelpersEndModal(IWin* win, int a, int b);           // 0x00809c50
@@ -132,6 +152,36 @@ struct IGlobalSlots {
 	virtual void Set(void* slot, int value);                 // +0x04
 };
 IGlobalSlots* GlobalSlots();                                 // 0x0067ca90
+
+// --------------------------------------------------------------------- message handling callees
+struct IAudioSystem {
+	virtual void v0();                                       // +0x00
+	PV8 PV8 PV8 PV
+	virtual int GetSomething();                              // +0x20
+};
+IAudioSystem* EAAudioGetSystemAT();                          // 0x00a206f0
+void  KillSetiEffects(uint32_t id, uint32_t value);          // 0x00435ed0
+uint32_t GetRecorderState();                                 // 0x00435e90
+bool  FUN_00f0e250(void* win);                               // 0x00f0e250 (window visibility test)
+void  FUN_00e12f80(void* win, int value);                    // 0x00e12f80 (SetVisible wrapper)
+void  FUN_00e12fc0(void* win, void* value);                  // 0x00e12fc0 (SetText wrapper)
+bool  FUN_00806a60(void* win, void* layout, int a, int b);   // 0x00806a60
+void* FUN_00eec570();                                        // 0x00eec570
+void  FUN_00f14120(void* out, const wchar_t* fmt, int a, void* b);  // 0x00f14120
+extern char     g_16c7aa4[];                                 // 0x016c7aa4 globals struct
+extern void*    g_16c7a28;                                   // 0x016c7a28
+
+// SP::cString: the wide-string helper used to format "/" tachometers.
+struct cString {
+	uint32_t mPad00;                                         // +0x00
+	uint32_t mPad04;                                         // +0x04
+	uint32_t mText;                                          // +0x08 (inline text pointer)
+	uint32_t mPad0c;                                         // +0x0c
+	uint32_t mPad10;                                         // +0x10
+	void ctor(uint32_t tag, uint32_t id, const wchar_t* s);  // 0x006b5770
+	const wchar_t* GetText();                                // 0x006b55c0
+	void dtor();                                             // 0x006b5240
+};
 
 // The palette category UI owning the animation sub-object.
 struct PaletteHolder {
@@ -155,6 +205,7 @@ struct SubA {
 	uint32_t pad1c;                                          // +0x1c
 	void* mpField20;                                         // +0x20
 	void FUN_00f16fd0();                                     // 0x00f16fd0
+	void FUN_00f126d0();                                     // 0x00f126d0
 };
 
 // Embedded list at +0x28 of the progress panel.
@@ -212,9 +263,13 @@ public:
 	IObjB4* mpFieldB4;                                       // +0xb4
 	PropertyList* mpPropList;                                // +0xb8
 	float mTimer;                                            // +0xbc
-	uint32_t padC0[(0xd4 - 0xc0) / 4];                       // +0xc0
+	float mTimeC0;                                           // +0xc0
+	uint32_t padC4;                                          // +0xc4
+	float mTimeC8;                                           // +0xc8
+	uint32_t padCc;                                          // +0xcc
+	int mCountD0;                                            // +0xd0
 	int mState;                                              // +0xd4
-	uint32_t padD8;                                          // +0xd8
+	int mState2;                                             // +0xd8
 	IWinContainer* mpWinA;                                   // +0xdc
 	IWinContainer* mpWinB;                                   // +0xe0
 	IServer* mpServer;                                       // +0xe4
@@ -227,6 +282,10 @@ public:
 
 	void StartNextAnimation();                               // 0x00f17870
 	void Shutdown();                                         // 0x00f17ea0
+
+	bool DoMessage(uint32_t msg, int* data);                 // 0x00f170c0
+	bool FUN_00f135b0(int a);                                // 0x00f135b0
+	void FUN_00f16580(int a);                                // 0x00f16580
 };
 
 // 0x40-byte "Simulator" UI message (vtable 0x013eb844, base vtable 0x013eb90c).
@@ -355,6 +414,219 @@ public:
 	void FUN_00f12eb0();                                     // 0x00f12eb0 page/category switch
 	bool Init(IUiEffect* effect, const EA::ResourceMan::Key& key);   // 0x00f17b00
 };
+
+// ----------------------------------------------------------------------------- 0x00f170c0
+// The progress panel's message handler. The payload is the shared UI message ("W_s0080_68d0"):
+// +0x00 source window, +0x08 news type, +0x0c control id, +0x10 the "reset" flag, +0x18 the owner id.
+// News type 0x287259f6 carries a button/news event whose control id walks a small state machine
+// (mState 0..10); news type 0x7e1a521 carries a window event whose window type walks the same machine,
+// which swaps between the two container panels and fills the remaining-time tachometer with FUN_00f14120.
+// @ 0x00f170c0
+bool cSPUIProgress::DoMessage(uint32_t msg, int* data)
+{
+	bool ok = false;
+	int news = data[2];
+
+	if (news == 1) {
+		if (data[4] != 0x1b)
+			return false;
+		if (mState != 0)
+			return false;
+		if (mpWinB != 0 && mpWinB->IsVisible()) {
+			FUN_00e12f80(mpWinB, 0);
+			mState = 9;
+			return true;
+		}
+		if (!FUN_00f0e250(mpWinA))
+			return true;
+		FUN_00e12f80(mpWinA, 0);
+		mpScenario = (void*)1;
+		mState = 10;
+		FUN_00f16580(1);
+		return true;
+	}
+
+	if (news == 0x287259f6) {
+		switch (data[3]) {
+		case 0x7c79940:
+		case 0x7c79948:
+			if (mpWinA != 0)
+				((IWin*)mpWinA)->SetVisible(1, false);
+			mpScenario = (void*)((data[3] != 0x7c79948) + 1);
+			mState = 10;
+			FUN_00f16580(1);
+			return true;
+
+		case 0x7c79c50:
+			{
+				IAudioSystem* sysA = EAAudioGetSystemAT();
+				KillSetiEffects(0x9ef448c0, sysA != 0 ? sysA->GetSomething() : 0);
+			}
+			if (mpWinA != 0)
+				((IWin*)mpWinA)->SetVisible(1, false);
+			mState = 9;
+			return true;
+
+		case 0x7c79c78:
+			{
+				IAudioSystem* sysB = EAAudioGetSystemAT();
+				KillSetiEffects(0x9ef448c0, sysB != 0 ? sysB->GetSomething() : 0);
+			}
+			if (mpWinB != 0)
+				((IWin*)mpWinB)->SetVisible(1, false);
+			mState = 9;
+			return true;
+
+		case 0x7e20437:
+			if (!FUN_00f135b0(0))
+				return true;
+			mpFieldB4->FUN_00f12970();
+			return true;
+
+		default:
+			return false;
+		}
+	}
+
+	if (news != 0x7e1a521)
+		return false;
+
+	IWin* win = (IWin*)data[0];
+	if (win->GetOwnerId(0) != data[6])
+		return false;
+	bool notVis = !(win != 0 && win->IsVisible());
+	bool visA = win != 0 && win->IsVisible();
+	uint type = win->GetWindowType();
+
+	switch (type) {
+	case 0x774b418:
+		if (!notVis)
+			return false;
+		if (mState == 10)
+			mState2 = 3;
+		return false;
+
+	case 0x7c79d78:
+		if (mState != 2)
+			return true;
+		if (!visA)
+			return true;
+		if (mTimer > 0.0f) {
+			mState = 3;
+			return true;
+		}
+		mState = 0;
+		return true;
+
+	case 0x7db8990:
+		if (mState == 6 && visA) {
+			FUN_00e12f80(mpLayout->FindWindowByID(0x7e09668, 1), 0);
+			mState = 7;
+			return true;
+		}
+		if (!notVis)
+			return true;
+		FUN_00e12f80(mpLayout->FindWindowByID(0x7e09668, 1), 1);
+		return true;
+
+	case 0x7e098d0:
+		if (mState != 5)
+			return true;
+		if (!notVis)
+			return true;
+		FUN_00e12f80(mpLayout->FindWindowByID(0x7db8991, 1), 0);
+		FUN_00e12f80(mpLayout->FindWindowByID(0x7db8990, 1), 1);
+		mState = 6;
+		KillSetiEffects(0x3c035721, GetRecorderState());
+		{
+			LayoutObj* layout = mpLayout;
+			int arg = mCountD0 + 0x7d10de0;
+			FUN_00806a60(layout->FindWindowByID(0x7c55300, 1), layout, arg, -1);
+			*(uint32_t*)(*(char**)(g_16c7aa4 + 0x7c) + 0x20) = mCountD0;
+			cString a;
+			a.ctor(0x623d2fc0, 0x7ceb16a, 0);
+			FUN_00e12fc0(mpLayout->FindWindowByID(0x7c79b20, 1), (void*)a.GetText());
+			cString b;
+			b.ctor(0x623d2fc0, 0x7ceb16b, 0);
+			FUN_00e12fc0(mpLayout->FindWindowByID(0x7c79b21, 1), (void*)b.GetText());
+			b.dtor();
+			a.dtor();
+		}
+		return true;
+
+	case 0x7e09668:
+		if (mState != 7)
+			return true;
+		if (!notVis)
+			return true;
+		FUN_00e12f80(mpLayout->FindWindowByID(0x7db8990, 1), 0);
+		FUN_00e12f80(mpLayout->FindWindowByID(0x7c66c00, 1), 1);
+		{
+			cString out;
+			FUN_00f14120(&out, L"%d/%d", mCountD0, FUN_00eec570());
+			FUN_00e12fc0(mpLayout->FindWindowByID(0x7c79af8, 1), (void*)out.mText);
+			mpSubA->FUN_00f126d0();
+			out.dtor();
+		}
+		mState = 8;
+		return true;
+
+	case 0x7e09670:
+		if (!visA)
+			return true;
+		FUN_00e12f80(win, 0);
+		return true;
+
+	case 0x7eb2740:
+		if (mState == 4 && visA) {
+			FUN_00e12f80(mpLayout->FindWindowByID(0x7e098d0, 1), 0);
+			mState = 5;
+			return true;
+		}
+		if (!notVis)
+			return true;
+		FUN_00e12f80(mpLayout->FindWindowByID(0x7e098d0, 1), 1);
+		return true;
+
+	case 0x7c796d0:
+	case 0x7c79820:
+	case 0x7c79918:
+		break;
+
+	default:
+		return false;
+	}
+
+	if (mState == 1 && visA) {
+		IWin* w = mpWinA->FindChildWindow(0x7c79d78, 1, 1);
+		FUN_00e12f80(w, 0);
+		if (mpWindow->mMode == 5) {
+			w = mpWinA->FindChildWindow(0x7e09670, 1, 1);
+			FUN_00e12f80(w, 0);
+		}
+		if (mTimeC0 != mTimeC8) {
+			mState = 2;
+			return true;
+		}
+	} else if (mState == 10 && notVis) {
+		if (mpScenario != (void*)1 || !FUN_00f135b0(1)) {
+			mState2 = 3;
+			return true;
+		}
+		mpFieldB4->FUN_00f12970();
+		return true;
+	} else {
+		if (mState != 9)
+			return true;
+		if (!notVis)
+			return true;
+		IWin* w = (void*)data[0] == (void*)mpWinA ? (IWin*)mpWinB : (IWin*)mpWinA;
+		FUN_00e12f80(w, 1);
+		WindowManager()->ContentSet(0, w);
+	}
+	mState = 0;
+	return true;
+}
 
 // ----------------------------------------------------------------------------- 0x00f17870
 // Ends the animation of the progress panel: tells the message server whether the panel is still in the finishing

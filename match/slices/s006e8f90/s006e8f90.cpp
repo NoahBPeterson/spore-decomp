@@ -20,7 +20,7 @@ struct E5 {
 
 extern void*  f67dd40();
 extern void*  f67dd50();
-extern void   f_f47380(void*);   // EASTL_allocator_deallocate
+extern void   f_f47380(void*);   // 0x00f47380 EASTL_allocator_deallocate
 extern void   f6e6e90(const float* src, float* dst);   // copies |m| of a 3x3 (nine floats)
 extern float  g1533c74;
 extern char   g13ec47c;
@@ -166,39 +166,81 @@ void S5::m91e0(int a, int b)
 }
 
 // ---------------------------------------------------------------------------
+// The three functions below belong to layouts distinct from S5 above; they
+// need real member types so the compiler emits the same EH state machine.
+extern "C" long __cdecl _InterlockedIncrement(volatile long*);
+extern "C" long __cdecl _InterlockedDecrement(volatile long*);
+extern "C" long __cdecl _InterlockedExchangeAdd(volatile long*, long);
+#pragma intrinsic(_InterlockedIncrement, _InterlockedDecrement, _InterlockedExchangeAdd)
+
+struct RefObj {
+    char pad[8];
+    volatile long ref;
+};
+
+// Atomic reference-counted pointer with the count at object+8.
+struct RefP {
+    RefObj* p;
+    RefP(const RefP& o) : p(o.p) {
+        if (p)
+            _InterlockedIncrement(&p->ref);
+    }
+    ~RefP() {
+        RefObj* q = p;
+        if (q) {
+            _InterlockedDecrement(&q->ref);
+            if (_InterlockedExchangeAdd(&q->ref, 0) < 1) {
+                _InterlockedIncrement(&q->ref);
+                return;
+            }
+            _InterlockedExchangeAdd(&q->ref, 0);
+        }
+    }
+};
+
+struct Iface4 {
+    virtual void v0();
+    virtual void AddRef();
+    virtual void v2();
+    virtual void v3();
+};
+
+// Interface reference whose AddRef is virtual and whose lifetime is not owned.
+struct RawRef {
+    Iface4* p;
+    RawRef(const RawRef& o) : p(o.p) {
+        if (p)
+            p->AddRef();
+    }
+};
+
+struct Blob32 {
+    int a[8];
+};
+
+struct C9230 {
+    int m0;
+    char pad4[4];
+    Blob32 m8;
+    RefP m28;
+    RefP m2c;
+    float f30, f34, f38, f3c, f40, f44;
+    uchar b48, b49;
+    char pad4a[2];
+    float f4c, f50, f54, f58;
+    int d5c, d60, d64, d68;
+    RawRef r6c;
+    C9230(const C9230& o);
+};
+
 // @ 0x006e9230
-void S5::m9230(void* src)
+C9230::C9230(const C9230& o)
+    : m0(o.m0), m8(o.m8), m28(o.m28), m2c(o.m2c),
+      f30(o.f30), f34(o.f34), f38(o.f38), f3c(o.f3c), f40(o.f40), f44(o.f44),
+      b48(o.b48), b49(o.b49),
+      f4c(o.f4c), f50(o.f50), f54(o.f54), f58(o.f58),
+      d5c(o.d5c), d60(o.d60), d64(o.d64), d68(o.d68), r6c(o.r6c)
 {
-    char* d = (char*)this;
-    char* s = (char*)src;
-    // compiler-generated copy ctor shape (EH); reproduced structurally
-    *(uint*)d = *(uint*)s;
-    for (int i = 0; i < 8; i++)
-        ((uint*)d)[i + 2] = ((uint*)s)[i + 2];
-    d += 0x28;
-    s += 0x28;
-    *(void**)d = *(void**)s;
-    if (*(void**)d)
-        (*(int*)((char*)*(void**)d + 8))++;
-    d += 4; s += 4;
-    *(void**)d = *(void**)s;
-    if (*(void**)d)
-        (*(int*)((char*)d - 4 + 0xc))++;
-    d += 4; s += 4;
-    for (int i = 0; i < 6; i++) {
-        *(float*)d = *(float*)s;
-        d += 4; s += 4;
-    }
-    *(uchar*)d = *(uchar*)s; d++; s++;
-    *(uchar*)d = *(uchar*)s; d++; s++;
-    for (int i = 0; i < 5; i++) {
-        *(uint*)d = *(uint*)s;
-        d += 4; s += 4;
-    }
-    d += 4;
-    *(void**)d = *(void**)s;
-    if (*(void**)d)
-        ((void(__thiscall*)(void*))VFN(*(void**)d, 4))(*(void**)d);
 }
 
 // ---------------------------------------------------------------------------
@@ -376,66 +418,60 @@ void S5::m9910(float d)
 }
 
 // ---------------------------------------------------------------------------
-// @ 0x006e9990
-void S5::m9990()
-{
-    char* self = (char*)this;
-    *(void**)self = (void*)0x140af90;
-    {
-        int a = *(int*)(self + 0x10);
-        if (a != 0 && *(int*)(a - 4) != 0)
-            f_f47380((void*)a);
-    }
-    {
-        void* p = *(void**)(self + 0xc);
+struct RefT {
+    void* p;
+    ~RefT() {
         if (p)
-            ((void(__thiscall*)(void*))VFN(p, 0xc))(p);
+            ((Iface4*)((char*)p + 8))->v3();
     }
-    {
-        int p = *(int*)(self + 8);
-        if (p) {
-            void* q = *(void**)(p + 8);
-            ((void(__thiscall*)(void*))VFN(q, 0xc))(q);
-        }
-    }
+};
+
+struct C9990 {
+    void* m4;
+    RefT m8;
+    void* mC;
+    void* m10;
+    virtual ~C9990();
+};
+
+// @ 0x006e9990
+C9990::~C9990()
+{
+    void* a = m10;
+    if (a != 0 && *(int*)((char*)a - 4) != 0)
+        f_f47380(a);
+    if (mC != 0)
+        ((Iface4*)mC)->v3();
 }
 
 // ---------------------------------------------------------------------------
+struct C9A30 {
+    RefP m0;
+    int* m4;
+    char pad[0x30d54 - 8];
+    void* m30d54;
+    char pad2[0x10];
+    void* m30d68;
+    ~C9A30();
+};
+
 // @ 0x006e9a30
-void S5::m9a30()
+C9A30::~C9A30()
 {
-    char* self = (char*)this;
-    {
-        int a = *(int*)(self + 0x30d68);
-        if (a != 0 && *(int*)(a - 4) != 0)
-            f_f47380((void*)a);
-    }
-    {
-        int a = *(int*)(self + 0x30d54);
-        if (a != 0 && *(int*)(a - 4) != 0)
-            f_f47380((void*)a);
-    }
-    {
-        int* p = *(int**)(self + 4);
-        if (p) {
-            int n = p[1] - 1;
-            p[1] = n;
-            if (n == 0) {
-                p[1] = 1;
-                ((void(__thiscall*)(void*, int))VFN(p, 0))(p, 1);
-            }
-        }
-    }
-    {
-        int* p = *(int**)self;
-        if (p) {
-            int* c = (int*)((char*)p + 8);
-            int n = *c - 1;
-            *c = n;
-            if (n < 1) {
-                *c = n + 1;
-                return;
-            }
+    void* a = m30d68;
+    if (a != 0 && *(int*)((char*)a - 4) != 0)
+        f_f47380(a);
+    a = m30d54;
+    if (a != 0 && *(int*)((char*)a - 4) != 0)
+        f_f47380(a);
+    int* p = m4;
+    if (p != 0) {
+        unsigned n = (unsigned)p[1] + 0xffffffffu;
+        p[1] = (int)n;
+        if (n == 0) {
+            p[1] = 1;
+            _ReadWriteBarrier();
+            ((void(__thiscall*)(void*, int))(*(void***)p)[0])(p, 1);
         }
     }
 }

@@ -1,1 +1,2 @@
-# no byte-exact matches in this slice yet
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s006907e0/s006907e0.cpp  ?FlushWaitingLists@cJobManager@@QAEXXZ  006915c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast

@@ -411,7 +411,526 @@ bool KeyPanel::HandleMessage(void* window, Message* msg)
 	return false;
 }
 
+// ===========================================================================
+// Reconstructed types for 0x0066ce00 (cSPUILargeAssetView::Show, secondary
+// this at primary+0xc) and 0x0066d280 (UpdateDescription, primary this).
+// ===========================================================================
+struct RectF { float x1, y1, x2, y2; };
+
+struct IProperty
+{
+	virtual int AddRef();                      // +0x00
+	virtual int Release();                     // +0x04
+};
+
+// SP::IPropertyManager (retail vtable; GetProperty sits at +0x2c).
+struct IPropertyManager
+{
+	virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
+	virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1c();
+	virtual void v20(); virtual void v24(); virtual void v28();
+	virtual bool GetProperty(uint32_t item, uint32_t propID, IProperty** out); // +0x2c
+};
+
+struct ICastable
+{
+	virtual int AddRef();            // +0x00
+	virtual int Release();           // +0x04
+	virtual void v08();              // +0x08
+	virtual void* Cast(uint32_t type); // +0x0c
+};
+
+struct IVecU32
+{
+	uint32_t* mpBegin;
+	uint32_t* mpEnd;
+	uint32_t* mpCap;
+};
+
+// UTFWin::IWindow (retail vtable; only the slots used here are named).
+struct IWindow
+{
+	virtual int AddRef();                        // +0x00
+	virtual int Release();                       // +0x04
+	virtual void v08();                          // +0x08
+	virtual void* Cast(uint32_t type);           // +0x0c
+	virtual IWindow* GetParent();                // +0x10
+	virtual void v14(); virtual void v18(); virtual void v1c(); virtual void v20();
+	virtual void v24(); virtual void v28(); virtual void v2c(); virtual void v30();
+	virtual void v34(); virtual void v38(); virtual void v3c(); virtual void v40();
+	virtual void v44(); virtual void v48(); virtual void v4c(); virtual void v50();
+	virtual void v54(); virtual void v58(); virtual void v5c();
+	virtual void SetArea(const RectF& area);     // +0x60
+	virtual void v64(); virtual void v68(); virtual void v6c(); virtual void v70();
+	virtual void v74(); virtual void v78();
+	virtual void SetFlag(int flag, bool value);  // +0x7c
+};
+
+// Sporepedia::IAssetData: vtable per ModAPI AssetData.h, key at +4, the
+// ref-count/cast sub-object at +0x10.
+struct IAssetData
+{
+	virtual void v00();                                 // +0x00
+	virtual void v04();                                 // +0x04
+	virtual void v08();                                 // +0x08
+	virtual const wchar_t* GetName();                   // +0x0c
+	virtual const wchar_t* GetAuthorName();             // +0x10
+	virtual const wchar_t* GetDescription();            // +0x14
+	virtual void GetImageKey();                         // +0x18
+	virtual void GetBackgroundImageKey();               // +0x1c
+	virtual void GetTags();                             // +0x20
+	virtual uint32_t GetAssetSubtype();                 // +0x24
+	virtual int64_t GetTimeCreated();                   // +0x28
+	virtual bool HasName();                             // +0x2c
+	virtual int v30();                                  // +0x30
+	virtual int v34();                                  // +0x34
+	virtual int v38();                                  // +0x38
+	virtual float v3c();                                // +0x3c
+	virtual const ResKey* GetKey();                     // +0x40
+	virtual void AsyncSetKey(const ResKey& key);        // +0x44
+	virtual bool v48();                                 // +0x48
+	virtual void v4c();                                 // +0x4c
+	virtual void LoadData();                            // +0x50
+	virtual int64_t GetAuthorID();                      // +0x54
+	virtual bool v58();                                 // +0x58
+	virtual bool v5c();                                 // +0x5c
+	virtual bool IsEditable();                          // +0x60
+	virtual bool v64();                                 // +0x64
+	virtual bool IsShareable();                         // +0x68
+	virtual bool v6c();                                 // +0x6c
+	virtual bool IsShared();                            // +0x70
+	virtual bool IsPlayable();                          // +0x74
+	virtual bool IsViewableLarge();                     // +0x78
+	virtual bool v7c();                                 // +0x7c
+	virtual bool v80();                                 // +0x80
+	virtual bool v84();                                 // +0x84
+	virtual int  v88();                                 // +0x88
+	virtual bool GetConsequenceTraits(IVecU32& dst);    // +0x8c
+	virtual bool GetAssetID(uint64_t& dst);             // +0x90
+
+	ResKey    mKey;      // +0x04
+	ICastable mObject;   // +0x10
+
+	int AddRef() { return mObject.AddRef(); }
+	int Release() { return mObject.Release(); }
+	void* Cast(uint32_t type) { return mObject.Cast(type); }
+};
+
+struct cSPAssetData : IAssetData
+{
+	bool IsLocalAsset();                       // 0x006418e0
+};
+
+struct ResourceObject
+{
+	virtual int AddRef();                      // +0x00
+	virtual int Release();                     // +0x04
+	virtual void v08();                        // +0x08
+	virtual void* Cast(uint32_t type);         // +0x0c
+};
+
+struct IResourceManager
+{
+	virtual void v00(); virtual void v04(); virtual void v08();
+	virtual bool GetResource(const ResKey& key, ResourceObject** ppOut,
+	                         int a, int b, int c, int d);   // +0x0c
+};
+IResourceManager* __cdecl EA_ResourceMan_GetManager();          // 0x0067dcd0
+
+struct cAssetMetadata
+{
+	virtual int AddRef();                      // +0x00
+	virtual int Release();                     // +0x04
+};
+
+struct IModelWorld
+{
+	virtual int AddRef();                      // +0x00
+	virtual int Release();                     // +0x04
+};
+
+struct IModelManager
+{
+	virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
+	virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1c();
+	virtual IModelWorld* GetMainWorld();       // +0x20
+};
+IModelManager* __cdecl SP_ModelManager();                       // 0x0067dd80
+
+struct IMessageListener
+{
+	virtual bool HandleMessage(uint32_t id, void* data);   // +0x00
+	virtual int AddRef();                                  // +0x04
+	virtual int Release();                                 // +0x08
+};
+
+struct ISPUILargeAssetView
+{
+	virtual int AddRef();                      // +0x00
+	virtual int Release();                     // +0x04
+	virtual void* Dispose();                   // +0x08
+	virtual void* AsInterface(uint32_t id);    // +0x0c
+	virtual int GetPriority();                 // +0x10
+	virtual uint32_t GetEventMask();           // +0x14
+	virtual bool func18(int a, IWindow* win);  // +0x18
+	virtual void LoadAssetViewLarge();         // +0x1c
+};
+
+struct IMessageServer
+{
+	virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
+	virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1c();
+	virtual void v20();
+	virtual void AddListener(IMessageListener* listener, uint32_t msgID);  // +0x24
+};
+IMessageServer* __cdecl SP_MessageServer();                     // 0x0067dcc0
+
+struct IConfigManager
+{
+	virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
+	virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1c();
+	virtual void v20(); virtual void v24(); virtual void v28(); virtual void v2c();
+	virtual int GetValue(uint32_t id);                          // +0x30
+};
+IConfigManager* __cdecl SP_ConfigManager();                    // 0x0067dd30
+
+struct IAuthManager
+{
+	virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
+	virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1c();
+	virtual void v20();
+	virtual bool IsOffline();                                   // +0x24
+};
+IAuthManager* __cdecl SP_AuthManager();                        // 0x00607a60
+
+struct IWindowManager
+{
+	virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
+	virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1c();
+	virtual void v20(); virtual void v24(); virtual void v28(); virtual void v2c();
+	virtual void v30(); virtual void v34(); virtual void v38(); virtual void v3c();
+	virtual void v40(); virtual void v44(); virtual void v48();
+	virtual void SetFocus(int a, IWindow* w);                   // +0x4c
+};
+IWindowManager* __cdecl SP_WindowManager();                    // 0x0067caa0
+
+struct cDirectValues
+{
+	uint32_t pad[0x118 / 4];
+	int mOfflineMode;                                           // +0x118
+};
+struct cDirectPropertyList
+{
+	uint32_t pad[0x3c / 4];
+	cDirectValues* mpValues;                                    // +0x3c
+};
+extern cDirectPropertyList* gAppProperties;                    // 0x015fd918
+
+struct cSPUILayout
+{
+	IWindow* FindWindowByID(uint32_t id, bool recursive);       // 0x008105b0
+};
+
+struct cSPUIAssetComments
+{
+	virtual int AddRef();                                       // +0x00
+	virtual int Release();                                      // +0x04
+	void SetVisibility(int visible);                            // 0x0064e400
+	bool LoadAssetComments(uint64_t id);                        // 0x0064e460
+};
+
+struct cSPUIMissingExpansionPackPage
+{
+	virtual int AddRef();                                       // +0x00
+	virtual int Release();                                      // +0x04
+	void SetVisibility(int visible);                            // 0x006717e0
+	bool ShowMissingExpansionPacks(const ResKey* key);          // 0x00671840
+};
+
+struct ShowParams
+{
+	uint32_t pItem;      // +0x00
+	bool b4;             // +0x04
+	bool b5;             // +0x05
+	bool b6;             // +0x06
+	char pad7;           // +0x07
+	uint32_t field8;     // +0x08
+	bool bc;             // +0x0c
+	char padD[3];        // +0x0d
+	ShowParams();                                               // 0x006563c0
+};
+
+struct cSPUIAssetVerbs
+{
+	void Update(int one, ShowParams* params, IAssetData* asset);  // 0x006571e0
+};
+
+struct MessageListenerData
+{
+	IMessageServer* mpMessageManager;   // +0x00
+	IMessageListener* mpMessageListener;// +0x04
+	const uint32_t* mpMessageIDs;       // +0x08
+	uint32_t mNumMessageIDs;            // +0x0c
+	int field_10;                       // +0x10
+};
+
+// EA::AutoRefCount<T>
+template <class T> struct AutoRefCount
+{
+	T* mpObject;
+	AutoRefCount() : mpObject(0) {}
+	~AutoRefCount() { if (mpObject) mpObject->Release(); }
+	AutoRefCount& operator=(T* p)
+	{
+		if (p != mpObject) {
+			T* old = mpObject;
+			if (p) p->AddRef();
+			mpObject = p;
+			if (old) old->Release();
+		}
+		return *this;
+	}
+	void Reset()
+	{
+		if (mpObject) {
+			T* old = mpObject;
+			mpObject = 0;
+			old->Release();
+		}
+	}
+	T** AsPPTypeParam()
+	{
+		if (mpObject) {
+			T* old = mpObject;
+			mpObject = 0;
+			old->Release();
+		}
+		return &mpObject;
+	}
+	T* operator->() const { return mpObject; }
+	operator T*() const { return mpObject; }
+};
+
+// Instances whose assignment is emitted out of line.
+template <class T> struct AutoRefCountOOL
+{
+	T* mpObject;
+	AutoRefCountOOL() : mpObject(0) {}
+	~AutoRefCountOOL() { if (mpObject) mpObject->Release(); }
+	AutoRefCountOOL& operator=(T* p);                           // 0x00b5f950
+	void Reset()
+	{
+		if (mpObject) {
+			T* old = mpObject;
+			mpObject = 0;
+			old->Release();
+		}
+	}
+	T* operator->() const { return mpObject; }
+	operator T*() const { return mpObject; }
+};
+
+// The full primary object (UpdateDescription receives this).
+struct cSPUILargeAssetView : ISPUILargeAssetView, IMessageListener
+{
+	uint32_t pad08[(0x18 - 0x08) / 4];
+	cSPUILayout* mLayout;                                   // +0x18
+	uint32_t pad1c[(0x5c - 0x1c) / 4];
+	IWindow* mWin5c;                                        // +0x5c
+	uint32_t pad60[(0x74 - 0x60) / 4];
+	AutoRefCount<IAssetData> mAssetData;                    // +0x74
+
+	void UpdateDescription();                               // 0x0066d280
+};
+
+// The secondary sub-object that receives Show's `this` (primary + 0x0c).
+struct AssetViewShow
+{
+	uint32_t pad00[(0x10 - 0x00) / 4];
+	AutoRefCount<IWindow> mWinParent;                       // +0x10
+	AutoRefCount<IWindow> mWinRoot;                         // +0x14
+	AutoRefCount<IWindow> mWinBakingArea;                   // +0x18
+	AutoRefCount<IWindow> mWin28;                           // +0x1c
+	uint32_t pad20[(0x2c - 0x20) / 4];
+	AutoRefCount<IWindow> mWinAuthor;                       // +0x2c
+	uint32_t pad30[(0x54 - 0x30) / 4];
+	AutoRefCountOOL<cSPUIAssetComments> mComments;          // +0x54
+	AutoRefCountOOL<cSPUIMissingExpansionPackPage> mExpansionPage; // +0x58
+	uint32_t pad5c[(0x64 - 0x5c) / 4];
+	cSPUIAssetVerbs* mAssetVerbs;                           // +0x64
+	AutoRefCount<IAssetData> mAssetData;                    // +0x68
+	AutoRefCountOOL<cAssetMetadata> mMetadata;              // +0x6c
+	uint32_t pad70[(0x7c - 0x70) / 4];
+	AutoRefCount<IModelWorld> mModelWorld;                  // +0x7c
+	uint32_t pad80[(0x8c - 0x80) / 4];
+	RectF mBakingArea;                                      // +0x8c
+	char pad9c;
+	bool mIsPlayable;                                       // +0x9d
+	bool mBusy;                                             // +0x9e
+	bool mHasResource;                                      // +0x9f
+	bool mIsEditable;                                       // +0xa0
+	char padA1[0xaf - 0xa1];
+	MessageListenerData mReg;                               // +0xb0
+
+	cSPUILargeAssetView* GetPrimary() const { return (cSPUILargeAssetView*)((char*)this - 0x0c); }
+	bool Show(IWindow* parent, IAssetData* asset, uint32_t item, bool b5, bool bc);
+};
+
+extern const uint32_t kAssetViewMessages[4];                    // 0x014007e4
+
 // @ 0x0066ce00
-void __fastcall FUN_0066ce00(void* self) { (void)self; }
+bool AssetViewShow::Show(IWindow* parent, IAssetData* asset, uint32_t item, bool b5, bool bc)
+{
+	mBusy = true;
+	mAssetData = asset;
+	mWinParent = parent;
+	mMetadata.Reset();
+
+	cSPAssetData* pData = mAssetData ? (cSPAssetData*)mAssetData->Cast(0x13d55dc8) : 0;
+	if (pData) {
+		mIsPlayable = pData->IsPlayable();
+		mHasResource = pData->IsViewableLarge();
+		mIsEditable = pData->IsEditable();
+		if (!pData->IsLocalAsset()) {
+			const ResKey* key = mAssetData->GetKey();
+			AutoRefCount<ResourceObject> res;
+			IResourceManager* mgr = EA_ResourceMan_GetManager();
+			ResourceObject** pp = res.AsPPTypeParam();
+			uint32_t kg = key->group;
+			uint32_t ki = key->instance;
+			ResKey k;
+			k.group = kg;
+			k.instance = ki;
+			k.type = 0x30bdee3;
+			if (mgr->GetResource(k, pp, 0, 0, 0, 0)) {
+				cAssetMetadata* md = res ? (cAssetMetadata*)res->Cast(0x30bdee3) : 0;
+				mMetadata = md;
+			}
+		}
+	}
+
+	mModelWorld = SP_ModelManager()->GetMainWorld();
+	GetPrimary()->LoadAssetViewLarge();
+
+	IMessageListener* listener = (IMessageListener*)(cSPUILargeAssetView*)((char*)this - 0x0c);
+	IMessageServer* ms = SP_MessageServer();
+	mReg.mpMessageManager = ms;
+	mReg.mpMessageListener = listener;
+	mReg.mpMessageIDs = kAssetViewMessages;
+	mReg.mNumMessageIDs = 4;
+	mReg.field_10 = 0;
+	if (ms && listener) {
+		for (uint32_t i = 0; i < 0x10; i += 4)
+			ms->AddListener(listener, *(const uint32_t*)((const char*)kAssetViewMessages + i));
+	}
+
+	if (pData) {
+		uint64_t assetID;
+		if (mComments) {
+			if (pData->GetAssetID(assetID) && !pData->IsLocalAsset()) {
+				mComments->SetVisibility(1);
+				mComments->LoadAssetComments(assetID);
+			} else {
+				mComments->SetVisibility(0);
+			}
+		}
+		if (mExpansionPage && asset) {
+			if (mHasResource) {
+				mExpansionPage->SetVisibility(0);
+			} else {
+				mExpansionPage->SetVisibility(1);
+				mExpansionPage->ShowMissingExpansionPacks(pData->GetKey());
+			}
+		}
+		if (mWinBakingArea && mWin28) {
+			if (pData->IsLocalAsset()) {
+				RectF r = { 0.0f, 0.0f, 0.0f, 0.0f };
+				mWinBakingArea->SetArea(r);
+				mWin28->SetFlag(1, false);
+			} else {
+				mWinBakingArea->SetArea(mBakingArea);
+				mWin28->SetFlag(1, true);
+			}
+		}
+	} else {
+		if (mComments && mExpansionPage && mWinBakingArea && mWin28) {
+			mComments->SetVisibility(0);
+			mExpansionPage->SetVisibility(0);
+			RectF r = { 0.0f, 0.0f, 0.0f, 0.0f };
+			mWinBakingArea->SetArea(r);
+			mWin28->SetFlag(1, false);
+		}
+	}
+
+	if (mAssetVerbs) {
+		ShowParams p;
+		p.pItem = item;
+		p.b5 = b5;
+		p.b4 = false;
+		p.b6 = true;
+		p.bc = bc;
+		mAssetVerbs->Update(1, &p, mAssetData);
+	}
+
+	if (mWinParent)
+		mWinParent->SetFlag(1, true);
+
+	if (mWinAuthor) {
+		bool isLocal = pData && pData->IsLocalAsset();
+		bool hasAuthor = pData && pData->GetAuthorID() != 0;
+		bool configValue = SP_ConfigManager()->GetValue(0x5de7b4a) != 0;
+		bool authOffline = SP_AuthManager()->IsOffline();
+		bool enable = !configValue && !authOffline
+		           && !isLocal && hasAuthor
+		           && !gAppProperties->mpValues->mOfflineMode;
+		mWinAuthor->SetFlag(2, enable);
+		mWinAuthor->SetFlag(0x10, !enable);
+	}
+
+	SP_WindowManager()->SetFocus(0, mWinRoot);
+	return true;
+}
+
 // @ 0x0066d280
-void __fastcall FUN_0066d280(void* self) { (void)self; }
+void cSPUILargeAssetView::UpdateDescription()
+{
+	bool any = false;
+	if (mAssetData) {
+		IVecU32 traits = { 0, 0, 0 };
+		if (mAssetData->GetConsequenceTraits(traits)) {
+			int count = (int)(traits.mpEnd - traits.mpBegin);
+			if (count > 0) {
+				uint32_t byteOffset = 0;
+				uint32_t id = 0xb4daee50;
+				do {
+					IWindow* w1 = mLayout->FindWindowByID(id - 0x10, true);
+					IWindow* w2 = mLayout->FindWindowByID(id, true);
+					if (w1 && w2) {
+						if (*(const uint32_t*)((const char*)traits.mpBegin + byteOffset) == 0) {
+							w2->SetFlag(1, false);
+							w1->SetFlag(1, false);
+						} else {
+							any = true;
+							w2->SetFlag(1, true);
+							w1->SetFlag(1, true);
+							AutoRefCount<IProperty> p;
+							ResKey key = { 0, 0, 0 };
+							IPropertyManager* mgr = (IPropertyManager*)SP_PropertyManager();
+							if (mgr->GetProperty(*(const uint32_t*)((const char*)traits.mpBegin + byteOffset),
+							                     0xf865c777, p.AsPPTypeParam())) {
+								if (SP_GetPropertyAsKey(p, 0x54d95162, &key))
+									SPUIHelpers_SetWindowImage(w2, &key, -1);
+							}
+						}
+					}
+					byteOffset += 4;
+					++id;
+				} while (--count);
+			}
+		}
+		if (traits.mpBegin && ((uint32_t*)traits.mpBegin)[-1])
+			EASTL_allocator_deallocate(traits.mpBegin);
+	}
+	if (mWin5c)
+		mWin5c->SetFlag(1, any);
+}
