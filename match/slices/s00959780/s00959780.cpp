@@ -39,15 +39,15 @@ struct TC {
 #define TH(x) ((TC*)(x))
 
 struct W {
-    char GV(int a, int b, void* c, int d, int e);                  // 0x00959640
+    bool GV(int a, int b, void* c, int d, int e);                  // 0x00959640
     void RenderWindow(int win, void* ctx);                         // 0x0095a510
     void a0b0(int p2, int* p3);                                    // 0x0095a0b0
     void fe0(int win);                                             // 0x00959fe0
     void cf0(int p2, int p3);                                      // 0x00959cf0
-    int  b70(int p2, int p3);                                      // 0x00959b70
+    bool b70(int p2, int p3);                                      // 0x00959b70
     void DetachWindow(void* win);                                  // 0x00959e00
     void UpdateRenderState(int win, char p3, char p4);             // 0x0095a140
-    char Fn00959780(int* ev, char p3);                             // 0x00959780
+    bool Fn00959780(int* ev, char p3);                             // 0x00959780
 };
 
 // vtable slot accessor: function pointer at byte offset `off` of this->vtable
@@ -159,7 +159,7 @@ void W::cf0(int p2, int p3)
 // ===========================================================================
 // @ 0x00959b70  W::b70
 // ===========================================================================
-int W::b70(int p2, int p3)
+bool W::b70(int p2, int p3)
 {
     p3 = p3 ? p3 - 4 : 0;
     int* piVar1 = (int*)(B(this) + p2 * 0x28 + 0x68c);
@@ -439,9 +439,9 @@ void W::UpdateRenderState(int win, char p3, char p4)
 // ===========================================================================
 // @ 0x00959780  W::Fn00959780  (window message dispatcher)
 // ===========================================================================
-char W::Fn00959780(int* ev, char p3)
+bool W::Fn00959780(int* ev, char p3)
 {
-    char ret = 0;
+    bool ret = false;
     int id = ev[2];
     if (id == 0x4ecd5687) {
         float f1 = F32(ev, 0xc);
@@ -457,12 +457,13 @@ char W::Fn00959780(int* ev, char p3)
             r[1] = 0.0f;
             r[2] = f1;
             r[3] = f2;
-            ((void(__thiscall*)(void*, void*))*(void**)((char*)*(void**)im + 0x60))(im, r);
+            void* obj = (char*)im + 4;
+            ((void(__thiscall*)(void*, void*))*(void**)((char*)*(void**)obj + 0x60))(obj, r);
         }
         return 1;
     }
     if (id == 0x74d2e9) {
-        ((void(__cdecl*)(int, void*))PTR(ev, 0xc))((int)this, (void*)ev[4]);
+        ((void(__cdecl*)(void*, int))PTR(ev, 0xc))((void*)ev[4], (int)this);
         if (ev[4] != 0) {
             void* o = (void*)ev[4];
             ((void(__thiscall*)(void*))*(void**)((char*)*(void**)o + 4))(o);
@@ -501,7 +502,7 @@ char W::Fn00959780(int* ev, char p3)
             if (ret == 0) {
                 int jv = *piVar2;
                 jv = jv ? jv + 4 : 0;
-                ret = ((char(__thiscall*)(void*, int, void*, int*, int))VFP(0x10))
+                ret = ((bool(__thiscall*)(void*, int, void*, int*, int))VFP(0x10))
                     (this, 0, (void*)jv, ev, 1);
             }
         }
@@ -520,7 +521,7 @@ char W::Fn00959780(int* ev, char p3)
             }
             int jv = *piVar2;
             jv = jv ? jv + 4 : 0;
-            ret = ((char(__thiscall*)(void*, int, void*, int*, int))VFP(0x10))
+            ret = ((bool(__thiscall*)(void*, int, void*, int*, int))VFP(0x10))
                 (this, 0, (void*)jv, ev, 1);
         }
         return ret;
@@ -546,9 +547,8 @@ char W::Fn00959780(int* ev, char p3)
     case 7:
     case 8:
     case 9: {
-        void* pv = (void*)ev[4];
-        I32(this, 0x6dc) = ev[3];
-        I32(this, 0x6e0) = (int)pv;
+        F32(this, 0xbc) = F32(ev, 0xc);
+        F32(this, 0xc0) = F32(ev, 0x10);
         float local[2];
         local[0] = -1000.0f;
         local[1] = -1000.0f;
@@ -574,13 +574,15 @@ char W::Fn00959780(int* ev, char p3)
                 }
             }
             int loc[7];
+            float* lf = (float*)loc;
             loc[2] = ev[2];
-            loc[6] = ev[6];
+            lf[3] = local[0];
+            lf[4] = local[1];
             loc[5] = ev[5];
-            loc[3] = (int)local[0];
-            unsigned u = ((unsigned(__thiscall*)(void*, int, int*, void*, int))
+            loc[6] = ev[6];
+            bool u = ((bool(__thiscall*)(void*, int, int*, void*, int))
                 VFP(0x10))(this, 0, r, loc, 0);
-            return (char)u;
+            return u;
         }
         return ret;
     }

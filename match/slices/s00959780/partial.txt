@@ -1,3 +1,2 @@
 # va  diff-bytes  reason (incomplete / not equivalence-testable)
-00959780  1095  Fn00959780 (window message dispatcher): difftest FAIL (5/13 valid inputs mismatched; first eax&0xffff 0xb00 vs 0); /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2; regalloc/switch layout differ
-00959b70  290  b70: difftest FAIL (5/6 valid inputs mismatched; first eax 0x801 vs 0x1, upper-bits/regalloc); /O2 /MD /Gy /EHsc /TP /GS-; regalloc differ
+# (none -- all inherited partial functions were finished in this pass and moved to nonmatching.txt)
