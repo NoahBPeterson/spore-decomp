@@ -1,0 +1,5 @@
+# source  symbol  va  flags
+../src/game/SPGonzago/Interaction.cpp  ?begin@SlotVector@@QAE?AUSlotIter@@XZ  00abeaf0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/Interaction.cpp  ?destroyTargets@SlotVector@@QAEXH@Z  00abec00  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/Interaction.cpp  ?destroyAgents@SlotVector@@QAEXH@Z  00abec70  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/Interaction.cpp  ?AgentBackFromInterruption@cInteraction_s00ab_f0b0@@QAEXPAUcInteractionAgent_s00ab_f0b0@@H@Z  00abf240  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

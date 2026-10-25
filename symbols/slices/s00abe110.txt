@@ -11,21 +11,21 @@
 00abe770 EA::Swarm::MapDescription::create  # operator_new 0x28; vtbl 0x1453948; calls read
 00abe800 TransformThing::SetTransform  # local transform copy + Matrix3::assign + preTransformBy
 00abe8a0 SlotVector::nextAllocated  # scan free chain for first used entry, sentinel 0x3fffffff
-00abe8f0 SlotVector::freeTarget  # release target (v+0x14), fold slot into free chain
-00abe950 SlotVector::freeAgent  # release agent (v+0x5c), fold slot into free chain
-00abe9b0 SlotIter::increment  # step over logical slots; end sentinel bit30, free bit31
-00abea00 SlotDistance  # count increments until iterator sums match
-00abea40 cInteraction::IsAgentDefault  # eastl map find; state==0 && sleepTimeout==0
-00abea90 IsAgentActive::evaluate  # predicate: agent owner/type/state check
-00abeaf0 SlotVector::begin  # SlotIter by value: mBeginIndex or endIndex when empty
-00abeb20 AgentFilterRange::advance  # skip inactive agents
-00abec00 SlotVector::destroyTargets  # pop tail entries, release target, free block at slot 0
-00abec70 SlotVector::destroyAgents  # pop tail entries, release agent, free block at slot 0
-00abece0 SlotVectorInsert  # FUN_00ac03f0 insert; true when begin moved
-00abed40 cInteraction::SetTarget  # drain slots via RemoveTarget (v+0x50), then AddTarget (v+0x4c)
-00abedb0 cInteraction::RemoveAgent  # by-value AgentFilterRange; remove matching map entries
-00abee20 cInteraction::HasAgent  # linear slot scan comparing entry data pointer
-00abeeb0 cInteraction::HasTarget  # linear slot scan comparing entry data pointer
-00abef40 cInteraction::RemoveTarget  # virtual RemoveTarget(out, vec, index) -> iterator
-00abefd0 SlotVector::size  # SlotDistance(begin,end); returns count (callers ignore it)
-00abf010 AgentFilterRange::AgentFilterRange  # begin/end + predicate; advance when inactive
+00abe8f0 ?freeTarget@SlotVector@@QAEXI@Z  # SlotVector::freeTarget migrated from s00abe110 (verbatim, slice spelling)
+00abe950 ?freeAgent@SlotVector@@QAEXI@Z  # SlotVector::freeAgent migrated from s00abe110 (verbatim, slice spelling)
+00abe9b0 ?increment@SlotIter@@QAEXXZ  # SlotIter::increment migrated from s00abe110 (verbatim, slice spelling)
+00abea00 ?SlotDistance@@YAHUSlotIter@@0@Z  # SlotDistance migrated from s00abe110 (verbatim, slice spelling)
+00abea40 ?IsAgentDefault@cInteraction@@QAE_NPAUcInteractionAgent@@@Z  # cInteraction::IsAgentDefault migrated from s00abe110 (verbatim, slice spelling)
+00abea90 ?evaluate@IsAgentActive@@QAE_NPAUcInteractionAgent@@@Z  # IsAgentActive::evaluate migrated from s00abe110 (verbatim, slice spelling)
+00abeaf0 ?begin@SlotVector@@QAE?AUSlotIter@@XZ  # SlotVector::begin migrated from s00abe110 (verbatim, slice spelling)
+00abeb20 ?advance@AgentFilterRange@@QAEXXZ  # AgentFilterRange::advance migrated from s00abe110 (verbatim, slice spelling)
+00abec00 ?destroyTargets@SlotVector@@QAEXH@Z  # SlotVector::destroyTargets migrated from s00abe110 (verbatim, slice spelling)
+00abec70 ?destroyAgents@SlotVector@@QAEXH@Z  # SlotVector::destroyAgents migrated from s00abe110 (verbatim, slice spelling)
+00abece0 ?SlotVectorInsert@@YA_NPAUSlotVector@@PAX@Z  # SlotVectorInsert migrated from s00abe110 (verbatim, slice spelling)
+00abed40 ?SetTarget@cInteraction@@QAEXPAUcInteractionTarget@@@Z  # cInteraction::SetTarget migrated from s00abe110 (verbatim, slice spelling)
+00abedb0 ?RemoveAgent@cInteraction@@QAEXUAgentFilterRange@@@Z  # cInteraction::RemoveAgent migrated from s00abe110 (verbatim, slice spelling)
+00abee20 ?HasAgent@cInteraction@@QAE_NPAUcInteractionAgent@@@Z  # cInteraction::HasAgent migrated from s00abe110 (verbatim, slice spelling)
+00abeeb0 ?HasTarget@cInteraction@@QAE_NPAUcInteractionTarget@@@Z  # cInteraction::HasTarget migrated from s00abe110 (verbatim, slice spelling)
+00abef40 ?RemoveTarget@cInteraction@@QAEPAUSlotIter@@PAU2@PAUSlotVector@@I@Z  # cInteraction::RemoveTarget migrated from s00abe110 (verbatim, slice spelling)
+00abefd0 ?size@SlotVector@@QAEHXZ  # SlotVector::size migrated from s00abe110 (verbatim, slice spelling)
+00abf010 ??0AgentFilterRange@@QAE@PAUSlotVector@@PAUIsAgentActive@@@Z  # AgentFilterRange::AgentFilterRange migrated from s00abe110 (verbatim, slice spelling)

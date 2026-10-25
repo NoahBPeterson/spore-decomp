@@ -1,0 +1,12 @@
+00abf0b0 ?GetFirstAgent@cInteraction_s00ab_f0b0@@QAEPAXXZ  # cInteraction_s00ab_f0b0::GetFirstAgent migrated from s00abf0b0 (verbatim, slice spelling)
+00abf110 ?FindAgent@cInteraction_s00ab_f0b0@@QAEPAUAgentFilterRange_s00ab_f0b0@@PAU2@PAUcInteractionAgent_s00ab_f0b0@@@Z  # cInteraction_s00ab_f0b0::FindAgent migrated from s00abf0b0 (verbatim, slice spelling)
+00abf190 ??1cInteraction_s00ab_f0b0@@UAE@XZ  # cInteraction_s00ab_f0b0::~cInteraction migrated from s00abf0b0 (verbatim, slice spelling)
+00abf210 ?GetAgent@cInteraction_s00ab_f0b0@@QAEPAUcInteractionAgent_s00ab_f0b0@@XZ  # cInteraction_s00ab_f0b0::GetAgent migrated from s00abf0b0 (verbatim, slice spelling)
+00abf240 ?AgentBackFromInterruption@cInteraction_s00ab_f0b0@@QAEXPAUcInteractionAgent_s00ab_f0b0@@H@Z  # cInteraction_s00ab_f0b0::AgentBackFromInterruption migrated from s00abf0b0 (verbatim, slice spelling)
+00abf320 ??0cInteraction_s00ab_f0b0@@QAE@XZ  # cInteraction_s00ab_f0b0::cInteraction migrated from s00abf0b0 (verbatim, slice spelling)
+00abf3c0 ?Insert@?$tSlotVector@UcInteractionTarget_s00ab_f0b0@@@@QAEIABQAUcInteractionTarget_s00ab_f0b0@@@Z  # Insert migrated from s00abf0b0 (verbatim, slice spelling)
+00abf500 ?Insert@?$tSlotVector@UcInteractionAgent_s00ab_f0b0@@@@QAEIABQAUcInteractionAgent_s00ab_f0b0@@@Z  # Insert migrated from s00abf0b0 (verbatim, slice spelling)
+00abf640 ?AddAgent@cInteraction_s00ab_f0b0@@QAE_NPAUcInteractionAgent_s00ab_f0b0@@@Z  # cInteraction_s00ab_f0b0::AddAgent migrated from s00abf0b0 (verbatim, slice spelling)
+00abf6a0 ?AddTarget@cInteraction_s00ab_f0b0@@QAE_NPAUcInteractionTarget_s00ab_f0b0@@@Z  # cInteraction_s00ab_f0b0::AddTarget migrated from s00abf0b0 (verbatim, slice spelling)
+01459ad8 ??_7cInteraction_s00ab_f0b0@@6BtIUnknown@@@  # primary vtable of the verbatim cInteraction stub (generated header: cInteraction vtable 0x01459ad8 {for EA::COM::IUnknown32}); binds the ctor's vtable store
+01459ac4 ??_7cInteraction_s00ab_f0b0@@6BtRefCount@@@  # secondary vtable (tRefCount base at +4; slice comment "vtables 0x01459ad8 / 0x01459ac4")
