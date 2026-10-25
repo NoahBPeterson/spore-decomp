@@ -1,0 +1,15 @@
+# source  symbol  va  flags
+../src/game/SPGonzago/SPUIEventLog.cpp  ?GetEventInstanceID@cSPUIEventLog@@QAEPAVcFeedbackEvent@@II@Z  00dd5d80  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPUIEventLog.cpp  ?find_in_history@cSPUIEventLog@@QAEPAVcFeedbackEvent@@PAV2@@Z  00dd5dd0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPUIEventLog.cpp  ?Update@BytePropertyCache@@QAE_NPAX@Z  00dd5e30  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPUIEventLog.cpp  ?find_event@cSPUIEventLog@@QAEPAVcFeedbackEvent@@I@Z  00dd6710  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPUIEventLog.cpp  ?EventDoNotAddToHistory@cSPUIEventLog@@QAE_NII@Z  00dd67d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPUIEventLog.cpp  ?GetPositionOfLastEvent@cSPUIEventLog@@QAE_NPAM@Z  00dd6810  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPUIEventLog.cpp  ?GetEventText@cSPUIEventLog@@QAEPAXH@Z  00dd68e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPUIEventLog.cpp  ?ModifyData@cSPUIEventLog@@QAE_NII@Z  00dd6930  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPUIEventLog.cpp  ?ModifyUserData@cSPUIEventLog@@QAE_NIPAUIUnknown32@@@Z  00dd6980  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPUIEventLog.cpp  ?GetEventData@cSPUIEventLog@@QAE_NIPAI00PAPAUIUnknown32@@@Z  00dd69f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPUIEventLog.cpp  ?RestartTimer@cSPUIEventLog_s00dd_6a70@@QAE_NI@Z  00dd6a70  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPGonzago/SPUIEventLog.cpp  ?RegisterCallback@cSPUIEventLog_s00dd_6a70@@QAEHI@Z  00dd6b20  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPGonzago/SPUIEventLog.cpp  ?RegisterCloseCallback@cSPUIEventLog_s00dd_6a70@@QAE_NIH@Z  00dd6b70  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPGonzago/SPUIEventLog.cpp  ?clear_events@cSPUIEventLog_s00dd_6a70@@QAEXXZ  00dd6d70  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include

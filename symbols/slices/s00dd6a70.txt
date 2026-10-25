@@ -1,13 +1,14 @@
-00dd6a70  ?RestartTimer@cSPUIEventLog@@QAE_NI@Z  # SP::cSPUIEventLog::RestartTimer (find event, restart when the +0x0c text-dirty bit is clear and duration has elapsed) - byte-exact
-00dd6ac0  ?SetEventDuration@cSPUIEventLog@@QAEXIM@Z  # SP::cSPUIEventLog::SetEventDuration (find event, store duration, set +0x0c bit11 when dur<0) - nonmatching/equivalent
-00dd6b20  ?RegisterCallback@cSPUIEventLog@@QAEHI@Z  # SP::cSPUIEventLog::RegisterCallback (store callback when the +0x0c bit9 history flag is clear) - byte-exact
-00dd6b70  ?RegisterCloseCallback@cSPUIEventLog@@QAE_NIH@Z  # SP::cSPUIEventLog::RegisterCloseCallback (store close callback, refresh UI) - byte-exact
-00dd6bc0  ?remove_event@cSPUIEventLog@@QAEXI@Z  # SP::cSPUIEventLog::remove_event (unlink event, fire callback, hide the four UI windows, erase rbtree node, release value) - nonmatching/equivalent
-00dd6d10  ?RemoveEvent@cSPUIEventLog@@QAEXID@Z  # SP::cSPUIEventLog::RemoveEvent (immediate -> remove_event; else flag for removal and zero duration) - nonmatching/equivalent
-00dd6d70  ?clear_events@cSPUIEventLog@@QAEXXZ  # SP::cSPUIEventLog::clear_events (drain the +0x28 EventTree via remove_event) - byte-exact
+008120d0 ?Init@cSPUILayout@@QAE_NABVKey@ResourceMan@EA@@_NI@Z  # cSPUILayout::Init (callee of s00dd6a70, named from the dev publics; slice address comment)
+00dd6a70 ?RestartTimer@cSPUIEventLog_s00dd_6a70@@QAE_NI@Z  # cSPUIEventLog_s00dd_6a70::RestartTimer migrated from s00dd6a70 (verbatim, slice spelling)
+00dd6ac0 ?SetEventDuration@cSPUIEventLog_s00dd_6a70@@QAEXIM@Z  # cSPUIEventLog_s00dd_6a70::SetEventDuration migrated from s00dd6a70 (verbatim, slice spelling)
+00dd6b20 ?RegisterCallback@cSPUIEventLog_s00dd_6a70@@QAEHI@Z  # cSPUIEventLog_s00dd_6a70::RegisterCallback migrated from s00dd6a70 (verbatim, slice spelling)
+00dd6b70 ?RegisterCloseCallback@cSPUIEventLog_s00dd_6a70@@QAE_NIH@Z  # cSPUIEventLog_s00dd_6a70::RegisterCloseCallback migrated from s00dd6a70 (verbatim, slice spelling)
+00dd6bc0 ?remove_event@cSPUIEventLog_s00dd_6a70@@QAEXI@Z  # cSPUIEventLog_s00dd_6a70::remove_event migrated from s00dd6a70 (verbatim, slice spelling)
+00dd6d10 ?RemoveEvent@cSPUIEventLog_s00dd_6a70@@QAEXID@Z  # cSPUIEventLog_s00dd_6a70::RemoveEvent migrated from s00dd6a70 (verbatim, slice spelling)
+00dd6d70 ?clear_events@cSPUIEventLog_s00dd_6a70@@QAEXXZ  # cSPUIEventLog_s00dd_6a70::clear_events migrated from s00dd6a70 (verbatim, slice spelling)
 00dd6da0  ?FUN_00dd6da0@@YGXXZ  # base-subobject method (ecx = log+4): drain EventTree, Shutdown global DAT_016a095c, tail-call FUN_00dd5950 - no source (partial)
-00dd6df0  ?ModifyEventText@cSPUIEventLog@@QAE_NIPB_W@Z  # SP::cSPUIEventLog::ModifyEventText (assign event text, set +0x0c bit0, refresh UI, drop from history) - nonmatching/equivalent
-00dd6ec0  ?add_to_history@cSPUIEventLog@@QAEXPAUcFeedbackEvent@@@Z  # SP::cSPUIEventLog::add_to_history (bump mHistorySize, set flags bit9/bit10, duration=-1, m1c from DAT_016a0a0c*255) - nonmatching/equivalent
+00dd6df0 ?ModifyEventText@cSPUIEventLog_s00dd_6a70@@QAE_NIPB_W@Z  # cSPUIEventLog_s00dd_6a70::ModifyEventText migrated from s00dd6a70 (verbatim, slice spelling)
+00dd6ec0 ?add_to_history@cSPUIEventLog_s00dd_6a70@@QAEXPAUcFeedbackEvent_s00dd_6a70@@@Z  # cSPUIEventLog_s00dd_6a70::add_to_history migrated from s00dd6a70 (verbatim, slice spelling)
 00dd7020  ?FUN_00dd7020@@YGXXZ  # Simulator::cSPUIEventLog::cSPUIEventLog (225-byte ctor: base vftables, EventTree init, global alpha/visibility, cPropertyList + animator) - no source (partial)
 00dd7160  ?FUN_00dd7160@@YGXXZ  # SP::cSPUIEventLog destructor (drain tree, restore base vftables, release members, operator delete) - no source (partial)
 00dd71e0  ?FUN_00dd71e0@@YGXXZ  # $E209 scalar deleting destructor / adjustor for cSPUIEventLog (1081 bytes) - no source (partial)
