@@ -174,6 +174,8 @@ struct GmePtrVec {
     GmePtr* mpBegin;
     GmePtr* mpEnd;
     GmePtr* mpCapacity;
+    GmePtrVec() : mpBegin(0), mpEnd(0), mpCapacity(0) {}
+    ~GmePtrVec();                                      // 0x0041eb80
     void DoInsertValue(GmePtr* pos, const GmePtr& v);  // 0x00424430
     void push_back(const GmePtr& v)
     {
@@ -413,9 +415,15 @@ void FUN_0072d6a0(int n, Item** items, u32* ids, GmePtrVec* out, void* dev)
     }
 }
 
-// @ 0x0072d5a0  refcounted wrapper that runs FUN_0072c270 (PARTIAL)
-int FUN_0072d5a0(void* self, int a, int b, int c, int d)
+// @ 0x0072d5a0  refcounted wrapper that hands one object to SP::MakeKDTree.
+// The original opens with the MSVC /EHsc fs:[0] C++ EH frame (push -1, push
+// 0x1210f90, mov eax,fs:[0], ...); under these flags that prologue is only
+// emitted when the function body itself contains a catch, so the frame cannot
+// be reproduced with plain object unwinding (see work/match/scratch_s0072d5a0_papercut.md).
+int FUN_0072c270(GmePtrVec* meshes, void* extent, void* arr, void* leaf, void* kd);
+extern "C" int __cdecl FUN_0072d5a0(GmeModel* obj, void* extent, void* arr, void* leaf, void* kd)
 {
-    (void)self; (void)a; (void)b; (void)c; (void)d;
-    return 0;
+    GmePtrVec meshes;
+    meshes.push_back(GmePtr(obj));
+    return FUN_0072c270(&meshes, extent, arr, leaf, kd);
 }
