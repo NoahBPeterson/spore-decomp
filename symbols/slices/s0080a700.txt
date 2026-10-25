@@ -4,3 +4,6 @@
 0080af20 record ctor from 0x28 source + AutoRef
 0080af90 record copy ctor
 0080b240 record copy assignment
+0080b3b0 ?DeletingDtor@RecA@@QAEPAU1@I@Z  # RecA deleting destructor (complete, nonmatching)
+0080b400 ?Validate@AtlasState@@QAE_NXZ  # AtlasState::Validate (complete, nonmatching)
+0080b170 ?FUN_0080b170@@YGIPAXDMMM@Z  # layout subobject dispatch (complete, nonmatching)

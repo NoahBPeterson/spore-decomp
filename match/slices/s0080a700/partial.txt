@@ -1,8 +1,6 @@
-0080a700  -  cSPUIImageAtlasMap::Init: not reconstructed
-0080ab00  -  not reconstructed
-0080acb0  -  not reconstructed
-0080b000  -  not reconstructed
-0080b170  -  not reconstructed
-0080b3b0  -  deleting destructor of a 0x34 record: not reconstructed
-0080b400  -  not reconstructed
-0080b4d0  -  not reconstructed
+# va  diff-bytes  reason (incomplete / approximated source)
+0080a700  -  cSPUIImageAtlasMap::Init (707 bytes): not reconstructed; the atlas map load walks the DDS/page table and the entry array with several virtual calls, so it needs its own pass over the 0x34-byte entry helpers
+0080ab00  -  FUN_0080ab00 (429 bytes): not reconstructed
+0080acb0  -  FUN_0080acb0 (435 bytes): not reconstructed
+0080b000  -  FUN_0080b000 (364 bytes): not reconstructed
+0080b4d0  -  FUN_0080b4d0 (475 bytes): not reconstructed
