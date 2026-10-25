@@ -8,3 +8,5 @@ slices/s00e4c9e0/s00e4c9e0.cpp  ?FUN_00e4ce20@@YAXXZ                  00e4ce20
 slices/s00e4c9e0/s00e4c9e0.cpp  ?FUN_00e4ce40@@YAXPAX@Z               00e4ce40
 slices/s00e4c9e0/s00e4c9e0.cpp  ?FUN_00e4ce60@@YAXPAX@Z               00e4ce60
 slices/s00e4c9e0/s00e4c9e0.cpp  ?FUN_00e4ce80@cLightObj@@QAEPAXI@Z     00e4ce80
+slices/s00e4c9e0/s00e4c9e0.cpp  ?SP_CellDataShutdownForApp@@YAXXZ     00e4cd50  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00e4c9e0/s00e4c9e0.cpp  ?SP_PreloadAdvectMap@@YAXPAX@Z        00e4ced0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
