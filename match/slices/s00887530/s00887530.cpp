@@ -98,9 +98,36 @@ struct RBmpTexInfo {
 
 typedef eastl::fixed_vector<RBmpTexInfo*, 4, true> TextureInfoArray;
 
-struct RBmpFont {
-    bool ReadBmpFontInfo(EA::IO::IStream* pStream);
+// Retail BmpFont::mPolygonGlyphMap (+0x14c) value type: a 4-byte glyph holder.
+struct TPolygonGlyphPtr
+{
+    void* mpGlyphData;                                        // +0x00
 };
+typedef eastl::hash_map<GlyphId, TPolygonGlyphPtr, eastl::hash<uint32_t>, eastl::equal_to<GlyphId>,
+                        EA::Allocator::EASTLICoreAllocator> PMap;
+
+struct RBmpFont {
+    // Font vtable; only the two slots used by Open are named.
+    virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3();
+    virtual void v4(); virtual void v5(); virtual void v6();
+    virtual void Close();                                            // vtable +0x1c
+    virtual void v8(); virtual void v9(); virtual void v10(); virtual void v11();
+    virtual void v12(); virtual void v13(); virtual void v14(); virtual void v15();
+    virtual void v16(); virtual void v17(); virtual void v18(); virtual void v19();
+    virtual void v20(); virtual void v21(); virtual void v22(); virtual void v23();
+    virtual void v24(); virtual void v25(); virtual void v26(); virtual void v27();
+    virtual bool ReadBmpTexture(EA::IO::IStream* pStream, uint32_t nTextureIndex);  // vtable +0x70
+
+    uint32_t pad04[(0x128 - 0x04) / 4];
+    GMap     mBmpGlyphMetricsMap;                             // +0x128
+    PMap     mPolygonGlyphMap;                                // +0x14c
+
+    void SetupSupportedScriptSet();                           // 0x0088b640
+    bool ReadBmpFontInfo(EA::IO::IStream* pStream);
+    bool Open(EA::IO::IStream* pStreamArray[], uint32_t streamCount);
+};
+typedef char GMapSizeCheck[sizeof(GMap) == 0x24 ? 1 : -1];
+typedef char PMapSizeCheck[sizeof(PMap) == 0x24 ? 1 : -1];
 
 #define RF(T, off) (*(T*)((char*)this + (off)))
 #define mFontDescription RF(FontDescription, 0x48)   // retail offset
@@ -342,6 +369,45 @@ bool RBmpFont::ReadBmpFontInfo(EA::IO::IStream* pStream)
     pStream->SetPosition((EA::IO::off_type)streamPositionSaved);
 
     return true;
+}
+
+// @ 0x00887f80
+bool RBmpFont::Open(EA::IO::IStream* pStreamArray[], uint32_t streamCount)
+{
+    bool bReturnValue = false;
+
+    if(pStreamArray[0] && (pStreamArray[0]->GetAccessFlags() & EA::IO::kAccessFlagRead))
+    {
+        if(ReadBmpFontInfo(pStreamArray[0]))
+        {
+            for(uint32_t i = 1; i < streamCount; i++) // Streams (1 to N) refer to i textures (0 to N-1).
+            {
+                if(!ReadBmpTexture(pStreamArray[i], i - 1))
+                {
+                    bReturnValue = false;
+                    goto OpenFailed;
+                }
+            }
+
+            SetupSupportedScriptSet();
+
+            // Add a kGlyphIdZeroWidth glyph.
+            GlyphMetrics glyphMetrics;
+            memset(&glyphMetrics, 0, sizeof(glyphMetrics));
+            mBmpGlyphMetricsMap.insert(GMap::value_type((GlyphId)kGlyphIdZeroWidth, glyphMetrics));
+
+            TPolygonGlyphPtr polygonGlyphPtr;
+            memset(&polygonGlyphPtr, 0, sizeof(polygonGlyphPtr));
+            mPolygonGlyphMap.insert(PMap::value_type((GlyphId)kGlyphIdZeroWidth, polygonGlyphPtr));
+
+            return true;
+        }
+    }
+
+OpenFailed:
+    Close();
+
+    return bReturnValue;
 }
 
 }  // namespace RT2
