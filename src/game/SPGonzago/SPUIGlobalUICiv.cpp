@@ -1,4 +1,4 @@
-// src/game/SPGonzago/SPUIGlobalUICiv.cpp -- migrated from slice(s) s00e033d0, s00bad7a0, s00bac830, s00baa930, s00ba9810 by tools/migrate/rewrite.py
+// src/game/SPGonzago/SPUIGlobalUICiv.cpp -- migrated from slice(s) s00e043c0, s00e033d0, s00bad7a0, s00bac830, s00baa930, s00ba9810 by tools/migrate/rewrite.py
 // Object file: SPGonzago/SPUIGlobalUICiv.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -504,6 +504,18 @@ struct cSPUIGlobalUI {
     void* __thiscall AsInterface(unsigned id);                      // 0x00e04270
 };
 // ---- items of slice s00e033d0 end
+
+// ---- items of slice s00e043c0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+void __cdecl SPUIHelpers_SetWindowSPMaterial(void* window, int material, int flags);  // 0x00808ad0
+static inline int  VT_0C_1(void* p, int a)
+{
+    return ((int (__thiscall*)(void*, int))(*(void***)p)[3])(p, a);
+}
+static inline void* VT_4C_0(void* p)
+{
+    return ((void* (__thiscall*)(void*))(*(void***)p)[0x13])(p);
+}
+// ---- items of slice s00e043c0 end
 
 // @ 0x00baa810
 cSortTriple* PartitionTriples(cSortTriple* pFirst, cSortTriple* pLast, cSortTriple value, char (*pPredicate)(const cSortTriple*, const cSortTriple*))
@@ -1571,4 +1583,16 @@ int __cdecl FUN_00e04330(int type)
     case 2:  return 0x64bd015;
     default: return 0x64bd016;
     }
+}
+
+// @ 0x00e04a50
+void __stdcall FlashCivCommButton(int unused1, void* window, int unused3)
+{
+    if (window != 0)
+        VT_0C_1(window, 0x8ed27e7a);
+    void* child = VT_4C_0(window);
+    if (child == 0)
+        SPUIHelpers_SetWindowSPMaterial(window, 0x0147f2c8, 0);
+    else if (VT_0C_1(child, 0x5234b49) == 0)
+        SPUIHelpers_SetWindowSPMaterial(window, 0x0147f2c8, 0);
 }

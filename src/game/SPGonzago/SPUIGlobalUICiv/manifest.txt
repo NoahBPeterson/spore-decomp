@@ -2,3 +2,4 @@
 ../src/game/SPGonzago/SPUIGlobalUICiv.cpp  ??4cClassInfo@@QAEAAU0@ABU0@@Z  00bab010  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPUIGlobalUICiv.cpp  ?AnyCivSlotUsed@cSPUIGlobalUI@@QAE_NXZ  00e042b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPUIGlobalUICiv.cpp  ?FUN_00e04330@@YAHH@Z  00e04330  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPUIGlobalUICiv.cpp  ?FlashCivCommButton@@YGXHPAXH@Z  00e04a50  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
