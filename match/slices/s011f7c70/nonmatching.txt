@@ -2,7 +2,6 @@
 011f7c70  110  D3D9VertexShaderDescriptor::DefaultLoadAndSelect: complete; the inlined
                2-byte strcmp scan and the sbb sign fixup differ
 011f7d00   74  rwg_SetPresent: complete; D3DPRESENT_PARAMETERS field mapping fixed (g_present[6]=(p[9]==0)?3:1, [7]=g_window, [13]=the HRESULT, which is also returned in eax); only the register assignment of the many stores differs [equiv PASS 400 valid, 100% cov]
-011f7f10   43  Device::Stop: complete; FUN_011eff60 is a no-arg thiscall, now invoked on g_rasterA/g_rasterB (the two pointers at 0x015d0838/0x015d083c) through a member stub; only the vcall form differs (cl 15 emits mov+call, the original uses call [reg+8]) [equiv PASS 398 valid, 75% cov]
 011f7fd0   70  Device::Reset: complete; the 15-dword rep movsd block copies and the
                changed-check schedule differ
 011f8070   75  Device::D3D9WindowResize: complete; vcall form and register schedule differ
@@ -17,3 +16,7 @@
 011f8a40  117  Device::GetAdapterInfo: complete; nested-loop register schedule differs
 011f8b00  146  DevCapsManager::GetNonD3DDeviceInfo: complete; OSVERSIONINFOA zeroing and
                the GetVersionExA call schedule differ
+011f7de0   79  rwg_D3D9ResetAndRestoreDevice: complete; drains TestCooperativeLevel, runs the one-shot shader/raster teardown, loops Reset(&g_present) until it succeeds, restores GlobalState and rebinds the render-target/state-block objects at raster+8; only the reset-loop register schedule and stack frame differ (288 vs 296 bytes) [equiv UNSUPPORTED 0/400 valid: 208 fake-arity, 186 fault(fetch), 5 fault(read), 1 fault(fetch-prot)]
+011f84b0  273  Device::Initialize: complete; Direct3DCreate9/D3DXCheckVersion, adapter enumeration with HAL then REF fallback, GetAdapterDisplayMode into 0x0171241c..28, the 9-entry depth-format scan via FUN_011f82a0, present-parameter fields, MXCSR|=0x8000, state=1 and FUN_011f94a0(0); remaining bytes are the caps-buffer/frame layout and loop schedule (507 vs 457 bytes) [equiv UNSUPPORTED 0/400 valid: import Direct3DCreate9 not modeled]
+011f8680  340  Device::StartInternal: complete; sets g_rasterA/g_rasterB to 0x01712480/0x017124a0, builds present flags from g_1712470/74/78 and p[14], CreateDevice, both Raster::Initialize calls with 6-field init records, render-target/state-block captures, start-up helpers, g_state=2 and QueryPerformanceCounter(&0x016f9128); only vcall/arg-schedule bytes differ (580 vs 576 bytes) [equiv UNSUPPORTED 0/400 valid: 320 GetClientRect import, 80 fault(read)]
+011f88c0  281  Adapter/format enumeration: complete; zeroes n*0x44 bytes, enumerates 3 device types through GetDeviceCaps into each 0x44-byte record, then 4 formats through GetAdapterModeCount/EnumAdapterModes appending 0x10-byte D3DDISPLAYMODE copies and the {format,count,pointer} entries; remaining bytes are the record pointer/loop register layout (373 vs 383 bytes) [equiv WEAK 339/400 valid (need 200), 22.1% coverage (need 60%)]

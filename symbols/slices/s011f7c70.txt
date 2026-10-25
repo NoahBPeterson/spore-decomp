@@ -21,3 +21,23 @@
 011f88c0  rw::graphics::Device::GetAdapterInfo
 011f8a40  rw::graphics::Device::GetFormats
 011f8b00  rw::graphics::DevCapsManager::GetNonD3DDeviceInfo
+# --- s011f7c70 rework evidence -------------------------------------------------
+# 011f7de0  rwg_D3D9ResetAndRestoreDevice: no stack args, plain ret; calls the
+#           optional 0x0171242c/30/34 callbacks, TestCooperativeLevel (vtable +0xc),
+#           Reset (vtable +0x40), and rebinds raster+8 from vtable +0x98/+0xa0.
+# 011f84b0  Device::Initialize: no args, returns int; Direct3DCreate9(0x20),
+#           D3DXCheckVersion(0x20,0x1b), GetAdapterCount (+0x10), GetDeviceCaps
+#           (+0x38), GetAdapterDisplayMode (+0x20), 9-entry 0x015d0814 scan,
+#           MXCSR|=0x8000, FUN_011f94a0(0).
+# 011f8680  Device::StartInternal: one int* arg, returns int; present-param flag
+#           assembly from 0x01712470/74/78 and p[14], CreateDevice (+0x40),
+#           Raster::Initialize (0x011efeb0), render-target/state-block captures,
+#           g_state=2, QueryPerformanceCounter(&0x016f9128).
+# 011f88c0  Device::GetAdapterInfo: (void** out, int n), returns base; zeroes
+#           n*0x44 bytes, GetDeviceCaps (+0x38) over 0x015d07e0[3] device types,
+#           GetAdapterModeCount (+0x18)/EnumAdapterModes (+0x1c) over
+#           0x015d07ec[4] formats, appending 0x10-byte modes at base+n*0x44.
+011efeb0  rw::graphics::Raster::Initialize  # 6 args: init record, u16 w, u16 h, 0, 1/2, extra
+011f1d70  rw::graphics::GlobalState::D3D9Reset  # code-restore helper called after Reset
+011f94a0  rw::graphics::Device::SelectPresentParameters  # called with 0 from Initialize/StartInternal
+
