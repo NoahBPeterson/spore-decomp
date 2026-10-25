@@ -1,3 +1,5 @@
 005680a0 eastl::vector<...>::DoDestroyValues  # destroys a 0x50-stride range
 00568740 VecRangeStub::RangeCtor  # allocate+copy range
 005687d0 ?DoFreeNodes@HashFreeStub@@QAEXPAPAXI@Z  # HashFreeStub::DoFreeNodes migrated from s00567a90 (verbatim, slice spelling)
+00567a90 ?DoInsertValue@Vec12Stub@@QAEPAXPAXH0@Z  # vector DoInsertValue, 12-byte elements (host in ecx; migrated marker omitted the hidden this)
+00567e70 ?InsertOne@Vec8Stub@@QAEPAXPAX0@Z  # vector insert, 8-byte elements (host in ecx; migrated marker omitted the hidden this)
