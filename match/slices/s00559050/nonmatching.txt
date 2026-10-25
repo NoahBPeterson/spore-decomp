@@ -1,1 +1,5 @@
+# va  diff-bytes  reason
+00559050 15 c559050 scalar deleting destructor (walk mVec18 at 0xc stride, reset two vtables, optional delete): equiv PASS (252 valid, 100% coverage); instruction stream identical to retail, only the /Od frame slots differ - retail keeps `this` at -0x18 and the materialised &mVec18 temporary at -0x14 with a 0x18 frame, ours keeps `this` at -0xc with a 0xc frame
+00559110 783 Editor::W1G2_58::cObjectTemplateDB constructor (retail 967 bytes, ours 653): equiv PASS (400 valid, 92.6% coverage); retail materialises every &member address into a frame temporary and passes a distinct Alloc temporary to each collection constructor
 00559500 4 element increment: flags /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast; complete; only the compiler spill slot of `this` (-8) vs the named local (-0xc) is swapped; equiv PASS
+00559590 626 SP::cSPObjectTemplateDB destructor (retail 792 bytes, ours 813): equiv UNSUPPORTED (0/400 valid, fault(read)=335) - the retail body dereferences raw sub-object pointers that no synthesised input can populate, so no valid input pair exists
