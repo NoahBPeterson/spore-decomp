@@ -60,5 +60,134 @@ void FUN_00520220(int p, float* outA, float* outB)
     outB[0] = n2[0]; outB[1] = n2[1]; outB[2] = n2[2];
 }
 
-// @ 0x0051fb90 -- PARTIAL skeleton (1404-byte /Od body not reconstructed)
-void FUN_0051fb90(void* self) { (void)self; }
+// ---------------------------------------------------------------- FUN_0051fb90 helpers
+
+extern float g_1471064;   // 0x1471064 (0.5f)
+
+struct S0051Mat3 { V3_s0051_fb90 xAxis, yAxis, zAxis; };
+
+struct S0051Elem {
+    char          pad00[0x14];
+    V3_s0051_fb90 a;        // +0x14
+    V3_s0051_fb90 b;        // +0x20
+    float         scale;    // +0x2c
+    S0051Mat3     mat;      // +0x30
+    V3_s0051_fb90 t;        // +0x54
+    char          pad60[0x2c];
+};
+
+struct S0051Mesh {
+    char       pad00[0x98];
+    S0051Elem* mpElems;     // +0x98
+};
+
+struct S0051Mapper {
+    char           pad00[0x08];
+    S0051Mesh*     mpMesh;  // +0x08
+    char           pad0c[0x14];
+    unsigned char* mpRemap; // +0x20 (packed -> index remap table)
+};
+
+struct Vector2_s0051_fb90 { float x, y; };
+
+struct S0051HitFlags {
+    char     pad00[0x1c];
+    uint32_t flags;         // +0x1c
+};
+
+struct S0051Skinner {
+    char           pad00[0x190];
+    uint32_t*      mpPacked;                                              // +0x190
+    V3_s0051_fb90* GetSkinnedPoint(V3_s0051_fb90* out, int idx, Vector2_s0051_fb90 v); // 0x50c490
+    void           GetFaceNormal(V3_s0051_fb90* out, int idx);                          // 0x5121c0
+};
+
+void FUN_0041daf0(V3_s0051_fb90* out, const V3_s0051_fb90* v, const S0051Mat3* m);  // 0x41daf0
+void FUN_0041dc10(V3_s0051_fb90* out, const V3_s0051_fb90* a, const V3_s0051_fb90* b); // 0x41dc10
+void FUN_0041db10(V3_s0051_fb90* out, const V3_s0051_fb90* a, const V3_s0051_fb90* b); // 0x41db10
+void FUN_0041dca0(V3_s0051_fb90* out, const V3_s0051_fb90* v, const float* s);        // 0x41dca0
+void FUN_0041dba0(V3_s0051_fb90* v, const float* s);                                  // 0x41dba0
+void FUN_0041ddb0(V3_s0051_fb90* a, const V3_s0051_fb90* b);                          // 0x41ddb0
+void FUN_00422020(V3_s0051_fb90* out, const V3_s0051_fb90* v);                        // 0x422020
+
+// @ 0x0051fb90
+void FUN_0051fb90(int kind, V3_s0051_fb90* v2, int idx, Vector2_s0051_fb90 v4,
+                  S0051HitFlags* self, S0051Mapper* mapper, S0051Skinner* skinner,
+                  V3_s0051_fb90* out)
+{
+    V3_s0051_fb90 result;
+
+    switch (kind) {
+    case 3:
+        result = *v2;
+        break;
+
+    case 5: {
+        V3_s0051_fb90 faceN;
+        skinner->GetFaceNormal(&faceN, idx);
+        uint32_t   raw  = skinner->mpPacked[idx] >> 16;
+        S0051Elem* elem = &mapper->mpMesh->mpElems[FUN_00520110((int)mapper, raw)];
+        V3_s0051_fb90 yAxis = elem->mat.yAxis;
+        V3_s0051_fb90 cross;
+        FUN_0044e460(&cross, &faceN, &yAxis);
+        V3_s0051_fb90 nrm;
+        FUN_00436ce0(&nrm, &cross);
+        result = nrm;
+        break;
+    }
+
+    case 6: {
+        uint32_t   raw  = (skinner->mpPacked[idx] >> 8) & 0xff;
+        S0051Elem* elem = &mapper->mpMesh->mpElems[FUN_00520110((int)mapper, raw)];
+        V3_s0051_fb90 tmp;
+        FUN_0041daf0(&tmp, v2, &elem->mat);
+        result = tmp;
+        break;
+    }
+
+    case 7: {
+        uint32_t   raw  = (skinner->mpPacked[idx] >> 8) & 0xff;
+        S0051Elem* elem = &mapper->mpMesh->mpElems[FUN_00520110((int)mapper, raw)];
+
+        V3_s0051_fb90 sum;
+        FUN_0041dc10(&sum, &elem->a, &elem->b);
+        float half = g_1471064;
+        V3_s0051_fb90 pos;
+        FUN_0041dca0(&pos, &sum, &half);
+        FUN_0041dba0(&pos, &elem->scale);
+        V3_s0051_fb90 rotated;
+        FUN_0041daf0(&rotated, &pos, &elem->mat);
+        pos = rotated;
+        FUN_0041ddb0(&pos, &elem->t);
+
+        V3_s0051_fb90  skinned;
+        V3_s0051_fb90* r = skinner->GetSkinnedPoint(&skinned, idx, v4);
+        V3_s0051_fb90  rel;
+        FUN_0041db10(&rel, r, &pos);
+
+        V3_s0051_fb90 yAxis = elem->mat.yAxis;
+        V3_s0051_fb90 cross;
+        FUN_0044e460(&cross, &rel, &yAxis);
+        V3_s0051_fb90 nrm;
+        FUN_00436ce0(&nrm, &cross);
+        result = nrm;
+        break;
+    }
+
+    default: {
+        uint32_t   raw  = skinner->mpPacked[idx] >> 16;
+        S0051Elem* elem = &mapper->mpMesh->mpElems[FUN_00520110((int)mapper, raw)];
+        V3_s0051_fb90 tmp;
+        FUN_0041daf0(&tmp, v2, &elem->mat);
+        result = tmp;
+        break;
+    }
+    }
+
+    if (self->flags & 0x10) {
+        V3_s0051_fb90 neg;
+        FUN_00422020(&neg, &result);
+        result = neg;
+    }
+    *out = result;
+}
