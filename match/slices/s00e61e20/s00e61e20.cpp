@@ -71,9 +71,9 @@ extern "C" void* __cdecl FUN_00b72230(int key);                      // 0x00b722
 extern "C" void* __cdecl FUN_00b72160();                             // 0x00b72160
 extern "C" void* __cdecl FUN_00b72210(int key);                      // 0x00b72210
 extern "C" void* __cdecl FUN_00e54050(int flag);                     // 0x00e54050
-extern "C" int   __cdecl FUN_00e87200(void* world, void* a, void* b, int* out, int cap, float maxd); // 0x00e87200
-extern "C" void  __cdecl FUN_00e50590(int* a, void* b, int* c, int n); // 0x00e50590
-extern "C" char  __cdecl FUN_00e505f0(int* a, void* b, int c);       // 0x00e505f0
+extern "C" int   __cdecl FUN_00e87200(u32 cell, void* a, void* b, int* out, int cap, float maxd); // 0x00e87200
+extern "C" void  __cdecl FUN_00e50590(int* a, u32* b, int* c, int n); // 0x00e50590
+extern "C" char  __cdecl FUN_00e505f0(int* a, u32 b, int c);         // 0x00e505f0
 extern "C" void* __cdecl FUN_00b721d0(int a);                        // 0x00b721d0
 extern "C" void  __cdecl Matrix3_Assign(void* dst, const void* src); // 0x0041cb40
 extern "C" void  __cdecl FUN_0040efa0(void* self);                   // 0x0040efa0  cSPTransform::Invert
@@ -149,7 +149,8 @@ struct cCellGfx {
 //   +0x168  the attached-model handle
 //   +0x244  mGfxID
 struct cSPCell {
-    u8   m_pad00[0x14];
+    u32  mWorld;                    // +0x00  the world the cell belongs to
+    u8   m_pad04[0x10];
     float mDesiredOrientation[4];   // +0x14
     u8   m_pad24[0x24];
     u8   mTransform[0x38];          // +0x48
@@ -240,46 +241,136 @@ char sResolvePartName(void* cell, void* outStr)
     return r;
 }
 
+// ------------------------------------------------------------------ UI records
+// Fixed-stride handle pool: records are addressed by a (slot << 16 | serial)
+// handle that the pool hands out, validates and resolves.
+struct cHandlePool {
+    void* mpData;        // +0x00  slot storage
+    u32   mFreeHead;     // +0x04  first free slot (or 0xffffffff)
+    u32   mSlotCount;    // +0x08  number of slots handed out so far
+    u32   mFreeCount;    // +0x0c
+    u32   mNextSlot;     // +0x10  slot used by the next Alloc
+    u32   mStride;       // +0x14  slot size
+    u32   mCapacity;     // +0x18
+
+    u32   Alloc();               // 0x00b72160
+    bool  IsValid(u32 handle);   // 0x00b721d0
+    void* Get(u32 handle);       // 0x00b72210  handle -> record
+    void* Next(int* iter);       // 0x00b72230  iterator step, 0 at the end
+    int   Begin();               // 0x00e31100  iterator start
+};
+
+// Text buffer of a cString (eastl::basic_string<wchar_t> layout).
+struct cWString {
+    u16*  mpBegin;      // +0x00
+    u16*  mpEnd;        // +0x04
+    u16*  mpCapacity;   // +0x08
+    void* mpAllocator;  // +0x0c
+};
+
+// The layout object of a record (its own calls are not virtual).
+struct cSPUILayout {
+    void* FindWindowByID(u32 id, int flag);   // 0x008105b0
+    void  SetVisibility(int visible);         // 0x00810590
+};
+
+// One part's UI record.  +0x08/+0x14/+0x1c are the targets of the three eased
+// channels and +0x10/+0x18/+0x20 the values they are eased from.
+struct cPartUIRecord {
+    u32   mSerial;    // +0x00
+    int   mPartID;    // +0x04
+    float mTargetA;   // +0x08
+    float mPad0c;     // +0x0c
+    float mCurA;      // +0x10
+    float mTargetB;   // +0x14
+    float mCurB;      // +0x18
+    float mTargetC;   // +0x1c
+    float mCurC;      // +0x20
+    float mRate;      // +0x24
+    float mScale;     // +0x28
+    float mTimer;     // +0x2c
+    u8    mbNamed;        // +0x30
+    u8    mPad31[3];
+    cSPUILayout* mpLayout; // +0x34
+};
+
+// The parts of cCellGfx these two routines touch.
+struct cCellGfxView {
+    u8          mPad00[0x24];
+    u8          mCfgFlag24;        // +0x24
+    u8          mPad25;
+    u8          mCfgFlag26;        // +0x26
+    u8          mPad27[0x9c - 0x27];
+    cHandlePool mUIRecords;        // +0x9c
+    u8          mPad0b8[0xfc - 0xb8];
+    u32         mSelectedPart;     // +0xfc
+    int         mPendingIDs[512];  // +0x100
+    u32         mPendingCount;     // +0x900
+    float       mCursorTimer;      // +0x904
+    u8          mPad908[8];        // +0x908
+    cWString    mPartName;         // +0x910
+};
+
+// The parts of cCellGame these two routines touch.
+struct cCellGameView {
+    u8          mPad00[0x1c];
+    cHandlePool mCells;            // +0x1c
+    u8          mPad38[0x40fc - 0x38];
+    u32         mMidPlayerCell;    // +0x40fc
+    u8          mPad4100[0x411c - 0x4100];
+    u32         mCurrentWorld;     // +0x411c
+    u8          mPad4120[0x5169 - 0x4120];
+    u8          mInGoldyCinematic; // +0x5169
+};
+
 // @ 0x00e62200
 void* sFindOrCreateUI(int partID, float a)
 {
-    void* gfx = gspCellGfx;
-    void* game = gspCellGame;
-    int key = ((TC_i0)(*(void***)((u8*)gfx + 0x9c)))((u8*)gfx + 0x9c);
+    // 0x00b72230 walks the record pool; 0x00e31100 yields the start index.
+    int it = ((cCellGfxView*)gspCellGfx)->mUIRecords.Begin();
     for (;;) {
-        void* found = FUN_00b72230(key);
-        if (found == 0) {
-            void* w = FUN_00b72160();
-            if (w == 0) return 0;
-            u8* rec = (u8*)FUN_00b72210(*(int*)w);
-            *(float*)(rec + 8)  = a;
-            *(float*)(rec + 0x1c) = a;
-            *(float*)(rec + 0x14) = a;
-            *(u32*)(rec + 0x24) = 0x3f000000;
-            *(int*)(rec + 4) = partID;
-            *(u32*)(rec + 0x10) = 0;
-            *(u32*)(rec + 0x18) = 0;
-            *(u32*)(rec + 0x20) = 0;
-            *(u32*)(rec + 0x28) = 0x3e800000;
-            *(u32*)(rec + 0x2c) = 0;
-            void* layout = FUN_00e54050(0);
-            ((TC_i1)(*(void***)layout)[1])(layout, 1);
-            *(void**)(rec + 0x34) = layout;
-            if (partID != *(int*)((u8*)game + 0x411c)) {
-                int cid = *(int*)FUN_00b72210(partID);
-                char ok = sResolvePartName((void*)FUN_00b72210(cid), (u8*)gspCellGfx + 0x910);
-                if (ok) {
-                    void* win = ((TC_pi11)(*(void***)layout)[5])(layout, 0x31e94d0, 1);
-                    ((TC_i1)(*(void***)win)[0x20])(win, *(int*)((u8*)gspCellGfx + 0x910));
-                    *(u8*)(rec + 0x30) = 1;
-                    return rec;
-                }
-                *(u8*)(rec + 0x30) = 0;
-            }
+        cPartUIRecord* found =
+            (cPartUIRecord*)((cCellGfxView*)gspCellGfx)->mUIRecords.Next(&it);
+        if (found == 0)
+            break;
+        if (found->mPartID != partID)
+            continue;
+        return found;
+    }
+
+    u32 handle = ((cCellGfxView*)gspCellGfx)->mUIRecords.Alloc();
+    if (handle == 0)
+        return 0;
+    cPartUIRecord* rec =
+        (cPartUIRecord*)((cCellGfxView*)gspCellGfx)->mUIRecords.Get(handle);
+    rec->mPartID  = partID;
+    rec->mTargetA = a;
+    rec->mTargetC = a;
+    rec->mTargetB = a;
+    rec->mCurA    = 0.0f;
+    rec->mRate    = 0.5f;
+    rec->mCurB    = 0.0f;
+    rec->mCurC    = 0.0f;
+    rec->mScale   = 0.25f;
+    rec->mTimer   = 0.0f;
+
+    cSPUILayout* layout = (cSPUILayout*)FUN_00e54050(0);
+    layout->SetVisibility(1);
+    rec->mpLayout = layout;
+
+    cCellGameView* game = (cCellGameView*)gspCellGame;
+    if (partID != (int)game->mCurrentWorld) {
+        cSPCell* cell = (cSPCell*)game->mCells.Get((u32)partID);
+        if (sResolvePartName(cell, &((cCellGfxView*)gspCellGfx)->mPartName)) {
+            void* win = rec->mpLayout->FindWindowByID(0x31e94d0, 1);
+            ((TC_i1)(*(void***)win)[0x20])(
+                win, (int)(size_t)((cCellGfxView*)gspCellGfx)->mPartName.mpBegin);
+            rec->mbNamed = 1;
             return rec;
         }
-        if (*(int*)((u8*)found + 4) == partID) return found;
+        rec->mbNamed = 0;
     }
+    return rec;
 }
 
 // @ 0x00e62380
@@ -343,52 +434,74 @@ void sErasePartsCacheEntry(int partID)
     }
 }
 
+// ------------------------------------------------------------------ trigger manager
+// 0x00b3d4d0 is the zero-argument accessor behind both call shapes in this
+// cluster (0x00e62440 happens to pass a spare dword on the stack).
+struct cTriggerMgr {
+    u8  mPad00[0x2c];
+    int mState;      // +0x2c
+};
+extern "C" void* __cdecl GetTriggerManager();   // 0x00b3d4d0
+
+// The screen-space sampler App slot 0x16 returns; it fills two positions.
+struct cPosSample {
+    void GetPos(void* first, void* second);   // 0x007c4900
+};
+
 // @ 0x00e62500
 void sTickSelectedPart(float dt)
 {
-    u8* gfx = (u8*)gspCellGfx;
-    float t = dt + *(float*)(gfx + 0x904);
-    *(float*)(gfx + 0x904) = t;
-    if (t > 1.0f) {
-        *(u32*)(gfx + 0x900) = 0;
-    }
+    float t = dt + ((cCellGfxView*)gspCellGfx)->mCursorTimer;
+    ((cCellGfxView*)gspCellGfx)->mCursorTimer = t;
+    if (t > 1.0f)
+        ((cCellGfxView*)gspCellGfx)->mPendingCount = 0;
 
-    u8* game = (u8*)gspCellGame;
-    if (*(u8*)(game + 0x5169) != 0) return;
-    void* mgr = GetTriggerMgr(0);
-    int state = *(int*)((u8*)mgr + 0x2c);
-    if (state == 1 || state == 2) return;
+    if (((cCellGameView*)gspCellGame)->mInGoldyCinematic != 0)
+        return;
+    cTriggerMgr* mgr = (cTriggerMgr*)GetTriggerManager();
+    if (mgr->mState == 1 || mgr->mState == 2)
+        return;
 
     void* app = SP_App();
-    void* a0 = ((TC_p0)(*(void***)app)[0x16])(app);
+    cPosSample* sample = (cPosSample*)((TC_p0)(*(void***)app)[0x16])(app);
     u8 posA[12];
     u8 posB[12];
-    FUN_007c4900(a0, posA, posB);
+    sample->GetPos(posA, posB);
 
-    int n = FUN_00e87200(*(void**)((u8*)game + 0x40fc), posA, posB,
-                         (int*)((u8*)gfx + 0x100), 0x200, 3.4e38f);
-    FUN_00e50590((int*)((u8*)gfx + 0x100), (void*)((u8*)gfx + 0x900), 0, n);
+    int ids[512];
+    int n = FUN_00e87200(((cCellGameView*)gspCellGame)->mMidPlayerCell,
+                         posA, posB, ids, 512, 3.4e38f);
+    FUN_00e50590(((cCellGfxView*)gspCellGfx)->mPendingIDs,
+                 &((cCellGfxView*)gspCellGfx)->mPendingCount, ids, n);
 
     for (int i = 0; i < n; ++i) {
-        u8* cell = (u8*)FUN_00b72210(*(int*)((u8*)gfx + 0x100 + i * 4));
-        int id = *(int*)cell;
-        if (id == *(int*)((u8*)game + 0x411c)) break;
-        if (*(u8*)(cell + 0x112) != 0) continue;
-        if (*(int*)((u8*)gfx + 0xfc) != id && *(u8*)((u8*)gfx + 0x24) != 0) continue;
-        if (*(u8*)((u8*)gfx + 0x26) != 0) continue;
-        if (FUN_00e505f0((int*)((u8*)gfx + 0x100), *(void**)((u8*)gfx + 0x900), id) != 0) continue;
-        if (sResolvePartName(cell, (u8*)gspCellGfx + 0x910) == 0) continue;
+        cSPCell* cell = (cSPCell*)
+            ((cCellGameView*)gspCellGame)->mCells.Get((u32)ids[i]);
+        if (cell->mWorld == ((cCellGameView*)gspCellGame)->mCurrentWorld)
+            break;
+        if (cell->mNoIcon != 0)
+            continue;
+        if (((cCellGfxView*)gspCellGfx)->mSelectedPart != cell->mWorld &&
+            ((cCellGfxView*)gspCellGfx)->mCfgFlag24 != 0)
+            continue;
+        if (((cCellGfxView*)gspCellGfx)->mCfgFlag26 != 0)
+            continue;
+        if (FUN_00e505f0(((cCellGfxView*)gspCellGfx)->mPendingIDs,
+                         ((cCellGfxView*)gspCellGfx)->mPendingCount,
+                         (int)cell->mWorld) != 0)
+            continue;
+        if (sResolvePartName(cell, &((cCellGfxView*)gspCellGfx)->mPartName) == 0)
+            continue;
 
-        float g = (float)*(int*)(cell + 0x244) * (1.0f / 6.0f);
-        u8* rec = (u8*)sFindOrCreateUI(id, g);
-        *(float*)(rec + 0x2c) = dt * 4.0f + 1.0f;
-        *(u32*)(rec + 0x28) = 0;
-        *(u32*)(rec + 0x20) = 0x3f800000;
-        *(u32*)(rec + 0x24) = 0;
-        *(int*)((u8*)gfx + 0xfc) = id;
-        *(u32*)((u8*)gfx + 0xfc) = 0;
-        (void)cell;
-        return;
+        float scale = (float)cell->mGfxID / 6.0f;
+        cPartUIRecord* rec = (cPartUIRecord*)sFindOrCreateUI((int)cell->mWorld, scale);
+        rec->mTimer = dt * 4.0f + 1.0f;
+        rec->mScale = 0.0f;
+        rec->mCurC  = 1.0f;
+        rec->mRate  = 0.0f;
+        ((cCellGfxView*)gspCellGfx)->mSelectedPart = cell->mWorld;
+        ((cCellGfxView*)gspCellGfx)->mSelectedPart = 0;
+        break;
     }
 }
 
