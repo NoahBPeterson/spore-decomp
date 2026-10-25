@@ -86,13 +86,14 @@ void BoundingBox_TransformBy(cSPBoundingBox* box, const cSPTransform* xf); // 0x
 int  FUN_006ffbd0(const void* v, float r);                            // 0x006ffbd0
 int  cFrustumCull_FrustumTestSphere(void* self, const void* p, unsigned flags); // 0x00700120
 int  FUN_00511140(void* p);                                          // 0x00511140
-void FUN_007760a0(int a, int b, int c, int d, int e, void* f);        // 0x007760a0
-int  SP_CreateModelInstance(unsigned a, int b, void* c);              // 0x00754ba0
-int  FUN_007454f0(int x);                                            // 0x007454f0
+int  FUN_007760a0(void* slot, void* handle, Vec3 pos, cSPTransform* xf); // 0x007760a0
+int  SP_CreateModelInstance(unsigned a, int b, void* c, unsigned d);  // 0x00754ba0
+void* __fastcall FUN_007454f0(void* self, int unused, int x);         // 0x007454f0
 void FUN_007453d0(int x);                                            // 0x007453d0
 void FUN_0073ab40(int x);                                            // 0x0073ab40
-int  FUN_007434b0(int x);                                            // 0x007434b0
-void FUN_0073b980(void* a, void* b, void* c, void* d, void* e, void* f, void* g); // 0x0073b980
+int  __fastcall FUN_007434b0(void* self, int unused, int arg);       // 0x007434b0
+void __fastcall FUN_0073b980(void* self, int unused, void* a1, void* a2, void* a3,
+                             void* a4, void* a5, void* a6, void* a7); // 0x0073b980
 void FUN_00743150(void* a, int b);                                   // 0x00743150
 void FUN_0041d8b0(void* a);                                          // 0x0041d8b0
 void FUN_0074f420(void* a);                                          // unused
@@ -425,39 +426,62 @@ void cModelWorld_SetMaterialInfo(void* /*this*/, void* handle, void* info, int i
     }
 }
 
-// @ 0x007462b0 : cModelWorld material-info update helper.
-struct ModelRef { void* p; };
-struct VecField {
-    void* mBegin;    // +0x00
-    void* mEnd;      // +0x04
-    unsigned char pad8[0x0c - 0x08];
-    void* mCapacity; // +0x0c
-    void* mStore;    // +0x10
-    unsigned char pad14[0x18 - 0x14];
-    void* mExtra;    // +0x18
-    unsigned char pad1c[0x24 - 0x1c];
-    void* mOther;    // +0x24
+// The rendered model instance behind a cModelWorld handle (handle - 8).
+struct HullModel {
+    unsigned char pad0[0xa8];
+    Vec3 mMin;     // +0xa8
+    Vec3 mMax;     // +0xb4
+    float mRadius; // +0xc0
 };
-void FUN_007462b0(void* /*this*/, void* handle, VecField* v)
+struct ModelInternal {
+    unsigned char pad0[0x0c];   // +0x00
+    uint32_t mFlags;            // +0x0c dirty/bounds bits (bit 9 = bounds valid)
+    unsigned char pad10[0x64];  // +0x10
+    float mRadius;              // +0x74 bounding radius
+    Vec3 mMin;                  // +0x78
+    Vec3 mMax;                  // +0x84
+    unsigned char pad90[0x0c];  // +0x90
+    HullModel* mSlot;           // +0x9c renderable instance
+    unsigned char padA0[0x0c];  // +0xa0
+    HullModel* mHull;           // +0xac collision hull
+    unsigned char padB0[0x34];  // +0xb0
+    cSPTransform mTransform;    // +0xe4
+};
+
+// @ 0x007462b0 : cModelWorld material-info commit helper.
+struct ModelInfo {          // 0x28-byte geometry/material state block owned by the caller
+    void* m00;              // +0x00
+    void* mSrcBegin;        // +0x04
+    int   mCount;           // +0x08 committed element count
+    void* mSrcEnd;          // +0x0c
+    void* mBuffer;          // +0x10 heap copy of the committed run
+    void* mSrc2Begin;       // +0x14
+    void* mRef;             // +0x18 refcounted owner
+    int   mNewCount;        // +0x1c recomputed element count
+    void* mOut;             // +0x20
+    void* mSrc2End;         // +0x24
+};
+
+void __fastcall FUN_007462b0(void* self, int unused, void* handle, ModelInfo* v)
 {
-    MWInternal* p = handle ? (MWInternal*)((char*)handle - 8) : 0;
-    void* src = 0;
-    if (p->mSlots[0] == 0 && p->mSlots[1] == 0 && p->mSlots[2] == 0 && p->mSlots[3] == 0) {
-        // no slots: still run the commit below
-    } else {
-        // find a live slot and detach its refcounted object at +0x18
-        void* q = (void*)v->mExtra;
-        if (q) {
-            v->mExtra = 0;
-            (*(void(__thiscall**)(void*))(*(void**)q))(q);
+    ModelInternal* p = handle ? (ModelInternal*)((char*)handle - 8) : 0;
+    void* inst = p->mHull;
+    if (inst == 0)
+        inst = p->mSlot;
+    if (inst != 0) {
+        FUN_007434b0(inst, 0, 0);            // instance->Sub34b0(0)
+        if (v->mRef != 0) {
+            void* q = v->mRef;
+            v->mRef = 0;
+            (*(void(__thiscall**)(void*))((char*)(*(void**)q) + 4))(q);
         }
-        FUN_0073b980(&v->mStore, &v->mBegin, &v->mExtra, &v->mEnd, &v->mOther, &v->mCapacity, &v->mExtra);
+        FUN_0073b980(inst, 0, &v->mOut, &v->mSrcBegin, &v->mNewCount, &v->mSrcEnd,
+                     &v->mSrc2End, &v->mSrc2Begin, &v->mRef);
     }
-    if (v->mEnd != v->mExtra) {
-        v->mEnd = v->mExtra;
-        EASTL_allocator_deallocate(v->mStore);
-        uint32_t n = (uint32_t)v->mEnd;
-        v->mStore = EASTL_allocator_allocate(n * 0xc, "Graphics", 0, 0, 0, 0);
+    if (v->mCount != v->mNewCount) {
+        v->mCount = v->mNewCount;
+        EASTL_allocator_deallocate(v->mBuffer);
+        v->mBuffer = EASTL_allocator_allocate((uint32_t)v->mCount * 0xc, "Graphics", 0, 0, 0, 0);
     }
 }
 
@@ -475,60 +499,52 @@ struct HullQuery {
 };
 struct VariantKey { uint32_t a, b; int c; };
 VariantKey* VariantKey_GetTPTR(void* variant);   // 0x00454b10
-void cModelWorld_GetHull(void* self, HullQuery* out)
+
+// @ 0x00746360 : SP::cModelWorld::GetHull - build/fetch the model instance and fill the
+// hull description through the model instance's 7-slot commit helper.
+void __fastcall cModelWorld_GetHull(void* self, int unused, HullQuery* out, HullQuery* desc)
 {
     (*(void(__thiscall**)(void*, HullQuery*))((char*)(*(void**)self) + 0x58))(self, out);
-    unsigned char* p = (unsigned char*)out - 8;
-    out->mKey = 0;
-    out->mType = 0;
-    out->m0 = 0;
-    out->m1 = 0;
-    out->m2 = 0;
-    out->m3 = 0;
-    if (out->mInst) {
-        void* q = out->mInst;
-        out->mInst = 0;
-        (*(void(__thiscall**)(void*, int))((char*)(*(void**)q) + 4))(q, 1);
+    ModelInternal* p = out ? (ModelInternal*)((char*)out - 8) : 0;
+    desc->mKey = 0;
+    desc->mType = 0;
+    desc->m0 = 0;
+    desc->m1 = 0;
+    desc->m2 = 0;
+    desc->m3 = 0;
+    if (desc->mInst != 0) {
+        void* q = desc->mInst;
+        desc->mInst = 0;
+        (*(void(__thiscall**)(void*))((char*)(*(void**)q) + 4))(q);
     }
-    if (*(void**)(p + 0xac) == 0 && *(void**)(p + 0x98) != 0) {
+    if (p->mHull == 0 && p->mSlot != 0) {
         VariantKey variant;
         memset(&variant, 0, sizeof(variant));
-        int ok = (*(int(__thiscall**)(void*, uint32_t, void*))
-                  ((char*)(**(void***)(p + 0x98)) + 0x24))(*(void**)(p + 0x98), 0xf9efc0, &variant);
+        int ok = (*(int(__thiscall**)(void*, uint32_t, VariantKey*))
+                  ((char*)(*(void**)p->mSlot) + 0x24))(p->mSlot, 0xf9efc0, &variant);
         if (ok) {
-            // resolved resource key
-            SP_CreateModelInstance(variant.a, variant.c == -1 ? 0 : variant.c, (void*)FUN_007454f0(0));
+            VariantKey* key = VariantKey_GetTPTR(&variant);
+            void* inst = 0;
+            void* released = FUN_007454f0(&inst, 0, 0);
+            SP_CreateModelInstance(key->a, key->c == -1 ? 0 : key->c, released, 0);
         }
     }
-    if (*(void**)(p + 0xac) != 0 || *(void**)(p + 0x9c) != 0) {
-        FUN_007434b0(0);
-        if (out->mInst) {
-            void* q = out->mInst;
-            out->mInst = 0;
-            (*(void(__thiscall**)(void*, int))((char*)(*(void**)q) + 4))(q, 1);
+    if (p->mHull != 0 || p->mSlot != 0) {
+        FUN_007434b0(p->mHull != 0 ? (void*)p->mHull : (void*)p->mSlot, 0, 0);
+        if (desc->mInst != 0) {
+            void* q = desc->mInst;
+            desc->mInst = 0;
+            (*(void(__thiscall**)(void*))((char*)(*(void**)q) + 4))(q);
         }
-        FUN_0073b980(&out->mKey, &out->mType, &out->m0, &out->m1, &out->m2, &out->m3, &out->mInst);
+        FUN_0073b980(desc, 0, &desc->mKey, &desc->mType, &desc->m0, &desc->m1, &desc->m2,
+                     &desc->m3, &desc->mInst);
     }
 }
 
-// @ 0x00746560
-struct HullModel {
-    unsigned char pad0[0xa8];
-    Vec3 mMin;     // +0xa8
-    Vec3 mMax;     // +0xb4
-};
-struct ModelInternal {
-    unsigned char pad0[0x78];
-    Vec3 mMin;     // +0x78
-    Vec3 mMax;     // +0x84
-    unsigned char pad90[0xac - 0x90];
-    HullModel* mHull;   // +0xac
-    unsigned char padB0[0xe4 - 0xb0];
-    cSPTransform mTransform; // +0xe4
-};
 struct CModelWorldStub {
     void GetHullBoundingBox(void* handle, cSPBoundingBox* out);
 };
+// @ 0x00746560
 void CModelWorldStub::GetHullBoundingBox(void* handle, cSPBoundingBox* out)
 {
     ModelInternal* p = handle ? (ModelInternal*)((char*)handle - 8) : 0;
@@ -546,72 +562,71 @@ void CModelWorldStub::GetHullBoundingBox(void* handle, cSPBoundingBox* out)
 }
 
 // @ 0x00746610 : SP::cModelWorld::GetRuntimeModel.
-int cModelWorld_GetRuntimeModel(void* self, void* handle, int* params)
+int __fastcall cModelWorld_GetRuntimeModel(void* self, int unused, void* handle, Vec3* pos)
 {
     (*(void(__thiscall**)(void*, void*))((char*)(*(void**)self) + 0x58))(self, handle);
     ModelInternal* p = handle ? (ModelInternal*)((char*)handle - 8) : 0;
-    unsigned char* q = (unsigned char*)p;
-    if (*(void**)(q + 0x9c) != 0) {
-        float rot[9];
-        Matrix3_Assign(rot, &g_f162ec38);
-        FUN_007760a0(*(int*)(q + 0x9c), (int)handle, params[0], params[1], params[2], rot);
-        return 0;
+    if (p->mSlot != 0) {
+        cSPTransform xf;
+        xf.mFlags = 0;
+        xf.mModificationCount = 0;
+        xf.mTranslation.x = g_f162eb0c;
+        xf.mTranslation.y = g_f162eb10;
+        xf.mTranslation.z = g_f162eb14;
+        xf.mScale = 1.0f;
+        ((Matrix33*)xf.mRotation)->Assign(&g_m162ec4c);   // identity rotation from the base matrix
+        return FUN_007760a0(p->mSlot, handle, *pos, &xf);
     }
     return 3;
 }
 
 // @ 0x007466e0 : cModelWorld hull-bounds refresh helper.
-int FUN_007466e0(void* self, void* handle)
+int __fastcall FUN_007466e0(void* self, int unused, void* handle)
 {
     (*(void(__thiscall**)(void*, void*))((char*)(*(void**)self) + 0x58))(self, handle);
     ModelInternal* p = handle ? (ModelInternal*)((char*)handle - 8) : 0;
-    if (*(void**)((char*)p + 0x9c) == 0)
+    if (p->mSlot == 0)
         return 0;
-    if (!FUN_007434b0((int)handle))
+    if (!FUN_007434b0(p->mSlot, 0, 0))
         return 0;
-    if (!((*(uint32_t*)((char*)p + 0xc) >> 9) & 1)) {
-        HullModel* h = (HullModel*)*(void**)((char*)p + 0xac);
-        (void)h;
-        Vec3 mn = *(Vec3*)((char*)p + 0xa8);
-        (void)mn;
-        // Copy bounding box out of the model instance (offsets as in retail).
-        Vec3 srcMax = *(Vec3*)((char*)p + 0xc0);
-        (void)srcMax;
+    if (((p->mFlags >> 9) & 1) == 0) {
+        HullModel* inst = p->mSlot;
+        p->mMin = inst->mMin;
+        p->mMax = inst->mMax;
+        if (p->mTransform.mScale != 1.0f || (p->mTransform.mFlags & 6) != 0)
+            cSPBoundingBox_Transform((cSPBoundingBox*)&p->mMin, p->mTransform);
+        p->mRadius = inst->mRadius;
         float scale = p->mTransform.mScale;
-        if (scale != g_f1485720 || (*(unsigned char*)&p->mTransform & 6)) {
-            // recompute bounding radius
-            float a = *(float*)((char*)p + 0xe8);
-            float b = *(float*)((char*)p + 0xec);
-            float c = *(float*)((char*)p + 0xf0);
-            float r = sqrtf(a * a + b * b + c * c);
-            (void)r;
+        if (scale != 1.0f || (p->mTransform.mFlags & 6) != 0) {
+            const Vec3& t = p->mTransform.mTranslation;
+            p->mRadius = sqrtf(t.x * t.x + t.y * t.y + t.z * t.z) + p->mRadius * scale;
         }
     }
     return 1;
 }
 
 // @ 0x007467f0 : cModelWorld query helper (two virtual calls, copies 3 vectors).
-struct IVirtual { virtual int v0(int); virtual int v1(int); };
-int FUN_007467f0(void* self, void* a, void* b, Vec3* out1, Vec3* out2, Vec3* out3)
+int __fastcall FUN_007467f0(void* self, int unused, void* a, void* b,
+                             Vec3* out1, Vec3* out2, Vec3* out3)
 {
-    char buf[36];
-    char* p = buf;
-    memset(buf, 0, sizeof(buf));
+    Vec3 buf[3];
     void* local = 0;
-    if (!(*(int(__thiscall**)(void*, int, void*, void*, void*))((char*)(*(void**)self) + 0x114))(self, 0, &local, a, b))
-        return 0;
-    {
-        IVirtual* lv = (IVirtual*)local;
-        if (lv) { lv->v1(0); }
-    }
-    if (!(*(int(__thiscall**)(void*, char*))((char*)(*(void**)local) + 8))(local, buf)) {
-        if (local) (*(void(__thiscall**)(void*))((char*)(*(void**)local) + 4))(local);
+    if (!(*(int(__thiscall**)(void*, void*, void*, void**, int))
+          ((char*)(*(void**)self) + 0x114))(self, a, b, &local, 0)) {
+        if (local)
+            (*(void(__thiscall**)(void*))((char*)(*(void**)local) + 4))(local);
         return 0;
     }
-    out1->x = *(float*)(buf + 0);  out1->y = *(float*)(buf + 4);  out1->z = *(float*)(buf + 8);
-    out2->x = *(float*)(buf + 12); out2->y = *(float*)(buf + 16); out2->z = *(float*)(buf + 20);
-    out3->x = *(float*)(buf + 24); out3->y = *(float*)(buf + 28); out3->z = *(float*)(buf + 32);
-    if (local) (*(void(__thiscall**)(void*))((char*)(*(void**)local) + 4))(local);
+    if (!(*(int(__thiscall**)(void*, Vec3*))((char*)(*(void**)local) + 8))(local, buf)) {
+        if (local)
+            (*(void(__thiscall**)(void*))((char*)(*(void**)local) + 4))(local);
+        return 0;
+    }
+    *out1 = buf[0];
+    *out2 = buf[1];
+    *out3 = buf[2];
+    if (local)
+        (*(void(__thiscall**)(void*))((char*)(*(void**)local) + 4))(local);
     return 1;
 }
 
