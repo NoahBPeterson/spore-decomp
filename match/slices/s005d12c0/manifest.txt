@@ -1,2 +1,3 @@
 # source (relative to match/)   symbol   original VA   [cl flags override]
 slices/s005d12c0/s005d12c0.cpp  ?SetFlag@cSpine75@  005d1600  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005d12c0/s005d12c0.cpp  ?FUN_005d14a0@cSpine75@SP@@QAEXXZ  005d14a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
