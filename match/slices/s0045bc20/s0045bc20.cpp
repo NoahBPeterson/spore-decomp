@@ -108,64 +108,63 @@ void Skel::Compact()
 // =====================================================================
 // @ 0x45c0f0  rebuild skinning arrays into local copies + remap indices
 // =====================================================================
-// 0x14-byte vector slot holding 0x40-byte elements (three pointers + allocator).
-struct SkinVec {
-    char*  mpBegin;                        // +0x00
-    char*  mpEnd;                          // +0x04
-    char*  mpCapacity;                     // +0x08
-    void*  mpAlloc;                        // +0x0c
+struct Mat4 { float m[16]; };              // 0x40-byte matrix element
 
-    void Assign(const SkinVec& src);       // 0x0045d790
+struct sp_vector_allocator {
+    const char* mpName;
+    int         mFlags;
 };
 
-struct Skin {
-    char     pad00[0xec];   // +0x000
-    int*     pIdx;          // +0x0ec  element -> source element index (-1 = keep)
-    char     padF0[0x10];   // +0x0f0
-    SkinVec  v100;          // +0x100
-    SkinVec  v114;          // +0x114  live position array
-    SkinVec  v128;          // +0x128
-    SkinVec  v13c;          // +0x13c  live normal array
+// EASTL vector with sp_vector_allocator (0x14 bytes).
+template <class T>
+struct vec {
+    T*                   mpBegin;      // +0x00
+    T*                   mpEnd;        // +0x04
+    T*                   mpCapacity;   // +0x08
+    sp_vector_allocator  mAllocator;   // +0x0c
+    void Assign(const vec& src);       // 0x0045d790
+};
 
-    void Rebuild();
+// Collada export target (same layout as ColladaExport in s004629e0).
+struct ColladaExport {
+    char       pad00[0xec];      // +0x000
+    vec<int>   mBoneParents;     // +0x0ec  source element per output bone (-1 = keep)
+    vec<Mat4>  mBindMatrices;    // +0x100  local bind matrices
+    vec<Mat4>  mWorkMatrices;    // +0x114  working copy of the bind matrices
+    vec<Mat4>  mBoneMatrices;    // +0x128  bone matrices (also the normal-matrix source)
+    vec<Mat4>  mWorkNormals;     // +0x13c  working copy of the bone matrices
+
+    void Finalize0();
 };
 
 // @ 0x45c0f0
-void Skin::Rebuild()
+void ColladaExport::Finalize0()
 {
-    char pad_d4[64];
-    char pad_94[64];
-    char pad_54[64];
+    Mat4 tmpC, tmpB, tmpA;
 
-    v114.Assign(v100);
-    v13c.Assign(v128);
+    mWorkMatrices.Assign(mBindMatrices);
+    mWorkNormals.Assign(mBoneMatrices);
 
-    int i = 0;
-    int n = (int)((v114.mpEnd - v114.mpBegin) >> 6);
+    unsigned int i = 0;
+    unsigned int n = (unsigned int)(mWorkMatrices.mpEnd - mWorkMatrices.mpBegin);
     for (; i < n; i = i + 1) {
-        char* src = (char*)FUN_0045da80(pad_54, v114.mpBegin + i * 0x40);
-        char* dst = v114.mpBegin + i * 0x40;
-        for (int k = 0; k < 0x10; k = k + 1) {
-            ((uint32_t*)dst)[k] = ((uint32_t*)src)[k];
-        }
-        char* src2 = (char*)FUN_0045da80(pad_94, v13c.mpBegin + i * 0x40);
-        char* dst2 = v13c.mpBegin + i * 0x40;
-        for (int k = 0; k < 0x10; k = k + 1) {
-            ((uint32_t*)dst2)[k] = ((uint32_t*)src2)[k];
-        }
+        Mat4& da = mWorkMatrices.mpBegin[i];
+        Mat4* ra = (Mat4*)FUN_0045da80(&tmpA, &mWorkMatrices.mpBegin[i]);
+        da = *ra;
+
+        Mat4& db = mWorkNormals.mpBegin[i];
+        Mat4* rb = (Mat4*)FUN_0045da80(&tmpB, &mWorkNormals.mpBegin[i]);
+        db = *rb;
     }
 
-    int j = 0;
-    int m = (int)((v128.mpEnd - v128.mpBegin) >> 6);
+    unsigned int j = 0;
+    unsigned int m = (unsigned int)(mBoneMatrices.mpEnd - mBoneMatrices.mpBegin);
     for (; j < m; j = j + 1) {
-        if (pIdx[j] >= 0) {
-            int idx = pIdx[j];
-            char* src = (char*)_Unchecked_idl0(pad_d4, v128.mpBegin + j * 0x40,
-                                               v13c.mpBegin + idx * 0x40);
-            char* dst = v128.mpBegin + j * 0x40;
-            for (int k = 0; k < 0x10; k = k + 1) {
-                ((uint32_t*)dst)[k] = ((uint32_t*)src)[k];
-            }
+        if (mBoneParents.mpBegin[j] >= 0) {
+            Mat4& dc = mBoneMatrices.mpBegin[j];
+            Mat4* rc = (Mat4*)_Unchecked_idl0(&tmpC, &mBoneMatrices.mpBegin[j],
+                                              &mWorkNormals.mpBegin[mBoneParents.mpBegin[j]]);
+            dc = *rc;
         }
     }
     return;
