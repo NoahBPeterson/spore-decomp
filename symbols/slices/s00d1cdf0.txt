@@ -1,6 +1,5 @@
-; slice s00d1cdf0 = 0x00d1cdf0..0x00d1df00 (SP Simulator rotation-mode game-data objects + editor strategy hooks)
-00d1cdf0 SP::cGameEditModeStrategy::HandleSimulationUpdate(float)   ; 0x00d1cdf0  thiscall: per-tick rotation/prune pass, edit-state machine, planet up-vector cache
-00d1d2e0 SP::cGameEditModeStrategy::HandleMessage(int, void*)        ; 0x00d1d2e0  cdecl: handle the 0x03d7106a planet-switch message, reset editor, pick avatar species
+00d1cdf0 ?HandleSimulationUpdate@cGameEditModeStrategy_s00d1_cdf0@@QAEXM@Z  # cGameEditModeStrategy_s00d1_cdf0::HandleSimulationUpdate migrated from s00d1cdf0 (verbatim, slice spelling)
+00d1d2e0 ?FUN_00d1d2e0@@YAIHPAX@Z  # FUN_00d1d2e0 migrated from s00d1cdf0 (verbatim, slice spelling)
 00d1d4d0 cRotationBall::Cast(int)                                   ; 0x00d1d4d0  thiscall: tag cast - self for 0x7292112, spatial (+0x34) for 0x1186577, else helper 0x00b18460
 00d1d540 cRotationBall::Write(void*)                                ; 0x00d1d540  thiscall: emit tag 0x7292112, base fields, model reference (returns 1)
 00d1d5c0 cRotationBall::GetWorldPos(float*)                          ; 0x00d1d5c0  thiscall: world position from model axis + projected up-vector + radius scale
@@ -26,9 +25,4 @@
 00d1de70 cRotationRing::CopyTo(EaString*)                            ; 0x00d1de70  assign this's +0xdc/+0xe0 string into the target  byte-exact (MATCH)
 00d1deb0 cRefObj::Init(void*)                                       ; 0x00d1deb0  smart-ptr init: vptr 0x147a2b0, clear +4/+8, AddRef/adopt the incoming object
 00d1df00 cRefObj::Destroy(void)                                     ; 0x00d1df00  shutdown the layout (+4) then release the adopted object (+8)  byte-exact (MATCH)
-; helpers: cGameData_ctor 0x00b18660, cGameData_dtor 0x00b184c0, cGameData::Write 0x00b18590, cGameData::Read 0x00b18600
-;          cSpatialObject_ctor 0x00c89630, cSpatialObject_dtor 0x00c8a420, FUN_00b18460 0x00b18460
-;          EaString::assign 0x00454cb0, operator_delete_array 0x00f47380, WriteUint32 0x0093aa70, ReadInt32 0x0093a780
-;          cSPUILayout::Shutdown 0x00811ad0, FUN_0059aed0 0x0059aed0, FUN_00dc6640 0x00dc6640
-;          globals: empty-string 0x01667bac/0x01667bad, current-rot 0x0169dda0/0x0169dda4, default vec 0x0169dd88..0x0169dd94
 ;          floats: 0x01486110 (5.0), 0x01485720 (1.0), 0x01473c70 (10.0); edit state 0x0169dca4
