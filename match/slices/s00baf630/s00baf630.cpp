@@ -179,33 +179,52 @@ void Obj790::FUN_00baf790(int param_2, void* param_3, int param_4)
 // ---------------------------------------------------------------------------
 // @ 0x00baf880
 // ---------------------------------------------------------------------------
+struct Element12
+{
+    char m[0xc];
+};
+
 struct Range3
 {
-    char* begin;                                // +0x00
-    char* end;                                  // +0x04
-    char* cap;                                  // +0x08
+    Element12* begin;                           // +0x00
+    Element12* end;                             // +0x04
+    Element12* cap;                             // +0x08
 };
 
 struct VObjX
 {
-    virtual void x00(); virtual void x04(); virtual void x08();
+    virtual void x00(); virtual void x04(); virtual void x08();   // x08 = +0x08
     virtual void x0c(); virtual void x10(); virtual void x14();
     virtual VObjX* x18();                       // vtable[0x18]
     virtual int  x1c();                         // vtable[0x1c]
-    virtual void x20(); virtual void x24(); virtual void x28(int a, int b);
-    virtual void x2c(); virtual void x30(void* a, int b);
-    virtual void x34(); virtual void x38(void* a, int b);
+    virtual void x20();
+    virtual void x24();                         // vtable[0x24]
+    virtual void x28(int a, int b);             // vtable[0x28]
+    virtual void x2c();
+    virtual void x30(void* a, int b);           // vtable[0x30]
+    virtual void x34();
+    virtual void x38(void* a, int b);           // vtable[0x38]
+};
+
+// eastl::vector<bool,fixed_vector_allocator<1,16,1,0,1>>: byte per bool.
+struct BitVector
+{
+    bool* mpBegin;                              // +0x00
+    bool* mpEnd;                                // +0x04
+    bool* mpCapacity;                           // +0x08
+    void DoInsertValues(bool* position, uint32_t n, const bool& value); // 0x4c10e0
 };
 
 struct Obj224
 {
     virtual void s00(); virtual void s04(); virtual void s08(); virtual void s0c();
     virtual void s10(); virtual void s14(); virtual void s18(); virtual void s1c();
-    virtual void s20(); virtual void s24(); virtual void s28(); virtual void s2c();
-    virtual void s30(Range3* r, int zero);
-    virtual void s34(void* elem, void* out, int a, int b, int c, int d);
+    virtual void s20(); virtual void s24();     // vtable[0x24]
+    virtual void s28(); virtual void s2c();
+    virtual void s30(Range3* r, int zero);      // vtable[0x30]
+    virtual void s34(Element12* elem, void** out, int a, int b, int c, int d); // vtable[0x34]
     virtual void s38(); virtual void s3c();
-    virtual void s40(void* elem);
+    virtual void s40(Element12* elem);          // vtable[0x40]
 };
 
 struct Obj880
@@ -216,77 +235,75 @@ struct Obj880
 void Obj880::FUN_00baf880(void)
 {
     char* self = (char*)this;
-    Obj224* c = *(Obj224**)(self + 0x224);
-    Obj224* s = *(Obj224**)(self + 0x228);
 
     Range3 range;
     range.begin = 0;
     range.end = 0;
     range.cap = 0;
 
-    void* elRef = 0;        // per-element refcounted object from the source range
-    void* elOut = 0;        // per-element refcounted object from the target range
-    void* bv0 = 0;          // eastl::vector<bool> data
-    void* bv1 = 0;          // eastl::vector<bool> end
-    void* bv2 = 0;          // eastl::vector<bool> capacity
+    BitVector bits;
+    bits.mpBegin = 0;
+    bits.mpEnd = 0;
+    bits.mpCapacity = 0;
 
-    c->s30(&range, 0);
-    int count = (int)((range.end - range.begin) / 0xc);
-    for (int i = 0; i < count; i++)
+    void* elRef = 0;            // element object from the source container
+    void* elOut = 0;            // element object from the target container
+
+    (*(Obj224**)(self + 0x224))->s30(&range, 0);
+    if (range.end != range.begin)
     {
-        elRef = 0;
-        elOut = 0;
-        c->s34(range.begin + i * 0xc, &elRef, 1, 3, 1, 0);
-        if (elOut != 0)
+        for (uint32_t i = 0; i < (uint32_t)(range.end - range.begin); ++i)
         {
-            void* dead = elOut;
+            elRef = 0;
             elOut = 0;
-            ((VObjX*)dead)->x08();
+            (*(Obj224**)(self + 0x224))->s34(range.begin + i, &elRef, 1, 3, 1, 0);
+            if (elOut != 0)
+            {
+                ((VObjX*)elOut)->x08();
+                elOut = 0;
+            }
+            (*(Obj224**)(self + 0x228))->s34(range.begin + i, &elOut, 2, 4, 1, 0);
+
+            VObjX* o1 = ((VObjX*)elRef)->x18();
+            int n = o1->x1c();
+            int have = (int)(bits.mpEnd - bits.mpBegin);
+            if ((uint32_t)n > (uint32_t)have)
+            {
+                bool value = false;
+                bits.DoInsertValues(bits.mpEnd, (uint32_t)(n - have), value);
+            }
+            else
+            {
+                memcpy(bits.mpBegin + n, bits.mpEnd, 0);
+                bits.mpEnd = bits.mpBegin + n;
+            }
+
+            o1->x28(0, 0);
+            o1->x30(bits.mpBegin, n);
+            ((VObjX*)elRef)->x24();
+
+            VObjX* o2 = ((VObjX*)elOut)->x18();
+            o2->x28(0, 0);
+            o2->x38(bits.mpBegin, n);
+            ((VObjX*)elOut)->x24();
+
+            (*(Obj224**)(self + 0x224))->s40(range.begin + i);
+
+            if (elOut != 0)
+                ((VObjX*)elOut)->x08();
+            if (elRef != 0)
+                ((VObjX*)elRef)->x08();
         }
-        s->s34(range.begin + i * 0xc, &elOut, 2, 4, 1, 0);
-
-        VObjX* o1 = ((VObjX*)elRef)->x18();
-        int n = o1->x1c();
-        int have = (int)((char*)bv1 - (char*)bv0);
-        if (n > have)
-        {
-            int old = have;
-            bv1 = (char*)bv1 + (n - have);
-            bv0 = bv0;
-            (void)old;
-        }
-        else
-        {
-            memcpy((char*)bv0 + have, bv1, 0);
-        }
-
-        o1->x28(0, 0);
-        o1->x30(bv0, n);
-        ((VObjX*)elRef)->x24();
-
-        VObjX* o2 = ((VObjX*)elOut)->x18();
-        o2->x28(0, 0);
-        o2->x38(bv0, n);
-        ((VObjX*)elOut)->x24();
-
-        c->s40(range.begin + i * 0xc);
-
-        if (elOut != 0)
-            ((VObjX*)elOut)->x08();
-        if (elRef != 0)
-            ((VObjX*)elRef)->x08();
-
-        (void)o1;
-        (void)o2;
-        (void)bv2;
     }
 
-    s->s24();
-    c->s24();
+    (*(Obj224**)(self + 0x228))->s24();
+    (*(Obj224**)(self + 0x224))->s24();
 
-    c->s30(&range, 0);
-    if (bv0 != 0 && *(int*)((char*)bv0 - 4) != 0)
-        FUN_00f47380(bv0);
-    if (bv1 != 0 && *(int*)((char*)bv1 - 4) != 0)
-        FUN_00f47380(bv1);
+    range.end = range.begin;
+    (*(Obj224**)(self + 0x224))->s30(&range, 0);
+
+    if (range.begin != 0 && *(int*)((char*)range.begin - 4) != 0)
+        FUN_00f47380(range.begin);
+    if (bits.mpBegin != 0 && *(int*)((char*)bits.mpBegin - 4) != 0)
+        FUN_00f47380(bits.mpBegin);
 }
