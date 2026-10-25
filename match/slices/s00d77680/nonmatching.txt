@@ -1,0 +1,2 @@
+# <va>  <diff-bytes>  <reason>
+00d77680 5196 nonmatching: SP::TRIBE_STEAL_BABY_Tick (PDB candidate), 5197-byte 10-state behaviour machine over cSCreatureCitizen/cSPCreatureBase; skeleton only (6-byte `return 1`), not reconstructed. The full body navigates the citizen and carrying creature to the tribe and back with tNavigationGoal/MoveToPointAtSpeed, then fires the birth feedback events. difftest FAIL 5/117 valid (eax: ff7fff01 vs 1; 3.6% coverage); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-.
