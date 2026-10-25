@@ -17,6 +17,14 @@ void  __cdecl VecUninitCopy(void*, void*, void*, void*, void*); // 0x007c7d70
 void* __cdecl VecCopyRange(void*, void*, void*);      // 0x007c7e10
 void  __cdecl UIntVecPushSlow(void*, unsigned*);     // 0x004558a0
 void  __cdecl UIntVecReserve(void*, unsigned);       // 0x004e0880
+// EASTL range algorithms used by the vector insert/grow paths (all masked callees).
+void  __cdecl CopyBackward4(uint32_t* first, uint32_t* last, uint32_t* result);       // 0x0042f5b0
+void  __cdecl CopyAssign4(uint32_t* first, uint32_t* last, uint32_t** value);         // 0x0042ece0
+void  __cdecl UninitFill4(uint32_t* first, int n, uint32_t** value, uint32_t* pos);   // 0x0042ed50
+void  __cdecl Displace4(void* a, void* b, void* c, void* d, void* e);                 // 0x004e8ee0
+
+static const char kAllocFile[] =
+    "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h";
 
 inline void* operator new(size_t size, const char* n, int f, unsigned d, const char* fi, int l)
 { return EA_New((unsigned)size, n, f, (int)d, fi, l); }
@@ -24,6 +32,9 @@ inline void operator delete(void*, const char*, int, unsigned, const char*, int)
 
 struct RC { virtual void AddRef(); virtual void Release(); };
 struct AutoRef { uint32_t m0; uint32_t m4; RC* mRC; uint32_t mPad; };
+void  __cdecl MoveBackwardAR(AutoRef* first, AutoRef* last, AutoRef* result);         // 0x007cde80
+AutoRef* __cdecl UninitMoveAR(AutoRef* first, AutoRef* last, AutoRef* dst);           // 0x007cd9d0
+void  __cdecl DestroyAR(AutoRef* first, AutoRef* last);                               // 0x007cddf0
 
 // ---------------------------------------------------------------- vector stubs
 struct UIntVec {
@@ -66,6 +77,8 @@ struct Vec4 {
     uint32_t* mpBegin;
     uint32_t* mpEnd;
     uint32_t* mpCap;
+    char      pad0c[4];
+    uint32_t* inlineCap;                                       // +0x10
     void InsertOne(uint32_t* pos, uint32_t* value);            // 0x007c99e0
     void InsertN(uint32_t* pos, int n, uint32_t* value);       // 0x007c9bc0
 };
@@ -74,6 +87,8 @@ struct MapVec {                                                // 0x007ca8e0
     void* mpBegin;
     void* mpEnd;
     void* mpCap;
+    char  pad0c[4];
+    void* inlineCap;                                           // +0x10
     void Destroy();
 };
 
@@ -188,6 +203,7 @@ struct MapElem {                                    // vector_map<u64, PropertyL
     struct Entry { uint32_t a, b; PropList* pl; uint32_t pad; };
     Entry* mpBegin; Entry* mpEnd;
     char pad[0x10];
+    ~MapElem();                                     // 0x007cef60
 };
 
 struct cOption {
@@ -235,51 +251,104 @@ void Vec4::InsertOne(uint32_t* pos, uint32_t* value)
     uint32_t* end = mpEnd;
     if (end != mpCap) {
         if (pos <= value && value < end)
-            value++;
-        uint32_t last = 0;
-        if (end)
-            last = *(end - 1);
-        if (end) {
-            *end = last;
-            if (last)
-                ((RC*)last)->AddRef();
-        }
-        VecCopyRange(pos, end - 1, end);
-        uint32_t old = *value;
-        uint32_t cur = *pos;
-        if (old != cur) {
-            if (old)
-                ((RC*)old)->AddRef();
-            *pos = old;
-            if (cur)
-                ((RC*)cur)->Release();
+            ++value;
+        // Construct *end as a copy of *(end-1), then shift [pos,end-1) right by one.
+        uint32_t last = end[-1];
+        end[0] = last;
+        if (last)
+            ((RC*)last)->AddRef();
+        CopyBackward4(pos, end - 1, end);
+        uint32_t nv = *value;
+        uint32_t ov = *pos;
+        if (nv != ov) {
+            if (nv)
+                ((RC*)nv)->AddRef();
+            *pos = nv;
+            if (ov)
+                ((RC*)ov)->Release();
         }
         mpEnd = end + 1;
         return;
     }
     int count = (int)(end - mpBegin) >> 2;
-    unsigned cap = count ? (unsigned)count * 2 : 1;
-    uint32_t* buf = cap ? (uint32_t*)EA_New(cap * 4, "App", 0, 0, 0, 0xd1) : 0;
-    (void)VecDoInsertValue();
-    (void)value;
+    unsigned ncap = count ? (unsigned)count * 2 : 1;
+    uint32_t* buf = ncap
+        ? (uint32_t*)EA_New(ncap * 4, "App", 0, 0, kAllocFile, 0xd1)
+        : 0;
+    int preBytes = (int)((char*)pos - (char*)mpBegin);
+    memcpy(buf, mpBegin, preBytes);
+    uint32_t* mid = (uint32_t*)((char*)buf + preBytes);
+    uint32_t nv = *value;
+    *mid = nv;
+    if (nv)
+        ((RC*)nv)->AddRef();
+    int sufBytes = (int)((char*)end - (char*)pos);
+    memcpy(mid + 1, pos, sufBytes);
+    uint32_t* nend = (uint32_t*)((char*)mid + 4 + sufBytes);
+    uint32_t* ob = mpBegin;
+    if (ob != 0 && ob != inlineCap)
+        EA_Free(ob);
+    mpEnd = nend;
     mpBegin = buf;
+    mpCap = buf + ncap;
 }
 
 // @ 0x007c9bc0
 void Vec4::InsertN(uint32_t* pos, int n, uint32_t* value)
 {
-    int size = (int)(mpCap - mpEnd) >> 2;
-    if ((unsigned)size < (unsigned)n) {
+    int freeSpace = (int)(mpCap - mpEnd) >> 2;
+    if ((unsigned)freeSpace < (unsigned)n) {
         int count = (int)(mpEnd - mpBegin) >> 2;
-        unsigned cap = count * 2;
-        if (count == 0) cap = 1;
-        unsigned need = (unsigned)count + n;
-        if (need < cap) need = cap;
-        uint32_t* buf = need ? (uint32_t*)EA_New(need * 4, "App", 0, 0, 0, 0xd1) : 0;
-        (void)VecDoInsertValue();
+        unsigned ncap = count ? (unsigned)count * 2 : 1;
+        unsigned need = (unsigned)count + (unsigned)n;
+        if (need > ncap)
+            ncap = need;
+        uint32_t* buf = ncap
+            ? (uint32_t*)EA_New(ncap * 4, "App", 0, 0, kAllocFile, 0xd1)
+            : 0;
+        int preBytes = (int)((char*)pos - (char*)mpBegin);
+        memcpy(buf, mpBegin, preBytes);
+        uint32_t* mid = (uint32_t*)((char*)buf + preBytes);
+        UninitFill4(mid, n, &value, pos);
+        uint32_t* after = mid + n;
+        int sufBytes = (int)((char*)mpEnd - (char*)pos);
+        memcpy(after, pos, sufBytes);
+        uint32_t* nend = (uint32_t*)((char*)after + sufBytes);
+        uint32_t* ob = mpBegin;
+        if (ob != 0 && ob != inlineCap)
+            EA_Free(ob);
         mpBegin = buf;
+        mpEnd = nend;
+        mpCap = buf + ncap;
+        return;
     }
-    (void)pos; (void)value;
+    if (n == 0)
+        return;
+
+    // Keep one addref'd copy of *value for all the elements written.
+    uint32_t nv = *value;
+    if (nv)
+        ((RC*)nv)->AddRef();
+
+    int tail = (int)(mpEnd - pos) >> 2;
+    if ((unsigned)n < (unsigned)tail) {
+        int nBytes = n * 4;
+        uint32_t* src = mpEnd - n;
+        Displace4(src, mpEnd, mpEnd, 0, 0);
+        mpEnd += n;
+        CopyBackward4(pos, src, mpEnd);
+        CopyAssign4(pos, pos + n, &value);
+    } else {
+        int extra = n - tail;
+        UninitFill4(mpEnd, extra, &value, pos);
+        mpEnd += extra;
+        uint32_t* oldEnd = mpEnd;
+        Displace4(pos, mpEnd, mpEnd, 0, 0);
+        mpEnd += tail;
+        CopyAssign4(pos, oldEnd, &value);
+    }
+    if (nv)
+        ((RC*)nv)->Release();
 }
 
 // @ 0x007c9dc0
@@ -288,33 +357,46 @@ void AutoRefVec::InsertOne(AutoRef* pos, AutoRef* value)
     AutoRef* end = mpEnd;
     if (end != mpCap) {
         if (pos <= value && value < end)
-            value++;
-        if (end) {
-            end->m0 = end[-1].m0;
-            end->m4 = end[-1].m4;
-            end->mRC = end[-1].mRC;
-            if (end->mRC)
-                end->mRC->AddRef();
-        }
-        VecCopyRange(pos, end - 1, end);
+            ++value;
+        end->m0 = end[-1].m0;
+        end->m4 = end[-1].m4;
+        end->mRC = end[-1].mRC;
+        if (end->mRC)
+            end->mRC->AddRef();
+        MoveBackwardAR(pos, end - 1, end);
         pos->m0 = value->m0;
         pos->m4 = value->m4;
         RC* s = value->mRC;
         RC* d = pos->mRC;
         if (s != d) {
-            if (s) s->AddRef();
+            if (s)
+                s->AddRef();
             pos->mRC = s;
-            if (d) d->Release();
+            if (d)
+                d->Release();
         }
         mpEnd = end + 1;
         return;
     }
-    int count = (int)(end - mpBegin);
-    unsigned cap = count ? (unsigned)count * 2 : 1;
-    AutoRef* buf = cap ? (AutoRef*)EA_New(cap * 0x10, "App", 0, 0, 0, 0xd1) : 0;
-    (void)VecDoInsertValue();
-    (void)value;
+    int count = (int)((char*)end - (char*)mpBegin) >> 4;
+    unsigned ncap = count ? (unsigned)count * 2 : 1;
+    AutoRef* buf = ncap
+        ? (AutoRef*)EA_New(ncap * 0x10, "App", 0, 0, kAllocFile, 0xd1)
+        : 0;
+    AutoRef* mid = UninitMoveAR(mpBegin, pos, buf);
+    DestroyAR(mpBegin, pos);
+    mid->m0 = value->m0;
+    mid->m4 = value->m4;
+    mid->mRC = value->mRC;
+    if (mid->mRC)
+        mid->mRC->AddRef();
+    AutoRef* nend = UninitMoveAR(pos, mpEnd, mid + 1);
+    DestroyAR(pos, mpEnd);
+    if (mpBegin)
+        EA_Free(mpBegin);
     mpBegin = buf;
+    mpEnd = nend;
+    mpCap = buf + ncap;
 }
 
 // @ 0x007c9fa0
@@ -503,5 +585,10 @@ void cConfigManager::Initialize(const char* path)
 // @ 0x007ca8e0
 void MapVec::Destroy()
 {
-    // element-wise teardown of vector_map<u64,AutoRef> then free (see partial.txt)
+    char* b = (char*)mpBegin;
+    char* e = (char*)mpEnd;
+    for (; b < e; b += 0x18)
+        ((MapElem*)b)->~MapElem();          // 0x007cef60  vector<pair<u64,AutoRefCount>>
+    if (mpBegin != 0 && mpBegin != inlineCap)
+        EA_Free(mpBegin);
 }
