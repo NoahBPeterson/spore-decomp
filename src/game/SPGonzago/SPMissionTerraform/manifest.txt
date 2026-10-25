@@ -1,0 +1,2 @@
+# source  symbol  va  flags
+../src/game/SPGonzago/SPMissionTerraform.cpp  ?GetTargetTerraformScore@cSPMissionTerraform@@QAEHXZ  00c60ab0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
