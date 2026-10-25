@@ -8,3 +8,4 @@
 00ba3550  179  vector assign (stride 16): complete; capacity/overlap branches
 00ba3620  180  vector assign (stride 8): complete; capacity/overlap branches
 00ba36f0  143  PlayerPlanetData array dtor: complete; stride/order of frees
+00ba2670  63  complete; save-game blob writer (magic 0xf2dcc8bc, GetWriter via vtable slots 0x20/0x18, EA::IO::WriteUint32, cVarListSerializer ctor 0x692f90 + Serialize 0x692900 over the 0xa18-byte frame); retail keeps the magic word immediately ahead of the serializer object, ours reuses the frame but reorders the magic store after the vtable loads; note this row needs /GS- (retail has no stack cookie, the manifest flags enable one on the 0xa18 frame) -> /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- (107 vs 105 bytes); difftest not run (row flags differ from manifest)
