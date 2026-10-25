@@ -2,3 +2,4 @@
 slices/s00657ad0/s00657ad0.cpp  ?IsReady@AssetView@@QAEDXZ  00657dd0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s00657ad0/s00657ad0.cpp  ?OnDetach@AssetView@@QAEXXZ  00657e00  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s00657ad0/s00657ad0.cpp  ?FUN_00657e20@@YAXPAXH@Z  00657e20  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00657ad0/s00657ad0.cpp  ?Destroy@AssetView@@QAEXXZ  006580b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
