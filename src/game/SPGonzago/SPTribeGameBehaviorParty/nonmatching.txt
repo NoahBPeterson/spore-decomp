@@ -1,0 +1,6 @@
+# va  diff-bytes  reason
+00d78f50 77 PreAction(): run the party agent's pre-action step -- walk the agent
+00d79000 83 PostAction(): the mirror of PreAction -- walk the agent tree and clear
+00d791a0 41 Init(): seed the party block -- clear the agent tree's sentinel, stamp
+00d791f0 4 Destroy(unsigned char): release the party block's agent tree by nuke-
+00d793e0 15 AddAgent(void*): register one agent -- test the incoming pointer, resolve
