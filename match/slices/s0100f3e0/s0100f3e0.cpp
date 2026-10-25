@@ -160,15 +160,13 @@ namespace SP {
 
 struct PirateRaidPlunderEvent {
     virtual void vf0();
-    char  mPad04[4];                                          // +0x04
-    uint64 mTimeSinceLastRaidMSec;                            // +0x08
+    uint64 mTimeSinceLastRaidMSec;                            // +0x08 (vptr + 4 bytes padding)
     double GetEventFrequency(uint64 deltaMs);                 // 0x0100f3e0
 };
 
 struct PirateRaidAllyEvent {
     virtual void vf0();
-    char  mPad04[4];                                          // +0x04
-    uint64 mTimeSinceLastRaidMSec;                            // +0x08
+    uint64 mTimeSinceLastRaidMSec;                            // +0x08 (vptr + 4 bytes padding)
     double GetEventFrequency(uint64 deltaMs);                 // 0x0100f600
 };
 
