@@ -1,5 +1,5 @@
-004834d0  SP::cSPEditorHandleRotationRing::Resume  # ring resume/update
-004837f0  SP::cSPEditorHandleRotationRing::Update  # large ring update
+004834d0  SP::cSPEditorHandleRotationBall::Resume  # ball primary vtable 0x13ef320 slot +0x24; returns cSPVector3 by value
+004837f0  SP::cSPEditorHandleRotationBall::Update  # ball primary vtable 0x13ef320 slot +0x2c; vcalls this->vptr[0x24] (Resume) and vptr[0x38] (alpha)
 00483cc0  SP::cSPEditorHandleRotationRing::SetScale2  # writes model+0x18, ++model+0xa
 00483d10  SP::cSPEditorHandleRotationRing::Shutdown2  # base Shutdown 0x47e2c0 then byte +0x5c=0
 00483d40  SP::cSPEditorHandleRotationRing::cSPEditorHandleRotationRing  # base ctor + vptrs + inits
