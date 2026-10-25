@@ -7,6 +7,12 @@
 typedef unsigned int  uint;
 typedef unsigned char byte;
 
+#include <math.h>
+#include <string.h>
+#include <xmmintrin.h>
+#pragma intrinsic(sqrt)
+#pragma intrinsic(sqrtf)
+
 // @ 0x011fcde0 -- FUN_011fcde0
 // Walks the NUL-terminated letter list at param_1+0x11 and invokes the
 // per-letter handler at &DAT_01719d08 when the letter's mask at &DAT_0171a108
@@ -198,4 +204,462 @@ void __cdecl FUN_011fcc70(void* param_1, void* param_2, int param_3) {
     }
     (*(void(__cdecl**)(void*, void*, void*, int))(*(int*)0x16f89d0 + 0x1b4))(
         *(void**)0x16f89d0, param_1, arg, 1);
+}
+
+// ===================== D3D9 soft-state cache: bitmap-gated flush walks =====================
+// These three are the sibling of s011fd3a0's StateCacheApplyPixel (0x011fd3a0): they walk the
+// same record lists of the soft-state cache, but each record is gated by a bitmap of live
+// shader/state ids at g_stateLive (0x016f89f8) instead of being applied unconditionally.
+//
+// One 4-byte record is {u16 id; u8 value; u8 sub}; the groups are separated by one skipped
+// record.  A custom render command is {fn; u16 cmd; u8 a; u8 b}.
+
+extern void* g_device;             // 0x016f89d0 IDirect3DDevice9*
+extern unsigned g_stateLive[];     // 0x016f89f8 bitmap of live state ids (id>>5, 1<<(id&31))
+extern void* g_stateTable[];       // 0x016f65a8 state objects indexed by 16-bit id
+extern unsigned g_stateCommandMask; // 0x016f9110 mask forcing the custom-command path
+extern unsigned g_constantPool[];  // 0x016fa5ec constant payloads, 0x20 bytes per id
+
+struct StateRecord
+{
+    unsigned short id;             // +0x00
+    byte value;                    // +0x02
+    byte sub;                      // +0x03
+};
+
+typedef void (__stdcall* PFN_StateIndexed)(void* dev, byte value, void* obj, byte sub);
+typedef void (__cdecl* PFN_StateCmd3)(byte a, byte b, int c);
+typedef void (__cdecl* PFN_StateCmdArg)(void* arg);
+
+// IDirect3DDevice9 vtable, viewed as the flat array of indexed-state setters this cache
+// walks.  Only the six slots below are ever called.
+enum DeviceSlot
+{
+    kSetVertexState0 = 0x178 / 4,  // +0x178
+    kSetVertexState1 = 0x180 / 4,  // +0x180
+    kSetVertexState2 = 0x188 / 4,  // +0x188
+    kSetPixelState0  = 0x1b4 / 4,  // +0x1b4
+    kSetPixelState1  = 0x1bc / 4,  // +0x1bc
+    kSetPixelState2  = 0x1c4 / 4,  // +0x1c4
+    kDeviceSlotCount = 0x1c8 / 4
+};
+
+struct DeviceVTable
+{
+    PFN_StateIndexed slot[kDeviceSlotCount];   // +0x000, indexed by DeviceSlot
+};
+
+struct DeviceState
+{
+    DeviceVTable* vtbl;            // +0x00
+};
+
+struct StateCommand
+{
+    PFN_StateCmd3 fn;              // +0x00
+    unsigned short cmd;            // +0x04
+    byte a;                        // +0x06
+    byte b;                        // +0x07
+};
+
+// One custom-command argument block: two bytes, the pooled payload and a flag byte.
+struct StateCommandArg
+{
+    byte a;                        // +0x00
+    byte b;                        // +0x01
+    unsigned payload;              // +0x04
+    byte flag;                     // +0x08
+};
+
+// Header of a soft-state list: the cache flags at +0x4 are OR-ed with the forced bit 4 and
+// tested against g_stateCommandMask.  The record groups follow the header.
+struct StateList
+{
+    void*    owner;                // +0x00
+    unsigned cacheFlags;           // +0x04
+};
+
+// Vertex lists keep one more header dword, so their records start at +0x0c.
+struct VertexStateList
+{
+    StateList   header;            // +0x00 .. +0x07
+    unsigned    unused08;          // +0x08
+    StateRecord records[1];        // +0x0c
+};
+
+// Pixel lists start their records right after the header, at +0x08.
+struct PixelStateList
+{
+    StateList   header;            // +0x00 .. +0x07
+    StateRecord records[1];        // +0x08
+};
+
+static bool StateIdIsLive(unsigned short id)
+{
+    return (g_stateLive[id >> 5] & (1u << (id & 0x1f))) != 0;
+}
+
+// Applies one record through the named device vtable slot; the caller passes the slot
+// constant so cl emits the retail's three hard-coded call sites.
+static __forceinline void StateApplyRecord(StateRecord* record, unsigned short id, DeviceSlot slot)
+{
+    DeviceState* dev = (DeviceState*)g_device;
+    dev->vtbl->slot[slot](dev, record->value, g_stateTable[id], record->sub);
+}
+
+// @ 0x011fcf20 -- FUN_011fcf20
+// Flushes the vertex-shader state list: three bitmap-gated indexed-state groups (device slots
+// 0x178/0x180/0x188) followed by the custom render commands, which use the plain three-argument
+// form unless the command id is in [0x400,0x800) and the cache mask forces the pooled form.
+void __fastcall FUN_011fcf20(VertexStateList* self)
+{
+    StateRecord* record = self->records;
+
+    for (;;) { unsigned short id = record->id; if (id == 0) break; if (StateIdIsLive(id)) StateApplyRecord(record, id, kSetVertexState0); ++record; }
+    ++record;
+    for (;;) { unsigned short id = record->id; if (id == 0) break; if (StateIdIsLive(id)) StateApplyRecord(record, id, kSetVertexState1); ++record; }
+    ++record;
+    for (;;) { unsigned short id = record->id; if (id == 0) break; if (StateIdIsLive(id)) StateApplyRecord(record, id, kSetVertexState2); ++record; }
+    ++record;
+
+    StateCommand* command = (StateCommand*)record;
+    for (;;)
+    {
+        unsigned short cmd = command->cmd;
+        if (cmd == 0)
+            break;
+        if (((self->header.cacheFlags | 4) & g_stateCommandMask) != 0)
+        {
+            if (cmd < 0x400 || cmd >= 0x800)
+            {
+                command->fn(command->a, command->b, 1);
+            }
+            else
+            {
+                StateCommandArg arg;
+                arg.a = command->a;
+                arg.b = command->b;
+                arg.payload = g_constantPool[cmd * 8];
+                arg.flag = 1;
+                ((PFN_StateCmdArg)command->fn)(&arg);
+            }
+        }
+        ++command;
+    }
+}
+
+// @ 0x011fd0c0 -- FUN_011fd0c0
+// Same walk as FUN_011fcf20 with the bitmap gate dropped: every record is applied (slots
+// 0x178/0x180/0x188), then the custom commands use the plain/pooled split on the command id
+// alone (no cache mask).
+void __fastcall FUN_011fd0c0(VertexStateList* self)
+{
+    StateRecord* record = self->records;
+
+    for (;;) { unsigned short id = record->id; if (id == 0) break; StateApplyRecord(record, id, kSetVertexState0); ++record; }
+    ++record;
+    for (;;) { unsigned short id = record->id; if (id == 0) break; StateApplyRecord(record, id, kSetVertexState1); ++record; }
+    ++record;
+    for (;;) { unsigned short id = record->id; if (id == 0) break; StateApplyRecord(record, id, kSetVertexState2); ++record; }
+    ++record;
+
+    StateCommand* command = (StateCommand*)record;
+    for (;;)
+    {
+        unsigned short cmd = command->cmd;
+        if (cmd == 0)
+            break;
+        if (cmd < 0x400 || cmd >= 0x800)
+        {
+            command->fn(command->a, command->b, 1);
+        }
+        else
+        {
+            StateCommandArg arg;
+            arg.a = command->a;
+            arg.b = command->b;
+            arg.payload = g_constantPool[cmd * 8];
+            arg.flag = 1;
+            ((PFN_StateCmdArg)command->fn)(&arg);
+        }
+        ++command;
+    }
+}
+
+// @ 0x011fd1f0 -- FUN_011fd1f0
+// Pixel-shader counterpart: the groups start at self+8 and use device slots 0x1b4/0x1bc/0x1c4.
+// The custom commands are again gated, with the pooled argument block flagged 0 instead of 1.
+void __fastcall FUN_011fd1f0(PixelStateList* self)
+{
+    StateRecord* record = self->records;
+
+    for (;;) { unsigned short id = record->id; if (id == 0) break; if (StateIdIsLive(id)) StateApplyRecord(record, id, kSetPixelState0); ++record; }
+    ++record;
+    for (;;) { unsigned short id = record->id; if (id == 0) break; if (StateIdIsLive(id)) StateApplyRecord(record, id, kSetPixelState1); ++record; }
+    ++record;
+    for (;;) { unsigned short id = record->id; if (id == 0) break; if (StateIdIsLive(id)) StateApplyRecord(record, id, kSetPixelState2); ++record; }
+    ++record;
+
+    unsigned commandMaskSet = ((self->header.cacheFlags | 4) & g_stateCommandMask) != 0;
+    StateCommand* command = (StateCommand*)record;
+    for (;;)
+    {
+        unsigned short cmd = command->cmd;
+        if (cmd == 0)
+            break;
+        if (commandMaskSet || StateIdIsLive(cmd))
+        {
+            if (cmd < 0x400 || cmd >= 0x800)
+            {
+                command->fn(command->a, command->b, 0);
+            }
+            else
+            {
+                StateCommandArg arg;
+                arg.a = command->a;
+                arg.b = command->b;
+                arg.payload = g_constantPool[cmd * 8];
+                arg.flag = 0;
+                ((PFN_StateCmdArg)command->fn)(&arg);
+            }
+        }
+        ++command;
+    }
+}
+
+// ===================== 0x011fc4c0 / 0x011fca60: normal-matrix cache =====================
+// The D3D9 driver keeps one lazily-built matrix for D3DXVec3TransformNormal (the transform
+// that lights push to the device).  FUN_011fc4c0 rebuilds the rotation part of an affine
+// matrix as a right-handed orthonormal basis; FUN_011fca60 chooses and caches which matrix
+// to use.
+
+// 16-byte aligned row, so whole-row copies are single movaps loads/stores.
+struct __declspec(align(16)) Vec4
+{
+    float x;                        // +0x00
+    float y;                        // +0x04
+    float z;                        // +0x08
+    float w;                        // +0x0c
+};
+
+struct Matrix4
+{
+    Vec4 row[4];                    // +0x00 .. +0x3c
+};
+
+// Lazily cached transform state.
+extern const Matrix4* g_cachedTransform; // 0x016f9114 matrix handed to D3DXVec3TransformNormal
+extern const Matrix4* g_matrixOverride;  // 0x016f8cf4 explicit 3x3 override
+extern const Matrix4* g_cachedBasis;     // 0x016f9120 cached orthonormal basis
+extern const Matrix4* g_sourceMatrix;    // 0x016f85ac the world matrix being reduced
+extern int            g_matrixType;      // 0x016f8b50 3 = 33 matrix, 4 = identity
+
+// Matrix scratch buffers owned by this module (16-byte aligned, like the rows they hold).
+// The mixed cases exercise the +0x50/+0x60/+0x70 scratch, so those need the same initial
+// contents in the original and in the reconstruction; the symbol names are the g_<hex> form
+// that the equivalence harness resolves unqualified references by.
+extern __declspec(align(16)) Matrix4 g_1718a60;   // 0x01718a60
+extern __declspec(align(16)) Matrix4 g_1718a20;   // 0x01718a20
+extern __declspec(align(16)) Matrix4 g_1718aa0;   // 0x01718aa0 (identity)
+
+extern "C" void     __cdecl Matrix33Mul(Matrix4* dst, const Matrix4* src);       // 0x011fb750
+extern "C" Matrix4* __cdecl Matrix44Invert(Matrix4* dst, const Matrix4* src);    // 0x011fb310
+extern "C" void     __cdecl D3DXVec3TransformNormal(float* out, const float* in,
+                                                   const Matrix4* m);            // 0x0120bb62
+
+// Row helpers.  The retail code keeps each row in an xmm register and does its dot
+// products / cross products with packed SSE, so these are written with __m128 too.
+static __forceinline __m128 SplatX(__m128 v) { return _mm_shuffle_ps(v, v, 0x00); }
+
+// Broadcast dot(a.xyz, b.xyz): s = a.x*b.x + (a.y*b.y + a.z*b.z), the same association
+// (and the same shuffle order) as the retail kernel.
+static __forceinline __m128 Dot3(__m128 a, __m128 b)
+{
+    __m128 p = _mm_mul_ps(a, b);
+    __m128 s = _mm_add_ps(_mm_shuffle_ps(p, p, 0x01), _mm_shuffle_ps(p, p, 0x02));
+    return SplatX(_mm_add_ps(p, s));
+}
+
+// 1 / sqrt(d) exactly as the retail kernel refines it: rsqrtps, then twice
+// r += (1 - d*r*r) * (0.5*r).
+static __forceinline __m128 RecipSqrt2(__m128 d)
+{
+    const __m128 one  = _mm_set1_ps(1.0f);
+    const __m128 half = _mm_set1_ps(0.5f);
+    __m128 r = _mm_rsqrt_ps(d);
+    r = _mm_add_ps(r, _mm_mul_ps(_mm_sub_ps(one, _mm_mul_ps(d, _mm_mul_ps(r, r))),
+                                 _mm_mul_ps(half, r)));
+    r = _mm_add_ps(r, _mm_mul_ps(_mm_sub_ps(one, _mm_mul_ps(d, _mm_mul_ps(r, r))),
+                                 _mm_mul_ps(half, r)));
+    return r;
+}
+
+// Scales all four lanes by the reciprocal length of the xyz part.  Also returns that
+// length, which the retail code derives as d*r (and masks to zero for a zero-length row).
+static __forceinline __m128 Normalize3(__m128 v, __m128* length)
+{
+    __m128 d = Dot3(v, v);
+    __m128 r = RecipSqrt2(d);
+    __m128 zero = _mm_setzero_ps();
+    *length = _mm_andnot_ps(_mm_cmpeq_ps(d, zero), _mm_mul_ps(d, r));
+    return _mm_mul_ps(v, r);
+}
+
+// a x b, identical shuffle/pairing to the retail sequence (a1b2-a2b1, a2b0-a0b2, a0b1-a1b0).
+static __forceinline __m128 Cross3(__m128 a, __m128 b)
+{
+    __m128 minuend = _mm_mul_ps(_mm_shuffle_ps(a, a, 0x09), _mm_shuffle_ps(b, b, 0x12));
+    __m128 subtrahend = _mm_mul_ps(_mm_shuffle_ps(a, a, 0x12), _mm_shuffle_ps(b, b, 0x09));
+    return _mm_sub_ps(minuend, subtrahend);
+}
+
+// @ 0x011fc4c0 -- FUN_011fc4c0
+// Rebuilds the rotation part of `in` as a right-handed orthonormal basis and returns `out`.
+// Row 3 (the translation) is copied through unchanged.  Two of the three normalized rows are
+// replaced by normalized cross products; which two depends on the row lengths (a zero row
+// makes that row the one to keep) and, when all three are valid, on the pairwise |dot| values.
+//
+// The retail code keeps three row pointers (eax = the row read as-is, ecx = the row that the
+// second cross product overwrites, edx = the row that the first cross product overwrites) and
+// picks one of three permutations:
+//   eax/ecx/edx = n1/n2/n0, n2/n0/n1 or n0/n1/n2.
+void* __cdecl FUN_011fc4c0(Matrix4* out, const Matrix4* in)
+{
+    __m128 l0, l1, l2, unused;
+    __m128 n0 = Normalize3(_mm_load_ps(reinterpret_cast<const float*>(&in->row[0])), &l0);
+    __m128 n1 = Normalize3(_mm_load_ps(reinterpret_cast<const float*>(&in->row[1])), &l1);
+    __m128 n2 = Normalize3(_mm_load_ps(reinterpret_cast<const float*>(&in->row[2])), &l2);
+
+    float len0 = _mm_cvtss_f32(l0);
+    float len1 = _mm_cvtss_f32(l1);
+    float len2 = _mm_cvtss_f32(l2);
+
+    __m128* pKeep;    // eax: the row the cross products are built from
+    __m128* pSecond;  // ecx: receives cross(c, keep)
+    __m128* pCross;   // edx: receives cross(keep, second)
+
+    // The retail code tests each length with comiss/jbe, so a zero (or unordered) length
+    // takes the branch; only three positive lengths reach the |dot| selection.
+    if (!(len0 > 0.0f))
+    {
+        pKeep = &n1; pSecond = &n2; pCross = &n0;
+    }
+    else if (!(len1 > 0.0f))
+    {
+        pKeep = &n2; pSecond = &n0; pCross = &n1;
+    }
+    else if (!(len2 > 0.0f))
+    {
+        pKeep = &n0; pSecond = &n1; pCross = &n2;
+    }
+    else
+    {
+        // the retail kernel uses max(kHitMiss * d, d) with kHitMiss == -1.0f, i.e. |d|
+        __m128 kHitMiss = _mm_set1_ps(-1.0f);
+        __m128 d01 = Dot3(n0, n1);
+        __m128 d20 = Dot3(n2, n0);
+        __m128 d12 = Dot3(n1, n2);
+        float f01 = _mm_cvtss_f32(_mm_max_ps(_mm_mul_ps(kHitMiss, d01), d01));
+        float f20 = _mm_cvtss_f32(_mm_max_ps(_mm_mul_ps(kHitMiss, d20), d20));
+        float f12 = _mm_cvtss_f32(_mm_max_ps(_mm_mul_ps(kHitMiss, d12), d12));
+
+        if (f20 > f12)
+        {
+            if (f01 > f12) { pKeep = &n1; pSecond = &n2; pCross = &n0; }
+            else           { pKeep = &n0; pSecond = &n1; pCross = &n2; }
+        }
+        else
+        {
+            if (f01 > f20) { pKeep = &n2; pSecond = &n0; pCross = &n1; }
+            else           { pKeep = &n0; pSecond = &n1; pCross = &n2; }
+        }
+    }
+
+    __m128 c = Normalize3(Cross3(*pKeep, *pSecond), &unused);
+    *pCross = c;
+    *pSecond = Normalize3(Cross3(c, *pKeep), &unused);
+
+    _mm_store_ps(reinterpret_cast<float*>(&out->row[0]), n0);
+    _mm_store_ps(reinterpret_cast<float*>(&out->row[1]), n1);
+    _mm_store_ps(reinterpret_cast<float*>(&out->row[2]), n2);
+    _mm_store_ps(reinterpret_cast<float*>(&out->row[3]),
+                 _mm_load_ps(reinterpret_cast<const float*>(&in->row[3])));
+    return out;
+}
+
+// Four-row (64-byte) copy, the way retail does it: one movaps per row.
+static __forceinline void CopyMatrix(Matrix4* dst, const Matrix4* src)
+{
+    _mm_store_ps(reinterpret_cast<float*>(&dst->row[0]),
+                 _mm_load_ps(reinterpret_cast<const float*>(&src->row[0])));
+    _mm_store_ps(reinterpret_cast<float*>(&dst->row[1]),
+                 _mm_load_ps(reinterpret_cast<const float*>(&src->row[1])));
+    _mm_store_ps(reinterpret_cast<float*>(&dst->row[2]),
+                 _mm_load_ps(reinterpret_cast<const float*>(&src->row[2])));
+    _mm_store_ps(reinterpret_cast<float*>(&dst->row[3]),
+                 _mm_load_ps(reinterpret_cast<const float*>(&src->row[3])));
+}
+
+// @ 0x011fca60 -- FUN_011fca60
+// Chooses the cached normal-transform matrix (building it on first use) and transforms `in`
+// into `out`.  type 3 uses the 3x3 product (or an explicit override), type 4 means the
+// cached transform is the identity so only the xyz lanes are copied, anything else inverts
+// the source matrix and orthonormalizes it.
+void __cdecl FUN_011fca60(float* out, const float* in)
+{
+    const Matrix4* m = g_cachedTransform;
+    __declspec(align(16)) Matrix4 scratch;
+
+    if (m == 0)
+    {
+        int type = g_matrixType;
+        if (type == 3)
+        {
+            if (g_matrixOverride != 0)
+            {
+                D3DXVec3TransformNormal(out, in, g_matrixOverride);
+                return;
+            }
+            m = g_cachedBasis;
+            if (m == 0)
+            {
+                Matrix33Mul(&g_1718a60, g_sourceMatrix);
+                m = &g_1718a60;
+                g_cachedBasis = m;
+            }
+        }
+        else if (type == 4)
+        {
+            m = &g_1718aa0;
+            g_cachedBasis = m;
+        }
+        else
+        {
+            m = g_cachedBasis;
+            if (m == 0)
+            {
+                const Matrix4* pInverse = Matrix44Invert(&scratch, g_sourceMatrix);
+                CopyMatrix(&g_1718a60, pInverse);
+                m = &g_1718a60;
+                g_cachedBasis = m;
+            }
+            const Matrix4* pBasis = (const Matrix4*)FUN_011fc4c0(&scratch, m);
+            CopyMatrix(&g_1718a20, pBasis);
+            m = &g_1718a20;
+        }
+        g_cachedTransform = m;
+    }
+
+    if (m == &g_1718aa0)
+    {
+        // identity transform: copy the three normal lanes, leave w untouched
+        Vec4* o = (Vec4*)out;
+        const Vec4* i = (const Vec4*)in;
+        o->x = i->x;
+        o->y = i->y;
+        o->z = i->z;
+        return;
+    }
+
+    D3DXVec3TransformNormal(out, in, m);
 }
