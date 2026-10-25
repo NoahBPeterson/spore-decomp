@@ -125,7 +125,7 @@ struct Quaternion { float x, y, z, w; };
 
 Quaternion* QuaternionFromFacingAndUp(Quaternion* pOut, const Vector3* pFacing,
                                       const Vector3* pUp);                     // 0x0069b600
-Vector3* FUN_0059aed0(Vector3* pOut, const Vector3* pPos, const Vector3* pAxis); // 0x0059aed0
+Vector3* FUN_0059aed0(const Vector3* pAxis, const Vector3* pPos, Vector3* pOut); // 0x0059aed0
 void* FUN_01021230();                                                          // 0x01021230
 int   cStar_GetType(void* pStar);                                              // 0x00c8b550
 
