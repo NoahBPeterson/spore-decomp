@@ -1,1 +1,2 @@
 # source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00cb1110/s00cb1110.cpp  ?DoInsertValue@Ht@@QAE?AUInsertResult@@ABUValue@@_N@Z  00cb1110  /O2 /MD /Gy /TP /arch:SSE /GS- /fp:fast

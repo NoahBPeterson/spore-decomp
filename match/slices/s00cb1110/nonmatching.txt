@@ -1,0 +1,4 @@
+# slice s00cb1110 nonmatching functions (complete semantics, not byte-exact)
+# format: <va>  <diff-bytes>  <reason>  | difftest: <verdict>
+# cl flags: /O2 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+00cb1210  6  get-or-create cached trace record for the global hash table at 0x0157d30c (identical shape to FUN_00c2b110, which serves the table at 0x01572460). Semantics complete: ht->Find(&it,&key); if (it.mpNode == ht->mpBuckets[ht->mBucketCount]) { cache = ht->FindOrInsert(&key); FUN_00cadb50(cache); return cache; } return (TraceCache*)((int)it.mpNode + 4). Only difference: the scheduler hoists the `mov eax,[esp]` (it.mpNode) reload above the two global loads in the original (`mov eax,[esp]; mov edx,[0x157d314]; mov ecx,[0x157d310]; cmp eax,[ecx+edx*4]`), while ours emits the two global loads first and then `mov eax,[esp]`; the compare, both exits and the +4 return path are identical (84 bytes both). | difftest: PASS - 270 valid inputs, 89.3% coverage (25/28), 0 mismatches
