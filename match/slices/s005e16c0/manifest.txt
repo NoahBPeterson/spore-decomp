@@ -1,4 +1,8 @@
 # source  symbol  original VA  [cl flags override]
 slices/s005e16c0/s005e16c0.cpp  ?Init@cVerbIconInterpolationValue@SP@@QAEXMMMMM@Z  005e1c80  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
 slices/s005e16c0/s005e16c0.cpp  ?IsAtTarget@cVerbIconInterpolationValue@SP@@QAEHXZ  005e1cd0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s005e16c0/s005e16c0.cpp  ?SetIcon@cSPEditorVerbIcon@SP@@QAEXPAVIWindow@UTFWin@EA@@UKey@ResourceMan@5@HH@Z  005e1b70  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s005e16c0/s005e16c0.cpp  ?Update@cVerbIconMiddleInterpolationValue@SP@@QAEXM@Z  005e1e90  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
 slices/s005e16c0/s005e16c0.cpp  ?SetFlag@cSPEditorVerbIcon@SP@@QAEXD@Z  005e1fa0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s005e16c0/s005e16c0.cpp  ?Reset@cSPEditorVerbIcon@SP@@QAEXHDD@Z  005e23b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s005e16c0/s005e16c0.cpp  ??1cSPEditorVerbIcon@SP@@QAE@XZ  005e2280  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
