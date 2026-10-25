@@ -6,8 +6,8 @@
 00c7a830 GetFlag4  # 0x00c7a830 Ghidra FUN; SP::cPlayer map flag bit 4; not byte-exact
 00c7a890 GetFlag5  # 0x00c7a890 Ghidra FUN; SP::cPlayer map flag bit 5; not byte-exact
 00c7a8f0 MapEntry  # Ghidra FUN_00c7a8f0; eastl::map<unsigned,unsigned>::operator[]-style find-or-insert returning the value slot at node+0x14; not byte-exact
-00c7a970 FUN_00c7a970  # Ghidra FUN; ReadSTLVector-style deserialiser: read a count through EA::IO::ReadInt32 and grow a stride-0x28 vector with the count-preserving path; not reconstructed
-00c7aa40 FUN_00c7aa40  # Ghidra FUN; vector<0x28>::insert: range insert into the stride-0x28 timer vector growing the storage when needed; not reconstructed
+00c7a970 FUN_00c7a970  # 0x00c7a970 Ghidra FUN; ReadSTLVector-style deserialiser: read a count through EA::IO::ReadInt32, reserve, then read that many elements (sub-node/reader + ReadInt32) into a stride-0x28 vector via the inline push_back fast path or DoInsertValue, then EndChunk; not byte-exact
+00c7aa40 Insert  # 0x00c7aa40 Ghidra FUN; cTimerVector::Insert for the stride-0x28 timer vector: move-construct the last element, copy backward, memberwise-assign, bump end, or on the grow path double capacity and allocate/move/destroy/free through the eastl helpers; not byte-exact
 00c7ad00 NatOp  # Ghidra FUN_00c7ad00; SP::cPlayer nat-table element dispatch: index below 10 frees the table element, otherwise erases the caller's booking pair; not byte-exact
 00c7ad40 RemoveStarFromPlayerCaptureProgressList  # Ghidra FUN_00c7ad40; SP::cPlayer: scan the 0x28-stride capture progress list for the star id at +0x70 and erase the matching entry, else discard the star; not byte-exact
 00c7ada0 UpdatePlayerCaptureProgressDecay  # Ghidra FUN_00c7ada0; SP::cPlayer: decay each capture progress timer (elapsed seconds vs the capture-decay setting) and erase expired entries; not byte-exact
