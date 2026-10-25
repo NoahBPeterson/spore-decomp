@@ -1,1 +1,13 @@
 00ccdc30 ?DrawLayer@cTribeDisplayStrategy_s00cc_d050@@QAEXPAXII@Z  # cTribeDisplayStrategy_s00cc_d050::DrawLayer migrated from s00ccd050 (verbatim, slice spelling)
+00e28a80 ?Call@Svc28a80@@QAEXXZ  # retail thiscall helper wrapper
+00cc8ba0 ?Call@Svc8ba0@@QAEXXZ  # retail thiscall helper wrapper
+00ce8d80 ?Call@Svc8d80@@QAEXXZ  # retail thiscall helper wrapper
+00537dc0 ?Call@SvcAssign@@QAEPAXPBX@Z  # cSPTransformOps::Assign wrapper
+00b225d0 ?Call@SvcB225d0@@QAEXPAX@Z  # cGameNounManager::RemoveNoun wrapper
+00e31130 ?Call@SvcE31130@@QAEXXZ  # retail thiscall helper wrapper
+00eb6280 ?Call@SvcEB6280@@QAEXPAX@Z  # rbtree node-chain teardown wrapper
+006f33d0 ?Call@SvcReleaseIf@@QAEXXZ  # ReleaseIf wrapper
+00e012b0 ?FindWindowByID@GlobalUI@@QAEPAXI@Z  # cSPUIGlobalUI::FindWindowByID wrapper
+00b759b0 ?Free@Svc759b0@@QAEXPAXI@Z  # free every bucket node wrapper
+005f0a60 ?RemoveContent@Svc5f0a60@@QAEXXZ  # SwatchManager::RemoveContent wrapper
+00811ad0 ?Shutdown@Svc81ad0@@QAEXI@Z  # cSPUILayout::Shutdown wrapper
