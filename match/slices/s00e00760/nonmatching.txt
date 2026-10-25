@@ -14,3 +14,12 @@
 00e01620  50  pause-gate inc/dec path differs
 00e01690  60  NetworkActivityProc ctor: vtable stores differ; equiv PASS
 00e016f0  51  NetworkActivityProc dtor: teardown differs; equiv PASS
+00e00760  287  sporepedia launcher: original homes `flag` in its saved-edi slot and calls LaunchCtx::Ctor once per info+0x44 arm (frame 0x48); ours keeps flag in bl and hoists the ctor. equiv FAIL (5/10 valid, our FUN_00de0a90 gets a zero flag dword vs the original's stale upper bytes -> different fake result)
+00e00a40  40  game-mode predicate scheduling differs. equiv WEAK
+00e00b00  144  pie-menu predicate: virtual dispatch scheduling differs. equiv UNSUPPORTED (0/400 valid inputs, fault(read))
+00e00c40  49  menu-allowed predicate scheduling differs. equiv WEAK
+00e00d20  42  menu predicate scheduling differs. equiv PASS
+00e00db0  40  stopwatch UI update: same inline fcos/SSE shape, diff in scheduling. equiv PASS
+00e012d0  114  window-rect update: virtual dispatch scheduling differs. equiv WEAK
+00e01390  181  large menu predicate: same tail semantics but MSVC emits `setne al` where the original branches with `je`/`mov al,1`; upper-eax byte after the fake F_00ed9e60 call then differs. equiv FAIL (1/391 valid, eax&0xffff, fake-call upper-byte artifact)
+00e014a0  136  large menu predicate: original reserves a dead 4-byte slot (push ecx/pop ecx) preserving ecx; ours has no such slot and leaves ecx clobbered. equiv FAIL (5/5 valid, ecx clobber)
