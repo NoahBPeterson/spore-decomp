@@ -1,1 +1,4 @@
 slices/s00c58920/s00c58920.cpp  ?GetTagString@cSPMissionMultiDelivery@@QAEEIPAUcWString@@@Z  00c58ad0  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS-
+slices/s00c58920/s00c58920.cpp  ?ReadBuyerSequence@@YAAAUIArchiver@@AAU1@AAUcBuyerVector@@@Z  00c58f10  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS-
+slices/s00c58920/s00c58920.cpp  ?ReadItemSequence@@YAAAUIArchiver@@AAU1@AAUcItemVector@@@Z  00c59010  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS-
+slices/s00c58920/s00c58920.cpp  ?Cleanup@cSPMissionMultiDelivery@@QAEXXZ  00c59190  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS-
