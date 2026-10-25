@@ -1,2 +1,0 @@
-004b4470  n/a  ReadSkinThemeFromProp: summarized control flow; the large inlined EASTL/RNG/property
-                body (skin colours, model enumeration) is not reproduced

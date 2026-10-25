@@ -1,1 +1,2 @@
 004b3e10  26  GenerateSkinPaintFromRegionPaint: complete; instruction stream identical, only 26 bytes of /Od temp-slot layout differ (sret temp of rwVec3 sub lands in the named-local zone)
+004b4470  944  ReadSkinThemeFromProp: complete reconstruction (all calls in order); /Od frame 0xb0 vs 0xe4, temp-slot layout differs, cl inlines the fill[3] array dtor in the !cursor path [equiv: WEAK 400 valid inputs, 9.9% coverage, no mismatch]

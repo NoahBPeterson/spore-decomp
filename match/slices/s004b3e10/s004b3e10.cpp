@@ -109,16 +109,53 @@ extern "C" {
     void  FUN_00422c50();
     int   FUN_00564f50();
     void  FUN_004e8a30(void* a);
-    void* FUN_004bbed0(void* a);
-    void* cSPUIAssetView_InitVerbCollection(void* a);
-    char  ExtractSkinPaintData(void* a);
-    int   FUN_004b2800(void* self, void* a);
-    int   FUN_004b3e10_GetPropertyT(PropObj* list, uint32_t id, void* out);
-    void  FUN_00540470(void* a);
-    void  FUN_00540520(void);
-    void  FUN_005156b0(void);
-    void  FUN_004b3e10(int self);
 }
+
+// --- skin-theme reading helpers --------------------------------------------
+struct FillEntry { uint32_t mEffect; float mA; float mB; };   // 0xc-byte skin paint entry
+struct SpVector {                                            // SP::SpVector<FillEntry> (0x14 bytes)
+    FillEntry* mpBegin;      // +0x00
+    FillEntry* mpEnd;        // +0x04
+    FillEntry* mpCap;        // +0x08
+    char       mAlloc[8];    // +0x0c sp_vector_allocator state
+    SpVector(const AllocTag& a = AllocTag());    // 0x540470
+    ~SpVector();                                 // 0x540520
+    void push_back(const FillEntry& e);          // 0x4e19a0
+};
+struct Rng {                                                 // EA::Random::RandomLinearCongruential
+    uint32_t mnSeed;                             // +0x00
+    void SetSeed(uint32_t seed);                 // 0x936090
+    uint32_t RandomUint32Uniform(uint32_t n);    // 0xa68fb0
+};
+struct ResKey3 { uint32_t mId; uint32_t mPa; uint32_t mPb; };   // 0xc-byte resource key
+struct PalItem {                                             // SP::cSPPalette item
+    char     pad0[0xc];
+    ResKey3  mKey;           // +0x0c
+    uint32_t pad1[3];        // +0x18
+    uint32_t mType;          // +0x24
+};
+struct PalCursor {                                           // SP::cSPPaletteCursor (0x20 bytes)
+    virtual void v0();
+    virtual void AddRef();
+    virtual void Release();
+    uint32_t pad[7];
+    PalCursor();                                 // 0x5c7b80
+    void SetPalette(void* palette);              // 0x5c7bc0
+    PalItem* First(int a, int b, int c, int d);  // 0x5c7e80
+    PalItem* Next(int a, int b, int c, int d);   // 0x5c7e20
+    void Finish();                               // 0xc2e4e0
+};
+struct PalCursorRef {
+    PalCursor* mp;
+    PalCursorRef(PalCursor* p) : mp(p) { if (mp) mp->AddRef(); }
+    ~PalCursorRef() { if (mp) mp->Release(); }
+    PalCursor* operator->() const { return mp; }
+};
+uint32_t InitVerbCollection(uint32_t verbs);     // 0x4bb860
+bool     ExtractSkinPaintData(uint32_t verbs);   // 0x4bbe90
+bool     IsRegionless(uint32_t verbs);           // 0x4bbed0
+bool __cdecl GetPropertyArray(PropObj2* list, uint32_t id, int* count, void** base);   // 0x6a0ae0
+void* operator new(size_t, const char*, int, int, int, int);   // 0xf473a0
 
 namespace SP {
 class cSPEditorPaintTheme {
@@ -132,7 +169,8 @@ public:
     uint32_t mSkinEffectSeeds[3];// +0x170
     Vec3 mSkinColors[3];         // +0x17c
     void __thiscall GenerateSkinPaint(cSPEditorModel* model);
-    unsigned char __thiscall ReadSkinTheme(int a, int b, int c);
+    uint32_t __thiscall ReadFromAsset(void* asset);      // 0x4b2800
+    unsigned char __thiscall ReadSkinTheme(int prop, int palette, int seed);
 };
 }
 using namespace SP;
@@ -220,15 +258,61 @@ void cSPEditorPaintTheme::GenerateSkinPaint(cSPEditorModel* model)
 }
 
 // @ 0x4b4470  ReadSkinThemeFromProp
-unsigned char __thiscall cSPEditorPaintTheme::ReadSkinTheme(int prop, int a, int b)
+unsigned char __thiscall cSPEditorPaintTheme::ReadSkinTheme(int prop, int palette, int seed)
 {
-    void* view = cSPUIAssetView_InitVerbCollection(*(void**)(prop + 0x58));
-    if (!ExtractSkinPaintData(view)) {
-        if (!FUN_004bbed0(view))
-            return 0;
-        FUN_004b3e10((int)this);
-        return 1;
+    int verbId = *(int*)(prop + 0x58);
+    uint32_t verbs = InitVerbCollection(verbId);
+    if (ExtractSkinPaintData(verbs))
+        return (unsigned char)ReadFromAsset((void*)prop);
+    if (!IsRegionless(verbs))
+        return 0;
+    GenerateSkinPaint((cSPEditorModel*)prop);
+
+    Rng rng;
+    rng.SetSeed(0xffffffffu);
+    rng.SetSeed((uint32_t)seed);
+
+    SpVector fill[3];                                    // per-slot candidate lists (skin effects)
+
+    PalCursorRef cursor(new("Editor", 0, 0, 0, 0) PalCursor());
+    if (!cursor.mp)
+        return 0;
+
+    int count = 0;
+    cursor->SetPalette((void*)palette);
+    for (PalItem* item = cursor->First(0, 0, 0, 0); item != 0; item = cursor->Next(0, 0, 0, 0)) {
+        uint32_t type = item->mType;
+        if (type == 0xdee3d8a8) {
+            ResKey3 key = item->mKey;
+            PropRef list;
+            PropMgr2* mgr = SP_PropertyManager2();
+            if (mgr->GetPropertyList(key.mId, gPropListType, &list)) {
+                FillEntry* arr = 0;
+                GetPropertyArray(list.mp, 0xb0e066a7, &count, (void**)&arr);
+                if (count == 3) {
+                    // exactly one of the three returned slots carries an effect
+                    if (arr[0].mEffect != 0) {
+                        if (arr[1].mEffect == 0 && arr[2].mEffect == 0)
+                            fill[0].push_back(arr[0]);
+                    } else if (arr[1].mEffect != 0) {
+                        if (arr[2].mEffect == 0)
+                            fill[1].push_back(arr[1]);
+                    } else if (arr[2].mEffect != 0) {
+                        fill[2].push_back(arr[2]);
+                    }
+                }
+            }
+        }
     }
-    (void)a; (void)b;
-    return FUN_004b2800(this, (void*)prop) ? 1 : 0;
+    cursor->Finish();
+
+    for (int i = 0; i < count; i++) {
+        int n = (int)(fill[i].mpEnd - fill[i].mpBegin);
+        if (n > 0) {
+            uint32_t pick = rng.RandomUint32Uniform((uint32_t)n);
+            mSkinEffects[i] = *(uint32_t*)(fill[i].mpBegin + pick);
+            mSkinEffectSeeds[i] = 0x4d2;
+        }
+    }
+    return 1;
 }
