@@ -388,12 +388,17 @@ public:
 };
 cNounManager* NounManager(uint32_t id);          // 0x00b3d300
 
+// Planet record reached through cPlanetRef::GetRecord(); the spice situation is at +0x48.
+struct cPlanetRecord {
+    int GetSpiceSituation();             // 0x00801920 (this+0x48)
+};
+
 // The planet being traded with: holds its own inventory, flags and spice key.
 class cPlanetRef {
 public:
     ResourceKey* GetSpiceKey();          // 0x00b8dad0 (this+0x198)
     void SetSpiceKey(const ResourceKey& key);    // 0x00b8dae0
-    int GetSpiceSituation();             // 0x00801920
+    cPlanetRecord* GetRecord();          // 0x00b8de30
     uint32_t mPad00[(0x2c) / 4];         // +0x00
     uint32_t mFlags;                     // +0x2c (0x3000 = planet has a trade post?)
 };
@@ -420,6 +425,12 @@ struct RBNode {
     char mPad0d[3];                      // +0x0d
     ResourceKey mValue;                  // +0x10
 };
+
+// eastl::rbtree InsertResult {iterator, inserted}.
+struct RBInsertResult {
+    RBNode* mpNode;                      // +0x00
+    bool mbInserted;                     // +0x04
+};
 RBNode* RBTreeIncrement(RBNode* pNode);                     // 0x00921580
 void RBTreeInsert(RBNode* pNode, RBNode* pParent, RBNode* pAnchor, int eSide);   // 0x009216a0
 
@@ -437,9 +448,9 @@ public:
     void* mAllocator;                    // +0x18
 public:
     bool Less(const ResourceKey& a, const ResourceKey& b) { return a < b; }
-    RBNode* DoInsertValueImpl(RBNode* pParent, const ResourceKey& value, bool bForceToLeft);   // 0x0103b590
-    RBNode* DoInsertUnique(const ResourceKey& value);                                          // 0x0103bc40
-    RBNode* insert(RBNode* position, const ResourceKey& value);
+    void DoInsertValueImpl(RBInsertResult* pResult, RBNode* pParent, const ResourceKey& value, bool bForceToLeft);   // 0x0103b590
+    void DoInsertUnique(RBInsertResult* pResult, const ResourceKey& value, bool bInsertUnique);                       // 0x0103bc40
+    RBInsertResult* insert(RBInsertResult* pResult, RBNode* position, const ResourceKey& value, bool bUnused);
 };
 
 void* MedianOfThree(ItemPtr* first, ItemPtr* mid, ItemPtr* last, ItemCompare cmp, ItemCompare cmp2);   // 0x01021180
@@ -523,20 +534,32 @@ void StoreVec::DoInsertValue(NPCStorePtr* position, const NPCStorePtr& value)
     mpCapacity = pNewData + nNewSize;
 }
 
-// 0x0103c6b0: eastl::rbtree hint insert (insert(position, value)).
+// 0x0103c6b0: eastl::rbtree hint insert. The iterator out-slot is the hidden first
+// argument (ret 0x10), so position/value arrive as argv[1]/argv[2].
 // @ 0x0103c6b0
-RBNode* RBTree::insert(RBNode* position, const ResourceKey& value)
+RBInsertResult* RBTree::insert(RBInsertResult* pResult, RBNode* position, const ResourceKey& value, bool bUnused)
 {
-    if (position == (RBNode*)&mpAnchorRight) {
+    if (position == mpAnchorRight || position == (RBNode*)&mpAnchorRight) {
         // Hint is end(): append after the rightmost node when the value is larger.
-        if (mnSize != 0 && Less(mpAnchorRight->mValue, value))
-            return DoInsertValueImpl(mpAnchorRight, value, false);
+        if (mnSize != 0 && Less(mpAnchorRight->mValue, value)) {
+            DoInsertValueImpl(pResult, mpAnchorRight, value, false);
+            return pResult;
+        }
     } else {
         RBNode* pNext = RBTreeIncrement(position);
-        if (Less(position->mValue, value) && Less(value, pNext->mValue))
-            return DoInsertValueImpl(pNext, value, position->mpNodeRight == 0);
+        if (Less(position->mValue, value) && Less(value, pNext->mValue)) {
+            if (position->mpNodeRight != 0)
+                DoInsertValueImpl(pResult, pNext, value, true);
+            else
+                DoInsertValueImpl(pResult, position, value, false);
+            return pResult;
+        }
     }
-    return DoInsertUnique(value);
+    RBInsertResult result;
+    bool bInsertUnique = false;
+    DoInsertUnique(&result, value, bInsertUnique);
+    pResult->mpNode = result.mpNode;
+    return pResult;
 }
 
 // 0x0103c800: eastl::quick_sort recursion (introsort depth guard).
@@ -604,15 +627,26 @@ void cSPSpaceTrading::BuildSpiceCommodities()
         return;
 
     int nCommodities = (int)(mCommodities.mpEnd - mCommodities.mpBegin);
-    AutoRefCount<PropertyList> props;
+    if (nCommodities <= 0)
+        return;
+
+    PropertyList* pProps = 0;
     ResourceKey kind = {0, 0, 0};
     ResourceKey* pKey = mCommodities.mpBegin;
     for (; nCommodities != 0; --nCommodities, ++pKey) {
-        PropertyManager_Get()->GetPropertyList(pKey->instance, 0x34d97fa, props.AsOutParam());
-        GetPropertyAsKey(props.get(), 0x34f1a4f, &kind);
+        // Release the previous property list before the next lookup.
+        if (pProps != 0) {
+            PropertyList* pOld = pProps;
+            pProps = 0;
+            pOld->Release();
+        }
+        PropertyManager_Get()->GetPropertyList(pKey->instance, 0x34d97fa, &pProps);
+        GetPropertyAsKey(pProps, 0x34f1a4f, &kind);
         if (kind.instance == 0x82af541)
             mFoodCommodities.push_back(*pKey);
     }
+    if (pProps != 0)
+        pProps->Release();
 }
 
 // 0x0103ca40: pick the NPC store's spice list (situational) and mark its spice key.
@@ -623,15 +657,15 @@ void cSPSpaceTrading::ChooseNPCSpices(cPlanetRef* planet, bool bForce)
         return;
 
     BuildSpiceCommodities();
-    int situation = planet->GetSpiceSituation() - 4;    // 4..11 -> 0..7
+    int situation = planet->GetRecord()->GetSpiceSituation() - 4;    // 4..11 -> 0..7
     bool bTradePost = (planet->mFlags & 0x3000) != 0;
-    int nCommodities = (int)(mCommodities.mpEnd - mCommodities.mpBegin);
+    int nCommodities = (int)(mFoodCommodities.mpEnd - mFoodCommodities.mpBegin);
     if (nCommodities <= 0)
         return;
 
     float fLimit = (float)gRandom.RandomDouble();
     float fSum = 0.0f;
-    ResourceKey* pKey = mCommodities.mpBegin;
+    ResourceKey* pKey = mFoodCommodities.mpBegin;
     for (int i = 0; i < nCommodities; ++i, ++pKey) {
         AutoRefCount<PropertyList> props;
         PropertyManager_Get()->GetPropertyList(pKey->instance, 0x34d97fa, props.AsOutParam());
@@ -693,6 +727,7 @@ void cSPSpaceTrading::ChooseNPCSpices(cPlanetRef* planet, bool bForce)
 // @ 0x0103cd00
 void cSPSpaceTrading::RefreshNPCSpiceCosts(cPlanetRef* planet)
 {
+    // Per-slot price scales (0.6f .. 3.0f), a static local so the compiler pools them.
     static const float kSpiceCostScale[10] = {
         0.6f, 0.75f, 0.85f, 1.0f, 1.2f, 1.4f, 1.65f, 2.0f, 2.5f, 3.0f
     };
@@ -703,31 +738,32 @@ void cSPSpaceTrading::RefreshNPCSpiceCosts(cPlanetRef* planet)
 
     RandomShuffle(mFoodCommodities.mpBegin, mFoodCommodities.mpEnd, &gRandom);
 
-    cNPCStore* pStore = mNPCStore[mLastNPCStoreIndex];
-    const ResourceKey& ownSpice = *planet->GetSpiceKey();
+    PropertyList* pProps = 0;
     int nKey = 0;                        // next commodity to price
     for (int slot = 0; slot < 3; ++slot) {
         // Never price the planet's own spice; step over it.
-        if (mFoodCommodities[nKey] == ownSpice)
+        if (mFoodCommodities[nKey] == *planet->GetSpiceKey())
             ++nKey;
-
         const ResourceKey& commodity = mFoodCommodities[nKey];
-        AutoRefCount<PropertyList> props;
-        PropertyManager_Get()->GetPropertyList(commodity.instance, 0x34d97fa, props.AsOutParam());
+
+        if (pProps != 0) {
+            pProps->Release();
+            pProps = 0;
+        }
+        PropertyManager_Get()->GetPropertyList(commodity.instance, 0x34d97fa, &pProps);
 
         float fBase = 0.0f;
         Property* pProp = 0;
-        if (props.get() != 0 && props->GetProperty(0x34f1a4a, &pProp) && pProp->mType == 0x0d)
+        if (pProps != 0 && pProps->GetProperty(0x34f1a4a, &pProp) && pProp->mType == 0x0d)
             fBase = (pProp->mFlags & 0x30) ? *(float*)pProp->mValue.mpData : pProp->mValue.mFloat;
 
-        float fCost = (float)(NounManager(0x1c2e590d)->GetCurrentTerrainSphere()->Measure() * fBase);
-
-        pStore->mSpiceID.mpBegin[slot] = commodity;
-        uint32_t nScale = gRandom.RandomUint32Uniform(10);
-        pStore->mSpiceCost.mpBegin[slot] = kSpiceCostScale[nScale] * fCost;
-
-        ++nKey;
+        mNPCStore[mLastNPCStoreIndex]->mSpiceID.mpBegin[slot] = commodity;
+        mNPCStore[mLastNPCStoreIndex]->mSpiceCost.mpBegin[slot] =
+            (float)(NounManager(0x1c2e590d)->GetCurrentTerrainSphere()->Measure() * fBase) *
+            kSpiceCostScale[gRandom.RandomUint32Uniform(10)];
     }
+    if (pProps != 0)
+        pProps->Release();
 }
 
 // 0x0103cf20: Simulator::cNPCStore::cNPCStore.
