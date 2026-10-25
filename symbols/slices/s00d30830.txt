@@ -1,0 +1,2 @@
+00d30ee0 ?DidDoubleClick@cCreatureModeInputStrategy_s00d3_0830@@QAE_NI@Z  # cCreatureModeInputStrategy_s00d3_0830::DidDoubleClick migrated from s00d30830 (verbatim, slice spelling)
+00d30f60 ?FUN_00d30f60@@YA_NPAUCNoun@@@Z  # FUN_00d30f60 migrated from s00d30830 (verbatim, slice spelling)

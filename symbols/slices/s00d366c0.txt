@@ -1,0 +1,1 @@
+00d366c0 ?InitCursors@cCreatureModeInputStrategy_s00d3_66c0@@QAEXXZ  # cCreatureModeInputStrategy_s00d3_66c0::InitCursors migrated from s00d366c0 (verbatim, slice spelling)

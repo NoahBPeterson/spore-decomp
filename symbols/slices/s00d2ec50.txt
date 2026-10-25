@@ -1,0 +1,2 @@
+00d2ede0 ?FUN_00d2ede0@@YAEPAX@Z  # FUN_00d2ede0 migrated from s00d2ec50 (verbatim, slice spelling)
+00d2ee20 ?FUN_00d2ee20@@YGEPAPAX@Z  # FUN_00d2ee20 migrated from s00d2ec50 (verbatim, slice spelling)

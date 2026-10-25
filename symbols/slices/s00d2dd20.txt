@@ -11,9 +11,9 @@
 00d2e8a0 ?NotifyEvent@cCreatureModeStrategy@@SAXM@Z  # cCreatureModeStrategy::NotifyEvent migrated from s00d2dd20 (verbatim, slice spelling)
 00d2e980 ?ResetCreatureModeState@@YAXXZ  # ResetCreatureModeState migrated from s00d2dd20 (verbatim, slice spelling)
 00d2e9b0  cVarListSerializer::Load(unsigned int) -> bool  # version/sub-version header check, then the item loop over the 0xa14-byte serializer body
-00d2ea80  cCreatureModeInputStrategy::AsInterface(unsigned int) -> void*  # interface id 0x2f009dd0 -> &mIface8 (this+8) when the encloser is non-null, 0x305a9f63 -> the encloser at this-0x3c, else null
-00d2eab0  cCreatureModeInputStrategy::IsStrafeLeftDown() -> bool  # keyboard strafe-left query (ecx unused)
-00d2eaf0  cCreatureModeInputStrategy::IsStrafeRightDown() -> bool  # keyboard strafe-right query (ecx unused)
-00d2eb30  OnDisplayStrategyModal(void*, unsigned int*) -> bool  # __stdcall (ret 8) message filter: end the modal on 0x287259f6 / 0x01788526
-00d2eb70  ToggleBanningMode() -> void  # banning-mode query 2 -> EndBanMode(1), else ToggleBanningContent(1); either way set the mode through FUN_0038
-00d2ebc0  ToggleBuildMode() -> void  # tightening/build toggle: switch the mode, then RecomputeZoom / RefreshViewScale
+00d2ea80 ?AsInterface@cCreatureModeInputStrategy@@QAEPAXI@Z  # cCreatureModeInputStrategy::AsInterface migrated from s00d2dd20 (verbatim, slice spelling)
+00d2eab0 ?IsStrafeLeftDown@cCreatureModeInputStrategy@@QAE_NXZ  # cCreatureModeInputStrategy::IsStrafeLeftDown migrated from s00d2dd20 (verbatim, slice spelling)
+00d2eaf0 ?IsStrafeRightDown@cCreatureModeInputStrategy@@QAE_NXZ  # cCreatureModeInputStrategy::IsStrafeRightDown migrated from s00d2dd20 (verbatim, slice spelling)
+00d2eb30 ?OnDisplayStrategyModal@@YG_NPAXPAI@Z  # OnDisplayStrategyModal migrated from s00d2dd20 (verbatim, slice spelling)
+00d2eb70 ?ToggleBanningMode@@YAXXZ  # ToggleBanningMode migrated from s00d2dd20 (verbatim, slice spelling)
+00d2ebc0 ?ToggleBuildMode@@YAXXZ  # ToggleBuildMode migrated from s00d2dd20 (verbatim, slice spelling)

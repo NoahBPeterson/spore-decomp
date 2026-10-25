@@ -1,1 +1,1 @@
-00d31a70 SP::cCreatureModeInputStrategy::UpdateAvatarGoal  # PDB name; keyboard/mouse goal for the creature avatar
+00d31a70 ?UpdateAvatarGoal@cCreatureModeInputStrategy_s00d3_1a70@SP@@QAE_N_N0@Z  # cCreatureModeInputStrategy_s00d3_1a70::UpdateAvatarGoal migrated from s00d31a70 (verbatim, slice spelling)
