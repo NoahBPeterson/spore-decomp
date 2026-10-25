@@ -2,3 +2,5 @@
 00bd6590 11 nonmatching: UpdatePosition; uniform stack-frame-size difference only (frame 0x64 vs 0x68, all insns identical otherwise); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast; verdict PASS (359 valid, 81.1% coverage)
 00bd6c10 10 nonmatching: cCheatObject dtor; lea ebx,[esi+0x108] scheduled one slot late vs original (lea edi already early); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast; verdict WEAK (193 valid, 100% coverage)
 00bd6eb0 230 nonmatching: switch(amount)+switch(command) rewrite; remaining is loop/register layout; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast; verdict WEAK (191 valid, 36.3% coverage)
+00bd5ea0 614 nonmatching: FUN_00bd5ea0 source incomplete (556 vs 735 bytes, ~179 instructions missing); equivalence UNSUPPORTED (2 unresolved references ?GetNounKey@cGameData@SP@@QBEIXZ, ?GetNounID@cGameData@SP@@QBEIXZ); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00bd6230 15 nonmatching: cGameData::WriteTagged; code complete, remaining diff is a one-slot store-vs-load scheduling swap (102-byte function); equivalence UNSUPPORTED (0/400 valid; vtable-call target unreadable under harness, fault(read)=399); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
