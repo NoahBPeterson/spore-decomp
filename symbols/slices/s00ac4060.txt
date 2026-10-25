@@ -6,7 +6,7 @@
 00ac44a0 eastl::vector<Text::GlyphInfo>::operator=(const vector&)  # reallocate-if-needed, else copy-prefix + copy_backward
 00ac4570 eastl::vector<cCurvePoint>::erase(first,last)  # shift tail left (0x3c-byte elements), shrink end
 00ac45e0 eastl::vector<cCurvePoint>::DoInsertValue(position,value)  # insert one 0x3c-byte element (user copy ctor) at position
-00ac4720 eastl::vector<Vector3>::DoAssignValues(position,value)  # fill/insert 0xc-byte Vector3 elements
+00ac4720 ?DoAssignValues@Vec12@@QAEXPAUVec3f@@ABU2@@Z  # Vec12::DoAssignValues migrated from s00ac4060 (verbatim, slice spelling)
 00ac4850 eastl::vector<u32>::DoAssignValues(position,value)  # fill/insert 4-byte elements with pool-aware deallocation
 00ac4970 eastl::reverse<cCurvePoint*>  # reverse 0x3c-byte elements in place via stack temp
 00ac4a60 eastl::vector<Text::GlyphInfo>::insert(position,n,value)  # insert n copies; grow path uses fill_n + uninitialized_copy

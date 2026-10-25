@@ -1,0 +1,21 @@
+# source  symbol  va  flags
+../src/game/SPGonzago/SPCreatureMissions.cpp  ?FUN_00c2f890@@YIXPAH@Z  00c2f890  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCreatureMissions.cpp  ?FUN_00c2fc00@Mission@@QAEDH@Z  00c2fc00  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCreatureMissions.cpp  ?FUN_00c2fcc0@Mission@@QAEPAHI@Z  00c2fcc0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCreatureMissions.cpp  ?FUN_00c2fd20@Mission@@QAEXH@Z  00c2fd20  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCreatureMissions.cpp  ?FUN_00c2fdd0@Mission@@QAEDH@Z  00c2fdd0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCreatureMissions.cpp  ?FUN_00c30090@Mission@@QAEDH@Z  00c30090  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCreatureMissions.cpp  ?FUN_00c300a0@Mission@@QAEPAHI@Z  00c300a0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCreatureMissions.cpp  ?FUN_00c30100@Mission@@QAEXH@Z  00c30100  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCreatureMissions.cpp  ?FUN_00c30150@Mission@@QAEDH@Z  00c30150  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCreatureMissions.cpp  ?FUN_00c30270@Mission@@QAEXH@Z  00c30270  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCreatureMissions.cpp  ?FUN_00c302b0@Mission@@QAEXPAD@Z  00c302b0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCreatureMissions.cpp  ?FUN_00c30350@Mission@@QAEXPAD@Z  00c30350  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCreatureMissions.cpp  ?GetTitleText@Mission@@QAEXPAD@Z  00c303f0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCreatureMissions.cpp  ?GetBodyText@Mission@@QAEXPAD@Z  00c30460  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCreatureMissions.cpp  ?GetSummaryText@Mission@@QAEXPAD@Z  00c304d0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCreatureMissions.cpp  ?GetRewardText@Mission@@QAEXPAD@Z  00c30540  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCreatureMissions.cpp  ?GetStatusText@Mission@@QAEXPAD@Z  00c305b0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCreatureMissions.cpp  ?GetProgressText@Mission@@QAEXPAD@Z  00c30780  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCreatureMissions.cpp  ?FUN_00c307f0@Mission@@QAEXPAD@Z  00c307f0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCreatureMissions.cpp  ?FUN_013366e0@@YAXXZ  013366e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

@@ -1,0 +1,11 @@
+00d57b50 ?FUN_00d57b50@@YIXPAX0D@Z  # FUN_00d57b50 migrated from s00d57b50 (verbatim, slice spelling)
+00d57e20 ?FUN_00d57e20@@YIXPAX0D@Z  # FUN_00d57e20 migrated from s00d57b50 (verbatim, slice spelling)
+00d58080 ?FUN_00d58080@@YIXPAX0@Z  # FUN_00d58080 migrated from s00d57b50 (verbatim, slice spelling)
+00d58330 ?FUN_00d58330@@YIXPAX0HI@Z  # FUN_00d58330 migrated from s00d57b50 (verbatim, slice spelling)
+00d58460 ?FUN_00d58460@@YIXPAX0@Z  # FUN_00d58460 migrated from s00d57b50 (verbatim, slice spelling)
+00d584b0 ?FUN_00d584b0@@YIPAXPAX00@Z  # FUN_00d584b0 migrated from s00d57b50 (verbatim, slice spelling)
+00d58510 ?FUN_00d58510@@YIPAPAXPAX000PAM@Z  # FUN_00d58510 migrated from s00d57b50 (verbatim, slice spelling)
+00d58610 ?FUN_00d58610@@YAXPAPAX0@Z  # FUN_00d58610 migrated from s00d57b50 (verbatim, slice spelling)
+00d58700 ?FUN_00d58700@@YIXPAX0PAPAX1@Z  # FUN_00d58700 migrated from s00d57b50 (verbatim, slice spelling)
+00d587e0 ?FUN_00d587e0@@YIXPAX0PAPAXHH0@Z  # FUN_00d587e0 migrated from s00d57b50 (verbatim, slice spelling)
+00d588a0 ?SetUpCitizenBodyScaleRanges@SP@@YAXPBUcSpeciesProfile@1@AAM11@Z  # SP::SetUpCitizenBodyScaleRanges migrated from s00d57b50

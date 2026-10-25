@@ -1,28 +1,15 @@
-# slice s00e17c10 - SP::cUIMissionCard / cUIMissionCardPanel / cUIMissionCardList (mission-card UI)
-# Modelled types (retail member offsets):
-#   cUIMissionCard       vtable @0x00, collapsed byte @0x10, animated byte @0x11, animator @0x28,
-#                        mission ptr @0x9c
-#   cUIMissionCardPanel  composite (real multiple inheritance): cPanelHead0c (vtable @0x00,
-#                        sub @0x04, slot vtable @0x08), cPanelMsg0c (slot vtable @0x0c, field @0x10,
-#                        field @0x14, layout @0x18, card @0x1c; owns OnMessage, this=panel+0x0c),
-#                        cPanelMsg24 (handler obj @0x20), cPanelHandler24 (handler arg @0x24; owns
-#                        HandleMessage, this=panel+0x24); then handler args @0x28/@0x2c/@0x30
-#                        (also card vector begin/end/cap), tree begin @0x34, current mission @0x38,
-#                        field @0x3c, tree base @0x40, field @0x58/@0x5c, tree @0x74
-#   cUIMissionCardList   card vector @0x28/@0x2c, field @0x3c, handler ptr @0x40, handler args
-#                        @0x44/@0x48/@0x4c/@0x50, layout @0x54
-00e17c10  cUIMissionCard::UpdateDetails(flag) -> void  # if mission: game-mode switch -> UpdateFromMission(vtbl[0xc](0x14066ce5)) / SetMissionSub(vtbl[0xc](0x2aa5ada)); then state=vtbl[0x64]?1:(vtbl[0x68]?2:0) drives InitForCreature/ResizeToContent(1,state) (NOT byte-exact; see nonmatching.txt)
-00e17cf0  cUIMissionCard::DoExpand() -> void  # set collapsed=1 animated=1; UpdateDetails(0); post 0xf46092d0 message via MessageServer (NOT byte-exact; see nonmatching.txt)
-00e17d60  cUIMissionCard::DoCollapse() -> void  # collapsed=0 animated=1 UpdateDetails(0)
-00e17d70  cUIMissionCard::Update() -> void  # elapsed-seconds tick; animator vtbl[0x7f6340]/[0x7f63b0]; in mode 0x1654c05 substream 0x2aa5ada -> FUN_00c44c90 -> count >0 -> UpdateDetails(1)
-00e17df0  cUIMissionCardPanel::Refresh() -> void  # iterate card vector, card->vtbl[0xc](0x334c6eec)->UpdateDetails(0) (NOT byte-exact; see nonmatching.txt)
-00e17e40  cUIMissionCardPanel::UpdateCardDetails(mission) -> void  # iterate card vector, match mission @sub+0x9c then UpdateDetails(0) (NOT byte-exact; see nonmatching.txt)
-00e17f40  cUIMissionCard::Setup(mission, a, b) -> void  # Init(b); mission swap addref vtbl[0]/release vtbl[1]; UpdateDetails(0); vtbl[0x28]/[0x2c] (NOT byte-exact; see nonmatching.txt)
-00e17fb0  cUIMissionCardPanel::RemoveMissionCard(mission) -> bool  # find card by mission, release, erase from vector, UpdateCardPositions (NOT byte-exact; see nonmatching.txt)
+00e17c10 ?UpdateDetails@cUIMissionCard@@QAEXD@Z  # cUIMissionCard::UpdateDetails migrated from s00e17c10 (verbatim, slice spelling)
+00e17cf0 ?DoExpand@cUIMissionCard@@QAEXXZ  # cUIMissionCard::DoExpand migrated from s00e17c10 (verbatim, slice spelling)
+00e17d60 ?DoCollapse@cUIMissionCard@@QAEXXZ  # cUIMissionCard::DoCollapse migrated from s00e17c10 (verbatim, slice spelling)
+00e17d70 ?Update@cUIMissionCard@@QAEXXZ  # cUIMissionCard::Update migrated from s00e17c10 (verbatim, slice spelling)
+00e17df0 ?Refresh@cUIMissionCardPanel_s00e1_7c10@@QAEXXZ  # cUIMissionCardPanel_s00e1_7c10::Refresh migrated from s00e17c10 (verbatim, slice spelling)
+00e17e40 ?UpdateCardDetails@cUIMissionCardPanel_s00e1_7c10@@QAEXPAX@Z  # cUIMissionCardPanel_s00e1_7c10::UpdateCardDetails migrated from s00e17c10 (verbatim, slice spelling)
+00e17f40 ?Setup@cUIMissionCard@@QAEXPAXDD@Z  # cUIMissionCard::Setup migrated from s00e17c10 (verbatim, slice spelling)
+00e17fb0 ?RemoveMissionCard@cUIMissionCardPanel_s00e1_7c10@@QAE_NPAX@Z  # cUIMissionCardPanel_s00e1_7c10::RemoveMissionCard migrated from s00e17c10 (verbatim, slice spelling)
 00e180d0  cUIMissionCardList::ReleaseAll() -> void  # release every card, erase vector, shut down layout @0x54 + field @0x3c (NOT byte-exact; see nonmatching.txt)
-00e18150  cUIMissionCardPanel::AddMissionCard(mission) -> void*  # operator_new 0x9c -> ctor 0xe147a0, push card, init from mission, UpdateCardPositions (NOT byte-exact; see nonmatching.txt)
+00e18150 ?AddMissionCard@cUIMissionCardPanel_s00e1_7c10@@QAEPAXI@Z  # cUIMissionCardPanel_s00e1_7c10::AddMissionCard migrated from s00e17c10 (verbatim, slice spelling)
 00e18200  cUIMissionCardPanel::SetupMissionCard(mission, a, b, c) -> void*  # operator_new 0xa0 -> ctor 0xe141a0, push, Setup, position, optional handler object 0xe4a6e0 (NOT byte-exact; see nonmatching.txt)
-00e18340  cUIMissionCardList::RemoveHandlerAndRelease() -> void  # ReleaseAll then EA::Messaging::RemoveHandler @0x40 (once, compare+clear)
+00e18340 ?RemoveHandlerAndRelease@cUIMissionCardList@@QAEXXZ  # cUIMissionCardList::RemoveHandlerAndRelease migrated from s00e17c10 (verbatim, slice spelling)
 00e18380  cPanelHandler24::HandleMessage(msg, arg) -> char  # this=panel+0x24; dispatch 0x38cf2fd (add/remove/update card), 0x38cf2ff (remove), 0xf46092d0 (collapse others) (NOT byte-exact; see nonmatching.txt)
 00e184d0  cUIMissionCardPanel::RefreshFromMissionList() -> void  # mode 0x1654c05: walk mission list adding missing cards (NOT byte-exact; see nonmatching.txt)
 00e18600  cPanelMsg0c::OnMessage(msg, arg) -> char  # this=panel+0x0c; handler sub-object message 0x65ff54a path (NOT byte-exact; see nonmatching.txt)

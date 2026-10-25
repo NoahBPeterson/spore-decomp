@@ -1,0 +1,2 @@
+008120d0 ?Init@cSPUILayout@@QAE_NABVKey@ResourceMan@EA@@_NI@Z  # cSPUILayout::Init (callee of s00e34290, named from the dev publics; slice address comment)
+00e34ea0 ?SetEnabled@cToolButton@@QAEX_N@Z  # cToolButton::SetEnabled migrated from s00e34290 (verbatim, slice spelling)

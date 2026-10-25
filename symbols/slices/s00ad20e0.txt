@@ -3,7 +3,7 @@
 00ad2320 cCityVisualizer::configureVignette  # fetch vignette (0x18eb4b7), apply slot 0x4f176642, bind via vt[0x2c]/[0xe8]/[0x38]/[0x3c]
 00ad23c0 cCityVisualizer::updateVignette  # push camera landmark into +0x20 vector then dispatch on game mode
 00ad2560 cCityVisualizer::setActiveVignette  # switch the active vignette id (notify message server + 0xb3d320 path)
-00ad25e0 cCityVisualizer::tickVignette  # mode-filtered forwarder into updateVignette
+00ad25e0 ?f_25e0@cMain@@QAEXPAX0@Z  # cMain::f_25e0 migrated from s00ad20e0 (verbatim, slice spelling)
 00ad2650 cCityVisualizer::triggerProbe  # GetTriggerMgr(a,b)->check()
 00ad2750 someVignetteObject::ctor  # cSpatialObject base + vtables 0x13ef094/0x145a5d8/0x145a5d0, +0xd8=0
 00ad2880 triggerCallbackA  # cActionTarget-based trigger callback (vt[3] lookup 0x55aa4e6)

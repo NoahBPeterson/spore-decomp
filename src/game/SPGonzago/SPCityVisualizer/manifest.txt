@@ -1,0 +1,4 @@
+# source  symbol  va  flags
+../src/game/SPGonzago/SPCityVisualizer.cpp  ?f_25e0@cMain@@QAEXPAX0@Z  00ad25e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCityVisualizer.cpp  ??4cActionCircle_s00d5_ccf0@@QAEAAU0@ABU0@@Z  00d5d4b0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCityVisualizer.cpp  ?push_back@Elem1CVec@@QAEXXZ  00d5ed70  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
