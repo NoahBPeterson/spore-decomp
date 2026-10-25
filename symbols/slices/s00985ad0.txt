@@ -1,0 +1,17 @@
+00985ad0 ??0WinSlider@UTFWinControls@EA@@QAE@XZ  # matched (manifest)
+00985cf0 ?SetDrawable@IWinSpinner@UTFWinControls@EA@@UAEXPAX@Z  # matched (manifest)
+00985d30 ?SetValue@IWinSpinner@UTFWinControls@EA@@UAEXHD@Z  # matched (manifest)
+00985dc0 ?SetMinimumValue@IWinSpinner@UTFWinControls@EA@@UAEXHH@Z  # matched (manifest)
+00985df0 ?SetMaximumValue@IWinSpinner@UTFWinControls@EA@@UAEXHH@Z  # matched (manifest)
+00985e20 ?SetMode@IWinSpinner@UTFWinControls@EA@@UAEXH@Z  # matched (manifest)
+00985e50 ?OnMouseDown@WinSpinner@UTFWinControls@EA@@QAE_NMMHH@Z  # matched (manifest)
+00985fc0 ?OnMouseMove@WinSpinner@UTFWinControls@EA@@QAE_NMMH@Z  # matched (manifest)
+00986000 ?OnTick@WinSpinner@UTFWinControls@EA@@QAE_NXZ  # matched (manifest)
+00986120 ?GetNaturalSize@SpinnerDrawable@UTFWinControls@EA@@QAE_NPAMHH@Z  # matched (manifest)
+00986360 ?GetDrawable@IWinSpinner@UTFWinControls@EA@@UAEPAXXZ  # matched (manifest)
+00986380 ?SetComponentDrawable@IWinSpinner@UTFWinControls@EA@@UAEXPAUImage@23@@Z  # matched (manifest)
+009863c0 ?OnRebuild@WinSpinner@UTFWinControls@EA@@QAE_NH@Z  # matched (manifest)
+00986420 ?RenderComponent@WinSpinner@UTFWinControls@EA@@UAEXHI@Z  # matched (manifest)
+00986510 ?PickComponent@WinSpinner@UTFWinControls@EA@@UAEHMM@Z  # matched (manifest)
+00987590 ?Refresh@WinSpinner@@QAEXXZ  # WinSpinner::Refresh override, defined in s009873a0; called by GetPreferredSize
+009861a0 ?GetPreferredSize@WinSpinner@UTFWinControls@EA@@QAE_NHPAM@Z  # nonmatching, see nonmatching.txt

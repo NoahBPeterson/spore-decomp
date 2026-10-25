@@ -412,19 +412,18 @@ bool WinSpinner::GetPreferredSize(int flag, float* out) {
     (void)flag;
     Refresh();
     if (drawable) {
-        float w1 = compArea[1][2] - compArea[1][0];
-        float a, b;
+        float w, h;
         if (mode == 1) {
-            a = w1 + (compArea[2][2] - compArea[2][0]);
-            b = compArea[1][3] - compArea[1][1];
-            if (compArea[2][3] - compArea[2][1] > b) b = compArea[2][3] - compArea[2][1];
+            w = (compArea[1][2] - compArea[1][0]) + (compArea[2][2] - compArea[2][0]);
+            h = compArea[1][3] - compArea[1][1];
+            if (h < compArea[2][3] - compArea[2][1]) h = compArea[2][3] - compArea[2][1];
         } else {
-            b = (compArea[2][3] - compArea[2][1]) + (compArea[1][3] - compArea[1][1]);
-            a = w1;
-            if (compArea[2][2] - compArea[2][0] > a) a = compArea[2][2] - compArea[2][0];
+            h = (compArea[2][3] - compArea[2][1]) + (compArea[1][3] - compArea[1][1]);
+            w = compArea[1][2] - compArea[1][0];
+            if (w < compArea[2][2] - compArea[2][0]) w = compArea[2][2] - compArea[2][0];
         }
-        out[0] = smax(a, 14.0f);
-        out[1] = smax(b, 14.0f);
+        out[0] = smax(w, 14.0f);
+        out[1] = smax(h, 14.0f);
         return true;
     }
     return false;
