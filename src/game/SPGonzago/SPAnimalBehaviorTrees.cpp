@@ -1838,6 +1838,8 @@ inline const float& Max(const float& a, const float& b) { return a < b ? b : a; 
 // ---- items of slice s00d7ff20 end
 
 // ---- items of slice s00d81940 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern float g_HiDefault;                             // 0x01473c70
+extern float g_LoDefault;                             // 0x01486110
 typedef unsigned int   u32;
 typedef int            s32;
 typedef unsigned char  u8;
@@ -1854,6 +1856,7 @@ struct VignetteMgr;
 struct VignetteList;
 struct cPlanetModel_s00d8_1940;
 struct Archetype;
+struct SpeciesMgr;
 struct LayoutMgr_s00d8_1940;
 struct cNearNoun_s00d8_1940 {
   u8    pad00[0x88];
@@ -1925,6 +1928,9 @@ struct Archetype {
   float mLo_394;               // +0x394
   float mHi_398;               // +0x398
 };
+struct SpeciesMgr {
+  Archetype* GetSpeciesArchetype(u32 a, u32 b); // 0x004e0050
+};
 struct cPlanetModel_s00d8_1940 {
   Vec3_s00d8_1940* FUN_00b81630(Vec3_s00d8_1940* out, const Vec3_s00d8_1940* in);                       // 0x00b81630
   void  FindClosestWater(Vec3_s00d8_1940* pos, float maxDist, Vec3_s00d8_1940* out);          // 0x00b8bb70
@@ -1972,7 +1978,9 @@ cPlanetModel_s00d8_1940* PlanetModel_s00d8_1940();                          // 0
 VignetteMgr*  FUN_00b3d4e0();                         // 0x00b3d4e0
 VignetteList* FUN_00bc9b00();                         // 0x00bc9b00
 LayoutMgr_s00d8_1940*    CreateLayoutManager_s00d8_1940();                  // 0x00af13b0
+SpeciesMgr*   FUN_00401090_s00d8_1940();                         // 0x00401090
 float         RandomFloatRange(float lo, float hi);   // 0x00572a10
+bool          FUN_00d7b290(void* a, void* b);         // 0x00d7b290
 void          FUN_0059aed0(Vec3_s00d8_1940* out, const Quat* a, const Quat* b); // 0x0059aed0
 extern Vec3_s00d8_1940  g_DefaultSurf;                           // 0x0169f03c
 typedef void  (__thiscall* VoidSlot)(void*);
@@ -1981,6 +1989,11 @@ typedef Vec3_s00d8_1940* (__thiscall* Vec3Slot)(void*);
 typedef Vec3_s00d8_1940* (__thiscall* Vec3OutSlot)(void*, Vec3_s00d8_1940*);
 typedef bool  (__thiscall* BoolSlot)(void*);
 #define VSLOT(T, p, off) ((T)((*(void***)(p))[(off) / 4]))
+template <class T>
+static const T& MaxRef(const T& a, const T& b)
+{
+  return a > b ? a : b;
+}
 // ---- items of slice s00d81940 end
 
 // ---- items of slice s00d824a0 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -6709,6 +6722,47 @@ bool __cdecl FUN_00d81b60(cSPCreatureBase_s00d8_1940* c, u32, u32, u32 flags, u3
     break;
   }
   return true;
+}
+
+// @ 0x00d82040
+LOUNGE_Node* __cdecl FindGuardOrLoungeGroup(cSPCreatureBase_s00d8_1940* c, u8 onlyGuard)
+{
+  LOUNGE_Node* result = 0;
+  if (c) {
+    cNearNoun_s00d8_1940* noun = c->Get();
+    if (noun->UnbrokenEggsInNest())
+      return FUN_00bc9b00()->Insert(0x4472a59, noun->mWorld_110,
+                                    (const char*)0x18eb45e, (const char*)0x147c048);
+
+    if (noun->mCount_10c > 0) {
+      result = FUN_00bc9b00()->FindItem(0x4472a59, (void*)(bool (__cdecl*)(void*, void*))FUN_00d7b290, c);
+      if (result)
+        return result;
+    }
+    if (onlyGuard)
+      return result;
+
+    result = FUN_00bc9b00()->FindItem(0x439e33e, (void*)(bool (__cdecl*)(void*, void*))FUN_00d7b290, c);
+    if (result)
+      return result;
+
+    Archetype* arch = FUN_00401090_s00d8_1940()->GetSpeciesArchetype(
+        c->Get()->mField_88, c->Get()->mField_f0);
+    if (!arch)
+      arch = c->FUN_00c0c1a0();
+
+    float f;
+    if (arch)
+      f = RandomFloatRange(arch->mLo_394, arch->mHi_398);
+    else
+      f = RandomFloatRange(g_LoDefault, g_HiDefault);
+
+    int n = (int)f;
+    n = MaxRef(n, 1);
+    return FUN_00bc9b00()->Insert(0x439e33e, n, (const char*)0x18eb45e,
+                                  (const char*)0x147c040);
+  }
+  return result;
 }
 
 // @ 0x00d821a0
