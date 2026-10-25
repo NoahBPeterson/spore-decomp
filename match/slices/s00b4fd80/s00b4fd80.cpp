@@ -3,6 +3,7 @@
 // selection). Mixed SSE/x87 float code.
 // Flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
 #include "types.h"
+#include <math.h>
 
 typedef unsigned int  uint;
 typedef unsigned char uchar;
@@ -222,12 +223,132 @@ S24& __thiscall Obj501A0::operator=(const S24& src)
     return *(S24*)this;
 }
 
-// @ 0x00b501d0  (partial: terrain height/face sampling)
-struct Obj501D0 { void F(float* p, unsigned a, char b, float e, void* f); };
-// @ 0x00b501d0
-void __thiscall Obj501D0::F(float* p, unsigned a, char b, float e, void* f)
+// ------------------------------------------------------------------ planet surface query
+struct Vec3 { float x, y, z; };
+struct Vec4 { float x, y, z, w; };
+struct FaceUV { float u, v; int face; };
+
+extern const float kOne;       // 0x01485720 = 1.0f
+extern const float kHalf;      // 0x01471064 = 0.5f
+extern const float kMilli;     // 0x013f9428 = 0.001f
+extern const float kFloatMax;  // 0x014612d8 = FLT_MAX
+extern const Vec3  kZeroVec;   // 0x0167ecf4 = {0,0,0}
+
+struct TerrainMapU16 {
+    float GetFloat(FaceUV* uv);                        // 0x00f8d620
+};
+struct PlanetModel {
+    Vec3* GetNormalAt(Vec3* out, const Vec3* at);                        // 0x00b7e3b0
+    Vec3* __thiscall FUN_00b82060(const Vec3* b, const Vec3* a, const Vec3* dir);     // 0x00b82060
+    Vec3* __thiscall FUN_00b82110(const FaceUV* uv, const Vec3* a, const Vec3* dir);  // 0x00b82110
+};
+
+static __forceinline void DirToCubeInto(FaceUV& r, const Vec3& v)
 {
-    (void)this; (void)p; (void)a; (void)b; (void)e; (void)f;
+    float ax = fabsf(v.x);
+    float ay = fabsf(v.y);
+    float az = fabsf(v.z);
+    if (az < ax || az < ay) {
+        if (ay < ax) {
+            r.u = (v.y / v.x + kOne) * kHalf;
+            r.v = (v.z / ax + kOne) * kHalf;
+            if (v.x < 0.0f) r.face = 3; else r.face = 2;
+        } else {
+            r.u = (v.z / v.y + kOne) * kHalf;
+            r.v = (v.x / ay + kOne) * kHalf;
+            if (v.y < 0.0f) r.face = 5; else r.face = 4;
+        }
+    } else {
+        r.u = (v.x / v.z + kOne) * kHalf;
+        r.v = (v.y / az + kOne) * kHalf;
+        if (v.z < 0.0f) r.face = 1; else r.face = 0;
+    }
+}
+
+struct RayHitSink {
+    virtual void Hit(unsigned id, const Vec4* normal);   // +0x00
+    float mMaxT;                                         // +0x04
+};
+
+struct Obj501D0 {
+    char pad00[0x34];
+    PlanetModel*    mPlanet;   // +0x34
+    char pad38[4];
+    TerrainMapU16*  mMap;      // +0x3c
+    char pad40[0x0c];
+    float           mBase;     // +0x4c
+    float           mScale;    // +0x50
+    void F(const Vec4* seg, unsigned id, char checkHeight, float margin, RayHitSink* sink);
+};
+
+// @ 0x00b501d0
+void __thiscall Obj501D0::F(const Vec4* seg, unsigned id, char checkHeight, float margin, RayHitSink* sink)
+{
+    Vec3 a;
+    a.x = seg[0].x;
+    a.y = seg[0].y;
+    a.z = seg[0].z;
+    Vec3 b;
+    b.x = seg[1].x;
+    b.y = seg[1].y;
+    b.z = seg[1].z;
+    Vec3 delta;
+    delta.x = b.x - a.x;
+    delta.y = b.y - a.y;
+    delta.z = b.z - a.z;
+
+    FaceUV uv;
+    DirToCubeInto(uv, a);
+    float terrainA = (float)((double)mMap->GetFloat(&uv) * (double)mScale + (double)mBase);
+    DirToCubeInto(uv, b);
+    mMap->GetFloat(&uv);
+
+    Vec3 hit;
+    hit = kZeroVec;
+    float lenA = sqrtf(a.z * a.z + (a.y * a.y + a.x * a.x));
+    float t;
+    if (checkHeight != 0 && terrainA > lenA) {
+        if (lenA - margin < sqrtf(b.y * b.y + (b.z * b.z + b.x * b.x))) return;
+        t = 0.0f;
+        hit = a;
+    } else {
+        float lenD = sqrtf(delta.y * delta.y + (delta.z * delta.z + delta.x * delta.x));
+        float dist;
+        if (lenD <= kMilli) {
+            hit = b;
+            dist = sqrtf(delta.z * delta.z + delta.y * delta.y + delta.x * delta.x);
+        } else {
+            float inv = kOne / lenD;
+            delta.x *= inv;
+            delta.y *= inv;
+            delta.z *= inv;
+            Vec3* r;
+            if (*(char*)((char*)mPlanet + 0xf0) == 0)
+                r = mPlanet->FUN_00b82060(&b, &a, &delta);
+            else
+                r = mPlanet->FUN_00b82110(&uv, &a, &delta);
+            hit = *r;
+            if (hit.x == kZeroVec.x && hit.y == kZeroVec.y && hit.z == kZeroVec.z) return;
+            float hx = hit.x - a.x;
+            float hy = hit.y - a.y;
+            float hz = hit.z - a.z;
+            dist = sqrtf(hz * hz + hy * hy + hx * hx);
+        }
+        if (lenD < dist) return;
+        t = dist / lenD;
+        if (t == kFloatMax) return;
+        if ((*(const unsigned*)&t & 0x7fffffffu) > 0x7f800000u) return;  // NaN: original's jbe takes
+    }
+    if (t < sink->mMaxT) {
+        Vec3 normal;
+        mPlanet->GetNormalAt(&normal, &hit);
+        Vec4 n;
+        n.x = normal.x;
+        n.y = normal.y;
+        n.z = normal.z;
+        n.w = 0.0f;
+        sink->Hit(id, &n);
+    }
 }
 
 // @ 0x00b50780
@@ -273,10 +394,58 @@ void __thiscall Obj507D0::F(unsigned param2, unsigned param3, uchar* out)
     *out = t.flag;
 }
 
+// ------------------------------------------------------------------ swept-sphere hit test
+struct SweptSphere {
+    Vec4  mStart;    // +0x00
+    Vec4  mEnd;      // +0x10
+    float mExtra0;   // +0x20
+    float mExtra1;   // +0x24
+    float mUnused0;  // +0x28
+    float mUnused1;  // +0x2c
+    float mRadius;   // +0x30
+    float mParam;    // +0x34
+};
+struct SweptSphereOut {
+    Vec4  mStart;    // +0x00
+    Vec4  mEnd;      // +0x10
+    float mExtra0;   // +0x20
+    float mExtra1;   // +0x24
+};
+
+struct IHitInvoke {
+    virtual void h0(); virtual void h1(); virtual void h2(); virtual void h3();
+    virtual void h4(); virtual void h5(); virtual void h6(); virtual void h7();
+    virtual void h8();
+    virtual void Invoke(SweptSphereOut* out, unsigned id, char one, float param, unsigned extra);  // +0x24
+};
+
+struct Obj50820 {
+    void F(const SweptSphere* in, unsigned id, unsigned extra);
+};
+
 // @ 0x00b50820
-struct Obj50820 { void F(float* p, unsigned a, unsigned b); };   // 0x00b50820
-// @ 0x00b50820
-void __thiscall Obj50820::F(float* p, unsigned a, unsigned b)
+void __thiscall Obj50820::F(const SweptSphere* in, unsigned id, unsigned extra)
 {
-    (void)this; (void)p; (void)a; (void)b;
+    SweptSphereOut out;
+    out.mExtra0 = in->mExtra0;
+    out.mExtra1 = in->mExtra1;
+    float lenA = sqrtf(in->mStart.z * in->mStart.z + in->mStart.y * in->mStart.y
+                     + in->mStart.x * in->mStart.x);
+    float invA = kOne / lenA;
+    float scaleA = lenA - in->mRadius;
+    float lenB = sqrtf(in->mEnd.y * in->mEnd.y + in->mEnd.z * in->mEnd.z
+                     + in->mEnd.x * in->mEnd.x);
+    float invB = kOne / lenB;
+    float scaleB = lenB - in->mRadius;
+
+    out.mStart.x = (in->mStart.x * invA) * scaleA;
+    out.mStart.y = (in->mStart.y * invA) * scaleA;
+    out.mStart.z = (in->mStart.z * invA) * scaleA;
+    out.mStart.w = (in->mStart.w * invA) * scaleA;
+    out.mEnd.x = (in->mEnd.x * invB) * scaleB;
+    out.mEnd.y = (in->mEnd.y * invB) * scaleB;
+    out.mEnd.z = (in->mEnd.z * invB) * scaleB;
+    out.mEnd.w = (in->mEnd.w * invB) * scaleB;
+
+    ((IHitInvoke*)this)->Invoke(&out, id, 1, in->mParam, extra);
 }
