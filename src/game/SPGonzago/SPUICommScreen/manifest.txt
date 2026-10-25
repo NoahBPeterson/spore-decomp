@@ -1,0 +1,13 @@
+# source  symbol  va  flags
+../src/game/SPGonzago/SPUICommScreen.cpp  ?FUN_00dd1ce0@SP@@YGPAUtUiKey@1@HH@Z  00dd1ce0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPUICommScreen.cpp  ?FUN_00dd22f0@SP@@YAPAXXZ  00dd22f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPUICommScreen.cpp  ?FUN_00dd2320@cSPUICommScreen@SP@@QAEPAVIWin@2@PAVcKindObj@2@PAX@Z  00dd2320  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPUICommScreen.cpp  ?FUN_00dd2780@cSPUICommScreen@SP@@QAEXHH@Z  00dd2780  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPUICommScreen.cpp  ?FUN_00dd27c0@cSPUICommScreen@SP@@QAEXXZ  00dd27c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPUICommScreen.cpp  ?FUN_00dd2800@cSPUICommScreen@SP@@QAEXPAX@Z  00dd2800  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPUICommScreen.cpp  ?FUN_00dd2a10@cSPUICommScreen@SP@@QAEXXZ  00dd2a10  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPUICommScreen.cpp  ?GetMainCreatureScreen@cSPUICommScreen@SP@@QAEXXZ  00dd2cf0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPUICommScreen.cpp  ?FUN_00dd2d00@cSPUICommScreen@SP@@QAEXXZ  00dd2d00  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPUICommScreen.cpp  ?Hide@cSPUICommScreen_s00dd_30d0@@QAEXXZ  00dd30d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPUICommScreen.cpp  ??1cSPUICommScreen_s00dd_30d0@@UAE@XZ  00dd3b60  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPUICommScreen.cpp  ?Shutdown@cSPUICommScreen_s00dd_30d0@@QAEXXZ  00dd3d30  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

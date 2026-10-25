@@ -1,0 +1,5 @@
+008120d0 ?Init@cSPUILayout@@QAE_NABVKey@ResourceMan@EA@@_NI@Z  # cSPUILayout::Init (callee of s00dd1280, named from the dev publics; slice address comment)
+00dd1ce0 ?FUN_00dd1ce0@SP@@YGPAUtUiKey@1@HH@Z  # FUN_00dd1ce0 migrated from s00dd1280 (verbatim, slice spelling)
+00dd1e30 ?FUN_00dd1e30@SP@@YGIPAUtBanState@1@H@Z  # FUN_00dd1e30 migrated from s00dd1280 (verbatim, slice spelling)
+00dd1f70 ?FUN_00dd1f70@SP@@YGXPAUtUiKey@1@PAUtBanState@1@@Z  # FUN_00dd1f70 migrated from s00dd1280 (verbatim, slice spelling)
+00dd21c0 ?GetRelationText@cBanRelationText@SP@@QAE_NPAUcPlayerEmpire@2@PAPB_W@Z  # cBanRelationText::GetRelationText migrated from s00dd1280 (verbatim, slice spelling)
