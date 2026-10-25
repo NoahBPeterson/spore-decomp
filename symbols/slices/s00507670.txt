@@ -1,2 +1,3 @@
+00507670 Skin::~Skin()  # derived vtable 13f18cc; frees pointer vector at +0xe4 (element sub-vectors via 0x507b30), destroys +0x164 object (0x4fdd60), then destroys all vector/set members in reverse order; restores base vtable 13ef094
 00507c70 Skin::Skin(const Skin&)  # copy ctor: GmeRefCount base, vtable 13f18cc, deep-copies Skinner elements (new "Skinner" 0x94)
 00508320 Container::Container(const Container&)  # 0x94-byte Skinner element copy ctor, called from 00507c70
