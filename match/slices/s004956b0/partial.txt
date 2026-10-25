@@ -1,1 +1,0 @@
-00495fe0  161  partial: hkArray/hkInplaceArray-style ctor skeleton (vtable stores + inplace buffer header); exact buffer init loop not reproduced

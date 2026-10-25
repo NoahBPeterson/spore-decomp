@@ -1,2 +1,3 @@
 # source (relative to match/)   symbol   original VA   [cl flags override]
 slices/s004956b0/s004956b0.cpp  ?SettleBlock@@YAXPAUcSPEditorBlock@@PAUBlockVec@@@Z  004956b0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Oy /GS-
+slices/s004956b0/s004956b0.cpp  ?Ctor@D95fe0@@QAEPAXXZ  00495fe0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Oy /GS-

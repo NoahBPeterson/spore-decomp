@@ -78,24 +78,40 @@ void* D960::Del(unsigned flags) {
     return this;
 }
 
-// @ 0x00495fe0
+extern float HK_REAL_MAX;
+
+struct hkInplaceArray8 {
+    void* m_data;                             // +0x00
+    int m_size;                               // +0x04
+    int m_capAndFlags;                        // +0x08
+    char pad0c[4];
+    char m_storage[8 * 0x30];                 // +0x10
+    __forceinline void init(int n) {
+        m_data = m_storage;
+        m_size = 0;
+        m_capAndFlags = n | 0x80000000;
+        int i = n;
+        char* p = m_storage;
+        while (--i >= 0)
+            p += 0x30;
+    }
+};
+
 struct D95fe0 {
-    void* vptr;
-    char pad[0x200];
+    void* m_vptr;                             // +0x00
+    float m_earlyOutDistance;                 // +0x04
+    char pad08[8];
+    hkInplaceArray8 m_points;                 // +0x10
     void* Ctor();
 };
+// @ 0x00495fe0
 void* D95fe0::Ctor() {
-    // reconstructed skeleton: vtable stores + inplace-buffer init
-    this->vptr = &g_vtbl_13ef55c;
-    *(int*)((char*)this + 4) = 0x7f7fffee;
-    void** buf = (void**)((char*)this + 0x10);
-    buf[0] = (void*)((char*)this + 0x30);
-    buf[1] = 0;
-    buf[2] = (void*)0x80000008;
-    for (int i = 8; i > 0; --i) {
-    }
-    *(int*)((char*)this + 0x14) = 0;
-    *(int*)((char*)this + 4) = 0x7f7fffee;
+    m_vptr = &g_vtbl_13ef534;
+    m_earlyOutDistance = HK_REAL_MAX;
+    m_vptr = &g_vtbl_13ef55c;
+    m_points.init(8);
+    m_points.m_size = 0;
+    m_earlyOutDistance = HK_REAL_MAX;
     return this;
 }
 
@@ -249,7 +265,7 @@ struct AllCdPointCollector : hkCdPointCollector {   // vtable 0x13ef55c
     int m_capAndFlags;                          // +0x18
     char pad1c[4];
     char storage[8 * 0x30];
-    AllCdPointCollector();                      // @ 0x495fe0
+    AllCdPointCollector();                      // 0x495fe0
     ~AllCdPointCollector();                     // @ 0x4960d0
     virtual void addCdPoint(const void* event);
 };
