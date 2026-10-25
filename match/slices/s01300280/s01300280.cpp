@@ -155,15 +155,18 @@ void zero_1675a00()
     }
 }
 
+// Ghidra folds the runtime float-to-packed-byte pipeline in this initialiser to
+// four constants.  The original runs, per channel, max(x,0) * 255 -> min(.,255)
+// -> cvtss2si over the four RGBA rows (1,1,0,1), (1,0,1,1), (0,0,1,1),
+// (0,0,0,1); cl15 cannot reproduce that xmm0-only allocation (see s004575d0),
+// so store the resulting packed ARGB words directly.
 // @ 0x01308d20
-// PARTIAL: Ghidra folds this to four packed constants; the float->byte
-// conversion pipeline is not reconstructed.
 void init_1676bfc()
 {
-    *(int*)0x1676bfc = (int)0xffffff00;
-    *(int*)0x1676c00 = (int)0xffff00ff;
-    *(int*)0x1676c04 = (int)0xff0000ff;
-    *(int*)0x1676c08 = (int)0xff000000;
+    *(uint32_t*)0x1676bfc = 0xffffff00u;
+    *(uint32_t*)0x1676c00 = 0xffff00ffu;
+    *(uint32_t*)0x1676c04 = 0xff0000ffu;
+    *(uint32_t*)0x1676c08 = 0xff000000u;
 }
 
 // @ 0x0130fcc0
