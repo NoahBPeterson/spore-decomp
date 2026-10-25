@@ -4,6 +4,10 @@
 
 extern "C" float sqrtf(float);
 
+// EASTL named operator new[] / delete[] pair used for every allocation in this slice.
+void* operator new[](size_t size, const char* pName, int flags, unsigned debugFlags,
+                     const char* file, int line);
+
 // Global color scale used to pack/unpack 10:11:11 vertex attributes.
 extern float g_colorScale;      // 0x0166c0d8
 // Baked-animation id generator.
@@ -28,9 +32,11 @@ struct baked_animation {
 };
 
 struct baked_animation_data {
-  char pad_00[0xc];
+  char pad_00[4];
+  uint32_t field_04;    // +0x04  frame count added to the manager's cache size
+  char pad_08[4];
   uint32_t mCount;      // +0x0c
-  char pad_10[4];
+  uint32_t mEnd;        // +0x10  last frame index
   float mScale;         // +0x14
   char pad_18[0x20];
   // frames begin at +0x38
@@ -189,7 +195,7 @@ struct baked_anim_manager {
 
 // --- out-of-line helpers (masked relocations; signatures inferred from the calls) ---
 extern "C" void __fastcall FUN_009c26a0(void* p);   // release creature_static_data auto-ref
-extern "C" void __fastcall FUN_009a3630(void* p);   // release animation_instance_data
+extern "C" int __fastcall FUN_009a3630(void* p);    // release animation_instance_data
 extern "C" void __fastcall FUN_009ae1c0(void* p);   // release baked_animation
 extern "C" void __fastcall FUN_009c4cc0(void* p);   // creature_instance_data::Release
 extern "C" void __fastcall FUN_009c4d10(void* p);   // creature_instance_data::Clear-ish
@@ -203,6 +209,76 @@ struct MgrHelper {
   void NukeBakedTree(void* node);       // 0x009aae10
 };
 struct AnimInstanceHelper { void Detach(); };  // 0x0099c970
+
+// --- helpers shared with the s009aa590 EASTL reconstruction and the baked-cache manager ---
+struct AnimPool {
+  void** mb;      // +0x00
+  void** me;      // +0x04
+  void** mcap;    // +0x08
+};
+extern "C" AnimPool* g_animInstancePool;   // 0x0166c064
+extern "C" uint32_t g_bakedAnimCacheLimit; // 0x01550b80
+
+extern "C" void __fastcall AddRefSpecies(void* p, void* edx);                    // 0x009b3450
+extern "C" void __fastcall AddRefBaked(void* p, void* edx);                      // 0x009ac2a0
+extern "C" void __fastcall AddRefAnim(void* p, void* edx);                       // 0x0099c970
+extern "C" void __fastcall AddRefInstance(void* p, void* edx);                   // 0x00a17060
+extern "C" void __fastcall AnimDetach(void* p, void* edx, int arg);              // 0x009a3080
+extern "C" void __fastcall VecPushBack(void* p, void* edx, void** value);        // 0x009ab3f0
+extern "C" void __fastcall FindSpeciesMap(void* map, void* edx, void** out,
+                                          const void* key);                      // 0x00e5c780
+extern "C" void __fastcall TreeFindS4(void* map, void* edx, void** out,
+                                      const void* key);                          // 0x009aa500
+extern "C" void __fastcall TreeLowerBoundS4(void* map, void* edx, void** out,
+                                            const void* key);                    // 0x009aa590
+extern "C" void __fastcall PairCtorS4S3(void* pair, void* edx, const void* key,
+                                        const void* value);                      // 0x009aa9f0
+extern "C" void __fastcall TreeInsertHintS4(void* map, void* edx, void** out,
+                                            void* pos, const void* pair, int tag); // 0x009ab2c0
+extern "C" void __fastcall TreeEraseP(void* map, void* edx, void** out,
+                                      void* node);                               // 0x009aadb0
+extern "C" void __fastcall TreeEraseQ(void* map, void* edx, void** out,
+                                      void* node);                               // 0x009ab150
+extern "C" void __fastcall TreeInsertQ(void* map, void* edx, void** out,
+                                       const void* qval, int tag);               // 0x009aaf20
+extern "C" void __fastcall RemoveCacheEntry(void* mgr, void* edx, void** pit);   // 0x009ab4a0
+extern "C" void __fastcall VecReserve(void* vec, void* edx, uint32_t n);         // 0x009aab80
+extern "C" void __fastcall VecInsert(void* vec, void* edx, void** pos,
+                                     void** value);                              // 0x009ab030
+extern "C" void __cdecl AdjustHeap(void* first, int top, int size, int pos,
+                                   void* value, int cmp);                        // 0x009aa640
+extern "C" void __fastcall AssignS4(void* dst, void* edx, const void* src);      // 0x009aa770
+extern "C" void __fastcall AssignS3(void* dst, void* edx, const void* src);      // 0x009aa7c0
+extern "C" void __cdecl Call9aa3a0(void* obj, void* p2, void* baked,
+                                   uint32_t n);                                  // 0x009aa3a0
+extern "C" void __cdecl Call9aaab0(void* obj, void* p2, void* baked,
+                                   float t, float rate);                         // 0x009aaab0
+extern "C" void* __fastcall Ctor9a34a0(void* p, void* edx);                      // 0x009a34a0
+extern "C" void __fastcall SetAnimObjects(void* anim, void* edx, void* p3,
+                                          void* instance, void* u);              // 0x009a3220
+extern "C" void __cdecl Call9a2cc0(void* anim, void* p4);                        // 0x009a2cc0
+extern "C" void* __cdecl Call9a4550(void* species, void* p3);                    // 0x009a4550
+extern "C" void* __fastcall CtorCreatureInstance(void* p, void* edx);            // 0x009c56c0
+extern "C" void __cdecl InitCreatureInstance(void* species, void* instance,
+                                             float vx, float vy, float vz,
+                                             float qx, float qy, float qz, float qw,
+                                             int flag);                          // 0x009c52a0
+
+static inline bool BakedKeyLess(const nSPCreatureAnim::baked_anim_cache_key& a,
+                                const nSPCreatureAnim::baked_anim_cache_key& b) {
+  if ((uint32_t)a.mSpecies != (uint32_t)b.mSpecies)
+    return (uint32_t)a.mSpecies < (uint32_t)b.mSpecies;
+  if (a.mAnimKey != b.mAnimKey)
+    return a.mAnimKey < b.mAnimKey;
+  return a.mAnimID < b.mAnimID;
+}
+
+static inline void BakedValueDestroy(nSPCreatureAnim::baked_anim_cache_value& v) {
+  if (v.mpBaked)
+    FUN_009ae1c0(v.mpBaked);
+  if (v.mpAnimation)
+    FUN_009a3630(v.mpAnimation);
+}
 
 // @ 0x009AB620
 void __fastcall ClearBakedAnimManager(nSPCreatureAnim::baked_anim_manager* self) {
@@ -270,42 +346,191 @@ void __fastcall DestroyBakedAnimManager(nSPCreatureAnim::baked_anim_manager* sel
 }
 
 // ---------------------------------------------------------------------------------------------
-// The remaining baked_anim_manager methods below are reconstructed skeletons: their control
-// flow and callees are described, but the deep inlined EASTL/timer passes are not reproduced.
+// baked-animation manager operations.
 
-// @ 0x009AB710  PARTIAL
-// Removes one entry from mSpeciesInstances keyed by the node inside *param_2, and (when the
-// per-species instance list becomes empty) drops the species' baked-animation cache entries.
-// __thiscall (ecx = the manager) with two stack arguments, callee-clean (ret 8): modelled as
-// __fastcall with an unused EDX filler.  Its eax is whatever the body last computed, so callers
-// that leak eax hand it through.
-void* __fastcall RemoveSpeciesEntry(void* self, void* edxUnused, void* ppNode, uint32_t id);
+// @ 0x009AB710
+// Removes one baked-cache entry's event from the species' instance and, once the baked animation
+// has reached its last frame, detaches/recycles the animation and drops the cache value.
+void* __fastcall RemoveSpeciesEntry(void* self, void* edxUnused, void* ppNode, uint32_t id) {
+  (void)edxUnused;
+  using namespace nSPCreatureAnim;
+  baked_anim_manager* mgr = (baked_anim_manager*)self;
+  baked_cache_node* node = (baked_cache_node*)*(void**)ppNode;
+  baked_animation* baked = (baked_animation*)node->val.mpBaked;
+  baked_animation_data* data = (baked_animation_data*)baked->mpData;
+  if (!data)
+    return 0;
+  if (id >= data->mEnd)
+    return (void*)(uint32_t)data->mEnd;
 
-__declspec(noinline) void* __fastcall RemoveSpeciesEntry(void* self, void* edxUnused, void* ppNode, uint32_t id) {
-  (void)self; (void)edxUnused; (void)ppNode; (void)id;
-  return 0;
+  species_node* species;
+  FindSpeciesMap(&mgr->mSpeciesInstances, 0, (void**)&species, &node->key.mSpecies);
+  if (species == (species_node*)&mgr->mSpeciesInstances.mAnchor)
+    return &mgr->mSpeciesInstances.mAnchor;
+  void* instance = species->mInstance;
+  if (!instance)
+    return 0;
+
+  Call9aa3a0(instance, node->val.mpAnimation, baked, id);
+
+  uint32_t end = baked->mpData ? baked->mpData->mEnd : 0;
+  if (baked->field_04 != end)
+    return (void*)(uint32_t)end;
+
+  AnimDetach(node->val.mpAnimation, 0, 0);
+  if (g_animInstancePool)
+    VecPushBack(g_animInstancePool, 0, &node->val.mpAnimation);
+  void* anim = node->val.mpAnimation;
+  if (!anim)
+    return &node->val.mpAnimation;
+  node->val.mpAnimation = 0;
+  return (void*)(int32_t)FUN_009a3630(anim);
 }
 
-// @ 0x009AB7C0  PARTIAL
-// Inserts a baked_anim_cache entry (lower_bound + DoInsertValueImpl) and returns the node.
-void* __fastcall InsertBakedCacheEntry(void* self, void* key) {
-  (void)self; (void)key;
-  return 0;
+// @ 0x009AB7C0
+// Inserts (lower_bound + hint insert) a default-valued baked-cache entry and returns its value.
+void* __fastcall InsertBakedCacheEntry(void* self, void* edxUnused, const void* keyPtr) {
+  (void)edxUnused;
+  using namespace nSPCreatureAnim;
+  const baked_anim_cache_key& key = *(const baked_anim_cache_key*)keyPtr;
+  baked_cache_node* pos;
+  TreeLowerBoundS4(self, 0, (void**)&pos, &key);
+  baked_cache_node* anchor = (baked_cache_node*)((char*)self + 4);
+  if (pos == anchor || BakedKeyLess(key, pos->key)) {
+    struct BakedPair {
+      baked_anim_cache_key key;
+      baked_anim_cache_value val;
+    } pair;
+    baked_anim_cache_value emptyValue;
+    emptyValue.mpAnimation = 0;
+    emptyValue.mpBaked = 0;
+    emptyValue.mField8 = 0;
+    PairCtorS4S3(&pair, 0, &key, &emptyValue);
+    void* inserted = 0;
+    // The original passes the lower_bound slot after clearing its low byte, not a clean zero.
+    int tag = (int)((uint32_t)pos & 0xffffff00u);
+    TreeInsertHintS4(self, 0, &inserted, pos, &pair, tag);
+    BakedValueDestroy(pair.val);
+    if (pair.key.mSpecies)
+      FUN_009c26a0(pair.key.mSpecies);
+    pos = (baked_cache_node*)inserted;
+  }
+  return &pos->val;
 }
 
-// @ 0x009AB890  PARTIAL
-// Maintains mBakedAnimCacheSize: repeatedly evicts least-recently-used baked cache nodes until
-// the size drops to (int)(DAT_01550b80 * 0.6), then resets mLastUpdatedKey.
-void __fastcall TrimBakedAnimCache(void* self) {
-  (void)self;
+// @ 0x009AB890
+// Trims mBakedAnimCache down to (unsigned)(0.6 * g_bakedAnimCacheLimit) entries using the
+// in-order node list and EASTL heap-pop order, then resets mLastUpdatedKey.
+void __cdecl TrimBakedAnimCache(void* selfPtr) {
+  using namespace nSPCreatureAnim;
+  baked_anim_manager* mgr = (baked_anim_manager*)selfPtr;
+  if (mgr->mBakedAnimCacheSize <= g_bakedAnimCacheLimit)
+    return;
+
+  AnimPool vec;
+  vec.mb = 0;
+  vec.me = 0;
+  vec.mcap = 0;
+  VecReserve(&vec, 0, mgr->mBakedAnimCache.mnSize);
+
+  baked_cache_node* anchor = (baked_cache_node*)&mgr->mBakedAnimCache.mAnchor;
+  for (baked_cache_node* n = (baked_cache_node*)mgr->mBakedAnimCache.mAnchor.mpNodeLeft;
+       n != anchor; n = (baked_cache_node*)RBTreeIncrement(&n->base)) {
+    void* v = n;
+    VecInsert(&vec, 0, vec.me, &v);
+  }
+
+  double target = (double)g_bakedAnimCacheLimit * 0.6;
+  uint32_t threshold = (uint32_t)(int64_t)(target + 0.5);
+
+  while (mgr->mBakedAnimCacheSize > threshold && vec.mb != vec.me) {
+    baked_cache_node* first = (baked_cache_node*)vec.mb[0];
+    baked_cache_node* last = (baked_cache_node*)vec.me[-1];
+    vec.me[-1] = first;
+    AdjustHeap(vec.mb, 0, (int)(vec.me - vec.mb) - 1, 0, last, 0);
+
+    baked_cache_node* victim = (baked_cache_node*)vec.me[-1];
+    vec.me -= 1;
+
+    void* pit = victim;
+    RemoveCacheEntry(mgr, 0, &pit);
+    mgr->mBakedAnimCache.mnSize--;
+    RBTreeIncrement(&victim->base);
+    RBTreeErase(&victim->base, &mgr->mBakedAnimCache.mAnchor);
+    if (victim->val.mpBaked)
+      FUN_009ae1c0(victim->val.mpBaked);
+    if (victim->val.mpAnimation)
+      FUN_009a3630(victim->val.mpAnimation);
+    if (victim->key.mSpecies)
+      FUN_009c26a0(victim->key.mSpecies);
+    EASTL_allocator_deallocate(victim);
+  }
+
+  if (mgr->mLastUpdatedKey.mSpecies) {
+    void* p = mgr->mLastUpdatedKey.mSpecies;
+    mgr->mLastUpdatedKey.mSpecies = 0;
+    FUN_009c26a0(p);
+  }
+  mgr->mLastUpdatedKey.mAnimKey = 0;
+  mgr->mLastUpdatedKey.mPad = 0;
+  mgr->mLastUpdatedKey.mAnimID = 0;
+
+  if (vec.mb && ((int*)vec.mb)[-1])
+    EASTL_allocator_deallocate(vec.mb);
 }
 
-// @ 0x009ABA80  PARTIAL
-// RemoveAllEventsOfSameType: finds all mSpeciesInstances sharing an animation id and detaches
-// up to `count` of them.
-uint32_t __fastcall FUN_009aba80(void* self, void* key, uint32_t count) {
-  (void)self; (void)key; (void)count;
-  return 0;
+// @ 0x009ABA80
+// Removes up to `count` baked-cache entries belonging to the species; when no baked entry is
+// left, clears and erases the species instance from mSpeciesInstances.
+uint32_t __fastcall FUN_009aba80(void* self, void* edxUnused, void* speciesPtr, uint32_t count) {
+  (void)edxUnused;
+  using namespace nSPCreatureAnim;
+  baked_anim_manager* mgr = (baked_anim_manager*)self;
+  if (!speciesPtr || !count)
+    return 0;
+
+  if (mgr->mLastUpdatedKey.mSpecies == speciesPtr) {
+    baked_anim_cache_key tmp;
+    tmp.mSpecies = 0;
+    tmp.mAnimKey = 0;
+    tmp.mPad = 0;
+    tmp.mAnimID = 0;
+    AssignS4(&mgr->mLastUpdatedKey, 0, &tmp);
+  }
+
+  void* species = speciesPtr;
+  AddRefSpecies(species, 0);
+  species_node* found;
+  FindSpeciesMap(&mgr->mSpeciesInstances, 0, (void**)&found, &species);
+  FUN_009c26a0(species);
+  if (found == (species_node*)&mgr->mSpeciesInstances.mAnchor)
+    return 0;
+
+  uint32_t n = 0;
+  baked_cache_node* anchor = (baked_cache_node*)&mgr->mBakedAnimCache.mAnchor;
+  baked_cache_node* it = (baked_cache_node*)mgr->mBakedAnimCache.mAnchor.mpNodeLeft;
+  while (it != anchor) {
+    if (it->key.mSpecies == speciesPtr) {
+      void* pit = it;
+      RemoveCacheEntry(mgr, 0, &pit);
+      void* next = 0;
+      TreeEraseP(&mgr->mBakedAnimCache, 0, &next, it);
+      it = (baked_cache_node*)next;
+      ++n;
+      if (n == count)
+        break;
+    } else {
+      it = (baked_cache_node*)RBTreeIncrement(&it->base);
+    }
+  }
+
+  if (it == anchor && n < count) {
+    FUN_009c4d10(found->mInstance);
+    void* next = 0;
+    TreeEraseQ(&mgr->mSpeciesInstances, 0, &next, found);
+    ++n;
+  }
+  return n;
 }
 
 // @ 0x009ABBB0
@@ -361,18 +586,169 @@ void* __fastcall FUN_009abbb0(void* self, void* edxUnused, void** ppNode) {
     }
 }
 
-// @ 0x009ABD10  PARTIAL
-// Creates (or fetches) the creature_instance_data (0x1930 bytes, "Anim/bam/new_cid") for the
-// species, initialises it and inserts it into mSpeciesInstances.
-void* __fastcall CreateCreatureInstance(void* self, void* key, uint32_t existing) {
-  (void)self; (void)key; (void)existing;
-  return 0;
+// @ 0x009ABD10
+// Creates the 0x1930-byte creature_instance_data for a species (optionally replacing an existing
+// entry), initialises it and inserts it into mSpeciesInstances under the species pointer.
+void* __fastcall CreateCreatureInstance(void* self, void* edxUnused, void* species,
+                                        uint32_t flag) {
+  (void)edxUnused;
+  using namespace nSPCreatureAnim;
+  if (!species)
+    return 0;
+  baked_anim_manager* mgr = (baked_anim_manager*)self;
+
+  AddRefSpecies(species, 0);
+  species_node* found;
+  FindSpeciesMap(&mgr->mSpeciesInstances, 0, (void**)&found, (const void*)&species);
+  FUN_009c26a0(species);
+  if (found != (species_node*)&mgr->mSpeciesInstances.mAnchor) {
+    if ((uint8_t)flag == 0)
+      return 0;
+    FUN_009aba80(self, 0, species, 0xffffffffu);
+  }
+
+  void* mem = operator new[](0x1930u, "Anim/bam/new_cid", 0, 0, 0, 0);
+  void* instance = 0;
+  if (mem) {
+    instance = CtorCreatureInstance(mem, 0);
+    if (instance)
+      AddRefInstance(instance, 0);
+  }
+
+  InitCreatureInstance(species, instance, 0.0f, 0.0f, 0.0f,
+                       0.0f, 0.0f, 0.0f, 1.0f, 0);
+  *(uint8_t*)((char*)instance + 0x260) = 0;
+  *(uint8_t*)((char*)instance + 0x168e) = 0;
+  *(uint8_t*)((char*)instance + 0x1794) = 0;
+  *(float*)((char*)instance + 0x278) = 0.0f;
+  *(float*)((char*)instance + 0x27c) = -2.0f;
+  *(float*)((char*)instance + 0x280) = 1.0f;
+
+  AddRefSpecies(species, 0);
+  AddRefSpecies(species, 0);
+  void* qval[2];
+  qval[0] = species;
+  qval[1] = instance;
+  AddRefInstance(instance, 0);
+
+  void* out[2];
+  // The tag reuses the incoming flag slot with only its low byte cleared.
+  int tag = (int)(flag & 0xffffff00u);
+  TreeInsertQ(&mgr->mSpeciesInstances, 0, out, qval, tag);
+  FUN_009c4cc0(instance);
+  FUN_009c26a0(species);
+  FUN_009c26a0(species);
+  FUN_009c4cc0(instance);
+  return instance;
 }
 
-// @ 0x009ABE90  PARTIAL
-// Higher-level "get/create creature for species and build its animation instance" entry point.
-void __fastcall FUN_009abe90(void* self, void* key, void* p3, void* p4, void* p5) {
-  (void)self; (void)key; (void)p3; (void)p4; (void)p5;
+// @ 0x009ABE90
+// Gets/creates the species' creature instance, looks up or removes the baked-cache entry for the
+// (species, p3, p4) animation key, builds a new baked animation when the duration is positive and
+// stores it in the cache.
+void __fastcall FUN_009abe90(void* self, void* edxUnused, void* species,
+                             void* p3, void* p4, uint32_t p5) {
+  (void)edxUnused;
+  using namespace nSPCreatureAnim;
+  baked_anim_manager* mgr = (baked_anim_manager*)self;
+
+  void* instance = 0;
+  void* speciesRef = species;
+  if (speciesRef)
+    AddRefSpecies(speciesRef, 0);
+  species_node* found;
+  FindSpeciesMap(&mgr->mSpeciesInstances, 0, (void**)&found, &speciesRef);
+  if (speciesRef)
+    FUN_009c26a0(speciesRef);
+
+  if (found == (species_node*)&mgr->mSpeciesInstances.mAnchor)
+    instance = CreateCreatureInstance(self, 0, species, 0);
+  else
+    instance = found->mInstance;
+  if (instance)
+    AddRefInstance(instance, 0);
+
+  baked_anim_cache_key key;
+  key.mSpecies = 0;
+  if (species) {
+    AddRefSpecies(species, 0);
+    key.mSpecies = species;
+  }
+  key.mAnimKey = (uint32_t)p3;
+  key.mPad = p3 ? *(uint32_t*)((char*)p3 + 0x110) : 0;
+  key.mAnimID = (uint32_t)p4;
+
+  baked_cache_node* existing;
+  TreeFindS4(&mgr->mBakedAnimCache, 0, (void**)&existing, &key);
+  if (existing != (baked_cache_node*)&mgr->mBakedAnimCache.mAnchor) {
+    if (p5 == 0) {
+      if (key.mSpecies)
+        FUN_009c26a0(key.mSpecies);
+      if (instance)
+        FUN_009c4cc0(instance);
+      return;
+    }
+    void* pit = existing;
+    RemoveCacheEntry(mgr, 0, &pit);
+  }
+
+  float animCount = *(float*)((char*)p3 + 0x120);
+  float animRate = *(float*)((char*)p3 + 0x11c);
+  float f = animCount - 1.0f;
+  f = f * animRate;
+  if (f > 0.0f) {
+    void* anim = 0;
+    if (g_animInstancePool->mb == g_animInstancePool->me) {
+      void* mem = operator new[](0xe0u, "Anim/aid", 0, 0, 0, 0);
+      if (mem) {
+        void* q = Ctor9a34a0(mem, 0);
+        if (q) {
+          AddRefAnim(q, 0);
+          anim = q;
+        }
+      }
+    } else {
+      void* q = g_animInstancePool->me[-1];
+      if (q)
+        AddRefAnim(q, 0);
+      anim = q;
+      g_animInstancePool->me -= 1;
+      if (*g_animInstancePool->me)
+        FUN_009a3630(*g_animInstancePool->me);
+    }
+
+    void* u = Call9a4550(species, p3);
+    SetAnimObjects(anim, 0, p3, instance, u);
+    Call9a2cc0(anim, p4);
+
+    void* bakedMem = operator new[](0x114u, "Anim/bam/new_ba", 0, 0, 0, 0);
+    void* baked = 0;
+    if (bakedMem) {
+      ((baked_animation*)bakedMem)->Init(true);
+      AddRefBaked(bakedMem, 0);
+      baked = bakedMem;
+    }
+
+    Call9aaab0(instance, anim, baked, 15.0f, f);
+
+    baked_anim_cache_value value;
+    value.mpAnimation = anim;
+    value.mpBaked = baked;
+    value.mField8 = 1;
+
+    TrimBakedAnimCache(mgr);
+    void* node = InsertBakedCacheEntry(&mgr->mBakedAnimCache, 0, &key);
+    AssignS3(node, 0, &value);
+    mgr->mBakedAnimCacheSize += ((baked_animation*)baked)->mpData->field_04;
+    FUN_009ae1c0(baked);
+    if (anim)
+      FUN_009a3630(anim);
+  }
+
+  if (key.mSpecies)
+    FUN_009c26a0(key.mSpecies);
+  if (instance)
+    FUN_009c4cc0(instance);
 }
 
 // --- EA::LimitStopwatch and the eastl map key helpers used by RestartTimer ---
