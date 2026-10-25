@@ -1,1 +1,1 @@
-00e956f0 SP::cVehicleView::HandleSimulationUpdate  # PDB name; retail layout differs from the 2008 PDB (timers +0x58/+0x78, sound +0x98/+0x9c, animator +0xb0)
+00e956f0 ?HandleSimulationUpdate@cVehicleView_s00e9_56f0@SP@@QAEXHM@Z  # cVehicleView_s00e9_56f0::HandleSimulationUpdate migrated from s00e956f0 (verbatim, slice spelling)

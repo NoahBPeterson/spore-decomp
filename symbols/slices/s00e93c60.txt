@@ -1,0 +1,7 @@
+00e948b0 ?FUN_00e948b0@SP@@YGXPAVcEmitter@1@PAVcEffectTarget@1@@Z  # FUN_00e948b0 migrated from s00e93c60 (verbatim, slice spelling)
+00e94900 ?FUN_00e94900@SP@@YGXPAVcEmitter@1@PAVcEffectTarget@1@@Z  # FUN_00e94900 migrated from s00e93c60 (verbatim, slice spelling)
+00e94970 ?Init@cTribeView@SP@@QAEXPAX000@Z  # cTribeView::Init migrated from s00e93c60 (verbatim, slice spelling)
+00e949c0 ?Init@cVehicleView@SP@@QAEXPAX@Z  # cVehicleView::Init migrated from s00e93c60 (verbatim, slice spelling)
+00e94a00 ?ToggleShowPaths@cVehicleView@SP@@QAEXXZ  # cVehicleView::ToggleShowPaths migrated from s00e93c60 (verbatim, slice spelling)
+00e94a10 ?Update@cEffectToggle@SP@@QAEXHMMPAVcEmitter@2@PAVcEffectTarget@2@@Z  # cEffectToggle::Update migrated from s00e93c60 (verbatim, slice spelling)
+00e94ad0 ?FUN_00e94ad0@SP@@YGXPAVcEmitter@1@PAVcEffectTarget@1@H@Z  # FUN_00e94ad0 migrated from s00e93c60 (verbatim, slice spelling)

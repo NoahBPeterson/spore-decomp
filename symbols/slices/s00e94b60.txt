@@ -1,1 +1,7 @@
+00e94b60 ??0cVehicleView_s00e9_4b60@@QAE@XZ  # cVehicleView_s00e9_4b60::cVehicleView migrated from s00e94b60 (verbatim, slice spelling)
+00e94c50 ??1cVehicleView_s00e9_4b60@@UAE@XZ  # cVehicleView_s00e9_4b60::~cVehicleView migrated from s00e94b60 (verbatim, slice spelling)
+00e94d10 ?FUN_00e94d10@cVehicleView_s00e9_4b60@@QAEPAXPAX@Z  # cVehicleView_s00e9_4b60::FUN_00e94d10 migrated from s00e94b60 (verbatim, slice spelling)
+00e94e50 ?FUN_00e94e50@cVehicleView_s00e9_4b60@@QAEXH@Z  # cVehicleView_s00e9_4b60::FUN_00e94e50 migrated from s00e94b60 (verbatim, slice spelling)
+00e94f30 ?UpdateTowedItem@cVehicleView_s00e9_4b60@@QAEXPAX0HD@Z  # cVehicleView_s00e9_4b60::UpdateTowedItem migrated from s00e94b60 (verbatim, slice spelling)
+00e953a0 ?ConnectBalloonString@cVehicleView_s00e9_4b60@@QAEXHPAX@Z  # cVehicleView_s00e9_4b60::ConnectBalloonString migrated from s00e94b60 (verbatim, slice spelling)
 01486d60 ??_7cVehicleView@@6B@  # SP::cVehicleView vtable (ctor/dtor store it)

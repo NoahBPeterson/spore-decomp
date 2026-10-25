@@ -1,0 +1,7 @@
+# source  symbol  va  flags
+../src/game/SPGonzago/SPVehicleView.cpp  ?FUN_00e948b0@SP@@YGXPAVcEmitter@1@PAVcEffectTarget@1@@Z  00e948b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPVehicleView.cpp  ?FUN_00e94900@SP@@YGXPAVcEmitter@1@PAVcEffectTarget@1@@Z  00e94900  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPVehicleView.cpp  ?Init@cTribeView@SP@@QAEXPAX000@Z  00e94970  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPVehicleView.cpp  ?Init@cVehicleView@SP@@QAEXPAX@Z  00e949c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPVehicleView.cpp  ?ToggleShowPaths@cVehicleView@SP@@QAEXXZ  00e94a00  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPVehicleView.cpp  ??1cVehicleView_s00e9_4b60@@UAE@XZ  00e94c50  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
