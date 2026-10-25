@@ -178,13 +178,155 @@ float* __fastcall InterpB(char* self, int unused, float* out, int tri, float u, 
 }
 
 // ---------------------------------------------------------------------------
-// @ 0x0050bd90 / 0x0050bff0  (PARTIAL skeletons: 0.6 KB traversals)
+// Triangle-traversal wrappers (0x0050bd90 / 0x0050bff0)
+//
+// Both take their host object in ecx (the migrated marker symbol did not model
+// the hidden this), forward the vertex stream at +0x08 and the index array at
+// +0x58 into the ray/triangle walks 0x004f7c00 (12 args) and 0x004f7e70
+// (9 args), and fall back to the per-triangle distance builder at +0x164 when
+// it is present.
 // ---------------------------------------------------------------------------
-void __cdecl TraverseA(int* a, void** b, unsigned char c, uint32_t* d, void* e, void* f, void* g, void* h)
+static float g_travEdgeX = 0.0f;                                // DAT_015dcfe8
+static float g_travEdgeY = 0.0f;                                // DAT_015dcfec
+static const float kTravMaxDistance = 3.4028234663852886e+38f;  // DAT_013f18c4
+float sqrtf(float);
+
+// 0x004f7c00  (ray/triangle walk over an indexed stream; 12 args)
+char __cdecl TraverseTrisA(const void* vertices, int stride, const int* indexTable, uint32_t n,
+                           const void* a, const void* b, unsigned char c, int zero,
+                           uint32_t* outCount, void* outFar, float* outUV, int zero2);
+// 0x004f7e70  (variant walk; 9 args)
+char __cdecl TraverseTrisB(const void* vertices, int stride, const int* indexTable, uint32_t n,
+                           const void* a, const void* b, uint32_t* outCount, float* outUV, int zero);
+
+// Per-triangle distance builder, pointed to by TravMesh::builder (+0x164).
+struct TravBuilder {
+    int handle;              // +0x00  opaque handle forwarded to Query
+    char pad0[0x40];
+    float distance;          // +0x44  best distance (seeded with kTravMaxDistance)
+    uint32_t indexCount;     // +0x48  index count of the hit triplet
+    float u;                 // +0x4c  barycentric u of the hit
+    float v;                 // +0x50  barycentric v of the hit
+    void Query(int h, int a, int b, int c);   // 0x004fe070 (thiscall, 4 stack args)
+};
+
+// Index array member at +0x58 (a SP::VectorU32); `Empty` is 0x00526430.
+struct TravIndexVector {
+    const int* begin;        // +0x00 (host +0x58)  index array begin
+    const int* end;          // +0x04 (host +0x5c)  index array end
+    char Empty();            // 0x00526430
+    uint32_t Count() const { return (uint32_t)(end - begin) / 3; }
+};
+
+// Traversal host: vertices at +0x08, index array at +0x58, builder at +0x164.
+struct TravMesh {
+    char pad0[8];
+    void* vertices;          // +0x08  vertex stream base
+    char pad1[0x4c];
+    TravIndexVector indices; // +0x58  index array
+    char pad2[0x164 - 0x60];
+    TravBuilder* builder;    // +0x164 per-triangle distance builder (may be null)
+
+    char TraverseA(const void* a, const void* b, unsigned char c, uint32_t* outCount,
+                   float* outFar, float* outUV, float* outTriA, float* outTriB);
+    void TraverseB(const void* p1, float* p2, uint32_t* p3, void* p4, float* p5, float* p6);
+};
+
+// ---------------------------------------------------------------------------
+// @ 0x0050bd90  (query the mesh: builder fast path, else 0x004f7c00 walk)
+// ---------------------------------------------------------------------------
+char TravMesh::TraverseA(const void* a, const void* b, unsigned char c, uint32_t* outCount,
+                         float* outFar, float* outUV, float* outTriA, float* outTriB)
 {
-    (void)a; (void)b; (void)c; (void)d; (void)e; (void)f; (void)g; (void)h;
+    if (indices.Empty())
+        return 0;
+
+    uint32_t count = 0xffffffffu;   // local_10
+    float uvx = g_travEdgeX;        // local_c.x
+    float uvy = g_travEdgeY;        // local_c.y
+    char ok;
+
+    if (builder != 0) {
+        TravBuilder* tb = builder;
+        tb->distance = kTravMaxDistance;
+        tb->Query(tb->handle, (int)a, (int)b, (int)c);
+        if (kTravMaxDistance > tb->distance) {
+            if (outFar != 0)
+                *outFar = tb->distance;
+            count = tb->indexCount / 3;
+            uvx = tb->u;
+            uvy = tb->v;
+            ok = 1;
+        } else {
+            ok = 0;
+        }
+    } else {
+        ok = TraverseTrisA(vertices, 0xc, indices.begin, indices.Count(), a, b, c, 0,
+                           &count, outFar, &uvx, 0);
+    }
+
+    if (!ok)
+        return 0;
+    if (outCount != 0)
+        *outCount = count;
+    if (outUV != 0) {
+        outUV[0] = uvx;
+        outUV[1] = uvy;
+    }
+    if (outTriA != 0) {
+        float tmp[3];
+        InterpA((char*)this, 0, tmp, (int)count, uvx, uvy);
+        outTriA[0] = tmp[0];
+        outTriA[1] = tmp[1];
+        outTriA[2] = tmp[2];
+    }
+    if (outTriB != 0) {
+        float tmp[3];
+        InterpB((char*)this, 0, tmp, (int)count, uvx, uvy);
+        outTriB[0] = tmp[0];
+        outTriB[1] = tmp[1];
+        outTriB[2] = tmp[2];
+    }
+    return 1;
 }
-void __fastcall TraverseB(int self, void* a, float* b, void* c, void* d, void* e, void* f)
+
+// ---------------------------------------------------------------------------
+// @ 0x0050bff0  (bbox distance (sqrt) or 0x004f7e70 walk, then the same outs)
+// ---------------------------------------------------------------------------
+void TravMesh::TraverseB(const void* p1, float* p2, uint32_t* p3, void* p4, float* p5, float* p6)
 {
-    (void)self; (void)a; (void)b; (void)c; (void)d; (void)e; (void)f;
+    uint32_t count = 0xffffffffu;   // local_10
+    float uvx = g_travEdgeX;        // local_c.x
+    float uvy = g_travEdgeY;        // local_c.y
+    float box = 0.0f;               // local_14
+
+    if (builder == 0) {
+        TraverseTrisB(vertices, 0xc, indices.begin, indices.Count(), p1, p2, &count, &uvx, 0);
+    } else {
+        float q[4];
+        BBoxQuery((char*)builder, 0, q, (int)p1, &box, &count, (int*)&uvx);
+        if (p2 != 0)
+            *p2 = sqrtf(box);
+    }
+
+    if (p3 != 0)
+        *p3 = count;
+    if (p4 != 0) {
+        ((float*)p4)[0] = uvx;
+        ((float*)p4)[1] = uvy;
+    }
+    if (p5 != 0) {
+        float tmp[3];
+        InterpA((char*)this, 0, tmp, (int)count, uvx, uvy);
+        p5[0] = tmp[0];
+        p5[1] = tmp[1];
+        p5[2] = tmp[2];
+    }
+    if (p6 != 0) {
+        float tmp[3];
+        InterpB((char*)this, 0, tmp, (int)count, uvx, uvy);
+        p6[0] = tmp[0];
+        p6[1] = tmp[1];
+        p6[2] = tmp[2];
+    }
 }
