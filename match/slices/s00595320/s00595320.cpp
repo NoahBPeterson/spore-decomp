@@ -713,20 +713,25 @@ typedef eastl::hashtable<map_pair<uint64_t, uint64_t>, eastl::fixed_hashtable_al
 } // namespace SP
 // hash_map::operator[] instances
 // NM 0x00595d40: value_type temporary construction order differs
-// @ 0x00595d40 ??$index@UcStaticItemInfo
+// symbol 0x00595d40 ??$index@UcStaticItemInfo
 template SP::cStaticItemInfo& SP::StaticInfoMap::index<SP::cStaticItemInfo>(const uint64_t&);
 // NM 0x00595eb0: value_type temporary construction order differs
-// @ 0x00595eb0 ??$index@E@
+// symbol 0x00595eb0 ??$index@E@
 template uint8_t& SP::ItemStatusMap::index<uint8_t>(const uint64_t&);
 // NM 0x00595ff0: value_type temporary construction order differs
-// @ 0x00595ff0 ??$index@_K@
+// symbol 0x00595ff0 ??$index@_K@
 template uint64_t& SP::ItemRowMap::index<uint64_t>(const uint64_t&);
 namespace SP {
 
 // fixed_hash_map constructor pattern: node pool inside the object, embedded bucket buffer,
 // max load factor 10000, rehash to fit.
 struct fixed_pool_base {
-    void* mpHead;
+    void* mpHead;          // +0x00
+    void* mpNext;          // +0x04
+    void* mpPoolBegin;     // +0x08
+    void* mpCapacity;      // +0x0c
+    uint32_t mnNodeSize;   // +0x10
+    void* mpBucketBuffer;  // +0x14
     void init(void* pMemory, size_t memorySize, size_t nodeSize, size_t alignment, size_t alignmentOffset);  // 0x00921260
 };
 uint32_t GetPrevBucketCountOnly(uint32_t n);   // 0x00921340
@@ -734,8 +739,6 @@ struct prime_rehash_policy_ex {
     float mfMaxLoadFactor;
     float mfGrowthFactor;
     uint32_t mnNextResize;
-    prime_rehash_policy_ex() {}
-    prime_rehash_policy_ex(float f) : mfMaxLoadFactor(f), mfGrowthFactor(2.0f), mnNextResize(0) {}
     uint32_t GetBucketCount(uint32_t nElementCount) const;   // 0x009213C0
 };
 
@@ -749,34 +752,34 @@ struct fixed_hash_map_storage {
     struct alloc_t { void* mpHead; void* mpNext; void* mpPoolBegin; void* mpCapacity; uint32_t mnNodeSize; void* mpBucketBuffer; } mAllocator;
     void* mBucketBuffer[kBucketCount + 1];   // +0x34
 
-    struct fixed_allocator_type {
-        fixed_pool_base mPool;
-        void* mpPoolBegin;
-        void* mpCapacity;
-        uint32_t mnNodeSize;
-        void* mpBucketBuffer;
-        fixed_allocator_type(void* pNodeBuffer, void* pBucketBuffer)
-        {
-            mPool.mpHead = 0;
-            mPool.init(pNodeBuffer, kNodeSize * kNodeCount, kNodeSize, 8, 0);
-            mpPoolBegin = pNodeBuffer;
-            mpCapacity = (char*)pNodeBuffer + kNodeSize * kNodeCount;
-            mnNodeSize = kNodeSize;
-            mpBucketBuffer = pBucketBuffer;
-        }
-    };
-    void BaseConstruct(uint32_t nBucketCount, const uint32_t& hash, const uint32_t& h2, uint32_t h3, const uint32_t& eq, const uint32_t& ex, const fixed_allocator_type& a);
+    void BaseConstruct(uint32_t nBucketCount, uint32_t hash, const uint32_t& h2, const uint32_t& h3, uint32_t eq, const uint32_t& ex, const fixed_pool_base& a);
     void DoRehash(uint32_t n);
-    fixed_hash_map_storage(const uint32_t& hashFunction, uint32_t predicate);
+    fixed_hash_map_storage(uint32_t hashFunction, uint32_t predicate);
 };
 
 template <int kNodeSize, int kNodeCount, int kBucketCount, int kPoolOffset>
-fixed_hash_map_storage<kNodeSize, kNodeCount, kBucketCount, kPoolOffset>::fixed_hash_map_storage(const uint32_t& hashFunction, uint32_t predicate)
+fixed_hash_map_storage<kNodeSize, kNodeCount, kBucketCount, kPoolOffset>::fixed_hash_map_storage(uint32_t hashFunction, uint32_t predicate)
 {
-    fixed_allocator_type allocator((char*)this + kPoolOffset, mBucketBuffer);
-    BaseConstruct(GetPrevBucketCountOnly(kBucketCount), hashFunction, predicate, predicate, predicate, predicate, allocator);
-    mRehashPolicy = prime_rehash_policy_ex(10000.0f);
-    const uint32_t nBuckets = mRehashPolicy.GetBucketCount(mnElementCount);
+    union PoolOrPolicy {
+        fixed_pool_base pool;
+        prime_rehash_policy_ex policy;
+    } temp;
+    char* const poolBegin = (char*)this + kPoolOffset;
+    const size_t alignment = (kNodeSize % 8 == 0) ? 8 : 4;
+    temp.pool.mpHead = 0;
+    temp.pool.init(poolBegin, (size_t)(kNodeSize * kNodeCount), kNodeSize, alignment, 0);
+    temp.pool.mpPoolBegin = poolBegin;
+    temp.pool.mpCapacity = poolBegin + kNodeSize * kNodeCount;
+    temp.pool.mnNodeSize = kNodeSize;
+    temp.pool.mpBucketBuffer = mBucketBuffer;
+    const uint32_t nPrevBuckets = GetPrevBucketCountOnly(kBucketCount);
+    BaseConstruct(nPrevBuckets, hashFunction, predicate, predicate, predicate, predicate, temp.pool);
+
+    temp.policy.mfMaxLoadFactor = 10000.0f;
+    temp.policy.mfGrowthFactor = 2.0f;
+    temp.policy.mnNextResize = 0;
+    mRehashPolicy = temp.policy;
+    const uint32_t nBuckets = temp.policy.GetBucketCount(mnElementCount);
     if (nBuckets > mnBucketCount)
         DoRehash(nBuckets);
 }

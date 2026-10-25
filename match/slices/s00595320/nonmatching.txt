@@ -7,3 +7,8 @@
 00595eb0  37  value_type temporary construction order differs; equiv UNSUPPORTED (unresolved DoAllocateBuckets, operator new[]/delete[])
 00595ff0  41  value_type temporary construction order differs; equiv UNSUPPORTED (unresolved DoAllocateBuckets, operator new[]/delete[])
 00595a90  378  register allocation and AutoRefCount temporaries differ
+00595c60  78  fixed_hash_map ctor complete and behaviourally equivalent; cl 15 CSEs the repeated &predicate address (emits push edx; mov ecx,edx where the original re-materializes two leas), leaving 203 vs 209 bytes. Root cause of the earlier larger diff (a leaked // @ marker resolving BaseConstruct to 0x00595ff0) and the pool alignment (4 for 0xc nodes) were fixed. /vc71, /Ob0, /Ob2, /Ox, /O1, void*/struct params and _ReadWriteBarrier do not change the CSE. [equiv: PASS 390 valid, 95.2% cov]
+00595dd0  78  fixed_hash_map ctor complete and behaviourally equivalent; same CSE residual as 0x00595c60 (203 vs 209 bytes) [equiv: PASS 391 valid, 95.2% cov]
+00595f20  78  fixed_hash_map ctor complete and behaviourally equivalent; same CSE residual as 0x00595c60 (200 vs 206 bytes) [equiv: PASS 394 valid, 95.2% cov]
+00596060  78  fixed_hash_map ctor complete and behaviourally equivalent; same CSE residual as 0x00595c60 (191 vs 197 bytes), with the 0xc-byte node pool using alignment 4 as in the original [equiv: PASS 393 valid, 95.2% cov]
+005961e0  78  fixed_hash_map ctor complete and behaviourally equivalent; same CSE residual as 0x00595c60 (191 vs 197 bytes) [equiv: PASS 394 valid, 95.2% cov]
