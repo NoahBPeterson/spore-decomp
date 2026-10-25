@@ -38,7 +38,7 @@ struct IWindow {
     virtual IWindow* GetParent() const;            // +0x10
     virtual IWindowManager* GetWindowManager() const; // +0x14
     virtual int v18() const;                       // +0x18
-    virtual uint32_t GetControlID() const;         // +0x1C
+    virtual int GetControlID() const;              // +0x1C
     virtual uint32_t GetCommandID() const;         // +0x20
     virtual uint32_t GetCursorID() const;          // +0x24
     virtual void v28(int, int);                    // +0x28
@@ -367,7 +367,7 @@ void FUN_00f0c290() {
 }
 
 // ---------------------------------------------------------------------------
-// @ 0x00f0bec0  Select the tool slot whose parent window is `param`.
+// Types used by the tool-slot selection code below.
 // ---------------------------------------------------------------------------
 struct cSlotInfo { char pad[0x40]; int field40; };
 
@@ -382,17 +382,27 @@ struct Message {
     IWindow* mpDest;        // +0x18
 };
 
+// Alternate view of a window whose vtable slot +0x10 takes a context pointer.
+struct IWindowCtx {
+    virtual void v00();
+    virtual void v04();
+    virtual void v08();
+    virtual IWindow* v0C(uint32_t type);
+    virtual IWindow* GetParentCtx(void* pCtx) const;   // +0x10
+};
+
 void FUN_00f0b4d0(void*);
 void FUN_00f0c680_impl();
 char FUN_00f08c20();
 void FUN_00f08b70(void*);
 void FUN_00f08920();
-void FUN_00f077c0(IWindow*, int, int);
-void FUN_00f0ab50(IWindow*, int, int);
+void FUN_00f077c0(IWindow*);
+void FUN_00f0ab50(IWindow*);
 int  FUN_00edc9e0(void*, int);
 int  FUN_00435e90();
 float FUN_00f07960(float, float, uint32_t);
 
+// @ 0x00f0bec0  Select the tool slot whose parent window is `param`.
 void FUN_00f0bec0(IWindow* param) {
     IWindow* parent = param->GetParent();
     cMarkerTextDialog* d = g_pActive;
@@ -537,143 +547,154 @@ void FUN_00f0c310(float dt) {
 }
 
 // ---------------------------------------------------------------------------
-// @ 0x00f0c680  Window-procedure message handler (bool __stdcall(int, Message*)).
+// Window-procedure message handler helpers (inlined into 0x00f0c680).
 // ---------------------------------------------------------------------------
-static IWindow* FindSlotWindow(cMarkerTextDialog* d, int target) {
-    for (int i = 0; i < 5; i++)
-        if (d->mSlots[i].mIndex == target) return d->mSlots[i].mpWindow;
-    return 0;
-}
-
-static int AddSlotWindowToManager(cMarkerTextDialog* d, int mode) {
+static __forceinline bool AddSlotWindowToManager(cMarkerTextDialog* d, int mode) {
+    IWindow* win = 0;
     d->mMode = mode;
-    IWindow* win = FindSlotWindow(d, 0);
+    int i = 0;
+    int* pIdx = &d->mSlots[0].mIndex;
+    do {
+        i++;
+        if (*pIdx == 0) {
+            win = d->mSlots[i - 1].mpWindow;
+            break;
+        }
+        pIdx += 4;
+    } while (i < 5);
     IWindow* found = win->FindWindowByID(0xcefa1100, true);
     IWindowManager* wm = SP_WindowManager();
     wm->v4C(0, found);
     FUN_00f0b8b0();
-    return 1;
+    return true;
 }
 
-static int C680CommonTail(Message* msg) {
-    if (msg->field0C != 0) return 0;
-    IWindow* w = msg->mpDest;
-    int id = (int)w->GetControlID();
-    if (id == (int)0xcefa1230 || id == (int)0xcefa1100 /* -0x3105ef00 */ ||
-        id == (int)0xcefa1210 || id == (int)0xcefa1220 ||
-        id == (int)0xcefa1240 || id == 0x742bdd0) {
-        IWindow* r = w->GetParent();
-        FUN_00f0b4d0(r);
-    }
-    return 0;
-}
-
-int __stdcall FUN_00f0c680(void* pWindow, Message* msg) {
+// ---------------------------------------------------------------------------
+// @ 0x00f0c680  Window-procedure message handler (bool __stdcall(int, Message*)).
+// ---------------------------------------------------------------------------
+bool __stdcall FUN_00f0c680(void* pWindow, Message* msg) {
     (void)pWindow;
+    int out[2];
     uint32_t type = msg->mType;
     int cmd = msg->field0C;
-    if (type < 0x1c) {
-        if (type != 0x1b) {
-            if (type == 1) {
-                if (msg->field10 != 0x1b) return 0;
-                FUN_00f0c210();
-                return 1;
-            }
-            if (type != 0x18) return 0;
-            if (msg->mpSource == 0) return 0;
-            if (msg->mpSource->GetControlID() != 0xcefa1100) return 0;
-            FUN_00f0aa80();
-            FUN_00f0b8b0();
-            return 0;
-        }
-    } else {
-        if (type == 0x1c) {
-            if (cmd != 0) return 0;
-            int cid = (int)msg->mpDest->GetControlID();
-            if (cid == (int)0xcefa1100) {
-                FUN_00f0aa80();
-                FUN_00f0b8b0();
-            }
-            IWindow* mw = SP_WindowManager()->GetMainWindowIndex(0);
-            if (g_pActive->mpSelectedWindow != 0 &&
-                FUN_00edc9e0(mw, 0x1742be59) == 0 &&
-                FUN_00edc9e0(mw, 0x1742be58) == 0) {
-                FUN_00f08920();
-                FUN_00f0b8b0();
-            }
-            if (FUN_00f08c20() == 0) return 0;
-            FUN_00f0bb90();
-            return 0;
-        }
-        if (type != 0x287259f6) return 0;
-
-        int flag = 0;   // set by the KillSetiEffects lab
-        if (cmd < (int)0xcefa1231) {
-            if (cmd == (int)0xcefa1230) { flag = 1; }
-            else if (cmd < (int)0xcefa0003) {
-                if (cmd == (int)0xcefa0002) {
-                    int r = FUN_00435e90();
-                    SP_KillSetiEffects(0xe76c9b4f, r);
-                } else if (cmd == (int)0xcefa0000) {
-                    int r = FUN_00435e90();
-                    SP_KillSetiEffects(0xe76c9b4f, r);
-                    FUN_00f0b940(1);
-                    return 1;
-                } else if (cmd == (int)0xcefa0001) {
-                    FUN_00435e90();
-                    SP_KillSetiEffects(0xe76c9b4f, 0);
-                    IWindow* w = g_pActive->mpLayout->FindWindowByID(0xcefa0001, true);
-                    if (w != 0) {
-                        IWindow* c = w->Cast(0x8ed27e7a);
-                        if (c != 0) c->v28(4, 1);
-                    }
-                    return AddSlotWindowToManager(g_pActive, 2);
-                }
-            } else if (cmd == (int)0xcefa1210 || cmd == (int)0xcefa1220) {
-                flag = 1;
-            }
-        } else if (cmd < 0x595e0ba) {
-            if (cmd == 0x595e0b9) {
-                FUN_00f08890(0);
-                IWindow* r = msg->mpSource->GetParent();
-                FUN_00f08b70(r);
-                return 1;
-            }
-            if (cmd == (int)0xcefa1240) flag = 1;
-            else if (cmd == 0x595e0a8) { FUN_00f0c210(); return 1; }
-        } else {
-            if (cmd == 0x742bdd0) {
-                FUN_00435e90();
-                SP_KillSetiEffects(0xe76c9b4f, 0);
-                if (g_pActive->mpSelectedWindow != 0) {
-                    FUN_00f08920();
-                    FUN_00f0b8b0();
-                    return 1;
-                }
-                FUN_00f0bec0(msg->mpSource);
-                FUN_00f08890(0);
-                return 1;
-            }
-            if (cmd > 0x742cbdf && cmd < 0x742cbe5) {
-                int r = FUN_00435e90();
-                SP_KillSetiEffects(0xe76c9b4f, r);
-                FUN_00f0ab50(msg->mpSource, 0xcc089e57, r);
-                return 1;
-            }
-        }
-        if (flag) {
-            IUISystem* sys = EA_Audio_GetSystemAT();
-            int r = sys ? sys->v20() : 0;
+    switch (type) {
+    case 0x18: {
+        IWindow* src = msg->mpSource;
+        if (src == 0) return false;
+        if (src->GetControlID() != 0xcefa1100) return false;
+        FUN_00f0aa80();
+        FUN_00f0b8b0();
+        return false;
+    }
+    case 1:
+        if (msg->field10 != 0x1b) return false;
+        FUN_00f0c210();
+        return true;
+    case 0x1b:
+        break;
+    case 0x287259f6:
+        switch (cmd) {
+        case (int)0xcefa0001: {
+            int r = FUN_00435e90();
             SP_KillSetiEffects(0xe76c9b4f, r);
-            FUN_00f077c0(msg->mpSource, 0xe76c9b4f, r);
+            IWindow* w = g_pActive->mpLayout->FindWindowByID(0xcefa0001, true);
+            if (w != 0) {
+                IWindow* c = w->Cast(0x8ed27e7a);
+                if (c != 0) c->v28(4, 1);
+            }
+            return AddSlotWindowToManager(g_pActive, 2);
+        }
+        case (int)0xcefa0000: {
+            int r = FUN_00435e90();
+            SP_KillSetiEffects(0xe76c9b4f, r);
+            FUN_00f0b940(1);
+            return true;
+        }
+        case (int)0xcefa0002: {
+            int r = FUN_00435e90();
+            SP_KillSetiEffects(0xe76c9b4f, r);
+            break;
+        }
+        case (int)0xcefa1230:
+        case (int)0xcefa1210:
+        case (int)0xcefa1220:
+        case (int)0xcefa1240: {
+            IUISystem* sys = EA_Audio_GetSystemAT();
+            int r;
+            if (sys == 0) r = 0;
+            else r = sys->v20();
+            SP_KillSetiEffects(0xe76c9b4f, r);
+            FUN_00f077c0(msg->mpSource);
             FUN_00f0aa80();
             FUN_00f0b8b0();
             IWindow* p = msg->mpSource->GetParent();
             IWindow* found = p->FindWindowByID(0xcefa1100, false);
             IWindowManager* wm = SP_WindowManager();
             wm->v4C(0, found);
-            return 1;
+            return true;
         }
+        case 0x595e0a8:
+            FUN_00f0c210();
+            return true;
+        case 0x595e0b9: {
+            FUN_00f08890(0);
+            IWindow* p = ((IWindowCtx*)msg->mpSource)->GetParentCtx(&out[1]);
+            FUN_00f08b70(p);
+            return true;
+        }
+        case 0x742cbe0: case 0x742cbe1: case 0x742cbe2: case 0x742cbe3: case 0x742cbe4: {
+            int r = FUN_00435e90();
+            SP_KillSetiEffects(0xcc089e57, r);
+            FUN_00f0ab50(msg->mpSource);
+            return true;
+        }
+        case 0x742bdd0: {
+            int r = FUN_00435e90();
+            SP_KillSetiEffects(0x6e649e21, r);
+            if (g_pActive->mpSelectedWindow != 0) {
+                FUN_00f08920();
+                FUN_00f0b8b0();
+                return true;
+            }
+            FUN_00f0bec0(msg->mpSource);
+            FUN_00f08890(0);
+            return true;
+        }
+        }
+        break;
+    case 0x1c: {
+        if (cmd != 0) return false;
+        IWindow* dest = msg->mpDest;
+        if (dest->GetControlID() == (int)0xcefa1100) {
+            FUN_00f0aa80();
+            FUN_00f0b8b0();
+        }
+        IWindow* mw = SP_WindowManager()->GetMainWindowIndex(0);
+        if (g_pActive->mpSelectedWindow != 0 &&
+            FUN_00edc9e0(mw, 0x1742be59) == 0 &&
+            FUN_00edc9e0(mw, 0x1742be58) == 0) {
+            FUN_00f08920();
+            FUN_00f0b8b0();
+        }
+        if (FUN_00f08c20() != 0)
+            FUN_00f0bb90();
+        return false;
     }
-    return C680CommonTail(msg);
+    default:
+        return false;
+    }
+
+    if (msg->field0C != 0) return false;
+    IWindow* w = msg->mpDest;
+    switch (w->GetControlID()) {
+    case (int)0xcefa1230:
+    case (int)0xcefa1100:
+    case (int)0xcefa1210:
+    case (int)0xcefa1220:
+    case (int)0xcefa1240:
+    case 0x742bdd0:
+        FUN_00f0b4d0(w->GetParent());
+        break;
+    }
+    return false;
 }
