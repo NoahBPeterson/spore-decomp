@@ -1,0 +1,8 @@
+00d3b920 ?FUN_00d3b920@@YAPAPAUcSPVector3_s00d3_b920@@PAPAU1@UcSPVectorRange@@PAU1@@Z  # FUN_00d3b920 migrated from s00d3b920 (verbatim, slice spelling)
+00d3b970 ?FUN_00d3b970@@YAXPAUcSPVector3_s00d3_b920@@IPBU1@@Z  # FUN_00d3b970 migrated from s00d3b920 (verbatim, slice spelling)
+00d3b9b0 ?FUN_00d3b9b0@@YAPAUcCreatureModeStrategy_s00d3_b920@@PAU1@@Z  # FUN_00d3b9b0 migrated from s00d3b920 (verbatim, slice spelling)
+00d3bb10 ?dtor@cCreatureModeStrategy_s00d3_b920@@QAEXXZ  # cCreatureModeStrategy_s00d3_b920::dtor migrated from s00d3b920 (verbatim, slice spelling)
+00d3bdb0 ?FUN_00d3bdb0@@YAXD@Z  # FUN_00d3bdb0 migrated from s00d3b920 (verbatim, slice spelling)
+00d3c380 ?Deactivate@cCreatureModeStrategy_s00d3_b920@@QAEXXZ  # cCreatureModeStrategy_s00d3_b920::Deactivate migrated from s00d3b920 (verbatim, slice spelling)
+00d3c430 ?FUN_00d3c430@@YAXXZ  # FUN_00d3c430 migrated from s00d3b920 (verbatim, slice spelling)
+00d3c6a0 ?FUN_00d3c6a0@@YAXXZ  # FUN_00d3c6a0 migrated from s00d3b920 (verbatim, slice spelling)

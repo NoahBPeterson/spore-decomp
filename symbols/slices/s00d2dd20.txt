@@ -1,100 +1,15 @@
-# slice s00d2dd20 - SP creature-mode display strategy plus the small creature-mode
-# helpers, inferred from the cards/disassembly only (the dev-PDB headers under
-# src/game/include/SP do NOT describe this build; every offset below is taken
-# from the observed code).
-#
-# Modelled types (retail member offsets):
-#   Vector2     {float x@0x00, y@0x04}
-#   Vector3     {float x@0x00, y@0x04, z@0x08}
-#   Matrix3Rows {float m[9]}
-#   CreatureModeState (the 0x0169e370 block, 0x50 bytes, memset once by the reset)
-#               int   mSelectedIndex@0x00
-#               float mZoom@0x04, mViewScale@0x08
-#               int   mMode@0x24 (set to 1 by ResetCreatureModeState)
-#               float mClampedValue@0x28
-#               uint  mFlags38@0x38, mFlags3c@0x3c
-#               float mPrevX@0x44, mPrevY@0x48, mPrevZ@0x4c
-#   cTerrainSphere  float mHeight@0x10f0, mHeightMax@0x10f4
-#   cGameNounManager  GetAvatar 0x00b1fdb0, GetCurrentTerrainSphere 0x00f67d90
-#   cGameInputManager single vptr; virtuals +0x18 IsKeyDown(int),
-#               +0x34 FUN_0034() -> int (banning-mode query), +0x38 FUN_0038(int)
-#   cAvatarProfile  float mZoomSpan@0x55c
-#   cEditorSpeciesManager  GetAvatarProfile 0x004df420
-#   cAvatarMood (4 bytes)  FUN_00bfc490 0x00bfc490 (double result)
-#   AvatarFlagsB58 (32-bit bitfield unit @0xb58): mFlag4 is the "hidden/possessed"
-#               bit read as `test byte [x+0xb58],0x10`; mFlag9 is read as
-#               `mov eax,[x+0xb58]; shr eax,9; test al,1`
-#   cLocomotive single vptr; virtuals +0x2c GetPosition() -> const Vector3*,
-#               +0x48 FUN_0048() -> bool, +0x74 FUN_0074() -> double
-#   cSpeciesData  int mMode@0x61c
-#   cAvatar single vptr; virtuals +0x0c FUN_000C(uint) -> cAvatar*,
-#               +0x84 FUN_0084(void*), +0xd8 FUN_00D8() -> int; +0x00/+0x04 are
-#               AddRef/Release.  Non-virtual (direct calls): FUN_00c04590,
-#               FUN_00c0b9c0 (double), FUN_00c0ee60(uchar,int), FUN_00c0ee70
-#               (GetTargetAsCreature), FUN_00c0ee90 (ApplyCombatTarget),
-#               FUN_00c0b770, FUN_00c1d400(id,guid), FUN_00c14e70(guid).
-#             data: mLocomotive(cLocomotive)@0xc0, mField137@0x137,
-#               mMood(cAvatarMood)@0x5a8, mMadTimer(float)@0x5e0,
-#               mpSpecies(cSpeciesData*)@0xb20, mCombatDataB28@0xb28 (0x24 bytes,
-#               handed to the mode helpers), mpOwnerB4c(void*)@0xb4c (object whose
-#               +8 owns the avatar), mFlagsB58(AvatarFlagsB58)@0xb58,
-#               mSlotB5c@0xb5c, mFieldB5e@0xb5e
-#   cUIWindow single vptr; virtuals +0x7c SetState(int,bool), +0x80 SetText(const void*)
-#   cSPUILayout  FindWindowByID 0x008105b0
-#   cPosseUI  GetBuffer 0x0093b6c0 (returns the cSPUILayout), FUN_00e012d0(label,float)
-#   cSPUINewProgressBar  Update 0x00e29da0 (ratio, value)
-#   cHintObject vptr, virtual +0x0c FUN_000C(uint) -> cAvatar*
-#   cHintProvider vptr, virtual +0x34 FUN_0034() -> cHintObject*; module accessor
-#               GetHintProvider 0x00b3d240
-#   cAchievements  FUN_00675e80 -> bool, FUN_006766e0 -> int, Award 0x00676710;
-#               module accessor GetAchievements 0x00675250
-#   cModeUi vptr, virtual +0x28 FUN_0028(int); module accessor GetBanningModeUi 0x00d37cb0
-#   cSub128  FUN_00d2d560(float), FUN_00d2d0b0(int)
-#   cCreatureModeEventSink  cSub128 mSub@0x128; Update 0x00d2e2e0 forwards the float
-#               to mSub.FUN_00d2d560(because retail calls it out-of-line, Update is
-#               marked __declspec(noinline))
-#   cCreatureModeStrategy  mpSink(cCreatureModeEventSink*)@0x68, mpPropList@0xb4;
-#               Instance 0x00d38840, FUN_00d39360(uint,void*), NotifyEvent 0x00d2e8a0
-#   cCreatureModeInputStrategy (no vptr) mIface8@0x08; live at +0x3c inside the
-#               enclosing strategy object, so AsInterface returns &this->mIface8
-#               (this+8) or the encloser at (this-0x3c)
-#   cPlanetModel  GetNormalAt 0x00b7e3b0; accessor PlanetModel 0x00b3d350
-#   cXformMsg  vptr + ctor 0x00434040; virtuals +0x18 FUN_0018(void*),
-#               +0x20 FUN_0020(void*); mFlags(u16)@0x04, mSeq(u16)@0x06,
-#               mPos(Vector3)@0x08, mDist(float)@0x18, mMatrix(Matrix3Rows)@0x24
-#   cVarListSerializer (stack only, 0xa14 bytes - `sub esp,0xa14`): blob views at
-#               +0x30 (u64 mask) / +0x38 bits and a trailing byte span through
-#               +0x414; ctor 0x00692f90, Serialize 0x00693e10, Load 0x00d2e9b0
-#   helpers  OrthogonalVector 0x006985b0, Matrix3FromFacingAndUp 0x0069b440,
-#            GetPropertyAsVector2Array 0x006a0920, SPUIHelpers_EndModal 0x00809c50,
-#            memset 0x011e073e, allshl 0x011e06e0, EA::Locale::SetNumberString
-#            0x00881ae0, ToggleBanningContent 0x00dd17f0, EndBanMode 0x00dd1840,
-#            FUN_00b3d4c0 0x00b3d4c0, FUN_00ba4350 0x00ba4350,
-#            FUN_00bc97f0 0x00bc97f0, FUN_00b69990 0x00b69990, FUN_00d99500 0x00d99500,
-#            FUN_00c0c1b0 0x00c0c1b0, FUN_00c17350 0x00c17350, FUN_00e099d0 0x00e099d0,
-#            FUN_00e09a50 0x00e09a50, FUN_010829f0 0x010829f0
-#   constants 0x013f4fd0 4294967296.0f (int->float bias), 0x013ebca0 0.0001f,
-#            0x013ec4d0 100.0f, 0x013eb960 0.01f, 0x0147a528 FLT_MAX,
-#            0x01485720 1.0f (_HK_REAL_ONE), 0x01485378 0.0f (_HK_REAL_ZERO),
-#            0x01582e38/3c/40/44 tier 0..3 heights, 0x01582e54 clamp ceiling,
-#            0x01582fc4..fd4 the five view scales, 0x01582ff0/ff4 hint thresholds,
-#            0x01687a0c mad max, 0x0145f8d4/8d8 blob version/sub-version,
-#            0x015829b8 var-list descriptor table,
-#            0x018ac46e/0x018ac464 hint-bar label ids,
-#            0x01654c10 "space" game-mode record, 0x01654c01 "creature" record
-#
 00d2e2e0  cCreatureModeEventSink::Update(float) -> void  # forward the event amount to the bar sub-object's FUN_00d2d560
 00d2e360  GetTerrainHeight() -> double  # current terrain sphere height promoted to double (st0 result)
 00d2e380  GetTierHeight(int) -> double  # -1 asks the avatar's combat target chain (vtable +0xd8) for the tier, else the shell level; 0..3 selects the tier height
 00d2e410  GetTierBaseHeight(int) -> double  # terrain height minus the stacked tier heights (switch 1/2/3, no default)
-00d2e480  SetClampedValue(float) -> void  # write mClampedValue and mirror it into the terrain sphere height
+00d2e480 ?SetClampedValue@@YAXM@Z  # SetClampedValue migrated from s00d2dd20 (verbatim, slice spelling)
 00d2e4a0  SetCreatureDisplayMode(int,bool) -> void  # re-entrancy guarded mode switch: calls the mode helper on the sub-object at ((char*)mpOwnerB4c + 8), then the per-creature id/guid helpers and the +0xd8 mode query
 00d2e580  RefreshViewScale() -> void  # tier height composition, clamped span, and dz*dz + (dy*dy + dx*dx) support radius (double via fsqrt) -> view scale
 00d2e720  RecomputeZoom() -> void  # avatar-profile zoom span, vector2-array property fetch (0xb561b9eb), clamp mZoom to the selected element's x, else y / span
 00d2e800  GetRecomputedZoom(cAvatar*) -> double  # recompute when the avatar's +0xb58 bit 9 is set, then read mZoom
 00d2e830  GetTierForTerrain() -> int  # walk tiers 0..3, add each tier height to the terrain height and stop at the first that exceeds the sphere's max height (4 when none do)
-00d2e8a0  cCreatureModeStrategy::NotifyEvent(float) -> void  # unless the amount is zero: clamp mClampedValue to the tier ceiling, accumulate the terrain height, and when not in space mode push the amount into the instance's event sink plus a {avatar,0,amount} context record
-00d2e980  ResetCreatureModeState() -> void  # memset the 0x0169e370 block and set mMode = 1
+00d2e8a0 ?NotifyEvent@cCreatureModeStrategy@@SAXM@Z  # cCreatureModeStrategy::NotifyEvent migrated from s00d2dd20 (verbatim, slice spelling)
+00d2e980 ?ResetCreatureModeState@@YAXXZ  # ResetCreatureModeState migrated from s00d2dd20 (verbatim, slice spelling)
 00d2e9b0  cVarListSerializer::Load(unsigned int) -> bool  # version/sub-version header check, then the item loop over the 0xa14-byte serializer body
 00d2ea80  cCreatureModeInputStrategy::AsInterface(unsigned int) -> void*  # interface id 0x2f009dd0 -> &mIface8 (this+8) when the encloser is non-null, 0x305a9f63 -> the encloser at this-0x3c, else null
 00d2eab0  cCreatureModeInputStrategy::IsStrafeLeftDown() -> bool  # keyboard strafe-left query (ecx unused)

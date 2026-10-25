@@ -1,0 +1,7 @@
+00d387c0 ?MarkEventAsOccurred@@YAXI@Z  # MarkEventAsOccurred migrated from s00d377f0 (verbatim, slice spelling)
+00d38800 ?EvaluateEvent@@YAPBDH@Z  # EvaluateEvent migrated from s00d377f0 (verbatim, slice spelling)
+00d38880 ?HasBrainUpgrade@cCreatureLevelUpScenario@@QAE_NXZ  # cCreatureLevelUpScenario::HasBrainUpgrade migrated from s00d377f0 (verbatim, slice spelling)
+00d38890 ?OnMouseWheel@cCreatureModeStrategy_s00d3_77f0@@QAEXXZ  # cCreatureModeStrategy_s00d3_77f0::OnMouseWheel migrated from s00d377f0 (verbatim, slice spelling)
+00d388a0 ?OnMouseMove@cCreatureModeStrategy_s00d3_77f0@@QAEXHMMH@Z  # cCreatureModeStrategy_s00d3_77f0::OnMouseMove migrated from s00d377f0 (verbatim, slice spelling)
+00d388d0 ?OnMouseButton@cCreatureModeStrategy_s00d3_77f0@@QAEXHMMH@Z  # cCreatureModeStrategy_s00d3_77f0::OnMouseButton migrated from s00d377f0 (verbatim, slice spelling)
+00d38900 ?FUN_00d38900@@YA_NXZ  # FUN_00d38900 migrated from s00d377f0 (verbatim, slice spelling)

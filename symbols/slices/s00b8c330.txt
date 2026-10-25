@@ -1,6 +1,7 @@
-00b8c330 ?UpdateMinimap@cPlanetModel@@QAEXHHH@Z  # cPlanetModel::UpdateMinimap (planet minimap route-overlay rebuild)
-00ac4570 ?erase@?$SpVector@UcCurvePoint@@@@QAEPAUcCurvePoint@@PAU2@0@Z  # SpVector<cCurvePoint>::erase (shared template body)
-0050f740 ?erase@?$SpVector@UVector3@@@@QAEPAUVector3@@PAU2@0@Z  # SpVector<Vector3>::erase (shared template body)
 00473810 ?resize@?$SpVector@UVector3@@@@QAEXH@Z  # SpVector<Vector3>::resize
-00b85d40 ?insert@?$SpVector@UVector3@@@@QAEPAUVector3@@PAU2@ABU2@@Z  # SpVector<Vector3>::insert
 004b5ad0 ?DoInsertValue@?$SpVector@UVector3@@@@QAEXPAUVector3@@ABU2@@Z  # SpVector<Vector3>::DoInsertValue (shared template body)
+0050f740 ?erase@?$SpVector@UVector3@@@@QAEPAUVector3@@PAU2@0@Z  # SpVector<Vector3>::erase (shared template body)
+00ac4570 ?erase@?$SpVector@UcCurvePoint@@@@QAEPAUcCurvePoint@@PAU2@0@Z  # SpVector<cCurvePoint>::erase (shared template body)
+00b85d40 ?insert@?$SpVector@UVector3@@@@QAEPAUVector3@@PAU2@ABU2@@Z  # SpVector<Vector3>::insert
+00b8c330 ?UpdateMinimap@cPlanetModel_s00b8_c330@@QAEXHHH@Z  # cPlanetModel_s00b8_c330::UpdateMinimap migrated from s00b8c330 (verbatim, slice spelling)
+00bd99e0 ?GetColor@cCity@SP@@QAEABUcSPColorRGB@@XZ  # SP::cCity::GetColor (callee of s00b8c330, named from the dev publics; slice address comment)

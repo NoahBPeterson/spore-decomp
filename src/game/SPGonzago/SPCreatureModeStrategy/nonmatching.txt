@@ -1,0 +1,34 @@
+# va  diff-bytes  reason
+00b8c330 2800 complete planet minimap route-overlay rebuild (land/sea/path layers); same 62-entry ordered call/vcall sequence, size 0.99x; register choice (ebx/edi zero reg) and stack slot layout differ; difftest WEAK (253 valid, 11.0% coverage, no mismatch; added @ marker and SpVector template member addresses in symbols/slices/s00b8c330.txt)
+00d2e8a0 105 cCreatureModeStrategy::NotifyEvent; the clamped-value update, the terrain-height accumulation, the game-mode gate and the per-instance event sink/context blocks are all modelled, but the clamp materialises the high bound in a register (comiss xmm1, xmm0) instead of comparing against memory (size 205 vs 209). flags /O2 /MD /Gy /TP /arch:SSE /fp:fast  equiv: PASS 400/400 valid, 66.7% coverage
+00d38890 5 cCreatureModeStrategy::OnMouseWheel (/O2 /MD /Gy /TP /arch:SSE): instruction stream identical; only the tail virtual call's register allocation differs (original loads the target into edx, ours into eax)
+00d38c00 55 insertion-sort hole walk over 8-byte {key,value} pairs; algorithm reproduced exactly but MSVC keeps the end pointer in ebx and uses disp8 addressing [eax-8]/[eax-4], while the original spills end to its stack home and materialises the byte offset in edx (sub edx,ecx / add edx,-4) with ebp as the 8-byte copy temp, 70 vs 79 bytes
+00d3a830
+00d3a960
+00d3b3c0
+00d3b480
+00d3b4e0
+00d3b520
+00d3b5d0
+00d3b620
+00d3b920
+00d3b9b0
+00d3bb10
+00d3bdb0
+00d3c430
+00d3c6a0
+00d3d870 7353 complete; /O2 /arch:SSE /fp:fast; only diff: cl inlines 2 more Property::GetValueFloat calls than the original (inline-budget boundary near 0x553c6e30)
+00d3fa90 502 EASTL vector<Vec18>::insert(pos,n,val); logic matches the decompile but MSVC 2008 lays out the grow/copy branches differently (591 vs 600 bytes). flags /O2 /MD /Gy /TP /arch:SSE /fp:fast [equiv: UNSUPPORTED, 2 unresolved references (_op_new, _op_delete_array)]
+00d3fcf0 582 Avatar-death cinematic setup; every observed call and offset is modelled, but the original inlines block/loop code MSVC will not reproduce from this source shape (796 vs 1004 bytes) and several helpers are reached through raw thiscall addresses. flags /O2 /MD /Gy /TP /arch:SSE /fp:fast [equiv: UNSUPPORTED, 0/400 valid inputs (all fault on the retail globals it dereferences)]
+00d400e0 211 Scenario::EvalTrigger; correct event/tag comparisons and c79f00 side effects, but the compiler picks a different case-block layout and needs a `this` in ecx for the FUN_00d3fcf0 call (305 vs 330 bytes). flags /O2 /MD /Gy /TP /arch:SSE /fp:fast [equiv: WEAK, 398 valid inputs, 50.5% coverage]
+00d40230 959 Scenario::EvaluateEvent; state machine and effect creation match, but 0x11e08c2 consumes its float argument on the x87 stack, which cannot be expressed portably (1100 vs 1029 bytes). flags /O2 /MD /Gy /TP /arch:SSE /fp:fast [equiv: FAIL, 5/46 valid inputs mismatched (eax return), 7.6% coverage]
+00d40640 695 Scenario::Finish; effect teardown plus the state-3 subobject transform loop are modelled, but the TransformMsg/cSPTransform temporaries and inlined orientation math differ (844 vs 741 bytes). flags /O2 /MD /Gy /TP /arch:SSE /fp:fast [equiv: FAIL, 5/5 valid inputs mismatched (eax return), 14.1% coverage]
+00d40e70 380 FUN_00d40e70 (Ghidra FUN; post the species-migrate trigger actions): complete - post the "CRG_SpeciesMigrate" trigger, walk the avatar's animal list clamping the migrate timer and posting a target action for every animal owned by the avatar, then post three more target actions for the avatar's herd nest, the best desired herd's nest and the UI root parent; 501 vs 376 bytes; the model is faithful in intent but this build emits the whole post-action body as straight-line code (retail shares the cActionTarget temporary across four `lea ecx,[esp+..]` constructions and threads the trigger manager in `ebx`), so the frame, the four temporary constructions and every displacement differ. flags /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-. difftest UNSUPPORTED (0/400 valid inputs: the model reads a real cActionTarget temporary it cannot construct under the emulator).
+00d425f0 1543 flags /O2 /MD /Gy /TP /arch:SSE /fp:fast complete (sUpdateMinimap: recenter, icon rebuild every 2.5 s, queued icon per second); x87 length/regalloc and block layout differ
+00d463a0 539 0/400 valid inputs (fake stream reads fault); cCreatureModeStrategy::Read grid deserializer; 547-byte diff (632 vs 624 bytes) from 0xa14-byte cVarListSerializer/local frame layout and vtable-slot call modelling
+00d46610 58 392 valid inputs, 95.2% coverage; eastl fixed_hash_map ctor; 82-byte diff (185 vs 209 bytes) as MSVC reuses dead stack slots and keeps the inline-pool address in a different register
+00d46730 404 4 unresolved references (?GetUInt/?GetBool/?GetInt/?GetFloat@PropC); ReadTrigger property table; member-modelled getters are declaration-only
+00d46c30 796 1 unresolved reference (?FUN_00d67dd0); EvaluateTrigger; 808-byte diff (988 vs 1000 bytes) from missing eastl::string16 scratch teardown, x87 vs SSE clamp and stack layout
+00d472a0 29 5/60 valid inputs; TrigVec push_back-default; difftest unresolved FUN_00d47160 fake faults where the original succeeds; 30-byte diff from ecx/edx choice, esi allocation and mid-function epilogue placement
+00d47630 491 GetTrigger: complete behaviour (owner-key lookup through the trigger hash 0x00d46b70, linear scan of the 0x2c-stride records for kind 0xa07dde8f or eventType, then SP::NounManager 0x00b3d300 + owner vtable slot 0x20 on mpObj_28 + 0x00b21000 + GetPropertyAsUint32Array 0x006a0840, hash-entry insert 0x00d47510 with AutoRefCount owner assign, then per-id property-manager slot 0x2c filter, 0x00d472a0 slot append, AutoRefCount ref assign, ReadTrigger 0x00d46730 and kind mask, returning the last matching slot); the inlined hash-map/sp_vector/AutoRefCount template bodies and register allocation differ (545 vs 529). equiv WEAK (223/400 valid, 29.3% coverage, 53/181 insns)
+01364b20 16 3-row attribute table: records identical, but the original materialises the shared default-getter address (FUN_00692ca0, rows 0 and 2) into edx and reuses it, ours stores it as an immediate twice (c7 44 24 28) - register-allocation choice, not a source difference; equiv PASS (400/400 inputs, 100% coverage)

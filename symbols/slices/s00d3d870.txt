@@ -1,1 +1,1 @@
-00d3d870 SP::LoadCreatureGameplayTuning  # PDB (anchor); xmatch matches.json
+00d3d870 ?LoadCreatureGameplayTuning@SP@@YAXII@Z  # LoadCreatureGameplayTuning migrated from s00d3d870 (verbatim, slice spelling)

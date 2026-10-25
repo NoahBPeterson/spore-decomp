@@ -1,0 +1,6 @@
+00d463a0 ?FUN_00d463a0@@YIEPAX00@Z  # FUN_00d463a0 migrated from s00d463a0 (verbatim, slice spelling)
+00d46610 ?FUN_00d46610@@YIPAXPAUHashMapC@@PAX11@Z  # FUN_00d46610 migrated from s00d463a0 (verbatim, slice spelling)
+00d466f0 ?FUN_00d466f0@@YIEPAX00@Z  # FUN_00d466f0 migrated from s00d463a0 (verbatim, slice spelling)
+00d46730 ?FUN_00d46730@@YGXPAUTrigInfo@@@Z  # FUN_00d46730 migrated from s00d463a0 (verbatim, slice spelling)
+00d46c30 ?FUN_00d46c30@@YAEPAUTrigInfo@@PAX1@Z  # FUN_00d46c30 migrated from s00d463a0 (verbatim, slice spelling)
+00d472a0 ?FUN_00d472a0@@YIXPAUTrigVec@@PAX@Z  # FUN_00d472a0 migrated from s00d463a0 (verbatim, slice spelling)

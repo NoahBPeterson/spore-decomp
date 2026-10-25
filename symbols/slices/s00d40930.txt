@@ -1,6 +1,6 @@
 00d40930 FUN_00d40930  # Ghidra FUN; rebuild the tribe-mode transition strategy from the current selection and the game-data vector; not reconstructed
 00d40b40 GetDesiredAvatarHerd  # PDB name SP::GetDesiredAvatarHerd; pick the herd the avatar should be assigned to: early-out on the selected animal, else nearest matching creature sharing the continent; not byte-exact
 00d40cc0 ClaimNearbyNestForAvatar  # PDB name SP::ClaimNearbyNestForAvatar; claim the nest nearest the avatar: drop the old herd membership, adopt the selected creature and post the herd-changed notification; not reconstructed
-00d40e70 FUN_00d40e70  # Ghidra FUN; post the species-migrate trigger and the four target actions (per-animal, herd nest, best desired herd nest, UI root parent); not byte-exact
+00d40e70 ?FUN_00d40e70@@YAXXZ  # FUN_00d40e70 migrated from s00d40930 (verbatim, slice spelling)
 00d40ff0 SetupHatchAtNest  # PDB name SP::SetupHatchAtNest; seed the nest hatch state, resolve the species/profile and play the hatch sequence; not reconstructed
-00d414e0 FUN_00d414e0  # Ghidra FUN; pick the creature AI tuning record for a tuning id (switch over id-0x01654c01); byte-exact
+00d414e0 ?FUN_00d414e0@@YGXI@Z  # FUN_00d414e0 migrated from s00d40930 (verbatim, slice spelling)

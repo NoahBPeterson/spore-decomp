@@ -1,41 +1,41 @@
-00d47630  `anonymous namespace'::cCreatureTriggerSystem::GetTrigger  # (eventType, cTriggerOwner*) ret 8, matched in this slice
-00d47850  cContentValidationSummarizer::FUN_00d47850  # thiscall, matched in this slice
-00d478b0  `anonymous namespace'::cCreatureTriggerSystem::EvaluateEvent  # (eventID, cTriggerEvent*) ret 8, matched in this slice
-00d47960  SP::cCreatureModeStrategy::Init  # thiscall, no args, returns 1
-00d47ea0  SP::cCreatureModeStrategy::FUN_00d47ea0  # (a, b, c, d, e, f, g) ret 0x1c, collectable roll
-00d46b70  cTriggerMap::Find  # ecx = map (this+8), (u8** iter, const u32* key) -> element iterator
-00d47510  cTriggerMap::NewInfo  # ecx = map, (ctx{key,0,manager}) -> cTriggersInfo*
-00d472a0  cTrigSlots::Append  # ecx = info+4 (sp_vector), appends one slot record
-00d46730  cCreatureTriggerSystem::ReadTrigger  # (cTriggerRec*) thiscall
-00d46c30  cCreatureTriggerSystem::EvaluateTrigger  # thiscall, ret 0xc, returns bool
-00d46b60  cTriggerRec ctor/reset  # helper used by ReadTrigger path
-00b3d300  SP::NounManager  # returns manager pointer (stdcall)
-0067de30  SP::PropertyManager  # returns manager pointer
-006a0840  GetPropertyAsUint32Array  # cdecl (prop, key 0x3d03b03, i32* count, u32** array), caller cleans 0x10
-00b21000  cNounManager::Find  # ecx = manager, (void* key) -> record
-0067dd10  SP::App  # returns app object
-00883860  EA::Messaging::GetServer
-00d2a600  message handler  # registered for message 0x2a7ecd6
-00d46610  fixed_hash_map ctor  # used by Init
-00d38f40  cCreatureModeStrategy prelude  # ecx = this
-00d47f40  FUN_00d47f40  # post-roll path helper (inside 00d47ea0 region)
-00598470  cCollectableItems::ctor  # ecx = object, (u8* a, u8* b)
+005976d0  cItemSource::Commit  # ecx = source, (g, lo, hi, f) -> u8
 00597b30  cCollectableItems::Deinit  # ecx = object, (first, count)
 00597f00  cItemSource::Init  # ecx = source, (obj, f, b)
-005976d0  cItemSource::Commit  # ecx = source, (g, lo, hi, f) -> u8
-00d3bfa0  cCreatureModeStrategy::pick item  # ecx = this, (out, p2, p3, p4) -> u64, -1 = not found
+00598470  cCollectableItems::ctor  # ecx = object, (u8* a, u8* b)
+0067dd10  SP::App  # returns app object
+0067de30  SP::PropertyManager  # returns manager pointer
+006a0840  GetPropertyAsUint32Array  # cdecl (prop, key 0x3d03b03, i32* count, u32** array), caller cleans 0x10
+00883860  EA::Messaging::GetServer
 009360d0  cRandomGlobal::RandomDouble  # ecx = 0x1601760 global
+00b21000  cNounManager::Find  # ecx = manager, (void* key) -> record
+00b3d300  SP::NounManager  # returns manager pointer (stdcall)
+00d2a600  message handler  # registered for message 0x2a7ecd6
+00d38f40  cCreatureModeStrategy prelude  # ecx = this
+00d3bfa0  cCreatureModeStrategy::pick item  # ecx = this, (out, p2, p3, p4) -> u64, -1 = not found
+00d3f9e0  cNodePool::FreeLists  # (mpTail, mCount), used by FUN_00d47850
+00d46610  fixed_hash_map ctor  # used by Init
+00d46730  cCreatureTriggerSystem::ReadTrigger  # (cTriggerRec*) thiscall
+00d46b60  cTriggerRec ctor/reset  # helper used by ReadTrigger path
+00d46b70  cTriggerMap::Find  # ecx = map (this+8), (u8** iter, const u32* key) -> element iterator
+00d46c30  cCreatureTriggerSystem::EvaluateTrigger  # thiscall, ret 0xc, returns bool
+00d472a0  cTrigSlots::Append  # ecx = info+4 (sp_vector), appends one slot record
+00d47510  cTriggerMap::NewInfo  # ecx = map, (ctx{key,0,manager}) -> cTriggersInfo*
+00d47630 ?GetTrigger@cCreatureTriggerSystem@@QAEPAUcTriggerRec@@IPAUcTriggerOwner@@@Z  # cCreatureTriggerSystem::GetTrigger migrated from s00d47630 (verbatim, slice spelling)
+00d47850 ?FUN_00d47850@cContentValidationSummarizer_s00d4_7630@@QAEXXZ  # cContentValidationSummarizer_s00d4_7630::FUN_00d47850 migrated from s00d47630 (verbatim, slice spelling)
+00d478b0 ?EvaluateEvent@cCreatureTriggerSystem@@QAE_NIPAUcTriggerEvent@@@Z  # cCreatureTriggerSystem::EvaluateEvent migrated from s00d47630 (verbatim, slice spelling)
+00d47960  SP::cCreatureModeStrategy::Init  # thiscall, no args, returns 1
+00d47ea0  SP::cCreatureModeStrategy::FUN_00d47ea0  # (a, b, c, d, e, f, g) ret 0x1c, collectable roll
+00d47f40  FUN_00d47f40  # post-roll path helper (inside 00d47ea0 region)
+00f14270  sp_vector slow push_back  # used by Init
+00f47380  operator delete  # single-arg (used by FUN_00d47ea0 teardown)
+00f473a0  operator new  # 6 args incl. "Simulator" tag (0x13f09b4)
 013ec458  vtbl_cContentValidationSummarizer  # node-pool teardown second vtable
-0147adf8  vtbl  # scenario vtable used by Init
-0147abec  vtbl  # scenario vtable used by Init
-0147abcc  vtbl  # scenario vtable used by Init
 0147ab44  vtbl  # scenario vtable used by Init
 0147abac  vtbl  # scenario vtable used by Init
+0147abcc  vtbl  # scenario vtable used by Init
+0147abec  vtbl  # scenario vtable used by Init
+0147adf8  vtbl  # scenario vtable used by Init
 01583298  global (key,value) filter list  # 8-byte entries appended by Init
 0158329c  global filter list +0x04
 015832a0  global filter list +0x08
 01601760  cRandomGlobal singleton  # RandomDouble receiver
-00f473a0  operator new  # 6 args incl. "Simulator" tag (0x13f09b4)
-00f47380  operator delete  # single-arg (used by FUN_00d47ea0 teardown)
-00f14270  sp_vector slow push_back  # used by Init
-00d3f9e0  cNodePool::FreeLists  # (mpTail, mCount), used by FUN_00d47850

@@ -1,0 +1,2 @@
+00b88590 ?GetContinent@cPlanetModel@SP@@QBEHABUcSPVector3@@@Z  # SP::cPlanetModel::GetContinent (callee of s00d425f0, named from the dev publics; slice address comment)
+00d425f0 ?sUpdateMinimap@@YAXM@Z  # sUpdateMinimap migrated from s00d425f0 (verbatim, slice spelling)
