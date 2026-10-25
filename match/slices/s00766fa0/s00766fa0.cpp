@@ -50,6 +50,20 @@ void* __cdecl Fake78050(int v);                                             // 0
 void* __cdecl ResolveColorSlot(void* a, void* b);                           // 0x7633a0
 }
 
+// correct-prototype views of shared callees (the declarations above are kept for the
+// other functions in this slice, which were recorded earlier and must not change)
+int   __fastcall JobRelease(void* self, int);                    // 0x690120
+void  __fastcall JobInit(void* self, int, void* arg);            // 0x68f9b0
+void  __fastcall JobAddDep(void* self, int, void* dep);          // 0x691380
+void  __fastcall JobGetStatus(void* self, int);                  // 0x6909b0
+void  __fastcall CtorEditor(void* self, int);                    // 0x40d010
+void  __fastcall VecResizeInt(void* self, int, int count, void* value);  // 0x767700
+void* __stdcall LockedAlloc(int size, int, int, int, int, int); // 0x9289f0
+void  __fastcall GetImageResource2(void* self, int, int img);    // 0x576650
+void  __fastcall RefVecPush2(void* self, int, void** p);         // 0x41ef20
+void  __fastcall RemoveRC2(void* self, int, void* p);            // 0x714050
+bool  __cdecl HasRoom(void* stream, int a, int b);               // 0x93a890
+
 // ===========================================================================
 // @ 0x00766fa0  paint-model chunk loader
 // ===========================================================================
@@ -264,8 +278,7 @@ bool JobOwner::BuildJob(int* a, int* b, unsigned char c) {
 // ===========================================================================
 // @ 0x007677c0  arm the decode of a 0x2f4e681c resource
 // ===========================================================================
-bool __fastcall ArmDecode(void* self, int, int unused) {
-    (void)unused;
+bool __fastcall ArmDecode(void* self, int, int outPtr) {
     char* s = (char*)self;
     if (*(int*)(s + 0x18) != 0x2f4e681c)
         return false;
@@ -274,23 +287,49 @@ bool __fastcall ArmDecode(void* self, int, int unused) {
     *(char**)(s + 0x5c) = e;
     *(char**)(s + 0x50) = e;
     *(char**)(s + 0x4c) = e;
-    *(char**)(s + 0x54) = s + 0xa4;
+    *(char**)(s + 0x54) = e + 0x40;
     char* f = s + 0xbc;
     *(char**)(s + 0xb4) = f;
     *(char**)(s + 0xa8) = f;
     *(char**)(s + 0xa4) = f;
-    *(char**)(s + 0xac) = s + 0xfc;
-    int* a = (int*)Node8F4d0();
-    ((void(__thiscall**)(int*))*(void***)a)[8](a);
-    int* b = (int*)Node8F4d0();
-    if (b && !((bool(__thiscall**)(int*, int*))*(void***)b)[4](b, (int*)&b))
+    *(char**)(s + 0xac) = f + 0x40;
+
+    void* a = Node8F4d0();
+    ((void(__thiscall*)(void*))(*(void***)a)[8])(a);
+
+    void* local = 0;
+    void* b = Node8F4d0();
+    if (!((bool(__thiscall*)(void*, void**))(*(void***)b)[4])(b, &local)) {
+        if (local) JobRelease(local, 0);
+        ((void(__thiscall*)(void*))(*(void***)a)[9])(a);
         return false;
-    int* d = (int*)Node8F4d0();
-    if (d && !((bool(__thiscall**)(int*, int*))*(void***)d)[4](d, (int*)&d))
+    }
+
+    void* local2 = 0;
+    void* c = Node8F4d0();
+    if (!((bool(__thiscall*)(void*, void**))(*(void***)c)[4])(c, &local2)) {
+        if (local2) JobRelease(local2, 0);
+        if (local) JobRelease(local, 0);
+        ((void(__thiscall*)(void*))(*(void***)a)[9])(a);
         return false;
-    FUN_0068f9b0(s);
-    FUN_006909b0(s);
-    if (a) ((void(__thiscall**)(int*))*(void***)a)[9](a);
+    }
+
+    *(int*)local = 0x767320;
+    *(void**)((char*)local + 4) = s;
+    *(int*)((char*)local + 0x18) = 4;
+    JobInit(local, 0, s);
+    JobGetStatus(local, 0);
+
+    *(int*)local2 = 0x7646f0;
+    *(void**)((char*)local2 + 4) = s;
+    *(int*)((char*)local2 + 0x18) = 1;
+    JobInit(local2, 0, s);
+    JobAddDep(local2, 0, local);
+    JobGetStatus(local2, 0);
+    *(void**)outPtr = local2;
+
+    if (local) JobRelease(local, 0);
+    ((void(__thiscall*)(void*))(*(void***)a)[9])(a);
     return true;
 }
 
@@ -299,49 +338,56 @@ bool __fastcall ArmDecode(void* self, int, int unused) {
 // ===========================================================================
 bool __stdcall ReadAbilityList(void* stream, char* obj, void* key) {
     (void)key;
-    uint32_t count;
+    uint32_t count = 0;
     if (!ReadValue(stream, &count, 4))
         return false;
-    uint32_t alloc;
-    if (!WriteValue(stream, &alloc, 4))
+    if (!HasRoom(stream, 4, (int)count))
         return false;
-    FUN_00767700(stream, &count);
+    uint32_t zero = 0;
+    VecResizeInt(obj + 8, 0, (int)count, &zero);
     for (uint32_t i = 0; i < count; i++) {
         uint32_t kind;
         if (!ReadValue(stream, &kind, 4))
             return false;
+        void* p;
         if (kind == 0x20d) {
-            void* p = Alloc6(0x70, "Editor", 0, 0, 0, 0);
-            if (p) FUN_0040d010(p);
+            p = Alloc6(0x70, "Editor", 0, 0, 0, 0);
+            if (p) CtorEditor(p, 0);
             uint32_t n;
             if (!ReadValue(stream, &n, 4) || n > 6)
                 return false;
-            for (uint32_t j = 0; j < n; j++) {
-                char item[0x10];
+            *(uint32_t*)((char*)p + 0xc) = n;
+            char* item = (char*)p + 0x10;
+            for (uint32_t j = 0; j < n; j++, item += 0x10) {
                 if (!ReadValue(stream, item, 0x10))
                     return false;
-                int c1 = 0, c2 = 0;
-                if (!ReadValue(stream, &c1, 4) || !ReadValue(stream, &c2, 4))
+                int in[3] = {0, 0, 0};
+                int out[3];
+                if (!ReadValue(stream, &in[0], 4) || !ReadValue(stream, &in[2], 4))
                     return false;
-                (void)ResolveColorSlot(&c1, &c2);
+                int* r = (int*)ResolveColorSlot(out, in);
+                in[0] = r[0];
+                in[1] = r[1];
+                in[2] = r[2];
                 void* mm = FUN_0067dd60();
-                int img = ((int(__thiscall**)(void*, int, int, int))*(void***)mm)[8](mm, c1, c2, 4);
-                GetImageResource(&img);
+                int img = ((int(__thiscall*)(void*, int, int, int))(*(void***)mm)[8])(mm, in[0], in[2], 4);
+                GetImageResource2(item + 4, 0, img);
             }
         } else {
-            void* p = FUN_009289f0((char*)0 + 0xc, 0, 0, 0, 0, 0);
-            if (!p)
-                p = 0;
-            else {
+            int size = (int)(size_t)Fake78050((int)kind);
+            p = LockedAlloc(size + 0xc, 0, 0, 0, 0, 0);
+            if (p) {
                 *(short*)((char*)p + 4) = (short)kind;
-                *(void**)p = (void*)0;
-                *(unsigned short*)((char*)p + 6) = (unsigned short)(size_t)Fake78050((int)kind);
+                *(void**)p = (void*)0x13ef094;
+                *(unsigned short*)((char*)p + 6) = (unsigned short)size;
                 *(void**)((char*)p + 8) = (char*)p + 0xc;
             }
-            if (!ReadValue(stream, *(void**)((char*)p + 8), (int)(size_t)Fake78050((int)kind)))
+            if (!ReadValue(stream, *(void**)((char*)p + 8), size)) {
+                ((void(__thiscall*)(void*, int))(*(void***)p)[0])(p, 1);
                 return false;
+            }
         }
-        (void)obj;
+        *(void**)(*(int*)(obj + 8) + i * 4) = p;
     }
     return true;
 }
@@ -361,14 +407,22 @@ bool __stdcall ReadMaterialList(void* stream, char* obj, uint32_t* key3) {
         return false;
     for (int i = 0; i < count; i++) {
         void* p = 0;
-        if (!FUN_0071f8f0(stream, &p))
+        if (!FUN_0071f8f0(stream, &p)) {
+            if (p) {
+                volatile int* rc = (volatile int*)((char*)p + 4);
+                if (_InterlockedExchangeAdd((volatile long*)rc, -1) - 1 == 0) {
+                    _InterlockedExchange((volatile long*)rc, 1);
+                    ((void(__thiscall*)(void*, int))(*(void***)p)[0])(p, 1);
+                }
+            }
             return false;
-        RefVecPush(obj + 0x18, &p);
+        }
+        RefVecPush2(obj + 0x18, 0, &p);
         if (p) {
             volatile int* rc = (volatile int*)((char*)p + 4);
             if (_InterlockedExchangeAdd((volatile long*)rc, -1) - 1 == 0) {
                 _InterlockedExchange((volatile long*)rc, 1);
-                ((void(__thiscall**)(void*, int))*(void***)p)[0](p, 1);
+                ((void(__thiscall*)(void*, int))(*(void***)p)[0])(p, 1);
             }
         }
     }
@@ -377,22 +431,24 @@ bool __stdcall ReadMaterialList(void* stream, char* obj, uint32_t* key3) {
         int idx = FUN_0071ddc0((void*)e, 0x15, 0, 6, 8);
         if (idx >= 0) {
             char* slot = (char*)(idx * 0x20 + 0x10 + *(int*)(e + 8));
-            int* local = 0;
+            void* local = 0;
             void* mm = MaterialManager();
-            int r = ((int(__thiscall**)(void*, void*, void*, int**, void*))*(void***)mm)[0x48 / 4](
-                mm, *(void**)slot, *((void**)slot + 1), &local, key3);
+            int r = ((int(__thiscall*)(void*, void*, void*, void*, void*, void*))(*(void***)mm)[0x48 / 4])(
+                mm, stream, *(void**)slot, *((void**)slot + 1), &local, key3);
             if (r < 0) {
-                if (local) ((void(__thiscall**)(int*))*(void***)local)[1](local);
+                if (local) ((void(__thiscall*)(void*))(*(void***)local)[1])(local);
                 return false;
             }
             if (local) {
-                RemoveRC(*((void**)slot + 3));
-                if (local != *((int**)slot + 3)) {
-                    ((void(__thiscall**)(int*))*(void***)local)[0](local);
-                    *((int**)slot + 3) = local;
+                RemoveRC2(local, 0, *((void**)slot + 3));
+                void* old = *((void**)slot + 3);
+                if (local != old) {
+                    ((void(__thiscall*)(void*))(*(void***)local)[0])(local);
+                    *((void**)slot + 3) = local;
+                    if (old) ((void(__thiscall*)(void*))(*(void***)old)[1])(old);
                 }
             }
-            if (local) ((void(__thiscall**)(int*))*(void***)local)[1](local);
+            if (local) ((void(__thiscall*)(void*))(*(void***)local)[1])(local);
         }
     }
     return true;
