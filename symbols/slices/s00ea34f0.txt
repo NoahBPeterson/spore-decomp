@@ -1,0 +1,6 @@
+008120d0 ?Init@cSPUILayout@@QAE_NABVKey@ResourceMan@EA@@_NI@Z  # cSPUILayout::Init (callee of s00ea34f0, named from the dev publics; slice address comment)
+0093a560 ??0Stopwatch@EA@@QAE@H_N@Z  # EA::Stopwatch::Stopwatch (callee of s00ea34f0, named from the dev publics; slice address comment)
+00ea34f0 ?OnMessage@cCityMusicNoteEditor@@QAE_NHPAUMsg@@@Z  # cCityMusicNoteEditor::OnMessage migrated from s00ea34f0 (verbatim, slice spelling)
+00ea3ab0 ?Destroy@cCityMusicNoteEditor@@QAEXXZ  # cCityMusicNoteEditor::Destroy migrated from s00ea34f0 (verbatim, slice spelling)
+00ea3b50 ?Update@cCityMusicNoteEditor@@QAEXXZ  # cCityMusicNoteEditor::Update migrated from s00ea34f0 (verbatim, slice spelling)
+00ea3c20 ??0cCityMusicNoteEditor@@QAE@PAUcPlayerCityMusicConfig@@@Z  # cCityMusicNoteEditor::cCityMusicNoteEditor migrated from s00ea34f0 (verbatim, slice spelling)

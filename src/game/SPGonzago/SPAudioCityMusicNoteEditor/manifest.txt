@@ -1,0 +1,2 @@
+# source  symbol  va  flags
+../src/game/SPGonzago/SPAudioCityMusicNoteEditor.cpp  ?Update@cCityMusicNoteEditor@@QAEXXZ  00ea3b50  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
