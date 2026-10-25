@@ -2,5 +2,7 @@
 01391740 init_16ca3d4  # 12 x int(-1) initializer
 01391bc0 init_16d6d30  # 16 x int(0) + atexit
 01391c20 init_16d6d70  # 16 x int(0) + atexit
-0138d560 init_15afd38  # property-descriptor table (stride 0x3c)
+0138d560 init_15afd38  # 9 PropertyDesc records {name VA, hash, size, unk0c-14, 0,0, 7 fn ptrs} -> 0x15afd38, 0x3c stride
+01396110 init_15b4568  # 5 PropertyDesc records -> 0x15b4568, 0x3c stride
+01396440 init_15b47b8  # 6 PropertyDesc records -> 0x15b47b8, 0x3c stride
 013921c0 init_16d6fa8  # float basis-matrix table (0x3f3504f3 = sqrt(1/2))
