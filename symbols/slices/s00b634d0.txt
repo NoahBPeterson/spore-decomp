@@ -1,0 +1,4 @@
+00b63890 ??0cGonzagoTimer@@QAE@XZ  # cGonzagoTimer::cGonzagoTimer migrated from s00b634d0 (verbatim, slice spelling)
+00b638b0 ??1cGonzagoTimer@@QAE@XZ  # cGonzagoTimer::~cGonzagoTimer migrated from s00b634d0 (verbatim, slice spelling)
+00b638c0 ?AddElapsed@cGonzagoTimer@@QAEXH@Z  # cGonzagoTimer::AddElapsed migrated from s00b634d0 (verbatim, slice spelling)
+00b638d0 ?Write@cGonzagoTimer@@QAEXPAX@Z  # cGonzagoTimer::Write migrated from s00b634d0 (verbatim, slice spelling)

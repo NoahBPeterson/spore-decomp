@@ -1,0 +1,2 @@
+# complete (behaviourally equivalent) but not byte-exact: <va> <diff-bytes> <reason>
+00b638d0 47 cGonzagoTimer::Write: complete (IsRunning -> elapsed -> mBase callback, then cVarListSerializer); the callback call reloads ecx in ours; flags /O2 /MD /Gy /EHsc /TP /arch:SSE /GS-
