@@ -30,19 +30,22 @@ extern "C" __declspec(dllimport) BOOL __stdcall FindCloseChangeNotification(HAND
 extern "C" __declspec(dllimport) DWORD __stdcall GetLongPathNameW(const unsigned short*, unsigned short*, DWORD);
 extern "C" __declspec(dllimport) void* __cdecl memmove(void*, const void*, unsigned);
 extern "C" void* __cdecl operator new[](unsigned);
+extern "C" void* __cdecl memset(void*, int, unsigned);
+extern "C" void* __cdecl memcpy(void*, const void*, unsigned);
+extern "C" bool __cdecl DirectoryExists(const unsigned short*);   // 0x009322b0
 
 extern "C" void FUN_004228e0(void*, unsigned);
 extern "C" unsigned FUN_00922930();
 extern "C" void FUN_005f8840(void*);
 extern "C" void FUN_005f96c0(void*);
 extern "C" void FUN_0092e9f0(void* self, int);
-extern "C" void WString_Assign(void* self, const unsigned short*, const unsigned short*);
-extern "C" void WString_insert(void*, const unsigned short*, const unsigned short*);
-extern "C" void WString_append(void*, const unsigned short*, int, unsigned short);
+extern "C" void WString_Assign(void* self, const unsigned short*, const unsigned short*); // 0x00423650
+extern "C" void WString_insert(void*, const unsigned short*, const unsigned short*);       // 0x005f7da0
+extern "C" void WString_append(void*, const unsigned short*, int, unsigned short);         // 0x0092ea90
 extern "C" void WString_insert2(void*, const void*, unsigned);
-extern "C" int  EA_Text_WildcardMatch(const unsigned short*, const unsigned short*, int);
-extern "C" void* Deque_Push(void*);
-extern "C" int* Deque_Last(void*);
+extern "C" int  EA_Text_WildcardMatch(const unsigned short*, const unsigned short*, int); // 0x0093d470
+extern "C" void* Deque_Push(void*);                                                       // 0x0092eec0
+extern "C" int* Deque_Last(void*);                                                        // 0x0092ea70
 bool EnsureTrailingPathSeparator(unsigned short* path, int length);
 int  ConcatenatePathComponents(unsigned short* dst, const unsigned short* c1, const unsigned short* c2);
 
@@ -266,7 +269,9 @@ bool FileWatcher::Stop() {
 // ---------------------------------------------------------------------------------------------
 void FileWatcher::Worker(uint32_t bWatchSubtree) {
     uint32_t share = m_shareMode;
-    (void)operator new[](0x1fff);
+    char changes[0x2000];
+    memset(changes, 0, 0x1fff);
+
     m_hChange = CreateEventA(0, 0, 0, 0);
     if (m_hChange == 0) return;
     m_ov.hEvent = m_hChange;   // +0x238 mirrors +0x218
@@ -274,25 +279,37 @@ void FileWatcher::Worker(uint32_t bWatchSubtree) {
     while (m_bRunning) {
         DWORD bytesReturned = 0;
         BOOL ok = ((BOOL(__stdcall*)(HANDLE, void*, DWORD, BOOL, DWORD, DWORD*, OVERLAPPED_*, void*))
-                   g_pfnReadDirectory)(m_hFile, m_path, 0x2000, notify, bWatchSubtree,
+                   g_pfnTable)(m_hFile, changes, 0x2000, notify, bWatchSubtree,
                                        &bytesReturned, &m_ov, 0);
         if (!ok) break;
         if (WaitForMultipleObjectsEx(2, &m_hChange, 0, 0xffffffff, 0) != 0) break;
         if (!m_bRunning) break;
-        char* p = (char*)m_path;
-        while (p) {
-            // queue entry (path + attributes) to the callback
+
+        char* p = changes;
+        for (;;) {
+            uint32_t next = *(uint32_t*)p;
             uint32_t attr = *(uint32_t*)(p + 4);
-            uint32_t flags = ((m_flags & 0x20) != 0) ? 0x28 : 8;
-            if (attr == 1 || attr == 5) flags = 2;
-            else if (attr == 2 || attr == 4) flags = 1;
-            if (m_callback) {
-                ((void(__cdecl*)(FileWatcher*, const unsigned short*, const unsigned short*, uint32_t, void*))m_callback)
-                    (this, m_path, (unsigned short*)(p + 0xc), flags, m_callbackData);
+            uint32_t nameBytes = *(uint32_t*)(p + 8);
+            unsigned short filename[0x100];
+            unsigned short fullPath[0x100];
+
+            memcpy(filename, p + 0xc, nameBytes);
+            filename[nameBytes / 2] = 0;
+            ConcatenatePathComponents(fullPath, m_path, filename);
+            GetLongPathNameW(fullPath, fullPath, 0x100);
+
+            if ((m_flags & 4) != 0 || !DirectoryExists(fullPath)) {
+                uint32_t flags = ((m_flags & 0x20) != 0) ? 0x28 : 8;
+                if (attr == 1 || attr == 5) flags = 2;
+                else if (attr == 2 || attr == 4) flags = 1;
+                if (m_callback) {
+                    ((void(__cdecl*)(FileWatcher*, const unsigned short*, const unsigned short*, uint32_t, void*))m_callback)
+                        (this, fullPath, filename, flags, m_callbackData);
+                }
             }
-            uint32_t sz = *(uint32_t*)p;
-            if (sz == 0) break;
-            p += sz;
+            if (next == 0)
+                break;
+            p += next;
         }
     }
     CancelIo(m_hFile);
@@ -554,50 +571,46 @@ int StripPathComponent(unsigned short* path, int component) {
     unsigned short* p = path;
     switch (component) {
     case 1: {
-        unsigned short* last = path;
         while (*p) {
-            if (*p == '\\' || *p == '/' || *p == ':') {
-                if (*p == ':' && (p[1] == 0 || ((p[1] == '\\' || p[1] == '/' || p[1] == ':') && p[2] == 0))) {
-                    *path = 0;
-                    return 0;
-                }
-            }
+            if (*p == '\\' || *p == '/' || *p == ':')
+                return (int)(p - path);
             ++p;
         }
-        (void)last;
         return (int)(p - path);
     }
     case 2: case 4: case 8: case 0x10: {
-        unsigned short* prev = path - 1;
+        unsigned short* lastSep = path - 1;
+        unsigned short* prevSep = path - 1;
         unsigned short* cur = path;
-        unsigned short* cut = prev;
         while (*cur) {
             unsigned short c = *cur;
             if (c == '\\' || c == '/' || c == ':') {
-                cut = cur;
+                prevSep = lastSep;
+                lastSep = cur;
             }
-            prev = cur;
             ++cur;
         }
-        if (component < 8 && prev + 1 == cur) cut = prev;
-        cut[1] = 0;
-        return (int)(cut + 1 - path);
+        if (component < 8 && lastSep + 1 == cur)
+            lastSep = prevSep;
+        lastSep[1] = 0;
+        return (int)(lastSep + 1 - path);
     }
     case 0x20: {
-        unsigned short* prev = path - 1;
+        unsigned short* lastSep = path - 1;
+        unsigned short* dot = path - 1;
         unsigned short* cur = path;
-        unsigned short* cut = prev;
         while (*cur) {
-            if (*cur == '\\' || *cur == '/' || *cur == ':') {
-                cur++;
-                continue;
-            }
-            if (*cur == '.') cut = cur;
-            prev = cur;
+            if (*cur == '\\' || *cur == '/' || *cur == ':')
+                lastSep = cur;
+            else if (*cur == '.')
+                dot = cur;
             ++cur;
         }
-        if (prev < cut) { *cut = 0; prev = cut; }
-        return (int)(prev - path);
+        if (dot > lastSep) {
+            *dot = 0;
+            cur = dot;
+        }
+        return (int)(cur - path);
     }
     default: {
         unsigned short* start = path + 1;
@@ -648,7 +661,7 @@ void SplitPathPtrs(unsigned short* path, void** pFile, void** pExt, void** pEnd)
         *pEnd = dot;
         return;
     }
-    unsigned short* e = (unsigned short*)*pFile;
+    unsigned short* e = p;
     while (*e) ++e;
     *pEnd = e;
 }
