@@ -1,0 +1,8 @@
+00d0c820 ?UpdateSwatchForModelType@cCommunityEditor_s00d0_c010@SP@@QAEXHPBUtVec3@2@0@Z  # cCommunityEditor_s00d0_c010::UpdateSwatchForModelType migrated from s00d0c010 (verbatim, slice spelling)
+00d0c8e0 ?FUN_00d0c8e0@cListOwner@SP@@QAEXPAUtListChild@2@@Z  # cListOwner::FUN_00d0c8e0 migrated from s00d0c010 (verbatim, slice spelling)
+00d0c970 ?FUN_00d0c970@SP@@YIXPAUcMapInsert@1@HPAPAUtTreeNode@1@PAUtMapValue@1@PAU31@_N@Z  # FUN_00d0c970 migrated from s00d0c010 (verbatim, slice spelling)
+00d0ca00 ?FUN_00d0ca00@SP@@YIXPAUcMapInsert@1@HPAPAUtTreeNode@1@PAUtMapValue@1@PAU31@_N@Z  # FUN_00d0ca00 migrated from s00d0c010 (verbatim, slice spelling)
+00d0cb30 ?FUN_00d0cb30@SP@@YIPAXPAUcMapInsert@1@HPAX1@Z  # FUN_00d0cb30 migrated from s00d0c010 (verbatim, slice spelling)
+00d0cc00 ?OnAssetBrowserSelection@cCommunityEditor_s00d0_c010@SP@@QAEXPBUtVec3@2@@Z  # cCommunityEditor_s00d0_c010::OnAssetBrowserSelection migrated from s00d0c010 (verbatim, slice spelling)
+00d0cca0 ?FUN_00d0cca0@SP@@YIXPAUcTribeToolView@1@@Z  # FUN_00d0cca0 migrated from s00d0c010 (verbatim, slice spelling)
+00d0cec0 ?FUN_00d0cec0@SP@@YIXPAUcTribeToolView@1@@Z  # FUN_00d0cec0 migrated from s00d0c010 (verbatim, slice spelling)

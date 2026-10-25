@@ -5,7 +5,7 @@
 00bf49e0 ?NotifySubEditor@cCommunityEditor@@QAEXXZ  # void cCommunityEditor::NotifySubEditor
 00bf4a60 ?SetModelTypeKey@@YAXPAHPBUVec3@@@Z  # void SetModelTypeKey(int*, const Vec3*)
 00bf4a90 ?ResetVector3Map@@YAXPAVcCommunityEditor@@@Z  # void ResetVector3Map(cCommunityEditor*)
-00bf4b10 ?CreateVehicleFromModelType@cCommunityEditor@@QAEXPAVcCity@@PBUVec3@@@Z  # void cCommunityEditor::CreateVehicleFromModelType
+00bf4b10 ?CreateVehicleFromModelType@cCommunityEditor@@QAEXPAVcCity@@PBUVec3@@@Z  # cCommunityEditor::CreateVehicleFromModelType migrated from s00bf4170 (verbatim, slice spelling)
 00bf4e50 ?RemoveAllCities@cCommunityEditor@@QAEXPAVcCity@@@Z  # void cCommunityEditor::RemoveAllCities
 00bf4eb0 ?RebuildCityFromTerrainSphere@cCommunityEditor@@QAEXXZ  # void cCommunityEditor::RebuildCityFromTerrainSphere
 00bf4fc0 ?CreateVehicleFromTerrainSphere@cCommunityEditor@@QAEXXZ  # void cCommunityEditor::CreateVehicleFromTerrainSphere

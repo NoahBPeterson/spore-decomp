@@ -8,3 +8,4 @@
 00421d70 Elem32Vec::~Elem32Vec  # destroys 0x20-byte elements, frees storage
 00421dd0 Elem56Vec::~Elem56Vec  # destroys 0x38-byte elements, frees storage
 00421e30 Elem24Vec2::~Elem24Vec2  # destroys 0x18-byte elements, frees storage
+00421eb0 ?QueryA@@YAPAXPAPAUUnknown@@@Z  # QueryA migrated from s004215f0 (verbatim, slice spelling)

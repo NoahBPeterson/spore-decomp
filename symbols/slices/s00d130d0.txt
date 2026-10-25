@@ -1,1 +1,3 @@
-00d130d0 SP::cCommunityEditor::HandleMessage  # card/PDB name; IHandler dispatcher for the city/colony editor (ret 8, bool)
+00bdca30 ?GetVehicleSpawnPoint@cCity@SP@@QAE?AUcSPVector3@@W4eVehicleLocomotion@2@@Z  # SP::cCity::GetVehicleSpawnPoint (callee of s00d130d0, named from the dev publics; slice address comment)
+00d130d0 ?HandleMessage@cCommunityEditor_s00d1_30d0@SP@@QAE_NIPAX@Z  # cCommunityEditor_s00d1_30d0::HandleMessage migrated from s00d130d0 (verbatim, slice spelling)
+00fe5430 ?SetGameDataOwner@cGameData@SP@@UAEXPAV12@@Z  # SP::cGameData::SetGameDataOwner (callee of s00d130d0, named from the dev publics; slice address comment)

@@ -1,12 +1,12 @@
-00d0b090 ?GetMaxCameraAnchorDistanceFromCommunityCenter@cCommunityEditor@@QAEMXZ  # SP::cCommunityEditor::GetMaxCameraAnchorDistanceFromCommunityCenter
-00d0b220 ?GetDefaultCameraDistance@cCommunityEditor@@QAEMXZ  # SP::cCommunityEditor::GetDefaultCameraDistance
-00d0b3b0 ?SetDefaultCamera@cCommunityEditor@@QAEX_N@Z  # SP::cCommunityEditor::SetDefaultCamera
-00d0b4d0 ?IsPositionInsideCommunityBounds@cCommunityEditor@@QAE_NUV3@@@Z  # SP::cCommunityEditor::IsPositionInsideCommunityBounds(V3)
-00d0b540 ?BoundPositionInsideCommunity@cCommunityEditor@@QAEXPAUV3@@MMM@Z  # SP::cCommunityEditor::BoundPositionInsideCommunity
-00d0b710 ?GetIndexOfClosestSnapPoint@cCommunityEditor@@QAEHPAX000_NPAPAX@Z  # SP::cCommunityEditor::GetIndexOfClosestSnapPoint
+00d0b090 ?GetMaxCameraAnchorDistanceFromCommunityCenter@cCommunityEditor_s00d0_b090@@QAEMXZ  # GetMaxCameraAnchorDistanceFromCommunityCenter migrated from s00d0b090 (verbatim, slice spelling)
+00d0b220 ?GetDefaultCameraDistance@cCommunityEditor_s00d0_b090@@QAEMXZ  # GetDefaultCameraDistance migrated from s00d0b090 (verbatim, slice spelling)
+00d0b3b0 ?SetDefaultCamera@cCommunityEditor_s00d0_b090@@QAEX_N@Z  # SetDefaultCamera migrated from s00d0b090 (verbatim, slice spelling)
+00d0b4d0 ?IsPositionInsideCommunityBounds@cCommunityEditor_s00d0_b090@@QAE_NUV3@@@Z  # IsPositionInsideCommunityBounds migrated from s00d0b090 (verbatim, slice spelling)
+00d0b540 ?BoundPositionInsideCommunity@cCommunityEditor_s00d0_b090@@QAEXPAUV3@@MMM@Z  # BoundPositionInsideCommunity migrated from s00d0b090 (verbatim, slice spelling)
+00d0b710 ?GetIndexOfClosestSnapPoint@cCommunityEditor_s00d0_b090@@QAEHPAX000_NPAPAX@Z  # GetIndexOfClosestSnapPoint migrated from s00d0b090 (verbatim, slice spelling)
 00d0ba80 ?CreateOneShotEffect@cCommunityEditor@@QAEPAXHMMM@Z  # SP::cCommunityEditor::CreateOneShotEffect
 00d0bcf0 ?SetSelectedObject@cCommunityEditor@@QAEXPAVcSpatialObject@@@Z  # SP::cCommunityEditor::SetSelectedObject
-00d0bd60 ?lower_bound@cIntPairTree@@QAEPAIPAHPAPAX@Z  # cIntPairTree::lower_bound (int-pair keyed intrusive tree)
+00d0bd60 ?lower_bound@cIntPairTree@@QAEPAIPAHPAPAX@Z  # cIntPairTree::lower_bound migrated from s00d0b090 (verbatim, slice spelling)
 00d0bdd0 ?PostEditorBehaviorMessage1@@YAXII@Z
 00d0be60 ?PostEditorBehaviorMessage2@@YAXII@Z
 00d0bef0 ?PostEditorBehaviorMessage3@@YAXII@Z

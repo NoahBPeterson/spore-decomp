@@ -1,0 +1,1 @@
+00afab70 ?StartSnapAttractorEffects@cActionCircle_s00af_ab70@SP@@QAEHPBUcSPVector3_s00af_ab70@2@@Z  # cActionCircle_s00af_ab70::StartSnapAttractorEffects migrated from s00afab70 (verbatim, slice spelling)

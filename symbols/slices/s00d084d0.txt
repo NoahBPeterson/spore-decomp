@@ -1,0 +1,7 @@
+00d08930 ?FUN_00d08930@@YAXXZ  # FUN_00d08930 migrated from s00d084d0 (verbatim, slice spelling)
+00d08a70 ?Do@Obj8A70@@QAEIII@Z  # Obj8A70::Do migrated from s00d084d0 (verbatim, slice spelling)
+00d08aa0 ?FUN_00d08aa0@@YGXIIII@Z  # FUN_00d08aa0 migrated from s00d084d0 (verbatim, slice spelling)
+00d08ad0 ?FUN_00d08ad0@@YAXPAX@Z  # FUN_00d08ad0 migrated from s00d084d0 (verbatim, slice spelling)
+00d08b50 ?Setup@Editor8B50@@QAEXIIIIE@Z  # Editor8B50::Setup migrated from s00d084d0 (verbatim, slice spelling)
+00d08d80 ?FUN_00d08d80@@YGDPAUReq8D80@@@Z  # FUN_00d08d80 migrated from s00d084d0 (verbatim, slice spelling)
+00d08fa0 ?GetVehicleCost@Editor8FA0@@QAEHI@Z  # Editor8FA0::GetVehicleCost migrated from s00d084d0 (verbatim, slice spelling)
