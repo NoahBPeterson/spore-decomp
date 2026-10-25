@@ -1,0 +1,3 @@
+00d54fa0 ??0cBehaviorSpaceTurret@@QAE@XZ  # cBehaviorSpaceTurret::cBehaviorSpaceTurret migrated from s00d54ce0 (verbatim, slice spelling)
+00d55060 ?SpaceTurret_SampleHelix@@YAXHPAUcVector3Array@@MMMMMMMMMM@Z  # SpaceTurret_SampleHelix migrated from s00d54ce0 (verbatim, slice spelling)
+00d554f0 ?SpaceTurret_SampleCorners@@YAXIPAUcVector3Array@@MMMMMMMMMM@Z  # SpaceTurret_SampleCorners migrated from s00d54ce0 (verbatim, slice spelling)
