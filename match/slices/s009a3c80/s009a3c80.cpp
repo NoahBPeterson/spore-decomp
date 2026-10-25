@@ -26,46 +26,136 @@ void operator_delete(void* p);               // 0xf47380
 
 namespace nSPCreatureAnim {
 
+// Intrusive red-black-tree node header (EASTL rbtree_node_base layout).
+struct AnimNode {
+    AnimNode* mpNodeRight;    // +0x00
+    AnimNode* mpNodeLeft;     // +0x04
+    AnimNode* mpNodeParent;   // +0x08
+    char      mColor;         // +0x0c
+    char      mPad0[3];
+};
+
+// Node of the hash-keyed animation cache (map<unsigned, AutoRefCount<animation_data> >).
+struct AnimNodeA : AnimNode {
+    unsigned mKey;            // +0x10
+    void*    mpValue;         // +0x14
+};
+
+// Node of the (creature_static_data*, id)-keyed cache.
+struct AnimNodeB : AnimNode {
+    void*    mpOwner;         // +0x10
+    unsigned mId;             // +0x14
+    void*    mpValue;         // +0x18
+};
+
+// Value/key pair stored in an anim-cache A node.
+struct AnimValueA {
+    unsigned mKey;            // +0x00
+    void*    mpValue;         // +0x04
+};
+
+// Value/key triple stored in an anim-cache B node.
+struct AnimValueB {
+    void*    mpOwner;         // +0x00
+    unsigned mId;             // +0x04
+    void*    mpValue;         // +0x08
+};
+struct AnimKeyB {
+    void*    mpOwner;         // +0x00
+    unsigned mId;             // +0x04
+};
+struct InsertRetB {
+    AnimNodeB* mpNode;
+    bool       mbInserted;
+};
+
+// Empty one-byte "unique keys" tag argument (only its byte is initialised, so the
+// generated argument push mirrors the original's byte-store-then-dword-push).
+struct UniqueKeys { char mPad; UniqueKeys() : mPad(0) {} };
+
 // Intrusive red-black-tree container used by the anim cache.
 struct AnimTree {
+    int        mCompare;       // +0x00
+    AnimNode   mAnchor;        // +0x04
+    unsigned   mnSize;         // +0x14
+    const char* mpAllocator;   // +0x18
+
     // 0x9a3c80 - recursively frees a node chain (node[0]=key-link, node[4]=next).
     void FUN_009a3c80(void* node);
     // 0x9a3c40 - sibling free used for the other global list.
     void FUN_009a3c40(void* node);
-    // (partial RB-tree entry points)
-    void* FUN_009a3da0(void* out, void* hint, void* key);      // 0x9a3da0
-    unsigned FUN_009a3f50(int key, unsigned limit);            // 0x9a3f50
-    unsigned FUN_009a4020(int key, unsigned limit);            // 0x9a4020
+    InsertRetB FUN_009a3da0(AnimNodeB* position, const AnimValueB* value, UniqueKeys unique); // 0x9a3da0
     static void FUN_009a4190(int param);                      // 0x9a4190
-    void* FUN_009a4310(void* key);                             // 0x9a4310
-    void* FUN_009a4390(void* key);                             // 0x9a4390
+    void** FUN_009a4310(unsigned* key);                        // 0x9a4310
+    void** FUN_009a4390(AnimKeyB* key);                        // 0x9a4390
 
     // Inlined cache-node-list clear helpers (used by FUN_009a3ef0).
     void ClearA()
     {
-        FUN_009a3c40(*(void**)((char*)this + 0x0c));
-        int base = (int)this + 4;
-        *(int*)base = base;
-        *(int*)((char*)this + 8) = base;
-        *(int*)((char*)this + 0x0c) = 0;
-        *(char*)((char*)this + 0x10) = 0;
-        *(int*)((char*)this + 0x14) = 0;
+        FUN_009a3c40(mAnchor.mpNodeParent);
+        AnimNode* base = &mAnchor;
+        mAnchor.mpNodeRight = base;
+        mAnchor.mpNodeLeft = base;
+        mAnchor.mpNodeParent = 0;
+        mAnchor.mColor = 0;
+        mnSize = 0;
     }
     void ClearB()
     {
-        FUN_009a3c80(*(void**)((char*)this + 0x0c));
-        int base = (int)this + 4;
-        *(int*)base = base;
-        *(int*)((char*)this + 8) = base;
-        *(int*)((char*)this + 0x0c) = 0;
-        *(char*)((char*)this + 0x10) = 0;
-        *(int*)((char*)this + 0x14) = 0;
+        FUN_009a3c80(mAnchor.mpNodeParent);
+        AnimNode* base = &mAnchor;
+        mAnchor.mpNodeRight = base;
+        mAnchor.mpNodeLeft = base;
+        mAnchor.mpNodeParent = 0;
+        mAnchor.mColor = 0;
+        mnSize = 0;
     }
 };
 
-int FUN_009a4430(int nameOrHash, int hash, char* name);        // 0x9a4430
-int FUN_009a4550(int a, int b);                                // 0x9a4550
+// Creature animation static data (only the fields touched here).
+struct creature_static_data {
+    char     mPad00[4];
+    int      mByteSize;        // +0x04
+    char     mPad08[0x108];
+    unsigned mAnimId;          // +0x110
+    void AddRef();             // 0x9b3450
+    void Release();            // 0x9c26a0
+};
+
+// Animation record passed to the cache lookup/insert (only the fields touched here).
+struct animation_record {
+    char     mPad00[0x110];
+    unsigned mAnimId;          // +0x110
+};
+
+// Animation data block as seen by the hash-keyed cache.
+struct animation_static_data {
+    char mPad00[4];
+    int  mByteSize;            // +0x04
+    char mPad08[4];
+    char mFilename[0x120];     // +0x0c .. +0x12c
+    int  mSerial;              // +0x12c
+    void AddRef();             // 0x99c660 (increments this+0x114)
+    void Release();            // 0x99d060
+};
+
+// Reference-counted animation bind record stored in the B cache.
+struct animation_bind_record {
+    void AddRef();             // 0x99c980
+    void Release();            // 0x99f0b0
+};
+
+// Animation cache manager holding the tree of finished/queued entries.
+struct animation_cache_manager {
+    unsigned FUN_009aba80(void* key, unsigned limit);   // 0x9aba80
+    unsigned FUN_009ab540(void* key, unsigned limit);   // 0x9ab540
+};
+
+int FUN_009a4430(char* filename, int hash, char* name);        // 0x9a4430
+int FUN_009a4550(creature_static_data* data, animation_record* record); // 0x9a4550
 void FUN_009a3ef0();                                           // 0x9a3ef0
+unsigned FUN_009a3f50(int key, unsigned limit);                // 0x9a3f50
+unsigned FUN_009a4020(int data, unsigned limit);               // 0x9a4020
 
 } // namespace nSPCreatureAnim
 
@@ -279,25 +369,253 @@ void PerpPair(float* n, float* out1, float* out2)
 }
 
 // ---------------------------------------------------------------------------
-// Partial EASTL red-black-tree / anim-cache entry points.
-// Bodies not reconstructed (see partial.txt).
+// EASTL red-black-tree / anim-cache entry points.
 // ---------------------------------------------------------------------------
+namespace nSPCreatureAnim {
+
+extern AnimTree*                  g_animTreeA;      // 0x166c058
+extern AnimTree*                  g_animTreeB;      // 0x166c05c
+extern unsigned                   g_animByteCount;  // 0x166c060
+extern unsigned                   g_animByteLimit;  // 0x1550b7c
+extern animation_cache_manager*   g_animCacheMgr;   // 0x166c084
+
+// Tree B node/insert helper: DoInsertValueImpl (0x9a3a10).
+struct AnimTreeInserter {
+    void Insert(AnimNodeB** out, AnimNodeB* parent, const AnimValueB* value, char force); // 0x9a3a10
+};
+
+// Tree A hinted insert: DoInsertValue(position, value, true_type) (0x9a3cd0).
+struct InsertRetA {
+    AnimNodeA* mpNode;
+    bool       mbInserted;
+};
+struct AnimTreeInserterA {
+    InsertRetA Insert(AnimNodeA* position, const AnimValueA* value, UniqueKeys unique);  // 0x9a3cd0
+};
+
+// Tree B regular insert: DoInsertValue(value, true_type) (0x9a3b10).
+struct AnimTreeRegularInserter {
+    void Insert(InsertRetB* out, const AnimValueB* value, UniqueKeys unique);      // 0x9a3b10
+};
+
+// Tree B lower_bound (0x9a3760).
+struct TreeBLowerBound {
+    void LowerBound(AnimNodeB** out, const AnimKeyB* key);                         // 0x9a3760
+};
+
+// Tree A find helper: eastl::rbtree<unsigned, AutoRefCount<...> >::find (0xe5c780).
+struct TreeAFinder {
+    void Find(void** out, const unsigned* key);            // 0xe5c780
+};
+
+// Animation bind record constructor (0x99f090).
+struct BindRecordCtor {
+    void* Construct();
+};
+
+} // namespace nSPCreatureAnim
+
+extern int g_animSerial;                                    // 0x166b260
+extern "C" void* __cdecl operator_new(unsigned size, const char* name,
+                                      int a, int b, const char* file, int line); // 0xf473a0
+
+extern "C" nSPCreatureAnim::AnimNodeB* __stdcall FUN_009a3890(const nSPCreatureAnim::AnimValueB* value); // 0x9a3890
+extern "C" nSPCreatureAnim::AnimNode* __cdecl FUN_00921580(nSPCreatureAnim::AnimNode* node);            // 0x921580
+extern "C" void __cdecl FUN_00921880(nSPCreatureAnim::AnimNode* node, nSPCreatureAnim::AnimNode* anchor); // 0x921880
+extern "C" void __cdecl FUN_009216a0(nSPCreatureAnim::AnimNode* node, nSPCreatureAnim::AnimNode* parent,
+                                     nSPCreatureAnim::AnimNode* anchor, int side);                       // 0x9216a0
+extern "C" bool __cdecl FUN_009a38f0(void* owner, unsigned id, void** out);                              // 0x9a38f0
+extern "C" void* __cdecl FUN_0099efd0(const char* filename, int hash);                                   // 0x99efd0
+extern "C" unsigned __cdecl FUN_00932e80(const char* text, unsigned seed, int flag);                     // 0x932e80
+extern "C" void __cdecl FUN_009a9b70(void* handle, unsigned size, char* buffer, int flag);               // 0x9a9b70
+extern "C" bool __cdecl FUN_009a1ee0(nSPCreatureAnim::animation_record* record,
+                                     nSPCreatureAnim::creature_static_data* data, void* bindRecord);     // 0x9a1ee0
+
+namespace nSPCreatureAnim {
+
+static inline bool KeyLessNodeValue(const AnimNodeB* node, const AnimValueB& value)
+{
+    if (value.mpOwner > node->mpOwner)
+        return true;
+    if (value.mpOwner < node->mpOwner)
+        return false;
+    if (node->mId < value.mId)
+        return true;
+    return false;
+}
+
+static inline bool KeyLessValueNode(const AnimValueB& value, const AnimNodeB* node)
+{
+    if (node->mpOwner > value.mpOwner)
+        return true;
+    if (node->mpOwner < value.mpOwner)
+        return false;
+    if (value.mId < node->mId)
+        return true;
+    return false;
+}
+
+static inline bool KeyLessKeyNode(const AnimKeyB& key, const AnimNodeB* node)
+{
+    if (node->mpOwner > key.mpOwner)
+        return true;
+    if (node->mpOwner < key.mpOwner)
+        return false;
+    if (key.mId < node->mId)
+        return true;
+    return false;
+}
+
+static inline bool KeyLessNodeKey(const AnimNodeB* node, const AnimKeyB& key)
+{
+    if (node->mpOwner < key.mpOwner)
+        return true;
+    if (key.mpOwner < node->mpOwner)
+        return false;
+    if (node->mId < key.mId)
+        return true;
+    return false;
+}
+
+} // namespace nSPCreatureAnim
+
+// Hinted insert into the (owner,id)-keyed tree, mirroring the EASTL
+// insert(position, value) dispatch at 0x9a3da0.
 // @ 0x009a3da0
-void* nSPCreatureAnim::AnimTree::FUN_009a3da0(void*, void*, void*)
+nSPCreatureAnim::InsertRetB nSPCreatureAnim::AnimTree::FUN_009a3da0(
+        AnimNodeB* position, const AnimValueB* value, UniqueKeys)
 {
-    return 0;
+    AnimNodeB* const last = (AnimNodeB*)mAnchor.mpNodeRight;
+    AnimNodeB* const head = (AnimNodeB*)&mAnchor;
+    InsertRetB result;
+
+    if ((position != last) && (position != head)) {
+        AnimNodeB* const next = (AnimNodeB*)FUN_00921580(position);
+        if (KeyLessNodeValue(position, *value) && KeyLessValueNode(*value, next)) {
+            if (position->mpNodeRight != 0) {
+                AnimNodeB* node = FUN_009a3890(value);
+                FUN_009216a0(node, next, head, 0);
+                mnSize += 1;
+                result.mpNode = node;
+                return result;
+            }
+            ((AnimTreeInserter*)this)->Insert(&result.mpNode, position, value, 0);
+            return result;
+        }
+    } else if ((mnSize != 0) && KeyLessNodeValue(last, *value)) {
+        int side = ((last == head) || KeyLessValueNode(*value, last)) ? 0 : 1;
+        AnimNodeB* node = FUN_009a3890(value);
+        FUN_009216a0(node, last, head, side);
+        mnSize += 1;
+        result.mpNode = node;
+        return result;
+    }
+
+    InsertRetB regular;
+    ((AnimTreeRegularInserter*)this)->Insert(&regular, value, UniqueKeys());
+    result.mpNode = regular.mpNode;
+    return result;
 }
 
+// Erase up to `limit` entries whose key owner equals `key` (first tree key field).
 // @ 0x009a3f50
-unsigned nSPCreatureAnim::AnimTree::FUN_009a3f50(int, unsigned)
+unsigned nSPCreatureAnim::FUN_009a3f50(int key, unsigned limit)
 {
-    return 0;
+    unsigned savedEcx;
+    __asm { mov savedEcx, ecx }
+    unsigned count = 0;
+    if (key != 0) {
+        if (g_animCacheMgr != 0)
+            count = g_animCacheMgr->FUN_009aba80((void*)key, limit);
+        if ((g_animTreeB != 0) && (count < limit)) {
+            AnimNodeB* const head = (AnimNodeB*)&g_animTreeB->mAnchor;
+            AnimNodeB* node = (AnimNodeB*)head->mpNodeLeft;
+            while (node != head) {
+                if (node->mpOwner == (void*)key) {
+                    g_animTreeB->mnSize -= 1;
+                    AnimNodeB* next = (AnimNodeB*)FUN_00921580(node);
+                    FUN_00921880(node, (AnimNode*)head);
+                    if (node->mpValue != 0)
+                        ((animation_bind_record*)node->mpValue)->Release();
+                    if (node->mpOwner != 0)
+                        ((creature_static_data*)node->mpOwner)->Release();
+                    operator_delete(node);
+                    count += 1;
+                    if (count == limit)
+                        break;
+                    node = next;
+                } else {
+                    node = (AnimNodeB*)FUN_00921580(node);
+                }
+            }
+        }
+    }
+    __asm { mov ecx, savedEcx }
+    return count;
 }
 
+// Erase up to `limit` cached entries belonging to `data`: first the (owner,id) tree
+// entries whose id matches, then the hash-keyed tree entries whose animation data
+// pointer matches (adjusting the global byte counter).
 // @ 0x009a4020
-unsigned nSPCreatureAnim::AnimTree::FUN_009a4020(int, unsigned)
+unsigned nSPCreatureAnim::FUN_009a4020(int data, unsigned limit)
 {
-    return 0;
+    unsigned savedEcx;
+    __asm { mov savedEcx, ecx }
+    unsigned count = 0;
+    if (data == 0) {
+        __asm { mov ecx, savedEcx }
+        return 0;
+    }
+    if (g_animCacheMgr != 0)
+        count = g_animCacheMgr->FUN_009ab540((void*)data, limit);
+
+    if ((g_animTreeB != 0) && (count < limit)) {
+        AnimNodeB* const head = (AnimNodeB*)&g_animTreeB->mAnchor;
+        AnimNodeB* node = (AnimNodeB*)head->mpNodeLeft;
+        while (node != head) {
+            if ((node->mId == ((creature_static_data*)data)->mAnimId) && (node->mpValue != 0)) {
+                g_animTreeB->mnSize -= 1;
+                AnimNodeB* next = (AnimNodeB*)FUN_00921580(node);
+                FUN_00921880(node, (AnimNode*)head);
+                if (node->mpValue != 0)
+                    ((animation_bind_record*)node->mpValue)->Release();
+                if (node->mpOwner != 0)
+                    ((creature_static_data*)node->mpOwner)->Release();
+                operator_delete(node);
+                count += 1;
+                if (count == limit)
+                    break;
+                node = next;
+            } else {
+                node = (AnimNodeB*)FUN_00921580(node);
+            }
+        }
+    }
+
+    if ((g_animTreeA != 0) && (count < limit)) {
+        AnimNodeA* const head = (AnimNodeA*)&g_animTreeA->mAnchor;
+        AnimNodeA* node = (AnimNodeA*)head->mpNodeLeft;
+        while (node != head) {
+            if (node->mpValue == (void*)data) {
+                g_animByteCount -= ((creature_static_data*)data)->mByteSize;
+                g_animTreeA->mnSize -= 1;
+                AnimNodeA* next = (AnimNodeA*)FUN_00921580((AnimNode*)node);
+                FUN_00921880((AnimNode*)node, (AnimNode*)head);
+                if (node->mpValue != 0)
+                    ((animation_static_data*)node->mpValue)->Release();
+                operator_delete(node);
+                count += 1;
+                if (count == limit)
+                    break;
+                node = next;
+            } else {
+                node = (AnimNodeA*)FUN_00921580((AnimNode*)node);
+            }
+        }
+    }
+    __asm { mov ecx, savedEcx }
+    return count;
 }
 
 namespace nSPCreatureAnim {
@@ -373,26 +691,163 @@ void nSPCreatureAnim::AnimTree::FUN_009a4190(int param)
         operator_delete(v.mpBegin);
 }
 
+// ---------------------------------------------------------------------------
+// AnimTree::FUN_009a4310 - find-or-insert in the hash-keyed cache (tree A).
+// Returns the address of the node's AutoRefCount payload slot.
 // @ 0x009a4310
-void* nSPCreatureAnim::AnimTree::FUN_009a4310(void*)
+void** nSPCreatureAnim::AnimTree::FUN_009a4310(unsigned* key)
 {
-    return 0;
+    AnimNodeA* const head = (AnimNodeA*)&mAnchor;
+    unsigned const k = *key;
+    AnimNodeA* lowerBound = head;
+    AnimNodeA* current = (AnimNodeA*)mAnchor.mpNodeParent;
+    while (current != 0) {
+        if (current->mKey < k) {
+            current = (AnimNodeA*)current->mpNodeRight;
+        } else {
+            lowerBound = current;
+            current = (AnimNodeA*)current->mpNodeLeft;
+        }
+    }
+    if ((lowerBound != head) && (lowerBound->mKey <= k))
+        return &lowerBound->mpValue;
+
+    AnimValueA value;
+    value.mKey = k;
+    value.mpValue = 0;
+    return &((AnimTreeInserterA*)this)->Insert(lowerBound, &value, UniqueKeys()).mpNode->mpValue;
 }
 
+// ---------------------------------------------------------------------------
+// AnimTree::FUN_009a4390 - find-or-insert in the (owner,id)-keyed cache (tree B).
+// Returns the address of the node's bind-record payload slot.
 // @ 0x009a4390
-void* nSPCreatureAnim::AnimTree::FUN_009a4390(void*)
+void** nSPCreatureAnim::AnimTree::FUN_009a4390(AnimKeyB* key)
 {
-    return 0;
+    AnimNodeB* const head = (AnimNodeB*)&mAnchor;
+    AnimNodeB* lowerBound;
+    ((TreeBLowerBound*)this)->LowerBound(&lowerBound, key);
+    if ((lowerBound != head) && !KeyLessKeyNode(*key, lowerBound))
+        return &lowerBound->mpValue;
+
+    AnimValueB value;
+    value.mpOwner = key->mpOwner;
+    if (value.mpOwner != 0)
+        ((creature_static_data*)value.mpOwner)->AddRef();
+    value.mId = key->mId;
+    value.mpValue = 0;
+    InsertRetB result = FUN_009a3da0(lowerBound, &value, UniqueKeys());
+    if (value.mpOwner != 0)
+        ((creature_static_data*)value.mpOwner)->Release();
+    return &result.mpNode->mpValue;
 }
 
+// ---------------------------------------------------------------------------
+// nSPCreatureAnim::LoadAndCacheAnimationStaticData - resolve an animation by
+// file name / hash, create it on demand, stamp its serial and add it to the
+// hash-keyed cache; then run the cache-size trimmer.
 // @ 0x009a4430
-int nSPCreatureAnim::FUN_009a4430(int, int, char*)
+int nSPCreatureAnim::FUN_009a4430(char* filename, int hash, char* name)
 {
-    return 0;
+    char buffer[0x200];
+    if (hash == 0) {
+        if (filename == 0)
+            return 0;
+        FUN_009a9b70(filename, 0x200, buffer, 0);
+        hash = (int)FUN_00932e80(buffer, 0x811c9dc5, 1);
+    }
+
+    unsigned key = (unsigned)hash;
+    AnimNodeA* it;
+    ((TreeAFinder*)g_animTreeA)->Find((void**)&it, &key);
+    AnimNodeA* const head = (AnimNodeA*)&g_animTreeA->mAnchor;
+    animation_static_data* data;
+    if ((it == head) || ((data = (animation_static_data*)it->mpValue) == 0)) {
+        data = (animation_static_data*)FUN_0099efd0(filename, hash);
+        void** slot = g_animTreeA->FUN_009a4310(&key);
+        void* old = *slot;
+        if ((void*)data != old) {
+            if (data != 0)
+                data->AddRef();
+            *slot = data;
+            if (old != 0)
+                ((animation_static_data*)old)->Release();
+        }
+        if (data == 0)
+            goto finish;
+
+        if (name != 0) {
+            char* dst = data->mFilename;
+            for (;;) {
+                char c = *name++;
+                *dst++ = c;
+                if (c == 0)
+                    break;
+            }
+        }
+        g_animByteCount += (unsigned)data->mByteSize;
+    }
+
+    data->mSerial = g_animSerial;
+    g_animSerial += 1;
+
+finish:
+    AnimTree::FUN_009a4190((int)data);
+    return (int)data;
 }
 
+// ---------------------------------------------------------------------------
+// nSPCreatureAnim::FUN_009a4550 - find-or-create the animation bind record for
+// (static data, animation record), store it in tree B and return a borrowed
+// pointer to it.
 // @ 0x009a4550
-int nSPCreatureAnim::FUN_009a4550(int, int)
+int nSPCreatureAnim::FUN_009a4550(creature_static_data* data, animation_record* record)
 {
-    return 0;
+    void* found = 0;
+    bool bFound = FUN_009a38f0(data, record->mAnimId, &found);
+    animation_bind_record* result = (animation_bind_record*)found;
+
+    if (!bFound) {
+        animation_bind_record* created =
+            (animation_bind_record*)operator_new(0x38, "Anim/abd/struct", 0, 0, 0, 0);
+        if (created != 0)
+            created = (animation_bind_record*)((BindRecordCtor*)created)->Construct();
+
+        animation_bind_record* value = (animation_bind_record*)found;
+        if (created != found) {
+            if (created != 0)
+                created->AddRef();
+            value = created;
+            if (found != 0)
+                ((animation_bind_record*)found)->Release();
+        }
+
+        bool ok = FUN_009a1ee0(record, data, value);
+        result = value;
+        if (!ok && (value != 0)) {
+            result = 0;
+            value->Release();
+        }
+
+        AnimKeyB key;
+        key.mpOwner = data;
+        key.mId = record->mAnimId;
+        if (data != 0)
+            data->AddRef();
+        void** slot = g_animTreeB->FUN_009a4390(&key);
+        void* old = *slot;
+        if ((void*)result != old) {
+            if (result != 0)
+                result->AddRef();
+            *slot = result;
+            if (old != 0)
+                ((animation_bind_record*)old)->Release();
+        }
+        if (data != 0)
+            data->Release();
+    }
+
+    if (result != 0)
+        result->Release();
+    return (int)result;
 }
