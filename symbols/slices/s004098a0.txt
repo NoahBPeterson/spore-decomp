@@ -6,5 +6,5 @@
 00409b90 BoundingBox_GetCenter  # (min+max)*0.5
 00409c00 BoundingBox_Reset  # min=+FLT_MAX, max=-FLT_MAX
 00409ce0 BoundingBox_SetCenterRadius  # center -/+ r
-00409dd0 BoundingBox_TransformBy  # applies Transform (scale/rotate/translate)
-0040a0f0 Matrix3_Abs  # elementwise fabs of 9 floats
+00409dd0 ?TransformBy@BoundingBox@@QAEXABUTransform@@@Z  # BoundingBox::TransformBy migrated from s004098a0 (verbatim, slice spelling)
+0040a0f0 ?Matrix3_Abs@@YAXABUMatrix3@@AAU1@@Z  # Matrix3_Abs migrated from s004098a0 (verbatim, slice spelling)
