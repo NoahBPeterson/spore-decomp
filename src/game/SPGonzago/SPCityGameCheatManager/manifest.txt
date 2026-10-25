@@ -1,0 +1,5 @@
+# source  symbol  va  flags
+../src/game/SPGonzago/SPCityGameCheatManager.cpp  ?Execute@cCommandToggleShowPaths@@QAEXPAX@Z  00cedff0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPCityGameCheatManager.cpp  ?Execute@cCommandSetVehicleWeapons@@QAEXPAX@Z  00cee010  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPCityGameCheatManager.cpp  ??1cCityGameCheatManager@@QAE@XZ  00cee060  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPCityGameCheatManager.cpp  ??0cCivModeStrategy@Simulator@@QAE@XZ  00cee130  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

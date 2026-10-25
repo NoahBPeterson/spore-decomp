@@ -1,0 +1,2 @@
+# complete behaviorally-equivalent source, not byte-exact (flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-)
+00cee1c0 76 -- enumerate class-0x18c43e8 sim objects, dispatch vtbl[0x58] on their +0x120 subobject, mark via FUN_00be1340; loop/register layout differs
