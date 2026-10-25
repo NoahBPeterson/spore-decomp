@@ -142,9 +142,16 @@ void CopyBoxElemsBackward(const BoxElem* pFirst, const BoxElem* pLast, BoxElem* 
 extern "C" long __cdecl _InterlockedExchangeAdd(volatile long*, long);
 #pragma intrinsic(_InterlockedExchangeAdd)
 
+// A three-component vector; rows of the matrix are stored as one of these.
+struct Vec3 { float x, y, z; };
+
 // 3x3 float matrix (rw::math::fpu::Matrix33Template<float,0> layout: row major, 9 floats).
+// The rows are exposed as vectors because the original assigns whole rows.
 struct Matrix33 {
-    float m[9];                                 // +0x0
+    union {
+        float m[9];                             // +0x0
+        struct { Vec3 xAxis, yAxis, zAxis; } row;
+    };
 
     void Assign(const Matrix33* pSrc);          // 0x0041cb40
 };
@@ -154,6 +161,7 @@ struct DecalNode {
     uint16_t mFlags;                            // +0x0
     uint16_t mStamp;                            // +0x2
     float mNormal[3];                           // +0x4
+    uint32_t mPad;                              // +0x10
     Matrix33 mBasis;                            // +0x14
 };
 
@@ -414,49 +422,60 @@ bool cTerrainSphereDecal::GetBBoxForFace(uint32_t face, float* pOut)
 // Rebuild a decal node's basis from its normal: replace the third row with the
 // unit normal and re-derive the two remaining rows from whichever of the first
 // two rows is more perpendicular to it.
+static Vec3 CrossVec(Vec3 a, Vec3 b)
+{
+    Vec3 r;
+    r.x = a.y * b.z - a.z * b.y;
+    r.y = a.z * b.x - a.x * b.z;
+    r.z = a.x * b.y - a.y * b.x;
+    return r;
+}
+
+static Vec3 NormVec(Vec3 v)
+{
+    float inv = 1.0f / sqrtf(v.x * v.x + v.y * v.y + v.z * v.z);
+    Vec3 r;
+    r.x = v.x * inv;
+    r.y = v.y * inv;
+    r.z = v.z * inv;
+    return r;
+}
+
 // @ 0x00fad1d0
 void DecalNode_UpdateBasis(DecalNode* pNode)
 {
     Matrix33 m;
     m.Assign(&pNode->mBasis);
 
-    float nx = pNode->mNormal[0];
-    float ny = pNode->mNormal[1];
-    float nz = pNode->mNormal[2];
-    float invZ = 1.0f / sqrtf(nx * nx + ny * ny + nz * nz + 1e-8f);
-    float z0 = nx * invZ;
-    float z1 = ny * invZ;
-    float z2 = nz * invZ;
+    Vec3 zAxis;
+    zAxis.x = pNode->mNormal[0];
+    float invZ = 1.0f / sqrtf(zAxis.x * zAxis.x +
+                              pNode->mNormal[2] * pNode->mNormal[2] +
+                              pNode->mNormal[1] * pNode->mNormal[1] + 1e-8f);
+    zAxis.x = zAxis.x * invZ;
+    zAxis.y = pNode->mNormal[1] * invZ;
+    zAxis.z = pNode->mNormal[2] * invZ;
+    m.row.zAxis = zAxis;
 
-    float dotA = fabsf(m.m[0] * z0 + m.m[1] * z1 + m.m[2] * z2);
-    float dotB = fabsf(m.m[3] * z0 + m.m[4] * z1 + m.m[5] * z2);
+    Vec3 xAxis = m.row.xAxis;
+    Vec3 yAxis = m.row.yAxis;
+
+    float dotA = fabsf(xAxis.x * zAxis.x + xAxis.y * zAxis.y + xAxis.z * zAxis.z);
+    float dotB = fabsf(yAxis.x * zAxis.x + yAxis.y * zAxis.y + yAxis.z * zAxis.z);
 
     if (dotB <= dotA) {
-        float t0 = m.m[4] * z2 - m.m[5] * z1;
-        float t1 = m.m[5] * z0 - m.m[3] * z2;
-        float t2 = m.m[3] * z1 - m.m[4] * z0;
-        float inv = 1.0f / sqrtf(t0 * t0 + t1 * t1 + t2 * t2);
-        m.m[0] = t0 * inv;
-        m.m[1] = t1 * inv;
-        m.m[2] = t2 * inv;
-        m.m[3] = m.m[1] * z2 - m.m[2] * z1;
-        m.m[4] = m.m[2] * z0 - m.m[0] * z2;
-        m.m[5] = m.m[0] * z1 - m.m[1] * z0;
+        // Rebuild the x row from y x z, then y from z x x.
+        xAxis = NormVec(CrossVec(yAxis, zAxis));
+        m.row.xAxis = xAxis;
+        yAxis = CrossVec(zAxis, xAxis);
+        m.row.yAxis = yAxis;
     } else {
-        float t0 = m.m[1] * z2 - m.m[2] * z1;
-        float t1 = m.m[2] * z0 - m.m[0] * z2;
-        float t2 = m.m[0] * z1 - m.m[1] * z0;
-        float inv = 1.0f / sqrtf(t0 * t0 + t1 * t1 + t2 * t2);
-        m.m[3] = t0 * inv;
-        m.m[4] = t1 * inv;
-        m.m[5] = t2 * inv;
-        m.m[0] = m.m[4] * z2 - m.m[5] * z1;
-        m.m[1] = m.m[5] * z0 - m.m[3] * z2;
-        m.m[2] = m.m[3] * z1 - m.m[4] * z0;
+        // Rebuild the y row from z x x, then x from y x z.
+        yAxis = NormVec(CrossVec(zAxis, xAxis));
+        m.row.yAxis = yAxis;
+        xAxis = CrossVec(yAxis, zAxis);
+        m.row.xAxis = xAxis;
     }
-    m.m[6] = z0;
-    m.m[7] = z1;
-    m.m[8] = z2;
 
     pNode->mFlags |= 2;
     ++pNode->mStamp;
