@@ -10,3 +10,7 @@
 008ddc10 68 complete: GetNameFromDatabaseKey; single-vs-early epilogue layout + buffer offset differ
 008dde50 260 complete: FUN_008dde50; retail entry is stdcall with four stack args (ret 0x10), trailing arg unused; equiv WEAK 337 valid, 14.9% coverage
 
+008dd250 386 complete: CopyDatabaseRecord; type-check, OpenRecord on source, alloc, ReadRecordRaw->WriteRecordRaw, then Record Read/Unlock/Release fallback; flags /O2 /MD /Gy /TP /GS- /arch:SSE; equiv UNSUPPORTED (0/400 valid: fake-arity 257, fault read 143)
+008dd430 149 complete: CopyDatabaseRecords; lock both DBs, enumerate key list, copy each, free vector; flags /O2 /MD /Gy /TP /GS- /arch:SSE; equiv UNSUPPORTED (0/400 valid: fault read 400)
+008dd8f0 396 complete: key-from-name parser + type resolver; flags /O2 /MD /Gy /TP /GS- /arch:SSE; equiv WEAK 392 valid, 45.4% coverage
+008ddc80 329 complete: DefaultCreateNameFromKey; id lookup + L"0x%08x!0x%08x..." format with optional "_"+name prefix; flags /O2 /MD /Gy /TP /GS- /arch:SSE; equiv UNSUPPORTED (0/400 valid: faults read/write)
