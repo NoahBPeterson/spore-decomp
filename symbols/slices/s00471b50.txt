@@ -1,2 +1,7 @@
-00471b50 ?AddInitialBoundInfo@EditorUtils@SP@@YAXPAVcEditorResource@2@PAVcPropertyList@2@@Z  # SP::EditorUtils::AddInitialBoundInfo migrated from s00471b50
+00471b50 ?AddInitialBoundInfo@EditorUtils@SP@@YAXPAVcEditorResource@2@PAVcPropertyList@2@@Z  # real symbol from card; complete source, nonmatching on retail's aligned esp frame
+004721e0 ??0cSerializedEditorBlock@SP@@QAE@ABU01@@Z  # cSerializedEditorBlock copy ctor, real symbol; byte-exact
 00472540 ??1RefHolderB@@QAE@XZ  # RefHolderB::~RefHolderB migrated from s00471b50 (verbatim, slice spelling)
+00472860 ??0IntVecObj@@QAE@XZ  # IntVecObj ctor (stub class name, no PDB name); byte-exact
+004728e0 ?GetView@IntVecObj@@QAEPAUBufView@@PAU2@@Z  # IntVecObj::GetView (stub class name); complete, 5-byte stack-slot diff
+00472990 ??0FixedVecInt1@@QAE@HABH@Z  # eastl::fixed_vector<int,1> ctor (stub type name); byte-exact
+00472aa0 ??1IntVecObj@@QAE@XZ  # IntVecObj destructor (stub class name); byte-exact
