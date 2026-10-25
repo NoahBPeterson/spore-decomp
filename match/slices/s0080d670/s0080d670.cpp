@@ -3,6 +3,7 @@
 // Built /O2 /MD /Gy /EHsc /TP /arch:SSE2 (most functions). d810 uses an 8-byte aligned frame.
 #include <intrin.h>
 #include <math.h>
+#include <xmmintrin.h>
 typedef unsigned char  u8;
 typedef unsigned short u16;
 typedef unsigned int   u32;
@@ -28,13 +29,30 @@ typedef void* (__thiscall *VF0)(void*);
 typedef void  (__thiscall *VF0v)(void*);
 typedef void* (__thiscall *VF1)(void*, void*);
 typedef void  (__thiscall *VF1v)(void*, void*);
+typedef void* (__thiscall *VF1a)(void*, void*, void*);
 typedef void  (__thiscall *VF2v)(void*, void*, void*, int);
 typedef void  (__thiscall *VF3v)(void*, void*, void*, void*, void*);
+
+struct Vec2 {
+    f32 x, y;
+    Vec2() {}
+    Vec2(f32 a, f32 b) : x(a), y(b) {}
+    Vec2(const Vec2& o) : x(o.x), y(o.y) {}
+};
+struct Rect4 { f32 x0, y0, x1, y1; };
+
+typedef void  (__thiscall *VFtf)(void*, void*, Vec2);
 static inline void** VT(void* o) { return *(void***)o; }
+
+// Retail carries every float temporary in an SSE register (single precision, no x87 excess).
+static inline f32 SseSub(f32 a, f32 b) { return _mm_cvtss_f32(_mm_sub_ss(_mm_set_ss(a), _mm_set_ss(b))); }
+static inline f32 SseMul(f32 a, f32 b) { return _mm_cvtss_f32(_mm_mul_ss(_mm_set_ss(a), _mm_set_ss(b))); }
+static inline f32 SseDiv(f32 a, f32 b) { return _mm_cvtss_f32(_mm_div_ss(_mm_set_ss(a), _mm_set_ss(b))); }
 
 // generic layered object
 struct Layered {
-    u8  pad0[0xc];
+    u8  pad0[8];
+    void* renderer;  // +0x8
     void** vBegin;   // +0xc
     void** vEnd;     // +0x10
     void** v2Begin;  // +0x14
@@ -44,7 +62,17 @@ struct Layered {
     void* obj3c;     // +0x3c
     u8  pad40[4];
     u8  bits44[0x1c]; // +0x44..+0x5f
-    u8  pad60[0x1cc - 0x60];
+    u8  pad60[4];     // +0x60..+0x63
+    f32 rectMinX;     // +0x64
+    f32 rectMinY;     // +0x68
+    f32 rectMaxX;     // +0x6c
+    f32 rectMaxY;     // +0x70
+    u8  flag74;       // +0x74
+    u8  flag75;       // +0x75
+    u8  flag76;       // +0x76
+    u8  pad77;        // +0x77
+    u8  flag78;       // +0x78
+    u8  pad79[0x1cc - 0x79];
     u8  flag1cc;     // +0x1cc
     u8  pad1d4[0x1d4 - 0x1cd];
     i32 r1d4;        // +0x1d4
@@ -60,7 +88,7 @@ struct Layered {
     void* p25c;      // +0x25c
     void* p260;      // +0x260
 
-    u8*  Method810();                     // 0x80d810
+    u8*  Method810(void* win);            // 0x80d810
     void MethodDA50(void* param, void*, void*, void*, void*); // 0x80da50
     void ReleaseAll();                    // 0x80dbb0
     void MethodDC50(int);                 // 0x80dc50
@@ -69,8 +97,32 @@ struct Layered {
     void SetObj(void* p, u8 b);           // 0x80dda0
     void RenderEnd();                     // 0x80de20
     void* CameraLocZoom(void* outVec3, float* outZoom); // 0x80dfe0
-    void RenderBegin();                   // 0x80e270
+    bool RenderBegin(int id);             // 0x80e270
 };
+
+// renderer device passed a CamState snapshot (0x7c40f0/0x7c4d00 family)
+struct Renderer {
+    void __thiscall SetViewport(int x, int y, int w, int h); // 0x7c5310
+    void __thiscall SetAspect(float aspect);                 // 0x7c4b50
+    void __thiscall SetFov(float fov);                       // 0x7c53d0
+    void __thiscall SetNearFar(float d);                     // 0x7c4ba0
+    void __thiscall Snapshot(void* state);                   // 0x7c40f0
+    void __thiscall Submit(void* state);                     // 0x7c4d00
+};
+
+struct CamState {
+    u16 flags;      // +0x00
+    u16 count;      // +0x02
+    f32 x;          // +0x04
+    f32 y;          // +0x08
+    f32 z;          // +0x0c
+    f32 w;          // +0x10
+    f32 basis[9];   // +0x14..+0x37
+};
+
+u8   __cdecl  FUN_8050b0(void*);              // 0x8050b0
+void __cdecl  FUN_805ea0(void* outRect);      // 0x805ea0
+void __cdecl  CamStateInit(CamState* s);      // 0x409930
 
 // cSPUIModelsAndEffectsRenderer: renders/refcounted
 struct ModelsRenderer {
@@ -157,17 +209,45 @@ void* __fastcall FUN_0080db90(char* p)
 }
 
 // @ 0x0080d810
-u8* Layered::Method810()
+u8* Layered::Method810(void* win)
 {
-    for (int i = 0; i < 6; ++i) {
-        u8* e = entries1e4 + i * 0x14;
-        if (e[0] == 0) {
-            // approximate: the original computes a min/max rectangle from two source rects
-            r1d4 = r1d8 = r1dc = r1e0 = 0;
-            return (u8*)((char*)this + 0x1d4);
-        }
-    }
-    return 0;
+    u32 i = 0;
+    u8* e = entries1e4;
+    for (; i < 6; ++i, e += 0x14)
+        if (*e == 0) break;
+    if (i == 6) return 0;
+    *e = 1;
+
+    f32* r = (f32*)((VF0)VT(win)[0x38 / 4])(win);
+    f32 w = SseSub(r[2], r[0]);
+    f32 h = SseSub(r[3], r[1]);
+
+    Vec2 p0, p1, p2, p3;
+    VFtf tf = (VFtf)VT(win)[0xc0 / 4];
+    tf(win, &p0, Vec2(0.0f, 0.0f));
+    tf(win, &p1, Vec2(w, h));
+    tf(win, &p2, Vec2(w, 0.0f));
+    tf(win, &p3, Vec2(0.0f, h));
+
+    const f32& maxY1 = p3.y > p2.y ? p3.y : p2.y;
+    const f32& maxY2 = maxY1 > p1.y ? maxY1 : p1.y;
+    const f32& maxY = maxY2 > p0.y ? maxY2 : p0.y;
+    const f32& maxX1 = p3.x > p2.x ? p3.x : p2.x;
+    const f32& maxX2 = maxX1 > p1.x ? maxX1 : p1.x;
+    const f32& maxX = maxX2 > p0.x ? maxX2 : p0.x;
+    const f32& minY1 = p2.y > p3.y ? p3.y : p2.y;
+    const f32& minY2 = p1.y > minY1 ? minY1 : p1.y;
+    const f32& minY = p0.y > minY2 ? minY2 : p0.y;
+    const f32& minX1 = p2.x > p3.x ? p3.x : p2.x;
+    const f32& minX2 = p1.x > minX1 ? minX1 : p1.x;
+    const f32& minX = p0.x > minX2 ? minX2 : p0.x;
+
+    u8* rect = (u8*)((char*)this + i * 0x14 + 0x1d4);
+    ((i32*)rect)[0] = (i32)minX;
+    ((i32*)rect)[1] = (i32)minY;
+    ((i32*)rect)[2] = (i32)maxX;
+    ((i32*)rect)[3] = (i32)maxY;
+    return rect;
 }
 
 // @ 0x0080da50
@@ -465,7 +545,100 @@ void* Layered::CameraLocZoom(void* outVec3, float* outZoom)
 }
 
 // @ 0x0080e270
-void Layered::RenderBegin()
+bool Layered::RenderBegin(int id)
 {
-    // approximate: begin rendering of the layered object
+    if (!vBegin) return false;
+    if (MethodDD50() != id) return false;
+    void** it = v2Begin;
+    void** end = v2End;
+    if (it == end) return false;
+    if (!FUN_8050b0(vBegin)) return false;
+
+    f32 cb = 0.0f, cg = 0.0f, cr = 0.0f, ca = 0.0f;
+    if (flag78) {
+        u32 c = (u32)(size_t)((VF0)VT(vBegin)[0x30 / 4])(vBegin);
+        const f32 k = 0.0039215689f;
+        cb = (f32)((c >> 16) & 0xff) * k;
+        cg = (f32)((c >> 8) & 0xff) * k;
+        cr = (f32)(c & 0xff) * k;
+        ca = (f32)(c >> 24) * k;
+    }
+
+    for (; it != end; ++it) {
+        void* obj = *it;
+        void* mgr = ModelMgr();
+        u32 idx = (u32)(size_t)((VF1a)VT(mgr)[0x28 / 4])(mgr, (void*)0x32fab27, (void*)0);
+        if (idx < 0x40) {
+            u32* bits = (u32*)((char*)obj + 0x44 + (idx >> 5) * 4);
+            *bits |= 1u << (idx & 0x1f);
+        }
+        if (flag78) {
+            u32 flags = *(u32*)((char*)obj + 4);
+            if (flags & 2) {
+                *(f32*)((char*)obj + 0x4c) = cb;
+                *(f32*)((char*)obj + 0x50) = cg;
+                *(f32*)((char*)obj + 0x54) = cr;
+                *(f32*)((char*)obj + 0x58) = ca;
+            }
+        }
+    }
+
+    if (!flag75 && !flag76) return true;
+
+    f32* wr = (f32*)((VF0)VT(vBegin)[0x38 / 4])(vBegin);
+    f32 rx0 = wr[0], ry0 = wr[1], rx1 = wr[2], ry1 = wr[3];
+
+    Vec2 p0, p1;
+    VFtf tf = (VFtf)VT(vBegin)[0xc0 / 4];
+    tf(vBegin, &p0, Vec2(0.0f, 0.0f));
+    tf(vBegin, &p1, Vec2(rx1 - rx0, ry1 - ry0));
+
+    bool changed = FUN_0080d7e0((float*)&p0, &rectMinX) != 0
+                || FUN_0080d7e0((float*)&p1, &rectMaxX) != 0;
+
+    rectMinX = p0.x;
+    rectMinY = p0.y;
+    rectMaxX = p1.x;
+    rectMaxY = p1.y;
+    if (rectMinX >= rectMaxX) return false;
+    if (rectMinY >= rectMaxY) return false;
+
+    Rect4 vp;
+    FUN_805ea0(&vp);
+    if (0.0f > rectMaxX) return false;
+    if (0.0f > rectMaxY) return false;
+    if (rectMinX > vp.x1 - vp.x0) return false;
+    if (rectMinY > vp.y1 - vp.y0) return false;
+
+    if (!changed) return true;
+
+    f32 w = rectMaxX - rectMinX;
+    f32 h = rectMaxY - rectMinY;
+    int iw = (int)w;
+    int ih = (int)h;
+    int ix = (int)rectMinX;
+    int iy = (int)rectMinY;
+
+    Renderer* dev = (Renderer*)renderer;
+    dev->SetViewport(ix, iy, iw, ih);
+    dev->SetAspect((f32)iw / (f32)ih);
+    if (flag76) return true;
+
+    dev->SetFov(50.0f);
+    dev->SetNearFar(0.01f);
+
+    f32 camPos[3];
+    f32 zoom;
+    CameraLocZoom(camPos, &zoom);
+
+    CamState cs;
+    CamStateInit(&cs);
+    dev->Snapshot(&cs);
+    cs.flags |= 4;
+    ++cs.count;
+    cs.x = camPos[0] - zoom * cs.basis[3];
+    cs.y = camPos[1] - zoom * cs.basis[4];
+    cs.z = camPos[2] - zoom * cs.basis[5];
+    dev->Submit(&cs);
+    return true;
 }
