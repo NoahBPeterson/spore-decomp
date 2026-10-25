@@ -267,8 +267,8 @@ public:
 class cSPSpaceToolData {
 public:
     Vtbl* mpVtbl;                  // +0x00
-    float FUN_00c41d40(int v);     // 0x00c41d40
-    float FUN_0104be50(float v);   // 0x0104be50
+    float FUN_00c41d40();          // 0x00c41d40  fld [ecx+0x1e0]
+    float FUN_0104be50();          // 0x0104be50  fld [ecx+0x1d8]
 };
 
 class cInteractableObject : public IVtblObject {
@@ -456,11 +456,11 @@ void cSpaceDefenseMissile::FUN_00cb8760(const Vector3* pos, IVtblObject* target)
     cSpaceDefenseMissileLocomotion* locomotion = 0;
     void* mem = operator_new(0x48, "Simulator/cSpaceDefenseMissileLocomotion", 0, 0, 0, 0);
     if (mem) {
-        int v = (int)((VfnP)target->mpVtbl->mSlots[kVt08])(target);
         cSPSpaceToolData* tool = mpTool;
-        float speed = tool->FUN_00c41d40(v);
-        float turn = tool->FUN_0104be50(speed);
-        locomotion = ((cSpaceDefenseMissileLocomotion*)mem)->Construct(turn, speed, v);
+        locomotion = ((cSpaceDefenseMissileLocomotion*)mem)->Construct(
+            tool->FUN_0104be50(),
+            tool->FUN_00c41d40(),
+            (int)((VfnP)target->mpVtbl->mSlots[kVt08])(target));
     }
     mLoco.FUN_00c421b0(locomotion);
     mProjSuper.mTargetPosX = pos->x;

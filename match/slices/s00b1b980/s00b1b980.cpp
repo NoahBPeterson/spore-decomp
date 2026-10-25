@@ -1,8 +1,10 @@
 // Slice s00b1b980: the cStateMachineHost region (state-machine host + its EASTL rbtree map
 // instances map<string,int>, map<int,string>, map<int, vector<Elem38>>, the class ctor/dtor and
 // the transition-script setup helper).
-// Flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
+// Flags: /O2 /MD /Gy /EHsc /TP /arch:SSE (SetupTransitions is scored with /EHs-c- so its body has the
+// original's bare, EH-free prologue; the other functions compile identically under both)
 #include "types.h"
+#include <intrin.h>
 
 void* operator new(unsigned int size, const char* name, int flags, unsigned debugFlags, const char* file, int line);  // 0x00f473a0
 void operator delete[](void* p);   // 0x00f47380
@@ -54,10 +56,21 @@ struct string8 {
 };
 
 // ------------------------------------------------------------------ Elem38 / vector
+// One 0x38-byte transition-script record.  The engine's strings only use the first 0xc bytes, so the
+// string member occupies 16 bytes and the payload starts at +0x10.
 struct Elem38 {
-  string8 name;
-  char rest[0x38 - sizeof(string8)];
-  Elem38();
+  string8 name;              // +0x00  always "transition"
+  int field10;               // +0x10
+  int state;                 // +0x14  the state the record belongs to
+  int value18;               // +0x18  6 / 8 / the edited-script id
+  int value1c;               // +0x1c  0 / 1 / -1 / the edited-script id
+  int value20;               // +0x20  -1
+  unsigned char flag24;      // +0x24
+  int value28;               // +0x28  6 / 8 / 10 / 11
+  int field2c;               // +0x2c
+  int field30;               // +0x30
+  int field34;               // +0x34
+  Elem38() {}
   Elem38(const Elem38& o);                 // 0x00b1a0f0
   Elem38& operator=(const Elem38& o);      // 0x00b19d40
 };
@@ -71,6 +84,22 @@ struct Elem38Vector {
   Elem38Vector(const Elem38Vector& x);         // 0x00b1a350
   Elem38Vector& operator=(const Elem38Vector& x);  // 0x00b1a7b0
   void DoInsertValue(Elem38* position, const Elem38& value);  // 0x00b1a900
+  // eastl::vector<Elem38>::push_back, inlined by the original
+  void push_back(const Elem38& value) {
+    if (mpEnd < mpCapacity) {
+      Elem38* p = mpEnd;
+      mpEnd = p + 1;
+      if (p) new (p) Elem38(value);
+    } else {
+      DoInsertValue(mpEnd, value);
+    }
+  }
+  // explicit teardown (the slice's Elem38Vector has no destructor; other reconstructed callers run
+  // Destruct/free themselves, so the vector type stays destructor-free)
+  void Destroy() {
+    for (Elem38* p = mpBegin; p != mpEnd; ++p) p->~Elem38();
+    if (mpBegin && ((int*)mpBegin)[-1]) delete[] (char*)mpBegin;
+  }
 };
 
 // ------------------------------------------------------------------ rbtree node plumbing
@@ -108,11 +137,31 @@ struct IntStrMap {
   char pad[4];
   RBNodeBase mAnchor;  // +4
   unsigned mnSize;     // +0x14
+  char mAllocator[4];  // +0x18  stateless eastl::allocator (never written)
   __declspec(noinline) string8* Index(const int& key);                    // 0x00b1ba90
   string8* operator[](const int& key) { return Index(key); }
   // 0x00b1ad00; the trailing slot is an unused flag argument that the original fills with the
   // caller's (dead) key-pointer stack slot, so callers pass that value through
   void DoInsert(Iter* out, IntStrNode* hint, IntStrPair* value, unsigned int unusedFlag);
+  void Free(RBNodeBase* node);                                            // 0x00e4b990
+  void destroy() { Free(mAnchor.mpNodeParent); }
+  // inlined eastl::rbtree::reset(): only the anchor's links/colour and the size
+  void Reset() {
+    mAnchor.mpNodeRight = &mAnchor;
+    mAnchor.mpNodeLeft = &mAnchor;
+    mAnchor.mpNodeParent = 0;
+    mAnchor.mColor = 0;
+    mnSize = 0;
+  }
+  // inlined eastl::rbtree::rbtree(allocator): mAnchor() value-init, then reset()
+  void Construct() {
+    mAnchor = RBNodeBase();
+    Reset();
+  }
+  void clear() {
+    destroy();
+    Reset();
+  }
 };
 
 
@@ -143,10 +192,30 @@ struct IntVecMap {
   char pad[4];
   RBNodeBase mAnchor;  // +4
   unsigned mnSize;     // +0x14
+  char mAllocator[4];  // +0x18  stateless eastl::allocator (never written)
   __declspec(noinline) Elem38Vector* Index(const int& key);                             // 0x00b1c150
   Elem38Vector* operator[](const int& key) { return Index(key); }
   // 0x00b1b8b0; the trailing slot is unused and carries the caller's (dead) key-pointer value
   void DoInsert(Iter* out, RBNodeBase* hint, IntVecPair* value, unsigned int unusedFlag);
+  void Free(RBNodeBase* node);                                            // 0x00b1b830
+  void destroy() { Free(mAnchor.mpNodeParent); }
+  // inlined eastl::rbtree::reset(): only the anchor's links/colour and the size
+  void Reset() {
+    mAnchor.mpNodeRight = &mAnchor;
+    mAnchor.mpNodeLeft = &mAnchor;
+    mAnchor.mpNodeParent = 0;
+    mAnchor.mColor = 0;
+    mnSize = 0;
+  }
+  // inlined eastl::rbtree::rbtree(allocator): mAnchor() value-init, then reset()
+  void Construct() {
+    mAnchor = RBNodeBase();
+    Reset();
+  }
+  void clear() {
+    destroy();
+    Reset();
+  }
 };
 
 // @ 0x00b1ba90
@@ -241,6 +310,13 @@ Elem38Vector* IntVecMap::Index(const int& key) {
   return &((IntVecNode*)it.mpNode)->second;
 }
 
+// ---- the two state maps sit next to each other: the dtor addresses the string map as
+//      (&mVecMap)+0x1c, so model them as one sub-object the teardown takes a reference to
+struct StateMaps {
+  IntVecMap vec;   // +0x00
+  IntStrMap str;   // +0x1c
+};
+
 // ================================================================== cStateMachineHost
 struct CsHostInfo {
   char pad0[0x1c];
@@ -254,13 +330,7 @@ struct IEditor {
   virtual void OnTransition(Elem38Vector* v, int a, int b, int c, int d, int e, int f);  // +0x2c
 };
 
-extern "C" void FUN_008d34d0(void* p);            // 0x008d34d0
-extern "C" void FUN_008d3c60(void* p, void* a);   // 0x008d3c60
-extern "C" void FUN_008d3ca0(void* p);            // 0x008d3ca0
-extern "C" void FUN_00e4b990(void* p);            // 0x00e4b990
-extern "C" void FUN_00b1b830(void* p);            // 0x00b1b830
 extern "C" void* EA_Allocator_GetDefaultAllocator();  // 0x00925cb0
-extern "C" void FUN_008d34d0_(void* p);
 
 extern void* g_vtbl_145d318;  // 0x0145d318
 extern void* g_vtbl_145d310;  // 0x0145d310
@@ -269,12 +339,96 @@ extern void* g_vtbl_145d2bc;  // 0x0145d2bc
 extern void* g_vtbl_13ec458;  // 0x013ec458
 extern void* g_vtbl_13eb394;  // 0x013eb394
 
-struct cGonzagoSubsystem { cGonzagoSubsystem(); ~cGonzagoSubsystem(); };  // 0x00b5b960 / 0x00b5b9a0
-struct Stopwatch { void SetUnits(int u); void Reset(); };  // 0x0093a1a0 / 0x0093a380
+struct cGonzagoSubsystem {
+  void* mpVftable;
+  cGonzagoSubsystem();                     // 0x00b5b960
+  ~cGonzagoSubsystem();                    // 0x00b5b9a0
+};
+// Inlined construction sites of the sub-object go through this ecx-call form (the original has no
+// placement-new null test).
+extern void __fastcall cGonzagoSubsystem_ctor(cGonzagoSubsystem* self);  // 0x00b5b960
+
+// A 0x1c-byte framework sub-object whose ctor is 0x008d34d0.
+struct FrameworkObject1c {
+  char mData[0x1c];
+  void ctor();                             // 0x008d34d0
+};
+
+// One entry of the edited-script list at +0x90; only the second word is read here.
+struct TransitionConfig {
+  int field0;
+  int value;
+};
+
+// The list at +0x90 (size 0x30).
+struct TransitionConfigList {
+  char mData[0x30];
+  void ctor(void* allocator);              // 0x008d3c60
+  void dtor();                             // 0x008d3ca0
+  int GetCount();                          // 0x008d3ac0
+  TransitionConfig* GetItem(int index);    // 0x008d3ad0
+};
+
+// A refcount-header vector with trivial elements (only its allocation is released on teardown).
+struct PodVector {
+  void* mpBegin;
+  void* mpEnd;
+  void* mpCapacity;
+};
+
+// Win32 performance counter plumbing used by the inlined EA::Stopwatch start.
+union LARGE_INTEGER {
+  struct { unsigned int LowPart; int HighPart; } u;
+  __int64 QuadPart;
+};
+extern "C" __declspec(dllimport) int __stdcall QueryPerformanceCounter(LARGE_INTEGER* count);
+extern "C" unsigned __int64 __rdtsc(void);
+#pragma intrinsic(__rdtsc)
+
+struct Stopwatch {
+  unsigned __int64 mnStartTime;        // +0x00
+  unsigned __int64 mnTotalElapsedTime; // +0x08
+  int mnUnits;                         // +0x10
+  float mfCoefficient;                 // +0x14
+  void SetUnits(int units);            // 0x0093a1a0
+  void SetElapsedCycles(__int64 cycles);  // 0x0093a380
+  void Start() {
+    if (!mnStartTime) {
+      if (mnUnits == 1) {
+        mnStartTime = __rdtsc();
+      } else {
+        LARGE_INTEGER now;
+        QueryPerformanceCounter(&now);
+        mnStartTime = now.QuadPart;
+      }
+    }
+  }
+};
 extern Stopwatch gBrushStopwatch;  // 0x0167c280
 
 struct cStateMachineHost {
-  char raw[0x190];
+  void** mpVftable;                    // +0x00
+  void* mpField04;                     // +0x04
+  void** mpVftable08;                  // +0x08
+  cGonzagoSubsystem mGonzago;          // +0x0c
+  void* mpSharedState;                 // +0x10  the shared info object DeclareState walks
+  char mPad14[0x14];                   // +0x14
+  StateMaps mMaps;                     // +0x28  map<int, vector<Elem38>>, map<int, string>
+  int mStateId;                        // +0x60
+  int mField64;                        // +0x64
+  float mFloat68;                      // +0x68
+  float mFloat6c;                      // +0x6c
+  float mFloat70;                      // +0x70
+  FrameworkObject1c mObject74;         // +0x74
+  TransitionConfigList mConfigs;       // +0x90
+  FrameworkObject1c mObjectC0;         // +0xc0
+  string8 mStringDC;                   // +0xdc
+  string8 mStringEC;                   // +0xec
+  PodVector mPodVector;                // +0xfc
+  char mPad108[8];                     // +0x108
+  int mField110;                       // +0x110
+  char mPad114[0x7c];                  // +0x114
+
   cStateMachineHost* ctor();                               // 0x00b1c2c0
   void dtor();                                             // 0x00b1c480
   void DeclareState(int index, const char* name);          // 0x00b1c080
@@ -282,9 +436,11 @@ struct cStateMachineHost {
   void SetupTransitions(int a);                            // 0x00b1c630
 };
 
+typedef char cStateMachineHost_size_check[sizeof(cStateMachineHost) == 0x190 ? 1 : -1];
+
 // @ 0x00b1c080
 void cStateMachineHost::DeclareState(int index, const char* name) {
-  CsHostInfo* info = *(CsHostInfo**)(raw + 0x10);
+  CsHostInfo* info = (CsHostInfo*)mpSharedState;
   string8* s = info->mStates.operator[](index);
   const char* e = name + strlen(name);
   s->assign(name, e);
@@ -292,70 +448,114 @@ void cStateMachineHost::DeclareState(int index, const char* name) {
 
 // @ 0x00b1c540
 void cStateMachineHost::virtual6(int a, int b, int c, int d, int e, int f) {
-  Elem38Vector* v = ((IntVecMap*)(raw + 0x28))->operator[](*(int*)(raw + 0x60));
+  Elem38Vector* v = mMaps.vec.operator[](mStateId);
   ((IEditor*)this)->OnTransition(v, a, b, c, d, e, f);
 }
 
 // @ 0x00b1c2c0
 cStateMachineHost* cStateMachineHost::ctor() {
-  unsigned char* p = (unsigned char*)raw;
-  *(void**)p = &g_vtbl_13ec458;
-  *(void**)(p + 4) = 0;
-  *(void**)(p + 8) = &g_vtbl_13eb394;
-  new (p + 0xc) cGonzagoSubsystem();
-  *(void**)p = &g_vtbl_145d318;
-  *(void**)(p + 8) = &g_vtbl_145d310;
-  *(void**)(p + 0xc) = &g_vtbl_145d2c0;
-  *(void**)(p + 0x10) = &g_vtbl_145d2bc;
-  *(unsigned*)(p + 0x30) = 0; *(unsigned*)(p + 0x34) = 0; *(unsigned*)(p + 0x38) = 0;
-  *(unsigned*)(p + 0x34) = 0; *(unsigned char*)(p + 0x38) = 0; *(unsigned*)(p + 0x3c) = 0;
-  *(void**)(p + 0x2c) = p + 0x2c; *(void**)(p + 0x30) = p + 0x2c;
-  *(unsigned*)(p + 0x4c) = 0; *(unsigned*)(p + 0x50) = 0; *(unsigned*)(p + 0x54) = 0;
-  *(void**)(p + 0x48) = p + 0x48; *(void**)(p + 0x4c) = p + 0x48;
-  *(unsigned*)(p + 0x50) = 0; *(unsigned char*)(p + 0x54) = 0; *(unsigned*)(p + 0x58) = 0;
-  *(unsigned*)(p + 0x60) = 0; *(unsigned*)(p + 0x64) = 0;
-  *(float*)(p + 0x68) = 0.0f; *(float*)(p + 0x6c) = 0.0f; *(float*)(p + 0x70) = 0.0f;
-  FUN_008d34d0(p + 0x74);
-  FUN_008d3c60(p + 0x90, EA_Allocator_GetDefaultAllocator());
-  FUN_008d34d0(p + 0xc0);
-  *(void**)(p + 0xdc) = gEmptyString;
-  *(void**)(p + 0xe0) = gEmptyString;
-  *(void**)(p + 0xe4) = gEmptyString + 1;
-  *(void**)(p + 0xf4) = gEmptyString + 1;
-  *(void**)(p + 0xec) = gEmptyString;
-  *(void**)(p + 0xf0) = gEmptyString;
-  *(unsigned*)(p + 0xfc) = 0; *(unsigned*)(p + 0x100) = 0; *(unsigned*)(p + 0x104) = 0;
-  *(unsigned*)(p + 0x110) = 0;
+  mpVftable = &g_vtbl_13ec458;
+  mpField04 = 0;
+  mpVftable08 = &g_vtbl_13eb394;
+  cGonzagoSubsystem_ctor(&mGonzago);
+  mpVftable = &g_vtbl_145d318;
+  mpVftable08 = &g_vtbl_145d310;
+  mGonzago.mpVftable = &g_vtbl_145d2c0;
+  mpSharedState = &g_vtbl_145d2bc;
+  mMaps.vec.Construct();
+  mMaps.str.Construct();
+  mStateId = 0;
+  mField64 = 0;
+  mFloat68 = 0.0f;
+  mFloat6c = 0.0f;
+  mFloat70 = 0.0f;
+  mObject74.ctor();
+  mConfigs.ctor(EA_Allocator_GetDefaultAllocator());
+  mObjectC0.ctor();
+  mStringDC.mpBegin = gEmptyString;
+  mStringDC.mpEnd = gEmptyString;
+  mStringDC.mpCapacity = gEmptyString + 1;
+  mStringEC.mpCapacity = gEmptyString + 1;
+  mStringEC.mpBegin = gEmptyString;
+  mStringEC.mpEnd = gEmptyString;
+  mPodVector.mpBegin = 0;
+  mPodVector.mpEnd = 0;
+  mPodVector.mpCapacity = 0;
+  mField110 = 0;
   gBrushStopwatch.SetUnits(5);
-  gBrushStopwatch.Reset();
+  gBrushStopwatch.SetElapsedCycles(0);
+  gBrushStopwatch.Start();
   return this;
 }
 
 // @ 0x00b1c480
 void cStateMachineHost::dtor() {
-  unsigned char* p = (unsigned char*)raw;
-  *(void**)p = &g_vtbl_145d318;
-  *(void**)(p + 8) = &g_vtbl_145d310;
-  *(void**)(p + 0xc) = &g_vtbl_145d2c0;
-  *(void**)(p + 0x10) = &g_vtbl_145d2bc;
-  void* v = *(void**)(p + 0xfc);
+  cGonzagoSubsystem* gonzago = &mGonzago;
+  mpVftable = &g_vtbl_145d318;
+  mpVftable08 = &g_vtbl_145d310;
+  gonzago->mpVftable = &g_vtbl_145d2c0;
+  mpSharedState = &g_vtbl_145d2bc;
+  void* v = mPodVector.mpBegin;
   if (v && ((int*)v)[-1]) delete[] (char*)v;
-  unsigned char* a = *(unsigned char**)(p + 0xec);
-  if ((1 < (int)(*(unsigned*)(p + 0xf4) - (unsigned)a)) && a) delete[] a;
-  a = *(unsigned char**)(p + 0xdc);
-  if ((1 < (int)(*(unsigned*)(p + 0xe4) - (unsigned)a)) && a) delete[] a;
-  FUN_008d3ca0(p + 0x90);
-  FUN_00e4b990(*(void**)(p + 0x50));
-  FUN_00b1b830(*(void**)(p + 0x34));
-  ((cGonzagoSubsystem*)(p + 0xc))->~cGonzagoSubsystem();
-  *(void**)(p + 8) = &g_vtbl_13eb394;
-  *(void**)p = &g_vtbl_13ec458;
+  unsigned char* a = (unsigned char*)mStringEC.mpBegin;
+  if ((1 < (int)(mStringEC.mpCapacity - mStringEC.mpBegin)) && a) delete[] a;
+  a = (unsigned char*)mStringDC.mpBegin;
+  if ((1 < (int)(mStringDC.mpCapacity - mStringDC.mpBegin)) && a) delete[] a;
+  mConfigs.dtor();
+  StateMaps& maps = mMaps;
+  maps.str.destroy();
+  maps.vec.destroy();
+  gonzago->~cGonzagoSubsystem();
+  mpVftable08 = &g_vtbl_13eb394;
+  mpVftable = &g_vtbl_13ec458;
 }
 
 // @ 0x00b1c630
-// (transition-script setup; abbreviated -- the full record-building body is not reconstructed)
 void cStateMachineHost::SetupTransitions(int a) {
-  (void)a;
+  Elem38 t;
+  t.name.assign("transition", "");
+  t.state = a;
+  t.field10 = 0;
+  t.value20 = -1;
+  t.flag24 = 0;
+  t.field2c = 0;
+  t.field30 = 0;
+  t.field34 = 0;
+  t.value1c = 0;
+
+  Elem38Vector v;
+  t.value18 = 6;
+  t.value28 = 6;
+  v.push_back(t);
+  t.value18 = 8;
+  t.value28 = 8;
+  t.value1c = 1;
+  v.push_back(t);
+  t.value1c = -1;
+  v.push_back(t);
+
+  int count = mConfigs.GetCount();
+  for (int i = 0; i < count; ++i) {
+    int value = mConfigs.GetItem(i)->value;
+    t.value18 = value;
+    t.value1c = value;
+    t.value28 = 10;
+    v.push_back(t);
+    t.value28 = 11;
+    v.push_back(t);
+  }
+
+  mMaps.str.clear();
+  mMaps.vec.clear();
+  mMaps.str.operator[](0)->assign("TriggerNeutral", "");
+  mMaps.vec.operator[](0)->operator=(v);
+
+  // ~vector<Elem38>: destroy each record's name buffer, then release the array block
+  for (Elem38* p = v.mpBegin; p != v.mpEnd; ++p) {
+    if ((p->name.mpCapacity - p->name.mpBegin) > 1 && p->name.mpBegin)
+      delete[] p->name.mpBegin;
+  }
+  if (v.mpBegin && ((int*)v.mpBegin)[-1]) delete[] (char*)v.mpBegin;
 }
 
 // ================================================================== the edited-script updater

@@ -28,7 +28,11 @@ struct WStr {
     wchar_t* mpCapacity;
     WStr() { mpBegin = gEmptyWString; mpEnd = gEmptyWString; mpCapacity = gEmptyWString + 1; }
     void DeallocateSelf();        // 0x00933960
-    ~WStr() { DeallocateSelf(); }
+    ~WStr()
+    {
+        if ((((int)((char*)mpCapacity - (char*)mpBegin)) & 0xfffffffe) > 2 && mpBegin != 0)
+            ::operator delete(mpBegin);
+    }
 };
 
 // --- read-only engine globals (float block at 0x01691fc8 is a Vec3, usually zero) ---
@@ -54,11 +58,14 @@ void  __cdecl FUN_00c5c310(void* a0, void* a1, void* a2, void* a3, int a4, int a
 void  __cdecl FUN_00c5c0f0(void* a0, void* a1, void* a2, void* a3, void* a4, int a5); // 0x00c5c0f0
 void  __cdecl FUN_00410370(void* prop, uint32_t id, int* out);   // 0x00410370  (GetPropertyAsInt)
 void  __cdecl FUN_0040cf10(void* prop, uint32_t id, float* out); // 0x0040cf10  GetPropertyT<int>
-void  __cdecl FUN_00c70fd0(void* self, int v);                   // 0x00c70fd0
+struct Planet   { void FUN_00c70fd0(int v); };                       // 0x00c70fd0  ret 4
 void* __cdecl FUN_0102c0c0(void* self);                          // 0x0102c0c0
-void* __cdecl FUN_00fe3b10(void* self);                          // 0x00fe3b10
-void* __cdecl FUN_00b3d4a0(void* a, void* b);                    // 0x00b3d4a0  CommManager
-void* __cdecl FUN_00aeb3e0(void*, void*, void*, void*, void*, void*, void*, void*); // 0x00aeb3e0
+char  __cdecl FUN_00fe3b10(void* self);                          // 0x00fe3b10  returns char
+void* __cdecl FUN_00b3d4a0();                      // 0x00b3d4a0  CommManager global (0 args)
+struct CommMgr {
+    void* FUN_00aeb3e0(void* a1, void* a2, void* a3, void* a4,
+                       void* a5, void* a6, void* a7, void* a8);   // 0x00aeb3e0 ret 0x20
+};
 void* __cdecl FUN_00cd7d10();         // 0x00cd7d10 (game-data descriptor)
 void* __cdecl FUN_00d3d420();         // 0x00d3d420
 void* __cdecl FUN_00ad48b0();         // 0x00ad48b0
@@ -115,8 +122,8 @@ struct EventLog {
 EventLog* __cdecl GetEventLog();        // 0x00b3d3e0  (0 args)
 
 struct Empire   { char FUN_00c31bc0(void* other); };                 // 0x00c31bc0
-struct StarRec  { void* GetCommContext(void* a); };                  // 0x00ce6950
-struct ThrB8    { void* FUN_00b8de30(void* a); };                    // 0x00b8de30
+struct StarRec  { void* GetCommContext(); };                         // 0x00ce6950  [ecx+0x184], 0 args
+struct ThrB8    { void* FUN_00b8de30(); };                           // 0x00b8de30  0 args
 struct Tuning   { float FUN_0102a590(); };                           // 0x0102a590
 struct AutoRef  { void operator=(void* p); };                        // 0x00b5f950
 struct UFOSim   { void* GetPlayerInventory(); };                     // 0x00a1ad60
@@ -356,7 +363,8 @@ int RaidPlunderEvent::Update(int dt)
     int r = mi->Update(dt);
     if (r != 3) return r;
 
-    if ((*(uint32_t*)((char*)GameTimeManager() + 0x48) & 1) != 0) dt = 0;
+    int gt = *(int*)((char*)GameTimeManager() + 0x48);
+    if ((gt & 1) != 0) dt = 0;
 
     if (F<uint8_t>(0x1fc) == 0) {
         void* p = FUN_00401010();
@@ -368,7 +376,7 @@ int RaidPlunderEvent::Update(int dt)
             F<uint8_t>(0x1fc) = 1;
             if (prop != 0) {
                 FUN_00410370(prop, 0x339bbc1, &v14);
-                FUN_00410370(prop, 0x339bbc5, &v10);
+                FUN_00410370(*(void**)((char*)this + 0x180), 0x339bbc5, &v10);
             }
             FUN_00c5c310((char*)this + 0x214, (char*)this + 0x204, (char*)this + 0x208,
                          (char*)this + 0x200, v14, v10);
@@ -382,19 +390,19 @@ int RaidPlunderEvent::Update(int dt)
             void* owner  = mi->GetOwnerEmpire();
             void* player = GetPlayerEmpire();
             if (owner != 0 && (owner == player || ((Empire*)owner)->FUN_00c31bc0(player))) {
-                void* tp1 = mi->GetTargetPlanet();
-                int   recA = *(int*)((char*)tp1 + 0x13c);
-                void* tp2 = mi->GetTargetPlanet();
-                int   recB = *(int*)((char*)tp2 + 0x13c);
+                int   recA = *(int*)((char*)mi->GetTargetPlanet() + 0x13c);
+                int   recB = *(int*)((char*)mi->GetTargetPlanet() + 0x13c);
                 int   owner84 = *(int*)((char*)owner + 0x84);
-                int   eq = (owner == player) ? 1 : 0;
-                void* tree = ((void*(__thiscall*)(void*, uint32_t, int, void*, int))
-                              (*(void***)this)[0xa4 / 4])(this, 0x8b756f4b, 2, this, eq);
-                void* ctx  = ((StarRec*)recA)->GetCommContext(tree);
-                void* ctx2 = ((ThrB8*)recB)->FUN_00b8de30(ctx);
-                void* cm   = FUN_00b3d4a0((void*)owner84, ctx2);
-                void* res  = FUN_00aeb3e0(cm, ctx2, ctx, tree, (void*)0x8b756f4b, (void*)2, this, (void*)eq);
-                ((AutoRef*)((char*)this + 0x1e4))->operator=(res);
+                bool  eq = (owner == player);
+                // the four "input" helpers take no stack arguments; the eight pushed slots the
+                // callee pops are (owner84, ctx2, ctx, tree, key, 2, this, eq)
+                ((AutoRef*)((char*)this + 0x1e4))->operator=(
+                    ((CommMgr*)FUN_00b3d4a0())->FUN_00aeb3e0(
+                        (void*)owner84,
+                        ((ThrB8*)recB)->FUN_00b8de30(),
+                        ((StarRec*)recA)->GetCommContext(),
+                        ((void*(__thiscall*)(void*))(*(void***)this)[0xa4 / 4])(this),
+                        (void*)0x8b756f4b, (void*)2, this, (void*)eq));
             }
         }
         if (F<uint8_t>(0x1fc) == 0) return 3;
@@ -406,44 +414,46 @@ int RaidPlunderEvent::Update(int dt)
         void* ev = GetEventLog()->PostFeedbackEvent(0xcc0a183b, 0x131a9f54, 0, 0, 1, 0);
         GetEventLog()->ModifyEventText(ev, text.mpBegin);
         GetEventLog()->EventDoNotAddToHistory(ev, 1);
-        if ((2 < (int)(((char*)text.mpEnd - (char*)text.mpBegin) & 0xfffffffe)) && text.mpBegin != 0)
-            ::operator delete(text.mpBegin);
         return 5;
     }
 
-    float f = gFloat_01473c70;
-    if (*(void**)((char*)this + 0x180) != 0)
-        FUN_0040cf10(*(void**)((char*)this + 0x180), 0x2b9e524, &f);
-    f = (float)(long long)(f * gFloat_013ec5b4);
+    {
+        float f = gFloat_01473c70;
+        if (*(void**)((char*)this + 0x180) != 0)
+            FUN_0040cf10(*(void**)((char*)this + 0x180), 0x2b9e524, &f);
+        int n = (int)(gFloat_013ec5b4 * f);
 
-    if (*(uint32_t*)((char*)this + 0x7c) < (uint32_t)(int)f) {
+        if (!(*(uint32_t*)((char*)this + 0x7c) < (uint32_t)n)) {
+            FUN_0102c0c0(mi->GetTargetPlanet());
+            BackgroundUpdate(0);
+            WStr text;
+            mi->GetText(0xb681fba2, &text);
+            void* ev = GetEventLog()->PostFeedbackEvent(0xcc0a183b, 0x131a9f54, 0, 0, 1, 0);
+            GetEventLog()->ModifyEventText(ev, text.mpBegin);
+            GetEventLog()->EventDoNotAddToHistory(ev, 1);
+            return 6;
+        }
+    }
+
+    {
         void* tp = mi->GetTargetPlanet();
         if (FUN_00fe3b10(tp) == 0) {
             float tuning = ((Tuning*)GetSpaceCombatTuning())->FUN_0102a590();
-            float acc = (float)dt * gFloat_013f9428 * (float)*(int*)((char*)this + 0x200) * tuning
-                      + *(float*)((char*)this + 0x210);
+            float acc = (float)(uint32_t)dt * gFloat_013f9428;
+            acc = acc * *(int*)((char*)this + 0x200);
+            acc = acc * tuning;
+            acc = acc + *(float*)((char*)this + 0x210);
             *(float*)((char*)this + 0x210) = acc;
-            int rounded = (int)(long long)acc;
+            uint32_t rounded = (uint32_t)acc;
             if (rounded != 0) {
                 *(float*)((char*)this + 0x210) = acc - (float)rounded;
-                FUN_00c70fd0(mi->GetTargetPlanet(), rounded);
+                ((Planet*)mi->GetTargetPlanet())->FUN_00c70fd0((int)rounded);
             }
         }
-        FUN_00c5c0f0((char*)this + 0x214, mi->GetTargetPlanet(), (char*)this + 0x200,
-                     *(void**)((char*)this + 0x180), (char*)this + 0x20c, dt);
-        return 3;
     }
-
-    FUN_0102c0c0(mi->GetTargetPlanet());
-    BackgroundUpdate(0);
-    WStr text;
-    mi->GetText(0xb681fba2, &text);
-    void* ev = GetEventLog()->PostFeedbackEvent(0xcc0a183b, 0x131a9f54, 0, 0, 1, 0);
-    GetEventLog()->ModifyEventText(ev, text.mpBegin);
-    GetEventLog()->EventDoNotAddToHistory(ev, 1);
-    if ((2 < (int)(((char*)text.mpEnd - (char*)text.mpBegin) & 0xfffffffe)) && text.mpBegin != 0)
-        ::operator delete(text.mpBegin);
-    return 6;
+    FUN_00c5c0f0((char*)this + 0x214, mi->GetTargetPlanet(), (char*)this + 0x200,
+                 *(void**)((char*)this + 0x180), (char*)this + 0x20c, dt);
+    return 3;
 }
 
 } // namespace SP

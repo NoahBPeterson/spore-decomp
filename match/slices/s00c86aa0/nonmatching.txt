@@ -2,3 +2,17 @@
 00c871b0 5   cSpaceInventoryItem::GetImageColors: complete; property-list argument temp in eax instead of ecx
 00c87390 21  cSpaceInventory::GetItemByCargoSlot: complete; loop end computed from begin first, original loads the end pointer before the begin pointer
 00c874a0 60  cSpaceInventory::CargoSlotIsFree: complete; loop/register scheduling differs
+00c86aa0 400 nonmatching: cSolarSystem::ActivatePtolemaicHitSpheres; 324 vs 449 bytes. Complete source but only 17.5% covered. difftest WEAK (200 valid, 17.5% coverage of 160 insns); flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast.
+00c86c70 243 nonmatching: cSolarSystem::ActivateGraphics; 473-byte target, 243 diff. Complete source but only 14.5% covered. difftest WEAK (107 valid, 14.5% coverage of 165 insns); flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast.
+00c86e50 53 nonmatching: cSolarSystem::Destroy; 170 vs 169 bytes. Size differs and the call chain hits an unresolved fake target. difftest FAIL 5/5 (fake-arity: no call site before 00000000); flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast.
+00c86f40 10 nonmatching: cSpaceInventoryItem::IsCargoType; 47 vs 43 bytes. Return value differs. difftest FAIL 5/8 (eax&0xff: orig 1, ours 0); flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast.
+00c871d0 2 nonmatching: cSpaceInventoryItem::GetPanelID; 104-byte target, 2 diff. difftest UNSUPPORTED (0/400 valid; fake-arity=387); flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast.
+00c872e0 32 nonmatching: cSpaceInventory::IndexOfNthItem; 61-byte target, 32 diff. Complete source. difftest WEAK (346 valid, 50% coverage; below 60% gate); flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast.
+00c87420 34 nonmatching: cSpaceInventory::GetCargoSlotsCount; 37 vs 38 bytes. difftest WEAK (350 valid, 41.2% coverage); flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast.
+00c874f0 131 nonmatching: cSpaceInventory::Write; 156 vs 138 bytes. difftest UNSUPPORTED (0/400 valid; fault(read)=399); flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast.
+00c87580 170 nonmatching: cSpaceInventoryItem::Write; 157 vs 110 bytes; serializer argument setup not reconstructed. difftest UNSUPPORTED (0/400 valid; fault(read)=400); flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast.
+00c87660 242 nonmatching: cSpaceInventoryItem constructor; 266 vs 198 bytes; /EHsc unwind frame and vptr store order differ. difftest UNSUPPORTED (our code stores a local vtable address where the original stores the image symbol); flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast.
+00c87770 224 nonmatching: cSpaceInventoryItem destructor; 203 vs 128 bytes; teardown order differs. difftest UNSUPPORTED (unresolved ??1ItemRefCount@@UAE@XZ); flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast.
+00c878d0 177 nonmatching: CreateMultiDeliveryObject; 185 vs 208 bytes. difftest FAIL 5/5 (memory pool @40020000); flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast.
+00c879a0 280 nonmatching: cSpaceInventoryItem::Read; 368 vs 348 bytes; switch/deserialisation paths not fully reconstructed. difftest UNSUPPORTED (0/400 valid; fault(read)=392, fake-arity=8); flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast.
+00c87b20 7 nonmatching: cSpaceInventory constructor; 43-byte target, vptr stores scheduled after field stores. difftest UNSUPPORTED (local vtable address vs image symbol); flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast.

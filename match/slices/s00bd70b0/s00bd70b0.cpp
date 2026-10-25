@@ -18,6 +18,8 @@ typedef int   (__thiscall *Fn_i_vii)(void*, int, int);
 typedef int   (__thiscall *Fn_i_viii)(void*, int, int, int);
 typedef char  (__thiscall *Fn_c_v)(void*);
 typedef void  (__thiscall *Fn_x_v)(void*);
+typedef void  (__thiscall *Fn_x_vi)(void*, void*);
+typedef void* (__thiscall *Fn_p_v)(void*);
 typedef void* (__thiscall *Fn_p_vi)(void*, int);
 
 // ---------------------------------------------------------------------------
@@ -46,6 +48,7 @@ extern "C" void* __cdecl FUN_00bd7400();
 extern "C" void  __cdecl FUN_00bd69d0(void*);
 extern "C" void  __cdecl FUN_00bd6940(void*);
 extern "C" void  __cdecl FUN_00bd68c0(void*);
+void FUN_00bd7640(int, int);
 extern "C" void* __stdcall FUN_00b3d480(int);
 extern "C" void  __cdecl FUN_00bd571db0(int, int, int, int, int);
 
@@ -92,21 +95,57 @@ void __cdecl FUN_00bd7110(int param_1, int param_2)
 }
 
 // ===========================================================================
-// @ 0x00bd7160 — (complex) populate civ model nouns; approximate.
+// @ 0x00bd7160 — populate the per-city vehicle model nouns.
 // ===========================================================================
 extern "C" void* __cdecl FUN_00b25ca0();
 extern "C" void* __cdecl FUN_00bef6c0();
 extern "C" int   __cdecl FUN_00c9e6d0(int, int);
+extern "C" void* __cdecl FUN_00b3d300();
+
+struct CivCity_ {
+    int  m00bd81d0();                                       // 0x00bd81d0 GetVehicleSpecialty
+    void m00be73d0(int, int);                               // 0x00be73d0
+    int  m00bddda0(int, int, int, int, int, int);           // 0x00bddda0
+};
+struct CivMgr_ {
+    void* m00b25ca0();                                      // 0x00b25ca0 GetCivilizationList
+};
+struct CivRoot_ {
+    void* m00bef6c0();                                      // 0x00bef6c0
+    int   m00bf0c60(int, int, int, int);                    // 0x00bf0c60
+    int   m00bf1fd0(int);                                   // 0x00bf1fd0
+    int*  m00bf9770(int);                                   // 0x00bf9770 GetModelTypeKey
+};
+struct Rand_ {
+    uint  m00a68fb0(uint);                                  // 0x00a68fb0 RandomUint32Uniform
+};
+
 void FUN_00bd7160(void)
 {
-    int* piVar2 = (int*)FUN_00b25ca0();
-    int iVar1 = piVar2[1];
-    for (int iVar8 = *piVar2; iVar8 != iVar1; iVar8 += 4) {
-        piVar2 = (int*)FUN_00bef6c0();
-        if (*piVar2 == piVar2[1]) continue;
-        for (int iVar3 = 0; iVar3 < 5; ++iVar3) {
-            int iVar4 = FUN_00c9e6d0(iVar3, 0);
-            (void)iVar4;
+    void* mgr = FUN_00b3d300();
+    int* civs = (int*)((CivMgr_*)mgr)->m00b25ca0();
+    char* begin = (char*)*civs;
+    char* end = (char*)*(civs + 1);
+    for (char* it = begin; it != end; it += 4) {
+        int civ = *(int*)it;
+        int* vec = (int*)((CivRoot_*)civ)->m00bef6c0();
+        if (*vec == vec[1]) continue;
+        int first = *(int*)*vec;
+        if (((CivCity_*)first)->m00bd81d0() == -1)
+            ((CivCity_*)first)->m00be73d0(0, 0);
+        for (int i = 0; i < 5; ++i) {
+            int a = ((CivRoot_*)civ)->m00bf0c60(i, -1, -1, 0);
+            int b = ((CivRoot_*)civ)->m00bf1fd0(i);
+            int n = b - a;
+            while (n > 0) {
+                uint cnt = (uint)((vec[1] - *vec) >> 2);
+                uint idx = ((Rand_*)0x1601760)->m00a68fb0(cnt);
+                int el = *(int*)(*vec + (int)idx * 4);
+                int key = FUN_00c9e6d0(i, 0);
+                int* mk = ((CivRoot_*)civ)->m00bf9770(key);
+                ((CivCity_*)el)->m00bddda0(i, 0, mk[0], mk[1], mk[2], 0);
+                --n;
+            }
         }
     }
 }
@@ -114,7 +153,7 @@ void FUN_00bd7160(void)
 // ===========================================================================
 // @ 0x00bd7270 — quaternion (x,y,z,w) -> row-major 4x4 matrix.
 // ===========================================================================
-void FUN_00bd7270(float* m, float* q)
+float* FUN_00bd7270(float* m, float* q)
 {
     float x = q[0];
     float y = q[1];
@@ -136,14 +175,63 @@ void FUN_00bd7270(float* m, float* q)
     m[0xd] = 0.0f;
     m[0xe] = 0.0f;
     m[0xf] = 1.0f;
+    return m;
 }
 
 // ===========================================================================
-// @ 0x00bd7400 — (complex) create+pose a civ "cheat" noun; approximate.
+// @ 0x00bd7400 — create+pose a civ "cheat" noun (object arrives in eax).
 // ===========================================================================
+extern "C" void* __cdecl FUN_00b3d300();
+extern "C" void* __cdecl FUN_00b20c60(void*, int);
+extern float g_f13f6b68;                                    // 0x013f6b68: 12.0f
+extern float DAT_0168bd40;
+extern float DAT_0168bd44;
+extern float DAT_0168bd48;
+
+struct Matrix44_0045dca0 {
+    float m[16];
+    void __thiscall Ctor(const void*);                      // 0x0045dca0
+};
+
 void* __cdecl FUN_00bd7400()
 {
-    return 0;
+    int* self;
+    __asm { mov dword ptr [self], eax }
+    void* mgr = FUN_00b3d300();
+    void* noun = FUN_00b20c60(mgr, 0x2a37e35);
+    int obj = 0;
+    if (noun != 0) obj = ((Fn_i_vi)(*(void***)noun)[0xc / 4])(noun, 0x2a37e34);
+    float* pos = (float*)((Fn_p_v)(*(void***)self)[0x2c / 4])(self);
+    float px = pos[0];
+    float py = pos[1];
+    float pz = pos[2];
+    float* qp = (float*)((Fn_p_v)(*(void***)self)[0x30 / 4])(self);
+    float quat[4];
+    quat[0] = qp[0]; quat[1] = qp[1]; quat[2] = qp[2]; quat[3] = qp[3];
+    float mat[16];
+    FUN_00bd7270(mat, quat);
+    Matrix44_0045dca0 M;
+    M.Ctor(mat);
+    float sx = DAT_0168bd40 * g_f13f6b68;
+    float sy = DAT_0168bd44 * g_f13f6b68;
+    float sz = DAT_0168bd48 * g_f13f6b68;
+    float rx = M.m[8] * sz + M.m[4] * sy + M.m[0] * sx + M.m[0xc] + px;
+    float ry = M.m[9] * sz + M.m[5] * sy + M.m[1] * sx + M.m[0xd] + py;
+    float rz = M.m[10] * sz + M.m[6] * sy + M.m[2] * sx + M.m[0xe] + pz;
+    void* sub = (void*)((char*)obj + 0x34);
+    ((Fn_x_vi)(*(void***)sub)[0x38 / 4])(sub, &rx);
+    ((Fn_x_vi)(*(void***)sub)[0x3c / 4])(sub, quat);
+    void* r = (void*)((Fn_i_vi)(*(void***)self)[0xb8 / 4])(self, 0x17f243b);
+    void** slot = (void**)((char*)obj + 0x120);
+    void* old = *slot;
+    void* ret = r;
+    if (r != old) {
+        if (r != 0) ret = ((Fn_p_v)(*(void***)r)[0])(r);
+        else ret = 0;
+        *slot = r;
+        if (old != 0) ret = ((Fn_p_v)(*(void***)old)[1])(old);
+    }
+    return ret;
 }
 
 // ===========================================================================
@@ -159,7 +247,7 @@ void __stdcall FUN_00bd78e0(EastlString* s)
 // ===========================================================================
 struct Sim {
     void  FUN_00bd75f0(int* p2);
-    int   FUN_00bd7760(int p2, int* p3);
+    bool  FUN_00bd7760(int p2, int* p3);
     void* FUN_00bd7a10(int p2);
     char  FUN_00bd7ad0(int* p2);
     char  FUN_00bd7b90(int* p2);
@@ -239,15 +327,56 @@ void __cdecl FUN_00bd7640(int param_1, int param_2)
 }
 
 // ===========================================================================
-// (complex) cheat command handler; approximate.
+// cheat command handler (message-noun chain walk + dispatch).
 // ===========================================================================
+extern "C" void __cdecl FUN_00bd6e00(int);
+extern "C" int DAT_0168bd68;
 // @ 0x00bd7760
-int Sim::FUN_00bd7760(int param_2, int* param_3)
+bool Sim::FUN_00bd7760(int param_2, int* param_3)
 {
+    void* self = this;
     if (param_2 == 0x1a0219e) {
-        if (param_3[2] != 3 && param_3[2] != 4) return 0;
+        int kind = param_3[2];
+        if (kind != 3 && kind != 4) return false;
+        int* h = (int*)param_3[4];
+        if (h == 0) return true;
+        int r = ((Fn_i_vi)(*(void***)h)[0xc / 4])(h, 0x1186577);
+        if (r == 0) return true;
+        if (kind == 3)
+            ((Fn_i_vi)(*(void***)self)[0x2c / 4])(self, r);
+        if (kind == 4)
+            ((Fn_i_vi)(*(void***)self)[0x2c / 4])(self, r);
+        return true;
     }
-    return 1;
+    void* s = ((Fn_p_v)(*(void***)param_3)[0x10 / 4])(param_3);
+    int* node = (int*)((Fn_i_vi)(*(void***)s)[0x1c / 4])(s, 0);
+    int* found = 0;
+    if (node != 0 && (*(unsigned char*)((char*)node + 0x10) & 0x30) != 0)
+        found = (int*)*node;
+    else if (node != 0 && *(short*)((char*)node + 0x12) != 0)
+        found = node;
+    int* ab = 0;
+    if (found != 0) {
+        ab = (int*)((Fn_i_vi)(*(void***)found)[0xc / 4])(found, 0x17f243b);
+        ((Fn_i_vi)(*(void***)found)[0xc / 4])(found, 0x1186577);
+    }
+    int* p = (int*)((Fn_i_vi)(*(void***)s)[0x1c / 4])(s, 1);
+    int payload = *p;
+    ((Fn_i_vi)(*(void***)s)[0x1c / 4])(s, 2);
+    if (ab != 0) {
+        int v = ((Fn_i_vi)(*(void***)ab)[0xc / 4])(ab, 0x2a37e34);
+        if (v != 0)
+            DAT_0168bd68 = ((Fn_i_vi)(*(void***)ab)[0xc / 4])(ab, 0x2a37e34);
+    }
+    if (param_2 == 0x2a650a0) {
+        if (ab != 0)
+            FUN_00bd6e00(((Fn_i_vi)(*(void***)ab)[0xc / 4])(ab, 0x2a37e34));
+        else
+            FUN_00bd6e00(0);
+    } else if (param_2 == 0x2a650a1) {
+        FUN_00bd7640(DAT_0168bd68, payload);
+    }
+    return true;
 }
 
 // ===========================================================================
@@ -308,12 +437,17 @@ void __fastcall FUN_00bd7ab0(int param_1)
 // ===========================================================================
 // @ 0x00bd7ad0 — Simulator::ISimulatorSerializable::Write.
 // ===========================================================================
-extern "C" char __cdecl FUN_00b18590(void*, void*);
-extern "C" char __cdecl FUN_00bfc4a0(void*, void*);
-extern "C" char __cdecl FUN_00c88a90(void*, void*);
-extern "C" void __cdecl FUN_00692f90(void*, void*, void*, int);
-extern "C" char __cdecl FUN_00692900(void*, void*);
-extern "C" void __cdecl WriteUint32(void*, void*, int, int);
+struct SimWrite_ {
+    char m00b18590(int*);                                   // 0x00b18590 SP::cGameData::Write
+    char m00bfc4a0(int*);                                   // 0x00bfc4a0 Sim::CombatantWrite
+    char m00c88a90(int*);                                   // 0x00c88a90 SP::cSpatialObject::Write
+};
+struct VarList_ {
+    void m00692f90(void*, void*, int);                      // 0x00692f90 ctor(out, owner, schemas, id)
+    char m00692900(int*);                                   // 0x00692900 Serialize
+    char m00693e10(int*);                                   // 0x00693e10 Read
+};
+extern "C" void __cdecl WriteUint32(void*, void*, int, int);   // 0x0093aa70
 char Sim::FUN_00bd7ad0(int* param_2)
 {
     char* this_ = (char*)this;
@@ -321,25 +455,26 @@ char Sim::FUN_00bd7ad0(int* param_2)
     unsigned int tag = 0x3d5c477;
     void* uVar5 = (void*)((Fn_i_v)*(void**)(*piVar4 + 0x18))(piVar4);
     WriteUint32(uVar5, &tag, 1, 0);
-    char cVar2 = FUN_00b18590(this_, param_2);
-    char cVar3 = FUN_00bfc4a0(this_ + 0x38, param_2);
+    char cVar2 = ((SimWrite_*)this_)->m00b18590(param_2);
+    char cVar3 = ((SimWrite_*)(this_ + 0x38))->m00bfc4a0(param_2);
     bool bVar1 = (cVar3 != 0 && cVar2 != 0);
-    cVar2 = FUN_00c88a90(this_ + 0x100, param_2);
+    cVar2 = ((SimWrite_*)(this_ + 0x100))->m00c88a90(param_2);
     bVar1 = (cVar2 != 0 && bVar1);
     char cStack_a14[0x9dc];
-    FUN_00692f90(cStack_a14, this_, (void*)0x156e2a0, 0x1a80d26);
-    cVar2 = FUN_00692900(cStack_a14, param_2);
+    ((VarList_*)cStack_a14)->m00692f90(this_, (void*)0x156e2a0, 0x1a80d26);
+    cVar2 = ((VarList_*)cStack_a14)->m00692900(param_2);
     return (cVar2 != 0 && bVar1) ? 1 : 0;
 }
 
 // ===========================================================================
 // @ 0x00bd7b90 — Simulator::ISimulatorSerializable::Read.
 // ===========================================================================
-extern "C" char __cdecl FUN_00b18600(void*, void*);
-extern "C" char __cdecl FUN_00bfc540(void*, void*);
-extern "C" char __cdecl FUN_00c88b00(void*, void*);
-extern "C" char __cdecl FUN_00693e10(void*, void*);
-extern "C" void __cdecl ReadInt32(void*, void*, int, int);
+struct SimRead_ {
+    char m00b18600(int*);                                   // 0x00b18600 SP::cGameData::Read
+    char m00bfc540(int*);                                   // 0x00bfc540 Sim::CombatantRead
+    char m00c88b00(int*);                                   // 0x00c88b00 SP::cSpatialObject::Read
+};
+extern "C" void __cdecl ReadInt32(void*, void*, int, int);      // 0x0093a780
 char Sim::FUN_00bd7b90(int* param_2)
 {
     char* this_ = (char*)this;
@@ -347,15 +482,15 @@ char Sim::FUN_00bd7b90(int* param_2)
     void* uVar4 = (void*)((Fn_i_v)*(void**)(*piVar3 + 0x18))(piVar3);
     int tag = 0;
     ReadInt32(uVar4, &tag, 1, 0);
-    char cVar2 = FUN_00b18600(this_, param_2);
+    char cVar2 = ((SimRead_*)this_)->m00b18600(param_2);
     bool bVar1 = (cVar2 != 0 && tag == 0x3d5c477);
-    cVar2 = FUN_00bfc540(this_ + 0x38, param_2);
+    cVar2 = ((SimRead_*)(this_ + 0x38))->m00bfc540(param_2);
     bVar1 = (cVar2 != 0 && bVar1);
-    cVar2 = FUN_00c88b00(this_ + 0x100, param_2);
+    cVar2 = ((SimRead_*)(this_ + 0x100))->m00c88b00(param_2);
     bVar1 = (cVar2 != 0 && bVar1);
     char cStack_a14[0x9dc];
-    FUN_00692f90(cStack_a14, this_, (void*)0x156e2a0, 0x1a80d26);
-    cVar2 = FUN_00693e10(cStack_a14, param_2);
+    ((VarList_*)cStack_a14)->m00692f90(this_, (void*)0x156e2a0, 0x1a80d26);
+    cVar2 = ((VarList_*)cStack_a14)->m00693e10(param_2);
     return (cVar2 != 0 && bVar1) ? 1 : 0;
 }
 

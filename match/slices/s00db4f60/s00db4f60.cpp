@@ -368,6 +368,7 @@ struct DEATH_memory_block {
 bool TRIBE_DEATH_Tick(cSPCreatureCitizen* creature, double, uint32_t flags,
                       unsigned char flags2, DEATH_memory_block* mem, void*, float dt)
 {
+    float radius;
     if (mem->mbDying) {
         if (creature->mpAnim) {
             mem->mTimer1 = mem->mTimer1 - dt;
@@ -377,7 +378,7 @@ bool TRIBE_DEATH_Tick(cSPCreatureCitizen* creature, double, uint32_t flags,
             }
             float p = pow((double)0.1f, (double)(dt * 0.33333334f));
             AnimState* anim = creature->mpAnim;
-            anim->mWeight = anim->mWeight * p + (1.0f - p) * 0.01f;
+            anim->mWeight = p * anim->mWeight + (1.0f - p) * 0.01f;
         }
         return true;
     }
@@ -406,7 +407,6 @@ bool TRIBE_DEATH_Tick(cSPCreatureCitizen* creature, double, uint32_t flags,
 
     if (GetCurrentGameMode() == (void*)0x1654c02 && creature->mLoco.IsOnGround()
         && (flags & 0x1000) && creature->mpAnim) {
-        float radius;
         mem->mTimer2 = mem->mTimer2 - dt;
         if (creature->mField50) {
             mem->mBlend = 1.0f;
@@ -434,7 +434,7 @@ bool TRIBE_DEATH_Tick(cSPCreatureCitizen* creature, double, uint32_t flags,
         }
         float p = pow((double)0.1f, (double)dt);
         AnimState* anim = creature->mpAnim;
-        anim->mWeight = anim->mWeight * p + (1.0f - p) * mem->mBlend;
+        anim->mWeight = p * anim->mWeight + (1.0f - p) * mem->mBlend;
     }
     return true;
     }

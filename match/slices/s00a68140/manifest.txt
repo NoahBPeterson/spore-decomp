@@ -13,3 +13,7 @@ slices/s00a68140/s00a68140.cpp  ?FreeChains@NodePool@@QAEXPAPAUPoolNode@@I@Z  00
 slices/s00a68140/s00a68140.cpp  ?PushTask@EapdTasks@@QAEXPAX@Z  00a685a0
 slices/s00a68140/s00a68140.cpp  ?Init@EapdAssets@@QAE_NHHH@Z  00a685e0  /O2 /MD /Gy /EHsc /TP /arch:SSE
 slices/s00a68140/s00a68140.cpp  ??1EapdSystemFull@@UAE@XZ  00a68dd0  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s00a68140/s00a68140.cpp  ??1FixedInputManagerS@@UAE@XZ  00a68aa0  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s00a68140/s00a68140.cpp  ??1SymbolManagerExt@@UAE@XZ  00a68af0  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s00a68140/s00a68140.cpp  ??0FixedInputManagerS@@QAE@XZ  00a68bf0  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s00a68140/s00a68140.cpp  ??_GFixedInputManagerS@@UAEPAXI@Z  00a68c50  /O2 /MD /Gy /EHsc /TP /GS-

@@ -82,16 +82,15 @@ struct Obj {
 
 // A world transform provider (position / facing through its vtable).
 struct cWorldXform {
-    Vector3* m_position();                   // vftable slot 0x2c
-    Vector3* m_facing();                     // vftable slot 0x5c
+    void*    mpVtable;                       // +0x00
 };
 
 // A hit object reached from the tool-manager list: an embedded transform at +0x34,
 // a position at +0xc4, a target block at +0x508 and a live-hit count at +0x714.
 struct cHitObject {
     uint32_t  mPad000[0x34 / 4];
-    cWorldXform mLoco;                       // +0x034
-    uint32_t  mPad050[(0xc4 - 0x50) / 4];
+    cWorldXform mLoco;                       // +0x034 (ends at +0x38)
+    uint32_t  mPad038[(0xc4 - 0x38) / 4];
     Vector3   mPosition;                     // +0x0c4
     uint32_t  mPad0d0[(0x508 - 0xd0) / 4];
     uint32_t  m508;                          // +0x508
@@ -165,10 +164,11 @@ namespace SP {
 // ============================================================================
 struct cSpaceDefenseMissile {
     uint32_t          mPad000[0x34 / 4];
-    cWorldXform       mLoco;                 // +0x034
-    uint32_t          mPad050[(0x508 - 0x50) / 4];
+    cWorldXform       mLoco;                 // +0x034 (4 bytes, ends at +0x38)
+    uint32_t          mPad038[(0x508 - 0x38) / 4];
     void*             mpVtable508;           // +0x508
     void*             mpField50c;            // +0x50c
+    uint32_t          mPad510[(0x518 - 0x510) / 4];
     cSPSpaceToolData* mpTool518;             // +0x518
     cSPSpaceToolData* mpGuidance51c;         // +0x51c
     uint32_t          mPad520[(0x550 - 0x520) / 4];
@@ -193,8 +193,8 @@ struct cCombatant {
 // ============================================================================
 struct cCulturalProjectile {
     uint32_t mPad000[0x34 / 4];
-    cWorldXform mLoco;                       // +0x034  embedded locomotion/transform
-    uint32_t mPad050[(0x518 - 0x50) / 4];
+    cWorldXform mLoco;                       // +0x034  embedded locomotion/transform (ends +0x38)
+    uint32_t mPad038[(0x518 - 0x38) / 4];
     void*    mpLocomotion;                   // +0x518
     void*    mpVehicle;                      // +0x51c
     void*    mpTarget;                       // +0x520
@@ -275,8 +275,8 @@ void SP::cSpaceDefenseMissile::Explode()
 
     // tool manager -> slot 0x48(float f, ObjVector* out) fills the hit list
     float f = ((float (__thiscall*)(void*))0x0104bdb0)(mpDamageTool);
-    Vector3* pDir = mLoco.m_position();
-    Vector3* unused = mLoco.m_facing();
+    Vector3* pDir = ((Vector3* (*)(void*))VTSLOT(&mLoco, 0x2c))(&mLoco);
+    Vector3* unused = ((Vector3* (*)(void*))VTSLOT(&mLoco, 0x5c))(&mLoco);
     (void)unused; (void)pDir; (void)f;
     ((Fn_v_pp)VTSLOT(pManager, 0x48))(pManager, &vec);
 
@@ -298,8 +298,8 @@ void SP::cSpaceDefenseMissile::Explode()
             pKey = ((Fn_p_pi)VTSLOT(mpDamageTool->mpTarget_114, 0xb8))(
                 mpDamageTool->mpTarget_114, (int)&DAT_013f94d4);
 
-        Vector3* pa = mLoco.m_position();
-        Vector3* pb = pHit->mLoco.m_position();
+        Vector3* pa = ((Vector3* (*)(void*))VTSLOT(&mLoco, 0x2c))(&mLoco);
+        Vector3* pb = ((Vector3* (*)(void*))VTSLOT(&pHit->mLoco, 0x2c))(&pHit->mLoco);
         Vector3 dir;
         dir.x = pb->x - pa->x;
         dir.y = pb->y - pa->y;
@@ -385,10 +385,10 @@ void SP::cCulturalProjectile::Explode()
         if (ok) {
             struct XformMsg { int mData[16]; };
             XformMsg msg;
-            Vector3 pos = *mLoco.m_position();
+            Vector3 pos = *((Vector3* (*)(void*))VTSLOT(&mLoco, 0x2c))(&mLoco);
             msg.mData[1] = 0; // (offset slot filled by SetOffset below)
             ((void (__thiscall*)(void*, Vector3*))0x00571d40)(&msg, &pos);
-            Vector3* pFacing = mLoco.m_facing();
+            Vector3* pFacing = ((Vector3* (*)(void*))VTSLOT(&mLoco, 0x5c))(&mLoco);
             Matrix3Rows rot;
             Matrix3FromFacingAndUp(&rot, pFacing, pFacing);
             (void)rot;
@@ -493,10 +493,10 @@ void SP::cCulturalProjectile::Explode()
             cCulturalLocomotion* pLoco = (cCulturalLocomotion*)mpVehicle;
             Vector3* pPts = pLoco->mPath.mpBegin;
             int cnt = (int)(pLoco->mPath.mpEnd - pLoco->mPath.mpBegin);
-            if (cnt / (int)sizeof(Vector3) > 1) {
-                int idx = cnt / (int)sizeof(Vector3);
-                Vector3 a = pPts[idx];
-                Vector3 b = pPts[idx - 2];
+            unsigned count = (unsigned)(cnt / (int)sizeof(Vector3));
+            if (count > 1) {
+                Vector3 a = pPts[count - 1];
+                Vector3 b = pPts[count - 2];
                 Vector3 d;
                 d.x = a.x - b.x; d.y = a.y - b.y; d.z = a.z - b.z;
                 Vector3 n;

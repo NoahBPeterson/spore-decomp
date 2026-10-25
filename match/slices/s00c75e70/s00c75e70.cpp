@@ -322,10 +322,9 @@ struct cHashTableA {
     U32          pad02c;      // +0x2c
     U32          mpSentinel;  // +0x30
 
+    cHashNodeA** __thiscall AllocBucketArray(U32 nBuckets);  // 0x00c763d0
     void __thiscall Rehash(U32 nBuckets);   // 0x00c76440
 };
-
-cHashNodeA** __cdecl AllocBucketArray(U32 nBuckets);      // 0x00c763d0
 
 // @ 0x00c76440
 void __thiscall cHashTableA::Rehash(U32 nBuckets)
@@ -741,7 +740,7 @@ struct CSubList {
 // @ 0x00c77020
 CSubList** __cdecl FUN_00c77020(CSubList** ppOut, CSubList* pSrcBegin, CSubList* pSrcEnd, CSubList* pDst, CSubList* pEnd)
 {
-    *ppOut = pEnd;
+    *ppOut = pDst;
     for (; pSrcBegin != pSrcEnd; ++pSrcBegin) {
         CSubList* pItem = *ppOut;
         if (pItem != 0) {
@@ -754,9 +753,9 @@ CSubList** __cdecl FUN_00c77020(CSubList** ppOut, CSubList* pSrcBegin, CSubList*
             pItem->mpBegin = pNew;
             pItem->mpEnd = pNew;
             pItem->mpCap = pNew + nCount;
-            CSubList* pResult;
-            FUN_00bdaa40(&pResult, pSrcBegin->mpBegin, pSrcBegin->mpEnd, pNew, pEnd);
-            pItem->mpEnd = pResult->mpEnd;
+            U32* pNewEnd;
+            FUN_00bdaa40(&pNewEnd, pSrcBegin->mpBegin, pSrcBegin->mpEnd, pNew, pSrcBegin);
+            pItem->mpEnd = pNewEnd;
         }
         *ppOut += 1;
     }
@@ -766,27 +765,31 @@ CSubList** __cdecl FUN_00c77020(CSubList** ppOut, CSubList* pSrcBegin, CSubList*
 // @ 0x00c770d0
 void __cdecl FUN_00c770d0(CSubList* pDst, U32 nCount, CSubList* pSrc)
 {
-    if (nCount == 0)
+    // cl colors the copy helper's out-param onto the nCount argument slot, so every call
+    // overwrites the count the next call passes as its fifth argument; the loop bound is
+    // the register copy in nRemaining.
+    U32 nRemaining = nCount;
+    if (nCount <= 0)
         return;
-    CSubList* pItem = pDst;
     do {
-        if (pItem != (CSubList*)4) {
+        if (pDst != 0) {
             U32 nSub = (U32)(pSrc->mpEnd - pSrc->mpBegin);
             U32* pNew;
             if (nSub != 0)
                 pNew = (U32*)operator_new(nSub * 4, g_szSimulator, 0, 0, g_szAllocator, 0xd1);
             else
                 pNew = 0;
-            pItem->mpBegin = pNew;
-            pItem->mpEnd = pNew;
-            pItem->mpCap = pNew + nSub;
-            CSubList* pResult;
-            FUN_00bdaa40(&pResult, pSrc->mpBegin, pSrc->mpEnd, pNew, (void*)nCount);
-            pItem->mpEnd = pResult->mpEnd;
+            pDst->mpBegin = pNew;
+            pDst->mpEnd = pNew;
+            pDst->mpCap = pNew + nSub;
+            U32* pNewEnd;
+            FUN_00bdaa40(&nCount, pSrc->mpBegin, pSrc->mpEnd, pNew, (void*)nCount);
+            pNewEnd = (U32*)nCount;
+            pDst->mpEnd = pNewEnd;
         }
-        --nCount;
-        ++pItem;
-    } while (nCount != 0);
+        --nRemaining;
+        ++pDst;
+    } while (nRemaining > 0);
 }
 
 // @ 0x00c77160

@@ -1,0 +1,3 @@
+# source  symbol  original VA  [cl flags override]
+slices/s00b8bb70/s00b8bb70.cpp  ?FindClosestWater@cPlanetModel@@QAE_NPBUSVector3@@MPAU2@@Z  00b8bb70  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00b8bb70/s00b8bb70.cpp  ?Shutdown@cPlanetModel@@QAEXXZ  00b8c0f0  /O2 /MD /Gy /EHsc /TP /arch:SSE

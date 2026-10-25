@@ -584,7 +584,7 @@ float IsLookupBFlagSet(cEditorGameObject* p)
 // @ 0x00d7a530
 float IsEditorActionAvailableValue(cEditorGameObject* p)
 {
-    return IsEditorActionAvailableFast(p) ? 1.0f : 0.0f;
+    return p->IsEditorActionAvailable() ? 1.0f : 0.0f;
 }
 
 // @ 0x00d7a560

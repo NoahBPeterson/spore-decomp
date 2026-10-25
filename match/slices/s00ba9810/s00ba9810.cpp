@@ -25,7 +25,7 @@ extern const char gMemoryStreamName[];                                   // 0x01
 struct cSortTriple {                                                    // 12-byte sort / run key
     float mX;                                                           // +0x00
     float mY;                                                           // +0x04
-    float mZ;                                                           // +0x08
+    uint32_t mZ;                                                        // +0x08 (third word copied as an integer)
 };
 
 struct cRunInfo {                                                       // 16-byte typesetter run
@@ -94,7 +94,6 @@ void SortTriples_Finalize(cSortTriple* pBegin, cSortTriple* pMiddle, cSortTriple
         if (pPred(pCur, pBegin)) {
             cSortTriple saved = *pCur;
             *pCur = *pBegin;
-            *pBegin = saved;
             FUN_00ba7a80(pBegin, 0, (int)(pMiddle - pBegin), 0, saved, (void*)pPred);
         }
     }
@@ -344,7 +343,7 @@ bool LoadDatabaseFromSave(IGameSave* pSave, uint32_t nVerbose)
     cSortTriple key;
     key.mX = 1.0f;
     key.mY = 1.0f;
-    key.mZ = 1.0f;
+    key.mZ = 0x3f800000u;
 
     if (!pSave->v08(gEmptyString16, (void*)nVerbose)) return false;
 
@@ -438,6 +437,15 @@ int cFeedbackTree::EraseKey(uint32_t nKey)
 }
 
 // ---- 0x00baa2b0 -----------------------------------------------------------
+// inlined eastl::basic_string destructor: the shared empty-string buffer is not freed
+__forceinline void FreeWideString(cWideString& str)
+{
+    if ((int)((((uint32_t)str.mpCapacityEnd - (uint32_t)str.mpBegin) & 0xfffffffeu)) > 2 &&
+        str.mpBegin) {
+        operator_delete_array(str.mpBegin);
+    }
+}
+
 // @ 0x00baa2b0 : offer every stored run to a visitor, under one display name
 bool FeedbackTree_VisitRuns(IResourceKeyVisitor* pVisitor, const char* pName,
                             cFeedbackTree* pTree)
@@ -455,7 +463,7 @@ bool FeedbackTree_VisitRuns(IResourceKeyVisitor* pVisitor, const char* pName,
         name.RangeInitialize(0);
     }
     cWideString displayName(name);
-    delete[] name.mpBegin;
+    FreeWideString(name);
 
     const wchar_t16* pDisplay = displayName.mpBegin;
     if (displayName.mpBegin == displayName.mpEnd) pDisplay = gUnknownString;
@@ -470,7 +478,7 @@ bool FeedbackTree_VisitRuns(IResourceKeyVisitor* pVisitor, const char* pName,
     pDisplay = displayName.mpBegin;
     if (displayName.mpBegin == displayName.mpEnd) pDisplay = gUnknownString;
     pVisitor->v04(pDisplay);
-    delete[] displayName.mpBegin;
+    FreeWideString(displayName);
     return bResult;
 }
 
@@ -490,31 +498,33 @@ void cRunInfoVector::Insert(cRunInfo* pPosition, const cRunInfo* pValue)
 {
     cRunInfo* pEnd = mpEnd;
     if (pEnd != mpCapacityEnd) {
-        if (pValue >= pPosition && pValue < pEnd)
+        if (pPosition <= pValue && pValue < pEnd)
             pValue = (const cRunInfo*)((const char*)pValue + 0x10);
-        if (pEnd) *pEnd = *(pEnd - 1);
+        if (pEnd) {
+            pEnd->mX = (pEnd - 1)->mX;
+            pEnd->mY = (pEnd - 1)->mY;
+            pEnd->mZ = (pEnd - 1)->mZ;
+            pEnd->mExtra = (pEnd - 1)->mExtra;
+        }
         FUN_00edba80(pPosition, mpEnd - 1, mpEnd);
         *pPosition = *pValue;
         mpEnd++;
         return;
     }
-    int nCapacity = (int)((char*)pEnd - (char*)mpBegin) >> 4;
-    if (nCapacity == 0) {
-        nCapacity = 1;
-    } else {
-        nCapacity *= 2;
-    }
-    cRunInfo* pNew;
-    if (nCapacity == 0) {
-        pNew = 0;
-    } else {
-        pNew = (cRunInfo*)operator_new((uint32_t)(nCapacity * 0x10), gSimulatorName, 0, 0,
-                                       gAllocatorFile, 0xd1);
-    }
+    uint32_t nCount = (uint32_t)((char*)pEnd - (char*)mpBegin) >> 4;
+    int nCapacity = nCount > 0 ? (int)(nCount * 2) : 1;
+    cRunInfo* pNew = nCapacity ? (cRunInfo*)operator_new((uint32_t)(nCapacity * 0x10),
+                                                        gSimulatorName, 0, 0, gAllocatorFile, 0xd1)
+                               : 0;
     cRunInfo* pSlot = (cRunInfo*)FUN_00ba7920(mpBegin, pPosition, pNew);
-    if (pSlot) *pSlot = *pValue;
+    if (pSlot) {
+        pSlot->mX = pValue->mX;
+        pSlot->mY = pValue->mY;
+        pSlot->mZ = pValue->mZ;
+        pSlot->mExtra = pValue->mExtra;
+    }
     cRunInfo* pNewEnd = (cRunInfo*)FUN_00ba7920(pPosition, mpEnd, pSlot + 1);
-    delete[] (int*)mpBegin;
+    if (mpBegin && ((int*)mpBegin)[-1] != 0) operator_delete_array(mpBegin);
     mpEnd = pNewEnd;
     mpCapacityEnd = (cRunInfo*)((char*)pNew + (uint32_t)nCapacity * 0x10);
     mpBegin = pNew;
@@ -537,30 +547,30 @@ void cTripleVector::Insert(cSortTriple* pPosition, const cSortTriple* pValue)
     if (pEnd != mpCapacityEnd) {
         if (pPosition <= pValue && pValue < pEnd)
             pValue = (const cSortTriple*)((const char*)pValue + 0xc);
-        if (pEnd) *pEnd = *(pEnd - 1);
+        if (pEnd) {
+            pEnd->mX = (pEnd - 1)->mX;
+            pEnd->mY = (pEnd - 1)->mY;
+            pEnd->mZ = (pEnd - 1)->mZ;
+        }
         for (cSortTriple* pCur = mpEnd - 1; pCur != pPosition; pCur--)
             pCur[0] = pCur[-1];
         *pPosition = *pValue;
         mpEnd++;
         return;
     }
-    int nCapacity = (int)((char*)pEnd - (char*)mpBegin) / 0xc;
-    if (nCapacity == 0) {
-        nCapacity = 1;
-    } else {
-        nCapacity *= 2;
-    }
-    cSortTriple* pNew;
-    if (nCapacity == 0) {
-        pNew = 0;
-    } else {
-        pNew = (cSortTriple*)operator_new((uint32_t)(nCapacity * 0xc), gSimulatorName, 0, 0,
-                                          gAllocatorFile, 0xd1);
-    }
+    int nCount = (int)((char*)pEnd - (char*)mpBegin) / 0xc;
+    int nCapacity = nCount > 0 ? nCount * 2 : 1;
+    cSortTriple* pNew = nCapacity ? (cSortTriple*)operator_new((uint32_t)(nCapacity * 0xc),
+                                                              gSimulatorName, 0, 0, gAllocatorFile, 0xd1)
+                                  : 0;
     cSortTriple* pSlot = (cSortTriple*)FUN_00ba7960(mpBegin, pPosition, pNew);
-    if (pSlot) *pSlot = *pValue;
+    if (pSlot) {
+        pSlot->mX = pValue->mX;
+        pSlot->mY = pValue->mY;
+        pSlot->mZ = pValue->mZ;
+    }
     cSortTriple* pNewEnd = (cSortTriple*)FUN_00ba7960(pPosition, mpEnd, pSlot + 1);
-    delete[] (int*)mpBegin;
+    if (mpBegin && ((int*)mpBegin)[-1] != 0) operator_delete_array(mpBegin);
     mpBegin = pNew;
     mpEnd = pNewEnd;
     mpCapacityEnd = (cSortTriple*)((char*)pNew + (uint32_t)nCapacity * 0xc);

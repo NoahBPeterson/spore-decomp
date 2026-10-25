@@ -37,8 +37,19 @@ struct cTree {
 
 struct cTimerElem {                    // eastl::pair<unsigned, SP::cGonzagoTimer>, stride 0x28
     uint32_t mKey;                     // +0x00
-    uint8_t  mPad04[0x04];             // +0x04
-    uint8_t  mTimer[0x20];             // +0x08
+    uint32_t mPad04;                   // +0x04
+    uint32_t mTimerVtable;             // +0x08
+    uint32_t mRefCount;                // +0x0c
+    uint32_t mElapsedLo;               // +0x10
+    uint32_t mElapsedHi;               // +0x14
+    uint32_t mBaseLo;                  // +0x18
+    uint32_t mBaseHi;                  // +0x1c
+    uint8_t  mbRunning;                // +0x20
+    uint8_t  mPad21[0x03];             // +0x21
+    uint32_t mFn;                      // +0x24
+
+    // cGonzagoTimer copy constructor (constructs this from src); __thiscall.
+    void Construct(const cTimerElem* src);                              // 0x00c76f10
 };
 
 struct cNatElem {                      // 0x14 bytes
@@ -298,4 +309,153 @@ uint32_t* cTree::MapEntry(const uint32_t& key)
     uint32_t flag = 0;
     mapInsertOrAssign((uint32_t*)&found, found, query, flag);
     return (uint32_t*)((char*)found + 0x14);
+}
+
+// ---------------------------------------------------------------------------
+// Stream-backed vector readers (EASTL vector instantiations)
+// ---------------------------------------------------------------------------
+
+// Serialiser read primitive (also declared below for the quad-vector reader).
+void ReadInt32(void* reader, int* out, int count, int flags);          // 0x0093a780
+
+// Deserialiser node interface (vtable +0x18 reader, +0x1c end-entry, +0x20 sub-node).
+class IStreamNode {
+public:
+    virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3();
+    virtual void v4(); virtual void v5();
+    virtual void* GetReader();           // +0x18
+    virtual void EndChunk();             // +0x1c
+    virtual IStreamNode* GetSubNode();   // +0x20
+};
+
+// eastl::vector<unsigned int> (4-byte elements).
+struct U32Vector {
+    uint32_t* mpBegin;                   // +0x0
+    uint32_t* mpEnd;                     // +0x4
+    uint32_t* mpCapacity;                // +0x8
+
+    void Clear();                        // inlined clear()
+    void Reserve(uint32_t n);            // 0x00c77b60
+    void PushBack(const uint32_t& value); // fast path + slow DoInsertValue
+    void DoInsertValue(uint32_t* position, const uint32_t& value);  // 0x00cd0550
+};
+
+// eastl's memmove wrapper used by the range algorithms.
+void EastlMove(void* dst, const void* src, unsigned bytes);            // 0x011e0744
+
+void U32Vector::Clear()
+{
+    EastlMove(mpBegin, mpEnd, 0);
+    mpEnd -= (mpEnd - mpBegin);
+}
+
+void U32Vector::PushBack(const uint32_t& value)
+{
+    if (mpEnd < mpCapacity) {
+        uint32_t* p = mpEnd;
+        mpEnd = p + 1;
+        if (p)
+            *p = value;
+    } else {
+        DoInsertValue(mpEnd, value);
+    }
+}
+
+// @ 0x00c7a970
+void FUN_00c7a970(IStreamNode* stream, U32Vector* vec)
+{
+    vec->Clear();
+
+    uint32_t count = 0;
+    IStreamNode* node = stream->GetSubNode();
+    void* reader = node->GetReader();
+    ReadInt32(reader, (int*)&count, 1, 0);
+    vec->Reserve(count);
+
+    for (uint32_t i = 0; i < count; ++i) {
+        IStreamNode* itemNode = stream->GetSubNode();
+        void* itemReader = itemNode->GetReader();
+        uint32_t value;
+        ReadInt32(itemReader, (int*)&value, 1, 0);
+        vec->PushBack(value);
+    }
+    stream->EndChunk();
+}
+
+// eastl::vector<eastl::pair<unsigned int, SP::cGonzagoTimer>> (0x28-byte elements).
+// The pair's copy assignment only touches the timer's state fields, not its
+// vtable/refcount words, so the copy helpers below do the same.
+
+// Range copy-construct [first,last) into dst; returns the new end.
+cTimerElem* TimerConstructRange(cTimerElem* first, cTimerElem* last, cTimerElem* dst); // 0x00c77160
+// Range copy-assign [first,last) backwards ending at dst; returns new begin.
+cTimerElem* TimerCopyBackward(cTimerElem* first, cTimerElem* last, cTimerElem* dst);  // 0x00c77250
+// Range destroy [first,last) (dst only carries the return value).
+void TimerDestroyRange(cTimerElem* first, cTimerElem* last, cTimerElem* dst);         // 0x0100daa0
+void* EastlAllocate(unsigned size, const char* name, int flags, unsigned debugFlags,
+                    const char* file, int line);                        // 0x00f473a0
+void  EastlFree(void* p);                                               // 0x00f47380
+
+struct cTimerVector {
+    cTimerElem* mpBegin;                 // +0x0
+    cTimerElem* mpEnd;                   // +0x4
+    cTimerElem* mpCapacity;              // +0x8
+
+    void Insert(cTimerElem* position, const cTimerElem& value);          // 0x00c7aa40
+};
+
+// @ 0x00c7aa40
+void cTimerVector::Insert(cTimerElem* position, const cTimerElem& value)
+{
+    if (mpEnd != mpCapacity) {
+        const cTimerElem* source = &value;
+        // Self-insertion fixup (EASTL adjusts a value that lives in the vector).
+        if ((const char*)source >= (const char*)position && source < mpEnd)
+            source = (const cTimerElem*)((const char*)source + 0x28);
+
+        if (mpEnd != 0)
+            mpEnd->Construct(mpEnd - 1);
+        TimerCopyBackward(position, mpEnd - 1, mpEnd);
+
+        position->mKey       = source->mKey;
+        position->mElapsedLo = source->mElapsedLo;
+        position->mElapsedHi = source->mElapsedHi;
+        position->mBaseLo    = source->mBaseLo;
+        position->mBaseHi    = source->mBaseHi;
+        position->mbRunning  = source->mbRunning;
+        position->mFn        = source->mFn;
+        mpEnd = mpEnd + 1;
+        return;
+    }
+
+    int count = (int)(mpEnd - mpBegin);
+    int newCapacity;
+    cTimerElem* buffer;
+    if (count == 0) {
+        newCapacity = 1;
+    } else {
+        newCapacity = count * 2;
+        if (newCapacity == 0) {
+            buffer = 0;
+            goto haveBuffer;
+        }
+    }
+    buffer = (cTimerElem*)EastlAllocate(newCapacity * 0x28, "Simulator", 0, 0,
+        "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h",
+        0xd1);
+haveBuffer:
+    cTimerElem* mid = TimerConstructRange(mpBegin, position, buffer);
+    TimerDestroyRange(mpBegin, position, buffer);
+    if (mid)
+        mid->Construct(&value);
+
+    cTimerElem* newEnd = TimerConstructRange(position, mpEnd, mid + 1);
+    TimerDestroyRange(position, mpEnd, mid + 1);
+
+    if (mpBegin != 0 && ((int*)mpBegin)[-1] != 0)
+        EastlFree(mpBegin);
+
+    mpEnd = newEnd;
+    mpBegin = buffer;
+    mpCapacity = (cTimerElem*)((char*)buffer + newCapacity * 0x28);
 }

@@ -52,17 +52,60 @@ void __cdecl FUN_00435ed0(void* space, unsigned value); // SP::cSPUISpace::KillS
 void __cdecl FUN_00421cf0(void* message);               // SlotMessage::Destruct
 void __cdecl FUN_00d9a290(int a, void* b, void* c, void* d);
 void* __cdecl FUN_00883860(void);                        // EA::Messaging::GetServer
-void __cdecl FUN_00afba10(void);
-void __cdecl FUN_00af9cf0(void* a, float b, void* c, void* d);
-void __cdecl FUN_00afef10(int a, float b);
-void* __cdecl FUN_00b25f40(void* a);
-void* __cdecl FUN_00bef6c0(void);
-void __cdecl FUN_00ac9310(void* a, void* b, unsigned c);
-void* __cdecl FUN_00bdca30(void* a, int b);
-void __cdecl FUN_00afbad0(void* a);
 char __cdecl FUN_00c9e8e0(int a, void* b);
 
 struct Vec3 { float x, y, z; };
+
+// ---------------------------------------------------------------------------
+// SP::cActionCircle -- 0x64-byte action circle: the slot vector lives at +0x50
+// and every slot is 0x18 bytes with its world position at +0xc.
+// ---------------------------------------------------------------------------
+struct cActionCircle {
+    struct tSlot {
+        bool mOccupied;              // +0x00
+        char _pad0[3];
+        void* mpReservingNoun;       // +0x04
+        unsigned int mReservingId;   // +0x08
+        Vec3 mPos;                   // +0x0c
+    };
+    struct SlotVector {
+        tSlot* mpBegin;              // +0x00
+        tSlot* mpEnd;                // +0x04
+        tSlot* mpCapacity;           // +0x08
+        int mAllocator[2];           // +0x0c
+    };
+
+    char pad00[0x50];
+    SlotVector mSlots;               // +0x50
+
+    void __thiscall Construct();                                     // 0xafba10
+    void __thiscall SetAtCenter(const Vec3* center, float radius,
+                                const Vec3* facing, float altitude); // 0xaf9cf0
+    void __thiscall SetSlotRadius(int index, float radius);          // 0xafef10
+    void __thiscall Destroy();                                       // 0xafbad0
+};
+
+struct NounManager {
+    void* __thiscall FindNoun(unsigned int id);                      // 0xb25f40
+};
+struct NounContainer {
+    void* mpBegin;                                                   // +0x00
+    void* mpEnd;                                                     // +0x04
+};
+struct Noun {
+    NounContainer* __thiscall GetContainer();                        // 0xbef6c0
+};
+struct cCity {
+    Vec3* __thiscall GetVehicleSpawnPoint(Vec3* out, int kind);      // 0xbdca30
+};
+
+NounManager* __cdecl SP_NounManager();                               // 0xb3d300
+void* __cdecl FUN_00ac9310(NounContainer* c, Vec3* pos, bool flag);  // 0xac9310
+
+extern float g_01699b08;        // 0x01699b08
+extern float g_01699b0c;        // 0x01699b0c
+extern float g_01699b10;        // 0x01699b10
+extern float g_1400a58;         // 0x01400a58
 
 struct Timer {
     unsigned __int64 __thiscall GetElapsedTime();        // 0x00bc3190
@@ -70,9 +113,9 @@ struct Timer {
 };
 
 struct PlanetModel {
-    unsigned __thiscall GetAverageRadius(Vec3* p);       // 0x00c... 
+    unsigned int __thiscall GetAverageRadius(Vec3* p);   // 0x00b7e840
 };
-void* __cdecl GetPlanetModel(void);                      // SP::PlanetModel
+PlanetModel* __cdecl GetPlanetModel();                   // 0x00b3d350
 
 // ---------------------------------------------------------------------------
 // Global cells.
@@ -429,14 +472,17 @@ void Self6ff0::FUN_00ca6ff0(void* arg)
 // ---------------------------------------------------------------------------
 // 00ca72a0
 // ---------------------------------------------------------------------------
-// cPathAndTurnLocomotion::Execute.  Samples the path, filters points by
-// planet-model region flags, then pushes the chosen target to the action
-// circle.  This is a readable reconstruction of the original control flow.
+// cPathAndTurnLocomotion::Execute.  Samples the actor position, builds a
+// zero-radius action circle around it, then walks the circle's reserved slots
+// and tells the locomotion sub-object to head for the first slot whose world
+// position lies in a region the current locomotion kind accepts.  When no slot
+// qualifies it falls back to the city vehicle spawn point for the empire that
+// owns the +0x508 object.
 struct Self72a0 {
     char pad34[0x34];
     ObjectAt508 mSub34;     // +0x34
     char pad38[0x508 - 0x38];
-    void* mp508;            // +0x508
+    ObjectAt508 m508;       // +0x508
     char pad50c[0xb1c - 0x50c];
     int mB1c;               // +0xb1c
 };
@@ -446,39 +492,65 @@ void __fastcall FUN_00ca72a0(Self72a0* self)
 {
     ObjectAt508* sub = &self->mSub34;
     float* p = ((float* (__thiscall*)(ObjectAt508*))
-                sub->mpVtbl[0x2c / 4])(sub);
+                self->mSub34.mpVtbl[0x2c / 4])(sub);
     Vec3 here = { p[0], p[1], p[2] };
 
     if (FUN_00c9e8e0(self->mB1c, &here))
         return;
 
-    FUN_00afba10();
-    void* path = 0;
-    void* ctx = ((void* (__thiscall*)(ObjectAt508*, void*, int))
-                 sub->mpVtbl[0x5c / 4])(sub, &path, 0);
-    FUN_00af9cf0(&path, 0x43000000, ctx, &path);
+    cActionCircle circle;
+    circle.Construct();
+
+    Vec3 scratch;
+    circle.SetAtCenter(&here, g_1400a58,
+        ((Vec3* (__thiscall*)(ObjectAt508*, Vec3*))
+         sub->mpVtbl[0x5c / 4])(sub, &scratch),
+        0.0f);
 
     float radius = ((float (__thiscall*)(ObjectAt508*))
                     sub->mpVtbl[0x70 / 4])(sub);
-    FUN_00afef10(0, radius);
+    circle.SetSlotRadius(0, radius);
 
-    void* noun = ((void* (__thiscall*)(void*))
-                  (*(void***)((char*)self + 0x508))[4])((char*)self + 0x508);
-    if (FUN_00b25f40(noun) != 0) {
-        void* state = FUN_00bef6c0();
-        if (*(int*)state != *(int*)((char*)state + 4)) {
-            void* filter = 0;
-            FUN_00ac9310(state, &filter, (unsigned)(size_t)sub & 0xffffff00);
-            Vec3 target;
-            FUN_00bdca30(&target, self->mB1c);
-            if (target.x != *(float*)0x01699b08 ||
-                target.y != *(float*)0x01699b0c ||
-                target.z != *(float*)0x01699b10) {
+    int count = (int)(circle.mSlots.mpEnd - circle.mSlots.mpBegin);
+    for (int i = 0; i < count; ++i) {
+        Vec3& sp = circle.mSlots.mpBegin[i].mPos;
+        scratch.x = sp.x;
+        scratch.y = sp.y;
+        scratch.z = sp.z;
+        int kind = self->mB1c;
+        unsigned int mask = GetPlanetModel()->GetAverageRadius(&scratch);
+        bool ok = true;
+        switch (kind) {
+        case 0: ok = (mask & 0x98000000) == 0; break;
+        case 1: ok = (mask & 0x58000000) == 0; break;
+        case 2: ok = ((mask >> 29) & 1) == 0; break;
+        default: break;
+        }
+        if (!ok)
+            continue;
+        ((void (__thiscall*)(ObjectAt508*, Vec3*))
+         sub->mpVtbl[0x38 / 4])(sub, &scratch);
+        circle.Destroy();
+        return;
+    }
+
+    Noun* noun = (Noun*)SP_NounManager()->FindNoun(
+        ((unsigned int (__thiscall*)(ObjectAt508*))
+         self->m508.mpVtbl[0x10 / 4])(&self->m508));
+    if (noun != 0) {
+        NounContainer* container = noun->GetContainer();
+        if (container->mpBegin != container->mpEnd) {
+            bool flag = false;
+            NounContainer* slots = noun->GetContainer();
+            cCity* city = (cCity*)FUN_00ac9310(slots, &here, flag);
+            here = *city->GetVehicleSpawnPoint(&scratch, self->mB1c);
+            if (here.x != g_01699b08 ||
+                here.y != g_01699b0c ||
+                here.z != g_01699b10)
                 ((void (__thiscall*)(ObjectAt508*, Vec3*))
-                 sub->mpVtbl[0x38 / 4])(sub, &target);
-            }
+                 sub->mpVtbl[0x38 / 4])(sub, &here);
         }
     }
 
-    FUN_00afbad0(&path);
+    circle.Destroy();
 }

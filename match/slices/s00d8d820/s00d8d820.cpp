@@ -229,13 +229,13 @@ bool __fastcall FUN_00d8d820(LOUNGE_memory_block* self, void* edx,
     void* u = group->FUN_00bc9b70(0);
     float total = f4 + f5;
     float3 tmp;
-    PlanetObj* pm = FUN_00b3d350(&tmp, u, f4, total);
-    pm->MakeRandomWorldPosition(&tmp, u, f4, total);
+    PlanetObj* pm = FUN_00b3d350(&tmp, u, f5, total);
+    pm->MakeRandomWorldPosition(&tmp, u, f5, total);
     GameData* gd5 = creature->FUN_00c04590();
     if (gd5->m15c == 8) {
-        float3 a, b;
-        PlanetObj* pm2 = FUN_00b3d350(&a, &b);
-        float3* v = pm2->FUN_00b81630(&a, &b);
+        float3 a;
+        PlanetObj* pm2 = FUN_00b3d350(&a, &tmp);
+        float3* v = pm2->FUN_00b81630(&a, &tmp);
         self->mMyPosition.x = v->x;
         self->mMyPosition.y = v->y;
         self->mMyPosition.z = v->z;

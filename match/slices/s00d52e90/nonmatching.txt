@@ -6,3 +6,7 @@
 00d538f0  32  ctor behavior matches (base ctor in ecx, vtable/constants/vector fields all set, mpCapacity is this+0x58); replay PASS, fresh equiv PASS (2000/2000, 100% coverage). Not byte-exact: same-size 77 B but the stores are scheduled differently (retail writes the vtable and +0x10/+0x14 constants before the vector fields and forms capacity with `add eax,0x20` from the +0x38 base, while ours groups the zero stores first and uses `lea eax,[esi+0x58]`)
 00d539d0  49  singleton init: new-expression null-path differs
 00d53a80  148  6-slot loop: i64->float conversion and vector growth path differ
+00d52e90 1172 nonmatching: large posse UI dispatch; body stubbed (1 vs 1172 bytes). difftest FAIL 5/5 (esp after return +0xc vs +0x4); flags /O2 /MD /Gy /EHsc /TP /arch:SSE
+00d533c0 197 nonmatching: ReloadTuning property-enumeration logic incomplete; 25 vs 206 bytes. difftest UNSUPPORTED (unresolved PropertyEnum::set); flags /O2 /MD /Gy /EHsc /TP /arch:SSE
+00d53490 466 nonmatching: RemovePosseMember; body stubbed (5 vs 470 bytes). difftest UNSUPPORTED (ambiguous _SP_NounManager 00b3d300/00b5b6c0); flags /O2 /MD /Gy /EHsc /TP /arch:SSE
+00d53790 237 nonmatching: PosseSim_OnTick; body stubbed (5 vs 241 bytes). difftest UNSUPPORTED (ambiguous _SP_NounManager 00b3d300/00b5b6c0); flags /O2 /MD /Gy /EHsc /TP /arch:SSE

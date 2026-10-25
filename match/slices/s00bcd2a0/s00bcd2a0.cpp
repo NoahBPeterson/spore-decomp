@@ -81,6 +81,14 @@ typedef unsigned char  u8;
 typedef unsigned short u16;
 
 struct Vec3 { float x, y, z, w; };
+struct Vec3f { float x, y, z; };                 // 12-byte position/offset vector
+struct WaterBody {                               // 0x14-stride element of the water-body list
+    u32   mField_00;
+    u32   mField_04;
+    u32   mField_08;
+    float mRadius_0c;
+    u32   mField_10;
+};
 
 // helper: virtual function pointer at vtable byte offset
 static void* vc(void* obj, int off) { return ((void**)*(void**)obj)[off / 4]; }
@@ -119,9 +127,9 @@ void*  __cdecl FUN_00a68fb0(void* a, u32 b);                     // 0xa68fb0 Ran
 void*  __cdecl FUN_00b3d480(float a, float b, float c, float d, float e, float f); // 0xb3d480
 void*  __cdecl FUN_00d5cfd0(void* a, void* b, void* c, void* d, void* e, void* f); // 0xd5cfd0
 void*  __cdecl FUN_00b3d350(void* a);                            // 0xb3d350 SP::PlanetModel
-void*  __cdecl FUN_00b8bb70(void* a, void* b, void* c);          // 0xb8bb70 cPlanetModel::FindClosestWater
-void*  __cdecl FUN_0108db30(void* a);                            // 0x108db30 water-body list
-void*  __cdecl FUN_00b81470(void* a, void* b, void* c);          // 0xb81470 cPlanetModel::DistanceBetweenPoints
+char   __fastcall FUN_00b8bb70(void* self, int, void* planet, float dist, void* out); // 0xb8bb70 cPlanetModel::FindClosestWater
+void*  __fastcall FUN_0108db30(void* self, int);                 // 0x108db30 water-body list
+float  __fastcall FUN_00b81470(void* self, int, void* planet, void* point); // 0xb81470 cPlanetModel::DistanceBetweenPoints
 void*  __cdecl FUN_00c00b00(void* a, void* b, void* c);          // 0xc00b00
 void*  __cdecl FUN_00bf02b0(void* a, void* b);                   // 0xbf02b0 city_flags_update
 void*  __cdecl FUN_00c6f660(void* a);                            // 0xc6f660
@@ -228,7 +236,7 @@ struct cOwnerT {
     void  SetModelKey2(void* pKey);      // 0x00bcd4e0
     void* GetOwnerCivilization();        // 0x00bcd630
     void  UpdateCityFlags(void* pObj);   // 0x00bcd890
-    bool  func7Ch(void* pPlanet, void* pPoint, float threshold); // 0x00bcda00
+    bool  func7Ch(void* pPlanet);                                // 0x00bcda00
     void  RefreshModelKeys();            // 0x00bcda90
     void  GetNextWanderNode(char mode, int count); // 0x00bcd690
 };
@@ -415,7 +423,7 @@ void* cOwnerT::GetOwnerCivilization() {
     void* pCity = ((void* (__thiscall*)(void*))vc(this, 0x30))(this);
     if (pCity != 0) {
         void* type = ((void* (__thiscall*)(void*))vc(pCity, 0x20))(pCity);
-        if (type != (void*)&DAT_018c43e8) pCity = 0;
+        if (type != (void*)0x018c43e8) pCity = 0;
     } else {
         pCity = 0;
     }
@@ -516,45 +524,51 @@ void cOwnerT::UpdateCityFlags(void* pObj) {
 // ---------------------------------------------------------------------------
 // 00bcd970 -- water-distance check for a planet point.
 // ---------------------------------------------------------------------------
+// Add 2.0f (0x01470f1c) to the requested distance, ask the planet model for the
+// closest water body, then walk the 0x14-stride body list behind pPoint: a body
+// whose radius (+0x0c) exceeds the model distance aborts the check.
+// ---------------------------------------------------------------------------
 // @ 0x00bcd970
 bool __cdecl FUN_00bcd970(void* pPlanet, float dist, void* pPoint) {
     if (pPoint == 0) return false;
     dist = dist + 2.0f;
-    Vec3 tmp;
-    void* model = FUN_00b3d350(pPlanet);
-    u8 ok = (u8)(((char (__thiscall*)(void*, float, Vec3*))FUN_00b8bb70)(model, dist, &tmp) != 0);
-    if (ok != 0) return false;
 
-    u32* p = (u32*)FUN_0108db30(pPoint);
-    u32 cur = p[0];
-    if (cur == p[1]) return true;
+    Vec3f tmp;
+    void* model = FUN_00b3d350(pPlanet);
+    if (FUN_00b8bb70(model, 0, pPlanet, dist, &tmp)) return false;
+
+    void** p = (void**)FUN_0108db30(pPoint, 0);   // {begin, end} of the body list
+    WaterBody* cur = (WaterBody*)p[0];
+    WaterBody* end = (WaterBody*)p[1];
+    if (cur == end) return true;
     do {
-        Vec3 d;
         void* m = FUN_00b3d350(pPlanet);
-        ((void (__thiscall*)(void*, void*, Vec3*))FUN_00b81470)(m, (void*)cur, &d);
-        if (d.x > *(float*)(cur + 0xc)) {
-            cur += 0x14;
-        } else {
-            return false;
-        }
-    } while (cur != p[1]);
+        float d = FUN_00b81470(m, 0, pPlanet, cur);
+        if (cur->mRadius_0c > d) return false;
+        ++cur;
+    } while (cur != end);
     return true;
 }
 
 // ---------------------------------------------------------------------------
 // 00bcda00 -- Simulator::cBuilding::func7Ch (distance gate).
 // ---------------------------------------------------------------------------
+// The caller passes only the planet: the owned city's offset (vslot 0x5c) and
+// the model distance to it are computed here, and the city's radius (vslot 0x60)
+// must exceed that distance before the water check runs.
+// ---------------------------------------------------------------------------
 // @ 0x00bcda00
-bool cOwnerT::func7Ch(void* pPlanet, void* pPoint, float threshold) {
-    if (mpOwner_1f0 == 0) return false;
-    Vec3 key;
-    ((void (__thiscall*)(void*, Vec3*))vc(mpOwner_1f0, 0x5c))(mpOwner_1f0, &key);
+bool cOwnerT::func7Ch(void* pPlanet) {
+    u8* pOwner = (u8*)mpOwner_1f0;
+    if (pOwner == 0) return false;
+    Vec3f key;
+    Vec3f* k = ((Vec3f* (__thiscall*)(u8*, Vec3f*))vc(pOwner, 0x5c))(pOwner, &key);
     void* model = FUN_00b3d350(pPlanet);
-    float dist;
-    ((void (__thiscall*)(void*, void*, void*, float*))FUN_00b81470)(model, &key, pPoint, &dist);
-    float radius = ((float (__thiscall*)(void*))vc(mpOwner_1f0, 0x60))(mpOwner_1f0);
-    if (threshold < radius) {
-        return FUN_00bcd970(pPlanet, dist, pPoint);
+    float dist = FUN_00b81470(model, 0, pPlanet, k);
+    float radius = ((float (__thiscall*)(u8*))vc(pOwner, 0x60))(pOwner);
+    if (radius > dist) {
+        float t = ((float (__thiscall*)(u8*))vc((u8*)this + 0x34, 0x70))((u8*)this + 0x34);
+        return FUN_00bcd970(pPlanet, t, pOwner);
     }
     return false;
 }
@@ -580,7 +594,7 @@ void cOwnerT::RefreshModelKeys() {
             ((void (__thiscall*)(void*))vc(obj, 8))(obj);
             continue;
         }
-        void* t = ((void* (__thiscall*)(void*, void*))vc(a, 0xc))(a, &DAT_01186577);
+        void* t = ((void* (__thiscall*)(void*, void*))vc(a, 0xc))(a, (void*)0x01186577);
         if (t == 0) {
             ((void (__thiscall*)(void*))vc(obj, 8))(obj);
             continue;

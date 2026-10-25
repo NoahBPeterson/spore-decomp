@@ -379,88 +379,113 @@ void SimPlanet::Func70860() {
 // vector at +0x15c..+0x160.
 // ===========================================================================
 
+// The whole 0x00c70150..0x00c706d0 family takes its object as the first stack
+// argument (plain `ret`, no `ret n`), i.e. it is a set of __cdecl helpers that
+// operate on a SimCivObject* -- not thiscall members.
+//
 // @ 0x00c70150
-bool SimCivObject::IsHomePlanetOfPlayer(WorldObject* pObj) {
-    if (GetRecordType() != 5) return false;
-    int n = (int)(mpCivEnd_160 - mpCivBegin_15c);
+bool SimCivObject_IsHomePlanetOfPlayer(SimCivObject* self, WorldObject* pObj, char flag) {
+    if (self->GetRecordType() != 5) return false;
+    int n = (int)((char*)self->mpCivEnd_160 - (char*)self->mpCivBegin_15c) >> 2;
     for (int i = 0; i < n; ++i) {
-        CivData* pCiv = mpCivBegin_15c[i];
-        int owner = pObj->mPlayerID_84;
-        if (pCiv->GetOwnerMaybe() == owner) {
-            CityData** pCities = pCiv->GetCities();
-            int nCities = (int)(pCities[1] - pCities[0]);
-            for (int j = 0; j < nCities; ++j) {
-                CityData* pCity = pCities[0] + j;
-                if (pCity->GetNumBuildings() > 1) return true;
+        CivData* pCiv = self->mpCivBegin_15c[i];
+        if (pCiv->GetOwnerMaybe() == pObj->mPlayerID_84) {
+            void** pVec = (void**)(void*)pCiv->GetCities();
+            void** pBegin = (void**)pVec[0];
+            int m = (int)((char*)pVec[1] - (char*)pBegin) >> 2;
+            for (int j = 0; j < m; ++j) {
+                if (flag == 0) return true;
+                if (((CityData*)pBegin[j])->GetNumBuildings() > 1) return true;
             }
         }
     }
-    return true;
+    if (FUN_01021080() != 0) return false;
+    void* pSingleton = DAT_0167a60c;
+    if (pSingleton == 0) {
+        pSingleton = FUN_00f473a0(0xc8, "Simulator/SimSingleton", 0, 0, 0, 0);
+        if (pSingleton != 0)
+            pSingleton = ((void* (__thiscall*)(void*))FUN_00ae5c30)(pSingleton);
+        DAT_0167a60c = pSingleton;
+    }
+    return ((bool (__thiscall*)(void*))FUN_00ae3740)(pSingleton) != 0;
 }
 
 // @ 0x00c70260
-bool SimCivObject::AnyCityHasBuildings() {
-    int n = (int)(mpCivEnd_160 - mpCivBegin_15c);
+bool SimCivObject_AnyCityHasBuildings(SimCivObject* self) {
+    int n = (int)((char*)self->mpCivEnd_160 - (char*)self->mpCivBegin_15c) >> 2;
     if (n <= 0) return false;
     for (int i = 0; i < n; ++i) {
-        WorldObject* pObj = (WorldObject*)GetSubObject(i);
-        int m = (int)(pObj->mpVec3c_40 - pObj->mpVec3c_3c);
+        WorldObject* pObj = (WorldObject*)self->GetSubObject(i);
+        char* begin = (char*)pObj->mpVec3c_3c;
+        int m = (int)((char*)pObj->mpVec3c_40 - begin) >> 2;
         for (int j = 0; j < m; ++j) {
-            if (((CityData*)pObj->mpVec3c_3c[j])->GetValue() >= 1.0f) return true;
+            CityData* pCity = *(CityData**)(begin + j * 4);
+            if (pCity->GetValue() >= 1.0f) return true;
         }
     }
     return false;
 }
+
 // @ 0x00c702f0
-int SimCivObject::CountBuildings() {
+int SimCivObject_CountBuildings(SimCivObject* self) {
     int total = 0;
-    int n = (int)(mpCivEnd_160 - mpCivBegin_15c);
+    int n = (int)((char*)self->mpCivEnd_160 - (char*)self->mpCivBegin_15c) >> 2;
     for (int i = 0; i < n; ++i) {
-        CityData** pCities = mpCivBegin_15c[i]->GetCities();
-        int m = (int)(pCities[1] - pCities[0]);
-        for (int j = 0; j < m; ++j) total += (pCities[0] + j)->GetNumBuildings();
+        void** pVec = (void**)(void*)self->mpCivBegin_15c[i]->GetCities();
+        void** pBegin = (void**)pVec[0];
+        int m = (int)((char*)pVec[1] - (char*)pBegin) >> 2;
+        for (int j = 0; j < m; ++j)
+            total += ((CityData*)pBegin[j])->GetNumBuildings();
     }
     return total;
 }
+
 // @ 0x00c70380
-void SimCivObject::GetTurretAndBuildingCounts(int* pBuildings, int* pTurrets) {
-    int n = (int)(mpCivEnd_160 - mpCivBegin_15c);
+void GetTurretAndBuildingCounts(SimCivObject* self, int* pBuildings, int* pTurrets) {
+    int n = (int)((char*)self->mpCivEnd_160 - (char*)self->mpCivBegin_15c) >> 2;
     for (int i = 0; i < n; ++i) {
-        CityData** pCities = mpCivBegin_15c[i]->GetCities();
-        int m = (int)(pCities[1] - pCities[0]);
+        void** pVec = (void**)(void*)self->mpCivBegin_15c[i]->GetCities();
+        void** pBegin = (void**)pVec[0];
+        int m = (int)((char*)pVec[1] - (char*)pBegin) >> 2;
         for (int j = 0; j < m; ++j) {
-            *pBuildings += (pCities[0] + j)->GetNumBuildings();
-            *pTurrets   += (pCities[0] + j)->GetNumTurrets();
+            CityData* pCity = (CityData*)pBegin[j];
+            *pBuildings += pCity->GetNumBuildings();
+            *pTurrets   += pCity->GetNumTurrets();
         }
     }
 }
+
 // @ 0x00c70420
-int SimCivObject::CountCities() {
+int SimCivObject_CountCities(SimCivObject* self) {
     int total = 0;
-    int n = (int)(mpCivEnd_160 - mpCivBegin_15c);
+    int n = (int)((char*)self->mpCivEnd_160 - (char*)self->mpCivBegin_15c) >> 2;
     for (int i = 0; i < n; ++i) {
-        CityData** pCities = mpCivBegin_15c[i]->GetCities();
-        total += (int)(pCities[1] - pCities[0]);
+        void** pVec = (void**)(void*)self->mpCivBegin_15c[i]->GetCities();
+        total += (int)((char*)pVec[1] - (char*)pVec[0]) >> 2;
     }
     return total;
 }
+
 // @ 0x00c70470
-int SimCivObject::GetPercentMaybe() {
-    unsigned n = (unsigned)(mpCivEnd_160 - mpCivBegin_15c);
-    if (n < 2 && n != 0) return mpCivBegin_15c[0]->GetCities()[0][0].GetPercent();
+int SimCivObject_GetPercentMaybe(SimCivObject* self) {
+    unsigned n = (unsigned)((char*)self->mpCivEnd_160 - (char*)self->mpCivBegin_15c) >> 2;
+    if (n < 2 && n != 0)
+        return ((CityData*)self->mpCivBegin_15c[0])->GetPercent();
     return 0;
 }
+
 // @ 0x00c704a0
-bool SimCivObject::Func704a0(int a, int b, int c, float amount) {
-    int* pKey = (int*)GetKeyMaybe();
+bool SimCivObject_Func704a0(SimCivObject* self, int a, int b, int c, float amount) {
+    int* pKey = (int*)self->GetKeyMaybe();
     if (a == pKey[0] && b == pKey[1] && c == pKey[2]) {
-        int n = (int)(mpCivEnd_160 - mpCivBegin_15c);
+        int n = (int)((char*)self->mpCivEnd_160 - (char*)self->mpCivBegin_15c) >> 2;
         for (int i = 0; i < n; ++i) {
-            WorldObject* pObj = (WorldObject*)GetSubObject(i);
-            int m = (int)(pObj->mpVec3c_40 - pObj->mpVec3c_3c);
+            WorldObject* pObj = (WorldObject*)self->GetSubObject(i);
+            char* begin = (char*)pObj->mpVec3c_3c;
+            int m = (int)((char*)pObj->mpVec3c_40 - begin) >> 2;
             for (int j = 0; j < m; ++j) {
-                CityData* pCity = (CityData*)pObj->mpVec3c_3c[j];
                 if (amount > 0.0f) {
+                    CityData* pCity = *(CityData**)(begin + j * 4);
                     float v = pCity->GetValue();
                     float take = v;
                     if (amount < v) take = amount;
@@ -472,19 +497,21 @@ bool SimCivObject::Func704a0(int a, int b, int c, float amount) {
     }
     return true;
 }
+
 // @ 0x00c705c0
-int SimCivObject::Func705c0(int amount) {
+int SimCivObject_Func705c0(SimCivObject* self, int amount) {
     if (FUN_01021300() == 0) return 0;
     FUN_01021090();
     float budget = (float)amount;
     if (amount < 0) budget += DAT_013f4fd0;
     float spent = 0.0f;
-    int n = (int)(mpCivEnd_160 - mpCivBegin_15c);
+    int n = (int)((char*)self->mpCivEnd_160 - (char*)self->mpCivBegin_15c) >> 2;
     for (int i = 0; i < n; ++i) {
-        WorldObject* pObj = (WorldObject*)GetSubObject(i);
-        int m = (int)(pObj->mpVec3c_40 - pObj->mpVec3c_3c);
+        WorldObject* pObj = (WorldObject*)self->GetSubObject(i);
+        char* begin = (char*)pObj->mpVec3c_3c;
+        int m = (int)((char*)pObj->mpVec3c_40 - begin) >> 2;
         for (int j = 0; j < m; ++j) {
-            CityData* pCity = (CityData*)pObj->mpVec3c_3c[j];
+            CityData* pCity = *(CityData**)(begin + j * 4);
             float v = pCity->GetValue();
             spent += v;
             if (budget > 0.0f) {
@@ -496,36 +523,42 @@ int SimCivObject::Func705c0(int amount) {
     }
     return (int)spent;
 }
-// @ 0x00c706d0
-void SimCivObject::SetPlanetTechLevel(int level) {
-    WorldObject* pWorld = GetWorldObj();
-    SimPlanet* pActive = (SimPlanet*)FUN_01021260();
-    if (pActive != 0 && pActive->mRecord_13c != (PlanetRecord*)this) pActive = 0;
 
-    if (mTechLevel_194 == 5 && level != 5) {
-        void* pAvatar = FUN_00b1fdb0(pWorld);
-        void* pEmpire = FUN_00ba9370(FUN_00b3d2a0(pAvatar));
-        if (pEmpire != 0) FUN_00c35810(pEmpire, this);
-        void* pCtx1 = FUN_00ce6950(this);
-        FUN_00aeab40(FUN_00b3d4a0(pCtx1), pCtx1);
-        void* pCtx2 = FUN_00ce6950(this);
-        FUN_00aea720(FUN_00b3d4a0(pAvatar), pCtx2, 0);
+// @ 0x00c706d0
+void SimCivObject_SetPlanetTechLevel(SimCivObject* self, int level) {
+    WorldObject* pWorld = (WorldObject*)self->GetWorldObj();
+    SimPlanet* pActive = (SimPlanet*)FUN_01021260();
+    if (pActive != 0 && pActive->mRecord_13c != (PlanetRecord*)self) pActive = 0;
+
+    if (self->mTechLevel_194 == 5 && level != 5) {
+        void* pAvatar = ((void* (__thiscall*)(void*))FUN_00b1fdb0)(pWorld);
+        void* pMgr = ((void* (__stdcall*)(void*))FUN_00b3d2a0)(pAvatar);
+        void* pEmpire = ((void* (__thiscall*)(void*))FUN_00ba9370)(pMgr);
+        if (pEmpire != 0)
+            ((void (__thiscall*)(void*, void*))FUN_00c35810)(pEmpire, self);
+        void* pCtx1 = ((void* (__thiscall*)(void*))FUN_00ce6950)(self);
+        ((void (__thiscall*)(void*))FUN_00aeab40)(
+            ((void* (__stdcall*)(void*))FUN_00b3d4a0)(pCtx1));
+        ((void (__thiscall*)(void*, void*, void*))FUN_00aea720)(
+            ((void* (__stdcall*)(void*))FUN_00b3d4a0)(pAvatar),
+            ((void* (__thiscall*)(void*))FUN_00ce6950)(self),
+            0);
     }
-    mTechLevel_194 = level;
+    self->mTechLevel_194 = level;
     if (level == 1 || level == 0) {
-        RebuildCivs();
-        RebuildCivs2();
+        ((void (__thiscall*)(void*))FUN_00b8de60)(self);
+        ((void (__thiscall*)(void*))FUN_00b8df20)(self);
     }
     if (pActive != 0) {
-        if (FUN_00b5b800() == &DAT_01654c05) {
+        if ((int)FUN_00b5b800() == 0x1654c05) {
             void* pMsg = FUN_0067dcc0();
             ((void (__thiscall*)(void*, int, int, int, int))vc(pMsg, 0x18))(pMsg, 0x490d429, 0, 0, 0);
         }
     }
     FUN_00c8b5e0(pWorld);
-    if (pWorld->GetType() < 2) {
+    if (((int (__thiscall*)(void*))FUN_00bb9ae0)(pWorld) < 2) {
         int x[3] = { 0, 0, 0 };
-        FUN_00bb9b90(x);
+        ((void (__thiscall*)(void*, void*))FUN_00bb9b90)(pWorld, x);
     }
 }
 
@@ -745,11 +778,12 @@ int Func6fe00(int type) {
 
 // @ 0x00c6fe50
 bool Func6fe50(WorldObject* pObj) {
-    WorldObject* pType = (WorldObject*)FUN_00b8de30(pObj);
-    if (pType->GetType() != 5) return false;
-    void* pAvatar = FUN_00b1fdb0(pType);
-    void* pEmpire = FUN_00ba9370(FUN_00b3d2a0(pAvatar));
-    return FUN_00c31730(pEmpire) == pObj;
+    WorldObject* pType = (WorldObject*)((void* (__thiscall*)(void*))FUN_00b8de30)(pObj);
+    if (((int (__thiscall*)(void*))FUN_00bb9ae0)(pType) != 5) return false;
+    void* pAvatar = ((void* (__thiscall*)(void*))FUN_00b1fdb0)(pType);
+    void* pMgr = ((void* (__stdcall*)(void*))FUN_00b3d2a0)(pAvatar);
+    void* pEmpire = ((void* (__thiscall*)(void*))FUN_00ba9370)(pMgr);
+    return ((void* (__thiscall*)(void*))FUN_00c31730)(pEmpire) == pObj;
 }
 
 // ===========================================================================

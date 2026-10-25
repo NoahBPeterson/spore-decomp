@@ -7,88 +7,117 @@ namespace Drawing {
 
 // ------------------------------------------------------------------ 0x95d000
 // Nine-slice stretched blit.  dest = target rect, edge = source uv borders (8 floats),
-// uv = inner tile uv, (sx,sy) = per-cell stretch factors.
+// uv = inner tile uv, (sx,sy) = per-cell stretch factors.  Corners are always drawn;
+// the top/bottom bands run when the horizontal band has positive width, the left/right
+// bands when the vertical band has positive height, and the centre when neither collapses.
 // @ 0x95d000
 void __cdecl BltEdgeStretch(Canvas* c, const float* dest, const float* edge, Image* img,
                             const float* uv, float sx, float sy)
 {
-    float iw = (float)img->width;
-    float ih = (float)img->height;
-    float dw = edge[2] - edge[0];
-    float dh = edge[3] - edge[1];
-    float du = iw * dw * sx;
-    float dv = ih * dh * sy;
+    float ew = edge[2] - edge[0];               // xmm0 - horizontal extent of the uv border box
+    float eh = edge[3] - edge[1];               // xmm1 - vertical extent
+    float du = (float)img->width * ew * sx;     // xmm3 - tile width
+    float dv = (float)img->height * eh * sy;    // xmm4 - tile height
+
     float fx0 = uv[0] * du + dest[0];
     float fy0 = uv[1] * dv + dest[1];
     float fx1 = dest[2] - (1.0f - uv[2]) * du;
     float fy1 = dest[3] - (1.0f - uv[3]) * dv;
-    if (!(fx1 >= fx0)) { fx0 = fx1 = (fx1 + fx0) * 0.5f; }
-    if (!(fy1 >= fy0)) { fy0 = fy1 = (fy1 + fy0) * 0.5f; }
+    if (fx1 < fx0) { fx0 = fx1 = (fx1 + fx0) * 0.5f; }
+    if (fy1 < fy0) { fy0 = fy1 = (fy1 + fy0) * 0.5f; }
 
-    float xs[4] = { dest[0], fx0, fx1, dest[2] };
-    float ys[4] = { dest[1], fy0, fy1, dest[3] };
-    float us[4] = { edge[0], uv[0], uv[2], edge[2] };
-    float vs[4] = { edge[1], uv[1], uv[3], edge[3] };
+    // Scratch area reused as the destination rect / uv rect of every blit below.
+    float q[8];
+    q[0] = edge[0]; q[1] = edge[1]; q[2] = edge[2]; q[3] = edge[3];
 
-    // corners (always)
-    for (int i = 0; i < 3; i++) {
-        for (int j = 0; j < 3; j++) {
-            if ((i == 1 && !(fx1 > fx0)) || (j == 1 && !(fy1 > fy0)))
-                continue;
-            float r[4] = { xs[i], ys[j], xs[i + 1], ys[j + 1] };
-            float t[4] = { us[i], vs[j], us[i + 1], vs[j + 1] };
-            c->DrawImage(r, img, t);
-        }
+    // top-left corner
+    q[4] = dest[0]; q[5] = dest[1]; q[6] = fx0; q[7] = fy0;
+    { float u[4] = { q[0], q[1], q[4] + ew * uv[0], q[1] + eh * uv[1] }; c->DrawImage(q + 4, img, u); }
+    // top-right corner
+    q[4] = fx1; q[5] = dest[1]; q[6] = dest[2]; q[7] = fy0;
+    { float u[4] = { q[0], q[5], q[4] + ew * uv[2], q[5] + eh * uv[1] }; c->DrawImage(q + 4, img, u); }
+    // bottom-left corner
+    q[4] = dest[0]; q[5] = fy1; q[6] = fx0; q[7] = dest[3];
+    { float u[4] = { q[5], q[1], q[6], q[2] }; c->DrawImage(q + 4, img, u); }
+    // bottom-right corner
+    q[4] = fx1; q[5] = fy1; q[6] = dest[2]; q[7] = dest[3];
+    { float u[4] = { q[4], q[5], fx1, fy1 }; c->DrawImage(q + 4, img, u); }
+
+    if (fx1 - fx0 > 0.0f) {
+        // top band
+        q[4] = fx0; q[5] = dest[1]; q[6] = fx1; q[7] = fy0;
+        { float u[4] = { q[0], q[5], q[6], q[2] }; c->DrawImage(q + 4, img, u); }
+        // bottom band
+        q[4] = fx0; q[5] = fy1; q[6] = fx1; q[7] = dest[3];
+        { float u[4] = { q[4], q[5], q[6], q[7] }; c->DrawImage(q + 4, img, u); }
+    }
+    if (fy1 - fy0 > 0.0f) {
+        // left band
+        q[4] = dest[0]; q[5] = fy0; q[6] = fx0; q[7] = fy1;
+        { float u[4] = { q[4], q[5], q[6], q[7] }; c->DrawImage(q + 4, img, u); }
+        // right band
+        q[4] = fx1; q[5] = fy0; q[6] = dest[2]; q[7] = fy1;
+        { float u[4] = { q[4], q[5], q[6], q[7] }; c->DrawImage(q + 4, img, u); }
+    }
+    if (fx0 != fx1 && fy0 != fy1) {
+        // centre
+        q[4] = fx0; q[5] = fy0; q[6] = fx1; q[7] = fy1;
+        { float u[4] = { q[4], q[5], q[6], q[7] }; c->DrawImage(q + 4, img, u); }
     }
 }
 
 // ------------------------------------------------------------------ 0x95d540
-// Draws a two-colour gradient ring between two rects (4 quads).
+// Two-colour gradient ring.  Draws the left, top, right and bottom bands between the outer
+// and inner rects; each band is a quad whose outer edge uses colOuter[k] and whose inner
+// edge uses colInner[k].  Early-outs when the outer rect has zero width or height (compared
+// with ucomiss parity, i.e. also on NaN).
 // @ 0x95d540
 void __cdecl GradientBox(Canvas* c, const float* outer, const float* inner,
                          const float* colOuter, const float* colInner)
 {
-    if (outer[0] == outer[2])
+    if (outer[0] == outer[2] || outer[1] == outer[3])
         return;
-    if (outer[1] == outer[3])
-        return;
-    float ox0 = outer[0], oy0 = outer[1], ox1 = outer[2], oy1 = outer[3];
-    float ix0 = inner[0], iy0 = inner[1], ix1 = inner[2], iy1 = inner[3];
-    struct P { float x, y; };
-    // top, bottom, left, right bands, each as a quad with outer/inner colours
-    {
-        P p0 = { ox0, oy0 }, p1 = { ox1, oy0 }, p2 = { ix0, iy0 }, p3 = { ix1, iy0 };
-        c->DrawQuad(&p0, colOuter[0], &p1, colOuter[2], &p2, colInner[0], &p3, colInner[2]);
-    }
-    {
-        P p0 = { ox0, oy1 }, p1 = { ox1, oy1 }, p2 = { ix0, iy1 }, p3 = { ix1, iy1 };
-        c->DrawQuad(&p0, colOuter[1], &p1, colOuter[3], &p2, colInner[1], &p3, colInner[3]);
-    }
-    {
-        P p0 = { ox0, oy0 }, p1 = { ox0, oy1 }, p2 = { ix0, iy0 }, p3 = { ix0, iy1 };
-        c->DrawQuad(&p0, colOuter[0], &p1, colOuter[1], &p2, colInner[0], &p3, colInner[1]);
-    }
-    {
-        P p0 = { ox1, oy0 }, p1 = { ox1, oy1 }, p2 = { ix1, iy0 }, p3 = { ix1, iy1 };
-        c->DrawQuad(&p0, colOuter[2], &p1, colOuter[3], &p2, colInner[2], &p3, colInner[3]);
-    }
+
+    // The gradient colour arrays arrive as raw ARGB words stored behind a "const float*" API.
+    const uint32_t* co = (const uint32_t*)colOuter;
+    const uint32_t* ci = (const uint32_t*)colInner;
+
+    float oTL[2] = { outer[0], outer[1] };
+    float oTR[2] = { outer[2], outer[1] };
+    float oBL[2] = { outer[0], outer[3] };
+    float oBR[2] = { outer[2], outer[3] };
+    float iTL[2] = { inner[0], inner[1] };
+    float iTR[2] = { inner[2], inner[1] };
+    float iBL[2] = { inner[0], inner[3] };
+    float iBR[2] = { inner[2], inner[3] };
+
+    // left band
+    c->FillQuadGradient(oTL, co[0], iTL, ci[0], iBL, ci[0], oBL, co[0]);
+    // top band
+    c->FillQuadGradient(oTL, co[1], oTR, co[1], iTR, ci[1], iTL, ci[1]);
+    // right band
+    c->FillQuadGradient(iTR, ci[2], oTR, co[2], oBR, co[2], iBR, ci[2]);
+    // bottom band
+    c->FillQuadGradient(iBL, ci[3], iBR, ci[3], oBR, co[3], oBL, co[3]);
 }
 
 // ------------------------------------------------------------------ 0x95d780
-// Draws the standard (Win7-ish) button frame with a 4-colour bevel gradient.
+// Draws the standard (Win7-ish) button frame: a 3px-inset inner rect, a four-colour bevel
+// gradient selection based on the low state bits, then the filled inner rect.
 // @ 0x95d780
 void __cdecl DrawStdButton(Canvas* c, const float* rect, uint32_t color, uint32_t state,
                            float thickness)
 {
+    float inner[4];
+    inner[0] = rect[0] + 3.0f;
+    inner[1] = rect[1] + 3.0f;
+    inner[2] = rect[2] - 3.0f;
+    inner[3] = rect[3] - 3.0f;
     (void)thickness;
-    float x0 = rect[0] + 3.0f;
-    float y0 = rect[1] + 3.0f;
-    float x1 = rect[2] - 3.0f;
-    float y1 = rect[3] - 3.0f;
-    uint32_t local_30, local_2c, local_28, local_24;
-    uint32_t local_10, local_c, local_8, local_4;
-    uint32_t uVar2, uVar1;
+
     uint32_t col = color;
+    uint32_t g[4];             // four gradient colours (g[0]..g[3] = original local_30..local_24)
+    uint32_t hi;               // the "highlight" endpoint colour
 
     if ((state & 8) == 0) {
         switch (state & 7) {
@@ -97,67 +126,81 @@ void __cdecl DrawStdButton(Canvas* c, const float* rect, uint32_t color, uint32_
         case 2:
             col = Color::Lerp(col, col | 0xffffff, 0.4f);
             break;
-        case 3: goto CASED0;
+        case 3: goto CASE_8_0_3;
         default: goto DEFAULT_;
         }
-        local_30 = Color::Lerp(col, col | 0xffffff, 0.6f);
-        local_2c = Color::Lerp(col, col | 0xffffff, 0.9f);
-        uVar2 = col & 0xff000000;
+        g[0] = Color::Lerp(col, col | 0xffffff, 0.6f);
+        g[1] = Color::Lerp(col, col | 0xffffff, 0.9f);
+        hi = col & 0xff000000;
     } else {
         switch (state & 7) {
         case 0:
         case 3:
-        CASED0:
+        CASE_8_0_3:
             col = Color::Lerp(col, col & 0xff000000, 0.1f);
             break;
         case 1:
         LAB_866:
             col = Color::Lerp(col, 0xff7f7f7f, 0.2f);
-            local_30 = Color::Lerp(col, col | 0xffffff, 0.2f);
-            local_2c = Color::Lerp(col, col | 0xffffff, 0.3f);
-            uVar2 = col & 0xff000000;
-            local_28 = Color::Lerp(col, uVar2, 0.2f);
-            uVar1 = 0x3e99999a;
-            goto LAB_945;
+            g[0] = Color::Lerp(col, col | 0xffffff, 0.2f);
+            g[1] = Color::Lerp(col, col | 0xffffff, 0.3f);
+            hi = col & 0xff000000;
+            g[2] = Color::Lerp(col, hi, 0.2f);
+            goto FINISH_HI03;
         case 2: break;
         default: goto DEFAULT_;
         }
-        local_30 = Color::Lerp(col, col & 0xff000000, 0.4f);
-        local_2c = Color::Lerp(col, col & 0xff000000, 0.7f);
-        uVar2 = col | 0xffffff;
+        g[0] = Color::Lerp(col, col & 0xff000000, 0.4f);
+        g[1] = Color::Lerp(col, col & 0xff000000, 0.7f);
+        hi = col | 0xffffff;
     }
-    local_28 = Color::Lerp(col, uVar2, 0.4f);
-    uVar1 = 0x3f333333;
-LAB_945:
-    local_24 = Color::Lerp(col, uVar2, *(float*)&uVar1);
+    g[2] = Color::Lerp(col, hi, 0.4f);
+    g[3] = Color::Lerp(col, hi, 0.7f);
+    goto DRAW;
+
+FINISH_HI03:
+    g[3] = Color::Lerp(col, hi, 0.3f);
+    goto DRAW;
+
 DEFAULT_:
-    local_10 = col; local_c = col; local_8 = col; local_4 = col;
-    GradientBox(c, rect, (const float*)&x0, (const float*)&local_30, (const float*)&local_10);
+    // The original's default case (state&7 > 3) jumps straight to the draw with the four
+    // gradient colours left uninitialised; keep that shape (no writes here).
+DRAW:
+    {
+        uint32_t fill[4] = { col, col, col, col };
+        GradientBox(c, rect, inner, (const float*)g, (const float*)fill);
+    }
     c->SetColor(col);
-    c->v14((float)local_24, x0, y0, x1);
-    (void)y1; (void)local_28;
+    c->FillRectangle(g[3], inner[0], inner[1], inner[2]);
 }
 
 // ------------------------------------------------------------------ 0x95da40
-// Draws a bevelled frame: an outer shadow band plus the inner bevel band.
+// Draws a bevelled frame: an outer shadow band (bevel width, transparent black to colour)
+// plus the inner half-width band (colour to transparent black).
 // @ 0x95da40
 void __cdecl DrawBevel(Canvas* c, const float* rect, uint32_t color, float width)
 {
-    float outer[4], colA[4], colB[4], outer2[4];
+    // The colour arrays are raw ARGB words behind a "const float*" API (cleared first, then
+    // filled with the flat colour), matching the original's integer stores.
+    uint32_t colInner[4] = { 0, 0, 0, 0 };
+    uint32_t colOuter[4] = { color, color, color, color };
+
     float half = width * 0.5f;
-    outer[0] = rect[0] - half;
-    outer[1] = rect[1] - half;
-    outer[2] = rect[2] + half;
-    outer[3] = rect[3] + half;
-    float f2 = (float)color;
-    colA[0] = f2; colA[1] = f2; colA[2] = f2; colA[3] = f2;
-    colB[0] = 0.0f; colB[1] = 0.0f; colB[2] = 0.0f; colB[3] = 0.0f;
-    outer2[0] = rect[0] - width;
-    outer2[1] = rect[1] - width;
-    outer2[2] = rect[2] + width;
-    outer2[3] = rect[3] + width;
-    GradientBox(c, outer, rect, colA, colB);
-    GradientBox(c, outer2, outer, colB, colA);
+
+    float outerHalf[4];
+    outerHalf[0] = rect[0] - half;
+    outerHalf[1] = rect[1] - half;
+    outerHalf[2] = rect[2] + half;
+    outerHalf[3] = rect[3] + half;
+
+    float outerFull[4];
+    outerFull[0] = rect[0] - width;
+    outerFull[1] = rect[1] - width;
+    outerFull[2] = rect[2] + width;
+    outerFull[3] = rect[3] + width;
+
+    GradientBox(c, outerHalf, rect, (const float*)colOuter, (const float*)colInner);
+    GradientBox(c, outerFull, outerHalf, (const float*)colInner, (const float*)colOuter);
 }
 
 }} // namespace Drawing

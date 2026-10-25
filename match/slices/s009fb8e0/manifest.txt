@@ -14,3 +14,7 @@ slices/s009fb8e0/s009fb8e0.cpp  ?FeedbackLookupName@@YAHPBD@Z  009fc0f0  /O2 /MD
 slices/s009fb8e0/s009fb8e0.cpp  ?InitDeform@cCmdObj@@QAEXHH@Z  009fc3e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s009fb8e0/s009fb8e0.cpp  ?ElemAssignFrom@@YAXPAUElem14@@00@Z  009fc680  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s009fb8e0/s009fb8e0.cpp  ?ElemMove@@YAPAUElem14@@PAU1@00@Z  009fc970  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s009fb8e0/s009fb8e0.cpp  ?ElemHeapSiftUp@@YAXHHHUElem14@@P6A_NPAU1@1@Z@Z  009fc9c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s009fb8e0/s009fb8e0.cpp  ?EffectsEmitEvent@@YAXPAXH0@Z  009fbe80  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s009fb8e0/s009fb8e0.cpp  ?PackFourCC@@YAIPBD@Z  009fc090  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s009fb8e0/s009fb8e0.cpp  ?EffectsSpawn@@YA_NPAXH0HHPAPAX@Z  009fbfc0  /O2 /MD /Gy /TP /arch:SSE /fp:fast

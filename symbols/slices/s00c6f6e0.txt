@@ -17,15 +17,15 @@
 00c6ffd0 VisiblePlanet::Cast2  # class-id 0x44462a6 returns this; GameData(+0xd4)/Spatial fallback
 00c70010 VisiblePlanet::Write2  # cVarListSerializer, GameData::Write + Spatial::Write
 00c70090 VisiblePlanet::Read  # cVarListSerializer, GameData::Read + Spatial::Read
-00c70150 SimCivObject::IsHomePlanetOfPlayer  # GetRecordType==5, iterates civs/cities, owner compare
-00c70260 SimCivObject::AnyCityHasBuildings  # iterates city list, cCityData::GetValue >= 1.0
-00c702f0 SimCivObject::CountBuildings  # sums cCityData::GetNumBuildings over all cities
-00c70380 SP::GetTurretAndBuildingCounts  # accumulates building + turret counts per city
-00c70420 SimCivObject::CountCities  # sums city-vector lengths across civs
-00c70470 SimCivObject::GetPercentMaybe  # single-civ case -> cCityData::GetPercent
-00c704a0 SimCivObject::Func704a0  # key match then drains cCityData value by amount
-00c705c0 SimCivObject::Func705c0  # sums city values, clamps/drains against budget
-00c706d0 SimCivObject::SetPlanetTechLevel  # writes +0x194 tech level, rebuilds civs/comm
+00c70150 SimCivObject_IsHomePlanetOfPlayer  # cdecl(SimCivObject* self, WorldObject*, char): GetRecordType==5, iterates civs/cities, owner compare
+00c70260 SimCivObject_AnyCityHasBuildings  # cdecl(SimCivObject* self): iterates city list, cCityData::GetValue >= 1.0
+00c702f0 SimCivObject_CountBuildings  # cdecl(SimCivObject* self): sums cCityData::GetNumBuildings over all cities
+00c70380 GetTurretAndBuildingCounts  # cdecl(SimCivObject* self, int*, int*): accumulates building + turret counts per city
+00c70420 SimCivObject_CountCities  # cdecl(SimCivObject* self): sums city-vector lengths across civs
+00c70470 SimCivObject_GetPercentMaybe  # cdecl(SimCivObject* self): single-civ case -> cCityData::GetPercent
+00c704a0 SimCivObject_Func704a0  # cdecl(SimCivObject* self,int,int,int,float): key match then drains cCityData value by amount
+00c705c0 SimCivObject_Func705c0  # cdecl(SimCivObject* self,int): sums city values, clamps/drains against budget
+00c706d0 SimCivObject_SetPlanetTechLevel  # cdecl(SimCivObject* self,int): writes +0x194 tech level, rebuilds civs/comm
 00c707f0 SimPlanet::GetNameRow  # returns NameRow pointer from cPlanetRecord name
 00c70860 SimPlanet::Func70860  # record->GetWorld()->Func70860()
 00c70880 SimPlanet::GetPlanetType  # cPlanetRecord type at +0x28

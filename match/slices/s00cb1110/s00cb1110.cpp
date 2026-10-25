@@ -1,430 +1,151 @@
-// Slice s00cb1110: Spore engine routines (naked transcription).
-// Flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast (no /EHsc).
+// Slice s00cb1110: trace-cache hash map (eastl hashtable) node insert + get-or-create for the
+// global table at 0x0157d30c.
+// Flags: /O2 /MD /Gy /TP /arch:SSE /GS- /fp:fast.
+//
+// The map key is a 32-bit id (an object address); the mapped value is a 0x820-byte trace cache made
+// of 8 cached hit records (0x100 bytes each) followed by 8 cached object pointers.  The hashtable is
+// the eastl layout: hash-functor base, bucket array, bucket count, element count, rehash policy.
 #include "types.h"
 
-extern "C" void FUN_00921440();
-extern "C" void FUN_00c29710();
-extern "C" void FUN_00c2b080();
-extern "C" void FUN_00cadb50();
-extern "C" void FUN_00cb00d0();
-extern "C" void FUN_00cb02a0();
-extern "C" void FUN_00f473a0();
+// EA allocator entry points (0x00f473a0 / 0x00f47380)
+void* operator new[](size_t size, const char* pName, int flags, unsigned debugFlags, const char* file, int line);
+void  operator delete[](void* p);
+inline void* operator new(size_t, void* p) { return p; }
 
-// @ 0x00cb1110  (242 bytes)
-__declspec(naked) void FUN_00cb1110()
+#define EASTL_ALLOCATOR_FILE \
+    "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h"
+
+struct TraceCache
 {
-    __asm {
-        _emit 0x8B
-        _emit 0x44
-        _emit 0x24
-        _emit 0x08
-        // mov eax, dword ptr [esp + 8]
-        _emit 0x83
-        _emit 0xEC
-        _emit 0x08
-        // sub esp, 8
-        _emit 0x53
-        // push ebx
-        _emit 0x8B
-        _emit 0x18
-        // mov ebx, dword ptr [eax]
-        _emit 0x55
-        // push ebp
-        _emit 0x56
-        // push esi
-        _emit 0x8B
-        _emit 0xF1
-        // mov esi, ecx
-        _emit 0x33
-        _emit 0xD2
-        // xor edx, edx
-        _emit 0x57
-        // push edi
-        _emit 0x8B
-        _emit 0x7E
-        _emit 0x08
-        // mov edi, dword ptr [esi + 8]
-        _emit 0x8B
-        _emit 0xC3
-        // mov eax, ebx
-        _emit 0xF7
-        _emit 0xF7
-        // div edi
-        _emit 0x8B
-        _emit 0x4E
-        _emit 0x04
-        // mov ecx, dword ptr [esi + 4]
-        _emit 0x8B
-        _emit 0xEA
-        // mov ebp, edx
-        _emit 0x8D
-        _emit 0x14
-        _emit 0xA9
-        // lea edx, [ecx + ebp*4]
-        _emit 0x8B
-        _emit 0x0A
-        // mov ecx, dword ptr [edx]
-        _emit 0x85
-        _emit 0xC9
-        // test ecx, ecx
-        _emit 0x74
-        _emit 0x12
-        // je 0xcb1148
-        _emit 0x3B
-        _emit 0x19
-        // cmp ebx, dword ptr [ecx]
-        _emit 0x0F
-        _emit 0x84
-        _emit 0xAD
-        _emit 0x00
-        _emit 0x00
-        _emit 0x00
-        // je 0xcb11eb
-        _emit 0x8B
-        _emit 0x89
-        _emit 0x24
-        _emit 0x08
-        _emit 0x00
-        _emit 0x00
-        // mov ecx, dword ptr [ecx + 0x824]
-        _emit 0x85
-        _emit 0xC9
-        // test ecx, ecx
-        _emit 0x75
-        _emit 0xEE
-        // jne 0xcb1136
-        _emit 0x8B
-        _emit 0x56
-        _emit 0x0C
-        // mov edx, dword ptr [esi + 0xc]
-        _emit 0x6A
-        _emit 0x01
-        // push 1
-        _emit 0x52
-        // push edx
-        _emit 0x57
-        // push edi
-        _emit 0x8D
-        _emit 0x44
-        _emit 0x24
-        _emit 0x1C
-        // lea eax, [esp + 0x1c]
-        _emit 0x50
-        // push eax
-        _emit 0x8D
-        _emit 0x4E
-        _emit 0x10
-        // lea ecx, [esi + 0x10]
-        call FUN_00921440
-        _emit 0x68
-        _emit 0xD1
-        _emit 0x00
-        _emit 0x00
-        _emit 0x00
-        // push 0xd1
-        _emit 0x68
-        _emit 0x38
-        _emit 0xBB
-        _emit 0x3E
-        _emit 0x01
-        // push 0x13ebb38
-        _emit 0x6A
-        _emit 0x00
-        // push 0
-        _emit 0x6A
-        _emit 0x00
-        // push 0
-        _emit 0x68
-        _emit 0xB4
-        _emit 0x09
-        _emit 0x3F
-        _emit 0x01
-        // push 0x13f09b4
-        _emit 0x68
-        _emit 0x28
-        _emit 0x08
-        _emit 0x00
-        _emit 0x00
-        // push 0x828
-        call FUN_00f473a0
-        _emit 0x8B
-        _emit 0xF8
-        // mov edi, eax
-        _emit 0x83
-        _emit 0xC4
-        _emit 0x18
-        // add esp, 0x18
-        _emit 0x85
-        _emit 0xFF
-        // test edi, edi
-        _emit 0x74
-        _emit 0x0C
-        // je 0xcb118e
-        _emit 0x8B
-        _emit 0x4C
-        _emit 0x24
-        _emit 0x20
-        // mov ecx, dword ptr [esp + 0x20]
-        _emit 0x51
-        // push ecx
-        _emit 0x8B
-        _emit 0xCF
-        // mov ecx, edi
-        call FUN_00cb02a0
-        _emit 0xC7
-        _emit 0x87
-        _emit 0x24
-        _emit 0x08
-        _emit 0x00
-        _emit 0x00
-        _emit 0x00
-        _emit 0x00
-        _emit 0x00
-        _emit 0x00
-        // mov dword ptr [edi + 0x824], 0
-        _emit 0x80
-        _emit 0x7C
-        _emit 0x24
-        _emit 0x10
-        _emit 0x00
-        // cmp byte ptr [esp + 0x10], 0
-        _emit 0x74
-        _emit 0x14
-        // je 0xcb11b3
-        _emit 0x8B
-        _emit 0x4C
-        _emit 0x24
-        _emit 0x14
-        // mov ecx, dword ptr [esp + 0x14]
-        _emit 0x33
-        _emit 0xD2
-        // xor edx, edx
-        _emit 0x8B
-        _emit 0xC3
-        // mov eax, ebx
-        _emit 0xF7
-        _emit 0xF1
-        // div ecx
-        _emit 0x51
-        // push ecx
-        _emit 0x8B
-        _emit 0xCE
-        // mov ecx, esi
-        _emit 0x8B
-        _emit 0xEA
-        // mov ebp, edx
-        call FUN_00c29710
-        _emit 0x8B
-        _emit 0x56
-        _emit 0x04
-        // mov edx, dword ptr [esi + 4]
-        _emit 0x8D
-        _emit 0x0C
-        _emit 0xAD
-        _emit 0x00
-        _emit 0x00
-        _emit 0x00
-        _emit 0x00
-        // lea ecx, [ebp*4]
-        _emit 0x8B
-        _emit 0x04
-        _emit 0x11
-        // mov eax, dword ptr [ecx + edx]
-        _emit 0x89
-        _emit 0x87
-        _emit 0x24
-        _emit 0x08
-        _emit 0x00
-        _emit 0x00
-        // mov dword ptr [edi + 0x824], eax
-        _emit 0x8B
-        _emit 0x56
-        _emit 0x04
-        // mov edx, dword ptr [esi + 4]
-        _emit 0x8B
-        _emit 0x44
-        _emit 0x24
-        _emit 0x1C
-        // mov eax, dword ptr [esp + 0x1c]
-        _emit 0x89
-        _emit 0x3C
-        _emit 0x11
-        // mov dword ptr [ecx + edx], edi
-        _emit 0xFF
-        _emit 0x46
-        _emit 0x0C
-        // inc dword ptr [esi + 0xc]
-        _emit 0x8B
-        _emit 0x56
-        _emit 0x04
-        // mov edx, dword ptr [esi + 4]
-        _emit 0x89
-        _emit 0x38
-        // mov dword ptr [eax], edi
-        _emit 0x5F
-        // pop edi
-        _emit 0x5E
-        // pop esi
-        _emit 0x03
-        _emit 0xD1
-        // add edx, ecx
-        _emit 0x5D
-        // pop ebp
-        _emit 0xC6
-        _emit 0x40
-        _emit 0x08
-        _emit 0x01
-        // mov byte ptr [eax + 8], 1
-        _emit 0x89
-        _emit 0x50
-        _emit 0x04
-        // mov dword ptr [eax + 4], edx
-        _emit 0x5B
-        // pop ebx
-        _emit 0x83
-        _emit 0xC4
-        _emit 0x08
-        // add esp, 8
-        _emit 0xC2
-        _emit 0x0C
-        _emit 0x00
-        // ret 0xc
-        _emit 0x8B
-        _emit 0x44
-        _emit 0x24
-        _emit 0x1C
-        // mov eax, dword ptr [esp + 0x1c]
-        _emit 0x5F
-        // pop edi
-        _emit 0x5E
-        // pop esi
-        _emit 0x5D
-        // pop ebp
-        _emit 0x89
-        _emit 0x08
-        // mov dword ptr [eax], ecx
-        _emit 0xC6
-        _emit 0x40
-        _emit 0x08
-        _emit 0x00
-        // mov byte ptr [eax + 8], 0
-        _emit 0x89
-        _emit 0x50
-        _emit 0x04
-        // mov dword ptr [eax + 4], edx
-        _emit 0x5B
-        // pop ebx
-        _emit 0x83
-        _emit 0xC4
-        _emit 0x08
-        // add esp, 8
-        _emit 0xC2
-        _emit 0x0C
-        _emit 0x00
-        // ret 0xc
+    char mBytes[0x820];          // 8 * 0x100 hit records followed by 8 cached object pointers
+};
+
+struct Value                       // the hashtable value (0x824 bytes)
+{
+    unsigned   mKey;               // +0x000
+    TraceCache mTrace;             // +0x004 .. +0x823
+
+    Value(const Value& src);       // 0x00cb02a0
+};
+
+struct Node
+{
+    Value mValue;                  // +0x000 .. +0x823
+    Node* mpNext;                  // +0x824
+};
+
+struct Iter                        // eastl hash iterator (8 bytes)
+{
+    Node*  mpNode;                 // +0x00
+    Node** mpBucket;               // +0x04
+};
+
+struct InsertResult                // eastl insert() result (12 bytes)
+{
+    Node*  mpNode;                 // +0x00
+    Node** mpBucket;               // +0x04
+    bool   mInserted;              // +0x08
+};
+
+struct RehashResult                // prime_rehash_policy::RehashResult (8 bytes)
+{
+    bool     first;                // +0x00
+    unsigned second;               // +0x04
+};
+
+struct RehashPolicy
+{
+    float    mfMaxLoadFactor;      // +0x00
+    float    mfGrowthFactor;       // +0x04
+    unsigned mnNextResize;         // +0x08
+
+    // 0x00921440
+    RehashResult GetRehashRequired(unsigned nBucketCount, unsigned nElementCount, unsigned nElementAdd);
+};
+
+struct Ht                          // global instance at 0x0157d30c
+{
+    void*        mField00;         // +0x00 (hash functor)
+    Node**       mpBuckets;        // +0x04
+    unsigned     mBucketCount;     // +0x08
+    unsigned     mSize;            // +0x0c
+    RehashPolicy mRehashPolicy;    // +0x10
+
+    void Find(Iter* out, const unsigned* key);                            // 0x00cb00d0
+    TraceCache* FindOrInsert(const unsigned* key);                        // 0x00c2b080
+    void DoRehash(unsigned newBucketCount);                               // 0x00c29710
+
+    Node* DoFindNode(Node* pNode, unsigned key)
+    {
+        for (; pNode; pNode = pNode->mpNext) {
+            if (key == pNode->mValue.mKey)
+                return pNode;
+        }
+        return 0;
     }
+
+    Node* DoAllocateNode(const Value& value)
+    {
+        Node* const pNode = (Node*)operator new[](sizeof(Node), "Simulator", 0, 0, EASTL_ALLOCATOR_FILE, 0xd1);
+        if (pNode)
+            ::new (&pNode->mValue) Value(value);
+        pNode->mpNext = 0;
+        return pNode;
+    }
+
+    InsertResult DoInsertValue(const Value& value, bool trueType);        // 0x00cb1110
+};
+
+// 0x00cadb50: zero the eight hit records, then release the eight cached objects.
+void __cdecl FUN_00cadb50(TraceCache* cache);
+
+// =======================================================================================
+// 00cb1110 -- Ht::DoInsertValue (eastl hashtable insert-with-tag)
+// =======================================================================================
+// @ 0x00cb1110
+InsertResult Ht::DoInsertValue(const Value& value, bool trueType)
+{
+    const unsigned c = value.mKey;
+    unsigned n = c % mBucketCount;
+    Node* const pNode = DoFindNode(mpBuckets[n], value.mKey);
+    InsertResult result;
+    if (pNode == 0) {
+        const RehashResult bRehash = mRehashPolicy.GetRehashRequired(mBucketCount, mSize, 1);
+        Node* const pNodeNew = DoAllocateNode(value);
+        if (bRehash.first) {
+            n = c % bRehash.second;
+            DoRehash(bRehash.second);
+        }
+        pNodeNew->mpNext = mpBuckets[n];
+        mpBuckets[n] = pNodeNew;
+        ++mSize;
+        result.mpNode = pNodeNew;
+        result.mInserted = true;
+        result.mpBucket = mpBuckets + n;
+        return result;
+    }
+    result.mpNode = pNode;
+    result.mInserted = false;
+    result.mpBucket = mpBuckets + n;
+    return result;
 }
 
-// @ 0x00cb1210  (84 bytes)
-__declspec(naked) void FUN_00cb1210()
+// =======================================================================================
+// 00cb1210 -- get-or-create the cached trace record for a key in the global table
+//             (near-identical twin of FUN_00c2b110, which uses the table at 0x01572460)
+// =======================================================================================
+// @ 0x00cb1210
+TraceCache* FUN_00cb1210(unsigned key)
 {
-    __asm {
-        _emit 0x83
-        _emit 0xEC
-        _emit 0x08
-        // sub esp, 8
-        _emit 0x8D
-        _emit 0x44
-        _emit 0x24
-        _emit 0x0C
-        // lea eax, [esp + 0xc]
-        _emit 0x50
-        // push eax
-        _emit 0x8D
-        _emit 0x4C
-        _emit 0x24
-        _emit 0x04
-        // lea ecx, [esp + 4]
-        _emit 0x51
-        // push ecx
-        _emit 0xB9
-        _emit 0x0C
-        _emit 0xD3
-        _emit 0x57
-        _emit 0x01
-        // mov ecx, 0x157d30c
-        call FUN_00cb00d0
-        _emit 0x8B
-        _emit 0x04
-        _emit 0x24
-        // mov eax, dword ptr [esp]
-        _emit 0x8B
-        _emit 0x15
-        _emit 0x14
-        _emit 0xD3
-        _emit 0x57
-        _emit 0x01
-        // mov edx, dword ptr [0x157d314]
-        _emit 0x8B
-        _emit 0x0D
-        _emit 0x10
-        _emit 0xD3
-        _emit 0x57
-        _emit 0x01
-        // mov ecx, dword ptr [0x157d310]
-        _emit 0x3B
-        _emit 0x04
-        _emit 0x91
-        // cmp eax, dword ptr [ecx + edx*4]
-        _emit 0x75
-        _emit 0x22
-        // jne 0xcb125d
-        _emit 0x56
-        // push esi
-        _emit 0x8D
-        _emit 0x54
-        _emit 0x24
-        _emit 0x10
-        // lea edx, [esp + 0x10]
-        _emit 0x52
-        // push edx
-        _emit 0xB9
-        _emit 0x0C
-        _emit 0xD3
-        _emit 0x57
-        _emit 0x01
-        // mov ecx, 0x157d30c
-        call FUN_00c2b080
-        _emit 0x8B
-        _emit 0xF0
-        // mov esi, eax
-        _emit 0x56
-        // push esi
-        call FUN_00cadb50
-        _emit 0x83
-        _emit 0xC4
-        _emit 0x04
-        // add esp, 4
-        _emit 0x8B
-        _emit 0xC6
-        // mov eax, esi
-        _emit 0x5E
-        // pop esi
-        _emit 0x83
-        _emit 0xC4
-        _emit 0x08
-        // add esp, 8
-        _emit 0xC3
-        // ret 
-        _emit 0x83
-        _emit 0xC0
-        _emit 0x04
-        // add eax, 4
-        _emit 0x83
-        _emit 0xC4
-        _emit 0x08
-        // add esp, 8
-        _emit 0xC3
-        // ret 
+    Ht* const ht = (Ht*)0x0157d30c;
+    Iter it;
+
+    ht->Find(&it, &key);
+    Node* const pNode = it.mpNode;
+    if (pNode == ht->mpBuckets[ht->mBucketCount]) {
+        TraceCache* cache = ht->FindOrInsert(&key);
+        FUN_00cadb50(cache);
+        return cache;
     }
+    return (TraceCache*)((int)pNode + 4);
 }

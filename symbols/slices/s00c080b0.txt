@@ -1,2 +1,2 @@
-00c080b0 Simulator::cCreatureBase::func8Ch  # naked asm, byte-exact
-00c08270 Simulator::cGameData::RemoveOwner  # naked asm, byte-exact
+00c080b0 func8Ch       # Simulator::cCreatureBase::func8Ch attack/idle state reset
+00c08270 RemoveOwner   # Simulator::cGameData::RemoveOwner

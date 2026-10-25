@@ -8,3 +8,7 @@
 00a686e0  73  hashtable remove; listener null-test form (cmp mem,0 + reload) and bl result [equiv: WEAK 190 valid]
 00a68740  126  hashtable erase + callback; register allocation (node in ebx), result kept in param slot [equiv: PASS]
 00a68990  189  map insert-or-push; key/false-arg share the param slot, register allocation [equiv: WEAK 46.4% cov]
+00a68430  154  hash table erase; iterator return NRVO and it.node/it.bucket register split (size 151 vs 168) [flags /O2 /MD /Gy /EHsc /TP /GS-] [equiv: UNSUPPORTED 0/400 valid, fault(read)/pool-limit]
+00a68890  143  Eapd System::Init; boolean and-chain and nested cleanup branch shape (size 245 vs 248) [flags /O2 /MD /Gy /EHsc /TP /GS-] [equiv: UNSUPPORTED 0/400 valid, fault(write)/pool-limit]
+00a68cb0  111  CreateSingleton ctor; EH state numbering off by one and member-init scheduling (size 268 vs 277) [flags /O2 /MD /Gy /EHsc /TP /GS-] [equiv: PASS]
+00a68e90  221  singleton create/teardown; no SEH frame and devirtualized vtable-slot allocator call (size 204 vs 284) [flags /O2 /MD /Gy /EHsc /TP /GS-] [equiv: PASS]

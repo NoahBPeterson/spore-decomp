@@ -463,19 +463,18 @@ Sub* SubVec::Erase(Sub* first, Sub* last)
     Sub* oldEnd = e;
     for (Sub* p = newEnd; p < oldEnd; ++p)
         SubDtor(p);
-    e += last - first;
+    e -= last - first;
     return first;
 }
 
 // @ 0x00bc7170
 void SubVec::Insert(Sub* pos, uint32_t n, const Sub& value)
 {
-    uint32_t capN = (uint32_t)(c - b);
-    uint32_t usedN = (uint32_t)(e - b);
-    if (n > capN - usedN) {
+    uint32_t freeN = (uint32_t)(c - e);
+    if (n > freeN) {
         uint32_t oldN = (uint32_t)(e - b);
-        uint32_t newCap = oldN * 2;
-        if (oldN == 0)
+        uint32_t newCap = oldN + oldN;
+        if (newCap == 0)
             newCap = 1;
         uint32_t need = oldN + n;
         if (newCap < need)
@@ -532,6 +531,17 @@ struct HashNode2 {
     HashNode2* next;                               // +0x18
 };
 
+struct MapIter {
+    void* node;                                    // +0x00  bucket chain node (0 when absent)
+    void* bucketSlot;                              // +0x04  &buckets[hash] or &buckets[count]
+    uint8_t inserted;                              // +0x08  set by Insert only
+};
+
+struct MapValue {
+    uint32_t key;                                  // +0x00
+    SubVec vec;                                    // +0x04
+};
+
 struct HashMap {
     uint32_t field00;                              // +0x00
     void** buckets;                                // +0x04
@@ -541,8 +551,8 @@ struct HashMap {
     float growF;                                   // +0x14
     uint32_t field18;                              // +0x18
     void ClearBuckets(void** buckets, uint32_t count);   // @ 0x00bc6eb0
-    void Find(void** out, uint32_t* key);                // 0x00aea1b0
-    void Insert(void** pos, uint32_t* key, void* value); // 0x00bc6f90
+    void Find(MapIter* out, uint32_t* key);              // 0x00aea1b0
+    void Insert(MapIter* out, const MapValue* value, uint32_t flag); // 0x00bc6f90
     SubVec* FindOrAdd(uint32_t* key);                    // @ 0x00bc7440
 };
 
@@ -590,10 +600,10 @@ int SimClass::CreateEntryCopy(const Sub* src, const V3* pa, const V3* pb)
     EntryB* e = (EntryB*)((char*)list.prev + 8);
     e->key = (int)count;
     count++;
-    const Sub* s = src;
-    e->sub.Assign(*s);
+    const Sub& s = *src;
+    e->sub.Assign(s);
     e->f1c = 0.0f;
-    int anim = (int)s->f04;
+    int anim = (int)s.f04;
     e->busy = anim;
     src = 0;
     e->anim.Build(anim, (int*)&src);
@@ -639,18 +649,20 @@ void SimClass::ClearMap()
 // @ 0x00bc7440
 SubVec* HashMap::FindOrAdd(uint32_t* key)
 {
-    void* found = 0;
-    Find(&found, key);
-    if (found == buckets[bucketCount]) {
-        uint32_t k = *key;
+    MapIter it;
+    Find(&it, key);
+    if (it.node == buckets[bucketCount]) {
         SubVec tmp;
         tmp.b = tmp.e = tmp.c = 0;
-        SubVec v(tmp);
-        Insert(&found, &k, &v);
-        DestroyVecA(&v);
+        MapValue value = { *key, tmp };
+        // The compiler homes the false flag in the incoming key slot, so the
+        // stack argument is the key pointer with its low byte cleared.
+        uint32_t flag = (uint32_t)key & 0xffffff00u;
+        Insert(&it, &value, flag);
+        DestroyVecA((SubVec*)&value);
         DestroyVecB(&tmp);
     }
-    return (SubVec*)((char*)found + 4);
+    return (SubVec*)((char*)it.node + 4);
 }
 
 // ---- Simulator object ------------------------------------------------------

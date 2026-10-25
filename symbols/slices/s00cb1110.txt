@@ -1,2 +1,2 @@
-00cb1110 FUN_00cb1110  # void __thiscall (int,int*,uint*); naked asm, byte-exact
-00cb1210 FUN_00cb1210  # int (void); naked asm, byte-exact
+00cb1110 DoInsertValue  # eastl::hashtable<...>::DoInsertValue (trace-cache map insert, sret + value + tag)
+00cb1210 FUN_00cb1210   # get-or-create cached trace record in the global table at 0x0157d30c

@@ -509,32 +509,41 @@ PtrVecD0X* C2X::FUN_00be2340()
 // @ 0x00be2390
 void C2X::FUN_00be2390(Ref60X* obj)
 {
-    Ref60X** it = m_vec548.begin;
-    Ref60X** last = m_vec548.end;
-    while (it != last && *it != obj)
-        ++it;
+    RefVec60X* vec = &m_vec548;
+    Ref60X* o = obj;
+    Ref60X** it = vec->begin;
+    Ref60X** last = vec->end;
+    if (it != last)
+    {
+        do
+        {
+            if (*it == o)
+                break;
+            ++it;
+        } while (it != last);
+    }
     if (it != last)
         return;
 
-    if (obj)
-        obj->AddRef();
-    if (m_vec548.end < m_vec548.cap)
+    if (o)
+        o->AddRef();
+    if (vec->end < vec->cap)
     {
-        Ref60X** slot = m_vec548.end;
-        m_vec548.end = slot + 1;
+        Ref60X** slot = vec->end;
+        vec->end = slot + 1;
         if (slot)
         {
-            *slot = obj;
-            if (obj)
-                obj->AddRef();
+            *slot = o;
+            if (o)
+                o->AddRef();
         }
     }
     else
     {
-        m_vec548.F_ae6ed0(m_vec548.end, &obj);
+        vec->F_ae6ed0(vec->end, &o);
     }
-    if (obj)
-        obj->Release();
+    if (o)
+        o->Release();
 }
 
 // @ 0x00be2420
@@ -546,8 +555,10 @@ void C2X::FUN_00be2420(void* arg)
 // @ 0x00be2b10
 void C2X::FUN_00be2b10(int id, RefVecBX* out)
 {
+    RefVX** p = m_begin340;
+    RefVX** end = m_end344;
     out->F_e25bd0(out->begin, out->end);
-    for (RefVX** p = m_begin340; p != m_end344; ++p)
+    for (; p != end; ++p)
     {
         RefVX* o = *p;
         if (o && o->GetId() == id)
@@ -650,8 +661,46 @@ void FUN_00be2c00X(C2cObj* self, TrioVecX* vec)
 // @ 0x00be2ee0
 void Vec80X::F2ee0(Elem80X* pos, unsigned n, Elem80X* value)
 {
-    unsigned capCount = (unsigned)(cap - end);
-    if (capCount < n)
+    if (n <= (unsigned)(cap - end))
+    {
+        if (n == 0)
+            return;
+
+        Elem80X temp;
+        temp.F_copy(value);
+
+        Elem80X* oldEnd = end;
+        unsigned tailCount = (unsigned)(oldEnd - pos);
+        Elem80X* fillEnd;
+        Elem80X* cursor = 0;
+
+        if (n < tailCount)
+        {
+            Elem80X* src = oldEnd - n;
+            F_bdd580X(&cursor, src, oldEnd, oldEnd, cursor);
+            end = end + n;
+            F_bdd640X(pos, src, oldEnd);
+            fillEnd = pos + n;
+        }
+        else
+        {
+            F_bdf1a0X(oldEnd, n - tailCount, &temp);
+            end = end + (n - tailCount);
+            F_bdd580X(&cursor, pos, oldEnd, end, cursor);
+            end = end + tailCount;
+            fillEnd = oldEnd;
+        }
+
+        F_bdf170X(pos, fillEnd, &temp);
+
+        if (temp.p78)
+            temp.p78->F_c0();
+        if (temp.p70)
+            temp.p70->F_c0();
+        temp.t50.F_dtor();
+        temp.t30.F_dtor();
+    }
+    else
     {
         unsigned oldCount = (unsigned)(end - begin);
         unsigned newCap = oldCount * 2;
@@ -678,43 +727,5 @@ void Vec80X::F2ee0(Elem80X* pos, unsigned n, Elem80X* value)
         begin = buffer;
         end = newEnd;
         cap = buffer + newCap;
-        return;
     }
-
-    if (n == 0)
-        return;
-
-    Elem80X temp;
-    temp.F_copy(value);
-
-    Elem80X* oldEnd = end;
-    unsigned tailCount = (unsigned)(oldEnd - pos);
-    Elem80X* fillEnd;
-    Elem80X* cursor = 0;
-
-    if (n < tailCount)
-    {
-        Elem80X* src = oldEnd - n;
-        F_bdd580X(&cursor, src, oldEnd, oldEnd, cursor);
-        end = end + n;
-        F_bdd640X(pos, src, oldEnd);
-        fillEnd = pos + n;
-    }
-    else
-    {
-        F_bdf1a0X(oldEnd, n - tailCount, &temp);
-        end = end + (n - tailCount);
-        F_bdd580X(&cursor, pos, oldEnd, end, cursor);
-        end = end + tailCount;
-        fillEnd = oldEnd;
-    }
-
-    F_bdf170X(pos, fillEnd, &temp);
-
-    if (temp.p78)
-        temp.p78->F_c0();
-    if (temp.p70)
-        temp.p70->F_c0();
-    temp.t50.F_dtor();
-    temp.t30.F_dtor();
 }
