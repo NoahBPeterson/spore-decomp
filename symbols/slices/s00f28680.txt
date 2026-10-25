@@ -1,14 +1,13 @@
-# Slice s00f28680 names.
-00f28680 ?fn28680@@YAHPAXPBDH@Z  # scenario-goal field writer; wraps FUN_00f26770 (L"cScenarioGoal")
-00f28780 ?fn28780@@YAHPAXPBDH@Z  # scenario-class-act field writer; wraps FUN_00f26810 (L"cScenarioClassAct")
-00f28880 ?fn28880@@YAHPAUISer@@PBDPAUTextObj@@@Z  # cString group writer (BeginGroup/SetValue/EndGroup) on TextObj
-00f289d0 ?fn289d0@@YAHPAUISer@@PBDPAUObjD@@@Z  # L"cScenarioDialog" group writer, calls 00f28880("text")
-00f28b30 ?init@Obj8c@@QAEPAU1@XZ  # obj init (guessed; already nonmatching)
-00f28b80 ?fn28b80@BigObj@@QAEHPAUWStr@@@Z  # BigObj::fn28b80: empty-test then get-or-assign cString text at +0x2788
-00f28c10 ?fn28c10@ObjC@@QAEPAU1@PAF@Z  # wstring set + id reset (MATCH)
-00f28c50 ?fn28c50@TextObj@@QAEHPAX@Z  # cVarListSerializer::Read + cString rebuild + append literal 0x13ec468
-00f28ce0 ?fn28ce0@@YAXPAUISer@@PAH@Z  # serialize 0x238-stride cBuildingData array via cVarListSerializer
-00f28dd0 ?erase@Vec38@@QAEPAUE38@@PAU2@0@Z  # eastl::vector<SP::cBuildingData, eastl::sp_vector_allocator>::erase  # from 2008 dev-build PDB
+00f28680 ?fn28680@@YAHPAXPBDH@Z  # fn28680 migrated from s00f28680 (verbatim, slice spelling)
+00f28780 ?fn28780@@YAHPAXPBDH@Z  # fn28780 migrated from s00f28680 (verbatim, slice spelling)
+00f28880 ?fn28880@@YAHPAUISer@@PBDPAUTextObj@@@Z  # fn28880 migrated from s00f28680 (verbatim, slice spelling)
+00f289d0 ?fn289d0@@YAHPAUISer@@PBDPAUObjD@@@Z  # fn289d0 migrated from s00f28680 (verbatim, slice spelling)
+00f28b30 ?init@Obj8c@@QAEPAU1@XZ  # Obj8c::init migrated from s00f28680 (verbatim, slice spelling)
+00f28b80 ?fn28b80@BigObj@@QAEHPAUWStr@@@Z  # BigObj::fn28b80 migrated from s00f28680 (verbatim, slice spelling)
+00f28c10 ?fn28c10@ObjC@@QAEPAU1@PAF@Z  # ObjC::fn28c10 migrated from s00f28680 (verbatim, slice spelling)
+00f28c50 ?fn28c50@TextObj@@QAEHPAX@Z  # TextObj::fn28c50 migrated from s00f28680 (verbatim, slice spelling)
+00f28ce0 ?fn28ce0@@YAXPAUISer@@PAH@Z  # fn28ce0 migrated from s00f28680 (verbatim, slice spelling)
+00f28dd0 ?erase@Vec38_s00f2_8680@@QAEPAUE38@@PAU2@0@Z  # Vec38_s00f2_8680::erase migrated from s00f28680 (verbatim, slice spelling)
 00f28e40 ?insert@Vec38@@QAEXPADI0@Z  # eastl::vector<SP::cBuildingData, eastl::sp_vector_allocator>::insert(pos, count, value)
 00f29030 ?insertOne@Vec38@@QAEXPAD0@Z  # eastl::vector<SP::cBuildingData, eastl::sp_vector_allocator>::insert(pos, value)
 00f29170 ?DoInsertSlow@Vec18@@QAEXPAD0@Z  # eastl::vector<0x18-stride, eastl::sp_vector_allocator>::DoInsertSlow(pos, value)

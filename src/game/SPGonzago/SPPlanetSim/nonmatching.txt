@@ -1,0 +1,23 @@
+# va  diff-bytes  reason
+00f278b0 50 complete; predicate branch/block ordering differs (control-flow equivalent)
+00f278f0 119 complete; 0x44-stride loop register allocation + inline wcslen differ
+00f280b0 6 complete; only the `xor ecx,ecx` zero-register scheduling differs
+00f28680 139 complete; serialize wrapper around FUN_00f26770 (L"cScenarioGoal"); size 188 vs 256; equiv FAIL (eax upper bits, byte return)
+00f28780 139 complete; serialize wrapper around FUN_00f26810 (L"cScenarioClassAct"); size 188 vs 256; equiv FAIL (eax upper bits, byte return)
+00f28880 223 complete; cString group writer (BeginGroup/SetValue/EndGroup); size 272 vs 327; equiv FAIL (eax upper bits)
+00f289d0 225 complete; cScenarioDialog wrapper around 00f28880; size 292 vs 338; equiv FAIL (eax upper bits)
+00f28b30 46 complete; constructor store scheduling / this-register choice differs
+00f28b80 90 complete; BigObj::fn28b80 cString get-vs-assign; size 132 vs 137; equiv FAIL (eax upper bits)
+00f28c50 116 complete; cVarListSerializer Read + cString rebuild; size 241 vs 131; equiv UNSUPPORTED (0 valid inputs, fault(read))
+00f28ce0 186 complete; cVarListSerializer over 0x238-stride array; size 249 vs 226; equiv UNSUPPORTED (0 valid inputs)
+00f28dd0 87 complete; Vec38::erase (0x38-stride); size 112 vs 110; equiv WEAK (126 valid, no mismatch)
+00ff0450 5 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 5 bytes - the word temp is stored to its slot before the writer vtable load where retail stores it after; every other instruction of the name loop and the serialiser tail agrees; equiv UNSUPPORTED (0/400 valid inputs, the out-stream argument cannot be faked)
+00ff07a0 53 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 53 bytes - the building count leaves `this` in ecx for the tail reload of mpBuildingsBegin, this build keeps the base pointer in esi and uses ecx as the subtraction destination, so the count, the sign fix-up and the index scaling all use different registers; equiv FAIL (5/5 valid inputs, our build leaves ecx dirty)
+00ff0cd0 156 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 191 bytes against 219 - the switch body is the same pivot, but `this` survives the sGetIndexFromModelType call in edx instead of a callee-saved esi, so the index temp moves to another slot and the key scaling is built with an extra lea; equiv WEAK (400 valid inputs, 29.3% coverage)
+00ff0e20 149 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 243 bytes against 260 - both list counts are spilled to their temp before the GetWriter call where retail keeps them in edi and stores after the GetStream call, so the write loops and the two serialiser calls are scheduled differently; equiv UNSUPPORTED (0/400 valid inputs)
+00ff0f30 69 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 69 bytes - the building count is spilled to the temp slot ahead of the writer calls instead of staying in esi, and the two arguments are loaded into edi/esi in the opposite order, which also drops the extra 4-byte frame adjustment; equiv UNSUPPORTED (0/400 valid inputs)
+00ff1ff0
+00ff21d0 98 SP::ReadSTLSequenceT<eastl::vector<cOrnamentData>>: instruction stream matches (all calls, field stores and the insert/erase fast paths agree); only register allocation in the 13-dword cOrnamentData copy and the arg load-order around the g_16dad08/0c/10 float constants differ (465 vs 467 B, same control flow)
+00ff23b0 750 cCityData::cCityData(cCity*): control flow, all callees (Query*, SlotAt, ToVector, AsInterface, OrnamentVec, GetPackedId, ActionCircle, InsertBld/InsertOrn) and every named field store agree; the summary bitmap / building / ornament loops are reconstructed from the disassembly with float-array (fld/fstp) copies where the original uses integer `mov` copies and short loop forms, so sizes differ (951 vs 1111 B)
+00ff2810 750 cCityData::Update(cCity*,int): all callees and named field updates (uBC/uC0, mPos/mOri, u20/u24/u2c, mBuildings/mOrnaments erase+rebuild, mSummary bitmap, mFlags) match; the original's integer `mov` triple/quad copies and its `rol`/`neg-sbb` bitmap idiom are expressed as Float3/Float4 value copies and a shift, so the instruction stream and sizes differ (933 vs 1109 B)
+00ff2c70 116 cCitySummary::AddRecord(cCityData*): popcount over mFlags and both tallies agree, but the trailing accumulator lands in edx where the original uses eax (operand-order and association variants all produce the mirror; 178 vs 176 B)

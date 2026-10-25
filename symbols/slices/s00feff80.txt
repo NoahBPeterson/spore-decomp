@@ -1,23 +1,23 @@
 00feff80 sSpawnTribesmen  # PDB name; spawns tribesmen from the gathered candidate pool
 00ff0330 cCityData::TestNameBit  # PDB name; tests one bit of an entry of the 14-word city name
 00ff0350 cCityData::AddValue  # PDB name; adds to mValue, clamped at zero
-00ff03d0 sGetIndexFromModelType  # PDB name; index of a model type in the stored key table
-00ff0400 cCityData::GetPercent  # PDB name; percent of the value range of the city
-00ff0430 cCityData::SetKey  # PDB name; copies the three-word city key
-00ff0450 cCityData::Write  # PDB name; name words then the property serialiser
-00ff04d0 cCityData::WriteRaw  # PDB name; name words then the alternate serialiser
-00ff05d0 sWriteUint16  # PDB name; one word through the stream writer chain
-00ff0610 cTribeData::cTribeData  # PDB name; saved payload of an existing tribe
-00ff06a0 cTribeData::cTribeData  # PDB name; saved payload from population/food
-00ff0700 cTribeData::cTribeData  # PDB name; empty saved payload
-00ff0760 cCityData::GetNumTurrets  # PDB name; number of set turret bits
-00ff07a0 cCityData::GetBuilding  # PDB name; bounds-checked building record of the city
-00ff07e0 cCityData::RemoveTurret  # PDB name; clears the lowest turret bit and its building
-00ff0870 cCityData::GetNumBuildings  # PDB name; building count without the turrets
+00ff03d0 ?sGetIndexFromModelType@SP@@YA_NIPAI@Z  # sGetIndexFromModelType migrated from s00feff80 (verbatim, slice spelling)
+00ff0400 ?GetPercent@cCityData_s00fe_ff80@SP@@QBEHXZ  # cCityData_s00fe_ff80::GetPercent migrated from s00feff80 (verbatim, slice spelling)
+00ff0430 ?SetKey@cCityData_s00fe_ff80@SP@@QAEXPBUcInt3@2@@Z  # cCityData_s00fe_ff80::SetKey migrated from s00feff80 (verbatim, slice spelling)
+00ff0450 ?Write@cCityData_s00fe_ff80@SP@@QAEXPAVcOutStream@2@@Z  # cCityData_s00fe_ff80::Write migrated from s00feff80 (verbatim, slice spelling)
+00ff04d0 ?WriteRaw@cCityData_s00fe_ff80@SP@@QAEXPAVcOutStream@2@@Z  # cCityData_s00fe_ff80::WriteRaw migrated from s00feff80 (verbatim, slice spelling)
+00ff05d0 ?sWriteUint16@SP@@YA_NPAVcOutStream@1@PBG@Z  # sWriteUint16 migrated from s00feff80 (verbatim, slice spelling)
+00ff0610 ??0cTribeData_s00fe_ff80@SP@@QAE@PAVcTribe_s00fe_ff80@1@@Z  # cTribeData_s00fe_ff80::cTribeData migrated from s00feff80 (verbatim, slice spelling)
+00ff06a0 ??0cTribeData_s00fe_ff80@SP@@QAE@HH@Z  # cTribeData_s00fe_ff80::cTribeData migrated from s00feff80 (verbatim, slice spelling)
+00ff0700 ??0cTribeData_s00fe_ff80@SP@@QAE@XZ  # cTribeData_s00fe_ff80::cTribeData migrated from s00feff80 (verbatim, slice spelling)
+00ff0760 ?GetNumTurrets@cCityData_s00fe_ff80@SP@@QBEHXZ  # cCityData_s00fe_ff80::GetNumTurrets migrated from s00feff80 (verbatim, slice spelling)
+00ff07a0 ?GetBuilding@cCityData_s00fe_ff80@SP@@QAEPAVcBuildingData_s00fe_ff80@2@H@Z  # cCityData_s00fe_ff80::GetBuilding migrated from s00feff80 (verbatim, slice spelling)
+00ff07e0 ?RemoveTurret@cCityData_s00fe_ff80@SP@@QAEXXZ  # cCityData_s00fe_ff80::RemoveTurret migrated from s00feff80 (verbatim, slice spelling)
+00ff0870 ?GetNumBuildings@cCityData_s00fe_ff80@SP@@QBEHXZ  # cCityData_s00fe_ff80::GetNumBuildings migrated from s00feff80 (verbatim, slice spelling)
 00ff08b0 cCityData::SetThreatLevel  # PDB name; threat level plus the district alert check
 00ff0940 cCivData::CopyTerrainKeys  # descriptive name; copies the terrain-sphere specific model keys
-00ff0cd0 cCivData::GetResourceKey  # descriptive name; model key record of a noun's resource type
-00ff0db0 cSpatialSnapshot::Init  # descriptive name; position and ids of a noun
-00ff0df0 cSpatialSnapshot::Set  # descriptive name; position and ids from a vector and two ints
-00ff0e20 cCivData::Write  # descriptive name; serialises the city and vehicle lists
-00ff0f30 WriteSTLSequenceT  # PDB name; serialises a building sequence
+00ff0cd0 ?GetResourceKey@cCivData_s00fe_ff80@SP@@QAEPAUcResourceKey@2@PAVcResourceNoun@2@@Z  # cCivData_s00fe_ff80::GetResourceKey migrated from s00feff80 (verbatim, slice spelling)
+00ff0db0 ?Init@cSpatialSnapshot@SP@@QAEPAV12@PAVcNoun@2@@Z  # cSpatialSnapshot::Init migrated from s00feff80 (verbatim, slice spelling)
+00ff0df0 ?Set@cSpatialSnapshot@SP@@QAEAAV12@PBUcVector3@2@HH@Z  # cSpatialSnapshot::Set migrated from s00feff80 (verbatim, slice spelling)
+00ff0e20 ?Write@cCivData_s00fe_ff80@SP@@QAEXPAVcOutStream@2@@Z  # cCivData_s00fe_ff80::Write migrated from s00feff80 (verbatim, slice spelling)
+00ff0f30 ?WriteSTLSequenceT@SP@@YA_NPAVcOutStream@1@PBVcBuildingList@1@@Z  # WriteSTLSequenceT migrated from s00feff80 (verbatim, slice spelling)

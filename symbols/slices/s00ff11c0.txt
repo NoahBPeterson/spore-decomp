@@ -1,0 +1,6 @@
+00ff11c0 ??4cOrnamentDataA@@QAEAAU0@ABU0@@Z  # cOrnamentDataA::operator= migrated from s00ff11c0 (verbatim, slice spelling)
+00ff1230 ??4cOrnamentDataB@@QAEAAU0@ABU0@@Z  # cOrnamentDataB::operator= migrated from s00ff11c0 (verbatim, slice spelling)
+00ff14f0 ?SetText40@cTextHolder@@QAEXPBUcWString@@@Z  # cTextHolder::SetText40 migrated from s00ff11c0 (verbatim, slice spelling)
+00ff1510 ?SetText50@cTextHolder@@QAEXPBUcWString@@@Z  # cTextHolder::SetText50 migrated from s00ff11c0 (verbatim, slice spelling)
+00ff1fb0 ?EraseCity@cCivData@@QAEXH@Z  # cCivData::EraseCity migrated from s00ff11c0 (verbatim, slice spelling)
+00ff1ff0 ?EraseValue@cCivData@@QAEXH@Z  # cCivData::EraseValue migrated from s00ff11c0 (verbatim, slice spelling)

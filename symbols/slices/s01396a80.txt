@@ -1,1 +1,3 @@
 01396a80 ?InitE229@Simulator@@YAXXZ  # InitE229 migrated from s01396a80 (verbatim, slice spelling)
+01397130 ?InitE231@Simulator@@YAXXZ  # InitE231 migrated from s01396a80 (verbatim, slice spelling)
+01397520 ?InitE235@Simulator@@YAXXZ  # InitE235 migrated from s01396a80 (verbatim, slice spelling)

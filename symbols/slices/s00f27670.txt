@@ -1,7 +1,7 @@
-# Slice s00f27670 names.
-# No exact mangled names confirmed. Provisional observations:
-#   00f27fc0  eastl lower_bound over 0x18-stride records, key compared (x,z,y)
-#   00f278f0  scans an array of 0x44-stride records; each has a cString at +4
-#   00f280b0  zero-initialises a 0x34-byte record (SSE scalar stores)
-#   00f28140  eastl vector reserve (0x18 stride)
-#   00f28280  eastl vector reserve (0x38 stride)
+00f278b0 ?fn278b0@StrObj@@QAE_NXZ  # StrObj::fn278b0 migrated from s00f27670 (verbatim, slice spelling)
+00f278f0 ?fn278f0@@YA_NPAH@Z  # fn278f0 migrated from s00f27670 (verbatim, slice spelling)
+00f27fc0 ?fn27fc0@@YAHHHPAI@Z  # fn27fc0 migrated from s00f27670 (verbatim, slice spelling)
+00f280b0 ?fn280b0@Zeroed@@QAEPAU1@XZ  # Zeroed::fn280b0 migrated from s00f27670 (verbatim, slice spelling)
+00f280f0 ??1CStr@@QAE@XZ  # CStr::~CStr migrated from s00f27670 (verbatim, slice spelling)
+00f28140 ?reserve@Vec18@@QAEXI@Z  # Vec18::reserve migrated from s00f27670 (verbatim, slice spelling)
+00f28280 ?reserve@Vec38@@QAEXI@Z  # Vec38::reserve migrated from s00f27670 (verbatim, slice spelling)
