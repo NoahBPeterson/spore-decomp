@@ -52,9 +52,7 @@ struct Bone {                       // stride 0x468; only the used fields are mo
     int mNextIndex;                 // +0x1fc
     int mChildFirst;                // +0x204
     int mChildCount;                // +0x208
-    unsigned char pad4[0x344 - 0x20c];
-    float mHasTransform;            // +0x30c  (unused placeholder)
-    unsigned char pad5[0x344 - 0x310];
+    unsigned char pad4[0x348 - 0x20c];
     float mPosX;                    // +0x344
     float mPosY;                    // +0x348
     float mPosZ;                    // +0x34c
@@ -258,15 +256,21 @@ float Solver::AverageSegment()
 // @ 0x009b53f0
 void Bone_AddScaledVectors(float* out, Bone* b, float k)
 {
+    float f4 = b->mPosX * k;
     if ((b->mFlags150 & 8) != 0) {
-        out[0] = b->mPosX * k - b->mParentOffX * k;
-        out[1] = b->mPosY * k - b->mParentOffY * k;
-        out[2] = b->mPosZ * k - b->mParentOffZ * k;
-    } else {
-        out[0] = b->mPosX * k;
-        out[1] = b->mPosY * k;
-        out[2] = b->mPosZ * k;
+        float f1 = b->mParentOffX;
+        float f2 = b->mParentOffY;
+        float f3 = b->mParentOffZ;
+        float f5 = b->mPosY;
+        out[0] = f4 - f1 * k;
+        float f6 = b->mPosZ;
+        out[1] = f5 * k - f2 * k;
+        out[2] = f6 * k - f3 * k;
+        return;
     }
+    out[0] = f4;
+    out[1] = b->mPosY * k;
+    out[2] = b->mPosZ * k;
 }
 
 // @ 0x009b54a0
@@ -355,9 +359,11 @@ void Solver::MarkDeepBones()
 int Solver::IsDeeperRatio(Bone** a, Bone** b)
 {
     Solver* self = this;
+    /* Both epsilons are the global 0x014471fc (1e-06f); when the measured value
+       is at least the epsilon the address of the local is used instead. */
     float denom = self->mSizeA;
     float* pDenom = (float*)&g_14471fc;
-    if (1e-06f <= denom)
+    if (!(denom < *pDenom))
         pDenom = &denom;
     int result = 1;
     if (a != b) {
@@ -366,9 +372,9 @@ int Solver::IsDeeperRatio(Bone** a, Bone** b)
         float dx = ba->mOffsetX - bb->mOffsetX;
         float dy = ba->mOffsetY - bb->mOffsetY;
         float absdz = fabsf(ba->mOffsetZ - bb->mOffsetZ);
-        float len = sqrtf(fsq(dx) + fsq(dy));
+        float len = sqrtf(fsq(dy) + fsq(dx));
         float* pLen = (float*)&g_14471fc;
-        if (1e-06f <= len)
+        if (!(len < *pLen))
             pLen = &len;
         if (self->mSizeB / *pDenom < absdz / *pLen)
             return 1;
