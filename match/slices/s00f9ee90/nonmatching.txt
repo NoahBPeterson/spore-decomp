@@ -3,15 +3,17 @@
 #
 # Slice s00f9ee90 = SPTerrainSphere.obj: cTerrainSphere's transform-block Reset/Release,
 # the effect/texture update paths, the rect blits, the sort/copy helpers, SphereBlock::Init
-# and RenderColorMap.  4/13 byte-exact (00f9f100, 00f9f1a0, 00f9f7b0, 00f9fe70).  The six
+# and RenderColorMap.  4/13 byte-exact (00f9f100, 00f9f1a0, 00f9f7b0, 00f9fe70).  The nine
 # rows below are complete C++ reconstructions that reproduce the original control flow and
 # field layout but miss byte-exactness on MSVC /O2 register allocation / instruction
-# scheduling; the three remaining (00f9ee90, 00f9ef70, 00f9f9f0) are approximate and live in
-# partial.txt.  Equivalence verdicts (equiv.py, default inputs) are noted per row: PASS =
+# scheduling.  Equivalence verdicts (equiv.py, default inputs) are noted per row: PASS =
 # behaviour matches; WEAK = too little coverage to confirm but no mismatch seen; FAIL = a
 # live-register/return difference only, body otherwise faithful; UNSUPPORTED = harness could
-# not drive the function.
+# not drive the function (the effect/terrain paths need a live game object graph).
 #
+00f9ee90  209  cTerrainSphere::EffectSurfacePass: complete.  Distinct-VA stop test, the cDirectPropertyList Vec4 read, the effect-id 0x2e892928 RunEffect, the 0x1c-byte event-modifier allocate/init and the offline-world RunEffect(vtbl+0x18) at G_15b1174; the Query(0xf3cfbb40) capture is released through vtable+4.  Diff is register allocation/frame layout (ours 230 vs 217 bytes).  equiv.py: UNSUPPORTED (0/400 valid, 261 fault(read), 138 fake-arity: needs a live effect manager).  flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00f9ef70  368  cTerrainSphere::RefreshModelEffects: complete.  SP_App()->v38() == 0x01654c10 early-out, EffectsManager, CreateOfflineEffect, ResolveModels(mpProps, 0x6875cfd, &count, &array), the stride-0xc model loop with per-iteration capture release, then Query(0xf3cfbb40)+Fill(1.0f)+RunOfflineWorld(eff,capture,h).  Diff is register allocation and the x87 time spill (ours 423 vs 395 bytes).  equiv.py: UNSUPPORTED (0/400 valid, 285 fault(read), 115 fake-arity).  flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00f9f9f0  860  cTerrainSphere::UpdateEffectSurfaces: complete.  The six SetEffect calls (0x2e892928/0x2e892929/0x2e89292b/0x2e89292a/0x3598109/0x4fe7337) with their 0x1c/0x20/0x10-byte event modifiers, SP_App()->v50()->v1c(), FUN_00f717b0(mpPlanet,mpStateMgr,p), em->v20(m924,-1), the three 0xb8-byte cSurfaceDecalManager chains (DecalTypeFastTerrain/FastAndWaterTerrain/FastWater, ids 6/7/8), FUN_006f24a0(G_16c9f50,this+0xc), m111=1 and the final v0c.  Diff is the inlined ref-ptr decal assignment shape and register allocation (ours 1063 vs 1147 bytes).  equiv.py: UNSUPPORTED (0/400 valid, needs a live sphere/effect graph).  flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00f9f200  324  complete; diff is register allocation (ebx/edx vs ebp/edi roles) and bool ok folding, frame size matches
 00f9f360  335  FUN_00f9f360() 32-bit rect blit: complete.  cSurfaceDecalManager Surface lock at level 2 (0x11ef750), the cvtsi2ss/floor of transform-scale*rect corners, the w*w*face source base, and the (destRow-destBase)+srcRow wrapped inner copy loop closing with the 0x11ef880 unlock.  Diff is the wrapped-offset inner loop shape and register allocation (ours 327 vs 351 bytes).  equiv.py: WEAK (388 valid, 13.6% coverage, no mismatch).  flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00f9f4c0  311  FUN_00f9f4c0() 8-bit rect blit: complete; twin of 00f9f360 over byte-sized pixels with the same lock/floor/w*w*face setup and wrapped inner copy loop.  Diff is the wrapped-offset inner loop shape and register allocation (ours 323 vs 343 bytes).  equiv.py: WEAK (385 valid, 13.9% coverage, no mismatch).  flags /O2 /MD /Gy /TP /arch:SSE /fp:fast

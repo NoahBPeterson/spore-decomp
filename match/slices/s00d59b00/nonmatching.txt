@@ -1,0 +1,12 @@
+# va  diff-bytes  reason
+# Build flags (all rows): /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- -I match/include
+#
+# Slice s00d59b00 = eastl sort/partition helpers, four vector element routines and
+# cFollowBehavior::Approach.  2/6 byte-exact (00d59d00, 00d59f00 = manifest.txt); these three are
+# complete C++ reconstructions that reproduce the original control flow and call graph but miss the
+# byte-exact budget because cl 15.00.30729.01 allocates the loop-carried pointers, hoists the x87
+# loads and orders the by-value Vec3 copies differently than the original build.
+#
+00d59da0  314  eastl partial_sort<int*>: make_heap(00d597b0) over [begin,middle), scan [middle,last) with the OriginCompare distance test, *p = *begin through IntrusivePtr, adjust_heap(00d592e0), then sort_heap(00d59820). C++ is complete (278 B vs 339 B); equiv WEAK 155/400 valid inputs, 31.6% coverage (call-heavy inputs fault).
+00d5a010  251  eastl vector<12-byte>::Assign(const vector&): self-assign guard, grow path via Grow12(00d59410), overlap path copy(00b84c80) + move(00951740), tail copy(00b84c80) and operator_delete. C++ is complete (273 B vs 289 B); equiv WEAK 151/400 valid inputs, 44.3% coverage.
+00d5a140  13  eastl vector<16-byte>::Insert(pos,value): small path shifts the tail by 00edba80, stores a/b/c/d, returns the old b; grow path doubles capacity, allocates with operator_new("Simulator",0xD1), copies the two halves with 00d577b0 and frees the old buffer. C++ is complete (277 B vs 277 B); only x87 load hoisting and the eax/ecx pick for the 00d577b0 argument differ; equiv WEAK 71/400 valid inputs, 58.6% coverage.

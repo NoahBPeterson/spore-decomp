@@ -8,3 +8,12 @@
 00ec7490 56   null-check / tail-merge block ordering differs [equiv PASS]
 00ec74e0 43   window lookup logic close; virtual-call slots approximated [equiv FAIL (3/791 mismatch eax&0xff)]
 00ec78e0 79   window handle lookup + call args approximated [equiv UNSUPPORTED (0/1200 valid, read faults)]
+00ec70d0 523  drag-reindex path reconstructed: two ComputeRect temporaries, float SetPos delta, camera-relative index query and the 10-entry value-shift loop; retail keeps more values live in xmm/fpu registers so the byte layout differs (380 vs 587).
+00ec7580 169  property lookup reconstructed: property-manager query, typed bool at +0x12, value accessor at 0x0041ea00, refcounted release; the dead pre-release block retained by retail is dropped by the compiler here (156 vs 186).
+00ec7640 120  stage-mode predicate reconstructed for kinds 1, 2 and 8 incl. the 0x00f25680, 0x00f25670, 0x00f25720 and 0x00ec7580 chain; the frame lookup and stage-set compare use a typed 0x4e0-byte record (164 vs 158).
+00ec76e0 80   free-list pop-or-create reconstructed: count from the begin/end globals, AddRef on the popped item, holder Cast(0x4c058cf) on the create path and Release of the holder.
+00ec7770 234  popup-menu item builder reconstructed: item pop, AddMenuItem, the 0xcdfb1002, 0xcdfb1003, 0xcdfb1004 and 0xcdfb1005 children, 3-way mode switch, SetText and the final item release (333 vs 356).
+00ec7950 94   unlocked-card update loop reconstructed over the pointer list, FindWindowByID + child text feed into the item builder, count recomputed each iteration.
+00ec7a80 197  credits-tab float layout reconstructed: holder Cast, FindChild(0xcdfb1002 and 0xcdfb1003, flag 1), three slot-0x38 x/x2 pairs and the combined width stored to 0x016c7580 (207 vs 270).
+00ec7b90 197  resource-image menu builder reconstructed: stage record at kind 2, image-from-resource + wide-string name cleanup, else id lookup via 0x00ec6b20 with the kind-derived selector (272 vs 269).
+00ec7ca0 42   eastl vector copy-ctor reconstructed: tag copy, 0x00ac20d0 element allocation with the source allocator, 5-argument eastl_copy and end-pointer store (79 vs 81).

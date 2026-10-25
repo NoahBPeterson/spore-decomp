@@ -15,3 +15,12 @@ slices/s00c87be0/s00c87be0.cpp  F00@Effects@@QAEXHM@Z  00c88a00  /O2 /MD /Gy /EH
 slices/s00c87be0/s00c87be0.cpp  F30@Effects@@QAEXHPAH@Z  00c88a30  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 slices/s00c87be0/s00c87be0.cpp  ?Set3@VecThing@@QAEXPAM@Z  00c88670  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 slices/s00c87be0/s00c87be0.cpp  ?Set4@VecThing@@QAEXPAM@Z  00c886d0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00c87be0/s00c87be0.cpp  ??_GcSpaceInventory@@UAEPAXI@Z  00c87c80  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00c87be0/s00c87be0.cpp  ?RemoveItem@cSpaceInventory@@UAE_NPAVcSpaceInventoryItem@@@Z  00c87d80  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00c87be0/s00c87be0.cpp  ?Read@cSpaceInventory@@QAE_NPAX@Z  00c883d0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00c87be0/s00c87be0.cpp  ?func5Ch@cCommunity@@QAEXM@Z  00c884a0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00c87be0/s00c87be0.cpp  ?FUN_00c885b0@@YAPAUVObj174@@PAU1@PAI@Z  00c885b0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00c87be0/s00c87be0.cpp  ?FUN_00c88610@@YAPAUVObj174@@PAU1@PAI@Z  00c88610  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00c87be0/s00c87be0.cpp  ?func60h@cCommunity@@QAEXII@Z  00c88740  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00c87be0/s00c87be0.cpp  ??0ToolData@@QAE@ABU0@@Z  00c88ba0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00c87be0/s00c87be0.cpp  ??4ToolData@@QAEAAU0@ABU0@@Z  00c88c30  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

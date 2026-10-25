@@ -27,7 +27,7 @@ extern float       g_16c9914;
 extern void*       g_015b0e40;   // 0x015b0e40
 
 // ---- externs --------------------------------------------------------------------------------
-void* __cdecl FUN_00f672f0(const char* fmt, int w, int h, int flags);           // 0x00f672f0
+void* __cdecl FUN_00f672f0(const char* fmt, int a, int b);                      // 0x00f672f0
 void* __cdecl FUN_0067dda0();                                                   // 0x0067dda0
 void* __cdecl FUN_0067dd60();                                                   // 0x0067dd60
 void* __cdecl FUN_0067dcc0();                                                   // 0x0067dcc0
@@ -49,29 +49,36 @@ void  cTransform_PreRotateY();                                                  
 void  Basis3_Build();                                                           // 0x006b9440
 void  __cdecl FUN_011ef750(void* self, int a, void* out);                       // 0x011ef750
 void  __cdecl FUN_011e0744(void* self, const void* data, int n);                // 0x011e0744
+void* __cdecl FUN_011e073e(void* dst, int val, u32 n);                          // 0x011e073e memset
 void  __cdecl FUN_011ef880(void* self);                                         // 0x011ef880
-void* __cdecl FUN_00fc2c10(void* self, int a, int b);                           // 0x00fc2c10
-void  __cdecl FUN_00fc2830(void* self);                                         // 0x00fc2830
+void* __cdecl FUN_011f0440();                                                   // 0x011f0440 thiscall sprite upload
+int   __cdecl FUN_00fc2c10();                                                   // 0x00fc2c10 RasterState::Construct
+int   __cdecl FUN_00fc2830();                                                   // 0x00fc2830 RasterState::Clear
+int   __cdecl FUN_007c4be0();                                                   // 0x007c4be0 cViewer::SetRaster
+int   __cdecl FUN_007c4fd0();                                                   // 0x007c4fd0 cViewer::Update
+int   __cdecl FUN_007c3c10();                                                   // 0x007c3c10 cViewer method
 
 // ---- interfaces -----------------------------------------------------------------------------
 #define V(n) virtual void v##n();
 struct IVP {
     V(0) V(1) V(2) V(3)
     virtual void* CreateRasterID(void* out, int w, int h, int fmt, int a, u32 id, int b); // +0x10
-    V(5) V(6)
-    virtual void* GetRaster(u32 pageID, u32 allocID);                        // +0x1c
-    V(8) V(9) V(10) V(11) V(12) V(13) V(14) V(15) V(16)
+    V(5)
+    virtual void* GetRaster(u32 pageID, u32 allocID);                        // +0x18
+    V(7) V(8) V(9) V(10) V(11) V(12) V(13) V(14) V(15) V(16) V(17)
     virtual void  Remap(u32 pageID, u32 allocID, const char* name);          // +0x48
 };
 struct IResolver {
-    V(0) V(1) V(2) V(3) V(4) V(5) V(6) V(7) V(8) V(9) V(10) V(11) V(12) V(13) V(14)
+    V(0) V(1) V(2) V(3) V(4) V(5) V(6) V(7) V(8) V(9) V(10) V(11) V(12)
+    virtual void  Prepare(void* res);                                       // +0x34 (slot 13)
+    V(14)
     virtual void* CreateTexture(u32 id, void* r, int w, int h, int a, int b, int c, int d); // +0x3c
 };
 struct IBatch {
     V(0)
     virtual bool BigAlloc(void** out, int stride, int count, const int* desc, int verts, int one); // +0x04
     virtual bool Alloc(void** out, int stride, int count, int zero);         // +0x08
-    virtual bool Apply(u32 shader, void* arg);                               // +0x0c
+    virtual bool Apply(u32 shader, float time);                              // +0x0c
     virtual void Flush();                                                    // +0x10
 };
 struct IBinding { u32 w[4]; };
@@ -79,16 +86,13 @@ struct ShaderIds { u32 pad; u32 id; };
 
 // SP::App  (vtable slots 0x50 = 20, 0x1c = 7 on the returned object, 0x38 = 14)
 struct AppResult { V(0) V(1) V(2) V(3) V(4) V(5) V(6) virtual void* Sub(); }; // +0x1c
-struct IApp {
-    V(0) V(1) V(2) V(3) V(4) V(5) V(6) V(7) V(8) V(9)
-    V(10) V(11) V(12) V(13)
-    virtual u32 Kind();            // +0x38
-    V(15) V(16) V(17) V(18) V(19)
-    virtual AppResult* Views();    // +0x50
+struct IPropertyManager {
+    V(0) V(1) V(2) V(3) V(4) V(5) V(6) V(7) V(8) V(9) V(10)
+    virtual void Register(u32 a, u32 b, void** pp);              // +0x2c
 };
 struct IServer {
-    V(0) V(1) V(2) V(3) V(4)
-    virtual void Post(u32 id, void* a, int b);   // +0x14
+    V(0) V(1) V(2) V(3) V(4) V(5) V(6) V(7) V(8)
+    virtual void Register(void* handler, u32 id);                // +0x24
 };
 struct ITerrainSphere {
     V(0) V(1) V(2) V(3) V(4) V(5) V(6) V(7) V(8) V(9) V(10) V(11) V(12) V(13)
@@ -102,6 +106,13 @@ struct ITerrainSphere {
 struct RectT { float l, t, r, b; };
 struct RectId { u32 pageID; u32 allocID; };
 struct RasterLike { u32 pad0[3]; u16 width; u16 height; u8 depth; u8 pad2[3]; };
+// Resource wrapper created by IResolver::CreateTexture: raster handle, flags, refcount.
+struct TempExtractTex { void* raster; u32 flags; u32 refcount; };
+struct LockableRaster {
+    int  Lock(int a, int b, void* state);    // 0x011ef750
+    void Unlock(void* state);                // 0x011ef880
+};
+struct RasterStateStub { u32 d[4]; };
 
 // ---- the terrain editor ---------------------------------------------------------------------
 struct cTerrainEditor {
@@ -130,7 +141,8 @@ struct cTerrainEditor {
     void*      mUploadHeightMapTexture; // +0x168
     RectId     mTempExtractRectID[2]; // +0x16c
     RasterLike* mTempExtractTexture;  // +0x17c
-    char       pad180[0x198 - 0x180];
+    Vec2       mTileVec[2];           // +0x180
+    void*      mUploadRaster[2];      // +0x190
     RasterLike* mTileRaster[2];       // +0x198
     int        mTileIndex;            // +0x1a0
     char       pad1a4[0x1c8 - 0x1a4];
@@ -167,19 +179,19 @@ struct cTerrainEditor {
 // @ 0x00f69a30
 void cTerrainEditor::Init()
 {
-    mHeightRasterArray[0] = (RasterLike*)FUN_00f672f0("V3FC4BT2F", 0x100, 0, 0);
-    mHeightRasterArray[1] = (RasterLike*)FUN_00f672f0("V4FN4FC4BT2F", 0xc00, 0x400, 0);
-    mHeightRasterArray[2] = (RasterLike*)FUN_00f672f0("V4FN3FC4BT4FT4FT4FT4FT4F", 0x10, 0, 0);
     mMaxTimePerRenderJob = 100.0f;
 
-    IApp* pm = (IApp*)FUN_0067de30();
-    void** ppv = &mpSphere;
-    void* old = *ppv;
+    mBatch  = (IBatch*)FUN_00f672f0("V3FC4BT2F", 0x100, 0);
+    mBatch2 = (IBatch*)FUN_00f672f0("V4FN4FC4BT2F", 0x400, 0xc00);
+    mBatch3 = (IBatch*)FUN_00f672f0("V4FN3FC4BT4FT4FT4FT4FT4F", 0x10, 0);
+
+    IPropertyManager* pm = (IPropertyManager*)FUN_0067de30();
+    void* old = mpSphere;
     if (old) {
-        *ppv = 0;
-        (*(void(__thiscall**)(void*, int))(*(void**)old))(old, 4);
+        mpSphere = 0;
+        ((void(__thiscall*)(void*))(*(void***)old)[1])(old);
     }
-    (*(void(__thiscall**)(void*, u32, u32, void**))(*(void**)pm))(pm, 0x5f848353, 0x243ad2b, ppv);
+    pm->Register(0x5f848353, 0x243ad2b, &mpSphere);
 
     IServer* server = (IServer*)FUN_0067dcc0();
     mpServer = server;
@@ -191,7 +203,7 @@ void cTerrainEditor::Init()
         u32 i = 0;
         do {
             u32 id = *(const u32*)((const char*)&D_148f614 + i);
-            (*(void(__thiscall**)(void*, cTerrainEditor*, u32))(*(void**)server))(server, this, id);
+            server->Register(this, id);
             i += 4;
         } while (i < 0x10);
     }
@@ -201,7 +213,6 @@ void cTerrainEditor::Init()
 
     for (int i = 0; i < 6; ++i)
         mGPUDirtyFace[i] = 0;
-    *(u32*)&mGPUDirtyFace[4] = 0;
 
     const float z = 0.0f;
     for (int i = 0; i < 6; ++i) {
@@ -210,7 +221,6 @@ void cTerrainEditor::Init()
         mCPUDirtyRect[i].r = z;
         mCPUDirtyRect[i].b = z;
     }
-    *(u32*)&mTextureType = 0;
     for (int i = 0; i < 6; ++i) {
         mBrushDirtyRect[i].l = z;
         mBrushDirtyRect[i].t = z;
@@ -225,9 +235,9 @@ void cTerrainEditor::Init()
     do {
         u32 tmp[2];
         u32* r = (u32*)vp->CreateRasterID(tmp, 0x200, 0x200, 0x15, 0, *ids, 0);
-        u32 allocID = r[1];
         u32 pageID = r[0];
-        vp->Remap(r[0], allocID, "TerrainHeightRasters");
+        u32 allocID = r[1];
+        vp->Remap(pageID, allocID, "TerrainHeightRasters");
         if (allocID != 0xffffffff) {
             *rasters = (RasterLike*)vp->GetRaster(pageID, allocID);
             dst->pageID = pageID;
@@ -249,10 +259,9 @@ void cTerrainEditor::Init()
         mTempExtractTexture = tex;
         if (oldTex) {
             void** rc = (void**)oldTex;
-            long n = _InterlockedExchangeAdd((volatile long*)&rc[2], -1);
-            if (n < 1) {
+            _InterlockedExchangeAdd((volatile long*)&rc[2], -1);
+            if (_InterlockedExchangeAdd((volatile long*)&rc[2], 0) < 1)
                 _InterlockedExchangeAdd((volatile long*)&rc[2], 1);
-            }
         }
     }
 
@@ -269,7 +278,7 @@ void cTerrainEditor::Init()
 
     ((cTerrainEditor*)((char*)this + 0x180))->PairResize(0x40);
     ((cTerrainEditor*)((char*)this + 0x1a4))->PairResize(0x20);
-    InitViewer();
+    return InitViewer();
 }
 
 // @ 0x00f69e50
@@ -331,89 +340,93 @@ bool cTerrainEditor::ReadTile(int face, const int* rect, float elapsed)
     if (!mBatch->Alloc(&out, 0x18, 4, 0))
         return false;
 
-    int* verts = (int*)out;
-    // original: operator_new__(0x60) then writes 0x60 bytes; contract small.
-    verts[0x14 / 4] = 0;
+    FUN_011e073e(out, 0, 0x60);
+
     RasterLike* raster = mHeightRasterArray[face];
-    u16 w = raster->width;
-    u16 h = raster->height;
-    u8 depth = raster->depth;
+    int w = raster->width;
+    int h = raster->height;
+    int depth = raster->depth;
 
-    float fw = (float)w;
-    float fh = (float)h;
+    float wf = (float)w;
+    float hf = (float)h;
     float zero = 0.0f;
-    float n = -zero / fw;
-    float one = C_1485720;
-    float o = one - zero / fw;
-    *(float*)((char*)verts + 0x00) = n;
-    *(float*)((char*)verts + 0x04) = n;
-    *(float*)((char*)verts + 0x08) = zero;
-    *(float*)((char*)verts + 0x18) = o;
-    *(float*)((char*)verts + 0x1c) = n;
-    *(float*)((char*)verts + 0x20) = zero;
-    *(float*)((char*)verts + 0x30) = n;
-    *(float*)((char*)verts + 0x34) = o;
-    *(float*)((char*)verts + 0x38) = zero;
-    *(float*)((char*)verts + 0x48) = o;
-    *(float*)((char*)verts + 0x4c) = o;
+    float n = -(zero / wf);
+    float o = 1.0f - zero / wf;
 
-    float u0 = (float)rect[0] / fw;
-    float v0 = (float)rect[1] / fh;
-    float u1 = (float)rect[2] / fw;
-    float v1 = (float)rect[3] / fh;
-    *(float*)((char*)verts + 0x10) = u0;
-    *(float*)((char*)verts + 0x14) = v1;
-    *(float*)((char*)verts + 0x28) = u1;
-    *(float*)((char*)verts + 0x2c) = v1;
-    *(float*)((char*)verts + 0x40) = u0;
-    *(float*)((char*)verts + 0x44) = v0;
-    *(float*)((char*)verts + 0x58) = u1;
-    *(float*)((char*)verts + 0x5c) = v0;
+    float* v = (float*)out;
+    v[0] = n;
+    v[1] = n;
+    v[2] = zero;
+    v[6] = o;
+    v[7] = n;
+    v[8] = zero;
+    v[12] = n;
+    v[13] = o;
+    v[14] = zero;
+    v[18] = o;
+    v[19] = o;
+    v[20] = zero;
+
+    float u0 = (float)rect[0] / wf;
+    float v0 = (float)rect[1] / hf;
+    float u1 = (float)rect[2] / wf;
+    float v1 = (float)rect[3] / hf;
+    v[4] = u0;
+    v[5] = v1;
+    v[10] = u1;
+    v[11] = v1;
+    v[16] = u0;
+    v[17] = v0;
+    v[22] = u1;
+    v[23] = v0;
 
     FUN_00777ae0(0x201, 0, 0);
 
     int idx = mTileIndex;
-    float* rp = (float*)((char*)this + 0x180 + idx * 8);
-    Vec2 rs(rp[0], rp[1]);
-    (*(void(__thiscall**)(void*, Vec2*, int))(*(void**)((char*)this + 0x1c)))(mRTTCamera, &rs, 1);
-    // Viewer::SetRaster(mRTTCamera, &rs, 1) then Update()
-    bool ok = (*(bool(__thiscall**)(void*))(*(void**)((char*)this + 0x1c)))(mRTTCamera);
-    if (ok) {
-        int* handle = (int*)mTileRaster[idx];
-        FUN_00fc2c10(&out, 0, (int)handle);   // RasterState::Construct
-        if (!mBatch->Apply(shader, 0)) {
-            FUN_00fc2830(&out);
+    Vec2 rs = mTileVec[idx];
+    ((void(__thiscall*)(void*, int*, int))FUN_007c4be0)(mRTTCamera, (int*)&rs, 1);
+    if (((char(__thiscall*)(void*))FUN_007c4fd0)(mRTTCamera)) {
+        RasterStateStub state;
+        ((void(__thiscall*)(void*, u32, int, RasterLike*))FUN_00fc2c10)(
+            &state, shader, 0, raster);
+        if (!mBatch->Apply(shader, elapsed)) {
+            ((void(__thiscall*)(void*))FUN_00fc2830)(&state);
             return false;
         }
         mBatch->Flush();
-        (*(void(__thiscall**)(void*))(*(void**)((char*)this + 0x1c)))(mRTTCamera);
-        FUN_00fc2830(&out);
+        ((void(__thiscall*)(void*))FUN_007c3c10)(mRTTCamera);
+        ((void(__thiscall*)(void*))FUN_00fc2830)(&state);
     }
 
-    void* buf = (void*)mTileRaster[idx];
-    FillSpriteTexture(buf, (u32)(depth >> 3) << 12, 0);
+    ((void(__thiscall*)(void*, void*, u32, int))FUN_011f0440)(
+        mUploadRaster[idx], mTileRaster[idx], (u32)(depth >> 3) << 12, 0);
 
-    void* hm = (*(void*(__thiscall**)(void*))(*(void**)((char*)this + 0x74)))((char*)this + 0x74);
-    int* hd = *(int**)((char*)hm + 8);
-    int side = hd[2];
-    int iVar2 = hd[4] + side * side * idx * 2;
-    u16* dst = (u16*)iVar2;   // (see below)
-    (void)dst;
+    ITerrainSphere* ts = (ITerrainSphere*)mTextureType;
+    void* a = ((void*(__thiscall*)(void*))(*(void***)ts)[0xc / 4])((void*)ts);
+    void* hd = *(void**)((char*)a + 8);
+    int side = *(int*)((char*)hd + 8);
+    u16* dst = (u16*)(*(int*)((char*)hd + 0x10) + side * side * face * 2);
 
     int row = 0;
-    u32 yoff = 0;
+    u32 off = 0;
     do {
         u32* src = (u32*)mTileRaster[mTileIndex];
         int x = 0;
         do {
-            if (rect[0] + x < (int)w && rect[1] + row < (int)h)
-                ((u16*)(size_t)(hd[4] + (side * side * idx * 2)))[((rect[1] + row) * w + rect[0] + x)] =
-                    (u16)(*(u32*)((char*)src + ((yoff + x) * 4)) >> 8);
+            int y = rect[1] + row;
+            if (rect[0] + x < w && y < h)
+                dst[y * w + rect[0] + x] = (u16)(src[off + x] >> 8);
+            if (rect[0] + x + 1 < w && y < h)
+                dst[y * w + rect[0] + x + 1] = (u16)(src[off + x + 1] >> 8);
+            if (rect[0] + x + 2 < w && y < h)
+                dst[y * w + rect[0] + x + 2] = (u16)(src[off + x + 2] >> 8);
+            if (rect[0] + x + 3 < w && y < h)
+                dst[y * w + rect[0] + x + 3] = (u16)(src[off + x + 3] >> 8);
             x += 4;
         } while (x < 0x40);
         ++row;
-        yoff += 0x40;
-    } while (yoff < 0x1000);
+        off += 0x40;
+    } while (off < 0x1000);
 
     mTileIndex = 1 - mTileIndex;
     return true;
@@ -425,18 +438,41 @@ bool cTerrainEditor::DrawBrushLayer(u32 param)
     if (!mTextureType)
         return false;
     ITerrainSphere* ts = (ITerrainSphere*)mTextureType;
-    void* hm = (*(void*(__thiscall**)(ITerrainSphere*))(*(void**)ts))(ts);
-    hm = *(void**)((char*)hm + 8);
-    int* hd = (int*)hm;
-    int side = hd[2];
+    void* a = ((void*(__thiscall*)(void*))(*(void***)ts)[0xc / 4])((void*)ts);
+    void* hd = *(void**)((char*)a + 8);
+    int side = *(int*)((char*)hd + 8);
+
     for (int i = 0; i < 6; ++i) {
         if (!mGPUDirtyFace[i])
             continue;
-        void* sphere = mTextureType;
-        u32* idxbuf = *(u32**)((char*)sphere + 0);   // [mTextureType+?]
-        int* src = (int*)(side * side * i * 2 + hd[4]);
-        u32 handle = (u32)idxbuf;
-        (void)handle; (void)src; (void)param;
+
+        TempExtractTex* tex = (TempExtractTex*)mTempExtractTexture;
+        int src = *(int*)((char*)hd + 0x10) + side * side * i * 2;
+        if ((tex->flags & 1) == 0) {
+            IResolver* res = (IResolver*)FUN_0067dd60();
+            res->Prepare(tex);
+        }
+
+        void* handle = tex->raster;
+        u32 state[7];
+        if (!((LockableRaster*)handle)->Lock(2, 0, state))
+            return false;
+        FUN_011e0744((void*)state[0], (void*)src, side * side * 2);
+        ((LockableRaster*)handle)->Unlock(state);
+
+        if (!DrawUnitQuad(i, (u32)handle, param))
+            return false;
+
+        if (i < 0) {
+            mGPUDirtyFace[0] = 0;
+            mGPUDirtyFace[1] = 0;
+            mGPUDirtyFace[2] = 0;
+            mGPUDirtyFace[3] = 0;
+            mGPUDirtyFace[4] = 0;
+            mGPUDirtyFace[5] = 0;
+        } else {
+            mGPUDirtyFace[i] = 0;
+        }
     }
     return true;
 }

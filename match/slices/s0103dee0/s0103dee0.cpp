@@ -15,7 +15,8 @@ struct Property {
     uint16_t mValueType;           // +0x12
     bool*    GetBool();            // 0x0041e920
     int*     GetInt();             // 0x0041e990
-    float*   GetFloat();           // 0x0041e9d0
+    uint32_t* GetUInt();           // 0x0041ea00
+    float*   GetFloat();           // 0x0041ea70
 };
 
 struct PropertyManager {
@@ -292,10 +293,14 @@ bool cSPSpaceTrading::ConsiderSellingTool(int iObjectID, ToolInfo* pInfo, uint32
             }
             NounManager(0xa5345685);
             FUN_00c75c30(0xa5345685);
-            int      iLimit = iAgeProp * 60000;
-            int      iNow   = FUN_011e0810();
-            unsigned long long iElapsed = pStore->mTimer.GetElapsedTime();
-            if (iNow == 0 || iElapsed < (unsigned long long)iLimit || (Property*)pItem == pProp)
+            int iAgeLimit = iAgeProp * 60000;
+            int iNow      = FUN_011e0810();
+            (void)iAgeLimit;
+            // per-item age timer: mAgesHandle points at a 0x20-byte record array
+            unsigned long long iElapsed =
+                ((cSPTimer*)((char*)pStore->mAgesHandle + i * 0x20))->GetElapsedTime();
+            if (iNow == 0 || iElapsed < (unsigned long long)(long long)iNow ||
+                pItem->mPoliticalId == (uint32_t)iToolType)
                 goto Fail;
         }
     }

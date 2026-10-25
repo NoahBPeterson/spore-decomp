@@ -27,7 +27,7 @@ void*  __cdecl SP_GetSaveArea(uint32_t id);                // 0x006b1f90
 void   __cdecl FUN_00f97750(void* self);                  // 0x00f97750
 void   __cdecl FUN_00f96c60();                            // 0x00f96c60
 void   __stdcall FUN_00f986f0(int i);                     // 0x00f986f0
-void   __cdecl FUN_00fb8a00();                            // 0x00fb8a00
+float  __fastcall FUN_00fb8a00(void* self);                 // 0x00fb8a00 (thiscall float getter, self+0x30)
 int    __cdecl FUN_011ef750(int a, int b, void* c);       // 0x011ef750
 void   __cdecl FUN_011ef880(void* a);                     // 0x011ef880
 void   __cdecl rw_D3D9Sync();                             // 0x011f21a0
@@ -35,6 +35,10 @@ void   __cdecl rw_CopyMatrix(void* a, void* b);           // 0x006ffe00
 char   __cdecl FUN_006ddcc0(int a, int b, void* c, void* d); // 0x006ddcc0
 void*  __cdecl operator_new__(void* a, int b, int size);  // 0x011e073e
 void   __cdecl FUN_006ddd80(int a, void* b, uint32_t c, void* d); // 0x006ddd80
+void*  __cdecl FUN_0067dda0();                             // 0x0067dda0 (RTT manager)
+void*  __cdecl FUN_0067dd60();                             // 0x0067dd60 (resource manager)
+void   __cdecl FUN_00f96920(const uint8_t* data, int w, int h, float u, float v,
+                            float* outB, float* outG, float* outR, float* outA); // 0x00f96920
 
 // TerrainEditor singleton members (__thiscall)
 struct TerrainEditor {
@@ -70,6 +74,9 @@ typedef void  (__thiscall *Tv1)(void*, int);
 typedef int   (__thiscall *Ti0)(void*);
 typedef void* (__thiscall *Tp0)(void*);
 typedef void* (__thiscall *Tp1)(void*, uint32_t);
+typedef void* (__thiscall *Tvp)(void*);
+typedef void  (__thiscall *Tv1p)(void*, void*);
+typedef void  (__thiscall *Tv3)(void*, uint32_t, uint32_t, void*);
 #define VTO(p, off) (*(void***)(p))[(off) / 4]
 
 struct cDirectPropertyList {
@@ -185,8 +192,47 @@ struct cViewer {
     bool Update();                              // 0x007c4fd0
     void Reset();                               // 0x007c3c10
     void SetZoom(float f);                      // 0x007c4ba0
+    void SetTexture(void* p);                   // 0x007c3cb0
 };
 struct Sync94 { void Sync(void* a); };          // 0x006ffe00 (this = cTS142+0x92c)
+
+// ---- terrain colour-map face / view-frame raster ---------------------------------------
+struct TerrainMapSet;
+struct ColorMap;
+struct RasterRes;
+struct RasterObj;
+struct ViewFrame;
+
+// One face of the terrain colour map (map set slot kMapColor == 3).
+struct ColorMap {
+    void*     mpVtbl;      // +0x00
+    uint8_t   pad04[0x08 - 0x04];
+    uint32_t  mFaceSize;   // +0x08
+    uint32_t  mModCount;   // +0x0c
+    uint32_t* mpData;      // +0x10
+};
+struct TerrainMapSet {
+    void*      mpVtbl;     // +0x00
+    uint8_t    pad04[0x08 - 0x04];
+    ColorMap*  mMaps[11];  // +0x08 .. +0x33 (kMapColor == 3)
+};
+// Resource behind a view-frame stream: width/height live in the resource header.
+struct RasterRes {
+    uint8_t  pad00[0x0c];
+    uint16_t mWidth;       // +0x0c
+    uint16_t mHeight;      // +0x0e
+    bool Lock(int a, int b, void** out);   // 0x011ef750 (ret 0xc)
+    void Unlock(void** out);               // 0x011ef880 (ret 4)
+};
+// Stream entry stored in a view frame (ref-counted raster wrapper).
+struct RasterObj {
+    RasterRes* mpRes;      // +0x00
+    uint32_t   mFlags;     // +0x04 (bit 0 = resident)
+};
+struct ViewFrame {
+    uint8_t    pad00[0x2f4];
+    RasterObj* mStreams[14];   // +0x2f4
+};
 
 // ---- globals ---------------------------------------------------------------------------
 extern void* g_sAppProperties;      // 0x015fd918
@@ -204,12 +250,14 @@ extern float g_dat15b119c;          // 0x015b119c
 extern void* g_dat016c9e68;         // 0x016c9e68
 extern void* g_dat016c9e40;         // 0x016c9e40
 extern int   g_dat016c9e44[];       // 0x016c9e44
+extern uint32_t g_colorMap[2];      // 0x015b1218
+extern cViewer g_renderViewer;      // 0x016ca410
 
 // ---- receiver --------------------------------------------------------------------------
 struct cTS142 {
     uint8_t  pad0[0x28];
     cDirectPropertyList* mpProps;   // +0x28
-    uint8_t  pad2c[0x30 - 0x2c];
+    TerrainMapSet* mpMapSet;        // +0x2c
     float    mScale;                // +0x30
     uint8_t  pad34[0x74 - 0x34];
     uint8_t  mSub74[0x30];          // +0x74
@@ -228,7 +276,8 @@ struct cTS142 {
     void*    mpDecalEnd;            // +0x194
     uint8_t  pad198[0x1d0 - 0x198];
     int      mDecalIdMode;          // +0x1d0
-    uint8_t  pad1d4[0x20c - 0x1d4];
+    uint8_t  pad1d4[0x1ec - 0x1d4];
+    float    mF1EC[8];              // +0x1ec .. +0x208
     uint8_t* mp20c;                 // +0x20c
     uint8_t  pad210[0x30c - 0x210];
     float    mMat30c[10];           // +0x30c .. +0x334
@@ -253,7 +302,7 @@ struct cTS142 {
     void FUN_00f9bd00(void* p2, uint32_t a, uint32_t b);
     void FUN_00f9bee0(void* p2);
     void FUN_00f9c010(int idx);
-    void FUN_00f9c0d0(void* p2);
+    void FUN_00f9c0d0(int face, void* renderStats);
 
     // sibling cTerrainSphere methods (defined in other slices)
     void FUN_00f97f50(uint32_t a, uint32_t b);
@@ -282,6 +331,15 @@ struct Sub334 {
     uint8_t pad[0x28];
     uint32_t* mp28;     // +0x28
 };
+
+// Acquire a view-frame raster if it is not resident yet.
+static inline void EnsureRaster(RasterObj* r)
+{
+    if ((r->mFlags & 1) == 0) {
+        void* mgr = FUN_0067dd60();
+        ((Tv1p)VTO(mgr, 0x34))(mgr, r);
+    }
+}
 
 // ----------------------------------------------------------------------------------------
 // @ 0x00f9b620
@@ -585,30 +643,58 @@ void cTS142::FUN_00f9c010(int idx)
 
 // ----------------------------------------------------------------------------------------
 // @ 0x00f9c0d0
-void cTS142::FUN_00f9c0d0(void* p2)
+void cTS142::FUN_00f9c0d0(int face, void* renderStats)
 {
-    IImgMgr* mm = (IImgMgr*)SP_MaterialManager();
+    void* mm = SP_MaterialManager();
     void* mat = ((Tp1)VTO(mm, 0x28))(mm, 0x78a45ffb);
-    FUN_007c3cb0(g_dat016c9e40);
-    if (mpViewer->Update()) {
-        float v0[4];
-        float v1[4];
-        if (FUN_006ddcc0(3, 4, v0, v1)) {
-            uint8_t* q = (uint8_t*)operator_new__(0, 0, 0x70);
-            uint32_t* w = (uint32_t*)q;
-            w[4] = 0; w[5] = 0; w[6] = 0;
-            w[0xb] = 0x3f800000; w[0xc] = 0; w[0xd] = 0;
-            w[0x12] = 0x3f800000; w[0x13] = 0x3f800000; w[0x14] = 0;
-            w[0x19] = 0; w[0x1a] = 0x3f800000; w[0x1b] = 0;
-            w[0] = 0xbf800000; w[1] = 0x3f800000; w[2] = 0;
-            w[7] = 0x3f800000; w[8] = 0x3f800000; w[9] = 0;
-            w[0xe] = 0x3f800000; w[0xf] = 0xbf800000; w[0x10] = 0;
-            w[0x15] = 0xbf800000; w[0x16] = 0xbf800000; w[0x17] = 0;
-            FUN_006ddd80(3, mat, g_dat016c9e44[0], p2);
+    g_renderViewer.SetTexture(g_dat016c9e40);
+    if (g_renderViewer.Update()) {
+        void* buf = 0;
+        void* extra = 0;
+        if (FUN_006ddcc0(3, 4, &buf, &extra)) {
+            memset(buf, 0, 0x70);
+            float* m = (float*)buf;
+            m[4] = 0.0f; m[5] = 0.0f; m[6] = 0.0f;
+            m[0xb] = 1.0f; m[0xc] = 0.0f; m[0xd] = 0.0f;
+            m[0x12] = 1.0f; m[0x13] = 1.0f; m[0x14] = 0.0f;
+            m[0x19] = 0.0f; m[0x1a] = 1.0f; m[0x1b] = 0.0f;
+            m[0] = -1.0f; m[1] = 1.0f; m[2] = 0.0f;
+            m[7] = 1.0f; m[8] = 1.0f; m[9] = 0.0f;
+            m[0xe] = 1.0f; m[0xf] = -1.0f; m[0x10] = 0.0f;
+            m[0x15] = -1.0f; m[0x16] = -1.0f; m[0x17] = 0.0f;
+            FUN_006ddd80(3, mat, g_dat016c9e44[face], renderStats);
         }
-        FUN_007c3c10(mpViewer);
+        g_renderViewer.Reset();
     }
     TerrainEditor* ed = (TerrainEditor*)SP_TerrainEditor();
-    if (!ed->IsEditing())
+    if (ed->IsEditing())
         return;
+
+    ColorMap* colorMap = (ColorMap*)mpMapSet->mMaps[3];
+    uint32_t faceSize = colorMap->mFaceSize;
+    uint32_t* faceData = colorMap->mpData + (uint32_t)face * faceSize * faceSize;
+    void* rtt = FUN_0067dda0();
+    ((Tv3)VTO(rtt, 0x30))(rtt, g_colorMap[0], g_colorMap[1], faceData);
+    colorMap->mModCount++;
+
+    ViewFrame* frame = (ViewFrame*)((Tvp)VTO(this, 0x10))(this);
+    RasterObj** streams = frame->mStreams;
+    RasterObj* r = streams[13];
+    EnsureRaster(r);
+    int w = r->mpRes->mWidth;
+    r = streams[13];
+    EnsureRaster(r);
+    int h = r->mpRes->mHeight;
+    r = streams[13];
+    EnsureRaster(r);
+    void* locked = 0;
+    if (r->mpRes->Lock(1, 0, &locked)) {
+        FUN_00f96920((const uint8_t*)locked, w, h, FUN_00fb8a00(mp20c), 0.0f,
+                     &mF1EC[0], &mF1EC[1], &mF1EC[2], &mF1EC[3]);
+        FUN_00f96920((const uint8_t*)locked, w, h, FUN_00fb8a00(mp20c), 1.0f,
+                     &mF1EC[4], &mF1EC[5], &mF1EC[6], &mF1EC[7]);
+        r = streams[13];
+        EnsureRaster(r);
+        r->mpRes->Unlock(&locked);
+    }
 }

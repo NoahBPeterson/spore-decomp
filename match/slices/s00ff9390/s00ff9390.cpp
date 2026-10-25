@@ -698,9 +698,8 @@ void FUN_00ff9520()
                                                               0x18c43e8)->mData;
     void* ctx = FUN_010666a0()->FUN_01067e60();
 
-    register uint32_t i;
-    uint32_t count = (uint32_t)(cities->mpEnd - cities->mpBegin);
-    i = 0;
+    uint32_t i = 0;
+    int count = (int)(cities->mpEnd - cities->mpBegin);
     for (; i < count; i++) {
         FUN_01041c30((*cities)[i], ctx);
         FUN_01041d50((*cities)[i], ctx);

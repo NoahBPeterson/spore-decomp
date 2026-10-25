@@ -5,3 +5,5 @@ slices/s00fcc260/s00fcc260.cpp  ??0SList@rw@@QAE@XZ  00fcce10  /O2 /MD /Gy /EHsc
 slices/s00fcc260/s00fcc260.cpp  ?ScalarDeletingDtor@SList@rw@@QAEPAXI@Z  00fccfb0  /O2 /MD /Gy /EHsc /TP
 slices/s00fcc260/s00fcc260.cpp  ?AppendOne@SList@rw@@QAEHHH@Z  00fccfe0  /O2 /MD /Gy /EHsc /TP
 slices/s00fcc260/s00fcc260.cpp  ?PrependOne@SList@rw@@QAEHHH@Z  00fcd030  /O2 /MD /Gy /EHsc /TP
+slices/s00fcc260/s00fcc260.cpp  ?InsertBeforeOne@SList@rw@@QAEHHPAVSNode@2@PAX@Z  00fcd080  /O2 /MD /Gy /EHsc /TP
+slices/s00fcc260/s00fcc260.cpp  ?InsertAfterOne@SList@rw@@QAEHHPAVSNode@2@PAX@Z  00fcd120  /O2 /MD /Gy /EHsc /TP

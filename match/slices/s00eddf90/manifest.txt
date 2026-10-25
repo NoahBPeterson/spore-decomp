@@ -1,1 +1,3 @@
-# source  symbol  original VA  [flags override]
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00eddf90/s00eddf90.cpp  ?FUN_00eddf90@@YAXPAUIWindow@@MMM@Z  00eddf90  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00eddf90/s00eddf90.cpp  ?FUN_00ede040@@YAXPAUIWindow@@_NH@Z  00ede040  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-

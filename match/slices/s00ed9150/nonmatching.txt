@@ -1,2 +1,7 @@
 # va  diff-bytes  reason
 00ed9560 80   noun placement helper: all calls present but arg order/float constant schedule differs; equiv: UNSUPPORTED (import:_decode_pointer, 0 valid inputs)
+00ed9150 905  cursor-path polyline builder reconstructed (count/step/endpoint logic and cursor transition present) but MSVC register/SSE scheduling differs; equiv: UNSUPPORTED (fault(read) inputs, 0 valid)
+00ed95d0 1009 noun-target step handler reconstructed (types 6/9/10/other, distance-pair selection, two path slots) but codegen/order differs; equiv: WEAK (69 valid, 15.6% coverage)
+00ed9990 423  StateSync::Set reconstructed (effect slots, paired path slots, -2 tutorial list branch) but codegen differs; equiv: WEAK (136 valid, 51.9% coverage)
+00ed9cd0 223  cursor-id selection switch reconstructed (all six cases and selector calls) but codegen differs; equiv: WEAK (162 valid, 45.5% coverage)
+00ed9e60 116  UI/banning predicate reconstructed (gate, ban keys 1000/1002/1001, app/viewer/key path) but codegen differs; equiv: WEAK (200 valid, 6.8% coverage)

@@ -1,2 +1,7 @@
 # va  diff-bytes  short reason
+00ee3800  226  selection predicate complete; branch layout and flag tests differ (equiv PASS)
+00ee3940  863  handler construction complete; size 1270 vs 1271 and codegen differ (equiv UNSUPPORTED: object model faults on globals)
+00ee3f60  322  message dispatch complete; switch tree/register base differ, size 417 vs 388 (equiv WEAK)
+00ee40f0  5  random resource pick complete; register allocation of index addressing differs (equiv UNSUPPORTED: 0/400 valid, global manager faults)
+00ee41e0  329  behaviour-selection handler complete; size 432 vs 427, branch layout differs (equiv WEAK)
 00ee3e40  188  char-param register handling and branch layout differ (behavior complete)

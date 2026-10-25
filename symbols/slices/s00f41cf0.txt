@@ -1,0 +1,19 @@
+# Slice s00f41cf0 names.
+# 00f42780  f_42780               collect scenario action elements (MATCH byte-exact)
+# 00f42a00  ScenarioObj::f_42a00  per-record action dispatch (MATCH byte-exact)
+# 00f41cf0  ScenarioObj::f_41cf0  noun cleanup / handler removal (MATCH byte-exact)
+# 00f42580  ScenarioObj::f_42580  release helper; nonmatching (44 diff, 66 vs 68)
+# 00f425d0  ScenarioObj::f_425d0  hashtable bucket scan; nonmatching (132 diff, 153 vs 152)
+# 00f42670  Vec44::assign           eastl vector assign; nonmatching (218 diff, 270 vs 258)
+# 00f41dc0  ScenarioObj::f_41dc0  three-probe action state evaluator; nonmatching (692 diff, 771 vs 786)
+# 00f420d0  ScenarioObj::f_420d0  two-pass action cost evaluator; nonmatching (1097 diff, 1196 vs 1121)
+# 00f427c0  ScenarioObj::Eval427c0 tutorial action evaluation driver; nonmatching (476 diff, 569 vs 522)
+00f42780 ?f_42780@@YAPAUElem4e0@@PAU1@IABU1@@Z  # MATCH byte-exact: collect action elements
+00f42a00 ?f_42a00@ScenarioObj@@QAEXH@Z  # MATCH byte-exact: per-record action dispatch
+00f41cf0 ?f_41cf0@ScenarioObj@@QAEXXZ  # MATCH byte-exact: noun cleanup, remove handler/list nodes
+00f42580 ?f_42580@ScenarioObj@@QAEXPAX@Z  # nonmatching: release helper (44 diff)
+00f425d0 ?f_425d0@ScenarioObj@@QAEXH@Z  # nonmatching: hashtable bucket scan (132 diff)
+00f42670 ?assign@Vec44@@QAEXIPBX@Z  # nonmatching: eastl vector assign, 0x44 stride (218 diff)
+00f41dc0 ?f_41dc0@ScenarioObj@@QAE_NPAUAction@@HPAX@Z  # nonmatching: three-probe action state evaluator (692 diff)
+00f420d0 ?f_420d0@ScenarioObj@@QAE_NHPAUAction@@HPAHPAX@Z  # nonmatching: two-pass action cost evaluator (1097 diff)
+00f427c0 ?Eval427c0@ScenarioObj@@QAE_NXZ  # nonmatching: tutorial action evaluation driver (476 diff)

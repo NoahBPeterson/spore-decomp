@@ -400,3 +400,96 @@ L2c:
     param_2[3] = ((*(float*)(param_1 + 0x578) * w16 + *(float*)(param_1 + 0x558) * w15) +
                   *(float*)(param_1 + 0x568) * w14) + *(float*)(param_1 + 0x588) * w13;
 }
+
+// ---------------------------------------------------------------------------
+// Reference-counted resource owner released by FUN_00fb9fc0.
+// The first fourteen pointers own intrusive references whose count lives at +0x08;
+// the last eight point at interface objects released through vtable slot 1.
+// ---------------------------------------------------------------------------
+struct RefVtbl {
+    void* v00;                                              // +0x00
+    void (__fastcall *v04)(void* self);                     // +0x04  release
+};
+struct RefIface {
+    RefVtbl* mpVtbl;                                        // +0x00
+};
+struct RefTarget {
+    void* mField00;                                         // +0x00
+    void* mField04;                                         // +0x04
+    int   mRefCount;                                        // +0x08
+};
+
+struct TerrainResources {
+    RefTarget* mpRef00;    // +0x00
+    RefTarget* mpRef04;    // +0x04
+    RefTarget* mpRef08;    // +0x08
+    RefTarget* mpRef0C;    // +0x0c
+    RefTarget* mpRef10;    // +0x10
+    RefTarget* mpRef14;    // +0x14
+    RefTarget* mpRef18;    // +0x18
+    RefTarget* mpRef1C;    // +0x1c
+    RefTarget* mpRef20;    // +0x20
+    RefTarget* mpRef24;    // +0x24
+    RefTarget* mpRef28;    // +0x28
+    RefTarget* mpRef2C;    // +0x2c
+    RefTarget* mpRef30;    // +0x30
+    RefTarget* mpRef34;    // +0x34
+    RefIface*  mpIface38;  // +0x38
+    RefIface*  mpIface3C;  // +0x3c
+    RefIface*  mpIface40;  // +0x40
+    RefIface*  mpIface44;  // +0x44
+    RefIface*  mpIface48;  // +0x48
+    RefIface*  mpIface4C;  // +0x4c
+    RefIface*  mpIface50;  // +0x50
+    RefIface*  mpIface54;  // +0x54
+};
+
+// Drop one intrusive reference: decrement, but keep the count at least 1
+// unless it was already 0 (mirrors the shipped lock-xadd sequence).
+static __forceinline void release_ref(RefTarget* p)
+{
+    if (p == 0)
+        return;
+    int left = p->mRefCount - 1;
+    p->mRefCount = left;
+    if (left < 1)
+        p->mRefCount = left + 1;
+}
+
+// @ 0x00fb9fc0
+// Release the eight interface pointers at +0x38..+0x54 through vtable slot 1,
+// then drop the fourteen intrusive references at +0x00..+0x34.
+void __fastcall FUN_00fb9fc0(TerrainResources* self)
+{
+    if (self->mpIface54 != 0)
+        self->mpIface54->mpVtbl->v04(self->mpIface54);
+    if (self->mpIface50 != 0)
+        self->mpIface50->mpVtbl->v04(self->mpIface50);
+    if (self->mpIface4C != 0)
+        self->mpIface4C->mpVtbl->v04(self->mpIface4C);
+    if (self->mpIface48 != 0)
+        self->mpIface48->mpVtbl->v04(self->mpIface48);
+    if (self->mpIface44 != 0)
+        self->mpIface44->mpVtbl->v04(self->mpIface44);
+    if (self->mpIface40 != 0)
+        self->mpIface40->mpVtbl->v04(self->mpIface40);
+    if (self->mpIface3C != 0)
+        self->mpIface3C->mpVtbl->v04(self->mpIface3C);
+    if (self->mpIface38 != 0)
+        self->mpIface38->mpVtbl->v04(self->mpIface38);
+
+    release_ref(self->mpRef34);
+    release_ref(self->mpRef30);
+    release_ref(self->mpRef2C);
+    release_ref(self->mpRef28);
+    release_ref(self->mpRef24);
+    release_ref(self->mpRef20);
+    release_ref(self->mpRef1C);
+    release_ref(self->mpRef18);
+    release_ref(self->mpRef14);
+    release_ref(self->mpRef10);
+    release_ref(self->mpRef0C);
+    release_ref(self->mpRef08);
+    release_ref(self->mpRef04);
+    release_ref(self->mpRef00);
+}

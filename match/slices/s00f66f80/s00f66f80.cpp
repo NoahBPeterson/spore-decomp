@@ -34,6 +34,26 @@ int   __cdecl RWVertexDescriptorAreEqual(void* a, void* b);                     
 void  __cdecl FUN_011f2bc0(void* vd);                                                             // 0x011f2bc0
 void  __cdecl RWFillSpriteTexture(void* dst, unsigned a, int b);                                  // 0x011f0440
 
+// Vertex-buffer wrapper (VBi, 0x011f3620): {D3D buffer, ?, offset, count}.
+struct VBi {
+    void*    mpBuffer;    // +0x00  byte +0x0f is the stride
+    int32_t  mPad04;      // +0x04
+    int32_t  mOffset;     // +0x08
+    int32_t  mCount;      // +0x0c
+    unsigned Lock(unsigned pool, unsigned offset, unsigned size);  // 0x011f3620
+};
+
+// Index-buffer wrapper (IBuf, vtable +0x2c = LockIndex).
+struct IBuf {
+    int LockIndex(IBuf* self, int offset, int count, int* out, unsigned flags);  // 0x2c slot
+};
+
+// The +0x0c field is a pair {IBuf*, index-base}.
+struct IBufWrap {
+    IBuf*   mpObject;     // +0x00
+    int32_t mBase;        // +0x04
+};
+
 // The terrain draw-batch object (0x34 bytes).  All offsets are raw because the layout is
 // only partly known; a private helper macro keeps it readable.
 struct TerrainDraw {
@@ -51,7 +71,7 @@ struct TerrainDraw {
     void*   mpParam;     // +0x2c
     int32_t mLockState;  // +0x30
 
-    char BuildIndexed(unsigned* a, void* b, int vertCount, int c, int* d, int indexCount);  // 0x00f66f80
+    char BuildIndexed(unsigned* pa, void* unused, int vertCount, int* pd, int indexCount, void* param);  // 0x00f66f80
     int  Draw(void* compiledState, void* out);                                              // 0x00f67070
     void Advance();                                                                         // 0x00f67290
     void Init(void* a, void* b, void* c);                                                   // 0x00f66d20
@@ -61,7 +81,8 @@ void FUN_00f66d20(void* a, void* b, void* c);   // 0x00f66d20
 void FUN_00f66e70(void* self);                  // 0x00f66e70
 
 // @ 0x00f66f80
-char TerrainDraw::BuildIndexed(unsigned* pa, void* pb, int vertCount, int pc, int* pd, int indexCount)
+char TerrainDraw::BuildIndexed(unsigned* pa, void* unused, int vertCount, int* pd,
+                               int indexCount, void* param)
 {
     int base = mCount0;
     unsigned pool = 10;
@@ -72,17 +93,14 @@ char TerrainDraw::BuildIndexed(unsigned* pa, void* pb, int vertCount, int pc, in
     *pa = 0;
     *pd = 0;
 
-    unsigned char stride;
-    {
-        unsigned* vd = (unsigned*)mpVb;
-        int n = vertCount;
-        if (vertCount == 0)
-            n = (int)vd[3];
-        stride = *(unsigned char*)(*vd + 0xf);
-        void* p = RWVertexBufferD3D9Lock(mpVb, pool, (vd[2] + base) * stride, stride * n);
-        if (!p)
-            return 0;
-    }
+    VBi* vb = (VBi*)mpIb;                       // +0x08
+    int n = vertCount;
+    if (vertCount == 0)
+        n = vb->mCount;
+    unsigned char stride = *(unsigned char*)((char*)vb->mpBuffer + 0xf);
+    void* p = (void*)vb->Lock(pool, (vb->mOffset + base) * stride, stride * n);
+    if (!p)
+        return 0;
 
     int vbase = mCount1;
     unsigned pool2 = 0x1000;
@@ -90,18 +108,21 @@ char TerrainDraw::BuildIndexed(unsigned* pa, void* pb, int vertCount, int pc, in
         pool2 = 0;
         vbase = 0;
     }
-    int* ib = *(int**)mpIb2;
-    int r = ((int(__thiscall*)(void*, int, int, void*, int*))ib[0x2c / 4])(ib, (*((int**)mpIb2))[1] * 2 + vbase * 2, indexCount, pa, pd); // LockIndex
+    IBufWrap* wrap = (IBufWrap*)mpIb2;          // +0x0c
+    IBuf* obj = wrap->mpObject;
+    void** vt = *(void***)obj;
+    int r = ((int(__thiscall*)(IBuf*, IBuf*, int, int, int*, unsigned))vt[0x2c / 4])(
+        obj, obj, (wrap->mBase + vbase) * 2, indexCount, pd, pool2);
     if (r < 0)
         return 0;
 
-    mpParam = pb;
-    mCount0 = pool2;
-    mStart1 = base;
+    mpParam = param;
+    mCount0 = base;
+    mBase0 = vertCount;
     mLockState = 1;
-    *pd = (int)pa;
-    mBase1 = vbase;
-    mBase0 = indexCount;
+    *pa = (unsigned)p;
+    mCount1 = vbase;
+    mBase1 = indexCount;
     return 1;
 }
 
@@ -279,7 +300,6 @@ struct TempExtract {
 };
 
 // @ 0x00f67360
-// @ 0x00f67360
 char TempExtract::Build(int size)
 {
     unsigned texA, texB, nameA, nameB;
@@ -325,8 +345,8 @@ char TempExtract::Build(int size)
 void TempExtract::Destroy()
 {
     TexFactory* svc = (TexFactory*)TerrainManager();
-    void** vt = svc->mpVtbl;
     if (hB_tex != 0) {
+        void** vt = svc->mpVtbl;
         ((void(__thiscall*)(void*, void*, int))vt[0x14 / 4])(svc, hB_handle, hB_id);
         hB_tex = 0;
         hB_handle = (void*)-1;
@@ -336,6 +356,7 @@ void TempExtract::Destroy()
         buf1 = 0;
     }
     if (hA_tex != 0) {
+        void** vt = svc->mpVtbl;
         ((void(__thiscall*)(void*, void*, int))vt[0x14 / 4])(svc, hA_handle, hA_id);
         hA_tex = 0;
         hA_handle = (void*)-1;
@@ -362,13 +383,22 @@ extern float g_c_148f6a8;                // 0x0148f6a8
 
 void* __cdecl ShaderGet(unsigned a, unsigned b, unsigned c);        // 0x00777ae0
 void* __cdecl TerrainEditorGet();                                   // 0x00f48a60
-void  __cdecl RasterStateConstruct(void* dst, void* a, void* b, void* c);  // 0x00fc2c10
-void  __cdecl RasterStateClear(void* self);                         // 0x00fc2830
-int   __cdecl ViewerSetRaster(void* self, void* p, bool b);         // 0x007c4be0
-char  __cdecl ViewerUpdate(void* self);                             // 0x007c4fd0
-void  __cdecl ViewerEndDraw(void* self);                            // 0x007c3c10
-void  __cdecl ViewerSetClearColor(void* self, const void* c);       // 0x007c3c20
-void  __cdecl ViewerClear(void* self, unsigned flags);              // 0x007c3c50
+
+// rw::graphics::RasterState: 0x10-byte value type with thiscall helpers.
+struct RasterState {
+    unsigned mData[4];              // +0x00 .. +0x0f
+    void Construct(void* a, void* b, void* c);   // 0x00fc2c10
+    void Clear();                                // 0x00fc2830
+};
+
+// The viewer object stored at face+0x1c (all thiscall).
+struct Viewer {
+    int  SetRaster(void* raster, bool b);        // 0x007c4be0
+    char Update();                               // 0x007c4fd0
+    void EndDraw();                              // 0x007c3c10
+    void SetClearColor(const void* c);           // 0x007c3c20
+    void Clear(unsigned flags);                  // 0x007c3c50
+};
 struct DepthCtx { float Read(); };                                  // 0x00fd9400
 void  __cdecl FUN_00fa3b30(void* self);                             // 0x00fa3b30
 int*  __cdecl SP_CoordToIndex(int* out, int n, float* v);           // 0x00684bf0
@@ -429,7 +459,7 @@ void TerrainFace::SetLodByte(int slot, unsigned char v)
 }
 
 // @ 0x00f675b0
-void FUN_00f675b0(char* self, char* info, float* out)
+void __stdcall FUN_00f675b0(char* self, char* info, float* out)
 {
     int kind = *(int*)(info + 0xc);
     if (kind == 5 || kind == 6) {
@@ -534,20 +564,19 @@ int __stdcall FUN_00f67770(char* self, char* info)
 void TerrainFace::Draw(int slot, void* a3)
 {
     char* p = (char*)this;
-    unsigned raster[4];       // rw::graphics::RasterState on the stack (0x10 bytes)
+    RasterState raster;       // rw::graphics::RasterState on the stack (0x10 bytes)
     ShaderGet(0x201, 0, 0);
     void* e = TerrainEditorGet();
     void* u = *(void**)(*(char**)((char*)e + 0x28) + 4);
-    RasterStateConstruct(raster, u, 0, *(void**)(p + 0x20 + slot * 4));
-    ViewerSetRaster(*(void**)(p + 0x1c), p + 0x6c, true);
-    char ok = ViewerUpdate(*(void**)(p + 0x1c));
-    if (ok) {
+    raster.Construct(u, 0, *(void**)(p + 0x20 + slot * 4));
+    ((Viewer*)*(void**)(p + 0x1c))->SetRaster(p + 0x6c, true);
+    if (((Viewer*)*(void**)(p + 0x1c))->Update()) {
         void* o = *(void**)(p + 0x204);
         void** vt = *(void***)o;
         ((void(__thiscall*)(void*, void*, void*))vt[0xc / 4])(o, u, a3);
-        ViewerEndDraw(*(void**)(p + 0x1c));
+        ((Viewer*)*(void**)(p + 0x1c))->EndDraw();
     }
-    RasterStateClear(raster);
+    raster.Clear();
 }
 
 // @ 0x00f678d0
@@ -645,23 +674,29 @@ float TerrainFace::ProjectDir(float dx, float dy, float dz)
     void* tex = *(void**)(p + 0x1b4 + slot * 4);
     *(int*)(p + 0x1c4) = 1 - slot;
 
-    void* a = *(void**)tex;
-    void* b = *(void**)(sprite + 8);
+    void* a = *(void**)((char*)tex + 8);
+    void* b = *(void**)((char*)sprite + 8);
     unsigned h1 = 0, h2 = 0;
-    ((void(__thiscall*)(void*, int, unsigned*))((void**)*(void**)((char*)a + 8))[0x48 / 4])(*(void**)((char*)a + 8), 0, &h1);
-    ((void(__thiscall*)(void*, int, unsigned*))((void**)*(void**)((char*)b + 8))[0x48 / 4])(*(void**)((char*)b + 8), 0, &h2);
+    void** vta = *(void***)a;
+    ((void(__thiscall*)(void*, void*, int, unsigned*))vta[0x48 / 4])(vta, a, 0, &h1);
+    void** vtb = *(void***)b;
+    ((void(__thiscall*)(void*, void*, int, unsigned*))vtb[0x48 / 4])(vtb, b, 0, &h2);
 
     if (h1 != 0) {
         if (h2 != 0) {
             void* dev = *(void**)0x016f89d0;
-            ((void(__thiscall*)(void*, unsigned, unsigned*, void*, unsigned*, int))((void**)*(void**)dev)[0x88 / 4])(
-                dev, h2, rect, 0, &rect[4], 1);
+            void** devVt = *(void***)dev;
+            ((void(__thiscall*)(void*, void*, unsigned, void*, unsigned, void*, int))devVt[0x88 / 4])(
+                devVt, dev, h2, rect, h1, &rect[4], 1);
             RWFillSpriteTexture(rect, h1 >> 3, 0);
         }
-        ((void(__thiscall*)(void*, void*))((void**)*(void**)h1)[8 / 4])((void*)h1, (void*)h1);
+        void** vh1 = *(void***)h1;
+        ((void(__thiscall*)(void*, void*))vh1[8 / 4])(vh1, (void*)h1);
     }
-    if (h2 != 0)
-        ((void(__thiscall*)(void*, void*))((void**)*(void**)h2)[8 / 4])((void*)h2, (void*)h2);
+    if (h2 != 0) {
+        void** vh2 = *(void***)h2;
+        ((void(__thiscall*)(void*, void*))vh2[8 / 4])(vh2, (void*)h2);
+    }
 
     return ((float)((rect[0] >> 8) & 0xffff) * g_c_148f6a0) * 2.0f - 1.0f;
 }
@@ -683,16 +718,17 @@ void TerrainFace::ClearSprites()
 
     int* raster = (int*)(p + 0x38);
     float* sprite = (float*)(p + 0x88);
+    Viewer* v = *(Viewer**)(p + 0x1c);
     for (int i = 0; i < 6; ++i) {
         sprite[-2] = 0.0f;
         sprite[-1] = 0.0f;
         sprite[0] = g_one_1485720;
         sprite[1] = g_one_1485720;
-        ViewerSetRaster(*(void**)(p + 0x1c), raster, true);
-        if (ViewerUpdate(*(void**)(p + 0x1c))) {
-            ViewerSetClearColor(*(void**)(p + 0x1c), &col);
-            ViewerClear(*(void**)(p + 0x1c), 7);
-            ViewerEndDraw(*(void**)(p + 0x1c));
+        v->SetRaster(raster, true);
+        if (v->Update()) {
+            v->SetClearColor(&col);
+            v->Clear(7);
+            v->EndDraw();
         }
         sprite += 4;
         raster += 2;

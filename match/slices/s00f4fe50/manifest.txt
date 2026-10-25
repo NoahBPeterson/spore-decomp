@@ -1,1 +1,2 @@
 # source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00f4fe50/s00f4fe50.cpp  ?Destroy@cContainer@@QAEXXZ  00f50040  /O2 /MD /Gy /TP /arch:SSE /fp:fast

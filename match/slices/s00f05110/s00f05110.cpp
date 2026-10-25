@@ -145,9 +145,22 @@ struct EaStr16
     char* mpCap;        // 0x08
     int   mSpare;       // 0x0c
     EaStr16();
+    EaStr16(const wchar_t* text);
     ~EaStr16();
-    void Format(const char* fmt, ...);      // 0x41e050
+    void Format(const char* fmt, ...);                  // 0x41e050
+    void assign(const wchar_t* first, const wchar_t* last);   // 0x423650
+    void RangeInitialize(const wchar_t* text);          // 0x579a90
+    int  find(const wchar_t* needle, int pos);          // 0x608340
+    void erase(int pos, int count);                     // 0x4228e0
 };
+
+inline EaStr16::EaStr16(const wchar_t* text)
+{
+    mpBegin = 0;
+    mpEnd   = 0;
+    mpCap   = 0;
+    RangeInitialize(text);
+}
 
 inline EaStr16::EaStr16()
 {
@@ -377,66 +390,88 @@ void Movie::SaveUploadSettings()
 
 // ------------------------------------------------------------------ 00f05110
 // Centre the "youtube icon + caption" pair inside the share panel and resize
-// both windows to the panel width.
+// both windows to the panel width.  The caption is a translated string that may
+// carry a "<youtubeicon>" tag: when present the tag is split out, the text on
+// either side of it is used as the caption and the icon moves to the side the
+// tag was on.
 // @ 0x00f05110
 void Movie::LayoutYouTube()
 {
-    cString title(0x7518573e, 0x5e51108, 0);
+    cString title(0x7518573e, 0x5e501eb, 0);
     EaStr16 text;
+    EaStr16 before;
+    EaStr16 after;
+    bool iconFirst = true;
 
-    const ushort* p = (const ushort*)title.GetText();
-    const ushort* end = p;
-    while (*end != 0)
-        end++;
-    WString_Assign(&text, p, end);
+    const wchar_t* p = (const wchar_t*)title.GetText();
+    const wchar_t* e = p;
+    while (*e != 0)
+        e++;
+    text.assign(p, p + (e - p));
 
-    Layout* lay = (Layout*)at<void*>(this, 0x2c);
-    void* icon  = lay->FindWindowByID(0x5e51108, 1);
-    void* label = lay->FindWindowByID(0x5daa660, 1);
+    void* icon  = ((Layout*)at<void*>(this, 0x2c))->FindWindowByID(0x5e51108, 1);
+    void* label = ((Layout*)at<void*>(this, 0x2c))->FindWindowByID(0x5daa660, 1);
 
-    bool compact = true;
-    if (label != 0)
-        ((void (__thiscall*)(void*, void*))((void**)*(void**)label)[0x80 / 4])(label, text.mpBegin);
-    if (label != 0)
-        AutoSizeWindowForText(label, 0, 0);
+    EaStr16 marker(L"<youtubeicon>");
 
-    RectF r1 = *(RectF*)((RectF* (__thiscall*)(void*))((void**)*(void**)icon)[0x38 / 4])(icon);
-    RectF r2 = *(RectF*)((RectF* (__thiscall*)(void*))((void**)*(void**)label)[0x38 / 4])(label);
-
-    if (!compact) {
-        r2.left   = (r2.right - r2.left) + r1.left;
-        r2.bottom = (r2.bottom - r2.top) + r2.top;
-        ((void (__thiscall*)(void*, const RectF*))
-         ((void**)*(void**)label)[0x6c / 4])(label, &r2);
-
-        RectF r2b = *(RectF*)((RectF* (__thiscall*)(void*))((void**)*(void**)label)[0x38 / 4])(label);
-        float h = r2b.right + 3.0f;
-        r1.right  = (r1.right - r1.left) + h;
-        r1.bottom = (r1.bottom - r1.top) + r1.top;
-        ((void (__thiscall*)(void*, const RectF*))
-         ((void**)*(void**)icon)[0x6c / 4])(icon, &r1);
-        r2.left = ((RectF* (__thiscall*)(void*))((void**)*(void**)label)[0x38 / 4])(label)->left;
+    int pos = text.find((const wchar_t*)marker.mpBegin, 0);
+    if (pos != -1) {
+        before.assign((const wchar_t*)text.mpBegin, (const wchar_t*)text.mpEnd);
+        text.erase(pos, (int)(before.mpEnd - before.mpBegin) >> 1);
+        before.erase(0, pos + ((int)(marker.mpEnd - marker.mpBegin) >> 1));
+        if (((int)(text.mpEnd - text.mpBegin) & ~1) == 0) {
+            after.assign((const wchar_t*)before.mpBegin, (const wchar_t*)before.mpEnd);
+        } else {
+            after.assign((const wchar_t*)text.mpBegin, (const wchar_t*)text.mpEnd);
+            iconFirst = false;
+        }
     }
 
-    RectF ir = *(RectF*)((RectF* (__thiscall*)(void*))((void**)*(void**)icon)[0x38 / 4])(icon);
-    float leftEdge = ir.left;
-    RectF lr = *(RectF*)((RectF* (__thiscall*)(void*))((void**)*(void**)label)[0x38 / 4])(label);
+    if (label != 0) {
+        ((void (__thiscall*)(void*, const void*))((void**)*(void**)label)[0x80 / 4])(label, after.mpBegin);
+        AutoSizeWindowForText(label, 0, 0);
+    }
 
-    void* panel = lay->FindWindowByID(0x5b5ef50, 1);
-    RectF pr = *(RectF*)((RectF* (__thiscall*)(void*))((void**)*(void**)panel)[0x38 / 4])(panel);
+    float baseX;
+    void* spanWin;
+    if (!iconFirst) {
+        RectF aR = *(RectF*)((RectF* (__thiscall*)(void*))((void**)*(void**)icon)[0x38 / 4])(icon);
+        RectF* rb = (RectF*)((RectF* (__thiscall*)(void*))((void**)*(void**)label)[0x38 / 4])(label);
+        RectF nb = *rb;
+        nb.left   = aR.left;
+        nb.right  = (rb->right - rb->left) + aR.left;
+        nb.bottom = (rb->bottom - rb->top) + rb->top;
+        ((void (__thiscall*)(void*, const RectF*))((void**)*(void**)label)[0x6c / 4])(label, &nb);
 
-    float shift = (lr.left + leftEdge) * 0.5f - (pr.right - pr.left) * 0.5f;
+        float right = ((RectF*)((RectF* (__thiscall*)(void*))((void**)*(void**)label)[0x38 / 4])(label))->right + 3.0f;
+        aR.right  = (aR.right - aR.left) + right;
+        aR.left   = right;
+        aR.bottom = (aR.bottom - aR.top) + aR.top;
+        ((void (__thiscall*)(void*, const RectF*))((void**)*(void**)icon)[0x6c / 4])(icon, &aR);
 
-    RectF io = *(RectF*)((RectF* (__thiscall*)(void*))((void**)*(void**)icon)[0x38 / 4])(icon);
-    io.left  = io.left - shift;
-    io.right = (io.right - (io.left + shift)) + io.left;
-    io.bottom = (io.bottom - io.top) + io.top;
+        baseX = ((RectF*)((RectF* (__thiscall*)(void*))((void**)*(void**)label)[0x38 / 4])(label))->left;
+        spanWin = icon;
+    } else {
+        baseX = ((RectF*)((RectF* (__thiscall*)(void*))((void**)*(void**)icon)[0x38 / 4])(icon))->left;
+        spanWin = label;
+    }
+    float spanRight = ((RectF*)((RectF* (__thiscall*)(void*))((void**)*(void**)spanWin)[0x38 / 4])(spanWin))->right;
+
+    void* panel = ((Layout*)at<void*>(this, 0x2c))->FindWindowByID(0x5b5ef50, 1);
+    RectF* pr = (RectF*)((RectF* (__thiscall*)(void*))((void**)*(void**)panel)[0x38 / 4])(panel);
+    float shift = (spanRight + baseX) * 0.5f - (pr->right - pr->left) * 0.5f;
+
+    RectF ia = *(RectF*)((RectF* (__thiscall*)(void*))((void**)*(void**)icon)[0x38 / 4])(icon);
+    ia.left   = ia.left - shift;
+    ia.right  = (ia.right - (ia.left + shift)) + ia.left;
+    ia.bottom = (ia.bottom - ia.top) + ia.top;
     ((void (__thiscall*)(void*, const RectF*))
-     ((void**)*(void**)icon)[0x6c / 4])(icon, &io);
+     ((void**)*(void**)icon)[0x6c / 4])(icon, &ia);
 
-    RectF lo = *(RectF*)((RectF* (__thiscall*)(void*))((void**)*(void**)label)[0x38 / 4])(label);
-    lo.left  = lo.left - shift;
-    lo.right = (lo.right - (lo.left + shift)) + lo.left;
+    RectF la = *(RectF*)((RectF* (__thiscall*)(void*))((void**)*(void**)label)[0x38 / 4])(label);
+    la.left   = la.left - shift;
+    la.right  = (la.right - (la.left + shift)) + la.left;
+    la.bottom = (la.bottom - la.top) + la.top;
     ((void (__thiscall*)(void*, const RectF*))
-     ((void**)*(void**)label)[0x6c / 4])(label, &lo);
+     ((void**)*(void**)label)[0x6c / 4])(label, &la);
 }

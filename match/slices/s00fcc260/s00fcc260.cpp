@@ -10,15 +10,15 @@ namespace rw {
 // ---- node interface ----------------------------------------------------
 // A list node heap block: [vptr @0][pad @4][element data @8 ..].
 class IListNode { public:
-    virtual void*        GetData();              // +0x00
-    virtual int          SetData(void* p);       // +0x04
-    virtual void*        v08();                  // +0x08
-    virtual IListNode*   Next();                 // +0x0c
-    virtual void         SetNext(IListNode* n);  // +0x10
-    int pad4;                                    // +4
+    virtual void*        GetData();                                     // +0x00
+    virtual int          SetData(void* src, unsigned size, void* ctx);  // +0x04
+    virtual void*        v08();                                         // +0x08
+    virtual IListNode*   Next();                                        // +0x0c
+    virtual void         SetNext(IListNode* n);                         // +0x10
+    int pad4;                                                           // +4
 };
 class SNode : public IListNode { public:
-    char data[1];                                // +8
+    char data[1];                                                       // +8
 };
 
 // mAllocator vtable: +0x04 Alloc(size,tag,a,b,c), +0x0c Free(ptr,flag).
@@ -30,27 +30,60 @@ struct AllocVtbl {
 };
 struct IRWAllocator { AllocVtbl* vftable; };
 
-// Source object (Append/Prepend/Merge/...) vtable slots used:
-//   +0x28  GetIterator(a,b) -> iterator
-//   +0x3c  GetCount()       -> unsigned
-// Iterator vtable: +0x00 GetValue(), +0x0c Next().
-struct SrcVtbl {
-    void* (*v00)(void*);
-    void* (*v04)(void*);
-    void* (*v08)(void*);
-    void* (*v0c)(void*);
-    void* (*v10)(void*);
-    void* (*v14)(void*);
-    void* (*v18)(void*);
-    void* (*v1c)(void*);
-    void* (*v20)(void*);
-    void* (*v24)(void*);
-    void* (*GetIterator)(void*, int a, int b);   // +0x28
-    void* (*v2c)(void*);
-    void* (*v30)(void*);
-    void* (*v34)(void*);
-    void* (*v38)(void*);
-    unsigned (*GetCount)(void*);                 // +0x3c
+// Iterator over a source collection: +0x00 GetValue(), +0x0c Next().
+class IListIterator { public:
+    virtual void*          GetValue();      // +0x00
+    virtual void*          v04();           // +0x04
+    virtual void*          v08();           // +0x08
+    virtual IListIterator* Next();          // +0x0c
+};
+
+// Source object (Append/Prepend/Merge/...): +0x28 GetIterator(), +0x3c GetCount().
+class IListSource { public:
+    virtual void*          v00();           // +0x00
+    virtual void*          v04();           // +0x04
+    virtual void*          v08();           // +0x08
+    virtual void*          v0c();           // +0x0c
+    virtual void*          v10();           // +0x10
+    virtual void*          v14();           // +0x14
+    virtual void*          v18();           // +0x18
+    virtual void*          v1c();           // +0x1c
+    virtual void*          v20();           // +0x20
+    virtual void*          v24();           // +0x24
+    virtual IListIterator* GetIterator();   // +0x28
+    virtual void*          v2c();           // +0x2c
+    virtual void*          v30();           // +0x30
+    virtual void*          v34();           // +0x34
+    virtual void*          v38();           // +0x38
+    virtual unsigned       GetCount();      // +0x3c
+};
+
+// Comparison functor (slot 0) and removal callback (slot 0).
+class ICompare { public:
+    virtual int Compare(void* a, void* b);  // +0x00
+};
+class ICallback { public:
+    virtual void Invoke(void* data);        // +0x00
+};
+
+// Sort helper: slot 0 receives the node array, count, stride and an adapter.
+class ISorter { public:
+    virtual int Sort(void* array, unsigned count, unsigned stride, void* adapter);  // +0x00
+};
+struct SListSortAdapter {
+    void* vftable;                          // +0x00
+    void* cmp;                              // +0x04
+};
+
+// InvokeKey dispatches through three different objects.
+class IInvokeValue { public:
+    virtual void* Get();                    // +0x00
+};
+class IInvokeMap { public:
+    virtual void* Get(void* x);             // +0x00
+};
+class IInvokeStore { public:
+    virtual void  Set(void* x);             // +0x00
 };
 
 class SList { public:
@@ -63,29 +96,29 @@ class SList { public:
     unsigned        mUserAlignment;         // +0x18
 
     SList();                                                           // va 0x00fcce10
-    SNode* FindNode(const char* key, void** cmp);                      // va 0x00fcc260
+    SNode* FindNode(const void* key, ICompare* cmp);                   // va 0x00fcc260
     SNode* GetPrev(SNode* node);                                       // va 0x00fcc2e0
     char   IsMember(SNode* node);                                      // va 0x00fcc330
-    int    Append(SrcVtbl* src, int a);                                // va 0x00fcc370
-    int    Prepend(SrcVtbl* src, int a);                               // va 0x00fcc470
-    int    InsertBefore(SrcVtbl* src, SNode* at, int a);               // va 0x00fcc5c0
-    int    InsertAfter(SrcVtbl* src, SNode* at, int a);                // va 0x00fcc700
-    int    InsertAt(SrcVtbl* src, unsigned idx, int a);                // va 0x00fcc810
-    int    Merge(SrcVtbl* src, void** cmp);                            // va 0x00fcc960
+    int    Append(IListSource* src, void* ctx);                        // va 0x00fcc370
+    int    Prepend(IListSource* src, void* ctx);                       // va 0x00fcc470
+    int    InsertBefore(IListSource* src, SNode* at, void* ctx);       // va 0x00fcc5c0
+    int    InsertAfter(IListSource* src, SNode* at, void* ctx);        // va 0x00fcc700
+    int    InsertAt(IListSource* src, unsigned idx, void* ctx);        // va 0x00fcc810
+    int    Merge(IListSource* src, ICompare* cmp, void* ctx);          // va 0x00fcc960
     int    Remove(SNode* node, void** cb);                             // va 0x00fccae0
-    int    RemoveIf(void** key, void** cmp);                           // va 0x00fccb80
+    int    RemoveIf(void* key, ICompare* cmp, ICallback* cb);          // va 0x00fccb80
     void   Clear(void** cb);                                           // va 0x00fccc40
     int    Reverse();                                                  // va 0x00fccca0
     int    Permute(int* idx);                                          // va 0x00fccd00
     void*  Dtor(unsigned flags);                                       // va 0x00fccde0
     void   InvokeKey(void** a, void** b);                              // va 0x00fcce30
-    int    Sort(void** cmp);                                           // va 0x00fcce70
+    int    Sort(void* sorter, void* cmp);                              // va 0x00fcce70
     SNode* LoadNewNode(int a, int b);                                  // va 0x00fccf40
     void*  ScalarDeletingDtor(unsigned flags);                         // va 0x00fccfb0
     int    AppendOne(int a, int b);                                    // va 0x00fccfe0
     int    PrependOne(int a, int b);                                   // va 0x00fcd030
-    int    InsertBeforeOne(int a, int b, SNode* at);                   // va 0x00fcd080
-    int    InsertAfterOne(int a, int b, SNode* at);                    // va 0x00fcd120
+    int    InsertBeforeOne(int a, SNode* at, void* ctx);               // va 0x00fcd080
+    int    InsertAfterOne(int a, SNode* at, void* ctx);                // va 0x00fcd120
     int    InsertAtOne(int a, unsigned idx, int b);                    // va 0x00fcd170
 };
 
@@ -102,15 +135,30 @@ SList::SList()
 }
 
 // @ 0x00fcc260
-SNode* SList::FindNode(const char* key, void** cmp)
+SNode* SList::FindNode(const void* key, ICompare* cmp)
 {
     SNode* node = mHead;
     if (node == 0)
         return 0;
     for (;;) {
-        int (*fn)(void*, const char*, void*) = (int (*)(void*, const char*, void*))(*cmp);
-        if (fn(cmp, key, node->GetData()) == 0)
-            return node;
+        void* data = node->GetData();
+        if (cmp != 0) {
+            if (cmp->Compare((void*)key, data) == 0)
+                return node;
+        } else {
+            unsigned n = mElementSize;
+            bool same = true;
+            if (n == 0)
+                return node;
+            do {
+                if (!same)
+                    break;
+                --n;
+                same = *(const unsigned char*)data == *(const unsigned char*)key;
+            } while (n != 0);
+            if (same)
+                return node;
+        }
         node = (SNode*)node->Next();
         if (node == 0)
             return 0;
@@ -148,24 +196,24 @@ char SList::IsMember(SNode* node)
 }
 
 // @ 0x00fcc370
-int SList::Append(SrcVtbl* src, int a)
+int SList::Append(IListSource* src, void* ctx)
 {
     unsigned size;
-    void* it;
+    IListIterator* it;
     SNode* node;
     if (src == 0)
         return -1;
     size = mElementSize;
-    if (src->GetCount(src) < 1)
+    if (src->GetCount() < 1)
         return 0;
-    it = src->GetIterator(src, 0, 0);
+    it = src->GetIterator();
     if (it == 0)
         return 0;
     for (;;) {
         node = (SNode*)mAllocator->vftable->Alloc(mAllocator, size + 8, "SNode", 0, 4, 0);
         if (node == 0)
             return -1;
-        if (node->SetData((*(void* (**)(void*))it)(it)) == -1) {
+        if (node->SetData(it->GetValue(), size, ctx) == -1) {
             mAllocator->vftable->Free(mAllocator, node, 0);
             return -1;
         }
@@ -175,226 +223,222 @@ int SList::Append(SrcVtbl* src, int a)
             mTail->SetNext(node);
         ++mLength;
         mTail = node;
-        it = (*(void* (**)(void*))(*(char**)it + 0xc))(it);
+        it = it->Next();
         if (it == 0)
             return 0;
     }
 }
 
 // @ 0x00fcc470
-int SList::Prepend(SrcVtbl* src, int a)
+int SList::Prepend(IListSource* src, void* ctx)
 {
     unsigned size;
-    void* it;
+    IListIterator* it;
     SNode* node;
     SNode* prev;
+    SNode* last;
     if (src == 0)
         return -1;
     size = mElementSize;
-    if (src->GetCount(src) < 1)
+    if (src->GetCount() < 1)
         return 0;
     prev = mHead;
-    it = src->GetIterator(src, 0, 0);
+    it = src->GetIterator();
     node = 0;
+    last = 0;
     for (;;) {
         if (it == 0) {
             if (mTail == 0)
-                mTail = node;
+                mTail = last;
             return 0;
         }
         node = (SNode*)mAllocator->vftable->Alloc(mAllocator, size + 8, "SNode", 0, 4, 0);
         if (node == 0)
             return -1;
-        if (node->SetData((*(void* (**)(void*))it)(it)) == -1) {
+        if (node->SetData(it->GetValue(), size, ctx) == -1) {
             mAllocator->vftable->Free(mAllocator, node, 0);
             return -1;
         }
         node->SetNext(prev);
         if (mHead == 0)
             mHead = node;
-        else if (prev == 0)
+        else if (last == 0)
             mHead = node;
         else
-            prev->SetNext(node);
+            last->SetNext(node);
         ++mLength;
-        prev = node;
-        it = (*(void* (**)(void*))(*(char**)it + 0xc))(it);
+        last = node;
+        it = it->Next();
     }
 }
 
 // @ 0x00fcc5c0
-int SList::InsertBefore(SrcVtbl* src, SNode* at, int a)
+int SList::InsertBefore(IListSource* src, SNode* at, void* ctx)
 {
     unsigned size;
     SNode* prev;
-    void* it;
+    IListIterator* it;
     SNode* first;
+    SNode* last;
     SNode* node;
-    if (src->GetCount(src) == 0)
+    if (src->GetCount() == 0)
         return 0;
     size = mElementSize;
     prev = GetPrev(at);
     if (prev == 0 && at != mHead)
         return -1;
-    it = src->GetIterator(src, 0, 0);
+    it = src->GetIterator();
     first = 0;
+    last = 0;
     while (it != 0) {
         node = (SNode*)mAllocator->vftable->Alloc(mAllocator, size + 8, "SNode", 0, 4, 0);
-        node->SetData((*(void* (**)(void*))it)(it));
+        node->SetData(it->GetValue(), size, ctx);
         if (first == 0)
             first = node;
         else
-            node->SetNext(first);
-        it = (*(void* (**)(void*))(*(char**)it + 0xc))(it);
+            last->SetNext(node);
+        last = node;
+        it = it->Next();
     }
     if (prev == 0) {
-        node = first;
-        first->SetNext(mHead);
-        node->SetNext(mHead);
+        last->SetNext(mHead);
         mHead = first;
     } else {
-        SNode* next = (SNode*)prev->Next();
+        last->SetNext(prev->Next());
         prev->SetNext(first);
-        first->SetNext(next);
     }
-    mLength += src->GetCount(src);
+    mLength += src->GetCount();
     return 0;
 }
 
 // @ 0x00fcc700
-int SList::InsertAfter(SrcVtbl* src, SNode* at, int a)
+int SList::InsertAfter(IListSource* src, SNode* at, void* ctx)
 {
     unsigned size;
-    void* it;
+    IListIterator* it;
     SNode* first;
-    SNode* node;
     SNode* last;
-    if (src->GetCount(src) == 0)
+    SNode* node;
+    if (src->GetCount() == 0)
         return 0;
     size = mElementSize;
-    it = src->GetIterator(src, 0, 0);
+    it = src->GetIterator();
     first = 0;
-    last = at;
+    last = 0;
     while (it != 0) {
         node = (SNode*)mAllocator->vftable->Alloc(mAllocator, size + 8, "SNode", 0, 4, 0);
-        node->SetData((*(void* (**)(void*))it)(it));
+        node->SetData(it->GetValue(), size, ctx);
         if (first == 0)
             first = node;
         else
-            node->SetNext(first);
-        it = (*(void* (**)(void*))(*(char**)it + 0xc))(it);
+            last->SetNext(node);
+        last = node;
+        it = it->Next();
     }
-    {
-        SNode* next = (SNode*)last->Next();
-        last->SetNext(first);
-        first->SetNext(next);
-    }
-    if (mTail == at) {
-        SNode* p = first;
-        while (p->Next() != 0)
-            p = (SNode*)p->Next();
-        mTail = p;
-    }
-    mLength += src->GetCount(src);
+    last->SetNext(at->Next());
+    at->SetNext(first);
+    if (mTail == at)
+        mTail = last;
+    mLength += src->GetCount();
     return 0;
 }
 
 // @ 0x00fcc810
-int SList::InsertAt(SrcVtbl* src, unsigned idx, int a)
+int SList::InsertAt(IListSource* src, unsigned idx, void* ctx)
 {
     unsigned size;
-    void* it;
+    IListIterator* it;
     SNode* first;
+    SNode* last;
     SNode* node;
     if (idx > mLength)
         return -1;
-    if (src->GetCount(src) < 1)
+    if (src->GetCount() < 1)
         return 0;
     size = mElementSize;
-    it = src->GetIterator(src, 0, 0);
+    it = src->GetIterator();
     first = 0;
+    last = 0;
     while (it != 0) {
         node = (SNode*)mAllocator->vftable->Alloc(mAllocator, size + 8, "SNode", 0, 4, 0);
-        node->SetData((*(void* (**)(void*))it)(it));
+        node->SetData(it->GetValue(), size, ctx);
         if (first == 0)
             first = node;
         else
-            node->SetNext(first);
-        it = (*(void* (**)(void*))(*(char**)it + 0xc))(it);
+            last->SetNext(node);
+        last = node;
+        it = it->Next();
     }
     if (idx == 0) {
-        first->SetNext(mHead);
+        last->SetNext(mHead);
         mHead = first;
     } else if (idx == mLength) {
-        mTail->SetNext(0);
-        mTail = first;
+        mTail->SetNext(first);
+        mTail = last;
     } else {
         SNode* (*getAt)(void*, unsigned) = (SNode* (*)(void*, unsigned))((*(void***)this)[0x30 / 4]);
         SNode* at = getAt(this, idx - 1);
-        SNode* next = (SNode*)at->Next();
-        first->SetNext(next);
+        last->SetNext(at->Next());
         at->SetNext(first);
     }
-    mLength += src->GetCount(src);
+    mLength += src->GetCount();
     return 0;
 }
 
 // @ 0x00fcc960
-int SList::Merge(SrcVtbl* src, void** cmp)
+int SList::Merge(IListSource* src, ICompare* cmp, void* ctx)
 {
     unsigned size;
-    void* it;
+    IListIterator* it;
     SNode* first;
+    SNode* last;
     SNode* node;
     SNode* a;
     SNode* prev;
-    if (src->GetCount(src) == 0)
+    if (src->GetCount() == 0)
         return 0;
     size = mElementSize;
-    it = src->GetIterator(src, 0, 0);
+    it = src->GetIterator();
     first = 0;
-    node = 0;
+    last = 0;
     while (it != 0) {
-        SNode* nn = (SNode*)mAllocator->vftable->Alloc(mAllocator, size + 8, "SNode", 0, 4, 0);
-        nn->SetData((*(void* (**)(void*))it)(it));
+        node = (SNode*)mAllocator->vftable->Alloc(mAllocator, size + 8, "SNode", 0, 4, 0);
+        node->SetData(it->GetValue(), size, ctx);
         if (first == 0)
-            first = nn;
+            first = node;
         else
-            node->SetNext(nn);
-        node = nn;
-        it = (*(void* (**)(void*))(*(char**)it + 0xc))(it);
+            last->SetNext(node);
+        last = node;
+        it = it->Next();
     }
     a = mHead;
     prev = 0;
     while (first != 0) {
         if (a == 0)
             break;
-        {
-            int (*fn)(void*, void*, void*) = (int (*)(void*, void*, void*))(*cmp);
-            int r = fn(cmp, a->GetData(), first->GetData());
-            if (r == -1) {
-                SNode* nx = (SNode*)first->Next();
-                first->SetNext(a);
-                if (prev == 0) {
-                    mHead = first;
-                    prev = first;
-                } else {
-                    prev->SetNext(first);
-                    prev = first;
-                }
-                first = nx;
+        if (cmp->Compare(first->GetData(), a->GetData()) == -1) {
+            SNode* nx = (SNode*)first->Next();
+            first->SetNext(a);
+            if (prev == 0) {
+                mHead = first;
+                prev = first;
             } else {
-                prev = a;
-                a = (SNode*)a->Next();
+                prev->SetNext(first);
+                prev = first;
             }
+            first = nx;
+        } else {
+            prev = a;
+            a = (SNode*)a->Next();
         }
     }
-    if (first != 0 || a != 0) {
-        SNode* tailNode = (first != 0) ? first : a;
-        if (prev != 0)
-            prev->SetNext(tailNode);
+    if (first != 0) {
+        mTail = last;
+        prev->SetNext(first);
+    } else if (a != 0) {
+        prev->SetNext(a);
     }
-    mLength += src->GetCount(src);
+    mLength += src->GetCount();
     return 0;
 }
 
@@ -427,41 +471,39 @@ int SList::Remove(SNode* node, void** cb)
 }
 
 // @ 0x00fccb80
-int SList::RemoveIf(void** key, void** cmp)
+int SList::RemoveIf(void* key, ICompare* cmp, ICallback* cb)
 {
     SNode* node = mHead;
     SNode* prev = 0;
-    while (node != 0) {
-        void* data = node->GetData();
-        int (*fn)(void*, void*) = (int (*)(void*, void*))(*cmp);
-        if (fn(key, data) == 0) {
-            SNode* nx;
-            if (key != 0) {
-                void (*cb)(void*) = (void (*)(void*))*key;
-                cb(data);
-            }
-            nx = (SNode*)node->Next();
-            if (prev == 0) {
-                mHead = nx;
-                if (mTail == node)
-                    mTail = nx;
-                mAllocator->vftable->Free(mAllocator, node, 0);
-                --mLength;
-                node = mHead;
-            } else {
-                prev->SetNext(nx);
-                if (mTail == node)
-                    mTail = prev;
-                mAllocator->vftable->Free(mAllocator, node, 0);
-                node = (SNode*)prev->Next();
-                --mLength;
-            }
-        } else {
+    for (;;) {
+        void* data;
+        if (node == 0)
+            return 0;
+        data = node->GetData();
+        if (cmp->Compare(key, data) != 0) {
             prev = node;
             node = (SNode*)node->Next();
+            continue;
+        }
+        if (cb != 0)
+            cb->Invoke(data);
+        if (prev == 0) {
+            SNode* nx = (SNode*)node->Next();
+            mHead = nx;
+            if (mTail == node)
+                mTail = nx;
+            mAllocator->vftable->Free(mAllocator, node, 0);
+            node = mHead;
+            --mLength;
+        } else {
+            prev->SetNext(node->Next());
+            if (mTail == node)
+                mTail = prev;
+            mAllocator->vftable->Free(mAllocator, node, 0);
+            node = (SNode*)prev->Next();
+            --mLength;
         }
     }
-    return 0;
 }
 
 // @ 0x00fccc40
@@ -553,21 +595,13 @@ void* SList::Dtor(unsigned flags)
 // @ 0x00fcce30
 void SList::InvokeKey(void** a, void** b)
 {
-    void* p = *a;
-    void* q = *b;
-    void** qv = *(void***)q;
-    void* h = mHead;
-    void** hv = *(void***)h;
-    void* (*f0)(void*) = (void* (*)(void*))*qv;
-    void* r0 = f0(qv);
-    void* (*f1)(void*, void*) = (void* (*)(void*, void*))*(void**)p;
-    void* r1 = f1(p, r0);
-    void  (*f2)(void*, void*) = (void  (*)(void*, void*))*hv;
-    f2(hv, r1);
+    void* r0 = ((IInvokeValue*)*b)->Get();
+    void* r1 = ((IInvokeMap*)*a)->Get(r0);
+    ((IInvokeStore*)mHead)->Set(r1);
 }
 
 // @ 0x00fcce70
-int SList::Sort(void** cmp)
+int SList::Sort(void* sorter, void* cmp)
 {
     unsigned* temp;
     SNode* node;
@@ -577,18 +611,19 @@ int SList::Sort(void** cmp)
         return 0;
     temp = (unsigned*)mAllocator->vftable->Alloc(mAllocator, mLength * 4, "SList::Sort temp", 0, 4, 0);
     node = mHead;
-    {
+    if (node != 0) {
         unsigned* p = temp;
-        while (node != 0) {
+        do {
             *p = (unsigned)node;
             node = (SNode*)node->Next();
             ++p;
-        }
+        } while (node != 0);
     }
     {
-        unsigned dummy = 0;
-        int (*fn)(void*, unsigned, int, unsigned*) = (int (*)(void*, unsigned, int, unsigned*))(*cmp);
-        rc = fn(cmp, mLength, 4, &dummy);
+        SListSortAdapter adapter;
+        adapter.vftable = (void*)0x1491fb8;
+        adapter.cmp = cmp;
+        rc = ((ISorter*)sorter)->Sort(temp, mLength, 4, &adapter);
     }
     if (rc == 0) {
         node = (SNode*)temp[0];
@@ -614,7 +649,7 @@ SNode* SList::LoadNewNode(int a, int b)
         return 0;
     *(void**)node = (void*)0x1491fa0;
     node->pad4 = 0;
-    if (node->SetData((void*)a) == -1) {
+    if (node->SetData((void*)a, mElementSize, (void*)b) == -1) {
         mAllocator->vftable->Free(mAllocator, node, 0);
         return 0;
     }
@@ -669,9 +704,9 @@ int SList::PrependOne(int a, int b)
 }
 
 // @ 0x00fcd080
-int SList::InsertBeforeOne(int a, int b, SNode* at)
+int SList::InsertBeforeOne(int a, SNode* at, void* ctx)
 {
-    SNode* node = LoadNewNode(a, b);
+    SNode* node = LoadNewNode(a, (int)ctx);
     if (at == mHead) {
         node->SetNext(mHead);
         ++mLength;
@@ -694,9 +729,9 @@ int SList::InsertBeforeOne(int a, int b, SNode* at)
 }
 
 // @ 0x00fcd120
-int SList::InsertAfterOne(int a, int b, SNode* at)
+int SList::InsertAfterOne(int a, SNode* at, void* ctx)
 {
-    SNode* node = LoadNewNode(a, b);
+    SNode* node = LoadNewNode(a, (int)ctx);
     node->SetNext(at->Next());
     at->SetNext(node);
     ++mLength;

@@ -1,1 +1,4 @@
 00ff9800 cSPSimPlanetHighLOD::ActivatePlanet  # descriptive (not PDB): thiscall on cSPSimPlanetHighLOD (+0x20 mSimulationStepTime=2000, +0x1b0 helper ptr, +0x1b4, +0x1b8 per ModAPI cSimPlanetHighLOD), arg cPlanet*, calls SpawnArtifact 0x00ff5d20
+00ff9390 Category_RefreshAll  # city vector 0x01041d50 + tribe vector 0x01041f00 + other-noun vector copy (AddRef/0x00ce8f70/Release, delete[])
+00ff9520 Category_RefreshCities  # city game-data vector, 0x010666a0/0x01067e60 context, 0x01041c30 + 0x01041d50 per city noun
+00ff95a0 Category_MedianFlag  # +0x340/+0x354 pair sums, sort via 0x00ff84f0, middle, writes +0x8a

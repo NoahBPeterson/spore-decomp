@@ -243,6 +243,20 @@ struct cTerrainSphere {
     void SetCloudType();                     // 0x00f9a590
 };
 
+// ---- float clamp ------------------------------------------------------------------------
+// The module's Min/Max are __asm helpers (docs/matching.md: /arch:SSE code), so the UV clamp
+// comes out as movss/maxss/minss over stack slots instead of a compare/branch sequence.
+static __forceinline float Clamp(float v, float lo, float hi)
+{
+    __asm {
+        movss xmm0, v
+        maxss xmm0, lo
+        minss xmm0, hi
+        movss v, xmm0
+    }
+    return v;
+}
+
 // ----------------------------------------------------------------------------------------
 // @ 0x00f99680
 void cTerrainSphere::InitializeVBInfoArray()
@@ -260,19 +274,21 @@ void cTerrainSphere::InitializeVBInfoArray()
     g_vb = vb;
     uint8_t stride = vb->mpDesc->mStride;
     float* verts = (float*)vb->D3D9Lock(2, stride * vb->mBase, stride * vb->mNumVerts);
-    g_vb = verts ? vb : 0;
-    if (g_vb) {
-        float inv = kOne / (float)dim;
+    if (verts == 0) {
+        vb = 0;
+    }
+    g_vb = vb;
+    if (vb) {
+        float one = kOne;
+        float inv = one / (float)dim;
         float lo = inv * kNegEighth;
-        float hi = inv * kEighth + kOne;
+        float hi = inv * kEighth + one;
         for (int i = 0; i < n; i++) {
             float tv = (float)(i - 1) / (float)dim;
-            tv = tv < lo ? lo : tv;
-            tv = tv > hi ? hi : tv;
+            tv = Clamp(tv, lo, hi);
             for (int j = 0; j < n; j++) {
                 float tu = (float)(j - 1) / (float)dim;
-                tu = tu < lo ? lo : tu;
-                tu = tu > hi ? hi : tu;
+                tu = Clamp(tu, lo, hi);
                 verts[0] = tu;
                 verts[1] = tv;
                 verts = (float*)((char*)verts + stride);
@@ -282,20 +298,20 @@ void cTerrainSphere::InitializeVBInfoArray()
     }
 
     g_ib = (RIdxBuf*)CreateIndexBuffer(&g_idxDesc, 1, idxCount, 8, 4, 0);
-    void* lock = 0;
+    void* lock;
     if (g_ib->Lock(2, &lock)) {
         uint16_t* p = (uint16_t*)lock;
         for (int i = 1; i <= dim; i++) {
-            int base = (uint16_t)(i + n);
+            uint16_t base = (uint16_t)(i + n);
             for (int k = 0; k < dim; k++) {
                 p[0] = (uint16_t)(base + 1);
                 p[1] = (uint16_t)(base + n + 1);
                 p[2] = (uint16_t)(base + n);
                 p[3] = (uint16_t)(base + n);
-                p[4] = (uint16_t)(base);
+                p[4] = base;
                 p[5] = (uint16_t)(base + 1);
                 p += 6;
-                base += n;
+                base += (uint16_t)n;
             }
         }
         g_ib->Unlock(&lock);
@@ -469,47 +485,46 @@ void cTerrainSphere::FUN_00f9a040(cTerrainSphere* p, void* arg1, float step, boo
     float negStep = -step;
     float scale = step * kTwo * kQuarter;
 
-    p->v2();                 // (slot 3) no-arg begin on the geometry object
+    p->GetMapSet();          // vtbl +0x0c: touch the map set before the faces
     p->v15((int)(size_t)arg1);
     p->v19(0);
 
     for (int face = 0; face < 6; face++) {
-        float coord[3];
-        int A, B, C;
-        switch (face) {
-        case 1:  coord[0] = step;    coord[1] = negStep; coord[2] = negStep; A = 1; B = 0; C = 2; break;
-        case 2:  coord[0] = negStep; coord[1] = negStep; coord[2] = step;    A = 0; B = 2; C = 1; break;
-        case 3:  coord[0] = negStep; coord[1] = negStep; coord[2] = negStep; A = 2; B = 0; C = 1; break;
-        case 4:  coord[0] = negStep; coord[1] = step;    coord[2] = negStep; A = 0; B = 1; C = 2; break;
-        case 5:  coord[0] = negStep; coord[1] = negStep; coord[2] = negStep; A = 0; B = 1; C = 2; break;
-        default: coord[0] = negStep; coord[1] = negStep; coord[2] = negStep; A = 0; B = 2; C = 1; break;
+        float coord[3] = { negStep, negStep, negStep };
+        int A = 0, B = 1, C = 2;
+        if (face == 1) {
+            coord[0] = step;
+            A = 1; B = 2; C = 0;
+        } else if (face == 2) {
+            coord[2] = step;
+        } else if (face == 3) {
+            A = 2; B = 1; C = 0;
+        } else if (face == 4) {
+            coord[1] = step;
+            A = 0; B = 2; C = 1;
+        } else if (face == 5) {
+            A = 0; B = 2; C = 1;
         }
 
         float perm[3];
         for (int i = 0; i <= 16; i++) {
             float tv = (float)i * scale + coord[A];
+            perm[A] = tv;
             if (i == 0) {
-                tv = tv + kEps1;
-                perm[A] = tv;
+                perm[A] = tv + kEps1;
             } else if (i == 16) {
-                tv = tv - kEps2;
-                perm[A] = tv;
-            } else {
-                perm[A] = tv;
+                perm[A] = perm[A] - kEps2;
             }
-            perm[B] = coord[B];
+            perm[C] = coord[C];
             for (int j = 0; j <= 16; j++) {
-                float tz = (float)j * scale + coord[C];
+                float tz = (float)j * scale + coord[B];
+                perm[B] = tz;
                 if (j == 0) {
-                    tz = tz + kEps1;
-                    perm[C] = tz;
+                    perm[B] = tz + kEps1;
                 } else if (j == 16) {
-                    tz = tz - kEps2;
-                    perm[C] = tz;
-                } else {
-                    perm[C] = tz;
+                    perm[B] = perm[B] - kEps2;
                 }
-                float len = sqrtf(perm[0] * perm[0] + perm[1] * perm[1] + perm[2] * perm[2]);
+                float len = sqrtf(perm[2] * perm[2] + perm[1] * perm[1] + perm[0] * perm[0]);
                 float inv = kOne / len;
                 float3 n;
                 n.x = perm[0] * inv;
@@ -545,14 +560,14 @@ void cTerrainSphere::FUN_00f9a040(cTerrainSphere* p, void* arg1, float step, boo
                     p->v25(3, idx);
                     p->v25(3, idx);
                     p->v25(3, idx + 0x11);
-                    p->v25(3, idx);
+                    p->v25(3, idx + 0x10);
                 } else {
                     p->v25(3, idx);
                     p->v25(3, idx - 1);
                     p->v25(3, idx + 0x10);
                     p->v25(3, idx + 0x10);
                     p->v25(3, idx + 0x11);
-                    p->v25(3, idx + 0x10);
+                    p->v25(3, idx);
                 }
                 p->v31();
                 idx++;

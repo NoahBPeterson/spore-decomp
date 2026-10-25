@@ -1,3 +1,4 @@
 # source  symbol  original VA  [flags override]
 slices/s00ec6e00/s00ec6e00.cpp  ?FUN_00ec6e70@@YAEH@Z  00ec6e70  /O2 /MD /Gy /EHsc /TP /arch:SSE
 slices/s00ec6e00/s00ec6e00.cpp  ?FUN_00ec70a0@@YAXH@Z  00ec70a0  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00ec6e00/s00ec6e00.cpp  ?FUN_00ec79f0@@YAPAHHH@Z  00ec79f0  /O2 /MD /Gy /EHsc /TP /arch:SSE

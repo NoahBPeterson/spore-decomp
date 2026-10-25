@@ -11,3 +11,6 @@
 00f47550 app-wide frame resync / teardown fan-out
 00f47580 CanvasProc::Run  # while flag: Canvas()->vfunc(0x84) loop
 00f475b0 ?Elapsed@Timer@@QAEHXZ  # Timer::Elapsed migrated from s00f46560 (verbatim, slice spelling)
+00f46cf0 cOnlineTab::FUN_00f46cf0  # thiscall (int,int,int,int); tab URL/name builder
+00f47080 cScreen::FUN_00f47080  # thiscall (int visible); shows/hides 4 named child windows
+00f47170 cScreen::FUN_00f47170  # thiscall (int,int); screen show/hide + child refresh

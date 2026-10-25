@@ -1,0 +1,18 @@
+# nonmatching: complete, compiling reconstructions that are behaviourally
+# equivalent to the original but not byte-exact.
+# fields: <va> <diff-bytes> <flags> <difftest> <reason>
+00b930c0 177 /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast UNSUPPORTED complete StreamAPI batch-walk reconstruction; 0/400 valid inputs because every test needs a live StreamAPI vtable (fault(read) 378). Diff is register allocation + loop-form only.
+00b931c0 130 /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast WEAK complete cGameEditModeStrategy::LoadScenario; 188 valid, 31.8% coverage (noun-manager/refcount vtable calls fault out). Ours 212B vs 209B; register assignment of type/id is swapped and the noun-slot release uses ebp/edi differently.
+00b932a0 477 /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast PASS complete surface-step reconstruction; 237 valid, 98.3% coverage. x87 1/sqrt from double sqrt() and the binary-search loop match; ours 672B vs 679B (xmm scheduling/local reuse).
+00b93550 108 /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast PASS complete banner/terraform population target; 381 valid, 100% coverage. cvtss2si round-to-nearest-even reproduced with the 1.5*2^23 magic-constant idiom (cvtss2si itself is not expressible without intrinsics); ours 168B vs 137B.
+00b935e0 387 /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast WEAK complete closest-pair scan; 231 valid, 35.2% coverage (array elements need live vtables). Ours 395B vs 366B.
+00b93750 161 /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast PASS complete GetRandomColor retry loop; 239 valid, 60.6% coverage. Ours 170B vs 186B (retry loop form).
+00b938d0 6 /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast PASS complete property float3 reader; 397 valid, 82.2% coverage. Only 6 bytes differ: original keeps prop in ecx / src in eax and schedules the fld one instruction later; both are register-allocator choices.
+00b939f0 133 /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast WEAK complete bucket-array rebuild; 92 valid, 71.9% coverage (old bucket chains release through vtables). Ours 151B vs 159B.
+00b93a90 113 /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast WEAK complete binary-heap sift-down; 174 valid, 39.4% coverage (pool/vtable faults). Ours 251B vs 271B.
+00b93ba0 44 /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast WEAK complete +0x34 sub-object vcall helper; 59 valid, 38.7% coverage. Ours 76B vs 77B; original loads the vtable directly from [obj+0x34] into edx before forming the this pointer, cl keeps the this pointer in ecx first.
+00b93bf0 62 /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast UNSUPPORTED complete +0x34 sub-object vcall helper variant; 0/400 valid inputs because the element array and its objects need live vtables (fault(read) 371). Ours 109B vs 110B.
+00b93cc0 141 /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast WEAK complete slot[-1] refcount move + re-heapify; 113 valid, 72.2% coverage (pool faults). Ours 165B vs 183B.
+00b93dc0 291 /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast UNSUPPORTED complete property-driven stage getter (modes 0..3, PropertyManager vtable+0x2c/+0x24, release ordering); 0/400 valid inputs (fault(read) 400) because the global PropertyManager's real vtable is dereferenced. Ours 376B vs 380B.
+00b93f40 289 /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast UNSUPPORTED complete Execute/create-noun path (field init, BuildSurfaceOrientation, LoadScenario); 0/400 valid inputs (fault(read) 340, fault(write) 58) because the created noun/self object needs a live vtable. Ours 328B vs 331B.
+00b94090 164 /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast UNSUPPORTED complete create-noun + +0x34 vtable 0x38/0x3c calls with type gating; 0/400 valid inputs (fault(read) 354, fault(write) 39) because the parent noun needs a live vtable. Ours 188B vs 190B.

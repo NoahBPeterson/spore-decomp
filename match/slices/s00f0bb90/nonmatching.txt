@@ -3,3 +3,4 @@
 00f0c000  453  complete reconstruction; slot find/swap and unrolled count loops differ
 00f0c290  53  complete reconstruction; register allocator hoists esi prologue (source-shape difference)
 00f0c310  628  complete reconstruction; x87/SSE float scheduling differs
+00f0c680  617  complete reconstruction; bool __stdcall handler with inlined slot helper; residual esi/ecx regalloc, branch polarity on audio null check, loop-alignment nop and push-cleanup scheduling; equiv WEAK

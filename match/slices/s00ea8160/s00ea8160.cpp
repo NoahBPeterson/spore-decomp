@@ -2,6 +2,7 @@
 // registers every creature-ability handler with the audio system and finally the layer object.
 #include "types.h"
 #include <stddef.h>
+#include <math.h>
 
 void* __cdecl operator new(size_t size, const char* name, int a, int b, int c, int d);   // 0xf473a0
 
@@ -100,7 +101,7 @@ struct C_00ea4fd0 { uint32_t pad[3]; C_00ea4fd0(); };   // 0xea4fd0
 // EA::Audio system (GetSystemAT): handlers are registered at slot 6.
 struct cAudioAT {
     virtual void s0(); virtual void s1(); virtual void s2(); virtual void s3();
-    virtual float* GetListenerPos();        // +0x10
+    virtual float* GetListenerPos(int flag);  // +0x10
     virtual void s5();
     virtual void Register(void* handler);   // +0x18
 };
@@ -299,12 +300,14 @@ struct AudioObj {
     int field04;                             // +0x04
     char pad08[0x18 - 0x08];
     IRefCounted* field18;                    // +0x18
-    char pad1c[0x24 - 0x1c];
+    char pad1c[0x20 - 0x1c];                 // +0x1c..+0x1f
+    int  m20;                                // +0x20
     float f24;                               // +0x24
     float f28;                               // +0x28
     float f2c;                               // +0x2c
     float f30;                               // +0x30
     float f34;                               // +0x34
+    void FUN_00a16ed0(float f, int a);       // 0x00a16ed0
     bool FUN_00ea8ed0();
     void FUN_00ea8af0(float f, int a);
     void FUN_00ea8c30(float f, int a);
@@ -340,17 +343,170 @@ bool AudioObj::FUN_00ea8ed0()
     return true;
 }
 
-void __cdecl FUN_00a16ed0(float f, void* self, int arg); // 0xa16ed0
+// ---------------------------------------------------------------------------
+// Listener-distance helpers (0xea8af0 / 0xea8c30)
+// ---------------------------------------------------------------------------
+// The original inlines an x87 fsqrt for the distance reductions.
+#pragma intrinsic(sqrt)
+static inline float Sqrt(float x) { return (float)sqrt((double)x); }
+
+// A three-component difference: the by-value return makes the compiler
+// materialise the components (SSE subtracts) before the x87 reduction.
+struct Vec3f { float x, y, z; };
+static Vec3f SubVec(const Vec3f& a, const Vec3f& b)
+{
+    Vec3f r;
+    r.x = a.x - b.x;
+    r.y = a.y - b.y;
+    r.z = a.z - b.z;
+    return r;
+}
+static float LengthVec(Vec3f v)
+{
+    return (float)sqrt((double)v.x * v.x + ((double)v.y * v.y + (double)v.z * v.z));
+}
+
+void __cdecl FUN_00cd7d10();          // 0x00cd7d10
+void __cdecl FUN_00d3d420();          // 0x00d3d420
+void __cdecl FUN_00acdff0();          // 0x00acdff0
+void __cdecl FUN_00bf6e00();          // 0x00bf6e00
+void __cdecl FUN_00b1e500();          // 0x00b1e500
+
+extern const char g_GameModeTribe;    // 0x01654c04
+extern const char g_LocationTribe;    // 0x01654c05
+extern const char g_Mode2;            // 0x01654c02
+
+// sApp (0x15fd8b0): the virtual at +0x38 returns the current location/mode tag.
+struct IApp {
+    virtual void a00(); virtual void a04(); virtual void a08(); virtual void a0c();
+    virtual void a10(); virtual void a14(); virtual void a18(); virtual void a1c();
+    virtual void a20(); virtual void a24(); virtual void a28(); virtual void a2c();
+    virtual void a30(); virtual void a34();
+    virtual const void* GetLocation();          // +0x38
+};
+IApp* __cdecl App();                            // 0x0067dd10
+
+// An object whose vtable slot +0x2c returns its world position.
+struct IPositioned {
+    virtual void p00(); virtual void p04(); virtual void p08(); virtual void p0c();
+    virtual void p10(); virtual void p14(); virtual void p18(); virtual void p1c();
+    virtual void p20(); virtual void p24(); virtual void p28();
+    virtual float* GetPos();                    // +0x2c
+};
+
+struct cTribe {
+    char pad00[0x120];                          // +0x00..+0x11f
+    IPositioned mPos;                           // +0x120
+    int GetAdultPopulation();                   // 0x00c8f370
+};
+
+struct cRelationshipManager {
+    float RelationshipBetween(void* a, void* b, void* c);   // 0x00d00d60
+};
+cRelationshipManager* __cdecl RelationshipManager();        // 0x00b3d2c0
+
+struct cGameNounManager {
+    int* GetGameDataVector(void (*a)(), void (*b)(), void (*c)(), void (*d)(), const void* tag);   // 0x00b21340
+    cTribe* GetPlayerTribe();                   // 0x00bfc5f0
+};
+cGameNounManager* __cdecl NounManager();        // 0x00b3d300
+
+// Ability object returned by the 0xea7040 lookup (position sub-object at +0x120).
+struct AbilityA {
+    char pad00[0x120];                          // +0x00..+0x11f
+    IPositioned mPos;                           // +0x120
+};
+// Ability object returned by the 0xea5440 lookup (own vtable + a position sub-object at +0x34).
+struct IAbilityB {
+    virtual void b00(); virtual void b04(); virtual void b08(); virtual void b0c();
+    virtual void b10(); virtual void b14(); virtual void b18(); virtual void b1c();
+    virtual void b20(); virtual void b24(); virtual void b28(); virtual void b2c();
+    virtual void b30(); virtual void b34(); virtual void b38(); virtual void b3c();
+    virtual void b40(); virtual void b44(); virtual void b48(); virtual void b4c();
+    virtual void b50(); virtual void b54(); virtual void b58();
+    virtual cTribe* GetTribe();                 // +0x5c
+};
+struct AbilityB : IAbilityB {
+    char pad04[0x30];                           // +0x04..+0x33
+    IPositioned mPos;                           // +0x34
+};
+
+AbilityA* __cdecl Ability_7040(int* vec, float* pos, int id);   // 0x00ea7040
+AbilityB* __cdecl Ability_5440(int* vec, float* pos, int id);   // 0x00ea5440
 
 // @ 0x00ea8af0
 void AudioObj::FUN_00ea8af0(float f, int a)
 {
-    FUN_00a16ed0(f, this, a);
-    SetVolume(3.402823466e38f);
+    FUN_00a16ed0(f, a);
+
+    float volume = 3.402823466e38f;             // FLT_MAX
+    const void* loc = App()->GetLocation();
+    if (loc == (const void*)&g_GameModeTribe || loc == (const void*)&g_LocationTribe) {
+        float* p = GetSystemAT()->GetListenerPos(0);
+        float pos[3];
+        pos[0] = p[0];
+        pos[1] = p[1];
+        pos[2] = p[2];
+
+        cGameNounManager* nm = NounManager();
+        int* vec = nm->GetGameDataVector(FUN_00cd7d10, FUN_00d3d420,
+                                         FUN_00acdff0, FUN_00b1e500,
+                                         (const void*)0x018c43e8);
+        AbilityA* ab = Ability_7040(vec + 1, pos, 0x00ea7020);
+        if (ab != 0) {
+            float* q = ab->mPos.GetPos();
+            Vec3f pv = { pos[0], pos[1], pos[2] };
+            Vec3f qv = { q[0], q[1], q[2] };
+            Vec3f d = SubVec(qv, pv);
+            volume = LengthVec(d);
+        }
+    }
+    SetVolume(volume);
 }
 
 // @ 0x00ea8c30
 void AudioObj::FUN_00ea8c30(float f, int a)
 {
-    FUN_00a16ed0(f, this, a);
+    FUN_00a16ed0(f, a);
+
+    if (App()->GetLocation() != (const void*)&g_Mode2)
+        return;
+
+    cGameNounManager* nm = NounManager();
+    cRelationshipManager* rel = RelationshipManager();
+    if (nm == 0 || rel == 0)
+        return;
+
+    float* p = GetSystemAT()->GetListenerPos(0);
+    float pos[3];
+    pos[0] = p[0];
+    pos[1] = p[1];
+    pos[2] = p[2];
+
+    int* vec = nm->GetGameDataVector(FUN_00cd7d10, FUN_00d3d420,
+                                     FUN_00bf6e00, FUN_00b1e500,
+                                     (const void*)0x01e4daae);
+    AbilityB* ab = Ability_5440(vec + 1, pos, 0x00ea5420);
+    cTribe* owner = nm->GetPlayerTribe();
+    if (ab == 0 || owner == 0)
+        return;
+
+    f2c = (float)(unsigned)owner->GetAdultPopulation();
+
+    float* q1 = owner->mPos.GetPos();
+    float dx1 = pos[0] - q1[0];
+    float dy1 = pos[1] - q1[1];
+    float dz1 = pos[2] - q1[2];
+    f24 = Sqrt(dx1 * dx1 + dy1 * dy1 + dz1 * dz1);
+
+    cTribe* other = ab->GetTribe();
+    f30 = (float)(unsigned)other->GetAdultPopulation();
+
+    float* q2 = ab->mPos.GetPos();
+    float dx2 = pos[0] - q2[0];
+    float dy2 = pos[1] - q2[1];
+    float dz2 = pos[2] - q2[2];
+    f28 = Sqrt(dx2 * dx2 + dy2 * dy2 + dz2 * dz2);
+
+    f34 = rel->RelationshipBetween(ab->GetTribe(), owner, (void*)1);
 }

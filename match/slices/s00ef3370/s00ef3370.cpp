@@ -26,37 +26,39 @@ extern int   VTABLE_0148b194;               /* 0x0148b194 */
 extern int   VTABLE_013eb394;               /* 0x013eb394 */
 extern int   VTABLE_0148b208;               /* 0x0148b208 */
 
-extern int   FUN_00985e40(void);            /* 0x00985e40 */
-extern uint  FUN_00ebbf60(void);            /* 0x00ebbf60 */
-extern void *SP_AssetBrowser(void);         /* 0x00f0e260 SP::AssetBrowser */
-extern char  FUN_00ed8130(int a, int b, int c); /* 0x00ed8130 */
-extern char  SP_cSPAssetDataList_SetAssetData(int a, int b); /* SetAssetData */
-extern uint  AutoRefCount_AsPPTypeParam(void);
+extern int   __fastcall FUN_00985e40(void *self);            /* 0x00985e40 */
+extern uint  __fastcall FUN_00ebbf60(uint self);              /* 0x00ebbf60 */
+extern void *FUN_00401030(void);            /* 0x00401030 SP::AssetBrowser */
+struct Tri3 { int a, b, c; };               /* 12-byte record passed by value */
+extern char  __fastcall FUN_00ed8130(void *self, struct Tri3 v); /* 0x00ed8130 */
+extern char  FUN_004bbe20(int list, int b); /* 0x004bbe20 cSPAssetDataList::SetAssetData */
+extern uint  __fastcall FUN_00a16f40(void **self);           /* 0x00a16f40 */
 extern char  FUN_00552450(int *a, uint b);  /* 0x00552450 */
-extern char  FUN_00550970(void);            /* 0x00550970 */
-extern void *SP_MessageServer(void);        /* 0x0067dcc0 */
-extern int   FUN_00ed4e30(void);            /* 0x00ed4e30 */
-extern void *SP_NounManager(void);          /* 0x00b3d300 */
-extern int   SP_cGameNounManager_GetAvatar(void *mgr); /* 0x00b1fdb0 */
-extern void *SP_ObjectTemplateDB(void);     /* 0x0067cb40 */
-extern void *ResourceMan_GetManager(void);  /* 0x0067dcd0 */
-extern void  operator_delete(void *p);      /* 0x00f47380 */
+extern char  __fastcall FUN_00550970(void *self);            /* 0x00550970 */
+extern void *FUN_0067dcc0(void);            /* 0x0067dcc0 message server */
+extern int   __fastcall FUN_00ed4e30(void *self);            /* 0x00ed4e30 */
+extern void *FUN_00b3d300(void);            /* 0x00b3d300 noun manager */
+extern uint  __fastcall FUN_00b1fdb0(void *self);            /* 0x00b1fdb0 GetAvatar */
+extern void *FUN_0067cb40(void);            /* 0x0067cb40 ObjectTemplateDB */
+extern void *FUN_0067dcd0(void);            /* 0x0067dcd0 resource manager */
+extern void  FUN_00f47380(void *p);         /* 0x00f47380 EA free */
+extern char  __fastcall FUN_00f2b270(void *self, void *dummy, int flags); /* 0x00f2b270 */
 extern void __fastcall FUN_00ed6b00(void *self);  /* 0x00ed6b00 Panel::Deactivate2 */
 extern void __fastcall FUN_00ed6a10(void *self);  /* 0x00ed6a10 Panel::Activate2 */
 extern void  FUN_00f039a0(int a);           /* 0x00f039a0 cdecl */
 extern void  FUN_00eff790(int a);           /* 0x00eff790 cdecl */
-extern void __fastcall FUN_00ef1ca0(void *self);  /* 0x00ef1ca0 */
-extern void  FUN_00f31c20(int a);           /* 0x00f31c20 */
-extern uint  FUN_00f37b20(void);            /* 0x00f37b20 */
-extern uint  FUN_00f37a40(int *p, int b);   /* 0x00f37a40 */
+extern uint __fastcall FUN_00ef1ca0(void *self);  /* 0x00ef1ca0 */
+extern void  __fastcall FUN_00f31c20(void *self, void *dummy, int a); /* 0x00f31c20 */
+extern uint  __fastcall FUN_00f37b20(void *self);                     /* 0x00f37b20 */
+extern uint  __fastcall FUN_00f37a40(void *self, void *dummy, int *p, int b); /* 0x00f37a40 */
 extern void __fastcall FUN_004e39a0(void *self, void *dummy, void *a, void *b); /* 0x004e39a0 */
 extern void __fastcall FUN_004e39d0(void *self, void *dummy, void *end, void *val); /* 0x004e39d0 */
 extern void __fastcall FUN_00606880(void *dst, void *dummy, void *src); /* 0x00606880 */
 extern void __fastcall FUN_006066f0(void *self);   /* 0x006066f0 Constraint dtor */
 
 /* Constraint ctor: thiscall(this, key, eq, value) */
-extern void *Constraint_ctor_eq(void *self, void *dummy, int key, int eq, int val); /* 0x00558960 */
-extern void *Constraint_ctor_ne(void *self, void *dummy, int key, int eq, int val); /* 0x00558a20 */
+extern void *__fastcall Constraint_ctor_eq(void *self, void *dummy, int key, int eq, int val); /* 0x00558960 */
+extern void *__fastcall Constraint_ctor_ne(void *self, void *dummy, int key, int eq, int val); /* 0x00558a20 */
 
 /* 0x00ef3a60 helpers */
 extern uchar FUN_008068d0(void *txt, int img, int last); /* 0x008068d0 cdecl */
@@ -110,123 +112,157 @@ struct AutoRefCountAssign { void *op(void *src); };
     ((void (__thiscall *)(void *, int, int))                                   \
         (*(void ***)*(void **)(self + (off)))[0x1f])(*(void **)(self + (off)), (a), (b))
 
+/* Fields of the IMsgHandler object (SP::cSPUIAssetView) touched by this handler. */
+struct AssetView {
+    char  pad00[0x10];
+    void *mpData;               /* +0x10 panel / asset data object */
+    void *mpQueryTarget;        /* +0x14 target of the asset queries */
+    char  pad18[0x6c - 0x18];
+    uint  mAssetId;             /* +0x6c */
+    char  pad70[0xa4 - 0x70];
+    uchar mQueryPending;        /* +0xa4 */
+    char  padA5[0xc8 - 0xa5];
+    int   mAssetView;           /* +0xc8 */
+};
+
+/* Reference-counted pointer handed out by the asset lookups: vtable[1] releases,
+ * vtable[3] resolves a type hash. */
+struct RefPtr {
+    void *mpObj;
+    /* Drop a reference carried in from an earlier lookup, then clear the slot. */
+    void Release()
+    {
+        void *o = mpObj;
+        if (o != 0) {
+            ((void (__thiscall *)(void *))(*(void ***)o)[1])(o);
+        }
+    }
+    void *Query(uint id)
+    {
+        return ((void *(__thiscall *)(void *, uint))(*(void ***)mpObj)[3])(mpObj, id);
+    }
+};
+
 // @ 0x00ef3370
-uint __fastcall FUN_00ef3370(char *self, void *dummy, int msg, int *param_3)
+char __fastcall FUN_00ef3370(AssetView *self, void *dummy, uint msg, int *param_3)
 {
     int *vec;
     int *it;
     int *end;
-    void *par;
-    int *obj;
+    uchar found;
     uint uVar4;
     struct ConstraintVec list;
-    struct Constraint tmp;
+    struct Constraint src1;
+    struct Constraint src2;
+    struct Constraint src3;
     void *db;
     void *mgr;
     int n;
     int i;
-    int local;
+    int key;
 
     switch (msg) {
     case 0x074baf67:
-        if ((FUN_00985e40() == 1) && ((param_3[2] == 0) || (param_3[2] == 2))) {
-            return FUN_00ebbf60() & 0xffffff00;
+        if ((FUN_00985e40(self->mpData) == 1) && ((param_3[2] == 0) || (param_3[2] == 2))) {
+            FUN_00ebbf60(self->mAssetId);
+            return 0;
         }
         break;
     case 0x05132389:
-        if (*(int *)(self + 200) == 1) {
-            par = SP_AssetBrowser();
-            if ((par == 0) || (*(char *)((char *)par + 0x1c) == 0)) {
+        if (self->mAssetView == 1) {
+            if ((FUN_00401030() == 0) || (*(char *)((char *)FUN_00401030() + 0x1c) == 0)) {
                 vec = (int *)*param_3;
                 it = (int *)*vec;
                 end = (int *)vec[1];
-                if (it != end) {
-                    while ((*(int *)(self + 0x10) == 0) ||
-                           (FUN_00ed8130(it[0], it[1], it[2]) == 0)) {
-                        it += 3;
-                        if (it == end) {
-                            return 0;
-                        }
+                while (it != end) {
+                    if (self->mpData != 0 && FUN_00ed8130(self->mpData, *(struct Tri3 *)it) != 0) {
+                        break;
                     }
+                    it += 3;
                 }
             }
         }
         break;
     case 0x04249453:
-        if (SP_cSPAssetDataList_SetAssetData(param_3[2], 0) != 0) {
-            n = param_3[8] != 0;
-            if (n == 0) {
-                uVar4 = AutoRefCount_AsPPTypeParam();
-                if ((FUN_00552450(param_3 + 6, uVar4) != 0) && (FUN_00550970() != 0)) {
-                    n = 1;
+        key = param_3[6];
+        if (FUN_004bbe20(param_3[2], 0) != 0) {
+            found = (param_3[8] != 0);
+            if (found == 0) {
+                RefPtr tp;
+                tp.mpObj = 0;
+                uVar4 = FUN_00a16f40(&tp.mpObj);
+                if ((FUN_00552450(&key, uVar4) != 0) && (FUN_00550970(tp.mpObj) != 0)) {
+                    found = 1;
                 }
-                if (n == 0) {
+                tp.Release();
+                if (found == 0) {
                     break;
                 }
             }
-            if (*(char *)(self + 0xa4) == 0) {
-                obj = (int *)SP_MessageServer();
+            if (self->mQueryPending == 0) {
+                void *srv = FUN_0067dcc0();
                 uVar4 = ((uint (__fastcall *)(void *, void *, int, int, int, int))
-                             (*(void ***)obj)[6])(obj, 0, 0x07fb11b4, 0, 0, 0);
-                *(char *)(self + 0xa4) = 1;
-                return uVar4 & 0xffffff00;
+                             (*(void ***)srv)[6])(srv, 0, 0x07fb11b4, 0, 0, 0);
+                self->mQueryPending = 1;
+                return 0;
             }
         }
         break;
     case 0x0462c656:
-        if (FUN_00ed4e30() == 0x07eaf739) {
-            DAT_015acc30 = 1;
-            return 0x07eaf700;
+        if (FUN_00ed4e30(self->mpData) == 0x07eaf739) {
+            *(uchar *)&DAT_015acc30 = 1;
+            return 0;
         }
         break;
-    case 0x073e8559:
-        uVar4 = SP_cGameNounManager_GetAvatar(SP_NounManager());
-        if (uVar4 != 0) {
-            *(char *)(uVar4 + 0x131) = 0;
-            return uVar4 & 0xffffff00;
+    case 0x073e8559: {
+        void *avatar = (void *)FUN_00b1fdb0(FUN_00b3d300());
+        if (avatar != 0) {
+            *(char *)((char *)avatar + 0x131) = 0;
+            return 0;
         }
         break;
+    }
     case 0x07fb11b4:
-        db = SP_ObjectTemplateDB();
+        db = FUN_0067cb40();
         list.begin = 0;
         list.end = 0;
         list.cap = 0;
 
-        Constraint_ctor_eq(&tmp, 0, 0x02dd90af, 0, 0x366a930d);
+        Constraint_ctor_eq(&src1, 0, 0x02dd90af, 0, 0x366a930d);
         if (list.end < list.cap) {
             struct Constraint *e = list.end;
             list.end = e + 1;
             if (e != 0) {
-                FUN_00606880(e, 0, &tmp);
+                FUN_00606880(e, 0, &src1);
             }
         } else {
-            FUN_004e39d0(&list, 0, list.end, &tmp);
+            FUN_004e39d0(&list, 0, list.end, &src1);
         }
-        FUN_006066f0(&tmp);
+        FUN_006066f0(&src1);
 
-        Constraint_ctor_eq(&tmp, 0, 0x54a32960, 0, 1);
+        Constraint_ctor_eq(&src2, 0, 0x54a32960, 0, 1);
         if (list.end < list.cap) {
             struct Constraint *e = list.end;
             list.end = e + 1;
             if (e != 0) {
-                FUN_00606880(e, 0, &tmp);
+                FUN_00606880(e, 0, &src2);
             }
         } else {
-            FUN_004e39d0(&list, 0, list.end, &tmp);
+            FUN_004e39d0(&list, 0, list.end, &src2);
         }
-        FUN_006066f0(&tmp);
+        FUN_006066f0(&src2);
 
-        Constraint_ctor_ne(&tmp, 0, 0x03cc89b1, 0, 0x913b23be);
+        Constraint_ctor_ne(&src3, 0, 0x03cc89b1, 0, 0x913b23be);
         if (list.end < list.cap) {
             struct Constraint *e = list.end;
             list.end = e + 1;
             if (e != 0) {
-                FUN_00606880(e, 0, &tmp);
+                FUN_00606880(e, 0, &src3);
             }
         } else {
-            FUN_004e39d0(&list, 0, list.end, &tmp);
+            FUN_004e39d0(&list, 0, list.end, &src3);
         }
-        FUN_006066f0(&tmp);
+        FUN_006066f0(&src3);
 
         {
             struct ConstraintVec out;
@@ -236,23 +272,45 @@ uint __fastcall FUN_00ef3370(char *self, void *dummy, int msg, int *param_3)
             ((void (__fastcall *)(void *, void *, void *, void *))
                  (*(void ***)db)[0xe])(db, 0, &out, &list);
 
-            n = (int)((char *)out.end - (char *)out.begin) / 0x24;
+            n = (int)((char *)out.end - (char *)out.begin) / 0xc;
             for (i = 0; i < n; i++) {
-                mgr = ResourceMan_GetManager();
-                local = 0;
-                ((uchar (__fastcall *)(void *, void *, void *, void *, int, int, int, int))
-                     (*(void ***)mgr)[3])(mgr, 0, (char *)out.begin + i * 0x24,
-                                          &local, 0, 0, 0, 0);
+                void *elem = (char *)out.begin + i * 0xc;
+                RefPtr found;
+
+                found.mpObj = 0;
+                mgr = FUN_0067dcd0();
+                if (((uchar (__fastcall *)(void *, void *, void *, void **,
+                                           int, int, int, int))
+                         (*(void ***)mgr)[3])(mgr, 0, elem, &found.mpObj, 0, 0, 0, 0) != 0) {
+                    if (found.mpObj != 0) {
+                        void *q = found.Query(0xe742574a);
+                        if ((q != 0) && (FUN_00f2b270(q, 0, 0x800) != 0)) {
+                            ((void (__thiscall *)(void *, void *, int))
+                                 (*(void ***)db)[0x1d])(db, elem, 0);
+                            ((void (__thiscall *)(void *, void *))
+                                 (*(void ***)db)[0x1c])(db, elem);
+                        }
+                    }
+                    found.Release();
+                }
+            }
+
+            self->mQueryPending = 0;
+            if ((out.begin != 0) && (((int *)out.begin)[-1] != 0)) {
+                FUN_00f47380(out.begin);
+            }
+            FUN_004e39a0(&list, 0, list.begin, list.end);
+            if ((list.begin != 0) && (((int *)list.begin)[-1] != 0)) {
+                FUN_00f47380(list.begin);
             }
         }
-        *(char *)(self + 0xa4) = 0;
         break;
     case 0x86a4609d:
-        if (*(int *)(self + 200) == 1) {
-            FUN_00ed6b00(*(void **)(self + 0x10));
+        if (self->mAssetView == 1) {
+            FUN_00ed6b00(self->mpData);
             FUN_00f039a0(1);
             FUN_00eff790(0);
-            FUN_00ed6a10(*(void **)(self + 0x10));
+            FUN_00ed6a10(self->mpData);
             if (param_3 != (int *)1) {
                 FUN_00ef1ca0(&DAT_015acc30);
                 return 0;
@@ -260,11 +318,13 @@ uint __fastcall FUN_00ef3370(char *self, void *dummy, int msg, int *param_3)
         }
         break;
     case 0xc054b3c0:
-        FUN_00f31c20(0);
+        FUN_00f31c20(self->mpQueryTarget, 0, 0);
         if (param_3[2] == 0) {
-            return FUN_00f37b20() & 0xffffff00;
+            FUN_00f37b20(self->mpQueryTarget);
+            return 0;
         }
-        return FUN_00f37a40(param_3, 0) & 0xffffff00;
+        FUN_00f37a40(self->mpQueryTarget, 0, param_3, 0);
+        return 0;
     default:
         break;
     }
@@ -462,7 +522,7 @@ void __fastcall FUN_00ef3d20(char *self, void *dummy, int a, int b, int c, int d
     } else {
         handler = self + 0x108;
     }
-    srv = SP_MessageServer();
+    srv = FUN_0067dcc0();
     *(void **)(self + 0x10c) = srv;
     *(void **)(self + 0x110) = handler;
     *(void **)(self + 0x114) = (void *)&VTABLE_0148b208;

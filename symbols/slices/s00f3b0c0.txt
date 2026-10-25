@@ -1,1 +1,7 @@
 00f3b2c0 ?_E366@@YGHH@Z  # _E366 migrated from s00f3b0c0 (verbatim, slice spelling)
+00f3b0c0 cSim::FUN_00f3b0c0  # HUD refresh: g_pGlobalUI+0x18 state, window mgr at this+0xc, m00f3a4e0/m00f3a540/m00f3aa30
+00f3b440 FUN_00f3b440  # outlined slider interpolation, object pointer live in ESI (custom ABI)
+00f3b520 FUN_00f3b520  # outlined slider value query, object pointer live in ESI (custom ABI)
+00f3b5e0 cSim::FUN_00f3b5e0  # planet-model random position + noun creation/pose transform/posse add
+00f3b800 FUN_00f3b800  # __stdcall placement world adjust: normalize/scale xyz, FUN_00eec2b0, flag at +0x209
+00f3b9e0 FUN_00f3b9e0  # __stdcall bounds test: 8 corners vs PlanetModel radius, optional edge distance compare

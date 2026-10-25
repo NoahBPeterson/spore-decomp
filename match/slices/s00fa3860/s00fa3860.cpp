@@ -709,10 +709,14 @@ void cTerrainSphere::DrawLayerRTT(void* viewer, void* a3)
             bit = (bit << 1) | (bit >> 31);
         }
         SphereData* d = (SphereData*)((TerrainVt*)this)->v10();
+        const float* c = d->mColor;
+        float r = c[0];
+        float g = c[1];
+        float bch = c[2];
         cSPColorRGBA col;
-        col.r = d->mColor[0];
-        col.g = d->mColor[1];
-        col.b = d->mColor[2];
+        col.r = r;
+        col.g = g;
+        col.b = bch;
         col.a = 0.0f;
         g_viewer16c9f60.SetClearColor(col);
         for (int i = 0; i < 6; i++) {
@@ -737,10 +741,14 @@ void cTerrainSphere::DrawLayerRTT(void* viewer, void* a3)
     g_viewer16ca0d8.Copy((cViewer*)viewer, false, false);
     g_viewer16ca0d8.SetRaster(&g_15b1200, true);
     SphereData* d2 = (SphereData*)((TerrainVt*)this)->v10();
+    const float* c2 = d2->mColor;
+    float r2 = c2[0];
+    float g2 = c2[1];
+    float b2 = c2[2];
     cSPColorRGBA col2;
-    col2.r = d2->mColor[0];
-    col2.g = d2->mColor[1];
-    col2.b = d2->mColor[2];
+    col2.r = r2;
+    col2.g = g2;
+    col2.b = b2;
     col2.a = 0.0f;
     g_viewer16ca0d8.SetClearColor(col2);
     g_viewer16ca0d8.Clear(7);

@@ -2,3 +2,5 @@
 slices/s00eed3f0/s00eed3f0.cpp  ?f00eed920@@YA_NHH@Z   00eed920  /O2 /MD /Gy /EHsc /TP /fp:fast
 slices/s00eed3f0/s00eed3f0.cpp  ?f00eed970@@YA_NHH@Z   00eed970  /O2 /MD /Gy /EHsc /TP /fp:fast
 slices/s00eed3f0/s00eed3f0.cpp  ?f00eed9c0@@YA_NHH@Z   00eed9c0  /O2 /MD /Gy /EHsc /TP /fp:fast
+slices/s00eed3f0/s00eed3f0.cpp  ?f00eed8c0@@YAHPBUResourceKey@@@Z  00eed8c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00eed3f0/s00eed3f0.cpp  ?f00eeda20@@YAXPBXPAH@Z  00eeda20  /O2 /MD /Gy /TP /arch:SSE /fp:fast

@@ -6,3 +6,5 @@
 00eeefb0 Vector::DoInsertValue  # Entry32 instantiation (two Vector<> instantiations; resolved by closest size)
 00eec9c0 ??$uninitialized_move@UEntry32@@@eastl@@YAPAUEntry32@@PAU1@00@Z  # uninit_move<Entry32>
 00f47380 ??3@YAXPAX@Z  # operator delete
+00eeebd0  FUN_00eeebd0  # resource-key float dispatcher (keys 0x476a98c7/0x2399be55/0x2b978c46/0x24682294)
+00eef570  FUN_00eef570  # applies gadget to model-set records + selection, appends Entry32 to output vector
