@@ -1,0 +1,2 @@
+0091a750 ?DoClear@cStrList@@QAEXXZ  # cStrList::DoClear migrated from s0091a680 (verbatim, slice spelling)
+00931b70 ?GetSize@FileStream@IO@EA@@UBEIXZ  # EA::IO::FileStream::GetSize (callee of s0091a680, named from the dev publics; slice address comment)
