@@ -2,6 +2,7 @@
 // Flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast (no /EHsc).
 #include <new>
 #include <math.h>
+#include <string.h>
 #include "types.h"
 
 // ---------------------------------------------------------------------------
@@ -19,18 +20,92 @@ class hkTransform { public:
 
 class hkMatrix3 { public:
   hkVector4 c0, c1, c2;
-  void mul(float s);
+  void mul(float s);  // 0x01081bb0
 };
+
+class hkRigidBodyCinfo {
+ public:
+  hkRigidBodyCinfo();  // 0x01087ed0
+  unsigned int m_collisionFilterInfo;  // +0x00
+  void* m_shape;                       // +0x04
+  unsigned char m_collisionResponse;   // +0x08
+  unsigned short m_processContactCallbackDelay;  // +0x0a
+  __declspec(align(16)) hkVector4 m_position;    // +0x10
+  hkVector4 m_rotation;                // +0x20
+  hkVector4 m_linearVelocity;          // +0x30
+  hkVector4 m_angularVelocity;         // +0x40
+  hkMatrix3 m_inertiaTensor;           // +0x50
+  hkVector4 m_centerOfMass;            // +0x80
+  float m_mass;                        // +0x90
+  float m_linearDamping;               // +0x94
+  float m_angularDamping;              // +0x98
+  float m_friction;                    // +0x9c
+  float m_restitution;                 // +0xa0
+  float m_maxLinearVelocity;           // +0xa4
+  float m_maxAngularVelocity;          // +0xa8
+  float m_allowedPenetrationDepth;     // +0xac
+  unsigned char m_motionType;          // +0xb0
+  unsigned char m_rigidBodyDeactivatorType;  // +0xb1
+  unsigned char m_solverDeactivation;  // +0xb2
+  unsigned char m_qualityType;         // +0xb3
+  unsigned char m_autoRemoveLevel;     // +0xb4
+};
+
+class hkReferencedObject {
+ public:
+  virtual void destroy(int dealloc);  // vtable +0
+  unsigned short m_memSizeAndFlags;   // +0x04
+  unsigned short m_referenceCount;    // +0x06
+};
+
+class hkShape : public hkReferencedObject {
+ public:
+  char pad08[0x10 - 0x08];  // +0x08
+  hkShape* m_childShape;    // +0x10
+};
+
+struct hkMassProperties {
+  char pad00[0x20];
+  hkMatrix3 m_inertiaTensor;  // +0x20
+};
+
+class hkMotion;
 
 class hkEntity {
  public:
   void removeReference();
   void addCollisionListener(void* listener);
+  char pad00[0x58];  // the retail hkEntity data before m_motion
+};
+
+class hkMotion {
+ public:
+  virtual void v00();
+  virtual void v04();
+  virtual void v08();
+  virtual void v0c();
+  virtual void v10();
+  virtual void v14();
+  virtual void v18();
+  virtual void v1c();
+  virtual void v20();
+  virtual void v24();
+  virtual void v28();
+  virtual void v2c();
+  virtual void v30();
+  virtual void v34();
+  virtual void v38(void* out);  // vtable +0x38
+  virtual void v3c(void* out);  // vtable +0x3c
 };
 
 class hkRigidBody : public hkEntity {
  public:
-  void setTransform(const hkTransform& t);
+  hkRigidBody(const hkRigidBodyCinfo& info);  // 0x010878b0
+  void setTransform(const hkTransform& t);    // 0x01087890
+  void getMotionStateAndVelocities(void* out);  // 0x010871e0
+  hkMotion* m_motion;        // +0x58
+  char pad5c[0x64 - 0x5c];
+  float mMaterialFriction;   // +0x64
 };
 
 class hkWorld {
@@ -43,9 +118,9 @@ class cHandleish {
   void SetEnabled(int enabled);  // 0x005a8a80
 };
 
-class hkRigidBodyCinfo { public:
-  char pad[0xd0];
-};
+void hkInertiaTensorComputer_computeShapeMassProperties(hkShape* shape, float mass,
+                                                        hkMassProperties* out);  // 0x01127680
+hkShape* CreateVertebraShapeStub(float scale);  // 0x005cd9a0
 
 class hkGenericConstraintData {
  public:
@@ -77,6 +152,63 @@ class hkConstraintConstructionKit {
 };
 
 // ---------------------------------------------------------------------------
+// Property system (layout from the 005ce300 disassembly: vptr at +0, type at +0x12,
+// release at vtable +4, GetProperty at +0x24, manager GetPropertyList at +0x2c).
+// ---------------------------------------------------------------------------
+class Property;
+
+class PropertyManager {
+ public:
+  virtual void p00();
+  virtual void p04();
+  virtual void p08();
+  virtual void p0c();
+  virtual void p10();
+  virtual void p14();
+  virtual void p18();
+  virtual void p1c();
+  virtual void p20();
+  virtual void p24();
+  virtual void p28();
+  virtual bool GetPropertyList(unsigned int listHash, unsigned int owner, Property** out);  // +0x2c
+};
+
+class Property {
+ public:
+  virtual void q00();       // +0x00
+  virtual void Release();   // +0x04
+  virtual void q08();
+  virtual void q0c();
+  virtual void q10();
+  virtual void q14();
+  virtual void q18();
+  virtual void q1c();
+  virtual void q20();
+  virtual bool GetProperty(unsigned int hash, Property** out);  // +0x24
+  char pad04[0x12 - 0x04];        // +0x04
+  unsigned short mType;           // +0x12
+  float* GetFloat();              // 0x0041ea70
+  int* GetInt();                  // 0x0041e990
+};
+
+void* FUN_0067de30();  // 0x0067de30
+extern unsigned int g_spinePropertyListOwner;  // 0x01517fd4
+extern float g_spineMouseSpringElasticity;     // 0x015ba0d0
+extern float g_spineMouseMaxForceFactor;       // 0x015ba0d4
+
+static inline void LoadFloatProperty(Property* list, unsigned int hash, float* dest) {
+  Property* found = 0;
+  if (list->GetProperty(hash, &found) && found->mType == 0x0d)
+    *dest = *found->GetFloat();
+}
+
+static inline void LoadIntProperty(Property* list, unsigned int hash, int* dest) {
+  Property* found = 0;
+  if (list->GetProperty(hash, &found) && found->mType == 9)
+    *dest = *found->GetInt();
+}
+
+// ---------------------------------------------------------------------------
 namespace SP {
 
 namespace EditorUtils {
@@ -89,9 +221,11 @@ class cSPEditorSpine {
   hkWorld* mpWorld;            // +0x14
   void* mpCollisionListener;   // +0x18
   char pad1c[0x40 - 0x1c];
-  hkConstraintConstructionKit* mChainConstraint;  // +0x40 (unused here)
-  void* mpCursorSpring;                           // +0x44
-  char pad48[0x54 - 0x48];
+  float mSpineMinVertebraScale;   // +0x40
+  float mSpineMaxVertebraScale;   // +0x44
+  char pad48[4];                  // +0x48
+  float mMaxBlockScale;           // +0x4c
+  char pad50[4];                  // +0x50
   float mSpineNewVertebraRelativeScale;  // +0x54
   int mSpineHavokWorldNumSolverIters;    // +0x58
   int mSpineHavokWorldSimType;           // +0x5c
@@ -100,7 +234,9 @@ class cSPEditorSpine {
   float mSpineFrictionConstant;          // +0x68
   float mSpineVertebraAllowedPenetrationDepth;  // +0x6c
   float mSpineVertebraMaxMassProportion;        // +0x70
-  char pad74[0x9c - 0x74];
+  char pad74[4];                                // +0x74
+  unsigned char mSpineVertebraHavokPaddingFactor;  // +0x78
+  char pad79[0x9c - 0x79];                      // +0x79
   int mSpineField9c;                     // +0x9c
   float mSpineFieldA0;                   // +0xa0
   float mSpineFieldA4;                   // +0xa4
@@ -226,18 +362,91 @@ hkGenericConstraintData* CreateAxialConstraintData(int dof) {
   return data;
 }
 // @ 0x005CDD00
-// PARTIAL: full Havok rigid-body construction (hkRigidBodyCinfo setup + hkRigidBody alloc,
-// two hkShape transforms, mouse-spring wiring) is not reconstructed; see partial.txt.
 hkRigidBody* cSPEditorSpine::CreateVertebraBody(float scale, hkTransform* transform) {
-  (void)scale;
-  (void)transform;
-  return 0;
+  hkShape* shape = CreateVertebraShapeStub(scale);
+  hkRigidBodyCinfo info;
+  info.m_shape = shape;
+  info.m_motionType = 1;
+
+  float minScale = mSpineMinVertebraScale;
+  float maxScale = mSpineMaxVertebraScale;
+  float clamped = scale;
+  if (clamped <= minScale)
+    clamped = minScale;
+  if (maxScale <= clamped)
+    clamped = maxScale;
+  float scaleFactor = ((clamped - minScale) / (maxScale - minScale)) *
+                          (mSpineFrictionConstant - 1.0f) +
+                      1.0f;
+
+  hkMassProperties massProps;
+  memset(&massProps, 0, sizeof(massProps));
+  hkInertiaTensorComputer_computeShapeMassProperties(shape->m_childShape, 1.0f, &massProps);
+  info.m_inertiaTensor = massProps.m_inertiaTensor;
+  info.m_mass = scaleFactor;
+  info.m_inertiaTensor.mul(mSpineVertebraAllowedPenetrationDepth * scaleFactor);
+
+  info.m_allowedPenetrationDepth = mSpineHavokWorldSolverDamp;
+  info.m_angularDamping = mSpineLooseAngularDamping;
+  info.m_maxAngularVelocity = 0.0f;
+  info.m_friction = mSpineLooseLinearDamping;
+
+  void* mem = g_hkMemory->allocate(0xd0, 0x2a);
+  *(unsigned short*)((char*)mem + 4) = 0xd0;
+  hkRigidBody* body = new (mem) hkRigidBody(info);
+
+  if (shape->m_memSizeAndFlags != 0) {
+    shape->m_referenceCount--;
+    if (shape->m_referenceCount == 0)
+      shape->destroy(1);
+  }
+
+  body->mMaterialFriction = mSpineHavokWorldSolverTau;
+  body->setTransform(*transform);
+
+  if (mSpineVertebraHavokPaddingFactor != 0) {
+    char buffer[0x100] = {};
+    body->m_motion->v3c(buffer);
+    memset(buffer + 0x14, 0, 0x1c);
+    body->getMotionStateAndVelocities(buffer);
+  }
+  return body;
 }
 
 // @ 0x005CE300
-// PARTIAL: the DynamicTuning property lookups (PropertyManager + Property virtual calls and the
-// mirrored tuning globals) are not reconstructed; see partial.txt.
-void cSPEditorSpine::LoadDynamicTuning() {}
+void cSPEditorSpine::LoadDynamicTuning() {
+  mMaxBlockScale = 0.9f;
+  mSpineMouseSpringElasticity = 1.5f;
+  mSpineMouseMaxForceFactor = 0.05f;
+  mSpineLooseAngularDamping = 10.0f;
+  mSpineFieldA0 = 1.0f;
+  mSpineFieldA4 = 1.0f;
+  mSpineTightLinearDamping = 2.0f;
+  mSpineField9c = 3;
+  mSpineLooseLinearDamping = 30.0f;
+  mSpineTightAngularDamping = 0.5f;
+  mSpineMouseSpringDamping = 30.0f;
+
+  Property* list = 0;
+  PropertyManager* manager = (PropertyManager*)FUN_0067de30();
+  if (manager->GetPropertyList(0xbef6f201, g_spinePropertyListOwner, &list) && list) {
+    LoadFloatProperty(list, 0x1cbb8a7, &mMaxBlockScale);
+    LoadFloatProperty(list, 0x62e4dba8, &mSpineMouseSpringElasticity);
+    LoadFloatProperty(list, 0x64553361, &mSpineMouseMaxForceFactor);
+    LoadIntProperty(list, 0x5446ac96, &mSpineField9c);
+    LoadFloatProperty(list, 0xbcbd7e27, &mSpineFieldA0);
+    LoadFloatProperty(list, 0x7cb94bf4, &mSpineFieldA4);
+    LoadFloatProperty(list, 0x98cef991, &mSpineLooseLinearDamping);
+    LoadFloatProperty(list, 0x874a0e6e, &mSpineLooseAngularDamping);
+    LoadFloatProperty(list, 0x9a54b3da, &mSpineTightLinearDamping);
+    LoadFloatProperty(list, 0x3cd0684f, &mSpineTightAngularDamping);
+    LoadFloatProperty(list, 0x71b632f5, &mSpineMouseSpringDamping);
+  }
+  if (list)
+    list->Release();
+  g_spineMouseSpringElasticity = mSpineMouseSpringElasticity;
+  g_spineMouseMaxForceFactor = mSpineMouseMaxForceFactor;
+}
 // Layout of the vertebra shape buffer passed in as `shape` by the caller.
 struct cVertebraShape {
   unsigned char mFlags;   // +0x00
@@ -282,5 +491,91 @@ void cSPEditorSpine::CalcVertebraPhysicsBoundingBox(float scale, unsigned char* 
   out[4] = cy + offset;
   out[5] = cz + offset;
 }
+// ---------------------------------------------------------------------------
+// 005ce7b0 -- search the vertebra-circle list for a free point along `dir`.
+// ---------------------------------------------------------------------------
+struct cVertebraCircle {
+  int mId;           // +0x00
+  float mX;          // +0x04
+  float mY;          // +0x08
+  float mRadius;     // +0x0c
+  char pad10[0x14];  // +0x10 .. +0x24
+};
+
+struct cVertebraCircleList {
+  cVertebraCircle* mpBegin;  // +0x00
+  cVertebraCircle* mpEnd;    // +0x04
+};
+
+struct cSpineOffset2 {
+  char pad0[4];
+  float mX;  // +0x04
+  float mY;  // +0x08
+};
+
+struct float2 { float x, y; };
+struct float3 { float x, y, z; };
+struct float4 { float x, y, z, w; };
+
+int FUN_005d5630(float2 origin, float2 query, float3 circle, float4* out);  // 0x005d5630
+
 // @ 0x005CE7B0
-int FUN_005ce7b0(void*, float*, int, char, float*, void*) { return 0; }
+int FUN_005ce7b0(cVertebraCircleList* list, float* dir, cSpineOffset2* offset,
+                 char forward, float* outPoint, int* outId) {
+  const float kEpsilon = 1.5258789e-05f;
+  int count = (int)(list->mpEnd - list->mpBegin);
+  int result = 0;
+  if (count == 0)
+    return 0;
+
+  for (int i = 0; i < count; ++i) {
+    int idx = forward ? i : count - i - 1;
+    cVertebraCircle* circle = &list->mpBegin[idx];
+
+    float2 origin;
+    origin.x = offset->mX;
+    origin.y = offset->mY;
+    float2 query;
+    query.x = dir[0] + offset->mX;
+    query.y = dir[1] + offset->mY;
+    float3 shape;
+    shape.x = circle->mX;
+    shape.y = circle->mY;
+    shape.z = circle->mRadius;
+    float4 hit;
+    int hitCount = FUN_005d5630(origin, query, shape, &hit);
+    result = count;
+    if (hitCount != 2)
+      continue;
+
+    float dot = dir[0] * (hit.x - circle->mX) + dir[1] * (hit.y - circle->mY);
+    float px, py;
+    if (dot <= 0.0f) {
+      px = hit.z;
+      py = hit.w;
+    } else {
+      px = hit.x;
+      py = hit.y;
+    }
+
+    int n = (int)(list->mpEnd - list->mpBegin);
+    int j = 0;
+    for (; j < n; ++j) {
+      if (j == idx)
+        continue;
+      cVertebraCircle* other = &list->mpBegin[j];
+      float dx = px - other->mX;
+      float dy = py - other->mY;
+      if (sqrtf(dx * dx + dy * dy) < other->mRadius - kEpsilon)
+        break;
+    }
+    if (j == n) {
+      outPoint[0] = px;
+      outPoint[1] = py;
+      int id = circle->mId;
+      *outId = id;
+      return (id & 0xFFFFFF00) | 1;
+    }
+  }
+  return result & 0xFFFFFF00;
+}

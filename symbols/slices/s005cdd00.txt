@@ -1,4 +1,5 @@
-005cdd00 ?CreateVertebraBody@cSPEditorSpine_s005c_dd00@SP@@QAEPAVhkRigidBody_s005c_dd00@@MPAUhkTransform_s005c_dd00@@@Z  # cSPEditorSpine_s005c_dd00::CreateVertebraBody migrated from s005cdd00 (verbatim, slice spelling)
+005cdd00 ?CreateVertebraBody@cSPEditorSpine@SP@@QAEPAVhkRigidBody@@MPAVhkTransform@@@Z  # SP::cSPEditorSpine::CreateVertebraBody
+005cd9a0 ?CreateVertebraShapeStub@@YAPAVhkShape@@M@Z  # shape builder (returns hkConvexTranslateShape)
 005ce060 ?AddVertebraBody@cSPEditorSpine_s005c_dd00@SP@@QAEPAHPAHMPAUhkTransform_s005c_dd00@@@Z  # cSPEditorSpine_s005c_dd00::AddVertebraBody migrated from s005cdd00 (verbatim, slice spelling)
 005ce0c0 ?CreateAxialConstraintData@@YAPAVhkGenericConstraintData@@H@Z  # CreateAxialConstraintData migrated from s005cdd00 (verbatim, slice spelling)
 005ce210 ?SetEnabled@cSpineHelper@SP@@QAEXH@Z  # cSpineHelper::SetEnabled migrated from s005cdd00 (verbatim, slice spelling)
@@ -7,4 +8,18 @@
 005ce2a0 ?NormalizeVector2@@YAXPAMPBM@Z  # NormalizeVector2 migrated from s005cdd00 (verbatim, slice spelling)
 005ce300 ?LoadDynamicTuning@cSPEditorSpine@SP@@QAEXXZ  # SP::cSPEditorSpine::LoadDynamicTuning migrated from s005cdd00
 005ce680 ?CalcVertebraPhysicsBoundingBox@cSPEditorSpine_s005c_dd00@SP@@QAEXMPAEPAM@Z  # cSPEditorSpine_s005c_dd00::CalcVertebraPhysicsBoundingBox migrated from s005cdd00 (verbatim, slice spelling)
-005ce7b0 ?FUN_005ce7b0@@YAHPAXPAMHD10@Z  # FUN_005ce7b0 migrated from s005cdd00 (verbatim, slice spelling)
+005ce7b0 ?FUN_005ce7b0@@YAHPAUcVertebraCircleList@@PAMPAUcSpineOffset2@@D1PAH@Z  # list-vs-direction vertebra-circle search
+005d5630 ?FUN_005d5630@@YAHUfloat2@@0Ufloat3@@PAUfloat4@@@Z  # segment/circle intersection helper (origin, query, circle, out[4])
+010878b0 ??0hkRigidBody@@QAE@ABVhkRigidBodyCinfo@@@Z  # hkRigidBody::hkRigidBody(const hkRigidBodyCinfo&)
+01087ed0 ??0hkRigidBodyCinfo@@QAE@XZ  # hkRigidBodyCinfo::hkRigidBodyCinfo()
+010871e0 ?getMotionStateAndVelocities@hkRigidBody@@QAEXPAX@Z  # hkRigidBody motion-state thunk
+01127680 ?hkInertiaTensorComputer_computeShapeMassProperties@@YAXPAVhkShape@@MPAUhkMassProperties@@@Z  # shape mass properties
+01081bb0 ?mul@hkMatrix3@@QAEXM@Z  # hkMatrix3::mul(float)
+01087890 ?setTransform@hkRigidBody@@QAEXABVhkTransform@@@Z  # hkRigidBody::setTransform
+0067de30 ?FUN_0067de30@@YAPAXXZ  # SP::PropertyManager accessor
+0041ea70 ?GetFloat@Property@@QAEPAMXZ  # Property::GetFloat
+0041e990 ?GetInt@Property@@QAEPAHXZ  # Property::GetInt
+016e4178 ?g_hkMemory@@3PAVhkMemory@@A  # hkMemory::s_instance
+015ba0d0 ?g_spineMouseSpringElasticity@@3MA  # mirrored spine mouse elastic tuning
+015ba0d4 ?g_spineMouseMaxForceFactor@@3MA  # mirrored spine mouse max force tuning
+01517fd4 ?g_spinePropertyListOwner@@3IA  # property-list owner id passed to GetPropertyList
