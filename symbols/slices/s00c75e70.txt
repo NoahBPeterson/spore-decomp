@@ -1,0 +1,3 @@
+00c76440 cHashTableA::Rehash  # rehash into nBuckets: thiscall AllocBucketArray(0x00c763d0) + xor-hash relink + old-array reclaim (free list or operator_delete); nonmatching (regalloc), equiv WEAK 104/400 valid, 100% coverage
+00c77020 FUN_00c77020  # eastl sub-vector copy helper: *ppOut = pDst; per 0x14-byte element operator_new("Simulator",0xD1) + FUN_00bdaa40(&end,srcBegin,srcEnd,new,src) -> dst->mpEnd; nonmatching (regalloc)
+00c770d0 FUN_00c770d0  # eastl fill-copy over n sub-vectors; out slot aliases the nCount argument so each call overwrites the next fifth argument; nonmatching (branch/regalloc), equiv PASS 204/400, 81.8% coverage
