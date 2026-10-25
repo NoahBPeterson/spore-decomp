@@ -3,3 +3,4 @@ slices/s006ffe00/s006ffe00.cpp  ?Get@CellAccessor@@QAEHPAH@Z  00700360  /O2 /MD 
 slices/s006ffe00/s006ffe00.cpp  ?PushBack@Vec4b@@QAEXPBH@Z  00700640  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
 slices/s006ffe00/s006ffe00.cpp  GetParentChildInfo@  00700b70  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
 slices/s006ffe00/s006ffe00.cpp  ChildCellIDs@  00700bb0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s006ffe00/s006ffe00.cpp  ?Destroy@CellArray@@QAEPAXI@Z  00700450  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
