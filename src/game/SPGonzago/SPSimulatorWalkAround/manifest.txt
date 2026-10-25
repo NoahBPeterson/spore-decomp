@@ -1,0 +1,2 @@
+# source  symbol  va  flags
+../src/game/SPGonzago/SPSimulatorWalkAround.cpp  ?ShutdownForGame@cSPSimulatorWalkAround@@QAEXXZ  010168c0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

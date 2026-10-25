@@ -1,7 +1,7 @@
-01016540  ?RemoveHighLODPlant@cSPSimulatorWalkAround@@QAEXPAXD@Z  # noun removal, vector erase (0x006782c0) + obstacle vtable slots 0xb/0x2c
-01016630  ?ClearOldestPlant@cSPSimulatorWalkAround@@QAEEXZ  # front-erase of plant + obstacle vectors, returns whether non-empty
-010166c0  ?SetHighLODPlant@cSPSimulatorWalkAround@@QAEXPAX@Z  # 8-plant cap, Plant::GetDesc copy, species lookup (0x00b90410/0x004df440), obstacle relink
-010168c0  ?ShutdownForGame@cSPSimulatorWalkAround@@QAEXXZ  # SimTicker tick, ClearOldestPlant drain, avatar/strategy refrelease
+01016540 ?RemoveHighLODPlant@cSPSimulatorWalkAround@@QAEXPAXD@Z  # cSPSimulatorWalkAround::RemoveHighLODPlant migrated from s01016540 (verbatim, slice spelling)
+01016630 ?ClearOldestPlant@cSPSimulatorWalkAround@@QAEEXZ  # cSPSimulatorWalkAround::ClearOldestPlant migrated from s01016540 (verbatim, slice spelling)
+010166c0 ?SetHighLODPlant@cSPSimulatorWalkAround@@QAEXPAX@Z  # cSPSimulatorWalkAround::SetHighLODPlant migrated from s01016540 (verbatim, slice spelling)
+010168c0 ?ShutdownForGame@cSPSimulatorWalkAround@@QAEXXZ  # cSPSimulatorWalkAround::ShutdownForGame migrated from s01016540 (verbatim, slice spelling)
 01016950  ?FUN_01016950@cSPSimulatorWalkAround@@QAEXXZ  # walk-around teardown: hint/config/effects managers, ClearOldestPlant drain
 01016ad0  ?FUN_01016ad0@cSPSimulatorWalkAround@@QAEXXZ  # beaming state machine driven by cSPTimer::GetElapsedTime
 01016e50  ?FUN_01016e50@cSPSimulatorWalkAround@@QAEXPAX@Z  # beaming-tick vcall, avatar trait + AudioSetListener3 (original is ret 8, symbol one-arg)

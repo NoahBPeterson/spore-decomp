@@ -1,0 +1,4 @@
+# va  diff-bytes  reason
+01016540 188 cSPSimulatorWalkAround::RemoveHighLODPlant: complete behaviour; noun removal, vector erase and obstacle bookkeeping reconstructed; register/schedule choice and inlined-copy boundaries differ
+01016630 105 cSPSimulatorWalkAround::ClearOldestPlant: complete behaviour; front-erase of both the plant and obstacle vectors reconstructed; differs in block layout and register allocation
+010166c0 386 cSPSimulatorWalkAround::SetHighLODPlant: complete behaviour (8-plant cap, desc copy, species lookup, obstacle relink); stack/register layout and inlined helper boundaries differ
