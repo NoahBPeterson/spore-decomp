@@ -1,1 +1,3 @@
 # source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s0115de20/s0115de20.cpp  ?FFT_Alloc@@YAHHDPAUFftPair@@@Z  0115e330  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s0115de20/s0115de20.cpp  ?FFT_Free@@YAHPAUFftPair@@@Z  0115e3c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
