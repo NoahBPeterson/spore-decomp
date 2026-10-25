@@ -1,20 +1,18 @@
-# slice s00c72c60 - confident symbol names
-# VA        name                       note
-00c72c60    cPlanet_AddDebugInfo       appends planet name + archetype to a debug string
+00c72c60 ?AddDebugInfo@cPlanet@SP@@UAEXPAV?$basic_string@DVallocator@eastl@@@eastl@@@Z  # SP::cPlanet::AddDebugInfo migrated from s00c72c60
 00c72ce0    cVisiblePlanet_AddDebugInfo appends "\nVisiblePlanet"
-00c72d70    cPlanet_HasFlagByKey       map lookup; returns node byte +0xaa != 0
-00c72dd0    cPlanet_PushInt            push_back into eastl vector<int> at planet+0xe4
-00c72e10    cPlanet_RebuildVehicleCityData  builds cVehicleData/cCityData/cCivData from planet+0xb0
-00c731a0    BuildPlanetEntry           appends a 0x2c-byte record to the vector at self+0x134
-00c73250    cPlanet_HasCommContextFlag comm-context -> noun mgr -> terrain sphere -> HasFlagByKey
-00c73270    cPlanet_PushKeyBC          push_back 12-byte EA::ResourceMan::Key into vector at planet+0xbc
-00c732c0    cPlanet_PushKeyD0          push_back 12-byte EA::ResourceMan::Key into vector at planet+0xd0
-00c73310    cPlanet_EraseKeyBC         erase-all on the vector at planet+0xbc
-00c73330    cPlanet_EraseKeyD0         erase-all on the vector at planet+0xd0
-00c73350    cPlanet_EraseElem10        find key in map at self, erase 0x10-byte element from vector at self+4
-00c733b0    cSpatialObject_Reset       releases nouns/sub-objects and clears state
-00c73520    cPlanet_CollectCivCities   appends every civ's cities into the out vector
-00c735e0    cPlanet_LowerBoundPlus1    lower_bound-style map lookup returning node+1
-00c73680    cPlanet_dtor               destructor (vtable 0x14725d8)
+00c72d70 ?FUN_00c72d70@PlanetCls@@QAE_NH@Z  # PlanetCls::FUN_00c72d70 migrated from s00c72c60 (verbatim, slice spelling)
+00c72dd0 ?FUN_00c72dd0@PlanetCls@@QAEXH@Z  # PlanetCls::FUN_00c72dd0 migrated from s00c72c60 (verbatim, slice spelling)
+00c72e10 ?FUN_00c72e10@PlanetCls@@QAEXPAD@Z  # PlanetCls::FUN_00c72e10 migrated from s00c72c60 (verbatim, slice spelling)
+00c731a0 ?FUN_00c731a0@@YAXPAXD0GDHHHD@Z  # FUN_00c731a0 migrated from s00c72c60 (verbatim, slice spelling)
+00c73250 ?FUN_00c73250@PlanetCls@@QAE_NXZ  # PlanetCls::FUN_00c73250 migrated from s00c72c60 (verbatim, slice spelling)
+00c73270 ?FUN_00c73270@PlanetCls@@QAEXPAH@Z  # PlanetCls::FUN_00c73270 migrated from s00c72c60 (verbatim, slice spelling)
+00c732c0 ?FUN_00c732c0@PlanetCls@@QAEXPAH@Z  # PlanetCls::FUN_00c732c0 migrated from s00c72c60 (verbatim, slice spelling)
+00c73310 ?FUN_00c73310@PlanetCls@@QAEXXZ  # PlanetCls::FUN_00c73310 migrated from s00c72c60 (verbatim, slice spelling)
+00c73330 ?FUN_00c73330@PlanetCls@@QAEXXZ  # PlanetCls::FUN_00c73330 migrated from s00c72c60 (verbatim, slice spelling)
+00c73350 ?FUN_00c73350@PlanetCls@@QAEHPAH@Z  # PlanetCls::FUN_00c73350 migrated from s00c72c60 (verbatim, slice spelling)
+00c733b0 ?FUN_00c733b0@PlanetCls@@QAEXXZ  # PlanetCls::FUN_00c733b0 migrated from s00c72c60 (verbatim, slice spelling)
+00c73520 ?FUN_00c73520@PlanetCls@@QAEPAPAXPAPAX@Z  # PlanetCls::FUN_00c73520 migrated from s00c72c60 (verbatim, slice spelling)
+00c735e0 ?FUN_00c735e0@PlanetCls@@QAEPAHPAH@Z  # PlanetCls::FUN_00c735e0 migrated from s00c72c60 (verbatim, slice spelling)
+00c73680 ?FUN_00c73680@PlanetCls@@QAEXXZ  # PlanetCls::FUN_00c73680 migrated from s00c72c60 (verbatim, slice spelling)
 00c737a0    cPlanet_LoadModuleData     large loader with inlined module/eastl code
-00c73b60    cPlanet_RebuildTribeCityData  rebuilds tribe and city data vectors
+00c73b60 ?FUN_00c73b60@PlanetCls@@QAEXXZ  # PlanetCls::FUN_00c73b60 migrated from s00c72c60 (verbatim, slice spelling)

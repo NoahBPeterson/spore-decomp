@@ -1,7 +1,7 @@
 00b0c190 cPlanetManager::Unload  # descriptive name; the 0x1ba1a8-byte planet data block's unload path
-00b0c520 cPlanetManager::SetCurrentKey  # descriptive name
+00b0c520 ?SetCurrentKey@cPlanetManager@@QAEXPBVcObjectKey@@@Z  # cPlanetManager::SetCurrentKey migrated from s00b0c190 (verbatim, slice spelling)
 00b0c570 cPlanetRecordTable::Insert  # descriptive name; sorted insert position lookup around pPos
-00b0c5d0 cKeyChangeNotifier::Shutdown  # descriptive name; listener sub-object at manager+4, remove handler + shut the world
+00b0c5d0 ?Shutdown@cKeyChangeNotifier@@QAEXXZ  # cKeyChangeNotifier::Shutdown migrated from s00b0c190 (verbatim, slice spelling)
 00b0c610 cPlanetRecordTable::FindOrCreate  # descriptive name
 00b0c730 LoadPlanetRecords  # free function streaming the record array in
 00b0cbb0 cKeyChangeNotifier::DoMessage  # descriptive name; turns planet-object messages into records

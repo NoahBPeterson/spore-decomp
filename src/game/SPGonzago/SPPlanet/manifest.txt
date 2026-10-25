@@ -1,0 +1,41 @@
+# source  symbol  va  flags
+../src/game/SPGonzago/SPPlanet.cpp  ?FUN_00ac0d80@@YAPAHPAH00@Z  00ac0d80  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPPlanet.cpp  ?GetFruitHeight@cTreeData_s00af_ef10@SP@@QBEMXZ  00aff240  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPPlanet.cpp  ?GetValue@cKeyedValue@@QAEII@Z  00aff250  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPPlanet.cpp  ?Initialize@cFruit@Simulator@@QAEXXZ  00aff280  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPPlanet.cpp  ?Cast@cFruit@Simulator@@QAEPAXI@Z  00aff330  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPPlanet.cpp  ?Reset@cFruit@Simulator@@QAEXXZ  00aff370  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPPlanet.cpp  ?CastOther@cFruit@Simulator@@QAEPAXI@Z  00aff520  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPPlanet.cpp  ?GetObstacleValue@cFruit@Simulator@@QAEMXZ  00aff550  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPPlanet.cpp  ?AddTime@cFruit@Simulator@@QAEXHH@Z  00aff700  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPPlanet.cpp  ?LoadRotation@@YA_NPAVcOutStream@@PAVRotSerial@@@Z  00aff7e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPPlanet.cpp  ?SaveRotation@@YA_NPAVcOutStream@@PAVRotSerial@@@Z  00aff810  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPPlanet.cpp  ?WriteVector2Value@@YAXPAVcValueHost@@@Z  00aff8b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPPlanet.cpp  ?WriteVector3Value@@YAXPAVcValueHost@@@Z  00aff930  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPPlanet.cpp  ?WriteByteValue@@YAXPAVcValueHost@@@Z  00aff9e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPPlanet.cpp  ?WriteVector3Value2@@YAXPAVcValueHost@@@Z  00affae0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPPlanet.cpp  ?WriteVector3Value3@@YAXPAVcValueHost@@@Z  00affb30  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPPlanet.cpp  ?WriteVector3Value4@@YAXPAVcValueHost@@@Z  00affb80  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPPlanet.cpp  ?DestroyItemRange@@YGXPAVcSerializeItem@@0@Z  00affc90  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPPlanet.cpp  ?DestroyItemRangeInto@@YAPAVcSerializeItem@@PAV1@00@Z  00affcc0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPPlanet.cpp  ?SetPosition@cTransform@@QAEXPBVcVector3@@@Z  00affde0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPPlanet.cpp  ?VectorAt@@YAPAXPBVcPtrVector@@I@Z  00afff30  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPPlanet.cpp  ?Update@cSpatialObjectView@SP@@QAEXII@Z  00afffa0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPPlanet.cpp  ?WriteVector3Value5@@YAXPAVcValueHost@@@Z  00b00350  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPPlanet.cpp  ?ReadItemList@@YA_NPAVcSerializeMgr@@PBVcSerializeItemList@@@Z  00b00400  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPPlanet.cpp  ?Enable@cFruitOps1@@QAEXPAX@Z  00b019d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPPlanet.cpp  ?Disable@cFruitOps2@@QAEXPAX@Z  00b01a00  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPPlanet.cpp  ?Wrap@WrapperOps@@QAEPAXPAIPAX@Z  00b02480  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPPlanet.cpp  ?M3550@RegNodeThunk@@QAEXXZ  00b03550  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPPlanet.cpp  ?SetCurrentKey@cPlanetManager@@QAEXPBVcObjectKey@@@Z  00b0c520  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPPlanet.cpp  ?Shutdown@cKeyChangeNotifier@@QAEXXZ  00b0c5d0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPPlanet.cpp  ?FUN_00c72dd0@PlanetCls@@QAEXH@Z  00c72dd0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPGonzago/SPPlanet.cpp  ?FUN_00c73250@PlanetCls@@QAE_NXZ  00c73250  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPGonzago/SPPlanet.cpp  ?FUN_00c73270@PlanetCls@@QAEXPAH@Z  00c73270  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPGonzago/SPPlanet.cpp  ?FUN_00c732c0@PlanetCls@@QAEXPAH@Z  00c732c0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPGonzago/SPPlanet.cpp  ?FUN_00c73350@PlanetCls@@QAEHPAH@Z  00c73350  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPGonzago/SPPlanet.cpp  ?FUN_00c73cb0@PlanetCls_s00c7_3cb0@@QAEPAXPAX@Z  00c73cb0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPPlanet.cpp  ?FUN_00c73cd0@PlanetCls_s00c7_3cb0@@QAEPAXPAX@Z  00c73cd0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPPlanet.cpp  ?SetSpeciesAsScanned@PlanetCls_s00c7_3cb0@@QAEDPAX@Z  00c73ea0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPPlanet.cpp  ?IsSpeciesScanned@PlanetCls_s00c7_3cb0@@QAEDPAX@Z  00c73f10  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPPlanet.cpp  ?InitPlantAttributes@Simulator@@YAXXZ  01317720  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include

@@ -1,3 +1,6 @@
-# slice s00c73cb0 - external symbols (VA + our mangled name + note)
-# VA        name                          note
+00c73cb0 ?FUN_00c73cb0@PlanetCls_s00c7_3cb0@@QAEPAXPAX@Z  # PlanetCls_s00c7_3cb0::FUN_00c73cb0 migrated from s00c73cb0 (verbatim, slice spelling)
+00c73cd0 ?FUN_00c73cd0@PlanetCls_s00c7_3cb0@@QAEPAXPAX@Z  # PlanetCls_s00c7_3cb0::FUN_00c73cd0 migrated from s00c73cb0 (verbatim, slice spelling)
+00c73cf0 ?FUN_00c73cf0@PlanetCls_s00c7_3cb0@@QAEXH@Z  # PlanetCls_s00c7_3cb0::FUN_00c73cf0 migrated from s00c73cb0 (verbatim, slice spelling)
+00c73ea0 ?SetSpeciesAsScanned@PlanetCls_s00c7_3cb0@@QAEDPAX@Z  # PlanetCls_s00c7_3cb0::SetSpeciesAsScanned migrated from s00c73cb0 (verbatim, slice spelling)
+00c73f10 ?IsSpeciesScanned@PlanetCls_s00c7_3cb0@@QAEDPAX@Z  # PlanetCls_s00c7_3cb0::IsSpeciesScanned migrated from s00c73cb0 (verbatim, slice spelling)
 00e30d20    ?Notify@Notifier@@QAEXXZ      FUN_00e30d20: notification sink fed by FUN_00b3d4f0's result
