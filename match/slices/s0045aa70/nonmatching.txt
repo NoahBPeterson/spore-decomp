@@ -17,3 +17,6 @@
 0045b660 86 complete; allocator selector is this+0x1c (not +0x14); /Od frame differs
 0045b6f0 0 complete; module is /Od, compiled /O2 here, not byte-exact (not tuned)
 0045b750 0 complete; module is /Od, compiled /O2 here, not byte-exact (not tuned)
+0045ab30 179 ClearAll: complete; flags /Od /Ob1 /MD /Gy /TP; original reserves extra /Od temp slots (frame 0x60 vs 0x30) and calls the out-of-line hashtable begin() 0x564140; difftest WEAK 224 valid/57.8% cov no mismatch
+0045b7c0 347 ColladaExport::ColladaExport: complete; flags /Od /Ob1 /MD /Gy /TP; vector ctors 0x540470, pad allocator 0x429360, WString::SetEmpty 0x45dac0; frame 0x78 vs 0x58 (tag/temp slot layout only); difftest PASS 400 valid/100% cov
+0045b9a0 565 ColladaExport::~ColladaExport: complete; flags /Od /Ob1 /MD /Gy /TP; destroys the 16 vectors via 0x45d750/0x425990/0x554b10/0x45daf0/0x5156b0/0x540520 then WString::Free 0x4237d0; inline element-clear loops (no side effects) not reproduced (ours 225B vs 639B); difftest UNSUPPORTED 0/400 valid (object-heavy dtor, budget/fault discards)
