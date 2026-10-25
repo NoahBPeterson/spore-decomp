@@ -1,3 +1,6 @@
+00d71f80 ?FUN_00d71f80@@YA_NPAVcTribeMember@SP@@HHHHPAI@Z  # FUN_00d71f80 migrated from s00d71f80 (verbatim, slice spelling)
+00d71fa0 ?SP_FOOD_CRY_Tick@@YA_NPAVcSPCreatureCitizen_s00d7_1f80@SP@@HHHHPAI@Z  # SP_FOOD_CRY_Tick migrated from s00d71f80 (verbatim, slice spelling)
+00d72100 ?SP_FEAR_Tick@@YA_NPAVcSPCreatureCitizen_s00d7_1f80@SP@@HHHHPAI@Z  # SP_FEAR_Tick migrated from s00d71f80 (verbatim, slice spelling)
 00d72520 ?SP_CastRay@@YAMPAUcSPVector3@SP@@0MM0@Z  # SP_CastRay migrated from s00d71f80 (verbatim, slice spelling)
 00d726e0 ?SP_ClearCellByIndex@@YAXPAUcSurfaceSampler@SP@@I@Z  # SP_ClearCellByIndex migrated from s00d71f80 (verbatim, slice spelling)
 00d72720 ?SP_ClearCellAtPos@@YAXPBUcSPVector3@SP@@I@Z  # SP_ClearCellAtPos migrated from s00d71f80 (verbatim, slice spelling)

@@ -1,0 +1,2 @@
+# source  symbol  va  flags
+../src/game/SPGonzago/SPTribeGameBehaviorBabyPlay.cpp  ?FUN_00d71f80@@YA_NPAVcTribeMember@SP@@HHHHPAI@Z  00d71f80  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

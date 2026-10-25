@@ -1,0 +1,3 @@
+# va  diff-bytes  reason
+00d71fa0 279 TRIBE_BABY_FOOD_CRY_Tick (/O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-): behaviour tick reconstructed from decompile; instruction scheduling and x87/SSE float ordering differ. equiv WEAK (336 valid, 28.8% coverage)
+00d72100 475 TRIBE_BABY_FEAR_Tick (/O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-): our 635-byte reconstruction (vs 888) diverges in order-manager lookups and the sin/cos quaternion steer block. equiv FAIL (5/123 mismatched)
