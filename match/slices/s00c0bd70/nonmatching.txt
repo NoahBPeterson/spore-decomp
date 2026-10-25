@@ -7,3 +7,9 @@
 00c0c4b0   201 quaternion half-angle rotation: complete; x87/SSE schedule
 00c0c5b0   31  water reflection helper: complete; cdecl arg/global load order
 00c0ce30   61  relation index: complete; call/global load order
+00c0bf10   197 creature-stimuli update: complete (11-arg ClearAll/Play/Set sequence); gate PASS 232/400 valid
+00c0c250   66  cCreatureBase relationship lookup: complete; gate PASS 392/400 valid
+00c0cdb0   114 game-mode creature id lookup: complete; original inlines _ftol2 (x87); gate WEAK 39.5% coverage
+00c0c630   840 SP::cCreatureLocomotion::Execute: complete state machine; gate UNSUPPORTED (difftest site_arity miscounts the 0x28 frame as args, shifting esp; all 400 inputs fault(write))
+00c0ca00   523 ballistic aim solver: complete; x87-vs-SSE overflow/NaN edge (gate FAIL 19/400, inf sign in out[1])
+00c0ccc0   213 creature transition tick: complete; FAIL-KEPT ECX (original push/pop ecx preserves entry ecx; wrapper clobbers it)
