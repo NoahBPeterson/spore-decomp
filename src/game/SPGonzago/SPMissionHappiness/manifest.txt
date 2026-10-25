@@ -1,0 +1,2 @@
+# source  symbol  va  flags
+../src/game/SPGonzago/SPMissionHappiness.cpp  ?Update@cSPMissionHappinessEvent_s00c5_62b0@SP@@QAEHI@Z  00c56850  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include

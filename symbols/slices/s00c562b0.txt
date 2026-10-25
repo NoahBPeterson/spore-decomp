@@ -4,6 +4,7 @@
 00c562b0 ?OnComplete@cSPGenericPressureEvent_s00c5_62b0@SP@@QAEXXZ  # cSPGenericPressureEvent_s00c5_62b0::OnComplete migrated from s00c562b0 (verbatim, slice spelling)
 00c56360 ?Init@cSPGenericPressureEvent_s00c5_62b0@SP@@QAE_NXZ  # cSPGenericPressureEvent_s00c5_62b0::Init migrated from s00c562b0 (verbatim, slice spelling)
 00c56490 ?Update@cSPGenericPressureEvent_s00c5_62b0@SP@@QAEHI@Z  # cSPGenericPressureEvent_s00c5_62b0::Update migrated from s00c562b0 (verbatim, slice spelling)
+00c56850 ?Update@cSPMissionHappinessEvent_s00c5_62b0@SP@@QAEHI@Z  # cSPMissionHappinessEvent_s00c5_62b0::Update migrated from s00c562b0 (verbatim, slice spelling)
 00c56de0 ??5SP@@YAAAUIArchiver@0@AAU10@AAUtItemInfo@0@@Z  # None migrated from s00c562b0 (verbatim, slice spelling)
 00c57070 ?IsItemTargetPlanet@cSPMissionMultiDelivery_s00c5_62b0@SP@@QAE_NPAX@Z  # cSPMissionMultiDelivery_s00c5_62b0::IsItemTargetPlanet migrated from s00c562b0 (verbatim, slice spelling)
 00c570e0 ?IsInBuyerPlanetList@cSPMissionMultiDelivery_s00c5_62b0@SP@@QAE_NPAX@Z  # cSPMissionMultiDelivery_s00c5_62b0::IsInBuyerPlanetList migrated from s00c562b0 (verbatim, slice spelling)
