@@ -90,7 +90,8 @@ void  __cdecl FUN_00e1e450(void* a, void* b);                // 0x00e1e450 iter_
 void  __cdecl FUN_00e1e6d0(void* a, void* b, void* c);       // 0x00e1e6d0 heap/insertion
 void  __cdecl FUN_00e1e7d0(void* a, void* b, void* c);       // 0x00e1e7d0 heap/insertion
 void* __cdecl FUN_00e1e8c0(void* a, int b, int c, int d, u32 key, u8 flag, RefObj* ref, void* cmp); // 0x00e1e8c0 heap adjust
-void  __cdecl FUN_00e1f5c0(void* a, void* b, void* c, void* d); // 0x00e1f5c0 insertion sort
+void  __cdecl FUN_00e1f330(void* a, void* b, void* c); // 0x00e1f330 insertion sort
+void  __cdecl FUN_00e1f5c0(void* a, void* b, void* c, void* d); // 0x00e1f5c0 partial sort
 }
 
 // ---------------------------------------------------------------------------------------------
@@ -687,4 +688,60 @@ void __cdecl FUN_00e1fa90(char* first, char* last, void* cmp)
             FUN_00e1e6d0(first, last, cmp);
         }
     }
+}
+
+// ---------------------------------------------------------------------------------------------
+// 0x00e1f5c0 -- partial_sort over the panel record vector: max-heap [first,middle), then for
+// every element of [middle,last) smaller than the root, swap it into the root slot and sift the
+// displaced value back down, then insertion-sort the heap range.
+// ---------------------------------------------------------------------------------------------
+// @ 0x00e1f5c0
+void __cdecl FUN_00e1f5c0(void* a, void* b, void* c, void* d)
+{
+    ListRec* first  = (ListRec*)a;
+    ListRec* middle = (ListRec*)b;
+    char*    last   = (char*)c;
+    void*    cmp    = d;
+
+    FUN_00e1f2c0(first, middle, cmp);
+
+    if ((char*)middle < last) {
+        u32      count = ((u32)(last - (char*)middle) - 1) / 0xc + 1;
+        ListRec* it    = middle;
+
+        do {
+            if (it->key < first->key) {
+                ListRec tmp;                       // displaced record, holds its own reference
+                RefObj* old;
+
+                tmp.key  = it->key;
+                tmp.flag = it->flag;
+                tmp.ref  = it->ref;
+                if (tmp.ref != 0)
+                    (*(void (__thiscall**)(RefObj*))(*(char**)tmp.ref + 4))(tmp.ref);
+
+                old      = it->ref;
+                it->key  = first->key;
+                it->flag = first->flag;
+                if (first->ref != old) {
+                    if (first->ref != 0)
+                        (*(void (__thiscall**)(RefObj*))(*(char**)first->ref + 4))(first->ref);
+                    it->ref = first->ref;
+                    if (old != 0)
+                        (*(void (__thiscall**)(RefObj*))(*(char**)old + 8))(old);
+                }
+
+                // tmp is handed to adjust_heap by value, so the parameter carries a reference
+                if (tmp.ref != 0)
+                    (*(void (__thiscall**)(RefObj*))(*(char**)tmp.ref + 4))(tmp.ref);
+                FUN_00e1e8c0(first, 0, (int)(((char*)middle - (char*)first) / 0xc), 0,
+                              tmp.key, tmp.flag, tmp.ref, cmp);
+                if (tmp.ref != 0)
+                    (*(void (__thiscall**)(RefObj*))(*(char**)tmp.ref + 8))(tmp.ref);
+            }
+            ++it;
+        } while (--count != 0);
+    }
+
+    FUN_00e1f330(first, middle, cmp);
 }

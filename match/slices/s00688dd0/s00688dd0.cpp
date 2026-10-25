@@ -356,14 +356,25 @@ void PostMsgB(int param)
 // ===========================================================================
 // @ 0x00688F00  concatenate two wide strings into an output string
 // ===========================================================================
+extern "C" void FreeHeap(void* p);                       // 0xf47380 cdecl
+extern "C" void* HeapCopy(void* dst, const void* src, unsigned n);  // 0x11e0744 memcpy
+
 struct WStr {
     wchar_t* mpBegin;
     wchar_t* mpEnd;
     wchar_t* mpCapacity;
     void*    mAllocator;
 
+    WStr() : mpBegin(0), mpEnd(0), mpCapacity(0) {}
+    ~WStr()
+    {
+        if (mpCapacity - mpBegin > 1 && mpBegin)
+            FreeHeap(mpBegin);
+    }
     void AllocateSelf(unsigned n);                       // 0x00429760
     void Append(const wchar_t* b, const wchar_t* e);     // 0x00429580
+    void AssignCStr(const wchar_t* s);                   // 0x00579a90
+    void Assign(const wchar_t* b, const wchar_t* e);     // 0x00423650
 };
 
 WStr* ConcatW(WStr* out, const WStr* a, const WStr* b)
@@ -381,27 +392,111 @@ WStr* ConcatW(WStr* out, const WStr* a, const WStr* b)
 }
 
 // ===========================================================================
-// @ 0x00688FA0  EA::Internet::FTPClient::Job destructor
+// FTP job step: build the cache path from the job argument plus the configured
+// server/root text, then hand it to a fresh database object.
 // ===========================================================================
-struct FTPJob {
-    void* vtbl;
-    ~FTPJob();
+struct TextSource { void* vtbl; };             // 0x6b1f90 result (text/table provider)
+extern "C" TextSource* GetTextSource(uint32 id);          // 0x6b1f90
+extern "C" int  IsValidPtr(const void* p);                // 0x931fd0
+
+struct DbFile {                                // 0x8d9f80 ctor, 0x388 bytes, second base at +4
+    void* vtbl0;
+    void* vtbl4;
+    DbFile(int a, int b);
+};
+struct DbObj {                                 // 0x69fa60 ctor, 0x24 bytes
+    void* vtbl0;
+    void* vtbl4;
+    DbObj(void* owner);
 };
 
-FTPJob::~FTPJob()
+extern "C" int  TagWideString(const void* p);             // 0x932ae0 cdecl
+
+// @ 0x00688fa0
+void* CommitJob(const wchar_t* path)
 {
-    // Large body: builds a temp cache path, constructs a DatabasePackedFile and
-    // a cObjectDatabase, deletes the old cache file.  Implemented approximately.
+    WStr s1;
+    s1.AssignCStr(path);
+    WStr s2;
+    TextSource* ts = GetTextSource(0x4729a47);
+    s2.AssignCStr(((const wchar_t*(__thiscall*)(void*))(*(void***)ts)[0x28 / 4])(ts));
+
+    WStr s3;
+    unsigned n = (unsigned)(s2.mpEnd - s2.mpBegin);
+    s3.AllocateSelf(n + 1);
+    HeapCopy(s3.mpBegin, s2.mpBegin, n * 2);
+    s3.mpEnd = s3.mpBegin + n;
+    *s3.mpEnd = 0;
+    (void)TagWideString(s3.mpBegin);
+
+    {
+        WStr tmp;
+        WStr* r = ConcatW(&tmp, &s3, &s1);
+        if (r != &s3)
+            s3.Assign(r->mpBegin, r->mpEnd);
+    }
+    (void)IsValidPtr(s3.mpBegin);
+
+    DbFile* file = new((const char*)0x13f09b4, 0, 0, 0, 0) DbFile(0, 0);
+    if (file != 0)
+        ((void(__thiscall*)(void*))(*(void***)((char*)file + 4))[0])((char*)file + 4);
+    DbObj* db = new((const char*)0x13f09b4, 0, 0, 0, 0) DbObj(file);
+    ((void(__thiscall*)(void*))(*(void***)((char*)db + 4))[1])((char*)db + 4);
+    ((void(__thiscall*)(void*, const wchar_t*))(*(void***)((char*)db + 4))[0x2c / 4])
+        ((char*)db + 4, s3.mpBegin);
+    ((void(__thiscall*)(void*, int, int))(*(void***)db)[0x3c / 4])(db, 0, 1);
+    if (file != 0)
+        ((void(__thiscall*)(void*))(*(void***)((char*)file + 4))[1])((char*)file + 4);
+    return db;
 }
 
 // ===========================================================================
 // @ 0x006891F0  EA::Internet::FTPClient::Job::CommitFile
+//
+// Builds the localized save-area path (configured text + the job's second
+// path), appends the constant suffix, then moves the cache file onto the
+// final name.
 // ===========================================================================
-void JobCommitFile(const void* a, const void* b)
+extern "C" int  IsValidPathPtr(const void* p);                    // 0x931fa0 cdecl
+extern "C" void TransferPath(void* dst, const void* src, int f);  // 0x931ff0 cdecl
+
+// @ 0x006891f0
+void JobCommitFile(const wchar_t* a, const wchar_t* b)
 {
-    // Large body: builds save-area paths, renames cache files.  Approximate.
     (void)a;
-    (void)b;
+    WStr locale;
+    TextSource* ts = GetTextSource(0x4729a47);
+    locale.AssignCStr(((const wchar_t*(__thiscall*)(void*))(*(void***)ts)[0x28 / 4])(ts));
+
+    WStr cache;
+    unsigned n = (unsigned)(locale.mpEnd - locale.mpBegin);
+    cache.AllocateSelf(n + 1);
+    HeapCopy(cache.mpBegin, locale.mpBegin, n * 2);
+    cache.mpEnd = cache.mpBegin + n;
+    *cache.mpEnd = 0;
+    (void)TagWideString(cache.mpBegin);
+
+    WStr ext;
+    ext.AssignCStr(b);
+
+    WStr out;
+    {
+        WStr tmp;
+        WStr* r = ConcatW(&tmp, &cache, &ext);
+        if (r != &ext)
+            ext.Assign(r->mpBegin, r->mpEnd);
+    }
+    {
+        WStr suffix;
+        suffix.AssignCStr((const wchar_t*)0x1403204);
+        WStr name;
+        ConcatW(&name, &ext, &suffix);
+        if (IsValidPathPtr(ext.mpBegin))
+            TransferPath(ext.mpBegin, name.mpBegin, 1);
+        TransferPath(out.mpBegin, ext.mpBegin, 1);
+        if (IsValidPathPtr(name.mpBegin))
+            (void)IsValidPtr(name.mpBegin);
+    }
 }
 
 // ===========================================================================

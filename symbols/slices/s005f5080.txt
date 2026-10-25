@@ -1,9 +1,9 @@
 005ed6c0 ?Hide@cSPPaletteItemRollover@SP@@QAEXXZ  # SP::cSPPaletteItemRollover::Hide (callee of s005f5080, named from the dev publics; slice address comment)
 005f46c0 ?EndInteraction@cSPOLDPaletteItemUIDragAndBuy@SP@@MAEXXZ  # SP::cSPOLDPaletteItemUIDragAndBuy::EndInteraction (callee of s005f5080, named from the dev publics; slice address comment)
-005f5080 ?FUN_005f5080@SP@@YAXXZ  # FUN_005f5080 migrated from s005f5080 (verbatim, slice spelling)
-005f55e0 ?RotateModel@cSPSwatch_s005f_5080@SP@@QAEXI@Z  # cSPSwatch_s005f_5080::RotateModel migrated from s005f5080 (verbatim, slice spelling)
+005f5080 ?SetDefaultDeforms@cSPSwatch@SP@@QAEXXZ  # SP::cSPSwatch::SetDefaultDeforms reconstructed in s005f5080
+005f55e0 ?RotateModel@cSPSwatch@SP@@QAEXXZ  # SP::cSPSwatch::RotateModel reconstructed in s005f5080
 005f58f0 ?AddModelKey@cSPSwatch_s005f_5080@SP@@QAEXABUKey_s005f_5080@ResourceMan@EA@@@Z  # cSPSwatch_s005f_5080::AddModelKey migrated from s005f5080 (verbatim, slice spelling)
-005f5930 ?ShrinkTransformVector@SP@@YAXXZ  # ShrinkTransformVector migrated from s005f5080 (verbatim, slice spelling)
+005f5930 ?ShrinkTransformVector@TransformVec@SP@@QAEXXZ  # SP::TransformVec::ShrinkTransformVector reconstructed in s005f5080
 005f5970 ?clear@RefVec@SP@@QAEXXZ  # RefVec::clear migrated from s005f5080 (verbatim, slice spelling)
 005f59b0 ?AddModel@cSwatch3DView_s005f_5080@SP@@QAEPAVcMWModel_s005f_5080@2@II@Z  # cSwatch3DView_s005f_5080::AddModel migrated from s005f5080 (verbatim, slice spelling)
 005f5aa0 ?RemoveAllModels@cSwatch3DView@SP@@QAEXXZ  # SP::cSwatch3DView::RemoveAllModels migrated from s005f5080

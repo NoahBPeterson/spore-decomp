@@ -1,2 +1,6 @@
 005bc860 21   ctor: all zero-stores present; base-ctor call/register schedule differ (compiled shorter)
 005bc930 100  dtor: member destruction present; eastl::sp_vector destructor shape differs
+005bc0f0 1291  DoOnMouseMove: full flow reconstructed but codegen diverges (1102 diff bytes; 1070 vs 1291). equiv: WEAK (244 valid, 4.4% coverage, no mismatch observed)
+005bc630 436  OnMouseUp: full flow reconstructed; 373 diff bytes (314 vs 436). equiv: PASS (229 valid, 75.6% coverage)
+005bc9b0 206  eastl::vector<cIVisualEffect*>::operator=: real EASTL assign reconstructed; 175 diff bytes (199 vs 206), register allocation differs. equiv: WEAK (173 valid, 41.9% coverage)
+005bcaa0 529  DoOnMouseDown: full flow reconstructed; 497 diff bytes (559 vs 529). equiv: WEAK (194 valid, 81.3% coverage, no mismatch)

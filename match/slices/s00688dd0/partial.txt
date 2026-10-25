@@ -1,2 +1,0 @@
-00688fa0  -    FTPClient::Job::~Job (582B): large body only sketched (cache path + DatabasePackedFile/cObjectDatabase)
-006891f0  -    FTPClient::Job::CommitFile (731B): large body only sketched (save-area paths, file rename)

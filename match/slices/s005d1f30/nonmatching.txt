@@ -1,1 +1,4 @@
-005d2790  44  Refresh: same loop but cl keeps `this`/sentinel/iterator in different regs and does not tail-jump into FUN_005d1f30 (helpers here are partial stubs)
+005d2790  10  Refresh: same loop but cl keeps `this`/sentinel/iterator in different regs and does not tail-jump into FUN_005d1f30 (the helper stubs live in this TU, so the call is not a cross-TU tail jump)
+005d1f30  1266  ReconstructChain: complete Havok chain rebuild; register/scheduling and frame layout differ from the original (hkRefObj Release/alloc inlined 2x, map lookups via out-of-line find)
+005d2480  213  per-vertebra update: complete; original builds the hkTransform with a stricter interleave of the identity stores and loads mField1d8 earlier, leaving cl with fewer register moves
+005d25c0  320  per-vertebra flex-damping update: complete; original keeps idx/order in ecx/ebx and the map find result in eax, cl here spills one slot and orders the float ops differently

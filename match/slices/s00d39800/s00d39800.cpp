@@ -724,8 +724,8 @@ class cEffectMgr {
 public:
     virtual void     v00();                         // +0x00
     virtual void     v04();                         // +0x04
-    virtual void     v08(void* p);                  // +0x08
-    virtual void     v0c();                         // +0x0c
+    virtual void     v08(int32_t nZero);            // +0x08
+    virtual void     v0c(int32_t nOn);              // +0x0c
     virtual bool     v10();                         // +0x10
     virtual void     v14();                         // +0x14
     virtual void     v18(void* pDesc);              // +0x18
@@ -734,6 +734,12 @@ public:
     virtual void     v24();                         // +0x24
     virtual void     v28();                         // +0x28
     virtual bool     v2c(void* pA, int32_t nB, void** ppOut); // +0x2c
+    virtual void     v30();                         // +0x30
+    virtual void     v34();                         // +0x34
+    virtual void     v38();                         // +0x38
+    virtual void     v3c();                         // +0x3c
+    virtual void     v40();                         // +0x40
+    virtual void     v44(int32_t nId, const void* pData, int32_t nCount); // +0x44
 };
 
 class cTransform3 {
@@ -801,4 +807,97 @@ void __cdecl SpawnLocatingCallEffect(void* pParam)
 
     void* pAvatar = GetAvatar(NounManager());
     SpawnLocatingCallResponse(pAvatar, pParam);
+}
+
+// ---------------------------------------------------------------------------------------------
+// 0x00d39dc0 - spawn the tagged creature-mode "call" response effect
+// ---------------------------------------------------------------------------------------------
+struct Quat {
+    float mValue[4];                                    // +0x00
+};
+
+struct Mat33 {
+    float mValue[9];                                    // +0x00
+};
+
+class cPlanetModel {
+public:
+    void BuildSurfaceOrientation(Quat& quat, const float* pPos); // 0x00b7f190
+};
+
+cPlanetModel* __cdecl PlanetModelInstance();            // 0x00b3d350
+void*         __cdecl FUN_00401090();                   // 0x00401090
+
+struct cSpeciesProfile {
+    uint8_t  mPad00[0x4ec];                             // +0x000
+    uint32_t mCallColor;                                // +0x4ec
+};
+
+class cSpeciesManager {
+public:
+    cSpeciesProfile* GetAvatarProfile();                // 0x004df420
+};
+
+extern cEffectMgr* g_pModeObject;                       // 0x0169e2d0
+extern uint8_t     g_modeLatched;                       // 0x0169e2cc
+
+extern "C" void* __cdecl memcpy(void* pDst, const void* pSrc, uint32_t nBytes);
+
+// @ 0x00d39dc0
+void __cdecl SpawnCreatureModeCallEffect(uint32_t nTag, const float* pPos)
+{
+    if (g_modeLatched != 0) {
+        if (g_pModeObject != 0) {
+            g_pModeObject->v0c(1);
+            if (g_pModeObject != 0) {
+                cEffectMgr* pOld = g_pModeObject;
+                g_pModeObject = 0;
+                pOld->v04();
+            }
+        }
+    }
+    if (g_pModeObject != 0 && g_pModeObject->v10()) {
+        g_modeLatched = 0;
+        return;
+    }
+
+    cEffectMgr* pMgr = (cEffectMgr*)EffectsManagerPtr();
+    if (g_pModeObject != 0) {
+        cEffectMgr* pOld = g_pModeObject;
+        g_pModeObject = 0;
+        pOld->v04();
+    }
+    if (!pMgr->v2c((void*)nTag, 0, (void**)&g_pModeObject)) {
+        g_modeLatched = 0;
+        return;
+    }
+
+    Quat   quat;
+    Mat33  mat;
+    cLocEffectDesc desc;
+    desc.mFlags = 0;
+    desc.mCount = 0;
+    desc.mfPosX = g_fLocX;
+    desc.mfPosY = g_fLocY;
+    desc.mfPosZ = g_fLocZ;
+    desc.mfOne = g_fRealOne;
+    ((cTransform3*)&desc.mMatrix)->Assign(&g_locMatrix);
+
+    memcpy(&desc.mfPosX, pPos, 3 * sizeof(float));
+    desc.mFlags |= 4;
+    desc.mCount++;
+
+    PlanetModelInstance()->BuildSurfaceOrientation(quat, pPos);
+    const void* pMat = Matrix3FromQuaternion(&mat, &quat);
+    memcpy(desc.mMatrix, pMat, sizeof(desc.mMatrix));
+
+    desc.mFlags |= 2;
+    desc.mCount++;
+
+    cSpeciesProfile* pProfile = ((cSpeciesManager*)FUN_00401090())->GetAvatarProfile();
+    const void* pColor = (const void*)((char*)pProfile + 0x4ec);
+    ((cEffectMgr*)g_pModeObject)->v44(5, pColor, 3);
+    ((cEffectMgr*)g_pModeObject)->v18(&desc);
+    ((cEffectMgr*)g_pModeObject)->v08(0);
+    g_modeLatched = 0;
 }

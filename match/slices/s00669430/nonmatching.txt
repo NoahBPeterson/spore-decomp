@@ -1,1 +1,2 @@
-00669430  1717  Complete SP::cSPUIFeedListItem::ReloadCallback (flags /O2 /MD /Gy /TP /arch:SSE /GS-); register allocation and scheduling differ
+00669430 2139 Complete SP::cSPUIFeedListItem::ReloadCallback (flags /O2 /MD /Gy /TP /arch:SSE /GS-); 2070 vs 2139 bytes, layout, window-assign inlining and register allocation differ; the earlier 1717 number predates the 2026-10-21 migration rewrite
+00669c90 368 Complete FeedItemProc::FUN_00669c90, thiscall bool(int, const unsigned int*) message handler (flags /O2 /MD /Gy /TP /arch:SSE /GS-); 685 vs 699 bytes, every mnemonic and operand matches and only MSVC stack-slot placement (match -0x24 vs retail -0x48, item -0x44 vs -0x24) and one duplicated Constraint dtor block differ; equiv WEAK (396/400 valid inputs, 10.1% coverage)

@@ -3,6 +3,7 @@
 00e50990  query: return 0xb8 when 0xb4==6
 00e509d0  mode eligibility predicate
 00e50a10  slide value toward target with step/clamp
+00e50af0  layer catalog lookup by (kind,id) returning per-kind value
 00e50b80  keep sorted list insert (binary/linear search + memmove)
 00e50c50  wrap angle into [-180,180]
 00e50cb0  wrap angle difference + absolute + sign

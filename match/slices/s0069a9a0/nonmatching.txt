@@ -6,3 +6,4 @@
 0069b440  301  complete: SP::Matrix3FromFacingAndUp; only SSE register allocation differs; difftest PASS (400 valid inputs, 100% cov) with /fp:fast, now carried by the slice manifest row
 0069b650  204  complete: 2D closest point on segment; len compare stays in x87 (orig stores len then SSE compares); difftest PASS (400 valid inputs, 100% cov) after rewriting the body in asm with the original's eax/ecx-only integer allocation (no edx clobber)
 0069b840   69  complete: angle step toward target with fmod wrap; select/wrap x87 vs xmm moves differ
+0069b760  190  complete: normalize both vectors then signed-angle tail call; ours multiplied y,z by the unrounded x87 reciprocal while the original rounds 1/len to float and multiplies all three in SSE; difftest PASS (400 valid inputs, 100% cov) after NormalizeTo emits fld/fmul/fsqrt/fdivrp + fstp dword inv and SSE mulss for all three components

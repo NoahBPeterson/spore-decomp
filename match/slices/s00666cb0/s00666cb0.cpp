@@ -13,6 +13,7 @@ typedef void  (__thiscall *FnVoidII)(void*, int, int);
 typedef int   (__thiscall *FnIntV)(void*);
 typedef void* (__thiscall *FnPtrV)(void*);
 typedef void  (__thiscall *FnVoidIP)(void*, int, void*);
+typedef void  (__thiscall *FnVoidIIP)(void*, int, void*, int);
 #define VT(p) (*(void***)(p))
 
 // -----------------------------------------------------------------------------
@@ -24,7 +25,6 @@ void  __cdecl EASTL_allocator_deallocate(void* p);            // 0x00f47380
 void  __cdecl FUN_00571db0(void* h, void* a, void* b, void* c, void* d); // RemoveHandler
 void* __cdecl EA_Audio_GetSystemAT();                         // 0x00a206f0
 void* __cdecl SP_MessageServer();                             // 0x0067dcc0
-void  __cdecl SlotMessage_Destruct(void* self);               // 0x00421cf0
 struct WString {
     void assign(const void* b, const void* e);   // 0x00423650
     void assignPair(void** p);                   // 0x00667c40
@@ -63,7 +63,40 @@ struct Key16 { uint32_t a, b, c, d; };
 // -----------------------------------------------------------------------------
 // SP::cSPUIFeedListItem
 // -----------------------------------------------------------------------------
+struct FeedItemMessage {       // id 0xb3d53f95 browser message (WidA: B0+B1 bases)
+    void*      mpVtbl0;        // +0x00  B0 vtable 0x0140029c
+    void*      mpVtbl1;        // +0x04  B1 vtable 0x01400298
+    uint32_t   mReserved08;    // +0x08
+    uint32_t   mnFeedItemID;   // +0x0c
+    struct FeedItem* mpItem;   // +0x10  AddRef'd while the message lives
+    uint8_t    mbByItem;       // +0x14
+    uint8_t    mbForceReset;   // +0x15
+};
+
+struct MessageBasicRC5 {       // 0x40-byte refcounted message object
+    void*     mpVtbl;          // +0x00
+    long      mnRef;           // +0x04
+    uint32_t  mData[5][2];     // +0x08
+    uint32_t  mnId;            // +0x30
+    uint32_t  mReserved34;     // +0x34
+    uint32_t  mnRCFlags;       // +0x38
+    uint32_t  mReserved3c;     // +0x3c
+    void Destruct();           // 0x00421cf0
+};
+
+extern void* vtMessageBase[];  // 0x013eb90c
+extern void* vtMessage5[];     // 0x013eb844
+extern void* vtFeedMsg0[];     // 0x0140029c
+extern void* vtFeedMsg1[];     // 0x01400298
+
 struct FeedItem {
+    uint8_t    mPad000[0x142];     // +0x000
+    uint8_t    mbMouseDownFlag;    // +0x142  cleared when the left button goes down
+    uint8_t    mPad143[0x14c - 0x143];
+    uint32_t   mnExtraMessageID;   // +0x14c  optional custom message posted on mouse-down
+    uint8_t    mPad150[0x184 - 0x150];
+    P184Obj*   mpField184;         // +0x184
+    void*      mpExtraMessageData; // +0x188  first payload word of the custom message
     void       FUN_00666cb0();
     void       FUN_006673a0(bool sel);
     FeedItem*  FUN_006676b0(unsigned flags);
@@ -403,10 +436,7 @@ void FeedItem::FUN_00667ae0() {
 }
 
 // @ 0x00667b00  SP::cSPUIFeedListItem::OnLeftMouseDown
-struct MsgBuffer { uint32_t a, b, c, d; void* e; uint8_t f, g; };
-
 void FeedItem::FUN_00667b00() {
-    void* self = this;
     void* at = EA_Audio_GetSystemAT();
     void* r = at ? ((FnPtrV)VT(at)[8])(at) : 0;
 
@@ -419,30 +449,33 @@ void FeedItem::FUN_00667b00() {
     }
 
     void* ms = SP_MessageServer();
-    MsgBuffer buf;
-    buf.a = 0x0140029c;
-    buf.b = 0x01400298;
-    buf.c = 0;
-    buf.d = 0;
-    buf.e = self;
-    if (self) ((FnVoid)VT(self)[0])(self);
-    buf.f = 0;
-    buf.g = 0;
-    ((FnVoidIP)VT(ms)[5])(ms, 0xb3d53f95, &buf);
+    FeedItemMessage buf;
+    buf.mReserved08 = 0;
+    buf.mpVtbl0 = vtFeedMsg0;
+    buf.mpVtbl1 = vtFeedMsg1;
+    buf.mnFeedItemID = 0;
+    buf.mpItem = this;
+    if (this) ((FnVoid)VT(this)[0])(this);
+    buf.mbByItem = 0;
+    buf.mbForceReset = 0;
+    ((FnVoidIIP)VT(ms)[5])(ms, 0xb3d53f95, &buf, 0);
 
-    *(uint8_t*)((char*)self + 0x142) = 0;
-    void* p = *(void**)((char*)self + 0x14c);
-    if (p) {
-        MsgBuffer buf2;
-        buf2.a = 0x013eb90c;
-        buf2.b = 0x013eb844;
-        buf2.d = 0;
-        buf2.e = 0;
-        (void)buf2;
+    mbMouseDownFlag = 0;
+    const uint32_t extraId = mnExtraMessageID;
+    if (extraId) {
+        MessageBasicRC5 extra;
+        extra.mnId = extraId;
+        extra.mpVtbl = vtMessageBase;
+        _InterlockedExchange(&extra.mnRef, 0);
+        extra.mData[0][0] = (uint32_t)mpExtraMessageData;
+        extra.mpVtbl = vtMessage5;
+        extra.mnRCFlags = 0;
+        ((FnVoidIIP)VT(ms)[5])(ms, (int)extraId, &extra, 0);
+        extra.Destruct();
     }
 
-    void* q = *(void**)((char*)self + 0x184);
-    if (q) ((P184Obj*)q)->FUN_00829160(1);
+    if (mpField184) mpField184->FUN_00829160(1);
+    if (this) ((FnVoid)VT(this)[1])(this);
 }
 
 // @ 0x00667c40

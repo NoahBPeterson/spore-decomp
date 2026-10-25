@@ -9,3 +9,6 @@
 006859b0  n/a  hash bucket erase; complete, register/branch layout differs.
 00685a60  n/a  two-wstring copy ctor; complete, EH/temp/AllocateSelf scheduling differs (difftest WEAK).
 00685ed0  n/a  vector<Variant> destroy; complete, missing compiler EH prolog.
+00685770 520  DatabasePackedFile stream loader: full flow reconstructed (FileStream open/read, shared pointer, DatabasePackedFile + MemoryStream attach); 371 diff bytes (486 vs 520), EH/stack-cookie layout differs. equiv: UNSUPPORTED (0/400 valid: the original faults or hits CreateFileW on every generated path).
+00685d40 388  resource record lookup: full flow reconstructed (manager v58/v38 calls, wide-string then id key, result cleanup); 353 diff bytes (272 vs 388), EH frame differs. equiv: WEAK (400 valid, 14.9% coverage, no mismatch).
+00685f90 238  hash find-or-insert: complete; 5 diff bytes (only the out->node store vs bucket-reload schedule differs). equiv: PASS (229 valid, 91.0% coverage).

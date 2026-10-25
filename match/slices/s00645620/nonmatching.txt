@@ -1,3 +1,9 @@
 006460b0  16  FUN_006460b0 (0x14-byte element assignment loop): complete; original loads the old refcount pointer at the point of use, mine hoists it to the top of the loop body
 00646140  16  FUN_00646140 (uninitialized_copy forward): complete; same old-pointref load hoist
 006461d0  20  FUN_006461d0 (uninitialized_copy backward): complete; same hoist plus loop-entry scheduling
+00645620  1480/1510  cSPUIAssetBrowser::LoadConfigFile: complete translation; original 1480 B, mine 1510 B; residual is /O2 register/stack scheduling of the config-property intrusive_ptr temps and the ban-array loop. equiv UNSUPPORTED (0/400 valid, 390 fault(read)) -- needs a live PropertyManager/user-config object
+00645bf0  208/155  FUN_00645bf0 (read archetype asset key): complete; original 208 B inlines the property-temp intrusive_ptr acquire/release dance around GetPropertyAsKeyInstance into two stack slots, mine keeps one; equiv FAIL (20.9% cov, eax return value)
+00645cc0  207/124  FUN_00645cc0 (read last-webpage id): complete; same property-temp slot/scheduling difference; equiv FAIL (54.4% cov, eax return value)
+00645e20  174/108  ShowPublishDialog: complete; original recomputes the sibling-count mask for the model object before the vtable call, mine lets the compiler use the already-known count==1; equiv WEAK (187/400 valid, 44.6% cov)
+00646030  121/133  FUN_00646030 (lower_bound over 0x14-byte elements): complete; key pointer cached in a local but mine spills/reloads it vs the original's register-held key; equiv PASS (383 valid, 100% cov)
+006462b0  178/169  FUN_006462b0 (hashtable find + AssetDiscovery_View new): complete; end-iterator sentinel loads and operator-new call sequence differ in slot placement; equiv UNSUPPORTED (0/400 valid, 260 fault(read))

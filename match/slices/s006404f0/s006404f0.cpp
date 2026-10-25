@@ -3,7 +3,8 @@
 
 int FUN_00552300(void* p);   // 0x00552300
 
-struct cVBase {
+// Primary base (+0x00): job bookkeeping plus the whole virtual interface of the class.
+struct cIJobManager {
     virtual void v00(); virtual void v01(); virtual void v02(); virtual void v03(); virtual void v04();
     virtual void v05(); virtual void v06(); virtual void v07(); virtual void v08();
     virtual uint32_t GetType();               // +0x24 (index 9)
@@ -19,16 +20,33 @@ struct cVBase {
     virtual void v41(uint32_t a);             // +0xA4 (index 41)
     virtual void v42();                       // +0xA8 (index 42)
     virtual void v43(uint32_t a);             // +0xAC (index 43)
-};
 
-struct cXX : cVBase {
     uint32_t f4;   // +0x04
     uint32_t f8;   // +0x08
     uint32_t fc;   // +0x0C
-    char pad10[0x26 - 0x10];
+    ~cIJobManager() {}
+};
+
+// Secondary base (+0x10): the resource the job was created for.
+struct cEditorResource {
+    virtual void e0();
+    ~cEditorResource() {}
+};
+
+// Secondary base (+0x14): content-validation summary/refcount.
+struct cContentValidationSummarizer {
+    virtual void s0();
+    virtual void s1();
+    int mRefCount;   // +0x1C
+    int mFlags;      // +0x20
+    ~cContentValidationSummarizer() {}
+};
+
+struct cXX : cIJobManager, cEditorResource, cContentValidationSummarizer {
+    char pad20[0x26 - 0x20];
     uint8_t f26;   // +0x26
 
-    void FUN_006412a0();
+    ~cXX();
     void FUN_006412c0(uint32_t* src);
     void FUN_00641340(uint32_t a);
     void FUN_00641360(uint32_t a);
@@ -107,14 +125,35 @@ char cXX::FUN_00641490()
     return 0;
 }
 
-// @ 0x006412A0  PARTIAL
-void cXX::FUN_006412a0() {}
-// @ 0x00640EE0  PARTIAL
-void cXX::FUN_00640ee0() {}
-// @ 0x00640FA0  PARTIAL
-void cXX::FUN_00640fa0() {}
-// @ 0x006411B0  PARTIAL
-void cXX::FUN_006411b0() {}
+// @ 0x006412A0
+cXX::~cXX() {}
+
+// EA::Stopwatch (0x18 bytes): the timestamp fields the photo sub-mode rewrites.
+extern "C" __declspec(dllimport) int __stdcall QueryPerformanceCounter(__int64* p);
+extern "C" unsigned __int64 __rdtsc();
+#pragma intrinsic(__rdtsc)
+
+namespace EA {
+struct Stopwatch {
+    uint64_t mnStartTime;         // +0x00
+    uint64_t mnTotalElapsedTime;  // +0x08
+    int mnUnits;                  // +0x10
+    float mfCoeff;                // +0x14
+    void Restart();               // 0x00571E80
+    // Start() inlined for both unit kinds, then the elapsed total is cleared.
+    void RestartInline()
+    {
+        if (mnUnits == 1)
+            mnStartTime = __rdtsc();
+        else {
+            __int64 t;
+            QueryPerformanceCounter(&t);
+            mnStartTime = t;
+        }
+        mnTotalElapsedTime = 0;
+    }
+};
+}
 
 // ============================================================================
 // @ 0x006404F0  SP::cSPPlayModeSubModePhoto::HandleButton
@@ -149,6 +188,10 @@ struct cSPPlayModeUIPhoto {
     char pad0[0x44];
     bool mbLayoutInit;                                  // +0x44
     void SetHighlight(uint32_t id, bool on);            // 0x00634E90
+    void SetEnabled(uint32_t id, bool on);              // 0x00634EF0
+    void SetUIGroupVisible(uint32_t id, bool on);       // 0x00635760
+    void SetEditorUIGroupVisible(uint32_t id, bool on); // 0x00635790
+    bool IsUIGroupEnabled(uint32_t id);                 // 0x00635890
     void FUN_00635350(int a, int b);                    // 0x00635350
     void SetSendEmailDialogVisibility(bool on);         // 0x00635400
     void SetEnableNewCreatureButton(bool on);           // 0x00635580
@@ -175,6 +218,9 @@ class cSPPlayModePhotoBrowser { public:
     void FUN_00634570();                // 0x00634570
     int  FUN_006c0200();                // 0x006C0200
     uint32_t FUN_00cee370();            // 0x00CEE370
+    void SetToLastPage();               // 0x00633080
+    void UpdatePhotoCountText();        // 0x00630D10
+    void* FUN_00630060(int index);      // 0x00630060
 };
 
 namespace Pollen {
@@ -213,9 +259,17 @@ public:
     uint32_t mBabyEventIDs[6];                  // +0x34
     cSPPlayModeUIPhoto* mUI;                    // +0x4C
     cSPPlayModePhotoBrowser mPhotoBrowser;      // +0x50
-    char padBrowser[0xF30 - 0x51];
+    char padBrowser[0xF10 - 0x51];
+    EA::Stopwatch mTimerA;                      // +0xF10
+    char padF28[0xF30 - 0xF28];
     bool mbF30;                                 // +0xF30
-    char padF31[0xF98 - 0xF31];
+    char padF31[0xF50 - 0xF31];
+    uint32_t mWriteCount;                       // +0xF50
+    char padF54[0xF58 - 0xF54];
+    bool mbF58;                                 // +0xF58
+    char padF59[0xF60 - 0xF59];
+    EA::Stopwatch mTimerC;                      // +0xF60
+    char padF78[0xF98 - 0xF78];
     int mDialogInProgress;                      // +0xF98
 
     bool HandleButton(int id);
@@ -224,7 +278,12 @@ public:
     void CloseSendPhotoWindow();                // 0x0063EC10
     void FUN_0063f060();                        // 0x0063F060
     void SavePhoto(uint32_t a);                 // 0x0063F420
+    void SavePhotoSimple();                     // 0x0063F5C0
+    void WritePhotoWithComment(void* pWriteJobInfo, int type, uint32_t a);   // 0x0063F740
     void SendPhoto();                           // 0x0063FD20
+    bool FUN_00640ee0(void* arg);
+    void FUN_00640fa0();
+    void CaptureImageDone();
 };
 
 } // namespace SP
@@ -478,6 +537,252 @@ bool cSPPlayModeSubModePhoto::HandleButton(int id)
 
     }
     return true;
+}
+
+} // namespace SP
+
+// ============================================================================
+// Post-capture photo path (SP::cSPPlayModeSubModePhoto): the write-job message
+// helper, the sprite-layer job and the capture-finished handler.
+// ============================================================================
+void* operator new(size_t size, const char* name, int a, int b, int c, int d);   // 0x00F473A0
+extern char kEditorAllocName[];   // 0x013EB430
+
+namespace SP {
+
+// A job owned by the job manager (virtual interface + directly-called refcounting).
+struct cJobCallback;
+struct cJob {
+    virtual void j0(); virtual void j1(); virtual void j2(); virtual void j3();
+    virtual cJobCallback* GetCallback();   // +0x10 (slot 4)
+    char pad14[0x30 - 0x14];
+    cJob* mpSubJob;        // +0x30
+    int AddRef();          // 0x0068F950
+    int Release();         // 0x00690120
+    int GetStatus();       // 0x006909B0
+};
+
+// The write-job bookkeeping object handed to WritePhotoWithComment (job at +0x0C,
+// message payload pointer at +0x10).
+struct cWriteJobInfo {
+    char pad0[0xC];
+    cJob* mpJob;           // +0x0C
+    void* mpMsgParam;      // +0x10
+};
+
+// Parameter block whose +0x08 field is the write-job info.
+struct cPhotoWriteParams {
+    char pad0[8];
+    cWriteJobInfo* mpJobInfo;   // +0x08
+};
+
+// Ref-counted virtual message posted to the message server.
+struct cRefBaseA22 {
+    virtual void r0();
+    virtual void r1();
+    virtual void r2();
+    int mRefCount;         // +0x04
+};
+
+struct cPhotoWriteMsg : cRefBaseA22 {
+    cJob* mpJob;           // +0x08
+    void* mpF0C;           // +0x0C
+    void* mpF10;           // +0x10
+    void* mpF14;           // +0x14
+    void* mpF18;           // +0x18
+    void* mpF1C;           // +0x1C
+};
+
+struct IMessageServerPhoto {
+    virtual void m0(); virtual void m1(); virtual void m2(); virtual void m3();
+    virtual void m4(); virtual void m5();
+    virtual void PostPhotoWrite(void* param, void* data, int a, int b);   // +0x18
+};
+IMessageServerPhoto* MessageServerPhoto();   // 0x0067DCC0
+
+// @ 0x00640EE0
+// A write job finished: flush the pending photo comment, drop the job's sub-job,
+// then post a message carrying the finished job to the message server.
+bool cSPPlayModeSubModePhoto::FUN_00640ee0(void* arg)
+{
+    cWriteJobInfo* info = ((cPhotoWriteParams*)arg)->mpJobInfo;
+    cJob* job = info->mpJob;
+    if (job) {
+        WritePhotoWithComment(info, 0x417b3bc, 2);
+        cJob* sub = job->mpSubJob;
+        if (sub) {
+            job->mpSubJob = 0;
+            sub->Release();
+        }
+    }
+    IMessageServerPhoto* server = MessageServerPhoto();
+    if (server && info->mpMsgParam) {
+        cPhotoWriteMsg* msg = new (kEditorAllocName, 0, 0, 0, 0) cPhotoWriteMsg;
+        if (msg) {
+            msg->mpF10 = 0;
+            msg->mRefCount = 0;
+            msg->mpF18 = 0;
+            msg->mpJob = job;
+            msg->r1();
+        }
+        server->PostPhotoWrite(info->mpMsgParam, msg, 0, 0);
+        msg->r2();
+    }
+    return true;
+}
+
+// ---------------------------------------------------------------------------
+// The sprite-layer object allocated by the post-capture job.
+struct cILayer { virtual void l0(); virtual void Release(); };
+struct hkReferencedObject { virtual void h0(); virtual void h1(); int mRefCount; };
+struct cPhotoSpriteLayer : cILayer, hkReferencedObject {
+    cJob* mpJob;           // +0x08
+    void* mpF0C;           // +0x0C
+    void* mpF10;           // +0x10
+    void* mpF14;           // +0x14
+    void* mpF18;           // +0x18
+    uint32_t mWidth;       // +0x1C
+    uint32_t mBpp;         // +0x20
+    uint8_t mbF24;         // +0x24
+};
+
+// The photo record the browser is currently showing (fields at +0x08/+0x0C).
+struct cPhotoRecord {
+    char pad0[8];
+    void* mpF8;            // +0x08
+    void* mpFC;            // +0x0C
+};
+
+struct cSpriteInfo {
+    void* mpData;          // +0x00
+    char pad4[8];
+    uint16_t mWidth;       // +0x0C
+    uint16_t mHeight;      // +0x0E
+    uint8_t mBpp;          // +0x10
+};
+
+// Wrapper holding the sprite plus its readiness flags.
+struct cSpriteSource {
+    cSpriteInfo* mpSprite; // +0x00
+    uint32_t mFlags;       // +0x04
+};
+
+// The photo-asset manager returned by GetPhotoAssets (0x0067DD60).
+struct cPhotoAssets {
+    virtual void a0(); virtual void a1(); virtual void a2(); virtual void a3();
+    virtual void a4(); virtual void a5(); virtual void a6(); virtual void a7();
+    virtual cSpriteSource* a8(void* a, void* b, int c);    // +0x20
+    virtual void a9(); virtual void a10(); virtual void a11(); virtual void a12();
+    virtual void a13(void* p);                             // +0x34
+    virtual void a14(); virtual void a15(); virtual void a16(); virtual void a17();
+    virtual void a18(); virtual void a19(); virtual void a20(); virtual void a21();
+    virtual void a22(); virtual void a23(); virtual void a24(); virtual void a25();
+    virtual void a26(void* p);                             // +0x68
+};
+cPhotoAssets* GetPhotoAssets();   // 0x0067DD60
+
+// A job completion callback slot handed back by the job (function at +0x00, param at +0x04).
+struct cJobCallback {
+    void (*mpFunc)();      // +0x00
+    void* mpParam;         // +0x04
+    char pad8[0x10];
+    int mF18;              // +0x18
+};
+
+// thiscall on the sprite, returning whether the texture was filled.
+bool __fastcall FillSpriteTexture(cSpriteInfo* self, int /*edx*/, void* buf, uint32_t size, int a);   // 0x011F0440
+cJob* FUN_0068f4d0();                                     // 0x0068F4D0
+void FUN_0068f9b0(cJobCallback* cb, cPhotoSpriteLayer* layer);   // 0x0068F9B0
+void FUN_00640f90();                                      // 0x00640F90 (job callback)
+
+// @ 0x00640FA0
+// Post-capture: build a sprite layer for the photo the browser is showing, hand it
+// to a new job (with a completion callback) and, when the job is accepted, enable
+// the take-picture button again.
+void cSPPlayModeSubModePhoto::FUN_00640fa0()
+{
+    cPhotoSpriteLayer* layer =
+        new (kEditorAllocName, 0, 0, 0, 0) cPhotoSpriteLayer;
+    if (!layer)
+        return;
+
+    layer->mpF0C = 0;
+    layer->mpF10 = 0;
+    layer->mBpp = 0;
+    layer->mbF24 = 1;
+    layer->l0();
+
+    cSPPlayModePhotoBrowser* browser = &mPhotoBrowser;
+    cPhotoRecord* record = (cPhotoRecord*)browser->FUN_00630060(browser->FUN_00cee370() - 1);
+    cPhotoAssets* assets = GetPhotoAssets();
+    cSpriteSource* source = assets->a8(record->mpF8, record->mpFC, 0);
+    assets->a26(source);
+    if (!(source->mFlags & 1))
+        assets->a13(source);
+
+    cSpriteInfo* sprite = source->mpSprite;
+    uint32_t size = ((uint32_t)sprite->mBpp * sprite->mHeight * sprite->mWidth) >> 3;
+    void* buf = operator new(size, kEditorAllocName, 0, 0, 0, 0);
+    if (!FillSpriteTexture(sprite, 0, buf, size, 0)) {
+        layer->Release();
+        return;
+    }
+
+    layer->mpF14 = sprite->mpData;
+    layer->mpF18 = buf;
+    layer->mpJob = 0;
+    layer->mpF0C = record;
+    layer->mpF10 = (void*)0x41a218d;
+    layer->mWidth = sprite->mWidth;
+    layer->mbF24 = (sprite->mHeight == 0x15);
+    layer->mBpp = sprite->mBpp;
+
+    cJob* job = FUN_0068f4d0();
+    cJobCallback* cb = 0;
+    if (job) {
+        job->AddRef();
+        cb = job->GetCallback();
+        cb->mpFunc = FUN_00640f90;
+        cb->mF18 = 4;
+    }
+    FUN_0068f9b0(cb, layer);
+    if (job)
+        job->GetStatus();
+
+    cJob* old = layer->mpJob;
+    if (old != job) {
+        if (job) job->AddRef();
+        layer->mpJob = job;
+        if (old) old->Release();
+    }
+    if (++mWriteCount >= 1)
+        mUI->SetEnabled(0x3a8ede4, false);
+    if (job) job->Release();
+    layer->Release();
+}
+
+// @ 0x006411B0
+// Photo capture finished: save the simple shot, reset the browser and UI groups,
+// restart the pose timer and run the post-capture job.
+void cSPPlayModeSubModePhoto::CaptureImageDone()
+{
+    SavePhotoSimple();
+    cSPPlayModePhotoBrowser* browser = &mPhotoBrowser;
+    browser->SetToLastPage();
+    browser->UpdatePhotoCountText();
+    mUI->SetHighlight(0x445ea50, false);
+    mUI->SetUIGroupVisible(0x410cf00, false);
+    mUI->SetUIGroupVisible(0x41a30c0, false);
+    mUI->SetUIGroupVisible(0x4463e78, false);
+    mUI->SetEditorUIGroupVisible(0x447c040, false);
+    mUI->SetEditorUIGroupVisible(0x447c4e8, false);
+    mbF30 = true;
+    mTimerA.RestartInline();
+    if (!mUI->IsUIGroupEnabled(0x445ea18)) {
+        mbF58 = true;
+        mTimerC.Restart();
+    }
+    FUN_00640fa0();
 }
 
 } // namespace SP

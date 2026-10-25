@@ -341,26 +341,37 @@ void Ser68::FUN_006805c0(char** pVec, IOStream* pStream) {
 }
 
 // ================================================================ vector copy ctor
-extern "C" void FUN_00680420(void**, char*, char*, char*, void**);
+extern char gEastlAllocator;                                   // 0x013ebb38
+void FUN_00680420(Rec48**, const Rec48*, const Rec48*, Rec48*, const void*);   // 0x00680420
+
+struct VecOps {
+  Rec48* mpBegin;   // +0
+  Rec48* mpEnd;     // +4
+  Rec48* mpCap;     // +8
+  VecOps* CopyCtor(const Vec48* src);
+};
+
 // @ 0x00680a50
-struct VecOps { char** FUN_00680a50(char** src); };
-char** VecOps::FUN_00680a50(char** src) {
-  char** dst = (char**)this;
-  int n = (int)(src[1] - src[0]) / 0x48;
-  char* p;
-  if (n == 0)
+VecOps* VecOps::CopyCtor(const Vec48* src) {
+  int n = (int)((char*)src->mpEnd - (char*)src->mpBegin) / 0x48;
+  Rec48* p;
+  if (n != 0) {
+    p = (Rec48*)EAAlloc((unsigned)(n * 0x48), "App", 0, 0, &gEastlAllocator, 0xd1);
+  } else {
     p = 0;
-  else
-    p = (char*)EAAlloc(
-        n * 0x48, "App", 0, 0,
-        "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h",
-        0xd1);
-  dst[0] = p;
-  dst[1] = p;
-  dst[2] = p + n * 0x48;
-  FUN_00680420((void**)&src, src[0], src[1], p, (void**)src);
-  dst[1] = (char*)src;
-  return dst;
+  }
+  mpBegin = p;
+  mpEnd = p;
+  mpCap = p + n;
+  Rec48* end;
+  try {
+    FUN_00680420(&end, src->mpBegin, src->mpEnd, p, src);
+  } catch (...) {
+    EAFree(mpBegin);
+    throw;
+  }
+  mpEnd = end;
+  return this;
 }
 
 // ================================================================ cheat name map

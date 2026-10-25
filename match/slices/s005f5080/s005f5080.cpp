@@ -341,26 +341,77 @@ struct cItemCostInfo {
   uint32_t mCost;       // +0x30
 };
 
+struct cSPMatrix3_ {
+  float m[9];                                       // +0x00
+  void Assign(const cSPMatrix3_& other);            // 0x0041cb40
+  void Assign(const float* other);                  // 0x0041cb40
+};
+
+struct cSPTransform_ {
+  uint16_t mFlags;                 // +0x00
+  uint16_t mModificationCount;     // +0x02
+  float mTranslation[3];           // +0x04
+  float mScale;                    // +0x10
+  cSPMatrix3_ mRotation;           // +0x14
+  cSPTransform_();
+  cSPTransform_* Assign(const cSPTransform_& other);   // 0x00537dc0
+  cSPTransform_* Compose(const cSPTransform_& other);  // 0x0040ccb0
+  void Apply(const cSPMatrix3_& rotation);             // 0x006ba870
+  void PreRotateY(float angle);                        // 0x006baa70
+};
+
+struct cSPBoundingBox3 {
+  float mMin[3];  // +0x00
+  float mMax[3];  // +0x0c
+  void Construct();  // 0x00576b40
+  cSPBoundingBox3* CopyFrom(void* source);                  // 0x00511140
+  cSPBoundingBox3* CopyFromBox(const cSPBoundingBox3& source);  // 0x00571d60
+};
+
+class cPropertyValue {
+ public:
+  cSPBoundingBox3* GetBoundingBox();  // 0x005f2320
+};
+
+class cPropertyList {
+ public:
+  PV(0) PV(1) PV(2) PV(3) PV(4) PV(5) PV(6)
+  virtual bool Cast(uint32_t typeID);              // +0x1c
+  PV(8) PV(9)
+  virtual void* GetProperty(uint32_t typeID);      // +0x28
+};
+
 class cModelWorld {
  public:
   PV(0) PV(1) PV(2) PV(3) PV(4) PV(5) PV(6) PV(7) PV(8) PV(9) PV(10) PV(11) PV(12) PV(13) PV(14)
-  PV(15) PV(16) PV(17) PV(18) PV(19) PV(20) PV(21) PV(22) PV(23) PV(24)
+  PV(15) PV(16) PV(17) PV(18) PV(19) PV(20) PV(21) PV(22) PV(23)
+  virtual cSPBoundingBox3* GetBoundingBox(struct cMWModel* model);  // +0x60
   virtual int GetEffectCount(struct cMWModel* model);  // +0x64
   PV(26) PV(27)
   virtual void StartEffect(cMWModel* model, uint32_t effectID, int a, float b, int index);  // +0x70
-  PV(29) PV(30) PV(31) PV(32) PV(33) PV(34) PV(35) PV(36) PV(37) PV(38) PV(39) PV(40) PV(41) PV(42)
+  virtual void SetDeformWeight(cMWModel* model, uint32_t id, float weight, int a);  // +0x74
+  PV(30) PV(31)
+  virtual void GetDeformRange(cMWModel* model, uint32_t id, float* minValue, float* maxValue,
+                              int a);  // +0x80
+  PV(33) PV(34) PV(35) PV(36) PV(37) PV(38) PV(39) PV(40) PV(41) PV(42)
   PV(43) PV(44) PV(45) PV(46) PV(47) PV(48) PV(49) PV(50) PV(51) PV(52) PV(53) PV(54) PV(55) PV(56)
-  PV(57) PV(58) PV(59) PV(60) PV(61) PV(62) PV(63) PV(64) PV(65) PV(66) PV(67) PV(68) PV(69) PV(70)
+  PV(57)
+  virtual int GetDeforms(cMWModel* model, void* deforms, int maxCount);  // +0xe8
+  PV(59) PV(60) PV(61) PV(62) PV(63) PV(64) PV(65) PV(66)
+  virtual void ResetDeforms(cMWModel* model, int a);  // +0x10c
+  PV(68) PV(69) PV(70)
   PV(71) PV(72) PV(73) PV(74) PV(75) PV(76) PV(77) PV(78) PV(79) PV(80) PV(81) PV(82) PV(83) PV(84)
   PV(85) PV(86) PV(87) PV(88) PV(89) PV(90) PV(91)
   virtual void DestroyModel(struct cMWModel* model, bool immediate);  // +0x170
 };
 struct cMWModel { private:
  public:
-  cModelWorld* mpWorld;  // +0x0
-  uint32_t mFlags;       // +0x4
-  uint32_t pad8[14];
-  int mRefCount;         // +0x40
+  cModelWorld* mpWorld;      // +0x0
+  uint32_t mFlags;           // +0x4
+  cSPTransform_ mTransform;  // +0x8
+  int mRefCount;             // +0x40
+  uint32_t pad44[19];        // +0x44
+  cPropertyList* mPropertyList;  // +0x90
   void AddRef() { mRefCount++; }
   void Release();
 };
@@ -420,6 +471,7 @@ class cSwatchRenderer {
   virtual void SetTexture(void* texture);  // +0x88
 };
 
+class cAnimatingCreature;
 class cSwatch3DView { public:
   bool mVisible;                                            // +0x00
   cUILayeredObject* mLayeredObject;                         // +0x04
@@ -433,7 +485,56 @@ class cSwatch3DView { public:
   cSwatchTexture* mTexture;                                 // +0x2c
   void RemoveModel(cMWModel* model);                        // 0x005f4eb0
   cMWModel* AddModel(uint32_t a, uint32_t b);               // 0x005f59b0
+  cAnimatingCreature* AddCreature(Key* key, void* a, uint32_t b);  // 0x005f3930
   void RemoveAllModels();                                   // 0x005f5aa0
+};
+
+inline cSPTransform_::cSPTransform_()
+    : mFlags(0), mModificationCount(0), mScale(1.0f) {
+  mTranslation[0] = 0.0f;
+  mTranslation[1] = 0.0f;
+  mTranslation[2] = 0.0f;
+  mRotation.m[0] = 1.0f; mRotation.m[1] = 0.0f; mRotation.m[2] = 0.0f;
+  mRotation.m[3] = 0.0f; mRotation.m[4] = 1.0f; mRotation.m[5] = 0.0f;
+  mRotation.m[6] = 0.0f; mRotation.m[7] = 0.0f; mRotation.m[8] = 1.0f;
+}
+
+struct KeyVec {
+  Key* mpBegin;
+  Key* mpEnd;
+  Key* mpCapacity;
+  int size() const { return (int)(mpEnd - mpBegin); }
+  void push_back(const Key& v);                 // 0x005f58f0
+  void DoInsertValue(Key* pos, const Key& v);   // 0x4e3e10
+  void clear() { mpEnd = mpBegin; }
+};
+
+struct RefVec {
+  AutoRefCount<cMWModel>* mpBegin;
+  AutoRefCount<cMWModel>* mpEnd;
+  AutoRefCount<cMWModel>* mpCapacity;
+  int size() const { return (int)(mpEnd - mpBegin); }
+  void clear();  // 0x005f5970
+  void DoDestroyValues(AutoRefCount<cMWModel>* first, AutoRefCount<cMWModel>* last);  // 0x005f3680
+  void DoInsertValue(AutoRefCount<cMWModel>* pos, cMWModel** value);  // 0x423c40
+};
+
+struct TransformVec {
+  cSPTransform_* mpBegin;
+  cSPTransform_* mpEnd;
+  cSPTransform_* mpCapacity;
+  int size() const { return (int)(mpEnd - mpBegin); }
+  void ShrinkTransformVector();
+};
+
+class cAnimatingCreature {
+ public:
+  char pad0[0x10];
+  float mQuaternion[4];               // +0x10
+  char pad20[0x180 - 0x20];
+  cMWModel* mpModel;                  // +0x180
+  int AddRef();
+  void Release();                     // 0x00a05270
 };
 
 struct cModelChangedMessage {
@@ -484,7 +585,7 @@ class cSPSwatch : public IWinProc, public EA::RefCountVTemplate<int>, public EA:
     return false;
   }
   void UpdateSwatchPosition(uint32_t deltaTime);
-  uint32_t SetImage(uint32_t imageID, bool overlay);
+  uint32_t SetImage(uint32_t imageID, bool overlay);  // 0x005f2d00
   void Show3DModel();
   void Hide3DModel();
   void StartModelEffects();
@@ -499,8 +600,9 @@ class cSPSwatch : public IWinProc, public EA::RefCountVTemplate<int>, public EA:
   void Init(Key* key, void* a, void* b, uint32_t c, uint32_t d, uint32_t e, uint32_t f, uint32_t scale);  // 0x005f5000
   void InitInternal(IWindow* base, IWindow* modelWindow, uint32_t a3, uint32_t a4,
                     uint32_t b5, uint32_t b6, uint32_t a7, uint32_t a8);  // 0x005f3b20
-  void RotateModel(uint32_t flags);       // 0x005f55e0
-  void LoadModel();                       // 0x005f5b40
+  void SetDefaultDeforms();               // 0x005f5080
+  void RotateModel();                     // 0x005f55e0
+  void LoadModel(Key& key);               // 0x005f5b40
   void ShutDownModel();                   // 0x005f5df0
   void AddModelKey(const Key& key);       // 0x005f58f0
 
@@ -518,7 +620,7 @@ class cSPSwatch : public IWinProc, public EA::RefCountVTemplate<int>, public EA:
   Point2D mActualViewportCenter;          // +0x84
   Point2D mTargetViewportCenter;          // +0x8c
   float mMaxViewportScaleFactor;          // +0x94
-  float mSwatchRotation[9];               // +0x98
+  cSPMatrix3_ mSwatchRotation;            // +0x98
   bool mIsZooming;                        // +0xbc
   float mTargetWindowAlpha;               // +0xc0
   float mCurrentWindowAlpha;              // +0xc4
@@ -535,14 +637,22 @@ class cSPSwatch : public IWinProc, public EA::RefCountVTemplate<int>, public EA:
   bool mDisplay3DModel;                   // +0xea
   bool mBakedAsset;                       // +0xeb
   bool mMouseOverWindow;                  // +0xec
-  cImageLayers* mpImageLayers;            // +0xf0
-  uint32_t padf4;
+  AutoRefCount<cAnimatingCreature> mAnimatingCreature;  // +0xf0
+  uint32_t mCreatureParam;                // +0xf4
   uint32_t mImageID;                      // +0xf8
   bool mImageOverlay;                     // +0xfc
   bool mImageSet;                         // +0xfd
-  uint32_t pad100[6];
+  uint16_t padfe;                         // +0xfe
+  uint32_t pad100;                        // +0x100
+  RefVec mStaticEffects;                  // +0x104
+  uint32_t pad110[2];                     // +0x110
   AutoRefCount<cMWModel> mModel;          // +0x118
-  uint32_t pad11c[17];
+  RefVec mAdditionalModels;               // +0x11c
+  uint32_t pad128[2];                     // +0x128
+  TransformVec mStaticEffectsTransforms;  // +0x130
+  uint32_t pad13c[3];                     // +0x13c
+  KeyVec mAdditionalModelKeys;            // +0x148
+  uint32_t pad154[3];                     // +0x154
   bool mHasBeenFramed;                    // +0x160
   bool mModelLoaded;                      // +0x161
   bool mModelLoadStarted;                 // +0x162
@@ -618,23 +728,43 @@ class cSPBoundingBox {
   cRefCountedModel2* GetModelManager();  // 0x006c10e0
 };
 
-struct KeyVec {
-  Key* mpBegin;
-  Key* mpEnd;
-  Key* mpCapacity;
-  void push_back(const Key& v);                 // 0x005f58f0
-  void DoInsertValue(Key* pos, const Key& v);   // 0x4e3e10
-  void clear() { mpEnd = mpBegin; }
+struct cSPDeform {
+  uint32_t mUnknown0;          // +0x00
+  cSPTransform_ mTransform;    // +0x04
+  uint32_t mID;                // +0x3c
+  uint32_t mUnknown40[6];      // +0x40
+  float mWeight;               // +0x58
 };
 
-struct RefVec {
-  AutoRefCount<cMWModel>* mpBegin;
-  AutoRefCount<cMWModel>* mpEnd;
-  AutoRefCount<cMWModel>* mpCapacity;
-  void clear();  // 0x005f5970
-  void DoDestroyValues(AutoRefCount<cMWModel>* first, AutoRefCount<cMWModel>* last);  // 0x005f3680
-  void DoInsertValue(AutoRefCount<cMWModel>* pos, cMWModel** value);  // 0x423c40
+cSPTransform_* copy_transforms(cSPTransform_* first, cSPTransform_* last,
+                               cSPTransform_* out);  // 0x00f339d0
+float* Matrix33ToQuaternion(float* out, const cSPMatrix3_* rotation);  // 0x0046d660
+void FUN_00458f60(cMWModel* model, cModelWorld* world, uint32_t instance, uint32_t type,
+                  uint32_t group, int a);  // 0x00458f60
+
+class cPropertyManager {
+ public:
+  PV(0) PV(1) PV(2) PV(3) PV(4) PV(5) PV(6) PV(7) PV(8) PV(9) PV(10)
+  virtual bool GetProperty(uint32_t instance, uint32_t group, void** out);  // +0x2c
 };
+cPropertyManager* PropertyManager();  // 0x0067de30
+bool GetPropertyAsKey(void* property, uint32_t typeID, Key* out);  // 0x006a1250
+
+struct cPropertyKeyDesc {
+  uint32_t mTypeID;  // +0x00
+  uint16_t mField;   // +0x04
+  uint16_t mFlags;   // +0x06
+};
+class cKeyConverter {
+ public:
+  PV(0) PV(1) PV(2) PV(3) PV(4) PV(5) PV(6) PV(7) PV(8) PV(9) PV(10) PV(11) PV(12) PV(13) PV(14)
+  PV(15) PV(16) PV(17) PV(18)
+  virtual void Convert(Key* key, const cPropertyKeyDesc* desc);  // +0x4c
+};
+cKeyConverter* KeyConverter();  // 0x00401010
+
+extern float kSwatchAngleOffset;  // 0x0151c568
+extern cSPMatrix3_ gIdentityMatrix;  // 0x015f1e14
 
 class cSwatchWindow {
  public:
@@ -746,29 +876,183 @@ void cSwatch3DView::RemoveAllModels() {
 // @ 0x005F5DF0
 void cSPSwatch::ShutDownModel() {
   mModel = (cMWModel*)0;
-  ((RefVec*)((char*)this + 0x11c))->clear();
-  ((RefVec*)((char*)this + 0x130))->clear();
-  ((RefVec*)((char*)this + 0x104))->clear();
-  ((KeyVec*)((char*)this + 0x148))->clear();
-  void* effect = *(void**)((char*)this + 0xf0);
-  if (effect) {
-    *(void**)((char*)this + 0xf0) = 0;
-    ((cAnimWorld*)effect)->Release();
-  }
+  mAdditionalModels.clear();
+  mStaticEffectsTransforms.ShrinkTransformVector();
+  mStaticEffects.clear();
+  mAdditionalModelKeys.clear();
+  mAnimatingCreature = (cAnimatingCreature*)0;
   m3DView.RemoveAllModels();
   mCreatedCreature = false;
 }
 
 // @ 0x005F5080
-void FUN_005f5080() { /* partial: 1375-byte update routine not reconstructed */ }
+void cSPSwatch::SetDefaultDeforms() {
+  cSPDeform deforms[32];
+
+  if (mModel) {
+    cModelWorld* world = mModel->mpWorld;
+    int count = world->GetDeforms(mModel, deforms, 32);
+    for (int i = 0; i < count; i++) {
+      float minValue = 0.0f;
+      float maxValue = 0.0f;
+      world->GetDeformRange(mModel, deforms[i].mID, &minValue, &maxValue, 0);
+      world->SetDeformWeight(mModel, deforms[i].mID,
+                             minValue + (maxValue - minValue) * deforms[i].mWeight, 0);
+    }
+    if (mOriginalItemKey.mInstance != 0)
+      FUN_00458f60(mModel, world, mOriginalItemKey.mInstance, mOriginalItemKey.mType,
+                   mOriginalItemKey.mGroup, 0);
+    if (count > 0 && !mModel->mPropertyList->Cast(0x1cbb2f62))
+      world->ResetDeforms(mModel, 0);
+  }
+  mHasBeenFramed = false;
+}
 
 // @ 0x005F55E0
-void cSPSwatch::RotateModel(uint32_t flags) { (void)flags; }
+void cSPSwatch::RotateModel() {
+  if (mModel == 0)
+    return;
+  if (mUseEditorCameraController)
+    return;
+
+  cModelWorld* world = mModel->mpWorld;
+  cSPTransform_ transform;
+  transform.mRotation.Assign(gIdentityMatrix);
+  cSPBoundingBox3 box;
+
+  if (mAnimatingCreature == 0) {
+    box.Construct();
+    if (mModel->mPropertyList != 0 && mModel->mPropertyList->Cast(0x1cbb2f62)) {
+      void* property = mModel->mPropertyList->GetProperty(0x1cbb2f62);
+      cSPBoundingBox3 source;
+      source.CopyFrom(((cPropertyValue*)property)->GetBoundingBox());
+      box.CopyFromBox(source);
+    } else {
+      cSPBoundingBox3* modelBox = world->GetBoundingBox(mModel);
+      box = *modelBox;
+    }
+    transform.mTranslation[0] = -((box.mMin[0] + box.mMax[0]) * 0.5f);
+    transform.mTranslation[1] = -((box.mMin[1] + box.mMax[1]) * 0.5f);
+    transform.mTranslation[2] = -((box.mMin[2] + box.mMax[2]) * 0.5f);
+    transform.mFlags |= 4;
+    transform.mModificationCount++;
+  }
+
+  transform.Apply(mSwatchRotation);
+
+  float angle = mActualAngle;
+  if (mIsModelBaked && mAnimatingCreature == 0)
+    angle += kSwatchAngleOffset;
+  transform.PreRotateY(angle);
+
+  cSPMatrix3_ rotation;
+  rotation.Assign(transform.mRotation);
+
+  if (mAnimatingCreature) {
+    float quaternion[4];
+    float* values = Matrix33ToQuaternion(quaternion, &rotation);
+    mAnimatingCreature->mQuaternion[0] = values[0];
+    mAnimatingCreature->mQuaternion[1] = values[1];
+    mAnimatingCreature->mQuaternion[2] = values[2];
+    mAnimatingCreature->mQuaternion[3] = values[3];
+  } else {
+    mModel->mTransform.mFlags |= 2;
+    mModel->mTransform.mRotation = rotation;
+    mModel->mTransform.mModificationCount++;
+    mModel->mTransform.mFlags |= 4;
+    mModel->mTransform.mModificationCount++;
+    mModel->mTransform.mTranslation[0] = transform.mTranslation[0];
+    mModel->mTransform.mTranslation[1] = transform.mTranslation[1];
+    mModel->mTransform.mTranslation[2] = transform.mTranslation[2];
+  }
+
+  int count = mAdditionalModels.size();
+  for (int i = 0; i < count; i++) {
+    cSPTransform_ temp;
+    temp.mRotation.Assign(gIdentityMatrix);
+    cMWModel* additional = mAdditionalModels.mpBegin[i].mpObject;
+    additional->mTransform.Assign(mModel->mTransform);
+    additional->mTransform.Compose(mStaticEffectsTransforms.mpBegin[i]);
+  }
+}
 
 // @ 0x005F5930
-void ShrinkTransformVector() { /* partial */ }
+void TransformVec::ShrinkTransformVector() {
+  cSPTransform_* first = mpBegin;
+  cSPTransform_* last = mpEnd;
+  copy_transforms(last, last, first);
+  mpEnd -= (int)(last - first);
+}
 
 // @ 0x005F5B40
-void cSPSwatch::LoadModel() { /* partial: 687-byte model load not reconstructed */ }
+void cSPSwatch::LoadModel(Key& key) {
+  if (key.mInstance == 0)
+    return;
+  if (mNeverLoadModel)
+    return;
+  mModelLoadStarted = true;
+  if (m3DView.mLayeredObject)
+    m3DView.mLayeredObject->SetVisible(false);
+  if (m3DView.mTexture)
+    m3DView.mRenderer->SetTexture(0);
+  m3DView.mVisible = false;
+
+  switch (key.mType) {
+    case 0x2b978c46:
+    case 0x438f6347:
+    case 0x3d97a8e4: {
+      cAnimatingCreature* creature =
+          m3DView.AddCreature(&key, (void*)mCreatureParam, mScaleParam);
+      mAnimatingCreature = creature;
+      mModel = mAnimatingCreature->mpModel;
+      mBakedAsset = true;
+      mCreatedCreature = true;
+      if (mImageID != 0)
+        SetImage(mImageID, mImageOverlay);
+      mAllowRotation = false;
+      return;
+    }
+    case 0:
+    case 0xe6bce5:
+    case 0xb1b104:
+    case 0x2f4e681b: {
+      uint32_t instance = key.mInstance;
+      uint32_t group = key.mGroup;
+      void* property = 0;
+      if (PropertyManager()->GetProperty(key.mInstance, key.mGroup, &property)) {
+        Key converted;
+        if (GetPropertyAsKey(property, 0x13c6a371, &converted)) {
+          instance = converted.mInstance;
+          group = converted.mGroup;
+        } else if (GetPropertyAsKey(property, 0x22e8410, &converted)) {
+          cPropertyKeyDesc desc;
+          desc.mTypeID = 0x2ea8fb98;
+          desc.mField = 0x11;
+          desc.mFlags = 4;
+          KeyConverter()->Convert(&converted, &desc);
+          instance = converted.mInstance;
+          group = converted.mGroup;
+        }
+      }
+      mModel = m3DView.AddModel(instance, group);
+      mBakedAsset = false;
+      if (property != 0)
+        ((EA::COM::IUnknown32*)property)->Release();
+      return;
+    }
+    default:
+      break;
+  }
+
+  if (key.mType == 0x2399be55 || key.mType == 0x476a98c7 || key.mType == 0x24682294) {
+    cPropertyKeyDesc desc;
+    desc.mTypeID = 0x2ea8fb98;
+    desc.mField = 0x101;
+    desc.mFlags = 4;
+    KeyConverter()->Convert(&key, &desc);
+    mModel = m3DView.AddModel(key.mInstance, key.mGroup);
+    mBakedAsset = true;
+  }
+}
 
 }  // namespace SP

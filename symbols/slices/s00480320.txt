@@ -1,3 +1,3 @@
 00480320 ?Update@RingHandle@@QAEXXZ  # RingHandle::Update migrated from s00480320 (verbatim, slice spelling)
-004809c0  Ring_Rotate  # __thiscall (ret 4); bounding-box transform + normalized basis
-00480cf0  Ring_Reset  # __thiscall; GetLocalTransform (0x436380), Normalize (0x436ce0), Ring_Rotate (0x4809c0)
+004809c0 ?SetPickOffset@cSPEditorHandleDeform@SP@@QAEXM@Z  # __thiscall (ret 4); bbox transform + aligned pick-direction rebuild
+00480cf0 ?SetPickData@cSPEditorHandleDeform@SP@@QAEXXZ  # __thiscall; GetLocalTransform (0x436380), Normalize (0x436ce0), SetPickOffset (0x4809c0)

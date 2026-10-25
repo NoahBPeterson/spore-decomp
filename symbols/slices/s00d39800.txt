@@ -3,6 +3,7 @@
 00d39a10 ?LoadPrivateTuningVariables@@YAXPAVcTuningSource@@@Z  # LoadPrivateTuningVariables(cTuningSource*): resolve and store private tuning properties (byte-exact)
 00d39c30 ?Rehash@cModeHash@@QAEXI@Z  # cModeHash::Rehash(unsigned int): grow the mode hashtable and reinsert (complete)
 00d39d50 ?SiftDown@@YAXPAHHHHHHH@Z  # SiftDown(int*,int,int,int,int,int,int,int): sift-down for 8-byte key/value pairs (byte-exact)
+00d39dc0 ?SpawnCreatureModeCallEffect@@YAXIPBM@Z  # SpawnCreatureModeCallEffect(unsigned int,float const*): submit the creature-mode call effect at a position (complete)
 00d39f70 ?SpawnLocatingCallEffect@@YAXPAX@Z  # SpawnLocatingCallEffect(void*): build the locating-call effect descriptor and submit it (complete)
 00d3a0d0 ?NotifyNounCreatureCollision@@YAXPAX00PBM101M@Z  # SP::NotifyNounCreatureCollision(void*,void*,void*,float const*,void*,void*,float const*,float): creature collision reaction (complete)
 00d3a450 ?CreatureModeCollisionCallback@@YAXPAUcCollisionEvent@@@Z  # CreatureModeCollisionCallback(cCollisionEvent*): dispatch creature-mode collision by mode (complete)

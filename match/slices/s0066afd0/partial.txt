@@ -1,2 +1,2 @@
-# va  diff-bytes  reason (flags /O2 /MD /Gy /TP /arch:SSE /GS-)
-0066b130  800  layout/animation builder: only the entry is present; the window/animation graph construction is omitted
+# va  reason (flags /O2 /MD /Gy /TP /arch:SSE /GS-)
+0066b130  840  layout/animation builder: only the entry stub is present; the window/animation graph construction (layout lookups, animation bindings and handler wiring) is not reconstructed yet. See work/match/scratch_s0066afd0_fixlog.txt.

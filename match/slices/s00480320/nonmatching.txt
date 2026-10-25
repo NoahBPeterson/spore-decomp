@@ -1,1 +1,3 @@
 # va  diff-bytes  reason
+004809c0  711  complete; /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast; difftest PASS (327 valid inputs, 100.0% coverage). Frame/locals differ (0xfc vs 0x1d4) and the first alignment dot is a call here but inlined in the original.
+00480cf0  369  complete; /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast; difftest PASS (292 valid inputs, 100.0% coverage). Smaller frame (0x9c vs 0x1d4) and dead cSPTransform result slot not reproduced.
