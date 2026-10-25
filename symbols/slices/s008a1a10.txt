@@ -1,0 +1,17 @@
+008a1a10 ?Insert@CVectorEntryArray@SP@@QAEXPAUCVectorEntry@2@ABU32@@Z  # SP::CVectorEntryArray::Insert
+008a1b30 ?DestroyInlineBuffers@SP@@YAPAUCInlineBuffer@1@PAU21@00@Z  # SP::DestroyInlineBuffers
+008a1b70 ?SubstituteGlyphs2@Text@EA@@YAXPAULineLayout@12@IIG@Z  # EA::Text::SubstituteGlyphs2
+008a1c20 ?DoDestroyValues@FeatureLookupVector@Text@EA@@QAEXPAUFeatureLookup@23@0@Z  # eastl::vector<EA::Text::FeatureLookup>::DoDestroyValues
+008a1c60 ?AppendArabicGlyphCluster@ArabicLayout@Text@EA@@QAEXIIPBGI0IIPAVOTF@23@@Z  # EA::Text::Typesetter::AppendArabicGlyphCluster
+008a1db0 ?AssignRange@LookupPtrVector@Text@EA@@QAEXPBQAVOTFLookup@23@0I@Z  # eastl::vector<EA::Text::OTFLookup *>::DoAssignFromIterator
+008a2120 ?DoGlyphSubstitutionsInLine@Text@EA@@YAXPAULineLayout@12@IPBUFeatureLookupRange@12@PBVOTF@12@@Z  # EA::Text::DoGlyphSubstitution
+008a2380 ?CopyFeatureLookups@Text@EA@@YAPAUFeatureLookup@12@PBU312@0PAU312@@Z  # eastl::copy_impl<0>::do_copy<EA::Text::FeatureLookup *,EA::Text::FeatureLookup *>
+008a2420 ?CopyFeatureLookupsBackward@Text@EA@@YAPAUFeatureLookup@12@PBU312@0PAU312@@Z  # eastl::copy_backward_impl<0>::do_copy<EA::Text::FeatureLookup *,EA::Text::FeatureLookup *>
+008a24c0 ??0FeatureLookup@Text@EA@@QAE@ABU012@@Z  # EA::Text::FeatureLookup::FeatureLookup
+008a2500 ?UninitializedCopyLookups@Text@EA@@YAPAULookupIterator@12@PAU312@PBUFeatureLookup@12@1PAU412@@Z  # eastl::uninitialized_copy_impl<generic_iterator<FeatureLookup *>>
+008a2570 ?FillFeatureLookups@Text@EA@@YAXPAUFeatureLookup@12@0PBU312@@Z  # eastl::fill_imp<0>::do_fill<EA::Text::FeatureLookup *,EA::Text::FeatureLookup>
+008a2600 ?UninitializedFillLookups@Text@EA@@YAXPAUFeatureLookup@12@IPBU312@@Z  # eastl::uninitialized_fill_n_impl<generic_iterator<FeatureLookup *>,unsigned int,FeatureLookup>
+008a2660 ?UninitializedMoveLookups@Text@EA@@YAPAUFeatureLookup@12@PBU312@0PAU312@@Z  # eastl::uninitialized_move_impl<0>::do_move_start<EA::Text::FeatureLookup *,EA::Text::FeatureLookup *>
+008a26d0 ?erase@FeatureLookupVector@Text@EA@@QAEPAUFeatureLookup@23@PAU423@0@Z  # eastl::vector<EA::Text::FeatureLookup>::erase
+008a2720 ?insert@FeatureLookupVector@Text@EA@@QAEXPAUFeatureLookup@23@IABU423@@Z  # eastl::vector<EA::Text::FeatureLookup>::insert
+008a2950 ?resize@FeatureLookupVector@Text@EA@@QAEXI@Z  # eastl::vector<EA::Text::FeatureLookup>::resize
