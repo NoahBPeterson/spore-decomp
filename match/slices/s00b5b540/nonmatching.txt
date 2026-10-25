@@ -16,5 +16,6 @@
 00b5cba0   11  subobject vcall thunk (+8 subobject); lea/arg schedule differs
 00b5cbc0   11  subobject vcall thunk (+8 subobject, slot 0x10); schedule differs
 00b5cc80   76  GameTimeManager cinematic registrations; vcall/arg schedule differs
-00b5cd90   25  iterate +0x5c vector and forward to slot 0x30; loop shape differs; equiv=WEAK (now member S5cd90::f, ecx fixed; 650 valid, 51.9% coverage)
 00b5cde0   85  App->mode vcall chain; call schedule differs
+00b5b730   78  eastl int-vector erase + copy-swap helper; complete source, but the temp vector frame is 0x14 in retail vs 0xc and the first memcpy keeps begin/count live in edi/esi (196 vs 194 bytes). [/O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-] [equiv: PASS 400 valid, 85.7% coverage]
+00b5ba30   597  rebuild simulator container slots; complete source, if/else slot stores now match retail exactly; only the two 3-dword key zeroings differ (retail uses 3 fresh xors + absolute stores, ours reuses the ebx zero; 974 vs 984 bytes). [/O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-] [equiv: WEAK 91 valid (need 200), 58.9% coverage (need 60%)]
