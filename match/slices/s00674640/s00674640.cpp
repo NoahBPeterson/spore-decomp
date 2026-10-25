@@ -45,6 +45,7 @@ struct TWStr {                       // eastl::basic_string<wchar_t, eastl::allo
     wchar_t* mpCap;
     int      mAlloc;
     void append(const wchar_t* p);                    // 0x005c3d90
+    void append(const wchar_t* b, const wchar_t* e);  // 0x00672750 (insert range)
     void operator_assign(const TWStr* o);             // 0x0057cb60 (operator=)
     void assign(const wchar_t* b, const wchar_t* e);  // 0x00423650
     void resize(unsigned n);                          // 0x00429520
@@ -308,18 +309,182 @@ void Detok2::Detokenize(const unsigned short* s, void* a2) {
     detokenize();
 }
 
-// ---- 0x00674dc0 : sBuildXHTMLDocument (partial skeleton) -------------
-// @ 0x00674dc0
-void sBuildXHTMLDocument(void* a, void* b) { (void)a; (void)b; }
-
-// ---- 0x00675080 : LoadSporeGuidePage (partial skeleton) --------------
-struct GuidePage {
-    char pad[0x6c];
-    void* mpFrame;   // +0x6c
-    void LoadSporeGuidePage(void* a);
+// ---- 0x00674dc0 : sBuildXHTMLDocument --------------------------------
+struct ResKey {
+    unsigned mInstance;   // +0
+    unsigned mType;       // +4
+    unsigned mGroup;      // +8
 };
+
+typedef char  (__thiscall *FnGetProperty)(void*, unsigned, unsigned, void**);
+typedef char  (__thiscall *FnGetResource)(void*, ResKey*, void**, int, int, int, int);
+typedef void* (__thiscall *FnFindObject)(void*, unsigned);
+typedef char  (__thiscall *FnNextEntry)(void*, void*, void**, void**);
+typedef void  (__thiscall *FnReleaseObject)(void*);
+
+void* __cdecl GetResourceManager();                                       // 0x008de1a0
+bool  __cdecl GetPropertyAsString16(void* list, unsigned id, void* out);  // 0x006a1400
+void  __cdecl PackDataIntoURIString(TWStr* out, const wchar_t* data, int nbytes,
+                                    const wchar_t* mime, int a, int b);   // 0x00837360
+
+// intrusive ref-counted pointer local, same shape as the engine's AutoRefCount
+struct AutoRef {
+    void* mpObject;   // +0
+    AutoRef() {}
+    ~AutoRef() { if (mpObject) ((FnReleaseObject)((VObj*)mpObject)->vt[1])(mpObject); }
+    void** AsPointer() {
+        if (mpObject) {
+            void* p = mpObject;
+            mpObject = 0;
+            ((FnReleaseObject)((VObj*)p)->vt[1])(p);
+        }
+        return &mpObject;
+    }
+};
+
+struct ResIter {                 // resource enumeration cursor, 8 bytes
+    unsigned mData[2];
+    void Ctor();                 // 0x00b90720
+};
+
+struct BuildDetokenizer {        // cBuildXHTMLDetokenizer, 0xc850 bytes
+    unsigned mData[0xc850 / 4];
+    void Ctor(void* props);                              // 0x00673c50
+    void Dtor();                                        // 0x00673710
+    void Detokenize(const unsigned short* s, void* a2);  // 0x00674d30
+};
+
+static __inline unsigned WStrLen(const wchar_t* s) {   // inlined scan used by the appends
+    const wchar_t* p = s;
+    while (*p) ++p;
+    return (unsigned)(p - s);
+}
+
+struct StrSlot : TWStr {          // engine EString with its explicit range destructor
+    void Destroy() {
+        if ((((char*)mpCap - (char*)mpBegin) & ~1) > 2 && mpBegin)
+            DeleteObj(mpBegin);
+    }
+};
+struct BuildLocals {              // frame block: cursor, three decoded strings, resource key
+    ResIter it;     // +0x00
+    StrSlot head;   // +0x08
+    StrSlot body;   // +0x18
+    StrSlot tail;   // +0x28
+    ResKey  key;    // +0x38
+};
+
+// @ 0x00674dc0
+bool __cdecl sBuildXHTMLDocument(unsigned instance, TWStr* out)
+{
+    out->resize(0);
+
+    AutoRef props;
+    props.mpObject = 0;
+    void* pm = PropertyManager();
+    ((FnGetProperty)((VObj*)pm)->vt[0x2c / 4])(pm, 0x3bc56e83, 0x41bbeb9, props.AsPointer());
+
+    AutoRef res;
+    void* k;
+    void* v;
+
+    BuildLocals loc;
+    loc.key.mInstance = instance;
+    loc.key.mType = 0x2fac0b6;
+    loc.key.mGroup = 0x2fabf01;
+    res.mpObject = 0;
+
+    void* rm = GetResourceManager();
+    ((FnGetResource)((VObj*)rm)->vt[0xc / 4])(rm, &loc.key, res.AsPointer(), 0, 0, 0, 0);
+
+    void* obj = 0;
+    if (res.mpObject)
+        obj = ((FnFindObject)((VObj*)res.mpObject)->vt[0xc / 4])(res.mpObject, 0x30410fc);
+    if (!obj)
+        return false;
+
+    BuildDetokenizer detok;
+    detok.Ctor(props.mpObject);
+
+    loc.body.mpBegin = gEmptyWStr;
+    loc.body.mpEnd = gEmptyWStr;
+    loc.body.mpCap = gEmptyWStr + 1;
+    loc.head.mpBegin = gEmptyWStr;
+    loc.head.mpEnd = gEmptyWStr;
+    loc.head.mpCap = gEmptyWStr + 1;
+
+    GetPropertyAsString16(props.mpObject, 0x14d9cf40, &loc.head);
+    out->append(loc.head.mpBegin, loc.head.mpBegin + WStrLen(loc.head.mpBegin));
+
+    loc.it.Ctor();
+    k = 0;
+    v = 0;
+    while (((FnNextEntry)((VObj*)obj)->vt[0x1c / 4])(obj, &loc.it, &k, &v)) {
+        detok.Detokenize((const unsigned short*)k, &loc.body);
+        out->append(loc.body.mpBegin, loc.body.mpBegin + WStrLen(loc.body.mpBegin));
+    }
+
+    loc.tail.mpBegin = gEmptyWStr;
+    loc.tail.mpEnd = gEmptyWStr;
+    loc.tail.mpCap = gEmptyWStr + 1;
+    GetPropertyAsString16(props.mpObject, 0x1f92fc44, &loc.tail);
+    out->append(loc.tail.mpBegin, loc.tail.mpBegin + WStrLen(loc.tail.mpBegin));
+
+    loc.tail.Destroy();
+    loc.head.Destroy();
+    loc.body.Destroy();
+    detok.Dtor();
+    return true;
+}
+// ---- 0x00675080 : cSPUISporeGuidePage::LoadSporeGuidePage ------------
+struct TFStr1024 : TWStr {        // eastl::fixed_string<wchar_t,1024,1>, 0x814 bytes
+    wchar_t* mpInline;            // +0x10
+    wchar_t  mBuf[1024];          // +0x14
+    TFStr1024() {
+        mpInline = mBuf;
+        mpEnd = mBuf;
+        mpBegin = mBuf;
+        mpCap = mBuf + 1024;
+        mBuf[0] = 0;
+    }
+    ~TFStr1024() {
+        if ((((char*)mpCap - (char*)mpBegin) & ~1) > 2 && mpBegin && mpBegin != mpInline)
+            DeleteObj(mpBegin);
+    }
+};
+
+struct GuideFrame {
+    void SetScrollPosition(float* pos);   // 0x00993490
+};
+struct GuideFrameSet {
+    char mData[0x64];
+    bool HandleLocationChange(void* frame, const wchar_t* uri, int a, int b);  // 0x00997730
+};
+struct GuidePage {
+    char         pad0[8];
+    GuideFrameSet mFrameSet;   // +8
+    GuideFrame*  mpFrame;      // +0x6c
+    void LoadSporeGuidePage(unsigned instance);
+};
+
 // @ 0x00675080
-void GuidePage::LoadSporeGuidePage(void* a) { (void)a; }
+void GuidePage::LoadSporeGuidePage(unsigned instance)
+{
+    if (!mpFrame)
+        return;
+    TFStr1024 html;
+    if (sBuildXHTMLDocument(instance, &html)) {
+        TWStrLocal uri;
+        int nbytes = (int)wcslen(html.mpBegin) * 2;
+        PackDataIntoURIString(&uri, html.mpBegin, nbytes, L"text/html", 0x10, 0);
+        void* frame = mpFrame ? (void*)((char*)mpFrame + 4) : 0;
+        mFrameSet.HandleLocationChange(frame, uri.mpBegin, 0, 0);
+    }
+    {
+        float pos[2] = {0.0f, 0.0f};
+        mpFrame->SetScrollPosition(pos);
+    }
+}
 
 // ---- 0x006751a0 ------------------------------------------------------
 // @ 0x006751a0
@@ -435,25 +600,51 @@ unsigned SerObj::Read(int* io) {
 }
 
 // ---- 0x006754d0 : load object database (complete, non-matching) ------
-struct SaveLoader { char pad[8]; void* mp8; };
+struct HeldBase {               // holder interface sub-object
+    void* mpVt;                 // +0
+    void* mpObject;             // +4
+    void* mpDb;                 // +8
+    bool  mbFlag;               // +0xc
+    char  pad[3];
+    bool Bind(void* db, void* key, int flag);   // 0x0069e260
+    bool Reset();                               // 0x0069d8e0
+};
+struct ValidationHolder {       // cContentValidationSummarizer + HeldBase
+    void*   mpVt0;              // +0
+    void*   mpPad4;             // +4
+    HeldBase base;              // +8
+    void Ctor();                // 0x0069e210
+    void Dtor();                // 0x0069d860
+};
+struct ObjectDatabase {
+    void** vt;
+    void* Ctor(void* save);     // 0x0069fa60
+};
+struct AchievementLoader {
+    char  pad0[8];
+    void* mp8;                  // +8
+};
+extern char g_1529498;          // [0x01529498]
+
 // @ 0x006754d0
 char __fastcall FUN_006754d0(char* p) {
-    char stack[0x18];
+    AchievementLoader* self = (AchievementLoader*)p;
     void* save = GetSaveArea(0x11ac19c);
     void* db = ZoneObjNew(0x24, "Simulator", 0, 0, 0, 0);
-    if (db) db = ObjectDbCtor(db, save);
-    else db = 0;
-    if (db) ((FnV1)((VObj*)db)->vt[0])(db);
-    FUN_0069e210(stack + 8);
-    if (!FUN_0069e260(db, (void*)0x1529498, 1)) {
-        FUN_0069d860(stack + 8);
+    db = db ? ((ObjectDatabase*)db)->Ctor(save) : 0;
+    if (db)
+        ((FnV0)((VObj*)db)->vt[0])(db);
+    ValidationHolder holder;
+    holder.Ctor();
+    if (!holder.base.Bind(db, &g_1529498, 1)) {
+        holder.Dtor();
         if (db) ((FnV1)((VObj*)db)->vt[1])(db);
         return 0;
     }
-    void* src = *(void**)(p + 8);
-    ((FnV1p)((VObj*)src)->vt[0x10 / 4])(src, stack + 0x10);
-    FUN_0069d8e0(stack + 0x10);
-    FUN_0069d860(stack + 8);
+    void* src = self->mp8;
+    ((FnV1p)((VObj*)src)->vt[0x10 / 4])(src, &holder.base);
+    holder.base.Reset();
+    holder.Dtor();
     if (db) ((FnV1)((VObj*)db)->vt[1])(db);
     return 1;
 }
