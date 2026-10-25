@@ -1,0 +1,9 @@
+# source  symbol  va  flags
+../src/game/SPGonzago/SPBadgeManager.cpp  ?FUN_00fe3df0@@YGHI@Z  00fe3df0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPBadgeManager.cpp  ?FUN_00fe3e50@@YGHI@Z  00fe3e50  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPBadgeManager.cpp  ?FUN_00fe3f50@cSPBadgeManager@@QBEHI@Z  00fe3f50  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPBadgeManager.cpp  ?FUN_00fe3f80@cSPBadgeManager@@QBEIII@Z  00fe3f80  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPBadgeManager.cpp  ?FUN_00fe4150@cSPBadgeManager@@QBEII@Z  00fe4150  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPBadgeManager.cpp  ?GetReplacement@cSPBadgeManager@@QBEII@Z  00fe41c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPBadgeManager.cpp  ?FUN_00fe49a0@cSPBadgeManager@@QBEXIAAVeastlWString@@@Z  00fe49a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPBadgeManager.cpp  ?FUN_00fe54d0@cSPBadgeManager_s00fe_4be0@SP@@QAEIPAVProperty@@@Z  00fe54d0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include

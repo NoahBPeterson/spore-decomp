@@ -1,0 +1,8 @@
+00fe4be0 ?FUN_00fe4be0@@YAXXZ  # FUN_00fe4be0 migrated from s00fe4be0 (verbatim, slice spelling)
+00fe4d60 ?FUN_00fe4d60@@YAXXZ  # FUN_00fe4d60 migrated from s00fe4be0 (verbatim, slice spelling)
+00fe4e80 ?FUN_00fe4e80@@YAXXZ  # FUN_00fe4e80 migrated from s00fe4be0 (verbatim, slice spelling)
+00fe4fa0 ?cSPBadgeManagerCtor@@YIXPAXH@Z  # cSPBadgeManagerCtor migrated from s00fe4be0 (verbatim, slice spelling)
+00fe5430 ?FUN_00fe5430@@YAXXZ  # FUN_00fe5430 migrated from s00fe4be0 (verbatim, slice spelling)
+00fe54d0 ?FUN_00fe54d0@cSPBadgeManager_s00fe_4be0@SP@@QAEIPAVProperty@@@Z  # cSPBadgeManager_s00fe_4be0::FUN_00fe54d0 migrated from s00fe4be0 (verbatim, slice spelling)
+00fe5520 ?GetBadgeImageKey@cSPBadgeManager_s00fe_4be0@SP@@QAEXXZ  # cSPBadgeManager_s00fe_4be0::GetBadgeImageKey migrated from s00fe4be0 (verbatim, slice spelling)
+00fe55b0 ?TestRequirement@cSPBadgeManager_s00fe_4be0@SP@@QAEXXZ  # cSPBadgeManager_s00fe_4be0::TestRequirement migrated from s00fe4be0 (verbatim, slice spelling)
