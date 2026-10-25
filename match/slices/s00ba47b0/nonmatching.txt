@@ -7,3 +7,6 @@
 00ba5270 158 save-data vector builder: eastl insert and callee conventions not reconstructed; equiv UNSUPPORTED (unresolved helpers)
 00ba4c70 261 vector grow/insert: operator_new EASTL allocator args not reconstructed; equiv UNSUPPORTED (0/400 valid)
 00ba4e60 154 map find-or-insert: EASTL iterator/temp layout differs; equiv FAIL 5/9 valid
+00ba47b0 206 mode-vector rebuild (CModeObj::Update): EASTL temp vector construction/cleanup not recovered; 165 vs 246 bytes; equiv UNSUPPORTED 0/400 valid.
+00ba48b0 844 mode switch dispatcher (CModeObj::Method): jump-table cases/helper signatures approximate; 1036 vs 948 bytes; equiv UNSUPPORTED (AutoTest annotation implausible).
+00ba4f30 525 embassy/scan handler: EASTL hashtable insert and achievement path not reconstructed; 566 vs 691 bytes; equiv FAIL 5/5, fault at 00b3d526.
