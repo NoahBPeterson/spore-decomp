@@ -1,0 +1,8 @@
+00bcc570 ?bcc570@cSpatialObject@@QAEDXZ  # cSpatialObject::bcc570 migrated from s00bcc010 (verbatim, slice spelling)
+00bcc5e0 ?bcc5e0@cSpatialObject@@QAEXHM@Z  # cSpatialObject::bcc5e0 migrated from s00bcc010 (verbatim, slice spelling)
+00bcc640 ?bcc640@cSpatialObject@@QAEMXZ  # cSpatialObject::bcc640 migrated from s00bcc010 (verbatim, slice spelling)
+00bccdc0 ?bccdc0@cSpatialObject@@QAEDXZ  # cSpatialObject::bccdc0 migrated from s00bcc010 (verbatim, slice spelling)
+00bcce20 ?GetProp@cVehicle@@QAEPAXH@Z  # cVehicle::GetProp migrated from s00bcc010 (verbatim, slice spelling)
+00bccf80 ?Write5@cVehicle@@QAE_NPAX@Z  # cVehicle::Write5 migrated from s00bcc010 (verbatim, slice spelling)
+00bcd030 ?WriteAsText@cVehicle@@QAEXPAX@Z  # cVehicle::WriteAsText migrated from s00bcc010 (verbatim, slice spelling)
+00bfc540 ?Read@cCombatant@SP@@QAE_NAAVcIObjectDatabaseIStream@2@@Z  # SP::cCombatant::Read (callee of s00bcc010, named from the dev publics; slice address comment)

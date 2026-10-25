@@ -1,6 +1,12 @@
-00bce1e0 Simulator::cGameData::RemoveOwner  # PDB vtable name via card (483-byte owner teardown)
+00bce1e0 ?FUN_00bce1e0@cBuilding@@QAEXXZ  # cBuilding::FUN_00bce1e0 migrated from s00bce1e0 (verbatim, slice spelling)
+00bce5d0 ?FUN_00bce5d0@cBuilding@@QAEHXZ  # cBuilding::FUN_00bce5d0 migrated from s00bce1e0 (verbatim, slice spelling)
+00bce5f0 ?FUN_00bce5f0@cSpatialObject_s00bc_e1e0@@QAE_NI@Z  # cSpatialObject_s00bc_e1e0::FUN_00bce5f0 migrated from s00bce1e0 (verbatim, slice spelling)
+00bce660 ?FUN_00bce660@cBuilding@@QAEXPAX@Z  # cBuilding::FUN_00bce660 migrated from s00bce1e0 (verbatim, slice spelling)
 00bce740 Simulator::ISimulatorSerializable::Read  # PDB vtable name via card
-00bce8e0 Simulator::cBuilding::SetOwnerCity1  # PDB vtable name via card
-00bce9a0 Simulator::cBuilding::GetCost  # PDB vtable name via card
-00bce9b0 Simulator::cGameData::RemoveOwner  # PDB vtable name via card (spatial sub-object teardown overload)
-00bcea30 SP::GetPropertyT_DO_NOT_USE<float>  # PDB name via card (callee-single)
+00bce8b0 ?FUN_00bce8b0@cCommunity@@QAEXI@Z  # cCommunity::FUN_00bce8b0 migrated from s00bce1e0 (verbatim, slice spelling)
+00bce8e0 ?SetOwnerCity1@cBuilding@@QAEXPAX@Z  # cBuilding::SetOwnerCity1 migrated from s00bce1e0 (verbatim, slice spelling)
+00bce970 ?FUN_00bce970@cBuilding@@QAEXXZ  # cBuilding::FUN_00bce970 migrated from s00bce1e0 (verbatim, slice spelling)
+00bce9a0 ?GetCost@cBuilding@@QAEMXZ  # cBuilding::GetCost migrated from s00bce1e0 (verbatim, slice spelling)
+00bce9b0 ?FUN_00bce9b0@cBuilding@@QAEXXZ  # cBuilding::FUN_00bce9b0 migrated from s00bce1e0 (verbatim, slice spelling)
+00bcea10 ?FUN_00bcea10@cBuilding@@QAEXI@Z  # cBuilding::FUN_00bcea10 migrated from s00bce1e0 (verbatim, slice spelling)
+00bcea30 ?FUN_00bcea30@@YAMIIIM@Z  # FUN_00bcea30 migrated from s00bce1e0 (verbatim, slice spelling)
