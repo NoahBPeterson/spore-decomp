@@ -1,0 +1,3 @@
+00ba9370 ?GetEmpireByID@cStarManager@SP@@QBEPAVcEmpire@2@I@Z  # SP::cStarManager::GetEmpireByID (callee of s01000740, named from the dev publics; slice address comment)
+00bb1080 ?GetStarRecords@cStarManager@SP@@QAEXABUcSPVector3@@AAUtStarSearchCriteria@12@AAV?$vector@V?$AutoRefCount@VcStarRecord@SP@@@EA@@Usp_vector_allocator@eastl@@@eastl@@@Z  # SP::cStarManager::GetStarRecords (callee of s01000740, named from the dev publics; slice address comment)
+01000dc0 ?FUN_01000dc0@@YAXXZ  # FUN_01000dc0 migrated from s01000740 (verbatim, slice spelling)

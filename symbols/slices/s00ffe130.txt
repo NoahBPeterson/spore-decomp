@@ -1,0 +1,4 @@
+00ffe130 ?OnContextChange@cSPSimulatorPlayerUFO_s00ff_e130@SP@@QAEXH@Z  # cSPSimulatorPlayerUFO_s00ff_e130::OnContextChange migrated from s00ffe130 (verbatim, slice spelling)
+00ffe3a0 ?FUN_00ffe3a0@cSPSimulatorPlayerUFO_s00ff_e130@SP@@QAEXH@Z  # cSPSimulatorPlayerUFO_s00ff_e130::FUN_00ffe3a0 migrated from s00ffe130 (verbatim, slice spelling)
+00ffe3d0 ?FUN_00ffe3d0@cSPSimulatorPlayerUFO_s00ff_e130@SP@@QAEXM_N@Z  # cSPSimulatorPlayerUFO_s00ff_e130::FUN_00ffe3d0 migrated from s00ffe130 (verbatim, slice spelling)
+00ffe570 ?SetPlanetDestinationFromOffset@cSPSimulatorPlayerUFO_s00ff_e130@SP@@QAEXMM_N0000@Z  # cSPSimulatorPlayerUFO_s00ff_e130::SetPlanetDestinationFromOffset migrated from s00ffe130 (verbatim, slice spelling)

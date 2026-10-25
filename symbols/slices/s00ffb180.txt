@@ -2,3 +2,8 @@
 00c3e0b0 ?Init@cSPGameDataUFO@SP@@QAEXW4eUFOType@2@PAVcEmpire@2@@Z  # SP::cSPGameDataUFO::Init (callee of s00ffb180, named from the dev publics; slice address comment)
 00d06240 ?RecordEvent@cRelationshipManager@SP@@QAEMIIW4eRelationshipEvents@2@M@Z  # SP::cRelationshipManager::RecordEvent (callee of s00ffb180, named from the dev publics; slice address comment)
 00ffbb20 ?OnTick@cSPSimPlanetHighLOD_s00ff_b180@@QAEXII@Z  # cSPSimPlanetHighLOD_s00ff_b180::OnTick migrated from s00ffb180 (verbatim, slice spelling)
+00ffbe60 ?Write@cSPSimulatorPlayerUFO@@QAE_NPAVcOutStream@@@Z  # cSPSimulatorPlayerUFO::Write migrated from s00ffb180 (verbatim, slice spelling)
+00ffbf60 ?Init@cSPSimPlanetHighLOD@@QAEXXZ  # cSPSimPlanetHighLOD::Init migrated from s00ffb180 (verbatim, slice spelling)
+00ffbfe0 ?FUN_00ffbfe0@cSPSimPlanetHighLOD@@QAE_NXZ  # cSPSimPlanetHighLOD::FUN_00ffbfe0 migrated from s00ffb180 (verbatim, slice spelling)
+00ffc030 ?FUN_00ffc030@cSPSimPlanetHighLOD@@QAEXXZ  # cSPSimPlanetHighLOD::FUN_00ffc030 migrated from s00ffb180 (verbatim, slice spelling)
+00ffc160 ?CheckAndReplaceData@cSPSimPlanetHighLOD@@QAE_NPAX00@Z  # cSPSimPlanetHighLOD::CheckAndReplaceData migrated from s00ffb180 (verbatim, slice spelling)

@@ -1,0 +1,8 @@
+00ffd280 ?FUN_00ffd280@cSPSimulatorPlayerUFO_s00ff_d220@@QAEXXZ  # cSPSimulatorPlayerUFO_s00ff_d220::FUN_00ffd280 migrated from s00ffd220 (verbatim, slice spelling)
+00ffd710 ?FUN_00ffd710@cSPSimulatorPlayerUFO_s00ff_d220@@QAEXHPAX@Z  # cSPSimulatorPlayerUFO_s00ff_d220::FUN_00ffd710 migrated from s00ffd220 (verbatim, slice spelling)
+00ffd830 ?FUN_00ffd830@cSPSimulatorPlayerUFO_s00ff_d220@@QAEXPAX@Z  # cSPSimulatorPlayerUFO_s00ff_d220::FUN_00ffd830 migrated from s00ffd220 (verbatim, slice spelling)
+00ffd8e0 ?CalculateMaxHealth@cSPSimulatorPlayerUFO_s00ff_d220@@QAEMXZ  # cSPSimulatorPlayerUFO_s00ff_d220::CalculateMaxHealth migrated from s00ffd220 (verbatim, slice spelling)
+00ffda80 ?CalculateMaxEnergy@cSPSimulatorPlayerUFO_s00ff_d220@@QAEMXZ  # cSPSimulatorPlayerUFO_s00ff_d220::CalculateMaxEnergy migrated from s00ffd220 (verbatim, slice spelling)
+00ffdbb0 ?FUN_00ffdbb0@cSPSimulatorPlayerUFO_s00ff_d220@@QAE_NXZ  # cSPSimulatorPlayerUFO_s00ff_d220::FUN_00ffdbb0 migrated from s00ffd220 (verbatim, slice spelling)
+00ffdc20 ?FlyToPlanet@cSPSimulatorPlayerUFO_s00ff_d220@@QAEXPAX@Z  # cSPSimulatorPlayerUFO_s00ff_d220::FlyToPlanet migrated from s00ffd220 (verbatim, slice spelling)
+00ffdde0 ?FUN_00ffdde0@cSPSimulatorPlayerUFO_s00ff_d220@@QAEXHMMM@Z  # cSPSimulatorPlayerUFO_s00ff_d220::FUN_00ffdde0 migrated from s00ffd220 (verbatim, slice spelling)
