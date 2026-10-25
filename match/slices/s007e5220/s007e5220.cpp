@@ -117,17 +117,62 @@ extern void* gVtbl_1413614; extern void* gVtbl_1413610; extern void* gVtbl_154df
 extern char  gEmptyStringData[];      // 0x01667bac (empty string byte)
 extern char  gEmptyStringObj[];       // 0x013ec47c (empty eastl::string)
 
-void FUN_007e5a30(void* p);
-void* FUN_007e30f0(void* p);
-void* FUN_007e3e20(void* first, void* end, void* last);
 void StringAssign(void* self, const void* s);
 struct EaStringOps {
     void assign(const char* first, const char* last);  // 0x454cb0
 };
-void MakeCaseInsensitive(void* p);
+void MakeCaseInsensitive(void* p);                      // 0x008409b0
+void FUN_007e5a30(void* p);            // cActionsVec::push_back (thiscall, modelled as free for sibling use)
+void FUN_00693230(void* self, void* a, void* b);        // hashtable clear/deallocate (this + begin/end)
+void FUN_0093dc70(void* self, void* a, void* b);        // hashtable clear/deallocate (this + begin/end)
+
+// ---- eastl::vector<SP::cAppStateManager::cActions, sp_vector_allocator> ----
+struct cActions;                       // sizeof == 0x50
+struct cActionsVec {                   // eastl::vector<cActions,sp_vector_allocator>
+    cActions* mpBegin;                 // +0x00
+    cActions* mpEnd;                   // +0x04
+    cActions* mpCapacity;              // +0x08
+    cActions* erase(cActions* first, cActions* last);          // 0x007e5830
+    void      push_back(const cActions* value);                // 0x007e5a30
+    void      insert(cActions* pos, const cActions* value);    // 0x007e5890
+};
+struct cActions {                      // sizeof == 0x50
+    void* mEntry[5];                   // +0x00  eastl::vector<cActionMessage>
+    void* mExit[5];                    // +0x14
+    void* mHandler[5];                 // +0x28
+    void* mNameBegin;                  // +0x3c  eastl::basic_string<char>
+    void* mNameEnd;                    // +0x40
+    void* mNameCapacity;               // +0x44
+    void* mNameAllocator;              // +0x48
+    int   field4c;                     // +0x4c
+    cActions() {                       // default ctor: 3 sub-vectors + eastl empty string
+        mEntry[0] = mEntry[1] = mEntry[2] = 0;
+        mExit[0] = mExit[1] = mExit[2] = 0;
+        mHandler[0] = mHandler[1] = mHandler[2] = 0;
+        mNameBegin = gEmptyStringData;
+        mNameEnd = gEmptyStringData;
+        mNameCapacity = gEmptyStringData + 1;
+        field4c = -1;
+    }
+    cActions& operator=(const cActions& o);    // 0x007e34a0
+    void      copy_ctor(const cActions& o);    // 0x007e2ae0
+    ~cActions();                               // 0x007e2680 (thiscall)
+};
+cActions* FUN_007e3e20(cActions* first, cActions* last, cActions* dst);  // copy-assign range
+cActions* FUN_007e3e90(cActions* first, cActions* last, cActions* dstEnd);
+cActions* FUN_007e2c10(cActions* first, cActions* last, cActions* dst);  // copy-construct range
+cActions* FUN_007e2ca0(cActions* first, cActions* last, cActions* dst);  // move-construct range
+int*      FUN_006a8340(void* self, void* arg);                           // hashtable lookup
+int*      FUN_007c3a90(void* self, void* arg);                           // hash_map::operator[]
+void      FUN_00645ed0(void* self, void* out, void* key);                // hashtable::find
+void*     FUN_007e30f0(void* p);
+void*     FUN_00f473a0(int size, const char* name, int a, int b, const char* file, int line);
+void      FUN_00f47380(void* p);
+extern char gAllocName_13ebc58[];      // 0x013ebc58
+extern char gAllocFile_13ebb38[];      // 0x013ebb38
 
 // @ 0x007E5220  (cAppStateManager constructor: member/subobject initialisation)
-struct cAppStateManagerC { void* ctor(); };
+struct cAppStateManagerC { void* ctor(); void Update(); };
 void* cAppStateManagerC::ctor() {
     char* p = (char*)this;
     *(void**)(p + 4)    = &gVtbl_13eb384;
@@ -175,48 +220,226 @@ void* cAppStateManagerC::ctor() {
     return p;
 }
 
-// @ 0x007E5430  (cAppStateManager::Init; incomplete reconstruction)
-void* SP_CheatManager();
-void cAppStateManagerInit(void* self) {
-    (void)self;
-    // Parser/command registration is not reconstructed (see partial.txt).
-    (void)SP_CheatManager();
+// ---- cAppStateManager::Init helpers (ArgScript parser / cheat manager) ----
+struct ParserIface {                   // EA::ArgScript::IParser
+    virtual void  v00();                                   //  0
+    virtual void  v04();                                   //  1
+    virtual void  v08();                                   //  2
+    virtual void  v0c();                                   //  3
+    virtual void  v10(void*);                              //  4
+    virtual void  v14(const char* name, void* cmd);        //  5
+    virtual void  f18(); virtual void  f1c(); virtual void  f20(); virtual void  f24();
+    virtual void  f28(); virtual void  f2c(); virtual void  f30(); virtual void  f34();
+    virtual void  f38(); virtual void  f3c(); virtual void  f40(); virtual void  f44();
+    virtual void  f48(); virtual void  f4c(); virtual void  f50(); virtual void  f54();
+    virtual void  f58(); virtual void  f5c(); virtual void  f60(); virtual void  f64();
+    virtual void  f68(); virtual void  f6c(); virtual void  f70(); virtual void  f74();
+    virtual void  f78(); virtual void  f7c(); virtual void  f80(); virtual void  f84();
+    virtual void  f88(); virtual void  f8c(); virtual void  f90(); virtual void  f94();
+    virtual void  f98(); virtual void  f9c(); virtual void  fa0(); virtual void  fa4();
+    virtual void  fa8(); virtual void  fac(); virtual void  fb0(); virtual void  fb4();
+    virtual void* vB8(void* a, void* b);                   // 46
+};
+struct StateObjIface {                 // *(this+0x154): cAppState / cStateMachine
+    virtual void s00(); virtual void s04(); virtual void s08(); virtual void s0c();
+    virtual void s10(); virtual void s14(); virtual void s18(); virtual void s1c();
+    virtual bool v20();                                    // +0x20
+    virtual void s24();                                    // +0x24
+    virtual bool v28();                                    // +0x28
+};
+struct StateCmdIface {                 // anonymous-namespace cStateCommand / cTransitionCommand
+    virtual void s0(); virtual void s1(); virtual void s2();
+    virtual void s3();                 // +0x0c  (release)
+    virtual void s4();                 // +0x10  (release)
+};
+struct CheatManagerIface {             // SP::cCheatManager
+    virtual void c00(); virtual void c04(); virtual void c08(); virtual void c0c();
+    virtual void c10(); virtual void c14(); virtual void c18(); virtual void c1c();
+    virtual void c20(); virtual void c24();
+    virtual int  c28(const char* name);                    // +0x28
+};
+struct MServerX {                      // EA::Messaging::Server
+    virtual void m00(); virtual void m04(); virtual void m08(); virtual void m0c();
+    virtual void m10(); virtual void m14(); virtual void m18(); virtual void m1c();
+    virtual void m20();
+    virtual void m24(void* obj, uint32_t msg);             // +0x24
+};
+
+ParserIface*       ArgScriptCreateParser();                // 0x008408d0
+void*              CommandBaseCtor(void* p);               // 0x0083cdd0
+void*              CmdBaseCtor(void* p);                   // 0x0083c800
+void               IfCmdCtor(void* p, void* arg);          // 0x0083df90
+void               AppStateCheatCtor(void* p, void* mgr);  // 0x007e4e90
+CheatManagerIface* SP_CheatManager();                      // 0x0067de20
+
+extern void*       gVtbl_cStateCommand;       // 0x014131f0
+extern void*       gVtbl_cTransitionCommand;  // 0x0141337c
+extern void*       gVtbl_chainCmd;            // 0x014134e0
+extern void*       gVtbl_endChainCmd;         // 0x014134f8
+extern void*       gVtbl_loadResourceCmd;     // 0x014131d8
+extern void*       gVtbl_evalReal;            // 0x014131c8
+extern char        gIfCommand[];              // 0x014090ec
+extern uint32_t    gMsgTable[];               // 0x01413180 (0x12 entries)
+extern const char* gName_state;               // 0x0153f5f0
+extern const char* gName_transition;          // 0x0153f5f4
+extern const char* gName_chain;               // 0x0153f644
+extern const char* gName_endChain;            // 0x0153f648
+extern const char* gName_loadResource;        // 0x0153f620
+extern const char  gStateText_1413124[];      // 0x01413124 ("state")
+
+struct cAppStateManagerI { int Init(const char* name); };
+
+// @ 0x007E5430  cAppStateManagerI::Init
+int cAppStateManagerI::Init(const char* name) {
+    char* self = (char*)this;
+    ParserIface* np = ArgScriptCreateParser();
+    ParserIface* op = *(ParserIface**)(self + 0x158);
+    if (np != op) {
+        if (np) np->v00();
+        *(void**)(self + 0x158) = np;
+        if (op) op->v04();
+    }
+    np = *(ParserIface**)(self + 0x158);
+    np->v08();
+    np->v10(self + 0x10);
+
+    StateCmdIface* sc = (StateCmdIface*)FUN_00f473a0(0x34, gAllocName_13ebc58, 0, 0, 0, 0);
+    if (sc) { CommandBaseCtor(sc); *(void**)sc = &gVtbl_cStateCommand; }
+    else sc = 0;
+    StateCmdIface* osc = *(StateCmdIface**)(self + 0x15c);
+    if (sc != osc) {
+        if (sc) sc->s3();
+        *(void**)(self + 0x15c) = sc;
+        if (osc) osc->s4();
+    }
+
+    sc = (StateCmdIface*)FUN_00f473a0(0x3c, gAllocName_13ebc58, 0, 0, 0, 0);
+    if (sc) { CommandBaseCtor(sc); *(void**)sc = &gVtbl_cTransitionCommand; }
+    else sc = 0;
+    osc = *(StateCmdIface**)(self + 0x160);
+    if (sc != osc) {
+        if (sc) sc->s3();
+        *(void**)(self + 0x160) = sc;
+        if (osc) osc->s4();
+    }
+
+    np = *(ParserIface**)(self + 0x158);
+    np->v14(gName_state, *(void**)(self + 0x15c));
+    np->v14(gName_transition, *(void**)(self + 0x160));
+
+    void* ci = FUN_00f473a0(0x10, gAllocName_13ebc58, 0, 0, 0, 0);
+    if (ci) { CmdBaseCtor(ci); *(void**)ci = &gVtbl_chainCmd; }
+    else ci = 0;
+    np = *(ParserIface**)(self + 0x158);
+    np->v14(gName_chain, ci);
+
+    ci = FUN_00f473a0(0x10, gAllocName_13ebc58, 0, 0, 0, 0);
+    if (ci) { CmdBaseCtor(ci); *(void**)ci = &gVtbl_endChainCmd; }
+    else ci = 0;
+    np = *(ParserIface**)(self + 0x158);
+    np->v14(gName_endChain, ci);
+
+    ci = FUN_00f473a0(0x10, gAllocName_13ebc58, 0, 0, 0, 0);
+    if (ci) { CmdBaseCtor(ci); *(void**)ci = &gVtbl_loadResourceCmd; }
+    else ci = 0;
+    np = *(ParserIface**)(self + 0x158);
+    np->v14(gName_loadResource, ci);
+
+    void* ev = FUN_00f473a0(8, gAllocName_13ebc58, 0, 0, 0, 0);
+    if (ev) { *(void**)((char*)ev + 4) = 0; *(void**)ev = &gVtbl_evalReal; }
+    else ev = 0;
+    np = *(ParserIface**)(self + 0x158);
+    IfCmdCtor((char*)np->vB8(gIfCommand, ev), ev);
+
+    const char* stateName = name;
+    if (stateName == 0)
+        stateName = gStateText_1413124;
+    if (SP_CheatManager()->c28(stateName) == 0) {
+        void* cheat = FUN_00f473a0(0xe0, gAllocName_13ebc58, 0, 0, 0, 0);
+        if (cheat) AppStateCheatCtor(cheat, self);
+        SP_CheatManager();
+        *(const char**)(self + 0x84) = stateName;
+    }
+
+    void* arg4 = self + 4;
+    MServerX* ms = (MServerX*)SP_MessageServer();
+    *(void**)(self + 0x140) = ms;
+    *(void**)(self + 0x144) = arg4;
+    *(void**)(self + 0x148) = gMsgTable;
+    *(uint32_t*)(self + 0x14c) = 0x12;
+    *(uint32_t*)(self + 0x150) = 0;
+    if (ms && arg4) {
+        for (unsigned i = 0; i < 0x48; i += 4)
+            ms->m24(arg4, *(uint32_t*)((char*)gMsgTable + i));
+    }
+    return 1;
 }
 
-// @ 0x007E5830  (vector<cActions>::erase helper; incomplete)
-void* cActionsEraseHelper(void* vec, void* first, void* last) {
-    char* v = (char*)vec;
-    char* dst = (char*)FUN_007e3e20(last, *(void**)(v + 4), first);
-    char* end = *(char**)(v + 4);
-    while (dst < end) {
-        FUN_007e5a30(dst);        // ~cActions
-        dst += 0x50;
-    }
-    *(int*)(v + 4) += (int)(((char*)last - (char*)first) / 0x50) * 0x50;
+inline void EraseDestroyRange(cActions* first, cActions* last) {
+    for (cActions* i = first; i < last; ++i)
+        i->~cActions();
+}
+// @ 0x007E5830  cActionsVec::erase
+cActions* cActionsVec::erase(cActions* first, cActions* last) {
+    cActions* dst = FUN_007e3e20(last, mpEnd, first);
+    EraseDestroyRange(dst, mpEnd);
+    mpEnd -= (last - first);
     return first;
 }
 
-// @ 0x007E5890  (vector<cActions>::erase with reallocation; incomplete)
-void cActionsEraseRange(void* vec, void* first, void* last) {
-    (void)vec; (void)first; (void)last;
-    // EASTL reallocating erase not reconstructed (see partial.txt).
+// @ 0x007E5890  cActionsVec::insert
+void cActionsVec::insert(cActions* pos, const cActions* value) {
+    if (mpEnd != mpCapacity) {
+        const cActions* v = value;
+        if (pos <= v && v < mpEnd)
+            ++v;
+        mpEnd->copy_ctor(*(mpEnd - 1));
+        FUN_007e3e90(pos, mpEnd - 1, mpEnd);
+        *pos = *v;
+        mpEnd = mpEnd + 1;
+    } else {
+        int n = (int)((mpEnd - mpBegin) / 0x50);
+        n = (n == 0) ? 1 : n * 2;
+        cActions* buf = 0;
+        if (n != 0)
+            buf = (cActions*)FUN_00f473a0(n * 0x50, gAllocName_13ebc58, 0, 0, gAllocFile_13ebb38, 0xd1);
+        cActions* dst = FUN_007e2c10(mpBegin, pos, buf);
+        FUN_007e2ca0(mpBegin, pos, buf);
+        dst->copy_ctor(*value);
+        ++dst;
+        cActions* newEnd = FUN_007e2c10(pos, mpEnd, dst);
+        FUN_007e2ca0(pos, mpEnd, dst);
+        if (mpBegin && *(int*)((char*)mpBegin - 4) != 0)
+            FUN_00f47380(mpBegin);
+        mpCapacity = buf + n;
+        mpBegin = buf;
+        mpEnd = newEnd;
+    }
 }
 
-// @ 0x007E5AB0  (cStateCommand::OnEndBlock; incomplete)
+// @ 0x007E5AB0  cStateCommand::OnEndBlock
 struct cStateCommandC { void OnEndBlock(char arg); };
 void cStateCommandC::OnEndBlock(char arg) {
     char* self = (char*)this;
     if (arg == 0) {
         char* mgr = *(char**)(self + 0x30);
         int count = (*(int*)(mgr + 0xa8) - *(int*)(mgr + 0xa4)) / 0x50;
-        FUN_007e5a30(mgr + 0x2c);
+        ((cActionsVec*)(mgr + 0xa4))->push_back((cActions*)(mgr + 0x2c));
         MakeCaseInsensitive(mgr + 0x18);
-        // hash_map operator[] / hashtable find not reconstructed (see partial.txt)
-        *(int*)(mgr + 0x7c) = *(int*)(mgr + 0x28);
-        (void)count;
+        *FUN_006a8340(mgr + 0xf8, mgr + 0x18) = *(int*)(mgr + 0x28);
+        *FUN_007c3a90(mgr + 0xb8, mgr + 0x28) = count;
+        if (*(int*)(mgr + 0x7c) != -1) {
+            int out = 0;
+            FUN_00645ed0(mgr + 0xb8, &out, mgr + 0x7c);
+            if (out != *(int*)(*(int*)(mgr + 0xbc) + *(int*)(mgr + 0xc0) * 4)) {
+                int idx = *(int*)(out + 4);
+                *(int*)(*(int*)(mgr + 0xa4) + idx * 0x50 + 0x4c) = *(int*)(mgr + 0x28);
+            }
+        }
+        *(int*)(mgr + 0x7c) = *(int*)(*(char**)(self + 0x30) + 0x28);
     }
     *(uint8_t*)(*(char**)(self + 0x30) + 0x80) = 0;
-    StringAssign(gEmptyStringObj, gEmptyStringObj);
+    ((EaStringOps*)(*(char**)(self + 0x30) + 0x18))->assign(gEmptyStringObj, gEmptyStringObj);
     *(int*)(*(char**)(self + 0x30) + 0x28) = 0xffffffff;
 }
 
@@ -239,10 +462,31 @@ void cTransitionCommandC::OnEndBlock(char arg) {
     ((EaStringOps*)(*(char**)(self + 0x30) + 0x18))->assign(gEmptyStringObj, gEmptyStringObj);
 }
 
-// @ 0x007E5C40  (cAppStateManager::Update; incomplete)
-void cAppStateManagerUpdate(void* self) {
-    (void)self;
-    // EASTL hash-map state replay not reconstructed (see partial.txt).
+// @ 0x007E5C40  cAppStateManager::Update
+void cAppStateManagerC::Update() {
+    char* self = (char*)this;
+    StateObjIface* sm = *(StateObjIface**)(self + 0x154);
+    if (sm != 0 && sm->v28()) {
+        ((cActionsVec*)(self + 0xa4))->erase(*(cActions**)(self + 0xa4), *(cActions**)(self + 0xa8));
+        FUN_00693230(self + 0xb8, *(void**)(self + 0xbc), *(void**)(self + 0xc0));
+        *(int*)(self + 0xc4) = 0;
+        FUN_0093dc70(self + 0xd8, *(void**)(self + 0xdc), *(void**)(self + 0xe0));
+        *(int*)(self + 0xe4) = 0;
+        *(int*)(self + 0x7c) = -1;
+        {
+            cActions local;
+            *(cActions*)(self + 0x2c) = local;
+        }
+        StateObjIface* sm2 = *(StateObjIface**)(self + 0x154);
+        if (sm2->v20()) {
+            int out = 0;
+            FUN_00645ed0(self + 0xb8, &out, self + 0x88);
+            if (out != *(int*)(*(int*)(self + 0xbc) + *(int*)(self + 0xc0) * 4)) {
+                int idx = *(int*)(out + 4);
+                *(int*)(self + 0x8c) = *(int*)(*(int*)(self + 0xa4) + idx * 0x50 + 0x4c);
+            }
+        }
+    }
 }
 
 
