@@ -20,7 +20,7 @@
 //   FUN_00e82130  thiscall, ECX = RefPtr*, Release (dec [p+0xc] if p != 0)
 //   FUN_00e52960  usercall: no stack args, reads its object from ESI (= p9 at every call site); bool result in AL
 //
-// Flags: /O2 /MD /Gy /TP
+// Flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 #include "types.h"
 #include <math.h>
 
@@ -309,4 +309,301 @@ extern "C" void sResolvePartCollision(int p1, int p2, int p3, float p4, int* p5,
     FUN_00e59cc0(p1, p2, p3, p4, *p5, *p9, p8, p14, uVar5);
 LAB_00e6ad4e:
     FUN_00e6a250(p1, p2, p3, p4, p5, p9, p10, p12);
+}
+
+// ---------------------------------------------------------------------------------------------
+// The part-side data the collision sweep below works on.
+//
+// Every part keeps a uniform-scale transform (translation +0x4c, scale +0x58, a column-major
+// 3x3 at +0x5c..+0x7c) and the grid cell it occupies (+0xfc).  The cell is turned into a list of
+// candidate contact points: a count at +0x00 of the list object followed by 0x48-byte records
+// holding a kind (+0x00, 1 = empty), the point in part space (+0x04..+0x0c) and a radius
+// (+0x34).
+// ---------------------------------------------------------------------------------------------
+struct Int3 {
+    int x, y, z;
+};
+
+struct PartCell {
+    int   kind;                          // +0x00: 1 = no contact point here
+    float x, y, z;                       // +0x04, +0x08, +0x0c (part space)
+    char  pad0[0x34 - 0x10];
+    float radius;                        // +0x34
+    char  pad1[0x48 - 0x38];
+};
+
+struct PartCellList {
+    int      count;                      // +0x00
+    int      pad;                        // +0x04
+    PartCell cells[1];                   // +0x08
+};
+
+struct PartXform {
+    char          pad0[0x48];
+    unsigned char flags;                 // +0x48: bit 1 = contact points are in part space
+    char          pad1[0x4c - 0x49];
+    float         tx, ty, tz;            // +0x4c, +0x50, +0x54
+    float         scale;                 // +0x58
+    float         m00, m10, m20;         // +0x5c, +0x60, +0x64 (column 0)
+    float         m01, m11, m21;         // +0x68, +0x6c, +0x70 (column 1)
+    float         m02, m12, m22;         // +0x74, +0x78, +0x7c (column 2)
+    char          pad2[0xfc - 0x80];
+    Int3          cell;                  // +0xfc: grid cell whose contact list to sweep
+};
+
+// The caller's two per-collision context objects: only the 0xb0/0xb4 mode words are read.
+struct ResolveCtx {
+    char pad0[0xb0];
+    int  b0;                             // +0xb0
+    int  b4;                             // +0xb4
+};
+
+extern "C" unsigned int  FUN_00e573e0(void* a, void* b);
+extern "C" PartCellList* FUN_00e679e0(Int3 cell);
+
+// sResolvePartCollision's declared parameter types (see above) describe the roles it played for
+// its first caller; the sweep below feeds it (mid, normal, overlap, ...) instead, so go through a
+// pointer of the shape actually pushed here.
+typedef void (__cdecl* ResolveSweepFn)(unsigned int p1, float* mid, float* normal, float overlap,
+                                       void* partA, int cfgA, int kindB, int outerIdx,
+                                       void* partB, int cfgB, int b0, unsigned int cfg,
+                                       int kindA, int innerIdx);
+
+// ---------------------------------------------------------------------------------------------
+// 0x00e6ad80 -- for every candidate contact point of part A against every candidate of part B:
+// transform both into world space, and when the spheres overlap hand the pair to
+// sResolvePartCollision with the outward normal and the midpoint of the overlap.
+// ---------------------------------------------------------------------------------------------
+// @ 0x00e6ad80
+void __cdecl FUN_00e6ad80(unsigned int p1, PartXform* a, PartXform* b, ResolveCtx* ctxA,
+                          ResolveCtx* ctxB)
+{
+    unsigned int  cfg   = FUN_00e573e0(a, b);
+    PartCellList* listA = FUN_00e679e0(a->cell);
+    PartCellList* listB = FUN_00e679e0(b->cell);
+
+    if (listA->count <= 0)
+        return;
+
+    for (int outer = 0; outer < listA->count; ++outer) {
+        PartCell* cellA = &listA->cells[outer];
+
+        if (cellA->kind == 1)
+            continue;
+
+        float ax = cellA->x;
+        float ay = cellA->y;
+        float az = cellA->z;
+
+        if (a->flags & 2) {
+            float rx = (a->m01 * ay + a->m02 * az) + a->m00 * ax;
+            float ry = (a->m11 * ay + a->m12 * az) + a->m10 * ax;
+            float rz = (a->m21 * ay + a->m22 * az) + a->m20 * ax;
+            ax = rx;
+            ay = ry;
+            az = rz;
+        }
+
+        float scaleA = a->scale;
+        float wax = a->tx + scaleA * ax;
+        float way = a->ty + scaleA * ay;
+        float waz = a->tz + scaleA * az;
+        float radA = cellA->radius * a->scale;
+
+        for (int inner = 0; inner < listB->count; ++inner) {
+            PartCell* cellB = &listB->cells[inner];
+
+            if (cellB->kind == 1)
+                continue;
+
+            float bx = cellB->x;
+            float by = cellB->y;
+            float bz = cellB->z;
+
+            if (b->flags & 2) {
+                float rx = (b->m01 * by + b->m02 * bz) + b->m00 * bx;
+                float ry = (b->m11 * by + b->m12 * bz) + b->m10 * bx;
+                float rz = (b->m21 * by + b->m22 * bz) + b->m20 * bx;
+                bx = rx;
+                by = ry;
+                bz = rz;
+            }
+
+            float scaleB = b->scale;
+            float wbx = b->tx + scaleB * bx;
+            float wby = b->ty + scaleB * by;
+            float wbz = b->tz + scaleB * bz;
+            float radB = cellB->radius * b->scale;
+
+            float dx = wbx - wax;
+            float dy = wby - way;
+            float dz = wbz - waz;
+            float d2 = (dy * dy + dx * dx) + dz * dz;
+
+            float normal[3];
+            float mid[3];
+            float overlap = radB + radA;
+            bool  collide = true;
+
+            if (d2 >= 1.52587890625e-05f) {
+                float dist = sqrtf(d2);
+                overlap -= dist;
+                collide = (overlap >= 0.0f);
+                if (collide) {
+                    float inv = 1.0f / dist;
+                    float nx  = dx * inv;
+                    float ny  = dy * inv;
+                    float nz  = dz * inv;
+                    float dr  = radB - radA;
+                    normal[0] = nx;
+                    normal[1] = ny;
+                    normal[2] = nz;
+                    mid[0] = ((wax + wbx) + nx * dr) * 0.5f;
+                    mid[1] = ((way + wby) + ny * dr) * 0.5f;
+                    mid[2] = ((waz + wbz) + nz * dr) * 0.5f;
+                }
+            }
+
+            if (collide) {
+                ((ResolveSweepFn)&sResolvePartCollision)(p1, mid, normal, overlap, a, ctxA->b4,
+                                                         cellB->kind, outer, b, ctxB->b4,
+                                                         ctxB->b0, cfg, cellA->kind, inner);
+            }
+        }
+    }
+}
+
+// ---------------------------------------------------------------------------------------------
+// The look-at target list: a count at +0x04 and an array of {kind, weight} records at +0x00.
+// ---------------------------------------------------------------------------------------------
+struct LookatRec {
+    int   kind;                          // +0x00
+    float weight;                        // +0x04
+};
+
+struct LookatList {
+    LookatRec* recs;                     // +0x00
+    int        count;                    // +0x04
+};
+
+// The 8-byte selector pair FUN_00e68990 fills from the object's resolved look-at ids.
+struct LookatSrc {
+    int unknown;                         // +0x00 (left as-is by FUN_00e686c0)
+    int handle;                          // +0x04
+};
+
+struct LookatMask {                      // the four selector bytes handed to FUN_00e68990
+    unsigned char a, b, c, d;
+};
+
+namespace EA { namespace Random {
+struct RandomLinearCongruential {
+    double RandomDoubleUniform();        // 0x009360d0, __thiscall (ECX = this)
+};
+}}
+
+static EA::Random::RandomLinearCongruential* const kRandom =
+    (EA::Random::RandomLinearCongruential*)0x01601760;   // the process-wide RNG
+
+extern "C" int  FUN_00e50af0(unsigned int p2, unsigned int p3);
+extern "C" void FUN_00e686c0(int obj, void* handle, int* out, LookatMask* mask);
+extern "C" void FUN_00e68990(int obj, int* src, int* out28, int* out2c, int* out30);
+
+// ---------------------------------------------------------------------------------------------
+// 0x00e6b180 -- pick a weighted-random look-at target of the given class from the object's
+// candidate list.  Kinds 6..8 need the object's three resolved selector ids, which are computed
+// once (lazily) through FUN_00e686c0/FUN_00e68990; kinds 4/5 map straight to object fields.
+// A record is taken when the running weight total, scaled by a random fraction, still falls
+// inside that record's own weight.  Returns the chosen record's kind, or 0.
+// ---------------------------------------------------------------------------------------------
+// @ 0x00e6b180
+int __cdecl FUN_00e6b180(int obj, unsigned int p2, unsigned int p3, int* out)
+{
+    int id = FUN_00e50af0(p2, p3);
+
+    RefPtr ref;
+    ref.Ctor_00743b50();
+    LookatList* list = (LookatList*)FUN_00e4cc40(id, &ref);
+
+    int   kind8Id = 0;
+    int   kind7Id = 0;
+    int   kind6Id = 0;
+    bool  resolved = false;
+    float total    = 0.0f;
+    int   chosen   = -1;
+
+    for (int i = 0; i < list->count; ++i) {
+        LookatRec* rec = &list->recs[i];
+
+        if (rec->weight == 0.0f)
+            continue;
+
+        if ((rec->kind == 6 || rec->kind == 7 || rec->kind == 8) && !resolved) {
+            LookatSrc  src;
+            LookatMask mask;
+            RefPtr     tmp;
+
+            tmp.Ctor_00743b50();
+            void* handle = FUN_00e4cc40(*(int*)((char*)obj + 0x108), &tmp);
+            FUN_00e686c0(obj, handle, &src.handle, &mask);
+            mask.a = 0;
+            mask.b = 1;
+            mask.c = 1;
+            mask.d = 1;
+            FUN_00e68990(obj, &src.unknown, &kind8Id, &kind7Id, &kind6Id);
+            resolved = true;
+            tmp.Release_00e82130();
+        }
+
+        int  value = 1;
+        bool take  = true;
+        switch (rec->kind) {
+        case 4:
+            value = *(int*)((char*)obj + 0x22c);
+            if (value == 0) {
+                value = *(int*)((char*)obj + 0x170);
+                take  = (value != 0);
+            }
+            break;
+        case 5:
+            value = *(int*)((char*)obj + 0x220);
+            take  = (value != 0);
+            break;
+        case 6:
+            value = kind6Id;
+            take  = (value != 0);
+            break;
+        case 7:
+            value = kind7Id;
+            take  = (value != 0);
+            break;
+        case 8:
+            value = kind8Id;
+            take  = (value != 0);
+            break;
+        }
+
+        if (take) {
+            total += rec->weight;
+            double roll = kRandom->RandomDoubleUniform() * (double)total;
+
+            if (roll > (double)total)
+                roll = (double)total;
+            if (roll < 0.0)
+                roll = 0.0;
+            if (roll < (double)rec->weight) {
+                *out   = value;
+                chosen = i;
+            }
+        }
+    }
+
+    if (chosen != -1) {
+        int result = list->recs[chosen].kind;
+        ref.Release_00e82130();
+        return result;
+    }
+
+    ref.Release_00e82130();
+    return 0;
 }
