@@ -1,7 +1,7 @@
 00600260 ?DoMessageTab@OnlineTabStub@@QAEXXZ  # OnlineTabStub::DoMessageTab migrated from s00600260 (verbatim, slice spelling)
-006002d0 ?FUN_006002d0@@YAXXZ  # FUN_006002d0 migrated from s00600260 (verbatim, slice spelling)
-006008c0 ?FUN_006008c0@@YAXXZ  # FUN_006008c0 migrated from s00600260 (verbatim, slice spelling)
-00600ab0 ?FUN_00600ab0@@YAXXZ  # FUN_00600ab0 migrated from s00600260 (verbatim, slice spelling)
-00600c00 ?FUN_00600c00@@YAXXZ  # FUN_00600c00 migrated from s00600260 (verbatim, slice spelling)
-00600da0 ?FUN_00600da0@@YAXXZ  # FUN_00600da0 migrated from s00600260 (verbatim, slice spelling)
-00600df0 ?FUN_00600df0@@YAXXZ  # FUN_00600df0 migrated from s00600260 (verbatim, slice spelling)
+006002d0 ?DoMessage@cSPUISettings@@UAE_NIPAUUIMsg@@@Z  # SP::cSPUISettings::DoMessage (header id at +0x08, sub at +0x0c, src at +0x18); retail spelling was cRegistrationDialog::DoMessage
+006008c0 ?OnModalWindowEnd@cSPUISettings@@UAE_NI@Z  # SP::cSPUISettings::OnModalWindowEnd
+00600ab0 ?ShowWindow@cSPUISettings@@QAEXXZ  # SP::cSPUISettings::ShowWindow
+00600c00 ?ReloadOptions@cGraphicsTab@@QAEXXZ  # SP::cGraphicsTab::ReloadOptions (retail PDB: cSPUIFeedList::ReloadCallback)
+00600da0 ??0cGraphicsTab@@QAE@XZ  # SP::cGraphicsTab::cGraphicsTab
+00600df0 ??1cGraphicsTab@@UAE@XZ  # SP::cGraphicsTab::~cGraphicsTab
