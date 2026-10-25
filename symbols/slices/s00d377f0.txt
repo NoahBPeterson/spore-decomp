@@ -1,3 +1,6 @@
+00d37cf0 ?Init@cSPCreatureMissionManager@@QAEPAV1@XZ  # cSPCreatureMissionManager::Init migrated from s00d377f0 (verbatim, slice spelling)
+00d37d80 ?Write@cSPCreatureMissionManager@@QAE_NPAX@Z  # cSPCreatureMissionManager::Write migrated from s00d377f0 (verbatim, slice spelling)
+00d37e10 ?Read@cSPCreatureMissionManager@@QAE_NPAX@Z  # cSPCreatureMissionManager::Read migrated from s00d377f0 (verbatim, slice spelling)
 00d387c0 ?MarkEventAsOccurred@@YAXI@Z  # MarkEventAsOccurred migrated from s00d377f0 (verbatim, slice spelling)
 00d38800 ?EvaluateEvent@@YAPBDH@Z  # EvaluateEvent migrated from s00d377f0 (verbatim, slice spelling)
 00d38880 ?HasBrainUpgrade@cCreatureLevelUpScenario@@QAE_NXZ  # cCreatureLevelUpScenario::HasBrainUpgrade migrated from s00d377f0 (verbatim, slice spelling)

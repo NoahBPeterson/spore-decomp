@@ -1,0 +1,4 @@
+# va  diff-bytes  reason
+00d37cf0 16 cSPCreatureMissionManager::Init (/O2 /MD /Gy /TP /arch:SSE): true body is 49 bytes; chk n0=69 because the region includes 15 int3 pad bytes and an unrecognized 5-byte `jmp 0x804910` DefaultRefCounted::AddRef thunk, which no C++ constructor can reproduce
+00d37d80 120 cSPCreatureMissionManager::Write (/O2 /MD /Gy /TP /arch:SSE): complete reconstruction of the serializer, but inlined eastl container / AutoRefCount writes schedule differently; ours is 141 bytes vs 159
+00d37e10 127 cSPCreatureMissionManager::Read (/O2 /MD /Gy /TP /arch:SSE): mirror of Write; inlined eastl read paths diverge; ours is 133 bytes vs 159
