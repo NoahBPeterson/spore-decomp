@@ -142,8 +142,8 @@ class cCityVisualizer {
   void OnTick(unsigned __int64);                                         // dev only
   void SetCity(SP::cCity *);                                             // dev only
   void LayoutChanged();                                                  // dev only
-  eastl::vector<void /* SP::cCity::tAllegianceInfo */, eastl::sp_vector_allocator> & GetAllegianceConversionDeltas(); // dev only
-  eastl::vector<void /* SP::cCity::tAllegianceInfo */, eastl::sp_vector_allocator> & GetAllegianceUnconversionDeltas(); // dev only
+  // UNDECLARABLE (a by-value parameter or return of a type no header declares): eastl::vector<void /* SP::cCity::tAllegianceInfo */, eastl::sp_vector_allocator> & GetAllegianceConversionDeltas(); // dev only
+  // UNDECLARABLE (a by-value parameter or return of a type no header declares): eastl::vector<void /* SP::cCity::tAllegianceInfo */, eastl::sp_vector_allocator> & GetAllegianceUnconversionDeltas(); // dev only
 
  public:  // data (retail offsets)
   bool mbLayoutChange;                                         // 0x008 relaid
