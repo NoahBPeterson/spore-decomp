@@ -1,0 +1,2 @@
+0058ac10 - 2213 diff bytes (1992 vs 2620); complete; equiv FAIL (5/5 valid, coverage 6.6%, harness faults in stubbed callee 0x5855b0)
+0058b650 - 921 diff bytes (1066 vs 1029); complete; equiv FAIL (5/267 valid, coverage 7.8%, memory-pool divergence in stubbed callee)
