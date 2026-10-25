@@ -137,7 +137,7 @@ class cSPUILayoutManager { public:
     void* __thiscall ctor();                                       // 0x811f20
     void* __thiscall scalarDtor(u8 flag);                          // 0x811f80
     __declspec(noinline) void* __thiscall CloseLayout(void* coll, u32 param); // 0x8117f0
-    void* __thiscall Method11c20();                                // 0x811c20
+    bool  __thiscall Method11c20();                                // 0x811c20
     void  __thiscall Method11330();                                // 0x811330 (external)
     void* __thiscall CreateLayoutObjects(u32 key);                 // 0x810fd0 (external)
     void* __thiscall GetWorldMainWindow(u32 id);                   // 0x810620 (external)
@@ -362,13 +362,180 @@ void __thiscall cSPUILayoutObjectCollectionV8::OnLoad()
     }
 }
 
-// @ 0x00811c20
-// 768-byte COM/UI body still to reconstruct: swaps the pointer vector at +0x5c, queries the
-// layout-root service (0x8de1a0) with the key from +0xc/+0x10/+0x14 (tag 0x510a95b), then
-// branches on the found child's +0x1c / +0x18 member to rebuild streams vs. tear down.
-void* __thiscall cSPUILayoutManager::Method11c20()
+// ---- views for the 0x00811c20 collection Reload body ------------------------
+struct WStr {                                       // eastl wide string, 0x10 B
+    void* mpBegin;   // +0x00
+    void* mpEnd;     // +0x04
+    void* mpCap;     // +0x08
+    u32   mAlloc;    // +0x0c (left untouched by the original)
+    void __thiscall Assign(const WStr& rhs);        // 0x57cb60
+    void __thiscall Destroy_();                     // 0x933960
+};
+
+struct MStream {
+    u8    pad00[0x24];
+    void  __thiscall Init(void* buf, u32 size, int a, int b, int c, const char* name); // 0x93c2c0
+    void  __thiscall SetOption(int opt, float val); // 0x93bb40
+    void  __thiscall AddRef_();                     // 0x83f5d0
+    u8    __thiscall SetPosition(int a, int b);     // 0x93c0c0
+    void  __thiscall Destroy_();                    // 0x93bde0
+};
+
+struct Iface4 {
+    void __thiscall Report(u32 code);                   // 0x999480
+};
+
+struct CollOps {
+    void __thiscall Flush();                            // 0x999050
+};
+
+struct VecOps {
+    void __thiscall Destroy_();                         // 0x7a41a0
+};
+
+struct ReloadKey { u32 a, b, c, d; };                   // d is never written
+
+struct LayoutChild {                                    // looked-up layout child
+    u8    pad00[0x18];
+    void* mpChildObj;   // +0x18 (tear-down target / load target)
+    void* mpToken;      // +0x1c (token tree to serialise on rebuild)
+    void* mpCtx;        // +0x20 (token io context)
+};
+
+struct ReloadView {                                     // this = collection
+    void** vtbl;        // +0x00
+    void*  mpIface;     // +0x04
+    void*  p08;         // +0x08
+    u32    m0c;         // +0x0c
+    u32    m10;         // +0x10
+    u32    m14;         // +0x14
+    void*  m18;         // +0x18
+    u8     pad1c[0x40]; // +0x1c
+    PtrVec vec5c;       // +0x5c
+    WStr   name70;      // +0x70
+};
+
+typedef u8  (__thiscall *SvcFindFn)(void*, ReloadKey*, void**, int, int, int, int);
+typedef void(__thiscall *SvcNameFn)(void*, void*, WStr*);
+typedef int (__thiscall *IfaceLoadFn)(void*, void*, void*, void*, void*);
+
+extern "C" void* FUN_008de1a0();                        // 0x8de1a0 layout-root service
+extern "C" void  SetCachingType(int, void*);            // 0x6ac040
+extern "C" u8    WriteTokenList(void*, void*, u32, void*); // 0x902fc0
+extern wchar_t   g_1667bac[2];                          // empty wide-string sentinel
+extern const char g_13ebacc[];                          // "UTF/MemoryStream"
+
+// @ 0x00811c20  cSPUILayoutManager::Method11c20 (cSPUILayoutObjectCollection::Reload)
+bool __thiscall cSPUILayoutManager::Method11c20()
 {
-    return 0;   // not reconstructed: see slice notes / partial.txt
+    ReloadView* v = (ReloadView*)this;
+    if (!v->mpIface)
+        return false;
+
+    PtrVec tmp;
+    tmp.mBegin = 0;
+    tmp.mEnd = 0;
+    tmp.mCap = 0;
+    v->vec5c.swap(tmp);
+
+    void* svc = FUN_008de1a0();
+    if (!svc)
+        ((Iface4*)v->mpIface)->Report(0x4fbd0001);
+
+    void* out = 0;
+    ReloadKey key;
+    key.a = v->m0c;
+    key.b = v->m10;          // overwritten below, as in the original
+    key.c = v->m14;
+    key.b = 0x510a95b;
+
+    u8 ok = ((SvcFindFn)((void**)*(void***)svc)[3])(svc, &key, &out, 0, 0, 0, 0);
+    if (!ok)
+        goto fail;
+
+    SetCachingType(6, out);
+    {
+        LayoutChild* child = (LayoutChild*)out;
+        if (!child)
+            goto fail;
+
+        if (child->mpToken) {
+            u8 buf[0x40];
+            MStream ms;
+            WStr temp;
+            int r;
+
+            ms.Init(buf, 0x40, 1, 0, 0, g_13ebacc);
+            ms.SetOption(1, 1.0f);
+            ms.AddRef_();
+            WriteTokenList(&ms, child->mpToken, 2, child->mpCtx);
+            ms.SetPosition(0, 0);
+
+            temp.mpBegin = &g_1667bac[0];
+            temp.mpEnd   = &g_1667bac[0];
+            temp.mpCap   = &g_1667bac[1];
+            ((SvcNameFn)((void**)*(void***)svc)[0x7c / 4])(svc, &v->m0c, &temp);
+            if (temp.mpBegin != temp.mpEnd)
+                v->name70.Assign(temp);
+
+            r = ((IfaceLoadFn)((void**)*(void***)v->mpIface)[6])
+                    (v->mpIface, &ms, v->name70.mpBegin, this, v->m18);
+            if (r != 0) {
+                temp.Destroy_();
+                ms.Destroy_();
+                goto fail;
+            }
+
+            v->vec5c.swap(tmp);
+            ((CollOps*)this)->Flush();
+            v->vec5c.swap(tmp);
+            ((void (__thiscall*)(void*))((void**)*(void***)this)[3])(this);
+            temp.Destroy_();
+            ms.Destroy_();
+            if (out)
+                ((void (__thiscall*)(void*))((void**)*(void***)out)[1])(out);
+            ((VecOps*)&tmp)->Destroy_();
+            return true;
+        } else if (child->mpChildObj) {
+            WStr temp;
+            void* childObj = child->mpChildObj;
+            int r;
+
+            temp.mpBegin = &g_1667bac[0];
+            temp.mpEnd   = &g_1667bac[0];
+            temp.mpCap   = &g_1667bac[1];
+            ((SvcNameFn)((void**)*(void***)svc)[0x7c / 4])(svc, &v->m0c, &temp);
+            if (temp.mpBegin != temp.mpEnd)
+                v->name70.Assign(temp);
+
+            ((void (__thiscall*)(void*, int, int))
+                ((void**)*(void***)childObj)[0x28 / 4])(childObj, 0, 0);
+
+            r = ((IfaceLoadFn)((void**)*(void***)v->mpIface)[6])
+                    (v->mpIface, childObj, v->name70.mpBegin, this, v->m18);
+            if (r != 0) {
+                temp.Destroy_();
+                goto fail;
+            }
+
+            v->vec5c.swap(tmp);
+            ((CollOps*)this)->Flush();
+            v->vec5c.swap(tmp);
+            ((void (__thiscall*)(void*))((void**)*(void***)this)[3])(this);
+            temp.Destroy_();
+            if (out)
+                ((void (__thiscall*)(void*))((void**)*(void***)out)[1])(out);
+            ((VecOps*)&tmp)->Destroy_();
+            return true;
+        }
+    }
+
+fail:
+    if (out)
+        ((void (__thiscall*)(void*))((void**)*(void***)out)[1])(out);
+    if (tmp.mBegin && ((u32*)tmp.mBegin)[-1] != 0)
+        operator_delete__(tmp.mBegin);
+    return false;
 }
 
 // @ 0x00811f20

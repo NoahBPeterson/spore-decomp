@@ -15,3 +15,4 @@
 00812210 ?FUN_00812210@@YA_NPAUVecView@@0@Z  # FUN_00812210 migrated from s008117f0 (verbatim, slice spelling)
 00812310 ?eraseSys@RBTree1@@QAEXPAPAXPAX@Z  # RBTree1::eraseSys migrated from s008117f0 (verbatim, slice spelling)
 00812370 ?Method12370@RBTree1@@QAEXPAPAXPAUVecView@@@Z  # RBTree1::Method12370 migrated from s008117f0 (verbatim, slice spelling)
+007a41a0 FUN_007a41a0  # eastl vector destructor called by 00811c20 (not a decomp index start)
