@@ -17,7 +17,7 @@ void  cSPTransform_Assign(void* dst, const void* src);
 void  cSPBoundingBox_Transform(cSPBoundingBox* box, const void* xf);
 int   FUN_00511140(void* p);
 int   FUN_00490330(float* p);
-int   ComposeTransforms(void* xf);
+int   ComposeTransforms(void* dst, void* src);
 int   FUN_0073e080(float* a, int b, void* c, int d);
 int   FUN_006ba870(int a);
 int   cModelInstance_IntersectsSphere(void* inst, const float* pos, const void* xf, bool b);
@@ -118,30 +118,50 @@ int FilterModelSphere2(CullModel* model, float* pos, SphereArg* arg)
 }
 
 // @ 0x00748ad0 : model pick/distance helper
-struct PickSrc { unsigned short f0, f1; float a, b, c; int d; float rot[9]; };
+// Copies a packed transform descriptor, composes the model's world transform,
+// then either picks against the single model instance (radius <= 0) or tests a
+// sphere against one of the model's two instance slots (radius > 0).
+struct PickSrc {
+    unsigned short f0;   // +0x00
+    unsigned short f1;   // +0x02
+    float a;             // +0x04
+    float b;             // +0x08
+    float c;             // +0x0c
+    int   d;             // +0x10
+    float rot[9];        // +0x14
+};
+
+extern "C" void cSPMatrix3_Assign(void* dst, const void* src);   // 0x0041CB40
+extern "C" void XForm2_Apply(PickSrc* dst, int arg);             // 0x006BA870
+
 int FUN_00748ad0(float* a, int b, unsigned short* src, int param_4, int param_5,
                  int model, int idx, int param_8, float radius)
 {
     PickSrc local;
     local.f0 = src[0];
     local.f1 = src[1];
-    local.a = *(float*)(src + 2);
-    local.b = *(float*)(src + 4);
-    local.c = *(float*)(src + 6);
-    local.d = *(int*)(src + 8);
-    memcpy(local.rot, src + 10, sizeof(local.rot));
-    ComposeTransforms((void*)(model + 0xe4));
+    local.a  = *(float*)(src + 2);
+    local.b  = *(float*)(src + 4);
+    local.c  = *(float*)(src + 6);
+    local.d  = *(int*)(src + 8);
+    cSPMatrix3_Assign(local.rot, src + 10);
+
+    ComposeTransforms(&local, (void*)(model + 0xe4));
+
     if (radius <= 0.0f) {
-        if (FUN_0073e080(a, b, &local, param_8)) return 1;
+        if (FUN_0073e080(a, b, &local, param_8))
+            return 1;
     } else {
-        local.f0 |= 4;
-        local.f1++;
+        // Bias the descriptor toward the query point and test the chosen slot.
+        local.f0 = (unsigned short)(local.f0 | 4);
+        local.f1 = (unsigned short)(local.f1 + 1);
         local.a += -a[0];
         local.b += -a[1];
         local.c += -a[2];
-        FUN_006ba870(param_5);
+        XForm2_Apply(&local, param_5);
         void* inst = *(void**)(model + 0x9c + idx * 4);
-        if (cModelInstance_IntersectsSphere(inst, (float*)param_4, &local, false)) return 1;
+        if (cModelInstance_IntersectsSphere(inst, (float*)param_4, &local, false))
+            return 1;
     }
     return 0;
 }
