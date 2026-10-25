@@ -63,3 +63,5 @@
 #   0xeec2b0 0xefcae0 0xf3be60.  Globals: 0x16c7aa4 (app/UI singleton).
 # Constants: 0x1485720 = 1.0f, 0x13f9428 = 0.001f, 0x13ec4b8 = 1e-9f, 0x4c8f8d29 = magic
 #   for /0x1ac.  Names: 0x1186577, 0x7b0f76d, 0x175cdc9, 0xce9f6639, 0x137e8e0.
+00f198f0 ?Apply@cScenarioPlayProgressBar@UI@@QAEX_N0@Z  # UI::cScenarioPlayProgressBar::Apply (slice spelling)
+00f19e00 ?cScenarioPlayProgressBar_Pred@UI@@YA_NPAX@Z  # UI::cScenarioPlayProgressBar_Pred (slice spelling)

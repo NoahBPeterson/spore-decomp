@@ -8,3 +8,4 @@ slices/s00f18eb0/s00f18eb0.cpp  ?GetField@cScenarioPlayProgressBar@UI@@QAEHH@Z  
 slices/s00f18eb0/s00f18eb0.cpp  ?GetField2@cScenarioPlayProgressBar@UI@@QAEHH@Z  00f19c20  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
 slices/s00f18eb0/s00f18eb0.cpp  ?GetField3@cScenarioPlayProgressBar@UI@@QAEHH@Z  00f19c40  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
 slices/s00f18eb0/s00f18eb0.cpp  ?GetDelta@cScenarioPlayProgressBar@UI@@QAEHH@Z   00f19c60  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00f18eb0/s00f18eb0.cpp  ?Apply@cScenarioPlayProgressBar@UI@@QAEX_N0@Z  00f198f0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast

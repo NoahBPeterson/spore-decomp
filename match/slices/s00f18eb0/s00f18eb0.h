@@ -38,13 +38,22 @@ public:
     int     GetDelta(int idx);                // 0x00f19c60
     uint8_t GetKind(int idx);                 // 0x00f19c80
     bool    IsKindAb(int idx);                // 0x00f19cc0
-    void    Apply(bool a);                    // 0x00f198f0
+    void    Apply(bool a, bool flag);         // 0x00f198f0
     void    Setup(uint32_t a, uint32_t b, uint32_t c, uint32_t d,
                   uint32_t e, uint32_t f, uint32_t g, uint32_t h,
                   uint32_t i);                // 0x00f19940
     void    Remove(void* a, uint32_t b);      // 0x00f19ac0
     float   ScanFrac();                       // 0x00f19d10
     void    EachChild(uint32_t* a, uint32_t b); // 0x00f19660
+};
+
+// ---- card reached through the global simulator object (0x016c7aa4) -------
+struct MissionCard {              // [sim + 0x6c][+0x148]
+    char    pad0[0x10];
+    uint8_t mFlag10;              // +0x10
+    void setFlag(bool on);        // 0x00e16a70
+    void initForCreature(int a, int b);   // 0x00e133b0
+    void resizeToContent(int a, int b);   // 0x00e13b50
 };
 
 // ---- external helpers ----------------------------------------------------

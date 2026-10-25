@@ -242,6 +242,49 @@ bool __cdecl cScenarioPlayProgressBar_KindOk(void* p)
 }
 
 // ---------------------------------------------------------------------------
+// @ 0x00f198f0  cScenarioPlayProgressBar::Apply
+// ---------------------------------------------------------------------------
+void cScenarioPlayProgressBar::Apply(bool a, bool flag)
+{
+    int* g = *(int**)0x16c7aa4;
+    void* panel = *(void**)((char*)g + 0x6c);
+    MissionCard* card = *(MissionCard**)((char*)panel + 0x148);
+    if (!card)
+        return;
+    card->setFlag(a);
+    if (!flag)
+        return;
+    if (card->mFlag10)
+        card->initForCreature(0, 0);
+    else
+        card->resizeToContent(0, 0);
+}
+
+// ---------------------------------------------------------------------------
+// @ 0x00f19e00  Pred
+// ---------------------------------------------------------------------------
+bool __cdecl cScenarioPlayProgressBar_Pred(void* a)
+{
+    bool ok = false;
+    void* p = *(void**)((char*)a + 0x64);
+    if (p) {
+        void* q = ((void* (__thiscall*)(void*, unsigned))(*(void***)p)[0x0c / 4])(p, 0x17f243b);
+        if (q) {
+            if (((unsigned (__thiscall*)(void*))(*(void***)q)[0x20 / 4])(q) != 0x2e72cae) {
+                if (((unsigned (__thiscall*)(void*))(*(void***)q)[0x20 / 4])(q) != 0x18eb45e) {
+                    ok = true;
+                } else {
+                    ((void (__thiscall*)(void*, unsigned))(*(void***)q)[0x0c / 4])(q, 0xd0036e08);
+                    void* av = ((Xb1fdb0*)sub_b3d300())->Find(0);
+                    ok = q != av;
+                }
+            }
+        }
+    }
+    return ok;
+}
+
+// ---------------------------------------------------------------------------
 // @ 0x00f195a0  Link
 // ---------------------------------------------------------------------------
 void __cdecl cScenarioPlayProgressBar_Link(void* a)
