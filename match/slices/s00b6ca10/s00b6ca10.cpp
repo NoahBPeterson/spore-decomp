@@ -56,6 +56,7 @@ struct TmpStr {
 };
 void operator_delete_array(void* p);                              // 0x00f47380
 
+// @ 0x00b6cde0
 void FUN_00b6cde0(cCtx* p, int param2, float* param3, float param4)
 {
     IMode* m1 = p->mpA ? p->mpA->Query(0xe9cb8ba) : 0;
