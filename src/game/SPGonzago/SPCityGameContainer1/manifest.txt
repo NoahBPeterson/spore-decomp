@@ -1,0 +1,2 @@
+# source  symbol  va  flags
+../src/game/SPGonzago/SPCityGameContainer1.cpp  ?AsISpatialObject@cGameBundleContainer_s00ce_dff0@SP@@QAEPAXXZ  00cee2a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

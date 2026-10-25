@@ -5,7 +5,7 @@
 00cee1c0 ?Execute@cCommandMakeTradeRoutes@@QAEXPAX@Z  # cCommandMakeTradeRoutes::Execute migrated from s00cedff0 (verbatim, slice spelling)
 00cee270  FUN_00cee270(p) -> void  # fn=*(*(p+0x34)+0x84); tail fn((u8*)p+0x34)
 00cee290  FUN_00cee290(o) -> float  # (float)o->m_field1c * o->m_field20 (x87)
-00cee2a0  SP::cGameBundleContainer::AsISpatialObject() -> void*  # this ? vtbl[0x14](this, 0x1186577) : 0
+00cee2a0 ?AsISpatialObject@cGameBundleContainer_s00ce_dff0@SP@@QAEPAXXZ  # cGameBundleContainer_s00ce_dff0::AsISpatialObject migrated from s00cedff0 (verbatim, slice spelling)
 00cee2c0  FUN_00cee2c0(o,obj,a,b,c,d) -> void  # owner swap addref/release @+0x18, stores +0x1c/+0x20, if c>0 spawn FUN_00b3d2b0(c,o,d)->FUN_00ac7ab0 (NOT byte-exact; see nonmatching.txt)
 00cee330  FUN_00cee330(v) -> void*  # first element or null (NOT byte-exact; see nonmatching.txt)
 00cee340  FUN_00cee340(v) -> void*  # RandomUint32Uniform(&rng, end-begin), return begin[index] (NOT byte-exact; see nonmatching.txt)
