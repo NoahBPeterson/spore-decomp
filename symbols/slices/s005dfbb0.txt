@@ -1,6 +1,6 @@
-005dfbb0 ?FUN_005dfbb0@@YAXPAX@Z  # FUN_005dfbb0 migrated from s005dfbb0 (verbatim, slice spelling)
-005dfd00 ?FUN_005dfd00@@YAXPAXH@Z  # FUN_005dfd00 migrated from s005dfbb0 (verbatim, slice spelling)
-005e0000 ?FUN_005e0000@@YAXPAX@Z  # FUN_005e0000 migrated from s005dfbb0 (verbatim, slice spelling)
-005e0370  Simulator::cCreatureAbility ctor  # card vtable
-005e0440  Simulator::cCreatureAbility dtor  # card vtable
-005e04d0  SPEditorUI_Helper_005e04d0  # card
+005dfbb0  SP::cSPEditorUI::OnFileDrop  # ?OnFileDrop@cSPEditorUI@SP@@QAEXABUKey@2@@Z
+005dfd00  SP::cSPEditorUI::DoCommand  # ?DoCommand@cSPEditorUI@SP@@QAE_NH@Z
+005e0000  SP::cSPEditorUIProc::DoMessage  # ?DoMessage@cSPEditorUIProc@SP@@QAE_NPAXPAUUIMessage@2@@Z
+005e0370  SP::cSPRolloverModelData ctor  # ??0cSPRolloverModelData@SP@@QAE@ABUKey@1@0III@Z
+005e0440  SP::cSPRolloverModelData dtor  # ??1cSPRolloverModelData@SP@@UAE@XZ
+005e04d0  SP::AbilityLayoutData::LayoutLine  # ?LayoutLine@AbilityLayoutData@SP@@QAEMPAVIWindow@2@PBUKey@2@MI1PAVcString@2@M@Z
