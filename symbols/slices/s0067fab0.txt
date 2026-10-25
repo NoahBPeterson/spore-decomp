@@ -5,3 +5,4 @@
 0067ff30 RGBToHSL  # 0x0067fe30 is the inverse; writes h,s,l
 0067e5c0 eastl::map<basic_string,...>::LowerBound  # already matched in slice s0067d550
 0067e830 PairB::~PairB  # releases command, frees string (slice s0067d550)
+00680a50 VecOps::CopyCtor  # eastl vector<Rec48> copy ctor; the out temp of 0x00680420 reuses the argument home

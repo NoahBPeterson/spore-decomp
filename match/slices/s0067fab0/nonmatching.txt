@@ -14,3 +14,4 @@
 006809f0  n/a  destructor with EH frame; complete, missing compiler EH prolog/state stores.
 0067fb80  157  CheatCmdMap::AddCheat (map operator[]); complete, EH state/temp slot sharing and register allocation differ (equiv UNSUPPORTED)
 0067fc50  349  CheatMgr::AddCheat; complete (parser vcall, 2 key-string builds, map insert, AddRef/Release), EH state and regalloc differ (equiv UNSUPPORTED)
+00680a50  133  vector<Rec48> copy ctor; complete (count from the record stride, EAAlloc, the three field stores, and the uninitialized-copy call at 0x00680420 whose out temp sits in the argument home, inside a catch(...) that frees and rethrows); cl 15.00 lays out every try/catch function with an ebp frame plus an [ebp-0x10] esp save while the retail VC8 build is esp-based (175 vs 177 bytes), and the this/src registers swap; equiv WEAK (175 valid, 79.0% cov)
