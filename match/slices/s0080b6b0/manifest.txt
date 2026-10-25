@@ -1,3 +1,4 @@
-slices/s0080b6b0/s0080b6b0.cpp  ?method@Big3  0080b8a0
-slices/s0080b6b0/s0080b6b0.cpp  ?Vec34Dtor  0080b8f0
-slices/s0080b6b0/s0080b6b0.cpp  ?Vec42CDtor  0080b930
+slices/s0080b6b0/s0080b6b0.cpp  ?method@Big3@@QAEPAXH@Z  0080b8a0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s0080b6b0/s0080b6b0.cpp  ?Vec34Dtor@@YIXPAH@Z  0080b8f0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s0080b6b0/s0080b6b0.cpp  ?Vec42CDtor@@YIXPAH@Z  0080b930  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s0080b6b0/s0080b6b0.cpp  ?FUN_0080c520@Big3@@QAEPAUWin@@MMH@Z  0080c520  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
