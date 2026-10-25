@@ -1,0 +1,2 @@
+# source  symbol  va  flags
+../src/game/SPGonzago/SPBreakpoints.cpp  ?GetUInt@Property@@QAEPAIXZ  0041ea00  /Od /Ob1 /MD /Gy /TP /Isrc/game/include
