@@ -1,0 +1,5 @@
+00d20620 ?FUN_00d20620@tCamCtrl@@QAEOM@Z  # tCamCtrl::FUN_00d20620 migrated from s00d20620 (verbatim, slice spelling)
+00d20880 ?FUN_00d20880@tCamCtrl@@QAEXABUtVec3@@ABUtVec4@@@Z  # tCamCtrl::FUN_00d20880 migrated from s00d20620 (verbatim, slice spelling)
+00d20910 ?FUN_00d20910@tCamCtrl@@QAEXM@Z  # tCamCtrl::FUN_00d20910 migrated from s00d20620 (verbatim, slice spelling)
+00d20950 ?FUN_00d20950@tCamCtrl@@QAEXI@Z  # tCamCtrl::FUN_00d20950 migrated from s00d20620 (verbatim, slice spelling)
+00d20970 ?FUN_00d20970@@YAEXZ  # FUN_00d20970 migrated from s00d20620 (verbatim, slice spelling)

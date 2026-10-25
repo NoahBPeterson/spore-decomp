@@ -1,0 +1,3 @@
+00d270a0 ?FUN_00d270a0@cCamView@@QAEXPAUVec3@@@Z  # cCamView::FUN_00d270a0 migrated from s00d26790 (verbatim, slice spelling)
+00d271d0 ?FUN_00d271d0@cCamView@@QAEXPAUVec3@@@Z  # cCamView::FUN_00d271d0 migrated from s00d26790 (verbatim, slice spelling)
+00d272e0 ?FUN_00d272e0@cCamView@@QAEXXZ  # cCamView::FUN_00d272e0 migrated from s00d26790 (verbatim, slice spelling)

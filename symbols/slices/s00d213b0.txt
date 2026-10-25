@@ -1,9 +1,9 @@
-00d213b0 cCreatureCameraIGB1::HandleMessage  # PDB name (card); delivered to the IGB1 subobject (camera+4); byte-exact
-00d217e0 cCreatureCamera::OnMouseDown  # card; byte-exact
-00d21810 cCreatureCamera::GetPitch  # card; needs SSE maxss/minss clamp + st0-convention _CIacos
-00d21b10 cCreatureCamera::FUN_00d21b10  # Ghidra FUN; pitch/orientation store helper (thiscall, 3 floats)
-00d21bc0 cCreatureCamera::FUN_00d21bc0  # Ghidra FUN; translation store helper (thiscall, 3 floats)
-00d21c50 cCreatureCamera::GetAudioAnchorPosition  # card; byte-exact
-00d21ca0 FUN_00d21ca0  # Ghidra FUN; axis-aligned point proximity test; byte-exact
-00d21d10 FUN_00d21d10  # Ghidra FUN; quaternion from axis/angle then rotate; byte-exact
-00d21d90 cCreatureCamera::UpdateCamera_Free  # card; free-camera update; needs SSE maxss/minss clamps + st0-convention _CIacos
+00d213b0 ?HandleMessage@cCreatureCameraIGB1@@QAE_NIPAX@Z  # cCreatureCameraIGB1::HandleMessage migrated from s00d213b0 (verbatim, slice spelling)
+00d217e0 ?OnMouseDown@cCreatureCamera@@QAE_NIMMI@Z  # cCreatureCamera::OnMouseDown migrated from s00d213b0 (verbatim, slice spelling)
+00d21810 ?GetPitch@cCreatureCamera@@QAEMMM@Z  # cCreatureCamera::GetPitch migrated from s00d213b0 (verbatim, slice spelling)
+00d21b10 ?FUN_00d21b10@cCreatureCamera@@QAEXMMM@Z  # cCreatureCamera::FUN_00d21b10 migrated from s00d213b0 (verbatim, slice spelling)
+00d21bc0 ?FUN_00d21bc0@cCreatureCamera@@QAEXMMM@Z  # cCreatureCamera::FUN_00d21bc0 migrated from s00d213b0 (verbatim, slice spelling)
+00d21c50 ?GetAudioAnchorPosition@cCreatureCamera@@QAEPAUVec3@@PAU2@@Z  # cCreatureCamera::GetAudioAnchorPosition migrated from s00d213b0 (verbatim, slice spelling)
+00d21ca0 ?FUN_00d21ca0@@YAHPBUVec3@@0M@Z  # FUN_00d21ca0 migrated from s00d213b0 (verbatim, slice spelling)
+00d21d10 ?FUN_00d21d10@@YAPAUVec3@@PAU1@PBU1@1M@Z  # FUN_00d21d10 migrated from s00d213b0 (verbatim, slice spelling)
+00d21d90 ?UpdateCamera_Free@cCreatureCamera@@QAEXXZ  # cCreatureCamera::UpdateCamera_Free migrated from s00d213b0 (verbatim, slice spelling)

@@ -1,1 +1,1 @@
-00d247f0 SP::cCreatureCamera::ReloadTuning  # card name
+00d247f0 ?ReloadTuning@cCreatureCamera_s00d2_47f0@SP@@QAEXXZ  # cCreatureCamera_s00d2_47f0::ReloadTuning migrated from s00d247f0 (verbatim, slice spelling)
