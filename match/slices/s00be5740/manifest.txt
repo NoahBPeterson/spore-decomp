@@ -1,1 +1,2 @@
 # source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00be5740/s00be5740.cpp  ?FUN_00be6180@@YAXPAUcIOStream@@PAUcBlockVecOwner@@@Z  00be6180  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-

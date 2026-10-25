@@ -215,12 +215,73 @@ struct CBlock {
   u32           pad74;                              // 0x74
   void*         p78;                                // 0x78
   u32           pad7c;                              // 0x7c
+
+  void CopyConstructFrom(const CBlock* src);        // 0x00bdd380
 };
+
+// IO stream chain used by the block reader: the outer stream hands out an
+// inner IO object whose vtable+0x18 slot returns the EA::IO stream.
+struct cIOInner {
+  virtual void v00(); virtual void v01(); virtual void v02(); virtual void v03();
+  virtual void v04(); virtual void v05();
+  virtual void* v06();                              // 0x18
+};
+
+struct cIOStream {
+  virtual void v00(); virtual void v01(); virtual void v02(); virtual void v03();
+  virtual void v04(); virtual void v05(); virtual void v06();
+  virtual void v07();                               // 0x1c
+  virtual cIOInner* v08();                          // 0x20
+};
+
+// Ref-counted handle interface: Release lives at vtable+0xc0.
+struct cRefCounted {
+  virtual void v00(); virtual void v01(); virtual void v02(); virtual void v03();
+  virtual void v04(); virtual void v05(); virtual void v06(); virtual void v07();
+  virtual void v08(); virtual void v09(); virtual void v0a(); virtual void v0b();
+  virtual void v0c(); virtual void v0d(); virtual void v0e(); virtual void v0f();
+  virtual void v10(); virtual void v11(); virtual void v12(); virtual void v13();
+  virtual void v14(); virtual void v15(); virtual void v16(); virtual void v17();
+  virtual void v18(); virtual void v19(); virtual void v1a(); virtual void v1b();
+  virtual void v1c(); virtual void v1d(); virtual void v1e(); virtual void v1f();
+  virtual void v20(); virtual void v21(); virtual void v22(); virtual void v23();
+  virtual void v24(); virtual void v25(); virtual void v26(); virtual void v27();
+  virtual void v28(); virtual void v29(); virtual void v2a(); virtual void v2b();
+  virtual void v2c(); virtual void v2d(); virtual void v2e(); virtual void v2f();
+  virtual void Release();                           // 0x30 -> vtable + 0xc0
+};
+
+// Variable-list serializer (same layout as slice s006925c0's SP class).
+namespace SP {
+struct cDataSerializationInfo {
+  s32  mId;                                         // 0x00
+  s32  mDataSize;                                   // 0x04
+  bool mbSerialized;                                // 0x08
+  char mPad09[3];                                   // 0x09
+  void* mpBinderContext;                            // 0x0c
+  void* mpSerializer;                               // 0x10
+};
+struct cVarListSerializer {
+  cDataSerializationInfo mDataSerializationInfos[128];  // 0x00 .. 0x9ff
+  s32  mSerializableVarCount;                       // 0xa00
+  s32  mSerializedVarCount;                         // 0xa04
+  u32  mSignature;                                  // 0xa08
+  void* mpObject;                                   // 0xa0c
+  void* mpSerializerList;                           // 0xa10
+
+  cVarListSerializer(const void* obj, void* list, u32 sig);  // 0x00692f90
+  void Read(void* stream);                          // 0x00693e10
+};
+}
 
 struct cBlockVecOwner {
   void** mBegin;                                    // 0x00
   void** mEnd;                                      // 0x04
+  void** mCapacity;                                 // 0x08
   void FUN_00be60a0(u32 index);                     // 0x00be60a0
+  void FUN_00be0cd0(u32 count);                     // 0x00be0cd0
+  void FUN_00be30e0(CBlock* pos, const CBlock* src);        // 0x00be30e0
+  void FUN_00bda710_vec(void* first, CBlock* end);  // 0x00bda710
 };
 
 // Simulator object stored at cRaidBeh+0x590.
@@ -253,6 +314,7 @@ void  __cdecl FUN_00b63890_ctor(void* t);                       // cGonzagoTimer
 void  __cdecl FUN_00b638b0_dtor(void* t);                       // cGonzagoTimer::dtor (unused alias)
 u32   __cdecl FUN_00bdd600(u32 a, u32 b, u32 c);                // 0x00bdd600
 void  __cdecl FUN_00bda710(void* a, u32 b);                     // 0x00bda710
+void  __cdecl EA_IO_ReadInt32(void* s, void* buf, s32 n, s32 f);// 0x0093a780
 void  __cdecl FUN_00be2440(cRaidBeh* self, u32 a, u32 b);       // 0x00be2440
 void  __cdecl FUN_00be2ee0_free(void* end, u32 n, void* out);   // 0x00be2ee0 (free alias)
 void  __cdecl FUN_01021260_stub();                              // high-LOD getter
@@ -589,4 +651,57 @@ void cBlockVecOwner::FUN_00be60a0(u32 index)
   u32 first = FUN_00bdd600((u32)end, (u32)end, dst);
   FUN_00bda710((void*)first, (u32)end);
   mEnd = (void**)((u32)end + ((s32)((u32)end - dst) >> 7) * -0x80);
+}
+
+// ===========================================================================
+// 0x00be6180 - block-vector load.
+//   Clears the 0x80-byte-record vector, reads a record count from the stream,
+//   sizes the vector, then for each record default-constructs a CBlock (two
+//   embedded timers + two owned handles), reads it through a
+//   cVarListSerializer and appends it, releasing the temporary's handles and
+//   destroying its timers afterwards.  The stream is closed at the end.
+// ===========================================================================
+// @ 0x00be6180
+void __cdecl FUN_00be6180(cIOStream* stream, cBlockVecOwner* vec)
+{
+  CBlock* begin = (CBlock*)vec->mBegin;
+  CBlock* end   = (CBlock*)vec->mEnd;
+
+  u32 first = FUN_00bdd600((u32)end, (u32)end, (u32)begin);
+  vec->FUN_00bda710_vec((void*)first, (CBlock*)vec->mEnd);
+  vec->mEnd = (void**)((u32)vec->mEnd + ((s32)((u32)end - (u32)begin) >> 7) * -0x80);
+
+  u32 count = 0;
+  void* io = stream->v08()->v06();
+  EA_IO_ReadInt32(io, &count, 1, 0);
+  vec->FUN_00be0cd0(count);
+
+  for (u32 i = 0; i < count; i++) {
+    CBlock tmp;
+    tmp.t30.Ctor();
+    tmp.t50.Ctor();
+    tmp.p70 = 0;
+    tmp.p78 = 0;
+
+    SP::cVarListSerializer ser(&tmp, (void*)0x156e448, 0x1a80d26);
+    ser.Read(stream);
+
+    CBlock* e = (CBlock*)vec->mEnd;
+    if (e < (CBlock*)vec->mCapacity) {
+      vec->mEnd = (void**)(e + 1);
+      if (e != 0)
+        e->CopyConstructFrom(&tmp);
+    } else {
+      vec->FUN_00be30e0(e, &tmp);
+    }
+
+    if (tmp.p78 != 0)
+      ((cRefCounted*)tmp.p78)->Release();
+    if (tmp.p70 != 0)
+      ((cRefCounted*)tmp.p70)->Release();
+    tmp.t50.Dtor();
+    tmp.t30.Dtor();
+  }
+
+  stream->v07();
 }
