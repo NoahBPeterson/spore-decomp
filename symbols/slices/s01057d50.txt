@@ -1,0 +1,1 @@
+01058660 ?ScanBuildingSpecies@@YAXPAXH@Z  # ScanBuildingSpecies migrated from s01057d50 (verbatim, slice spelling)

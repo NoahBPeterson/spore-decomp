@@ -1,0 +1,9 @@
+# source  symbol  va  flags
+../src/game/SPGonzago/SPToolStrategies.cpp  ?AdjustCost@cSPEnergyRepairToolStrategy@@QAEHH@Z  01053590  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPToolStrategies.cpp  ?ScanBuildingSpecies@@YAXPAXH@Z  01058660  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPGonzago/SPToolStrategies.cpp  ?DoToolAction@cSPScanToolStrategy_s0105_a110@@UAE_NPAVcSpaceToolData@@ABUVector3@@HH@Z  0105a890  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPToolStrategies.cpp  ?DoToolAction@cSPCityMarkerStrategy@@UAE_NPAVcSpaceToolData_s0105_b960@@ABUVector3_s0105_b960@@HH@Z  0105b960  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPToolStrategies.cpp  ?DoToolAction@cSPPlaceObjectStrategy@@UAE_NPAVcSpaceToolData_s0105_b960@@ABUVector3_s0105_b960@@HH@Z  0105bc70  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPToolStrategies.cpp  ?DoToolAction@cSPArtilleryWeaponStrategy@@UAE_NPAVcSpaceToolData_s0105_b960@@ABUVector3_s0105_b960@@HH@Z  0105bd00  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPToolStrategies.cpp  ?DoToolAction@cCropCirclesToolStrategy@@UAE_NPAVcSpaceToolData_s0105_b960@@ABUVector3_s0105_b960@@HH@Z  0105bde0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPToolStrategies.cpp  ?DoToolAction@cSPGenesisDeviceToolStrategy@@UAE_NPAVcSpaceToolData_s0105_b960@@ABUVector3_s0105_b960@@HH@Z  0105bf50  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

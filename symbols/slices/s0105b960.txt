@@ -1,0 +1,8 @@
+00ba9370 ?GetEmpireByID@cStarManager@SP@@QBEPAVcEmpire@2@I@Z  # SP::cStarManager::GetEmpireByID (callee of s0105b960, named from the dev publics; slice address comment)
+0105b960 ?DoToolAction@cSPCityMarkerStrategy@@UAE_NPAVcSpaceToolData_s0105_b960@@ABUVector3_s0105_b960@@HH@Z  # cSPCityMarkerStrategy::DoToolAction migrated from s0105b960 (verbatim, slice spelling)
+0105ba00 ?CanUseToolAtLocation@cSPPlaceObjectToolStrategy_s0105_b960@@QAE_NPAVcSpaceToolData_s0105_b960@@ABUVector3_s0105_b960@@H@Z  # cSPPlaceObjectToolStrategy_s0105_b960::CanUseToolAtLocation migrated from s0105b960 (verbatim, slice spelling)
+0105bc70 ?DoToolAction@cSPPlaceObjectStrategy@@UAE_NPAVcSpaceToolData_s0105_b960@@ABUVector3_s0105_b960@@HH@Z  # cSPPlaceObjectStrategy::DoToolAction migrated from s0105b960 (verbatim, slice spelling)
+0105bd00 ?DoToolAction@cSPArtilleryWeaponStrategy@@UAE_NPAVcSpaceToolData_s0105_b960@@ABUVector3_s0105_b960@@HH@Z  # cSPArtilleryWeaponStrategy::DoToolAction migrated from s0105b960 (verbatim, slice spelling)
+0105bd20 ?DoToolAction@cSPMindEraseToolStrategy@@UAE_NPAVcSpaceToolData_s0105_b960@@ABUVector3_s0105_b960@@HH@Z  # cSPMindEraseToolStrategy::DoToolAction migrated from s0105b960 (verbatim, slice spelling)
+0105bde0 ?DoToolAction@cCropCirclesToolStrategy@@UAE_NPAVcSpaceToolData_s0105_b960@@ABUVector3_s0105_b960@@HH@Z  # cCropCirclesToolStrategy::DoToolAction migrated from s0105b960 (verbatim, slice spelling)
+0105bf50 ?DoToolAction@cSPGenesisDeviceToolStrategy@@UAE_NPAVcSpaceToolData_s0105_b960@@ABUVector3_s0105_b960@@HH@Z  # cSPGenesisDeviceToolStrategy::DoToolAction migrated from s0105b960 (verbatim, slice spelling)

@@ -1,0 +1,3 @@
+01058b60 ?CanUseTool@cSPPlaceColonyToolStrategy@@QAE_NIIPAI@Z  # cSPPlaceColonyToolStrategy::CanUseTool migrated from s01058b60 (verbatim, slice spelling)
+01059040 ?StartTool@cSPPlaceColonyToolStrategy@@QAE_NIIPAI@Z  # cSPPlaceColonyToolStrategy::StartTool migrated from s01058b60 (verbatim, slice spelling)
+01059170 ?CreatePanicBubbleForTool@@YAXIMMM@Z  # CreatePanicBubbleForTool migrated from s01058b60 (verbatim, slice spelling)

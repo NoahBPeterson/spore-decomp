@@ -1,0 +1,2 @@
+0105a110 ?DoToolAction@cSPToolStrategy_s0105_a110@@UAE_NPAVcSpaceToolData@@ABUVector3@@HH@Z  # cSPToolStrategy_s0105_a110::DoToolAction migrated from s0105a110 (verbatim, slice spelling)
+0105a890 ?DoToolAction@cSPScanToolStrategy_s0105_a110@@UAE_NPAVcSpaceToolData@@ABUVector3@@HH@Z  # cSPScanToolStrategy_s0105_a110::DoToolAction migrated from s0105a110 (verbatim, slice spelling)

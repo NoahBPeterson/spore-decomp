@@ -1,0 +1,8 @@
+00cb5cf0 ?InitArea@cDefaultAoEArea@SP@@QAEXPAVcSPSpaceToolData@2@@Z  # SP::cDefaultAoEArea::InitArea (callee of s01054110, named from the dev publics; slice address comment)
+01054110 ?DeactivateTool@PlaceColonyTool@@QAEDH@Z  # PlaceColonyTool::DeactivateTool migrated from s01054110 (verbatim, slice spelling)
+010541f0 ?FUN_010541f0@@YGDH@Z  # FUN_010541f0 migrated from s01054110 (verbatim, slice spelling)
+010542a0 ?FUN_010542a0@@YGDH@Z  # FUN_010542a0 migrated from s01054110 (verbatim, slice spelling)
+01054350 ?StopTool@ToolStrategy2@@QAEXPAX0@Z  # ToolStrategy2::StopTool migrated from s01054110 (verbatim, slice spelling)
+01054ec0 ?FUN_01054ec0@@YGDPAX0@Z  # FUN_01054ec0 migrated from s01054110 (verbatim, slice spelling)
+01055040 ?FUN_01055040@@YGDPAX0@Z  # FUN_01055040 migrated from s01054110 (verbatim, slice spelling)
+01055130 ?FUN_01055130@@YGDPAX@Z  # FUN_01055130 migrated from s01054110 (verbatim, slice spelling)
