@@ -11,3 +11,14 @@ slices/s0093b9e0/s0093b9e0.cpp  ?WriteBuffer@memorystream@@QAE_NPBXI@Z  0093b9e0
 slices/s0093b9e0/s0093b9e0.cpp  ?GetProperty@GraphicsFactoryAsyncRequest@IO@EA@@QAEMH@Z  0093bab0  /O2 /MD /Gy /TP /arch:SSE2
 slices/s0093b9e0/s0093b9e0.cpp  ?SetProperty@GraphicsFactoryAsyncRequest@IO@EA@@QAEXHM@Z  0093bb40  /O2 /MD /Gy /TP /arch:SSE2
 slices/s0093b9e0/s0093b9e0.cpp  ?FUN_0093bd50@@YIPAXPAXHH@Z  0093bd50  /O2 /MD /Gy /TP /arch:SSE2
+slices/s0093b9e0/s0093b9e0.cpp  ?Init@SharedPointer@IO@EA@@QAEPAV123@PAXI@Z  0093bca0  /O2 /MD /Gy /TP /GS-
+slices/s0093b9e0/s0093b9e0.cpp  ?InitWithAlloc@SharedPointer@IO@EA@@QAEPAV123@PAX0I@Z  0093bcf0  /O2 /MD /Gy /TP /GS-
+slices/s0093b9e0/s0093b9e0.cpp  ?Destroy@SharedPointer@IO@EA@@QAEPAXE@Z  0093bd90  /O2 /MD /Gy /TP /GS-
+slices/s0093b9e0/s0093b9e0.cpp  ?ConvertToString8Impl@EA@@YAPAUEAString@1@PAU21@PB_WI@Z  0093c440  /O2 /MD /Gy /TP /GS-
+slices/s0093b9e0/s0093b9e0.cpp  ?ConvertToString16Impl@EA@@YAPAUEAString@1@PAU21@PBDI@Z  0093c5a0  /O2 /MD /Gy /TP /GS-
+slices/s0093b9e0/s0093b9e0.cpp  ?ConvertEncoding_via_UTF16@Text@EA@@YAHPBXHHPAXPAHH@Z  0093c850  /O2 /MD /Gy /TP /GS-
+slices/s0093b9e0/s0093b9e0.cpp  ??0SharedPointer@IO@EA@@QAE@PAXE0@Z  0093bc40  /O2 /MD /Gy /TP /GS- /arch:SSE2
+slices/s0093b9e0/s0093b9e0.cpp  ?FUN_0093bde0@@YIXPAVGraphicsFactoryAsyncRequest@IO@EA@@@Z  0093bde0  /O2 /MD /Gy /TP /GS- /arch:SSE2
+slices/s0093b9e0/s0093b9e0.cpp  ?Attach@GraphicsFactoryAsyncRequest@IO@EA@@QAE_NPAXI@Z  0093bf70  /O2 /MD /Gy /TP /GS- /arch:SSE2
+slices/s0093b9e0/s0093b9e0.cpp  ??0GraphicsFactoryAsyncRequest@IO@EA@@QAE@PAX0H@Z  0093c270  /O2 /MD /Gy /TP /GS- /arch:SSE2
+slices/s0093b9e0/s0093b9e0.cpp  ??0MemoryStream@IO@EA@@QAE@PAXIEH0H@Z  0093c2c0  /O2 /MD /Gy /TP /GS- /arch:SSE2

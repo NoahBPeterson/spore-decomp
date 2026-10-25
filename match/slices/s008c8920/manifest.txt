@@ -1,1 +1,2 @@
 # source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s008c8920/s008c8920.cpp  ?CountInterSections@@YAHHPAUT2KInterSectType@@JJ@Z  008c8eb0  /O2 /MD /Gy /TP /arch:SSE /fp:fast

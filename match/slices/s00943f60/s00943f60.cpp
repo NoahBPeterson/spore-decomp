@@ -2,6 +2,7 @@
 // Module flags: /O2 /MD /Gy /EHsc /TP /GS-
 #include "types.h"
 #include <intrin.h>
+#include <string.h>
 #include <new>
 
 void __cdecl operator_delete__(void*) throw();   // 0x00f47380
@@ -14,6 +15,7 @@ typedef int  (__thiscall *VFI0)(void*);
 
 namespace EA { namespace Thread {
 class Mutex { public:
+    void Init(const void* params, bool lock);   // 0x009222a0
     void Lock(const void* timeout);   // 0x009221b0
     void Unlock();                    // 0x00922270
 };
@@ -159,6 +161,7 @@ struct basic_string {
     int mAllocator;              // +0x0c
 
     void clear() { if (mpBegin != mpEnd) { *mpBegin = 0; mpEnd = mpBegin; } }
+    void RangeInitialize(u32 n);                       // 0x00475ab0
     void push_back(char c);                            // 0x00944250
     void Destroy() {
         if ((int)(mpCapacity - mpBegin) > 1 && mpBegin != 0)
@@ -210,6 +213,7 @@ struct sso_string {
         ++mpEnd;
         *mpEnd = 0;
     }
+    void Erase(u32 pos, u32 n);                        // 0x0061e200
     void DeallocateSelf();                             // 0x00919a40
 };
 
@@ -326,8 +330,9 @@ struct HeaderVec {
     int         m14;                                   // +0x14
     char        mBuffer[0xa80];                        // +0x18
 
-    void init() { mpSelf = (HeaderPair*)mBuffer; mpBegin = mpSelf; mpEnd = mpSelf; mpCapacity = mpSelf + (0xa80 / 0xa8); }
+    void init() { mpSelf = (HeaderPair*)mBuffer; mpEnd = mpSelf; mpBegin = mpSelf; mpCapacity = mpSelf + (0xa80 / 0xa8); }
 
+    void        JobDestroyRange(HeaderPair* first, HeaderPair* last);   // 0x00943420
     HeaderPair* erase(HeaderPair* pos);                // 0x00944850
     void        insert(HeaderPair* pos, const HeaderPair& v);  // 0x009448c0
     void        push_back_empty();                     // 0x00944af0
@@ -361,12 +366,13 @@ struct HTTPResponse {
     void Clear();                                      // 0x00944bd0
 };
 
-// A report/response cookie record (0x30 in the client cookie callbacks).
+// A report/response cookie record (the client cookie callbacks receive it).
 struct CookieJob {
     char  mPad00[0x0c];
-    SsoString10 mStr0c;                                // +0x0c
+    HeapString mStr0c;                                 // +0x0c (heap string, 0x10)
     u16   m1c;                                         // +0x1c
     int   m20;                                         // +0x20
+    char  mPad24[0x28 - 0x24];
     char  b28;                                         // +0x28
     void* mp2c;                                        // +0x2c
 };
@@ -388,7 +394,8 @@ struct UTFHTTPRequest {
     void*       mpD90;                                 // +0xd90
     void*       mpD94;                                 // +0xd94
 
-    void Construct();                                  // 0x009442e0
+    void SetMethod(int method);                        // 0x009438c0
+    UTFHTTPRequest* Construct();                       // 0x009442e0
     void Destroy();                                    // 0x00944380
     bool AddRequestParameter(const char* pName, const char* pValue);   // 0x00944660
     bool AddRequestParameterStr(const HeapString& name, const HeapString& value);  // 0x00944a10 (thunk)
@@ -446,10 +453,10 @@ extern "C" void __cdecl UrlHolder_SetURL(void* holder, const char* url);    // 0
 // ---------------------------------------------------------------------------
 class HTTPClientCtor {
 public:
-    void ctor();
+    HTTPClientCtor* ctor();
 };
 
-void HTTPClientCtor::ctor() {
+HTTPClientCtor* HTTPClientCtor::ctor() {
     char* self = (char*)this;
     *(void**)(self + 0x00) = (void*)0x143ef0c;
     *(void**)(self + 0x04) = (void*)0x13fb19c;
@@ -458,16 +465,15 @@ void HTTPClientCtor::ctor() {
     *(void**)(self + 0x04) = (void*)0x143f23c;
     *(u8*)(self + 0x0c)   = 0;
     *(u32*)(self + 0x10)  = 0;
-    *(u32*)(self + 0x14)  = 0;
-    *(u32*)(self + 0x18)  = 0;
-    *(u32*)(self + 0x1c)  = 0;
-    RangeInitialize((HeapString*)(self + 0x14), 0x14);
-    char* p = *(char**)(self + 0x14);
+    HeapString* pAgent = (HeapString*)(self + 0x14);
+    pAgent->mpBegin    = 0;
+    pAgent->mpEnd      = 0;
+    pAgent->mpCapacity = 0;
+    pAgent->RangeInitialize(0x14);
+    char* p = pAgent->mpBegin;
     // "EA/2.0 (compatible)" (0x13 bytes) copied into the freshly-allocated buffer.
-    const char* kAgent = "EA/2.0 (compatible)";
-    for (int i = 0; i < 0x13; ++i)
-        p[i] = kAgent[i];
-    *(u32*)(self + 0x18) = (u32)(p + 0x13);
+    memcpy(p, "EA/2.0 (compatible)", 0x13);
+    pAgent->mpEnd = p + 0x13;
     p[0x13] = 0;
     *(u32*)(self + 0x24) = 0;
     *(u32*)(self + 0x28) = 0;
@@ -481,11 +487,12 @@ void HTTPClientCtor::ctor() {
     *(u32*)(self + 0x4c) = (u32)kVtblEmpty16;
     *(u32*)(self + 0x54) = 0;
     *(u32*)(self + 0x58) = 0;
-    Mutex_ctor((EA::Thread::Mutex*)(self + 0x60), 0, true);
+    ((EA::Thread::Mutex*)(self + 0x60))->Init(0, true);
     *(u32*)(self + 0x90) = 0;
-    *(u32*)(self + 0x94) = (u32)(self + 0x94);
-    *(u32*)(self + 0x98) = (u32)(self + 0x94);
-    FUN_0094d230();
+    u32* pCookieSentinel = (u32*)(self + 0x94);
+    pCookieSentinel[0] = (u32)pCookieSentinel;
+    pCookieSentinel[1] = (u32)pCookieSentinel;
+    ((void(__thiscall*)(void*))FUN_0094d230)((void*)(self + 0xa0));
     *(u32*)(self + 0xfc) = 0;
     *(u16*)(self + 0xfa) = 0;
     *(u16*)(self + 0xf8) = 2;
@@ -505,6 +512,7 @@ void HTTPClientCtor::ctor() {
     *(u32*)(self + 0x150) = 0;
     *(u32*)(self + 0x154) = 0;
     *(u32*)(self + 0x158) = 0;
+    return this;
 }
 
 // ---------------------------------------------------------------------------
@@ -533,18 +541,27 @@ void HeapString::push_back(char c) {
 // ---------------------------------------------------------------------------
 // @ 0x009442e0  UTFInternet::HTTPRequest::HTTPRequest  (ecx = this)
 // ---------------------------------------------------------------------------
-void UTFHTTPRequest::Construct() {
+UTFHTTPRequest* UTFHTTPRequest::Construct() {
     *(void**)this = (void*)0x13fb19c;
     _InterlockedExchange((volatile long*)&mnRefCount, 0);
     *(void**)this = (void*)0x143f258;
-    mMethod.init();
+    mMethod.mpSelf     = mMethod.mBuffer;
+    mMethod.mpEnd      = mMethod.mBuffer;
+    mMethod.mpBegin    = mMethod.mBuffer;
+    mMethod.mpCapacity = mMethod.mpBegin + 0x10;
+    mMethod.mpBegin[0] = 0;
     m2c = 0;
     mURL.Construct();
-    mStr0e0.init();
+    mStr0e0.mpSelf     = mStr0e0.mBuffer;
+    mStr0e0.mpEnd      = mStr0e0.mBuffer;
+    mStr0e0.mpBegin    = mStr0e0.mBuffer;
+    mStr0e0.mpCapacity = mStr0e0.mpBegin + 0x200;
+    mStr0e0.mpBegin[0] = 0;
     mVec2f4.init();
     mpD8c = 0;
     mpD90 = 0;
     mpD94 = 0;
+    return this;
 }
 
 // ---------------------------------------------------------------------------
@@ -556,7 +573,7 @@ void UTFHTTPRequest::Destroy() {
     if (mpD8c != 0)
         ((void(__thiscall*)(void*))((*(void***)mpD8c)[2]))(mpD8c);
     HeaderVec* v = &mVec2f4;
-    JobDestroyRange(v->mpBegin, v->mpEnd);
+    v->JobDestroyRange(v->mpBegin, v->mpEnd);
     if (v->mpBegin != 0 && v->mpBegin != v->mpSelf)
         operator_delete__(v->mpBegin);
     mStr0e0.Destroy();
@@ -572,32 +589,30 @@ void UTFHTTPRequest::Destroy() {
 bool __cdecl CreateHTTPGetRequest(const char* pURL, void* pFilter, UTFHTTPRequest** ppOut) {
     if (ppOut == 0)
         return false;
-    UTFHTTPRequest* req = (UTFHTTPRequest*)eastl_allocate(0xd98, "UTFInternet/HTTPRequest", 0, 0, 0, 0);
-    if (req != 0) {
-        req->Construct();
-        if (req != 0)
-            _InterlockedIncrement((volatile long*)&req->mnRefCount);
-    }
+    void* p = eastl_allocate(0xd98, "UTFInternet/HTTPRequest", 0, 0, 0, 0);
+    UTFHTTPRequest* req = (p != 0) ? ((UTFHTTPRequest*)p)->Construct() : 0;
+    if (req != 0)
+        _InterlockedIncrement((volatile long*)&req->mnRefCount);
     _InterlockedIncrement((volatile long*)&req->mnRefCount);
-    HTTPRequestBase_SetMethod(req, 2);
+    req->SetMethod(2);
     req->mURL.SetURL(pURL, true);
     HeapString* pStr = req->mURL.GetString();
     const char* last  = pStr->mpEnd;
     HeapString* pStr2 = req->mURL.GetString();
     const char* first = pStr2->mpBegin;
-    FUN_0060a2c0(&req->mStr0e0, first, last);
-    if (pFilter != req->mpD90) {
+    req->mStr0e0.assign(first, last);
+    void* old = req->mpD90;
+    if (pFilter != old) {
         if (pFilter != 0)
             ((void(__thiscall*)(void*))((*(void***)pFilter)[1]))(pFilter);
-        void* old = req->mpD90;
         req->mpD90 = pFilter;
         if (old != 0)
             ((void(__thiscall*)(void*))((*(void***)old)[2]))(old);
     }
     *ppOut = req;
-    {
-        long old = _InterlockedExchangeAdd((volatile long*)&req->mnRefCount, -1);
-        if (old - 1 == 0) {
+    if (req != 0) {
+        long prev = _InterlockedExchangeAdd((volatile long*)&req->mnRefCount, -1);
+        if (--prev == 0) {
             _InterlockedExchange((volatile long*)&req->mnRefCount, 1);
             ((void(__thiscall*)(void*, int))((*(void***)req)[0]))(req, 1);
         }
@@ -856,12 +871,12 @@ void HTTPResponse::Clear() {
         *mStr440.mpBegin = 0;
         mStr440.mpEnd = mStr440.mpBegin;
     }
-    HeaderPair* b = mHeaderArray.mpBegin;
-    HeaderPair* e = mHeaderArray.mpEnd;
-    CopyJob(e, e, b);
-    JobDestroyRange(b, e);
-    mHeaderArray.mpEnd = (HeaderPair*)((char*)mHeaderArray.mpEnd
-        - (u32)(((char*)e - (char*)b) / 0xa8) * 0xa8);
+    HeaderVec* v = &mHeaderArray;
+    HeaderPair* b = v->mpBegin;
+    HeaderPair* e = v->mpEnd;
+    HeaderPair* res = CopyJob(e, e, b);
+    v->JobDestroyRange(res, v->mpEnd);
+    v->mpEnd -= (e - b);
     if (mF3c != 0) {
         void* p = (void*)mF3c;
         mF3c = 0;
@@ -932,7 +947,7 @@ struct CookieWorker {
     int   m00;                                         // +0x00
     int   m04;                                         // +0x04
     char  mPad08[0x10 - 0x08];
-    int   m10;                                         // +0x10
+    u32   m10;                                         // +0x10
     int   m14;                                         // +0x14
     char  mPad18[0x1c - 0x18];
     void* mp1c;                                        // +0x1c (the request)
@@ -942,46 +957,51 @@ struct CookieWorker {
 
 bool HTTPClientEx::AddCookie(CookieJob* pJob, char bKeep) {
     if (pJob == 0)
-        return false;
+        goto fail;
+    {
     CookieWorker* w = (CookieWorker*)pJob->mp2c;
     if (w == 0)
-        return false;
+        goto fail;
     if (w->m10 > 2)
-        return false;
+        goto fail;
     if (w->m04 != 5)
-        return false;
+        goto fail;
     if (pJob->b28 == 0)
-        return false;
+        goto fail;
 
     ++w->m10;
-    w->m14 = 0;
-    w->m04 = 1;
+    ((CookieWorker*)pJob->mp2c)->m14 = 0;
+    ((CookieWorker*)pJob->mp2c)->m04 = 1;
 
-    UTFHTTPRequest* req = (UTFHTTPRequest*)w->mp1c;
-    if (req != 0) {
-        void* r1 = req->mpD8c;
-        if (r1 != 0 && !((bool(__thiscall*)(void*, int, int))((*(void***)r1)[0x28 / 4]))(r1, 0, 0))
-            return false;
-        void* r2 = req->mpD90;
-        if (r2 != 0) {
-            if (!((bool(__thiscall*)(void*, int, int))((*(void***)r2)[0x28 / 4]))(r2, 0, 0))
-                return false;
-            if (!((bool(__thiscall*)(void*, int))((*(void***)r2)[0x20 / 4]))(r2, 0))
-                return false;
-        }
+    {
+    void* r1 = ((UTFHTTPRequest*)((CookieWorker*)pJob->mp2c)->mp1c)->mpD8c;
+    if (r1 != 0 && !((bool(__thiscall*)(void*, int, int))((*(void***)r1)[0x28 / 4]))(r1, 0, 0))
+        goto fail;
+    void* r2 = ((UTFHTTPRequest*)((CookieWorker*)pJob->mp2c)->mp1c)->mpD90;
+    if (r2 != 0) {
+        if (!((bool(__thiscall*)(void*, int, int))((*(void***)r2)[0x28 / 4]))(r2, 0, 0))
+            goto fail;
+        void* r3 = ((UTFHTTPRequest*)((CookieWorker*)pJob->mp2c)->mp1c)->mpD90;
+        if (!((bool(__thiscall*)(void*, int))((*(void***)r3)[0x20 / 4]))(r3, 0))
+            goto fail;
     }
-    if (w->mp24 != 0)
-        ((HTTPResponse*)w->mp24)->Clear();
-    Mutex_LockPtr(&mMutex, &kLockTimeout);
-    mCookieList.insertAtNext(*(Cookie40*)&pJob[0]);
-    Mutex_UnlockPtr(&mMutex);
+    }
+    void* resp = ((CookieWorker*)pJob->mp2c)->mp24;
+    if (resp != 0)
+        ((HTTPResponse*)resp)->Clear();
+    mMutex.Lock(&kLockTimeout);
+    mCookieList.insertAtNext(*(Cookie40*)((CookieWorker*)pJob->mp2c));
+    mMutex.Unlock();
 
     if (bKeep) {
-        FUN_0061e200(&pJob->mStr0c, 0, 0xffffffff);
+        pJob->mStr0c.Erase(0, 0xffffffff);
         pJob->m1c = 0;
-        FUN_009421b0_1((void*)pJob->m20);
+        ((HTTPClient*)this)->Pump((void*)pJob->m20);
     }
     return true;
+    }
+fail:
+    return false;
 }
 
 }}

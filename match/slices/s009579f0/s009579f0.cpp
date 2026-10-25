@@ -255,18 +255,38 @@ void __cdecl Fn00957c20(int a, int b)
 // ===========================================================================
 // @ 0x00957C40  Fn00957c40
 // ===========================================================================
+// ImageTable::Clear: move the table's lookup pointers into a temporary, empty the member
+// vector, unlock, then Release every moved element and free the temporary's buffer.
 char __fastcall Fn00957c40(void* self)
 {
     ((Ext*)self)->Lock((const void*)0x14405d0);
-    int* src = *(int**)(B(self) + 0x30);
-    int* end = *(int**)(B(self) + 0x34);
-    char result = 0;
-    if (src != end) {
-        result = 1;
-        *(int**)(B(self) + 0x34) = src;
+
+    unsigned* begin = *(unsigned**)(B(self) + 0x30);
+    unsigned* end   = *(unsigned**)(B(self) + 0x34);
+    bool bHadEntries = (begin != end);
+
+    if (bHadEntries)
+    {
+        // The original copies the range into an EASTL fixed_vector temporary and then empties
+        // the member vector (memcpy of 0 bytes, then end = begin).  Keep the moved range.
+        *(unsigned**)(B(self) + 0x34) = begin;
     }
+
     Mutex_Unlock(self);
-    return result;
+
+    // Destroy the moved range: each element is a tagged pointer (low bit selects one of two
+    // vtable slots at +0x10/+0x14), then the object is released through vtable slot +0x04.
+    for (unsigned* it = begin; it != end; ++it)
+    {
+        void* p = (void*)(*it & ~1u);
+        if (*it & 1)
+            ((VTab*)p)->v10(0, 0);
+        else
+            ((VTab*)p)->v14();
+        ((VTab*)p)->v04();
+    }
+
+    return 0;   // original reloads the temp ends and stores setne, which is always false
 }
 
 // ===========================================================================
@@ -495,29 +515,39 @@ void W::ComputeClip(float* out, void* node)
                     ((Ext*)M)->tp3(o, i);
                     float i2[4] = {w, h, 0, 0}, o2[4];
                     ((Ext*)M)->tp3(o2, i2);
-                    pxmin = o[0] < o2[0] ? o[0] : o2[0];
-                    pymin = o[1] < o2[1] ? o[1] : o2[1];
-                    pxmax = o[0] > o2[0] ? o[0] : o2[0];
-                    pymax = o[1] > o2[1] ? o[1] : o2[1];
+                    pxmin = o[0];
+                    pymin = o[1];
+                    pxmax = o2[0];
+                    pymax = o2[1];
                 } else {
                     float p[4] = {0, 0, 0, 0}, a[4], b[4], c[4], d[4];
                     ((Ext*)M)->tp4(a, p);
                     p[0] = w; p[1] = h; p[2] = 0; p[3] = 0; ((Ext*)M)->tp4(b, p);
                     p[0] = w; p[1] = 0; ((Ext*)M)->tp4(c, p);
                     p[0] = 0; p[1] = h; ((Ext*)M)->tp4(d, p);
-                    pxmin = a[0]; if (b[0] < pxmin) pxmin = b[0]; if (c[0] < pxmin) pxmin = c[0]; if (d[0] < pxmin) pxmin = d[0];
-                    pymin = a[1]; if (b[1] < pymin) pymin = b[1]; if (c[1] < pymin) pymin = c[1]; if (d[1] < pymin) pymin = d[1];
-                    pxmax = a[0]; if (b[0] > pxmax) pxmax = b[0]; if (c[0] > pxmax) pxmax = c[0]; if (d[0] > pxmax) pxmax = d[0];
-                    pymax = a[1]; if (b[1] > pymax) pymax = b[1]; if (c[1] > pymax) pymax = c[1]; if (d[1] > pymax) pymax = d[1];
+                    // The original's selection chains pick the new candidate when a comparison is
+                    // unordered, so keep the same operand order and "!(a > b)" forms.
+                    pxmin = c[0]; if (c[0] > d[0]) pxmin = d[0];
+                    if (!(b[0] > pxmin)) pxmin = b[0];
+                    if (!(a[0] > pxmin)) pxmin = a[0];
+                    pymin = c[1]; if (c[1] > d[1]) pymin = d[1];
+                    if (!(b[1] > pymin)) pymin = b[1];
+                    if (!(a[1] > pymin)) pymin = a[1];
+                    pxmax = d[0]; if (!(d[0] > c[0])) pxmax = c[0];
+                    if (!(pxmax > b[0])) pxmax = b[0];
+                    if (!(pxmax > a[0])) pxmax = a[0];
+                    pymax = d[1]; if (!(d[1] > c[1])) pymax = c[1];
+                    if (!(pymax > b[1])) pymax = b[1];
+                    if (!(pymax > a[1])) pymax = a[1];
                 }
             }
             if (xmax <= pxmin || pxmax <= xmin || ymax <= pymin || pymax <= ymin) {
                 xmin = 0; ymin = 0; xmax = 0; ymax = 0;
             } else {
-                if (xmin < pxmin) xmin = pxmin;
-                if (ymin < pymin) ymin = pymin;
-                if (pxmax < xmax) xmax = pxmax;
-                if (pymax < ymax) ymax = pymax;
+                if (!(xmin > pxmin)) xmin = pxmin;
+                if (!(ymin > pymin)) ymin = pymin;
+                if (!(pxmax > xmax)) xmax = pxmax;
+                if (!(pymax > ymax)) ymax = pymax;
             }
         }
         if ((U8(node, 0x30) & 2) == 0) break;

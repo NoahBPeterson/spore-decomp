@@ -1,5 +1,4 @@
-# va  diff-bytes  reason   flags /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
-00a350d0  115 F_a350d0::call (travel-segment update): approximated; difftest FAIL (5/349, 1-ulp difference in stored speed)
-00a35720  209 FUN_00a35720 (object destructor): approximated; difftest FAIL (5/5, fake-arity: indirect call through zero)
-00a35840  119 F_a35840::call (set + cache global audio style property): approximated; difftest FAIL (5/5, fault in hashtable find at 0x645ed8; find/insert iterator ABI not reproduced)
-00a35aa0  -   FUN_00a35aa0 (ambience-layer ctor): approximated; difftest FAIL (5/5, invalid write at 0x9212a8; inlined pool ctor args differ)
+# va  diff-bytes  reason   flags /O2 /MD /Gy /EHsc /TP /GS- /arch=SSE /fp=fast
+00a35720  209 FUN_00a35720 (object destructor): reconstructed field-by-field but not proven equivalent; difftest FAIL (5/5, fake-arity: our teardown reaches an indirect call through a zero vtable slot), so the sub-object teardown order still differs.  See scratch_s00a34e80_fixlog.txt.
+00a35840  212 F_a35840::call (set + cache global audio style property): reconstructed but not proven equivalent; difftest FAIL (5/5, fault in the hashtable find at 0x645ed8 -- the find/insert iterator ABI is not reproduced).  See scratch_s00a34e80_fixlog.txt.
+00a35aa0  267 FUN_00a35aa0 (ambience-layer ctor): reconstructed field-by-field (vtable/refcount prologue, border/ambience floats at +0x4c..+0x7c, +0x26c..+0x274 block, +0x27c byte, +0x290/+0x294) but not proven equivalent; difftest FAIL (5/5, fake-arity: the stack temporary handed to the 0x00a1e320 thiscall ctor is not modelled faithfully, our call reaches a garbage target).  See scratch_s00a34e80_fixlog.txt.

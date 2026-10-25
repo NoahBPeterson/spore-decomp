@@ -1,2 +1,8 @@
+0092b840 ?Split@@YAXPAUWString@@PAUWStringVec@@@Z  # EA::CommandLine::ConvertStringToStringArray (split helper)
+0092bbe0 ?FixCommandLine@@YAXPAUSplitBase@@PB_W@Z  # EA::AppCommandLine::FixCommandLine
+0092c0c0 ?Set@SplitBase@@QAEXPBF@Z  # SplitBase::Set(const short*)
+0092c130 ?Set@SplitBase@@QAEXPBD@Z  # SplitBase::Set(const char*)
+0092c1b0 ??0Splitable3@@QAE@PBD@Z  # Splitable3::Splitable3(const char*)
+0092c210 ??0Splitable4@@QAE@PBF@Z  # Splitable4::Splitable4(const short*)
 0092c2d0 ?WriteToBigEndian@Util@EA@@YAXPAXIH@Z  # EA::Util::WriteToBigEndian migrated from s0092b840
 0092c340 ?DecodeUnchecked@@YAHPAEI0@Z  # DecodeUnchecked migrated from s0092b840 (verbatim, slice spelling)

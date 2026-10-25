@@ -3,3 +3,4 @@ slices/s009a2c90/s009a2c90.cpp  ?f@S9a35b0@@QAEXXZ  009a35b0
 slices/s009a2c90/s009a2c90.cpp  ?FUN_009a3680@@YA_NHH@Z  009a3680
 slices/s009a2c90/s009a2c90.cpp  ?FUN_009a36f0@@YAXPAHHHHHH@Z  009a36f0
 slices/s009a2c90/s009a2c90.cpp  ?f@S9a3c40@@QAEXPAX@Z  009a3c40
+slices/s009a2c90/s009a2c90.cpp  ?f@S9a2fd0@@QAEXI@Z  009a2fd0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-

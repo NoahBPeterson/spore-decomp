@@ -533,16 +533,21 @@ int cDistributeEffect::ApplyEffect(void* param, float time, void* stats)
     }
 done:
     if (stats != 0 && mSetID >= 0) {
-        int n = (int)((char*)mRenderSamples.mpEnd - (char*)mRenderSamples.mpBegin) / 0x4c;
         if (mDesc->mFlags & 0x100) {
-            st->mField18 += n;
-            st->mField1c += n * mSubdivCount;
+            st->mField18 += (int)((char*)mRenderSamples.mpEnd - (char*)mRenderSamples.mpBegin) / 0x4c;
+            st->mField1c += (int)((char*)mRenderSamples.mpEnd - (char*)mRenderSamples.mpBegin) / 0x4c
+                            * mSubdivCount;
         } else {
-            st->mField10 += n;
-            st->mField14 += n * mSubdivCount;
+            st->mField10 += (int)((char*)mRenderSamples.mpEnd - (char*)mRenderSamples.mpBegin) / 0x4c;
+            st->mField14 += (int)((char*)mRenderSamples.mpEnd - (char*)mRenderSamples.mpBegin) / 0x4c
+                            * mSubdivCount;
         }
         mSubdivCount = 0;
     }
+    // The retail code has no explicit return: on the paths that skip the stats block eax
+    // still holds the last intermediate (ClearSamples/mod-count or the /0x4c quotient), so
+    // this int result is undefined C++ in the original. A deterministic 0 is the only
+    // source-level choice; difftest can differ in eax alone and nothing else.
     return 0;
 }
 

@@ -7,3 +7,21 @@
 00a26730  97  complete; hashtable find + intrusive refcount, inlining schedule differs
 00a26790  62  complete; find2 iterator vs end-node compare, register schedule differs
 00a26da0  97  complete; vector element release loop + block free, schedule differs
+00a25c40  581 complete; AudioSystem::Update SEH frame + queue/stopwatch timing loop reproduced; 269 vs 651 bytes. [equiv: FAIL 5/7 valid, fault at 00a0f9b1]
+00a25ed0  273 complete; RemoveFromList intrusive-list unlink/refcount body; 123 vs 281 bytes. [equiv: WEAK 94 valid, 16.7% coverage]
+00a26040  103 complete; RemovePrimitiveFromUpdate EH string temp + vtable[0xf4] dispatch; 67 vs 122 bytes. [equiv: FAIL 5/5 valid, fault at 009276cd]
+00a26100  165 complete; Map_26100 EH frame around hashtable find + refcount; 117 vs 178 bytes. [equiv: WEAK 206 valid, 51.6% coverage]
+00a261c0  85  complete; Map_261c0 bucket-walk broadcast; 87 vs 101 bytes. [equiv: WEAK 247 valid, 56.1% coverage]
+00a26230  111 complete; Map_26230 bucket-walk broadcast with two args; 104 vs 112 bytes. [equiv: WEAK 237 valid, 37.8% coverage]
+00a262a0  88  complete; Map_262a0 hashtable find + virtual dispatch; 94 vs 89 bytes. [equiv: FAIL 5/27 valid, fault at 00645ef1]
+00a26300  88  complete; Map_26300 hashtable find + virtual dispatch (slot 0x110); 94 vs 89 bytes. [equiv: FAIL 5/11 valid, fault at 00645ef1]
+00a263a0  157 complete; Map_263a0 EH frame + refcount acquire/release; 120 vs 169 bytes. [equiv: FAIL 5/138 valid, fault at 30000045]
+00a26450  172 complete; UpdateSoundStates rbtree AssignLess2 + inbound walk; 204 vs 211 bytes. [equiv: UNSUPPORTED 0/400 valid, fault(read)]
+00a265b0  68  complete; Lookup_265b0 hashtable find, returns node value or 0; 70 vs 60 bytes. [equiv: WEAK 182 valid, 100% coverage]
+00a265f0  103 complete; Map_265f0 guard byte + bucket-walk virtual broadcast; 117 vs 133 bytes. [equiv: FAIL 5/7 valid, fault at 30000040]
+00a266e0  89  complete; Map_266e0 hashtable find + float setter; 89 vs 75 bytes. [equiv: FAIL 5/83 valid, fake-arity/no call site]
+00a267d0  151 complete; Map_267d0 find2/EraseNode erase + ring notify; 167 vs 139 bytes. [equiv: WEAK 294 valid, 52.2% coverage]
+00a26860  63  complete; Dtor_26860 rbtree nuke + vtable store; 29 vs 71 bytes. [equiv: FAIL 5/5 valid, DoNukeSubtree this differs]
+00a268b0  182 complete; Shutdown_268b0 profiler hash free + queue flush; 177 vs 224 bytes. [equiv: FAIL 5/5 valid, fault at 0068fb82]
+00a26990  113 complete; InitPool_26990 fixed_pool init sequence; 96 vs 129 bytes. [equiv: FAIL 5/5 valid, write fault at 009212a8]
+00a26be0  210 complete; Insert_26be0 hashtable insert; 198 vs 242 bytes. [equiv: UNSUPPORTED unresolved operator_new]

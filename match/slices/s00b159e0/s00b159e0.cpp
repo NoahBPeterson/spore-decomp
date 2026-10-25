@@ -17,8 +17,11 @@ cTerrainSphere* GetActiveTerrainSphere();           // 0x00f48aa0 (cdecl)
 
 static inline void* g_vt(void* p) { return *(void**)p; }
 static inline void* g_vfn(void* p, int off) { return *(void**)((char*)g_vt(p) + off); }
-template<class R, class A1> static inline R vcall1(void* p, int off, A1 a1)
-{ return ((R(__thiscall*)(void*, A1))g_vfn(p, off))(p, a1); }
+template<class R> static inline R vcall0(void* p, int off)
+{ return ((R(__thiscall*)(void*))g_vfn(p, off))(p); }
+template<class R, class A1, class A2, class A3, class A4, class A5>
+static inline R vcall5(void* p, int off, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5)
+{ return ((R(__thiscall*)(void*, A1, A2, A3, A4, A5))g_vfn(p, off))(p, a1, a2, a3, a4, a5); }
 
 // @ 0x00b159e0
 void cTerrainCameraController::FUN_00b159e0(int n)
@@ -293,25 +296,40 @@ void FUN_00b16490(float* v, float add)
     v[2] = tz * s;
 }
 
+// Hit record filled by GonzagoModelWorld's segment query at vtable+0x44.
+struct gonzago_ray_hit
+{
+    Vector3 mPoint;     // +0x00
+    float   mDistance;  // +0x0c
+    float   mParam;     // +0x10
+    char    mFlag;      // +0x14
+    char    mUnused;    // +0x15
+};
+
 // @ 0x00b16520
+// Starts a Gonzago segment query from a to b, then lerps the hit parameter into out.
 bool FUN_00b16520(int* world, float* a, float* b, bool flag, float* out)
 {
     void* gw = GonzagoModelWorld_00b3d520();
-    if (gw) vcall1<void, int>(gw, 0x0, 0);
-    int h = vcall1<int, int>(world, 0xac, 0);
-    if (!gw) return false;
+    if (gw)
+        vcall0<void>(gw, 0x0);
+    int h = vcall0<int>(world, 0xac);
+    if (!gw)
+        return false;
     if (h)
     {
-        char ok = vcall1<char, int>(gw, 0x44, 0);
-        if (ok)
+        float t;
+        gonzago_ray_hit hit = {0};
+        hit.mFlag = (char)flag;
+        if (vcall5<char>(gw, 0x44, a, b, h, &t, &hit))
         {
-            out[0] = a[0] + (b[0] - a[0]) * (float)h;
-            out[1] = a[1] + (b[1] - a[1]) * (float)h;
-            out[2] = a[2] + (b[2] - a[2]) * (float)h;
-            vcall1<void, int>(gw, 0x4, 0);
+            out[0] = a[0] + (b[0] - a[0]) * t;
+            out[1] = a[1] + (b[1] - a[1]) * t;
+            out[2] = a[2] + (b[2] - a[2]) * t;
+            vcall0<void>(gw, 0x4);
             return true;
         }
     }
-    vcall1<void, int>(gw, 0x4, 0);
+    vcall0<void>(gw, 0x4);
     return false;
 }

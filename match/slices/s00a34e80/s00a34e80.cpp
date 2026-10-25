@@ -22,7 +22,7 @@ void  __cdecl FUN_00621d50(void*, void*, void*);
 void  __cdecl FUN_00621d10(void*, void*, void*);
 void  __cdecl SetGlobalProperty(u32, float);                 // 0x005ca880
 void* __cdecl FUN_011e0744(void*, void*, int);               // vector<bool> DoInsertValue
-void  __cdecl FUN_00a1e320(void*, void*);
+void  __fastcall FUN_00a1e320(void* self, int unused, void* arg);  // 0x00a1e320
 void  __cdecl FUN_00a1b6c0(void*, void*, void*);
 void  __cdecl FUN_00a26ce0(void*, void*, void*);
 void  __cdecl FUN_find(void*, u32, void*, void*);
@@ -177,21 +177,22 @@ void* __cdecl FUN_00a35070(void* p1, void* p2, void* p3)
 void F_a350d0::call(float* p, float dt)
 {
     float* self = (float*)this;
-    self[0] = p[0];
-    self[1] = p[1];
-    self[2] = p[2];
-    float d = self[1] - self[4];
-    float e = self[2] - self[5];
-    float f = self[0] - self[3];
-    float dist = d * d + (e * e + f * f);
-    dist = (float)sqrt((double)dist);
-    if (dt != 0.0f && 1e-06f <= dist) {
-        self[6] = (float)(dist / dt);
+    // retail copies the three floats with integer moves
+    struct Vec3i { int mx, my, mz; };
+    *(Vec3i*)this = *(Vec3i*)p;
+    // retail accumulates the squared deltas on the x87 stack (extended precision) and only
+    // rounds the finished distance to float before the single-precision division
+    double dx = (double)self[0] - (double)self[3];
+    double dy = (double)self[1] - (double)self[4];
+    double dz = (double)self[2] - (double)self[5];
+    float dist = (float)sqrt(dy * dy + (dx * dx + dz * dz));
+    if (dt != 0.0f && 1e-06 <= (double)dist) {
+        self[6] = dist / dt;
         return;
     }
-    self[3] = p[0];
-    self[4] = p[1];
-    self[5] = p[2];
+    ((Vec3i*)(self + 3))->mx = ((Vec3i*)p)->mx;
+    ((Vec3i*)(self + 3))->my = ((Vec3i*)p)->my;
+    ((Vec3i*)(self + 3))->mz = ((Vec3i*)p)->mz;
 }
 
 // ===========================================================================
@@ -573,9 +574,15 @@ void* __fastcall FUN_00a35aa0(int* param_1)
     param_1[0x1f] = 0;
     *((u8*)param_1 + 0x88) = 1;
     *((u8*)param_1 + 0x89) = 0;
-    FUN_00a1e320((char*)param_1 + 0x8c, (char*)param_1 + 0x8c);
-    param_1[0x9b] = 0x1667bac;
-    param_1[0x9c] = 0x1667bac;
+    // a stack temporary is constructed and handed to itself (thiscall ctor, one pointer arg)
+    union LocalTmp_aa0 {
+        struct { char mPad[0x11]; unsigned char mFive; } mFields;
+        int mAlign;
+    } localTmp;
+    localTmp.mFields.mFive = 5;
+    FUN_00a1e320(&localTmp, 0, &localTmp);
+    param_1[0x9b] = 0;
+    param_1[0x9c] = 0;
     param_1[0x9d] = 0x1667bad;
     *((u8*)param_1 + 0x27c) = 0;
     param_1[0xa4] = 0;

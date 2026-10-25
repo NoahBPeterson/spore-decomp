@@ -56,6 +56,7 @@ extern "C" void* __cdecl FUN_00609d90(void* a, void* b, void* c, void* d);  // 0
 extern "C" int   __cdecl FUN_008d9170(void* a, int b, int c);              // 0x8d9170
 extern "C" int   __cdecl FUN_008da920(int a, int b, int c, int d, int e);  // 0x8da920
 extern "C" void* __cdecl FUN_008dcbf0(void* self);                          // 0x8dcbf0
+extern "C" char FUN_008ddb90(void* self, int a2, int a3, int a4, int a5);  // 0x8ddb90
 extern "C" int   __cdecl FUN_008de1a0(void);                                // 0x8de1a0 ObjectError
 extern "C" void  __cdecl FUN_0041e050(void* out, const wchar_t* fmt, ...);  // 0x41e050 WStr_Format
 extern "C" void  __cdecl FUN_00423650(void* self, const wchar_t* a, const wchar_t* b); // 0x423650 WString_Assign
@@ -169,24 +170,168 @@ void* PFRecordWrite::_virtual_dtor(int flags)
 // ---------------------------------------------------------------------------
 // 0x8dd250  EA::ResourceMan::CopyDatabaseRecord
 // ---------------------------------------------------------------------------
-// @ 0x008dd250
-int CopyDatabaseRecord(void* src, int* dst, int a3, char a4);
+// EA::ResourceMan support types used by this slice's two Copy functions.
+namespace EA { namespace ResourceMan {
 
-extern "C" int FUN_008dd250(void* src, int* dst, int a3, char a4)
+class Key {
+ public:
+    unsigned int mInstance;   // +0x00
+    unsigned int mType;       // +0x04
+    unsigned int mGroup;      // +0x08
+};
+
+// eastl::vector<Key, sp_vector_allocator>: 0x14 bytes.  The original free path
+// checks the allocator header word at [mpBegin-1] before freeing.
+struct sp_key_vector {
+    Key*  mpBegin;     // +0x00
+    Key*  mpEnd;       // +0x04
+    void* mAlloc;      // +0x08
+    Key*  mpEndCap;    // +0x0c
+    void* mAllocator;  // +0x10
+
+    Key* begin() const { return mpBegin; }
+    Key* end()   const { return mpEnd; }
+};
+
+// The record object returned by OpenRecord.  Only the vtable slots this slice
+// calls are named; slots in between are placeholders so the offsets line up.
+class Record {
+ public:
+    virtual void v00();                                            // [0x00]
+    virtual void v04();                                            // [0x04]
+    virtual void Release();                                        // [0x08]
+    virtual void v0c();                                            // [0x0c]
+    virtual void v10();                                            // [0x10]
+    virtual void v14();                                            // [0x14]
+    virtual void* GetStream();                                     // [0x18]
+    virtual unsigned int GetSize();                                // [0x1c]
+    virtual void v20();                                            // [0x20]
+    virtual void Unlock();                                         // [0x24]
+    virtual void v28();                                            // [0x28]
+    virtual void v2c();                                            // [0x2c]
+    virtual unsigned int Read(void*, unsigned int);                // [0x30]
+    virtual void v34();                                            // [0x34]
+    virtual bool ReadInt(int*, unsigned int);                      // [0x38]
+    virtual void v3c();                                            // [0x3c]
+    virtual bool Close();                                          // [0x40]
+};
+
+// Database (a DatabasePackedFile in practice).  Only the vtable slots this
+// slice calls are declared, in slot order, so the offsets line up:
+//   0x0c GetDatabaseType   0x14 Lock(bool)   0x30 GetKeyList
+//   0x34 OpenRecord        0x40 Close
+class DatabasePackedFile {
+ public:
+    virtual void v04();
+    virtual void v08();
+    virtual unsigned int GetDatabaseType();                        // [0x0c]
+    virtual void v10();
+    virtual void Lock(bool);                                       // [0x14]
+    virtual void v18();
+    virtual void v1c();
+    virtual void v20();
+    virtual void v24();
+    virtual void v28();
+    virtual void v2c();
+    virtual unsigned int GetKeyList(sp_key_vector*, void*);        // [0x30]
+    virtual bool OpenRecord(Key const&, void*, int, int, int, void*);// [0x34]
+    virtual bool v38();
+    virtual void v3c();
+    virtual bool Close(Key const&);                                // [0x40]
+
+    // Non-virtual members of DatabasePackedFile:
+    bool         ReadRecordRaw(Key const&, void*, unsigned int);   // 0x008d9170
+    bool         WriteRecordRaw(Key const&, void*, unsigned int, int, int); // 0x008da920
+    unsigned int GetKeyListSortedByPosition(sp_key_vector*);       // 0x008d8770
+};
+
+// The object OpenRecord writes into the caller's 0x10-byte local.  Only the
+// first two dwords are read by this slice.
+struct PFRecordInfoOut {
+    Record*      mpRecord;        // +0x00
+    unsigned int mnSize;          // +0x04
+    unsigned int mnPosition;      // +0x08
+    unsigned int mnExtra;         // +0x0c
+};
+
+}}  // namespace
+
+extern "C" int FUN_008dd250(void* dst, void* src, void* pKey, char a4);
+
+// @ 0x008dd250
+extern "C" int FUN_008dd250(void* dst, void* src, void* pKey, char a4)
 {
-    if ((*(int (__thiscall**)(void*))((*(void***)dst)[0x0c / 4]))(dst) != 0x2a43bd44)
-        ;
-    return 0;
+    EA::ResourceMan::DatabasePackedFile* pDst = (EA::ResourceMan::DatabasePackedFile*)dst;
+    EA::ResourceMan::DatabasePackedFile* pSrc = (EA::ResourceMan::DatabasePackedFile*)src;
+    EA::ResourceMan::Key& key = *(EA::ResourceMan::Key*)pKey;
+    EA::ResourceMan::PFRecordInfoOut info;
+    char result = 0;
+    if (pDst->GetDatabaseType() == 0x2a43bd44 && pSrc->GetDatabaseType() == 0x2a43bd44) {
+        if (pSrc->OpenRecord(key, 0, 1, 6, 0, &info)) {
+            void* p = ((MemAlloc*)g_pMemAlloc)->Alloc((int)info.mnSize, 0, 0, 0, 0, 0);
+            if (pSrc->ReadRecordRaw(key, p, info.mnSize) &&
+                pDst->WriteRecordRaw(key, p, info.mnSize, info.mnPosition, info.mnExtra)) {
+                if (!a4)
+                    pSrc->Close(key);
+                result = 1;
+            }
+            if (p)
+                ((MemAlloc*)g_pMemAlloc)->Free(p);
+            if (result)
+                return result;
+        }
+    }
+    info.mpRecord = 0;
+    result = 0;
+    if (pSrc->OpenRecord(key, 0, 1, 6, 1, &info)) {
+        EA::ResourceMan::Record* rec = info.mpRecord;
+        unsigned int n = rec->GetSize();
+        void* p = ((MemAlloc*)g_pMemAlloc)->Alloc((int)n, 0, 0, 0, 0, 0);
+        if (n == rec->Read(p, n))
+            result = (char)FUN_008ddb90((void*)&key, (int)rec, (int)p, (int)n, 1);
+        if (p)
+            ((MemAlloc*)g_pMemAlloc)->Free(p);
+        rec->Unlock();
+    }
+    if (info.mpRecord)
+        info.mpRecord->Release();
+    if (result && a4)
+        pDst->Close(key);
+    if (info.mpRecord)
+        info.mpRecord->Release();
+    return result;
 }
 
 // ---------------------------------------------------------------------------
 // 0x8dd430  EA::ResourceMan::CopyDatabaseRecords
 // ---------------------------------------------------------------------------
 // @ 0x008dd430
-extern "C" int FUN_008dd430(void* self, int* other, int a3)
+extern "C" unsigned FUN_008dd430(EA::ResourceMan::DatabasePackedFile* pDst,
+                                 EA::ResourceMan::DatabasePackedFile* pSrc,
+                                 void* pFilter, char a4)
 {
-    (void)self; (void)other; (void)a3;
-    return 0;
+    unsigned int nCopied = 0;
+    pDst->Lock(true);
+    pSrc->Lock(true);
+    EA::ResourceMan::sp_key_vector keys;
+    keys.mpBegin = 0;
+    keys.mpEnd = 0;
+    keys.mAlloc = 0;
+    keys.mpEndCap = 0;
+    keys.mAllocator = 0;
+    if (pSrc->GetDatabaseType() == 0x2a43bd44)
+        pSrc->GetKeyListSortedByPosition(&keys);
+    else
+        pSrc->GetKeyList(&keys, pFilter);
+    for (EA::ResourceMan::Key* it = keys.begin(); it != keys.end(); ++it) {
+        if (FUN_008dd250(pDst, pSrc, it, a4))
+            ++nCopied;
+    }
+    pSrc->Lock(false);
+    pDst->Lock(false);
+    if (keys.mpBegin != 0 && *((int*)keys.mpBegin - 1) != 0)
+        operator_delete__(keys.mpBegin);
+    return nCopied;
 }
 
 // ---------------------------------------------------------------------------
@@ -297,11 +442,101 @@ extern "C" void FUN_008dd8d0(void* a, void* b)
 // ---------------------------------------------------------------------------
 // 0x8dd8f0  key -> name
 // ---------------------------------------------------------------------------
+// wcslen is inlined by the original; declare it as an intrinsic.
+extern "C" unsigned int __cdecl wcslen(const wchar_t*);
+#pragma intrinsic(wcslen)
+extern "C" __declspec(dllimport) wchar_t* __cdecl wcschr(const wchar_t*, wchar_t);
+extern "C" __declspec(dllimport) unsigned long __cdecl wcstoul(const wchar_t*, wchar_t**, int);
+extern "C" void* __cdecl FUN_00422950(int holder);                 // 0x422950 QueryByHolder
+
 // @ 0x008dd8f0
-extern "C" int FUN_008dd8f0(int* self, void* out)
+extern "C" bool FUN_008dd8f0(EA::ResourceMan::Key* pKey, const wchar_t* name,
+                             unsigned int a3, unsigned int a4,
+                             void* pManager, int* pHolder)
 {
-    (void)self; (void)out;
-    return 0;
+    if (name == 0 || name[0] == 0)
+        return false;
+    pKey->mType = a3;
+    const wchar_t* pDot = 0;
+    const wchar_t* p = wcschr(name, L'.');
+    if (p != 0)
+        pDot = p + 1;
+    else
+        p = name + wcslen(name);
+
+    // Split [name, p) at the first '!' into group (before) and instance (after).
+    const wchar_t* segStart = name;      // ebp
+    const wchar_t* groupEnd = name;      // ebx
+    unsigned int n = (unsigned int)(p - name);
+    const wchar_t* q = name;
+    while (n != 0) {
+        if (*q == L'!') {
+            groupEnd = q;
+            segStart = q + 1;
+            pKey->mGroup = 0xffffffff;
+            break;
+        }
+        ++q;
+        --n;
+    }
+    if (groupEnd == name && segStart == name)
+        pKey->mGroup = a4;               // no '!' found
+
+    // Instance: the part after the '!' (or the whole prefix) up to the dot.
+    if (segStart != p) {
+        const wchar_t* r = (const wchar_t*)FUN_008dd820((unsigned short*)segStart, (unsigned short*)p, 1, 1);
+        if (r != 0)
+            pKey->mInstance = wcstoul(r, 0, 0x10);
+        else
+            pKey->mInstance = FUN_008dd7d0((const unsigned short*)segStart, (int)(p - segStart));
+    } else {
+        pKey->mInstance = 0xffffffff;
+    }
+
+    // Group: [name, groupEnd).
+    if (name != groupEnd) {
+        const wchar_t* r = (const wchar_t*)FUN_008dd820((unsigned short*)name, (unsigned short*)groupEnd, 1, 0);
+        if (r != 0)
+            pKey->mGroup = wcstoul(r, 0, 0x10);
+        else
+            pKey->mGroup = FUN_008dd7d0((const unsigned short*)name, (int)(groupEnd - name));
+    }
+
+    // Type: the segment after the dot, only when not already supplied.
+    if (pKey->mType == 0) {
+        pKey->mType = 0xffffffff;
+        if (pDot != 0 && pDot[0] != 0) {
+            const wchar_t* e = pDot + wcslen(pDot);
+            const wchar_t* r = (const wchar_t*)FUN_008dd820((unsigned short*)pDot, (unsigned short*)e, 0, 0);
+            if (r != 0) {
+                pKey->mType = wcstoul(r, 0, 0x10);
+                return true;
+            }
+            if (pHolder != 0) {
+                void* m = FUN_00422950((int)pHolder);
+                if (m != 0) {
+                    unsigned int v = ((unsigned int (__thiscall*)(void*, const wchar_t*))
+                                      (((void**)*(void**)m)[0x5c / 4]))(m, pDot);
+                    if (v != 0xffffffff) {
+                        pKey->mType = v;
+                        return true;
+                    }
+                }
+            }
+            if (pManager == 0)
+                pManager = (void*)FUN_008de1a0();
+            if (pManager != 0) {
+                unsigned int v = ((unsigned int (__thiscall*)(void*, const wchar_t*))
+                                  (((void**)*(void**)pManager)[0x88 / 4]))(pManager, pDot);
+                if (v != 0xffffffff) {
+                    pKey->mType = v;
+                    return true;
+                }
+            }
+            pKey->mType = FUN_008dd7d0((const unsigned short*)pDot, (int)(e - pDot));
+        }
+    }
+    return true;
 }
 
 // ---------------------------------------------------------------------------
@@ -372,10 +607,67 @@ extern "C" char FUN_008ddc10(int a1, void* out, void* pKey)
 // ---------------------------------------------------------------------------
 // 0x8ddc80  EA::ResourceMan::DefaultCreateNameFromKey
 // ---------------------------------------------------------------------------
+// eastl::basic_string<wchar_t, eastl::allocator>: 0x14 bytes here.
+struct WStr16 {
+    wchar_t* mpBegin;    // +0x00
+    wchar_t* mpEnd;      // +0x04
+    wchar_t* mpEndCap;   // +0x08
+    void*    mpAlloc;    // +0x0c
+    void*    mpAllocator;// +0x10
+    void assign(const wchar_t* first, const wchar_t* last);  // 0x423650
+    void append(const wchar_t* first, const wchar_t* last);  // 0x429580
+};
+
+extern wchar_t gEmptyString16;                     // 0x1667bac (sentinel)
+extern const wchar_t g_nameSepUnderscore;          // 0x13fe614 (L"_")
+
 // @ 0x008ddc80
-extern "C" void FUN_008ddc80(int* key, void* out, void* a3, void* a4, unsigned short* a5)
+extern "C" void FUN_008ddc80(const EA::ResourceMan::Key* pKey, WStr16* pOut,
+                             void* pManager, void* pDatabase, const wchar_t* pName)
 {
-    (void)key; (void)out; (void)a3; (void)a4; (void)a5;
+    unsigned int id = 0;
+    if (pDatabase != 0 &&
+        ((unsigned int (__thiscall*)(void*))(((void**)*(void**)pDatabase)[0x0c / 4]))(pDatabase) == 0x34728492) {
+        id = ((unsigned int (__thiscall*)(void*, unsigned int))
+              (((void**)*(void**)pDatabase)[0x60 / 4]))(pDatabase, pKey->mType);
+    } else {
+        if (pManager == 0)
+            pManager = (void*)FUN_008de1a0();
+        if (pManager != 0)
+            id = ((unsigned int (__thiscall*)(void*, unsigned int))
+                  (((void**)*(void**)pManager)[0x8c / 4]))(pManager, pKey->mType);
+    }
+
+    WStr16 tmp;
+    tmp.mpBegin = &gEmptyString16;
+    tmp.mpEnd = &gEmptyString16;
+    tmp.mpEndCap = &gEmptyString16 + 1;
+    tmp.mpAlloc = 0;
+    tmp.mpAllocator = 0;
+    if (id != 0)
+        FUN_0041e050(&tmp, L"0x%08x!0x%08x.%ls", pKey->mGroup, pKey->mInstance, id);
+    else
+        FUN_0041e050(&tmp, L"0x%08x!0x%08x.0x%08x", pKey->mGroup, pKey->mInstance, pKey->mType);
+
+    if (pName != 0) {
+        const wchar_t* e = pName + wcslen(pName);
+        pOut->assign(pName, e);
+        WStr16 cat;
+        cat.mpBegin = &gEmptyString16;
+        cat.mpEnd = &gEmptyString16;
+        cat.mpEndCap = &gEmptyString16 + 1;
+        cat.mpAlloc = 0;
+        cat.mpAllocator = 0;
+        FUN_006309e0(&cat, (const void*)&g_nameSepUnderscore, (const void*)&tmp);
+        pOut->append(cat.mpBegin, cat.mpEnd);
+        if ((unsigned int)((char*)cat.mpEndCap - (char*)cat.mpBegin) > 2 && cat.mpBegin != 0)
+            operator_delete__(cat.mpBegin);
+    } else {
+        if (&tmp != pOut)
+            pOut->assign(tmp.mpBegin, tmp.mpEnd);
+    }
+    if ((unsigned int)((char*)tmp.mpEndCap - (char*)tmp.mpBegin) > 2 && tmp.mpBegin != 0)
+        operator_delete__(tmp.mpBegin);
 }
 
 // ---------------------------------------------------------------------------

@@ -190,33 +190,32 @@ struct Inner {
     float f04;              // +0x04
     int f08;                // +0x08
     char skip[0x28];        // +0x0c .. +0x33 (not part of either copy)
-    int f34;                // +0x34
-    int f38;
-    int f3c;
-    int f40;
-    int f44;
-    int f48;
-    int f4c;
-    int f50;
-    int f54;
-    int f58;
-    int f5c;
-    int f60;
-    int f64;
-    int f68;
-    int f6c;
-    int f70;
-    int f74;
-    int f78;
-    int f7c;
-    int f80;
-    int f84;
-    int f88;
-    int f8c;
-    int f90;
-    int f94;
-    int f98;
-    char pad1[3];
+    float f34;              // +0x34
+    float f38;
+    float f3c;
+    float f40;
+    float f44;
+    float f48;
+    float f4c;
+    float f50;
+    float f54;
+    float f58;
+    float f5c;
+    float f60;
+    float f64;
+    float f68;
+    float f6c;
+    float f70;
+    float f74;
+    float f78;
+    float f7c;
+    float f80;
+    float f84;
+    float f88;
+    float f8c;
+    float f90;
+    float f94;
+    float f98;
     char f9c;               // +0x9c
     void Assign(const Inner* src);
     void CopyMasked(const Inner* src, uint32 mask);
@@ -354,7 +353,7 @@ float Track::Total()
         j = pairs * 2;
         do {
             acc[1] = c[-0x2d] * wv[-1] + acc[1];
-            acc[2] = wv[0] * c[0] + acc[2];
+            acc[2] = c[0] * wv[0] + acc[2];
             wv += 2;
             c += 0x5a;
         } while (--pairs);
@@ -371,13 +370,13 @@ float Track::Total()
 struct Grid {
     char pad[0x1c];
     void* m[4][4];          // +0x1c
-    void Set(void* value, int row, int col);
+    void* Set(void* value, int row, int col);
 };
 
 // @ 0x009dbe10
-void Grid::Set(void* value, int row, int col)
+void* Grid::Set(void* value, int row, int col)
 {
-    m[row][col] = value;
+    return m[row][col] = value;
 }
 
 // ---------------------------------------------------------------------------
@@ -463,8 +462,10 @@ struct Sample {             // 0x0c
 
 struct CurveOut {
     float v;                // +0x00
-    float d;                // +0x04
-    bool exact;             // +0x08
+    union {
+        float d;            // +0x04 sample value stored on the fallback path
+        bool exact;         // +0x04 low byte overwritten by the equality flag
+    };
 };
 
 struct Curve {
@@ -477,11 +478,11 @@ struct Curve {
 void Curve::Eval(float t, CurveOut* out)
 {
     int n = count;
-    int idx = 0;
     int i = 0;
+    int idx = 0;
     if (n != 0) {
         for (; i != n; ++i) {
-            if (t < samples[i].t)
+            if (!(t >= samples[i].t))
                 break;
             idx = i;
         }

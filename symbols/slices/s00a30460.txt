@@ -1,7 +1,7 @@
-00a30460 ?SetProperty@System@Audio@EA@@UAEXIM@Z  # EA::Audio::System::SetProperty migrated from s00a30460
-00a30790 ?FUN_00a30790@@YAHXZ  # FUN_00a30790 migrated from s00a30460 (verbatim, slice spelling)
-00a30940 ?PreloadConfigurations@System@Audio@EA@@QAEXXZ  # EA::Audio::System::PreloadConfigurations migrated from s00a30460
-00a30e10 ?ctor@FixedMap30e10@@QAEHPAX0@Z  # FixedMap30e10::ctor migrated from s00a30460 (verbatim, slice spelling)
-00a30f10 ?eraseKey@NodeMap@@QAEHPAI@Z  # NodeMap::eraseKey migrated from s00a30460 (verbatim, slice spelling)
-00a31040 ?ctor@FixedVec11@@QAEPAU1@H@Z  # FixedVec11::ctor migrated from s00a30460 (verbatim, slice spelling)
-00a310b0 ?ctor@FixedVec11b@@QAEPAU1@PAI@Z  # FixedVec11b::ctor migrated from s00a30460 (verbatim, slice spelling)
+00a30460 ?SetProperty@AudioSystem@@QAEXIM@Z  # EA::Audio::System::SetProperty (retail ?SetProperty@System@Audio@EA@@UAEXIM@Z)
+00a30790 ?FUN_00a30790@AudioSystem@@QAEHXZ  # System submix registration, __thiscall, returns bool (no PDB name)
+00a30940 ?PreloadConfigurations@AudioSystem@@QAEXXZ  # EA::Audio::System::PreloadConfigurations (retail ?PreloadConfigurations@System@Audio@EA@@QAEXXZ)
+00a30e10 ??0FixedMap30e10@@QAE@PAX0@Z  # eastl::fixed_hash_map ctor (node size 0x14)
+00a30f10 ?eraseKey@NodeMap@@QAEHPAI@Z  # NodeMap::eraseKey
+00a31040 ??0FixedVec11@@QAE@H@Z  # fixed_vector<uint32,1000> ctor
+00a310b0 ?ctor@FixedVec11b@@QAEPAU1@PAI@Z  # fixed_vector<uint32,250> ctor

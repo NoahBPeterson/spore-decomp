@@ -5,3 +5,5 @@ slices/s009b3180/s009b3180.cpp  ?Set@TargetFrame@nSPCreatureAnim@@QAEXPBM0@Z  00
 slices/s009b3180/s009b3180.cpp  ??4CopyBlock@nSPCreatureAnim@@QAEAAU01@ABU01@@Z  009b3ab0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
 slices/s009b3180/s009b3180.cpp  ?FUN_009b3bc0@nSPCreatureAnim@@YAXH@Z  009b3bc0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
 slices/s009b3180/s009b3180.cpp  ??4Transform30@nSPCreatureAnim@@QAEAAU01@ABU01@@Z  009b3c80  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s009b3180/s009b3180.cpp  ?Shuffle@anim_transform_view@@QAEXPBUanim_vec3@@PBUanim_vec4@@PBM@Z  009b3b20  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s009b3180/s009b3180.cpp  ??4creature_body_static_view@@QAEAAU0@ABU0@@Z  009b3490  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2

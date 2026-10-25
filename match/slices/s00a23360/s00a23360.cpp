@@ -356,28 +356,100 @@ struct RBNode {
     u32     key1;    // +0x14
 };
 
+// Intrusive list link embedded in the element payload at +0x10 (eastl node
+// convention: the payload pointer is the iterator, the node sits 0x10 before it).
+struct SNode {
+    SNode* next;    // +0x00
+    SNode* prev;    // +0x04
+};
+
+// Element payload; the merge sort only ever touches the embedded link.
+struct Snd {
+    u8    mPad00[0x10];   // +0x00 payload (not inspected by the sort)
+    SNode node;           // +0x10 { next, prev }
+    static Snd* FromNode(SNode* n) { return n ? (Snd*)((char*)n - 0x10) : 0; }
+    static SNode* ToNode(Snd* p) { return p ? (SNode*)((char*)p + 0x10) : 0; }
+};
+
+typedef bool (__cdecl* CompareFn)(Snd*, Snd*);
+
+// Bare intrusive list head (two links, 8 bytes).  The PDB reports 0x00a24210 as
+// RBTree::Assign, but the instantiation the linker kept for that address (ICF)
+// works on a list head only: its temporaries are two 8-byte objects (frame
+// 0x18) and the recursive calls pass those temporaries as `this`, so the
+// element-list member is modelled as its own type.
+struct ElemList {
+    SNode anchor;                                               // +0x00 { next, prev }
+    ElemList();                                                 // self-links the anchor
+    ~ElemList();                                                // unlinks what is left
+    void Assign(void* pCompare);                                // 0x00a24210 (merge sort)
+    Snd* begin() { return Snd::FromNode(anchor.next); }
+    // Out-of-slice intrusive-list helpers (the original passes the list in ecx).
+    void splice(Snd* pos, ElemList& x, Snd* first, Snd* last);  // 0x00a212b0
+    void spliceAll(Snd* pos, ElemList& x);                      // 0x00a21310
+    void merge(ElemList& x, CompareFn pCompare);                // 0x00a22410
+};
+
 struct RBTree {
     u8      pad00[0x1c];
     void*   mpFreeList;                 // +0x1c
     u8      pad20[0x2c - 0x20];
     u32     mAllocator;                 // +0x2c
-    void   Assign(void* arg);                   // 0x00a24210 (opaque rbtree assignment)
     void*  AllocNode2(const void* src);         // 0x00a243e0
     RBNode* CloneNode(RBNode* src, RBNode* parent);   // 0x00a24530
 };
 
-void __cdecl sub_00a212b0();
-void __cdecl sub_00a21310();
-void __cdecl sub_00a22410();
+inline ElemList::ElemList()
+{
+    anchor.next = &anchor;
+    anchor.prev = &anchor;
+}
+
+__forceinline ElemList::~ElemList()
+{
+    SNode* n = anchor.next;
+    while (n != &anchor) {
+        SNode* next = n->next;
+        n->prev = 0;
+        n->next = 0;
+        n = next;
+    }
+    anchor.next = 0;
+    anchor.prev = 0;
+}
 
 // @ 0x00a24210
-void RBTree::Assign(void* arg)
+// Recursive merge sort of the element list anchored at +0x00: the list is cut
+// in two halves with the forward/backward middle walk below, each half is
+// sorted by a recursive Assign, then the sorted second half is merged into the
+// sorted first half. The comparison function is the opaque argument.
+void ElemList::Assign(void* pCompare)
 {
-    // Opaque eastl rbtree range-copy helper: rebuild the tree from the source range.
-    (void)arg;
-    sub_00a212b0();
-    sub_00a21310();
-    sub_00a22410();
+    if (Snd::ToNode(Snd::FromNode(anchor.next)) == &anchor)
+        return;                                      // empty list
+    Snd* first = Snd::FromNode(anchor.next);
+    if (first == Snd::FromNode(anchor.prev))
+        return;                                      // single element
+
+    ElemList a, b;
+
+    // Middle walk: `mid` advances from the front while `end` retreats from the
+    // anchor, so [first, mid) holds ceil(n/2) elements and [mid, end) the rest.
+    Snd* mid = first;
+    Snd* end = Snd::FromNode(&anchor);
+    while (mid != end) {
+        mid = Snd::FromNode(mid->node.next);
+        if (mid == end)
+            break;
+        end = Snd::FromNode(end->node.prev);
+    }
+
+    b.splice(b.begin(), *this, first, mid);          // b = first half
+    a.spliceAll(a.begin(), *this);                   // a = second half
+    b.Assign(pCompare);
+    a.Assign(pCompare);
+    this->spliceAll(this->begin(), b);               // this = sorted first half
+    this->merge(a, (CompareFn)pCompare);             // + the sorted second half
 }
 
 // @ 0x00a243e0

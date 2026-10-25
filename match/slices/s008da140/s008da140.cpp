@@ -81,6 +81,34 @@ struct Mutex {
     int Unlock();                    // 0x922270
 };
 
+// 16-byte record index entry (PFRecordInfo). The low compression word and the committed flag
+// share the dword at +0xc in the retail layout.
+struct RecordInfo {
+    int mnPosition;                  // +0x0
+    int mnSize;                      // +0x4
+    int mnMemorySize;                // +0x8
+    union {
+        unsigned mFlags;             // +0xc (whole dword)
+        struct {
+            unsigned short mnCompressionType;  // +0xc
+            unsigned char mbCommitted;         // +0xe
+            unsigned char mbReserved;          // +0xf
+        } s;
+    } u;
+};
+
+// key/value pair stored in the open-record multimap (Key is 12 bytes).
+struct PFPair {
+    unsigned key[3];                 // +0x0
+    void* value;                     // +0xc
+};
+
+struct PFRecordBase {
+    void* vt;                        // +0x0
+    int mnRefCount;                  // +0x4
+    unsigned mPFRecordType;          // +0x8
+};
+
 struct IStream {
     virtual void s0();
     virtual int  AddRef();                           // +0x04
@@ -131,6 +159,7 @@ struct RecMap {
     int mnFlags;
     RbNode* Anchor() { return (RbNode*)&mAnchor; }
     RbNode** find(RbNode** out, const void* k);   // 0xa21dc0
+    RbNode** insert(RbNode** out, const void* pair, int flags);  // 0x8d9f20
     RecMap() {}
 };
 
@@ -140,6 +169,7 @@ struct HoleSet {
     int GetTotalSize();                // 0x8dae40
     void Erase(void** out, void* node); // 0x8dae70
     void FUN_008dc120(HoleSet* other); // 0x8dc120
+    void* AllocAt(int size);           // 0x8dbf20
 };
 struct HoleTable {
     int mExtent;                       // +0x334
@@ -186,14 +216,22 @@ struct DatabasePackedFile {            // 0x384
     bool CompactDatabaseInternal();
     bool CompactDatabase();
     bool ReadIndexRecord();
-    bool OpenRecord(void* pKey, unsigned access, unsigned reqFlags, unsigned mode, void* arg5, void* pOutRecord);
-    char FUN_008da920(void* param2);
+    bool OpenRecord(void* pKey, void** ppDst, unsigned access, unsigned mode, bool arg5,
+                    RecordInfo* pDstInfo);
+    char FUN_008da920(void* pKey, const void* pData, unsigned nSize, unsigned nDecompressed,
+                      unsigned short nCompression);
     bool Flush();
 
     // contiguous helpers
     bool ReadBytes(void* dst, int size);              // 0x8d88d0
     bool Verify();                                    // 0x8d87c0
     bool WriteEmpty1(int a, int b, int c);            // vf
+    bool AllocateSpace(long& pos, unsigned size);     // 0x8d84a0
+    bool FreeSpace(long pos, int size, bool flag);    // 0x8d84d0
+    bool WriteFileSpan(const void* pData, long pos, unsigned size);  // 0x8d90e0
+    bool DecompressRecord(unsigned short type, unsigned pos, unsigned compressedSize,
+                          unsigned memorySize, void* pData);         // 0x8d9320
+    DatabasePackedFile* Construct(const wchar_t* path, IAlloc* alloc); // 0x8d9f80
 };
 
 typedef char chk_sz[(sizeof(DatabasePackedFile) == 0x384) ? 1 : -1];
@@ -481,18 +519,30 @@ typedef bool  (__thiscall *TFb2i)(void*, unsigned, int);
 typedef bool  (__thiscall *TFb4i)(void*, void*, unsigned, unsigned, int);
 typedef bool  (__thiscall *TFb3i)(void*, int, int, int);
 typedef void  (__thiscall *TFv1i)(void*, int);
+typedef unsigned (__thiscall *TFu0)(void*);
+typedef bool  (__thiscall *TFb0v)(void*);
+typedef bool  (__thiscall *TFb1p)(void*, void*);
+typedef bool  (__thiscall *TFb2p)(void*, void*, void*);
+typedef void  (__thiscall *TFv2p)(void*, void*, void*);
+typedef void* (__thiscall *TFp3v)(void*, unsigned, void*, void*);
+typedef void* (__thiscall *TFp4v)(void*, unsigned, void*, unsigned, void*);
+typedef void* (__thiscall *TFp4u)(void*, unsigned, unsigned, unsigned, void*);
+typedef int   (__thiscall *TFref)(void*);
 
-// external helpers of the complex functions (addresses masked; semantics approximated)
-extern "C" void* __cdecl ZoneObject_operator_new(unsigned size, void* alloc, const char* name);
-extern "C" void* __cdecl DatabasePackedFile_ctor(void* mem, int a, void* alloc);
-extern "C" void  __cdecl FUN_00930f60();
-extern "C" void  __cdecl FUN_00572590();
-extern "C" char  __cdecl FUN_00932580(void* buf, void* a);
-extern "C" char  __cdecl FUN_00931ff0(void* buf, void* path, int a);
-extern "C" char  __cdecl IO_File_Exists(void* buf);
-extern "C" void  __cdecl IO_File_Remove();
-extern "C" int   __cdecl CopyDatabaseRecords(void* db, void* src, int a, int b);
-extern "C" char  __cdecl ReadRecordRaw(void* p0, void* p1, void* p2, void* p3);
+struct FilePath {
+    char d[0x14];
+    wchar_t* SetPath(const wchar_t* p);   // 0x930f60
+    void AppendDirectory();               // 0x930f90
+    void* Self();                         // 0x572590
+};
+
+// external helpers of the complex functions
+extern "C" void* __cdecl FUN_00925fe0(unsigned size, void* alloc, const char* name);  // 0x925fe0
+extern "C" char  __cdecl FUN_00932580(wchar_t* pOut, void* filePath, const wchar_t* prefix, int flags); // 0x932580
+extern "C" bool  __cdecl FUN_00931ff0(const wchar_t* src, const wchar_t* dst, bool overwrite); // 0x931ff0
+extern "C" bool  __cdecl FUN_00931fa0(const wchar_t* path);  // 0x931fa0
+extern "C" bool  __cdecl FUN_00931fd0(const wchar_t* path);  // 0x931fd0
+extern "C" unsigned __cdecl FUN_008dd430(void* pDst, void* pSrc, void* pFilter, bool bFlag); // 0x8dd430
 typedef void  (__thiscall *TFv1p)(void*, void*);
 
 // ===========================================================================
@@ -545,121 +595,245 @@ cleanup:
 // ===========================================================================
 // 0x8da3d0  DatabasePackedFile::OpenRecord
 // ===========================================================================
-// Reconstructed from the retail disassembly. The Ghidra calling convention for this body is
-// garbled; the real prototype is (key, access, reqFlags, mode, arg5, outRecordInfo), ret 0x18.
+// bool OpenRecord(Key const& name, Record** ppDst, AccessFlags desiredAccess, CD createDisposition,
+//                 bool arg_10, RecordInfo* pDstInfo); ret 0x18
 // @ 0x008da3d0
-bool DatabasePackedFile::OpenRecord(void* pKey, unsigned access, unsigned reqFlags, unsigned mode,
-                                    void* arg5, void* pOutRecord)
+bool DatabasePackedFile::OpenRecord(void* pKey, void** ppDst, unsigned access, unsigned mode,
+                                    bool arg5, RecordInfo* pDstInfo)
 {
     void* pRecord = 0;
-    if ((access & 3) == 0)
-        goto done;
-    {
-        bool bLocked = false;
-        if (mnAccessFlags == 0) {
-            mMutex.Lock(kTimeoutNone);
-            bLocked = true;
-        }
-        if (mnAccessFlags == 0)
-            goto unlock_false;
-        if ((mnAccessFlags & 2) != 0 && !bLocked) {
-            bLocked = true;
-            mMutex.Lock(kTimeoutNone);
-        }
-        {
-            void* pInfo = ((TFp1p)(*(void***)mpIndex)[0x28 / 4])(mpIndex, pKey);
-            bool bFound = pInfo != 0;
-            if (bFound && pOutRecord != 0) {
-                ((unsigned*)pOutRecord)[0] = *(unsigned*)((char*)pInfo + 0x00);
-                ((unsigned*)pOutRecord)[1] = *(unsigned*)((char*)pInfo + 0x04);
-                ((unsigned*)pOutRecord)[2] = *(unsigned*)((char*)pInfo + 0x08);
-                ((unsigned*)pOutRecord)[3] = *(unsigned short*)((char*)pInfo + 0x0c);
-            }
-            if (reqFlags == 0) {
-                if (bLocked)
-                    mMutex.Unlock();
-                return bFound;
-            }
-            unsigned want = mode;
-            if (mode == 6)
-                want = (((access & 2) != 0) ? 1u : 0u) + 3;
-            bool bReadOnly;
-            if (bFound) {
-                bReadOnly = (want == 1);
-            } else {
-                if (want == 3)
-                    goto unlock_false;
-                bReadOnly = (want == 5);
-            }
-            if (bReadOnly || ((mnAccessFlags & access) != access))
-                goto unlock_false;
-            if (want == 2 || want == 5)
-                reqFlags |= 0x100;
-            if (bFound) {
-                if ((access & 2) == 0 || reqFlags == 0) {
-                    unsigned recFlags = *(unsigned*)((char*)pInfo + 0x08);
-                    if (recFlags != 0 && arg5 != 0 && ((unsigned)arg5 & 1) == 0)
-                        goto unlock_false;
-                }
-                if ((access & 2) == 0) {
-                    if ((mnAccessFlags & 2) == 0)
-                        pRecord = ((TFp1p)(*(void***)this)[0x2c / 4])(this, pInfo);
-                    else
-                        pRecord = ((TFp1p)(*(void***)this)[0x2c / 4])(this, pInfo);
-                    goto have_record;
-                }
-            } else {
-                pRecord = ((TFp1p)(*(void***)this)[0x2c / 4])(this, pInfo);
-                if (pRecord != 0) {
-                    ((TFv0)(*(void***)this)[0x30 / 4])(this);
-                    ((TFv0)(*(void***)this)[0x34 / 4])(this);
-                }
-                goto have_record;
-            }
-        }
-unlock_false:
-        if (bLocked)
-            mMutex.Unlock();
+    if ((access & 3) == 0) {
+        if (ppDst != 0)
+            *ppDst = 0;
         return false;
     }
-have_record:
+
+    bool bLocked = false;
+    RecordInfo* pInfo = 0;
+    bool bFound = false;
+    bool bMaybeWrite = false;
+    unsigned desired = 0;
+    RbNode* it = 0;
+    void* pData = 0;
+    RecordInfo zeroInfo;
+    PFPair pair;
+
+    if (mnAccessFlags == 0) {
+        mMutex.Lock(kTimeoutNone);
+        bLocked = true;
+    }
+    if (mnAccessFlags == 0)
+        goto unlock_path;
+    if ((mnAccessFlags & 2) != 0 && !bLocked) {
+        bLocked = true;
+        mMutex.Lock(kTimeoutNone);
+    }
+
+    pInfo = (RecordInfo*)((TFp1p)(*(void***)mpIndex)[0x28 / 4])(mpIndex, pKey);
+    bFound = pInfo != 0;
+    if (bFound && pDstInfo != 0) {
+        pDstInfo->mnPosition = pInfo->mnPosition;
+        pDstInfo->mnSize = pInfo->mnSize;
+        pDstInfo->mnMemorySize = pInfo->mnMemorySize;
+        pDstInfo->u.mFlags = pInfo->u.s.mnCompressionType;
+    }
+    if (ppDst == 0) {
+        if (bLocked)
+            mMutex.Unlock();
+        return bFound;
+    }
+
+    desired = mode;
+    if (mode == 6)
+        desired = ((access & 2) != 0) ? 4u : 3u;
+    if (bFound) {
+        if (desired == 1)
+            goto fail_nowrite;
+    } else {
+        if (desired == 3 || desired == 5)
+            goto fail_nowrite;
+    }
+    if ((mnAccessFlags & access) != access)
+        goto fail_nowrite;
+    bMaybeWrite = (desired == 2 || desired == 5);
+
+    if (bFound && !((access & 2) != 0 && bMaybeWrite)
+        && pInfo->u.s.mnCompressionType != 0 && !arg5)
+        goto fail_nowrite;
+
+    if (bFound && (access & 2) == 0) {
+        // read an existing record
+        if ((mnAccessFlags & 2) != 0) {
+            mMap.find(&it, pKey);
+            if (it != mMap.Anchor()) {
+                PFRecordBase* pOther = (PFRecordBase*)it->value;
+                if (pOther->mPFRecordType != 0x12e4a891)
+                    goto unlock_path;
+                pRecord = ((TFp3v)(*(void***)this)[0x58 / 4])(this, access, pOther, pKey);
+            } else {
+                pRecord = ((TFp3v)(*(void***)this)[0x54 / 4])(this, access, pInfo, pKey);
+            }
+        } else {
+            pRecord = ((TFp3v)(*(void***)this)[0x54 / 4])(this, access, pInfo, pKey);
+        }
+    } else if (bFound) {
+        // write access to an existing record
+        if (*mMap.find(&it, pKey) != mMap.Anchor())
+            goto unlock_path;
+        if (bMaybeWrite) {
+            pRecord = ((TFp4u)(*(void***)this)[0x60 / 4])(this, access, 0, 0, pKey);
+            if (pRecord == 0)
+                goto unlock_path;
+            ((TFv0)(*(void***)this)[0x8c / 4])(this);
+            ((TFb1p)(*(void***)this)[0x40 / 4])(this, pKey);
+            zeroInfo.mnPosition = 0;
+            zeroInfo.mnSize = 0;
+            zeroInfo.mnMemorySize = 0;
+            zeroInfo.u.mFlags = 0;
+            ((TFv2p)(*(void***)mpIndex)[0x2c / 4])(mpIndex, pKey, &zeroInfo);
+        } else if (pInfo->u.s.mnCompressionType != 0) {
+            pData = mpAllocator->Alloc((unsigned)pInfo->mnMemorySize, "Resource/Raw", 0);
+            if (pData == 0)
+                goto unlock_path;
+            if (DecompressRecord(pInfo->u.s.mnCompressionType, (unsigned)pInfo->mnPosition,
+                                 (unsigned)pInfo->mnSize, (unsigned)pInfo->mnMemorySize, pData)) {
+                pRecord = ((TFp4v)(*(void***)this)[0x5c / 4])(this, access, pData,
+                                                             (unsigned)pInfo->mnMemorySize, pKey);
+                if (pRecord != 0)
+                    goto created;
+            }
+            mpAllocator->Free(pData, 0);
+            goto unlock_path;
+        } else {
+            pRecord = ((TFp4u)(*(void***)this)[0x60 / 4])(this, access,
+                                                          (unsigned)pInfo->mnPosition,
+                                                          (unsigned)pInfo->mnSize, pKey);
+        }
+    } else {
+        // brand new record
+        pRecord = ((TFp4u)(*(void***)this)[0x60 / 4])(this, access, 0, 0, pKey);
+        if (pRecord == 0)
+            goto unlock_path;
+        ((TFv0)(*(void***)this)[0x8c / 4])(this);
+        zeroInfo.mnPosition = 0;
+        zeroInfo.mnSize = 0;
+        zeroInfo.mnMemorySize = 0;
+        zeroInfo.u.mFlags = 0;
+        ((TFv2p)(*(void***)mpIndex)[0x2c / 4])(mpIndex, pKey, &zeroInfo);
+    }
+
+created:
+    if (pRecord != 0) {
+        ((TFref)(*(void***)pRecord)[0x04 / 4])(pRecord);
+        if ((mnAccessFlags & 2) != 0) {
+            pair.key[0] = ((unsigned*)pKey)[0];
+            pair.key[1] = ((unsigned*)pKey)[1];
+            pair.key[2] = ((unsigned*)pKey)[2];
+            pair.value = pRecord;
+            mMap.insert(&it, &pair, 0);
+        }
+    }
+
+unlock_path:
+    if (bLocked)
+        mMutex.Unlock();
     if (pRecord != 0)
-        ((TFv0)(*(void***)pRecord)[0x04 / 4])(pRecord);
-done:
-    if (pOutRecord != 0)
-        *(void**)pOutRecord = pRecord;
+        ((TFref)(*(void***)pRecord)[0x04 / 4])(pRecord);
+    if (ppDst != 0)
+        *ppDst = pRecord;
     return pRecord != 0;
+
+fail_nowrite:
+    if (bLocked)
+        mMutex.Unlock();
+    return false;
 }
 
 // ===========================================================================
-// 0x8da920  DatabasePackedFile helper (delete/replace record)
+// 0x8da920  DatabasePackedFile record-write helper
 // ===========================================================================
+// Replaces the contents of one record: allocates a hole, writes the new bytes, drops the old
+// index entry and re-adds an entry describing the new span.
 // @ 0x008da920
-char DatabasePackedFile::FUN_008da920(void* param2)
+char DatabasePackedFile::FUN_008da920(void* pKey, const void* pData, unsigned nSize,
+                                     unsigned nDecompressed, unsigned short nCompression)
 {
+    char bWritten = 0;
+    long pos = 0;
+    bool bAlloc = false;
+    RbNode* it = 0;
+    RbNode* node = 0;
+    void* pRecord = 0;
+    PFPair pair;
+    RecordInfo oldInfo;
+    RecordInfo newInfo;
+
     mMutex.Lock(kTimeoutNone);
     if ((mnAccessFlags & 2) == 0 || mnAccessFlags == 0) {
         mMutex.Unlock();
         return 0;
     }
-    void* pFound = ((TFp1p)(*(void***)mpIndex)[0x28 / 4])(mpIndex, param2);
-    if (pFound == 0) {
+    if (*mMap.find(&it, pKey) != mMap.Anchor()) {
         mMutex.Unlock();
         return 0;
     }
-    char cResult = 0;
-    void* pRec = ((TFp1p)(*(void***)this)[0x60 / 4])(this, param2);
-    bool bAlloc = false;
-    if (pRec != 0)
+
+    pRecord = ((TFp4u)(*(void***)this)[0x60 / 4])(this, 2, 0, 0, pKey);
+    ((TFref)(*(void***)pRecord)[0x04 / 4])(pRecord);
+    pair.key[0] = ((unsigned*)pKey)[0];
+    pair.key[1] = ((unsigned*)pKey)[1];
+    pair.key[2] = ((unsigned*)pKey)[2];
+    pair.value = pRecord;
+    mMap.insert(&it, &pair, 0);
+    ((TFv0)(*(void***)this)[0x8c / 4])(this);
+
+    if (nSize != 0) {
+        if ((mnAccessFlags & 2) != 0) {
+            pos = (long)mActive.mHoles.AllocAt((int)nSize);
+            bAlloc = true;
+        }
+    } else {
         bAlloc = true;
+    }
+
     mMutex.Unlock();
     if (bAlloc) {
-        char cWritten = ReadRecordRaw(this, pRec, 0, 0);
-        (void)cWritten;
+        if (nSize == 0)
+            bWritten = 1;
+        else
+            bWritten = WriteFileSpan(pData, pos, nSize) ? 1 : 0;
     }
+
     mMutex.Lock(kTimeoutNone);
+    mMap.find(&it, pKey);
+    node = it;
+    --mMap.mnSize;
+    RBTreeIncrement(node);
+    RBTreeErase(node, mMap.Anchor());
+    mMap.mpAlloc->Free(node, 0x20);
+    ((TFref)(*(void***)pRecord)[0x08 / 4])(pRecord);
+
+    if (bWritten) {
+        oldInfo.mnPosition = 0;
+        oldInfo.mnSize = 0;
+        oldInfo.mnMemorySize = 0;
+        oldInfo.u.mFlags = 0;
+        if (((TFb2p)(*(void***)mpIndex)[0x30 / 4])(mpIndex, pKey, &oldInfo))
+            FreeSpace(oldInfo.mnPosition, oldInfo.mnSize, oldInfo.u.s.mbCommitted == 0);
+        newInfo.mnPosition = (int)pos;
+        newInfo.mnSize = (int)nSize;
+        newInfo.mnMemorySize = (int)nDecompressed;
+        newInfo.u.mFlags = 0;
+        newInfo.u.s.mnCompressionType = nCompression;
+        ((TFv2p)(*(void***)mpIndex)[0x2c / 4])(mpIndex, pKey, &newInfo);
+        mbIndexHasChanged = true;
+        mMutex.Unlock();
+        return bWritten;
+    }
+    if (bAlloc && nSize != 0)
+        FreeSpace(pos, (int)nSize, true);
     mMutex.Unlock();
-    return cResult;
+    return bWritten;
 }
 
 // ===========================================================================
@@ -673,59 +847,62 @@ bool DatabasePackedFile::CompactDatabaseInternal()
         return false;
     if (mMap.mnSize != 0)
         return false;
-    if (((TFb0)(*(void***)mpIndex)[0x08 / 4])(mpIndex)) {
-        if (mnMemorySize == 0)
-            ((TFv0)(*(void***)mpMemoryLocation.p)[0x20 / 4])(mpMemoryLocation.p);
+
+    if (((TFb0v)(*(void***)mpIndex)[0x08 / 4])(mpIndex)) {
+        if (mpMemoryBase == 0)
+            ((TFv1i)(*(void***)mpMemoryLocation.p)[0x20 / 4])(mpMemoryLocation.p, 0x60);
         mHeaderBlock.f[8] = 0;
         mHeaderBlock.f[7] = 0;
         mHeaderBlock.f[9] = 0;
         mbFlag330 = true;
-        ((TFv0)(*(void***)this)[0x90 / 4])(this);
-        ((TFv0)(*(void***)this)[0x24 / 4])(this);
+        ((TFb0v)(*(void***)this)[0x90 / 4])(this);
+        ((TFb0v)(*(void***)this)[0x24 / 4])(this);
         return true;
     }
+
     char cResult = 0;
-    char szPath[520];
-    void* pFilePath = 0;
-    FUN_00930f60();
-    (void)pFilePath;
-    FUN_00572590();
-    if (FUN_00932580(szPath, 0) != 0) {
-        void* pNew = ZoneObject_operator_new(0x388, mpAllocator, "Resource/DatabasePackedFile");
+    wchar_t szPath[260];
+    FilePath filePath;
+    long pos = 0;
+
+    filePath.SetPath(mPath.mpBegin);
+    filePath.AppendDirectory();
+    void* pTempArg = filePath.Self();
+    if (FUN_00932580(szPath, pTempArg, L"TempDBPF_", 0) != 0) {
+        void* pNew = FUN_00925fe0(0x388, mpAllocator, "Resource/DatabasePackedFile");
         void* pDb = 0;
         if (pNew != 0)
-            pDb = DatabasePackedFile_ctor(pNew, 0, mpAllocator);
-        bool bOk = false;
-        if (pDb != 0 && ((TFb0)(*(void***)pDb)[0x04 / 4])(pDb)) {
+            pDb = ((DatabasePackedFile*)pNew)->Construct(0, mpAllocator);
+        bool bCopied = false;
+        if (((TFb0v)(*(void***)pDb)[0x04 / 4])(pDb)) {
             ((TFv1p)(*(void***)pDb)[0x2c / 4])(pDb, szPath);
             if (((TFb3i)(*(void***)pDb)[0x18 / 4])(pDb, 3, 6, 0)) {
-                *(int*)((char*)pDb + 0x334) = 2;
+                ((DatabasePackedFile*)pDb)->mActive.mExtent = 2;
+                unsigned nAllocSize = ((TFu0)(*(void***)mpIndex)[0x14 / 4])(mpIndex);
                 ((TFv1i)(*(void***)pDb)[0x14 / 4])(pDb, 1);
-                FUN_008d84d0(0, 0, true);
+                if (((DatabasePackedFile*)pDb)->AllocateSpace(pos, nAllocSize))
+                    ((DatabasePackedFile*)pDb)->FreeSpace(pos, (int)nAllocSize, true);
                 ((TFv1i)(*(void***)pDb)[0x14 / 4])(pDb, 0);
-                bOk = CopyDatabaseRecords(pDb, this, 0, 0) != -1;
-                ((TFv0)(*(void***)pDb)[0x1c / 4])(pDb);
+                bCopied = FUN_008dd430(pDb, this, 0, false) != 0xffffffffu;
+                ((TFb0v)(*(void***)pDb)[0x1c / 4])(pDb);
             }
             ((TFv0)(*(void***)pDb)[0x08 / 4])(pDb);
         }
-        if (pDb != 0)
-            ((TFv1i)(*(void***)pDb)[0x00 / 4])(pDb, 1);
-        if (bOk) {
+        ((TFv1i)(*(void***)pDb)[0x00 / 4])(pDb, 1);
+
+        if (bCopied) {
             unsigned nExtent = (unsigned)mActive.mExtent;
             int nAccess = mnAccessFlags;
             mActive.mExtent = (int)(nExtent & 0xfffffffe);
-            if (((TFb0)(*(void***)this)[0x1c / 4])(this)) {
-                if (FUN_00931ff0(szPath, mPath.mpBegin, 1) == 0) {
-                    ((TFb3i)(*(void***)this)[0x18 / 4])(this, nAccess, 6, 0);
-                    cResult = 0;
-                } else {
-                    cResult = (char)((TFb3i)(*(void***)this)[0x18 / 4])(this, nAccess, 6, 0);
-                }
+            if (((TFb0v)(*(void***)this)[0x1c / 4])(this)) {
+                bool bMoved = FUN_00931ff0(szPath, mPath.mpBegin, true);
+                bool bOpened = ((TFb3i)(*(void***)this)[0x18 / 4])(this, nAccess, 6, 0);
+                cResult = bMoved ? (bOpened ? 1 : 0) : 0;
             }
             mActive.mExtent = (int)nExtent;
         }
-        if (IO_File_Exists(szPath) != 0)
-            IO_File_Remove();
+        if (FUN_00931fa0(szPath))
+            FUN_00931fd0(szPath);
     }
     return cResult != 0;
 }

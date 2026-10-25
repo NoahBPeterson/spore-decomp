@@ -1,4 +1,6 @@
+00900410  399  StylesheetFactory::CreateResource: complete; no EH/unwind frame now; register allocation, frame size (+11) and strcmp-loop alignment differ; difftest WEAK (no mismatch)
 00900720  105  XmlReader::FindAttribute: complete; 8-bit compare-loop shape differs (cl emitted a 4-byte-wide strcmp-style loop)
+00900800  185  XmlReader::ReadString: complete; cl assigns this to ebp and the text pointer to ebx (swapped from the original), re-encoding the whole body; difftest PASS
 00900900  82   wstring->stack-allocator append: complete; signed allocator-space check + return value; difftest PASS
 00900990  76   XmlReader ctor: complete; cl interleaves member construction / adds an EH frame vs the original
 00900b70  252  XmlTextReader dtor: complete; cl inline-expands the base dtor + EH frame vs the original's plain tail call; difftest PASS
@@ -9,3 +11,4 @@
 009010c0  82   expat comment callback: complete; cdecl free fn with explicit reader; allocation schedule differs; difftest PASS
 00901150  86   expat processing-instruction callback: complete; cdecl free fn with explicit reader; allocation schedule differs; difftest PASS
 009011e0  39   XmlTextReader deleting dtor: complete; EH frame/ordering differs
+00901340  26   XmlTextReader::Read: complete; only cold-block ordering (read-error block vs parse-error block) differs; difftest PASS

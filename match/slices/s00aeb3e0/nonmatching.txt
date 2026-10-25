@@ -4,3 +4,7 @@
 00aeba50 187 equivalence UNSUPPORTED (only 0/400 inputs valid)
 00aebcd0 230 equivalence WEAK
 00aebde0 93 equivalence UNSUPPORTED (original reads ecx at entry but our declaration passes nothing there)
+00aeb7b0 167 complete; comm-action dispatcher on a raw 4-dword message (three event ids plus fallback, trailing selected-entry cleanup); retail receives the message in ecx while our declared parameters put a5 in the fourth slot, and the branch/register schedule differs (206 vs 215); flags /O2 /MD /Gy /EHsc /TP; equiv FAIL (5/5 valid mismatched, call #0 depth 1)
+00aeb890 175 complete; civ-comm dispatcher (comm-context lookup, vtable-slot 3 query, three event ids, fallback DoCivCommAction); the reconstruction's GetCommContext call runs without a live context so ours faults at 00ce6950, and the frame/register layout differs (207 vs 202); flags /O2 /MD /Gy /EHsc /TP; equiv FAIL (5/5 valid, execution)
+00aeb960 187 complete; hashtable find-or-insert over 0x1c-byte nodes (bucket chain walk, RangeMapper rehash, op_new of the node, bucket splice) returning {node, bucketPtr, inserted}; the insert path's rehash calls and slot reuse differ (219 vs 230); flags /O2 /MD /Gy /EHsc /TP; equiv FAIL (5/66 valid, execution)
+00aebc10 152 complete; cSPUICommScreen message handler for three event ids (Hide the layout, build/show the comm dialog and clear the selection, set the +0x44 flag); constant-folded branch layout and register allocation differ (192 vs 191); flags /O2 /MD /Gy /EHsc /TP; equiv FAIL (5/14 valid mismatched, eax)

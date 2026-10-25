@@ -6,3 +6,8 @@
 00944ac0   13  HTTPHeaders::RemoveHeaderEntry; complete but the name-arg evaluation order and register selection differ; equiv.py PASS
 00944af0  257  eastl vector<pair>::push_back(empty); complete but the grow-vs-in-place branch is scheduled differently (264 vs 223); equiv.py PASS
 00944d50    8  HTTPHeaders::AddHeaderEntryField; complete but this is kept in esi in the original and edi here (a stable register swap); equiv.py PASS
+00943f60   76  HTTPClient ctor; complete and same size (361 bytes), but the scheduler hoists the agent-length lea/vtbl constant loads and groups the 0xf8/0xfa stores differently; equiv.py PASS (350 valid, 100% coverage)
+009442e0   19  UTFInternet::HTTPRequest ctor; complete and same size (152 bytes), but two independent init instructions (lea edx,[eax+0x10] and xor ebx,ebx) are scheduled before the vtable store; equiv.py PASS (400 valid, 100% coverage)
+00944450   85  CreateHTTPGetRequest; complete (243 vs 245 bytes), refcount pointer kept in ebx vs ebp in the original and the final release uses dec on the exchange-add result; equiv.py PASS (287 valid, 85.6% coverage)
+00944bd0   19  HTTPResponse::Clear; complete and same size (212 bytes), but the four m430/m434/m438/m43c field stores are scheduled differently; equiv.py PASS (232 valid, 92.2% coverage)
+00944e10  212  HTTPClient::AddCookie; complete (262 vs 275 bytes) with the cookie record layout corrected (heap string at +0x0c, worker at +0x2c), but the leaf checks keep m10/m04 in registers instead of memory operands and one fail path is duplicated; equiv.py WEAK (399 valid, 21.1% coverage)

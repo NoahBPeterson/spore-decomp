@@ -7,6 +7,7 @@
 #include "types.h"
 #include <stddef.h>
 #include <math.h>
+#include <intrin.h>
 #pragma intrinsic(fabs)
 
 // --- float constants the original loads from .rdata --------------------------------
@@ -74,6 +75,21 @@ class intrusive_list { public:
     iterator begin() { return iterator(static_cast<T*>(mAnchor.mpNext)); }
     iterator end() { return iterator(static_cast<T*>(&mAnchor)); }
     bool empty() const { return mAnchor.mpPrev == &mAnchor; }
+    // Retail calls the list teardown out of line (0x620230) from
+    // TreeNode::~TreeNode, so keep it from being inlined.  A plain member keeps
+    // it from becoming an implicit destructor call (which would run last).
+    __declspec(noinline) void Destroy()
+    {
+        intrusive_list_node* cur = mAnchor.mpNext;
+        while (cur != &mAnchor) {
+            intrusive_list_node* next = cur->mpNext;
+            cur->mpNext = 0;
+            cur->mpPrev = 0;
+            cur = next;
+        }
+        mAnchor.mpNext = &mAnchor;
+        mAnchor.mpPrev = &mAnchor;
+    }
     // raw accessors mirroring the original's `&mChildren` / `mAnchor.mpNext` forms
     intrusive_list_node* rawAnchor() { return &mAnchor; }
     intrusive_list_node* firstRaw() { return mAnchor.mpNext; }
@@ -185,8 +201,10 @@ class TreeNode : public TreeNodeBase, public eastl::intrusive_list_node { public
     wchar_t* mCaptionBegin;                                     // +0x34
     wchar_t* mCaptionEnd;                                       // +0x38
     wchar_t* mCaptionCap;                                       // +0x3c
-    IDrawable* mpIcon;                                          // +0x44
-    IUnknown32* mpUserData;                                     // +0x48
+    unsigned int mReserved40;                                   // +0x40  (never written by the factory)
+    unsigned int mReserved44;                                   // +0x44  (zeroed by the factory)
+    IDrawable* mpIcon;                                          // +0x48
+    IUnknown32* mpUserData;                                     // +0x4c
 
     void Attach(WinTreeView* tree);                             // 0x009911e0
     void Detach();                                              // 0x00991230
@@ -196,7 +214,9 @@ class TreeNode : public TreeNodeBase, public eastl::intrusive_list_node { public
 
     ~TreeNode();                                                // 0x00991410
     bool IsExpanded();                                          // 0x00991470
-    void SetFlag(unsigned int flag, bool on);                   // 0x00991490
+    // Retail keeps SetFlag out of line: the two 10-byte Expand/Collapse
+    // wrappers are plain `push on; push 2; call SetFlag; ret`.
+    __declspec(noinline) void SetFlag(unsigned int flag, bool on);   // 0x00991490
     void SetFlagRecursive(unsigned int flag, bool on);          // 0x00991520
     void ChildInsert(eastl::intrusive_list_node* pos, TreeNode* child);  // 0x00991580
     void ChildRemoveAll();                                      // 0x00991600
@@ -265,7 +285,10 @@ class WinTreeView : public CustomWindowBase { public:
     float mLineOff0;                                            // +0x1d8
     float mLineOff1;                                            // +0x1dc
     IDrawable* mpBackground;                                    // +0x1e0
-    unsigned int pad2[0xb];                                     // +0x1e4 .. 0x210
+    unsigned int pad2[0xa];                                     // +0x1e4 .. 0x20c
+    // The real IWindow subobject (the one the +0x20c vtable dispatches on);
+    // only its vptr lives here, everything else is reached through base+0x20c.
+    IWindow mWindow2;                                           // +0x20c
     bool mInited;                                               // +0x210
     unsigned char pad3[3];
     TreeNode mNodes;                                            // +0x214
@@ -287,9 +310,9 @@ class WinTreeView : public CustomWindowBase { public:
     float mExpanderW;                                           // +0x2c8
     float mExpanderH;                                           // +0x2cc
     float mRowHeight;                                           // +0x2d0
-    unsigned int pad6[1];                                       // +0x2d4
-    void* mpSelectedNodesBegin;                                 // +0x2d8
-    unsigned int pad6b[3];                                      // +0x2dc .. 0x2e8
+    unsigned int pad6[2];                                       // +0x2d4 .. 0x2dc
+    void* mpSelectedNodesBegin;                                 // +0x2dc
+    unsigned int pad6b[3];                                      // +0x2e0 .. 0x2ec
     TreeNode* mPickNode;                                        // +0x2ec
     unsigned int mPickType;                                     // +0x2f0
     ScrollbarState mScrollbars[2];                              // +0x2f4
@@ -312,7 +335,7 @@ class WinTreeView : public CustomWindowBase { public:
     void InvalidateLayout();                                    // 0x009917b0
     void SetBorders(EA::UTFWin::RectF* r);                      // 0x009917f0
     void ClearSelection();                                      // 0x00991860
-    void OnMouseDown();                                         // 0x009918b0
+    bool OnMouseDown(int, int, int, int);                       // 0x009918b0
     void SetScrollbarDrawable(int which, void* p);              // 0x00991930
     void SetScrollbarEnabled(int which, int v);                 // 0x00991990
     ~WinTreeView();                                             // 0x00991df0
@@ -390,13 +413,18 @@ TreeNode::~TreeNode()
 {
     *(void**)this = &g_vtbl_1445c58;
     *(void**)((char*)this + 4) = &g_vtbl_1445c54;
+    _ReadWriteBarrier();
     if (mpUserData != 0)
         mpUserData->u1();
     if (mpIcon != 0)
         mpIcon->d1();
-    if (mCaptionBegin != 0 && (unsigned int)(mCaptionCap - mCaptionBegin) > 2)
+    // Retail masks the low bit of the (capacity - begin) span before the
+    // "is it heap-allocated" test, then falls through to the free.
+    unsigned int span = (unsigned int)mCaptionCap - (unsigned int)mCaptionBegin;
+    span &= 0xfffffffeu;
+    if ((int)span > 2 && mCaptionBegin != 0)
         FUN_00f47380(mCaptionBegin);
-    ((eastl::intrusive_list<TreeNode>*)&mChildren)->~intrusive_list();
+    ((eastl::intrusive_list<TreeNode>*)&mChildren)->Destroy();
     *(void**)((char*)this + 4) = &g_vtbl_13ef094;
     *(void**)this = &g_vtbl_13eb938;
 }
@@ -408,6 +436,7 @@ bool TreeNode::IsExpanded()
 }
 
 // @ 0x00991490
+__declspec(noinline)
 void TreeNode::SetFlag(unsigned int flag, bool on)
 {
     unsigned int old = mFlags;
@@ -506,13 +535,14 @@ void SerUpdate(TreeNode* p)
 }
 
 // @ 0x009916f0
-void TreeNode_Expand(TreeNode* p)
+// ecx already holds the node; the callee is the out-of-line SetFlag.
+void __fastcall TreeNode_Expand(TreeNode* p)
 {
     p->SetFlag(2, true);
 }
 
 // @ 0x00991700
-void TreeNode_Collapse(TreeNode* p)
+void __fastcall TreeNode_Collapse(TreeNode* p)
 {
     p->SetFlag(2, false);
 }
@@ -556,21 +586,22 @@ void WinTreeView::ClearSelection()
 }
 
 // @ 0x009918b0
-void WinTreeView::OnMouseDown()
+bool WinTreeView::OnMouseDown(int, int, int, int)
 {
     TreeNode* node = mPickNode;
-    if (node == 0) {
-        mWindow.w5();
-        return;
+    if (node != 0) {
+        if (mPickType == 1) {
+            node->SetFlag(2, ((node->mFlags >> 1) & 1) == 0);
+            return false;
+        }
+        if ((node->mFlags & 1) == 0) {
+            mWindow2.w21();
+            mPickNode->SetFlag(1, true);
+        }
+    } else {
+        mWindow2.w21();
     }
-    if (mPickType == 1) {
-        node->SetFlag(2, ((node->mFlags >> 1) & 1) == 0);
-        return;
-    }
-    if ((node->mFlags & 1) == 0) {
-        mWindow.w5();
-        mPickNode->SetFlag(1, true);
-    }
+    return false;
 }
 
 // @ 0x00991930

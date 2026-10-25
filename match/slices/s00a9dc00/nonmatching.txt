@@ -1,0 +1,4 @@
+# nonmatching: compiles and is behaviourally equivalent to the original (difftest PASS/WEAK)
+# but is not byte-exact.
+# fields: <va> <diff-bytes> <flags> <difftest> <reason>
+00a9dc00 372 /O2 /MD /Gy /TP /arch:SSE /fp:fast PASS cMetaParticlesEffect::UpdateParticle: plain C++ reconstruction (the old source was a naked __asm transcription). Flag-set path copies the particle position, picks the active path (this+0x218 when non-empty, else desc+0x2a8), builds the description's scaled half-extents and box halves, calls SnapParticleToPath(p+8, dt, path, box, size, this+0x30) and then the spin correction at desc+0x278 != 0. Cheap/full path chosen by the two timestep masks and !(desc+0x168 * dt > 0.05f). Mine 444B vs 463B; difftest PASS (387/400 valid, 99.3% coverage). Not byte-exact: cl15 hoists 0.5f and keeps different xmm/ebp temporaries and uses cmovne for the path select.

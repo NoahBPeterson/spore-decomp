@@ -12,3 +12,7 @@
 009a38f0 78 complete rbtree find+release; frame/register layout differs; equiv UNSUPPORTED: 2 unresolved reference(s): ?f@S9c26a0@@QAEXXZ, ?f@S99c980@@QAEXXZ
 009a3980 104 complete rbtree insert; scheduling differs; equiv UNSUPPORTED: 2 unresolved reference(s): ?operator_new@@YAPAXHPBDHH0H@Z, ?f@S99c660@@QAEXXZ
 009a3a10 79 complete rbtree insert (node ctor); register allocation differs; equiv PASS: 1004 valid inputs, 100.0% coverage (all insns)
+009a2d50 554 complete vector insert(n,value); compiler factors grow/in-place paths differently; equiv WEAK: 165 valid inputs (need 200), 14.3% coverage (need 60%)
+009a3080 413 complete animation reset; movss of 1.0f scheduled after the zero stores; equiv PASS: 269 valid inputs, 100.0% coverage (all insns)
+009a3220 631 complete animation channel bind; register/frame allocation differs; equiv PASS: 214 valid inputs, 65.4% coverage
+009a3b10 302 complete rbtree insert_unique with hint; identical insert tails merged by compiler; equiv PASS: 322 valid inputs, 72.6% coverage

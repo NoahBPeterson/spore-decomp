@@ -123,11 +123,14 @@ public:
     cRefCountBase() : mRefCount(0) {}
 };
 
-// message handler base at +0x08
+// message handler base at +0x08 (vtable only; the listener state lives in cListener)
+class cListener;
 class IHandler {
 public:
     virtual bool HandleMessage(uint32_t id, void* pMsg);   // 0x00a3c830
     virtual ~IHandler() {}
+    // the listener that owns this sub-object (IHandler sits at cListener+0x08)
+    cListener* Listener() { return (cListener*)((char*)this - sizeof(cRefCountBase)); }
 };
 
 class cListener : public cRefCountBase, public IHandler {
@@ -393,27 +396,26 @@ void cListener::SetTuningId(uint32_t id)
 // @ 0x00a3c830
 bool IHandler::HandleMessage(uint32_t id, void* pMsg)
 {
-    cListener& listener = static_cast<cListener&>(*this);
+    // IHandler is the sub-object at cListener+0x08; the original folds that -8 into its
+    // member displacements and only re-adjusts ecx before the ReadTuningValues calls.
     if (id == 0x052d9bab) {
         const cMicrophoneMessage* pMic = (const cMicrophoneMessage*)pMsg;
-        listener.mCellMicrophonePos = V3(pMic->mX, pMic->mY, pMic->mZ);
+        Listener()->mCellMicrophonePos.x = pMic->mX;
+        Listener()->mCellMicrophonePos.y = pMic->mY;
+        Listener()->mCellMicrophonePos.z = pMic->mZ;
         return true;
     }
     if (id == 0x02b0c259) {
-        listener.ReadTuningValues();
+        Listener()->ReadTuningValues();
         return true;
     }
-    uint32_t nCurrent = listener.mTuningId;
+    uint32_t nCurrent = Listener()->mTuningId;
     uint32_t nNew = nCurrent;
-    if (id > 0x0248976a) {
-        if (id == 0x0539a4ce)
-            nNew = 0x96ccccb8;
-        else if (id == 0x0539a4cf)
-            nNew = listener.mPendingId;
-    } else if (id == 0x0248976a) {
-        nNew = 0x12ef46b8;
-    } else if (id == 0x022d1adc) {
-        switch (*(const uint32_t*)((const uint8_t*)pMsg + 8)) {
+    switch (id) {
+    case 0x022d1adc: {
+        // the message carries a mode tag at +0x08
+        const uint32_t nMode = *(const uint32_t*)((const uint8_t*)pMsg + 8);
+        switch (nMode) {
         case 0x01654c00: nNew = 0xbba5a414; break;
         case 0x01654c01: nNew = 0x1f401827; break;
         case 0x01654c02: nNew = 0x13a11a34; break;
@@ -421,20 +423,23 @@ bool IHandler::HandleMessage(uint32_t id, void* pMsg)
         case 0x01654c10: nNew = 0xdb193f1e; break;
         case 0x02ccd1d2: nNew = 0x12ef46b8; break;
         }
-    } else if (id == 0x0248975f) {
-        nNew = 0x608310c6;
-    } else if (id == 0x02489766) {
-        nNew = 0xa602a723;
+        break;
+    }
+    case 0x0248975f: nNew = 0x608310c6; break;
+    case 0x02489766: nNew = 0xa602a723; break;
+    case 0x0248976a: nNew = 0x12ef46b8; break;
+    case 0x0539a4ce: nNew = 0x96ccccb8; break;
+    case 0x0539a4cf: nNew = Listener()->mPendingId; break;
     }
     if (nNew == nCurrent)
         return true;
     if (nCurrent == 0x96ccccb8 && id != 0x0539a4cf) {
-        listener.mPendingId = nNew;
+        Listener()->mPendingId = nNew;
         return true;
     }
-    listener.mPendingId = nCurrent;
-    listener.mTuningId = nNew;
-    listener.ReadTuningValues();
+    Listener()->mPendingId = nCurrent;
+    Listener()->mTuningId = nNew;
+    Listener()->ReadTuningValues();
     return true;
 }
 

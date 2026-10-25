@@ -1,4 +1,6 @@
 # va  diff-bytes  reason
+00959780  1076  Fn00959780 (message dispatcher, bool): complete; fixed Mouse x/y float stores at +0xbc/+0xc0, the 28-byte msg temp, im+4 object, cdecl arg order, bool returns; regalloc/switch layout differ; difftest PASS (2918/3000 valid, 60.7% coverage); /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2 /fp:fast
+00959b70  365  b70: complete (bool slot-setup predicate); movzx/lea reg choices + add-vs-sub -4 differ; difftest WEAK (4101 valid, 38.8% coverage, no mismatch); /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2 /fp:fast
 00959cf0  146  cf0: complete (slot-change notify via vtable slot 0x4c + GameViewManager event 0xb); regalloc/branch layout differ; difftest PASS (217 valid inputs, 64.2% coverage)
 00959e00  402  DetachWindow: complete; regalloc/order differ; /O2 /MD /Gy /EHsc /TP /GS-; difftest UNSUPPORTED (0/400 valid; fault(read) 398 -> dereferences ctx-owned pointers)
 00959fe0  162  fe0: complete; ebx-vs-edx argv reg + folded null test differ; /O2 /MD /Gy /EHsc /TP /GS-; difftest UNSUPPORTED (0/400 valid; fake-arity 211, fault(read) 182 -> vtable calls through win+4)

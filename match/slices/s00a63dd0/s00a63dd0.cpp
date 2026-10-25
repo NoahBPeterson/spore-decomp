@@ -15,10 +15,53 @@ namespace EA { namespace Audio { namespace Eapd {
 // ===========================================================================
 // @ 0x00a63dd0  EapdAssetManager::Load
 // ===========================================================================
+extern uint32_t gAssetMagic;       // 0x015544a8
+extern uint32_t gFieldKind;        // 0x015544ac
+extern PgSymbol gEmptySymbol;      // 0x01675874
+
 bool EapdAssetManager::Load(const char* data, unsigned size, PgSymbol* out)
 {
-    (void)data; (void)size; (void)out;
-    return false;
+    out->mHash = gEmptySymbol.mHash;
+    out->mpName = gEmptySymbol.mpName;
+    if (data == 0 || size <= 0x17)
+        return false;
+
+    const uint32_t* hdr = (const uint32_t*)data;
+    if (hdr[0] != gAssetMagic || hdr[2] != 2)
+        return false;
+    uint32_t kind = hdr[1];
+    if (kind != gFieldKind && kind != 2 && kind != 3)
+        return false;
+    if (hdr[4] == 0)
+        return false;
+
+    const char* cursor = data + 0x18;
+    const char* end = data + size;
+    PgSymbol first, second;
+    int count1 = 0, count2 = 0;
+    if (!InputParseSymbols((int)kind, (char**)&cursor, (char*)end,
+                           &first, &second, &count1, &count2))
+        return false;
+
+    out->mHash = first.mHash;
+    out->mpName = first.mpName;
+
+    // Asset records: hdr[4] maps followed by hdr[5] event records.  The real
+    // loader interns each symbol pair into the manager's two maps and the
+    // per-asset rb-tree; the slices' map helpers are not callable without the
+    // full allocator/bootstrap state, so parse the records and keep the same
+    // cursor/termination behavior.
+    for (uint32_t i = 0; i < hdr[4]; ++i) {
+        if (!InputParseSymbols((int)kind, (char**)&cursor, (char*)end,
+                               &first, &second, &count1, &count2))
+            return false;
+    }
+    for (uint32_t i = 0; i < hdr[5]; ++i) {
+        if (!InputParseSymbols((int)kind, (char**)&cursor, (char*)end,
+                               &first, &second, &count1, &count2))
+            return false;
+    }
+    return true;
 }
 
 // ===========================================================================

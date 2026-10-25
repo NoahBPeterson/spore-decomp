@@ -2,3 +2,6 @@
 00935a70 13  ShutdownOSGlobalSystem: complete, register/load order in the free path differs (compiler reloads vs esi-held)
 00935ad0 109 EA_ReleaseOSGlobal: complete, original uses a double `lock xadd` refcount read that no plain source shape reproduced
 00935b70 145 InitOSGlobalSystem: complete, cl hoists the `gp != 0` early-out block ahead of the one-time-init body
+00935e60 86 EA::Process::OpenFile(const wchar_t*): complete; [equiv: UNSUPPORTED 0/400 valid, LoadLibraryW import]; diff is callee-saved register allocation (path in edi vs ebx; gShellExecuteWPtr tested from memory instead of cached in edi) and the reload of the cached import pointer in the http branch
+009350f0 745 IniFile::LoadSectionNames: complete; [equiv: WEAK 217/400 valid, 13.5% coverage]; diff is inlined WString/Eastl rbtree scheduling, stack-slot assignment, and duplicated dtor blocks (size 768 vs 862)
+00935560 1059 IniFile::EnumEntries: complete; [equiv: WEAK 302/400 valid, 25.8% coverage]; diff is inlined WString/vector scheduling and stack-slot assignment (size 1092 vs 1231)

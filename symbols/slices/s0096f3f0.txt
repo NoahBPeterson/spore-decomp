@@ -10,3 +10,4 @@
 009702b0 ?SetDefaultFormatting@WinGrid@UTFWinControls@EA@@QAEXXZ  # EA::UTFWinControls::WinGrid::SetDefaultFormatting migrated from s0096f3f0
 00970460 ?OnMouseMove@WinGrid@UTFWinControls@EA@@UAE_NMMI@Z  # EA::UTFWinControls::WinGrid::OnMouseMove migrated from s0096f3f0
 00970540 ?OnMouseWheel@WinGrid_s0096_f3f0@UTFWinControls@EA@@QAEXHHHH@Z  # WinGrid_s0096_f3f0::OnMouseWheel migrated from s0096f3f0 (verbatim, slice spelling)
+0096f3f0 ?CreateRenderables@FrameDrawable@UTFWinControls@EA@@QAEXPAURenderCtx_s96@UTFWin@3@PBURectF_s96@53@PBUFrameInfo_s96@53@@Z  # frame renderer: border clamp (floor(extent/2)), inner/outer rects (style 9/10 inset by 1), optional outline stroke, four Color::Lerp shades, then style switch 0..10 (flat bands, dashed stepper at scale 1 or 3, gradient rings, 9/10 edge colour + FUN_0096f1b0); complete, not byte-exact

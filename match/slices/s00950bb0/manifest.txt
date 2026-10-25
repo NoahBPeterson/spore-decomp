@@ -2,3 +2,7 @@ slices/s00950bb0/s00950bb0.cpp  ?operator_delete@MultiHeapObject@UTFWin@EA@@SAXP
 slices/s00950bb0/s00950bb0.cpp  ?Release@CustomWinProc@UTFWin@EA@@QAEHXZ  009514a0
 slices/s00950bb0/s00950bb0.cpp  ?GetBounds@Bounds@@QAEDPAM@Z  00952100
 slices/s00950bb0/s00950bb0.cpp  ?SetBounds@Bounds@@QAEXDPBM@Z  00952130
+slices/s00950bb0/s00950bb0.cpp  ?ForwardCall514d0@@YA_NPAH0@Z  009514d0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00950bb0/s00950bb0.cpp  ?AddElementRound@ElementList@@QAEXMMMMM@Z  00952230  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00950bb0/s00950bb0.cpp  ?HandleMessage@Window_s0095_ff20@@QAE_NPAUUIMessage@@@Z  00950bb0  /O2 /MD /Gy /EHsc /TP
+slices/s00950bb0/s00950bb0.cpp  ?HandleMessageExt@Window_s0095_ff20@@QAE_NHPAUUIMessage@@@Z  00950ef0  /O2 /MD /Gy /EHsc /TP

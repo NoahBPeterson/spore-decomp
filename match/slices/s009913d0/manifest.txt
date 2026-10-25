@@ -3,3 +3,7 @@ slices/s009913d0/s009913d0.cpp  ?IsExpanded@TreeNode@UTFWinControls@EA@@QAE_NXZ 
 slices/s009913d0/s009913d0.cpp  ?SetFlagRecursive@TreeNode@UTFWinControls@EA@@QAEXI_N@Z  00991520  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s009913d0/s009913d0.cpp  ?SerUpdate@@YAXPAVTreeNode@UTFWinControls@EA@@@Z  009916b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s009913d0/s009913d0.cpp  ?OnAreaChanged@WatchGraph@UTFWinControls@EA@@QAEXPAURectF@UTFWin@3@@Z  00992140  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s009913d0/s009913d0.cpp  ??1TreeNode@UTFWinControls@EA@@QAE@XZ  00991410  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s009913d0/s009913d0.cpp  ?TreeNode_Expand@@YIXPAVTreeNode@UTFWinControls@EA@@@Z  009916f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s009913d0/s009913d0.cpp  ?TreeNode_Collapse@@YIXPAVTreeNode@UTFWinControls@EA@@@Z  00991700  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s009913d0/s009913d0.cpp  ?OnMouseDown@WinTreeView@UTFWinControls@EA@@QAE_NHHHH@Z  009918b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast

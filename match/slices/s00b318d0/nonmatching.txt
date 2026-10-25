@@ -10,3 +10,4 @@
 00b32490 2 complete; vptr store scheduled after the [this+8] load
 00b324b0 2 complete; same as 00b32490 (scalar deleting dtor with inlined body); difftest PASS (308 valid, 100% cov) once symbols/slices names it ?_GcTokenTranslator
 00b324f0 876 complete; token translator (^p / prop_file / tuning_float / tuning_int / br); wstring helpers are local stubs
+00b322c0 204 complete; cGameTimeManager::SetTimeFlowRate; the (__int64)float conversion is _ftol2 (truncate) vs the original inline fld/fistp under the current x87 mode; frame differs (287 vs 295).  flags /O2 /MD /Gy /TP /arch:SSE /GS-; difftest PASS (367 valid, 96.8% coverage, inline-calls tolerated).
