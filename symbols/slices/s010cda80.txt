@@ -6,4 +6,4 @@
 010cdac0  hkBvTreeStreamAgent::updateShapeCollectionFilter  # builds a 5-dword block, calls 0x1104740
 010cdc20  hkAlgorithm::quickSortRecursive<unsigned int, hkAlgorithm::less<unsigned int> >  # self-recursive at 0x10cdc20
 010cdca0  hkBvTreeStreamAgent::scalarDeletingDtor  # stores vtable 0x13ef534, hkMemory dealloc(ret 0xc)
-010cdcd0  hkBvTreeStreamAgent::calcStatistics  # "BvTreeAgt3"/"SectorPtrs" literals; calls 0x10fce10
+010cdcd0  hkBvTreeStreamAgent::calcStatistics  # "BvTreeAgt3"/"SectorPtrs" literals; calls 0x10fce10; hkArray cap mask 0x3fffffff + dealloc flag 0x80000000; nonmatching (56), equiv UNSUPPORTED (random collector vtable faults)

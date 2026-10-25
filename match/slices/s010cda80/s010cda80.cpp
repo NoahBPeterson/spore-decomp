@@ -19,6 +19,16 @@ class hkStatisticsCollector { public:
                                unsigned size, unsigned cap);              // +0x08
 };
 
+// hkArray<T> keeps its capacity in the low 30 bits of the header and the "do not deallocate"
+// flag in bit 31, so the capacity accessor masks the flag bits off.
+struct hkArrayInt {
+    int* m_data;                 // +0x00
+    int  m_size;                 // +0x04
+    int  m_capacityAndFlags;     // +0x08
+
+    int getCapacity() const { return m_capacityAndFlags & 0x3fffffff; }
+};
+
 // =====================================================================
 // hkBvTreeStreamAgent
 // =====================================================================
@@ -26,9 +36,7 @@ struct hkBvTreeStreamAgent {
     unsigned char pad_000[0x10];
     hkUint32      v10, v14, v18, v1c;        // +0x10..+0x1c
     hkUint32      v20, v24, v28, v2c;        // +0x20..+0x2c
-    int           m_sectorPtrs;              // +0x30 (hkArray<int> data)
-    int           m_sectorSize;              // +0x34
-    int           m_sectorCap;               // +0x38
+    hkArrayInt    m_sectors;                 // +0x30 (hkArray<int> sector list)
 
     void invalidateTim(hkCollisionInput& in);                        // 010cda80
     void warpTime(float dt, float t, hkCollisionInput& in);          // 010cdaa0
@@ -143,11 +151,12 @@ void* hkBvTreeStreamAgent::scalarDeletingDtor(unsigned int flags)
 void hkBvTreeStreamAgent::calcStatistics(hkStatisticsCollector* c) const
 {
     c->addObjectStat("BvTreeAgt3", 8, (void*)this);
-    int cap  = m_sectorCap;
-    if (cap >= 0) {
-        int siz = m_sectorSize;
-        const void* p = (const void*)m_sectorPtrs;
-        c->addBufferStat("SectorPtrs", 8, p, siz * 4, cap * 4);
-    }
+
+    // A negative m_capacityAndFlags means the sector storage is not owned by this agent (the
+    // top flag bit is set), in which case it is not reported.
+    if ((m_sectors.m_capacityAndFlags & 0x80000000) == 0)
+        c->addBufferStat("SectorPtrs", 8, m_sectors.m_data,
+                         m_sectors.m_size * 4, m_sectors.getCapacity() * 4);
+
     hkTrackerCalcStatistics((char*)this + 0x30, c);
 }
