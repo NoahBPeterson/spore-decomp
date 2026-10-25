@@ -1,3 +1,4 @@
+01064fd0 ?Init_01064fd0@cEmpire_s0106_4990@@QAEXXZ  # cEmpire_s0106_4990::Init_01064fd0 migrated from s01064990 (verbatim, slice spelling)
 01065ab0 ?ShowBakeTimeSplash_01065ab0@cSPUISpace@@QAEXXZ  # cSPUISpace::ShowBakeTimeSplash_01065ab0 migrated from s01064990 (verbatim, slice spelling)
 01065af0 ?HideBakeTimeSplash_01065af0@cSPUISpace@@QAEXXZ  # cSPUISpace::HideBakeTimeSplash_01065af0 migrated from s01064990 (verbatim, slice spelling)
 01065b30 ?IsBakeSplashShown_01065b30@cSPUISpace@@QAE_NXZ  # cSPUISpace::IsBakeSplashShown_01065b30 migrated from s01064990 (verbatim, slice spelling)

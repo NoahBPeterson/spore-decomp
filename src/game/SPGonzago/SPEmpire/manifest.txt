@@ -1,0 +1,25 @@
+# source  symbol  va  flags
+../src/game/SPGonzago/SPEmpire.cpp  ?FUN_00c30820@Mission@@QAEPAHH@Z  00c30820  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPEmpire.cpp  ?cEmpireFUN_00c30bb0@@YIXPAUcEmpire@@@Z  00c30bb0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPEmpire.cpp  ?cEmpireFUN_00c30bd0@@YIPAXPAUcEmpire@@@Z  00c30bd0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPEmpire.cpp  ?FUN_00c30c10@cEmpire@@QAEXPAUObj@@@Z  00c30c10  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPEmpire.cpp  ?cEmpireFUN_00c30c60@@YIHPAUcEmpire@@@Z  00c30c60  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPEmpire.cpp  ?cEmpireFUN_00c30c80@@YIPAXPAUcEmpire@@@Z  00c30c80  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPEmpire.cpp  ?cEmpireFUN_00c30e80@@YIIPAUcEmpire@@@Z  00c30e80  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPEmpire.cpp  ?cEmpireDebugArchetype@@YIPBDPAUcEmpire@@@Z  00c30eb0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPEmpire.cpp  ?FUN_00c30fa0@cEmpire@@QAEXPBUVec3@@@Z  00c30fa0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPEmpire.cpp  ?FUN_00c31470@cEmpire@@QAE_NPAUcCivData@@@Z  00c31470  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPEmpire.cpp  ?SetHomePlanet@cEmpire@@QAEXPAUObj@@@Z  00c316c0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPEmpire.cpp  ?cEmpireGetHomePlanet@@YIPAUObj@@PAUcEmpire@@@Z  00c31730  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPEmpire.cpp  ?cEmpireGetBackgroundFighterDPS@@YIMPAUcEmpire@@@Z  00c31890  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPEmpire.cpp  ?cEmpireGetBackgroundBomberDPS@@YIMPAUcEmpire@@@Z  00c318c0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPEmpire.cpp  ?cEmpireGetBackgroundTurretDPS@@YIMPAUcEmpire@@@Z  00c318f0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPEmpire.cpp  ?GetUFOHealth@cEmpire@@QAEMH@Z  00c31920  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPEmpire.cpp  ?FUN_00c31960@@YIMPAX0@Z  00c31960  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPEmpire.cpp  ?FUN_00c31a60@@YIXPAX0H@Z  00c31a60  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPEmpire.cpp  ?FUN_00c31bc0@@YI_NPAX00@Z  00c31bc0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPEmpire.cpp  ?FUN_00c31ca0@@YAEIPAX@Z  00c31ca0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPEmpire.cpp  ?Reset_34140@cEmpire_s00c3_3ab0@SP@@QAEXXZ  00c34140  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPEmpire.cpp  ?Resize_34710@EVec@@QAEXIPAX@Z  00c34710  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPEmpire.cpp  ?FUN_00c34e70@cEmpire_s00c3_49e0@@QAEXPAUObj_s00c3_49e0@@@Z  00c34e70  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPEmpire.cpp  ?FUN_00c352f0@cEmpire_s00c3_49e0@@QAEPAXPAX@Z  00c352f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

@@ -1,0 +1,2 @@
+00c34e70 ?FUN_00c34e70@cEmpire_s00c3_49e0@@QAEXPAUObj_s00c3_49e0@@@Z  # cEmpire_s00c3_49e0::FUN_00c34e70 migrated from s00c349e0 (verbatim, slice spelling)
+00c352f0 ?FUN_00c352f0@cEmpire_s00c3_49e0@@QAEPAXPAX@Z  # cEmpire_s00c3_49e0::FUN_00c352f0 migrated from s00c349e0 (verbatim, slice spelling)

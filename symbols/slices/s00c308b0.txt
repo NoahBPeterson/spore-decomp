@@ -5,29 +5,29 @@
 00c30970 FUN_00c30970  # byte-exact
 00c30990 FUN_00c30990  # byte-exact
 00c309b0 cEmpire::FUN_00c309b0  # byte-exact
-00c309e0 cEmpire::IsHostileToPlayer  # not byte-exact
-00c30b40 cEmpire::HasDemandForTributeExpired  # not byte-exact
-00c30bb0 FUN_00c30bb0  # byte-exact
-00c30bd0 FUN_00c30bd0  # byte-exact
-00c30c10 cEmpire::FUN_00c30c10  # byte-exact
-00c30c60 FUN_00c30c60  # byte-exact
-00c30c80 FUN_00c30c80  # byte-exact
-00c30cc0 FUN_00c30cc0  # not byte-exact
-00c30e80 FUN_00c30e80  # byte-exact
-00c30eb0 cEmpire::DebugArchetype  # byte-exact
-00c30fa0 cEmpire::FUN_00c30fa0  # byte-exact
-00c31080 FUN_00c31080  # not byte-exact
-00c31150 cEmpire::Write  # not byte-exact
-00c31240 cEmpire::Read  # not byte-exact
-00c313d0 cEmpire::FindNearestCity  # not byte-exact
-00c31470 cEmpire::FUN_00c31470  # byte-exact
-00c314a0 cEmpire::WarnPlayer  # not byte-exact
-00c31550 cEmpire::WelcomePlayer  # not byte-exact
-00c31640 FUN_00c31640  # not byte-exact
-00c316c0 cEmpire::SetHomePlanet  # byte-exact
-00c31730 cEmpire::GetHomePlanet  # byte-exact
-00c317a0 cEmpire::GetWeaponryLevel  # not byte-exact
-00c31890 cEmpire::GetBackgroundFighterDPS  # byte-exact
-00c318c0 cEmpire::GetBackgroundBomberDPS  # byte-exact
-00c318f0 cEmpire::GetBackgroundTurretDPS  # byte-exact
-00c31920 cEmpire::GetUFOHealth  # byte-exact
+00c309e0 ?cEmpireIsHostileToPlayer@@YI_NPAUcEmpire@@@Z  # cEmpireIsHostileToPlayer migrated from s00c308b0 (verbatim, slice spelling)
+00c30b40 ?cEmpireHasDemandForTributeExpired@@YI_NPAUcEmpire@@@Z  # cEmpireHasDemandForTributeExpired migrated from s00c308b0 (verbatim, slice spelling)
+00c30bb0 ?cEmpireFUN_00c30bb0@@YIXPAUcEmpire@@@Z  # cEmpireFUN_00c30bb0 migrated from s00c308b0 (verbatim, slice spelling)
+00c30bd0 ?cEmpireFUN_00c30bd0@@YIPAXPAUcEmpire@@@Z  # cEmpireFUN_00c30bd0 migrated from s00c308b0 (verbatim, slice spelling)
+00c30c10 ?FUN_00c30c10@cEmpire@@QAEXPAUObj@@@Z  # cEmpire::FUN_00c30c10 migrated from s00c308b0 (verbatim, slice spelling)
+00c30c60 ?cEmpireFUN_00c30c60@@YIHPAUcEmpire@@@Z  # cEmpireFUN_00c30c60 migrated from s00c308b0 (verbatim, slice spelling)
+00c30c80 ?cEmpireFUN_00c30c80@@YIPAXPAUcEmpire@@@Z  # cEmpireFUN_00c30c80 migrated from s00c308b0 (verbatim, slice spelling)
+00c30cc0 ?FUN_00c30cc0@@YAIIH@Z  # FUN_00c30cc0 migrated from s00c308b0 (verbatim, slice spelling)
+00c30e80 ?cEmpireFUN_00c30e80@@YIIPAUcEmpire@@@Z  # cEmpireFUN_00c30e80 migrated from s00c308b0 (verbatim, slice spelling)
+00c30eb0 ?cEmpireDebugArchetype@@YIPBDPAUcEmpire@@@Z  # cEmpireDebugArchetype migrated from s00c308b0 (verbatim, slice spelling)
+00c30fa0 ?FUN_00c30fa0@cEmpire@@QAEXPBUVec3@@@Z  # cEmpire::FUN_00c30fa0 migrated from s00c308b0 (verbatim, slice spelling)
+00c31080 ?cEmpireFUN_00c31080@@YI_NPAUcEmpire@@PAUcCivData@@1@Z  # cEmpireFUN_00c31080 migrated from s00c308b0 (verbatim, slice spelling)
+00c31150 ?cEmpireWrite@@YI_NPAUcEmpire@@PAUIStream@@@Z  # cEmpireWrite migrated from s00c308b0 (verbatim, slice spelling)
+00c31240 ?cEmpireRead@@YI_NPAUcEmpire@@PAUIStream@@@Z  # cEmpireRead migrated from s00c308b0 (verbatim, slice spelling)
+00c313d0 ?cEmpireFindNearestCity@@YIPAUcCivData@@PAUcEmpire@@UVec3@@@Z  # cEmpireFindNearestCity migrated from s00c308b0 (verbatim, slice spelling)
+00c31470 ?FUN_00c31470@cEmpire@@QAE_NPAUcCivData@@@Z  # cEmpire::FUN_00c31470 migrated from s00c308b0 (verbatim, slice spelling)
+00c314a0 ?cEmpireWarnPlayer@@YIXPAUcEmpire@@@Z  # cEmpireWarnPlayer migrated from s00c308b0 (verbatim, slice spelling)
+00c31550 ?cEmpireWelcomePlayer@@YIXPAUcEmpire@@@Z  # cEmpireWelcomePlayer migrated from s00c308b0 (verbatim, slice spelling)
+00c31640 ?cEmpireFUN_00c31640@@YI_NPAUcEmpire@@@Z  # cEmpireFUN_00c31640 migrated from s00c308b0 (verbatim, slice spelling)
+00c316c0 ?SetHomePlanet@cEmpire@@QAEXPAUObj@@@Z  # cEmpire::SetHomePlanet migrated from s00c308b0 (verbatim, slice spelling)
+00c31730 ?cEmpireGetHomePlanet@@YIPAUObj@@PAUcEmpire@@@Z  # cEmpireGetHomePlanet migrated from s00c308b0 (verbatim, slice spelling)
+00c317a0 ?cEmpireGetWeaponryLevel@@YIHPAUcEmpire@@@Z  # cEmpireGetWeaponryLevel migrated from s00c308b0 (verbatim, slice spelling)
+00c31890 ?cEmpireGetBackgroundFighterDPS@@YIMPAUcEmpire@@@Z  # cEmpireGetBackgroundFighterDPS migrated from s00c308b0 (verbatim, slice spelling)
+00c318c0 ?cEmpireGetBackgroundBomberDPS@@YIMPAUcEmpire@@@Z  # cEmpireGetBackgroundBomberDPS migrated from s00c308b0 (verbatim, slice spelling)
+00c318f0 ?cEmpireGetBackgroundTurretDPS@@YIMPAUcEmpire@@@Z  # cEmpireGetBackgroundTurretDPS migrated from s00c308b0 (verbatim, slice spelling)
+00c31920 ?GetUFOHealth@cEmpire@@QAEMH@Z  # cEmpire::GetUFOHealth migrated from s00c308b0 (verbatim, slice spelling)
