@@ -1,1 +1,2 @@
 # va  diff-bytes  reason
+004ef880  344  complete (model block list scanned, per-block {type,part} key looked up in 0x015da960 map, empty-list early-out, validity bit 5); remaining diff is /Od top-of-frame slot placement (allowed/blocks/isValid at -0x8/-0xc/-0x1 vs -0x4/-0x8/-0x9) plus one BlockKey conversion temp, size 686 vs 671; difftest FAIL 5/5 valid inputs mismatched (memory pool @4d670074 differs on input 0, coverage 24.2% 46/190)
