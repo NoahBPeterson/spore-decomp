@@ -1,0 +1,3 @@
+01048aa0 ?FilterHelperAdd@cStarMap_s0104_88e0@SP@@QAEXI@Z  # cStarMap_s0104_88e0::FilterHelperAdd migrated from s010488e0 (verbatim, slice spelling)
+01048b40 ?FilterHelper@cStarMap_s0104_88e0@SP@@QAEXHH@Z  # cStarMap_s0104_88e0::FilterHelper migrated from s010488e0 (verbatim, slice spelling)
+01048ce0 ?FilterHelperRebuildAll@cStarMap_s0104_88e0@SP@@QAEXXZ  # cStarMap_s0104_88e0::FilterHelperRebuildAll migrated from s010488e0 (verbatim, slice spelling)

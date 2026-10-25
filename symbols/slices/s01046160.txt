@@ -1,2 +1,6 @@
-01046eb0 ??1cPropView@@QAE@XZ  # cPropView destructor; byte-exact MATCH, class name from the retail-mangled symbol
-01046f30 ?Fill_01046f30@cPropView@@QAEXPAX@Z  # cPropView member taking one pointer arg; byte-exact MATCH (symbol spelling confirmed by the match)
+01046160 ?Pump_01046160@cPropView@@QAEXI@Z  # cPropView::Pump_01046160 migrated from s01046160 (verbatim, slice spelling)
+010463b0 ?Pump_010463b0@cPropView@@QAEXI@Z  # cPropView::Pump_010463b0 migrated from s01046160 (verbatim, slice spelling)
+010468f0 ?Pump_010468f0@cPropView@@QAEXI@Z  # cPropView::Pump_010468f0 migrated from s01046160 (verbatim, slice spelling)
+01046e40 ??0cPropView@@QAE@XZ  # cPropView::cPropView migrated from s01046160 (verbatim, slice spelling)
+01046eb0 ??1cPropView@@QAE@XZ  # cPropView::~cPropView migrated from s01046160 (verbatim, slice spelling)
+01046f30 ?Fill_01046f30@cPropView@@QAEXPAX@Z  # cPropView::Fill_01046f30 migrated from s01046160 (verbatim, slice spelling)

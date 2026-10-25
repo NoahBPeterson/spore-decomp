@@ -1,0 +1,1 @@
+00996460 ?clear@StarDeque@@QAEXXZ  # StarDeque::clear migrated from s00995b20 (verbatim, slice spelling)

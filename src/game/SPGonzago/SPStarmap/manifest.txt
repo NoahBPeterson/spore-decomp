@@ -1,0 +1,8 @@
+# source  symbol  va  flags
+../src/game/SPGonzago/SPStarmap.cpp  ?clear@StarDeque@@QAEXXZ  00996460  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPStarmap.cpp  ?CreateStarRecordVisual@cStarMap@@QAEPAVVEffect@@PAVcStarRecord@@HH@Z  010458f0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPStarmap.cpp  ?ResetTravelTrail@cStarMap@@QAEXXZ  01045c10  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPStarmap.cpp  ??1cPropView@@QAE@XZ  01046eb0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPStarmap.cpp  ?Fill_01046f30@cPropView@@QAEXPAX@Z  01046f30  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPStarmap.cpp  ?FilterHelperAdd@cStarMap_s0104_88e0@SP@@QAEXI@Z  01048aa0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPStarmap.cpp  ?FilterHelperRebuildAll@cStarMap_s0104_88e0@SP@@QAEXXZ  01048ce0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

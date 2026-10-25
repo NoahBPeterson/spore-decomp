@@ -1,0 +1,2 @@
+00c308d0 ?GetStars@cEmpire@SP@@QBEABV?$vector@V?$AutoRefCount@VcStarRecord@SP@@@EA@@Usp_vector_allocator@eastl@@@eastl@@XZ  # SP::cEmpire::GetStars (callee of s01047850, named from the dev publics; slice address comment)
+01047850 ?FilterHelperEmpires@CStarMap@@QAEXH@Z  # CStarMap::FilterHelperEmpires migrated from s01047850 (verbatim, slice spelling)
