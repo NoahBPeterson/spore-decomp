@@ -2,9 +2,14 @@
 // EA::XML::XmlReader / XmlTextReader (expat-based XML reader) + XHTML StylesheetFactory.
 // Layouts taken from the 2008 dev PDB; the module is plain /O2 cl 15.00.
 #include <new>
+#include <intrin.h>
 
 typedef unsigned int uint32;
 typedef unsigned short uint16;
+typedef unsigned char uint8;
+
+extern "C" int __cdecl strcmp(const char*, const char*);
+#pragma intrinsic(strcmp)
 
 // ---------------------------------------------------------------------------
 // EA::Allocator
@@ -26,6 +31,7 @@ public:
     StackAllocator(void* pBlock = 0, uint32 blockSize = 0xffffffff, void* alloc = 0,
                    void* free = 0, void* ctx = 0);                 // 0x00928cd0
     bool AllocateNewBlock(uint32 size);                            // 0x00928ba0
+    void Init(void* pBlock, uint32 size, void* alloc, void* free, void* ctx); // 0x00928b00
     void Reset();                                                  // 0x00928dc0
     void* Allocate(uint32 size) {
         if ((int)(mpCurrentBlockEnd - mpCurrentObjectBegin) - (int)size < 0) {
@@ -50,7 +56,10 @@ struct Token {
     int    field8;       // +0x08
     int    fieldc;       // +0x0c
     int    field10;      // +0x10
-    int*   mpEntries;    // +0x14
+    union {
+        int* mpEntries;      // +0x14 (element tokens)
+        int  mnValueLength;  // +0x14 (text tokens)
+    };
     int    mnEntryCount; // +0x18
 };
 
@@ -70,6 +79,31 @@ struct MemoryStream {
     bool Grow(uint32 size);                                     // 0x00928ba0-ish
 };
 
+// ---------------------------------------------------------------------------
+// EA::IO::IStream (vtable order from the canonical header; only slots used here)
+// ---------------------------------------------------------------------------
+namespace EA { namespace IO {
+enum PositionType { kPositionTypeBegin = 0 };
+class IStream {
+public:
+    virtual ~IStream();                                  // slot 0
+    virtual int  AddRef();                               // slot 1 (+0x04)
+    virtual int  Release();                              // slot 2 (+0x08)
+    virtual int  GetType() const;                        // slot 3
+    virtual int  GetAccessFlags() const;                 // slot 4
+    virtual int  GetState() const;                       // slot 5
+    virtual bool Close();                                // slot 6 (+0x18)
+    virtual uint32 GetSize() const;                      // slot 7 (+0x1c)
+    virtual bool SetSize(uint32 size);                   // slot 8
+    virtual int  GetPosition(PositionType type) const;   // slot 9 (+0x24)
+    virtual bool SetPosition(int pos, PositionType type);// slot 10 (+0x28)
+    virtual uint32 GetAvailable() const;                 // slot 11
+    virtual uint32 Read(void* p, uint32 size);           // slot 12 (+0x30)
+    virtual bool Flush();                                // slot 13
+    virtual bool Write(const void* p, uint32 size);      // slot 14
+};
+}}
+
 class XmlReader {
 public:
     void** vftable;                 // +0x00
@@ -77,11 +111,11 @@ public:
     int    mAllocatorContextName;   // +0x08
     int    mAllocatorContextAlloc;  // +0x0c
     char   mAllocator[0x24];        // +0x10
-    int    r34;                     // +0x34
+    EA::IO::IStream* mpInputStream; // +0x34
     Token* mpFirstToken;            // +0x38
     Token* mpLastToken;             // +0x3c
     Token* mpCurrentToken;          // +0x40
-    int    r44;                     // +0x44
+    void*  mpSourcePath;            // +0x44
     char   mMemoryStream[0x24];     // +0x48
 
     int  GetTokenType();
@@ -92,14 +126,14 @@ public:
     void FUN_00900610(void* a1, void* a2, void* a3);
     int  FUN_00900720(const uint16* s);
     void FUN_009007b0();
-    __declspec(noinline) int ReadString(int unused, uint32* pOut);
+    __declspec(noinline) void* ReadString(EA::Allocator::StackAllocator* pAlloc, uint32* pOut);
     void FUN_009008f0();
     void* FUN_00900970(const void* v);
 
     XmlReader(void* pAllocator);
     ~XmlReader();
     void* DeletingDtor(char flags);
-    int   InitAllocator(int* a2, void* a3);
+    char  InitAllocator(EA::IO::IStream* pStream, const uint16* pPath);
 };
 
 class XmlTextReader : public XmlReader {
@@ -113,7 +147,7 @@ public:
     uint32 mnFlags;              // +0x84
 
     int  MapError(int err);
-    int  Read();
+    char Read();
 
     XmlTextReader(void* pAllocator);
     ~XmlTextReader();
@@ -146,14 +180,114 @@ void FUN_00903330(void* parser, void* pi);
 void FUN_00903340(void* parser, void* comment);
 void FUN_00903370(void* parser, void* a, void* b);
 void FUN_00903390(void* parser, void* a, void* b);
-void FUN_00903b40(void* parser);
+int  FUN_00903b40(void* parser);
 extern "C" void* __cdecl memcpy(void* dst, const void* src, unsigned int n); // 0x011e0744
 void* FUN_00900900(short* s, EA::Allocator::StackAllocator* a); // 0x00900900
 extern "C" void g_use_ptr(uint32*);
+extern "C" uint16 g_wcharNull;                 // 0x0141a154
+extern "C" const char* gMimeTextCss;           // 0x0154db10
+
+void FUN_00925bf0();                           // 0x00925bf0 (StackAllocator core alloc)
+void FUN_00925c20();                           // 0x00925c20 (StackAllocator core free)
+void FUN_00c2e4e0();                           // 0x00c2e4e0 (bare ret callback)
+void __fastcall Fn8e2ed0(void* p);             // 0x008e2ed0 (CSSParser dtor)
+void __cdecl operator_delete(void* p);         // 0x00f47380
+void* __cdecl operator_new(unsigned size, const char* name, int, int, int, int); // 0x00f473a0
+
+inline void* operator new(unsigned size, const char* name, int a, int b, int c, int d)
+{
+    return operator_new(size, name, a, b, c, d);
+}
 
 #define VFN0(p, off) (*(void (__thiscall**)(void*))((char*)(*(void**)(p)) + (off)))
+#define VFN0C(p, off) (*(char (__thiscall**)(void*))((char*)(*(void**)(p)) + (off)))
 #define VFN2(p, off) (*(void (__thiscall**)(void*, void*, void*))((char*)(*(void**)(p)) + (off)))
 #define VFN1a(p, off) (*(void (__thiscall**)(void*, void*))((char*)(*(void**)(p)) + (off)))
+
+// ===========================================================================
+// XHTML stylesheet factory types (slice tail)
+// ===========================================================================
+struct CStr {
+    char* mpBegin;   // +0x00
+    char* mpEnd;     // +0x04
+    char* mpCapacity;// +0x08
+};
+
+struct ByteVector {  // eastl::vector<unsigned char>, size 0x14
+    uint8* mpBegin;     // +0x00
+    uint8* mpEnd;       // +0x04
+    uint8* mpCapacity;  // +0x08
+    uint32 mPad[2];     // +0x0c
+    void resize(uint32 n);   // 0x004c0410
+};
+
+struct WStr {
+    uint16* mpBegin;    // +0x00
+    uint16* mpEnd;      // +0x04
+    uint16* mpCapacity; // +0x08
+    void resize(uint32 n);                                    // 0x00429520
+    void clear() {
+        if (mpBegin != mpEnd) {
+            *mpBegin = 0;
+            mpEnd = mpBegin;
+        }
+    }
+};
+
+struct ResourceRequest {
+    char    pad0[8];
+    void*   mpErrorListener;  // +0x08
+    void*   mpURL;            // +0x0c
+    CStr    mTypeStr;         // +0x10
+    char    pad1[0x24 - 0x1c];
+    int     mEncoding;        // +0x24
+    int     mEncodingSource;  // +0x28
+    char    pad2[0x3c - 0x2c];
+    EA::IO::IStream* mpStream; // +0x3c
+    bool SetEncoding(int enc, int source);  // 0x009002f0
+};
+
+class Stylesheet {
+public:
+    virtual void AddRef();    // slot 0 (+0x00)
+    virtual void Release();   // slot 1 (+0x04)
+    int  mField4;             // +0x04
+    char mAllocator[0x24];    // +0x08
+    char mPad[0x70 - 0x2c];
+    Stylesheet(void* p);      // 0x008f9db0
+};
+
+class CSSParser {
+public:
+    void* Fn8f3970(void* allocator, uint16* begin, int count);  // 0x008f3970
+    bool  Parse(Stylesheet* pSheet);                            // 0x008f9220
+    uint32 mPad0[0x48 / 4];
+    void*  mpErrorListener;   // +0x48
+    uint32 mPad1[2];
+};
+
+struct SheetPtr {
+    Stylesheet* mp;
+    SheetPtr(Stylesheet* p) : mp(p) { if (mp) mp->AddRef(); }
+    ~SheetPtr() { if (mp) mp->Release(); }
+    operator Stylesheet*() const { return mp; }
+    Stylesheet* operator->() const { return mp; }
+};
+
+class StylesheetFactory {
+public:
+    void**     vftable;          // +0x00
+    int        mRefCount;        // +0x04
+    ByteVector mConvertBuffer;   // +0x08
+    WStr       mDataBuffer;      // +0x1c
+
+    int CreateResource(Stylesheet** ppOut, uint32* pSize, ResourceRequest* req); // 0x00900410
+    int FUN_00900370(EA::IO::IStream* pStream);                                  // 0x00900370
+};
+
+namespace EA { namespace Text {
+uint32 ConvertEncoding(uint8* src, uint32 srcLen, int srcEnc, WStr* dst); // 0x0093cfb0
+}}
 
 // ===========================================================================
 // XmlReader members
@@ -248,21 +382,64 @@ void XmlReader::FUN_009007b0()
     XmlReader* t = this;
     if (t->mpCurrentToken == 0)
         return;
+    int depth = t->mpCurrentToken->field10;
+    if (t->mpCurrentToken->mToken == 1 && !VFN0C(t, 0x0c)(t))
+        return;
+    Token* p = t->mpCurrentToken;
+    if (p == 0)
+        return;
+    do {
+        if (!VFN0C(t, 0x0c)(t))
+            break;
+        if (p->field10 <= depth)
+            break;
+        p = t->mpCurrentToken;
+    } while (p != 0);
 }
 
 // @ 0x00900800
-__declspec(noinline) int XmlReader::ReadString(int unused, uint32* pOut)
+void* XmlReader::ReadString(EA::Allocator::StackAllocator* pAlloc, uint32* pOut)
 {
-    (void)unused;
-    g_use_ptr(pOut);
-    return 0;
+    Token* p = this->mpCurrentToken;
+    if (p == 0)
+        return 0;
+    if (p->mToken == 1 && !VFN0C(this, 0x0c)(this))
+        return 0;
+    p = this->mpCurrentToken;
+    while (p != 0 && p->mToken == 4) {
+        uint32 bytes = (uint32)(p->mnValueLength * 2);
+        if (pAlloc->mpCurrentObjectEnd + bytes <= pAlloc->mpCurrentBlockEnd
+            || pAlloc->AllocateNewBlock(bytes)) {
+            memcpy(pAlloc->mpCurrentObjectEnd, (char*)p->fieldc, bytes);
+            pAlloc->mpCurrentObjectEnd += bytes;
+        }
+        if (!VFN0C(this, 0x0c)(this))
+            return 0;
+        p = this->mpCurrentToken;
+    }
+    uint32 n = (uint32)(pAlloc->mpCurrentObjectEnd - pAlloc->mpCurrentObjectBegin) >> 1;
+    *pOut = n;
+    if (n == 0)
+        return 0;
+    if (pAlloc->mpCurrentObjectEnd + 2 <= pAlloc->mpCurrentBlockEnd
+        || pAlloc->AllocateNewBlock(2)) {
+        *(uint16*)pAlloc->mpCurrentObjectEnd = g_wcharNull;
+        pAlloc->mpCurrentObjectEnd += 2;
+    }
+    char* result = pAlloc->mpCurrentObjectBegin;
+    char* aligned = (char*)(((uint32)pAlloc->mpCurrentObjectEnd + 7) & ~7u);
+    pAlloc->mpCurrentObjectEnd = aligned;
+    if ((uint32)aligned > (uint32)pAlloc->mpCurrentBlockEnd)
+        pAlloc->mpCurrentObjectEnd = pAlloc->mpCurrentBlockEnd;
+    pAlloc->mpCurrentObjectBegin = pAlloc->mpCurrentObjectEnd;
+    return result;
 }
 
 // @ 0x009008f0
 void XmlReader::FUN_009008f0()
 {
     uint32 local;
-    ReadString((int)((char*)this + 0x10), &local);
+    ReadString((EA::Allocator::StackAllocator*)this->mAllocator, &local);
 }
 
 // @ 0x00900900
@@ -301,11 +478,11 @@ XmlReader::XmlReader(void* pAllocator)
         pAllocator = EA::Allocator::GetDefaultAllocator();
     t->mAllocatorContextAlloc = (int)pAllocator;
     new (t->mAllocator) EA::Allocator::StackAllocator();
-    t->r34 = 0;
+    t->mpInputStream = 0;
     t->mpFirstToken = 0;
     t->mpLastToken = 0;
     t->mpCurrentToken = 0;
-    t->r44 = 0;
+    t->mpSourcePath = 0;
     new (t->mMemoryStream) MemoryStream(0);
 }
 
@@ -315,23 +492,37 @@ XmlReader::~XmlReader()
     XmlReader* t = this;
     t->vftable = (void**)&g_vtblXmlReader;
     ((EA::Allocator::StackAllocator*)(t->mAllocator))->Reset();
-    if (t->r34 != 0) {
-        int* p = (int*)t->r34;
-        t->r34 = 0;
+    if (t->mpInputStream != 0) {
+        int* p = (int*)t->mpInputStream;
+        t->mpInputStream = 0;
         (*(void(__thiscall**)(int*))((char*)*p + 8))(p);
     }
     ((MemoryStream*)(t->mMemoryStream))->Reset();
-    if (t->r34 != 0) {
-        int* p = (int*)t->r34;
+    if (t->mpInputStream != 0) {
+        int* p = (int*)t->mpInputStream;
         (*(void(__thiscall**)(int*))((char*)*p + 8))(p);
     }
     ((EA::Allocator::StackAllocator*)(t->mAllocator))->Reset();
 }
 
 // @ 0x00900a30
-int XmlReader::InitAllocator(int* a2, void* a3)
+char XmlReader::InitAllocator(EA::IO::IStream* pStream, const uint16* pPath)
 {
-    XmlReader* t = this; (void)a2; (void)a3;
+    XmlReader* t = this;
+    EA::Allocator::StackAllocator* a = (EA::Allocator::StackAllocator*)t->mAllocator;
+    a->Reset();
+    a->mnDefaultBlockSize = 0x200;
+    a->Init(0, 0, (void*)&FUN_00925bf0, (void*)&FUN_00925c20, &t->mAllocatorContextName);
+    EA::IO::IStream* old = t->mpInputStream;
+    if (pStream != old) {
+        if (pStream != 0)
+            pStream->AddRef();
+        t->mpInputStream = pStream;
+        if (old != 0)
+            old->Release();
+    }
+    if (pPath != 0)
+        t->mpSourcePath = FUN_00900900((short*)pPath, a);
     return 1;
 }
 
@@ -340,6 +531,18 @@ void* XmlReader::DeletingDtor(char flags)
 {
     XmlReader* t = this;
     t->vftable = (void**)&g_vtblXmlReader;
+    ((EA::Allocator::StackAllocator*)t->mAllocator)->Reset();
+    EA::IO::IStream* p = t->mpInputStream;
+    if (p != 0) {
+        t->mpInputStream = 0;
+        p->Release();
+    }
+    ((MemoryStream*)t->mMemoryStream)->Reset();
+    if (t->mpInputStream != 0)
+        t->mpInputStream->Release();
+    ((EA::Allocator::StackAllocator*)t->mAllocator)->Reset();
+    if (flags & 1)
+        operator_delete(t);
     return t;
 }
 
@@ -558,12 +761,29 @@ XmlTextReader* XmlTextReader::DeletingDtor(char flags)
 char XmlTextReader::InitParser()
 {
     XmlTextReader* t = this;
-    t->mpParser = 0;
-    return 0;
+    int pos = t->mpInputStream->GetPosition(EA::IO::kPositionTypeBegin);
+    uint16 wc = 0;
+    int n = (int)t->mpInputStream->Read(&wc, 2);
+    if (n == -1 || (n != 0 && wc == 0))
+        return 0;
+    t->mpInputStream->SetPosition(pos, EA::IO::kPositionTypeBegin);
+    char* buf = (char*)((EA::Allocator::StackAllocator*)t->mAllocator)->Allocate(0x2000);
+    t->mpTokenBufferStart = buf;
+    t->mpTokenBufferEnd = buf + 0x2000;
+    t->mnTokenBufferBytes = 0;
+    t->mnDepth = 0;
+    FUN_009032e0(t->mpParser, t);
+    FUN_00903300(t->mpParser, (void*)&OnStartElement, (void*)&OnEndElement);
+    FUN_00903320(t->mpParser, (void*)&OnCharacterData);
+    FUN_00903340(t->mpParser, (void*)&OnComment);
+    FUN_00903370(t->mpParser, (void*)&OnStartElement2, (void*)&FUN_00c2e4e0);
+    FUN_00903330(t->mpParser, (void*)&OnPI);
+    FUN_00903390(t->mpParser, (void*)&FUN_00c2e4e0, (void*)&FUN_00c2e4e0);
+    return 1;
 }
 
 // @ 0x00901340
-int XmlTextReader::Read()
+char XmlTextReader::Read()
 {
     XmlTextReader* t = this;
     if (t->mbEndOfStream) {
@@ -571,18 +791,74 @@ int XmlTextReader::Read()
         return 0;
     }
     while (t->mpFirstToken == 0) {
-        void* p = t->mpParser;
-        (void)p;
-        break;
+        uint32 n = t->mpInputStream->Read(t->mpTokenBufferStart, 0x2000);
+        t->mnTokenBufferBytes = n;
+        if ((int)n < 0)
+            goto readfail;
+        if (n < 0x2000)
+            t->mbEndOfStream = 1;
+        if (!XML_Parse(t->mpParser, (const char*)t->mpTokenBufferStart, (int)n, t->mbEndOfStream))
+            goto parsefail;
     }
     return 1;
+parsefail:
+    t->mResultCode = t->MapError(FUN_00903b40(t->mpParser));
+    return 0;
+readfail:
+    t->mResultCode = 2;
+    return 0;
 }
 
 // @ 0x00900410
-int CreateResource(void* self, int a2, int* a3, void* req)
+int StylesheetFactory::CreateResource(Stylesheet** ppOut, uint32* pSize, ResourceRequest* req)
 {
-    (void)self; (void)a2; (void)a3; (void)req;
-    return 3;
+    StylesheetFactory* t = this;
+    if (strcmp(req->mTypeStr.mpBegin, gMimeTextCss) != 0)
+        return 3;
+    Stylesheet* sheet = new ("StylesheetFactory/Stylesheet", 0, 0, 0, 0) Stylesheet(req->mpURL);
+    if (sheet != 0)
+        sheet->AddRef();
+    EA::IO::IStream* stream = req->mpStream;
+    *pSize = stream->GetSize();
+    if (req->mEncodingSource > 1) {
+        int enc = FUN_00900370(stream);
+        if (enc != 0)
+            req->SetEncoding(enc, 1);
+    }
+    uint32 size = stream->GetSize();
+    if (req->mEncoding == 0x10) {
+        t->mDataBuffer.resize(size >> 1);
+        if (stream->Read(t->mDataBuffer.mpBegin, size) != size) {
+            stream->Close();
+            goto cleanup;
+        }
+    } else {
+        t->mConvertBuffer.resize(size);
+        if (stream->Read(t->mConvertBuffer.mpBegin, size) != size) {
+            stream->Close();
+            goto cleanup;
+        }
+        t->mDataBuffer.clear();
+        EA::Text::ConvertEncoding(t->mConvertBuffer.mpBegin, size, req->mEncoding, &t->mDataBuffer);
+    }
+    {
+        CSSParser parser;
+        parser.Fn8f3970((void*)sheet->mAllocator, t->mDataBuffer.mpBegin,
+                        (int)(t->mDataBuffer.mpEnd - t->mDataBuffer.mpBegin));
+        parser.mpErrorListener = req->mpErrorListener;
+        if (parser.Parse(sheet)) {
+            sheet->AddRef();
+            *ppOut = sheet;
+            Fn8e2ed0(&parser);
+            sheet->Release();
+            return 0;
+        }
+        Fn8e2ed0(&parser);
+    }
+cleanup:
+    if (sheet != 0)
+        sheet->Release();
+    return 1;
 }
 // --- equivalence checker address annotations
 

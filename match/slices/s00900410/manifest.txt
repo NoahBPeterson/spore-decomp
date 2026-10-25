@@ -9,3 +9,7 @@ slices/s00900410/s00900410.cpp  ??0XmlTextReader@@  00900b30
 slices/s00900410/s00900410.cpp  ?MapError@XmlTextReader@@  00900ba0
 slices/s00900410/s00900410.cpp  ?IsAtEnd@XmlReader@@  00900d90
 slices/s00900410/s00900410.cpp  ??1XmlReader@@QAE@XZ  009009e0  /O2 /MD /Gy /EHsc /TP
+slices/s00900410/s00900410.cpp  ?FUN_009007b0@XmlReader@@QAEXXZ  009007b0  /O2 /MD /Gy /EHsc /TP
+slices/s00900410/s00900410.cpp  ?InitAllocator@XmlReader@@QAEDPAVIStream@IO@EA@@PBG@Z  00900a30  /O2 /MD /Gy /EHsc /TP
+slices/s00900410/s00900410.cpp  ?DeletingDtor@XmlReader@@QAEPAXD@Z  00900ab0  /O2 /MD /Gy /EHsc /TP
+slices/s00900410/s00900410.cpp  ?InitParser@XmlTextReader@@QAEDXZ  00901220  /O2 /MD /Gy /EHsc /TP
