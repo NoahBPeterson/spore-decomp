@@ -1,4 +1,9 @@
 0103fe90 ?CollectSpicePile@cSPSpaceTrading_s0103_fe90@@SAXPAX0@Z  # cSPSpaceTrading_s0103_fe90::CollectSpicePile migrated from s0103fe90 (verbatim, slice spelling)
 010406d0 ?FUN_010406d0@cSPSpaceTrading_s0103_fe90@@QAEXXZ  # cSPSpaceTrading_s0103_fe90::FUN_010406d0 migrated from s0103fe90 (verbatim, slice spelling)
+010407d0 ?FUN_010407d0@cSpaceTuning@@QAEHPAX@Z  # cSpaceTuning::FUN_010407d0 migrated from s0103fe90 (verbatim, slice spelling)
+01040820 ?FUN_01040820@cSpaceTuning@@QAEMM@Z  # cSpaceTuning::FUN_01040820 migrated from s0103fe90 (verbatim, slice spelling)
+01040870 ?FUN_01040870@cSpaceTuning@@QAEIXZ  # cSpaceTuning::FUN_01040870 migrated from s0103fe90 (verbatim, slice spelling)
+010408f0 ?FUN_010408f0@cSpaceRelationshipTuning@@QAEXXZ  # cSpaceRelationshipTuning::FUN_010408f0 migrated from s0103fe90 (verbatim, slice spelling)
+01040950 ??1cSpaceRelationshipTuning@@UAE@XZ  # cSpaceRelationshipTuning::~cSpaceRelationshipTuning migrated from s0103fe90 (verbatim, slice spelling)
 013eb394 ??_7PaintSystem@@6B@               # SP::PaintSystem (base) vtable
 01499cac ??_7cSpaceRelationshipTuning@@6B@  # SP::cSpaceRelationshipTuning vtable
