@@ -1,0 +1,5 @@
+00c44a20 ?Read_c44a20@GameObj@@QAEHPAX@Z  # GameObj::Read_c44a20 migrated from s00c44a20 (verbatim, slice spelling)
+00c44ad0 ?Write_c44ad0@GameObj@@QAE_NPAX@Z  # GameObj::Write_c44ad0 migrated from s00c44a20 (verbatim, slice spelling)
+00c44c90 ?CallV42_c44c90@GameObj@@QAE_NXZ  # GameObj::CallV42_c44c90 migrated from s00c44a20 (verbatim, slice spelling)
+00c44cb0 ?GetTypeId_c44cb0@GameObj@@QAEIXZ  # GameObj::GetTypeId_c44cb0 migrated from s00c44a20 (verbatim, slice spelling)
+00c44d00 ?GetFactor_c44d00@@YGMPAUThing@@PB_N@Z  # GetFactor_c44d00 migrated from s00c44a20 (verbatim, slice spelling)

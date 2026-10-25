@@ -1,0 +1,7 @@
+00c45250 ?SetEmpire@cSPMission@@QAEXPAUcEmpire@@@Z  # cSPMission::SetEmpire migrated from s00c44080 (verbatim, slice spelling)
+00c452a0 ?GetEmpire@cSPMission@@QAEPAUcEmpire@@XZ  # cSPMission::GetEmpire migrated from s00c44080 (verbatim, slice spelling)
+00c45310 ?SetUITextValue@cSPMission@@QAEHH@Z  # cSPMission::SetUITextValue migrated from s00c44080 (verbatim, slice spelling)
+00c45380 ?GetNumAvailable@cSPMission@@QAEHXZ  # cSPMission::GetNumAvailable migrated from s00c44080 (verbatim, slice spelling)
+00c45510 ?GetTotalTravelCost@cSPMission@@QAEHXZ  # cSPMission::GetTotalTravelCost migrated from s00c44080 (verbatim, slice spelling)
+00c455b0 ?IsAtStar@cSPMission@@QAE_NHH@Z  # cSPMission::IsAtStar migrated from s00c44080 (verbatim, slice spelling)
+00c45740 ?GetDynamicResponseID@cSPMission@@QAEHHH@Z  # cSPMission::GetDynamicResponseID migrated from s00c44080 (verbatim, slice spelling)

@@ -1,0 +1,18 @@
+00c46ab0 ?FUN_00c46ab0@cSPMission_s00c4_6ab0@SP@@QAEXXZ  # cSPMission_s00c4_6ab0::FUN_00c46ab0 migrated from s00c46ab0 (verbatim, slice spelling)
+00c46b80 ?FUN_00c46b80@cSPMission_s00c4_6ab0@SP@@QAEXXZ  # cSPMission_s00c4_6ab0::FUN_00c46b80 migrated from s00c46ab0 (verbatim, slice spelling)
+00c46e20 ?GiveOnAcceptItems@cSPMission@SP@@QAEXXZ  # SP::cSPMission::GiveOnAcceptItems migrated from s00c46ab0
+00c47040 ?GetConversationFileID@cSPMission_s00c4_6ab0@SP@@QAEIXZ  # cSPMission_s00c4_6ab0::GetConversationFileID migrated from s00c46ab0 (verbatim, slice spelling)
+00c470a0 ?FUN_00c470a0@cSPMission_s00c4_6ab0@SP@@QAEXXZ  # cSPMission_s00c4_6ab0::FUN_00c470a0 migrated from s00c46ab0 (verbatim, slice spelling)
+00c470f0 ?SetMissionID@cSPMission_s00c4_6ab0@SP@@QAEXI@Z  # cSPMission_s00c4_6ab0::SetMissionID migrated from s00c46ab0 (verbatim, slice spelling)
+00c47140 ?FUN_00c47140@cSPMission_s00c4_6ab0@SP@@QAEXI@Z  # cSPMission_s00c4_6ab0::FUN_00c47140 migrated from s00c46ab0 (verbatim, slice spelling)
+00c47180 ?FUN_00c47180@cSPMission_s00c4_6ab0@SP@@QAEXI@Z  # cSPMission_s00c4_6ab0::FUN_00c47180 migrated from s00c46ab0 (verbatim, slice spelling)
+00c471c0 ?FUN_00c471c0@cSPMission_s00c4_6ab0@SP@@QAEXXZ  # cSPMission_s00c4_6ab0::FUN_00c471c0 migrated from s00c46ab0 (verbatim, slice spelling)
+00c47240 ?FUN_00c47240@cSPMission_s00c4_6ab0@SP@@QAEXXZ  # cSPMission_s00c4_6ab0::FUN_00c47240 migrated from s00c46ab0 (verbatim, slice spelling)
+00c472c0 ?FUN_00c472c0@cSPMission_s00c4_6ab0@SP@@QAE_NXZ  # cSPMission_s00c4_6ab0::FUN_00c472c0 migrated from s00c46ab0 (verbatim, slice spelling)
+00c472e0 ?FUN_00c472e0@cSPMission_s00c4_6ab0@SP@@QAEXXZ  # cSPMission_s00c4_6ab0::FUN_00c472e0 migrated from s00c46ab0 (verbatim, slice spelling)
+00c47350 ?ExportPlanet@cSPMission@SP@@QAEXPAVcPlanet@2@I@Z  # SP::cSPMission::ExportPlanet migrated from s00c46ab0
+00c473f0 ?ExportSpecies@cSPMission_s00c4_6ab0@SP@@QAEXII@Z  # cSPMission_s00c4_6ab0::ExportSpecies migrated from s00c46ab0 (verbatim, slice spelling)
+00c47440 ?StartCompletedFeedbackTimer@cSPMission_s00c4_6ab0@SP@@QAEXXZ  # cSPMission_s00c4_6ab0::StartCompletedFeedbackTimer migrated from s00c46ab0 (verbatim, slice spelling)
+00c474b0 ?FUN_00c474b0@cSPMission_s00c4_6ab0@SP@@QAEXXZ  # cSPMission_s00c4_6ab0::FUN_00c474b0 migrated from s00c46ab0 (verbatim, slice spelling)
+00c47610 ?GetAnimalSpeciesFromType@cSPMission@SP@@QAEXIAAVKey@ResourceMan@EA@@@Z  # SP::cSPMission::GetAnimalSpeciesFromType migrated from s00c46ab0
+00c478b0 ?Update@cSPMission_s00c4_6ab0@SP@@QAEXH@Z  # cSPMission_s00c4_6ab0::Update migrated from s00c46ab0 (verbatim, slice spelling)

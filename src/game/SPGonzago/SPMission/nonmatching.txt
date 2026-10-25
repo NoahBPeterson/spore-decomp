@@ -1,0 +1,26 @@
+# va  diff-bytes  reason   [flags + difftest verdict]
+00c45250
+00c452a0
+00c45510
+00c455b0
+00c46ab0 1 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 208 bytes - mission setup body not reconstructed.
+00c46b80 1 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 671 bytes - mission bookkeeping body not reconstructed.
+00c46e20 1 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 532 bytes - GiveOnAcceptItems body not reconstructed.
+00c47040 4 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 88 bytes - GetConversationFileID walks the planet record's property table (virtual +0xa4 tail call, GetPropertyAsKey); body not reconstructed.
+00c470a0 1 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 67 bytes - flag-gated virtual checks; vtable slots past +0x12c not declared.
+00c470f0 10 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 70 bytes - SetMissionID; the property-key release at +0x180 (virtual +4) is not modelled.
+00c47140 3 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 51 bytes - releases the planet ref (+0x9c, virtual +0xc0) then asks the star manager for the planet; ref-release vtable slot not declared.
+00c47180 3 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 51 bytes - same as 00c47140 for the +0x1e8 ref.
+00c471c0 1 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 118 bytes - star-map rebuild with flag bits and virtuals +0xf8/+0xfc/+0x198/+0x19c; not reconstructed.
+00c47240 1 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 114 bytes - planet visual creation via virtuals +0xe4/+0xe8 and the star map; not reconstructed.
+00c472c0 1 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 2 bytes - MSVC tail-jumps to the manager call while retail emits call+ret; only that instruction differs.
+00c472e0 1 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 98 bytes - comm-manager conversation start; virtuals +0x10c/+0xa4 not declared.
+00c47350 3 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 149 bytes - ExportPlanet body not reconstructed.
+00c473f0 64 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 72 bytes - ExportSpecies: retail derives the payload from the incoming argument slot while my version needs a callee-saved this; register/frame shape differs.
+00c47440 14 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 15 bytes - StartCompletedFeedbackTimer matches except the null device argument, which retail materialises as xor eax,eax / push eax while MSVC emits push 0.
+00c474b0 1 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 350 bytes - GetPlanetRecordFromTargetType body not reconstructed.
+00c47610 3 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 67 bytes - GetAnimalSpeciesFromType copies the +0x504 species key; not reconstructed.
+00c478b0 3 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 349 bytes - Update body not reconstructed.
+00c48470 81 FUN_00c48470 (Ghidra FUN): complete - re-arm the mission when the give-on-accept key becomes valid or the caller's key matches it; 95 vs 100 bytes; retail compares the key words straight out of memory (`cmp dword ptr [esi+0x170],0`, then `mov ecx,[eax]; cmp ecx,[esi+0x170]`) while this build caches 0x170 in a register and folds the three key-word compares into shorter encodings, and the vtable dispatch register pair is swapped (eax/edx). flags /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-. difftest PASS (400 valid inputs, 100.0% coverage, no mismatch).
+00c484e0 22 Validate (PDB name SP::cSPMission::Validate): complete - validate the mission before it can start: owner empire present, the two virtual gates, both planet records having a name holder, then either accept or post the failure feedback event and set state 1; 196 vs 196 bytes; only the receiver setup for the second gate is scheduled differently (retail hoists `mov ecx,esi` above the `test al,al` of the preceding virtual call, this build emits it after the branch); every other instruction matches. flags /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-. difftest PASS (315 valid inputs, 100.0% coverage, no mismatch).
+00c487d0 180 GetText (PDB name SP::cSPMission::GetText): complete - build the mission's display text: install the mission as the token translator's current context, gather the active planet record and the owner empire, run the two text formatters over a local cString, copy the result into the caller's string and restore the context; 285 vs 292 bytes; the frame is 0x2c instead of 0x40 and the two formatter calls are marshalled with a different argument and stack shape (retail keeps six live argument slots across the first virtual call and reloads the caller's string pointer out of the frame twice), so the whole call block differs. flags /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-. difftest UNSUPPORTED (0/400 valid inputs: fault(read)=353, fault(write)=40).

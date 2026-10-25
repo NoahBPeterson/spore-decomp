@@ -1,15 +1,15 @@
-00c47a10 OnAccept  # PDB name SP::cSPMission::OnAccept; complete - hand over the mission reward: create the update message, push the payout (reward timer + 1.0) and the mission id into the state object, post the UI/state updates and update the objective counter; byte-exact
+00c47a10 ?OnAccept@cSPMission_s00c4_7a10@@QAEXXZ  # cSPMission_s00c4_7a10::OnAccept migrated from s00c47a10 (verbatim, slice spelling)
 00c47b10 FUN_00c47b10  # Ghidra FUN; cSPMission member: show or hide the mission's mesh markers (beacon, target and each listed object) and recolour them with the owning mission's display colour; not byte-exact
-00c47cc0 SetState  # PDB name SP::cSPMission::SetState; cSPMission member: change the mission state, clear the two label strings, store the new state and broadcast the state message; byte-exact
-00c47d80 TriggerUIUpdate  # PDB name SP::cSPMission::TriggerUIUpdate; cSPMission member: bump the mission's UI generation counter and post the UI update message; byte-exact
+00c47cc0 ?SetState@cSPMission_s00c4_7a10@@QAEXI@Z  # cSPMission_s00c4_7a10::SetState migrated from s00c47a10 (verbatim, slice spelling)
+00c47d80 ?TriggerUIUpdate@cSPMission_s00c4_7a10@@QAEXXZ  # cSPMission_s00c4_7a10::TriggerUIUpdate migrated from s00c47a10 (verbatim, slice spelling)
 00c47e20 PickPlanet  # PDB name SP::cSPMission::PickPlanet; cSPMission member: choose the target planet for the mission by scoring the player civ's planets against the property-key gates and the capital distance; not reconstructed
-00c483d0 DataExportOnInit  # PDB name SP::cSPMission::DataExportOnInit; cSPMission member: register the mission's export fields (key, exported species, exported planet) on the data-export object; byte-exact
-00c48470 FUN_00c48470  # Ghidra FUN; cSPMission member: re-arm the mission when the give-on-accept key becomes valid or the caller's key matches the stored key, then clear the key and set state 1; not byte-exact
-00c484e0 Validate  # PDB name SP::cSPMission::Validate; cSPMission member: gate the mission start on empire, virtual permissions and planet name holders, and post the failure feedback event with state 1 otherwise; not byte-exact
-00c48600 PickPlanetClue  # PDB name SP::cSPMission::PickPlanetClue; cSPMission member: roll the clue kind (planet radius order or planet flag), copy and radius-sort the holder's planet range, then store the picked index; byte-exact
-00c486f0 FUN_00c486f0  # Ghidra FUN; cSPMission member: write the owner empire's species name into the given string; byte-exact
-00c48740 FUN_00c48740  # Ghidra FUN; cSPMission member: write the owner empire's home planet name into the given string; byte-exact
-00c48790 FUN_00c48790  # Ghidra FUN; cSPMission member: write the owner empire's species name from the planet name holder into the given string; byte-exact
-00c487d0 GetText  # PDB name SP::cSPMission::GetText; cSPMission member: build the mission's display text through the two token-text formatters and copy it into the caller's string; not byte-exact
+00c483d0 ?DataExportOnInit@cSPMission_s00c4_7a10@@QAEXXZ  # cSPMission_s00c4_7a10::DataExportOnInit migrated from s00c47a10 (verbatim, slice spelling)
+00c48470 ?FUN_00c48470@cSPMission_s00c4_7a10@@QAEXPAH@Z  # cSPMission_s00c4_7a10::FUN_00c48470 migrated from s00c47a10 (verbatim, slice spelling)
+00c484e0 ?Validate@cSPMission_s00c4_7a10@@QAE_NXZ  # cSPMission_s00c4_7a10::Validate migrated from s00c47a10 (verbatim, slice spelling)
+00c48600 ?PickPlanetClue@cSPMission_s00c4_7a10@@QAE_NXZ  # cSPMission_s00c4_7a10::PickPlanetClue migrated from s00c47a10 (verbatim, slice spelling)
+00c486f0 ?FUN_00c486f0@cSPMission_s00c4_7a10@@QAEXPAUWString@@@Z  # cSPMission_s00c4_7a10::FUN_00c486f0 migrated from s00c47a10 (verbatim, slice spelling)
+00c48740 ?FUN_00c48740@cSPMission_s00c4_7a10@@QAEXPAUWString@@@Z  # cSPMission_s00c4_7a10::FUN_00c48740 migrated from s00c47a10 (verbatim, slice spelling)
+00c48790 ?FUN_00c48790@cSPMission_s00c4_7a10@@QAEXPAUWString@@@Z  # cSPMission_s00c4_7a10::FUN_00c48790 migrated from s00c47a10 (verbatim, slice spelling)
+00c487d0 ?GetText@cSPMission_s00c4_7a10@@QAEXPAUWString@@H@Z  # cSPMission_s00c4_7a10::GetText migrated from s00c47a10 (verbatim, slice spelling)
 00c48900 FUN_00c48900  # Ghidra FUN; cSPMission member: write the mission's own label string into the given string; byte-exact
 00c48940 FUN_00c48940  # Ghidra FUN; cSPMission member: write the mission's cached label text into the given string; byte-exact
