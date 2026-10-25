@@ -2,3 +2,4 @@
 slices/s008491a0/s008491a0.cpp  ?SetStyle@Canvas@@QAEXH@Z         00849d20  /O2 /MD /Gy /TP
 slices/s008491a0/s008491a0.cpp  ?ScalarDtor@Canvas@@QAEPAU1@I@Z   00849da0  /O2 /MD /Gy /TP
 slices/s008491a0/s008491a0.cpp  ?SetCaption@Canvas@@QAEXPB_W@Z    00849df0  /O2 /MD /Gy /TP
+slices/s008491a0/s008491a0.cpp  ?Init@Canvas@@QAE_NXZ            00849b10  /O2 /MD /Gy /EHsc /TP /GS-
