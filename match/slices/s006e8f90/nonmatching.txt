@@ -6,3 +6,4 @@
 006e9bf0  123  ctor-style field init (other layout, 0x00..0x68); declared to return this (S5*) so eax matches the original; equiv: PASS 400/400, 100% coverage
 006e9cc0  91  complete; field-init order/schedule differ
 006e9d50  650  complete; per-frame block copy + clip->screen direction (rect denominators per axis, x87 sqrt grouping); register/frame schedule differs; equiv: PASS 394/400 (6 fault-read), 100% coverage
+006e9a30  2  complete; only `add eax,-1` vs `sub eax,1` on the non-atomic refcount decrement; flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- [equiv: PASS 270 valid, 92.2% coverage]
