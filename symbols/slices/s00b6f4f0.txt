@@ -1,0 +1,1 @@
+00b6f570 ?Write@MissionMgr@@QAEXPAUISerializer@@@Z  # MissionMgr::Write migrated from s00b6f4f0 (verbatim, slice spelling)

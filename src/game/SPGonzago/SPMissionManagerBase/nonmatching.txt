@@ -1,0 +1,2 @@
+# complete (behaviourally equivalent) but not byte-exact: <va> <diff-bytes> <reason>
+00b6f570 71 serialize the mission-manager state (signature tag + cVarListSerializer): complete; equiv UNSUPPORTED (harness cannot build a valid ISerializer/stream graph: 0/400 inputs valid, fault(read)); flags /O2 /MD /Gy /EHsc /TP /arch:SSE
