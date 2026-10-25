@@ -1,0 +1,4 @@
+# source  symbol  va  flags
+../src/game/SPGonzago/SPOrnamentView.cpp  ??1cOrnamentView@@UAE@XZ  00e8eaa0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPOrnamentView.cpp  ??0cMineralView@@QAE@XZ  00e8efd0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPOrnamentView.cpp  ??1cMineralView@@UAE@XZ  00e8f000  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
