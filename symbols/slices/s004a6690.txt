@@ -1,7 +1,7 @@
 00451e50 ?SetCollisionFilterInfo@cSPEditorBlock@SP@@QAEXI@Z  # SP::cSPEditorBlock::SetCollisionFilterInfo (callee of s004a6690, named from the dev publics; slice address comment)
 004a6690 ?AssignCollisionGroups@@YAXPAUcSPEditorBlock_s004a_6690@@PAUBlockVector_s004a_6690@@HH_N@Z  # AssignCollisionGroups migrated from s004a6690 (verbatim, slice spelling)
 004a6ca0 ?FUN_4a6ca0@@YAXPAUcSPEditorModel_s004a_6690@@H@Z  # FUN_4a6ca0 migrated from s004a6690 (verbatim, slice spelling)
-004a6d20 ?FUN_4a6d20@@YAXPAUcSPEditorBlock_s004a_6690@@@Z  # FUN_4a6d20 migrated from s004a6690 (verbatim, slice spelling)
+004a6d20 ?FUN_4a6d20@@YAXPAUcSPEditorBlock_s004a_6690@@PAUBlockVector_s004a_6690@@_NPAVcSPEditorSkinManager_s004a_6690@@H222@Z  # FUN_4a6d20 completed: recursive block re-validation (8 args)
 004accb0 ?GetBlock@cSPEditorModel@SP@@QAEPAVcSPEditorBlock@2@I@Z  # SP::cSPEditorModel::GetBlock (callee of s004a6690, named from the dev publics; slice address comment)
 004accf0 ?GetBlockCount@cSPEditorModel@SP@@QBEIXZ  # SP::cSPEditorModel::GetBlockCount (callee of s004a6690, named from the dev publics; slice address comment)
 004ad450 ?GetPhysicsWorld@cSPEditorModel@SP@@QAEPAVcSPEditorPhysicsWorld@2@XZ  # SP::cSPEditorModel::GetPhysicsWorld (callee of s004a6690, named from the dev publics; slice address comment)

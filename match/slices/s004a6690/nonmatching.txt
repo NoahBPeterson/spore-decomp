@@ -1,0 +1,1 @@
+004a6d20  9  block re-validation recursion (self, symmetric partner, listed blocks, children): complete; instruction stream identical, only two /Od inline-temp slots sit 0xc higher (frame 0x48 vs 0x54; the AddRef temp and the ternary temp at -0x44/-0x45 instead of -0x50/-0x51); difftest PASS (266 valid inputs, 60.9% coverage) flags /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
