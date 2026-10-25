@@ -1,3 +1,5 @@
+00817cb0 ?UpdateTimeText@PieMenuTimeText@@QAEXXZ  # PieMenuTimeText::UpdateTimeText reconstructed (DateTime -> WStr fields)
+00817d70 ?Dispatch@PieDispatch@@QAEDPAHPAUPieEventArg@@@Z  # PieDispatch::Dispatch reconstructed (event dispatch)
 00817e20 ?Init@PieMenuInit@@QAEXPAX00000@Z  # PieMenuInit::Init migrated from s00817cb0 (verbatim, slice spelling)
 00817eb0 cSPUIPieMenuItem::SetPos  # stores +0x64/+0x68, returns true
 00817ee0 ?SetTextColor@cSPUIPieMenuItem@@QAEXH@Z  # cSPUIPieMenuItem::SetTextColor migrated from s00817cb0 (verbatim, slice spelling)

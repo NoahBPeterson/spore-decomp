@@ -17,6 +17,9 @@ static inline void Vv1(void* p, int off, int a) {
 static inline void Vv2(void* p, int off, int a, int b) {
     ((void(__thiscall*)(void*, int, int))(*(void***)p)[off / 4])(p, a, b);
 }
+static inline void Vv2b(void* p, int off, int a, bool b) {
+    ((void(__thiscall*)(void*, int, bool))(*(void***)p)[off / 4])(p, a, b);
+}
 static inline int Vi0(void* p, int off) {
     return ((int(__thiscall*)(void*))(*(void***)p)[off / 4])(p);
 }
@@ -468,12 +471,102 @@ PieItemFull::PieItemFull() {
 }
 
 // ===========================================================================
-// incomplete / approximate (see partial.txt)
+// completed partials (formerly stubs)
 // ===========================================================================
-struct PieStub {
-    char pad_00[0x4000];
-    void a() { *(volatile int*)pad_00 = 0; }
+struct WStr {                       // eastl::basic_string<wchar_t, eastl::allocator>
+    unsigned short* mpBegin;        // +0
+    unsigned short* mpEnd;          // +4
+    unsigned short* mpCapacity;     // +8
+    int             mAllocator;     // +0xc
 };
-void stub_817cb0(PieStub* p) { p->a(); }
-void stub_817d70(PieStub* p) { p->a(); }
+WStr* __cdecl WStr_Format(WStr* s, const wchar_t* fmt, ...);   // 0x0041e050
+
+struct DateTime {
+    u32 mLow;
+    u32 mHigh;
+    void Set(int);                  // 0x0092e3d0
+    int  GetParameter(int);         // 0x0092df80
+};
+
+struct PieMenuTimeText {
+    char  pad_00[0x38];
+    void* mp38;                     // +0x38
+    void* mp3c;                     // +0x3c
+    void* mp40;                     // +0x40
+    void* mp44;                     // +0x44
+    WStr  m48;                      // +0x48
+    WStr  m58;                      // +0x58
+    WStr  m68;                      // +0x68
+    WStr  m78;                      // +0x78
+    void UpdateTimeText();
+};
+
+// @ 0x00817cb0
+void PieMenuTimeText::UpdateTimeText() {
+    DateTime now;
+    now.Set(2);
+    WStr_Format(&m48, L"%04u", now.GetParameter(1));
+    mp38 = m48.mpBegin;
+    WStr_Format(&m58, L"%02u", now.GetParameter(2));
+    mp3c = m58.mpBegin;
+    WStr_Format(&m68, L"%02u", now.GetParameter(6));
+    mp40 = m68.mpBegin;
+    WStr_Format(&m78, L"%02u-%02u-%02u",
+                now.GetParameter(8), now.GetParameter(9), now.GetParameter(10));
+    mp44 = m78.mpBegin;
+}
+
+struct PieEventArg {
+    char pad_00[8];
+    u32  mCode;                     // +0x8
+    int  mSubCode;                  // +0xc
+};
+
+struct PieDispatch {
+    char  pad_00[0x10];
+    int   m10;                      // +0x10
+    u8    m14;                      // +0x14
+    char  pad_15[3];
+    void (__cdecl* mCallback)(int, int, bool);  // +0x18
+    int   m1c;                      // +0x1c
+    char  Dispatch(int* param_2, PieEventArg* param_3);
+};
+
+struct PieEventMsg {
+    int   m0;                       // +0
+    int   m4;                       // +4
+    int   mType;                    // +8
+    int   mValue;                   // +0xc
+    int   m10;                      // +0x10
+    int   m14;                      // +0x14
+    int   m18;                      // +0x18
+};
+typedef void (__thiscall* PieDispatch114)(void*, PieEventMsg*);
+
+// @ 0x00817d70
+char PieDispatch::Dispatch(int* param_2, PieEventArg* param_3) {
+    u32 code = param_3->mCode;
+    switch (code) {
+    case 0x1b:
+    case 0x1c: {
+        if (param_3->mSubCode != 1) return 0;
+        bool is27 = (code == 0x1b);
+        if (mCallback) mCallback(m10, m1c, is27);
+        void* obj = Vcp2(param_2, 0xf0, (int)0x122d76c, 1);
+        if (obj) Vv2b(obj, 0x7c, 1, is27);
+        return 0;
+    }
+    case 0x287259f6: {
+        PieEventMsg msg;
+        int value = m10;
+        m14 = 1;
+        msg.mValue = value;
+        msg.mType = 0x2ccb7e3;
+        Vv1(param_2, 0x114, (int)&msg);
+        return 1;
+    }
+    default:
+        return 0;
+    }
+}
 #pragma float_control(pop)

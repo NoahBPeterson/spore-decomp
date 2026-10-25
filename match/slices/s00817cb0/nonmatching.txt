@@ -7,3 +7,4 @@
 00818000  90  cSPUIPieMenuItem::SetIcon: complete; SSE operand folding/schedule in rect centring differs (fast-math pragma) [equiv: WEAK 6.9% coverage]
 008183a0  284 FUN_008183a0 (pie ray quad/tri draw): complete; xmm allocation differs around inline fsqrt [equiv: UNSUPPORTED fake-arity]
 00818500  67  FUN_00818500 (disjoin_items): complete; store/add interleave of 4 rect floats differs [equiv: PASS]
+00817d70  22  PieDispatch::Dispatch: complete switch (0x1b/0x1c shared event path + 0x287259f6 command path), callback call, two vtable calls (0xf0 and 0x7c) and 0x114 dispatch with an 0x1c-byte event message. Only the 0x287 path schedules the message type store before the pointer push (ours [esp+8] before push; retail [esp+0xc] after push), plus the 0x114 slot load moves across that store; 22 bytes, rest exact. [equiv: WEAK 400/400 valid, 47.4% coverage]

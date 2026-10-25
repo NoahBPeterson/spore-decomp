@@ -7,3 +7,4 @@ slices/s00817cb0/s00817cb0.cpp  ?MarkUnused@cSPUIPieMenuItem@@QAEXXZ  00818950  
 slices/s00817cb0/s00817cb0.cpp  ??0PieItemFull@@QAE@ABU0@@Z  00818650  /O2 /MD /Gy /EHsc /TP /arch:SSE
 slices/s00817cb0/s00817cb0.cpp  ?assign@PieItemFull@@QAEAAU1@ABU1@@Z  008186f0  /O2 /MD /Gy /EHsc /TP /arch:SSE
 slices/s00817cb0/s00817cb0.cpp  ??0PieItemFull@@QAE@XZ  00818820  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00817cb0/s00817cb0.cpp  ?UpdateTimeText@PieMenuTimeText@@QAEXXZ  00817cb0  /O2 /MD /Gy /EHsc /TP /arch:SSE

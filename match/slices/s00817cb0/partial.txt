@@ -1,2 +1,1 @@
-00817cb0  184  FUN_00817cb0: stub (layout/scroll recompute not reproduced)
-00817d70  164  FUN_00817d70: stub (window rebind not reproduced)
+# va  diff-bytes  reason (incomplete / approximated source)
