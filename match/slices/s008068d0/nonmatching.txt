@@ -12,3 +12,6 @@
 00807690  50  complete; register differences
 008076f0  91  complete; register differences
 00807760  78  complete; allocator ctor arg/register differences
+00806d10  15  complete; only volatile Rect4 load/scheduling differs; flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast; equiv WEAK 150/400 valid, 14.0% coverage
+008070d0  571  complete; source 558 B vs retail 613 B; float args materialized with x87 fstp instead of retail movss; flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast; equiv UNSUPPORTED 0/400 valid
+00807340  198  complete; source 171 B vs retail 232 B; float args materialized with x87 fstp instead of retail movss; flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast; equiv UNSUPPORTED 0/400 valid

@@ -68,7 +68,7 @@ struct W {
     virtual void* mB4(int);          // +0xb4
     virtual void  mB8(int, void*);   // +0xb8
     S(bc)
-    virtual void* mC0(void*, int, int);// +0xc0
+    virtual float* mC0(float*, float, float);// +0xc0
     S(c4) S(c8) S(cc) S(d0) S(d4) S(d8) S(dc) S(e0) S(e4) S(e8) S(ec)
     S(f0) S(f4) S(f8) S(fc) S(100) S(104)
     virtual void  m108(void*);       // +0x108
@@ -223,13 +223,15 @@ void FUN_00806ca0(W* w, float x, float y) {
 }
 
 // @ 0x00806d10 SP::Pollinator
+extern "C" double floor(double);
+struct Rect4 { float x, y, z, w; };
 void Pollinator(W* w, float* r) {
     if (w == 0) return;
-    float* a = (float*)w->v38();
-    float x = r[0];
-    float dy = (((r[3] - r[1]) - (a[3] - a[1])) * 0.5f + r[1]);
-    float dx = (((r[2] - x) - (a[2] - a[0])) * 0.5f + x);
-    (*(void(__thiscall**)(void*, float, float))VSlot(w, 0x64))(w, dx, dy);
+    const volatile float* p = (const volatile float*)w->v38();
+    Rect4 a = { p[0], p[1], p[2], p[3] };
+    float dy = (float)floor((double)(((r[3] - r[1]) - (a.w - a.y)) * 0.5f + r[1]));
+    float dx = (float)floor((double)(((r[2] - r[0]) - (a.z - a.x)) * 0.5f + r[0]));
+    w->m64(dx, dy);
 }
 
 // @ 0x00806db0
@@ -253,16 +255,16 @@ void SetTooltipText(W* w, void* text) {
 }
 
 // @ 0x00806e40 SPUIHelpers::AutoSizeWindowForText
-void AutoSizeWindowForText(W* w, int param2) {
+void AutoSizeWindowForText(W* w, int param2, int param3) {
     if (w == 0) return;
     float* a = (float*)w->v38();
     float wd = a[2] - a[0];
     W* p = (W*)w->m0c(0x8ed27e7a);
     if (p == 0) p = (W*)w->m0c(0x0f15f4bd);
-    if (p != 0) p->m14(param2);
-    if ((char)wd != 0) {
+    if (p != 0) p->m14(param3);
+    if ((char)param2 != 0) {
         float* b = (float*)w->v38();
-        w->m70((b[0] + 0.0f) - (b[2] - b[0]), b[1]);
+        w->m70((b[0] + wd) - (b[2] - b[0]), b[1]);
     }
 }
 
@@ -325,52 +327,64 @@ void FUN_00807040(W* w) {
 // @ 0x008070d0 SPUIHelpers::AnchorWindowToScreen
 void AnchorWindowToScreen(float* rect, W* win, int flags, W* other) {
     float lx = rect[0], ly = rect[1], lz = rect[2], lw = rect[3];
-    float* wa = (float*)win->v38();
-    float wd = wa[2] - wa[0];
-    float hd = wa[3] - wa[1];
-    float t1[2];
-    win->mC0(t1, 0, 0);
-    float t2[2];
-    win->mC0(t2, 0, 0);
-    float fx = 0, fy = 0;
-    if (flags & 0x800) { lw = 0; }
-    else if (flags & 0x200) { fx = (t1[1] + ly) * 0.5f; fy = (lz + fy) * 0.5f; fy = fy - fx; }
-    else {
-        if (flags & 1) { lw = ly - lw; }
-        else if (flags & 2) { fx = ly; fy = fx - /*??*/0; }
-        else if (flags & 4) { lw = t1[1] - lw; }
-        else if (flags & 8) { fx = t1[1]; fy = fx - 0; }
+    float* a = (float*)win->v38();
+    float wd = a[2] - a[0];
+    float hd = a[3] - a[1];
+    float r[4];
+    win->mC0(r, 0.0f, 0.0f);
+    float t0 = r[0], t1 = r[1];
+    win->mC0(r, wd, hd);
+    float q0 = r[0], q1 = r[1];
+    float fx = 0.0f, fy = 0.0f;
+    if (flags & 0x800) {
+        fy = 0.0f;
+    } else if (flags & 0x200) {
+        fy = (lw + ly) * 0.5f - (q1 + t1) * 0.5f;
+    } else if (flags & 1) {
+        fy = ly - t1;
+    } else if (flags & 2) {
+        fy = ly - q1;
+    } else if (flags & 4) {
+        fy = lw - t1;
+    } else if (flags & 8) {
+        fy = lw - q1;
     }
-    (void)wd; (void)hd;
-    if (!(flags & 0x400)) {
-        if (flags & 0x100) { /* centered */ }
+    if (flags & 0x400) {
+        fx = 0.0f;
+    } else if (flags & 0x100) {
+        fx = (lz + lx) * 0.5f - (q0 + t0) * 0.5f;
+    } else if (flags & 0x10) {
+        fx = lx - t0;
+    } else if (flags & 0x20) {
+        fx = lx - q0;
+    } else if (flags & 0x40) {
+        fx = lz - t0;
+    } else if (flags & 0x80) {
+        fx = lz - q0;
     }
     W* tgt = other ? other : win;
     float* ta = (float*)tgt->v38();
-    float r2[4];
-    r2[0] = ta[0] + fx;
-    r2[1] = ta[1] + fy;
-    r2[2] = ta[2] + fx;
-    r2[3] = ta[3] + fy;
-    tgt->m6c(r2);
+    float out[4];
+    out[0] = ta[0] + fx;
+    out[1] = ta[1] + fy;
+    out[2] = ta[2] + fx;
+    out[3] = ta[3] + fy;
+    tgt->m6c(out);
 }
 
 // @ 0x00807340 SPUIHelpers::AnchorWindowToWindow
-void AnchorWindowToWindow(W* w) {
+void AnchorWindowToWindow(W* w, W* target, int flags, W* other) {
     float* a = (float*)w->v38();
+    float wd = a[2] - a[0];
     float hd = a[3] - a[1];
-    float t1[2];
-    float zero = 0.0f;
-    w->mC0(t1, 0, 0);
-    float t2[2];
-    w->mC0(t2, 0, 0);
     float rect[4];
-    rect[0] = t1[0];
-    rect[1] = t2[1];
-    rect[2] = 0;
-    rect[3] = 0;
-    AnchorWindowToScreen(rect, w, 0, 0);
-    (void)hd; (void)zero;
+    w->mC0(rect, 0.0f, 0.0f);
+    float t0 = rect[0], t1 = rect[1];
+    w->mC0(rect, t0, wd);
+    rect[0] = t0;
+    rect[1] = t1;
+    AnchorWindowToScreen(rect, target, flags, other);
+    (void)hd;
 }
 
 // @ 0x00807430
