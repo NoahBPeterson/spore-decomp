@@ -2,14 +2,14 @@
 00774010 eastl::partial_sort
 007740f0 FUN_007740f0  # thunk into Unk770320::Method on the global at 0x01630b68
 00774290 eastl::introsort_loop
+007743b0 Vec30::insert_n  # vector of 0x30-byte elements
+007745d0 VecB0::insert_n  # vector of 0xb0-byte elements
+007747c0 VecM34::insert_n  # vector of Matrix34 elements
 007749e0 eastl::sort
-007743b0 vector<0x30>::insert_n
-007745d0 vector<0xb0>::insert_n
-007747c0 vector<Matrix34>::insert_n
-00774a60 vector<0x14>::insert(first,last)
-00774b50 vector<8-byte>::resize
-00774bb0 vector<0x30>::resize
-00774c30 vector<0xb0>::resize
-00774cc0 vector<Matrix34>::resize
-00774f10 fixed-vector range constructor
-00774110 UI/resource glue
+00774a60 Vec14Fixed::assign(first, last, endHint)  # ret 0xc, frees a heap buffer unless it is the inline one
+00774b50 VecIdx2::resize  # vector of 8-byte {-1,-1} elements
+00774bb0 Vec30::resize
+00774c30 VecB0::resize
+00774cc0 VecM34::resize  # shrink goes through the out-of-line erase at 0x009c69f0
+00774f10 Vec14Fixed range constructor  # ret 8, inline 16 x 0x14 buffer at +0x18
+00774110 UI/resource glue  # EH frame, ctor + factory calls through the globals at 0x016c8b44
