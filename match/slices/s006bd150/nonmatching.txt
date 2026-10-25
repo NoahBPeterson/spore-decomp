@@ -1,4 +1,7 @@
 006bd150  352  complete; compressed-record allocation path; *pFlags = 0xffff now written only inside the compression branch; RefPack local + register/frame differs [equiv: PASS 233/233, 79.0% cov]
+006bd300  193  complete; destructor (vtable reset, indexed-close teardown, hole tables, open-record map, mutexes, FileStream, string16 capacity-span free); SEH frame/state stores not reproduced (explicit subobject teardown) [equiv: PASS 467/1200, 82.5% cov]
 006bd430  112  complete; Close(); duplicated cleanup blocks merged differently by cl
 006bd4d0  137  complete; GetOpenCount rbtree walk; iterator/frame differences
 006bd580  91  complete; ratio check with x87; p6 passed as the pFlags pointer and unsigned conversions used; register/frame differs [equiv: PASS 203/203, 86.4% cov]
+006bd690  1273  complete; CloseRecord (three lock regions, open-record multimap unlink, empty-stream index update, compress + write + SetEntry + refind/erase); EH frame, register allocation and block order differ [equiv: UNSUPPORTED 0/400 valid (fault(read)=290, import:WaitForSingleObject=65, fake-arity=44)]
+006bdc50  357  complete; constructor (vtable chain, allocator selection, string16 sentinels, FileStream/Mutex/PFHoleTable construction, map anchor, ratios, AddRef/assign tail); EH frame and register allocation differ [equiv: PASS 381/381, 100.0% cov]
