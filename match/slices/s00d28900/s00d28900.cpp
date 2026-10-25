@@ -1,5 +1,5 @@
 // Slice s00d28900: SP::cCreatureCamera::cCreatureCamera(IRefObject*) (0x00d28e60, 1772 bytes).
-// Flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast (same module as the other cSP camera code).
+// Flags: /O2 /MD /Gy /TP /arch:SSE /GS- /fp:fast (same module as the other cSP camera code).
 //
 // A long constructor: base vptrs, input/tuning limits (angles in radians, distances, interpolation
 // times), the camera transform, the local input state, the owner reference (AddRef'd), the message
@@ -7,6 +7,7 @@
 // Retail offsets: the 2008 PDB layout minus 8 from +0x200 on and minus 0x10 from +0x2cc on.
 #include "types.h"
 #include <float.h>
+#include <math.h>
 #include <new>
 
 struct Vector2 {
@@ -96,6 +97,63 @@ inline SPVector3 MakeVec(float x, float y, float z)
     v.z = z;
     return v;
 }
+
+// Virtual-call helper: fetch vtable entry `offset` of the object at `p`.
+inline void* VTC(void* p, int offset)
+{
+    return *(void**)((char*)*(void**)p + offset);
+}
+
+void* __cdecl SP_App();                  // 0x0067dd10 (SP::App)
+
+// Local aim/query block (0xd8 bytes) built by cCreatureCamera::UpdateDesiredLookAt and driven
+// through the SP::cSimulator camera-query helpers below.
+struct AimQuery {
+    SPVector3 mAim;                      // +0x00 current aim (in/out)
+    SPVector3 mDirection;                // +0x0c normalised look direction
+    float     mDeltaX;                   // +0x18 normalised x
+    float     mPitch;                    // +0x1c camera pitch
+    float     mYaw;                      // +0x20 camera yaw
+    SPVector3 mOffset;                   // +0x24 camera offset
+    SPVector3 mField30;                  // +0x30 target offset
+    SPVector3 mDesired;                  // +0x3c desired aim
+    void**    mpHandlerBegin;            // +0x48 handler list begin
+    void**    mpHandlerEnd;              // +0x4c handler list end
+    void**    mpHandlerCap;              // +0x50 handler list capacity
+    uint32_t  mField54;                  // +0x54
+    uint32_t  mField58;                  // +0x58
+    uint32_t  mField5C;                  // +0x5c
+    void*     mHandlerInline[3];         // +0x60 inline handler slots
+    uint32_t  mField6C[0x18];            // +0x6c
+    float     mFieldCC;                  // +0xcc
+    void*     mpFieldD0;                 // +0xd0
+    void*     mpContext;                 // +0xd4 object owning the query
+
+    void Init(void* pContext);                             // 0x00b16dc0 (thiscall, ret 4)
+    void SetMode(int mode);                                // 0x00b17790 (thiscall, ret 4)
+};
+
+// Spatial result list (0x44 bytes): an eastl::vector<EA::AutoRefCount<SP::cSpatialObject>> with an
+// 8-slot inline buffer, plus the offset the query produced.
+struct AimSpatialList {
+    void**   mpBegin;                    // +0x00
+    void**   mpEnd;                      // +0x04
+    void**   mpCap;                      // +0x08
+    void*    mpBuffer;                   // +0x0c
+    uint32_t mnCapacity;                 // +0x10
+    uint32_t mField14;                   // +0x14
+    void*    mInline[8];                 // +0x18 inline element buffer
+    float    mResultX;                   // +0x38
+    float    mResultY;                   // +0x3c
+    float    mResultZ;                   // +0x40
+
+    void Destroy();                                        // 0x00ad92d0 (thiscall)
+};
+
+bool __cdecl CameraQueryHandlers(AimQuery* q, AimSpatialList* list);   // 0x00b17c10
+bool __cdecl CameraQueryValue(AimQuery* q, float* value);              // 0x00b17810
+void __cdecl CameraQueryCollect(SPVector3* aim, AimSpatialList* list); // 0x00b16450
+void __cdecl CameraQueryApply(AimQuery* q, float* value);              // 0x00b16e50
 
 // ---- message-handler collection (0x00d29610) ----
 
@@ -400,7 +458,6 @@ void RbTreeAnchor::MapIterateErase(RbNode* first, RbNode* last)
 }
 
 // @ 0x00d29610
-// @ 0x00d29610
 bool CollectMessageHandlers(MsgSource* src, MsgMap* map)
 {
     src->SetHandlers(0);
@@ -454,11 +511,103 @@ bool CollectMessageHandlers(MsgSource* src, MsgMap* map)
 // @ 0x00d28900
 void cCreatureCamera::UpdateDesiredLookAt()
 {
-    // SKELETON (booked partial): the 1292-byte body was not recovered from the analysis image.
-    // Recovered shape: it initialises a transient CameraData block through 0x00b16dc0, forms the
-    // look-at delta mV114 - mV13C, normalises it, then drives the aim-interpolation helpers
-    // 0x00b17c10 / 0x00b17810 / 0x00b16450 / 0x00b16e50 / 0x00b17790 and finally stores the
-    // result into mV168, flagging mb164 when the target changed.
+    // Query object: constructed with the simulator's camera-data context obtained through
+    // App()->vtbl[0x50]->vtbl[0x1c].
+    void* app = SP_App();
+    void* appSub = ((void* (__thiscall*)(void*))VTC(app, 0x50))(app);
+    void* context = ((void* (__thiscall*)(void*))VTC(appSub, 0x1c))(appSub);
+
+    AimQuery q;
+    q.Init(context);
+
+    // Normalised delta from the current aim to the desired one.
+    const float dx = mV114.x - mV13C.x;
+    const float dy = mV114.y - mV13C.y;
+    const float dz = mV114.z - mV13C.z;
+    const float invDelta = 1.0f / sqrtf(dx * dx + dy * dy + dz * dz + 1e-08f);
+    const float nx = dx * invDelta;
+    const float ny = dy * invDelta;
+    const float nz = dz * invDelta;
+
+    q.mDirection = MakeVec(nx, ny, nz);
+    q.mDeltaX = nx;
+    q.mPitch = mV88.y;
+    q.mYaw = mV88.z;
+    q.mOffset = mV7c;
+    q.mDesired = mV114;
+
+    const bool wasSet = mb164;
+    mb164 = false;
+
+    if (CameraQueryHandlers(&q, 0))          // 0x00b17c10
+        mb164 = true;
+    if (!mb164) {
+        if (CameraQueryValue(&q, 0))         // 0x00b17810
+            mb164 = true;
+    }
+
+    const float curLen = sqrtf(mV13C.x * mV13C.x + mV13C.y * mV13C.y + mV13C.z * mV13C.z);
+    const float desLen = sqrtf(mV168.x * mV168.x + mV168.y * mV168.y + mV168.z * mV168.z);
+
+    if (!mb164) {
+        // Not flagged: only grow the aim when the desired aim is meaningfully longer.
+        if (desLen - curLen > 1.52587890625e-05f) {
+            mb164 = true;
+            const float head = desLen - mDt * 20.0f;
+            const float target = (head > curLen) ? head : curLen;
+            const float invCur = 1.0f / sqrtf(mV13C.x * mV13C.x + mV13C.y * mV13C.y +
+                                              mV13C.z * mV13C.z + 1e-08f);
+            mV168 = MakeVec(mV13C.x * invCur * target, mV13C.y * invCur * target,
+                            mV13C.z * invCur * target);
+            if (wasSet)
+                mb164 = true;
+        }
+    } else {
+        // Already flagged: pull the query aim onto the largest of the two lengths first.
+        if (wasSet) {
+            const float target = (desLen > curLen) ? desLen : curLen;
+            const float invCur = 1.0f / sqrtf(mV13C.x * mV13C.x + mV13C.y * mV13C.y +
+                                              mV13C.z * mV13C.z + 1e-08f);
+            q.mAim = MakeVec(mV13C.x * invCur * target, mV13C.y * invCur * target,
+                             mV13C.z * invCur * target);
+            q.SetMode(1);                    // 0x00b17790
+        }
+
+        AimSpatialList list;
+        list.mpBegin = &list.mInline[0];
+        list.mpEnd = &list.mInline[0];
+        list.mpCap = &list.mInline[8];
+        list.mField14 = 0;
+
+        const bool found = CameraQueryHandlers(&q, &list);          // 0x00b17c10
+        if (found) {
+            CameraQueryCollect(&q.mAim, &list);                     // 0x00b16450
+            q.SetMode(1);                                           // 0x00b17790
+        }
+
+        float value = 0.0f;
+        int32_t reserved = 0;                // the original zeroes a stack slot here as well
+        const bool haveValue = CameraQueryValue(&q, &value);        // 0x00b17810
+        if (haveValue)
+            CameraQueryApply(&q, &value);                           // 0x00b16e50
+
+        if (found || haveValue) {
+            // Advance the query aim along its own direction by one frame step.
+            const float step = mDt * 20.0f;
+            const float invAim = 1.0f / sqrtf(q.mAim.x * q.mAim.x + q.mAim.y * q.mAim.y +
+                                              q.mAim.z * q.mAim.z + 1e-08f);
+            q.mAim.x = (invAim * q.mAim.x) * step + q.mAim.x;
+            q.mAim.y = (invAim * q.mAim.y) * step + q.mAim.y;
+            q.mAim.z = (invAim * q.mAim.z) * step + q.mAim.z;
+        }
+
+        mV168 = q.mAim;
+        list.Destroy();                      // 0x00ad92d0
+    }
+
+    // Release the query's heap-allocated handler buffer if one was allocated.
+    if (q.mpHandlerBegin != 0 && ((int32_t*)q.mpHandlerBegin)[-1] != 0)
+        OpDelete(q.mpHandlerBegin);
 }
 
 // @ 0x00d29570
