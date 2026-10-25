@@ -14,4 +14,15 @@
 ../src/game/SPGonzago/SPGameNounManager.cpp  ?Dummy225b0@cGameNounManager@@QAEXXZ  00b225b0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
 ../src/game/SPGonzago/SPGameNounManager.cpp  ?RemoveHerd@cGameNounManager@@QAEXPAUcNoun@@@Z  00b22930  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
 ../src/game/SPGonzago/SPGameNounManager.cpp  ?ClearHolderVec@@YAXPAUVecHolder@@@Z  00b22e80  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPGameNounManager.cpp  ?FUN_00b230b0@cEAString@@QAEXI@Z  00b230b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPGameNounManager.cpp  ?FUN_00b23260@cMilitaryAttackCityOrder@@QAEPAV1@E@Z  00b23260  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPGameNounManager.cpp  ?ClearPosseMembers@cGameNounManager_s00b2_30b0@@QAEXXZ  00b234c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPGameNounManager.cpp  ?FUN_00b23510@cGameNounManager_s00b2_30b0@@QAEXXZ  00b23510  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPGameNounManager.cpp  ?FUN_00b23610@cGameNounManager_s00b2_30b0@@QAEXXZ  00b23610  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPGameNounManager.cpp  ?FUN_00b23640@cGNMThunk@@QAEXII@Z  00b23640  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPGameNounManager.cpp  ?FUN_00b23650@cGameNounManager_s00b2_30b0@@QAEPAVcNoun_s00b2_30b0@@PAX0000@Z  00b23650  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPGameNounManager.cpp  ?FUN_00b23690@cGameNounManager_s00b2_30b0@@QAEPAXI@Z  00b23690  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPGameNounManager.cpp  ?FUN_00b23770@@YAPAVcCulturalConvertCityOrder@@XZ  00b23770  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPGameNounManager.cpp  ?RegisterNounClasses@NounCreateMap@Simulator@@QAEXXZ  00b24740  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPGonzago/SPGameNounManager.cpp  ?FUN_00b25cd0@@YAXXZ  00b25cd0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPGameNounManager.cpp  ?FUN_00b26600@cGameNounManager_s00b2_5c30@@QAEXXZ  00b26600  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

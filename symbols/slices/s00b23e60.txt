@@ -1,0 +1,1 @@
+00b23e60 ?RegisterNounType@@YAXIIPBD@Z  # RegisterNounType migrated from s00b23e60 (verbatim, slice spelling)
