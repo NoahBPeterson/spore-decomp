@@ -1,0 +1,11 @@
+# slice s00aecf90 -- FAIL-KEPT: naked assembly transcription is not acceptable
+# flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
+# <va> <diff> <reason incl. difftest verdict>
+00aecf90  0  FAIL-KEPT: ecx (this) + x87/SSE temporaries; current body is a naked `_emit` transcription, byte-exact (184 B) but disallowed. Needs a C++ rewrite from the decompiler. difftest: UNSUPPORTED (original reads ecx at entry).
+00aed050  0  FAIL-KEPT: ecx (this) + eax/edx call targets; naked `_emit` transcription, byte-exact (140 B) but disallowed. difftest: UNSUPPORTED (ecx at entry).
+00aed0e0  0  FAIL-KEPT: ecx (this) + eax/edx indirect targets; naked `_emit` transcription, byte-exact (473 B) but disallowed. difftest: UNSUPPORTED (ecx at entry).
+00aed2c0  0  FAIL-KEPT: ecx (this) + x87 temporaries; naked `_emit` transcription, byte-exact (272 B) but disallowed. difftest: UNSUPPORTED (ecx at entry).
+00aed3d0  0  FAIL-KEPT: edx indirect target + DAT_0167acf4 guard; naked `_emit` transcription, byte-exact (30 B) but disallowed. difftest: WEAK (400/400 valid, 44.4% coverage) only via transcription.
+00aed4d0  0  FAIL-KEPT: edx indirect target + operator-new target; naked `_emit` transcription, byte-exact (52 B) but disallowed. difftest: PASS (349/400 valid, 84.2% coverage) only via transcription.
+00aed550  0  FAIL-KEPT: ecx (this) + edx indirect target; naked `_emit` transcription, byte-exact (45 B) but disallowed. difftest: UNSUPPORTED (ecx at entry).
+00aed580  0  FAIL-KEPT: x87/SSE temporaries + eax/edx call targets; naked `_emit` transcription, byte-exact (379 B) but disallowed. difftest: PASS (400/400 valid, 72.3% coverage) only via transcription.
