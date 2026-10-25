@@ -1,1 +1,16 @@
 00e5f8c0 SP::sCellIsOutOfRange  # calls sGetSourceLevel(fastcall, level in EDX), FUN_00b721d0 (thiscall on gspCellGame+0x1c), sGetBoxSizeMultiplier2, sBlockIsInRange
+00e5eb20 SP::sCellGetFacing  # unit facing vector from the orientation matrix (own TU: s00e5eb20_facing.cpp)
+00e5ec10 SP::sCellBeginSpawn  # handle -> cell, spawn transform/box setup
+00e5ec70 SP::sCellSpawn44  # cell handle + distance -> position/orientation copy
+00e5ed20 SP::sCellSetOrientationHandle  # handle -> cell, orient from quaternion
+00e5ed50 SP::sCellOrientToward  # handle + point + quat + two angles -> lerped orientation
+00e5ef40 SP::sCellRayAngle  # angle between the cell facing and a ray quotient (atan2)
+00e5f010 SP::sCellPullToward  # handle + handle + distance + flag -> step the cell toward another
+00e5f160 SP::sCellSetTargetAndCamera  # two handles + spawn params -> targets/camera for the player cell
+00e5f360 SP::sRecalcAdvectMap  # rebuild the advection map for the current level
+00e5f450 SP::sAttach  # three handles + parent + transform -> create a cAttachment
+00e5f4d0 SP::sPull  # handle + lerp t + target -> move the cell along the line
+00e5f590 SP::sCellIsBehind  # point behind the cell facing?
+00e5f610 SP::sCalcBoxExtents  # level+flags -> four box extents (floats, scaled)
+00e5f810 SP::sBlockIsInRange  # block record vs the current box extents
+00e5fa00 SP::sBlockExtentFill  # enumerate the block records of a level

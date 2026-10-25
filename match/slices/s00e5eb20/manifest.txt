@@ -1,0 +1,5 @@
+# source  symbol  original VA  [flags override]
+slices/s00e5eb20/s00e5eb20_cell.cpp  ?sCellBeginSpawn@SP@@YA_NH@Z  00e5ec10  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00e5eb20/s00e5eb20_cell.cpp  ?sCellSpawn44@SP@@YA_NHM@Z  00e5ec70  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00e5eb20/s00e5eb20_cell.cpp  ?sCellSetOrientationHandle@SP@@YAXHPBUQuaternion@@@Z  00e5ed20  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00e5eb20/s00e5eb20_cell.cpp  ?sAttach@SP@@YAHHHHPBXD@Z  00e5f450  /O2 /MD /Gy /TP /arch:SSE /fp:fast
