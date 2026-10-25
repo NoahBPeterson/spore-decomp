@@ -1,4 +1,5 @@
-004f1ff0 ?FUN_004f1ff0@@YAMH@Z  # FUN_004f1ff0 migrated from s004f1ff0 (verbatim, slice spelling)
-004f21e0 ?FUN_004f21e0@@YA_NHH@Z  # FUN_004f21e0 migrated from s004f1ff0 (verbatim, slice spelling)
-004f2210 ?FUN_004f2210@@YAXPAX00@Z  # FUN_004f2210 migrated from s004f1ff0 (verbatim, slice spelling)
-004f2610 ?FUN_004f2610@@YAXPAX00@Z  # FUN_004f2610 migrated from s004f1ff0 (verbatim, slice spelling)
+004f1ff0 ?FUN_004f1ff0@@YAMH@Z  # weighted entry-vector metric (returns float)
+004f21e0 ?FUN_004f21e0@@YA_NHH@Z  # metric(a) <= b
+004f2210 ?FUN_004f2210@@YA_NHPAI@Z  # SP::cSPEditorModelValidity::TestBudget
+004f2610 ?FUN_004f2610@@YA_NHPAI@Z  # SP::cSPEditorModelValidity::TestVehicleStatsInRange (entry stub; body at 0x4f2620)
+004f2620 ?FUN_004f2620@@YA_NHPAI@Z  # SP::cSPEditorModelValidity::TestVehicleStatsInRange body
