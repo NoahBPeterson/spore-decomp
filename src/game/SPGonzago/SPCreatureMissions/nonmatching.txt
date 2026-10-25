@@ -1,0 +1,10 @@
+# va  diff-bytes  reason   (none: all 3 target functions are byte-exact MATCHes)
+00c2f9c0 89 /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast difftest PASS; destructor, ReleaseRef inlined with lea instead of add (register form only)
+00c2fb30 170 /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast difftest PASS; GetPropListToUse, ebx zero-constant scheduling + tail-jmp release differ
+00c2fc10 85 /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast difftest UNSUPPORTED (0/400 valid inputs); frame uses push ecx vs sub esp,0x10; this not kept in ebp
+00c2fc80 41 /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast difftest PASS; refcount reset, lea vs add on refcount address
+00c2fde0 55 /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast difftest UNSUPPORTED (0/400 valid inputs, fake-arity); member/global load order swapped
+00c2fea0 245 /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast difftest UNSUPPORTED (unresolved _SP_RelationshipManager); call-via-absolute-address not inlined to direct calls
+00c2ffb0 204 /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast difftest UNSUPPORTED (unresolved _SP_RelationshipManager); GameMode checks not shared, size 233 vs 203
+00c301c0 11 /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast difftest UNSUPPORTED (0/400 valid inputs); src parameter allocated to eax instead of ecx
+00c30630 221 /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast difftest UNSUPPORTED (0/400 valid inputs); ResKey build and resource-manager path differ, size 307 vs 328
