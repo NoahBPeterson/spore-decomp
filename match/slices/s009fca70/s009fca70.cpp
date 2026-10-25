@@ -44,8 +44,8 @@ extern __declspec(noreturn) void CxxThrowException(void*, void*); // _CxxThrowEx
 extern void*  g_TI_cError;                                      // 0x014f9174  ThrowInfo
 struct TreeFind { void find(void* outIter, const uint32* key); };// 0x00e5c780 thiscall ret 8
 struct cErr16 { void* p0; void* p1; void* p2; void* p3; };     // 16-byte cError temp
-struct TreeInsertA_t { void insert(void** out, void* hint, const uint32* key, int zero); }; // 0x009fd230 thiscall ret 0x10
-struct TreeInsertB_t { void insert(void** out, void* hint, const uint32* key, int zero); }; // 0x009fd300 thiscall ret 0x10
+struct TreeInsertA_t { void insert(void** out, void* hint, const void* value, uint32 flag); }; // 0x009fd230 thiscall ret 0x10
+struct TreeInsertB_t { void insert(void** out, void* hint, const void* value, uint32 flag); }; // 0x009fd300 thiscall ret 0x10
 extern void   ElemRangeInitialize(void* self, uint32 n);        // 0x00475ab0  thiscall
 extern void   VecDeformResize(void* self, int n);               // 0x009fd530  thiscall ret 4
 
@@ -445,43 +445,49 @@ struct MapIdxB {
 // @ 0x009fd950
 void* MapIdxA::insert(const uint32& key)
 {
+    // The key pointer doubles as the DoInsertValue result slot: retail passes the address of
+    // its own key-pointer parameter as the out iterator, and returns that slot + 0x14.
+    const uint32* keyp = &key;
+    const uint32 k = *keyp;
     char* root = (char*)this->root;
     char* result = (char*)this + 4;
     char* anchor = (char*)this + 4;
     while (root) {
-        if (*(uint32*)(root + 0x10) < key)
+        if (*(uint32*)(root + 0x10) < k)
             root = *(char**)root;
         else {
             result = root;
             root = *(char**)(root + 4);
         }
     }
-    if (result != anchor && *(uint32*)(result + 0x10) <= key)
+    if (result != anchor && *(uint32*)(result + 0x10) <= k)
         return result + 0x14;
-    uint32 k = key;
-    void* out = 0;
-    ((TreeInsertA_t*)this)->insert(&out, result, &k, 0);
-    return (char*)out + 0x14;
+    uint32 value[3] = { k, 0, 0 };                 // pair<const uint32, vector*> + tail
+    uint32 flag = (uint32)keyp & 0xffffff00u;  // low byte is the zeroed bool slot
+    ((TreeInsertA_t*)this)->insert((void**)&keyp, result, value, flag);
+    return (char*)keyp + 0x14;
 }
 
 // @ 0x009fd9e0
 void* MapIdxB::insert(const uint32& key)
 {
+    const uint32* keyp = &key;
+    const uint32 k = *keyp;
     char* root = (char*)this->root;
     char* result = (char*)this + 4;
     char* anchor = (char*)this + 4;
     while (root) {
-        if (*(uint32*)(root + 0x10) < key)
+        if (*(uint32*)(root + 0x10) < k)
             root = *(char**)root;
         else {
             result = root;
             root = *(char**)(root + 4);
         }
     }
-    if (result != anchor && *(uint32*)(result + 0x10) <= key)
+    if (result != anchor && *(uint32*)(result + 0x10) <= k)
         return result + 0x14;
-    uint32 k = key;
-    void* out = 0;
-    ((TreeInsertB_t*)this)->insert(&out, result, &k, 0);
-    return (char*)out + 0x14;
+    uint32 value[3] = { k, 0, 0 };
+    uint32 flag = (uint32)keyp & 0xffffff00u;
+    ((TreeInsertB_t*)this)->insert((void**)&keyp, result, value, flag);
+    return (char*)keyp + 0x14;
 }
