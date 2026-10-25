@@ -8,3 +8,7 @@
 00721bb0  92  ChartHash::FindI: complete; equivalence PASS (228 valid, 93.9% coverage); pair-store/register shape differs
 00721c30  0  ChartHash::InsertI: complete; grow/alloc sequence differs
 007221c0  0  cMeshClusterer::CollapseEdges: complete; heap/offset schedule differs
+00721d80  39  CopyChart68: complete; equivalence PASS (401 valid, 100.0% coverage); call-tail source reload/register schedule differs (191 vs 195)
+00722010  135  InitChartHash: complete; equivalence PASS (400 valid, 100.0% coverage); retail SEH frame/scope table not reproduced (120 vs 162)
+007220c0  217  FreeChartThing: complete; equivalence PASS (211 valid, 100.0% coverage); retail SEH/trylevel unwinding not reproduced (183 vs 247)
+007222f0  113  Insert34Vec: complete; equivalence WEAK (273 valid, no mismatch, 59.5% coverage; grow path not fully reachable under the emulator heap); grow-branch layout/register picks differ (280 vs 282)
