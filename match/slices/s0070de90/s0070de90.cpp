@@ -1,6 +1,8 @@
 // Slice s0070de90: SP::cMaterialManager / SP::cLightingManager helpers + EA refcount algorithms.
 // Module flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
 #include "types.h"
+#include <new>
+#include <intrin.h>
 
 // ---- stub types --------------------------------------------------------------
 struct Mat { char _p[0x18]; unsigned mID; };   // cMaterialInternal: mID at +0x18
@@ -124,16 +126,126 @@ void* __cdecl EAlloc(size_t n, const char* name, int a, unsigned b, const char* 
 void* __cdecl MessageServer(void);          // 0x0067dcc0
 void* __cdecl PropertyManager(void);        // 0x0067de30
 
-// A config record lives out of line (0x144 bytes).
-struct LConfig { unsigned char _d[0x144]; LConfig(); LConfig(const LConfig&); LConfig& operator=(const LConfig&); ~LConfig(); };
+// A config record lives out of line (0x144 bytes). The payload is spelled as scalars (no array) so the
+// compiler does not treat a local LConfig temporary as a /GS buffer.
+struct LConfig {
+    void* mpProperty;               // +0x000
+    int mPad04, mPad08, mPad0c, mPad10, mPad14, mPad18, mPad1c, mPad20;
+    int mPad24, mPad28, mPad2c, mPad30, mPad34, mPad38, mPad3c, mPad40;
+    int mPad44, mPad48, mPad4c, mPad50, mPad54, mPad58, mPad5c, mPad60;
+    int mPad64, mPad68, mPad6c, mPad70, mPad74, mPad78, mPad7c, mPad80;
+    int mPad84, mPad88, mPad8c, mPad90, mPad94, mPad98, mPad9c, mPadA0;
+    int mPadA4, mPadA8, mPadAc, mPadB0, mPadB4, mPadB8, mPadBc, mPadC0;
+    int mPadC4, mPadC8, mPadCc, mPadD0, mPadD4, mPadD8, mPadDc, mPadE0;
+    int mPadE4, mPadE8, mPadEc, mPadF0, mPadF4, mPadF8, mPadFc, mPad100;
+    int mPad104, mPad108, mPad10c, mPad110, mPad114, mPad118, mPad11c, mPad120;
+    int mPad124, mPad128, mPad12c, mPad130, mPad134, mPad138, mPad13c, mPad140;
+    LConfig();                      // 0x00706dd0
+    LConfig(const LConfig&);
+    LConfig& operator=(const LConfig&);
+    ~LConfig();                     // 0x007067f0
+};
 struct LConfigVec {
     LConfig* mpBegin; LConfig* mpEnd; LConfig* mpCap;
     void DoInsertValues(LConfig* pos, unsigned n, const LConfig& v); // 0x70d080
     LConfig* Erase(LConfig* first, LConfig* last);                   // 0x70ce80
+    void push_back(const LConfig& v);                                // 0x70dd50
+    void Resize(unsigned n);                                         // 0x70e060
 };
 LConfig* __cdecl LConfig_Default(LConfig* out);                      // 0x70dd50
 
-struct ReloadOwner { void Reload(); };   // 0x70e160 (__thiscall, this = lighting manager)
+// Refcounted property handle: the property's vtable slot 1 releases it.
+struct PropRef {
+    void* mpProp;
+    PropRef() : mpProp(0) {}
+    ~PropRef()
+    {
+        void* p = mpProp;
+        if (p != 0)
+        {
+            mpProp = 0;
+            ((void(__thiscall*)(void*))(*(void***)p)[1])(p);
+        }
+    }
+    PropRef& operator=(void* p)
+    {
+        if (mpProp != 0)
+        {
+            void* old = mpProp;
+            mpProp = 0;
+            ((void(__thiscall*)(void*))(*(void***)old)[1])(old);
+        }
+        mpProp = p;
+        return *this;
+    }
+};
+
+// A lighting world hangs off a node of the manager's world tree.
+struct WorldNode {
+    WorldNode* mpNext;      // +0x00  tree linkage
+    void* mpParent;         // +0x04
+    void* mpRight;          // +0x08
+    char _pad0c[8];         // +0x0c
+    void* mpWorld;          // +0x14
+};
+struct WorldObj {
+    char _pad[0x10];
+    void* mpConfig;         // +0x10  selected cLightingConfig
+    void ApplyConfig();     // 0x007094c0
+};
+struct WorldTree {
+    WorldNode* mpRoot;      // +0x00  anchor node; its address is the end sentinel
+};
+WorldNode* __cdecl RBTreeIncrement(WorldNode* node);   // 0x00921580
+
+// A property record: type tag at +0x12, typed accessors.
+struct PropValue {
+    char _pad[0x12];
+    short mType;            // +0x12
+    char* GetBool();        // 0x0041e920
+    int*  GetInt();         // 0x0041e990
+};
+// The app property list's vtable: +0x24 looks up an id, +0x2c by key, +0x48 enumerates keys.
+struct PropertyList {
+    virtual void v00(); virtual void v01(); virtual void v02(); virtual void v03();
+    virtual void v04(); virtual void v05(); virtual void v06(); virtual void v07();
+    virtual void v08();                                                         // +0x20
+    virtual char GetProperty(unsigned id, PropValue** out);                     // +0x24
+    virtual void v0a();                                                         // +0x28
+    virtual char GetPropertyByKey(unsigned key, unsigned id, PropValue** out);  // +0x2c
+    virtual void v0c(); virtual void v0d(); virtual void v0e(); virtual void v0f();
+    virtual void v10(); virtual void v11();
+    virtual void EnumKeys(unsigned id, void* span);                             // +0x48
+};
+
+// A begin/end/cap vector of property keys handed back by PropertyList, released on scope exit.
+void __cdecl EFree2(void* p);   // 0x00f47380
+struct PropSpan {
+    void* mpBegin; void* mpEnd; void* mpCap;
+    ~PropSpan()
+    {
+        if (mpBegin != 0 && ((int*)mpBegin)[-1] != 0)
+            EFree2(mpBegin);
+    }
+};
+
+// The manager itself (Reload's `this`): config vector at +0x18, world tree at +0x30.
+struct LightingMgr {
+    char mPad00[0x18];              // +0x00
+    LConfigVec mConfigs;            // +0x18
+    char mPad2c[4];                 // +0x2c
+    WorldTree mWorlds;              // +0x30
+    void FillLightingStateFromConfig(void* prop, LConfig* cfg);   // 0x0070aed0
+    void Reload();                  // 0x0070e160
+};
+
+// Message-target subobject at manager+4: the same config vector seen at +0x14.
+struct LightingMsgTarget {
+    char mPad00[0x14];              // +0x00
+    LConfigVec mConfigs;            // +0x14
+    char mPad28[4];                 // +0x28
+    WorldTree mWorlds;              // +0x2c
+};
 struct MsgReg { virtual void a0(); virtual void a1(); virtual void a2(); virtual void a3();
                 virtual void a4(); virtual void a5(); virtual void a6(); virtual void a7();
                 virtual void a8(void*, int); virtual void a9(); virtual void a10(); virtual void a11(); };
@@ -163,7 +275,7 @@ struct MatMgrW { char WriteMaterials(void* stream); };
 char MsgRegOwner::MsgRegister()
 {
     void* self = this;
-    ((ReloadOwner*)self)->Reload();
+    ((LightingMgr*)self)->Reload();
     void* ms = MessageServer();
     if (ms != 0)
     {
@@ -417,37 +529,87 @@ void* __cdecl EAlloc8(size_t n, unsigned a, int b, int c, const char* d, int e, 
 void __cdecl EFree2(void* p);                                // 0x00f47380
 void* __cdecl MessageServerRaw(void);                        // 0x0067dcc0
 void __cdecl ActiveStateFlushX(void);                        // 0x006fd790
-int  __cdecl CreateVertexBuffer(unsigned flags, int b);      // 0x007616f0
+void* __cdecl CreateVertexBuffer(int flags, int b);           // 0x007616f0
 void* __cdecl CreateCompiledState(void* vb);                 // 0x007617a0
 void __cdecl RegisterInvalidShader();                        // 0x00713f20
 void* __cdecl PropGetBoolStub();                             // 0x0041e920
 void* __cdecl PropGetIntStub();                              // 0x0041e990
 void* __cdecl SpriteMgrA();                                  // 0x00761b40
 void* __cdecl SpriteMgrB();                                  // 0x0067dd60
-void __cdecl DoNothing1();                                   // 0x00761150
+void __cdecl DoNothing1(void* p);                             // 0x00761150
 void __cdecl GetImageResourceStub();                         // 0x00576650
 void __cdecl DoNothing2();                                   // 0x0077e6d0
 void __cdecl DoNothing3();                                   // 0x0067d0c0
 int  __cdecl WriteUint32Stub(void* s, void* d, int n, int f); // 0x0093aa70
 void __cdecl FreeStreamStub(void* s);                        // 0x006fe430
 void __cdecl FragDeclStub(void* s);                          // 0x006fa480
-void __cdecl _eh_vector_constructor_iterator_(void* ptr, unsigned size, unsigned count, void* ctor, void* dtor);
 extern void* g_device; // 0x016f89d0
 char __cdecl props_get(void* propList, unsigned id, void* out);
-extern unsigned char g_dbg[8];
-extern unsigned g_dbg2;
-void __cdecl make_the_buffer(void* self, unsigned flags);
-void __cdecl FillLightingStateFromConfig(void* a, void* b);   // 0x0070aed0
-void __cdecl RBTreeInc(void* n);                              // 0x00921580
+extern unsigned char g_dbg[8];      // 0x015345ac
+extern unsigned g_dbg2;             // 0x015345b0
+extern void* g_propList;            // 0x015fd918
+extern const float kOne;            // 0x01485720
+int __stdcall QueryPerformanceCounter(long long* counter);   // kernel32
+
+// ---- SP::cMaterialManager ---------------------------------------------------
+struct VBDesc {
+    unsigned mFlags00;              // +0x000
+    unsigned mFlags04;              // +0x004
+    char mPad08[0x5c];              // +0x008
+    float mOne64;                   // +0x064
+    float mOne68;                   // +0x068
+    float mOne6c;                   // +0x06c
+    float mOne70;                   // +0x070
+    char mPad74[0x434 - 0x74];      // +0x074
+    unsigned mFlags434;             // +0x434
+    unsigned mFlags438;             // +0x438
+    int mState43c;                  // +0x43c
+    int mState440;                  // +0x440
+    int mState444;                  // +0x444
+    int mState448;                  // +0x448
+};
+struct VBInitOwner { void Init(int a, int b); };   // 0x011f9c10 (thiscall on the VB)
+struct ImageOwner { void GetImageResource(void* res); };   // 0x00576650
+
+struct MaterialMgr {
+    char mPad000[0x1b4];            // +0x000
+    void* mpState1b4;               // +0x1b4
+    unsigned char mb1b8;            // +0x1b8
+    char mPad1b9[3];                // +0x1b9
+    void* mpState1bc;               // +0x1bc
+    char mPad1c0[0x10];             // +0x1c0
+    int mState1d0;                  // +0x1d0
+    char mPad1d4[0x34];             // +0x1d4
+    unsigned mTickLow;              // +0x208
+    unsigned mTickHigh;             // +0x20c
+    char mPad210[8];                // +0x210
+    int mClockSource;               // +0x218
+    char mPad21c[4];                // +0x21c
+    int mState220;                  // +0x220
+    char Init();                    // 0x0070ec80
+};
+
+void __stdcall FixedElem_ctor(void* p);   // 0x006c0fa0  rw::BaseResourceDescriptor::BaseResourceDescriptor
+void __stdcall FixedElem_dtor(void* p);   // 0x00c2e4e0
+void __stdcall _eh_vector_constructor_iterator_(void* ptr, unsigned size, unsigned count,
+                                                void (__stdcall* ctor)(void*),
+                                                void (__stdcall* dtor)(void*));
+
+struct FixedArrayBuilder {
+    void* mpFirst;              // +0x00
+    void* MakeFixedArray(void* dest);
+};
 
 // @ 0x0070e480  (fixed-array wrapper constructor)
-void* MakeFixedArray(void* ret, const void* src)
+void* FixedArrayBuilder::MakeFixedArray(void* dest)
 {
-    const void* first = *(const void**)ret;
-    _eh_vector_constructor_iterator_(ret, 8, 4, 0, 0);
-    *(const void**)ret = first;
-    ((unsigned*)ret)[1] = 0x10;
-    return ret;
+    volatile int state = 0;
+    const void* first = mpFirst;
+    _eh_vector_constructor_iterator_(dest, 8, 4, FixedElem_ctor, FixedElem_dtor);
+    void** out = (void**)dest;
+    out[0] = (void*)first;
+    out[1] = (void*)0x10;
+    return out;
 }
 
 // @ 0x0070e4e0  (rebuild per-instance graphics resources)
@@ -583,72 +745,82 @@ void FillAtomic8(void** first, void** last, void** value)
 }
 
 // @ 0x0070ec80  (SP::cMaterialManager::Init)
-char cMaterialManager_Init(void* self)
+char MaterialMgr::Init()
 {
     ActiveStateFlushX();
-    unsigned* props = (unsigned*)PropertyManager();
-    if (props != 0)
-    {
-        char* out;
-        if (props_get(props, 0x5fb85a3, &out) && *(short*)(out + 0x12) == 1)
-            g_dbg[0] = *(char*)PropGetBoolStub();
-        if (props_get(props, 0x5fb85a4, &out) && *(short*)(out + 0x12) == 9)
-            g_dbg2 = *(int*)PropGetIntStub();
-        if (props_get(props, 0x179ada3, &out) && *(short*)(out + 0x12) == 1)
-        {
-            if (*(char*)PropGetBoolStub() != 0)
-            {
-                RegisterInvalidShader();
-                make_the_buffer(self, 0x7ffffffe);
-                return 1;
-            }
-        }
-    }
-    make_the_buffer(self, 0x80000002);
-    return 1;
-}
+    PropValue* prop;
+    if (g_propList != 0 &&
+        ((PropertyList*)g_propList)->GetProperty(0x5fb85a3, &prop) &&
+        prop->mType == 1)
+        g_dbg[0] = *prop->GetBool();
+    if (g_propList != 0 &&
+        ((PropertyList*)g_propList)->GetProperty(0x5fb85a4, &prop) &&
+        prop->mType == 9)
+        g_dbg2 = *prop->GetInt();
 
-void make_the_buffer(void* self, unsigned flags)
-{
+    void* vb;
+    if (g_propList != 0 &&
+        ((PropertyList*)g_propList)->GetProperty(0x179ada3, &prop) &&
+        prop->mType == 1 &&
+        *prop->GetBool() != 0)
     {
-        unsigned* vb = (unsigned*)CreateVertexBuffer(flags, 0);
-        vb[0x10d] |= 1;
-        vb[0x10e] |= 1;
-        vb[0] |= 0x10;
-        vb[1] |= 0x10;
-        vb[0x19] = 0x3f800000;
-        vb[0x1a] = 0x3f800000;
-        vb[0x1b] = 0x3f800000;
-        vb[0x1c] = 0x3f800000;
-        vb[0x10f] = 0;
-        vb[0x10d] |= 2; vb[0x10e] |= 2; vb[0x110] = 0;
-        vb[0x10d] |= 4; vb[0x10e] |= 4; vb[0x111] = 0;
-        vb[0x10d] |= 8; vb[0x10e] |= 8; vb[0x112] = 0;
-        void* cs = CreateCompiledState(vb);
-        *(void**)((char*)self + 0x1b4) = cs;
-        *(char*)((char*)self + 0x1b8) = 1;
-        *(void**)((char*)self + 0x1bc) = cs;
-        *(int*)((char*)self + 0x1d0) = -1;
-        DoNothing1();
-        void* m = SpriteMgrA();
-        void* mm = SpriteMgrB();
-        GetImageResourceStub();
-        DoNothing2();
-        DoNothing3();
-        if (*(int*)((char*)self + 0x208) == 0 && *(int*)((char*)self + 0x20c) == 0)
-        {
-            if (*(int*)((char*)self + 0x218) == 1)
-            {
-                *(int*)((char*)self + 0x20c) = 0;
-            }
-            else
-            {
-                *(int*)((char*)self + 0x20c) = 0;
-            }
-            *(int*)((char*)self + 0x208) = 0;
-        }
-        *(int*)((char*)self + 0x220) = 0;
+        RegisterInvalidShader();
+        vb = CreateVertexBuffer(0x7ffffffe, 0);
     }
+    else
+    {
+        vb = CreateVertexBuffer((int)0x80000002, 0);
+    }
+
+    VBDesc* desc = (VBDesc*)vb;
+    desc->mFlags434 |= 1;
+    desc->mFlags438 |= 1;
+    desc->mFlags00 |= 0x10;
+    desc->mFlags04 |= 0x10;
+    const float one = kOne;
+    desc->mOne64 = one;
+    desc->mOne68 = one;
+    desc->mOne6c = one;
+    desc->mOne70 = one;
+    desc->mState43c = 0;
+    desc->mFlags434 |= 2; desc->mFlags438 |= 2; desc->mState440 = 0;
+    desc->mFlags434 |= 4; desc->mFlags438 |= 4; desc->mState444 = 0;
+    desc->mFlags434 |= 8; desc->mFlags438 |= 8; desc->mState448 = 0;
+
+    ((VBInitOwner*)vb)->Init(4, 0);
+    void* cs = CreateCompiledState(vb);
+    mpState1b4 = cs;
+    mb1b8 = 1;
+    mpState1bc = cs;
+    mState1d0 = -1;
+    DoNothing1(vb);
+
+    void* image = SpriteMgrA();
+    void* mgr = SpriteMgrB();
+    void** vt = *(void***)mgr;
+    void* res = ((void*(__thiscall*)(void*, void*, int))vt[0x48 / 4])(mgr, image, 0);
+    ((ImageOwner*)((char*)this + 0x14))->GetImageResource(res);
+    DoNothing2();
+    DoNothing3();
+
+    if ((mTickLow | mTickHigh) == 0)
+    {
+        if (mClockSource == 1)
+        {
+            unsigned long long stamp = __rdtsc();
+            mTickLow = (unsigned)stamp;
+            mTickHigh = (unsigned)(stamp >> 32);
+        }
+        else
+        {
+            long long counter = 0;
+            QueryPerformanceCounter(&counter);
+            mTickLow = (unsigned)counter;
+            mTickHigh = (unsigned)(counter >> 32);
+        }
+    }
+    mState220 = 0;
+    return 1;
 }
 
 // @ 0x0070eea0  (SP::cMaterialManager::WriteMaterials)
@@ -674,86 +846,78 @@ char MatMgrW::WriteMaterials(void* stream)
     return 1;
 }
 
-// @ 0x0070de90  (cLightingManager lighting-state message handler)
-int cLightingManager_HandleMessage(void* self, int msg, void* data)
+// @ 0x0070de90 cLightingManager_HandleMessage
+char __fastcall cLightingManager_HandleMessage(LightingMsgTarget* self, int, int msg, void* data)
 {
     if (msg != 0xf62def)
         return 0;
-    int id = *(int*)((char*)data + 0x10);
-    if (id == *(int*)0x01535b38)
+    int key = *(int*)((char*)data + 0x10);
+    if (key == *(int*)0x01535b38)
     {
         int state = *(int*)((char*)data + 0x18);
-        int count = (*(int*)((char*)self + 0x18) - *(int*)((char*)self + 0x14)) / 0x144;
-        void* found = 0;
-        int i = 0;
-        for (; i < count; i++)
+        LightingMgr* mgr = (LightingMgr*)((char*)self - 4);
+        LConfig* found = 0;
+        int count = (int)(self->mConfigs.mpEnd - self->mConfigs.mpBegin);
+        for (int i = 0; i < count; i++)
         {
-            void* cfg = (void*)(*(int*)((char*)self + 0x14) + i * 0x144);
-            if (*(void**)cfg != 0 && *(int*)(*(int*)cfg + 8) == state)
+            LConfig* cfg = self->mConfigs.mpBegin + i;
+            if (cfg->mpProperty != 0 && *(int*)(*(int*)cfg->mpProperty + 8) == state)
+            {
+                mgr->FillLightingStateFromConfig(cfg->mpProperty, cfg);
+                found = cfg;
                 break;
+            }
         }
-        if (i < count)
-        {
-            void* cfg = (void*)(*(int*)((char*)self + 0x14) + i * 0x144);
-            FillLightingStateFromConfig(cfg, cfg);
-            found = cfg;
-        }
-        else
+        if (found == 0)
         {
             void* pm = PropertyManager();
-            void** vt = *(void***)pm;
-            void* prop = 0;
-            if (((char(__thiscall*)(void*, int, int, void**))vt[0x2c / 4])(pm, state, id, &prop))
+            PropRef prop;
+            prop = 0;
+            if (((PropertyList*)pm)->GetPropertyByKey(key, state, (PropValue**)&prop.mpProp))
             {
-                LConfig tmp;
-                LConfig_Default(&tmp);
-                LConfigVec_Resize((LConfigVec*)((char*)self + 0x14), count + 1);
-                LConfig* last = *(LConfig**)((char*)self + 0x18) - 1;
-                FillLightingStateFromConfig((void*)prop, last);
-                tmp.~LConfig();
-                found = last;
+                {
+                    LConfig tmp;
+                    self->mConfigs.push_back(tmp);
+                }
+                found = self->mConfigs.mpEnd - 1;
+                mgr->FillLightingStateFromConfig(prop.mpProp, found);
             }
         }
         if (found != 0)
         {
-            void* node = (void*)*(int*)((char*)self + 0x30);
-            void* head = (char*)self + 0x2c;
-            while (node != head)
+            WorldNode* head = (WorldNode*)&self->mWorlds;
+            for (WorldNode* node = self->mWorlds.mpRoot; node != head; node = RBTreeIncrement(node))
             {
-                void* w = *(void**)((char*)node + 0x14);
-                if (*(void**)((char*)w + 0x10) == found)
-                    RBTreeInc(node);
-                node = (void*)*(int*)node; // advance placeholder
-                break;
+                WorldObj* world = (WorldObj*)node->mpWorld;
+                if (world->mpConfig != 0 && world->mpConfig == (void*)found)
+                    world->ApplyConfig();
             }
         }
     }
     return 1;
 }
 
-// @ 0x0070e160  (reload lighting states from the property manager)
-void ReloadOwner::Reload()
+// @ 0x0070e160 Reload
+void LightingMgr::Reload()
 {
-    void* self = this;
-    unsigned local[3];
-    local[0] = 0; local[1] = 0; local[2] = 0;
+    PropSpan span;
+    span.mpBegin = 0; span.mpEnd = 0; span.mpCap = 0;
     void* pm = PropertyManager();
-    void** vt = *(void***)pm;
-    ((void(__thiscall*)(void*, unsigned, void*))vt[0x48 / 4])(pm, *(unsigned*)0x01535b38, local);
-    unsigned n = (local[1] - local[0]) >> 2;
-    LConfigVec_Resize((LConfigVec*)((char*)self + 0x18), n);
+    ((PropertyList*)pm)->EnumKeys(*(unsigned*)0x01535b38, (void*)&span);
+    unsigned n = (unsigned)(((char*)span.mpEnd - (char*)span.mpBegin) >> 2);
+    mConfigs.Resize(n);
+    PropRef prop;
+    prop = 0;
+    LConfig* dst = mConfigs.mpBegin;
     for (unsigned i = 0; i < n; i++)
     {
-        void* prop = 0;
-        unsigned key = *(unsigned*)(local[0] + i * 4);
-        if (((char(__thiscall*)(void*, unsigned, unsigned, void**))vt[0x2c / 4])(pm, key, *(unsigned*)0x01535b38, &prop))
-        {
-            LConfig* dst = *(LConfig**)((char*)self + 0x18) + i;
-            FillLightingStateFromConfig(prop, dst);
-        }
+        prop = 0;
+        unsigned key = ((unsigned*)span.mpBegin)[i];
+        if (((PropertyList*)pm)->GetPropertyByKey(key, *(unsigned*)0x01535b38, (PropValue**)&prop.mpProp))
+            FillLightingStateFromConfig(prop.mpProp, dst);
+        ++dst;
     }
-    if (local[0] != 0)
-        EFree2((void*)local[0]);
+    prop = 0;
 }
 // --- equivalence checker address annotations
 

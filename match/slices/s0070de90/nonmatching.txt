@@ -14,3 +14,7 @@
 0070ebf0  30    assign weak-refcount; dst kept in memory not register
 0070ec30  4     copy_backward weak-refcount; returns dstEnd in eax; equiv WEAK (127 valid, 34.5% cov); cl encodes the pointer decrement as add -4 vs orig sub 4
 0070eea0  200   SP::cMaterialManager::WriteMaterials; stream/vtable shape differs; equiv UNSUPPORTED (0/1200 valid inputs, fault(read))
+0070de90  327   cLightingManager message handler (target subobject at manager+4); register/frame layout differs, retail finds the config via an out-of-line AutoRef; equiv WEAK (400 valid, 11.6% cov); flags /O2 /MD /Gy /EHsc /TP /arch:SSE /GS-
+0070e160  226   lighting-state reload; this kept in ebx vs retail esi and frame 0x18 vs 0x20; equiv WEAK (342 valid, 57.1% cov); flags /O2 /MD /Gy /EHsc /TP /arch:SSE /GS-
+0070e480  18    fixed-array wrapper ctor; only retail's `mov eax,0x10; mov [esi+4],eax` store shape differs; equiv PASS (400 valid, 100% cov); flags /O2 /MD /Gy /EHsc /TP /arch:SSE /GS-
+0070ec80  266   cMaterialManager::Init; retail round-trips the four 1.0f constants through stack temps and keeps per-bit flag registers; equiv UNSUPPORTED (0/400 valid inputs, fault(read/write)); flags /O2 /MD /Gy /EHsc /TP /arch:SSE /GS-
