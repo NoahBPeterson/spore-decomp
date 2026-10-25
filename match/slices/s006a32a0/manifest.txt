@@ -16,3 +16,4 @@ slices/s006a32a0/s006a32a0.cpp  ?CopyVec12@@YAPAXPAXIPBX@Z  006a4100
 slices/s006a32a0/s006a32a0.cpp  ?Init@Vec38@@QAEPAU1@HPBX@Z  006a4130
 slices/s006a32a0/s006a32a0.cpp  ?Release@cDealloc@@QAEXXZ  006a4360
 slices/s006a32a0/s006a32a0.cpp  ?assign@String@@QAEAAU1@PBD@Z  006a4380
+slices/s006a32a0/s006a32a0.cpp  ?Test@FeedbackCmd@@QAE_NH@Z  006a3f00  /O2 /MD /Gy /EHsc /TP
