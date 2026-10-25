@@ -1,0 +1,5 @@
+00e8e0d0 ?CreateEggView@@YAPAUcEggView_s00e8_e0d0@@PAUcSpatialObject_s00e8_e0d0@@@Z  # CreateEggView migrated from s00e8e0d0 (verbatim, slice spelling)
+00e8e160 ?CreateNestView@@YAPAUcNestView_s00e8_e0d0@@PAUcSimulatorObject@@@Z  # CreateNestView migrated from s00e8e0d0 (verbatim, slice spelling)
+00e8e220 ?HandleSimulationUpdate@cNestView_s00e8_e0d0@@UAEXPAX0@Z  # cNestView_s00e8_e0d0::HandleSimulationUpdate migrated from s00e8e0d0 (verbatim, slice spelling)
+00e8e420 ?CreateAndStartScaledEffect@cEggView_s00e8_e0d0@@QAEXIIH@Z  # cEggView_s00e8_e0d0::CreateAndStartScaledEffect migrated from s00e8e0d0 (verbatim, slice spelling)
+00e8e5d0 ?HandleSimulationUpdate@cEggView_s00e8_e0d0@@UAEXPAX0@Z  # cEggView_s00e8_e0d0::HandleSimulationUpdate migrated from s00e8e0d0 (verbatim, slice spelling)

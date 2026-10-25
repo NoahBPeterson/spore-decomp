@@ -12,5 +12,5 @@
 00e8dd90 ?loadModel@@YAPAXXZ  # void* loadModel
 00e8de10 ?CreateGameTerrainCursorView@@YAPAVcGameTerrainCursorView@@PAVcSpatialObject@@@Z  # cGameTerrainCursorView* CreateGameTerrainCursorView
 00e8ded0 ??0cNestView@@QAE@XZ  # cNestView::cNestView
-00e8df50 ?SetupNestModelKey@cNestView@@QAEXXZ  # void cNestView::SetupNestModelKey
-00e8e050 ??0cEggView@@QAE@XZ  # cEggView::cEggView
+00e8df50 ?SetupNestModelKey@cNestView@@QAEXXZ  # cNestView::SetupNestModelKey migrated from s00e8d0e0 (verbatim, slice spelling)
+00e8e050 ??0cEggView@@QAE@XZ  # cEggView::cEggView migrated from s00e8d0e0 (verbatim, slice spelling)
