@@ -1,2 +1,2 @@
-005810d0 ?FUN_005810d0@@YAXXZ  # FUN_005810d0 migrated from s005810d0 (verbatim, slice spelling)
-005812b0 ?FUN_005812b0@@YAXXZ  # FUN_005812b0 migrated from s005810d0 (verbatim, slice spelling)
+005810d0 ?DoInsertN@VecU9@@QAEXPAIIPBI@Z  # vector<unsigned> EASTL insert(position, n, value)
+005812b0 ?FUN_005812b0@@YIXPAUGraphicsSystem9@@IPAUBitmapSrc9@@II@Z  # SP::cGraphicsSystem::InitGIFExportTexture

@@ -1,2 +1,1 @@
-005810d0 478 skeleton only (not reconstructed)
-005812b0 1086 skeleton only (not reconstructed)
+# <va>  <diff-bytes>  <reason>
