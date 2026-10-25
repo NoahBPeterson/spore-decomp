@@ -1,0 +1,9 @@
+# source  symbol  va  flags
+../src/game/SPGonzago/SPAppData.cpp  ?Load@cLoadHook@@QAE_NPAXPAUIIdentifiable@@II@Z  00e4b030  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPAppData.cpp  ?FUN_00e4b6c0@@YAPAUcResManager@@PAX0@Z  00e4b6c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPAppData.cpp  ?FUN_00e4b910@@YAXPB_W@Z  00e4b910  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPAppData.cpp  ?Free@cDescTree@@QAEXPAUcDescNode@@@Z  00e4b990  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPAppData.cpp  ?Destroy@cMyMagicCommand_s00e4_ba40@@QAEPAXI@Z  00e4bad0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPAppData.cpp  ?FUN_00e4bc70@@YAXXZ  00e4bc70  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPAppData.cpp  ?FUN_00e4bd70@@YAXXZ  00e4bd70  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPAppData.cpp  ?FUN_00e4bff0@@YAXPBDH@Z  00e4bff0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
