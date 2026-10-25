@@ -1,0 +1,14 @@
+# source  symbol  va  flags
+../src/game/SPGonzago/SPCityViews.cpp  ?ViewInit1@cBuildingView@@QAEXPAX@Z  00e87560  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCityViews.cpp  ?ViewInit4@cBuildingView@@QAEXPAX000@Z  00e87580  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCityViews.cpp  ?SetVisible@cBuildingView@@QAEXE@Z  00e875b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCityViews.cpp  ?UpdateLoyaltyBar@cCityFeedbackView@@QAEPAUcSPUIMeter@@PAU2@DI@Z  00e88c30  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCityViews.cpp  ?deleting_dtor@cCityTerritory@@QAEPAXD@Z  00e89770  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCityViews.cpp  ?deleting_dtor@cCitySoundLoopView@@QAEPAXD@Z  00e89950  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCityViews.cpp  ?HandleSimulationUpdate@cCitySoundLoopView_s00e8_99b0@SP@@QAEXII@Z  00e899b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCityViews.cpp  ?scalar_deleting_destructor@cCityWallsView@SP@@QAEPAV12@E@Z  00e89c20  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCityViews.cpp  ?FUN_00e89c60@@YGPAVcTurretView@SP@@I@Z  00e89c60  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCityViews.cpp  ?FUN_00e89d10@@YGPAVcBuildingView_s00e8_99b0@SP@@I@Z  00e89d10  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCityViews.cpp  ??0cCulturalTargetView@SP@@QAE@XZ  00e89d60  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCityViews.cpp  ?FUN_00e89e50@cCulturalTargetView@SP@@QAEIIIPAUFloat3@@@Z  00e89e50  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCityViews.cpp  ??1cCulturalTargetView@SP@@QAE@XZ  00e89f20  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

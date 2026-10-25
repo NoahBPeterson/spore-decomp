@@ -1,0 +1,6 @@
+00e87560 ?ViewInit1@cBuildingView@@QAEXPAX@Z  # cBuildingView::ViewInit1 migrated from s00e86d40 (verbatim, slice spelling)
+00e87580 ?ViewInit4@cBuildingView@@QAEXPAX000@Z  # cBuildingView::ViewInit4 migrated from s00e86d40 (verbatim, slice spelling)
+00e875b0 ?SetVisible@cBuildingView@@QAEXE@Z  # cBuildingView::SetVisible migrated from s00e86d40 (verbatim, slice spelling)
+00e87600 ?UpdateCloudTendril@SP@@YAXPAVcSpatialObjectView@1@@Z  # SP::UpdateCloudTendril migrated from s00e86d40
+00e87b70 ??0cBuildingView@@QAE@XZ  # cBuildingView::cBuildingView migrated from s00e86d40 (verbatim, slice spelling)
+00e87be0 ??1cBuildingView@@QAE@XZ  # cBuildingView::~cBuildingView migrated from s00e86d40 (verbatim, slice spelling)

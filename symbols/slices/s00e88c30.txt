@@ -1,0 +1,5 @@
+00e88c30 ?UpdateLoyaltyBar@cCityFeedbackView@@QAEPAUcSPUIMeter@@PAU2@DI@Z  # cCityFeedbackView::UpdateLoyaltyBar migrated from s00e88c30 (verbatim, slice spelling)
+00e88ce0 ?HandleSimulationUpdate@cCityFeedbackView@@QAEXHH@Z  # cCityFeedbackView::HandleSimulationUpdate migrated from s00e88c30 (verbatim, slice spelling)
+00e88e10 ?ConfigureBuildingView@cBuildingView_s00e8_8c30@@QAEXPAUcBuildingData@@@Z  # cBuildingView_s00e8_8c30::ConfigureBuildingView migrated from s00e88c30 (verbatim, slice spelling)
+00e89770 ?deleting_dtor@cCityTerritory@@QAEPAXD@Z  # cCityTerritory::deleting_dtor migrated from s00e88c30 (verbatim, slice spelling)
+00e89950 ?deleting_dtor@cCitySoundLoopView@@QAEPAXD@Z  # cCitySoundLoopView::deleting_dtor migrated from s00e88c30 (verbatim, slice spelling)

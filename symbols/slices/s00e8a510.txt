@@ -1,1 +1,1 @@
-00e8a510 SP::cBuildingView::HandleSimulationUpdate  # card name; cBuildingView : cSpatialObjectView (size 0x70)
+00e8a510 ?HandleSimulationUpdate@cBuildingView_s00e8_a510@SP@@QAEXHH@Z  # cBuildingView_s00e8_a510::HandleSimulationUpdate migrated from s00e8a510 (verbatim, slice spelling)
