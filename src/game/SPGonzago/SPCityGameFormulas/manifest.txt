@@ -1,0 +1,2 @@
+# source  symbol  va  flags
+../src/game/SPGonzago/SPCityGameFormulas.cpp  ?LoadFormulas@nCityGameFormulas@SP@@YAXXZ  00ceec60  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

@@ -1,0 +1,1 @@
+# complete behaviorally-equivalent source, not byte-exact (flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-)
