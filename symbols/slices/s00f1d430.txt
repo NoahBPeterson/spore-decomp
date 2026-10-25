@@ -1,1 +1,2 @@
 00f1d5d0  Mgr::Handle  # scenario-play interaction-command switch (types 1..11), out ptrs handled/cast-pointers
+00f1d5d0 PB::FireType3  # scenario-entry interaction-command switch: mnType 1..11 (approach/score via 0x00f19270+0x00f1aa10, animal/object/building link blocks at +0x5a8/+0x508/+0x120 with SetTarget/GetValue, posse simulator 0x00d539d0/0x00d54330, event token 0x00a18440), out nouns returned through ppA/ppB

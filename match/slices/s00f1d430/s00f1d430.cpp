@@ -54,6 +54,7 @@ struct EventMap {                    // eastl::rbtree<unsigned, AutoRefCount<cFe
     EvIter find(const uint& key);                        // 0x00e5c780
     void   insert(EvIter* pResult, uint key, InsertTag tag);   // 0x00a17a70
     void   DoNukeSubtree(EvNode* pNode);                 // 0x009a9600
+    void   LookupToken(const int& nKey, void* pToken);   // 0x00a18440
 };
 
 // ---- scenario entry --------------------------------------------------------
@@ -76,7 +77,8 @@ struct PBEl {                        // 0x1ac-byte scenario entry
     char      mPad18[0x0c];          // +0x18
     int       mnType;                // +0x24
     int       mnId;                  // +0x28
-    char      mPad2c[0x10];          // +0x2c
+    int       mnId2;                 // +0x2c  second lookup id (types 6 and 9)
+    char      mPad30[0x0c];          // +0x30
     World*    mpWorldBegin;          // +0x3c
     World*    mpWorldEnd;            // +0x40
     char      mPad44[0x1ac - 0x44];  // +0x44
@@ -120,12 +122,18 @@ struct PBPacket {
 // one-shot event reference id handed to the packet's virtual lookup
 enum { kPacketRef = 0x1186577 };
 
+struct cGameMgr;                     // game manager handed out at *0x016c7aa4 + 0x74
+
 struct GBlock {                      // *0x016c7aa4
-    char  mPad00[0x6c];
-    void* mpf_6c;                    // +0x6c
+    char      mPad00[0x6c];
+    void*     mpf_6c;                // +0x6c
+    void*     mPad70;                // +0x70
+    cGameMgr* mpGameMgr;             // +0x74
 };
 extern GBlock* g_16c7aa4;
 void FUN_00f0e6c0(void* p);          // 0x00f0e6c0
+
+struct cNoun;                        // a world noun (see the interaction commands below)
 
 struct PB {                          // scenario manager
     char   mPad00[0x1c];             // +0x00
@@ -141,6 +149,9 @@ struct PB {                          // scenario manager
     char   mf_ec;                    // +0xec
 
     void Add(PBEl* e, void* a, void* b);                             // 0x00f1ae10
+    cNoun* FindNoun(PBEl* e, int nId, cNoun* pExclude);               // 0x00f1b820
+    float Score(char bLast, cNoun* pNoun);                           // 0x00f1aa10
+    void  SetTargetRefs(PBEl* e, cNoun* pNoun);                      // 0x00f1a120
     bool FireType3(PBEl* e, bool* pFlag, void** ppA, void** ppB);    // 0x00f1d5d0
     void FireType4(PBPacket* pPacket);                               // 0x00f1d430
     void FireType5(PBPacket* pPacket);                               // 0x00f1d500
@@ -321,4 +332,331 @@ void ElemVector::Assign(Elem16* pFirst, Elem16* pLast, int nUnused)
     void* pNewEnd;
     UninitializedCopy(&pNewEnd, pMid, pLast, mpEnd, pLast);
     mpEnd = (Elem16*)pNewEnd;
+}
+
+// ---------------------------------------------------------------------------
+// World side of the interaction commands (types 1..11 of 00f1d5d0).
+// ---------------------------------------------------------------------------
+
+extern float g_15ad93c;              // 0x015ad93c
+extern float g_15ad944;              // 0x015ad944
+extern float g_14853e0;              // 0x014853e0
+extern float g_1470f1c;              // 0x01470f1c
+extern float g_13eb95c;              // 0x013eb95c
+extern char  g_16c826c;             // 0x016c826c  global handed to the "set target" call
+
+// The link block every noun carries for the interaction system; only two of its virtuals are
+// used by the commands (slot +0x18 "set target" and slot +0x58 "value against the avatar").
+struct cNounLink {
+    virtual void  Unused00();                                        // +0x00
+    virtual void  Unused04();                                        // +0x04
+    virtual void  Unused08();                                        // +0x08
+    virtual void  Unused0c();                                        // +0x0c
+    virtual void  Unused10();                                        // +0x10
+    virtual void  Unused14();                                        // +0x14
+    // (float value, mode, global handed in by the caller, the other side's link block)
+    virtual void  SetTarget(float fValue, int nMode, void* pGlobal, cNounLink* pOther);   // +0x18
+    virtual void  Unused1c();                                        // +0x1c
+    virtual void  Unused20();                                        // +0x20
+    virtual void  Unused24();                                        // +0x24
+    virtual void  Unused28();                                        // +0x28
+    virtual void  Unused2c();                                        // +0x2c
+    virtual void  Unused30();                                        // +0x30
+    virtual void  Unused34();                                        // +0x34
+    virtual void  Unused38();                                        // +0x38
+    virtual void  Unused3c();                                        // +0x3c
+    virtual void  Unused40();                                        // +0x40
+    virtual void  Unused44();                                        // +0x44
+    virtual void  Unused48();                                        // +0x48
+    virtual void  Unused4c();                                        // +0x4c
+    virtual void  Unused50();                                        // +0x50
+    virtual void  Unused54();                                        // +0x54
+    virtual float GetValue(void* pActive);                           // +0x58
+};
+
+// A world noun.  Only the interface query (slot +0x0c) and three fields are touched here.
+struct cNoun {
+    virtual void* Unused00();                                        // +0x00
+    virtual void* Unused04();                                        // +0x04
+    virtual void* Unused08();                                        // +0x08
+    virtual void* Query(uint nId);                                   // +0x0c
+    char  mPad04[0x20];                                              // +0x04
+    int   mnType24;                                                  // +0x24
+    char  mPad28[0x28];                                              // +0x28
+    uint  mnFlags50;                                                 // +0x50
+};
+
+struct cAvatar;                                                      // see below
+struct cNoun;
+
+// Animal / object / building instances each embed the link block at their own offset.
+struct cCreature {
+    char      mPad00[0x5a8];                                         // +0x00
+    cNounLink mLink;                                                 // +0x5a8
+    char      mPad604[0xb58 - 0x604];                                // +0x604
+    uint      mnFlagsB58;                                            // +0xb58
+    bool      TryInteract(cNoun* pNoun, int nMode, int nFlags);      // 0x00c159c0
+};
+
+struct cPlainObject {
+    char      mPad00[0x508];                                         // +0x00
+    cNounLink mLink;                                                 // +0x508
+    bool      TryInteract(cNoun* pNoun);                             // 0x00ca4320
+};
+
+struct cBuilding {
+    char      mPad00[0x120];                                         // +0x00
+    cNounLink mLink;                                                 // +0x120
+    bool      TryInteract(cNoun* pNoun);                             // 0x00bcf490
+};
+
+// The player avatar record: it carries its own link block at +0x5a8 and the interaction list at
+// +0xe40 that 0x00c15d50 edits.
+struct cAvatar {
+    char      mPad00[0x5a8];                                         // +0x00
+    cNounLink mLink;                                                 // +0x5a8
+    char      mPad604[0xe40 - 0x604];                                // +0x604
+    void      ForgetNoun(cNoun* pNoun, int nMode, int nFlags);       // 0x00c15d50
+};
+
+// Result of 0x00ad7380: a noun that keeps a back-pointer to the avatar-like record.
+struct cNounHolder {
+    char      mPad00[0x108];                                         // +0x00
+    cAvatar*  mpAvatar;                                              // +0x108
+};
+
+// Wrapper object returned by 0x00bd8460; kind 9 wrappers are transparent for the commands.
+struct cWrapper {
+    char  mPad00[0x38];                                              // +0x00
+    int   mnKind38;                                                  // +0x38
+};
+
+struct cGameNounManager {
+    cAvatar*   GetAvatar();                                          // 0x00b1fdb0
+    cCreature* GetActiveObject();                                    // 0x00b1f9d0
+};
+
+struct cPosseSimulator {
+    int  Count();                                                    // 0x00d52df0
+    bool AddPosseMember(cCreature* pAnimal);                         // 0x00d54330
+};
+
+struct cGameMgr {                                                    // *(gSporeApp + 0x74)
+    int GetMaxMembers();                                             // 0x00f3bf60
+};
+
+cGameNounManager* __cdecl NounManager();                              // 0x00b3d300
+cPosseSimulator*  __cdecl PosseSimulator();                           // 0x00d539d0
+
+void        __cdecl ApproachNoun(void* pMover, void* pTarget, float fDistance);  // 0x00f19270
+cCreature*  __cdecl AvatarCreature(cAvatar* pAvatar);                 // 0x00f19200
+cNoun*      __cdecl GetNounRef(cNoun* pNoun);                         // 0x00b18e00
+void        __cdecl DetachNoun(cNoun* pNoun, cNoun* pRef);            // 0x00f195a0
+cCreature*  __cdecl AsCreature(cNoun* pNoun);                         // 0x00ac8960
+cPlainObject* __cdecl AsObject(cNoun* pNoun);                         // 0x00ae6760
+cBuilding*  __cdecl AsBuilding(cNoun* pNoun);                         // 0x00b67720
+cNounHolder* __cdecl AsHolder(cNoun* pNoun);                          // 0x00ad7380
+cWrapper*   __cdecl AsWrapper(cNoun* pNoun);                          // 0x00bd8460
+cNoun*      __cdecl UnwrapNoun(cWrapper* pWrapper);                   // 0x00f20d20
+
+// @ 0x00f1d5d0
+// Interaction-command switch: `e->mnType` (1..11) selects what the entry does with the nouns it
+// refers to.  Every command resolves those nouns through the manager, positions them relative to
+// the avatar (0x00f19270) and, on success, hands them back through ppA/ppB.  `*pFlag` reports
+// whether the caller should register the result as a new entry; types 10 and 11 are not commands
+// and report "nothing happened" straight away.
+bool PB::FireType3(PBEl* e, bool* pFlag, void** ppA, void** ppB)
+{
+    *pFlag = true;
+    *ppA = 0;
+    *ppB = 0;
+    cGameMgr* pGame = g_16c7aa4->mpGameMgr;
+    bool  bResult = false;
+    cNoun* pNoun = 0;                 // handed back through ppA
+    cNoun* pSecond = 0;               // handed back through ppB
+
+    switch (e->mnType) {
+    case 1:
+    case 7: {
+        pNoun = FindNoun(e, e->mnId, 0);
+        if (!pNoun)
+            return false;
+        const bool bLast = e->mnType == 7;
+        ApproachNoun(NounManager()->GetAvatar(), pNoun, Score(bLast, GetNounRef(pNoun)));
+        if (bLast)
+            DetachNoun(pNoun, GetNounRef(pNoun));
+        // record the noun's type in the entry's event map, keyed by that type
+        const int nKey = pNoun->mnType24;
+        int nToken;
+        e->mEvents.LookupToken(nKey, &nToken);
+        bResult = true;
+        break;
+    }
+    case 2:
+        pNoun = FindNoun(e, e->mnId, 0);
+        if (!pNoun)
+            return false;
+        ApproachNoun(NounManager()->GetAvatar(), pNoun, g_15ad93c * 0.75f);
+        if (mf_ec) {
+            *pFlag = true;
+            bResult = true;
+        } else {
+            SetTargetRefs(e, pNoun);
+            *pFlag = false;
+        }
+        break;
+    case 3: {
+        pNoun = FindNoun(e, e->mnId, 0);
+        if (!pNoun)
+            return false;
+        ApproachNoun(NounManager()->GetAvatar(), pNoun, g_14853e0);
+        cWrapper* pWrapper = AsWrapper(pNoun);
+        if (pWrapper != 0 && pWrapper->mnKind38 == 9)
+            pNoun = UnwrapNoun(pWrapper);
+        cCreature*    pAnimal = AsCreature(pNoun);
+        cPlainObject* pObject = AsObject(pNoun);
+        cBuilding*    pBuilding = AsBuilding(pNoun);
+        cNounLink* pLink;
+        cNounLink* pOther = 0;
+        int nMode;
+        cAvatar* pAvatar;
+        if (pAnimal != 0) {
+            pAvatar = NounManager()->GetAvatar();
+            pOther = pAvatar != 0 ? &pAvatar->mLink : 0;
+            pLink = &pAnimal->mLink;
+            nMode = 2;
+        } else if (pObject != 0) {
+            pAvatar = NounManager()->GetAvatar();
+            pOther = pAvatar != 0 ? &pAvatar->mLink : 0;
+            pLink = &pObject->mLink;
+            nMode = 0;
+        } else if (pBuilding != 0) {
+            pAvatar = NounManager()->GetAvatar();
+            pOther = pAvatar != 0 ? &pAvatar->mLink : 0;
+            pLink = &pBuilding->mLink;
+            nMode = 0;
+        } else {
+            *pFlag = false;
+            break;
+        }
+        pLink->SetTarget(pLink->GetValue(NounManager()->GetActiveObject()), nMode,
+                         &g_16c826c, pOther);
+        bResult = true;
+        *pFlag = false;
+        break;
+    }
+    case 4: {
+        pNoun = FindNoun(e, e->mnId, 0);
+        if (!pNoun)
+            return false;
+        ApproachNoun(NounManager()->GetAvatar(), pNoun, g_1470f1c);
+        cCreature* pAnimal = AsCreature(pNoun);
+        if (pAnimal != 0) {
+            pAnimal->mnFlagsB58 |= 0x80;
+            const int nKey = pNoun->mnType24;
+            int nToken;
+            e->mEvents.LookupToken(nKey, &nToken);
+            *pFlag = true;
+            bResult = true;
+        }
+        break;
+    }
+    case 5: {
+        if (PosseSimulator()->Count() >= pGame->GetMaxMembers()) {
+            *pFlag = false;
+            return false;
+        }
+        pNoun = FindNoun(e, e->mnId, 0);
+        if (!pNoun)
+            return false;
+        ApproachNoun(NounManager()->GetAvatar(), pNoun, g_1470f1c);
+        cCreature* pAnimal = AsCreature(pNoun);
+        if (pAnimal != 0) {
+            bResult = PosseSimulator()->AddPosseMember(pAnimal);
+            *pFlag = false;
+        }
+        break;
+    }
+    case 6:
+        pSecond = FindNoun(e, e->mnId2, 0);
+        if (!pSecond)
+            return false;
+        pNoun = FindNoun(e, e->mnId, pSecond);
+        if (!pNoun)
+            goto skipFirst;
+        if (AsBuilding(pNoun) != 0) {
+            // the building becomes the second noun and the first one the mover
+            cNoun* pTmp = pSecond;
+            pSecond = pNoun;
+            pNoun = pTmp;
+        }
+        if (AsBuilding(pNoun) != 0) {
+            *pFlag = false;
+            break;
+        }
+        ApproachNoun(NounManager()->GetAvatar(), pSecond, g_13eb95c);
+        ApproachNoun(pNoun, pSecond, g_15ad944 * 0.75f);
+        bResult = true;
+        *pFlag = true;
+        break;
+    case 8: {
+        pNoun = FindNoun(e, e->mnId, 0);
+        if (!pNoun)
+            return false;
+        ApproachNoun(NounManager()->GetAvatar(), pNoun, 1.0f);
+        cCreature* pActive = AvatarCreature(NounManager()->GetAvatar());
+        if (pActive == 0)
+            break;
+        cNoun* pKey = GetNounRef(pNoun);
+        if ((pKey->mnFlags50 & 0x100) != 0) {
+            cNounHolder* pHolder = AsHolder(pNoun);
+            if (pHolder != 0 && pHolder->mpAvatar != 0)
+                pHolder->mpAvatar->ForgetNoun(pKey, 1, 0);
+        }
+        pActive->TryInteract(pKey, 0, 1);
+        bResult = true;
+        break;
+    }
+    case 9: {
+        pSecond = FindNoun(e, e->mnId2, 0);
+        if (!pSecond)
+            return false;
+        pNoun = FindNoun(e, e->mnId, 0);
+        if (!pNoun)
+            goto skipFirst;
+        ApproachNoun(NounManager()->GetAvatar(), pSecond, g_13eb95c);
+        cCreature*    pAnimal = AsCreature(pSecond);
+        cPlainObject* pObject = AsObject(pSecond);
+        cBuilding*    pBuilding = AsBuilding(pSecond);
+        cNoun*   pKey = GetNounRef(pNoun);
+        cAvatar* pAvatar = NounManager()->GetAvatar();
+        if (pBuilding != 0) {
+            pAvatar->ForgetNoun(pKey, 1, 0);
+            bResult = pBuilding->TryInteract(pNoun);
+            *pFlag = bResult;
+        } else if (pObject != 0) {
+            pAvatar->ForgetNoun(pKey, 1, 0);
+            bResult = pObject->TryInteract(pNoun);
+            *pFlag = bResult;
+        } else if (pAnimal != 0) {
+            pAvatar->ForgetNoun(pKey, 1, 0);
+            bResult = pAnimal->TryInteract(pKey, 0, 1);
+            *pFlag = bResult;
+        } else {
+            *pFlag = false;
+        }
+        break;
+    }
+    case 10:
+    case 11:
+        *pFlag = false;
+        return false;
+    }
+
+    if (pNoun != 0)
+        *ppA = pNoun->Query(kPacketRef);
+skipFirst:
+    if (pSecond != 0)
+        *ppB = pSecond->Query(kPacketRef);
+    return bResult;
 }
