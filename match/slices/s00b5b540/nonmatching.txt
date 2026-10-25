@@ -1,6 +1,5 @@
 # va  diff-bytes  reason  (complete behaviourally-equivalent source, not byte-exact)
 00b5b540   82  multi-vtable serialization bridge; vcall argument order/obj layout differs
-00b5b5d0   0  interface adjustor thunk; __thiscall member form puts self in ecx and emits ret 4 with the original neg/sbb/and branch (byte-exact). [equiv: PASS]
 00b5b690   17  free-list erase-first-equal; loop/branch layout differs
 00b5b6c0   16  cGonzagoSimulator ctor; double vtable store schedule differs
 00b5b6f0   26  free-list push_back; grow path now calls SPVector::DoInsertKey4 as __thiscall (ecx=0x1686a18, args end/&v) instead of cdecl; remaining diff is the capacity-check/add register schedule. [equiv: WEAK 52.9% coverage (grow path); replay PASS]
