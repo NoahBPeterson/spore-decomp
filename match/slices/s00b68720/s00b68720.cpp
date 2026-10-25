@@ -2,6 +2,7 @@
 // usage.
 // Flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast (no /EHsc).
 #include "types.h"
+#include <xmmintrin.h>
 
 typedef unsigned int uint;
 
@@ -11,10 +12,13 @@ struct Obj {
     int mField4;                        // 0x04
     unsigned char pad8[0x14];
     float m1c;                          // 0x1c
+    float m20;                          // 0x20
     float m24;                          // 0x24
     float m28;                          // 0x28
     float m2c;                          // 0x2c
     float m30;                          // 0x30
+    unsigned char m34;                  // 0x34 active-layout flag
+    unsigned char pad35[3];
     float m38;                          // 0x38
     float m3c;                          // 0x3c
     float m40;                          // 0x40
@@ -38,6 +42,10 @@ struct Obj {
 
 // the manager singleton at 0x01687348
 struct Manager {
+    unsigned char pad0[0x24];
+    float mGlowDecay;                   // 0x24 damage-glow decay rate
+    float mRefillRate;                  // 0x28 bar refill rate
+    float mDrainRate;                   // 0x2c bar drain rate
     int GetPriority();                          // 0x00e31100 (thiscall)
     Obj* Find(const int& key);                  // 0x00b72230 (thiscall, ret 4)
     int Alloc();                                // 0x00b72160 (thiscall)
@@ -68,6 +76,23 @@ extern const wchar_t kRolloverInvulnName[];   // 0x01464990 L"Rollover_ScenarioI
 extern float kOne_;                      // 0x01485720  1.0f
 extern float kProbeLimit;                // 0x013eb1bc
 extern float __cdecl Clamp01(float v);   // 0x005a6e00
+
+// axis-aligned rectangle handed back by window slot 0x38
+struct Rect {
+    float left;                         // 0x00
+    float top;                          // 0x04
+    float right;                        // 0x08
+    float bottom;                       // 0x0c
+};
+
+// the min(max(v, 0), 1) form MSVC inlined into 0x00b69010 at three sites
+static __inline float Clamp01Inline(float v)
+{
+    __m128 x = _mm_set_ss(v);
+    x = _mm_max_ss(_mm_setzero_ps(), x);
+    x = _mm_min_ss(x, _mm_set_ss(1.0f));
+    return _mm_cvtss_f32(x);
+}
 
 // helpers used by the layout builder @ 00b68aa0
 extern int  __cdecl FUN_00b687d0(int* value);          // 0x00b687d0 (FindOrCreate)
@@ -179,523 +204,197 @@ int __cdecl FindOrCreate(int* value)
 }
 
 // =============================================================================
-// @ 0x00b693b0  Register-ABI helper (incoming ecx = window, esi = the record):
-// sets the record's colour from the window rect delta * param_2 (a float on the
-// stack), then toggles visibility.  Expressed as a naked function because the
-// record arrives in esi, which MSVC's C ABI cannot express.
-__declspec(naked) void FUN_00b693b0()
+// @ 0x00b693b0  Register-ABI helper (incoming ecx = rect provider, esi = target
+// window, stack float alpha at entry+4): builds a rect from the provider's
+// slot-0x34 rectangle scaled by alpha on the x axis and hands it to the
+// target's slot 0x60, then sets the colour/visibility from alpha.  The two
+// register arguments are modelled as explicit leading parameters.
+void FUN_00b693b0(void* pProvider, void* pTarget, float alpha)
 {
-    __asm {
-        sub     esp, 0x10
-        mov     eax, dword ptr [ecx]
-        mov     edx, dword ptr [eax + 0x34]
-        call    edx
-        movss   xmm2, dword ptr [eax]
-        movss   xmm3, dword ptr [eax + 4]
-        movss   xmm0, dword ptr [eax + 8]
-        movss   xmm1, dword ptr [eax + 0x0c]
-        mov     eax, dword ptr [esi]
-        xorps   xmm4, xmm4
-        mov     edx, dword ptr [eax + 0x60]
-        lea     ecx, [esp]
-        subss   xmm0, xmm2
-        mulss   xmm0, dword ptr [esp + 0x14]
-        push    ecx
-        subss   xmm1, xmm3
-        mov     ecx, esi
-        movss   dword ptr [esp + 4], xmm4
-        movss   dword ptr [esp + 8], xmm4
-        movss   dword ptr [esp + 0x0c], xmm0
-        movss   dword ptr [esp + 0x10], xmm1
-        call    edx
-        movss   xmm0, dword ptr [esp + 0x18]
-        ucomiss xmm0, dword ptr [kColourZero]
-        lahf
-        test    ah, 0x44
-        jp      l_colour
-        mov     eax, dword ptr [esi]
-        mov     edx, dword ptr [eax + 0x7c]
-        push    0
-        push    1
-        mov     ecx, esi
-        call    edx
-        add     esp, 0x10
-        ret
-    l_colour:
-        mulss   xmm0, dword ptr [kColourScale]
-        movss   dword ptr [esp + 0x14], xmm0
-        cvtss2si eax, dword ptr [esp + 0x14]
-        mov     edx, dword ptr [esi]
-        shl     eax, 0x18
-        or      eax, 0xffffff
-        push    eax
-        mov     eax, dword ptr [edx + 0x5c]
-        mov     ecx, esi
-        call    eax
-        mov     edx, dword ptr [esi]
-        mov     eax, dword ptr [edx + 0x7c]
-        push    1
-        push    1
-        mov     ecx, esi
-        call    eax
-        add     esp, 0x10
-        ret
+    const Rect* r = (const Rect*)(*(void*(__thiscall**)(void*))(*(int*)pProvider + 0x34))(pProvider);
+    Rect rc;
+    rc.left = 0.0f;
+    rc.top = 0.0f;
+    rc.right = (r->right - r->left) * alpha;
+    rc.bottom = r->bottom - r->top;
+    (*(void(__thiscall**)(void*, Rect*))(*(int*)pTarget + 0x60))(pTarget, &rc);
+
+    if (alpha == 0.0f) {
+        (*(void(__thiscall**)(void*, int, int))(*(int*)pTarget + 0x7c))(pTarget, 1, 0);
+        return;
     }
+    int level = _mm_cvtss_si32(_mm_set_ss(alpha * kColourScale));
+    (*(void(__thiscall**)(void*, unsigned int))(*(int*)pTarget + 0x5c))(
+        pTarget, ((unsigned int)level << 0x18) | 0xffffffu);
+    (*(void(__thiscall**)(void*, int, int))(*(int*)pTarget + 0x7c))(pTarget, 1, 1);
 }
 
 // =============================================================================
-// @ 0x00b69460  Register-ABI helper (incoming esi = an object, edi = a mode):
-// optionally fetches a sub-object through the object's slot-3 method, toggles the
-// sub-object's slot-0x7c method, and for a real mode forwards to the object's
-// slot-0x14 method.  Naked for the same esi/edi reason.
-__declspec(naked) void FUN_00b69460()
+// @ 0x00b69460  Register-ABI helper (incoming esi = a window, edi = a mode):
+// fetches the window's slot-0x0c sub-object and toggles that sub-object's
+// slot-0x7c visibility; a real mode is then forwarded to the window's
+// slot-0x14.  The two register arguments are explicit parameters here.
+void FUN_00b69460(void* pWindow, int mode)
 {
-    __asm {
-        test    esi, esi
-        je      l_null
-        mov     eax, dword ptr [esi]
-        mov     edx, dword ptr [eax + 0x0c]
-        push    0xeeee8218
-        mov     ecx, esi
-        call    edx
-        mov     ecx, eax
-        jmp     l_have
-    l_null:
-        xor     ecx, ecx
-    l_have:
-        mov     eax, dword ptr [ecx]
-        mov     edx, dword ptr [eax + 0x7c]
-        cmp     edi, -1
-        jne     l_two
-        push    0
-        push    1
-        call    edx
-        ret
-    l_two:
-        push    1
-        push    1
-        call    edx
-        mov     eax, dword ptr [esi]
-        mov     edx, dword ptr [eax + 0x14]
-        push    edi
-        mov     ecx, esi
-        call    edx
-        ret
+    void* pCtx = 0;
+    if (pWindow != 0)
+        pCtx = (*(void*(__thiscall**)(void*, void*))(*(int*)pWindow + 0x0c))(pWindow, (void*)0xeeee8218);
+    if (mode == -1) {
+        (*(void(__thiscall**)(void*, int, int))(*(int*)pCtx + 0x7c))(pCtx, 1, 0);
+        return;
     }
+    (*(void(__thiscall**)(void*, int, int))(*(int*)pCtx + 0x7c))(pCtx, 1, 1);
+    (*(void(__thiscall**)(void*, int))(*(int*)pWindow + 0x14))(pWindow, mode);
 }
 
 // =============================================================================
 // @ 0x00b68910  Register-ABI window routine (incoming ecx = an object whose
-// slot-3 method yields a window, edi = the record/self).  Creates a
-// Rollover_ScenarioInvulnerableImage layout, finds its window, positions and
-// anchors it, then shuts the layout down.  Naked as the record arrives in edi.
-__declspec(naked) void FUN_00b68910()
+// slot-3 method yields a window, edi = the manager record).  Creates a
+// Rollover_ScenarioInvulnerableImage layout, finds its window, sizes and
+// anchors it to the record's panel, then shuts the layout down.  The two
+// register arguments are explicit parameters here.
+void FUN_00b68910(void* pOwner, Obj* self)
 {
-    __asm {
-        sub     esp, 0x1c
-        test    ecx, ecx
-        je      l_nullwin
-        mov     eax, dword ptr [ecx]
-        mov     edx, dword ptr [eax + 0x0c]
-        push    0x13f94d4
-        call    edx
-        jmp     l_havewin
-    l_nullwin:
-        xor     eax, eax
-    l_havewin:
-        mov     byte ptr [edi + 0x34], 0
-        test    eax, eax
-        je      l_done
-        mov     ecx, eax
-        call    FUN_00bfc480
-        test    al, al
-        je      l_done
-        mov     ecx, dword ptr [edi + 0x64]
-        mov     byte ptr [edi + 0x34], 1
-        test    ecx, ecx
-        je      l_s2
-        mov     eax, dword ptr [ecx]
-        mov     edx, dword ptr [eax + 0x7c]
-        push    0
-        push    1
-        call    edx
-    l_s2:
-        mov     ecx, dword ptr [edi + 0x68]
-        test    ecx, ecx
-        je      l_s3
-        mov     eax, dword ptr [ecx]
-        mov     edx, dword ptr [eax + 0x7c]
-        push    0
-        push    1
-        call    edx
-    l_s3:
-        mov     ecx, dword ptr [edi + 0x6c]
-        test    ecx, ecx
-        je      l_s4
-        mov     eax, dword ptr [ecx]
-        mov     edx, dword ptr [eax + 0x7c]
-        push    0
-        push    1
-        call    edx
-    l_s4:
-        mov     ecx, dword ptr [edi + 0x74]
-        test    ecx, ecx
-        je      l_layout
-        mov     eax, dword ptr [ecx]
-        mov     edx, dword ptr [eax + 0x7c]
-        push    0
-        push    1
-        call    edx
-    l_layout:
-        lea     ecx, [esp + 4]
-        call    cConnectionDialog_ctor
-        push    0x5b598fa
-        push    0
-        push    0x40464100
-        push    offset kRolloverInvulnName
-        lea     ecx, [esp + 0x14]
-        call    cSPUILayout_Init
-        test    al, al
-        je      l_dtor
-        push    esi
-        push    1
-        push    0x26e0df3
-        lea     ecx, [esp + 0x10]
-        call    cSPUILayout_FindWindowByID
-        mov     esi, eax
-        test    esi, esi
-        je      l_nowin
-        mov     eax, dword ptr [esi]
-        mov     edx, dword ptr [eax]
-        mov     ecx, esi
-        call    edx
-    l_nowin:
-        mov     eax, dword ptr [esi]
-        mov     edx, dword ptr [eax + 0x10]
-        mov     ecx, esi
-        call    edx
-        test    eax, eax
-        je      l_shutdown
-        mov     eax, dword ptr [esi]
-        mov     edx, dword ptr [eax + 0x10]
-        mov     ecx, esi
-        call    edx
-        mov     edx, dword ptr [eax]
-        mov     ecx, eax
-        mov     eax, dword ptr [edx + 0xdc]
-        push    esi
-        call    eax
-    l_shutdown:
-        push    1
-        lea     ecx, [esp + 0x0c]
-        call    cSPUILayout_Shutdown
-        mov     ecx, dword ptr [edi + 0x70]
-        mov     edx, dword ptr [ecx]
-        mov     eax, dword ptr [edx + 0xd8]
-        push    esi
-        call    eax
-        fldz
-        mov     edx, dword ptr [esi]
-        mov     eax, dword ptr [edx + 0x70]
-        sub     esp, 8
-        fst     dword ptr [esp + 4]
-        mov     ecx, esi
-        fstp    dword ptr [esp]
-        call    eax
-        mov     ecx, dword ptr [edi + 0x70]
-        mov     edx, dword ptr [ecx]
-        mov     eax, dword ptr [edx + 0x38]
-        call    eax
-        fld     dword ptr [eax + 0x0c]
-        fsub    dword ptr [eax + 4]
-        mov     ecx, dword ptr [edi + 0x70]
-        mov     edx, dword ptr [ecx]
-        mov     eax, dword ptr [edx + 0x38]
-        fstp    dword ptr [esp + 4]
-        call    eax
-        movss   xmm0, dword ptr [eax + 8]
-        fld     dword ptr [esp + 4]
-        mov     edx, dword ptr [esi]
-        subss   xmm0, dword ptr [eax]
-        mov     eax, dword ptr [edx + 0x74]
-        sub     esp, 8
-        fstp    dword ptr [esp + 4]
-        mov     ecx, esi
-        movss   dword ptr [esp], xmm0
-        call    eax
-        mov     ecx, dword ptr [edi + 0x70]
-        push    0
-        push    0x300
-        push    esi
-        push    ecx
-        call    AnchorWindowToWindow
-        mov     edx, dword ptr [esi]
-        mov     eax, dword ptr [edx + 4]
-        add     esp, 0x10
-        mov     ecx, esi
-        call    eax
-        pop     esi
-    l_dtor:
-        lea     ecx, [esp + 4]
-        call    cSPUILayout_dtor
-    l_done:
-        add     esp, 0x1c
-        ret
+    void* pWin = 0;
+    if (pOwner != 0)
+        pWin = (*(void*(__thiscall**)(void*, void*))(*(int*)pOwner + 0x0c))(pOwner, (void*)&gVtbl13f94d4);
+    self->m34 = 0;
+    if (pWin == 0)
+        return;
+    if (!FUN_00bfc480())
+        return;
+
+    self->m34 = 1;
+    if (self->m64 != 0)
+        (*(void(__thiscall**)(void*, int, int))(*(int*)self->m64 + 0x7c))((void*)self->m64, 1, 0);
+    if (self->m68 != 0)
+        (*(void(__thiscall**)(void*, int, int))(*(int*)self->m68 + 0x7c))((void*)self->m68, 1, 0);
+    if (self->m6c != 0)
+        (*(void(__thiscall**)(void*, int, int))(*(int*)self->m6c + 0x7c))((void*)self->m6c, 1, 0);
+    if (self->m74 != 0)
+        (*(void(__thiscall**)(void*, int, int))(*(int*)self->m74 + 0x7c))((void*)self->m74, 1, 0);
+
+    // cSPUILayout instance (0x18 bytes); ctor/Init/Shutdown/dtor are the same
+    // thiscall helpers the original invokes, modelled with an explicit self.
+    char layout[0x18];
+    cConnectionDialog_ctor(layout);
+    if (!cSPUILayout_Init(layout, kRolloverInvulnName, 0x40464100, 0, 0x5b598fa)) {
+        cSPUILayout_dtor(layout);
+        return;
     }
+
+    void* pItem = cSPUILayout_FindWindowByID(layout, 0x26e0df3, 1);
+    if (pItem != 0)
+        (*(void(__thiscall**)(void*))(*(int*)pItem + 0x00))(pItem);
+    void* pR = (*(void*(__thiscall**)(void*))(*(int*)pItem + 0x10))(pItem);
+    if (pR != 0) {
+        void* pR2 = (*(void*(__thiscall**)(void*))(*(int*)pItem + 0x10))(pItem);
+        (*(void(__thiscall**)(void*, void*))(*(int*)pR2 + 0xdc))(pR2, pItem);
+    }
+    cSPUILayout_Shutdown(layout, 1);
+
+    void* pPanel = (void*)self->m70;
+    (*(void(__thiscall**)(void*, void*))(*(int*)pPanel + 0xd8))(pPanel, pItem);
+    (*(void(__thiscall**)(void*, float, float))(*(int*)pItem + 0x70))(pItem, 0.0f, 0.0f);
+
+    const Rect* a = (const Rect*)(*(void*(__thiscall**)(void*))(*(int*)pPanel + 0x38))(pPanel);
+    float height = a->bottom - a->top;
+    const Rect* b = (const Rect*)(*(void*(__thiscall**)(void*))(*(int*)pPanel + 0x38))(pPanel);
+    float width = b->right - b->left;
+    (*(void(__thiscall**)(void*, float, float))(*(int*)pItem + 0x74))(pItem, width, height);
+    AnchorWindowToWindow(pPanel, pItem, 0x300, 0);
+    (*(void(__thiscall**)(void*))(*(int*)pItem + 0x04))(pItem);
+
+    cSPUILayout_dtor(layout);
 }
 
 // =============================================================================
-// @ 0x00b69010  Register-ABI health-bar/decay updater (incoming esi = the record,
-// two floats on the stack at [esp+0x18]/[esp+0x1c]).  Eases the record's bar
-// towards its target, clamps sub-values through Clamp01 (0x005a6e00), and returns
-// whether the current value (record+0x38) is positive.  Naked for the esi ABI.
-__declspec(naked) void FUN_00b69010()
+// @ 0x00b69010  Register-ABI health-bar/decay updater (incoming esi = the
+// record, stack floats target at entry+4 and dt at entry+8).  Eases the
+// record's bar towards its target, clamps its sub-values through the
+// min(max(v,0),1) sequence the original inlines, and returns whether the flash
+// value (record+0x38) is still positive.  The register argument is an explicit
+// trailing parameter here.
+bool FUN_00b69010(float target, float dt, Obj* self)
 {
-    __asm {
-        sub     esp, 0x14
-        mov     eax, dword ptr [gManager]
-        movss   xmm2, dword ptr [eax + 0x24]
-        movss   xmm1, dword ptr [esp + 0x1c]
-        movss   xmm0, dword ptr [esi + 0x44]
-        lea     ecx, [esi + 0x44]
-        mulss   xmm2, xmm1
-        subss   xmm0, xmm2
-        movss   xmm2, dword ptr [kOne_]
-        movss   dword ptr [ecx], xmm0
-        movss   dword ptr [esp + 4], xmm0
-        movss   dword ptr [esp], xmm2
-        xorps   xmm0, xmm0
-        maxss   xmm0, dword ptr [esp + 4]
-        minss   xmm0, dword ptr [esp]
-        movss   dword ptr [esp + 4], xmm0
-        movss   xmm0, dword ptr [esp + 4]
-        movss   dword ptr [ecx], xmm0
-        movss   xmm0, dword ptr [esp + 0x18]
-        comiss  xmm0, dword ptr [esi + 0x1c]
-        movss   dword ptr [esi + 0x20], xmm0
-        jbe     l_b1
-        movss   dword ptr [esi + 0x28], xmm0
-        movss   dword ptr [esi + 0x30], xmm0
-    l_b1:
-        movss   xmm3, dword ptr [esi + 0x1c]
-        ucomiss xmm3, dword ptr [kProbeLimit]
-        lahf
-        test    ah, 0x44
-        jp      l_b2
-        movss   dword ptr [esi + 0x1c], xmm0
-    l_b2:
-        movss   xmm3, dword ptr [esi + 0x40]
-        xorps   xmm5, xmm5
-        comiss  xmm3, xmm5
-        jbe     l_b3
-        subss   xmm3, xmm1
-        movss   dword ptr [esi + 0x40], xmm3
-        jmp     l_afterpop
-    l_b3:
-        movss   xmm3, dword ptr [esi + 0x38]
-        comiss  xmm2, xmm3
-        push    edi
-        lea     edi, [esi + 0x38]
-        jbe     l_b4
-        movss   xmm4, dword ptr [esi + 0x1c]
-        ucomiss xmm4, xmm0
-        lahf
-        test    ah, 0x44
-        jnp     l_b4
-        mov     edx, dword ptr [gManager]
-        movss   xmm0, dword ptr [edx + 0x28]
-        mulss   xmm0, xmm1
-        addss   xmm0, xmm3
-        movss   dword ptr [edi], xmm0
-        movss   dword ptr [esp + 8], xmm0
-        movss   dword ptr [esp + 0x20], xmm2
-        xorps   xmm0, xmm0
-        maxss   xmm0, dword ptr [esp + 8]
-        minss   xmm0, dword ptr [esp + 0x20]
-        movss   dword ptr [esp + 8], xmm0
-        movss   xmm0, dword ptr [esp + 8]
-        movss   dword ptr [edi], xmm0
-        jmp     l_cmp
-    l_b4:
-        movss   xmm4, dword ptr [esi + 0x1c]
-        comiss  xmm0, xmm4
-        jbe     l_b5
-        movss   xmm0, dword ptr [esi + 0x24]
-        comiss  xmm0, xmm5
-        jbe     l_b6
-        mov     eax, dword ptr [gManager]
-        movss   xmm3, dword ptr [eax + 0x28]
-        mulss   xmm3, xmm1
-        subss   xmm0, xmm3
-        movss   dword ptr [esi + 0x24], xmm0
-        movss   dword ptr [esp + 8], xmm0
-        movss   dword ptr [esp + 0x20], xmm2
-        xorps   xmm0, xmm0
-        maxss   xmm0, dword ptr [esp + 8]
-        minss   xmm0, dword ptr [esp + 0x20]
-        movss   dword ptr [esp + 8], xmm0
-        movss   xmm0, dword ptr [esp + 8]
-        movss   dword ptr [esi + 0x24], xmm0
-    l_b6:
-        movss   xmm3, dword ptr [esi + 0x2c]
-        comiss  xmm2, xmm3
-        jbe     l_b7
-        mov     ecx, dword ptr [gManager]
-        movss   xmm0, dword ptr [ecx + 0x28]
-        mulss   xmm0, xmm1
-        addss   xmm0, xmm3
-        movss   dword ptr [esi + 0x2c], xmm0
-        movss   dword ptr [esp + 8], xmm0
-        movss   dword ptr [esp + 0x20], xmm2
-        xorps   xmm0, xmm0
-        maxss   xmm0, dword ptr [esp + 8]
-        minss   xmm0, dword ptr [esp + 0x20]
-        movss   dword ptr [esp + 8], xmm0
-        movss   xmm0, dword ptr [esp + 8]
-        movss   dword ptr [esi + 0x2c], xmm0
-        jmp     l_epi
-    l_b7:
-        mov     edx, dword ptr [gManager]
-        movss   xmm0, dword ptr [edx + 0x2c]
-        mulss   xmm0, xmm1
-        addss   xmm0, dword ptr [esi + 0x1c]
-        movss   xmm1, dword ptr [esi + 0x20]
-        comiss  xmm0, xmm1
-        movss   dword ptr [esi + 0x1c], xmm0
-        jb      l_epi
-        movss   dword ptr [esi + 0x1c], xmm1
-        jmp     l_epi
-    l_b5:
-        comiss  xmm4, xmm0
-        jbe     l_b8
-        movss   xmm0, dword ptr [esi + 0x2c]
-        comiss  xmm0, xmm5
-        mov     al, 1
-        jbe     l_b9
-        mov     eax, dword ptr [gManager]
-        movss   xmm2, dword ptr [eax + 0x28]
-        mulss   xmm2, xmm1
-        subss   xmm0, xmm2
-        movss   dword ptr [esp + 0x1c], xmm0
-        fld     dword ptr [esp + 0x1c]
-        push    ecx
-        fstp    dword ptr [esp]
-        movss   dword ptr [esi + 0x2c], xmm0
-        call    Clamp01
-        fstp    dword ptr [esi + 0x2c]
-        movss   xmm1, dword ptr [esp + 0x24]
-        xorps   xmm5, xmm5
-        movss   xmm2, dword ptr [kOne_]
-        add     esp, 4
-        xor     al, al
-    l_b9:
-        movss   xmm3, dword ptr [esi + 0x24]
-        comiss  xmm2, xmm3
-        jbe     l_b10
-        movss   xmm0, dword ptr [esi + 0x28]
-        comiss  xmm0, dword ptr [esi + 0x1c]
-        jbe     l_b10
-        mov     ecx, dword ptr [gManager]
-        movss   xmm0, dword ptr [ecx + 0x28]
-        mulss   xmm0, xmm1
-        addss   xmm0, xmm3
-        movss   dword ptr [esp + 0x20], xmm0
-        fld     dword ptr [esp + 0x20]
-        movss   dword ptr [esi + 0x24], xmm0
-        jmp     l_b11
-    l_b10:
-        movss   dword ptr [esi + 0x24], xmm2
-        test    al, al
-        je      l_epi
-        mov     edx, dword ptr [gManager]
-        movss   xmm2, dword ptr [edx + 0x2c]
-        movss   xmm0, dword ptr [esi + 0x1c]
-        mulss   xmm2, xmm1
-        movss   xmm1, dword ptr [esi + 0x20]
-        subss   xmm0, xmm2
-        comiss  xmm1, xmm0
-        movss   dword ptr [esi + 0x1c], xmm0
-        jb      l_epi
-        movss   dword ptr [esi + 0x1c], xmm1
-        jmp     l_epi
-    l_b8:
-        ucomiss xmm4, xmm0
-        lahf
-        test    ah, 0x44
-        jp      l_epi
-        movss   xmm3, dword ptr [esi + 0x24]
-        comiss  xmm3, xmm5
-        jbe     l_b12
-        movss   xmm6, dword ptr [esi + 0x28]
-        comiss  xmm6, xmm4
-        jbe     l_b12
-        subss   xmm3, xmm1
-        movss   dword ptr [esp + 0x20], xmm3
-        fld     dword ptr [esp + 0x20]
-        movss   dword ptr [esi + 0x24], xmm3
-    l_b11:
-        push    ecx
-        fstp    dword ptr [esp]
-        call    Clamp01
-        xorps   xmm5, xmm5
-        fstp    dword ptr [esi + 0x24]
-        add     esp, 4
-        jmp     l_epi
-    l_b12:
-        movss   dword ptr [esi + 0x28], xmm0
-        movss   dword ptr [esi + 0x30], xmm0
-        movss   xmm0, dword ptr [esi + 0x3c]
-        comiss  xmm0, xmm5
-        jbe     l_b13
-        movss   xmm3, dword ptr [edi]
-        comiss  xmm2, xmm3
-        jbe     l_b14
-        mov     eax, dword ptr [gManager]
-        movss   xmm0, dword ptr [eax + 0x28]
-        mulss   xmm0, xmm1
-        addss   xmm0, xmm3
-        movss   dword ptr [esp + 0x20], xmm0
-        fld     dword ptr [esp + 0x20]
-        push    ecx
-        fstp    dword ptr [esp]
-        movss   dword ptr [edi], xmm0
-        call    Clamp01
-        xorps   xmm5, xmm5
-        add     esp, 4
-        jmp     l_b15
-    l_b14:
-        subss   xmm0, xmm1
-        movss   dword ptr [esi + 0x3c], xmm0
-        jmp     l_epi
-    l_b13:
-        mov     edx, dword ptr [gManager]
-        movss   xmm0, dword ptr [edx + 0x28]
-        mulss   xmm0, xmm1
-        movss   xmm1, dword ptr [edi]
-        subss   xmm1, xmm0
-        movss   dword ptr [edi], xmm1
-    l_cmp:
-        movss   xmm0, dword ptr [ecx]
-        comiss  xmm0, dword ptr [edi]
-        ja      l_b16
-        mov     ecx, edi
-    l_b16:
-        fld     dword ptr [ecx]
-    l_b15:
-        fstp    dword ptr [edi]
-    l_epi:
-        pop     edi
-    l_afterpop:
-        comiss  xmm5, dword ptr [esi + 0x38]
-        jb      l_ret1
-        xor     al, al
-        add     esp, 0x14
-        ret
-    l_ret1:
-        mov     al, 1
-        add     esp, 0x14
-        ret
+    // damage-glow decay (inline clamp at 0x00b6904a)
+    self->m44 = Clamp01Inline(self->m44 - gManager->mGlowDecay * dt);
+
+    self->m20 = target;
+    if (target > self->m1c) {
+        self->m28 = target;
+        self->m30 = target;
     }
+    if (self->m1c == kProbeLimit)
+        self->m1c = target;
+
+    if (self->m40 > 0.0f) {
+        self->m40 -= dt;
+        return self->m38 > 0.0f;
+    }
+
+    // flash still growing
+    if (self->m38 < 1.0f) {
+        if (self->m1c != target) {
+            self->m38 = Clamp01Inline(self->m38 + gManager->mRefillRate * dt);
+            if (self->m44 > self->m38)
+                self->m38 = self->m44;
+        }
+        return self->m38 > 0.0f;
+    }
+
+    // bar below target: ramp the chase value down, then the bar up
+    if (target > self->m1c) {
+        if (self->m24 > 0.0f)
+            self->m24 = Clamp01Inline(self->m24 - gManager->mRefillRate * dt);
+        if (self->m2c < 1.0f) {
+            self->m2c = Clamp01Inline(self->m2c + gManager->mRefillRate * dt);
+        } else {
+            self->m1c += gManager->mDrainRate * dt;
+            if (self->m1c >= self->m20)
+                self->m1c = self->m20;
+        }
+        return self->m38 > 0.0f;
+    }
+
+    // bar above target: drain the cooldown, then chase or snap
+    if (target < self->m1c) {
+        bool cooldownWasZero = true;
+        if (self->m2c > 0.0f) {
+            self->m2c = Clamp01Inline(self->m2c - gManager->mRefillRate * dt);
+            cooldownWasZero = false;
+        }
+        if (self->m24 < 1.0f && self->m28 > self->m1c) {
+            self->m24 = Clamp01Inline(self->m24 + gManager->mRefillRate * dt);
+            return self->m38 > 0.0f;
+        }
+        self->m24 = 1.0f;
+        if (cooldownWasZero) {
+            self->m1c -= gManager->mDrainRate * dt;
+            if (self->m1c < self->m20)
+                self->m1c = self->m20;
+        }
+        return self->m38 > 0.0f;
+    }
+
+    // bar at target
+    if (self->m24 > 0.0f && self->m28 > self->m1c) {
+        self->m24 = Clamp01Inline(self->m24 - dt);
+        return self->m38 > 0.0f;
+    }
+    self->m28 = target;
+    self->m30 = target;
+    if (self->m3c > 0.0f) {
+        if (self->m38 < 1.0f)
+            self->m38 = Clamp01Inline(self->m38 + gManager->mRefillRate * dt);
+        else
+            self->m3c -= dt;
+    } else {
+        self->m38 -= gManager->mRefillRate * dt;
+        if (self->m44 > self->m38)
+            self->m38 = self->m44;
+    }
+    return self->m38 > 0.0f;
 }
 
 // =============================================================================
@@ -804,7 +503,7 @@ int __cdecl sFindOrCreateUI(int* param_1, int param_2, float param_3)
         unsigned vis = *((unsigned char*)gManager + 0x30);
         (*(void(__thiscall**)(int*, unsigned, int))(*(int*)w74 + 0x7c))(w74, vis, 1);
     }
-    FUN_00b68910();
+    FUN_00b68910(param_1, rec);
     rec->m9c = (int)lay->FindWindowByID(0x4d039a8, 1);
     rec->ma0 = (int)lay->FindWindowByID(0x4d039a8, 1);
     rec->ma4 = (int)lay->FindWindowByID(0x4d039a8, 1);
