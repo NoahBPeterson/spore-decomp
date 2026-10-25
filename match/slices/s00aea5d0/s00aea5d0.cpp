@@ -25,6 +25,7 @@ static inline void* vt0(void* p, int slot) { return ((tc0_t*)(*(void***)p))[slot
 static inline void* vt1(void* p, int slot, int a) { return ((tc1_t*)(*(void***)p))[slot](p, a); }
 static inline void* vt3(void* p, int slot, int a, int b, int c) { return ((tc3_t*)(*(void***)p))[slot](p, a, b, c); }
 static inline void* vt4(void* p, int slot, int a, int b, int c, int d) { return ((tc4_t*)(*(void***)p))[slot](p, a, b, c, d); }
+static inline int vt0_i(void* p, int slot) { return ((int (__thiscall *)(void*))(*(void***)p)[slot])(p); }
 
 static inline void addref(void* p) { if (p) vt0(p, 0); }
 static inline void relref(void* p) { if (p) vt0(p, 1); }
@@ -42,6 +43,11 @@ extern "C" void  vec12_move2(void* first, void* last, void* dest);              
 struct CEventLog { void RemoveEvent(int id, int a); };          // 0xdd6d10 thiscall
 struct CStarMap  { void RemoveVisual(int id, int a); };         // 0x1045a60 thiscall
 struct CTerrainEditor { void* GetCurrentTerrainSphere(); };     // 0xf67d90 thiscall
+struct CTerrainSphere { void FUN_00c77bf0(int id); };           // 0xc77bf0 thiscall ret4
+struct CCity { void* FUN_00bd9bf0(); };                         // 0xbd9bf0 GetCivilization
+struct CNounMgr { void* FUN_00b25fb0(); };                      // 0xb25fb0 GetPlayerCivilization
+struct CPlanet { void FUN_00c74550(int* id); };                 // 0xc74550 thiscall ret4
+struct EntryCtor { void* ctor(); };                              // 0xaea250 thiscall
 struct CUILayout { void classify(); };                          // 0xdd3d30 thiscall
 struct CWriter { virtual void Field(const wchar_t*); virtual void EndField(const wchar_t*); };
 
@@ -55,8 +61,9 @@ void       FUN_00aed3d0();                          // 0xaed3d0
 void*      SP_SpaceGameGet();                       // 0x1002bd0
 void       FUN_010762d0(void* p);                   // 0x10762d0
 CUILayout* ctor_UILayout();                         // 0xdd1ca0
-int        FUN_00ac8050(CWriter* w, int a, const void* e);  // 0xac8050
+char       FUN_00ac8050(CWriter* w, int a, const void* e);  // 0xac8050
 void*      ctor_Entry();                            // 0xaea250
+void*      FUN_01021260();                          // 0x1021260 GetActivePlanet
 
 // ===========================================================================
 // 4-byte element vector (EA::AutoRefCount<Entry>)
@@ -452,32 +459,41 @@ void SpaceTool::RemoveByKey(int key) {
   } while (it != mVec.mpEnd);
 }
 
-// @ 0x00aeacc0  field serializer
-struct WString {
-  const wchar_t* mpBegin;
-  const wchar_t* mpEnd;
-  u32 mCap;
+// ---- eastl::basic_string<wchar_t> used by the field serializer -------------
+struct EaString16 {
+  wchar_t* mpBegin;
+  wchar_t* mpEnd;
+  wchar_t* mpCapacity;
+
+  EaString16(const wchar_t* p) : mpBegin(0), mpEnd(0), mpCapacity(0) { RangeInitialize(p); }
+  EaString16(const EaString16& o);                 // 0x0056e2d0
+  ~EaString16() {
+    if ((((int)((char*)mpCapacity - (char*)mpBegin)) & ~1) > 2 && mpBegin)
+      op_del(mpBegin);
+  }
+  void RangeInitialize(const wchar_t* p);          // 0x00579a90
   bool empty() const { return mpBegin == mpEnd; }
 };
-WString ConvertToString16W(const char* s);
-void WStringRangeInit(WString* out);
 
-u8 SerializeList(CWriter* writer, const char* name, Vec12* list) {
-  u8 ok = 1;
+EaString16 ConvertToString16(const char* s, int n);   // 0x0093c5a0
+
+// @ 0x00aeacc0
+bool SerializeList(CWriter* writer, const char* name, Vec12* list) {
+  bool ok = 1;
   if (list->mpBegin == list->mpEnd)
     return ok;
-  WString str;
-  if (name == 0)
-    WStringRangeInit(&str);
-  else
-    str = ConvertToString16W(name);
+  EaString16 str = name ? ConvertToString16(name, -1) : EaString16(0);
   const wchar_t* field = str.empty() ? L"list" : str.mpBegin;
   ((tc1_t*)(*(void***)writer))[0](writer, (int)field);
   for (E12* p = list->mpBegin; p != list->mpEnd; p = (E12*)((char*)p + 0xc)) {
-    if (!ok)
-      break;
-    if (!FUN_00ac8050(writer, 0, p))
+    if (ok != 0) {
+      char r = FUN_00ac8050(writer, 0, p);
+      ok = 1;
+      if (r == 0)
+        ok = 0;
+    } else {
       ok = 0;
+    }
   }
   ((tc1_t*)(*(void***)writer))[1](writer, (int)field);
   return ok;
@@ -552,12 +568,10 @@ void* SpaceTool::AddEntry(int a1, int a2, int a3, int a4, void* a5, int a6, int 
 // @ 0x00aeb240
 void* SpaceTool::CreateEntry(void* obj, void* a2, int a3, int a4, int a5, int a6) {
   void* e = op_new(0xa0, "Simulator", 0, 0, 0, 0);
-  e = e ? ctor_Entry() : 0;
+  e = e ? ((EntryCtor*)e)->ctor() : 0;
   EI(e, 0xc) = 1;
-  {
-    void* ts = ((CTerrainEditor*)SP_NounManager())->GetCurrentTerrainSphere();
-    terrain_sphere_update(ts);
-  }
+  ((CTerrainSphere*)((CTerrainEditor*)SP_NounManager())->GetCurrentTerrainSphere())
+      ->FUN_00c77bf0(0x52da1f8);
   void* r1 = 0;
   void* r2 = 0;
   if (obj != 0) {
@@ -604,13 +618,11 @@ void* SpaceTool::CreateEntry(void* obj, void* a2, int a3, int a4, int a5, int a6
     mVec.DoInsertValue(end, tmp);
   }
   relref(e);
-  if (r1 != 0) {
-    void* civ = vt0(r1, 19);          // cCity::GetCivilization()
-    void* playerCiv = vt0(SP_NounManager(), 0);  // cGameNounManager::GetPlayerCivilization()
-    if (civ != playerCiv) {
-      void* planet = vt0(civ, 19);    // placeholder: GetActivePlanet + update
-      (void)planet;
-    }
+  if (r1 != 0)
+    r2 = ((CCity*)r1)->FUN_00bd9bf0();
+  if (r2 != ((CNounMgr*)SP_NounManager())->FUN_00b25fb0()) {
+    int id = vt0_i(r2, 19);
+    ((CPlanet*)FUN_01021260())->FUN_00c74550(&id);
   }
   return e;
 }
