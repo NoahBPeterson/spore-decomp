@@ -5,4 +5,4 @@
 0139d420 ?PropTableInit_d420@@YAXXZ  # PropTableInit_d420 migrated from s01399700 (verbatim, slice spelling)
 0139e870 ?PropTableInit_e870@@YAXXZ  # static-initialiser thunk (unnamed in PDB)
 013a0c40 ?PropTableInit_0c40@@YAXXZ  # PropTableInit_0c40 migrated from s01399700 (verbatim, slice spelling)
-013a1150 ?PropTableInit_1150@@YAXXZ  # $E225 (MSVC static-initialiser thunk; unnamed in PDB)
+013a1150 ?PropTableInit_1150@@YAXXZ  # PropTableInit_1150 migrated from s01399700 (verbatim, slice spelling)

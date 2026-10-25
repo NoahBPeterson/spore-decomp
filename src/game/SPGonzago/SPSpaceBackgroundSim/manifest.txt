@@ -1,0 +1,5 @@
+# source  symbol  va  flags
+../src/game/SPGonzago/SPSpaceBackgroundSim.cpp  ?FUN_01021240@@YAHXZ  01021240  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPSpaceBackgroundSim.cpp  ?Read@cSPBackgroundSimManager@@QAEXPAVcVarListSerializer@@@Z  010220e0  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPSpaceBackgroundSim.cpp  ?StopBackgroundSim@@YAXXZ  01022550  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPSpaceBackgroundSim.cpp  ?PropTableInit_1150@@YAXXZ  013a1150  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
