@@ -1,3 +1,10 @@
 00eec0d0  9   complete; global-load vs arg-load scheduling differs (register assignment)
 00eec3d0  6   complete; three-dword sret copy store order differs
 00eec580  17  complete; index register (eax vs ecx) and loop scheduling differ
+00eeb770  365  complete; refcounted-list removal; register/indirect-call scheduling differs; equiv=WEAK (213 valid, 36.6% cov)
+00eeb920  338  complete; copies list into float/Vector3 vectors (truncating erase semantics); equiv=WEAK (165 valid, 53.3% cov)
+00eeba40  1311  complete; large message handler (switch 0/1/2/4/7 + special id); thiscall helper shapes modelled; equiv=WEAK (399 valid, 11.6% cov)
+00eebfc0   99  complete; vector reserve + key find; original bounds include a separate omitted function, so 99-byte delta is irreducible; equiv=WEAK (386 valid, 32.8% cov)
+00eec0f0  377  complete; surface position/radius (x87); x87/SSE scheduling differs; equiv=PASS (236 valid, 82.6% cov)
+00eec2b0   99  complete; scaled surface direction; float scheduling differs; equiv=PASS (217 valid, 100% cov)
+00eec440  177  complete; orient/scale from physics object; thiscall helper shapes and the g_16c7aa4+0x74 manager fixed; equiv=WEAK (171 valid, 16.9% cov)
