@@ -1,2 +1,4 @@
 00492de0  76  complete: tracker offset check; only /Od local-slot assignment differs (frame 0x34 vs 0x30) and the bb.mx[2] offset
 00492e70  1284  complete: all 22 calls in original order (size 0.967x); /Od local-slot layout and a few spill temps differ (frame 0x194 vs 0x1ec); flags /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Oi
+004928d0  1116  complete: full block-alignment/snap routine (idx==-1 corner-rescale branch + idx snap branch, all calls); /Od local-slot + spill layout differ (frame 0x1a8 vs 0x248), pod vs movss arg copies; flags /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS-; difftest UNSUPPORTED (0/100 valid, all inputs fault through out pointers)
+004934d0  146  complete: entry guard + registry lookup + per-block translation loop; /Od local-slot assignment differs (size 278 vs 276); flags /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS-; difftest WEAK (91 valid, 39% cov, no mismatch)

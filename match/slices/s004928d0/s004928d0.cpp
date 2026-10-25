@@ -115,17 +115,108 @@ struct cSPEditorBlock2 {
 // 0x004928d0 (cdecl): compute the snapped position/orientation for snap index `idx`
 void Snap_004928d0(cSPEditorBlock2* blk, Vec3W pos, Matrix3 rot, Vec3W* outPos, Matrix3* outRot, int idx);
 
-// @ 0x004928d0
-void FUN_004928d0(cSPEditorBlock* p, int a, int b, int c) {
-    if (p == 0)
-        return;
-    BoundingBox bb;
-    p->GetBBox(&bb, 0, 0, 0);
-    (void)a;
-    (void)b;
-    (void)c;
-}
+// ---- 0x004928d0 support types (retail layout: position +0x48, orientation +0x60) ----
+struct Vec3N { float x, y, z; };                 // plain triple
 
+struct Blk {
+    char pad0[0x48];
+    Vec3N mPosition;                            // +0x48
+    char pad1[0x60 - 0x54];
+    Matrix3 mOrientation;                       // +0x60
+    int Count();                                // 0x0044e800
+    void GetBBox(void* out, int a, int b, int c);   // 0x0044ae00
+    void Corner(Vec3N* out, int a);             // 0x0043d240 (ret 8)
+    void GetBounds(Vec3N* out, unsigned index); // 0x0044d8f0 (ret 8)
+};
+
+Vec3N g_v492b24;                                // 0x015d6324 dummy third argument
+Vec3N* Cross(Vec3N* out, const Vec3N* a, const Vec3N* b);            // 0x0044e460
+Vec3N* ProjPerp(Vec3N* out, const Vec3N* a, const Vec3N* b);         // 0x004909d0
+void UpdateModel(void* obj);                    // 0x004ae250
+Matrix3* BuildFrame(Matrix3* out, Vec3N v0, Vec3N v1, Vec3N v2, Vec3N v3, Vec3N v4);  // 0x004906e0
+
+// @ 0x004928d0
+void FUN_004928d0(Blk* p, Vec3W pos, Matrix3 rot, Vec3W* outPos, Matrix3* outRot, int idx) {
+    void* bb[6];
+    p->GetBBox(bb, 0, 0, 0);
+    outPos->x = pos.x;
+    outPos->y = pos.y;
+    outPos->z = pos.z;
+    *outRot = rot;
+    int n = p->Count();
+
+    if (idx == -1) {
+        Vec3N corner;
+        p->Corner(&corner, 0);
+        Matrix3 inv;
+        Mat_Inverse(&inv, &rot);
+        Vec3W sub;
+        Vec3W* r1 = Vec_Sub(&sub, (const Vec3W*)&p->mPosition, (const Vec3W*)&pos);
+        Vec3W* r2 = Vec_MulMat((Vec3W*)0, r1, &inv);
+        Vec3W term;
+        term.x = corner.x;
+        term.y = corner.y;
+        term.z = r2->x;
+        {
+            Vec3W tgt;
+            tgt.x = r2->x; tgt.y = r2->y; tgt.z = r2->z;
+            tgt.x = corner.x;
+            tgt.y = corner.y;
+            term.x = tgt.x; term.y = tgt.y;
+        }
+        Vec3W* r3 = Vec_Add((Vec3W*)0, &term, (const Vec3W*)&p->mPosition);
+        outPos->x = r3->x;
+        outPos->y = r3->y;
+        outPos->z = r3->z;
+        return;
+    }
+
+    if (idx >= 0 && idx < n) {
+        Matrix3 localRot;
+        localRot.Assign(&rot);
+        Vec3W sub;
+        Vec3W* r1 = Vec_Sub(&sub, (const Vec3W*)&pos, (const Vec3W*)&p->mPosition);
+        Vec3W rel; rel.x = r1->x; rel.y = r1->y; rel.z = r1->z;
+        Matrix3 inv;
+        Mat_Inverse(&inv, &localRot);
+        Vec3W r2;
+        {
+            Vec3W* p2 = Vec_MulMat(&r2, &rel, &inv);
+            (void)p2;
+        }
+        Vec3W snapped;
+        p->GetBounds((Vec3N*)&snapped, (unsigned)idx);
+        Vec3W rs;
+        Vec3W* rr = Vec_Sub(&rs, &r2, &snapped);
+        Vec3N e2l; e2l.x = rr->x; e2l.y = rr->y; e2l.z = rr->z;
+        Vec3N cross;
+        Cross(&cross, (const Vec3N*)&snapped, &g_v492b24);
+        Vec3N proj;
+        ProjPerp(&proj, &e2l, &cross);
+        Vec3W sr;
+        Vec3W* srr = Vec_Add(&sr, (const Vec3W*)&proj, (const Vec3W*)&snapped);
+        Vec3N term; term.x = srr->x; term.y = srr->y; term.z = srr->z;
+        term.z = snapped.z;
+        Vec3W fr;
+        Vec3W* frr = Vec_Add(&fr, (const Vec3W*)&term, (const Vec3W*)&p->mPosition);
+        outPos->x = frr->x;
+        outPos->y = frr->y;
+        outPos->z = frr->z;
+
+        Vec3W row3;
+        row3.x = localRot.m[6]; row3.y = localRot.m[7]; row3.z = localRot.m[8];
+        Vec3W l2;
+        {
+            Vec3W* pl = Vec_MulMat(&l2, &row3, &localRot);
+            (void)pl;
+        }
+        Vec3N l3; l3.x = l2.x; l3.y = l2.y; l3.z = snapped.z;
+        Matrix3 built;
+        BuildFrame(&built, *(Vec3N*)&pos, *(Vec3N*)&rel, *(Vec3N*)&snapped, l3, *(Vec3N*)&l2);
+        *outRot = built;
+        UpdateModel(0);
+    }
+}
 
 // @ 0x00492e70  (cdecl) find the best snap of block p against its parent block: returns the snap
 // distance (-1.0f when none), writes the snapped position/orientation and the snap index.
@@ -195,6 +286,40 @@ float FUN_00492e70(cSPEditorBlock2* p, Vec3W* outPos, Matrix3* outRot, int* outI
 }
 
 // @ 0x004934d0
-void FUN_004934d0(int p) {
-    (void)p;
+struct cSPEditorModel934 {
+    bool UsingSymmetry();             // 0x004adc40
+    void SetUsingSymmetry(bool v);    // 0x004adc20 (ret 4)
+    unsigned GetBlockCount();         // 0x004accf0
+    Blk* GetBlock(unsigned i);        // 0x004accb0
+};
+struct Blk934 {
+    char pad0[0x48];
+    Vec3N pos;                        // +0x48
+    Vec3N historyPos;                 // +0x54
+    void SetPosition934(const Vec3N* p, bool b);   // 0x00448e90 (ret 8)
+};
+Vec3N g_v492d64d8;                    // 0x015d64d8
+bool Vector3_NotEqual(const Vec3N* a, const Vec3N* b);  // 0x0041dd30
+bool BlockBlocked(Blk* b);                  // 0x004a7e60
+
+// @ 0x004934d0
+void FUN_004934d0(cSPEditorModel934* model, Vec3N pos, unsigned char flag) {
+    if (Vector3_NotEqual(&pos, &g_v492d64d8)) {
+        if (model != 0) {
+            bool saved = model->UsingSymmetry();
+            model->SetUsingSymmetry(false);
+            int count = (int)model->GetBlockCount();
+            for (int i = 0; i < count; i++) {
+                Blk934* blk = (Blk934*)model->GetBlock(i);
+                if (flag && !BlockBlocked((Blk*)blk))
+                    continue;
+                Vec3W r;
+                Vec3W* p = Vec_Add(&r, (const Vec3W*)&blk->pos, (const Vec3W*)&pos);
+                Vec3N p2; p2.x = p->x; p2.y = p->y; p2.z = p->z;
+                blk->SetPosition934(&p2, true);
+                blk->historyPos = blk->pos;
+            }
+            model->SetUsingSymmetry(saved);
+        }
+    }
 }
