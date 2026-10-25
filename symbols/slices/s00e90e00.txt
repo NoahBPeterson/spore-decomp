@@ -2,15 +2,15 @@
 00e91060 cSpatialObjectView::MakeView_91060  # complete; colour materialisation / vtable-store scheduling differ, 312 vs 296 bytes
 00e91190 cDamageView::HandleSimulationUpdate_91190  # complete; flag test folded to test dword and comiss operand order reversed; equiv PASS
 00e911f0 cSpatialObjectView::MakeView_911f0  # partial: factory reconstructed only structurally, 421 vs 523 bytes
-00e91400 ?GetFlag0@cViewA@@QAE_NXZ  # byte-exact MATCH
-00e91410 GetPropertyV3a  # complete; guard/vtable-call register allocation differs throughout
-00e914f0 GetPropertyV3b  # complete; guard/vtable-call register allocation differs throughout
-00e915d0 ??0cViewA@@QAE@XZ  # byte-exact MATCH
-00e915f0 cViewA::~cViewA  # complete; callee-saved push edi placement differs from prologue
+00e91400 ?GetFlag0@cViewA@@QAE_NXZ  # cViewA::GetFlag0 migrated from s00e90e00 (verbatim, slice spelling)
+00e91410 ?GetPropertyV3a@@YAPAUV3@@PAU1@IHIU1@@Z  # GetPropertyV3a migrated from s00e90e00 (verbatim, slice spelling)
+00e914f0 ?GetPropertyV3b@@YAPAUV3@@PAU1@IHIU1@@Z  # GetPropertyV3b migrated from s00e90e00 (verbatim, slice spelling)
+00e915d0 ??0cViewA@@QAE@XZ  # cViewA::cViewA migrated from s00e90e00 (verbatim, slice spelling)
+00e915f0 ??1cViewA@@QAE@XZ  # cViewA::~cViewA migrated from s00e90e00 (verbatim, slice spelling)
 00e916a0 cViewA::Update_916a0  # partial: model fade update reduced to flag/store prologue, 278 vs 744 bytes
 00e91990 cSpatialObjectView::MakeView_91990  # partial: factory reduced to alloc + ref-assignments, 208 vs 486 bytes
-00e91ba0 ?SetModelFlag@cViewA@@QAEX_N@Z  # byte-exact MATCH
-00e91bd0 ?SetFlag0@cViewA@@QAEX_N@Z  # byte-exact MATCH
-00e91bf0 ?GetFlagF@cViewA@@QAE_NXZ  # byte-exact MATCH
-00e91c10 ??0cRotationRingView@@QAE@XZ  # byte-exact MATCH
-00e91c30 cRotationRingView::~cRotationRingView  # complete; same body as cViewA dtor, push edi placement differs
+00e91ba0 ?SetModelFlag@cViewA@@QAEX_N@Z  # cViewA::SetModelFlag migrated from s00e90e00 (verbatim, slice spelling)
+00e91bd0 ?SetFlag0@cViewA@@QAEX_N@Z  # cViewA::SetFlag0 migrated from s00e90e00 (verbatim, slice spelling)
+00e91bf0 ?GetFlagF@cViewA@@QAE_NXZ  # cViewA::GetFlagF migrated from s00e90e00 (verbatim, slice spelling)
+00e91c10 ??0cRotationRingView@@QAE@XZ  # cRotationRingView::cRotationRingView migrated from s00e90e00 (verbatim, slice spelling)
+00e91c30 ??1cRotationRingView@@QAE@XZ  # cRotationRingView::~cRotationRingView migrated from s00e90e00 (verbatim, slice spelling)

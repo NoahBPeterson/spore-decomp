@@ -1,0 +1,7 @@
+# source  symbol  va  flags
+../src/game/SPGonzago/SPRotationRingView.cpp  ?GetFlag0@cViewA@@QAE_NXZ  00e91400  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPRotationRingView.cpp  ??0cViewA@@QAE@XZ  00e915d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPRotationRingView.cpp  ?SetModelFlag@cViewA@@QAEX_N@Z  00e91ba0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPRotationRingView.cpp  ?SetFlag0@cViewA@@QAEX_N@Z  00e91bd0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPRotationRingView.cpp  ?GetFlagF@cViewA@@QAE_NXZ  00e91bf0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPRotationRingView.cpp  ??0cRotationRingView@@QAE@XZ  00e91c10  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

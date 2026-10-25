@@ -1,0 +1,8 @@
+# va  diff-bytes  reason
+00e91410 145 complete; GetPropertyV3a, same-size reconstruction, guard/vtable-call register allocation differs throughout; equiv WEAK (no mismatch)
+00e914f0 145 complete; GetPropertyV3b, same-size reconstruction, guard/vtable-call register allocation differs throughout; equiv WEAK (no mismatch)
+00e915f0 7 complete; callee-saved push placement of the release-flag bool (push edi) differs from the prologue; equiv UNSUPPORTED (fake-arity)
+00e91c30 7 complete; same body as the cViewA dtor, push edi placement differs; equiv UNSUPPORTED (fake-arity)
+00e91ce0 274 equiv FAIL (5/5 valid, execution); GetRingAnimationPercentage body/transform staging not reproduced. flags /O2 /MD /Gy /TP /arch:SSE
+00e91e40 821 equiv WEAK (286 valid, 6.5% cov); HandleSimulationUpdate under-built (1021 vs 1386) - full transform-message / effect-color / pow-pop logic not reproduced. flags /O2 /MD /Gy /TP /arch:SSE
+00e923b0 93 equiv FAIL (5/5 valid, fake call #0); cRotationRingView::MakeView staged-dispatch differs. flags /O2 /MD /Gy /TP /arch:SSE

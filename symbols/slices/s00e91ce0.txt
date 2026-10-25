@@ -1,6 +1,6 @@
-00e91ce0 ?GetRingAnimationPercentage@cRotationRingView@@QAEMM@Z  # SP::cRotationRingView::GetRingAnimationPercentage
-00e91e40 ?HandleSimulationUpdate@cRotationRingView@@QAEXHH@Z  # SP::cRotationRingView::HandleSimulationUpdate
-00e923b0 ?MakeView@cRotationRingView@@UAEPAV1@PAX@Z  # SP::cRotationRingView::MakeView (unnamed in PDB; vtable +0x08)
+00e91ce0 ?GetRingAnimationPercentage@cRotationRingView_s00e9_1ce0@@QAEMM@Z  # cRotationRingView_s00e9_1ce0::GetRingAnimationPercentage migrated from s00e91ce0 (verbatim, slice spelling)
+00e91e40 ?HandleSimulationUpdate@cRotationRingView_s00e9_1ce0@@QAEXHH@Z  # cRotationRingView_s00e9_1ce0::HandleSimulationUpdate migrated from s00e91ce0 (verbatim, slice spelling)
+00e923b0 ?MakeView@cRotationRingView_s00e9_1ce0@@UAEPAV1@PAX@Z  # cRotationRingView_s00e9_1ce0::MakeView migrated from s00e91ce0 (verbatim, slice spelling)
 00e92620 ?SetIsInWorld@cSpatialObjectView@@QAEX_N@Z  # cSpatialObjectView::SetIsInWorld migrated from s00e91ce0 (verbatim, slice spelling)
 00e92660 ??1cSpatialObjectView@@QAE@XZ  # cSpatialObjectView::~cSpatialObjectView migrated from s00e91ce0 (verbatim, slice spelling)
 00e926d0 ?SetModel_926d0@cSpatialObjectView@@QAEXPAX@Z  # cSpatialObjectView::SetModel_926d0 migrated from s00e91ce0 (verbatim, slice spelling)
