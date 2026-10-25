@@ -41,67 +41,16 @@ float SampleTable(const float* values, int n, float t)
 
 namespace {
 
-// @ 0x00516AC0  `anonymous namespace'::FastMemCopy: MMX non-temporal block copy
+// @ 0x00516AC0  `anonymous namespace'::FastMemCopy
+// The original is a hand-written MMX non-temporal block copy (movntq stores, a prefetch
+// loop, a rep movsd/movsb tail and sfence). No MSVC C++ expression emits that sequence, so
+// this plain-C++ version copies the same bytes with a byte loop; the byte image differs.
 void FastMemCopy(void* dst, const void* src, unsigned int n)
 {
-    if (((uint32_t)dst | (uint32_t)src) & 7) {
-        memcpy(dst, src, n);
-        return;
-    }
-    __asm {
-        mov     edx, n
-        mov     esi, src
-        mov     edi, dst
-        mov     ecx, edx
-        and     ecx, 0xffffe000
-        jz      tail
-        shr     ecx, 3
-        lea     esi, [esi + ecx*8]
-        lea     edi, [edi + ecx*8]
-        neg     ecx
-    blockloop:
-        mov     eax, 0x40
-        add     ecx, 0x400
-    prefetchloop:
-        mov     ebx, [esi + ecx*8 - 0x40]
-        mov     ebx, [esi + ecx*8 - 0x80]
-        sub     ecx, 0x10
-        dec     eax
-        jnz     prefetchloop
-        mov     eax, 0x80
-    copyloop:
-        movq    mm0, [esi + ecx*8]
-        movq    mm1, [esi + ecx*8 + 8]
-        movq    mm2, [esi + ecx*8 + 0x10]
-        movq    mm3, [esi + ecx*8 + 0x18]
-        movq    mm4, [esi + ecx*8 + 0x20]
-        movq    mm5, [esi + ecx*8 + 0x28]
-        movq    mm6, [esi + ecx*8 + 0x30]
-        movq    mm7, [esi + ecx*8 + 0x38]
-        movntq  [edi + ecx*8], mm0
-        movntq  [edi + ecx*8 + 8], mm1
-        movntq  [edi + ecx*8 + 0x10], mm2
-        movntq  [edi + ecx*8 + 0x18], mm3
-        movntq  [edi + ecx*8 + 0x20], mm4
-        movntq  [edi + ecx*8 + 0x28], mm5
-        movntq  [edi + ecx*8 + 0x30], mm6
-        movntq  [edi + ecx*8 + 0x38], mm7
-        add     ecx, 8
-        dec     eax
-        jnz     copyloop
-        or      ecx, ecx
-        jnz     blockloop
-        emms
-    tail:
-        mov     ecx, edx
-        and     ecx, 0x1ffc
-        shr     ecx, 2
-        rep     movsd
-        mov     ecx, edx
-        and     ecx, 3
-        rep     movsb
-        sfence
-    }
+    uint8_t* d = (uint8_t*)dst;
+    const uint8_t* s = (const uint8_t*)src;
+    for (unsigned int i = 0; i < n; ++i)
+        d[i] = s[i];
 }
 
 } // namespace
