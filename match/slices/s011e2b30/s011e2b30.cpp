@@ -10,6 +10,10 @@
 //     iterator +0x1c, base +0x20, size +0x24, extra size +0x28, alignment +0x2c.
 #include <string.h>
 
+// FNV-1a style integer hash and its seed (RW4 core, shared with the arena hash maps).
+unsigned int rw_HashUInt(unsigned int nValue, unsigned int nSeed);   // 0x011e4540
+extern unsigned int g_rwHashSeed;                                    // 0x014f64ac
+
 namespace rw {
 namespace core {
 namespace arena {
@@ -926,6 +930,24 @@ struct ArenaAtomField
     AtomLookupPair* Find(AtomLookupPair* pPair, const unsigned int* pKey);   // 0x011e3a60
 };
 
+// @ 0x011e2b30  rw::core::arena::ArenaAtomField::Lookup
+// Open-addressed probe: start at the hash slot and stop at the key or at the first empty slot.
+void ArenaAtomField::Lookup(AtomLookupResult* pResult, const unsigned int* pKey)
+{
+    unsigned int nCount = mnCount;
+    unsigned int nIndex = rw_HashUInt(*pKey, g_rwHashSeed) % nCount;
+    unsigned int nEntryKey = mpEntries[nIndex].mnKey;
+    unsigned int nKey = *pKey;
+    while (nKey != nEntryKey && nEntryKey != 0xffffffffu)
+    {
+        if (++nIndex == nCount)
+            nIndex = 0;
+        nEntryKey = mpEntries[nIndex].mnKey;
+    }
+    pResult->mnCount = nCount;
+    pResult->mnIndex = nIndex;
+}
+
 // @ 0x011e3a60  rw::core::arena::ArenaAtomField::Find
 AtomLookupPair* ArenaAtomField::Find(AtomLookupPair* pPair, const unsigned int* pKey)
 {
@@ -945,4 +967,62 @@ AtomLookupPair* ArenaAtomField::Find(AtomLookupPair* pPair, const unsigned int* 
         pPair->mpEnd = pEnd;
     }
     return pPair;
+}
+
+// --------------------------------------------------------------- open-addressed hash map
+// Slot cursor of RwHashMap: the index and the table size, so incrementing wraps on its own.
+struct RwHashIterator
+{
+    unsigned int mnIndex;               // +0x00
+    unsigned int mnCount;               // +0x04  slot count of the table
+
+    RwHashIterator& operator++()
+    {
+        if (++mnIndex == mnCount)
+            mnIndex = 0;
+        return *this;
+    }
+};
+
+struct RwHashMap
+{
+    AtomTableEntry* mpEntries;          // +0x00
+    unsigned int mnCount;               // +0x04  slot count
+    unsigned int mnUsed;                // +0x08  occupied slots
+
+    void EraseAt(RwHashIterator it);    // 0x011e2b90
+};
+
+// @ 0x011e2b90  rw::core::arena::RwHashMap::EraseAt
+// Backward-shift deletion: it is the hole. Walk the probe run after it and pull back every entry
+// whose home slot does not lie cyclically in (hole, cur], so lookups never stop early at the hole.
+void RwHashMap::EraseAt(RwHashIterator it)
+{
+    RwHashIterator start = it;
+    RwHashIterator cur = it;
+    for (;;)
+    {
+        ++cur;
+        if (cur.mnIndex == start.mnIndex)
+            break;
+        AtomTableEntry* pEntry = mpEntries + cur.mnIndex;
+        if (pEntry->mnKey == 0xffffffffu)
+            break;
+        unsigned int nCount = mnCount;
+        unsigned int nHome = rw_HashUInt(pEntry->mnKey, g_rwHashSeed) % nCount;
+        RwHashIterator next = it;
+        ++next;
+        if (next.mnIndex <= cur.mnIndex)
+        {
+            if (next.mnIndex <= nHome && nHome <= cur.mnIndex)
+                continue;
+        }
+        else if (next.mnIndex <= nHome || nHome <= cur.mnIndex)
+            continue;
+        mpEntries[it.mnIndex] = mpEntries[cur.mnIndex];
+        it = cur;
+    }
+    mpEntries[it.mnIndex].mnKey = 0xffffffffu;
+    mpEntries[it.mnIndex].mnValue = 0;
+    --mnUsed;
 }
