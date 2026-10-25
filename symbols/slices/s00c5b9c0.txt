@@ -1,2 +1,7 @@
 00c48e90 ??0cSPMission@SP@@QAE@XZ  # SP::cSPMission::cSPMission (callee of s00c5b9c0, named from the dev publics; slice address comment)
+00c5b9c0 ?FUN_00c5b9c0@@YIXPAUcRaidEvent@@PAX@Z  # FUN_00c5b9c0 migrated from s00c5b9c0 (verbatim, slice spelling)
+00c5bab0 ?FUN_00c5bab0@@YIXPAUcRaidEvent@@PAX@Z  # FUN_00c5bab0 migrated from s00c5b9c0 (verbatim, slice spelling)
 00c5bd00 ?FUN_00c5bd00@@YIPAXPAUcRaidPlunderEvent@@PAXI@Z  # FUN_00c5bd00 migrated from s00c5b9c0 (verbatim, slice spelling)
+00c5bea0 ?FUN_00c5bea0@@YIPAXPAUcRaidEvent@@PAXI@Z  # FUN_00c5bea0 migrated from s00c5b9c0 (verbatim, slice spelling)
+00c5c410 ?FUN_00c5c410@@YIEPAUcRaidEvent@@PAXI1@Z  # FUN_00c5c410 migrated from s00c5b9c0 (verbatim, slice spelling)
+00c5c470 ?FUN_00c5c470@@YIXPAUcRaidEvent@@PAX@Z  # FUN_00c5c470 migrated from s00c5b9c0 (verbatim, slice spelling)

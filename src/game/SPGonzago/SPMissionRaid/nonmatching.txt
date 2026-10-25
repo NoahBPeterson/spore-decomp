@@ -1,0 +1,15 @@
+# Slice s00c5b9c0 nonmatching functions (compiled; behaviourally faithful but not byte-exact).
+00c5b210 83 (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) planet mission read; the base read and field serializer are unresolved and the version test is modelled from the virtual type getter; equiv UNSUPPORTED (unresolved serializer and base read)
+00c5b280 88 (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) planet position refresh; the planet validity and empire lookups are unresolved so the branch bodies collapse; equiv UNSUPPORTED (unresolved planet services)
+00c5b450 39 (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) copy elements forward; retail copies each 32-byte element with SSE moves, the modelled struct assignment becomes a rep movs-free scalar copy; equiv FAIL (first mismatch memory pool @40040020)
+00c5b4b0 39 (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) copy elements backward; retail copies each 32-byte element with SSE moves walking backwards, the modelled loop is a scalar assignment; equiv FAIL (first mismatch memory pool @40030000)
+00c5b510 16 (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) pirate count; the tuning call takes the mission definition pointer in ecx, the modelled free helper passes it on the stack; equiv FAIL (first mismatch execution)
+00c5b530 16 (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) bomber count; the tuning call takes the mission definition pointer in ecx, the modelled free helper passes it on the stack; equiv FAIL (first mismatch execution)
+00c5b550 119 (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) plunder background update; the planet list walk is modelled but the artifact removal and empire lookups are unresolved; equiv UNSUPPORTED (unresolved planet helpers)
+00c5b600 9 (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) raid event init; the definition query and key-array read are unresolved so the body reduces to the base init check; equiv UNSUPPORTED (unresolved base init)
+00c5b660 49 (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) raid event shutdown; the UFO spawn, refresh and message post are unresolved; equiv UNSUPPORTED (unresolved mission services)
+00c5b6c0 223 (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) distance condition; the universe context, kinesthetics tuning and empire city lookups are unresolved so the distance math collapses; equiv UNSUPPORTED (unresolved tuning services)
+00c5b860 137 (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) raid event update; the threshold property read and the kinesthetics warp multiplier are unresolved so most of the body collapses; equiv UNSUPPORTED (unresolved tuning services)
+00c5b9c0 157 size 241 vs 229, 169 bytes differ: OnComplete/HandlerComplete float budget path and event-argument ordering; difftest cannot build valid inputs (0/400)
+00c5bab0 159 size 233 vs 202, 190 bytes differ: HandlerFail body reordered (child-loop structure and EventLog argument setup); difftest 0/400 valid inputs
+00c5c470 710 size 1030 vs 997: OnAccept constructs cStarRef/planet/event-log sequence; difftest 0/400 valid inputs (unmapped reads)
