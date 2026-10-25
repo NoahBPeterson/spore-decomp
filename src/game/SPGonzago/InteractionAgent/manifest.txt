@@ -1,0 +1,2 @@
+# source  symbol  va  flags
+../src/game/SPGonzago/InteractionAgent.cpp  ?VectorConstructorIterator@@  00401930  /Od /Ob1 /MD /Gy /TP /arch:SSE /Isrc/game/include
