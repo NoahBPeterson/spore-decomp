@@ -17,3 +17,4 @@
 e0a5c0 PartHolder::Part::Destroy
 00f14980 PartHolder::ReleaseParts
 00f143c0 Int64ListVector list insert
+00f15890 SP::cSPCreatureBase::OnPathCompleted  # thiscall UI refresh after a path finishes: window swap/visibility, tag+FNV1 key -> progress range (0x00eec540/0x00eec580/0x00eec570), progress-bar lerp, number/locale labels (0x00881ae0/0x00881f00/0x00f14120), elapsed-time text, then the 0x00f19640 achievement/debug block
