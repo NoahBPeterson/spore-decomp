@@ -2,4 +2,4 @@
 00422b00 KeyTree_Find  # lower_bound on 3-field key, then not-less check, returns iterator
 00422e20 Variant_SetChar  # type tag 1, size 1
 00422eb0 ?SetU32@Variant@@QAEPAU1@PBI@Z  # Variant::SetU32 migrated from s00422950 (verbatim, slice spelling)
-00422f40 Variant_SetVec12  # type tag 0x20, size 12
+00422f40 ?SetVec12@Variant@@QAEPAU1@PBUVec12@@@Z  # Variant::SetVec12 migrated from s00422950 (verbatim, slice spelling)

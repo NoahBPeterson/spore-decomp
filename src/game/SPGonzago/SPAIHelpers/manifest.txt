@@ -1,0 +1,2 @@
+# source  symbol  va  flags
+../src/game/SPGonzago/SPAIHelpers.cpp  ?SetVec12@Variant@@QAEPAU1@PBUVec12@@@Z  00422f40  /Od /Ob1 /MD /Gy /TP /arch:SSE /Isrc/game/include
