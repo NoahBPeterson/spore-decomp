@@ -52,10 +52,18 @@ struct sfnt_OffsetTable {
     sfnt_DirectoryEntry* table;  // +0x10
 };
 
+struct kernSubEntry {
+    uint32 key;      // +0x00
+    uint16 value;    // +0x04
+    uint16 pad06;    // +0x06
+};
+
 struct kernSub10 {
-    tsiMemObject* mem;  // +0x00
-    int32 pad04[2];     // +0x04
-    void* f0c;          // +0x0c
+    tsiMemObject* mem;       // +0x00
+    uint16 count;            // +0x04
+    uint16 pad06;            // +0x06
+    int32 pad08;             // +0x08
+    kernSubEntry* f0c;       // +0x0c
 };
 
 struct kernSubTable {
@@ -190,10 +198,6 @@ void  Seek_InputStream(InputStream* in, int32 off);       // 0x008cc580
 int32 Tell_InputStream(InputStream* in);                  // 0x008cc5b0
 void  PrimeT2KInputStream(InputStream* in);               // 0x008cc0b0
 
-// GetKernSubTable0Value is a TU-local helper in the original (this in ecx, the high
-// half of the key in dx, the low half on the stack) -- declared __fastcall so the call
-// site in GetSfntClassKernValue lines up.
-uint16 __fastcall GetKernSubTable0Value(kernSub10* t, int32 hi, int32 lo);  // 0x008cd610
 }
 
 // The kern sub-table constructor is TU-local with mem in eax; declare it so the call
@@ -241,6 +245,29 @@ void Delete_kernClass(kernClass* k)
         tsi_DeAllocMem(k->mem, k->tables);
         tsi_DeAllocMem(k->mem, k);
     }
+}
+
+// TU-local helper: this (kernSub10*) in ecx, the high key half in dx, the low half on
+// the stack, caller-cleaned.  A same-TU static body lets cl reproduce that convention.
+// 0x008cd610
+static uint16 __declspec(noinline) GetKernSubTable0Value(kernSub10* t, uint16 hi, uint16 lo)
+{
+    uint32 key = ((uint32)hi << 16) | lo;
+    kernSubEntry* rec = t->f0c;
+    int32 low = 0;
+    int32 high = (int32)t->count - 1;
+    while (high >= low) {
+        int32 mid = (high + low) >> 1;
+        uint32 k = rec[mid].key;
+        if (key > k) {
+            low = mid + 1;
+        } else if (key == k) {
+            return rec[mid].value;
+        } else {
+            high = mid - 1;
+        }
+    }
+    return 0;
 }
 
 // @ 0x008cd810
