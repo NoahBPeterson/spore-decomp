@@ -1,5 +1,6 @@
 00ff4d50 ?LoadToolData@cPlayerInventory_s00ff_4d50@@QAEXXZ  # cPlayerInventory_s00ff_4d50::LoadToolData migrated from s00ff4d50 (verbatim, slice spelling)
 00ff50f0 ?Read@cPlayerInventory_s00ff_4d50@@QAE_NPAUIStream@@@Z  # cPlayerInventory_s00ff_4d50::Read migrated from s00ff4d50 (verbatim, slice spelling)
+00ff5270 ?SP_DoCommunityReaction@@YAXPAHMM@Z  # SP_DoCommunityReaction migrated from s00ff4d50 (verbatim, slice spelling)
 00ff5510 ?SP_DetermineCityGrowth@@YAHPAUCCityGrow@@PAH@Z  # SP_DetermineCityGrowth migrated from s00ff4d50 (verbatim, slice spelling)
 00ff5720 ?DoGrowthSim@cColonySimulator@@QAEXPAX@Z  # cColonySimulator::DoGrowthSim migrated from s00ff4d50 (verbatim, slice spelling)
 00ff5810 ?scalarDeletingDtor@cColonySimulator@@QAEPAXD@Z  # cColonySimulator::scalarDeletingDtor migrated from s00ff4d50 (verbatim, slice spelling)
