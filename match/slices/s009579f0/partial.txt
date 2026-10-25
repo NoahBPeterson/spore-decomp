@@ -1,3 +1,1 @@
 # va  diff-bytes  reason (incomplete / not equivalence-testable)
-00957c40  213  Fn00957c40 (ImageTable reset/clear): incomplete - only lock/drop-vector/unlock translated; original is a 225-byte routine handling more work; difftest NOT RUN (known incomplete)
-00958150  938  WM::ComputeClip: incomplete - best-effort AABB translation (ours 1163 bytes vs original 938); no symbol of similar size, not equivalence-tested
