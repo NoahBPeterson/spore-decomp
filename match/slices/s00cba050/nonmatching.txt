@@ -2,3 +2,6 @@
 00cbad00  80  ebx/edi holding this vs loco swapped; x87 accumulation order differs; equiv UNSUPPORTED (no valid inputs)
 00cbad90  29  register roles (ebx/esi/edi) swapped for pList/count; equiv UNSUPPORTED (no valid inputs)
 00cbaf00  234  member copies inlined instead of direct 0x00473460 call; vftable store order; equiv WEAK (no mismatch)
+00cba050  1117  behavioural reconstruction only: 1158-byte SSE effect/message block not fully reproduced; equiv UNSUPPORTED (no valid inputs)
+00cba560  291  register-ABI function (args in eax/edi at entry); behavioural reconstruction only; equiv UNSUPPORTED (custom register ABI)
+00cba690  1360  behavioural reconstruction only: large SSE effect block partially reproduced; equiv WEAK (no mismatch)
