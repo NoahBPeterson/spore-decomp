@@ -5,8 +5,12 @@
 //  locals with destructors exist, so no /EHsc.)
 
 #include "types.h"
+#include <math.h>
 
 #pragma warning(disable: 4100)
+// Retail evaluates every transcendental with x87 fsin/fcos/fsqrt on the extended-precision
+// operands; intrinsic sin/cos/sqrt keep those instructions inline instead of CRT imports.
+#pragma intrinsic(sin, cos, sqrt)
 
 // ---------------------------------------------------------------------------
 // Minimal EASTL map layout (matches EASTL 3.02.01: rb_base::mCompare at +0,
@@ -58,11 +62,15 @@ struct UnsignedVoidMap {
 struct cStarManager {
     char pad_0000[0x150];
     UnsignedVoidMap mEmpires;  // +0x150
-    char pad_016c[0x1d8 - 0x16c];
+    char pad_016c[0x1a4 - 0x16c];
+    void* mpProperties;        // +0x1a4  (property table)
+    char pad_01a8[0x1d8 - 0x1a8];
     int mEmpireID;             // +0x1d8
 
     int   GetEmpireByID(unsigned int empireID);
     void* GetByFieldID();
+    void  GenerateStarField(void* star);
+    void  BuildPlanet(void* system, void* out, float p4, float p5, void* p6);
 };
 
 // ---------------------------------------------------------------------------
@@ -146,7 +154,36 @@ extern WStr    g_WStrA;             // 0x1689dfc
 extern uint32_t g_initA;            // 0x1689e0c
 extern WStr    g_WStrB;             // 0x1689e10
 extern uint32_t g_initB;            // 0x1689e20
+extern WStr    g_CachedName;        // 0x156c63c
 extern "C" int __cdecl atexit(void (__cdecl*)(void));
+
+// ---------------------------------------------------------------------------
+// Input solar-system star record (the argument of GenerateStarField) and the
+// generated star body record returned by 0xba61b0.
+// ---------------------------------------------------------------------------
+struct StarSystem {
+    char     pad_0000[0x70];
+    uint32_t mnBaseKey;                       // +0x70
+    char     pad_0074[0xac - 0x74];
+    uint8_t  mnBodyIndex;                     // +0xac
+};
+
+struct StarBody {
+    char     pad_0000[0x18];
+    WStr     mName;                           // +0x18
+    char     pad_0024[0x28 - 0x24];
+    int      mnKind;                          // +0x28
+    int      mnSubKind;                       // +0x2c
+    char     pad_0030[0x4c - 0x30];
+    uint8_t  mb4c;                            // +0x4c
+    char     pad_004d[0xb0 - 0x4d];
+    float    mfB0;                            // +0xb0
+    float    mfB4;                            // +0xb4
+    char     pad_00b8[0x130 - 0xb8];
+    uint8_t  mb130;                           // +0x130
+    char     pad_0131[0x194 - 0x131];
+    int      mn194;                           // +0x194
+};
 
 typedef WStr* (__cdecl* GetWStrFn)(void*);
 
@@ -211,88 +248,177 @@ void* cStarManager::GetByFieldID()
 // ===========================================================================
 
 // --- external callees (all original relocations) ---------------------------
+// The __fastcall forms put the first argument in ecx (thiscall layout) with a
+// throw-away edx slot, matching the retail thiscall callees.
 extern "C" void* __cdecl FUN_004010a0();                              // 0x4010a0
 extern "C" void  __cdecl FUN_00ba61b0(uint32_t key, void** out);       // 0xba61b0
-extern "C" void* __cdecl FUN_005ecf80(void* out, int hash);            // 0x5ecf80
-extern "C" void  __cdecl FUN_00ba64a0(void* o, void* star, int x);     // 0xba64a0
-extern "C" void  __cdecl FUN_00ba6310(void* o, int a, int b);          // 0xba6310
-extern "C" int   __cdecl FUN_00989360(int x);                          // 0x989360
-extern "C" void* __cdecl FUN_00ba8010(void* out, int x);               // 0xba8010
-extern "C" void  __cdecl FUN_00b8dde0(void* o, int x);                 // 0xb8dde0
+extern "C" void* __fastcall FUN_005ecf80(void* self, int, void* out, int hash);          // 0x5ecf80
+extern "C" void  __fastcall FUN_00ba64a0(void* self, int, void* o, void* star, int x);   // 0xba64a0
+extern "C" void  __fastcall FUN_00ba6310(void* self, int, void* o, int a, int b);         // 0xba6310
+extern "C" int   __fastcall FUN_00989360(void* self, int);              // 0x989360
+extern "C" void* __fastcall FUN_00ba8010(void* self, int, void* out, int x);              // 0xba8010
+extern "C" void  __fastcall FUN_00b8dde0(void* self, int, void* x, int y); // 0xb8dde0
 extern "C" void* __cdecl FUN_00f48a80();                               // 0xf48a80
-extern "C" void* __cdecl FUN_00b8d8e0(void* out);                      // 0xb8d8e0
-extern "C" void  __cdecl FUN_00b3d3d0(void* o, int x);                 // 0xb3d3d0
-extern "C" void  __cdecl FUN_0103ca40(void* o, int x);                 // 0x103ca40
-extern "C" bool  __cdecl FUN_00bb9af0(void* o, int x);                 // 0xbb9af0
-extern "C" void  __cdecl FUN_00bb9b00(void* o, int a, int b);          // 0xbb9b00
+extern "C" void* __fastcall FUN_00b8d8e0(void* self, int, void* out);  // 0xb8d8e0
+extern "C" void* __cdecl FUN_00b3d3d0(void* o, int x);                 // 0xb3d3d0
+extern "C" void  __fastcall FUN_0103ca40(void* self, int);             // 0x103ca40
+extern "C" bool  __fastcall FUN_00bb9af0(void* self, int, int x);      // 0xbb9af0
+extern "C" void  __fastcall FUN_00bb9b00(void* self, int, int a, int b); // 0xbb9b00
 extern "C" void  __cdecl FUN_00b2af00(int* a, int* b);                 // 0xb2af00
 extern "C" void  __cdecl FUN_00ba79a0(void* a, int b, int c, int d);   // 0xba79a0
 extern "C" void  __cdecl FUN_00ba84b0(void* a, void* b, void* c);      // 0xba84b0
 extern "C" void  __cdecl FUN_00ba8500(void* a, void* b, void* c);      // 0xba8500
 extern "C" float __cdecl FUN_010431e0(void* props, int id);            // 0x10431e0
 extern "C" void* __cdecl FUN_00ba8650(void* out, float angle);         // 0xba8650
-extern "C" void* __cdecl FUN_0059aed0(void* out, void* m, void* v);    // 0x59aed0
-extern "C" void* __cdecl FUN_00801920();                               // 0x801920
-extern "C" void  __cdecl FUN_00fe8450();                               // 0xfe8450
+extern "C" void* __cdecl FUN_0059aed0(void* out, void* vec, void* quat); // 0x59aed0
+extern "C" void* __fastcall FUN_00801920(void* self, int);             // 0x801920
+extern "C" float __cdecl FUN_00c841a0(void* star);                     // 0xc841a0 (GetStarMass)
+extern "C" float* __fastcall FUN_0041ea70(void* prop, int);            // 0x41ea70 (Property::GetFloat)
+extern "C" void  __fastcall FUN_00fe8450(void* out, int);              // 0xfe8450
 extern "C" int   __cdecl EA_IO_WriteUint32(void* w, void* p, int n, int x); // EA::IO::WriteUint32 (reloc)
 
-// Random number singleton (SP::VRandomLinearCongruential_Random).
+// Random number singleton: SP::sMathRandom is an EA::Random::RandomLinearCongruential
+// living at 0x01601760.  The namespaced spelling mangles to the retail global/method,
+// so both the data reference and the RandomDoubleUniform call bind to the originals.
+namespace EA { namespace Random {
+class RandomLinearCongruential {
+public:
+    double RandomDoubleUniform();   // 0x009360d0
+};
+} }
+namespace SP { extern EA::Random::RandomLinearCongruential sMathRandom; }
+
+// Older spelling kept for InitStarOrbit (its row is already finalized).
 struct VRandom { double RandomDoubleUniform(); };
 extern VRandom sMathRandom;   // 0x16... _sMathRandom
+
+// Rotation axes used by BuildPlanet (0x156c52c / 0x156c538) and the retail float
+// constants it loads from .rdata/.data.
+static const float kAxisX[3] = { 1.0f, 0.0f, 0.0f };   // 0x156c52c
+static const float kAxisZ[3] = { 0.0f, 0.0f, 1.0f };   // 0x156c538
+static const float kfDegToRad = 0.017453292f;   // 0x1465eb0
+// Full-turn angle; retail initializes this global to 2*pi from 0x156c528 at startup, so
+// reference it rather than folding in the literal.
+extern float g_RandomTurns;                     // 0x1689c4c
+static const float kfHalf = 0.5f;               // 0x1471064
+static const float kfMaxInclination = 89.0f;    // 0x1466024
+static const float kfWeightMax = 0.99f;         // 0x13ef480
+static const float kfEpsilon = 1e-8f;           // 0x13ec4b8
+static const float kfDensityDefault = 100.0f;   // 0x13ec4d0
+static const float kfDensityGas = 10.0f;        // 0x1473c70
+static const float kfVolumeScaleRocky = 0.001f; // 0x13f9428
+static const float kfVolumeScaleStar = 1e-6f;   // 0x13f11c8
 
 // Non-trivial reference-counted object held inside the generated containers.
 typedef void (__thiscall* VCall1)(void*);
 static inline void RefAddRef(void* o) { if (o) ((VCall1)(*(void***)o)[0])(o); }
 static inline void RefRelease(void* o) { if (o) ((VCall1)(*(void***)o)[1])(o); }
+static inline void StarBody_Release(void* o)
+{
+    (*(void (__thiscall**)(void*))((char*)*(void**)o + 4))(o);
+}
+
+// Build one star body record: allocate via the key, copy its localized name,
+// then store the type/subtype/flag triple.  The caller advances the index.
+static void* MakeStarBody(cStarManager* self, StarSystem* star, void* nameGen,
+                          int kind, int subKind, int flag194, bool useCached)
+{
+    void* obj = 0;
+    FUN_00ba61b0((uint32_t)star->mnBodyIndex * 0x1000000u + star->mnBaseKey, &obj);
+
+    WStr  tmp = { 0, 0, 0 };
+    WStr* name;
+    bool  usedTemp = false;
+    if (useCached && g_CachedName.mpBegin != g_CachedName.mpEnd) {
+        name = &g_CachedName;
+    } else {
+        name = (WStr*)FUN_005ecf80(nameGen, 0, &tmp, 0x7e1310a);
+        usedTemp = true;
+    }
+
+    StarBody* body = (StarBody*)obj;
+    if (name != &body->mName)
+        body->mName.Assign(name->mpBegin, name->mpEnd);
+    if (usedTemp && (((char*)tmp.mpCapacity - (char*)tmp.mpBegin) & 0xfffffffe) > 2 &&
+        tmp.mpBegin != 0)
+        operator_delete(tmp.mpBegin);
+
+    body->mnKind   = kind;      // +0x28
+    body->mnSubKind = subKind;  // +0x2c
+    body->mn194    = flag194;   // +0x194
+    return obj;
+}
 
 // ---------------------------------------------------------------------------
 // @ 0x00ba8830  cStarManager::GenerateStarField(star*) : __thiscall (ret 4)
 // ---------------------------------------------------------------------------
-void FUN_00ba8830(void* self, void* star)
+void cStarManager::GenerateStarField(void* starPtr)
 {
-    char* sp = (char*)star;
-    if (FUN_00bb9af0(star, 0x8000)) sp[0xac] = 0;
-    if (sp[0xac] != 0) return;
+    StarSystem* star = (StarSystem*)starPtr;
+    if (FUN_00bb9af0(star, 0, 0x8000))
+        star->mnBodyIndex = 0;
+    if (star->mnBodyIndex != 0)
+        return;
 
-    FUN_00bb9b00(star, 0x100, 0);
+    FUN_00bb9b00(star, 0, 0x100, 0);
 
-    for (int i = 0; i < 5; ++i) {
-        uint32_t key = (uint32_t)(uint8_t)sp[0xac] * 0x1000000u + *(int*)(sp + 0x70);
-        void* obj = 0;
-        FUN_00ba61b0(key, &obj);
+    void* nameGen = FUN_004010a0();
 
-        // localized display-name copy
-        void* tmp = 0;
-        void* nm = FUN_005ecf80(&tmp, 0x7e1310a);
-        if (nm != (char*)obj + 0x18)
-            ((WStr*)((char*)obj + 0x18))->Assign(((WStr*)nm)->mpBegin, ((WStr*)nm)->mpEnd);
+    // Body 0: kind 2/5/1 plus the orbit / spin / size setup.
+    {
+        void* obj = MakeStarBody(this, star, nameGen, 5, 2, 1, true);
+        StarBody* body = (StarBody*)obj;
 
-        static const int kA[5] = { 2, 4, 0, 0, 2 };
-        static const int kB[5] = { 5, 2, 3, 2, 1 };
-        static const int kC[5] = { 1, 1, 1, 1, 0 };
-        *(int*)((char*)obj + 0x2c)  = kA[i];
-        *(int*)((char*)obj + 0x28)  = kB[i];
-        *(int*)((char*)obj + 0x194) = kC[i];
+        void* dummy = 0;
+        void* m = FUN_00ba8010(this, 0, &dummy, FUN_00989360(star, 0));
+        FUN_00b8dde0(body, 0, m, 0);
+        body->mb130 = 1;
 
-        if (i == 0) {
-            void* m = FUN_00ba8010(&tmp, FUN_00989360(0));
-            FUN_00b8dde0(m, 0);
-            *(uint8_t*)((char*)obj + 0x4c) = 1;
-            void* g = FUN_00f48a80();
-            void* v = FUN_00b8d8e0(&tmp);
-            (*(void (__cdecl**)(void*))(*(void**)g))(v);   // *g(v)
-            *(int*)((char*)obj + 0x2c) = *(int*)&tmp;
-            *(int*)((char*)obj + 0x2d) = *(int*)&tmp;
-            FUN_00b3d3d0(obj, 1);
-            FUN_0103ca40(g, 1);
-        } else {
-            FUN_00ba64a0(obj, star, 0);
-            if (i == 2)
-                FUN_00ba6310(obj, 0x6334d0ad, 0xaf);
-        }
+        void* g = FUN_00f48a80();
+        float orbit[4] = { 0.0f, 0.0f, 0.0f, 0.0f };
+        void* v = FUN_00b8d8e0(body, 0, orbit);
+        (*(void (__thiscall**)(void*, void*))((char*)*(void**)g + 8))(g, v);
+        body->mfB0 = orbit[3];   // +0xb0
+        body->mfB4 = orbit[2];   // +0xb4
 
-        sp[0xac]++;
-        RefRelease(obj);
+        void* r = FUN_00b3d3d0(body, 1);
+        FUN_0103ca40(r, 0);
+
+        star->mnBodyIndex++;
+        StarBody_Release(obj);
+    }
+
+    // Body 1: kind 2/4/1.
+    {
+        void* obj = MakeStarBody(this, star, nameGen, 2, 4, 1, false);
+        FUN_00ba64a0(this, 0, obj, star, 0);
+        star->mnBodyIndex++;
+        StarBody_Release(obj);
+    }
+
+    // Body 2: kind 3/0/1 plus the special satellite descriptor.
+    {
+        void* obj = MakeStarBody(this, star, nameGen, 3, 0, 1, false);
+        FUN_00ba64a0(this, 0, obj, star, 0);
+        FUN_00ba6310(this, 0, obj, 0x6334d0ad, 0xaf);
+        star->mnBodyIndex++;
+        StarBody_Release(obj);
+    }
+
+    // Body 3: kind 2/0/1.
+    {
+        void* obj = MakeStarBody(this, star, nameGen, 2, 0, 1, false);
+        FUN_00ba64a0(this, 0, obj, star, 0);
+        star->mnBodyIndex++;
+        StarBody_Release(obj);
+    }
+
+    // Body 4: kind 1/2/0.
+    {
+        void* obj = MakeStarBody(this, star, nameGen, 1, 2, 0, false);
+        FUN_00ba64a0(this, 0, obj, star, 0);
+        star->mnBodyIndex++;
+        StarBody_Release(obj);
     }
 }
 
@@ -323,29 +449,121 @@ void FUN_00ba91b0(void* self, void* star)
 }
 
 // ---------------------------------------------------------------------------
-// @ 0x00ba8c40  cStarManager::BuildPlanet(star*, void*, float, float, float)
+// Property table lookup used by the BuildPlanet radius tail.
 // ---------------------------------------------------------------------------
-void FUN_00ba8c40(void* self, void* star, int* out, float p4, float p5, float p6)
+struct PropertyObject {
+    char     pad_0000[0x12];
+    uint16_t mnType;   // +0x12  (0xd == float)
+};
+typedef bool (__thiscall* GetPropertyFn)(void* self, uint32_t id, void** out);
+
+// Property-table lookup: the original calls the virtual at vtable +0x24 and only
+// accepts a float property.  mpProperties == 0 leaves the caller's default.
+static float GetPropertyFloat(void* props, uint32_t id, float fallback)
 {
-    (void)self; (void)star;
+    if (props != 0) {
+        void* prop = 0;
+        GetPropertyFn fn = (GetPropertyFn)(*(void***)props)[9];
+        if (fn(props, id, &prop) && ((PropertyObject*)prop)->mnType == 0xd)
+            return *FUN_0041ea70(prop, 0);
+    }
+    return fallback;
+}
+
+// ---------------------------------------------------------------------------
+// @ 0x00ba8c40  cStarManager::BuildPlanet(system*, out*, p4, p5, p6)
+//              __thiscall, ret 0x14
+//
+// Splits the feature amount across p4/p5, builds the surface orientation
+// quaternion from an inclination and a random spin, rotates the Z/X unit axes
+// through it, stores the two orthogonal vectors, derives the density weight and
+// finally the radius from the star mass (p6 == 0) or the body's own density.
+// ---------------------------------------------------------------------------
+void cStarManager::BuildPlanet(void* system, void* out, float p4, float p5, void* p6)
+{
     unsigned char* o = (unsigned char*)out;
     *o = 0;
 
+    // Split the requested feature amount between p4 and p5.
     float feat = p5 - p4;
     if (feat > 0.0f) {
-        float t = (float)(sMathRandom.RandomDoubleUniform() * (double)feat);
+        float t = (float)(SP::sMathRandom.RandomDoubleUniform() * (double)feat);
         if (t > feat) t = feat;
         if (t < 0.0f) t = 0.0f;
-        p4 += t;
         float rem = feat - t;
         if (rem > 0.0f) {
-            float t2 = (float)(sMathRandom.RandomDoubleUniform() * (double)rem);
+            float t2 = (float)(SP::sMathRandom.RandomDoubleUniform() * (double)rem);
             if (t2 >= rem) t2 = rem;
             if (t2 < 0.0f) t2 = 0.0f;
-            p5 = t + p5;
+            p4 += t2;
         }
+        p5 = p4 + t;
     }
-    (void)p6;
+
+    // Inclination (degrees, clamped) converted to radians.
+    float incl = FUN_010431e0(mpProperties, 0x1960001);
+    if (incl < 0.0f) incl = 0.0f;
+    if (incl > kfMaxInclination) incl = kfMaxInclination;
+    incl *= kfDegToRad;
+
+    // Random full turn, then a spin angle uniformly inside [-incl, incl].
+    float turn = (float)(SP::sMathRandom.RandomDoubleUniform() * (double)g_RandomTurns);
+    float lo = -incl;
+    float hi = incl;
+    float spin = (float)(SP::sMathRandom.RandomDoubleUniform() * ((double)hi - (double)lo) + (double)lo);
+    if (spin >= hi) spin = hi;
+    else if (spin < lo) spin = lo;
+    float half1 = spin * kfHalf;
+    float half2 = turn * kfHalf;
+
+    float s1 = (float)sin((double)half1), c1 = (float)cos((double)half1);
+    float s2 = (float)sin((double)half2), c2 = (float)cos((double)half2);
+
+    // q = (axisZ * sin2, cos2) * (axisX * sin1, cos1)
+    float x0 = kAxisX[0] * s1, x1 = kAxisX[1] * s1, x2 = kAxisX[2] * s1;
+    float z0 = kAxisZ[0] * s2, z1 = kAxisZ[1] * s2, z2 = kAxisZ[2] * s2;
+    float q[4];
+    q[0] = (c2 * x0 + c1 * z0) + (z1 * x2 - z2 * x1);
+    q[1] = (c2 * x1 + c1 * z1) + (z2 * x0 - z0 * x2);
+    q[2] = (c2 * x2 + c1 * z2) + (z0 * x1 - z1 * x0);
+    q[3] = c2 * c1 - ((z0 * x0 + z2 * x2) + z1 * x1);
+
+    // Surface normal: rotate the Z axis; tangent frame: rotate the X axis.
+    float up[3];
+    FUN_0059aed0(up, (void*)kAxisZ, q);
+    *(float*)(o + 4)  = up[0];
+    *(float*)(o + 8)  = up[1];
+    *(float*)(o + 12) = up[2];
+
+    float side[3];
+    FUN_0059aed0(side, (void*)kAxisX, q);
+    float lenSq = (side[0] * side[0] + side[2] * side[2]) + side[1] * side[1];
+    float inv = (float)(1.0 / sqrt((double)(lenSq + kfEpsilon)));
+    *(float*)(o + 0x14) = (inv * side[0]) * p4;
+    *(float*)(o + 0x18) = (inv * side[1]) * p4;
+    *(float*)(o + 0x1c) = (inv * side[2]) * p4;
+
+    // Density weight: the smaller of the property and the radius ratio.
+    float w1 = FUN_010431e0(mpProperties, 0x1960000);
+    if (w1 < 0.0f) w1 = 0.0f;
+    if (w1 > kfWeightMax) w1 = kfWeightMax;
+    float ratio = (p5 - p4) / (p4 + p5);
+    if (ratio < 0.0f) ratio = 0.0f;
+    if (ratio > kfWeightMax) ratio = kfWeightMax;
+    *(float*)(o + 0x10) = (w1 <= ratio) ? w1 : ratio;
+
+    if (p6 == 0) {
+        float mass = FUN_00c841a0(FUN_00801920(system, 0));
+        float density = GetPropertyFloat(mpProperties, 0x1960021, kfDensityDefault);
+        float dm = density / mass;
+        *(float*)(o + 0x20) = (float)sqrt((double)(((p4 * p4) * p4) * (dm * dm) * kfVolumeScaleStar));
+    } else {
+        int kind = *(int*)((char*)p6 + 0x28);
+        uint32_t key = 0x1960020u + (kind != 1 ? 0x3bb977bu : 0u);
+        float density = GetPropertyFloat(mpProperties, key, kfDensityGas);
+        *(float*)(o + 0x20) = (float)sqrt((double)((density * density) * ((p4 * p4) * p4) * kfVolumeScaleRocky));
+    }
+    FUN_00fe8450(out, 0);
 }
 
 // ---------------------------------------------------------------------------
