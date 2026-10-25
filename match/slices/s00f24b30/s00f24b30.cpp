@@ -7,7 +7,12 @@
 // hashes of Spore type names; without the name registry they are reproduced as
 // literals under kType* names.
 
+#include <math.h>
+#pragma intrinsic(sqrt)
+
 typedef unsigned int uint;
+
+struct Vec3 { float x, y, z; };
 
 struct Vec3i { int x, y, z; };
 
@@ -92,7 +97,7 @@ struct Obj {
   Obj* fn257b0();
 
   // complex
-  void fn257f0(void* serializer);
+  char fn257f0(void* serializer);
 };
 
 // @ 0x00f25050  __stdcall
@@ -418,8 +423,9 @@ Obj* Obj::fn257b0() {
 
 // @ 0x00f257f0
 struct VarListSerializer {
-  VarListSerializer(Obj*, const char*, int);
-  char Serialize(void*);
+  unsigned mData[0xa14 / 4];                    // +0x0000
+  VarListSerializer(Obj*, const char*, int);    // 0x00692f90
+  char Serialize(void*);                        // 0x00693e10
 };
 struct VarReader {
   virtual void v0(); virtual void v1(); virtual void v2();
@@ -430,127 +436,307 @@ struct VarReader {
   virtual int  GetVersion();
 };
 
-void Obj::fn257f0(void* serializer) {
+char Obj::fn257f0(void* serializer) {
   // Constructs a cVarListSerializer over this and serializes through it, then
   // (if the serializer version is < 15) collapses the pending key fields.
-  VarListSerializer ser(this, "VarList", 0x1a80d26);
-  ser.Serialize(serializer);
+  VarListSerializer ser(this, (const char*)0x15aed38, 0x1a80d26);
+  char r = ser.Serialize(serializer);
   if ((uint)((VarReader*)serializer)->GetVersion() < 0xf) {
-    f00 = f28; f04 = f2c; f10 = f30; f28 = 0; f08 = f24; f14 = f34;
-    f2c = 0; f24 = 0; f30 = 0xffffffffu; f34 = 0xffffffffu;
+    f00 = f24; f04 = f28; f08 = f2c; f10 = f30; f14 = f34;
+    f24 = 0; f28 = 0; f2c = 0; f30 = 0xffffffffu; f34 = 0xffffffffu;
   }
+  return r;
 }
 
 // ---------------------------------------------------------------------------
 // Larger functions in the slice.
 
-struct LayoutTree {          // ~0x1c-byte eastl rbtree header
-  void* mpNode;
-  LayoutTree* mpAnchor;
-  void* mpLeft;
-  void* mpRight;
-  unsigned char mColor;
-  void* mpSize;
+struct LayoutTree {          // 0x1c-byte Simulator event-tree header
+  void*  mpUnused00;         // +0x00
+  void*  mpNext;             // +0x04  self-referential list head
+  void*  mpPrev;             // +0x08
+  void*  mpRoot;             // +0x0c  tree root (nuked / destroyed)
+  unsigned char mColor;      // +0x10
+  unsigned char mPad11[3];   // +0x11
+  void*  mpSize;             // +0x14
+  unsigned mPad18;           // +0x18
+  void DoNukeSubtree(void* pNode);   // 0x009a9600
+  void Destroy(void* pNode);         // 0x00f240d0
 };
 struct LayoutGlobal {        // 0x38-byte Simulator layout singleton
-  LayoutTree worlds;         // eastl::map<unsigned,cWorld>
-  LayoutTree collections;    // eastl::map<AutoRefCount,...>
+  LayoutTree worlds;         // +0x00
+  LayoutTree collections;    // +0x1c
 };
-LayoutGlobal* gLayoutManager;
+#define gLayoutManager (*(LayoutGlobal**)0x016c8318)   /* 0x016c8318 */
+
+void* FUN_00f473a0(unsigned size, const char* name, int a, int b,
+                   const char* file, int line);      // 0x00f473a0
+void  FUN_00f47380(void* p);                         // 0x00f47380
 
 extern "C" {
-  void* sub_new38(int, const char*, int, int, int, int);
-  void  sub_del(void*);
-  void  sub_nuke(void*);
-  int   sub240d0(void*);
   void* sub_manager_0067cb30(void);
-  int   sub_54e460(void*, void*, void*, void*);
-  int   sub_54e740(void*, void*, void*);
   int   sub_005f7930(void);
-  void  sub_00572590(void*);
-  int   sub_005f8a10(void*, void*, void*);
   int   sub_00552300(void*);
 }
 
+struct AssetDir {                                       // SP::Pollen::cAssetDirectory
+  bool GetLocalKey(void* a1, void* a2, void* pKey);     // 0x0054e460
+  bool IsPending(void* a1, void* a2);                   // 0x0054e740
+};
+struct UintArray {                                      // 3-dword key array
+  unsigned m00;                                         // +0x00
+  int      m04;                                         // +0x04
+  int      m08;                                         // +0x08
+  UintArray* Self();                                    // 0x00572590
+};
+struct AssetManager {
+  unsigned  mPad00[0x16];                               // +0x00
+  AssetDir* mpDirectory;                                // +0x58
+};
+struct AssetThing {                                     // object returned by 0x005f7930
+  unsigned mPad00[0x11];                                // +0x00
+  void*    mpValue;                                     // +0x44
+  bool GetKey(void* p, UintArray* pKey);                // 0x005f8a10
+};
+
 // @ 0x00f24d30
 void fn24d30() {
-  LayoutGlobal* g = (LayoutGlobal*)sub_new38(0x38, "Simulator", 0, 0, 0, 0);
-  gLayoutManager = g;
+  LayoutGlobal* g = (LayoutGlobal*)FUN_00f473a0(0x38, "Simulator", 0, 0, 0, 0);
   if (g) {
-    // default-construct the two embedded eastl maps
-    g->worlds.mpAnchor = (LayoutTree*)&g->worlds.mpNode;
-    g->worlds.mpNode = (void*)&g->worlds.mpNode;
-    g->worlds.mpLeft = 0;
-    g->worlds.mpRight = 0;
+    // default-construct the two embedded event-tree headers
+    g->worlds.mpNext = (void*)&g->worlds.mpNext;
+    g->worlds.mpPrev = (void*)&g->worlds.mpNext;
+    g->worlds.mpRoot = 0;
     g->worlds.mColor = 0;
     g->worlds.mpSize = 0;
-    g->collections.mpAnchor = (LayoutTree*)&g->collections.mpNode;
-    g->collections.mpNode = (void*)&g->collections.mpNode;
-    g->collections.mpLeft = 0;
-    g->collections.mpRight = 0;
+    g->collections.mpNext = (void*)&g->collections.mpNext;
+    g->collections.mpPrev = (void*)&g->collections.mpNext;
+    g->collections.mpRoot = 0;
     g->collections.mColor = 0;
     g->collections.mpSize = 0;
   }
+  gLayoutManager = g;
 }
 
 // @ 0x00f24d90
 void fn24d90() {
   LayoutGlobal* g = gLayoutManager;
   if (g) {
-    sub_nuke(g->worlds.mpAnchor);           // DoNukeSubtree
-    sub240d0(g->worlds.mpLeft);             // destroy the world map
-    sub_del(g);                             // operator delete
+    LayoutTree& c = g->collections;
+    c.DoNukeSubtree(c.mpRoot);                             // free the world tree
+    LayoutTree& w = g->worlds;
+    w.Destroy(w.mpRoot);                                   // destroy the collection tree
+    FUN_00f47380(g);
   }
 }
 
+// --- types used by 0x00f24b30 -------------------------------------------------
+#ifndef PV
+#define PV(n) virtual void pv##n();
+#endif
+
+// The object reached through root->GetComponent(0x8367427): slot +0x04 yields a
+// boolean-ish sub object, slot +0x08 yields something with a position.
+struct InnerCheck {
+  PV(0) PV(1) PV(2) PV(3) PV(4) PV(5) PV(6) PV(7) PV(8) PV(9) PV(10)
+  virtual char Check();                        // +0x2c
+};
+struct PosProvider {
+  PV(0) PV(1) PV(2) PV(3) PV(4) PV(5) PV(6) PV(7) PV(8) PV(9) PV(10)
+  virtual float* GetPos();                     // +0x2c
+};
+struct EffectComp {
+  PV(0)                                        // +0x00
+  virtual InnerCheck*    GetInner();           // +0x04
+  virtual PosProvider*   GetPosProvider();     // +0x08
+  unsigned mKind;                              // +0x04  dispatch kind (6/0xa/0xd/0xf)
+};
+struct EffectRoot {
+  PV(0) PV(1) PV(2)
+  virtual EffectComp* GetComponent(unsigned id);   // +0x0c
+};
+struct EffectOwner {                           // result of FUN_00ae6740
+  PV(0) PV(1)
+  virtual PosProvider* GetPosProvider();       // +0x08
+  PV(3) PV(4) PV(5) PV(6) PV(7) PV(8) PV(9)
+  unsigned mPad04[9];                          // +0x04
+  void* mpSlot28;                              // +0x28
+};
+
+void* FUN_00ae6740(void* p);                              // 0x00ae6740
+void* FUN_00f20240(void* pSlot);                          // 0x00f20240
+void  FUN_00f24ae0(int* a1, int a2, float a3);            // 0x00f24ae0
+
+// Shared float constants the original reads straight out of .rdata.
+extern float g_1485720;   // 0x01485720  1.0f
+extern float g_148c3b8;   // 0x0148c3b8  0.111110926f
+extern float g_1471064;   // 0x01471064  0.5f
+extern float g_1488874;   // 0x01488874  0.1f
+
 // @ 0x00f24b30
-// Sends a proximity/update message for the target identified by id: looks the
-// target up (creating if needed), resets it, and computes a distance-based
-// scale factor from the owner's current position.
-void fn24b30(void* owner, unsigned /*unused*/) {
-  // The original's virtual dispatch and key construction are not fully
-  // reconstructed.
-  (void)owner;
+// Sends an update to the effect component of root, for the given dispatch mode:
+// the component's kind selects the only handled class of effects, whose scale is
+// derived from the distance between the component's position and the owner's.
+void fn24b30(EffectRoot* root, unsigned mode) {
+  if (!root) return;
+  EffectComp* comp = root->GetComponent(0x8367427);
+  if (!comp || comp->mKind == 0) return;
+  if (comp->GetInner()->Check()) return;
+  switch (comp->mKind) {
+    case 6: case 10: case 13: case 15: {
+      EffectOwner* o = (EffectOwner*)FUN_00ae6740(root);
+      void* selected;
+      if (mode == 0x13) selected = o->mpSlot28;
+      else              selected = 0;
+      void* rec = FUN_00f20240(&o->mpSlot28);
+      float scale = 0.0f;
+      if (rec) {
+        unsigned t = *(unsigned*)((char*)rec + 4);
+        if (t == 0xf || t == 6 || t == 0xa || t == 0xd) {
+          Vec3 p1 = *(Vec3*)comp->GetPosProvider()->GetPos();
+          Vec3* p2 = (Vec3*)o->GetPosProvider()->GetPos();
+          Vec3 delta;
+          delta.z = p2->z - p1.z;
+          delta.x = p2->x - p1.x;
+          delta.y = p2->y - p1.y;
+          double d = sqrt((double)delta.z * delta.z + (double)delta.x * delta.x
+                          + (double)delta.y * delta.y);
+          d = (d - g_1485720) * g_148c3b8;
+          float v = (float)d;
+          if (v < 0.0f) v = 0.0f;
+          if (v > g_1485720) v = g_1485720;
+          scale = (float)((double)v * g_1471064 + g_1488874);
+        }
+      }
+      FUN_00f24ae0((int*)comp, (int)selected, scale);
+      break;
+    }
+    default:
+      break;
+  }
 }
 
+// --- types used by 0x00f24dc0 -------------------------------------------------
+struct GameDataList {                  // Simulator::tGameDataVectorT header
+  void*  mPad00;                       // +0x00
+  void** mpBegin;                      // +0x04
+  void** mpEnd;                        // +0x08
+  void*  mPad0c;                       // +0x0c
+  void*  mAllocator;                   // +0x10
+};
+struct RefObj {                        // ref-counted game object base
+  virtual void AddRef();               // +0x00
+  virtual void Release();              // +0x04
+};
+struct PtrVector {                     // eastl::vector<T*> header
+  void** mpBegin;                      // +0x00
+  void** mpEnd;                        // +0x04
+  void** mpCap;                        // +0x08
+  PtrVector* Reserve(unsigned n, void* allocator);   // 0x00b93c60
+};
+struct GameDataMgr {                   // SP::cGameNounManager
+  GameDataList* GetGameDataVector(unsigned a, unsigned b, unsigned c, unsigned d,
+                                  unsigned e);       // 0x00b21340
+};
+void  FUN_00829110(void*** out, void** first, void** last, void** dest,
+                   int index);                       // 0x00829110
+void* FUN_00f20ef0(int* p, float dt);                // 0x00f20ef0
+void* FUN_00f243c0(int* p, float dt);                // 0x00f243c0
+
+#define SIM_ALLOC_FILE "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h"
+
 // @ 0x00f24dc0
-// Advances every interactable game-data object by dt (walking the noun
-// manager's data vectors twice, once for the object list and once for the
-// secondary list).
+// Advances every interactable game-data object by dt: snapshots both of the noun
+// manager's game-data vectors, dispatches each element on its kind (6 = update,
+// 9 = secondary update, 0xd = timer advance) and releases the snapshots.
 void fn24dc0(float dt) {
-  (void)dt;
+  sub_f24200();
+  GameDataMgr* mgr = (GameDataMgr*)sub_b3d300();
+  GameDataList* list = mgr->GetGameDataVector(0xcd7d10, 0xd3d420, 0xc5fc70, 0xb1e500,
+                                              0x18c88e4);
+  int n = (int)((char*)list->mpEnd - (char*)list->mpBegin) >> 2;
+  PtrVector tmp;
+  tmp.Reserve((unsigned)n, &list->mAllocator);
+  void** out = tmp.mpBegin;
+  FUN_00829110(&out, list->mpBegin, list->mpEnd, tmp.mpBegin, 0);
+  int count = (int)((char*)out - (char*)tmp.mpBegin) >> 2;
+  void** base = tmp.mpBegin;
+  for (int i = 0; i < count; ++i) {
+    if (((InnerCheck*)base[i])->Check() == 1) continue;
+    char* p = base[i] ? (char*)base[i] + 0x34 : 0;
+    int kind = *(int*)(p + 4);
+    if (kind == 6) { FUN_00f20ef0((int*)p, dt); continue; }
+    if (kind == 9) { FUN_00f243c0((int*)p, dt); continue; }
+    if (kind == 0xd && *(char*)(p + 0x30) != 0) *(float*)(p + 0x34) += dt;
+  }
+
+  mgr = (GameDataMgr*)sub_b3d300();
+  GameDataList* list2 = mgr->GetGameDataVector(0xcd7d10, 0xd3d420, 0xd3d440, 0xb1e500,
+                                               0x3a2511e);
+  int n2 = (int)((char*)list2->mpEnd - (char*)list2->mpBegin) >> 2;
+  void** buf = 0;
+  if (n2 != 0) {
+    buf = (void**)FUN_00f473a0((unsigned)n2 * 4, "Simulator", 0, 0, SIM_ALLOC_FILE, 0xd1);
+  }
+  void** out2 = 0;
+  FUN_00829110(&out2, list2->mpBegin, list2->mpEnd, buf, 0);
+  int count2 = (int)((char*)out2 - (char*)buf) >> 2;
+  void** base2 = buf;
+  for (int i = 0; i < count2; ++i) {
+    if (((InnerCheck*)base2[i])->Check() == 1) continue;
+    char* p = base2[i] ? (char*)base2[i] + 0x130 : 0;
+    int kind = *(int*)(p + 4);
+    if (kind == 6) { FUN_00f20ef0((int*)p, dt); continue; }
+    if (kind == 9) { FUN_00f243c0((int*)p, dt); continue; }
+    if (kind == 0xd && *(char*)(p + 0x30) != 0) *(float*)(p + 0x34) += dt;
+  }
+
+  for (void** p = buf; p < out2; ++p) {
+    if (*p) ((RefObj*)*p)->Release();
+  }
+  if (buf && ((int*)buf)[-1] != 0) FUN_00f47380(buf);
+  for (void** p = tmp.mpBegin; p < tmp.mpCap; ++p) {
+    if (*p) ((RefObj*)*p)->Release();
+  }
+  if (tmp.mpBegin && ((int*)tmp.mpBegin)[-1] != 0) FUN_00f47380(tmp.mpBegin);
 }
 
 // @ 0x00f25930
-int fn25930(void* a1, void* a2, Vec3i* out) {
-  uint key[3];
+bool fn25930(void* a1, void* a2, Vec3i* out) {
+  int key[3];
   key[0] = 0; key[1] = 0; key[2] = 0;
-  void* mgr = sub_manager_0067cb30();
-  void* dir = *(void**)((char*)mgr + 0x58);
-  if (!sub_54e460(dir, a1, a2, key)) return 0;
-  if (sub_54e740(dir, a1, a2)) return 0;
-  if (out) { out->x = (int)key[0]; out->y = (int)key[1]; out->z = (int)key[2]; }
-  return 1;
+  AssetManager* mgr = (AssetManager*)sub_manager_0067cb30();
+  AssetDir* dir = mgr->mpDirectory;
+  if (dir->GetLocalKey(a1, a2, key)) {
+    if (!dir->IsPending(a1, a2)) {
+      if (out) { out->x = key[0]; out->y = key[1]; out->z = key[2]; }
+      return true;
+    }
+  }
+  return false;
 }
 
-// @ 0x00f259b0
-int fn259b0(int* p, void** out) {
-  int mgr = sub_005f7930();
-  if (!mgr || *p == 0) return 0;
-  uint local_c; int local_8, local_4;
-  sub_00572590(&local_c);
-  if (sub_005f8a10((void*)mgr, p, &local_c)) {
-    p[2] = local_8;
-    *p = local_4;
-    *out = (void*)local_c;
-    return 1;
+// @ 0x00f259b0// @ 0x00f259b0
+bool fn259b0(int* p, void** out) {
+  AssetThing* mgr = (AssetThing*)sub_005f7930();
+  if (mgr && *p != 0) {
+    UintArray key;
+    key.Self();
+    if (mgr->GetKey(p, &key)) {
+      p[2] = key.m04;
+      *p = key.m08;
+      *out = (void*)key.m00;
+      return true;
+    }
+    switch (sub_00552300(p)) {
+      case 0:
+        *out = 0;
+        break;
+      case 1:
+        *out = mgr->mpValue;
+        return true;
+    }
+    return true;
   }
-  int r = sub_00552300(p);
-  if (r == 0) {
-    *out = 0;
-  } else if (r == 1) {
-    *out = *(void**)(mgr + 0x44);
-    return 1;
-  }
-  return 1;
+  return false;
 }

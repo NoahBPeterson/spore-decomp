@@ -1,3 +1,2 @@
 # va  diff-bytes  reason
-010c1c90  513  hkConvexVerticesShape::castRay: full shape reconstructed (hidden hkBool out, "TtrcConvexVert"/"Et" monitor timers, min/max plane walk); residual is the unassigned point copied out on the one input where both sides hit without a plane assignment
-010c1fe0  272  incomplete hkConvexVerticesShape constructor from a geometry source: plane-equation array copy/allocation not reconstructed
+010c1c90  487  hkConvexVerticesShape::castRay: full shape reconstructed (hidden hkBool out, "TtrcConvexVert"/"Et" monitor timers, near/far plane walk with the entry point); equiv FAIL on 1/340 inputs only (input 107: hit flag, material and out->m_fraction agree, out->m_vec differs -- the input's plane base resolves into the function's own frame, so the copied point is per-side stack bytes, not a logic divergence)

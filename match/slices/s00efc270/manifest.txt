@@ -7,3 +7,4 @@ slices/s00efc270/s00efc270.cpp  ?FUN_00efc6c0@@YIXPADHH@Z  00efc6c0  /O2 /MD /Gy
 slices/s00efc270/s00efc270.cpp  ?FUN_00efc7a0@@YI_NPAD@Z  00efc7a0  /O2 /MD /Gy /TP /arch:SSE
 slices/s00efc270/s00efc270.cpp  ?FUN_00efc7d0@@YI_NPADHHH@Z  00efc7d0  /O2 /MD /Gy /TP /arch:SSE
 slices/s00efc270/s00efc270.cpp  ?FUN_00efc850@@YAXXZ  00efc850  /O2 /MD /Gy /TP /arch:SSE
+slices/s00efc270/s00efc270.cpp  ?FUN_00efc5f0@@YAHPAXM@Z  00efc5f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast

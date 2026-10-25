@@ -261,10 +261,14 @@ void recentreVertices(hkArrayVector4* verts, hkVector4* extents, hkVector4* cent
     hkAabb aabb;
     hkGeomConvexHullBuilder::getAabb(*verts, aabb);
 
-    center->x = (aabb.m_min.x + aabb.m_max.x) * 0.5f;
-    center->y = (aabb.m_min.y + aabb.m_max.y) * 0.5f;
-    center->z = (aabb.m_min.z + aabb.m_max.z) * 0.5f;
-    center->w = (aabb.m_min.w + aabb.m_max.w) * 0.5f;
+    center->x = aabb.m_min.x + aabb.m_max.x;
+    center->y = aabb.m_min.y + aabb.m_max.y;
+    center->z = aabb.m_min.z + aabb.m_max.z;
+    center->w = aabb.m_min.w + aabb.m_max.w;
+    center->x = center->x * 0.5f;
+    center->y = center->y * 0.5f;
+    center->z = center->z * 0.5f;
+    center->w = center->w * 0.5f;
 
     extents->x = aabb.m_max.x - aabb.m_min.x;
     extents->y = aabb.m_max.y - aabb.m_min.y;
@@ -273,14 +277,18 @@ void recentreVertices(hkArrayVector4* verts, hkVector4* extents, hkVector4* cent
 
     hkMatrix3 inv;
     inv.m_row[0].x = 1.0f;
-    if (1.1920929e-07f < extents->x)
-        inv.m_row[0].x = 1.0f / extents->x;
-    inv.m_row[1].y = 1.0f;
-    if (1.1920929e-07f < extents->y)
-        inv.m_row[1].y = 1.0f / extents->y;
-    inv.m_row[2].z = 1.0f;
     if (1.1920929e-07f < extents->z)
         inv.m_row[2].z = 1.0f / extents->z;
+    else
+        inv.m_row[2].z = 1.0f;
+    if (1.1920929e-07f < extents->y)
+        inv.m_row[1].y = 1.0f / extents->y;
+    else
+        inv.m_row[1].y = 1.0f;
+    if (1.1920929e-07f < extents->x)
+        inv.m_row[0].x = 1.0f / extents->x;
+    else
+        inv.m_row[0].x = 1.0f;
     inv.m_row[0].y = 0.0f;
     inv.m_row[0].z = 0.0f;
     inv.m_row[0].w = 0.0f;
@@ -294,30 +302,29 @@ void recentreVertices(hkArrayVector4* verts, hkVector4* extents, hkVector4* cent
     for (int i = 0; i < verts->m_size; ++i)
     {
         hkVector4& v = verts->m_data[i];
-        hkVector4 out;
-        out.x = v.x - center->x;
-        out.y = v.y - center->y;
-        out.z = v.z - center->z;
+        float ox = v.x - center->x;
+        float oy = v.y - center->y;
+        float oz = v.z - center->z;
 
         hkMatrix3 m;
-        m.m_row[0].x = out.x;
+        m.m_row[0].x = ox;
         m.m_row[0].y = g_vecZero[0];
         m.m_row[0].z = g_vecZero[0];
         m.m_row[0].w = 0.0f;
-        m.m_row[1].x = out.y;
+        m.m_row[1].x = oy;
         m.m_row[1].y = g_vecZero[1];
         m.m_row[1].z = g_vecZero[1];
         m.m_row[1].w = 0.0f;
-        m.m_row[2].x = out.z;
+        m.m_row[2].x = oz;
         m.m_row[2].y = g_vecZero[2];
         m.m_row[2].z = g_vecZero[2];
         m.m_row[2].w = 0.0f;
 
-        inv.mul(m);
+        m.mul(inv);
 
-        v.x = out.x;
-        v.y = out.y;
-        v.z = out.z;
+        v.x = m.m_row[0].x;
+        v.y = m.m_row[1].x;
+        v.z = m.m_row[2].x;
         v.w = 0.0f;
     }
 }
@@ -345,29 +352,26 @@ void hkGeomConvexHullBuilder::convertFromUnitCube(hkArrayVector4& verts, hkVecto
     for (int i = 0; i < verts.m_size; ++i)
     {
         hkVector4& v = verts.m_data[i];
-        float x = v.x;
-        float y = v.y;
-        float z = v.z;
 
         hkMatrix3 m;
-        m.m_row[0].x = x;
+        m.m_row[0].x = v.x;
         m.m_row[0].y = g_vecZero[0];
         m.m_row[0].z = g_vecZero[0];
         m.m_row[0].w = 0.0f;
-        m.m_row[1].x = y;
+        m.m_row[1].x = v.y;
         m.m_row[1].y = g_vecZero[1];
         m.m_row[1].z = g_vecZero[1];
         m.m_row[1].w = 0.0f;
-        m.m_row[2].x = z;
+        m.m_row[2].x = v.z;
         m.m_row[2].y = g_vecZero[2];
         m.m_row[2].z = g_vecZero[2];
         m.m_row[2].w = 0.0f;
 
         m.mul(scaleM);
 
-        v.x = x;
-        v.y = y;
-        v.z = z;
+        v.x = m.m_row[0].x;
+        v.y = m.m_row[1].x;
+        v.z = m.m_row[2].x;
         v.w = 0.0f;
 
         v.x = v.x + translation.x;
@@ -376,7 +380,6 @@ void hkGeomConvexHullBuilder::convertFromUnitCube(hkArrayVector4& verts, hkVecto
         v.w = translation.w + v.w;
     }
 }
-
 // =====================================================================
 // MOPP AABB cast virtual machine
 // =====================================================================
@@ -402,16 +405,24 @@ struct hkMoppAabbCastVirtualMachine
     void*     m_collector;    // 0x24
     void*     m_collector2;   // 0x28
     const hkAabbCastInput* m_input;   // 0x2c
+    void*     m_mopp_at_0x20; // mopp bytecode pointer
 
     void aabbCast(const hkAabbCastInput& input, hkCdPointCollector& collector,
                   hkCdPointCollector* collector2);
+
+    void m_step(const hkVector4* offset, const uchar* code, hkVector4* points); // 01114370
 };
+
+// Virtual dispatch helper: calls slot <index> of the object's vtable.
+typedef void* (__thiscall* HkVtFunc)(void*);
+__forceinline HkVtFunc Vt(void* obj, int index)
+{
+    return ((HkVtFunc*)(*(void***)obj))[index];
+}
 
 static uchar s_moppMemReady;                 // 0x016e5ac1
 
 extern uchar hkThreadMemoryInit(int requirement);
-
-extern void hkMoppAabbCastJobStep(void* dst, void* job, const hkVector4* point);
 
 // ------------------------------------------------------------------ 01115400
 // @ 0x01115400
@@ -426,22 +437,31 @@ void hkMoppAabbCastVirtualMachine::aabbCast(const hkAabbCastInput& input,
     m_input = &input;
 
     void* shape = (void*)input.m_shape;
-    m_mopp = *(void**)(*(int*)(*(int*)((const char*)&input + 0x38)) + 0x10);
+    void* moppVt = *(void**)*(void**)((const char*)&input + 0x38);
+    m_mopp = *(void**)((const char*)moppVt + 0x10);
 
     m_collector = &collector;
     m_collector2 = collector2;
 
-    void* shapeObj = *(void**)((const char*)&input + 0x34);
-    m_param18 = (*(void** (__thiscall*)(void*))(((void**)*(void**)shapeObj)[2]))(shapeObj);
+    void* p1 = *(void**)((const char*)&input + 0x34);
+    void* shapeObj = *(void**)p1;
+    m_param18 = Vt(shapeObj, 2)(shapeObj);
 
     m_f1c = 1.0f;
     m_f20 = 1.0f;
 
     const char* m = (const char*)m_mopp;
+    m_mopp_at_0x20 = *(void**)(m + 0x20);
+    hkVector4 offset;
+    offset.x = 0.0f;
+    offset.y = 0.0f;
+    offset.z = 0.0f;
+    offset.w = 0.0f;
+
     float w = *(float*)(m + 0x1c);
     m_invScale = 1.0f / w;
 
-    float t = w * 1.5258789e-05f;
+    float t = w * 2.3283064e-10f;
     hkVector4 tmp;
     tmp.x = t * input.m_aabb[1].x;
     tmp.y = t * input.m_aabb[1].y;
@@ -455,32 +475,70 @@ void hkMoppAabbCastVirtualMachine::aabbCast(const hkAabbCastInput& input,
     pts[0].y = (input.m_aabb[0].y - *(float*)(m + 0x14)) * t;
     pts[0].z = (input.m_aabb[0].z - *(float*)(m + 0x18)) * t;
     pts[0].w = (input.m_aabb[0].w - *(float*)(m + 0x1c)) * t;
-    pts[1].x = (input.m_aabb[0].x - *(float*)(m + 0x10)) * t;
-    pts[1].y = (input.m_aabb[0].y - *(float*)(m + 0x14)) * t;
-    pts[1].z = (input.m_aabb[0].z - *(float*)(m + 0x18)) * t;
-    pts[1].w = (input.m_aabb[0].w - *(float*)(m + 0x1c)) * t;
+    pts[1].x = (input.m_aabb[1].x - *(float*)(m + 0x10)) * t;
+    pts[1].y = (input.m_aabb[1].y - *(float*)(m + 0x14)) * t;
+    pts[1].z = (input.m_aabb[1].z - *(float*)(m + 0x18)) * t;
+    pts[1].w = (input.m_aabb[1].w - *(float*)(m + 0x1c)) * t;
 
     (void)shape;
     (void)sum;
-    hkMoppAabbCastJobStep(&m_param18, tmp.x ? m_param18 : m_param18, pts);
+    m_step(&offset, (const uchar*)(const char*)m_mopp_at_0x20, pts);
 }
 
 // ------------------------------------------------------------------ 01115730
-// Edge equalities of two hull triangles: reports whether both edges a-b and
-// c-d are "less" than the reference edges, taking shared end points into
-// account.
+// Edge-pair welding test for two hull triangles: reports whether the edge pair
+// (a0,a1) of one face and (b0,b1) of an opposing face are shared, taking the
+// four shared-endpoint / opposite-orientation permutations into account.
 // @ 0x01115730
-hkBool hullEdgesLess(int param_2, short* a, short* b, short* c, short* d,
-                     short (*vert)(int, short*));
-
-hkBool hullEdgesLess(int param_2, short* a, short* b, short* c, short* d,
-                     short (*vert)(int, short*))
+struct hkGeomEdge
 {
-    bool e0 = !(a == b || a[0] != b[0] || vert(param_2, a) == vert(param_2, b));
-    bool e1 = !(c == d || c[0] != d[0] || vert(param_2, c) == vert(param_2, d));
+    ushort m_vertex;   // +0
+    ushort m_twin;     // +2 (index of the opposite half-edge)
+    ushort m_next;     // +4
+    ushort m_pad;      // +6
+};
+
+// The twin lookup: the vertex opposite e in the edge array.
+#define TWIN(e) (edges[(e)->m_twin].m_vertex)
+
+hkBool sharesEdgePair(const hkGeomEdge* edges, const hkGeomEdge* a0,
+                      const hkGeomEdge* b0, const hkGeomEdge* a1,
+                      const hkGeomEdge* b1)
+{
+    bool e0 = a0 != b0 && a0->m_vertex == b0->m_vertex && TWIN(a0) != TWIN(b0);
+    bool e1 = a1 != b1 && a1->m_vertex == b1->m_vertex && TWIN(a1) != TWIN(b1);
     if (!(e0 && e1))
         return hkBool(0);
-    return hkBool(1);
+
+    // Block D: pairing (a0, b1) decides whether the two faces keep the edge.
+    bool aPairOk = a0 == b1 || a0->m_vertex != b1->m_vertex || TWIN(a0) == TWIN(b1);
+    // Block E: pairing (a1, b1).
+    bool ePairAlign = a1 != b1 && a1->m_vertex == b1->m_vertex && TWIN(a1) == TWIN(b1);
+
+    // Block F/G: fold the (a0, b1) and (a1, b1) twin pairings.
+    bool t0Matches = TWIN(a0) == b1->m_vertex && TWIN(b1) == a0->m_vertex;
+    bool p0AgainstB1 = &edges[a0->m_twin] == b1;
+    bool t1Matches = TWIN(a1) == b1->m_vertex && TWIN(b1) == a1->m_vertex;
+    bool p1AgainstB1 = &edges[a1->m_twin] == b1;
+    bool t1PairOk = t1Matches && p1AgainstB1;
+
+    bool reachedF = !aPairOk || ePairAlign == false;
+    bool z;
+    if (reachedF && t0Matches && !p0AgainstB1)
+        z = true;
+    else
+        z = !t1PairOk;
+
+    // Blocks I/J/K/M: fold the (a0, b0) and (a1, b0) pairings.
+    bool m0 = a0 != b0 && a0->m_vertex == b0->m_vertex && TWIN(a0) == TWIN(b0);
+    bool m1 = a1 != b0 && a1->m_vertex == b0->m_vertex && TWIN(a1) == TWIN(b0);
+    bool c0a = &edges[a0->m_twin] == b0 && edges[a0->m_twin].m_vertex == b0->m_vertex
+        && TWIN(b0) == a0->m_vertex;
+    bool t1AgainstB0 = &edges[a1->m_twin] == b0 && TWIN(a1) == b0->m_vertex
+        && TWIN(b0) == a1->m_vertex;
+    bool h = z ? (m0 || !m1 ? !c0a : false) : false;
+
+    return hkBool(h ? 1 : 0);
 }
 
 // 20 byte plane predicate stub so the instantiation has a distinct type.

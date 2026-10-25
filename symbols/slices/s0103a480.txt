@@ -1,0 +1,10 @@
+0103a630 A630::f_0103a630  # (item,x,y,z); item+0xc vtable slot +0xc hash lookup key 0x707459f0; HPosition(0x0104be80) fetches 3 ints; compare g_16df56c/570/574; TToolMgr(0x0104e340) CreateToolFromToolID(key,&ref) then recurse; else V6 slot+0x18 vec3 compare
+0103a7d0 SPTrading::handleMessage  # (msg,arg) ret 8, always 0; msg 0x4445d43/0x4445d44; arg+8 vs arg+0x10 player-empire pick; entry+0xc noun id -> B3Obj 0x00ba6dc0; NounObj 0x00b8de30 -> AvObj 0x00b1fdb0 -> B3Obj 0x00ba9370; swap-and-erase, element+8 AddRef(slot0)/Release(slot1)
+0103aa00 Trading34::addRareCommodity  # (void* p2); guards GetCurrentGameMode 0x1654c05, p2+0x28>1, RareNoun 0x00b8d970, GetPlayerEmpire !=0, Empire 0x00c30c60 vs RareNoun 0x00b8de30, 0x0103a930; scan +0x34/+0x38 0xc-stride, PropertyManager Unregister 0x34d97fa, GetPropertyAsKey 0x34f1a4f==0x7ecbe6f5, prop 0x34f1a4e float (type 0xd), RngObj 0x009360d0 nextDouble, GetFloatProperty 0x34f1a49, FUN_00c731a0 9-arg spawn
+0103ad50 FUN_0103ad50  # (self,p2,amount,planet); +0x160/+0x15c guard; ItemCtr 0x00b8dec0 -> +0x3c/+0x40 vec; +0x134/+0x138 3-int-stride dup scan vs 2*count; RngAd 0x00a68fb0 pick + WorldItemAd 0x00572590 rank; FUN_0103a480(&item,p2,amount,0); VItem3 +0x18 -> id; FUN_00c731a0 4-arg; planet path NounMgrAd 0x00b20c60 0x2dd8c42, NounAd +0xc 0x2dd8c33, VPosAd +0x38/+0x2c, PlanetModel 0x00b3d350, ModelAd 0x00b7f190, +0x3c, ArtifactAd 0x00c69090, SetterAd 0x00c74d30, 0x00afa030; VItem3 Release +8
+0103b100 FUN_0103b100  # (stream,map); map+0x14 count; V20 +0x14 -> V18 +0x18 -> WriteUint32(stream,val,1,0); loop 0x00e5c780 rbtree find
+0103b1b0 FUN_0103b1b0  # eastl adjust_heap(a,top,n,start,AutoRef value,fn); AutoRef cctor AddRef / dtor Release on slot2
+0103b290 FUN_0103b290  # eastl pop_heap(a,b,fn); b[-1]=a[0]; adjust 0x0103b1b0 of length (b-a)-1
+0103b0c0 VecDtor::dtor  # manifest: vector element dtor, calls RefObj+8 V4 Release, operator_delete
+0103ac40 TAC40::find  # manifest
+0103af90 TSx::f_af90  # manifest

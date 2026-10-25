@@ -54,10 +54,12 @@ typedef void  (__thiscall *TF_i)(void*, int);
 typedef void  (__thiscall *TF_v)(void*);
 typedef int   (__thiscall *TF_ri)(void*, int);
 typedef int   (__thiscall *TF_r)(void*);
+typedef bool  (__thiscall *TF_bp)(void*, void*);
+typedef void  (__thiscall *TF_vppi)(void*, void*, int);
 
-void          __cdecl FUN_00985e40(void*);
-int           __cdecl FUN_00efc530(void*);
-void* __fastcall FUN_00f33620(void*, int, void*);
+int           __fastcall FUN_00985e40(void*);
+bool          __cdecl FUN_00efc530(void*);
+void          __cdecl FUN_00f33620();
 void* __fastcall FUN_00f3e8a0(void*, int, int);
 void* __cdecl FUN_0067dd10();
 void* __cdecl FUN_00b3d350();
@@ -313,9 +315,20 @@ void* __cdecl FUN_00b10c40(void*, int);
 // Member helpers with non-standard conventions (this in eax/esi) are declared
 // as free functions taking the pointer explicitly; see partial.txt.
 typedef float (__thiscall *PF_t)(void*);
+typedef void* (__thiscall *FN0_v)(void*);
+typedef void* (__thiscall *FN1_v)(void*, void*);
+typedef float* (__thiscall *FN0_fp)(void*);
+typedef float* (__thiscall *FN1_fp)(void*, void*);
+
+void* __cdecl FUN_0067dd30();                      // 0x0067dd30  SP::ConfigManager
+bool __fastcall FUN_00ef72a0(void*);                // 0x00ef72a0
+void* __cdecl FUN_0067cac0();                      // 0x0067cac0  returns singleton
+void  __cdecl FUN_0067c8c0();                      // 0x0067c8c0
+void  __cdecl FUN_0067c830();                      // 0x0067c830
+extern int* g_16c7d1c;                             // 0x016c7d1c
 
 // @ 0x00efc270
-int __fastcall FUN_00efc270(char* self, int pad, int tag, int arg)
+bool __fastcall FUN_00efc270(char* self, int pad, int tag, int arg)
 {
     int sv;
     (void)pad;
@@ -435,13 +448,12 @@ bool __cdecl FUN_00efc570(void* a, void* self2, float f)
 }
 
 // @ 0x00efc5f0
-int __fastcall FUN_00efc5f0(void* self, int pad, float f, int a)
+int __cdecl FUN_00efc5f0(void* a, float f)
 {
-    (void)self; (void)pad;
     if (g_15ad33c > f)
         return 0;
     float xmm0;
-    void* v = FUN_00eeca30((void*)a);
+    void* v = FUN_00eeca30(a);
     if (v != 0)
         xmm0 = ((PF_t)((*(void***)v)[0x1c]))(v);
     else
@@ -493,27 +505,24 @@ void* __fastcall FUN_007c4900(void*, int);
 void* __cdecl FUN_00b82620(void* self, void* a, void* b, void* c, int d);
 
 // @ 0x00efc930
-// Original writes its Vec3 through ESI (an out-pointer in that register) and
-// returns a flag in AL; that convention cannot be produced from C, so the out
-// pointer is declared explicitly. Behaviour (compare against the 3 globals)
-// matches the original.
-int __cdecl FUN_00efc930(Vec3* out)
+// Original receives its out-vec pointer in ESI and returns a flag in AL; that
+// convention cannot be produced from C, so the out pointer is declared
+// explicitly. Behaviour (compare against the 3 globals) matches the original.
+bool __cdecl FUN_00efc930(Vec3* out)
 {
-    int a0 = 0, a1 = 0, a2 = 0, a3 = 0;
+    int a3, a2;
     void* app = FUN_0067dd10();
-    void* x = ((FN_v58)((*(void***)app)[0x16]))(app, &a0, &a1);
+    void* x = ((FN_v58)((*(void***)app)[0x16]))(app, &a2, &a3);
     void* y = FUN_007c4900(x, 0);
     (void)y;
     void* pm = FUN_00b3d350();
-    Vec3* v = (Vec3*)FUN_00b82620(pm, &a3, &a2, &a1, 0);
+    Vec3* v = (Vec3*)FUN_00b82620(pm, (void*)&a2, (void*)&a3, (void*)0, 0);
     out->x = v->x; out->y = v->y; out->z = v->z;
-    if (out->x != g_16c7b98 || out->y != g_16c7b9c || out->z != g_16c7ba0)
-        return 1;
-    return 0;
+    return (out->x != g_16c7b98 || out->y != g_16c7b9c || out->z != g_16c7ba0);
 }
 
 // @ 0x00efc9c0
-int __cdecl FUN_00efc9c0()
+bool __cdecl FUN_00efc9c0()
 {
     int a0 = 0, a1 = 0, a2 = 0, a3 = 0;
     Vec3 v;
@@ -536,7 +545,7 @@ int __cdecl FUN_00efc9e0()
 }
 
 // @ 0x00efca60
-int __cdecl FUN_00efca60(char* a)
+bool __cdecl FUN_00efca60(char* a)
 {
     void* p = *(void**)(*(char**)a + 0x64);
     void* esi = 0;
@@ -551,7 +560,7 @@ int __cdecl FUN_00efca60(char* a)
     if (*(int*)0x15ad298 == 0x16c7c08) {
         if (FUN_00efc530(esi))
             return 1;
-        if (FUN_00f33620(*(void**)((char*)gSimulator + 0x18), 0, esi) == 0)
+        if (((TF_bp)FUN_00f33620)(*(void**)((char*)gSimulator + 0x18), esi) == 0)
             return 0;
     }
     return 1;
@@ -598,9 +607,8 @@ void __cdecl FUN_00efcbe0(void* self, int arg)
     v[2] = ((float*)self)[2];
     if (g_15ad344 != 0) {
         float outA[3];
-        float s1, s2, s3;
-        FUN_00eec2b0(outA, v, 0, &s1, 1);
-        (void)s2; (void)s3;
+        float coords[3];
+        FUN_00eec2b0(&coords, &v, 0, &outA, 1);
         float d1 = v[0] * v[0] + v[1] * v[1] + v[2] * v[2];
         float d2 = outA[0] * outA[0] + outA[1] * outA[1] + outA[2] * outA[2];
         if (d2 > d1) {
@@ -615,18 +623,101 @@ void __cdecl FUN_00efcbe0(void* self, int arg)
 // @ 0x00efccd0
 void __fastcall FUN_00efccd0(char* p)
 {
-    (void)p;
+    if (p != 0) {
+        float vx, vy, vz;
+        float* f = ((FN0_fp)((*(void***)p)[0x2c / 4]))(p);
+        vx = f[0];
+        vy = f[1];
+        vz = f[2];
+        if (g_16c7d18 != 0) {
+            float* m = ((FN1_fp)((*(void***)p)[0x6c / 4]))(p, &vx);
+            vx = (m[0] + m[3]) * g_1471064;
+            vy = (m[4] + m[1]) * g_1471064;
+            vz = (m[5] + m[2]) * g_1471064;
+        }
+        float v[3];
+        v[0] = vx; v[1] = vy; v[2] = vz;
+        FUN_00efcbe0(v, 0);
+    }
 }
 
 // @ 0x00efcec0
-void __stdcall FUN_00efcec0(int a)
+bool __cdecl FUN_00efcec0(void* a, void* b)
 {
-    (void)a;
+    char* p = (char*)b;
+    int matched = 0;
+    {
+        void* cm = (void*)FUN_0067dd30();
+        int ok = ((TF_ri)((*(void***)cm)[0xc]))(cm, 0x5b5bb5e);
+        if (ok == 0)
+            goto done;
+    }
+    if (p == 0)
+        goto done;
+    if (p[0x6e] == 0)
+        goto done;
+    if (FUN_00ef72a0(*(void**)((char*)gSimulator + 0xd4)))
+        goto done;
+
+    {
+        int* o = (int*)((int (__cdecl*)(void*))FUN_00eebf80)(a);
+        unsigned flags = *(unsigned*)((char*)o + 0x224);
+        int ival;
+        if ((flags >> 4) & 1) {
+            matched = 1;
+            ival = (int)0x9f52a10f;
+        } else if ((flags >> 1) & 1) {
+            int k = *(int*)((char*)o + 0x22c);
+            if (k < 0 || k >= 3)
+                goto done;
+            ival = *(int*)(0x0148b650 + k * 4);
+            matched = 1;
+            if (ival == 0)
+                goto done;
+        } else if ((flags >> 2) & 1) {
+            int k = *(int*)((char*)o + 0x230);
+            if (k < 0 || k >= 0x20)
+                goto done;
+            ival = *(int*)(0x0148b660 + k * 4);
+            matched = 1;
+            if (ival == 0)
+                goto done;
+        } else {
+            goto done;
+        }
+
+        if (g_16c7d1c != 0) {
+            ((TF_vppi)FUN_0067c8c0)((void*)FUN_0067cac0(), (void*)g_16c7d1c, 0);
+        }
+        ((TF_i)FUN_0067c830)((void*)FUN_0067cac0(), ival);
+        g_16c7d1c = (int*)ival;
+        matched = 1;
+    }
+
+done:
+    return matched != 0;
 }
 
-// @ 0x00efcfb0
-int __cdecl FUN_00efcfb0(char* p)
+// @ 0x00efcfb0  ScenarioTutorials_IsInState2or10
+bool __cdecl FUN_00efcfb0(char* p)
 {
-    (void)p;
-    return 0;
+    if (p[0x4c8] != 0) {
+        int n = *(int*)(p + 0x4d0) - *(int*)(p + 0x4cc);
+        int i = 0;
+        if (n < 0x20)
+            return 0;
+        int* it = (int*)(*(int*)(p + 0x4cc) + 0x0c);
+        while (1) {
+            if (*it == 2 || *it == 10)
+                break;
+            i++;
+            it += 8;
+            if (i << 5 >= n)
+                return 0;
+        }
+    } else {
+        if (*(int*)(p + 0x4b8) != 4 && *(int*)(p + 0x4b8) != 6)
+            return 0;
+    }
+    return 1;
 }

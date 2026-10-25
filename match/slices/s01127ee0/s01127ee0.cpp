@@ -405,7 +405,9 @@ void hkSpringAction::applyAction(const hkStepInfo& stepInfo)
     hkX87Real dw = (hkX87Real)pointB.w - pointA.w;
     hkX87Real len2 = (dz * dz + dy * dy) + dx * dx;
     float length = (float)sqrt((double)len2);
-    if (!(length >= 0.001f))
+    // Retail returns for length <= 0.001 but keeps going for an unordered (NaN)
+    // compare, so the guard is a plain "<=" test.
+    if (length <= 0.001f)
         return;
 
     // X87-PRECISION: the reciprocal length is kept on the x87 stack; each
@@ -417,9 +419,12 @@ void hkSpringAction::applyAction(const hkStepInfo& stepInfo)
     dir.z = (float)(dz * invLen);
     dir.w = (float)(dw * invLen);
 
-    if (!onCompression && !(length >= m_restLength))
+    // Retail skips the spring at exactly the rest length in both directions
+    // (compression needs length > restLength, extension needs length < restLength),
+    // and keeps going on an unordered compare.
+    if (!onCompression && !(length > m_restLength))
         return;
-    if (!onExtension && !(length <= m_restLength))
+    if (!onExtension && !(length < m_restLength))
         return;
 
     hkVector4 velA, velB;

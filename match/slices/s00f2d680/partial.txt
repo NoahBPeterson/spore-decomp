@@ -1,7 +1,3 @@
 # va  diff-bytes  reason
-00f2d7e0  1009  incomplete: serializer stub (cVarListSerializer + 0x34-element adjustment loop not reconstructed)
-00f2dde0  405  incomplete: constraint-list builder stub (vector<Constraint> append + ObjectTemplateDB traversal missing)
-00f2df80  337  incomplete: inlined generic insert (destroy/move_backward/construct path not reproduced)
-00f2e370  152  incomplete: 0x4e0 container deserialize (0xf2dd70 pre-call + object vtable stream accessor missing)
-00f2e440  336  incomplete: 0x188 container deserialize stub
-00f2e5d0  333  incomplete: inlined 0x238 insert (destroy/shift/construct path not reproduced)
+00f2d7e0  1009  incomplete: stub; body needs cVarListSerializer ctor 0x00692f90 + Load 0x00693e10, then the 0x20c float-vector normalisation loop (fld/fsqrt/1.0 division) and 0x34-element adjustment. Too much unknown layout for the remaining budget
+00f2e440  380  incomplete: stub; 0x188 container deserializer needs E188 default-init layout, 0xa14-byte cVarListSerializer placement, Clear/erase 0x00f2dd70-style prefix, ReadInt32 0x0093a780, set_capacity 0x00f2dcb0, E188 copy-ctor 0x00dfd020 and Insert 0x00f2e0e0. Retail's `add [vec+4], count*0x188` clear idiom not yet explained

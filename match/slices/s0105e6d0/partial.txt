@@ -1,3 +1,7 @@
-0105e6d0
-0105eb90
-0105eeb0
+# va  diff-bytes  reason
+# Build flags (all rows): /O2 /MD /Gy /EHsc /TP /arch:SSE
+#
+# Slice s0105e6d0.  Every one of the 3 functions has a complete reconstruction
+# (no stubs, no sketches), so there are no PARTIAL entries.
+# The 3 non-exact functions and their equivalence verdicts are listed in
+# nonmatching.txt; manifest.txt is header-only.

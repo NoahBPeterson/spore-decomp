@@ -127,7 +127,7 @@ Quaternion* QuaternionFromFacingAndUp(Quaternion* pOut, const Vector3* pFacing,
                                       const Vector3* pUp);                     // 0x0069b600
 Vector3* FUN_0059aed0(const Vector3* pAxis, const Vector3* pPos, Vector3* pOut); // 0x0059aed0
 void* FUN_01021230();                                                          // 0x01021230
-int   cStar_GetType(void* pStar);                                              // 0x00c8b550
+struct cStar { int GetType(); };                                               // 0x00c8b550
 
 // App() -> feature (+0x50) -> subsystem (+0x38) -> lookup (+0x0c).
 class cSubsystem {
@@ -250,7 +250,8 @@ void __stdcall FUN_0105e290(void* pWrapper, int nMagnitude)
     float scaled = mag * kMagnitudeScale;
 
     cBodyRef* pRef = (cBodyRef*)pWrapper;
-    cSteered* p = (cSteered*)(pRef->mpBody - 0x34);
+    char* pBody = pRef->mpBody;
+    cSteered* p = pBody ? (cSteered*)(pBody - 0x34) : 0;
 
     cAppFeature* pFeature = App()->GetFeature();
     cSubsystem* pSub = pFeature->GetSubsystem();
@@ -261,7 +262,7 @@ void __stdcall FUN_0105e290(void* pWrapper, int nMagnitude)
         return;
     float cap = pProp->mfValue;
 
-    Vector3 pos = p->mPos;
+    Vector3& pos = p->mPos;
     float norm = sqrtf(pos.x * pos.x + pos.y * pos.y + pos.z * pos.z);
     if (norm < kMinLength)
         pos = kAxis;
@@ -273,7 +274,9 @@ void __stdcall FUN_0105e290(void* pWrapper, int nMagnitude)
     float newDist = blend * c1 + norm;
 
     float inv = 1.0f / sqrtf(pos.x * pos.x + pos.y * pos.y + pos.z * pos.z + 1e-8f);
-    pos = Vector3(pos.x * inv * newDist, pos.y * inv * newDist, pos.z * inv * newDist);
+    pos.x = pos.x * inv * newDist;
+    pos.y = pos.y * inv * newDist;
+    pos.z = pos.z * inv * newDist;
 
     float f2 = invCap * newDist;
     float c2 = (1.0f <= f2) ? 1.0f : f2;
@@ -285,7 +288,7 @@ void __stdcall FUN_0105e290(void* pWrapper, int nMagnitude)
                   (kUnit.z * t - up.z) * c1 + up.z);
     p->SetUp(&newUp);
 
-    float sign = (cStar_GetType(FUN_01021230()) == 3) ? kNegOne : 1.0f;
+    float sign = (((cStar*)FUN_01021230())->GetType() == 3) ? kNegOne : 1.0f;
     float angle = (((1.0f - c2) * (kSpinMin * kSpinMax - kSpinMax) + kSpinMax) * mag * sign) * kHalf;
 
     float s = sinf(angle);
@@ -293,8 +296,7 @@ void __stdcall FUN_0105e290(void* pWrapper, int nMagnitude)
     Vector3 axisRot(s * kUnit.x, s * kUnit.y, s * kUnit.z);
 
     Vector3 outPos;
-    FUN_0059aed0(&outPos, &pos, &axisRot);
-    p->mPos = outPos;
+    pos = *FUN_0059aed0(&axisRot, &pos, &outPos);
     (void)c;
 
     const Vector3& pp = p->mPos;

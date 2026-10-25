@@ -26,6 +26,24 @@ struct V2c { virtual void z0(); virtual void z1(); virtual void z2(); virtual vo
              virtual void z8(); virtual void z9(); virtual void z10();
              virtual void v2c(int id, int key, void** out); };
 struct V4  { virtual int AddRef(); virtual int Release(); };
+
+// Heap element refcount interface: slot0 unknown, AddRef at +4, Release at +8.
+struct HRef { virtual void h0(); virtual int AddRef(); virtual int Release(); };
+struct AutoRef {
+    HRef* mpRef;
+    AutoRef(HRef* p = 0) : mpRef(p) { if (mpRef) mpRef->AddRef(); }
+    AutoRef(const AutoRef& o) : mpRef(o.mpRef) { if (mpRef) mpRef->AddRef(); }
+    ~AutoRef() { if (mpRef) mpRef->Release(); }
+    AutoRef& operator=(const AutoRef& o) {
+        if (mpRef != o.mpRef) {
+            if (o.mpRef) o.mpRef->AddRef();
+            HRef* old = mpRef;
+            mpRef = o.mpRef;
+            if (old) old->Release();
+        }
+        return *this;
+    }
+};
 struct V38 { virtual void z0(); virtual void z1(); virtual void z2(); virtual void z3();
              virtual void z4(); virtual void z5(); virtual void z6(); virtual void z7();
              virtual void z8(); virtual void z9(); virtual void z10(); virtual void z11();
@@ -92,11 +110,13 @@ void* GetPlayerEmpire();                                                       /
 void  FUN_b3d2a0(void*);                                                       // 0x00b3d2a0 (StarManager)
 int   GetCurrentGameMode();                                                    // 0x00b5b800
 void* GetPlayerInventoryOf(void* sim);                                         // 0x00a1ad60
-void  RBTreeIncrement(void* node);                                             // 0x00921580
+void* RBTreeIncrement(void* node);                                             // 0x00921580
 void  WriteUint32(void* stream, const void* v, int a, int b);                  // 0x0093aa70
 void  FUN_00ae2e40(void* a, void* b);                                          // 0x00ae2e40
 void  FUN_00ff0350(float f);                                                   // 0x00ff0350
 void  FUN_00c731a0(int a, int b, int c, int d, int e, int f, int g, int h, int i);  // 0x00c731a0
+void  FUN_00c731a0(int a, int b, int c);                                       // 3-arg form (0x00c731a0)
+void  FUN_00c731a0(int a, int b, int c, int d);                                // 4-arg form (0x00c731a0)
 void* FUN_00ff5b80();                                                          // 0x00ff5b80
 void* FUN_00b8dec0(int a);                                                     // 0x00b8dec0
 void* FUN_00b8dad0(void* a, int b);                                            // 0x00b8dad0
@@ -111,7 +131,7 @@ void  FUN_00afa030(void* o);                                                   /
 void* FUN_00bd7f70(void* a, void* b);                                          // 0x00bd7f70
 void* FUN_00bd7f50(void* a);                                                   // 0x00bd7f50
 void* FUN_00afad70(void* a);                                                   // 0x00afad70
-void* FUN_00572590(void* a, int b);                                            // 0x00572590
+void* FUN_00572590();                                                          // 0x00572590 (thiscall getter)
 void* FUN_00b81780(void* out, void* model, float a, float b, float c);         // 0x00b81780
 void* FUN_00b7f190(void* model, void* out, void* in);                          // 0x00b7f190
 void* FUN_00c74d30(void* artifact, int a, int b, void* c);                     // 0x00c74d30
@@ -122,9 +142,12 @@ uint  RandomUint32Uniform(void* rng, int n);                                   /
 double RandomDoubleUniform(void* rng);                                         // 0x009360d0
 
 extern void* g_rand;              // 0x01601760
-extern float g_16df56c, g_16df570, g_16df574;
+extern int g_16df56c, g_16df570, g_16df574;   // key sentinel ints
 extern float g_16df53c, g_16df540, g_16df544;
 extern float g_13f4fd0;
+
+struct Vec3f { float x, y, z; };
+struct Vec3  { int x, y, z; };
 
 // ---------------------------------------------------------------------------
 // @ 0x0103a480  SP::cSPSpaceTrading::CreateCommodityFromID
@@ -202,16 +225,36 @@ uint T540::scan(void* p) {
 // ---------------------------------------------------------------------------
 struct Vec3i { int x, y, z; };
 struct HashObj { virtual void z0(); virtual void z1(); virtual void z2(); virtual int v3(uint id); };
-bool FUN_0103a630(void* self, int a, int b, int c) {
-    (void)self;
-    if (a == 0) return false;
-    void* pi = (void*)((HashObj*)(*(void**)((char*)a + 0xc)))->v3(0x707459f0);
+struct V6 { virtual void z0(); virtual void z1(); virtual void z2(); virtual void z3();
+            virtual void z4(); virtual void z5(); virtual Vec3i* get(); };
+struct HPosition { void get(void* out); };                    // 0x0104be80 (thiscall, ret 4)
+struct TToolMgr { bool createTool(void* key, void** out); };  // 0x0104e340 (thiscall, ret 8)
+void* FUN_00b3d390();                                          // 0x00b3d390 (global getter)
+struct A630 {
+    bool f_0103a630(void* item, int x, int y, int z);
+};
+// @ 0x0103a630
+bool A630::f_0103a630(void* item, int x, int y, int z) {
+    if (item == 0) return false;
+    void* pi = (void*)((HashObj*)(*(void**)((char*)item + 0xc)))->v3(0x707459f0);
     if (pi == 0) return false;
-    Vec3i v;
-    Vec3i* got = (Vec3i*)((V38*)pi)->v38();
-    (void)got;
-    // placeholder body
-    return false;
+    Vec3i tmp;
+    Vec3i key = { 0, 0, 0 };
+    ((HPosition*)pi)->get(&tmp);
+    key.x = tmp.x;
+    key.y = tmp.y;
+    key.z = tmp.z;
+    IUnk* local = 0;
+    if (key.x != g_16df56c || key.y != g_16df570 || key.z != g_16df574) {
+        if (((TToolMgr*)FUN_00b3d390())->createTool(&key, (void**)&local)) {
+            bool r = f_0103a630(item, x, y, z);
+            if (local) local->Release();
+            return r;
+        }
+    }
+    if (local) local->Release();
+    Vec3i* v = ((V6*)pi)->get();
+    return v->x == x && v->y == y && v->z == z;
 }
 
 // ---------------------------------------------------------------------------
@@ -238,34 +281,65 @@ uint T760::find(int id) {
 // ---------------------------------------------------------------------------
 // @ 0x0103a7d0  SP::cSPSpaceTrading::HandleMessage
 // ---------------------------------------------------------------------------
+struct MsgRef { virtual int AddRef(); virtual int Release(); };
+struct B3Obj {
+    void* get_ba6dc0(int id);      // 0x00ba6dc0 (thiscall, ret 4)
+    int   get_ba9370(void* av);    // 0x00ba9370 (thiscall, ret 4)
+};
+struct NounObj { void* f_b8de30(); };   // 0x00b8de30 (thiscall)
+struct AvObj   { void* f_b1fdb0(); };   // 0x00b1fdb0 (thiscall)
 struct SPTrading {
     char pad0[0x2c];
-    int* mBegin;   // +0x2c
-    int* mEnd;     // +0x30
+    void** mBegin;   // +0x2c
+    void** mEnd;     // +0x30
+    int handleMessage(int msg, void* arg);
 };
-bool FUN_0103a7d0(SPTrading* self, int msg, void* arg) {
-    if (msg < 0x4445d43 || msg > 0x4445d44) return false;
-    int a = *(int*)((char*)arg + 8);
-    int b = *(int*)((char*)arg + 0x10);
+// @ 0x0103a7d0  SP::cSPSpaceTrading::HandleMessage
+int SPTrading::handleMessage(int msg, void* arg) {
+    if (msg < 0x4445d43 || msg > 0x4445d44) return 0;
+    int a = *(int*)((char*)arg + 0x10);
+    int b = *(int*)((char*)arg + 8);
     int player = (int)GetPlayerEmpire();
     int target;
-    if (a == player) target = b;
-    else if (b == player) target = a;
-    else return false;
-    int count = (int)(self->mEnd - self->mBegin) >> 2;
-    bool found = false;
+    if (b == player) target = a;
+    else if (a == player) target = b;
+    else return 0;
+    int count = (int)(mEnd - mBegin);
+    if (count <= 0) return 0;
     int i = 0;
-    if (count > 0) {
-        do {
-            void* entry = (void*)self->mBegin[i];
-            int id = *(int*)((char*)entry + 0xc);
-            void* q = FUN_00ba6dc0(id);
-            // ... complex; approximate
-            (void)q; (void)found; (void)target;
+    do {
+        void* entry = mBegin[i];
+        int id = *(int*)((char*)entry + 0xc);
+        void* noun = ((B3Obj*)StarManager())->get_ba6dc0(id);
+        void* keep = 0;
+        if (noun) {
+            ((MsgRef*)noun)->AddRef();
+            keep = noun;
+        }
+        void* av = ((NounObj*)keep)->f_b8de30();
+        void* avatar = ((AvObj*)av)->f_b1fdb0();
+        int emp = ((B3Obj*)StarManager())->get_ba9370(avatar);
+        if (target == emp) {
+            int n = (int)(mEnd - mBegin);
+            if (i != n - 1) {
+                void* last = mBegin[n - 1];
+                void* cur = mBegin[i];
+                if (last != cur) {
+                    if (last) ((MsgRef*)((char*)last + 8))->AddRef();
+                    mBegin[i] = last;
+                    if (cur) ((MsgRef*)((char*)cur + 8))->Release();
+                }
+            }
+            mEnd = mEnd - 1;
+            void* popped = *mEnd;
+            if (popped) ((MsgRef*)((char*)popped + 8))->Release();
+        } else {
             ++i;
-        } while (i < (int)(self->mEnd - self->mBegin) >> 2);
-    }
-    return false;
+        }
+        if (keep) ((MsgRef*)keep)->Release();
+        count = (int)(mEnd - mBegin);
+    } while (i < count);
+    return 0;
 }
 
 // ---------------------------------------------------------------------------
@@ -300,17 +374,59 @@ bool FUN_0103a930(int* list) {
 // ---------------------------------------------------------------------------
 // @ 0x0103aa00
 // ---------------------------------------------------------------------------
-void FUN_0103aa00(void* self, void* p2) {
-    int count = (*(int*)((char*)self + 0x38) - *(int*)((char*)self + 0x34)) / 0xc;
+struct Empire { int f_c30c60(); };                      // 0x00c30c60 (thiscall)
+struct RngObj { double nextDouble(); };                 // 0x009360d0 (thiscall)
+struct RareNoun { bool f_b8d970(); void* f_b8de30(); }; // 0x00b8d970 / 0x00b8de30
+struct Trading34 {
+    char pad0[0x34];
+    int* mBegin;   // +0x34 (0xc-byte elements)
+    int* mEnd;     // +0x38
+    void addRareCommodity(void* p2);
+};
+// @ 0x0103aa00  SP::cSPSpaceTrading::AddRareCommodity
+void Trading34::addRareCommodity(void* p2) {
+    int count = (int)(((char*)mEnd - (char*)mBegin) / 0xc);
     if (GetCurrentGameMode() != 0x1654c05) return;
     if (*(int*)((char*)p2 + 0x28) <= 1) return;
-    if (FUN_00b8d970(p2)) return;
+    if (((RareNoun*)p2)->f_b8d970()) return;
     if (GetPlayerEmpire() == 0) return;
-    int e1 = FUN_00c30c60();
-    if ((int)FUN_00b8de30(p2) == e1) return;
-    if (!FUN_0103a930((int*)((char*)self + 0x34))) return;
-    // body: scan rare list, random chance, spawn pile — approximate
-    (void)count;
+    int e1 = ((Empire*)GetPlayerEmpire())->f_c30c60();
+    if ((int)((RareNoun*)p2)->f_b8de30() == e1) return;
+    if (!FUN_0103a930((int*)((char*)this + 0x34))) return;
+    IUnk* local = 0;
+    bool found = false;
+    do {
+        int idx = 0;
+        int left = count;
+        while (left > 0) {
+            if (local) { IUnk* old = local; local = 0; old->Release(); }
+            PropertyMgr* pm = (PropertyMgr*)PropertyManager();
+            pm->Unregister(*(int*)((char*)mBegin + idx), 0x34d97fa, &local);
+            int key[3] = { 0, 0, 0 };
+            GetPropertyAsKey(local, 0x34f1a4f, key);
+            if (key[0] == 0x7ecbe6f5) {
+                float chance = 0.0f;
+                void* pr = 0;
+                if (local && ((VProp24*)local)->v24(0x34f1a4e, &pr) &&
+                    *(short*)((char*)pr + 0x12) == 0xd) {
+                    float* f = ((Prop*)pr)->GetFloat();
+                    chance = *f;
+                }
+                double roll = ((RngObj*)&g_rand)->nextDouble();
+                if (roll < (double)chance) {
+                    float amt = 0.0f;
+                    GetFloatProperty(local, 0x34f1a49, &amt);
+                    int n = (int)(amt + (amt >= 0.0f ? 0.5f : -0.5f));
+                    FUN_00c731a0((int)p2, 4, *(int*)((char*)mBegin + idx), n, 0,
+                                  *(int*)&g_16df53c, *(int*)&g_16df540, *(int*)&g_16df544, 1);
+                    found = true;
+                }
+            }
+            idx += 0xc;
+            --left;
+        }
+    } while (!found);
+    if (local) local->Release();
 }
 
 // ---------------------------------------------------------------------------
@@ -385,17 +501,91 @@ bool TSx::f_ac70(int group, bool needInventory) {
 // ---------------------------------------------------------------------------
 // @ 0x0103ad50  SP::cSPSpaceTrading::AddCitySpicePile
 // ---------------------------------------------------------------------------
+struct ItemVecB { char pad0[0x3c]; void** mBegin; void** mEnd; };  // +0x3c / +0x40
+struct ItemCtr  { ItemVecB* getItems(int kind); };                  // 0x00b8dec0 (thiscall, ret 4)
+struct RngAd    { uint nextInt(int n); };                           // 0x00a68fb0 (thiscall, ret 4)
+struct WorldItemAd { Vec3f* getPos(); };                            // 0x00572590 (thiscall)
+struct VItem3 {
+    virtual void z0(); virtual void z1(); virtual void Release(); virtual void z3();
+    virtual void z4(); virtual void z5();
+    virtual void* v18(int a, int b, Vec3f pos);                     // +0x18
+};
+struct VItem2 {
+    virtual void z0(); virtual void z1(); virtual void Release(); virtual void z3();
+    virtual void z4(); virtual void z5();
+    virtual void* v18(int a, int b);                                // +0x18
+};
+struct VPosAd {
+    virtual void z0(); virtual void z1(); virtual void z2(); virtual void z3();
+    virtual void z4(); virtual void z5(); virtual void z6(); virtual void z7();
+    virtual void z8(); virtual void z9(); virtual void z10();
+    virtual int  get_2c();                                          // +0x2c
+    virtual void z12();                                             // +0x30
+    virtual void z13();                                             // +0x34
+    virtual void get_38(Vec3f* out);                                // +0x38
+    virtual void set_3c(int v);                                     // +0x3c
+};
+struct ArtifactAd {
+    char pad0[0x34];
+    VPosAd mPos;                                                    // +0x34 (vptr)
+    void f_c69090();                                                // 0x00c69090 (thiscall)
+};
+struct SetterAd { void set(void* a, void* b); };                    // 0x00c74d30 (thiscall, 2 args)
+struct ModelAd  { int build(int angle, Vec3f* pos); };              // 0x00b7f190 (thiscall, 2 args)
+struct NounAd {
+    virtual void z0(); virtual void z1(); virtual void z2();
+    virtual void* getArtifact(int id);                              // +0x0c
+};
+struct NounMgrAd { void* createNoun(int id); };                     // 0x00b20c60 (thiscall, ret 4)
+
 void FUN_0103ad50(void* self, int* p2, int a3, int a4) {
     if ((*(int*)((char*)self + 0x160) - *(int*)((char*)self + 0x15c)) == 0) return;
-    void* bp = FUN_00b8dec0(0);
-    int cnt = (*(int*)((char*)bp + 0x40) - *(int*)((char*)bp + 0x3c)) >> 2;
+    ItemVecB* bp = ((ItemCtr*)self)->getItems(0);
+    int cnt = (int)(bp->mEnd - bp->mBegin);
     if (cnt == 0) return;
     uint matches = 0;
-    for (int* q = *(int**)((char*)self + 0x134); q != *(int**)((char*)self + 0x138); q += 0xb)
-        if (*q == *p2) ++matches;
+    for (int* q = *(int**)((char*)self + 0x134); q != *(int**)((char*)self + 0x138); q += 3) {
+        if (q[0] == p2[0]) ++matches;
+    }
     if (matches >= (uint)(cnt * 2)) return;
-    // ... complex pile placement — approximate
-    (void)a3; (void)a4;
+    Vec3f pos;
+    void* placed = 0;
+    if (a4 == 0) {
+        uint k = ((RngAd*)&g_rand)->nextInt(cnt);
+        Vec3f* v = ((WorldItemAd*)bp->mBegin[k])->getPos();
+        pos.x = v->x;
+        pos.y = v->y;
+        pos.z = v->z;
+    } else {
+        pos.x = 0.0f;
+        pos.y = 0.0f;
+        pos.z = 0.0f;
+    }
+    void* item = 0;
+    FUN_0103a480(&item, p2, a3, 0.0f);
+    void* id = ((VItem3*)item)->v18(*(int*)((char*)item + 0x10), 1, pos);
+    FUN_00c731a0((int)self, 4, (int)id, 0);
+    if (a4 != 0) {
+        void* mgr = NounManager();
+        void* noun = mgr ? ((NounMgrAd*)mgr)->createNoun(0x2dd8c42) : 0;
+        if (noun) {
+            void* art = ((NounAd*)noun)->getArtifact(0x2dd8c33);
+            if (art) {
+                ArtifactAd* a = (ArtifactAd*)art;
+                Vec3f apos;
+                a->mPos.get_38(&apos);
+                int angle = a->mPos.get_2c();
+                ModelAd* model = (ModelAd*)PlanetModel();
+                int orient = model->build(angle, &apos);
+                a->mPos.set_3c(orient);
+                a->f_c69090();
+                void* aid = ((VItem2*)item)->v18(*(int*)((char*)item + 0x10), 1);
+                ((SetterAd*)art)->set(*(void**)((char*)item + 0x14), aid);
+                if (placed) FUN_00afa030(art);
+            }
+        }
+    }
+    ((VItem3*)item)->Release();
 }
 
 // ---------------------------------------------------------------------------
@@ -480,7 +670,6 @@ void FUN_0103b100(void* stream, void* map) {
     WriteUint32((void*)x, &save, 1, 0);
     int node = *(int*)((char*)map + 8);
     int stop = (int)map + 4;
-    if (node == stop) return;   // note: tail path differs; approximate
     while (node != stop) {
         FUN_00ae2e40(stream, (void*)(node + 0x10));
         ((V1c*)stream)->v1c();
@@ -489,65 +678,50 @@ void FUN_0103b100(void* stream, void* map) {
         int x2 = ((V18*)s2)->v18();
         WriteUint32((void*)x2, &v, 1, 0);
         ((V1c*)stream)->v1c();
-        RBTreeIncrement((void*)node);
+        node = (int)RBTreeIncrement((void*)node);
     }
+    ((V1c*)stream)->v1c();
 }
 
-// @ 0x0103b1b0  eastl heap adjust (AutoRefCount comparator)
-void FUN_0103a280(int* a, int b, int n);
-void FUN_0103b1b0(int* a, int param2, int n, int start, int* cmp, int (*fn)(int,int)) {
-    for (;;) {
-        int c = start * 2 + 2;
-        if (c >= n) break;
-        if (fn(a[c], a[c - 1]) != 0) --c;
-        int* cur = &a[start];
-        int* next = &a[c];
-        if (*next != *cur) {
-            if (*next) ((V4*)(*next))->AddRef();
-            *cur = *next;
-            if (cur) ((V4*)(cur))->Release();
-        }
-        start = c;
+// @ 0x0103b1b0  eastl heap adjust (AutoRefCount value + comparator function)
+void FUN_0103a280(AutoRef* a, int top, int hole, AutoRef value, int (*fn)(int,int));
+void FUN_0103b1b0(AutoRef* a, int top, int n, int start, AutoRef value, int (*fn)(int,int)) {
+    int hole = start;
+    int child = start * 2 + 2;
+    while (child < n) {
+        if (fn((int)a[child].mpRef, (int)a[child - 1].mpRef) != 0) --child;
+        a[hole] = a[child];
+        hole = child;
+        child = hole * 2 + 2;
     }
-    if (start * 2 + 2 == n) {
-        int c = start * 2 + 2;
-        int* cur = &a[start];
-        int* next = &a[c - 1];
-        if (*next != *cur) {
-            if (*next) ((V4*)(*next))->AddRef();
-            *cur = *next;
-            if (cur) ((V4*)(cur))->Release();
-        }
-        start = c - 1;
+    if (child == n) {
+        a[hole] = a[child - 1];
+        hole = child - 1;
     }
-    if (cmp) ((V4*)(cmp))->AddRef();
-    FUN_0103a280(a, param2, start);
-    if (cmp) ((V4*)(cmp))->Release();
+    FUN_0103a280(a, top, hole, value, fn);
 }
 
-// @ 0x0103a280
-void FUN_0103a280(int* a, int b, int n) {
-    (void)a; (void)b; (void)n;
+// @ 0x0103a280  eastl heap sift-up (push_heap tail)
+void FUN_0103a280(AutoRef* a, int top, int hole, AutoRef value, int (*fn)(int,int)) {
+    while (hole > top) {
+        int parent = (hole - 1) >> 1;
+        if (fn((int)a[parent].mpRef, (int)value.mpRef) == 0) break;
+        a[hole] = a[parent];
+        hole = parent;
+    }
+    a[hole] = value;
 }
 
-// @ 0x0103b290
-void FUN_0103b290(int* a, int b, int c) {
-    if (*(int*)(b - 4)) ((V4*)(*(int*)(b - 4)))->AddRef();
-    if (a[0] != *(int*)(b - 4)) {
-        if (a[0]) ((V4*)(a[0]))->AddRef();
-        *(int*)(b - 4) = a[0];
-        if (*(int*)(b - 4)) ((V4*)(*(int*)(b - 4)))->Release();
-    }
-    FUN_0103b1b0(a, 0, (b - (int)a) / 4 - 1, 0, 0, 0);
-    (void)c;
+// @ 0x0103b290  eastl pop_heap
+void FUN_0103b290(AutoRef* a, AutoRef* b, int (*fn)(int,int)) {
+    AutoRef value = b[-1];
+    b[-1] = a[0];
+    FUN_0103b1b0(a, 0, (int)(b - a) - 1, 0, value, fn);
 }
 
 // @ 0x0103b320
 struct InvItems {
     void* list_00ff5b80();   // returns this+0x34
-};
-struct A630 {
-    bool f_0103a630(int elem, Vec3i key);   // 0x0103a630
 };
 bool TSx::f_b320(int* prop) {
     void* self = this;
@@ -561,7 +735,7 @@ bool TSx::f_b320(int* prop) {
     if (((V74*)inv)->v74(&k2)) return false;
     void* list = ((InvItems*)((SpaceGame*)SpaceGameGet())->get_00a1ad60())->list_00ff5b80();
     for (void** it = *(void***)list; it != *(void***)((char*)list + 4); ++it) {
-        if (((A630*)self)->f_0103a630((int)*it, k2)) return false;
+        if (((A630*)self)->f_0103a630(*it, k2.x, k2.y, k2.z)) return false;
     }
     return true;
 }

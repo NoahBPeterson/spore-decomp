@@ -281,7 +281,7 @@ class cVarListSerializer {
 public:
     void* Construct(const void* pSrc, uint32_t nA, uint32_t nB);   // 0x00692f90
     bool  Serialize(cOutStream* pOut);                             // 0x00692900
-    uint8_t mPad[0xa00];
+    uint8_t mPad[0xa14];
 };
 
 struct tSerializeNode {
@@ -591,20 +591,21 @@ void cSPMissionManager::FUN_00feca20(cSPMission* pMission)
 // @ 0x00feca80 FUN_00feca80
 void __cdecl FUN_00feca80(cOutStream* pOut, tSerializeNode* pList)
 {
-    int32_t nCount = 0;
+    uint32_t nCount = 0;
     for (tSerializeNode* p = pList->mpNext; p != pList; p = p->mpNext)
         ++nCount;
 
     cOutStream* pStream = pOut->v20();
     void* pHandle = pStream->v18();
-    WriteUint32(pHandle, (uint32_t*)&nCount, 1, 0);
+    uint32_t nValue = nCount;
+    WriteUint32(pHandle, &nValue, 1, 0);
 
     for (tSerializeNode* p = pList->mpNext; p != pList; p = p->mpNext) {
         cVarListSerializer ser;
         ser.Construct(&p->mPayload, 0x15b49b0, 0x1a80d26);
         ser.Serialize(pOut);
     }
-    pOut->v1c();
+    return pOut->v1c();
 }
 
 // =============================================================================================
@@ -833,61 +834,60 @@ void cSPMissionManager::CacheProperties()
     }
     pPM2->v2c(0xe8e2f4b2, 0x2ae1a8e, (void**)&mpProp7c);
 
-    cProperty* pProp = mpProp7c;
-    if (pProp != 0) {
+    if (mpProp7c != 0) {
         cProperty* pOut;
-        if (pProp->v24(0x14d805b0, (void**)&pOut) && pOut->mnType12 == 0xa)
+        if (mpProp7c->v24(0x14d805b0, (void**)&pOut) && pOut->mnType12 == 0xa)
             mnE0 = *pOut->GetUInt();
     }
 
     float fValue = 0.0f;
-    if (pProp != 0) {
+    if (mpProp7c != 0) {
         cProperty* pOut;
-        if (pProp->v24(0x14d805b1, (void**)&pOut) && pOut->mnType12 == 0xd)
+        if (mpProp7c->v24(0x14d805b1, (void**)&pOut) && pOut->mnType12 == 0xd)
             fValue = *pOut->GetFloat();
     }
-    mnE4 = (uint32_t)(int32_t)(fValue * g_k1000);
+    mnE4 = (uint32_t)(fValue * g_k1000);
 
-    if (pProp != 0) {
+    if (mpProp7c != 0) {
         cProperty* pOut;
-        if (pProp->v24(0x14d805b2, (void**)&pOut) && pOut->mnType12 == 0xd)
+        if (mpProp7c->v24(0x14d805b2, (void**)&pOut) && pOut->mnType12 == 0xd)
             fValue = *pOut->GetFloat();
     }
-    mnE8 = (uint32_t)(int32_t)(fValue * g_k1000);
+    mnE8 = (uint32_t)(fValue * g_k1000);
 
-    if (pProp != 0) {
+    if (mpProp7c != 0) {
         cProperty* pOut;
-        if (pProp->v24(0x14d805b5, (void**)&pOut) && pOut->mnType12 == 0xa)
+        if (mpProp7c->v24(0x14d805b5, (void**)&pOut) && pOut->mnType12 == 0xa)
             mnEC = *pOut->GetUInt();
     }
 
-    GetPropertyAsKey(pProp, 0x14d805b6, &mKeyF0);
-    GetPropertyAsKey(pProp, 0x14d805b7, &mKeyFC);
+    GetPropertyAsKey(mpProp7c, 0x14d805b6, &mKeyF0);
+    GetPropertyAsKey(mpProp7c, 0x14d805b7, &mKeyFC);
 
     int32_t nCount = 0;
     uint32_t* pArray = 0;
-    GetPropertyAsUint32Array(pProp, 0x14d805b4, &nCount, &pArray);
+    GetPropertyAsUint32Array(mpProp7c, 0x14d805b4, &nCount, &pArray);
     for (int32_t i = 0; i < nCount; ++i)
         g_cachedUintArray[i] = pArray[i];
 
     {
         int32_t nRecCount = 0;
         void* pRecs = 0;
-        GetPropertyAsKeyArray(pProp, 0x14d805b8, &nRecCount, &pRecs);
+        GetPropertyAsKeyArray(mpProp7c, 0x14d805b8, &nRecCount, &pRecs);
         for (int32_t i = 0; i < nRecCount; ++i)
             mVec130.push_back(((tKey*)pRecs)[i].mType);
     }
     {
         int32_t nRecCount = 0;
         void* pRecs = 0;
-        GetPropertyAsKeyArray(pProp, 0x14d805b9, &nRecCount, &pRecs);
+        GetPropertyAsKeyArray(mpProp7c, 0x14d805b9, &nRecCount, &pRecs);
         for (int32_t i = 0; i < nRecCount; ++i)
             mVec11c.push_back(((tKey*)pRecs)[i].mType);
     }
     {
         int32_t nRecCount = 0;
         void* pRecs = 0;
-        GetPropertyAsKeyArray(pProp, 0x14d805ba, &nRecCount, &pRecs);
+        GetPropertyAsKeyArray(mpProp7c, 0x14d805ba, &nRecCount, &pRecs);
         for (int32_t i = 0; i < nRecCount; ++i)
             mVec108.push_back(((tKey*)pRecs)[i].mType);
     }

@@ -158,30 +158,346 @@ int WillametteNewInstructionHWSupport(void)
     return result;
 }
 
-// @ 0x00fd1f70
-void vp6_filter_row_sse2_a(short* m, short* h, short* out)
+// ---------------------------------------------------------------------------
+// SSE2 8x8 inverse DCT (0x00fd1f70 full, 0x00fd2470 sparse 4x4).
+//
+// Layout:  r[0..7] are the eight 16-byte rows of the block (8 int16 samples each).
+// Pass 1 transforms the columns (each r[i] is one row, so the eight rows are the
+// eight 1-D inputs); the block is then transposed 8x8 and pass 2 transforms the
+// other direction, adding 8 and shifting right by 4 for the final rounding.
+//
+// The fixed-point coefficients are the runtime IDCT vectors (cosines scaled by
+// 2^16, stored as the negative complement where |c| > 0.5 so pmulhw can be folded
+// with paddw).  ROWSEL is the sparse 4-tap path: the odd inputs are zero.
+// ---------------------------------------------------------------------------
+static __forceinline void vp6_idct_transpose8(__m128i* r)
 {
-    __m128i x0 = *(__m128i*)(m + 0);
-    __m128i x1 = *(__m128i*)(m + 8);
-    __m128i x2 = *(__m128i*)(m + 16);
-    __m128i x3 = *(__m128i*)(m + 24);
-    *(__m128i*)(out + 0)  = _mm_mullo_epi16(x0, *(__m128i*)(h + 0));
-    *(__m128i*)(out + 8)  = _mm_mullo_epi16(x1, *(__m128i*)(h + 8));
-    *(__m128i*)(out + 16) = _mm_mullo_epi16(x2, *(__m128i*)(h + 16));
-    *(__m128i*)(out + 24) = _mm_mullo_epi16(x3, *(__m128i*)(h + 24));
+    __m128i b0 = _mm_unpacklo_epi16(r[0], r[1]);
+    __m128i b1 = _mm_unpackhi_epi16(r[0], r[1]);
+    __m128i b2 = _mm_unpacklo_epi16(r[2], r[3]);
+    __m128i b3 = _mm_unpackhi_epi16(r[2], r[3]);
+    __m128i b4 = _mm_unpacklo_epi16(r[4], r[5]);
+    __m128i b5 = _mm_unpackhi_epi16(r[4], r[5]);
+    __m128i b6 = _mm_unpacklo_epi16(r[6], r[7]);
+    __m128i b7 = _mm_unpackhi_epi16(r[6], r[7]);
+
+    __m128i c0 = _mm_unpacklo_epi32(b0, b2);
+    __m128i c1 = _mm_unpackhi_epi32(b0, b2);
+    __m128i c2 = _mm_unpacklo_epi32(b1, b3);
+    __m128i c3 = _mm_unpackhi_epi32(b1, b3);
+    __m128i c4 = _mm_unpacklo_epi32(b4, b6);
+    __m128i c5 = _mm_unpackhi_epi32(b4, b6);
+    __m128i c6 = _mm_unpacklo_epi32(b5, b7);
+    __m128i c7 = _mm_unpackhi_epi32(b5, b7);
+
+    r[0] = _mm_unpacklo_epi64(c0, c4);
+    r[1] = _mm_unpackhi_epi64(c0, c4);
+    r[2] = _mm_unpacklo_epi64(c1, c5);
+    r[3] = _mm_unpackhi_epi64(c1, c5);
+    r[4] = _mm_unpacklo_epi64(c2, c6);
+    r[5] = _mm_unpackhi_epi64(c2, c6);
+    r[6] = _mm_unpacklo_epi64(c3, c7);
+    r[7] = _mm_unpackhi_epi64(c3, c7);
+}
+
+static __forceinline __m128i vp6_mh(__m128i a, __m128i b) { return _mm_mulhi_epi16(a, b); }
+static __forceinline __m128i vp6_aw(__m128i a, __m128i b) { return _mm_add_epi16(a, b); }
+static __forceinline __m128i vp6_as(__m128i a, __m128i b) { return _mm_adds_epi16(a, b); }
+static __forceinline __m128i vp6_ss(__m128i a, __m128i b) { return _mm_subs_epi16(a, b); }
+
+// Full 8-point 1-D pass.  kFinal selects the row pass (rounding + arithmetic shift).
+template <bool kFinal>
+static __forceinline void vp6_idct_full(__m128i* r)
+{
+    const __m128i k0  = *(__m128i*)0x015b3ac0;   // cos(1*pi/16)
+    const __m128i k1  = *(__m128i*)0x015b3ad0;   // cos(2*pi/16)
+    const __m128i k2  = *(__m128i*)0x015b3ae0;   // cos(3*pi/16)
+    const __m128i k3  = *(__m128i*)0x015b3af0;   // cos(4*pi/16)
+    const __m128i k4  = *(__m128i*)0x015b3b00;   // cos(5*pi/16)
+    const __m128i k5  = *(__m128i*)0x015b3b10;   // cos(6*pi/16)
+    const __m128i k6  = *(__m128i*)0x015b3b20;   // cos(7*pi/16)
+    const __m128i rnd = *(__m128i*)0x015b3aa0;   // rounding (8)
+
+    __m128i x0, x1, x2, x3, x4, x5, x6, x7, even1, even2;
+
+    x2 = r[3];
+    x6 = k2;
+    x4 = x2;
+    x7 = r[5];
+    x4 = vp6_mh(x4, x6);
+    x1 = k4;
+    x6 = vp6_mh(x6, x7);
+    x5 = x1;
+    x1 = vp6_mh(x1, x2);
+    x3 = r[1];
+    x5 = vp6_mh(x5, x7);
+    x0 = k0;
+    x4 = vp6_aw(x4, x2);
+    x6 = vp6_aw(x6, x7);
+    x2 = vp6_aw(x2, x1);
+    x1 = r[7];
+    x7 = vp6_aw(x7, x5);
+    x5 = x0;
+    x0 = vp6_mh(x0, x3);
+    x4 = vp6_as(x4, x7);
+    x5 = vp6_mh(x5, x1);
+    x7 = k6;
+    x6 = vp6_ss(x6, x2);
+    x0 = vp6_aw(x0, x3);
+    x3 = vp6_mh(x3, x7);
+    x2 = r[2];
+    x7 = vp6_mh(x7, x1);
+    x5 = vp6_aw(x5, x1);
+    x1 = x2;
+    x2 = vp6_mh(x2, k1);
+    x3 = vp6_ss(x3, x5);
+    x5 = r[6];
+    x0 = vp6_as(x0, x7);
+    x7 = x5;
+    x0 = vp6_ss(x0, x4);
+    x5 = vp6_mh(x5, k1);
+    x2 = vp6_aw(x2, x1);
+    x1 = vp6_mh(x1, k5);
+    x4 = vp6_as(x4, x4);
+    x4 = vp6_as(x4, x0);
+    x3 = vp6_ss(x3, x6);
+    x5 = vp6_aw(x5, x7);
+    x6 = vp6_as(x6, x6);
+    x7 = vp6_mh(x7, k5);
+    x6 = vp6_as(x6, x3);
+    even1 = x4;
+    x1 = vp6_ss(x1, x5);
+    x4 = k3;
+    x5 = x3;
+    x3 = vp6_mh(x3, x4);
+    x7 = vp6_as(x7, x2);
+    even2 = x6;
+    x2 = x0;
+    x6 = r[0];
+    x0 = vp6_mh(x0, x4);
+    x5 = vp6_aw(x5, x3);
+    x3 = r[4];
+    x5 = vp6_ss(x5, x1);
+    x2 = vp6_aw(x2, x0);
+    x6 = vp6_ss(x6, x3);
+    x0 = x6;
+    x6 = vp6_mh(x6, x4);
+    x3 = vp6_as(x3, x3);
+    x1 = vp6_as(x1, x1);
+    x3 = vp6_as(x3, x0);
+    x1 = vp6_as(x1, x5);
+    x4 = vp6_mh(x4, x3);
+    x6 = vp6_aw(x6, x0);
+    x6 = vp6_ss(x6, x2);
+    x2 = vp6_as(x2, x2);
+    x0 = even1;
+    x2 = vp6_as(x2, x6);
+    x4 = vp6_aw(x4, x3);
+    x2 = vp6_ss(x2, x1);
+    if (kFinal)
+        x2 = vp6_as(x2, rnd);
+    x1 = vp6_as(x1, x1);
+    x1 = vp6_as(x1, x2);
+    if (kFinal)
+        x2 = _mm_srai_epi16(x2, 4);
+    x4 = vp6_ss(x4, x7);
+    if (kFinal)
+        x1 = _mm_srai_epi16(x1, 4);
+    x3 = even2;
+    x7 = vp6_as(x7, x7);
+    x7 = vp6_as(x7, x4);
+    x4 = vp6_ss(x4, x3);
+    if (kFinal)
+        x4 = vp6_as(x4, rnd);
+    x3 = vp6_as(x3, x3);
+    x3 = vp6_as(x3, x4);
+    if (kFinal)
+        x4 = _mm_srai_epi16(x4, 4);
+    x6 = vp6_ss(x6, x5);
+    if (kFinal)
+        x3 = _mm_srai_epi16(x3, 4);
+    if (kFinal)
+        x6 = vp6_as(x6, rnd);
+    x5 = vp6_as(x5, x5);
+    x5 = vp6_as(x5, x6);
+    if (kFinal)
+        x6 = _mm_srai_epi16(x6, 4);
+    if (kFinal)
+        x5 = _mm_srai_epi16(x5, 4);
+    x7 = vp6_ss(x7, x0);
+    if (kFinal)
+        x7 = vp6_as(x7, rnd);
+    x0 = vp6_as(x0, x0);
+    x0 = vp6_as(x0, x7);
+    if (kFinal)
+        x7 = _mm_srai_epi16(x7, 4);
+    if (kFinal)
+        x0 = _mm_srai_epi16(x0, 4);
+
+    r[0] = x0;
+    r[1] = x1;
+    r[2] = x2;
+    r[3] = x3;
+    r[4] = x4;
+    r[5] = x5;
+    r[6] = x6;
+    r[7] = x7;
+}
+
+// Sparse 4-tap 1-D pass: the odd inputs are zero (only the top-left 4x4 of the
+// coefficient block is coded, so the decoder selects this 4x4 inverse DCT).
+template <bool kFinal>
+static __forceinline void vp6_idct_sparse(__m128i* r)
+{
+    const __m128i k0  = *(__m128i*)0x015b3ac0;
+    const __m128i k1  = *(__m128i*)0x015b3ad0;
+    const __m128i k2  = *(__m128i*)0x015b3ae0;
+    const __m128i k3  = *(__m128i*)0x015b3af0;
+    const __m128i k4  = *(__m128i*)0x015b3b00;
+    const __m128i k5  = *(__m128i*)0x015b3b10;
+    const __m128i k6  = *(__m128i*)0x015b3b20;
+    const __m128i rnd = *(__m128i*)0x015b3aa0;
+
+    __m128i x0, x1, x2, x3, x4, x5, x6, x7, even1, even2;
+
+    x2 = r[3];
+    x6 = k2;
+    x4 = x2;
+    x4 = vp6_mh(x4, x6);
+    x1 = k4;
+    x5 = x1;
+    x1 = vp6_mh(x1, x2);
+    x3 = r[1];
+    x0 = k0;
+    x4 = vp6_aw(x4, x2);
+    x7 = k6;
+    x2 = vp6_aw(x2, x1);
+    x5 = x0;
+    x0 = vp6_mh(x0, x3);
+    x6 = _mm_setzero_si128();
+    x6 = vp6_ss(x6, x2);
+    x0 = vp6_aw(x0, x3);
+    x3 = vp6_mh(x3, x7);
+    x2 = r[2];
+    x1 = x2;
+    x2 = vp6_mh(x2, k1);
+    x0 = vp6_ss(x0, x4);
+    x2 = vp6_aw(x2, x1);
+    x1 = vp6_mh(x1, k5);
+    x4 = vp6_as(x4, x4);
+    x4 = vp6_as(x4, x0);
+    x3 = vp6_ss(x3, x6);
+    x6 = vp6_as(x6, x6);
+    x6 = vp6_as(x6, x3);
+    even1 = x4;
+    x4 = k3;
+    x5 = x3;
+    x3 = vp6_mh(x3, x4);
+    x7 = x2;
+    even2 = x6;
+    x2 = x0;
+    x6 = r[0];
+    x0 = vp6_mh(x0, x4);
+    x5 = vp6_aw(x5, x3);
+    x5 = vp6_ss(x5, x1);
+    x2 = vp6_aw(x2, x0);
+    x0 = x6;
+    x6 = vp6_mh(x6, x4);
+    x1 = vp6_as(x1, x1);
+    x1 = vp6_as(x1, x5);
+    x6 = vp6_aw(x6, x0);
+    x4 = x6;
+    x6 = vp6_ss(x6, x2);
+    x2 = vp6_as(x2, x2);
+    x0 = even1;
+    x2 = vp6_as(x2, x6);
+    x2 = vp6_ss(x2, x1);
+    if (kFinal)
+        x2 = vp6_as(x2, rnd);
+    x1 = vp6_as(x1, x1);
+    x1 = vp6_as(x1, x2);
+    if (kFinal)
+        x2 = _mm_srai_epi16(x2, 4);
+    x4 = vp6_ss(x4, x7);
+    if (kFinal)
+        x1 = _mm_srai_epi16(x1, 4);
+    x3 = even2;
+    x7 = vp6_as(x7, x7);
+    x7 = vp6_as(x7, x4);
+    x4 = vp6_ss(x4, x3);
+    if (kFinal)
+        x4 = vp6_as(x4, rnd);
+    x3 = vp6_as(x3, x3);
+    x3 = vp6_as(x3, x4);
+    if (kFinal)
+        x4 = _mm_srai_epi16(x4, 4);
+    x6 = vp6_ss(x6, x5);
+    if (kFinal)
+        x3 = _mm_srai_epi16(x3, 4);
+    if (kFinal)
+        x6 = vp6_as(x6, rnd);
+    x5 = vp6_as(x5, x5);
+    x5 = vp6_as(x5, x6);
+    if (kFinal)
+        x6 = _mm_srai_epi16(x6, 4);
+    if (kFinal)
+        x5 = _mm_srai_epi16(x5, 4);
+    x7 = vp6_ss(x7, x0);
+    if (kFinal)
+        x7 = vp6_as(x7, rnd);
+    x0 = vp6_as(x0, x0);
+    x0 = vp6_as(x0, x7);
+    if (kFinal)
+        x7 = _mm_srai_epi16(x7, 4);
+    if (kFinal)
+        x0 = _mm_srai_epi16(x0, 4);
+
+    r[0] = x0;
+    r[1] = x1;
+    r[2] = x2;
+    r[3] = x3;
+    r[4] = x4;
+    r[5] = x5;
+    r[6] = x6;
+    r[7] = x7;
+}
+
+// @ 0x00fd1f70
+short* vp6_filter_row_sse2_a(short* m, short* h, short* out)
+{
+    __m128i r[8];
+    const __m128i* pm = (const __m128i*)m;
+    const __m128i* ph = (const __m128i*)h;
+    for (int i = 0; i < 8; i++)
+        r[i] = _mm_mullo_epi16(pm[i], ph[i]);
+
+    vp6_idct_full<false>(r);
+    vp6_idct_transpose8(r);
+    vp6_idct_full<true>(r);
+
+    __m128i* po = (__m128i*)out;
+    for (int i = 0; i < 8; i++)
+        po[i] = r[i];
+    return m;
 }
 
 // @ 0x00fd2470
-void vp6_filter_row_sse2_b(short* m, short* h, short* out)
+short* vp6_filter_row_sse2_b(short* m, short* h, short* out)
 {
-    __m128i x0 = *(__m128i*)(m + 0);
-    __m128i x1 = *(__m128i*)(m + 8);
-    __m128i x2 = *(__m128i*)(m + 16);
-    __m128i x3 = *(__m128i*)(m + 24);
-    *(__m128i*)(out + 0)  = _mm_mullo_epi16(x0, *(__m128i*)(h + 0));
-    *(__m128i*)(out + 8)  = _mm_mullo_epi16(x1, *(__m128i*)(h + 8));
-    *(__m128i*)(out + 16) = _mm_mullo_epi16(x2, *(__m128i*)(h + 16));
-    *(__m128i*)(out + 24) = _mm_mullo_epi16(x3, *(__m128i*)(h + 24));
+    __m128i r[8];
+    const __m128i* pm = (const __m128i*)m;
+    const __m128i* ph = (const __m128i*)h;
+    for (int i = 0; i < 4; i++)
+        r[i] = _mm_mullo_epi16(pm[i], ph[i]);
+
+    vp6_idct_sparse<false>(r);
+    vp6_idct_transpose8(r);
+    vp6_idct_sparse<true>(r);
+
+    __m128i* po = (__m128i*)out;
+    for (int i = 0; i < 8; i++)
+        po[i] = r[i];
+    return m;
 }
 
 // @ 0x00fd28e0

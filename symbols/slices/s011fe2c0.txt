@@ -1,0 +1,10 @@
+011fe2c0 Interpolator::AdvanceBack  # (float delta) rewind; m_rate*delta, m_done=0, wrap loop += m_ctrl->m_duration, positive remainder -> Advance2 0x011fe180, then two reverse key-pointer searches (12-byte layout stepping by +8 link, plain layout stepping by stride)
+011fe3f0 Interpolator::EmitCurrent  # once-per-frame key emission; m_done guard; flag = ((m_ctrl->m_flags&1)<<3)|4; m_map path remaps track->key via m_map->m_keys; emitter m_emit(dest, slot, key+4-flag, m_cur, m_ctrl->m_id, key)
+011fe510 Interpolator::GetInvDuration  # 1.0f / m_ctrl->m_duration (MATCH)
+011fe520 Interpolator::SetPlaybackRate  # m_rate = rate / (1.0f/m_ctrl->m_duration) (MATCH)
+011fe550 Interpolator::GetResourceDescriptor  # 8 {size,alignment} dwords; align 0x10 iff desc&0xff else 4; stride ((hi+lo*4+mid)*4+4) rounded; extra size*4+0xc; total extra+size*8+0x38 rounded + stride*size
+011fe600 Interpolator::Seek  # frame-m_cur, <0 -> AdvanceBack(-d) else Advance2(d); returns 1 (MATCH)
+011fe650 Interpolator::GetResourceSize  # descriptor of (m_tracks, m_format, m_map!=NULL); returns first word
+011fe680 Interpolator::Fixup  # (self, FrameTable*); ControllerFixup 0x011fdb30, rebase m_keys by delta, Arena::IdToObject 0x011e2300 on m_ctrl, store vtable 0x015d0968, rebind emitters via 0x011ffa40 (bind[1]/bind[2]), shift both key pointers per track by m_ctrl
+011fe730 Interpolator::Blend128  # (out, counts, a, counts, b, counts, t, flags); scalar per-quad slerp/lerp (g_blendDotLimit 0x014f84e0, _CIacos 0x011e08c8), surplus-quat copy, min(of,bf) float lerp, trailing af-bf copy
+011fed20 Interpolator::Blend64  # same skeleton; quadratic nlerp vs g_nlerpCosLimit 0x0171e220, _sqrtf, -1.0f clamp 0x13eb1bc, float lerp + count-difference copies

@@ -406,7 +406,13 @@ void InitRTTSphere()
 }
 
 // ---- the geometry-changed message object -----------------------------------
-struct MsgVtbl { virtual void v00(); virtual int AddRef(); virtual void v08(); virtual void v0c(); };
+// The message object's vtable: slot +0x04 adds a reference, slot +0x08 releases.
+struct MsgVtbl {
+    void* mSlot00;                                   // +0x00
+    int   (__thiscall* mAddRef)(void* self);         // +0x04
+    void  (__thiscall* mRelease)(void* self);        // +0x08
+    void* mSlot0c;                                   // +0x0c
+};
 struct MsgObj {
     MsgVtbl* mpVtbl;    // +0x00
     volatile long mRef; // +0x04
@@ -418,13 +424,53 @@ struct MsgObj {
     char pad34[4];
     int f38;            // +0x38
 };
-void __cdecl FUN_00f99f20(int self, int a2, int a3, int a4);  // 0x00f99f20
+// 0x00f99f20: thiscall on the handler, forwards the change to the sphere.
+struct GeomHandlerOps {
+    void FUN_00f99f20(void* a2, int a3, int a4, void* a5);
+};
+
+// The application object returned by FUN_0067dd50; slot +0x78 files an id.
+struct AppVtbl {
+    void* mpad00[0x78 / 4];                                             // +0x00 .. +0x74
+    int  (__thiscall* mRegisterId)(void* self, unsigned id);            // +0x78
+};
+struct AppObj { AppVtbl* mpVtbl; };
+
+// The payload handed to the geometry-change handler: a small tagged record that
+// carries the fresh message object, the handler and the application object.
+struct GeomChangeMsg {
+    int            mKind;       // +0x00  (always 1)
+    int            mReserved04; // +0x04
+    bool           mFlag08;     // +0x08
+    char           mPad09;
+    char           mPad0a;
+    char           mPad0b;
+    int            mReserved0c; // +0x0c
+    int            mReserved10; // +0x10
+    int            mEventKind;  // +0x14  (0x03d5bf9a)
+    MsgObj*        mpMessage;   // +0x18
+    int            mReserved1c; // +0x1c
+    int            mReserved20; // +0x20
+    int            mReserved24; // +0x24
+    int            mReserved28; // +0x28
+    int            mReserved2c; // +0x2c
+    struct GeomHandler* mpHandler;  // +0x30
+    AppObj*        mpApp;       // +0x34
+};
+
+struct HandlerVtbl {
+    void*     mpad00[4];                                                // +0x00 .. +0x0c
+    unsigned (__thiscall* mSend)(void* self, int a, GeomChangeMsg* m);  // +0x10
+};
+struct GeomHandler { HandlerVtbl* mpVtbl; };
 
 // The class that carries AddGeometryChangeMessage (its +0x8a0 member is the handler).
 struct GeomMsgOwner {
-    char pad000[0x8a0];
-    void* mpHandler;    // +0x8a0
-    int   mMsgId;       // +0x8a4
+    char pad000[0x898];
+    int  mChangeState;        // +0x898 (handed to the handler)
+    char pad89c[0x8a0 - 0x89c];
+    GeomHandler* mpHandler;   // +0x8a0
+    int          mMsgId;      // +0x8a4
 
     void AddGeometryChangeMessage(int a2, int a3);   // 0x00fa0560
 };
@@ -436,23 +482,39 @@ void GeomMsgOwner::AddGeometryChangeMessage(int a2, int a3)
         return;
     MsgObj* p = (MsgObj*)EAAllocate(0x40, "Terrain/Sphere/kMessageTerrainGeometryChange", 0, 0, 0, 0);
     if (p) {
-        p->f38 = 0;
+        p->mpVtbl30 = 0;
         p->mpVtbl = (MsgVtbl*)0x013eb90c;
         _InterlockedExchange((volatile long*)&p->mRef, 0);
         p->mpVtbl = (MsgVtbl*)0x013eb844;
-        p->mpVtbl30 = 0;
-        p->mpVtbl->AddRef();
+        p->f38 = 0;
+        p->mpVtbl->mAddRef(p);
     } else {
         p = 0;
     }
     p->mpVtbl30 = (MsgVtbl*)0x0182c582;
     p->f08 = a2;
     p->f10 = a3;
-    FUN_00f99f20((int)this, a3, a2, (int)this + 0x898);
-    ServiceObj* m = FUN_0067dd50();
-    (void)m;
-    mMsgId = 0;
-    p->mpVtbl30->v08();
+
+    GeomChangeMsg msg;
+    msg.mKind = 1;
+    msg.mReserved04 = 0;
+    msg.mReserved0c = 0;
+    msg.mReserved10 = 0;
+    msg.mFlag08 = false;
+    msg.mReserved1c = 0;
+    msg.mReserved20 = 0;
+    msg.mReserved24 = 0;
+    msg.mReserved28 = 0;
+    msg.mReserved2c = 0;
+    msg.mEventKind = 0x03d5bf9a;
+    msg.mpMessage = p;
+
+    ((GeomHandlerOps*)mpHandler)->FUN_00f99f20(this, a3, a2, &mChangeState);
+    msg.mpHandler = mpHandler;
+    msg.mpApp = (AppObj*)FUN_0067dd50();
+    unsigned id = msg.mpHandler->mpVtbl->mSend(msg.mpHandler, 0, &msg);
+    mMsgId = msg.mpApp->mpVtbl->mRegisterId(msg.mpApp, id);
+    p->mpVtbl->mRelease(p);
 }
 
 // ---- decal-box construction (uses the editor's decal box builder) -----------
@@ -558,23 +620,57 @@ void TerrainSphereRes::Dtor()
 }
 
 // ---- RTT re-registration on the active terrain sphere -----------------------
-bool __cdecl AppPropertyGetDescription(unsigned id);        // 0x006a25a0 (this = _sAppProperties)
-void __cdecl InitializeStaticRTTTextures();                 // 0x00f96b40
-void __cdecl FUN_00f9e3a0(void* self);                      // 0x00f9e3a0
-void* __cdecl ModelManagerGet();                            // 0x0067dd80
-void* __cdecl EffectsManagerGet();                          // 0x0067ddd0
-
-// A registration object whose vtable is called by slot index.
-struct RegObj { void** mpVtbl; };
-struct PropList {
-    char pad[8];
-    unsigned char GetDescription(unsigned id);
+namespace SP {
+struct cDirectPropertyList_s006a_22a0 {
+    bool GetDescription(unsigned id) const;                 // 0x006a25a0
 };
-struct ModelMgrObj { void** mpVtbl; };
-struct ModelInstObj { void** mpVtbl; };
-struct EffectMgrObj { void** mpVtbl; };
-struct EffectInstObj { void** mpVtbl; };
-struct TerrainSphereReg : RegObj { void Register(RegObj* obj); };
+struct cTerrainSphere {
+    void InitializeStaticRTTTextures();                     // 0x00f96b40
+};
+void* ModelManager();                                       // 0x0067dd80
+}
+void* EffectsManagerPtr();                                  // 0x0067ddd0
+void __cdecl FUN_00f9e3a0(void* self);                      // 0x00f9e3a0
+
+// A registration object: slot +0x4c adds an entry, slot +0x58 looks one up.
+struct RegVtbl {
+    void* mpad00[0x4c / 4];      // +0x00 .. +0x48
+    void* mpfnAddEntry;          // +0x4c
+    void* mpad50;                // +0x50
+    void* mpad54;                // +0x54
+    void* mpfnFindEntry;         // +0x58
+};
+struct RegObj { RegVtbl* mpVtbl; };
+
+struct ModelMgrVtbl {
+    void* mpad00[0x1c / 4];                                    // +0x00 .. +0x18
+    void* (__thiscall* mGetInstance)(void* self, void* key);    // +0x1c
+};
+struct ModelMgrObj { ModelMgrVtbl* mpVtbl; };
+struct ModelInstVtbl {
+    void* mpad00[0x134 / 4];                                    // +0x00 .. +0x130
+    void  (__thiscall* mSetActive)(void* self, int a);          // +0x134
+    void* mpad38;                                               // +0x138
+    void* (__thiscall* mGetHandle)(void* self, int a, int b);   // +0x13c
+};
+struct ModelInstObj { ModelInstVtbl* mpVtbl; };
+
+struct EffectMgrVtbl {
+    void* mpad00[0x54 / 4];                                    // +0x00 .. +0x50
+    void* (__thiscall* mGetInstance)(void* self, void* key);    // +0x54
+};
+struct EffectMgrObj { EffectMgrVtbl* mpVtbl; };
+struct EffectInstVtbl {
+    void* mpad00[3];                                           // +0x00 .. +0x08
+    void  (__thiscall* mApply)(void* self, int a);              // +0x0c
+};
+struct EffectInstObj { EffectInstVtbl* mpVtbl; };
+
+// The registration owner: +4 is the handle handed to the registration object.
+struct TerrainSphereReg {
+    char pad00[4];
+    void Register(RegObj* obj);   // 0x00f9fef0
+};
 
 // @ 0x00f9fef0
 void TerrainSphereReg::Register(RegObj* obj)
@@ -582,26 +678,29 @@ void TerrainSphereReg::Register(RegObj* obj)
     void* self = this;
     void* handle = (self == 0) ? 0 : (char*)self + 4;
 
-    if (((void*(__thiscall*)(RegObj*, int))obj->mpVtbl[0x58 / 4])(obj, 8) != handle) {
-        PropList* props = (PropList*)0x015fd918;   // _sAppProperties
-        unsigned char cVar2 = props->GetDescription(0x201a4e50);
-        unsigned char cVar3 = props->GetDescription(0xe13ce337);
+    void* found = ((void* (__thiscall*)(void*, int))obj->mpVtbl->mpfnFindEntry)(obj, 8);
+    if (found != handle) {
+        SP::cDirectPropertyList_s006a_22a0* props =
+            *(SP::cDirectPropertyList_s006a_22a0**)0x015fd918;   // _sAppProperties
+        bool cVar2 = props->GetDescription(0x201a4e50);
+        bool cVar3 = props->GetDescription(0xe13ce337);
         if (cVar2) {
-            InitializeStaticRTTTextures();
+            ((SP::cTerrainSphere*)props)->InitializeStaticRTTTextures();
             if (cVar3)
                 FUN_00f9e3a0(self);
         }
-        ((void(__thiscall*)(RegObj*, void*, int, int))obj->mpVtbl[0x4c / 4])(obj, handle, 7, 0);
-        ((void(__thiscall*)(RegObj*, void*, int, int))obj->mpVtbl[0x4c / 4])(obj, handle, 8, 0);
-        ((void(__thiscall*)(RegObj*, void*, int, int))obj->mpVtbl[0x4c / 4])(obj, handle, 0x21, 0);
-        ModelMgrObj* mm = (ModelMgrObj*)ModelManagerGet();
-        ModelInstObj* mi = (ModelInstObj*)((void*(__thiscall*)(ModelMgrObj*, void*))mm->mpVtbl[0x1c / 4])(mm, (void*)0x03fbae24);
-        void* h = ((void*(__thiscall*)(ModelInstObj*, int, int))mi->mpVtbl[0x13c / 4])(mi, 10, 0);
-        ((void(__thiscall*)(RegObj*, void*))obj->mpVtbl[0x4c / 4])(obj, h);
-        ((void(__thiscall*)(ModelInstObj*, int))mi->mpVtbl[0x134 / 4])(mi, 1);
-        EffectMgrObj* em = (EffectMgrObj*)EffectsManagerGet();
-        EffectInstObj* ei = (EffectInstObj*)((void*(__thiscall*)(EffectMgrObj*, void*))em->mpVtbl[0x54 / 4])(em, (void*)0x03fbae24);
-        ((void(__thiscall*)(EffectInstObj*, int))ei->mpVtbl[0x0c / 4])(ei, 0);
+        void* add = obj->mpVtbl->mpfnAddEntry;
+        ((void (__thiscall*)(void*, void*, int, int))add)(obj, handle, 7, 0);
+        ((void (__thiscall*)(void*, void*, int, int))add)(obj, handle, 8, 0);
+        ((void (__thiscall*)(void*, void*, int, int))add)(obj, handle, 0x21, 0);
+        ModelMgrObj* mm = (ModelMgrObj*)SP::ModelManager();
+        ModelInstObj* mi = (ModelInstObj*)mm->mpVtbl->mGetInstance(mm, (void*)0x03fbae24);
+        void* h = mi->mpVtbl->mGetHandle(mi, 10, 0);
+        ((void (__thiscall*)(void*, void*))add)(obj, h);
+        mi->mpVtbl->mSetActive(mi, 1);
+        EffectMgrObj* em = (EffectMgrObj*)EffectsManagerPtr();
+        EffectInstObj* ei = (EffectInstObj*)em->mpVtbl->mGetInstance(em, (void*)0x03fbae24);
+        ((void (__thiscall*)(void*, int))ei->mpVtbl->mApply)(ei, 0);
     }
 }
 

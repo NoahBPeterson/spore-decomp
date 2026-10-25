@@ -24,3 +24,6 @@ slices/s00f24b30/s00f24b30.cpp  ?fn25720@Obj@@QAE_NXZ  00f25720  /O2 /MD /Gy /TP
 slices/s00f24b30/s00f24b30.cpp  ?fn25730@Obj@@QAE_NXZ  00f25730  /O2 /MD /Gy /TP
 slices/s00f24b30/s00f24b30.cpp  ?fn25750@Obj@@QAEHXZ  00f25750  /O2 /MD /Gy /TP
 slices/s00f24b30/s00f24b30.cpp  ?fn257b0@Obj@@QAEPAU1@XZ  00f257b0  /O2 /MD /Gy /TP
+slices/s00f24b30/s00f24b30.cpp  ?fn24d90@@YAXXZ  00f24d90  /O2 /MD /Gy /TP
+slices/s00f24b30/s00f24b30.cpp  ?fn25930@@YA_NPAX0PAUVec3i@@@Z  00f25930  /O2 /MD /Gy /TP
+slices/s00f24b30/s00f24b30.cpp  ?fn259b0@@YA_NPAHPAPAX@Z  00f259b0  /O2 /MD /Gy /TP

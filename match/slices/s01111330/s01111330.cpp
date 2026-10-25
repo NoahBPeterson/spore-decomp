@@ -34,6 +34,8 @@ struct SimplexVertex
     hkReal pad10[3];               // +0x10
     hkReal m_extra;                // +0x1c
     hkReal pad20[4];               // +0x20
+
+    void setFrom(const hkVector4* pSource);              // 0x01103af0
 };
 
 #define HK_REAL_MAX 3.40282e+38f
@@ -245,13 +247,21 @@ found:
 
 struct hkPackedRow
 {
-    uint8_t  m_ids[2];      // +0x00 the two ids the row was built from
-    uint16_t m_value;       // +0x02 packed value written by the manifold
-    uint8_t  m_payload[4];  // +0x04
+    union                                           // +0x00 the two ids the row was built from
+    {
+        struct { uint8_t m_id0, m_id1; uint16_t m_value; };
+        uint32_t m_head;                            // +0x00 both ids and the value as one word
+    };
+    union                                           // +0x04 packed per-vertex byte offsets
+    {
+        uint8_t  m_payload[4];
+        uint32_t m_tail;                            // +0x04 the same four bytes as one word
+    };
 };
 
-// Working simplex: a 4-slot, most-recently-used-first table of rows.  The byte at +0x08 (the
-// payload of row 0) doubles as the packed per-vertex values of the simplex.
+// Working simplex: a 4-slot, most-recently-used-first table of rows.  The packed 16-bit values
+// follow the live rows directly, and the 4 bytes at +0x08 (row 0's payload) double as the packed
+// per-vertex value indices of the simplex.
 struct hkPackedSimplex
 {
     uint8_t     m_numVerticesA;   // +0x00
@@ -260,7 +270,18 @@ struct hkPackedSimplex
     uint8_t     m_pad03;          // +0x03
     hkPackedRow m_rows[4];        // +0x04
 
-    uint8_t* valueBytes() { return (uint8_t*)this + 8; }
+    uint16_t* wordValues() { return (uint16_t*)((uint8_t*)this + 4 + m_numRows * 8u); }
+    uint8_t*  valueBytes() { return (uint8_t*)this + 8; }
+    void      removeUnusedVertices();                           // 0x0110fc50
+};
+
+// One candidate vertex handed to the insert routine: a position vector plus the packed index the
+// manifold assigned to it.
+struct hkGskInsertPoint
+{
+    hkVector4 m_position;         // +0x00
+    unsigned  m_pad10[4];         // +0x10
+    uint16_t  m_index;            // +0x20
 };
 
 // The manifold-side interface the routines call through.
@@ -292,21 +313,18 @@ struct hkGskFrame              // two basis vectors, a 4-float stride apart
 extern const hkReal gGskPositiveScale;
 extern const hkReal gGskNegativeScale;
 
-void hkGskManifold_removeUnusedVertices(hkPackedSimplex* pSimplex);          // 0x0110fc50
-void __fastcall SimplexVertex_setFrom(SimplexVertex* pVertex, const hkVector4* pSource); // 0x01103af0
-
 // @ 0x01111d90
 // Inserts a vertex into the working simplex.  With four rows present the oldest row is dropped
 // through Simplex5::SelectVertexToDrop and the manifold is asked for the new index; otherwise the
 // new row is prepended and the packed per-vertex values are recorded.  Returns 4 when the simplex
 // was updated, 5 when no vertex could be dropped and 6 after a manifold-level replacement.
-int __cdecl hkPackedSimplex_InsertVertex(hkPackedSimplex* pSimplex, const void* pUnused,
-                                         hkGskInterface* pInterface, void* a3, void* a4,
-                                         void* a5, uint16_t* pOutIndex, Simplex5* pSimplex5,
-                                         const hkSimplexKey* pKey, int bReplace)
+int __cdecl hkPackedSimplex_InsertVertex(hkPackedSimplex* pSimplex, void* a2, void* a3, void* a4,
+                                         const hkSimplexKey* pKey, hkGskInsertPoint* pPoint,
+                                         Simplex5* pSimplex5, hkGskInterface* pInterface,
+                                         int bReplace)
 {
     int result = 4;
-    uint16_t packedIndex = 0xffff;
+    uint16_t packed;
     if (pSimplex->m_numRows == 4)
     {
         int dropped = pSimplex5->SelectVertexToDrop();
@@ -316,134 +334,125 @@ int __cdecl hkPackedSimplex_InsertVertex(hkPackedSimplex* pSimplex, const void* 
         pInterface->v10(pSimplex->m_rows[dropped].m_value);
 
         // the dropped slot takes over the newest row; slot 0 takes row 1
+        hkPackedRow* pDropped = &pSimplex->m_rows[dropped];
         if (dropped != 0)
-        {
-            *(uint32_t*)&pSimplex->m_rows[dropped] = *(uint32_t*)&pSimplex->m_rows[0];
-            *(uint32_t*)&pSimplex->m_rows[dropped].m_payload[0] =
-                *(uint32_t*)&pSimplex->m_rows[0].m_payload[0];
-        }
+            *pDropped = pSimplex->m_rows[0];
         else
-        {
-            *(uint32_t*)&pSimplex->m_rows[0] = *(uint32_t*)&pSimplex->m_rows[1];
-            *(uint32_t*)&pSimplex->m_rows[0].m_payload[0] =
-                *(uint32_t*)&pSimplex->m_rows[1].m_payload[0];
-        }
+            *pDropped = pSimplex->m_rows[1];
 
-        hkGskManifold_removeUnusedVertices(pSimplex);
+        pSimplex->removeUnusedVertices();
 
-        uint16_t index = pInterface->v08(a3, a4, a5, &pSimplex5[0]);
+        uint16_t index = pInterface->v08(a2, a3, a4, pPoint);
+        packed = index;
         if (index == 0xffff)
         {
-            // the manifold replaced the vertex instead: drop the last simplex vertex and shift
-            pSimplex->m_rows[0].m_payload[0] = (uint8_t)(pSimplex->m_rows[0].m_payload[0] & 0xff);
-            uint8_t newCount = (uint8_t)(pSimplex->m_numRows - 1);
-            pSimplex->m_numRows = newCount;
-            uint8_t* pDst = (uint8_t*)pSimplex + newCount * 8 + 8;
-            uint8_t* pSrc = (uint8_t*)pSimplex + newCount * 8 + 0x10;
-            int n = (pSimplex->m_numVerticesA + pSimplex->m_numVerticesB - 1) >> 1;
-            for (int i = n; i >= 0; --i)
+            // the manifold replaced the vertex instead: drop the last simplex row and shift
+            pSimplex->m_rows[0].m_tail = pSimplex->m_rows[3].m_tail;
+            uint8_t  count = (uint8_t)(pSimplex->m_numRows - 1);
+            pSimplex->m_numRows = count;
+            pSimplex->m_rows[0].m_head = pSimplex->m_rows[3].m_head;
+            uint8_t*  pBase = (uint8_t*)pSimplex + count * 8;
+            uint32_t* pDst = (uint32_t*)(pBase + 4);
+            uint32_t* pSrc = (uint32_t*)(pBase + 0xc);
+            int n = ((int)pSimplex->m_numVerticesB + (int)pSimplex->m_numVerticesA - 1) >> 1;
+            for (int i = 0; i <= n; ++i)
             {
-                *(uint32_t*)pDst = *(uint32_t*)pSrc;
-                pDst += 4;
-                pSrc += 4;
+                *pDst = *pSrc;
+                ++pDst;
+                ++pSrc;
             }
-            SimplexVertex_setFrom((SimplexVertex*)((uint8_t*)pSimplex5 + dropped * 0x30),
-                                  (const hkVector4*)((uint8_t*)a5 + 0x90));
+            pSimplex5->m_v[dropped].setFrom(&pSimplex5->m_v[3].m_position);
             return 6;
         }
 
-        *(uint16_t*)((uint8_t*)a5 + 0x20) = index;
-        packedIndex = index;
+        pPoint->m_index = index;
+        pSimplex5->m_v[dropped].setFrom(&pPoint->m_position);
         result = dropped;
-        SimplexVertex_setFrom((SimplexVertex*)((uint8_t*)pSimplex5 + dropped * 0x30),
-                              (const hkVector4*)a5);
     }
     else
     {
-        if (!bReplace || pKey->m_ids[1] == 3)
+        if (bReplace != 0 && pKey->m_ids[1] != 3)
         {
-            uint16_t index = pInterface->v08(a3, a4, a5, pKey);
-            if (index == 0xffff)
-                return 5;
-            packedIndex = index;
-            *(uint16_t*)((uint8_t*)a5 + 0x20) = packedIndex;
+            packed = 0xffff;
         }
         else
         {
-            *(uint16_t*)((uint8_t*)a5 + 0x20) = packedIndex;
-
-            // make room in the middle of the packed-value bytes
-            int half = (pSimplex->m_numVerticesA + pSimplex->m_numVerticesB - 1) >> 1;
-            int slot = half + pSimplex->m_numRows * 2;
-            uint8_t* pDst = (uint8_t*)pSimplex + slot * 4 + 0xc;
-            uint8_t* pSrc = (uint8_t*)pSimplex + slot * 4 + 4;
-            for (int i = half; i >= 0; --i)
-            {
-                *(uint32_t*)pDst = *(uint32_t*)pSrc;
-                pDst -= 4;
-                pSrc -= 4;
-            }
-
-            // append the old row 0 as row m_numRows
-            hkPackedRow* pTail = &pSimplex->m_rows[pSimplex->m_numRows];
-            *(uint32_t*)&pTail->m_ids[0] = *(uint32_t*)&pSimplex->m_rows[0];
-            *(uint32_t*)&pTail->m_payload[0] = *(uint32_t*)&pSimplex->m_rows[0].m_payload[0];
-            ++pSimplex->m_numRows;
+            packed = pInterface->v08(a2, a3, a4, pPoint);
+            if (packed == 0xffff)
+                return 5;
         }
+        pPoint->m_index = packed;
+
+        // make room in the middle of the packed-value words and append the old row 0
+        int n = ((int)pSimplex->m_numVerticesB + (int)pSimplex->m_numVerticesA - 1) >> 1;
+        int slot = n + (int)pSimplex->m_numRows * 2;
+        uint32_t* pDst = (uint32_t*)((uint8_t*)pSimplex + slot * 4 + 4);
+        uint32_t* pSrc = (uint32_t*)((uint8_t*)pSimplex + slot * 4 + 0xc);
+        for (int i = n; i >= 0; --i)
+        {
+            *pDst = *pSrc;
+            --pDst;
+            --pSrc;
+        }
+        pSimplex->m_rows[pSimplex->m_numRows] = pSimplex->m_rows[0];
+        ++pSimplex->m_numRows;
     }
 
     // fill row 0 from the key
-    pSimplex->m_rows[0].m_ids[0] = (uint8_t)pKey->m_ids[0];
-    pSimplex->m_rows[0].m_ids[1] = (uint8_t)pKey->m_ids[1];
-    pSimplex->m_rows[0].m_value = packedIndex;
-    *(uint32_t*)&pSimplex->m_rows[0].m_payload[0] = 0;
+    pSimplex->m_rows[0].m_id0 = (uint8_t)pKey->m_ids[0];
+    pSimplex->m_rows[0].m_id1 = (uint8_t)pKey->m_ids[1];
+    pSimplex->m_rows[0].m_value = packed;
+    pSimplex->m_rows[0].m_tail = 0;
 
     // record one packed byte per simplex vertex; the 16-bit values live right after the rows
-    uint16_t* pWordValues =
-        (uint16_t*)((uint8_t*)pSimplex + 4 + (int)pSimplex->m_numRows * 8);
+    uint16_t* pWordValues = pSimplex->wordValues();
     uint8_t* pValues = pSimplex->valueBytes();
     int offset = 0;
-    for (int a = 0; a < (int)pKey->m_ids[0]; ++a)
+    for (int a = 0; a < pKey->m_ids[0]; ++a)
     {
         uint16_t v = pKey->m_values[a];
-        int found = 0;
         int i = 0;
-        for (; i < pSimplex->m_numVerticesA; ++i)
-            if (pWordValues[i] == v) { found = 1; break; }
-        if (!found)
+        for (; i < (int)pSimplex->m_numVerticesA; ++i)
+            if (pWordValues[i] == v)
+                goto foundA;
+
         {
-            int n = pSimplex->m_numVerticesA + pSimplex->m_numVerticesB;
+            int n = (int)pSimplex->m_numVerticesA + (int)pSimplex->m_numVerticesB;
             for (int j = n; j > i; --j)
                 pWordValues[j] = pWordValues[j - 1];
             pWordValues[i] = v;
             ++pSimplex->m_numVerticesA;
             offset += 0x10;
         }
+    foundA:
         pValues[a] = (uint8_t)(i << 4);
     }
     if (offset)
     {
-        for (int r = 1; r < pSimplex->m_numRows; ++r)
+        for (int r = 1; r < (int)pSimplex->m_numRows; ++r)
         {
-            uint8_t* pRow = (uint8_t*)&pSimplex->m_rows[r];
-            int n = pRow[0] + pRow[1];
-            for (int i = pRow[0]; i < n; ++i)
-                pRow[4 + i] = (uint8_t)(pRow[4 + i] + offset);
+            hkPackedRow* pRow = &pSimplex->m_rows[r];
+            for (int i = (int)pRow->m_id0; i < (int)pRow->m_id0 + (int)pRow->m_id1; ++i)
+            {
+                uint8_t value = pRow->m_payload[i];
+                value = (uint8_t)(value + (uint8_t)offset);
+                pRow->m_payload[i] = value;
+            }
         }
     }
-    for (int b = 0; b < (int)pKey->m_ids[1]; ++b)
+    for (int b = 0; b < pKey->m_ids[1]; ++b)
     {
         uint16_t v = pKey->m_values[pKey->m_ids[0] + b];
-        int i = 0;
-        int n = pSimplex->m_numVerticesA + pSimplex->m_numVerticesB;
+        int i = (int)pSimplex->m_numVerticesA;
+        int n = (int)pSimplex->m_numVerticesA + (int)pSimplex->m_numVerticesB;
         for (; i < n; ++i)
-            if (pWordValues[i] == v) break;
-        if (i == n)
-        {
-            pWordValues[i] = v;
-            ++pSimplex->m_numVerticesB;
-        }
-        pValues[pSimplex->m_numVerticesA + b] = (uint8_t)(i << 4);
+            if (pWordValues[i] == v)
+                goto foundB;
+
+        pWordValues[i] = v;
+        ++pSimplex->m_numVerticesB;
+    foundB:
+        pValues[pKey->m_ids[0] + b] = (uint8_t)(i << 4);
     }
     return result;
 }

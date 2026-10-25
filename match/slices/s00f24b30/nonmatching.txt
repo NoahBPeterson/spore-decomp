@@ -7,3 +7,7 @@
 00f25580  68  complete; decision-tree block ordering differs (control flow equivalent)
 00f256a0  10  complete; inner switch tree evaluates u<=root then branches, block order differs
 00f256e0  10  complete; same as 00f256a0 with the second constant set
+00f24b30  406  complete; /O2 scheduler + register allocation and a dead refcount block differ (442 vs 498 bytes); flags /O2 /MD /Gy /TP /arch:SSE; difftest WEAK 165/400 valid (8.3% coverage), no mismatch
+00f24d30  62  complete; redundant inlined default-construction zero stores eliminated by cl (67 vs 95 bytes); difftest FAIL 5/5 valid, only on uninitialised allocation-pool dwords at object +0x00/+0x1c that the original leaves untouched too
+00f24dc0  419  complete; frame size/register allocation + x87 fadd vs addss differ (587 vs 596 bytes); difftest UNSUPPORTED 0/400 (original faults: read/write faults, VirtualFree import)
+00f257f0  47  complete; store scheduling + zero-register reuse differs (127 vs 131 bytes); difftest UNSUPPORTED 0/400 (original faults: read faults, GetUserNameW import)

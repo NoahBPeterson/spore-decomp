@@ -1,232 +1,52 @@
-// Slice s01164140: Spore engine routines (naked transcription).
+// Slice s01164140: terrain weight-plane rotation.
+//
+//   0x01164140  in-place 45-degree butterfly between two 576-float weight planes
+//
+// The retail body reads its buffer pointer out of EAX (custom register
+// convention: `lea ecx,[eax+0x900]` with no stack argument), so it cannot be
+// expressed as a normal parameter.  It is modelled here as the plain cdecl
+// `void FUN_01164140(float*)` used by the caller slice (0x01164200 FillWeightMap
+// calls it with the buffer); that costs the 4-byte `mov eax,[esp+4]` prologue
+// load but everything after it is the retail instruction sequence.
+//
 // Flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast (no /EHsc).
 #include "types.h"
 
+// Both planes of the weight map, in floats.  0x900 bytes / 4 = 576 per plane.
+static const int kPlaneFloats = 576;
 
-// @ 0x01164140  (183 bytes)
-__declspec(naked) void FUN_01164140()
+// cos(45 deg) == sin(45 deg); retail loads it from 0x013ef584.
+static const float kSqrtHalf = 0.70710677f;
+
+// Each step rotates one xyz triple of the low plane against the matching triple
+// of the high plane:
+//
+//   lo = (lo + hi) * kSqrtHalf
+//   hi = (lo - hi) * kSqrtHalf
+//
+// (the rotated pair is written with the sum in the low plane and the difference
+// in the high plane, which is a 45-degree rotation of each component pair).
+//
+// @ 0x01164140
+void FUN_01164140(float* dst)
 {
-    __asm {
-        _emit 0x8D
-        _emit 0x88
-        _emit 0x00
-        _emit 0x09
-        _emit 0x00
-        _emit 0x00
-        // lea ecx, [eax + 0x900]
-        _emit 0x3B
-        _emit 0xC1
-        // cmp eax, ecx
-        _emit 0x0F
-        _emit 0x84
-        _emit 0xA8
-        _emit 0x00
-        _emit 0x00
-        _emit 0x00
-        // je 0x11641f6
-        _emit 0xF3
-        _emit 0x0F
-        _emit 0x10
-        _emit 0x1D
-        _emit 0x84
-        _emit 0xF5
-        _emit 0x3E
-        _emit 0x01
-        // movss xmm3, dword ptr [0x13ef584]
-        _emit 0x83
-        _emit 0xC0
-        _emit 0x04
-        // add eax, 4
-        _emit 0x8D
-        _emit 0xA4
-        _emit 0x24
-        _emit 0x00
-        _emit 0x00
-        _emit 0x00
-        _emit 0x00
-        // lea esp, [esp]
-        _emit 0xF3
-        _emit 0x0F
-        _emit 0x10
-        _emit 0x40
-        _emit 0xFC
-        // movss xmm0, dword ptr [eax - 4]
-        _emit 0xF3
-        _emit 0x0F
-        _emit 0x10
-        _emit 0xB8
-        _emit 0xFC
-        _emit 0x08
-        _emit 0x00
-        _emit 0x00
-        // movss xmm7, dword ptr [eax + 0x8fc]
-        _emit 0xF3
-        _emit 0x0F
-        _emit 0x10
-        _emit 0x88
-        _emit 0x00
-        _emit 0x09
-        _emit 0x00
-        _emit 0x00
-        // movss xmm1, dword ptr [eax + 0x900]
-        _emit 0xF3
-        _emit 0x0F
-        _emit 0x10
-        _emit 0x28
-        // movss xmm5, dword ptr [eax]
-        _emit 0xF3
-        _emit 0x0F
-        _emit 0x10
-        _emit 0x90
-        _emit 0x04
-        _emit 0x09
-        _emit 0x00
-        _emit 0x00
-        // movss xmm2, dword ptr [eax + 0x904]
-        _emit 0xF3
-        _emit 0x0F
-        _emit 0x10
-        _emit 0x70
-        _emit 0x04
-        // movss xmm6, dword ptr [eax + 4]
-        _emit 0x0F
-        _emit 0x28
-        _emit 0xE0
-        // movaps xmm4, xmm0
-        _emit 0xF3
-        _emit 0x0F
-        _emit 0x58
-        _emit 0xC7
-        // addss xmm0, xmm7
-        _emit 0xF3
-        _emit 0x0F
-        _emit 0x59
-        _emit 0xC3
-        // mulss xmm0, xmm3
-        _emit 0xF3
-        _emit 0x0F
-        _emit 0x11
-        _emit 0x40
-        _emit 0xFC
-        // movss dword ptr [eax - 4], xmm0
-        _emit 0xF3
-        _emit 0x0F
-        _emit 0x10
-        _emit 0x00
-        // movss xmm0, dword ptr [eax]
-        _emit 0xF3
-        _emit 0x0F
-        _emit 0x5C
-        _emit 0xE9
-        // subss xmm5, xmm1
-        _emit 0xF3
-        _emit 0x0F
-        _emit 0x5C
-        _emit 0xF2
-        // subss xmm6, xmm2
-        _emit 0xF3
-        _emit 0x0F
-        _emit 0x58
-        _emit 0xC8
-        // addss xmm1, xmm0
-        _emit 0xF3
-        _emit 0x0F
-        _emit 0x10
-        _emit 0x40
-        _emit 0x04
-        // movss xmm0, dword ptr [eax + 4]
-        _emit 0xF3
-        _emit 0x0F
-        _emit 0x5C
-        _emit 0xE7
-        // subss xmm4, xmm7
-        _emit 0xF3
-        _emit 0x0F
-        _emit 0x58
-        _emit 0xD0
-        // addss xmm2, xmm0
-        _emit 0xF3
-        _emit 0x0F
-        _emit 0x59
-        _emit 0xE3
-        // mulss xmm4, xmm3
-        _emit 0xF3
-        _emit 0x0F
-        _emit 0x59
-        _emit 0xEB
-        // mulss xmm5, xmm3
-        _emit 0xF3
-        _emit 0x0F
-        _emit 0x59
-        _emit 0xF3
-        // mulss xmm6, xmm3
-        _emit 0xF3
-        _emit 0x0F
-        _emit 0x59
-        _emit 0xCB
-        // mulss xmm1, xmm3
-        _emit 0xF3
-        _emit 0x0F
-        _emit 0x59
-        _emit 0xD3
-        // mulss xmm2, xmm3
-        _emit 0xF3
-        _emit 0x0F
-        _emit 0x11
-        _emit 0xA0
-        _emit 0xFC
-        _emit 0x08
-        _emit 0x00
-        _emit 0x00
-        // movss dword ptr [eax + 0x8fc], xmm4
-        _emit 0xF3
-        _emit 0x0F
-        _emit 0x11
-        _emit 0x08
-        // movss dword ptr [eax], xmm1
-        _emit 0xF3
-        _emit 0x0F
-        _emit 0x11
-        _emit 0xA8
-        _emit 0x00
-        _emit 0x09
-        _emit 0x00
-        _emit 0x00
-        // movss dword ptr [eax + 0x900], xmm5
-        _emit 0xF3
-        _emit 0x0F
-        _emit 0x11
-        _emit 0x50
-        _emit 0x04
-        // movss dword ptr [eax + 4], xmm2
-        _emit 0xF3
-        _emit 0x0F
-        _emit 0x11
-        _emit 0xB0
-        _emit 0x04
-        _emit 0x09
-        _emit 0x00
-        _emit 0x00
-        // movss dword ptr [eax + 0x904], xmm6
-        _emit 0x83
-        _emit 0xC0
-        _emit 0x0C
-        // add eax, 0xc
-        _emit 0x8D
-        _emit 0x50
-        _emit 0xFC
-        // lea edx, [eax - 4]
-        _emit 0x3B
-        _emit 0xD1
-        // cmp edx, ecx
-        _emit 0x0F
-        _emit 0x85
-        _emit 0x6A
-        _emit 0xFF
-        _emit 0xFF
-        _emit 0xFF
-        // jne 0x1164160
-        _emit 0xC3
-        // ret 
+    const float s = kSqrtHalf;
+
+    for (float* p = dst; p != dst + kPlaneFloats; p += 3) {
+        // The x component sums as (lo + hi), y and z as (hi + lo); adding
+        // floats is commutative but /fp:fast keeps the retail operand order.
+        const float lo0 = p[0];
+        const float hi0 = p[kPlaneFloats + 0];
+        const float lo1 = p[1];
+        const float hi1 = p[kPlaneFloats + 1];
+        const float lo2 = p[2];
+        const float hi2 = p[kPlaneFloats + 2];
+
+        p[0] = (lo0 + hi0) * s;
+        p[kPlaneFloats + 0] = (lo0 - hi0) * s;
+        p[1] = (hi1 + lo1) * s;
+        p[kPlaneFloats + 1] = (lo1 - hi1) * s;
+        p[2] = (hi2 + lo2) * s;
+        p[kPlaneFloats + 2] = (lo2 - hi2) * s;
     }
 }

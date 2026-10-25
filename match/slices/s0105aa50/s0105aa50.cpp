@@ -426,20 +426,26 @@ struct Creature {
     Vec3* GetVec3();                                                  // 0x00c0bc00
 };
 
-struct TF { char pad[0x20]; Vec3 f20; Vec3 f2c; };
-struct TFA { void F00bbcb10(); };                                     // 0x00bbcb10
-struct Pollinator { void Update(); };                                 // 0x0060d860
-struct RelationshipMgr { float RecordEvent(int key, float amount); }; // 0x00d06240
+struct TF {
+    char pad[0x20];
+    Vec3 f20;
+    Vec3 f2c;
+    void F00bbcb10(const Vec3* v, int z);                             // 0x00bbcb10
+};
+struct Pollinator { void Update(const void* key, void* src); };       // 0x0060d860
+struct RelationshipMgr {                                              // 0x00d06240
+    float RecordEvent(int empire, int id, int key, float amount);
+};
 struct Tok { char pad[0xc]; void* f0c; };
 struct Msg { void Fff6380(); };                                       // 0x00ff6380
-struct CreatureEdit { void AutoTest(); };                             // 0x00676e90
+struct CreatureEdit { void AutoTest(int key, int flag); };            // 0x00676e90
 
 struct GDSub {
     P8(a) P(b0) P(b1) P(b2)
     virtual void* Slot2c();                                           // +0x2c (slot 11)
 };
 struct GDElem {
-    P8(a) P4(b)
+    P8(a) P(b0) P(b1) P(b2)
     virtual void* Slot2c();                                           // +0x2c of the element itself
     char pad[0x34 - 4];
     GDSub sub;                                                        // +0x34
@@ -471,21 +477,20 @@ struct GameDataVec { char pad[4]; void** mBegin; void** mEnd; };
 
 bool __stdcall OnHit(void* self, void* a2, int a3, int zero);          // 0x010593e0 cSPToolStrategy::OnHit
 bool __stdcall CanUseToolBase(void* self, Vec3* pos, int a3);          // 0x01053980 cSPToolStrategy::CanUseToolAtLocation
-int __stdcall SetErrorEvent(void* self, int key, int flag);            // 0x010527f0 cSPToolStrategy::SetErrorEvent
-void __stdcall CreatePanicBubbleForTool(void* self, Vec3 pos);         // 0x01059170
+int SetErrorEvent(void* self, int key, int flag);                      // 0x010527f0 cSPToolStrategy::SetErrorEvent
+void CreatePanicBubbleForTool(void* self, Vec3 pos);                   // 0x01059170
 PlanetRecord* __stdcall GetActivePlanetRecord();                       // 0x010212a0
 Empire* __stdcall GetPlayerEmpire();                                   // 0x01021300
-int __stdcall GetPlayerEmpireID(int key);                              // 0x01021090
+int GetPlayerEmpireID();                                               // 0x01021090
 MsgServer* MessageServer();                                            // 0x0067dcc0
-CreatureEdit* __stdcall AchievementsController(int a, int b);           // 0x00675250
+CreatureEdit* AchievementsController();                                // 0x00675250
 UFOSim* GetUFOSimulator();                                             // 0x00ffbe50
 Planet* PlanetModel();                                                 // 0x00b3d350
 Cursor* GetGameTerrainCursor();                                        // 0x00b30d70
 TF* TerraformingMgr();                                                 // 0x00b3d390
-TFA* __stdcall TerraformingMgrArg(int v);                              // 0x00b3d430
-RelationshipMgr* __stdcall RelationshipManager(int a, int b);          // 0x00b3d2c0
-Pollinator* __stdcall GetPollinator(const void* key, void* src);       // 0x0067cb30
-Vec3* __stdcall RandomDirection3(Vec3* out);                           // 0x00b7e560
+RelationshipMgr* RelationshipManager();                                // 0x00b3d2c0
+Pollinator* GetPollinator();                                           // 0x0067cb30
+Vec3* RandomDirection3(Vec3* out);                                     // 0x00b7e560
 WalkAround* F1015df0();                                                // 0x01015df0
 WM* WindowManager();                                                   // 0x0067caa0
 
@@ -572,7 +577,7 @@ bool __stdcall DefaultProjectileWeaponDoToolAction(Strategy* self, Vec3* pos, in
         if (av) ((Msg*)av)->Fff6380();
         MessageServer()->Slot18(0x490d429, 0, 0, 0);
         g_spaceTokenTranslator->f0c = GetActivePlanetRecord();
-        AchievementsController(0xcfc6c8ee, 1)->AutoTest();
+        AchievementsController()->AutoTest(0xcfc6c8ee, 1);
         GetUFOSimulator()->f18 = 0;
     }
     int* k2 = (int*)self->GetKey();
@@ -582,15 +587,15 @@ bool __stdcall DefaultProjectileWeaponDoToolAction(Strategy* self, Vec3* pos, in
             Creature* cr = (Creature*)a4->SlotC(0xd0036e08);
             if (cr) {
                 void* prof = &cr->GetSpeciesProfile()->f504;
-                GetPollinator((const void*)0xbe96cd0, prof)->Update();
-                TerraformingMgrArg(cr->F00c0bc00(0))->F00bbcb10();
+                GetPollinator()->Update((const void*)0xbe96cd0, prof);
+                TerraformingMgr()->F00bbcb10(cr->GetVec3(), 0);
                 float f = cr->f5e0;
                 Vec3 dir;
                 cr->sub.Slot18(f, -1, 0, RandomDirection3(&dir), 0);
                 Empire* e = GetActivePlanet()->F00c71e30();
                 if (e && e != GetPlayerEmpire()) {
-                    RelationshipManager(e->f84, GetPlayerEmpireID(0x526e531))
-                        ->RecordEvent(0x526e531, g_relEventAmount);
+                    RelationshipManager()->RecordEvent(e->f84, GetPlayerEmpireID(),
+                                                       0x526e531, g_relEventAmount);
                 }
             }
         }

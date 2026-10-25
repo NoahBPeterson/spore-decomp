@@ -1,3 +1,4 @@
+# <va> <diff-bytes> <reason>
 01212800 76 MSVC EH unwind-funclet group (no prologue; reads caller EBP; tail-jmps into local dtors/delete + __ehhandler thunk, funcinfo 0x15005ac); orphaned - enclosing fn EH prolog @0x7582b2; no standalone C++ source
 012129a0 43 MSVC EH unwind-funclet group (no prologue; reads caller EBP; tail-jmps into local dtors/delete + __ehhandler thunk, funcinfo 0x1500750); orphaned - enclosing fn EH prolog @0x75b192; no standalone C++ source
 012129d0 50 MSVC EH unwind-funclet group (no prologue; reads caller EBP; tail-jmps into local dtors/delete + __ehhandler thunk, funcinfo 0x1500784); orphaned - enclosing fn EH prolog @0x75d4b8; no standalone C++ source
@@ -22,7 +23,6 @@
 012136b0 82 compiler-generated EH cleanup funclet; enclosing source is outside the slice
 01213750 153 compiler-generated EH cleanup funclet (PDB names it cRuntimeModelBuilder::CreateModelMeshes, but this VA is the cleanup fragment); enclosing body outside the slice
 012137f0 94 compiler-generated EH cleanup funclet; enclosing source is outside the slice
-012138a0 11 body `g_16f33b78 &= ~1` reproduces the first 13 bytes; the trailing 11-byte compiler EH/throw funclet is not reproduced
 012138e0 68 compiler-generated EH cleanup funclet; enclosing source is outside the slice
 01213930 68 compiler-generated EH cleanup funclet; enclosing source is outside the slice
 01213a10 86 compiler-generated EH cleanup funclet; enclosing source is outside the slice

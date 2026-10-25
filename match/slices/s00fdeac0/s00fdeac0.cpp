@@ -10,6 +10,7 @@
 // IBakeManager slots and BakeParameters from Spore-ModAPI Editors/BakeManager.h.
 // Callees that only have FUN_ names are named after their use here (descriptive, not PDB).
 #include "types.h"
+#include <intrin.h>
 
 typedef unsigned int size_t_;
 
@@ -272,12 +273,14 @@ struct IBakeManager {
 IBakeManager* BakeManager();                    // 0x00401010
 
 // ---- universe / planet ----
+struct cCivData;
 struct cPlanetRecord {
     uint32_t pad00[0xbc / 4];
     ResourceKey* mPlantsBegin;                  // +0xbc  vector<ResourceKey>
     ResourceKey* mPlantsEnd;                    // +0xc0
     uint32_t size() const { return (uint32_t)(mPlantsEnd - mPlantsBegin); }
     void* GetTransitionData();                  // 0x00b8d9b0
+    cCivData* GetOwnerCiv();                    // 0x00b8de30
 };
 
 struct ITransitionTarget {
@@ -298,6 +301,8 @@ struct cPlanetItem {
     int GetOwnerID();                           // 0x00ff0420
     void ApplyKeyMap(const cKeyMap& map);       // 0x00ff3190
     void SetActive(bool active);                // 0x00c37130
+    char pad08[0x508 - 0x08];
+    void* mpInterface508;                       // +0x508
 };
 struct PlanetItemVector {
     cPlanetItem** mpBegin;
@@ -310,6 +315,7 @@ struct cPlanet {
     uint32_t pad00[0x13c / 4];
     cStarRecordRef* mpStarRecord;               // +0x13c
     int GetPlanetType();                        // 0x00c70e00
+    int GetPlanetKind();                        // 0x00c70880
     PlanetItemVector& GetItems();               // 0x00c71000
     cPlanetItem* GetItem(int index);            // 0x00c71030
     const ResourceKey* GetPlanetKey();          // 0x00c713e0
@@ -317,9 +323,11 @@ struct cPlanet {
     bool IsHomePlanet();                        // 0x00c73250
 };
 
+struct cEmpire;
 namespace cSPLivingUniverse {
 cPlanet* GetActivePlanet();                     // 0x01021260
 cPlanetRecord* GetActivePlanetRecord();         // 0x010212a0
+cEmpire* GetPlayerEmpire();                     // 0x01021300
 }
 void UniverseUpdateActive();                    // 0x01021230
 
@@ -330,9 +338,14 @@ struct cMission {
 };
 cMission* ActiveMission();                      // 0x01021240
 
+struct cHomePlanet {
+    const ResourceKey* GetBannerKey();          // 0x00b8e090
+};
 struct cEmpire {
     cKeyMap GetKeyMap();                        // 0x00c352f0
     const ResourceKey* GetUFOKey();             // 0x00c326b0
+    const ResourceKey* GetCityKey();            // 0x00c30f90
+    cHomePlanet* GetHomePlanet();               // 0x00c31730
 };
 struct cStarManager {
     cMission* GetCurrentMission();              // 0x00ba70a0
@@ -340,7 +353,10 @@ struct cStarManager {
 };
 cStarManager* StarManager();                    // 0x00b3d2a0
 
-struct cGameNounManager { int GetPlayerEmpireID(); };   // 0x00b1f9d0
+struct cGameNounManager {
+    int GetPlayerEmpireID();                    // 0x00b1f9d0
+    void* GetGameDataVector(void*, void*, void*, void*, uint32_t);   // 0x00b21340 (ret 0x14)
+};   // 0x00b3d300
 cGameNounManager* NounManager();                // 0x00b3d300
 
 struct AchievementsCtl { void AutoTest(uint32_t id, int value); };   // 0x00676e90
@@ -354,6 +370,9 @@ struct cSpaceUI {
     cSPUISpace* mpUISpace;                      // +0x14
     uint32_t pad18[14];
     uint32_t mFlags;                            // +0x50
+    void DestroyNPC_UFOs(char, char, int);      // 0x01009470
+    void FUN_01003230();                        // 0x01003230
+    void FUN_010039c0(void* star);              // 0x010039c0
 };
 
 struct cPropertyList {
@@ -442,6 +461,133 @@ IRenderer* Renderer();                          // 0x0067dd50
 
 extern const ResourceKey kDefaultKey;           // 0x016d9950
 
+// ---- planet-entry transition helpers ----
+struct Vector3 { float x, y, z; };
+
+// Global record filled by ResetTransitionParams (0x00ef19f0) and read by the transition code.
+struct KeyVector {
+    ResourceKey* mpBegin;                       // +0x00
+    ResourceKey* mpEnd;                         // +0x04
+    ResourceKey* mpCapacity;                    // +0x08
+    void DoInsertValue(ResourceKey* position, const ResourceKey& value);   // 0x004e3e10 (ret 8)
+    void push_back(const ResourceKey& value)
+    {
+        if (mpEnd < mpCapacity)
+            *mpEnd++ = value;
+        else
+            DoInsertValue(mpEnd, value);
+    }
+};
+struct TransitionParams {
+    void*       mpTargetData;                   // +0x00
+    uint32_t    mTypeHash;                      // +0x04
+    uint32_t    mField08;                       // +0x08
+    uint32_t    pad0c[3];                       // +0x0c
+    ResourceKey mEmpireKey;                     // +0x18
+    uint32_t    mField24;                       // +0x24
+    uint32_t    mField28;                       // +0x28
+    uint32_t    mField2c;                       // +0x2c
+    KeyVector   mKeys;                          // +0x30
+};
+TransitionParams* ResetTransitionParams();      // 0x00ef19f0
+extern uint32_t DAT_015b4050;                   // 0x015b4050
+
+template <class T> struct PtrVec {
+    T** mpBegin;
+    T** mpEnd;
+    T** mpCapacity;
+};
+template <class T> struct VecOut {
+    uint32_t mPad00;
+    PtrVec<T> mVec;                             // +0x04
+};
+
+struct cSolarSystem {
+    void ActivateGraphics(int on);              // 0x00c86c70
+};
+struct cStar {
+    cSolarSystem* GetSolarSystem();             // 0x00c8b770
+};
+struct cCivData {
+    const Vector3* GetCities();                 // 0x005c65e0
+};
+
+// SP::cSPSpaceGfx / render manager reached through 0x00b3d470.
+struct RenderMgr {
+    char  pad00[0x6c];
+    void* mpInterface6c;                        // +0x6c
+    void FUN_01034810();                        // 0x01034810
+    void Setup(int a, int kind);                // 0x01034950
+    void FUN_01036590(void* planet);            // 0x01036590
+    void UpdateSpaceColor(Vector3 color);       // 0x01036940
+};
+RenderMgr* GetRenderMgr();                      // 0x00b3d470
+
+struct IdVector {
+    uint32_t* mpBegin;
+    uint32_t* mpEnd;
+    uint32_t* mpCapacity;
+};
+struct cTutorialManager {
+    IdVector* GetTargetEmpires();               // 0x010662c0
+};
+cTutorialManager* TutorialManager();            // 0x010666a0
+struct cTutorialSystem {
+    void StartModeTutorial(int a, uint32_t mode, int b);   // 0x00e3e350 (ret 0xc)
+};
+cTutorialSystem* TutorialSystem();              // 0x00b3d410
+
+cStar* FUN_01021230();                          // 0x01021230 (active star)
+void  FUN_01021740(void* planet);               // 0x01021740
+void  FUN_01021960(int mode);                   // 0x01021960
+
+extern "C" void* App();                         // 0x0067dd10
+extern "C" void* FUN_0067de00();                // 0x0067de00
+extern "C" void* FUN_0067ddd0();                // 0x0067ddd0 (effects manager)
+extern "C" void* FUN_0067dd40();                // 0x0067dd40
+extern "C" void* FUN_00b3d310();                // 0x00b3d310
+extern "C" void* MessageServerGet();            // 0x00883860 (EA::Messaging::GetServer)
+
+// Vtable dispatch helpers for the small interface objects above.
+#define VTP(p)          (*(void***)(p))
+#define VCP0(p,off)     (((void*(__thiscall*)(void*))             VTP(p)[(off)/4])((void*)(p)))
+#define VCP1(p,off,a)   (((void*(__thiscall*)(void*,int))         VTP(p)[(off)/4])((void*)(p),(int)(a)))
+#define VC0(p,off)      (((int (__thiscall*)(void*))             VTP(p)[(off)/4])((void*)(p)))
+#define VCB0(p,off)     (((bool(__thiscall*)(void*))             VTP(p)[(off)/4])((void*)(p)))
+#define VC1(p,off,a)    (((int (__thiscall*)(void*,int))          VTP(p)[(off)/4])((void*)(p),(int)(a)))
+#define VC2(p,off,a,b)  (((int (__thiscall*)(void*,int,int))      VTP(p)[(off)/4])((void*)(p),(int)(a),(int)(b)))
+
+// Stack message used when leaving a planet; vtables 0x013eb90c / 0x013eb844.
+extern void* g_slotMsgVtbl0;
+extern void* g_slotMsgVtbl1;
+struct PlanetLeaveMessage {
+    void*    mpVtbl;                            // +0x00
+    long     mRef;                              // +0x04
+    void*    mpRecord;                          // +0x08
+    uint32_t mField0c;                          // +0x0c
+    uint32_t mField10;                          // +0x10
+    uint32_t mField14;                          // +0x14
+    uint32_t mField18;                          // +0x18
+    uint32_t pad1c[5];                          // +0x1c
+    uint32_t mField30;                          // +0x30
+    uint32_t pad34;                             // +0x34
+    uint32_t mField38;                          // +0x38
+    uint32_t pad3c;                             // +0x3c
+    void Destruct();                            // 0x00421cf0
+};
+
+struct Editor {
+    char     pad00[0x74];
+    void*    mpMgr;                             // +0x74
+    char     pad78[0xb8 - 0x78];
+    uint32_t mFieldB8;                          // +0xb8
+    char     padBC[0xc4 - 0xbc];
+    uint32_t mFieldC4;                          // +0xc4
+    char     padC8[0xd4 - 0xc8];
+    void*    mpCtl;                             // +0xd4
+};
+extern Editor* DAT_016c7aa4;                    // 0x016c7aa4
+
 namespace SP {
 
 class cAppModeSpace { public:
@@ -457,11 +603,15 @@ class cAppModeSpace { public:
     uint32_t mLastBakedTag;                     // +0x16c
     eastl::list<ResourceKey> mNeedsBakingForTransition;   // +0x170
     eastl::list<bool> mOldRenderLayerStates;    // +0x17c
+    char pad188[0x194 - 0x188];
+    uint32_t mField194;                         // +0x194
 
     void TransitionFromSolarToPlanet();
     void OnPlanetRecordReady();                 // 0x00fdf5b0
     void EnterPlanetTransition();               // 0x00fdf5f0
     void ExitPlanetTransition();                // 0x00fdf8e0
+    void TransitionFromPlanetToSolar(bool);     // 0x00fde3e0
+    void AwardSpaceAchievements();              // 0x00fdbf90
 };
 
 // @ 0x00fdeac0
@@ -648,33 +798,110 @@ void cAppModeSpace::EnterPlanetTransition()
     cPlanetRecord* record = cSPLivingUniverse::GetActivePlanetRecord();
     GonzagoTransition()->Begin();
 
-    if (!record->GetTransitionData()) {
+    void* transitionData = record->GetTransitionData();
+    if (!transitionData) {
         TransitionFromSolarToPlanet();
         return;
     }
 
-    mDisabledRenderLayersForBaking = true;
-    mBakingForPlanetEntryEnded = false;
-    mElapsedBakeTimeForTransitionMS = 0;
+    void* app = App();
+    void* appObject = VCP0(app, 0x50);
+    VC1(appObject, 0x34, 0);
 
-    PlanetItemVector& items = planet->GetItems();
-    for (int i = 0; i < items.size(); ++i)
-        items.mpBegin[i]->SetActive(false);
+    TransitionParams* params = ResetTransitionParams();
+    params->mpTargetData = transitionData;
+    params->mTypeHash = 0x366a930d;
+    params->mField08 = DAT_015b4050;
+    params->mEmpireKey = *cSPLivingUniverse::GetPlayerEmpire()->GetCityKey();
+    params->mField24 = 2;
+    params->mField28 = 2;
 
-    UniverseUpdateActive();
-    MessageServer()->PostMSG(0x279a5da, 0, 0);
+    IdVector* targets = TutorialManager()->GetTargetEmpires();
+    int numTargets = (int)(targets->mpEnd - targets->mpBegin);
+    for (int i = 0; i < numTargets; i++) {
+        cEmpire* empire = StarManager()->GetEmpireByID(targets->mpBegin[i]);
+        if (empire) {
+            cHomePlanet* home = empire->GetHomePlanet();
+            if (home)
+                params->mKeys.push_back(*home->GetBannerKey());
+        }
+    }
+
+    mpSpaceUI->DestroyNPC_UFOs(1, 1, 0);
+    mpSpaceUI->FUN_010039c0(FUN_01021230());
+
+    VecOut<cPlanetItem>* items = (VecOut<cPlanetItem>*)NounManager()->GetGameDataVector(
+        (void*)0xcd7d10, (void*)0xd3d420, (void*)0xad48b0, (void*)0xb1e500, 0x18ebadc);
+    int numItems = (int)(items->mVec.mpEnd - items->mVec.mpBegin);
+    for (int i = 0; i < numItems; i++) {
+        cPlanetItem* item = items->mVec.mpBegin[i];
+        item->SetActive(false);
+        VC1(&item->mpInterface508, 0x50, 0);
+    }
+
+    void* obj = FUN_0067de00();
+    VC1(obj, 0xe0, 0);
+    obj = FUN_0067ddd0();
+    VC2(obj, 0x98, 0x14, 1);
+    obj = FUN_0067dd40();
+    VC1(obj, 0x100, 1);
+    obj = FUN_0067dd40();
+    VC1(obj, 0x108, 0);
+
+    RenderMgr* renderMgr = GetRenderMgr();
+    void* iface = renderMgr->mpInterface6c;
+    if (iface && !VCB0(iface, 0x10))
+        VC1(iface, 0x08, 0);
+
+    FUN_01021960(0);
+    renderMgr->FUN_01034810();
+    renderMgr->Setup(1, planet->GetPlanetKind());
+
+    cSolarSystem* solar = FUN_01021230()->GetSolarSystem();
+    if (solar)
+        solar->ActivateGraphics(1);
+
+    renderMgr->FUN_01036590(planet);
+    GetRenderMgr()->UpdateSpaceColor(*record->GetOwnerCiv()->GetCities());
+    FUN_01021740(planet);
+
+    mField194 = 0xa;
+    TutorialSystem()->StartModeTutorial(1, 0x1654c10, 1);
 }
 
 // @ 0x00fdf8e0
 void cAppModeSpace::ExitPlanetTransition()
 {
-    cPlanet* planet = cSPLivingUniverse::GetActivePlanet();
-    cPlanetRecord* record = cSPLivingUniverse::GetActivePlanetRecord();
-    (void)record;
+    void* transitionMgr = FUN_00b3d310();
+    VC1(transitionMgr, 0x14, 0x1654c05);
+    mpSpaceUI->FUN_01003230();
+    TransitionFromPlanetToSolar(true);
 
-    PlanetItemVector& items = planet->GetItems();
-    for (int i = 0; i < items.size(); ++i)
-        items.mpBegin[i]->SetActive(true);
+    Editor* editor = DAT_016c7aa4;
+    if (editor) {
+        uint32_t* pField = &editor->mFieldB8;
+        if (pField) {
+            PlanetLeaveMessage msg;
+            msg.mField30 = 0;
+            msg.mpVtbl = (void*)0x013eb90c;
+            _InterlockedExchange(&msg.mRef, 0);
+            msg.mpVtbl = (void*)0x013eb844;
+            msg.mField38 = 0;
+            msg.mpRecord = cSPLivingUniverse::GetActivePlanetRecord();
+            msg.mField10 = editor->mFieldB8;
+            msg.mField18 = (editor->mFieldC4 == 5) ? 1 : 0;
+            IMessageServer* server = (IMessageServer*)MessageServerGet();
+            server->PostMSG(0x43f2592, &msg, 0);
+            msg.Destruct();
+        }
+        AwardSpaceAchievements();
+    }
+
+    VecOut<cPlanetItem>* items = (VecOut<cPlanetItem>*)NounManager()->GetGameDataVector(
+        (void*)0xcd7d10, (void*)0xd3d420, (void*)0xad48b0, (void*)0xb1e500, 0x18ebadc);
+    int numItems = (int)(items->mVec.mpEnd - items->mVec.mpBegin);
+    for (int i = 0; i < numItems; i++)
+        items->mVec.mpBegin[i]->SetActive(true);
 }
 
 } // namespace SP

@@ -10,3 +10,5 @@
 00fd7b30  297  cMovieSystem constructor [equiv: PASS]
 00fd7cd0  128  cMovieSystem destructor
 00fd7d80  111  cMovieSystem record/update tick (StopRecordingMovie): complete; compiled /O2 /MD /Gy /TP /arch:SSE /fp:fast; frame float lives in xmm1 (orig xmm0) and floor-by-cvtss2si is asm-block + ternary instead of the original's cmov sequence [equiv: PASS]
+00fd7260  460  DrawLayer: complete viewer/Clear/SetMaterialColor/Update/Render path plus raster recapture and FillSpriteTexture; compiled /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast; 597 vs 652 B; clamp01 stays a non-inlined SSE helper call and color[] sits 8 B lower in the frame, so block scheduling differs [equiv: WEAK 240 valid inputs, 56.7% coverage]
+00fd7f80  144  EndRecording: complete recorder teardown (v10/v18/v08 dispatch, feedback reset, audio stop, encoder release, packet-list unlink); compiled /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast; 438 vs 438 B; the paired -1 field stores use one register instead of the original's eax/ecx pair, shifting the loop entry by 2 B [equiv: WEAK 208 valid inputs, 10.5% coverage]

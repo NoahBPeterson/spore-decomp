@@ -297,9 +297,9 @@ struct FontObj {
 };
 // D3D9 COM calls are __stdcall: the object is the first stack argument.
 struct IComResource {
-    virtual void v00() = 0;
-    virtual void v04() = 0;
-    virtual void v08(void* self) = 0;           // +0x08
+    virtual void __stdcall v00() = 0;
+    virtual void __stdcall v04() = 0;
+    virtual void __stdcall v08() = 0;           // +0x08
 };
 struct ID3DDevice9 {
     virtual void __stdcall v00()=0; virtual void __stdcall v04()=0;
@@ -358,7 +358,7 @@ extern float kFloat_13f9428;
 extern float kFloat_13f4fd0;
 extern void* g_pMutexTag;                            // 0x01493900
 extern char g_MutexTagObj;                           // 0x01493900 (address is the tag)
-struct PacketNode { PacketNode* next; PacketNode* prev; int payload; };
+struct PacketNode { PacketNode* next; PacketNode* prev; void* payload; };
 
 // @ 0x00fd71e0
 void FUN_00fd71e0(int p1, int p2, int p3, int mode, IInputHandler* handler)
@@ -375,23 +375,19 @@ void FUN_00fd71e0(int p1, int p2, int p3, int mode, IInputHandler* handler)
 // maxss/minss clamp: (min(max(0,x),1)), matching the original's NaN semantics.
 static float Clamp01(float x)
 {
-    __m128 v = _mm_max_ss(_mm_setzero_ps(), _mm_set_ss(x));
-    v = _mm_min_ss(v, _mm_set_ss(kFloat_1485720));
-    return _mm_cvtss_f32(v);
+    return _mm_cvtss_f32(_mm_min_ss(_mm_max_ss(_mm_setzero_ps(), _mm_set_ss(x)), _mm_set_ss(kFloat_1485720)));
 }
 
 // @ 0x00fd7260
 void cMovieSystem::DrawLayer(int, int arg2, int viewerArg, int userData)
 {
-    SPcViewer** viewer = (SPcViewer**)viewerArg;
-    MoviePlayer* pl = mDrawPlayer;
-    if (pl != 0) {
+    if (mDrawPlayer != 0) {
         if (!mField328) {
             mField328 = true;
             SP_MessageServer()->PostMsg(0x49731a9, 0, 0);
         }
-        if (!pl->CanPlay()) {
-            pl->Decode();
+        if (!mDrawPlayer->CanPlay()) {
+            mDrawPlayer->Decode();
             float one = kFloat_1485720;
             float color[4];
             color[0] = one;
@@ -399,21 +395,21 @@ void cMovieSystem::DrawLayer(int, int arg2, int viewerArg, int userData)
             color[2] = one;
             color[3] = one;
             if (mFadeInTime > 0.0f) {
-                float r = mField5c / mFadeInTime;
-                color[3] = Clamp01(r);
+                float t = mField5c / mFadeInTime;
+                color[3] = Clamp01(t);
             }
             if (mFadeOutTime > 0.0f) {
-                int n = (pl->mFieldB8 != 0) ? pl->mFieldB8->mField34 : 0;
-                float x = (float)(uint32_t)(pl->mWidth - n - 1) / pl->mFps / mFadeOutTime;
+                int n = (mDrawPlayer->mFieldB8 != 0) ? mDrawPlayer->mFieldB8->mField34 : 0;
+                float x = (float)(uint32_t)(mDrawPlayer->mWidth - n - 1) / mDrawPlayer->mFps / mFadeOutTime;
                 color[3] = color[3] * Clamp01(x);
             }
+            SPcViewer** viewer = (SPcViewer**)viewerArg;
             if (mField48.mField49)
                 (*viewer)->Clear(7);
-            EmbeddedState* state = (EmbeddedState*)((MaterialSlot*)mMaterials[mPlayerIndex + 1])->mState;
-            state->SetMaterialColor(color);
+            ((EmbeddedState*)((MaterialSlot*)mMaterials[mPlayerIndex + 1])->mState)->SetMaterialColor(color);
             if ((*viewer)->Update()) {
                 ((FontObj*)mVideoDecoder)->SetUserData((void*)userData);
-                pl->Render();
+                mDrawPlayer->Render();
                 ((FontObj*)mVideoDecoder)->SetUserData(0);
                 (*viewer)->PostFrame();
             }
@@ -433,8 +429,8 @@ void cMovieSystem::DrawLayer(int, int arg2, int viewerArg, int userData)
             g_pD3DDevice->v48(0, 0, 0, &pA);
             ((IRasterSurf*)tex)->v48(0, &pB);
             g_pD3DDevice->v88(pA, 0, pB, 0, 2);
-            ((IComResource*)pA)->v08(pA);
-            ((IComResource*)pB)->v08(pB);
+            ((IComResource*)pA)->v08();
+            ((IComResource*)pB)->v08();
             raster = nr;
         }
         raster->FillSpriteTexture(mField308, mWidth * mHeight * 4, 0);
@@ -788,7 +784,7 @@ void cMovieSystem::StopRecordingMovie(unsigned int dtMs)
     IAudioSystem* au = EA_Audio_GetSystemAT();
     while (*(void**)(p + 0x31c) != p + 0x31c && au != 0) {
         PacketNode* n = *(PacketNode**)(p + 0x320);
-        int payload = n->payload;
+        int payload = (int)n->payload;
         n->prev->next = n->next;
         n->next->prev = n->prev;
         operator_delete(n);
@@ -826,53 +822,53 @@ void cMovieSystem::StopRecordingMovie(unsigned int dtMs)
 // @ 0x00fd7f80
 bool cMovieSystem::EndRecording()
 {
-    char* p = (char*)this;
-    EAMutex* mx = (EAMutex*)(p + 0x70);
-    EAMutex_Lock(mx, g_pMutexTag);
-    if (!*(bool*)(p + 0xa0)) {
-        EAMutex_Unlock(mx);
-        return false;
-    }
-    if (!*(bool*)(p + 0xcd))
-        FUN_0067dd50()->ShowHudMessage(0x25);
-    else if (*(MoviePlayer**)(p + 0x34) == 0)
-        FUN_0067dd50()->ShowHudMessage(0x1b);
-    *(float*)(p + 0x310) = 0.0f;
-    ((IVideoOps*)*(void**)(p + 0xb4))->v10();
-    FUN_0067dda0()->PostFeedback1(*(int*)(p + 0x300), *(int*)(p + 0x304));
-    *(int*)(p + 0x304) = -1;
-    *(int*)(p + 0x308) = -1;
-    operator_delete(*(void**)(p + 0x30c));
-    *(void**)(p + 0x30c) = 0;
-    if (*(bool*)(p + 0xcc)) {
+    EAMutex* mx = &mRecordMutex;
+    mx->Lock((void*)0x1493900);
+    if (mRecording) {
+        if (!mExcludeUI)
+            FUN_0067dd50()->ShowHudMessage(0x25);
+        else if (mPlayerIndex == 0)
+            FUN_0067dd50()->ShowHudMessage(0x1b);
+        mField310 = 0.0f;
+        ((IVideoOps*)mWidth)->v10();
+        ((IVideoOps*)&mRecordStream)->v18();
+        ((IVideoOps*)mField64)->v08();
+        IFeedback* fb = FUN_0067dda0();
+        fb->PostFeedback1(mField304, mField308);
+        mField304 = mField308 = -1;
+        operator_delete(mField30c);
+        mField30c = 0;
         IAudioSystem* au = EA_Audio_GetSystemAT();
-        if (au != 0) {
-            ((IVideoOps*)*(void**)(p + 0x68))->v08();
+        if (mAudio && au != 0) {
+            ((IVideoOps*)mField68)->v08();
             au->v38_set(0x4503efa);
             au->v40_call(0x4501144, 0x52de7b41);
             au->v58();
         }
+        if (mWidth != 0) {
+            ((IMovieResource*)mWidth)->Stop();
+            if (mWidth != 0)
+                ((IMovieResource*)mWidth)->Release(true);
+            mWidth = 0;
+        }
+        PacketNode* head = (PacketNode*)&mPacketList;
+        while (head->next != head) {
+            PacketNode* n = (PacketNode*)mPacketList2;
+            void* payload = n->payload;
+            n->prev->next = n->next;
+            n->next->prev = n->prev;
+            operator_delete(n);
+            operator_delete(payload);
+        }
+        mRecording = false;
+        mx->Unlock();
+        SP_MessageServer()->PostMsg(0x62ff414, 0, 0);
+        mx->Lock((void*)0x1493900);
+        mx->Unlock();
+        return true;
     }
-    if (*(void**)(p + 0xb4) != 0) {
-        ((MoviePlayer*)*(void**)(p + 0xb4))->v08();
-        ((MoviePlayer*)*(void**)(p + 0xb4))->v00();
-        *(void**)(p + 0xb4) = 0;
-    }
-    while (*(void**)(p + 0x31c) != p + 0x31c) {
-        void* n = *(void**)(p + 0x320);
-        void* nn = *(void**)n;
-        void* nn2 = *(void**)((char*)n + 4);
-        *(void**)nn2 = nn;
-        *(void**)((char*)nn + 4) = nn2;
-        operator_delete(n);
-        operator_delete(*(void**)((char*)n + 8));
-    }
-    *(bool*)(p + 0xa0) = false;
-    EAMutex_Unlock(mx);
-    SP_MessageServer()->PostMsg(0x62ff414, 0, 0);
-    EAMutex_Lock(mx, g_pMutexTag);
-    EAMutex_Unlock(mx);
-    return true;
+    mx->Unlock();
+    return false;
 }
 // --- equivalence checker address annotations
     void operator_delete(...); // 0x00f47380

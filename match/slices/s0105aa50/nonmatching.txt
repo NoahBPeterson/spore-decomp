@@ -1,2 +1,6 @@
 0105aa50 1337 complete; stack-slot layout (frame 0x84 vs 0x88) and a few mov orders differ, otherwise same call/vtable sequence (flags /O2 /arch:SSE /fp:fast)
+0105b180 121 complete; same call sequence and ABI, the vptr is kept in edx instead of eax and a2 in ecx instead of edx, plus a 4-byte frame-size difference (flags /O2 /arch:SSE /fp:fast)
+0105b240 133 complete; same Find/GetKey call sequence and return convention; the vtable slot address is precomputed before the call and self->f14 is loaded after GetKey, and the a2 arg register differs (flags /O2 /arch:SSE /fp:fast)
+0105b350 556 complete; all four key blocks and their calls are present with the retail push order (including the dropped RandomDirection3 result and the 16-byte CreatePanicBubble argument cleanup); only block scheduling, message-object store order and extra spills differ (flags /O2 /arch:SSE /fp:fast)
+0105b6a0 415 complete; same vector scan and 3-argument call; the iterators are not hoisted into the original's begin and end registers, with extra locals/spills and different arg registers (flags /O2 /arch:SSE /fp:fast)
 0105b0f0 50 complete; same OnHit/vtable/Repair sequence, differs only in the a2/a3 arg registers (mov ecx,[esp+8] vs mov edx,[esp+8]) and the original's redundant fld/fstp spill of v around GetRate() (8 bytes); equivalence PASS (262 valid inputs, 100% coverage)

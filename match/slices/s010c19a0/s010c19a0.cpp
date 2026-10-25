@@ -22,6 +22,11 @@ extern unsigned long g_hkMonitorEndTls;      // 0x016e42a8
 void* FUN_0107daa0(int nbytes, int cl);   // hkThreadMemory::allocateChunk
 void  FUN_0107db10(void* p, int nbytes, int cl); // hkThreadMemory::deallocateChunk
 
+class hkThreadMemory { public:
+    void* allocateChunk(int nbytes, int alignment);            // 0x0107daa0
+    void  deallocateChunk(void* p, int nbytes, int alignment);  // 0x0107db10
+};
+
 // ---------------------------------------------------------------------------
 // math
 // ---------------------------------------------------------------------------
@@ -118,7 +123,9 @@ class hkConvexVerticesShape : public hkConvexShape { public:
     hkArray<hkVector4> m_planeEquations;      // +0x40
 
     void copyVertexData(const float* data, int stride, int numVertices);
-    void f1fe0(const void* a, int stride, int numVertices, const hkArray<hkVector4>* src);
+    // (vertexData, numVertices, stride, planeEquations src, radius) -- ret 0x14
+    hkConvexVerticesShape* f1fe0(const void* a, int numVertices, int stride,
+                                 const hkArray<hkVector4>* src, float radius);
     void getAabb(const hkTransform& t, float tol, hkAabb& out) const;
     // (hkBool ret = hidden first pointer, hkShapeRayCastInput const&, hkShapeRayCastOutput&): ret 0xc
     void castRay(unsigned char* hitOut, const void* input, void* output) const;
@@ -289,31 +296,39 @@ static inline void hkTimerSplit(const char* name)
     }
 }
 
-// @ 0x010c1c90  hkConvexVerticesShape::castRay (monitor-stream timers omitted)
+// @ 0x010c1c90  hkConvexVerticesShape::castRay
 void hkConvexVerticesShape::castRay(unsigned char* hitOut, const void* input_, void* output_) const
 {
     hkTimerSplit((const char*)0x14a27e0);      // "TtrcConvexVert"
     const hkVector4& origin = *(const hkVector4*)input_;
     const hkVector4& dir = *((const hkVector4*)input_ + 1);
     hkShapeRayCastOut* out = (hkShapeRayCastOut*)output_;
-    float reference = out->m_fraction;         // local_28: the caller's fraction, never written back
-    float fraction = -1.0f;                    // local_2c
-    hkVector4 point;                           // local_20..0x2c
+    float exitFrac = out->m_fraction;          // far bound: the caller's fraction, never written back
+    float entryFrac = -1.0f;                   // near bound
+    // local_20..0x2c: the entry plane, kept as separate scalars so the compiler spills
+    // them consistently (an aggregate local made cl71 keep .x in a live register that it
+    // reloaded from an unwritten slot, writing garbage for the hit vector)
+    float px = 0.0f, py = 0.0f, pz = 0.0f, pw = 0.0f;
     int i = m_planeEquations.m_size - 1;
     const hkVector4* planes = m_planeEquations.m_data;
     for (; i >= 0; --i)
     {
         const hkVector4& pl = planes[i];
-        float d0 = pl.x * origin.x + pl.y * origin.y + pl.z * origin.z + pl.w;
-        float d1 = pl.x * dir.x + pl.y * dir.y + pl.z * dir.z + pl.w;
-        if (d0 < 0.0f)
+        // grouped exactly like the original: ((x*x + y*y) + z*z) + w
+        float d0 = pl.x * origin.x + pl.y * origin.y;
+        d0 = d0 + pl.z * origin.z;
+        d0 = d0 + pl.w;
+        float d1 = pl.x * dir.x + pl.y * dir.y;
+        d1 = d1 + pl.z * dir.z;
+        d1 = d1 + pl.w;
+        if (!(d0 >= 0.0f))                     // the original tests C0 only: unordered counts as inside
         {
-            if (d1 < 0.0f)
+            if (!(d1 >= 0.0f))
             {
                 continue;                      // both ends inside: no crossing on this plane
             }
-            float f = d0 / (d0 - d1);
-            if (!(reference < f)) reference = f;
+            float f = d0 / (d0 - d1);          // leaving the half space: tighten the far bound
+            if (!(exitFrac < f)) exitFrac = f;
         }
         else
         {
@@ -323,21 +338,25 @@ void hkConvexVerticesShape::castRay(unsigned char* hitOut, const void* input_, v
                 *hitOut = 0;
                 return;
             }
-            float f = d0 / (d0 - d1);
-            if (fraction < f) { fraction = f; point = pl; }
+            float f = d0 / (d0 - d1);          // entering the half space: raise the near bound
+            if (entryFrac < f)
+            {
+                entryFrac = f;
+                px = pl.x; py = pl.y; pz = pl.z; pw = pl.w;
+            }
         }
-        if (reference < fraction)
+        if (!(exitFrac >= entryFrac))
         {
             hkTimerSplit((const char*)0x149cc34);       // "Et"
             *hitOut = 0;
             return;
         }
     }
-    if (!(fraction < 0.0f))
+    if (!(entryFrac < 0.0f))
     {
-        out->m_vec = point;
+        out->m_vec.x = px; out->m_vec.y = py; out->m_vec.z = pz; out->m_vec.w = pw;
         out->m_material = 0xffffffff;
-        out->m_fraction = fraction;
+        out->m_fraction = entryFrac;
         hkTimerSplit((const char*)0x149cc34);           // "Et"
         *hitOut = 1;
         return;
@@ -363,24 +382,46 @@ void hkConvexVerticesShape::calcStatistics(hkStatisticsCollector* c) const
     c->endObject();
 }
 
-// @ 0x010c1fe0  hkConvexVerticesShape constructor from an hkConvexVerticesShape-like source
-void hkConvexVerticesShape::f1fe0(const void* a, int stride, int numVertices, const hkArray<hkVector4>* src)
+// @ 0x010c1fe0  hkConvexVerticesShape constructor from a vertex array and a plane array
+hkConvexVerticesShape* hkConvexVerticesShape::f1fe0(const void* a, int numVertices, int stride,
+                                                    const hkArray<hkVector4>* src, float radius)
 {
-    m_numVertices = 0;
-    m_memSizeAndFlags = 1;
+    m_radius = radius;                       // +0xc: the last argument is stored verbatim
+    m_referenceCount = 1;
     m_userData = 0;
     *(void**)this = (void*)0x14a2804;
     m_rotatedVertices.m_data = 0; m_rotatedVertices.m_size = 0;
     m_rotatedVertices.m_capacityAndFlags = (int)0x80000000;
     m_planeEquations.m_data = 0; m_planeEquations.m_size = 0;
     m_planeEquations.m_capacityAndFlags = (int)0x80000000;
-    if (src->m_size > 0)
+    // hkArrayUtil::_reserveExactly inlined: the freshly cleared array owns nothing yet
+    if (m_planeEquations.getCapacity() < src->m_size)
     {
-        m_planeEquations.m_data = (hkVector4*)FUN_0107daa0(src->m_size << 4, 0x14);
-        m_planeEquations.m_capacityAndFlags = (m_planeEquations.m_capacityAndFlags & 0x40000000) | src->m_size;
+        if (m_planeEquations.m_capacityAndFlags >= 0)
+        {
+            hkThreadMemory* mem = (hkThreadMemory*)TlsGetValue(g_hkThreadMemoryTls);
+            mem->deallocateChunk(m_planeEquations.m_data, m_planeEquations.getCapacity() << 4, 0x14);
+        }
+        hkThreadMemory* mem2 = (hkThreadMemory*)TlsGetValue(g_hkThreadMemoryTls);
+        m_planeEquations.m_data = (hkVector4*)mem2->allocateChunk(src->m_size << 4, 0x14);
+        m_planeEquations.m_capacityAndFlags =
+            (m_planeEquations.m_capacityAndFlags & 0x40000000) | src->m_size;
     }
     m_planeEquations.m_size = src->m_size;
+    {
+        const int n = src->m_size;
+        hkVector4* dst = m_planeEquations.m_data;
+        const hkVector4* s = src->m_data;
+        int i = 0;
+        for (; i < n - 3; i += 4)
+        {
+            dst[i] = s[i]; dst[i + 1] = s[i + 1];
+            dst[i + 2] = s[i + 2]; dst[i + 3] = s[i + 3];
+        }
+        for (; i < n; ++i) dst[i] = s[i];
+    }
     copyVertexData((const float*)a, stride, numVertices);
+    return this;
 }
 
 // @ 0x010c21c0  hkConvexVerticesShape::~hkConvexVerticesShape
