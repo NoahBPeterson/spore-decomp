@@ -4,3 +4,6 @@
 008dad30 15 complete: FUN_008dad30 unguarded insertion sort; body/shape identical, only register naming of (prev,j,k) differs; difftest UNSUPPORTED (0/400 valid - pool reads fault)
 008dad80 63 complete: FUN_008dad80 promote-heap; register allocation of (array,top,value,parent) differs from retail; difftest PASS (372 valid, 100% coverage)
 008da750 332 complete: DatabasePackedFile::ReadIndexRecord; VecBuf/read/index-serialize flow reconstructed; buffer alloc-header handling and register allocation differ; difftest PASS (351 valid, 88.5% coverage)
+008da140 393 complete: DatabasePackedFile::CompactDatabaseInternal (hole-table merge, empty-index fast path, temp-file copy/rename/cleanup); vtable dispatch, helper inlining and stack layout differ; difftest UNSUPPORTED (0/400 valid - original faults on generated object)
+008da3d0 849 complete: DatabasePackedFile::OpenRecord (lock, index lookup/info copy, access/CD validation, read/decompress/write paths, open-record multimap insert); reconstructed from disassembly, register allocation differs; difftest WEAK (293 valid, 33.4% coverage)
+008da920 534 complete: DatabasePackedFile record-write helper (hole alloc, WriteFileSpan, open-map erase, index delete/add); reconstructed from disassembly, register allocation differs; difftest WEAK (300 valid, 9.8% coverage)
