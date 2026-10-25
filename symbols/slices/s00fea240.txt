@@ -7,3 +7,6 @@
 00fea8d0 ?FUN_00fea8d0@@YA_NPAUcPropertyList@@IGPAUStringVector@@@Z  # FUN_00fea8d0 migrated from s00fea240 (verbatim, slice spelling)
 00fea960 ??0BehaviorRule@@QAE@XZ  # BehaviorRule::BehaviorRule migrated from s00fea240 (verbatim, slice spelling)
 00feaa70 ?Execute@BehaviorRule@@UAEXPAX@Z  # BehaviorRule::Execute migrated from s00fea240 (verbatim, slice spelling)
+00feb060 ?FUN_00feb060@@YIXPAUViewerHolder@@@Z  # FUN_00feb060 migrated from s00fea240 (verbatim, slice spelling)
+00feb0b0 ?FUN_00feb0b0@@YG_NI@Z  # FUN_00feb0b0 migrated from s00fea240 (verbatim, slice spelling)
+00feb0f0 ?FUN_00feb0f0@@YIXPAUViewerHolder@@@Z  # FUN_00feb0f0 migrated from s00fea240 (verbatim, slice spelling)

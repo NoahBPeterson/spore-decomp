@@ -1,3 +1,5 @@
+00feb120 ?FUN_00feb120@@YAXPAX00PAMME@Z  # FUN_00feb120 migrated from s00feb120 (verbatim, slice spelling)
+00feb510 ?DrawEmpire@cEmpireLayer@@QAEXPAX0@Z  # cEmpireLayer::DrawEmpire migrated from s00feb120 (verbatim, slice spelling)
 00feba10 ?RemoveNewMissionAvailableEventLog@cSPMissionManager@@QAEXXZ  # cSPMissionManager::RemoveNewMissionAvailableEventLog migrated from s00feb120 (verbatim, slice spelling)
 00feba50 ?FUN_00feba50@cSPMissionManager@@QAEXXZ  # cSPMissionManager::FUN_00feba50 migrated from s00feb120 (verbatim, slice spelling)
 00febb90 ?Write@cSPMissionManager@@QAEEPAX@Z  # cSPMissionManager::Write migrated from s00feb120 (verbatim, slice spelling)

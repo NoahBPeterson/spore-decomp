@@ -1,0 +1,4 @@
+# source  symbol  va  flags
+../src/game/SPGonzago/SPEmpireLines.cpp  ?FUN_00feb060@@YIXPAUViewerHolder@@@Z  00feb060  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPEmpireLines.cpp  ?FUN_00feb0b0@@YG_NI@Z  00feb0b0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPEmpireLines.cpp  ?FUN_00feb0f0@@YIXPAUViewerHolder@@@Z  00feb0f0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
