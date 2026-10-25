@@ -1,0 +1,9 @@
+# source  symbol  va  flags
+../src/game/SPGonzago/SPSpaceEconomyTuning.cpp  ?GetTradeCaptureOfferPrice@cSPSpaceEconomyTuning@@QAEHH@Z  0102fa30  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPSpaceEconomyTuning.cpp  ?GetEnergyRechargeDelayMS@cSPSpaceEconomyTuning@@QAEHXZ  0102fbf0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPSpaceEconomyTuning.cpp  ?GetEnergyRechargePerMS@cSPSpaceEconomyTuning@@QAEMXZ  0102fc60  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPSpaceEconomyTuning.cpp  ?GetTradeCaptureCostForPlanet@cSPSpaceEconomyTuning@@QAEHH@Z  01030000  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPSpaceEconomyTuning.cpp  ?GetPeaceOfferPrice@cSPSpaceEconomyTuning@@QAEHHPAUcEmpire@@@Z  01030930  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPSpaceEconomyTuning.cpp  ?GetPeaceBadOfferDelta@cSPSpaceEconomyTuning@@QAEHPAUcEmpire@@@Z  010309c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPSpaceEconomyTuning.cpp  ?GetPeaceVeryBadOfferDelta@cSPSpaceEconomyTuning@@QAEHPAUcEmpire@@@Z  01030a30  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPSpaceEconomyTuning.cpp  ?GetPeaceGoodOfferDelta@cSPSpaceEconomyTuning@@QAEHPAUcEmpire@@@Z  01030aa0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
