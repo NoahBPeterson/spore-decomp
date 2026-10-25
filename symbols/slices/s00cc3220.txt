@@ -1,0 +1,4 @@
+00cc3490 ?FUN_00cc3490@cSpatialObjectView_s00cc_3220@@QAEXII@Z  # cSpatialObjectView_s00cc_3220::FUN_00cc3490 migrated from s00cc3220 (verbatim, slice spelling)
+00cc3570 ?MakeView@cSpaceDefenseMissileView_s00cc_3220@@SAPAXPAUcSpatialObject@@@Z  # cSpaceDefenseMissileView_s00cc_3220::MakeView migrated from s00cc3220 (verbatim, slice spelling)
+00cc36d0 ?FUN_00cc36d0@cSpatialObjectView_s00cc_3220@@QAEPAXE@Z  # cSpatialObjectView_s00cc_3220::FUN_00cc36d0 migrated from s00cc3220 (verbatim, slice spelling)
+00cc3730 ?MakeView@cArtilleryProjectileView@@SAPAXPAUcSpatialObject@@@Z  # cArtilleryProjectileView::MakeView migrated from s00cc3220 (verbatim, slice spelling)

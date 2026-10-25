@@ -1,0 +1,10 @@
+# va  diff-bytes  reason
+00cc2cb0 159 (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) space defense missile view destructor; the effect and object queries are modelled as virtual calls but the release order and the inline base teardown differ; equiv FAIL (first mismatch execution)
+00cc2d30 42 (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) missile view simulation update; the base update and the two effect updates are unresolved; equiv UNSUPPORTED (unresolved effect helpers)
+00cc2d70 327 (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) default beam projectile view factory; the placement new, the five effect refs and the two empire colour passes are unresolved so most of the body collapses; equiv UNSUPPORTED (unresolved effect helpers)
+00cc3140 102 (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) cultural projectile view factory; the placement new, the effect ref and the noun colour pass are unresolved; equiv UNSUPPORTED (unresolved allocation and effect helpers)
+00cc3490
+00cc3570
+00cc36d0
+00cc3730
+00cc4270 44 complete cDefaultBeamProjectileView::HandleSimulationUpdate: all 67 calls / vtable slots / effect ids in source order, frame 0x700 matches; register allocation of the vertex fill loop and stack-slot reuse differ; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast

@@ -1,1 +1,2 @@
-00cc4270 SP::cDefaultBeamProjectileView::HandleSimulationUpdate  # PDB candidate (caller-scored) on card; calls cSpatialObjectView::HandleSimulationUpdate and cDefaultBeamProjectile::IsHittingPlayer
+00cc4270 ?HandleSimulationUpdate@cSpaceDefenseMissileView@@QAEXHH@Z  # HandleSimulationUpdate migrated from s00cc4270 (verbatim, slice spelling)
+00e92ca0 ?HandleSimulationUpdate@cSpatialObjectView@@QAEXHH@Z  # base-class callee of 0x00cc4270 (slice declaration comment "0x00e92ca0"); the module TU's verbatim body calls it through the s00cc22c0 stub class
