@@ -1,6 +1,6 @@
 00e1d020 ?Refresh@cUIMissionCardPanel@@QAEXXZ  # void cUIMissionCardPanel::Refresh()
-00e1d610 ?SetSlot@cUIMissionCardPanel@@QAEXPAX@Z  # void cUIMissionCardPanel::SetSlot(void*)
-00e1d710 ?OnNotify@cMissionSlot@@QAEXPAXI@Z  # void cMissionSlot::OnNotify(void*, unsigned int)
+00e1d610 ?SetSlot@cUIMissionCardPanel_s00e1_d020@@QAEXPAX@Z  # cUIMissionCardPanel_s00e1_d020::SetSlot migrated from s00e1d020 (verbatim, slice spelling)
+00e1d710 ?OnNotify@cMissionSlot@@QAEXPAXI@Z  # cMissionSlot::OnNotify migrated from s00e1d020 (verbatim, slice spelling)
 00e1d7a0 ?DoMessage@cUIMissionsHandler@@QAE_NPAXH@Z  # bool cUIMissionsHandler::DoMessage(void*, int)
 00e1dae0 ?Activate@cTradeUI@@QAEXXZ  # void cTradeUI::Activate()
 00e1db60 ?Deactivate@cUITradingActivity@@QAEXI@Z  # void cUITradingActivity::Deactivate(unsigned int)

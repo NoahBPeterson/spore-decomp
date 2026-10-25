@@ -1,0 +1,6 @@
+# source  symbol  va  flags
+../src/game/SPGonzago/SPUIMissions.cpp  ?ShowAllCards@cUIMissionCardPanel@@QAEXXZ  00e15b70  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPUIMissions.cpp  ?DoCollapse@cUIMissionCard@@QAEXXZ  00e17d60  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPUIMissions.cpp  ?Update@cUIMissionCard@@QAEXXZ  00e17d70  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPUIMissions.cpp  ?RemoveHandlerAndRelease@cUIMissionCardList@@QAEXXZ  00e18340  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPUIMissions.cpp  ?UpdateProgessIcons@@YAXPAVcSPUILayout_s00e2_e6e0@@PAVtIWindowEx@@@Z  00e2e790  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
