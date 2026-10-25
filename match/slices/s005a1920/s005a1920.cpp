@@ -272,6 +272,25 @@ struct string16 {
     string16& sprintf(const wchar_t* fmt, ...);                          // 0x0041e050
 };
 
+// EA::Variant-shaped record (data + 16-bit flags/type id) handed back by the property getters.
+struct VariantBytes {
+    uint32_t mData[4];       // +0x00
+    uint16_t mFlags;         // +0x10
+    uint16_t mTypeId;        // +0x12
+};
+
+// Inlined property unwrap: the by-value float types live inline, others sit behind a
+// pointer, and everything else yields the shared default whose contents live at 0x015d1168.
+static const void* VariantData(const VariantBytes* v, uint16_t tA, uint16_t tB, uint32_t emptyAddr) {
+    uint16_t t = v->mTypeId;
+    if (t == tA || t == tB) {
+        if (v->mFlags & 0x30)
+            return *(const void**)(const void*)v;
+        return t ? (const void*)v : (const void*)0;
+    }
+    return (const void*)(size_t)emptyAddr;
+}
+
 namespace SP {
 class cPropertyList { public:
     virtual int AddRef();                                                // +0x00
@@ -279,6 +298,9 @@ class cPropertyList { public:
     virtual void v08(); virtual void v0c(); virtual void v10(); virtual void v14();
     virtual void v18();
     virtual bool HasProperty(uint32_t id);                               // +0x1c
+    virtual void v20();                                                  // +0x20
+    virtual void v24();                                                  // +0x24
+    virtual VariantBytes* GetProperty(uint32_t id);                      // +0x28
 };
 
 bool GetPropertyAsKeyInstance(cPropertyList* p, uint32_t id, uint32_t* out);       // 0x006a12a0
@@ -523,22 +545,48 @@ void cSPEditorBlockAbilities::LayoutAbilitiesCompact(IWindow* pParent, bool bUse
     area.x2 = area.x1 + totalWidth;
     pParent->SetLayoutArea(area);
 }
+// SP::cEditorCameraController -- camera/zoom offsets pulled from the editor config properties.
+class cEditorCameraController { public:
+    uint32_t pad00[4];                   // +0x00
+    cPropertyList* mConfig;              // +0x10
+    uint32_t pad14[(0x3c - 0x14) / 4];   // +0x14
+    float mTargetCameraZoomModifier;     // +0x3c
+    float mTargetCameraOffsetX;          // +0x40
+
+    void SetCenterCameraOffset();        // 0x005a2370
+    void SetPartModeCameraOffset();      // 0x005a2400
+    void SetPaintModeCameraOffset();     // 0x005a24c0
+};
 }  // namespace SP
 
 // @ 0x005a2370
-void SetCenterCameraOffset(void* self)
+void SP::cEditorCameraController::SetCenterCameraOffset()
 {
-    (void)self;
+    float v = 0.0f;
+    if (mConfig->HasProperty(0x6fda2e1c))
+        v = *(const float*)VariantData(mConfig->GetProperty(0x6fda2e1c), 0xd, 0x10, 0x015d1168);
+    float negated = -v;
+    mTargetCameraZoomModifier = negated * 0.85f + v;
 }
 
 // @ 0x005a2400
-void SetPartModeCameraOffset(void* self)
+void SP::cEditorCameraController::SetPartModeCameraOffset()
 {
-    (void)self;
+    if (mConfig->HasProperty(0x6fda2e1c))
+        mTargetCameraZoomModifier =
+            *(const float*)VariantData(mConfig->GetProperty(0x6fda2e1c), 0xd, 0x10, 0x015d1168);
+    if (mConfig->HasProperty(0x8fda2e23))
+        mTargetCameraOffsetX =
+            *(const float*)VariantData(mConfig->GetProperty(0x8fda2e23), 0xd, 0x10, 0x015d1168);
 }
 
 // @ 0x005a24c0
-void SetPaintModeCameraOffset(void* self)
+void SP::cEditorCameraController::SetPaintModeCameraOffset()
 {
-    (void)self;
+    if (mConfig->HasProperty(0x6fda2e1c))
+        mTargetCameraZoomModifier =
+            -*(const float*)VariantData(mConfig->GetProperty(0x6fda2e1c), 0xd, 0x10, 0x015d1168);
+    if (mConfig->HasProperty(0x8fda2e23))
+        mTargetCameraOffsetX =
+            *(const float*)VariantData(mConfig->GetProperty(0x8fda2e23), 0xd, 0x10, 0x015d1168);
 }
