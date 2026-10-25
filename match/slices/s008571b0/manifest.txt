@@ -3,3 +3,15 @@ slices/s008571b0/s008571b0.cpp  ?FUN_00857f20@@YAHPAH@Z  00857f20  /O2 /MD /Gy /
 slices/s008571b0/s008571b0.cpp  ?FUN_00857f70@@YAXPAH@Z  00857f70  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s008571b0/s008571b0.cpp  ?FUN_00857ff0@@YAXH@Z  00857ff0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s008571b0/s008571b0.cpp  ?FUN_00858130@@YAXH@Z  00858130  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s008571b0/jcsample.cpp  _h2v2_smooth_downsample  008571b0  /O2 /arch:SSE /MD /Gy /TC /GS-
+slices/s008571b0/jcsample.cpp  _fullsize_smooth_downsample  00857430  /O2 /arch:SSE /MD /Gy /TC /GS-
+slices/s008571b0/jcsample.cpp  _jinit_downsampler  008575b0  /O2 /arch:SSE /MD /Gy /TC /GS-
+slices/s008571b0/jdapimin.cpp  _jpeg_CreateDecompress  00857730  /O2 /arch:SSE /MD /Gy /TC /GS-
+slices/s008571b0/jdapimin.cpp  _default_decompress_parms  00857880  /O2 /arch:SSE /MD /Gy /TC /GS-
+slices/s008571b0/jdapimin.cpp  _jpeg_consume_input  00857a50  /O2 /arch:SSE /MD /Gy /TC /GS-
+slices/s008571b0/jdapimin.cpp  _jpeg_finish_decompress  00857b20  /O2 /arch:SSE /MD /Gy /TC /GS-
+slices/s008571b0/jdapimin.cpp  _jpeg_read_header  00857bf0  /O2 /arch:SSE /MD /Gy /TC /GS-
+slices/s008571b0/jdapistd.cpp  _output_pass_setup  00857c90  /O2 /arch:SSE /MD /Gy /TC /GS-
+slices/s008571b0/jdapistd.cpp  _jpeg_read_scanlines  00857d70  /O2 /arch:SSE /MD /Gy /TC /GS-
+slices/s008571b0/jdapistd.cpp  _jpeg_start_decompress  00857e10  /O2 /arch:SSE /MD /Gy /TC /GS-
+slices/s008571b0/jdatasrc.cpp  _fill_input_buffer  00858000  /O2 /arch:SSE /MD /Gy /TC /GS-
