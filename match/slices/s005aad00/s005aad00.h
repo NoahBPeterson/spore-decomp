@@ -3,6 +3,7 @@
 // the retail sp_vector_allocator is 8 bytes). Only the members the retail code touches are named.
 #ifndef SP_EDITOR_MANIP_SCAFFOLD_H
 #define SP_EDITOR_MANIP_SCAFFOLD_H
+#include <new>
 #include "types.h"
 
 extern "C" void EASTL_allocator_deallocate(void* p); // 0x00f47380
@@ -31,9 +32,21 @@ struct cSPVector3 : public rw::math::fpu::Vector3Template<float, 0> {
   cSPVector3(const base& v) { x = v.x; y = v.y; z = v.z; }
   cSPVector3& operator=(const base& v) { x = v.x; y = v.y; z = v.z; return *this; }
 };
-struct cSPMatrix3 : public rw::math::fpu::Matrix33Template<float, 0> {};
+struct cSPMatrix3 : public rw::math::fpu::Matrix33Template<float, 0> {
+  cSPMatrix3() {}
+  cSPMatrix3(const cSPMatrix3& o);   // 0x0041cb40
+};
+bool operator!=(const cSPMatrix3& a, const cSPMatrix3& b);   // 0x0041dd90
+float* Matrix33_Convert(float* out, const cSPMatrix3* in);   // 0x0041ded0
+
+extern const cSPVector3 kZero;      // 0x015e8814
+extern const cSPMatrix3 kIdentity;  // 0x015e8950
 
 namespace eastl {
+struct bitset60 {  // eastl::bitset<60>
+  uint32_t mWord[2];
+  bool test(uint32_t i) const { return ((mWord[i >> 5] >> (i & 31)) & 1) != 0; }
+};
 struct sp_vector_allocator {
   uint32_t mData[2];
   sp_vector_allocator() {}
@@ -77,7 +90,23 @@ class sp_vector : public VectorBase<T> {
   sp_vector(const sp_vector& x) : VectorBase<T>((size_t)(x.mpEnd - x.mpBegin), x.mAllocator) {
     this->mpEnd = uninitialized_copy_ptr(x.mpBegin, x.mpEnd, this->mpBegin);
   }
+  T* begin() { return this->mpBegin; }
+  T* end() { return this->mpEnd; }
+  T* erase(T* first, T* last);                      // 0x00454280
+  void DoInsertValue(T* position, const T& value);  // 0x00454ee0
+  void push_back(const T& value) {
+    if (this->mpEnd < this->mpCapacity)
+      ::new (this->mpEnd++) T(value);
+    else
+      DoInsertValue(this->mpEnd, value);
+  }
 };
+template <typename InputIterator, typename T>
+inline InputIterator find(InputIterator first, InputIterator last, const T& value) {
+  while ((first != last) && !(*first == value))
+    ++first;
+  return first;
+}
 }  // namespace eastl
 
 namespace EA {
@@ -102,13 +131,28 @@ class AutoRefCount {
  public:
   T* mpObject;
   AutoRefCount() : mpObject(0) {}
+  AutoRefCount(T* p) : mpObject(p) {
+    if (mpObject)
+      mpObject->AddRef();
+  }
   ~AutoRefCount() {
     if (mpObject)
       mpObject->Release();
   }
+  void Reset() {
+    if (mpObject) {
+      T* const pTemp = mpObject;
+      mpObject = 0;
+      pTemp->Release();
+    }
+  }
   T* operator->() const { return mpObject; }
   operator T*() const { return mpObject; }
 };
+template <typename T>
+inline bool operator==(const AutoRefCount<T>& a, const AutoRefCount<T>& b) {
+  return a.mpObject == b.mpObject;
+}
 }  // namespace EA
 
 namespace SP {
@@ -135,12 +179,19 @@ class cSPEditorBlock : public EA::RefCountVTemplate<int> {
   char pad_150[0x33c - 0x150];
   EA::AutoRefCount<cMWModel> mSocketConnector;  // +0x33c
   char pad_340[0xdc8 - 0x340];
-  uint32_t mFlags[2];   // +0xdc8 (bitset<54>)
+  eastl::bitset60 mFlags;   // +0xdc8 (bitset<60>)
+
+  cSPVector3* F40b90(uint32_t* out);                    // 0x00440b90
+  void SetUserOrientation(cSPMatrix3 m);                // 0x0043ffa0
+  void SetOrientation(const cSPMatrix3& m, bool b);     // 0x00449420
 };
+
+class cSPEditorSkinPart;
 
 class cSPEditorSkinManager : public EA::COM::IUnknown32 {
  public:
   char pad_4[0xc - 0x4];
+  cSPEditorSkinPart* GetSkinPart(int id);   // 0x004c49e0
 };
 
 class cSPEditorManipulationObject : public EA::COM::IUnknown32 {
@@ -188,9 +239,12 @@ class cSPEditorManipulationCellPinning : public cSPEditorManipulationObject, pub
   virtual int Release();
   virtual void* AsInterface(uint32_t typeID);
   virtual bool OnMouseUp(int button, float x, float y, int modifiers);
+  virtual bool OnMouseDown(int button, float x, float y, int modifiers);   // base wrapper (slot 5)
   virtual bool DoOnMouseDown(int button, float x, float y, int modifiers);
+  virtual bool OnMouseMove(float x, float y, int modifiers);               // base wrapper (slot 7)
   virtual bool DoOnMouseMove(float x, float y, int modifiers);
   virtual void Update();
+  virtual void Slot10();
   virtual eastl::sp_vector<EA::AutoRefCount<cSPEditorBlock> > GetPileList();
 
   void RecalculateMouseOffset(float x, float y);
