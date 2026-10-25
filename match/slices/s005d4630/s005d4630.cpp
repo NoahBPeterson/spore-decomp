@@ -2,7 +2,18 @@
 // Flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 #include <new>
 #include <math.h>
+#include <xmmintrin.h>
 #include "types.h"
+
+// Clamp lo<=v<=hi with the scalar SSE min/max the retail body uses (maxss then minss).  Taking the
+// bounds by value forces them into stack slots, which is why the original feeds maxss/minss from
+// memory ([esp+..]) instead of a register.
+__forceinline float ClampFloat(float v, float lo, float hi) {
+  __m128 t = _mm_load_ss(&v);
+  t = _mm_max_ss(t, _mm_load_ss(&lo));
+  t = _mm_min_ss(t, _mm_load_ss(&hi));
+  return _mm_cvtss_f32(t);
+}
 
 struct E20 {
   int a;
@@ -92,20 +103,91 @@ void Curve2D::Arc(float* out, float t) {
   out[0] = dxc - (y1 - y0) * s + x0;
 }
 
-// --- skeletons for the remaining slice functions (partial; see partial.txt) ---
+// --- remaining slice functions ---
 
-// @ 0x005D4630
-// PARTIAL: 0x185-byte curve/segment helper not reconstructed.
-void FUN_005d4630(int) {}
-// @ 0x005D47C0
-// PARTIAL: 0x18e-byte curve/segment helper not reconstructed.
-void FUN_005d47c0(int) {}
+// ============================================================================================
+// 0x005D5050: walk a list of path segments (this+0x00 is the pointer array, this+0x14 the whole
+// path length) accumulating segment lengths scaled by t until the remaining distance falls inside
+// a segment, then evaluate that segment at remaining/length.  A short path evaluates its last
+// segment at 1.0; an empty path writes a zero point.  Returns `out` (arg1) in eax.
+// ============================================================================================
+struct PathSegment {
+  virtual float Length();                     // vtable slot 0
+  virtual void  Eval(float* out, float t);    // vtable slot 1
+};
+
+struct PathCurve {
+  PathSegment** mpBegin;     // +0x00
+  PathSegment** mpEnd;       // +0x04
+  PathSegment** mpCapacity;  // +0x08
+  char pad0c[8];
+  float mTotalLength;        // +0x14
+
+  float* Walk(float* out, float t);
+};
+
 // @ 0x005D5050
-// PARTIAL: 0xcb-byte curve/segment helper not reconstructed.
-void FUN_005d5050(int) {}
+float* PathCurve::Walk(float* out, float t)
+{
+  float remaining = mTotalLength * t;
+  for (unsigned i = 0; i < (unsigned)(mpEnd - mpBegin); ++i) {
+    PathSegment* seg = mpBegin[i];
+    float len = seg->Length();
+    if (len >= remaining) {
+      seg->Eval(out, remaining / len);
+      return out;
+    }
+    remaining -= len;
+  }
+  unsigned n = (unsigned)(mpEnd - mpBegin);
+  if (n >= 1) {
+    PathSegment* seg = mpBegin[n - 1];
+    seg->Eval(out, 1.0f);
+    return out;
+  }
+  out[0] = 0.0f;
+  out[1] = 0.0f;
+  return out;
+}
+
+// ============================================================================================
+// 0x005D5250: intersect two circles {x,y,r}.  Returns 0 (separate), 1 (tangent, one point in
+// out[0..1]) or 2 (two points in out[0..3]).
+// ============================================================================================
+struct CircXY {
+  float x, y, r;
+  int Intersect(const CircXY* b, float* out);
+};
+
 // @ 0x005D5250
-// PARTIAL: 0x186-byte curve/segment helper not reconstructed.
-void FUN_005d5250(int) {}
+int CircXY::Intersect(const CircXY* b, float* out)
+{
+  float dx = b->x - x;
+  float dy = b->y - y;
+  float dist2 = dx * dx + dy * dy;
+  float dist = sqrtf(dist2);
+  if (dist > r + b->r) return 0;
+  if (fabsf(b->r - r) > dist) return 0;
+  float t = (r * r - b->r * b->r + dist2) / (dist * 2.0f);
+  float h = sqrtf(r * r - t * t);
+  float inv = 1.0f / dist;
+  float X1 = x + dx * t * inv;
+  float Y1 = y + dy * t * inv;
+  if (h < 1.5258789e-05f) {
+    out[0] = X1;
+    out[1] = Y1;
+    return 1;
+  }
+  float ox = dy * h * inv;
+  float oy = dx * h * inv;
+  out[0] = X1 + ox;
+  out[1] = Y1 - oy;
+  out[2] = X1 - ox;
+  out[3] = Y1 + oy;
+  return 2;
+}
+
+// 0x005D47C0 (CircleVec::DoInsertValue) is defined after the CircleVec declaration below.
 
 // ============================================================================================
 // 0x005D4970: spine handle "belt of circles" builder.  Builds one Circle per spine node, runs the
@@ -127,7 +209,8 @@ template <class T> struct sp_vector {
   T* mpCapacity;
   uint32_t mAllocator[2];
   sp_vector() : mpBegin(0), mpEnd(0), mpCapacity(0) {}
-  sp_vector(const sp_vector& o);   // out of line (0x005D1240 for E20)
+  sp_vector(const sp_vector& o);                                  // out of line (0x005D1240 for E20)
+  sp_vector& operator=(const sp_vector& o);                       // out of line (0x005D12C0 for E20)
   ~sp_vector() {
     if (mpBegin && ((uint32_t*)mpBegin)[-1] != 0) operator delete(mpBegin);
   }
@@ -139,6 +222,17 @@ struct Circle {          // 0x24 bytes
   sp_vector<E20> arcs;   // +0x10
   Circle(int idx, struct SpineNode* n);                       // 0x005D57D0 (thiscall, ret 8)
   Circle(const Circle& o) : id(o.id), x(o.x), y(o.y), r(o.r), arcs(o.arcs) {}
+  // The retail copy-assignment moves the 4-dword trivial prefix with integer moves (bitwise) and
+  // only then runs sp_vector::operator= for the trailing container.
+  Circle& operator=(const Circle& o)
+  {
+    *(uint32_t*)&id = *(const uint32_t*)&o.id;
+    *(uint32_t*)&x  = *(const uint32_t*)&o.x;
+    *(uint32_t*)&y  = *(const uint32_t*)&o.y;
+    *(uint32_t*)&r  = *(const uint32_t*)&o.r;
+    arcs = o.arcs;
+    return *this;
+  }
   ~Circle() {}
   void FUN_005d5be0(Circle* other);                           // 0x005D5BE0 (thiscall, ret 4)
   void FUN_005d5cf0(Vec2* p0, Vec2* p1, Circle* c);           // 0x005D5CF0 (thiscall, ret 0xc)
@@ -168,6 +262,42 @@ struct CircleVec {
   int size() const { return (int)(mpEnd - mpBegin); }
 };
 
+// eastl vector insert machinery for the 0x24-byte element (out-of-line helpers in the original TU).
+Circle* UninitCopyCircle(Circle* first, Circle* last, Circle* dest);      // 0x005D13F0
+void    DestroyCircleRange(Circle* first, Circle* last, Circle* dest);    // 0x005CF7F0
+Circle* CopyBackwardCircle(Circle* first, Circle* last, Circle* destEnd); // 0x005D1450
+
+// @ 0x005D47C0
+void CircleVec::DoInsertValue(Circle* position, const Circle& value)
+{
+  if (mpEnd != mpCapacity) {
+    const Circle* pValue = &value;
+    if (pValue >= position && pValue < mpEnd) ++pValue;
+    ::new ((void*)mpEnd) Circle(*(mpEnd - 1));
+    CopyBackwardCircle(position, mpEnd - 1, mpEnd);
+    *position = *pValue;
+    ++mpEnd;
+  } else {
+    const int nPrevSize = (int)(mpEnd - mpBegin);
+    int nNewSize = nPrevSize ? (2 * nPrevSize) : 1;
+    Circle* pNewData = nNewSize
+        ? (Circle*)operator new(nNewSize * 0x24, "Editor", 0, 0,
+                                "c:\\EASTL\\include\\EASTL/allocator.h", 0xd1)
+        : 0;
+    Circle* pPos = position;
+    Circle* pOld = mpBegin;
+    Circle* pNewEnd = UninitCopyCircle(pOld, pPos, pNewData);
+    DestroyCircleRange(pOld, pPos, pNewData);
+    ::new ((void*)pNewEnd) Circle(value);
+    Circle* pNewEnd2 = UninitCopyCircle(pPos, mpEnd, ++pNewEnd);
+    DestroyCircleRange(pPos, mpEnd, pNewEnd2);
+    if (pOld && ((uint32_t*)pOld)[-1] != 0) operator delete(pOld);
+    mpBegin = pNewData;
+    mpEnd = pNewEnd2;
+    mpCapacity = pNewData + nNewSize;
+  }
+}
+
 struct PathObj {         // 0x18 bytes, allocated with the EA "Editor" allocator
   PathObj();             // 0x005D57B0
   ~PathObj();            // 0x005D59C0
@@ -188,8 +318,58 @@ extern float gDirX;   // 0x01517F44
 extern float gDirY;   // 0x01517F48
 extern float gDirZ;   // 0x01517F4C
 
+// --- vertebra bookkeeping: eastl::map<SpineNode*, VInfo> at spine+0xcc, and the rigid bodies ---
+struct HkVector4 { float x, y, z, w; };
+
+struct HkMotion { float getMass(); };                 // 0x01088270 hkRigidMotion::getMass
+struct HkBody { char pad0[0x58]; HkMotion* motion; };  // hkRigidBody: motion at +0x58
+
+struct MouseSpring {                                   // hkMouseSpringAction (refcounted)
+  virtual void* Destroy(int flags);                    // +0
+  uint16_t memSize;                                    // +4
+  short refCount;                                      // +6
+  char pad8[0x30 - 8];
+  HkVector4 mMouse;                                    // +0x30 target point of the spring
+  char pad40[0x48 - 0x40];
+  void setMaxRelativeForce(float f);                   // 0x00C87BC0 (writes +0x48)
+};
+
+struct RbNode {
+  RbNode* mpRight;    // +0
+  RbNode* mpLeft;     // +4
+  RbNode* mpParent;   // +8
+  int color;          // +0xc
+  unsigned key;       // +0x10
+  void* body;         // +0x14
+};
+struct VIter { RbNode* node; };
+struct VInfo { void* body; uint32_t a, b, c; };
+
+struct VMap {                    // eastl::map at spine+0xcc (anchor node base at +4)
+  int pad0;
+  RbNode* anchorRight;           // +0xcc+4
+  RbNode* anchorLeft;
+  RbNode* root;
+  char color;
+  unsigned size;
+  VIter* Find(VIter* out, const unsigned* k);   // 0x00E5C780  rbtree find, returns `out`
+  VInfo* Index(const unsigned* k);              // 0x00632E90  map subscript
+  RbNode* Anchor() { return (RbNode*)&anchorRight; }
+};
+
 struct SpineHandle {
-  char pad0[0xe8];
+  char pad0[0x20];
+  float wallX0;          // +0x20  min X of the editor wall box
+  float wallZ0;          // +0x24  max Z
+  float wallX1;          // +0x28  max X
+  float wallZ1;          // +0x2c  min Z
+  char pad30[0x3c - 0x30];
+  MouseSpring* action;   // +0x3c  the mouse spring action currently dragging a vertebra
+  char pad40[0xb8 - 0x40];
+  float springMaxForce;  // +0xb8
+  char padbc[0xcc - 0xbc];
+  VMap vertebrae;        // +0xcc
+  char padE4[0xe8 - 0xe4];
   SpineNode* n1;         // +0xe8
   SpineNode* n2;         // +0xec
   char pad1[0x120 - 0xf0];
@@ -197,9 +377,41 @@ struct SpineHandle {
   PathObj* c2;           // +0x124
 
   bool FUN_005d4970();
+  bool Drag(SpineNode** pBlock, float a, float b, float c, float d, float e, float f);          // 0x005D4630
+  float Mass();                                                                                  // 0x005D3100
   uint32_t* NearestParam(Vec2* res, SpineNode* o);                                              // 0x005CF110 (thiscall, ret 8)
   bool WalkBelt(PathObj* out, CircleVec* v, int idx, float px, float py, unsigned flag);        // 0x005CE9B0 (thiscall, ret 0x18; this unused)
 };
+
+// @ 0x005D4630
+// Mouse-move continuation of StartDrag (0x5D43D0): recompute the ray/plane hit parameter t for
+// the vertebra under the pointer, clamp the result into the editor wall box, retarget the mouse
+// spring at the clamped point and refresh its force limit (max force / total mass * total mass).
+bool SpineHandle::Drag(SpineNode** pBlock, float a, float b, float c, float d, float e, float f)
+{
+  unsigned key = (unsigned)*pBlock;
+  VIter it;
+  if (vertebrae.Find(&it, &key)->node == vertebrae.Anchor()) return false;
+  VInfo* info = vertebrae.Index(&key);
+  if (!info) return false;
+  float den = (f + e) * 0.0f + d;
+  if (den == 0.0f) return true;
+  float t = -(((c + b) * 0.0f + a) / den);
+  if (t < 0.0f) return true;
+  float cy = b + e * t;
+  float cz = c + f * t;
+  cy = ClampFloat(cy, wallX0, wallX1);
+  cz = ClampFloat(cz, wallZ1, wallZ0);
+  HkVector4* mouse = &action->mMouse;
+  mouse->x = 0.0f;
+  mouse->y = cy;
+  mouse->z = cz;
+  mouse->w = 0.0f;
+  float s = Mass();
+  float mass = ((HkBody*)info->body)->motion->getMass();
+  action->setMaxRelativeForce(springMaxForce / mass * s);
+  return true;
+}
 
 char FindEnd(CircleVec* v, Vec2* dir, Circle* from, char flag, Vec2* out, uint32_t* idx);       // 0x005CE7B0 (cdecl)
 
