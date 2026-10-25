@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+00b18590 15 cGameData::Write: complete; cl stores the 0x17f243b local before the vcall's table load, original after

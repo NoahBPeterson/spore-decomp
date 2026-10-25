@@ -1,0 +1,10 @@
+# source  symbol  va  flags
+../src/game/SPGonzago/SPGameData.cpp  ?WriteSerializableObjectCheck@cGameData_s00b1_81d0@SP@@QAE_NXZ  00b183e0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPGameData.cpp  ?VtableSlot40@cGameData_s00b1_81d0@SP@@QAEXH@Z  00b183f0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPGameData.cpp  ?Init@cGameData_s00b1_81d0@SP@@QAE_NPAXHH@Z  00b18400  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPGameData.cpp  ?Ctor@RefHolder@@QAEPAU1@IIPAUIRef@@@Z  00b18490  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPGameData.cpp  ?DtorBody@cGameData_s00b1_81d0@SP@@QAEXXZ  00b184c0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPGameData.cpp  ?GetDefinition@cGameData_s00b1_81d0@SP@@QAEIXZ  00b18530  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPGameData.cpp  ?SetOwner@cGameData_s00b1_81d0@SP@@QAEXPAUIRef@@@Z  00b18550  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPGameData.cpp  ??0cGameData_s00b1_81d0@SP@@QAE@XZ  00b18660  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPGameData.cpp  ?InitGameDataAttributes@Simulator@@YAXXZ  013194a0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
