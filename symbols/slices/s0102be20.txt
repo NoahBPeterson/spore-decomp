@@ -7,9 +7,9 @@
 0102c720 ?GetCreatureColorProperty@@YADPAX00@Z  # char GetCreatureColorProperty
 0102c7f0 ?ApplyFilterConstraints@@YAXPAXD@Z  # void ApplyFilterConstraints
 0102c980 ?ClearTradeRoute@@YAXPAX@Z  # void ClearTradeRoute
-0102c9e0 ?StartMission@@YAXPAXPAUcMissionData@@0@Z  # void StartMission
-0102caa0 ?CollectSpice@@YAXPAXPAUcMissionData@@@Z  # void CollectSpice
-0102cae0 ?GiveGift@@YAXPAXI@Z  # void GiveGift
-0102cc30 ?CreateNewRaid@@YAXPAXPAUcMissionData@@@Z  # void CreateNewRaid
-0102cd30 ?ResumeSpaceGame@@YAXXZ  # void ResumeSpaceGame
-0102cd40 ?CloseCommScreenToSpace@@YAXXZ  # void CloseCommScreenToSpace
+0102c9e0 ?StartMission@@YAXPAXPAUcMissionData@@0@Z  # StartMission migrated from s0102be20 (verbatim, slice spelling)
+0102caa0 ?CollectSpice@@YAXPAXPAUcMissionData@@@Z  # CollectSpice migrated from s0102be20 (verbatim, slice spelling)
+0102cae0 ?GiveGift@@YAXPAXI@Z  # GiveGift migrated from s0102be20 (verbatim, slice spelling)
+0102cc30 ?CreateNewRaid@@YAXPAXPAUcMissionData@@@Z  # CreateNewRaid migrated from s0102be20 (verbatim, slice spelling)
+0102cd30 ?ResumeSpaceGame@@YAXXZ  # ResumeSpaceGame migrated from s0102be20 (verbatim, slice spelling)
+0102cd40 ?CloseCommScreenToSpace@@YAXXZ  # CloseCommScreenToSpace migrated from s0102be20 (verbatim, slice spelling)

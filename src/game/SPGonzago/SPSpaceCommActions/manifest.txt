@@ -1,0 +1,2 @@
+# source  symbol  va  flags
+../src/game/SPGonzago/SPSpaceCommActions.cpp  ?CollectSpice@@YAXPAXPAUcMissionData@@@Z  0102caa0  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
