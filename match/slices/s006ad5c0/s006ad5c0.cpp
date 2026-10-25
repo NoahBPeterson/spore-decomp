@@ -632,30 +632,38 @@ bool RegistryHost::Find(int a, void** out)
 // ---------------------------------------------------------------------------
 // 006ad5c0  LRU cache flush: walk buckets, drop refs, run callbacks, GC
 // ---------------------------------------------------------------------------
-extern "C" void F_6abfa0(void*);                 // 0x6abfa0
-extern "C" int  F_6ac0d0(void*);                 // 0x6ac0d0
-extern "C" void F_6ad180(void*);                 // 0x6ad180
-extern "C" void F_6aca20(void*, void*, void*);   // 0x6aca20
-extern "C" void F_6ac630(void*);                 // 0x6ac630
-extern "C" void F_7c80c0(void);                  // 0x7c80c0
+// thiscall callees (ecx carries the object), named so the hex address resolves.
+struct CacheLock { void Fn6abfa0(); };                     // 0x6abfa0  enter
+struct AutoRefVec { void Push6ad180(); void* Destroy7c80c0(); };  // 0x6ad180 / 0x7c80c0
+struct RegTable   { void F_6aca20(void* a, void* b, void* c); };  // 0x6aca20
+extern "C" int  F_6ac0d0(void*);                 // 0x6ac0d0  refcount probe
+extern "C" void F_6ac630(int zero, void* item);  // 0x6ac630  OnRegister(bool, IObj*)
+extern "C" void F_7c80c0(void*);                 // 0x7c80c0  AutoRefVec::Destroy
 
 // @ 0x006ad5c0
 void* __fastcall FUN_006ad5c0(void* self, void* filter)
 {
-    char   buf[1024];       // vector of removed (node, iterator) pairs
-    char*  end = buf;
-    char*  vec = buf;
+    // The removal set is an EASTL AutoRefVec local (destructor 0x7c80c0); the
+    // user-declared destructor makes cl emit the EH frame the original has.
+    struct VecLocal {
+        char   buf[1024];
+        ~VecLocal() {}          // presence only: forces the EH frame
+    };
+    VecLocal store;
+    char*  vec = store.buf;
+    char*  end = store.buf;
     void*  f = filter;
+    char*  s = (char*)self;
 
-    F_6abfa0((char*)self + 0x48);
+    ((CacheLock*)(s + 0x48))->Fn6abfa0();
 
-    int* it   = *(int**)((char*)self + 0x10);
-    int  v    = *it;
+    int* it = *(int**)(s + 0x10);
+    int  v  = *it;
     if (v == 0) {
         do { ++it; v = *it; } while (v == 0);
     }
     int* cur  = it;
-    int  stop = *(int*)((char*)self + 0x10) + *(int*)((char*)self + 0x14) * 4;
+    int  stop = *(*(int**)(s + 0x10) + *(int*)(s + 0x14));
 
     while (v != stop) {
         void* node = (void*)v;
@@ -672,20 +680,17 @@ void* __fastcall FUN_006ad5c0(void* self, void* filter)
                 if (q == 0 || *(int*)((char*)q + 0x14) == 0 || F_6ac0d0(ref) == 1)
                     pass = 1;
             }
-            if (pass && (f != 0 || F_6ac0d0((void*)v) != 1)) {
+            if (pass && (f != 0 || F_6ac0d0(node) != 1)) {
                 if (((int (__thiscall*)(void*))(((void**)ref)[4]))(ref) == 1) {
-                    F_6ad180((char*)self + 0x30);
+                    ((AutoRefVec*)vec)->Push6ad180();
                     void* r = *(void**)((char*)node + 0xc);
                     *(void**)((char*)node + 0xc) = 0;
                     void* old = *(void**)(end - 4);
                     *(void**)(end - 4) = r;
                     if (old)
                         ((void(__thiscall*)(void*))(((void**)old)[1]))(old);
-                    /* append the (node, cur) pair to the removal vector */
-                    *(void**)end = node;
-                    *(void**)(end + 4) = cur;
-                    F_6aca20(vec, end, end + 8);
-                    end += 8;
+                    /* record (node, bucketIterator) through RegTable::erase */
+                    ((RegTable*)vec)->F_6aca20(node, cur, end);
                 }
             }
         }
@@ -693,17 +698,14 @@ void* __fastcall FUN_006ad5c0(void* self, void* filter)
     }
 
     LOCK();
-    *(int*)((char*)self + 0x48) = *(int*)((char*)self + 0x48) - 1;
-    UNLOCK();
-    LOCK();
-    *(int*)((char*)self + 0x50) = *(int*)((char*)self + 0x50) + 1;
+    *(int*)(s + 0x48) = *(int*)(s + 0x48) - 1;
+    *(int*)(s + 0x50) = *(int*)(s + 0x50) + 1;
     UNLOCK();
 
     unsigned n = (unsigned)(end - vec) >> 2;
     for (unsigned i = 0; i < n; ++i)
-        F_6ac630(vec);
-    F_7c80c0();
-    return self;
+        F_6ac630(0, *(void**)(vec + i * 4));
+    return (void*)((AutoRefVec*)vec)->Destroy7c80c0();
 }
 
 // ---------------------------------------------------------------------------
@@ -803,8 +805,15 @@ int* __fastcall FUN_006adee0(void* self, void* key)
 // map node under the mutex.
 // ---------------------------------------------------------------------------
 extern "C" void* F_67dcd0(void);                 // 0x67dcd0 ResourceMan::GetManager
-extern char g_mapLock[];                         // 0x1409448 (lock arg, unused)
 struct MapLookup { void Find(void** out, void* key); };  // 0xa21dc0
+
+// EA::Thread::Mutex is locked through ecx = the mutex, with the debug name
+// (0x1409448) as the sole stack argument; model it as a __thiscall member.
+struct Mutex {
+    void Lock9221b0(void* name);   // 0x9221b0
+    void Unlock922270();           // 0x922270
+};
+extern char g_01409448[];          // 0x1409448  mutex debug name
 
 // @ 0x006ae880
 void __fastcall FUN_006ae880(void* self, int unused, void* p, void* rec)
@@ -818,12 +827,12 @@ void __fastcall FUN_006ae880(void* self, int unused, void* p, void* rec)
         void* mgr = F_67dcd0();
         ((void(__thiscall*)(void*, void*, int))(*(void***)mgr)[0x6c / 4])(mgr, rec, 1);
     }
-    F_9221b0(s + 0x10);
+    ((Mutex*)(s + 0x10))->Lock9221b0(g_01409448);
     void* it = 0;
     ((MapLookup*)(s + 0x40))->Find(&it, p);
     if (it != s + 0x44)
         ((RBTreeX*)(s + 0x40))->Remove(&it, (RBNodeX*)it);
-    F_922270(s + 0x10);
+    ((Mutex*)(s + 0x10))->Unlock922270();
 }
 
 
