@@ -3,7 +3,7 @@
 010c1c60 hkConvexVerticesShape::getAabb  # dev-PDB mangled name
 010c1c90 hkConvexVerticesShape::castRay  # dev-PDB mangled name
 010c1f40 hkConvexVerticesShape::calcStatistics  # dev-PDB mangled name
-010c1fe0 hkConvexVerticesShape constructor from hkGeometry-like source
+010c1fe0 hkConvexVerticesShape constructor from a vertex array + hkArray<hkVector4> plane source (returns this; 5 args, ret 0x14)
 010c21c0 hkConvexVerticesShape::~hkConvexVerticesShape  # dev-PDB mangled name
 010c2230 hkConvexVerticesShape assignment from an hkGeometry-like source
 010c2310 hkAllCdPointCollector::addCdPoint  # dev-PDB mangled name
