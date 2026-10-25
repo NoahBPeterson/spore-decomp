@@ -5,3 +5,5 @@ slices/s009a9600/s009a9600.cpp  ?FUN_009a9b70@@YAKPBDKPADPAPAD@Z  009a9b70
 slices/s009a9600/s009a9600.cpp  ?f@S9a9b90@@QAEPAU1@H@Z  009a9b90
 slices/s009a9600/s009a9600.cpp  ?FUN_009a9bc0@@YG_NPAI0@Z  009a9bc0
 slices/s009a9600/s009a9600.cpp  ?f@S9aa4c0@@QAEPAU1@PAH@Z  009aa4c0
+slices/s009a9600/s009a9600.cpp  ?Init@cSPUILayoutManager@@QAE_NXZ  009a9920  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s009a9600/s009a9600.cpp  ?F9aa3a0@@YAXPAX0PAUbaked_animation@nSPCreatureAnim@@I@Z  009aa3a0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
