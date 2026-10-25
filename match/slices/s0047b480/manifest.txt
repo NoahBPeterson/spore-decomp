@@ -1,1 +1,6 @@
 # source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s0047b480/s0047b480.cpp  ?DoAssignFromIterator@TransformVec@@QAEXPBUcSPTransform@@0URandomAccessTag@@@Z  0047b480  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s0047b480/s0047b480.cpp  ?QuickSortImpl@@YAXPAUSortKey@@0HUKeyLess@@@Z  0047b6d0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s0047b480/s0047b480.cpp  ??0Obj8C@@QAE@ABU0@@Z  0047b950  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s0047b480/s0047b480.cpp  ??0Obj29C@@QAE@ABU0@@Z  0047bbf0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s0047b480/s0047b480.cpp  ?Median@@YAABUSortKey@@ABU1@00UKeyLess@@@Z  0047c2c0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
