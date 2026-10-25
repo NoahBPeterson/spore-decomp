@@ -1,9 +1,9 @@
-00c5a580 ?UpdateActiveStep@cMissionMultiStep@@QAEXXZ  # void cMissionMultiStep::UpdateActiveStep
-00c5a610 ?CompleteStep@cMissionMultiStep@@QAEXXZ  # void cMissionMultiStep::CompleteStep
-00c5a790 ?OnAccept@cMissionMultiStep@@QAEXXZ  # void cMissionMultiStep::OnAccept
-00c5a7d0 ?DestroyStepLists@cMissionMultiStep@@QAEXXZ  # void cMissionMultiStep::~vector steps
-00c5a990 ?Init@cMissionMultiStep@@QAE_NXZ  # bool cMissionMultiStep::Init
-00c5ab80 ?Shutdown@cMissionMultiStep@@QAEXXZ  # void cMissionMultiStep::Shutdown
+00c5a580 ?UpdateActiveStep@cMissionMultiStep_s00c5_a580@@QAEXXZ  # cMissionMultiStep_s00c5_a580::UpdateActiveStep migrated from s00c5a580 (verbatim, slice spelling)
+00c5a610 ?CompleteStep@cMissionMultiStep_s00c5_a580@@QAEXXZ  # cMissionMultiStep_s00c5_a580::CompleteStep migrated from s00c5a580 (verbatim, slice spelling)
+00c5a790 ?OnAccept@cMissionMultiStep_s00c5_a580@@QAEXXZ  # cMissionMultiStep_s00c5_a580::OnAccept migrated from s00c5a580 (verbatim, slice spelling)
+00c5a7d0 ?DestroyStepLists@cMissionMultiStep_s00c5_a580@@QAEXXZ  # cMissionMultiStep_s00c5_a580::DestroyStepLists migrated from s00c5a580 (verbatim, slice spelling)
+00c5a990 ?Init@cMissionMultiStep_s00c5_a580@@QAE_NXZ  # cMissionMultiStep_s00c5_a580::Init migrated from s00c5a580 (verbatim, slice spelling)
+00c5ab80 ?Shutdown@cMissionMultiStep_s00c5_a580@@QAEXXZ  # cMissionMultiStep_s00c5_a580::Shutdown migrated from s00c5a580 (verbatim, slice spelling)
 00c5ac60 ?GetUILongDescriptionSoFar@cMissionMultiStep@@QAEXPAX@Z  # void cMissionMultiStep::GetUILongDescriptionSoFar
 00c5ad40 ??0cMissionMultiStep@@QAE@XZ  # cMissionMultiStep::cMissionMultiStep
 00c5ae30 ?Write@cMissionMultiStep@@QAE_NPAX@Z  # bool cMissionMultiStep::Write
