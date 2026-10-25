@@ -1,25 +1,3 @@
-# slice s00e033d0 - ban-content UI, inferred from the cards and observed behaviour
-# Modelled types (retail member offsets):
-#   wstring    {wchar_t* mpBegin@0x00, mpEnd@0x04, mpCap@0x08}; heap owned when
-#              (((int)((cap-begin)) & 0xfffffffe) > 2) and begin != 0
-#   BanEntry   0x24 bytes: miId@0x00, mName(wstring)@0x04, miUnk10@0x10,
-#              mText(wstring)@0x14, miExtra@0x20
-#   BanVec     EASTL vector<BanEntry>: mpBegin@0x00, mpEnd@0x04, mpCap@0x08;
-#              shifts via 0xe02d30/0xe02da0, relocate via 0xe038e0/0xe02cc0,
-#              growth allocates cap*0x24 bytes (op_new 0x13ebb38 "Simulator" line 0xd1)
-#   BanTranslator  mpVtbl@0x00, miUnk04@0x04, mbActive@0x08, mbHold@0x09,
-#              miId@0x0c, mText(wstring)@0x10, miUnk1C@0x1c, mExtra(wstring)@0x20,
-#              mList(BanVec)@0x30; ctor 0x6b5870, dtor 0x5725a0
-#   BanContent mpVtbl@0x00, mTokens(BanTranslator)@0x04 (0x3c bytes)
-#   cSPUIGlobalUI  ban-dialog root: mpVtbl@0x00, mpOptions@0x04, mpLayout@0x08,
-#              mBan(BanContent)@0x0c (0x40 bytes), mpHandler@0x54, mpHandlerThis@0x58,
-#              miHandlerTag@0x5c, miHandlerCount@0x60, miHandlerExtra@0x64
-#              vtable 0x147f288 (ban dialog) / 0x13eb394 (PaintSystem base)
-#   cSPUIGlobalUI civ slots: 4 x 0xc bytes at 0x91 (used flag at +0x00)
-#   CivPauseUI  mpVtbl@0x00, mMessageBoxState@0x0c, mStopwatch@0x28 (double time@0x38),
-#              mTimeoutFlag@0x3c?
-#   helpers    FNV1_String16@0x932f30, WStr_Format@0x41e050, cof_new/cof_delete,
-#              op_new@0x8105b0, EA::Messaging::RegisterHandler@0x571ea0/RemoveHandler@0x571db0
 00e033d0  CivPauseUI::Pause() -> void  # gate on the two stopwatch thresholds and the 1500 s timeout, then show the pause message box and drop the pause gate
 00e03590  BanContent::SetText(int id, const wchar_t* text, const void* extras) -> void  # set active+id, assign the text wstring, then format extras into mExtra and retarget the handler string
 00e03620  cSPUIGlobalUI::Init(int param) -> bool  # register the 11-message handler array, create the layout object, init the ban content, add the translator handler
@@ -37,7 +15,7 @@
 00e03e50  BanContent::AddRow(int id, const wchar_t* name, const wchar_t* text) -> void  # in hold mode format directly, else append a copy-constructed entry
 00e03f40  BanContent::OnToggle(char on) -> void  # store the hold flag; turning hold on while inactive flushes the first pending entry
 00e03f80  cSPUIGlobalUI::HandleMessage(unsigned msg, int arg) -> bool  # 10 ban-dialog messages: show/hide, civ-slot queries, rename, accept/cancel
-00e04270  cSPUIGlobalUI::AsInterface(unsigned id) -> void*  # interface ids 0xee3f516e/0x2f009dd0 return this, 0x469a812 returns this-0x70
-00e042b0  cSPUIGlobalUI::AnyCivSlotUsed() -> bool  # true when any of the four 0xc-byte civ slots at 0x91 has its used flag set
-00e042d0  cSPUIGlobalUI::ShowOptionWindows(char on) -> void  # show the three option windows; the third gets the inverted enable flag
-00e04330  FUN_00e04330(int type) -> int  # map a UI option index to its message id in 0x064bd00a..0x064bd016
+00e04270 ?AsInterface@cSPUIGlobalUI@@QAEPAXI@Z  # cSPUIGlobalUI::AsInterface migrated from s00e033d0 (verbatim, slice spelling)
+00e042b0 ?AnyCivSlotUsed@cSPUIGlobalUI@@QAE_NXZ  # cSPUIGlobalUI::AnyCivSlotUsed migrated from s00e033d0 (verbatim, slice spelling)
+00e042d0 ?ShowOptionWindows@cSPUIGlobalUI@@QAEXD@Z  # cSPUIGlobalUI::ShowOptionWindows migrated from s00e033d0 (verbatim, slice spelling)
+00e04330 ?FUN_00e04330@@YAHH@Z  # FUN_00e04330 migrated from s00e033d0 (verbatim, slice spelling)

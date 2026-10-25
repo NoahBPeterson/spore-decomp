@@ -1,4 +1,4 @@
-// src/game/SPGonzago/SPUIGlobalUICiv.cpp -- migrated from slice(s) s00bad7a0, s00bac830, s00baa930, s00ba9810 by tools/migrate/rewrite.py
+// src/game/SPGonzago/SPUIGlobalUICiv.cpp -- migrated from slice(s) s00e033d0, s00bad7a0, s00bac830, s00baa930, s00ba9810 by tools/migrate/rewrite.py
 // Object file: SPGonzago/SPUIGlobalUICiv.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -403,6 +403,107 @@ public:
     uint8_t mPad1ec[0x30];          // +0x1ec
 };
 // ---- items of slice s00bad7a0 end
+
+// ---- items of slice s00e033d0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+typedef void  (__thiscall* TFnVII)(void*, int, int);
+#define VT(o, off) (*(void***)(o))[(off) / 4]
+struct wstring {
+    wchar_t* mpBegin;   // +0x00
+    wchar_t* mpEnd;     // +0x04
+    wchar_t* mpCap;     // +0x08
+
+    void __thiscall Assign(const wchar_t* first, const wchar_t* last); // 0x423650
+    void __thiscall AllocateSelf(int n);                               // 0x429760
+    void __thiscall RangeInit(const wchar_t* str);                     // 0x579a90
+    void __thiscall Destroy();                                         // 0x5725a0
+};
+struct BanVec;
+struct BanEntry {
+    int     miId;      // +0x00
+    wstring mName;     // +0x04
+    int     miUnk10;   // +0x10
+    wstring mText;     // +0x14
+    int     miExtra;   // +0x20
+
+    BanEntry* __thiscall CopyFrom(const BanEntry& src);   // 0x00e03830
+};
+struct BanVec {
+    BanEntry* mpBegin;   // +0x00
+    BanEntry* mpEnd;     // +0x04
+    BanEntry* mpCap;     // +0x08
+
+    BanEntry* __thiscall EraseLast(BanEntry* pos);                    // 0x00e03c30
+    BanEntry* __thiscall Insert(BanEntry* pos, const BanEntry& val);  // 0x00e03ca0
+};
+struct BanTranslator {
+    void*    mpVtbl;     // +0x00
+    int      miUnk04;    // +0x04
+    char     mbActive;   // +0x08 (BanContent+0x0c)
+    char     mbHold;     // +0x09 (BanContent+0x0d)
+    short    miPad0A;    // +0x0a
+    int      miId;       // +0x0c
+    wstring  mText;      // +0x10
+    int      miUnk1C;    // +0x1c
+    wstring  mExtra;     // +0x20
+    int      miUnk2C;    // +0x2c
+    BanVec   mList;      // +0x30
+
+    bool __thiscall Format(const wchar_t* key, wchar_t* out);      // 0x00e03b80
+};
+struct BanContent {
+    void*         mpVtbl;    // +0x00
+    BanTranslator mTokens;   // +0x04
+
+    void __thiscall Dtor();                     // 0x00e03930
+    void __thiscall SetText(int id, const wchar_t* text, const void* extras); // 0x00e03590
+    void __thiscall OnDeactivate(int a, int b); // 0x00e03e10
+    void __thiscall OnToggle(char on);          // 0x00e03f40
+    void __thiscall AddRow(int id, const wchar_t* name, const wchar_t* text); // 0x00e03e50
+    void __thiscall Reactivate();               // 0x00e02e80 (external)
+};
+struct UIMessage {
+    int miPad00;   // +0x00
+    int miPad04;   // +0x04
+    int miType;    // +0x08
+    int miId;      // +0x0c
+    int miSub;     // +0x10
+    int miFlag;    // +0x14
+};
+struct cSPUIGlobalOptions {
+    int   miPad00[3];   // +0x00
+    int   miType;       // +0x0c
+    int   miId;         // +0x10
+    int   miSub;        // +0x14
+
+    void __thiscall Reactivate();                        // 0x00e02e80
+    void __thiscall Enable(int on);                      // 0x00e018c0
+    bool __thiscall HandleMessage(int arg, UIMessage* msg); // 0x00e039d0
+};
+struct cSPUILayout_s00e0_33d0;
+struct cSPUIGlobalUI {
+    void*            mpVtbl;        // +0x00
+    cSPUIGlobalOptions* mpOptions;  // +0x04
+    cSPUILayout_s00e0_33d0*     mpLayout;      // +0x08
+    BanContent       mBan;          // +0x0c
+    int              miPad4C;       // +0x4c
+    int              miPad50;       // +0x50
+    void*            mpHandler;     // +0x54
+    void*            mpHandlerThis; // +0x58
+    int              miHandlerTag;  // +0x5c
+    int              miHandlerCount;// +0x60
+    int              miHandlerExtra;// +0x64
+
+    bool __thiscall Init(int param);                                // 0x00e03620
+    bool __thiscall Shutdown();                                     // 0x00e03740
+    void* __thiscall Construct();                                   // 0x00e03ab0
+    void __thiscall Destroy();                                      // 0x00e03b20
+    void* __thiscall FindWindowByID(unsigned id);                   // 0x00e012b0
+    void __thiscall ShowOptionWindows(char on);                     // 0x00e042d0
+    bool __thiscall HandleMessage(unsigned msg, int arg);           // 0x00e03f80
+    bool __thiscall AnyCivSlotUsed();                               // 0x00e042b0
+    void* __thiscall AsInterface(unsigned id);                      // 0x00e04270
+};
+// ---- items of slice s00e033d0 end
 
 // @ 0x00baa810
 cSortTriple* PartitionTriples(cSortTriple* pFirst, cSortTriple* pLast, cSortTriple value, char (*pPredicate)(const cSortTriple*, const cSortTriple*))
@@ -1413,4 +1514,61 @@ uint32_t& CivCounterMap::GetCounter(cCivilization* pKey)
 
     DoInsertValue(pParent, (const uint32_t*)&pKey, 0);
     return *(uint32_t*)&pParent->mpValue;
+}
+
+// @ 0x00e04270
+void* cSPUIGlobalUI::AsInterface(unsigned id)
+{
+    void* pRet = 0;
+    if (id != 0xee3f516e) {
+        if (id == 0x0469a812)
+            return (void*)((char*)this - 0x70);
+        if (id != 0x2f009dd0)
+            return pRet;
+    }
+    char* p = (char*)this - 0x70;
+    return (void*)(p ? this : 0);
+}
+
+// @ 0x00e042b0
+bool cSPUIGlobalUI::AnyCivSlotUsed()
+{
+    for (int i = 0; i < 4; ++i) {
+        if (*(char*)((char*)this + 0x91 + i * 0xc) != 0)
+            return true;
+    }
+    return false;
+}
+
+// @ 0x00e042d0
+void cSPUIGlobalUI::ShowOptionWindows(char on)
+{
+    void* w = this->FindWindowByID(0x6453746);
+    ((TFnVII)VT(w, 0x7c))(w, 1, (int)on);
+
+    w = this->FindWindowByID(0x652a628);
+    ((TFnVII)VT(w, 0x7c))(w, 1, (int)on);
+
+    w = this->FindWindowByID(0x44827b8);
+    ((TFnVII)VT(w, 0x7c))(w, 1, (on == 0) ? 1 : 0);
+}
+
+// @ 0x00e04330
+int __cdecl FUN_00e04330(int type)
+{
+    switch (type) {
+    case 3:  return 0x64bd00a;
+    case 10: return 0x64bd00b;
+    case 9:  return 0x64bd00c;
+    case 11: return 0x64bd00d;
+    case 6:  return 0x64bd00e;
+    case 0:  return 0x64bd00f;
+    case 4:  return 0x64bd010;
+    case 7:  return 0x64bd011;
+    case 1:  return 0x64bd012;
+    case 5:  return 0x64bd013;
+    case 8:  return 0x64bd014;
+    case 2:  return 0x64bd015;
+    default: return 0x64bd016;
+    }
 }
