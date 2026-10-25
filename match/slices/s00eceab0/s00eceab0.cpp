@@ -13,6 +13,24 @@ extern char vtbl_AddRef[];
 extern char vtbl_cSPScenarioSwatchEditItemUI[];
 extern char vtbl_TextZoomName[];
 
+// distinct vtable data addresses used by the cSPScenarioSwatchEditItemUI ctor
+extern char vtbl_13fa72c[];
+extern char vtbl_13fa768[];
+extern char vtbl_13fa750[];
+extern char vtbl_1489838[];
+extern char vtbl_1489824[];
+extern char vtbl_14897f4[];
+extern char vtbl_14897d8[];
+extern char vtbl_14899e0[];
+extern char vtbl_14897d0[];
+extern char vtbl_1489750[];
+extern char vtbl_1489738[];
+
+// ctor helpers for the two members at +0x80 (thiscall, ret 8)
+struct MemberCtor560 { void ctor(int a, int b); };   // 0x0093a560
+struct MemberCtor480 { void ctor(int a, int b); };   // 0x0093a480
+struct SwatchItemBase { void ctor(); };              // 0x00ece990
+
 void* __cdecl FUN_00401020();
 void  __cdecl FUN_005f0c60(int a, int b);
 void  __cdecl FUN_005f0a60(int a);
@@ -31,6 +49,7 @@ struct ValueSink {
 void  __cdecl FUN_00834fa0(int a, int b, int c, int d, int e, int f, int g);
 int*  __cdecl cSPUILayout_FindWindowByID3(void* l, int id);
 void  __cdecl FUN_00808230(int a, void* b);
+void  __fastcall FUN_00834a00(int self, int arg);   // ecx=this, one stack arg
 int   __cdecl FUN_00834c60(int a);
 int   __cdecl FUN_00834e30();
 int   __cdecl FUN_00ece410(void* a);
@@ -50,6 +69,7 @@ int   __cdecl FUN_00b3d320();
 void* __cdecl UI_TextZoomName_ctor();
 
 // ============================================================ 0x00eceab0 (LoadLayout, big)
+// @ 0x00eceab0
 void FUN_00eceab0(int param_1, int param_2)
 {
     // reference-counted palette-item assignment + property push; partial.
@@ -178,23 +198,28 @@ bool SwatchMsgTarget::FUN_00ecf0f0(int param_2, int param_3)
 }
 
 // ============================================================ 0x00ecf150 (ctor)
+// @ 0x00ecf150
 int* __fastcall FUN_00ecf150(int* param_1)
 {
-    param_1[0x1c] = (int)vtbl_Async;
-    param_1[0x1b] = (int)vtbl_AddRef;
-    param_1[0x1c] = (int)vtbl_Async;
-    param_1[0x1d] = 0;
-    param_1[0] = (int)vtbl_cSPScenarioSwatchEditItemUI;
-    param_1[2] = (int)vtbl_Async;
-    param_1[9] = (int)vtbl_Async;
-    param_1[0xc] = (int)vtbl_Async;
-    param_1[0xd] = (int)vtbl_Async;
-    param_1[0x11] = (int)vtbl_Async;
-    param_1[0x1b] = (int)vtbl_Async;
-    param_1[0x1c] = (int)vtbl_Async;
+    ((SwatchItemBase*)param_1)->ctor();
+    volatile int* vp = (volatile int*)param_1;
+    vp[0x1c] = (int)vtbl_13fa72c;
+    vp[0x1b] = (int)vtbl_13fa768;
+    vp[0x1c] = (int)vtbl_13fa750;
+    vp[0x1d] = 0;
+    param_1[0] = (int)vtbl_1489838;
+    param_1[2] = (int)vtbl_1489824;
+    param_1[9] = (int)vtbl_14897f4;
+    param_1[0xc] = (int)vtbl_14897d8;
+    param_1[0xd] = (int)vtbl_14899e0;
+    param_1[0x11] = (int)vtbl_14897d0;
+    param_1[0x1b] = (int)vtbl_1489750;
+    param_1[0x1c] = (int)vtbl_1489738;
     *((char*)param_1 + 0x78) = 0;
     *((char*)param_1 + 0x79) = 0;
     param_1[0x1f] = 0;
+    ((MemberCtor560*)((char*)param_1 + 0x80))->ctor(4, 0);
+    ((MemberCtor480*)((char*)param_1 + 0x80))->ctor(0, 0);
     return param_1;
 }
 
@@ -229,6 +254,7 @@ void FUN_00ecf320(int param_1, int param_2, int param_3, int param_4, int param_
 }
 
 // ============================================================ 0x00ecf400
+// @ 0x00ecf400
 int FUN_00ecf400(int param_1, int param_2, int* param_3)
 {
     int iVar5 = param_3[6];
@@ -268,34 +294,48 @@ int FUN_00ecf400(int param_1, int param_2, int* param_3)
     (void)param_2;
 }
 
+// 0x00ecf6d0 receives an interior pointer (object base is 0x6c lower) as ecx, with all
+// message arguments on the stack: model it as a thiscall member.
+struct SwatchMsgHandler {
+    bool FUN_00ecf6d0(int msg, int arg2, int arg3);
+};
+
 // ============================================================ 0x00ecf6d0
-unsigned FUN_00ecf6d0(int param_1, int* param_2)
+// @ 0x00ecf6d0
+bool SwatchMsgHandler::FUN_00ecf6d0(int msg, int arg2, int arg3)
 {
-    int iVar2 = K0(param_2, 0x1c);
-    if (iVar2 == 0x4a1cb6e) {
-        int u = *(int*)(param_1 - 0x20);
-        FUN_00401020();
-        FUN_005f0c60(u, 0x5368d4a5);
+    (void)arg2; (void)arg3;
+    char* param_1 = (char*)this;
+    if (K0((int*)msg, 0x1c) == (int)0x4a1cb6e) {
+        ((ValueSink*)FUN_00401020())->SetValue(*(int*)(param_1 - 0x20), *(float*)0x13f9bb0);
     }
-    unsigned b = 1;
-    iVar2 = K0(*(int**)(param_1 - 0x6c), 0x28);
-    int flag = (iVar2 == (int)0x867a9ee9) ? 1 : 0;
-    int iVar1 = *(int*)(param_1 - 0x5c);
-    if (*(char*)(param_1 + 0xd) == 0) {
-        int* w = (int*)cSPUILayout_FindWindowByID3(*(void**)(param_1 - 0x1c), 0x7b6b2cd);
-        if (w) C2(w, 0x7c, 1, iVar1 != -1);
+    char* base = param_1 - 0x6c;
+    bool flag = true;
+    if (K0(base, 0x28) == (int)0x867a9ee9)
+        flag = false;
+    bool c = *(int*)(base + 0x10) != -1;
+    if (*(char*)(base + 0x79) == 0) {
+        int* w = (int*)((cSPUILayout*)*(void**)(base + 0x50))->FindWindowByID(0x7b6b2cd, true);
+        if (w) C2(w, 0x7c, 1, c);
     }
-    int iVar2b = *(int*)(param_1 - 0x5c);
-    if (*(char*)(param_1 + 0xd) == 0) {
-        int* w = (int*)cSPUILayout_FindWindowByID3(*(void**)(param_1 - 0x1c), 0x4a1cb6d);
-        if (w) C2(w, 0x7c, 1, iVar2b != -1);
-        if (*(char*)(param_1 + 0xd) == 0) {
-            w = (int*)cSPUILayout_FindWindowByID3(*(void**)(param_1 - 0x1c), 0x73272b0);
+    c = *(int*)(base + 0x10) != -1;
+    if (*(char*)(base + 0x79) == 0) {
+        int* w = (int*)((cSPUILayout*)*(void**)(base + 0x50))->FindWindowByID(0x4a1cb6d, true);
+        if (w) C2(w, 0x7c, 1, c);
+        if (*(char*)(base + 0x79) == 0) {
+            w = (int*)((cSPUILayout*)*(void**)(base + 0x50))->FindWindowByID(0x73272b0, true);
             if (w) C2(w, 0x7c, 1, flag);
         }
     }
-    b = (*(int*)(param_1 - 0x5c) != -1);
-    return b;
+    c = *(int*)(base + 0x10) != -1;
+    if (*(char*)(base + 0x79) == 0) {
+        int* w = (int*)((cSPUILayout*)*(void**)(base + 0x50))->FindWindowByID(0x7464588, true);
+        if (w) C2(w, 0x7c, 1, c);
+    }
+    if (!*(char*)(param_1 + 0xc))
+        FUN_00834a00(*(int*)(param_1 + 0x10), 0);
+    *(char*)(param_1 + 0xc) = 1;
+    return false;
 }
 
 // ============================================================ 0x00ecf800

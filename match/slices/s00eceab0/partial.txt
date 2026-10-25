@@ -1,5 +1,3 @@
 # va  diff-bytes  reason
-00eceab0  1293  approximate: SP::cSPEditorDevUI::LoadLayout only partially reconstructed
-00ecf150   131  approximate: cSPScenarioSwatchEditItemUI ctor base call/vptr setup omitted
-00ecf400   712  approximate: scenario swatch message handler only partially reconstructed
-00ecf6d0   304  approximate: swatch window-enable logic only partially reconstructed
+00eceab0  1293  PARTIAL: SP::cSPEditorDevUI::LoadLayout only partially reconstructed (63-byte approximation of a 1293-byte function; heavy inlined container/property-map code)
+00ecf400   659  PARTIAL: scenario swatch message handler only partially reconstructed (221-byte approximation of a 686-byte function; missing cases 0x7be2446/0x7be2447 and the FUN_00ece410 eax+stack helper ABI)

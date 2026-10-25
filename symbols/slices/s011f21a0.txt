@@ -1,4 +1,5 @@
-011f21a0 ?GlobalState_D3D9Sync@@YAXXZ  # d3d9 state-bank flush; calls the 0x011f1400/0x011f1810/0x011f18b0/0x011f1950/0x011f1a10 dispatch helpers (partial)
+011f21a0 ?GlobalState_D3D9Sync@@YAXXZ  # d3d9 state-bank flush; calls the 0x011f1400/0x011f1810/0x011f18b0/0x011f1950/0x011f1a10 dispatch helpers. Nonmatching (230 diff, 684 vs 724): /LTCG frame + register allocation only; equivalence FAIL clobber-only (ecx), 20.7% coverage
+011f2480 ?GlobalState_D3D9InitializeBitShiftTable+?GlobalState_D3D9Initialize  # region is 1840 bytes and has two entry points (the PDB gives both names); no slice target, no marker, and it cannot get a manifest row (chk reports "no marker symbol and no symbol of similar size"). Body is the rodata shift-table initialiser plus the pixel-shader-3.0 caps fixups on the D3DCaps9 record at [eax+0x21]/[eax+0x2d]
 011f2bb0 ?GlobalState_D3D9Start@@YAHXZ  # pdb_names GlobalState::D3D9Start; calls D3D9InitializeBitShiftTable then D3D9Initialize
 011f2bc0 ?GlobalState_D3D9SetActiveVertexDescriptor@@YIXPAUVertexDescriptor@@@Z  # pdb_candidates GlobalState::D3D9SetActiveVertexDescriptor; device vtable +0x15c = SetVertexDeclaration
 011f2bf0 ?GlobalState_D3D9ClearActiveVertexDescriptor@@YAXXZ  # pdb_candidates GlobalState::D3D9ClearActiveVertexDescriptor; clears 0x016fa55c and 0x016fa558

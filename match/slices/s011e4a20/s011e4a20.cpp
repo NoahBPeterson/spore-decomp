@@ -326,10 +326,30 @@ void* __cdecl rw_ArenaSectionsInitialize(int* a, int nTypes, int typeIds, int nE
 }
 
 // ------------------------------------------------------------------ size calculators
+__declspec(noinline) uint32 __cdecl rw_sections_size(uint32 n1, uint32 n2);
+// The retail body walks the section layout with a run-time alignment step (the alignment
+// applied to the running total before every section block), which folds to n1*4 + n2*8 + 0x5c.
+static uint32 section_size_align(uint32 pos, uint32 align)
+{
+    uint32 mask = align - 1;
+    if (align <= 1)
+        return pos;
+    return (pos + mask) & ~mask;
+}
+
 // @ 0x011e5000
 uint32 __cdecl rw_sections_size(uint32 n1, uint32 n2)
 {
-    return n1 * 4 + n2 * 8 + 0x5c;
+    uint32 aNull = 4, aTypes = 4, aExt = 4, aAtoms = 4;
+    uint32 pos = 0x1c;
+    pos = section_size_align(pos, aNull);
+    pos += n1 * 4 + 0xc;
+    pos = section_size_align(pos, aTypes);
+    pos += n2 * 8 + 0xc;
+    pos = section_size_align(pos, aExt);
+    pos += 0x1c;
+    pos = section_size_align(pos, aAtoms);
+    return pos + 0xc;
 }
 
 // @ 0x011e5090

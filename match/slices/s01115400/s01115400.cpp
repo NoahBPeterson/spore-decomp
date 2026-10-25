@@ -461,7 +461,7 @@ void hkMoppAabbCastVirtualMachine::aabbCast(const hkAabbCastInput& input,
     float w = *(float*)(m + 0x1c);
     m_invScale = 1.0f / w;
 
-    float t = w * 2.3283064e-10f;
+    float t = w * 1.5258789e-05f;
     hkVector4 tmp;
     tmp.x = t * input.m_aabb[1].x;
     tmp.y = t * input.m_aabb[1].y;

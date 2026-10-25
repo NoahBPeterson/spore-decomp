@@ -3,13 +3,13 @@
 #
 # Slice s011e4a20 = rw arena section registration and fixup walkers (tables of rw_section_init_* /
 # rw_section_*_advance writers, the arena section manifests, the Atoms/ExternalArenas sections and
-# the arena path tokenizer).  2/27 byte-exact.  The other 25 are complete C++ that reproduces the
-# original control flow, the section layouts and the callback ordering; they are spread over the
-# two bookkeeping files below:
-#   * partial.txt        15 functions that the equivalence gate PASSes at these flags and whose only
-#                        gap is byte layout (LTCG-folded tables, scheduler differences);
-#   * nonmatching.txt    10 functions the gate cannot measure (import:_decode_pointer / fake-arity /
-#                        all-fault inputs) or that pass with WEAK coverage.
+# the arena path tokenizer).  3/27 byte-exact.  The other 24 are complete C++ that reproduces the
+# original control flow, the section layouts and the callback ordering, and every one of them has
+# been through the equivalence gate:
+#   * 14 functions below pass the gate but are not byte-exact (LTCG frame/spill and inlining
+#     differences);
+#   * 10 functions the gate cannot measure (import:_decode_pointer / fake-arity / all-fault inputs)
+#     or that pass with WEAK coverage.
 # One helper, rw_ArenaSectionAtoms_fixup at 0x011e56d0, is emitted by this source but is not part of
 # this slice's function list; it is kept because the Atoms serialize path calls it.
 
@@ -23,3 +23,19 @@
 011e5870 29 UNSUPPORTED -- AtomSingleton::Init: 0/400 inputs, atexit -> _decode_pointer
 011e58c0 11 UNSUPPORTED -- rw_atom_singleton_get: 0/400 inputs, atexit -> _decode_pointer
 011e59b0 48 UNSUPPORTED -- rw_stream_push: 0/400 inputs, fake-arity (indirect stream writer callback)
+#
+# Rows below were complete and behaviourally equivalent (equivalence PASS) but not byte-exact.
+011e4aa0  36  rw_section_types_advance: complete, equivalence PASSes (400/400 valid, 100.0% coverage). Adds section[+0x04]*4+0xc to the serialisation context's running size at +0x28. Compiled 22 B vs the original's 39 B - the LTCG body opens a 0x20 frame, spills the alignment constant 4 into it and reloads the context before a single `add [eax+0x28],edx`; the source folds to lea+add with no frame.
+011e4ad0  69  rw_section_init_table12: complete, equivalence PASSes (400/400 valid, 100.0% coverage). Fills the four {id,align} entry pairs of the 0x24-byte section manifest (id 0, align 4 for each pair, size = count*8+0xc). Compiled 50 B vs the original's 79 B - the original writes the last two pairs through a walking pointer (lea ecx,[eax+8]; add ecx,8; mov [ecx+4],1; mov [ecx],0) and keeps 1 in esi; the source uses immediate stores.
+011e4bb0  36  rw_section_ext_advance: complete, equivalence PASSes (400/400 valid, 100.0% coverage). Same as 011e4aa0 with count*8+0xc (external-arena entries are 8 bytes): the original opens the same 0x20 frame and spills the alignment constant before one `add [eax+0x28],edx`. Compiled 22 B vs 39 B.
+011e4be0  59  rw_section_init_table1c: complete, equivalence PASSes (400/400 valid, 100.0% coverage). The same manifest fill as 011e4ad0 with the fixed size 0x1c. Compiled 43 B vs the original's 71 B - same walking-pointer/esi residue.
+011e4c30  59  rw_section_init_table0c: complete, equivalence PASSes (400/400 valid, 100.0% coverage). The same manifest fill as 011e4be0 with the fixed size 0xc. Compiled 43 B vs the original's 71 B.
+011e4c80  69  rw_section_pad_advance: complete, equivalence PASSes (400/400 valid, 100.0% coverage). Zeroes section[+0x08] and adds 0xc to the context's running size at +0x28 after rounding it up to a 4-byte boundary. Compiled 31 B vs the original's 71 B - the original materialises the alignment 4 in edx, branches on `cmp edx,1` and spills the 0xc to its 0x20 frame before one `add [eax+0x28],edx`; the source folds `(v+3)&~3` and the add.
+011e4cd0  130  rw_ArenaSectionAtoms_Refix: complete, equivalence PASSes (378 valid, 22 fault(read), 100.0% coverage). Copies the 3-dword Atoms header (atom-table id, +0x0c slot, fixup id) through the arena's write callback (+0x2c with its +0x30 context arg when present, self-copy otherwise), advances serialPos/pos by 0xc and the align to 0x0c, then maps the id at +0x08 back through IdToObject(this = arena+0x78). Compiled 138 B vs the original's 157 B - the callback dispatch and the block copy are scheduled differently and the original re-reads the context slot after the call.
+011e4d70  12  rw_ArenaSectionAtoms_Fixup: complete, equivalence PASSes (262 valid, 100.0% coverage). If the section's atom-table id at +0x08 is set, maps it through IdToObject(this = arena+0x78), stores it back, runs StaticAtomTable::Fixup(arena) on it and mirrors the pointer into arena+0x04; returns 1. Same size (51 B) - only esi/edi are swapped (the original keeps the section in esi and the arena in edi, this build the reverse).
+011e4db0  8  AtomsSection::SetAtomTableAndUnfixIt: complete, equivalence PASSes (204 valid, 100.0% coverage). Stores the atom table in +0x08 and, when it is non-null, replaces it with arena->ObjectToId(table). Same size (31 B) - the original schedules `test eax,eax` before the `push esi` prologue, this build after it.
+011e4dd0  154  rw_section_init_combined: complete, equivalence PASSes (400/400 valid, 100.0% coverage). The combined four-pair manifest fill plus size = n1*4 + n2*8 + 0x88. Compiled 55 B vs the original's 159 B - the original keeps its 0x20 frame, spills the alignment 4 and the manifest pointer, walks the pairs through a pointer and recomputes the size through those spilled registers; the source emits immediate stores and one lea chain.
+011e5000  134  rw_sections_size: complete, equivalence PASSes (400/400 valid, 100.0% coverage). Returns the section manifest size n1*4 + n2*8 + 0x5c, which the original computes as an align-up chain (running total 0x1c, + (n1*4+0xc), + (n2*8+0xc), + 0x1c, then + 0xc, rounding the total to 4 bytes before each step through a run-time alignment kept in ecx/edx/ebp/edi). Compiled 35 B vs the original's 134 B - written from source the alignment steps and the constant blocks fold away; keeping the step as a call-free variable (__declspec(noinline) prototype above the marker) is what lets 011e5090 call it instead of inlining it.
+011e5310  376  rw_ArenaSectionTypes_Fixup: complete, equivalence PASSes (292 valid, 82 fault(read) + 26 fault(pool-limit), 100.0% coverage). Serialises the type table: header block (type-reg id, count, self-relative +0x08 pointer) and one u32 per registry (0 when the slot is null) through the arena write callback with the 0xc/4 serialPos+pos+align advances. Compiled 244 B vs the original's 389 B - the original inlines the write/advance sequence for the header and for every loop iteration (keeping the arena and its callback slots in registers) where this build keeps the calls and hoists the loop-invariant slots.
+011e54a0  339  rw_ArenaSectionExternalArenas_ser: complete, equivalence PASSes (271 valid, 101 fault(read) + 28 fault(pool-limit), 100.0% coverage). Writes the external-arena header block, then per arena the u32 at +0x1c, then count*4 alignment bytes, with the matching serialPos/pos/align advances. Compiled 314 B vs the original's 363 B - same inlining residue as 011e5310 plus a different spill of the per-arena slot pointer.
+011e5900  107  ArenaPathHolder::Split: complete, equivalence PASSes (265 valid, 134 fault(pool-limit) + 1 fault(read), 87.5% coverage). Releases the previous path buffer and piece array, copies the path, tokenises it on ';' (dropping a trailing '/' or '\\'), records {start,length} per piece via the string-length helper and strips a trailing separator from the last piece. Compiled 174 B vs the original's 171 B - the original keeps the piece index and cursor in different registers and merges the two release calls differently.

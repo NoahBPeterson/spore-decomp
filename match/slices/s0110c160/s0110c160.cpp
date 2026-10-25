@@ -42,6 +42,7 @@ struct hkGsk {
     char pad_b0[0x70];
     hkVector4 mNormal_120;      // 0x120
     hkVector4 mPlaneC_130;      // 0x130
+    char      pad_140[0x20];    // 0x140
     float     mA_160;           // 0x160
     float     mB_164;           // 0x164
     float     mC_168;           // 0x168
@@ -49,9 +50,9 @@ struct hkGsk {
     int       mE_170;           // 0x170
 
     // 0x00c330
-    unsigned char checkTriangleBoundaries(const float* point, float* tri, int supportType);
+    unsigned int checkTriangleBoundaries(const float* point, float* tri, int supportType);
     // 0x00c720
-    int subdivideTriangle(float* tri, float* scratch, int* pA, int* pB, char flag,
+    int subdivideTriangle(float* other, float* tri, int* pA, int* pB, char flag,
                           int param7);
     // 0x00cde0
     void convertFeatureToClosestDistance(const hkVector4& in, hkGskOut& out);
@@ -100,9 +101,16 @@ struct hkFeatureIndexOut {
 extern float _HK_REAL_ZERO;   // 0x01485378
 
 // hkCollideTriangleUtil::closestLineSegLineSeg @ 0x01105940 -- returns the
-// closest-point result for two line segments (32-byte result struct).
-void __cdecl FUN_01105940(const float* a0, const float* a1, const float* b0,
-                          const float* b1, void* result);
+// closest-point result for two line segments (33-float / 0x84-byte result).
+struct ClosestLineSegLineSegResult {
+    float p0[4];      // 0x00  point on segment A
+    float d0[4];      // 0x10  point on segment B
+    float dir[4];     // 0x20  A - B
+    float dist2;      // 0x30  |dir|^2
+    char  pad_34[0x50];
+};
+unsigned int __cdecl FUN_01105940(const float* a0, const float* a1, const float* b0,
+                                  const float* b1, ClosestLineSegLineSegResult* result);
 
 // ---------------------------------------------------------------------------
 // 0110c160 -- triangle halfspace vertex resolver.
@@ -163,64 +171,68 @@ int __fastcall TriangleHalfspaceResolve(int /*unused*/, float* tri,
 //   [ebp+0x10] : supportType
 // ---------------------------------------------------------------------------
 // @ 0x0110c330
-unsigned char hkGsk::checkTriangleBoundaries(const float* point, float* tri, int supportType) {
+unsigned int hkGsk::checkTriangleBoundaries(const float* point, float* tri, int supportType) {
     float e20 = tri[8] - tri[4];
     float e24 = tri[9] - tri[5];
     float e25 = tri[10] - tri[6];
-    float e26 = tri[0] - tri[8];
-    float e27 = tri[1] - tri[9];
-    float e28 = tri[2] - tri[10];
+    // e26..e28 / n0..n2 / d80..d88 / d40..d48 / e10..e12 are all spilled to
+    // 32-bit memory by the original; e20/e24/e25 and d68 stay in x87 registers.
+    volatile float e26 = tri[0] - tri[8];
+    volatile float e27 = tri[1] - tri[9];
+    volatile float e28 = tri[2] - tri[10];
 
-    float n0 = e28 * e24 - e27 * e25;
-    float n1 = e26 * e25 - e28 * e20;
-    float n2 = e27 * e20 - e24 * e26;
+    volatile float n0 = e28 * e24 - e27 * e25;
+    volatile float n1 = e26 * e25 - e28 * e20;
+    volatile float n2 = e27 * e20 - e24 * e26;
 
-    float d26 = point[0] - tri[8];
-    float d27 = point[1] - tri[9];
-    float d28 = point[2] - tri[10];
-    float d60 = point[0] - tri[4];
-    float d64 = point[1] - tri[5];
+    // d60/d64 are spilled to 32-bit memory by the original (0x0110c3c9/0x0110c3d3);
+    // d68 is kept in an x87 register.
+    volatile float d60 = point[0] - tri[4];
+    volatile float d64 = point[1] - tri[5];
     float d68 = point[2] - tri[6];
-    float d40 = point[0] - tri[0];
-    float d44 = point[1] - tri[1];
-    float d48 = point[2] - tri[2];
+    volatile float d80 = point[0] - tri[8];
+    volatile float d84 = point[1] - tri[9];
+    volatile float d88 = point[2] - tri[10];
+    volatile float d40 = point[0] - tri[0];
+    volatile float d44 = point[1] - tri[1];
+    volatile float d48 = point[2] - tri[2];
 
-    float v160 = (d64 * e25 - d68 * e24) * n0 +
-                 ((d68 * e20 - e25 * d60) * n1 +
-                 (e24 * d60 - d64 * e20) * n2);
+    volatile float e10 = tri[4] - tri[0];      // v1 - v0
+    volatile float e11 = tri[5] - tri[1];
+    volatile float e12 = tri[6] - tri[2];
 
-    float v164;
-    {
-        float da0 = point[0] - tri[8];
-        float da1 = point[1] - tri[9];
-        float da2 = point[2] - tri[10];
-        float x1 = point[1] - tri[5];
-        float x2 = point[2] - tri[6];
-        float y0 = point[0] - tri[4];
-        v164 = (x1 * e28 - x2 * e27) * n0 +
-               ((x2 * e26 - e28 * (da0)) * n1 +
-               (e27 * (da0) - x1 * e26) * n2);
-        (void)da1; (void)da2;
-    }
+    // b0/b1 are spilled to 32-bit memory in the original (0x0110c422/0x0110c430)
+    // while b2 stays in an x87 register, so only the first two round here.
+    volatile float b0 = d64 * e25 - d68 * e24;
+    volatile float b1 = d68 * e20 - e25 * d60;
+    float b2 = e24 * d60 - d64 * e20;
+    // The sign tests read these back from 32-bit memory in the original, so a
+    // tiny negative that rounds to -0.0 counts as "not negative".
+    volatile float v160 = b0 * n0 + (b1 * n1 + b2 * n2);
 
-    float v168;
-    {
-        float A1 = point[1] - tri[5];
-        float A2 = point[2] - tri[6];
-        float B0 = point[0] - tri[4];
-        v168 = (A1 * (tri[6] - tri[2]) - A2 * (tri[5] - tri[1])) * n0 +
-               ((A2 * (tri[4] - tri[0]) - (tri[6] - tri[2]) * B0) * n1 +
-               ((tri[5] - tri[1]) * B0 - A1 * (tri[4] - tri[0])) * n2);
-    }
+    volatile float c0 = d84 * e28 - d88 * e27;
+    volatile float c1 = d88 * e26 - e28 * d80;
+    volatile float c2 = e27 * d80 - d84 * e26;
+    // v164 is compared while still in an x87 register (mask @0x0110c557) and only
+    // rounded by the store to mB_164, so it must stay a plain float local.
+    float v164 = c0 * n0 + (c1 * n1 + c2 * n2);
+
+    // The original spills these three edge-plane values to 32-bit memory before
+    // the final dot product (see 0x0110c496/0x0110c4ac/0x0110c4c2); rounding at
+    // that point is observable when the products overflow to Inf.
+    volatile float h0 = d44 * e12 - d48 * e11;
+    volatile float h1 = d48 * e10 - e12 * d40;
+    volatile float h2 = e11 * d40 - d44 * e10;
+    volatile float v168 = h0 * n0 + (h1 * n1 + h2 * n2);
 
     mA_160 = v160;
     mB_164 = v164;
     mC_168 = v168;
     mD_16c = 0;
 
-    unsigned char mask = (unsigned char)(((v168 < 0.0f) << 1) |
-                                         ((v164 < 0.0f) << 2) |
-                                         (((v160 < 0.0f) ? (unsigned)-8 : 0u)));
+    unsigned int mask = ((v168 < 0.0f) << 1) |
+                        ((v164 < 0.0f) << 2) |
+                        ((v160 < 0.0f) ? (unsigned)-8 : 0u);
     mask &= 0xe;
 
     if (supportType != 0) {
@@ -265,34 +277,46 @@ unsigned char hkGsk::checkTriangleBoundaries(const float* point, float* tri, int
 //   [ebp+0x1c]: int  param7
 // ---------------------------------------------------------------------------
 // @ 0x0110c720
-int hkGsk::subdivideTriangle(float* tri, float* other, int* pA, int* pB, char flag,
+int hkGsk::subdivideTriangle(float* other, float* tri, int* pA, int* pB, char flag,
                              int param7) {
     float local_b0, local_ac, local_a8, local_a4;
     float local_90, local_8c, local_88, local_84;
     float local_80, local_7c, local_78, local_74;
-    float local_50, local_20;
-    float seg0[8];
-    float seg1[8];
+    ClosestLineSegLineSegResult seg0;
+    ClosestLineSegLineSegResult seg1;
 
     if (flag != '\0') {
         float* pfVar6 = tri + 8;
-        local_90 = tri[4] - pfVar6[0];
-        local_8c = tri[5] - tri[9];
-        local_88 = tri[6] - tri[10];
-        local_84 = tri[7] - tri[0xb];
+        // The eight edge vectors are spilled to 32-bit memory by the original
+        // (0x0110c748..0x0110c78c); the three cross products stay in registers.
+        // l90/l8c/l88/l84 are the rounded copies; local_90..local_84 are the
+        // address-taken arrays used by the segment solve further down.
+        volatile float l90 = tri[4] - pfVar6[0];
+        volatile float l8c = tri[5] - tri[9];
+        volatile float l88 = tri[6] - tri[10];
+        volatile float l84 = tri[7] - tri[0xb];
+        local_90 = l90;
+        local_8c = l8c;
+        local_88 = l88;
+        local_84 = l84;
         local_80 = tri[0] - pfVar6[0];
         local_7c = tri[1] - tri[9];
         local_78 = tri[2] - tri[10];
         local_74 = tri[3] - tri[0xb];
-        float fVar1 = local_78 * local_8c - local_7c * local_88;
-        float fVar3 = local_88 * local_80 - local_78 * local_90;
-        float fVar2 = local_7c * local_90 - local_8c * local_80;
-        local_b0 = other[4] - tri[0];
-        local_ac = other[5] - tri[1];
-        local_a8 = other[6] - tri[2];
-        float v94 = (other[1] - tri[1]) * fVar3 +
-                    ((other[2] - tri[2]) * fVar2 + fVar1 * (other[0] - tri[0]));
-        float v2 = local_ac * fVar3 + (local_a8 * fVar2 + fVar1 * local_b0);
+        float fVar1 = local_78 * l8c - local_7c * l88;
+        float fVar3 = l88 * local_80 - local_78 * l90;
+        float fVar2 = local_7c * l90 - l8c * local_80;
+        // other[4..6]-tri[0..2] are spilled (0x0110c7db..), the other terms stay
+        // in x87 registers, as does the second dot product v2.
+        volatile float dA = other[4] - tri[0];
+        volatile float dB = other[5] - tri[1];
+        volatile float dC = other[6] - tri[2];
+        local_b0 = dA;
+        local_ac = dB;
+        local_a8 = dC;
+        volatile float v94 = (other[1] - tri[1]) * fVar3 +
+                             ((other[2] - tri[2]) * fVar2 + fVar1 * (other[0] - tri[0]));
+        float v2 = dB * fVar3 + (dC * fVar2 + fVar1 * dA);
         int iVar8, iVar5;
         if (0.0f <= v94) iVar8 = 0; else iVar8 = 8;
         if (0.0f <= v2)  iVar5 = 0; else iVar5 = 8;
@@ -331,9 +355,9 @@ int hkGsk::subdivideTriangle(float* tri, float* other, int* pA, int* pB, char fl
         local_ac = other[5] - other[1];
         local_a8 = other[6] - other[2];
         local_a4 = other[7] - other[3];
-        FUN_01105940(other, &local_b0, pfVar6, &local_90, seg0);
-        FUN_01105940(other, &local_b0, pfVar6, &local_80, seg1);
-        unsigned int uVar7 = (unsigned int)(local_20 < local_50);
+        FUN_01105940(other, &local_b0, pfVar6, &local_90, &seg0);
+        FUN_01105940(other, &local_b0, pfVar6, &local_80, &seg1);
+        unsigned int uVar7 = (unsigned int)(seg0.dist2 < seg1.dist2);
         tri[uVar7 * 4] = pfVar6[0];
         tri[uVar7 * 4 + 1] = tri[9];
         tri[uVar7 * 4 + 2] = tri[10];
@@ -385,8 +409,9 @@ int hkGsk::subdivideTriangle(float* tri, float* other, int* pA, int* pB, char fl
         mE_170 = param7;
         return 0;
     }
-    if (iVar8 == 6) goto LAB_ccb7;
-    if (iVar8 == 10) {
+    int n = iVar8;
+    if (n == 6) goto LAB_ccb7;
+    if (n == 10) {
 LAB_cc74:
         *pB = *pB - 1;
         tri[4] = tri[8];
@@ -399,12 +424,12 @@ LAB_cc74:
         tri[0x17] = tri[0x1b];
         return 2;
     }
-    if (iVar8 != 0xc) {
-        if (iVar8 != 8) {
-            if (iVar8 == 4) {
+    if (n != 0xc) {
+        if (n != 8) {
+            if (n == 4) {
                 if ((mC_168 - local_88) * local_90 <= (mA_160 - local_90) * local_88)
                     goto LAB_cc37;
-            } else if (iVar8 == 2 &&
+            } else if (n == 2 &&
                        ((mB_164 - local_8c) * local_90 < (mA_160 - local_90) * local_8c)) {
                 goto LAB_cc74;
             }

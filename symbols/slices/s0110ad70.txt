@@ -1,2 +1,2 @@
-0110ad70 FUN_0110ad70  # undefined4 __thiscall (int,int,byte*,float*) float/vector routine; naked asm, byte-exact
-0110b260 FUN_0110b260  # void __thiscall (int,undefined1*,float*) float/vector routine; naked asm, byte-exact
+0110ad70 ?FUN_0110ad70@BoxBoxDetector@@QAEHPAUFeaturePairList@@PAEPAUFeaturePointCache@@@Z  # int __thiscall(FeaturePairList*, unsigned char*, FeaturePointCache*) - feature-pair search over the 5x4 depth table; complete C++ (hkPackSigns1/2 inlined)
+0110b260 ?FUN_0110b260@BoxBoxDetector@@QAEXPAEPAUCdPoint@@@Z  # void __thiscall(unsigned char*, CdPoint*) - box-box contact point; complete C++

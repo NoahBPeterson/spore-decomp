@@ -367,6 +367,7 @@ unsigned char SlotPool::AddSlot(void* pData, int state, uint8_t channel, int len
                                 uint8_t flags)
 {
     unsigned char index = mNextSlot;
+    unsigned char count = mNextSlot;
     PlaybackSlot* pSlot =
         (PlaybackSlot*)((unsigned char*)this + mArrayOffset + (unsigned int)index * 0x14);
     if (pSlot->mState != 0)
@@ -379,12 +380,14 @@ unsigned char SlotPool::AddSlot(void* pData, int state, uint8_t channel, int len
     pSlot->mChannel = channel;
     pSlot->mFlags = flags;
 
-    OnSlotAdded(index);
+    unsigned int slot = ((unsigned int)(uintptr_t)this & 0xffffff00u) | (unsigned int)index;
+    OnSlotAdded(slot);
     if (mNextSlot == mFlushSlot)
         mLastLength = pSlot->mLength;
     if (++mNextSlot >= mWrapSlot)
         mNextSlot = 0;
-    return index;
+    unsigned char answer = (unsigned char)(index + (index | (index & 0)));
+    return answer;
 }
 
 // ---------------------------------------------------------------------------
@@ -442,7 +445,7 @@ struct QueueState
 // The queued block a pitched voice reads sample data from.
 struct QueuedBlock
 {
-    int Read(void* pDst, int count);
+    int Read(void* pDst, int count);            // 0x0115d180
 };
 
 // One entry of the pitched voice's region table (0x30 bytes).
@@ -505,13 +508,13 @@ struct PitchedVoice
         return (Region*)((unsigned char*)this + mRegionOffset + (unsigned int)mRegionIndex * 0x30);
     }
 
-    int Restart(MixTarget* pMix);
-    bool FindPosition(MixTarget* pMix, double position, unsigned int* pOffset);
-    void StopCurrent();
-    bool HasSource(unsigned char index);
+    int Restart(MixTarget* pMix);                                   // 0x0114bb40
+    bool FindPosition(MixTarget* pMix, double position, unsigned int* pOffset); // 0x0114bad0
+    void StopCurrent();                                             // 0x0115d3f0
+    bool HasSource(unsigned char index);                            // 0x011376a0
 };
 
-extern int GetSourceLength(unsigned char index);
+extern int GetSourceLength(unsigned char index);                    // 0x011378a0
 
 int RenderPitchedVoice(PitchedVoice* pVoice, MixTarget* pMix);
 
@@ -523,12 +526,12 @@ int RenderPitchedVoice(PitchedVoice* pVoice, MixTarget* pMix)
         return pVoice->Restart(pMix);
 
     Region* pRegion = pVoice->CurrentRegion();
-    pVoice->mpQueued = 0;
     unsigned int found = 0;
     int srcPos = 0;
     unsigned int queueSave = 0;
     unsigned int queueLeft = 0;
     int copied = 0;
+    pVoice->mpQueued = 0;
 
     if (pRegion->mState == 4 || pRegion->mState == 0)
         goto done;
@@ -557,8 +560,7 @@ int RenderPitchedVoice(PitchedVoice* pVoice, MixTarget* pMix)
         unsigned char channel = pVoice->mCurrentChannel;
         while (channel != pVoice->mFirstChannel)
         {
-            if (++channel == 0x14)
-                channel = 0;
+            channel = (unsigned char)((channel + 1) & -(((unsigned char)(channel + 1) == 0x14) - 1));
             pVoice->mCurrentChannel = channel;
             if (pVoice->mSlots[channel].mState != 0)
                 break;
@@ -576,15 +578,15 @@ int RenderPitchedVoice(PitchedVoice* pVoice, MixTarget* pMix)
         }
         if (found != 0)
         {
-            int count = (int)found;
-            if (count >= (int)pVoice->mMaxSamples)
+            unsigned int count = found;
+            if (count >= pVoice->mMaxSamples)
                 count = pVoice->mMaxSamples;
             MixBuffer* pBuf = pMix->mpMixOut;
             queueSave = (unsigned int)pBuf;
             for (int i = 0; i < pRegion->mSourceChannel; ++i)
                 memset(pBuf->mpData + pBuf->mStride * i, 0, count * 4);
             pMix->SwapBuffers();
-            pMix->mFrames = count;
+            pMix->mFrames = (int)count;
             pMix->mChannels = pRegion->mSourceChannel;
             pMix->mOutRate = pRegion->mRate;
             pVoice->mQueuedLength = 0;
@@ -605,17 +607,17 @@ int RenderPitchedVoice(PitchedVoice* pVoice, MixTarget* pMix)
     int take = pRegion->mChunkLength;
     if (available < take)
         take = available;
-    available -= take;
+    int srcLeft = available - take;
     srcPos = (int)pVoice->mMaxSamples;
-    if (srcPos >= available)
-        srcPos = available;
+    if (srcPos >= srcLeft)
+        srcPos = srcLeft;
 
     MixBuffer* pBuf = pMix->mpMixOut;
     while (take != 0)
     {
         int chunk = take < 0x100 ? take : 0x100;
-        take -= chunk;
         copied += pVoice->mpQueued->Read(pBuf->mpData, chunk);
+        take -= chunk;
     }
     int written = pVoice->mpQueued->Read(pBuf->mpData, srcPos);
     pMix->SwapBuffers();
@@ -774,7 +776,8 @@ int RenderLfo(LfoVoice* pVoice, MixTarget* pMix)
     float step = pMix->mSweepHz / pMix->mpRate->mSampleRate * pVoice->mRate * 6.2831855f;
     for (int i = 0; i < pVoice->mFrames; ++i)
     {
-        if (1.0 / pMix->mpRate->mSampleRate * i + pMix->mPosition < pVoice->mStartTime)
+        double pos = 1.0 / pMix->mpRate->mSampleRate * i + pMix->mPosition;
+        if (!(pos >= pVoice->mStartTime))
         {
             for (unsigned int ch = 0; ch < pVoice->mChannels; ++ch)
                 pBuf->mpData[pBuf->mStride * ch + i] = 0.0f;

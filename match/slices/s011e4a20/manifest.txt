@@ -1,2 +1,3 @@
 slices/s011e4a20/s011e4a20.cpp  ?rw_register_section_fixups@@YAXXZ  011e5750  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s011e4a20/s011e4a20.cpp  ?rw_register_section_writers@@YAXXZ  011e57b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s011e4a20/s011e4a20.cpp  ?rw_sections_size_from@@YAIPAX@Z  011e5090  /O2 /MD /Gy /TP /arch:SSE /fp:fast

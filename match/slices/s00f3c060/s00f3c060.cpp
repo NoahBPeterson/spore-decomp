@@ -529,9 +529,246 @@ bool __stdcall FUN_00f3c870(void* a, void* b, float pad, bool coarse)
     return FUN_0069b910(&box.mMin.x, &ta, (const float*)((char*)proxyB + kProxyBox), &tb);
 }
 
-void FUN_00f3cb60(void* self) { (void)self; }                         // @ 0x00F3CB60
-void FUN_00f3cc40(void* self, void* a, void* b) { (void)self; (void)a; (void)b; }  // @ 0x00F3CC40
-void FUN_00f3cd10(void* self) { (void)self; }                         // @ 0x00F3CD10
-void FUN_00f3cd60(void* self, void* s) { (void)self; (void)s; }       // @ 0x00F3CD60
-void FUN_00f3cdf0(void* self, void* s) { (void)self; (void)s; }       // @ 0x00F3CDF0
-void FUN_00f3ce80(void* self, void* s) { (void)self; (void)s; }       // @ 0x00F3CE80
+// ---------------------------------------------------------------------------
+// Content-validation summarizer ("cContentValidationSummarizer").
+//
+// Layout recovered from the ctor/dtor:
+//   +0x00  vtable          (0x0148D2EC, later 0x013EB938)
+//   +0x04  vtable2         (0x013EC458, later 0x0148D2DC)
+//   +0x08  unsigned        (zeroed)
+//   +0x0c  unsigned        (ctor arg 1)
+//   +0x10  refcounted*     (ctor arg 2)
+//   +0x14  refcounted*     (ctor arg 3)
+//   +0x48  wide-string map (setter 1)
+//   +0x58  wide-string map (setter 2)
+//   +0x68  wide-string map (setter 3)
+//   +0x81  unsigned char   ("dirty" flag)
+// ---------------------------------------------------------------------------
+
+// A refcounted object whose vtable slot 0 is AddRef and slot 1 is Release.
+struct RefCountedVtbl {
+    virtual void AddRef();                    // slot 0
+    virtual void Release();                   // slot 1
+};
+
+// The wide-string map object used at +0x48/+0x58/+0x68 is a self-contained
+// 2-pointer (begin/end) wide string; reporting the two members is enough for the
+// operations the setters perform.
+struct WideKeyMap {
+    void** mpBegin;                           // +0x00
+    void** mpEnd;                             // +0x04
+    char   pad08[0x10 - 0x08];                // +0x08  inline capacity / bucket storage
+    void assign(const wchar_t* first, const wchar_t* last);   // 0x00423650
+};
+bool FindWideKey(const WideKeyMap* map, const wchar_t* key);  // 0x006AB760
+
+// Message server: slot 5 (+0x14) is Send(unsigned id, const void* payload, int).
+struct IMessageServer {
+    virtual void m0(); virtual void m1(); virtual void m2(); virtual void m3();
+    virtual void m4();
+    virtual void Send(unsigned id, const void* payload, int flag);   // slot 5 (+0x14)
+};
+IMessageServer* SP_MessageServer();                        // 0x0067DCC0
+
+// The authoring/auth manager: slot 16 (+0x40) returns its 64-bit meta id.
+struct AuthManager {
+    virtual void m0(); virtual void m1(); virtual void m2(); virtual void m3();
+    virtual void m4(); virtual void m5(); virtual void m6(); virtual void m7();
+    virtual void m8(); virtual void m9(); virtual void m10(); virtual void m11();
+    virtual void m12(); virtual void m13(); virtual void m14(); virtual void m15();
+    virtual long long GetMetaId();            // slot 16 (+0x40)
+};
+AuthManager* AuthManager_Get();                           // 0x00607A60
+
+// The resource-manager Find slot returns a property list whose vtable slot 1 is
+// Release and slot 3 is Cast(iid).
+struct FindResult {
+    virtual void f0();
+    virtual void Release();                   // slot 1
+    virtual void f2();
+    virtual void* Cast(unsigned iid);         // slot 3
+};
+
+// The cast target of the 0x30BDEE3 id: slot 0 is a "touch", slot 1 a release and
+// the non-virtual GetId reads the 64-bit id at +0x68/+0x6c (0x005508A0).
+struct ContentMeta {
+    virtual void Touch();                     // slot 0
+    virtual void Release();                   // slot 1
+    long long GetId();                        // 0x005508A0 (thiscall, no args)
+};
+
+// vtable fragments installed by the ctor/dtor (retail image literals).
+extern void* g_148d2ec;                       // 0x0148D2EC
+extern void* g_148d2dc;                       // 0x0148D2DC
+extern void* g_13ec458;                       // 0x013EC458
+extern void* g_13eb938;                       // 0x013EB938
+
+extern void operator_delete(void* p);                     // 0x00F47380
+
+struct cContentValidationSummarizer {
+    void*    mpVtbl0;                         // +0x00
+    void*    mpVtbl1;                         // +0x04
+    unsigned mField08;                        // +0x08
+    unsigned mField0c;                        // +0x0c
+    void*    mpField10;                       // +0x10
+    void*    mpField14;                       // +0x14
+    char     pad18[0x48 - 0x18];
+    WideKeyMap mMap48;                        // +0x48
+    WideKeyMap mMap58;                        // +0x58
+    WideKeyMap mMap68;                        // +0x68
+    char     pad78[0x81 - 0x78];              // +0x78
+    unsigned char mField81;                   // +0x81
+
+    bool FUN_00f3cb60();                                                // 0x00F3CB60
+    cContentValidationSummarizer* ctor(unsigned a, void* b, void* c);   // 0x00F3CC40
+    cContentValidationSummarizer* dtor(unsigned flag);                  // 0x00F3CD10
+    void FUN_00f3cd60(const wchar_t* key);                              // 0x00F3CD60
+    void FUN_00f3cdf0(const wchar_t* key);                              // 0x00F3CDF0
+    void FUN_00f3ce80(const wchar_t* key);                              // 0x00F3CE80
+};
+
+// ---------------------------------------------------------------------------
+// Ask the resource manager for the property list described by the two ids taken
+// from this+0x10, cast the result to the content-meta interface, and report
+// whether its 64-bit id matches the authoring manager's current meta id.
+// @ 0x00F3CB60
+bool cContentValidationSummarizer::FUN_00f3cb60()
+{
+    char* src = (char*)mpField10;
+    unsigned key[3];
+    key[0] = *(unsigned*)(src + 8);
+    key[1] = 0x30bdee3;
+    key[2] = *(unsigned*)(src + 0x10);
+
+    FindResult* propList = 0;
+    IResourceManager* mgr = GetManager();
+    mgr->Find(key, (PropertyList**)&propList, 0, 0, 0, 0);
+
+    bool same = false;
+    if (propList) {
+        ContentMeta* meta = (ContentMeta*)propList->Cast(0x30bdee3);
+        if (meta) {
+            meta->Touch();
+            AuthManager* auth = AuthManager_Get();
+            long long authId = auth->GetMetaId();
+            long long metaId = meta->GetId();
+            same = (metaId == authId);
+            meta->Release();
+        }
+        propList->Release();
+    }
+    return same;
+}
+
+// @ 0x00F3CC40
+cContentValidationSummarizer* cContentValidationSummarizer::ctor(
+    unsigned a, void* b, void* c)
+{
+    mpVtbl1 = &g_13ec458;
+    mField08 = 0;
+    mpVtbl0 = &g_148d2ec;
+    mpVtbl1 = &g_148d2dc;
+    mpField10 = 0;
+    mpField14 = 0;
+    mField0c = a;
+
+    void* old = mpField10;
+    if (b != old) {
+        if (b)
+            ((RefCountedVtbl*)b)->AddRef();
+        mpField10 = b;
+        if (old)
+            ((RefCountedVtbl*)old)->Release();
+    }
+    old = mpField14;
+    if (c != old) {
+        if (c)
+            ((RefCountedVtbl*)c)->AddRef();
+        mpField14 = c;
+        if (old)
+            ((RefCountedVtbl*)old)->Release();
+    }
+    return this;
+}
+
+// @ 0x00F3CD10
+cContentValidationSummarizer* cContentValidationSummarizer::dtor(unsigned flag)
+{
+    void* m = mpField14;
+    if (m)
+        ((RefCountedVtbl*)m)->Release();
+    m = mpField10;
+    if (m)
+        ((RefCountedVtbl*)m)->Release();
+
+    mpVtbl1 = &g_13ec458;
+    mpVtbl0 = &g_13eb938;
+    if (flag & 1)
+        operator_delete(this);
+    return this;
+}
+
+// ---------------------------------------------------------------------------
+// The three wide-string setters share one body: if `key` is not already present
+// in the map at +0x48 (resp. +0x58 / +0x68), assign it and broadcast a
+// "changed" notification whose payload is {this, 0, map header word}, then set
+// the dirty byte at +0x81.  ret 4.
+// @ 0x00F3CD60
+void cContentValidationSummarizer::FUN_00f3cd60(const wchar_t* key)
+{
+    if (FindWideKey(&mMap48, key))
+        return;
+
+    const wchar_t* end = key;
+    if (*end)
+        while (*++end)
+            ;
+    mMap48.assign(key, key + (end - key));
+
+    unsigned payload[3];
+    payload[0] = (unsigned)(uintptr_t)(this != (void*)4 ? this : 0);
+    payload[1] = 0;
+    payload[2] = (unsigned)(uintptr_t)mMap48.mpBegin;
+    SP_MessageServer()->Send(0x7aa519dc, payload, 0);
+    mField81 = 1;
+}
+
+// @ 0x00F3CDF0
+void cContentValidationSummarizer::FUN_00f3cdf0(const wchar_t* key)
+{
+    if (FindWideKey(&mMap58, key))
+        return;
+
+    const wchar_t* end = key;
+    if (*end)
+        while (*++end)
+            ;
+    mMap58.assign(key, key + (end - key));
+
+    unsigned payload[3];
+    payload[0] = (unsigned)(uintptr_t)(this != (void*)4 ? this : 0);
+    payload[1] = 0;
+    payload[2] = (unsigned)(uintptr_t)mMap58.mpBegin;
+    SP_MessageServer()->Send(0x14418c3f, payload, 0);
+    mField81 = 1;
+}
+
+// @ 0x00F3CE80
+void cContentValidationSummarizer::FUN_00f3ce80(const wchar_t* key)
+{
+    if (FindWideKey(&mMap68, key))
+        return;
+
+    const wchar_t* end = key;
+    if (*end)
+        while (*++end)
+            ;
+    mMap68.assign(key, key + (end - key));
+
+    unsigned payload[3];
+    payload[0] = (unsigned)(uintptr_t)(this != (void*)4 ? this : 0);
+    payload[1] = 0;
+    payload[2] = (unsigned)(uintptr_t)mMap68.mpBegin;
+    SP_MessageServer()->Send(0x73127e6, payload, 0);
+    mField81 = 1;
+}

@@ -27,46 +27,34 @@ void __cdecl GlobalState_D3D9Initialize(void);                // 0x011f2480
 // ---------------------------------------------------------------------------
 extern void* g_d3d9Device;                 // 0x016f89d0 IDirect3DDevice9*
 
-// Soft-state dirty bank (7 scalars) and render-state dirty bank (3 scalars).
-extern u32 g_softDirty0;                   // 0x016f89d8
-extern u32 g_softDirty1;                   // 0x016f89dc
-extern u32 g_softDirty2;                   // 0x016f89e0
-extern u32 g_softDirty3;                   // 0x016f89e4
-extern u32 g_softDirty4;                   // 0x016f89e8
-extern u32 g_softDirty5;                   // 0x016f89ec
-extern u32 g_softDirty6;                   // 0x016f89f0
-extern u32 g_renderDirty0;                 // 0x016f8af8
-extern u32 g_renderDirty1;                 // 0x016f8b00
-extern u32 g_renderDirty2;                 // 0x016f85b0
+// The d3d9 state banks, split in two halves:
+//   ActiveState::m_*       -- the deltas the caller has requested,
+//   GlobalState::m_*Dirty  -- the shadow of what was last flushed.
+// For every pair `toUpdate = ~delta & dirty` is "still stale", then both words
+// are retired.  The rwg_D3D9*ToUpdate words are the per-bank results consumed by
+// the dispatchers below.
+extern u32 g_activeRenderDelta[7];         // 0x016f89d8 ActiveState::m_renderStateDelta
+extern u32 g_activeSoftDelta;              // 0x016f8af8 ActiveState::m_softStateDelta
+extern u32 g_activeRasterDelta;            // 0x016f8b00 ActiveState::m_rasterDelta
+extern u32 g_activePaletteDelta;           // 0x016f85b0 ActiveState::m_paletteDelta
+extern u32 g_activeTextureStageDelta[0x11];// 0x016f8b58 ActiveState::m_textureStageStateDelta
+extern u32 g_activeSamplerDelta[0x11];     // 0x016f8cb0 ActiveState::m_samplerStateDelta
 
-// Per-stage dirty banks (0x11 u32 entries each).
-extern u32 g_textureStageDirty[0x11];      // 0x016f8b58
-extern u32 g_samplerStateDirty[0x11];      // 0x016f8cb0
+extern u32 g_softStateDirty;               // 0x016f9528 GlobalState::m_softStateDirty
+extern u32 g_renderStateDirty[7];          // 0x016fa38c GlobalState::m_renderStateDirty
+extern u32 g_rasterStageDirty;             // 0x016fa3a8 GlobalState::m_rasterStageDirty
+extern u32 g_paletteDirty;                 // 0x016fa384 GlobalState::m_paletteDirty
+extern u32 g_textureStageStateDirty[0x11]; // 0x016f9f80 GlobalState::m_textureStageStateDirty
+extern u32 g_samplerStateDirty[0x11];      // 0x016f9530 GlobalState::m_samplerStateDirty
 
-// Shadow copies / deltas produced by the dispatchers.
-extern u32 g_shadowSoft0;                  // 0x016fa38c
-extern u32 g_shadowSoft1;                  // 0x016fa390
-extern u32 g_shadowSoft2;                  // 0x016fa394
-extern u32 g_shadowSoft3;                  // 0x016fa398
-extern u32 g_shadowSoft4;                  // 0x016fa39c
-extern u32 g_shadowSoft5;                  // 0x016fa3a0
-extern u32 g_shadowSoft6;                  // 0x016fa3a4
-extern u32 g_shadowRender0;                // 0x016fa3a8
-extern u32 g_shadowRender1;                // 0x016fa384
-extern u32 g_shadowRender2;                // 0x016fa3ac
-extern u32 g_softStateDelta;               // 0x016f9528
-extern u32 g_renderStateDelta;             // 0x016f95a4
-extern u32 g_softShadow0;                  // 0x016f9634
-extern u32 g_softShadow1;                  // 0x016f9638
-extern u32 g_softShadow2;                  // 0x016f963c
-extern u32 g_softShadow3;                  // 0x016f9640
-extern u32 g_softShadow4;                  // 0x016f9644
-extern u32 g_softShadow5;                  // 0x016f9648
-extern u32 g_softShadow6;                  // 0x016f964c
-extern u32 g_texStageBitmap[0x11];         // 0x016f95a8
-extern u32 g_samplerBitmap[0x11];          // 0x016f95f0
-extern u32 g_activeRaster;                 // 0x016f96a4
-extern u32 g_shadowRaster;                 // 0x016f9130
+extern u32 g_renderStateToUpdate[7];       // 0x016f9634 rwg_D3D9RenderStateToUpdate
+extern u32 g_rasterToUpdate;               // 0x016f95a4 rwg_D3D9RasterToUpdate
+extern u32 g_textureStageStateToUpdate[0x11]; // 0x016f95a8 rwg_D3D9TextureStageStateToUpdate
+extern u32 g_samplerStateToUpdate[0x11];   // 0x016f95f0 rwg_D3D9SamplerStateToUpdate
+
+// Currently bound palette and the shadow of what the device last received.
+extern void* g_activePalette;              // 0x016f96a4 ActiveState::m_palette
+extern void* g_paletteShadow;              // 0x016f9130 ActiveState::m_paletteShadow
 
 // ---------------------------------------------------------------------------
 // Vertex descriptor (rw::graphics::VertexDescriptor).
@@ -128,8 +116,29 @@ struct D3DCaps9
 {
     u8  mPad00[0xc4];          // +0x0000
     u32 mPixelShaderVersion;   // +0x00c4
-    u8  mPadC8[0x24];          // +0x00c8
+    u8  mPadC8[0x1c];          // +0x00c8
+    u8  mPadE4;                // +0x00e4
+    u8  mPadE5;                // +0x00e5
+    u8  mPadE6;                // +0x00e6
+    u8  mPadE7;                // +0x00e7
+    u8  mPadE8;                // +0x00e8
+    u8  mPadE9;                // +0x00e9
+    u8  mPadEA;                // +0x00ea
+    u8  mPadEB;                // +0x00eb
     u8  mPS20Caps;             // +0x00ec
+    u8  mPadED;                // +0x00ed
+    u8  mPadEE;                // +0x00ee
+    u8  mPadEF;                // +0x00ef
+    u8  mPadF0[0x14];          // +0x00f0
+    u8  mPad104;               // +0x0104
+    u8  mPad105;               // +0x0105
+    u8  mPad106;               // +0x0106
+    u8  mPad107;               // +0x0107
+    u8  mPad108;               // +0x0108
+    u8  mPad109;               // +0x0109
+    u8  mPad10A;               // +0x010a
+    u8  mPad10B;               // +0x010b
+    u8  mPixelShaderCaps;      // +0x010c (bit 7 = pixel shader 3.0 supported)
 };
 
 const D3DCaps9* __cdecl DevCapsManager_GetD3DCAPS9(void);   // 0x011f8af0
@@ -479,108 +488,133 @@ int rwg_D3D9FindBestDeclType(u32 type)
 // ===========================================================================
 // rw::graphics::GlobalState::D3D9Sync
 // Flushes every dirty state bank to the D3D9 device.
+//
+// The whole "prelude" is evaluated in one go: every dirty word is OR-ed into a
+// single `changed` accumulator (the two 0x11-entry per-stage banks included, as
+// a 0x44-byte tail loop) and the function returns immediately when the shadow
+// deltas come out empty.  Only then does the flush fan out over the banks.
 // ===========================================================================
 // @ 0x011f21a0
 void GlobalState_D3D9Sync(void)
 {
-    u32 changed = g_softDirty0 | g_softDirty1 | g_softDirty2 | g_softDirty3 |
-                  g_softDirty4 | g_softDirty5 | g_softDirty6 |
-                  g_renderDirty0 | g_renderDirty1 | g_renderDirty2;
+    // Every bank participates in one "is anything requested at all" test.
+    u32 d0 = g_activeRenderDelta[0];
+    u32 d1 = g_activeRenderDelta[1];
+    u32 d2 = g_activeRenderDelta[2];
+    u32 d3 = g_activeRenderDelta[3];
+    u32 d4 = g_activeRenderDelta[4];
+    u32 d5 = g_activeRenderDelta[5];
+    u32 d6 = g_activeRenderDelta[6];
+    u32 soft = g_activeSoftDelta;
+    u32 raster = g_activeRasterDelta;
+    u32 palette = g_activePaletteDelta;
+
+    u32 changed = d0 | d1 | d2 | d3 | d4 | d5 | d6;
+    changed |= soft;
+    changed |= raster | palette;
+    // The two 0x11-entry per-stage banks are part of the same chain (0x44-byte
+    // tail loop in the original).
     for (u32 i = 0; i < 0x11; ++i)
-        changed |= g_samplerStateDirty[i] | g_textureStageDirty[i];
+        changed |= g_activeSamplerDelta[i] | g_activeTextureStageDelta[i];
     if (changed == 0)
         return;
 
     // ---- soft state -------------------------------------------------------
-    {
-        u32 v = g_renderDirty0;
-        u32 delta = ~v & g_softStateDelta;
-        g_softStateDelta = v;
-        g_renderDirty0 = 0;
-        if (delta != 0)
-            GlobalState_D3D9SoftStateDispatch(delta);
-    }
-    {
-        u32 v0 = g_softDirty0, v1 = g_softDirty1, v2 = g_softDirty2, v3 = g_softDirty3;
-        u32 v4 = g_softDirty4, v5 = g_softDirty5, v6 = g_softDirty6;
+    // One scalar delta feeds the soft dispatcher.
+    u32 softDelta = ~soft & g_softStateDirty;
+    g_softStateDirty = soft;
+    g_activeSoftDelta = 0;
+    if (softDelta != 0)
+        GlobalState_D3D9SoftStateDispatch(softDelta);
 
-        g_softShadow0 = ~v0 & g_shadowSoft0;
-        g_shadowSoft0 = v0;
-        g_softShadow1 = ~v1 & g_shadowSoft1;
-        g_shadowSoft1 = v1;
-        g_softShadow2 = ~v2 & g_shadowSoft2;
-        g_shadowSoft2 = v2;
-        g_softShadow3 = ~v3 & g_shadowSoft3;
-        g_shadowSoft3 = v3;
-        g_softShadow4 = ~v4 & g_shadowSoft4;
-        g_shadowSoft4 = v4;
+    // The dispatcher may have touched the render-state delta bank, so the seven
+    // shadow/delta pairs are re-read after the call.
+    d0 = g_activeRenderDelta[0];
+    d1 = g_activeRenderDelta[1];
+    d2 = g_activeRenderDelta[2];
+    d3 = g_activeRenderDelta[3];
+    d4 = g_activeRenderDelta[4];
+    d5 = g_activeRenderDelta[5];
+    d6 = g_activeRenderDelta[6];
 
-        g_softDirty0 = 0;
-        g_softDirty1 = 0;
-        g_softDirty2 = 0;
-        g_softDirty3 = 0;
-        g_softDirty4 = 0;
+    g_renderStateToUpdate[0] = ~d0 & g_renderStateDirty[0];
+    g_renderStateDirty[0] = d0;
+    g_renderStateToUpdate[1] = ~d1 & g_renderStateDirty[1];
+    g_renderStateDirty[1] = d1;
+    g_renderStateToUpdate[2] = ~d2 & g_renderStateDirty[2];
+    g_renderStateDirty[2] = d2;
+    g_renderStateToUpdate[3] = ~d3 & g_renderStateDirty[3];
+    g_renderStateDirty[3] = d3;
+    g_renderStateToUpdate[4] = ~d4 & g_renderStateDirty[4];
+    g_renderStateDirty[4] = d4;
 
-        g_softShadow5 = ~v5 & g_shadowSoft5;
-        g_shadowSoft5 = v5;
-        g_softShadow6 = ~v6 & g_shadowSoft6;
-        g_shadowSoft6 = v6;
+    g_activeRenderDelta[0] = 0;
+    g_activeRenderDelta[1] = 0;
+    g_activeRenderDelta[2] = 0;
+    g_activeRenderDelta[3] = 0;
+    g_activeRenderDelta[4] = 0;
 
-        g_softDirty5 = 0;
-        g_softDirty6 = 0;
+    g_renderStateToUpdate[5] = ~d5 & g_renderStateDirty[5];
+    g_renderStateDirty[5] = d5;
+    g_renderStateToUpdate[6] = ~d6 & g_renderStateDirty[6];
+    g_renderStateDirty[6] = d6;
 
-        u32 softAll = g_softShadow0 | g_softShadow1 | g_softShadow2 | g_softShadow3 |
-                      g_softShadow4 | g_softShadow5 | g_softShadow6;
-        if (softAll != 0)
-            GlobalState_D3D9RenderStateDispatch();
-    }
+    g_activeRenderDelta[5] = 0;
+    g_activeRenderDelta[6] = 0;
 
-    // ---- render state -----------------------------------------------------
-    u32 changedRaster;
-    u32 renderAll;
-    {
-        u32 v = g_renderDirty1;
-        u32 delta = ~v & g_shadowRender0;
-        g_shadowRender0 = v;
-        renderAll = delta;
+    u32 renderChanged = g_renderStateToUpdate[0] | g_renderStateToUpdate[1] |
+                        g_renderStateToUpdate[2] | g_renderStateToUpdate[3] |
+                        g_renderStateToUpdate[4] | g_renderStateToUpdate[5] |
+                        g_renderStateToUpdate[6];
+    if (renderChanged != 0)
+        GlobalState_D3D9RenderStateDispatch();
 
-        u32 wasActive = g_shadowRender1;
-        if (wasActive == 0 || g_renderDirty2 == 0)
-            changedRaster = 0;
-        else
-            changedRaster = 1;
+    // ---- raster state -----------------------------------------------------
+    // The raster delta is re-read after the dispatch above.
+    raster = g_activeRasterDelta;
+    g_rasterToUpdate = ~raster & g_rasterStageDirty;
+    g_rasterStageDirty = raster;
+    g_activeRasterDelta = 0;
 
-        g_shadowRender1 = g_renderDirty2;
-        g_renderDirty2 = 0;
-    }
-    u32 texOr = 0, sampOr = 0;
-    for (u32 i = 0; i < 0x11; ++i) {
-        u32 t = g_textureStageDirty[i];
-        u32 td = ~t & g_texStageBitmap[i];
-        g_texStageBitmap[i] = t;
-        g_textureStageDirty[i] = 0;
-        texOr |= td;
+    // The palette flush fires when a palette stops being requested.
+    palette = g_activePaletteDelta;
+    u32 paletteChanged = (g_paletteDirty != 0 && palette == 0) ? 1 : 0;
+    g_paletteDirty = palette;
+    g_activePaletteDelta = 0;
 
-        u32 s = g_samplerStateDirty[i];
-        u32 sd = ~s & g_samplerBitmap[i];
-        g_samplerBitmap[i] = s;
-        g_samplerStateDirty[i] = 0;
-        sampOr |= sd;
-    }
-    if (renderAll != 0)
+    if (g_rasterToUpdate != 0)
         GlobalState_D3D9RasterDispatch();
-    if (changedRaster != 0) {
-        u32 raster = g_activeRaster;
-        if (raster != g_shadowRaster) {
+
+    if (paletteChanged != 0) {
+        void* boundPalette = g_activePalette;
+        if (boundPalette != g_paletteShadow) {
             void* pDevice = g_d3d9Device;
-            if (raster != 0) {
-                (*(i32(__stdcall**)(void*, u32, u32))((char*)*(void**)pDevice + 0x11c))(pDevice, 0, raster);
+            if (boundPalette != 0) {
+                (*(i32(__stdcall**)(void*, u32, void*))((char*)*(void**)pDevice + 0x11c))(pDevice, 0, boundPalette);
                 (*(i32(__stdcall**)(void*, u32))((char*)*(void**)pDevice + 0x124))(pDevice, 0);
             } else {
                 (*(i32(__stdcall**)(void*, u32, u32))((char*)*(void**)pDevice + 0x11c))(pDevice, 0, 0);
             }
-            g_shadowRaster = raster;
+            g_paletteShadow = boundPalette;
         }
+    }
+
+    // ---- per-stage banks --------------------------------------------------
+    u32 texOr = 0, sampOr = 0;
+    for (u32 i = 0; i < 0x11; ++i) {
+        u32 t = g_activeTextureStageDelta[i];
+        u32 td = ~t & g_textureStageStateDirty[i];
+        g_textureStageStateDirty[i] = t;
+        g_textureStageStateToUpdate[i] = td;
+        g_activeTextureStageDelta[i] = 0;
+        texOr |= td;
+
+        u32 s = g_activeSamplerDelta[i];
+        u32 sd = ~s & g_samplerStateDirty[i];
+        g_samplerStateDirty[i] = s;
+        g_samplerStateToUpdate[i] = sd;
+        g_activeSamplerDelta[i] = 0;
+        sampOr |= sd;
     }
     if (texOr != 0)
         GlobalState_D3D9PaletteDispatch();

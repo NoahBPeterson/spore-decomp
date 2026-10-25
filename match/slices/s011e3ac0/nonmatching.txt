@@ -7,3 +7,12 @@
 011e4910  80  ArenaSectionManifest::Initialize: memset frame and store order differ
 011e4970  72  arena manifest expand: vtable slot 1 called with the object as an explicit stack argument (2 dwords, caller-cleaned); the remaining difference is that our code uses the caller-saved edx for the header sum while the original leaves edx untouched (the original reserves a 0x20-byte local frame we could not reproduce) [equiv: FAIL, edx only]
 011e49d0  69  arena manifest init: store order differs
+011e3ac0  318  complete; recipe walks base object, existing sub-object, new sub-object and then the external arena list; register/schedule differs [equiv: FAIL 5/77 valid, an extra FindNewSubObject call on 5 inputs]
+011e3c70  357  complete; FixupStart rebases the dictionary and the manifest section; frame/register schedule differs [equiv: UNSUPPORTED 0/400 valid, reads fault on the random context]
+011e3f20  569  complete; Arena::Initialize lays out the header, descriptor table and registers the arena in the id map; frame/register schedule differs [equiv: UNSUPPORTED, unresolved rw_ArenaFileHeader]
+011e40a0  47  complete; Release walks the iterator and unregisters the arena; only the this/map register choice and a mem-vs-reg test differ [equiv: PASS 227 valid, 67.4% coverage]
+011e4130  345  complete; rwArenaOpen registers the base types, creates the null arena and adds the first resource; frame/register schedule differs [equiv: UNSUPPORTED, unresolved internal statics]
+011e43c0  365  complete; rwArenaClose releases the current arena, erases every live arena from the id map and clears it; frame/register schedule differs [equiv: UNSUPPORTED 0/400 valid, every input discarded by _decode_pointer]
+011e4680  108  complete; chunk header write: the copy of the source record and the overwritten fields keep a different register/stack schedule [equiv: PASS 359 valid, 100% coverage]
+011e4720  197  complete; UnfixData reserves the two subreference tables; only the offset/cursor register schedule differs [equiv: PASS 400 valid, 96.9% coverage]
+011e4820  229  complete; RefixData writes the records and then the trailing table; the trailing table size keeps a different register plan [equiv: FAIL, ecx at the last fake call only (retail leaves num*0x18 there)]

@@ -1,6 +1,7 @@
 // Slice s010f1350: Havok hkContinuousSimulation continuous-collision routines.
 // Flags: /O2 /MD /Gy /TP /arch:SSE
 #include "types.h"
+#include <intrin.h>
 
 typedef unsigned int uint;
 
@@ -8,11 +9,40 @@ void* FUN_01099cb0(int a, int b, int c);      // 0x01099cb0
 void* FUN_010f0bb0(void* self, int a, int b); // 0x010f0bb0
 void* FUN_0111ccf0();                         // 0x0111ccf0 hkDefaultToiResourceMgr ctor
 void* FUN_0107db10(void* mem, int a, int b, int c);  // 0x0107db10 deallocateChunk
-void* TlsGetValue(void* idx);
+void FUN_0107f530(void* array, int elemSize);         // 0x0107f530 hkArray::grow
 void* hkMemoryAlloc(int size, int align);     // hkMemory::s_instance vtable+0x10
 extern void* g_hkMemory;                      // 0x016e4178
-extern void* g_hkThreadMemoryTls;             // 0x016e4174
+extern unsigned long g_hkThreadMemoryTls;     // 0x016e4174
 extern void* g_13ef094;                       // vtable
+
+// ---------------------------------------------------------------------------------------------
+// monitor-stream timers: the HK_TIMER_SPLIT prologue/epilogue writes a {name, rdtsc} record into
+// the thread-local monitor buffer when the buffer is enabled, i.e. when its end pointer is
+// greater than its current pointer.
+// ---------------------------------------------------------------------------------------------
+extern unsigned long g_hkMonitorStreamEndTls;   // 0x016e42a8
+extern unsigned long g_hkMonitorStreamCurTls;   // 0x016e42a4
+extern "C" __declspec(dllimport) void* __stdcall TlsGetValue(unsigned long);
+extern "C" __declspec(dllimport) int   __stdcall TlsSetValue(unsigned long, void*);
+
+struct hkMonitorStreamRecord
+{
+    const char* m_name;   // +0x00
+    uint32_t m_time;      // +0x04 rdtsc low half
+    uint32_t m_pad;       // +0x08
+};
+
+static __forceinline void HK_TIMER_SPLIT(const char* name)
+{
+    void* end = TlsGetValue(g_hkMonitorStreamEndTls);
+    void* cur = TlsGetValue(g_hkMonitorStreamCurTls);
+    if (cur < end) {
+        hkMonitorStreamRecord* r = (hkMonitorStreamRecord*)TlsGetValue(g_hkMonitorStreamCurTls);
+        r->m_name = name;
+        r->m_time = (uint32_t)__rdtsc();
+        TlsSetValue(g_hkMonitorStreamCurTls, (char*)r + sizeof(hkMonitorStreamRecord));
+    }
+}
 
 // Continuous-solver entry points used by the hkLs_* helpers.
 struct AgentOutput;
@@ -61,6 +91,68 @@ struct AgentOutput
     int m3998;               // +0x3040
 };
 
+struct hkpAgentNnTrack
+{
+    void** m_sectors;                  // +0x00
+    int m_numSectors;                  // +0x04
+    int m_sectorCapacityAndFlags;      // +0x08
+    void* m_inlineSector;              // +0x0c  inline slot of hkInplaceArray<hkpAgentNnSector*,1>
+    uint32_t m_bytesUsedInLastSector;  // +0x10
+    uint16_t m_trackType;              // +0x14
+    uint16_t m_sectorSize;             // +0x16  byte size of a full sector
+};
+
+// 0x010f1cc0/0x010f1a90 arguments: the agent record (arg1), the process-collision input
+// (arg2) and the output accumulator (arg3). The agent's job table entry is selected from
+// its state byte and the input's table base.
+struct AgentEntry
+{
+    char mPad00[3];     // +0x00
+    uint8_t mSize;      // +0x03  stride to the next agent entry in the sector
+    char mPad04[4];     // +0x04
+    int8_t mState;      // +0x08  collision dispatcher state, indexes the job table
+    char mPad09[7];     // +0x09
+    void** mpOwner;     // +0x10  object whose vtable slot 5 is called back
+    int mOwnerArg0;     // +0x14
+    int mOwnerArg1;     // +0x18
+};
+
+struct ProcessCollisionInput
+{
+    int mTableBase;     // +0x00
+    int mPad04[2];      // +0x04
+    uint8_t mField0c;   // +0x0c
+    char mPad0d[0x1b];  // +0x0d
+    int mpJob;          // +0x28  selected job table entry
+};
+
+// One 0x3c-byte entry of the static agent job table.
+struct JobTableEntry
+{
+    char mPad00[0x10];   // +0x00
+    uint8_t mKind;       // +0x10
+};
+
+// hkMemory::s_instance: the per-thread budget the watchdog compares against.
+struct HkMemory
+{
+    int mPad00;          // +0x00
+    int mStopped;        // +0x04  set to 1 once the budget is exhausted
+    int mTotal;          // +0x08
+    int mPad0c[2];       // +0x0c
+    int mUsedA;          // +0x14
+    int mPad18[4];       // +0x18
+    int mUsedB;          // +0x28
+};
+
+// hkSimulationIsland as seen by the narrowphase continuous pass: the entity array occupies
+// +0x3c..+0x4b, so the narrowphase agent track starts at +0x4c.
+struct SimIsland
+{
+    char mPad00[0x4c];                  // +0x00
+    hkpAgentNnTrack m_agentTrack;       // +0x4c
+};
+
 struct ContinuousSim {
     void* mVtable;              // +0x00
     char mPad04[2];             // +0x04
@@ -77,7 +169,7 @@ struct ContinuousSim {
     int mField28;               // +0x28
 
     void resetEntities(int a, int b, int c);
-    void collideIsland(int* island, void* input);
+    void collideIsland(SimIsland* island, ProcessCollisionInput* input);
     void processAgentCollide(AgentEntry* agent, ProcessCollisionInput* input, AgentOutput* output);
     void* scalarDelete(unsigned int flags);
     void destroy();             // 0x010f1a10
@@ -105,9 +197,169 @@ void ContinuousSim::resetEntities(int a, int b, int c) {
     f0bb0(a, b);
 }
 
-// @ 0x010f1350
-void FUN_010f1350(void* input, int prio, float dt, void* entities, void* flags, void* a, void* b) {
-    (void)input; (void)prio; (void)dt; (void)entities; (void)flags; (void)a; (void)b;
+// ---------------------------------------------------------------------------------------------
+// hkLs_toiActivateEntitiesAndCheckConstraints support types
+// ---------------------------------------------------------------------------------------------
+// hkArray / hkFixedArray as used by the continuous solver, plus the entity and constraint
+// structures 0x010F1350 walks.
+template <typename T> struct hkArray
+{
+    enum { CAPACITY_MASK = 0x3fffffff };
+    T* m_data;                 // +0x00
+    int m_size;                // +0x04
+    int m_capacityAndFlags;    // +0x08
+};
+
+template <typename T> struct hkFixedArray { T* m_data; };
+
+struct hkMotionState
+{
+    char m_transform[0x40];       // +0x00 hkTransform
+    char m_sweptTransform[0x50];  // +0x40 hkSweptTransform
+};
+
+struct hkMotion
+{
+    char mPad00[0x10];         // +0x00
+    hkMotionState m_motionState; // +0x10
+};
+
+class hkConstraintInstance;
+
+// hkConstraintInternal: the constraint and the two entities it joins. The two entity pointers
+// are XOR-combined to recover "the other" one.
+struct hkConstraintInternal
+{
+    hkConstraintInstance* m_constraint;  // +0x00
+    void* m_entities[2];                 // +0x04
+    char mPad0c[0x10];                   // +0x0c
+};
+
+// hkpConstraintInstance (the members 0x010F1350 reads).
+class hkConstraintInstance
+{
+public:
+    enum ConstraintPriority
+    {
+        CONSTRAINT_PRIORITY_INVALID = 0,
+        CONSTRAINT_PRIORITY_PSI,
+        CONSTRAINT_PRIORITY_TOI,
+        CONSTRAINT_PRIORITY_TOI_HIGHER,
+        CONSTRAINT_PRIORITY_TOI_FORCED,
+        CONSTRAINT_PRIORITY_SIMULATION_CONTROL,
+        CONSTRAINT_PRIORITY_MAX
+    };
+
+    char mPad00[0x18];                   // +0x00
+    uint8_t m_priority;                  // +0x18
+    char mPad19[0x0b];                   // +0x19
+    hkConstraintInternal* m_internal;    // +0x24
+};
+
+class hkEntity
+{
+public:
+    char mPad00[0x58];                                   // +0x00
+    hkMotion* m_motion;                                  // +0x58
+    char mPad5c[0x14];                                   // +0x5c
+    hkArray<hkConstraintInternal> m_constraintsMaster;   // +0x70
+    hkArray<hkConstraintInstance*> m_constraintsSlave;   // +0x7c
+    char mPad88[0x0c];                                   // +0x88
+    uint16_t m_storageIndex;                             // +0x94
+    char mPad96[3];                                      // +0x96
+    bool m_fixed;                                        // +0x99
+};
+
+void FUN_010f0d60(hkEntity* entity, int priority, void* input, float time, void* flags);
+void FUN_01209c50(void* sweptTransform, float time, void* transform);
+
+// @ 0x010f1350  hkLs_toiActivateEntitiesAndCheckConstraints
+void FUN_010f1350(void* input, int priority, float time, hkArray<hkEntity*>* toBeActivated,
+                  hkFixedArray<unsigned char>* flags, hkArray<hkEntity*>* newEntities,
+                  hkArray<hkConstraintInstance*>* newConstraints) {
+    if (toBeActivated->m_size <= 0)
+        return;
+
+    int i = 0;
+    do {
+        hkEntity* entity = toBeActivated->m_data[i];
+        unsigned char* state = &flags->m_data[entity->m_storageIndex];
+        if (*state == 0) {
+            *state = 1;
+            FUN_01209c50(&entity->m_motion->m_motionState.m_sweptTransform, time,
+                         &entity->m_motion->m_motionState.m_transform);
+        }
+        flags->m_data[entity->m_storageIndex] = 8;
+        FUN_010f0d60(entity, priority, input, time, flags);
+
+        // master constraints: the internal records are stored inline
+        for (int m = 0; m < entity->m_constraintsMaster.m_size; m++) {
+            hkConstraintInternal* ci = &entity->m_constraintsMaster.m_data[m];
+            if (priority > (int)ci->m_constraint->m_priority)
+                continue;
+            hkEntity* other = (hkEntity*)((unsigned int)ci->m_entities[0] ^
+                                          (unsigned int)ci->m_entities[1] ^
+                                          (unsigned int)entity);
+            if (other->m_fixed) {
+                if (newConstraints->m_size == (newConstraints->m_capacityAndFlags & hkArray<hkConstraintInstance*>::CAPACITY_MASK))
+                    FUN_0107f530(newConstraints, 4);
+                newConstraints->m_data[newConstraints->m_size++] = ci->m_constraint;
+                continue;
+            }
+            unsigned char* otherState = &flags->m_data[other->m_storageIndex];
+            if (*otherState == 8)
+                continue;
+            if (newConstraints->m_size == (newConstraints->m_capacityAndFlags & hkArray<hkConstraintInstance*>::CAPACITY_MASK))
+                FUN_0107f530(newConstraints, 4);
+            newConstraints->m_data[newConstraints->m_size++] = ci->m_constraint;
+            if (*otherState >= 2)
+                continue;
+            if (newEntities->m_size == (newEntities->m_capacityAndFlags & hkArray<hkEntity*>::CAPACITY_MASK))
+                FUN_0107f530(newEntities, 4);
+            newEntities->m_data[newEntities->m_size++] = other;
+            if (*otherState == 0) {
+                *otherState = 1;
+                FUN_01209c50(&other->m_motion->m_motionState.m_sweptTransform, time,
+                             &other->m_motion->m_motionState.m_transform);
+            }
+            *otherState = 2;
+        }
+
+        // slave constraints: the records are reached through the instance's internal pointer
+        for (int s = 0; s < entity->m_constraintsSlave.m_size; s++) {
+            hkConstraintInternal* ci = entity->m_constraintsSlave.m_data[s]->m_internal;
+            if (priority > (int)ci->m_constraint->m_priority)
+                continue;
+            hkEntity* other = (hkEntity*)((unsigned int)ci->m_entities[0] ^
+                                          (unsigned int)ci->m_entities[1] ^
+                                          (unsigned int)entity);
+            if (other->m_fixed) {
+                if (newConstraints->m_size == (newConstraints->m_capacityAndFlags & hkArray<hkConstraintInstance*>::CAPACITY_MASK))
+                    FUN_0107f530(newConstraints, 4);
+                newConstraints->m_data[newConstraints->m_size++] = ci->m_constraint;
+                continue;
+            }
+            unsigned char* otherState = &flags->m_data[other->m_storageIndex];
+            if (*otherState == 8)
+                continue;
+            if (newConstraints->m_size == (newConstraints->m_capacityAndFlags & hkArray<hkConstraintInstance*>::CAPACITY_MASK))
+                FUN_0107f530(newConstraints, 4);
+            newConstraints->m_data[newConstraints->m_size++] = ci->m_constraint;
+            if (*otherState >= 2)
+                continue;
+            if (newEntities->m_size == (newEntities->m_capacityAndFlags & hkArray<hkEntity*>::CAPACITY_MASK))
+                FUN_0107f530(newEntities, 4);
+            newEntities->m_data[newEntities->m_size++] = other;
+            if (*otherState == 0) {
+                *otherState = 1;
+                FUN_01209c50(&other->m_motion->m_motionState.m_sweptTransform, time,
+                             &other->m_motion->m_motionState.m_transform);
+            }
+            *otherState = 2;
+        }
+
+        i++;
+    } while (i < toBeActivated->m_size);
 }
 
 // @ 0x010f1690  hkLs_areConstraintsSatisfied
@@ -183,7 +435,6 @@ struct ResultArray
 
 int FUN_010b1d70(int a, int b, int c, int d, int e, void* out);
 int FUN_010f0e90(int a, SimObjectRef* ref, const void* buf, int d, int e);
-void FUN_0107f530(void* array, int elemSize);
 
 void FUN_010f1690(char* out, ConstraintContext* ctx, ConstraintArray* constraints, int param4, ResultArray* results) {
     char ok = 1;
@@ -356,51 +607,47 @@ void FUN_010f18d0(Island* island, FlagList* flagList) {
 }
 
 
-// @ 0x010f1a90
-void ContinuousSim::collideIsland(int* island, void* input) {
-    (void)island; (void)input;
+// @ 0x010f1a90  hkContinuousSimulation::collideIslandNarrowPhaseContinuous
+void ContinuousSim::collideIsland(SimIsland* island, ProcessCollisionInput* input) {
+    HK_TIMER_SPLIT((const char*)0x014a1e64);
+    hkpAgentNnTrack* track = &island->m_agentTrack;
+    bool stopped = false;
+    if (track->m_numSectors > 0) {
+        for (int i = 0; i < track->m_numSectors && !stopped; i++) {
+            AgentEntry* agent = (AgentEntry*)track->m_sectors[i];
+            char* sectorEnd = (char*)agent +
+                ((i + 1 == track->m_numSectors) ? track->m_bytesUsedInLastSector
+                                                : track->m_sectorSize);
+            while ((char*)agent < sectorEnd) {
+                AgentOutput out;
+                out.mData = out.mInline;
+                out.m3994Bits = 0x7f7fffee;
+                out.m3998 = 0;
+                JobTableEntry* job = (JobTableEntry*)(agent->mState * 0x3c + 0x1a14 + input->mTableBase);
+                input->mpJob = (int)job;
+                input->mField0c = job->mKind;
+                FUN_010fc180(agent, input, &out);
+                HkMemory* mem = (HkMemory*)g_hkMemory;
+                int used = mem->mUsedA + mem->mUsedB;
+                if (mem->mTotal <= used)
+                    mem->mStopped = 1;
+                if (mem->mStopped == 1) {
+                    stopped = true;
+                    break;
+                }
+                if (out.mData != out.mInline) {
+                    void** vt = *(void***)(agent->mpOwner);
+                    ((void(__thiscall*)(void*, int, int, ProcessCollisionInput*, AgentOutput*))(vt[5]))(
+                        agent->mpOwner, agent->mOwnerArg0, agent->mOwnerArg1, input, &out);
+                }
+                if (out.m3994 < 3.40282e+38f)
+                    FUN_010f0b00((int)this, agent, &out);
+                agent = (AgentEntry*)((char*)agent + agent->mSize);
+            }
+        }
+    }
+    HK_TIMER_SPLIT((const char*)0x0149cc34);
 }
-
-// 0x010f1cc0 arguments: the agent record (arg1), the process-collision input (arg2) and
-// the output accumulator (arg3). The agent's job table entry is selected from its
-// state byte and the input's table base.
-struct AgentEntry
-{
-    int mPad00[2];      // +0x00
-    int8_t mState;      // +0x08
-    char mPad09[3];     // +0x09
-    void** mpOwner;     // +0x10  object whose vtable slot 5 is called back
-    int mOwnerArg0;     // +0x14
-    int mOwnerArg1;     // +0x18
-};
-
-struct ProcessCollisionInput
-{
-    int mTableBase;     // +0x00
-    int mPad04[2];      // +0x04
-    uint8_t mField0c;   // +0x0c
-    char mPad0d[0x1b];  // +0x0d
-    int mpJob;          // +0x28  selected job table entry
-};
-
-// One 0x3c-byte entry of the static agent job table.
-struct JobTableEntry
-{
-    char mPad00[0x10];   // +0x00
-    uint8_t mKind;       // +0x10
-};
-
-// hkMemory::s_instance: the per-thread budget the watchdog compares against.
-struct HkMemory
-{
-    int mPad00;          // +0x00
-    int mStopped;        // +0x04  set to 1 once the budget is exhausted
-    int mTotal;          // +0x08
-    int mPad0c[2];       // +0x0c
-    int mUsedA;          // +0x14
-    int mPad18[4];       // +0x18
-    int mUsedB;          // +0x28
-};
 
 // @ 0x010f1cc0
 void ContinuousSim::processAgentCollide(AgentEntry* agent, ProcessCollisionInput* input, AgentOutput* output) {
@@ -428,9 +675,22 @@ void ContinuousSim::processAgentCollide(AgentEntry* agent, ProcessCollisionInput
 
 // @ 0x010f1d80  hkContinuousSimulation scalar deleting dtor
 void* ContinuousSim::scalarDelete(unsigned int flags) {
-    destroy();
+    mVtable = (void*)0x014a59d0;
+    if (mResourceMgr) {
+        void** vt = *(void***)mResourceMgr;
+        ((void(__thiscall*)(void*, int))vt[0])(mResourceMgr, 1);
+    }
+    if (mCapacityAndFlags >= 0) {
+        void* tm = TlsGetValue(g_hkThreadMemoryTls);
+        FUN_0107db10(tm, (int)mArrayData,
+                     (mCapacityAndFlags & 0x3fffffff) << 6, 0x14);
+    }
+    mVtable = &vtable_Simulator_cCreatureAbility;
     if (flags & 1) {
-        // operator delete(this)
+        void* mem = g_hkMemory;
+        void** vt = *(void***)mem;
+        ((void(__thiscall*)(void*, void*, unsigned short, int))vt[5])(
+            mem, this, *(unsigned short*)((char*)this + 4), 0x12);
     }
     return this;
 }

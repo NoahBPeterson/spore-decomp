@@ -16,6 +16,6 @@
 011e2560 rw::core::arena::UnfixContextImpl::FindNewSubObject  # card name
 011e25d0 rw::core::arena::UnfixContextImpl::FindExistingSubObject  # card name
 011e26f0 rw::core::arena::ArenaIterator::UpdateSubreferencesData  # card name
-011e2760 rw::core::arena::Arena::WriteDictionary  # card name
-011e28e0 rw::core::arena::Arena::GetExportedObjectByIndex  # card name
-011e2a00 rw::core::arena::AddResourceToArena<rw::core::arena::Adder>  # card name
+011e2760 ?WriteDictionary@Arena@@SAXPAU1@PAUArenaStream@@@Z  # card name
+011e28e0 ?GetExportedObjectByIndex@Arena@@QAEHIPAUExportedObject@@@Z  # card name
+011e2a00 ?AddResourceToArena@arena@core@rw@@YAIPAUAdder@@PAUArenaResourceSource@@IPAUArenaResourceOut@@@Z  # card name

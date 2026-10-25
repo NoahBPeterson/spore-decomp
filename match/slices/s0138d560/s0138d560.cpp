@@ -100,12 +100,56 @@ void init_16d6d70()
 
 // ---------------------------------------------------------------------------
 // Large property-descriptor table initializers.  Each entry is a 15-dword
-// {name, hash, size, 0, 0, 7 x function pointer} record copied to a global
-// table; only the first records were reconstructed.
+// record: name string VA, hash, byte size, three dwords that the original
+// leaves untouched (+0x0c..+0x14), two zero dwords (+0x18/+0x1c) and seven
+// function pointers (+0x20..+0x38).  The original builds one record in a
+// 0x3c-byte stack temporary and rep-movsd's it into the global table.
 // ---------------------------------------------------------------------------
+struct PropertyDesc {
+    unsigned int name;   // +0x00  const char* (VA)
+    unsigned int hash;   // +0x04
+    unsigned int size;   // +0x08  byte size of the value
+    unsigned int unk0c;  // +0x0c  uninitialised in the original
+    unsigned int unk10;  // +0x10  uninitialised in the original
+    unsigned int unk14;  // +0x14  uninitialised in the original
+    unsigned int fn0;    // +0x18
+    unsigned int fn1;    // +0x1c
+    unsigned int fn2;    // +0x20
+    unsigned int fn3;    // +0x24
+    unsigned int fn4;    // +0x28
+    unsigned int fn5;    // +0x2c
+    unsigned int fn6;    // +0x30
+    unsigned int fn7;    // +0x34
+    unsigned int fn8;    // +0x38
+};
 
-// @ 0x0138d560  PARTIAL: 15-dword descriptor table (6 records)
-void init_15afd38() { }
+// @ 0x0138d560  0x15afd38: 9 records, 0x3c stride
+void init_15afd38()
+{
+    static const PropertyDesc desc[9] = {
+        { 0x148cd30, 0x7905d42, 0x130,  0,0,0, 0,0,
+          0x692ca0, 0xf26be0, 0xf26c20, 0xc2e4e0, 0x692fb0, 0xf25b80, 0xf2a510 },
+        { 0x148cdcc, 0x7734a68, 0x175,  0,0,0, 0,0,
+          0x692ca0, 0xac8750, 0xac8780, 0x693090, 0x694fa0, 0xb1fbf0, 0x57ce00 },
+        { 0x148cda0, 0x7905d3c, 0x238,  0,0,0, 0,0,
+          0x692ca0, 0x572810, 0x572840, 0x692ff0, 0x694ee0, 0xb1fbf0, 0x57cde0 },
+        { 0x148cd88, 0x7905d3e, 0xb8,   0,0,0, 0,0,
+          0x692ca0, 0xf293f0, 0xf268b0, 0xc2e4e0, 0x692fb0, 0xf25b60, 0xf28880 },
+        { 0x148cd7c, 0x7905d3f, 0xf4,   0,0,0, 0,0,
+          0x692ca0, 0xf293f0, 0xf268b0, 0xc2e4e0, 0x692fb0, 0xf25b60, 0xf28880 },
+        { 0x148cd70, 0x7905d40, 0x7c,   0,0,0, 0,0,
+          0x692ca0, 0xf293f0, 0xf268b0, 0xc2e4e0, 0x692fb0, 0xf25b60, 0xf28880 },
+        { 0x1412cf4, 0x7905d41, 0x78,   0,0,0, 0,0,
+          0x692ca0, 0x572810, 0x572840, 0x692ff0, 0x694ee0, 0xb1fbf0, 0x57cde0 },
+        { 0x148ca9c, 0x7be36ef, 0x23c,  0,0,0, 0,0,
+          0x692ca0, 0xf2f4f0, 0xf27010, 0xc2e4e0, 0x692fb0, 0xf270b0, 0xf29e30 },
+        { 0x148cd98, 0x7be710b, 0x2bf4, 0,0,0, 0,0,
+          0x692ca0, 0xf2f6c0, 0xf27ee0, 0xc2e4e0, 0x692fb0, 0xf26fd0, 0xf29ce0 },
+    };
+    PropertyDesc* dst = (PropertyDesc*)0x15afd38;
+    for (int i = 0; i < 9; ++i)
+        dst[i] = desc[i];
+}
 
 // The table at 0x16d6fa8 is a 72-float basis-matrix block built from
 // +1/sqrt(2), -1/sqrt(2), +0.0 and -0.0 (0x3f3504f3, 0xbf3504f3, 0, 0x80000000).
@@ -186,8 +230,44 @@ void init_16d6fa8()
     *(float*)0x016d70c4 = -0.70710678f;
 }
 
-// @ 0x01396110  PARTIAL: 15-dword descriptor table
-void init_15b4568() { }
+// @ 0x01396110  0x15b4568: 5 records, 0x3c stride
+void init_15b4568()
+{
+    static const PropertyDesc desc[5] = {
+        { 0x1494424, 0x374176b, 0x00,  0,0,0, 0,0,
+          0x692ca0, 0xac8750, 0xac8780, 0x693090, 0x694fa0, 0xb1fbf0, 0x57ce00 },
+        { 0x1494414, 0x3741796, 0x04,  0,0,0, 0,0,
+          0x692ca0, 0xb6e3a0, 0xac88c0, 0x6930f0, 0x695010, 0xb1fbf0, 0xacbba0 },
+        { 0x1494404, 0x3741811, 0x10,  0,0,0, 0,0,
+          0x692ca0, 0x572810, 0xac88f0, 0x6930b0, 0x694fc0, 0xb1fbf0, 0xacbb80 },
+        { 0x14943f8, 0x374181f, 0x14,  0,0,0, 0,0,
+          0x692ca0, 0xb6e3a0, 0xac88c0, 0x6930f0, 0x695010, 0xb1fbf0, 0xacbba0 },
+        { 0x14943f0, 0x374182d, 0x20,  0,0,0, 0,0,
+          0x692ca0, 0x572810, 0xac88f0, 0x6930b0, 0x694fc0, 0xb1fbf0, 0xacbb80 },
+    };
+    PropertyDesc* dst = (PropertyDesc*)0x15b4568;
+    for (int i = 0; i < 5; ++i)
+        dst[i] = desc[i];
+}
 
-// @ 0x01396440  PARTIAL: 15-dword descriptor table
-void init_15b47b8() { }
+// @ 0x01396440  0x15b47b8: 6 records, 0x3c stride
+void init_15b47b8()
+{
+    static const PropertyDesc desc[6] = {
+        { 0x1494838, 0x42a2fbd, 0x38,  0,0,0, 0,0,
+          0x692ca0, 0xaff840, 0xaff870, 0x692fd0, 0x694ec0, 0xb1fbf0, 0x595a70 },
+        { 0x149481c, 0x5a5bc48, 0x40,  0,0,0, 0,0,
+          0x692ca0, 0xaff840, 0xaff870, 0x692fd0, 0x694ec0, 0xb1fbf0, 0x595a70 },
+        { 0x1494808, 0x54ffe6e, 0x58,  0,0,0, 0,0,
+          0x692ca0, 0x572810, 0x572840, 0x692ff0, 0x694ee0, 0xb1fbf0, 0x57cde0 },
+        { 0x14947f8, 0x54ffe6d, 0x5c,  0,0,0, 0,0,
+          0x692ca0, 0x572810, 0x572840, 0x692ff0, 0x694ee0, 0xb1fbf0, 0x57cde0 },
+        { 0x14947ec, 0x57e1d98, 0x48,  0,0,0, 0,0,
+          0x692ca0, 0xac8750, 0xac8780, 0x693090, 0x694fa0, 0xb1fbf0, 0x57ce00 },
+        { 0x14947d8, 0x66b6169, 0x49,  0,0,0, 0,0,
+          0x692ca0, 0xac8750, 0xac8780, 0x693090, 0x694fa0, 0xb1fbf0, 0x57ce00 },
+    };
+    PropertyDesc* dst = (PropertyDesc*)0x15b47b8;
+    for (int i = 0; i < 6; ++i)
+        dst[i] = desc[i];
+}

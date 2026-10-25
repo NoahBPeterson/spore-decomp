@@ -6,3 +6,6 @@ slices/s01065c30/s01065c30.cpp  ?ToggleStarmapFilters@SPUISpace@@QAEXH@Z  010662
 slices/s01065c30/s01065c30.cpp  ?FUN_010666a0@@YAPAXXZ  010666a0  /O2 /MD /Gy /TP /arch:SSE
 slices/s01065c30/s01065c30.cpp  ?FUN_01066310@@YGXPAH@Z  01066310  /O2 /MD /Gy /TP /arch:SSE
 slices/s01065c30/s01065c30.cpp  ?hide@T6a10@@QAEXXZ  01066a10  /O2 /MD /Gy /TP /arch:SSE
+slices/s01065c30/s01065c30.cpp  ?ShowCameraControls@SPUISpace@@QAEXH@Z  01065c30  /O2 /MD /Gy /TP /arch=SSE
+slices/s01065c30/s01065c30.cpp  ?OnState2@CmdDeleteCargo@@QAE_NXZ  01066520  /O2 /MD /Gy /TP /arch=SSE
+slices/s01065c30/s01065c30.cpp  ?Run@CmdDeleteCargo@@QAE_NXZ  01066570  /O2 /MD /Gy /TP /arch=SSE
