@@ -1,0 +1,4 @@
+00b894a0 ?CellFromDirection@cCellGrid@@QAEHPAM@Z  # cCellGrid::CellFromDirection migrated from s00b894a0 (verbatim, slice spelling)
+00b89770 ?PushDefault@OuterVec@@QAEXXZ  # OuterVec::PushDefault migrated from s00b894a0 (verbatim, slice spelling)
+00b89830 ?DoInsertValue28@Vec1c@@QAEXPAUElem1c@@ABU2@@Z  # Vec1c::DoInsertValue28 migrated from s00b894a0 (verbatim, slice spelling)
+00b899b0 ?AddBoundary@cNatlBounds@@QAEXPBUVec3@@0II@Z  # cNatlBounds::AddBoundary migrated from s00b894a0 (verbatim, slice spelling)

@@ -1,1 +1,2 @@
 00b88590 SP::cPlanetModel::GetContinent  # thiscall(const Vector3*) -> continent index; same name in s00b97280 / s00b9d820
+00b8aea0 ?BuildPoliticalZoneMap@cPlanetModel_s00b8_aea0@SP@@QAEXXZ  # cPlanetModel_s00b8_aea0::BuildPoliticalZoneMap migrated from s00b8aea0 (verbatim, slice spelling)

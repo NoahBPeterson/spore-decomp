@@ -1,0 +1,16 @@
+# source  symbol  va  flags
+../src/game/SPGonzago/SPPlanetModel.cpp  ?DrawMaterial@Mode@@QAEXPAX0@Z  00b80a50  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPGonzago/SPPlanetModel.cpp  ?SetMaterialA@Mode@@QAEXPAX@Z  00b80a80  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPGonzago/SPPlanetModel.cpp  ?SetMaterialB@Mode@@QAEXPAX@Z  00b80ac0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPGonzago/SPPlanetModel.cpp  ?SetMaterialC@Mode@@QAEXPAX@Z  00b80b00  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPGonzago/SPPlanetModel.cpp  ?StopAudio@Layer@@QAEXXZ  00b80e40  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPGonzago/SPPlanetModel.cpp  ?DeleteInstance@Mode@@QAEPAU1@I@Z  00b80ff0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPGonzago/SPPlanetModel.cpp  ?AllocAndCopy@@YGPAXIPBX0@Z  00b85930  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPPlanetModel.cpp  ?insert@SpVector3@@QAEPAUVec3f@@PAU2@PBU2@@Z  00b85d40  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPPlanetModel.cpp  ?push_back@Vertex3DVec@@QAEXPBUVertex3D@@@Z  00b85db0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPPlanetModel.cpp  ?AssignN@SpVector20B@@QAEPAXII@Z  00b85e10  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPPlanetModel.cpp  ?CopyCtor@ByteVec@@QAEPAXPBU1@@Z  00b85fb0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPPlanetModel.cpp  ?CopyVec20BForward@@YAPAIPAI00@Z  00b86350  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPPlanetModel.cpp  ?CopyVec20BBackward@@YAPAIPAI00@Z  00b86390  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPPlanetModel.cpp  ?PushDefault@OuterVec@@QAEXXZ  00b89770  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPPlanetModel.cpp  ?AddBoundary@cNatlBounds@@QAEXPBUVec3@@0II@Z  00b899b0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include

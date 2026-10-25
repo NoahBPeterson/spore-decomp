@@ -1,0 +1,1 @@
+00b7f920 ?DrawArc@cArcRibbon@@QAEXABUVector3@@0I@Z  # cArcRibbon::DrawArc migrated from s00b7f920 (verbatim, slice spelling)
