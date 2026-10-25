@@ -1,5 +1,5 @@
-004d8c10 ?SpeciesProfile_Update@@YAXPAXH@Z  # SpeciesProfile_Update migrated from s004d8c10 (verbatim, slice spelling)
+004d8c10 ?Update@SpeciesProfile@@QAEXPAX_N@Z  # SpeciesProfile::Update migrated from s004d8c10 (member def; was ?SpeciesProfile_Update@@YAXPAXH@Z)
 004d8ee0 ?GetVariantA@SpeciesProfile@@QAEHPAX@Z  # SpeciesProfile::GetVariantA migrated from s004d8c10 (verbatim, slice spelling)
 004d8f10 ?GetVariantB@SpeciesProfile@@QAEHPAX@Z  # SpeciesProfile::GetVariantB migrated from s004d8c10 (verbatim, slice spelling)
 004d8f90 ?GetVariantC@SpeciesProfile@@QAEHPAX@Z  # SpeciesProfile::GetVariantC migrated from s004d8c10 (verbatim, slice spelling)
-004d90a0 ?cSpeciesProfile_FillInProfileValues@@YAXPAX@Z  # cSpeciesProfile_FillInProfileValues migrated from s004d8c10 (verbatim, slice spelling)
+004d90a0 ?FillInProfileValues@cSpeciesProfile@SP@@QAE_NPAXPAUIProfileSource@@@Z  # SP::cSpeciesProfile::FillInProfileValues migrated from s004d8c10 (member def; was ?cSpeciesProfile_FillInProfileValues@@YAXPAX@Z)
