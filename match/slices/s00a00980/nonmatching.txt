@@ -2,3 +2,4 @@
 00a00b10  183  complete; list-splice shape and command-ctor call schedule differ from retail
 00a00c40  202  complete; callee-saved register assignment (param/src/dst) differs from retail
 00a00d50  241  complete; /arch:SSE float + multiple callback call sites not byte-identical
+00a010c0  1510 complete; UpdateCreatureBodies reconstructed: facility bake/ease path, per-command weight bake, default-command refresh, directional-flag scan, animation tick/status 1/2/3 handling, command retirement/replacement and mPrimary/mActive maintenance; 1758 vs 1860 bytes, status==2 ceil/modf timing and the mA0/mSeq comparison are approximations. [equiv: FAIL 1/252 valid, memory pool mismatch at the mPrimary/mQueueHead fields]
