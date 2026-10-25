@@ -104,7 +104,7 @@ public:
     virtual const EA::RectT& GetArea();           // +0x38
     PV(15) PV(16) PV(17) PV(18) PV(19) PV(20) PV(21) PV(22)
     virtual void pv23(uint32_t color);            // +0x5c
-    virtual void SetArea(EA::RectT area);         // +0x60
+    virtual void SetArea(const EA::RectT& area);  // +0x60 (a pointer is pushed)
     PV(25) PV(26)
     virtual void pv27(const EA::RectT* area);     // +0x6c
     PV(28) PV(29) PV(30)
@@ -113,7 +113,10 @@ public:
     PV(40) PV(41) PV(42) PV(43) PV(44) PV(45) PV(46) PV(47)
     virtual EA::Point ToClient(float, float);     // +0xc0
     virtual EA::Point ToScreen(float, float);     // +0xc4
-    PV(50) PV(51) PV(52) PV(53) PV(54) PV(55) PV(56) PV(57) PV(58) PV(59)
+    PV(50) PV(51) PV(52) PV(53)
+    virtual void SelectChild(IWindow* child);     // +0xd8
+    virtual void DeselectChild(IWindow* child);   // +0xdc
+    PV(56) PV(57) PV(58) PV(59)
     PV(60) PV(61) PV(62) PV(63) PV(64)
     virtual void pv65(void*);                     // +0x104
     virtual void pv66(void*);                     // +0x108
@@ -126,6 +129,16 @@ public:
 }  // namespace EA
 
 using EA::UTFWin::IWindow;
+
+class cSPColorSwatch;
+
+// What an owning color picker exposes: slot +0xc maps an id to the swatch it
+// created for it.
+class IColorSwatchHost : public EA::COM::IUnknown32 {
+public:
+    PV(2)
+    virtual cSPColorSwatch* GetSwatch(uint32_t id);   // +0x0c
+};
 
 namespace eastl {
 struct sp_vector_allocator {
@@ -167,8 +180,15 @@ public:
     cString();
     ~cString();
     void Load(uint32_t id, uint32_t arg, const wchar_t* text);  // 0x6b54b0
+    const wchar_t* GetText();                                   // 0x6b55c0
     const wchar_t* c_str();                                     // 0x6b5240
-    char pad[0x14];
+    // Opaque storage; spelled as words (not an array) so a local cString whose
+    // address is taken does not pull in a /GS cookie.
+    uint32_t mField00;
+    uint32_t mField04;
+    uint32_t mField08;
+    uint32_t mField0c;
+    uint32_t mField10;
 };
 
 struct cSPColorRGB {
@@ -183,7 +203,36 @@ extern cSPColorRGB gDefaultPaintColor;  // 0x0150f470 (12 bytes)
 IWindow* WindowManagerView();
 int PropertyManagerDummy();
 
+// The window manager singleton; only its main-window getter is used here.
+class cWindowManager {
+public:
+    virtual int AddRef();                  // +0x00
+    virtual IWindow* GetMainWindow();      // +0x04
+};
+cWindowManager* WindowManager();           // 0x67caa0
+
+void RgbToHsl(uint8_t r, uint8_t g, uint8_t b,
+              float* pHue, float* pLight, float* pSat);      // 0x918090
+cSPColorRGB* HSLToRGB(cSPColorRGB* out, float h, float s, float l);  // 0x67fe30
+
 }  // namespace SP
+
+// Heap allocation behind the tooltip: FUN_009512c0 fetches the owning heap,
+// FUN_009512d0 allocates a block from it (size, flags, name, heap).
+void* FUN_009512c0();                                                    // 0x9512c0
+void* FUN_009512d0(size_t size, int flags, const char* pName, void* pHeap);  // 0x9512d0
+
+// Tooltip window procedure created for the swatch (definition lives in the
+// tooltip slice; only AddRef/Release and the constructor are used here).
+class cSPUITooltipWinProc {
+public:
+    virtual int AddRef();    // +0x00
+    virtual int Release();   // +0x04
+    cSPUITooltipWinProc(const wchar_t* pName, uint32_t id, const wchar_t* pText,
+                        const EA::Point* pOffset, uint32_t arg, const wchar_t* pClass,
+                        uint32_t flags);                     // 0x835e30
+    char mData[0x64];
+};
 
 using SP::cSPColorRGB;
 
@@ -270,55 +319,50 @@ void FUN_005a4e20(cSPEditorColorPicker* self, const cSPColorRGB* c);
 void FUN_005a4fb0(cSPEditorColorPicker* self);
 
 // ============================================================================
-// @ 0x005a4250  SP::cSPColorSwatch::GetExpansionColor
+// @ 0x005a4250
 void cSPColorSwatch::GetExpansionColor(float* out, float a, float b, float c, int d, int e) {
-    int num = 5;
-    if (mColorPickerConfig) {
-        Property* prop;
-        if (mColorPickerConfig->GetProperty(0xd29675eb, prop) && prop->mType == 9) {
-            int* p = prop->GetInt();
-            num = *p;
-        }
-    }
-    float col2 = 0.0f, col3 = 0.0f, col4 = 0.0f;
-    if (mColorPickerConfig) {
-        Property* prop;
-        if (mColorPickerConfig->GetProperty(0x92fa6b4b, prop) && prop->mType == 0xd) {
-            float* p = prop->GetFloat();
-            col2 = *p;
-        }
-    }
-    if (mColorPickerConfig) {
-        Property* prop;
-        if (mColorPickerConfig->GetProperty(0xd29675ee, prop) && prop->mType == 0xd) {
-            float* p = prop->GetFloat();
-            col3 = *p;
-        }
-    }
-    if (mColorPickerConfig) {
-        Property* prop;
-        if (mColorPickerConfig->GetProperty(0xb2fa6d7b, prop) && prop->mType == 0xd) {
-            float* p = prop->GetFloat();
-            col4 = *p;
-        }
-    }
-    if (mColorPickerConfig) {
-        Property* prop;
-        if (mColorPickerConfig->GetProperty(0xd29675ed, prop) && prop->mType == 0xd) {
-            float* p = prop->GetFloat();
-            /* stored to 0x1c slot; unused below */
-            (void)p;
-        }
-    }
+    // Grey swatches are spread over the expansion row, colored ones go through
+    // HSV: sat = satBase ^ (satExp * (1 - d/steps)) and likewise for the value.
+    Property* pProp;
+    int steps = 5;
+    float satExp = 1.0f;    // 0xb2fa6d7b
+    float satBase = 1.0f;   // 0xd29675ed
+    float lightExp = 1.0f;  // 0x92fa6b4b
+    float lightBase = 1.0f; // 0xd29675ee
+
+    if (mColorPickerConfig && mColorPickerConfig->GetProperty(0xd29675eb, pProp) && pProp->mType == 9)
+        steps = *pProp->GetInt();
+    if (mColorPickerConfig && mColorPickerConfig->GetProperty(0x92fa6b4b, pProp) && pProp->mType == 0xd)
+        lightExp = *pProp->GetFloat();
+    if (mColorPickerConfig && mColorPickerConfig->GetProperty(0xd29675ee, pProp) && pProp->mType == 0xd)
+        lightBase = *pProp->GetFloat();
+    if (mColorPickerConfig && mColorPickerConfig->GetProperty(0xb2fa6d7b, pProp) && pProp->mType == 0xd)
+        satExp = *pProp->GetFloat();
+    if (mColorPickerConfig && mColorPickerConfig->GetProperty(0xd29675ed, pProp) && pProp->mType == 0xd)
+        satBase = *pProp->GetFloat();
+
     if (a == b && a == c && b == c) {
-        float t = (float)(num * d + e) / (float)(num * num - 1);
-        out[0] = t;
-        out[1] = t;
-        out[2] = t;
+        float grey = (float)(steps * d + e) / (float)(steps * steps - 1);
+        out[0] = grey;
+        out[1] = grey;
+        out[2] = grey;
         return;
     }
-    (void)col2; (void)col3; (void)col4;
-    out[0] = 0.0f; out[1] = 0.0f; out[2] = 0.0f;
+
+    float light;
+    float sat;
+    float hue;
+    SP::RgbToHsl((uint8_t)(int)(mBaseColor.r * 255.0f),
+                 (uint8_t)(int)(mBaseColor.g * 255.0f),
+                 (uint8_t)(int)(mBaseColor.b * 255.0f),
+                 &hue, &light, &sat);
+    cSPColorRGB color;
+    SP::HSLToRGB(&color, hue * 60.0f,
+                 (float)pow((double)satBase, (double)satExp * (1.0 - (double)d / (double)steps)),
+                 (float)pow((double)lightBase, (double)lightExp * (1.0 - (double)e / (double)steps)));
+    out[0] = color.r;
+    out[1] = color.g;
+    out[2] = color.b;
 }
 
 // @ 0x005a4500
@@ -366,13 +410,29 @@ void cSPColorSwatch::CollapseExpansion() {
 
 // @ 0x005a4680
 void cSPColorSwatch::AddTooltip(uint32_t id) {
-    IWindow* w = mWinRoot;
-    if (!w)
+    IWindow* pRoot = mWinRoot;
+    EA::Point offset;       // where the tooltip pops up, relative to the swatch
+    offset.x = 5.0f;
+    offset.y = -9.0f;
+    if (!pRoot)
         return;
-    SP::cString str;
-    str.Load(0x496bfb26, id, L"Color swatch Placeholder");
-    /* Tooltip creation path elided for reading; behaviour: attach tooltip window. */
-    (void)str;
+
+    SP::cString text;
+    text.Load(0x496bfb26, id, L"Color swatch Placeholder");
+
+    cSPUITooltipWinProc* pTooltip = 0;
+    void* pMemory = FUN_009512d0(0x68, 4, "UI/Tooltip", FUN_009512c0());
+    if (pMemory != 0) {
+        cSPUITooltipWinProc* pProc = new (pMemory) cSPUITooltipWinProc(
+            L"Tooltips", 0x3754e6c, text.GetText(), &offset, 0, L"Tooltip", 0);
+        if (pProc != 0) {
+            pProc->AddRef();
+            pTooltip = pProc;
+        }
+    }
+    pRoot->pv65(pTooltip);
+    if (pTooltip)
+        pTooltip->Release();
 }
 
 // @ 0x005a4750
@@ -432,21 +492,65 @@ void cSPEditorColorPicker::SetPaletteColor(const cSPColorRGB& color) {
 }
 
 // @ 0x005a4990
-void cSPColorSwatch::SetExpansionArea(bool b) {
+void cSPColorSwatch::SetExpansionArea(bool bKeepInside) {
+    Property* pProp;
     float scale = 0.0f;
-    if (mColorPickerConfig) {
-        Property* prop;
-        if (mColorPickerConfig->GetProperty(0xd29675ea, prop) && prop->mType == 0xd) {
-            float* p = prop->GetFloat();
-            scale = *p;
-        }
-    }
-    (void)b; (void)scale;
+    if (mColorPickerConfig && mColorPickerConfig->GetProperty(0xd29675ea, pProp) && pProp->mType == 0xd)
+        scale = *pProp->GetFloat();
+
+    // The expansion square is centred on the swatch and sized from the world
+    // area of the root window.
+    const EA::RectT& world = SP::WindowManager()->GetMainWindow()->GetRealArea();
+    float span = (world.right - world.left) * 0.00125f;
+    const EA::RectT& screen = SP::WindowManager()->GetMainWindow()->GetArea();
+    const EA::RectT& root = mWinRoot->GetArea();
+    float centerY = (root.bottom + root.top) * 0.5f;
+    float centerX = (root.right + root.left) * 0.5f;
+    IWindow* pParent = mWinRoot->GetParent();
+    EA::Point client = pParent->ToClient(centerX, centerY);
+    EA::Point pos = SP::WindowManager()->GetMainWindow()->ToScreen(client.x, client.y);
+
+    float half = span * scale * 0.5f;
+    float x = pos.x;
+    if (bKeepInside && x + half > screen.right)
+        x = (screen.right - half) - 1.0f;
+    mWinExpansion->SetFlag(1, false);
+    mWinExpansion->SetArea(EA::RectT(x - half, pos.y - half, x + half, pos.y + half));
 }
 
 // @ 0x005a4b80
-void cSPColorSwatch::SetSelectedColor(EA::COM::IUnknown32*) {
+void cSPColorSwatch::SetSelectedColor(EA::COM::IUnknown32* pOwner) {
+    // Become the owner's current swatch: hand the parent window's selection
+    // over and move this swatch onto the owner's square.
     mBecomingOwner = true;
+    if (!mOwner)
+        return;
+    cSPColorSwatch* pOwnerSwatch =
+        (cSPColorSwatch*)((IColorSwatchHost*)mOwner.mpObject)->GetSwatch(0x3b26ca5);
+    if (!pOwnerSwatch)
+        return;
+    if (!pOwnerSwatch->mWinRoot)
+        return;
+    if (!pOwnerSwatch->mWinRoot->GetParent())
+        return;
+    if (!mWinRoot->GetParent())
+        return;
+
+    EA::RectT area = mWinRoot->GetRealArea();
+    float x0 = mWinRoot->ToClient(area.left, area.top).x;
+    float y0 = mWinRoot->ToClient(area.left, area.top).y;
+    float x1 = mWinRoot->ToClient(area.right, area.bottom).x;
+    float y1 = mWinRoot->ToClient(area.right, area.bottom).y;
+
+    mWinRoot->GetParent()->DeselectChild(mWinRoot);
+    pOwnerSwatch->mWinRoot->GetParent()->SelectChild(mWinRoot);
+
+    SetArea(EA::RectT(mWinRoot->ToScreen(x0, y0).x,
+                      mWinRoot->ToScreen(x0, y0).y,
+                      mWinRoot->ToScreen(x1, y1).x,
+                      mWinRoot->ToScreen(x1, y1).y),
+            false);
+    (void)pOwner;
 }
 
 // @ 0x005a4e20
