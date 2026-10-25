@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+004c6df0  1006  SP::cSkinObject::cSkinObject(Res*): complete behaviour port (1259 vs 1277 bytes); full member init order, property-loop vtable calls, node-map build and texture rect resize all present, but /Od stack-slot layout differs (frame 0x9c/0xa4 vs 0xc0) and the two out-of-line BlockVec/NodeVec ctor sites evaluate the tag before materialising the member address (retail does the reverse); flags /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast; equiv WEAK 165 valid (66.4% cov), no mismatch
