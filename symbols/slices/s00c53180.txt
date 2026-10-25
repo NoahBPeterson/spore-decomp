@@ -1,0 +1,1 @@
+00c53a90 ?clear@cFetchSampleVector@@QAEXXZ  # cFetchSampleVector::clear migrated from s00c53180 (verbatim, slice spelling)

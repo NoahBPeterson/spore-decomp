@@ -1,0 +1,3 @@
+# va  diff-bytes  reason
+00c528a0
+01342770 482 fetch-mission registrar, 9 records (/O2 /MD /Gy /EHsc /TP): body complete; includes a run of four records (0x385389f/3f69492/3f69497/3f69498) that share a distinct callback set (0xae3430/0xae3450/0x693150/0x695080/0xae5720). Original hoists 0xb1fbf0 and 0xae5720 (ebp/ebx) only across that run; ours picks a different phase and frame throughout (size 881 vs 894); difftest PASS (400/400 valid, 100% coverage)
