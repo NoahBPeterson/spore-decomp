@@ -306,6 +306,11 @@ void CDefaultAoEArea::Write(IStream* s) {
 }
 
 // ---------------------------------------------------------------- 0x00cb3f80
+// The denominator is spelled out at each use: written as one named local,
+// cl's SSE codegen turns the three divisions into 1/d + multiplies, while the
+// original divides three times.
+#define BARYDEN ((((((f7 * f3 - f7 * f2) + f10 * f2) - f10 * f1) + f9 * f1) - f9 * f3))
+
 // @ 0x00cb3f80
 void __cdecl FUN_00cb3f80(float* a, float* b, float* c,
                           float* out1, float* out2, float* out3) {
@@ -318,12 +323,11 @@ void __cdecl FUN_00cb3f80(float* a, float* b, float* c,
     float f5  = b[1];
     float f6  = c[1];
     float f10 = f3 * f3;
-    float f8  = ((((f7 * f3 - f7 * f2) + f10 * f2) - f10 * f1) + f9 * f1) - f9 * f3;
 
-    *out1 = (((((f6 * f3 - f5 * f1) - f6 * f2) - f4 * f3) + f4 * f1) + f5 * f2) / f8;
-    *out2 = -((((((f5 - f6) * f9 + f7 * f4) - f10 * f4) + f10 * f6) - f7 * f5) / f8);
+    *out1 = (((((f6 * f3 - f5 * f1) - f6 * f2) - f4 * f3) + f4 * f1) + f5 * f2) / BARYDEN;
+    *out2 = -((((((f5 - f6) * f9 + f7 * f4) - f10 * f4) + f10 * f6) - f7 * f5) / BARYDEN);
     *out3 = (((((f9 * f1 - f7 * f2) * f5 + (f10 * f6) * f2) - (f10 * f4) * f1)
-              - (f9 * f6) * f3) + (f7 * f4) * f3) / f8;
+              - (f9 * f6) * f3) + (f7 * f4) * f3) / BARYDEN;
 }
 
 // ---------------------------------------------------------------- 0x00cb41c0
@@ -386,6 +390,7 @@ struct RawLoco {
     float  mf1a0;                           // +0x1a0
     PathSlot* __thiscall FUN_00c41ec0();    // 0x00c41ec0
     bool   __thiscall IsNearGoal();         // 0x00c42e20
+    unsigned char __thiscall FUN_00c41ed0(float a, float b); // 0x00c41ed0
 };
 
 struct SimWorld {
@@ -400,6 +405,7 @@ struct SimWorld {
     char       padB20[0xbcd - 0xb20];
     char       mbcd;                        // +0xbcd
     float __thiscall FUN_00c9ffd0(float* p); // 0x00c9ffd0
+    float __thiscall FUN_00c9f380();        // 0x00c9f380
 };
 
 // Path data block returned by FUN_00c41ec0; the first dword pair is a byte
@@ -416,7 +422,7 @@ struct PathSlot {
     char  pad4d[0x5c - 0x4d];
     int   mCount5c;                     // +0x5c
     char  pad60[0x68 - 0x60];
-    int   mf68;                         // +0x68
+    float mf68;                         // +0x68
     float mf6c;                         // +0x6c
 };
 
@@ -463,8 +469,6 @@ extern float g_147510c;
 PathSlot*  __cdecl FUN_00cb1210(SimWorld* world);                                  // 0x00cb1210
 void       __cdecl FUN_00cadb50(void* u);                                          // 0x00cadb50
 bool       __cdecl FUN_00cadc20(NavObj* obj, SimWorld* w, float* pos, PathSlot* p); // 0x00cadc20
-float      __cdecl FUN_00c9f380(SimWorld* world);                                  // 0x00c9f380
-unsigned char __cdecl FUN_00c41ed0(float a, float b);                              // 0x00c41ed0
 void       __cdecl FUN_00cadd50(NavObj* obj, SimWorld* w, PathSlot* p, float f, float d); // 0x00cadd50
 bool       __cdecl FUN_00cb2480(SimWorld* w, PathSlot* p, float* a, float* b, void** c);  // 0x00cb2480
 uint32_t   __cdecl FUN_00cb2770(SimWorld* w, float* a, PathSlot* p, float* b, float* c,
@@ -515,14 +519,12 @@ void __cdecl FUN_00cb2f70(NavObj* obj) {
                 return;
         }
 
-        float ratio = FUN_00c9f380(world) / world->mf21c;
+        float ratio = world->FUN_00c9f380() / world->mf21c;
         float sel = (ratio > 1.0f) ? ratio : 1.0f;
-        float scale = (p->mBegin == p->mEnd) ? p->mf20 : (sel * 2.0f);
+        arg.f = (p->mBegin == p->mEnd) ? p->mf20 : (sel * 2.0f);
 
-        arg.f = scale;
-        arg.bytes[0] = FUN_00c41ed0(dist * dist, scale);
+        arg.bytes[0] = raw->FUN_00c41ed0(dist * dist, arg.f);
         FUN_00cadd50(obj, world, p, arg.f, dist);
-
         float inv;
         if ((dz > dist
              && (inv = 1.0f / sqrtf(dist2 + 1e-08f),
@@ -555,8 +557,9 @@ void __cdecl FUN_00cb2f70(NavObj* obj) {
         }
     }
 
-    float f1c = 1.0f;
+    float f1c;
     if (!flag || noPath || !(p->mFlag4c & 1)) {
+        arg.f = 1.0f;
         PathSlot* q = FUN_00cb1210(world);
         if (q->mEnd != 0 && q->mf08 < 1.0f)
             f1c = q->mf08;
@@ -606,7 +609,7 @@ void __cdecl FUN_00cb2f70(NavObj* obj) {
         }
     }
 
-    p->mf68 = (int)dist;
+    p->mf68 = dist;
 }
 
 // ---------------------------------------------------------------- 0x00cb34d0
