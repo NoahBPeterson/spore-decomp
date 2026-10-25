@@ -1,0 +1,1 @@
+01009ab0 ?EraseFront@cObjectList@@QAEPAXPAE@Z  # cObjectList::EraseFront migrated from s01009820 (verbatim, slice spelling)

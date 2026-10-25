@@ -1,0 +1,12 @@
+# source  symbol  va  flags
+../src/game/SPGonzago/SPSimulatorSpaceGame.cpp  ?FUN_01003230@cSPSimulatorSpaceGame@@QAEXXZ  01003230  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPSimulatorSpaceGame.cpp  ?GalaxyContextActivate@cSPSimulatorSpaceGame@@QAEXXZ  01003490  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPSimulatorSpaceGame.cpp  ?FUN_01003620@cSPSimulatorSpaceGame@@QAEXXZ  01003620  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPSimulatorSpaceGame.cpp  ?FUN_010039c0@cSPSimulatorSpaceGame@@QAEXPAUcStar@@@Z  010039c0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPSimulatorSpaceGame.cpp  ?FUN_01003a50@@YAXXZ  01003a50  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPSimulatorSpaceGame.cpp  ?f4c00@SimGame@@QAEHXZ  01004c00  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPSimulatorSpaceGame.cpp  ?f50d0@@YGXH@Z  010050d0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPSimulatorSpaceGame.cpp  ?f5320@SimGame@@QAEXXZ  01005320  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPSimulatorSpaceGame.cpp  ?FUN_01006280@@YAPAXPAD00@Z  01006280  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPSimulatorSpaceGame.cpp  ?FUN_01006600@@YA_NPAXPAPAX@Z  01006600  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPSimulatorSpaceGame.cpp  ?PropTableInit_d420@@YAXXZ  0139d420  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include

@@ -1,0 +1,4 @@
+01006880 ?FUN_01006880@@YIXPAX0@Z  # FUN_01006880 migrated from s01006880 (verbatim, slice spelling)
+01006a40 ?FUN_01006a40@@YIXPAX00HHMM@Z  # FUN_01006a40 migrated from s01006880 (verbatim, slice spelling)
+01006ef0 ?FUN_01006ef0@@YIXPAX0PAD@Z  # FUN_01006ef0 migrated from s01006880 (verbatim, slice spelling)
+01007430 ?FUN_01007430@@YIXPAX0@Z  # FUN_01007430 migrated from s01006880 (verbatim, slice spelling)

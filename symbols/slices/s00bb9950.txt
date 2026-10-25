@@ -1,0 +1,1 @@
+00bba2a0 ?OnBan@cStarRecord@@QAEXXZ  # cStarRecord::OnBan migrated from s00bb9950 (verbatim, slice spelling)
