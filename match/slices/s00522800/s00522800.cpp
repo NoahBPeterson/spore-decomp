@@ -3,7 +3,8 @@
 #include "types.h"
 
 void* EA_alloc(unsigned size, const char* name, int a, int b, int c, int d); // 0x00f473a0
-void* FUN_00507c70(void* p);              // 0x00507c70
+// 0x00507c70 is the allocated object's initialiser (this in ecx, factory on the stack).
+struct SkinnerAlloc { void* Init(void* factory); };
 // The converter takes the destination first and the RGB triple by value;
 // the old one-argument declaration dropped the 12-byte argument.
 struct V3 { float x, y, z; };
@@ -39,7 +40,7 @@ void* Factory::Make()
     void* mem = EA_alloc(0x1d0, "Skinner", 0, 0, 0, 0);
     void* result;
     if (mem != 0)
-        result = FUN_00507c70(this);
+        result = ((SkinnerAlloc*)mem)->Init(this);
     else
         result = 0;
     return result;
@@ -64,18 +65,11 @@ void FUN_005229c0(int idx, float* v)
     g2[2] = r[2];
 }
 
-// @ 0x00522800 -- PARTIAL skeleton (444-byte /Od body not reconstructed)
-void FUN_00522800(void* self) { (void)self; }
-// @ 0x005235c0 -- PARTIAL skeleton (203-byte /Od body not reconstructed)
-void FUN_005235c0(void* self) { (void)self; }
-// @ 0x00522a40 -- PARTIAL skeleton (135-byte /Od body: request complete + release)
-void FUN_00522a40(void* self) { (void)self; }
-
 // ---------------------------------------------------------------------------
 // nSPSkinner::cPaintSystem::SetCreatureSkin (0x00522b40)
 // ---------------------------------------------------------------------------
-#pragma intrinsic(fabs)
 extern "C" double __cdecl fabs(double);
+#pragma intrinsic(fabs)
 
 namespace nSPSkinner {
 
@@ -115,11 +109,15 @@ public:
     {
         if (pObject != mpObject) {
             T* const pTemp = mpObject;
+            // Retail /Od reserved three further slots for this inlined body
+            // (unreferenced, but they shift every later local by 0xc).
+            int slot0; int slot1; int slot2;
             if (pObject)
                 pObject->AddRef();
             mpObject = pObject;
             if (pTemp)
                 pTemp->Release();
+            (void)slot0; (void)slot1; (void)slot2;
         }
         return *this;
     }
@@ -193,6 +191,20 @@ struct cBoneInfo {                                        // size 0x40
 extern sp_vector<cBoneInfo> g_boneInfos;                 // 0x015de470
 struct ChainWeight { float operator()(int bone); };       // 0x005235c0
 
+// @ 0x005235c0
+float ChainWeight::operator()(int bone)
+{
+    float best = 1e-08f;
+    int i = bone + 1;
+    int n = g_boneInfos.size();
+    for (; i < n; ++i) {
+        if (g_boneInfos.mpBegin[i].mParent == bone) {
+            float w = (*this)(i);
+            best = Max(best, w);
+        }
+    }
+    return best + Abs(g_boneInfos[bone].mfWeight);
+}
 struct cPaintOutput {
     uint32_t pad[5];
     int mnPending;                                        // +0x14
@@ -203,19 +215,56 @@ struct cPaintOutput {
 
 extern AutoRefCount<cPropertyList> g_appProperties;      // 0x015fd918
 
+struct cSPColorRGB { float mRed, mGreen, mBlue; };
+
+struct ResourceKey {                                       // size 0xc
+    unsigned int mInstance;                               // +0x00
+    unsigned int mType;                                   // +0x04
+    unsigned int mGroup;                                  // +0x08
+};
+
+struct cPaintRequest : RefCounted {                       // size 0x78
+    AutoRefCount<cSkinObject> mSkin;                      // +0x08
+    ResourceKey mTextureKey;                              // +0x0c
+    unsigned int mScripts[4];                             // +0x18
+    unsigned int mSeeds[4];                               // +0x28
+    cSPColorRGB mColors[3];                               // +0x38
+    int mTextureSize;                                     // +0x5c
+    int mDXTCompressLevel;                                // +0x60
+    bool mAmbientOcclusion;                               // +0x64
+    bool mIdentityChannel;                                // +0x65
+    bool mProgressiveUpdates;                             // +0x66
+    bool mWriteToDisk;                                    // +0x67
+    bool mTransferMeshOwnership;                          // +0x68
+    bool mUseEditorAOCache;                               // +0x69
+    bool mAbort;                                          // +0x6a
+    bool mComplete;                                       // +0x6b
+    float mPhongExponent;                                 // +0x6c
+    float mPhongFactor;                                   // +0x70
+    float mGlossFactor;                                   // +0x74
+};
+
 class cPaintSystem {
 public:
     void SetCreatureSkin(cSkinObject* skin, bool keepMesh);
     bool ShouldTick();                                    // 0x00522720
     void FinishTick();                                    // 0x00523690
     void RebuildBones();                                  // 0x005241e0
+    bool RunPaintRequest(cPaintRequest* pReq);            // 0x00522800
+    void CancelPaintRequest(cPaintRequest* pReq);         // 0x00522a40
+    void SetOutputTextures(unsigned int, unsigned int, unsigned int, int, bool, bool, bool);
+    void SetIdentityEnabled(bool);
+    void QueueScript(unsigned int, unsigned int);
 
     uint32_t pad0[4];
     AutoRefCount<cMesh> mpBakedMesh;                      // +0x10
     AutoRefCount<cMeshAORender> mpMeshAORender;           // +0x14
-    uint32_t pad18[2];
+    uint32_t pad18;
+    AutoRefCount<cPaintRequest> mCurrentRequest;          // +0x1c
     cSkinObject* mpEditorSkinPart;                        // +0x20
-    uint32_t pad24[0x11];
+    uint8_t pad24[0x3f];
+    bool mIdentityEnabled;                                // +0x63
+    uint32_t pad64;
     int mOutputDiffuseGroup;                              // +0x68
     int mOutputNormSpecGroup;                             // +0x6c
     int mDXTQuality;                                      // +0x70
@@ -231,6 +280,51 @@ public:
     uint32_t pad80[0x1f];
     AutoRefCount<cPaintOutput> mpOutput;                  // +0xfc
 };
+
+// @ 0x00522800
+bool cPaintSystem::RunPaintRequest(cPaintRequest* pReq)
+{
+    cPaintRequest* pCurrent = mCurrentRequest.mpObject;
+    if (pCurrent != 0 || ShouldTick())
+        return false;
+
+    mCurrentRequest = pReq;
+    cSkinObject* pSkin = pReq->mSkin.mpObject;
+    SetCreatureSkin(pSkin, pReq->mUseEditorAOCache);
+    unsigned int group1 = (pReq->mTextureKey.mGroup & 0xffffff00) | (1 & 0xff);
+    unsigned int group0 = (pReq->mTextureKey.mGroup & 0xffffff00) | (0 & 0xff);
+    SetOutputTextures(pReq->mTextureKey.mInstance,
+                      group0,
+                      group1,
+                      pReq->mDXTCompressLevel,
+                      pReq->mDXTCompressLevel != -1,
+                      pReq->mAmbientOcclusion,
+                      pReq->mWriteToDisk);
+    SetIdentityEnabled(pReq->mIdentityChannel);
+    bool progressive = pReq->mProgressiveUpdates;
+    mIdentityEnabled = progressive;
+
+    for (int i = 0; i < 3; ++i)
+        FUN_005229c0(i, &pReq->mColors[i].mRed);
+
+    for (int j = 0; j < 4; ++j) {
+        if (pReq->mScripts[j] != 0)
+            QueueScript(pReq->mScripts[j], pReq->mSeeds[j]);
+    }
+    return true;
+}
+
+// @ 0x00522a40
+void cPaintSystem::CancelPaintRequest(cPaintRequest* pReq)
+{
+    pReq->mComplete = true;
+    cPaintRequest* pCurrent = mCurrentRequest.mpObject;
+    if (pCurrent == pReq) {
+        FinishTick();
+        SetCreatureSkin(0, 0);
+        mCurrentRequest = 0;
+    }
+}
 
 // @ 0x00522b40
 void cPaintSystem::SetCreatureSkin(cSkinObject* skin, bool keepMesh)
