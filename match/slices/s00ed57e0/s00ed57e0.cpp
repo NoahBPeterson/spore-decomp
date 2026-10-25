@@ -521,3 +521,318 @@ void __fastcall FUN_00ed6540(void* self_, int dummy, int param_2)
 
     ((ObjV*)FUN_0067cae0())->FUN_005fdf40();
 }
+
+// ---------------------------------------------------------------------------
+// Panel::SyncState  (0x00ed5d70)
+// ---------------------------------------------------------------------------
+
+void* operator new(unsigned int, const char*, int, int, int, int);   // 0x00f473a0
+inline void* operator new(unsigned int, void* p) { return p; }       // placement new
+
+extern const char kUITagAlloc[];                 // 0x013f6b3c  "UI"
+extern const char kComplexityWorldName[];        // 0x01489f7c  "UI/cScenarioComplexityMeter/World"
+extern const char kComplexityTerraName[];        // 0x01489f58  "UI/cScenarioComplexityMeter/Terra"
+extern const char kChecklistUIName[];            // 0x01489f34  "UI/cScenarioTutorialsChecklistUI"
+extern const char kScriptUIName[];               // 0x01489f14  "UI/cScenarioEditModeScriptUI"
+extern const char kGlobalOptionsName[];          // 0x01489ef4  "Simulator/cSPUIGlobalOptions"
+extern const char kPosseAllocName[];             // 0x01476ab8  "UI/Posse"
+extern char       kPosseDatum[];                 // 0x015ac28c
+extern char       kMessageHandlerStub[];         // 0x01489d38
+extern float      kPosseMaxRange;                // 0x01486ebc
+
+void* __cdecl GetAllocContext();                                            // 0x009512c0
+void* __cdecl AllocNamed(u32 size, int align, const char* name, void* ctx); // 0x009512d0
+
+
+#define CAT2(a, b) a##b
+#define CAT(a, b) CAT2(a, b)
+#define PV1 virtual void CAT(_pv, __COUNTER__)();
+#define PV5 PV1 PV1 PV1 PV1 PV1
+#define PV20 PV5 PV5 PV5 PV5
+
+struct SyncKey { u32 mA, mB, mC; };               // 12-byte resource key
+
+struct IWinS;
+
+class SyncLayout {                                // cSPUILayout
+public:
+    virtual void pv0();                           // +0x00
+    virtual int  AddRef();                        // +0x04
+    virtual int  Release();                       // +0x08
+    SyncLayout();                                                     // 0x00810000
+    bool  Init(const SyncKey* key, bool visible, u32 id);             // 0x008120d0
+    void  Shutdown(u32 flags);                                        // 0x00811ad0
+    void  SetVisibility(int visible);                                 // 0x00810590
+    IWinS* FindWindowByID(u32 id, int recursive);                     // 0x008105b0
+    u32 mPad[5];                                  // retail size 0x18
+};
+
+struct IWinS {
+    virtual int  AddRef();                        // +0x00
+    virtual int  Release();                       // +0x04
+    PV20 PV20 PV20 PV1 PV1 PV1                    // slots 2..64
+    virtual void SetWinProc(void* proc);          // +0x104
+};
+
+struct WinProcS { void* mpVtbl; void* mpOwner; }; // 8-byte window proc object at Panel+0x08
+
+struct SyncPage {                                 // cEditorPage
+    virtual int  AddRef();                        // +0x00
+    virtual int  Release();                       // +0x04
+    SyncPage();                                                       // 0x00ed02c0
+    void Init(IWinS* win, void* param);                               // 0x00ed0400
+    u32 mPad[0x54 / 4];                           // retail size 0x58
+};
+
+struct SyncChecklist {                            // cScenarioTutorialsChecklistUI
+    virtual int  AddRef();                        // +0x00
+    virtual int  Release();                       // +0x04
+    SyncChecklist();                                                  // 0x00ef7900
+    void SelectCategory(IWinS* win, int which);                       // 0x00efb9c0
+    u32 mPad[0x34 / 4];                           // retail size 0x38
+};
+
+struct SyncScenarioObj {                          // 0xa0 object built by 0x00ed2e40
+    virtual void pv0();                           // +0x00
+    virtual int  AddRef();                        // +0x04
+    virtual int  Release();                       // +0x08
+    SyncScenarioObj();                                                // 0x00ed2e40
+    bool Setup();                                                     // 0x00ed3c00
+    u32 mPad[0x9c / 4];                           // retail size 0xa0
+};
+
+struct SyncC40 {                                  // 0x40 object built by 0x00ee9180
+    virtual void pv0();                           // +0x00
+    virtual int  AddRef();                        // +0x04
+    virtual int  Release();                       // +0x08
+    virtual void pv3();                           // +0x0c
+    virtual bool Init(int arg);                   // +0x10
+    SyncC40();                                                        // 0x00ee9180
+    u32 mPad[0x3c / 4];                           // retail size 0x40
+};
+
+struct SyncScriptUI {                             // cScenarioEditModeScriptUI
+    virtual void pv0();                           // +0x00
+    virtual int  AddRef();                        // +0x04
+    virtual int  Release();                       // +0x08
+    SyncScriptUI();                                                   // 0x00edd580
+    bool Init();                                                      // 0x00ee3940
+    u32 mPad[0x108 / 4];                          // retail size 0x10c
+};
+
+struct SyncMeter {                                // 0xe0 object built by 0x00edaf10
+    virtual int  AddRef();                        // +0x00
+    virtual int  Release();                       // +0x04
+    SyncMeter();                                                      // 0x00edaf10
+    void SetWindow(IWinS* win);                                       // 0x00edb4c0
+    u32 mPad[0xdc / 4];                           // retail size 0xe0
+};
+
+struct SyncOptions {                              // cSPUIGlobalOptions
+    virtual int  AddRef();                        // +0x00
+    virtual int  Release();                       // +0x04
+    SyncOptions();                                                    // 0x00e00ec0
+    u32 mPad[0x54 / 4];                           // retail size 0x58
+};
+
+struct SyncPosse {                                // 0x20c object built by 0x00e25710
+    virtual int  AddRef();                        // +0x00
+    virtual int  Release();                       // +0x04
+    PV20 PV5 PV5 PV1                              // slots 2..32
+    virtual bool SetDatum(const void* datum);     // +0x84
+    PV1 PV1
+    virtual void SetRange(float lo, float hi, int a, int b);          // +0x90
+    PV5 PV1 PV1 PV1 PV1                           // slots 37..45
+    virtual void SetCaption(const wchar_t* text); // +0xb8
+    PV1
+    virtual void SetFlag(int on);                 // +0xc0
+    void SetField1e5(int on);                                         // 0x00e21950
+    SyncPosse();                                                      // 0x00e25710
+    u32 mPad[0x208 / 4];                          // retail size 0x20c
+};
+
+struct SyncWinMgr2 {
+    PV20 PV20 PV20                                // slots 0..59
+    virtual IWinS* FindWindow(u32 id, int recursive);                 // +0x0f0
+};
+struct SyncWinMgr {
+    virtual void pv0();                           // +0x00
+    virtual SyncWinMgr2* GetWindows();            // +0x04
+};
+SyncWinMgr* __cdecl WindowManager();                                 // 0x0067caa0
+
+struct IMsgServerSync {
+    PV5 PV1 PV1 PV1 PV1                           // slots 0..8
+    virtual void AddListener(void* object, u32 id);                   // +0x24
+};
+
+struct SyncHandlerReg {                           // inline registration block at Panel+0x70
+    void* mpServer;                               // +0x70
+    void* mpObject;                               // +0x74
+    void* mpFunc;                                 // +0x78
+    u32   mFlags;                                 // +0x7c
+    void* mExtra;                                 // +0x80
+};
+
+template <class T> struct SyncRef12 {             // AddRef slot1 / Release slot2
+    T* mpObject;
+    SyncRef12& operator=(T* q) {
+        if (q != mpObject) {
+            T* pOld = mpObject;
+            if (q) q->AddRef();
+            mpObject = q;
+            if (pOld) pOld->Release();
+        }
+        return *this;
+    }
+    T* operator->() const { return mpObject; }
+};
+
+template <class T> struct SyncRef01 {             // AddRef slot0 / Release slot1
+    T* mpObject;
+    SyncRef01& operator=(T* q) {
+        if (q != mpObject) {
+            T* pOld = mpObject;
+            if (q) q->AddRef();
+            mpObject = q;
+            if (pOld) pOld->Release();
+        }
+        return *this;
+    }
+    T* operator->() const { return mpObject; }
+};
+
+namespace SP {
+class cString {
+public:
+    cString(u32 a, u32 b, const wchar_t* def);                        // 0x006b5770
+    ~cString();                                                       // 0x006b5240
+    const wchar_t* GetText();                                         // 0x006b55c0
+    u32 mPad[5];                                  // retail size 0x14
+};
+}
+
+struct SyncSim { char mPad[0xd0]; void* mpData; };                    // +0xd0
+struct SyncApp { char mPad[0x74]; SyncSim* mpSim; };                  // +0x74
+#define SYNC_APP (*(SyncApp**)0x016c7aa4)
+
+struct Panel {
+    char        mPad00[8];                        // +0x00
+    WinProcS    mWinProc;                         // +0x08
+    void*       mpMsgObject;                      // +0x10
+    SyncRef12<SyncScenarioObj> mScn;              // +0x14
+    SyncRef12<SyncScriptUI>    mScriptUI;         // +0x18
+    u32         mPage;                            // +0x1c
+    u32         mField20;                         // +0x20
+    SyncRef12<SyncLayout>      mLayout;           // +0x24
+    SyncRef12<SyncC40>         mC40;              // +0x28
+    SyncRef01<SyncMeter>       mMeter;            // +0x2c
+    SyncRef01<SyncPage>        mPageWorld;        // +0x30
+    SyncRef01<SyncPage>        mPageTerra;        // +0x34
+    SyncRef01<SyncChecklist>   mCheck1;           // +0x38
+    SyncRef01<SyncChecklist>   mCheck2;           // +0x3c
+    SyncRef01<SyncPosse>       mPosse;            // +0x40
+    SyncRef01<SyncOptions>     mOptions;          // +0x44
+    char        mPad48[0x28];                     // +0x48
+    SyncHandlerReg mHandler;                      // +0x70
+    char        mPad84[0x10];                     // +0x84
+    u8          mField94;                         // +0x94
+
+    void SetPage(u32 page);                       // 0x00ed5890
+    bool SyncState();                             // 0x00ed5d70
+};
+
+// @ 0x00ed5d70
+bool Panel::SyncState()
+{
+    SyncKey key = { 0x396f69f5, 0x510a95b, 0x40464100 };
+
+    mLayout = new (kUITagAlloc, 0, 0, 0, 0) SyncLayout();
+    if (!mLayout->Init(&key, true, 0x2edd95ca)) {
+        mLayout->Shutdown(1);
+        mLayout = 0;
+        return false;
+    }
+
+    IWinS* win = mLayout->FindWindowByID(0xffffffff, 1);
+    if (win)
+        win->SetWinProc(&mWinProc);
+
+    IWinS* w = mLayout->FindWindowByID(0x73bd748, 1);
+    if (w) {
+        mPageWorld = new (kComplexityWorldName, 0, 0, 0, 0) SyncPage();
+        mPageWorld->Init(w, SYNC_APP->mpSim->mpData);
+    }
+
+    w = mLayout->FindWindowByID(0x74b85c8, 1);
+    if (w) {
+        mPageTerra = new (kComplexityTerraName, 0, 0, 0, 0) SyncPage();
+        mPageTerra->Init(w, SYNC_APP->mpSim->mpData);
+    }
+
+    w = mLayout->FindWindowByID(0x771f0a0, 1);
+    if (w) {
+        mCheck1 = new (kChecklistUIName, 0, 0, 0, 0) SyncChecklist();
+        mCheck1->SelectCategory(w, 0);
+    }
+
+    w = mLayout->FindWindowByID(0x7736c78, 1);
+    if (w) {
+        mCheck2 = new (kChecklistUIName, 0, 0, 0, 0) SyncChecklist();
+        mCheck2->SelectCategory(w, 1);
+    }
+
+    mScn = new (kUITagAlloc, 0, 0, 0, 0) SyncScenarioObj();
+    if (!mScn->Setup())
+        mScn = 0;
+
+    mC40 = new (kUITagAlloc, 0, 0, 0, 0) SyncC40();
+    if (!mC40->Init(0))
+        mC40 = 0;
+
+    w = mLayout->FindWindowByID(0x7108388, 1);
+    if (w) {
+        mScriptUI = new (kScriptUIName, 0, 0, 0, 0) SyncScriptUI();
+        if (!mScriptUI->Init())
+            mScriptUI = 0;
+    }
+
+    w = mLayout->FindWindowByID(0x272eb68e, 1);
+    if (w) {
+        mMeter = new (kUITagAlloc, 0, 0, 0, 0) SyncMeter();
+        mMeter->SetWindow(w);
+    }
+
+    if (mOptions.mpObject == 0)
+        mOptions = new (kGlobalOptionsName, 0, 0, 0, 0) SyncOptions();
+
+    mPosse = new (AllocNamed(0x20c, 4, kPosseAllocName, GetAllocContext())) SyncPosse();
+    if (!mPosse->SetDatum(kPosseDatum)) {
+        mPosse = 0;
+    } else {
+        SP::cString str(0xefdb68ec, 0x760b242, 0);
+        mPosse->SetCaption(str.GetText());
+        mPosse->SetRange(0.0f, kPosseMaxRange, 0, 0);
+        mPosse->SetFlag(0);
+        mPosse->SetField1e5(1);
+    }
+
+    IWinS* pw = WindowManager()->GetWindows()->FindWindow(0x774b060, 1);
+    if (pw)
+        pw->SetWinProc(&mWinProc);
+
+    mHandler.mpServer = MessageServer();
+    mHandler.mpObject = &mpMsgObject;
+    mHandler.mpFunc = kMessageHandlerStub;
+    mHandler.mFlags = 1;
+    mHandler.mExtra = 0;
+    if (mHandler.mpServer != 0 && mHandler.mpObject != 0)
+        ((IMsgServerSync*)mHandler.mpServer)->AddListener(mHandler.mpObject, 0x30c11c7);
+
+    if (mLayout.mpObject != 0)
+        mLayout->SetVisibility(0);
+    mField94 = 0;
+    SetPage(0xffffffff);
+    mField20 = 0xffffffff;
+    return true;
+}

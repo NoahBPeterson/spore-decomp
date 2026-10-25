@@ -5,3 +5,4 @@
 00ed59e0  Panel::BuildModeMeshes (inferred)  # height + two XLocal transforms (pos/orient from the scenario object, Matrix3FromQuaternion of BuildSurfaceOrientation) pushed into +0x88/+0x8c
 00ed63a0  Panel::UpdateModes (PDB name)  # releases +0x84, Panel::Select(1), RemoveHandler at +0x70, the +0x44/+0x14/+0x28/+0x18/+0x2c/+0x30/+0x34/+0x38/+0x3c/+0x40/+0x24 teardown chain, then page(-1) and +0x20=-1
 00ed6540  Panel::Update (inferred)  # forwards the mode to the sub-pages, then the two sim-visibility window toggles and the two global-gated window toggles, then the achievement notifier update
+00ed5d70  Panel::SyncState (inferred)  # builds the editor UI layout and sub-pages/posse, installs the window proc, and registers the 0x30c11c7 message listener
