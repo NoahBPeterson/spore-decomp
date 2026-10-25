@@ -1,0 +1,2 @@
+# source  symbol  va  flags
+../src/game/SPGonzago/SPTribeMissionManager.cpp  ?FUN_0135d720@@YAXXZ  0135d720  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
