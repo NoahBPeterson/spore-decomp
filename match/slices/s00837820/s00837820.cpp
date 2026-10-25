@@ -4,8 +4,8 @@
 
 #include "types.h"
 
-void* __cdecl operator_new6(uint32_t, const void*, int, int, const char*, int);
-void  __cdecl operator_delete__(void*);
+void* __cdecl operator_new6(uint32_t, const void*, int, int, const char*, int);  // 0x00f473a0
+void  __cdecl operator_delete__(void*);                                          // 0x00f47380
 __declspec(dllimport) int __cdecl _stricmp(const char*, const char*);
 __declspec(dllimport) int __cdecl _strnicmp(const char*, const char*, unsigned int);
 extern "C" __declspec(dllimport) int __cdecl isspace(int);
@@ -30,7 +30,7 @@ struct cError {
 void  __cdecl FUN_0092dc50(int, void*);
 void  __cdecl FUN_00690b80(void*, void*);
 void  __cdecl FUN_0052df30(void*, const char*, ...);
-void  __cdecl CxxThrow(void*, void*);
+__declspec(noreturn) void __cdecl CxxThrow(void*, void*);                  // 0x011e0912 _CxxThrowException
 void  __cdecl ThrowError(const char* fmt, ...);
 
 // ---------------------------------------------------------------------------
@@ -86,6 +86,7 @@ struct cArguments {
     void  FindUnprocessed();                           // 0x837f40
     void  MarkAllProcessed();                          // 0x837f60
     void  GetArguments(int* count, char*** begin);     // 0x837f80
+    void  GatherUnprocessed(void* outList);            // 0x838350
     __declspec(noinline) char** MainArguments(int* count, int min, int max);     // 0x838020
     char** OptionArguments(const char* label, int* count, int min, int max); // 0x838130
     void  MainArguments(int n);                        // 0x838320
@@ -164,8 +165,14 @@ cArguments::cArguments() {
 // @ 0x00838020
 char** cArguments::MainArguments(int* count, int min, int max) {
     int n = mNumMainArguments;
-    if (n < min) ThrowError("Expecting at least %d arguments", min);
-    if (n > max) ThrowError("Expecting at most %d arguments", max);
+    if (n < min) {
+        cError err("Expecting at least %d arguments", min);
+        CxxThrow(&err, (void*)0x14f9174);
+    }
+    if (n > max) {
+        cError err("Expecting at most %d arguments", max);
+        CxxThrow(&err, (void*)0x14f9174);
+    }
     if (count) *count = n;
     if (mNumMainArguments > 0) {
         return (char**)mArguments.mpBegin + mMainArgumentsStart;
@@ -179,11 +186,12 @@ bool cArguments::HasFlag(const char* label) {
     if (it != mOptionArguments.mpEnd) {
         do {
             if (!it->mProcessed && _stricmp(it->mName, label) == 0) {
-                if (it->mNumArguments == 0) {
-                    it->mProcessed = true;
-                    return true;
+                if (it->mNumArguments != 0) {
+                    cError err("Not expecting any arguments for option '%s'", label);
+                    CxxThrow(&err, (void*)0x14f9174);
                 }
-                ThrowError("Not expecting any arguments for option '%s'", label);
+                it->mProcessed = true;
+                return true;
             }
             ++it;
         } while (it != mOptionArguments.mpEnd);
@@ -198,14 +206,17 @@ char** cArguments::OptionArguments(const char* label, int* count, int min, int m
         do {
             if (!it->mProcessed && _stricmp(it->mName, label) == 0) {
                 int n = it->mNumArguments;
-                if (n < min)
-                    ThrowError("Expecting at least %d arguments for option '%s'", min, label);
-                if (n <= max) {
-                    if (count) *count = n;
-                    it->mProcessed = true;
-                    return (char**)mArguments.mpBegin + it->mFirstArgumentIndex;
+                if (n < min) {
+                    cError err("Expecting at least %d arguments for option '%s'", min, label);
+                    CxxThrow(&err, (void*)0x14f9174);
                 }
-                ThrowError("Expecting at most %d arguments for option '%s'", max, label);
+                if (n > max) {
+                    cError err("Expecting at most %d arguments for option '%s'", max, label);
+                    CxxThrow(&err, (void*)0x14f9174);
+                }
+                if (count) *count = n;
+                it->mProcessed = true;
+                return (char**)mArguments.mpBegin + it->mFirstArgumentIndex;
             }
             ++it;
         } while (it != mOptionArguments.mpEnd);
@@ -342,6 +353,309 @@ cArgumentsEH::cArgumentsEH(int text) : mMainArgumentsStart(0), mNumMainArguments
     ((cArguments*)this)->SplitIntoArguments((const char*)text);
 }
 
-void FUN_00838350(int self, void* vec) { (void)self; (void)vec; }
-int  FUN_00837820(int* self) { (void)self; return 0; }
-int  FUN_00837c90(int self, int msg) { (void)self; (void)msg; return 0; }
+// @ 0x00838350
+void cArguments::GatherUnprocessed(void* outList) {
+    sp_vector<const char*>* out = (sp_vector<const char*>*)outList;
+    out->clear();
+    for (cOptionArgInfo* it = mOptionArguments.mpBegin; it != mOptionArguments.mpEnd; ++it) {
+        if (!it->mProcessed) out->push_back(it->mName);
+    }
+}
+
+// ---------------------------------------------------------------------------
+// data: URI -> memory stream, and the XHTML handler that dispatches it.
+// ---------------------------------------------------------------------------
+extern "C" char gEmptyString8[];               // 0x01667bac
+extern "C" const wchar_t* g_01548788;          // 0x01548788
+// stream-name tag (0x013ebacc) and allocation name (0x0141b14c) are immediate constants.
+
+struct MemoryStream {
+    virtual void v00();
+    virtual void AddRef();                              // +0x04
+    virtual void Release();                             // +0x08
+    virtual void v0c();
+    virtual void v10();
+    virtual void v14();
+    virtual void v18();
+    virtual void v1c();
+    virtual void v20();
+    virtual void v24();
+    virtual void v28(int, int);                         // +0x28
+    virtual void v2c();
+    virtual void v30();
+    virtual void v34();
+    virtual void Write(const void* data, unsigned size); // +0x38
+    MemoryStream* Construct(void* a, void* b, const char* name);  // 0x0093c270
+    void SetOption(int opt, float value);               // 0x0093bb40
+};
+
+// The percent-decoding target: an SSO wide string with a 256-character buffer.
+struct WideString256 {
+    wchar_t* mpBegin;      // +0x00
+    wchar_t* mpEnd;        // +0x04
+    wchar_t* mpCapacity;   // +0x08
+    uint32_t mAllocator;   // +0x0c
+    wchar_t* mpBuffer;     // +0x10
+    wchar_t  mData[256];   // +0x14
+
+    WideString256() {
+        wchar_t* b = mData;
+        mpBegin = b;
+        mpEnd = b;
+        mpCapacity = b + 256;
+        mAllocator = 0;
+        mpBuffer = b;
+        *b = 0;
+    }
+    ~WideString256() {
+        if ((((int)((char*)mpCapacity - (char*)mpBegin) & -2) > 2) && mpBegin && mpBegin != mpBuffer)
+            operator_delete__(mpBegin);
+    }
+    void set_capacity(unsigned n);                       // 0x004c29c0
+    void append(unsigned n, wchar_t c);                  // 0x004c1ff0
+};
+
+// Heap-allocated eastl::basic_string<char> (base64 staging buffers).
+struct CharString {
+    char*    mpBegin;      // +0x00
+    char*    mpEnd;        // +0x04
+    char*    mpCapacity;   // +0x08
+    uint32_t mAllocator;   // +0x0c
+
+    CharString() {
+        mpBegin = gEmptyString8;
+        mpEnd = gEmptyString8;
+        mpCapacity = gEmptyString8 + 1;
+        mAllocator = 0;
+    }
+    ~CharString() {
+        if ((mpCapacity - mpBegin) > 1 && mpBegin) operator_delete__(mpBegin);
+    }
+    void set_capacity(unsigned n);                       // 0x0047d240
+    void append(const char* first, const char* last);    // 0x00455d60
+};
+
+bool __cdecl Base64DecodeString(int* src, int* dst);     // 0x00941af0
+
+// cDataURI's two SSO wide strings (32-char scheme/mediatype, 1024-char value).
+template <int N>
+struct WideFixed {
+    wchar_t* mpBegin;
+    wchar_t* mpEnd;
+    wchar_t* mpCapacity;
+    uint32_t mAllocator;
+    wchar_t* mpBuffer;
+    wchar_t  mData[N];
+};
+
+struct cDataURI {
+    int             mEncoding;   // +0x00
+    WideFixed<32>   mScheme;     // +0x04
+    WideFixed<1024> mValue;      // +0x58
+    bool            mbBase64;    // +0x86c
+
+    cDataURI(const wchar_t* p);  // 0x008371e0
+    ~cDataURI() {
+        if ((((int)((char*)mValue.mpCapacity - (char*)mValue.mpBegin) & -2) > 2) &&
+            mValue.mpBegin && mValue.mpBegin != mValue.mpBuffer)
+            operator_delete__(mValue.mpBegin);
+        if ((((int)((char*)mScheme.mpCapacity - (char*)mScheme.mpBegin) & -2) > 2) &&
+            mScheme.mpBegin && mScheme.mpBegin != mScheme.mpBuffer)
+            operator_delete__(mScheme.mpBegin);
+    }
+    bool GetStream(void** out);
+};
+
+static inline unsigned HexVal(wchar_t c) {
+    if (c >= L'0' && c <= L'9') return (unsigned)(c - L'0');
+    if (c >= L'A' && c <= L'F') return (unsigned)(c - 0x37);
+    if (c >= L'a' && c <= L'f') return (unsigned)(c - 0x57);
+    return 0;
+}
+
+// @ 0x00837820
+bool cDataURI::GetStream(void** out) {
+    if (mValue.mpBegin == mValue.mpEnd) return false;
+
+    WideString256 decoded;
+    unsigned need = (unsigned)(mValue.mpEnd - mValue.mpBegin) + 1;
+    if (need > 256) decoded.set_capacity(need);
+
+    bool utf16 = (mEncoding == 0x10 && !mbBase64);
+    const wchar_t* p = mValue.mpBegin;
+    const wchar_t* end = mValue.mpEnd;
+    while (p < end) {
+        wchar_t ch = *p++;
+        if (ch == L'%') {
+            unsigned v;
+            if (utf16) {
+                v  = HexVal(p[0]) << 12; ++p;
+                v |= HexVal(p[0]) << 8;  ++p;
+                v |= HexVal(p[0]) << 4;  ++p;
+                v |= HexVal(p[0]);       ++p;
+            } else {
+                v  = HexVal(p[0]) << 4;  ++p;
+                v |= HexVal(p[0]);       ++p;
+            }
+            decoded.append(1, (wchar_t)v);
+        } else {
+            decoded.append(1, ch);
+        }
+    }
+
+    MemoryStream* stream = 0;
+    void* mem = operator_new6(0x24, (const void*)0x141b14c, 0, 0, 0, 0);
+    if (mem) {
+        stream = ((MemoryStream*)mem)->Construct(0, 0, (const char*)0x13ebacc);
+        if (stream) stream->AddRef();
+    }
+    stream->SetOption(1, 1.0f);
+
+    if (mbBase64) {
+        CharString encoded;
+        unsigned n = (unsigned)(decoded.mpEnd - decoded.mpBegin) + 1;
+        if (n > 1) encoded.set_capacity(n);
+        const wchar_t* q = decoded.mpBegin;
+        const wchar_t* qe = decoded.mpEnd;
+        while (q < qe) {
+            char buf[0x40];
+            int i = 0;
+            while (q < qe && i < 0x40) {
+                buf[i++] = (char)*q;
+                ++q;
+            }
+            encoded.append(buf, buf + i);
+        }
+        CharString plain;
+        if (!Base64DecodeString((int*)&encoded, (int*)&plain)) {
+            if (stream) stream->Release();
+            return false;
+        }
+        stream->Write(plain.mpBegin, (unsigned)(plain.mpEnd - plain.mpBegin));
+    } else if (mEncoding == 0x10) {
+        stream->Write(decoded.mpBegin, (unsigned)(decoded.mpEnd - decoded.mpBegin) * 2);
+    } else {
+        const wchar_t* q = decoded.mpBegin;
+        const wchar_t* qe = decoded.mpEnd;
+        while (q < qe) {
+            char buf[0x40];
+            int i = 0;
+            while (q < qe && i < 0x40) {
+                buf[i++] = (char)*q;
+                ++q;
+            }
+            buf[i] = 0;
+            stream->Write(buf, (unsigned)i);
+        }
+    }
+
+    stream->v28(0, 0);
+    *out = stream;
+    stream->AddRef();
+    stream->Release();
+    return true;
+}
+
+// ---------------------------------------------------------------------------
+// cSPUInHandler::ProcessRequest
+// ---------------------------------------------------------------------------
+// Fixed 32-byte char buffer used to hold the byte-sized media type.
+struct CharFixed32 {
+    char* a;        // +0x00 begin
+    char* b;        // +0x04 end
+    char* c;        // +0x08 capacity
+    char* d;        // +0x0c allocator
+    char* e;        // +0x10 inline buffer
+    char  mData[32];// +0x14
+
+    CharFixed32() {
+        char* p = mData;
+        a = p;
+        b = p;
+        c = p + 32;
+        d = 0;
+        e = p;
+        *p = 0;
+    }
+    ~CharFixed32() {
+        if ((c - a) > 1 && a && a != e) operator_delete__(a);
+    }
+    void Reserve2(unsigned n);                            // 0x00837230
+    CharFixed32* AppendN(unsigned count, unsigned char ch); // 0x00837270
+};
+
+// The URI text: an EStr (wide fixed string, layout-compatible with eastl::basic_string).
+struct EStr {
+    wchar_t* mpBegin;      // +0x00
+    wchar_t* mpEnd;        // +0x04
+    wchar_t* mpCapacity;   // +0x08
+    void*    mpAlloc;      // +0x0c
+    wchar_t* mpInline;     // +0x10
+    wchar_t  mBuf[0x20];   // +0x14
+
+    EStr* Construct(const wchar_t* src);                  // 0x006743f0
+    unsigned find(const wchar_t* needle, unsigned pos);   // 0x00608340
+    ~EStr() {
+        if ((((int)((char*)mpCapacity - (char*)mpBegin) & -2) > 2) && mpBegin && mpBegin != mpInline)
+            operator_delete__(mpBegin);
+    }
+};
+
+struct CharAssignString {
+    char*    mpBegin;
+    char*    mpEnd;
+    char*    mpCapacity;
+    uint32_t mAllocator;
+    void assign(const char* first, const char* last);     // 0x00454cb0
+};
+
+struct ResourceRequest {
+    char mPad00[0x0c];
+    const wchar_t* mPath;    // +0x0c
+    CharAssignString mMime;  // +0x10
+    void SetStream(void* stream);                         // 0x00836480
+};
+
+struct ResourceProvider {
+    void FinishRequest(ResourceRequest* req, int status); // 0x008ffb40
+};
+
+struct cSPUInHandler {
+    char mPad00[8];
+    ResourceProvider* mProvider;   // +0x08
+    bool ProcessRequest(ResourceRequest* req, int unused);
+};
+
+// @ 0x00837c90
+bool cSPUInHandler::ProcessRequest(ResourceRequest* req, int unused) {
+    (void)unused;
+    if (!mProvider) return false;
+
+    EStr uri;
+    uri.Construct(req->mPath);
+    if (uri.find(g_01548788, 0) == 0xffffffffu) {
+        mProvider->FinishRequest(req, 3);
+        return false;
+    }
+
+    cDataURI data(uri.mpBegin);
+    void* stream = 0;
+    if (!data.GetStream(&stream)) {
+        if (stream) ((MemoryStream*)stream)->Release();
+        mProvider->FinishRequest(req, 3);
+        return false;
+    }
+
+    req->SetStream(stream);
+
+    CharFixed32 mime;
+    int n = (int)(data.mScheme.mpEnd - data.mScheme.mpBegin);
+    mime.Reserve2((unsigned)n);
+    for (int i = 0; i < n; ++i)
+        mime.AppendN(1, (unsigned char)data.mScheme.mpBegin[i]);
+    req->mMime.assign(mime.a, mime.a + strlen(mime.a));
+
+    mProvider->FinishRequest(req, 2);
+    if (stream) ((MemoryStream*)stream)->Release();
+    return true;
+}
