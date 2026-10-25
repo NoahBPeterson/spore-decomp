@@ -39,7 +39,9 @@ struct string8 {
     char* mpEnd;          // +4
     char* mpCapacity;     // +8
     unsigned int mAllocator;  // +0xc
-    string8() : mpBegin(&gEmptyChar), mpEnd(&gEmptyChar), mpCapacity(&gEmptyChar + 1), mAllocator(0) {}
+    // Retail (0x7cc110) writes only begin/end/capacity for an empty string; the
+    // trailing allocator word is left untouched by the original build.
+    string8() : mpBegin(&gEmptyChar), mpEnd(&gEmptyChar), mpCapacity(&gEmptyChar + 1) {}
     ~string8() {
         if ((mpCapacity - mpBegin) > 1 && mpBegin)
             EASTL_allocator_deallocate(mpBegin);
@@ -299,6 +301,33 @@ struct cOption {
     ~cOption();
 };
 
+// Destructor-free view of the three eastl::vector members. ~cConfigScriptState
+// (retail 0x7cc190) drives their teardown explicitly so that the retail helper
+// calls are used: 0x6a4950 destroys the string8 range, 0x7cbd00 destroys the
+// cOption range, and the float range needs no element destruction at all.
+struct OptionVecStore {
+    cOption* mpBegin; cOption* mpEnd; cOption* mpCapacity;   // +0x00 / +0x04 / +0x08
+    sp_vector_allocator mAllocator;                          // +0x0c
+    OptionVecStore() : mpBegin(0), mpEnd(0), mpCapacity(0) {}
+};
+struct StringVecStore {
+    string8* mpBegin; string8* mpEnd; string8* mpCapacity;
+    sp_vector_allocator mAllocator;
+    StringVecStore() : mpBegin(0), mpEnd(0), mpCapacity(0) {}
+};
+struct FloatVecStore {
+    float* mpBegin; float* mpEnd; float* mpCapacity;
+    sp_vector_allocator mAllocator;
+    FloatVecStore() : mpBegin(0), mpEnd(0), mpCapacity(0) {}
+};
+
+struct OptionVecTeardown {
+    void destroy();                                          // 0x007cbd00
+};
+struct StringVecTeardown {
+    void destroyRange(string8* first, string8* last);        // 0x006a4950
+};
+
 struct cConfigScriptState {
     void* mpVtable;                       // +0x00
     unsigned int mVendorID;               // +0x04
@@ -313,14 +342,14 @@ struct cConfigScriptState {
     bool mAbortApp;                       // +0x41
     bool mPad42;                          // +0x42
     bool mPad43;                          // +0x43
-    eastl::vector<cOption, sp_vector_allocator> mOptions;     // +0x44
+    OptionVecStore mOptions;              // +0x44
     int mCurrentOptionID;                 // +0x58
     unsigned int mCurrentOptionSetting;   // +0x5c
-    eastl::vector<string8, sp_vector_allocator> mConfigStrings;  // +0x60
-    eastl::vector<float, sp_vector_allocator>   mConfigNumbers;  // +0x74
+    StringVecStore mConfigStrings;        // +0x60
+    FloatVecStore  mConfigNumbers;        // +0x74
 
     cConfigScriptState();
-    ~cConfigScriptState();
+    __declspec(noinline) ~cConfigScriptState();
     void GatherInformation();
 };
 
@@ -329,22 +358,31 @@ struct IConfigUnknown {
     virtual void Release();
 };
 
+// Raw counted reference slot: the default constructor only zeroes the pointer
+// (it can never throw), while the destructor calls the second vtable slot, which
+// is what retail's cConfigManager ctor/dtor do inline.
+template <typename T>
+struct RefPtr {
+    T* mpObject;
+    RefPtr() : mpObject(0) {}
+    ~RefPtr() { if (mpObject) mpObject->Release(); }
+};
+
 class cConfigManager { public:
     void* mpVtable0;                      // +0x00
     void* mpVtable1;                      // +0x04
     unsigned int mRefCount;               // +0x08
-    EA::AutoRefCount<IConfigUnknown> mpPad0c;  // +0x0c
-    EA::AutoRefCount<IConfigUnknown> mpPad10;  // +0x10
+    RefPtr<IConfigUnknown> mpPad0c;       // +0x0c
+    RefPtr<IConfigUnknown> mpPad10;       // +0x10
     unsigned int mPad14;                  // +0x14
     unsigned int mPad18;                  // +0x18
     int mPad1c;                           // +0x1c
-    cConfigScriptState mState;            // +0x20
-    char padA0[8];
+    cConfigScriptState mState;            // +0x20 (0x88 bytes, ends at +0xa8)
     int mPadA8;                           // +0xa8
     bool mPadAC;                          // +0xac
     bool mPadAD;                          // +0xad
     char padAE[2];
-    EA::AutoRefCount<IConfigUnknown> mpPadB0;  // +0xb0
+    RefPtr<IConfigUnknown> mpPadB0;       // +0xb0
 
     cConfigManager();
     ~cConfigManager();
@@ -352,21 +390,39 @@ class cConfigManager { public:
 
 // @ 0x007cc110
 cConfigScriptState::cConfigScriptState()
-    : mpVtable(0), mVendorID(0), mCardID(0), mOverrideCardIDs(false), mFoundCard(false),
-      mFirstRun(false), mAbortApp(false), mPad42(false), mPad43(true),
+    : mpVtable((void*)0x021566aa), mVendorID(0), mCardID(0), mOverrideCardIDs(false),
+      mFoundCard(false), mFirstRun(false), mAbortApp(false), mPad42(false), mPad43(true),
       mCurrentOptionID(0), mCurrentOptionSetting(0) {}
 
 // @ 0x007cc190
-cConfigScriptState::~cConfigScriptState() {}
+cConfigScriptState::~cConfigScriptState()
+{
+    // The float list has no element destructors: just release its block.
+    mConfigNumbers.mAllocator.deallocate(mConfigNumbers.mpBegin, 0);
+    // The string list destroys its string8 elements first, then frees the block.
+    reinterpret_cast<StringVecTeardown*>(&mConfigStrings)
+        ->destroyRange(mConfigStrings.mpBegin, mConfigStrings.mpEnd);
+    mConfigStrings.mAllocator.deallocate(mConfigStrings.mpBegin, 0);
+    // The option list has its own out-of-line destructor in the retail image.
+    reinterpret_cast<OptionVecTeardown*>(&mOptions)->destroy();
+    // The three vendor/name/id strings release themselves through their own
+    // destructors, which run after this body (reverse member order).
+}
 
 // @ 0x007cc310
 cConfigManager::cConfigManager()
-    : mpVtable0(0), mpVtable1(0), mRefCount(0), mpPad0c(0), mpPad10(0),
-      mPad14(0x9a06678c), mPad18(0x24a0e52), mPad1c(0),
-      mPadA8(-1), mPadAC(false), mPadAD(false), mpPadB0(0) {}
+    : mpVtable0((void*)0x01411a60), mpVtable1((void*)0x01411a5c), mRefCount(0), mpPad0c(),
+      mpPad10(), mPad14(0x9a06678c), mPad18(0x24a0e52), mPad1c(0),
+      mPadAC(false), mPadAD(false), mpPadB0(), mPadA8(-1) {}
 
 // @ 0x007cc260
-cConfigManager::~cConfigManager() {}
+cConfigManager::~cConfigManager()
+{
+    // Retail rewrites both interface-table slots, then lets the member destructors
+    // run in reverse order: +0xb0 reference, embedded state, +0x10 and +0x0c.
+    mpVtable0 = (void*)0x013eb938;
+    mpVtable1 = (void*)0x013ef094;
+}
 
 // @ 0x007cc480
 namespace {
