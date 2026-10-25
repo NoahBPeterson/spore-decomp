@@ -1,0 +1,1 @@
+00643a40 ?operator_idx@MapUU@@QAEPAIPBI@Z  # operator_idx migrated from s00642530 (verbatim, slice spelling)

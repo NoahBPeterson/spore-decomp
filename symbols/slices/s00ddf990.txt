@@ -1,7 +1,7 @@
 00ddf990 ??0cInterfaceState@@QAE@PAUcDispatchObject@@@Z  # cInterfaceState::cInterfaceState
 00ddfaa0 ??1cInterfaceState@@QAE@XZ  # cInterfaceState::~cInterfaceState
 00ddfaf0 ?ResetDefaults@cInterfaceState@@QAE_NXZ  # bool cInterfaceState::ResetDefaults
-00ddfb50 ?PushMatrix@cInterfaceState@@QAEXI@Z  # void cInterfaceState::PushMatrix
+00ddfb50 ?PushMatrix@cInterfaceState@@QAEXI@Z  # cInterfaceState::PushMatrix migrated from s00ddf990 (verbatim, slice spelling)
 00ddfbe0 ?UpdateTransition@cInterfaceState@@QAEXII@Z  # void cInterfaceState::UpdateTransition
 00ddfef0 ?UpdateFade@cInterfaceState@@QAEXM@Z  # void cInterfaceState::UpdateFade
 00de00e0 ?UpdateSequence@cInterfaceState@@QAEXH@Z  # void cInterfaceState::UpdateSequence
