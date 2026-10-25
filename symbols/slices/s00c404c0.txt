@@ -32,6 +32,13 @@
 00c40800 ?Attach_00c40800@cInteractiveOrnament_s00c4_04c0@@QAEXPAX@Z  # cInteractiveOrnament_s00c4_04c0::Attach_00c40800 migrated from s00c404c0 (verbatim, slice spelling)
 00c40830 ?SetLifetime_00c40830@cInteractiveOrnament_s00c4_04c0@@QAEXME@Z  # cInteractiveOrnament_s00c4_04c0::SetLifetime_00c40830 migrated from s00c404c0 (verbatim, slice spelling)
 00c408f0 ?Update_00c408f0@cInteractiveOrnament_s00c4_04c0@@QAEXH@Z  # cInteractiveOrnament_s00c4_04c0::Update_00c408f0 migrated from s00c404c0 (verbatim, slice spelling)
+00c40cd0 ?Cast_00c40cd0@cInteractiveOrnament@@QAEPAXH@Z  # cInteractiveOrnament::Cast_00c40cd0 migrated from s00c404c0 (verbatim, slice spelling)
+00c40d20 ?FUN_00c40d20@@YG_NPAX@Z  # FUN_00c40d20 migrated from s00c404c0 (verbatim, slice spelling)
+00c40d40 ?WriteRoad@cInterCityRoad@@QAE_NPAX@Z  # cInterCityRoad::WriteRoad migrated from s00c404c0 (verbatim, slice spelling)
+00c40de0 ?ReadRoad@cInterCityRoad@@QAE_NPAX@Z  # cInterCityRoad::ReadRoad migrated from s00c404c0 (verbatim, slice spelling)
+00c40e80 ?FUN_00c40e80@@YAXPAXPAUSpVecSP3@@@Z  # FUN_00c40e80 migrated from s00c404c0 (verbatim, slice spelling)
+00c40f10 ??0cInterCityRoad@@QAE@XZ  # cInterCityRoad::cInterCityRoad migrated from s00c404c0 (verbatim, slice spelling)
+00c412f0 ?RemoveOwner_00c412f0@cInterCityRoad@@QAEXXZ  # cInterCityRoad::RemoveOwner_00c412f0 migrated from s00c404c0 (verbatim, slice spelling)
 00c884f0  SP::cSpatialObject::Cast  # virtual slot call in Cast_00c40cd0
 00c88a90  SP::cSpatialObject::Write
 00c88b00 ?Read@cSpatialObject@SP@@UAE_NAAVcIObjectDatabaseIStream@2@@Z  # SP::cSpatialObject::Read (callee of s00c404c0, named from the dev publics; slice address comment)
