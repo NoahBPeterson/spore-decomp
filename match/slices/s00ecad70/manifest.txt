@@ -3,3 +3,7 @@ slices/s00ecad70/s00ecad70.cpp  ?FUN_00ecb090@@YAXHH@Z  00ecb090  /O2 /MD /Gy /E
 slices/s00ecad70/s00ecad70.cpp  ?FUN_00ecb0d0@@YAXHH@Z  00ecb0d0  /O2 /MD /Gy /EHsc /TP /arch:SSE
 slices/s00ecad70/s00ecad70.cpp  ?FUN_00ecb110@@YAXHH@Z  00ecb110  /O2 /MD /Gy /EHsc /TP /arch:SSE
 slices/s00ecad70/s00ecad70.cpp  ?FUN_00ecb730@@YAXXZ  00ecb730  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00ecad70/s00ecad70.cpp  ?FUN_00ecb690@@YAXM@Z  00ecb690  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00ecad70/s00ecad70.cpp  ?FUN_00ecb6b0@@YAEH@Z  00ecb6b0  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00ecad70/s00ecad70.cpp  ?FUN_00ecb950@@YIXPAUPaletteItemUI@@@Z  00ecb950  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00ecad70/s00ecad70.cpp  ?Update@PaletteItemUI@@QAEXH@Z  00ecb9a0  /O2 /MD /Gy /EHsc /TP /arch:SSE
