@@ -16,6 +16,8 @@ extern "C" __declspec(dllimport) void* __stdcall TlsGetValue(unsigned long);
 extern "C" __declspec(dllimport) int   __stdcall TlsSetValue(unsigned long, void*);
 void* hkMemSet(void* dst, int c, int n);          // 0x0107f470 hkString::memSet
 extern "C" __int64 __stdcall _allmul(int lo, int hi, int mlo, int mhi); // lib_crt::allmul
+extern "C" void __cdecl __debugbreak(void);
+#pragma intrinsic(__debugbreak)
 
 extern unsigned long g_tlsThreadMemory;           // 0x016e4174
 extern unsigned long g_tlsThreadMemory2;          // unused placeholder
@@ -48,6 +50,15 @@ public:
     virtual void v14();
     virtual void v18();
     virtual void deallocate2(void* p, int row, int one);
+    virtual bool v20();
+};
+
+// plain function-pointer view of the vtable (member-call through a pointer field
+// keeps cl's memory-indirect `call [eax+0x20]`)
+struct hkMemoryFnTable {
+    void* m00; void* m04; void* m08; void* m0c;
+    void* m10; void* m14; void* m18; void* m1c;
+    char (__thiscall* m20)(hkMemory*);
 };
 
 extern hkMemory* g_hkMemory;      // 0x016e4178
@@ -365,10 +376,11 @@ public:
     int mMaxRows;          // +0x34
     int mRows[0x11];       // +0x38..+0x7b (free list heads)
     int mRowCounts[0x11];  // +0x7c..+0xbf
-    char padC0[0x44];      // +0xc0..+0x103 (per-thread class sizes)
+    int mClassMax[0x11];   // +0xc0..+0x103 (largest size per class)
     signed char mClassForSize[0x204]; // +0x104..+0x307
     int mExtra[0x40];                  // +0x308..
 
+    hkThreadMemory(hkMemory* memory, int stackSize);   // 0x0107d7e0
     void releaseCachedMemory();          // 0x0107d740
     void removeReference();              // 0x0107d790
     void setStackArea(void* p, int n);   // 0x0107d7a0
@@ -529,69 +541,111 @@ void* hkSmallObj::FUN_0107dc90()
     return self;
 }
 
-// @ 0x0107d7e0: hkThreadMemory constructor (size->class table build)
-void FUN_0107d7e0(void* self, void* memory, int stackSize)
+static __forceinline int hkSizeToClass(int size)
 {
-    char* p = (char*)self;
-    *(void**)p = (void*)0x149c848;
-    *(int*)(p + 0x14) = 1;
-    *(int*)(p + 0x20) = 0;
-    *(int*)(p + 0x24) = 0;
-    *(int*)(p + 0x28) = -1;
-    *(int*)(p + 0x2c) = 0;
-    *(void**)(p + 0x10) = memory;
-    (void)stackSize;
-    ((void(__thiscall*)(void*))VFN(memory, 0x20))(memory);
-    for (int i = 0; i < 0x44; i += 4)
-        *(int*)(p + 0xbc - i) = 0;   // rough clear of the tables
+    if (size <= 8) return 1;
+    if (size <= 0x10) return 2;
+    if (size <= 0x20) return 3;
+    if (size <= 0x30) return 4;
+    if (size <= 0x40) return 5;
+    if (size <= 0x60) return 6;
+    if (size <= 0x80) return 7;
+    if (size <= 0xa0) return 8;
+    if (size <= 0xc0) return 9;
+    if (size <= 0x100) return 10;
+    if (size <= 0x140) return 11;
+    if (size <= 0x200) return 12;
+    if (size <= 0x400) return 13;
+    if (size <= 0x800) return 14;
+    if (size <= 0x1000) return 15;
+    if (size <= 0x2000) return 16;
+    __debugbreak();
+    return -1;
+}
+
+// @ 0x0107d7e0
+hkThreadMemory::hkThreadMemory(hkMemory* memory, int stackSize)
+{
+    mpVtbl = (void*)0x149c848;
+    mnRefCount = 1;
+    mStackBase = 0;
+    mStackAlloc = 0;
+    mStackCurrent = -1;
+    mStackEnd = 0;
+    mMemory = memory;
+    mMaxRows = ((hkMemoryVt*)memory)->v20() ? stackSize : 0;
+    int* p = &mRowCounts[0x10];
+    int n = 0x11;
+    do {
+        p[-0x11] = 0;
+        *p = 0;
+        --p;
+    } while (--n);
     for (int s = 0; s <= 0x200; ++s) {
-        int cls;
-        if (s <= 8) cls = 1;
-        else if (s <= 0x10) cls = 2;
-        else if (s <= 0x20) cls = 3;
-        else if (s <= 0x30) cls = 4;
-        else if (s <= 0x40) cls = 5;
-        else if (s <= 0x60) cls = 6;
-        else if (s <= 0x80) cls = 7;
-        else if (s <= 0xa0) cls = 8;
-        else if (s <= 0xc0) cls = 9;
-        else if (s <= 0x100) cls = 10;
-        else if (s <= 0x140) cls = 11;
-        else if (s <= 0x200) cls = 12;
-        else cls = -1;
-        *(signed char*)(p + 0x104 + s) = (signed char)cls;
-        *(int*)(p + 0xc0 + cls * 4) = s;
+        int cls = hkSizeToClass(s);
+        mClassForSize[s] = (signed char)cls;
+        mClassMax[cls] = s;
+    }
+    int* extra = mExtra;
+    for (int s = 0x400; s < 0x2400; s += 0x400) {
+        int cls = hkSizeToClass(s);
+        *extra++ = cls;
+        mClassMax[cls] = s;
     }
 }
 
-// @ 0x0107d6a0  SP::cWalkAroundInputStrategy::Shutdown
-void FUN_0107d6a0(void* self)
+// ---- SP::cWalkAroundInputStrategy ---------------------------------------
+struct cInputList {
+    int   m00;       // +0x00
+    void* mpLeft;    // +0x04
+    void* mpRight;   // +0x08
+    int   mSize;     // +0x0c
+    bool  mFlag;     // +0x10
+    char  pad11[3];
+    int   m14;       // +0x14
+};
+
+class cWalkAroundInputStrategy {
+public:
+    char       pad00[4];    // +0x00
+    cInputList mHooks;      // +0x04
+    char       pad1c[4];    // +0x1c
+    cInputList mHandlers;   // +0x20
+    char       pad38[0xd0]; // +0x38..+0x107
+    int        mHandlerId;  // +0x108
+    int        mHandlerArg0;// +0x10c
+    int        mHandlerArg1;// +0x110
+    int        mHandlerArg2;// +0x114
+    int        mHandlerArg3;// +0x118
+    void*      mObject;     // +0x11c
+    void Shutdown();
+};
+
+// @ 0x0107d6a0
+void cWalkAroundInputStrategy::Shutdown()
 {
-    char* p = (char*)self;
-    int h = *(int*)(p + 0x108);
-    if (h != 0) {
-        int a = *(int*)(p + 0x118);
-        int b = *(int*)(p + 0x114);
-        int c = *(int*)(p + 0x110);
-        int d = *(int*)(p + 0x10c);
-        *(int*)(p + 0x108) = 0;
-        EA_Messaging_RemoveHandler(h, d, c, b, a);
+    if (mHandlerId != 0) {
+        int id = mHandlerId;
+        mHandlerId = 0;
+        EA_Messaging_RemoveHandler(id, mHandlerArg0, mHandlerArg1, mHandlerArg2, mHandlerArg3);
     }
-    FUN_00b1b830(*(void**)(p + 0x10));
-    *(void**)(p + 0x0c) = p + 8;
-    *(int*)(p + 0x10) = 0;
-    *(char*)(p + 0x14) = 0;
-    *(int*)(p + 0x18) = 0;
-    *(void**)(p + 0x08) = p + 8;
-    FUN_00e4b990(*(void**)(p + 0x2c));
-    *(void**)(p + 0x28) = p + 0x24;
-    *(int*)(p + 0x2c) = 0;
-    *(char*)(p + 0x30) = 0;
-    *(int*)(p + 0x34) = 0;
-    *(void**)(p + 0x24) = p + 0x24;
-    void* obj = *(void**)(p + 0x11c);
+    cInputList* l = &mHooks;
+    ((void(__thiscall*)(cInputList*, int))FUN_00b1b830)(l, l->mSize);
+    l->mpRight = &l->mpLeft;
+    l->mSize = 0;
+    l->mFlag = false;
+    l->m14 = 0;
+    l->mpLeft = &l->mpLeft;
+    l = &mHandlers;
+    ((void(__thiscall*)(cInputList*, int))FUN_00e4b990)(l, l->mSize);
+    l->mpRight = &l->mpLeft;
+    l->mSize = 0;
+    l->mFlag = false;
+    l->m14 = 0;
+    l->mpLeft = &l->mpLeft;
+    void* obj = mObject;
     if (obj != 0) {
-        *(void**)(p + 0x11c) = 0;
-        ((void(__thiscall*)(void*, int))VFN(obj, 4))(obj, 1);
+        mObject = 0;
+        ((void(__thiscall*)(void*))VFN(obj, 4))(obj);
     }
 }
