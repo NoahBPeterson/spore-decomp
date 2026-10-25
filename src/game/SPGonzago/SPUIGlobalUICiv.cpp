@@ -1,4 +1,4 @@
-// src/game/SPGonzago/SPUIGlobalUICiv.cpp -- migrated from slice(s) s00e043c0, s00e033d0, s00bad7a0, s00bac830, s00baa930, s00ba9810 by tools/migrate/rewrite.py
+// src/game/SPGonzago/SPUIGlobalUICiv.cpp -- migrated from slice(s) s00e052d0, s00e043c0, s00e033d0, s00bad7a0, s00bac830, s00baa930, s00ba9810 by tools/migrate/rewrite.py
 // Object file: SPGonzago/SPUIGlobalUICiv.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -7,6 +7,10 @@
 #include "SP/cGonzagoSubsystem.h"
 #include "SP/cStarManager.h"
 #include <string.h>
+#include "SP/cCivilization.h"
+#include "EA/UTFWin/RenderContext.h"
+#include "SP/cString.h"
+#include "SP/cVehicle.h"
 
 // ---- items of slice s00ba9810 begin (TODO(rewrite): local stubs, replace by canonical classes)
 struct cSortTriple {                                                    // 12-byte sort / run key
@@ -516,6 +520,185 @@ static inline void* VT_4C_0(void* p)
     return ((void* (__thiscall*)(void*))(*(void***)p)[0x13])(p);
 }
 // ---- items of slice s00e043c0 end
+
+// ---- items of slice s00e052d0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+#define VSLOT(n) virtual void _v##n();
+class cCivilization_s00e0_52d0;
+class cMessage;
+class cCivilization_s00e0_52d0 {
+public:
+    int32_t GetRwTypeKind(uint32_t nType);          // 0x00bef980 ret 4
+    int32_t GetSuperweaponSpeccy();                 // 0x00bf0f40 ret 0
+    bool SuperweaponOnCooldown(int32_t nKind);      // 0x00bf1790 ret 4
+    float GetSuperweaponCooldown(int32_t nKind);    // 0x00bf17f0 ret 4
+    bool CanUseSuperweapon(int32_t nKind);          // 0x00bf8a00 ret 4
+    int32_t GetSuperweaponLevel(uint32_t nType);    // 0x00befa50 ret 4
+    float InteractionScore(uint32_t nType);         // 0x00bf6cb0 ret 4
+    int32_t GetInteractionLevel();                  // 0x00bf01e0 ret 0
+    uint8_t mnPad00[0x8a];                          // +0x00
+    uint8_t mbHidden;                               // +0x8a
+};
+class cCivModeState;
+class cCommRelay {
+public:
+    void OnMessage(void* pWindow, uint32_t nValue);   // 0x00e35290 ret 8
+    void OnEnd();                                     // 0x00e352b0 ret 0
+};
+class cCivModeState {
+public:
+    uint8_t mnPad00[0xe4];      // +0x00
+    cCommRelay* mpRelay;        // +0xe4
+    uint8_t mnPadE8[0x58];      // +0xe8
+    int32_t mnSelectedWeapon;   // +0x140
+    void EnterWeaponMode(int32_t nKind);   // 0x00cf1be0 ret 4
+};
+class cCivModeStrategy {
+public:
+    VSLOT(0) VSLOT(1) VSLOT(2) VSLOT(3) VSLOT(4) VSLOT(5) VSLOT(6) VSLOT(7) VSLOT(8)
+    virtual void ExecuteMessage(uint32_t nMessage, uint32_t nArg);   // +0x24
+    cCivModeState* GetState();                     // 0x00cf74f0 ret 0
+    void OnTechLevelUpgradeButtonPress();          // 0x00cf8160 ret 0
+};
+cCivModeStrategy* GetCivModeStrategy();            // 0x00cf74c0
+class cRenderCtx;
+class DSub;
+class cIWinProc {
+public:
+    virtual bool DoMessage(void* pWindow, cMessage* pMsg);   // overridden by cSPUIGlobalUICiv
+    virtual void Release();
+    VSLOT(2) VSLOT(3) VSLOT(4) VSLOT(5) VSLOT(6) VSLOT(7) VSLOT(8) VSLOT(9) VSLOT(10)
+    VSLOT(11) VSLOT(12) VSLOT(13) VSLOT(14) VSLOT(15) VSLOT(16) VSLOT(17) VSLOT(18)
+    virtual uint32_t GetCommandId(uint32_t nArg);            // +0x4c
+    uint32_t FireSelectedCommEvent();                        // 0x00bf0810 ret 0
+};
+class cUIWindow {
+public:
+    VSLOT(0) VSLOT(1) VSLOT(2)
+    virtual cUIWindow* FindWindowByID(uint32_t nID);         // +0x0c
+    VSLOT(4)
+    virtual cUIWindow* GetRenderable();                      // +0x14
+    VSLOT(6)
+    virtual uint32_t GetID();                                // +0x1c
+    VSLOT(8) VSLOT(9)
+    virtual void SetFlag(uint32_t nFlag, bool bValue);       // +0x28
+    VSLOT(11) VSLOT(12) VSLOT(13)
+    virtual const float* GetArea();                          // +0x38
+    VSLOT(15) VSLOT(16) VSLOT(17) VSLOT(18) VSLOT(19) VSLOT(20) VSLOT(21) VSLOT(22) VSLOT(23)
+    VSLOT(24) VSLOT(25) VSLOT(26) VSLOT(27) VSLOT(28) VSLOT(29) VSLOT(30)
+    virtual void SetVisible(uint32_t nVisible, bool bFlag);   // +0x7c
+    VSLOT(32) VSLOT(33) VSLOT(34) VSLOT(35)
+    virtual void Invalidate();                               // +0x90
+    VSLOT(37) VSLOT(38) VSLOT(39) VSLOT(40) VSLOT(41)
+    virtual DSub* GetSub(uint32_t nID);                      // +0xa8
+    VSLOT(43) VSLOT(44) VSLOT(45) VSLOT(46) VSLOT(47) VSLOT(48) VSLOT(49) VSLOT(50) VSLOT(51)
+    VSLOT(52) VSLOT(53) VSLOT(54) VSLOT(55) VSLOT(56) VSLOT(57) VSLOT(58) VSLOT(59)
+    virtual cUIWindow* GetChild(uint32_t nID, uint32_t nArg);   // +0xf0
+    cRenderCtx* mpRenderCtx;    // +0xf4
+};
+class DSub {
+public:
+    VSLOT(0) VSLOT(1) VSLOT(2)
+    virtual DSub* GetSub(uint32_t nID);                      // +0x0c
+    uint8_t mnPad10[0x0c];      // +0x10
+    int32_t mnWidth;            // +0x1c
+    int32_t mnHeight;           // +0x20
+    int32_t GetField10(int32_t nIndex);                      // 0x00830cf0 ret 4
+    void GetPair38(float* pOut, int32_t nCount);             // 0x00830d30 ret 8
+    void GetPair40(float* pOut, int32_t nCount);             // 0x00830d60 ret 8
+};
+class cRenderCtx {
+public:
+    void* Begin2D(void* pRenderMode);    // 0x0095bc10 ret 4
+    void End2D();                        // 0x0095bb20 ret 0
+};
+struct tCommButton {                // base class comm-rel button record
+    void* mpObject;                 // +0x00
+    uint32_t mnPad04;               // +0x04
+    uint32_t mnPad08;               // +0x08
+};
+class cSPUIGlobalUI_s00e0_52d0 {
+public:
+    VSLOT(0)
+    cSPUIGlobalUI_s00e0_52d0();
+    void Construct();                          // 0x00e03ab0
+    cUIWindow* FindWindowByID(uint32_t nID);   // 0x00e012b0 ret 4
+    uint8_t mnPad04[0x20];                     // +0x04
+    tCommButton mCommButtons[4];               // +0x24
+    uint8_t mnPad54[0x14];                     // +0x54
+};
+class cUIRefCount {
+public:
+    virtual void _v0();
+    int32_t mnRefCount;             // +0x04
+    cUIRefCount() : mnRefCount(0) {}
+};
+class cSPUIGlobalUICiv;
+struct tCivButton {                 // superweapon button record, 12 bytes
+    uint32_t mnObject;              // +0x00
+    uint8_t mbFlag04;               // +0x04
+    uint8_t mbFlag05;               // +0x05
+    uint8_t mnPad06[0x02];          // +0x06
+    cIWinProc* mpObject;            // +0x08
+};
+struct sCivIndexNode {
+    sCivIndexNode* mpLeft;          // +0x00
+    sCivIndexNode* mpRight;         // +0x04
+    sCivIndexNode* mpParent;        // +0x08
+    uint32_t mnColor;               // +0x0c
+    uint32_t mnKey;                 // +0x10
+    uint32_t mnValue;               // +0x14
+};
+struct cCivIndexMap {
+    uint32_t mnPad00;               // +0x00
+    sCivIndexNode* mpAnchorLeft;    // +0x04
+    sCivIndexNode* mpAnchorRight;   // +0x08
+    sCivIndexNode* mpAnchorParent;  // +0x0c
+    uint8_t mbAnchorColor;          // +0x10
+    uint8_t mnPad11[0x03];          // +0x11
+    uint32_t mnSize;                // +0x14
+    void find(const uint32_t& key, sCivIndexNode** ppResult);   // 0x00e5c780 ret 8
+};
+class cMessage {
+public:
+    uint8_t mnPad00[0x08];          // +0x00
+    uint32_t mnId;                  // +0x08
+    uint32_t mnParam;               // +0x0c
+    uint8_t mnPad10[0x08];          // +0x10
+    cUIWindow* mpWindow;            // +0x18
+};
+class cSPUIGlobalUICiv : public cSPUIGlobalUI_s00e0_52d0, public cUIRefCount, public cIWinProc {
+public:
+    cSPUIGlobalUICiv();
+    bool DoMessage(void* pWindow, cMessage* pMsg);    // overrides cIWinProc::DoMessage
+    void RemoveCivFeedback(cCivilization_s00e0_52d0* pCiv);                 // 0x00e052d0
+    void SuperweaponClick(uint32_t nButtonId);                   // 0x00e05530
+    void SelectStance(int32_t nStance);                          // 0x00e05870
+    void SyncStanceWithSelection(int32_t nStance);               // 0x00e05930
+    void SetButtonTooltip(uint32_t nWindowId, uint32_t nTextA, uint32_t nTextB, int32_t nCount);
+                                                                 // 0x00e05ab0
+    void SyncSuperweaponButton(uint32_t nWindowId, int32_t* pnState, int32_t nIndex);
+    void DeactivateCommRelPanel(int32_t nIndex);                 // 0x00e04960
+    void SetMinimapStateFromButton(int32_t nState);              // 0x00e04560
+    void SetStanceButtonsState(int32_t a, int32_t b, int32_t c, int32_t d, int32_t e);
+                                                                 // 0x00e046b0
+    uint32_t mnPad74;               // +0x74
+    uint32_t mnPad78;               // +0x78
+    uint32_t mnPad7c;               // +0x7c
+    uint32_t mnPad80;               // +0x80
+    uint32_t mnPad84;               // +0x84
+    uint8_t mbMinimapVisible;       // +0x88
+    uint8_t mbPad89;                // +0x89
+    uint8_t mnPad8a[0x02];          // +0x8a
+    tCivButton mButtons[4];         // +0x8c
+    float mfCooldown;               // +0xbc
+    uint32_t mnPadC0;               // +0xc0
+    uint32_t mnPadC4;               // +0xc4
+    uint8_t mnPadC8[0x10];          // +0xc8
+    uint8_t mbCooldownShown[4];     // +0xd8
+    cCivIndexMap mCivToIndex;       // +0xdc
+};
+int32_t GetSuperweaponKind(uint32_t nButtonId);                        // 0x00e053c0
+// ---- items of slice s00e052d0 end
 
 // @ 0x00baa810
 cSortTriple* PartitionTriples(cSortTriple* pFirst, cSortTriple* pLast, cSortTriple value, char (*pPredicate)(const cSortTriple*, const cSortTriple*))
@@ -1595,4 +1778,18 @@ void __stdcall FlashCivCommButton(int unused1, void* window, int unused3)
         SPUIHelpers_SetWindowSPMaterial(window, 0x0147f2c8, 0);
     else if (VT_0C_1(child, 0x5234b49) == 0)
         SPUIHelpers_SetWindowSPMaterial(window, 0x0147f2c8, 0);
+}
+
+// @ 0x00e05530
+void cSPUIGlobalUICiv::SuperweaponClick(uint32_t nButtonId)
+{
+    int32_t nKind = GetSuperweaponKind(nButtonId);
+    if (nKind == -1)
+        return;
+    cCivModeState* pState = GetCivModeStrategy()->GetState();
+    if (pState->mnSelectedWeapon != nKind) {
+        GetCivModeStrategy()->GetState()->EnterWeaponMode(nKind);
+        return;
+    }
+    GetCivModeStrategy()->ExecuteMessage(0x1b, 0);
 }

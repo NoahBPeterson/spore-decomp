@@ -1,0 +1,3 @@
+00bf1790 ?SuperweaponOnCooldown@cCivilization@SP@@QBE_NW4eSuperWeapon@cCity@2@@Z  # SP::cCivilization::SuperweaponOnCooldown (callee of s00e052d0, named from the dev publics; slice address comment)
+00bf17f0 ?GetSuperweaponCooldown@cCivilization@SP@@QBEMW4eSuperWeapon@cCity@2@@Z  # SP::cCivilization::GetSuperweaponCooldown (callee of s00e052d0, named from the dev publics; slice address comment)
+00e05530 ?SuperweaponClick@cSPUIGlobalUICiv@@QAEXI@Z  # cSPUIGlobalUICiv::SuperweaponClick migrated from s00e052d0 (verbatim, slice spelling)
