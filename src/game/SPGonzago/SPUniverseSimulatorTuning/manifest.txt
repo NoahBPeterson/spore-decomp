@@ -1,0 +1,3 @@
+# source  symbol  va  flags
+../src/game/SPGonzago/SPUniverseSimulatorTuning.cpp  ?UpdateTuning@cUniverseSimulatorTuning@@QAEXXZ  0107bd40  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPUniverseSimulatorTuning.cpp  ?HandleMessage@cUniverseSimulatorTuning@@UAE_NIPAVcUniverseTuningMessage@@@Z  0107bea0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
