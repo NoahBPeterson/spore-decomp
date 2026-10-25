@@ -150,7 +150,7 @@ using eastl::vec;
 
 namespace EA { namespace ArgScript {
 
-class cArguments { public: unsigned char pad[0x44]; cArguments(); ~cArguments(); };
+class cArguments { public: unsigned char pad[0x44]; cArguments(); ~cArguments(); void** MainArguments(int); };
 
 class cExpression { public: Hashtable mFunctions; cExpression(); ~cExpression() {} };
 
@@ -729,10 +729,59 @@ char __cdecl FUN_008476b0(void*, void* a2)
 extern void* gLocalizedStringFmt;   // 0x013f3da0
 void WStr_Format(void* dest, void* fmt, ...);   // 0x0041e050
 
+// eastl::basic_string<wchar_t> (retail layout)
+struct string16W {
+    void* mpBegin;      // +0x00
+    void* mpEnd;        // +0x04
+    void* mpCapacity;   // +0x08
+    unsigned mPad;      // +0x0c
+    string16W() {
+        mpBegin = gEmptyStr;
+        mpEnd = gEmptyStr;
+        mpCapacity = gEmptyStr + 2;
+    }
+    ~string16W() {
+        if ((int)(((unsigned)mpCapacity - (unsigned)mpBegin) & 0xfffffffe) > 2 && mpBegin)
+            operator delete(mpBegin);
+    }
+};
+
 // @ 0x00847810
-void FUN_00847810(void* this_, cArguments* args)
+void __fastcall FUN_00847810(void* this_, void* dummy, cArguments* args)
 {
-    const char** a = (const char**)((const char**(__thiscall*)(cArguments*, int))*(int*)(*(int*)args + 0xc))(args, 1);
-    (void)this_;
-    (void)a;
+    (void)dummy;
+    typedef void  (__thiscall *PFN_78)(void*, void*, void*, void*, void*);
+    typedef void* (__thiscall *PFN_58)(void*, void*);
+    typedef char  (__thiscall *PFN_34)(void*, void*, void**, int, int, int, int);
+    typedef unsigned (__thiscall *PFN_18)(void*);
+    typedef void  (__thiscall *PFN_4C)(void*, unsigned);
+    typedef void  (__thiscall *PFN_0)(void*);
+
+    void** mainArgs = args->MainArguments(1);
+    void* err = ObjectErrorSingleton();
+    string16W str;
+    WStr_Format(&str, &gLocalizedStringFmt, mainArgs[0]);
+
+    unsigned ctx[3] = { 0, 0, 0 };
+    ((PFN_78)*(unsigned*)(*(unsigned*)err + 0x78))(err, ctx, str.mpBegin,
+        *(void**)((char*)this_ + 0x14), *(void**)((char*)this_ + 0x10));
+    ctx[2] = (unsigned)*(void**)((char*)this_ + 0x10);
+    ctx[1] = (unsigned)*(void**)((char*)this_ + 0x14);
+
+    void* parser = ((PFN_58)*(unsigned*)(*(unsigned*)err + 0x58))(err, ctx);
+    typedef void (__thiscall *PFN_REL)(void*);
+    struct ObjRef {
+        void* p;
+        ObjRef() : p(0) {}
+        ~ObjRef() { if (p) ((PFN_REL)*(unsigned*)(*(unsigned*)p + 8))(p); }
+    };
+    ObjRef out;
+    if (parser) {
+        if (((PFN_34)*(unsigned*)(*(unsigned*)parser + 0x34))(parser, ctx, &out.p, 1, 6, 1, 0)) {
+            unsigned v = ((PFN_18)*(unsigned*)(*(unsigned*)out.p + 0x18))(out.p);
+            void* parse = *(void**)((char*)this_ + 4);
+            ((PFN_4C)*(unsigned*)(*(unsigned*)parse + 0x4c))(parse, v);
+            ((PFN_0)*(unsigned*)(*(unsigned*)out.p + 0x24))(out.p);
+        }
+    }
 }
