@@ -1,3 +1,5 @@
 # source (relative to match/)   symbol   original VA   [cl flags override]
 slices/s00474bd0/s00474bd0.cpp  ?push_backA@Vec8@@QAEXPAI@Z  00475670  /Od /Ob1 /MD /Gy /EHsc /TP /GS-
 slices/s00474bd0/s00474bd0.cpp  ?push_backB@Vec8@@QAEXPAI@Z  00475800  /Od /Ob1 /MD /Gy /EHsc /TP /GS-
+slices/s00474bd0/s00474bd0.cpp  ?Wrap4@@YAPAXPAX0PAM@Z  00475550  /Od /Ob1 /MD /Gy /TP
+slices/s00474bd0/s00474bd0.cpp  ?initFromVec@StreamDesc@@QAEPAU1@PBUIndexVec@@PAUIRefObj@@H@Z  004755a0  /Od /Ob1 /MD /Gy /TP

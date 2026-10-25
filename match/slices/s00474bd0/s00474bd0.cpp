@@ -6,6 +6,8 @@ typedef unsigned int uint;
 typedef unsigned short ushort;
 typedef unsigned char uchar;
 
+template <int N> inline void ScratchSlots() { uint s[N]; }
+
 struct DefaultRefCounted { void Release(); };
 void operator_delete_array(void* p);                       // operator delete[] // 0x00f47380
 void operator_delete_alloc(void* p, void* a, void* alloc, uint n);
@@ -133,40 +135,64 @@ void FixedVecInt::push_back(const int& v)
 }
 
 // ---- vector<T(0x10)>::resize ----------------------------------------------------------------
-struct Vec16 {
-    char* mpBegin; char* mpEnd; char* mpCapacity;
-    void resize(uint n);
+// ---- shared 0x10-byte stream descriptor and its 0x20-byte vector element -------------------
+struct IRefObj {                       // ref-counted object: slot 0 = AddRef, slot 1 = Release
+    virtual int AddRef();
+    virtual int Release();
 };
-struct Releasable { virtual void v0(); virtual void Release(); };
-void Init16Tmp();                                      // 0x46f1f0 (ctor of fill-temp)
-void Fill16(char* pos, uint count, void* tmp);         // 0x47aa40
-void Erase16(char* first, char* last);                 // 0x4772a0
+struct IndexVec;                       // 4-byte-element vector (StreamIndex pairs), +0x98 in the caller
+
+struct StreamDesc {                    // 0x10 bytes (the "Desc" of s0046e450)
+    int mCount;                        // +0x0
+    void* mpData;                      // +0x4
+    unsigned short mStride;            // +0x8
+    unsigned short mStride2;           // +0xa
+    IRefObj* mpOwner;                  // +0xc
+    StreamDesc() { init0(); }
+    StreamDesc* init0();                                            // 0x46f1f0
+    StreamDesc* init(int count, void* data, IRefObj* owner, int);   // 0x46f140
+    StreamDesc* initFromVec(const IndexVec* v, IRefObj* owner, int); // 0x4755a0
+};
+
+struct Vec16 {
+    StreamDesc* mpBegin; StreamDesc* mpEnd; StreamDesc* mpCapacity;
+    void resize(uint n);
+    void Fill(StreamDesc* pos, uint count, const StreamDesc* v);   // 0x47aa40
+    void Erase(StreamDesc* first, StreamDesc* last);               // 0x4772a0
+};
 
 // @ 0x004751a0
 void Vec16::resize(uint n)
 {
-    char tmp[12];
-    Releasable* ref;
-    if ((uint)((mpEnd - mpBegin) >> 4) < n) {
-        Init16Tmp();
-        Fill16(mpEnd, n - (uint)((mpEnd - mpBegin) >> 4), tmp);
-        if (ref) ref->Release();
+    if (n > (uint)(mpEnd - mpBegin)) {
+        StreamDesc tmp;
+        ScratchSlots<15>();
+        Fill(mpEnd, n - (uint)(mpEnd - mpBegin), &tmp);
+        if (tmp.mpOwner) tmp.mpOwner->Release();
     } else {
-        Erase16(mpBegin + n * 0x10, mpEnd);
+        Erase(mpBegin + n, mpEnd);
     }
 }
 
 // ---- vector<T(0x20)>::resize / reserve ------------------------------------------------------
+struct StreamElem {                    // 0x20 bytes
+    int mUsage;                        // +0x0
+    int mIndex;                        // +0x4
+    int mType;                         // +0x8
+    int mSlot;                         // +0xc
+    StreamDesc mDesc;                  // +0x10
+    StreamElem() : mUsage(0), mIndex(0), mType(0), mSlot(14) {}
+};
+
 struct Vec32 {
     char* mpBegin; char* mpEnd; char* mpCapacity;
     char mAllocator[4];
     void resize(uint n);
     void reserve(uint n);
     int size() const;
+    void Fill32(char* pos, uint count, const StreamElem* v);       // 0x47ae60
+    void Erase32(char* first, char* last);                         // 0x477380
 };
-void Init32Tmp();                                      // 0x46f1f0
-void Fill32(char* pos, uint count, void* tmp);         // 0x47ae60
-void Erase32(char* first, char* last);                 // 0x477380
 void Move32(char* first, char* last, char* dst);       // 0x42a730
 
 // @ 0x00475240
@@ -175,13 +201,11 @@ int Vec32::size() const { return (mpEnd - mpBegin) >> 5; }
 // @ 0x00475260
 void Vec32::resize(uint n)
 {
-    uint tmp[4];
-    Releasable* ref;
-    if ((uint)((mpEnd - mpBegin) >> 5) < n) {
-        tmp[0] = 0; tmp[1] = 0; tmp[2] = 0; tmp[3] = 0xe;
-        Init32Tmp();
-        Fill32(mpEnd, n - (uint)((mpEnd - mpBegin) >> 5), tmp);
-        if (ref) ref->Release();
+    if (n > (uint)((mpEnd - mpBegin) >> 5)) {
+        StreamElem tmp;
+        ScratchSlots<14>();
+        Fill32(mpEnd, n - (uint)((mpEnd - mpBegin) >> 5), &tmp);
+        if (tmp.mDesc.mpOwner) tmp.mDesc.mpOwner->Release();
     } else {
         Erase32(mpBegin + n * 0x20, mpEnd);
     }
@@ -250,29 +274,31 @@ void Vec8c::push_back(void* v)
 }
 
 // @ 0x00475550
-void Uninit4(void* a, void* b, uint* c);               // 0x477820 stdcall-ish helper
-void* Wrap4(void* out, void* in, uint* pv)
+void Uninit4(void* a, void* b, float c);               // 0x477820 (cdecl, 3 args; 3rd is a float)
+void* Wrap4(void* out, void* in, float* pv)
 {
-    Uninit4(out, in, (uint*)*pv);
+    Uninit4(out, in, *pv);
     return out;
 }
 
-// @ 0x004755a0
-struct RangeRef {
-    int mCount;
-    uint mpBegin;
-    ushort mA, mB;
-    int* mpObj;
-    RangeRef* Init(Vec48* range, int* obj);
+struct StreamIndex { short mStream; short mSub; };     // 4 bytes
+struct IndexVec {                                      // 4-byte-element vector
+    StreamIndex* mpBegin; StreamIndex* mpEnd; StreamIndex* mpCapacity;
+    int size() const { return (int)(mpEnd - mpBegin); }
+    StreamIndex* begin() const { return mpBegin; }
 };
-RangeRef* RangeRef::Init(Vec48* range, int* obj)
+
+// @ 0x004755a0
+StreamDesc* StreamDesc::initFromVec(const IndexVec* v, IRefObj* owner, int)
 {
-    mCount = (int)(range->mpEnd - range->mpBegin) >> 2;
-    mpBegin = (uint)range->mpBegin;
-    mA = 4;
-    mB = 4;
-    mpObj = obj;
-    if (mpObj) (*(void (**)())(*(int**)mpObj)[0])();
+    mCount = v->size();
+    StreamIndex* p = v->begin();
+    mpData = p;
+    mStride = 4;
+    mStride2 = 4;
+    IRefObj*& r = mpOwner;
+    r = owner;
+    if (r) r->AddRef();
     return this;
 }
 

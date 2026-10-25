@@ -2,8 +2,10 @@
 00474f30 0 complete source, byte-exactness not attempted (no variant rounds run); equiv WEAK (782 valid, 40% cov)
 00474fb0 0 complete source, byte-exactness not attempted (no variant rounds run); equiv WEAK (793 valid, 40% cov)
 00475040 0 complete source, byte-exactness not attempted (no variant rounds run)
+004751a0 107 complete source; equiv PASS (291 valid, 87.9% cov) under /Od /Ob1 /MD /Gy /TP: Vec16::resize (0x10-byte StreamDesc vector) now member-calls Fill/Erase and releases the temp owner with a direct AddRef/Release vtable slot; remaining bytes are the original's two extra named fill-argument locals ([ebp-0x18]/[ebp-0x1c]) and its &member address temp, which shift the temp slot numbering
 00475130 0 complete source, byte-exactness not attempted (no variant rounds run)
 00475240 0 complete source, byte-exactness not attempted (no variant rounds run); equiv PASS (1200 inputs)
+00475260 110 complete source; equiv PASS (276 valid, 88.7% cov) under /Od /Ob1 /MD /Gy /TP: Vec32::resize (0x20-byte StreamElem vector) now member-calls Fill32/Erase32 and releases the temp owner via the element's Release slot; remaining bytes are the original's extra named fill-argument locals plus its &member address temp
 00475320 0 complete source, byte-exactness not attempted (no variant rounds run)
 00475410 0 complete source, byte-exactness not attempted (no variant rounds run)
 00475430 49 complete source; equiv PASS (281 inputs, 100% cov) under /Od /Ob1: push_back_default now constructs in place via the 0x8c-byte element's __thiscall Construct and uses the thiscall DoInsert/Fixup on the insert path; the remaining bytes are the original's extra ~0x38-byte local slot that shifts this/result offsets
