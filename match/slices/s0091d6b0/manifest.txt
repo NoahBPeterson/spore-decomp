@@ -9,3 +9,4 @@ slices/s0091d6b0/s0091d6b0.cpp  WriteHeader@ExceptionHandlerWin32   0091e250  /O
 slices/s0091d6b0/s0091d6b0.cpp  NotifyClients@ExceptionHandler      0091e3b0  /O2 /MD /Gy /EHsc /TP /GS-
 slices/s0091d6b0/s0091d6b0.cpp  WriteExtraData@ExceptionHandlerWin32  0091e3e0  /O2 /MD /Gy /EHsc /TP /GS-
 slices/s0091d6b0/s0091d6b0.cpp  WriteExceptionReportInternal@ExceptionHandlerWin32  0091e4b0  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s0091d6b0/s0091d6b0.cpp  ?GetExceptionString@ExceptionHandlerWin32@@QAEHPADI@Z  0091d950  /O2 /MD /Gy /EHsc /TP /GS-

@@ -57,7 +57,11 @@ extern "C" __declspec(dllimport) BOOL  __stdcall FlushFileBuffers(HANDLE);
 extern "C" __declspec(dllimport) BOOL  __stdcall FreeLibrary(HMODULE);
 extern "C" __declspec(dllimport) wchar_t* __cdecl wcsncpy(wchar_t*, const wchar_t*, size_t);
 extern "C" __declspec(dllimport) char* __cdecl strncpy(char*, const char*, size_t);
+extern "C" __declspec(dllimport) size_t __cdecl strlen(const char*);
 extern "C" __declspec(dllimport) int __cdecl _snprintf(char*, size_t, const char*, ...);
+extern "C" __declspec(dllimport) HMODULE __stdcall GetModuleHandleA(LPCSTR);
+extern "C" __declspec(dllimport) DWORD __stdcall FormatMessageA(DWORD, void*, DWORD, DWORD, char*, DWORD, void*);
+#pragma intrinsic(strlen)
 
 // EA / internal helpers (direct calls)
 void EA_Text_StrncpyUTF8ToUTF16(void* dst, unsigned n, const void* src, int len); // 0x93cf10
@@ -148,8 +152,8 @@ struct ExceptionHandlerWin32 {
     void WriteExceptionReportInternal(ReportWriter* w);       // @ 0091e4b0
     int  GetReportFilePath(char* buf, unsigned n, int type);  // @ 0091e080
     void WriteExceptionReport();                              // @ 0091e5c0
-    unsigned GetAddressInfo(unsigned char flags, unsigned long long addr, unsigned* out); // @ 0091d830
-    void GetExceptionString(char* buf, unsigned n);           // @ 0091d950
+    unsigned GetAddressInfo(unsigned char flags, unsigned long long addr, unsigned* out); // 0x0091d830
+    int GetExceptionString(char* buf, unsigned n);            // 0x0091d950
 };
 
 // symbol-engine-ish class for the dbghelp helpers
@@ -247,27 +251,88 @@ unsigned ExceptionHandlerWin32::GetAddressInfo(unsigned char flags, unsigned lon
     return result;
 }
 
-// @ 0x0091d950  (large exception-code -> string switch; only main arms reproduced)
-void ExceptionHandlerWin32::GetExceptionString(char* buf, unsigned n) {
-    unsigned code = *(unsigned*)(*(char**)mpExceptionPointers);
-    switch (code) {
-    case 0xc0000005:
+// @ 0x0091d950
+int ExceptionHandlerWin32::GetExceptionString(char* buf, unsigned n) {
+    char* rec = *(char**)mpExceptionPointers;
+    unsigned code = *(unsigned*)rec;
+    if (code == 0xc0000005) {
         _snprintf(buf, n, "ACCESS_VIOLATION %s address 0x%08x",
-                  *(unsigned*)(*(char**)mpExceptionPointers + 0x14) ? "writing" : "reading",
-                  *(unsigned*)(*(char**)mpExceptionPointers + 0x18));
-        return;
-    case 0xc0000006:
-        strncpy(buf, "IN_PAGE_ERROR", n);
-        return;
+                  *(unsigned*)(rec + 0x14) ? "writing" : "reading",
+                  *(unsigned*)(rec + 0x18));
+        return (int)strlen(buf);
+    }
+    switch (code) {
+    case 0x80000002:
+        strncpy(buf, "DATATYPE_MISALIGNMENT", n);
+        return (int)strlen(buf);
     case 0x80000003:
         strncpy(buf, "BREAKPOINT", n);
-        return;
+        return (int)strlen(buf);
     case 0x80000004:
         strncpy(buf, "SINGLE_STEP", n);
-        return;
-    default:
-        strncpy(buf, "UNKNOWN", n);
-        return;
+        return (int)strlen(buf);
+    case 0x80000001:
+        strncpy(buf, "GUARD_PAGE", n);
+        return (int)strlen(buf);
+    case 0xc0000006:
+        strncpy(buf, "IN_PAGE_ERROR", n);
+        return (int)strlen(buf);
+    case 0xc0000008:
+        strncpy(buf, "INVALID_HANDLE", n);
+        return (int)strlen(buf);
+    case 0xc000001d:
+        strncpy(buf, "ILLEGAL_INSTRUCTION", n);
+        return (int)strlen(buf);
+    case 0xc0000025:
+        strncpy(buf, "NONCONTINUABLE_EXCEPTION", n);
+        return (int)strlen(buf);
+    case 0xc0000026:
+        strncpy(buf, "INVALID_DISPOSITION", n);
+        return (int)strlen(buf);
+    case 0xc000008c:
+        strncpy(buf, "ARRAY_BOUNDS_EXCEEDED", n);
+        return (int)strlen(buf);
+    case 0xc000008d:
+        strncpy(buf, "FLT_DENORMAL_OPERAND", n);
+        return (int)strlen(buf);
+    case 0xc000008e:
+        strncpy(buf, "FLT_DIVIDE_BY_ZERO", n);
+        return (int)strlen(buf);
+    case 0xc000008f:
+        strncpy(buf, "FLT_INEXACT_RESULT", n);
+        return (int)strlen(buf);
+    case 0xc0000090:
+        strncpy(buf, "FLT_INVALID_OPERATION", n);
+        return (int)strlen(buf);
+    case 0xc0000091:
+        strncpy(buf, "FLT_OVERFLOW", n);
+        return (int)strlen(buf);
+    case 0xc0000092:
+        strncpy(buf, "FLT_STACK_CHECK", n);
+        return (int)strlen(buf);
+    case 0xc0000093:
+        strncpy(buf, "FLT_UNDERFLOW", n);
+        return (int)strlen(buf);
+    case 0xc0000094:
+        strncpy(buf, "INT_DIVIDE_BY_ZERO", n);
+        return (int)strlen(buf);
+    case 0xc0000095:
+        strncpy(buf, "INT_OVERFLOW", n);
+        return (int)strlen(buf);
+    case 0xc0000096:
+        strncpy(buf, "PRIV_INSTRUCTION", n);
+        return (int)strlen(buf);
+    case 0xc00000fd:
+        strncpy(buf, "STACK_OVERFLOW", n);
+        return (int)strlen(buf);
+    default: {
+        DWORD len = FormatMessageA(0xa00, GetModuleHandleA("NTDLL.DLL"), code, 0, buf, n, 0);
+        if (len == 0) {
+            _snprintf(buf, n, "Unknown exception 0x%08x", code);
+            len = (DWORD)strlen(buf);
+        }
+        return (int)len;
+    }
     }
 }
 
