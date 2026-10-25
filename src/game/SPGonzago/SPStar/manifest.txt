@@ -1,0 +1,4 @@
+# source  symbol  va  flags
+../src/game/SPGonzago/SPStar.cpp  ?FUN_00c8bb00@@YA_NPAUcSim@@@Z  00c8bb00  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPStar.cpp  ?Destroy@cStar@@QAEXXZ  00c8be70  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPStar.cpp  ?FUN_00c8bee0@@YAMPAUFloatMap@@HPAH@Z  00c8bee0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include

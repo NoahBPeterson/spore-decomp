@@ -1,0 +1,5 @@
+00c8bb00 ?FUN_00c8bb00@@YA_NPAUcSim@@@Z  # FUN_00c8bb00 migrated from s00c8bb00 (verbatim, slice spelling)
+00c8bc10 ?FUN_00c8bc10@@YAXPAUcSim@@@Z  # FUN_00c8bc10 migrated from s00c8bb00 (verbatim, slice spelling)
+00c8be70 ?Destroy@cStar@@QAEXXZ  # cStar::Destroy migrated from s00c8bb00 (verbatim, slice spelling)
+00c8bee0 ?FUN_00c8bee0@@YAMPAUFloatMap@@HPAH@Z  # FUN_00c8bee0 migrated from s00c8bb00 (verbatim, slice spelling)
+00c8bff0 ?SP_GenerateNewStarName@@YAXPAUcStar@@@Z  # SP_GenerateNewStarName migrated from s00c8bb00 (verbatim, slice spelling)
