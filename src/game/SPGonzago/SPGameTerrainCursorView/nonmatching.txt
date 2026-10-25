@@ -1,0 +1,6 @@
+# va  diff-bytes  reason
+00e8d6b0 185 (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) colour packing; the four float to int conversions lower to x87 loads while retail keeps them in xmm registers with cvttss2si; equiv WEAK (40 valid inputs, 100.0% coverage)
+00e8d760 8 (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) flag getter; retail loads the low byte straight into al and masks al while the model widens the load to a full register; equiv WEAK (40 valid inputs, 100.0% coverage)
+00e8d880 648 (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) cursor simulation update; the planet, mouse, transform, layout and property services are unresolved so the transform build and the cursor frame creation reduce to calls; equiv UNSUPPORTED (unresolved cursor services)
+00e8dd90 72 (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) cursor model load; the model instance call carries three arguments in retail and two in the model so the frame differs; equiv FAIL (3/3 valid inputs mismatched, first execution)
+00e8de10 193 (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) cursor view factory; the allocation, construction and model load services are unresolved so the reference swap and the model binding collapse; equiv UNSUPPORTED (unresolved factory services)

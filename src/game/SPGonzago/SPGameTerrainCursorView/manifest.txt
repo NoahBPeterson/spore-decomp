@@ -1,0 +1,2 @@
+# source  symbol  va  flags
+../src/game/SPGonzago/SPGameTerrainCursorView.cpp  ?SetFlag@cGameTerrainCursorView@@QAEXD@Z  00e8d740  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
