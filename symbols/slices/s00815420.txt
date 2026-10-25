@@ -1,4 +1,4 @@
-00815420 ?FUN_00815420_partial@@YAXXZ  # FUN_00815420_partial migrated from s00815420 (verbatim, slice spelling)
+00815420 ?FUN_00815420@@YIXPAUcSPUIMainWin@@@Z  # cSPUIMainWin::Shutdown (PDB candidate, caller-scored)
 00815990 ?Execute@Cheat@@QAEXPAUArgs@@@Z  # Cheat::Execute migrated from s00815420 (verbatim, slice spelling)
 00815a50 ?ExecuteColor@Outer@@QAEXH@Z  # Outer::ExecuteColor migrated from s00815420 (verbatim, slice spelling)
 00815aa0 ?DoFreeNodes@HashtableStub@@QAEXPAPAXI@Z  # HashtableStub::DoFreeNodes migrated from s00815420 (verbatim, slice spelling)
