@@ -362,40 +362,279 @@ PropertyList::PropertyList(void* p)
 }
 
 // ---------------------------------------------------------------------------
-// @ 0x006c1cd0  animation-bake driver (large; reconstructed skeleton)
+// animation-bake / arena-resource helpers
 // ---------------------------------------------------------------------------
-struct BakeContext {
-    char pad00[0x18];
-    void* field18;
-    char pad1c[0x40];
-    void* arr5c[4];
-    void* arr6c[4];
-    void Run();
+typedef void* (__thiscall* BakeFrameAtFn)(void* ctl, u32 frame);
+typedef void  (__thiscall* EmbeddedSetTransformFn)(void* self, const float* m, int a, int b);
+typedef void  (__thiscall* FixedVectorInsertFn)(void* vec, int* pos, const int* value);
+typedef void  (__thiscall* ArenaAddObjectFn)(void* arena, void* a, u32 handle, void* b);
+
+extern void* rwSectionInitCombined(void* out, int count, void* data, int a, int b);     // 0x011e4dd0
+extern void* rwArenaSectionsInitialize(void* arr, int count, void* data, int a, int b); // 0x011e4e70
+extern void* arenaGetResourceDescriptor(void* out, int size, int a, u32 magic,
+                                        void* sections, void* desc, void* mgr);         // 0x011e3190
+extern void* arenaInitialize(void* arr, int size, int a, u32 magic,
+                             void* sections, void* desc, void* mgr);                    // 0x011e3f20
+extern void  arenaFinalize(void* p);                                                    // 0x011e3ed0
+extern void  ehVectorCtor(void* p, int elemSize, int count, void* ctorFn);              // 0x011e0b85
+extern void  ehVectorDtor(void* p, int elemSize, int count, void* dtorFn);              // 0x011e0b22
+extern void* sub_f473a0(u32 size, const char* name, int a, int b, int c, int d);        // 0x00f473a0
+extern void  sub_f47380(void* p);                                                       // 0x00f47380
+
+struct BakePair {
+    void* state;   // +0x00
+    u32   frame;   // +0x04
 };
 
-void BakeContext::Run()
+struct BakeContext {
+    char       rsv00[8];
+    BakePair*  pairs;     // +0x08
+    char       rsv0c[4];
+    u32**      flagsPtr;  // +0x10
+};
+
+struct BakeFrameCtl {
+    char rsv00[0x14];
+    u32  frameCount;      // +0x14
+};
+
+// ---------------------------------------------------------------------------
+// @ 0x006c1cd0  animation-bake driver: inverse-bind matrices + transform stack
+// ---------------------------------------------------------------------------
+void AnimationBakeDriver(BakeContext* ctx, BakeFrameCtl* ctl, const float* xf)
 {
-    if (field18 != 0)
-        ((void(__thiscall*)(void*))(*(void***)field18)[0x10 / 4])(field18);
-    DestroyRenderObjects((u32*)arr5c);
-    DestroyRenderObjects((u32*)arr6c);
+    float inv[256][16];
+    float stack[64][16];
+
+    const u32 count = ctl->frameCount;
+    BakePair* const pairs = ctx->pairs;
+    BakePair* const pairEnd = pairs + count;
+    const u32* const flags = *ctx->flagsPtr;
+    BakePair* curPair = pairs;
+
+    float cur[16];
+    for (int k = 0; k < 16; ++k)
+        cur[k] = xf[k];
+
+    bool done = false;
+
+    if (count != 0) {
+        // inverse bind-pose matrix for every frame (back to front fills the array)
+        for (u32 n = count; n != 0; --n) {
+            const u32 fi = n - 1;
+            const float* q = (const float*)((BakeFrameAtFn)0x011fda50)(ctl, fi);
+            const float x = q[0] * 1.4142135f;
+            const float y = q[1] * 1.4142135f;
+            const float z = q[2] * 1.4142135f;
+            const float w = q[3] * 1.4142135f;
+            const float xx = (0.0f - x) * x + 0.5f;
+            const float yy = (0.0f - y) * y + 0.5f;
+            const float zz = (0.0f - z) * z + 0.5f;
+            const float t1 = w * z + y * x;
+            const float t2 = y * x - w * z;
+            const float s  = yy + xx;
+            float* m = inv[fi];
+            m[0]  = zz + yy;
+            m[1]  = t1;
+            m[2]  = x * z - w * y;
+            m[3]  = t2;
+            m[4]  = t2;
+            m[5]  = xx + zz;
+            m[6]  = w * x + z * y;
+            m[7]  = t1;
+            m[8]  = w * y + x * z;
+            m[9]  = z * y - w * x;
+            m[10] = s;
+            m[11] = s;
+            m[12] = q[4];
+            m[13] = q[5];
+            m[14] = q[6];
+            m[15] = q[7];
+        }
+    }
+
+    if (count != 0) {
+        float* sp = &stack[0][0];
+        for (u32 i = 0; i < count; ++i) {
+            if (done)
+                return;
+
+            const float* m = inv[i];
+            float r[16];
+            for (int col = 0; col < 4; ++col) {
+                r[0 + col]  = m[1] * cur[4 + col] + m[0] * cur[0 + col] + m[2] * cur[8 + col];
+                r[4 + col]  = m[5] * cur[4 + col] + m[4] * cur[0 + col] + m[6] * cur[8 + col];
+                r[8 + col]  = m[9] * cur[4 + col] + m[8] * cur[0 + col] + m[10] * cur[8 + col];
+                r[12 + col] = (m[13] * cur[4 + col] + m[12] * cur[0 + col] + m[14] * cur[8 + col])
+                              + cur[12 + col];
+            }
+
+            while (curPair->frame == i) {
+                if (curPair->state != 0)
+                    ((EmbeddedSetTransformFn)0x011edc10)(curPair->state, r, 3, 1);
+                ++curPair;
+                if (curPair >= pairEnd) {
+                    done = true;
+                    break;
+                }
+            }
+
+            switch (flags[i] & 3) {
+            case 0:
+                for (int k = 0; k < 16; ++k)
+                    cur[k] = r[k];
+                break;
+            case 1:
+                sp -= 16;
+                for (int k = 0; k < 16; ++k)
+                    cur[k] = sp[k];
+                break;
+            case 2:
+                for (int k = 0; k < 16; ++k)
+                    sp[k] = cur[k];
+                sp += 16;
+                for (int k = 0; k < 16; ++k)
+                    cur[k] = r[k];
+                break;
+            default:
+                break;
+            }
+        }
+    }
 }
+
+// ---------------------------------------------------------------------------
+// baked arena resource: Resource + arena/sections + two render-object sets
+// ---------------------------------------------------------------------------
+struct BakedArenaResource : PropertyList {   // PropertyList = 0x20 bytes
+    u32 field20;      // +0x20  sections
+    u32 arr24[4];     // +0x24  resource render objects
+    u32 arr34[4];     // +0x34  section render objects
+};
 
 // ---------------------------------------------------------------------------
 // @ 0x006c22b0  anonymous namespace cBakedArenaResource constructor
 // ---------------------------------------------------------------------------
-void* BakeResourceCtor(void* self, void* a, void* b, void* key, void* name)
+void* BakeResourceCtor(void* self, void* p2, int count, void* frames, int unique,
+                       const char* name)
 {
-    (void)a; (void)b; (void)key; (void)name;
+    BakedArenaResource* r = (BakedArenaResource*)self;
+
+    // base PropertyList construction (inlined)
+    r->vtbl = (void*)0x13ebcdc;
+    r->field04 = 0;
+    r->f08 = 0; r->f0c = 0; r->f10 = 0; r->f14 = 0;
+    r->vtbl = (void*)0x140a5bc;
+    r->field1c = p2;
+    if (p2 != 0)
+        ((void(__thiscall*)(void*))(*(void***)p2)[0])(p2);
+    r->f18 = 0;
+
+    r->vtbl = (void*)0x140a5a8;
+    r->field20 = 0;
+    for (int i = 0; i < 4; ++i) {
+        r->arr24[i] = 0;
+        r->arr34[i] = 0;
+    }
+
+    struct { void* vf; } mgr;
+    mgr.vf = (void*)0x140a578;
+    int mgrData = ((int(__cdecl*)(void*))*(void**)0x140a57c)(&mgr);
+
+    u8 secBuffer[32];
+    rwSectionInitCombined(secBuffer, unique, frames, 0, 0);
+    CreateRenderObjects(r->arr34, (u32*)secBuffer);
+    void* sections = rwArenaSectionsInitialize(r->arr34, unique, frames, 0, 0);
+    r->field20 = (u32)sections;
+
+    u32 descArgs[8];
+    ehVectorCtor(descArgs, 8, 4, (void*)0x00c2e4e0);
+    descArgs[0] = 0;
+    descArgs[1] = 1;
+
+    u8 descBuffer[32];
+    arenaGetResourceDescriptor(descBuffer, count * 4, 1, 0xcafed00d,
+                               (void*)r->field20, descArgs, (void*)(mgrData + 4));
+    CreateRenderObjects(r->arr24, (u32*)descBuffer);
+    void* arena = arenaInitialize(r->arr24, count * 4, 1, 0xcafed00d,
+                                  (void*)r->field20, descArgs, (void*)(mgrData + 4));
+    r->f18 = (u32)arena;
+    arenaFinalize(arena);
+
+    ehVectorDtor(descBuffer, 8, 4, (void*)0x00c2e4e0);
+    ehVectorDtor(descArgs, 8, 4, (void*)0x00c2e4e0);
+    ehVectorDtor(secBuffer, 8, 4, (void*)0x00c2e4e0);
     return self;
 }
 
 // ---------------------------------------------------------------------------
 // @ 0x006c24b0  assemble and register the baked animation resource
 // ---------------------------------------------------------------------------
+struct BakedFrameRec {
+    u32 d[14];   // 0x38 bytes
+};
+
 u32 sub_6c24b0(void* a, void* b, void* c, int count, int d, int e, const char* name)
 {
-    (void)a; (void)b; (void)c; (void)count; (void)d; (void)e; (void)name;
+    BakedFrameRec* recs = (BakedFrameRec*)c;
+
+    struct BakedVec {
+        int* begin;
+        int* end;
+        int* capEnd;
+        int  buffer[18];
+    } frames;
+    frames.begin = frames.buffer;
+    frames.end = frames.buffer;
+    frames.capEnd = frames.buffer + 18;
+
+    void* frameArg = (void*)d;
+    int unique = e;
+
+    if (e < 0) {
+        for (int i = 0; i < count; ++i) {
+            int value = (int)recs[i].d[0];
+            bool found = false;
+            for (int* it = frames.begin; it != frames.end; ++it) {
+                if (*it == value) {
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) {
+                if (frames.end < frames.capEnd) {
+                    if (frames.end != 0)
+                        *frames.end = value;
+                    ++frames.end;
+                } else {
+                    ((FixedVectorInsertFn)0x0060a600)(&frames, frames.end, &value);
+                }
+            }
+        }
+        unique = (int)(frames.end - frames.begin);
+        frameArg = frames.begin;
+    }
+
+    BakedArenaResource* res = 0;
+    void* mem = sub_f473a0(0x44, "Graphics", 0, 0, 0, 0);
+    if (mem != 0)
+        res = (BakedArenaResource*)BakeResourceCtor(mem, b, count, frameArg, unique, name);
+
+    void* arena = (void*)res->f18;
+
+    for (int i = 0; i < count; ++i) {
+        u8 buf[0x38];
+        memcpy(buf, &recs[i], 0x38);
+        ((ArenaAddObjectFn)0x011e3300)(arena, buf + 8, *(u32*)buf, buf + 0x18);
+        ehVectorDtor(buf + 0x18, 8, 4, (void*)0x00c2e4e0);
+    }
+
+    *(BakedArenaResource**)a = res;
+    ((void(__thiscall*)(void*))(*(void***)res)[0])(res);
+
+    if (frames.begin != 0 && frames.begin != frames.buffer)
+        sub_f47380(frames.begin);
+
     return 0;
 }
 
