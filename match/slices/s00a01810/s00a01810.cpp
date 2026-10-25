@@ -65,7 +65,10 @@ public:
 
 class RefObj {
 public:
-    char pad[0x1000];
+    char   pad[0xb0];
+    double mBlendA;          // +0xb0
+    double mBlendB;          // +0xb8
+    char   pad_rest[0x1000 - 0xc0];
     void  Rel9ae1c0();
     void  Rel9a3630();
     void  Rel9c4cc0();
@@ -235,6 +238,8 @@ void qb_set_query(anim_qb* qb, int index, int mode, bool idle)
     case 0: {
         int n = qb->field_F9C + 1;
         n = n % 16;
+        if (n < 0)
+            n += 16;
         if (qb->field_FA0 >= 16) {
             qb->field_FA0 = n;
             qb->field_F9C = n;
@@ -386,17 +391,18 @@ void anim_qb::UpdateQuery(uint32_t param_1, float param_2)
     if (!(v <= 0.0f))
         return;
     if (other->field_C0 != 3) {
-        ((unsigned char*)q->field_0)[0xad] = q->field_D4;
-        float a = other->field_C4;
+        RefObj* target = q->field_0;
+        ((unsigned char*)target)[0xad] = q->field_D4;
+        float a = other->field_CC;
         if (a >= 0.0f) {
-            q->field_C4 = a;
-            q->field_B8 = a;
+            q->field_CC = a;
+            target->mBlendB = a;
         } else {
             int i = q->field_68 + 1;
             float b = *(float*)((char*)q + i * 12);
             if (b >= 0.0f) {
-                q->field_C4 = b;
-                q->field_B8 = b;
+                q->field_CC = b;
+                target->mBlendB = b;
             }
         }
         float c = other->field_D0;
@@ -405,14 +411,14 @@ void anim_qb::UpdateQuery(uint32_t param_1, float param_2)
             float d = *(float*)((char*)q + i * 12 + 0x10);
             if (d != g_1485720) {
                 q->field_D0 = d;
-                q->field_B8 *= d;
+                target->mBlendB *= d;
             }
         } else {
             q->field_D0 = c;
-            q->field_B8 *= c;
+            target->mBlendB *= c;
         }
     }
-    q->field_B8 = q->field_C8 * g_13eb1bc;
+    q->field_0->mBlendA = q->field_C8 * g_13eb1bc;
     q->field_A8 = other->field_A8;
 
     int i;
@@ -430,7 +436,7 @@ void anim_qb::UpdateQuery(uint32_t param_1, float param_2)
     }
 
     q->field_6C = 0;
-    q->field_6C = 0;
+    other->field_6C = 0;
     if (other->field_C0 == 0) {
         for (int k = 0; k < 16; ++k) {
             int v2 = field_F0C[k] * 0xf0;
@@ -622,11 +628,16 @@ extern "C" int __cdecl RaySlab(float* p, float* d, float* o, float* m, float ex,
         if (denom > -1e-06f && denom < 1e-06f) {
             t = 3.402823466e+38F;
         } else {
-            t = (((o[2] * m2 + o[1] * m1 + o[0] * m0) -
-                  (p[2] * m2 + p[1] * m1 + p[0] * m0)) +
-                 (half[ax] * sgn)) * (-1.0f / denom);
+            float dotO = p[2] * m2;
+            dotO = dotO + p[1] * m1;
+            dotO = dotO + p[0] * m0;
+            t = half[ax] - dotO;
+            t = t + o[2] * m2;
+            t = t + o[1] * m1;
+            t = t + o[0] * m0;
+            t = t * (1.0f / denom);
         }
-        if (denom <= 0.0f) {
+        if (denom < 0.0f) {
             if (t < tNear)
                 tNear = t;
         } else {

@@ -1,3 +1,2 @@
-00a01cd0  507  approximate transliteration (x87 branches not verified)
 00a01f40  1087 approximate transliteration of the per-query animation update
-00a02530  400  approximate ray/box slab test (ABS/denom test rewritten)
+00a02530  562  approximate ray/box slab test; zero-denominator branch fixed, but alias/NaN-sensitive clamp still mismatches (FAIL 5/51 valid, first tMax ~35614 ulp)
