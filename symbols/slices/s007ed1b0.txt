@@ -1,1 +1,7 @@
 007ed1b0 EA::Swarm::ScaleCurve  # PDB name
+007ed2e0 RegisterTextEffect  # ArgScript command registration (new TextEffect + GroupText command objects)
+007ed490 BattleCommand::ColorCommand  # "color" command: erase mColorVec, ArgToVec3 each arg, optional /255 scaling
+007ed560 BattleCommand::FloatListCommand  # "engine scale" float-vector command
+007ed670 BattleCommand::FloatListParentCommand  # "engine scale" command with parentScale flag
+007ed980 TextEffectCommand::EffectCommand  # "effect" command execute: copy text/description, register with iface
+007eda60 TextEffectCommand::SyncInherited  # register inherited effect description when flag == 0

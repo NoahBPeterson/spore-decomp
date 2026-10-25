@@ -7,11 +7,16 @@
 void* operator new[](size_t size, const char* pName, int flags, unsigned debugFlags,
                      const char* file, int line); // 0x00f473a0
 void* operator new(size_t size, const char* pName, int flags, unsigned debugFlags,
-                   const char* file, int line);
+                   const char* file, int line); // 0x00f473a0
+void operator delete(void* p, const char* pName, int flags, unsigned debugFlags,
+                     const char* file, int line); // matching placement delete
 void operator delete(void* p); // 0x00f47380
 void operator delete[](void* p);
 inline void* operator new(size_t, void* p) throw() { return p; }
 extern "C" void* memcpy(void* d, const void* s, unsigned int n);
+extern "C" __declspec(dllimport) char* __cdecl StrStr(const char* s, const char* sub); // IAT strstr
+extern "C" size_t __cdecl strlen(const char* s);
+extern const float kInv255;   // 0x13eecd4  0.003921569f
 
 namespace EA {
 namespace IO {
@@ -19,11 +24,12 @@ void ReadInt32(void* r, void* d, int n, int f);
 void ReadTriple(void* r, void* d, int n, int f);
 }  // namespace IO
 namespace ArgScript {
-class cArguments;
-void** MainArguments(cArguments* self, int n);
-void** OptionArguments(cArguments* self, const char* name, int n);
-bool HasFlag(cArguments* self, const char* name);
-char* GetArg(cArguments* self, int i);
+class cArguments {
+ public:
+  char** MainArguments(int* count, int minCount, int maxCount);  // 0x00838020
+  char* operator[](int index);                                  // 0x00837f20
+  bool HasFlag(const char* name);                               // 0x008380b0
+};
 }  // namespace ArgScript
 }  // namespace EA
 
@@ -32,9 +38,9 @@ static float ArgToFloat(void* iface, void* arg) {
   typedef float(__thiscall * F0)(void*, void*);
   return ((F0)VSLOT(iface, 0x98))(iface, arg);
 }
-static void ArgToVec3(void* iface, void* dst, void* arg) {
-  typedef void*(__thiscall * F0)(void*, void*);
-  ((F0)VSLOT(iface, 0xb0))(dst, arg);
+static void* ArgToVec3(void* iface, void* dst, void* arg) {
+  typedef void*(__thiscall * F0)(void*, void*, void*);
+  return ((F0)VSLOT(iface, 0xb0))(iface, dst, arg);
 }
 
 struct Vec3 {
@@ -46,6 +52,148 @@ struct Vec3Vec {
   Vec3* mpCapacity;  // +0x8
   void PushBack(Vec3* value);
   void ScaleCurve(Vec3* pos, Vec3* value);
+  void erase(Vec3* first, Vec3* last);   // 0x009E0480
+};
+
+// float vector embedded in an effect description (eastl::vector<float>)
+struct FloatVec {
+  float* mpBegin;      // +0x00
+  float* mpEnd;        // +0x04
+  float* mpCapacity;   // +0x08
+  void erase(float* first, float* last);
+  void push_back(const float& value);
+  void push_back_slow(float* end, const float& value);   // 0x00455660
+  uint32_t size() const { return (uint32_t)(mpEnd - mpBegin); }
+  float& operator[](uint32_t i) { return mpBegin[i]; }
+};
+void __cdecl ScaleVec3Vec(float scale, Vec3Vec* vec);            // 0x007ECC30
+
+// description shared by the ArgScript effect commands (0x80 bytes)
+struct EffectDesc {
+  void*    vt;           // +0x00
+  uint32_t f04;          // +0x04
+  uint32_t f08;          // +0x08
+  uint32_t f0c;          // +0x0c
+  uint32_t mFlags;       // +0x10
+  uint32_t f14;          // +0x14
+  uint32_t f18;          // +0x18
+  uint32_t f1c;          // +0x1c
+  uint32_t f20;          // +0x20
+  uint32_t f24;          // +0x24
+  uint32_t f28;          // +0x28
+  uint32_t f2c;          // +0x2c
+  uint32_t f30;          // +0x30
+  uint32_t f34;          // +0x34
+  uint32_t f38;          // +0x38
+  uint32_t f3c;          // +0x3c
+  uint32_t f40;          // +0x40
+  uint32_t f44;          // +0x44
+  uint32_t f48;          // +0x48
+  Vec3Vec  mColorVec;    // +0x4c
+  uint32_t f58;          // +0x58
+  uint32_t f5c;          // +0x5c
+  FloatVec mScaleVec;    // +0x60
+  uint32_t f6c;          // +0x6c
+  uint32_t f70;          // +0x70
+  FloatVec mParentVec;   // +0x74
+  EffectDesc();                           // 0x007EC5E0
+  ~EffectDesc();                          // 0x007EC660
+  EffectDesc(const EffectDesc& x);        // 0x007ED7C0
+  int CopyFrom(const EffectDesc& other);  // 0x007ED740
+};
+
+inline void FloatVec::erase(float* first, float* last) {
+  memcpy(first, last, (uint32_t)((char*)mpEnd - (char*)last));
+  mpEnd = mpEnd - (last - first);
+}
+inline void FloatVec::push_back(const float& value) {
+  if (mpEnd < mpCapacity) {
+    float* p = mpEnd;
+    mpEnd = p + 1;
+    if (p != 0) *p = value;
+  } else {
+    push_back_slow(mpEnd, value);
+  }
+}
+
+// command objects registered by the "effect" script command
+struct string8 {
+  char* mpBegin;      // +0x00
+  char* mpEnd;        // +0x04
+  char* mpCapacity;   // +0x08
+  uint32_t mAllocator; // +0x0c
+  void assign(const char* first, const char* last);   // 0x00454CB0
+};
+struct CommandBaseA {
+  // implicit vptr at +0x00
+  void* mIface;        // +0x04
+  uint32_t f08;        // +0x08
+  uint32_t f0c;        // +0x0c
+  uint32_t f10;        // +0x10
+  uint32_t f14;        // +0x14
+  uint32_t f18;        // +0x18
+  uint32_t f1c;        // +0x1c
+  uint32_t f20;        // +0x20
+  uint32_t f24;        // +0x24
+  uint32_t f28;        // +0x28
+  virtual void Execute(EA::ArgScript::cArguments* args);
+  CommandBaseA();      // 0x0083CDD0
+};
+struct CommandBaseB {
+  // implicit vptr at +0x00
+  uint32_t f04;        // +0x04
+  uint32_t f08;        // +0x08
+  uint32_t f0c;        // +0x0c
+  virtual void Execute(EA::ArgScript::cArguments* args);
+  CommandBaseB();      // 0x0083C800
+};
+struct EffectsParser {
+  EffectDesc* GetInheritedDescription(char** args, int count, int flag); // 0x00A6F090
+  void RegisterInherited(const char* name, int flag, EffectDesc* desc);  // 0x00A6F9C0
+};
+extern void* g_vtTextEffect;     // 0x014143C8
+extern void* g_vtGroupText;      // 0x01414370
+extern char  g_emptyString;      // 0x01667BAC
+extern char  g_emptyStringEnd;   // 0x01667BAD
+extern void* g_scriptGlobals;    // 0x0153FD3C
+
+struct U32Init {
+  uint32_t v;
+  U32Init(uint32_t x) : v(x) {}
+};
+
+struct TextEffectCommand : CommandBaseA {
+  uint32_t f2c;          // +0x2c
+  void* mParser;         // +0x30
+  uint32_t f34;          // +0x34
+  U32Init f38;           // +0x38
+  uint32_t f3c;          // +0x3c
+  EffectDesc mDesc;      // +0x40
+  void* mParserCopy;     // +0xc0
+  uint32_t fC4;          // +0xc4
+  string8 mString;       // +0xc8
+  __forceinline TextEffectCommand() : f38(0x6254f2e) {
+    mString.mpBegin = &g_emptyString;
+    mString.mpEnd = &g_emptyString;
+    mString.mpCapacity = &g_emptyStringEnd;
+  }
+  void EffectCommand(EA::ArgScript::cArguments* args);   // 0x007ED980
+  void SyncInherited(char flag);                         // 0x007EDA60
+};
+
+struct GroupTextCommand : CommandBaseB {
+  GroupTextCommand() {}
+};
+
+// command object whose description is shared through +0xc
+struct BattleCommand {
+  void* vt;               // +0x00
+  void* mIface;           // +0x04
+  void* mField8;          // +0x08
+  EffectDesc* mDesc;      // +0x0c
+  void ColorCommand(EA::ArgScript::cArguments* args);           // 0x007ED490
+  void FloatListCommand(EA::ArgScript::cArguments* args);       // 0x007ED560
+  void FloatListParentCommand(EA::ArgScript::cArguments* args); // 0x007ED670
 };
 
 // @ 0x007ED1B0  EA::Swarm::ScaleCurve
@@ -82,26 +230,15 @@ void Vec3Vec::ScaleCurve(Vec3* pos, Vec3* value) {
 }
 
 // @ 0x007ED2E0  register the "TextEffect" ArgScript command
-struct CommandBase {
-  void* vtable;
-};
-void CommandBaseCtor(CommandBase*);
-extern int g_swarm_1667bac, g_swarm_1667bad;
-extern "C" void RegisterTextEffect(void* reg, void* parser) {
-  char* obj = (char*)operator new(0xd8, "ArgScript/TextEffect", 0, 0, 0, 0);
-  if (obj) {
-    // vector<float> ctor + vtable + fields (see 0x007EC5E0)
-    *(uint32_t*)(obj + 0xe * 4) = 0x6254f2e;
-    extern void SwarmEffect(void*);
-    SwarmEffect(obj);
-    *(uint32_t*)(obj + 0x32 * 4) = (uint32_t)(size_t)&g_swarm_1667bac;
-    *(uint32_t*)(obj + 0x33 * 4) = (uint32_t)(size_t)&g_swarm_1667bac;
-    *(uint32_t*)(obj + 0x34 * 4) = (uint32_t)(size_t)&g_swarm_1667bad;
-  }
-  void* cmd = operator new(0x10, "ArgScript/GroupText", 0, 0, 0, 0);
-  CommandBaseCtor((CommandBase*)cmd);
-  (void)reg;
-  (void)parser;
+void __cdecl RegisterTextEffect(void* cmdReg, void* effectReg) {
+  typedef void(__thiscall * F0)(void*, void*, void*);
+  TextEffectCommand* effect =
+      new ("ArgScript/TextEffect", 0, 0, 0, 0) TextEffectCommand;
+  ((F0)VSLOT(effectReg, 0x14))(effectReg, g_scriptGlobals, effect);
+
+  GroupTextCommand* cmd =
+      new ("ArgScript/GroupText", 0, 0, 0, 0) GroupTextCommand;
+  ((F0)VSLOT(cmdReg, 0x18))(cmdReg, g_scriptGlobals, cmd);
 }
 
 // @ 0x007ED3E0  vector<Vec3>::push_back
@@ -111,7 +248,9 @@ void Vec3Vec::PushBack(Vec3* value) {
   if (p < v->mpCapacity) {
     v->mpEnd = p + 1;
     if (p != 0) {
-      *p = *value;
+      p->x = value->x;
+      p->y = value->y;
+      p->z = value->z;
       return;
     }
   } else {
@@ -119,33 +258,66 @@ void Vec3Vec::PushBack(Vec3* value) {
   }
 }
 
-// @ 0x007ED490  "color" command
-extern "C" void ColorCommand(int* self, EA::ArgScript::cArguments* args) {
-  void* list = EA::ArgScript::MainArguments(args, 0);
-  int count = 0;
-  (void)list;
-  (void)count;
-  Vec3Vec* v = (Vec3Vec*)(*(char**)((char*)self + 0xc) + 0x4c);
-  v->mpEnd = v->mpBegin;
-  for (int i = 0; i < count; ++i) {
-    Vec3 tmp;
-    ArgToVec3(*(void**)((char*)self + 4), &tmp, 0);
-    v->PushBack(&tmp);
+// inlined copy of Vec3Vec::PushBack for the command Execute bodies
+inline void PushBackInline(Vec3Vec* v, Vec3* value) {
+  Vec3* p = v->mpEnd;
+  if (p < v->mpCapacity) {
+    v->mpEnd = p + 1;
+    if (p != 0) {
+      p->x = value->x;
+      p->y = value->y;
+      p->z = value->z;
+      return;
+    }
+  } else {
+    v->ScaleCurve(p, value);
   }
-  (void)args;
+}
+
+// @ 0x007ED490  "color" command
+void BattleCommand::ColorCommand(EA::ArgScript::cArguments* args) {
+  int count;
+  char** list = args->MainArguments(&count, 1, 0x7fffffff);
+  Vec3Vec& colors = mDesc->mColorVec;
+  colors.erase(colors.mpBegin, colors.mpEnd);
+  Vec3 tmp;
+  for (int i = 0; i < count; ++i) {
+    Vec3* value = (Vec3*)ArgToVec3(mIface, &tmp, list[i]);
+    PushBackInline(&mDesc->mColorVec, value);
+  }
+  char* text = (*args)[0];
+  if (StrStr(text, "255") != 0)
+    ScaleVec3Vec(kInv255, &mDesc->mColorVec);
 }
 
 // @ 0x007ED560  float-vector command (engine scale)
-extern "C" void FloatListCommand(int* self, EA::ArgScript::cArguments* args) {
-  EA::ArgScript::MainArguments(args, 0);
-  (void)self;
+void BattleCommand::FloatListCommand(EA::ArgScript::cArguments* args) {
+  int count;
+  char** list = args->MainArguments(&count, 1, 0x7fffffff);
+  FloatVec& sv = mDesc->mScaleVec;
+  sv.erase(sv.mpBegin, sv.mpEnd);
+  for (int i = 0; i < count; ++i)
+    mDesc->mScaleVec.push_back(ArgToFloat(mIface, list[i]));
+  char* text = (*args)[0];
+  if (StrStr(text, "255") != 0) {
+    const float k = kInv255;
+    FloatVec& v = mDesc->mScaleVec;
+    for (uint32_t i = 0; i < v.size(); ++i) v[i] *= k;
+  }
 }
 
 // @ 0x007ED670  float-vector command with parentScale flag
-extern "C" void FloatListParentCommand(int* self, EA::ArgScript::cArguments* args) {
-  EA::ArgScript::MainArguments(args, 0);
-  if (EA::ArgScript::HasFlag(args, "parentScale"))
-    *(uint32_t*)(*(char**)((char*)self + 0xc) + 0x10) |= 1;
+void BattleCommand::FloatListParentCommand(EA::ArgScript::cArguments* args) {
+  int count;
+  char** list = args->MainArguments(&count, 0, 0x7fffffff);
+  FloatVec& pv = mDesc->mParentVec;
+  pv.erase(pv.mpBegin, pv.mpEnd);
+  for (int i = 0; i < count; ++i) {
+    float value = ArgToFloat(mIface, list[i]);
+    mDesc->mParentVec.push_back(value);
+  }
+  if (args->HasFlag("parentScale"))
+    mDesc->mFlags |= 1;
 }
 
 // @ 0x007ED740  copy effect description fields
@@ -200,17 +372,28 @@ extern "C" void* ReadVec3Vec(void* reader, Vec3Vec* v) {
 }
 
 // @ 0x007ED980  "effect" command execute
-extern "C" void EffectCommand(int* self, EA::ArgScript::cArguments* args) {
-  void** p = EA::ArgScript::MainArguments(args, 1);
-  (void)p;
-  (void)self;
+void TextEffectCommand::EffectCommand(EA::ArgScript::cArguments* args) {
+  int count;
+  char** list = args->MainArguments(&count, 1, 3);
+  char* text = list[0];
+  mString.assign(text, text + strlen(text));
+  mDesc.CopyFrom(EffectDesc());
+  mParserCopy = mParser;
+  if (count > 1) {
+    EffectDesc* inherited =
+        ((EffectsParser*)mParser)->GetInheritedDescription(list, count, 0x2f);
+    if (inherited != 0)
+      mDesc.CopyFrom(*inherited);
+  }
+  typedef void(__thiscall * F0)(void*, void*);
+  ((F0)VSLOT(mIface, 0x8c))(mIface, this);
 }
 
 // @ 0x007EDA60  sync inherited description
-extern "C" void SyncInherited(int self, char flag) {
+void TextEffectCommand::SyncInherited(char flag) {
   if (flag == 0) {
-    void* obj = operator new(0x80, "Swarm", 0, 0, 0, 0);
-    (void)obj;
+    EffectDesc* cloned = new ("Swarm", 0, 0, 0, 0) EffectDesc(mDesc);
+    ((EffectsParser*)mParser)->RegisterInherited(mString.mpBegin, 0x2f, cloned);
   }
 }
 
