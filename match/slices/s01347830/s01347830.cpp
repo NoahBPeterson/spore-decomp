@@ -1,3 +1,5 @@
+// @ 0x01347830  $E??? dynamic initializer of the cRaidPlunderEvent serializer attribute table
+// (8 Simulator::Attribute records, 0x3c bytes each, at 0x015769a8..0x01576b80).
 // @ 0x01347b70  $E420: dynamic initializer of the UFO game-data serializer attribute table
 // (17 Simulator::Attribute records, 0x3c bytes each, at 0x01576bc8..0x01576fc3).
 // Same record layout/construction as s0133ba60 (cMission): each record is built in one reused
@@ -185,6 +187,28 @@ bool Read_00c5cff0(ISerializerReadStream* pStream, void* pData);
 bool Write_00c5b3d0(ISerializerWriteStream* pStream, void* pData);
 bool Validate_00c5bb80();
 bool ToXml_00f29650(void* pData, const char* pName, int depth);
+
+// @ 0x01347830  $E??? dynamic initializer of the cRaidPlunderEvent serializer attribute table.
+// Eight Simulator::Attribute records (0x3c bytes each) at 0x015769a8..0x01576b80, matching the
+// cRaidPlunderEvent layout: 0x1f0 mPendingUFOKey, 0x1fc mCanStart, 0x200 mNumPirates,
+// 0x204 mNumBombers, 0x208 mNumFighters, 0x20c mDamageRemainderUFO, 0x210 mStolenSpiceFraction,
+// 0x214 mBackgroundShipsList.
+extern AttrSlot cRaidPlunderEvent_sAttributes[8];   // 0x015769a8
+
+#define ADD_PLUNDER(IDX, ...) { Attribute a(__VA_ARGS__); *(Attribute*)&cRaidPlunderEvent_sAttributes[IDX] = a; }
+
+// @ 0x01347830
+void InitRaidPlunderAttributes()
+{
+    ADD_PLUNDER(0, "mPendingUFOKey",       0x05ed0eec, 0x1f0, KEY_ATTR)
+    ADD_PLUNDER(1, "mNumBombers",          0x06450543, 0x204, INT_ATTR)
+    ADD_PLUNDER(2, "mNumFighters",         0x06450548, 0x208, INT_ATTR)
+    ADD_PLUNDER(3, "mNumPirates",          0x0645054d, 0x200, INT_ATTR)
+    ADD_PLUNDER(4, "mBackgroundShipsList", 0x0648d08e, 0x214, Read_00c5cff0, Write_00c5b3d0, ReadText_00c2e4e0, WriteText_00692fb0, Validate_00c5bb80, ToXml_00f29650)
+    ADD_PLUNDER(5, "mCanStart",            0x06492614, 0x1fc, BOOL_ATTR)
+    ADD_PLUNDER(6, "mStolenSpiceFraction", 0x0679f2eb, 0x210, FLOAT_ATTR)
+    ADD_PLUNDER(7, "mDamageRemainderUFO",  0x06b7d725, 0x20c, FLOAT_ATTR)
+}
 
 // @ 0x01347b70
 void InitUFOAttributes()
