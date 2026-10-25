@@ -45,6 +45,91 @@ extern "C" {
     void  FUN_004b5xxx_push(void* value);
 }
 
+// ---- editor paint records and the two lookaside containers used below -------------------------
+struct PaintRGB {                       // rw::math::fpu::Vector3Template<float,0>, 12 bytes
+    uint32_t x, y, z;
+    PaintRGB(const PaintRGB& src);      // 0x004098a0 (copy ctor)
+};
+
+struct PaintEntry {                     // SP::tSPEditorPaint, 0x1c bytes
+    uint32_t mPaint;                    // +0x00
+    PaintRGB mColor1;                   // +0x04
+    PaintRGB mColor2;                   // +0x10
+    PaintEntry();                       // 0x00440f60 (default ctor)
+    PaintEntry(uint32_t paint, const PaintRGB& c1, const PaintRGB& c2)
+        : mPaint(paint), mColor1(c1), mColor2(c2) {}
+};
+
+struct PaintCount;                      // rbtree node value: PaintEntry key + tally
+struct PaintEntryIter {                 // eastl rbtree iterator over one node pointer
+    void* mpNode;                       // +0x00
+    PaintEntryIter(void* node);         // 0x00566c50
+    PaintEntryIter& operator++();       // 0x00422c50
+    PaintCount* operator->();           // 0x00564f50
+};
+inline bool operator!=(const PaintEntryIter& a, const PaintEntryIter& b)
+{
+    return a.mpNode != b.mpNode;
+}
+struct PaintCount {
+    PaintEntry mEntry;                  // +0x00 (node+0x10)
+    int        mCount;                  // +0x1c (node+0x2c)
+};
+struct AllocTag { AllocTag() {} };
+struct PaintCountTree {                 // eastl::rbtree<PaintCount-ish>, 0x1c bytes
+    void*    mpAllocator;               // +0x00
+    void*    mpEnd;                     // +0x04 anchor node (also the end iterator)
+    void*    mpBegin;                   // +0x08 leftmost node
+    void*    mpRoot;                    // +0x0c
+    uint8_t  mColor;                    // +0x10
+    uint8_t  mPad0, mPad1, mPad2;
+    uint32_t mSize;                     // +0x14
+    uint32_t mAllocTag;                 // +0x18
+    PaintCountTree(const AllocTag& = AllocTag());       // 0x004b5980
+    ~PaintCountTree() { DoNuke(mpRoot); }
+    PaintEntryIter begin() { return PaintEntryIter(mpBegin); }
+    PaintEntryIter end() { return PaintEntryIter(&mpEnd); }
+    PaintEntryIter find(const PaintEntry& key);         // 0x00564b50
+    int& operator[](const PaintEntry& key);             // 0x004b5160
+    void DoNuke(void* root);                            // 0x004e8a30
+};
+
+struct PaintFindResult {                // eastl hashtable find() result pair
+    void* mpNode;                       // +0x00
+    void* mpFound;                      // +0x04
+};
+struct PaintTable {                     // eastl::map<int, tSPEditorPaint> hashtable, 0x11c bytes
+    void*   mpBuckets;                  // +0x000
+    void*   mpEnd;                      // +0x004
+    char    mPad[0x110];                // +0x008
+    uint8_t mVersion;                   // +0x118
+    char    mPad2[3];
+    PaintFindResult* Find(PaintFindResult* out, const int& key);   // 0x004553b0
+    PaintEntry* GetPaint(const int& key);                          // 0x00454420
+};
+struct PaintMapList {                   // eastl::vector<PaintTable, sp_vector_allocator>, 0x11c bytes
+    PaintTable* mpBegin;                // +0x000
+    PaintTable* mpEnd;                  // +0x004
+    PaintTable* mpCap;                  // +0x008
+    char        mInline[0x110];         // +0x00c
+};
+
+struct ModelEntry;                      // rbtree node value: unsigned key + PaintMapList
+struct ModelIter {                      // eastl rbtree iterator over the theme's model map
+    void* mpNode;                       // +0x00
+    ModelIter(void* node);              // 0x00566c50
+    ModelIter& operator++();            // 0x00422c50
+    ModelEntry* operator->();           // 0x00564f50
+};
+inline bool operator!=(const ModelIter& a, const ModelIter& b)
+{
+    return a.mpNode != b.mpNode;
+}
+struct ModelEntry {
+    uint32_t     mKey;                  // +0x00 (node+0x10)
+    PaintMapList mValue;                // +0x04 (node+0x14)
+};
+
 namespace SP {
 struct PaintVector {
     void* mpBegin; void* mpEnd; void* mpCap;
@@ -52,7 +137,19 @@ struct PaintVector {
     void* Insert(void* value);
     void FUN_004b4fa0(void* a);   // 0x004b4fa0
 };
-struct ModelTree { char _[0x1c]; void* FUN_004b5080(void* a); };   // 0x004b5080
+struct ModelTree {                      // eastl::map<unsigned, vector<PaintTable>>, 0x1c bytes
+    void*    mpAllocator;               // +0x00
+    void*    mpEnd;                     // +0x04 anchor node (also the end iterator)
+    void*    mpBegin;                   // +0x08 leftmost node
+    void*    mpRoot;                    // +0x0c
+    uint8_t  mColor;                    // +0x10
+    char     mPad[3];
+    uint32_t mSize;                     // +0x14
+    char     mAllocTag[4];              // +0x18
+    ModelIter begin() { return ModelIter(mpBegin); }
+    ModelIter end() { return ModelIter(&mpEnd); }
+    void* FUN_004b5080(void* a);        // 0x004b5080
+};
 class cSPEditorPaintTheme {
 public:
     void* mpVtbl0; void* mpVtbl1; int mRefCount;
@@ -70,6 +167,8 @@ public:
     cSPColorRGB mSkinColors[3];
     void InitClosestRegions(int a, int b);
     void SetRegionColor(int a, int b, int c, int d);
+    int  FUN_004b33e0(int* out, int* range, int key);
+    char FUN_004b3660(int* out, int key);
     char FUN_004b3910(int* out, int key, int arg3);
     char FUN_004b3a50(int out, int key, int arg3);
     char FUN_004b3b20(int key, int* outCount, int* outPtr);
@@ -79,19 +178,77 @@ public:
 using namespace SP;
 
 extern uint32_t DAT_015d6cc8;
+extern PaintRGB DAT_015d6e2c;
 extern "C" void* g_closestReserve;
 
 // @ 0x004b33e0
-int FUN_004b33e0(int* out, int* range, int key)
+int cSPEditorPaintTheme::FUN_004b33e0(int* out, int* range, int key)
 {
-    (void)out; (void)range; (void)key;
+    if (out != 0) {
+        PaintEntry paint(0, DAT_015d6e2c, DAT_015d6e2c);
+        PaintCountTree counts;
+
+        int i = 0;
+        int n = (int)(((PaintMapList*)range)->mpEnd - ((PaintMapList*)range)->mpBegin);
+        for (; i < n; i++) {
+            PaintTable* table = &((PaintMapList*)range)->mpBegin[i];
+            PaintFindResult pair;
+            table->Find(&pair, key);
+            void* node = (pair.mpNode != pair.mpFound) ? pair.mpNode : table->mpEnd;
+            if (node != table->mpEnd) {
+                paint = *table->GetPaint(key);
+                PaintEntryIter end = counts.end();
+                PaintEntryIter it = counts.find(paint);
+                if (it != end)
+                    ++counts[paint];
+                else
+                    counts[paint] = 1;
+            }
+        }
+
+        if (!counts.mSize)
+            return 0;
+
+        int bestCount = 0;
+        PaintEntry best(0, DAT_015d6e2c, DAT_015d6e2c);
+        PaintEntryIter it = counts.begin();
+        PaintEntryIter end = counts.end();
+        while (it != end) {
+            if (it.operator->()->mCount > bestCount) {
+                bestCount = it.operator->()->mCount;
+                best = it.operator->()->mEntry;
+            }
+            ++it;
+        }
+        *((PaintEntry*)out) = best;
+        return bestCount;
+    }
     return 0;
 }
 
 // @ 0x004b3660
-int FUN_004b3660(int self, int* out, int key)
+char cSPEditorPaintTheme::FUN_004b3660(int* out, int key)
 {
-    (void)self; (void)out; (void)key;
+    if (out != 0) {
+        int bestCount = 0;
+        PaintEntry best;
+        ModelIter it = mModelTheme.begin();
+        ModelIter end = mModelTheme.end();
+        while (it != end) {
+            PaintMapList* list = &it.operator->()->mValue;
+            PaintEntry candidate;
+            int n = FUN_004b33e0((int*)&candidate, (int*)list, key);
+            if (n > bestCount) {
+                best = candidate;
+                bestCount = n;
+            }
+            ++it;
+        }
+        if (bestCount > 0) {
+            *((PaintEntry*)out) = best;
+            return 1;
+        }
+    }
     return 0;
 }
 
@@ -146,7 +303,7 @@ char cSPEditorPaintTheme::FUN_004b3910(int* out, int key, int arg3)
         if (iVar2 != 0)
             return 1;
     }
-    char cVar1 = (char)FUN_004b3660((int)this, out, key);
+    char cVar1 = FUN_004b3660(out, key);
     if (cVar1 != '\0')
         return 1;
     int a = 0, b = 0;
