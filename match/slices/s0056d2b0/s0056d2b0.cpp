@@ -352,13 +352,87 @@ Vector3* Vector3::SetZero()
     return this;
 }
 
-struct UnkClass_0056def0 {
-    char pad0[4];
-    void* mpEnd;   // +4
-    bool Find(void* a, void* out);   // @ 0x0056def0
+// ------------------------------------------------------------------ classifier registry
+// eastl::pair: non-POD (user constructors), so it is returned through the hidden return pointer
+template <class A, class B> struct Pair2 {
+    A first;
+    B second;
+    Pair2() {}
+    Pair2(A a, B b) : first(a), second(b) {}
 };
-bool UnkClass_0056def0::Find(void*, void*)
+
+struct cIClassifier;
+
+struct cClassifierFactory {
+    virtual cIClassifier* Create();   // vtbl[0]
+};
+
+struct FactoryEntry {                 // eastl::pair<uint32_t, cClassifierFactory*>
+    uint32_t first;
+    cClassifierFactory* second;
+};
+
+struct FactoryMap {                   // eastl::vector_map<uint32_t, cClassifierFactory*>
+    typedef FactoryEntry* iterator;
+    FactoryEntry* mpBegin;            // +0x0
+    FactoryEntry* mpEnd;              // +0x4
+    FactoryEntry* mpCapacity;         // +0x8
+    uint32_t mAllocator;              // +0xc
+    iterator begin() { return mpBegin; }
+    iterator end() { return mpEnd; }
+    Pair2<iterator, iterator> equal_range(const uint32_t& k);   // 0x0056f3e0
+};
+
+struct IRefObj {
+    virtual ~IRefObj();
+    virtual int AddRef();             // vtbl[1]
+    virtual int Release();            // vtbl[2]
+    virtual int RefCount();           // vtbl[3]
+};
+
+struct cIClassifier : IRefObj {
+    virtual void v10() = 0;
+    virtual void v14() = 0;
+    virtual void v18() = 0;
+    virtual void v1c() = 0;
+};
+
+struct cClassifierRegistry {
+    FactoryMap mFactories;                          // +0x0 (mpBegin / mpEnd are the two iterators)
+    bool Find(uint32_t id, cIClassifier** out);     // 0x0056def0
+};
+
+// @ 0x0056def0
+// Behavioural reconstruction of cClassifierRegistry::Find (SP::Traits): look `id` up in the
+// factory vector_map, build the classifier through its factory's Create(), AddRef() it and hand
+// it back through *out. The retail body is a 133-byte /Od thiscall (frame 0x30) that reserves
+// five scratch dwords between the end() temporaries and the pair result (the locals of an
+// inlined helper, as in s0056df80); ScratchSlots<5> reproduces that gap. Instruction stream and
+// size then match exactly except for the /Od slot of the pair result and of the Create() temp,
+// whose placement is not source-controllable -- recorded as nonmatching.
+bool cClassifierRegistry::Find(uint32_t id, cIClassifier** out)
 {
-    // partial: hashtable lookup returning bool
+    FactoryMap::iterator itEnd;
+    cIClassifier* c;
+    Pair2<FactoryMap::iterator, FactoryMap::iterator> range = mFactories.equal_range(id);
+    FactoryMap::iterator it;
+    ScratchSlots<5>();
+    if (range.first != range.second)
+        it = range.first;
+    else
+    {
+        itEnd = mFactories.end();
+        it = itEnd;
+    }
+    if (it != mFactories.end())
+    {
+        c = it->second->Create();
+        if (c != 0)
+        {
+            c->AddRef();
+            *out = c;
+            return true;
+        }
+    }
     return false;
 }
