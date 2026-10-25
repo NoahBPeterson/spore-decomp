@@ -1,0 +1,2 @@
+# source  symbol  va  flags
+../src/game/SPGonzago/SPAStar.cpp  ?Restart@Stopwatch_s0057_18f0@EA@@QAEXXZ  00571e80  /O2 /MD /Gy /EHsc /TP /Isrc/game/include

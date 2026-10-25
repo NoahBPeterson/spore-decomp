@@ -3,6 +3,7 @@
 00571d90 ?Notify@OwnerHandle@@QAEXXZ  # OwnerHandle::Notify migrated from s005718f0 (verbatim, slice spelling)
 00571db0 ?RemoveHandler@Messaging@EA@@YA_NPAVServer@12@PAVIHandler@12@PBIIH@Z  # EA::Messaging::RemoveHandler migrated from s005718f0
 00571e60 ?GetStopwatchCycle@@YA_KXZ  # GetStopwatchCycle migrated from s005718f0 (verbatim, slice spelling)
+00571e80 ?Restart@Stopwatch_s0057_18f0@EA@@QAEXXZ  # Stopwatch_s0057_18f0::Restart migrated from s005718f0 (verbatim, slice spelling)
 00572070 ?SetSoundSymbol@@YAXIIPBD@Z  # SetSoundSymbol migrated from s005718f0 (verbatim, slice spelling)
 005720f0 ?SetCullBackfaces@@YAXH@Z  # SetCullBackfaces migrated from s005718f0 (verbatim, slice spelling)
 00572110 ?LookupByHash@@YAII@Z  # LookupByHash migrated from s005718f0 (verbatim, slice spelling)

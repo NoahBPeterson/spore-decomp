@@ -3,9 +3,9 @@
 00675700 FUN_00675700  # PropertyManager GetPropertyListEx(0x5befd27) + GetProperty(0x5bef2cd)
 00675770 eastl::hashtable<uint32_t,uint32_t,eastl::allocator,...>::clear  # DoFreeNodes + mnElementCount=0
 00675790 FUN_00675790  # hashtable serialize: writer vtable[0x20] stream, stream[0x18]/[0x1c]
-006758a0 eastl::hashtable<uint32_t,uint32_t,...>::DoInsertValue  # PDB name
-00675990 SP::cTypedValueToStringT<short>::Write caller + property streaming
-00675b90 eastl::vector<Simulator::cCreatureAbility,...>::DoInsertValue  # 0x10-byte elements
+006758a0 ?DoInsertValue@UIntHashTable@@QAEPAUHashInsertResult@@PAU2@PBI_N@Z  # UIntHashTable::DoInsertValue migrated from s006755c0 (verbatim, slice spelling)
+00675990 ?FUN_00675990@@YA_NPAUIPropWriter@@PBDPBXPB_W@Z  # FUN_00675990 migrated from s006755c0 (verbatim, slice spelling)
+00675b90 ?DoInsertValue@Elem16Vec@@QAEXPAUElem16@@PBU2@@Z  # Elem16Vec::DoInsertValue migrated from s006755c0 (verbatim, slice spelling)
 00675cc0 FourHashMaps::~FourHashMaps  # four 0x20-byte uint hash maps at +0,+0x20,+0x40,+0x60
 00675d70 ?FUN_00675D70@@YAXXZ  # FUN_00675D70 migrated from s006755c0 (verbatim, slice spelling)
 00675e80 hash-map find wrapper  # calls FUN_00555A20
