@@ -121,10 +121,98 @@ void PropWatcher::Read(void* p2) {
     fc = (int)w[0xd];
 }
 
+// ---- game-info property loader (0x7E6210) --------------------------------------------------
+// Property is SP::Property as recovered in s0041e730 (data pointer, flags at +0x10, type at +0x12).
+struct GameProperty {
+    void*          data;     // +0x00
+    unsigned       pad04[3]; // +0x04..+0x0f
+    unsigned short flags;    // +0x10
+    unsigned short type;     // +0x12
+};
+
+extern "C" float* __fastcall F_0041ea70(GameProperty* p);   // 0x0041ea70 Property::GetFloat
+extern "C" int*   __fastcall F_0041e990(GameProperty* p);   // 0x0041e990 Property::GetInt
+extern "C" bool*  __fastcall F_0041e920(GameProperty* p);   // 0x0041e920 Property::GetBool
+extern "C" void*  __cdecl    F_0067ddd0();                  // 0x0067ddd0 SP::EffectsManager
+extern PropListBase* sAppProperties;                        // 0x015fd918 SP::sAppProperties
+
+struct GameInfo {
+    float f0;        // +0x00
+    float f4;        // +0x04
+    float f8;        // +0x08
+    float fc;        // +0x0c
+    float f10;       // +0x10
+    bool  b14;       // +0x14
+    char  pad15[3];  // +0x15..+0x17
+    float f18;       // +0x18
+    int   m1c;       // +0x1c
+};
+
+struct ShaderGameInfo {
+    char  pad00[8];  // +0x00..+0x07
+    int   m08;       // +0x08
+    float m0c;       // +0x0c
+    int   m10;       // +0x10
+    int   m14;       // +0x14
+};
+
+#define ECAT2(a, b) a##b
+#define ECAT(a, b) ECAT2(a, b)
+#define EPAD ECAT(evpad, __COUNTER__)
+#define E1 virtual void EPAD();
+#define E2 E1 E1
+#define E4 E2 E2
+#define E8 E4 E4
+#define E16 E8 E8
+#define E32 E16 E16
+struct EffectsManager {
+    E32 E8
+    virtual void* GetShaderInfo();   // +0xa0
+};
+#undef ECAT2
+#undef ECAT
+#undef EPAD
+#undef E1
+#undef E2
+#undef E4
+#undef E8
+#undef E16
+#undef E32
+
 // @ 0x007E6210
 void LoadGameInfoProperties(void* data) {
-    // Reads "game info" AppProperties; incomplete (see partial.txt).
-    (void)data;
+    PropListBase* props = sAppProperties;
+    GameProperty* p;
+    GameInfo* out = (GameInfo*)data;
+    if (props) {
+        if (props->vf24((void*)0x1142595, &p) && p->type == 13)
+            out->f0 = *F_0041ea70(p);
+        if (props->vf24((void*)0x1142596, &p) && p->type == 13)
+            out->f4 = *F_0041ea70(p);
+        if (props->vf24((void*)0x1142599, &p) && p->type == 13)
+            out->f8 = *F_0041ea70(p);
+        if (props->vf24((void*)0x114259a, &p) && p->type == 13)
+            out->fc = *F_0041ea70(p);
+        if (props->vf24((void*)0x114259f, &p) && p->type == 13)
+            out->f10 = *F_0041ea70(p);
+        if (props->vf24((void*)0x114259c, &p) && p->type == 1)
+            out->b14 = *F_0041e920(p);
+        if (props->vf24((void*)0x114259d, &p) && p->type == 13)
+            out->f18 = *F_0041ea70(p);
+        if (props->vf24((void*)0x11425a2, &p) && p->type == 9)
+            out->m1c = *F_0041e990(p);
+    }
+    ShaderGameInfo* info = (ShaderGameInfo*)((EffectsManager*)F_0067ddd0())->GetShaderInfo();
+    if (props) {
+        if (props->vf24((void*)0x1142597, &p) && p->type == 9)
+            info->m08 = *F_0041e990(p);
+        if (props->vf24((void*)0x1142594, &p) && p->type == 13)
+            info->m0c = *F_0041ea70(p);
+        if (props->vf24((void*)0x11425a0, &p) && p->type == 9)
+            info->m14 = *F_0041e990(p);
+        if (props->vf24((void*)0x1142598, &p) && p->type == 9)
+            info->m10 = *F_0041e990(p);
+    }
 }
 
 // ---- PreShutdown helpers ----

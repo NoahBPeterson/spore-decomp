@@ -498,18 +498,21 @@ void* MapW::tryInsert(void* pos, void* value)
 {
     void* p = mpEnd;
     int idx = (int)((char*)pos - (char*)mpTree) >> 4;
-    if (pos == p && p != mpRoot) {
-        mpEnd = (char*)p + 0x10;
-        if (p) {
-            MapElem* d = (MapElem*)p;
-            MapElem* s = (MapElem*)value;
-            d->ka = s->ka;
-            d->kb = s->kb;
-            new (&d->ref) AutoRef(s->ref);
-        }
+    if (pos != p || p == mpRoot) {
+        ((MapY*)(void*)this)->insertPair(pos, value);
         return (char*)mpTree + idx * 0x10;
     }
-    ((MapY*)(void*)this)->insertPair(pos, value);
+    mpEnd = (char*)p + 0x10;
+    if (p) {
+        unsigned* d = (unsigned*)p;
+        const unsigned* s = (const unsigned*)value;
+        d[0] = s[0];
+        d[1] = s[1];
+        unsigned ref = s[2];
+        d[2] = ref;
+        if (ref)
+            _InterlockedExchangeAdd((volatile long*)(ref + 8), 1);
+    }
     return (char*)mpTree + idx * 0x10;
 }
 

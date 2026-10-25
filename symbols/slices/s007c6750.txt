@@ -1,4 +1,4 @@
-007c6750 ?CameraCheatExecute@@YAXHPAX@Z  # CameraCheatExecute migrated from s007c6750 (verbatim, slice spelling)
+007c6750 ?Execute@cCameraCheat@@QAEXPAX@Z  # `anonymous namespace'::cCameraCheat::Execute (console camera cheat)
 007c6b80 ?LoadControllers@cCameraManager@SP@@UAEXXZ  # SP::cCameraManager::LoadControllers migrated from s007c6750
 007c6db0 ?Shutdown@cCameraManager_s007c_6750@@QAEXXZ  # cCameraManager_s007c_6750::Shutdown migrated from s007c6750 (verbatim, slice spelling)
 007c6eb0 ?ClearControllers@cCameraManager@SP@@UAEXXZ  # SP::cCameraManager::ClearControllers migrated from s007c6750

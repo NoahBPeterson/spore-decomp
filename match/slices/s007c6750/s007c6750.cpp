@@ -160,11 +160,143 @@ struct ControllerRef {            // AutoRefCount<cICameraController>: releases 
 };
 
 // ===========================================================================
-// @ 0x007c6750  `anonymous namespace'::cCameraCheat::Execute
-void CameraCheatExecute(int self, void* args) {
-    // Console cheat: list/select cameras, set render type.
-    // Full argument handling is preserved structurally; see disassembly 0x7c6750.
-    (void)self; (void)args;
+// `anonymous namespace'::cCameraCheat::Execute
+// Console cheat: no argument prints the current camera, a number or a name
+// selects one, and the argument flags drive the manager's list/apply slots.
+struct cCameraCheat {
+    void* mpVtbl;                   // +0x00
+    void* mpUnk4;                   // +0x04 (output object)
+    u8    mPad08[8];                // +0x08
+    cCameraManager* mpManager;      // +0x10
+    void Execute(void* args);       // 0x007c6750 (thiscall, ret 4)
+};
+
+typedef int   (__thiscall* FnInt0)(void*);
+typedef void  (__thiscall* FnVoidInt)(void*, int);
+typedef char  (__thiscall* FnBoolInt)(void*, int);
+typedef void* (__thiscall* FnPtrInt)(void*, int);
+typedef void* (__thiscall* FnPtrStr)(void*, const char*);
+typedef void* (__thiscall* FnPtrV)(void*, void*);
+typedef void* (__thiscall* FnPtrVV)(void*, void*, void*);
+typedef void  (__cdecl* FnFmt)(void*, const char*, int, const char*, const char*, int);
+
+int    ArgCount(void* ctx);                                     // 0x00837F30
+char*  ArgString(void* ctx, void* out, int a, int b);           // 0x00838020
+char*  ArgNamed(void* ctx, const char* name, int a);            // 0x00838330
+char   ArgFlag(void* ctx, const char* name);                    // 0x008380B0
+void   StrCtor(void* str, const char* text, int len);           // 0x0093C5A0 (thiscall)
+int    StrCmp(const char* a, const char* b);                    // 0x013CC50C
+int    CharClass(int c);                                        // 0x013CC4CC
+void*  SP_Object();                                             // 0x0067DD10
+void   LogFree(void* text, const void* sink);                   // 0x011E0912
+void*  CameraCheatVariantPtr();                                 // 0x007c65a0
+
+// Name of the i-th controller (empty strings read as null).
+static const char* NameAt(cCameraManager* mgr, int i) {
+    const char* begin = (const char*)mgr->mControllerNames.mpBegin;
+    const char* end = (const char*)mgr->mControllerNames.mpEnd;
+    if (i < 0 || i >= (int)((end - begin) >> 4))
+        return 0;
+    const char** elem = (const char**)(begin + (i << 4));
+    if (*elem == elem[1] || *elem == 0)
+        return 0;
+    return *elem;
+}
+
+// @ 0x007c6750
+void cCameraCheat::Execute(void* args) {
+    void* ctx = args;
+    cCameraManager* mgr = mpManager;
+    if (ArgCount(ctx) == 1) {
+        // No argument: print the current camera.
+        int idx = ((FnInt0)((*(void***)mgr)[0x58 / 4]))(mgr);
+        ((FnFmt)(void*)0x00841000)(mpUnk4, (const char*)0x0141067C, 0, NameAt(mgr, idx), 0, 0);
+        return;
+    }
+
+    char* arg;
+    int   kind[2] = { 0, 0 };
+    arg = ArgString(ctx, kind, 0, 1);
+    if (kind[0] != 1) {
+        arg = ArgNamed(ctx, (const char*)0x013F2CE4, 1);
+        if (arg == 0)
+            goto common;
+    }
+
+    if (CharClass((u8)*arg) != 0) {
+        // A leading letter: hand the whole string to the manager's command slot.
+        void* res = ((FnPtrStr)((*(void***)mpUnk4)[0xa0 / 4]))(mpUnk4, arg);
+        ((FnVoidInt)((*(void***)mgr)[0x34 / 4]))(mgr, (int)res);
+    } else {
+        CheatStr name;
+        StrCtor(&name, arg, -1);
+        int count = ((FnInt0)((*(void***)mgr)[0x48 / 4]))(mgr);
+        int i;
+        for (i = 0; i < count; ++i) {
+            const char* nm = NameAt(mgr, i);
+            if (nm != 0 && StrCmp(nm, name.mpBegin) == 0)
+                break;
+        }
+        if (i == count) {
+            char msg[0x10];
+            FUN_0052df30(msg, (const char*)0x01410664, name.mpBegin);
+            LogFree(msg, (const void*)0x014F9174);
+        }
+        ((FnVoidInt)((*(void***)mgr)[0x54 / 4]))(mgr, i);
+    }
+
+common:
+    if (ArgFlag(ctx, (const char*)0x01409070)) {
+        int count = ((FnInt0)((*(void***)mgr)[0x48 / 4]))(mgr);
+        for (int i = 0; i < count; ++i) {
+            const char* nm = NameAt(mgr, i);
+            const char* marker = (i == ((FnInt0)((*(void***)mgr)[0x58 / 4]))(mgr))
+                                     ? (const char*)0x01401B58
+                                     : (const char*)0x013ED024;
+            void* ctrl = ((FnPtrInt)((*(void***)mgr)[0x4c / 4]))(mgr, i);
+            int value = 0;
+            if (ctrl != 0) {
+                void* sub = ((FnPtrInt)((*(void***)ctrl)[0x4c / 4]))(ctrl, 0);
+                if (sub != 0 && ((FnBoolInt)((*(void***)sub)[0x1c / 4]))(sub, 0x00B2CCCA)) {
+                    void* var = ((FnPtrInt)((*(void***)sub)[0x28 / 4]))(sub, 0x00B2CCCA);
+                    unsigned short type = *(unsigned short*)((char*)var + 0x12);
+                    void* decoded;
+                    if (type == 0x13 || type == 0x10) {
+                        if ((*(u8*)((char*)var + 0x10) & 0x30) != 0)
+                            decoded = *(void**)var;
+                        else
+                            decoded = (type != 0) ? var : 0;
+                    } else {
+                        decoded = CameraCheatVariantPtr();
+                    }
+                    value = *(int*)decoded;
+                }
+            }
+            if (nm != 0)
+                ((FnFmt)(void*)0x00841000)(mpUnk4, (const char*)0x01410648, i << 4, nm, marker, value);
+            else
+                ((FnFmt)(void*)0x00841000)(
+                    mpUnk4, (const char*)0x01410628, 0,
+                    (const char*)((FnPtrInt)((*(void***)mgr)[0x50 / 4]))(mgr, i), marker, value);
+        }
+    }
+
+    char* apply = ArgNamed(ctx, (const char*)0x01410624, 1);
+    if (apply != 0) {
+        float* src = (float*)((FnPtrStr)((*(void***)mpUnk4)[0xb4 / 4]))(mpUnk4, *(char**)apply);
+        float v[4];
+        v[0] = src[0]; v[1] = src[1]; v[2] = src[2]; v[3] = src[3];
+        void* obj = SP_Object();
+        void* out = ((FnPtrV)((*(void***)obj)[0x58 / 4]))(obj, v);
+        FUN_007c3c20(out);
+    }
+    char* reset = ArgNamed(ctx, (const char*)0x01410618, 1);
+    if (reset != 0) {
+        void* res = ((FnPtrStr)((*(void***)mpUnk4)[0x9c / 4]))(mpUnk4, *(char**)reset);
+        void* obj = SP_Object();
+        void* out = ((FnPtrVV)((*(void***)obj)[0x58 / 4]))(obj, 0, res);
+        FUN_007c3ce0(out, res);
+    }
 }
 
 // ===========================================================================

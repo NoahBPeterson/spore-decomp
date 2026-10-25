@@ -4,3 +4,7 @@
 007ca060  151 eastl vector<pair> operator=: call conventions fixed (Reserve/DestroyRange are thiscall from the vector; Pair16 must be 16 bytes; size compares are unsigned) [equiv: WEAK, 861 valid inputs, 0 mismatches, 41.0% coverage; --src identical]
 007ca150  91  GetOptionIDs: prologue register allocation (this/out) and push_back load order differ
 007ca1c0  1474 cConfigManager::Initialize complete (parser setup, Options.txt, per-option property lists); block layout, register allocation and frame slots differ
+007c99e0  367/422  Vec4::InsertOne complete (EASTL intrusive-ptr insert: construct-at-end + copy_backward 0x42f5b0 + addref/release; grow = EA_New + memcpy prefix/suffix). [equiv: UNSUPPORTED, 0/400 valid inputs; fault(read) harness artifact]
+007c9bc0  431/501  Vec4::InsertN complete (free-space check, in-place shift vs uninitialized-fill + displace 0x4e8ee0, grow = EA_New + memcpy + UninitFill 0x42ed50). [equiv: WEAK, 177 valid, 15.6% coverage]
+007c9dc0  415/472  AutoRefVec::InsertOne complete (0x10-stride intrusive ref insert: move_backward 0x7cde80, addref/release swap; grow = UninitMove 0x7cd9d0 + Destroy 0x7cddf0). [equiv: WEAK, 88 valid, 57.8% coverage]
+007ca8e0  88/100  MapVec::Destroy complete (loop dtor 0x7cef60 at 0x18 stride, free begin when != inlineCap; original adds MSVC EH unwind frame). [equiv: PASS, 247 valid, 86.1% coverage]

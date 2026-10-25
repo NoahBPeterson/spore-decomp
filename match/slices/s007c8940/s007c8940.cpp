@@ -2,6 +2,9 @@
 // Module flags: /O2 /MD /Gy /EHsc /TP
 #include "types.h"
 
+extern "C" long __cdecl _InterlockedExchange(volatile long*, long);
+#pragma intrinsic(_InterlockedExchange)
+
 // ---------------------------------------------------------------- masked externs
 void*    __cdecl PropertyManager();     // 0x0067de30
 void*    __cdecl CheatManager();        // 0x0067de20
@@ -22,9 +25,14 @@ typedef void  (__thiscall *VFn1)(void*, void*);
 typedef int   (__thiscall *VFnI1)(void*, void*);
 typedef int   (__thiscall *VFnI2)(void*, void*, void*);
 typedef bool  (__thiscall *VFnB1)(void*, void*);
+typedef bool  (__thiscall *VFnB2)(void*, void*, void*);
 typedef bool  (__thiscall *VFnIP)(void*, const char*, void*);
 typedef void  (__thiscall *VFn2P)(void*, void*, void*);
 typedef float (__thiscall *VFnF1)(void*, void*);
+typedef void  (__thiscall *VFn4)(void*, void*, void*, void*, void*);
+typedef char  (__thiscall *VFnC3)(void*, void*, void*, void*);
+typedef void* (__thiscall *VFnP1)(void*, void*);
+typedef void* (__thiscall *VFnP0)(void*);
 #define VSLOT(obj, off) (*(void***)(obj))[(off) / 4]
 
 inline void* operator new(size_t size, const char* n, int f, unsigned d, const char* fi, int l)
@@ -63,8 +71,53 @@ struct cOption {
     uint32_t cur;
     uint8_t* resBegin;
     uint8_t* resEnd;
-    char     pad[0xac - 0x14];
+    char     pad14[0x34 - 0x14];
+    void*    mBehaviors;      // +0x34 (array of 0x18-byte behavior headers)
+    char     pad38[0xac - 0x38];
 };
+
+// 0x34 array element: pointer pair to 0x10-byte behavior entries.
+struct OptionBehavior { int* elems; int* elemsEnd; int pad8[4]; };
+struct BehaviorElem { int key; int value; int arg; int pad; };
+
+// 0x40 behavior message allocated and posted by ApplyOption.
+struct BehaviorMsg {
+    void* vt;        // +0x00
+    long  refs;      // +0x04
+    void* field8;    // +0x08
+    void* fieldC;    // +0x0c
+    void* field10;   // +0x10
+    void* field14;   // +0x14
+    void* field18;   // +0x18
+    char  pad1c[0x30 - 0x1c];
+    void* field30;   // +0x30
+    char  pad34[0x38 - 0x34];
+    void* field38;   // +0x38
+};
+
+// EA::Variant: 16-byte payload, flags at +0x10, type id at +0x12.
+struct Variant {
+    uint32_t data[4];
+    uint16_t flags;
+    uint16_t type;
+    void __thiscall Clear(int full);                 // 0x0093db80
+    Variant* __thiscall SetUInt(const unsigned* v);  // 0x00427fd0
+    Variant* __thiscall AssignKey(const void* key);  // 0x00422f40
+};
+struct ResourceKey { uint32_t a, b, c; };
+
+// eastl::string (empty-string sentinel is a global).
+struct EString {
+    char* begin;
+    char* end;
+    char* cap;
+    void __thiscall assign(const char* first, const char* last);  // 0x00454cb0
+    void __thiscall append(const char* first, const char* last);  // 0x00455d60
+};
+extern char g_emptyString16[];      // 0x01667bac
+
+extern char g_vt_13eb90c[];         // 0x013eb90c
+extern char g_vt_13eb844[];         // 0x013eb844
 
 struct cConfigManager {
     char pad00[0x64];
@@ -73,6 +126,8 @@ struct cConfigManager {
     char pad6c[0x80 - 0x6c];
     Str16* mStrings;          // +0x80
     Str16* mStringsEnd;       // +0x84
+    char pad88[0xb0 - 0x88];
+    void*  mNotifier;         // +0xb0 (object whose vt[0x30] is applied)
 
     void ApplyOption(cOption* opt);                  // 0x007c8940
     void SetOption(int id, unsigned setting);        // 0x007c94f0
@@ -101,6 +156,8 @@ struct cSetOptionCommand    : CCmd { void Execute(cArguments*); };
 // ---------------------------------------------------------------- helpers
 int __cdecl GetPropID(const char* name);              // 0x007c8bb0
 void* __cdecl CopyStrings(void* first, void* last, void* dest); // 0x007c8b70
+void __cdecl SPKeyFromName(void* outKey, const char* name, int a, int b);       // 0x0068d5a0
+void* __cdecl CopyConstructAutoRef(void* out, void* first, void* last, void* dest, void* tag); // 0x007c7d70
 
 // @ 0x007c8bb0
 int __cdecl GetPropID(const char* name)
@@ -177,8 +234,14 @@ void cConfigManager::SetOption(int id, unsigned setting)
         }
         if ((unsigned)((p->resEnd - p->resBegin) >> 2) > setting) {
             p->cur = setting;
-            if (g_sAppPreferences != 0)
-                ((void (__thiscall*)(void*, int, unsigned))0)(g_sAppPreferences, id, setting);
+            if (g_sAppPreferences != 0) {
+                Variant v;
+                v.flags = 0; v.type = 0;
+                v.SetUInt(&setting);
+                ((VFn2P)VSLOT(g_sAppPreferences, 0x14))(g_sAppPreferences, (void*)id, &v);
+                if (v.flags & 4)
+                    v.Clear(0);
+            }
             ApplyOption(p);
         }
     }
@@ -191,8 +254,13 @@ void cConfigManager::ResetToDefaults()
     if (p != mOptionsEnd) {
         do {
             p->cur = p->def;
-            if (g_sAppPreferences != 0)
-                ((void (__thiscall*)(void*, int, unsigned))0)(g_sAppPreferences, p->id, p->def);
+            if (g_sAppPreferences != 0) {
+                Variant v;
+                v.flags = 0; v.type = 10; v.data[0] = p->def;
+                ((VFn2P)VSLOT(g_sAppPreferences, 0x14))(g_sAppPreferences, (void*)p->id, &v);
+                if (v.flags & 4)
+                    v.Clear(0);
+            }
             ApplyOption(p);
             p++;
         } while (p != mOptionsEnd);
@@ -205,8 +273,23 @@ void cConfigManager::ApplyAllOptions()
     cOption* p = mOptionsBegin;
     if (p != mOptionsEnd) {
         do {
-            if (g_sAppPreferences != 0)
-                ((void (__thiscall*)(void*, int, unsigned))0)(g_sAppPreferences, p->id, p->def);
+            if (g_sAppPreferences != 0) {
+                Variant* got = 0;
+                if (((VFnB2)VSLOT(g_sAppPreferences, 0x24))(g_sAppPreferences, (void*)p->id, &got)
+                    && got->type == 10) {
+                    if (got->flags & 0x30)
+                        p->cur = *(int*)got->data[0];
+                    else
+                        p->cur = (int)got->data[0];
+                } else {
+                    p->cur = p->def;
+                    Variant v;
+                    v.flags = 0; v.type = 10; v.data[0] = p->def;
+                    ((VFn2P)VSLOT(g_sAppPreferences, 0x14))(g_sAppPreferences, (void*)p->id, &v);
+                    if (v.flags & 4)
+                        v.Clear(0);
+                }
+            }
             ApplyOption(p);
             p++;
         } while (p != mOptionsEnd);
@@ -228,7 +311,44 @@ bool cConfigManager::GetConfigString(unsigned i, Str16* out)
 // @ 0x007c8940
 void cConfigManager::ApplyOption(cOption* opt)
 {
-    (void)opt;
+    if (opt->cur < (unsigned)((opt->resEnd - opt->resBegin) >> 2)) {
+        int value = ((int*)opt->resBegin)[opt->cur];
+        if (value != 0) {
+            void* notifier = mNotifier;
+            ((VFn1)VSLOT(notifier, 0x30))(notifier, (void*)value);
+        }
+        OptionBehavior* ob = (OptionBehavior*)((char*)opt->mBehaviors + opt->cur * 0x18);
+        int count = (int)((ob->elemsEnd - ob->elems) >> 4);
+        if (count > 0) {
+            for (int i = 0; i < count; i++) {
+                BehaviorElem* e = (BehaviorElem*)ob->elems + i;
+                Variant* out = 0;
+                void* pm = PropertyManager();
+                char ok = ((VFnC3)VSLOT(pm, 0x2c))(pm, (void*)e->key,
+                                                   (void*)e->value, &out);
+                if (ok) {
+                    ((VFn1)VSLOT(out, 0x30))(out, (void*)e->arg);
+                    BehaviorMsg* msg = (BehaviorMsg*)operator new(0x40, "App", 0, 0, 0, 0);
+                    if (msg) {
+                        msg->field30 = (void*)0xf62def;
+                        msg->vt = g_vt_13eb90c;
+                        _InterlockedExchange(&msg->refs, 0);
+                        msg->vt = g_vt_13eb844;
+                        msg->field38 = 0;
+                        ((VFn0)VSLOT(msg, 4))(msg);
+                    }
+                    msg->field8 = (void*)0xb1b104;
+                    msg->field10 = (void*)e->value;
+                    msg->field18 = (void*)e->key;
+                    void* ms = MessageServer();
+                    ((VFn4)VSLOT(ms, 0x18))(ms, (void*)0xf62ade, msg, 0, 0);
+                    ((VFn0)VSLOT(msg, 8))(msg);
+                }
+                if (out)
+                    ((VFn0)VSLOT(out, 4))(out);
+            }
+        }
+    }
 }
 
 // ---------------------------------------------------------------- remaining commands
@@ -252,10 +372,10 @@ struct StateView {
 struct ArgList { int count; void* a[4]; };
 
 struct cAlertCommand : CCmd { void Execute(cArguments*); };
-struct cOptionCheat  : CCmd { char pad10[4]; cConfigManager* mManager; void Execute(cArguments*); };
+struct cOptionCheat  : CCmd { cConfigManager* mManager; void Execute(cArguments*); };
 struct cCardCommand  : CCmd { void Execute(cArguments*); };
 struct cUnknownCmd   : CCmd { void Execute(cArguments*); };
-struct cInitCommand  : CCmd { char pad10[4]; cConfigManager* mManager; void Execute(cArguments*); void Init(); };
+struct cInitCommand  : CCmd { void* mParser2; char pad14[0xc]; const char* mName; void Execute(cArguments*); void Init(const char* prefix); };
 
 // @ 0x007c8f70
 void cCardCommand::Execute(cArguments* args)
@@ -349,29 +469,70 @@ void cOptionCheat::Execute(cArguments* args)
     if (list.count >= 1) {
         int id = GetPropID((const char*)list.a[0]);
         if (list.count == 1) {
-            int def = ((VFnI1)VSLOT(mManager, 0x30))(mManager, (void*)id);
-            int cur = ((VFnI2)VSLOT(mManager, 0x34))(mManager, (void*)id, (void*)def);
-            Output(mParser, "%s: default: %d, current: %d\n", list.a[0], def, cur);
+            Output(mParser, "%s: default: %d, current: %d\n", list.a[0],
+                   ((VFnI1)VSLOT(mManager, 0x34))(mManager, (void*)id),
+                   ((VFnI1)VSLOT(mManager, 0x30))(mManager, (void*)id));
         } else {
             int v = ((VFnI1)VSLOT(mParser, 0x9c))(mParser, list.a[1]);
             ((void (__thiscall*)(void*, int, int))VSLOT(mManager, 0x2c))(mManager, id, v);
         }
     }
     if (args->NumArguments() < 2) {
-        // list all options
+        int* vb = 0; int* ve = 0; int* vc = 0;
+        ((void (__thiscall*)(void*, void*))VSLOT(mManager, 0x38))(mManager, &vb);
+        int n = (int)((char*)ve - (char*)vb) >> 2;
+        for (int i = 0; i < n; i++) {
+            void* pm = PropertyManager();
+            void* name = ((VFnP1)VSLOT(pm, 0x1c))(pm, (void*)vb[i]);
+            int id = vb[i];
+            if (name == 0) {
+                Output(mParser, "0x%08x   default: %2d, current: %2d\n", (void*)id,
+                       ((VFnI1)VSLOT(mManager, 0x34))(mManager, (void*)id),
+                       ((VFnI1)VSLOT(mManager, 0x30))(mManager, (void*)id));
+            } else {
+                Output(mParser, "%-40.40s: default: %2d, current: %2d\n", name,
+                       ((VFnI1)VSLOT(mManager, 0x34))(mManager, (void*)id),
+                       ((VFnI1)VSLOT(mManager, 0x30))(mManager, (void*)id));
+            }
+        }
+        if (vb && vb[-1] != 0)
+            EA_Free(vb);
     }
 }
 
 // @ 0x007c8d20
 void VariantPropertyCommand_Execute(cArguments* args)
 {
-    ArgList list;
-    args->MainArguments(&list, 2, 0);
-    (void)list;
+    void** a = (void**)args->MainArguments(2);
+    ResourceKey key;
+    key.a = 0; key.b = 0; key.c = 0;
+    SPKeyFromName(&key, (const char*)a[1], 0, 0);
+    Variant var;
+    var.flags = 0; var.type = 0;
+    var.AssignKey(&key);
+    int id = GetPropID((const char*)a[0]);
+    ((VFn2P)VSLOT(g_sAppProperties, 0x14))(g_sAppProperties, (void*)id, &var);
+    if (var.flags & 4)
+        var.Clear(0);
 }
 
-// @ 0x007c8af0
 void* __cdecl InsertAutoRef(void* out, void* src);  // external original; stub body omitted in this slice
+
+struct AutoRefVec {
+    char* begin; char* end; char* cap;
+    void __thiscall Resize(int n, void* alloc);   // 0x007c7a40
+    void* InsertAutoRef(void* src);
+};
+// @ 0x007c8af0
+void* AutoRefVec::InsertAutoRef(void* src)
+{
+    int* s = (int*)src;
+    Resize((int)((char*)s[1] - (char*)s[0]) >> 4, s + 3);
+    void* tmp = 0;
+    CopyConstructAutoRef(&tmp, (void*)s[0], (void*)s[1], begin, src);
+    end = (char*)tmp;
+    return this;
+}
 
 // @ 0x007c97a0
 void* __cdecl UninitCopyAutoRef2(void* out, char* first, char* last, char* dest)
@@ -405,15 +566,60 @@ void __cdecl FillAutoRef(char* first, unsigned n, char* src)
 }
 
 // @ 0x007c9320
-void cInitCommand::Init()
+void cInitCommand::Init(const char* prefix)
 {
-    if (mManager == 0) {
+    if (mState == 0) {
+        void* oldFile = mState;
         void* fp = CreateFileParser();
-        ((void (__thiscall*)(void*, void*))VSLOT(mManager, 0x8c))(mManager, fp);
+        if (fp != oldFile) {
+            if (fp)
+                ((VFn0)VSLOT(fp, 0))(fp);
+            mState = fp;
+            if (oldFile)
+                ((VFn0)VSLOT(oldFile, 4))(oldFile);
+        }
+        ((VFn0)VSLOT(mState, 8))(mState);
+        void* oldParser = mParser2;
+        void* p = CreateParser();
+        if (p != oldParser) {
+            if (p)
+                ((VFn0)VSLOT(p, 0))(p);
+            mParser2 = p;
+            if (oldParser)
+                ((VFn0)VSLOT(oldParser, 4))(oldParser);
+        }
+        ((VFn1)VSLOT(mState, 0x10))(mState, mParser2);
+        ((void (__thiscall*)(void*, int, int))VSLOT(mParser2, 0x24))(mParser2, 0, 0);
+        ((VFn1)VSLOT(mParser2, 0x10))(mParser2, (char*)this + 0x20);
+        void* cm = CheatManager();
+        void* obj = ((VFnP0)VSLOT(cm, 0x38))(cm);
+        void* res = ((VFnP0)VSLOT(obj, 0xc4))(obj);
+        ((VFn1)((void***)mParser2)[0xbc / 4])(mParser2, res);
+        RegisterConfigScriptCommands(mParser2);
     }
+    ((VFn0)VSLOT(mState, 0x18))(mState);
+
+    EString s;
+    s.begin = g_emptyString16;
+    s.end = g_emptyString16;
+    s.cap = g_emptyString16 + 1;
+    const char* e = prefix;
+    while (*e) ++e;
+    s.assign(prefix, e);
+    s.append("Options.txt", "Options.txt" + 11);
+    ((VFn2P)VSLOT(mState, 0x1c))(mState, s.begin, (void*)4);
+
+    e = prefix;
+    while (*e) ++e;
+    s.assign(prefix, e);
+    s.append("ConfigManager.txt", "ConfigManager.txt" + 17);
+    ((VFn2P)VSLOT(mState, 0x1c))(mState, s.begin, (void*)5);
+
+    if (s.cap - s.begin > 1 && s.begin)
+        EA_Free(s.begin);
 }
 
 void cInitCommand::Execute(cArguments*)
 {
-    Init();
+    Init(0);
 }
