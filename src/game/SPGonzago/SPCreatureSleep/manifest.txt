@@ -1,0 +1,2 @@
+# source  symbol  va  flags
+../src/game/SPGonzago/SPCreatureSleep.cpp  ?SLEEP_Deactivate@SP@@YAXPAVcSPCreatureBase_s00d7_0080@1@HHHHPAH@Z  00d70560  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

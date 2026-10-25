@@ -1,0 +1,3 @@
+# va  diff-bytes  reason (compiled /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-)
+00d705b0 40 complete SP::FUN_00d705b0; size 55 vs 56; only diff is home->m164 load: orig `add eax,0x164; mov eax,[eax]` vs folded `mov eax,[eax+0x164]`; equiv PASS
+00d705f0 697 complete SP::SLEEP_Tick; size 940 vs 1210; same calls/slots, switch layout / stack frame / float materialization differ substantially; equiv WEAK (no mismatch)
