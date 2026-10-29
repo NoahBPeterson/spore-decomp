@@ -812,10 +812,26 @@ def _equiv_verdicts():
     return out
 
 
+UNPLACED = "Not placed in a source file yet"
+_COMPONENTS = None
+
+
+def _component_of(a):
+    """symbols/components.json range component of a (Havok, RenderWare, ...), else "Spore code"."""
+    global _COMPONENTS
+    if _COMPONENTS is None:
+        _COMPONENTS = [(n, [(int(lo, 16), int(hi, 16)) for lo, hi in r])
+                       for n, r in json.load(open(W("symbols", "components.json"))).items()
+                       if not n.startswith("_") and not isinstance(r, dict)]
+    return next((n for n, rs in _COMPONENTS if any(lo <= a < hi for lo, hi in rs)), "Spore code")
+
+
 def _tree_rows():
     """(group, box, va, bytes, category) for every game function. Group = top directory of the dev build's object
     (work/migrate/modmap.json), box = the object. A function the module map does not assign joins the object on both
-    sides of its gap when there is one; the rest are boxed by 1 MB of address under "(no module)"."""
+    sides of its gap when there is one; the rest go under "Not placed in a source file yet", boxed by kind (globals'
+    initializers and compiler stubs) or component (Havok, RenderWare, Spore code). Those cannot be migrated into
+    src/game until the module map places them."""
     import bisect
     try:
         MM = json.load(open(W("work", "migrate", "modmap.json")))
@@ -837,9 +853,9 @@ def _tree_rows():
             group = "EA sound library" if top in SOUND_DIRS else top
             box = m.rsplit("/", 1)[-1].replace(".obj", "")
         elif a in KG:
-            group, box = "(no module)", "initializers, stubs"
+            group, box = UNPLACED, "globals' initializers, compiler stubs"
         else:
-            group, box = "(no module)", "0x%03xxxxxx" % (a >> 20)
+            group, box = UNPLACED, _component_of(a)
         if a in byte_exact:
             cat = "byte-exact"
         elif a in equiv:
@@ -1031,8 +1047,8 @@ def treemap(path):
     fig.suptitle("Spore (SporeApp.exe): %s game functions, %.2f MB - area = code bytes, colour = verdict"
                  % (human(tot_n), tot_b / 2**20), x=0.012, ha="left", fontsize=12, color=INK)
     fig.text(0.012, 0.945, "Group (top directory of the dev build) -> object file -> one block per verdict; area = "
-             "function size in bytes. Objects come from work/migrate/modmap.json; code it does not place is boxed by "
-             "address under \"(no module)\".\nThird-party libraries (OpenSSL, libpng, zlib, libjpeg, CRT) are excluded, "
+             "function size in bytes. Objects come from work/migrate/modmap.json; functions it does "
+             "not place in an object (so not migratable yet) are grouped by kind.\nThird-party libraries (OpenSSL, libpng, zlib, libjpeg, CRT) are excluded, "
              "as in docs/STATUS.md. Equivalence verdicts are the ones recorded in the nonmatching.txt rows (the "
              "harness before the 2026-10-29 port).", fontsize=8.2, color=MUTED, va="top")
     fig.savefig(path, facecolor=SURFACE)
