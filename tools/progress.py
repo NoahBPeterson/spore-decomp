@@ -8,6 +8,8 @@
                                                        # --plot runs, kept in docs/progress_history.json; needs matplotlib)
                                                        # below it, one bar per module (docs/modules.md) split into byte-exact /
                                                        # equivalent / partial / no source; per-module shares go into the history too
+  .venv/bin/python tools/progress.py --treemap [out.png]  # one box per dev-build object, split by verdict, area = bytes
+                                                          # (default work/treemap.png)
   .venv/bin/python tools/progress.py --no-refresh # reuse docs/STATUS.md-derived cache? (still recomputes)
 
 Coverage is computed with the exact logic of tools/status.py (reused via runpy), so numbers
@@ -781,6 +783,263 @@ def pctb_f(items):
     return 100.0 * sum(funcs[a]["size"] for a in items) / GB
 
 
+
+# ---------------------------------------------------------------- treemap
+# Ported from mountandblade-decomp's tools/progress.py (2026-10-29). Okabe-Ito colours (colour-blind safe), one hue per
+# verdict. Equivalence verdicts are the ones recorded in the nonmatching.txt rows (the pre-2026-10-29 harness).
+TREE_CATS = (("byte-exact", "Byte-exact", "#0072B2"),                                  # blue
+             ("pass", "Equivalent, test PASS", "#009E73"),                             # bluish green
+             ("weak", "Equivalent, test WEAK (part of the function never ran)", "#E69F00"),   # orange
+             ("fail", "Equivalent, test FAIL (a mismatch)", "#D55E00"),                # vermillion
+             ("unsupported", "Equivalent, untestable by the harness", "#CC79A7"),      # reddish purple
+             ("untested", "Equivalent, no test verdict recorded", "#F0E442"),          # yellow
+             ("partial", "Partial source", "#999999"),                                 # the only grey
+             ("nosource", "No source yet", "#FFFFFF"))
+_TREE_VERDICT = re.compile(r"\b(PASS|WEAK|FAIL|UNSUPPORTED)\b")
+
+
+def _equiv_verdicts():
+    """VA -> PASS / WEAK / FAIL / UNSUPPORTED from the nonmatching.txt rows; a migrated module's row wins."""
+    out = {}
+    for nm in sorted(glob.glob(W("match", "slices", "*", "nonmatching.txt"))) + \
+            sorted(glob.glob(W("src", "game", "**", "nonmatching.txt"), recursive=True)):
+        for line in open(nm, errors="replace"):
+            p = line.split(None, 2)
+            if len(p) < 2 or not re.fullmatch(r"[0-9a-fA-F]{6,8}", p[0]):
+                continue
+            v = _TREE_VERDICT.search(p[2] if len(p) > 2 else "")
+            out[int(p[0], 16)] = v.group(1) if v else None
+    return out
+
+
+def _tree_rows():
+    """(group, box, va, bytes, category) for every game function. Group = top directory of the dev build's object
+    (work/migrate/modmap.json), box = the object. A function the module map does not assign joins the object on both
+    sides of its gap when there is one; the rest are boxed by 1 MB of address under "(no module)"."""
+    import bisect
+    try:
+        MM = json.load(open(W("work", "migrate", "modmap.json")))
+    except (OSError, ValueError):
+        MM = {"functions": {}, "gaps": []}
+    mod = {int(v, 16): (m or {}).get("module") for v, m in MM["functions"].items()}
+    gaps = sorted((int(g["lo"], 16), int(g["hi"], 16), g.get("before"), g.get("after")) for g in MM.get("gaps", []))
+    los = [g[0] for g in gaps]
+    verd = _equiv_verdicts()
+    rows = []
+    for a in sorted(game):
+        m = mod.get(a)
+        if not m and a not in KG:
+            i = bisect.bisect_right(los, a) - 1
+            if i >= 0 and gaps[i][0] <= a <= gaps[i][1] and gaps[i][2] and gaps[i][2] == gaps[i][3]:
+                m = gaps[i][2]
+        if m:
+            top = m.split("/")[0] if "/" in m else m
+            group = "EA sound library" if top in SOUND_DIRS else top
+            box = m.rsplit("/", 1)[-1].replace(".obj", "")
+        elif a in KG:
+            group, box = "(no module)", "initializers, stubs"
+        else:
+            group, box = "(no module)", "0x%03xxxxxx" % (a >> 20)
+        if a in byte_exact:
+            cat = "byte-exact"
+        elif a in equiv:
+            cat = {"PASS": "pass", "WEAK": "weak", "FAIL": "fail", "UNSUPPORTED": "unsupported"}.get(verd.get(a), "untested")
+        elif a in part:
+            cat = "partial"
+        else:
+            cat = "nosource"
+        rows.append((group, box, a, funcs[a]["size"] or 1, cat))
+    return rows
+
+
+def _worst(row, side):
+    s = sum(v for _, v in row)
+    mx = max(v for _, v in row)
+    mn = min(v for _, v in row)
+    if s <= 0 or mn <= 0:
+        return float("inf")
+    return max(side * side * mx / (s * s), (s * s) / (side * side * mn))
+
+
+def squarify(items, x, y, w, h):
+    """Squarified treemap: [(key, weight)] -> [(key, (x, y, w, h))], areas proportional to weight."""
+    items = sorted(((k, float(v)) for k, v in items if v > 0), key=lambda kv: -kv[1])
+    tot = sum(v for _, v in items)
+    if not tot or w <= 0 or h <= 0:
+        return []
+    items = [(k, v * w * h / tot) for k, v in items]
+    out, i = [], 0
+    while i < len(items):
+        side = min(w, h)
+        row, j = [items[i]], i + 1
+        while j < len(items) and _worst(row, side) >= _worst(row + [items[j]], side):
+            row.append(items[j])
+            j += 1
+        rsum = sum(v for _, v in row)
+        if w >= h:                      # shorter side is the height: the row is a column of full height
+            rw = rsum / h
+            cy = y
+            for k, v in row:
+                rh = v / rw if rw else 0.0
+                out.append((k, (x, cy, rw, rh)))
+                cy += rh
+            x, w = x + rw, w - rw
+        else:                           # shorter side is the width: the row is a band of full width
+            rh = rsum / w
+            cx = x
+            for k, v in row:
+                rw = v / rh if rh else 0.0
+                out.append((k, (cx, y, rw, rh)))
+                cx += rw
+            y, h = y + rh, h - rh
+        i = j
+    return out
+
+
+def treemap(path):
+    """Treemap of every game function: group -> dev-build object -> verdict, area = code bytes. Inside an object the
+    functions are drawn as one block per verdict (88k single functions are too small to see). Object labels are
+    measured and kept only where they fit (horizontal first, then rotated, then smaller), so none overlap."""
+    import matplotlib
+    matplotlib.use("Agg")
+    import matplotlib.pyplot as plt
+    from matplotlib.collections import PatchCollection
+    from matplotlib.patches import Patch, Rectangle
+    INK, MUTED, SURFACE = "#0b0b0b", "#52514e", "#fcfcfb"
+    rows = _tree_rows()
+    colour = dict((k, c) for k, _l, c in TREE_CATS)
+    label = dict((k, l) for k, l, _c in TREE_CATS)
+    order = [k for k, _l, _c in TREE_CATS]
+    counts = collections.Counter(r[4] for r in rows)
+    size = collections.Counter()
+    boxes = collections.defaultdict(collections.Counter)    # (group, box) -> category -> bytes
+    gsz = collections.Counter()
+    for g, b, _a, n, cat in rows:
+        size[cat] += n
+        boxes[(g, b)][cat] += n
+        gsz[g] += n
+    tot_b, tot_n = sum(size.values()) or 1, len(rows) or 1
+    W_, H_ = 141.0, 100.0
+
+    fig, ax = plt.subplots(figsize=(16.0, 11.2), dpi=150)
+    fig.patch.set_facecolor(SURFACE)
+    ax.set_facecolor(SURFACE)
+    ax.set_xlim(0, W_)
+    ax.set_ylim(0, H_)
+    ax.set_xticks([])
+    ax.set_yticks([])
+    for sp in ax.spines.values():
+        sp.set_visible(False)
+    ax.set_position([0.012, 0.13, 0.976, 0.745])
+
+    FS = 6.4
+    cal = ax.text(0, 0, ("SPGonzago_0123456789_" * 4), fontsize=FS, color=INK)
+    fig.canvas.draw()
+    bb = cal.get_window_extent(fig.canvas.get_renderer())
+    (cx0, cy0), (cx1, cy1) = ax.transData.inverted().transform([[bb.x0, bb.y0], [bb.x1, bb.y1]])
+    line_h = abs(cy1 - cy0)
+    cal.remove()
+
+    fills, fcol, frames = [], [], []
+    labels = []
+    for g, (gx, gy, gw, gh) in squarify(list(gsz.items()), 0, 0, W_, H_):
+        gx, gy, gw, gh = gx + 0.5, gy + 0.5, gw - 1.0, gh - 1.0
+        if gw <= 1 or gh <= 1:
+            continue
+        ax.add_patch(Rectangle((gx, gy), gw, gh, fill=False, lw=1.5, ec=INK, zorder=5))
+        if gw > 6 and gh > 2.5:
+            fs_g = 10.5 if gw > 14 else 7
+            gl = g if len(g) * fs_g * 0.105 < gw - 0.8 else g[:max(1, int((gw - 0.8) / (fs_g * 0.105)) - 1)] + "…"
+            ax.text(gx + 0.4, gy + gh - 0.15, gl, ha="left", va="top", fontsize=fs_g, color=INK,
+                    weight="bold", zorder=7, bbox=dict(boxstyle="square,pad=0.1", fc=SURFACE, ec="none"))
+        strip = line_h + 0.75 if gw > 6 and gh > 2.5 else 0.1
+        mine = {b: c for (gg, b), c in boxes.items() if gg == g}
+        for b, (fx, fy, fw, fh) in squarify([(b, sum(c.values())) for b, c in mine.items()],
+                                            gx + 0.35, gy + 0.35, gw - 0.7, gh - strip - 0.35):
+            fx, fy, fw, fh = fx + 0.06, fy + 0.06, fw - 0.12, fh - 0.12
+            if fw <= 0 or fh <= 0:
+                continue
+            frames.append(Rectangle((fx, fy), fw, fh))
+            # verdict blocks in a fixed order (exact first), so the mix reads the same way in every box
+            cx, cy, cw, ch = fx, fy, fw, fh
+            cats = [(k, mine[b][k]) for k in order if mine[b][k]]
+            tot = float(sum(v for _, v in cats))
+            for k, v in cats:
+                if cw >= ch:
+                    d = cw * v / tot
+                    fills.append(Rectangle((cx, cy), d, ch)); cx += d; cw -= d
+                else:
+                    d = ch * v / tot
+                    fills.append(Rectangle((cx, cy + ch - d), cw, d)); ch -= d
+                fcol.append(colour[k])
+                tot -= v
+            if fw > 1.2 and fh > 1.0:
+                t = ax.text(fx + 0.2, fy + fh - 0.2, b, ha="left", va="top", fontsize=FS, color=INK, zorder=6,
+                            bbox=dict(boxstyle="square,pad=0.1", fc=SURFACE, ec="none", alpha=0.85))
+                labels.append((t, (fx, fy, fw, fh), b))
+    ax.add_collection(PatchCollection(fills, facecolors=fcol, edgecolors="none", linewidths=0, zorder=2,
+                                      antialiased=False))
+    ax.add_collection(PatchCollection(frames, facecolors="none", edgecolors=MUTED, linewidths=0.3, zorder=4))
+
+    def bbox_data(t):
+        bb = t.get_window_extent(fig.canvas.get_renderer())
+        (x0, y0), (x1, y1) = ax.transData.inverted().transform([[bb.x0, bb.y0], [bb.x1, bb.y1]])
+        return min(x0, x1), min(y0, y1), max(x0, x1), max(y0, y1)
+
+    def place(t, r, rot):
+        """Rotate the label and put its measured box inside the cell; False when it cannot fit at this size."""
+        t.set_rotation(rot)
+        t.set_ha("left")
+        t.set_va("top" if rot == 0 else "bottom")
+        x0, y0, x1, y1 = bbox_data(t)
+        fx, fy, fw, fh = r
+        if x1 - x0 > fw - 0.4 or y1 - y0 > fh - 0.3:
+            return False
+        px, py = t.get_position()
+        t.set_position((px + (fx + 0.2 - x0), py + (fy + fh - 0.2 - y1)))
+        return True
+
+    placed, pending = 0, labels
+    for fsz in (FS, FS - 0.9, FS - 1.7, 4.0):
+        for t, r, _nm in pending:
+            t.set_fontsize(fsz)
+            t.set_position((r[0] + 0.2, r[1] + r[3] - 0.2))
+            t.set_rotation(0)
+        fig.canvas.draw()
+        rot, still = [], []
+        for t, r, nm in pending:
+            if place(t, r, 0):
+                placed += 1
+                continue
+            t.set_position((r[0] + 0.2, r[1] + 0.25))
+            rot.append((t, r, nm))
+        fig.canvas.draw()
+        for t, r, nm in rot:
+            if place(t, r, 90):
+                placed += 1
+                continue
+            t.set_rotation(0)
+            still.append((t, r, nm))
+        pending = still
+    for t, _r, _nm in pending:
+        t.remove()                      # nothing fits: the colours still carry the verdicts
+    handles = [Patch(fc=colour[k], ec="#d8d6cf", lw=0.5,
+                     label="%s - %s functions, %.1f%% of the code" % (label[k], human(counts[k]), 100.0 * size[k] / tot_b))
+               for k in order if counts[k]]
+    fig.legend(handles=handles, loc="lower left", bbox_to_anchor=(0.012, 0.004), frameon=False, fontsize=8.6,
+               labelcolor=INK, ncol=2, handlelength=1.1, handleheight=0.9)
+    fig.suptitle("Spore (SporeApp.exe): %s game functions, %.2f MB - area = code bytes, colour = verdict"
+                 % (human(tot_n), tot_b / 2**20), x=0.012, ha="left", fontsize=12, color=INK)
+    fig.text(0.012, 0.945, "Group (top directory of the dev build) -> object file -> one block per verdict; area = "
+             "function size in bytes. Objects come from work/migrate/modmap.json; code it does not place is boxed by "
+             "address under \"(no module)\".\nThird-party libraries (OpenSSL, libpng, zlib, libjpeg, CRT) are excluded, "
+             "as in docs/STATUS.md. Equivalence verdicts are the ones recorded in the nonmatching.txt rows (the "
+             "harness before the 2026-10-29 port).", fontsize=8.2, color=MUTED, va="top")
+    fig.savefig(path, facecolor=SURFACE)
+    print("wrote %s (%s functions in %d objects, %d labels)" % (os.path.relpath(path, ROOT), human(tot_n), len(boxes),
+                                                               placed))
+
+
 if "--groups" in sys.argv:
     t = groups_table()
     print()
@@ -795,3 +1054,7 @@ if "--plot" in sys.argv:
     i = sys.argv.index("--plot")
     out = sys.argv[i + 1] if i + 1 < len(sys.argv) and not sys.argv[i + 1].startswith("--") else W("work", "progress.png")
     plot_history(out)
+if "--treemap" in sys.argv:
+    i = sys.argv.index("--treemap")
+    out = sys.argv[i + 1] if i + 1 < len(sys.argv) and not sys.argv[i + 1].startswith("--") else W("work", "treemap.png")
+    treemap(out)
