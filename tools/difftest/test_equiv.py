@@ -209,3 +209,26 @@ def test_ret_n_mismatch_fails():
     open(path, "w").write(text.replace("void jpeg_fdct_float(float* data)", "void __stdcall jpeg_fdct_float(float* data)"))
     r = equiv.test_function(EXACT_SID, EXACT_VA, opts("--src", path))
     assert r["verdict"] == "FAIL" and r["first_mismatch"]["observable"] in ("esp", "eax"), r
+
+
+# ---------------------------------------------------------------------- audit binding (2026-10-29 calibration)
+
+def test_own_global_definition_is_bound_to_the_image():
+    # InitSpatialObjectAttributes (byte-exact) initialises `Attribute gSpatialObjectAttributes[25]`, which its TU
+    # defines: unbound, ours wrote a private copy and every input FAILed. resaudit.audit_bindings ties the
+    # definition to the original's .data operand (0x0157a1f8).
+    r = equiv.test_function("s01353d90", 0x01353d90, opts())
+    assert r["verdict"] == "PASS", r
+    assert [b["addr"] for b in r["audit_bound"]] == ["0157a1f8"], r
+
+
+def test_own_global_binding_keeps_real_differences():
+    # the same function with one attribute's name hash changed must still FAIL once the array is bound
+    src = os.path.join(ROOT, "match", "slices", "s01353d90", "s01353d90.cpp")
+    text = open(src).read()
+    assert '"mIsInvalid", 0xd24b464b' in text
+    os.makedirs(MUT_DIR, exist_ok=True)
+    path = os.path.join(MUT_DIR, "s01353d90_hash.cpp")
+    open(path, "w").write(text.replace('"mIsInvalid", 0xd24b464b', '"mIsInvalid", 0xd24b464c'))
+    r = equiv.test_function("s01353d90", 0x01353d90, opts("--src", path))
+    assert r["verdict"] == "FAIL" and r["first_mismatch"]["observable"].startswith("memory"), r

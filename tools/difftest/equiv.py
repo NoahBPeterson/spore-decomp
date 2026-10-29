@@ -4358,9 +4358,37 @@ def _ledger(r):
         pass          # releases the flock
 
 
+def audit_bind(t, log=print):
+    """Bind the references the original's own instructions identify (resaudit.audit_bindings): a global our TU defines
+    that the original keeps in its .data, and a symbol the resolver could only model. Recorded as resolution method
+    "audit-bind(...)" and in t.audit_bound; a bound model no longer counts as modelled."""
+    t.audit_bound = []
+    if t.verdict == "UNSUPPORTED" or getattr(t, "orig_insns", None) is None or getattr(t, "res", None) is None:
+        return
+    try:
+        binds = RA.audit_bindings(t.coff, t.fsym, t.res, t.orig_insns, context()["img"])
+    except Exception as e:          # evidence only: never let it fail a row
+        log("  audit-bind skipped: %s" % e)
+        return
+    for si, (a, how) in sorted(binds.items()):
+        nm = t.coff.syms[si].name
+        t.res.addr[si] = a
+        t.res.method[nm] = "audit-bind(%s)" % how
+        t.audit_bound.append({"symbol": nm, "addr": "%08x" % a, "was": how})
+        log("  audit-bind: %s -> %08x (%s)" % (nm, a, how))
+    if t.audit_bound:
+        names = {b["symbol"] for b in t.audit_bound}
+        t.res.models = [m for m in getattr(t.res, "models", []) if m.get("symbol") not in names]
+        t.methods = {}
+        for nm, h in t.res.method.items():
+            k = h.split("(")[0]
+            t.methods[k] = t.methods.get(k, 0) + 1
+
+
 def _test_function(sid, va, opts, log=print):
     t0 = time.time()
     t = prepare(sid, va, opts.flags, log, getattr(opts, "src", None))
+    audit_bind(t, log)
     models = modelled_symbols(t)
     out = {"slice": sid, "va": "%08x" % va, "flags": " ".join(t.flags), "flags_from": t.flags_how,
            "symbol": getattr(t, "sym", None), "symbol_from": getattr(t, "sym_how", None),
@@ -4368,7 +4396,7 @@ def _test_function(sid, va, opts, log=print):
            "modelled": models,
            "resolution_conflicts": [{"symbol": c[0], "resolved": "%08x" % c[1], "method": c[2], "aligned": "%08x" % c[3]}
                                     for c in t.conflicts],
-           "resolution_methods": t.methods}
+           "resolution_methods": t.methods, "audit_bound": getattr(t, "audit_bound", [])}
     if t.verdict == "UNSUPPORTED":
         out.update(verdict="UNSUPPORTED", reason=t.reason + model_note(models), seconds=round(time.time() - t0, 1))
         return out
@@ -4866,6 +4894,12 @@ def _test_function(sid, va, opts, log=print):
     if opts.call_regs and out.get("call_regs"):
         why += "; " + cmp_.call_reg_note(out["call_regs"])
     why += model_note(models)               # a run kept alive by a harness model: say so in the reason ...
+    callees = [b["symbol"] for b in getattr(t, "audit_bound", []) if b["was"] == "was modelled"]
+    if callees:
+        # bound to the original's own operand: the run is real, but nothing checked that our source names the same
+        # function, so a verdict that leans on it says so
+        why += "; %d callee(s) bound from the original's operands, identity unchecked (%s)" % (
+            len(callees), ", ".join(callees[:3]))
     n_inv = discarded.get("invalid-object")
     if n_inv:
         # Never silent: a row that discarded inputs says how many, which field, and the bound it broke, so

@@ -193,6 +193,73 @@ def audit(coff, fsym, res, orig_insns, img):
     return out
 
 
+def _is_code(sec):
+    c = sec.is_code
+    return c() if callable(c) else c
+
+
+def audit_bindings(coff, fsym, res, orig_insns, img):
+    """{symbol index: (original address, evidence)} for references the resolver could not tie to the image but the
+    original's own instructions do: our TU's own definition of a global the original keeps in its .data (Spore
+    s01353d90 defines `Attribute gSpatialObjectAttributes[25]` and initialises it: ours wrote its private copy and
+    every input FAILed), and a function or data symbol the resolver fell back to modelling (Spore 0x00afbde0's
+    Elem24Vec::DtorElems ran as a zero stub where the original calls 0x00afb090). A binding needs at least one strong
+    pair (same-size instructions in an aligned run, as audit() uses), every pair giving the same address, an address
+    inside the image, and for a call a known function start. Symbols already mapped by name or position are never
+    rebound: this only replaces "ours" and "model" with evidence."""
+    ours, rel, data = our_insns(coff, fsym)
+    oa, ua = sorted(orig_insns), sorted(ours)
+    sm = difflib.SequenceMatcher(None, [_shape(orig_insns[a]) for a in oa], [_shape(ours[a]) for a in ua],
+                                 autojunk=False)
+    pair = {}
+    for bo, bu, n in sm.get_matching_blocks():
+        if n >= MIN_RUN:
+            for k in range(n):
+                pair[ua[bu + k]] = oa[bo + k]
+    models = {m.get("symbol") for m in getattr(res, "models", ()) if str(m.get("kind") or "").startswith("model")}
+    seen = {}                                       # si -> set of base addresses the pairs imply
+    for a in ua:
+        ins = ours[a]
+        for p in range(a, a + ins.size):
+            if p not in rel:
+                continue
+            si, typ = rel[p]
+            sy = coff.syms[si]
+            if typ not in (REL_DIR32, REL_REL32):
+                continue
+            # a named data object our TU defines (a section symbol such as `.bss` may hold several objects whose
+            # image addresses need not be contiguous, so only named ones are bound)
+            # Writable sections only: a read-only definition (a float constant `__real@...`, a string, a vtable) is
+            # part of what our code computes, and binding it to the original's would hide a changed constant (the
+            # test_changed_constant_fails mutant PASSed until this was restricted). Mutable globals are game state
+            # whose storage is the image's.
+            own_data = (si not in res.addr and sy.defined and sy.secno > 0 and sy.secno != fsym.secno and
+                        not sy.name.startswith(".") and not _is_code(coff.sections[sy.secno - 1]) and
+                        coff.sections[sy.secno - 1].writable)
+            if not (own_data or (si in res.addr and sy.name in models)):
+                continue
+            o = pair.get(a)
+            oi = orig_insns.get(o) if o is not None else None
+            if oi is None or oi.size != ins.size:
+                continue
+            addend = struct.unpack_from("<I", data, p)[0]
+            field = struct.unpack_from("<I", bytes(oi.bytes), p - a)[0]
+            got = ((o + (p - a) + 4 + field) if typ == REL_REL32 else field) & 0xFFFFFFFF
+            base = (got - addend) & 0xFFFFFFFF
+            seen.setdefault(si, set()).add((base, typ))
+    out = {}
+    for si, bases in seen.items():
+        if len({b for b, _t in bases}) != 1:
+            continue
+        base, typ = next(iter(bases))
+        if not img.in_image(base):
+            continue
+        if typ == REL_REL32 and base not in img.start_set:
+            continue
+        out[si] = (base, "our own definition" if si not in res.addr else "was modelled")
+    return out
+
+
 def summary(a):
     """One line for the verdict reason / report."""
     s = "resolution audit: %d agree, %d same-code, %d unverified, %d disagree, %d local copies" % (
