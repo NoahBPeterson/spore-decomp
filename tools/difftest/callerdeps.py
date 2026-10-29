@@ -44,6 +44,13 @@ from resolve import Image                          # noqa: E402
 from regfacts import FULL                          # noqa: E402
 
 CALLEE_SAVED = {"ebx", "esi", "edi", "ebp"}
+_LAST_RAW = (set(), set())       # the raw (sub-register) names of the last rw() call
+# the low parts of a register a partial write overwrites (a read of only those no longer sees the callee's value)
+LOW_PARTS = {}
+for _r in "abcd":
+    LOW_PARTS[_r + "x"] = frozenset((_r + "x", _r + "l", _r + "h"))
+    LOW_PARTS[_r + "l"] = frozenset((_r + "l",))
+    LOW_PARTS[_r + "h"] = frozenset((_r + "h",))
 SCRATCH = {"eax", "ecx", "edx"} | {"xmm%d" % k for k in range(8)}
 # instructions that write a whole xmm register (anything else may merge into the old value)
 XMM_FULL = {"movaps", "movups", "movapd", "movupd", "movdqa", "movdqu", "xorps", "xorpd", "pxor", "movd", "movq",
@@ -110,6 +117,8 @@ class Deps:
             return set(), set(), set()
         reads = {FULL.get(i.reg_name(x), i.reg_name(x)) for x in r}
         writes_any = {FULL.get(i.reg_name(x), i.reg_name(x)) for x in w}
+        global _LAST_RAW
+        _LAST_RAW = ({i.reg_name(x) for x in r}, {i.reg_name(x) for x in w})
         full = set()
         for x in w:
             n = i.reg_name(x)
@@ -138,14 +147,14 @@ class Deps:
         'escapes': bool, 'unknown': [why]}."""
         out = {"reads": [], "escapes": False, "unknown": []}
         seen = set()
-        work = [(start, frozenset(regs))]
+        work = [(start, frozenset(regs), frozenset())]
         steps = 0
         while work:
-            a, pend = work.pop()
+            a, pend, low = work.pop()
             while pend:
-                if (a, pend) in seen:
+                if (a, pend, low) in seen:
                     break
-                seen.add((a, pend))
+                seen.add((a, pend, low))
                 steps += 1
                 if steps > MAX_STEPS:
                     out["unknown"].append("step budget at %08x" % a)
@@ -155,6 +164,15 @@ class Deps:
                     break
                 m = i.mnemonic
                 reads, _w, full = self.rw(i)
+                raw_r, raw_w = _LAST_RAW
+                # a partial write (fnstsw ax, setcc al, mov al, ..) leaves the register pending -- its other bits are
+                # still the callee's -- but a later read of only the overwritten part does not consume them
+                # (0x52df40: `fnstsw ax; test ah, 5` after the call to 0x52dfd0)
+                for n in raw_w:
+                    if n in LOW_PARTS:
+                        low = low | LOW_PARTS[n]
+                if raw_r and all((n in low) or FULL.get(n, n) not in pend for n in raw_r):
+                    reads = reads - {FULL.get(n, n) for n in raw_r if n in low}
                 if m == "call":
                     op = i.operands[0]
                     if op.type == x86.X86_OP_IMM:
@@ -197,7 +215,7 @@ class Deps:
                 if m.startswith("j") or m in ("loop", "loope", "loopne", "jecxz"):
                     op = i.operands[0]
                     if op.type == x86.X86_OP_IMM:
-                        work.append((op.imm & 0xFFFFFFFF, pend))
+                        work.append((op.imm & 0xFFFFFFFF, pend, low))
                 a = i.address + i.size
         return out
 

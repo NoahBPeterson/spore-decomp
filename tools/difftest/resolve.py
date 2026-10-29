@@ -6,15 +6,29 @@ the same real globals. Methods, tried in order (the report records which one fir
 
   import        __imp_X -> the IAT slot of X; a direct reference to an import -> its image thunk
   crt           compiler helpers (__chkstk, __ftol2_sse, ___security_cookie, ...) from lib_names.txt
-  symbols       exact mangled name in symbols/*.txt, symbols/slices/*.txt, pdb_globals.json, or a
+  annotation    a '// 0x...' comment on the declaration line (or a '// @ 0x...' marker above it)
+                in the slice source, matched by identifier and enclosing class (tried before symbols/:
+                names are not unique across slices)
+  symbols       exact mangled name in symbols/*.txt, symbols/slices/*.txt, byte-exact manifest rows
+                (match/slices/*/manifest.txt, src/**/*.manifest.txt), pdb_globals.json, or a
                 unique qualified name there (only when our object has no overload of that name)
   hex-name      an address embedded in the name (FUN_00abcdef, Fn9467b0, g_01582df8, ..._0167a6d0)
-  annotation    a '// 0x...' comment on the declaration line (or a '// @ 0x...' marker above it)
-                in the slice source, matched by identifier and enclosing class
-  rdata-literal string literals found byte-identical in the image's .rdata
+  bare-annot.   the row source's own unqualified declaration of a scoped symbol (an out-of-line
+                template member written at namespace scope, whose class the scanner cannot see)
+  deep          the whole repository's name evidence: symbols/'s qualified names plus every
+                '// 0x...' declaration annotation under src/ (so a declaration one include deeper
+                than the row's own headers is found), compared demangled and with the qualification
+                ignored. A hit is kind "orig-code": our call runs the original's own body.
+  rdata-literal string literals found byte-identical in the image's .rdata; a read-only literal/constant
+                block of ours (a `__real@`/`__xmm@` pool entry, a const table) whose whole section is
+                byte-identical to a block there (rdata-literal(copy)); a block that differs stays local
   align         the N-th call/global reference of ours vs the original's N-th one, between
                 already-resolved anchors, when gap lengths and instruction mnemonics agree
-A reference that none of these resolves makes the function UNSUPPORTED (never guessed).
+A reference that none of these resolves is bound to a Machine model when the harness Machine offers
+model_stub/model_data (kind "model-stub" for a function-shaped symbol, "model-data" for a data one,
+recorded in Resolution.models). A model is evidence of testability, not of equivalence: equiv caps
+such a row at WEAK and appends "N modelled symbol(s)". Without the model API the reference stays
+UNSUPPORTED; nothing is guessed.
 Locally defined helpers/constants with no original address are loaded from our object.
 """
 import bisect, difflib, glob, json, os, re, struct, sys
@@ -30,14 +44,34 @@ sys.path.insert(0, HERE)
 import imgcache  # noqa: E402
 from coff import REL_DIR32, REL_REL32, REL_DIR32NB, REL_SECREL, REL_SECTION  # noqa: E402
 from slice import base_ident, demangle_qual  # noqa: E402
+# the demangled-name comparison also runs over the whole repository (see Resolver.by_deep)
+from slice import _clean_name, _name_matches  # noqa: E402
 from machine import BUILTIN_ADDR  # noqa: E402
 
+from cfgcov import MAX_TABLE  # noqa: E402  jump-table entries per dispatch (see there)
 EH_PREFIXES = ("??_R", "__ehhandler$", "__unwindfunclet$", "__ehfuncinfo$", "__unwindtable$", "__catchsym$",
                "__tryblocktable$", "__catch$", "__tryend$", "__catchblock", "$unwind", "__ehvec", "__TI", "__CT", "__CTA")
 # a function-local static ('?sMax@?1??Update@C@@QAEXXZ@4MA') or its guard ('?$S1@?1??Update@...')
 LOCAL_STATIC_RE = re.compile(r"@\?[0-9A-P]*\?\?")
 LOCAL_CONST_PREFIXES = ("__real@", "__xmm@", "__mask@", "__int64@", "??_C@", "__fltused")
-HEX_RE = re.compile(r"(?<![0-9A-Fa-f])(?:0x)?([0-9A-Fa-f]{6,8})(?![0-9A-Fa-f])")
+# the hex run must end the identifier or be followed by '_' (FUN_00abcdef, Fn9467b0, g_01582df8_x): a run followed by a
+# letter is part of a word ("??_7CD3DApplication" read as 0x7cd3da, a vtable mapped into .rdata garbage)
+HEX_RE = re.compile(r"(?<![0-9A-Fa-f])(?:0x)?([0-9A-Fa-f]{6,8})(?![0-9A-Za-z])")
+def _image_end(path=os.path.join(ROOT, "work", "SporeApp.analysis.bin")):
+    """End of the analysed image (ImageBase + SizeOfImage), the upper bound for an address annotation. The bound
+    was a fixed 0x1900000 (inherited from spore-decomp, whose image ends there); mount&blade.exe's .data/.bss run to
+    0x8ee5b94, so every annotation above 0x1900000 was silently ignored and such globals resolved only through
+    symbols/ entries (Papercuts, names-n2)."""
+    try:
+        h = open(path, "rb").read(0x1000)
+        pe = struct.unpack_from("<I", h, 0x3c)[0]
+        opt = pe + 24
+        return struct.unpack_from("<I", h, opt + 28)[0] + struct.unpack_from("<I", h, opt + 56)[0]
+    except (OSError, struct.error):
+        return 0x1900000
+
+
+IMAGE_END = _image_end()
 ADDR_IN_COMMENT = re.compile(r"(?:\b0x([0-9A-Fa-f]{6,8})|(?:\b|DAT_|FUN_|PTR_|LAB_|g_|_)([0-9A-Fa-f]{8}))\b")
 
 _md = capstone.Cs(capstone.CS_ARCH_X86, capstone.CS_MODE_32)
@@ -177,6 +211,7 @@ class SymbolDB:
         self.mangled = defaultdict(set)   # exact mangled name -> {va}
         self.qual = defaultdict(set)      # qualified name -> {va}
         self.lib = {}                     # lib_crt helper short name -> va
+        self.lib_full = {}                # lib_crt C symbol name as spelled in lib_names.txt -> va
         files = glob.glob(os.path.join(ROOT, "symbols", "*.txt")) + glob.glob(os.path.join(ROOT, "symbols", "slices", "*.txt"))
         for f in files:
             for line in open(f, encoding="utf-8", errors="replace"):
@@ -193,6 +228,7 @@ class SymbolDB:
                     nm = m.group(2)
                     if m.group(1) == "crt":
                         self.lib[nm.lstrip("_")] = va
+                        self.lib_full[nm] = va
                 if nm.startswith(("?", "@")) or (nm.startswith("_") and "::" not in nm):
                     self.mangled[nm].add(va)
                     q = demangle_qual(nm)
@@ -200,6 +236,15 @@ class SymbolDB:
                         self.qual[q].add(va)
                 else:
                     self.qual[nm].add(va)
+        # byte-exact manifest rows (`<src> <mangled> <va> <flags>`) are the strongest name evidence there is: a
+        # callee our object references but symbols/ never listed (an out-of-line vector::resize matched in a
+        # neighbouring slice) would otherwise run as our own copy and its inner calls misalign the call trace
+        for f in glob.glob(os.path.join(ROOT, "match", "slices", "*", "manifest.txt")) + \
+                glob.glob(os.path.join(ROOT, "src", "**", "*.manifest.txt"), recursive=True):
+            for line in open(f, encoding="utf-8", errors="replace"):
+                p = line.split()
+                if len(p) >= 3 and p[1].startswith(("?", "_")) and re.fullmatch(r"[0-9a-fA-F]{6,8}", p[2]):
+                    self.mangled[p[1]].add(int(p[2], 16))
         try:
             for k, v in json.load(open(os.path.join(ROOT, "symbols", "pdb_globals.json"))).items():
                 nm = v["name"]
@@ -258,7 +303,7 @@ def source_annotations(paths):
             va = None
             for m in ADDR_IN_COMMENT.finditer(comment):
                 v = int(m.group(1) or m.group(2), 16)
-                if 0x401000 <= v < 0x1900000:
+                if 0x401000 <= v < IMAGE_END:
                     va = v
                     break
             if re.search(r"@\s*0x[0-9A-Fa-f]{6,8}", comment) and not code.strip():
@@ -477,7 +522,7 @@ def recursive_descent(read, lo, hi, entry, table_target):
                 if op.type == X.X86_OP_MEM and op.mem.index != 0 and op.mem.scale == 4:
                     t = op.mem.disp & 0xFFFFFFFF
                     k = 0
-                    while k < 2048:
+                    while k < MAX_TABLE:
                         tgt = table_target(t + 4 * k)
                         if tgt is None or not lo <= tgt < hi:
                             break
@@ -506,18 +551,39 @@ class Resolution:
         self.local_sections = set()   # our section indexes to load
         self.unresolved = []      # required symbol names that could not be resolved
         self.eh_unresolved = []   # unresolved but only reachable from EH metadata (trapped)
+        self.models = []          # bindings to the original's own code or to a Machine model:
+                                  # {"symbol", "kind", "addr", "size"} (kind: orig-code/model-*)
         self.notes = []
 
 
 RENAME_SFX = re.compile(r"_s[0-9a-f]{4}_[0-9a-f]{4}(?=[@:]|$)")
+# MSVC puts the storage-class digit right after '@@' for a *data* symbol ('?g_x@@3HA',
+# '?nothrow@std@@3Unothrow_t@1@B'); a function encoding has a calling-convention letter there
+# ('@@QAE', '@@YA', '@@IAE', '@@SAE'). Needed to give a data symbol a data model and a function
+# symbol an executable one when neither the original address nor a declaration annotation is known.
+DATA_MANGLING_RE = re.compile(r"@@[0-9]")
+
+
+def mangled_is_data(name):
+    return bool(DATA_MANGLING_RE.search(name))
+
+
+# An unresolved data symbol has no original address, hence no extent to measure (nothing follows it
+# in the original's data). A model block therefore gets one page: enough for any struct our code
+# reaches through a documented field offset, and Machine.model_data excludes its pages from the
+# written-data diff the same way it excludes imports and pool objects.
+MODEL_DATA_SIZE = 0x1000
+
 
 
 class Resolver:
-    def __init__(self, image, symdb):
+    def __init__(self, image, symdb, machine=None):
         self.img = image
         self.db = symdb
         self._crt = None
         self._orig_calls = None   # call targets of the function being resolved (set per resolve())
+        self._machine = machine    # the harness Machine (model_stub/model_data); resolved lazily
+        self._deep = None          # repository-wide demangled-name index (see deep_symbols)
 
     # --- single-symbol methods -------------------------------------------------
     def crt_helpers(self):
@@ -562,6 +628,10 @@ class Resolver:
         return None
 
     def by_crt(self, name):
+        # the exact C symbol first: stripping underscores folds `_exit` (exit, 0x537ced) and `__exit` (_exit,
+        # 0x537cfe) into one key, and the later lib_names line won (0x42cc80's exit(-1) resolved to _exit)
+        if name in self.db.lib_full:
+            return self.db.lib_full[name]
         key = name.lstrip("_@")
         h = self.crt_helpers()
         if name in h:
@@ -577,11 +647,11 @@ class Resolver:
         return self.img.in_data(va) or va in self.img.start_set
 
     def by_symbols(self, name, our_quals, want_func):
-        vas = self.db.mangled.get(name)
-        if vas and len(vas) == 1:
-            va = next(iter(vas))
-            if self.plausible(va, want_func):
-                return va, "symbols(mangled)"
+        # implausible candidates (a data name on a code address, from a mistyped symbols line) are dropped
+        # before the uniqueness test, so one bad line elsewhere cannot make a name ambiguous
+        vas = {v for v in self.db.mangled.get(name, ()) if self.plausible(v, want_func)}
+        if len(vas) == 1:
+            return next(iter(vas)), "symbols(mangled)"
         q = demangle_qual(name)
         if q and our_quals.get(q, 0) == 1 and "::" in q:
             vas = self.db.qual.get(q)
@@ -620,29 +690,157 @@ class Resolver:
             if not re.search(r"\d", s):
                 continue
             va = int(s, 16)
-            if 0x401000 <= va < 0x1900000 and self.plausible(va, want_func):
+            if 0x401000 <= va < IMAGE_END and self.plausible(va, want_func):
                 return va
         return None
 
-    def by_annotation(self, name, annots, want_func):
+    # --- the whole repository's name evidence ----------------------------------
+    def machine(self):
+        """The Machine the harness executes on (equiv.context()["m"]). A model page must live in the
+        emulator that runs both sides, so the resolver borrows the harness context instead of making
+        its own; None when none is reachable, and then a model is simply not offered."""
+        if self._machine is None:
+            for modname in ("__main__", "equiv"):
+                mod = sys.modules.get(modname)
+                ctx = getattr(mod, "context", None)
+                if ctx is None:
+                    continue
+                try:
+                    self._machine = (ctx() or {}).get("m")
+                except Exception:
+                    self._machine = None
+                if self._machine is not None:
+                    break
+        return self._machine
+
+    @staticmethod
+    def _match_parts(name, parts):
+        """slice._name_matches against a pre-split qualified name; a leading '_' is ignored because
+        the sources spell some names with one ('?_Insert_n@?$vector...' is vector<...>::_Insert_n)."""
+        if not parts:
+            return False
+        return _name_matches(name, "::".join(parts[:-1] + (parts[-1].lstrip("_") or parts[-1],)))
+
+    @staticmethod
+    def _is_qualified(name, parts):
+        """True when the matched name carries a class our mangled name spells, i.e. the evidence is
+        more than the bare identifier ('Terrain::ground_color', not just any 'ground_color')."""
+        if len(parts) < 2:
+            return False
+        scopes = set(mangled_scopes(name))
+        cls = parts[-2].lstrip("_")
+        if name.startswith(("??0", "??1")):
+            return cls in scopes or cls == base_ident(name)
+        return cls in scopes
+
+    def deep_symbols(self):
+        """{last name part: [(qualified parts, va, loc, params text)]} over the whole name universe
+        the harness already trusts: `symbols/` (its demangled qualified names) and every '// 0x...'
+        declaration annotation under src/. Built once per process and only for a row that still has
+        an unresolved symbol: ~0.5 s over 12k declarations."""
+        if self._deep is None:
+            idx = defaultdict(list)
+
+            def add(nm, va, loc, ptext):
+                parts = tuple(_clean_name(nm))
+                if parts and va:
+                    idx[parts[-1].lstrip("~").lstrip("_")].append((parts, va, loc, ptext))
+
+            for q, vas in self.db.qual.items():
+                for va in vas:
+                    add(q, va, "symbols", None)
+            # isfile: a Spore module for `mpegl3base.cpp.obj` keeps its rows in a directory named mpegl3base.cpp
+            files = [f for f in glob.glob(os.path.join(ROOT, "src", "**", "*.h"), recursive=True) +
+                     glob.glob(os.path.join(ROOT, "src", "**", "*.cpp"), recursive=True) if os.path.isfile(f)]
+            for ident, scopes, va, loc, ptext in source_annotations(files):
+                add("::".join(tuple(scopes) + (ident,)), va, loc, ptext)
+            self._deep = idx
+        return self._deep
+
+    def by_deep(self, name, want_func, called):
+        """-> (va, how) from the repository-wide symbol universe, demangled and with the qualification
+        ignored. by_annotation sees only the row's own source, its slice headers and its direct
+        includes; a declaration one include deeper (Terrain::ground_color in terrain_a/terrain.h for
+        mesh_terrain.cpp, SoundMgr::play in include/sound_mgr.h) stayed unresolved although the
+        original implements it. A *qualified* match (the class our mangled name spells) is accepted
+        when the address is unique; a bare-identifier match (our slice renamed the class:
+        block_base::free_materials is the original's Block::free_materials) only when it is unique
+        and, for a direct callee, an address the original's body actually calls."""
+        idx = self.deep_symbols()
+        key = base_ident(name).lstrip("_")
+        cands = idx.get(key, ())
+        if not cands:
+            return None, None
+        wf = bool(want_func or not mangled_is_data(name))
+
+        def ok(va):
+            return self.plausible(va, wf)
+
+        hits = [c for c in cands if self._match_parts(name, c[0]) and ok(c[1])]
+        qual = [h for h in hits if self._is_qualified(name, h[0])]
+        if len({h[1] for h in qual}) == 1:
+            return qual[0][1], "deep-symbols"
+        # several classes implement the identifier: the original's own call operands decide a callee,
+        # then the parameter list (a slice-local class name and the original's differ, the types do not)
+        pool = qual if len(qual) > 1 else hits
+        vas = {h[1] for h in pool}
+        if len(vas) > 1 and called and self._orig_calls:
+            direct = [h for h in pool if h[1] in self._orig_calls]
+            if direct and len({h[1] for h in direct}) == 1:
+                return direct[0][1], "deep-symbols(called)"
+        if len(vas) > 1:
+            try:
+                import sig as SIG
+                mt = SIG.parse(name).ptypes
+            except Exception:
+                mt = None
+            sel = [h for h in pool if h[3] and params_match(mt, norm_text_params(h[3]))]
+            if sel and len({h[1] for h in sel}) == 1:
+                return sel[0][1], "deep-symbols(params)"
+            return None, None
+        if len(vas) != 1:
+            # qualification-insensitive last resort: the original's class is spelled differently in
+            # our slice. Only a single address in the whole repository, and a directly called one must
+            # be called by the original's body (else the callee was inlined there and the out-of-line
+            # body is a different function than the code our object is standing in for).
+            hits = [c for c in cands if ok(c[1])]
+            if len({h[1] for h in hits}) != 1:
+                return None, None
+            va = hits[0][1]
+            if called and want_func and self._orig_calls is not None and va not in self._orig_calls:
+                return None, None
+            return va, "deep-symbols(ident %s)" % key
+        va = next(iter(vas))
+        if called and want_func and self._orig_calls is not None and va not in self._orig_calls:
+            return None, None
+        return va, "deep-symbols"
+
+    def _ann_idents(self, name):
+        """(ident candidates, our scopes, operator-or-None) to match a `// 0x...` declaration
+        annotation against a mangled name; None for a special member the scanner cannot name."""
         op = operator_of(name) if name.startswith("??") and not name.startswith(("??0", "??1")) and \
             (not name.startswith("??_") or name.startswith(("??_U", "??_V", "??_0", "??_1", "??_2", "??_3", "??_4", "??_5", "??_6"))) else None
         if op:
-            ident_cands = {op[0]}
-            scopes = set(op[1])
+            return {op[0]}, set(op[1]), op
+        ident = base_ident(name).lstrip("?$")      # '??1?$vector@I@@..' -> '~vector'
+        if name.startswith("??0"):
+            ident_cands = {ident}
+        elif name.startswith("??1"):
+            ident_cands = {"~" + ident}
+        elif name.startswith("??"):
+            return None
         else:
-            ident = base_ident(name).lstrip("?$")      # '??1?$vector@I@@..' -> '~vector'
-            if name.startswith("??0"):
-                ident_cands = {ident}
-            elif name.startswith("??1"):
-                ident_cands = {"~" + ident}
-            elif name.startswith("??"):
-                return None, "special member"
-            else:
-                ident_cands = {ident}
-            scopes = set(mangled_scopes(name))
-            if name.startswith(("??0", "??1")):
-                scopes.add(ident)
+            ident_cands = {ident}
+        scopes = set(mangled_scopes(name))
+        if name.startswith(("??0", "??1")):
+            scopes.add(ident)
+        return ident_cands, scopes, None
+
+    def by_annotation(self, name, annots, want_func):
+        ids = self._ann_idents(name)
+        if ids is None:
+            return None, "special member"
+        ident_cands, scopes, op = ids
         hits = []
         c_name = not name.startswith("?")          # extern "C": a namespace around the declaration is irrelevant
         for a_ident, a_scopes, va, loc, ptext in annots:
@@ -675,6 +873,40 @@ class Resolver:
             return None, "annotation-ambiguous %s" % ",".join("%08x" % v for v in sorted(vas))
         return None, None
 
+    def by_bare_annotation(self, name, annots, want_func, called=True):
+        """→ (va, how) from the *unqualified* declaration of a scoped symbol: a qualified out-of-line
+        definition written at namespace scope parses without its class ('template<> void
+        std::vector<int>::push_back(const int&);  // 0x4936b0' is recorded as a bare `push_back`),
+        which by_annotation has to discard because the same identifier belongs to other classes.
+        Used only after symbols/ and the scoped annotations failed: one address, agreeing parameters,
+        and a direct callee must be an address the original's body itself calls."""
+        ids = self._ann_idents(name)
+        if ids is None:
+            return None, None
+        ident_cands, scopes, op = ids
+        if not scopes or op or not name.startswith("?"):
+            return None, None
+        bare = [(va, loc, ptext) for a_ident, a_scopes, va, loc, ptext in annots
+                if a_ident in ident_cands and not [x for x in a_scopes if x != "<anon>"]]
+        if not bare:
+            return None, None
+        sel = bare
+        if len({b[0] for b in bare}) > 1:
+            try:
+                import sig as SIG
+                mt = SIG.parse(name).ptypes
+            except Exception:
+                mt = None
+            sel = [b for b in bare if params_match(mt, norm_text_params(b[2]))]
+        if len({b[0] for b in sel}) != 1:
+            return None, None
+        va = sel[0][0]
+        if not self.plausible(va, want_func):
+            return None, None
+        if called and want_func and self._orig_calls is not None and va not in self._orig_calls:
+            return None, None
+        return va, "annotation(%s, unqualified)" % sel[0][1]
+
     def thunk_import(self, va):
         """Import name if va is a 'jmp [IAT]' thunk."""
         if not self.img.in_text(va):
@@ -685,8 +917,10 @@ class Resolver:
         return None
 
     # --- whole-object resolution --------------------------------------------------
-    def resolve(self, coff, func_sym, orig_va, annots):
+    def resolve(self, coff, func_sym, orig_va, annots, machine=None):
         r = Resolution()
+        if machine is not None:
+            self._machine = machine
         try:
             self._orig_calls = self.call_targets(orig_va)
         except Exception:   # no extent for this VA: fall back to the unchecked behaviour
@@ -714,6 +948,14 @@ class Resolver:
         def want_func(s):
             return s.is_func or usage[s.index] == {"call"}
 
+        models_seen = set()   # (name, kind, addr): one entry per binding, however often it is referenced
+
+        def note_model(name, kind, va, size=None):
+            k = (name, kind, va)
+            if k not in models_seen:
+                models_seen.add(k)
+                r.models.append({"symbol": name, "kind": kind, "addr": "%08x" % va, "size": size})
+
         def try_single(s):
             name = s.name
             wf = want_func(s)
@@ -727,16 +969,19 @@ class Resolver:
             va = self.by_crt(name)
             if va:
                 return va, "crt"
+            # The slice's own `// 0x` annotation wins over symbols/: names are not unique across slices (two
+            # slices each called a different global `g_item_count`, and the other slice's symbols line sent
+            # 0x44c210's bounds check to the wrong address: a false FAIL).
+            va, how = self.by_annotation(name, annots, wf)
+            if va:
+                return va, how
+            note = how
             va, how = self.by_symbols(name, our_quals, wf)
             if va:
                 return va, how
             va = self.by_hex_name(name, wf)
             if va:
                 return va, "hex-name"
-            va, how = self.by_annotation(name, annots, wf)
-            if va:
-                return va, how
-            note = how
             # a slice stub renamed for a module TU (`System_s0113_88f0`, `string8_s0083_f140`): its methods keep the slice
             # spelling in symbols/ and in the `// 0x` annotations, so the suffix is stripped and the name retried
             # (mig9/mig10 holds: renamed stubs lost the callee bindings the slice had)
@@ -853,6 +1098,111 @@ class Resolver:
                     r.method[nm] = how + "(aligned copy)"
                     continue
             r.conflicts.append((nm, old, how, va))
+        # ---- our own copy of a read-only literal/constant: bind the image's identical block ---------
+        # /Gy gives every literal its own read-only COMDAT section (`__real@3f800000`, a const table) and
+        # a symbol no name source knows stays a local copy loaded next to the image. Our code then stores
+        # the address of OUR copy where the original stores the image's. When the image's .rdata holds a
+        # byte-identical block, bind ours to it (the binding the string-literal and vtable passes already
+        # make for their copies); both sides then read the same bytes. A block whose bytes differ is a real
+        # difference - or a relocated table (a vtable) - and must stay local.
+        ro = self.img.section(".rdata")
+        if ro:
+            if ("rdata",) not in self.img._mem:
+                self.img._mem[("rdata",)] = self.img.read(ro[0], ro[1])
+            rdata = self.img._mem[("rdata",)]
+            for i in sorted(r.local_sections):
+                sec = coff.sections[i]
+                if sec.is_code or sec.writable or not sec.data:
+                    continue
+                offs = sorted({s.value for s in syms.values() if s.defined and s.secno - 1 == i})
+                for k, off in enumerate(offs):
+                    end = offs[k + 1] if k + 1 < len(offs) else len(sec.data)
+                    if any(off <= o < end for (o, _si, _t) in sec.relocs):
+                        continue        # relocated slots: a vtable, not literal bytes
+                    blob = sec.data[off:end]
+                    if not 4 <= len(blob) <= 256:
+                        continue
+                    # the named data symbols at this offset (a section symbol stays local: a relocation
+                    # with an addend into our section must keep pointing into OUR copy)
+                    users = [si for si, s_ in syms.items() if si not in r.addr and s_.defined and s_.cls != 3
+                             and s_.secno - 1 == i and s_.value == off]
+                    if not users:
+                        continue
+                    # the address the alignment pass paired with the original's own reference, when it
+                    # confirms one and the block there is ours byte for byte; else the image's one and
+                    # only byte-identical block
+                    va = None
+                    for si in users:
+                        c = check.get(si)
+                        if c is not None and self.img.in_data(c) and self.img.read(c, len(blob)) == blob:
+                            va, how = c, "rdata-literal(aligned copy)"
+                            break
+                    if va is None:
+                        # a block the image holds more than once (`__real@3f800000` is 1.0f everywhere)
+                        # identifies no address: leave ours local, the comparison then accepts the
+                        # copy only if its bytes match
+                        hits, hit = [], rdata.find(blob)
+                        while hit >= 0 and len(hits) < 2:
+                            if hit % 4 == 0:            # the image aligns its literals
+                                hits.append(hit)
+                            hit = rdata.find(blob, hit + 1)
+                        if len(hits) != 1:
+                            continue
+                        va, how = ro[0] + hits[0], "rdata-literal(copy)"
+                    for si in users:
+                        r.addr[si] = va
+                        r.method[syms[si].name] = how
+        # ---- still-unresolved required symbols: the whole repository's name evidence --------------
+        # by_annotation only sees the row's own source, its slice headers and its direct includes, and
+        # the alignment pass needs an anchor to work from. A symbol declared one include deeper
+        # (Terrain::ground_color in terrain_a/terrain.h for mesh_terrain.cpp, SoundMgr::play in
+        # include/sound_mgr.h) is still on record in src/ and symbols/. Binding it to the original's
+        # address (kind "orig-code") makes our call run the original's own body, the honest model.
+        # Runs after alignment so a positional match the original's own call operands confirm keeps
+        # its (possibly ICF-folded) address.
+        for si, (kind, _note) in list(pending.items()):
+            if kind != "req" or si in r.addr:
+                continue
+            s = syms[si]
+            wf = want_func(s)
+            called = "call" in usage.get(s.index, ())
+            va, how = self.by_bare_annotation(s.name, annots, wf, called)
+            if va is None:
+                va, how = self.by_deep(s.name, wf, called)
+            if va is None:
+                continue
+            r.addr[si] = va
+            r.method[s.name] = "orig-code(%s)" % how
+            note_model(s.name, "orig-code", va)
+        # ---- still-unresolved required symbols: bind a Machine model ------------------------------
+        # The last resort, and evidence of testability only: a symbol no name source identifies is
+        # modelled (a zero-returning stub / a zeroed data block), and equiv caps the row at WEAK
+        # with "N modelled symbol(s)" instead of reporting a PASS. Skipped silently when the Machine
+        # has no model API (the row then stays unresolved, as before).
+        m = self.machine()
+        stub = getattr(m, "model_stub", None) if m is not None else None
+        data = getattr(m, "model_data", None) if m is not None else None
+        for si, (kind, _note) in list(pending.items()):
+            if kind != "req" or si in r.addr:
+                continue
+            s = syms[si]
+            called = "call" in usage.get(s.index, ())
+            as_data = mangled_is_data(s.name) or (not called and not s.is_func)
+            va, mkind, size = None, None, None
+            try:
+                if as_data:
+                    if data is not None:
+                        va, mkind, size = data(s.name, MODEL_DATA_SIZE), "model-data", MODEL_DATA_SIZE
+                elif stub is not None:
+                    va, mkind = stub(s.name), "model-stub"
+            except Exception as e:      # a Machine without the model API must not fail the row
+                r.notes.append("model %s: %s" % (s.name, e))
+                continue
+            if va is None:
+                continue
+            r.addr[si] = va
+            r.method[s.name] = mkind
+            note_model(s.name, mkind, va, size)
         for si, (kind, note) in pending.items():
             if si in r.addr:
                 continue

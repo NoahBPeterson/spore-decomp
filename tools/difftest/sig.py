@@ -15,6 +15,7 @@ class Sig:
         self.conv = None        # cdecl / thiscall / stdcall / fastcall
         self.member = False     # has `this`
         self.ret = None         # kind of the return value
+        self.ret_width = None   # bytes of a "small" return (1: char, 2: short); None = not known, compare 2
         self.params = []        # [(kind, dwords)]
         self.variadic = False
         self.ptypes = []        # readable parameter type names
@@ -295,8 +296,11 @@ def parse(name):
         if p.peek() == "@":
             p.take()
     if sig.ret is None:
+        c0 = p.peek()
         r = p.ret_type()
         sig.ret = r[0]
+        if sig.ret == "small":
+            sig.ret_width = {"C": 1, "D": 1, "E": 1, "F": 2, "G": 2}.get(c0)
     params, variadic = p.param_list()
     sig.params = params
     sig.ptypes = p.ptypes
@@ -446,6 +450,8 @@ def parse_c_decl(name, texts, extra_texts=()):
             sig.conv = conv
             r = c_kind(" ".join(ret_words), typedefs, structs)
             sig.ret = "hidden" if r[0] == "struct" else r[0]
+            if sig.ret == "small":
+                sig.ret_width = 1 if _re.search(r"\b(char|__int8)\b", " ".join(ret_words)) else 2
             params = _split_params(ptext)
             if params in ([], ["void"]):
                 params = []

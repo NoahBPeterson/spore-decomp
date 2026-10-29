@@ -35,6 +35,9 @@ SLOT = 0x10000
 # slots are mapped whole rather than per 4 KB page, and runaway loops on random inputs stop here.
 MAX_POOL_SLOTS = 64
 DYN_BASE, DYN_SIZE = 0x50000000, 0x04000000
+MODEL_BASE, MODEL_SIZE = 0x60000000, 0x00400000   # zeroed blocks for symbols only a model can bind
+MODEL_SLOT = 0x1000                               # one modelled object per page
+MODEL_STUB_SLOTS = 128                            # spare import-thunk slots Machine.model_stub hands out
 STACK_TOP, STACK_SIZE = 0x7E000000, 0x00200000
 SENTINEL = 0x7EFFF000
 STUB_BASE = 0x7F000000
@@ -60,12 +63,28 @@ TLS_ARRAY = MISC_BASE + 0x1000
 TLS_BLOCKS = MISC_BASE + 0x2000          # 64 x 0x1000 (TlsGetValue slots + static TLS)
 ERRNO_CELL = MISC_BASE + 0x80000
 SCRATCH = MISC_BASE + 0x80100            # double result of python float handlers
+CRT_LOCKS = MISC_BASE + 0x90000          # the CRITICAL_SECTIONs _mtinitlocks hands the preallocated CRT locks
 
 CALLEE_SAVED = (("ebx", UC_X86_REG_EBX), ("esi", UC_X86_REG_ESI), ("edi", UC_X86_REG_EDI), ("ebp", UC_X86_REG_EBP))
 
 
+# Pure CRT math our object calls by name (a modelled stub) where the original runs its statically linked copy in
+# the image (floor 0x536b10): the original's call is never an import, so recording ours as one made every such row
+# an "import call" FAIL (world_data 0x494b60). The result is still compared through registers and memory.
+UNTRACED_PURE = frozenset(("floor", "ceil", "ldexp"))
+
 class Stop(Exception):
     pass
+
+
+# An import handler that runs the emulated heap out of address space (malloc/new). equiv.py needs to tell this
+# apart from an input-dependent handler stop that *is* measured (a huge memcpy/memset): the run no longer has a
+# comparable end state, so the input is discarded instead of compared.
+HEAP_EXHAUSTED = "emulated heap exhausted"
+
+
+def is_heap_exhausted(why):
+    return HEAP_EXHAUSTED in str(why)
 
 
 def _page(n):
@@ -74,6 +93,13 @@ def _page(n):
 
 FPCW = 0x007F   # x87 control word both sides run under; see _setup_cpu
 
+
+
+def static_crt_functions(handlers):
+    """[(va, handler name)] for statically linked CRT functions in the image. mountandblade-decomp (/MT) reads them
+    from its CRT match list; SporeApp.exe links msvcr90 dynamically (/MD), so there are none and the static-CRT
+    startup model (_init_crt_state) finds nothing to set up."""
+    return []
 
 class Machine:
     def __init__(self, image, fpcw=FPCW):
@@ -109,6 +135,9 @@ class Machine:
         uc.mem_map(STACK_TOP - STACK_SIZE, STACK_SIZE + 0x1000, UC_PROT_READ | UC_PROT_WRITE)
         uc.mem_map(SENTINEL, 0x1000, UC_PROT_READ | UC_PROT_EXEC)
         uc.mem_map(MISC_BASE, MISC_SIZE, UC_PROT_ALL)
+        # Modelled data symbols (Machine.model_data): its own region, so no hook and no diffed section
+        # ever sees it -- the same exclusion imports and pool objects get.
+        uc.mem_map(MODEL_BASE, MODEL_SIZE, UC_PROT_READ | UC_PROT_WRITE)
         self._setup_cpu()
         uc.mem_protect(STUB_BASE, _page(self.stub_end - STUB_BASE), UC_PROT_READ | UC_PROT_EXEC)
         uc.mem_protect(GDT_BASE, 0x1000, UC_PROT_READ)
@@ -121,17 +150,31 @@ class Machine:
         self._rdtsc_cb = uccallback(uc, intel.HOOK_INSN_CPUID_CFUNC)(self._on_rdtsc)
         # The Python binding only maps in/out/syscall/cpuid; rdtsc hooks share cpuid's C signature.
         uc._Uc__do_hook_add(UC_HOOK_INSN, self._rdtsc_cb, 1, 0, ctypes.c_int(UC_X86_INS_RDTSC))
-        self.image_baseline = {nm: bytes(uc.mem_read(lo, hi - lo)) for nm, lo, hi in self.writable}
+        self.image_extra_base = {}
+        self._init_crt_state()
+        # Baseline of each writable section up to its last nonzero page; pages beyond are zero
+        # (mount&blade.exe: 188 KB initialized of a 144 MB .data). Read through image_base_page().
+        self.image_baseline = {}
+        for nm, lo, hi in self.writable:
+            raw = next((s.get_data() for s in pe.sections if base + s.VirtualAddress == lo), b"")
+            n = min(hi - lo, _page(len(raw.rstrip(b"\0"))))
+            self.image_baseline[nm] = bytes(uc.mem_read(lo, n))
         self.misc_baseline = bytes(uc.mem_read(MISC_BASE, MISC_SIZE))
         # Dirty-page tracking for DYN and MISC: emulated writes through a hook, handler writes in
         # write(). Both sides start from the baseline (zeros / misc_baseline) on every run.
         self.dirty = set()
         self._dirty_hooks = [uc.hook_add(UC_HOOK_MEM_WRITE, self._on_tracked_write, begin=lo, end=hi - 1)
                              for lo, hi in ((DYN_BASE, DYN_BASE + DYN_SIZE), (MISC_BASE, MISC_BASE + MISC_SIZE))]
+        # Same for the image's writable sections. mount&blade.exe's .data is 144 MB (mostly .bss): reading
+        # and comparing whole sections after every run allocated 144 MB per run (~5 GB peak per process).
+        self.img_dirty = set()
+        self._dirty_hooks += [uc.hook_add(UC_HOOK_MEM_WRITE, self._on_image_write, begin=lo, end=hi - 1)
+                              for _nm, lo, hi in self.writable]
         self.obj = None
         self.dyn_next = DYN_BASE
         self.dyn_sizes = {}
         self.rand_state = 1
+        self.ui_seed, self.ui_calls = 0, 0
         self.trace_imports = []
         self.stop_reason = None
         self.hooks = []
@@ -140,6 +183,8 @@ class Machine:
         self.pool_pages = {}        # page -> initial bytes of every page mapped during this run
         self.pool_slots = []        # slots mapped during this run
         self.pool_entry = set()     # page of the first access to each slot (for mutation)
+        self.model_next = MODEL_BASE    # bump allocator for Machine.model_data
+        self.model_blocks = {}      # symbol name -> (address, size) of its zeroed block
         uc.hook_add(UC_HOOK_MEM_UNMAPPED | UC_HOOK_MEM_PROT, self._on_bad_mem)
 
     def _on_tracked_write(self, uc, access, address, size, value, _):
@@ -147,13 +192,46 @@ class Machine:
         if (address + size - 1) & ~0xFFF != address & ~0xFFF:
             self.dirty.add((address + size - 1) & ~0xFFF)
 
+    def _on_image_write(self, uc, access, address, size, value, _):
+        self.img_dirty.add(address & ~0xFFF)
+        if (address + size - 1) & ~0xFFF != address & ~0xFFF:
+            self.img_dirty.add((address + size - 1) & ~0xFFF)
+
+    def image_base_page(self, nm, p):
+        lo = next(l for n, l, _h in self.writable if n == nm)
+        if p in self.image_extra_base:
+            return self.image_extra_base[p]
+        b = self.image_baseline[nm][p - lo:p - lo + 0x1000]
+        return b + b"\0" * (0x1000 - len(b))
+
+    def in_image_writable(self, a):
+        return any(lo <= a < hi for _nm, lo, hi in self.writable)
+
+    def take_image_dirty(self):
+        """-> {section name: {page: bytes}} for image pages written since the last call that differ from
+        the baseline (sections with no such page are absent); restores every dirty page."""
+        out = {}
+        for p in sorted(self.img_dirty):
+            for nm, lo, hi in self.writable:
+                if lo <= p < hi:
+                    base = self.image_base_page(nm, p)
+                    cur = bytes(self.uc.mem_read(p, len(base)))
+                    if cur != base:
+                        out.setdefault(nm, {})[p] = cur
+                        self.uc.mem_write(p, base)
+                    break
+        self.img_dirty = set()
+        return out
+
     @staticmethod
     def tracked(a):
         return DYN_BASE <= a < DYN_BASE + DYN_SIZE or MISC_BASE <= a < MISC_BASE + MISC_SIZE
 
-    def take_dirty(self):
+    def take_dirty(self, written=None):
         """-> ({DYN page: bytes}, {MISC page: bytes}) for pages written since the last call that
-        differ from the baseline; restores every dirty page."""
+        differ from the baseline; restores every dirty page. `written`, when given, collects the address
+        of every written dword (the caller's per-run write set: the comparison needs to know which dwords
+        of a dirty page a build actually wrote, and only an emulated store reaches this hook)."""
         dyn, misc = {}, {}
         zero = b"\0" * 0x1000
         for p in sorted(self.dirty):
@@ -164,6 +242,10 @@ class Machine:
                 base, out = self.misc_base_page(p), misc
             if cur != base:
                 out[p] = cur
+                if written is not None:
+                    for k in range(0, 0x1000, 4):
+                        if cur[k:k + 4] != base[k:k + 4]:
+                            written.add(p + k)
                 self.uc.mem_write(p, base)
         self.dirty = set()
         return dyn, misc
@@ -276,12 +358,71 @@ class Machine:
         self.fpcw = fpcw & 0xFFFF
         self.uc.mem_write(self.cw_addr, struct.pack("<H", self.fpcw))
 
+    def _init_crt_state(self):
+        """The static CRT's per-process state as the game's startup (_mtinit, before main) leaves it, which
+        no test runs: left as the image has it, the first CRT function that takes a lock or reads per-thread
+        data (errno, locale, mbcinfo) recursed or ended the input (quest_log 0x4ee910: _lock -> _mtinitlocknum
+        -> _lock(_LOCKTAB_LOCK) until the stack ran out; then _getptd -> _amsg_exit -> MessageBoxA).
+        - _mtinitlocks: each preallocated lock of _locktable ({CRITICAL_SECTION*, kind} x 36, mlock.c) gets a
+          critical section; the table is found through _lock's `lea esi,[eax*8+table]; cmp dword [esi],0`.
+        - _mtinit's no-FLS path (kernel32 without FlsAlloc): the four gpFls* pointers are the Tls* imports,
+          __tlsindex a TLS slot, and that slot's block the main thread's _tiddata (tid, _thandle -1,
+          _ownlocale 1, ptmbcinfo = &__initialmbcinfo). Addresses are read from _mtinit's own stores.
+        Pages of .bss this writes are kept as baseline (image_extra_base), so every run starts from them."""
+        uc = self.uc
+        rd = lambda a, n: bytes(uc.mem_read(a, n))
+        text = next((s for s in self.img.sections if s[0] == ".text"), None)
+        if text is None:
+            return
+        code = rd(text[1], text[2])
+        touched = set()
+
+        def put(a, v):
+            uc.mem_write(a, struct.pack("<I", v & 0xFFFFFFFF))
+            touched.add(a & ~0xFFF)
+
+        k = code.find(b"\x55\x8b\xec\x8b\x45\x08\x56\x8d\x34\xc5")
+        if k >= 0 and code[k + 14:k + 17] == b"\x83\x3e\x00":
+            table = struct.unpack_from("<I", code, k + 10)[0]
+            ents = struct.unpack("<72I", rd(table, 72 * 4))
+            for i in range(36):
+                if ents[2 * i] == 0 and ents[2 * i + 1] == 1:
+                    put(table + 8 * i, CRT_LOCKS + 0x18 * i)
+        mt = next((va for va, nm in static_crt_functions({"_mtinit": {"fn": True}})), None)
+        b = rd(mt, 0xF0) if mt else b""
+        want = ((0x38, b"\xa3"), (0x45, b"\xa3"), (0x52, b"\xa3"), (0x60, b"\xa3"), (0x67, b"\xa1"),
+                (0x71, b"\xa1"), (0x7B, b"\xa1"), (0x80, b"\xc7\x05"), (0x9D, b"\xa3"), (0xCB, b"\xc7\x46\x54"))
+        if b and all(b[o:o + len(op)] == op for o, op in want):
+            u = lambda o: struct.unpack_from("<I", b, o)[0]
+            fls_alloc, fls_get, fls_set, fls_free = u(0x39), u(0x46), u(0x53), u(0x61)
+            put(fls_get, struct.unpack("<I", rd(u(0x68), 4))[0])      # = TlsGetValue's IAT entry
+            put(fls_set, struct.unpack("<I", rd(u(0x72), 4))[0])      # TlsSetValue
+            put(fls_free, struct.unpack("<I", rd(u(0x7C), 4))[0])     # TlsFree
+            put(fls_alloc, u(0x86))                                    # _mtinit's TlsAlloc wrapper
+            slot = 63
+            put(u(0x9E), slot)                                         # __tlsindex
+            ptd = TLS_BLOCKS + 0x1000 * slot
+            uc.mem_write(ptd, b"\0" * 0x8C)
+            uc.mem_write(ptd, struct.pack("<Ii", 0x1234, -1))         # _tid (GetCurrentThreadId), _thandle
+            uc.mem_write(ptd + 0x14, struct.pack("<I", 1))            # _ownlocale
+            uc.mem_write(ptd + 0x54, struct.pack("<I", u(0xCE)))      # ptmbcinfo = &__initialmbcinfo
+            uc.mem_write(TLS_ARRAY + 4 * slot, struct.pack("<I", ptd))
+        for p in touched:
+            self.image_extra_base[p] = rd(p, 0x1000)
+
     # ------------------------------------------------------------------ imports
     def _install_stubs(self):
         uc = self.uc
-        n = len(self.img.imports)
-        uc.mem_map(STUB_BASE, _page(n * STUB_SLOT), UC_PROT_READ | UC_PROT_EXEC | UC_PROT_WRITE)
         install_crt(self)
+        install_import_models(self)
+        # SporeApp.exe links the CRT dynamically (/MD): malloc, memcpy, ... are msvcr90 imports with their own
+        # stubs. (mountandblade-decomp routes its static-CRT image functions to handler stubs here.)
+        crt = []
+        n = len(self.img.imports) + len(crt)
+        # The tail of the stub table is never used by an import: Machine.model_stub hands those slots out
+        # to symbols no source maps, through this same table and Python handler dispatch.
+        slots = n + MODEL_STUB_SLOTS
+        uc.mem_map(STUB_BASE, _page(slots * STUB_SLOT), UC_PROT_READ | UC_PROT_EXEC | UC_PROT_WRITE)
         for i, (iat, full) in enumerate(sorted(self.img.imports.items())):
             name = full.split("!", 1)[1]
             stub = STUB_BASE + STUB_SLOT * i
@@ -292,18 +433,28 @@ class Machine:
             uc.mem_write(stub, code.ljust(STUB_SLOT, b"\xcc"))
             uc.mem_write(iat, struct.pack("<I", stub))
             self.stub_names[stub] = name
-        self.stub_end = STUB_BASE + STUB_SLOT * n
+        for j, (va, name) in enumerate(crt):
+            stub = STUB_BASE + STUB_SLOT * (len(self.img.imports) + j)
+            uc.mem_write(stub, self.handlers[name]["code"].ljust(STUB_SLOT, b"\xcc"))
+            uc.mem_write(va, b"\xe9" + struct.pack("<i", stub - (va + 5)))
+            self.stub_names[stub] = name
+        self.stub_end = STUB_BASE + STUB_SLOT * slots
+        self.model_stub_next, self.model_stub_limit = n, slots
+        self.model_stubs = {}       # symbol name -> stub address
         uc.hook_add(UC_HOOK_CODE, self._on_stub, begin=STUB_BASE, end=self.stub_end - 1)
 
-    def handle(self, name, fn=None, nargs=0, pops=0, code=None, fresult=False):
-        """fn(machine, args) -> eax (or float when fresult; then the stub does fld [SCRATCH])."""
+    def handle(self, name, fn=None, nargs=0, pops=0, code=None, fresult=False, span=None):
+        """fn(machine, args) -> eax (or float when fresult; then the stub does fld [SCRATCH]).
+        `span`, when given, is the byte length of the handler's buffer argument(s): equiv.py's
+        stub-scratch rule uses it to scope which addresses a do-nothing stub (fn None) can excuse."""
         if code is None:
             if fresult:
                 code = b"\xdd\x05" + struct.pack("<I", SCRATCH)
             else:
                 code = b""
             code += (b"\xc2" + struct.pack("<H", pops * 4)) if pops else b"\xc3"
-        self.handlers[name] = {"fn": fn, "nargs": nargs, "pops": pops, "code": code, "fresult": fresult}
+        self.handlers[name] = {"fn": fn, "nargs": nargs, "pops": pops, "code": code, "fresult": fresult,
+                               "span": span}
 
     def _on_stub(self, uc, address, size, _):
         if (address - STUB_BASE) % STUB_SLOT:
@@ -316,7 +467,8 @@ class Machine:
             uc.emu_stop()
             return
         args = [self.u32(esp + 4 + 4 * k) for k in range(h["nargs"])]
-        self.trace_imports.append((name, tuple(args)))
+        if name not in UNTRACED_PURE:
+            self.trace_imports.append((name, tuple(args)))
         if h["fn"] is None:
             return
         try:
@@ -348,6 +500,12 @@ class Machine:
         """Write on behalf of the emulated program (import handlers, input setup): refuses read-only
         memory (a write-protection fault, as the CPU would raise) and records dirty pages."""
         n = len(data)
+        cb = getattr(self, "mark_written", None)
+        if cb is not None and n:            # --uninit-mem: a handler/setup write is a write by this run
+            try:
+                cb(a, n, True)              # via_import: not a store the code made (see MemWrites.mark)
+            except Exception:               # noqa: BLE001  bookkeeping must never break a run
+                pass
         if n:
             e = a + n
             for lo, hi in self.readonly:
@@ -357,6 +515,9 @@ class Machine:
                 for p in range(a & ~0xFFF, e, 0x1000):
                     if self.tracked(p):
                         self.dirty.add(p)
+            for p in range(a & ~0xFFF, e, 0x1000):
+                if self.in_image_writable(p):
+                    self.img_dirty.add(p)
         self.uc.mem_write(a, bytes(data))
 
     def cstr(self, a, wide=False, limit=1 << 16):
@@ -384,9 +545,59 @@ class Machine:
     def dyn_alloc(self, n, align=16):
         a = (self.dyn_next + align - 1) & ~(align - 1)
         if a + n > DYN_BASE + DYN_SIZE or n > DYN_SIZE:
-            raise Stop("emulated heap exhausted (%d bytes)" % n)
+            raise Stop("%s (%d bytes)" % (HEAP_EXHAUSTED, n))
         self.dyn_next = a + n
         self.dyn_sizes[a] = n
+        return a
+
+    # ------------------------------------------------------------------ models
+    # A symbol our object references but no name source identifies has no original address to bind to.
+    # Narrowing the row to "unresolved reference" makes it unmeasurable, so the resolver (resolve.py) may
+    # bind it to one of these two models instead. A model is evidence of testability, never of equivalence:
+    # resolve.py records it in r.models and equiv.py caps such a run at WEAK and says how many there were.
+    # Neither model can hide a difference the harness compares: model stubs live in the read-only stub
+    # table and model data in its own untracked region, so neither shows up as written memory.
+    def model_stub(self, name):
+        """Address of an executable stub for an unmapped function symbol: a `call` returns 0 (xor eax,eax;
+        ret) and touches nothing but the return address. Routed through the import stub table and the same
+        Python handler dispatch (_on_stub), so it costs one traced import entry and nothing else.
+        Idempotent per name."""
+        a = self.model_stubs.get(name)
+        if a is not None:
+            return a
+        slot = self.model_stub_next
+        if slot >= self.model_stub_limit:
+            raise Stop("model stub slots exhausted (%s)" % name)
+        stub = STUB_BASE + STUB_SLOT * slot
+        key = "model:" + name        # never collides with an import handler of the same name
+        code = b"\x31\xc0\xc3"       # xor eax,eax; ret
+        self.handlers[key] = {"fn": lambda m, args, esp: 0, "nargs": 0, "pops": 0, "code": code,
+                              "fresult": False}
+        page = stub & ~0xFFF
+        self.uc.mem_protect(page, 0x1000, UC_PROT_READ | UC_PROT_WRITE | UC_PROT_EXEC)
+        self.uc.mem_write(stub, code.ljust(STUB_SLOT, b"\xcc"))
+        self.uc.mem_protect(page, 0x1000, UC_PROT_READ | UC_PROT_EXEC)
+        self.stub_names[stub] = key
+        self.model_stub_next = slot + 1
+        self.model_stubs[name] = stub
+        return stub
+
+    def model_data(self, name, size):
+        """Address of a zeroed, readable+writable block of at least `size` bytes for a data symbol no source
+        maps. Idempotent per name for the same or a smaller size; a later, larger request gets a fresh block
+        (the first address may already be reachable from the code being tested). Both sides start every run
+        from zeros (see run()), and the block lies in MODEL_BASE, which no write hook or diffed region
+        covers -- the exclusion imports and pool objects get."""
+        n = max(int(size), 1)
+        blk = self.model_blocks.get(name)
+        if blk is not None and blk[1] >= n:
+            return blk[0]
+        span = (n + MODEL_SLOT - 1) // MODEL_SLOT * MODEL_SLOT
+        a = self.model_next
+        if a + span > MODEL_BASE + MODEL_SIZE:
+            raise Stop("model data exhausted (%d bytes for %s)" % (span, name))
+        self.model_next = a + span
+        self.model_blocks[name] = (a, n)
         return a
 
     # ------------------------------------------------------------------ our object
@@ -472,6 +683,8 @@ class Machine:
         generated function pointer): it may emulate a do-nothing method and the run resumes."""
         import time as _time
         uc = self.uc
+        for a, n in self.model_blocks.values():     # both sides start from the same model memory
+            uc.mem_write(a, b"\0" * n)
         self.stop_reason = None
         self.fake_calls = 0
         self.tsc = 0x1000000
@@ -504,6 +717,10 @@ class Machine:
                     return r
             return ("fault", "%s at eip=%08x" % (err, eip))
         if eip != SENTINEL:
+            if t_end is not None and _time.time() >= t_end:
+                # the WALL clock stopped it, not the instruction budget: this outcome depends on machine load, so
+                # the caller must not turn it into a verdict (equiv invalidates the row instead)
+                return ("wall", "%ss wall-clock cap exhausted at eip=%08x" % (seconds, eip))
             return ("budget", "instruction budget %d or %ss exhausted at eip=%08x" % (budget, seconds, eip))
         return ("ok", None)
 
@@ -750,6 +967,9 @@ def install_crt(m):
         "rand": (rand, 0), "srand": (srand, 1), "_errno": (errno, 0), "atoi": (atoi, 1), "atol": (atoi, 1),
         "_isnan": (isnan, 2), "_finite": (finite, 2), "_purecall": (purecall, 0),
         "_CxxThrowException": (throw, 2),
+        # _mtinitlocknum's critical section for a lock first taken at run time: initialized (TRUE), without
+        # the LoadLibraryA("kernel32")/GetProcAddress lookup that otherwise ends the input at an import
+        "__crtInitCritSecAndSpinCount": (lambda m, a, e: 1, 2),
     }
     for name, (fn, n) in cdecl.items():
         m.handle(name, fn, nargs=n)
@@ -786,3 +1006,252 @@ def install_crt(m):
     }
     for name, code in native.items():
         m.handle(name, None, code=code)
+
+
+# ---------------------------------------------------------------------- import models
+
+def install_import_models(m):
+    """Models for imports that stop the run where they are called: an unmodelled thunk ends the input, so
+    a function that reaches one is never measurable (rows "only 0/N inputs valid (discards:
+    import:CreateDirectoryA=400)"). Each model is what the API documents for the state the original can
+    reach with a generated input -- a handle, S_OK, a zeroed allocation, the documented D3DX matrix -- and
+    never a pointer the real call could not have produced. Like install_crt's handlers these change the
+    emulator identically on both sides, so a row they keep alive is still re-run and compared in full;
+    unlike a symbol model they are not part of equiv.py's "N modelled symbol(s)" count."""
+    def fl(x):
+        """A FLOAT argument: the dword on the stack reinterpreted, as the callee's own code would read it."""
+        return struct.unpack("<f", struct.pack("<I", x & 0xFFFFFFFF))[0]
+
+    def raise_exception(m_, a, esp):
+        # The harness has no SEH unwinder, so a raise that reached the CRT's C++ throw (0xE06D7363) can only
+        # either stop the input -- indistinguishable from the unmodelled thunk it replaces, which is what
+        # left these rows untestable -- or be modelled as ignored, the documented behaviour when no handler
+        # takes the exception. Ignored, execution resumes after the raise; a dead frame that faults does so
+        # at the barrier (address 0 / 0xCCCCCCCC) and is discarded as a fault, never counted as valid.
+        return 0
+
+    def heap_alloc(m_, a, esp):
+        # A block from the emulated heap, as kernel32!HeapAlloc hands one out. DYN memory is zero on a fresh
+        # run and restored to zero between runs, so an overflowing size stops the run like malloc does.
+        return m_.dyn_alloc(max(a[2], 1))
+
+    def create_directory(m_, a, esp):
+        # BOOL: nonzero when the directory now exists. A generated path is not a real path, so "created" is
+        # the answer that lets the caller's success branch run.
+        return 1
+
+    def create_compatible_dc(m_, a, esp):
+        return 0x00010001           # HDC: a handle, not an address the caller dereferences
+
+    def create_dib_section(m_, a, esp):
+        # HBITMAP, and the BITS pointer the API writes through ppvBits: a zeroed block to draw into.
+        m_.write(a[3], struct.pack("<I", m_.model_data("CreateDIBSection.bits", 0x1000)))
+        return 0x00020001
+
+    def d3dx_create_texture(m_, a, esp):
+        # S_OK plus a non-null texture at ppTexture: the caller checks the HRESULT and then uses *ppTexture,
+        # so returning 0 alone would hand it a NULL engine object.
+        m_.write(a[7], struct.pack("<I", m_.model_data("D3DXCreateTexture.texture", 0x100)))
+        return 0
+
+    def fsound_listener(m_, a, esp):
+        # FSOUND_BOOL: the attributes were accepted. The call only hands the listener position/velocity
+        # vectors to the sound driver, which nothing the harness compares reads back.
+        return 1
+
+    def message_box(m_, a, esp):
+        # int: a modal dialog. A generated caption/text is not a real prompt, so the answer is the one
+        # the original's continuation expects: the user pressed OK (IDOK). The API writes nothing.
+        return 1
+
+    def open_clipboard(m_, a, esp):
+        # BOOL: the clipboard is now owned by the caller (the function it is called from only reads or
+        # writes through the other clipboard APIs, which this harness never reaches).
+        return 1
+
+    def get_module_file_name(m_, a, esp):
+        # DWORD: the module's path written to lpFilename. A generated buffer is not the process's real
+        # one, so the documented "path truncated to nSize-1, NUL terminated" answer is written instead
+        # of faulting; a buffer the emulator cannot write (generated garbage pointer) keeps the count.
+        path = b"C:\\Program Files (x86)\\Steam\\steamapps\\common\\Spore\\SporeBin\\SporeApp.exe"
+        n = a[2] & 0xFFFFFFFF
+        if not n:
+            return 0
+        copy = path[:max(n - 1, 0)]
+        try:
+            m_.write(a[1], copy + b"\0")
+        except UcError:
+            pass
+        return n if len(copy) < len(path) else len(path)
+
+    def matrix(m_, a, rows):
+        m_.write(a[0], struct.pack("<16f", *rows))      # D3DXMATRIX: row-major, translation in row 4
+        return a[0]                                     # pOut, as the API returns it
+
+    def matrix_read(m_, addr):
+        return struct.unpack("<16f", m_.read(addr, 64))
+
+    def matrix_multiply(m_, a, esp):
+        p, q = matrix_read(m_, a[1]), matrix_read(m_, a[2])
+        return matrix(m_, a, tuple(_f32(_f32(p[i * 4] * q[j]) + _f32(p[i * 4 + 1] * q[4 + j])
+                                        + _f32(p[i * 4 + 2] * q[8 + j]) + _f32(p[i * 4 + 3] * q[12 + j]))
+                                 for i in range(4) for j in range(4)))
+
+    def matrix_transpose(m_, a, esp):
+        p = matrix_read(m_, a[1])
+        return matrix(m_, a, tuple(p[j * 4 + i] for i in range(4) for j in range(4)))
+
+    # ---- user32 dialog / window calls (the map editor's and the options' dialogs). No window exists in the
+    # emulator, so each call gets a fixed, documented answer: a control handle is a token the game only passes back
+    # to user32 (never dereferenced), queries answer "nothing selected / empty / unchecked", and the out-buffers are
+    # written as the API would. Writes through a generated pointer the emulator cannot write are skipped.
+    def put(m_, addr, data):
+        try:
+            m_.write(addr, data)
+        except UcError:
+            pass
+
+    def get_dlg_item(m_, a, esp):
+        # HWND of control a[1] in dialog a[0]: NULL for a NULL dialog (the API fails), else a stable token
+        return 0 if not a[0] & 0xFFFFFFFF else 0x00030000 | (a[1] & 0xFFFF)
+
+    def ui_answer(m_, choices):
+        # One of `choices` for the n-th user32 query of this run, a pure function of (input seed, n): both builds
+        # get the same answers as long as they ask the same questions in the same order (a reordered call is a
+        # mismatch of the import trace anyway), and different inputs see different selections / checks / item
+        # data, so the dialog code's branches on them are reachable.
+        m_.ui_calls += 1
+        h = (m_.ui_seed * 0x9E3779B1 + m_.ui_calls * 0x85EBCA77) & 0xFFFFFFFF
+        h ^= h >> 15
+        return choices[h % len(choices)]
+
+    UI_QUERIES = {0x146, 0x147, 0x150, 0x188, 0x18b, 0x199}   # CB_GETCOUNT/GETCURSEL/GETITEMDATA, LB_GETCURSEL/GETCOUNT/GETITEMDATA
+
+    # messages that write into lParam: the text getters (WM_GETTEXT, CB_GETLBTEXT, LB_GETTEXT, the rich edit's
+    # EM_GETSELTEXT / EM_GETTEXTRANGE) return an empty string; EM_EXGETSEL fills a CHARRANGE with an empty selection
+    UI_TEXT_OUT = {0x0d, 0x148, 0x189, 0x43e, 0x44b}
+    EM_EXGETSEL = 0x434
+
+    def send_message(m_, a, esp):
+        # LRESULT. Queries (the selection, a count, an item's data) and the application's own messages (>= WM_USER,
+        # the editor's 0x40x list-type queries) answer -1 ("none", CB_ERR / LB_ERR) or a small number; every other
+        # message (adding strings, setting the selection, WM_SETTEXT, ...) answers 0
+        msg = a[1] & 0xFFFF
+        if msg in UI_TEXT_OUT:
+            if a[3] & 0xFFFFFFFF:
+                put(m_, a[3], b"\0")
+            return 0
+        if msg == EM_EXGETSEL:
+            if a[3] & 0xFFFFFFFF:
+                put(m_, a[3], struct.pack("<2i", 0, 0))
+            return 0
+        if msg in UI_QUERIES or msg >= 0x400:
+            return ui_answer(m_, (0xFFFFFFFF, 0, 1, 2, 3, 4, 5, 7))
+        return 0
+
+    def get_text(buf_arg):
+        def f(m_, a, esp):
+            # int: the control's text: empty, NUL-terminated when the buffer has room
+            if a[buf_arg + 1] & 0xFFFFFFFF:
+                put(m_, a[buf_arg], b"\0")
+            return 0
+        return f
+
+    def get_dlg_item_int(m_, a, esp):
+        # UINT: no number in an empty control: 0, *lpTranslated = FALSE
+        if a[2] & 0xFFFFFFFF:
+            put(m_, a[2], struct.pack("<I", 0))
+        return 0
+
+    def get_rect(m_, a, esp):
+        # BOOL: an 800 x 600 window at the origin (the game's default resolution)
+        put(m_, a[1], struct.pack("<4i", 0, 0, 800, 600))
+        return 1
+
+    def get_cursor_pos(m_, a, esp):
+        # BOOL: the cursor at the centre of that window
+        put(m_, a[0], struct.pack("<2i", 400, 300))
+        return 1
+
+    def ortho_off_center(rh):
+        def f(m_, a, esp):
+            l, r, b, t, zn, zf = (fl(x) for x in a[1:7])
+            z = _fdiv(1.0, zn - zf) if rh else _fdiv(1.0, zf - zn)
+            return matrix(m_, a, (_fdiv(2.0, r - l), 0.0, 0.0, 0.0,
+                                  0.0, _fdiv(2.0, t - b), 0.0, 0.0,
+                                  0.0, 0.0, z, 0.0,
+                                  _fdiv(l + r, l - r), _fdiv(t + b, b - t), _fdiv(zn, zn - zf), 1.0))
+        return f
+
+    def persp_off_center(rh):
+        def f(m_, a, esp):
+            l, r, b, t, zn, zf = (fl(x) for x in a[1:7])
+            two_zn = _f32(2.0 * zn)
+            far = _fdiv(zf, zn - zf) if rh else _fdiv(zf, zf - zn)
+            w = _fdiv(zn * zf, zn - zf) if rh else _fdiv(-zn * zf, zf - zn)
+            return matrix(m_, a, (_fdiv(two_zn, r - l), 0.0, 0.0, 0.0,
+                                  0.0, _fdiv(two_zn, t - b), 0.0, 0.0,
+                                  _fdiv(l + r, l - r), _fdiv(t + b, b - t), far, -1.0 if rh else 1.0,
+                                  0.0, 0.0, w, 0.0))
+        return f
+
+    stdcall = {
+        "RaiseException": (raise_exception, 4),
+        "HeapAlloc": (heap_alloc, 3),
+        "CreateDirectoryA": (create_directory, 2),
+        "CreateCompatibleDC": (create_compatible_dc, 1),
+        "CreateDIBSection": (create_dib_section, 6),
+        "D3DXCreateTexture": (d3dx_create_texture, 8),
+        "D3DXMatrixMultiply": (matrix_multiply, 3),
+        "D3DXMatrixTranspose": (matrix_transpose, 2),
+        "D3DXMatrixOrthoOffCenterRH": (ortho_off_center(True), 7),
+        "D3DXMatrixOrthoOffCenterLH": (ortho_off_center(False), 7),
+        "D3DXMatrixPerspectiveOffCenterRH": (persp_off_center(True), 7),
+        "D3DXMatrixPerspectiveOffCenterLH": (persp_off_center(False), 7),
+        "_FSOUND_3D_Listener_SetAttributes@32": (fsound_listener, 8),
+        "MessageBoxA": (message_box, 4),
+        "OpenClipboard": (open_clipboard, 1),
+        "GetModuleFileNameA": (get_module_file_name, 3),
+        "GetDlgItem": (get_dlg_item, 2),
+        "SendMessageA": (send_message, 4),
+        "GetDlgItemTextA": (get_text(2), 4),
+        "GetWindowTextA": (get_text(1), 3),
+        "GetDlgItemInt": (get_dlg_item_int, 4),
+        "IsDlgButtonChecked": (lambda m_, a, esp: ui_answer(m_, (0, 1)), 2),   # BST_UNCHECKED / BST_CHECKED
+        "SetDlgItemTextA": (lambda m_, a, esp: 1, 3),             # BOOL: done
+        "SetDlgItemInt": (lambda m_, a, esp: 1, 4),
+        "SetWindowTextA": (lambda m_, a, esp: 1, 2),
+        "CheckRadioButton": (lambda m_, a, esp: 1, 4),
+        "EnableWindow": (lambda m_, a, esp: 0, 2),                # BOOL: the window was not disabled before
+        "ShowWindow": (lambda m_, a, esp: 0, 2),                  # BOOL: it was hidden before
+        "UpdateWindow": (lambda m_, a, esp: 1, 1),
+        "RedrawWindow": (lambda m_, a, esp: 1, 4),
+        "SetWindowPos": (lambda m_, a, esp: 1, 7),
+        "SetFocus": (lambda m_, a, esp: 0, 1),                    # HWND: no window had the focus
+        "PostMessageA": (lambda m_, a, esp: 1, 4),
+        "EndDialog": (lambda m_, a, esp: 1, 2),
+        "DefWindowProcA": (lambda m_, a, esp: 0, 4),
+        "GetWindowRect": (get_rect, 2),
+        "GetClientRect": (get_rect, 2),
+        "GetCursorPos": (get_cursor_pos, 1),
+    }
+    for name, (fn, n) in stdcall.items():
+        m.handle(name, fn, nargs=n, pops=n)
+
+
+def _f32(x):
+    """x rounded to single precision, the width the original's D3DX call computes in."""
+    try:
+        return struct.unpack("<f", struct.pack("<f", x))[0]
+    except OverflowError:
+        return math.copysign(math.inf, x)
+
+
+def _fdiv(a, b):
+    """IEEE division: a degenerate projection (l == r, zn == zf) yields inf/NaN like the real call, where
+    Python would raise ZeroDivisionError."""
+    if b:
+        return _f32(a / b)
+    if a == 0.0 or a != a:
+        return float("nan")
+    return math.copysign(float("inf"), a) * math.copysign(1.0, b)

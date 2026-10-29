@@ -2,7 +2,7 @@
 
 Read-only with respect to match/: objects are compiled into work/difftest/obj/.
 """
-import hashlib, os, re, subprocess, sys
+import glob, hashlib, os, re, subprocess, sys, threading
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(os.path.dirname(HERE))
@@ -26,8 +26,31 @@ def winpath(p):
     return "Z:" + p.replace("/", "\\")
 
 
+_MODULE_DIRS = None
+
+
+def module_dir(sid):
+    """A migrated Spore module's bookkeeping directory (src/game/<dir>/<obj>/, beside src/game/<dir>/<obj>.cpp) for
+    id '<obj>' (unique stems) or '<dir>/<obj>', else None. Its manifest/nonmatching/partial files have the slice formats."""
+    global _MODULE_DIRS
+    if _MODULE_DIRS is None:
+        _MODULE_DIRS = {}
+        for d in glob.glob(os.path.join(ROOT, "src", "game", "*", "*", "")):
+            d = d.rstrip(os.sep)
+            if not os.path.exists(d + ".cpp"):
+                continue
+            rel = os.path.relpath(d, os.path.join(ROOT, "src", "game")).replace(os.sep, "/")
+            _MODULE_DIRS[rel] = d
+            stem = os.path.basename(d)
+            _MODULE_DIRS[stem] = None if stem in _MODULE_DIRS else d     # an ambiguous stem needs '<dir>/<obj>'
+    return _MODULE_DIRS.get(sid)
+
+
 def slice_dir(sid):
-    return os.path.join(ROOT, "match", "slices", sid)
+    d = os.path.join(ROOT, "match", "slices", sid)
+    if not os.path.isdir(d):
+        return module_dir(sid) or d
+    return d
 
 
 def read_rows(path):
@@ -52,7 +75,12 @@ def manifest_rows(sid):
     out = []
     path = os.path.join(slice_dir(sid), "manifest.txt")
     if not os.path.exists(path):
-        return out
+        # a migrated module (src/<area>/<stem>.cpp): its rows are in src/<area>/<stem>.manifest.txt, and the mangled
+        # names there are the only binding for compiler-generated functions and same-size template instances
+        hits = glob.glob(os.path.join(ROOT, "src", "**", sid + ".manifest.txt"), recursive=True)
+        if len(hits) != 1:
+            return out
+        path = hits[0]
     for line in open(path):
         p = line.split("#", 1)[0].split()
         if len(p) >= 3:
@@ -201,6 +229,8 @@ def manifest_note_flags(sid):
 
 
 def source_path(sid):
+    if not os.path.isdir(os.path.join(ROOT, "match", "slices", sid)) and module_dir(sid):
+        return module_dir(sid) + ".cpp"
     return os.path.join(slice_dir(sid), sid + ".cpp")
 
 
@@ -234,19 +264,56 @@ def resolve_include_flags(flags):
     return out
 
 
+_INC = re.compile(r'^\s*#\s*include\s*"([^"]+)"', re.M)
+
+
+def _quoted_includes(src):
+    """src plus every file it reaches through #include "..." (resolved next to the including file, then in
+    match/include), so an edit to any header a TU uses (src/include, ../../rgl/..., ...) invalidates its object."""
+    seen, todo = [], [os.path.abspath(src)]
+    while todo:
+        f = todo.pop()
+        if f in seen:
+            continue
+        seen.append(f)
+        try:
+            text = open(f, "rb").read().decode("latin-1")
+        except OSError:
+            continue
+        for name in _INC.findall(text):
+            for d in (os.path.dirname(f), os.path.join(ROOT, "match", "include")):
+                c = os.path.normpath(os.path.join(d, name))
+                if os.path.isfile(c):
+                    todo.append(c)
+                    break
+    return sorted(seen)
+
+
 def compile_obj(src, flags):
     """Compile src with flags into work/difftest/obj (cached by source+headers+flags). -> (obj, log)."""
     flags = resolve_include_flags(flags)
     os.makedirs(OBJDIR, exist_ok=True)
     h = hashlib.md5()
-    h.update(open(src, "rb").read())
+    # paths enter the key relative to the repo, so git worktrees of the repo share compiled objects. No source
+    # uses __FILE__, but cl mangles anonymous-namespace names with a hash of the source path (?A0x101b409b), so a
+    # TU that reaches an anonymous namespace keys on its absolute path (run_all looks such symbols up by name).
+    anon = False
+    for f in _quoted_includes(src):
+        h.update(os.path.relpath(f, ROOT).encode())
+        text = open(f, "rb").read()
+        h.update(text)
+        anon = anon or re.search(rb"namespace\s*\{", text) is not None
+    if anon:
+        h.update(os.path.abspath(src).encode())
     for hdr in sorted(os.listdir(os.path.dirname(src))):
         if hdr.endswith((".h", ".hpp", ".inl")):
             h.update(open(os.path.join(os.path.dirname(src), hdr), "rb").read())
-    h.update(" ".join(flags).encode())
+    h.update(" ".join(flags).replace(winpath(ROOT), "<ROOT>").encode())
+    # the shared slice headers (match/include, on cl.sh's include path): an edit there must invalidate too
+    for f in sorted(glob.glob(os.path.join(ROOT, "match", "include", "*.h"))):
+        h.update(open(f, "rb").read())
     if os.path.abspath(src).startswith(os.path.join(ROOT, "src", "game") + os.sep):
-        # module TUs include the generated class headers under src/game/include: a header edit must
-        # invalidate the cached object (the slice-era key only covered headers next to the source)
+        # generated class headers under src/game/include may also be reached through an /I path
         for d, _sub, files in sorted(os.walk(os.path.join(ROOT, "src", "game", "include"))):
             for f in sorted(files):
                 if f.endswith((".h", ".hpp", ".inl")):
@@ -254,12 +321,21 @@ def compile_obj(src, flags):
     obj = os.path.join(OBJDIR, "%s_%s.obj" % (os.path.basename(src).rsplit(".", 1)[0], h.hexdigest()[:12]))
     if os.path.exists(obj):
         return obj, ""
-    tmp = obj + ".part.obj"
+    # Unique temp per thread: six sweep workers compile the same module at once, and a shared "<obj>.part.obj"
+    # made one of them fail with FileNotFoundError on the rename (mesh_start, slot_api, mission_ctx rows).
+    tmp = "%s.%d.%d.part.obj" % (obj, os.getpid(), threading.get_ident())
     r = subprocess.run([CL, "/nologo", "/c", *flags, INCLUDE, "/Fo" + winpath(tmp), winpath(src)],
                        capture_output=True, text=True)
     if r.returncode or not os.path.exists(tmp):
+        if os.path.exists(obj):
+            return obj, r.stdout[-500:]          # another worker finished the identical object first
         return None, (r.stdout + r.stderr)[-3000:]
-    os.replace(tmp, obj)
+    try:
+        os.replace(tmp, obj)
+    except OSError:
+        if os.path.exists(obj):
+            return obj, r.stdout[-500:]
+        raise
     return obj, r.stdout[-500:]
 
 
@@ -302,13 +378,19 @@ def demangle_qual(name):
 
 
 def _def_name_after(lines, i):
-    """Name of the first function *definition* (a '(' ... '{' before any ';') after line i.
-    A file-local 'static inline' / 'static __forceinline' helper defined between the marker and
-    the free function it labels is skipped when such a definition follows before the next
-    '// ... @ 0x' marker (and before any class body)."""
+    """Name of the function the marker on line i labels: the first definition ('(' ... '{' before any ';'), or an
+    explicit template instantiation ('template void V<int>::f(...);'), which IS a definition. A file-local
+    'static inline' / 'static __forceinline' helper defined between the marker and the free function it labels is
+    skipped when such a definition follows before the next '// ... @ 0x' marker (and before any class body)."""
     buf = ""
     first = None
     depth = 0
+    tpl = False
+
+    def name_of(head):
+        m = re.search(r"((?:[A-Za-z_]\w*\s*::\s*)*~?(?:operator\s*\S+|[A-Za-z_]\w*))\s*$", head)
+        return re.sub(r"\s+", "", m.group(1)) if m else None
+
     for j in range(i + 1, min(i + 80, len(lines))):
         if first is not None and re.search(r"//.*@\s*0x[0-9a-fA-F]{5,8}\b", lines[j]):
             break
@@ -317,30 +399,42 @@ def _def_name_after(lines, i):
             depth += raw.count("{") - raw.count("}")
             continue
         l = raw.strip()
-        if not l or l.startswith(("#", "template", "/*", "*")):
+        if l.startswith("template"):
+            # the instantiation/specialisation on this line is the definition the marker labels; without this the
+            # scan ran on to the next ordinary definition (0x445ea0, the vector<E56> _Insert_n COMDAT, was bound to
+            # ir_max_amount twelve lines below, so the row compared two unrelated functions)
+            tpl = True
+            l = re.sub(r"^template\s*(<[^<>]*>)?\s*", "", l).strip()
+        if not l or l.startswith(("#", "/*", "*")):
             continue
+        # `__declspec(noinline) char __fastcall check_register(...)`: the attribute's parenthesis is not the
+        # parameter list (every validator of the interpreter was "our symbol not found: __declspec")
+        l = re.sub(r"__declspec\s*\([^)]*\)", " ", l)
         buf += " " + l
         if "{" in buf or ";" in buf:
             semi, brace = buf.find(";"), buf.find("{")
             if brace >= 0 and (semi < 0 or brace < semi) and "(" in buf[:brace]:
                 head = buf[:buf.index("(")]
-                m = re.search(r"((?:[A-Za-z_]\w*\s*::\s*)*~?(?:operator\s*\S+|[A-Za-z_]\w*))\s*$", head)
-                if m:
-                    nm = re.sub(r"\s+", "", m.group(1))
+                nm = name_of(head)
+                if nm:
                     helper = re.search(r"\bstatic\b", head) and re.search(r"\b(?:inline|__inline|__forceinline)\b", head)
                     if not helper:
                         return nm if first is None or "::" not in nm else first
                     if first is None:
                         first = nm              # a file-local inline helper: look further
                     depth = buf.count("{") - buf.count("}")
-                    buf = ""
+                    buf, tpl = "", False
                     continue
+            if tpl and semi >= 0 and "(" in buf and brace < 0:
+                nm = name_of(buf[:buf.index("(")])
+                if nm:
+                    return nm
             if brace >= 0 and (semi < 0 or brace < semi) and "(" not in buf[:brace]:
                 if first is not None:
                     return first   # past a helper into a class body: the helper was the target
                 buf = ""   # class/namespace opening: keep looking
                 continue
-            buf = ""
+            buf, tpl = "", False
     return first
 
 

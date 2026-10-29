@@ -19,3 +19,4 @@ python-dateutil==3.0.0
 six==1.17.0
 tzdata==2026.5
 unicorn==2.1.4
+z3-solver==5.3.2.0

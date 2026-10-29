@@ -142,9 +142,20 @@ def test_flag_order():
 # ---------------------------------------------------------------------- hybrid-found blind spots (2026-10-12)
 
 def test_untouched_register_clobber_fails():
-    # InterpRamp: instruction-for-instruction equivalent but writes xmm3, which the original never
-    # touches; its LTCG caller kept a live value there (crackling audio in the hybrid).
-    r = equiv.test_function("s0114da70", 0x0114e780, opts())
+    # InterpRamp: instruction-for-instruction equivalent but wrote xmm3, which the original never touches; its
+    # LTCG caller kept a live value there (crackling audio in the hybrid). The source was fixed on 2026-10-18,
+    # so the clobber is put back as a mutant.
+    src = os.path.join(ROOT, "src", "game", "SPBake", "Tessellator.cpp")
+    text = open(src).read()
+    head = "PosDst InterpRamp(u32 pos, s32 step, u32 end, const f32* src, f32* dst)\n{\n"
+    assert head in text
+    text = text.replace(head, head + "    __asm xorps xmm3, xmm3\n")
+    path = os.path.join(ROOT, "src", "game", "SPBake", "_mut_xmm3_Tessellator.cpp")
+    open(path, "w").write(text)
+    try:
+        r = equiv.test_function("s0114da70", 0x0114e780, opts("--src", path))
+    finally:
+        os.remove(path)
     assert r["verdict"] == "FAIL", r
     assert r["first_mismatch"]["observable"].startswith("xmm3"), r
 
@@ -187,6 +198,14 @@ def test_void_declaration_hiding_eax_return_fails():
 
 
 def test_ret_n_mismatch_fails():
-    # `ret` vs the original's `ret 4` unbalances the caller's stack; the esp observable catches it.
-    r = equiv.test_function("s0056fb90", 0x0056fe60, opts())
+    # `ret 4` vs the original's `ret` unbalances the caller's stack; the esp observable catches it. The slice the
+    # test first used (LowerBound1c 0x0056fe60) was fixed on 2026-10-19, so the byte-exact cdecl jpeg_fdct_float
+    # is made __stdcall as a mutant.
+    src = os.path.join(ROOT, "match", "slices", EXACT_SID, EXACT_SID + ".cpp")
+    text = open(src).read()
+    assert "void jpeg_fdct_float(float* data)" in text
+    os.makedirs(MUT_DIR, exist_ok=True)
+    path = os.path.join(MUT_DIR, EXACT_SID + "_stdcall.cpp")
+    open(path, "w").write(text.replace("void jpeg_fdct_float(float* data)", "void __stdcall jpeg_fdct_float(float* data)"))
+    r = equiv.test_function(EXACT_SID, EXACT_VA, opts("--src", path))
     assert r["verdict"] == "FAIL" and r["first_mismatch"]["observable"] in ("esp", "eax"), r
