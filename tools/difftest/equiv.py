@@ -1486,7 +1486,8 @@ class Runner:
         must not clear them."""
         old = self.write_flags_reg.get((label, base))
         if old is not None and len(old[1]) == len(flags):
-            flags = bytearray(max(a, b) for a, b in zip(old[1], flags))
+            flags = bytearray(np.maximum(np.frombuffer(bytes(old[1]), np.uint8),
+                                         np.frombuffer(bytes(flags), np.uint8)).tobytes())
             baseline = baseline if baseline is not None else old[0]
         self.write_flags_reg[(label, base)] = (baseline, flags)
         if is_page:
@@ -2305,7 +2306,8 @@ class Runner:
         regt, fpu, pend, steps = {}, [], [False], [0]
         movs = [None]       # esi - edi of the string copy in progress: its writes take their source bytes' taint
         last_esp = [entry]
-        cache = {}
+        # decoded instructions, kept across inputs (keyed by address AND bytes, so changed code is re-decoded)
+        cache = self.__dict__.setdefault("_taint_insns", {})
 
         def src_taint(a, n):
             return all((b in tainted) or (lo_s <= b < entry and b not in written) for b in range(a, a + n))
@@ -2326,15 +2328,26 @@ class Runner:
             steps[0] += 1
             if self.cur is not self.orig or steps[0] > max_steps:
                 return
-            ins = cache.get(address)
-            if ins is None:
+            try:
+                raw = bytes(uc_.mem_read(address, size))
+            except Exception:
+                return
+            dec = cache.get((address, raw))
+            if dec is None:
                 try:
-                    ins = cache[address] = next(_md.disasm(bytes(uc_.mem_read(address, size)), address))
+                    ins = next(_md.disasm(raw, address))
                 except Exception:
                     return
-            ops, mn = ins.operands, ins.mnemonic
-            if mn.startswith("rep "):
-                mn = mn[4:]                 # capstone spells the prefix into the mnemonic ("rep movsd")
+                mn = ins.mnemonic
+                if mn.startswith("rep "):
+                    mn = mn[4:]             # capstone spells the prefix into the mnemonic ("rep movsd")
+                try:
+                    wr = tuple(ins.regs_access()[1])
+                except Exception:
+                    wr = None               # re-raised below, where the instruction needs it
+                # capstone rebuilds .operands on every access: decode once, with the registers it writes
+                dec = cache[(address, raw)] = (mn, ins.operands, wr)
+            mn, ops, wr = dec
             pend[0] = False
             movs[0] = None
             esp_now = uc_.reg_read(UC_X86_REG_ESP)
@@ -2402,7 +2415,9 @@ class Runner:
                         fpu.pop()
                     return
                 # anything else: what it writes is untainted (registers here, memory through on_write)
-                for r_ in ins.regs_access()[1]:
+                if wr is None:
+                    raise ValueError("regs_access failed")
+                for r_ in wr:
                     regt.pop(r_, None)
                     regt.pop(full(r_), None)
                 if mn.startswith("f"):
@@ -3992,18 +4007,23 @@ class FpTol:
         touched = list(inp.touched)
         m.set_fpcw(FPCW_REF)
         self.fstore = {}        # dword address -> the last write to it was an x87/SSE float store
-        code, fvals = {}, set()
+        # pc -> "is a float store", kept across inputs (keyed by address AND bytes, so changed code is re-decoded)
+        code, fvals = self.__dict__.setdefault("_fst_code", {}), set()
 
         def on_write(uc, access, address, size, value, _):
             pc = uc.reg_read(UC_X86_REG_EIP)
-            f = code.get(pc)
+            try:
+                raw = bytes(uc.mem_read(pc, 15))
+            except Exception:                           # noqa: BLE001
+                raw = b""
+            f = code.get((pc, raw))
             if f is None:
                 try:
-                    ins = next(_md.disasm(bytes(uc.mem_read(pc, 15)), pc))
+                    ins = next(_md.disasm(raw, pc))
                     f = ins.mnemonic.startswith("fst") or ins.mnemonic in FP_STORES
                 except (StopIteration, Exception):      # noqa: BLE001
                     f = False
-                code[pc] = f
+                code[(pc, raw)] = f
             if size >= 4:
                 # an integer store of a value an x87/SSE store wrote earlier is a copied float (spill, then mov to the result)
                 v = value & 0xFFFFFFFF
@@ -5213,4 +5233,10 @@ def print_result(r):
 
 
 if __name__ == "__main__":
+    # String hashing is randomised per process, and set/dict-of-set iteration (steering candidates, repairs) follows
+    # it: three runs of one row gave 632 / 644 / 600 valid inputs (SPEditorBaker 0x00402cc0, 2026-10-29). A fixed
+    # seed makes a row's verdict a function of --inputs and --seed alone, which the verdict cache also assumes.
+    if os.environ.get("PYTHONHASHSEED") != "0":
+        os.environ["PYTHONHASHSEED"] = "0"
+        os.execv(sys.executable, [sys.executable] + sys.argv)
     sys.exit(main())

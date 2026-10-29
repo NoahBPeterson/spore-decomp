@@ -515,9 +515,15 @@ class Machine:
                 for p in range(a & ~0xFFF, e, 0x1000):
                     if self.tracked(p):
                         self.dirty.add(p)
-            for p in range(a & ~0xFFF, e, 0x1000):
-                if self.in_image_writable(p):
-                    self.img_dirty.add(p)
+            # the pages of [a, e) inside each writable section, by range intersection (a fill of the stack or
+            # a big setup buffer spans hundreds of pages; testing each one was most of a run's write cost)
+            first = a & ~0xFFF
+            for _nm, lo, hi in self.writable:
+                # the pages p of range(first, e, 0x1000) with lo <= p < hi
+                start = first if first >= lo else first + -(-(lo - first) // 0x1000) * 0x1000
+                stop = min(e, hi)
+                if start < stop:
+                    self.img_dirty.update(range(start, stop, 0x1000))
         self.uc.mem_write(a, bytes(data))
 
     def cstr(self, a, wide=False, limit=1 << 16):
