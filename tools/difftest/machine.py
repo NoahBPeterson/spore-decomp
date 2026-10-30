@@ -1090,6 +1090,25 @@ def install_import_models(m):
             pass
         return n if len(copy) < len(path) else len(path)
 
+    def get_full_path_name(m_, a, esp):
+        # DWORD GetFullPathNameA(name, nBufferLength, lpBuffer, lpFilePart): the name made absolute against a fixed
+        # current directory, written NUL-terminated when it fits (returns its length), else the size needed. A name
+        # the emulator cannot read is the documented failure (0).
+        try:
+            name = m_.cstr(a[0], limit=1024).replace(b"/", b"\\")
+        except UcError:
+            return 0
+        full = name if (name[1:2] == b":" or name.startswith(b"\\")) else b"C:\\Spore\\" + name
+        if (a[1] & 0xFFFFFFFF) <= len(full):
+            return len(full) + 1
+        try:
+            m_.write(a[2], full + b"\0")
+            if a[3]:
+                m_.write(a[3], struct.pack("<I", (a[2] + full.rfind(b"\\") + 1) & 0xFFFFFFFF))
+        except UcError:
+            return 0
+        return len(full)
+
     def matrix(m_, a, rows):
         m_.write(a[0], struct.pack("<16f", *rows))      # D3DXMATRIX: row-major, translation in row 4
         return a[0]                                     # pOut, as the API returns it
@@ -1218,6 +1237,12 @@ def install_import_models(m):
         "MessageBoxA": (message_box, 4),
         "OpenClipboard": (open_clipboard, 1),
         "GetModuleFileNameA": (get_module_file_name, 3),
+        "GetFullPathNameA": (get_full_path_name, 4),
+        "CloseHandle": (lambda m_, a, esp: 1, 1),                 # BOOL: closed
+        "GetCurrentThread": (lambda m_, a, esp: 0xFFFFFFFE, 0),   # the documented pseudo-handle, (HANDLE)-2
+        "GetThreadPriority": (lambda m_, a, esp: 0, 1),           # THREAD_PRIORITY_NORMAL
+        "GetCurrentProcess": (lambda m_, a, esp: 0xFFFFFFFF, 0),  # the documented pseudo-handle, (HANDLE)-1
+        "SetThreadPriority": (lambda m_, a, esp: 1, 2),           # BOOL: done
         "GetDlgItem": (get_dlg_item, 2),
         "SendMessageA": (send_message, 4),
         "GetDlgItemTextA": (get_text(2), 4),
