@@ -309,6 +309,14 @@ def prepare(sid, va, flags_override=None, log=print, src=None):
         return unsupported(t, "no source %s" % src)
     t.orig_lo, t.orig_hi = img.func_extent(va)
     obj, clog = S.compile_obj(src, t.flags)
+    mh = re.search(r"C1083: Cannot open include file: '([^']+)'", clog or "") if obj is None else None
+    if mh and os.path.exists(os.path.join(S.ROOT, "src", "game", "include", mh.group(1))):
+        # a slice that includes a canonical header (game/types.h) whose row's flags omit /Isrc/game/include (the
+        # flags note predates the header move; 62 sweep rows, 2026-10-29): the header is the project's, so add it
+        log("  %s is under src/game/include: retrying with /Isrc/game/include" % mh.group(1))
+        t.flags = list(t.flags) + ["/Isrc/game/include"]
+        t.flags_how += "+include"
+        obj, clog = S.compile_obj(src, t.flags)
     if obj is None and t.flags_how not in ("override", "default"):
         log("  compile failed with %s flags %s; retrying with defaults" % (t.flags_how, " ".join(t.flags)))
         t.flags, t.flags_how = list(S.DEFAULT_FLAGS), "default(after %s failed)" % t.flags_how
@@ -2707,6 +2715,9 @@ class Runner:
         value (a loop count over small allocations). Returns the repaired input or None."""
         mm = re.search(r"\((\d+) bytes\)", str(why))
         size = int(mm.group(1)) if mm else 0
+        mh = re.search(r"huge mem\w+ (0x[0-9a-f]+)", str(why))
+        if mh:      # a memcpy/memmove/memset length the input carried (Spore: 0x411c0744, 0xbffe0006 from soup)
+            size = int(mh.group(1), 16)
         reads = self._traced_reads(inp)
 
         def pointer(v):
@@ -4556,7 +4567,8 @@ def _test_function(sid, va, opts, log=print):
                     if st_[0] == "fault" and a["fault"] and a["fault"][0] != "pool-limit" and fixes < opts.repairs:
                         fixes += 1
                         rep = runner.repair(inp, a["fault"], rng, fixes - 1)
-                    elif st_[0] == "import" and M.is_heap_exhausted(st_[1]) and heap_fixes < 4 and opts.repairs:
+                    elif st_[0] == "import" and (M.is_heap_exhausted(st_[1]) or M.is_huge_block(st_[1])) and \
+                            heap_fixes < 4 and opts.repairs:
                         heap_fixes += 1
                         rep = runner.repair_heap(inp, st_[1], rng)
                     elif st_[0] == "import" and str(st_[1]).split(":")[0] == "_purecall" and \

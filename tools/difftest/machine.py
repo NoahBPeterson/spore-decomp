@@ -14,7 +14,7 @@ successive inputs) never see each other's leftovers:
   writes fault, and `write()` (used by import handlers such as memcpy) raises a write-protection
   fault instead of silently patching code.
 """
-import ctypes, math, struct
+import ctypes, math, re, struct
 
 from unicorn import (Uc, UcError, UC_ARCH_X86, UC_MODE_32, UC_HOOK_CODE, UC_HOOK_BLOCK,
                      UC_HOOK_MEM_UNMAPPED, UC_HOOK_MEM_PROT, UC_HOOK_INSN, UC_HOOK_MEM_WRITE,
@@ -85,6 +85,11 @@ HEAP_EXHAUSTED = "emulated heap exhausted"
 
 def is_heap_exhausted(why):
     return HEAP_EXHAUSTED in str(why)
+
+
+def is_huge_block(why):
+    """A memcpy/memmove/memset stopped because its length (from the input) is beyond any real block."""
+    return re.search(r"\bhuge mem(cpy|set|move) 0x", str(why)) is not None
 
 
 def _page(n):
@@ -955,6 +960,14 @@ def install_crt(m):
         return 1
 
     cdecl = {
+        # msvcr80/90 pointer obfuscation: the real ones XOR with a per-process cookie; one value for both builds
+        # (identity) keeps a decode of an encoded global symmetric and lets the caller go on
+        "_encode_pointer": (lambda m, a, e: a[0], 1), "_decode_pointer": (lambda m, a, e: a[0], 1),
+        # msvcr90's CRT locks (_lock(n) / _unlock(n)): one emulated thread, so taking a lock always succeeds at once
+        "_lock": (lambda m, a, e: 0, 1), "_unlock": (lambda m, a, e: 0, 1),
+        # atexit registration (a global's static initializer registers its destructor): success, the function is
+        # never run at exit; both builds register through the same import, so the call trace still compares them
+        "__dllonexit": (lambda m, a, e: a[0], 3), "_onexit": (lambda m, a, e: a[0], 1), "atexit": (lambda m, a, e: 0, 1),
         "memcpy": (memcpy, 3), "memmove": (memcpy, 3), "memset": (memset, 3), "memcmp": (memcmp, 3),
         "memchr": (memchr, 3), "strlen": (strlen, 1), "strcmp": (strcmp, 2), "strncmp": (strncmp, 3),
         "_stricmp": (stricmp, 2), "_strnicmp": (strnicmp, 3), "_wcsicmp": (wcsicmp, 2),
@@ -1242,6 +1255,7 @@ def install_import_models(m):
         "GetCurrentThread": (lambda m_, a, esp: 0xFFFFFFFE, 0),   # the documented pseudo-handle, (HANDLE)-2
         "GetThreadPriority": (lambda m_, a, esp: 0, 1),           # THREAD_PRIORITY_NORMAL
         "GetCurrentProcess": (lambda m_, a, esp: 0xFFFFFFFF, 0),  # the documented pseudo-handle, (HANDLE)-1
+        "EncodePointer": (lambda m_, a, esp: a[0], 1), "DecodePointer": (lambda m_, a, esp: a[0], 1),
         "SetThreadPriority": (lambda m_, a, esp: 1, 2),           # BOOL: done
         "GetDlgItem": (get_dlg_item, 2),
         "SendMessageA": (send_message, 4),
