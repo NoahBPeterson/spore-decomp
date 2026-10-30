@@ -755,7 +755,7 @@ def plot_history(path):
     axes = [fig.add_subplot(gs[0, 0])]
     axes.append(fig.add_subplot(gs[0, 1], sharey=axes[0], sharex=axes[0]))
     plt.setp(axes[1].get_yticklabels(), visible=False)
-    TC_LINE = {"pass": "#009E73", "fail": "#D55E00"}   # the PASS / FAIL colours of the evidence bands
+    TC_LINE = {"pass": "#009E73"}   # the PASS colour of the evidence bands
     GREEN = "#7a7a7a"   # migrated: grey here, so the PASS line keeps the green
     panels = (("Share of functions", "exact", "comp", "mig"), ("Share of code size", "exact_sz", "comp_sz", "mig_sz"))
     for ax, (title, ke, kc, km) in zip(axes, panels):
@@ -768,22 +768,19 @@ def plot_history(path):
             ax.plot(xs, ys, color=color, lw=2, marker="o", ms=4, label=label, solid_capstyle="round")
             ax.annotate("%.1f%%" % ys[-1], (xs[-1], ys[-1]), xytext=(6, 0), textcoords="offset points",
                         va="center", fontsize=9, color=INK)
-        # Spliced in from the first equivalence sweep on (points that carry verdicts): byte-exact + PASS branches up
-        # from the byte-exact line, compilable - FAIL branches down from the compilable line, each starting at the
-        # last point before verdicts existed.
+        # Spliced in from the first equivalence sweep on (points that carry verdicts): the compilable line, counting
+        # only what is shown correct -- byte-exact + test PASS; WEAK, FAIL, untestable and untested drop out. It
+        # branches down from the compilable line at the last point before verdicts existed; byte-exact is untouched.
         sfx = ke[len("exact"):]
-        for base, sign, k, color, label in ((ke, 1, "pass", TC_LINE["pass"], "Shown correct (byte-exact + test PASS)"),
-                                            (kc, -1, "fail", TC_LINE["fail"], "Compilable minus test FAIL")):
-            vx = [(t, p) for t, p in pts if p.get(base) is not None and (p.get("v") or {}).get(k + sfx) is not None]
-            if not vx:
-                continue
-            prior = [(t, p) for t, p in pts if t < vx[0][0] and p.get(base) is not None]
-            xs = [t for t, _p in prior[-1:]] + [t for t, _p in vx]
-            ys = [p[base] for _t, p in prior[-1:]] + [p[base] + sign * p["v"][k + sfx] for _t, p in vx]
-            ax.plot(xs, ys, color=color, lw=2, ls="--", marker="o", ms=4, markevery=list(range(len(prior[-1:]), len(xs))),
-                    label=label, solid_capstyle="round")
+        vx = [(t, p) for t, p in pts if p.get(ke) is not None and (p.get("v") or {}).get("pass" + sfx) is not None]
+        if vx:
+            prior = [(t, p) for t, p in pts if t < vx[0][0] and p.get(kc) is not None][-1:]
+            xs = [t for t, _p in prior] + [t for t, _p in vx]
+            ys = [p[kc] for _t, p in prior] + [p[ke] + p["v"]["pass" + sfx] for _t, p in vx]
+            ax.plot(xs, ys, color=TC_LINE["pass"], lw=2, ls="--", marker="o", ms=4,
+                    markevery=list(range(len(prior), len(xs))), label="Compilable, counting only test PASS")
             ax.annotate("%.1f%%" % ys[-1], (xs[-1], ys[-1]), xytext=(6, 0), textcoords="offset points",
-                        va="center", fontsize=9, color=color)
+                        va="center", fontsize=9, color=TC_LINE["pass"])
         ax.set_title(title, loc="left", fontsize=11, color=INK)
         ax.set_ylim(0, 100)
         ax.yaxis.set_major_formatter(matplotlib.ticker.PercentFormatter(decimals=0))
