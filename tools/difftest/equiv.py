@@ -5844,6 +5844,7 @@ def _test_function(sid, va, opts, log=print):
     traps = {}
     repaired = 0
     loop_tries = loop_ok = loop_calls = 0
+    fault_eips = collections.Counter()      # "eip kind" of the original's fault, per discarded input
     faked = 0
     saved_cover = 0
     ran = 0
@@ -6048,9 +6049,16 @@ def _test_function(sid, va, opts, log=print):
                     key = "budget(cut-off)"
                     out["budget_cutoff"] = out.get("budget_cutoff", 0) + 1
                 discarded[key] = discarded.get(key, 0) + 1
+                if st == "fault" and a["fault"]:
+                    # where the original faulted, by instruction: one eip for most of a row's discards names the
+                    # field or callee whose input the generator gets wrong (results "fault_eips", top 8)
+                    fe = re.search(r"eip=([0-9a-f]+)", str(a["status"][1] or ""))
+                    if fe:
+                        fault_eips["%s %s" % (fe.group(1), a["fault"][0])] += 1
                 if opts.verbose and st == "fault" and a["fault"]:
-                    log("  discard input %d: fault %s" % (i, " ".join(
-                        "%#x" % x if isinstance(x, int) else str(x) for x in a["fault"])))
+                    log("  discard input %d: fault %s%s%s" % (i, " ".join(
+                        "%#x" % x if isinstance(x, int) else str(x) for x in a["fault"]),
+                        " at eip=%s" % fe.group(1) if fe else "", " (typed)" if getattr(inp, "typed", 0) else ""))
                 elif opts.verbose and st == "budget":
                     log("  discard input %d: %s (%d loop repair call(s))" % (i, a["status"][1], loop_fixes))
                 continue
@@ -6227,6 +6235,8 @@ def _test_function(sid, va, opts, log=print):
         out["shrink_repairs"] = dict(runner.shrink_stats.most_common())
     if loop_tries:
         out["loop_repair"] = {"inputs": loop_tries, "finished": loop_ok, "calls": loop_calls}
+        if fault_eips:
+            out["fault_eips"] = dict(fault_eips.most_common(8))
     if steer:
         out["steering"] = dict(steer.stats, constants=steer.n_consts, queued=steer.made)
     covered = set()
