@@ -183,7 +183,7 @@ Quaternion_s0069_a9a0_b* QuaternionFromMatrix33(Quaternion_s0069_a9a0_b* out, co
 
 // @ 0x00698180
 namespace SP {
-void QuaternionFromDirections(Quaternion* out, const Vector3* a, const Vector3* b)
+Quaternion* QuaternionFromDirections(Quaternion* out, const Vector3* a, const Vector3* b)
 {
   float a0 = a->x;
   float a1 = a->y;
