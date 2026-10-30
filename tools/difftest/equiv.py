@@ -90,6 +90,7 @@ BUDGET_PROBES = 3
 LOOP_PROFILE_CAP = 300_000     # repair_loop: instructions profiled/sampled to find a runaway loop and its compare
 _PAIR_K = np.arange(1, 0x401, dtype=np.uint64)   # repair_relations: element strides of a begin/end pair
 LOOP_REPAIRS_PER_ROW = 40      # repair_loop calls per row, all inputs together
+FAULT_LOOP_AT = 4              # the fault repair of an input that tries repair_loop first (once per input)
 LOOP_REPAIRS = 4               # repair_loop calls per input (each up to 16 capped shrink rounds; a fault repair
 #                                between two calls can expose the next soup loop)
 HEAP_REPAIRS = 12              # repair_heap rounds per input (an array of soup records, one string length each:
@@ -3781,14 +3782,23 @@ class Runner:
             if ins.mnemonic in ("loop", "loope", "loopne", "jecxz"):
                 out.append(ins)
                 continue
-            for j in range(k - 1, max(-1, k - 8), -1):
+            j, lo = k - 1, max(-1, k - 8)
+            while j > lo:
                 p = insns[j]
                 if p.mnemonic in ("call", "ret") or p.group(CX.X86_GRP_JUMP):
                     break
                 if p.mnemonic in self._FLAG_SETTERS:
                     if all(q.address != p.address for q in out):
                         out.append(p)
-                    break
+                    # /Od materialises the compare: cmp; setne cl; movzx edx, cl; test edx, edx; je (s005409d0
+                    # 0x541450). The test sees 1/0 every time; the cmp before the setcc is the loop's own
+                    if not (p.mnemonic == "test" and any(insns[i].mnemonic.startswith("set")
+                                                         for i in range(max(0, j - 3), j))):
+                        break
+                    while j > lo and not insns[j].mnemonic.startswith("set"):
+                        j -= 1
+                    lo = max(-1, j - 4)
+                j -= 1
         return out
 
     def _cmp_operands(self, ins):
@@ -3852,20 +3862,24 @@ class Runner:
         repaired input or None."""
         cur = None
         self.loop_fit = False
+        done = {}           # input dword -> the value this call wrote there. A dword read back with another value
+        #                     is not the one the loop reads (s0098c880 0x98cfd0 rewrote [432904d0] from the same
+        #                     0x42b70000 in all 16 rounds, 8 s a call), so it is not tried again
         for _round in range(rounds):
             loops, st = self._profile_loops(cur or inp, cap)
             if os.environ.get("DIFFTEST_LOOP_DEBUG"):
                 self.log("  loop repair round %d: profile %s" % (_round, st))
-            if cur is not None and st[0] != "budget":
+            if cur is not None and st[0] != "budget" and not (st[0] == "fault" and self.m.last_fault and
+                                                               self.m.last_fault[0] == "pool-limit"):
                 self.loop_fit = True            # the shrunk input finishes (or stops for another reason) in the cap
                 break
-            nxt = self._shrink_loop(cur or inp, loops, rng, why, cap, samples)
+            nxt = self._shrink_loop(cur or inp, loops, rng, why, cap, samples, done)
             if nxt is None:
                 break
             cur = nxt
         return cur
 
-    def _shrink_loop(self, inp, loops, rng, why, cap, samples):
+    def _shrink_loop(self, inp, loops, rng, why, cap, samples, done=None):
         """One repair_loop round: sample the exit compares of the profiled loops and shrink one input dword."""
         hooked = []
         for _n, _src, end, head in loops[:4]:
@@ -3992,6 +4006,25 @@ class Runner:
                     if val == xs[k]:
                         cands.append((9, addr, val, bs[0], ("chain", 1, 0), "chain"))
                         break
+        # a dword can bound more than one loop (s00bf51d0 erase: m_end ends both the copy loop, from `last`, and the
+        # destructor loop, from first + (m_end - last)). A new value that makes another sampled loop with the same
+        # start or bound step past its exit (an equality exit never taken) is no shrink: rounds alternated between
+        # the two loops' bounds until the cap. Each such loop must still reach its bound from its start.
+        progs = []
+        for ins in hooked:
+            s = got[ins.address]
+            for j in (0, 1):
+                xs = [smp[0][j][0] for smp in s]
+                bs = [smp[0][1 - j][0] for smp in s]
+                if len(s) >= 2 and len(set(bs)) == 1 and s32(xs[1] - xs[0]) and \
+                        all(s32(xs[i + 1] - xs[i]) == s32(xs[1] - xs[0]) for i in range(len(xs) - 1)):
+                    progs.append((xs[0], s32(xs[1] - xs[0]), bs[0]))
+
+        def reaches(x0, d, b):
+            dist = s32(b - x0)
+            return dist == 0 or ((dist > 0) == (d > 0) and dist % d == 0)
+        cands = [c for c in cands if all(reaches(c[3] if x0 == c[2] else x0, d, c[3] if b == c[2] else b)
+                                         for x0, d, b in progs if c[2] in (x0, b))]
         cands.sort(key=lambda c: c[0])
         if os.environ.get("DIFFTEST_LOOP_DEBUG"):
             self.log("  loop repair (%s): loops %s" % (why, " ".join("%08x->%08x x%d" % (lp[1], lp[3], lp[0])
@@ -4002,8 +4035,12 @@ class Runner:
             self.log("    %d candidate(s): %s" % (len(cands), " ".join(
                 "[%08x]%x->%x:%s:%s" % (c[1], c[2], c[3], c[4][0], c[5]) for c in cands[:6])))
         for _r, addr, val, new, rel, what in cands:
+            if done is not None and addr in done and done[addr] != val:
+                continue
             out = self._put_any(inp.copy(), addr, new)
             if out is not None:
+                if done is not None:
+                    done[addr] = new
                 self.note_repair("%s-loop:%s" % (why, what), rel, addr, val, new)
                 return out
         return None
@@ -5876,15 +5913,30 @@ def _test_function(sid, va, opts, log=print):
                 fixes = pure_fixes = heap_fixes = loop_fixes = shrunk = 0
                 while time.time() < deadline:
                     st_ = a["status"]
+                    # out of pool objects: a loop walked or wrote through 4 MB of inputs, the same runaway trip
+                    # count a --budget cut-off is (s00bf51d0's copy loop from `last` to a soup m_end), only shorter
+                    pool_out = st_[0] == "fault" and a["fault"] and a["fault"][0] == "pool-limit"
                     if st_[0] == "fault" and a["fault"] and a["fault"][0] != "pool-limit" and fixes < opts.repairs:
                         fixes += 1
-                        rep = runner.repair(inp, a["fault"], rng, fixes - 1)
+                        rep = None
+                        if fixes == FAULT_LOOP_AT and loop_fixes < LOOP_REPAIRS and \
+                                getattr(opts, "loop_repair", True) and loop_calls < LOOP_REPAIRS_PER_ROW:
+                            # the same bad pointer kind again and again: often one per element of a loop whose trip
+                            # count is soup (DatabasePackedFileIndex_v2 0x6be6e0 sorts [first, last) of random
+                            # pointers, each repaired in turn, every repair a full re-run). Shrink the loop once;
+                            # repair_loop finds no long loop (None) when the faults are not a loop's
+                            loop_fixes += 1
+                            loop_calls += 1
+                            rep = runner.repair_loop(inp, rng, why="fault")
+                            shrunk += rep is not None
+                        if rep is None:
+                            rep = runner.repair(inp, a["fault"], rng, fixes - 1)
                     elif st_[0] == "import" and (M.is_heap_exhausted(st_[1]) or M.is_huge_block(st_[1])) and heap_fixes < HEAP_REPAIRS and \
                             opts.repairs:
                         heap_fixes += 1
                         rep = runner.repair_heap(inp, st_[1], rng, heap_fixes - 1)
                         shrunk += rep is not None
-                    elif st_[0] == "budget" and loop_fixes < LOOP_REPAIRS and opts.repairs and \
+                    elif (st_[0] == "budget" or pool_out) and loop_fixes < LOOP_REPAIRS and opts.repairs and \
                             getattr(opts, "loop_repair", True) and loop_calls < LOOP_REPAIRS_PER_ROW and \
                             not (loop_tries >= 6 and loop_ok * 4 < loop_tries):
                         # (a row stops shrinking once it has spent LOOP_REPAIRS_PER_ROW calls, or once fewer than a
@@ -5893,7 +5945,7 @@ def _test_function(sid, va, opts, log=print):
                         # dword that set it (never the cap: the loops are O(n), a small n tests the same code)
                         loop_fixes += 1
                         loop_calls += 1
-                        rep = runner.repair_loop(inp, rng)
+                        rep = runner.repair_loop(inp, rng, why="pool" if pool_out else "budget")
                         shrunk += rep is not None
                         if rep is not None and runner.loop_fit and runner.budget < min(LOOP_PROFILE_CAP, opts.budget):
                             # the shrunk input ends inside the profiling cap but not inside the start cap: the row's
@@ -5918,13 +5970,15 @@ def _test_function(sid, va, opts, log=print):
                     # each round re-runs the input at the full cap: a row whose runaway loops the repair cannot
                     # shrink (the trip count is not an input dword) stops trying after 6 such inputs
                     loop_tries += 1
-                    loop_ok += a["status"][0] != "budget"
+                    loop_ok += a["status"][0] != "budget" and not (a["fault"] and a["fault"][0] == "pool-limit")
                 if a["status"][0] == "budget" and runner.budget < opts.budget and probes < BUDGET_PROBES:
                     # Runaway input, or a function whose real runs are long? Retry with the full cap.
                     probes += 1
                     low, runner.budget = runner.budget, opts.budget
                     a2 = runner.run_side(runner.orig, inp)
-                    if a2["status"][0] == "budget":
+                    if a2["status"][0] == "budget" or (a2["fault"] and a2["fault"][0] == "pool-limit"):
+                        # (a run that went on to exhaust the pool is the runaway kind, not a long real one: raising
+                        # the cap on it made every later runaway input of s00bf51d0 cost 1.4M instructions)
                         runner.budget = low
                     else:
                         a = a2
@@ -6500,10 +6554,13 @@ def parse_args(argv=None):
                     help="comma-separated image function VAs (hex) that return an input object instead of running "
                          "(default: the resource lookups that exit() on a missing name; '' for none)")
     ap.add_argument("--loop-repair", dest="loop_repair", action="store_true",
-                    default=os.environ.get("DIFFTEST_LOOP_REPAIR") == "1",
+                    default=os.environ.get("DIFFTEST_LOOP_REPAIR") != "0",
                     help="shrink the input dword that set a runaway loop's trip count when the original is cut off by "
-                         "the instruction cap (Runner.repair_loop). Opt-in for now: on obj_tbl 0x499050 it halved the "
-                         "row's edge coverage (10/10 -> 5/10), cause not yet found")
+                         "the instruction cap, runs out of pool objects, or needs a 4th fault repair "
+                         "(Runner.repair_loop). On by default since 2026-10-30: on a 35-row sample (11 timeouts, 24 "
+                         "controls) 8 timeouts got verdicts, no control lost a verdict or an edge, 4 gained, and the "
+                         "rows ran in 43%% of the time. (Mount & Blade keeps it opt-in: on its obj_tbl 0x499050 it "
+                         "halved the row's edge coverage)")
     ap.add_argument("--no-loop-repair", dest="loop_repair", action="store_false")
     ap.add_argument("--no-force-results", dest="force_results", action="store_false",
                     help="never force the result of a branch-feeding callee (Runner._on_forced)")

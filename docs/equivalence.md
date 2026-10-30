@@ -100,6 +100,12 @@ Only `/O2`-vs-`/Od` and `/fp:` change behavior in practice.
    - **fault repair**: when the original faults on a bad pointer, the dword it was loaded from
      (found by tracing reads; the faulting instruction's base register gives the exact value) is
      replaced by a pointer to a fresh object and the input is retried;
+   - **loop repair** (`--no-loop-repair` turns it off): a loop whose trip count came from a random
+     value (a begin/end pair millions of elements apart, a soup count) runs until the instruction
+     cap, the 4 MB input pool runs out, or bad pointers need fault repair after fault repair. The
+     loop's exit compare is sampled to find its start, step and bound, and the input dword that set
+     the count is rewritten so the loop runs a few times. The rewritten input then runs on both
+     sides identically: only the input changes, never what is compared;
    - **fake methods**: a call through a generated function pointer (a soup vtable) returns a
      deterministic value and pops the argument bytes counted at the call site; float returns are
      detected by the x87 code after the call. Both sides must count the same arity per target;
