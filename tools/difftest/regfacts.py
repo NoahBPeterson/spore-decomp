@@ -89,8 +89,12 @@ def regs_written(ins):
         except capstone.CsError:
             continue
         if i.mnemonic == "pop" and i.operands and i.operands[0].type == x86.X86_OP_REG:
-            n = i.reg_name(i.operands[0].reg)
-            saved.add(FULL.get(n, n))
+            # a callee-saved register's push/pop preserves it; MSVC's push ecx / pop ecx (also eax, edx) only
+            # allocates and frees a stack slot, and the pop loads whatever local was kept there, so the register is
+            # written (Interaction 0x00abf190: ecx was "untouched by the original" and ours FAILed for writing it)
+            n = FULL.get(i.reg_name(i.operands[0].reg), i.reg_name(i.operands[0].reg))
+            if n in ("ebx", "esi", "edi", "ebp"):
+                saved.add(n)
         for r in ws:
             n = i.reg_name(r)
             if n not in IGNORE:

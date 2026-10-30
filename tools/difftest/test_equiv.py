@@ -294,3 +294,17 @@ def test_memset_fill_is_compared_as_a_byte():
     assert r["verdict"] in ("PASS", "WEAK") and not r.get("mismatches"), r      # PASS with the sweep's input count
     path = _slice_mutant("s005e6b40", "memset(p, fill, count);", "memset(p, fill ^ 1, count);", "fill")
     assert equiv.test_function("s005e6b40", 0x005e7390, opts("--src", path))["verdict"] == "FAIL"
+
+
+def test_dummy_slot_pop_writes_the_register():
+    """MSVC's `push ecx ... pop ecx` allocates and frees a stack slot; the pop loads the local kept there, so ecx is
+    written. A callee-saved register's push/pop preserves it."""
+    import capstone
+    import regfacts
+    md = capstone.Cs(capstone.CS_ARCH_X86, capstone.CS_MODE_32)
+    md.detail = True
+    ins = lambda b: list(md.disasm(b, 0x1000))
+    # push ecx; mov [esp], eax; pop ecx; ret
+    assert "ecx" in regfacts.regs_written(ins(b"\x51\x89\x04\x24\x59\xc3"))
+    # push esi; mov esi, eax; pop esi; ret
+    assert "esi" not in regfacts.regs_written(ins(b"\x56\x89\xc6\x5e\xc3"))
