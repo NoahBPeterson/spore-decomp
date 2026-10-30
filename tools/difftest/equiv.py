@@ -24,7 +24,9 @@ Inputs are random "pointer soup" plus steering (tools/difftest/steer.py; --no-st
 the constants compared before branches (both builds, +-1 / +-1 ulp) join the dictionary; uncovered
 branches are replayed with the compare instrumented and the compared input location (argument, entry
 register, pool field, .data global, malloc result) is set to the other operand (input-to-state);
-mutation prefers inputs that reach uncovered branches; covered compares get boundary probes; fault
+mutation prefers inputs that reach uncovered branches; a share of fresh inputs (--typed-share) builds `this`
+and the pointer-to-class arguments as objects of their declared class (TypedInputs: CodeView types of a
+/Z7 compile; vtable pointers are the original's vtables, nested objects and vectors are consistent); covered compares get boundary probes; fault
 repair redirects bad pointers, small-ifies garbage indices and, as a last resort, maps input memory
 at the faulting address. A run that stops in `_purecall` is resampled the same way instead of being
 discarded: the dword that carried the vtable pointer (an argument, a pool object's vtable field or an
@@ -73,16 +75,25 @@ import regfacts as RF                                # noqa: E402
 import cfgcov as CF                                # noqa: E402
 import steer as ST                                 # noqa: E402
 import invariants as INV                           # noqa: E402
+import cvtypes as CV                               # noqa: E402
 import sig as SIG                                  # noqa: E402
 import machine as M                                # noqa: E402
 from coff import Coff                              # noqa: E402
 
 DEFAULT_INPUTS = 400
+DEFAULT_PLATEAU = 150      # --plateau: inputs in a row without new coverage before a row stops early
 DEFAULT_K = 200
 DEFAULT_C = 60.0                  # legacy --gate insns only
 DEFAULT_BUDGET = 10_000_000
 START_BUDGET = 100_000
 BUDGET_PROBES = 3
+LOOP_PROFILE_CAP = 300_000     # repair_loop: instructions profiled/sampled to find a runaway loop and its compare
+_PAIR_K = np.arange(1, 0x401, dtype=np.uint64)   # repair_relations: element strides of a begin/end pair
+LOOP_REPAIRS_PER_ROW = 40      # repair_loop calls per row, all inputs together
+LOOP_REPAIRS = 4               # repair_loop calls per input (each up to 16 capped shrink rounds; a fault repair
+#                                between two calls can expose the next soup loop)
+HEAP_REPAIRS = 12              # repair_heap rounds per input (an array of soup records, one string length each:
+#                                MapDialog::place_c 0x4c6f50 allocates [rec+0xc]+1 bytes per record)
 FAIL_DIR = os.environ.get("DIFFTEST_FAIL_DIR") or os.path.join(S.ROOT, "work", "difftest", "fail_inputs")
 # Regression inputs: every input that ever made a row mismatch is kept (one file per distinct input) and run first
 # by every later run of that row, so a FAIL once found is re-checked forever, whatever the seed or the steering
@@ -121,6 +132,57 @@ def regress_inputs(sid, va, opts):
         except Exception:       # noqa: BLE001 - an unreadable file (older harness) is skipped, never fatal
             continue
     return out
+
+
+def cover_dir(sid, va, opts):
+    """Coverage inputs: valid inputs that reached a control-flow edge no earlier input of the row had reached (kept
+    by every run, replayed first by every later run, like the regression inputs). A slow, thorough run (z3 steering:
+    DIFFTEST_CONCOLIC=1, more inputs) finds them once; every ordinary run then starts from its coverage."""
+    return os.path.join(regress_dir(sid, va, opts), "cover")
+
+
+def cover_inputs(sid, va, opts):
+    """[(file name, Input)] of the row's coverage inputs, oldest first."""
+    if getattr(opts, "no_regress", False) or os.environ.get("DIFFTEST_NO_REGRESS"):
+        return []
+    import pickle
+    d = cover_dir(sid, va, opts)
+    out = []
+    try:
+        names = sorted(os.listdir(d), key=lambda f: os.path.getmtime(os.path.join(d, f)))
+    except OSError:
+        return []
+    for f in names:
+        if not f.endswith(".pkl"):
+            continue
+        try:
+            inp = Input()
+            inp.__dict__.update(pickle.load(open(os.path.join(d, f), "rb")))
+            inp.__dict__.setdefault("pagegen", 1)
+            inp.origin = "cover"
+            out.append(("cover/" + f, inp))
+        except Exception:       # noqa: BLE001 - an unreadable file (older harness) is skipped, never fatal
+            continue
+    return out
+
+
+def save_cover(sid, va, opts, inp):
+    """Keep a valid input that reached a new edge (content-addressed). -> path or None."""
+    if getattr(opts, "no_regress", False) or os.environ.get("DIFFTEST_NO_REGRESS"):
+        return None
+    import hashlib, pickle
+    blob = pickle.dumps(dict(inp.__dict__, pagegen=inp.pagegen, origin="cover"))
+    d = cover_dir(sid, va, opts)
+    pth = os.path.join(d, hashlib.sha1(blob).hexdigest()[:16] + ".pkl")
+    try:
+        os.makedirs(d, exist_ok=True)
+        if not os.path.exists(pth):
+            tmp = pth + ".%d.part" % os.getpid()
+            open(tmp, "wb").write(blob)
+            os.replace(tmp, pth)
+        return pth
+    except OSError:
+        return None
 
 
 def save_regress(sid, va, opts, inp):
@@ -728,10 +790,13 @@ class Input:
         n.alloc_fail = tuple(getattr(self, "alloc_fail", ()))
         n.extra = dict(getattr(self, "extra", {}))
         n.forced = dict(getattr(self, "forced", {}))
+        n.fake_ret = dict(getattr(self, "fake_ret", {}))
+        n.typed = getattr(self, "typed", 0)
         return n
 
 
 NSLOTS = M.POOL_SIZE // M.SLOT
+DEAD_ECX = "dead-ecx"  # Input fake-call record: ecx was the call's vtable base, not an argument (Runner._call_via_ecx)
 FORCE_SHARE = 0.25     # share of fresh inputs that force one branch-feeding callee's result (Runner._on_forced)
 FAULT_EDGE_RUNS = 50   # faulting inputs per row whose edges are recorded (each also runs our build once)
 # Image functions whose callers are stubbed by default (Runner._on_stubbed): lookups that end the game when a name is
@@ -766,6 +831,8 @@ class InputGen:
         self.specials = SPECIAL_F if nan else SPECIAL_F[:8]
         self.invs = []                              # input-object invariants (invariants.py), set by Runner
         self.slot_cache = {}
+        self.typed = None                           # TypedInputs (set by Runner), or None: soup only
+        self.typed_share = 0.0
 
     def fin(self, v):
         """Unless --nan: never produce a dword whose float32 reading is NaN/Inf (clears the top
@@ -897,8 +964,8 @@ class InputGen:
                 words[(a - page) // 4] = v
         return struct.pack("<1024I", *words)
 
-    def ptr(self, rng, hot):
-        if rng.random() < 0.04:
+    def ptr(self, rng, hot, k=None):
+        if k != "this" and rng.random() < 0.04:
             return 0
         return M.POOL_BASE + M.SLOT * hot
 
@@ -907,7 +974,7 @@ class InputGen:
 
     def _scalar(self, k, rng, profile, hot=1):
         if k in ("this", "ptr", "retptr"):
-            return self.ptr(rng, hot)
+            return self.ptr(rng, hot, k)
         if k == "int":
             r = rng.random()
             if r < 0.4:
@@ -991,6 +1058,10 @@ class InputGen:
         inp.alloc_fail = ()
         inp.extra = {}
         inp.forced = {}
+        inp.fake_ret = {}
+        inp.typed = 0
+        if self.typed is not None and rng.random() < self.typed_share:
+            inp.typed = self.typed.build(self, inp, rng)    # typed `this` / argument objects into pool_over
         cands = getattr(self, "force_cands", ())
         if cands and rng.random() < FORCE_SHARE:
             inp.forced[rng.choice(cands)] = rng.choice((0, 1))
@@ -1046,6 +1117,454 @@ class InputGen:
             # governed fields back in range so the mutant stays a usable input rather than being discarded.
             INV.enforce(self.invs, self, inp, rng)
         return inp
+
+
+TYPED_SHARE = 0.5      # share of fresh inputs whose `this` / pointer-to-class arguments are typed objects
+TYPED_DEPTH = 3        # nested object pointers followed (deeper ones stay soup)
+TYPED_OBJECTS = 48     # typed objects (incl. vector elements) per input
+_VT_NAMES = None
+
+
+def _vtable_names():
+    """{mangled vtable name: original VA} from work/relink/resolve_map.json (the relink's content-matched
+    `vtables`, then single-address `names` entries)."""
+    global _VT_NAMES
+    if _VT_NAMES is None:
+        out = {}
+        try:
+            rm = json.load(open(os.path.join(S.ROOT, "work", "relink", "resolve_map.json")))
+            for name, e in (rm.get("names") or {}).items():
+                if name.startswith("??_7") and isinstance(e, dict) and len(e) == 1:
+                    out[name] = int(next(iter(e)), 16)
+            for name, e in (rm.get("vtables") or {}).items():
+                orig = e.get("orig") or []
+                if len(orig) == 1:
+                    out[name] = int(orig[0], 16)
+        except (OSError, ValueError, KeyError, AttributeError):
+            pass
+        _VT_NAMES = out
+    return _VT_NAMES
+
+
+class TypedInputs:
+    """Typed `this` / pointer-argument objects for a share of fresh inputs (InputGen.fresh).
+
+    The row's source is compiled once more with /Z7 (cached like the tested object, never the object under
+    test) and cvtypes.py flattens the declared class of `this` and of each pointer/reference-to-class argument.
+    An object is written into Input.pool_over at its hot slot. Image .data globals the function references
+    whose image value is zero (run-time state: g_game, a CRT-constructed static object) and whose decorated
+    name gives a class (pointer) type are typed too, through Input.overrides (10% keep the zero).
+    Per field:
+      vfptr      the ORIGINAL's vtable for that (sub)object's class (the tested object's own relocation, the
+                 relink's resolve_map, symbols/); unknown -> soup. Both builds run the same input and our
+                 relocations resolve to the original's addresses, so the original's vtable is right for both.
+      ptr_class  10% NULL, else a fresh object (bump-allocated in cold slots), typed recursively to depth 3
+      ptr_char   a short NUL-terminated ASCII string
+      int/bool/enum  mostly 0..8 (sometimes < 300; an enum takes one of its enumerators)
+      float/double   the soup's float distributions
+      vector     first <= last <= end with 0..4 typed elements (empty: all NULL or all equal)
+      rglstring / stdstring  consistent buffer, length and capacity
+    Padding, unions, bitfields and unknown pointers stay soup; a dword only partly covered by typed fields
+    has its other bytes zeroed. Mutations, fault repair and invariants act on top of the result."""
+
+    def __init__(self, tt, this_cls, arg_cls, vt_lookup, globs=(), image=None):
+        self.tt = tt
+        self.this_cls = this_cls        # class type index of `this` (thiscall, ecx) or None
+        self.arg_cls = arg_cls          # [(stack dword index, class type index)]
+        self.vt_lookup = vt_lookup      # mangled vtable name -> original VA or None
+        self.globs = list(globs)        # [(original VA, "ptr"|"obj", class type index, name)]: zero globals
+        self.image = image              # va, n -> the image's bytes (an "obj" global's untyped bytes)
+        self.vt_cache = {}
+        self.slots_of = None            # vtable VA -> slot targets (set by setup)
+        self.purecall = None
+        self.known_vts = ()             # every vtable VA the repository names
+        self.concrete_cache = {}
+
+    @classmethod
+    def setup(cls, t, ctx):
+        """(TypedInputs for the row, None) or (None, why not)."""
+        if not getattr(t, "src", None) or not getattr(t, "sym", None):
+            return None, "no source/symbol"
+        obj, _clog = S.compile_obj(t.src, list(t.flags) + ["/Z7"])
+        if obj is None:
+            return None, "the /Z7 compile failed"
+        try:
+            tt, procs = CV.load(Coff(obj))
+        except (ValueError, KeyError, struct.error, IndexError) as e:
+            return None, "CodeView parse: %s" % e
+        fty = procs.get(t.sym)
+        f = tt.func(fty) if fty is not None else None
+        if f is None:
+            return None, "no S_GPROC32 for %s" % t.sym
+        this_cls = None
+        if t.reg_kinds.get("ecx") == "this" and f["this"]:
+            p = tt.pointee(f["this"])
+            if p is not None and tt.is_class(p) and tt.sizeof(p):
+                this_cls = tt.strip(p)
+        arg_cls = []
+        kinds = t.stack_kinds
+        if getattr(t, "conv", None) != "fastcall":
+            pos = 1 if kinds and kinds[0] == "retptr" else 0
+            for a in f["args"]:
+                if a == 0:                                  # varargs terminator
+                    break
+                s = tt.scalar(a)
+                if s and s[0] == "ptr_class" and pos < len(kinds) and kinds[pos] in ("ptr", "unknown", "soup"):
+                    arg_cls.append((pos, s[2]))
+                pos += max(1, (tt.sizeof(a) + 3) // 4)
+            if pos != len(kinds):
+                arg_cls = []                                # the CV argument list does not match the stack layout
+        res, coff = t.res, t.coff
+        db, img, m = ctx["db"], ctx["img"], ctx["m"]
+        # globals the function reads whose image value is zero (set at run time in the game: g_game, g_items,
+        # a static object constructed by the CRT's initialisers): a pointer to a class gets a typed object,
+        # an object of a class is typed in place (image .data overrides)
+        globs = []
+        try:
+            our, our_rel, our_data = RA.our_insns(coff, t.fsym)
+        except Exception:           # noqa: BLE001
+            our, our_rel, our_data = {}, {}, b""
+
+        def loads_only(si):
+            # `extern T g[]` decorates like `T* g` (3PAU...): a pointer is only ever loaded whole (mov r32,
+            # [g]); an array is indexed or its address taken, and must not get a pointer stored over it
+            uses = 0
+            for a_, ins in our.items():
+                for o_ in range(a_, a_ + ins.size):
+                    if our_rel.get(o_, (None,))[0] != si:
+                        continue
+                    uses += 1
+                    mem = [op for op in ins.operands if op.type == CX.X86_OP_MEM]
+                    if ins.id == CX.X86_INS_LEA or not mem or mem[0].mem.base or mem[0].mem.index or \
+                            mem[0].size != 4 or struct.unpack_from("<I", our_data, o_)[0]:
+                        return False
+            return uses > 0
+
+        for si, va_ in sorted(res.addr.items()):
+            sy = coff.syms.get(si)
+            dt = CV.data_type(sy.name) if sy is not None and not sy.defined else None
+            if dt is None or not m.in_image_writable(va_) or (dt[0] == "ptr" and not loads_only(si)):
+                continue
+            cti = tt.defined.get(dt[1])
+            if cti is None or not tt.is_class(cti) or not tt.sizeof(cti):
+                continue
+            n_ = 4 if dt[0] == "ptr" else tt.sizeof(cti)
+            if n_ > M.SLOT or not m.in_image_writable(va_ + n_ - 1):
+                continue
+            try:
+                if any(img.read(va_, n_)):
+                    continue
+            except Exception:       # noqa: BLE001 - .bss past the raw data reads as zero or not at all
+                pass
+            globs.append((va_, dt[0], tt.strip(cti), sy.name))
+        if this_cls is None and not arg_cls and not globs:
+            return None, "no class-typed this/pointer argument or global"
+        names = _vtable_names()
+
+        def vt_lookup(name):
+            s_ = coff.by_name.get(name)
+            if s_ is not None and s_.index in res.addr:
+                return res.addr[s_.index] & 0xFFFFFFFF
+            if name in names:
+                return names[name]
+            vas = [v for v in db.mangled.get(name, ()) if img.in_data(v)]
+            return vas[0] if len(vas) == 1 else None
+
+        def image(va_, n_):
+            try:
+                return bytes(img.read(va_, n_)).ljust(n_, b"\0")
+            except Exception:       # noqa: BLE001
+                return b"\0" * n_
+
+        ti_ = cls(tt, this_cls, arg_cls, vt_lookup, globs, image)
+        ti_.purecall = db.lib.get("purecall")
+        known = set(names.values())
+        for nm_, vas in db.mangled.items():
+            if nm_.startswith("??_7") and len(vas) == 1 and img.in_data(next(iter(vas))):
+                known.add(next(iter(vas)))
+        ti_.known_vts = sorted(known)
+
+        def slots_of(va_):
+            out_ = []
+            for k_ in range(256):
+                try:
+                    x_ = img.u32(va_ + 4 * k_)
+                except Exception:   # noqa: BLE001
+                    break
+                if not img.in_text(x_):
+                    break
+                out_.append(x_)
+            return out_
+
+        ti_.slots_of = slots_of
+        return ti_, None
+
+    def describe(self):
+        tt = self.tt
+        return {"this": tt.name(self.this_cls) if self.this_cls else None,
+                "args": {str(p): tt.name(c) for p, c in self.arg_cls},
+                "globals": {"%08x" % va: "%s %s" % (k, tt.name(c)) for va, k, c, _n in self.globs}}
+
+    def vtable(self, cands):
+        """The original VA of the first known candidate vtable. An abstract class's vtable (a `_purecall` slot:
+        stream_base, whose readers are all pure) is replaced by a random concrete one that agrees with it in
+        every implemented slot and has at least as many slots (mem_stream, file_reader, ...): the object is
+        then one of the classes the game actually passes there."""
+        for nm in cands or ():
+            if nm not in self.vt_cache:
+                self.vt_cache[nm] = self.vt_lookup(nm)
+            va = self.vt_cache[nm]
+            if va is not None:
+                conc = self.concrete(va)
+                return self.rng.choice(conc) if conc else va
+        return None
+
+    def concrete(self, va):
+        """[concrete vtable VA] standing in for the abstract vtable at va; [] when va is not abstract."""
+        if va in self.concrete_cache:
+            return self.concrete_cache[va]
+        out = []
+        if self.slots_of is not None and self.purecall is not None:
+            a = self.slots_of(va)
+            if self.purecall in a:
+                for v in self.known_vts:
+                    sl = self.slots_of(v)
+                    if len(sl) >= len(a) and self.purecall not in sl and \
+                            all(x == self.purecall or x == y for x, y in zip(a, sl)) and sl[:len(a)] not in \
+                            [self.slots_of(o)[:len(a)] for o in out]:
+                        out.append(v)
+        self.concrete_cache[va] = out
+        return out
+
+    # ---- one input
+    def build(self, gen, inp, rng):
+        """Write the typed objects of one fresh input into inp.pool_over. -> number of root objects typed."""
+        self.gen, self.inp, self.rng = gen, inp, rng
+        self.bytes = {}
+        self.nobj = 0
+        self.queue = []                 # objects allocated, fields not written yet (breadth first)
+        self.heap = None                # [next free address, end] of the current cold allocation slot
+        self.used = set(range(HOT_SLOTS))
+        roots = 0
+        done = set()
+        if self.this_cls is not None and inp.regs.get("ecx") == M.POOL_BASE + M.SLOT * 1:
+            self.obj(M.POOL_BASE + M.SLOT * 1, self.this_cls, 0)
+            done.add(1)
+            roots += 1
+        for pos, c in self.arg_cls:
+            v = inp.args[pos] if pos < len(inp.args) else 0
+            slot = (v - M.POOL_BASE) // M.SLOT
+            if v and (v - M.POOL_BASE) % M.SLOT == 0 and 0 < slot < HOT_SLOTS and slot not in done:
+                done.add(slot)
+                self.obj(v, c, 0)
+                roots += 1
+        for va, kind, c, _n in self.globs:
+            if rng.random() < 0.1:
+                continue                                # the global as the image has it (zero)
+            if kind == "ptr":
+                p = self.alloc(self.tt.sizeof(c), 8)
+                if p:
+                    self.obj(p, c, 1)
+                    self.gput(va, p, 4)
+            else:
+                self.obj(va, c, 1)
+            roots += 1
+        # breadth first: every root's direct members are typed before the budget goes to deep nesting (a
+        # vector of objects early in `this` must not use up the objects its later `env` pointer needs)
+        k = 0
+        while k < len(self.queue):
+            self.fill(*self.queue[k])
+            k += 1
+        for a in sorted({a & ~3 for a in self.bytes}):
+            pool = M.POOL_BASE <= a < M.POOL_BASE + M.POOL_SIZE
+            old = b"\0" * 4 if pool else self.image(a, 4)
+            w = 0
+            for k in range(4):
+                w |= self.bytes.get(a + k, old[k]) << (8 * k)
+            if pool:
+                inp.pool_over[a] = w
+            else:
+                inp.overrides[a] = w
+        self.bytes = self.gen = self.inp = self.rng = None
+        return roots
+
+    def alloc(self, size, align=8):
+        """Address of `size` fresh bytes in a cold slot (bump allocation: few slots get mapped), or 0."""
+        size = max(4, size)
+        if self.heap is None or ((self.heap[0] + align - 1) & ~(align - 1)) + size > self.heap[1]:
+            if size > M.SLOT or len(self.used) >= NSLOTS:
+                return 0
+            while True:
+                slot = HOT_SLOTS + self.rng.randrange(NSLOTS - HOT_SLOTS)
+                if slot not in self.used:
+                    break
+            self.used.add(slot)
+            base = M.POOL_BASE + M.SLOT * slot
+            self.heap = [base, base + M.SLOT]
+        a = (self.heap[0] + align - 1) & ~(align - 1)
+        self.heap[0] = a + size
+        return a
+
+    def put(self, addr, value, size):
+        if M.POOL_BASE <= addr < M.POOL_BASE + M.POOL_SIZE or self.in_glob(addr):
+            for k in range(size):
+                self.bytes[addr + k] = (value >> (8 * k)) & 0xFF
+
+    def gput(self, addr, value, size):
+        for k in range(size):
+            self.bytes[addr + k] = (value >> (8 * k)) & 0xFF
+
+    def in_glob(self, addr):
+        """addr lies in one of the typed in-place ("obj") globals."""
+        return any(kind == "obj" and va <= addr < va + self.tt.sizeof(c) for va, kind, c, _n in self.globs)
+
+    def small(self):
+        r = self.rng.random()
+        if r < 0.75:
+            return self.rng.randrange(9)
+        if r < 0.93:
+            return self.rng.randrange(300)
+        return self.rng.choice(self.gen.dic)
+
+    def text(self, n):
+        return bytes(self.rng.choice(b"abcdefghijklmnopqrstuvwxyz_0123456789") for _ in range(n))
+
+    def string_at(self, n):
+        a = self.alloc(n + 1, 4)
+        if a:
+            for k, ch in enumerate(self.text(n) + b"\0"):
+                self.bytes[a + k] = ch
+        return a
+
+    def room(self):
+        return self.nobj < TYPED_OBJECTS
+
+    def obj(self, addr, cls, depth):
+        """Queue a typed object of class `cls` at addr (build() writes the queue in order)."""
+        self.nobj += 1
+        self.queue.append((addr, cls, depth))
+
+    def fill(self, addr, cls, depth):
+        """Write the fields of a typed object (fields past the end of its 64 KB slot are left)."""
+        lim = (addr & ~(M.SLOT - 1)) + M.SLOT if M.POOL_BASE <= addr < M.POOL_BASE + M.POOL_SIZE \
+            else addr + self.tt.sizeof(cls)
+        for f in self.tt.layout(cls):
+            if addr + f.off + f.size > lim:
+                break
+            self.field(addr + f.off, f, depth)
+
+    def value(self, addr, kind, size, target, depth):
+        """Write one non-aggregate value (a cvtypes Field kind) at addr."""
+        rng, gen = self.rng, self.gen
+        if kind == "vfptr":
+            v = self.vtable(target)
+            if v is not None:
+                self.put(addr, v, 4)
+        elif kind == "ptr_class":
+            if rng.random() < 0.1:
+                self.put(addr, 0, 4)
+            elif depth < TYPED_DEPTH and self.room():
+                p = self.alloc(self.tt.sizeof(target), 8)
+                if p:
+                    self.obj(p, target, depth + 1)
+                self.put(addr, p, 4)
+        elif kind == "ptr_char":
+            self.put(addr, 0 if rng.random() < 0.05 else self.string_at(rng.randrange(1, 12)), 4)
+        elif kind == "int":
+            v = self.small()
+            if target and rng.random() < 0.03:
+                v = -1
+            self.put(addr, v & ((1 << (8 * size)) - 1), size)
+        elif kind == "bool":
+            self.put(addr, rng.randrange(2), size)
+        elif kind == "enum":
+            v = rng.choice(target) if target and rng.random() < 0.9 else rng.randrange(9)
+            self.put(addr, v & ((1 << (8 * size)) - 1), size)
+        elif kind == "float":
+            self.put(addr, gen.fin(gen._scalar("float", rng, self.inp.profile)), 4)
+        elif kind == "double":
+            x = rng.uniform(-10, 10) if rng.random() < 0.7 else rng.choice(gen.specials)
+            self.put(addr, struct.unpack("<Q", struct.pack("<d", x))[0], 8)
+
+    def field(self, addr, f, depth):
+        rng = self.rng
+        if f.kind == "chars":
+            n = rng.randrange(min(f.size, 12))
+            for k, ch in enumerate(self.text(n) + b"\0"):
+                self.bytes[addr + k] = ch
+        elif f.kind == "vector":
+            self.vector(addr, f.target, depth)
+        elif f.kind == "rglstring":                     # {pos, buf, cap, len}; c_str() is buf ? buf : &buf
+            n = rng.randrange(12)
+            if n == 0 and rng.random() < 0.5:
+                for k in range(4):
+                    self.put(addr + 4 * k, 0, 4)
+                return
+            if rng.random() < 0.4:
+                # a binary buffer of small dwords: rgl::string is also mem_stream's backing store (+0x20), whose
+                # r_int/r_float read counts and records out of it (a counted loop then runs 0..4 times)
+                k = rng.randrange(4, 17)
+                n = 4 * k
+                p = self.alloc(n + 4, 4)
+                for j in range(k):
+                    self.put(p + 4 * j, rng.randrange(5) if rng.random() < 0.8 else self.small(), 4)
+                self.put(p + n, 0, 4)
+                self.put(addr, 0, 4)
+                self.put(addr + 4, p, 4)
+                self.put(addr + 8, n + 4, 4)
+                self.put(addr + 12, n, 4)
+                return
+            self.put(addr, 0 if rng.random() < 0.8 else rng.randrange(n + 1), 4)
+            self.put(addr + 4, self.string_at(n), 4)
+            self.put(addr + 8, n + 1 + rng.randrange(8), 4)
+            self.put(addr + 12, n, 4)
+        elif f.kind == "stdstring":                     # VC7.1 basic_string<char>: _Bx[16], _Mysize, _Myres
+            n = rng.randrange(14)
+            if rng.random() < 0.8:
+                for k, ch in enumerate(self.text(n) + b"\0"):
+                    self.bytes[addr + k] = ch
+                self.put(addr + 20, 15, 4)
+            else:
+                n += 16
+                self.put(addr, self.string_at(n), 4)
+                self.put(addr + 20, n + rng.randrange(8), 4)
+            self.put(addr + 16, n, 4)
+        else:
+            self.value(addr, f.kind, f.size, f.target, depth)
+
+    def vector(self, addr, elem, depth):
+        """first <= last <= end, 0..4 typed elements."""
+        rng, tt = self.rng, self.tt
+        esz = tt.sizeof(elem)
+        # mostly non-empty: game state vectors rarely are, and code that reads back() / [n-1] of an empty one
+        # (a NULL _Mylast - 4: fault at 0xfffffffc) makes a whole input useless
+        n = 0 if rng.random() < 0.1 else rng.randrange(1, 5)
+        if n == 0 or depth >= TYPED_DEPTH or not self.room():
+            p = 0 if rng.random() < 0.5 else self.alloc(4, 4)
+            for k in range(3):
+                self.put(addr + 4 * k, p, 4)
+            return
+        cap = n + rng.randrange(3)
+        if esz * cap > M.SLOT // 2:
+            cap = n = max(1, (M.SLOT // 2) // esz)
+        p = self.alloc(esz * cap, 8)
+        if not p:
+            for k in range(3):
+                self.put(addr + 4 * k, 0, 4)
+            return
+        self.put(addr, p, 4)
+        self.put(addr + 4, p + esz * n, 4)
+        self.put(addr + 8, p + esz * cap, 4)
+        if tt.is_class(elem):
+            for i in range(n):
+                if not self.room():
+                    break
+                self.obj(p + i * esz, elem, depth + 1)
+            return
+        s = tt.scalar(elem)
+        if s:
+            for i in range(n):
+                self.value(p + i * esz, s[0], s[1], s[2], depth + 1)
 
 
 PROFILE_KW = {k: tuple(zip(*v)) for k, v in PROFILES.items()}
@@ -1212,6 +1731,12 @@ class ImportTrace(list):
         self.regs.append(call_reg_snapshot(self.uc))
 
 
+_CALLEE_SAVED_REGS = (CX.X86_REG_EBX, CX.X86_REG_EBP, CX.X86_REG_ESI, CX.X86_REG_EDI)
+# sub-registers -> the callee-saved register they write
+_FULL_REG = {CX.X86_REG_BX: CX.X86_REG_EBX, CX.X86_REG_BL: CX.X86_REG_EBX, CX.X86_REG_BH: CX.X86_REG_EBX,
+             CX.X86_REG_BP: CX.X86_REG_EBP, CX.X86_REG_SI: CX.X86_REG_ESI, CX.X86_REG_DI: CX.X86_REG_EDI}
+
+
 class Side:
     """One installed function (original or ours): entry, ranges, call-site hooks."""
 
@@ -1228,6 +1753,7 @@ class Side:
 class Runner:
     def __init__(self, t, opts, log=print):
         self.t, self.opts, self.log = t, opts, log
+        self.shrink_stats = collections.Counter()      # repair_heap / repair_loop: shrinks by kind and relation
         ctx = context()
         self.img, self.m = ctx["img"], ctx["m"]
         self.arity_cache = ctx["arity"]
@@ -1308,6 +1834,8 @@ class Runner:
                                             begin=sva, end=sva))
         # branch-feeding callees whose result an input may force (see _on_forced)
         self.cur_forced = {}
+        self.cur_fake_ret = {}      # Input.fake_ret {target: eax}: the result a fake call to target returns
+        self.fake_seq, self.last_fake = 0, None
         self.forced_cands = []
         if getattr(opts, "force_results", True):
             # only callees our object calls too, at the same image address: a forced result the other build cannot
@@ -1349,6 +1877,21 @@ class Runner:
         # leaves the list empty and the generator/comparison behave exactly as before.
         self.gen.invs = INV.specs_for(t.sid, t.va, not getattr(opts, "no_invariants", False))
         self.gen.force_cands = list(self.forced_cands)
+        # typed `this` / pointer-to-class argument objects (TypedInputs) for a share of the fresh inputs
+        self.typed_info = None
+        share = getattr(opts, "typed_share", TYPED_SHARE)
+        if share > 0:
+            try:
+                ti_, why = TypedInputs.setup(t, ctx)
+            except Exception as e:      # noqa: BLE001 - an aid: without type info the row runs on soup as before
+                ti_, why = None, "%s: %s" % (type(e).__name__, e)
+            if ti_ is not None:
+                self.gen.typed, self.gen.typed_share = ti_, share
+                self.typed_info = ti_.describe()
+            else:
+                self.typed_info = {"none": why}
+            if getattr(opts, "verbose", False):
+                log("  typed inputs: %s" % self.typed_info)
         # --edge-scope: the original's edges this run is about (one case of a switch): the run continues past
         # --inputs and steers only for these; coverage is still reported for the whole function
         self.edge_scope = None
@@ -2081,11 +2624,15 @@ class Runner:
 
     def block_starts(self, addrs, insns):
         """Addresses a branch or call in this code can land on: the start of a basic block. `addrs[0]`
-        (the function's entry in the image) is a block start too. Attributed here once per code blob."""
+        (the function's entry in the image) is a block start too, and so is the tested function's entry on either
+        side: our object can place another function before it (mission_5 0x529130's inlined accessor ends at
+        0x3000001d), and walking from a call back over `sub esp,34h` counted the frame as 13 arguments.
+        Attributed here once per code blob."""
         key = id(insns)
         t = self.targets_cache.get(key)
         if t is None:
             t = {addrs[0]} if addrs else set()
+            t |= {a for a in (self.t.va, self.ours.entry) if a in insns}
             for ins in insns.values():
                 if ins.id == CX.X86_INS_CALL or ins.group(capstone.CS_GRP_JUMP):
                     if ins.operands and ins.operands[0].type == CX.X86_OP_IMM:
@@ -2093,12 +2640,297 @@ class Runner:
             self.targets_cache[key] = t
         return t
 
+    def fn_entries(self, addrs, insns):
+        """Addresses in this code that are a function's entry: the tested function on either side, the
+        code blob's first address, and every direct call target (attributed once per code blob)."""
+        key = ("fn", id(insns))
+        t = self.targets_cache.get(key)
+        if t is None:
+            t = {self.t.va, self.t.orig_lo, self.ours.entry}
+            if addrs:
+                t.add(addrs[0])
+            for ins in insns.values():
+                if ins.id == CX.X86_INS_CALL and ins.operands and ins.operands[0].type == CX.X86_OP_IMM:
+                    t.add(ins.operands[0].imm & 0xFFFFFFFF)
+            self.targets_cache[key] = t
+        return t
+
+    def block_preds(self, addrs, insns):
+        """Block start -> indexes of the instructions ending its predecessors: the fall-through instruction and
+        every direct jump/jcc to it (attributed once per code blob)."""
+        key = ("pred", id(insns))
+        t = self.targets_cache.get(key)
+        if t is None:
+            t = {}
+            idx = {a: k for k, a in enumerate(addrs)}
+            starts = self.block_starts(addrs, insns)
+            for k, a in enumerate(addrs):
+                ins = insns[a]
+                if ins.group(capstone.CS_GRP_JUMP) and ins.operands and ins.operands[0].type == CX.X86_OP_IMM:
+                    tg = ins.operands[0].imm & 0xFFFFFFFF
+                    if tg in idx:
+                        t.setdefault(tg, []).append(k)
+                nx = a + ins.size
+                if nx in starts and nx in idx and ins.id not in (CX.X86_INS_JMP, CX.X86_INS_RET, CX.X86_INS_INT3):
+                    t.setdefault(nx, []).append(k)
+            self.targets_cache[key] = t
+        return t
+
+    @staticmethod
+    def _is_frame_sub(ins):
+        return ins.id == CX.X86_INS_SUB and ins.operands[0].type == CX.X86_OP_REG and \
+            ins.operands[0].reg == CX.X86_REG_ESP and \
+            (ins.operands[1].type != CX.X86_OP_IMM or ins.operands[1].imm > 0x40)
+
+    def _walk_back(self, addrs, insns, k, starts):
+        """The straight-line instructions ending with index k, back to the previous stack-balance point (call,
+        pop, `add esp`, branch, ret, other esp write) or the start of k's basic block, in program order; and
+        whether the walk ended at a block start (then the first instruction returned is that start)."""
+        seq = []
+        hit_start = False
+        j = k
+        # no instruction cap short of the block: /O2 schedules argument pushes far ahead of the call; config
+        # 0x4bc830 pushes 2 of its 3 COM-call arguments 60 and 30 instructions before `call [edx+158h]`, between
+        # byte stores into the vertex-declaration table, and a 40-instruction cap found only the last
+        while j >= 0 and k - j < 2000:
+            ins = insns[addrs[j]]
+            if j < k and ins.address + ins.size != addrs[j + 1]:
+                break                           # gap: not a straight-line predecessor
+            if ins.id in (CX.X86_INS_PUSH, CX.X86_INS_SUB):
+                pass                            # counted, or judged a frame allocation, by _count_pushes
+            elif ins.id in (CX.X86_INS_CALL, CX.X86_INS_RET, CX.X86_INS_POP, CX.X86_INS_ADD) or \
+                    ins.group(capstone.CS_GRP_JUMP):
+                if not (ins.id == CX.X86_INS_ADD and not (ins.operands[0].type == CX.X86_OP_REG and
+                                                          ins.operands[0].reg == CX.X86_REG_ESP)):
+                    break
+            else:
+                try:
+                    _r, w = ins.regs_access()
+                except capstone.CsError:
+                    w = []
+                if CX.X86_REG_ESP in w and ins.id not in (CX.X86_INS_MOV,):
+                    break
+            seq.append(ins)
+            if addrs[j] in starts:
+                hit_start = True
+                break                           # this instruction starts the block: earlier ones are another path
+            j -= 1
+        seq.reverse()
+        return seq, hit_start
+
+    def entry_saved(self, addrs, insns):
+        """address -> bitmask of the callee-saved registers (_CALLEE_SAVED_REGS order) some path from a function
+        entry in this code may have written before that instruction runs. A register outside the mask still holds
+        the caller's value there, so pushing it saves it: it is never an argument. /O2 schedules those saves
+        late: mesh_pass's render-state setter 0x4617b0 saves ebp and edi only in its third block, as
+        `push ebp; push edi; push ebx; push 0Fh; push eax; call [ecx+0E4h]`, a 3-argument call."""
+        key = ("saved", id(insns))
+        t = self.targets_cache.get(key)
+        if t is not None:
+            return t
+        bit = {r: 1 << k for k, r in enumerate(_CALLEE_SAVED_REGS)}
+        t = {}
+        for e in sorted(self.fn_entries(addrs, insns)):
+            if e not in insns:
+                continue
+            te = self._entry_saved_from(insns, e, bit)
+            if te is None:
+                continue                        # not a real entry: it reads a caller register it never saved
+            for a, m in te.items():
+                t[a] = t.get(a, 0) | m
+        self.targets_cache[key] = t
+        return t
+
+    @staticmethod
+    def _entry_saved_from(insns, e, bit):
+        """entry_saved's dataflow from one entry, or None when some path from it reads a callee-saved register
+        it has not written (other than to push it): the code there is the interior continuation of another
+        function, whose registers already hold values (facegen_misc 0x4eb8ed, a split of 0x4eb8e0, passes the
+        ebx it inherits as `push ebx` arguments of IDirect3DDevice9::Clear)."""
+        t = {}
+        work = [(e, 0)]
+        while work:
+            a, m = work.pop()
+            while a in insns:
+                old = t.get(a)
+                if old is not None and (old | m) == old:
+                    break
+                m = m | (old or 0)
+                t[a] = m
+                ins = insns[a]
+                try:
+                    rd, w = ins.regs_access()
+                except capstone.CsError:
+                    rd, w = list(_CALLEE_SAVED_REGS), list(_CALLEE_SAVED_REGS)
+                ops = ins.operands
+                zeroing = ins.id in (CX.X86_INS_XOR, CX.X86_INS_SUB) and len(ops) == 2 and \
+                    ops[0].type == ops[1].type == CX.X86_OP_REG and ops[0].reg == ops[1].reg
+                if ins.id != CX.X86_INS_PUSH and not zeroing:
+                    for r in rd:
+                        b = bit.get(_FULL_REG.get(r, r), 0)
+                        if b and not m & b:
+                            return None
+                if ins.id == CX.X86_INS_POP:
+                    w = [ops[0].reg] if ops[0].type == CX.X86_OP_REG else []
+                elif ins.id in (CX.X86_INS_PUSH, CX.X86_INS_CALL):
+                    w = []                      # a callee restores what it saves
+                for r in w:
+                    m |= bit.get(_FULL_REG.get(r, r), 0)
+                if ins.id in (CX.X86_INS_RET, CX.X86_INS_INT3):
+                    break
+                if ins.group(capstone.CS_GRP_JUMP):
+                    tg = ops[0].imm & 0xFFFFFFFF if ops and ops[0].type == CX.X86_OP_IMM else None
+                    if tg is not None:
+                        work.append((tg, m))
+                    if ins.id == CX.X86_INS_JMP:
+                        break
+                a = a + ins.size
+        return t
+
+    def _count_pushes(self, seq, prologue, saved=None):
+        """Argument dwords `seq` pushes. A push of a callee-saved register still holding the caller's value
+        (`saved`, from entry_saved) saves it. With `prologue` (seq starts at a function's entry) a `sub esp,N` /
+        `push ecx` that only prologue instructions precede allocates the frame. A large `sub esp,N` anywhere
+        allocates a frame: the pushes before it are not the call's."""
+        n = 0
+        in_prologue = prologue
+        bit = {r: 1 << k for k, r in enumerate(_CALLEE_SAVED_REGS)}
+        for ins in seq:
+            push_reg = ins.operands[0].reg if ins.id == CX.X86_INS_PUSH and \
+                ins.operands[0].type == CX.X86_OP_REG else None
+            if push_reg in bit and saved is not None and ins.address in saved and \
+                    not saved[ins.address] & bit[push_reg]:
+                continue                        # saves the caller's register
+            if ins.id == CX.X86_INS_PUSH:
+                if in_prologue and push_reg == CX.X86_REG_ECX:
+                    continue                    # `push ecx` reserving a local slot
+                n += 1
+                in_prologue = False
+                continue
+            if ins.id == CX.X86_INS_SUB and ins.operands[0].type == CX.X86_OP_REG and \
+                    ins.operands[0].reg == CX.X86_REG_ESP:
+                if self._is_frame_sub(ins):
+                    n = 0
+                    in_prologue = False
+                elif not in_prologue:
+                    n += ins.operands[1].imm // 4
+                continue
+            if prologue and ins.id == CX.X86_INS_MOV and ins.operands[0].type == CX.X86_OP_REG and \
+                    ins.operands[0].reg == CX.X86_REG_EBP and ins.operands[1].type == CX.X86_OP_REG and \
+                    ins.operands[1].reg == CX.X86_REG_ESP:
+                continue                        # frame pointer setup
+            in_prologue = False
+        return n
+
+    def _pushes_ending(self, addrs, insns, k, depth):
+        """Argument dwords on the stack, since the last balance point, after the instruction at index k runs
+        (k ends a predecessor block when it is a jump)."""
+        starts = self.block_starts(addrs, insns)
+        ins = insns[addrs[k]]
+        if ins.group(capstone.CS_GRP_JUMP):
+            if addrs[k] in starts:
+                return self._pushes_from_preds(addrs, insns, addrs[k], depth)
+            k -= 1
+            if insns[addrs[k]].address + insns[addrs[k]].size != addrs[k + 1]:
+                return None
+        seq, hit_start = self._walk_back(addrs, insns, k, starts)
+        saved = self.entry_saved(addrs, insns)
+        if not seq or not hit_start:
+            return self._count_pushes(seq, False, saved)
+        if seq[0].address in self.fn_entries(addrs, insns):
+            return self._count_pushes(seq, True, saved)
+        n = self._count_pushes(seq, False, saved)
+        if any(self._is_frame_sub(x) for x in seq):
+            return n
+        return n + self._pushes_from_preds(addrs, insns, seq[0].address, depth)
+
+    def _pushes_from_preds(self, addrs, insns, start, depth):
+        """Pushes the predecessors of the block at `start` leave for it, when they all agree; else 0 (a loop header
+        entered from its preheader and its back edge: the pushes belong to one path only)."""
+        if depth >= 4 or start in self.fn_entries(addrs, insns):
+            return 0
+        preds = self.block_preds(addrs, insns).get(start, [])
+        got = {self._pushes_ending(addrs, insns, k, depth + 1) for k in preds}
+        return got.pop() if len(got) == 1 and None not in got else 0
+
+    def _call_pushes(self, addrs, insns, i):
+        """Argument dwords the call at index i passes. Its own block's pushes, plus those every predecessor
+        leaves when they agree: /O2 merges the call after an if/else whose arms each push its argument
+        (`push eax; jmp L` / `push ecx; L: mov edx,[esi]; mov ecx,esi; call [edx+64h]`, ours of mission_3
+        0x48d470); counting the call's block alone faked a 0-argument method, the dword stayed on the stack and
+        the epilogue popped it into esi (ours-abi-broken)."""
+        if addrs[i] in self.block_starts(addrs, insns):
+            return self._pushes_from_preds(addrs, insns, addrs[i], 0)
+        prev = insns[addrs[i - 1]]
+        if prev.address + prev.size != addrs[i]:
+            return 0
+        return self._pushes_ending(addrs, insns, i - 1, 0) or 0
+
+    def _call_vtable_base(self, ret):
+        """The base register of a `call [reg+disp]` ending at `ret` (capstone reg id), or None."""
+        key = ("via-base", ret)
+        v = self.targets_cache.get(key, 0)
+        if v == 0:
+            v = None
+            try:
+                for n in (3, 6, 2):         # ff 5x xx / ff 9x xx xx xx xx / ff 1x
+                    ins = next(_md.disasm(self.m.read(ret - n, n), ret - n, 1), None)
+                    if ins is not None and ins.id == CX.X86_INS_CALL and ins.address + ins.size == ret:
+                        o = ins.operands[0]
+                        if o.type == CX.X86_OP_MEM and o.mem.base and not o.mem.index and o.mem.base != CX.X86_REG_ESP:
+                            v = o.mem.base
+                        break
+            except Exception:           # noqa: BLE001 - undecodable: treat ecx as an argument, as before
+                v = None
+            self.targets_cache[key] = v
+        return v
+
+    def _call_via_ecx(self, ret):
+        """The call ending at `ret` is `call [ecx+disp]` (ecx the vtable base, so not a thiscall `this`)."""
+        return self._call_vtable_base(ret) == CX.X86_REG_ECX
+
+    _CS_TO_UC = {CX.X86_REG_EAX: UC_X86_REG_EAX, CX.X86_REG_EBX: UC_X86_REG_EBX, CX.X86_REG_ECX: UC_X86_REG_ECX,
+                 CX.X86_REG_EDX: UC_X86_REG_EDX, CX.X86_REG_ESI: UC_X86_REG_ESI, CX.X86_REG_EDI: UC_X86_REG_EDI,
+                 CX.X86_REG_EBP: UC_X86_REG_EBP}
+
+    def _com_call(self, ret, esp, n):
+        """The call ending at `ret` is `call [R+disp]` where R holds the vtable of its first stack argument
+        (`mov edx,[eax]; push eax; call [edx+2Ch]`): a COM-style __stdcall method whose object is on the stack,
+        so ecx is not an argument there (IDirect3DVertexBuffer9::Lock in GeomBuffer::upload 0x46d060)."""
+        if n < 1:
+            return False
+        base = self._call_vtable_base(ret)
+        if base is None:
+            return False
+        try:
+            vt = self.m.uc.reg_read(self._CS_TO_UC[base])
+            obj = self.m.u32(esp + 4)
+            if self.m.u32(obj) != vt:
+                return False
+        except Exception:               # noqa: BLE001 - unreadable object: treat ecx as an argument
+            return False
+        try:
+            # ...unless ecx is another object with that vtable: `a->compare(b)` on two objects of one class is a
+            # thiscall whose this (ecx) and first argument share the vtable (typed inputs give both the real one).
+            # ecx left holding the argument object itself (an earlier call on it) is the COM leftover: still dead.
+            ecx = self.m.uc.reg_read(UC_X86_REG_ECX)
+            return ecx == obj or self.m.u32(ecx) != vt
+        except Exception:               # noqa: BLE001 - ecx is no readable pointer: not an object, so not this
+            return True
+
     def site_arity(self, ret):
         """Stack dwords a call ending at `ret` passes: pushes (and 'sub esp,N' slots) walking back
         from the call to the previous call/branch/stack adjustment. None if not determinable.
-        The walk stays inside the call's own basic block: the pushes of a loop's prologue (or of the
-        funclet/parent function the site was inlined into) belong to a different path, and counting
-        them fabricated 6 arguments for a 1-argument vtable call in a loop (write_soa 0x4e9640)."""
+        The walk counts the call's own basic block, and continues into its predecessors only when they all
+        push the same (_call_pushes): the pushes of a loop's prologue (or of the funclet/parent function the
+        site was inlined into) belong to a different path, and counting them fabricated 6 arguments for a
+        1-argument vtable call in a loop (write_soa 0x4e9640).
+        When the walk reaches a function's entry block is the function's entry block, its prologue is not argument traffic: a push of a
+        callee-saved register still holding its entry value saves it, and a `sub esp,N` / `push ecx` that
+        only prologue instructions precede allocates the frame. Counting /O2's interleaved prologue
+        (`sub esp,70h; push ebx; push ebp; push esi; mov ebx,ecx; mov eax,[ebx]; push edi; call [eax+7Ch]`,
+        dynamic_entity::integrate 0x4260a0) as 4 arguments popped 16 bytes the callee never owned, and the
+        run then returned through a float (logged as "no call site before cccccccc")."""
         got = self._insns_around(ret - 1)
         if not got:
             return None
@@ -2110,38 +2942,11 @@ class Runner:
         call = insns[addrs[i]]
         if call.id != CX.X86_INS_CALL or call.address + call.size != ret:
             return None
-        starts = self.block_starts(addrs, insns)
-        n = 0
-        j = i - 1
-        if addrs[i] not in starts:
-            while j >= 0 and i - j < 40:
-                ins = insns[addrs[j]]
-                if ins.address + ins.size != addrs[j + 1]:
-                    break                       # gap: not a straight-line predecessor
-                if ins.id == CX.X86_INS_PUSH:
-                    n += 1
-                elif ins.id == CX.X86_INS_SUB and ins.operands[0].type == CX.X86_OP_REG and \
-                        ins.operands[0].reg == CX.X86_REG_ESP and ins.operands[1].type == CX.X86_OP_IMM:
-                    if ins.operands[1].imm > 0x40:
-                        break
-                    n += ins.operands[1].imm // 4
-                elif ins.id in (CX.X86_INS_CALL, CX.X86_INS_RET, CX.X86_INS_POP, CX.X86_INS_ADD) or \
-                        ins.group(capstone.CS_GRP_JUMP):
-                    if ins.id == CX.X86_INS_ADD and not (ins.operands[0].type == CX.X86_OP_REG and
-                                                         ins.operands[0].reg == CX.X86_REG_ESP):
-                        j -= 1
-                        continue
-                    break
-                else:
-                    try:
-                        _r, w = ins.regs_access()
-                    except capstone.CsError:
-                        w = []
-                    if CX.X86_REG_ESP in w and ins.id not in (CX.X86_INS_MOV,):
-                        break
-                if addrs[j] in starts:
-                    break                   # this instruction starts the block: earlier ones are another path
-                j -= 1
+        key = ("arity", id(insns), i)
+        n = self.targets_cache.get(key)
+        if n is None:
+            n = self._call_pushes(addrs, insns, i)
+            self.targets_cache[key] = n
         nxt = self.m.read(ret, 3)
         callee_pops = not (nxt[:2] == b"\x83\xc4" or nxt[:2] == b"\x81\xc4")
         return n, callee_pops
@@ -2160,13 +2965,26 @@ class Runner:
             # a tail call through a pointer (`jmp [eax+0x68]` with the tested function's frame gone): the target
             # takes over the tested function's own arguments and returns to its caller (mission_3 0x48d7e0)
             ar = (len(self.t.stack_kinds), bool(self.t.callee_pop))
+        if ar is None and esp > self.esp_entry:
+            # esp is above the tested function's return-address slot: it already returned, to `target`. That is a stack
+            # imbalance (a misjudged fake call earlier, or a fragment returning through its parent's epilogue, mission_5
+            # 0x52ba1d), not a call site arity could be read from
+            return ("ret-misaligned", "returned to %08x with esp %+d past its entry" % (target, esp - self.esp_entry))
         if ar is None:
             return ("fake-arity", "no call site before %08x" % ret)
         n, pops = ar
         args = []
         for k in range(n):
             args.append(self.norm_key(m.u32(esp + 4 + 4 * k)))
-        ecx = self.norm_key(uc.reg_read(UC_X86_REG_ECX))
+        # a call through [ecx+disp] has the vtable in ecx, so ecx is not its `this`: the callee is __stdcall
+        # (a COM-style method, the object is a stack argument) and ecx is dead there (screen 0x4ebfd0's
+        # GetDeviceData through vtable +0x28: the original leaves the vtable in ecx, ours a stack address)
+        # likewise `call [R+disp]` where R is the vtable of the first stack argument (a COM method through
+        # another register: the original's ecx is then whatever it last held, GeomBuffer::upload 0x46d060)
+        # and a caller-cleaned call with stack arguments (`push eax; call [eax+68h]; add esp,4`) is __cdecl: MSVC's
+        # thiscall callee pops its own arguments, so ecx carries nothing there (mesh::render 0x413750's on_render)
+        dead = self._call_via_ecx(ret) or self._com_call(ret, esp, n) or (n > 0 and not pops)
+        ecx = DEAD_ECX if dead else self.norm_key(uc.reg_read(UC_X86_REG_ECX))
         h = zlib.crc32(repr((target, ecx, args, getattr(self, "fake_salt", 0))).encode())
         k = h % 4
         eax = (0, 1, h % 9, M.POOL_BASE + M.SLOT * (HOT_SLOTS + (h >> 8) % (NSLOTS - HOT_SLOTS)))[k]
@@ -2176,6 +2994,11 @@ class Runner:
             # sending it into work the method was supposed to do (cam_view 0x4eaa05: the model-record
             # check gates the clipboard copy, whose GlobalAlloc is not modelled)
             eax = 0
+        ov = self.cur_fake_ret.get(target)
+        if ov is not None:          # the input chooses this callee's result (concolic steering, concolic.py)
+            eax = ov & 0xFFFFFFFF
+        self.fake_seq += 1
+        self.last_fake = target
         self.fakes.append((target, n, ecx, tuple(args)))
         if self.opts.call_regs:
             self.fake_regs.append(call_reg_snapshot(uc))
@@ -2706,38 +3529,484 @@ class Runner:
         slot = (base + idx * op.mem.scale + op.mem.disp) & 0xFFFFFFFF
         return base, slot, ret
 
-    def repair_heap(self, inp, why, rng):
+    def repair_heap(self, inp, why, rng, round_=0):
         """The original ran the emulated heap out (64 MB): a size or element count it read from the input is a
         soup value no game state holds (mesh_hud 0x498420: 321 of 400 inputs; quest_log 0x4ee910: 37 of 100).
-        Shrink the input dword that carried it: the most recent one the failed size is a small multiple of
-        (an element count times its stride, or the byte size itself) or a few bytes more than (quest_log:
-        a string length + 1), else the most recent large non-pointer
-        value (a loop count over small allocations). Returns the repaired input or None."""
+        Shrink the input dword that carried it. A large failed size is matched against the input reads made before
+        the allocation (repair_relations: the size is a count times a stride plus a small header, as new[] of
+        trigger_vec 0x4c1c90 allocates count * 0x78 + 4; a byte length; or the distance between a vector's begin and
+        end); a small one is the n-th allocation of a loop whose trip count the input set, which repair_loop shrinks.
+        From the third round of one input on, the loop comes first: a runaway loop over soup records allocates each
+        record's soup-sized string in turn (uninitialized_copy 0x524cd0 under MapDialog::place_c 0x4c6f50), and
+        shrinking one size per round never ends it. Last resort: the most recent large non-pointer value. Returns the
+        repaired input or None."""
         mm = re.search(r"\((\d+) bytes\)", str(why))
         size = int(mm.group(1)) if mm else 0
         mh = re.search(r"huge mem\w+ (0x[0-9a-f]+)", str(why))
         if mh:      # a memcpy/memmove/memset length the input carried (Spore: 0x411c0744, 0xbffe0006 from soup)
             size = int(mh.group(1), 16)
+        if round_ >= 2:
+            out = self.repair_loop(inp, rng, why="heap")
+            if out is not None:
+                return out
+        if size >= 0x10000:
+            reads = self._traced_reads(inp)
+            n = rng.choice((1, 2, 3, 4, 8, 16, rng.randrange(33)))
+            rels = self.repair_relations(reads, size)
+            if not rels:
+                # a soup vector header (begin/last/end of float or int garbage, none a pointer): the size is still
+                # a stride times end - begin, an exact match no unrelated pair of dwords produces by chance
+                rels = [r for r in self.repair_relations(reads, size, near=0) if r[2][0] == "pair"]
+            for addr, val, rel in rels:
+                # a count scaled to the size gets n elements; a size/length/distance gets a small byte size
+                new = self._invert(rel, val, n * rel[1] + rel[2] if rel[0] == "scaled" else 16 * n)
+                out = self._put_any(inp.copy(), addr, new)
+                if out is not None:
+                    self.note_repair("heap", rel, addr, val, new)
+                    return out
+        out = self.repair_loop(inp, rng, why="heap")
+        if out is not None:
+            return out
         reads = self._traced_reads(inp)
-
-        def pointer(v):
-            return (M.POOL_BASE <= v < M.POOL_BASE + M.POOL_SIZE or self.img.in_image(v) or
-                    M.DYN_BASE <= v < M.DYN_BASE + M.DYN_SIZE or M.STACK_TOP - M.STACK_SIZE <= v < STACK_END)
-        pick = None
+        if size >= 0x10000:
+            # a vector header (three adjacent dwords read as begin/last/end, each a pointer or a small int, not a
+            # consistent first <= last <= end triple): soup or small typed ints where a pointer triple belongs. Its grow path sizes the
+            # allocation from end - begin modulo 2**32 (camera 0x49ebd0: PartyMgrW::grow's pages.push_back asked for
+            # 0xfffffffc bytes), which no single dword relates to. Make the most recent such header empty (all equal).
+            seen = {a: v for a, v in reads}
+            tri = []
+            for a, v in reversed(reads):
+                if a not in [x[0] for x in tri] and a + 4 in seen and a + 8 in seen and \
+                        not seen[a] == seen[a + 4] == seen[a + 8] and \
+                        all(seen[a + k] < 0x1000 or self._pointer(seen[a + k]) for k in (0, 4, 8)) and \
+                        not all(self._pointer(seen[a + k]) and not seen[a + k] & 3 and
+                                seen[a] <= seen[a + 4] <= seen[a + 8] for k in (0, 4, 8)):
+                    tri.append((a, v))
+            for a, v in tri[:4][rng.randrange(min(4, len(tri))):] if tri else ():
+                out = inp.copy()
+                keep = v if self._pointer(v) else 0
+                for k in range(3):
+                    out = self._put_any(out, a + 4 * k, keep) if out is not None else None
+                if out is not None:
+                    self.note_repair("heap", ("vecheader", 1, 0), a, v, keep)
+                    return out
         for addr, v in reversed(reads):
-            # the size is the value times a stride, or the value plus a small header/terminator (a string length
-            # + 1); a soup value used as a length is often a pool address, so pointers are not excluded here
-            if v >= 0x1000 and size and (size % v == 0 and size // v <= 0x1000 or 0 <= size - v <= 0x40):
-                pick = addr
-                break
-        if pick is None:
-            for addr, v in reversed(reads):
-                if 0x10000 <= v and not pointer(v):
-                    pick = addr
+            if 0x10000 <= v and not self._pointer(v):
+                new = rng.choice((0, 1, 2, 3, 4, 8, 16, rng.randrange(64)))
+                out = self._put_any(inp.copy(), addr, new)
+                if out is not None:
+                    self.note_repair("heap", ("large", 1, 0), addr, v, new)
+                    return out
+        return None
+
+    def _put_any(self, out, addr, val):
+        """_put_dword, plus an unaligned pool dword (a count stored at an odd offset of a soup record, rec_tables
+        0x4c47d0's callee bound at [..+0x...9]): its bytes are spliced into the two aligned pool dwords around it, as
+        the input generates them (Generator.slot_pages applies pool_over)."""
+        r = self._put_dword(out, addr, val)
+        if r is not None or not (M.POOL_BASE <= addr and addr + 4 <= M.POOL_BASE + M.POOL_SIZE) or not addr & 3:
+            return r
+        lo = addr & ~3
+        cur = bytearray()
+        for a in (lo, lo + 4):
+            slot = a & ~(M.SLOT - 1)
+            pg = self.gen.slot_pages(out, slot)[a & ~0xFFF]
+            cur += pg[a & 0xFFF:(a & 0xFFF) + 4]
+        sh = addr - lo
+        cur[sh:sh + 4] = struct.pack("<I", val & 0xFFFFFFFF)
+        out.pool_over[lo], out.pool_over[lo + 4] = struct.unpack("<II", bytes(cur))
+        return out
+
+    def _pointer(self, v):
+        return (M.POOL_BASE <= v < M.POOL_BASE + M.POOL_SIZE or self.img.in_image(v) or
+                M.DYN_BASE <= v < M.DYN_BASE + M.DYN_SIZE or M.STACK_TOP - M.STACK_SIZE <= v < STACK_END)
+
+    def note_repair(self, kind, rel, addr, old, new):
+        """Diagnostics of the shrink repairs (the result's `shrink_repairs`): how many of each kind and relation."""
+        self.shrink_stats["%s:%s" % (kind, rel[0])] += 1
+        if self.opts.verbose:
+            self.log("  %s repair: [%08x] %#x -> %s (%s)" % (kind, addr, old, "%#x" % new if isinstance(new, int)
+                                                          else "small", " ".join(str(x) for x in rel)))
+
+    @staticmethod
+    def _relate(t, v):
+        """How the value t (a trip count, a loop bound, an allocation size) follows from the input dword v:
+        ("eq", 1, 0) t == v; ("scaled", k, c) t == v*k + c, also modulo 2**32 (a count times a stride plus a header;
+        v >= 0x40, so a small soup value is not a count by accident); ("divided", k, c) v == t*k + c (a byte size the
+        loop walks in strides); None. 1 <= k <= 0x1000, |c| <= 0x40."""
+        if v == t:
+            return ("eq", 1, 0)
+        if v >= 0x40 and t > v:
+            k = (t + v // 2) // v
+            if 1 <= k <= 0x1000 and abs(t - v * k) <= 0x40:
+                return ("scaled", k, t - v * k)
+        if v >= 0x40:
+            # the same modulo 2**32: a soup count times the stride wraps (new[] of 0xff7fffff elements of 0x78)
+            tz = (v & -v).bit_length() - 1
+            inv = pow(v >> tz, -1, 1 << (32 - tz))
+            for c in range(-0x40, 0x41):
+                r = (t - c) & 0xFFFFFFFF
+                if r & ((1 << tz) - 1):
+                    continue
+                k = ((r >> tz) * inv) & ((1 << (32 - tz)) - 1)
+                if 2 <= k <= 0x1000:
+                    return ("scaled", k, c)
+        if t >= 2 and v > t:
+            k = (v + t // 2) // t
+            if 1 <= k <= 0x1000 and abs(v - t * k) <= 0x40:
+                return ("divided", k, v - t * k)
+        return None
+
+    @staticmethod
+    def _invert(rel, val, want):
+        """The new value of input dword `val` (related to the target by rel) that makes the target `want`.
+        A ("pair", k, c, begin) relation is the end dword of a begin/end pair: begin + the new distance."""
+        kind, k, c = rel[0], rel[1], rel[2]
+        if kind == "eq":
+            return want & 0xFFFFFFFF
+        if kind == "scaled":
+            return max(0, want - c) // k
+        if kind == "divided":
+            return (want * k + c) & 0xFFFFFFFF
+        if kind == "pair":
+            return (rel[3] + want) & 0xFFFFFFFF
+        return None
+
+    def repair_relations(self, reads, t, limit=None, near=None):
+        """[(addr, value, relation)] of the input dwords (most recent read first) the value t follows from: one dword
+        (_relate), or the distance between the two dwords of an adjacent begin/end pair (a vector's first/last:
+        ("pair", k, c, begin) with distance == t*k + c, the end dword being the one rewritten); eq first. A pair needs
+        one pointer among the two, except for the reads from index `near` on (the loop's own first iteration, which
+        reads the vector it walks: Hud 0x420860 compares against ([ebx+8] - [ebx+4]) >> 2 of soup 0x5000000)."""
+        if t < 2:
+            return []
+        reads = reads[:limit] if limit is not None else reads
+        last, seen = {}, set()
+        for a, v in reads:
+            last[a] = v
+        out = []
+        for idx in range(len(reads) - 1, -1, -1):
+            a, v = reads[idx]
+            if (a, v) in seen:
+                continue
+            seen.add((a, v))
+            rel = self._relate(t, v)
+            if rel is not None:
+                out.append((a, v, rel))
+            b = last.get(a - 4)
+            if b is not None and last.get(a) == v and (self._pointer(v) or self._pointer(b) or
+                                                        near is not None and idx >= near):
+                # a vector [begin, end) of t elements of k bytes: end - begin == t*k + c modulo 2**32, c the remainder
+                # a size computation drops ((end - begin) >> 2 of soup begin 0x44221431: Hud's vectors at 0x420860)
+                d = (v - b) & 0xFFFFFFFF
+                r = (d - t * _PAIR_K) & 0xFFFFFFFF
+                hit = np.nonzero((r < _PAIR_K) | (r <= 0x40) | (r >= 0xFFFFFFC0))[0]     # (a size one or a few bytes past the stride multiple: new[] of the bytes + 1)
+                if len(hit):
+                    k = int(_PAIR_K[hit[0]])
+                    out.append((a, v, ("pair", k, int(r[hit[0]]), b)))
+        rank = {"eq": 0, "pair": 1, "scaled": 2, "divided": 3}
+        out.sort(key=lambda x: rank.get(x[2][0], 9))       # stable: most recent first within a kind
+        return out
+
+    def _profile_loops(self, inp, cap):
+        """Run the original on inp for at most `cap` instructions with every block transition counted: [(count, src
+        block start, src block end, loop head)] of the backward jumps (a jcc/jmp/loop to an address at or below the
+        jumping block, or a rep string instruction repeating itself), hottest first; and the run's status."""
+        m, uc = self.m, self.m.uc
+        cnt = collections.Counter()
+        st = ("budget", None)
+        prev = [None, 0]
+
+        def on_blk(uc_, addr, size, _):
+            p = prev[0]
+            if p is not None and addr <= p:
+                cnt[(p, prev[1], addr)] += 1
+            prev[0], prev[1] = addr, size
+        h = uc.hook_add(UC_HOOK_BLOCK, on_blk, begin=1, end=0)
+        saved = self.budget
+        self.budget = cap
+        try:
+            st = self.run_side(self.orig, inp)["status"]
+        except UcError:
+            pass
+        finally:
+            self.budget = saved
+            uc.hook_del(h)
+        stop = uc.reg_read(UC_X86_REG_EIP)
+        loops = []
+        for (src, size, dst), n in cnt.most_common(32):
+            try:
+                last = list(_md.disasm(m.read(src, size), src))[-1]
+            except Exception:
+                continue
+            if last.address + last.size != src + size:
+                continue
+            ok = last.prefix[0] in (0xF2, 0xF3) and dst == src
+            if last.group(CX.X86_GRP_JUMP) and last.operands and last.operands[0].type == CX.X86_OP_IMM:
+                ok = ok or (last.operands[0].imm & 0xFFFFFFFF) == dst
+            if ok:
+                loops.append((n, src, src + size, dst))
+        try:
+            # a rep string instruction burning the cap is one instruction (the block hook may see it once)
+            ins = next(_md.disasm(m.read(stop, 16), stop, 1))
+            if ins.prefix[0] in (0xF2, 0xF3) and all(lp[3] != stop for lp in loops):
+                loops.insert(0, (cap, stop, stop + ins.size, stop))
+        except Exception:
+            pass
+        return loops, st
+
+    _FLAG_SETTERS = {"cmp", "test", "dec", "inc", "sub", "add", "and", "or", "xor", "neg", "sar", "shr", "shl"}
+    _STRING_OPS = ("movs", "stos", "scas", "cmps", "lods")
+
+    def _loop_compares(self, head, end):
+        """[instruction] that set the flags of the loop's exit branches: every jcc/loop in [head, end) with a side
+        outside the range, and the flag-setting instruction just before it (a rep string instruction: itself)."""
+        if not 0 < end - head <= 0x4000:
+            return []
+        try:
+            insns = list(_md.disasm(self.m.read(head, end - head), head))
+        except Exception:
+            return []
+        out = []
+        for k, ins in enumerate(insns):
+            if ins.prefix[0] in (0xF2, 0xF3) and ins.mnemonic.split()[-1][:4] in self._STRING_OPS:
+                out.append(ins)
+                continue
+            if not (ins.group(CX.X86_GRP_JUMP) and ins.mnemonic != "jmp" and ins.operands and
+                    ins.operands[0].type == CX.X86_OP_IMM):
+                continue
+            tgt, fall = ins.operands[0].imm & 0xFFFFFFFF, ins.address + ins.size
+            if head <= tgt < end and head <= fall < end:
+                continue
+            if ins.mnemonic in ("loop", "loope", "loopne", "jecxz"):
+                out.append(ins)
+                continue
+            for j in range(k - 1, max(-1, k - 8), -1):
+                p = insns[j]
+                if p.mnemonic in ("call", "ret") or p.group(CX.X86_GRP_JUMP):
                     break
-        if pick is None:
+                if p.mnemonic in self._FLAG_SETTERS:
+                    if all(q.address != p.address for q in out):
+                        out.append(p)
+                    break
+        return out
+
+    def _cmp_operands(self, ins):
+        """The values the flag setter ins compares, as [(value, is_imm, address of a dword memory operand or None)]
+        of two: cmp/test both operands (test r, r: r against 0); an arithmetic setter its destination against 0;
+        loop/jecxz/rep ecx against 0."""
+        uc = self.m.uc
+        mn = ins.mnemonic
+        if mn in ("loop", "loope", "loopne", "jecxz") or ins.prefix[0] in (0xF2, 0xF3):
+            return [(uc.reg_read(UC_X86_REG_ECX), False, None), (0, True, None)]
+        ops = list(ins.operands)
+        if mn not in ("cmp", "test"):
+            ops = ops[:1]
+        res = []
+        for o in ops:
+            msk = ST._MASK.get(o.size, 0xFFFFFFFF)
+            if o.type == CX.X86_OP_REG:
+                res.append((uc.reg_read(ST._ucreg(o.reg)) & msk, False, None))
+            elif o.type == CX.X86_OP_MEM:
+                a = o.mem.disp
+                if o.mem.base:
+                    a += uc.reg_read(ST._ucreg(o.mem.base))
+                if o.mem.index:
+                    a += uc.reg_read(ST._ucreg(o.mem.index)) * o.mem.scale
+                a &= 0xFFFFFFFF
+                try:
+                    raw = self.m.read(a, o.size)
+                except Exception:
+                    # a pool page the run has not touched yet (the hook runs before the access maps it)
+                    if not M.POOL_BASE <= a < M.POOL_BASE + M.POOL_SIZE - 8 or self.m.lazy is None:
+                        raise
+                    raw = bytes(self.m.lazy((a + k) & ~0xFFF)[(a + k) & 0xFFF] for k in range(o.size))
+                res.append((int.from_bytes(raw, "little"), False, a if o.size == 4 else None))
+            elif o.type == CX.X86_OP_IMM:
+                res.append((o.imm & msk, True, None))
+        if mn == "test" and len(res) == 2 and ins.operands[0].type == ins.operands[1].type == CX.X86_OP_REG and \
+                ins.operands[0].reg == ins.operands[1].reg:
+            res[1] = (0, True, None)
+        if len(res) == 1:
+            res.append((0, True, None))
+        return res
+
+    def repair_loop(self, inp, rng, why="budget", cap=LOOP_PROFILE_CAP, samples=12, rounds=16):
+        """A loop of the original ran on and on (the --budget instruction cap cut the run off, or its allocations
+        ran the heap out): its trip count came from a soup value no game state holds (rec_tables 0x4c47d0 deletes
+        [[this+4]-4] elements of an array). These are O(n) loops, so a small n tests the same code: the input
+        dword that set the trip count is shrunk, and the input is then replayed identically on both sides (only
+        the input changes, never the comparison).
+        1. profile `cap` instructions: the hottest backward jumps are the loops (_profile_loops);
+        2. the exit compares of the hottest few (_loop_compares) are sampled for `samples` iterations: the operand
+           that steps by a constant d is the induction variable (first value x0), a constant one is the bound B (0
+           for a dec/sub/loop/rep counter), and N = (B - x0) / d is the trip count;
+        3. the input dword that N, B or x0 follows from (in that order; the compare's own memory operand when the
+           input owns it, else one read before the loop or in its first iteration, by repair_relations: equal, a
+           scaled count, a byte size, a begin/end pair) is rewritten so the loop runs n times: n for a count,
+           x0 + n*d for an end pointer, B - n*d for a count-down start;
+        a loop over a chain of pointers compared against a constant (a list walked to NULL) is cut instead: the
+        input dword the k-th pointer was loaded from is set to the compared constant.
+        Up to `rounds` shrinks are made per call, each checked by a run capped at `cap` (one soup count per element
+        of an array: rec_tables 0x4c47d0's strings); the caller replays the result at the full cap. Returns the
+        repaired input or None."""
+        cur = None
+        self.loop_fit = False
+        for _round in range(rounds):
+            loops, st = self._profile_loops(cur or inp, cap)
+            if os.environ.get("DIFFTEST_LOOP_DEBUG"):
+                self.log("  loop repair round %d: profile %s" % (_round, st))
+            if cur is not None and st[0] != "budget":
+                self.loop_fit = True            # the shrunk input finishes (or stops for another reason) in the cap
+                break
+            nxt = self._shrink_loop(cur or inp, loops, rng, why, cap, samples)
+            if nxt is None:
+                break
+            cur = nxt
+        return cur
+
+    def _shrink_loop(self, inp, loops, rng, why, cap, samples):
+        """One repair_loop round: sample the exit compares of the profiled loops and shrink one input dword."""
+        hooked = []
+        for _n, _src, end, head in loops[:4]:
+            for ins in self._loop_compares(head, end):
+                if all(h.address != ins.address for h in hooked):
+                    hooked.append(ins)
+        if not hooked:
             return None
-        return self._put_dword(inp.copy(), pick, rng.choice((0, 1, 2, 3, 4, 8, 16, rng.randrange(64))))
+        m, uc = self.m, self.m.uc
+        # per compare: runs of consecutive executions whose operands each step by a constant (one invocation of the
+        # loop: a callee's loop runs once per call, each call from its own start and bound). The LONGEST run is the
+        # runaway one (rec_tables 0x4c47d0: a 0x21-character string's loop runs before the soup-length one); its
+        # first `samples` executions are kept. first: the first `samples` executions whatever they hold (a pointer
+        # chain does not step). Sampling stops once every compare has a run of `long_run`.
+        long_run = 4 * samples + 16
+        state = {ins.address: {"seg": [], "n": 0, "last": [], "best": (0, [])} for ins in hooked}
+        first = {ins.address: [] for ins in hooked}
+        full = [0]
+
+        def steps(a_, b_, c_):
+            return all(((z[0] - y[0]) - (y[0] - x[0])) & 0xFFFFFFFF == 0 for x, y, z in zip(a_[0], b_[0], c_[0]))
+
+        def on_cmp(uc_, address, size, ins):
+            if self.cur is not self.orig:
+                return
+            st_ = state[ins.address]
+            if st_["n"] >= long_run:
+                return
+            try:
+                hit = (self._cmp_operands(ins), len(self.reads))
+            except Exception:
+                return
+            f = first[ins.address]
+            if len(f) < samples:
+                f.append(hit)
+            last = st_["last"]
+            if len(last) == 2 and not steps(last[0], last[1], hit):
+                if st_["n"] > st_["best"][0]:
+                    st_["best"] = (st_["n"], st_["seg"])
+                st_["seg"], st_["n"] = [last[1]], 1      # a new invocation (or no progression) starts here
+            st_["n"] += 1
+            if len(st_["seg"]) < samples:
+                st_["seg"].append(hit)
+            st_["last"] = (last + [hit])[-2:]
+            if st_["n"] == long_run:
+                full[0] += 1
+                if full[0] >= len(state):
+                    uc_.emu_stop()
+        self.reads = []
+        ranges = [(M.POOL_BASE, M.POOL_BASE + M.POOL_SIZE), (self.esp_entry, self.args_hi)]
+        ranges += [(lo, hi) for _nm, lo, hi in m.writable]
+        hs = [uc.hook_add(UC_HOOK_MEM_READ, self._on_read, begin=lo, end=hi - 1) for lo, hi in ranges]
+        hs += [uc.hook_add(UC_HOOK_CODE, on_cmp, user_data=ins, begin=ins.address, end=ins.address) for ins in hooked]
+        saved = self.budget
+        self.budget = cap
+        try:
+            self.run_side(self.orig, inp)
+        except UcError:
+            pass
+        finally:
+            self.budget = saved
+            for h in hs:
+                uc.hook_del(h)
+        reads, self.reads = self.reads, None
+        n = rng.choice((1, 2, 3, 4, 5, 8, rng.randrange(17)))
+
+        def s32(x):
+            x &= 0xFFFFFFFF
+            return x - (1 << 32) if x >> 31 else x
+        got = {a_: (st_["seg"] if st_["n"] >= st_["best"][0] else st_["best"][1]) for a_, st_ in state.items()}
+        cands = []          # (rank, addr, old, new, rel, what)
+        for ins in hooked:
+            s = got[ins.address]
+            if len(s) < 4:
+                continue
+            for j in (0, 1):
+                xs = [smp[0][j][0] for smp in s]
+                bs = [smp[0][1 - j][0] for smp in s]
+                if len(set(bs)) != 1:
+                    continue                        # the other operand moves too: not a bound
+                b = bs[0]
+                d = s32(xs[1] - xs[0])
+                lim = s[0][1]                       # the reads made before the loop's first compare
+                lim2 = s[1][1]                      # ... and in its first iteration (the bound re-read each time)
+                if d and all(s32(xs[i + 1] - xs[i]) == d for i in range(len(xs) - 1)):
+                    x0 = xs[0]
+                    dist = s32(b - x0)
+                    if dist and (dist > 0) == (d > 0) and dist % d == 0:
+                        trip = dist // d
+                    else:
+                        # moving away from the bound, or stepping over it (an equality exit never taken: soup
+                        # uninitialized_copy 0x4c1b60 walks [first, last) in 0x204 strides): it wraps first
+                        trip = 1 << 32
+                    if trip <= 4 * samples:
+                        continue                    # a short loop: not the one burning the budget
+                    targets = [("x0", x0, (b - n * d) & 0xFFFFFFFF)]
+                    if trip < 1 << 32:
+                        targets.insert(0, ("N", trip, n))
+                    if not s[0][0][1 - j][1] and b:
+                        targets.append(("B", b, (x0 + n * d) & 0xFFFFFFFF))
+                    for what, t, want in targets:
+                        rels = self.repair_relations(reads, t, lim2, near=lim)[:4]
+                        ma = s[0][0][1 - j][2] if what == "B" else s[0][0][j][2] if what == "x0" else None
+                        if ma is not None:
+                            rels.insert(0, (ma, t, ("eq", 1, 0)))   # the compare reads it from the input itself
+                        for addr, val, rel in rels:
+                            # N as a begin/end pair: the end is begin + n elements of the pair's stride
+                            new = self._invert(rel, val, n * rel[1] if what == "N" and rel[0] == "pair" else want)
+                            if new is None or new == val:
+                                continue
+                            rank = -1 if addr == ma else \
+                                {"eq": 0, "pair": 1}.get(rel[0], 2) * 3 + ("N", "B", "x0").index(what)
+                            cands.append((rank, addr, val, new, rel, what))
+        for ins in hooked:
+            s = first[ins.address]
+            if len(s) < 4:
+                continue
+            xs = [smp[0][0][0] for smp in s]
+            bs = [smp[0][1][0] for smp in s]
+            if len(set(bs)) == 1 and len(set(xs)) == len(xs) and all(self._pointer(x) for x in xs):
+                # a pointer chain compared against a constant (a list walked to NULL): end it at element k
+                k = rng.randrange(1, min(4, len(xs)))
+                for addr, val in reversed(reads[s[k - 1][1]:s[k][1]]):
+                    if val == xs[k]:
+                        cands.append((9, addr, val, bs[0], ("chain", 1, 0), "chain"))
+                        break
+        cands.sort(key=lambda c: c[0])
+        if os.environ.get("DIFFTEST_LOOP_DEBUG"):
+            self.log("  loop repair (%s): loops %s" % (why, " ".join("%08x->%08x x%d" % (lp[1], lp[3], lp[0])
+                                                                 for lp in loops[:4])))
+            for ins in hooked:
+                self.log("    %08x %s %s: %s" % (ins.address, ins.mnemonic, ins.op_str, " ".join(
+                    "/".join("%x" % v for v, *_x in smp[0]) for smp in got[ins.address][:6])))
+            self.log("    %d candidate(s): %s" % (len(cands), " ".join(
+                "[%08x]%x->%x:%s:%s" % (c[1], c[2], c[3], c[4][0], c[5]) for c in cands[:6])))
+        for _r, addr, val, new, rel, what in cands:
+            out = self._put_any(inp.copy(), addr, new)
+            if out is not None:
+                self.note_repair("%s-loop:%s" % (why, what), rel, addr, val, new)
+                return out
+        return None
 
     def repair_pure(self, inp, rng):
         """The original stopped in _purecall: an indirect call read a vtable slot that is still the
@@ -2786,7 +4055,7 @@ class Runner:
             stopped = status[0] != "ok" and a == last
             side.site_hits[a] = side.site_hits.get(a, 0) + n
             side.site_returned[a] = side.site_returned.get(a, 0) + n - (1 if stopped else 0)
-        if status[0] == "import" and last is not None and noreturn_stop(status[1]):
+        if status[0] in ("import", "exit") and last is not None and noreturn_stop(status[1]):
             nm = str(status[1]).split(":")[0]
             side.site_stops.setdefault(last, {})
             side.site_stops[last][nm] = side.site_stops[last].get(nm, 0) + 1
@@ -2806,6 +4075,7 @@ class Runner:
     def run_side(self, side, inp):
         m, uc, t = self.m, self.m.uc, self.t
         self.cur_forced = getattr(inp, "forced", None) or {}
+        self.cur_fake_ret = getattr(inp, "fake_ret", None) or {}
         # memory: pool, dyn heap, stack, misc
         cache = self.page_cache
         if cache.get("inp") is not inp:
@@ -2855,6 +4125,7 @@ class Runner:
         m.dyn_sizes = {}
         m.rand_state = 1
         m.ui_seed, m.ui_calls = getattr(inp, "seed", 0) & 0xFFFFFFFF, 0     # user32 query answers (machine.ui_answer)
+        m.find_patterns, m.find_counts = {}, {}                                 # FindFirstFileA search state
         m.alloc_fail, m.alloc_count = tuple(getattr(inp, "alloc_fail", ())), 0
         extra_init = {}
         self.mapped_extra = []
@@ -3357,6 +4628,11 @@ class Comparer:
     def compare(self, a, b, t):
         """-> None if equivalent, else (observable, orig, ours, detail). self.last_kind: triage hint."""
         self.last_kind = None
+        if a["status"][0] == "exit":
+            # both builds terminated the program (run() checked that they did so the same way): no frame returned,
+            # so registers, esp and the x87 stack are mid-call state nothing observes. Everything the process
+            # leaves behind -- memory, the calls and imports made on the way -- is compared below as for a return.
+            return self.compare_state(a, b, t)
         rk = t.ret_kind
         if rk in ("int", "ptr", "hidden", "unknown", "small", "bool", "i64"):
             mask = {"bool": 0xFF, "small": 0xFFFF}.get(rk, 0xFFFFFFFF)
@@ -3409,6 +4685,16 @@ class Comparer:
             return ("mxcsr", "%08x" % a["mxcsr"], "%08x" % b["mxcsr"], "SSE control")
         if rk == "m128" and a["xmm0"] != b["xmm0"]:
             return ("xmm0", "%032x" % a["xmm0"], "%032x" % b["xmm0"], "SSE return")
+        return self.compare_state(a, b, t)
+
+    def compare_state(self, a, b, t):
+        """The observables a run leaves besides its registers: the control words, memory, and the import, call
+        and fake-call traces (compare's tail; on its own for a run that ended in a program exit)."""
+        if a["status"][0] == "exit":
+            if a["fpcw"] != b["fpcw"]:
+                return ("fpcw", "%04x" % a["fpcw"], "%04x" % b["fpcw"], "x87 control word")
+            if a["mxcsr"] != b["mxcsr"]:
+                return ("mxcsr", "%08x" % a["mxcsr"], "%08x" % b["mxcsr"], "SSE control")
         d = self.compare_mem(a, b)
         if d:
             return d
@@ -3440,7 +4726,9 @@ class Comparer:
             tb, nb, eb, ab = fb[k]
             if ta != tb:
                 return ("fake call #%d" % k, "%08x" % ta, "%08x" % tb, "different generated callee")
-            if not self.veq(ea, eb):
+            if ea != DEAD_ECX and not self.veq(ea, eb):
+                # (the original's ecx was the vtable base: not an argument, so not compared; ours being dead
+                # where the original passes a real `this` is still a mismatch)
                 return ("fake call #%d this" % k, fmt_val(ea), fmt_val(eb), "ecx at a call through a generated pointer")
             for i in range(min(na, nb)):
                 if not self.veq(aa[i], ab[i]):
@@ -4140,10 +5428,11 @@ class FpTol:
     def judge(self, a, b, inp, t):
         """-> ('fp' | 'oor', None) when only float rounding differs, else ('real', mismatch tuple)."""
         ref = self.ref_run(inp)
-        if ref["status"][0] != "ok":
+        if ref["status"][0] != a["status"][0]:
             return "real", ("fp-tol", "-", "-", "reference run (original at 64-bit precision) did not complete: %s" % (ref["status"],))
         floats = []          # (label, fa, fb, fr, bits, edit): edit = (region, page, dword index, orig dword) | "st0" | None
-        for_st0 = a["fpu_depth"] and a["fpu_depth"] == b["fpu_depth"] and a["st0"] != b["st0"]
+        for_st0 = a["status"][0] == "ok" and a["fpu_depth"] and a["fpu_depth"] == b["fpu_depth"] and \
+            a["st0"] != b["st0"]                    # (an exit leaves no result on the x87 stack)
         if for_st0:
             fa, fb = x87_to_float(a["st0"]), x87_to_float(b["st0"])
             fr = x87_to_float(ref["st0"]) if ref["fpu_depth"] == a["fpu_depth"] and ref["st0"] is not None else fa
@@ -4488,6 +5777,8 @@ def _test_function(sid, va, opts, log=print):
         if opts.transparent_auto:
             out["transparent_auto"] = ["%08x" % v for v in opts.transparent_auto]
     regress = regress_inputs(sid, va, opts)
+    n_regress = len(regress)
+    regress += cover_inputs(sid, va, opts)          # then the saved coverage inputs (see cover_dir)
     opts.regress_set = [f for f, _i in regress]      # keyed: a new regression input re-runs the row
     key = _cache_key(t, out, opts)
     if key:
@@ -4505,10 +5796,13 @@ def _test_function(sid, va, opts, log=print):
     gen = runner.gen
     corpus = []
     valid, discarded, mism, first = 0, {}, 0, None
+    typed_n = typed_valid = 0
     sigs = collections.Counter()
     traps = {}
     repaired = 0
+    loop_tries = loop_ok = loop_calls = 0
     faked = 0
+    saved_cover = 0
     ran = 0
     ours_probe = 0
     probes = 0
@@ -4516,11 +5810,17 @@ def _test_function(sid, va, opts, log=print):
     steer = ST.Steer(runner, gen, opts) if getattr(opts, "steer", True) else None
     hard = opts.inputs + (opts.extra_inputs if steer else 0)
     pass_at = None
+    plateau = getattr(opts, "plateau", 0)
+    last_new = 0            # input index of the last one that reached a new block or edge
     i = -1
     try:
         while True:
             i += 1
             if i >= hard:
+                break
+            if plateau and i >= plateau and i - last_new >= plateau and valid >= opts.min_valid:
+                # coverage has stopped growing: more inputs would re-run the same paths (--plateau 0 runs them all)
+                out["plateau"] = "no new coverage in the %d inputs after input %d" % (i - last_new, last_new)
                 break
             if i >= opts.inputs and not (steer and corpus and edges_missing(runner) and steer.has_work()):
                 break               # past --inputs only while steering still has uncovered branches to try
@@ -4551,7 +5851,7 @@ def _test_function(sid, va, opts, log=print):
                 inp = steer.next(rng, corpus)
             if inp is None and i < len(regress):
                 inp = regress[i][1]
-                inp.origin = "regress"
+                inp.origin = "regress" if i < n_regress else "cover"
             if inp is None:
                 if corpus and rng.random() < opts.mutate:
                     parent = steer.pick_parent(corpus, rng) if steer else \
@@ -4559,18 +5859,42 @@ def _test_function(sid, va, opts, log=print):
                     inp = gen.mutate(parent, rng, corpus)
                 else:
                     inp = gen.fresh(rng)
+            if t.reg_kinds.get("ecx") == "this" and not inp.regs.get("ecx"):
+                # no caller passes a NULL this: point it at the hot slot rather than run and discard the input
+                # (progress_bar 0x4e7a70: mutants and steered inputs of a NULL-this parent were 174/400 discards)
+                inp.regs["ecx"] = M.POOL_BASE + M.SLOT
+            if getattr(inp, "typed", 0):
+                typed_n += 1
             try:
                 a = runner.run_side(runner.orig, inp)
-                fixes = pure_fixes = heap_fixes = 0
+                fixes = pure_fixes = heap_fixes = loop_fixes = shrunk = 0
                 while time.time() < deadline:
                     st_ = a["status"]
                     if st_[0] == "fault" and a["fault"] and a["fault"][0] != "pool-limit" and fixes < opts.repairs:
                         fixes += 1
                         rep = runner.repair(inp, a["fault"], rng, fixes - 1)
-                    elif st_[0] == "import" and (M.is_heap_exhausted(st_[1]) or M.is_huge_block(st_[1])) and \
-                            heap_fixes < 4 and opts.repairs:
+                    elif st_[0] == "import" and (M.is_heap_exhausted(st_[1]) or M.is_huge_block(st_[1])) and heap_fixes < HEAP_REPAIRS and \
+                            opts.repairs:
                         heap_fixes += 1
-                        rep = runner.repair_heap(inp, st_[1], rng)
+                        rep = runner.repair_heap(inp, st_[1], rng, heap_fixes - 1)
+                        shrunk += rep is not None
+                    elif st_[0] == "budget" and loop_fixes < LOOP_REPAIRS and opts.repairs and \
+                            getattr(opts, "loop_repair", True) and loop_calls < LOOP_REPAIRS_PER_ROW and \
+                            not (loop_tries >= 6 and loop_ok * 4 < loop_tries):
+                        # (a row stops shrinking once it has spent LOOP_REPAIRS_PER_ROW calls, or once fewer than a
+                        # quarter of the shrunk inputs finished: mesh_terrain 0x481d10 spent its time limit on 160)
+                        # a loop whose trip count is a soup value burned the instruction cap: shrink the input
+                        # dword that set it (never the cap: the loops are O(n), a small n tests the same code)
+                        loop_fixes += 1
+                        loop_calls += 1
+                        rep = runner.repair_loop(inp, rng)
+                        shrunk += rep is not None
+                        if rep is not None and runner.loop_fit and runner.budget < min(LOOP_PROFILE_CAP, opts.budget):
+                            # the shrunk input ends inside the profiling cap but not inside the start cap: the row's
+                            # real runs are longer than the start cap (the start-budget probe's job, done here with
+                            # the cap the repair already ran it under; never above --budget)
+                            out["budget_raised"] = "input %d needed more than %d instructions" % (i, runner.budget)
+                            runner.budget = min(LOOP_PROFILE_CAP, opts.budget)
                     elif st_[0] == "import" and str(st_[1]).split(":")[0] == "_purecall" and \
                             pure_fixes < opts.repairs:
                         # a random input drove a vtable call through a slot that is still the pure-call
@@ -4584,6 +5908,11 @@ def _test_function(sid, va, opts, log=print):
                         break
                     inp = rep
                     a = runner.run_side(runner.orig, inp)
+                if loop_fixes:
+                    # each round re-runs the input at the full cap: a row whose runaway loops the repair cannot
+                    # shrink (the trip count is not an input dword) stops trying after 6 such inputs
+                    loop_tries += 1
+                    loop_ok += a["status"][0] != "budget"
                 if a["status"][0] == "budget" and runner.budget < opts.budget and probes < BUDGET_PROBES:
                     # Runaway input, or a function whose real runs are long? Retry with the full cap.
                     probes += 1
@@ -4611,7 +5940,26 @@ def _test_function(sid, va, opts, log=print):
                 if opts.verbose:
                     log("  discard input %d: UcError: %s" % (i, str(e)[:120]))
                 continue
-            if st != "ok":
+            if any(M.STACK_TOP - M.STACK_SIZE <= w < runner.esp_entry for w in list(inp.args) +
+                   [v for k, v in inp.regs.items() if k != "esp"]):
+                # an argument or entry register pointing below esp at entry, inside the callee's own frame: no
+                # caller can pass that (mesh_3 0x5302f0: `out` at entry esp - 0x10 is where the original keeps
+                # find_meshes' result temporary, ours an uninitialised slot -> free(0xcccccccc))
+                discarded["arg-in-callee-frame"] = discarded.get("arg-in-callee-frame", 0) + 1
+                continue
+            if any(M.DYN_BASE <= w < M.DYN_BASE + M.DYN_SIZE for w in list(inp.args) +
+                   [v for k, v in inp.regs.items() if k != "esp"]):
+                # the heap is empty at entry (dyn_next = DYN_BASE), so such an argument points at a block the function
+                # itself is about to be handed: steering copies malloc results it saw into the input (agent_hud
+                # 0x4f7f00: this = 0x50000001 aliases the frame engine_new returns, this->fr overlaps frame->kids)
+                discarded["arg-in-unallocated-heap"] = discarded.get("arg-in-unallocated-heap", 0) + 1
+                continue
+            if t.reg_kinds.get("ecx") == "this" and not inp.regs.get("ecx"):
+                # a member function called on NULL: no caller does that (agent_hud 0x4f7f00: this = 0 put frame->kids at
+                # 0x178, overlapping this->fr)
+                discarded["null-this"] = discarded.get("null-this", 0) + 1
+                continue
+            if st not in FINISHED:
                 key = "wall-timeout" if st == "wall" else (st if st != "import" else "import:%s" % str(a["status"][1]).split(":")[0])
                 if st == "fault" and a["fault"]:
                     key = "fault(%s)" % a["fault"][0]
@@ -4643,15 +5991,17 @@ def _test_function(sid, va, opts, log=print):
                 if opts.verbose and st == "fault" and a["fault"]:
                     log("  discard input %d: fault %s" % (i, " ".join(
                         "%#x" % x if isinstance(x, int) else str(x) for x in a["fault"])))
+                elif opts.verbose and st == "budget":
+                    log("  discard input %d: %s (%d loop repair call(s))" % (i, a["status"][1], loop_fixes))
                 continue
-            if not runner.abi_ok(a):
+            if st == "ok" and not runner.abi_ok(a):     # (an exit's frames never return: no ABI to check)
                 # the original itself returned with clobbered callee-saved registers or a wrong esp:
                 # a fake method popped the wrong number of bytes, or the input sent it through
                 # non-code (e.g. a vtable pointer into .text). Says nothing about equivalence.
                 key = "orig-abi-broken(fake)" if a["fakes"] else "orig-abi-broken"
                 discarded[key] = discarded.get(key, 0) + 1
                 continue
-            if fixes or pure_fixes:
+            if fixes or pure_fixes or shrunk:
                 repaired += 1
             # Input-object invariants, on the FINAL input (generation edits, steering and every fault repair
             # applied): an object whose length field is outside the declared capacity of the array the
@@ -4713,25 +6063,42 @@ def _test_function(sid, va, opts, log=print):
                     fa.setdefault(tg, set()).add(n)
                 for tg, n, _e, _a in b["fakes"]:
                     fb.setdefault(tg, set()).add(n)
-                if any(len(v) > 1 for v in list(fa.values()) + list(fb.values())) or \
-                        any(fa[k] != fb[k] for k in set(fa) & set(fb)):
+                # one generated value fills several soup slots (0, small integers, a float's bits), so the same
+                # target can stand for methods of different arities (mission_4 0x48f120: target 0 called with 1
+                # and with 0 arguments). Calls both builds made in the same order with the same arities were each
+                # judged alike; only otherwise must a target keep one arity on both sides.
+                same_seq = [(tg, n) for tg, n, _e, _a in a["fakes"]] == [(tg, n) for tg, n, _e, _a in b["fakes"]]
+                if not same_seq and (any(len(v) > 1 for v in list(fa.values()) + list(fb.values())) or
+                                     any(fa[k] != fb[k] for k in set(fa) & set(fb))):
                     discarded["fake-arity"] = discarded.get("fake-arity", 0) + 1
                     continue
                 faked += 1
             valid += 1
-            new = bool(run_blocks - runner.blocks) or bool(a["edges"] - runner.orig.edges) or \
-                bool(sb[0] == "ok" and b["edges"] - runner.ours.edges)
+            if st == "exit":
+                out["exited"] = out.get("exited", 0) + 1      # valid runs that ended in a program exit
+            if getattr(inp, "typed", 0):
+                typed_valid += 1
+            new_edge = bool(a["edges"] - runner.orig.edges)
+            new = bool(run_blocks - runner.blocks) or new_edge or \
+                bool(sb[0] in FINISHED and b["edges"] - runner.ours.edges)
             runner.blocks |= run_blocks
             runner.orig.edges |= a["edges"]
-            if sb[0] == "ok":
+            if sb[0] in FINISHED:
                 runner.ours.edges |= b["edges"]
             if new:
                 corpus.append(inp)
+                last_new = i
+                if i >= len(regress) and new_edge:
+                    saved_cover += save_cover(sid, va, opts, inp) is not None
             if steer:
-                steer.note_valid(inp, {"orig": a["edges"], "ours": b["edges"] if sb[0] == "ok" else set()})
+                steer.note_valid(inp, {"orig": a["edges"], "ours": b["edges"] if sb[0] in FINISHED else set()})
             cmp_.last_kind = None
-            if sb[0] != "ok":
-                d = ("execution", "returned normally", "%s: %s" % sb, "ours failed where the original succeeded")
+            if sb[0] != st:
+                d = ("execution", "returned normally" if st == "ok" else "%s: %s" % a["status"], "%s: %s" % sb,
+                     "ours failed where the original succeeded" if sb[0] not in FINISHED else
+                     "one build exited where the other returned")
+            elif st == "exit" and sb[1] != a["status"][1]:
+                d = ("exit", a["status"][1], sb[1], "how / with which code the program exited")
             else:
                 d = cmp_.compare(a, b, t)
                 if d and fpt is not None:
@@ -4793,6 +6160,10 @@ def _test_function(sid, va, opts, log=print):
     finally:
         runner.close()
     out["repaired_inputs"] = repaired
+    if runner.shrink_stats:
+        out["shrink_repairs"] = dict(runner.shrink_stats.most_common())
+    if loop_tries:
+        out["loop_repair"] = {"inputs": loop_tries, "finished": loop_ok, "calls": loop_calls}
     if steer:
         out["steering"] = dict(steer.stats, constants=steer.n_consts, queued=steer.made)
     covered = set()
@@ -4805,7 +6176,10 @@ def _test_function(sid, va, opts, log=print):
     out["mismatch_sigs"] = dict(sigs.most_common(40))
     if gen.invs:
         out["input_invariants"] = describe_invariants(gen.invs)
-    out["regress_inputs"] = len(regress)
+    out["regress_inputs"] = n_regress
+    out["cover_inputs"] = {"replayed": len(regress) - n_regress, "saved": saved_cover}
+    # inputs that carry typed objects (fresh ones and the mutants/steered inputs made from them)
+    out["typed_inputs"] = {"inputs": typed_n, "valid": typed_valid, "types": runner.typed_info}
     out.update(seed=opts.seed, inputs_planned=opts.inputs, extra_inputs=opts.extra_inputs if getattr(opts, "steer", True) else 0,
                gate=opts.gate, require_all=bool(getattr(opts, "require_all", False)),
                inputs=ran, valid=valid, discarded=discarded, mismatches=mism, first_mismatch=first,
@@ -4956,7 +6330,12 @@ def mismatch_sig(d):
     return obs + ((" [" + ",".join(offs[:8]) + "]") if offs else "")
 
 
-NORETURN_WHY = {"_purecall": "pure virtual call", "_CxxThrowException": "C++ throw", "RaiseException": "C++ throw"}
+NORETURN_WHY = {"_purecall": "pure virtual call", "_CxxThrowException": "C++ throw", "RaiseException": "C++ throw",
+                "exit": "process exit", "_exit": "process exit", "abort": "process exit",
+                "SetUnhandledExceptionFilter": "process exit"}
+# Run statuses that are a completed run: "exit" is the program terminating (machine.Exit) -- compared on memory and
+# the call traces at that point, never discarded
+FINISHED = ("ok", "exit")
 
 
 def noreturn_stop(why):
@@ -5045,7 +6424,8 @@ def replay(sid, va, path, opts):
             print("    call", fmt_tcall(ent))
         for ent in o["imports"][:40]:
             print("    import", fmt_call((ent[0], tuple(norm_val(v, runner.stk_hi) for v in ent[1]))))
-    print("first difference:", cmp_.compare(a, b, t) if a["status"][0] == b["status"][0] == "ok" else "status differs")
+    print("first difference:", cmp_.compare(a, b, t) if a["status"][0] == b["status"][0] in FINISHED
+          else "status differs")
     if opts.call_regs and a["status"][0] == b["status"][0] == "ok":
         crd = cmp_.call_reg_diff(a, b)
         if crd:
@@ -5061,6 +6441,9 @@ def parse_args(argv=None):
     ap.add_argument("--flags")
     ap.add_argument("--src", help="test this source file instead of match/slices/<id>/<id>.cpp")
     ap.add_argument("--inputs", type=int, default=DEFAULT_INPUTS)
+    ap.add_argument("--plateau", type=int, default=int(os.environ.get("DIFFTEST_PLATEAU", DEFAULT_PLATEAU)),
+                    help="stop once this many inputs in a row reach no new block or edge (and --min-valid inputs "
+                         "are valid); 0 runs every input, for a fix's confirmation run")
     ap.add_argument("--seed", type=int, default=1)
     ap.add_argument("--json")
     ap.add_argument("--min-valid", type=int, default=DEFAULT_K)
@@ -5103,6 +6486,12 @@ def parse_args(argv=None):
     ap.add_argument("--stub", type=lambda v: [int(x, 16) for x in v.split(",") if x], default=STUB_LOOKUPS,
                     help="comma-separated image function VAs (hex) that return an input object instead of running "
                          "(default: the resource lookups that exit() on a missing name; '' for none)")
+    ap.add_argument("--loop-repair", dest="loop_repair", action="store_true",
+                    default=os.environ.get("DIFFTEST_LOOP_REPAIR") == "1",
+                    help="shrink the input dword that set a runaway loop's trip count when the original is cut off by "
+                         "the instruction cap (Runner.repair_loop). Opt-in for now: on obj_tbl 0x499050 it halved the "
+                         "row's edge coverage (10/10 -> 5/10), cause not yet found")
+    ap.add_argument("--no-loop-repair", dest="loop_repair", action="store_false")
     ap.add_argument("--no-force-results", dest="force_results", action="store_false",
                     help="never force the result of a branch-feeding callee (Runner._on_forced)")
     ap.add_argument("--no-uninit-copy", dest="uninit_copy", action="store_false",
@@ -5156,6 +6545,10 @@ def parse_args(argv=None):
     ap.add_argument("--layout", type=float, default=0.5,
                     help="share of fresh inputs whose `this` is built from the dev-PDB class layout (0 = off)")
     ap.add_argument("--mutate", type=float, default=0.6, help="share of inputs mutated from the coverage corpus")
+    ap.add_argument("--typed-share", type=float, default=TYPED_SHARE,
+                    help="share of fresh inputs whose `this` and pointer-to-class arguments are objects of their "
+                         "declared class (CodeView types of a /Z7 compile: the original's vtable pointers, nested "
+                         "objects, consistent vectors and strings, small counts); 0 = pointer soup only")
     ap.add_argument("--no-steer", dest="steer", action="store_false",
                     help="no input steering (comparison constants, input-to-state replays, frontier-weighted parents)")
     ap.add_argument("--steer-share", type=float, default=0.35, help="share of inputs taken from the steering queue")
@@ -5244,11 +6637,15 @@ def print_result(r):
         print("    resolution conflicts: %s" % r["resolution_conflicts"][:3])
 
 
-if __name__ == "__main__":
-    # String hashing is randomised per process, and set/dict-of-set iteration (steering candidates, repairs) follows
-    # it: three runs of one row gave 632 / 644 / 600 valid inputs (SPEditorBaker 0x00402cc0, 2026-10-29). A fixed
-    # seed makes a row's verdict a function of --inputs and --seed alone, which the verdict cache also assumes.
+def pin_hash_seed():
+    """Re-exec once with PYTHONHASHSEED=0. Some passes iterate sets of strings, whose order follows the per-process
+    hash seed, so the same --seed gave different runs (obj_tbl 0x499050: the uninit-copy excuse came and went).
+    A fixed seed makes every run reproducible."""
     if os.environ.get("PYTHONHASHSEED") != "0":
         os.environ["PYTHONHASHSEED"] = "0"
         os.execv(sys.executable, [sys.executable] + sys.argv)
+
+
+if __name__ == "__main__":
+    pin_hash_seed()
     sys.exit(main())

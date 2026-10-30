@@ -180,15 +180,19 @@ def equivalent_vas():
         return set(runpy.run_path(st)["equiv"])
 
 
-def run(r, out, extra):
+def run(r, out, extra, force=False):
+    """Run one row into out/<id>_<va>.json. An existing result is skipped (restartable) unless force: then it stays in
+    place until the new result replaces it, so a re-run in progress never leaves the row without a result."""
     js = os.path.join(out, result_name(r))
-    if os.path.exists(js):
+    if os.path.exists(js) and not force:
         return
     cmd = [PY, EQ, r["id"], r["va"], "--fp-tol", "--max-mismatch", "200", "--json", js + ".part"] + extra + row_opts(r)
     if r["src"]:
         cmd += ["--src", os.path.join(ROOT, r["src"])]
+    # the hard cap follows a --time-limit given to equiv (the last one wins, as in argparse), with room to write the JSON
+    tl = [cmd[i + 1] for i, a in enumerate(cmd[:-1]) if a == "--time-limit"]
     try:
-        subprocess.run(cmd, cwd=ROOT, capture_output=True, text=True, timeout=900)
+        subprocess.run(cmd, cwd=ROOT, capture_output=True, text=True, timeout=max(900, float(tl[-1]) + 180 if tl else 0))
     except subprocess.TimeoutExpired:
         json.dump([{"verdict": "TIMEOUT"}], open(js + ".part", "w"))
     if os.path.exists(js + ".part"):

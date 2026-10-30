@@ -14,7 +14,7 @@ successive inputs) never see each other's leftovers:
   writes fault, and `write()` (used by import handlers such as memcpy) raises a write-protection
   fault instead of silently patching code.
 """
-import ctypes, math, re, struct
+import ctypes, math, os, re, struct
 
 from unicorn import (Uc, UcError, UC_ARCH_X86, UC_MODE_32, UC_HOOK_CODE, UC_HOOK_BLOCK,
                      UC_HOOK_MEM_UNMAPPED, UC_HOOK_MEM_PROT, UC_HOOK_INSN, UC_HOOK_MEM_WRITE,
@@ -75,6 +75,13 @@ UNTRACED_PURE = frozenset(("floor", "ceil", "ldexp"))
 
 class Stop(Exception):
     pass
+
+
+class Exit(Stop):
+    """The program terminated: the CRT's exit/_exit/abort (the game's fatal-error path, mb_error 0x42cc80 ->
+    exit(-1)) or, past them, the exit path's SetUnhandledExceptionFilter. The run ENDS there with status
+    ("exit", "<name>: <detail>") -- a completed run whose memory and call traces are compared like a return's,
+    not a discarded input (the frames below never return, so registers and esp are not)."""
 
 
 # An import handler that runs the emulated heap out of address space (malloc/new). equiv.py needs to tell this
@@ -180,6 +187,7 @@ class Machine:
         self.dyn_sizes = {}
         self.rand_state = 1
         self.ui_seed, self.ui_calls = 0, 0
+        self.find_patterns, self.find_counts = {}, {}     # FindFirstFileA search state (reset per run)
         self.trace_imports = []
         self.stop_reason = None
         self.hooks = []
@@ -478,6 +486,10 @@ class Machine:
             return
         try:
             res = h["fn"](self, args, esp)
+        except Exit as e:
+            self.stop_reason = ("exit", "%s: %s" % (name, e))
+            uc.emu_stop()
+            return
         except Stop as e:
             self.stop_reason = ("import", "%s: %s" % (name, e))
             uc.emu_stop()
@@ -927,6 +939,13 @@ def install_crt(m):
     def purecall(m, a, esp):
         raise Stop("_purecall")
 
+    def exit_(m, a, esp):
+        code = a[0] - (1 << 32) if a[0] & 0x80000000 else a[0]
+        raise Exit("code %d" % code)
+
+    def abort(m, a, esp):
+        raise Exit("abort")
+
     def throw(m, a, esp):
         raise Stop("C++ exception thrown (_CxxThrowException)")
 
@@ -986,6 +1005,7 @@ def install_crt(m):
         "rand": (rand, 0), "srand": (srand, 1), "_errno": (errno, 0), "atoi": (atoi, 1), "atol": (atoi, 1),
         "_isnan": (isnan, 2), "_finite": (finite, 2), "_purecall": (purecall, 0),
         "_CxxThrowException": (throw, 2),
+        "exit": (exit_, 1), "_exit": (exit_, 1), "abort": (abort, 0),     # image CRT code (static_crt_functions)
         # _mtinitlocknum's critical section for a lock first taken at run time: initialized (TRUE), without
         # the LoadLibraryA("kernel32")/GetProcAddress lookup that otherwise ends the input at an import
         "__crtInitCritSecAndSpinCount": (lambda m, a, e: 1, 2),
@@ -1048,6 +1068,11 @@ def install_import_models(m):
         # takes the exception. Ignored, execution resumes after the raise; a dead frame that faults does so
         # at the barrier (address 0 / 0xCCCCCCCC) and is discarded as a fault, never counted as valid.
         return 0
+
+    def unhandled_filter(m_, a, esp):
+        # Reached only on the CRT's exit path (0x53cd8d: the terminator doexit runs to restore the filter; the
+        # startup call that installs it never runs here). The process is terminating.
+        raise Exit("CRT exit path")
 
     def heap_alloc(m_, a, esp):
         # A block from the emulated heap, as kernel32!HeapAlloc hands one out. DYN memory is zero on a fresh
@@ -1160,7 +1185,11 @@ def install_import_models(m):
         # data, so the dialog code's branches on them are reachable.
         m_.ui_calls += 1
         h = (m_.ui_seed * 0x9E3779B1 + m_.ui_calls * 0x85EBCA77) & 0xFFFFFFFF
-        h ^= h >> 15
+        h ^= h >> 16                    # murmur3 fmix32: neighbouring seeds / ordinals give unrelated answers
+        h = (h * 0x85EBCA6B) & 0xFFFFFFFF
+        h ^= h >> 13
+        h = (h * 0xC2B2AE35) & 0xFFFFFFFF
+        h ^= h >> 16
         return choices[h % len(choices)]
 
     UI_QUERIES = {0x146, 0x147, 0x150, 0x188, 0x18b, 0x199}   # CB_GETCOUNT/GETCURSEL/GETITEMDATA, LB_GETCURSEL/GETCOUNT/GETITEMDATA
@@ -1235,6 +1264,7 @@ def install_import_models(m):
 
     stdcall = {
         "RaiseException": (raise_exception, 4),
+        "SetUnhandledExceptionFilter": (unhandled_filter, 1),
         "HeapAlloc": (heap_alloc, 3),
         "CreateDirectoryA": (create_directory, 2),
         "CreateCompatibleDC": (create_compatible_dc, 1),
@@ -1282,6 +1312,444 @@ def install_import_models(m):
     }
     for name, (fn, n) in stdcall.items():
         m.handle(name, fn, nargs=n, pops=n)
+    install_system_models(m, ui_answer, put)
+
+
+# Opaque handles the models hand out: values the game only passes back to the API (never dereferenced), each kind in
+# its own range so a trace shows which call produced it. Pointers the game DOES read through (an FMOD stream or
+# sample, a Newton object) come from model_data instead.
+H_FIND, H_FILE, H_KEY, H_MODULE, H_EVENT, H_PROCESS, H_THREAD = (0x00040001, 0x00041001, 0x00042001, 0x6F000000,
+                                                                0x00043001, 0x00044001, 0x00045001)
+H_GDI, H_FONT, H_PAINT_DC, H_CURSOR, H_MENU = 0x00060001, 0x00070001, 0x00010002, 0x00090001, 0x000A0001
+INVALID_HANDLE = 0xFFFFFFFF
+MODULE_DIR = b"C:\\Program Files\\Mount&Blade"
+# SHGetFolderPathA's answers per CSIDL (low byte; CSIDL_FLAG_CREATE and friends are ORed into the high bits)
+FOLDER_PATHS = {0x05: b"C:\\Documents and Settings\\User\\My Documents",        # CSIDL_PERSONAL
+                0x1A: b"C:\\Documents and Settings\\User\\Application Data",    # CSIDL_APPDATA
+                0x1C: b"C:\\Documents and Settings\\User\\Local Settings\\Application Data",
+                0x23: b"C:\\Documents and Settings\\All Users\\Application Data",
+                0x26: b"C:\\Program Files"}
+
+
+def install_system_models(m, ui_answer, put):
+    """kernel32 / shell / registry / GDI / FMOD / Newton imports the game's own code calls. As with the dialog
+    models above, every answer to a query or to a call that can fail -- a file found or not, a folder lookup,
+    a sound channel, a physics body's matrix, the installed memory -- is ui_answer(): a pure function of
+    (input seed, call ordinal), identical for both builds as long as they make the same calls in the same
+    order, and different across inputs so the branches on it are explored. Out-parameters are written the way
+    the API documents (skipped when the generated pointer is not writable)."""
+    def fl(x):
+        return struct.unpack("<f", struct.pack("<I", x & 0xFFFFFFFF))[0]
+
+    def cstr(m_, p, limit=0x400):
+        try:
+            return m_.cstr(p, limit=limit) if p & 0xFFFFFFFF else b""
+        except UcError:
+            return b""
+
+    # ---- shfolder
+    def sh_get_folder_path(m_, a, esp):
+        # HRESULT. S_OK with the folder's path in pszPath (MAX_PATH chars), or E_FAIL; a failed call leaves an
+        # empty string (callers test path[0])
+        csidl = a[1] & 0xFF
+        if ui_answer(m_, (0, 0, 0, 0x80004005)):
+            put(m_, a[4], b"\0")
+            return 0x80004005
+        put(m_, a[4], FOLDER_PATHS.get(csidl, b"C:\\Documents and Settings\\User") + b"\0")
+        return 0
+
+    # ---- kernel32: find, files, handles
+    def find_name(pattern, k):
+        base = re.split(rb"[\\/]", pattern)[-1] or b"a"
+        nm = base.replace(b"*", b"a%d" % k if k else b"a").replace(b"?", b"a")
+        return nm[:259]
+
+    def fill_find_data(m_, p, name):
+        # WIN32_FIND_DATAA (320 bytes): attributes, three FILETIMEs, size high/low, reserved, cFileName[260],
+        # cAlternateFileName[14]. A name without an extension is a directory, anything else a 1 KB archive file.
+        attr = 0x20 if b"." in name.strip(b".") else 0x10
+        ft = struct.pack("<II", 0xD53E8000, 0x01C8D2A4)                     # 2008-06-01 00:00 UTC
+        rec = struct.pack("<I", attr) + ft * 3 + struct.pack("<IIII", 0, 0 if attr == 0x10 else 1024, 0, 0)
+        rec += name.ljust(260, b"\0")[:260] + b"\0" * 16
+        put(m_, p, rec)
+
+    def find_first_file(m_, a, esp):
+        # HANDLE: a search handle and the first match in *lpFindFileData, or INVALID_HANDLE_VALUE (no match)
+        if not ui_answer(m_, (0, 1)):
+            return INVALID_HANDLE
+        pat = cstr(m_, a[0])
+        m_.find_patterns[H_FIND] = pat
+        fill_find_data(m_, a[1], find_name(pat, 0))
+        return H_FIND
+
+    def find_next_file(m_, a, esp):
+        # BOOL: the next match, or FALSE (ERROR_NO_MORE_FILES). Each call ends the listing with probability 2/3,
+        # so a directory loop terminates.
+        if not ui_answer(m_, (0, 0, 1)):
+            return 0
+        n = m_.find_counts.get(a[0], 0) + 1
+        m_.find_counts[a[0]] = n
+        fill_find_data(m_, a[1], find_name(m_.find_patterns.get(a[0], b"*.txt"), n))
+        return 1
+
+    def create_file(m_, a, esp):
+        # HANDLE or INVALID_HANDLE_VALUE (not found / no access)
+        return ui_answer(m_, (INVALID_HANDLE, H_FILE))
+
+    def write_file(m_, a, esp):
+        # BOOL: everything written; *lpNumberOfBytesWritten = nNumberOfBytesToWrite
+        if a[3] & 0xFFFFFFFF:
+            put(m_, a[3], struct.pack("<I", a[2]))
+        return 1
+
+    def read_file(m_, a, esp):
+        # BOOL TRUE with *lpNumberOfBytesRead = 0: end of file (an opened file is empty; no content exists to read)
+        if a[3] & 0xFFFFFFFF:
+            put(m_, a[3], struct.pack("<I", 0))
+        return 1
+
+    def file_time_to_local(m_, a, esp):
+        # BOOL; the machine's time zone is UTC, so the local time is the same FILETIME
+        put(m_, a[1], m_.read(a[0], 8))
+        return 1
+
+    def file_time_to_system(m_, a, esp):
+        # BOOL; SYSTEMTIME {year, month, weekday, day, hour, minute, second, ms} of the FILETIME (UTC)
+        import datetime
+        ft = struct.unpack("<Q", m_.read(a[0], 8))[0]
+        if ft >= 0x8000000000000000:
+            return 0
+        t = datetime.datetime(1601, 1, 1) + datetime.timedelta(microseconds=ft // 10)
+        put(m_, a[1], struct.pack("<8H", t.year, t.month, (t.weekday() + 1) % 7, t.day, t.hour, t.minute,
+                                  t.second, t.microsecond // 1000))
+        return 1
+
+    def global_memory_status(m_, a, esp):
+        # void: MEMORYSTATUS (32 bytes). The installed RAM is a query answer: 256 MB .. 2 GB, half of it free
+        total = ui_answer(m_, (256, 512, 1024, 2047)) << 20
+        put(m_, a[0], struct.pack("<8I", 32, 50, total, total // 2, 2 * total, total, 0x7FFE0000, 0x7F000000))
+        return 0
+
+    def get_current_directory(m_, a, esp):
+        # DWORD: chars written without the NUL, or the size needed when the buffer is too small
+        n = a[0] & 0xFFFFFFFF
+        if n <= len(MODULE_DIR):
+            return len(MODULE_DIR) + 1
+        put(m_, a[1], MODULE_DIR + b"\0")
+        return len(MODULE_DIR)
+
+    def heap_size(m_, a, esp):
+        return m_.dyn_sizes.get(a[2], 0xFFFFFFFF)       # SIZE_T, (SIZE_T)-1 for a block the heap did not hand out
+
+    def heap_realloc(m_, a, esp):
+        p, n = a[2], max(a[3], 1)
+        q = m_.dyn_alloc(n)
+        if p:
+            m_.write(q, m_.read(p, min(m_.dyn_sizes.get(p, 0), n)))
+        return q
+
+    def global_alloc(m_, a, esp):
+        # HGLOBAL; the block itself (GlobalLock returns it unchanged), zeroed as GMEM_ZEROINIT would
+        return m_.dyn_alloc(max(a[1], 1))
+
+    def create_process(m_, a, esp):
+        # BOOL; on success PROCESS_INFORMATION {hProcess, hThread, pid, tid} at lpProcessInformation (arg 10)
+        if not ui_answer(m_, (0, 1)):
+            return 0
+        put(m_, a[9], struct.pack("<4I", H_PROCESS, H_THREAD, 0x5678, 0x9ABC))
+        return 1
+
+    def process_affinity(m_, a, esp):
+        put(m_, a[1], struct.pack("<I", 1))
+        put(m_, a[2], struct.pack("<I", 1))
+        return 1
+
+    def mul_div(m_, a, esp):
+        # int: a*b/c rounded to nearest (halves away from zero), -1 on c == 0 or overflow
+        s = lambda v: v - (1 << 32) if v & 0x80000000 else v
+        x, y, z = s(a[0]), s(a[1]), s(a[2])
+        if z == 0:
+            return 0xFFFFFFFF
+        p = x * y
+        q = (abs(p) + abs(z) // 2) // abs(z)
+        q = q if (p >= 0) == (z > 0) else -q
+        return 0xFFFFFFFF if not -(1 << 31) <= q < (1 << 31) else q & 0xFFFFFFFF
+
+    def lstrcpy(m_, a, esp):
+        m_.write(a[0], m_.cstr(a[1]) + b"\0")
+        return a[0]
+
+    def lstrcpyn(m_, a, esp):
+        n = a[2] & 0xFFFFFFFF
+        if n:
+            m_.write(a[0], m_.cstr(a[1])[:n - 1] + b"\0")
+        return a[0]
+
+    def lstrcat(m_, a, esp):
+        d = m_.cstr(a[0])
+        m_.write(a[0] + len(d), m_.cstr(a[1]) + b"\0")
+        return a[0]
+
+    def lstrcmp(m_, a, esp):
+        x, y = m_.cstr(a[0]), m_.cstr(a[1])
+        return 0 if x == y else (0xFFFFFFFF if x < y else 1)
+
+    # ---- advapi32
+    def reg_create_key(m_, a, esp):
+        # LONG ERROR_SUCCESS; *phkResult = a key handle, *lpdwDisposition = REG_CREATED_NEW_KEY (1) or
+        # REG_OPENED_EXISTING_KEY (2) -- the query the game branches on (it logs a newly created key)
+        put(m_, a[7], struct.pack("<I", H_KEY))
+        if a[8] & 0xFFFFFFFF:
+            put(m_, a[8], struct.pack("<I", ui_answer(m_, (1, 2))))
+        return 0
+
+    def reg_query_value(m_, a, esp):
+        # LONG: ERROR_FILE_NOT_FOUND (no such value) or ERROR_SUCCESS with the value: a REG_DWORD 0/1 when the
+        # caller's buffer is 4 bytes, else an empty REG_SZ; a too-small buffer gets ERROR_MORE_DATA
+        if not ui_answer(m_, (0, 1)):
+            return 2
+        cb = struct.unpack("<I", m_.read(a[5], 4))[0] if a[5] & 0xFFFFFFFF else 0
+        if cb == 4:
+            typ, data = 4, struct.pack("<I", ui_answer(m_, (0, 1)))
+        else:
+            typ, data = 1, b"\0"
+        if a[3] & 0xFFFFFFFF:
+            put(m_, a[3], struct.pack("<I", typ))
+        if a[5] & 0xFFFFFFFF:
+            put(m_, a[5], struct.pack("<I", len(data)))
+        if a[4] & 0xFFFFFFFF:
+            if cb < len(data):
+                return 234
+            put(m_, a[4], data)
+        return 0
+
+    # ---- user32 / gdi32 (painting, metrics)
+    def begin_paint(m_, a, esp):
+        # HDC; PAINTSTRUCT {hdc, fErase, rcPaint = the 800 x 600 client area, ...} at lpPaint
+        put(m_, a[1], struct.pack("<II4i", H_PAINT_DC, 0, 0, 0, 800, 600) + b"\0" * 40)
+        return H_PAINT_DC
+
+    DEVICE_CAPS = {8: 800, 10: 600, 12: 32, 14: 1, 88: 96, 90: 96}   # HORZRES VERTRES BITSPIXEL PLANES LOGPIXELSX/Y
+
+    def text_extent(m_, a, esp):
+        # BOOL; SIZE {8 px per char, 16 px}: a fixed-pitch stand-in for the selected font
+        put(m_, a[3], struct.pack("<2i", 8 * (a[2] & 0xFFFF), 16))
+        return 1
+
+    def get_object(m_, a, esp):
+        # int bytes written: a 64 x 64 32-bpp BITMAP (the only object type the game asks about)
+        n = a[1] & 0xFFFFFFFF
+        bm = struct.pack("<iiiiHHI", 0, 64, 64, 256, 1, 32, 0)
+        if a[2] & 0xFFFFFFFF and n:
+            put(m_, a[2], (bm + b"\0" * n)[:min(n, 24)])
+            return min(n, 24)
+        return 24
+
+    SYS_METRICS = {0: 1024, 1: 768, 4: 19, 5: 1, 6: 1, 7: 3, 8: 3, 15: 19, 32: 4, 33: 4}
+
+    def window_long(m_, a, esp):
+        idx = a[1] - (1 << 32) if a[1] & 0x80000000 else a[1]
+        return {-16: 0x16CF0000, -20: 0x00000100}.get(idx, 0)  # GWL_STYLE (overlapped, visible), GWL_EXSTYLE
+
+    def set_rect(m_, a, esp):
+        put(m_, a[0], struct.pack("<4I", a[1], a[2], a[3], a[4]))
+        return 1
+
+    def variant_init(m_, a, esp):
+        put(m_, a[0], b"\0" * 16)
+        return 0
+
+    def co_create_instance(m_, a, esp):
+        # HRESULT REGDB_E_CLASSNOTREG, *ppv = NULL: no COM server exists in the emulator (a fake object would
+        # need a vtable the harness cannot know); the failure branch is the one a real machine without it takes
+        put(m_, a[4], struct.pack("<I", 0))
+        return 0x80040154
+
+    stdcall = {
+        "SHGetFolderPathA": (sh_get_folder_path, 5),
+        "FindFirstFileA": (find_first_file, 2),
+        "FindNextFileA": (find_next_file, 2),
+        "FindClose": (lambda m_, a, esp: 1, 1),
+        "CreateFileA": (create_file, 7),
+        "WriteFile": (write_file, 5),
+        "SetFilePointer": (lambda m_, a, esp: 0, 4),
+        "ReadFile": (read_file, 5),
+        "GetFileType": (lambda m_, a, esp: 1, 1),                 # FILE_TYPE_DISK
+        "SetEndOfFile": (lambda m_, a, esp: 1, 1),
+        "FileTimeToLocalFileTime": (file_time_to_local, 2),
+        "FileTimeToSystemTime": (file_time_to_system, 2),
+        "LoadImageA": (lambda m_, a, esp: ui_answer(m_, (0, H_GDI + 0x200)), 6),   # HANDLE, NULL = not found
+        "FlushFileBuffers": (lambda m_, a, esp: 1, 1),
+        "CloseHandle": (lambda m_, a, esp: 1, 1),
+        "DeleteFileA": (lambda m_, a, esp: 1, 1),
+        "MoveFileA": (lambda m_, a, esp: 1, 2),
+        "GetDriveTypeA": (lambda m_, a, esp: 3, 1),               # DRIVE_FIXED
+        "GetCurrentDirectoryA": (get_current_directory, 2),
+        "GlobalMemoryStatus": (global_memory_status, 1),
+        "LoadLibraryA": (lambda m_, a, esp: H_MODULE, 1),         # HMODULE (the game ignores it)
+        "GetModuleHandleA": (lambda m_, a, esp: m_.img.base if not a[0] & 0xFFFFFFFF else H_MODULE, 1),
+        "GetProcAddress": (lambda m_, a, esp: 0, 2),              # FARPROC NULL: no such export (never callable)
+        "WaitForSingleObject": (lambda m_, a, esp: 0, 2),         # WAIT_OBJECT_0
+        "CreateEventA": (lambda m_, a, esp: H_EVENT, 4),
+        "SetEvent": (lambda m_, a, esp: 1, 1),
+        "CreateProcessA": (create_process, 10),
+        "GetCurrentProcess": (lambda m_, a, esp: 0xFFFFFFFF, 0),  # the pseudo handle
+        "GetProcessAffinityMask": (process_affinity, 3),
+        "HeapSize": (heap_size, 3),
+        "HeapFree": (lambda m_, a, esp: 1, 3),
+        "HeapReAlloc": (heap_realloc, 4),
+        "GlobalAlloc": (global_alloc, 2),
+        "GlobalLock": (lambda m_, a, esp: a[0], 1),
+        "GlobalUnlock": (lambda m_, a, esp: 0, 1),
+        "MulDiv": (mul_div, 3),
+        "lstrcpyA": (lstrcpy, 2),
+        "lstrcpynA": (lstrcpyn, 3),
+        "lstrcatA": (lstrcat, 2),
+        "lstrlenA": (lambda m_, a, esp: len(m_.cstr(a[0])) if a[0] & 0xFFFFFFFF else 0, 1),
+        "lstrcmpA": (lstrcmp, 2),
+        "RegCreateKeyExA": (reg_create_key, 9),
+        "RegCloseKey": (lambda m_, a, esp: 0, 1),
+        "RegSetValueExA": (lambda m_, a, esp: 0, 6),
+        "RegQueryValueExA": (reg_query_value, 6),
+        "ShellExecuteA": (lambda m_, a, esp: 42, 6),              # HINSTANCE > 32: started
+        "VariantInit": (variant_init, 1),
+        "VariantClear": (variant_init, 1),                        # HRESULT S_OK, the VARIANT now VT_EMPTY
+        "CoInitialize": (lambda m_, a, esp: 0, 1),
+        "CoCreateInstance": (co_create_instance, 5),
+        "BeginPaint": (begin_paint, 2),
+        "EndPaint": (lambda m_, a, esp: 1, 2),
+        "GetClassLongA": (lambda m_, a, esp: H_CURSOR, 2),
+        "GetSystemMetrics": (lambda m_, a, esp: SYS_METRICS.get(a[0], 0), 1),
+        "GetWindowLongA": (window_long, 2),
+        "SetWindowLongA": (lambda m_, a, esp: 0, 3),              # LONG: the previous value
+        "GetMenu": (lambda m_, a, esp: H_MENU, 1),
+        "SetMenu": (lambda m_, a, esp: 1, 2),
+        "DestroyMenu": (lambda m_, a, esp: 1, 1),
+        "SetRect": (set_rect, 5),
+        "AdjustWindowRect": (lambda m_, a, esp: 1, 3),            # BOOL: the rect left as is (no frame)
+        "ScreenToClient": (lambda m_, a, esp: 1, 2),              # BOOL: the window sits at the origin
+        "ClipCursor": (lambda m_, a, esp: 1, 1),
+        "SetCursorPos": (lambda m_, a, esp: 1, 2),
+        "SetCursor": (lambda m_, a, esp: 0, 1),
+        "LoadCursorA": (lambda m_, a, esp: H_CURSOR, 2),
+        "LoadIconA": (lambda m_, a, esp: H_CURSOR + 1, 2),
+        "IsClipboardFormatAvailable": (lambda m_, a, esp: ui_answer(m_, (0, 1)), 1),
+        "GetClipboardData": (lambda m_, a, esp: 0, 1),            # HANDLE NULL: no data in that format
+        "CloseClipboard": (lambda m_, a, esp: 1, 0),
+        "EmptyClipboard": (lambda m_, a, esp: 1, 0),
+        "SetClipboardData": (lambda m_, a, esp: a[1], 2),
+        "SetMapMode": (lambda m_, a, esp: 1, 2),                  # int: the previous mode, MM_TEXT
+        "SelectObject": (lambda m_, a, esp: H_GDI, 2),            # HGDIOBJ: the previously selected object
+        "DeleteObject": (lambda m_, a, esp: 1, 1),
+        "DeleteDC": (lambda m_, a, esp: 1, 1),
+        "GetStockObject": (lambda m_, a, esp: H_GDI + 0x100 + (a[0] & 0xFF), 1),
+        "BitBlt": (lambda m_, a, esp: 1, 9),
+        "SetTextColor": (lambda m_, a, esp: 0, 2),                # COLORREF: the previous colour (black)
+        "SetBkColor": (lambda m_, a, esp: 0xFFFFFF, 2),           # (white)
+        "SetTextAlign": (lambda m_, a, esp: 0, 2),                # UINT: TA_TOP | TA_LEFT before
+        "GetDeviceCaps": (lambda m_, a, esp: DEVICE_CAPS.get(a[1], 0), 2),
+        "CreateFontA": (lambda m_, a, esp: ui_answer(m_, (H_FONT, H_FONT, H_FONT, 0)), 14),
+        "GetTextExtentPoint32A": (text_extent, 4),
+        "ExtTextOutA": (lambda m_, a, esp: 1, 8),
+        "GetObjectA": (get_object, 3),
+    }
+    for name, (fn, n) in stdcall.items():
+        m.handle(name, fn, nargs=n, pops=n)
+
+    # ---- FMOD 3.x (fmod.dll, __stdcall: the decorated @N is the argument bytes). FSOUND_BOOL is a signed char.
+    # Creating a sample/stream and starting a channel can fail (NULL / -1) and the lengths / states are queries,
+    # so those are ui_answer; samples and streams are zeroed model blocks (the game passes them back to FMOD).
+    def fs_sample_load(m_, a, esp):
+        return ui_answer(m_, (0, m_.model_data("FSOUND_SAMPLE", 0x100), m_.model_data("FSOUND_SAMPLE", 0x100)))
+
+    def fs_stream_open(m_, a, esp):
+        return ui_answer(m_, (0, m_.model_data("FSOUND_STREAM", 0x100), m_.model_data("FSOUND_STREAM", 0x100)))
+
+    def fs_sample_get_defaults(m_, a, esp):
+        for p, v in zip(a[1:5], (44100, 255, 128, 128)):          # deffreq, defvol, defpan, defpri
+            if p & 0xFFFFFFFF:
+                put(m_, p, struct.pack("<i", v))
+        return 1
+
+    fsound = {
+        "Update": (lambda m_, a, esp: 0), "Close": (lambda m_, a, esp: 0),
+        "Init": (lambda m_, a, esp: 1), "SetMaxHardwareChannels": (lambda m_, a, esp: 1),
+        "SetSFXMasterVolume": (lambda m_, a, esp: 0), "3D_SetRolloffFactor": (lambda m_, a, esp: 0),
+        "Sample_Load": fs_sample_load, "Sample_SetDefaults": (lambda m_, a, esp: 1),
+        "Sample_GetLength": (lambda m_, a, esp: ui_answer(m_, (0, 22050, 44100, 441000))),
+        "Sample_GetDefaults": fs_sample_get_defaults,
+        "Stream_Open": fs_stream_open, "Stream_Close": (lambda m_, a, esp: 1),
+        # 0 ready, -2 still opening, -3 failed to open
+        "Stream_GetOpenState": (lambda m_, a, esp: ui_answer(m_, (0, 0, 0xFFFFFFFE, 0xFFFFFFFD))),
+        "Stream_Play": (lambda m_, a, esp: ui_answer(m_, (0xFFFFFFFF, 0, 1, 7))),
+        "Stream_GetLengthMs": (lambda m_, a, esp: ui_answer(m_, (0, 1000, 30000, 180000))),
+        "Stream_GetTime": (lambda m_, a, esp: ui_answer(m_, (0, 500, 29000, 179999))),
+        "PlaySoundEx": (lambda m_, a, esp: ui_answer(m_, (0xFFFFFFFF, 0, 3, 7))),     # channel, -1 = none free
+        "3D_SetAttributes": (lambda m_, a, esp: 1), "SetVolume": (lambda m_, a, esp: 1),
+        "SetLoopMode": (lambda m_, a, esp: 1), "SetCurrentPosition": (lambda m_, a, esp: 1),
+        "SetFrequency": (lambda m_, a, esp: 1), "SetPriority": (lambda m_, a, esp: 1),
+        "SetPaused": (lambda m_, a, esp: 1), "StopSound": (lambda m_, a, esp: 1),
+    }
+    for full in set(nm.split("!", 1)[1] for nm in m.img.imports.values()):
+        mt = re.match(r"_FSOUND_(\w+)@(\d+)$", full)
+        if mt and mt.group(1) in fsound and full not in m.handlers:
+            n = int(mt.group(2)) // 4
+            m.handle(full, fsound[mt.group(1)], nargs=n, pops=n)
+
+    # ---- Newton Game Dynamics 1.5 (newton.dll, __cdecl). Worlds, bodies, collisions and rag dolls are zeroed
+    # model blocks; the getters fill their out-arrays. A body's matrix is a rotation-free transform whose
+    # translation is a query answer per call, so code comparing two bodies' positions sees both orders.
+    def nw(kind):
+        return lambda m_, a, esp: m_.model_data("Newton" + kind, 0x100)
+
+    COORDS = (0.0, 1.0, -1.0, 2.5)
+
+    def nw_matrix(m_, a, esp):
+        t = [ui_answer(m_, COORDS) for _ in range(3)]
+        put(m_, a[1], struct.pack("<16f", 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, t[0], t[1], t[2], 1))
+        return 0
+
+    def nw_vec3(m_, a, esp):
+        put(m_, a[1], struct.pack("<3f", *(ui_answer(m_, COORDS) for _ in range(3))))
+        return 0
+
+    def nw_mass(m_, a, esp):
+        for p, v in zip(a[1:5], (ui_answer(m_, (0.0, 1.0, 80.0)), 1.0, 1.0, 1.0)):   # mass 0 = static body
+            if p & 0xFFFFFFFF:
+                put(m_, p, struct.pack("<f", v))
+        return 0
+
+    def nw_inertia(m_, a, esp):
+        put(m_, a[1], struct.pack("<3f", 1.0, 1.0, 1.0))
+        put(m_, a[2], struct.pack("<3f", 0.0, 0.0, 0.0))
+        return 0
+
+    void0 = lambda m_, a, esp: 0
+    newton = {
+        "NewtonCreate": (nw("World"), 2), "NewtonDestroy": (void0, 1), "NewtonUpdate": (void0, 2),
+        "NewtonSetSolverModel": (void0, 2), "NewtonSetWorldSize": (void0, 3),
+        "NewtonMaterialGetDefaultGroupID": (void0, 1), "NewtonMaterialSetDefaultSoftness": (void0, 4),
+        "NewtonMaterialSetDefaultElasticity": (void0, 4), "NewtonMaterialSetDefaultFriction": (void0, 5),
+        "NewtonCreateBody": (nw("Body"), 2), "NewtonDestroyBody": (void0, 2),
+        "NewtonCreateTreeCollision": (nw("Collision"), 2), "NewtonCreateCapsule": (nw("Collision"), 4),
+        "NewtonTreeCollisionBeginBuild": (void0, 1), "NewtonTreeCollisionAddFace": (void0, 5),
+        "NewtonTreeCollisionEndBuild": (void0, 2), "NewtonReleaseCollision": (void0, 2),
+        "NewtonConvexCollisionCalculateInertialMatrix": (nw_inertia, 3),
+        "NewtonBodyGetMatrix": (nw_matrix, 2), "NewtonBodySetMatrix": (void0, 2),
+        "NewtonBodyGetVelocity": (nw_vec3, 2), "NewtonBodySetVelocity": (void0, 2),
+        "NewtonBodyGetOmega": (nw_vec3, 2), "NewtonBodySetOmega": (void0, 2),
+        "NewtonBodyGetMassMatrix": (nw_mass, 5), "NewtonBodySetMassMatrix": (void0, 5),
+        "NewtonBodySetCentreOfMass": (void0, 2), "NewtonBodySetMaterialGroupID": (void0, 2),
+        "NewtonBodySetAngularDamping": (void0, 2), "NewtonBodySetFreezeTreshold": (void0, 4),
+        "NewtonBodyGetSleepingState": (lambda m_, a, esp: ui_answer(m_, (0, 1)), 1),
+        "NewtonBodyAddForce": (void0, 2), "NewtonBodyAddTorque": (void0, 2),
+        "NewtonCreateRagDoll": (nw("RagDoll"), 1), "NewtonRagDollBegin": (void0, 1), "NewtonRagDollEnd": (void0, 1),
+        "NewtonRagDollAddBone": (nw("RagDollBone"), 7), "NewtonRagDollBoneSetLimits": (void0, 8),
+        "NewtonRagDollBoneGetBody": (nw("Body"), 1), "NewtonRagDollBoneGetGlobalMatrix": (nw_matrix, 2),
+        "NewtonRagDollSetForceAndTorqueCallback": (void0, 2),
+    }
+    for name, (fn, n) in newton.items():
+        m.handle(name, fn, nargs=n)
 
 
 def _f32(x):

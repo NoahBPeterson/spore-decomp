@@ -336,8 +336,7 @@ class Steer:
                 return (winners + deeper)[:24]
         out = []
         budget = 0.4 * getattr(self.opts, "time_limit", 180)
-        if self.concolic is not None and not getattr(self, "_boundary", False) and kind == "int" \
-                and self.cc_time < budget:
+        if self.concolic is not None and not getattr(self, "_boundary", False) and self.cc_time < budget:
             # z3 over the traced path, for every uncovered branch while its share of the run's time lasts: the
             # callee's chained decisions (windows) when the branch tests a callee's result, else its own
             import time as _t

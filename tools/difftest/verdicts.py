@@ -177,6 +177,14 @@ def main():
     if a.src:
         from sweep_nonmatching import rows
         res, src_dirs = {}, [os.path.abspath(d) for d in a.src]
+        # A re-run (rerun_rows.py) keeps the rows' previous results in work/sweep_stale/<stamp>; with work/sweep alone,
+        # every row still queued read as "not run" (spikes of 117-633 in the history). Search those too: the newest
+        # result per row still wins, so a finished re-run's result always replaces the stale one.
+        for sd in list(src_dirs):
+            stale = os.path.join(os.path.dirname(sd), "sweep_stale")
+            if os.path.basename(sd) == "sweep" and os.path.isdir(stale):
+                src_dirs += sorted(os.path.join(stale, d) for d in os.listdir(stale)
+                                   if os.path.isdir(os.path.join(stale, d)) and os.path.join(stale, d) not in src_dirs)
         for r in rows():
             # Spore still has most rows in match/slices (Mount & Blade skipped slice rows: everything there lives in
             # a src module since its migration wave M4)
@@ -189,7 +197,16 @@ def main():
             # single "current" dir is reliable.
             cands = [os.path.join(sd, name) for sd in src_dirs]
             cands = [c for c in cands if os.path.exists(c)]
-            d = load(max(cands, key=os.path.getmtime)) if cands else None
+            # A run that hit the sweep's time limit (TIMEOUT), died (CRASH) or was cut short by equiv's own wall-clock
+            # limit (UNSUPPORTED "not a verdict: time limit ...", a loaded machine) measured nothing: the newest result
+            # that did finish wins, and a cut-short one counts only when the row has nothing else.
+            got = [(os.path.getmtime(c), load(c)) for c in cands]
+            def finished(d):
+                d = d or {}
+                return d.get("verdict") not in (None, "TIMEOUT", "CRASH") and not (
+                    d.get("verdict") == "UNSUPPORTED" and d.get("stopped_early"))
+            done = [g for g in got if finished(g[1])]
+            d = max(done or got, key=lambda g: g[0])[1] if got else None
             cs = case_sweep(r["id"], r["va"])
             if cs is not None:
                 # a switch function swept case by case: one whole-function run never gets past its dispatch
@@ -201,7 +218,7 @@ def main():
                 continue
             res[r["va"]] = {"module": r["id"], "file": r["file"], "verdict": (d or {}).get("verdict"),
                             "category": category(d), "size": size_of(d, r["va"])}
-        when = max(newest(d) for d in src_dirs)
+        when = max(newest(d) for d in src_dirs if glob.glob(os.path.join(d, "*.json")))
         head = os.popen("git -C '%s' rev-parse --short HEAD" % ROOT).read().strip()
         summ = summarize((v["category"], v["size"]) for v in res.values())
         doc = {"when": when, "commit": head, "sources": [os.path.relpath(d, ROOT) for d in src_dirs],
