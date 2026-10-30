@@ -108,6 +108,34 @@ def mb(items):
     return sum(funcs[a]["size"] for a in items) / 2**20
 
 exact_total = byte_exact | equiv
+
+# ---- equivalence verdicts of the compilable-but-not-exact functions, from the latest sweep ----
+# docs/equiv_verdicts.json is written by tools/difftest/verdicts.py from the merged harness's results (2026-10-29 on).
+# A FAIL is a mismatch, so that function is NOT equivalent; only a PASS (every branch exercised on both builds) counts
+# as shown equivalent. A function the sweep has no result for is "not tested yet".
+VERDICT_CATS = (("pass", "Equivalent: test PASS (every branch ran)"),
+                ("weak", "Probably equivalent: WEAK (some branch never ran)"),
+                ("inputs", "Untestable: random inputs invalid"),
+                ("harness", "Untestable: harness limit or symbol not found"),
+                ("untested", "Not tested yet by the new harness"),
+                ("fail", "NOT equivalent: test FAIL (a mismatch)"))
+_VMAP = {"pass": "pass", "comdat": "pass", "weak": "weak", "fail": "fail", "comdatdiff": "fail", "inputs": "inputs",
+         "harness": "harness", "funclet": "harness"}
+
+
+def _load_verdicts():
+    """(VA -> verdicts.py category, sweep time) from docs/equiv_verdicts.json; ({}, None) without it."""
+    try:
+        doc = json.load(open(W("docs", "equiv_verdicts.json")))
+    except (OSError, ValueError):
+        return {}, None
+    return {int(va, 16): r.get("category") for va, r in doc.get("rows", {}).items()}, doc.get("when")
+
+
+VERDICT_OF, VERDICT_WHEN = _load_verdicts()
+equiv_by = collections.defaultdict(set)
+for _a in equiv:
+    equiv_by[_VMAP.get(VERDICT_OF.get(_a), "untested")].add(_a)
 GB_MB = GB / 2**20
 def pctb(items):
     return pct(mb(items), GB_MB)
@@ -116,10 +144,13 @@ rows = [
     ("Byte-exact: classes/templates",     len(byte_exact & KC), pct(len(byte_exact & KC), G), mb(byte_exact & KC), pctb(byte_exact & KC)),
     ("Byte-exact: globals/other code",    len(byte_exact & KG), pct(len(byte_exact & KG), G), mb(byte_exact & KG), pctb(byte_exact & KG)),
     ("BYTE-EXACT TOTAL",                  len(byte_exact),       pct(len(byte_exact), G),       mb(byte_exact),       pctb(byte_exact)),
-    ("Equivalent (compilable, not exact)",len(equiv),            pct(len(equiv), G),            mb(equiv),            pctb(equiv)),
+] + [("  " + lab, len(equiv_by[k]), pct(len(equiv_by[k]), G), mb(equiv_by[k]), pctb(equiv_by[k])) for k, lab in VERDICT_CATS] + [
+    ("COMPILABLE, NOT EXACT (sum of the above)", len(equiv), pct(len(equiv), G),            mb(equiv),            pctb(equiv)),
     ("Partial (incomplete)",              len(part),             pct(len(part), G),             mb(part),             pctb(part)),
     ("No source yet",                     len(nosrc),            pct(len(nosrc), G),            mb(nosrc),            pctb(nosrc)),
     ("TOTAL WITH COMPILABLE SOURCE",      len(exact_total),      pct(len(exact_total), G),      mb(exact_total),      pctb(exact_total)),
+    ("SHOWN CORRECT (byte-exact + PASS)", len(byte_exact | equiv_by["pass"]), pct(len(byte_exact | equiv_by["pass"]), G),
+     mb(byte_exact | equiv_by["pass"]), pctb(byte_exact | equiv_by["pass"])),
     ("Game functions (denominator)",      G,                     "100.00%",                     GB_MB,                "100.00%"),
 ]
 print("Spore decompilation progress")
@@ -127,6 +158,8 @@ print()
 print(table(["Tier", "Functions", "% count", "MB", "% size"],
             [(a, human(b), c, "%.2f" % d, e) for a, b, c, d, e in rows],
             aligns=["<", ">", ">", ">", ">"]))
+print("Verdicts: %s" % ("the equivalence sweep at %s (tools/difftest/verdicts.py -> docs/equiv_verdicts.json)" % VERDICT_WHEN
+                        if VERDICT_WHEN else "none yet (run tools/difftest/verdicts.py --from <sweep dir>)"))
 
 # ---- components ----
 comp = ns["comp_rows"]()  # markdown rows: | name | funcs | exact (pct) | exact% by size | src (pct) | MB | src% |
@@ -656,7 +689,10 @@ def module_counts():
 
 def _tier_of(a):
     k = "exact" if a in byte_exact else "equiv" if a in equiv else "part" if a in part else "none"
-    return {"n": 1, k: 1, "bytes": funcs[a]["size"]}
+    out = {"n": 1, k: 1, "bytes": funcs[a]["size"]}
+    if k == "equiv":   # plus its sweep verdict (VERDICT_CATS), for the per-module bars
+        out["v_" + _VMAP.get(VERDICT_OF.get(a), "untested")] = 1
+    return out
 
 
 def plot_history(path):
@@ -681,6 +717,10 @@ def plot_history(path):
     live = {"exact": 100.0 * len(byte_exact) / G, "comp": 100.0 * len(exact_total) / G,
             "exact_sz": pctb_f(byte_exact), "comp_sz": pctb_f(exact_total),
             "mig": 100.0 * len(migrated) / G, "mig_sz": pctb_f(migrated)}
+    if VERDICT_WHEN:   # the compilable-not-exact share split by the latest sweep's verdicts (saved with the day's point)
+        live["v"] = {k + sfx: (100.0 * len(equiv_by[k]) / G if not sfx else pctb_f(equiv_by[k]))
+                     for k, _l in VERDICT_CATS for sfx in ("", "_sz")}
+        live["v_when"] = VERDICT_WHEN
     # One saved point per day (docs/progress_history.json): each run overwrites today's entry with
     # its live numbers, so a day keeps its latest figure and earlier days stay on the chart.
     hist_path = W("docs", "progress_history.json")
@@ -708,10 +748,10 @@ def plot_history(path):
     BLUE, ORANGE, GREEN = "#2a78d6", "#eb6834", "#2e9e5b"   # dataviz reference palette, slots 1-3
     INK, MUTED, GRID = "#1f2328", "#59636e", "#e6e8eb"
     order = sorted(mods, key=lambda m: (m.startswith("("), -mods[m]["n"]))   # modules by size, then the "(no module: ...)" rows
-    H = 4.6 + (0.6 + 0.3 * len(order) if order else 0)
+    H = 10.3 + (0.6 + 0.3 * len(order) if order else 0)
     fig = plt.figure(figsize=(12, H), dpi=150)
     fig.patch.set_facecolor("white")
-    gs = fig.add_gridspec(2 if order else 1, 2, height_ratios=[4.6, H - 4.6] if order else [1])
+    gs = fig.add_gridspec(3 if order else 2, 2, height_ratios=[4.6, 4.8] + ([H - 10.3] if order else []))
     axes = [fig.add_subplot(gs[0, 0])]
     axes.append(fig.add_subplot(gs[0, 1], sharey=axes[0], sharex=axes[0]))
     plt.setp(axes[1].get_yticklabels(), visible=False)
@@ -741,40 +781,103 @@ def plot_history(path):
         plt.setp(ax.get_xticklabels(), ha="right", rotation_mode="anchor")
         ax.margins(x=0.08)
     axes[0].legend(loc="upper left", frameon=False, fontsize=9, labelcolor=INK)
+    # Every game function, 100%: byte-exact at the bottom, equivalent (PASS) above it, then the other verdicts of the
+    # compilable-not-exact functions, then partial / no source. A day before the first sweep (or a committed
+    # STATUS.md point) has no verdicts, so its whole compilable-not-exact share is "not tested yet".
+    TC = dict((k, c) for k, _l, c in TREE_CATS)
+    LAYERS = [("exact", "Byte-exact", TC["byte-exact"]), ("pass", dict(VERDICT_CATS)["pass"], TC["pass"]),
+              ("weak", dict(VERDICT_CATS)["weak"], TC["weak"]), ("fail", dict(VERDICT_CATS)["fail"], TC["fail"]),
+              ("inputs", dict(VERDICT_CATS)["inputs"], TC["inputs"]), ("harness", dict(VERDICT_CATS)["harness"], TC["harness"]),
+              ("untested", "Compiles, not tested yet by the new harness", TC["untested"]),
+              ("rest", "Partial or no source", "#e6e8eb")]
+    for col, (title, sfx) in enumerate((("All game functions, by evidence", ""), ("... by code size", "_sz"))):
+        ax = fig.add_subplot(gs[1, col], sharex=axes[0])
+        sp = [(t, p) for t, p in pts if p.get("exact" + sfx) is not None and p.get("comp" + sfx) is not None]
+        xs = [t for t, _p in sp]
+        ys = {k: [] for k, _l, _c in LAYERS}
+        for _t, p in sp:
+            v = p.get("v") or {}
+            known = 0.0
+            for k, _l, _c in LAYERS[1:-2]:
+                ys[k].append(v.get(k + sfx, 0.0))
+                known += ys[k][-1]
+            ys["exact"].append(p["exact" + sfx])
+            ys["untested"].append(max(0.0, p["comp" + sfx] - p["exact" + sfx] - known))
+            ys["rest"].append(max(0.0, 100.0 - p["comp" + sfx]))
+        keys = [k for k, _l, _c in LAYERS if any(y > 0 for y in ys[k])]
+        # steps, not slopes: a value holds until the next point (interpolating drew the first sweep's verdicts as a
+        # wedge growing from the previous --plot day)
+        for i in range(len(xs) - 1, 0, -1):
+            xs.insert(i, xs[i] - datetime.timedelta(seconds=1))
+            for k in ys:
+                ys[k].insert(i, ys[k][i - 1])
+        if xs:   # the last point (now) holds for a day and a half, or a step chart would give it no width
+            xs.append(xs[-1] + datetime.timedelta(hours=36))
+            for k in ys:
+                ys[k].append(ys[k][-1])
+        if xs:
+            ax.stackplot(xs, [ys[k] for k in keys], colors=[c for k, _l, c in LAYERS if k in keys],
+                         labels=[l for k, l, _c in LAYERS if k in keys], edgecolor="white", linewidth=0.6)
+            base = 0.0
+            for k in keys:
+                y = ys[k][-1]
+                if y >= 2.5:
+                    ax.annotate("%.1f%%" % y, (xs[-1], base + y / 2), xytext=(6, 0), textcoords="offset points",
+                                va="center", fontsize=8.5, color=INK)
+                base += y
+        ax.set_title(title, loc="left", fontsize=11, color=INK)
+        ax.set_ylim(0, 100)
+        ax.yaxis.set_major_formatter(matplotlib.ticker.PercentFormatter(decimals=0))
+        for sp_ in ("top", "right", "left"):
+            ax.spines[sp_].set_visible(False)
+        ax.spines["bottom"].set_color(GRID)
+        ax.tick_params(colors=MUTED, labelsize=9, length=0)
+        ax.tick_params(axis="x", labelrotation=45)
+        plt.setp(ax.get_xticklabels(), ha="right", rotation_mode="anchor")
+        if col:
+            plt.setp(ax.get_yticklabels(), visible=False)
     if order:
         # per module, now: each bar is 100% of the module's functions, split by tier (docs/modules.md)
-        bx = fig.add_subplot(gs[1, :])
+        bx = fig.add_subplot(gs[2, :])
         PARTIAL, NONE = "#f6c7a9", "#e6e8eb"
         y = list(range(len(order)))[::-1]
         left = [0.0] * len(order)
-        for key, color, label in (("exact", BLUE, "Byte-exact"), ("equiv", ORANGE, "Equivalent (compilable, not exact)"),
-                                  ("part", PARTIAL, "Partial"), ("none", NONE, "No source yet")):
+        for key, color, label in ([("exact", TC["byte-exact"], "Byte-exact")] +
+                                  [("v_" + k, TC[k], l) for k, l, _c in LAYERS[1:-1]] +
+                                  [("part", TC["partial"], "Partial"), ("none", NONE, "No source yet")]):
             w = [100.0 * mods[m][key] / mods[m]["n"] for m in order]
             bx.barh(y, w, left=left, color=color, height=0.7, label=label)
             left = [l + x for l, x in zip(left, w)]
         for yy, m in zip(y, order):
             c = mods[m]
-            bx.text(101, yy, "%s functions, %.1f MB   exact %.0f%%, compilable %.0f%%" % (
+            bx.text(101, yy, "%s functions, %.1f MB   exact %.0f%%, PASS %.0f%%, FAIL %.0f%%" % (
                 "{:,}".format(c["n"]), c["bytes"] / 2**20, 100.0 * c["exact"] / c["n"],
-                100.0 * (c["exact"] + c["equiv"]) / c["n"]), va="center", fontsize=8, color=MUTED)
+                100.0 * c["v_pass"] / c["n"], 100.0 * c["v_fail"] / c["n"]), va="center", fontsize=8, color=MUTED)
         bx.set_yticks(y)
         bx.set_yticklabels(order, fontsize=9, color=INK)
         bx.set_xlim(0, 140)
         bx.set_xticks([0, 25, 50, 75, 100])
         bx.xaxis.set_major_formatter(matplotlib.ticker.PercentFormatter(decimals=0))
-        bx.set_title("By module, now", loc="left",
-                     fontsize=11, color=INK)
         for sp in ("top", "right", "left"):
             bx.spines[sp].set_visible(False)
         bx.spines["bottom"].set_color(GRID)
         bx.tick_params(colors=MUTED, labelsize=9, length=0)
-        bx.legend(loc="lower right", bbox_to_anchor=(1.0, 1.0), frameon=False, fontsize=8, labelcolor=INK, ncol=4)
+        bx.set_title("By module, now (same colours as above)", loc="left", fontsize=11, color=INK)
     fig.suptitle("Spore decompilation progress (game functions; third-party libraries excluded)",
                  x=0.01, ha="left", fontsize=12, color=INK)
     fig.text(0.01, 0.01, "One point per committed docs/STATUS.md, one per day of --plot runs (latest run that day), plus now.\nEquivalent = complete compilable source, "
              "not yet byte-identical. Size shares only exist in later snapshots; the migrated line starts with Phase B "
-             "(Oct 2026).", fontsize=8, color=MUTED)
-    fig.tight_layout(rect=(0, 0.32 / H, 1, 1 - 0.23 / H))   # room for the two-line footnote and the title (inches / H)
+             "(Oct 2026).\nEvidence bands: verdicts of the merged equivalence harness (tools/difftest/verdicts.py, first "
+             "sweep 2026-10-29); a FAIL is a mismatch, so not equivalent. Days before it count as not tested.",
+             fontsize=8, color=MUTED)
+    from matplotlib.patches import Patch
+    leg = [Patch(fc=c, label=l) for k, l, c in LAYERS]
+    if order:
+        leg = leg[:-1] + [Patch(fc=TC["partial"], label="Partial source"), Patch(fc="#e6e8eb", label="No source yet (evidence bands: partial too)")]
+    fig.legend(handles=leg, loc="lower left", bbox_to_anchor=(0.01, 0.5 / H), ncol=3, frameon=False, fontsize=8.5,
+               labelcolor=INK, title="Evidence bands and module bars (bottom to top / left to right):",
+               title_fontsize=8.5, alignment="left")
+    fig.tight_layout(rect=(0, 1.35 / H, 1, 1 - 0.23 / H))   # room for the two-line footnote and the title (inches / H)
     fig.savefig(path)
     print("wrote %s (%d snapshots)" % (os.path.relpath(path, ROOT), len(pts)))
 
@@ -786,30 +889,16 @@ def pctb_f(items):
 
 # ---------------------------------------------------------------- treemap
 # Ported from mountandblade-decomp's tools/progress.py (2026-10-29). Okabe-Ito colours (colour-blind safe), one hue per
-# verdict. Equivalence verdicts are the ones recorded in the nonmatching.txt rows (the pre-2026-10-29 harness).
+# verdict. The verdicts are the latest equivalence sweep's (docs/equiv_verdicts.json, see VERDICT_CATS above).
 TREE_CATS = (("byte-exact", "Byte-exact", "#0072B2"),                                  # blue
-             ("pass", "Equivalent, test PASS", "#009E73"),                             # bluish green
-             ("weak", "Equivalent, test WEAK (part of the function never ran)", "#E69F00"),   # orange
-             ("fail", "Equivalent, test FAIL (a mismatch)", "#D55E00"),                # vermillion
-             ("unsupported", "Equivalent, untestable by the harness", "#CC79A7"),      # reddish purple
-             ("untested", "Equivalent, no test verdict recorded", "#F0E442"),          # yellow
+             ("pass", "Equivalent: test PASS (every branch ran)", "#009E73"),          # bluish green
+             ("weak", "Probably equivalent: WEAK (some branch never ran)", "#E69F00"), # orange
+             ("inputs", "Untestable: random inputs invalid", "#CC79A7"),               # reddish purple
+             ("harness", "Untestable: harness limit or symbol not found", "#56B4E9"),  # sky blue
+             ("untested", "Compiles, not tested yet by the new harness", "#F0E442"),   # yellow
+             ("fail", "NOT equivalent: test FAIL (a mismatch)", "#D55E00"),            # vermillion
              ("partial", "Partial source", "#999999"),                                 # the only grey
              ("nosource", "No source yet", "#FFFFFF"))
-_TREE_VERDICT = re.compile(r"\b(PASS|WEAK|FAIL|UNSUPPORTED)\b")
-
-
-def _equiv_verdicts():
-    """VA -> PASS / WEAK / FAIL / UNSUPPORTED from the nonmatching.txt rows; a migrated module's row wins."""
-    out = {}
-    for nm in sorted(glob.glob(W("match", "slices", "*", "nonmatching.txt"))) + \
-            sorted(glob.glob(W("src", "game", "**", "nonmatching.txt"), recursive=True)):
-        for line in open(nm, errors="replace"):
-            p = line.split(None, 2)
-            if len(p) < 2 or not re.fullmatch(r"[0-9a-fA-F]{6,8}", p[0]):
-                continue
-            v = _TREE_VERDICT.search(p[2] if len(p) > 2 else "")
-            out[int(p[0], 16)] = v.group(1) if v else None
-    return out
 
 
 UNPLACED = "Not placed in a source file yet"
@@ -840,7 +929,6 @@ def _tree_rows():
     mod = {int(v, 16): (m or {}).get("module") for v, m in MM["functions"].items()}
     gaps = sorted((int(g["lo"], 16), int(g["hi"], 16), g.get("before"), g.get("after")) for g in MM.get("gaps", []))
     los = [g[0] for g in gaps]
-    verd = _equiv_verdicts()
     rows = []
     for a in sorted(game):
         m = mod.get(a)
@@ -859,7 +947,7 @@ def _tree_rows():
         if a in byte_exact:
             cat = "byte-exact"
         elif a in equiv:
-            cat = {"PASS": "pass", "WEAK": "weak", "FAIL": "fail", "UNSUPPORTED": "unsupported"}.get(verd.get(a), "untested")
+            cat = _VMAP.get(VERDICT_OF.get(a), "untested")
         elif a in part:
             cat = "partial"
         else:
@@ -1049,8 +1137,8 @@ def treemap(path):
     fig.text(0.012, 0.945, "Group (top directory of the dev build) -> object file -> one block per verdict; area = "
              "function size in bytes. Objects come from work/migrate/modmap.json; functions it does "
              "not place in an object (so not migratable yet) are grouped by kind.\nThird-party libraries (OpenSSL, libpng, zlib, libjpeg, CRT) are excluded, "
-             "as in docs/STATUS.md. Equivalence verdicts are the ones recorded in the nonmatching.txt rows (the "
-             "harness before the 2026-10-29 port).", fontsize=8.2, color=MUTED, va="top")
+             "as in docs/STATUS.md. Verdicts: the equivalence sweep at %s (tools/difftest/verdicts.py)."
+             % (VERDICT_WHEN or "- (none yet)"), fontsize=8.2, color=MUTED, va="top")
     fig.savefig(path, facecolor=SURFACE)
     print("wrote %s (%s functions in %d objects, %d labels)" % (os.path.relpath(path, ROOT), human(tot_n), len(boxes),
                                                                placed))

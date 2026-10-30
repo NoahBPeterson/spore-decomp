@@ -125,8 +125,8 @@ def size_of(d, va):
         return n
     if _SIZES is None:
         import csv
-        try:
-            _SIZES = {r["address"].lower(): int(r["size_bytes"]) for r in csv.DictReader(open(os.path.join(ROOT, "work", "index", "functions.csv")))}
+        try:   # Mount & Blade's index names the column size_bytes, Spore's size
+            _SIZES = {r["address"].lower(): int(r.get("size_bytes") or r["size"]) for r in csv.DictReader(open(os.path.join(ROOT, "work", "index", "functions.csv")))}
         except OSError:
             _SIZES = {}
     return _SIZES.get(va.lower(), 0)
