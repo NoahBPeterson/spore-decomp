@@ -232,3 +232,65 @@ def test_own_global_binding_keeps_real_differences():
     open(path, "w").write(text.replace('"mIsInvalid", 0xd24b464b', '"mIsInvalid", 0xd24b464c'))
     r = equiv.test_function("s01353d90", 0x01353d90, opts("--src", path))
     assert r["verdict"] == "FAIL" and r["first_mismatch"]["observable"].startswith("memory"), r
+
+
+def test_cxx_throw_is_a_compared_outcome():
+    """_CxxThrowException ends the run as a compared outcome (status "exit"), and the status names what was thrown:
+    the first CatchableType's TypeDescriptor name and the exception object's bytes, with dwords that point into
+    mapped memory reduced to "ptr". Two different thrown types or values give different statuses, so a run where
+    the builds throw differently is a mismatch; before this, every throwing input was discarded (228 rows)."""
+    import struct
+    import machine as M
+    import resolve as R
+    m = M.Machine(R.Image())
+    buf = m.model_data("test_throw", 0x1000)
+
+    def throw(name, words):
+        m.write(buf, b"\0" * 0x400)
+        td, ct, cta, ti, obj = buf, buf + 0x100, buf + 0x140, buf + 0x180, buf + 0x200
+        m.write(td + 8, name + b"\0")
+        m.write(ct, struct.pack("<7I", 0, td, 0, 0xFFFFFFFF, 0, 4 * len(words), 0))
+        m.write(cta, struct.pack("<2I", 1, ct))
+        m.write(ti, struct.pack("<4I", 0, 0, 0, cta))
+        m.write(obj, struct.pack("<%dI" % len(words), *words))
+        try:
+            m.handlers["_CxxThrowException"]["fn"](m, [obj, ti], 0)
+        except M.Exit as e:
+            return str(e)
+        assert False, "the throw returned"
+
+    a = throw(b".?AVcError@ArgScript@EA@@", [8, 0x21, buf])
+    assert a == "C++ throw .?AVcError@ArgScript@EA@@ [00000008 00000021 ptr]", a
+    assert throw(b".?AVcError@ArgScript@EA@@", [9, 0x21, buf]) != a          # another value
+    assert throw(b".?AVbad_alloc@std@@", [8, 0x21, buf]) != a                # another type
+    assert throw(b".?AVcError@ArgScript@EA@@", [8, 0x21, buf + 0x40]) == a   # a pointer's address does not matter
+
+
+def _slice_mutant(sid, old, new, tag):
+    src = os.path.join(ROOT, "match", "slices", sid, sid + ".cpp")
+    text = open(src).read()
+    assert old in text, old
+    os.makedirs(MUT_DIR, exist_ok=True)
+    path = os.path.join(MUT_DIR, "%s_%s.cpp" % (sid, tag))
+    open(path, "w").write(text.replace(old, new, 1))
+    return path
+
+
+def test_cdecl_libm_runs_the_library_function():
+    """Vec3_AngleBetween 0x00454aa0 (/Od) calls acos(double); the original calls _CIacos (argument in st0). Alignment
+    bound our _acos to the image's _CIacos, which read an empty x87 stack (FAIL on x87 depth). The C symbol now runs
+    the acos handler (method crt-model) and the pure math call is not part of the import trace: PASS. asin in its
+    place must still FAIL."""
+    r = equiv.test_function("s00454330", 0x00454aa0, opts())
+    assert r["verdict"] == "PASS", r
+    path = _slice_mutant("s00454330", "return (float)acos(d);", "return (float)asin(d);", "asin")
+    assert equiv.test_function("s00454330", 0x00454aa0, opts("--src", path))["verdict"] == "FAIL"
+
+
+def test_memset_fill_is_compared_as_a_byte():
+    """memset converts its fill to unsigned char: the original pushes 0x200 (a count's leftover in the upper bytes),
+    ours 0, and both fill with 0 (s005e6b40 0x005e7390 was FAIL on import call #0). A different fill byte FAILs."""
+    r = equiv.test_function("s005e6b40", 0x005e7390, opts())
+    assert r["verdict"] in ("PASS", "WEAK") and not r.get("mismatches"), r      # PASS with the sweep's input count
+    path = _slice_mutant("s005e6b40", "memset(p, fill, count);", "memset(p, fill ^ 1, count);", "fill")
+    assert equiv.test_function("s005e6b40", 0x005e7390, opts("--src", path))["verdict"] == "FAIL"

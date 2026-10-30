@@ -1060,6 +1060,21 @@ class Resolver:
         close(work)
         r.local_sections = required_secs | eh_secs
 
+        # C library functions the image never imports (the original inlined them, e.g. _CIacos for acos): a plain
+        # C symbol with a Machine import handler of that name runs the handler, before alignment can pair the
+        # call with the original's helper at the same position, whose convention differs (_CIacos reads st0)
+        mh = self.machine()
+        hstub = getattr(mh, "handler_stub", None) if mh is not None else None
+        for si, (kind, _n) in list(pending.items()):
+            nm = syms[si].name
+            if kind == "req" and hstub is not None and nm.startswith("_") and not nm.startswith("__") and \
+                    "@" not in nm and nm[1:] in mh.handlers:
+                va = hstub(nm[1:])
+                if va is not None:
+                    r.addr[si] = va
+                    r.method[nm] = "crt-model"
+                    del pending[si]
+
         # alignment fallback for required unresolved symbols
         req = {si for si, (k, _n) in pending.items() if k == "req"} | set(vtables) | set(statics)
         got, check = self.align(coff, func_sym, orig_va, r, req)

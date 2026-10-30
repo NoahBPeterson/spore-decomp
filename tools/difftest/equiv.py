@@ -5161,10 +5161,16 @@ class Comparer:
     def seq_eq(self, xs, ys):
         return len(xs) == len(ys) and all(self.veq(x, y) for x, y in zip(xs, ys))
 
+    # Import arguments the callee reads narrower than the pushed dword: (argument index, mask). memset converts its
+    # int fill to unsigned char, so the upper bytes are whatever the register held (s005e6b40 0x005e7390: the
+    # original pushes 0x200, the count's leftover, ours 0; both fill with 0).
+    IMPORT_ARG_MASKS = {"memset": {1: 0xFF}}
+
     def compare_imports(self, ia, ib):
         esp = self.r.stk_hi
-        na = [(n, tuple(norm_val(v, esp) for v in args)) for n, args in ia]
-        nb = [(n, tuple(norm_val(v, esp) for v in args)) for n, args in ib]
+        mask = lambda n, k, v: v & self.IMPORT_ARG_MASKS[n][k] if k in self.IMPORT_ARG_MASKS.get(n, {}) else v
+        na = [(n, tuple(norm_val(mask(n, k, v), esp) for k, v in enumerate(args))) for n, args in ia]
+        nb = [(n, tuple(norm_val(mask(n, k, v), esp) for k, v in enumerate(args))) for n, args in ib]
         if na == nb:
             return None
         for k in range(max(len(na), len(nb))):
@@ -6075,7 +6081,10 @@ def _test_function(sid, va, opts, log=print):
                 faked += 1
             valid += 1
             if st == "exit":
-                out["exited"] = out.get("exited", 0) + 1      # valid runs that ended in a program exit
+                if str(a["status"][1]).startswith("_CxxThrowException:") and tuple(sb) == tuple(a["status"]):
+                    out["threw"] = out.get("threw", 0) + 1    # valid runs that ended in the same C++ throw
+                elif not str(a["status"][1]).startswith("_CxxThrowException:"):
+                    out["exited"] = out.get("exited", 0) + 1  # valid runs that ended in a program exit
             if getattr(inp, "typed", 0):
                 typed_valid += 1
             new_edge = bool(a["edges"] - runner.orig.edges)
@@ -6306,6 +6315,10 @@ def _test_function(sid, va, opts, log=print):
         # function, so a verdict that leans on it says so
         why += "; %d callee(s) bound from the original's operands, identity unchecked (%s)" % (
             len(callees), ", ".join(callees[:3]))
+    if out.get("threw"):
+        # a throw is compared up to _CxxThrowException (type, object, memory, calls); the unwind's destructors are not
+        why += "; %d valid input(s) ended in the same C++ throw, compared up to the throw (unwinding not emulated)" % \
+            out["threw"]
     n_inv = discarded.get("invalid-object")
     if n_inv:
         # Never silent: a row that discarded inputs says how many, which field, and the bound it broke, so

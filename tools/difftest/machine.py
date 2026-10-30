@@ -71,7 +71,11 @@ CALLEE_SAVED = (("ebx", UC_X86_REG_EBX), ("esi", UC_X86_REG_ESI), ("edi", UC_X86
 # Pure CRT math our object calls by name (a modelled stub) where the original runs its statically linked copy in
 # the image (floor 0x536b10): the original's call is never an import, so recording ours as one made every such row
 # an "import call" FAIL (world_data 0x494b60). The result is still compared through registers and memory.
-UNTRACED_PURE = frozenset(("floor", "ceil", "ldexp"))
+# Pure math with no side effects: not recorded in the import trace (its result is compared through the function's
+# own outputs). The x87 helpers and their C forms are one operation however a build reaches it: the original inlines
+# fsqrt where ours calls _CIsqrt, or calls _CIacos where a /Od build calls acos(double).
+_LIBM = ("sqrt", "sin", "cos", "tan", "log", "log10", "pow", "fmod", "asin", "acos", "atan", "atan2", "exp")
+UNTRACED_PURE = frozenset(("floor", "ceil", "ldexp") + _LIBM + tuple("_CI" + n for n in _LIBM))
 
 class Stop(Exception):
     pass
@@ -605,6 +609,31 @@ class Machine:
         self.model_stubs[name] = stub
         return stub
 
+    def handler_stub(self, name):
+        """Address of a stub slot that runs the import handler `name` (its native code or Python model), for a C
+        library symbol our object calls directly although the image never imports it (a /Od build's cdecl
+        acos where the original inlined _CIacos). Unlike model_stub this is the library's documented behaviour,
+        not a placeholder. None when there is no such handler. Idempotent per name."""
+        h = self.handlers.get(name)
+        if h is None:
+            return None
+        key = "crt:" + name
+        a = self.model_stubs.get(key)
+        if a is not None:
+            return a
+        slot = self.model_stub_next
+        if slot >= self.model_stub_limit:
+            raise Stop("model stub slots exhausted (%s)" % name)
+        stub = STUB_BASE + STUB_SLOT * slot
+        page = stub & ~0xFFF
+        self.uc.mem_protect(page, 0x1000, UC_PROT_READ | UC_PROT_WRITE | UC_PROT_EXEC)
+        self.uc.mem_write(stub, h["code"].ljust(STUB_SLOT, b"\xcc"))
+        self.uc.mem_protect(page, 0x1000, UC_PROT_READ | UC_PROT_EXEC)
+        self.stub_names[stub] = name
+        self.model_stub_next = slot + 1
+        self.model_stubs[key] = stub
+        return stub
+
     def model_data(self, name, size):
         """Address of a zeroed, readable+writable block of at least `size` bytes for a data symbol no source
         maps. Idempotent per name for the same or a smaller size; a later, larger request gets a fresh block
@@ -947,7 +976,25 @@ def install_crt(m):
         raise Exit("abort")
 
     def throw(m, a, esp):
-        raise Stop("C++ exception thrown (_CxxThrowException)")
+        # A C++ throw ends the run like a program exit: both builds must throw, and what they threw is part of the
+        # status compared -- the thrown type's mangled name (ThrowInfo -> CatchableTypeArray -> first CatchableType ->
+        # TypeDescriptor.name) and the exception object's bytes, a dword that points into mapped memory reduced to
+        # "ptr" (a message buffer is at a different address in each build). Unwinding is NOT emulated: the
+        # destructors the unwind would run are not compared (equiv.py reports the count of such inputs).
+        obj, ti = a[0], a[1]
+        try:
+            ct = m.u32(m.u32(ti + 0xC) + 4)
+            name = m.cstr(m.u32(ct + 4) + 8).decode("latin-1")
+            size = m.u32(ct + 0x14)
+            data = m.read(obj, min(size, 0x40)) if obj and size else b""
+        except Exception:
+            name, data = "?", b""
+        regions = [(lo, hi) for lo, hi, _p in m.uc.mem_regions()]
+        words = []
+        for k in range(0, len(data) - 3, 4):
+            v = struct.unpack_from("<I", data, k)[0]
+            words.append("ptr" if v >= 0x10000 and any(lo <= v <= hi for lo, hi in regions) else "%08x" % v)
+        raise Exit("C++ throw %s [%s]" % (name, " ".join(words)))
 
     def tls_get(m, a, esp):
         return TLS_BLOCKS + 0x1000 * (a[0] % 64)
@@ -1045,6 +1092,21 @@ def install_crt(m):
     }
     for name, code in native.items():
         m.handle(name, None, code=code)
+    # The C library's cdecl forms (a /Od build calls acos(double) instead of the _CI intrinsic): double argument(s)
+    # on the stack, result in st0. Load them (fld qword [esp+4] / [esp+12]) and run the _CI helper's body; without
+    # these the resolver bound _acos to the image's _CIacos, which reads st0, so the x87 stack underflowed
+    # (Vec3_AngleBetween 0x00454aa0, FAIL on x87 depth).
+    ld1, ld2 = b"\xdd\x44\x24\x04", b"\xdd\x44\x24\x04\xdd\x44\x24\x0c"
+    cdecl_libm = {"sqrt": ld1 + native["_CIsqrt"], "sin": ld1 + native["_CIsin"], "cos": ld1 + native["_CIcos"],
+                  "log": ld1 + native["_CIlog"], "asin": ld1 + native["_CIasin"], "acos": ld1 + native["_CIacos"],
+                  "pow": ld2 + native["_CIpow"], "fmod": ld2 + native["_CIfmod"],
+                  "log10": ld1 + b"\xd9\xec\xd9\xc9\xd9\xf1\xc3",        # fldlg2; fxch; fyl2x
+                  "atan": ld1 + b"\xd9\xe8\xd9\xf3\xc3",                    # fld1; fpatan
+                  "tan": ld1 + b"\xd9\xf2\xdd\xd8\xc3",                     # fptan; fstp st0
+                  "atan2": ld2 + b"\xd9\xf3\xc3"}                             # st1 = y, st0 = x; fpatan
+    for name, code in cdecl_libm.items():
+        if name not in m.handlers:
+            m.handle(name, None, code=code)
 
 
 # ---------------------------------------------------------------------- import models
