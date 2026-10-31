@@ -264,8 +264,17 @@ struct cXform {                       // SP::cTransform, at cSplitTxf+8
     void PreRotateX(float a);         // 0x5a2d90
 };
 struct MapEntry { void* node; uint8_t inserted; };
+struct RbAnchorNode {   // eastl::rbtree_node_base (a slice does not include src/game/include)
+    RbAnchorNode* mpNodeRight;
+    RbAnchorNode* mpNodeLeft;
+    RbAnchorNode* mpNodeParent;
+    char mColor;
+};
 struct cRBT {                         // eastl::rbtree<uint32,...> at cSplitTxf+0x4c
-    char raw[0x1c];
+    uint32_t mCompare;                 // +0x00  (the comparator)
+    RbAnchorNode mAnchor;   // +0x04  {right, left = begin, parent = root, color}
+    uint32_t mnSize;                   // +0x14
+    uint32_t mAllocator;               // +0x18
     void Insert(MapEntry* out, const int* key, uint8_t flag);   // 0x7d0850
     void Nuke(void* sub);                                        // 0x9a9600
 };

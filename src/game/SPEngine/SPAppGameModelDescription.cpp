@@ -13,6 +13,7 @@
 #include "EA/ArgScript/cError.h"
 #include "EA/Swarm/cEffectParams.h"
 #include "EA/Swarm/cTransform.h"
+#include "eastl/map.h"
 
 // unnamed retail callees and globals (address in the comment)
 extern const float g_1636ef4, g_1636ef8, g_1636efc;
@@ -769,7 +770,10 @@ struct cXform {                       // SP::cTransform, at cSplitTxf+8
 };
 struct MapEntry { void* node; uint8_t inserted; };
 struct cRBT {                         // eastl::rbtree<uint32,...> at cSplitTxf+0x4c
-    char raw[0x1c];
+    uint32_t mCompare;                 // +0x00  (the comparator)
+    eastl::rbtree_node_base mAnchor;   // +0x04  {right, left = begin, parent = root, color}
+    uint32_t mnSize;                   // +0x14
+    uint32_t mAllocator;               // +0x18
     void Insert(MapEntry* out, const int* key, uint8_t flag);   // 0x7d0850
     void Nuke(void* sub);                                        // 0x9a9600
 };

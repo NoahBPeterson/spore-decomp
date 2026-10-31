@@ -26,6 +26,7 @@
 #include <float.h>
 #include "SP/cSPEditorSnapVector.h"
 #include "EA/Swarm/cIComponent.h"
+#include "eastl/map.h"
 
 // ---- items of slice s00438440 begin (TODO(rewrite): local stubs, replace by canonical classes)
 namespace SP {
@@ -3744,7 +3745,10 @@ struct cSPEditorHandleDeform_s0044_7150 {
 }
 namespace SP {
 struct UIntMap {  // eastl::map<uint32_t, uint32_t>
-    uint32_t mData[7];
+    uint32_t mCompare;                 // +0x00  (the comparator)
+    eastl::rbtree_node_base mAnchor;   // +0x04  {right, left = begin, parent = root, color}
+    uint32_t mnSize;                   // +0x14
+    uint32_t mAllocator;               // +0x18
     void Reserve(int n);                      // 0x00454640
     uint32_t& operator[](const uint32_t& key);  // 0x00454750
 };
@@ -3754,7 +3758,10 @@ typedef vector<pair<uint32_t, cSPEditorHandleDeform_s0044_7150*> > SoundParamVec
 }
 namespace SP {
 struct SoundParameterMap {  // eastl::map<uint32_t, vector<pair<uint32_t, cSPEditorHandleDeform*> > >
-    uint32_t mData[7];
+    uint32_t mCompare;                 // +0x00  (the comparator)
+    eastl::rbtree_node_base mAnchor;   // +0x04  {right, left = begin, parent = root, color}
+    uint32_t mnSize;                   // +0x14
+    uint32_t mAllocator;               // +0x18
     SoundParamVector& operator[](const uint32_t& key);  // 0x004544d0
 };
 }

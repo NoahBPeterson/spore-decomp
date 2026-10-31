@@ -3,6 +3,7 @@
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
 #include "game/types.h"
+#include "eastl/map.h"
 
 // unnamed retail callees and globals (address in the comment)
 extern "C" __declspec(dllimport) int __cdecl sscanf(const char* buffer, const char* format, ...);
@@ -120,9 +121,10 @@ struct InsertResult {  // pair<iterator, bool>
 };
 
 struct SymbolMap {  // eastl::map<unsigned, Symbol>
-    char pad0[0x14];
-    unsigned mnSize;
-    char pad1[4];
+    uint32_t mCompare;                 // +0x00  (the comparator)
+    eastl::rbtree_node_base mAnchor;   // +0x04  {right, left = begin, parent = root, color}
+    uint32_t mnSize;                   // +0x14
+    uint32_t mAllocator;               // +0x18
     InsertResult* insert(InsertResult* out, const SymbolPair& v);  // 0x0091cc30
 };
 
@@ -131,7 +133,10 @@ struct FileLineEntry {
     int mLine;
 };
 struct FileLineMap {  // eastl::map<unsigned, pair<String*, int>>
-    char pad[0x1c];
+    uint32_t mCompare;                 // +0x00  (the comparator)
+    eastl::rbtree_node_base mAnchor;   // +0x04  {right, left = begin, parent = root, color}
+    uint32_t mnSize;                   // +0x14
+    uint32_t mAllocator;               // +0x18
     FileLineEntry& operator[](const unsigned& key);  // 0x0091c9b0
 };
 

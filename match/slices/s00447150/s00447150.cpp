@@ -154,15 +154,27 @@ class cSPEditorHandleDeform { public:
     bool mDoNotPlaceHandle;                  // +0x1d5
 };
 
+struct RbAnchorNode {   // eastl::rbtree_node_base (a slice does not include src/game/include)
+    RbAnchorNode* mpNodeRight;
+    RbAnchorNode* mpNodeLeft;
+    RbAnchorNode* mpNodeParent;
+    char mColor;
+};
 struct UIntMap {  // eastl::map<uint32_t, uint32_t>
-    uint32_t mData[7];
+    uint32_t mCompare;                 // +0x00  (the comparator)
+    RbAnchorNode mAnchor;   // +0x04  {right, left = begin, parent = root, color}
+    uint32_t mnSize;                   // +0x14
+    uint32_t mAllocator;               // +0x18
     void Reserve(int n);                      // 0x00454640
     uint32_t& operator[](const uint32_t& key);  // 0x00454750
 };
 
 typedef vector<pair<uint32_t, cSPEditorHandleDeform*> > SoundParamVector;
 struct SoundParameterMap {  // eastl::map<uint32_t, vector<pair<uint32_t, cSPEditorHandleDeform*> > >
-    uint32_t mData[7];
+    uint32_t mCompare;                 // +0x00  (the comparator)
+    RbAnchorNode mAnchor;   // +0x04  {right, left = begin, parent = root, color}
+    uint32_t mnSize;                   // +0x14
+    uint32_t mAllocator;               // +0x18
     SoundParamVector& operator[](const uint32_t& key);  // 0x004544d0
 };
 
