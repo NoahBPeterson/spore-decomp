@@ -195,6 +195,8 @@ struct Holder {
     eastl::map<unsigned int, bool> flags;
     eastl::map<unsigned int, Item> items;
     int b;
+    struct NodeF { NodeF* l; NodeF* r; NodeF* up; unsigned col; unsigned key; float v; } ;
+    struct { unsigned pad; NodeF mAnchor_04; } fm;   // a stand-in: its own node type as the anchor, names swapped
     int touch(unsigned k);
 };
 int Holder::touch(unsigned k) { eastl::map<unsigned int, Item>::node_type* n = 0; return a + b + (int)k + (n != 0); }
@@ -222,9 +224,10 @@ def test_rbtree_inputs(tree_sample):
     ti = tt.defined["Holder"]
     lay = tt.layout(ti)
     trees = [f for f in lay if f.kind == "rbtree"]
-    assert [f.off for f in trees] == [8, 0x24]          # map at +4 / +0x20: the anchor 4 bytes in
-    assert not any(f.name in ("mAnchor", "mnSize", "mpNodeLeft") for f in lay)
+    assert [f.off for f in trees] == [8, 0x24, 0x44]    # map at +4 / +0x20 / +0x40: the anchor 4 bytes in
+    assert not any(f.name in ("mAnchor", "mnSize", "mpNodeLeft", "key", "col") for f in lay)
     assert {f.name: f for f in lay}["b"].off == 0x3c
+    assert trees[2].target[0] == "node" and tt.name(trees[2].target[1]) == "Holder::NodeF"
     typed = equiv.TypedInputs(tt, ti, [], {}.get)
     base = M.POOL_BASE + M.SLOT
     sizes = set()

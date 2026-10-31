@@ -1347,7 +1347,8 @@ class TypedInputs:
         self.bytes = {}
         self.nobj = 0
         self.queue = []                 # objects allocated, fields not written yet (breadth first)
-        self.post = []                  # (addr, value, size) written after the queue: rbtree keys
+        self.post = []                  # (addr, value, size) written after the queue: rbtree links and keys
+        self.node_cls = set()           # stand-in rbtree node classes (rbtree): their links are not typed
         self.heap = None                # [next free address, end] of the current cold allocation slot
         self.used = set(range(HOT_SLOTS))
         roots = 0
@@ -1455,10 +1456,12 @@ class TypedInputs:
         """Write the fields of a typed object (fields past the end of its 64 KB slot are left)."""
         lim = (addr & ~(M.SLOT - 1)) + M.SLOT if M.POOL_BASE <= addr < M.POOL_BASE + M.POOL_SIZE \
             else addr + self.tt.sizeof(cls)
+        links = 0x10 if cls in self.node_cls else 0
         for f in self.tt.layout(cls):
             if addr + f.off + f.size > lim:
                 break
-            self.field(addr + f.off, f, depth)
+            if f.off >= links:
+                self.field(addr + f.off, f, depth)
 
     def value(self, addr, kind, size, target, depth):
         """Write one non-aggregate value (a cvtypes Field kind) at addr."""
@@ -1543,57 +1546,70 @@ class TypedInputs:
 
     def rbtree(self, anchor, val, depth):
         """An eastl::rbtree at its anchor {right, left, parent, color} + mnSize: 0..3 nodes in a valid red-black
-        shape (EASTL colors: red 0, black 1; the anchor is red, the root's parent is the anchor), keys ascending."""
+        shape (EASTL colors: red 0, black 1; the anchor is red, the root's parent is the anchor), keys ascending.
+        val: the value type (at node + 0x10), ("node", T) for a stand-in node class T holding the key and value
+        itself (typed as T, the links written over it), or None (a dword key)."""
         rng, tt = self.rng, self.tt
+        node_cls = val[1] if isinstance(val, tuple) else None
+        if node_cls is not None:
+            val = None
         n = 0 if rng.random() < 0.25 else rng.randrange(1, 4)
-        vsz = tt.sizeof(val) if val is not None else 0
+        nsz = tt.sizeof(node_cls) if node_cls is not None else 0x10 + max(tt.sizeof(val) if val is not None else 0, 8)
         if n and (depth >= TYPED_DEPTH or not self.room()):
             n = 0
         nodes = []
         for _ in range(n):
-            p = self.alloc(0x10 + max(vsz, 8), 8)
+            p = self.alloc(nsz, 8)
             if not p:
                 break
             nodes.append(p)
         n = len(nodes)
+        put = lambda a, v, k: self.post.append((a, v, k))      # after the queue: a typed node's own fields first
         for k, v in enumerate((nodes[-1] if n else anchor, nodes[0] if n else anchor, 0, 0)):
-            self.put(anchor + 4 * k, v, 4)
+            put(anchor + 4 * k, v, 4)
         if n == 0:
-            self.put(anchor + 0x10, 0, 4)
+            put(anchor + 0x10, 0, 4)
             return
         # in-order nodes[0] < nodes[1] < nodes[2]; the shape: 1 = root; 2 = root + red right child; 3 = the
         # middle as root with two red children
         root = nodes[1] if n == 3 else nodes[0]
         left = {nodes[1]: nodes[0]} if n == 3 else {}
         right = {nodes[1]: nodes[2]} if n == 3 else {nodes[0]: nodes[1]} if n == 2 else {}
-        self.put(anchor + 8, root, 4)
-        self.put(anchor + 0x10, n, 4)
+        put(anchor + 8, root, 4)
+        put(anchor + 0x10, n, 4)
         parent = {c: p for p, c in list(left.items()) + list(right.items())}
         for p in nodes:
-            self.put(p, right.get(p, 0), 4)
-            self.put(p + 4, left.get(p, 0), 4)
-            self.put(p + 8, parent.get(p, anchor), 4)
-            self.put(p + 0xc, 1 if p == root else 0, 4)
-        # the key: the value itself (a set of ints), the first member of a pair/record, or (undefined value type)
-        # the dword after the node header
-        ksz = None
-        if val is not None and tt.is_class(val):
+            put(p, right.get(p, 0), 4)
+            put(p + 4, left.get(p, 0), 4)
+            put(p + 8, parent.get(p, anchor), 4)
+            put(p + 0xc, 1 if p == root else 0, 4)
+        # the key (offset in the node, size): the value itself (a set of ints), the first member of a pair or
+        # record, the stand-in node's first field after the links, or the dword after the links
+        key = None
+        if node_cls is not None:
+            f = next((f for f in tt.layout(node_cls) if f.off >= 0x10), None)
+            key = (f.off, f.size) if f is not None and f.kind in ("int", "enum", "bool") else None
+        elif val is not None and tt.is_class(val):
             lay = tt.layout(val)
             if lay and lay[0].off == 0 and lay[0].kind in ("int", "enum", "bool"):
-                ksz = lay[0].size
+                key = (0x10, lay[0].size)
         elif val is not None:
             sc = tt.scalar(val)
-            ksz = sc[1] if sc and sc[0] in ("int", "enum") else None
-        elif val is None:
-            ksz = 4
+            key = (0x10, sc[1]) if sc and sc[0] in ("int", "enum") else None
+        else:
+            key = (0x10, 4)
         for p in nodes:
-            if val is not None and tt.is_class(val):
+            if node_cls is not None:
+                self.node_cls.add(node_cls)             # fill() leaves its links (+0..+0x10) to the writes above
+                self.obj(p, node_cls, depth + 1)
+            elif val is not None and tt.is_class(val):
                 self.obj(p + 0x10, val, depth + 1)
             elif val is not None:
                 s = tt.scalar(val)
                 if s:
                     self.value(p + 0x10, s[0], s[1], s[2], depth + 1)
-        if ksz:
+        if key:
+            off, ksz = key
             # non-negative and below 2^(8*ksz-1): ascending under a signed or an unsigned less<>
             lim = (1 << (8 * ksz - 1)) - 1
             keys = set()
@@ -1605,8 +1621,8 @@ class TypedInputs:
             while len(keys) < n:
                 keys.add(k)
                 k += 1
-            for p, key in zip(nodes, sorted(keys)):
-                self.post.append((p + 0x10, key, ksz))
+            for p, kv in zip(nodes, sorted(keys)):
+                put(p + off, kv, ksz)
 
     def vector(self, addr, elem, depth):
         """first <= last <= end, 0..4 typed elements."""
@@ -6048,17 +6064,25 @@ def _test_function(sid, va, opts, log=print):
                     loop_tries += 1
                     loop_ok += a["status"][0] != "budget" and not (a["fault"] and a["fault"][0] == "pool-limit")
                 if a["status"][0] == "budget" and runner.budget < opts.budget and probes < BUDGET_PROBES:
-                    # Runaway input, or a function whose real runs are long? Retry with the full cap.
+                    # Runaway input, or a function whose real runs are long? Retry with caps 4x apart up to the
+                    # full one, and keep the first the input finishes under: the cap stays near what a real run
+                    # needs. (Raised straight to --budget, one 0.4M-instruction input of SPEditorBlock 0x4388b0
+                    # made every later runaway cost 10M: 93 cut-offs and the time limit, WEAK -> UNSUPPORTED.)
                     probes += 1
-                    low, runner.budget = runner.budget, opts.budget
-                    a2 = runner.run_side(runner.orig, inp)
+                    low = cap = runner.budget
+                    while cap < opts.budget:
+                        cap = runner.budget = min(opts.budget, cap * 4)
+                        a2 = runner.run_side(runner.orig, inp)
+                        if a2["status"][0] != "budget":
+                            break
                     if a2["status"][0] == "budget" or (a2["fault"] and a2["fault"][0] == "pool-limit"):
                         # (a run that went on to exhaust the pool is the runaway kind, not a long real one: raising
                         # the cap on it made every later runaway input of s00bf51d0 cost 1.4M instructions)
                         runner.budget = low
                     else:
                         a = a2
-                        out["budget_raised"] = "input %d needed more than %d instructions" % (i, low)
+                        out["budget_raised"] = "input %d needed more than %d instructions (cap now %d)" % (
+                            i, low, cap)
                 st = a["status"][0]
                 if st == "import" and ours_probe < OURS_IMPORT_PROBES and \
                         not M.is_heap_exhausted(a["status"][1]):
