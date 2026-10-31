@@ -3896,12 +3896,12 @@ void SP::GalaxyUI::FUN_00dee770(uint32_t id, void* refObj)
     void** dvt = *(void***)d;
     void*  img = ((VFP1)dvt[0x0c / 4])(d, 0x103c1908);
     if (img == 0) return;
-    void*  res = 0;
-    CreateImageFromResource2((void*)(size_t)id, &res, 0, -1, -1);
-    ((VFIP)dvt[0x14 / 4])(d, 0, res);
+    void*  res = 0;                     // the original keeps it in id's argument slot
+    CreateImageFromResource2(refObj, &res, 0, -1, -1);
+    ((VFIP)(*(void***)img)[0x14 / 4])(img, 0, res);
     ((VF0)wvt[0x90 / 4])(w);
-    if (refObj != 0)
-        ((VF0)(*(void***)refObj)[1])(refObj);
+    if (res != 0)
+        ((VF0)(*(void***)res)[1])(res);    // Release
 }
 
 // @ 0x00dee800
