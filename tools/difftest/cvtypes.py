@@ -29,6 +29,9 @@ Layout entries (Field) are flattened to primitive slots, offsets relative to the
               size 12, target = the element type index
   rglstring   rgl::string / tstring {pos, buf, cap, len}: size 16
   stdstring   std::basic_string<char>'s (_Bx, _Mysize, _Myres) at the _Bx offset: size 24
+  rbtree      eastl::rbtree's anchor node {right, left, parent, color} and mnSize (src/game/include/eastl/map.h,
+              the base of eastl::map/set/multimap): size 0x14 at the anchor, target = the value_type (a
+              pair<const K, V> for a map) or None when the TU never defines it
 Padding, bitfields and virtual bases are not listed (they stay soup); a union is typed as its first member
 (anonymous ones too: the first-listed of overlapping members).
 """
@@ -360,6 +363,11 @@ class TypeTable:
                     if c and c not in cands:
                         cands.append(c)
                 out.append(Field(base, "vfptr", 4, tuple(cands), nm))
+        tree = self._rbtree(fl, members)
+        if tree is not None:
+            anchor, val = tree
+            out.append(Field(base + anchor, "rbtree", 0x14, val, nm))
+            members = [d for d in members if d["name"] not in ("mAnchor", "mnSize")]
         vec = self._vector_triples(members)
         tail = {o + k for o in vec for k in (4, 8)}     # _Mylast / _Myend of a triple
         # an anonymous union's members are listed as members of the enclosing class at overlapping offsets
@@ -426,6 +434,20 @@ class TypeTable:
                 s = self.scalar(elem)
                 if s and s[0] != "soup":
                     out.append(Field(off + i * esz, s[0], s[1], s[2], "%s[%d]" % (name, i)))
+
+    def _rbtree(self, fl, members):
+        """(anchor offset, value type index or None) of an eastl::rbtree's own members, else None."""
+        by = {d["name"]: d for d in members}
+        a, n = by.get("mAnchor"), by.get("mnSize")
+        if a is None or n is None or n["off"] != a["off"] + 0x10 or \
+                self.name(a["type"]) != "eastl::rbtree_node_base" or self.sizeof(a["type"]) != 0x10:
+            return None
+        val = next((d["type"] for sl, d in fl if sl == LF_NESTTYPE and d["name"] == "value_type"), None)
+        if val is not None:
+            val = self.strip(val)
+            if not (self.is_class(val) and self.sizeof(val)) and not self.scalar(val):
+                val = None                              # declared but never instantiated in this TU
+        return a["off"], val
 
     def _is_rglstring(self, members):
         sig = [(d["name"], d["off"]) for d in members]

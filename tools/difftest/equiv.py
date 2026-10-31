@@ -1165,6 +1165,9 @@ class TypedInputs:
       float/double   the soup's float distributions
       vector     first <= last <= end with 0..4 typed elements (empty: all NULL or all equal)
       rglstring / stdstring  consistent buffer, length and capacity
+      rbtree     an eastl map/set of 0..3 nodes: a valid red-black tree (root black, children red) whose anchor
+                 holds leftmost/rightmost/root, nodes' parents linked, keys distinct and ascending (an int-like
+                 key; a value type the TU never defines gets a dword key and soup after it)
     Padding, unions, bitfields and unknown pointers stay soup; a dword only partly covered by typed fields
     has its other bytes zeroed. Mutations, fault repair and invariants act on top of the result."""
 
@@ -1344,6 +1347,7 @@ class TypedInputs:
         self.bytes = {}
         self.nobj = 0
         self.queue = []                 # objects allocated, fields not written yet (breadth first)
+        self.post = []                  # (addr, value, size) written after the queue: rbtree keys
         self.heap = None                # [next free address, end] of the current cold allocation slot
         self.used = set(range(HOT_SLOTS))
         roots = 0
@@ -1376,6 +1380,8 @@ class TypedInputs:
         while k < len(self.queue):
             self.fill(*self.queue[k])
             k += 1
+        for a, v, n in self.post:                       # tree keys, over the typed values written above
+            self.put(a, v, n)
         for a in sorted({a & ~3 for a in self.bytes}):
             pool = M.POOL_BASE <= a < M.POOL_BASE + M.POOL_SIZE
             old = b"\0" * 4 if pool else self.image(a, 4)
@@ -1495,6 +1501,8 @@ class TypedInputs:
                 self.bytes[addr + k] = ch
         elif f.kind == "vector":
             self.vector(addr, f.target, depth)
+        elif f.kind == "rbtree":
+            self.rbtree(addr, f.target, depth)
         elif f.kind == "rglstring":                     # {pos, buf, cap, len}; c_str() is buf ? buf : &buf
             n = rng.randrange(12)
             if n == 0 and rng.random() < 0.5:
@@ -1532,6 +1540,73 @@ class TypedInputs:
             self.put(addr + 16, n, 4)
         else:
             self.value(addr, f.kind, f.size, f.target, depth)
+
+    def rbtree(self, anchor, val, depth):
+        """An eastl::rbtree at its anchor {right, left, parent, color} + mnSize: 0..3 nodes in a valid red-black
+        shape (EASTL colors: red 0, black 1; the anchor is red, the root's parent is the anchor), keys ascending."""
+        rng, tt = self.rng, self.tt
+        n = 0 if rng.random() < 0.25 else rng.randrange(1, 4)
+        vsz = tt.sizeof(val) if val is not None else 0
+        if n and (depth >= TYPED_DEPTH or not self.room()):
+            n = 0
+        nodes = []
+        for _ in range(n):
+            p = self.alloc(0x10 + max(vsz, 8), 8)
+            if not p:
+                break
+            nodes.append(p)
+        n = len(nodes)
+        for k, v in enumerate((nodes[-1] if n else anchor, nodes[0] if n else anchor, 0, 0)):
+            self.put(anchor + 4 * k, v, 4)
+        if n == 0:
+            self.put(anchor + 0x10, 0, 4)
+            return
+        # in-order nodes[0] < nodes[1] < nodes[2]; the shape: 1 = root; 2 = root + red right child; 3 = the
+        # middle as root with two red children
+        root = nodes[1] if n == 3 else nodes[0]
+        left = {nodes[1]: nodes[0]} if n == 3 else {}
+        right = {nodes[1]: nodes[2]} if n == 3 else {nodes[0]: nodes[1]} if n == 2 else {}
+        self.put(anchor + 8, root, 4)
+        self.put(anchor + 0x10, n, 4)
+        parent = {c: p for p, c in list(left.items()) + list(right.items())}
+        for p in nodes:
+            self.put(p, right.get(p, 0), 4)
+            self.put(p + 4, left.get(p, 0), 4)
+            self.put(p + 8, parent.get(p, anchor), 4)
+            self.put(p + 0xc, 1 if p == root else 0, 4)
+        # the key: the value itself (a set of ints), the first member of a pair/record, or (undefined value type)
+        # the dword after the node header
+        ksz = None
+        if val is not None and tt.is_class(val):
+            lay = tt.layout(val)
+            if lay and lay[0].off == 0 and lay[0].kind in ("int", "enum", "bool"):
+                ksz = lay[0].size
+        elif val is not None:
+            sc = tt.scalar(val)
+            ksz = sc[1] if sc and sc[0] in ("int", "enum") else None
+        elif val is None:
+            ksz = 4
+        for p in nodes:
+            if val is not None and tt.is_class(val):
+                self.obj(p + 0x10, val, depth + 1)
+            elif val is not None:
+                s = tt.scalar(val)
+                if s:
+                    self.value(p + 0x10, s[0], s[1], s[2], depth + 1)
+        if ksz:
+            # non-negative and below 2^(8*ksz-1): ascending under a signed or an unsigned less<>
+            lim = (1 << (8 * ksz - 1)) - 1
+            keys = set()
+            for _ in range(32):
+                if len(keys) == n:
+                    break
+                keys.add(min(self.small() & lim, lim))
+            k = 0
+            while len(keys) < n:
+                keys.add(k)
+                k += 1
+            for p, key in zip(nodes, sorted(keys)):
+                self.post.append((p + 0x10, key, ksz))
 
     def vector(self, addr, elem, depth):
         """first <= last <= end, 0..4 typed elements."""

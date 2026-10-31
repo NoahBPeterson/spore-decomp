@@ -185,3 +185,74 @@ def test_abstract_vtable_replaced():
     assert typed.concrete(0x100) == [0x200]          # 0x300 overrides slot 1, 0x400 is abstract, 0x500 a duplicate
     assert typed.vtable(("??_7A@@6B@",)) == 0x200
     assert typed.vtable(("??_7X@@6B@", "??_7B@@6B@")) == 0x300 and typed.concrete(0x300) == []
+
+
+TREE_SAMPLE = r"""
+#include "eastl/map.h"
+struct Item { unsigned id; float w; };
+struct Holder {
+    int a;
+    eastl::map<unsigned int, bool> flags;
+    eastl::map<unsigned int, Item> items;
+    int b;
+    int touch(unsigned k);
+};
+int Holder::touch(unsigned k) { eastl::map<unsigned int, Item>::node_type* n = 0; return a + b + (int)k + (n != 0); }
+"""
+
+
+@pytest.fixture(scope="module")
+def tree_sample():
+    d = os.path.join(ROOT, "work", "difftest", "mut")
+    os.makedirs(d, exist_ok=True)
+    src = os.path.join(d, "cvtypes_tree_sample.cpp")
+    if not os.path.exists(src) or open(src).read() != TREE_SAMPLE:
+        open(src, "w").write(TREE_SAMPLE)
+    obj, log = S.compile_obj(src, list(S.DEFAULT_FLAGS) + ["/Z7", "/I" + os.path.join(ROOT, "src", "game", "include")])
+    assert obj, log
+    tt, _ = CV.load(Coff(obj))
+    return tt
+
+
+def test_rbtree_inputs(tree_sample):
+    """An eastl::map member is an rbtree field; typed inputs build a well-formed red-black tree with ascending keys."""
+    import equiv
+    import machine as M
+    tt = tree_sample
+    ti = tt.defined["Holder"]
+    lay = tt.layout(ti)
+    trees = [f for f in lay if f.kind == "rbtree"]
+    assert [f.off for f in trees] == [8, 0x24]          # map at +4 / +0x20: the anchor 4 bytes in
+    assert not any(f.name in ("mAnchor", "mnSize", "mpNodeLeft") for f in lay)
+    assert {f.name: f for f in lay}["b"].off == 0x3c
+    typed = equiv.TypedInputs(tt, ti, [], {}.get)
+    base = M.POOL_BASE + M.SLOT
+    sizes = set()
+    for seed in range(60):
+        inp = _Inp()
+        assert typed.build(_Gen(), inp, random.Random(seed)) == 1
+        po = inp.pool_over
+        for f in trees:
+            anc = base + f.off
+            right, left, root, n = po[anc], po[anc + 4], po[anc + 8], po[anc + 0x10]
+            sizes.add(n)
+            if n == 0:
+                assert right == left == anc and root == 0
+                continue
+            assert po[root + 8] == anc and po[root + 0xc] & 0xff == 1   # the root: black, parent = anchor
+            order, node = [], left                      # in-order walk, as eastl::RBTreeIncrement does
+            while node != anc and len(order) <= n:
+                order.append(node)
+                if po.get(node, 0):
+                    node = po[node]
+                    while po.get(node + 4, 0):
+                        node = po[node + 4]
+                else:
+                    p = po[node + 8]
+                    while p != anc and node == po.get(p, 0):
+                        node, p = p, po[p + 8]
+                    node = p
+            assert len(order) == n and order[-1] == right
+            keys = [po[x + 0x10] for x in order]
+            assert keys == sorted(keys) and len(set(keys)) == n
+    assert sizes == {0, 1, 2, 3}
