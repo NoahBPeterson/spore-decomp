@@ -12,6 +12,7 @@
 #include "SP/cGameInfo.h"
 #include "SP/cPropertyList.h"
 #include "cSPUILayout.h"
+#include "eastl/map.h"
 #include "SP/cStarManager.h"
 #include "EA/Variant.h"
 #include "SP/cSPUIAssetBrowser.h"
@@ -1479,13 +1480,10 @@ struct RBNode_s00de_e450 {
     uint32_t  mKey;                   // +0x10
     union { uint32_t mValue; byte mFlag; };   // +0x14
 };
-struct Rbtree {                       // eastl::rbtree header (0x18 bytes)
-    uint32_t  m00;                    // +0x00
-    void*     mpAnchor;               // +0x04  (sentinel "node"; &mpAnchor is the end node)
-    void*     mpRoot;                 // +0x08
-    void*     mp0c;                   // +0x0c
-    byte      mFlag;                  // +0x10
-    char      pad_11[0x03];
+struct Rbtree {                       // eastl::map<uint32_t, bool> header (0x18 bytes, eastl/map.h's members)
+    typedef eastl::pair<const uint32_t, bool> value_type;
+    uint32_t  m00;                    // +0x00  (the comparator)
+    eastl::rbtree_node_base mAnchor;  // +0x04  {right, left = begin, parent = root, color}; &mAnchor is end()
     uint32_t  mnSize;                 // +0x14
 
     void DoNukeSubtree(void* node);   // 0x009a9600
@@ -3958,9 +3956,9 @@ uint32_t __stdcall FUN_00dee890(void* editor)
 void SP::GalaxyUI::FUN_00dee9a0(float a, float b)
 {
     Rbtree* tree = &mMap40;
-    RBNode_s00de_e450* end  = (RBNode_s00de_e450*)&tree->mpAnchor;
+    RBNode_s00de_e450* end  = (RBNode_s00de_e450*)&tree->mAnchor;
     RBNode_s00de_e450* n;
-    for (n = (RBNode_s00de_e450*)tree->mpRoot; n != end; n = RBTreeIncrement(n)) {
+    for (n = (RBNode_s00de_e450*)tree->mAnchor.mpNodeLeft; n != end; n = RBTreeIncrement(n)) {
         void* w = mLayout.FindWindowByID(n->mKey, 1);
         if (w == 0) continue;
         void** vt = *(void***)w;
@@ -3982,7 +3980,7 @@ void SP::GalaxyUI::FUN_00dee9a0(float a, float b)
             c  = ((VFP)cvt[0x10 / 4])(c);
         }
     }
-    for (n = (RBNode_s00de_e450*)tree->mpRoot; n != end; n = RBTreeIncrement(n)) {
+    for (n = (RBNode_s00de_e450*)tree->mAnchor.mpNodeLeft; n != end; n = RBTreeIncrement(n)) {
         void* w = mLayout.FindWindowByID(n->mKey, 1);
         if (w == 0) continue;
         void** vt = *(void***)w;
@@ -4055,18 +4053,18 @@ void SP::GalaxyUI::FUN_00deed40()
         mpRef614 = 0;
         ((VF0)(*(void***)r)[2])(r);
     }
-    mMap520.DoNukeSubtree(mMap520.mp0c);
-    mMap520.mpRoot  = &mMap520.mpAnchor;
-    mMap520.mp0c    = 0;
-    mMap520.mFlag   = 0;
-    mMap520.mnSize  = 0;
-    mMap520.mpAnchor = &mMap520.mpAnchor;
-    mMap40.DoNukeSubtree(mMap40.mp0c);
-    mMap40.mp0c     = 0;
-    mMap40.mFlag    = 0;
-    mMap40.mnSize   = 0;
-    mMap40.mpRoot   = &mMap40.mpAnchor;
-    mMap40.mpAnchor = &mMap40.mpAnchor;
+    mMap520.DoNukeSubtree(mMap520.mAnchor.mpNodeParent);
+    mMap520.mAnchor.mpNodeLeft   = &mMap520.mAnchor;
+    mMap520.mAnchor.mpNodeParent = 0;
+    mMap520.mAnchor.mColor       = 0;
+    mMap520.mnSize               = 0;
+    mMap520.mAnchor.mpNodeRight  = &mMap520.mAnchor;
+    mMap40.DoNukeSubtree(mMap40.mAnchor.mpNodeParent);
+    mMap40.mAnchor.mpNodeParent = 0;
+    mMap40.mAnchor.mColor       = 0;
+    mMap40.mnSize               = 0;
+    mMap40.mAnchor.mpNodeLeft   = &mMap40.mAnchor;
+    mMap40.mAnchor.mpNodeRight  = &mMap40.mAnchor;
 }
 
 // @ 0x00deee80
@@ -4097,7 +4095,7 @@ char SP::GalaxyUI::FUN_00deee80(int mode)
 void SP::GalaxyUI::FUN_00deef20(unsigned a, unsigned b, void* map)
 {
     Rbtree* tree = (Rbtree*)map;
-    void*   end  = &tree->mpAnchor;
+    void*   end  = &tree->mAnchor;
     void*   it[2];
     uint32_t key = b;
     void**  found = (void**)RbtreeFind(it, &key, map);
