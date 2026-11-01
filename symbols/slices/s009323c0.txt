@@ -1,13 +1,13 @@
-009323c0 GetSystemPath  # dc: switches on CSIDL bucket, SHGetFolderPathW, appends separator
+009323c0 ?GetSystemPath@@YAHHPA_W_N@Z  # GetSystemPath migrated from s009323c0 (verbatim, slice spelling)
 00932580 EA::IO::CreateTempFile  # pdb-area: _time64 + Snprintf16 temp-name loop + FileStream
-009326b0 DeleteDirectoryContents  # dc: recursive DeleteFileW/RemoveDirectory walk
-00932890 RemoveDirectoryRecursive  # dc: RemoveDirectoryW wrapper, recursive path calls 009326b0
+009326b0 ?DeleteDirectoryContents@@YA_NPA_WI@Z  # DeleteDirectoryContents migrated from s009323c0 (verbatim, slice spelling)
+00932890 ?RemoveDirectoryRecursive@@YAIPB_WD@Z  # RemoveDirectoryRecursive migrated from s009323c0 (verbatim, slice spelling)
 00932960 CreateDirectoryPath  # dc: component-wise MakeOneDirectory
 00932ae0 EnsureDirectoryExists  # dc: GetFileAttributesW + CreateDirectoryPath
 00932b20 CopyDirectoryTree  # dc: recursive CopyFileW over WalkDirectory listing
 00932d00 ?InitCRC32Table@Hash@EA@@YAXXZ  # EA::Hash::InitCRC32Table migrated from s009323c0
 00932da0 EA::Hash::CRC32  # pdb callee-single
-00932df0 EA::Hash::CRC64  # dc: dual-table 64-bit CRC
+00932df0 ?CRC64@@YA_KPBEH_K_N@Z  # CRC64 migrated from s009323c0 (verbatim, slice spelling)
 00932e50 ?FNV1@@YAIPBEHI@Z  # FNV1 migrated from s009323c0 (verbatim, slice spelling)
 00932e80 ?FNV1_String8@@YAIPBDIH@Z  # FNV1_String8 migrated from s009323c0 (verbatim, slice spelling)
 00932f30 ?FNV1_String16@@YAIPB_WIH@Z  # FNV1_String16 migrated from s009323c0 (verbatim, slice spelling)

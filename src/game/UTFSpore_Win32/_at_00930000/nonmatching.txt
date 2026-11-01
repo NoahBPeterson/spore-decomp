@@ -1,0 +1,25 @@
+# va  diff-bytes  reason
+009323c0 327 GetSystemPath: complete reconstruction; SHGetFolderPathW retry branch and the trailing wcslen pointer loop schedule differently
+009326b0 330 DeleteDirectoryContents: complete; the Deque init/DoInit sequence and the iteration/RemoveRecursive tail schedule differently (equiv UNSUPPORTED: only 0/400 valid inputs, FindFirstFileW import + write faults)
+00932890 124 RemoveDirectoryRecursive: complete; the redundant strlen in the separator branch and the pointer-copy loop differ
+00936110 393 MersenneTwister::Reload: complete MT reload (two loops + wrap-around); cl's unrolled counter/rotation schedule differs. The retail tail leaves mState[0] with its low byte masked by the scalar `and al,1` in eax, so the slice declares Reload returning that value (dead for the game, observable to LTCG callers) -- equiv PASS 400 valid inputs, 100% coverage; only byte shape differs (size 401 vs 217)
+009361f0 67 MersenneTwister::InitState: complete; register allocation differs (seed kept in ebx vs eax) and store/or split
+009362d0 15 MersenneTwister::GenerateDouble: complete; double clamp uses fcomp/fnstsw instead of fcomi
+0093bbf0 44 complete: MemoryStream reads via shared data pointer, schedule differs
+0093c6f0 10 complete: fputs-to-stderr wrapper, call setup differs
+0093d110 219 complete; GetToken basic-block layout differs (bool delimiter test placement)
+0093d6f0 64 complete; cl folds (p+n)-p, original kept it unfolded
+0093d740 677 complete; wide-string command tokenizer (1074B; reached from the command server as ParseCmd): trims leading blanks, copies the string into a working buffer, scans for the separator char while counting double quotes, then appends each token to the output vector<WStr> via WStr::Assign (trailing-blank trim + surrounding-quote strip) and returns the token count; reconstructed; equiv WEAK (202 valid inputs, 39.2% coverage - the harness discards most inputs on output-vector pointer faults so the deep paths are not exercised); flags /O2 /MD /Gy /EHsc /TP; helper inlining (WStr::erase/Resize) and register scheduling differ
+0093dbc0 66 complete; SetVariant8 wrote a full dword into value0 (zeroing the high half); now writes only the low word via value0w; the Construct call is now emitted; equiv PASS; flags /O2 /MD /Gy /EHsc /TP; ax-vs-dx scheduling differs
+0093dcc0 118 complete; EASTL hashtable bucket rebuild (rehash); node re-linking schedule differs
+0093dd80 436 complete; EA::Variant::Construct/Assign (414B): the fast paths (invariant bit, kfConstruct, kfRawPointer, small in-place copy) plus the slow path that builds {dataArg, typeArg, flagsArg} Variants and calls the global Variant type-proc at 0x0154eb48 with op 2 (construct); equiv PASS (300 valid inputs, 81.1% coverage); flags /O2 /MD /Gy /EHsc /TP; local-Variant ctor/dtor inlining and store scheduling differ
+0093df20 49 complete; SetBool (type 2): the EA::Variant::Construct call was dropped because the helper was an empty inline stub; now a real out-of-line member at 0x0093dd80; equiv PASS; flags /O2 /MD /Gy /EHsc /TP; ax-vs-dx/movzx scheduling differs
+0093dfa0 67 complete; SetUInt16 (type 3): Construct call restored (was an empty inline stub); equiv PASS; flags /O2 /MD /Gy /EHsc /TP; ax-vs-dx scheduling differs
+0093e020 65 complete; SetUInt8 (type 5): Construct call restored; equiv PASS; flags /O2 /MD /Gy /EHsc /TP; ax-vs-dx scheduling differs
+0093e0a0 65 complete; SetInt8 (type 6): Construct call restored; equiv PASS; flags /O2 /MD /Gy /EHsc /TP; ax-vs-dx scheduling differs
+0093e120 67 complete; SetUInt16b (type 7): Construct call restored; equiv PASS; flags /O2 /MD /Gy /EHsc /TP; ax-vs-dx scheduling differs
+0093e1a0 71 complete; SetPtr (type 0xb, 8-byte copy): Construct call restored; equiv PASS; flags /O2 /MD /Gy /EHsc /TP; store/register scheduling differs
+0093e220 65 complete; SetDouble (type 0xe, fld/fstp copy): Construct call restored; equiv PASS; flags /O2 /MD /Gy /EHsc /TP; ax-vs-dx scheduling differs
+0093e3f0 75 complete; EASTL hashtable find: original returns the out pointer in eax, the void declaration dropped it; now void* returning out; equiv PASS; flags /O2 /MD /Gy /EHsc /TP; bucket-walk scheduling differs
+0093e470 165 complete; EASTL hashtable insert (rehash on grow + node alloc)
+0093e5f0 8348 complete EA::Variant default type proc (destruct/construct/convert matrix); flags /O2 /MD /Gy /TP /arch:SSE /GS-; register choice (esi/edi), shared temp slots (frame 0x174 vs 0x3ac) and block merging differ

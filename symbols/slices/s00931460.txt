@@ -1,3 +1,4 @@
+00931770 ?EnsureTrailingBackslash@@YA_NPAUWString@@@Z  # EnsureTrailingBackslash migrated from s00931460 (verbatim, slice spelling)
 009317e0 ?SetPath8@FileStream@@UAEXPBD@Z  # FileStream::SetPath8 migrated from s00931460 (verbatim, slice spelling)
 00931810 ?SetPath16@FileStream@@UAEXPB_W@Z  # FileStream::SetPath16 migrated from s00931460 (verbatim, slice spelling)
 00931840 ?GetPath8@FileStream@@UAEIPADI@Z  # FileStream::GetPath8 migrated from s00931460 (verbatim, slice spelling)
@@ -16,3 +17,4 @@
 00931da0 ??0FileStream@@QAE@PBD@Z  # FileStream::FileStream migrated from s00931460 (verbatim, slice spelling)
 00931e10 ??0FileStream@@QAE@PB_W@Z  # FileStream::FileStream migrated from s00931460 (verbatim, slice spelling)
 00931e70 ??1FileStream@@UAE@XZ  # FileStream::~FileStream migrated from s00931460 (verbatim, slice spelling)
+00931f20 ?Create@File@@YA_NPB_W_N@Z  # Create migrated from s00931460 (verbatim, slice spelling)

@@ -1,0 +1,19 @@
+# source  symbol  va  flags
+../src/game/UTFSpore_Win32/_at_00930000.cpp  ?EnsureTrailingBackslash@@YA_NPAUWString@@@Z  00931770  /O2 /MD /Gy /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/_at_00930000.cpp  ?Create@File@@YA_NPB_W_N@Z  00931f20  /O2 /MD /Gy /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/_at_00930000.cpp  ?CRC64@@YA_KPBEH_K_N@Z  00932df0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/_at_00930000.cpp  ?GetApplicationPath@@YAXPA_W@Z  00935d30  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/_at_00930000.cpp  ?WideSpawn@@YAHPB_WPBQB_W_N@Z  00935d60  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/_at_00930000.cpp  ?RandomBytes@@YAXPAEI@Z  00936050  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/_at_00930000.cpp  ?Generate@RandomMersenneTwister_s0093_6090@Random@EA@@QAEIXZ  00936250  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/_at_00930000.cpp  ?GenerateUInt32@RandomMersenneTwister_s0093_6090@Random@EA@@QAEII@Z  009362b0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/_at_00930000.cpp  ?SetSeed@RandomMersenneTwister_s0093_6090@Random@EA@@QAEPAV123@I@Z  00936300  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/_at_00930000.cpp  ?StreamCopy@@YAHPAVIOStream@@0I@Z  0093a610  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/UTFSpore_Win32/_at_00930000.cpp  ?ReadUInt16@@YA_NPAVIOStream@@PAGHH@Z  0093a700  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/UTFSpore_Win32/_at_00930000.cpp  ?Release@FixedMemoryStream@IO@EA@@UAEHXZ  0093b8b0  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/_at_00930000.cpp  ?GetProperty@GraphicsFactoryAsyncRequest@IO@EA@@QAEMH@Z  0093bab0  /O2 /MD /Gy /TP /arch:SSE2 /Isrc/game/include
+../src/game/UTFSpore_Win32/_at_00930000.cpp  ?SetProperty@GraphicsFactoryAsyncRequest@IO@EA@@QAEXHM@Z  0093bb40  /O2 /MD /Gy /TP /arch:SSE2 /Isrc/game/include
+../src/game/UTFSpore_Win32/_at_00930000.cpp  ?Clear@MemoryStream_s0093_b9e0@IO@EA@@QAE_NXZ  0093c320  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/_at_00930000.cpp  ?FUN_0093c3f0@@YIHPAPAX@Z  0093c3f0  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/_at_00930000.cpp  ?FUN_0093c430@@YIPAXPAPAX@Z  0093c430  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/_at_00930000.cpp  ?GetTextLine@Text@EA@@YAPBDPBD0PAPBD@Z  0093d0b0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include

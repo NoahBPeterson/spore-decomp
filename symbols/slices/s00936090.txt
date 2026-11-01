@@ -1,12 +1,12 @@
 00936090 ?SetSeed@RandomLinearCongruential@Random@EA@@QAEXI@Z  # EA::Random::RandomLinearCongruential::SetSeed migrated from s00936090
 009360b0 ?RandomUint32Uniform@RandomLinearCongruential@Random@EA@@QAEIXZ  # EA::Random::RandomLinearCongruential::RandomUint32Uniform migrated from s00936090
 009360d0 ?RandomDoubleUniform@RandomLinearCongruential@Random@EA@@QAENXZ  # EA::Random::RandomLinearCongruential::RandomDoubleUniform migrated from s00936090
-00936110 EA::Random::RandomMersenneTwister::Reload  # dc: MT19937 reload (227/396/1 split)
-009361f0 EA::Random::RandomMersenneTwister::InitState  # dc: seed expansion loop + Reload
-00936250 EA::Random::RandomMersenneTwister::Generate  # dc: tempering
-009362b0 EA::Random::RandomMersenneTwister::GenerateUInt32  # dc: (gen*max)>>32
-009362d0 EA::Random::RandomMersenneTwister::GenerateDouble  # dc: double clamp
-00936300 EA::Random::RandomMersenneTwister::SetSeed  # dc: mpNext=0; count=624; InitState
+00936110 ?Reload@RandomMersenneTwister_s0093_6090@Random@EA@@QAEIXZ  # RandomMersenneTwister_s0093_6090::Reload migrated from s00936090 (verbatim, slice spelling)
+009361f0 ?InitState@RandomMersenneTwister_s0093_6090@Random@EA@@QAEXI@Z  # RandomMersenneTwister_s0093_6090::InitState migrated from s00936090 (verbatim, slice spelling)
+00936250 ?Generate@RandomMersenneTwister_s0093_6090@Random@EA@@QAEIXZ  # RandomMersenneTwister_s0093_6090::Generate migrated from s00936090 (verbatim, slice spelling)
+009362b0 ?GenerateUInt32@RandomMersenneTwister_s0093_6090@Random@EA@@QAEII@Z  # RandomMersenneTwister_s0093_6090::GenerateUInt32 migrated from s00936090 (verbatim, slice spelling)
+009362d0 ?GenerateDouble@RandomMersenneTwister_s0093_6090@Random@EA@@QAENXZ  # RandomMersenneTwister_s0093_6090::GenerateDouble migrated from s00936090 (verbatim, slice spelling)
+00936300 ?SetSeed@RandomMersenneTwister_s0093_6090@Random@EA@@QAEPAV123@I@Z  # RandomMersenneTwister_s0093_6090::SetSeed migrated from s00936090 (verbatim, slice spelling)
 00936330 ?CanUnload@SharedLibrary@EA@@UBE_NXZ  # EA::SharedLibrary::CanUnload migrated from s00936090
 00936380 ?Reload@SharedLibrary@EA@@UAE_N_N@Z  # EA::SharedLibrary::Reload migrated from s00936090
 009363b0 ?GetVersionInfo@SharedLibrary@EA@@UBEPBUVersionInfo@12@XZ  # EA::SharedLibrary::GetVersionInfo migrated from s00936090

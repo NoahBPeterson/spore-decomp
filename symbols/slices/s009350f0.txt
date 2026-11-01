@@ -7,12 +7,12 @@
 00935ad0 ?EA_ReleaseOSGlobal@@YA_NPAUOSGlobalNode@@@Z  # EA_ReleaseOSGlobal migrated from s009350f0 (verbatim, slice spelling)
 00935b70 ?InitOSGlobalSystem@@YA_NXZ  # InitOSGlobalSystem migrated from s009350f0 (verbatim, slice spelling)
 00935c80 ?GetOSGlobal@@YAPAUOSGlobalNode@@HP6APAXXZ@Z  # GetOSGlobal migrated from s009350f0 (verbatim, slice spelling)
-00935d30 GetApplicationPath  # GetModuleFileNameW(buf,0x104) wrapper
-00935d60 WideSpawn  # tail-jumps to _wspawnv(_P_WAIT/_P_DETACH)
+00935d30 ?GetApplicationPath@@YAXPA_W@Z  # GetApplicationPath migrated from s009350f0 (verbatim, slice spelling)
+00935d60 ?WideSpawn@@YAHPB_WPBQB_W_N@Z  # WideSpawn migrated from s009350f0 (verbatim, slice spelling)
 00935db0 ?Spawn@Process@EA@@YAHPBDPBQBD_N@Z  # EA::Process::Spawn migrated from s009350f0
 00935e00 ?WideSearchEnvironmentPath@@YA_NPB_WPA_W0@Z  # WideSearchEnvironmentPath migrated from s009350f0 (verbatim, slice spelling)
 00935e30 ?SearchEnvironmentPath@Process@EA@@YA_NPBDPAD0@Z  # EA::Process::SearchEnvironmentPath migrated from s009350f0
 00935e60 ?OpenFile@Process@EA@@YA_NPB_W@Z  # EA::Process::OpenFile migrated from s009350f0
 00935f80 ?Process_OpenFileA@@YAXPBD@Z  # Process_OpenFileA migrated from s009350f0 (verbatim, slice spelling)
 00935fb0 ?OpenBrowser@Process@EA@@YA_NPB_W_N@Z  # EA::Process::OpenBrowser migrated from s009350f0
-00936050 RandomBytes  # __rdtsc-seeded byte generator
+00936050 ?RandomBytes@@YAXPAEI@Z  # RandomBytes migrated from s009350f0 (verbatim, slice spelling)
