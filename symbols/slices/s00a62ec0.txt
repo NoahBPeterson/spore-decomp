@@ -1,4 +1,3 @@
-# Slice s00a62ec0 symbols  (EA::Audio::Eapd PD wrapper family + EASTL/EAPd map helpers)
 00a62ec0  EA::Audio::Eapd::x_input_new
 00a62f30  EA::Audio::Eapd::input_bang
 00a62f40  EA::Audio::Eapd::input_new_float_local
@@ -10,23 +9,23 @@
 00a63090  EA::Audio::Eapd::pause_float
 00a630c0  EA::Audio::Eapd::x_input_setup
 00a632e0  EA::Audio::Eapd::instance_new
-00a63310  EA::Audio::Eapd::busy_float
+00a63310 ?busy_float@Eapd@Audio@EA@@YAXPAUXThisInstance@123@M@Z  # busy_float migrated from s00a62ec0 (verbatim, slice spelling)
 00a63350  EA::Audio::Eapd::x_thisinstance_setup
-00a633e0  EA::Audio::Eapd::XThisInstance::StoreFlag
-00a634a0  EA::Audio::Eapd::InputParseSymbols
+00a633e0 ?StoreFlag@XThisInstance@Eapd@Audio@EA@@QAE_NE@Z  # XThisInstance::StoreFlag migrated from s00a62ec0 (verbatim, slice spelling)
+00a634a0 ?InputParseSymbols@Eapd@Audio@EA@@YI_NHPAPADPAD0PAUPgSymbol@123@PAH3@Z  # InputParseSymbols migrated from s00a62ec0 (verbatim, slice spelling)
 00a635d0  EA::Audio::Eapd::GetGroupSymbol
-00a63640  EA::Audio::Eapd::EapdMapBase::DestroyAll
-00a63680  EA::Audio::Eapd::EapdMapBase::HasKeyEvent
-00a636b0  EA::Audio::Eapd::EapdMapBase::HasKeyField
-00a636e0  EA::Audio::Eapd::EapdMapBase::Insert28
-00a63770  EA::Audio::Eapd::EapdMapBase::Insert1c
-00a637f0  EA::Audio::Eapd::EapdMapBase::Insert18
-00a63860  EA::Audio::Eapd::EapdMapBase::EraseEvent
-00a63900  EA::Audio::Eapd::EapdMapBase::FindEventSample
-00a63a50  EA::Audio::Eapd::EapdMapBase::FindOrInsert18
-00a63b40  EA::Audio::Eapd::EapdMapBase::~EapdMapBase
-00a63b90  EA::Audio::Eapd::EapdMapBase::ClearAll
-00a63bf0  EA::Audio::Eapd::EapdMapBase::FindOrInsert28
-00a63c30  EA::Audio::Eapd::EapdMapBase::Init
-00a63c90  EA::Audio::Eapd::EapdAssetManager::Init
-00a63d20  EA::Audio::Eapd::EapdAssetManager::~EapdAssetManager()
+00a63640 ?DestroyAll@EapdMapBase@Eapd@Audio@EA@@QAEXPAX@Z  # EapdMapBase::DestroyAll migrated from s00a62ec0 (verbatim, slice spelling)
+00a63680 ?HasKeyEvent@EapdMapBase@Eapd@Audio@EA@@QAE_NI@Z  # EapdMapBase::HasKeyEvent migrated from s00a62ec0 (verbatim, slice spelling)
+00a636b0 ?HasKeyField@EapdMapBase@Eapd@Audio@EA@@QAE_NIH@Z  # EapdMapBase::HasKeyField migrated from s00a62ec0 (verbatim, slice spelling)
+00a636e0 ?Insert28@EapdMapBase@Eapd@Audio@EA@@QAEPAXPAPAXPAXPAID@Z  # EapdMapBase::Insert28 migrated from s00a62ec0 (verbatim, slice spelling)
+00a63770 ?Insert1c@EapdMapBase@Eapd@Audio@EA@@QAEXPAIPAX0D@Z  # EapdMapBase::Insert1c migrated from s00a62ec0 (verbatim, slice spelling)
+00a637f0 ?Insert18@EapdMapBase@Eapd@Audio@EA@@QAEXPAIPAX0D@Z  # EapdMapBase::Insert18 migrated from s00a62ec0 (verbatim, slice spelling)
+00a63860 ?EraseEvent@EapdMapBase@Eapd@Audio@EA@@QAE_NIPAUPgSymbol@234@@Z  # EapdMapBase::EraseEvent migrated from s00a62ec0 (verbatim, slice spelling)
+00a63900 ?FindEventSample@EapdMapBase@Eapd@Audio@EA@@QAE_NIIHIIIPAI0@Z  # EapdMapBase::FindEventSample migrated from s00a62ec0 (verbatim, slice spelling)
+00a63a50 ?FindOrInsert18@EapdMapBase@Eapd@Audio@EA@@QAEPAXPAPAXPAI@Z  # EapdMapBase::FindOrInsert18 migrated from s00a62ec0 (verbatim, slice spelling)
+00a63b40 ??1EapdMapBase@Eapd@Audio@EA@@QAE@XZ  # EapdMapBase::~EapdMapBase migrated from s00a62ec0 (verbatim, slice spelling)
+00a63b90 ?ClearAll@EapdMapBase@Eapd@Audio@EA@@QAE_NXZ  # EapdMapBase::ClearAll migrated from s00a62ec0 (verbatim, slice spelling)
+00a63bf0 ?FindOrInsert28@EapdMapBase@Eapd@Audio@EA@@QAEPAXPAPAXPAI@Z  # EapdMapBase::FindOrInsert28 migrated from s00a62ec0 (verbatim, slice spelling)
+00a63c30 ?Init@EapdMapBase@Eapd@Audio@EA@@QAEPAXPAX000@Z  # EapdMapBase::Init migrated from s00a62ec0 (verbatim, slice spelling)
+00a63c90 ?Init@EapdAssetManager@Eapd@Audio@EA@@QAEPAXPAX@Z  # EapdAssetManager::Init migrated from s00a62ec0 (verbatim, slice spelling)
+00a63d20 ??1EapdAssetManager@Eapd@Audio@EA@@QAE@XZ  # EapdAssetManager::~EapdAssetManager migrated from s00a62ec0 (verbatim, slice spelling)

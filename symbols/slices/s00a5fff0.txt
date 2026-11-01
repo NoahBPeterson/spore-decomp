@@ -1,0 +1,2 @@
+00a604a0 ?function_inrange@Eapd@Audio@EA@@YAXPADMM@Z  # function_inrange migrated from s00a5fff0 (verbatim, slice spelling)
+00a604e0 ?function_outrange@Eapd@Audio@EA@@YAXPADMM@Z  # function_outrange migrated from s00a5fff0 (verbatim, slice spelling)
