@@ -1,1 +1,1 @@
-00770320 Unk770320::Method  # skinning-matrix bake job of the runtime model builder (called via job thunk 007740f0 on global 01630b68): per-bone affine inverse of bind matrices, quaternion/scale/translation composition, push/pop hierarchy stacks, 3x4 skin matrix output
+00770320 ?Method@Unk770320@@QAEHHPAUBakeJob@@@Z  # Unk770320::Method migrated from s00770320 (verbatim, slice spelling)

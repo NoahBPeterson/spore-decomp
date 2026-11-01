@@ -1,2 +1,1 @@
-# va  name  evidence
-0077a160  rw::graphics::RWShader_SetShConst_transformBlock  # caches inverse transform at 0x16f9120 using FUN_00778060; 6826-byte SSE
+0077a160 ?FUN_0077a160@@YAXIIH@Z  # FUN_0077a160 migrated from s0077a160 (verbatim, slice spelling)

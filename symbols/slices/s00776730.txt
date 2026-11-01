@@ -1,14 +1,14 @@
-00776730 SP::... # shader/model-builder routine (skeleton)
-00776920 SP::... # skeleton
-00776a60 SP::... # skeleton
-00776e60 SP::... # skeleton
-00776f40 SP::... # skeleton
-00777060 SP::... # skeleton
-00777130 SP::... # skeleton
-007771f0 SP::... # skeleton
-00777290 SP::... # skeleton
-007773c0 SP::... # skeleton
-007775a0 SP::... # skeleton
+00776730 ??0cShaderPreviewA@@QAE@XZ  # cShaderPreviewA::cShaderPreviewA migrated from s00776730 (verbatim, slice spelling)
+00776920 ??0cShaderPreviewB@@QAE@XZ  # cShaderPreviewB::cShaderPreviewB migrated from s00776730 (verbatim, slice spelling)
+00776a60 ?Draw@cShaderPreviewA@@QAEXHPAII@Z  # cShaderPreviewA::Draw migrated from s00776730 (verbatim, slice spelling)
+00776e60 ?Draw@cShaderPreviewB@@QAEXHHPAPAUcViewer@@I@Z  # cShaderPreviewB::Draw migrated from s00776730 (verbatim, slice spelling)
+00776f40 ?Init@cShaderPreviewA@@QAE_NXZ  # cShaderPreviewA::Init migrated from s00776730 (verbatim, slice spelling)
+00777060 ?Shutdown@cShaderPreviewA@@QAE_NXZ  # cShaderPreviewA::Shutdown migrated from s00776730 (verbatim, slice spelling)
+00777130 ?Init@cShaderPreviewB@@QAE_NXZ  # cShaderPreviewB::Init migrated from s00776730 (verbatim, slice spelling)
+007771f0 ?Shutdown@cShaderPreviewB@@QAE_NXZ  # cShaderPreviewB::Shutdown migrated from s00776730 (verbatim, slice spelling)
+00777290 ?LoadTexture@cShaderBase@@QAE_NUResKey@@@Z  # cShaderBase::LoadTexture migrated from s00776730 (verbatim, slice spelling)
+007773c0 ?SetSlot@cShaderPreviewA@@QAE_NHIIPAH@Z  # cShaderPreviewA::SetSlot migrated from s00776730 (verbatim, slice spelling)
+007775a0 ?SetSlot@cShaderPreviewB@@QAE_NHIIPAH@Z  # cShaderPreviewB::SetSlot migrated from s00776730 (verbatim, slice spelling)
 007776c0 ?VSProfileFromVersion@SP@@YAPADI@Z  # SP::VSProfileFromVersion migrated from s00776730
 007c4dd0 ?Init@cViewer@SP@@QAE_N_N@Z  # SP::cViewer::Init (callee of s00776730, named from the dev publics; slice address comment)
 013eb384 ??_7cListenerBase@@6B@

@@ -1,10 +1,10 @@
 00775760 SP::cRuntimeModelBuilder::...  # large EH routine (skeleton)
-007760a0 SP::cRuntimeModelBuilder::...  # large EH routine (skeleton)
+007760a0 ?FUN_007760a0@@YAHPAUInst@@PAPAXUResKey3@@H@Z  # FUN_007760a0 migrated from s00775760 (verbatim, slice spelling)
 00776320 SP::cRuntimeModelBuilder::...  # mesh builder (skeleton)
 007763b0 ?GetRuntimeMeshes@@YA_NHHHHH@Z  # GetRuntimeMeshes migrated from s00775760 (verbatim, slice spelling)
-007763f0 cRuntimeModelBuilder::setFlagA  # message key 0x692ea61
-00776470 cRuntimeModelBuilder::setFlagB  # message key 0x692ea61
+007763f0 ?setFlagA@cRuntimeModelBuilder@@QAEDHH@Z  # cRuntimeModelBuilder::setFlagA migrated from s00775760 (verbatim, slice spelling)
+00776470 ?setFlagB@cRuntimeModelBuilder@@QAEDHH@Z  # cRuntimeModelBuilder::setFlagB migrated from s00775760 (verbatim, slice spelling)
 007764c0 cRuntimeModelBuilder::setBoneA
 00776520 cRuntimeModelBuilder::setBoneB
-00776590 destructor (skeleton)
-00776680 destructor (skeleton)
+00776590 ?Destroy@ShaderPreviewA@@QAEXXZ  # ShaderPreviewA::Destroy migrated from s00775760 (verbatim, slice spelling)
+00776680 ?Destroy@ShaderPreviewB@@QAEXXZ  # ShaderPreviewB::Destroy migrated from s00775760 (verbatim, slice spelling)

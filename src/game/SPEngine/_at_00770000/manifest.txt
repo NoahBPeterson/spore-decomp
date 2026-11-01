@@ -1,0 +1,47 @@
+# source  symbol  va  flags
+../src/game/SPEngine/_at_00770000.cpp  ?pop_heap@@YAXPAUSortElem@@0P6A_NABU1@1@Z@Z  00770180  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/_at_00770000.cpp  ?make_heap@@YAXPAUSortElem@@0P6A_NABU1@1@Z@Z  00770240  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/_at_00770000.cpp  ?sort_heap@@YAXPAUSortElem@@0P6A_NABU1@1@Z@Z  007702c0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/_at_00770000.cpp  ?get_partition@@YAPAUSortElem@@PAU1@0U1@P6A_NABU1@2@Z@Z  00773f60  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/_at_00770000.cpp  ?partial_sort@@YAXPAUSortElem@@00P6A_NABU1@1@Z@Z  00774010  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/_at_00770000.cpp  ?FUN_007740f0@@YAXIPAH@Z  007740f0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/_at_00770000.cpp  ?introsort_loop@@YAXPAUSortElem@@0HP6A_NABU1@1@Z@Z  00774290  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/_at_00770000.cpp  ?resize@VecIdx2@@QAEXI@Z  00774b50  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/_at_00770000.cpp  ?resize@Vec30@@QAEXI@Z  00774bb0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/_at_00770000.cpp  ?resize@VecB0@@QAEXI@Z  00774c30  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/_at_00770000.cpp  ?resize@VecM34@@QAEXI@Z  00774cc0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/_at_00770000.cpp  ?setFlagA@cRuntimeModelBuilder@@QAEDHH@Z  007763f0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/_at_00770000.cpp  ?setFlagB@cRuntimeModelBuilder@@QAEDHH@Z  00776470  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/_at_00770000.cpp  ?Destroy@ShaderPreviewA@@QAEXXZ  00776590  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/_at_00770000.cpp  ?Destroy@ShaderPreviewB@@QAEXXZ  00776680  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/_at_00770000.cpp  ?Init@cShaderPreviewB@@QAE_NXZ  00777130  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/_at_00770000.cpp  ?FUN_00777a10@@YAHXZ  00777a10  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/_at_00770000.cpp  ?setSlotU0@ShaderState@@QAEXHD@Z  00777a60  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/_at_00770000.cpp  ?setSlotU1@ShaderState@@QAEXHD@Z  00777a80  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/_at_00770000.cpp  ?setSlotV0@ShaderState@@QAEXHD@Z  00777aa0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/_at_00770000.cpp  ?setSlotV1@ShaderState@@QAEXHD@Z  00777ac0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/_at_00770000.cpp  ?FUN_00777ae0@@YAXGPAXD@Z  00777ae0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/_at_00770000.cpp  ?pushShaderDataNull@@YAXXZ  00777bf0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/_at_00770000.cpp  ?FUN_00777c10@@YAXXZ  00777c10  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/_at_00770000.cpp  ?shaderDataStackNotEmpty@@YAHXZ  00777c90  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/_at_00770000.cpp  ?FUN_00777cb0@@YAXH@Z  00777cb0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/_at_00770000.cpp  ?FUN_00777d60@@YAXHHH@Z  00777d60  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/_at_00770000.cpp  ?FUN_00777e10@@YAXPAUArenaObject@@PAUArenaCtx@@@Z  00777e10  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/_at_00770000.cpp  ?FUN_00777e30@@YAXPAUArenaObject@@PAUArenaHandle@@@Z  00777e30  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/_at_00770000.cpp  ?FUN_00777e50@@YAXHHH@Z  00777e50  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/_at_00770000.cpp  ?FUN_00777e90@@YAXHHH@Z  00777e90  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/_at_00770000.cpp  ?FUN_00777ed0@@YAXHHH@Z  00777ed0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/_at_00770000.cpp  ?FUN_00777f80@@YAXHHH@Z  00777f80  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/_at_00770000.cpp  ?tableLookup@@YAHG@Z  00778050  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/_at_00770000.cpp  ?FUN_00778fd0@@YAXIIH@Z  00778fd0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/_at_00770000.cpp  ?FUN_00779030@@YAXIIH@Z  00779030  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/_at_00770000.cpp  ?FUN_007790a0@@YAXIIH@Z  007790a0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/_at_00770000.cpp  ?FUN_00779130@@YAXIIH@Z  00779130  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/_at_00770000.cpp  ?FUN_00779560@@YAXIIH@Z  00779560  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/_at_00770000.cpp  ?FUN_00779670@@YAXIIH@Z  00779670  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/_at_00770000.cpp  ?FUN_00779710@@YAXIIH@Z  00779710  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/_at_00770000.cpp  ?FUN_00779b60@@YAXIIH@Z  00779b60  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/_at_00770000.cpp  ?FUN_0077cb10@GfxConst@@QAEHII@Z  0077cb10  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/_at_00770000.cpp  ?FUN_0077d130@@YIPAMPAM@Z  0077d130  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/_at_00770000.cpp  ?FUN_0077d1d0@@YIPAUCtorObj@@PAU1@@Z  0077d1d0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/_at_00770000.cpp  ?FUN_0077d6c0@@YGPAXIPBX0@Z  0077d6c0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
