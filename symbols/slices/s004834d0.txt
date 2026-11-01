@@ -1,7 +1,7 @@
-004834d0  SP::cSPEditorHandleRotationBall::Resume  # ball primary vtable 0x13ef320 slot +0x24; returns cSPVector3 by value
-004837f0  SP::cSPEditorHandleRotationBall::Update  # ball primary vtable 0x13ef320 slot +0x2c; vcalls this->vptr[0x24] (Resume) and vptr[0x38] (alpha)
-00483cc0  SP::cSPEditorHandleRotationRing::SetScale2  # writes model+0x18, ++model+0xa
-00483d10  SP::cSPEditorHandleRotationRing::Shutdown2  # base Shutdown 0x47e2c0 then byte +0x5c=0
-00483d40  SP::cSPEditorHandleRotationRing::cSPEditorHandleRotationRing  # base ctor + vptrs + inits
+004834d0 ?Resume@RotationBall_s0048_34d0@@QAE?AUcSPVector3_s0048_34d0@@XZ  # RotationBall_s0048_34d0::Resume migrated from s004834d0 (verbatim, slice spelling)
+004837f0 ?Update@RotationBall_s0048_34d0@@QAEXXZ  # RotationBall_s0048_34d0::Update migrated from s004834d0 (verbatim, slice spelling)
+00483cc0 ?SetScale@cSPEditorHandleRotationBall@SP@@UAEXM@Z  # SP::cSPEditorHandleRotationBall::SetScale migrated from s004834d0
+00483d10 ?Shutdown@RotationRing@@QAEXXZ  # RotationRing::Shutdown migrated from s004834d0 (verbatim, slice spelling)
+00483d40 ?Construct@RotationRing@@QAEPAU1@XZ  # RotationRing::Construct migrated from s004834d0 (verbatim, slice spelling)
 00483e90 ?Destroy@RotationRing@@QAEXXZ  # RotationRing::Destroy migrated from s004834d0 (verbatim, slice spelling)
 00483ec0 ?AsInterface@cSPEditorHandleRotationRing@SP@@UAEPAXW4InterfaceId@COM@EA@@@Z  # SP::cSPEditorHandleRotationRing::AsInterface migrated from s004834d0

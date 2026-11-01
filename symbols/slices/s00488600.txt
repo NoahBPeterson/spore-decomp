@@ -1,3 +1,11 @@
 00488850 SP::cSPEditorLimbStructure::cSPEditorLimbStructure  # ctor init matches dev-PDB layout (mPileList, mBaseBlock.., mFeet, mHands)
 00488900 SP::cSPEditorLimbStructure::~cSPEditorLimbStructure  # destroys mHands, mFeet, mPileList
-00488c30 SP::cSPEditorLimbStructure::DeleteJoint  # recursive delete of cSPEditorLimbJoint tree
+00488a50 ?UpdateSymmetry@cSPEditorLimbStructure_s0048_8600@SP@@QAEXXZ  # UpdateSymmetry migrated from s00488600 (verbatim, slice spelling)
+00488b30 ?FindInvalidJoint@cSPEditorLimbStructure_s0048_8600@SP@@QAEPAVcSPEditorLimbJoint_s0048_8600@2@XZ  # FindInvalidJoint migrated from s00488600 (verbatim, slice spelling)
+00488c30 ?DeleteJoint@cSPEditorLimbStructure_s0048_8600@SP@@QAEXPAVcSPEditorLimbJoint_s0048_8600@2@@Z  # DeleteJoint migrated from s00488600 (verbatim, slice spelling)
+00488d00 ?UpdateTargetPositions@cSPEditorLimbStructure_s0048_8600@SP@@QAEX_N@Z  # UpdateTargetPositions migrated from s00488600 (verbatim, slice spelling)
+00488d30 ?UpdateTargetPositions@cSPEditorLimbStructure_s0048_8600@SP@@QAEXPAVcSPEditorLimbJoint_s0048_8600@2@_N@Z  # UpdateTargetPositions migrated from s00488600 (verbatim, slice spelling)
+00488e80 ?MoveToBlock@cSPEditorLimbStructure_s0048_8600@SP@@QAEXPAVcSPEditorBlock_s0048_8600@2@@Z  # MoveToBlock migrated from s00488600 (verbatim, slice spelling)
+00488f20 ?Translate@cSPEditorLimbStructure_s0048_8600@SP@@QAEXPAVcSPEditorLimbJoint_s0048_8600@2@UcSPVector3_s0048_8600@@@Z  # Translate migrated from s00488600 (verbatim, slice spelling)
+00488fe0 ?RelocateTargets@cSPEditorLimbStructure_s0048_8600@SP@@QAEXPAVcSPEditorLimbJoint_s0048_8600@2@0@Z  # RelocateTargets migrated from s00488600 (verbatim, slice spelling)
+004890e0 ?Refresh@cSPEditorLimbStructure_s0048_8600@SP@@QAEX_N@Z  # Refresh migrated from s00488600 (verbatim, slice spelling)

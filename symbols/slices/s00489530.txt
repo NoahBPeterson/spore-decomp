@@ -2,9 +2,9 @@
 00489640 SP::cSPEditorLimbStructure::MirrorTargetsOffset  # mirror + offset*2 on x, recurses non-limb-part joints
 00489710 SP::cSPEditorLimbStructure::RefreshTargets  # d1f0 reset then MirrorTargets/Original/Creation + UpdateSymmetry
 004897b0 SP::cSPEditorLimbStructure::RefreshBlockTargets  # block-position based mirror + 0x4961d0
-004898a0 SP::cSPEditorLimbStructure::Rebuild  # CollectBlocks/UpdateLimbScale/clear/BuildPileList/Refresh(true)
+004898a0 ?Rebuild@cSPEditorLimbStructure_s0048_9530@SP@@QAEXPAVcSPEditorBlock_s0048_9530@2@@Z  # Rebuild migrated from s00489530 (verbatim, slice spelling)
 00489900 SP::cSPEditorLimbStructure::CollectBlocks  # sets mEndBlock/mLastBone from block flags 0x2d/0x2c or foot block
 00489ae0 SP::cSPEditorLimbStructure::FixAllJoints  # runs FixJoint over lower joints, then FinalizeJoints
-00489bc0 SP::cSPEditorLimbStructure::UpdateLimbScale  # mLimbOriginalScale = |mBaseBlock->mPosition - GetLimbOriginalPosition()|
-00489c60 SP::cSPEditorLimbStructure::FinalizeJoints  # RepinJoint + SetUIState + UpdateSymmetry
+00489bc0 ?UpdateLimbScale@cSPEditorLimbStructure_s0048_9530@SP@@QAEXXZ  # UpdateLimbScale migrated from s00489530 (verbatim, slice spelling)
+00489c60 ?FinalizeJoints@cSPEditorLimbStructure_s0048_9530@SP@@QAEXPAVcSPEditorLimbJoint_s0048_9530@2@_N@Z  # FinalizeJoints migrated from s00489530 (verbatim, slice spelling)
 00489cf0 SP::cSPEditorLimbStructure::RepinJoint  # repin joint to torso (partial reconstruction)

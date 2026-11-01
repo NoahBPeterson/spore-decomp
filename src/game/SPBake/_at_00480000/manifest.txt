@@ -1,0 +1,40 @@
+# source  symbol  va  flags
+../src/game/SPBake/_at_00480000.cpp  ?Construct@RotationBall@@QAEPAU1@XZ  00482f90  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/_at_00480000.cpp  ?Destroy@RotationBall@@QAEXXZ  00483040  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/_at_00480000.cpp  ?GetTuningOffset@RotationBall@@QAEPAUVector3@@PAU2@@Z  00483490  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/_at_00480000.cpp  ?Shutdown@RotationRing@@QAEXXZ  00483d10  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/_at_00480000.cpp  ?Construct@RotationRing@@QAEPAU1@XZ  00483d40  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/_at_00480000.cpp  ?GetUpperUpperJoint@cSPEditorLimbJoint_s0048_4e40@SP@@QAEPAV12@XZ  00485900  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/_at_00480000.cpp  ?SetTargetPosition@cSPEditorLimbJoint_s0048_4e40@SP@@QAEXUcSPVector3_s0048_4e40@@@Z  00485930  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/_at_00480000.cpp  ?Move@cSPEditorLimbJoint_s0048_4e40@SP@@QAEXUcSPVector3_s0048_4e40@@_N@Z  00485960  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/_at_00480000.cpp  ?MoveLowerJoints@cSPEditorLimbJoint_s0048_4e40@SP@@QAEXUcSPVector3_s0048_4e40@@@Z  00485a60  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/_at_00480000.cpp  ?Translate@cSPEditorLimbJoint_s0048_4e40@SP@@QAEXUcSPVector3_s0048_4e40@@@Z  00485af0  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/_at_00480000.cpp  ?Fix@cSPEditorLimbJoint_s0048_6910@SP@@QAE_NPAV12@@Z  00486e70  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/_at_00480000.cpp  ?F_486f50@cSPEditorLimbJoint_s0048_6910@SP@@QAEXUcSPVector3_s0048_6910@@@Z  00486f50  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/_at_00480000.cpp  ?AddLowerJoint@cSPEditorLimbJoint_s0048_6910@SP@@QAEXPAV12@@Z  00487040  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/_at_00480000.cpp  ?F_487290@cSPEditorLimbJoint_s0048_6910@SP@@QAEXPAV12@@Z  00487290  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/_at_00480000.cpp  ?FindFirstLimbLowerJoint@cSPEditorLimbJoint_s0048_7850@SP@@QAEPAV12@XZ  00487850  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/_at_00480000.cpp  ?UpdateSymmetry@cSPEditorLimbStructure_s0048_8600@SP@@QAEXXZ  00488a50  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/_at_00480000.cpp  ?FindInvalidJoint@cSPEditorLimbStructure_s0048_8600@SP@@QAEPAVcSPEditorLimbJoint_s0048_8600@2@XZ  00488b30  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/_at_00480000.cpp  ?DeleteJoint@cSPEditorLimbStructure_s0048_8600@SP@@QAEXPAVcSPEditorLimbJoint_s0048_8600@2@@Z  00488c30  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/_at_00480000.cpp  ?UpdateTargetPositions@cSPEditorLimbStructure_s0048_8600@SP@@QAEX_N@Z  00488d00  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/_at_00480000.cpp  ?UpdateTargetPositions@cSPEditorLimbStructure_s0048_8600@SP@@QAEXPAVcSPEditorLimbJoint_s0048_8600@2@_N@Z  00488d30  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/_at_00480000.cpp  ?MoveToBlock@cSPEditorLimbStructure_s0048_8600@SP@@QAEXPAVcSPEditorBlock_s0048_8600@2@@Z  00488e80  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/_at_00480000.cpp  ?Translate@cSPEditorLimbStructure_s0048_8600@SP@@QAEXPAVcSPEditorLimbJoint_s0048_8600@2@UcSPVector3_s0048_8600@@@Z  00488f20  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/_at_00480000.cpp  ?RelocateTargets@cSPEditorLimbStructure_s0048_8600@SP@@QAEXPAVcSPEditorLimbJoint_s0048_8600@2@0@Z  00488fe0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/_at_00480000.cpp  ?Refresh@cSPEditorLimbStructure_s0048_8600@SP@@QAEX_N@Z  004890e0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/_at_00480000.cpp  ?FinalizeJoints@cSPEditorLimbStructure_s0048_9530@SP@@QAEXPAVcSPEditorLimbJoint_s0048_9530@2@_N@Z  00489c60  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/_at_00480000.cpp  ?UpdateLimbModels@cSPEditorLimbStructure_s0048_a4e0@SP@@QAEXPAVcSPEditorLimbJoint_s0048_a4e0@2@@Z  0048a4e0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/_at_00480000.cpp  ?SetUIState@cSPEditorLimbStructure_s0048_a4e0@SP@@QAEXH@Z  0048a560  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/_at_00480000.cpp  ?SetJointTarget@cSPEditorLimbStructure_s0048_a4e0@SP@@QAEXPAVcSPEditorLimbJoint_s0048_a4e0@2@UcSPVector3_s0048_a4e0@@@Z  0048a650  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/_at_00480000.cpp  ?UpdateSymmetryModels@cSPEditorLimbStructure_s0048_a4e0@SP@@QAEXPAVcSPEditorLimbJoint_s0048_a4e0@2@_N1@Z  0048ad20  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/_at_00480000.cpp  ?UpdateSymmetryModels@cSPEditorLimbStructure_s0048_a4e0@SP@@QAEX_N0@Z  0048ae30  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/_at_00480000.cpp  ?AreJointsValid@cSPEditorLimbStructure_s0048_a4e0@SP@@QAE_NPAU?$vector_s0048_a4e0@PAVcSPEditorLimbJoint_s0048_a4e0@SP@@@@@Z  0048ae60  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/_at_00480000.cpp  ?FixJoints@cSPEditorLimbStructure_s0048_a4e0@SP@@QAE_NPAU?$vector_s0048_a4e0@PAVcSPEditorLimbJoint_s0048_a4e0@SP@@@@@Z  0048af00  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/_at_00480000.cpp  ?FixJoint@cSPEditorLimbStructure_s0048_a4e0@SP@@QAE_NPAVcSPEditorLimbJoint_s0048_a4e0@2@@Z  0048afc0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/_at_00480000.cpp  ?UpdateLengths@cSPEditorLimbStructure_s0048_a4e0@SP@@QAE_NPAU?$vector_s0048_a4e0@PAVcSPEditorLimbJoint_s0048_a4e0@SP@@@@@Z  0048b080  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/_at_00480000.cpp  ?FixZeroLengthJoints@cSPEditorLimbStructure_s0048_a4e0@SP@@QAEXPAVcSPEditorLimbJoint_s0048_a4e0@2@@Z  0048b120  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/_at_00480000.cpp  ?CollectLimbJoints@cSPEditorLimbStructure_s0048_a4e0@SP@@QAEXPAU?$vector_s0048_a4e0@PAVcSPEditorLimbJoint_s0048_a4e0@SP@@@@@Z  0048b1e0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/_at_00480000.cpp  ?CollectLimbJoints@cSPEditorLimbStructure_s0048_a4e0@SP@@QAEXPAVcSPEditorLimbJoint_s0048_a4e0@2@PAU?$vector_s0048_a4e0@PAVcSPEditorLimbJoint_s0048_a4e0@SP@@@@@Z  0048b200  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/_at_00480000.cpp  ?FindJoint@cSPEditorLimbStructure_s0048_a4e0@SP@@QAEPAVcSPEditorLimbJoint_s0048_a4e0@2@PAVcSPEditorBlock_s0048_a4e0@2@@Z  0048b2c0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/_at_00480000.cpp  ?FindJoint@cSPEditorLimbStructure_s0048_a4e0@SP@@QAEPAVcSPEditorLimbJoint_s0048_a4e0@2@PAVcSPEditorBlock_s0048_a4e0@2@PAV32@@Z  0048b2e0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

@@ -1,0 +1,15 @@
+# va  diff-bytes  reason
+00483070 11 AsInterface: switch shape correct (slots/compares match) but return-block ordering differs
+004830c0 154 UpdateOffset: vcall slot9 + transform write shape and slots differ
+004834d0 537 SP::cSPEditorHandleRotationBall::Resume: complete hidden-return cSPVector3 builder (early-out on !mModel/!mBlock; GetBBox(2,0,0) + cSPTransform with g_ballRotation/g_zeroVector/1.0 then box.Transform; VectorLength(mOffset); operator/ dir; Vector3T zero(g_zeroVector); operator*(dir,100.0) ray; SegmentBoxIntersect(&u,&zero,&box,&tval); dist=(1-tval)*100 else len; off=(dist+mDistanceFromBoundingBox)*mBlock->mScale; mBlock->mPosition + (dir*off)*mBlock->mOrientation). ours 730B vs 794B; /Od name-hash slot order differs (frame 0x184 vs 0x188) so every local-operand displacement differs; equiv PASS 364/400 valid (100% cov)
+004837f0 1073 SP::cSPEditorHandleRotationBall::Update: complete (all calls in order: Normalize(mOffset); dir*orient; BuildOrientation(&buildOri,&v,&g_ballUp); this->vptr[0x24/4]() sample; mModel->mTransform.SetTranslation(newPos)/SetRotation(buildOri) with newPos = pos + (mOffset - dir*0.4)*scale*orient; four anim sends through mgr vptr slot 6 with inline ModelRef temps, incl. this->vptr[0x38/4](3) alpha). ours 1251B vs 1228B; /Od name-hash slot order and ModelRef temps differ; equiv WEAK 400/400 valid (8.5% cov: the deep path needs GetSetting6() nonzero, absent on default inputs)
+00483cc0 8 SetScale2: needs a model pointer local for the if condition (raw pointer folds it away)
+00487090 97 /Od; complete. find-iterator loop: frame one slot short of the original and temp order differs
+00487140 232 /Od; complete. find-iterator loop and operator- result temps / slot order differ
+004873d0 113 /Od; complete. Abs() x87 temp placement and extra frame slots differ
+004874c0 311 /Od; complete. SignOf helper inlining and frame slot order differ
+004876b0 238 /Od; complete. SignOf helper inlining and frame slot order differ
+004878e0 1195 /Od; complete. mode switch over lower-joint direction; /Od frame slot layout not reproduced
+00487e90 500 /Od; complete. mode switch over upper-joint direction; frame slot layout not reproduced
+004898a0 56 /Od; complete. rebuild wrapper (CollectBlocks/UpdateLimbScale/clear/BuildPileList/Refresh); equiv PASS (296 valid inputs at --inputs 600, 0 mismatches, 100.0% coverage)
+00489bc0 120 /Od; complete. limb-scale update; frame/temp layout differs; equiv PASS (328 valid inputs, 0 mismatches, 100.0% coverage)

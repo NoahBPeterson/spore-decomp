@@ -1,11 +1,11 @@
 00486910 SP::cSPEditorLimbJoint::UpdateLength  # bool, uses mEditorModel radius/scale slots, mFlags.test(0x2d)
 00486d40 SP::cSPEditorLimbJoint::IsValid  # reads mUpperJoint->GetLength, sets block flag 0xf
-00486e70 SP::cSPEditorLimbJoint::Fix  # args (invalid), uses IsLimbPart and a 0x43f5b0 block helper
-00486f50 SP::cSPEditorLimbJoint::SetTargetAndMoveLower  # writes mTargetPosition from pos, moves lower joints with delta
-00487040 SP::cSPEditorLimbJoint::AddLowerJoint  # push_back into mLowerJoints, sets child->mUpperJoint=this
-00487090 SP::cSPEditorLimbJoint::RemoveLowerJoint  # erases from mLowerJoints, clears child->mUpperJoint
-00487140 SP::cSPEditorLimbJoint::DetachJoint  # stores target/original/creation offsets relative to this, erases
-00487290 SP::cSPEditorLimbJoint::AttachJoint  # AddLowerJoint then Move/Translate using stored offsets
-004873d0 SP::cSPEditorLimbJoint::GetLength  # sign-based length from mTargetPosition.x / mUpperJoint sign
-004874c0 SP::cSPEditorLimbJoint::Sign  # sign of mTargetPosition.x, recurses into lower joints
-004876b0 SP::cSPEditorLimbJoint::SignFromBlock  # sign of mJointBlock->mPosition.x, checks first lower joint
+00486e70 ?Fix@cSPEditorLimbJoint_s0048_6910@SP@@QAE_NPAV12@@Z  # Fix migrated from s00486910 (verbatim, slice spelling)
+00486f50 ?F_486f50@cSPEditorLimbJoint_s0048_6910@SP@@QAEXUcSPVector3_s0048_6910@@@Z  # F_486f50 migrated from s00486910 (verbatim, slice spelling)
+00487040 ?AddLowerJoint@cSPEditorLimbJoint_s0048_6910@SP@@QAEXPAV12@@Z  # AddLowerJoint migrated from s00486910 (verbatim, slice spelling)
+00487090 ?RemoveLowerJoint@cSPEditorLimbJoint_s0048_6910@SP@@QAEXPAV12@@Z  # RemoveLowerJoint migrated from s00486910 (verbatim, slice spelling)
+00487140 ?F_487140@cSPEditorLimbJoint_s0048_6910@SP@@QAEXPAV12@@Z  # F_487140 migrated from s00486910 (verbatim, slice spelling)
+00487290 ?F_487290@cSPEditorLimbJoint_s0048_6910@SP@@QAEXPAV12@@Z  # F_487290 migrated from s00486910 (verbatim, slice spelling)
+004873d0 ?GetLength@cSPEditorLimbJoint_s0048_6910@SP@@QAEMXZ  # GetLength migrated from s00486910 (verbatim, slice spelling)
+004874c0 ?Sign@cSPEditorLimbJoint_s0048_6910@SP@@QAEH_N@Z  # Sign migrated from s00486910 (verbatim, slice spelling)
+004876b0 ?SignFromBlock@cSPEditorLimbJoint_s0048_6910@SP@@QAEH_N@Z  # SignFromBlock migrated from s00486910 (verbatim, slice spelling)

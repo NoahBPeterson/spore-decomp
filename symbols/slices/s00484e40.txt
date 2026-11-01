@@ -12,3 +12,8 @@
 004856d0 ?AnimateOn@cSPEditorHandleRotationRing_s0048_4e40@SP@@QAEXXZ  # cSPEditorHandleRotationRing_s0048_4e40::AnimateOn migrated from s00484e40 (verbatim, slice spelling)
 00485850 ?SetModelScale@cSPEditorHandleRotationRing_s0048_4e40@SP@@QAEXM@Z  # cSPEditorHandleRotationRing_s0048_4e40::SetModelScale migrated from s00484e40 (verbatim, slice spelling)
 004858b0 ?Shutdown@cSPEditorHandleRotationRing_s0048_4e40@SP@@QAEXXZ  # cSPEditorHandleRotationRing_s0048_4e40::Shutdown migrated from s00484e40 (verbatim, slice spelling)
+00485900 ?GetUpperUpperJoint@cSPEditorLimbJoint_s0048_4e40@SP@@QAEPAV12@XZ  # GetUpperUpperJoint migrated from s00484e40 (verbatim, slice spelling)
+00485930 ?SetTargetPosition@cSPEditorLimbJoint_s0048_4e40@SP@@QAEXUcSPVector3_s0048_4e40@@@Z  # SetTargetPosition migrated from s00484e40 (verbatim, slice spelling)
+00485960 ?Move@cSPEditorLimbJoint_s0048_4e40@SP@@QAEXUcSPVector3_s0048_4e40@@_N@Z  # Move migrated from s00484e40 (verbatim, slice spelling)
+00485a60 ?MoveLowerJoints@cSPEditorLimbJoint_s0048_4e40@SP@@QAEXUcSPVector3_s0048_4e40@@@Z  # MoveLowerJoints migrated from s00484e40 (verbatim, slice spelling)
+00485af0 ?Translate@cSPEditorLimbJoint_s0048_4e40@SP@@QAEXUcSPVector3_s0048_4e40@@@Z  # Translate migrated from s00484e40 (verbatim, slice spelling)

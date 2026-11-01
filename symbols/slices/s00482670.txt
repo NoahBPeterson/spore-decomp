@@ -1,8 +1,8 @@
 00482670  SP::cSPEditorHandleDeform::Update  # class by use: pinning type +0xac, mData start/end +0x90/+0x9c, mDelta +0x180 (PDB cSPEditorHandleDeform)
-00482f90  SP::cSPEditorHandleRotationBall::cSPEditorHandleRotationBall  # base ctor 0x47d6a0 + vptrs + mOffset
-00483040  SP::cSPEditorHandleRotationBall::~cSPEditorHandleRotationBall  # BallCleanup 0x483d10 + base dtor 0x47d870
-00483070  SP::cSPEditorHandleRotationBall::AsInterface  # ids 0xee3f516e / 0x050a1fe5 / 0x050a510e
-004830c0  SP::cSPEditorHandleRotationBall::UpdateOffset  # vcall slot9 -> model+0xc, flags|4, ++count
+00482f90 ?Construct@RotationBall@@QAEPAU1@XZ  # RotationBall::Construct migrated from s00482670 (verbatim, slice spelling)
+00483040 ?Destroy@RotationBall@@QAEXXZ  # RotationBall::Destroy migrated from s00482670 (verbatim, slice spelling)
+00483070 ?AsInterface@RotationBall@@QAEPAXI@Z  # RotationBall::AsInterface migrated from s00482670 (verbatim, slice spelling)
+004830c0 ?UpdateOffset@RotationBall@@QAEXXZ  # RotationBall::UpdateOffset migrated from s00482670 (verbatim, slice spelling)
 00483140 ?CalculateBallOffset@cSPEditorHandleRotationBall@SP@@QAEXXZ  # SP::cSPEditorHandleRotationBall::CalculateBallOffset migrated from s00482670
 00483350 ?Init@RotationBall@@QAEXPAUIModelManager@@PAUcSPEditorBlock@@UcSPVector3@@_N@Z  # RotationBall::Init: base init + offset + CalculateBallOffset + group-flag set
-00483490  SP::cSPEditorHandleRotationBall::GetTuningOffset  # EditorTuning()+0x9c
+00483490 ?GetTuningOffset@RotationBall@@QAEPAUVector3@@PAU2@@Z  # RotationBall::GetTuningOffset migrated from s00482670 (verbatim, slice spelling)
