@@ -1,2 +1,2 @@
-0071ac50  SP::cMeshBuilder::CreateMeshData  # dev-PDB ?CreateMeshData@cMeshBuilder@SP@@QAEXXZ; news cMeshData into +0x148, fills elt arrays/sections/primitives, then calls 0x7320f0 and ClearMeshInfo 0x71a650
+0071ac50 ?CreateMeshData@cMeshBuilder_s0071_ac50@@QAEXXZ  # cMeshBuilder_s0071_ac50::CreateMeshData migrated from s0071ac50 (verbatim, slice spelling)
 007320f0  SP::cMeshData array-ref resolve walk (called by CreateMeshData)  # calls 0x7200f0 on every cEltArrayRef of elt arrays and sections

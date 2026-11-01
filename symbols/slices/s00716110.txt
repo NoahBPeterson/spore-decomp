@@ -1,3 +1,22 @@
+00716700 ?pushV8@MeshBuilder@@QAEXABUVec3@@@Z  # MeshBuilder::pushV8 migrated from s00716110 (verbatim, slice spelling)
+00716740 ?pushV1c@MeshBuilder@@QAEXABUVec3@@@Z  # MeshBuilder::pushV1c migrated from s00716110 (verbatim, slice spelling)
+00716780 ?pushV30@MeshBuilder@@QAEXABUVec2@@H@Z  # MeshBuilder::pushV30 migrated from s00716110 (verbatim, slice spelling)
+007167c0 ?pushColor@MeshBuilder@@QAEXABUVec4_s0071_6110@@H@Z  # MeshBuilder::pushColor migrated from s00716110 (verbatim, slice spelling)
+007168c0 ?resizeV8@MeshBuilder@@QAEXHABUVec3@@@Z  # MeshBuilder::resizeV8 migrated from s00716110 (verbatim, slice spelling)
+00716930 ?resizeV1c@MeshBuilder@@QAEXHABUVec3@@@Z  # MeshBuilder::resizeV1c migrated from s00716110 (verbatim, slice spelling)
+007169a0 ?addColors@MeshBuilder@@QAEXHHPBUVec4_s0071_6110@@@Z  # MeshBuilder::addColors migrated from s00716110 (verbatim, slice spelling)
+00716ad0 ?uniqueAdd@MeshBuilder@@QAEXH@Z  # MeshBuilder::uniqueAdd migrated from s00716110 (verbatim, slice spelling)
+00716bf0 ?pushV188_2@MeshBuilder@@QAEXIH@Z  # MeshBuilder::pushV188_2 migrated from s00716110 (verbatim, slice spelling)
+00716c30 ?pushV188_6@MeshBuilder@@QAEXIH@Z  # MeshBuilder::pushV188_6 migrated from s00716110 (verbatim, slice spelling)
+00716c70 ?addMasked@MeshBuilder@@QAEXEI@Z  # MeshBuilder::addMasked migrated from s00716110 (verbatim, slice spelling)
+00716e40 ?addPair120@MeshBuilder@@QAEXHMH@Z  # MeshBuilder::addPair120 migrated from s00716110 (verbatim, slice spelling)
+00716ed0 ?addBulk120@MeshBuilder@@QAEXHHPBHPBM@Z  # MeshBuilder::addBulk120 migrated from s00716110 (verbatim, slice spelling)
+00716fc0 ?addDiff134_lo@MeshBuilder@@QAEXHHPBUVec3@@@Z  # MeshBuilder::addDiff134_lo migrated from s00716110 (verbatim, slice spelling)
+007170e0 ?addDiff134_hi@MeshBuilder@@QAEXHHPBUVec3@@@Z  # MeshBuilder::addDiff134_hi migrated from s00716110 (verbatim, slice spelling)
+00717200 ?addDiff134_lo1@MeshBuilder@@QAEXHHPBUVec3@@@Z  # MeshBuilder::addDiff134_lo1 migrated from s00716110 (verbatim, slice spelling)
+007172f0 ?addDiff134_hi1@MeshBuilder@@QAEXHHPBUVec3@@@Z  # MeshBuilder::addDiff134_hi1 migrated from s00716110 (verbatim, slice spelling)
+0x00716110 cBuilderSection::cBuilderSection(const cBuilderSection&)  # copy ctor of the 0xd0-byte element
+0x007162b0 cMorphTarget::cMorphTarget(const cMorphTarget&)  # copy ctor of the 0x50-byte element
 0x00716700 cMeshBuilder::pushV8   # push_back onto the Vec3 vector at +8
 0x00716740 cMeshBuilder::pushV1c  # push_back onto the Vec3 vector at +0x1c
 0x00716780 cMeshBuilder::pushV30  # push_back onto element index of the 4x0x14 array at +0x30
@@ -13,5 +32,3 @@
 0x007170e0 cMeshBuilder::addDiff134_hi
 0x00717200 cMeshBuilder::addDiff134_lo1
 0x007172f0 cMeshBuilder::addDiff134_hi1
-0x00716110 cBuilderSection::cBuilderSection(const cBuilderSection&)  # copy ctor of the 0xd0-byte element
-0x007162b0 cMorphTarget::cMorphTarget(const cMorphTarget&)  # copy ctor of the 0x50-byte element

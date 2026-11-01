@@ -1,14 +1,22 @@
+007173e0 ?FUN_007173e0@@YIXPAUSelEditor@@@Z  # FUN_007173e0 migrated from s007173e0 (verbatim, slice spelling)
+00717820 ?resize@Vec30@@QAEXIPBX@Z  # Vec30::resize migrated from s007173e0 (verbatim, slice spelling)
+00717890 ?resize@Vec18@@QAEXI@Z  # Vec18::resize migrated from s007173e0 (verbatim, slice spelling)
+007179e0 ??4AppEditor@@QAEAAU0@ABU0@@Z  # AppEditor::operator= migrated from s007173e0 (verbatim, slice spelling)
+00717ad0 ?copyFwd50@@YAPAUElem50@@PAU1@00@Z  # copyFwd50 migrated from s007173e0 (verbatim, slice spelling)
+00717b70 ?copyBack50@@YAPAUElem50@@PAU1@00@Z  # copyBack50 migrated from s007173e0 (verbatim, slice spelling)
+00717bd0 ?FUN_00717bd0@@YAXPAH0@Z  # FUN_00717bd0 migrated from s007173e0 (verbatim, slice spelling)
+00717cb0 ?insertRange@AppEditor@@QAEXHPADH@Z  # AppEditor::insertRange migrated from s007173e0 (verbatim, slice spelling)
+00717ce0 ?FUN_00717ce0@@YIXPAUSelEditor@@@Z  # FUN_00717ce0 migrated from s007173e0 (verbatim, slice spelling)
+00718050 ?FUN_00718050@@YIXPAUSelEditor@@@Z  # FUN_00718050 migrated from s007173e0 (verbatim, slice spelling)
+00718370 ?FUN_00718370@@YIPAXPAHH0@Z  # FUN_00718370 migrated from s007173e0 (verbatim, slice spelling)
+00718520 ?assignFwd50@@YAXPAUElem50@@00@Z  # assignFwd50 migrated from s007173e0 (verbatim, slice spelling)
+00718600 ?copyFwd28@@YAPAUElem28@@PAU1@00@Z  # copyFwd28 migrated from s007173e0 (verbatim, slice spelling)
 0x00717820 SP::cAppModeEditorBase vector<cAnimatedBaby>::resize(n,value)
 0x00717890 vector<EA::Text::Vertex3D>::resize(n)   # 0x18-byte elements
 0x007179e0 cAppModeEditorBase::operator=(const&)   # vectors at +8,+0x1c,+0x30[4],+0x80[2],+0xa8,+0xbc
 0x00717ad0 copy forward over 0x50-byte 4-vector elements
 0x00717b70 copy backward over 0x50-byte 4-vector elements
 0x00717cb0 insertRange into element at +0x30+index*0x14
+0x00718370 EH copy ctor (vectors at +0/+0x14)
 0x00718520 assign forward over 0x50-byte 4-vector elements
 0x00718600 copy forward over 0x28-byte 2-vector elements
-0x00718370 EH copy ctor (vectors at +0/+0x14)
-007173e0 FUN_007173e0  # selection-definition pass: three per-vertex count arrays (0x38 word groups, xyz-normalised 0x50 pairs), then the 0xd0 usage records get the 0x100/0x200/0x400 used bits
-00717bd0 FUN_00717bd0  # remap a 0x14-record index vector through the group map (temp vector + eastl swap)
-00717ce0 FUN_00717ce0  # build the per-record group ids from the three sorted index vectors, remap the 0xbc array and rewrite the record's index vectors
-00718050 FUN_00718050  # collect the per-record attribute spans (tag 0..9, inner key) from the 0xe4 entries into the record's span vector
-00718370 FUN_00718370  # EH copy ctor of an object holding two 0x14-record index vectors

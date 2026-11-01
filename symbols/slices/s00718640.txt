@@ -1,12 +1,24 @@
+00718640 ?copyBack28@@YAPAUElem28_s0071_8640@@PAU1@00@Z  # copyBack28 migrated from s00718640 (verbatim, slice spelling)
+00718680 ?addIndices0@MeshBuilder8@@QAEXHPBHH@Z  # MeshBuilder8::addIndices0 migrated from s00718640 (verbatim, slice spelling)
+007186e0 ?addIndices1@MeshBuilder8@@QAEXHPBHH@Z  # MeshBuilder8::addIndices1 migrated from s00718640 (verbatim, slice spelling)
+00718740 ?addIndicesSlot@MeshBuilder8@@QAEXHPBHHH@Z  # MeshBuilder8::addIndicesSlot migrated from s00718640 (verbatim, slice spelling)
+007187b0 ?addIndicesSlot6@MeshBuilder8@@QAEXHPBHHH@Z  # MeshBuilder8::addIndicesSlot6 migrated from s00718640 (verbatim, slice spelling)
+00718820 ?CompactAttributeVertices@MeshBuilderUV@@QAEXXZ  # MeshBuilderUV::CompactAttributeVertices migrated from s00718640 (verbatim, slice spelling)
+00719170 ?Assign@FixedIdVector6@@QAEPAU1@ABU1@@Z  # FixedIdVector6::Assign migrated from s00718640 (verbatim, slice spelling)
+00719200 ?fill28@@YAXPAUElem28_s0071_8640@@0PBU1@@Z  # fill28 migrated from s00718640 (verbatim, slice spelling)
+00719240 ?finish@MeshBuilder8@@QAEXXZ  # MeshBuilder8::finish migrated from s00718640 (verbatim, slice spelling)
+00719330 ?relocateRange@MeshVecD0@@QAEPAEPAE0@Z  # MeshVecD0::relocateRange migrated from s00718640 (verbatim, slice spelling)
+00719390 ?copyEraseRange@MeshVec50@@QAEPAEPAE0@Z  # MeshVec50::copyEraseRange migrated from s00718640 (verbatim, slice spelling)
+007193e0 ?insert@MeshVecD0@@QAEXPAEIPBX@Z  # MeshVecD0::insert migrated from s00718640 (verbatim, slice spelling)
 0x00718640 copy backward over 0x28-byte two-vector elements
 0x00718680 cMeshBuilder::addIndices0  # insert ints at v188[0].end then add delta
 0x007186e0 cMeshBuilder::addIndices1  # v188[1]
 0x00718740 cMeshBuilder::addIndicesSlot  # v188[2+index]
 0x007187b0 cMeshBuilder::addIndicesSlot6  # v188[6+index]
+0x00718820 large cMeshBuilder editor routine
 0x00719170 FixedIdVector6::operator=  # 4-byte element vector assign
 0x00719200 fill 0x28-byte two-vector elements from one source
 0x00719240 cMeshBuilder::finish  # calls 0x718820,0x717ce0,0x7173e0,0x718050 and clears +0x150
 0x00719330 insert range + destructor loop over 0xd0-byte elements
 0x00719390 copy + erase range over 0x50-byte elements
 0x007193e0 vector<0xd0-byte>::insert n copies
-0x00718820 large cMeshBuilder editor routine

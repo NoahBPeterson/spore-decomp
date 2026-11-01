@@ -1,5 +1,5 @@
-0071d550  Mesh::EmitSphere  # Rend* writer, float r, float zScale, int count, int seg, int subdiv, char flag; rings x segments UV sphere with blend falloff + 2 tri-strips + quad strip; ends with vtable +0x10
-0071d960  Mesh::EmitDisc  # Rend* writer, float a, float b, char flag, int count; rings x cols disc + optional cap strip + quad strip; ends with vtable +0x10
+0071d550 ?EmitSphere@@YAXPAURend@@MMHHHD@Z  # EmitSphere migrated from s0071d550 (verbatim, slice spelling)
+0071d960 ?EmitDisc@@YAXPAURend@@MMDH@Z  # EmitDisc migrated from s0071d550 (verbatim, slice spelling)
 0071dbf0  WriteStream  # EA::IO::WriteUint32 0x93aa70 / WriteUint16 0x93a9d0 then vtable +0x38 rows (whole row when format==stride, else per-element)
 0071dc90  Obj13::func_dc90  # byte-exact; returns element[idx @0x8c].field44 != field48
 0071dcc0  Model::sumSection  # per-section sum over stride-0x14 entries using char tables 0x140cf84 / 0x140cf90

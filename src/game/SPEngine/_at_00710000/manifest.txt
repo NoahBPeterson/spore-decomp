@@ -1,0 +1,33 @@
+# source  symbol  va  flags
+../src/game/SPEngine/_at_00710000.cpp  ?DispatchAll@@YAXPAUDispatchTarget@@PAX1@Z  007141e0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/_at_00710000.cpp  ?SetName@ResourceAdapter@@QAEXPBX@Z  00714310  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /Isrc/game/include
+../src/game/SPEngine/_at_00710000.cpp  ?SetNameAndCall@ResourceAdapter@@QAEXPBX0@Z  00714350  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /Isrc/game/include
+../src/game/SPEngine/_at_00710000.cpp  ?SetFlag@ResourceAdapter@@QAEXH@Z  007143a0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /Isrc/game/include
+../src/game/SPEngine/_at_00710000.cpp  ?Copy24@@YAXPAI0PBI@Z  007144b0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /Isrc/game/include
+../src/game/SPEngine/_at_00710000.cpp  ?InsertionSortA@@YAXPAI0URecordCmp@@@Z  00714780  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/_at_00710000.cpp  ?MinOfThree@@YAPAIPAI00URecordCmp@@@Z  00714880  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/_at_00710000.cpp  ?DestroyRes50@@YAPAXPAX0PAD@Z  00714a20  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/_at_00710000.cpp  ?HeapSiftUp@@YAXPAIHHIURecordCmp@@@Z  00714ab0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/_at_00710000.cpp  ?DestroyRes50Range@@YGXPAX0@Z  00714b40  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/_at_00710000.cpp  ?HeapSiftDown@@YAXPAIHHHIURecordCmp@@@Z  00714c00  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/_at_00710000.cpp  ?DestroyRes28@@YAPAXPAX0PAD@Z  00714c70  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/_at_00710000.cpp  ?Reserve@Vec4@@QAEXI@Z  00714cd0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/_at_00710000.cpp  ??0AdapterCtor@@QAE@XZ  00714e10  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/_at_00710000.cpp  ?f714f20@@YGXPAUElem40@@0@Z  00714f20  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/_at_00710000.cpp  ?f714fa0@@YAPAHPAH0HUCmp4@@@Z  00714fa0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/_at_00710000.cpp  ?f715010@@YAPAHPAH0000PAPAH@Z  00715010  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/_at_00710000.cpp  ?pushV8@MeshBuilder@@QAEXABUVec3@@@Z  00716700  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPEngine/_at_00710000.cpp  ?pushV1c@MeshBuilder@@QAEXABUVec3@@@Z  00716740  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPEngine/_at_00710000.cpp  ?pushV30@MeshBuilder@@QAEXABUVec2@@H@Z  00716780  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPEngine/_at_00710000.cpp  ?pushV188_2@MeshBuilder@@QAEXIH@Z  00716bf0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPEngine/_at_00710000.cpp  ?pushV188_6@MeshBuilder@@QAEXIH@Z  00716c30  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPEngine/_at_00710000.cpp  ?addMasked@MeshBuilder@@QAEXEI@Z  00716c70  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPEngine/_at_00710000.cpp  ??4AppEditor@@QAEAAU0@ABU0@@Z  007179e0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/_at_00710000.cpp  ?copyFwd50@@YAPAUElem50@@PAU1@00@Z  00717ad0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/_at_00710000.cpp  ?copyBack50@@YAPAUElem50@@PAU1@00@Z  00717b70  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/_at_00710000.cpp  ?copyFwd28@@YAPAUElem28@@PAU1@00@Z  00718600  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/_at_00710000.cpp  ?copyBack28@@YAPAUElem28_s0071_8640@@PAU1@00@Z  00718640  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/_at_00710000.cpp  ?fill28@@YAXPAUElem28_s0071_8640@@0PBU1@@Z  00719200  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/_at_00710000.cpp  ?copyEraseRange@MeshVec50@@QAEPAEPAE0@Z  00719390  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/_at_00710000.cpp  ?resize@Vec50@@QAEXI@Z  00719d30  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/_at_00710000.cpp  ?resize@VecInt@@QAEXI@Z  0071ef50  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include

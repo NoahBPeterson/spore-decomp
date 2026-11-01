@@ -2,10 +2,30 @@
 00713f20 ?RegisterInvalidShader@@YAXXZ  # register the fallback shader, point dispatch cb at 0x713e40
 00713f90 ?Init@Adapter20@@QAEPAXXZ  # resource-adapter vtable/field init
 00713fd0 ?Destroy@AdapterBase@@QAEXXZ  # resource-adapter dtor: vtable reset + member dtor at +0xc
-00714050 ?Remove@AdapterList@@QAEXPAX@Z  # list remove-by-value (scan, then SmartPtr + push_back)
-007140e0 ?CollectTextures@@YAXPAX0P6A_N0@Z@Z  # gather textures with a filter callback
-007141e0 ?DispatchAll@@YAXPAUDispatchTarget@@PAX1@Z  # dispatch over the two pointer arrays (+0xb8, +0xf4)
-00714260 ?CollectMaterials@@YAXPAIHPAPAX@Z  # allocate an adapter object and collect materials
-007146c0 ?Destroy@AdapterTeardown@@QAEXXZ  # teardown: guarded frees + two vector destructors
-00714780 ?InsertionSortA@@YAXPAI0URecordCmp@@@Z  # insertion sort over 0x18-byte records
-007144f0 ?less@RecordCmp@@QBE_NII@Z  # record comparator (callee of the sorts)
+00714050 ?Remove@AdapterList@@QAEXPAX@Z  # AdapterList::Remove migrated from s00713e40 (verbatim, slice spelling)
+007140e0 ?CollectTextures@@YAXPAX0P6A_N0@Z@Z  # CollectTextures migrated from s00713e40 (verbatim, slice spelling)
+007141e0 ?DispatchAll@@YAXPAUDispatchTarget@@PAX1@Z  # DispatchAll migrated from s00713e40 (verbatim, slice spelling)
+00714260 ?CollectMaterials@@YAXPAIHPAPAX@Z  # CollectMaterials migrated from s00713e40 (verbatim, slice spelling)
+00714310 ?SetName@ResourceAdapter@@QAEXPBX@Z  # ResourceAdapter::SetName migrated from s00713e40 (verbatim, slice spelling)
+00714350 ?SetNameAndCall@ResourceAdapter@@QAEXPBX0@Z  # ResourceAdapter::SetNameAndCall migrated from s00713e40 (verbatim, slice spelling)
+007143a0 ?SetFlag@ResourceAdapter@@QAEXH@Z  # ResourceAdapter::SetFlag migrated from s00713e40 (verbatim, slice spelling)
+007143e0 ?Dispatch@ResourceAdapter@@QAEXEIII@Z  # ResourceAdapter::Dispatch migrated from s00713e40 (verbatim, slice spelling)
+007144b0 ?Copy24@@YAXPAI0PBI@Z  # Copy24 migrated from s00713e40 (verbatim, slice spelling)
+007144f0 ?less@RecordCmp@@QBE_NII@Z  # RecordCmp::less migrated from s00713e40 (verbatim, slice spelling)
+00714560 ?Set@PairTable@@QAEXII@Z  # PairTable::Set migrated from s00713e40 (verbatim, slice spelling)
+007145b0 ?Set@MatrixTable@@QAEPAIIPBI@Z  # MatrixTable::Set migrated from s00713e40 (verbatim, slice spelling)
+007146c0 ?Destroy@AdapterTeardown@@QAEXXZ  # AdapterTeardown::Destroy migrated from s00713e40 (verbatim, slice spelling)
+00714780 ?InsertionSortA@@YAXPAI0URecordCmp@@@Z  # InsertionSortA migrated from s00713e40 (verbatim, slice spelling)
+007147e0 ?InsertionSortB@@YAXPAI0URecordCmp@@@Z  # InsertionSortB migrated from s00713e40 (verbatim, slice spelling)
+00714880 ?MinOfThree@@YAPAIPAI00URecordCmp@@@Z  # MinOfThree migrated from s00713e40 (verbatim, slice spelling)
+00714910 ?Fill24@@YAPAXPAIIPBI@Z  # Fill24 migrated from s00713e40 (verbatim, slice spelling)
+007149a0 ?CopyFloats48@@YAXPAUFloat12@@00@Z  # CopyFloats48 migrated from s00713e40 (verbatim, slice spelling)
+00714a20 ?DestroyRes50@@YAPAXPAX0PAD@Z  # DestroyRes50 migrated from s00713e40 (verbatim, slice spelling)
+00714ab0 ?HeapSiftUp@@YAXPAIHHIURecordCmp@@@Z  # HeapSiftUp migrated from s00713e40 (verbatim, slice spelling)
+00714b40 ?DestroyRes50Range@@YGXPAX0@Z  # DestroyRes50Range migrated from s00713e40 (verbatim, slice spelling)
+00714bc0 ?CopyPairs@@YAPAXPAI000@Z  # CopyPairs migrated from s00713e40 (verbatim, slice spelling)
+00714c00 ?HeapSiftDown@@YAXPAIHHHIURecordCmp@@@Z  # HeapSiftDown migrated from s00713e40 (verbatim, slice spelling)
+00714c70 ?DestroyRes28@@YAPAXPAX0PAD@Z  # DestroyRes28 migrated from s00713e40 (verbatim, slice spelling)
+00714cd0 ?Reserve@Vec4@@QAEXI@Z  # Vec4::Reserve migrated from s00713e40 (verbatim, slice spelling)
+00714e10 ??0AdapterCtor@@QAE@XZ  # AdapterCtor::AdapterCtor migrated from s00713e40 (verbatim, slice spelling)
+00714ec0 ?AllocAndCopy@@YGXIPAI0@Z  # AllocAndCopy migrated from s00713e40 (verbatim, slice spelling)
