@@ -9,13 +9,13 @@
 00a5ea40 bag_clear  # PD bag_clear
 00a5ea70 bag_setup  # class_new("bag"), "flush"/"clear" methods
 00a5eb20 x_note_setup  # makenote + stripnote + poly + bag registration chain
-00a5eb50 print_new  # class_new("print") allocator; stores the help symbol at +0x28
-00a5ebb0 print_anything  # PD print_anything (postargs into a 1000-byte buffer)
-00a5ebe0 print_setup  # class_new("print"); bang/float/symbol route to sys_gui, list/anything to print_anything
-00a5ec90 random_uniform  # RandomLinearCongruential::RandomUint32UniformN on sSystemRandom
-00a5ecb0 random_seed  # SetSeed on sSystemRandom
+00a5eb50 ?print_new@Eapd@Audio@EA@@YAPAXUt_symbol_s00a5_e0f0@123@@Z  # print_new migrated from s00a5e0f0 (verbatim, slice spelling)
+00a5ebb0 ?print_anything@Eapd@Audio@EA@@YAXPADUt_symbol_s00a5_e0f0@123@HPAUt_atom_s00a5_e0f0@123@@Z  # print_anything migrated from s00a5e0f0 (verbatim, slice spelling)
+00a5ebe0 ?print_setup@Eapd@Audio@EA@@YA_NXZ  # print_setup migrated from s00a5e0f0 (verbatim, slice spelling)
+00a5ec90 ?random_uniform@Eapd@Audio@EA@@YAII@Z  # random_uniform migrated from s00a5e0f0 (verbatim, slice spelling)
+00a5ecb0 ?random_seed@Eapd@Audio@EA@@YAXI@Z  # random_seed migrated from s00a5e0f0 (verbatim, slice spelling)
 00a5ecc0 random_seed_method  # PD random "seed" method (SetSeed on x+0x2c); merged into the 0xa5ecb0 slice row by the analyser
-00a5ece0 random_new  # class_new("random") allocator; seeds from the global stream
+00a5ece0 ?random_new@Eapd@Audio@EA@@YAPAXM@Z  # random_new migrated from s00a5e0f0 (verbatim, slice spelling)
 00a5ed40 frandom_new  # class_new("frandom") allocator; identical body to random_new
 00a5eda0 random_bang  # PD random_bang (RandomUint32UniformN, then float out)
 00a5ee30 frandom_bang  # PD frandom_bang (value * NextFloat)

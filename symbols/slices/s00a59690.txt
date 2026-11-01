@@ -1,0 +1,3 @@
+00a598f0 ?FUN_00a598f0@@YAPAXM@Z  # FUN_00a598f0 migrated from s00a59690 (verbatim, slice spelling)
+00a59940 ?FUN_00a59940@@YAXPAUPdObject@@@Z  # FUN_00a59940 migrated from s00a59690 (verbatim, slice spelling)
+00a599a0 ?FUN_00a599a0@@YAXPAUPdObject@@M@Z  # FUN_00a599a0 migrated from s00a59690 (verbatim, slice spelling)
