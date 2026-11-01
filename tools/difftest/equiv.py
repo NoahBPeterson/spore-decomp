@@ -60,7 +60,11 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 import capstone                                    # noqa: E402
 try:
-    os.nice(10)                                    # yield the CPU to interactive work
+    if hasattr(os, "nice"):
+        os.nice(10)                                # yield the CPU to interactive work
+    else:                                          # Windows: BELOW_NORMAL_PRIORITY_CLASS
+        import ctypes
+        ctypes.windll.kernel32.SetPriorityClass(ctypes.windll.kernel32.GetCurrentProcess(), 0x4000)
 except OSError:
     pass
 import numpy as np                                 # noqa: E402
