@@ -288,6 +288,14 @@ class Splicer:
         if selfrefs:
             return self.skip("an external symbol resolves to the hooked address itself", t.sid,
                              "%08x(%s)" % (t.va, selfrefs[0][:40]))
+        # A symbol bound to an address that exists only in the equivalence harness (a Machine model stub or model
+        # datum the resolver fell back to): in the game it is garbage. cTribeGameBehaviorParty's constructor
+        # 0xd791a0 called 0x7f004260 for its base constructor and crashed (Windows boot 2026-11-01).
+        ghosts = [coff.syms[si].name for si, va_ in res.addr.items()
+                  if va_ not in self.builtin and not self.img.in_image(va_)]
+        if ghosts:
+            return self.skip("a symbol resolves to a harness-only address (model stub/data)", t.sid,
+                             "%08x(%s)" % (t.va, ghosts[0][:40]))
         fsec, f_lo, f_hi = coff.func_extent(fsym)
         # Calling convention: every `ret N` of ours must be one the original uses. `ret 4` against
         # the original's `ret` leaves the caller's stack 4 bytes off at every call (UTFWin crashes
@@ -473,6 +481,10 @@ def splice(pe, sp, targets, verbose, limit=None):
                 t = E.prepare(sid, vai, flags_override=" ".join(_fl), src=_src, log=quiet)
             else:
                 t = E.prepare(sid, vai, log=quiet)
+            # the bindings the verdict was made with: equiv binds what the original's own instructions identify
+            # after prepare (audit-bind), e.g. a callee the resolver could only model; without it the hybrid used
+            # a different binding from the one the harness tested
+            E.audit_bind(t, quiet)
         except Exception as e:  # a slice the harness cannot handle must not stop the build
             sp.skip("prepare raised " + type(e).__name__, sid, va)
             continue
