@@ -1,15 +1,20 @@
+0068f950 ?AddRef@cJob@SP@@QAEHXZ  # SP::cJob::AddRef (callee of s006b47a0, named from the dev publics; slice address comment)
+006909b0 ?GetStatus@cJob@SP@@QBE?AW4tJobStatus@2@XZ  # SP::cJob::GetStatus (callee of s006b47a0, named from the dev publics; slice address comment)
+00691380 ?AddDependency@cJob@SP@@QAEXPAV12@@Z  # SP::cJob::AddDependency (callee of s006b47a0, named from the dev publics; slice address comment)
+006913c0 ?AddWeakDependency@cJob@SP@@QAEXPAV12@@Z  # SP::cJob::AddWeakDependency (callee of s006b47a0, named from the dev publics; slice address comment)
+006926b0 ?Wait@cJob@SP@@QAEXXZ  # SP::cJob::Wait (callee of s006b47a0, named from the dev publics; slice address comment)
 006b47a0 async-save cJob setter  # EA::Thread mutex + refcounted swap
 006b4840 async-save cJob clear
 006b48d0 async-save request ctor  # two vptrs + nested GraphicsFactoryAsyncRequest at +0x20
 006b4a10 async-save prepare
 006b4b60 async-save submit  # ResourceMan::GetManager
 006b4ce0 async-save completion
-006b4f40 ISteamApps wrapper  # dllimport SteamApps, tail-calls vtable slot 0x18
-006b4f60 SP::cString sink ctor (source, placeholder)  # layout identical to cString payload
-006b4f90 SP::cString sink flag-and  # and byte[+0x10], arg
-006b4fa0 SP::cString sink write A  # calls FUN_00693390
-006b4fd0 SP::cString sink write B  # calls SP::cUnknownTypedValueToString::Write
-006b5000 SP::cString sink release  # releases +0x4 (slots 0x24,0x8)
+006b4f40 ?FUN_006b4f40@@YA_NPBD@Z  # FUN_006b4f40 migrated from s006b47a0 (verbatim, slice spelling)
+006b4f60 ??0CSink@@QAE@II@Z  # CSink::CSink migrated from s006b47a0 (verbatim, slice spelling)
+006b4f90 ?FUN_006b4f90@CSink@@QAEX_N@Z  # CSink::FUN_006b4f90 migrated from s006b47a0 (verbatim, slice spelling)
+006b4fa0 ?FUN_006b4fa0@CSink@@QAEXPBX@Z  # CSink::FUN_006b4fa0 migrated from s006b47a0 (verbatim, slice spelling)
+006b4fd0 ?FUN_006b4fd0@CSink@@QAEXPBX@Z  # CSink::FUN_006b4fd0 migrated from s006b47a0 (verbatim, slice spelling)
+006b5000 ?FUN_006b5000@CSink@@QAEXXZ  # CSink::FUN_006b5000 migrated from s006b47a0 (verbatim, slice spelling)
 006b5030 ?SP_cString_SetColorLocalized@@YAX_N@Z  # SP_cString_SetColorLocalized migrated from s006b47a0 (verbatim, slice spelling)
 006b5040 ?FUN_006b5040@@YAXIIIPAI@Z  # FUN_006b5040 migrated from s006b47a0 (verbatim, slice spelling)
 006b5060 ??0cString_s006b_47a0@SP@@QAE@XZ  # cString_s006b_47a0::cString migrated from s006b47a0 (verbatim, slice spelling)

@@ -1,3 +1,5 @@
+006bb1c0 ?FUN_006bb1c0@@YAXPBDII0@Z  # FUN_006bb1c0 migrated from s006bb1c0 (verbatim, slice spelling)
+006bb4b0 ?FUN_006bb4b0@@YA_NIIPB_WZZ  # FUN_006bb4b0 migrated from s006bb1c0 (verbatim, slice spelling)
 006bb670 ?FUN_006bb670@@YIHPAX@Z  # FUN_006bb670 migrated from s006bb1c0 (verbatim, slice spelling)
 006bb690 ??1DebugMessage@@UAE@XZ  # DebugMessage::~DebugMessage migrated from s006bb1c0 (verbatim, slice spelling)
 006bb7b0 ?FUN_006bb7b0@@YA_NPBX0@Z  # FUN_006bb7b0 migrated from s006bb1c0 (verbatim, slice spelling)

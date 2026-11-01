@@ -1,13 +1,13 @@
 006b8680 SP::GetSystemInfo  # PDB anchor
-006b8d60 FUN_006b8d60  # UTF-8 -> UTF-16 with capacity
-006b8db0 FUN_006b8db0  # UTF-16 -> UTF-8 with capacity
-006b8e10 FUN_006b8e10  # CompareStringW wrapper (locale via FUN_0087da90)
-006b8ea0 FUN_006b8ea0  # wide case-insensitive compare
-006b8f00 FUN_006b8f00  # UTF-8 -> UTF-16 via ConvertEncoding 0x93cfb0
-006b8f40 FUN_006b8f40  # LCMapStringW case map, EH
-006b9050 MatX::Rotate  # sin/cos rotation of 3x3 rows
-006b9190 RotSerial::Save  # serialize flags + fields
-006b9230 RotSerial::Load  # deserialize
-006b92d0 Basis3::Normalize  # normalize 3x3 basis
-006b9440 Basis3::Build  # basis-to-matrix
 006b8ca0 FUN_006b8ca0  # drive hash (PDB candidate GetShaderInfo)
+006b8d60 ?FUN_006b8d60@@YAHPBDPA_WH@Z  # FUN_006b8d60 migrated from s006b8680 (verbatim, slice spelling)
+006b8db0 FUN_006b8db0  # UTF-16 -> UTF-8 with capacity
+006b8e10 ?FUN_006b8e10@@YAHPB_WH0HI@Z  # FUN_006b8e10 migrated from s006b8680 (verbatim, slice spelling)
+006b8ea0 FUN_006b8ea0  # wide case-insensitive compare
+006b8f00 ?FUN_006b8f00@@YAHPBDPAH@Z  # FUN_006b8f00 migrated from s006b8680 (verbatim, slice spelling)
+006b8f40 ?FUN_006b8f40@@YAXPAX@Z  # FUN_006b8f40 migrated from s006b8680 (verbatim, slice spelling)
+006b9050 ?Rotate@MatX@@QAEXM@Z  # MatX::Rotate migrated from s006b8680 (verbatim, slice spelling)
+006b9190 ?Save@BasisM@@QAEIPAX@Z  # BasisM::Save migrated from s006b8680 (verbatim, slice spelling)
+006b9230 ?Load@BasisM@@QAEIPAX@Z  # BasisM::Load migrated from s006b8680 (verbatim, slice spelling)
+006b92d0 ?Normalize@Basis3@@QAEXPBM@Z  # Basis3::Normalize migrated from s006b8680 (verbatim, slice spelling)
+006b9440 ?Build@BasisM@@QAEXPAM@Z  # BasisM::Build migrated from s006b8680 (verbatim, slice spelling)

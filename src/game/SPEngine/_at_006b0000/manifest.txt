@@ -1,0 +1,18 @@
+# source  symbol  va  flags
+../src/game/SPEngine/_at_006b0000.cpp  ?SetSaveAreaFlag@@YAXE@Z  006b1d40  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/_at_006b0000.cpp  ?Inc@Counter40@@QAE_NXZ  006b42f0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/_at_006b0000.cpp  ?FUN_006b4f40@@YA_NPBD@Z  006b4f40  /O2 /MD /Gy /EHsc /GS- /TP /Isrc/game/include
+../src/game/SPEngine/_at_006b0000.cpp  ??0CSink@@QAE@II@Z  006b4f60  /O2 /MD /Gy /EHsc /GS- /TP /Isrc/game/include
+../src/game/SPEngine/_at_006b0000.cpp  ?FUN_006b4f90@CSink@@QAEX_N@Z  006b4f90  /O2 /MD /Gy /EHsc /GS- /TP /Isrc/game/include
+../src/game/SPEngine/_at_006b0000.cpp  ?FUN_006b4fa0@CSink@@QAEXPBX@Z  006b4fa0  /O2 /MD /Gy /EHsc /GS- /TP /Isrc/game/include
+../src/game/SPEngine/_at_006b0000.cpp  ?FUN_006b4fd0@CSink@@QAEXPBX@Z  006b4fd0  /O2 /MD /Gy /EHsc /GS- /TP /Isrc/game/include
+../src/game/SPEngine/_at_006b0000.cpp  ?FUN_006b5000@CSink@@QAEXXZ  006b5000  /O2 /MD /Gy /EHsc /GS- /TP /Isrc/game/include
+../src/game/SPEngine/_at_006b0000.cpp  ?func28h@cStringDetokenizer@App@@UAE_NPAXAAUstring16_s006b_5770@eastl@@@Z  006b57f0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/_at_006b0000.cpp  ?HasTokens@cStringDetokenizer@App@@UAE_NPBG@Z  006b5810  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/_at_006b0000.cpp  ?func14h@ITokenTranslator@App@@UAEXH@Z  006b5840  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/_at_006b0000.cpp  ?FUN_006b8d60@@YAHPBDPA_WH@Z  006b8d60  /O2 /MD /Gy /GS- /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPEngine/_at_006b0000.cpp  ?FUN_006b8e10@@YAHPB_WH0HI@Z  006b8e10  /O2 /MD /Gy /GS- /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPEngine/_at_006b0000.cpp  ?FUN_006b8f00@@YAHPBDPAH@Z  006b8f00  /O2 /MD /Gy /GS- /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPEngine/_at_006b0000.cpp  ?SetA@MatOwner@@QAEXHM@Z  006ba800  /O2 /MD /Gy /GS- /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/_at_006b0000.cpp  ?SetB@MatOwner@@QAEXHH@Z  006ba840  /O2 /MD /Gy /GS- /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/_at_006b0000.cpp  ?FUN_006bae50@@YAXXZ  006bae50  /O2 /MD /Gy /GS- /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include

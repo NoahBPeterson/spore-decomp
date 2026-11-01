@@ -1,9 +1,15 @@
-006ba800 MatOwner::SetA  # build Matrix3 and set (thiscall ret 8)
-006ba840 MatOwner::SetB  # Matrix3 from two ints
-006ba870 XForm2::Apply  # transform a Matrix3 into this
-006ba940 XForm2::PreRotateX  # build cTransform + rotate
-006baa70 XForm2::PreRotateY  # build cTransform + rotate
-006bae50 FUN_006bae50  # app property setup
+004099b0 ?PreRotateY@cTransform@Swarm@EA@@QAEXM@Z  # EA::Swarm::cTransform::PreRotateY (callee of s006ba2f0, named from the dev publics; slice address comment)
+006ba2f0 ?FUN_006ba2f0@@YAXPAXHPADH@Z  # FUN_006ba2f0 migrated from s006ba2f0 (verbatim, slice spelling)
+006ba620 ?FUN_006ba620@@YAPAUMatrix3@@PAU1@PBM@Z  # FUN_006ba620 migrated from s006ba2f0 (verbatim, slice spelling)
+006ba800 ?SetA@MatOwner@@QAEXHM@Z  # MatOwner::SetA migrated from s006ba2f0 (verbatim, slice spelling)
+006ba840 ?SetB@MatOwner@@QAEXHH@Z  # MatOwner::SetB migrated from s006ba2f0 (verbatim, slice spelling)
+006ba870 ?Apply@XForm2@@QAEXPBM@Z  # XForm2::Apply migrated from s006ba2f0 (verbatim, slice spelling)
+006ba940 ?PreRotateX@XForm2@@QAEXM@Z  # XForm2::PreRotateX migrated from s006ba2f0 (verbatim, slice spelling)
+006baa70 ?PreRotateY@XForm2@@QAEXM@Z  # XForm2::PreRotateY migrated from s006ba2f0 (verbatim, slice spelling)
+006baba0 ?SetA@XForm2@@QAEXHM@Z  # XForm2::SetA migrated from s006ba2f0 (verbatim, slice spelling)
+006bac90 ?SetB@XForm2@@QAEXHH@Z  # XForm2::SetB migrated from s006ba2f0 (verbatim, slice spelling)
+006badd0 ??0LogManager@@QAE@PAX@Z  # LogManager::LogManager migrated from s006ba2f0 (verbatim, slice spelling)
+006bae50 ?FUN_006bae50@@YAXXZ  # FUN_006bae50 migrated from s006ba2f0 (verbatim, slice spelling)
 006baec0 ?FUN_006baec0@@YAXPAX@Z  # FUN_006baec0 migrated from s006ba2f0 (verbatim, slice spelling)
 006baff0 ?SporeAlert@SP@@YAXPBDHH@Z  # SporeAlert migrated from s006ba2f0 (verbatim, slice spelling)
-006bb0b0 FUN_006bb0b0  # wide SporeAlert variant
+006bb0b0 ?FUN_006bb0b0@@YAXPB_WHH@Z  # FUN_006bb0b0 migrated from s006ba2f0 (verbatim, slice spelling)

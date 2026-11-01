@@ -1,7 +1,7 @@
 006b5770 ??0cString@SP@@QAE@IIPB_W@Z  # SP::cString::cString migrated from s006b5770
-006b57f0 App::cStringDetokenizer::func28h  # tail-calls this->ProcessString(*(a+8), dst)
-006b5810 App::cStringDetokenizer::HasTokens  # wcschr(p,'~') != 0
-006b5840 App::ITokenTranslator::func14h  # iterate mTranslators[1..], call translator->func14h
+006b57f0 ?func28h@cStringDetokenizer@App@@UAE_NPAXAAUstring16_s006b_5770@eastl@@@Z  # cStringDetokenizer::func28h migrated from s006b5770 (verbatim, slice spelling)
+006b5810 ?HasTokens@cStringDetokenizer@App@@UAE_NPBG@Z  # cStringDetokenizer::HasTokens migrated from s006b5770 (verbatim, slice spelling)
+006b5840 ?func14h@ITokenTranslator@App@@UAEXH@Z  # ITokenTranslator::func14h migrated from s006b5770 (verbatim, slice spelling)
 006b5880 ?FindTokenTranslation@cStringDetokenizer@App@@UAE_NPBGAAUstring16_s006b_5770@eastl@@@Z  # cStringDetokenizer::FindTokenTranslation migrated from s006b5770 (verbatim, slice spelling)
 006b5950 ?func34h@cStringDetokenizer@App@@UAEXPBGI@Z  # cStringDetokenizer::func34h migrated from s006b5770 (verbatim, slice spelling)
 006b5990 ?erase@TranslatorVector@App@@QAEPAUintrusive_ptr@2@PAU32@@Z  # TranslatorVector::erase migrated from s006b5770 (verbatim, slice spelling)
