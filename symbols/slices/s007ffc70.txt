@@ -1,11 +1,11 @@
 007ffc70 cSPUIBehaviorPredicateWinState::Evaluate  # vtable 0x14165B0 slot 6; switch on cSPUIBehaviorPredicateWinState::mWinStateQuery (+0x18)
-00800060 cSPUIBehaviorPredicateWinState::~cSPUIBehaviorPredicateWinState  # vtable 0x14165B0 slot 2; resets IWinProc/RefCount vptrs, releases mpQueryWindow, base dtor
+00800060 ?ScalarDtor@C_800060@@QAEPAXE@Z  # C_800060::ScalarDtor migrated from s007ffc70 (verbatim, slice spelling)
 008005f0 UTFWin::RegisterUIBehaviors  # one-time init guarded by g_164BBD9; registers 29 handler globals with the messaging server
 008008b0 UTFWin::CreateFrameSequencer  # factory: alloc 0x60 "UTFWin/cSPUIFrameSequencer", construct, set resource id 0x105A94B
-00800ea0 UTFWin::CreateBehaviorWinEventBase  # factory: alloc 0x8C "UTFWin/cSPUIBehaviorWinEventBase", ctor(10,max,0)
-00800ef0 UTFWin::CreateBehaviorWinBoolStateEvent  # factory: alloc 0x90 "UTFWin/cSPUIBehaviorWinBoolStateEvent", ctor(1,10,max,0)
-008010a0 UTFWin::CreateBehaviorTimeFunctionSmoothRamp  # factory: alloc 0x48 "UTFWin/cSPUIBehaviorTimeFunctionSmoothRamp"
-00801100 UTFWin::CreateBehaviorTimeFunctionDampedPeriodic  # factory: alloc 0x50 "UTFWin/cSPUIBehaviorTimeFunctionDampedPeriodic"
+00800ea0 ?f_800ea0@@YGPAXHPAX@Z  # f_800ea0 migrated from s007ffc70 (verbatim, slice spelling)
+00800ef0 ?f_800ef0@@YGPAXHPAX@Z  # f_800ef0 migrated from s007ffc70 (verbatim, slice spelling)
+008010a0 ?f_8010a0@@YGPAXHPAX@Z  # f_8010a0 migrated from s007ffc70 (verbatim, slice spelling)
+00801100 ?f_801100@@YGPAXHPAX@Z  # f_801100 migrated from s007ffc70 (verbatim, slice spelling)
 008011f0 ?Dtor@C_8011f0@@QAEXXZ  # C_8011f0::Dtor migrated from s007ffc70 (verbatim, slice spelling)
 00801210 ?Thunk@C_801210@@QAEPAXXZ  # C_801210::Thunk migrated from s007ffc70 (verbatim, slice spelling)
 00801280 cSPUICursorAttachmentLayout::cSPUICursorAttachmentLayout  # PDB type cSPUICursorAttachmentLayout; vtable 0x1416EC4 at +0x78

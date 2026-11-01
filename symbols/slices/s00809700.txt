@@ -8,8 +8,14 @@
 00809970 ?FUN_00809970@@YAHXZ  # FUN_00809970 migrated from s00809700 (verbatim, slice spelling)
 008099a0 ?SPUIHelpers_BeginModal@@YAXXZ  # SPUIHelpers_BeginModal migrated from s00809700 (verbatim, slice spelling)
 00809c50 ?SPUIHelpers_EndModal@@YAXXZ  # SPUIHelpers_EndModal migrated from s00809700 (verbatim, slice spelling)
-00809db0 UI::CalloutMessageBox create helper  # callee 0x816cb0/0x817040
+00809db0 ?FUN_00809db0@@YADPAXPBX@Z  # FUN_00809db0 migrated from s00809700 (verbatim, slice spelling)
 00809e40 EA::UTFWin subobject rebind (AutoRefCount<IWinText>)  # callee 0xb5f950
-00809ff0 window scale/position update  # callee 0x957f30
+00809f40 ?Fn@HelperObj@@QAEXPAUIWin@@PAX@Z  # HelperObj::Fn migrated from s00809700 (verbatim, slice spelling)
+00809fa0 ?DeleteThis@Holder@@QAEPAU1@E@Z  # Holder::DeleteThis migrated from s00809700 (verbatim, slice spelling)
+00809ff0 ?FUN_00809ff0@@YAXPAX@Z  # FUN_00809ff0 migrated from s00809700 (verbatim, slice spelling)
 0080a1a0 ?sOnEnterEscKeys@@YAXXZ  # sOnEnterEscKeys migrated from s00809700 (verbatim, slice spelling)
 0080a320 ?FUN_0080a320@@YG_NPAXPAUMsg@@@Z  # FUN_0080a320 migrated from s00809700 (verbatim, slice spelling)
+0080a390 ?Fn@ModalBind@@QAEXPAUIWin@@@Z  # ModalBind::Fn migrated from s00809700 (verbatim, slice spelling)
+0080a5f0 ?FUN_0080a5f0@@YAXXZ  # FUN_0080a5f0 migrated from s00809700 (verbatim, slice spelling)
+00816a20 ?Show@cSPUIMessageBox@@QAE_NHHMM@Z  # cSPUIMessageBox::Show (callee of s00809700, named from the dev publics; slice address comment)
+00817040 ?Init@cSPUIMessageBox@@QAE_NABVKey@ResourceMan@EA@@@Z  # cSPUIMessageBox::Init (callee of s00809700, named from the dev publics; slice address comment)

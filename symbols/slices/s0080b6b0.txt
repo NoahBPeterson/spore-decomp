@@ -1,5 +1,12 @@
-0080b8a0 layout window find/refresh helper  # calls cSPUILayout::FindWindowByID
-0080b8f0 vector<0x34> teardown  # destroy range + free non-inline storage
-0080b930 vector<0x42c> teardown  # destroy range + free non-inline storage
-0080ba10 inline-buffered container init
-0080bcf0 vector erase(first,last)
+0080b6b0 ?FUN_0080b6b0@Big3@@QAEXXZ  # Big3::FUN_0080b6b0 migrated from s0080b6b0 (verbatim, slice spelling)
+0080b8a0 ?method@Big3@@QAEPAXH@Z  # Big3::method migrated from s0080b6b0 (verbatim, slice spelling)
+0080b8f0 ?Vec34Dtor@@YIXPAH@Z  # Vec34Dtor migrated from s0080b6b0 (verbatim, slice spelling)
+0080b930 ?Vec42CDtor@@YIXPAH@Z  # Vec42CDtor migrated from s0080b6b0 (verbatim, slice spelling)
+0080b9b0 ?DeletingDtor@Big3@@QAEPAXD@Z  # Big3::DeletingDtor migrated from s0080b6b0 (verbatim, slice spelling)
+0080ba10 ?ObjBCtor@@YIPAUObjB@@PAU1@@Z  # ObjBCtor migrated from s0080b6b0 (verbatim, slice spelling)
+0080baa0 ?Insert@RecVec@@QAEXPAUVecRec@@PBU2@@Z  # RecVec::Insert migrated from s0080b6b0 (verbatim, slice spelling)
+0080bbe0 ?Assign@RecVec@@QAEXPBUVecRec@@PAU2@PBX@Z  # RecVec::Assign migrated from s0080b6b0 (verbatim, slice spelling)
+0080bcf0 ?erase@Vec@@QAEPAURecC_s0080_b6b0@@PAU2@0@Z  # Vec::erase migrated from s0080b6b0 (verbatim, slice spelling)
+0080bd50 ?FUN_0080bd50@Big3@@QAEXM@Z  # Big3::FUN_0080bd50 migrated from s0080b6b0 (verbatim, slice spelling)
+0080bfb0 ?FUN_0080bfb0@Big3@@QAE_NM@Z  # Big3::FUN_0080bfb0 migrated from s0080b6b0 (verbatim, slice spelling)
+0080c520 ?FUN_0080c520@Big3@@QAEPAUWin@@MMH@Z  # Big3::FUN_0080c520 migrated from s0080b6b0 (verbatim, slice spelling)

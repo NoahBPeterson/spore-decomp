@@ -1,0 +1,5 @@
+# va  diff-bytes  reason
+0080ab00  -  FUN_0080ab00 (429 bytes): not reconstructed flags: /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+0080acb0  -  FUN_0080acb0 (435 bytes): not reconstructed flags: /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+0080b000  -  FUN_0080b000 (364 bytes): not reconstructed flags: /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+0080b4d0  -  FUN_0080b4d0 (475 bytes): not reconstructed flags: /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast

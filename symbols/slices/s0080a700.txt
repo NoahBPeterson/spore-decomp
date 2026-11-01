@@ -1,9 +1,15 @@
 0080a700 cSPUIImageAtlasMap::Init  # PDB name
-0080aa20 window scale setter  # uses subobject +0x20c
-0080aa90 window scale setter (outer object vtbl+0x88)
+0080aa20 ?FUN_0080aa20@@YA_NPAX@Z  # FUN_0080aa20 migrated from s0080a700 (verbatim, slice spelling)
+0080aa90 ?FUN_0080aa90@@YA_NPAX@Z  # FUN_0080aa90 migrated from s0080a700 (verbatim, slice spelling)
+0080ab00 ?FUN_0080ab00@@YAXXZ  # FUN_0080ab00 migrated from s0080a700 (verbatim, slice spelling)
+0080acb0 ?FUN_0080acb0@@YAXXZ  # FUN_0080acb0 migrated from s0080a700 (verbatim, slice spelling)
 0080af20 record ctor from 0x28 source + AutoRef
 0080af90 record copy ctor
+0080b000 ?FUN_0080b000@@YAXXZ  # FUN_0080b000 migrated from s0080a700 (verbatim, slice spelling)
+0080b170 ?FUN_0080b170@@YGIPAXDMMM@Z  # FUN_0080b170 migrated from s0080a700 (verbatim, slice spelling)
 0080b240 record copy assignment
-0080b3b0 ?DeletingDtor@RecA@@QAEPAU1@I@Z  # RecA deleting destructor (complete, nonmatching)
-0080b400 ?Validate@AtlasState@@QAE_NXZ  # AtlasState::Validate (complete, nonmatching)
-0080b170 ?FUN_0080b170@@YGIPAXDMMM@Z  # layout subobject dispatch (complete, nonmatching)
+0080b2d0 ?copyBack@@YAPAURecC@@PAXPAU1@11@Z  # copyBack migrated from s0080a700 (verbatim, slice spelling)
+0080b340 ?copyFwd@@YAPAURecC@@PAXPAU1@11@Z  # copyFwd migrated from s0080a700 (verbatim, slice spelling)
+0080b3b0 ?FUN_0080b3b0@@YAXXZ  # FUN_0080b3b0 migrated from s0080a700 (verbatim, slice spelling)
+0080b400 ?Validate@AtlasState@@QAE_NXZ  # AtlasState::Validate migrated from s0080a700 (verbatim, slice spelling)
+0080b4d0 ?FUN_0080b4d0@@YAXXZ  # FUN_0080b4d0 migrated from s0080a700 (verbatim, slice spelling)

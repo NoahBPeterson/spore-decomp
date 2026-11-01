@@ -1,0 +1,18 @@
+# source  symbol  va  flags
+../src/game/Spui/_at_00800000.cpp  ?ScalarDtor@C_800060@@QAEPAXE@Z  00800060  /O2 /MD /Gy /TP /arch:SSE2 /Isrc/game/include
+../src/game/Spui/_at_00800000.cpp  ?f_800ea0@@YGPAXHPAX@Z  00800ea0  /O2 /MD /Gy /TP /arch:SSE2 /Isrc/game/include
+../src/game/Spui/_at_00800000.cpp  ?f_800ef0@@YGPAXHPAX@Z  00800ef0  /O2 /MD /Gy /TP /arch:SSE2 /Isrc/game/include
+../src/game/Spui/_at_00800000.cpp  ?f_8010a0@@YGPAXHPAX@Z  008010a0  /O2 /MD /Gy /TP /arch:SSE2 /Isrc/game/include
+../src/game/Spui/_at_00800000.cpp  ?f_801100@@YGPAXHPAX@Z  00801100  /O2 /MD /Gy /TP /arch:SSE2 /Isrc/game/include
+../src/game/Spui/_at_00800000.cpp  ?Sub_8028e0@@YI_NPAX@Z  008028e0  /O2 /MD /Gy /TP /arch:SSE2 /Isrc/game/include
+../src/game/Spui/_at_00800000.cpp  ?DeleteThis@Holder@@QAEPAU1@E@Z  00809fa0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/Spui/_at_00800000.cpp  ?FUN_0080a5f0@@YAXXZ  0080a5f0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/Spui/_at_00800000.cpp  ?FUN_0080aa20@@YA_NPAX@Z  0080aa20  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/Spui/_at_00800000.cpp  ?FUN_0080aa90@@YA_NPAX@Z  0080aa90  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/Spui/_at_00800000.cpp  ?method@Big3@@QAEPAXH@Z  0080b8a0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Spui/_at_00800000.cpp  ?Vec34Dtor@@YIXPAH@Z  0080b8f0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Spui/_at_00800000.cpp  ?Vec42CDtor@@YIXPAH@Z  0080b930  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Spui/_at_00800000.cpp  ?FUN_0080c520@Big3@@QAEPAUWin@@MMH@Z  0080c520  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Spui/_at_00800000.cpp  ?dtor@cSPUIInfoLineTray@@QAEXXZ  0080cdd0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include
+../src/game/Spui/_at_00800000.cpp  ?Add@cSPUIInfoLineTray@@QAEXPBX@Z  0080ce20  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /GS- /Isrc/game/include
+../src/game/Spui/_at_00800000.cpp  ?ScalarDeletingDtor@cSPUIInfoLineTray@@QAEPAXE@Z  0080ceb0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include

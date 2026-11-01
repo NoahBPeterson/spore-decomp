@@ -1,9 +1,13 @@
-0080c840 cSPUIInfoLine::cSPUIInfoLine  # element ctor; string "UI/cSPUIInfoLine" layout name, vtable 0x1417cb0
-0080c9f0 cSPUIInfoLine::operator=  # copies +4..+0x1c4 then layout/fields
-0080cb30 cSPUIInfoLine::cSPUIInfoLine  # element ctor variant
-0080cdd0 cSPUIInfoLineTray::~cSPUIInfoLineTray  # releases layout/current, clears InfoLine vector
-0080ceb0 cSPUIInfoLineTray::`scalar deleting destructor'  # vtable 0x1417cb4, calls dtor
-0080cf00 UTFWin::cSPUILaunchScreenWinProc::cSPUILaunchScreenWinProc  # vtables 0x1417d14/0x1417d04, class name from card + vtable_names.txt
+0080c5d0 ?Method@cSPUIInfoLineTray@@QAEXPAXMM0@Z  # cSPUIInfoLineTray::Method migrated from s0080c5d0 (verbatim, slice spelling)
+0080c840 ?ctor@cSPUIInfoLine@@QAEPAU1@PBX@Z  # cSPUIInfoLine::ctor migrated from s0080c5d0 (verbatim, slice spelling)
+0080c9f0 ?assign@cSPUIInfoLine@@QAEPAU1@PBU1@@Z  # cSPUIInfoLine::assign migrated from s0080c5d0 (verbatim, slice spelling)
+0080cb30 ?ctor2@cSPUIInfoLine@@QAEPAU1@PBU1@@Z  # cSPUIInfoLine::ctor2 migrated from s0080c5d0 (verbatim, slice spelling)
+0080cc10 ?Erase@InfoVec@@QAEPAUcSPUIInfoLine@@PAU2@0@Z  # InfoVec::Erase migrated from s0080c5d0 (verbatim, slice spelling)
+0080cc80 ?Insert@InfoVec@@QAEXPAUcSPUIInfoLine@@PBU2@@Z  # InfoVec::Insert migrated from s0080c5d0 (verbatim, slice spelling)
+0080cdd0 ?dtor@cSPUIInfoLineTray@@QAEXXZ  # cSPUIInfoLineTray::dtor migrated from s0080c5d0 (verbatim, slice spelling)
+0080ce20 ?Add@cSPUIInfoLineTray@@QAEXPBX@Z  # cSPUIInfoLineTray::Add migrated from s0080c5d0 (verbatim, slice spelling)
+0080ceb0 ?ScalarDeletingDtor@cSPUIInfoLineTray@@QAEPAXE@Z  # cSPUIInfoLineTray::ScalarDeletingDtor migrated from s0080c5d0 (verbatim, slice spelling)
+0080cf00 ?ctor@cSPUILaunchScreenWinProc@@QAEPAV1@XZ  # cSPUILaunchScreenWinProc::ctor migrated from s0080c5d0 (verbatim, slice spelling)
 0080cf80 ?DoMessage@cSPUILaunchScreenWinProc@@QAEEPAUIWin@@PAUWinMsg@@@Z  # cSPUILaunchScreenWinProc::DoMessage migrated from s0080c5d0 (verbatim, slice spelling)
 0080d590 ?SetFlag8@@YGXPAD@Z  # SetFlag8 migrated from s0080c5d0 (verbatim, slice spelling)
 008120d0 ?Init@cSPUILayout@@QAE_NABVKey@ResourceMan@EA@@_NI@Z  # cSPUILayout::Init (callee of s0080c5d0, named from the dev publics; slice address comment)
