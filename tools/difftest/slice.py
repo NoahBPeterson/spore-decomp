@@ -11,9 +11,10 @@ sys.path.insert(0, os.path.join(ROOT, "tools", "matching"))
 from coff import Coff  # noqa: E402
 
 DEFAULT_FLAGS = ["/O2", "/MD", "/Gy", "/EHsc", "/TP"]
-INCLUDE = "/I" + "Z:" + os.path.join(ROOT, "match", "include").replace("/", "\\")
 OBJDIR = os.path.join(ROOT, "work", "difftest", "obj")
 CL = os.path.join(ROOT, "tools", "matching", "cl.sh")
+# On Windows the compilers run directly (cl_run), with the include/lib paths cl.sh and cl71.sh give them under wine
+NATIVE = os.name == "nt"
 
 FLAG_RE = re.compile(r"(?<![\w/])(/(?:O[12dxyst]-?|Ob\d|Oi-?|Oy-?|M[DT]d?|Gy-?|EH\w+|TP|TC|arch:\w+|fp:\w+|GS-?|GR-?|Gz|Gr|Gd|Zp\d+|GF|Gs\d*|J|vc71))(?![\w:])")
 
@@ -23,7 +24,33 @@ EXPLICIT_RE = re.compile(r"\bflags?\s*[:=]?\s*((?:/[\w:+\-]+(?![\w:+\-])[\s,]*)+
 
 
 def winpath(p):
-    return "Z:" + p.replace("/", "\\")
+    """A path as the compiler sees it: wine's Z: drive on the Mac, the path itself on Windows."""
+    return os.path.abspath(p) if NATIVE else "Z:" + p.replace("/", "\\")
+
+
+INCLUDE = "/I" + winpath(os.path.join(ROOT, "match", "include"))
+
+
+def cl_run(args):
+    """Run the compiler (cl.sh's VS2008 SP1 cl 15.00, or cl71.sh's VC 7.1 for the /vc71 pseudo-flag) on args."""
+    if not NATIVE:
+        return subprocess.run([CL, *args], capture_output=True, text=True)
+    tc = os.path.join(ROOT, "work", "toolchain")
+    env = dict(os.environ)
+    if "/vc71" in args:
+        args = [a for a in args if a != "/vc71"]
+        b = os.path.join(tc, "vc71tk")
+        env["INCLUDE"] = ";".join([os.path.join(ROOT, "match", "include", "vc71"), os.path.join(b, "include"),
+                                   os.path.join(tc, "vc9sp1", "WinSDK", "Include")])
+        env["LIB"] = os.path.join(b, "lib")
+        exe = os.path.join(b, "bin", "cl.exe")
+    else:
+        b = os.path.join(tc, "vc9sp1")
+        env["INCLUDE"] = ";".join([os.path.join(b, "VC", "include"), os.path.join(b, "WinSDK", "Include")])
+        env["LIB"] = ";".join([os.path.join(b, "VC", "lib"), os.path.join(b, "WinSDK", "Lib")])
+        exe = os.path.join(b, "VC", "bin", "cl.exe")
+    env["PATH"] = os.path.dirname(exe) + os.pathsep + env.get("PATH", "")
+    return subprocess.run([exe, *args], capture_output=True, text=True, env=env)
 
 
 _MODULE_DIRS = None
@@ -324,8 +351,7 @@ def compile_obj(src, flags):
     # Unique temp per thread: six sweep workers compile the same module at once, and a shared "<obj>.part.obj"
     # made one of them fail with FileNotFoundError on the rename (mesh_start, slot_api, mission_ctx rows).
     tmp = "%s.%d.%d.part.obj" % (obj, os.getpid(), threading.get_ident())
-    r = subprocess.run([CL, "/nologo", "/c", *flags, INCLUDE, "/Fo" + winpath(tmp), winpath(src)],
-                       capture_output=True, text=True)
+    r = cl_run(["/nologo", "/c", *flags, INCLUDE, "/Fo" + winpath(tmp), winpath(src)])
     if r.returncode or not os.path.exists(tmp):
         if os.path.exists(obj):
             return obj, r.stdout[-500:]          # another worker finished the identical object first
