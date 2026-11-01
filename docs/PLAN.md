@@ -51,6 +51,16 @@ program. Merging them later is a rewrite that grows with every slice. So:
   ModAPI (`work/ext/Spore-ModAPI`). Each migrated module must keep its byte-exact functions exact
   and boot in the hybrid. Pilot: the resource/DBPF module (milestone 1 already has real source).
 
+### Course change (2026-11-01): hybrid boots shelved
+
+The user dropped the hybrid binary as the validation path: each boot crash cost hours of bisecting
+several independent crashing hooks that hid each other (`win.sh peel`, `docs/hybrid.md`). The
+strict equivalence harness (`tools/difftest/equiv.py`, sweep in `work/sweep_pod`) is the oracle from
+here on. Order of work: (1) source for the functions that have none or only partial source,
+(2) land the slices into `src/game/` module TUs, including a home for the ~20k functions the module
+map does not place, (3) burn down strict FAIL / WEAK verdicts on the migrated tree. Phase A and the
+hybrid gate of Phase B (`gate.py`) are off; `tools/hybrid/` stays in the repo unused.
+
 ## Roadmap to completion (2026-10-12)
 
 Where we stand (from `docs/STATUS.md`, the strict-equivalence shards and `tools/matching/layout_census.py`):

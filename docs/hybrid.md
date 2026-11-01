@@ -1,5 +1,8 @@
 # Hybrid binary: running the game with our code in it
 
+**Shelved 2026-11-01** (docs/PLAN.md, "Course change (2026-11-01)"): the strict equivalence harness, not
+hybrid boots, validates non-byte-exact code now. Kept for reference.
+
 The hybrid is `SporeApp.exe` rebuilt from the decrypted analysis image with our compiled
 functions spliced in. It is the first artifact of the project that can be *launched*, and the
 test for everything that is not byte-exact: an "equivalent" function is one the game runs with.
