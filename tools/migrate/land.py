@@ -101,7 +101,10 @@ def main():
             mods.append(e["module"])
     log("== %s %s: %d modules" % (time.strftime("%Y-%m-%d %H:%M"), a.batch, len(mods)))
     for m in mods:
-        if run(["git", "status", "--porcelain", "--"] + module_files(m))[1].strip():
+        # stdout only: git warns on stderr about a directory that does not exist yet (src/game/Havok/)
+        dirty = subprocess.run(["git", "status", "--porcelain", "--"] + module_files(m), cwd=ROOT,
+                               capture_output=True, text=True).stdout
+        if dirty.strip():
             log("%s: skipped, uncommitted changes in its files" % m)
             continue
         sids = [e["id"] for e in ents if e["module"] == m]
