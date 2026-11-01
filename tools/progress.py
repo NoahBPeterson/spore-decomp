@@ -1016,8 +1016,9 @@ def squarify(items, x, y, w, h):
 
 
 def treemap(path):
-    """Treemap of every game function: group -> dev-build object -> verdict, area = code bytes. Inside an object the
-    functions are drawn as one block per verdict (88k single functions are too small to see). Object labels are
+    """Treemap of every game function: group -> dev-build object -> verdict -> function, area = code bytes. Inside an
+    object each verdict is one squarified block, and each block is split into one cell per function, outlined in the
+    background colour (mountandblade-decomp's sub-treemap style). Object labels are
     measured and kept only where they fit (horizontal first, then rotated, then smaller), so none overlap."""
     import matplotlib
     matplotlib.use("Agg")
@@ -1032,10 +1033,12 @@ def treemap(path):
     counts = collections.Counter(r[4] for r in rows)
     size = collections.Counter()
     boxes = collections.defaultdict(collections.Counter)    # (group, box) -> category -> bytes
+    funcs = collections.defaultdict(list)                   # (group, box) -> [(va, bytes, category)]
     gsz = collections.Counter()
-    for g, b, _a, n, cat in rows:
+    for g, b, a, n, cat in rows:
         size[cat] += n
         boxes[(g, b)][cat] += n
+        funcs[(g, b)].append((a, n, cat))
         gsz[g] += n
     tot_b, tot_n = sum(size.values()) or 1, len(rows) or 1
     W_, H_ = 141.0, 100.0
@@ -1059,7 +1062,7 @@ def treemap(path):
     line_h = abs(cy1 - cy0)
     cal.remove()
 
-    fills, fcol, frames = [], [], []
+    fills, fcol, frames = [], [], []      # one cell per function (outlined), and the object frames
     labels = []
     for g, (gx, gy, gw, gh) in squarify(list(gsz.items()), 0, 0, W_, H_):
         gx, gy, gw, gh = gx + 0.5, gy + 0.5, gw - 1.0, gh - 1.0
@@ -1079,25 +1082,17 @@ def treemap(path):
             if fw <= 0 or fh <= 0:
                 continue
             frames.append(Rectangle((fx, fy), fw, fh))
-            # verdict blocks in a fixed order (exact first), so the mix reads the same way in every box
-            cx, cy, cw, ch = fx, fy, fw, fh
-            cats = [(k, mine[b][k]) for k in order if mine[b][k]]
-            tot = float(sum(v for _, v in cats))
-            for k, v in cats:
-                if cw >= ch:
-                    d = cw * v / tot
-                    fills.append(Rectangle((cx, cy), d, ch)); cx += d; cw -= d
-                else:
-                    d = ch * v / tot
-                    fills.append(Rectangle((cx, cy + ch - d), cw, d)); ch -= d
-                fcol.append(colour[k])
-                tot -= v
+            # one block per verdict, then one cell per function inside it
+            fs_ = funcs[(g, b)]
+            for k, (kx, ky, kw, kh) in squarify([(k, v) for k, v in mine[b].items() if v], fx, fy, fw, fh):
+                for _a, (x_, y_, w_, h_) in squarify([(a, n) for a, n, c in fs_ if c == k], kx, ky, kw, kh):
+                    fills.append(Rectangle((x_, y_), w_, h_))
+                    fcol.append(colour[k])
             if fw > 1.2 and fh > 1.0:
                 t = ax.text(fx + 0.2, fy + fh - 0.2, b, ha="left", va="top", fontsize=FS, color=INK, zorder=6,
                             bbox=dict(boxstyle="square,pad=0.1", fc=SURFACE, ec="none", alpha=0.85))
                 labels.append((t, (fx, fy, fw, fh), b))
-    ax.add_collection(PatchCollection(fills, facecolors=fcol, edgecolors="none", linewidths=0, zorder=2,
-                                      antialiased=False))
+    ax.add_collection(PatchCollection(fills, facecolors=fcol, edgecolors=SURFACE, linewidths=0.15, zorder=2))
     ax.add_collection(PatchCollection(frames, facecolors="none", edgecolors=MUTED, linewidths=0.3, zorder=4))
 
     def bbox_data(t):
@@ -1149,7 +1144,7 @@ def treemap(path):
                labelcolor=INK, ncol=2, handlelength=1.1, handleheight=0.9)
     fig.suptitle("Spore (SporeApp.exe): %s game functions, %.2f MB - area = code bytes, colour = verdict"
                  % (human(tot_n), tot_b / 2**20), x=0.012, ha="left", fontsize=12, color=INK)
-    fig.text(0.012, 0.945, "Group (top directory of the dev build) -> object file -> one block per verdict; area = "
+    fig.text(0.012, 0.945, "Group (top directory of the dev build) -> object file -> one block per verdict -> one cell per function; area = "
              "function size in bytes. Objects come from work/migrate/modmap.json; functions it does "
              "not place in an object (so not migratable yet) are grouped by kind.\nThird-party libraries (OpenSSL, libpng, zlib, libjpeg, CRT) are excluded, "
              "as in docs/STATUS.md. Verdicts: the equivalence sweep at %s (tools/difftest/verdicts.py)."
