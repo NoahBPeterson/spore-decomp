@@ -1,6 +1,6 @@
 00687c20 SP::ProfEnableAffinityMasks  # pre-existing committed function (complete, nonmatching)
-006884f0 EntrySet  # g_entryVec entry write: FUN_00687bc0 clamp, set byte + a3, assign the two wstrings
-00688570 cRendererCheat::Execute  # PDB candidate (caller-scored); ArgScript "renderer" cheat
+006884f0 ?EntrySet@@YAXHEHPBUWStrRange@@0@Z  # EntrySet migrated from s00687c20 (verbatim, slice spelling)
+00688570 ?Execute@cRendererCheat@@UAEXPAVcArguments_s0068_7c20@ArgScript@EA@@@Z  # cRendererCheat::Execute migrated from s00687c20 (verbatim, slice spelling)
 006886b0 SP::GetDirFromID  # g_dirMap lookup, returns the wstring begin at node+0x14 or 0
 00688700 PairUW::PairUW  # pair<unsigned const,wstring> copy constructor
 00688760 PairUW::PairUW  # pair<unsigned const,wstring> (key,src) constructor
