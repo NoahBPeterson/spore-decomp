@@ -1,3 +1,4 @@
+008d9320 ?DecompressRecord@DatabasePackedFile@ResourceMan@EA@@IAE_NGIIIPAE@Z  # EA::ResourceMan::DatabasePackedFile::DecompressRecord (callee of s008dc1a0, named from the dev publics; slice address comment)
 008dc1a0 ?Insert@HoleSet@@QAE_NHH@Z  # HoleSet::Insert migrated from s008dc1a0
 008dc2b0 ?ReserveRange@PFIndexModifiable@@QAE_NPAUHoleSet@@II@Z  # PFIndexModifiable::ReserveRange migrated from s008dc1a0
 008dc350 ?ForwardGetSize@PFRecordReadIstream@@QAEXXZ  # PFRecordReadIstream::ForwardGetSize migrated from s008dc1a0
@@ -24,4 +25,6 @@
 008dcc80 ??0PFRecordRead@@QAE@ABU0@ABUKey@@PAUDatabasePackedFile@@@Z  # PFRecordRead::PFRecordRead(copy) migrated from s008dc1a0
 008dcd70 ?Destroy@PFRecordRead@@QAEPAXI@Z  # PFRecordRead::Destroy (scalar deleting destructor) migrated from s008dc1a0
 008dcdc0 ??0PFRecordRead@@QAE@ABUPFRecordInfo@@ABUKey@@PAUDatabasePackedFile@@@Z  # PFRecordRead::PFRecordRead(info) migrated from s008dc1a0
-008dcea0 ??0PFRecordWrite@@QAE@IIABUKey@@PAUDatabasePackedFile@@@Z  # PFRecordWrite::PFRecordWrite migrated from s008dc1a0
+008dcea0 ??0PFRecordWrite@@QAE@IIABUKey@@PAUDatabasePackedFile@@@Z  # PFRecordWrite::PFRecordWrite migrated from s008dc1a0 (verbatim, slice spelling)
+0093ba70 ?GetData@MemoryStream@IO@EA@@QBEPAXXZ  # EA::IO::MemoryStream::GetData (callee of s008dc1a0, named from the dev publics; slice address comment)
+0093bb40 ?SetOption@MemoryStream@IO@EA@@QAEXW4Options@123@M@Z  # EA::IO::MemoryStream::SetOption (callee of s008dc1a0, named from the dev publics; slice address comment)

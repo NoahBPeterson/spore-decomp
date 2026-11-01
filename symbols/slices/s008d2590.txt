@@ -22,3 +22,7 @@
 008d32e0 ?IsButtonDown@Mouse@Input@EA@@QAE_NI@Z  # Mouse::IsButtonDown migrated from s008d2590 (verbatim, slice spelling)
 008d32f0 EA::Input::InputMan::InputMan  # ctor, noise 0.02 / binary 0.5
 008d3450 ?IsKeyDown@Keyboard@Input@EA@@QAE_NII@Z  # Keyboard::IsKeyDown migrated from s008d2590 (verbatim, slice spelling)
+008d34d0 ??0InputEvent@@QAE@XZ  # InputEvent::InputEvent migrated from s008d2590 (verbatim, slice spelling)
+008d34f0 ??0InputEvent@@QAE@HHHDHD@Z  # InputEvent::InputEvent migrated from s008d2590 (verbatim, slice spelling)
+008d3530 ?FindBinding@BindingTable@@QAEPAUBinding@@HHH@Z  # BindingTable::FindBinding migrated from s008d2590 (verbatim, slice spelling)
+008d3580 ?FindBindingMasked@BindingTable@@QAEPAUBinding@@HHHI@Z  # BindingTable::FindBindingMasked migrated from s008d2590 (verbatim, slice spelling)

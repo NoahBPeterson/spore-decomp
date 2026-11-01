@@ -1,9 +1,7 @@
-# Slice s008d4520 names. EA text lexer (Lexer::TokenReader<char, CharStream<char>>) and the
-# small containers/string-table helpers it uses. 6/24 byte-exact.
-008d4520 ?push_back@Rect20Vec@@QAEXPAH0@Z  # Rect20Vec::push_back - grow-or-insert a 5-dword {x,y,w,h,id} record
+008d4520 ?push_back@Rect20Vec@@QAEXPAH0@Z  # Rect20Vec::push_back migrated from s008d4520 (verbatim, slice spelling)
 008d4680 FUN_008d4680  # expression-parser token resolver (nested-offset token walk) # no (WEAK)
-008d47b0 ?lookupFlags@SortedTable@@QAEHPAHPAI0@Z  # SortedTable::lookupFlags - lazy sort (+0x2c dirty) then binary search # no (PASS)
-008d4850 ?lookup400@SortedTable@@QAEHPAHPAI@Z  # SortedTable::lookup400 - same over the 0x400-stride second span # no (PASS)
+008d47b0 ?lookupFlags@SortedTable@@QAEHPAHPAI0@Z  # SortedTable::lookupFlags migrated from s008d4520 (verbatim, slice spelling)
+008d4850 ?lookup400@SortedTable@@QAEHPAHPAI@Z  # SortedTable::lookup400 migrated from s008d4520 (verbatim, slice spelling)
 008d48d0 ?push@SmallVec@@QAEXPAX@Z  # SmallVec::push - bump end/cap at +8/+0xc or grow via 0x008d4400 # no (PASS)
 008d4920 ?push@BigObj@@QAEXHPAHI@Z  # BigObj::push - grow-or-append into the vector at +0x18 # no (PASS)
 008d49b0 ?clear@ClearTwo@@QAEXXZ  # ClearTwo::clear - erase-all over the Quad16 [abase,aend) and Rec20 [bbase,bend) spans # no (diff 14, PASS)

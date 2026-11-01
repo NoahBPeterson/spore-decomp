@@ -1,4 +1,9 @@
+008d9170 ?ReadRecordRaw@DatabasePackedFile@ResourceMan@EA@@QAE_NABVKey@23@PAXI@Z  # EA::ResourceMan::DatabasePackedFile::ReadRecordRaw (callee of s008dd0d0, named from the dev publics; slice address comment)
+008da920 ?WriteRecordRaw@DatabasePackedFile@ResourceMan@EA@@QAE_NABVKey@23@PBXIIG@Z  # EA::ResourceMan::DatabasePackedFile::WriteRecordRaw (callee of s008dd0d0, named from the dev publics; slice address comment)
+008dd0d0 ?ctor@PFRecordWrite_s008d_d0d0@@QAEPAXHHHPAXH@Z  # PFRecordWrite_s008d_d0d0::ctor migrated from s008dd0d0 (verbatim, slice spelling)
 008dd1c0 ?Release@SharedLibrary@EA@@UAEHXZ  # EA::SharedLibrary::Release migrated from s008dd0d0
+008dd1f0 ?_virtual_dtor@PFRecordWrite_s008d_d0d0@@QAEPAXH@Z  # PFRecordWrite_s008d_d0d0::_virtual_dtor migrated from s008dd0d0 (verbatim, slice spelling)
 008dd250 ?CopyDatabaseRecord@ResourceMan@EA@@YA_NPAVDatabase@12@0ABVKey@12@_N@Z  # EA::ResourceMan::CopyDatabaseRecord migrated from s008dd0d0
 008dd430 ?CopyDatabaseRecords@ResourceMan@EA@@YAIPAVDatabase@12@0PAVKeyFilter@12@_N@Z  # EA::ResourceMan::CopyDatabaseRecords migrated from s008dd0d0
 008ddc80 ?DefaultCreateNameFromKey@ResourceMan@EA@@YAXABVKey@12@AAV?$basic_string@_WVallocator@eastl@@@eastl@@PBVManager@12@PBVDatabase@12@PB_W@Z  # EA::ResourceMan::DefaultCreateNameFromKey migrated from s008dd0d0
+008dde10 ?dtor@EditorResource@@QAEXXZ  # EditorResource::dtor migrated from s008dd0d0 (verbatim, slice spelling)
