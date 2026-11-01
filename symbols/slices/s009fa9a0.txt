@@ -1,0 +1,7 @@
+009fa9a0 ?f_009fa9a0@@YAXPAMPAUCr_s009fa9a0@@PAUB_s009fa9a0@@M@Z  # f_009fa9a0 migrated from s009fa9a0 (verbatim, slice spelling)
+009fae30 ?f_009fae30@@YAXPAMPAUCr_s009fa9a0@@PAUB_s009fa9a0@@M@Z  # f_009fae30 migrated from s009fa9a0 (verbatim, slice spelling)
+009fb090 ?f_009fb090@@YAXPAMPAUCr_s009fa9a0@@PAUB_s009fa9a0@@@Z  # f_009fb090 migrated from s009fa9a0 (verbatim, slice spelling)
+009fb130 ?f_009fb130@@YAXPAUB_s009fa9a0@@M@Z  # f_009fb130 migrated from s009fa9a0 (verbatim, slice spelling)
+009fb510 ?f_009fb510@@YAXPAUCr_s009fa9a0@@PAUB_s009fa9a0@@M@Z  # f_009fb510 migrated from s009fa9a0 (verbatim, slice spelling)
+009fb7c0 ?f_009fb7c0@@YAXPAUCr_s009fa9a0@@PAUB_s009fa9a0@@M@Z  # f_009fb7c0 migrated from s009fa9a0 (verbatim, slice spelling)
+009fb830 ?f_009fb830@@YAXPAUCr_s009fa9a0@@M@Z  # f_009fb830 migrated from s009fa9a0 (verbatim, slice spelling)

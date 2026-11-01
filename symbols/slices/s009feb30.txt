@@ -1,5 +1,8 @@
+009fee90 ?Init@AnimGoal@@QAEXXZ  # AnimGoal::Init migrated from s009feb30 (verbatim, slice spelling)
+009fef20 ?CopyFiltersFrom@AnimGoal@@QAEXPAU1@@Z  # AnimGoal::CopyFiltersFrom migrated from s009feb30 (verbatim, slice spelling)
 009fef70 ?packHandle@@YAHHE@Z  # packHandle migrated from s009feb30 (verbatim, slice spelling)
 009fef90 ?packGoalHandle@@YAHPAUQueuedBlender@@PAUAnimGoal@@@Z  # packGoalHandle migrated from s009feb30 (verbatim, slice spelling)
 009fefd0 ?Count@QueuedBlender@@QAEHXZ  # QueuedBlender::Count migrated from s009feb30 (verbatim, slice spelling)
 009ff020 ?IsActive@AnimGoal@@QAEHXZ  # AnimGoal::IsActive migrated from s009feb30 (verbatim, slice spelling)
 009ff440 ?TransitionToNextAnimation@QueuedBlender@@QAEXXZ  # QueuedBlender::TransitionToNextAnimation migrated from s009feb30 (verbatim, slice spelling)
+009ff880 ?UpdateGoalWeight@@YAXHPAUAnimGoal@@@Z  # UpdateGoalWeight migrated from s009feb30 (verbatim, slice spelling)

@@ -1,0 +1,1 @@
+009fe560 ?insert@MapIdxC@@QAEPAIABI@Z  # MapIdxC::insert migrated from s009fdb00 (verbatim, slice spelling)

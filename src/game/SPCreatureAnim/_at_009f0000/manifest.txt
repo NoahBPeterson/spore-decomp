@@ -1,0 +1,21 @@
+# source  symbol  va  flags
+../src/game/SPCreatureAnim/_at_009f0000.cpp  ?animLayoutSyncMat@@YAXPAXPAUAnimLayout@@@Z  009f9dc0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPCreatureAnim/_at_009f0000.cpp  ?f_009fb7c0@@YAXPAUCr_s009fa9a0@@PAUB_s009fa9a0@@M@Z  009fb7c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPCreatureAnim/_at_009f0000.cpp  ?f_009fb830@@YAXPAUCr_s009fa9a0@@M@Z  009fb830  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPCreatureAnim/_at_009f0000.cpp  ?AudioSetListener3@@YAXHMMM@Z  009fbc50  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPCreatureAnim/_at_009f0000.cpp  ?AudioSetEvent9@@YAXPAXH@Z  009fbcd0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPCreatureAnim/_at_009f0000.cpp  ?AudioSetEvent10@@YAXPAXH@Z  009fbcf0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPCreatureAnim/_at_009f0000.cpp  ?AudioSetFlag@@YAXPAXD@Z  009fbd10  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPCreatureAnim/_at_009f0000.cpp  ?AudioSetEvent5@@YAXPAXH@Z  009fbd30  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPCreatureAnim/_at_009f0000.cpp  ?AudioSetEvent1@@YAXPAXH@Z  009fbd50  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPCreatureAnim/_at_009f0000.cpp  ?AudioSetListener2@@YAXHD@Z  009fbd70  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPCreatureAnim/_at_009f0000.cpp  ?AudioQueryA@@YADH@Z  009fbdd0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPCreatureAnim/_at_009f0000.cpp  ?AudioQueryB@@YAXH@Z  009fbe00  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPCreatureAnim/_at_009f0000.cpp  ?AudioQueryC@@YAMH@Z  009fbe20  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPCreatureAnim/_at_009f0000.cpp  ?AudioSetListener3v@@YAXHPAM@Z  009fbe50  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPCreatureAnim/_at_009f0000.cpp  ?EffectsEmitEvent@@YAXPAXH0@Z  009fbe80  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPCreatureAnim/_at_009f0000.cpp  ?EffectsSpawn@@YA_NPAXH0HHPAPAX@Z  009fbfc0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPCreatureAnim/_at_009f0000.cpp  ?EffectsSpawnThunk@@YA_NHHHHH@Z  009fc050  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPCreatureAnim/_at_009f0000.cpp  ?FeedbackLookupName@@YAHPBD@Z  009fc0f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPCreatureAnim/_at_009f0000.cpp  ?CopyFiltersFrom@AnimGoal@@QAEXPAU1@@Z  009fef20  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPCreatureAnim/_at_009f0000.cpp  ??4AnimGoal_s009f_fa00@@QAEPAU0@PAU0@@Z  009ffb50  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
