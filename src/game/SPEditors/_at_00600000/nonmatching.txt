@@ -1,0 +1,4 @@
+# va  diff-bytes  reason
+0060b150 9 cDBCheckDialog ctor: complete; store order of base vptr/zero differs (xor/lea scheduling)
+0060b730 9 cInsertDiscDialog ctor: complete; original delays the [this+8]=0 store until after the member-layout lea (store scheduling only)
+0060bae0 27 InsertDisc::Show: complete; stack-message ctor stores (+0x30 before vptr) and one push ebp/eax register choice differ

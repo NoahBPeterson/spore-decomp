@@ -1,11 +1,12 @@
-0060b730 UI::cInsertDiscDialog::cInsertDiscDialog  # vt
-0060b760 UI::InsertDisc::InsertDisc  # ctor; same shape as UI::DBCheck (listener base at +0xc, dialog at +0x18)
-0060b800 UI::InsertDisc::Shutdown  # vtable slot 5; RemoveListener x2 + release dialog
-0060b870 UI::InsertDisc::OnWinProcEvent  # releases dialog when control 0x7f869a8 clicked in 0x7f86a40
-0060b910 UI::cInsertDiscDialog::HandleUIMessage  # button 0x7f869a8 closes the modal
-0060b9e0 UI::InsertDisc::~InsertDisc  # calls Shutdown, releases dialog
-0060ba40 UI::InsertDisc::HandleMessage  # msg 0x49a32cb -> Show, 0x238de9c -> Shutdown
-0060bae0 UI::InsertDisc::Show  # switch on disc state (0/1/2) posting messages / showing the prompt
+0060b730 ??0cInsertDiscDialog_s0060_b730@UI@@QAE@XZ  # cInsertDiscDialog_s0060_b730::cInsertDiscDialog migrated from s0060b730 (verbatim, slice spelling)
+0060b760 ??0InsertDisc@UI@@QAE@XZ  # InsertDisc::InsertDisc migrated from s0060b730 (verbatim, slice spelling)
+0060b800 ?Shutdown@InsertDisc@UI@@UAE_NXZ  # InsertDisc::Shutdown migrated from s0060b730 (verbatim, slice spelling)
+0060b870 ?OnWinProcEvent@InsertDisc@UI@@UAEXPAVIWindow@UTFWin@@I@Z  # InsertDisc::OnWinProcEvent migrated from s0060b730 (verbatim, slice spelling)
+0060b8b0 ?SetInsertDiscHandle@UI@@YAXPAVIRefCounted@@@Z  # SetInsertDiscHandle migrated from s0060b730 (verbatim, slice spelling)
+0060b910 ?HandleUIMessage@cInsertDiscDialog_s0060_b730@UI@@QAE_NPAX0@Z  # cInsertDiscDialog_s0060_b730::HandleUIMessage migrated from s0060b730 (verbatim, slice spelling)
+0060b9e0 ??1InsertDisc@UI@@QAE@XZ  # InsertDisc::~InsertDisc migrated from s0060b730 (verbatim, slice spelling)
+0060ba40 ?HandleMessage@InsertDisc@UI@@UAE_NIPAX@Z  # InsertDisc::HandleMessage migrated from s0060b730 (verbatim, slice spelling)
+0060bae0 ?Show@InsertDisc@UI@@UAEXXZ  # InsertDisc::Show migrated from s0060b730 (verbatim, slice spelling)
 0060bc90 ?GetAESKey@@YAXPAI@Z  # GetAESKey migrated from s0060b730; retail symbol per the slice's own manifest row (unsigned int *), not the dev public ?GetAESKey@@YAXPAE@Z
 0060bcd0 ?assign@?$basic_string_s0060_b730@DUallocator_s0060_b730@eastl@@@eastl@@QAEAAU12@PBDI@Z  # assign migrated from s0060b730 (verbatim, slice spelling)
 0060bcf0 ?Encrypt@@YAXABU?$basic_string_s0060_b730@DUallocator_s0060_b730@eastl@@@eastl@@AAU12@@Z  # Encrypt migrated from s0060b730 (verbatim, slice spelling)

@@ -1,0 +1,44 @@
+# source  symbol  va  flags
+../src/game/SPEditors/_at_00600000.cpp  ?IsSporeDisc@@YA_NPBD@Z  006064c0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/_at_00600000.cpp  ?FindSporeDisc@@YA_NPADPBD@Z  00606590  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/_at_00600000.cpp  ?CheckSporeDisc@@YAHPBD@Z  00606610  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/_at_00600000.cpp  ?GetResourceAs30bdee3@@YAPAXABUResourceKey@@@Z  00606640  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/_at_00600000.cpp  ?GetArchiveFolder@@YA_NAAUWStr@@@Z  00606790  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/_at_00600000.cpp  ??0cEncryptedStream@Pollen@SP@@QAE@PAVIStream_s0060_9790@IO@EA@@@Z  00609790  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPEditors/_at_00600000.cpp  ?Init@cEncryptedStream@Pollen@SP@@UAE_NPBE@Z  006097f0  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPEditors/_at_00600000.cpp  ?GetAccessFlags@cEncryptedStream@Pollen@SP@@UBEHXZ  00609910  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPEditors/_at_00600000.cpp  ?GetState@cEncryptedStream@Pollen@SP@@UBEHXZ  00609930  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPEditors/_at_00600000.cpp  ?Close@cEncryptedStream@Pollen@SP@@UAE_NXZ  00609960  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPEditors/_at_00600000.cpp  ?GetSize@cEncryptedStream@Pollen@SP@@UBEIXZ  006099b0  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPEditors/_at_00600000.cpp  ?GetPosition@cEncryptedStream@Pollen@SP@@UBEHH@Z  006099d0  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPEditors/_at_00600000.cpp  ?SetPosition@cEncryptedStream@Pollen@SP@@UAE_NHH@Z  00609a00  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPEditors/_at_00600000.cpp  ?GetAvailable@cEncryptedStream@Pollen@SP@@UBEIXZ  00609a70  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPEditors/_at_00600000.cpp  ?Read@cEncryptedStream@Pollen@SP@@UAEIPAXI@Z  00609a90  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPEditors/_at_00600000.cpp  ?SetSize@cEncryptedStream@Pollen@SP@@UAE_NI@Z  00609b50  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPEditors/_at_00600000.cpp  ?Flush@cEncryptedStream@Pollen@SP@@UAE_NXZ  00609b80  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPEditors/_at_00600000.cpp  ?Write@cEncryptedStream@Pollen@SP@@UAE_NPBXI@Z  00609ba0  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPEditors/_at_00600000.cpp  ??_GcEncryptedStream@Pollen@SP@@UAEPAXI@Z  00609c70  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPEditors/_at_00600000.cpp  ??1AutoFutex@Thread@EA@@QAE@XZ  00609e40  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPEditors/_at_00600000.cpp  ?Init@cDBCheckDialog@UI@@QAE_NXZ  0060b050  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPEditors/_at_00600000.cpp  ?Init@DBCheck@UI@@UAE_NXZ  0060b110  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPEditors/_at_00600000.cpp  ?Close@cDBCheckDialog@UI@@QAE_NPAX@Z  0060b180  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPEditors/_at_00600000.cpp  ??0DBCheck@UI@@QAE@XZ  0060b220  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPEditors/_at_00600000.cpp  ?Shutdown@DBCheck@UI@@UAE_NXZ  0060b290  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPEditors/_at_00600000.cpp  ?Show@DBCheck@UI@@UAEXXZ  0060b2e0  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPEditors/_at_00600000.cpp  ?OnWinProcEvent@DBCheck@UI@@UAEXPAVIWindow@UTFWin@@H@Z  0060b390  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPEditors/_at_00600000.cpp  ?GetMessageHandle@UI@@YAPAVIRefCounted@@XZ  0060b3c0  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPEditors/_at_00600000.cpp  ?SetMessageHandle@UI@@YAXPAVIRefCounted@@@Z  0060b3e0  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPEditors/_at_00600000.cpp  ??1DBCheck@UI@@QAE@XZ  0060b470  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPEditors/_at_00600000.cpp  ?HandleMessage@DBCheck@UI@@UAE_NIPAX@Z  0060b4f0  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPEditors/_at_00600000.cpp  ?Init@cInsertDiscDialog@UI@@QAE_NXZ  0060b550  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPEditors/_at_00600000.cpp  ?Show@cInsertDiscDialog@UI@@QAEXPAXI@Z  0060b5e0  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPEditors/_at_00600000.cpp  ?Cast@cPromptCaster@UI@@QAEPAXI@Z  0060b670  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPEditors/_at_00600000.cpp  ?Register@cPromptListener@UI@@QAE_NXZ  0060b6b0  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPEditors/_at_00600000.cpp  ?HandleUIMessage@cPromptHandler@UI@@QAE_NPAVIWindow@UTFWin@@PAUUIMessage@2@@Z  0060b710  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPEditors/_at_00600000.cpp  ??0InsertDisc@UI@@QAE@XZ  0060b760  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPEditors/_at_00600000.cpp  ?Shutdown@InsertDisc@UI@@UAE_NXZ  0060b800  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPEditors/_at_00600000.cpp  ?OnWinProcEvent@InsertDisc@UI@@UAEXPAVIWindow@UTFWin@@I@Z  0060b870  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPEditors/_at_00600000.cpp  ?SetInsertDiscHandle@UI@@YAXPAVIRefCounted@@@Z  0060b8b0  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPEditors/_at_00600000.cpp  ?HandleUIMessage@cInsertDiscDialog_s0060_b730@UI@@QAE_NPAX0@Z  0060b910  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPEditors/_at_00600000.cpp  ??1InsertDisc@UI@@QAE@XZ  0060b9e0  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPEditors/_at_00600000.cpp  ?HandleMessage@InsertDisc@UI@@UAE_NIPAX@Z  0060ba40  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include

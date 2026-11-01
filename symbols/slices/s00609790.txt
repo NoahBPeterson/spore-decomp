@@ -1,21 +1,21 @@
-00609790 SP::Pollen::cEncryptedStream::cEncryptedStream  # AES IStream wrapper (class name guessed); byte-exact
-006097f0 SP::Pollen::cEncryptedStream::Init  # EVP_EncryptInit_ex with deobfuscated key; byte-exact
-00609910 SP::Pollen::cEncryptedStream::GetAccessFlags  # IStream slot 4; byte-exact
-00609930 SP::Pollen::cEncryptedStream::GetState  # IStream slot 5; byte-exact
-00609960 SP::Pollen::cEncryptedStream::Close  # IStream slot 6; byte-exact
-006099b0 SP::Pollen::cEncryptedStream::GetSize  # IStream slot 7; byte-exact
-006099d0 SP::Pollen::cEncryptedStream::GetPosition  # IStream slot 9; byte-exact
-00609a00 SP::Pollen::cEncryptedStream::SetPosition  # IStream slot 10; byte-exact
-00609a70 SP::Pollen::cEncryptedStream::GetAvailable  # IStream slot 11; byte-exact
-00609a90 SP::Pollen::cEncryptedStream::Read  # EVP_DecryptUpdate; byte-exact
-00609b50 SP::Pollen::cEncryptedStream::SetSize  # IStream slot 8; byte-exact
-00609b80 SP::Pollen::cEncryptedStream::Flush  # IStream slot 13; byte-exact
-00609ba0 SP::Pollen::cEncryptedStream::Write  # EVP_EncryptUpdate; byte-exact
-00609c70 SP::Pollen::cEncryptedStream::`scalar deleting destructor'  # byte-exact
+00609790 ??0cEncryptedStream@Pollen@SP@@QAE@PAVIStream_s0060_9790@IO@EA@@@Z  # cEncryptedStream::cEncryptedStream migrated from s00609790 (verbatim, slice spelling)
+006097f0 ?Init@cEncryptedStream@Pollen@SP@@UAE_NPBE@Z  # cEncryptedStream::Init migrated from s00609790 (verbatim, slice spelling)
+00609910 ?GetAccessFlags@cEncryptedStream@Pollen@SP@@UBEHXZ  # cEncryptedStream::GetAccessFlags migrated from s00609790 (verbatim, slice spelling)
+00609930 ?GetState@cEncryptedStream@Pollen@SP@@UBEHXZ  # cEncryptedStream::GetState migrated from s00609790 (verbatim, slice spelling)
+00609960 ?Close@cEncryptedStream@Pollen@SP@@UAE_NXZ  # cEncryptedStream::Close migrated from s00609790 (verbatim, slice spelling)
+006099b0 ?GetSize@cEncryptedStream@Pollen@SP@@UBEIXZ  # cEncryptedStream::GetSize migrated from s00609790 (verbatim, slice spelling)
+006099d0 ?GetPosition@cEncryptedStream@Pollen@SP@@UBEHH@Z  # cEncryptedStream::GetPosition migrated from s00609790 (verbatim, slice spelling)
+00609a00 ?SetPosition@cEncryptedStream@Pollen@SP@@UAE_NHH@Z  # cEncryptedStream::SetPosition migrated from s00609790 (verbatim, slice spelling)
+00609a70 ?GetAvailable@cEncryptedStream@Pollen@SP@@UBEIXZ  # cEncryptedStream::GetAvailable migrated from s00609790 (verbatim, slice spelling)
+00609a90 ?Read@cEncryptedStream@Pollen@SP@@UAEIPAXI@Z  # cEncryptedStream::Read migrated from s00609790 (verbatim, slice spelling)
+00609b50 ?SetSize@cEncryptedStream@Pollen@SP@@UAE_NI@Z  # cEncryptedStream::SetSize migrated from s00609790 (verbatim, slice spelling)
+00609b80 ?Flush@cEncryptedStream@Pollen@SP@@UAE_NXZ  # cEncryptedStream::Flush migrated from s00609790 (verbatim, slice spelling)
+00609ba0 ?Write@cEncryptedStream@Pollen@SP@@UAE_NPBXI@Z  # cEncryptedStream::Write migrated from s00609790 (verbatim, slice spelling)
+00609c70 ??_GcEncryptedStream@Pollen@SP@@UAEPAXI@Z  # cEncryptedStream::~cEncryptedStream migrated from s00609790 (verbatim, slice spelling)
 00609cc0 SP::Pollen::TrimWhitespace  # static, arg in eax; byte-exact
 00609d50 eastl::find_first_of<char*,const char*>  # byte-exact
 00609d90 eastl::search<char*,const char*>  # byte-exact
-00609e40 EA::Thread::AutoFutex::~AutoFutex  # LeaveCriticalSection(mpFutex); byte-exact
+00609e40 ??1AutoFutex@Thread@EA@@QAE@XZ  # ~AutoFutex migrated from s00609790 (verbatim, slice spelling)
 00609e50 SP::Pollen::DomainMatches  # cookie domain suffix match (static)
 00609ea0 EA::COM::AutoRefCount<SP::Pollen::cCookie>::operator=  # byte-exact
 00609ee0 eastl::basic_string<char>::comparei  # byte-exact

@@ -8,6 +8,9 @@
 00605e60 SP::cSPVerbTrayCollection::cSPVerbTrayCollection  # inits mImageGroup 0xb5ac9c22 as InitTrays does
 00605ee0 ?A?$map  # cSPVerbTrayCollection::mWindowsToVerbTrays operator[] (mangled ??A?$map@..., base identifier only so the name matcher finds it)
 00605f90 ?InitTrays@cSPVerbTrayCollection_s0060_5870@SP@@UAEXUResourceKey@@PBU3@H@Z  # cSPVerbTrayCollection_s0060_5870::InitTrays migrated from s00605870 (verbatim, slice spelling)
-006064c0 IsSporeDisc  # GetDriveTypeA==CDROM, volume label xor 0x2a == "yzexo" ("SPORE"), >=2GB
-00606590 FindSporeDisc  # scans GetLogicalDrives with IsSporeDisc
+006064c0 ?IsSporeDisc@@YA_NPBD@Z  # IsSporeDisc migrated from s00605870 (verbatim, slice spelling)
+00606590 ?FindSporeDisc@@YA_NPADPBD@Z  # FindSporeDisc migrated from s00605870 (verbatim, slice spelling)
+00606610 ?CheckSporeDisc@@YAHPBD@Z  # CheckSporeDisc migrated from s00605870 (verbatim, slice spelling)
+00606640 ?GetResourceAs30bdee3@@YAPAXABUResourceKey@@@Z  # GetResourceAs30bdee3 migrated from s00605870 (verbatim, slice spelling)
 00606730 eastl::uninitialized_relocate_commit<SP::FunctionalMatch::ConstraintNode*>  # destroys sources, advances dest by 0x24
+00606790 ?GetArchiveFolder@@YA_NAAUWStr@@@Z  # GetArchiveFolder migrated from s00605870 (verbatim, slice spelling)

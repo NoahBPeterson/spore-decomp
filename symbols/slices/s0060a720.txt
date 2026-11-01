@@ -4,13 +4,21 @@
 0060aa40 ?Filter@CookieHandler_s0060_a720@Pollen@SP@@UAE_NPAUHTTPRequest@23@@Z  # CookieHandler_s0060_a720::Filter migrated from s0060a720 (verbatim, slice spelling)
 0060ada0 ?AddCookie@CookieHandler_s0060_a720@Pollen@SP@@QAEXPBD0@Z  # CookieHandler_s0060_a720::AddCookie migrated from s0060a720 (verbatim, slice spelling)
 0060afa0 ?Filter@CookieHandler_s0060_a720@Pollen@SP@@UAE_NPAUHTTPResponse@23@@Z  # CookieHandler_s0060_a720::Filter migrated from s0060a720 (verbatim, slice spelling)
-0060b050 UI::cDBCheckDialog::Init  # layout init, AddWinProc(this)
-0060b110 UI::DBCheck::Init  # vtable slot 4; AddListener(msg 0x238de9c)
-0060b180 UI::cDBCheckDialog::Close  # EndModal + RemoveWinProc + layout shutdown
-0060b290 UI::DBCheck::Shutdown  # vtable slot 5; RemoveListener + release dialog
-0060b2e0 UI::DBCheck::Show  # vtable slot 6; creates cDBCheckDialog and BeginModal
-0060b390 UI::DBCheck::OnWinProcEvent  # releases dialog when control 0x431e538 closes
-0060b4f0 UI::DBCheck::HandleMessage  # msg 0x238de9c -> Shutdown
-0060b550 UI::cInsertDiscDialog::Init  # layout key 0x5b9f6852
-0060b5e0 UI::cInsertDiscDialog::Show  # sets caption string then BeginModal
+0060b050 ?Init@cDBCheckDialog@UI@@QAE_NXZ  # cDBCheckDialog::Init migrated from s0060a720 (verbatim, slice spelling)
+0060b110 ?Init@DBCheck@UI@@UAE_NXZ  # DBCheck::Init migrated from s0060a720 (verbatim, slice spelling)
+0060b150 ??0cDBCheckDialog@UI@@QAE@XZ  # cDBCheckDialog::cDBCheckDialog migrated from s0060a720 (verbatim, slice spelling)
+0060b180 ?Close@cDBCheckDialog@UI@@QAE_NPAX@Z  # cDBCheckDialog::Close migrated from s0060a720 (verbatim, slice spelling)
+0060b220 ??0DBCheck@UI@@QAE@XZ  # DBCheck::DBCheck migrated from s0060a720 (verbatim, slice spelling)
+0060b290 ?Shutdown@DBCheck@UI@@UAE_NXZ  # DBCheck::Shutdown migrated from s0060a720 (verbatim, slice spelling)
+0060b2e0 ?Show@DBCheck@UI@@UAEXXZ  # DBCheck::Show migrated from s0060a720 (verbatim, slice spelling)
+0060b390 ?OnWinProcEvent@DBCheck@UI@@UAEXPAVIWindow@UTFWin@@H@Z  # DBCheck::OnWinProcEvent migrated from s0060a720 (verbatim, slice spelling)
+0060b3c0 ?GetMessageHandle@UI@@YAPAVIRefCounted@@XZ  # GetMessageHandle migrated from s0060a720 (verbatim, slice spelling)
+0060b3e0 ?SetMessageHandle@UI@@YAXPAVIRefCounted@@@Z  # SetMessageHandle migrated from s0060a720 (verbatim, slice spelling)
+0060b470 ??1DBCheck@UI@@QAE@XZ  # DBCheck::~DBCheck migrated from s0060a720 (verbatim, slice spelling)
+0060b4f0 ?HandleMessage@DBCheck@UI@@UAE_NIPAX@Z  # DBCheck::HandleMessage migrated from s0060a720 (verbatim, slice spelling)
+0060b550 ?Init@cInsertDiscDialog@UI@@QAE_NXZ  # cInsertDiscDialog::Init migrated from s0060a720 (verbatim, slice spelling)
+0060b5e0 ?Show@cInsertDiscDialog@UI@@QAEXPAXI@Z  # cInsertDiscDialog::Show migrated from s0060a720 (verbatim, slice spelling)
+0060b670 ?Cast@cPromptCaster@UI@@QAEPAXI@Z  # cPromptCaster::Cast migrated from s0060a720 (verbatim, slice spelling)
+0060b6b0 ?Register@cPromptListener@UI@@QAE_NXZ  # cPromptListener::Register migrated from s0060a720 (verbatim, slice spelling)
+0060b710 ?HandleUIMessage@cPromptHandler@UI@@QAE_NPAVIWindow@UTFWin@@PAUUIMessage@2@@Z  # cPromptHandler::HandleUIMessage migrated from s0060a720 (verbatim, slice spelling)
 008120d0 ?Init@cSPUILayout@@QAE_NABVKey@ResourceMan@EA@@_NI@Z  # cSPUILayout::Init (callee of s0060a720, named from the dev publics; slice address comment)
