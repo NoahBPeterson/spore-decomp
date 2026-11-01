@@ -1,0 +1,10 @@
+# source  symbol  va  flags
+../src/game/SPTerrain/_at_00f70000.cpp  ?CountSubs@CubeOwner@@QAEHXZ  00f70440  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPTerrain/_at_00f70000.cpp  ?CountSubsEffect@CubeOwner@@QAEHXZ  00f70870  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPTerrain/_at_00f70000.cpp  ?distance@cTerrainProbe@@QAEMPBMHH@Z  00f71f30  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPTerrain/_at_00f70000.cpp  ?AllocPoolNode@@YAPAUPoolNode@@XZ  00f75fc0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPTerrain/_at_00f70000.cpp  ?FUN_00f79bb0@@YAXD@Z  00f79bb0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPTerrain/_at_00f70000.cpp  ?Destroy@cParticlesEffect_s00f7_a710@@QAEXXZ  00f7b460  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPTerrain/_at_00f70000.cpp  ?FUN_00f7be20@@YAHHH@Z  00f7be20  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPTerrain/_at_00f70000.cpp  ?FUN_00f7bef0@Swarm_s00f7_b520@@QAEXH@Z  00f7bef0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPTerrain/_at_00f70000.cpp  ?F7d990@cParticlesEffectView@Swarm@EA@@QAEXPAUcParticlesDescription_s00f7_caf0@23@@Z  00f7d990  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include

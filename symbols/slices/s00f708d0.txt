@@ -1,0 +1,7 @@
+00f71220 ?QueryD@CCubeQuery@@QAEMPBUV4@@@Z  # CCubeQuery::QueryD migrated from s00f708d0 (verbatim, slice spelling)
+00f713c0 ?GetCubeUV@CCubeQuery@@QAEPAUV4@@PAU2@@Z  # CCubeQuery::GetCubeUV migrated from s00f708d0 (verbatim, slice spelling)
+00f715d0 ?GetColorA@CCubeQuery@@QAEPAUV4@@PAU2@@Z  # CCubeQuery::GetColorA migrated from s00f708d0 (verbatim, slice spelling)
+00f71610 ?GetColorB@CCubeQuery@@QAEPAUV4@@PAU2@@Z  # CCubeQuery::GetColorB migrated from s00f708d0 (verbatim, slice spelling)
+00f71660 ?QueryScaleA@@YAHXZ  # QueryScaleA migrated from s00f708d0 (verbatim, slice spelling)
+00f716b0 ?GetScaledColor@CCubeQuery@@QAEPAUV4@@PAU2@PBU2@@Z  # CCubeQuery::GetScaledColor migrated from s00f708d0 (verbatim, slice spelling)
+00f71760 ?RefCountedDtor@@YAPAXPAXE@Z  # RefCountedDtor migrated from s00f708d0 (verbatim, slice spelling)

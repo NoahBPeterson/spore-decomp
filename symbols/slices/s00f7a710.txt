@@ -1,1 +1,3 @@
-00f7a710  EA::Swarm::cParticlesEffect::WriteParticleMatrices  # coined; same algorithm as 0x00aaf700 (acquire vertex stream, sample color/alpha/scale/spin curves, RotateZ + PostTransformBy, write 3x4 matrix + rgba)
+00f7a710 ?Write@cSwarmWriterA@@QAEXPAUIVertexStream@@@Z  # cSwarmWriterA::Write migrated from s00f7a710 (verbatim, slice spelling)
+00f7afd0 ?Init@cParticlesEffect_s00f7_a710@@QAEPAU1@PAXI@Z  # cParticlesEffect_s00f7_a710::Init migrated from s00f7a710 (verbatim, slice spelling)
+00f7b460 ?Destroy@cParticlesEffect_s00f7_a710@@QAEXXZ  # cParticlesEffect_s00f7_a710::Destroy migrated from s00f7a710 (verbatim, slice spelling)

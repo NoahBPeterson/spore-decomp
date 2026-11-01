@@ -1,1 +1,4 @@
-00f7caf0 EA::Swarm::cParticlesEffectOld::ApplyEffect  # Claude-coined class name: older-layout twin of 00ab18d0 (ApplyEffect, s00ab1400) with the same callee order; this = cComponentBase subobject (+8)
+00f7caf0 ?ApplyEffect@cParticlesEffect_s00f7_caf0@Swarm@EA@@UAEXMMPAUcStats@23@@Z  # cParticlesEffect_s00f7_caf0::ApplyEffect migrated from s00f7caf0 (verbatim, slice spelling)
+00f7d3d0 ?F7d3d0@cParticlesEffectCore@Swarm@EA@@QAEXPAUcParamFactory@23@@Z  # cParticlesEffectCore::F7d3d0 migrated from s00f7caf0 (verbatim, slice spelling)
+00f7d7a0 ?F7d7a0@cParticlesEffectView@Swarm@EA@@QAEXPAVcIEffectsWorld_s00f7_caf0@23@PAUcParamFactory@23@PAX@Z  # cParticlesEffectView::F7d7a0 migrated from s00f7caf0 (verbatim, slice spelling)
+00f7d990 ?F7d990@cParticlesEffectView@Swarm@EA@@QAEXPAUcParticlesDescription_s00f7_caf0@23@@Z  # cParticlesEffectView::F7d990 migrated from s00f7caf0 (verbatim, slice spelling)

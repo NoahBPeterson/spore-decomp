@@ -1,0 +1,5 @@
+00f7b520 ?FUN_00f7b520@Swarm_s00f7_b520@@QAEHHPAMH@Z  # Swarm_s00f7_b520::FUN_00f7b520 migrated from s00f7b520 (verbatim, slice spelling)
+00f7ba80 ?FUN_00f7ba80@Swarm_s00f7_b520@@QAEXM@Z  # Swarm_s00f7_b520::FUN_00f7ba80 migrated from s00f7b520 (verbatim, slice spelling)
+00f7bd70 ?FUN_00f7bd70@Swarm_s00f7_b520@@QAEXXZ  # Swarm_s00f7_b520::FUN_00f7bd70 migrated from s00f7b520 (verbatim, slice spelling)
+00f7be20 ?FUN_00f7be20@@YAHHH@Z  # FUN_00f7be20 migrated from s00f7b520 (verbatim, slice spelling)
+00f7bef0 ?FUN_00f7bef0@Swarm_s00f7_b520@@QAEXH@Z  # Swarm_s00f7_b520::FUN_00f7bef0 migrated from s00f7b520 (verbatim, slice spelling)

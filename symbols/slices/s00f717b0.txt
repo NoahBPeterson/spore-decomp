@@ -1,1 +1,3 @@
 00f717b0 RegisterTerrainEffectMaps  # registers 22 Terrain/EffectMap/* maps via IEffectsManager::RegisterMap; byte-exact
+00f71f30 ?distance@cTerrainProbe@@QAEMPBMHH@Z  # cTerrainProbe::distance migrated from s00f717b0 (verbatim, slice spelling)
+00f71f90 ?SetTransformHeight@@YGXPAUcTerrainHeightSource@@PBX1PAUcSPTransformOps@@@Z  # SetTransformHeight migrated from s00f717b0 (verbatim, slice spelling)
