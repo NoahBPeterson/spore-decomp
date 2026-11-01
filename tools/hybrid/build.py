@@ -101,6 +101,30 @@ def pass_targets():
     return sorted(k for k, v in latest.items() if v == "PASS")
 
 
+def strict_targets(sweep_dir):
+    """(id, va) of every row whose verdict in a strict sweep (sweep_nonmatching.py --out DIR) is PASS or PASS-FP.
+    pass_targets() reads the older shards: on 2026-11-01 its 2402 hooks held 123 rows the strict harness calls FAIL
+    and 726 WEAK, and both hybrid failures on the first Windows boots (0x6907e0 deadlock, 0x8fec20 stack overwrite)
+    were WEAK rows whose only PASS was the lenient 2026-10-23 layout recheck. A module row is prepared from its
+    module TU with the flags the sweep used, as the sweep ran it."""
+    import sweep_nonmatching as SW
+    out = []
+    for r in SW.rows():
+        f = os.path.join(sweep_dir, "%s_%s.json" % (r["id"].replace("/", "__"), r["va"]))
+        try:
+            v = json.load(open(f))
+        except (OSError, ValueError):
+            continue
+        v = v[0] if isinstance(v, list) and v else v
+        if not isinstance(v, dict) or v.get("verdict") not in ("PASS", "PASS-FP"):
+            continue
+        if r["src"]:
+            HOOK_SRC[(r["id"], r["va"])] = (os.path.join(ROOT, r["src"]) if not os.path.isabs(r["src"]) else r["src"],
+                                            (v.get("flags") or "").split(), None)
+        out.append((r["id"], r["va"]))
+    return out
+
+
 # (slice id, va) -> (TU path, flags) for --hook-manifest targets; splice() hands them to equiv.prepare
 HOOK_SRC = {}
 SRC_INC = "/Isrc/game/include"
@@ -676,7 +700,9 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--out", default=os.path.join(ROOT, "work", "hybrid", "SporeApp.hybrid.exe"))
     ap.add_argument("--no-patches", action="store_true")
-    ap.add_argument("--hook", default="none", help="pass | none | FILE of '<slice> <va>' lines")
+    ap.add_argument("--hook", default="none",
+                    help="strict[=SWEEP_DIR] (PASS rows of a strict sweep, default work/sweep_pod) | pass (older shards) "
+                         "| none | FILE of '<slice> <va>' lines")
     ap.add_argument("--hook-manifest", nargs="+", metavar="NONMATCHING",
                     help="hook the functions of migrated module TUs (src/game/<dir>/<Stem>/nonmatching.txt)")
     ap.add_argument("--manifest-verdicts", choices=("pass", "all"), default="pass",
@@ -707,7 +733,14 @@ def main():
         from callerdeps import Deps
         sp.deps = Deps(sp.img)
     if a.hook != "none" or a.hook_manifest:
-        targets = [] if a.hook == "none" else pass_targets() if a.hook == "pass" else file_targets(a.hook)
+        if a.hook == "none":
+            targets = []
+        elif a.hook == "pass":
+            targets = pass_targets()
+        elif a.hook == "strict" or a.hook.startswith("strict="):
+            targets = strict_targets(a.hook[7:] or os.path.join(ROOT, "work", "sweep_pod"))
+        else:
+            targets = file_targets(a.hook)
         if a.hook_manifest:
             mt = manifest_targets(a.hook_manifest)
             print("%d manifest targets from %d file(s)" % (len(mt), len(a.hook_manifest)))
