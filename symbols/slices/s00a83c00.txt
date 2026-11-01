@@ -1,0 +1,7 @@
+00a84460 ?WriteTransform@@YAPAXPAUIOStream@@PAX@Z  # WriteTransform migrated from s00a83c00 (verbatim, slice spelling)
+00a84510 ?WriteRec@@YAXPAUIOStream@@PAX@Z  # WriteRec migrated from s00a83c00 (verbatim, slice spelling)
+00a846c0 ?WriteRecList@@YAPAXPAUIOStream@@PAX@Z  # WriteRecList migrated from s00a83c00 (verbatim, slice spelling)
+00a84720 ?WriteDescRec@@YAPAXPAUIOStream@@PAX@Z  # WriteDescRec migrated from s00a83c00 (verbatim, slice spelling)
+00a84850 ?ReadLODScales@@YAPAXPAUIOStream@@PAX@Z  # ReadLODScales migrated from s00a83c00 (verbatim, slice spelling)
+00a848d0 ?ReadDescRec@@YAPAXPAUIOStream@@PAX@Z  # ReadDescRec migrated from s00a83c00 (verbatim, slice spelling)
+00a84a80 ?ResizeDescRecs@@YAXPAXIPBX0@Z  # ResizeDescRecs migrated from s00a83c00 (verbatim, slice spelling)

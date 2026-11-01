@@ -1,0 +1,18 @@
+# source  symbol  va  flags
+../src/game/Swarm/_at_00a80000.cpp  ?WriteTransform@@YAPAXPAUIOStream@@PAX@Z  00a84460  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Swarm/_at_00a80000.cpp  ?WriteRec@@YAXPAUIOStream@@PAX@Z  00a84510  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Swarm/_at_00a80000.cpp  ?WriteRecList@@YAPAXPAUIOStream@@PAX@Z  00a846c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Swarm/_at_00a80000.cpp  ?WriteDescRec@@YAPAXPAUIOStream@@PAX@Z  00a84720  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Swarm/_at_00a80000.cpp  ?Reserve@Vec84@@QAEXI@Z  00a84ca0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Swarm/_at_00a80000.cpp  _FUN_00a84da0  00a84da0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Swarm/_at_00a80000.cpp  ?Release@Cfg@@QAIXXZ  00a84e50  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Swarm/_at_00a80000.cpp  ?Ctor@Cfg@@QAIPAU1@XZ  00a84f00  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Swarm/_at_00a80000.cpp  _FUN_00a84fb0  00a84fb0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Swarm/_at_00a80000.cpp  ?SetCfg@Sim@@QAEXPAX00@Z  00a85070  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Swarm/_at_00a80000.cpp  ?Apply@Sim@@QAEXPAX0@Z  00a85840  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Swarm/_at_00a80000.cpp  _FUN_00a85b00  00a85b00  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Swarm/_at_00a80000.cpp  ?Release@Heap5@@QAIXXZ  00a85b80  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Swarm/_at_00a80000.cpp  ?SerializeElems@@YAPAXPAXPAUElemVec@@@Z  00a871e0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Swarm/_at_00a80000.cpp  ?CopyFrom@Elem@@QAEPAU1@PBU1@@Z  00a87280  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Swarm/_at_00a80000.cpp  ?AssignFrom@Elem@@QAEPAU1@PBU1@@Z  00a873c0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Swarm/_at_00a80000.cpp  ?Sim_Dtor@@YIXPAUSim_s00a8_6b30@@@Z  00a87720  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
