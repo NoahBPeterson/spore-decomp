@@ -272,6 +272,7 @@ def source_annotations(paths):
         depth = 0
         pending = None     # class/struct/namespace name waiting for its '{'
         marker_va = None
+        marker_text = ""
         in_block_comment = False
         logical = []       # (line no, code, comment): physical lines joined while '(' is open
         buf = None
@@ -299,7 +300,37 @@ def source_annotations(paths):
             buf = None
         if buf is not None:
             logical.append(buf)
-        for ln, code, comment in logical:
+        def is_decl(code):
+            """A function declaration (a statement ending in ';' before any '{'), not a definition."""
+            c = code.strip()
+            return "(" in c and ";" in c and ("{" not in c or c.index(";") < c.index("{"))
+
+        def marker_skips(k, marker_text):
+            """The '// @ 0x' marker pending at the extern declaration on logical line k names the function
+            defined right after the run of extern declarations it sits on, not the extern: the first code line
+            after that run (blank and comment lines aside) is a function definition. s013ac650 put
+            `// @ 0x013B52D0` above `extern float FUN_010c9050();` and the function's definition: the extern
+            took the marker, so the call bound to the function's own address and the hybrid recursed until the
+            stack overflowed. A marker whose extern is followed by anything else (the next marker, a type,
+            s0108e080's `// @ 0x0107f530` for hkArrayUtil_reserveMore) still names its extern, and so does a
+            marker whose comment spells the extern's name (`// @ 0x01080e40  hkMath::equal(...)` above
+            `extern hkBool hkMath_equal(...)`)."""
+            ident = _decl_ident(logical[k][1]) or ""
+            squash = lambda t: re.sub(r"[^0-9a-z]", "", t.lower())
+            if len(squash(ident)) >= 4 and squash(ident) in squash(marker_text):
+                return False
+            for _ln, c2, cm2 in logical[k + 1:]:
+                c2 = c2.strip()
+                if not c2:
+                    if re.search(r"@\s*0x[0-9A-Fa-f]{6,8}", cm2):
+                        return False                # the next marker: this one was the extern's
+                    continue                        # blank or comment-only
+                if c2.startswith("extern") and c2.endswith(";"):
+                    continue                        # a function or data extern of the same run
+                return "(" in c2 and not is_decl(c2)
+            return False
+
+        for k, (ln, code, comment) in enumerate(logical):
             va = None
             for m in ADDR_IN_COMMENT.finditer(comment):
                 v = int(m.group(1) or m.group(2), 16)
@@ -308,13 +339,15 @@ def source_annotations(paths):
                     break
             if re.search(r"@\s*0x[0-9A-Fa-f]{6,8}", comment) and not code.strip():
                 marker_va = va
+                marker_text = comment
             cm = re.search(r"\b(class|struct|union|namespace)\s+(?:__declspec\([^)]*\)\s*)?([A-Za-z_]\w*)?[^;()]*$", code)
             if cm and "(" not in code.split(cm.group(0))[0][-1:]:
                 pending = cm.group(2) or "<anon>"
             ident = None
             if code.strip() and va is not None:
                 ident = _decl_ident(code)
-            elif code.strip() and marker_va is not None and "(" in code:
+            elif code.strip() and marker_va is not None and "(" in code and \
+                    not (code.lstrip().startswith("extern") and is_decl(code) and marker_skips(k, marker_text)):
                 ident = _decl_ident(code)
                 if ident:
                     va = marker_va

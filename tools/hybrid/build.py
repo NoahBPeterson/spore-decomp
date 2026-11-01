@@ -255,6 +255,15 @@ class Splicer:
             return self.skip("unresolved", t.sid, "%08x" % t.va)
         if t.orig_hi - t.orig_lo < 5:
             return self.skip("original shorter than a jmp", t.sid, "%08x" % t.va)
+        # An external symbol of ours bound to the hooked function's own address: the jmp written there
+        # turns every use into a call of ourselves. s013ac650's `extern FUN_010c9050` took the
+        # `// @ 0x013B52D0` marker above it, so FUN_013b52d0 called 0x13b52d0 and the game died of a stack
+        # overflow at startup (Windows boot 2026-11-01). Our own recursion calls our defined symbol.
+        selfrefs = [coff.syms[si].name for si, va_ in res.addr.items()
+                    if va_ == t.va and not coff.syms[si].defined]
+        if selfrefs:
+            return self.skip("an external symbol resolves to the hooked address itself", t.sid,
+                             "%08x(%s)" % (t.va, selfrefs[0][:40]))
         fsec, f_lo, f_hi = coff.func_extent(fsym)
         # Calling convention: every `ret N` of ours must be one the original uses. `ret 4` against
         # the original's `ret` leaves the caller's stack 4 bytes off at every call (UTFWin crashes
