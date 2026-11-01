@@ -36,10 +36,10 @@ source in a module TU: contiguous retail code reproduced in object order, the li
 | Migrated: in src/game, byte-exact | 5512 | 6.24% | 0.75 MB | 5.26% |  |
 | Migrated: in src/game, equivalent | 7397 | 8.38% | 3.19 MB | 22.36% |  |
 | Migrated: in src/game, partial | 189 | 0.21% | 0.10 MB | 0.72% | not counted as migrated |
-| **Migrated: total with compilable source in src/game** | 12909 | 14.62% | 3.94 MB | 27.62% | 732 object files with a TU, 276 closed of 1331 intervals |
+| **Migrated: total with compilable source in src/game** | 12909 | 14.62% | 3.94 MB | 27.62% | 732 object files with a TU, 227 closed of 1427 intervals |
 | Migrated: verbatim slice text, not yet on canonical classes | 12280 | 13.91% | 3.80 MB | 26.68% | subset of the total above |
 | Migrated: converted to canonical classes | 629 | 0.71% | 0.13 MB | 0.93% | subset of the total above |
-| Migrated: inside closed object intervals | 560 | 0.63% | 0.18 MB | 1.29% |  |
+| Migrated: inside closed object intervals | 434 | 0.49% | 0.14 MB | 0.98% |  |
 | Compilable source still only in match/slices | 72990 | 82.67% | 9.37 MB | 65.72% |  |
 
 Kind is from the name (template arguments, recovered class) or, for unnamed functions, from the calling
