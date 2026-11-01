@@ -103,6 +103,9 @@ ceiling for any signal. Three seeds: recall 78–81%, precision 96.1–96.7%.
 | order-split (0.8), added 2026-11-01 | gap between A and B, no unplaced module of their directories sorting between them; only functions whose own votes (call graph + features unique to A or B in the dev build) agree with the best split | 597 | 225 | 91.9% |
 | order-split-ev (0.5), added 2026-11-01 | the same where an unplaced module sorts between but none of its unique dev features occurs in the gap | 1,702 | 520 | 79.3% |
 | **total with order** | | **38,746 = 42.8%** | **59.8% by size** | |
+| component (0.3), added 2026-11-01 | inside the Havok 3.1.0 range of `symbols/components.json` (`sig_library.py`); replaces the 31 game anchors there, which are xmatch misnames (0x010840e0 "cSPEditorVerbIcon::InitializeSize" references `.\world\hkWorld.cpp`) | 2,121 | 716 | the 5 hidden anchors it "missed" are those misnames |
+| library (0.3), added 2026-11-01 | the two nearest placements of confidence >= 0.7 on each side are in one top directory; module `<dir>/_at_<va & ~0xffff>.obj` (one TU per 64 KB inside the library) | 18,710 | 2,787 | 93.7% (directory right) |
+| **total with library** | | **59,546 = 65.8%** | **80.7% by size** | 390 conflicts |
 
 `sig_order.py` rests on one measured fact: inside a directory, retail links its objects in
 **alphabetical order of the file name** (622 of 706 consecutive pairs of runs with at least two anchors
@@ -118,6 +121,16 @@ a split proportional to the dev functions left on each side (55-60%), and votes 
 the unplaced ones are all unnamed. Of the 20,430 unplaced functions with source, the order rules
 place 5,217 (1.6 MB); most of the 15,213 left are in gaps where no function has a vote (4,318 gap
 visits) or where an unplaced module leaves traces (600).
+
+**Library level.** Retail is library-major as well: each top directory is one or two long address
+blocks (SPBake 0x402000-0x552000, SPEditors -0x675000, SPEngine -0x7f2000, Spui -0x837000,
+UTFSpore_Win32 -0x99b000, SPCreatureAnim -0xa0f000, SPAudio -0xa68000, Swarm -0xabe000, SPGonzago
+-0xea5000 and 0xfd9000-0x107d000, SPTerrain, SPMovie, RenderWare from 0x11e2000). `sig_library.py`
+puts a function whose file is unknown into its library, in `src/game/<dir>/_at_<64 KB>.cpp`
+(`rewrite.py` lands it like any module, verbatim, checked on s004ab690). After it, 1,695 functions with
+source are unplaced; most of the 30,921 unplaced functions are the compiler-generated initializers and
+stubs at 0x01213750-0x012d81a0 (14,314 functions, median 48 bytes), which belong to the TU of the
+global they touch. Open: `symbols/pdb_names.json` still carries the 31 Havok misnames.
 
 Facts learned on the way, each of which changed a rule:
 - Dev order is **ascending in retail too**, strictly: no chain of three or more same-module anchor
