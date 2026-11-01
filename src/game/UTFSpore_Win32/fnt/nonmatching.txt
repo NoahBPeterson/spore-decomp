@@ -1,0 +1,41 @@
+# va  diff-bytes  reason
+008abf90 14 complete; difftest UNSUPPORTED (all inputs discarded: import:longjmp). BlueShiftPix overflow handler; original tail-calls longjmp(buf,0x1101) so it has no ordinary epilogue (best candidate is a different symbol).
+008ac070  2  complete; difftest PASS (400/400, 100% cov). RoundToHalfGrid: only `add eax,-0x20` vs `sub eax,0x20` differs (compiler canonicalises the constant add).
+008ac0b0  77  complete; difftest FAIL (eax). blue-zone rounding mode reading the zone half-width at p+0x80/p+0x7e and the mask at p+0x74; boundary value differs.
+008ac100  141  complete; difftest FAIL (eax). fnt_Super45Round uses FixDiv by (p+0x74)>>14 then FixMul back; register differences + boundary value.
+008ac1a0 209 complete; difftest FAIL (execution). fnt_MovePoint returns the mark byte (eax = marks+idx, not void). Original re-reads the state pointer fields per branch and spills `delta` to a stack slot; /O2 keeps them in registers.
+008ac370 81 complete; difftest UNSUPPORTED (original reads eax at entry: static register ABI). GetCVTScale scale blend (cx^2/cy^2 weighted by +0xb8/+0xbc); block layout + register allocation differ.
+008ac460 57 complete; difftest FAIL (eax). ChangeCvt (scaled delta when +0xb6==0).
+008ac4c0 173 complete; difftest FAIL (memory pool). fnt_InterpChars interpreter loop, including the 8-way rounding-mode dispatch written into word[st+0x3c].
+008ac5c0 26 complete; difftest PASS (281 valid, 63.3% cov). fnt_NoInterpChars interpreter loop; loop shape differs by two instructions.
+008ac600 358 complete; difftest PASS (323 valid, 63.4% cov). fnt_Execute. /Od-style 0xa0 frame building the T1Decode context, setjmp3(cblock,0), the interp vs no-interp loop selection via the callback. Byte layout cannot match a /O2 rebuild because the original is an /Od function inside an /O2 module.
+008ac7a0 11 complete; difftest UNSUPPORTED (original static register ABI: arg in eax). fnt_ComputeAndCheck_PF_Proj short-matrix projection + projection-scale snap; extra `mov ecx,edx` before the movzx.
+008ac800 36 complete; difftest PASS (400/400, 100% cov). identity vector state (0x10cca50 projection, 0x8ac2d0 point op); store ordering differs.
+008ac840 37 complete; difftest PASS (400/400, 100% cov). identity vector state (0x8ac360, 0x8ac2a0); register differences.
+008ac880 17 complete; difftest PASS (400/400, 100% cov). fnt_SPVTCA (SetProjectionVectorToCoordinateAxis); extra `mov ecx,edx` before the scale store.
+008ac900 8 complete; difftest PASS (400/400, 100% cov). fnt_SFVTCA; single extra `mov ecx,edx` before the scale store.
+008ac970 122 complete; difftest PASS (222 valid, 100% cov). fnt_SPVTL (pop two stack indices, distance*0x400, FixDiv, >>2, negate on opcode bit0); register differences.
+008aca20 256 complete; difftest FAIL (ecx untouched by the original). fnt_SDPVTL (both projection and dual-projection axes).
+008acb50 115 complete; difftest PASS (239 valid, 100% cov). fnt_SFVTL.
+008adac0 29 ?fnt_SHE@@YAXPAUTTExecCtx@@@Z  locates the reference point via fnt_SH_Common(ctx,&x,&x) then walks zp2+idx*0x2c; frame/scheduling deltas only. flags=/O2 /MD /Gy /EHsc /TP; difftest UNSUPPORTED (0/400 valid: fault(write)=187 fault(read)=117 fault=96)
+008adbe0 48 ?fnt_SHPIX@@YAXPAUTTExecCtx@@@Z  dx=ShortFracMul(pix,singleX) dy=ShortFracMul(pix,singleY) then fnt_SHP_Common(ctx-in-edx, dx); body equivalent, prologue/push ebp+ebx frame differs. flags=/O2 /MD /Gy /EHsc /TP; difftest FAIL 5/5 (execution)
+008adc30 259 ?fnt_IP@@YAXPAUTTExecCtx@@@Z  interpolate-point handler; structure reproduced, zone field offsets verified, large scheduling delta. flags=/O2 /MD /Gy /EHsc /TP; difftest UNSUPPORTED (0/400 valid: fault(read)=400)
+008add80 174 ?fnt_MSIRP@@YAXPAUTTExecCtx@@@Z  move-indirect-relative-point; register allocation and call ordering differ. flags=/O2 /MD /Gy /EHsc /TP; difftest UNSUPPORTED (0/400 valid: fault(read)=238 fake-arity=162)
+008ade50 128 ?fnt_IUP@@YAXPAUTTExecCtx@@@Z  interpolate-untouched-points; bases from zp0->mOrgX/mOrgY[refPt], per-point deltas from zp1->mOrgX/mOrgY via mProjFn; needs a stack slot for live bases -> extra push ecx frame. flags=/O2 /MD /Gy /EHsc /TP; difftest WEAK 102 valid 39.3% coverage
+008aded0 115 ?fnt_SHP@@YAXPAUTTExecCtx@@@Z  shift-point handler; ref-point/zone selection and mov ordering differ. flags=/O2 /MD /Gy /EHsc /TP; difftest UNSUPPORTED (0/400 valid: fault(read)=220 fake-arity=180)
+008adf60 21 ?fnt_FLIPPT@@YAXPAUTTExecCtx@@@Z  flags[pop()]^=1 for mRepeat+1 points using zp0->mFlags(+0x18); loop shape differs. flags=/O2 /MD /Gy /EHsc /TP; difftest PASS 253 valid 100.0% coverage
+008adfa0 51 ?fnt_FLIPRGON@@YAXPAUTTExecCtx@@@Z  sets bit0 over [lo,hi] in zp0->mFlags; equivalent, hi/lo stack-pop ordering differs. flags=/O2 /MD /Gy /EHsc /TP; difftest PASS 354 valid 100.0% coverage
+008adfe0 45 ?fnt_FLIPRGOFF@@YAXPAUTTExecCtx@@@Z  clears bit0 over [lo,hi] in zp0->mFlags; equivalent, pop ordering differs. flags=/O2 /MD /Gy /EHsc /TP; difftest PASS 360 valid 100.0% coverage
+008ae020 15 ?fnt_SCANCTRL@@YAXPAUTTExecCtx@@@Z  dword RMW at gs+0x64: (*(u32*)(gs+0x64)&0xffff0000)|*stack; original folds mask via add eax,0x58 / mov [eax+0xc]. flags=/O2 /MD /Gy /EHsc /TP; difftest PASS 400 valid 100.0% coverage
+008ae040 52 ?fnt_INSTCTRL@@YAXPAUTTExecCtx@@@Z  switch(sel) writes gs+0x66/gray/subpixel; body equivalent, jump-table/branch layout differs. flags=/O2 /MD /Gy /EHsc /TP; difftest FAIL 5/5 (eax)
+008ae0b0 49 ?fnt_SCFS@@YAXPAUTTExecCtx@@@Z  gs->mInstrCtrl ^= (gs->mInstrCtrl ^ val) & sel; mask-branch layout differs only. flags=/O2 /MD /Gy /EHsc /TP; difftest FAIL 5/5 (eax)
+008ae100 706 ?fnt_AA@@YAXPAUTTExecCtx@@@Z  hand-reconstructed anti-alias handler (axis vectors, mDist, mBackend); large unverified reconstruction. flags=/O2 /MD /Gy /EHsc /TP; difftest FAIL 5/5 (execution)
+008ae460 39 ?fnt_a0b0@@YAXPAUTTExecCtx@@@Z  PUSHB[n]: n=*ip; ip++; push n bytes as ints; loop/epilogue scheduling differs. flags=/O2 /MD /Gy /EHsc /TP; difftest PASS 400 valid 100.0% coverage
+008ae4a0 74 ?fnt_a0b8@@YAXPAUTTExecCtx@@@Z  NPUSHB: opcode-0xb8 words read big-endian from ip; MSVC word-shift codegen differs (di/bx form). flags=/O2 /MD /Gy /EHsc /TP; difftest PASS 400 valid 100.0% coverage
+008ae4f0 74 ?fnt_a0b8b@@YAXPAUTTExecCtx@@@Z  NPUSHW: count from ip then n big-endian words; word-shift codegen differs. flags=/O2 /MD /Gy /EHsc /TP; difftest PASS 400 valid 100.0% coverage
+008ae580 52 ?fnt_WCVT@@YAXPAUTTExecCtx@@@Z  write-cvt: gs->mCvt[idx]=round(arg); call/arg ordering differs. flags=/O2 /MD /Gy /EHsc /TP; difftest FAIL 5/5 (execution)
+008ae600 24 ?fnt_ROUND@@YAXPAUTTExecCtx@@@Z  *p = mReadFn(ctx,*p) with callback at ctx+0x54; register choice/scheduling differs. flags=/O2 /MD /Gy /EHsc /TP; difftest UNSUPPORTED (fake-arity=400)
+008ae6f0 151 ?fnt_MDRP@@YAXPAUTTExecCtx@@@Z  move-direct-relative-point; dual path uses zp0/zp1 mOrgS + mDualFn then mRoundFn; large scheduling delta. flags=/O2 /MD /Gy /EHsc /TP; difftest UNSUPPORTED (0/400 valid: fault(read)=365 fake-arity=35)
+008ae7a0 34 ?fnt_MPPEM@@YAXPAUTTExecCtx@@@Z  pushInt(grayscale? singleW : ((FixMul(2*w,GetCVTScale(c))+1)>>1)&0xffff); body equivalent. flags=/O2 /MD /Gy /EHsc /TP; difftest FAIL 5/11 (execution)
+008ae810 58 ?fnt_GETINFO@@YAXPAUTTExecCtx@@@Z  r = (v&1) | ((v&2)&&(subpixel&1) ? 0x100:0) | ((v&4)&&(subpixel&2)?0x200:0); branch layout differs. flags=/O2 /MD /Gy /EHsc /TP; difftest PASS 400 valid 100.0% coverage
+008ae890 287 ?fnt_Arithmetic@@YAXPAUTTExecCtx@@@Z  arithmetic-opcode dispatcher; structure reproduced, large scheduling/branch-layout delta. flags=/O2 /MD /Gy /EHsc /TP; difftest FAIL 5/337 (memory pool @40020020, unmodelled heap)

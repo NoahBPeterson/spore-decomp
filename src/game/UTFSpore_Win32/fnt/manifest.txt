@@ -1,0 +1,23 @@
+# source  symbol  va  flags
+../src/game/UTFSpore_Win32/fnt.cpp  ?FUN_008abfe0@@YAIHHH@Z  008abfe0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/fnt.cpp  _FUN_008ac010  008ac010  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/fnt.cpp  _fnt_RoundToGrid  008ac040  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/fnt.cpp  ?FUN_008ac2a0@@YAPAHHPAPAXHH@Z  008ac2a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/fnt.cpp  ?FUN_008ac2d0@@YAPAHHPAPAXHH@Z  008ac2d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/fnt.cpp  ?fnt_Project@@YAHPAXHH@Z  008ac300  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/fnt.cpp  ?fnt_OldProject@@YAHPAXHH@Z  008ac330  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/fnt.cpp  ?FUN_008ac3e0@@YAHPAUT1Exec@@H@Z  008ac3e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/fnt.cpp  ?fnt_GetCVTEntrySlow@@YAHPAUT1Exec@@H@Z  008ac400  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/fnt.cpp  ?FUN_008ac430@@YAHPAUT1Exec@@@Z  008ac430  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/fnt.cpp  ?fnt_GetSingleWidthSlow@@YAHPAUT1Exec@@@Z  008ac440  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/fnt.cpp  ?fnt_MDAP0@@YAXPAUTTExecCtx@@@Z  008adf40  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/fnt.cpp  ?fnt_svtca_lo@@YAXPAUTTExecCtx@@@Z  008ae420  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/fnt.cpp  ?fnt_MD1@@YAXPAUTTExecCtx@@@Z  008ae540  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/fnt.cpp  ?fnt_MD0@@YAXPAUTTExecCtx@@@Z  008ae560  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/fnt.cpp  ?fnt_RS@@YAXPAUTTExecCtx@@@Z  008ae5d0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/fnt.cpp  ?fnt_GC@@YAXPAUTTExecCtx@@@Z  008ae630  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/fnt.cpp  ?fnt_MD@@YAXPAUTTExecCtx@@@Z  008ae690  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/fnt.cpp  ?fnt_MPS@@YAXPAUTTExecCtx@@@Z  008ae7f0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/fnt.cpp  ?fnt_INSTRCTRL_ON@@YAXPAUTTExecCtx@@@Z  008ae860  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/fnt.cpp  ?fnt_INSTRCTRL_OFF@@YAXPAUTTExecCtx@@@Z  008ae870  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/fnt.cpp  ?fnt_POP_NOOP@@YAXPAUTTExecCtx@@@Z  008ae880  /O2 /MD /Gy /EHsc /TP /Isrc/game/include

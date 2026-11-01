@@ -1,33 +1,33 @@
-008adac0  ?fnt_SHE@@YAXPAUTTExecCtx@@@Z  # marker
-008adbe0  ?fnt_SHPIX@@YAXPAUTTExecCtx@@@Z  # marker
-008adc30  ?fnt_IP@@YAXPAUTTExecCtx@@@Z  # marker
-008add80  ?fnt_MSIRP@@YAXPAUTTExecCtx@@@Z  # marker
-008ade50  ?fnt_IUP@@YAXPAUTTExecCtx@@@Z  # marker
-008aded0  ?fnt_SHP@@YAXPAUTTExecCtx@@@Z  # marker
-008adf40  ?fnt_MDAP0@@YAXPAUTTExecCtx@@@Z  # marker
-008adf60  ?fnt_FLIPPT@@YAXPAUTTExecCtx@@@Z  # marker
-008adfa0  ?fnt_FLIPRGON@@YAXPAUTTExecCtx@@@Z  # marker
-008adfe0  ?fnt_FLIPRGOFF@@YAXPAUTTExecCtx@@@Z  # marker
-008ae020  ?fnt_SCANCTRL@@YAXPAUTTExecCtx@@@Z  # marker
-008ae040  ?fnt_INSTCTRL@@YAXPAUTTExecCtx@@@Z  # marker
-008ae0b0  ?fnt_SCFS@@YAXPAUTTExecCtx@@@Z  # marker
-008ae100  ?fnt_AA@@YAXPAUTTExecCtx@@@Z  # marker
-008ae420  ?fnt_svtca_lo@@YAXPAUTTExecCtx@@@Z  # marker
-008ae460  ?fnt_a0b0@@YAXPAUTTExecCtx@@@Z  # marker
-008ae4a0  ?fnt_a0b8@@YAXPAUTTExecCtx@@@Z  # marker
-008ae4f0  ?fnt_a0b8b@@YAXPAUTTExecCtx@@@Z  # marker
-008ae540  ?fnt_MD1@@YAXPAUTTExecCtx@@@Z  # marker
-008ae560  ?fnt_MD0@@YAXPAUTTExecCtx@@@Z  # marker
-008ae580  ?fnt_WCVT@@YAXPAUTTExecCtx@@@Z  # marker
-008ae5d0  ?fnt_RS@@YAXPAUTTExecCtx@@@Z  # marker
-008ae600  ?fnt_ROUND@@YAXPAUTTExecCtx@@@Z  # marker
-008ae630  ?fnt_GC@@YAXPAUTTExecCtx@@@Z  # marker
-008ae690  ?fnt_MD@@YAXPAUTTExecCtx@@@Z  # marker
-008ae6f0  ?fnt_MDRP@@YAXPAUTTExecCtx@@@Z  # marker
-008ae7a0  ?fnt_MPPEM@@YAXPAUTTExecCtx@@@Z  # marker
-008ae7f0  ?fnt_MPS@@YAXPAUTTExecCtx@@@Z  # marker
-008ae810  ?fnt_GETINFO@@YAXPAUTTExecCtx@@@Z  # marker
-008ae860  ?fnt_INSTRCTRL_ON@@YAXPAUTTExecCtx@@@Z  # marker
-008ae870  ?fnt_INSTRCTRL_OFF@@YAXPAUTTExecCtx@@@Z  # marker
-008ae880  ?fnt_POP_NOOP@@YAXPAUTTExecCtx@@@Z  # marker
-008ae890  ?fnt_Arithmetic@@YAXPAUTTExecCtx@@@Z  # marker
+008adac0 ?fnt_SHE@@YAXPAUTTExecCtx@@@Z  # fnt_SHE migrated from s008adac0 (verbatim, slice spelling)
+008adbe0 ?fnt_SHPIX@@YAXPAUTTExecCtx@@@Z  # fnt_SHPIX migrated from s008adac0 (verbatim, slice spelling)
+008adc30 ?fnt_IP@@YAXPAUTTExecCtx@@@Z  # fnt_IP migrated from s008adac0 (verbatim, slice spelling)
+008add80 ?fnt_MSIRP@@YAXPAUTTExecCtx@@@Z  # fnt_MSIRP migrated from s008adac0 (verbatim, slice spelling)
+008ade50 ?fnt_IUP@@YAXPAUTTExecCtx@@@Z  # fnt_IUP migrated from s008adac0 (verbatim, slice spelling)
+008aded0 ?fnt_SHP@@YAXPAUTTExecCtx@@@Z  # fnt_SHP migrated from s008adac0 (verbatim, slice spelling)
+008adf40 ?fnt_MDAP0@@YAXPAUTTExecCtx@@@Z  # fnt_MDAP0 migrated from s008adac0 (verbatim, slice spelling)
+008adf60 ?fnt_FLIPPT@@YAXPAUTTExecCtx@@@Z  # fnt_FLIPPT migrated from s008adac0 (verbatim, slice spelling)
+008adfa0 ?fnt_FLIPRGON@@YAXPAUTTExecCtx@@@Z  # fnt_FLIPRGON migrated from s008adac0 (verbatim, slice spelling)
+008adfe0 ?fnt_FLIPRGOFF@@YAXPAUTTExecCtx@@@Z  # fnt_FLIPRGOFF migrated from s008adac0 (verbatim, slice spelling)
+008ae020 ?fnt_SCANCTRL@@YAXPAUTTExecCtx@@@Z  # fnt_SCANCTRL migrated from s008adac0 (verbatim, slice spelling)
+008ae040 ?fnt_INSTCTRL@@YAXPAUTTExecCtx@@@Z  # fnt_INSTCTRL migrated from s008adac0 (verbatim, slice spelling)
+008ae0b0 ?fnt_SCFS@@YAXPAUTTExecCtx@@@Z  # fnt_SCFS migrated from s008adac0 (verbatim, slice spelling)
+008ae100 ?fnt_AA@@YAXPAUTTExecCtx@@@Z  # fnt_AA migrated from s008adac0 (verbatim, slice spelling)
+008ae420 ?fnt_svtca_lo@@YAXPAUTTExecCtx@@@Z  # fnt_svtca_lo migrated from s008adac0 (verbatim, slice spelling)
+008ae460 ?fnt_a0b0@@YAXPAUTTExecCtx@@@Z  # fnt_a0b0 migrated from s008adac0 (verbatim, slice spelling)
+008ae4a0 ?fnt_a0b8@@YAXPAUTTExecCtx@@@Z  # fnt_a0b8 migrated from s008adac0 (verbatim, slice spelling)
+008ae4f0 ?fnt_a0b8b@@YAXPAUTTExecCtx@@@Z  # fnt_a0b8b migrated from s008adac0 (verbatim, slice spelling)
+008ae540 ?fnt_MD1@@YAXPAUTTExecCtx@@@Z  # fnt_MD1 migrated from s008adac0 (verbatim, slice spelling)
+008ae560 ?fnt_MD0@@YAXPAUTTExecCtx@@@Z  # fnt_MD0 migrated from s008adac0 (verbatim, slice spelling)
+008ae580 ?fnt_WCVT@@YAXPAUTTExecCtx@@@Z  # fnt_WCVT migrated from s008adac0 (verbatim, slice spelling)
+008ae5d0 ?fnt_RS@@YAXPAUTTExecCtx@@@Z  # fnt_RS migrated from s008adac0 (verbatim, slice spelling)
+008ae600 ?fnt_ROUND@@YAXPAUTTExecCtx@@@Z  # fnt_ROUND migrated from s008adac0 (verbatim, slice spelling)
+008ae630 ?fnt_GC@@YAXPAUTTExecCtx@@@Z  # fnt_GC migrated from s008adac0 (verbatim, slice spelling)
+008ae690 ?fnt_MD@@YAXPAUTTExecCtx@@@Z  # fnt_MD migrated from s008adac0 (verbatim, slice spelling)
+008ae6f0 ?fnt_MDRP@@YAXPAUTTExecCtx@@@Z  # fnt_MDRP migrated from s008adac0 (verbatim, slice spelling)
+008ae7a0 ?fnt_MPPEM@@YAXPAUTTExecCtx@@@Z  # fnt_MPPEM migrated from s008adac0 (verbatim, slice spelling)
+008ae7f0 ?fnt_MPS@@YAXPAUTTExecCtx@@@Z  # fnt_MPS migrated from s008adac0 (verbatim, slice spelling)
+008ae810 ?fnt_GETINFO@@YAXPAUTTExecCtx@@@Z  # fnt_GETINFO migrated from s008adac0 (verbatim, slice spelling)
+008ae860 ?fnt_INSTRCTRL_ON@@YAXPAUTTExecCtx@@@Z  # fnt_INSTRCTRL_ON migrated from s008adac0 (verbatim, slice spelling)
+008ae870 ?fnt_INSTRCTRL_OFF@@YAXPAUTTExecCtx@@@Z  # fnt_INSTRCTRL_OFF migrated from s008adac0 (verbatim, slice spelling)
+008ae880 ?fnt_POP_NOOP@@YAXPAUTTExecCtx@@@Z  # fnt_POP_NOOP migrated from s008adac0 (verbatim, slice spelling)
+008ae890 ?fnt_Arithmetic@@YAXPAUTTExecCtx@@@Z  # fnt_Arithmetic migrated from s008adac0 (verbatim, slice spelling)
