@@ -11,7 +11,7 @@
 01082a00 hkNullContactMgr::processRequest  # returns 1, ret 0x1c
 01082a40 hkWorld::removeWorldDeletionListener  # +0x108 array, null-assign
 01082a90 hkWorld::stepDeltaTime  # simulation vtbl+8(world,dt,dt) then watchdog "TtWatchDog:FreeMem"
-01082b90 ?linearCast@hkWorld_s0108_2350@@QBEXPBUhkCollidable@@ABUhkLinearCastInput_s0108_2350@@AAUhkCdPointCollector@@PAU4@@Z  # hkWorld_s0108_2350::linearCast migrated from s01082350 (verbatim, slice spelling)
+01082b90 hkWorld::linearCast  # hkWorldLinearCaster::linearCast args match mangled signature
 01082bf0 hkWorld::executePendingOperations  # "TtPendingOps"
 01082ca0 hkWorld::calcMaxIslandSizeEstimate  # max over +0x38 islands
 01082ce0 hkNullContactMgrFactory::createContactMgr  # returns this+8

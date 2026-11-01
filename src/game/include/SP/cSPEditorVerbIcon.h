@@ -166,7 +166,7 @@ class cSPEditorVerbIcon : public EA::UTFWin::IWinProc /* +0x0 */, public EA::Ref
   void EndCharge();                                                      // 0x005e2e50
   void EndFlashing();                                                    // 0x005e3180
   void Disappear();                                                      // 0x005e3d50
-  void InitializeSize();                                                 // 0x010840e0
+  void InitializeSize();
   void SetCollectionID(EA::COM::IUnknown32 *);                           // dev only
   float GetAspectRatio();                                                // dev only
   bool GetIgnoreKeyPress();                                              // dev only

@@ -306,7 +306,7 @@ class cSPCreatureCitizen : public SP::cSPCreatureBase /* +0x0 */ {
   bool IsWaitingForTool(SP::eTribeToolType);                             // 0x00c26380
   void ForceOrdersUpdate();                                              // 0x00c26450
   SP::cAgentOrder * GiveOrder(unsigned int, EA::COM::IUnknown32 *, EA::Variant const *); // 0x00c275b0
-  void AttachBundle(SP::cGameBundle *);                                  // 0x0108ae30
+  void AttachBundle(SP::cGameBundle *);
   SP::cSPCreatureCitizen::cTribeActivity GetLastChattableActivity() const; // dev only
   SP::cSPCreatureCitizen::eTribeThought GetCurrentThoughtEffect() const; // dev only
   SP::cSPCreatureCitizen::eTribeThought GetThoughtEffectState();         // dev only

@@ -34,13 +34,13 @@ source in a module TU: contiguous retail code reproduced in object order, the li
 | Tier | Functions | Share (by count) | Code size | Share (by size) | Notes |
 |---|---:|---:|---:|---:|---|
 | Migrated: in src/game, byte-exact | 5512 | 6.24% | 0.75 MB | 5.26% |  |
-| Migrated: in src/game, equivalent | 7397 | 8.38% | 3.19 MB | 22.36% |  |
+| Migrated: in src/game, equivalent | 7396 | 8.38% | 3.19 MB | 22.36% |  |
 | Migrated: in src/game, partial | 189 | 0.21% | 0.10 MB | 0.72% | not counted as migrated |
-| **Migrated: total with compilable source in src/game** | 12909 | 14.62% | 3.94 MB | 27.62% | 732 object files with a TU, 226 closed of 1411 intervals |
-| Migrated: verbatim slice text, not yet on canonical classes | 12280 | 13.91% | 3.80 MB | 26.68% | subset of the total above |
+| **Migrated: total with compilable source in src/game** | 12908 | 14.62% | 3.94 MB | 27.62% | 731 object files with a TU, 226 closed of 1411 intervals |
+| Migrated: verbatim slice text, not yet on canonical classes | 12279 | 13.91% | 3.80 MB | 26.68% | subset of the total above |
 | Migrated: converted to canonical classes | 629 | 0.71% | 0.13 MB | 0.93% | subset of the total above |
 | Migrated: inside closed object intervals | 433 | 0.49% | 0.14 MB | 0.98% |  |
-| Compilable source still only in match/slices | 72990 | 82.67% | 9.37 MB | 65.72% |  |
+| Compilable source still only in match/slices | 72991 | 82.67% | 9.37 MB | 65.72% |  |
 
 Kind is from the name (template arguments, recovered class) or, for unnamed functions, from the calling
 convention (reads ECX = `this` before writing it).
@@ -48,6 +48,6 @@ Checked against PDB-named functions, that heuristic labels 79% of member functio
 free functions as functions, so for unnamed code the split between the first two kinds is approximate.
 Kind totals: functions 20328, classes/templates 36561, globals/other 31404.
 
-Named (recovered real names, incl. high-confidence dev-PDB matches): 15958 (18.07%). This is orthogonal to the tiers.
+Named (recovered real names, incl. high-confidence dev-PDB matches): 15954 (18.07%). This is orthogonal to the tiers.
 
 Excluded third-party library functions: 2179 (b5rw 40, cblock 748, crt 28, eatext 256, eathread 16, jpeg 31, openssl 918, png 113, zlib 29)

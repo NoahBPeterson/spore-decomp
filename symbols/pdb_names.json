@@ -46409,26 +46409,6 @@
 "how": "callee-single",
 "name": "SP::cCombatant::NotifyAttack"
 },
-"01082b90": {
-"dev": "00d608d0",
-"how": "callee-scored",
-"name": "SP::cSPEditorManipulationStacking::MoveBlockLowAngleStacking"
-},
-"01083570": {
-"dev": "007e3e40",
-"how": "anchor",
-"name": "SP::cTribePlannerWindow::UpdateList"
-},
-"010840e0": {
-"dev": "00dc8d30",
-"how": "anchor",
-"name": "SP::cSPEditorVerbIcon::InitializeSize"
-},
-"0108ae30": {
-"dev": "006f1260",
-"how": "anchor",
-"name": "SP::cSPCreatureCitizen::AttachBundle"
-},
 "010937e0": {
 "dev": "00917bb0",
 "how": "vtable-slot",
@@ -46438,16 +46418,6 @@
 "dev": "00980380",
 "how": "vtable-slot",
 "name": "SP::cTribeGameBehaviorParty::Score"
-},
-"010cd030": {
-"dev": "00ce2f70",
-"how": "anchor",
-"name": "SP::cAppModeEditorBase::CreateAnimatedCreature"
-},
-"01123680": {
-"dev": "00c30810",
-"how": "anchor",
-"name": "eastl::vector<int,eastl::fixed_vector_allocator<4,256,4,0,1> >::DoAssignValues"
 },
 "0112c820": {
 "dev": "014b3ffb",

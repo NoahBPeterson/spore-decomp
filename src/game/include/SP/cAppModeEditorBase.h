@@ -365,7 +365,7 @@ class cAppModeEditorBase : public SP::cIAppMode /* +0x0 */, public SP::cILayer /
   void SendButtonEventToBabies(unsigned int, unsigned int, float, float); // 0x00628ca0
   bool IsEventForBaby(unsigned int);                                     // 0x0062ba10
   void Redo();                                                           // 0x00bb6650
-  bool CreateAnimatedCreature(SP::cAppModeEditorBase::eAnimatedCreatureType); // 0x010cd030
+  bool CreateAnimatedCreature(SP::cAppModeEditorBase::eAnimatedCreatureType);
   static SP::cAppModeEditorBase * Instance();                            // dev only
   unsigned int GetResourceType();                                        // dev only
   SP::cIModelWorld * GetModelWorld();                                    // dev only
