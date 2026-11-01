@@ -1,0 +1,43 @@
+# source  symbol  va  flags
+../src/game/SPAudio/eapdconnective.cpp  ?pdsymbol_symbol@@YAXPAUPdObject@@@Z  00a59ca0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdconnective.cpp  ?bang_new2@@YAPAXXZ  00a59d70  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdconnective.cpp  ?FUN_00a59db0@@YAXPAX@Z  00a59db0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdconnective.cpp  ?FUN_00a59e90@@YAXPAUPdObject@@@Z  00a59e90  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdconnective.cpp  ?send_symbol@@YAXPAUPdObject@@PAX1@Z  00a59eb0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdconnective.cpp  ?FUN_00a59ed0@@YAXPAUPdObject@@PAX111@Z  00a59ed0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdconnective.cpp  ?FUN_00a5a000@@YAXPAUPdObject@@M@Z  00a5a000  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdconnective.cpp  ?FUN_00a5a020@@YAXPAUPdObject@@PAX111@Z  00a5a020  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdconnective.cpp  ?sel2_symbol@@YAXPAUPdObject@@HPAX@Z  00a5a3c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdconnective.cpp  ?route_free@Eapd@Audio@EA@@YAXPAURouteObj@123@@Z  00a5a960  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdconnective.cpp  ?route_setup@Eapd@Audio@EA@@YAEXZ  00a5aa70  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdconnective.cpp  ?pack_float@Eapd@Audio@EA@@YAXPAUPackObj@123@M@Z  00a5acc0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdconnective.cpp  ?pack_symbol@Eapd@Audio@EA@@YAXPAUPackObj@123@Ut_symbol_s00a5_a590@123@@Z  00a5ace0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdconnective.cpp  ?pack_list@Eapd@Audio@EA@@YAXPAUPackObj@123@Ut_symbol_s00a5_a590@123@HPAUAtom@123@@Z  00a5ad10  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdconnective.cpp  ?pack_anything@Eapd@Audio@EA@@YAXPAUPackObj@123@Ut_symbol_s00a5_a590@123@HPAUAtom@123@@Z  00a5ad40  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdconnective.cpp  ?pack_free@Eapd@Audio@EA@@YAXPAUPackObj@123@@Z  00a5add0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdconnective.cpp  ?pack_setup@Eapd@Audio@EA@@YAEXZ  00a5ae10  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdconnective.cpp  ?unpack_list@Eapd@Audio@EA@@YAXPAUUnpackObj@123@Ut_symbol_s00a5_a590@123@HPAUAtom@123@@Z  00a5afa0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdconnective.cpp  ?unpack_anything@Eapd@Audio@EA@@YAXPAUUnpackObj@123@Ut_symbol_s00a5_a590@123@HPAUAtom@123@@Z  00a5b070  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdconnective.cpp  ?unpack_free@Eapd@Audio@EA@@YAXPAUUnpackObj@123@@Z  00a5b100  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdconnective.cpp  ?unpack_setup@Eapd@Audio@EA@@YAEXZ  00a5b120  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdconnective.cpp  ?trigger_anything@Eapd@Audio@EA@@YAXPAUTriggerObj@123@Ut_symbol_s00a5_a590@123@HPAUAtom@123@@Z  00a5b450  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdconnective.cpp  ?trigger_bang@Eapd@Audio@EA@@YAXPAUTriggerObj@123@@Z  00a5b4b0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdconnective.cpp  ?trigger_float@Eapd@Audio@EA@@YAXPAUTriggerObj@123@M@Z  00a5b4d0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdconnective.cpp  ?trigger_symbol@Eapd@Audio@EA@@YAXPADUt_symbol_s00a5_b510@123@@Z  00a5b510  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdconnective.cpp  ?spigot_bang@Eapd@Audio@EA@@YAXPAD@Z  00a5b670  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdconnective.cpp  ?spigot_symbol@Eapd@Audio@EA@@YAXPADUt_symbol_s00a5_b510@123@@Z  00a5b700  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdconnective.cpp  ?spigot_list@Eapd@Audio@EA@@YAXPADUt_symbol_s00a5_b510@123@HPAX@Z  00a5b730  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdconnective.cpp  ?spigot_anything@Eapd@Audio@EA@@YAXPADUt_symbol_s00a5_b510@123@HPAX@Z  00a5b770  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdconnective.cpp  ?gate_free@Eapd@Audio@EA@@YAXPAD@Z  00a5b920  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdconnective.cpp  ?switch_free@Eapd@Audio@EA@@YAXPAD@Z  00a5bc70  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdconnective.cpp  ?switch_float@Eapd@Audio@EA@@YAXPADM@Z  00a5bc90  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdconnective.cpp  ?until_bang@Eapd@Audio@EA@@YAXPAD@Z  00a5bf20  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdconnective.cpp  ?until_float@Eapd@Audio@EA@@YAXPADM@Z  00a5bf60  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdconnective.cpp  ?until_bang2@Eapd@Audio@EA@@YAXPAD@Z  00a5bfa0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdconnective.cpp  ?change_float@Eapd@Audio@EA@@YAXPAUt_change@123@M@Z  00a5c460  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPAudio/eapdconnective.cpp  ?change_set@Eapd@Audio@EA@@YAXPAUt_change@123@M@Z  00a5c4c0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPAudio/eapdconnective.cpp  ?value_get@Eapd@Audio@EA@@YAPAMUt_symbol_s00a5_c460@123@@Z  00a5c570  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPAudio/eapdconnective.cpp  ?value_new@Eapd@Audio@EA@@YAPAUt_value@123@Ut_symbol_s00a5_c460@123@@Z  00a5c5d0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPAudio/eapdconnective.cpp  ?value_bang@Eapd@Audio@EA@@YAXPAUt_value@123@@Z  00a5c620  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPAudio/eapdconnective.cpp  ?value_float@Eapd@Audio@EA@@YAXPAUt_value@123@M@Z  00a5c680  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPAudio/eapdconnective.cpp  ?value_setup@Eapd@Audio@EA@@YAEXZ  00a5c6f0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
