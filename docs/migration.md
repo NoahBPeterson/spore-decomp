@@ -99,6 +99,20 @@ ceiling for any signal. Three seeds: recall 78–81%, precision 96.1–96.7%.
 | gapsplit-short / same-wide (0.5) | 3–4 aligned, or count up to 2× | 266 | 66 | 90–100% |
 | inst (0.7) | instantiation follows its class's owner | 0 | 0 | never fires: the low-confidence named functions are `$E` initialisers or have no owner |
 | **total** | | **31,295 = 34.6%** | **8,041 = 48.2%** | 359 conflicts |
+| order-enclosed (0.7), added 2026-11-01 | gap whose two flanking runs are one module (`sig_order.py`) | 4,484 | 1,018 | 88.9% (91.3% outside template instantiations) |
+| order-split (0.5), added 2026-11-01 | gap between A and B with no unplaced module of their directories sorting between them; split point by call-graph votes | 2,217 | 638 | 73.0% (75.4% outside templates) |
+| **total with order** | | **37,996 = 42.0%** | **58.1% by size** | |
+
+`sig_order.py` rests on one measured fact: inside a directory, retail links its objects in
+**alphabetical order of the file name** (622 of 706 consecutive pairs of runs with at least two anchors
+each; most exceptions are restarts at a filter-folder boundary). Dev link order is no help (53% of
+consecutive retail runs ascend in dev order, and the dev build keeps only 942 of its 1,809 objects
+contiguous). Rejected on hold-out: a split proportional to the dev functions left on each side
+(55-60%) and votes from shared `.data`/`.rdata` addresses (lowered splits to 69%). Hold-out precision
+is measured on named functions; the unplaced ones are all unnamed. Of the 20,430 unplaced functions
+with source, the order rules place 4,543 (1.4 MB); the 15,887 left sit mostly in gaps where an
+unplaced module of the same directory sorts between the flanks (1,033 gaps) or at directory
+boundaries.
 
 Facts learned on the way, each of which changed a rule:
 - Dev order is **ascending in retail too**, strictly: no chain of three or more same-module anchor

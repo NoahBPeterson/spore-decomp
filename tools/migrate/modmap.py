@@ -54,7 +54,7 @@ W = lambda *p: os.path.join(ROOT, *p)
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 # Signal order.  The first two are built in; the rest are tools/migrate/sig_<name>.py modules.
-SIGNALS = ["anchor", "interp", "vtable", "callgraph", "gapsplit", "inst"]
+SIGNALS = ["anchor", "interp", "vtable", "callgraph", "gapsplit", "inst", "order"]
 
 # Gap plausibility for `interp`.  Retail (2024, VC9 LTCG) and dev (2008, VC7.1) differ in
 # inlining, so counts, not sizes, are compared; a retail gap holding more than WIDE_FACTOR times
