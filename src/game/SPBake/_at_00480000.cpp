@@ -18,6 +18,7 @@ extern void* g_ballVtbl0;
 extern void* g_ballVtbl1;
 
 // ---- items of slice s00482670 begin (TODO(rewrite): local stubs, replace by canonical classes)
+#define PV(n) virtual void _v##n();
 struct Vector3 { float x, y, z;                  // rw::math::fpu::Vector3Template<float,0>
     Vector3() {}
     Vector3(const Vector3& v) : x(v.x), y(v.y), z(v.z) {}
@@ -32,8 +33,6 @@ struct cSPVector3_s0048_2670 : Vector3 {                       // cSPVector3 (12
 struct cSPMatrix3_s0048_2670 { Vector3 xAxis, yAxis, zAxis; }; // 36 bytes, copied with rep movsd
 void* EditorTuning();          // @ 0x00401070
 extern Vector3 g_offset;
-extern void* g_ballVtbl0;
-extern void* g_ballVtbl1;
 Vector3 operator*(const Vector3& v, const float& s);        // @ 0x41dca0
 Vector3 operator/(const Vector3& v, const float& s);        // @ 0x453880
 struct cSPTransform_s0048_2670 {                               // 0x38 bytes
@@ -75,11 +74,11 @@ struct cSPEditorBlock {
     AutoRefCount<cIModelWorld> mModelWorld;         // +0x18
     cSPBoundingBox_s0048_2670 GetBBox(int mode, bool a, bool b);   // @ 0x44ae00
 };
-#define PV(n) virtual void _v##n();
+#define PV_s0048_2670(n) virtual void _v##n();
 struct IModelManager {
 virtual int AddRef();
 virtual int Release();
-    PV(2) PV(3) PV(4) PV(5) PV(6) PV(7) PV(8) PV(9)
+    PV_s0048_2670(2) PV_s0048_2670(3) PV_s0048_2670(4) PV_s0048_2670(5) PV_s0048_2670(6) PV_s0048_2670(7) PV_s0048_2670(8) PV_s0048_2670(9)
     virtual unsigned int GetGroupFlag(uint32_t groupID, int arg);   // +0x28
 };
 struct cMWModel {
@@ -132,7 +131,6 @@ Vec3R operator*(const Vec3& a, const float& s);             // 0x0041dca0
 // ---- items of slice s00482670 end
 
 // unnamed retail callees and globals that name local stubs (address in the comment)
-extern Vector3 g_offset;
 
 // ---- items of slice s004834d0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern float  g_negOne;
