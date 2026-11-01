@@ -1,0 +1,27 @@
+# source  symbol  va  flags
+../src/game/SPEngine/_at_007c0000.cpp  ?FUN_007c3910@@YAXXZ  007c3910  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include
+../src/game/SPEngine/_at_007c0000.cpp  ?CopyMat4@Mat4@@QAEXPBU1@@Z  007c3b70  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include
+../src/game/SPEngine/_at_007c0000.cpp  ?FUN_007c3ba0@cViewer@@QAE_NXZ  007c3ba0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPEngine/_at_007c0000.cpp  ?FUN_007c3c50@cViewer@@QAEXE@Z  007c3c50  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPEngine/_at_007c0000.cpp  ?FUN_007c3c90@cViewer@@QAEMXZ  007c3c90  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPEngine/_at_007c0000.cpp  ?FUN_007c3ca0@cViewer@@QAEMXZ  007c3ca0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPEngine/_at_007c0000.cpp  ?Alloc@SerializedArray@@QAEPAXXZ  007c5490  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/_at_007c0000.cpp  ?RegFF0000C@@YAXXZ  007c56e0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/_at_007c0000.cpp  ?RegFF0000@@YAXXZ  007c5700  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/_at_007c0000.cpp  ?RegFF0001C@@YAXXZ  007c5720  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/_at_007c0000.cpp  ?RegFF0001@@YAXXZ  007c5740  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/_at_007c0000.cpp  ?RegFF0002C@@YAXXZ  007c57c0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/_at_007c0000.cpp  ?IsType1Or9@@YAHH@Z  007c57e0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/_at_007c0000.cpp  ?IsType9to11@@YAHH@Z  007c5800  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/_at_007c0000.cpp  ?Mode@cRandom@@QAEHXZ  007c78c0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/_at_007c0000.cpp  ?Query@cRandom@@QAEHH@Z  007c78e0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/_at_007c0000.cpp  ?Unnamed960@cConfigManagerS@@QAEXXZ  007cd960  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/_at_007c0000.cpp  ?Unnamed990@cConfigManagerS@@QAEXXZ  007cd990  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/_at_007c0000.cpp  ?Unnamed9C0@cConfigManagerS@@QAE_NXZ  007cd9c0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/_at_007c0000.cpp  ??0VecHolder@@QAE@XZ  007cef40  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include
+../src/game/SPEngine/_at_007c0000.cpp  ?clear@V16@@QAEXXZ  007cf4b0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include
+../src/game/SPEngine/_at_007c0000.cpp  ?createBig@@YIPAPAUBig@@PAPAU1@@Z  007cf5d0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include
+../src/game/SPEngine/_at_007c0000.cpp  ?resize@Vec8_s007c_f310@@QAEXI@Z  007cf630  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include
+../src/game/SPEngine/_at_007c0000.cpp  ?reset@PtrX@@QAEXXZ  007cfa90  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include
+../src/game/SPEngine/_at_007c0000.cpp  ?checkPtr@@YI_NPAPAUObjX2@@@Z  007cfac0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include
+../src/game/SPEngine/_at_007c0000.cpp  ?clear@W@@QAEXXZ  007cfc60  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include
