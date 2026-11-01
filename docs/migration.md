@@ -372,3 +372,16 @@ the best byte-exact slice view to a header for a class the PDB lacks (`EA/Resour
 43 members, 28 slots, sizeof and 34 offsets verified under VC9). Progress counts "migrated" and "of which
 verbatim" separately (`tools/progress.py`), and "misfiled" = functions in a TU whose address lies in another
 object's ranges (the ten 0x6b functions still in `DatabasePackedFile.cpp`).
+
+## Mechanical landing (2026-11-01)
+
+`tools/migrate/land.py <batch>` lands a batch (`work/claude/make_wave.py <batch> <n>`) without agents: per
+module it runs `rewrite.py --apply` on each entry, then gates the module and commits it with
+`tools/migrate/commit_obj.sh`, or restores its files to HEAD and logs why (`work/migrate/land_<batch>.log`).
+The gate: every manifest row byte-exact (`run_all`), the asm audit clean, and every nonmatching row either
+compiling to the same code as in its slice (`tools/migrate/samecode.py`: function bytes with relocation
+fields masked, relocation targets by name with the renamed-stub suffix normalised) or getting an `equiv.py`
+verdict no worse than the strict sweep's verdict for the slice row (`work/sweep_pod`). Verbatim landings are
+SAME by construction; a body rewrite.py converted to canonical members gets the harness run. First module
+(`SPBake/_at_00480000`, 9 slices): 39/39 byte-exact, 13 of 14 nonmatching rows SAME, the converted one PASS
+as in the sweep.
