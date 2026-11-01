@@ -1,0 +1,18 @@
+# source  symbol  va  flags
+../src/game/SPEngine/_at_007d0000.cpp  ?SerTree@@YAXPAXPAD@Z  007d03f0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include
+../src/game/SPEngine/_at_007d0000.cpp  ?CloneTree@CloneTreeOwner@@QAEPAXPAHPAX@Z  007d0920  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include
+../src/game/SPEngine/_at_007d0000.cpp  ?ReadC10@@YAXPAXPAURBTreeFind@@@Z  007d0c10  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include
+../src/game/SPEngine/_at_007d0000.cpp  ??1CtrlVec@@QAE@XZ  007d5a30  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /Isrc/game/include
+../src/game/SPEngine/_at_007d0000.cpp  ??0cMapResA@@QAE@ABURbMap@@@Z  007d6380  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /Isrc/game/include
+../src/game/SPEngine/_at_007d0000.cpp  ??0cMapResB@@QAE@ABURbMap@@PBMPAUGmeRefCount@@@Z  007d6440  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /Isrc/game/include
+../src/game/SPEngine/_at_007d0000.cpp  ?CopyAssignForward@@YAPAUcSplitInstanceList@@PBU1@0PAU1@@Z  007d71b0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/_at_007d0000.cpp  ?CopyAssignBackward@@YAPAUcSplitInstanceList@@PBU1@0PAU1@@Z  007d71f0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/_at_007d0000.cpp  ?AssignValueRange@@YAXPAUcSplitInstanceList@@0PBU1@@Z  007d7240  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/_at_007d0000.cpp  ?FilterAbilityType@@YG_NHHH@Z  007d7ce0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /Isrc/game/include
+../src/game/SPEngine/_at_007d0000.cpp  ?SetIface@cAbilityCmd@@QAEXHHH@Z  007d7d70  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /Isrc/game/include
+../src/game/SPEngine/_at_007d0000.cpp  ?Deactivate@cAbilityCmd@@QAEXH@Z  007d7e80  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /Isrc/game/include
+../src/game/SPEngine/_at_007d0000.cpp  ?AbilityRegister@@YAXXZ  007d7f40  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /Isrc/game/include
+../src/game/SPEngine/_at_007d0000.cpp  ?Load@ManifestSource@@QAEXXZ  007db060  /O2 /MD /Gy /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPEngine/_at_007d0000.cpp  ?SP_AutomateEntry@@YAXHH@Z  007db570  /O2 /MD /Gy /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPEngine/_at_007d0000.cpp  ?FUN_007dfbd0@@YAXPAX0@Z  007dfbd0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/_at_007d0000.cpp  ?FUN_007dfbf0@@YAPAXXZ  007dfbf0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include

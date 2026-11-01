@@ -1,5 +1,13 @@
 007d76d0 SP::cGameModelEffect::HandleSplitCommand  # pdb_candidates caller-single
 007d7a10 SP::cGameModelEffect::Init  # pdb_candidates caller-scored
+007d7ce0 ?FilterAbilityType@@YG_NHHH@Z  # FilterAbilityType migrated from s007d76d0 (verbatim, slice spelling)
+007d7d00 ?Destroy@cAbilityCmd@@QAEXXZ  # cAbilityCmd::Destroy migrated from s007d76d0 (verbatim, slice spelling)
+007d7d70 ?SetIface@cAbilityCmd@@QAEXHHH@Z  # cAbilityCmd::SetIface migrated from s007d76d0 (verbatim, slice spelling)
+007d7dc0 ?Activate@cAbilityCmd@@QAEXH@Z  # cAbilityCmd::Activate migrated from s007d76d0 (verbatim, slice spelling)
+007d7e80 ?Deactivate@cAbilityCmd@@QAEXH@Z  # cAbilityCmd::Deactivate migrated from s007d76d0 (verbatim, slice spelling)
+007d7ed0 ?AbilityCmdNew@@YAPAUcAbilityCmd@@PAX@Z  # AbilityCmdNew migrated from s007d76d0 (verbatim, slice spelling)
+007d7f40 ?AbilityRegister@@YAXXZ  # AbilityRegister migrated from s007d76d0 (verbatim, slice spelling)
+007d7f60 ?SetTransform@cAbilityCmd@@QAEXPAXPBUTransformTemp@@@Z  # cAbilityCmd::SetTransform migrated from s007d76d0 (verbatim, slice spelling)
 007d8060 ?Init@cApp@SP@@QAE_NXZ  # cApp::Init migrated from s007d76d0 (verbatim, slice spelling)
 007d8180 ?HandleMessage@IHandlerRC@SP@@QAE_NHPAX@Z  # IHandlerRC::HandleMessage migrated from s007d76d0 (verbatim, slice spelling)
 007d81f0 ?PreInitAppModes@cApp@SP@@QAE_NXZ  # cApp::PreInitAppModes migrated from s007d76d0 (verbatim, slice spelling)

@@ -13,3 +13,7 @@
 007cfc60 ?clear@W@@QAEXXZ  # W::clear migrated from s007cf310 (verbatim, slice spelling)
 007cfcd0 SP::CompileToPropertyModel  # PDB candidate (caller-scored)
 007d00e0 SP::cCityVisualizer::AllegianceUpdate  # PDB candidate (caller-scored)
+007d01f0 ?Ser1F0@@YAPAXPAUIStream@@PAD@Z  # Ser1F0 migrated from s007cf310 (verbatim, slice spelling)
+007d0250 ?Ser250@@YAPAXPAUIStream@@PAH@Z  # Ser250 migrated from s007cf310 (verbatim, slice spelling)
+007d02b0 ?Ser2B0@@YAPAXPAUIStream@@PAH@Z  # Ser2B0 migrated from s007cf310 (verbatim, slice spelling)
+007d0360 ?Ser360@@YAXPAUIStream@@PAD@Z  # Ser360 migrated from s007cf310 (verbatim, slice spelling)

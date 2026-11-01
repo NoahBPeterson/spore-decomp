@@ -1,3 +1,11 @@
+007d67e0 ?CopyConstructToPtr@@YAPAPAUcSplitInstanceList@@PAPAU1@PBU1@1PAU1@@Z  # CopyConstructToPtr migrated from s007d67e0 (verbatim, slice spelling)
+007d68f0 ?FillConstructN@@YAXPAUcSplitInstanceList@@IPBU1@@Z  # FillConstructN migrated from s007d67e0 (verbatim, slice spelling)
+007d69f0 ?CopyConstructRange@@YAPAUcSplitInstanceList@@PBU1@0PAU1@@Z  # CopyConstructRange migrated from s007d67e0 (verbatim, slice spelling)
+007d6b00 ??4cEffectParams_s007d_67e0@@QAEAAU0@ABU0@@Z  # cEffectParams_s007d_67e0::operator= migrated from s007d67e0 (verbatim, slice spelling)
+007d6c10 ?Sub_7d6c10@cSwarmThis@@QAEXH@Z  # cSwarmThis::Sub_7d6c10 migrated from s007d67e0 (verbatim, slice spelling)
+007d7080 ??4CElementVector@@QAEAAU0@ABU0@@Z  # CElementVector::operator= migrated from s007d67e0 (verbatim, slice spelling)
+007d71b0 ?CopyAssignForward@@YAPAUcSplitInstanceList@@PBU1@0PAU1@@Z  # CopyAssignForward migrated from s007d67e0 (verbatim, slice spelling)
+007d71f0 ?CopyAssignBackward@@YAPAUcSplitInstanceList@@PBU1@0PAU1@@Z  # CopyAssignBackward migrated from s007d67e0 (verbatim, slice spelling)
+007d7240 ?AssignValueRange@@YAXPAUcSplitInstanceList@@0PBU1@@Z  # AssignValueRange migrated from s007d67e0 (verbatim, slice spelling)
+007d7560 ?resize@ListVector@@QAEXI@Z  # ListVector::resize migrated from s007d67e0 (verbatim, slice spelling)
 007d7640 SP::cSplitManager::AddSplitInstance  # pdb_candidates caller-single
-007d6b00 ?4cEffectParams  # layout match: 25 cParamRec + float vector + int params + 9 AutoRefCount (PDB type cEffectParams)
-007d7080 ?4CElementVector
