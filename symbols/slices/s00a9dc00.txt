@@ -1,1 +1,1 @@
-00a9dc00 FUN_00a9dc00  # uint __thiscall (int,int,float) float routine; naked asm, byte-exact
+00a9dc00 ?UpdateParticle@cMetaParticlesEffect_s00a9_dc00@@QAE_NPAUcMetaParticle@@M@Z  # cMetaParticlesEffect_s00a9_dc00::UpdateParticle migrated from s00a9dc00 (verbatim, slice spelling)

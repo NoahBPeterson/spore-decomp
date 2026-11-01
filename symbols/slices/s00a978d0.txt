@@ -1,0 +1,5 @@
+00a978d0 ?Update@SwarmCtrl@@QAEXMMPAUUpdateCtx@@@Z  # SwarmCtrl::Update migrated from s00a978d0 (verbatim, slice spelling)
+00a97f50 ?Destroy@EffectObjA@@QAEPAXD@Z  # EffectObjA::Destroy migrated from s00a978d0 (verbatim, slice spelling)
+00a97f90 ?FUN_00a97f90@@YAXPAXHPAUSwarmDesc@@@Z  # FUN_00a97f90 migrated from s00a978d0 (verbatim, slice spelling)
+00a98480 ?FUN_00a98480@@YAPAXPAXH@Z  # FUN_00a98480 migrated from s00a978d0 (verbatim, slice spelling)
+00a984f0 ?FUN_00a984f0@@YAXXZ  # FUN_00a984f0 migrated from s00a978d0 (verbatim, slice spelling)

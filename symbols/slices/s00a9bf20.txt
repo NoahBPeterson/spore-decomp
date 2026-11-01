@@ -1,1 +1,3 @@
 00a9bf20 Emitter::Constrain  # Swarm particle collision/deflection against sampler (this+0x194); desc flag bits 14/15/16/17/18/20
+00a9c710 ?ConstrainLocal@SwarmEmitter@@QAE_NPAUParticle_s00a9_bf20@@@Z  # SwarmEmitter::ConstrainLocal migrated from s00a9bf20 (verbatim, slice spelling)
+00a9ca50 ?SetParameter@SwarmEmitter@@QAE_NHPAMH@Z  # SwarmEmitter::SetParameter migrated from s00a9bf20 (verbatim, slice spelling)

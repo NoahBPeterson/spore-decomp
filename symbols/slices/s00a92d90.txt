@@ -1,0 +1,4 @@
+00a938d0 ?RegisterMeshStreamers2@@YAX_N@Z  # RegisterMeshStreamers2 migrated from s00a92d90 (verbatim, slice spelling)
+00a93910 ??1cMetaParticlesEffect@@QAE@XZ  # cMetaParticlesEffect::~cMetaParticlesEffect migrated from s00a92d90 (verbatim, slice spelling)
+00a93980 ??0cMetaParticlesEffect@@QAE@XZ  # cMetaParticlesEffect::cMetaParticlesEffect migrated from s00a92d90 (verbatim, slice spelling)
+00a93c60 ?Erase@cSampleRange@@QAEXABUVector3@@@Z  # cSampleRange::Erase migrated from s00a92d90 (verbatim, slice spelling)

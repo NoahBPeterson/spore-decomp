@@ -1,0 +1,8 @@
+00a99040 ?LightEffectSub_Read@@YAXPAXHPAULightEffectSub@@@Z  # LightEffectSub_Read migrated from s00a987c0 (verbatim, slice spelling)
+00a990d0 ?LightEffectSub_CreateAndRead@@YAPAULightEffectSub@@PAXH@Z  # LightEffectSub_CreateAndRead migrated from s00a987c0 (verbatim, slice spelling)
+00a99190 ?Elem1C_copy_range@@YAPAUElem1C@@PAU1@00@Z  # Elem1C_copy_range migrated from s00a987c0 (verbatim, slice spelling)
+00a991f0 ?Elem1C_fill@@YAPAUElem1C@@PAU1@IPBU1@@Z  # Elem1C_fill migrated from s00a987c0 (verbatim, slice spelling)
+00a99240 ?Elem1C_fill_off14@@YAPAUElem1C@@PAU1@IPBU1@@Z  # Elem1C_fill_off14 migrated from s00a987c0 (verbatim, slice spelling)
+00a99290 ?Elem1C_write_vector@@YAPAXPAXPAUElem1CVec@@@Z  # Elem1C_write_vector migrated from s00a987c0 (verbatim, slice spelling)
+00a992f0 ?Elem1C_write_vector2@@YAPAXPAXPAUElem1CVec@@@Z  # Elem1C_write_vector2 migrated from s00a987c0 (verbatim, slice spelling)
+00a99410 ?Elem1C_insert@@YAXPAUElem1CVec@@PAUElem1C@@IPBU2@@Z  # Elem1C_insert migrated from s00a987c0 (verbatim, slice spelling)

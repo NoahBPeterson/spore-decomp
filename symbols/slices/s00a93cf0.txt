@@ -1,16 +1,15 @@
-; slice s00a93cf0 = 0x00a93cf0..0x00a94b80 (Simulator::cCreatureAbility) - exact decorated names
+00a93cf0 ?FUN_00a93cf0@CAbil@@QAEXPAUIoObj@@PAXPAU1@@Z  # CAbil::FUN_00a93cf0 migrated from s00a93cf0 (verbatim, slice spelling)
+00a93ea0 ?FUN_00a93ea0@CAbil@@QAEXXZ  # CAbil::FUN_00a93ea0 migrated from s00a93cf0 (verbatim, slice spelling)
+00a93ee0 ?FUN_00a93ee0@CAbil@@QAEHHPAHH@Z  # CAbil::FUN_00a93ee0 migrated from s00a93cf0 (verbatim, slice spelling)
+00a94030 ?FUN_00a94030@CAbil@@QAEXD@Z  # CAbil::FUN_00a94030 migrated from s00a93cf0 (verbatim, slice spelling)
+00a940a0 ?FUN_00a940a0@CAbil@@QAEXPAX@Z  # CAbil::FUN_00a940a0 migrated from s00a93cf0 (verbatim, slice spelling)
+00a940e0 ?FUN_00a940e0@@YAHPAX000@Z  # FUN_00a940e0 migrated from s00a93cf0 (verbatim, slice spelling)
+00a94130 ?FUN_00a94130@CAbil@@QAEXH@Z  # CAbil::FUN_00a94130 migrated from s00a93cf0 (verbatim, slice spelling)
+00a94220 ?FUN_00a94220@CAbil@@QAEHHPAHH@Z  # CAbil::FUN_00a94220 migrated from s00a93cf0 (verbatim, slice spelling)
+00a943a0 ?FUN_00a943a0@CAbil@@QAEHXZ  # CAbil::FUN_00a943a0 migrated from s00a93cf0 (verbatim, slice spelling)
+00a94470 ?FUN_00a94470@CAbil@@QAEPAU1@PAX@Z  # CAbil::FUN_00a94470 migrated from s00a93cf0 (verbatim, slice spelling)
+00a947b0 ?FUN_00a947b0@CAbil@@QAEPAU1@E@Z  # CAbil::FUN_00a947b0 migrated from s00a93cf0 (verbatim, slice spelling)
+00a94800 ?FUN_00a94800@CAbil@@QAEXPAX0@Z  # CAbil::FUN_00a94800 migrated from s00a93cf0 (verbatim, slice spelling)
+00a94940 ?FUN_00a94940@CAbil@@QAEXPAX0@Z  # CAbil::FUN_00a94940 migrated from s00a93cf0 (verbatim, slice spelling)
+00a94b70 ?FUN_00a94b70@CAbil@@QAEXPAX@Z  # CAbil::FUN_00a94b70 migrated from s00a93cf0 (verbatim, slice spelling)
 ; manifest.txt rows are byte-exact; the rest are the nonmatching.txt entries
-00a93cf0 ?FUN_00a93cf0@CAbil@@QAEXPAUIoObj@@PAXPAU1@@Z  # complete, non-exact
-00a93ea0 ?FUN_00a93ea0@CAbil@@QAEXXZ  # byte-exact
-00a93ee0 ?FUN_00a93ee0@CAbil@@QAEHHPAHH@Z  # complete, non-exact
-00a94030 ?FUN_00a94030@CAbil@@QAEXD@Z  # byte-exact
-00a940a0 ?FUN_00a940a0@CAbil@@QAEXPAX@Z  # byte-exact
-00a940e0 ?FUN_00a940e0@@YAHPAX000@Z  # byte-exact
-00a94130 ?FUN_00a94130@CAbil@@QAEXH@Z  # complete, non-exact
-00a94220 ?FUN_00a94220@CAbil@@QAEHHPAHH@Z  # complete, non-exact
-00a943a0 ?FUN_00a943a0@CAbil@@QAEHXZ  # complete, non-exact
-00a94470 ?FUN_00a94470@CAbil@@QAEPAU1@PAX@Z  # complete, non-exact
-00a947b0 ?FUN_00a947b0@CAbil@@QAEPAU1@E@Z  # byte-exact
-00a94800 ?FUN_00a94800@CAbil@@QAEXPAX0@Z  # complete, non-exact
-00a94940 ?FUN_00a94940@CAbil@@QAEXPAX0@Z  # complete, non-exact
-00a94b70 ?FUN_00a94b70@CAbil@@QAEXPAX@Z  # byte-exact

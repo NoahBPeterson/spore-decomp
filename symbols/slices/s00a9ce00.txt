@@ -1,2 +1,2 @@
-00a9ce00 ?BuildParticleTransform@cParticlesEffect@@QAEXPAUcParticle@@MMPAUVector3@@PAUcSPTransform@@@Z  # per-particle model transform (pre-existing row; nonmatching)
-00a9d640 ?FUN_00a9d640@ParticleEmitter@@QAE_NPAUcParticle@@M@Z  # particle integration step: path/velocity, sub-curves, quaternion, attractor, collision, spin (nonmatching)
+00a9ce00 ?BuildParticleTransform@cParticlesEffect_s00a9_ce00@@QAEXPAUcParticle_s00a9_ce00@@MMPAUVector3_s00a9_ce00@@PAUcSPTransform_s00a9_ce00@@@Z  # cParticlesEffect_s00a9_ce00::BuildParticleTransform migrated from s00a9ce00 (verbatim, slice spelling)
+00a9d640 ?FUN_00a9d640@ParticleEmitter@@QAE_NPAUcParticle_s00a9_ce00@@M@Z  # ParticleEmitter::FUN_00a9d640 migrated from s00a9ce00 (verbatim, slice spelling)

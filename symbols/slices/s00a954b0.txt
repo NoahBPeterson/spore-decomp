@@ -1,1 +1,1 @@
-00a954b0 EA::Swarm::Stream_Quad_V4F_N4F_C4B_T2F  # lock buffer, 4 vertices per particle, vtbl slot0 GetBuffer / slot2 Release
+00a954b0 ?Stream_Quad@@YAXPAUcParticlesEffect_s00a9_54b0@@PAVcITextureParticleRenderer_s00a9_54b0@@PAE@Z  # Stream_Quad migrated from s00a954b0 (verbatim, slice spelling)
