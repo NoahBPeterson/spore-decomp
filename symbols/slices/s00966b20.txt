@@ -1,8 +1,3 @@
-# slice s00966b20 -- VA to symbol map (UTFWinControls WinButton/ButtonDrawable,
-# CascadeEffect, CircularAllocator, WinComboBox and small drawables)
-# 19 byte-exact (manifest.txt), 13 complete-but-diff (nonmatching.txt), 0 partial.
-#
-# va          symbol                                 source fn                   status
 00966b20   ?m@S_966b20@@QAEEIPAM@Z                S_966b20::m                 nonmatching (uv rect by switch)
 00966bb0   ?m@S_966bb0@@QAEEIPAM@Z                S_966bb0::m                 nonmatching (uv rect by switch)
 00966c70   ?m@S_966c70@@QAEXXZ                    S_966c70::m                 nonmatching (list walk)
@@ -23,25 +18,15 @@
 009676f0   ?m@S_9676f0@@QAEXIPBD@Z                S_9676f0::m                 MATCH
 00967770   ?m@S_967770@@QAEII@Z                   S_967770::m                 MATCH
 009677d0   ?m@S_9677d0@@QAEPAII@Z                 S_9677d0::m                 MATCH
-00967890   _FUN_00967890                          FUN_00967890                MATCH
-009678f0   _FUN_009678f0                          FUN_009678f0                MATCH
-00967980   ?m@S_967980@@QAEXXZ                    S_967980::m                 MATCH
-009679c0   ?m@S_9679c0@@QAE_NXZ                   S_9679c0::m                 MATCH
-00967a60   ?m@S_967a60@@QAEXI@Z                   S_967a60::m                 MATCH
-00967ac0   ?m@S_967ac0@@QAEXPAX@Z                 S_967ac0::m                 MATCH
-00967b10   ?m@S_967b10@@QAE_NIIIH@Z               S_967b10::m                 nonmatching (OnMouseDown)
-00967bc0   ?m@S_967bc0@@QAE_NIIIE@Z               S_967bc0::m                 nonmatching (OnMouseUp)
-00967c90   ?m@S_967c90@@QAEEMMI@Z                 S_967c90::m                 MATCH
-00967cd0   ?m@S_967cd0@@QAEEHPAX@Z                S_967cd0::m                 MATCH
-00967d10   ?m@S_967d10@@QAEEXZ                    S_967d10::m                 MATCH
-00967d20   ?m@S_967d20@@QAEXXZ                    S_967d20::m                 MATCH
-#
-# Calling-convention notes:
-#   - Every function that receives its object in ecx is written as a member of a
-#     tiny opaque struct (MSVC 2008 rejects __thiscall on free functions, C3865).
-#   - 00966ed0 / 00966f30 are the BasicFactory_*::CreateInstance members (ret 8).
-#   - 009671c0 / 00967890 / 009678f0 are __cdecl free functions.
-#   - 00967b10 / 00967bc0 return bool (al), matching the original `mov al,1`.
-#   - Virtual calls are modelled with static inline VCALLn helpers over raw
-#     this-pointers; 009671c0 passes the secondary subobject (d+0xc) to slot 0x60.
-#   - Build flags: /O2 /MD /Gy /EHsc /TP /arch:SSE (explicit on every manifest row).
+00967890 _FUN_00967890  # FUN_00967890 migrated from s00966b20 (verbatim, slice spelling)
+009678f0 _FUN_009678f0  # FUN_009678f0 migrated from s00966b20 (verbatim, slice spelling)
+00967980 ?m@S_967980@@QAEXXZ  # S_967980::m migrated from s00966b20 (verbatim, slice spelling)
+009679c0 ?m@S_9679c0@@QAE_NXZ  # S_9679c0::m migrated from s00966b20 (verbatim, slice spelling)
+00967a60 ?m@S_967a60@@QAEXI@Z  # S_967a60::m migrated from s00966b20 (verbatim, slice spelling)
+00967ac0 ?m@S_967ac0@@QAEXPAX@Z  # S_967ac0::m migrated from s00966b20 (verbatim, slice spelling)
+00967b10 ?m@S_967b10@@QAE_NIIIH@Z  # S_967b10::m migrated from s00966b20 (verbatim, slice spelling)
+00967bc0 ?m@S_967bc0@@QAE_NIIIE@Z  # S_967bc0::m migrated from s00966b20 (verbatim, slice spelling)
+00967c90 ?m@S_967c90@@QAEEMMI@Z  # S_967c90::m migrated from s00966b20 (verbatim, slice spelling)
+00967cd0 ?m@S_967cd0@@QAEEHPAX@Z  # S_967cd0::m migrated from s00966b20 (verbatim, slice spelling)
+00967d10 ?m@S_967d10@@QAEEXZ  # S_967d10::m migrated from s00966b20 (verbatim, slice spelling)
+00967d20 ?m@S_967d20@@QAEXXZ  # S_967d20::m migrated from s00966b20 (verbatim, slice spelling)

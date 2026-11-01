@@ -1,0 +1,19 @@
+# source  symbol  va  flags
+../src/game/UTFSpore_Win32/ComboBox.cpp  _FUN_00967890  00967890  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/UTFSpore_Win32/ComboBox.cpp  _FUN_009678f0  009678f0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/UTFSpore_Win32/ComboBox.cpp  ?m@S_967980@@QAEXXZ  00967980  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/UTFSpore_Win32/ComboBox.cpp  ?m@S_9679c0@@QAE_NXZ  009679c0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/UTFSpore_Win32/ComboBox.cpp  ?m@S_967a60@@QAEXI@Z  00967a60  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/UTFSpore_Win32/ComboBox.cpp  ?m@S_967ac0@@QAEXPAX@Z  00967ac0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/UTFSpore_Win32/ComboBox.cpp  ?m@S_967c90@@QAEEMMI@Z  00967c90  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/UTFSpore_Win32/ComboBox.cpp  ?m@S_967cd0@@QAEEHPAX@Z  00967cd0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/UTFSpore_Win32/ComboBox.cpp  ?m@S_967d10@@QAEEXZ  00967d10  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/UTFSpore_Win32/ComboBox.cpp  ?m@S_967d20@@QAEXXZ  00967d20  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/UTFSpore_Win32/ComboBox.cpp  ?OnPropValue@WC@@QAEXI@Z  00967d40  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/ComboBox.cpp  ?SetColor@WCB@@QAEXII@Z  00967e20  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/ComboBox.cpp  ?GetColor@WCB@@QAEII@Z  00967e40  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/ComboBox.cpp  ?GetComponentImage@CBD@@QAEPAXI@Z  00967f40  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/ComboBox.cpp  ?SetComponentImage@CBD2@@QAEXIPAUAutoRefCountIface@@@Z  00967f60  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/ComboBox.cpp  ?GetDrawable@WCB@@QAEPAXXZ  00968210  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/ComboBox.cpp  ?PickComponent@WC@@QAEHMM@Z  00968350  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/ComboBox.cpp  ?RemoveAllValues@WinComboBox@@QAEXXZ  00969a60  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

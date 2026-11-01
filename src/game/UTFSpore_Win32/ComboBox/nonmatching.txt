@@ -1,0 +1,23 @@
+# va  diff-bytes  reason
+00967b10 143 bool return and 4-arg ABI match, but the original marshals the two float args through x87 stack slots.
+00967bc0 167 same float-argument marshalling difference.
+00967d80 164 OnModalWindowEnd /O2 /MD /Gy /TP /arch:SSE /fp:fast difftest UNSUPPORTED (fake-arity/fault-read, 0/400 valid)
+00967f00 47 GetNaturalSize /O2 /MD /Gy /TP /arch:SSE /fp:fast difftest PASS 400/400
+009680f0 205 WinComboBox_TransformComponent /O2 /MD /Gy /TP /arch:SSE /fp:fast difftest UNSUPPORTED (fault-read, 0/400 valid)
+00968230 99 RenderComponent /O2 /MD /Gy /TP /arch:SSE /fp:fast difftest FAIL (5/328; RenderContext_Begin2D ecx ABI not reproducible)
+00968400 543 Refresh /O2 /MD /Gy /TP /arch:SSE /fp:fast difftest FAIL (5/285; component-area layout uncertain)
+009686b0 710 ShowListBox /O2 /MD /Gy /TP /arch:SSE /fp:fast difftest WEAK (317 valid, 4.0% coverage)
+00968c10 27 GetValue /O2 /MD /Gy /TP /arch:SSE /fp:fast difftest PASS 317/317
+00968c50 106 SetCurrentSelection /O2 /MD /Gy /TP /arch:SSE /fp:fast difftest PASS 369/369
+00968da0 396 complete (((int*)this)[i+5] renderable dispatch + DrawStdButton/UV-quad paths) flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-; difftest WEAK (312 valid, 18.3% cov); size 548 vs 600, structural: MSVC vectorized the switch into a jump table the decompiler cannot reproduce from plain C
+00969000 4 complete (ComboBoxDrawable ctor; only base-vptr store interleaving differs) flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-; difftest PASS (400 valid, 100% cov); residual 4 bytes are store-scheduling (docs §15/§16)
+00969060 15 complete (BasicFactory_ComboBoxDrawable::CreateInstance) flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-; difftest UNSUPPORTED (unresolved ?g_szComboBoxDrawable@@3QBDB); size 74 vs 94
+009690c0 475 complete (WinComboBox::OnRebuild) flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-; difftest UNSUPPORTED (0/400 valid; _decode_pointer + read faults on fabricated ctx); size 573 vs 666
+00969360 249 complete (WinComboBox::FindValue) flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-; difftest PASS (309 valid, 94.3% cov); size 261 vs 239, structural loop-shape mismatch in the specialized string compare
+00969450 156 complete (WinComboBox ctor) flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-; difftest UNSUPPORTED (unresolved ?Ctor@CustomWindowBase@@QAEXXZ, ?SetMode@DropShadowDesc@@QAEXH@Z); size 234 vs 298; base-vptr store coalescing
+009695d0 69 complete (WinComboBox dtor) flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-; difftest UNSUPPORTED (0/340 valid; read/write faults, VirtualFree import); size 125 vs 121
+00969650 283 complete (WinComboBox::CalcSize) flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-; difftest WEAK (223 valid, 26.4% cov); size 436 vs 526, LayoutParagraph result plumbing simplified
+00969870 59 complete (WinComboBox::SetValue) flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-; difftest PASS (230 valid, 89.3% cov); register/expression scheduling only
+00969920 41 complete (WinComboBox::RemoveValue) flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-; difftest PASS (285 valid, 100% cov); signed/unsigned compare + branch polarity only
+00969950 4 complete (WinComboBox::AddValue) flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-; difftest PASS (252 valid, 100% cov); residual 4 bytes are stack-frame size (0x10 vs 0xc), not source-controllable
+009699d0 88 complete (WinComboBox::InsertValue) flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-; difftest PASS (232 valid, 88.9% cov); frame size + signed-vs-unsigned compare
