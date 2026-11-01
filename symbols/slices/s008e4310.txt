@@ -1,0 +1,2 @@
+008e49e0 ?CollectText@Element@@QAEXPAX@Z  # Element::CollectText migrated from s008e4310 (verbatim, slice spelling)
+008e4b10 ?AddSubElement@Element@@QAEEPBG@Z  # Element::AddSubElement migrated from s008e4310 (verbatim, slice spelling)

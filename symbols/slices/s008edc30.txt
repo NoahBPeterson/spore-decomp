@@ -1,0 +1,3 @@
+008edd30 ?StyleCtorForward@@YGPAXPAX0@Z  # StyleCtorForward migrated from s008edc30 (verbatim, slice spelling)
+008edd50 ?ScrollbarStyleSet@@YGXPBUVec2@Layout@XHTML@EA@@@Z  # ScrollbarStyleSet migrated from s008edc30 (verbatim, slice spelling)
+008edd80 ?ScrollbarStyleGet@@YGXPAUVec2@Layout@XHTML@EA@@@Z  # ScrollbarStyleGet migrated from s008edc30 (verbatim, slice spelling)

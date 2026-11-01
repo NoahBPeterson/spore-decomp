@@ -1,6 +1,12 @@
 008e1d50 ?RegisterFactory@ManagerX@@QAE_N_NPAUIFactory@@H@Z  # ManagerX::RegisterFactory migrated from s008e1d50 (verbatim, slice spelling)
 008e1f10 ??1ManagerX@@QAE@XZ  # ManagerX::~ManagerX migrated from s008e1d50 (verbatim, slice spelling)
 008e20c0 ??0ManagerX@@QAE@PAUCAlloc@@@Z  # ManagerX::ManagerX migrated from s008e1d50 (verbatim, slice spelling)
+008e22e0 ?Test@Ref@@QAE_NXZ  # Ref::Test migrated from s008e1d50 (verbatim, slice spelling)
+008e2300 ?Release@Ref@@QAE_NXZ  # Ref::Release migrated from s008e1d50 (verbatim, slice spelling)
+008e2350 ??1DerV@@UAE@XZ  # DerV::~DerV migrated from s008e1d50 (verbatim, slice spelling)
+008e2380 ??0DerV@@QAE@HHPBHEE@Z  # DerV::DerV migrated from s008e1d50 (verbatim, slice spelling)
+008e2460 ??_GNode46@@UAEPAXI@Z  # Node46::~Node46 migrated from s008e1d50 (verbatim, slice spelling)
+008e24a0 ?LookupStyle@DocX@@QAEHXZ  # DocX::LookupStyle migrated from s008e1d50 (verbatim, slice spelling)
 008e2890 ?DestroyFormControls@Document@DOM@XHTML@EA@@QAEXXZ  # EA::XHTML::DOM::Document::DestroyFormControls migrated from s008e1d50
 008e28b0 ?SetAt@DocX@@QAEXIPAUIObj@@@Z  # DocX::SetAt migrated from s008e1d50 (verbatim, slice spelling)
 008e2930 ?RemoveAllChildren@DocX@@QAEXXZ  # DocX::RemoveAllChildren migrated from s008e1d50 (verbatim, slice spelling)

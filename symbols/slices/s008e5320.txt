@@ -1,11 +1,15 @@
-008e5320 ?Fn8e5320@@YGDPAM@Z  # GUI metric reader
+008e5320 ?Fn8e5320@@YGDPAM@Z  # Fn8e5320 migrated from s008e5320 (verbatim, slice spelling)
+008e5370 ?Fn8e5370@GuiThing@@QAEPAXHHH@Z  # GuiThing::Fn8e5370 migrated from s008e5320 (verbatim, slice spelling)
 008e53a0 ?Fn8e53a0@@YAPADPAD0PBX@Z  # Fn8e53a0 migrated from s008e5320 (verbatim, slice spelling)
 008e5410 ?Fn8e5410@@YAPADPAD0PBX@Z  # Fn8e5410 migrated from s008e5320 (verbatim, slice spelling)
 008e5480 ?Fn8e5480@@YAXPAUStaticRange@@PAUStaticDef@@1PAPBG@Z  # eastl::equal_range
 008e5580 ?LookupStandardHTMLEntity@DOM@XHTML@EA@@YA_WPB_W@Z  # EA::XHTML::DOM::LookupStandardHTMLEntity migrated from s008e5320
+008e55d0 ?Fn8e55d0@GuiThing2@@QAEPAXHHH@Z  # GuiThing2::Fn8e55d0 migrated from s008e5320 (verbatim, slice spelling)
+008e5600 ?Fn8e5600@XmlParser@@QAEXPAFH@Z  # XmlParser::Fn8e5600 migrated from s008e5320 (verbatim, slice spelling)
 008e5670 ?Fn8e5670@XmlParser@@QAEPAGXZ  # XmlParser::Fn8e5670
 008e5730 ?Fn8e5730@XmlParser@@QAEHPAX0@Z  # XmlParser::Fn8e5730
 008e5930 ?Fn8e5930@@YAXPAXPBG@Z  # expat default handler at 0x8e5930 (not a slice target; fixes bounds for 008e5730)
+008e5980 ?Fn8e5980@@YAXPAXPAFH@Z  # Fn8e5980 migrated from s008e5320 (verbatim, slice spelling)
 008e59a0 ?Fn8e59a0@XmlParser@@QAEXD@Z  # XmlParser::Fn8e59a0 migrated from s008e5320 (verbatim, slice spelling)
 008e5a20 ?Fn8e5a20@XmlParser@@QAEHPBDHH@Z  # XmlParser::Fn8e5a20 migrated from s008e5320 (verbatim, slice spelling)
 008e5a70 ?Fn8e5a70@@YA_NPAX0PBD1H@Z  # Fn8e5a70 migrated from s008e5320 (verbatim, slice spelling)
@@ -18,4 +22,6 @@
 008e5ea0 ?Fn8e5ea0@XmlParser@@QAEPAXPAX@Z  # XmlParser::Fn8e5ea0 migrated from s008e5320 (verbatim, slice spelling)
 008e5fb0 ?Fn8e5fb0@XmlParser@@QAEXXZ  # XmlParser::Fn8e5fb0 migrated from s008e5320 (verbatim, slice spelling)
 008e60a0 ?Fn8e60a0@XmlParser@@QAEHPAX@Z  # XmlParser::Fn8e60a0 migrated from s008e5320 (verbatim, slice spelling)
+008e6130 ?Fn8e6130@GuiThing3@@QAEPAXPAX@Z  # GuiThing3::Fn8e6130 migrated from s008e5320 (verbatim, slice spelling)
+008e6180 ?Fn8e6180@Q18@@QAEXPAX@Z  # Q18::Fn8e6180 migrated from s008e5320 (verbatim, slice spelling)
 008e61b0 ?Fn8e61b0@@YAXPAPAXURectF@@PAXPAU1@@Z  # GUI rect scatter
