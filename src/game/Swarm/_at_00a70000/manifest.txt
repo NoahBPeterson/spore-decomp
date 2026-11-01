@@ -1,0 +1,43 @@
+# source  symbol  va  flags
+../src/game/Swarm/_at_00a70000.cpp  ?cMapInfo_One@Swarm@EA@@YGMPAX@Z  00a75000  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Swarm/_at_00a70000.cpp  ?NormalizeNoWrap@cMapInfo@Swarm@EA@@QAEXXZ  00a751a0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Swarm/_at_00a70000.cpp  ?NormalizeFloor@cMapInfo@Swarm@EA@@QAEXXZ  00a75200  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Swarm/_at_00a70000.cpp  ?NormalizeRound@cMapInfo@Swarm@EA@@QAEXXZ  00a75270  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Swarm/_at_00a70000.cpp  ?cMapInfo_ResetGrid@Swarm@EA@@YAXPAXPAI@Z  00a75390  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Swarm/_at_00a70000.cpp  ?MulScale@cMapInfo@Swarm@EA@@QAEPAMPAM0@Z  00a756d0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Swarm/_at_00a70000.cpp  ?Fill@cMapInfo@Swarm@EA@@QAEXPAMI@Z  00a75720  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Swarm/_at_00a70000.cpp  ?SampleDir@cMapInfo_s00a7_5dd0@Swarm@EA@@QAEXPAMI@Z  00a761d0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Swarm/_at_00a70000.cpp  ?SampleTangent@cMapInfo_s00a7_5dd0@Swarm@EA@@QAEPAMPAMI@Z  00a76970  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Swarm/_at_00a70000.cpp  ?SampleScalar4@cMapInfo_s00a7_5dd0@Swarm@EA@@QAEXPAMI@Z  00a76990  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Swarm/_at_00a70000.cpp  ?SampleVec3@cMapInfo_s00a7_5dd0@Swarm@EA@@QAEPAMPAMI@Z  00a76cd0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Swarm/_at_00a70000.cpp  ?ReleaseTemps@MapInfo@@QAEXXZ  00a76ef0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Swarm/_at_00a70000.cpp  ?SumCounts@MapInfo@@QAEHXZ  00a76f70  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Swarm/_at_00a70000.cpp  ?MapInfo_TileContains@@YG_NPAM@Z  00a77c40  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Swarm/_at_00a70000.cpp  ?WaveNormal@@YGXPAMPBM@Z  00a77da0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/Swarm/_at_00a70000.cpp  ??_GMapInfoHolder@@UAEPAXI@Z  00a780f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/Swarm/_at_00a70000.cpp  ?InitMapInfoTable@@YAXXZ  00a78560  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/Swarm/_at_00a70000.cpp  ?AddMapDescription@@YAXPAUMapDescription@@PAUIContext@@@Z  00a785e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/Swarm/_at_00a70000.cpp  ?ReadMaterialParam@@YAXPAUIStream@@PAUMaterialParam@@@Z  00a78610  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/Swarm/_at_00a70000.cpp  ?resize@ParamVec@@QAEXI@Z  00a789e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/Swarm/_at_00a70000.cpp  ?ReadMaterialDescription@@YAPAUMaterialDescription@@PAUIStream@@@Z  00a78b90  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/Swarm/_at_00a70000.cpp  ?InitMaterialTable@@YAXXZ  00a78c10  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/Swarm/_at_00a70000.cpp  ??_GMaterialDescription@@UAEPAXI@Z  00a78c40  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/Swarm/_at_00a70000.cpp  ?FastSine@@YAMM@Z  00a78c80  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/Swarm/_at_00a70000.cpp  ?ReadRec@@YAXPAUIStream_s00a7_8ce0@@PAUKeyRec@@@Z  00a796d0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Swarm/_at_00a70000.cpp  ?WriteRec@@YAXPAUIStream_s00a7_8ce0@@PAUKeyRec@@@Z  00a79710  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Swarm/_at_00a70000.cpp  ?ReadRecB@@YAXPAUIStream_s00a7_8ce0@@PAUKeyRecB@@@Z  00a79760  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Swarm/_at_00a70000.cpp  ?WriteRecB@@YAXPAUIStream_s00a7_8ce0@@PAUKeyRecB@@@Z  00a797a0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Swarm/_at_00a70000.cpp  ?ReadRecordA@@YAXPAUIStream@@PAE@Z  00a7b9a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/Swarm/_at_00a70000.cpp  ?ReadRecordB@@YAXPAUIStream@@PAE@Z  00a7ba10  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/Swarm/_at_00a70000.cpp  ?QueryTypeId@@YGHPAII@Z  00a7ba60  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/Swarm/_at_00a70000.cpp  ?Release@RcObj@@QAEJXZ  00a7ba90  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/Swarm/_at_00a70000.cpp  ?ForwardOp12@@YG_NPAUISource@@PAUForwarder@@HI@Z  00a7bac0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/Swarm/_at_00a70000.cpp  ?ForwardOp13@@YG_NPAUForwarder@@PAUISource@@HI@Z  00a7bb00  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/Swarm/_at_00a70000.cpp  ??0RecordReadObj@@QAE@XZ  00a7bb80  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/Swarm/_at_00a70000.cpp  ?GetResourceField@@YAHH@Z  00a7bca0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/Swarm/_at_00a70000.cpp  ?AllocNode1@@YGPAU?$HNode@UIRefT1@@@@PBU?$HPair@UIRefT1@@@@@Z  00a7bd20  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/Swarm/_at_00a70000.cpp  ?AllocNode2@@YGPAU?$HNode@UIRefT2@@@@PBU?$HPair@UIRefT2@@@@@Z  00a7be20  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/Swarm/_at_00a70000.cpp  ?Set1@Registry@@QAEXUHKey@@PAUIRefT1@@@Z  00a7c200  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/Swarm/_at_00a70000.cpp  ?Set2@Registry@@QAEXUHKey@@PAUIRefT2@@@Z  00a7c240  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/Swarm/_at_00a70000.cpp  ?VanDerCorput@@YAMI@Z  00a7c280  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/Swarm/_at_00a70000.cpp  ?RadicalInverse2@@YAMH@Z  00a7c300  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
