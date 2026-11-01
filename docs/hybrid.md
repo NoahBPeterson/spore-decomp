@@ -37,6 +37,37 @@ Wine notes:
 - The game's own fatal errors are `MessageBoxA(... "Alert")` with a number: `[1004]` data dir,
   `[2000]` configuration script.
 
+## Running it (native Windows, over SSH)
+
+Since 2026-11-01 boots also run on a real Windows laptop reached over OpenSSH (`tools/hybrid/winboot/win.sh`;
+`SPORE_WIN_HOST`, `SPORE_WIN_PWFILE`). A crash there is ours, not Wine's. One-time setup on the machine:
+
+- Steam signed in and Spore installed (build 16095569, `SporeApp.exe` identical to the Mac's), and the game launched
+  once through Steam: that runs `InstallScript.vdf`, which writes `HKLM\SOFTWARE\WOW6432Node\Electronic Arts\SPORE`
+  (`DataDir`, `InstallLoc`, locale). Without it every exe stops at "[1004] data directory is missing".
+- Windowed mode: `OptionFullScreen 0` / `OptionScreenSize 6` in `%APPDATA%\SPORE\Preferences\Preferences.prop`
+  (an 800x600 window). Full screen hides the game from every capture.
+- The repo and its build inputs at `D:\spore` with a `.venv` (requirements.txt plus `windows-capture`), the compile
+  cache copied to `work\difftest\obj` (its keys hash contents and repo-relative paths, so they carry over), then
+  `win.sh setup`. `slice.py` runs cl 15.00 / 13.10 directly on Windows: `tools\hybrid\build.py --hook strict` builds
+  the hybrid natively (about 17 minutes for 4480 hooks).
+
+`win.sh boot NAME` starts `D:\spore_run\NAME.exe` from SporeBin on the console session (a one-shot scheduled task
+with `/it`: a GUI started from the SSH session lands on an invisible desktop) and judges it after 50 s with
+`judge.ps1`: GONE plus the Windows Error Reporting record (exception code, offset in the exe or "unknown" module), or
+ALIVE plus `stall-frames`, a count of threads parked in cTextureManager::StallFinishBackgroundLoad (0x7ab03d), from
+`threads.py`, which reads every thread's registers and stack. `win.sh shot NAME TAG` captures the game window through
+Windows.Graphics.Capture (GDI captures and PrintWindow return black for Direct3D over RDP). `win.sh bisect` switches
+hooks off by restoring the original's first five bytes (`unhook.py`), so a bisection step needs no rebuild.
+
+Found on the first native boots (2026-11-01), each a row the old `--hook pass` set took from a lenient PASS:
+- stack overflow at startup: s013ac650's `extern FUN_010c9050` took the `// @ 0x013B52D0` marker above it, so
+  the function called its own address (resolver fix and a build-time self-reference check);
+- deadlock (black window, main thread in StallFinishBackgroundLoad, job workers idle): s006907e0's empty
+  `ScheduleJob` stand-in made QueueJobUnderLock 0x6907e0 drop the call that hands a job to the workers;
+- crash in the hashtable insert 0x8ffa20: ResourceCache::Insert 0x8fec20 gave insert 0x8fe970 an 8-byte iterator
+  slot where it writes 12 bytes.
+
 ## Stage 1: runnable image
 
 `tools/steamstub_analysis_image.py` leaves the entry point on the SteamStub stub so the image
