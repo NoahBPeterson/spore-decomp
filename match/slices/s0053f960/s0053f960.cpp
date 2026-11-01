@@ -16,7 +16,7 @@ uint32_t FUN_0050ea00(int key);                       // @ 0x50ea00 hash
 uint32_t FUN_0050e850(int a, int b);                  // @ 0x50e850 hash
 char     FUN_00509850(int a, int b);                  // @ 0x509850 equal
 void*    FUN_0042dee0(void* alloc, int size, int align, int flags); // @ 0x42dee0
-void     DefaultRefCounted_Release(void* p);          // DefaultRefCounted::Release   // 0x00453540 (equiv t2)
+void __fastcall DefaultRefCounted_Release(void* p);   // DefaultRefCounted::Release (__thiscall, plain ret: p in ecx, no stack argument)   // 0x00453540 (equiv t2)
 void     FUN_0053e580();                              // @ 0x53e580
 void     FUN_0053eca0();                              // @ 0x53eca0
 char     FUN_0053e690();                              // @ 0x53e690
