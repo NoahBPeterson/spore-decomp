@@ -1860,6 +1860,7 @@ class Runner:
         self.obj = obj
         self.decl_arity = {}      # callee VA -> stack dwords, from our declaration's mangled name
         self.decl_prefix = {}     # callee VA -> comparable leading stack dwords (before a by-value struct)
+        self.decl_struct = set()  # callee VAs declared with a by-value struct parameter
         for si, va_ in t.res.addr.items():
             try:
                 sg = SIG.parse(t.coff.syms[si].name)
@@ -1873,6 +1874,8 @@ class Runner:
                     break
                 n_ += d_
             self.decl_prefix.setdefault(va_, n_)
+            if any(k_ == "struct" for k_, _d in sg.params):
+                self.decl_struct.add(va_)
             if sg.conv == "cdecl" and not sg.variadic and not any(k_ == "struct" for k_, _d in sg.params):
                 self.decl_arity.setdefault(va_, n_)
         # (section index, offset) -> defining symbol name, for the vtable-match rule's ours-side lookup
@@ -1888,6 +1891,7 @@ class Runner:
         self.hooks = []
         self.cur = None
         self.calls = []
+        self.call_taint_fn, self.call_taint, self.last_call_uninit = None, [], None
         # Original's instruction cap: starts low (random inputs often send a loop into the
         # billions) and rises to --budget if a probe shows a real input needs more; see run_function.
         self.budget = min(getattr(opts, "start_budget", opts.budget), opts.budget)
@@ -2521,6 +2525,8 @@ class Runner:
             words = (0,) * 8
         self.calls.append((tgt, uc.reg_read(UC_X86_REG_ECX), uc.reg_read(UC_X86_REG_EDX), words,
                            info["add_esp"], info["is_jmp"]))
+        if self.call_taint_fn is not None:
+            self.call_taint.append(self.call_taint_fn(esp))     # uninit_copies: which argument dwords are leftovers
         if self.opts.call_regs:
             self.call_regs.append(call_reg_snapshot(uc))
 
@@ -3231,8 +3237,38 @@ class Runner:
         last_esp = [entry]
         # decoded instructions, kept across inputs (keyed by address AND bytes, so changed code is re-decoded)
         cache = self.__dict__.setdefault("_taint_insns", {})
+        stale_hits = self.__dict__.setdefault("stale_w_slots", set())
+
+        # per stack byte: (write sequence number, written by the tested function's own code) of its last write
+        lastw, seq, cur_pc = {}, [0], [0]
+        span_lo, span_hi = self.orig.span
+
+        def stale_w(a):
+            """The dword at frame slot `a` is the w lane of a vector the function just built: the function's own
+            code wrote the three dwords below it (x, y, z) after the slot's last write, which came from outside
+            the function (a callee's object that shared the slot, e.g. a dead string's length, or a value left
+            before entry). The 3-argument vector constructor never sets w, so the original copies that leftover
+            (ported from mountandblade-decomp: update_flags 0x4b7840, process_blow 0x457b40)."""
+            if a & 3 or not (lo_s <= a - 12 and a + 4 <= entry):
+                return False
+            w = lastw.get(a)
+            if w is None or w[1]:
+                return False
+            for k in (4, 8, 12):
+                for b in range(a - k, a - k + 4):
+                    x = lastw.get(b)
+                    if x is None or not x[1] or x[0] < w[0]:
+                        return False
+            for b in range(a + 1, a + 4):
+                x = lastw.get(b)
+                if x is None or x[1]:
+                    return False
+            return True
 
         def src_taint(a, n):
+            if n == 4 and stale_w(a):
+                stale_hits.add(a)
+                return True
             return all((b in tainted) or (lo_s <= b < entry and b not in written) for b in range(a, a + n))
 
         def ea(o):
@@ -3251,6 +3287,7 @@ class Runner:
             steps[0] += 1
             if self.cur is not self.orig or steps[0] > max_steps:
                 return
+            cur_pc[0] = address
             try:
                 raw = bytes(uc_.mem_read(address, size))
             except Exception:
@@ -3351,23 +3388,32 @@ class Runner:
         def on_write(uc_, access, address, size, value, _):
             if self.cur is not self.orig:
                 return
+            seq[0] += 1
+            inside = span_lo <= cur_pc[0] < span_hi
             for b in range(address, address + size):
                 t_ = src_taint((b + movs[0]) & 0xFFFFFFFF, 1) if movs[0] is not None else pend[0]
                 if lo_s <= b < entry + 0x1000:
                     written.add(b)
+                    lastw[b] = (seq[0], inside)
                 if t_:
                     tainted.add(b)
                 else:
                     tainted.discard(b)
 
         hs = [uc.hook_add(UC_HOOK_CODE, on_code), uc.hook_add(UC_HOOK_MEM_WRITE, on_write)]
+        # the same notion for call arguments: per recorded call (index-aligned with self.calls), the stack-argument
+        # dwords (of the 8 recorded) that are a plain copy of a never-written slot (Comparer.norm_calls masks them)
+        self.call_taint_fn = lambda esp: frozenset(k for k in range(8) if src_taint(esp + 4 * k, 4))
+        self.last_call_uninit = None
         try:
             self.run_side(self.orig, inp)
         finally:
+            self.call_taint_fn = None
             for h in hs:
                 uc.hook_del(h)
         if steps[0] > max_steps:
             return frozenset()
+        self.last_call_uninit = list(self.call_taint)
         # bytes, not dwords: a copy to an unaligned destination (cam widget + 0x1ac from a soup pointer) straddles
         # dwords, so the comparison excuses a dword whose differing bytes are all tainted (Comparer.uninit_excused)
         return frozenset(a for a in tainted if not (lo_s <= a < entry))
@@ -4287,6 +4333,7 @@ class Runner:
         for k in range(8):
             entry["xmm%d" % k] = uc.reg_read(UC_X86_REG_XMM0 + k)
         self.fakes, self.calls = [], []
+        self.call_taint = []
         self.call_regs, self.fake_regs, self.import_regs = [], [], []
         m.trace_imports = ImportTrace(uc, self.import_regs) if self.opts.call_regs else []
         m.fake_handler = (getattr(self, "fake_override", None) or self.fake_call) if self.opts.fake_calls else None
@@ -4461,6 +4508,9 @@ def in_stack_frame(v, hi):
     return M.STACK_TOP - M.STACK_SIZE <= v < hi
 
 
+UNINIT_ARG = "<uninit>"
+
+
 def norm_val(v, hi):
     return "STK" if isinstance(v, int) and in_stack_frame(v, hi) else v
 
@@ -4487,6 +4537,7 @@ class Comparer:
                           "uninit-dword": 0, "stub-scratch": 0, "stale-return-address": 0}
         self.ro = runner.ro
         self.uninit_copy = frozenset()      # bytes excused for the input in hand (set by test_function)
+        self.uninit_args = None             # per original call: stack-arg dword indexes that are uninitialised leftovers
         self.last_kind = None
         self._thr, self._thr_key = None, None      # --uninit-mem: the pool/extra baseline of the page in hand
 
@@ -5308,32 +5359,49 @@ class Comparer:
                 return ("import call #%d" % k, fmt_call(x), fmt_call(y), "imports called (any depth), args normalised")
         return None
 
-    def norm_calls(self, calls):
+    def call_nargs(self, tgt, add_esp):
+        """Stack dwords a depth-1 call passes: the callee's own `ret N`, else our declaration's arity, else the
+        caller's `add esp, N`. The words recorded past them are the caller's frame, not arguments."""
+        n = self.r.callee_arity(tgt)
+        if n is None:
+            n = self.r.decl_arity.get(tgt)
+        if n is None:
+            n = add_esp
+        if tgt in self.r.decl_prefix and not (tgt in self.r.decl_struct and self.r.callee_arity(tgt)):
+            # a by-value struct's size is not in the mangled name, so without the callee's own `ret N` the
+            # dwords from the struct on stay uncompared. With it (callee_arity), the whole popped argument
+            # area is the callee's arity and the struct bytes are compared like any other stack argument
+            # (ported from mountandblade-decomp: a wrong colour passed by value was invisible)
+            n = min(n, self.r.decl_prefix[tgt])
+        return n
+
+    def norm_calls(self, calls, uninit=None):
+        """uninit: the original's per-call masks (Runner.uninit_copies); a masked dword becomes UNINIT_ARG."""
         out = []
+        if uninit is not None and len(uninit) != len(calls):
+            uninit = None
         esp = self.r.stk_hi
-        for tgt, ecx, edx, words, add_esp, is_jmp in calls:
-            n = self.r.callee_arity(tgt)
-            if n is None:
-                n = self.r.decl_arity.get(tgt)
-            if n is None:
-                n = add_esp
-            if tgt in self.r.decl_prefix:
-                n = min(n, self.r.decl_prefix[tgt])
+        for ci, (tgt, ecx, edx, words, add_esp, is_jmp) in enumerate(calls):
+            n = self.call_nargs(tgt, add_esp)
             regs = self.r.callee_regs(tgt)
             ent = [tgt, norm_val(ecx, esp) if "ecx" in regs else "-", norm_val(edx, esp) if "edx" in regs else "-"]
             widths = self.r.callee_arg_widths(tgt) if n else {}
-            out.append((ent, [norm_val(w & ((1 << 8 * widths[k]) - 1) if k in widths else w, esp)
+            um = uninit[ci] if uninit is not None else ()
+            out.append((ent, [UNINIT_ARG if k in um else
+                              norm_val(w & ((1 << 8 * widths[k]) - 1) if k in widths else w, esp)
                               for k, w in enumerate(words[:n])] if n else []))
         return out
 
     def compare_calls(self, ca, cb):
-        A, B = self.norm_calls(ca), self.norm_calls(cb)
+        A, B = self.norm_calls(ca, self.uninit_args), self.norm_calls(cb)
 
         def same(x, y):
             if x[0][0] != y[0][0] or not self.seq_eq(x[0][1:], y[0][1:]):
                 return False
             n = min(len(x[1]), len(y[1]))
-            return self.seq_eq(x[1][:n], y[1][:n])
+            # a dword the original passes from a never-written stack slot is indeterminate: any value of ours matches
+            return self.seq_eq([w for w, v in zip(x[1][:n], y[1][:n]) if w is not UNINIT_ARG],
+                               [v for w, v in zip(x[1][:n], y[1][:n]) if w is not UNINIT_ARG])
 
         def first_diff(A, B):
             for k in range(max(len(A), len(B))):
@@ -6279,12 +6347,15 @@ def _test_function(sid, va, opts, log=print):
                             cmp_.last_kind = None   # an fp judgement replaced the compared observable
                     else:
                         d = None
-                if d and d[0].startswith("memory") and getattr(opts, "uninit_copy", True):
-                    # the original may have copied an uninitialised local there: re-compare without those dwords
+                if d and d[0].startswith(("memory", "call #")) and getattr(opts, "uninit_copy", True):
+                    # the original may have copied an uninitialised local there (or passed one by value to a callee):
+                    # re-compare without those dwords
                     # (the original's run of this input is re-done once with copy taint; see uninit_copies)
                     u = runner.uninit_copies(inp)
-                    if u:
+                    cu = runner.last_call_uninit
+                    if u or (cu and any(cu)):
                         cmp_.uninit_copy = u
+                        cmp_.uninit_args = cu
                         try:
                             d2 = cmp_.compare(a, b, t)
                             if d2 and fpt is not None:
@@ -6292,6 +6363,7 @@ def _test_function(sid, va, opts, log=print):
                                 d2 = d2_ if kind_ == "real" else None
                         finally:
                             cmp_.uninit_copy = frozenset()
+                            cmp_.uninit_args = None
                         d = d2
             if d:
                 mism += 1
@@ -6336,6 +6408,7 @@ def _test_function(sid, va, opts, log=print):
         out["loop_repair"] = {"inputs": loop_tries, "finished": loop_ok, "calls": loop_calls}
         if fault_eips:
             out["fault_eips"] = dict(fault_eips.most_common(8))
+    out["stale_w_slots"] = len(getattr(runner, "stale_w_slots", ()) or ())
     if steer:
         out["steering"] = dict(steer.stats, constants=steer.n_consts, queued=steer.made)
     covered = set()
