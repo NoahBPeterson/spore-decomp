@@ -1,1 +1,4 @@
-00f015b0 DragObjectToSurface  # editor drag-to-planet-surface tool update; reorients entity via QuaternionFromDirections
+00f015b0 ?DragObjectToSurface@@YAXXZ  # DragObjectToSurface migrated from s00f015b0 (verbatim, slice spelling)
+00f01d60 ??1cScenarioTutorialsList@@QAE@XZ  # cScenarioTutorialsList::~cScenarioTutorialsList migrated from s00f015b0 (verbatim, slice spelling)
+00f01e60 ?FUN_00f01e60@@YAXI@Z  # FUN_00f01e60 migrated from s00f015b0 (verbatim, slice spelling)
+00f01f40 ?RefreshGrids@cSPEditorDevUI@@QAE_NHPAX@Z  # cSPEditorDevUI::RefreshGrids migrated from s00f015b0 (verbatim, slice spelling)

@@ -1,14 +1,13 @@
-# va  name  # evidence
-00f02160  ScenarioTutorialsPlacement_Update  # 1279 B dispatch, called by f02c50
-00f02670  ScenarioTutorialsPlacement_Init  # FUN_00f31fd0 temp, V4 assign at +0xc, vtable+0x18
-00f02700  ScenarioTutorialsPlacement_Build  # 772 B, called by f02b00 when g_mgr+0xc
-00f02a10  ScenarioTutorialsPlacement_HandleMessage  # switch on arg 0..0xb (jump table 0xf02adc)
-00f02b00  ScenarioTutorialsPlacement_UpdateGateA  # vtable+0x38, 0x67dd10 chain, g_mgr+0x10/+0xc
-00f02b80  ScenarioTutorialsPlacement_ctor  # zero field block + Stopwatch(this+0xb0,4)
-00f02c50  ScenarioTutorialsPlacement_UpdateGateB  # vtable+0x38, 0x67dd10 chain, f02160/f01c20
-00f02cd0  ScenarioTutorialsPlacement_FactoryCtor  # vtable 0x148b708 + operator_new(0x10) + FUN_00f31fd0
-00f02d30  ScenarioTutorialsPlacement_dtor  # vtable 0x148b708, release +0xc, scalar delete
-00f02dd0  ScenarioTutorialsPlacement_DestroyGlobal  # g_mgr teardown + free + null
-00f02e00  ScenarioTutorialsPlacement_SceneBuild  # 523 B
-00f03010  ScenarioTutorialsPlacement_ListDtor  # vtable 0x148b788, free +0x2c vector, free +0xc
-00f030a0  ScenarioTutorialsPlacement_SceneCommit  # 242 B, FUN_00f01140 copy + g_015acb40 gate
+00f02160 ?f02160@PL@@QAEXXZ  # PL::f02160 migrated from s00f02160 (verbatim, slice spelling)
+00f02670 ?f02670@PL@@QAEXXZ  # PL::f02670 migrated from s00f02160 (verbatim, slice spelling)
+00f02700 ?f02700@PL@@QAEXXZ  # PL::f02700 migrated from s00f02160 (verbatim, slice spelling)
+00f02a10 ?f02a10@PL@@QAEHHHM@Z  # PL::f02a10 migrated from s00f02160 (verbatim, slice spelling)
+00f02b00 ?f02b00@PL@@QAEXXZ  # PL::f02b00 migrated from s00f02160 (verbatim, slice spelling)
+00f02b80 ?f02b80@PL@@QAEPAU1@XZ  # PL::f02b80 migrated from s00f02160 (verbatim, slice spelling)
+00f02c50 ?f02c50@PL@@QAEXXZ  # PL::f02c50 migrated from s00f02160 (verbatim, slice spelling)
+00f02cd0 ?ctor_2cd0@PL@@QAEPAU1@XZ  # PL::ctor_2cd0 migrated from s00f02160 (verbatim, slice spelling)
+00f02d30 ?f02d30@PL@@QAEPAU1@H@Z  # PL::f02d30 migrated from s00f02160 (verbatim, slice spelling)
+00f02dd0 ?destroy_global_2dd0@@YAXXZ  # destroy_global_2dd0 migrated from s00f02160 (verbatim, slice spelling)
+00f02e00 ?f02e00@PL@@QAEXXZ  # PL::f02e00 migrated from s00f02160 (verbatim, slice spelling)
+00f03010 ?f03010@PL@@QAEXXZ  # PL::f03010 migrated from s00f02160 (verbatim, slice spelling)
+00f030a0 ?f030a0@PL@@QAEXXZ  # PL::f030a0 migrated from s00f02160 (verbatim, slice spelling)
