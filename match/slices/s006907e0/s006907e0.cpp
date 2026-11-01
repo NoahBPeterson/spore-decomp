@@ -318,7 +318,7 @@ public:
     void SetJobPriorityUnderLock(cJobData* job, int priority);
     void CheckDependentPriority(cJobData* job, int priority);
     void InsertWaitingThread(int priority);                              // 0x00691500
-    void ScheduleJob(cJobData* job);
+    void ScheduleJob(cJobData* job);                                     // 0x00690540 (the original's: an empty stand-in here dropped every no-dependency job, hybrid deadlock 2026-11-01)
     void FailJob(cJobData& job);                                         // 0x00690f60
     void FailNonRunnableJobs();                                          // 0x006910a0
     void FailJobDependents(cJobData* job, bool weakOnly);                // 0x00690630
@@ -854,7 +854,6 @@ unsigned int GetMaxDependentPriority(cJobData* job) {
     }
     return maxPri;
 }
-void cJobManager::ScheduleJob(cJobData*) {}
 
 // ===========================================================================
 // @ 0x0068f570  job thread entry point
