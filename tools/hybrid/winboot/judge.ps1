@@ -4,7 +4,7 @@ $p = Get-Process -Name $Name -ErrorAction SilentlyContinue
 if (-not $p) {
   $e = Get-WinEvent -FilterHashtable @{LogName='Application'; StartTime=(Get-Date).AddMinutes(-5)} -ErrorAction SilentlyContinue |
        ? { $_.Message -like "*$Name.exe*" } | select -First 1
-  if ($e) { "GONE " + (($e.Message -split "`n") | ? { $_ -match '0x' } | % { $_.Trim() }) -join ' | ' } else { "GONE (no event)" }
+  if ($e) { "GONE crash " + (($e.Message -split "`n") | ? { $_ -match '0x' } | % { $_.Trim() }) -join ' | ' } else { "GONE (no event)" }
   exit
 }
 $out = & D:\spore\.venv\Scripts\python D:\spore_run\threads.py $p.Id 2

@@ -5,6 +5,9 @@
 #   win.sh boot NAME [secs=50]    copy D:\spore_run\NAME.exe into SporeBin, start it on the console session, wait, judge
 #   win.sh shot NAME TAG          capture NAME's SPORE(TM) window (Windows.Graphics.Capture) -> work/hybrid/win/TAG.png
 #   win.sh bisect BASE CANDS PAT  which hook of CANDS (one VA per line) in work/hybrid/BASE.exe makes `boot` print PAT
+#   win.sh peel BASE [rounds=8]   repeat: boot with the culprits found so far switched off; if it crashes or stalls,
+#                                 bisect for one hook that does (any crash counts: when several hooks crash, a pattern
+#                                 for one of them is masked by the others), add it to work/hybrid/BASE.culprits
 # SPORE_WIN_HOST (default noah@100.84.111.92) and SPORE_WIN_PWFILE (the password, chmod 600; never in the repo).
 # The machine needs Steam signed in, Spore installed, the game launched once through Steam (registry), windowed mode
 # in %APPDATA%\SPORE\Preferences\Preferences.prop, and D:\spore\.venv with windows-capture (wgc.py).
@@ -42,5 +45,26 @@ print('work/hybrid/win/$3.png %dx%d mean %.1f left-strip %.1f' % (w,h,sum(px)/le
            echo "step $step: ${#half} hooked (${half[1]}..${half[-1]}) -> $r  [${v[1,160]}]"
          done
          echo "CULPRIT ${cands[*]}" ;;
-  *) sed -n 2,11p $0 ;;
+  peel)  cd $ROOT; base=$2; rounds=${3:-8}; cf=work/hybrid/$base.culprits; touch $cf
+         $ROOT/.venv/bin/python -c "import json;print('\\n'.join(h['va'] for h in json.load(open('work/hybrid/$base.exe.hooks.json'))['hooks']))" > work/hybrid/$base.all.txt
+         for r in $(seq 1 $rounds); do
+           cur=${base}_p$r
+           .venv/bin/python $HERE/unhook.py work/hybrid/$base.exe work/hybrid/$cur.exe @$cf >/dev/null
+           put work/hybrid/$cur.exe
+           v=$($0 boot $cur 50 | tail -2 | tr '\n' ' ')
+           echo "round $r: $(wc -l < $cf | tr -d ' ') off -> ${v[1,200]}"
+           [[ $v == *ALIVE* && $v != *"stall-frames "[1-9]* ]] && { echo "ALIVE with $(wc -l < $cf | tr -d ' ') hooks off"; break; }
+           rg -v -x -f $cf work/hybrid/$base.all.txt > work/hybrid/$cur.cands.txt 2>/dev/null || cp work/hybrid/$base.all.txt work/hybrid/$cur.cands.txt
+           [ -s $cf ] || cp work/hybrid/$base.all.txt work/hybrid/$cur.cands.txt
+           c=$($0 bisect $cur work/hybrid/$cur.cands.txt '(GONE crash|stall-frames [1-9])' | tee -a work/hybrid/$base.peel.log | rg '^CULPRIT' | awk '{print $2}')
+           [ -n "$c" ] || { echo "no culprit found"; break; }
+           # confirm: only the culprit hooked must still crash or stall (several hooks together can fool a bisection)
+           rg -v -x "$c" work/hybrid/$cur.cands.txt > work/hybrid/win_off.txt
+           .venv/bin/python $HERE/unhook.py work/hybrid/$cur.exe work/hybrid/${cur}_only.exe @work/hybrid/win_off.txt >/dev/null
+           put work/hybrid/${cur}_only.exe
+           cv=$($0 boot ${cur}_only 50 | tail -2 | tr '\n' ' ')
+           if [[ $cv != *"GONE crash"* && $cv != *"stall-frames "[1-9]* ]]; then echo "culprit $c not confirmed alone: ${cv[1,160]}"; break; fi
+           echo $c >> $cf; echo "culprit $c confirmed: ${cv[1,200]}"
+         done ;;
+  *) sed -n 2,13p $0 ;;
 esac
