@@ -246,7 +246,7 @@ struct IHTable {
     IterR* DoInsertValue(IterR* out, CacheEntry* node, TagT);
     void erase(const uint16_t* const* key);                                 // 0x008fe510
     void find(IterC* out, const uint16_t* const* key);                      // 0x008fe490
-    void insert(IterC* out, CacheEntry* e);                                 // 0x008fe970
+    void insert(IterR* out, CacheEntry* e);                                 // 0x008fe970 (passes out to DoInsertValue: writes all 12 bytes)
 };
 
 static inline const uint16_t* const& ExtractKey(CacheEntry& e) { return e.mKey; }
@@ -383,8 +383,8 @@ bool ResourceCache::Insert(const uint16_t* key, IUnk* data, unsigned size)
     if (size == 0 || key == 0)
         return false;
     bool inserted = false;
-    IterC it;
-    mMap.find(&it, &key);
+    IterR it;   // the original's 12-byte slot: insert 0x8fe970 writes iterator + inserted flag into it
+    mMap.find((IterC*)&it, &key);
     if (size > mMaxEntrySize) {
         if (it.node != mMap.mBucketArray[64])
             Remove(it.node);
