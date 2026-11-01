@@ -1,4 +1,6 @@
-006d8880 Bake_6d8880
-006d8c00 Bake_6d8c00
-006d8f60 Bake_6d8f60
-006d9280 Bake_6d9280
+006d8880 ?Bake_6d8880@@YA_NPAMHPAUElemTable@@PAUBakeEntry@@PAUStreamDesc@@0PAUScaleInfo@@HHH@Z  # Bake_6d8880 migrated from s006d8880 (verbatim, slice spelling)
+006d8c00 ?Bake_6d8c00@@YA_NPAMHPAUElemTable@@PAUBakeEntry@@PAUStreamDesc@@0PAUScaleInfo@@HHH@Z  # Bake_6d8c00 migrated from s006d8880 (verbatim, slice spelling)
+006d8f60 ?Bake_6d8f60@@YA_NPAMHPAUElemTable@@PAUBakeEntry@@PAUStreamDesc@@0PAUScaleInfo@@HHH@Z  # Bake_6d8f60 migrated from s006d8880 (verbatim, slice spelling)
+006d9280 ?Bake_6d9280@@YA_NPAMHPAUElemTable@@PAUBakeEntry@@PAUStreamDesc@@0PAUScaleInfo@@HHH@Z  # Bake_6d9280 migrated from s006d8880 (verbatim, slice spelling)
+006d95e0 ?FindOrInsert@RBTree@@QAEPAXPBH@Z  # RBTree::FindOrInsert migrated from s006d8880 (verbatim, slice spelling)
+006d9660 ?Insert@HandleVec@@QAEXII@Z  # HandleVec::Insert migrated from s006d8880 (verbatim, slice spelling)

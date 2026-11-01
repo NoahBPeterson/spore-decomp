@@ -1,0 +1,6 @@
+# source  symbol  va  flags
+../src/game/SPEngine/_at_006d0000.cpp  ?FUN_006ddcc0@@YA_NHHHH@Z  006ddcc0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/_at_006d0000.cpp  ?FUN_006ddde0@@YAXHH@Z  006ddde0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/_at_006d0000.cpp  ?FUN_006dde30@@YAXHHH@Z  006dde30  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/_at_006d0000.cpp  ?FUN_006dde90@@YAXHHHH@Z  006dde90  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/_at_006d0000.cpp  ?FUN_006de350@@YAXXZ  006de350  /O2 /MD /Gy /EHsc /TP /Isrc/game/include

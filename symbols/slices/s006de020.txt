@@ -1,0 +1,4 @@
+006de350 ?FUN_006de350@@YAXXZ  # None migrated from s006de020 (verbatim, slice spelling)
+006de4e0 ?FUN_006de4e0@@YAXHHHH@Z  # FUN_006de4e0 migrated from s006de020 (verbatim, slice spelling)
+006de530 ?FUN_006de530@@YAXHHHH@Z  # FUN_006de530 migrated from s006de020 (verbatim, slice spelling)
+006de580 ?FUN_006de580@@YAXHHHIZZ  # FUN_006de580 migrated from s006de020 (verbatim, slice spelling)

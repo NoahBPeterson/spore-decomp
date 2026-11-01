@@ -1,4 +1,4 @@
-006d35a0 Bake_6d35a0 # core FUN_006c4200; dot tail
+006d35a0 ?Bake_6d35a0@@YA_NPAMHPAUElemTable@@PAUBakeEntry@@PAUStreamDesc@@0PAUScaleInfo@@HHH@Z  # Bake_6d35a0 migrated from s006d35a0 (verbatim, slice spelling)
 006d38b0 Bake_6d38b0 # core FUN_006c3550; dot tail
 006d3b90 Bake_6d3b90 # core FUN_006c3550; dot tail
 006d3e30 Bake_6d3e30 # core FUN_006c3550; dot tail

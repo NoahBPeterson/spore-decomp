@@ -1,10 +1,10 @@
 006deee0 eastl::insertion_sort_simple<SP::cClusterRect*, cRectAreaSort>  # PDB-derived comparator/type; stride 0x34, key at +8
 006defe0 eastl::fill<Elem16*, Elem16>  # 16-byte element, intrusive ptr at +0xc
 006df170 eastl::make_heap<SP::cClusterRect*, cRectAreaSort>  # make_heap shape, calls adjust_heap 0x6dea60
-006df280 RefPtr::AssignRefPtr
+006df280 ?AssignRefPtr@RefPtr@@QAEAAU1@PBU1@@Z  # RefPtr::AssignRefPtr migrated from s006deee0 (verbatim, slice spelling)
 006df2d0 eastl::copy<Elem16*, Elem16*>  # forward element assign
 006df340 eastl::copy_backward<Elem16*, Elem16*>  # backward element assign
-006df3b0 eastl::vector<Elem16>::~vector  # release each + operator delete
+006df3b0 ?Destroy@Elem16Vector@@QAEXXZ  # Elem16Vector::Destroy migrated from s006deee0 (verbatim, slice spelling)
 006df420 ?GetPartitionKeyGT@@YAPAPAUSortKeyObj@@PAPAU1@0PAU1@ABUSortKeyGreater@@@Z  # GetPartitionKeyGT migrated from s006deee0 (verbatim, slice spelling)
 006df470 ?PartialSortKeyGT@@YAXPAPAUSortKeyObj@@00ABUSortKeyGreater@@@Z  # PartialSortKeyGT migrated from s006deee0 (verbatim, slice spelling)
 006df4e0 ?GetPartitionKeyLT@@YAPAPAUSortKeyObj@@PAPAU1@0PAU1@ABUSortKeyLess@@@Z  # GetPartitionKeyLT migrated from s006deee0 (verbatim, slice spelling)
