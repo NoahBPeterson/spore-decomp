@@ -4,3 +4,6 @@
 00ff2c70 ?AddRecord@cCitySummary@@QAEXPAUcCityData_s00ff_21d0@@@Z  # cCitySummary::AddRecord migrated from s00ff21d0 (verbatim, slice spelling)
 00ff2d50 ?FUN_00ff2d50@@YIXPAUcCitySummary@@PAXH0@Z  # FUN_00ff2d50 migrated from s00ff21d0 (verbatim, slice spelling)
 00ff2d80 ?ResetForward@cCitySummary@@QAEXXZ  # cCitySummary::ResetForward migrated from s00ff21d0 (verbatim, slice spelling)
+00ff2e30 ?FUN_00ff2e30@@YIXPAUcCitySummary@@PAX@Z  # FUN_00ff2e30 migrated from s00ff21d0 (verbatim, slice spelling)
+00ff2e80 ?FUN_00ff2e80@@YIXPAUcCitySummary@@PAX1@Z  # FUN_00ff2e80 migrated from s00ff21d0 (verbatim, slice spelling)
+00ff3090 ?FUN_00ff3090@@YAXPAUSerHost@@PAUVecU32@@@Z  # FUN_00ff3090 migrated from s00ff21d0 (verbatim, slice spelling)

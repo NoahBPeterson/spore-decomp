@@ -1,0 +1,10 @@
+# source  symbol  va  flags
+../src/game/SPGonzago/_at_00ff0000.cpp  ?TestNameBit@cCityData_s00fe_ff80@SP@@QBE_NHI@Z  00ff0330  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00ff0000.cpp  ?AddValue@cCityData_s00fe_ff80@SP@@QAEXM@Z  00ff0350  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00ff0000.cpp  ?FUN_00ff2e30@@YIXPAUcCitySummary@@PAX@Z  00ff2e30  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00ff0000.cpp  ?FUN_00ff35e0@@YIXPAUCitySummary@@PAXH@Z  00ff35e0  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/SPGonzago/_at_00ff0000.cpp  ?FUN_00ff38a0@@YIXPAUImageModifier@@@Z  00ff38a0  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/SPGonzago/_at_00ff0000.cpp  ?FUN_00ff3ab0@@YIPAUImageModifier@@PAU1@PAXE@Z  00ff3ab0  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/SPGonzago/_at_00ff0000.cpp  ?FUN_00ff53f0@@YAHH@Z  00ff53f0  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_00ff0000.cpp  ?ctor@cColonySimulator@@QAEPAU1@XZ  00ff54e0  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_00ff0000.cpp  ?FUN_00ff5a10@@YAXPAX0@Z  00ff5a10  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include

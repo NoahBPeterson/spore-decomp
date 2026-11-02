@@ -1,6 +1,6 @@
 00feff80 ?sSpawnTribesmen@SP@@YAXIHHHIIPAVcRefVector@1@@Z  # sSpawnTribesmen migrated from s00feff80 (verbatim, slice spelling)
-00ff0330 cCityData::TestNameBit  # PDB name; tests one bit of an entry of the 14-word city name
-00ff0350 cCityData::AddValue  # PDB name; adds to mValue, clamped at zero
+00ff0330 ?TestNameBit@cCityData_s00fe_ff80@SP@@QBE_NHI@Z  # cCityData_s00fe_ff80::TestNameBit migrated from s00feff80 (verbatim, slice spelling)
+00ff0350 ?AddValue@cCityData_s00fe_ff80@SP@@QAEXM@Z  # cCityData_s00fe_ff80::AddValue migrated from s00feff80 (verbatim, slice spelling)
 00ff03d0 ?sGetIndexFromModelType@SP@@YA_NIPAI@Z  # sGetIndexFromModelType migrated from s00feff80 (verbatim, slice spelling)
 00ff0400 ?GetPercent@cCityData_s00fe_ff80@SP@@QBEHXZ  # cCityData_s00fe_ff80::GetPercent migrated from s00feff80 (verbatim, slice spelling)
 00ff0430 ?SetKey@cCityData_s00fe_ff80@SP@@QAEXPBUcInt3@2@@Z  # cCityData_s00fe_ff80::SetKey migrated from s00feff80 (verbatim, slice spelling)
