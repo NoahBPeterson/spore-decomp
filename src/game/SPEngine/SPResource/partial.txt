@@ -1,4 +1,4 @@
-# incomplete / approximate (stubbed blocks or omitted paths)
+# va  diff-bytes  reason
 006abf20  114  spin-wait retire queue stubbed
 006abfa0  148  atomic refcount retire helper stubbed
 006ac140  112  FixedAllocatorBase::Init + vtable setup stubbed

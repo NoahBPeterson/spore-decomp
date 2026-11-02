@@ -6,6 +6,7 @@
 ../src/game/SPEngine/SPResource.cpp  ?FUN_006ad010@@YA_NPAD@Z  006ad010  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPEngine/SPResource.cpp  ?FUN_006ad030@@YA_NPAD@Z  006ad030  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPEngine/SPResource.cpp  ?FUN_006ad050@@YA_NPAD@Z  006ad050  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/SPResource.cpp  ??1RegTableOwner@@QAE@XZ  006ad0f0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/SPEngine/SPResource.cpp  ?FUN_006ad250@@YGXPAD@Z  006ad250  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPEngine/SPResource.cpp  ?FUN_006ad590@@YA_NPAD_N@Z  006ad590  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPEngine/SPResource.cpp  ?FlushCache@SP@@YAXH@Z  006ad7c0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include

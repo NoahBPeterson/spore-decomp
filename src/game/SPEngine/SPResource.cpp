@@ -156,6 +156,21 @@ struct ListNode { ListNode* next; ListNode* prev; IObj* value; };
 struct ListNodeList {
     ListNode* allocListNode(IObj** tmp);   // 0x006ac3c0 (thiscall on the list sentinel)
 };
+struct InnerAlloc {
+    ~InnerAlloc();   // 0x00926640
+};
+struct RegTableOwner {
+    void* pad0; void** buckets; uint32_t bucketCount; int count;
+    char pad10[0xc]; InnerAlloc inner;    // +0x1c
+    char pad20[0xf]; void* freelist;      // +0x2c
+    ~RegTableOwner();
+    void FreeNodes(void** first, uint32_t n);   // 0x006ac5d0
+};
+struct IObjVec {
+    void* pad0; IObj** mpEnd; IObj** mpCapEnd;
+    void PushNull();
+    void DoInsertValue(IObj** pos, IObj** val);   // 0x007c99e0
+};
 struct Elem8 { uint32_t a, b; };
 struct Vec8 {
     Elem8* mpBegin; Elem8* mpEnd; Elem8* mpCapEnd; int pad; Elem8* mpFixed;
@@ -218,8 +233,6 @@ bool __fastcall FUN_006abee0(char* self)
     return true;
 }
 
-
-
 // @ 0x006abf20
 void FUN_006abf20(void* self)
 {
@@ -227,16 +240,12 @@ void FUN_006abf20(void* self)
     (void)self;
 }
 
-
-
 // @ 0x006abfa0
 void FUN_006abfa0(void* self)
 {
     // TODO(partial): atomic refcount retire helper.
     (void)self;
 }
-
-
 
 // @ 0x006ac040
 bool SetCachingType(int type, void* obj)
@@ -254,8 +263,6 @@ bool SetCachingType(int type, void* obj)
     return true;
 }
 
-
-
 // @ 0x006ac0a0
 bool FUN_006ac0a0(uint32_t type, CacheHolder* obj)
 {
@@ -266,8 +273,6 @@ bool FUN_006ac0a0(uint32_t type, CacheHolder* obj)
         return false;
     return SetCachingType(type, (void*)v);
 }
-
-
 
 // @ 0x006ac0d0
 int FUN_006ac0d0(CacheHolder* obj)
@@ -287,16 +292,12 @@ int FUN_006ac0d0(CacheHolder* obj)
     return 0;
 }
 
-
-
 // @ 0x006ac140
 void FUN_006ac140(void* self)
 {
     // TODO(partial): FixedAllocatorBase::Init + vtable setup.
     (void)self;
 }
-
-
 
 // @ 0x006ac260
 void* FUN_006ac260(void* self, void* value)
@@ -306,8 +307,6 @@ void* FUN_006ac260(void* self, void* value)
     return 0;
 }
 
-
-
 // @ 0x006ac2f0
 void FUN_006ac2f0(void* self, void* a2, void* a3)
 {
@@ -315,16 +314,12 @@ void FUN_006ac2f0(void* self, void* a2, void* a3)
     (void)self; (void)a2; (void)a3;
 }
 
-
-
 // @ 0x006ac3c0
 void FUN_006ac3c0(void* self)
 {
     // TODO(partial): fixed-allocator core teardown.
     (void)self;
 }
-
-
 
 // @ 0x006ac440
 uint32_t* FUN_006ac440(uint32_t* dst, uint32_t count, const uint32_t* src)
@@ -341,8 +336,6 @@ uint32_t* FUN_006ac440(uint32_t* dst, uint32_t count, const uint32_t* src)
     return p;
 }
 
-
-
 // @ 0x006ac470
 void __fastcall FUN_006ac470(int self)
 {
@@ -351,15 +344,12 @@ void __fastcall FUN_006ac470(int self)
         EASTL_allocator_deallocate((void*)p);
 }
 
-
-
 // @ 0x006ac5d0
 void FUN_006ac5d0(void* self, void* buckets, uint32_t count)
 {
     // TODO(partial): free a bucket array of allocated nodes.
     (void)self; (void)buckets; (void)count;
 }
-
 
 // @ 0x006ac630
 void OnRegister(bool added, IObj* obj)
@@ -388,19 +378,16 @@ void OnRegister(bool added, IObj* obj)
     }
 }
 
-
 // @ 0x006ac6f0
 RegList::~RegList()
 {
 }
-
 
 // @ 0x006ac770
 RegList::RegList()
 : mMutex(0, true)
 {
 }
-
 
 // @ 0x006ac7d0
 bool Registry::ClearAll()
@@ -425,7 +412,6 @@ bool Registry::ClearAll()
     return true;
 }
 
-
 // @ 0x006ac840
 bool Registry::Lookup(const uint32_t* key, IObj** out)
 {
@@ -441,7 +427,6 @@ bool Registry::Lookup(const uint32_t* key, IObj** out)
     }
     return true;
 }
-
 
 // @ 0x006ac8d0
 int Registry::Enumerate(void* list, IFilter* f)
@@ -482,7 +467,6 @@ int Registry::Enumerate(void* list, IFilter* f)
     return matched;
 }
 
-
 // @ 0x006aca20
 RegIter* RegTable::erase(RegIter* out, RegIter it)
 {
@@ -513,7 +497,6 @@ RegIter* RegTable::erase(RegIter* out, RegIter it)
     count--;
     return out;
 }
-
 
 // @ 0x006acaa0
 void Vec8::InsertN(Elem8* pos, uint32_t n, const Elem8* val)
@@ -560,7 +543,6 @@ void Vec8::InsertN(Elem8* pos, uint32_t n, const Elem8* val)
         mpCapEnd = mem + newCap;
     }
 }
-
 
 // @ 0x006acc60
 bool Registry::Register(void* vkey, void* vobj)
@@ -625,7 +607,6 @@ bool Registry::Register(void* vkey, void* vobj)
     return r;
 }
 
-
 // @ 0x006ace70
 bool Registry::Unregister(void* vkey, void* vobj)
 {
@@ -668,7 +649,6 @@ bool Registry::Unregister(void* vkey, void* vobj)
     return r;
 }
 
-
 // @ 0x006acfe0
 bool FUN_006acfe0(uint32_t* a, char* b)
 {
@@ -680,7 +660,6 @@ bool FUN_006acfe0(uint32_t* a, char* b)
     return false;
 }
 
-
 // @ 0x006ad010
 bool FUN_006ad010(char* a)
 {
@@ -688,7 +667,6 @@ bool FUN_006ad010(char* a)
         return sRegistry->Register(a + 8, a);
     return false;
 }
-
 
 // @ 0x006ad030
 bool FUN_006ad030(char* a)
@@ -698,7 +676,6 @@ bool FUN_006ad030(char* a)
     return false;
 }
 
-
 // @ 0x006ad050
 bool FUN_006ad050(char* a)
 {
@@ -706,7 +683,6 @@ bool FUN_006ad050(char* a)
         return sRegistry->Unregister(a + 8, a);
     return false;
 }
-
 
 // @ 0x006ad070
 void RemoveRegistrationCallback(uint32_t key, ResCallback callback)
@@ -734,6 +710,36 @@ void RemoveRegistrationCallback(uint32_t key, ResCallback callback)
     }
 }
 
+// @ 0x006ad0f0
+RegTableOwner::~RegTableOwner()
+{
+    FreeNodes(buckets, bucketCount);
+    uint32_t n = bucketCount;
+    void** b = buckets;
+    count = 0;
+    if (n > 1) {
+        if (n * 4 + 4 <= 0x14) {
+            *b = freelist;
+            freelist = b;
+        } else {
+            operator delete(b);
+        }
+    }
+}
+
+// @ 0x006ad180
+void IObjVec::PushNull()
+{
+    IObj** p = mpEnd;
+    if (p < mpCapEnd) {
+        mpEnd = p + 1;
+        if (p) *p = 0;
+    } else {
+        IObj* tmp = 0;
+        DoInsertValue(p, &tmp);
+        if (tmp) tmp->Release();
+    }
+}
 
 // @ 0x006ad250
 void __stdcall FUN_006ad250(char* a)
@@ -743,6 +749,43 @@ void __stdcall FUN_006ad250(char* a)
         r->Unregister(a + 8, a);
 }
 
+// @ 0x006ad270
+bool RegList::ReleaseAll()
+{
+    LockGuard g(&mMutex);
+    int n = (int)(v.mpEnd - v.mpBegin);
+    for (int i = 0; i < n; i++) {
+        if (v.mpBegin[i].obj) {
+            int c = _InterlockedExchangeAdd((long*)&v.mpBegin[i].obj->mnRefCount, 0);
+            if ((c >> 1) - 1 == 0) {
+                cResourceBase* o = v.mpBegin[i].obj;
+                if (sRegistry)
+                    sRegistry->Unregister(&o->key[0], o);
+            }
+        }
+    }
+    v.mpEnd += -(int)(v.mpEnd - v.mpBegin);
+    return true;
+}
+
+// @ 0x006ad350
+void RegList::Reset()
+{
+    LockGuard g(&mMutex);
+    int n = (int)(v.mpEnd - v.mpBegin);
+    for (int i = 0; i < n; i++) {
+        if (v.mpBegin[i].obj) {
+            int c = _InterlockedExchangeAdd((long*)&v.mpBegin[i].obj->mnRefCount, 0);
+            if ((c >> 1) - 1 == 0) {
+                cResourceBase* o = v.mpBegin[i].obj;
+                if (sRegistry)
+                    sRegistry->Unregister(&o->key[0], o);
+            }
+        }
+        v.mpBegin[i].obj = 0;
+        v.mpBegin[i].count = 1000;
+    }
+}
 
 // @ 0x006ad410
 void RegList::Add(cResourceBase* obj)
@@ -795,7 +838,6 @@ void RegList::Add(cResourceBase* obj)
         }
     }
 }
-
 
 // @ 0x006ad590
 bool FUN_006ad590(char* a, bool flag)
