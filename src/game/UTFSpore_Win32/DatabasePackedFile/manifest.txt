@@ -39,3 +39,10 @@
 ../src/game/UTFSpore_Win32/DatabasePackedFile.cpp  ?Erase@HoleSet_s008d_a140@@QAEXPAPAXPAX@Z  008dae70  /O2 /MD /Gy /TP /GS- /arch:SSE /Isrc/game/include
 ../src/game/UTFSpore_Win32/DatabasePackedFile.cpp  ?Reset@HoleSet_s008d_aff0@@QAEXH@Z  008db3a0  /O2 /MD /Gy /TP /GS- /arch:SSE /Isrc/game/include
 ../src/game/UTFSpore_Win32/DatabasePackedFile.cpp  ?GetFileInfo@PFIndexModifiable_s008d_aff0@@QAEPAXPBX@Z  008db810  /O2 /MD /Gy /TP /GS- /arch:SSE /Isrc/game/include
+../src/game/UTFSpore_Win32/DatabasePackedFile.cpp  ?ForwardGetSize@PFRecordReadIstream@@QAEXXZ  008dc350  /O2 /MD /Gy /TP /GS- /arch:SSE /Isrc/game/include
+../src/game/UTFSpore_Win32/DatabasePackedFile.cpp  ?GetAccessFlags@PFRecordReadIstream@@QAEIXZ  008dc370  /O2 /MD /Gy /TP /GS- /arch:SSE /Isrc/game/include
+../src/game/UTFSpore_Win32/DatabasePackedFile.cpp  ?DeleteTempFile@PFRecordWrite@@QAEXXZ  008dc740  /O2 /MD /Gy /TP /GS- /arch:SSE /Isrc/game/include
+../src/game/UTFSpore_Win32/DatabasePackedFile.cpp  ?Close@PFRecordWriteIstream@@QAEXXZ  008dc7b0  /O2 /MD /Gy /TP /GS- /arch:SSE /Isrc/game/include
+../src/game/UTFSpore_Win32/DatabasePackedFile.cpp  ?SetSize@PFRecordWriteIstream@@QAEXH@Z  008dc7e0  /O2 /MD /Gy /TP /GS- /arch:SSE /Isrc/game/include
+../src/game/UTFSpore_Win32/DatabasePackedFile.cpp  ?SetPosition@PFRecordWriteIstream@@QAEXHH@Z  008dc820  /O2 /MD /Gy /TP /GS- /arch:SSE /Isrc/game/include
+../src/game/UTFSpore_Win32/DatabasePackedFile.cpp  ?Flush@PFRecordWriteIstream@@QAEXXZ  008dc860  /O2 /MD /Gy /TP /GS- /arch:SSE /Isrc/game/include

@@ -45,3 +45,10 @@
 008dbf20 152 complete: HoleSet::AllocAt (rbtree insert + split); register allocation/insert path differs
 008dc000 201 complete: HoleSet::Release (rbtree erase + merge); register allocation/erase path differs
 008dc120 62 complete: HoleSet::MergeFrom (rbtree merge); register allocation differs
+008dc1a0 208 HoleSet::Insert rbtree lower_bound + two DoInsert calls; codegen/regalloc differs (equiv PASS) flags: /O2 /MD /Gy /TP /GS- /arch:SSE
+008dc2b0 108 PFIndexModifiable::ReserveRange bucket walk; register allocation differs (equiv PASS) flags: /O2 /MD /Gy /TP /GS- /arch:SSE
+008dc3f0 233 PFRecordRead::ReadSpan buffer-copy/ReadFileSpan codegen differs (equiv PASS) flags: /O2 /MD /Gy /TP /GS- /arch:SSE
+008dc510 186 PFRecordRead::EnsureLoaded decompress path; codegen differs (equiv WEAK) flags: /O2 /MD /Gy /TP /GS- /arch:SSE
+008dc5e0 14 PFRecordRead::GetBuffer; `mov al`+`cmp al,3` vs `cmp byte ptr,3` and ret layout differ (equiv PASS) flags: /O2 /MD /Gy /TP /GS- /arch:SSE
+008dc600 122 PFRecordWrite::OpenTempFile; filename format + CreateTempFile/FileStream codegen differs (equiv UNSUPPORTED: import _time64) flags: /O2 /MD /Gy /TP /GS- /arch:SSE
+008dc890 262 PFRecordWrite::WriteRecordToParent chunked write loop; codegen differs (equiv UNSUPPORTED: unresolved stub MemoryStream::GetData) flags: /O2 /MD /Gy /TP /GS- /arch:SSE

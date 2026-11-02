@@ -1,4 +1,4 @@
-# va  size  reason
+# va  reason   (functions present but not yet complete/compilable — none for this slice)
 006bbde0 59 DatabasePackedFile shutdown - skeleton
 006bbe80 140 PFRecordWrite alloc+ctor - skeleton
 006bbf10 137 unknown - skeleton

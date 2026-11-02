@@ -1,4 +1,4 @@
-// src/game/UTFSpore_Win32/DatabasePackedFile.cpp -- migrated from slice(s) s008daff0, s008da140, s008d91e0, s008d7220, s006bb1c0, s008d81d0 by tools/migrate/rewrite.py
+// src/game/UTFSpore_Win32/DatabasePackedFile.cpp -- migrated from slice(s) s008dc1a0, s008daff0, s008da140, s008d91e0, s008d7220, s006bb1c0, s008d81d0 by tools/migrate/rewrite.py
 // Object file: UTFSpore_Win32/DatabasePackedFile.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -19,6 +19,8 @@
 #include "EA/CompressionRefpack.h"
 #include "EA/ResourceMan/Manager.h"
 #include "EA/COM/IUnknown32.h"
+#include "EA/IO/MemoryStream.h"
+#include <string.h>
 
 // unnamed retail callees and globals (address in the comment)
 extern "C" void* __cdecl memset_pf(void* dst, int val, unsigned n);   // 0x11e073e
@@ -301,7 +303,6 @@ struct DatabasePackedFile : DBase1 {
     void memcpy(...); // 0x011e0744
 // ---- items of slice s008d91e0 end
 
-
 // ---- items of slice s008da140 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern "C" void* __cdecl operator_delete__(void* p);                              // 0xf47380
 extern "C" void* __cdecl RBTreeIncrement(void* node);                             // 0x921580
@@ -569,6 +570,170 @@ struct RBTree {
 };
 // ---- items of slice s008daff0 end
 
+// ---- items of slice s008dc1a0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C" long __cdecl _InterlockedExchangeAdd(volatile long*, long);
+extern "C" long __cdecl _InterlockedDecrement(volatile long*);
+extern "C" int   __cdecl Sprintf16(wchar_t* buf, const wchar_t* fmt, ...);   // 0x9399c0
+extern "C" char  __cdecl CreateTempFile(wchar_t* name, int a, const wchar_t* fmt, int b); // 0x932580
+#pragma intrinsic(_InterlockedExchangeAdd, _InterlockedDecrement, _InterlockedExchange)
+typedef unsigned int   uint32;
+typedef unsigned short uint16;
+extern "C" char  __cdecl IO_File_Remove_s008d_c1a0(const wchar_t* path);                // 0x931fd0
+struct Key_s008d_c1a0 { uint32 mInstance; uint32 mType; uint32 mGroup; };   // 0xc
+struct IAllocator {
+    virtual void a0();                          // +0x00
+    virtual void a1();                          // +0x04
+    virtual void* Alloc(unsigned size, const char* name, unsigned flags); // +0x08
+    virtual void  Free(void* p, unsigned size);                           // +0x0c
+    virtual void a4();                          // +0x10
+};
+struct HoleTree {
+    char d[0x1c];                               // full 0x1c, size counter at +0x14
+    void Erase(void** ppOut, void* pNode);      // 0x8dae70 (defined in s008da140)
+    int  GetTotalSize();                        // 0x8dae40 (defined in s008da140)
+    void DoInsert(void** ppOut, void* pAfter, const int* pRange); // 0x8dbef0
+};
+struct HoleSet_s008d_c1a0 {
+    int       mExtent;                          // +0x00 running extent
+    HoleTree  mTree;                            // +0x04
+    bool Insert(int pos, int size);             // 0x8dc1a0
+    void Release(unsigned pos, int size);       // 0x8dc000 (defined in s008daff0)
+    int  GetTotalSize() { return mTree.GetTotalSize(); }
+};
+struct PFRecordInfo { uint32 mf[4]; };          // 0x10
+struct DatabasePackedFile_s008d_c1a0 {                     // 0x384
+virtual void v00();
+virtual void v01();
+virtual void v02();
+virtual void v03();
+virtual void v04();
+virtual void v05();
+virtual void v06();
+virtual void v07();
+virtual void v08();
+virtual void v09();
+virtual void v10();
+virtual void v11();
+virtual void v12();
+virtual void v13();
+virtual void v14();
+virtual void v15();
+virtual void v16();
+virtual void v17();
+    virtual IAllocator* GetAllocator();         // +0x48
+    bool ReadFileSpan(void* dst, unsigned offset, int size);            // 0x8d9050
+    bool WriteFileSpan(const void* src, unsigned offset, int size);     // 0x8d90e0
+    bool DecompressRecord(uint16 type, unsigned src, unsigned a, unsigned b, void* out); // 0x8d9320
+};
+struct MemoryStream {
+virtual void r00();
+virtual void r01();
+virtual void r02();
+virtual void r03();
+virtual void r04();
+virtual void r05();
+virtual void r06();
+virtual int r07();
+    virtual void r08();                              // +0x20
+    virtual int  GetSize(int mode);                  // +0x24
+    virtual bool SetPosition(int delta, int mode);   // +0x28
+    virtual int  GetSize0();                         // +0x2c
+    virtual int  Read(void* buf, int len);           // +0x30
+    bool  SetData(void* data, unsigned size, unsigned a, unsigned b, void* alloc); // 0x93be30
+    void* GetData();                            // 0x93ba70
+    void  SetOption(int option, float value);   // 0x93bb40
+    void  Construct(const char* name);          // 0x93bd50
+    void  Destroy();                            // 0x93bde0
+    int   Attach(void* a, unsigned b);          // 0x93bf70
+};
+struct MemStreamW {
+virtual void w00();
+virtual void w01();
+virtual void w02();
+virtual void w03();
+virtual void w04();
+virtual void w05();
+virtual void w06();
+    virtual int  GetSize();                          // +0x1c
+    virtual void SetSize(int n);                     // +0x20
+    virtual void w09();                              // +0x24
+    virtual void SetPosition(int delta, int mode);   // +0x28
+    virtual void Flush();                            // +0x2c
+    virtual int  Read(void* buf, int len);           // +0x30
+    bool  SetData(void* data, unsigned size, unsigned a, unsigned b, void* alloc);
+    void* GetData();
+    void  SetOption(int option, float value);
+    void  Construct(const char* name);
+    void  Destroy();
+    int   Attach(void* a, unsigned b);
+};
+struct FileStream_s008d_c1a0 {
+virtual void f00();
+virtual void f01();
+virtual void f02();
+virtual void f03();
+    virtual int  IsOpen();                      // +0x10
+    virtual void f05();                         // +0x14
+    virtual bool Close();                       // +0x18 0x00931a70
+    virtual void f07();                         // +0x1c
+    virtual bool f08(int n);                    // +0x20
+    virtual int  f09();                         // +0x24
+    virtual void f10(int a, int b);             // +0x28
+    virtual void f11();                         // +0x2c
+    virtual int  f12();                         // +0x30
+    virtual void f13();                         // +0x34
+    virtual bool f14();                         // +0x38
+    virtual void f15();                         // +0x3c
+    virtual void f16();                         // +0x40
+    virtual int  GetPath(void* buf, int n);     // +0x44
+    virtual void f18();                         // +0x48
+    virtual bool Open(int mode, int a, int b, int c); // +0x4c 0x009318f0
+    void Construct(const char* path);           // 0x931da0
+};
+struct PFRecordRead {
+    char raw[0x70];
+    void  EnsureLoaded();                        // 0x8dc510
+    char  ReadSpan(void* dst, unsigned pos, unsigned len); // 0x8dc3f0
+    void* GetBuffer();                           // 0x8dc5e0
+    void  IStreamDestroy();                      // 0x8dca00
+    PFRecordRead(const PFRecordRead& src, const Key_s008d_c1a0& key, DatabasePackedFile_s008d_c1a0* parent); // 0x8dcc80
+    PFRecordRead(const PFRecordInfo& info, const Key_s008d_c1a0& key, DatabasePackedFile_s008d_c1a0* parent); // 0x8dcdc0
+    void* operator new(unsigned n, void* p) { return p; }
+    void* Destroy(unsigned flags);               // 0x8dcd70
+};
+struct PFRecordWrite {
+    char raw[0x27c];
+    char  OpenTempFile();                        // 0x8dc600
+    void  DeleteTempFile();                      // 0x8dc740
+    char  WriteRecordToParent(void* data, unsigned size);  // 0x8dc890
+    void  IStreamDestroy();                      // 0x8dcbf0
+    bool  IStreamAddRef();                       // 0x8dcc50
+    PFRecordWrite(unsigned access, unsigned size, const Key_s008d_c1a0& key, DatabasePackedFile_s008d_c1a0* parent); // 0x8dcea0
+};
+struct PFRecordReadIstream {
+    unsigned   GetAccessFlags();                 // 0x8dc370
+    void       ForwardGetSize();                 // 0x8dc350
+    int        GetSize(int mode);                // 0x8dc380
+    int        GetSize0();                       // 0x8dc3c0
+    bool       SetPosition(int delta, int mode); // 0x8dcab0
+    int        Read(void* buf, int len);         // 0x8dcb70
+    bool       IStreamAddRef();                   // 0x8dca50
+    bool       IStreamRelease();                  // 0x8dca70
+};
+struct PFRecordWriteIstream {
+    void Close();                                // 0x8dc7b0
+    void SetSize(int n);                         // 0x8dc7e0
+    void SetPosition(int a, int b);              // 0x8dc820
+    void Flush();                                // 0x8dc860
+};
+struct PFIndexModifiable_s008d_c1a0 {
+    char d0[0x2c];                  // +0x00
+    char** mpBucketArray;           // +0x2c
+    int    mnBucketCount;           // +0x30
+    bool ReserveRange(HoleSet_s008d_c1a0* holes, unsigned pos, unsigned end);
+};
+// ---- items of slice s008dc1a0 end
+
 // @ 0x006bbdd0
 bool EA::ResourceMan::DatabasePackedFile::Init()
 {
@@ -576,31 +741,9 @@ bool EA::ResourceMan::DatabasePackedFile::Init()
     return true;
 }
 
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x006bbde0
 void __cdecl FUN_006bbde0(void* self)
 { (void)self; }
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x006bbe50
 void MutexOwner::LockOrUnlock(bool lock)
@@ -609,121 +752,33 @@ void MutexOwner::LockOrUnlock(bool lock)
     else      mMutex.Unlock();
 }
 
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x006bbe80
 void __cdecl FUN_006bbe80(void* self)
 { (void)self; }
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x006bbf10
 void __cdecl FUN_006bbf10(void* self)
 { (void)self; }
 
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x006bbfa0
 void __cdecl FUN_006bbfa0(void* self)
 { (void)self; }
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x006bc020
 void __cdecl FUN_006bc020(void* self)
 { (void)self; }
 
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x006bc0a0
 void __cdecl FUN_006bc0a0(void* self)
 { (void)self; }
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x006bc0f0
 void __cdecl FUN_006bc0f0(void* self)
 { (void)self; }
 
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x006bc130
 void __cdecl FUN_006bc130(void* self)
 { (void)self; }
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x008d81a0
 void * EA::ResourceMan::DatabasePackedFile::AsInterface(EA::COM::InterfaceId nType)
@@ -735,16 +790,6 @@ void * EA::ResourceMan::DatabasePackedFile::AsInterface(EA::COM::InterfaceId nTy
     return (nType == 0xee3f516e) ? static_cast<EA::COM::IUnknown32 *>(this) : 0;
 }
 
-
-
-
-
-
-
-
-
-
-
 // @ 0x008d81d0
 void EA::ResourceMan::DatabasePackedFile::Lock(bool b)
 {
@@ -753,24 +798,6 @@ void EA::ResourceMan::DatabasePackedFile::Lock(bool b)
     else
         mMutex.Unlock();
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x008d8200
 EA::ResourceMan::PFRecordBase * EA::ResourceMan::DatabasePackedFile::CreateRecord(int flag, unsigned int a, unsigned int b, EA::ResourceMan::Key const & c)
@@ -781,24 +808,6 @@ EA::ResourceMan::PFRecordBase * EA::ResourceMan::DatabasePackedFile::CreateRecor
     return 0;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x008d8250
 EA::ResourceMan::PFRecordBase * EA::ResourceMan::DatabasePackedFile::CreateRecord(int flag, void * a, unsigned int b, EA::ResourceMan::Key const & c)
 {
@@ -808,71 +817,17 @@ EA::ResourceMan::PFRecordBase * EA::ResourceMan::DatabasePackedFile::CreateRecor
     return 0;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x008d82a0
 EA::ResourceMan::PFRecordBase * EA::ResourceMan::DatabasePackedFile::CreateRecord(int unused, EA::ResourceMan::PFRecordRead & a, EA::ResourceMan::Key const & b)
 {
     return new (mpAllocator, "Resource/PFRecordRead") PFRecordRead(a, b, this);
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x008d82e0
 EA::ResourceMan::PFRecordBase * EA::ResourceMan::DatabasePackedFile::CreateRecord(int unused, EA::ResourceMan::PFRecordInfo & a, EA::ResourceMan::Key const & b)
 {
     return new (mpAllocator, "Resource/PFRecordRead") PFRecordRead(a, b, this);
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x008d8320
 bool EA::ResourceMan::DatabasePackedFile::ReadHeaders()
@@ -885,47 +840,11 @@ bool EA::ResourceMan::DatabasePackedFile::ReadHeaders()
     return ReadIndexRecord() ? true : false;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x008d8360
 EA::ResourceMan::PFIndex * EA::ResourceMan::DatabasePackedFile::CreateIndex(int unused)
 {
     return new (mpAllocator, "Resource/PFIndexModifiable") PFIndexModifiable(mpAllocator);
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x008d8390
 void EA::ResourceMan::DatabasePackedFile::DestroyIndex(EA::ResourceMan::PFIndex * idx)
@@ -933,24 +852,6 @@ void EA::ResourceMan::DatabasePackedFile::DestroyIndex(EA::ResourceMan::PFIndex 
     if (idx)
         delete idx;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x008d83b0
 void EA::ResourceMan::DatabasePackedFile::MakeIndexModifiable()
@@ -980,24 +881,6 @@ void EA::ResourceMan::DatabasePackedFile::MakeIndexModifiable()
     mMutex.Unlock();
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x008d84a0
 bool EA::ResourceMan::DatabasePackedFile::AllocateSpace(long & pOut, unsigned int size)
 {
@@ -1008,24 +891,6 @@ bool EA::ResourceMan::DatabasePackedFile::AllocateSpace(long & pOut, unsigned in
     }
     return r;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x008d84d0
 bool EA::ResourceMan::DatabasePackedFile::FreeSpace(long pos, unsigned int size, bool flag)
@@ -1047,24 +912,6 @@ bool EA::ResourceMan::DatabasePackedFile::FreeSpace(long pos, unsigned int size,
     return true;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x008d8530
 bool EA::ResourceMan::DatabasePackedFile::SetHoleUse(int extent, float ratio)
 {
@@ -1074,24 +921,6 @@ bool EA::ResourceMan::DatabasePackedFile::SetHoleUse(int extent, float ratio)
     return true;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x008d8570
 int EA::ResourceMan::DatabasePackedFile::ShouldRecordBeCompressed(EA::ResourceMan::Key const & unused, unsigned int size)
 {
@@ -1099,24 +928,6 @@ int EA::ResourceMan::DatabasePackedFile::ShouldRecordBeCompressed(EA::ResourceMa
         return 1;
     return 0;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x008d85a0
 bool EA::ResourceMan::DatabasePackedFile::Attach(bool attach, EA::ResourceMan::Manager * mgr, bool arg3)
@@ -1147,24 +958,6 @@ bool EA::ResourceMan::DatabasePackedFile::Attach(bool attach, EA::ResourceMan::M
     return r;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x008d8650
 bool EA::ResourceMan::DatabasePackedFile::Shutdown()
 {
@@ -1183,24 +976,6 @@ bool EA::ResourceMan::DatabasePackedFile::Shutdown()
     return true;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x008d86c0
 bool EA::ResourceMan::DatabasePackedFile::SetStream(EA::IO::IStream * s)
 {
@@ -1217,24 +992,6 @@ bool EA::ResourceMan::DatabasePackedFile::SetStream(EA::IO::IStream * s)
     return true;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x008d8710
 unsigned int EA::ResourceMan::DatabasePackedFile::GetKeyList(eastl::vector<EA::ResourceMan::Key, eastl::sp_vector_allocator> * a, EA::ResourceMan::KeyFilter * b)
 {
@@ -1248,24 +1005,6 @@ unsigned int EA::ResourceMan::DatabasePackedFile::GetKeyList(eastl::vector<EA::R
     return 0;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x008d8770
 unsigned int EA::ResourceMan::DatabasePackedFile::GetKeyListSortedByPosition(eastl::vector<EA::ResourceMan::Key, eastl::sp_vector_allocator> * a)
 {
@@ -1278,24 +1017,6 @@ unsigned int EA::ResourceMan::DatabasePackedFile::GetKeyListSortedByPosition(eas
     mMutex.Unlock();
     return 0;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x008d87c0
 bool EA::ResourceMan::DatabasePackedFile::Verify()
@@ -1311,24 +1032,6 @@ bool EA::ResourceMan::DatabasePackedFile::Verify()
     mMutex.Unlock();
     return r;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x008d8820
 bool EA::ResourceMan::DatabasePackedFile::DecompressData(unsigned short unused, unsigned char const * buf, unsigned int size, unsigned int expectedSize, unsigned char * dest)
@@ -1348,24 +1051,6 @@ bool EA::ResourceMan::DatabasePackedFile::DecompressData(unsigned short unused, 
     return r;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x008d8890
 bool EA::ResourceMan::DatabasePackedFile::InternalSetPosition(long pos)
 {
@@ -1377,24 +1062,6 @@ bool EA::ResourceMan::DatabasePackedFile::InternalSetPosition(long pos)
     }
     return mpStream.mpObject->SetPosition(pos, (EA::IO::PositionType)0);
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x008d88d0
 unsigned int EA::ResourceMan::DatabasePackedFile::InternalRead(void * dst, unsigned int size)
@@ -1412,24 +1079,6 @@ unsigned int EA::ResourceMan::DatabasePackedFile::InternalRead(void * dst, unsig
     return mpStream.mpObject->Read(dst, size);
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x008d8930
 unsigned int EA::ResourceMan::DatabasePackedFile::InternalGetSize()
 {
@@ -1437,24 +1086,6 @@ unsigned int EA::ResourceMan::DatabasePackedFile::InternalGetSize()
         return mnMemorySize;
     return mpStream.mpObject->GetSize();
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x008d8950
 bool EA::ResourceMan::DatabasePackedFile::InternalClose()
@@ -1465,24 +1096,6 @@ bool EA::ResourceMan::DatabasePackedFile::InternalClose()
     }
     return mpStream.mpObject->Close();
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x008d8980
 bool EA::ResourceMan::DatabasePackedFile::Open(int access, int mode, bool autoOpen)
@@ -1555,24 +1168,6 @@ bool EA::ResourceMan::DatabasePackedFile::Open(int access, int mode, bool autoOp
     return r;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x008d8b30
 bool EA::ResourceMan::DatabasePackedFile::CloseOpenRecords()
 {
@@ -1586,24 +1181,6 @@ bool EA::ResourceMan::DatabasePackedFile::CloseOpenRecords()
     }
     return r;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x008d8b70
 bool EA::ResourceMan::DatabasePackedFile::DeleteRecord(EA::ResourceMan::Key const & key)
@@ -1626,24 +1203,6 @@ bool EA::ResourceMan::DatabasePackedFile::DeleteRecord(EA::ResourceMan::Key cons
     mMutex.Unlock();
     return r;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x008d8c50
 bool EA::ResourceMan::DatabasePackedFile::ReadHeaderRecord()
@@ -1686,24 +1245,6 @@ bool EA::ResourceMan::DatabasePackedFile::ReadHeaderRecord()
     return r;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x008d8e20
 bool EA::ResourceMan::DatabasePackedFile::WriteEmptyHeaderRecord()
 {
@@ -1722,24 +1263,6 @@ bool EA::ResourceMan::DatabasePackedFile::WriteEmptyHeaderRecord()
     }
     return r;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x008d8ee0
 bool EA::ResourceMan::DatabasePackedFile::WriteHeaderRecord()
@@ -1778,24 +1301,6 @@ bool EA::ResourceMan::DatabasePackedFile::WriteHeaderRecord()
     return true;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x008d9000
 bool EA::ResourceMan::DatabasePackedFile::VerifyIndexRecordIntegrity()
 {
@@ -1806,24 +1311,6 @@ bool EA::ResourceMan::DatabasePackedFile::VerifyIndexRecordIntegrity()
         size = mpStream.mpObject->GetSize();
     return mpIndex->Validate(0, size);
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x008d9050
 bool EA::ResourceMan::DatabasePackedFile::ReadFileSpan(void * dst, long pos, unsigned int size)
@@ -1849,24 +1336,6 @@ fail:
     return false;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x008d90e0
 bool EA::ResourceMan::DatabasePackedFile::WriteFileSpan(void const * dst, long pos, unsigned int size)
 {
@@ -1886,24 +1355,6 @@ bool EA::ResourceMan::DatabasePackedFile::WriteFileSpan(void const * dst, long p
     return false;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x008d9170
 bool EA::ResourceMan::DatabasePackedFile::ReadRecordRaw(EA::ResourceMan::Key const & key, void * dst, unsigned int size)
 {
@@ -1921,15 +1372,6 @@ bool EA::ResourceMan::DatabasePackedFile::ReadRecordRaw(EA::ResourceMan::Key con
     mMutex.Unlock();
     return false;
 }
-
-
-
-
-
-
-
-
-
 
 // @ 0x008d91e0
 bool EA::ResourceMan::DatabasePackedFile::CompressData(void const * src, unsigned int size, void *& ppOut, unsigned int & pOutSize, unsigned short & pFlags)
@@ -2440,9 +1882,6 @@ bool DatabasePackedFile_s008d_a140::CompactDatabaseInternal()
     return cResult != 0;
 }
 
-
-
-
 // @ 0x008da3d0
 bool DatabasePackedFile_s008d_a140::OpenRecord(void* pKey, unsigned access, unsigned reqFlags, unsigned mode, void* arg5, void* pOutRecord)
 {
@@ -2526,9 +1965,6 @@ done:
     return pRecord != 0;
 }
 
-
-
-
 // @ 0x008da750
 bool EA::ResourceMan::DatabasePackedFile::ReadIndexRecord()
 {
@@ -2573,9 +2009,6 @@ cleanup:
     return bResult;
 }
 
-
-
-
 // @ 0x008da8b0
 bool EA::ResourceMan::DatabasePackedFile::CompactDatabase()
 {
@@ -2591,9 +2024,6 @@ bool EA::ResourceMan::DatabasePackedFile::CompactDatabase()
     mMutex.Unlock();
     return bResult;
 }
-
-
-
 
 // @ 0x008da920
 char DatabasePackedFile_s008d_a140::FUN_008da920(void* param2)
@@ -2622,9 +2052,6 @@ char DatabasePackedFile_s008d_a140::FUN_008da920(void* param2)
     mMutex.Unlock();
     return cResult;
 }
-
-
-
 
 // @ 0x008daba0
 bool DatabasePackedFile_s008d_a140::Flush()
@@ -2658,9 +2085,6 @@ done:
     return bResult;
 }
 
-
-
-
 // @ 0x008dac90
 void BmpGlyphHash::DoFreeNodes(void** pBuckets, unsigned n)
 {
@@ -2674,9 +2098,6 @@ void BmpGlyphHash::DoFreeNodes(void** pBuckets, unsigned n)
         pBuckets[i] = 0;
     }
 }
-
-
-
 
 // @ 0x008dace0
 void FUN_008dace0(SortNode** p1, SortNode** p2)
@@ -2694,9 +2115,6 @@ void FUN_008dace0(SortNode** p1, SortNode** p2)
         }
     }
 }
-
-
-
 
 // @ 0x008dad30
 void FUN_008dad30(SortNode** p1, SortNode** p2)
@@ -2718,9 +2136,6 @@ void FUN_008dad30(SortNode** p1, SortNode** p2)
     }
 }
 
-
-
-
 // @ 0x008dad80
 void FUN_008dad80(SortNode** array, int topIndex, int holeIndex, SortNode* value, int extra)
 {
@@ -2740,9 +2155,6 @@ void FUN_008dad80(SortNode** array, int topIndex, int holeIndex, SortNode* value
     array[holeIndex] = value;
     (void)extra;
 }
-
-
-
 
 // @ 0x008dadd0
 void FUN_008dadd0(SortNode** array, int topIndex, int length, int holeIndex, SortNode* value, int extra)
@@ -2765,9 +2177,6 @@ void FUN_008dadd0(SortNode** array, int topIndex, int length, int holeIndex, Sor
     FUN_008dad80(array, topIndex, holeIndex, value, extra);
 }
 
-
-
-
 // @ 0x008dae40
 int HoleSet_s008d_a140::GetTotalSize()
 {
@@ -2776,9 +2185,6 @@ int HoleSet_s008d_a140::GetTotalSize()
         nSum += *(int*)((char*)p + 0x14);
     return nSum;
 }
-
-
-
 
 // @ 0x008dae70
 void HoleSet_s008d_a140::Erase(void** ppOut, void* pNode)
@@ -2789,9 +2195,6 @@ void HoleSet_s008d_a140::Erase(void** ppOut, void* pNode)
     operator_delete__(pNode);
     *ppOut = pNext;
 }
-
-
-
 
 // @ 0x008daf40
 int PFIndexModifiable::GetDataEnd()
@@ -2818,9 +2221,6 @@ int PFIndexModifiable::GetDataEnd()
     return (int)nEnd;
 }
 
-
-
-
 // @ 0x008dafa0
 int PFIndexModifiable::GetTotalDiskSize()
 {
@@ -2844,8 +2244,6 @@ int PFIndexModifiable::GetTotalDiskSize()
     }
     return nTotal;
 }
-
-
 
 // @ 0x008daff0
 bool PFIndexModifiable_s008d_aff0::Write(void** ppBuf, unsigned* pSize, unsigned count, char flag)
@@ -2941,7 +2339,6 @@ bool PFIndexModifiable_s008d_aff0::Write(void** ppBuf, unsigned* pSize, unsigned
     return true;
 }
 
-
 // @ 0x008db230
 void PFIndexModifiable_s008d_aff0::SetIsSaved()
 {
@@ -2959,7 +2356,6 @@ void PFIndexModifiable_s008d_aff0::SetIsSaved()
         while (p == 0) { ++pb; p = *pb; }
     }
 }
-
 
 // @ 0x008db280
 bool PFIndexModifiable_s008d_aff0::CheckFilesInRange(unsigned a, unsigned b)
@@ -2986,7 +2382,6 @@ bool PFIndexModifiable_s008d_aff0::CheckFilesInRange(unsigned a, unsigned b)
     return true;
 }
 
-
 // @ 0x008db310
 bool PFIndexModifiable_s008d_aff0::CheckFilesInSizeRange(unsigned a, unsigned b)
 {
@@ -3011,7 +2406,6 @@ bool PFIndexModifiable_s008d_aff0::CheckFilesInSizeRange(unsigned a, unsigned b)
     return true;
 }
 
-
 // @ 0x008db3a0
 void HoleSet_s008d_aff0::Reset(int extent)
 {
@@ -3025,7 +2419,6 @@ void HoleSet_s008d_aff0::Reset(int extent)
     *(void**)(b + 0x14) = 0;
     mExtent = extent;
 }
-
 
 // @ 0x008db450
 void* HT::InsertUnique(void* out, const void* val, unsigned flags)
@@ -3068,7 +2461,6 @@ void* HT::InsertUnique(void* out, const void* val, unsigned flags)
     return out;
 }
 
-
 // @ 0x008db560
 int* RBTree::insertUnique(int* out, int* parent, int* value, char flag)
 {
@@ -3088,7 +2480,6 @@ int* RBTree::insertUnique(int* out, int* parent, int* value, char flag)
     *out = node;
     return out;
 }
-
 
 // @ 0x008db5e0
 extern "C" void* FUN_008db5e0(int* lo, int* hi, int* pivot)
@@ -3114,7 +2505,6 @@ extern "C" void* FUN_008db5e0(int* lo, int* hi, int* pivot)
     }
 }
 
-
 // @ 0x008db630
 extern "C" void FUN_008db630(int* lo, int* mid, int* hi, int d)
 {
@@ -3128,7 +2518,6 @@ extern "C" void FUN_008db630(int* lo, int* mid, int* hi, int d)
     }
     FUN_008daef0(lo, mid, d);
 }
-
 
 // @ 0x008db730
 PFIndexModifiable_s008d_aff0::PFIndexModifiable_s008d_aff0(void* alloc)
@@ -3146,7 +2535,6 @@ PFIndexModifiable_s008d_aff0::PFIndexModifiable_s008d_aff0(void* alloc)
     *(unsigned*)((char*)this + 0x30) = 1;
     *(void**)((char*)this + 0x2c) = (void*)0x154df28;
 }
-
 
 // @ 0x008db7b0
 void* PFIndexModifiable_s008d_aff0::_virtual_dtor(int flags)
@@ -3168,7 +2556,6 @@ void* PFIndexModifiable_s008d_aff0::_virtual_dtor(int flags)
     return this;
 }
 
-
 // @ 0x008db810
 void* PFIndexModifiable_s008d_aff0::GetFileInfo(const void* key)
 {
@@ -3179,7 +2566,6 @@ void* PFIndexModifiable_s008d_aff0::GetFileInfo(const void* key)
         return (char*)out[0] + 0xc;
     return 0;
 }
-
 
 // @ 0x008db850
 bool PFIndexModifiable_s008d_aff0::RemoveFile(const void* key, void* out)
@@ -3201,7 +2587,6 @@ bool PFIndexModifiable_s008d_aff0::RemoveFile(const void* key, void* out)
     return false;
 }
 
-
 // @ 0x008db8c0
 HoleSet_s008d_aff0::HoleSet_s008d_aff0()
 {
@@ -3216,7 +2601,6 @@ HoleSet_s008d_aff0::HoleSet_s008d_aff0()
     *((char*)this + 0x14) = 0;
     *(void**)((char*)this + 0x18) = 0;
 }
-
 
 // @ 0x008db8f0
 extern "C" void FUN_008db8f0(int* lo, int* hi, int depth, int d)
@@ -3244,7 +2628,6 @@ extern "C" void FUN_008db8f0(int* lo, int* hi, int depth, int d)
     if (depth == 0)
         FUN_008db630(lo, hi, hi, d);
 }
-
 
 // @ 0x008db9b0
 bool PFIndexModifiable_s008d_aff0::Read(void* buf, unsigned a3, unsigned count, char flag)
@@ -3315,7 +2698,6 @@ bool PFIndexModifiable_s008d_aff0::Read(void* buf, unsigned a3, unsigned count, 
     return true;
 }
 
-
 // @ 0x008dbb10
 void* HT::GetFileInfoRef(const void* key)
 {
@@ -3341,7 +2723,6 @@ void* HT::GetFileInfoRef(const void* key)
     }
     return (char*)out[0] + 0xc;
 }
-
 
 // @ 0x008dbcf0
 int PFIndexModifiable_s008d_aff0::GetFiles(void* vec, void* filter)
@@ -3378,7 +2759,6 @@ int PFIndexModifiable_s008d_aff0::GetFiles(void* vec, void* filter)
     }
     return n;
 }
-
 
 // @ 0x008dbdb0
 unsigned PFIndexModifiable_s008d_aff0::GetAllFiles(int a2, unsigned a3, int a4, void* vec)
@@ -3422,7 +2802,6 @@ unsigned PFIndexModifiable_s008d_aff0::GetAllFiles(int a2, unsigned a3, int a4, 
     return a3;
 }
 
-
 // @ 0x008dbeb0
 void PFIndexModifiable_s008d_aff0::PutFileInfo(int a1, int* info)
 {
@@ -3436,7 +2815,6 @@ void PFIndexModifiable_s008d_aff0::PutFileInfo(int a1, int* info)
     out[2] = c;
     out[3] = d;
 }
-
 
 // @ 0x008dbef0
 // HoleTree::DoInsert - __thiscall (ecx = the tree header at HoleSet+4, ret 12). Forwards the
@@ -3453,7 +2831,6 @@ void* HoleTreeDoInsertThunk::DoInsert(void** ppOut, void* pAfter, const int* pRa
     ((Fn8dbc20)FUN_008dbc20)(this, ppOut, pAfter, (void*)pRange, aligned);
     return ppOut;
 }
-
 
 // @ 0x008dbf20
 HoleNode* HoleSet_s008d_aff0::AllocAt(int size)
@@ -3497,7 +2874,6 @@ HoleNode* HoleSet_s008d_aff0::AllocAt(int size)
     mExtent = old + size;
     return (HoleNode*)old;
 }
-
 
 // @ 0x008dc000
 void HoleSet_s008d_aff0::Release(unsigned pos, int size)
@@ -3549,7 +2925,6 @@ void HoleSet_s008d_aff0::Release(unsigned pos, int size)
     ((Fn8dbc20)FUN_008dbc20)((char*)this + 4, &aligned, slot, &pair[0], aligned);
 }
 
-
 // @ 0x008dc120
 void HoleSet_s008d_aff0::MergeFrom(HoleSet_s008d_aff0* other)
 {
@@ -3568,4 +2943,289 @@ void HoleSet_s008d_aff0::MergeFrom(HoleSet_s008d_aff0* other)
     *(void**)((char*)other + 0x18) = 0;
     *(void**)((char*)other + 0x0c) = anchor;
     *(void**)((char*)other + 0x08) = anchor;
+}
+
+// @ 0x008dc1a0
+bool HoleSet_s008d_c1a0::Insert(int pos, int size)
+{
+    if (size == 0)
+        return true;
+    int end = pos + size;
+    int extent = mExtent;
+    if (end > extent) {
+        if (pos < extent)
+            return false;
+        mExtent = end;
+        if (pos > extent)
+            Release(extent, pos - extent);
+        return true;
+    }
+    // Find the first hole positioned strictly after `pos` (rbtree lower_bound).
+    char* root = *(char**)((char*)&mTree + 0xc);
+    char* at = (char*)&mTree + 4;
+    while (root != 0) {
+        if (pos < *(int*)(root + 0x10)) {
+            at = root;
+            root = *(char**)(root + 4);
+        } else {
+            root = *(char**)root;
+        }
+    }
+    if (at == *(char**)((char*)&mTree + 8))
+        return false;
+    char* prev = (char*)RBTreeDecrement(at);
+    int prevPos = *(int*)(prev + 0x10);
+    int prevSize = *(int*)(prev + 0x14);
+    void* out;
+    mTree.Erase(&out, prev);
+    int holeEnd = prevPos + prevSize;
+    int range[2];
+    if (prevPos < pos) {
+        range[0] = prevPos;
+        range[1] = pos - prevPos;
+        mTree.DoInsert(&out, at, range);
+    }
+    if (end < holeEnd) {
+        range[0] = end;
+        range[1] = holeEnd - end;
+        mTree.DoInsert(&out, at, range);
+    }
+    return true;
+}
+
+// @ 0x008dc2b0
+bool PFIndexModifiable_s008d_c1a0::ReserveRange(HoleSet_s008d_c1a0* holes, unsigned pos, unsigned end)
+{
+    char** pBucket = mpBucketArray;
+    char* node = *pBucket;
+    if (node == 0) {
+        ++pBucket;
+        while (*pBucket == 0)
+            ++pBucket;
+        node = *pBucket;
+    }
+    char* last = mpBucketArray[mnBucketCount];
+    while (node != last) {
+        unsigned holeSize = *(unsigned*)(node + 0x10);
+        if (holeSize != 0) {
+            unsigned holePos = *(unsigned*)(node + 0xc);
+            if (holePos < pos || end <= holePos || end - holePos < holeSize)
+                return false;
+            if (!holes->Insert((int)holePos, (int)holeSize))
+                return false;
+        }
+        node = *(char**)(node + 0x1c);
+        while (node == 0) {
+            ++pBucket;
+            node = *pBucket;
+        }
+    }
+    return true;
+}
+
+// @ 0x008dc350
+void PFRecordReadIstream::ForwardGetSize()
+{
+    char* obj = (char*)this - 0x20;
+    void** vt = *(void***)obj;
+    typedef void (__thiscall *F)(void*);
+    ((F)vt[0x24 / 4])(obj);
+}
+
+// @ 0x008dc370
+unsigned PFRecordReadIstream::GetAccessFlags()
+{
+    return *(unsigned*)((char*)this - 4);
+}
+
+// @ 0x008dc3f0
+char PFRecordRead::ReadSpan(void* dst, unsigned pos, unsigned len)
+{
+    unsigned bufPos = *(unsigned*)(raw + 0x28);
+    if (bufPos <= pos && pos < bufPos + 0x200) {
+        unsigned avail = 0x200 - (pos - bufPos);
+        char* src = (char*)*(void**)(raw + 0x24) + (pos - bufPos);
+        if (len <= avail) {
+            memcpy_pf(dst, src, len);
+            return 1;
+        }
+        memcpy_pf(dst, src, avail);
+        dst = (char*)dst + avail;
+        pos += avail;
+        len -= avail;
+    }
+    if (len < 0x200 && pos + len < *(unsigned*)(raw + 0x64)) {
+        *(unsigned*)(raw + 0x28) = 0xffffffff;
+        if (*(void**)(raw + 0x24) == 0) {
+            IAllocator* alloc = ((DatabasePackedFile_s008d_c1a0*)*(void**)(raw + 0x18))->GetAllocator();
+            *(void**)(raw + 0x24) = alloc->Alloc(0x200, "Resource/PFReadBuffer", 0);
+        }
+        if (*(void**)(raw + 0x24) != 0) {
+            unsigned n = 0x200;
+            if (*(unsigned*)(raw + 0x64) < pos + 0x200)
+                n = *(unsigned*)(raw + 0x64) - pos;
+            if (((DatabasePackedFile_s008d_c1a0*)*(void**)(raw + 0x18))->ReadFileSpan(
+                    *(void**)(raw + 0x24), *(unsigned*)(raw + 0x50) + pos, (int)n)) {
+                *(unsigned*)(raw + 0x28) = pos;
+                memcpy_pf(dst, *(void**)(raw + 0x24), len);
+                return 1;
+            }
+            return 0;
+        }
+    }
+    return ((DatabasePackedFile_s008d_c1a0*)*(void**)(raw + 0x18))->ReadFileSpan(
+               dst, *(unsigned*)(raw + 0x50) + pos, (int)len) ? 1 : 0;
+}
+
+// @ 0x008dc510
+void PFRecordRead::EnsureLoaded()
+{
+    unsigned char flags = *(unsigned char*)(raw + 0x68);
+    if (flags == 0 || flags == 3)
+        return;
+    DatabasePackedFile_s008d_c1a0* parent = (DatabasePackedFile_s008d_c1a0*)*(void**)(raw + 0x18);
+    IAllocator* alloc = parent->GetAllocator();
+    if (*(uint16*)(raw + 0x5c) != 0) {
+        void* p = alloc->Alloc(*(unsigned*)(raw + 0x64), "Resource/RecordData", 0);
+        if (p == 0)
+            goto loaded;
+        if (!parent->DecompressRecord(*(uint16*)(raw + 0x5c), *(unsigned*)(raw + 0x50),
+                                      *(unsigned*)(raw + 0x54), *(unsigned*)(raw + 0x58), p)) {
+            alloc->Free(p, 0);
+            goto loaded;
+        }
+        ((MemoryStream*)(raw + 0x2c))->SetData(p, *(unsigned*)(raw + 0x64), 1, 1, alloc);
+    } else {
+        void* p = alloc->Alloc(*(unsigned*)(raw + 0x64), "Resource/RecordData", 0);
+        if (p == 0)
+            goto loaded;
+        if (!parent->ReadFileSpan(p, *(unsigned*)(raw + 0x50), *(int*)(raw + 0x64))) {
+            *(unsigned char*)(raw + 0x68) = 0;
+            return;
+        }
+        ((MemoryStream*)(raw + 0x2c))->SetData(p, *(unsigned*)(raw + 0x64), 1, 1, alloc);
+    }
+loaded:
+    *(unsigned char*)(raw + 0x68) |= 2;
+}
+
+// @ 0x008dc5e0
+void* PFRecordRead::GetBuffer()
+{
+    EnsureLoaded();
+    unsigned char flags = *(unsigned char*)(raw + 0x68);
+    if (flags == 3)
+        return *(void**)(raw + 0x30);
+    return 0;
+}
+
+// @ 0x008dc600
+char PFRecordWrite::OpenTempFile()
+{
+    wchar_t name[20];
+    const wchar_t* fmt = L"Record_%08x_%08x";
+    memcpy_pf(name, fmt, sizeof(L"Record_%08x_%08x"));
+    Sprintf16(name, fmt, *(unsigned*)(raw + 0x10), *(unsigned*)(raw + 0xc));
+    wchar_t path[260];
+    if (!CreateTempFile(path, 0, name, 0))
+        return 0;
+    FileStream_s008d_c1a0* fs = (FileStream_s008d_c1a0*)(raw + 0x48);
+    fs->GetPath(path, 0x104);
+    if (!fs->Open(3, 4, 1, 0))
+        return 0;
+    fs->f08(0);
+    return 1;
+}
+
+// @ 0x008dc740
+void PFRecordWrite::DeleteTempFile()
+{
+    FileStream_s008d_c1a0* fs = (FileStream_s008d_c1a0*)(raw + 0x48);
+    if (fs->IsOpen()) {
+        fs->Close();
+        wchar_t path[260];
+        fs->GetPath(path, 0x104);
+        IO_File_Remove_s008d_c1a0(path);
+    }
+}
+
+// @ 0x008dc7b0
+void PFRecordWriteIstream::Close()
+{
+    FileStream_s008d_c1a0* fs = (FileStream_s008d_c1a0*)((char*)this + 0x28);
+    if (fs->IsOpen())
+        fs->f07();
+    else
+        ((MemStreamW*)((char*)this + 4))->GetSize();
+}
+
+// @ 0x008dc7e0
+void PFRecordWriteIstream::SetSize(int n)
+{
+    FileStream_s008d_c1a0* fs = (FileStream_s008d_c1a0*)((char*)this + 0x28);
+    if (fs->IsOpen())
+        fs->f08(n);
+    else
+        ((MemStreamW*)((char*)this + 4))->SetSize(n);
+}
+
+// @ 0x008dc820
+void PFRecordWriteIstream::SetPosition(int a, int b)
+{
+    FileStream_s008d_c1a0* fs = (FileStream_s008d_c1a0*)((char*)this + 0x28);
+    if (fs->IsOpen())
+        fs->f10(a, b);
+    else
+        ((MemStreamW*)((char*)this + 4))->SetPosition(a, b);
+}
+
+// @ 0x008dc860
+void PFRecordWriteIstream::Flush()
+{
+    FileStream_s008d_c1a0* fs = (FileStream_s008d_c1a0*)((char*)this + 0x28);
+    if (fs->IsOpen())
+        fs->f11();
+    else
+        ((MemStreamW*)((char*)this + 4))->Flush();
+}
+
+// @ 0x008dc890
+char PFRecordWrite::WriteRecordToParent(void* data, unsigned size)
+{
+    char ok = 0;
+    if (*(int*)(raw + 0x1c) == 0)
+        return 0;
+    FileStream_s008d_c1a0* fs = (FileStream_s008d_c1a0*)(raw + 0x48);
+    if (!fs->IsOpen()) {
+        // Memory-stream path: clamp to the buffered size and copy straight through.
+        MemStreamW* ms = (MemStreamW*)(raw + 0x24);
+        int have = ms->GetSize();
+        unsigned n = (unsigned)have < size ? (unsigned)have : size;
+        ((DatabasePackedFile_s008d_c1a0*)*(void**)(raw + 0x18))->WriteFileSpan(ms->GetData(), (unsigned)data, (int)n);
+        return ok;
+    }
+    IAllocator* alloc = ((DatabasePackedFile_s008d_c1a0*)*(void**)(raw + 0x18))->GetAllocator();
+    void* buf = alloc->Alloc(0x4000, "Resource/RecordData", 0);
+    if (buf == 0)
+        return ok;
+    unsigned done = 0;
+    unsigned todo = (unsigned)fs->f09();
+    ok = 1;
+    fs->f10(0, 0);
+    while (done < size && ok) {
+        unsigned chunk = size - done;
+        if (chunk > 0x4000)
+            chunk = 0x4000;
+        int got = fs->f12();
+        ok = 0;
+        if ((unsigned)got == chunk) {
+            ok = ((DatabasePackedFile_s008d_c1a0*)*(void**)(raw + 0x18))->WriteFileSpan(
+                     buf, *(unsigned*)(raw + 0x50) + done, (int)chunk) ? 1 : 0;
+            done += chunk;
+        }
+        (void)todo;
+    }
+    alloc->Free(buf, 0);
+    fs->f10(0, 0);
+    return ok;
 }
