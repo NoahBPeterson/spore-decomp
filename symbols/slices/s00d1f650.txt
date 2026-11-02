@@ -5,7 +5,7 @@
 00d1fb30 SP::ValidateAbilityTarget  # eastl::vector<cSpatialObject*> terrain scan; 55-entry type dispatch (5/6/7 -> tools 4/5/6, 0x2b/0x3a/0x3b -> tools 3/1/2); returns 0/13/14/15/1 (complete, nonmatching - WEAK)
 00d1fe00 SP::ActivateAbilityTarget  # same terrain scan + dispatch, then 0xd1e5c0 slot lookup, >=g_kOne gate and 0xbc97f0 activation anim (complete, nonmatching - WEAK)
 00d200a0 SP::ScoreAbilityRange  # range probe (0xd1e830/0xd1e610), caster vtable slot 0xb0 distance, tool-index matched terrain scan, max score (complete, nonmatching - WEAK)
-00d201f0 SP::cTribeGameBehaviorFish::Score  # tribe tool lookup per behavior type (5/6/7 -> 4/5/6, 0x2b/0x3a/0x3b -> 1/2/3) then terrain scan for a wielding creature (complete, nonmatching - WEAK)
+00d201f0 ?F_d201f0@@YAEPAUAbilityInfo@@@Z  # F_d201f0 migrated from s00d1f650 (verbatim, slice spelling)
 00d203d0 SP::cCreatureCamera::Init  # (byte-exact)
 00d203e0 SP::cCreatureCamera::Deactivate  # (byte-exact)
 00d20430 SP::cCreatureCamera::SetCameraUI  # UI panel visibility/cursor toggling (complete, nonmatching - FAIL)

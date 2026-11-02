@@ -1,8 +1,8 @@
 00d2dd20 ?DrawLayer@cCreatureDisplayStrategy_s00d2_dd20@@QAEXIH@Z  # cCreatureDisplayStrategy_s00d2_dd20::DrawLayer migrated from s00d2dd20 (verbatim, slice spelling)
-00d2e2e0  cCreatureModeEventSink::Update(float) -> void  # forward the event amount to the bar sub-object's FUN_00d2d560
+00d2e2e0 ?Update@cCreatureModeEventSink@@QAEXM@Z  # cCreatureModeEventSink::Update migrated from s00d2dd20 (verbatim, slice spelling)
 00d2e360  GetTerrainHeight() -> double  # current terrain sphere height promoted to double (st0 result)
 00d2e380  GetTierHeight(int) -> double  # -1 asks the avatar's combat target chain (vtable +0xd8) for the tier, else the shell level; 0..3 selects the tier height
-00d2e410  GetTierBaseHeight(int) -> double  # terrain height minus the stacked tier heights (switch 1/2/3, no default)
+00d2e410 ?GetTierBaseHeight@@YANH@Z  # GetTierBaseHeight migrated from s00d2dd20 (verbatim, slice spelling)
 00d2e480 ?SetClampedValue@@YAXM@Z  # SetClampedValue migrated from s00d2dd20 (verbatim, slice spelling)
 00d2e4a0  SetCreatureDisplayMode(int,bool) -> void  # re-entrancy guarded mode switch: calls the mode helper on the sub-object at ((char*)mpOwnerB4c + 8), then the per-creature id/guid helpers and the +0xd8 mode query
 00d2e580  RefreshViewScale() -> void  # tier height composition, clamped span, and dz*dz + (dy*dy + dx*dx) support radius (double via fsqrt) -> view scale

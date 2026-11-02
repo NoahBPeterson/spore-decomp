@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+00d201f0 260 SP::cTribeGameBehaviorFish::Score: complete; tribe tool lookup per behavior type (5/6/7 -> 4/5/6, 0x2b/0x3a/0x3b -> 1/2/3) then terrain scan for a wielding creature; cl lowered the switch and vector loop differently. flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast. difftest WEAK (400 valid, 6.0% cov, no mismatch).

@@ -1,0 +1,3 @@
+# source  symbol  va  flags
+../src/game/SPGonzago/_at_00d20000.cpp  ?Update@cCreatureModeEventSink@@QAEXM@Z  00d2e2e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00d20000.cpp  ?GetTierBaseHeight@@YANH@Z  00d2e410  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
