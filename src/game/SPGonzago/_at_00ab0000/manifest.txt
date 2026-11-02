@@ -1,0 +1,14 @@
+# source  symbol  va  flags
+../src/game/SPGonzago/_at_00ab0000.cpp  ?SetUnknownFlag@cInteractionStack@@QAEXXZ  00abf6f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00ab0000.cpp  ?NotifyBehaviorManager@cInteractionStack@@QAEXXZ  00abf710  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00ab0000.cpp  ?v20Call@cInteractionStack@@QAEXPAX00@Z  00abf760  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00ab0000.cpp  ?v24Call@cInteractionStack@@QAEXPAX00@Z  00abf790  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00ab0000.cpp  ?Forward@cInteractionStack@@QAEXPAX@Z  00abf7c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00ab0000.cpp  ?GetInner1c@cInteractionStack@@QAEPAXXZ  00abf7e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00ab0000.cpp  ?GetInner1cFrom28@cInteractionStack@@QAEPAXXZ  00abf800  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00ab0000.cpp  ?HasPositive38@cInteractionStack@@QAE_NXZ  00abf820  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00ab0000.cpp  ?SwapFlag@cInteractionStack@@QAE_N_N@Z  00abf850  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00ab0000.cpp  ?Count@cInteractionStack@@QAEHXZ  00abf860  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00ab0000.cpp  ?pop_back@tBlockVector4@@QAEXXZ  00abf980  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00ab0000.cpp  ??1cInteractionStack@@UAE@XZ  00abfec0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00ab0000.cpp  ?SetFlag@cInteractionStack@@QAEX_N@Z  00abfee0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
