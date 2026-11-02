@@ -1,3 +1,11 @@
-# va  diff-bytes  reason  (complete behaviourally-equivalent source, not byte-exact)
+# va  diff-bytes  reason
 00a80240 1309 complete (flags /O2 /MD /Gy /TP /arch:SSE /fp:fast); same Lock/Unlock vslots (0, 2), same constants, ToByte via _mm intrinsics gives the original's aligned ebp frame; 1534 vs 1758 bytes: frame 0xe4 vs 0xf4, register allocation (stream ptr spilled) and rotation-term scheduling differ
+00a80920 16 complete (flags /O2 /MD /Gy /TP /arch:SSE /fp:fast); same size 172; only the two 16-bit zero stores are scheduled in the opposite order ([+8] before [+0xa], ecx/eax swapped); equiv PASS 400/400 valid, 100% coverage
+00a809d0 73 complete (flags /O2 /MD /Gy /TP /arch:SSE /fp:fast); 84 vs 99 bytes; target's redundant end-iterator null check and list reloads were folded by the compiler; equiv UNSUPPORTED 0/400 valid (fuzzer read faults)
+00a80a40 91 complete (flags /O2 /MD /Gy /TP /arch:SSE /fp:fast); 103 vs 119 bytes; same end-iterator fold as 00a809d0, tail call jmp eax matches; equiv UNSUPPORTED 0/400 valid (fuzzer read faults)
+00a80ac0 52 complete (flags /O2 /MD /Gy /TP /arch:SSE /fp:fast); 78 vs 181 bytes; bounds() includes the adjacent unnamed destructor 00a80b40 (target ctor 128 bytes + destructor); all ctor fields match; equiv PASS 400/400 valid, 100% coverage
+00a80b80 68 complete (flags /O2 /MD /Gy /TP /arch:SSE /fp:fast); 107 vs 119 bytes; target keeps redundant head reloads and a null check in the list pop; equiv UNSUPPORTED 0/400 valid (fuzzer read/write faults)
+00a80d10 113 complete (flags /O2 /MD /Gy /TP /arch:SSE /fp:fast); 177 vs 172 bytes; edi-based hash-table base and final vtable store scheduling differ; equiv UNSUPPORTED 0/400 valid (fuzzer read/write-prot faults)
+00a80ee0 149 complete (flags /O2 /MD /Gy /TP /arch:SSE /fp:fast); 219 vs 220 bytes; same field values, vtable/float-constant store scheduling and xmm register choice differ; equiv PASS 400/400 valid, 100% coverage
+00a80fe0 151 complete (flags /O2 /MD /Gy /TP /arch:SSE /fp:fast); 177 vs 192 bytes; inline erase vs target memcpy and list-unlink scheduling; equiv WEAK 176/400 valid, 64.8% coverage
 00a81110 367 cSurfaceDecalManager::AddDecal: complete.  The original is heavily inlined (EAAllocate/intrusive-list/map/vector/transform code) and our reconstruction allocates registers and materialises the intrusive list/vector nodes in a different shape; size 459 vs 505.  Equiv FAIL, 5/240 valid inputs, memory-pool dword differs (low validity: the reconstructed callees fault on random `this`). flags: /O2 /MD /Gy /EHsc /TP

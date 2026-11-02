@@ -6,6 +6,7 @@
 #include <xmmintrin.h>
 #include "EA/Swarm/cVisualEffect.h"
 #include <math.h>
+#include <string.h>
 
 // unnamed retail callees and globals (address in the comment)
 extern "C" void* FUN_00539440(void* a, void* b);   // EA::Swarm::normalized
@@ -115,6 +116,163 @@ public:
 }
 using EA::Swarm::cSurfaceDecalManager;
 // ---- items of slice s00a81110 end
+
+// ---- items of slice s00a80240_g7 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern float g_167776c;          // 0x0167776c
+extern float g_1677770;          // 0x01677770
+extern float g_1677774;          // 0x01677774
+extern float g_1564cc8;          // 0x01564cc8
+extern float g_1457d54;          // 0x01457d54 (raw 0xce6e6b28, -1e9f)
+extern float g_1470f1c;          // 0x01470f1c (raw 0x40000000, 2.0f)
+extern void* g_staticBuckets;    // 0x0154df28 (one-element static bucket array)
+extern void* g_vtblSurfaceDecals;      // 0x01457d58
+extern void* g_vtblSurfaceDecalsEx;    // 0x01457d64
+extern void* g_vtblSurfaceDecalsEx2;   // 0x01457d60
+extern void* g_vtblIEventModifier;     // 0x013ef094
+extern void  FreeMem(void* p);                            // 0x00f47380
+struct Matrix33 {
+  float m[9];
+  void Assign(const Matrix33* src);                        // 0x0041cb40
+};
+extern Matrix33 g_identity33;                              // 0x01677818
+struct IntrusiveList {
+  IntrusiveList* mNext;   // +0x00
+  IntrusiveList* mPrev;   // +0x04
+  ~IntrusiveList();                                        // 0x00620230
+};
+struct Particle {
+  uint32_t m0;        // +0x00
+  uint32_t m4;        // +0x04
+  uint16_t m8;        // +0x08
+  uint16_t mA;        // +0x0a
+  float    mC;        // +0x0c
+  float    m10;       // +0x10
+  float    m14;       // +0x14
+  float    m18;       // +0x18
+  Matrix33 mMatrix;   // +0x1c
+  float    m40, m44, m48, m4c;   // +0x40
+  float    m50, m54, m58, m5c;   // +0x50
+  float    m60, m64;             // +0x60
+  uint32_t m68, m6c;             // +0x68
+
+  Particle* Ctor();                                          // 0x00a80920
+};
+struct SurfaceDecalState;
+struct DecalNode {
+  uint32_t mPad00;            // +0x00
+  uint32_t mNext;             // +0x04 (link pointer to the next node's mNext)
+  uint32_t mPrev;             // +0x08
+  int32_t  mIndex;            // +0x0c
+  uint8_t  mPad10[0x18];      // +0x10
+  Particle mParticle;         // +0x28 .. +0x97
+  SurfaceDecalState* mState;  // +0x98
+};
+struct CellDataNode {
+  CellDataNode* mNext;        // +0x00
+  CellDataNode* mPrev;        // +0x04
+  uint8_t mData[0x90];        // +0x08 .. +0x97
+  SurfaceDecalState* mState;  // +0x98
+};
+struct SimpleVector {
+  CellDataNode** mBegin;      // +0x00
+  CellDataNode** mEnd;        // +0x04
+  CellDataNode** mCap;        // +0x08
+
+  void DoInsertValue(CellDataNode** pos, CellDataNode** value); // 0x00a80dd0
+};
+struct SurfaceDecalState {
+  uint8_t mPad00[0x0c];       // +0x00
+  int32_t mIndex;             // +0x0c
+  uint8_t mPad10[0x04];       // +0x10
+  SimpleVector mVector;       // +0x14 (begin +0, end +4, cap +8)
+};
+struct HashNode {
+  uint32_t mKey[4];           // +0x00
+  HashNode* mNext;            // +0x10
+};
+struct RehashResult {
+  uint8_t mFlag;              // +0x00
+  uint8_t mPad[3];            // +0x01
+  uint32_t mCount;            // +0x04
+};
+struct RehashPolicy {
+  float mMaxLoad;             // +0x00
+  float mGrowth;              // +0x04
+  uint32_t mNextResize;       // +0x08
+
+  bool NeedRehash(RehashResult* out, uint32_t bucketCount,
+                  uint32_t elementCount, bool grow);        // 0x00921440
+};
+struct InsertResult {
+  HashNode*  mNode;           // +0x00
+  HashNode** mBucket;         // +0x04
+  uint8_t    mFlag;           // +0x08
+};
+struct HashTable {
+  uint32_t mUnused;           // +0x00
+  HashNode** mBuckets;        // +0x04
+  uint32_t mBucketCount;      // +0x08
+  uint32_t mElementCount;     // +0x0c
+  RehashPolicy mPolicy;       // +0x10
+
+  void DoFreeNodes(HashNode** buckets, uint32_t count);     // 0x007611f0
+  void Rehash(uint32_t newCount);                           // 0x00a7bd70
+  InsertResult* Insert(InsertResult* out, const uint32_t* key,
+                       uint32_t unused);                    // 0x00a80c00
+};
+struct SurfaceDecals {
+  void*    mVtbl0;            // +0x00
+  void*    mVtbl4;            // +0x04
+  uint32_t m8;                // +0x08
+  int32_t  mC;                // +0x0c
+  void*    mObj10;            // +0x10
+  void*    mObj14;            // +0x14
+  uint32_t m18;               // +0x18
+  uint32_t m1c;               // +0x1c
+  int32_t  m20;               // +0x20
+  int32_t  m24;               // +0x24
+  float    m28, m2c, m30;     // +0x28
+  float    m34, m38, m3c;     // +0x34
+  float    m40, m44, m48, m4c;// +0x40
+  int32_t  m50, m54;          // +0x50
+  void*    mArray58;          // +0x58
+  uint32_t m5c;               // +0x5c
+  uint32_t m60;               // +0x60
+  uint32_t m64;               // +0x64
+  uint32_t m68;               // +0x68
+  uint32_t m6c;               // +0x6c
+  void*    mArray70;          // +0x70
+  uint32_t m74;               // +0x74
+  uint32_t m78;               // +0x78
+  uint32_t m7c;               // +0x7c
+  uint32_t m80;               // +0x80
+  HashTable mHash;            // +0x84
+  uint32_t mListA0;           // +0xa0
+  IntrusiveList mListA4;      // +0xa4
+  IntrusiveList mListAC;      // +0xac
+
+  SurfaceDecals* BaseCtor();                                  // 0x00a80ac0
+  SurfaceDecals* DerivedCtor();                               // 0x00a80ee0
+  void Destroy();                                             // 0x00a80d10
+  void VisitParticles();                                      // 0x00a809d0
+  void ClearParticles();                                      // 0x00a80a40
+  bool Reset();                                               // 0x00a80b80
+  void RemoveCell(CellDataNode* cell);                        // 0x00a80fe0
+};
+typedef void (__thiscall* VtFn0)(void* self);
+typedef void (__thiscall* VtFn1)(void* self, int a);
+typedef void (__thiscall* VtFn3)(void* self, int a, void* b, float c);
+static inline void* VtblOf(void* obj) {
+  return *(void**)obj;
+}
+static inline void* VtSlot(void* vtable, uint32_t byteOffset) {
+  return *(void**)((char*)vtable + byteOffset);
+}
+static inline void FreeArray(void* p) {
+  if (p != 0 && ((int*)p)[-1] != 0)
+    FreeMem(p);
+}
+// ---- items of slice s00a80240_g7 end
 
 // @ 0x00a7fe20
 void Owner::FUN_00a7fe20(void* arg)
@@ -235,6 +393,244 @@ void BillboardEffect::WriteQuads(VertexStream* stream)
     }
     stream->Unlock();
   }
+}
+
+// @ 0x00a80920
+Particle* Particle::Ctor()
+{
+  m4 = 0;
+  m0 = 0;
+  uint32_t zA = m0;
+  uint32_t z8 = m0;
+  mA = (uint16_t)zA;
+  m8 = (uint16_t)z8;
+  mC = g_167776c;
+  m10 = g_1677770;
+  m14 = g_1677774;
+  m18 = 1.0f;
+  mMatrix.Assign(&g_identity33);
+  m40 = 1.0f;
+  m44 = 1.0f;
+  m48 = 1.0f;
+  m4c = 1.0f;
+  m50 = 1.0f;
+  m54 = 1.0f;
+  m58 = 1.0f;
+  m5c = 1.0f;
+  m60 = 0.0f;
+  m64 = 0.0f;
+  m68 = 0;
+  m6c = 0;
+  return this;
+}
+
+// @ 0x00a809d0
+void SurfaceDecals::VisitParticles()
+{
+  DecalNode* node = mListA4.mNext
+      ? (DecalNode*)((char*)mListA4.mNext - 4) : 0;
+  DecalNode* end = (DecalNode*)((char*)&mListA4 - 4);
+  while (node != end) {
+    if (node->mIndex >= 0) {
+      void* owner = mObj14;
+      VtFn3 fn = (VtFn3)VtSlot(VtblOf(owner), 0x20);
+      fn(owner, node->mIndex, &node->mParticle, 0.0f);
+    }
+    node = node->mNext
+        ? (DecalNode*)((char*)node->mNext - 4) : 0;
+  }
+}
+
+// @ 0x00a80a40
+void SurfaceDecals::ClearParticles()
+{
+  DecalNode* node = mListA4.mNext
+      ? (DecalNode*)((char*)mListA4.mNext - 4) : 0;
+  DecalNode* end = (DecalNode*)((char*)&mListA4 - 4);
+  while (node != end) {
+    if (node->mIndex >= 0) {
+      void* owner = mObj14;
+      VtFn1 fn = (VtFn1)VtSlot(VtblOf(owner), 0x1c);
+      fn(owner, node->mIndex);
+      node->mIndex = -1;
+    }
+    node = node->mNext
+        ? (DecalNode*)((char*)node->mNext - 4) : 0;
+  }
+  void* owner = mObj14;
+  if (owner != 0) {
+    mObj14 = 0;
+    VtFn0 fn = (VtFn0)VtSlot(VtblOf(owner), 0x04);
+    fn(owner);
+  }
+}
+
+// @ 0x00a80ac0
+SurfaceDecals* SurfaceDecals::BaseCtor()
+{
+  float v = g_1564cc8;
+  m8 = 0;
+  mVtbl4 = 0;
+  mVtbl0 = &g_vtblSurfaceDecals;
+  mC = -1;
+  mObj14 = 0;
+  m18 = 0;
+  m1c = 0;
+  m28 = v;
+  m2c = v;
+  m30 = v;
+  float nv = -v;
+  m34 = nv;
+  m38 = nv;
+  m3c = nv;
+  return this;
+}
+
+// @ 0x00a80b80
+bool SurfaceDecals::Reset()
+{
+  if (mObj14 != 0)
+    ClearParticles();
+
+  IntrusiveList* anchor = &mListAC;
+  while (anchor->mPrev != anchor) {
+    CellDataNode* first = (CellDataNode*)anchor->mNext;
+    CellDataNode* next = first->mNext;
+    next->mPrev = (CellDataNode*)anchor;
+    anchor->mNext = (IntrusiveList*)next;
+    if (first != (CellDataNode*)anchor) {
+      first->mPrev = 0;
+      first->mNext = 0;
+    }
+    if (first != 0)
+      FreeMem(first);
+  }
+
+  IntrusiveList* anchorA4 = &mListA4;
+  uint32_t* p = (uint32_t*)mListA4.mNext;
+  if (p != (uint32_t*)anchorA4) {
+    do {
+      uint32_t next = *p;
+      p[1] = 0;
+      p[0] = 0;
+      p = (uint32_t*)next;
+    } while (p != (uint32_t*)anchorA4);
+  }
+  mListA4.mPrev = anchorA4;
+  mListA4.mNext = anchorA4;
+  return true;
+}
+
+// @ 0x00a80d10
+void SurfaceDecals::Destroy()
+{
+  mVtbl0 = &g_vtblSurfaceDecalsEx;
+  mVtbl4 = &g_vtblSurfaceDecalsEx2;
+  mListAC.~IntrusiveList();
+  mListA4.~IntrusiveList();
+
+  mHash.DoFreeNodes(mHash.mBuckets, mHash.mBucketCount);
+  mHash.mElementCount = 0;
+  if (mHash.mBucketCount > 1)
+    FreeMem(mHash.mBuckets);
+
+  FreeArray(mArray70);
+  FreeArray(mArray58);
+
+  if (mObj14 != 0) {
+    void* owner = mObj14;
+    VtFn0 fn = (VtFn0)VtSlot(VtblOf(owner), 0x04);
+    fn(owner);
+  }
+  if (mObj10 != 0) {
+    void* owner = mObj10;
+    VtFn0 fn = (VtFn0)VtSlot(VtblOf(owner), 0x00);
+    fn(owner);
+  }
+  mVtbl4 = &g_vtblIEventModifier;
+}
+
+// @ 0x00a80ee0
+SurfaceDecals* SurfaceDecals::DerivedCtor()
+{
+  mVtbl4 = &g_vtblIEventModifier;
+  m8 = 0;
+  mVtbl0 = &g_vtblSurfaceDecalsEx;
+  mVtbl4 = &g_vtblSurfaceDecalsEx2;
+  mC = 0;
+  mObj10 = 0;
+  mObj14 = 0;
+  m30 = 0.0f;
+  m34 = 0.0f;
+  m38 = 0.0f;
+  m40 = 0.0f;
+  m44 = 0.0f;
+  m48 = 0.0f;
+  m18 = 0;
+  m4c = g_1457d54;
+  m28 = 1.0f;
+  m2c = 1.0f;
+  m3c = 1.0f;
+  m20 = -1;
+  m24 = -1;
+  m50 = -1;
+  m54 = -1;
+  mArray58 = 0;
+  m5c = 0;
+  m60 = 0;
+  mArray70 = 0;
+  m74 = 0;
+  m78 = 0;
+  mHash.mPolicy.mMaxLoad = 1.0f;
+  mHash.mPolicy.mGrowth = g_1470f1c;
+  mHash.mElementCount = 0;
+  mHash.mPolicy.mNextResize = 0;
+  mHash.mBucketCount = 1;
+  mHash.mBuckets = (HashNode**)&g_staticBuckets;
+  mListA4.mPrev = &mListA4;
+  mListA4.mNext = &mListA4;
+  mListAC.mPrev = &mListAC;
+  mListAC.mNext = &mListAC;
+  return this;
+}
+
+// @ 0x00a80fe0
+void SurfaceDecals::RemoveCell(CellDataNode* cell)
+{
+  if (mListAC.mPrev == &mListAC)
+    return;
+
+  CellDataNode* node = (CellDataNode*)((char*)cell - 8);
+  SurfaceDecalState* state = node->mState;
+  CellDataNode** begin = state->mVector.mBegin;
+  CellDataNode** end = state->mVector.mEnd;
+  int count = (int)(end - begin);
+  for (int i = 0; i < count; ++i) {
+    if (begin[i] == node) {
+      CellDataNode** dst = begin + i;
+      CellDataNode** src = dst + 1;
+      if (src < end)
+        memcpy(dst, src, (char*)end - (char*)src);
+      state->mVector.mEnd = end - 1;
+      break;
+    }
+  }
+
+  state = node->mState;
+  if (state->mVector.mBegin == state->mVector.mEnd && state->mIndex >= 0) {
+    void* owner = mObj14;
+    VtFn1 fn = (VtFn1)VtSlot(VtblOf(owner), 0x1c);
+    fn(owner, state->mIndex);
+    state->mIndex = -1;
+  }
+
+  CellDataNode* next = node->mNext;
+  CellDataNode* prev = node->mPrev;
+  prev->mNext = next;
+  next->mPrev = prev;
+  node->mNext = 0;
+  node->mPrev = 0;
+  FreeMem(node);
 }
 
 // @ 0x00a81110
