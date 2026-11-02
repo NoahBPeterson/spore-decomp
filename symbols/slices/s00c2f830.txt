@@ -1,5 +1,8 @@
+00c2f830 ?cFindMission_ctor@@YIPAHPAH@Z  # cFindMission_ctor migrated from s00c2f830 (verbatim, slice spelling)
 00c2f890 ?FUN_00c2f890@@YIXPAH@Z  # FUN_00c2f890 migrated from s00c2f830 (verbatim, slice spelling)
+00c2f8c0 ?cCreatureSpeciesMission_ctor@@YIPAHPAH@Z  # cCreatureSpeciesMission_ctor migrated from s00c2f830 (verbatim, slice spelling)
 00c2f9c0 ?FUN_00c2f9c0@@YIXPAH@Z  # FUN_00c2f9c0 migrated from s00c2f830 (verbatim, slice spelling)
+00c2fa50 ?FUN_00c2fa50@@YIXPAH@Z  # FUN_00c2fa50 migrated from s00c2f830 (verbatim, slice spelling)
 00c2fb30 ?FUN_00c2fb30@Mission@@QAEPAHXZ  # Mission::FUN_00c2fb30 migrated from s00c2f830 (verbatim, slice spelling)
 00c2fc00 ?FUN_00c2fc00@Mission@@QAEDH@Z  # Mission::FUN_00c2fc00 migrated from s00c2f830 (verbatim, slice spelling)
 00c2fc10 ?FUN_00c2fc10@Mission@@QAEXXZ  # Mission::FUN_00c2fc10 migrated from s00c2f830 (verbatim, slice spelling)
