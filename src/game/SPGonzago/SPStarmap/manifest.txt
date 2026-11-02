@@ -1,5 +1,8 @@
 # source  symbol  va  flags
 ../src/game/SPGonzago/SPStarmap.cpp  ?clear@StarDeque@@QAEXXZ  00996460  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPStarmap.cpp  ?SetNodeFlag@cStarMap_s0104_4360@SP@@QAEXHD@Z  01044d70  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPStarmap.cpp  ?SetNodeFlag2@cStarMap_s0104_4360@SP@@QAEXHD@Z  01044db0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPStarmap.cpp  ?AllocSharedRef@SP@@YGPAUSharedRefBlock@1@PBUSharedRefSrc@1@@Z  010450b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPStarmap.cpp  ?CreateStarRecordVisual@cStarMap@@QAEPAVVEffect@@PAVcStarRecord@@HH@Z  010458f0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
 ../src/game/SPGonzago/SPStarmap.cpp  ?ResetTravelTrail@cStarMap@@QAEXXZ  01045c10  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
 ../src/game/SPGonzago/SPStarmap.cpp  ??1cPropView@@QAE@XZ  01046eb0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

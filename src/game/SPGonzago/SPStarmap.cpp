@@ -1,4 +1,4 @@
-// src/game/SPGonzago/SPStarmap.cpp -- migrated from slice(s) s010488e0, s01047850, s01046160, s01045200, s00995b20 by tools/migrate/rewrite.py
+// src/game/SPGonzago/SPStarmap.cpp -- migrated from slice(s) s01044360, s010488e0, s01047850, s01046160, s01045200, s00995b20 by tools/migrate/rewrite.py
 // Object file: SPGonzago/SPStarmap.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -8,6 +8,10 @@
 #include <string.h>
 #include "SP/cEmpire.h"
 #include "SP/cSpaceTradeRouteManager.h"
+#include "SP/cCivData.h"
+#include "SP/cGameNounManager.h"
+#include "SP/cPropertyManager.h"
+#include "SP/cVarListSerializer.h"
 
 // unnamed retail callees and globals (address in the comment)
 extern "C" void  __cdecl FUN_00f47380(void* p);
@@ -31,6 +35,14 @@ public:
 // ---- items of slice s00995b20 end
 
 // ---- items of slice s01045200 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern const char kAllocatorFile[];                       // 0x013f09b4 "…/EASTL/allocator.h"
+extern float gMatrixDefault;        // 0x016e0690
+extern float gVisualPosX;           // 0x016e06b4
+extern float gVisualPosY;           // 0x016e06b8
+extern float gVisualPosZ;           // 0x016e06bc
+extern const float kRealOne;        // 0x01485720
+typedef unsigned char byte;
+struct Vector3_s0104_5200 { float x, y, z; };
 class VEffect {
  public:
   virtual void v00();
@@ -98,6 +110,29 @@ virtual void t24();
 virtual void t28();
   virtual bool Create(uint32_t id, int a, VEffect** out);      // +0x2c
 };
+class SeqStream {
+ public:
+virtual void s00();
+virtual void s04();
+virtual void s08();
+virtual void s0c();
+virtual void s10();
+virtual void s14();
+  virtual void* Handle();                     // +0x18
+};
+class SeqReader {
+ public:
+virtual void q00();
+virtual void q04();
+virtual void q08();
+virtual void q0c();
+virtual void q10();
+virtual void q14();
+  virtual void q18();
+  virtual void End();                         // +0x1c
+  virtual SeqStream* Stream();                // +0x20
+  virtual void* ReadItem();                   // +0x28
+};
 class cStarRecord;
 template <typename T>
 struct DequeIter {
@@ -123,6 +158,11 @@ class cStarRecord {
   virtual void Release();      // +0x04
   uint8_t mPad08[0x6c];        // +0x04 .. +0x6f
   void* mpInstance;            // +0x70
+};
+struct PtrVector {
+  void** mpBegin;
+  void** mpEnd;
+  void** mpCap;
 };
 struct StarMapVisual {
   VEffect* mpObject;           // +0x14 in the node
@@ -179,7 +219,23 @@ class cStarMap {
   void BuildVisual(VisualCtx* ctx, void* object);
   void Init();                 // SP::cStarMap::Init
 };
+void*  StarManager(cStarRecord* rec);                     // 0x00b3d2a0
+void   FUN_00b3d2a0(PtrVector* vec);                      // 0x00b3d2a0
+int    FUN_00baf460(PtrVector* vec);                      // 0x00baf460
+void*  FUN_00ba6dc0(void* mgr, cStarRecord* rec);         // 0x00ba6dc0
+void*  FUN_00ba6d80(void* mgr, cStarRecord* rec);         // 0x00ba6d80
+void*  cCivData_GetCities(void* civ);                     // 0x005c65e0
+void*  cCivData_GetCitiesOverload(void* civ, float r, void* out); // 0x00b8de30
+char   FUN_00fe3b30(void* x);                             // 0x00fe3b30
+int    cSPLivingUniverse_GetUniverseContext();            // 0x01021080
+void*  cStarManager_GetOrActivatePlanet(void* mgr, cStarRecord* rec); // 0x00bb59b0
+void*  BioProtectorSort_op(void* x);                      // 0x00b8de30
+void   Matrix3_Assign(void* dst, const void* src);        // 0x0041cb40
+void   FUN_01044f80(Deque64<cStarRecord*>* d, int a, int b);// 0x01044f80
+void*  operator_new(uint32_t size, const char* name, int a, int b,
+                    const char* file, int line);          // 0x00f473a0
 void   operator_delete__(void* p);                        // 0x00f47380
+int32_t EA_IO_ReadInt32(void* stream, void* dst, int a, int b); // 0x0093a780
 void   RBTreeInsert(void* node, RBNode* parent, RBNode** anchor, int side); // 0x009216a0
 RBNode* RBTreeIncrement(RBNode* node);                    // 0x00921580
 void   RBTreeErase(RBNode* node, RBNode** anchor);        // 0x00921880
@@ -187,11 +243,17 @@ RBNode* FUN_010450b0(void* key);                          // 0x010450b0
 EffectsMgr* EffectsManagerPtr();                          // 0x0067ddd0
 void*  cStarRecordRef_GetCommContext(void* ref);          // 0x00ce6950
 char   FUN_01044bf0(cStarMap* self, cStarRecord* rec);    // 0x01044bf0
+void*  FUN_01045120(cStarMap* self, void* key, uint32_t id); // 0x01045120
+void   FUN_01043d10(void* x);                             // 0x01043d10
 void*  cSPLivingUniverse_GetPlayerEmpire();               // 0x01021300
 class EmpireContext {
  public:
   void* GetSelectedRecord();                              // 0x00c30c60
 };
+static cStarRecord** DequeAllocBlock()
+{
+  return (cStarRecord**)operator_new(0x100, "Simulator", 0, 0, kAllocatorFile, 0xd1);
+}
 static void DequeClear(Deque64<cStarRecord*>* d)
 {
   d->clear();
@@ -207,6 +269,12 @@ struct VisualCtx {
   uint32_t mPad08;
   uint32_t mKind;
 };
+class DebugWriter {
+ public:
+  virtual void Begin(const uint16_t* name);   // +0x00
+  virtual void End(const uint16_t* name);     // +0x04
+};
+bool FUN_00ac8050(DebugWriter* writer, int zero, cStarRecord* rec); // 0x00ac8050
 // ---- items of slice s01045200 end
 
 // callees this slice defines outside this object (rewrite.py held_callee_protos)
@@ -646,6 +714,324 @@ struct cStarMap_s0104_88e0 {
 }
 // ---- items of slice s010488e0 end
 
+// ---- items of slice s01044360 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C" float __cdecl SqrtF(float);
+namespace SP {
+struct Vector3 { float x, y, z; };
+}
+namespace SP {
+struct RBNode_s0104_4360 {
+    RBNode_s0104_4360*  mpLeft;       // +0x00
+    RBNode_s0104_4360*  mpRight;      // +0x04
+    RBNode_s0104_4360*  mpParent;     // +0x08
+    uint32_t mColor;       // +0x0c
+    uint32_t mPad10;       // +0x10
+    uint32_t mValue;       // +0x14
+    uint32_t mKey;         // +0x18
+    uint32_t mPad1c;       // +0x1c
+    uint32_t mPad20;       // +0x20
+    uint8_t  mFlags;       // +0x24
+    uint8_t  mPad25[3];    // +0x25
+};
+}
+namespace SP {
+struct NodeRange_s0104_4360 {
+    RBNode_s0104_4360* mpFirst;
+    RBNode_s0104_4360* mpSecond;
+};
+}
+namespace SP {
+struct RBTree_s0104_4360 {
+    uint32_t mPad00;       // +0x00
+    RBNode_s0104_4360*  mpEnd;        // +0x04 (sentinel; also the end iterator)
+    RBNode_s0104_4360*  mpRoot;       // +0x08
+    RBNode_s0104_4360*  mpRightmost;  // +0x0c
+    uint32_t mSize;        // +0x10
+    uint32_t mPad14;       // +0x14
+    uint32_t mPad18;       // +0x18
+    uint32_t mPad1c;       // +0x1c
+    void equal_range(NodeRange_s0104_4360* out, const uint32_t* key); // 0x00d4b450
+};
+}
+namespace SP {
+RBNode_s0104_4360* __cdecl RBTreeIncrement_s0104_4360(RBNode_s0104_4360* node);                                       // 0x00921580
+}
+namespace SP {
+struct cSink;
+}
+namespace SP {
+struct cIOStream {
+    void* mpVtable;                                        // +0x00
+    cSink* GetSink() {
+        return ((cSink* (__thiscall*)(cIOStream*))((void**)mpVtable)[0x20 / 4])(this);
+    }
+    void* GetStream() {
+        return ((void* (__thiscall*)(cIOStream*))((void**)mpVtable)[0x1c / 4])(this);
+    }
+    void WriteRef(void* value) {
+        ((void (__thiscall*)(cIOStream*, void*))((void**)mpVtable)[0x2c / 4])(this, value);
+    }
+};
+}
+namespace SP {
+struct cSink {
+    void* mpVtable;                                        // +0x00
+    void* GetStream() {
+        return ((void* (__thiscall*)(cSink*))((void**)mpVtable)[0x18 / 4])(this);
+    }
+};
+}
+namespace SP {
+struct cVarListSerializer_s0104_4360 {
+    uint32_t mData[7];                                     // 0x1c bytes
+    void Init(void* owner, const void* list, uint32_t line); // 0x00692f90
+    bool Serialize(cIOStream* stream);                     // 0x00692900
+};
+}
+namespace SP {
+void* __cdecl MemAlloc(uint32_t size, const char* tag, int a, int b,
+                       const char* file, uint32_t line);                               // 0x00f473a0
+}
+namespace SP {
+void  __cdecl MemFreeArray(void* p);                                                   // 0x00f47380
+}
+namespace SP {
+void* __cdecl MemCopy(void* dst, const void* src, uint32_t size);                      // 0x011e0744
+}
+namespace SP {
+void* __cdecl MemMove(void* dst, const void* src, uint32_t size);                      // memmove
+}
+namespace SP {
+extern const char  gBannerName;    // 0x016e0688
+}
+namespace SP {
+extern const char  gSerializerList;// 0x015b85a0
+}
+namespace SP {
+extern const char  gAllocatorFile; // 0x013ebb38
+}
+namespace SP {
+extern const char  gAllocatorTag;  // 0x013f09b4 ("Simulator")
+}
+namespace SP {
+extern const char  gEntryName;     // 0x0179c807
+}
+namespace SP {
+struct cEmbeddedSource {
+    void* mpVtable;                                        // +0x00
+    void* GetKey() {
+        return ((void* (__thiscall*)(cEmbeddedSource*))((void**)mpVtable)[0x2c / 4])(this);
+    }
+    Vector3* GetPosition() {
+        return ((Vector3* (__thiscall*)(cEmbeddedSource*))((void**)mpVtable)[0x2c / 4])(this);
+    }
+};
+}
+namespace SP {
+struct cItemOwner {
+    void* mpVtable;                                        // +0x00
+    bool HasItem(const void* id) {
+        return ((bool (__thiscall*)(cItemOwner*, const void*))
+            ((void**)mpVtable)[0x74 / 4])(this, id);
+    }
+};
+}
+namespace SP {
+struct cPlayerInventory {
+    cItemOwner* mpOwner;                                   // +0x00
+    uint32_t mPad04[0x30 / 4];                             // +0x04
+    cEmbeddedSource mKeySource;                            // +0x34
+};
+}
+namespace SP {
+struct cStarMapView {
+    void* mpVtable;                                        // +0x00
+    long long GetId() {
+        return ((long long (__thiscall*)(cStarMapView*))((void**)mpVtable)[0x60 / 4])(this);
+    }
+};
+}
+namespace SP {
+struct cMiniCaptureHost {
+    cStarMapView* mpView;                                  // +0x00
+};
+}
+namespace SP {
+struct cBannerList {
+    void* mpVtable;                                        // +0x00
+    int FindEntry(uint32_t key);                           // 0x00ba6d80
+    void Reset();                                          // 0x00ba6490
+};
+}
+namespace SP {
+struct cProperty {
+    void* mpVtable;                                        // +0x00
+    uint8_t mPad04[0x0e];                                  // +0x04
+    uint16_t mType;                                        // +0x12
+    bool Query(uint32_t id, cProperty** out) {
+        return ((bool (__thiscall*)(cProperty*, uint32_t, cProperty**))
+            ((void**)mpVtable)[0x24 / 4])(this, id, out);
+    }
+    int* GetInt();                                         // 0x0041e990
+    float* GetFloat();                                     // 0x0041ea70
+};
+}
+namespace SP {
+struct cPropertyManager_s0104_4360 {
+    void* mpVtable;                                        // +0x00
+    void GetProperty(uint32_t a, uint32_t b, cProperty** out) {
+        ((void (__thiscall*)(cPropertyManager_s0104_4360*, uint32_t, uint32_t, cProperty**))
+            ((void**)mpVtable)[0x2c / 4])(this, a, b, out);
+    }
+};
+}
+namespace SP {
+void* __cdecl GetUFOSimulator();                           // 0x00ffbe50
+}
+namespace SP {
+cPropertyManager_s0104_4360* __cdecl PropertyManager();               // 0x0067de30
+}
+namespace SP {
+void __cdecl FUN_00feb060(const void* table);              // 0x00feb060
+}
+namespace SP {
+cBannerList* __cdecl StarManager_s0104_4360();                        // 0x00b3d2a0
+}
+namespace SP {
+float __cdecl FUN_00c8c5d0(int index, float* out);         // 0x00c8c5d0
+}
+namespace SP {
+void __cdecl WriteUint32(void* stream, const uint32_t* value,
+                         int count, int flags);            // 0x0093aa70
+}
+namespace SP {
+struct cSPSimulatorSpaceGame {
+    void* mpVtable;                                        // +0x00
+    cPlayerInventory* GetPlayerInventory();                // 0x00a1ad60
+    float GetMaxZ();                                       // 0x00ffbfd0
+};
+}
+namespace SP {
+struct cCivData_s0104_4360 {
+    void* mpVtable;                                        // +0x00
+    float* GetCities();                                    // 0x005c65e0
+    float* GetCityPosition();                              // 0x005c65e0
+};
+}
+namespace SP {
+struct cPlayerCityData {
+    uint32_t mPad00[0x718 / 4];                            // +0x00
+    Vector3  mCityPosition;                                // +0x718
+};
+}
+namespace SP {
+ bool __stdcall UpdateMiniCaptureBar(cMiniCaptureHost* self, float value);   // 0x01044b00 (defined below; used by a stub's inline body)
+}
+namespace SP {
+struct cStarMap_s0104_4360 {
+    uint8_t       mFirstFlag;          // +0x00
+    bool          mRequestZoom;        // +0x01
+    uint8_t       mPad02[2];           // +0x02
+    uint32_t      mSlots[8];           // +0x04
+    uint32_t      mPad24[0x28 / 4];    // +0x24 .. +0x4b
+    float         mZoomRequestHeight;  // +0x4c
+    int           mTravelTrailLength;  // +0x50
+    uint32_t      mPad54;              // +0x54
+    RBTree_s0104_4360        mTree;               // +0x58
+    uint32_t      mVisualCount;        // +0x74
+
+    uint32_t* FindNode(int key);
+uint32_t* FindNodeValue(int key);
+void SetNodeFlag(int key, char on);
+    void SetNodeFlag2(int key, char on);
+    void SyncEntryFlags(char enable);
+    bool IsSlotSet(int index);
+    void Notify(int id, char flag);
+    void UpdateDesiredCamera();  // 0x01044b70 (SP::cStarMap::UpdateDesiredCamera)
+    bool UpdateMiniCaptureBar(float value);  // 0x01044b00 (SP::cStarMap::UpdateMiniCaptureBar)
+    void Init();  // 0x01044c60 (SP::cStarMap::Init)
+    void SerializeSlots(cIOStream* stream);
+    uint32_t FindValue(uint32_t bucket, int key);
+    uint32_t FindEntryByLongId(uint32_t key, uint32_t lo, uint32_t hi);
+};
+}
+namespace SP {
+struct cFlagGrid {
+    uint32_t mPad00;                   // +0x00
+    uint32_t mPad04;                   // +0x04
+    int*     mpBegin;                  // +0x08
+    uint32_t mPad0c;                   // +0x0c
+    int*     mpRowEnd;                 // +0x10
+    int**    mpRowBase;                // +0x14
+    int*     mpEnd;                    // +0x18
+    int*     mpEndCap;                 // +0x1c
+    uint32_t mPad20;                   // +0x20
+    int*     mpLastRowEnd;             // +0x24
+};
+}
+namespace SP {
+struct cBitVector {
+    uint32_t* mpData;                  // +0x00
+    uint32_t  mCapacity;               // +0x04
+    uint32_t  mPad08;                  // +0x08
+    uint32_t  mFirstValue;             // +0x0c
+    uint32_t  mFirstCap;               // +0x10
+    uint32_t* mpBegin;                 // +0x14
+    uint32_t  mPad18;                  // +0x18
+    uint32_t  mLastValue;              // +0x1c
+    uint32_t  mLastCap;                // +0x20
+    uint32_t* mpEnd;                   // +0x24
+    void __thiscall InsertAtFront(uint32_t count, uint32_t value);
+};
+}
+namespace SP {
+struct cFlagEntry {
+    void* mpVtable;                    // +0x00
+    void SerializeInto(void* stream) {
+        ((void (__thiscall*)(cFlagEntry*, void*))((void**)mpVtable)[0x1c / 4])(this, stream);
+    }
+    void* GetName(const void* id) {
+        return ((void* (__thiscall*)(cFlagEntry*, const void*))
+            ((void**)mpVtable)[0x0c / 4])(this, id);
+    }
+};
+}
+namespace SP {
+struct cFlagObj {
+    void* mpVtable;                    // +0x00
+    void AddRef() {
+        ((void (__thiscall*)(cFlagObj*))((void**)mpVtable)[0x00 / 4])(this);
+    }
+};
+}
+namespace SP {
+struct SharedRefSrc {
+    uint32_t  mValue;                  // +0x00
+    cFlagObj* mpRef;                   // +0x04
+    uint32_t  mA;                      // +0x08
+    uint32_t  mB;                      // +0x0c
+    uint32_t  mC;                      // +0x10
+    uint8_t   mD;                      // +0x14
+};
+}
+namespace SP {
+struct SharedRefData {
+    uint32_t  mValue;                  // +0x00
+    cFlagObj* mpRef;                   // +0x04
+    uint32_t  mA;                      // +0x08
+    uint32_t  mB;                      // +0x0c
+    uint32_t  mC;                      // +0x10
+    uint8_t   mD;                      // +0x14
+};
+}
+namespace SP {
+struct SharedRefBlock {
+    uint32_t      mHeader[4];          // +0x00 .. +0x0f
+    SharedRefData mData;               // +0x10
+};
+}
+// ---- items of slice s01044360 end
+
 // @ 0x00996460
 void __thiscall StarDeque::clear()
 {
@@ -663,6 +1049,414 @@ void __thiscall StarDeque::clear()
     mpPool  = mField0c;
     mField20 = mField10;
     mItEnd  = mItBegin;
+}
+
+// @ 0x01044a70
+namespace SP {
+void cStarMap_s0104_4360::SerializeSlots(cIOStream* stream)
+{
+    for (int i = 0; i < 7; ++i) {
+        uint32_t value = mSlots[i];
+        cSink* sink = stream->GetSink();
+        WriteUint32(sink->GetStream(), &value, 1, 0);
+    }
+    cVarListSerializer_s0104_4360 serializer;
+    serializer.Init(this, &gSerializerList, 0x1a80d26);
+    serializer.Serialize(stream);
+}
+}  // namespace SP
+
+// @ 0x01044b00
+namespace SP {
+bool __stdcall UpdateMiniCaptureBar(cMiniCaptureHost* self, float value)
+{
+    cBannerList* list = StarManager_s0104_4360();
+    int index = list->FindEntry(*(uint32_t*)&value);
+    float ratio = -1.0f;
+    StarManager_s0104_4360()->Reset();
+    long long id = self->mpView->GetId();
+    if ((uint32_t)id == 0xff8bbb2b && (uint32_t)(id >> 32) == 0xffffffff)
+        ratio = FUN_00c8c5d0(index, &ratio);
+    return !(0.0f < ratio);
+}
+}  // namespace SP
+
+// @ 0x01044bf0
+namespace SP {
+bool __cdecl FUN_01044bf0(cCivData_s0104_4360* civData)
+{
+    cSPSimulatorSpaceGame* simulator = (cSPSimulatorSpaceGame*)GetUFOSimulator();
+    float maxZ = simulator->GetMaxZ();
+    cPlayerCityData* inventory = (cPlayerCityData*)simulator->GetPlayerInventory();
+    float* city = civData->GetCities();
+    float dx = city[0] - inventory->mCityPosition.x;
+    float dy = city[1] - inventory->mCityPosition.y;
+    float dz = city[2] - inventory->mCityPosition.z;
+    float dist = SqrtF(dy * dy + (dz * dz + dx * dx));
+    return dist < maxZ;
+}
+}  // namespace SP
+
+// @ 0x01044c60
+namespace SP {
+void cStarMap_s0104_4360::Init()
+{
+    mVisualCount = 0;
+    FUN_00feb060(&gBannerName);
+    cProperty* property = 0;
+    cPropertyManager_s0104_4360* manager = PropertyManager();
+    if (property) {
+        property->mpVtable = 0;
+    }
+    manager->GetProperty(0xddb63e53, 0x2ae0c7e, &property);
+    if (!property)
+        return;
+    cProperty* value = 0;
+    if (property->Query(0x2ba603e, &value)) {
+        if (value->mType == 9)
+            mTravelTrailLength = *value->GetInt();
+    }
+    cProperty* zoom = 0;
+    if (property->Query(0x54030ee, &zoom)) {
+        if (zoom->mType == 0xd)
+            mZoomRequestHeight = *zoom->GetFloat();
+    }
+    ((void (__thiscall*)(cProperty*))((void**)property->mpVtable)[1])(property);
+}
+}  // namespace SP
+
+// @ 0x01044d30
+namespace SP {
+uint32_t* cStarMap_s0104_4360::FindNode(int key)
+{
+    RBNode_s0104_4360* end = (RBNode_s0104_4360*)&mTree.mpEnd;
+    RBNode_s0104_4360* node = mTree.mpRoot;
+    if (node != end) {
+        do {
+            if (key == (int)node->mKey)
+                return &node->mValue;
+            node = RBTreeIncrement_s0104_4360(node);
+        } while (node != end);
+    }
+    return 0;
+}
+}  // namespace SP
+
+// @ 0x01044d70
+namespace SP {
+void cStarMap_s0104_4360::SetNodeFlag(int key, char on)
+{
+    RBNode_s0104_4360* end = (RBNode_s0104_4360*)&mTree.mpEnd;
+    RBNode_s0104_4360* node = mTree.mpRoot;
+    if (node != end) {
+        do {
+            if (key == (int)node->mKey) {
+                if (on)
+                    node->mFlags &= (uint8_t)~8u;
+                else
+                    node->mFlags |= 8;
+                return;
+            }
+            node = RBTreeIncrement_s0104_4360(node);
+        } while (node != end);
+    }
+}
+}  // namespace SP
+
+// @ 0x01044db0
+namespace SP {
+void cStarMap_s0104_4360::SetNodeFlag2(int key, char on)
+{
+    RBNode_s0104_4360* end = (RBNode_s0104_4360*)&mTree.mpEnd;
+    RBNode_s0104_4360* node = mTree.mpRoot;
+    if (node != end) {
+        do {
+            if (key == (int)node->mKey) {
+                if (on)
+                    node->mFlags &= (uint8_t)~4u;
+                else
+                    node->mFlags |= 4;
+                return;
+            }
+            node = RBTreeIncrement_s0104_4360(node);
+        } while (node != end);
+    }
+}
+}  // namespace SP
+
+// @ 0x01044df0
+namespace SP {
+void cStarMap_s0104_4360::SyncEntryFlags(char enable)
+{
+    RBNode_s0104_4360* end = (RBNode_s0104_4360*)&mTree.mpEnd;
+    for (RBNode_s0104_4360* node = mTree.mpRoot; node != end; node = RBTreeIncrement_s0104_4360(node)) {
+        if ((node->mKey == 0x70930c64 || node->mKey == 0x166521a5)
+            && ((bool)enable != ((node->mFlags & 8) != 8))) {
+            uint32_t key = node->mKey;
+            RBNode_s0104_4360* other = mTree.mpRoot;
+            while (other != end) {
+                if (key == other->mKey) {
+                    if (enable)
+                        other->mFlags &= (uint8_t)~8u;
+                    else
+                        other->mFlags |= 8;
+                    break;
+                }
+                other = RBTreeIncrement_s0104_4360(other);
+            }
+        }
+    }
+}
+}  // namespace SP
+
+// @ 0x01044e70
+namespace SP {
+void __cdecl SerializeFlagGrid(cIOStream* stream, const cFlagGrid* grid)
+{
+    int rows = (((int)grid->mpLastRowEnd - (int)grid->mpRowBase) >> 2) - 1;
+    int cols = ((int)grid->mpEnd - (int)grid->mpEndCap) >> 2;
+    int width = ((int)grid->mpRowEnd - (int)grid->mpBegin) >> 2;
+    uint32_t index = (uint32_t)(rows * 0x40 + cols + width);
+    cSink* sink = stream->GetSink();
+    void* out = sink->GetStream();
+    WriteUint32(out, &index, 1, 0);
+
+    int* it = grid->mpBegin;
+    int* rowEnd = grid->mpRowEnd;
+    int** rowBase = grid->mpRowBase;
+    int* last = grid->mpEnd;
+    while (it != last) {
+        void* value = 0;
+        if (*it)
+            value = ((cFlagEntry*)*it)->GetName(&gEntryName);
+        stream->WriteRef(value);
+        ++it;
+        if (it == rowEnd) {
+            it = rowBase[1];
+            ++rowBase;
+            rowEnd = it + 0x40;
+        }
+    }
+    ((void (__thiscall*)(cIOStream*))((void**)stream->mpVtable)[0x1c / 4])(stream);
+}
+}  // namespace SP
+
+// @ 0x01044f30
+namespace SP {
+bool __cdecl ForEachFlagEntry(void* stream, const cFlagGrid* grid)
+{
+    int* rowEnd = grid->mpRowEnd;
+    int* last = grid->mpEnd;
+    int* it = grid->mpBegin;
+    int** rowBase = grid->mpRowBase;
+    while (it != last) {
+        if (*it)
+            ((cFlagEntry*)*it)->SerializeInto(stream);
+        ++it;
+        if (it == rowEnd) {
+            it = rowBase[1];
+            ++rowBase;
+            rowEnd = it + 0x40;
+        }
+    }
+    return true;
+}
+}  // namespace SP
+
+// @ 0x01044f80
+namespace SP {
+void __thiscall cBitVector::InsertAtFront(uint32_t count, uint32_t value)
+{
+    uint32_t used = (uint32_t)(mpEnd - mpBegin);
+    uint32_t newSize = used + 1 + count;
+    uint32_t* dst;
+    if (mCapacity > newSize * 2) {
+        dst = mpData + (mCapacity - newSize) / 2 + (value ? count : 0);
+        if (dst < mpBegin)
+            MemCopy(dst, mpBegin, (used + 1) * 4);
+        else
+            MemMove(dst + (newSize - (used + 1)), mpBegin, (used + 1) * 4);
+    } else {
+        uint32_t capacity = (mCapacity > count ? mCapacity : count) + mCapacity + 2;
+        uint32_t* data = (uint32_t*)MemAlloc(capacity * 4, &gAllocatorTag, 0, 0,
+                                             &gAllocatorFile, 0xd1);
+        dst = data + (mpBegin - mpData) + (value ? count : 0);
+        if (mpData)
+            MemCopy(dst, mpBegin, (used + 1) * 4);
+        if (mpData)
+            MemFreeArray(mpData);
+        mpData = data;
+        mCapacity = capacity;
+    }
+    mpBegin = dst;
+    mFirstValue = *dst;
+    mFirstCap = mFirstValue + 0x100;
+    mpEnd = dst + used;
+    mLastValue = *mpEnd;
+    mLastCap = mLastValue + 0x100;
+}
+}  // namespace SP
+
+// @ 0x010450b0
+namespace SP {
+SharedRefBlock* __stdcall AllocSharedRef(const SharedRefSrc* source)
+{
+    SharedRefBlock* block = (SharedRefBlock*)MemAlloc(0x28, &gAllocatorTag, 0, 0,
+                                                      &gAllocatorFile, 0xd1);
+    SharedRefData* target = &block->mData;
+    if (target) {
+        target->mValue = source->mValue;
+        target->mpRef = source->mpRef;
+        if (target->mpRef)
+            target->mpRef->AddRef();
+        target->mA = source->mA;
+        target->mB = source->mB;
+        target->mC = source->mC;
+        target->mD = source->mD;
+    }
+    return block;
+}
+}  // namespace SP
+
+// @ 0x01045120
+namespace SP {
+uint32_t cStarMap_s0104_4360::FindValue(uint32_t bucket, int key)
+{
+    if (bucket == 0) {
+        uint32_t* value = FindNode(key);
+        if (value)
+            return *value;
+        return 0;
+    }
+    NodeRange_s0104_4360 range;
+    mTree.equal_range(&range, &bucket);
+    for (RBNode_s0104_4360* node = range.mpFirst; node != range.mpSecond; node = RBTreeIncrement_s0104_4360(node)) {
+        if ((int)node->mKey == key)
+            return node->mValue;
+    }
+    return 0;
+}
+}  // namespace SP
+
+// @ 0x01045190
+namespace SP {
+uint32_t cStarMap_s0104_4360::FindEntryByLongId(uint32_t key, uint32_t lo, uint32_t hi)
+{
+    NodeRange_s0104_4360 range;
+    mTree.equal_range(&range, &key);
+    RBNode_s0104_4360* node = range.mpFirst;
+    RBNode_s0104_4360* end = range.mpSecond;
+    if (node != end) {
+        do {
+            unsigned long long id = (unsigned long long)((cStarMapView*)node->mValue)->GetId();
+            if ((uint32_t)id == lo && (uint32_t)(id >> 32) == hi)
+                return node->mValue;
+            node = RBTreeIncrement_s0104_4360(node);
+        } while (node != end);
+    }
+    return 0;
+}
+}  // namespace SP
+
+// @ 0x01045200
+void cStarMap::BuildVisual(VisualCtx* ctx, void* object)
+{
+  cStarRecord* rec = (cStarRecord*)object;
+  float x, y, z;
+
+  if (ctx->mKind == 0) {
+    void* mgr = StarManager(rec);
+    void* civ = FUN_00ba6dc0(mgr, rec);
+    if (FUN_00fe3b30(civ) != 0 &&
+        cSPLivingUniverse_GetUniverseContext() == 1) {
+      void* planet = cStarManager_GetOrActivatePlanet(FUN_00ba6dc0(mgr, rec), rec);
+      VEffect* vis = (VEffect*)planet;
+      const Vector3_s0104_5200* p = (const Vector3_s0104_5200*)vis;
+      x = p->x; y = p->y; z = p->z;
+      if (vis != 0)
+        vis->Detach();
+    } else {
+      void* civ2 = BioProtectorSort_op(civ);
+      const Vector3_s0104_5200* p = (const Vector3_s0104_5200*)cCivData_GetCities(civ2);
+      x = p->x; y = p->y; z = p->z;
+    }
+  } else if (ctx->mKind == 1) {
+    void* mgr = StarManager(rec);
+    void* civ = FUN_00ba6d80(mgr, rec);
+    const Vector3_s0104_5200* p = (const Vector3_s0104_5200*)cCivData_GetCities(civ);
+    x = p->x; y = p->y; z = p->z;
+  } else {
+    x = y = z = 0.0f;
+  }
+
+  struct RenderBlock {
+    uint16_t mFlags;
+    int16_t  mCount;
+    float    mPosX, mPosY, mPosZ;
+    float    mScale;
+    float    mMatrix[9];
+  } block;
+
+  block.mPosX = gVisualPosX;
+  block.mPosY = gVisualPosY;
+  block.mPosZ = gVisualPosZ;
+  block.mCount = 0;
+  block.mFlags = 0;
+  block.mScale = kRealOne;
+  Matrix3_Assign(&block.mMatrix[0], &gMatrixDefault);
+  block.mFlags |= 4;
+  block.mCount = (int16_t)(block.mCount + 1);
+
+  if (ctx->mpEffect != 0) {
+    block.mPosX = x;
+    block.mPosY = y;
+    block.mPosZ = z;
+    ctx->mpEffect->SetTransform(&block);
+  }
+}
+
+// @ 0x01045370
+void FUN_01045370(Deque64<cStarRecord*>* d, cStarRecord** value)
+{
+  cStarRecord* v = *value;
+  if ((int)(((char*)d->mItEnd.mpCurrentArrayPtr - (char*)d->mpPtrArray) >> 2) + 1
+      >= (int)d->mnPtrArraySize)
+    FUN_01044f80(d, 1, 1);
+
+  cStarRecord** block = DequeAllocBlock();
+  d->mItEnd.mpCurrentArrayPtr[1] = block;
+  if (d->mItEnd.mpCurrent != 0)
+    *d->mItEnd.mpCurrent = v;
+
+  cStarRecord*** cur = d->mItEnd.mpCurrentArrayPtr;
+  d->mItEnd.mpCurrentArrayPtr = cur + 1;
+  block = cur[1];
+  d->mItEnd.mpBegin = block;
+  d->mItEnd.mpEnd = block + 0x40;
+  d->mItEnd.mpCurrent = d->mItEnd.mpBegin;
+}
+
+// @ 0x010453f0
+void FUN_010453f0(SeqReader* reader, Deque64<cStarRecord*>* d)
+{
+  DequeClear(d);
+
+  uint32_t count = 0;
+  SeqStream* stream = reader->Stream();
+  EA_IO_ReadInt32(stream->Handle(), &count, 1, 0);
+
+  for (uint32_t i = 0; i < count; ++i) {
+    cStarRecord* rec = (cStarRecord*)reader->ReadItem();
+    if (d->mItEnd.mpCurrent + 1 == d->mItEnd.mpEnd) {
+      FUN_01045370(d, &rec);
+    } else {
+      cStarRecord** slot = d->mItEnd.mpCurrent;
+      d->mItEnd.mpCurrent = slot + 1;
+      if (slot != 0)
+        *slot = rec;
+    }
+  }
+  reader->End();
 }
 
 // @ 0x01045490
@@ -734,6 +1528,39 @@ void MultiMapErase(RBTree* tree, RBNode** out, RBNode* node)
     obj->Release();
   operator_delete__(node);
   *out = next;
+}
+
+// @ 0x010455e0
+byte FUN_010455e0(DebugWriter* writer, const char* label, Deque64<cStarRecord*>* dq)
+{
+  byte ok = 1;
+  if (dq->mItBegin.mpCurrent == dq->mItEnd.mpCurrent)
+    return ok;
+
+  const uint16_t* name = (label != 0) ? (const uint16_t*)label
+                                      : (const uint16_t*)L"list";
+  writer->Begin(name);
+
+  cStarRecord** it = dq->mItBegin.mpCurrent;
+  cStarRecord** blockEnd = dq->mItBegin.mpEnd;
+  cStarRecord*** blockPtr = dq->mItBegin.mpCurrentArrayPtr;
+  cStarRecord** end = dq->mItEnd.mpCurrent;
+
+  while (it != end) {
+    if (ok)
+      ok = FUN_00ac8050(writer, 0, *it) ? 1 : 0;
+    else
+      ok = 0;
+
+    ++it;
+    if (it == blockEnd) {
+      it = blockPtr[1];
+      ++blockPtr;
+      blockEnd = it + 0x40;
+    }
+  }
+  writer->End(name);
+  return ok;
 }
 
 // @ 0x01045740
@@ -918,6 +1745,144 @@ void cStarMap::FilterHelperRemove(int filter)
       eff->Release();
     }
   }
+}
+
+// @ 0x01045c80
+void cStarMap::FilterHelperTravelTrail(int filter)
+{
+  Deque64<cStarRecord*>& q = this->mTravelTrail;
+  uint32_t count = (uint32_t)(((q.mItEnd.mpCurrentArrayPtr - q.mItBegin.mpCurrentArrayPtr) >> 2) - 1) * 0x40
+                 + (uint32_t)((q.mItEnd.mpCurrent - q.mItEnd.mpBegin) >> 2)
+                 + (uint32_t)((q.mItBegin.mpEnd - q.mItBegin.mpCurrent) >> 2);
+  if (count <= 1)
+    return;
+
+  cStarRecord** it = q.mItEnd.mpCurrent;
+  cStarRecord** beginBlock = q.mItEnd.mpBegin;
+  cStarRecord** endBlock = q.mItEnd.mpEnd;
+  cStarRecord*** blockPtr = q.mItEnd.mpCurrentArrayPtr;
+  cStarRecord* prev = 0;
+  int index = 0;
+
+  while (it != q.mItBegin.mpCurrent) {
+    cStarRecord** cur = it;
+    if (it == beginBlock) {
+      cur = blockPtr[-1] + 0x40;
+    }
+    cStarRecord* rec = cur[-1];
+    if (it == beginBlock) {
+      beginBlock = blockPtr[-1];
+      blockPtr = blockPtr - 1;
+      it = beginBlock + 0x40;
+      endBlock = it;
+    }
+    it = it - 1;
+    if (it == q.mItBegin.mpCurrent)
+      break;
+
+    cur = it;
+    if (it == beginBlock)
+      cur = blockPtr[-1] + 0x40;
+    cStarRecord* next = cur[-1];
+    if (rec != next) {
+      uint32_t id = this->mVisualCount;
+      this->mVisualCount = id + 1;
+
+      VEffect* eff = 0;
+      if (filter == 0x166521a5 || filter == 0x70930c64 ||
+          filter == (int)0xc3f6ca28 || FUN_01044bf0(this, rec) != 0) {
+        EffectsMgr* mgr = EffectsManagerPtr();
+        if (mgr->Create(0x3ab4709, 0, &eff)) {
+          eff->SetVisible(false);
+          VisualCtx ctx;
+          ctx.mpEffect = 0;
+          ctx.mPad04 = 0;
+          ctx.mPad08 = 0;
+          ctx.mKind = 0;
+          BuildVisual(&ctx, rec);
+
+          RBNode node;
+          node.mpKey = (void*)id;
+          node.mValue.mpObject = eff;
+          node.mValue.mGroup = 0;
+          node.mValue.mFlags = 0;
+          DoInsertValueImpl(&this->mObjectVisuals, (const void*)id, &node.mValue, 0);
+
+          if (id != 0) {
+            VEffect* obj = (VEffect*)FUN_01045120(this, rec->mpInstance, id);
+            if (obj != 0) {
+              float f = ((float)index / this->mTravelTrailLength) * -0.45f + 0.5f;
+              obj->SetParam(4, &f, 1);
+              void* cities = 0;
+              cCivData_GetCitiesOverload((void*)rec, 0.1f, &cities);
+              FUN_01043d10(cities);
+              obj->SetParam(0xd, cities, 0);
+            }
+          }
+        }
+      }
+      ++index;
+    }
+  }
+}
+
+// @ 0x01045f90
+void cStarMap::FilterHelperVisited(uint32_t filter)
+{
+  PtrVector visited;
+  visited.mpBegin = 0;
+  visited.mpEnd = 0;
+  visited.mpCap = 0;
+
+  FUN_00b3d2a0(&visited);
+  if (FUN_00baf460(&visited) != 0) {
+    for (void** p = visited.mpBegin; p != visited.mpEnd; ++p) {
+      cStarRecord* rec = (cStarRecord*)*p;
+      uint32_t id = this->mVisualCount;
+      this->mVisualCount = id + 1;
+      void* instance = rec->mpInstance;
+
+      VEffect* eff = 0;
+      if (filter == 0x166521a5 || filter == 0x70930c64 ||
+          filter == (uint32_t)0xc3f6ca28 || FUN_01044bf0(this, rec) != 0) {
+        EffectsMgr* mgr = EffectsManagerPtr();
+        if (eff != 0) {
+          eff->Release();
+          eff = 0;
+        }
+        if (mgr->Create(0xbfdea3f7, 0, &eff)) {
+          eff->SetVisible(false);
+          VisualCtx ctx;
+          ctx.mpEffect = eff;
+          ctx.mPad04 = 0;
+          ctx.mPad08 = 0;
+          ctx.mKind = 0;
+          BuildVisual(&ctx, instance);
+
+          RBNode node;
+          node.mpKey = instance;
+          node.mValue.mpObject = eff;
+          node.mValue.mGroup = filter;
+          node.mValue.mFlags = 0;
+          if (eff != 0)
+            eff->v00();                 // AddRef before publishing
+          DoInsertValueImpl(&this->mObjectVisuals, instance, &node.mValue, 0);
+          if (eff != 0)
+            eff->Release();
+        }
+      }
+      if (eff != 0)
+        eff->Release();
+    }
+  }
+
+  for (void** p = visited.mpBegin; p != visited.mpEnd; ++p) {
+    cStarRecord* rec = (cStarRecord*)*p;
+    if (rec != 0)
+      rec->Release();
+  }
+  if (visited.mpBegin != 0 && ((uint32_t*)visited.mpBegin)[-1] != 0)
+    operator_delete__(visited.mpBegin);
 }
 
 // @ 0x01046160
