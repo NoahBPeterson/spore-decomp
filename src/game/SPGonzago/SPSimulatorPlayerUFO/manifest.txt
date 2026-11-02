@@ -3,6 +3,8 @@
 ../src/game/SPGonzago/SPSimulatorPlayerUFO.cpp  ?FUN_00ffbfe0@cSPSimPlanetHighLOD@@QAE_NXZ  00ffbfe0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPSimulatorPlayerUFO.cpp  ?FUN_00ffc030@cSPSimPlanetHighLOD@@QAEXXZ  00ffc030  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPSimulatorPlayerUFO.cpp  ?CheckAndReplaceData@cSPSimPlanetHighLOD@@QAE_NPAX00@Z  00ffc160  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPSimulatorPlayerUFO.cpp  ?FUN_00ffc230@@YIXPAUcSPSimulatorPlayerUFO_s00ff_c230@SP@@@Z  00ffc230  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPSimulatorPlayerUFO.cpp  ?FUN_00ffca20@@YIXPAUcSPSimulatorPlayerUFO_s00ff_c230@SP@@@Z  00ffca20  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPSimulatorPlayerUFO.cpp  ?FUN_00ffd280@cSPSimulatorPlayerUFO_s00ff_d220@@QAEXXZ  00ffd280  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPSimulatorPlayerUFO.cpp  ?FUN_00ffdbb0@cSPSimulatorPlayerUFO_s00ff_d220@@QAE_NXZ  00ffdbb0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPSimulatorPlayerUFO.cpp  ?OnContextChange@cSPSimulatorPlayerUFO_s00ff_e130@SP@@QAEXH@Z  00ffe130  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

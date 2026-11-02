@@ -1,4 +1,4 @@
-// src/game/SPGonzago/SPSimulatorPlayerUFO.cpp -- migrated from slice(s) s01000740, s00fff8e0, s00ffe130, s00ffd220, s00ffb180 by tools/migrate/rewrite.py
+// src/game/SPGonzago/SPSimulatorPlayerUFO.cpp -- migrated from slice(s) s00ffc230, s01000740, s00fff8e0, s00ffe130, s00ffd220, s00ffb180 by tools/migrate/rewrite.py
 // Object file: SPGonzago/SPSimulatorPlayerUFO.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -22,6 +22,7 @@
 #include "SP/cMWModel.h"
 #include <stddef.h>
 #include <string.h>
+#include "SP/cViewer.h"
 
 // unnamed retail callees and globals (address in the comment)
 extern char g_nounListUFO[];           // 0x018ebadc
@@ -319,19 +320,6 @@ bool __cdecl EA_IO_WriteUint32(tIStream* pStream, const uint32_t* pValue, int32_
 // ---- items of slice s00ffb180 end
 
 // ---- items of slice s00ffd220 begin (TODO(rewrite): local stubs, replace by canonical classes)
-extern "C" void*        __cdecl FUN_00b3d230(void);   // 0x00b3d230
-extern "C" void         __cdecl FUN_010424c0(void* pDst, const void* pSrc); // 0x010424c0
-extern "C" void*        __cdecl FUN_0059aed0(void* pOut, const void* pV, const void* pQ); // 0x0059aed0
-extern "C" void*        __cdecl QuaternionFromFacingAndUp(void* pOut, const void* pFacing, const void* pUp); // 0x0069b600
-extern "C" float        __cdecl sqrtf(float);         // CRT intrinsic -> fsqrt
-extern const float kDirEps;          // 0x014950e4
-extern const float kNormEps;         // 0x013ec4b8
-extern const float kFwdX;            // 0x016dc0c8
-extern const float kFwdY;            // 0x016dc0cc
-extern const float kFwdZ;            // 0x016dc0d0
-extern const float kBaseX;           // 0x016dba18
-extern const float kBaseY;           // 0x016dba1c
-extern const float kBaseZ;           // 0x016dba20
 extern "C" void*        __cdecl FUN_01021260(void);   // 0x01021260 GetActivePlanet
 extern "C" void*        __cdecl FUN_01021240(void);   // 0x01021240 GetPlayerCiv
 extern "C" void*        __cdecl FUN_01021300(void);   // 0x01021300 GetPlayerEmpire
@@ -341,10 +329,16 @@ extern "C" void*        __cdecl App(void);            // 0x0067dd10
 extern "C" void*        __cdecl EffectsManagerPtr(void); // 0x0067ddd0
 extern "C" void*        __cdecl MessageServer(void);  // 0x0067dcc0
 extern "C" void*        __cdecl GetSpaceCombatTuning(void); // 0x01029940
+extern "C" void*        __cdecl FUN_00b3d230(void);   // 0x00b3d230
 extern "C" bool         __cdecl FUN_0102af80(int uId, void* pObj); // 0x0102af80
 extern "C" uint32_t     __cdecl FUN_00932e80(const char* s, uint32_t seed, int flag); // 0x00932e80 FNV
+extern "C" void         __cdecl FUN_010424c0(void* pDst, const void* pSrc); // 0x010424c0
+extern "C" void*        __cdecl FUN_0059aed0(void* pOut, const void* pV, const void* pQ); // 0x0059aed0
+extern "C" void*        __cdecl QuaternionFromFacingAndUp(void* pOut, const void* pFacing, const void* pUp); // 0x0069b600
 extern const float kRealOne;         // 0x01485720 1.0f
 extern const float kRealZero;        // 0x01485378 0.0f
+extern const float kDirEps;          // 0x014950e4
+extern const float kNormEps;         // 0x013ec4b8
 extern const float kFive;            // 0x01486110
 extern const float kThousand;        // 0x013ec5b4
 extern const float kHundred;         // 0x013ec4d0
@@ -352,6 +346,12 @@ extern const float kRefMatrix[9];    // 0x016dc018 Matrix3 source
 extern const float kMsgX;            // 0x016dc03c
 extern const float kMsgY;            // 0x016dc040
 extern const float kMsgZ;            // 0x016dc044
+extern const float kFwdX;            // 0x016dc0c8
+extern const float kFwdY;            // 0x016dc0cc
+extern const float kFwdZ;            // 0x016dc0d0
+extern const float kBaseX;           // 0x016dba18
+extern const float kBaseY;           // 0x016dba1c
+extern const float kBaseZ;           // 0x016dba20
 extern uint32_t kInterplanetaryDrive; // 0x016dba90 interplanetary-drive tool key
 extern uint32_t kHealthUpgrade10;  // 0x016dbebc
 extern uint32_t kHealthUpgrade9;   // 0x016dbeb0
@@ -468,7 +468,7 @@ public:
     void*   mpD8;             // +0xd8
     void*   mpDc;             // +0xdc
 
-    float __thiscall FUN_00ffd220(int nId);  // 0x00ffd220 (cSPSimulatorPlayerUFO::FUN_00ffd220)
+    float __thiscall FUN_00ffd220(int nId);
     void  __thiscall FUN_00ffd280();  // 0x00ffd280 (cSPSimulatorPlayerUFO::FUN_00ffd280)
     void  __thiscall InitForPlanet();  // 0x00ffd390 (cSPSimulatorPlayerUFO::InitForPlanet)
     void  __thiscall FUN_00ffd710(int nUid, void* pObj);  // 0x00ffd710 (cSPSimulatorPlayerUFO::FUN_00ffd710)
@@ -651,7 +651,25 @@ extern f32 g14950d4;
 // ---- items of slice s00ffe130 end
 
 // ---- items of slice s00fff8e0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern int g_15b6244;      // float bits
+extern int g_15b6248;
+extern int g_15b624c;
+extern unsigned char g_15b7434;
+extern void* g_16dc0f8;    // current cSpaceInventoryItem*
+extern float g_16dc03c, g_16dc040, g_16dc044;
+extern float g_16dc018;    // Matrix3 seed
 #define VFN_s00ff_f8e0(p, slot) (((void**)*(void**)p)[(slot)/4])
+void* GetUniverseContext();                       // 0x01021080
+void* FUN_00b3d4d0();                             // 0x00b3d4d0
+void* SP_App();                                   // 0x0067dd10
+void* FUN_0067dd50();                             // 0x0067dd50
+void* SP_EffectsManager();                        // 0x0067ddd0
+void* SP_SpaceGameGet();                          // 0x01002bd0
+void* SP_GetActivePlanet();                       // 0x01021260
+void* SP_GetActivePlanetRecord();                 // 0x010212a0
+void* FUN_00fd9c60();                             // 0x00fd9c60
+void* SP_MessageServer();                         // 0x0067dcc0
+void  Matrix3_Assign(void*, void*);               // 0x0041cb40
 void  FUN_00fff800(void*, void*, float, float, float);  // 0x00fff800
 void  FUN_00fff870(void*, void*, float, float, float);  // 0x00fff870
 void  FUN_00fff440(void*, int, int, int);         // 0x00fff440
@@ -688,6 +706,285 @@ void*  SP_NormalizedSafe(void* out, const void* src, int flags); // 0x449c20
 #define FUN_00ad48b0 ((void*)0xad48b0)
 #define FUN_00b1e500 ((void*)0xb1e500)
 // ---- items of slice s01000740 end
+
+// ---- items of slice s00ffc230 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern float          g_onef;        // 0x01485720  1.0f
+extern float          g_epsf;        // 0x014950e4  1.5258789e-05f
+extern float          g_vecA[3];     // 0x016dba18  reference point
+extern float          g_vecPrev[3];  // 0x016dc0e8  last camera point
+extern unsigned       g_vecInit;     // 0x016dc0f4  camera-point initialised flag
+extern unsigned char  g_flag15b7434; // 0x015b7434  force star update
+extern float          g_c15b6220;    // 0x015b6220
+extern float          g_c15b6224;    // 0x015b6224
+extern float          g_c15b6228;    // 0x015b6228
+extern float          g_c15b622c;    // 0x015b622c
+extern float          g_c15b6230;    // 0x015b6230
+extern float          g_c15b6234;    // 0x015b6234
+extern float          g_c15b6238;    // 0x015b6238
+extern float          g_c15b623c;    // 0x015b623c
+extern float          g_c15b6240;    // 0x015b6240
+extern void*          g_player16dba14; // 0x016dba14  current player
+extern int            g_id16dba9c;   // 0x016dba9c
+extern int            g_id16dbaa8;   // 0x016dbaa8
+extern int            g_id16dbab4;   // 0x016dbab4
+extern int            g_id16dbac0;   // 0x016dbac0
+extern int            g_id16dbacc;   // 0x016dbacc
+extern int            g_id16dbad8;   // 0x016dbad8
+extern int            g_id16dbae4;   // 0x016dbae4
+extern int            g_id16dbaf0;   // 0x016dbaf0
+extern int            g_id16dbafc;   // 0x016dbafc
+extern int            g_id16dbb08;   // 0x016dbb08
+extern int            g_id16dbb14;   // 0x016dbb14
+struct Vec3 { float x, y, z; };
+void*  __cdecl FUN_01021230();                       // 0x01021230
+int    __cdecl FUN_01021080();                       // 0x01021080  GetUniverseContext
+void*  __cdecl FUN_01002bd0();                       // 0x01002bd0  SpaceGameGet
+void*  __cdecl FUN_00b3d2a0();                       // 0x00b3d2a0  travel tuning
+void*  __cdecl FUN_00b3d300(unsigned);               // 0x00b3d300  NounManager
+void*  __cdecl FUN_00b3d380();                       // 0x00b3d380  GameTimeManager
+void*  __cdecl FUN_00b3d4d0();                       // 0x00b3d4d0  current context
+void*  __cdecl FUN_00feb9f0();                       // 0x00feb9f0  GetMissionManager
+void*  __cdecl FUN_00c37360_s00ff_c230();                       // 0x00c37360  universe scale
+float  __cdecl FUN_00c376b0();                       // 0x00c376b0
+float  __cdecl FUN_0104be30(void* ecx);              // 0x0104be30  handler value
+float  __fastcall FUN_01017240(void* self);          // 0x01017240
+float  __fastcall FUN_01017220(void* self);          // 0x01017220
+bool   __fastcall FUN_01017f20(void* self);          // 0x01017f20
+void   __fastcall FUN_0101b9e0(void* self);          // 0x0101b9e0
+void*  __fastcall FUN_00a1ad60(void* self);          // 0x00a1ad60  player inventory
+int    __fastcall FUN_00bb9ae0(void* self);          // 0x00bb9ae0
+void*  __fastcall FUN_00b1fdb0(void* self);          // 0x00b1fdb0  GetAvatar
+float  __fastcall FUN_0102fd40(void* self);          // 0x0102fd40  colony discount
+float  __fastcall FUN_0102fd90(void* self);          // 0x0102fd90  alliance discount
+float  __fastcall FUN_0102fcf0(void* self);          // 0x0102fcf0  travel rate
+bool   __fastcall FUN_00c772c0(void* self);          // 0x00c772c0  in-terrain-sphere test
+void*  __fastcall FUN_00f67d90(void* self);          // 0x00f67d90  terrain sphere
+bool   __fastcall FUN_00feba90(void* self);          // 0x00feba90  IsRunning
+void*  __fastcall FUN_00c30c60(void* self);          // 0x00c30c60  player's civ
+void*  __fastcall FUN_00c5f3d0(void* self);          // 0x00c5f3d0
+void*  __fastcall FUN_00b8de30(void* self);          // 0x00b8de30
+int    __fastcall FUN_00c8b550(void* self);          // 0x00c8b550
+bool   __fastcall FUN_00ac80f0(void* self);          // 0x00ac80f0
+int    __fastcall FUN_00801920(void* self);          // 0x00801920
+float  __cdecl FUN_010434e0(void* a, void* b);       // 0x010434e0  distance
+float  __cdecl FUN_010434c0(void* a, void* b);       // 0x010434c0  distance
+float  __cdecl FUN_010434c0(void* a, float* b);      // 0x010434c0  distance to point
+void   __cdecl FUN_0105c3d0(float* out, void* obj, float t);   // 0x0105c3d0
+void   __cdecl FUN_0105c5d0(float* out, void* obj, float t);   // 0x0105c5d0
+void   __cdecl FUN_0105f760(void* game, float a, float b);      // 0x0105f760
+float  __cdecl FUN_00b0f060(float a, float b, float c);         // 0x00b0f060
+int    __cdecl FUN_011e0810(float v);                           // 0x011e0810  float->int helper
+struct ICloseable {
+    virtual void p00();                    // +0x00
+    virtual void Release();                // +0x04
+    virtual void p08();                    // +0x08
+    virtual void SetVisible(bool on);      // +0x0c
+    virtual bool IsVisible();              // +0x10
+};
+struct IItemIface {
+    virtual void p00();                    // +0x00
+    virtual void p04();                    // +0x04
+    virtual void p08();                    // +0x08
+    virtual void* Get(unsigned id);        // +0x0c
+};
+struct InventoryItem {
+    char       pad00[0x0c];
+    IItemIface iface;                      // +0x0c  embedded interface (vptr)
+};
+struct IObj {                              // object carrying a world position
+    virtual void p00();                    // +0x00
+    virtual void p04();
+    virtual void p08();
+    virtual void p0c();
+    virtual void p10();
+    virtual void p14();
+    virtual void p18();
+    virtual void p1c();
+    virtual void p20();
+    virtual void p24();
+    virtual void p28();
+    virtual float* GetPos();               // +0x2c
+    virtual void p30();                    // +0x30
+    virtual void p34();                    // +0x34
+    virtual void SetPos(float* p);         // +0x38
+};
+struct INounB {
+    virtual void p00();                    // +0x00
+    virtual void p04();                    // +0x04
+    virtual void p08();                    // +0x08
+    virtual void* Find(unsigned id);       // +0x0c
+};
+struct IMgrA {
+    virtual void p00();                    // +0x00
+    virtual void p04();
+    virtual void p08();
+    virtual void p0c();
+    virtual void p10();
+    virtual void p14();
+    virtual void p18();
+    virtual void p1c();
+    virtual void p20();
+    virtual void p24();
+    virtual void p28();
+    virtual void p2c();
+    virtual void p30();
+    virtual void p34();
+    virtual INounB* GetNounMgr();          // +0x38
+};
+struct IViewer {
+    void GetCameraLocationInfo();          // 0x007c3d30
+};
+struct IApp {
+    virtual void p00();                    // +0x00
+    virtual void p04();
+    virtual void p08();
+    virtual void p0c();
+    virtual void p10();
+    virtual void p14();
+    virtual void p18();
+    virtual void p1c();
+    virtual void p20();
+    virtual void p24();
+    virtual void p28();
+    virtual void p2c();
+    virtual void p30();
+    virtual void p34();
+    virtual void p38();
+    virtual void p3c();
+    virtual void p40();
+    virtual void p44();
+    virtual void p48();
+    virtual void p4c();
+    virtual IMgrA* GetMgrA();              // +0x50
+    virtual void p54();                    // +0x54
+    virtual IViewer* GetViewer(float* out, int, int, int); // +0x58
+};
+struct IInventory {
+    virtual void p00();                    // +0x00
+    virtual void p04();
+    virtual void p08();
+    virtual void p0c();
+    virtual void p10();
+    virtual void p14();
+    virtual void p18();
+    virtual void p1c();
+    virtual void p20();
+    virtual void p24();
+    virtual void p28();
+    virtual void p2c();
+    virtual void p30();
+    virtual void p34();
+    virtual void p38();
+    virtual void p3c();
+    virtual void p40();
+    virtual void p44();
+    virtual void p48();
+    virtual void p4c();
+    virtual void p50();
+    virtual void p54();
+    virtual void p58();
+    virtual void p5c();
+    virtual void p60();
+    virtual void p64();
+    virtual void* FindItem(void* id);      // +0x68
+};
+struct IMission {
+    virtual void p00();                    // +0x00
+    virtual void p04();                    // +0x04
+    virtual void p08();                    // +0x08
+    virtual void* Get(unsigned id);        // +0x0c
+};
+struct IMissionMgr {
+    void* GetMissionByID(unsigned id);     // 0x00fee480
+};
+struct ICiv {
+    void* GetCities();                     // 0x005c65e0  -> this + 0x3c
+};
+struct IEmpire {
+    bool IsColony(void* nounMgr);          // 0x00c31470
+    bool HasAvatar(void* avatar);          // 0x00c31bf0
+};
+struct Timer {
+    void Reset();                          // 0x00bc3170
+};
+struct Sub508 {
+    void f(int arg);                       // 0x00bfc470
+};
+struct SpaceGame {
+    char          pad00[0x34];
+    IObj          view;                    // +0x34  embedded view object (vptr)
+    char          pad38[0x508 - 0x38];
+    Sub508        sub508;                  // +0x508
+    char          pad509[0x608 - 0x509];
+    unsigned char b608;                    // +0x608
+    char          pad609[0x624 - 0x609];
+    unsigned char b624;                    // +0x624
+    char          pad625[0x688 - 0x625];
+    unsigned char b688;                    // +0x688
+    unsigned char b689;                    // +0x689
+    char          pad68a[0x6d0 - 0x68a];
+    Timer         t6d0;                    // +0x6d0
+    char          pad6d1[0x6f0 - 0x6d1];
+    Timer         t6f0;                    // +0x6f0
+    char          pad6f1[0x718 - 0x6f1];
+    float         posX;                    // +0x718
+    float         posY;                    // +0x71c
+    float         posZ;                    // +0x720
+    char          pad724[0x740 - 0x724];
+    float         offX;                    // +0x740
+    float         offY;                    // +0x744
+    float         offZ;                    // +0x748
+    unsigned char mode74c;                 // +0x74c
+    char          pad74d[0x760 - 0x74d];
+    void*         p760;                    // +0x760
+
+    void  MoveTo(float* p);                // 0x00c381e0
+    void  setup(int a, int b);             // 0x00c389c0
+    float time();                          // 0x00c3ae70
+    void  update();                        // 0x00c3b3f0
+    bool  testA();                         // 0x00c37170
+    bool  testB();                         // 0x00c372b0
+    void  launch(float* p);                // 0x00c3be70
+};
+struct StarRecord {
+    char           pad00[0x04];
+    unsigned       flags;                  // +0x04
+    char           pad08[0x0a - 0x08];
+    unsigned short counter;                // +0x0a
+    float          f0c;                    // +0x0c
+    float          f10;                    // +0x10
+    float          f14;                    // +0x14
+    float          f18;                    // +0x18
+    char           pad1c[0x64 - 0x1c];
+    IItemIface*    p64;                    // +0x64
+};
+namespace SP {
+struct cSPSimulatorPlayerUFO_s00ff_c230 {
+    char        pad00[0x1c];
+    void*       mHandler;                  // +0x1c  auto-message handler
+    char        pad20[0x40 - 0x20];
+    SpaceGame*  mpGame;                    // +0x40
+    char        pad44[0x58 - 0x44];
+    StarRecord** mpStars;                  // +0x58  array of star-record pointers
+    char        pad5c[0xa8 - 0x5c];
+    ICloseable* pA8;                       // +0xa8
+    ICloseable* pAC;                       // +0xac
+    ICloseable* pB0;                       // +0xb0
+    ICloseable* pB4;                       // +0xb4
+    char        padb8[0xd8 - 0xb8];
+    int         pD8;                       // +0xd8
+    ICloseable* pDC;                       // +0xdc
+
+    void  SetPlanetDestination(float* dest, unsigned char a, unsigned char b,
+                               unsigned char c, unsigned char d);
+    void  CalcMaxTravelDistance();  // 0x00ffc6d0 (SP::cSPSimulatorPlayerUFO::CalcMaxTravelDistance)
+    float ScaledTravelTime(void* param);
+    bool  CanReach(ICiv* civ);
+    void  Update(float param);
+    void  GetStarRecordUnderMouse();  // 0x00fff8e0 (SP::cSPSimulatorPlayerUFO::GetStarRecordUnderMouse)
+};
+}
+// ---- items of slice s00ffc230 end
 
 // @ 0x00ffbe60
 bool cSPSimulatorPlayerUFO::Write(cOutStream* pStream)
@@ -770,6 +1067,416 @@ bool cSPSimPlanetHighLOD::CheckAndReplaceData(void* pKey, void* pB, void* pC)
     if (pServer != 0 && pListener != 0)
         pServer->v24(pListener, 0x057f3749);
     return true;
+}
+
+// @ 0x00ffc230
+void __fastcall FUN_00ffc230(SP::cSPSimulatorPlayerUFO_s00ff_c230* p)
+{
+    if (p->pDC != 0) {
+        ICloseable* obj = p->pDC;
+        p->pDC = 0;
+        obj->Release();
+    }
+    if (p->pB0 != 0 && p->pB0->IsVisible())
+        p->pB0->SetVisible(true);
+    if (p->pB4 != 0 && p->pB4->IsVisible())
+        p->pB4->SetVisible(true);
+    p->mpGame->sub508.f(0);
+    p->mpGame->t6d0.Reset();
+    p->mpGame->setup(1, 0);
+    p->mpGame->t6f0.Reset();
+}
+
+// @ 0x00ffc350
+void SP::cSPSimulatorPlayerUFO_s00ff_c230::SetPlanetDestination(float* dest, unsigned char a, unsigned char b, unsigned char c, unsigned char d)
+{
+    float dot = dest[0] * dest[0] + dest[1] * dest[1] + dest[2] * dest[2];
+    if (dot >= g_epsf && mpGame->testA()) {
+        IApp*  app  = (IApp*)App();
+        IMgrA* mgr  = app->GetMgrA();
+        INounB* noun = mgr->GetNounMgr();
+        void*  found;
+        if (noun == 0)
+            found = 0;
+        else
+            found = noun->Find(0x303154cd);
+
+        SpaceGame* g = mpGame;
+        float x = g->posX, y = g->posY, z = g->posZ;
+        if (found == 0 ||
+            sqrt(x * x + y * y + z * z) <= FUN_01017240(found)) {
+            mpGame->launch(dest);
+            mpGame->b608 = a;
+            mpGame->b624 = b;
+            mpGame->b688 = c;
+            mpGame->b689 = d;
+            if (found != 0)
+                FUN_0101b9e0(found);
+        }
+    }
+}
+
+// @ 0x00ffc490
+float __stdcall FUN_00ffc490(ICiv* a, ICiv* b)
+{
+    float f = FUN_010434e0(a->GetCities(), b->GetCities());
+    return f > 1.0f ? f : 1.0f;
+}
+
+// @ 0x00ffc4e0
+void __stdcall FUN_00ffc4e0(ICiv* self, void* nounMgr)
+{
+    void*  empire = FUN_01021300();
+    float  discount;
+    if (empire != 0) {
+        if (((IEmpire*)empire)->IsColony(nounMgr)) {
+            discount = FUN_0102fd40(FUN_0102f810());
+        } else if (FUN_00bb9ae0(nounMgr) == 5) {
+            void* avatar = FUN_00b1fdb0(nounMgr);
+            if (((IEmpire*)empire)->HasAvatar(avatar))
+                discount = FUN_0102fd90(FUN_0102f810());
+            else
+                discount = g_onef;
+        } else {
+            discount = g_onef;
+        }
+    } else {
+        discount = g_onef;
+    }
+
+    void* cities2 = ((ICiv*)nounMgr)->GetCities();
+    void* cities1 = self->GetCities();
+    float dist    = FUN_010434e0(cities1, cities2);
+    float chosen  = dist > g_onef ? dist : g_onef;
+    float product = FUN_0102fcf0(FUN_0102f810()) * discount * chosen;
+    FUN_011e0810(product);
+}
+
+// @ 0x00ffc5b0
+int __fastcall FUN_00ffc5b0(SP::cSPSimulatorPlayerUFO_s00ff_c230* p)
+{
+    if (p->mpGame->testB()) {
+        float* pos = p->mpGame->view.GetPos();
+        float  d   = sqrt(pos[0] * pos[0] + pos[1] * pos[1] + pos[2] * pos[2]);
+        return d > FUN_00c376b0() ? 1 : 0;
+    }
+
+    IApp*  app  = (IApp*)App();
+    IMgrA* mgr  = app->GetMgrA();
+    INounB* noun = mgr->GetNounMgr();
+    if (noun != 0) {
+        void* found = noun->Find(0x303154cd);
+        if (found != 0) {
+            void*     tm = FUN_00b3d380();
+            SpaceGame* g = ((SP::cSPSimulatorPlayerUFO_s00ff_c230*)g_player16dba14)->mpGame;
+            float x = g->posX, y = g->posY, z = g->posZ;
+            if (((*(unsigned char*)((char*)tm + 0x48)) & 1) == 0) {
+                float limit = FUN_01017220(found);
+                float d     = sqrt(x * x + y * y + z * z);
+                if (limit < d) {
+                    if (FUN_01017f20(found))
+                        return 1;
+                }
+            }
+        }
+    }
+    return 0;
+}
+
+// @ 0x00ffc6d0
+void SP::cSPSimulatorPlayerUFO_s00ff_c230::CalcMaxTravelDistance()
+{
+    void* sg = FUN_01002bd0();
+    if (sg != 0) {
+        IInventory* inv = (IInventory*)FUN_00a1ad60(sg);
+        if (inv != 0) {
+            void* item = 0;
+            if (item == 0) item = inv->FindItem(&g_id16dbb14);
+            if (item == 0) item = inv->FindItem(&g_id16dbb08);
+            if (item == 0) item = inv->FindItem(&g_id16dbafc);
+            if (item == 0) item = inv->FindItem(&g_id16dbaf0);
+            if (item == 0) item = inv->FindItem(&g_id16dbae4);
+            if (item == 0) item = inv->FindItem(&g_id16dbad8);
+            if (item == 0) item = inv->FindItem(&g_id16dbacc);
+            if (item == 0) item = inv->FindItem(&g_id16dbac0);
+            if (item == 0) item = inv->FindItem(&g_id16dbab4);
+            if (item == 0) item = inv->FindItem(&g_id16dbaa8);
+            if (item == 0) item = inv->FindItem(&g_id16dba9c);
+            if (item != 0) {
+                mHandler = ((InventoryItem*)item)->iface.Get(0x707459f0);
+                return;
+            }
+        }
+    }
+    mHandler = 0;
+}
+
+// @ 0x00ffc7f0
+float SP::cSPSimulatorPlayerUFO_s00ff_c230::ScaledTravelTime(void* param)
+{
+    if (mHandler == 0) {
+        CalcMaxTravelDistance();
+        if (mHandler == 0)
+            return 0.0f;
+    }
+    float t = FUN_0104be30(mHandler);
+
+    void* nounMgr = FUN_00b3d300(0x61f1454);
+    void* sphere  = FUN_00f67d90(nounMgr);
+    if (!FUN_00c772c0(sphere)) {
+        void* info = FUN_00b3d2a0();
+        float d    = FUN_010434e0(param, &g_vecA);
+        if (d < *(float*)((char*)info + 0x1d0)) {
+            void* info2 = FUN_00b3d2a0();
+            float a     = *(float*)((char*)info2 + 0x1c8);
+            if (a < t) {
+                float r = FUN_00b0f060(*(float*)((char*)info + 0x1cc),
+                                       *(float*)((char*)info + 0x1d0), d);
+                return r * (t - a) + a;
+            }
+        }
+    }
+    return t;
+}
+
+// @ 0x00ffc8d0
+bool SP::cSPSimulatorPlayerUFO_s00ff_c230::CanReach(ICiv* civ)
+{
+    if (FUN_00feba90(FUN_00feb9f0())) {
+        void*  planet  = FUN_01021240();
+        void*  pcities = ((ICiv*)planet)->GetCities();
+        void*  ccities = civ->GetCities();
+        float  f1      = ScaledTravelTime(pcities);
+        float  f2      = ScaledTravelTime(ccities);
+        float  mx      = f1 > f2 ? f1 : f2;
+        float  sq      = mx * mx;
+        float  d1      = FUN_010434c0(ccities, pcities);
+        SpaceGame* g   = mpGame;
+        if (g->mode74c == 0) {
+            float d2 = FUN_010434c0(civ->GetCities(), &g->posX);
+            if (sq < d1)
+                return false;
+            if (sq < d2)
+                return false;
+            return true;
+        }
+        if (sq < d1)
+            return false;
+        return true;
+    }
+
+    void*  mission = ((IMissionMgr*)FUN_00feb9f0())->GetMissionByID(0x7bdbb97d);
+    void*  x;
+    if (mission == 0)
+        x = 0;
+    else
+        x = ((IMission*)mission)->Get(0x422227e);
+
+    void* empire = FUN_00c30c60(FUN_01021300());
+    if (civ == empire)
+        return true;
+    if (x != 0) {
+        void* a = FUN_00c5f3d0(x);
+        void* b = FUN_00b8de30(a);
+        if (civ == b)
+            return true;
+    }
+    return false;
+}
+
+// @ 0x00ffca20
+void __fastcall FUN_00ffca20(SP::cSPSimulatorPlayerUFO_s00ff_c230* p)
+{
+    if (p->pA8 != 0 && p->pA8->IsVisible()) {
+        p->pA8->SetVisible(true);
+        if (p->pA8 != 0) {
+            ICloseable* obj = p->pA8;
+            p->pA8 = 0;
+            obj->Release();
+        }
+    }
+    if (p->pAC != 0 && p->pAC->IsVisible()) {
+        p->pAC->SetVisible(true);
+        if (p->pAC != 0) {
+            ICloseable* obj = p->pAC;
+            p->pAC = 0;
+            obj->Release();
+        }
+    }
+}
+
+// @ 0x00ffcab0
+void SP::cSPSimulatorPlayerUFO_s00ff_c230::Update(float param)
+{
+    mpGame->update();
+    int ctx = FUN_01021080();
+
+    if (ctx == 0) {
+        mpGame->MoveTo(g_vecA);
+        return;
+    }
+
+    if (ctx == 1) {
+        void* planet = FUN_01021260();
+        if (planet == 0)
+            return;
+        float t = mpGame->time();
+        Vec3  p;
+        FUN_0105c3d0(&p.x, planet, t);
+        SpaceGame* g = mpGame;
+        if (g->mode74c == 0) {
+            void* target = g->p760;
+            if (target == 0 || planet == target) {
+                float* pp = ((IObj*)planet)->GetPos();
+                float  dx = pp[0] - g->posX;
+                float  dy = pp[1] - g->posY;
+                float  dz = pp[2] - g->posZ;
+                float  scale = sqrt(dx * dx + dy * dy + dz * dz) /
+                               *(float*)((char*)FUN_00c37360_s00ff_c230() + 0x114);
+                float k;
+                if (scale <= g_epsf) {
+                    k = g_onef;
+                } else {
+                    float r = (float)(int)param / scale;
+                    k = r >= g_onef ? g_onef : r;
+                }
+                Vec3 out;
+                out.x = (p.x - g->offX) * k + g->offX;
+                out.y = (p.y - g->offY) * k + g->offY;
+                out.z = (p.z - g->offZ) * k + g->offZ;
+                g->MoveTo(&out.x);
+                return;
+            }
+            Vec3 q;
+            FUN_0105c3d0(&q.x, target, t);
+            float* tp = ((IObj*)target)->GetPos();
+            float* pp = ((IObj*)planet)->GetPos();
+            float dx0 = pp[0] - tp[0];
+            float dy0 = pp[1] - tp[1];
+            float dz0 = pp[2] - tp[2];
+            g = mpGame;
+            float* p2 = ((IObj*)planet)->GetPos();
+            float ex = p2[0] - g->posX;
+            float ey = p2[1] - g->posY;
+            float ez = p2[2] - g->posZ;
+            float frac = g_onef - sqrt(ex * ex + ey * ey + ez * ez) /
+                                     sqrt(dx0 * dx0 + dy0 * dy0 + dz0 * dz0);
+            if (frac <= 0.0f)
+                frac = 0.0f;
+            if (frac >= g_onef)
+                frac = g_onef;
+            Vec3 out;
+            out.x = q.x + (p.x - q.x) * frac;
+            out.y = q.y + (p.y - q.y) * frac;
+            out.z = q.z + (p.z - q.z) * frac;
+            g->MoveTo(&out.x);
+        } else {
+            g->MoveTo(&p.x);
+            void* info = FUN_00b3d4d0();
+            if (*(int*)((char*)info + 0x2c) != 1 && *(int*)((char*)info + 0x2c) != 2) {
+                float k = t < g_c15b6220 ? t : g_c15b6220;
+                FUN_0105f760(mpGame, k, param);
+                SpaceGame* gg = mpGame;
+                Vec3 out;
+                out.x = gg->posX + gg->offX;
+                out.y = gg->posY + gg->offY;
+                out.z = gg->posZ + gg->offZ;
+                gg->view.SetPos(&out.x);
+            }
+        }
+        return;
+    }
+
+    if (ctx == 2) {
+        void* x = FUN_01021230();
+        if (x == 0)
+            return;
+        if (FUN_00c8b550(x) == 2)
+            return;
+        float t = mpGame->time();
+        Vec3  p;
+        FUN_0105c5d0(&p.x, *(void**)((char*)x + 0x48), t);
+        SpaceGame* g = mpGame;
+        if (g->mode74c == 0) {
+            float r = (float)(int)param * g_c15b6224;
+            float k = r >= g_onef ? g_onef : r;
+            Vec3 out;
+            out.x = (p.x - g->offX) * k + g->offX;
+            out.y = (p.y - g->offY) * k + g->offY;
+            out.z = (p.z - g->offZ) * k + g->offZ;
+            g->MoveTo(&out.x);
+            return;
+        }
+        g->MoveTo(&p.x);
+        void* info = FUN_00b3d4d0();
+        if (!FUN_00ac80f0(info)) {
+            float k = t < g_c15b6228 ? t : g_c15b6228;
+            FUN_0105f760(mpGame, k, param);
+            SpaceGame* gg = mpGame;
+            Vec3 out;
+            out.x = gg->posX + gg->offX;
+            out.y = gg->posY + gg->offY;
+            out.z = gg->posZ + gg->offZ;
+            gg->view.SetPos(&out.x);
+        }
+    }
+}
+
+// @ 0x00ffd000
+void SP::cSPSimulatorPlayerUFO_s00ff_c230::GetStarRecordUnderMouse()
+{
+    if ((g_vecInit & 1) == 0) {
+        g_vecInit |= 1;
+        g_vecPrev[0] = g_vecA[0];
+        g_vecPrev[1] = g_vecA[1];
+        g_vecPrev[2] = g_vecA[2];
+    }
+
+    IApp* app = (IApp*)App();
+    float cam[3];
+    IViewer* viewer = app->GetViewer(cam, 0, 0, 0);
+    viewer->GetCameraLocationInfo();
+
+    float dx = g_vecPrev[0] - cam[0];
+    float dy = g_vecPrev[1] - cam[1];
+    float dz = g_vecPrev[2] - cam[2];
+    if (0.001f <= dx * dx + dy * dy + dz * dz || g_flag15b7434 != 0) {
+        g_vecPrev[0] = cam[0];
+        g_vecPrev[1] = cam[1];
+        g_vecPrev[2] = cam[2];
+        int off = 0;
+        do {
+            StarRecord* sr = mpStars[off / 4];
+            if (((sr->flags >> 15) & 1) == 0)
+                return;
+            float ex = cam[0] - sr->f0c;
+            float ey = cam[1] - sr->f10;
+            float ez = cam[2] - sr->f14;
+            float dist = sqrt(ex * ex + ey * ey + ez * ez);
+            float val;
+            void* found = 0;
+            if (sr->p64 != 0)
+                found = sr->p64->Get(0x3e4353b);
+            if (sr->p64 == 0 || found == 0 || FUN_00801920(found) != 1) {
+                float hi = g_c15b6238 * dist;
+                float mid = g_c15b623c * dist;
+                float lo = g_c15b6240;
+                if (mid > lo)
+                    lo = mid;
+                val = hi < lo ? hi : lo;
+            } else {
+                float hi = g_c15b622c * dist;
+                float mid = g_c15b6230 * dist;
+                float lo = g_c15b6234;
+                if (mid > lo)
+                    lo = mid;
+                val = hi < lo ? hi : lo;
+            }
+            sr->counter = sr->counter + 1;
+            off += 4;
+            sr->f18 = val;
+        } while (off < 4000);
+    }
 }
 
 // @ 0x00ffd280
@@ -1416,6 +2123,63 @@ void SP::cSPSimulatorPlayerUFO_s00ff_e130::SetPlanetDestinationFromOffset( f32 x
     this->FUN_00ffc030();
 }
 
+// @ 0x00fff8e0
+void* cSPSimulatorPlayerUFO_GetStarRecordUnderMouse(void* self)
+{
+    char* t = (char*)self;
+    bool bVar4 = true;
+    int ctx = (int)((int(__cdecl*)())GetUniverseContext)();
+    if (ctx == 2) {
+        void* p = FUN_00b3d4d0();
+        int st = *(int*)((char*)p + 0x2c);
+        if (st != 1 && st != 2) {
+            void* app = SP_App();
+            void* q = ((void*(__thiscall*)(void*))VFN_s00ff_f8e0(app, 0x50))(app);
+            void* r = ((void*(__thiscall*)(void*, int))VFN_s00ff_f8e0(q, 0x40))(q, 0x1103192);
+            if (r != 0) {
+                void* m = ((void*(__thiscall*)(void*, int))VFN_s00ff_f8e0(r, 0xc))(r, 0x303154cc);
+                if (m != 0) {
+                    void* hud = FUN_0067dd50();
+                    int info = ((int(__thiscall*)(void*))VFN_s00ff_f8e0(hud, 0x1c))(hud);
+                    void* rec = *(void**)(t + 0x40);
+                    if (*(unsigned char*)((char*)rec + 0x74c) == 0
+                        || *(int*)((char*)info + 8) != g_15b624c
+                        || *(int*)((char*)info + 0xc) != g_15b6248
+                        || *(float*)((char*)m + 0) != 0.0f) {
+                        g_15b624c = *(int*)((char*)info + 8);
+                        g_15b6248 = *(int*)((char*)info + 0xc);
+                        float fv = ((float(__thiscall*)(void*))VFN_s00ff_f8e0(m, 0x5c))(m);
+                        *(float*)&g_15b6244 = fv;
+                    } else {
+                        bVar4 = false;
+                        if (g_15b7434 == 0)
+                            return g_16dc0f8;
+                    }
+                }
+            }
+        } else {
+            g_15b6248 = -1;
+            g_15b624c = -1;
+        }
+    } else {
+        g_15b6248 = -1;
+        g_15b624c = -1;
+    }
+    if (bVar4) {
+        g_16dc0f8 = 0;
+        void* app = SP_App();
+        void* q = ((void*(__thiscall*)(void*))VFN_s00ff_f8e0(app, 0x50))(app);
+        void* v = ((void*(__thiscall*)(void*))VFN_s00ff_f8e0(q, 0x1c))(q);
+        float a[8] = {0};
+        FUN_00fff800(v, v, 0, 0, 0);
+        float dx = a[4] - a[0], dy = a[5] - a[1], dz = a[6] - a[2];
+        float dist = dx * dx + dy * dy + dz * dz;
+        (void)dist;
+        (void)0;
+    }
+    return g_16dc0f8;
+}
+
 // @ 0x00fffc90
 void FUN_00fffc90(int* param_1, int* param_2, int* param_3, float f1, float f2, float f3)
 {
@@ -1439,6 +2203,65 @@ void FUN_00fffc90(int* param_1, int* param_2, int* param_3, float f1, float f2, 
         }
     }
     FUN_00fff870(param_1, param_2, f1, f2, f3);
+}
+
+// @ 0x00fffdd0
+void FUN_00fffdd0(void* self, int p1, int p2)
+{
+    (void)p1; (void)p2;
+    char* t = (char*)self;
+    int ctx = (int)((int(__cdecl*)())GetUniverseContext)();
+    int key;
+    if (ctx == 0) key = (int)0xb2b0ae6a;
+    else if (ctx == 1) key = (int)0x92d2d44f;
+    else if (ctx == 2) key = (int)0x3e43e2d6;
+    else key = p1;
+    void* fx = SP_EffectsManager();
+    void* out = 0;
+    char ok = ((char(__thiscall*)(void*, int, int, void**))VFN_s00ff_f8e0(fx, 0x2c))(fx, key, 0, &out);
+    if (ok) {
+        ((void(__thiscall*)(void*, int))VFN_s00ff_f8e0(out, 8))(out, 0);
+        float m[12];
+        m[4] = g_16dc03c;
+        m[5] = g_16dc040;
+        m[6] = g_16dc044;
+        m[7] = 1.0f;
+        Matrix3_Assign(&m[7], &g_16dc018);
+        void* e = *(void**)(t + 0x40);
+        void* q = ((void*(__thiscall*)(void*))VFN_s00ff_f8e0((char*)e + 0x34, 0x2c))((char*)e + 0x34);
+        m[4] = ((float*)q)[0];
+        m[5] = ((float*)q)[1];
+        m[6] = ((float*)q)[2];
+        ((void(__thiscall*)(void*, void*))VFN_s00ff_f8e0(out, 0x14))(out, &m[4]);
+    }
+    if (out != 0)
+        ((void(__thiscall*)(void*, int))VFN_s00ff_f8e0(out, 4))(out, 1);
+    if (out != 0)
+        ((void(__thiscall*)(void*, int))VFN_s00ff_f8e0(out, 4))(out, 1);
+}
+
+// @ 0x01000000
+void cSPSimulatorPlayerUFO_AutoAddSpiceToCargo(void* self, int param_2)
+{
+    char* t = (char*)self;
+    (void)t;
+    int empire = (int)((int(__cdecl*)())GetUniverseContext)();
+    (void)empire;
+    (void)param_2;
+}
+
+// @ 0x01000520
+void cSPSimulatorPlayerUFO_OnPlanetMoveDone(void* self)
+{
+    (void)self;
+    void* planet = SP_GetActivePlanet();
+    void* rec = SP_GetActivePlanetRecord();
+    if (planet != 0 && rec != 0) {
+        FUN_00fd9c60();
+        void* sg = SP_SpaceGameGet();
+        (void)sg;
+    }
+    SP_MessageServer();
 }
 
 // @ 0x01000dc0
