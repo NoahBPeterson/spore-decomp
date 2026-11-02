@@ -1,0 +1,18 @@
+# va  diff-bytes  reason
+00a102e0 33 complete; behaviourally equivalent reconstruction (cl schedule/register-allocation or EH-frame delta vs original) flags: /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+00a103c0 162 complete; behaviourally equivalent reconstruction (cl schedule/register-allocation or EH-frame delta vs original) flags: /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+00a10670 87 complete; behaviourally equivalent reconstruction (cl schedule/register-allocation or EH-frame delta vs original) flags: /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+00a107a0 23 Ability::ctor: complete; the original is `void ctor()` but hands `this` back in eax (the LTCG caller in 00a2e650 re-reads eax at 00a2e741 after the call at 00a2e737), so it is declared `void* ctor()` with `return this;` (same hidden-eax pattern as ctor2 at 00a10860); equiv PASS 400 valid inputs, 100% coverage (18/18 insns) flags: /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+00a10800 34 complete; behaviourally equivalent reconstruction (cl schedule/register-allocation or EH-frame delta vs original) flags: /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+00a10860 44 complete; behaviourally equivalent reconstruction (cl schedule/register-allocation or EH-frame delta vs original) flags: /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+00a10960 59 complete; behaviourally equivalent reconstruction (cl schedule/register-allocation or EH-frame delta vs original) flags: /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+00a10a00 61 complete; behaviourally equivalent reconstruction (cl schedule/register-allocation or EH-frame delta vs original) flags: /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+00a10d40 69 complete; behaviourally equivalent reconstruction (cl schedule/register-allocation or EH-frame delta vs original) flags: /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+00a10da0 69 complete; behaviourally equivalent reconstruction (cl schedule/register-allocation or EH-frame delta vs original) flags: /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+00a10e00 69 complete; behaviourally equivalent reconstruction (cl schedule/register-allocation or EH-frame delta vs original) flags: /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+00a14380 237 EA::Audio::Group::Shutdown: complete; 248 diff, hash-table clear loop and call schedule differ; difftest PASS (79.8% coverage) flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+00a144c0 110 HTable28 ctor: complete; no symbol of similar size, fixed_pool_base init/rehash inlining not reproduced; difftest FAIL (ours faults in FUN_009212a8) flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+00a145c0 132 EA::Audio::Group ctor body / HTable28: complete; 101 diff, inline member-ctor argument stores differ; difftest PASS flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+00a146a0 30 Playlist::Choose: complete; 31 diff, rand scaling/remainder schedule differs (closest of 9 probed shapes); difftest PASS flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+00a14810 192 MixChannel: complete; 192 diff, float/SSE conversion schedule and loop unrolling differ; difftest FAIL (5/284, rounding at pool @4d590004) flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+00a14a10 32 Chorus dtor: complete; 38 diff, vector destructor iterator call and vptr store shape differ; difftest UNSUPPORTED (our base vtable is a local copy; map the symbol) flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-

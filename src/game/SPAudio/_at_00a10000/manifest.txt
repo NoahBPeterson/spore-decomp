@@ -1,0 +1,21 @@
+# source  symbol  va  flags
+../src/game/SPAudio/_at_00a10000.cpp  ?AddFloat@CmdQueue@@QAEXII@Z  00a10060  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPAudio/_at_00a10000.cpp  ?AddUint32@CmdQueue@@QAEXII@Z  00a10120  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPAudio/_at_00a10000.cpp  ?AddVoidPtr@CmdQueue@@QAEXII@Z  00a101e0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPAudio/_at_00a10000.cpp  ?Reset@CmdQueue@@QAE_NI@Z  00a102a0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPAudio/_at_00a10000.cpp  ?WriteFloat@Serializer@@QAEXHM@Z  00a10390  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPAudio/_at_00a10000.cpp  ?WriteBlob@Serializer@@QAEXHPBXH@Z  00a10490  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPAudio/_at_00a10000.cpp  ?WriteVec3@Serializer@@QAEXHPBI@Z  00a10540  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPAudio/_at_00a10000.cpp  ?f_00a10780@@YAXPAPAX@Z  00a10780  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPAudio/_at_00a10000.cpp  ?q10@Ability@@QAEXPAXH@Z  00a109a0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPAudio/_at_00a10000.cpp  ?q14@Ability@@QAEXH@Z  00a109d0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPAudio/_at_00a10000.cpp  ?q3c@Ability@@QAEHH@Z  00a10cc0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPAudio/_at_00a10000.cpp  ?q40@Ability@@QAEHH@Z  00a10d00  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPAudio/_at_00a10000.cpp  ?q0c@Ability@@QAEXPAXD@Z  00a10e90  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPAudio/_at_00a10000.cpp  ?FUN_00a14680@@YAHH@Z  00a14680  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPAudio/_at_00a10000.cpp  ?FUN_00a146e0@@YAXPAI0AAUpointer_to_unary_function@@@Z  00a146e0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPAudio/_at_00a10000.cpp  ?Shuffle@Playlist@@QAEXXZ  00a14730  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPAudio/_at_00a10000.cpp  ?Clear@Playlist@@QAE_NXZ  00a147b0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPAudio/_at_00a10000.cpp  ?FUN_00a14940@@YA_NPAX@Z  00a14940  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPAudio/_at_00a10000.cpp  ??0tDelayLine@@QAE@XZ  00a14980  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPAudio/_at_00a10000.cpp  ??0Chorus@@QAE@XZ  00a149b0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

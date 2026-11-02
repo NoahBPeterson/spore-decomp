@@ -5,3 +5,7 @@
 00a0f7f0 ?AudioFree@@YGXPAXH@Z  # AudioFree migrated from s00a0f350 (verbatim, slice spelling)
 00a0f810 ?AudioBlockAlloc@@YGPAUAudioBlock@@PAU1@PBHPBD@Z  # AudioBlockAlloc migrated from s00a0f350 (verbatim, slice spelling)
 00a0f860 ?AudioFreeBlock@@YGXPAPAX@Z  # AudioFreeBlock migrated from s00a0f350 (verbatim, slice spelling)
+00a10060 ?AddFloat@CmdQueue@@QAEXII@Z  # CmdQueue::AddFloat migrated from s00a0f350 (verbatim, slice spelling)
+00a10120 ?AddUint32@CmdQueue@@QAEXII@Z  # CmdQueue::AddUint32 migrated from s00a0f350 (verbatim, slice spelling)
+00a101e0 ?AddVoidPtr@CmdQueue@@QAEXII@Z  # CmdQueue::AddVoidPtr migrated from s00a0f350 (verbatim, slice spelling)
+00a102a0 ?Reset@CmdQueue@@QAE_NI@Z  # CmdQueue::Reset migrated from s00a0f350 (verbatim, slice spelling)
