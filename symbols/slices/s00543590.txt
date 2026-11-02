@@ -1,5 +1,5 @@
 00543590 SP::Feed::AtomParser::StartLink  # dev PDB candidate; rel/href/term attributes -> entry thumb/asset link or doc self link
-005439d0 SP::Feed::AtomParser::StartCategory  # term/scheme attributes -> mTags (String16) / mUintList (wcstoul)
+005439d0 ?FUN_005439d0@Ctx40@@QAEXPAH@Z  # Ctx40::FUN_005439d0 migrated from s00543590 (verbatim, slice spelling)
 00543b90 ?FUN_00543b90@Ctx40@@QAEXPAH@Z  # Ctx40::FUN_00543b90 migrated from s00543590 (verbatim, slice spelling)
 00543bb0 ?FUN_00543bb0@Ctx40@@QAEXPAH@Z  # Ctx40::FUN_00543bb0 migrated from s00543590 (verbatim, slice spelling)
 00543bd0 ?FUN_00543bd0@Ctx40@@QAEXPAH@Z  # Ctx40::FUN_00543bd0 migrated from s00543590 (verbatim, slice spelling)

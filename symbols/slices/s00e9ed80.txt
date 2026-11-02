@@ -1,1 +1,7 @@
 00e9ed80 SamplePoints::Rebuild  # ring sample-point rebuild (name mine)
+00e9f3d0 ?InsertDynamicTag@cAmbienceLayerManager_s00e9_ed80@@QAEXPAPAPAUcAmbienceTag_s00e9_ed80@@PBUcSPVector3_s00e9_ed80@@I@Z  # cAmbienceLayerManager_s00e9_ed80::InsertDynamicTag migrated from s00e9ed80 (verbatim, slice spelling)
+00e9f480 ?GenerateDynamicAmbienceTags@cAmbienceLayerManager_s00e9_ed80@@QAEXXZ  # cAmbienceLayerManager_s00e9_ed80::GenerateDynamicAmbienceTags migrated from s00e9ed80 (verbatim, slice spelling)
+00e9f770 ?Update@cAmbienceLayerManager_s00e9_ed80@@QAEXM@Z  # cAmbienceLayerManager_s00e9_ed80::Update migrated from s00e9ed80 (verbatim, slice spelling)
+00e9f9c0 ?InsertTag@cAmbienceLayerManager_s00e9_ed80@@QAE_NIMMMI@Z  # cAmbienceLayerManager_s00e9_ed80::InsertTag migrated from s00e9ed80 (verbatim, slice spelling)
+00e9faa0 ?FUN_00e9faa0@cAmbienceLayerManager_s00e9_ed80@@QAE_NPBD@Z  # cAmbienceLayerManager_s00e9_ed80::FUN_00e9faa0 migrated from s00e9ed80 (verbatim, slice spelling)
+00e9fbc0 ?ResetCubeMap@cAmbienceLayerManager_s00e9_ed80@@QAEXXZ  # cAmbienceLayerManager_s00e9_ed80::ResetCubeMap migrated from s00e9ed80 (verbatim, slice spelling)
