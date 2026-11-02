@@ -684,9 +684,113 @@ struct cTerrainStateMgr_s00fc_03c0 {
     float ComputeAmbient();            // 0xfb88d0
     void UpdateSeasonsNow();           // 0xfbbc00
 
-    void Reset(bool updateNow);
+    void Reset(bool updateNow);  // 0x00fc04b0 (cTerrainStateMgr::Reset)
 };
 // ---- items of slice s00fc03c0 end
+
+// ---- items of slice s00fc03c0_state begin (TODO(rewrite): local stubs, replace by canonical classes)
+struct Vector2_s00fc_03c0__state { float x, y; };
+template <class T>
+struct eastl_vector {
+    T* mpBegin;
+    T* mpEnd;
+    T* mpCapacity;
+    uint32_t mAllocator0;
+    uint32_t mAllocator1;
+    eastl_vector& operator=(const eastl_vector& other);
+};
+typedef eastl_vector<Vector2_s00fc_03c0__state> Vector2Vector;
+struct IRefCounted {
+    virtual void AddRef();      // +0x00
+    virtual void Release();     // +0x04
+};
+template <class T>
+struct AutoRefCount_s00fc_03c0__state {
+    T* mpObject;
+    AutoRefCount_s00fc_03c0__state& operator=(T* p)
+    {
+        if (p != mpObject) {
+            T* const pOld = mpObject;
+            if (p)
+                p->AddRef();
+            mpObject = p;
+            if (pOld)
+                pOld->Release();
+        }
+        return *this;
+    }
+};
+struct TexturingParms {
+    Vector2Vector mTable;           // +0x00
+    float m134;                     // +0x14
+    float m138;                     // +0x18
+    TexturingParms& operator=(const TexturingParms& other)
+    {
+        mTable = other.mTable;
+        m134 = other.m134;
+        m138 = other.m138;
+        return *this;
+    }
+};
+struct PlanarDef {                  // 0xa0 bytes: five floats + seven vectors
+    uint32_t mData[0xa0 / 4];
+    PlanarDef& operator=(const PlanarDef& other);
+};
+struct TerrainRecord {              // 0x6c bytes
+    uint32_t mData[0x6c / 4];
+    void Assign(const TerrainRecord& other);
+};
+struct StateOutputParms {           // 0x90 bytes
+    uint32_t mData[0x90 / 4];
+    StateOutputParms& operator=(const StateOutputParms& other);
+};
+namespace SP {
+struct cTerrainStateMgr_s00fc_03c0__state {
+    struct cStateParms;
+};
+}
+namespace SP {
+struct cTerrainStateMgr_s00fc_03c0__state::cStateParms {
+    struct PodBlock { uint32_t m[0x118 / 4]; };
+
+    PodBlock mPlanetaryParms;       // +0x000 opaque value block
+    uint32_t m118;                  // +0x118
+    uint32_t m11c;                  // +0x11c
+    TexturingParms mTexturingParms; // +0x120
+    PlanarDef mTerrainParms;        // +0x13c
+    float m1dc;                     // +0x1dc
+    float m1e0;                     // +0x1e0
+    float m1e4;                     // +0x1e4
+    float m1e8;                     // +0x1e8
+    AutoRefCount_s00fc_03c0__state<IRefCounted> m1ec; // +0x1ec
+    TerrainRecord mScatterParms;    // +0x1f0
+    StateOutputParms mOutputParms;  // +0x25c
+
+    cStateParms* Reset();                                   // 0x00fbe050
+    void DestroySubObjects();                               // 0x00fbcd80
+    cStateParms& operator=(const cStateParms& other);
+};
+}
+struct ImageRef_s00fc_03c0__state {
+    void* mpResource;
+};
+template <class T>
+struct RefPtr_s00fc_03c0__state {
+    T* mpObject;
+};
+struct RenderState_s00fc_03c0__state {                // 0x2b8 bytes
+    ImageRef_s00fc_03c0__state images[14];            // +0x000
+    RefPtr_s00fc_03c0__state<IRefCounted> refs[8];    // +0x038
+    uint32_t mScalars[(0x2b8 - 0x58) / 4];
+
+    void ReleaseImages();                                   // 0x00fb9fc0
+    RenderState_s00fc_03c0__state& operator=(const RenderState_s00fc_03c0__state& other);       // 0x00fbce30
+};
+extern SP::cTerrainStateMgr_s00fc_03c0__state::cStateParms gCoreState;   // 0x016d6788
+extern RenderState_s00fc_03c0__state gRenderState;                       // 0x016d6a78
+extern IRefCounted* gTerrainLayerTable[];              // 0x016d6d30, 16 entries
+extern IRefCounted* gTerrainLayerTable2[];             // 0x016d6d70, 16 entries
+// ---- items of slice s00fc03c0_state end
 
 // @ 0x00fba330
 void SP::cTerrainStateMgr::StaticInit()
@@ -1380,4 +1484,38 @@ void cTerrainStateMgr_s00fc_03c0::Reset(bool updateNow)
 
     if (list)
         list->Release();
+}
+
+// @ 0x00fc0fe0
+void ResetTerrainGlobals()
+{
+    {
+        SP::cTerrainStateMgr_s00fc_03c0__state::cStateParms state;
+        gCoreState = *state.Reset();
+        state.DestroySubObjects();
+    }
+
+    {
+        RenderState_s00fc_03c0__state renderState;
+        void** refs = &renderState.images[0].mpResource;    // 22 reference slots, images then refs
+        for (unsigned i = 0; i < 22; i++)
+            refs[i] = 0;
+        gRenderState = renderState;
+        renderState.ReleaseImages();
+    }
+
+    for (unsigned i = 0; i < 16; i++) {
+        IRefCounted* p = gTerrainLayerTable[i];
+        if (p) {
+            gTerrainLayerTable[i] = 0;
+            p->Release();
+        }
+    }
+    for (unsigned i = 0; i < 16; i++) {
+        IRefCounted* p = gTerrainLayerTable2[i];
+        if (p) {
+            gTerrainLayerTable2[i] = 0;
+            p->Release();
+        }
+    }
 }
