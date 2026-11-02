@@ -1,1 +1,3 @@
+00cc15b0 ?GetBestCityTarget@@YAPAUcCombatant_s00cc_15b0@@PAUcTribe@@PAU1@@Z  # GetBestCityTarget migrated from s00cc15b0 (verbatim, slice spelling)
+00cc1890 ?FireGravityWave@cDefaultToolProjectile_s00cc_15b0@@QAEXUcSPVector3_s00cc_15b0@@0@Z  # cDefaultToolProjectile_s00cc_15b0::FireGravityWave migrated from s00cc15b0 (verbatim, slice spelling)
 00cc1c30 SP::cDefaultToolProjectile::UpdateBombPhase1  # Claude-coined name; ModAPI cDefaultToolProjectile layout (mBombPhase 0x544, mPhaseTimer 0x548, effect 0x5cc, cities 0x5dc); sets phase 2 after 20 s

@@ -1,5 +1,4 @@
-# s00cbcde0 recovered names
-00cbcde0 BuildFlightArcPath  # preserved; cdecl(float x6, SpVector<Vector3>*): arcs A->B over the planet at radius+80, returns false when |A-B| < 300
-00cbd620 BuildFlightArcPathFromObjects  # newly claimed; partial: 64-segment object-to-object flight arc
+00cbcde0 ?BuildFlightArcPath@@YA_NUVector3_s00cb_cde0@@0PAUSpVectorV3@@@Z  # BuildFlightArcPath migrated from s00cbcde0 (verbatim, slice spelling)
+00cbd620 ?BuildFlightArcPathFromObjects@@YA_NPAUIPositioned@@0PAUSpVectorV3@@MMM@Z  # BuildFlightArcPathFromObjects migrated from s00cbcde0 (verbatim, slice spelling)
 0169aa6c ?g_flightArcPiOver8@@3MA  # lazily-initialised pi/8 for the 64-segment arc
 0169aa70 ?g_flightArcPiOver8Guard@@3IA  # its init guard (dword, bit 0)

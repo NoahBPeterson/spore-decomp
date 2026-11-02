@@ -1,0 +1,7 @@
+00cba4e0 ?TakeHit@cCombatant_s00cb_a050@SP@@QAEXMHHHH@Z  # cCombatant_s00cb_a050::TakeHit migrated from s00cba050 (verbatim, slice spelling)
+00cba560 ?FUN_00cba560@@YAXPAX0HHMMHH@Z  # FUN_00cba560 migrated from s00cba050 (verbatim, slice spelling)
+00cba690 ?Explode@cCulturalProjectile_s00cb_a050@SP@@QAEXXZ  # cCulturalProjectile_s00cb_a050::Explode migrated from s00cba050 (verbatim, slice spelling)
+00cbac80 ?Update@cResourceProjectile_s00cb_a050@SP@@QAE_NXZ  # cResourceProjectile_s00cb_a050::Update migrated from s00cba050 (verbatim, slice spelling)
+00cbad00 ?Update@cICBM@SP@@QAE_NXZ  # cICBM::Update migrated from s00cba050 (verbatim, slice spelling)
+00cbad90 ?FUN_00cbad90@@YAXPAUObj_s00cb_a050@@PAUPropertyList@@@Z  # FUN_00cbad90 migrated from s00cba050 (verbatim, slice spelling)
+00cbaf00 ??0cPathFollowingLocomotion_s00cb_a050@Simulator@@QAE@ABUVector3Vector_s00cb_a050@@H@Z  # cPathFollowingLocomotion_s00cb_a050::cPathFollowingLocomotion migrated from s00cba050 (verbatim, slice spelling)

@@ -1,1 +1,4 @@
+00b7e3b0 ?GetNormal@cPlanetModel@SP@@QBE?AUcSPVector3@@ABU3@@Z  # SP::cPlanetModel::GetNormal (callee of s00cc0700, named from the dev publics; slice address comment)
+00cc0700 ?FirePeaceBomb@@YAXUcSPVector3_s00cc_0700@@0@Z  # FirePeaceBomb migrated from s00cc0700 (verbatim, slice spelling)
+00cc0870 ?SetupPathFollowing@cDefaultToolProjectile_s00cc_0700@@QAEXMPAUcTargetObj@@PAUcSPVector3_s00cc_0700@@@Z  # cDefaultToolProjectile_s00cc_0700::SetupPathFollowing migrated from s00cc0700 (verbatim, slice spelling)
 00cc0b40 SP::cDefaultBeamProjectile::Update  # card PDB name; ModAPI cDefaultBeamProjectile layout (this = +0x108 base)

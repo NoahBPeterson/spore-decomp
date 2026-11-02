@@ -1,6 +1,6 @@
 00cc22c0 ?Explode@cDefaultToolProjectile@@QAEXHPAX@Z  # cDefaultToolProjectile::Explode migrated from s00cc22c0 (verbatim, slice spelling)
-00cc26a0 ?FindNearestCreature@@YAHMMM_N0@Z  # int FindNearestCreature
-00cc27f0 ?UpdateState@cSpatialObjectView@@QAEHXZ  # int cSpatialObjectView::UpdateState
+00cc26a0 ?FindNearestCreature@@YAHMMM_N0@Z  # FindNearestCreature migrated from s00cc22c0 (verbatim, slice spelling)
+00cc27f0 ?UpdateState@cSpatialObjectView@@QAEHXZ  # cSpatialObjectView::UpdateState migrated from s00cc22c0 (verbatim, slice spelling)
 00cc28c0 ??0cDefaultBeamProjectileView@@QAE@XZ  # cDefaultBeamProjectileView::cDefaultBeamProjectileView migrated from s00cc22c0 (verbatim, slice spelling)
 00cc28f0 ?MakeFlakProjectileView@@YAPAVcSpatialObjectView@@PAX@Z  # MakeFlakProjectileView migrated from s00cc22c0 (verbatim, slice spelling)
 00cc2980 ?MakeDefaultToolProjectileView@@YAPAVcSpatialObjectView@@PAX@Z  # MakeDefaultToolProjectileView migrated from s00cc22c0 (verbatim, slice spelling)
