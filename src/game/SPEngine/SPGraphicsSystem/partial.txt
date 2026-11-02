@@ -1,2 +1,2 @@
-# va  diff-bytes  reason
+# all 19 rows settled -> manifest.txt (1 byte-exact) + nonmatching.txt (18)
 007a7d50  1300  skeleton: large render-init body omitted; only calls Init()

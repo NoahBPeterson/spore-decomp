@@ -1,15 +1,19 @@
-007a5290 SP::cGraphicsSystem::UpdateRendering  # PDB name
-007a52f0 SP::cGraphicsSystem::InitSplatterTexture  # PDB name
-007a54b0 SP::cGraphicsSystem::InitAOTexture  # PDB name
-007a5530 SP::cGraphicsSystem::InitBakeInfoTexture  # PDB name
-007a55b0 SP::cGraphicsSystem::InitNMapSpecTexture  # PDB name
-007a5630 SP::cGraphicsSystem::InitFinalBakedTexture  # PDB name
-007a56b0 SP::cGraphicsSystem::InitSmallFinalBakedTexture  # PDB name
-007a5730 SP::cGraphicsSystem::InitDepthTexture  # PDB name
-007a57d0 SP::cGraphicsSystem::InitShadowTexture  # PDB name
-007a5860 SP::cGraphicsSystem::InitShadowBlurTexture  # PDB name
-007a5900 SP::cGraphicsSystem::InitSnapshotTexture  # PDB name
-007a5990 SP::cGraphicsSystem::InitLargeThumbnailTexture  # PDB name
-007a5a20 SP::cGraphicsSystem::InitThumbnailBoundsTexture  # PDB name
-007a5ef0 SP::cGraphicsSystem::RecycleBakeBuffers  # PDB name
-007a5f70 SP::cGraphicsSystem::InitBakeBuffer  # PDB name
+007a51d0 ?ReleaseGifExportTextures@cGraphicsSystem_s007a_51d0@SP@@QAEXXZ  # cGraphicsSystem_s007a_51d0::ReleaseGifExportTextures migrated from s007a51d0 (verbatim, slice spelling)
+007a5290 ?UpdateRendering@cGraphicsSystem_s007a_51d0@SP@@QAEXH@Z  # cGraphicsSystem_s007a_51d0::UpdateRendering migrated from s007a51d0 (verbatim, slice spelling)
+007a52f0 ?InitSplatterTexture@cGraphicsSystem_s007a_51d0@SP@@QAE_NXZ  # cGraphicsSystem_s007a_51d0::InitSplatterTexture migrated from s007a51d0 (verbatim, slice spelling)
+007a5370 ?InitAnimGifExportTexture@cGraphicsSystem_s007a_51d0@SP@@QAE_NXZ  # cGraphicsSystem_s007a_51d0::InitAnimGifExportTexture migrated from s007a51d0 (verbatim, slice spelling)
+007a5410 ?InitEditGifExportTexture@cGraphicsSystem_s007a_51d0@SP@@QAE_NXZ  # cGraphicsSystem_s007a_51d0::InitEditGifExportTexture migrated from s007a51d0 (verbatim, slice spelling)
+007a54b0 ?InitAOTexture@cGraphicsSystem_s007a_51d0@SP@@QAE_NXZ  # cGraphicsSystem_s007a_51d0::InitAOTexture migrated from s007a51d0 (verbatim, slice spelling)
+007a5530 ?InitBakeInfoTexture@cGraphicsSystem_s007a_51d0@SP@@QAE_NXZ  # cGraphicsSystem_s007a_51d0::InitBakeInfoTexture migrated from s007a51d0 (verbatim, slice spelling)
+007a55b0 ?InitNMapSpecTexture@cGraphicsSystem_s007a_51d0@SP@@QAE_NXZ  # cGraphicsSystem_s007a_51d0::InitNMapSpecTexture migrated from s007a51d0 (verbatim, slice spelling)
+007a5630 ?InitFinalBakedTexture@cGraphicsSystem_s007a_51d0@SP@@QAE_NXZ  # cGraphicsSystem_s007a_51d0::InitFinalBakedTexture migrated from s007a51d0 (verbatim, slice spelling)
+007a56b0 ?InitSmallFinalBakedTexture@cGraphicsSystem_s007a_51d0@SP@@QAE_NXZ  # cGraphicsSystem_s007a_51d0::InitSmallFinalBakedTexture migrated from s007a51d0 (verbatim, slice spelling)
+007a5730 ?InitDepthTexture@cGraphicsSystem_s007a_51d0@SP@@QAE_NXZ  # cGraphicsSystem_s007a_51d0::InitDepthTexture migrated from s007a51d0 (verbatim, slice spelling)
+007a57d0 ?InitShadowTexture@cGraphicsSystem_s007a_51d0@SP@@QAE_NXZ  # cGraphicsSystem_s007a_51d0::InitShadowTexture migrated from s007a51d0 (verbatim, slice spelling)
+007a5860 ?InitShadowBlurTexture@cGraphicsSystem_s007a_51d0@SP@@QAE_NXZ  # cGraphicsSystem_s007a_51d0::InitShadowBlurTexture migrated from s007a51d0 (verbatim, slice spelling)
+007a5900 ?InitSnapshotTexture@cGraphicsSystem_s007a_51d0@SP@@QAE_NXZ  # cGraphicsSystem_s007a_51d0::InitSnapshotTexture migrated from s007a51d0 (verbatim, slice spelling)
+007a5990 ?InitLargeThumbnailTexture@cGraphicsSystem_s007a_51d0@SP@@QAE_NXZ  # cGraphicsSystem_s007a_51d0::InitLargeThumbnailTexture migrated from s007a51d0 (verbatim, slice spelling)
+007a5a20 ?InitThumbnailBoundsTexture@cGraphicsSystem_s007a_51d0@SP@@QAE_NXZ  # cGraphicsSystem_s007a_51d0::InitThumbnailBoundsTexture migrated from s007a51d0 (verbatim, slice spelling)
+007a5ef0 ?RecycleBakeBuffers@cGraphicsSystem_s007a_51d0@SP@@QAEXXZ  # cGraphicsSystem_s007a_51d0::RecycleBakeBuffers migrated from s007a51d0 (verbatim, slice spelling)
+007a5f70 ?InitBakeBuffer@cGraphicsSystem_s007a_51d0@SP@@QAEPAVcTextureHandle@2@H@Z  # cGraphicsSystem_s007a_51d0::InitBakeBuffer migrated from s007a51d0 (verbatim, slice spelling)
+007a6010 ??0cGraphicsSystem_s007a_51d0@SP@@QAE@XZ  # cGraphicsSystem_s007a_51d0::cGraphicsSystem migrated from s007a51d0 (verbatim, slice spelling)
