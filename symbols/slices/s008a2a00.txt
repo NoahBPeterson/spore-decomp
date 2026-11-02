@@ -5,4 +5,4 @@
 008a2ee0 EA::Text::Typesetter::GetGeneralCharCluster  # byte-exact
 008a2fe0 EA::Text::GlyphLayoutVector::DoInsertValue  # complete; append path byte-identical, grow path register/slot assignment differs; equiv WEAK (12 valid, 39.0% coverage)
 008a3110 EA::Text::Typesetter::AppendGeneralGlyphCluster  # complete; retail inlines GlyphLayoutInfo push_back, this build outlines it; equiv WEAK (174 valid, 23.8% coverage)
-008a3480 EA::Text::Typesetter::AppendHangulCharCluster  # byte-exact (incl. retail password-mode branch)
+008a3480 ?AppendHangulCharCluster@Typesetter@Text@EA@@QAEIIIPB_WIH@Z  # EA::Text::Typesetter::AppendHangulCharCluster migrated from s008a2a00

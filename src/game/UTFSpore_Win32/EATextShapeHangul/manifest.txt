@@ -1,0 +1,2 @@
+# source  symbol  va  flags
+../src/game/UTFSpore_Win32/EATextShapeHangul.cpp  ?AppendHangulCharCluster@Typesetter@Text@EA@@QAEIIIPB_WIH@Z  008a3480  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
