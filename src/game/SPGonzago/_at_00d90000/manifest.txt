@@ -1,0 +1,26 @@
+# source  symbol  va  flags
+../src/game/SPGonzago/_at_00d90000.cpp  ?FUN_00d90c40@SP@@YAXPAVcSPCreatureCitizen_s00d9_0640@@@Z  00d90c40  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00d90000.cpp  ?FUN_00d90c60@SP@@YADPAVcSPCreatureCitizen_s00d9_0640@@@Z  00d90c60  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00d90000.cpp  ?FUN_00d90c80@SP@@YAMPAX00I@Z  00d90c80  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00d90000.cpp  ?FUN_00d90ca0@SP@@YAXPAVcSPCreatureCitizen_s00d9_0640@@@Z  00d90ca0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00d90000.cpp  ?FUN_00d90cd0@SP@@YAXPAVcSPCreatureCitizen_s00d9_0640@@@Z  00d90cd0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00d90000.cpp  ?ExtinguishTarget@@YAPAVcSPCreatureBase@@PAV1@@Z  00d99470  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00d90000.cpp  ?FireTarget@@YAPAVcSPCreatureBase@@PAV1@@Z  00d994c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00d90000.cpp  ?IsAnimRunning@@YAHPAVcAnimState@@@Z  00d99550  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00d90000.cpp  ?RingNodeMatches@@YA_NPAUcTreeRing@@PBI@Z  00d995c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00d90000.cpp  ?ForwardWalkTree@@YAXMNPAX00000@Z  00d995f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00d90000.cpp  ?MakeStimulusDesc@@YAXIIPBUVector3@@PAUsStimulusDesc@@@Z  00d996b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00d90000.cpp  ?CopyStimulusFlat@@YAXPBUsStimulusFlat@@PAUsStimulusRotated@@@Z  00d996e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00d90000.cpp  ?AssignStimulus@@YAXPBUsStimulusRecord@@PAUsStimulusAssignment@@@Z  00d99730  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00d90000.cpp  ?GetStimulusCreature@@YAPAVcSPCreatureBase@@PAUcStimulusContext@@@Z  00d99a10  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00d90000.cpp  ?FUN_00d9ae60@@YAMPAD@Z  00d9ae60  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPGonzago/_at_00d90000.cpp  ?FUN_00d9afe0@@YAXPAUCreature@@@Z  00d9afe0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00d90000.cpp  ?StartFillLeft@SocialValues@@QAEXMM@Z  00d9b0d0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00d90000.cpp  ?FUN_00d9b510@@YAXPAUCreature@@HHHHPAX@Z  00d9b510  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00d90000.cpp  ?FUN_00d9b560@@YA_NPAUCreature@@HHHHPAX@Z  00d9b560  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00d90000.cpp  ?FUN_00d9c960@@YAXPAUcSPCreatureBase_s00d9_bee0@@@Z  00d9c960  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00d90000.cpp  ?FUN_00d9ccc0@cScaleHelper@@QAEXMM@Z  00d9ccc0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00d90000.cpp  ?FUN_00d9d0e0@@YADPAX@Z  00d9d0e0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPGonzago/_at_00d90000.cpp  ?FUN_00d9d800@@YAXPAX@Z  00d9d800  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPGonzago/_at_00d90000.cpp  ?FUN_00d9d890@S@@QAEXPAH0@Z  00d9d890  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPGonzago/_at_00d90000.cpp  ?FinishBehaviorTask@@YAXPAVcSimCreature@@PAX111PAUcBehaviorCallback@@@Z  00d9e420  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

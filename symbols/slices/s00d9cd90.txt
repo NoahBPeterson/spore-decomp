@@ -1,4 +1,17 @@
+00d9cd90 ?FUN_00d9cd90@S@@QAEXXZ  # S::FUN_00d9cd90 migrated from s00d9cd90 (verbatim, slice spelling)
 00d9cf70 SP::cTribeGameBehaviorFeedBaby::AddAgent  # PDB candidate (caller-scored)
+00d9d0e0 ?FUN_00d9d0e0@@YADPAX@Z  # FUN_00d9d0e0 migrated from s00d9cd90 (verbatim, slice spelling)
+00d9d100 ?FUN_00d9d100@S@@QAEXPAXH@Z  # S::FUN_00d9d100 migrated from s00d9cd90 (verbatim, slice spelling)
+00d9d1e0 ?FUN_00d9d1e0@S@@QAEDPAX@Z  # S::FUN_00d9d1e0 migrated from s00d9cd90 (verbatim, slice spelling)
+00d9d570 ?FUN_00d9d570@S@@QAEXPAX@Z  # S::FUN_00d9d570 migrated from s00d9cd90 (verbatim, slice spelling)
 00d9d5b0 SP::TRIBE_RESET_TOOL_Tick  # PDB candidate (caller-scored)
+00d9d800 ?FUN_00d9d800@@YAXPAX@Z  # FUN_00d9d800 migrated from s00d9cd90 (verbatim, slice spelling)
+00d9d840 ?FUN_00d9d840@S@@QAEHH@Z  # S::FUN_00d9d840 migrated from s00d9cd90 (verbatim, slice spelling)
+00d9d890 ?FUN_00d9d890@S@@QAEXPAH0@Z  # S::FUN_00d9d890 migrated from s00d9cd90 (verbatim, slice spelling)
+00d9d8d0 ?FUN_00d9d8d0@S@@QAEXPAH000@Z  # S::FUN_00d9d8d0 migrated from s00d9cd90 (verbatim, slice spelling)
+00d9d940 ?FUN_00d9d940@@YAXPAXI0@Z  # FUN_00d9d940 migrated from s00d9cd90 (verbatim, slice spelling)
+00d9d9a0 ?FUN_00d9d9a0@S@@QAEXPAXHHHHMMMMMMM0@Z  # S::FUN_00d9d9a0 migrated from s00d9cd90 (verbatim, slice spelling)
+00d9da80 ?FUN_00d9da80@S@@QAEXPAX0HHMMM@Z  # S::FUN_00d9da80 migrated from s00d9cd90 (verbatim, slice spelling)
+00d9db30 ?FUN_00d9db30@S@@QAEXPAX00@Z  # S::FUN_00d9db30 migrated from s00d9cd90 (verbatim, slice spelling)
 00d9dba0 SP::SOCIAL_RESPOND_memory_block::Start  # bootstrap of the SOCIAL_RESPOND memory block
-00d9dc80 SP::SOCIAL_RESPOND_memory_block::Stop  # shutdown of the SOCIAL_RESPOND memory block
+00d9dc80 ?FUN_00d9dc80@S@@QAEXPAX0@Z  # S::FUN_00d9dc80 migrated from s00d9cd90 (verbatim, slice spelling)

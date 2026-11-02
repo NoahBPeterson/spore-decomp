@@ -1,14 +1,14 @@
-00d90640 FUN_00d90640  # SP::CitizenTree find-nearest-object tick
-00d90950 FUN_00d90950  # SP::CitizenTree find-different-type tick
-00d90a60 FUN_00d90a60  # game-mode predicate
+00d90640 ?FUN_00d90640@SP@@YAMPAVcSPCreatureCitizen_s00d9_0640@@PAX1I1PAD@Z  # FUN_00d90640 migrated from s00d90640 (verbatim, slice spelling)
+00d90950 ?FUN_00d90950@SP@@YAMPAVcSPCreatureCitizen_s00d9_0640@@PAX1I1PAD@Z  # FUN_00d90950 migrated from s00d90640 (verbatim, slice spelling)
+00d90a60 ?FUN_00d90a60@SP@@YAMPAVcSPCreatureCitizen_s00d9_0640@@@Z  # FUN_00d90a60 migrated from s00d90640 (verbatim, slice spelling)
 00d90ac0 FUN_00d90ac0  # warp-home activate
-00d90b20 FUN_00d90b20  # warp-home tick
-00d90bb0 FUN_00d90bb0  # watch-vignette tick
-00d90c40 FUN_00d90c40  # decrement agent counter
-00d90c60 FUN_00d90c60  # not-near-goal predicate
-00d90c80 FUN_00d90c80  # flag predicate
-00d90ca0 FUN_00d90ca0  # decrement counter + tool effect
-00d90cd0 FUN_00d90cd0  # SetSprinting(0) helper
+00d90b20 ?FUN_00d90b20@SP@@YA_NPAVcSPCreatureCitizen_s00d9_0640@@PAX1I1PAUBehaviorStateOut@@@Z  # FUN_00d90b20 migrated from s00d90640 (verbatim, slice spelling)
+00d90bb0 ?FUN_00d90bb0@SP@@YAMPAVcSPCreatureCitizen_s00d9_0640@@PAX1I1PAD@Z  # FUN_00d90bb0 migrated from s00d90640 (verbatim, slice spelling)
+00d90c40 ?FUN_00d90c40@SP@@YAXPAVcSPCreatureCitizen_s00d9_0640@@@Z  # FUN_00d90c40 migrated from s00d90640 (verbatim, slice spelling)
+00d90c60 ?FUN_00d90c60@SP@@YADPAVcSPCreatureCitizen_s00d9_0640@@@Z  # FUN_00d90c60 migrated from s00d90640 (verbatim, slice spelling)
+00d90c80 ?FUN_00d90c80@SP@@YAMPAX00I@Z  # FUN_00d90c80 migrated from s00d90640 (verbatim, slice spelling)
+00d90ca0 ?FUN_00d90ca0@SP@@YAXPAVcSPCreatureCitizen_s00d9_0640@@@Z  # FUN_00d90ca0 migrated from s00d90640 (verbatim, slice spelling)
+00d90cd0 ?FUN_00d90cd0@SP@@YAXPAVcSPCreatureCitizen_s00d9_0640@@@Z  # FUN_00d90cd0 migrated from s00d90640 (verbatim, slice spelling)
 00d90ce0 ?FUN_00d90ce0@SP@@YA_NPAVcSPCreatureCitizen_s00d9_0640@@@Z  # FUN_00d90ce0 migrated from s00d90640 (verbatim, slice spelling)
 00d90d30 ?FUN_00d90d30@SP@@YAMPAVcSPCreatureCitizen_s00d9_0640@@@Z  # FUN_00d90d30 migrated from s00d90640 (verbatim, slice spelling)
 00d90d70 ?FUN_00d90d70@SP@@YA_NPAVcSPCreatureCitizen_s00d9_0640@@PAX1E1PAH@Z  # FUN_00d90d70 migrated from s00d90640 (verbatim, slice spelling)
