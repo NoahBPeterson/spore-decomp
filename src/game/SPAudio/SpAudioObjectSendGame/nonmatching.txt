@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+00a3f000 21 SendGame_Register: complete; gensym/class_new/class_addanything registration; the original computes (cls!=0) into bl before the call while ours keeps cls in esi and computes it after, and combines with and eax,ecx instead of and al,bl. difftest UNSUPPORTED (0/400 valid; unresolved Eapd gensym/class_new/class_addanything). flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
