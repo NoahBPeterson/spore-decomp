@@ -1,0 +1,33 @@
+# source  symbol  va  flags
+../src/game/SPGonzago/_at_00db0000.cpp  ?FUN_00dbec30@@YAMXZ  00dbec30  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_00db0000.cpp  ?FUN_00dbec60@@YAMXZ  00dbec60  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_00db0000.cpp  ?FUN_00dbeca0@@YAMPAUUfoBehaviour@@@Z  00dbeca0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_00db0000.cpp  ?FUN_00dbece0@@YAMXZ  00dbece0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_00db0000.cpp  ?FUN_00dbed20@@YAMPAUUfoBehaviour@@@Z  00dbed20  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_00db0000.cpp  ?FUN_00dbed50@@YAMPAUUfoBehaviour@@@Z  00dbed50  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_00db0000.cpp  ?FUN_00dbed70@@YAMPAUEmpireRef@@@Z  00dbed70  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_00db0000.cpp  ?FUN_00dbee30@@YAMXZ  00dbee30  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_00db0000.cpp  ?FUN_00dbee70@@YAMPAUEmpireRef@@@Z  00dbee70  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_00db0000.cpp  ?FUN_00dbeef0@@YAMPAUUfoBehaviour@@@Z  00dbeef0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_00db0000.cpp  ?FUN_00dbef10@@YADPAUUfoBehaviour@@@Z  00dbef10  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_00db0000.cpp  ?FUN_00dbef30@@YAXPAUUfoBehaviour@@@Z  00dbef30  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_00db0000.cpp  ?FUN_00dbef60@@YA_NPAUUfoBehaviour@@@Z  00dbef60  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_00db0000.cpp  ?FUN_00dbefc0@@YAXPAUUfoBehaviour@@@Z  00dbefc0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_00db0000.cpp  ?FUN_00dbefe0@@YA_NPAUUfoBehaviour@@@Z  00dbefe0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_00db0000.cpp  ?FUN_00dbf000@@YA_NPAUUfoBehaviour@@HHHHPAM@Z  00dbf000  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_00db0000.cpp  ?FUN_00dbf060@@YA_NPAUUfoBehaviour@@@Z  00dbf060  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_00db0000.cpp  ?f_00dbf0c0@@YAXPAUBehaviour@@@Z  00dbf0c0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/_at_00db0000.cpp  ?f_00dbf100@@YA_NPAUBehaviour@@@Z  00dbf100  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/_at_00db0000.cpp  ?f_00dbf110@@YA_NPAUBehaviour@@@Z  00dbf110  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/_at_00db0000.cpp  ?f_00dbf140@@YA_NPAUBehaviour@@HHHHHH@Z  00dbf140  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/_at_00db0000.cpp  ?f_00dbf160@@YAXPAUBehaviour@@@Z  00dbf160  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/_at_00db0000.cpp  ?f_00dbf1c0@@YA_NPAUBehaviour@@@Z  00dbf1c0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/_at_00db0000.cpp  ?f_00dbf1f0@@YA_NPAUBehaviour@@@Z  00dbf1f0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/_at_00db0000.cpp  ?f_00dbf210@@YA_NPAUBehaviour@@HHHHPAUBehaviourState@@@Z  00dbf210  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/_at_00db0000.cpp  ?f_00dbf340@@YAMPAUBehaviour@@@Z  00dbf340  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/_at_00db0000.cpp  ?f_00dbf710@@YAMPAUBehaviour@@@Z  00dbf710  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/_at_00db0000.cpp  ?f_00dbf810@@YAMPAUBehaviour@@@Z  00dbf810  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/_at_00db0000.cpp  ?f_00dbf890@@YAMPAUBehaviour@@@Z  00dbf890  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/_at_00db0000.cpp  ?f_00dbf8b0@@YAMPAUBehaviour@@@Z  00dbf8b0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/_at_00db0000.cpp  ?f_00dbf8f0@@YAMPAUBehaviour@@HHI@Z  00dbf8f0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/_at_00db0000.cpp  ?f_00dbf9a0@@YAMPAUBehaviour@@@Z  00dbf9a0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include

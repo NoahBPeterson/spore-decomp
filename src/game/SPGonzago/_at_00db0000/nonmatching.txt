@@ -1,0 +1,12 @@
+# va  diff-bytes  reason
+00dbedc0 61 complete; flags extraction folded to test [mem],0x2000 instead of mov/shr/test al,1, and the id load/callee-saved order differs (103 vs 104); equiv hits a fake-vtable read flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+00dbf230 224 complete  generic 3-way "smallest by priority handle" comparator; LTCG register ABI, reordered compare tree [equiv: UNSUPPORTED] flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
+00dbf3c0 249 complete  register-ABI applicability callback; float offsets/return idiom differ (x87 vs SSE); equiv's only complaint is the caller-saved ecx (ours uses it as scratch, the original leaves it), every return value and output byte matches [equiv: UNSUPPORTED] flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
+00dbf4b0 318 complete  register-ABI applicability callback; 6-arg frame + x87 float helper results [equiv: UNSUPPORTED] flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
+00dbf5e0 344 complete  register-ABI applicability callback; 6-arg frame + x87 float helper results [equiv: WEAK] flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
+00dbf760 25 complete  float compare idiom: orig xorps/comiss/jae, ours fldz/fcompi/jbe (x87 float ABI for bool||float) [equiv: PASS] flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
+00dbf7b0 9 complete  Metric() returns float in x87 st(0) in orig; /arch:SSE build widens the compare to fld qword [equiv: UNSUPPORTED] flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
+00dbf840 20 complete  cl merges the two "target != 0" tests; orig keeps the 1.0f SSE materialization path [equiv: PASS] flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
+00dbf9c0 98 complete  orbit-state builder; x87 float helper results + switch on kind [equiv: WEAK] flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
+00dbfad0 711 complete  SP::UFO_STRAFE_ATTACK_TARGET_Tick; LTCG register ABI (10 args), whole body reordered [equiv: UNSUPPORTED] flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
+00dbfe80 185 complete  target reselection; LTCG register ABI, jump-table/vtable slot differences [equiv: UNSUPPORTED] flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
