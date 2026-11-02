@@ -1,4 +1,4 @@
-// src/game/UTFSpore_Win32/httppostbodystream.cpp -- migrated from slice(s) s00945ed0, s0060b730 by tools/migrate/rewrite.py
+// src/game/UTFSpore_Win32/httppostbodystream.cpp -- migrated from slice(s) s00946dc0, s00945ed0, s0060b730 by tools/migrate/rewrite.py
 // Object file: UTFSpore_Win32/httppostbodystream.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -467,6 +467,103 @@ public:
 }
 // ---- items of slice s00945ed0 end
 
+// ---- items of slice s00946dc0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+#ifndef S00946DC0_H
+#endif
+void  __cdecl operator delete(void*) throw();
+void* __cdecl operator new(unsigned int, const char*, int, int, int, int);
+namespace eastl {
+extern const char kEastlPathAddr[];              // 0x013ebb38
+}
+namespace eastl {
+struct StrStub_s0094_6dc0 {
+    char* mpBegin;
+    char* mpEnd;
+    char* mpCapacity;
+    int   mAlloc;
+
+    StrStub_s0094_6dc0() {}
+    StrStub_s0094_6dc0(const StrStub_s0094_6dc0& other);               // 0x0057cb10
+    StrStub_s0094_6dc0(const char* first, const char* last) {
+        unsigned n = (unsigned)(last - first);
+        char* p;
+        if (n + 1 < 2) {
+            p = (char*)0x1667bac;
+            mpCapacity = p + 1;
+        } else {
+            p = (char*)operator new(n + 1, "EASTL", 0, 0, (int)kEastlPathAddr, 0xd1);
+            mpCapacity = p + n + 1;
+        }
+        memcpy(p, first, n);
+        mpBegin = p;
+        mpEnd = p + n;
+        *mpEnd = 0;
+    }
+
+    void assign(const char* first, const char* last);     // 0x00454cb0
+    void append(const char* first, const char* last);     // 0x00455d60
+    void RangeInitialize(unsigned n);                      // 0x00475ab0
+    unsigned find(char c, unsigned pos) const;             // 0x00607580
+};
+}
+struct ListNode_s0094_6dc0 {
+    ListNode_s0094_6dc0* mpNext;
+    ListNode_s0094_6dc0* mpPrev;
+};
+struct StreamNode_s0094_6dc0 : ListNode_s0094_6dc0 {
+    void* mpStream;      // +8
+};
+struct ListBase {
+    void DoClear();      // 0x0060c4a0
+};
+struct MemoryStream {
+    void Construct(const char* name);            // 0x0093bd50
+    void SetOption(int option, float value);     // 0x0093bb40
+};
+struct StreamChild {
+    void Construct(void* stream, unsigned start, unsigned len);   // 0x0093b7d0
+};
+struct AutoRefCountIStream {
+    void* mpObject;
+    AutoRefCountIStream(void* p);                // 0x00572620
+};
+class HTTPMultipartFormDataPostBodyStream {
+public:
+    void*      mpVtbl;        // +0x00
+    void*      mpVtbl2;       // +0x04
+    long       mnRefCount;    // +0x08
+    ListNode_s0094_6dc0   mListAnchor;   // +0x0c
+    unsigned   mListSize;     // +0x14
+    eastl::StrStub_s0094_6dc0 msBoundary;// +0x18
+    ListNode_s0094_6dc0*  mReadItr;      // +0x28
+    long       mnPosition;    // +0x2c
+    unsigned   mnSize;        // +0x30
+    int        mnState;       // +0x34
+    bool       mbFinal;       // +0x38
+    int        mLastDataType; // +0x3c
+    unsigned   mnTextStart;   // +0x40
+    void*      mpMemStream;   // +0x44
+
+    HTTPMultipartFormDataPostBodyStream();       // 0x00946dc0
+    ~HTTPMultipartFormDataPostBodyStream();      // 0x00946f70
+    bool Close();                                // 0x00946f10
+    bool GetContentTypeString(eastl::StrStub_s0094_6dc0* out);   // 0x00946fe0
+    bool AddFormData(const char* name, void* stream, const char* contentType,
+                     const char* fileName, const char* transferEncoding);  // 0x00947030
+    bool CreateChildStream();                    // 0x00947270
+};
+typedef int  (__thiscall *VF0)(void*);
+typedef bool (__thiscall *VFB0)(void*);
+typedef int  (__thiscall *VF1)(void*, int);
+typedef int  (__thiscall *VF2)(void*, int, int);
+#define VSLOT(p, byteoff) ((*(void***)(p))[(byteoff) / 4])
+#define VCALL0(p, off)          ((VF0)VSLOT(p, off))(p)
+#define VCALLB0(p, off)         ((VFB0)VSLOT(p, off))(p)
+#define VCALL1(p, off, a)       ((VF1)VSLOT(p, off))(p, (int)(a))
+#define VCALL2(p, off, a, b)    ((VF2)VSLOT(p, off))(p, (int)(a), (int)(b))
+#define S_(a) ((const char*)(a))
+// ---- items of slice s00946dc0 end
+
 // @ 0x0060c0f0
 unsigned int EA::Internet::HTTPMultipartFormDataPostBodyStream::GetAvailable() const
 {
@@ -760,3 +857,220 @@ bool HTTPFormURLEncodedPostBodyStream_s0094_5ed0::Write(const char* name, const 
     return true;
 }
 }}  // namespace EA::Internet
+
+// @ 0x00946dc0
+HTTPMultipartFormDataPostBodyStream::HTTPMultipartFormDataPostBodyStream()
+{
+    mpVtbl = (void*)0x13fb5c8;
+    mpVtbl2 = (void*)0x13ef094;
+    _InterlockedExchange(&mnRefCount, 0);
+    mpVtbl = (void*)0x143f3e0;
+    mpVtbl2 = (void*)0x143f3d8;
+    mListAnchor.mpNext = &mListAnchor;
+    mListAnchor.mpPrev = &mListAnchor;
+    msBoundary.mpBegin = 0;
+    msBoundary.mpEnd = 0;
+    msBoundary.mpCapacity = 0;
+    msBoundary.RangeInitialize(0x20);
+    {
+        char* p = msBoundary.mpBegin;
+        memcpy(p, S_(0x13fb554), 0x1f);
+        msBoundary.mpEnd = p + 0x1f;
+        *msBoundary.mpEnd = 0;
+    }
+    mnPosition = -1;
+    mnSize = 0;
+    mnState = 0;
+    mbFinal = false;
+    mLastDataType = 1;
+    mnTextStart = 0;
+    mpMemStream = 0;
+    mReadItr = &mListAnchor;
+    {
+        void* mem = operator new(0x24, S_(0x143f3bc), 0, 0, 0, 0);
+        void* stream = 0;
+        if (mem) {
+            ((MemoryStream*)mem)->Construct(S_(0x143f3bc));
+            stream = mem;
+        }
+        void* old = mpMemStream;
+        if (stream != old) {
+            if (stream)
+                VCALL0(stream, 4);
+            mpMemStream = stream;
+            if (old)
+                VCALL0(old, 8);
+        }
+        ((MemoryStream*)mpMemStream)->SetOption(1, 1.0f);
+        ((MemoryStream*)mpMemStream)->SetOption(2, 0.0f);
+        ((MemoryStream*)mpMemStream)->SetOption(3, *(const float*)0x13ef574);
+    }
+}
+
+// @ 0x00946f10
+bool HTTPMultipartFormDataPostBodyStream::Close()
+{
+    bool ok = true;
+    mnState = -2;
+    ListNode_s0094_6dc0* node = mListAnchor.mpNext;
+    while (node != &mListAnchor) {
+        if (!VCALLB0(((StreamNode_s0094_6dc0*)node)->mpStream, 0x18))
+            ok = false;
+        node = node->mpNext;
+    }
+    ((ListBase*)&mListAnchor)->DoClear();
+    ListNode_s0094_6dc0* anchor = &mListAnchor;
+    anchor->mpNext = anchor;
+    anchor->mpPrev = anchor;
+    if (mpMemStream) {
+        void* old = mpMemStream;
+        mpMemStream = 0;
+        VCALL0(old, 8);
+    }
+    return ok;
+}
+
+// @ 0x00946f70
+HTTPMultipartFormDataPostBodyStream::~HTTPMultipartFormDataPostBodyStream()
+{
+    mpVtbl = (void*)0x143f3e0;
+    mpVtbl2 = (void*)0x143f3d8;
+    _ReadWriteBarrier();
+    if (mpMemStream)
+        VCALL0(mpMemStream, 8);
+    if (msBoundary.mpCapacity - msBoundary.mpBegin > 1 && msBoundary.mpBegin)
+        operator delete(msBoundary.mpBegin);
+    ((ListBase*)&mListAnchor)->DoClear();
+    mpVtbl2 = (void*)0x13ef094;
+    mpVtbl = (void*)0x13f3a68;
+}
+
+// @ 0x00946fe0
+bool EA::Internet::HTTPMultipartFormDataPostBodyStream::GetContentTypeString(eastl::basic_string<char, eastl::allocator> & out)
+{
+    out.assign(S_(0x143f444), S_(0x143f444) + 0x1e);
+    const char* boundary = (const char*)VCALL0(this, 0x4c);
+    unsigned n = strlen(boundary);
+    out.append(boundary, boundary + n);
+    return true;
+}
+
+// @ 0x00947030
+bool HTTPMultipartFormDataPostBodyStream::AddFormData(const char* name, void* stream, const char* contentType, const char* fileName, const char* transferEncoding)
+{
+    if (mbFinal)
+        mnState = -1;
+    if (!name || !stream || !contentType)
+        mnState = -1;
+    else {
+        int sz = VCALL0(stream, 0x1c);
+        if (sz == -1 || sz == -2)
+            mnState = -1;
+    }
+    if (mnState != 0)
+        return false;
+    {
+        unsigned pos = VCALL1(mpMemStream, 0x24, 0);
+        if (mLastDataType == 1) {
+            mnTextStart = pos;
+            mLastDataType = 0;
+        }
+    }
+    VCALL2(this, 0x58, S_(0x13fb644), mpMemStream);
+    VCALL2(mpMemStream, 0x38, msBoundary.mpBegin,
+           (int)(msBoundary.mpEnd - msBoundary.mpBegin));
+    VCALL2(this, 0x58, S_(0x13fb618), mpMemStream);
+    VCALL2(this, 0x58, name, mpMemStream);
+    VCALL2(this, 0x58, S_(0x13fb764), mpMemStream);
+    if (fileName) {
+        VCALL2(this, 0x58, S_(0x13fb754), mpMemStream);
+        VCALL2(this, 0x58, fileName, mpMemStream);
+        VCALL2(this, 0x58, S_(0x13fb764), mpMemStream);
+    }
+    VCALL2(this, 0x58, S_(0x13fb750), mpMemStream);
+    VCALL2(this, 0x58, S_(0x13fb740), mpMemStream);
+    VCALL2(this, 0x58, contentType, mpMemStream);
+    VCALL2(this, 0x58, S_(0x13fb750), mpMemStream);
+    if (transferEncoding) {
+        VCALL2(this, 0x58, S_(0x13fb724), mpMemStream);
+        VCALL2(this, 0x58, transferEncoding, mpMemStream);
+        VCALL2(this, 0x58, S_(0x13fb750), mpMemStream);
+    }
+    VCALL2(this, 0x58, S_(0x13fb750), mpMemStream);
+    if (VCALL0(mpMemStream, 0x14) != 0) {
+        mnState = -1;
+        return false;
+    }
+    if (!VCALLB0(this, 0x60)) {
+        mnState = -1;
+        return false;
+    }
+    if (stream)
+        VCALL0(stream, 4);
+    {
+        StreamNode_s0094_6dc0* node = (StreamNode_s0094_6dc0*)operator new(0xc, S_(0x13f2150), 0, 0,
+                                                    (int)S_(0x13ebb38), 0xd1);
+        void* p = (char*)node + 8;
+        if (p) {
+            node->mpStream = stream;
+            if (stream)
+                VCALL0(stream, 4);
+        }
+        node->mpNext = &mListAnchor;
+        node->mpPrev = mListAnchor.mpPrev;
+        mListAnchor.mpPrev->mpNext = node;
+        mListAnchor.mpPrev = node;
+    }
+    if (stream)
+        VCALL0(stream, 8);
+    mnSize += VCALL0(stream, 0x2c);
+    mLastDataType = 1;
+    return true;
+}
+
+// @ 0x00947270
+bool HTTPMultipartFormDataPostBodyStream::CreateChildStream()
+{
+    if (mbFinal || !mpMemStream || mLastDataType != 0) {
+        mnState = -1;
+        return false;
+    }
+    {
+        void* mem = operator new(0x1c, S_(0x143f464), 0, 0, 0, 0);
+        void* child = 0;
+        if (mem) {
+            void* ms = mpMemStream;
+            unsigned pos = VCALL1(ms, 0x24, 0);
+            unsigned len = pos - mnTextStart;
+            ((StreamChild*)mem)->Construct(ms, mnTextStart, len);
+            child = mem;
+        }
+        AutoRefCountIStream tmp(child);
+        void* s = tmp.mpObject;
+        if (!s) {
+            mnState = -1;
+            return false;
+        }
+        VCALL2(s, 0x28, 0, 0);
+        VCALL0(s, 4);
+        {
+            StreamNode_s0094_6dc0* node = (StreamNode_s0094_6dc0*)operator new(0xc, S_(0x13f2150), 0, 0,
+                                                        (int)S_(0x13ebb38), 0xd1);
+            void* p = (char*)node + 8;
+            if (p) {
+                node->mpStream = s;
+                VCALL0(s, 4);
+            }
+            node->mpNext = &mListAnchor;
+            node->mpPrev = mListAnchor.mpPrev;
+            mListAnchor.mpPrev->mpNext = node;
+            mListAnchor.mpPrev = node;
+        }
+        VCALL0(s, 8);
+        unsigned p1 = VCALL1(mpMemStream, 0x24, 0);
+        mnSize += p1 - mnTextStart;
+        mnTextStart = VCALL1(mpMemStream, 0x24, 0);
+        VCALL0(s, 8);
+    }
+    return true;
+}
