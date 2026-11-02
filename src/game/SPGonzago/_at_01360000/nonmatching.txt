@@ -1,0 +1,4 @@
+# va  diff-bytes  reason
+01364240 255 property-descriptor dynamic initializer; complete, cl hoists f0/f1/f5 into regs where original keeps only edx=f0 flags /O2 /MD /Gy /EHsc /TP difftest PASS 100%
+0136da30 299 6-row attribute table: same repeated-constant hoisting and store placement around the rep movsd differ (same class as 01364f50); equiv UNSUPPORTED (unresolved reference _FUN_00de70a0) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
+0136dcb0 28 4-row attribute table: records identical, but cl caches a different pair of repeated constants in ebp/ebx (original fn20+fn2c, ours fn2c+fn30), so those two stores land one slot apart; equiv UNSUPPORTED (unresolved reference _FUN_00de70a0) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
