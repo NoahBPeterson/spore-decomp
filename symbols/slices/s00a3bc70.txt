@@ -3,5 +3,9 @@
 00a1a1c0 EA::Audio::ResponseCurve::GetMinInput  # thiscall(float* out) -> bool; first key's x, false when the key array is empty
 00a1a9d0 ?InitFromConfiguration@ResponseCurve@Audio@EA@@QAE_NPAVIConfiguration@23@I@Z  # EA::Audio::ResponseCurve::InitFromConfiguration (callee of s00a3bc70, named from the dev publics; slice address comment)
 00a3bc70 ?Update@cListener@@QAEXPAUcViewer@@@Z  # cListener::Update migrated from s00a3bc70 (verbatim, slice spelling)
+00a3c710 ?Init@cListener@@QAE_NXZ  # cListener::Init migrated from s00a3bc70 (verbatim, slice spelling)
+00a3c800 ?SetTuningId@cListener@@QAEXI@Z  # cListener::SetTuningId migrated from s00a3bc70 (verbatim, slice spelling)
+00a3c830 ?HandleMessage@IHandler_s00a3_bc70@@UAE_NIPAX@Z  # IHandler_s00a3_bc70::HandleMessage migrated from s00a3bc70 (verbatim, slice spelling)
+00a3c970 ??0cListener@@QAE@XZ  # cListener::cListener migrated from s00a3bc70 (verbatim, slice spelling)
 00a3cac0 ?FUN_00a3cac0@@YAXPAUcMapDescription@@PAUIWriter@IO@EA@@@Z  # FUN_00a3cac0 migrated from s00a3bc70 (verbatim, slice spelling)
 00a3cb20 ?FUN_00a3cb20@@YAPAUcMapDescription@@PAUIReader@IO@EA@@H@Z  # FUN_00a3cb20 migrated from s00a3bc70 (verbatim, slice spelling)

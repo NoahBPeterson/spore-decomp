@@ -1,0 +1,4 @@
+# source  symbol  va  flags
+../src/game/SPAudio/SPAudioListener.cpp  ?Init@cListener@@QAE_NXZ  00a3c710  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/SPAudioListener.cpp  ?SetTuningId@cListener@@QAEXI@Z  00a3c800  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/SPAudioListener.cpp  ??0cListener@@QAE@XZ  00a3c970  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
