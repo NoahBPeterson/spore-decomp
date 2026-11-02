@@ -1,0 +1,2 @@
+# va diff reason
+007f1220  n/a  partial: GPU submit / vertex emit (962B, SSE).  The receiver is not a cArithmeticaProgram: it reaches a renderer-owned object (+0x120/+0x134/+0x138), global shader state (0x1485720, 0x14148e0, 0x163a304..) and VolState::BuildSlices (0x7efd10), so the body is only an empty-bodied skeleton on an opaque ArithSubmitObj receiver and the equivalence gate reports FAIL (5/5 mismatched, .data @0163a2ac orig=1 ours=0).  See work/match/scratch_s007f1220_fixlog.txt. flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

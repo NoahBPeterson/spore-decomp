@@ -1,3 +1,4 @@
+007f1220 ?Submit@ArithSubmitObj@@QAEXPAX@Z  # ArithSubmitObj::Submit migrated from s007f1220 (verbatim, slice spelling)
 007f1600 ?ArithmeticaKeyRead@@YGHPAPAXI@Z  # ArithmeticaKeyRead migrated from s007f1220 (verbatim, slice spelling)
 007f1630 ?CompileToByteCode@cArithmeticaProgram@@QAEPAXPAX@Z  # cArithmeticaProgram::CompileToByteCode migrated from s007f1220 (verbatim, slice spelling)
 007f1820 ?ArithmeticaWriteResource@@YA_NPAX0@Z  # ArithmeticaWriteResource migrated from s007f1220 (verbatim, slice spelling)
