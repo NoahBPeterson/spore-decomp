@@ -1,6 +1,6 @@
 004b2320 ?ConstructArray@@YAXPAPAURefCounted@@I0@Z  # ConstructArray migrated from s004b2320 (verbatim, slice spelling)
-004b24c0  SP::cSPEditorPaintTheme::cSPEditorPaintTheme  # constructor; writes both vtables
-004b25e0  SP::cSPEditorPaintTheme::~cSPEditorPaintTheme  # destructor
+004b24c0 ??0cSPEditorPaintTheme_s004b_2320@SP@@QAE@XZ  # cSPEditorPaintTheme_s004b_2320::cSPEditorPaintTheme migrated from s004b2320 (verbatim, slice spelling)
+004b25e0 ??1cSPEditorPaintTheme_s004b_2320@SP@@QAE@XZ  # cSPEditorPaintTheme_s004b_2320::~cSPEditorPaintTheme migrated from s004b2320 (verbatim, slice spelling)
 004b26a0 ?AsInterface@cSPEditorPaintTheme_s004b_2320@SP@@QAEPAXH@Z  # cSPEditorPaintTheme_s004b_2320::AsInterface migrated from s004b2320 (verbatim, slice spelling)
 004b26e0 ?SetSource@cSPEditorPaintTheme_s004b_2320@SP@@QAEXH@Z  # cSPEditorPaintTheme_s004b_2320::SetSource migrated from s004b2320 (verbatim, slice spelling)
 004b2710 ?Reset@cSPEditorPaintTheme_s004b_2320@SP@@QAEXXZ  # cSPEditorPaintTheme_s004b_2320::Reset migrated from s004b2320 (verbatim, slice spelling)

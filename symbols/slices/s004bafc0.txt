@@ -3,3 +3,4 @@
 004bbd20 ?GetTypeForCategory@@YAIIE@Z  # GetTypeForCategory migrated from s004bafc0 (verbatim, slice spelling)
 004bbe20 ?IsBakeableType@@YA_NIE@Z  # IsBakeableType migrated from s004bafc0 (verbatim, slice spelling)
 004bbe90 ?FUN_004bbe90@@YA_NI@Z  # FUN_004bbe90 migrated from s004bafc0 (verbatim, slice spelling)
+004bbed0 ?FUN_004bbed0@@YA_NI@Z  # FUN_004bbed0 migrated from s004bafc0 (verbatim, slice spelling)

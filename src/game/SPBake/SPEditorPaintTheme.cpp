@@ -1,4 +1,4 @@
-// src/game/SPBake/SPEditorPaintTheme.cpp -- migrated from slice(s) s004b3e10, s004bafc0, s004ba150, s004b4930, s004b33e0, s004b2320 by tools/migrate/rewrite.py
+// src/game/SPBake/SPEditorPaintTheme.cpp -- migrated from slice(s) s004b5690, s004b3e10, s004bafc0, s004ba150, s004b4930, s004b33e0, s004b2320 by tools/migrate/rewrite.py
 // Object file: SPBake/SPEditorPaintTheme.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -10,6 +10,11 @@
 #include "cSPTransform.h"
 #include "SP/cSPEditorBlock.h"
 #include "SP/cSPEditorModel.h"
+#include "EA/Variant.h"
+#include "EA/ResourceMan/Resource.h"
+#include "EA/ResourceMan/Manager.h"
+#include "SP/cEditorResource.h"
+#include "SP/cPropertyList.h"
 
 // ---- items of slice s004b2320 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern "C" void* SP_PropertyManager();                 // 0x0067de30
@@ -21,7 +26,13 @@ extern "C" void  FUN_00440ff0(void* obj);
 extern "C" void  FUN_00440c40(void* obj, int a);
 extern "C" void  FUN_004b8180();
 extern "C" void  FUN_00425990(void* vec);
+extern "C" void  FUN_00455290(void* vec);
 extern "C" void  FUN_004b3c20(int a);
+extern void* g_vtbl_EditorResource;
+extern void* g_vtbl_BakeSprites;
+extern void* g_vtbl_ContentValidator;
+extern void* g_vtbl_PaintTheme0;
+extern void* g_vtbl_PaintTheme1;
 extern uint32_t DAT_015d6e2c, DAT_015d6e30, DAT_015d6e34;
 extern uint32_t DAT_015d6b98, DAT_015d6b9c, DAT_015d6ba0;
 extern uint32_t DAT_015d6cc8, DAT_015d6f64;
@@ -131,10 +142,10 @@ public:
     void  SetSource(int source);  // 0x004b26e0 (SP::cSPEditorPaintTheme::SetSource)
     void  Reset();  // 0x004b2710 (SP::cSPEditorPaintTheme::Reset)
     void  Reset2();  // 0x004b27c0 (SP::cSPEditorPaintTheme::Reset2)
-    uint32_t ReadFromAsset(Asset* asset);
+    uint32_t ReadFromAsset(Asset* asset);  // 0x004b2800 (SP::cSPEditorPaintTheme::ReadFromAsset)
     bool ReadFromProp2(int prop, char useColors);  // 0x004b29b0 (SP::cSPEditorPaintTheme::ReadFromProp2)
     bool ReadFromProp(uint32_t prop);  // 0x004b2bb0 (SP::cSPEditorPaintTheme::ReadFromProp)
-    void  WriteToProp(Asset* asset, int resourceType);
+    void  WriteToProp(Asset* asset, int resourceType);  // 0x004b2f80 (SP::cSPEditorPaintTheme::WriteToProp)
     void  ApplyToAsset(int asset, int view);  // 0x004b3190 (SP::cSPEditorPaintTheme::ApplyToAsset)
     void  Apply(int a, int b, int c, int d);  // 0x004b31d0 (SP::cSPEditorPaintTheme::Apply)
     void  InitClosestRegions(void* a, void* b);  // 0x004b3730 (SP::cSPEditorPaintTheme::InitClosestRegions)
@@ -276,6 +287,8 @@ struct PaintTheme
 // ---- items of slice s004b4930 end
 
 // ---- items of slice s004ba150 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C" void  FUN_004f3de0(void* a, void* b, int c, int d, int e, int f, char g);
+extern int DAT_015da860, DAT_015da864, DAT_015da868, DAT_015da86c;
 namespace SP {
 struct Vector3 {
     float x, y, z;
@@ -439,6 +452,662 @@ public:
 
 // forward declarations: helpers defined later in VA order (rewrite.py forward_protos)
 bool FUN_004bbe90(uint32_t type);   // defined at 0x004bbe90, called earlier in the TU
+
+// ---- items of slice s004b5690 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C" void* __cdecl memmove_nd(void* dst, const void* src, uint32_t n);                     // 0x11e0744 (static CRT memmove)
+void __cdecl EASTL_allocator_deallocate(void* p);                                                // 0xf47380
+inline void operator delete(void* p) { EASTL_allocator_deallocate(p); }
+namespace eastl {
+template <typename T, T v> struct integral_constant { static const T value = v; };
+}
+namespace eastl {
+typedef integral_constant<bool, true>  true_type;
+}
+namespace eastl {
+typedef integral_constant<bool, false> false_type;
+}
+namespace eastl {
+struct input_iterator_tag { input_iterator_tag() {} };
+}
+namespace eastl {
+struct forward_iterator_tag : public input_iterator_tag { forward_iterator_tag() {} };
+}
+namespace eastl {
+struct bidirectional_iterator_tag : public forward_iterator_tag { bidirectional_iterator_tag() {} };
+}
+namespace eastl {
+struct random_access_iterator_tag : public bidirectional_iterator_tag { random_access_iterator_tag() {} };
+}
+namespace eastl {
+template <typename T> struct has_trivial_relocate : public false_type {};
+}
+namespace eastl {
+template <typename It> struct Iterator_traits_ref;
+}
+namespace eastl {
+template <typename T> struct Iterator_traits_ref<T*> { typedef T& type; typedef T value_type; };
+}
+namespace eastl {
+template <typename T> struct Iterator_traits_ref<const T*> { typedef const T& type; typedef T value_type; };
+}
+namespace eastl {
+struct sp_vector_allocator_s004b_5690 {
+    uint32_t mFlags;
+    void deallocate(void* p, uint32_t n)
+    {
+        if (((uint32_t*)p)[-1]) {
+            void* pBlock = p;
+            EASTL_allocator_deallocate(pBlock);
+        }
+    }
+};
+}
+namespace eastl {
+void* __cdecl allocate_memory(sp_vector_allocator_s004b_5690& a, uint32_t n, uint32_t alignment, uint32_t alignmentOffset);   // 0x42dee0
+}
+namespace eastl {
+template <typename T> struct has_trivial_assign : public false_type {};
+}
+namespace eastl {
+template <typename T> struct is_integral : public false_type {};
+}
+namespace eastl {
+class fixed_vector_allocator { public:
+    uint32_t mOverflowAllocator;
+    void* mpPoolBegin;
+    void deallocate(void* p, uint32_t n)
+    {
+        if (p != mpPoolBegin) {
+            void* pBlock = p;
+            EASTL_allocator_deallocate(pBlock);
+        }
+    }
+};
+}
+namespace eastl {
+void* __cdecl allocate_memory(fixed_vector_allocator& a, uint32_t n, uint32_t alignment, uint32_t alignmentOffset);
+}
+namespace eastl {
+template <typename Iterator>
+class generic_iterator { public:
+    Iterator mIterator;
+    explicit generic_iterator(const Iterator& x) : mIterator(x) {}
+    typename Iterator_traits_ref<Iterator>::type operator*() const { return *mIterator; }
+    generic_iterator& operator++() { ++mIterator; return *this; }
+    const Iterator& base() const { return mIterator; }
+};
+}
+namespace eastl {
+template <typename IteratorL, typename IteratorR>
+inline bool operator!=(const generic_iterator<IteratorL>& lhs, const generic_iterator<IteratorR>& rhs)
+{
+    return lhs.base() != rhs.base();
+}
+}
+namespace eastl {
+template <bool bHasTrivialCopy>
+struct copy_impl
+{
+    template <typename T>
+    static T* do_copy(const T* first, const T* last, T* result)
+    {
+        for (; first != last; ++result, ++first)
+            *result = *first;
+        return result;
+    }
+};
+}
+namespace eastl {
+template <typename T>
+inline T* copy(const T* first, const T* last, T* result)
+{
+    const bool bOutputIsPointer = false;
+    const bool bInputIsPointer = false;
+    const bool bHasTrivialCopy = false;
+    return copy_impl<bHasTrivialCopy>::do_copy(first, last, result);
+}
+}
+namespace eastl {
+namespace Internal {
+template <typename T, typename InputIterator, typename ForwardIterator>
+inline ForwardIterator uninitialized_copy_impl(InputIterator first, InputIterator last, ForwardIterator dest, false_type)
+{
+    ForwardIterator currentDest(dest);
+    for (; first != last; ++first, ++currentDest)
+        ::new(&*currentDest) T(*first);
+    ScratchSlots<4>();
+    return currentDest;
+}
+}
+}
+namespace eastl {
+template <typename First, typename Last, typename Result>
+Result uninitialized_copy_ptr(First first, Last last, Result result)
+{
+    typedef typename Iterator_traits_ref<Result>::value_type value_type;
+    const generic_iterator<Result> i(Internal::uninitialized_copy_impl<value_type>(generic_iterator<First>(first),
+                                                                                   generic_iterator<Last>(last),
+                                                                                   generic_iterator<Result>(result),
+                                                                                   has_trivial_assign<value_type>()));
+    return i.base();
+}
+}
+namespace eastl {
+template <bool bHasTrivialCopy>
+struct copy_backward_impl
+{
+    template <typename T>
+    static T* do_copy(T* first, T* last, T* resultEnd)
+    {
+        while (last != first)
+            *--resultEnd = *--last;
+        return resultEnd;
+    }
+};
+}
+namespace eastl {
+template <typename T>
+inline T* copy_backward(T* first, T* last, T* resultEnd)
+{
+    const bool bOutputIsPointer = false;
+    const bool bInputIsPointer = false;
+    const bool bHasTrivialCopy = false;
+    return copy_backward_impl<bHasTrivialCopy>::do_copy(first, last, resultEnd);
+}
+}
+namespace eastl {
+template <bool hasTrivialRelocate>
+struct uninitialized_relocate_impl
+{
+    template <typename T>
+    static T* do_move_start(T* first, T* last, T* dest)
+    {
+        for (; first != last; ++first, ++dest)
+            ::new(dest) T(*first);
+        return dest;
+    }
+    template <typename T>
+    static T* do_move_commit(T* first, T* last, T* dest)
+    {
+        for (; first != last; ++first, ++dest)
+            (*first).~T();
+        return dest;
+    }
+};
+}
+namespace eastl {
+template <>
+struct uninitialized_relocate_impl<true>
+{
+    template <typename T>
+    static T* do_move_start(T* first, T* last, T* dest)
+    {
+        return (T*)((last - first) * sizeof(T) + (char*)memmove_nd(dest, first, (uint32_t)((char*)last - (char*)first)));
+    }
+    template <typename T>
+    static T* do_move_commit(T* first, T* last, T* dest)
+    {
+        return dest;
+    }
+};
+}
+namespace eastl {
+template <typename T>
+inline T* uninitialized_relocate_start(T* first, T* last, T* dest)
+{
+    const bool bHasTrivialRelocate = has_trivial_relocate<T>::value;
+    return uninitialized_relocate_impl<bHasTrivialRelocate>::do_move_start(first, last, dest);
+}
+}
+namespace eastl {
+template <typename T>
+inline T* uninitialized_relocate_commit(T* first, T* last, T* dest)
+{
+    const bool bHasTrivialRelocate = has_trivial_relocate<T>::value;
+    return uninitialized_relocate_impl<bHasTrivialRelocate>::do_move_commit(first, last, dest);
+}
+}
+namespace eastl {
+template <typename T>
+inline T* uninitialized_relocate(T* first, T* last, T* dest)
+{
+    T* result = uninitialized_relocate_start(first, last, dest);
+    uninitialized_relocate_commit(first, last, dest);
+    return result;
+}
+}
+namespace eastl {
+template <typename T, typename Allocator>
+struct VectorBase_s004b_5690 {
+    T* mpBegin;
+    T* mpEnd;
+    T* mpCapacity;
+    Allocator mAllocator;
+    ~VectorBase_s004b_5690();                                                   // 0x455290 (for Entry32)
+    T* DoAllocate(uint32_t n)
+    {
+        return n ? (T*)allocate_memory(mAllocator, n * sizeof(T), 4, 0) : 0;
+    }
+    void DoFree(T* p, uint32_t n)
+    {
+        if (p)
+            mAllocator.deallocate(p, n * sizeof(T));
+    }
+    uint32_t GetNewCapacity(uint32_t currentCapacity)
+    {
+        return (currentCapacity > 0) ? (2 * currentCapacity) : 1;
+    }
+};
+}
+namespace eastl {
+template <typename T, typename Allocator>
+class vector_s004b_5690 : public VectorBase_s004b_5690<T, Allocator> { public:
+    typedef VectorBase_s004b_5690<T, Allocator> base_type;
+    using base_type::mpBegin;
+    using base_type::mpEnd;
+    using base_type::mpCapacity;
+    using base_type::mAllocator;
+
+    ~vector_s004b_5690() { DoDestroyValues(mpBegin, mpEnd); ScratchSlots<3>(); }
+    T* erase(T* first, T* last);                                      // 0x4b5570 (Entry32)
+    T* DoRealloc(uint32_t n, const T* first, const T* last);          // 0x4b74d0 (Entry32)
+    const T* begin() const { return mpBegin; }
+    const T* end() const { return mpEnd; }
+    template <typename InputIterator>
+    void assign(InputIterator first, InputIterator last) { DoAssign(first, last, is_integral<InputIterator>()); }
+    template <typename InputIterator>
+    void DoAssign(InputIterator first, InputIterator last, const false_type&) { DoAssignFromIterator(first, last, random_access_iterator_tag()); }
+    void DoAssignFromIterator(const T* first, const T* last, input_iterator_tag);   // 0x4b7290 (Entry32)
+    static void DoDestroyValues(T* first, T* last)
+    {
+        for (; first < last; ++first)
+            first->~T();
+    }
+    void DoInsertValue(T* position, const T& value);  // 0x00621fc0 (eastl::vector::DoInsertValue)
+};
+}
+namespace eastl {
+template <typename T, typename Allocator>
+void vector_s004b_5690<T, Allocator>::DoAssignFromIterator(const T* first, const T* last, input_iterator_tag)
+{
+    const uint32_t n = (uint32_t)(last - first);
+    ScratchSlots<10>();     // unused slots of inlined helpers in the original
+    if (n > (uint32_t)(mpCapacity - mpBegin)) {
+        T* const pNewData = DoRealloc(n, first, last);
+        DoDestroyValues(mpBegin, mpEnd);
+        this->DoFree(mpBegin, (uint32_t)(mpCapacity - mpBegin));
+        mpBegin = pNewData;
+        mpEnd = mpBegin + n;
+        mpCapacity = mpEnd;
+    } else if (n <= (uint32_t)(mpEnd - mpBegin)) {
+        T* const pNewEnd = eastl::copy(first, last, mpBegin);
+        DoDestroyValues(pNewEnd, mpEnd);
+        mpEnd = pNewEnd;
+    } else {
+        const T* position = first + (mpEnd - mpBegin);
+        eastl::copy(first, position, mpBegin);
+        mpEnd = eastl::uninitialized_copy_ptr(position, last, mpEnd);
+    }
+    ScratchSlots<16>();
+}
+}
+namespace eastl {
+template <typename T, typename Allocator>
+void vector_s004b_5690<T, Allocator>::DoInsertValue(T* position, const T& value)
+{
+    if (mpEnd != mpCapacity) {
+        const T* pValue = &value;
+        if ((pValue >= position) && (pValue < mpEnd))
+            ++pValue;
+        ::new(mpEnd) T(*(mpEnd - 1));
+        eastl::copy_backward(position, mpEnd - 1, mpEnd);
+        *position = *pValue;
+        ++mpEnd;
+    } else {
+        const uint32_t nPrevSize = (uint32_t)(mpEnd - mpBegin);
+        const uint32_t nNewSize = this->GetNewCapacity(nPrevSize);
+        T* const pNewData = this->DoAllocate(nNewSize);
+        T* pNewEnd = eastl::uninitialized_relocate(mpBegin, position, pNewData);
+        ::new(pNewEnd) T(value);
+        pNewEnd = eastl::uninitialized_relocate(position, mpEnd, ++pNewEnd);
+        this->DoFree(mpBegin, (uint32_t)(mpCapacity - mpBegin));
+        mpBegin = pNewData;
+        mpEnd = pNewEnd;
+        mpCapacity = pNewData + nNewSize;
+    }
+}
+}
+struct Element28 {
+    uint32_t d[7];
+    Element28(const Element28& x);                                   // 0x440ff0
+};
+struct Entry32 {
+    uint32_t mKey;
+    Element28 mValue;
+};
+struct EntryFixedVector : public eastl::vector_s004b_5690<Entry32, eastl::fixed_vector_allocator> {
+    uint32_t mBuffer[(0x118 - 0x14) / 4];
+    EntryFixedVector(const EntryFixedVector& x);                     // 0x4b62a0
+    EntryFixedVector& operator=(const EntryFixedVector& x)
+    {
+        ScratchSlots<6>();
+        if (this != &x) {
+            erase(mpBegin, mpEnd);
+            assign(x.begin(), x.end());
+        }
+        return *this;
+    }
+};
+struct Flag { bool mbValue; };
+struct Record11c {
+    EntryFixedVector mEntries;
+    Flag mFlag;
+    Record11c(const Record11c& x) : mEntries(x.mEntries), mFlag(x.mFlag) { ScratchSlots<5>(); }
+    Record11c& operator=(const Record11c& x);
+};
+namespace SP {
+class cPropertyList_s004b_5690 { public:
+    virtual int AddRef();
+    virtual int Release();
+};
+}
+namespace EA {
+template<class T> class AutoRefCount_s004b_5690 { public:
+    T* mpObject;
+    AutoRefCount_s004b_5690(const AutoRefCount_s004b_5690& x) : mpObject(x.mpObject) { if (mpObject) mpObject->AddRef(); }
+    AutoRefCount_s004b_5690& operator=(const AutoRefCount_s004b_5690& x) { return operator=(x.mpObject); }
+    AutoRefCount_s004b_5690& operator=(T* pObject) {
+        if (pObject != mpObject) {
+            T* const pTemp = mpObject;
+            if (pObject) pObject->AddRef();
+            mpObject = pObject;
+            if (pTemp) pTemp->Release();
+        }
+        return *this;
+    }
+};
+}
+namespace eastl {
+ template<> struct has_trivial_relocate<EA::AutoRefCount_s004b_5690<SP::cPropertyList_s004b_5690> > : public true_type {}; 
+}
+namespace eastl {
+template <typename T> struct less_s004b_5690 { bool operator()(const T& a, const T& b) const { return a < b; } };
+}
+namespace eastl {
+template <typename T> struct use_self_s004b_5690 { const T& operator()(const T& x) const { return x; } };
+}
+namespace eastl {
+template <typename Pair> struct use_first_s004b_5690 { const typename Pair::first_type& operator()(const Pair& x) const { return x.first; } };
+}
+namespace eastl {
+template <typename T1, typename T2> struct pair_s004b_5690 {
+    typedef T1 first_type;
+    T1 first;
+    T2 second;
+    pair_s004b_5690(const T1& x, const T2& y) : first(x), second(y) {}
+};
+}
+namespace eastl {
+struct rbtree_node_base_s004b_5690 {
+    rbtree_node_base_s004b_5690* mpNodeRight;
+    rbtree_node_base_s004b_5690* mpNodeLeft;
+    rbtree_node_base_s004b_5690* mpNodeParent;
+    char mColor;
+};
+}
+namespace eastl {
+template <typename Value> struct rbtree_node_s004b_5690 : public rbtree_node_base_s004b_5690 {
+    Value mValue;
+};
+}
+namespace eastl {
+template <typename Value>
+struct rbtree_iterator_s004b_5690 {
+    typedef rbtree_node_s004b_5690<Value> node_type;
+    node_type* mpNode;
+    explicit rbtree_iterator_s004b_5690(const node_type* pNode);                // 0x566c50
+    rbtree_iterator_s004b_5690(const rbtree_iterator_s004b_5690& x);                       // 0x5673e0
+    rbtree_iterator_s004b_5690& operator++();                                   // 0x422c50
+    Value& operator*() const { return mpNode->mValue; }
+};
+}
+namespace eastl {
+rbtree_node_base_s004b_5690* __cdecl RBTreeDecrement(const rbtree_node_base_s004b_5690* pNode);                                     // 0x9215c0
+}
+namespace eastl {
+void __cdecl RBTreeInsert(rbtree_node_base_s004b_5690* pNode, rbtree_node_base_s004b_5690* pNodeParent, rbtree_node_base_s004b_5690* pNodeAnchor, int insertionSide);  // 0x9216a0
+}
+namespace eastl {
+enum RBTreeSide { kRBTreeSideLeft, kRBTreeSideRight };
+}
+namespace eastl {
+class allocator_s004b_5690 { public:
+    void deallocate(void* p, uint32_t n) { void* pBlock = p; EASTL_allocator_deallocate(pBlock); }
+};
+}
+namespace eastl {
+void* __cdecl allocate_memory(allocator_s004b_5690& a, uint32_t n, uint32_t alignment, uint32_t alignmentOffset);   // 0x42dee0
+}
+namespace eastl {
+template <typename Key, typename Value, typename Compare, typename ExtractKey>
+class rbtree_s004b_5690 {
+public:
+    typedef rbtree_node_s004b_5690<Value> node_type;
+    typedef rbtree_iterator_s004b_5690<Value> iterator;
+    typedef Value value_type;
+    typedef Key key_type;
+    typedef ExtractKey extract_key;
+    typedef allocator_s004b_5690 allocator_type;
+    typedef eastl::pair_s004b_5690<iterator, bool> insert_return_type;
+
+    Compare mCompare;
+    rbtree_node_base_s004b_5690 mAnchor;
+    uint32_t mnSize;
+    allocator_type mAllocator;
+
+    rbtree_s004b_5690(const allocator_type& allocator_s004b_5690);
+    void reset()
+    {
+        mAnchor.mpNodeRight = &mAnchor;
+        mAnchor.mpNodeLeft = &mAnchor;
+        mAnchor.mpNodeParent = 0;
+        mAnchor.mColor = kRBTreeColorRed;
+        mnSize = 0;
+    }
+    enum { kRBTreeColorRed = 0 };
+
+    iterator lower_bound(const key_type& key);
+    iterator DoInsertValue(iterator position, const value_type& value, true_type);
+    insert_return_type DoInsertValue(const value_type& value, true_type);
+    insert_return_type insert(const value_type& value) { return DoInsertValue(value, true_type()); }
+    iterator DoInsertValueImpl(node_type* pNodeParent, const value_type& value, bool bForceToLeft);
+    node_type* DoCreateNode(const value_type& value);
+    node_type* DoAllocateNode() { return (node_type*)allocate_memory(mAllocator, sizeof(node_type), 4, 0); }
+    void DoFreeNode(node_type* pNode)
+    {
+        pNode->~node_type();
+        ScratchSlots<9>();
+        mAllocator.deallocate(pNode, sizeof(node_type));
+    }
+    void DoNuke(node_type* pNode);
+};
+}
+namespace eastl {
+template <typename K, typename V, typename C, typename E>
+typename rbtree_s004b_5690<K, V, C, E>::insert_return_type rbtree_s004b_5690<K, V, C, E>::DoInsertValue(const value_type& value, true_type)
+{
+    extract_key extractKey;
+    node_type* pCurrent = (node_type*)mAnchor.mpNodeParent;
+    node_type* pLowerBound = (node_type*)&mAnchor;
+    node_type* pParent;
+    bool bValueLessThanNode = true;
+
+    while (pCurrent) {
+        bValueLessThanNode = mCompare(extractKey(value), extractKey(pCurrent->mValue));
+        pLowerBound = pCurrent;
+        if (bValueLessThanNode)
+            pCurrent = (node_type*)pCurrent->mpNodeLeft;
+        else
+            pCurrent = (node_type*)pCurrent->mpNodeRight;
+    }
+
+    pParent = pLowerBound;
+
+    if (bValueLessThanNode) {
+        if (pLowerBound != (node_type*)mAnchor.mpNodeLeft)
+            pLowerBound = (node_type*)RBTreeDecrement(pLowerBound);
+        else {
+            const iterator itResult(DoInsertValueImpl(pLowerBound, value, false));
+            return insert_return_type(itResult, true);
+        }
+    }
+
+    if (mCompare(extractKey(pLowerBound->mValue), extractKey(value))) {
+        const iterator itResult(DoInsertValueImpl(pParent, value, false));
+        return insert_return_type(itResult, true);
+    }
+
+    return insert_return_type(iterator(pLowerBound), false);
+}
+}
+namespace eastl {
+template <typename K, typename V, typename C, typename E>
+typename rbtree_s004b_5690<K, V, C, E>::iterator rbtree_s004b_5690<K, V, C, E>::DoInsertValueImpl(node_type* pNodeParent, const value_type& value, bool bForceToLeft)
+{
+    RBTreeSide side;
+    extract_key extractKey;
+
+    if (bForceToLeft || (pNodeParent == &mAnchor) || mCompare(extractKey(value), extractKey(pNodeParent->mValue)))
+        side = kRBTreeSideLeft;
+    else
+        side = kRBTreeSideRight;
+
+    node_type* const pNodeNew = DoCreateNode(value);
+    RBTreeInsert(pNodeNew, pNodeParent, &mAnchor, side);
+    mnSize++;
+
+    return iterator(pNodeNew);
+}
+}
+namespace eastl {
+template <typename K, typename V, typename C, typename E>
+typename rbtree_s004b_5690<K, V, C, E>::node_type* rbtree_s004b_5690<K, V, C, E>::DoCreateNode(const value_type& value)
+{
+    node_type* const pNode = DoAllocateNode();
+    ::new(&pNode->mValue) value_type(value);
+    return pNode;
+}
+}
+namespace eastl {
+template <typename K, typename V, typename C, typename E>
+rbtree_s004b_5690<K, V, C, E>::rbtree_s004b_5690(const allocator_type& allocator_s004b_5690)
+    : mAnchor(), mnSize(0)
+{
+    reset();
+}
+}
+namespace eastl {
+template <typename K, typename V, typename C, typename E>
+typename rbtree_s004b_5690<K, V, C, E>::iterator rbtree_s004b_5690<K, V, C, E>::lower_bound(const key_type& key)
+{
+    extract_key extractKey;
+    node_type* pCurrent = (node_type*)mAnchor.mpNodeParent;
+    node_type* pRangeEnd = (node_type*)&mAnchor;
+    while (pCurrent) {
+        if (!mCompare(extractKey(pCurrent->mValue), key)) {
+            pRangeEnd = pCurrent;
+            pCurrent = (node_type*)pCurrent->mpNodeLeft;
+        } else
+            pCurrent = (node_type*)pCurrent->mpNodeRight;
+    }
+    return iterator(pRangeEnd);
+}
+}
+namespace eastl {
+template <typename K, typename V, typename C, typename E>
+typename rbtree_s004b_5690<K, V, C, E>::iterator rbtree_s004b_5690<K, V, C, E>::DoInsertValue(iterator position, const value_type& value, true_type)
+{
+    extract_key extractKey;
+    if ((position.mpNode != mAnchor.mpNodeRight) && (position.mpNode != &mAnchor)) {
+        iterator itNext(position);
+        ++itNext;
+        if (mCompare(extractKey(*position), extractKey(value))) {
+            if (mCompare(extractKey(value), extractKey(*itNext))) {
+                if (position.mpNode->mpNodeRight)
+                    return DoInsertValueImpl(itNext.mpNode, value, true);
+                return DoInsertValueImpl(position.mpNode, value, false);
+            }
+        }
+        return insert(value).first;
+    }
+    if (mnSize && mCompare(extractKey(((node_type*)mAnchor.mpNodeRight)->mValue), extractKey(value)))
+        return DoInsertValueImpl((node_type*)mAnchor.mpNodeRight, value, false);
+    return insert(value).first;
+}
+}
+struct NukeMapped { ~NukeMapped(); uint32_t d[3]; };
+typedef eastl::pair_s004b_5690<const uint32_t, NukeMapped> NukePair;
+typedef eastl::rbtree_s004b_5690<uint32_t, NukePair, eastl::less_s004b_5690<uint32_t>, eastl::use_first_s004b_5690<NukePair> > NukeTree;
+struct Key16 {
+    float x, y, z, w;
+    Key16(const Key16& k) : x(k.x), y(k.y), z(k.z), w(k.w) {}
+    bool operator<(const Key16& k) const;                            // 0x4b52b0
+};
+typedef eastl::rbtree_s004b_5690<Key16, Key16, eastl::less_s004b_5690<Key16>, eastl::use_self_s004b_5690<Key16> > Key16Tree;
+struct Mapped0 { uint32_t d[4]; };
+typedef eastl::pair_s004b_5690<const uint32_t, Mapped0> Pair0;
+typedef eastl::rbtree_s004b_5690<uint32_t, Pair0, eastl::less_s004b_5690<uint32_t>, eastl::use_first_s004b_5690<Pair0> > UIntTree0;
+template void NukeTree::DoNuke(NukeTree::node_type*);
+struct Deletable {
+    virtual void _v0();
+    virtual void Destroy();
+    static void operator delete(void* p) { EASTL_allocator_deallocate(p); }
+};
+struct DeletablePtr {
+    Deletable* p;
+    ~DeletablePtr() { if (p) p->Destroy(); }
+    static void operator delete(void* q) { EASTL_allocator_deallocate(q); }
+};
+struct DeletablePtrRange {
+    void DestroyRange(DeletablePtr* first, DeletablePtr* last);
+};
+// ---- items of slice s004b5690 end
+
+// @ 0x004b24c0
+SP::cSPEditorPaintTheme_s004b_2320::cSPEditorPaintTheme_s004b_2320()
+{
+    mpVtbl0 = &g_vtbl_EditorResource;
+    mpVtbl0 = &g_vtbl_BakeSprites;
+    mpVtbl1 = &g_vtbl_ContentValidator;
+    mRefCount = 0;
+    mpVtbl0 = &g_vtbl_PaintTheme0;
+    mpVtbl1 = &g_vtbl_PaintTheme1;
+    mPropTheme.Ctor();
+    mModelTheme.Ctor(&mSourceRef);
+    mPropThemeID = 0;
+    mResourceType = 0;
+    mpClosestBegin = 0;
+    mpClosestEnd = 0;
+    mpClosestCap = 0;
+    for (int i = 0; i < 3; i++) {
+    }
+}
+
+// @ 0x004b25e0
+SP::cSPEditorPaintTheme_s004b_2320::~cSPEditorPaintTheme_s004b_2320()
+{
+    mpVtbl0 = &g_vtbl_PaintTheme0;
+    mpVtbl1 = &g_vtbl_PaintTheme1;
+    for (void** p = (void**)mpClosestBegin; p < (void**)mpClosestEnd; p++) {
+    }
+    FUN_00425990(&mpClosestBegin);
+    mModelTheme.Nuke(*(void**)((char*)&mModelTheme + 0xc));
+    for (char* p = (char*)mPropTheme.mpBegin; p < (char*)mPropTheme.mpEnd; p += 0x20) {
+    }
+    FUN_00455290(&mPropTheme);
+    mpVtbl1 = &g_vtbl_ContentValidator;
+    mpVtbl0 = &g_vtbl_EditorResource;
+}
 
 // @ 0x004b26a0
 void* SP::cSPEditorPaintTheme_s004b_2320::AsInterface(int type)
@@ -1104,6 +1773,49 @@ int __fastcall FUN_004b5080(void* self, uint32_t* key)
     return 0;
 }
 
+// @ 0x004b5690
+template void eastl::vector_s004b_5690<Record11c, eastl::sp_vector_allocator_s004b_5690>::DoInsertValue(Record11c*, const Record11c&)
+;
+
+// @ 0x004b5980
+template eastl::rbtree_s004b_5690<Key16, Key16, eastl::less_s004b_5690<Key16>, eastl::use_self_s004b_5690<Key16> >::rbtree_s004b_5690(const eastl::allocator_s004b_5690&)
+;
+
+// @ 0x004b5a20
+template void Key16Tree::reset()
+;
+
+// @ 0x004b5a60
+namespace eastl {
+template <typename K, typename V, typename C, typename E> void rbtree_s004b_5690<K, V, C, E>::DoNuke(node_type* pNode)
+{
+    while (pNode) {
+        DoNuke((node_type*)pNode->mpNodeRight);
+        node_type* const pNodeLeft = (node_type*)pNode->mpNodeLeft;
+        DoFreeNode(pNode);
+        pNode = pNodeLeft;
+    }
+}
+}  // namespace eastl
+
+// @ 0x004b5e90
+template UIntTree0::iterator UIntTree0::lower_bound(const uint32_t&)
+;
+
+// @ 0x004b5fb0
+void DeletablePtrRange::DestroyRange(DeletablePtr* first, DeletablePtr* last)
+{
+    for (; first < last; ++first)
+        first->~DeletablePtr();
+}
+
+// @ 0x004babe0
+void* __fastcall FUN_004babe0(void* self, void* unused, void* a, char c)
+{
+    FUN_004f3de0(a, self, DAT_015da860, DAT_015da864, DAT_015da868, DAT_015da86c, c);
+    return a;
+}
+
 // @ 0x004badd0
 int FUN_004badd0(void* self, int* a, void* b)
 {
@@ -1118,6 +1830,19 @@ bool FUN_004bbe90(uint32_t type)
     case 0x2b978c46:
     case 0x3d97a8e4:
     case 0x438f6347:
+        return true;
+    default:
+        return false;
+    }
+}
+
+// @ 0x004bbed0
+bool FUN_004bbed0(uint32_t type)
+{
+    switch (type) {
+    case 0x2399be55:
+    case 0x24682294:
+    case 0x476a98c7:
         return true;
     default:
         return false;
