@@ -1,0 +1,10 @@
+# source  symbol  va  flags
+../src/game/SPGonzago/_at_00ea0000.cpp  ?SetGonzagoEnabled@cNPCCityMusic@Audio@SP@@QAEX_N@Z  00eab860  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00ea0000.cpp  ?CommitAllProperties@cPlaceableSound@@QAEXXZ  00eab900  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_00ea0000.cpp  ?SetVolume@cPlaceableSound@@QAEXM@Z  00eaba90  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_00ea0000.cpp  ?SetPitch@cPlaceableSound@@QAEXM@Z  00eabb10  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_00ea0000.cpp  ?GetVolumeScaled@cPlaceableSound@@QAEMXZ  00eabb50  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_00ea0000.cpp  ?Shutdown@cPlaceableSound@@QAEXXZ  00eabe10  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_00ea0000.cpp  ?LoadModel@cSpatialObject@@QAE_NH@Z  00eabe90  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_00ea0000.cpp  ?SetPosition@cPlaceableSound@@QAEXPBUVec3@@@Z  00eac310  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_00ea0000.cpp  ?Destroy@cPlaceableSound@@QAEPAU1@E@Z  00eac4c0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

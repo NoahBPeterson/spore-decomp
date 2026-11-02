@@ -12,4 +12,4 @@
 00eab650 SP::Audio::cNPCCityMusicManager::AddChannelRef  # void(uint32_t id, void* key); find/insert + increment; diff 99
 00eab690 SP::Audio::cNPCCityMusicManager::ReleaseChannel  # void(uint32_t id, void* key); find + decrement positive refcount; diff 74
 00eab6e0 SP::Audio::cNPCCityMusicManager::InitGonzagoSubsystem  # void(); creates subsystem, registers five channel groups; diff 295
-00eab860 SP::Audio::cNPCCityMusic::SetGonzagoEnabled  # void(bool); activate/deactivate Gonzago controller, volume/fade; byte-exact
+00eab860 ?SetGonzagoEnabled@cNPCCityMusic@Audio@SP@@QAEX_N@Z  # cNPCCityMusic::SetGonzagoEnabled migrated from s00eaa9a0 (verbatim, slice spelling)
