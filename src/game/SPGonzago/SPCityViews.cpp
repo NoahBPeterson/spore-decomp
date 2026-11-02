@@ -1,4 +1,4 @@
-// src/game/SPGonzago/SPCityViews.cpp -- migrated from slice(s) s00e8a510, s00e899b0, s00e88c30, s00e86d40 by tools/migrate/rewrite.py
+// src/game/SPGonzago/SPCityViews.cpp -- migrated from slice(s) s00e87cf0, s00e8a510, s00e899b0, s00e88c30, s00e86d40 by tools/migrate/rewrite.py
 // Object file: SPGonzago/SPCityViews.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -22,6 +22,8 @@ extern const float kOneAndAHalf;   // 0x01485548 (1.5f)
 #include "SP/cVehicle.h"
 #include "SP/cBuilding.h"
 #include "SP/cGameNounManager.h"
+#include "EA/Swarm/cIVisualEffect.h"
+#include "SP/cCivilization.h"
 
 // ---- items of slice s00e86d40 begin (TODO(rewrite): local stubs, replace by canonical classes)
 typedef unsigned char      u8;
@@ -843,6 +845,421 @@ static bool LinkMatches(void* city, bool needNo9670)
 }
 // ---- items of slice s00e8a510 end
 
+// ---- items of slice s00e87cf0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C" double __cdecl cos(double);
+extern "C" double __cdecl sin(double);
+extern "C" double __cdecl sqrt(double);
+extern float g_ringAngleRange;                                                 // 0x016c4bc8 (2 pi)
+extern const float kZero;                                                      // 0x01485378
+extern float g_cityEffectScale;                                              // 0x013ef574
+extern void* cCityFeedbackView_vtbl[];                  // 0x014862c4
+extern void* cGameDataView_vtbl[];                      // 0x01455648
+extern void* cCityTerritoryView_vtbl[];                 // 0x01486208
+#pragma intrinsic(cos, sin, sqrt)
+struct Vector3 { float x, y, z; };
+struct Quaternion { float x, y, z, w; };
+#define PAD_VIRT(n) virtual void _v##n()
+struct IEffect_s00e8_7cf0 {
+    virtual void AddRef();                                      // +0x00
+    virtual void Release();                                     // +0x04
+    virtual void Start(int flags);                              // +0x08
+PAD_VIRT(3);
+PAD_VIRT(4);
+PAD_VIRT(5);
+PAD_VIRT(6);
+PAD_VIRT(7);
+PAD_VIRT(8);
+PAD_VIRT(9);
+PAD_VIRT(10);
+PAD_VIRT(11);
+PAD_VIRT(12);
+PAD_VIRT(13);
+PAD_VIRT(14);
+PAD_VIRT(15);
+PAD_VIRT(16);
+    virtual void SetPoints(int kind, const float* data, int count);   // +0x44
+};
+struct EffectRef {
+    IEffect_s00e8_7cf0* mp;
+    EffectRef& operator=(IEffect_s00e8_7cf0* p);                           // 0x00b5f950
+};
+struct IObjectBounds {
+PAD_VIRT(0);
+PAD_VIRT(1);
+PAD_VIRT(2);
+PAD_VIRT(3);
+PAD_VIRT(4);
+PAD_VIRT(5);
+PAD_VIRT(6);
+PAD_VIRT(7);
+PAD_VIRT(8);
+PAD_VIRT(9);
+PAD_VIRT(10);
+    virtual const Vector3* GetPosition();                       // +0x2c
+PAD_VIRT(12);
+PAD_VIRT(13);
+PAD_VIRT(14);
+PAD_VIRT(15);
+PAD_VIRT(16);
+PAD_VIRT(17);
+PAD_VIRT(18);
+PAD_VIRT(19);
+PAD_VIRT(20);
+PAD_VIRT(21);
+PAD_VIRT(22);
+PAD_VIRT(23);
+PAD_VIRT(24);
+PAD_VIRT(25);
+PAD_VIRT(26);
+PAD_VIRT(27);
+    virtual float GetRadius();                                  // +0x70
+};
+struct cTerritoryObject {
+PAD_VIRT(0);
+PAD_VIRT(1);
+PAD_VIRT(2);
+PAD_VIRT(3);
+PAD_VIRT(4);
+PAD_VIRT(5);
+PAD_VIRT(6);
+PAD_VIRT(7);
+PAD_VIRT(8);
+PAD_VIRT(9);
+PAD_VIRT(10);
+PAD_VIRT(11);
+PAD_VIRT(12);
+PAD_VIRT(13);
+PAD_VIRT(14);
+PAD_VIRT(15);
+PAD_VIRT(16);
+PAD_VIRT(17);
+PAD_VIRT(18);
+PAD_VIRT(19);
+PAD_VIRT(20);
+    PAD_VIRT(21);
+    virtual bool IsAlternate();                                 // +0x58
+    u32 pad04[(0x34 - 4) / 4];
+    IObjectBounds mBounds;                                      // +0x34
+    u32 pad38[(0xa6 - 0x38) / 4];
+    char pad_a4[2];
+    bool mbHasAlternate;                                        // +0xa6
+    char pad_a7[(0x110 - 0xa7)];
+    bool mbHasInventoryEffect;                                  // +0x110
+};
+struct cSpatialObjectView_s00e8_7cf0 {
+    // vtable slot 46 (+0xb8)
+PAD_VIRT(0);
+PAD_VIRT(1);
+PAD_VIRT(2);
+PAD_VIRT(3);
+PAD_VIRT(4);
+PAD_VIRT(5);
+PAD_VIRT(6);
+PAD_VIRT(7);
+PAD_VIRT(8);
+PAD_VIRT(9);
+PAD_VIRT(10);
+    virtual void* GetVisible();                                 // +0x2c
+PAD_VIRT(12);
+PAD_VIRT(13);
+PAD_VIRT(14);
+PAD_VIRT(15);
+PAD_VIRT(16);
+PAD_VIRT(17);
+PAD_VIRT(18);
+PAD_VIRT(19);
+PAD_VIRT(20);
+PAD_VIRT(21);
+PAD_VIRT(22);
+PAD_VIRT(23);
+PAD_VIRT(24);
+PAD_VIRT(25);
+PAD_VIRT(26);
+PAD_VIRT(27);
+PAD_VIRT(28);
+PAD_VIRT(29);
+PAD_VIRT(30);
+PAD_VIRT(31);
+PAD_VIRT(32);
+PAD_VIRT(33);
+PAD_VIRT(34);
+PAD_VIRT(35);
+PAD_VIRT(36);
+PAD_VIRT(37);
+PAD_VIRT(38);
+PAD_VIRT(39);
+PAD_VIRT(40);
+PAD_VIRT(41);
+PAD_VIRT(42);
+PAD_VIRT(43);
+PAD_VIRT(44);
+PAD_VIRT(45);
+    virtual cTerritoryObject* Cast(u32 typeId);                 // +0xb8
+    cSpatialObjectView_s00e8_7cf0();                                       // 0x00e92af0 (not defined here)
+    void Construct();                                           // out-of-line base constructor, 0x00e92af0
+    ~cSpatialObjectView_s00e8_7cf0();                                      // 0x00e92660 (not defined here)
+    void Init(void* owner);                                     // 0x00e92910
+    void HandleSimulationUpdate(void* a, void* b);              // 0x00e92ca0
+    void StopEffect(u32 id, bool bImmediate);                   // 0x00c8ad30
+    IEffect_s00e8_7cf0* GetEffect(u32 id);                                 // 0x00c888e0
+    bool HasEffect(u32 id);                                     // 0x00c88910 (PDB: GetEffect)
+    IEffect_s00e8_7cf0* CreateEffect(u32 key, int flags, u32 id);          // 0x00c8b060
+    bool CheckEffectMode(u32 a, u32 b, int c, int d);           // 0x00c8b220
+    void SetEffectFloat(u32 id, float v);                       // 0x00c88a00
+    void SetEffectFloat2(u32 id, float v);                      // 0x00c8a020
+    void SetIsVisible(bool b);                                  // 0x00e889f0
+    bool IsVisible();                                           // 0x00e88a10
+};
+struct cPlanetModel {
+    void ProjectToSurface(Vector3* dst, const Vector3* src);    // 0x00b81630
+};
+struct cSPSpaceColonyTuning {
+    float GetRingHeightOffset();                                // 0x010298b0
+    int GetRingSamplePointCount();                              // 0x01029870
+};
+struct cPlayerInventory {
+    void Refresh();                                             // 0x00ff3f00 (result unused)
+};
+struct cSPSimulatorSpaceGame {
+    cPlayerInventory* GetPlayerInventory();                     // 0x00a1ad60
+};
+u32 __cdecl GetCurrentGameMode_s00e8_7cf0();                                              // 0x00b5b800
+cSPSimulatorSpaceGame* __cdecl SpaceGameGet_s00e8_7cf0();                                 // 0x01002bd0
+cSPSpaceColonyTuning* __cdecl GetSpaceColonyTuning();                          // 0x01029790
+cPlanetModel* __cdecl PlanetModel();                                           // 0x00b3d350
+void __cdecl QuaternionFromDirections(Quaternion* out, const Vector3* from, const Vector3* to);   // 0x00698180
+class cCityTerritoryView {
+public:
+    u32 pad00[3];
+    cSpatialObjectView_s00e8_7cf0* mpObject;       // +0x0c
+    u32 pad10[(0x34 - 0x10) / 4];
+    int mPlacementState;                // +0x34
+    Vector3 mCenter;                    // +0x38
+    float mRadius;                      // +0x44
+    u32 pad48[3];
+
+    virtual void vslot0();
+    virtual void vslot1();
+    virtual void vslot2();
+    virtual void vslot3();
+    virtual void vslot4();
+    virtual void vslot5();
+    virtual void vslot6();
+    virtual void vslot7();
+    virtual void vslot8();
+    virtual void vslot9();
+    virtual void vslot10();
+    virtual void vslot11();
+    virtual void vslot12();
+    virtual void vslot13();
+    virtual void vslot14();
+    virtual void vslot15();
+    virtual void vslot16();
+    virtual void vslot17();
+    virtual void vslot18();
+    virtual void vslot19();
+    virtual void vslot20();
+    virtual void vslot21();
+    virtual void vslot22();
+    virtual void vslot23();
+    virtual void vslot24();
+    virtual void vslot25();
+    virtual void vslot26();
+    virtual void vslot27();
+    virtual void vslot28();
+    virtual void vslot29();
+    virtual void UpdateSelection();     // +0x74
+};
+inline void* operator new(unsigned int, void* p) { return p; }
+void* __cdecl ViewAlloc(unsigned int size, const char* name, int a, int b, int c, int d);     // 0x00f473a0
+void __cdecl FreeViewBuffer(void* p, int flags);                                             // 0x00572020
+struct IObjectCast {
+PAD_VIRT(0);
+PAD_VIRT(1);
+PAD_VIRT(2);
+    virtual void* Cast(u32 typeId);                     // +0x0c
+};
+struct IRefCounted {
+    virtual void AddRef();                              // +0x00
+    virtual void Release();                             // +0x04
+    PAD_VIRT(2);
+    virtual void Detach(int force);                     // +0x0c
+};
+struct IViewVtbl {
+PAD_VIRT(0);
+PAD_VIRT(1);
+PAD_VIRT(2);
+PAD_VIRT(3);
+    virtual void SetExpanded(bool b);                   // +0x10
+PAD_VIRT(5);
+PAD_VIRT(6);
+PAD_VIRT(7);
+PAD_VIRT(8);
+    virtual void Init(void* owner);                     // +0x24
+    PAD_VIRT(10);
+    virtual void* GetVisible();                         // +0x2c
+};
+struct IRenderable {
+    PAD_VIRT(0);
+    u32 mFlags;                                         // +0x04
+    u32 pad08[0x11];                                    // +0x08
+    float mPos4c;                                       // +0x4c
+    float mPos50;                                       // +0x50
+    float mPos54;                                       // +0x54
+};
+struct IRenderableBits {
+    PAD_VIRT(0);
+    u8 mVisible : 1;                                    // +0x04 bit 0
+    u8 mRest : 7;
+};
+struct IGonzagoWorld {
+PAD_VIRT(0);
+PAD_VIRT(1);
+PAD_VIRT(2);
+PAD_VIRT(3);
+PAD_VIRT(4);
+PAD_VIRT(5);
+PAD_VIRT(6);
+PAD_VIRT(7);
+PAD_VIRT(8);
+PAD_VIRT(9);
+PAD_VIRT(10);
+PAD_VIRT(11);
+PAD_VIRT(12);
+PAD_VIRT(13);
+PAD_VIRT(14);
+PAD_VIRT(15);
+PAD_VIRT(16);
+PAD_VIRT(17);
+PAD_VIRT(18);
+PAD_VIRT(19);
+PAD_VIRT(20);
+PAD_VIRT(21);
+PAD_VIRT(22);
+PAD_VIRT(23);
+PAD_VIRT(24);
+PAD_VIRT(25);
+PAD_VIRT(26);
+PAD_VIRT(27);
+    virtual void SpawnEffect(void* obj, u32 effectId, int a, float b, int c);   // +0x70
+};
+IGonzagoWorld* __cdecl GonzagoModelWorld_s00e8_7cf0();                                  // 0x00b3d520
+struct cCivilization {
+    u32 pad00[0xc4 / 4];                                // +0x000
+    Vector3 mPos;                                       // +0x0c4
+};
+struct cCityVisual {
+PAD_VIRT(0);
+PAD_VIRT(1);
+PAD_VIRT(2);
+PAD_VIRT(3);
+PAD_VIRT(4);
+PAD_VIRT(5);
+PAD_VIRT(6);
+PAD_VIRT(7);
+PAD_VIRT(8);
+PAD_VIRT(9);
+PAD_VIRT(10);
+PAD_VIRT(11);
+PAD_VIRT(12);
+PAD_VIRT(13);
+PAD_VIRT(14);
+PAD_VIRT(15);
+PAD_VIRT(16);
+PAD_VIRT(17);
+PAD_VIRT(18);
+PAD_VIRT(19);
+PAD_VIRT(20);
+    PAD_VIRT(21);
+    virtual bool IsFlagged();                           // +0x58
+    u32 pad04[(0x50 - 4) / 4];                          // +0x04
+    u32 mFlags;                                         // +0x50
+};
+struct cCityInfo {
+    u32 pad00[0x120 / 4];                               // +0x000
+    cCityVisual mVisual;                                // +0x120
+    cCivilization* GetCivilization();                   // 0x00bd9bf0
+};
+struct cCity_s00e8_7cf0 : IRefCounted {
+    u32 pad04;                                          // +0x004
+    u8 pad08[0x108 - 0x08];                             // +0x008
+    u8 mbFlag108;                                       // +0x108
+    u8 pad109[0x25c - 0x109];                           // +0x109
+    float mField25c;                                    // +0x25c
+    u32 pad260;                                         // +0x260
+    cCityInfo* mpInfo;                                  // +0x264
+    Vector3* GetPosition(Vector3* out);                 // 0x00bec830
+};
+struct cSPUIMeter_s00e8_7cf0 {
+    void Shutdown(int force);                           // 0x00e06940
+};
+class cCityFeedbackView_s00e8_7cf0 {
+public:
+    void** mpVtbl;                                      // +0x00
+    u32 m04;                                            // +0x04
+    u32 m08;                                            // +0x08
+    IRefCounted* mp0c;                                  // +0x0c
+    cSPUIMeter_s00e8_7cf0* mp10;                                   // +0x10
+    cSPUIMeter_s00e8_7cf0* mp14;                                   // +0x14
+    cSPUIMeter_s00e8_7cf0* mp18;                                   // +0x18
+
+    cCityFeedbackView_s00e8_7cf0();                                // 0x00e88ac0
+    ~cCityFeedbackView_s00e8_7cf0();                               // 0x00e88ae0
+};
+class cCityEffectView : public cSpatialObjectView_s00e8_7cf0 {
+public:
+    u32 pad04[16];                                      // +0x04
+    void* mp44;                                         // +0x44
+    IRefCounted* mp48;                                  // +0x48
+    IRefCounted* mp4c;                                  // +0x4c
+
+    ~cCityEffectView();                                 // 0x00e88a30
+};
+class cCitySoundLoopView_s00e8_7cf0 : public cSpatialObjectView_s00e8_7cf0 {
+public:
+    u32 pad04[12];                                      // +0x04
+    u32 mSoundHandle;                                   // +0x34
+    u32 pad38;                                          // +0x38
+
+    cCitySoundLoopView_s00e8_7cf0();                               // factory-inlined (no standalone symbol)
+};
+class cCityWallsView_s00e8_7cf0 : public cSpatialObjectView_s00e8_7cf0 {
+public:
+    u32 pad04[2];                                       // +0x04
+    cSpatialObjectView_s00e8_7cf0* mpObject;                       // +0x0c
+    u32 pad10[2];                                       // +0x10
+    Vector3 mLastPos;                                   // +0x18
+    u32 pad24[4];                                       // +0x24
+    cCity_s00e8_7cf0* mpCity;                                      // +0x34
+    bool mbFlag38;                                      // +0x38
+    bool mbFlag39;                                      // +0x39
+    bool mbFlag3a;                                      // +0x3a
+    u8 pad3b;                                           // +0x3b
+
+    cCityWallsView_s00e8_7cf0();                                   // 0x00e88680
+    void Init(void* owner);                             // 0x00e88720
+    void HandleSimulationUpdate(void* a, void* b);      // 0x00e88820
+};
+class cCityTerritoryViewRetail {
+public:
+    void** mpVtbl;                                      // +0x00
+    u32 pad04[2];                                       // +0x04
+    cSpatialObjectView_s00e8_7cf0* mpObject;                       // +0x0c
+    u32 pad10[(0x34 - 0x10) / 4];                       // +0x10
+    int mPlacementState;                                // +0x34
+    Vector3 mCenter;                                    // +0x38
+    float mRadius;                                      // +0x44
+    u32 pad48[3];                                       // +0x48
+
+    cCityTerritoryViewRetail();                         // 0x00e87d30
+    void StopEffects4(u32 id);                          // 0x00e87cf0
+};
+cCitySoundLoopView_s00e8_7cf0::cCitySoundLoopView_s00e8_7cf0()
+{
+    mSoundHandle = 0;
+}
+// ---- items of slice s00e87cf0 end
+
 // @ 0x00e87560
 void cBuildingView::ViewInit1(void* gameData)
 {
@@ -993,6 +1410,394 @@ cBuildingView::~cBuildingView()
     mTimer.Destruct();
     if (mpEffect_34 != 0)
         VC0(void, mpEffect_34, 4);
+}
+
+// @ 0x00e87cf0
+void cCityTerritoryViewRetail::StopEffects4(u32 id)
+{
+    for (int i = 0; i < 4; ++i, ++id) {
+        if (mpObject->HasEffect(id))
+            mpObject->StopEffect(id, false);
+    }
+}
+
+// @ 0x00e87d30
+cCityTerritoryViewRetail::cCityTerritoryViewRetail()
+{
+    ((cSpatialObjectView_s00e8_7cf0*)this)->Construct();
+    mpVtbl = cCityTerritoryView_vtbl;
+    mRadius = 0.0f;
+}
+
+// @ 0x00e87d50
+cCityTerritoryViewRetail* __stdcall MakeCityTerritoryView(void* owner)
+{
+    void* mem = ViewAlloc(0x48, "Simulator/cCityTerritoryView", 0, 0, 0, 0);
+    cCityTerritoryViewRetail* p = mem ? new (mem) cCityTerritoryViewRetail() : 0;
+    ((IViewVtbl*)p)->Init(owner);
+    return p;
+}
+
+// @ 0x00e87db0
+void cCityTerritoryView::UpdateSelection()
+{
+    cTerritoryObject* obj = mpObject ? mpObject->Cast(0x2450023) : 0;
+
+    mCenter = *obj->mBounds.GetPosition();
+
+    int state = 1;
+    if (obj->mbHasAlternate)
+        state = obj->IsAlternate() ? 2 : 3;
+
+    if (state != mPlacementState || obj->mBounds.GetRadius() != mRadius) {
+        mpObject->StopEffect(0x243a1dc, true);
+        mpObject->StopEffect(0x243a1dd, true);
+        const float oldRadius = mRadius;
+        mPlacementState = state;
+        mRadius = (obj->mBounds.GetRadius() - oldRadius) * 0.1f + oldRadius;
+    }
+
+    IEffect_s00e8_7cf0* ring = mpObject->GetEffect(0x243a1dc);
+    if (ring)
+        ring->AddRef();
+    EffectRef second;
+    second.mp = mpObject->GetEffect(0x243a1dd);
+    if (second.mp)
+        second.mp->AddRef();
+
+    if (ring == 0) {
+        if (GetCurrentGameMode_s00e8_7cf0() == 0x1654c05) {
+            u32 effectKey;
+            if (mPlacementState == 2) {
+                effectKey = 0x849a5ac3;
+            } else {
+                effectKey = 0x43fa3907;
+                if (mPlacementState == 1)
+                    effectKey = 0x849a5ac3;
+            }
+            IEffect_s00e8_7cf0* created = mpObject->CreateEffect(effectKey, 0, 0x243a1dc);
+            if (created) {
+                created->AddRef();
+                ring = created;
+            }
+            SpaceGameGet_s00e8_7cf0()->GetPlayerInventory()->Refresh();
+            if (obj->mbHasInventoryEffect) {
+                second = mpObject->CreateEffect(effectKey, 0, 0x243a1dd);
+                second.mp->Start(0);
+            }
+        } else {
+            IEffect_s00e8_7cf0* created = mpObject->CreateEffect(0x5f688fa9, 0, 0x243a1dc);
+            if (created) {
+                created->AddRef();
+                ring = created;
+            }
+        }
+        ring->Start(0);
+    }
+
+    const float heightOffset = GetSpaceColonyTuning()->GetRingHeightOffset();
+    int count = GetSpaceColonyTuning()->GetRingSamplePointCount();
+    if (count < 3 || count > 500)
+        count = 500;
+
+    const float radius = mRadius;
+    Vector3 dir;
+    dir.x = 0.0f;
+    dir.y = 0.0f;
+    dir.z = 1.0f;
+    const int numFloats = count * 3 + 3;
+    Quaternion q;
+    QuaternionFromDirections(&q, &dir, &mCenter);
+    cPlanetModel* planet = PlanetModel();
+    const float step = g_ringAngleRange / (float)count;
+
+    float innerRing[1503];
+    float outerRing[1503];
+    Vector3 inner, outer;
+
+    if (count > 0) {
+        const float scale = 100.0f / radius;
+        const float zeroScaled = scale * kZero;
+        for (int i = 0; i < count; i++) {
+            const float xx = q.x * q.x;
+            const float yx = q.y * q.x;
+            const float zz = q.z * q.z;
+            const float zx = q.z * q.x;
+            const float zy = q.z * q.y;
+            const float yy = q.y * q.y;
+            const float wx = q.w * q.x;
+            const float wz = q.w * q.z;
+            const float wy = q.w * q.y;
+            const double angle = (double)i * (double)step;
+            const double cd = cos(angle) * (double)radius;
+            const float c = (float)cd;
+            const double sd = -sin(angle) * (double)radius;
+            const float s = (float)sd;
+            const float cs = (float)(cd * (double)scale);
+            const float ss = (float)((double)scale * sd);
+
+            Vector3 a;
+            a.y = mCenter.y + (((1.0f - (zz + xx) * 2.0f) * s + ((wz + yx) * c) * 2.0f) + (zy - wx) * 0.0f);
+            a.x = mCenter.x + (((1.0f - (zz + yy) * 2.0f) * c + ((yx - wz) * s) * 2.0f) + (wy + zx) * 0.0f);
+            a.z = mCenter.z + ((((wx + zy) * s + (zx - wy) * c) * 2.0f) + (1.0f - (yy + xx) * 2.0f) * 0.0f);
+
+            const float by = (((wz + yx) * cs + (zy - wx) * zeroScaled) * 2.0f + (1.0f - (zz + xx) * 2.0f) * ss);
+            Vector3 b;
+            b.x = mCenter.x + (((yx - wz) * ss + (wy + zx) * zeroScaled) * 2.0f + (1.0f - (zz + yy) * 2.0f) * cs);
+            b.y = mCenter.y + by;
+            b.z = mCenter.z + ((((zx - wy) * cs + (wx + zy) * ss) * 2.0f) + (1.0f - (yy + xx) * 2.0f) * zeroScaled);
+
+            planet->ProjectToSurface(&inner, &a);
+            planet->ProjectToSurface(&outer, &b);
+
+            const float inv = (float)(1.0 / sqrt((double)inner.x * inner.x + ((double)inner.y * inner.y + (double)inner.z * inner.z)));
+            const float ox = (inner.x * inv) * heightOffset;
+            const float oy = (inner.y * inv) * heightOffset;
+            const float oz = (inner.z * inv) * heightOffset;
+            outer.x = ox + outer.x;
+            inner.x = ox + inner.x;
+            inner.y = oy + inner.y;
+            inner.z = oz + inner.z;
+            outer.y = outer.y + oy;
+            outer.z = outer.z + oz;
+
+            innerRing[i * 3] = inner.x;
+            innerRing[i * 3 + 1] = inner.y;
+            innerRing[i * 3 + 2] = inner.z;
+            outerRing[i * 3] = outer.x;
+            outerRing[i * 3 + 1] = outer.y;
+            outerRing[i * 3 + 2] = outer.z;
+        }
+    }
+
+    innerRing[count * 3] = innerRing[0];
+    innerRing[count * 3 + 1] = innerRing[1];
+    innerRing[count * 3 + 2] = innerRing[2];
+    outerRing[count * 3] = outerRing[0];
+    outerRing[count * 3 + 1] = outerRing[1];
+    outerRing[count * 3 + 2] = outerRing[2];
+
+    ring->SetPoints(0xd, innerRing, numFloats);
+    if (second.mp) {
+        second.mp->SetPoints(0xd, outerRing, numFloats);
+        second.mp->Release();
+    }
+    ring->Release();
+}
+
+// @ 0x00e88620
+cCitySoundLoopView_s00e8_7cf0* __stdcall MakeCitySoundLoopView(void* owner)
+{
+    void* mem = ViewAlloc(0x38, "Simulator/cCitySoundLoopView", 0, 0, 0, 0);
+    cCitySoundLoopView_s00e8_7cf0* p = mem ? new (mem) cCitySoundLoopView_s00e8_7cf0() : 0;
+    ((IViewVtbl*)p)->Init(owner);
+    return p;
+}
+
+// @ 0x00e88680
+cCityWallsView_s00e8_7cf0::cCityWallsView_s00e8_7cf0()
+{
+    mpCity = 0;
+    mbFlag38 = false;
+    mbFlag39 = false;
+    mbFlag3a = false;
+}
+
+// @ 0x00e88720
+void cCityWallsView_s00e8_7cf0::Init(void* owner)
+{
+    cSpatialObjectView_s00e8_7cf0::Init(owner);
+    cCity_s00e8_7cf0* p = owner ? (cCity_s00e8_7cf0*)((IObjectCast*)owner)->Cast(0xed7fc07) : 0;
+    cCity_s00e8_7cf0* old = mpCity;
+    if (p != old) {
+        if (p)
+            p->AddRef();
+        mpCity = p;
+        if (old)
+            old->Release();
+    }
+    ((IViewVtbl*)this)->SetExpanded(mpCity->mbFlag108 == 0);
+}
+
+// @ 0x00e88790
+cCityWallsView_s00e8_7cf0* __stdcall MakeCityWallsView(void* owner)
+{
+    void* mem = ViewAlloc(0x3c, "Simulator/cCityWallsView", 0, 0, 0, 0);
+    cCityWallsView_s00e8_7cf0* p = mem ? new (mem) cCityWallsView_s00e8_7cf0() : 0;
+    ((IViewVtbl*)p)->Init(owner);
+    Vector3 pos;
+    p->mLastPos = *p->mpCity->GetPosition(&pos);
+    void* r = ((IViewVtbl*)p)->GetVisible();
+    if (GetCurrentGameMode_s00e8_7cf0() != 0x1654c10)
+        ((IRenderable*)r)->mFlags |= 0x20;
+    return p;
+}
+
+// @ 0x00e88820
+void cCityWallsView_s00e8_7cf0::HandleSimulationUpdate(void* a, void* b)
+{
+    cSpatialObjectView_s00e8_7cf0::HandleSimulationUpdate(a, b);
+    IRenderable* r = (IRenderable*)((IViewVtbl*)this)->GetVisible();
+    if (r) {
+        Vector3 v;
+        if (GetCurrentGameMode_s00e8_7cf0() == 0x1654c05) {
+            cCivilization* civ = mpCity->mpInfo->GetCivilization();
+            v = civ->mPos;
+        } else {
+            Vector3 pos;
+            Vector3* q = mpCity->GetPosition(&pos);
+            v = *q;
+        }
+        if (v.x != mLastPos.x || v.y != mLastPos.y || v.z != mLastPos.z) {
+            mLastPos = v;
+            IRenderable* r2 = (IRenderable*)((IViewVtbl*)this)->GetVisible();
+            if (r2) {
+                r2->mPos4c = v.x;
+                r2->mPos50 = v.y;
+                r2->mPos54 = v.z;
+                cCityVisual* vis = &mpCity->mpInfo->mVisual;
+                if (vis->IsFlagged())
+                    r2->mFlags &= ~0x800u;
+                else
+                    r2->mFlags |= 0x800;
+            }
+        }
+        u32 bit = (r->mFlags >> 0xe) & 1;
+        if (bit && !mbFlag3a)
+            GonzagoModelWorld_s00e8_7cf0()->SpawnEffect(r, 0x40969046, 0, 0.0f, 0);
+        mbFlag3a = bit != 0;
+    }
+
+    bool flagged = (mpCity->mpInfo->mVisual.mFlags & 0x800) == 0x800;
+    if (mpObject->CheckEffectMode(0x7d2bf7a3, 0x30e8811, flagged, 0)) {
+        mpObject->SetEffectFloat(0x30e8811, g_cityEffectScale);
+        mpObject->SetEffectFloat2(0x30e8811, mpCity->mField25c);
+    }
+    cCityVisual* vis = &mpCity->mpInfo->mVisual;
+    vis->mFlags &= ~0x800u;
+}
+
+// @ 0x00e889f0
+void cSpatialObjectView_s00e8_7cf0::SetIsVisible(bool b)
+{
+    IRenderable* p = (IRenderable*)GetVisible();
+    if (!p)
+        return;
+    if (b) {
+        p->mFlags |= 1;
+        return;
+    }
+    p->mFlags &= ~1u;
+}
+
+// @ 0x00e88a10
+bool cSpatialObjectView_s00e8_7cf0::IsVisible()
+{
+    IRenderableBits* p = (IRenderableBits*)GetVisible();
+    if (p)
+        return p->mVisible;
+    return false;
+}
+
+// @ 0x00e88a30
+cCityEffectView::~cCityEffectView()
+{
+    if (mp44)
+        FreeViewBuffer(mp44, 0);
+    if (mp48) {
+        mp48->Detach(0);
+        IRefCounted* p = mp48;
+        if (p) {
+            mp48 = 0;
+            p->Release();
+        }
+    }
+    if (mp4c) {
+        mp4c->Detach(0);
+        IRefCounted* p = mp4c;
+        if (p) {
+            mp4c = 0;
+            p->Release();
+        }
+    }
+    if (mp4c)
+        mp4c->Release();
+    if (mp48)
+        mp48->Release();
+}
+
+// @ 0x00e88ac0
+cCityFeedbackView_s00e8_7cf0::cCityFeedbackView_s00e8_7cf0()
+{
+    m08 = 0;
+    m04 = 0;
+    mpVtbl = cCityFeedbackView_vtbl;
+    mp0c = 0;
+    mp10 = 0;
+    mp14 = 0;
+    mp18 = 0;
+}
+
+// @ 0x00e88ae0
+cCityFeedbackView_s00e8_7cf0::~cCityFeedbackView_s00e8_7cf0()
+{
+    mpVtbl = cCityFeedbackView_vtbl;
+    if (mp0c) {
+        IRefCounted* p = mp0c;
+        mp0c = 0;
+        p->Release();
+    }
+    if (mp10) {
+        mp10->Shutdown(1);
+        cSPUIMeter_s00e8_7cf0* p = mp10;
+        if (p) {
+            mp10 = 0;
+            ((IRefCounted*)p)->Release();
+        }
+    }
+    if (mp14) {
+        mp14->Shutdown(1);
+        cSPUIMeter_s00e8_7cf0* p = mp14;
+        if (p) {
+            mp14 = 0;
+            ((IRefCounted*)p)->Release();
+        }
+    }
+    if (mp18) {
+        mp18->Shutdown(1);
+        cSPUIMeter_s00e8_7cf0* p = mp18;
+        if (p) {
+            mp18 = 0;
+            ((IRefCounted*)p)->Release();
+        }
+    }
+    if (mp18)
+        ((IRefCounted*)mp18)->Release();
+    if (mp14)
+        ((IRefCounted*)mp14)->Release();
+    if (mp10)
+        ((IRefCounted*)mp10)->Release();
+    if (mp0c)
+        mp0c->Release();
+    mpVtbl = cGameDataView_vtbl;
+}
+
+// @ 0x00e88ba0
+cCityFeedbackView_s00e8_7cf0* __stdcall MakeCityFeedbackView(void* owner)
+{
+    IRefCounted* src;
+    if (owner == 0 || (src = (IRefCounted*)((IObjectCast*)owner)->Cast(0xee9b2232)) == 0)
+        return 0;
+    void* mem = ViewAlloc(0x1c, "Simulator/cCityFeedbackView", 0, 0, 0, 0);
+    cCityFeedbackView_s00e8_7cf0* p = mem ? new (mem) cCityFeedbackView_s00e8_7cf0() : 0;
+    IRefCounted* old = p->mp0c;
+    if (src != old) {
+        src->AddRef();
+        p->mp0c = src;
+        if (old)
+            old->Release();
+    }
+    return p;
 }
 
 // @ 0x00e88c30
