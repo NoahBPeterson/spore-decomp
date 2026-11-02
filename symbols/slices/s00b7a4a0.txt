@@ -1,1 +1,3 @@
+00b7a4a0 ?CollectLights@cSpawner@@QAEHPAM0MPAUIntVector@@D@Z  # cSpawner::CollectLights migrated from s00b7a4a0 (verbatim, slice spelling)
+00b7a710 ?ResetLights@cSpawner@@QAEXXZ  # cSpawner::ResetLights migrated from s00b7a4a0 (verbatim, slice spelling)
 00b7a880 BeamMgr::UpdateBeams  # per-frame update of paired beam lights around aim target; asm + Ghidra

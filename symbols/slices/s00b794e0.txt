@@ -1,0 +1,8 @@
+00b794e0 ?Init@ObMgr@@QAEPAXPAH0@Z  # ObMgr::Init migrated from s00b794e0 (verbatim, slice spelling)
+00b795c0 ?Insert@ObMgr@@QAEPAHPAH0H@Z  # ObMgr::Insert migrated from s00b794e0 (verbatim, slice spelling)
+00b79740 ?Construct@ObMgr@@QAEPAXXZ  # ObMgr::Construct migrated from s00b794e0 (verbatim, slice spelling)
+00b79a60 ?Detach@Sub@@QAEXXZ  # Sub::Detach migrated from s00b794e0 (verbatim, slice spelling)
+00b79aa0 ?Destroy@ObMgr@@QAEXXZ  # ObMgr::Destroy migrated from s00b794e0 (verbatim, slice spelling)
+00b79c30 ?Query@ObMgr@@QAEXPAUV3@@PAUPointerVec@@IMD0@Z  # ObMgr::Query migrated from s00b794e0 (verbatim, slice spelling)
+00b79e50 ?Count@ObMgr@@QAEHPAUV3@@MD@Z  # ObMgr::Count migrated from s00b794e0 (verbatim, slice spelling)
+00b7a1d0 ?QueryNear@ObMgr@@QAEXPAUV3@@MIPAUPointerVec@@@Z  # ObMgr::QueryNear migrated from s00b794e0 (verbatim, slice spelling)

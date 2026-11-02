@@ -1,10 +1,15 @@
+00b7bd50 ?sub_b7bd50@cSPPieMenu@@QAEXHH@Z  # cSPPieMenu::sub_b7bd50 migrated from s00b7bd50 (verbatim, slice spelling)
+00b7c160 ?SetSomething@cSPPieMenu@@QAEXH@Z  # cSPPieMenu::SetSomething migrated from s00b7bd50 (verbatim, slice spelling)
+00b7c1b0 ?sub_b7c1b0@HashTable_s00b7_bd50@@QAEPAXPBX@Z  # HashTable_s00b7_bd50::sub_b7c1b0 migrated from s00b7bd50 (verbatim, slice spelling)
+00b7c290 ?sub_b7c290@cSPPieMenu@@QAEHPAUcSpatialObject@@PAX@Z  # cSPPieMenu::sub_b7c290 migrated from s00b7bd50 (verbatim, slice spelling)
+00b7c360 ?sub_b7c360@cSPPieMenu@@QAEPAXPAUcSpatialObject@@PAX@Z  # cSPPieMenu::sub_b7c360 migrated from s00b7bd50 (verbatim, slice spelling)
+00b7c480 ?sub_b7c480@cSPPieMenu@@QAEPAXPAX@Z  # cSPPieMenu::sub_b7c480 migrated from s00b7bd50 (verbatim, slice spelling)
+00b7c750 ?PieMenuAcceptCallback@@YAXHHD@Z  # PieMenuAcceptCallback migrated from s00b7bd50 (verbatim, slice spelling)
+00b7c790 ?cSPPieMenu_ReleaseAndInput@@YAXH@Z  # cSPPieMenu_ReleaseAndInput migrated from s00b7bd50 (verbatim, slice spelling)
 00b7c810 SP::cSPPieMenu::HideUTFMenu  # dev PDB 0x5ebc40 callee-single
-00b7c9c0 Simulator::cPieMenuScreenPosition::cPieMenuScreenPosition  # Ghidra real name / vtbl 0x14651bc
-00b7c750 PieMenu input accept callback  # forwards to SP::GameInputManager vtbl+0x68
-00b7c870 cSPPieMenu window-contains-window query  # global winproc +0x00818370
-00b7c1b0 HashTable::sub_b7c1b0  # 1-dword-key map find-or-insert (inlined into 00b7c290 / 00b7c360)
-00b7c290 SP::cSPPieMenu::sub_b7c290  # get-or-create item value for a spatial object (map +0x54c8)
-00b7c360 SP::cSPPieMenu::sub_b7c360  # get-or-create item value with transform copy (map +0x54e8)
-00b7c480 SP::cSPPieMenu::sub_b7c480  # create item value from a model (map +0x54a8)
-00b7bd50 SP::cSPPieMenu::sub_b7bd50  # refresh the visible pie items
+00b7c870 ?cSPPieMenu_ContainsWindow@@YA_NPAX@Z  # cSPPieMenu_ContainsWindow migrated from s00b7bd50 (verbatim, slice spelling)
+00b7c890 ?SetItemTextColor@ButtonVec@@QAEXHH@Z  # ButtonVec::SetItemTextColor migrated from s00b7bd50 (verbatim, slice spelling)
 00b7c8e0 PieMenu_ScreenPosition_GetPosition  # screen-space position of a spatial object
+00b7c9c0 ??0cPieMenuScreenPosition@@QAE@PAUcSpatialObject@@@Z  # cPieMenuScreenPosition::cPieMenuScreenPosition migrated from s00b7bd50 (verbatim, slice spelling)
+00b7cb00 ?GetPosition@cPieMenuScreenPosition@@QAE_NPAM0@Z  # cPieMenuScreenPosition::GetPosition migrated from s00b7bd50 (verbatim, slice spelling)
+00b7cb20 ?ShouldBeVisible@cPieMenuScreenPosition@@QAE_NXZ  # cPieMenuScreenPosition::ShouldBeVisible migrated from s00b7bd50 (verbatim, slice spelling)

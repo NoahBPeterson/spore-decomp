@@ -1,0 +1,47 @@
+# source  symbol  va  flags
+../src/game/SPGonzago/_at_00b70000.cpp  ?deleteTree@MotiveMap@@QAEXPAUTreeNode@@@Z  00b71790  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_00b70000.cpp  ?FUN_00b71a30@@YIXPAUMotiveObjectTree@@@Z  00b71a30  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_00b70000.cpp  ?Init@cObjectPool@@QAEXHH@Z  00b72080  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/SPGonzago/_at_00b70000.cpp  ?Destroy@cObjectPool@@QAEXXZ  00b720e0  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/SPGonzago/_at_00b70000.cpp  ?Reset@cObjectPool@@QAEXXZ  00b72110  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/SPGonzago/_at_00b70000.cpp  ?Advance@cObjectPool@@SIXPAHPAU1@@Z  00b72120  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00b70000.cpp  ?Get@cObjectPool@@QAEPAXI@Z  00b721d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00b70000.cpp  ?At@cObjectPool@@QAEPAXI@Z  00b72210  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/SPGonzago/_at_00b70000.cpp  ?Next@cObjectPool@@QAEPAXPAH@Z  00b72230  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00b70000.cpp  ?Free@cObjectPool@@QAEXI@Z  00b72260  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/SPGonzago/_at_00b70000.cpp  ?Fn_00b72290@@YA_NPBM0@Z  00b72290  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00b70000.cpp  ?GetScriptId@cGameModeManager@@QAEIXZ  00b72320  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/SPGonzago/_at_00b70000.cpp  ?Register@cMessageListener@@QAEXXZ  00b72370  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00b70000.cpp  ?Fn_00b72410@@YG_KII@Z  00b72410  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/SPGonzago/_at_00b70000.cpp  ?Fn_00b72430@@YAPADPAD0P6AD00@Z@Z  00b72430  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00b70000.cpp  ?PreRotateXYZ@cXform@@QAEXMMM@Z  00b72520  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/SPGonzago/_at_00b70000.cpp  ?Fn_00b72560@@YA_NPBM0@Z  00b72560  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00b70000.cpp  ?Fn_00b72580@@YA_NPBM0@Z  00b72580  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00b70000.cpp  ?Fn_00b725a0@@YA_NPBM0@Z  00b725a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00b70000.cpp  ?SetActive@cGridEntryOwner@@QAEX_N@Z  00b725e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00b70000.cpp  ?SetFlag2@cFlagObject@@QAEXXZ  00b72870  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/SPGonzago/_at_00b70000.cpp  ?ClearFlag2@cFlagObject@@QAEXXZ  00b72880  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/SPGonzago/_at_00b70000.cpp  ?FUN_00b72dc0@@YAPAUK12@@PAU1@0P6A_NPBU1@1@Z@Z  00b72dc0  /O2 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00b70000.cpp  ?FUN_00b72f10@@YGPAULNode@@PAU1@PBII@Z  00b72f10  /O2 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00b70000.cpp  ?FUN_00b73010@@YGPAUNode1c@@PBUKey24@@@Z  00b73010  /O2 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00b70000.cpp  ?FUN_00b73350@@YAXPAPAUOp@@0MMM@Z  00b73350  /O2 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00b70000.cpp  ?FUN_00b73780@@YAPAUE18@@PAU1@00@Z  00b73780  /O2 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00b70000.cpp  ?FUN_00b739f0@@YAPAUE10@@PAU1@00@Z  00b739f0  /O2 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00b70000.cpp  ?FUN_00b74590@@YGXH@Z  00b74590  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00b70000.cpp  ?FUN_00b749c0@@YAXPAM0MMM@Z  00b749c0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00b70000.cpp  ?FUN_00b74c20@@YAXPAM00@Z  00b74c20  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00b70000.cpp  ?FUN_00b74ef0@@YGXH@Z  00b74ef0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00b70000.cpp  ?Lookup@ObstacleMgr@@QAEHPAI@Z  00b74f40  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00b70000.cpp  ?FUN_00b76400@@YIPAMPAUMF@@HABH@Z  00b76400  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00b70000.cpp  ?Push@C76530@@QAEXABUEl18@@@Z  00b76530  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00b70000.cpp  ?FUN_00b768d0@@YAXPAX000@Z  00b768d0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00b70000.cpp  ??0SwarmRecord@@QAE@ABU0@@Z  00b778b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00b70000.cpp  ?FUN_00b78020@Sim_s00b7_7db0@@QAEPAXPAX@Z  00b78020  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00b70000.cpp  ?FUN_00b78080@Sim_s00b7_7db0@@QAEPAXPAX@Z  00b78080  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00b70000.cpp  ?FUN_00b78860@@YIXPAX@Z  00b78860  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00b70000.cpp  ?Detach@Sub@@QAEXXZ  00b79a60  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00b70000.cpp  ?Update@Mgr@@QAEXHM@Z  00b7b590  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00b70000.cpp  ?SerializeIt@Mgr@@QAEDPAX@Z  00b7b710  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00b70000.cpp  ?PieMenuAcceptCallback@@YAXHHD@Z  00b7c750  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/_at_00b70000.cpp  ?cSPPieMenu_ContainsWindow@@YA_NPAX@Z  00b7c870  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/_at_00b70000.cpp  ?GetPosition@cPieMenuScreenPosition@@QAE_NPAM0@Z  00b7cb00  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include

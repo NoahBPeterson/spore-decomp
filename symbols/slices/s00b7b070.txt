@@ -1,0 +1,5 @@
+00b7b070 ?Sample@Mgr@@QAEXPAM0@Z  # Mgr::Sample migrated from s00b7b070 (verbatim, slice spelling)
+00b7b590 ?Update@Mgr@@QAEXHM@Z  # Mgr::Update migrated from s00b7b070 (verbatim, slice spelling)
+00b7b710 ?SerializeIt@Mgr@@QAEDPAX@Z  # Mgr::SerializeIt migrated from s00b7b070 (verbatim, slice spelling)
+00b7b780 ?Destroy@Mgr@@QAEXXZ  # Mgr::Destroy migrated from s00b7b070 (verbatim, slice spelling)
+00b7ba50 ?UpdatePooled@Mgr@@QAEXHH@Z  # Mgr::UpdatePooled migrated from s00b7b070 (verbatim, slice spelling)
