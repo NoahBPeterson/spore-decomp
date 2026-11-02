@@ -1,0 +1,5 @@
+00812160 ?Init@cSPUILayout@@QAE_NPB_WH_NI@Z  # cSPUILayout::Init (callee of s01076540, named from the dev publics; slice address comment)
+01076a00 ?AddNPCItems@cSPUISpaceTrading_s0107_6540@@QAEXXZ  # cSPUISpaceTrading_s0107_6540::AddNPCItems migrated from s01076540 (verbatim, slice spelling)
+01076a60 ?AddUserItems@cSPUISpaceTrading_s0107_6540@@QAEXXZ  # cSPUISpaceTrading_s0107_6540::AddUserItems migrated from s01076540 (verbatim, slice spelling)
+01076b00 ?Fn1076b00@cSPUISpaceTrading_s0107_6540@@QAEXXZ  # cSPUISpaceTrading_s0107_6540::Fn1076b00 migrated from s01076540 (verbatim, slice spelling)
+01076b80 ?DoMessage@cSPUISpaceTrading_s0107_6540@@QAE_NPAUIWindow_s0107_6540@@PAUMessage@@@Z  # cSPUISpaceTrading_s0107_6540::DoMessage migrated from s01076540 (verbatim, slice spelling)

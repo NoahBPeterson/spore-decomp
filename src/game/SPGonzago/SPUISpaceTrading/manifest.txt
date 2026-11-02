@@ -1,2 +1,12 @@
 # source  symbol  va  flags
+../src/game/SPGonzago/SPUISpaceTrading.cpp  ?F1075450@cTrading@@QAEHXZ  01075450  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPUISpaceTrading.cpp  ?F1075510@cTrading@@QAEXXZ  01075510  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPUISpaceTrading.cpp  ?F1075570@cTrading@@QAEXXZ  01075570  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPUISpaceTrading.cpp  ?SetMidPanel@cTrading@@QAEXXZ  010755d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPUISpaceTrading.cpp  ?RemoveExistingItem@cTrading@@QAEXXZ  01075690  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPUISpaceTrading.cpp  ?F1075760@cTrading@@QAEXXZ  01075760  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPUISpaceTrading.cpp  ?F1075810@cTrading@@QAEXHPAX@Z  01075810  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPUISpaceTrading.cpp  ?Fn10762D0@cSPUISpaceTrading@@QAEXXZ  010762d0  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPGonzago/SPUISpaceTrading.cpp  ?AddNPCItems@cSPUISpaceTrading_s0107_6540@@QAEXXZ  01076a00  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPUISpaceTrading.cpp  ?AddUserItems@cSPUISpaceTrading_s0107_6540@@QAEXXZ  01076a60  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPUISpaceTrading.cpp  ?Fn1076b00@cSPUISpaceTrading_s0107_6540@@QAEXXZ  01076b00  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include

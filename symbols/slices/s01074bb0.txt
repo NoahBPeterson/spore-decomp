@@ -1,2 +1,10 @@
 01074bb0 SP::cSPUISpace::HandleMessage  # IHandlerRC::HandleMessage(msgID, msg), this = cSPUISpace+0xc; PDB candidate was RefreshActiveToolUI
+01075450 ?F1075450@cTrading@@QAEHXZ  # cTrading::F1075450 migrated from s01074bb0 (verbatim, slice spelling)
 01075490 ?F1075490@cTrading@@QAEXXZ  # cTrading::F1075490 migrated from s01074bb0 (verbatim, slice spelling)
+01075510 ?F1075510@cTrading@@QAEXXZ  # cTrading::F1075510 migrated from s01074bb0 (verbatim, slice spelling)
+01075570 ?F1075570@cTrading@@QAEXXZ  # cTrading::F1075570 migrated from s01074bb0 (verbatim, slice spelling)
+010755d0 ?SetMidPanel@cTrading@@QAEXXZ  # cTrading::SetMidPanel migrated from s01074bb0 (verbatim, slice spelling)
+01075690 ?RemoveExistingItem@cTrading@@QAEXXZ  # cTrading::RemoveExistingItem migrated from s01074bb0 (verbatim, slice spelling)
+01075760 ?F1075760@cTrading@@QAEXXZ  # cTrading::F1075760 migrated from s01074bb0 (verbatim, slice spelling)
+01075810 ?F1075810@cTrading@@QAEXHPAX@Z  # cTrading::F1075810 migrated from s01074bb0 (verbatim, slice spelling)
+01075990 ?F1075990@cTrading@@QAEXXZ  # cTrading::F1075990 migrated from s01074bb0 (verbatim, slice spelling)
