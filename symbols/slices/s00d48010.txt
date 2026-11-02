@@ -5,3 +5,4 @@
 00d48ae0 ?FreeButtonTable@@YAXXZ  # FreeButtonTable migrated from s00d48010 (verbatim, slice spelling)
 00d48b00 ?SelectAbility@@YAXH@Z  # SelectAbility migrated from s00d48010 (verbatim, slice spelling)
 00d48b50 ?GetCreatureGUIWindow@@YAPAXI@Z  # GetCreatureGUIWindow migrated from s00d48010 (verbatim, slice spelling)
+00d48cb0 ?FindButtonIDBySlot@@YAII@Z  # FindButtonIDBySlot migrated from s00d48010 (verbatim, slice spelling)

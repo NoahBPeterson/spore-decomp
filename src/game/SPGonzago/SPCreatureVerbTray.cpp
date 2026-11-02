@@ -1,4 +1,4 @@
-// src/game/SPGonzago/SPCreatureVerbTray.cpp -- migrated from slice(s) s00d49b60, s00d48f20 by tools/migrate/rewrite.py
+// src/game/SPGonzago/SPCreatureVerbTray.cpp -- migrated from slice(s) s00d48010, s00d49b60, s00d48f20 by tools/migrate/rewrite.py
 // Object file: SPGonzago/SPCreatureVerbTray.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -125,6 +125,89 @@ struct cButtonRec2 {
     i32 mField38;                       // 0x38
 };
 // ---- items of slice s00d49b60 end
+
+// ---- items of slice s00d48010 begin (TODO(rewrite): local stubs, replace by canonical classes)
+struct ButtonEntry
+{
+    int32_t mID;          // +0x00 (-1 = unused slot)
+    uint8_t mFlag;        // +0x04
+    uint8_t pad05[3];     // +0x05
+};
+struct ButtonCategory
+{
+    ButtonEntry mEntries[5];   // +0x00 .. +0x27
+};
+struct ButtonTable
+{
+    union
+    {
+        ButtonEntry mAllEntries[0x19];    // +0x000 (flat view used by the filler loop)
+        ButtonCategory mCategories[5];    // +0x000 (category view used by the lookups)
+    };
+    uint32_t mFieldC8;                    // +0x0c8
+    uint32_t mCategoryCount;              // +0x0cc (ids per category range)
+    uint32_t mBase0;                      // +0x0d0 (first id of categories 0/1)
+    uint32_t mBase1;                      // +0x0d4 (first id of categories 3/4)
+};
+extern ButtonTable* gButtonTable;         // 0x0169e3ec
+// ---- items of slice s00d48010 end
+
+// @ 0x00d48bc0
+namespace  {
+bool sGetButtonCategoryFromButtonID(unsigned int buttonID, int & outIndex, int & outCategory)
+{
+    if (gButtonTable == 0)
+        return false;
+    if (buttonID >= gButtonTable->mBase0 && buttonID < gButtonTable->mBase0 + gButtonTable->mCategoryCount)
+    {
+        outCategory = 0;
+        outIndex = (int32_t)(buttonID - gButtonTable->mBase0);
+        return true;
+    }
+    if (buttonID >= gButtonTable->mBase1 && buttonID < gButtonTable->mBase1 + gButtonTable->mCategoryCount)
+    {
+        outCategory = 1;
+        outIndex = (int32_t)(buttonID - gButtonTable->mBase1);
+        return true;
+    }
+    if (buttonID >= 0x1012030 && buttonID < 0x1012030 + gButtonTable->mCategoryCount)
+    {
+        outCategory = 2;
+        outIndex = (int32_t)(buttonID - 0x1012030);
+        return true;
+    }
+    if (buttonID >= 0x1012040 && buttonID < 0x1012040 + gButtonTable->mCategoryCount)
+    {
+        outCategory = 4;
+        outIndex = (int32_t)(buttonID - 0x1012040);
+        return true;
+    }
+    return false;
+}
+}  // namespace 
+
+// @ 0x00d48cb0
+uint32_t FindButtonIDBySlot(uint32_t buttonID)
+{
+    ButtonTable* t = gButtonTable;
+    for (int cat = 0; cat < 5; ++cat)
+    {
+        for (int i = 0; i < 5; ++i)
+        {
+            if (t->mCategories[cat].mEntries[i].mID == (int32_t)buttonID)
+            {
+                switch (cat)
+                {
+                case 0:  return t->mBase0 + i;
+                case 1:  return t->mBase1 + i;
+                case 2:  return 0x1012030 + i;
+                case 4:  return 0x1012040 + i;
+                }
+            }
+        }
+    }
+    return 0;
+}
 
 // @ 0x00d48f20
 bool FUN_00d48f20(CmpObj* param_1)
