@@ -1,1 +1,15 @@
 # source  symbol  va  flags
+../src/game/Swarm/EffectsWorld.cpp  ?StopStopped@cEffectsWorld@@QAEXXZ  00a70330  /O2 /MD /Gy /EHsc /TP /GS- /fp:fast /arch:SSE /Isrc/game/include
+../src/game/Swarm/EffectsWorld.cpp  ?CopyRange@@YAPAUParamElem@@PAU1@00@Z  00a70730  /O2 /MD /Gy /EHsc /TP /GS- /fp:fast /arch:SSE /Isrc/game/include
+../src/game/Swarm/EffectsWorld.cpp  ??1cEffectsWorld@@QAE@XZ  00a70870  /O2 /MD /Gy /EHsc /TP /GS- /fp:fast /arch:SSE /Isrc/game/include
+../src/game/Swarm/EffectsWorld.cpp  ?Ctor@Desc58@@QAEPAU1@XZ  00a70910  /O2 /MD /Gy /EHsc /TP /GS- /fp:fast /arch:SSE /Isrc/game/include
+../src/game/Swarm/EffectsWorld.cpp  ?DestroyRange@@YGXPAUParamElem@@0@Z  00a70980  /O2 /MD /Gy /EHsc /TP /GS- /fp:fast /arch:SSE /Isrc/game/include
+../src/game/Swarm/EffectsWorld.cpp  ?SetRenderer@cEffectsWorld@@QAEXPAX@Z  00a70da0  /O2 /MD /Gy /EHsc /TP /GS- /fp:fast /arch:SSE /Isrc/game/include
+../src/game/Swarm/EffectsWorld.cpp  ?CopyFrom@cSPTransform_s00a7_0f70@@QAEPAU1@PBU1@@Z  00a70f70  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Swarm/EffectsWorld.cpp  ?CopyTransformRange@@YAPAUcSPTransform_s00a7_0f70@@PAU1@00@Z  00a71260  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Swarm/EffectsWorld.cpp  ?CopyTransformBackward@@YAPAUcSPTransform_s00a7_0f70@@PAU1@00@Z  00a712e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Swarm/EffectsWorld.cpp  ?CreateEffectForDescription@cEffectsWorld_s00a7_0f70@Swarm@EA@@QAE_NHPAXPAPAUcVisualEffect_s00a7_0f70@23@@Z  00a71360  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Swarm/EffectsWorld.cpp  ?ResolveEffect@cEffectsWorld_s00a7_0f70@Swarm@EA@@QAEPAXHHHPAX@Z  00a714f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Swarm/EffectsWorld.cpp  ?SelectEffects@cEffectsWorld_s00a7_0f70@Swarm@EA@@QAEXH@Z  00a719c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Swarm/EffectsWorld.cpp  ?ResetVisualEffectDescriptions@cEffectsWorld_s00a7_1a00@@QAEXH@Z  00a72010  /O2 /MD /Gy /EHsc /TP /GS- /fp:fast /arch:SSE /Isrc/game/include
+../src/game/Swarm/EffectsWorld.cpp  ?FUN_00a72060@cEffectsWorld_s00a7_1a00@@QAEXH@Z  00a72060  /O2 /MD /Gy /EHsc /TP /GS- /fp:fast /arch:SSE /Isrc/game/include

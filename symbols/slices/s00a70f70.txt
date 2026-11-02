@@ -1,12 +1,12 @@
-00a70f70 FUN_00a70f70  # __thiscall cSPTransform::operator= wrapper; naked asm, byte-exact
-00a70fd0 EA::Swarm::cEffectsWorld::CreateComponentFromDescription  # PDB name; naked asm, byte-exact
-00a711c0 FUN_00a711c0  # __fastcall buffer init helper; naked asm, byte-exact
-00a71260 FUN_00a71260  # cSPTransform copy routine; naked asm, byte-exact
-00a712e0 FUN_00a712e0  # cSPTransform copy routine (twin); naked asm, byte-exact
-00a71360 FUN_00a71360  # __thiscall cEffectsWorld method; naked asm, byte-exact
-00a71410 EA::Swarm::cEffectsWorld::CreateInternalEffect  # PDB candidate; naked asm, byte-exact
-00a714f0 FUN_00a714f0  # __thiscall helper (5 args); naked asm, byte-exact
-00a71580 EA::Swarm::cEffectsWorld::GetActiveEffectInfo  # PDB candidate; naked asm, byte-exact
-00a717d0 FUN_00a717d0  # __thiscall cEffectsWorld method; naked asm, byte-exact
-00a71910 FUN_00a71910  # helper (3 virtual calls); naked asm, byte-exact
-00a719c0 FUN_00a719c0  # __thiscall small helper; naked asm, byte-exact
+00a70f70 ?CopyFrom@cSPTransform_s00a7_0f70@@QAEPAU1@PBU1@@Z  # cSPTransform_s00a7_0f70::CopyFrom migrated from s00a70f70 (verbatim, slice spelling)
+00a70fd0 ?CreateComponentFromDescription@cEffectsWorld_s00a7_0f70@Swarm@EA@@QAEXPAHPAUEffectSlot@23@PAPAUIComponent@23@HI@Z  # cEffectsWorld_s00a7_0f70::CreateComponentFromDescription migrated from s00a70f70 (verbatim, slice spelling)
+00a711c0 ?AppendPendingToActive@cEffectsWorld_s00a7_0f70@Swarm@EA@@QAEXH@Z  # cEffectsWorld_s00a7_0f70::AppendPendingToActive migrated from s00a70f70 (verbatim, slice spelling)
+00a71260 ?CopyTransformRange@@YAPAUcSPTransform_s00a7_0f70@@PAU1@00@Z  # CopyTransformRange migrated from s00a70f70 (verbatim, slice spelling)
+00a712e0 ?CopyTransformBackward@@YAPAUcSPTransform_s00a7_0f70@@PAU1@00@Z  # CopyTransformBackward migrated from s00a70f70 (verbatim, slice spelling)
+00a71360 ?CreateEffectForDescription@cEffectsWorld_s00a7_0f70@Swarm@EA@@QAE_NHPAXPAPAUcVisualEffect_s00a7_0f70@23@@Z  # cEffectsWorld_s00a7_0f70::CreateEffectForDescription migrated from s00a70f70 (verbatim, slice spelling)
+00a71410 ?CreateInternalEffect@cEffectsWorld_s00a7_0f70@Swarm@EA@@QAEPAUcVisualEffect_s00a7_0f70@23@IHPAX@Z  # cEffectsWorld_s00a7_0f70::CreateInternalEffect migrated from s00a70f70 (verbatim, slice spelling)
+00a714f0 ?ResolveEffect@cEffectsWorld_s00a7_0f70@Swarm@EA@@QAEPAXHHHPAX@Z  # cEffectsWorld_s00a7_0f70::ResolveEffect migrated from s00a70f70 (verbatim, slice spelling)
+00a71580 ?GetActiveEffectInfo@cEffectsWorld_s00a7_0f70@Swarm@EA@@QAEXPAUEffectInfoVector@@PBDH@Z  # cEffectsWorld_s00a7_0f70::GetActiveEffectInfo migrated from s00a70f70 (verbatim, slice spelling)
+00a717d0 ?Insert@TransformVector@@QAEXPAUcSPTransform_s00a7_0f70@@PBU2@@Z  # TransformVector::Insert migrated from s00a70f70 (verbatim, slice spelling)
+00a71910 ?ReleaseEffectInfo@cEffectsWorld_s00a7_0f70@Swarm@EA@@QAEXPAUcVisualEffect_s00a7_0f70@23@@Z  # cEffectsWorld_s00a7_0f70::ReleaseEffectInfo migrated from s00a70f70 (verbatim, slice spelling)
+00a719c0 ?SelectEffects@cEffectsWorld_s00a7_0f70@Swarm@EA@@QAEXH@Z  # cEffectsWorld_s00a7_0f70::SelectEffects migrated from s00a70f70 (verbatim, slice spelling)
