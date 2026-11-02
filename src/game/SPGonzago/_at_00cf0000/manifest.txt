@@ -1,0 +1,7 @@
+# source  symbol  va  flags
+../src/game/SPGonzago/_at_00cf0000.cpp  ?FUN_00cf0e10@@YA_NXZ  00cf0e10  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_00cf0000.cpp  ?FUN_00cf0eb0@@YGXI@Z  00cf0eb0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_00cf0000.cpp  ?FUN_00cf0ed0@cCityInputStrategy@@QAEXXZ  00cf0ed0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_00cf0000.cpp  ?FUN_00cf0f10@@YGXI@Z  00cf0f10  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_00cf0000.cpp  ?FUN_00cf0f40@@YGXPAXI@Z  00cf0f40  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_00cf0000.cpp  ?FUN_00cf6df0@@YAXXZ  00cf6df0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
