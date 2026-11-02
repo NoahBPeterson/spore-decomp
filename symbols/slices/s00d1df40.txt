@@ -2,7 +2,13 @@
 00d1df40 ?FUN_00d1df40@@YIXPAUWrapper@@PAX@Z  # FUN_00d1df40 migrated from s00d1df40 (verbatim, slice spelling)
 00d1e140 ?FUN_00d1e140@@YIPAXPAUE207Obj@@PAXI@Z  # FUN_00d1e140 migrated from s00d1df40 (verbatim, slice spelling)
 00d1e180 ?FUN_00d1e180@@YI_NPAUWrapper@@PAX1@Z  # FUN_00d1e180 migrated from s00d1df40 (verbatim, slice spelling)
+00d1e4b0 ?FUN_00d1e4b0@@YAHPAUTuningObj@@PAUcCreature@@PAUIVtbl@@@Z  # FUN_00d1e4b0 migrated from s00d1df40 (verbatim, slice spelling)
+00d1e530 ?FUN_00d1e530@@YAHPAUTuningObj@@PAUIVtbl@@PAUcCreature@@1@Z  # FUN_00d1e530 migrated from s00d1df40 (verbatim, slice spelling)
 00d1e5c0 ?FUN_00d1e5c0@@YAHPAUIVtbl@@H@Z  # FUN_00d1e5c0 migrated from s00d1df40 (verbatim, slice spelling)
+00d1e610 ?FUN_00d1e610@@YAPAXXZ  # FUN_00d1e610 migrated from s00d1df40 (verbatim, slice spelling)
+00d1e670 ?FUN_00d1e670@@YAXXZ  # FUN_00d1e670 migrated from s00d1df40 (verbatim, slice spelling)
 00d1e6c0 ?AbilityIsBeingTaughtToBaby@SP@@YA_NH@Z  # SP::AbilityIsBeingTaughtToBaby migrated from s00d1df40
+00d1e720 ?SP_CanSocial@@YAHPAUcCreature@@0@Z  # SP_CanSocial migrated from s00d1df40 (verbatim, slice spelling)
 00d1e7f0 ?FUN_00d1e7f0@@YAMPAUFlagSetObj@@H@Z  # FUN_00d1e7f0 migrated from s00d1df40 (verbatim, slice spelling)
+00d1e830 ?FUN_00d1e830@@YAPAXH@Z  # FUN_00d1e830 migrated from s00d1df40 (verbatim, slice spelling)
 00d1e8d0 ?FUN_00d1e8d0@@YA_NPAUFlagSetObj@@I@Z  # FUN_00d1e8d0 migrated from s00d1df40 (verbatim, slice spelling)
