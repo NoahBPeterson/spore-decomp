@@ -1,3 +1,4 @@
+00c50940 ?FUN_00c50940@@YIXPAX0@Z  # FUN_00c50940 migrated from s00c4fe60 (verbatim, slice spelling)
 00c50a80 ?FUN_00c50a80@@YIHPAX0@Z  # FUN_00c50a80 migrated from s00c4fe60 (verbatim, slice spelling)
 00c50aa0 ?FUN_00c50aa0@@YIHPAX0@Z  # FUN_00c50aa0 migrated from s00c4fe60 (verbatim, slice spelling)
 00c50ac0 ?FUN_00c50ac0@@YI_NPAX0@Z  # FUN_00c50ac0 migrated from s00c4fe60 (verbatim, slice spelling)

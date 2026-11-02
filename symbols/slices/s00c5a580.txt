@@ -5,13 +5,13 @@
 00c5a990 ?Init@cMissionMultiStep_s00c5_a580@@QAE_NXZ  # cMissionMultiStep_s00c5_a580::Init migrated from s00c5a580 (verbatim, slice spelling)
 00c5ab80 ?Shutdown@cMissionMultiStep_s00c5_a580@@QAEXXZ  # cMissionMultiStep_s00c5_a580::Shutdown migrated from s00c5a580 (verbatim, slice spelling)
 00c5ac60 ?GetUILongDescriptionSoFar@cMissionMultiStep@@QAEXPAX@Z  # void cMissionMultiStep::GetUILongDescriptionSoFar
-00c5ad40 ??0cMissionMultiStep@@QAE@XZ  # cMissionMultiStep::cMissionMultiStep
-00c5ae30 ?Write@cMissionMultiStep@@QAE_NPAX@Z  # bool cMissionMultiStep::Write
-00c5aea0 ?Read@cMissionMultiStep@@QAE_NPAX@Z  # bool cMissionMultiStep::Read
-00c5b020 ?UpdateFromTerrainSphereA@cMissionMultiStep@@QAEXXZ  # void cMissionMultiStep::UpdateFromTerrainSphereA
-00c5b0b0 ?UpdateFromTerrainSphereB@cMissionMultiStep@@QAEXXZ  # void cMissionMultiStep::UpdateFromTerrainSphereB
-00c5b130 ?RefreshTargetPlanet@@YAXXZ  # void RefreshTargetPlanet
-00c5b150 ?RefreshTargetPlanetConditional@@YAXPAVcSPMission@@@Z  # void RefreshTargetPlanetConditional
+00c5ad40 ??0cMissionMultiStep@@QAE@XZ  # cMissionMultiStep::cMissionMultiStep migrated from s00c5a580 (verbatim, slice spelling)
+00c5ae30 ?Write@cMissionMultiStep@@QAE_NPAX@Z  # cMissionMultiStep::Write migrated from s00c5a580 (verbatim, slice spelling)
+00c5aea0 ?Read@cMissionMultiStep@@QAE_NPAX@Z  # cMissionMultiStep::Read migrated from s00c5a580 (verbatim, slice spelling)
+00c5b020 ?UpdateFromTerrainSphereA@cMissionMultiStep@@QAEXXZ  # cMissionMultiStep::UpdateFromTerrainSphereA migrated from s00c5a580 (verbatim, slice spelling)
+00c5b0b0 ?UpdateFromTerrainSphereB@cMissionMultiStep@@QAEXXZ  # cMissionMultiStep::UpdateFromTerrainSphereB migrated from s00c5a580 (verbatim, slice spelling)
+00c5b130 ?RefreshTargetPlanet@@YAXXZ  # RefreshTargetPlanet migrated from s00c5a580 (verbatim, slice spelling)
+00c5b150 ?RefreshTargetPlanetConditional@@YAXPAVcSPMission@@@Z  # RefreshTargetPlanetConditional migrated from s00c5a580 (verbatim, slice spelling)
 00c5b210 ?Read@cPlanetMission@@QAE_NPAX@Z  # cPlanetMission::Read migrated from s00c5a580 (verbatim, slice spelling)
 00c5b280 ?UpdateFromPlanet@cPlanetMission@@QAEXXZ  # cPlanetMission::UpdateFromPlanet migrated from s00c5a580 (verbatim, slice spelling)
 00c5b340 ?GetOwnerEmpireId@cPlanetMission@@QAEIXZ  # uint32_t cPlanetMission::GetOwnerEmpireId

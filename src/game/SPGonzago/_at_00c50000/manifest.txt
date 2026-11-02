@@ -1,0 +1,8 @@
+# source  symbol  va  flags
+../src/game/SPGonzago/_at_00c50000.cpp  ?FUN_00c50940@@YIXPAX0@Z  00c50940  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPGonzago/_at_00c50000.cpp  ??0cMissionFindAliens@@QAE@XZ  00c55130  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_00c50000.cpp  ?OnCompleteMission@cSPMissionHappinessEvent_s00c5_62b0@SP@@QAEXXZ  00c568d0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00c50000.cpp  ?Construct@cMissionMakeAlly@SP@@QAEPAV12@XZ  00c56970  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00c50000.cpp  ?Init@cMissionMakeAlly@SP@@QAE_NXZ  00c56ac0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00c50000.cpp  ?HandleMessage@cMsgHandler@SP@@UAEXIPAX@Z  00c56b20  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00c50000.cpp  ??0MissionScan@@QAE@XZ  00c5e740  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
