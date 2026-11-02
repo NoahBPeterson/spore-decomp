@@ -1,9 +1,9 @@
 0084faf0 ?EmitSamples@@YAHPAXHHHHHPAE@Z  # EmitSamples migrated from s0084faf0 (verbatim, slice spelling)
 0084feb0 ?CheckUniformRun@@YAHHPAE0@Z  # CheckUniformRun migrated from s0084faf0 (verbatim, slice spelling)
 0084ff00 ?EncodeMcuHuff@@YAXPAH0@Z  # EncodeMcuHuff migrated from s0084faf0 (verbatim, slice spelling)
-008502a0    jinit_huff_encoder          libjpeg Huffman-encoder init
+008502a0 ?jinit_huff_encoder@@YAXPAHHH@Z  # jinit_huff_encoder migrated from s0084faf0 (verbatim, slice spelling)
 00850380 ?SetTableNext@@YAXPAHH@Z  # SetTableNext migrated from s0084faf0 (verbatim, slice spelling)
-008503f0    finish_pass_huff            libjpeg finish_pass_huff
-00850510    write_raw_dispatch          raw-data write dispatch / state check
+008503f0 ?finish_pass_huff@@YAXPAH@Z  # finish_pass_huff migrated from s0084faf0 (verbatim, slice spelling)
+00850510 ?write_raw_dispatch@@YAXPAHHHH@Z  # write_raw_dispatch migrated from s0084faf0 (verbatim, slice spelling)
 00850570 ?jpeg_finish_compress2@@YAXPAHH@Z  # jpeg_finish_compress2 migrated from s0084faf0 (verbatim, slice spelling)
-008505f0    output_pass_setup           empty_output_buffer / iMCU row accounting
+008505f0 ?output_pass_setup@@YAXPAHHI@Z  # output_pass_setup migrated from s0084faf0 (verbatim, slice spelling)
