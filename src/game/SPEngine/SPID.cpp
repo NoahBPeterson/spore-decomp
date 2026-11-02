@@ -1,10 +1,19 @@
-// src/game/SPEngine/SPID.cpp -- migrated from slice(s) s0068c330, s005f7da0 by tools/migrate/rewrite.py
+// src/game/SPEngine/SPID.cpp -- migrated from slice(s) s005f6df0, s0068c330, s005f7da0 by tools/migrate/rewrite.py
 // Object file: SPEngine/SPID.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
 #include "game/types.h"
 #include <string.h>
 #include "EA/ResourceMan/Key.h"
+#include "EA/Stopwatch.h"
+#include "SP/cISPCreatureAnimWorld.h"
+#include "SP/cSPEditorPaintTheme.h"
+#include "cSPMatrix3.h"
+#include "SP/cSPSwatch.h"
+#include "cSPUILayeredObject.h"
+#include "cSPUIModelsAndEffectsRenderer.h"
+#include "SP/cSwatch3DView.h"
+#include <math.h>
 
 // ---- items of slice s005f7da0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 void* operator new[](size_t size, const char* pName, int flags, unsigned debugFlags, const char* file, int line);
@@ -13,7 +22,7 @@ inline void* operator new(size_t, void* p) throw() { return p; }
 #define EASTL_ALLOCATOR_FILE "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h"
 namespace EA {
 namespace ResourceMan {
-struct Key_s005f_7da0 {
+class Key_s005f_7da0 { public:
   uint32_t instanceID;
   uint32_t typeID;
   uint32_t groupID;
@@ -23,7 +32,7 @@ struct Key_s005f_7da0 {
 }
 using EA::ResourceMan::Key_s005f_7da0;
 namespace eastl {
-struct allocator_s005f_7da0 {
+class allocator_s005f_7da0 { public:
   void* allocate(size_t n) { return operator new[](n, "Editor", 0, 0, EASTL_ALLOCATOR_FILE, 0xd1); }
   void deallocate(void* p) { operator delete[](p); }
 };
@@ -295,17 +304,39 @@ namespace eastl {
 template pair_s005f_7da0<KeyRecordMultiMap::iterator, KeyRecordMultiMap::iterator> KeyRecordMultiMap::equal_range(const Key_s005f_7da0&);
 }
 using eastl::string16;
+struct KeyRemapHash {
+  uint32_t operator()(const Key_s005f_7da0& k) const;
+};
+typedef eastl::kv_pair<string16, Key_s005f_7da0> NameKeyPair;
+typedef eastl::hashtable_s005f_7da0<NameKeyPair, KeyRemapHash> NameKeyMap;
+typedef eastl::hashtable_s005f_7da0<eastl::KeyKeyPair, KeyRemapHash> RemapKeyMap;
+class cKeyMappingTable {
+ public:
+  uint32_t mUnknown00;           // +0x00
+  NameKeyMap mNameMap;           // +0x04
+  uint32_t mUnknown24[9];        // +0x24
+  eastl::KeyKeyMap mKeyMap;      // +0x48
+  RemapKeyMap mRemapMap;         // +0x68
+
+  bool GetRemappedKey(const Key_s005f_7da0& key, Key_s005f_7da0* pOut);
+  bool GetMappedKey(const Key_s005f_7da0& key, Key_s005f_7da0* pOut);
+  bool Save();
+};
 // ---- items of slice s005f7da0 end
 
 // ---- items of slice s0068c330 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern "C" __declspec(dllimport) int   __cdecl iswctype(unsigned short c, unsigned t);
 extern "C" __declspec(dllimport) int   __cdecl isdigit(int c);
 extern "C" __declspec(dllimport) int   __cdecl isxdigit(int c);
+extern "C" __declspec(dllimport) void* __cdecl memmove(void* dst, const void* src, unsigned n);
+extern "C" __declspec(dllimport) void* __cdecl memcpy(void* dst, const void* src, unsigned n);
 extern "C" __declspec(dllimport) unsigned long __cdecl strtoul(const char* s, char** e, int base);
 typedef unsigned int   uint32;
 typedef unsigned char  uint8;
 extern "C" __declspec(dllimport) char* __cdecl strchr_s0068_c330(const char* s, int c);
 extern "C" __declspec(dllimport) void* __cdecl memchr_s0068_c330(const void* s, int c, unsigned n);
+void* EAAllocate(unsigned size, const char* area, int a, int b, const char* file, int line); // 0x00F473A0
+void  EAFree(void* p);                                                                        // 0x00F47380
 void* GetManager();                                                                           // 0x0067DCD0
 void  WStr_Format(void* out, const wchar_t* fmt, ...);                                        // 0x0041E050
 void  Str_Format(void* out, const char* fmt, ...);                                            // 0x00472FE0
@@ -320,9 +351,14 @@ struct PackStr {
     char* mpBegin;    // +0x00
     char* mpEnd;      // +0x04
     char* mpCapacity; // +0x08
+    void* mAllocator; // +0x0c (EASTL allocator; the empty string leaves this null)
+    void* mEmptyRef;  // +0x10 (copied by the copy ctor; equals mpBegin for the shared empty string)
 
-    PackStr* InsertCStr(uint32 id, const char* s);
+    PackStr* InsertCStr(uint32 id, const char* s);                  // 0x0068CD40
     void __declspec(noinline) Insert(char* pos, const char* first, const char* last);  // 0x0068C9E0
+
+    void Swap(PackStr& other);                                     // 0x0068D1C0 (thiscall, ret 4)
+    void reserve(unsigned n);                                       // 0x0068D480 (thiscall, ret 4)
 };
 void SPNameFromKeyW(const ResKey* key, void* out, const wchar_t* name);
 void SPNameFromKeyA(const ResKey* key, void* out, const char* name);
@@ -333,10 +369,114 @@ struct WStr {
     void*    mAllocator;
 
     void Insert(wchar_t* pos, const wchar_t* first, const wchar_t* last); // 0x005F7DA0
+    void resize(unsigned n);                                              // 0x00429520
 };
 void* FUN_0068C680(const char* s, unsigned n);          // Resource::HashNameN
 void  FUN_0068D0B0(void* out, const void* tpl, const char* s); // fixed wstring ctor
+struct PackStrOps {                                     // packed string (EASTL string) members
+    void Ctor(PackStr* src);                            // 0x0068CF00  copy ctor
+    void Assign(const char* first, const char* last);   // 0x0068CF60  assign/append range
+    void Erase(unsigned n);                             // 0x0068CBB0  erase tail down to n
+};
+struct HashMap {
+    void  Find(void** itOut, const uint32* key);        // 0x00A3B2C0  (thiscall, ret 8)
+    void* Insert(void* itOut, void* pair, int flag);    // 0x0068CFF0
+
+    void* Lookup(const uint32* pKey);                   // stands in for operator[](uint32)
+};
 // ---- items of slice s0068c330 end
+
+// ---- items of slice s005f6df0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+namespace eastl {
+template <typename Value>
+struct hash_node_s005f_6df0 {
+  Value mValue;
+  hash_node_s005f_6df0* mpNext;
+};
+}
+namespace eastl {
+template <typename T, typename Node>
+struct hashtable_iterator_s005f_6df0 {
+  Node* mpNode;
+  Node** mpBucket;
+  hashtable_iterator_s005f_6df0() {}
+  hashtable_iterator_s005f_6df0(Node* pNode, Node** pBucket) : mpNode(pNode), mpBucket(pBucket) {}
+  void increment() {
+    mpNode = mpNode->mpNext;
+    while (mpNode == 0) mpNode = *++mpBucket;
+  }
+  hashtable_iterator_s005f_6df0& operator++() {
+    increment();
+    return *this;
+  }
+};
+}
+namespace eastl {
+class allocator_s005f_6df0 { public:
+  void* allocate(size_t n) { return operator new[](n, "Editor", 0, 0, EASTL_ALLOCATOR_FILE, 0xd1); }
+  void deallocate(void* p) { operator delete[](p); }
+};
+}
+namespace eastl {
+template <typename Value>
+class hashtable_s005f_6df0 {
+ public:
+  typedef hash_node_s005f_6df0<Value> node_type;
+  typedef hashtable_iterator_s005f_6df0<Value, node_type> iterator;
+
+  uint32_t mHashCodeBase;          // +0x00
+  node_type** mpBucketArray;       // +0x04
+  uint32_t mnBucketCount;          // +0x08
+  uint32_t mnElementCount;         // +0x0c
+  float mRehashPolicy[3];          // +0x10
+  allocator_s005f_6df0 mAllocator;            // +0x1c
+
+  static uint32_t hash_of(const Value& v) { return v.first.groupID; }
+  node_type** DoAllocateBuckets(uint32_t n) {
+    node_type** const pBucketArray = (node_type**)mAllocator.allocate((n + 1) * sizeof(node_type*));
+    memset(pBucketArray, 0, n * sizeof(node_type*));
+    pBucketArray[n] = reinterpret_cast<node_type*>((uintptr_t)~0);
+    return pBucketArray;
+  }
+  void DoFreeBuckets(node_type** pBucketArray, uint32_t n) {
+    if (n > 1) mAllocator.deallocate(pBucketArray);
+  }
+  void DoFreeNode(node_type* pNode) { mAllocator.deallocate(pNode); }
+  void DoRehash(uint32_t nNewBucketCount);
+  node_type* DoAllocateNode(const Value& value);
+  iterator erase(iterator i);
+};
+}
+namespace eastl {
+template <typename Value>
+typename hashtable_s005f_6df0<Value>::node_type* hashtable_s005f_6df0<Value>::DoAllocateNode(const Value& value) {
+  node_type* const pNode = (node_type*)mAllocator.allocate(sizeof(node_type));
+  ::new (&pNode->mValue) Value(value);
+  pNode->mpNext = 0;
+  return pNode;
+}
+}
+// ---- items of slice s005f6df0 end
+
+// @ 0x005f7be0
+namespace eastl {
+template <typename Value> void hashtable_s005f_6df0<Value>::DoRehash(uint32_t nNewBucketCount)
+{
+  node_type** const pBucketArray = DoAllocateBuckets(nNewBucketCount);
+  for (uint32_t i = 0; i < mnBucketCount; ++i) {
+    node_type* pNode;
+    while ((pNode = mpBucketArray[i]) != 0) {
+      const uint32_t nNewBucketIndex = hash_of(pNode->mValue) % nNewBucketCount;
+      mpBucketArray[i] = pNode->mpNext;
+      pNode->mpNext = pBucketArray[nNewBucketIndex];
+      pBucketArray[nNewBucketIndex] = pNode;
+    }
+  }
+  DoFreeBuckets(mpBucketArray, mnBucketCount);
+  mnBucketCount = nNewBucketCount;
+  mpBucketArray = pBucketArray;
+}
+}  // namespace eastl
 
 // @ 0x005f7da0
 namespace eastl {
@@ -388,6 +528,131 @@ template <typename T> void basic_string_s005f_7da0<T>::insert(iterator p, const 
   }
 }
 }  // namespace eastl
+
+// @ 0x005f7fa0
+namespace eastl {
+template <typename Value, typename Hash> pair_s005f_7da0<typename hashtable_s005f_7da0<Value, Hash>::iterator, typename hashtable_s005f_7da0<Value, Hash>::iterator> hashtable_s005f_7da0<Value, Hash>::equal_range(const Key_s005f_7da0& k)
+{
+  const uint32_t n = mHash(k) % mnBucketCount;
+  node_type** head = mpBucketArray + n;
+  node_type* pNode = DoFindNode(*head, k);
+  if (pNode) {
+    node_type* p1 = pNode->mpNext;
+    for (; p1; p1 = p1->mpNext) {
+      if (!(k == p1->mValue.first)) break;
+    }
+    iterator first(pNode, head);
+    iterator last(p1, head);
+    if (!p1) last.increment_bucket();
+    return pair_s005f_7da0<iterator, iterator>(first, last);
+  }
+  return pair_s005f_7da0<iterator, iterator>(iterator(mpBucketArray + mnBucketCount), iterator(mpBucketArray + mnBucketCount));
+}
+}  // namespace eastl
+
+// @ 0x005f8050
+namespace eastl {
+template <typename Value, typename Hash> typename hashtable_s005f_7da0<Value, Hash>::iterator hashtable_s005f_7da0<Value, Hash>::find(const Key_s005f_7da0& k)
+{
+  const uint32_t n = mHash(k) % mnBucketCount;
+  node_type* const pNode = DoFindNode(mpBucketArray[n], k);
+  return pNode ? iterator(pNode, mpBucketArray + n) : iterator(mpBucketArray + mnBucketCount);
+}
+}  // namespace eastl
+
+// @ 0x005f80d0
+namespace eastl {
+template <typename Value, typename Hash> uint32_t hashtable_s005f_7da0<Value, Hash>::erase(const Key_s005f_7da0& k)
+{
+  const uint32_t n = mHash(k) % mnBucketCount;
+  const uint32_t nElementCountSaved = mnElementCount;
+  node_type** pBucketArray = mpBucketArray + n;
+  while (*pBucketArray && !(k == (*pBucketArray)->mValue.first)) pBucketArray = &(*pBucketArray)->mpNext;
+  while (*pBucketArray && (k == (*pBucketArray)->mValue.first)) {
+    node_type* const pNode = *pBucketArray;
+    *pBucketArray = pNode->mpNext;
+    DoFreeNode(pNode);
+    --mnElementCount;
+  }
+  return nElementCountSaved - mnElementCount;
+}
+}  // namespace eastl
+
+// @ 0x005f8170
+namespace eastl {
+template <typename Value, typename Hash> typename hashtable_s005f_7da0<Value, Hash>::insert_return_type hashtable_s005f_7da0<Value, Hash>::DoInsertValue(const Value& value, true_type)
+{
+  const uint32_t c = mHash(value.first);
+  uint32_t n = c % mnBucketCount;
+  node_type* const pNode = DoFindNode(mpBucketArray[n], value.first);
+  if (pNode == 0) {
+    const prime_rehash_policy_s005f_7da0::RehashResult bRehash = mRehashPolicy.GetRehashRequired(mnBucketCount, mnElementCount, 1);
+    node_type* const pNodeNew = DoAllocateNode(value);
+    if (bRehash.first) {
+      n = c % bRehash.second;
+      DoRehash(bRehash.second);
+    }
+    pNodeNew->mpNext = mpBucketArray[n];
+    mpBucketArray[n] = pNodeNew;
+    ++mnElementCount;
+    return insert_return_type(iterator(pNodeNew, mpBucketArray + n), true);
+  }
+  return insert_return_type(iterator(pNode, mpBucketArray + n), false);
+}
+}  // namespace eastl
+
+// @ 0x005f8400
+namespace eastl {
+template <typename T> basic_string_s005f_7da0<T>& basic_string_s005f_7da0<T>::replace(iterator pBegin, iterator pEnd, const T* pBegin2, const T* pEnd2)
+{
+  const size_type nLength1 = (size_type)(pEnd - pBegin);
+  const size_type nLength2 = (size_type)(pEnd2 - pBegin2);
+
+  if (nLength1 >= nLength2) {
+    if ((pBegin2 > pEnd) || (pEnd2 <= pBegin))
+      memcpy(pBegin, pBegin2, (size_t)(pEnd2 - pBegin2) * sizeof(T));
+    else
+      memmove(pBegin, pBegin2, (size_t)(pEnd2 - pBegin2) * sizeof(T));
+    erase(pBegin + nLength2, pEnd);
+  } else {
+    if ((pBegin2 > pEnd) || (pEnd2 <= pBegin)) {
+      const T* const pMid2 = pBegin2 + nLength1;
+      if ((pEnd2 <= pBegin) || (pBegin2 > pEnd))
+        memcpy(pBegin, pBegin2, (size_t)(pMid2 - pBegin2) * sizeof(T));
+      else
+        memmove(pBegin, pBegin2, (size_t)(pMid2 - pBegin2) * sizeof(T));
+      insert(pEnd, pMid2, pEnd2);
+    } else {
+      const size_type nOldSize = (size_type)(mpEnd - mpBegin);
+      const size_type nOldCap = (size_type)((mpCapacity - mpBegin) - 1);
+      const size_type nNewCapacity = max_alt((size_type)GetNewCapacity(nOldCap), (size_type)(nOldSize + (nLength2 - nLength1))) + 1;
+
+      T* pNewBegin = DoAllocate(nNewCapacity);
+      T* pNewEnd = CharStringUninitializedCopy(mpBegin, pBegin, pNewBegin);
+      pNewEnd = CharStringUninitializedCopy(pBegin2, pEnd2, pNewEnd);
+      pNewEnd = CharStringUninitializedCopy(pEnd, mpEnd, pNewEnd);
+      *pNewEnd = 0;
+
+      DeallocateSelf();
+      mpBegin = pNewBegin;
+      mpEnd = pNewEnd;
+      mpCapacity = pNewBegin + nNewCapacity;
+    }
+  }
+  return *this;
+}
+}  // namespace eastl
+
+// @ 0x005f8a70
+bool cKeyMappingTable::GetMappedKey(const Key_s005f_7da0& key, Key_s005f_7da0* pOut)
+{
+  eastl::KeyKeyMap::iterator it = mKeyMap.find(key);
+  if (it != mKeyMap.end()) {
+    if (pOut) *pOut = it->second;
+    return true;
+  }
+  return false;
+}
 
 // @ 0x0068c700
 ResKey* InvalidEditorModelKey(ResKey* key, uint32 v)
@@ -509,10 +774,54 @@ char* GetExplicitIdStartA(char* first, char* last, uint8 flag3, uint8 flag4)
 // @ 0x0068c9e0
 void PackStr::Insert(char* pos, const char* first, const char* last)
 {
-    // EASTL string insert; body approximated (scratch only).
-    (void)pos;
-    (void)first;
-    (void)last;
+    // eastl::string::insert(pos, first, last), inlined body (SSO or heap buffer).
+    const unsigned n = (unsigned)(last - first);
+    if (n == 0)
+        return;
+    const unsigned size = (unsigned)(mpEnd - mpBegin);
+    const unsigned cap = (unsigned)(mpCapacity - mpBegin);
+    const bool roomInBuffer = (n + 1) <= (cap - size);
+    const bool overlap = !(last <= mpBegin || pos > mpEnd);
+    if (roomInBuffer && !overlap) {
+        const unsigned tail = (unsigned)(mpEnd - pos);
+        if (n <= tail) {
+            memmove(mpEnd + 1, mpEnd - n + 1, n);
+            mpEnd += n;
+            memmove(pos + n, pos, (tail - n) + 1);
+        } else {
+            const char* front = first + (tail + 1);
+            memmove(mpEnd + 1, front, (unsigned)(last - front));
+            mpEnd += n - tail;
+            memmove(mpEnd, pos, (tail + 1));
+            mpEnd += tail;
+        }
+        return;
+    }
+    unsigned newCap;
+    if (roomInBuffer) {
+        newCap = size + n + (1 - 0);
+    } else {
+        const unsigned need = size + n;
+        const unsigned grow = (size > 8) ? size * 2 : 8;
+        newCap = (need > grow ? need : grow) + 1;
+    }
+    char* dst = (char*)EAAllocate(newCap, "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\"
+                                          "SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\"
+                                          "EASTL/allocator.h",
+                                  0, 0, 0, 0xd1);
+    const char* oldBegin = mpBegin;
+    const unsigned head = (unsigned)(pos - oldBegin);
+    memmove(dst, oldBegin, head);
+    char* mid = dst + head;
+    memmove(mid, first, n);
+    memmove(mid + n, pos, size - head);
+    mid[size - head + n] = 0;
+    const char* newEnd = mid + (size - head) + n;
+    if ((unsigned)(mpCapacity - oldBegin) > 1 && oldBegin != 0)
+        EAFree((void*)oldBegin);
+    mpBegin = dst;
+    mpEnd = (char*)newEnd;
+    mpCapacity = dst + newCap;
 }
 
 // @ 0x0068cd40
@@ -557,19 +866,30 @@ void SPNameFromKeyThunk(const ResKey* key, void* out, int a3, int a4, const char
 }
 
 // @ 0x0068d1c0
-void PackStrSwap(PackStr* a, PackStr* b)
+void PackStr::Swap(PackStr& other)
 {
-    if ((char*)a + 0xc == (char*)b + 0xc) {
-        char* pa = (char*)a;
-        char* pb = (char*)b;
+    // Both sides are SSO (their inline buffers live at +0x0c): just swap the three pointers.
+    if ((char*)this + 0xc == (char*)&other + 0xc) {
+        char* a = (char*)this;
+        char* b = (char*)&other;
         for (int i = 0; i < 3; ++i) {
-            void* t = *(void**)(pa + i * 4);
-            *(void**)(pa + i * 4) = *(void**)(pb + i * 4);
-            *(void**)(pb + i * 4) = t;
+            void* t = *(void**)(a + i * 4);
+            *(void**)(a + i * 4) = *(void**)(b + i * 4);
+            *(void**)(b + i * 4) = t;
         }
         return;
     }
-    // Non-SSO swap uses a temp copy + assign; approximated.
+    PackStr tmp;
+    tmp.mpBegin = 0;
+    tmp.mpEnd = 0;
+    tmp.mpCapacity = 0;
+    ((PackStrOps*)&tmp)->Ctor(this);
+    if (&other != this)
+        ((PackStrOps*)this)->Assign(other.mpBegin, other.mpEnd);
+    if (&other != &tmp)
+        ((PackStrOps*)&other)->Assign(tmp.mpBegin, tmp.mpEnd);
+    if ((unsigned)(tmp.mpCapacity - tmp.mpBegin) > 2 && tmp.mpBegin != 0)
+        EAFree(tmp.mpBegin);
 }
 
 // @ 0x0068d290
@@ -594,6 +914,40 @@ void SPNameFromKeyA(const ResKey* key, void* out, const char* name)
         Str_Format(out, "%hs_%hs", name, *(char**)out);
 }
 
+// @ 0x0068d480
+void PackStr::reserve(unsigned n)
+{
+    // eastl::string::reserve(n).
+    PackStr* self = this;
+    if (n != 0xffffffffu && (unsigned)((self->mpEnd - self->mpBegin) >> 1) < n) {
+        const unsigned newBytes = n * 2;
+        char* dst = (char*)EAAllocate(newBytes, "App", 0, 0,
+                                      "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\"
+                                      "SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\"
+                                      "EASTL/allocator.h",
+                                      0xd1);
+        const unsigned oldBytes = (unsigned)((self->mpEnd - self->mpBegin) >> 1) * 2;
+        memcpy(dst, self->mpBegin, oldBytes);
+        char* newEnd = dst + oldBytes;
+        *(unsigned short*)newEnd = 0;
+        char* old = self->mpBegin;
+        if ((unsigned)(self->mpCapacity - old) > 2 && old != 0 && old != (char*)self->mEmptyRef)
+            EAFree(old);
+        self->mpBegin = dst;
+        self->mpCapacity = dst + newBytes;
+        self->mpEnd = newEnd;
+        return;
+    }
+    PackStr tmp;
+    if (n < (unsigned)((self->mpEnd - self->mpBegin) >> 1))
+        ((PackStrOps*)self)->Erase(n);
+    ((PackStrOps*)&tmp)->Ctor(self);
+    self->Swap(tmp);
+    char* b = tmp.mpBegin;
+    if ((unsigned)((char*)tmp.mpCapacity - b) > 2 && b != 0 && b != (char*)tmp.mEmptyRef)
+        EAFree(b);
+}
+
 // @ 0x0068d5a0
 bool SPKeyFromName(ResKey* key, const char* name, uint32 type, uint32 defGroup)
 {
@@ -615,17 +969,19 @@ bool SPKeyFromName(ResKey* key, const char* name, uint32 type, uint32 defGroup)
     const char* bang = (const char*)memchr_s0068_c330(name, '!', (unsigned)(dot - name));
     key->mGroup = (bang != 0) ? 0xffffffff : defGroup;
     const char* start = (bang != 0) ? bang + 1 : name;
+    // memchr miss: the original folds the delimiter onto `name`, which skips the group block.
+    const char* bangEnd = (bang != 0) ? bang : name;
     if (start == dot) {
         key->mInstance = 0xffffffff;
     } else {
         const char* hexs = GetExplicitIdStartA((char*)start, (char*)dot, 1, 1);
         if (hexs == 0)
-            key->mInstance = (uint32)FUN_0068C680(name, (unsigned)(dot - name));
+            key->mInstance = (uint32)FUN_0068C680(start, (unsigned)(dot - start));
         else
             key->mInstance = (uint32)strtoul(hexs, 0, 16);
     }
-    if (name != bang) {
-        const char* p = bang;
+    if (name != bangEnd) {
+        const char* p = bangEnd;
         const char* at = 0;
         do {
             --p;
@@ -637,14 +993,21 @@ bool SPKeyFromName(ResKey* key, const char* name, uint32 type, uint32 defGroup)
         if (at != 0) {
             key->mGroup = 0;
         } else {
-            const char* us = FindLastCharA((char*)name, (char*)bang, "_");
+            char underscore = '_';
+            const char* us = FindLastCharA((char*)name, (char*)bangEnd, &underscore);
             const char* s2 = name;
             if (us != 0)
                 s2 = us + 1;
-            const char* hexs = GetExplicitIdStartA((char*)s2, (char*)bang, 0, 0);
+            const char* hexs = GetExplicitIdStartA((char*)s2, (char*)bangEnd, 0, 0);
             if (hexs == 0) {
-                key->mGroup = (uint32)FUN_0068C680(name, (unsigned)(bang - name));
-                // cache the group name string
+                key->mGroup = (uint32)FUN_0068C680(name, (unsigned)(bangEnd - name));
+                // cache the group name string (wide) in the global group->name map
+                HashMap* groupNames = (HashMap*)0x0152C864;
+                WStr* cached = (WStr*)groupNames->Lookup(&key->mGroup);
+                cached->resize((unsigned)(bangEnd - name));
+                wchar_t* dst = cached->mpBegin;
+                for (const char* q = name; q != bangEnd; ++q)
+                    *dst++ = (wchar_t)(signed char)*q;
             } else {
                 key->mGroup = (uint32)strtoul(hexs, 0, 16);
             }

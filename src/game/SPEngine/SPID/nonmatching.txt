@@ -1,6 +1,10 @@
 # va  diff-bytes  reason
-0068c770 6 GetExplicitIdStartW: p=last hoisted before the first==last test
-0068c820 139 GetExplicitIdStartA (narrow): loop rotation / branch placement
-0068cd40 11 PackStr::InsertCStr: inlined strlen codegen shape
-0068d0d0 78 SPNameFromKeyW: string-length do-while + res-branch order
-0068d290 70 SPNameFromKeyA: packed-insert + append_sprintf scheduling
+0068c770 6 GetExplicitIdStartW: p=last hoisted before the first==last test flags: /O2 /MD /Gy /EHsc /TP
+0068c820 139 GetExplicitIdStartA (narrow): isdigit/isxdigit must be called with the byte zero-extended (unsigned char), not sign-extended [equiv: PASS 367 valid, 73.0% cov] flags: /O2 /MD /Gy /EHsc /TP
+0068c9e0 321 PackStr::Insert: thiscall ret 4; eastl::string::insert(pos, first, last) with SSO/heap branches (memcpy/memmove) [equiv: UNSUPPORTED 0/400 valid (input generator cannot fabricate a valid PackStr)] flags: /O2 /MD /Gy /EHsc /TP
+0068cd40 36 PackStr::InsertCStr: inlined strlen codegen shape flags: /O2 /MD /Gy /EHsc /TP
+0068d0d0 78 SPNameFromKeyW: string-length do-while + res-branch order flags: /O2 /MD /Gy /EHsc /TP
+0068d1c0 149 PackStr::Swap: thiscall ret 4; SSO test on +0xc then copy-construct tmp from this, Assign both ways, free tmp (memcpy grow copy) [equiv: WEAK 143 valid, 64.8% cov, 0 mismatch] flags: /O2 /MD /Gy /EHsc /TP
+0068d290 72 SPNameFromKeyA: the "." separator is pushed as the retail literal address 0x1403550 (0x1403551 for the end), not a fresh pooled copy [equiv: UNSUPPORTED 0/400 valid (input generator cannot fabricate a valid PackStr), 0 mismatch on the repaired replay] flags: /O2 /MD /Gy /EHsc /TP
+0068d480 173 PackStr::reserve: thiscall ret 4; grow allocates 2n via EAAllocate then memcpy + null terminator, else shrink via Ctor(tmp,this)+Swap+free; SSO sentinel is mEmptyRef at +0x10 [equiv: WEAK 163 valid, 85.1% cov, 0 mismatch] flags: /O2 /MD /Gy /EHsc /TP
+0068d5a0 440 SPKeyFromName: narrow name->ResKey; strchr('.')/memchr('!') split, GetExplicitIdStartA + HashNameN per part, '!' miss folds bang onto name, group name cached wide into global hash_map at 0x152c864 via Lookup+resize [equiv: WEAK 400 valid, 41.7% cov / PASS 2994 valid, 63.4% cov with --inputs 3000, 0 mismatch] flags: /O2 /MD /Gy /EHsc /TP

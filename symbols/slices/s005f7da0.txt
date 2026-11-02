@@ -1,10 +1,11 @@
 005f7da0 ?insert@?$basic_string_s005f_7da0@_W@eastl@@QAEXPA_WPB_W1@Z  # insert migrated from s005f7da0 (verbatim, slice spelling)
-005f7fa0 eastl::hashtable::equal_range  # multimap equal_range shape (increment_bucket on miss)
-005f8050 eastl::hashtable::find  # byte-exact find
-005f80d0 eastl::hashtable::erase  # erase(const key&) returning count
-005f8170 eastl::hashtable::DoInsertValue  # calls GetRehashRequired/DoAllocateNode/DoRehash
-005f8400 eastl::basic_string<wchar_t>::replace  # byte-exact EASTL replace(iterator,iterator,const T*,const T*); calls insert
+005f7fa0 ?equal_range@?$hashtable_s005f_7da0@UKeyRecord@eastl@@UKeyMixHash@2@@eastl@@QAE?AU?$pair_s005f_7da0@U?$hashtable_iterator@UKeyRecord@eastl@@U?$hash_node_s005f_7da0@UKeyRecord@eastl@@@2@@eastl@@U12@@2@ABVKey_s005f_7da0@ResourceMan@EA@@@Z  # equal_range migrated from s005f7da0 (verbatim, slice spelling)
+005f8050 ?find@?$hashtable_s005f_7da0@U?$kv_pair@VKey_s005f_7da0@ResourceMan@EA@@V123@@eastl@@UKeyGroupHash@2@@eastl@@QAE?AU?$hashtable_iterator@U?$kv_pair@VKey_s005f_7da0@ResourceMan@EA@@V123@@eastl@@U?$hash_node_s005f_7da0@U?$kv_pair@VKey_s005f_7da0@ResourceMan@EA@@V123@@eastl@@@2@@2@ABVKey_s005f_7da0@ResourceMan@EA@@@Z  # find migrated from s005f7da0 (verbatim, slice spelling)
+005f80d0 ?erase@?$hashtable_s005f_7da0@U?$kv_pair@VKey_s005f_7da0@ResourceMan@EA@@V123@@eastl@@UKeyGroupHash@2@@eastl@@QAEIABVKey_s005f_7da0@ResourceMan@EA@@@Z  # erase migrated from s005f7da0 (verbatim, slice spelling)
+005f8170 ?DoInsertValue@?$hashtable_s005f_7da0@U?$kv_pair@VKey_s005f_7da0@ResourceMan@EA@@V123@@eastl@@UKeyGroupHash@2@@eastl@@QAE?AUinsert_return_type@12@ABU?$kv_pair@VKey_s005f_7da0@ResourceMan@EA@@V123@@2@Utrue_type@2@@Z  # DoInsertValue migrated from s005f7da0 (verbatim, slice spelling)
+005f8400 ?replace@?$basic_string_s005f_7da0@_W@eastl@@QAEAAV12@PA_W0PB_W1@Z  # replace migrated from s005f7da0 (verbatim, slice spelling)
 005f8840 eastl::DequeBase::DoInit  # EASTL deque init shape (ptr array min 8, subarray 4 x 0x30)
+005f8a70 ?GetMappedKey@cKeyMappingTable@@QAE_NABVKey_s005f_7da0@ResourceMan@EA@@PAV234@@Z  # cKeyMappingTable::GetMappedKey migrated from s005f7da0 (verbatim, slice spelling)
 005f8e40 ??1cKeyNameRecord@@QAE@XZ  # cKeyNameRecord::~cKeyNameRecord migrated from s005f7da0 (verbatim, slice spelling)
 005f8f30 eastl::basic_string<char>::basic_string  # (size_type n, char c, const allocator&) fill ctor
 005f8f80 eastl::basic_string<wchar_t>::replace  # replace(size_type,size_type,const T*) forwarding to 0x5f8400
