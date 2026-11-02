@@ -1,0 +1,8 @@
+# va  diff-bytes  reason
+00755da0 376 CS755da0::dtor755da0: complete; derived dtor teardown (RefVecs/ref arrays/single refs); scheduling differs; equiv: FAIL (5/5 mismatched, fake-arity: no call site before cccccccc) flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2
+007564b0 136 X_7565a0::FUN_007564b0 job-start; complete, not byte-exact (MSVC EH frame; the original's 5th call is the unreachable unwind cleanup at 0x690120)  [equiv: PASS 339 valid, 61.4% cov] flags: /O2 /MD /Gy /EHsc /TP
+00756650 244 CB24::FUN_00756650 job ctor; complete, not byte-exact (EH frame); harness cannot run either side (both fault at the same null-job-manager deref)  [equiv: UNSUPPORTED 0/400 valid, both sides fault identically] flags: /O2 /MD /Gy /EHsc /TP
+00756790 127 FUN_00756790 refcounted CB24 new + FUN_00756650; complete, not byte-exact (EH frame)  [equiv: PASS 219 valid, 98.6% cov] flags: /O2 /MD /Gy /EHsc /TP
+00756860 335 SP::BuildRegionToInfoMap; complete, not byte-exact (EH frame; virtual m42/vfunc dispatch)  [equiv: WEAK 339 valid, 52.3% cov, 0 mismatches] flags: /O2 /MD /Gy /EHsc /TP
+00756a20 174 CModelRegion::FUN_00756a20 lock/job-step; complete, not byte-exact (EH frame + mSlot in ebp vs local)  [equiv: PASS 269 valid, 67.0% cov] flags: /O2 /MD /Gy /EHsc /TP
+00756b50 171 CModelRegion::FUN_00756b50 refcount swap + part update; complete, not byte-exact (EH frame); harness cannot run either side (orig and ours fault at the identical eip 0x009289f4)  [equiv: UNSUPPORTED 0/400 valid, both sides fault at the same instruction] flags: /O2 /MD /Gy /EHsc /TP

@@ -1,0 +1,2 @@
+# source  symbol  va  flags
+../src/game/SPEngine/_at_00750000.cpp  ?FUN_00755d40@@YAXHHD@Z  00755d40  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2 /Isrc/game/include

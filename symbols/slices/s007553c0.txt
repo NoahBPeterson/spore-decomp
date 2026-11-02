@@ -5,4 +5,6 @@
 007555d0 ?FUN_007555d0@@YAXPAX@Z  # FUN_007555d0 migrated from s007553c0 (verbatim, slice spelling)
 00755810 ?FUN_00755810@@YADHHHPAXHH@Z  # FUN_00755810 migrated from s007553c0 (verbatim, slice spelling)
 00755c80 ?f55c80@CS553@@QAEXPAX@Z  # CS553::f55c80 migrated from s007553c0 (verbatim, slice spelling)
+00755d40 ?FUN_00755d40@@YAXHHD@Z  # FUN_00755d40 migrated from s007553c0 (verbatim, slice spelling)
+00755da0 ?dtor755da0@CS755da0@@QAEXXZ  # CS755da0::dtor755da0 migrated from s007553c0 (verbatim, slice spelling)
 00755fe0 ?FUN_00755fe0@S_755fe0@@QAEXPAX@Z  # S_755fe0::FUN_00755fe0 migrated from s007553c0 (verbatim, slice spelling)
