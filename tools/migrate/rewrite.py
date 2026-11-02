@@ -4925,7 +4925,7 @@ class Rewrite:
             p = os.path.join(sdir, fname)
             if not os.path.exists(p):
                 continue
-            rows2 = [l for l in read_rows(p) if row_va(l.split()[0]) in vas]
+            rows2 = [self.pin_flags(module, l) for l in read_rows(p) if row_va(l.split()[0]) in vas]
             head = next((l.rstrip("\n") for l in open(p) if l.startswith("#")), "# va  diff-bytes  reason")
             self.merge_rows(os.path.join(outdir, fname), head, rows2, key=lambda l: int(l.split()[0], 16))
         self.prune_rows(d, stem)
@@ -4964,6 +4964,26 @@ class Rewrite:
             if dropped:
                 open(p, "w").write("\n".join(kept))
                 self.notes.append(("pruned", "%d row(s) without a function in %s.cpp (or with a better row) removed from %s/%s" % (dropped, stem, stem, fname)))
+
+    def pin_flags(self, module, row):
+        """A nonmatching/partial row of this slice with the slice's flags for it written into the reason
+        ("flags: /O2 ..."), unless the reason already names them.  Such a row has no flags column: in the module the
+        harness would fall back to the majority of the module's manifest rows, which mixes objects built with different
+        flags (mig23: 0x00a81580 PASS with the slice's /O2, FAIL with the module's /arch:SSE /fp:fast, which writes
+        xmm6)."""
+        try:
+            sys.path.insert(0, W("tools", "difftest"))
+            import slice as S
+            va = row_va(row.split()[0])
+            reason = row.split(None, 2)[2] if len(row.split(None, 2)) > 2 else ""
+            if any(S.flags_from_reason(m.group(1)) for m in S.EXPLICIT_RE.finditer(reason)):
+                return row
+            fl, _how = S.choose_flags(self.sid, va)
+        except Exception as e:              # noqa: BLE001
+            self.notes.append(("flags", "choose_flags failed for %s: %s" % (row.split()[0], e)))
+            return row
+        fl = self.module_flags(module, [f for f in fl if not f.startswith("/I")])
+        return "%s%sflags: %s" % (row, " " if len(row.split(None, 2)) > 2 else "  - ", " ".join(fl))
 
     def row_flags(self, va):
         """Flags of a nonmatching/partial row of this slice as the difftest harness picks them (explicit note in the

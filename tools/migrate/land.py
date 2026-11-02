@@ -10,7 +10,7 @@ For every module of work/batches/<batch>.json (entries {id, vas, module}, tools:
   3. pass: tools/migrate/commit_obj.sh <batch> M (re-checks run_all and the audit, commits);
      fail: the module's files are restored to HEAD and the reason is logged.
 
-usage: land.py <batch> [--only SUBSTR] [--log work/migrate/land_<batch>.log]
+usage: land.py <batch> [--only SUBSTR] [--log work/migrate/land_<batch>.log] [--check]
 """
 import argparse, glob, json, os, re, subprocess, sys, time
 
@@ -69,6 +69,11 @@ def gate(m, log):
         va = p[0]
         ms = re.search(r"\((s[0-9a-f]{8})\)\s*$", line)
         sid = ms.group(1) if ms else None
+        if not sid:
+            # an ERROR line names no slice (symbol not found in the module TU): the sweep record of the VA, if it has
+            # exactly one (mig23: 0x0107e560 PASS -> WEAK landed with no baseline)
+            recs = glob.glob(os.path.join(SWEEP, "s*_%s.json" % va))
+            sid = os.path.basename(recs[0]).split("_")[0] if len(recs) == 1 else None
         before = verdict(os.path.join(SWEEP, "%s_%s.json" % (sid, va))) if sid else None
         js = os.path.join(SCRATCH, "%s_%s.json" % (stem, va))
         run([PY, "tools/difftest/equiv.py", stem, va, "--src", tu, "--fp-tol", "--max-mismatch", "200", "--json", js])
@@ -84,6 +89,7 @@ def main():
     ap.add_argument("batch")
     ap.add_argument("--only")
     ap.add_argument("--log")
+    ap.add_argument("--check", action="store_true", help="gate the batch's committed modules as they are; no rewrite, commit or rollback")
     a = ap.parse_args()
     os.makedirs(SCRATCH, exist_ok=True)
     logp = a.log or os.path.join(ROOT, "work", "migrate", "land_%s.log" % a.batch)
@@ -100,7 +106,11 @@ def main():
         if e["module"] not in mods and (not a.only or a.only in e["module"]):
             mods.append(e["module"])
     log("== %s %s: %d modules" % (time.strftime("%Y-%m-%d %H:%M"), a.batch, len(mods)))
-    for m in mods:
+    for m in mods if a.check else []:
+        if os.path.exists(os.path.join(ROOT, module_files(m)[0])):
+            ok, why = gate(m, log)
+            log("%s: %s %s" % (m, "GATE OK" if ok else "GATE FAIL", why))
+    for m in mods if not a.check else []:
         # stdout only: git warns on stderr about a directory that does not exist yet (src/game/Havok/)
         dirty = subprocess.run(["git", "status", "--porcelain", "--"] + module_files(m), cwd=ROOT,
                                capture_output=True, text=True).stdout
