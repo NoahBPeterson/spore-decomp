@@ -1,0 +1,16 @@
+# va  diff-bytes  reason
+00d06d80 1 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 102 bytes - helper not reconstructed. flags: /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+00d06e70 1 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 53 bytes - cSoundLoopObject constructor not reconstructed (base cGameData + embedded cSpatialObject at +0x34, two vtable stores after the base calls). flags: /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+00d06f00 1 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 418 bytes - helper not reconstructed. flags: /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+00d070b0 44 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 47 bytes - scalar deleting destructor: volatile member qualifiers keep the vtable store first but cost 3 extra bytes (size 62 vs 59). flags: /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+00d07470 1 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 287 bytes - helper not reconstructed. flags: /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+00d07590 1 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 59 bytes - helper not reconstructed. flags: /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+00d075d0 1 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 325 bytes - helper not reconstructed. flags: /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+00d07770 225 equivalence UNSUPPORTED (only 0/400 inputs valid) flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
+00d078d0 210 nonmatching: C103::CreateLayout; 344 vs 354 bytes. difftest FAIL 5/5 (first memory pool @424e00f0: 40464200 vs 04044210); flags /O2 /MD /Gy /EHsc /TP /arch:SSE
+00d07bb0 112 nonmatching: C103::GetValue; 224 vs 228 bytes. difftest FAIL 5/221 (fake-arity: no call site before 4b8f0080); flags /O2 /MD /Gy /EHsc /TP /arch:SSE
+00d07ca0 60 equivalence WEAK flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
+00d07e40 759 nonmatching: C103::CanAffordEmpire; 871 vs 935 bytes. difftest FAIL 5/5 (execution fault at 006a12a8); flags /O2 /MD /Gy /EHsc /TP /arch:SSE
+00d081f0 139 equivalence WEAK flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
+00d082a0 451 equivalence UNSUPPORTED (only 0/400 inputs valid) flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
+00d084d0 809 /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast difftest WEAK (291 valid inputs); complete community-editor property-row fill (request type dispatch: 0x42bf8c1d/0x2b885df4 and 0x4d863c8b return 1, 0xfcafd26/default return 2, 0x142462a/0x81c74dbc/0x8bfac054 fill both CString labels plus a colour pair); MSVC drops the dead null-property release branch and shares the release/return epilogues, changing the switch layout (size 976 vs 1106) flags: /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast

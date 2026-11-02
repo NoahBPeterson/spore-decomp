@@ -1,0 +1,8 @@
+# source  symbol  va  flags
+../src/game/SPGonzago/_at_00d00000.cpp  ?FUN_00d06eb0@cCountedSlot@SP@@QAEPAV12@PAVcRefCounted@2@@Z  00d06eb0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00d00000.cpp  ?Destroy@C103@@QAEPAXE@Z  00d07890  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/_at_00d00000.cpp  ?GetFlag@C103@@QAEHH@Z  00d07d00  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/_at_00d00000.cpp  ?SetFlag@C103@@QAEXHH@Z  00d07d20  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/_at_00d00000.cpp  ?CanAffordScalar@C103@@QAEEHH@Z  00d07d50  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/_at_00d00000.cpp  ?GetTribeValue@C103@@QAEHH@Z  00d07d70  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/_at_00d00000.cpp  ?SetTribeValue@C103@@QAEXHH@Z  00d07e10  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include

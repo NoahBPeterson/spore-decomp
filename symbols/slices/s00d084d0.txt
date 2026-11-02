@@ -1,3 +1,4 @@
+00d084d0 ?Do@Obj84D0@@QAEHPAURequest84D0@@PAUProps84D0@@@Z  # Obj84D0::Do migrated from s00d084d0 (verbatim, slice spelling)
 00d08930 ?FUN_00d08930@@YAXXZ  # FUN_00d08930 migrated from s00d084d0 (verbatim, slice spelling)
 00d08a70 ?Do@Obj8A70@@QAEIII@Z  # Obj8A70::Do migrated from s00d084d0 (verbatim, slice spelling)
 00d08aa0 ?FUN_00d08aa0@@YGXIIII@Z  # FUN_00d08aa0 migrated from s00d084d0 (verbatim, slice spelling)
