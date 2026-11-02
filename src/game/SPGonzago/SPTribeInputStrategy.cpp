@@ -1,4 +1,4 @@
-// src/game/SPGonzago/SPTribeInputStrategy.cpp -- migrated from slice(s) s00cd0aa0 by tools/migrate/rewrite.py
+// src/game/SPGonzago/SPTribeInputStrategy.cpp -- migrated from slice(s) s00ccfc20, s00cd0aa0 by tools/migrate/rewrite.py
 // Object file: SPGonzago/SPTribeInputStrategy.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -371,6 +371,110 @@ static const uint32_t kCursorDataKey = 0x01186577;
 // unnamed retail callees and globals that name local stubs (address in the comment)
 extern Vector3 gDefaultCursorOffset;             // 0x0169b1c8
 extern cGameState* gGameState;                   // 0x0169b41c
+
+// ---- items of slice s00ccfc20 begin (TODO(rewrite): local stubs, replace by canonical classes)
+void*  GetGameTerrainCursor();                 // 0x00b30d70
+void   FUN_00ad92d0(void*);                    // 0x00ad92d0  eastl vector dtor
+void   FUN_00ccece0(void*);                    // 0x00ccece0  ShowSelection
+void*  FUN_00c9d9e0(void*);                    // 0x00c9d9e0
+unsigned char FUN_00c8e7c0(void*);             // 0x00c8e7c0
+float  FUN_00bfc490(void*);                    // 0x00bfc490
+struct PtrVec {
+    void**  mpBegin;    // +0x00
+    void**  mpEnd;      // +0x04
+    void**  mpCap;      // +0x08
+    void*   mPad0c;     // +0x0c
+    void**  mpBuf;      // +0x10  points at the inline storage
+    void push_back(void** value);                // 0x00cd0a70
+    void insert(void** position, void** value);  // 0x00cd0550
+};
+struct StackVec {
+    void**  mpBegin;    // +0x00
+    void**  mpEnd;      // +0x04
+    void**  mpCap;      // +0x08
+    void*   mX0c;       // +0x0c
+    void*   mX10;       // +0x10
+    void*   mX14;       // +0x14
+    void*   mBuf[16];   // +0x18
+    void init()
+    {
+        mX14    = 0;
+        mpBegin = &mBuf[0];
+        mpEnd   = &mBuf[0];
+        mpCap   = &mBuf[16];
+    }
+};
+struct CInput {
+    void F_ccfc20(void* arg);                            // 0x00ccfc20
+    void F_ccfcf0(void* vec, int key, void* a, void* b); // 0x00ccfcf0
+    void F_cd07c0(void* a, void* b, void* c);            // 0x00cd07c0
+    int  F_cd0830(void* arg);                            // 0x00cd0830
+    void F_cd0950();                                     // 0x00cd0950
+    void F_cd02d0(void* pos);                            // 0x00cd02d0
+    int  F_cd0660(void* flags, void* pos, void* c);      // 0x00cd0660
+};
+// ---- items of slice s00ccfc20 end
+
+// @ 0x00cd07c0
+void CInput::F_cd07c0(void* a, void* b, void* c)
+{
+    StackVec vec;
+    vec.init();
+
+    void* tc = GetGameTerrainCursor();
+    ((void(__thiscall*)(void*, void*)) (*(void***)tc)[0x5c / 4])(tc, &vec);
+
+    F_ccfcf0(&vec, (int)a, b, c);
+    ((void(__thiscall*)(void*)) FUN_00ad92d0)(&vec);
+}
+
+// @ 0x00cd0830
+int CInput::F_cd0830(void* arg)
+{
+    void* sub = (char*)arg + 0x120;
+    float f158 = *(float*)((char*)arg + 0x158);
+    if (f158 > ((float(__thiscall*)(void*)) (*(void***)sub)[0x58 / 4])(sub)) {
+        if (FUN_00bfc490(sub) > 0.0f) {
+            F_cd07c0((void*)0x18, arg, 0);
+            return 1;
+        }
+    }
+
+    switch (((int(__thiscall*)(void*)) (*(void***)arg)[0x58 / 4])(arg)) {
+    case 1: case 2: case 3: case 4: case 5:
+    case 6: case 7: case 8: case 9:
+        F_cd07c0((void*)3, arg, 0);
+        return 1;
+    case 10: {
+        void* t = FUN_00c9d9e0(arg);
+        void* sub2 = (char*)t + 0x120;
+        if (((unsigned char(__thiscall*)(void*)) (*(void***)sub2)[0x58 / 4])(sub2)) {
+            if (!FUN_00c8e7c0(t)) {
+                F_cd07c0((void*)0xc, arg, 0);
+                void* b = (char*)arg + 0x34;
+                float f = ((float(__thiscall*)(void*, int)) (*(void***)b)[0x34 / 4])(b, 1);
+                void* r = ((void*(__thiscall*)(void*, uint32_t, int, float)) (*(void***)b)[0x2c / 4])(b, 0x4ae30884, 0, f);
+                FUN_00ccece0(r);
+            }
+        }
+        break;
+    }
+    }
+    return 1;
+}
+
+// @ 0x00cd0a70
+void PtrVec::push_back(void** value)
+{
+    void** p = mpEnd;
+    if (p < mpCap) {
+        mpEnd = p + 1;
+        if (p != 0)
+            *p = *value;
+        return;
+    }
+    insert(p, value);
+}
 
 // @ 0x00cd0aa0
 void SP::cTribeInputStrategy::Init(cSPUIInputOwner* pOwner)

@@ -3,4 +3,7 @@
 00ccff40 ?FUN_00ccff40@@YAXXZ  # FUN_00ccff40 migrated from s00ccfc20 (verbatim, slice spelling)
 00cd0260 ?FUN_00cd0260@@YGEPAX@Z  # FUN_00cd0260 migrated from s00ccfc20 (verbatim, slice spelling)
 00cd0660 ?F_cd0660@CInput@@QAEHPAX00@Z  # CInput::F_cd0660 migrated from s00ccfc20 (verbatim, slice spelling)
+00cd07c0 ?F_cd07c0@CInput@@QAEXPAX00@Z  # CInput::F_cd07c0 migrated from s00ccfc20 (verbatim, slice spelling)
+00cd0830 ?F_cd0830@CInput@@QAEHPAX@Z  # CInput::F_cd0830 migrated from s00ccfc20 (verbatim, slice spelling)
 00cd0950 ?F_cd0950@CInput@@QAEXXZ  # CInput::F_cd0950 migrated from s00ccfc20 (verbatim, slice spelling)
+00cd0a70 ?push_back@PtrVec@@QAEXPAPAX@Z  # PtrVec::push_back migrated from s00ccfc20 (verbatim, slice spelling)
