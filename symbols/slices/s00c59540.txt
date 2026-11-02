@@ -1,3 +1,5 @@
+00c59540 ?FUN_00c59540@cMissionMultiStep@@QAEEPAX0@Z  # cMissionMultiStep::FUN_00c59540 migrated from s00c59540 (verbatim, slice spelling)
+00c59980 ?FUN_00c59980@cMissionMultiStep@@QAEEPAX@Z  # cMissionMultiStep::FUN_00c59980 migrated from s00c59540 (verbatim, slice spelling)
 00c59b50 ?FUN_00c59b50@cMissionMultiStep@@QAEEXZ  # cMissionMultiStep::FUN_00c59b50 migrated from s00c59540 (verbatim, slice spelling)
 00c59d90 ?GetCurrSubMission@cMissionMultiStep@@QAEPAXXZ  # cMissionMultiStep::GetCurrSubMission migrated from s00c59540 (verbatim, slice spelling)
 00c59dc0 ?FUN_00c59dc0@cMissionMultiStep@@QAEXXZ  # cMissionMultiStep::FUN_00c59dc0 migrated from s00c59540 (verbatim, slice spelling)

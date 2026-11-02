@@ -435,6 +435,9 @@ public:
 };
 }
 namespace SP {
+cEmpire_s00c5_62b0* __cdecl FUN_01021300();                       // 0x01021300 player empire
+}
+namespace SP {
 class cPlayerInventory {
 public:
     uint8_t pad000[0x74c];
@@ -451,6 +454,15 @@ public:
 }
 namespace SP {
 cSPSimulatorSpaceGame* __cdecl GetUFOSimulator();      // 0x00ffbe50
+}
+namespace SP {
+class RandomLinearCongruential {
+public:
+    uint32_t RandomUint32Uniform(uint32_t range);      // 0x00a68fb0
+};
+}
+namespace SP {
+extern RandomLinearCongruential g_spRandom;            // 0x01601760
 }
 namespace SP {
 struct IArchiveWriter : VPad<6, IEmpty> {
@@ -771,6 +783,7 @@ typedef unsigned short u16;
 typedef signed int     i32_s00c5_9540;
 typedef float          f32;
 static inline void** vtbl(const void* p) { return *(void***)p; }
+void __cdecl FUN_011e0744(void* d, void* s, u32 n);                    // 0x11e0744 memcpy
 struct CMissionOps {
     u32   FUN_00a68fb0(u32 n);                 // 0xa68fb0 RandomUint32Uniform
     void* FUN_00c451e0();                      // 0xc451e0 GetOwnerEmpire
@@ -867,6 +880,31 @@ void cSPMissionMultiDelivery::ReturnForRewards()
     FUN_00c471c0(this);
 }
 
+// @ 0x00c56b90
+namespace SP {
+int32_t cSPMissionMultiDelivery_s00c5_62b0::Update(uint32_t delta)
+{
+    int32_t result = cSPMission_s00c5_62b0::Update(delta);
+    if (mDeliveryState == 0) {
+        tU32Vector* pShips = (tU32Vector*)FUN_01021300()->GetShipList();
+        uint32_t numShips = pShips->size();
+        if (numShips > 0)
+            ReturnForRewards();
+    }
+    return result;
+}
+}  // namespace SP
+
+// @ 0x00c56d90
+namespace SP {
+void cSPMissionMultiDelivery_s00c5_62b0::UpdateItemName()
+{
+    cProperty_s00c5_62b0* pProperty = 0;
+    PropertyManager()->GetProperty(mpItemDefinition, 0x37d494e, &pProperty);
+    GetPropertyAsText(pProperty, 0x3068d95d, &mItemName);
+}
+}  // namespace SP
+
 // @ 0x00c56de0
 namespace SP {
 IArchiver& operator>>(IArchiver& archiver, tItemInfo& item)
@@ -878,6 +916,66 @@ IArchiver& operator>>(IArchiver& archiver, tItemInfo& item)
     item.mpPlanet = 0;
     archiver.SerializeItem(0x3275872, &item, 0);
     return archiver;
+}
+}  // namespace SP
+
+// @ 0x00c56ef0
+namespace SP {
+bool cSPMissionMultiDelivery_s00c5_62b0::Validate()
+{
+    if (!cSPMission_s00c5_62b0::Validate())
+        return false;
+
+    int32_t numBuyers = (int32_t)((char*)mpBuyerItemsEnd - (char*)mpBuyerItems) / 20;
+    for (int32_t i = 0; i < numBuyers; ++i) {
+        if (mpBuyerItems[i].mpPlanet->mpStarRecord->FUN_00b8d970()) {
+            SetState(1);
+            return false;
+        }
+    }
+
+    int32_t numItems = (int32_t)((char*)mpRunnerItemsEnd - (char*)mpRunnerItems) / 12;
+    for (int32_t i = 0; i < numItems; ++i) {
+        cStarRecordRef* pStarRecord = mpRunnerItems[i].mpPlanet->mpStarRecord;
+        if (pStarRecord->FUN_00b8d970() || pStarRecord->FUN_00b8dab0() != 5) {
+            SetState(1);
+            return false;
+        }
+    }
+    return true;
+}
+}  // namespace SP
+
+// @ 0x00c56fe0
+namespace SP {
+bool cSPMissionMultiDelivery_s00c5_62b0::PickFetchItem()
+{
+    if (!mpMissionPropList)
+        return false;
+
+    cProperty_s00c5_62b0* pProperty = mpMissionPropList->GetPropertyRef(0x781900a6);
+    uint16_t kind = pProperty->mFlags & 0x30;
+    if (kind == 0 && pProperty->mType == 0)
+        return false;
+
+    int32_t count;
+    tItemInfo* pItems;
+    if (kind) {
+        count = pProperty->mCount;
+        if (count <= 0)
+            return false;
+        pItems = (tItemInfo*)pProperty->mpData;
+    } else {
+        count = 1;
+        pItems = pProperty->mType ? (tItemInfo*)pProperty : 0;
+    }
+
+    uint32_t index = g_spRandom.RandomUint32Uniform((uint32_t)count);
+    mpItemDefinition = pItems[index].mpPlanet.mpObject;
+    mItemCount = 0;
+    mItemsDelivered = 0;
+    UpdateItemName();
+    return true;
 }
 }  // namespace SP
 
@@ -1319,6 +1417,58 @@ u8 cSPMissionMultiDelivery_s00c5_8920::GetTagString(u32 tag, cWString* out)
         return 1;
     }
     return ((cSPMissionBase*)this)->GetTagString(tag, out);
+}
+
+// @ 0x00c59540
+u8 cMissionMultiStep::FUN_00c59540(void* a, void* b)
+{
+    i32_s00c5_9540 want = (i32_s00c5_9540)b - (i32_s00c5_9540)a;
+    i32_s00c5_9540 rnd  = (i32_s00c5_9540)MOPS((void*)0x1601760)->FUN_00a68fb0((u32)want);
+    (void)rnd;
+    void* empire = MOPS(this)->FUN_00c451e0();
+    i32_s00c5_9540 ally = 0;
+    if (empire != 0) {
+        ally = (i32_s00c5_9540)MOPS(empire)->FUN_00c31b50(1);
+    }
+    void* civ = MOPS(this)->FUN_00b8de30();
+    f32 home = (f32)MOPS(this)->FUN_00ffbfc0();
+    (void)home;
+    f32 minR = MOPS(this)->FUN_00c45b80();
+    f32 maxR = MOPS(this)->FUN_00c45bd0();
+    u32 jumps = MOPS(this)->FUN_00c45c20();
+    // erase the existing buyer list
+    MOPS(this)->FUN_00c58590(*(void**)((u8*)this + 0x1f4), *(void**)((u8*)this + 0x1f8));
+    (void)civ; (void)minR; (void)maxR; (void)jumps; (void)ally;
+    return 1;
+}
+
+// @ 0x00c59980
+u8 cMissionMultiStep::FUN_00c59980(void* param)
+{
+    if (!MOPS(this)->FUN_00c45f80()) {
+        return 0;
+    }
+    void* base = *(void**)((u8*)this + 0x9c);
+    i32_s00c5_9540 seed = (i32_s00c5_9540)MOPS((void*)((u8*)base + 0x13c))->FUN_00b8de30();
+    if (seed == 0) {
+        return 0;
+    }
+    u8** vec = (u8**)((u8*)this + 0x21c);
+    i32_s00c5_9540 n = (i32_s00c5_9540)(vec[1] - vec[0]) >> 2;
+    for (i32_s00c5_9540 i = 0; i < n; i++) {
+        i32_s00c5_9540 id = *(i32_s00c5_9540*)(vec[0] + i * 4);
+        if (id != -1) {
+            void* sm = MOPS((void*)id)->FUN_01046fc0(0);
+            (*(void(__thiscall**)(void*))((char*)vtbl(sm) + 0x0))(sm);
+        }
+    }
+    // collapse the record vector
+    u8* src = vec[1];
+    u8* dst = vec[0];
+    FUN_011e0744(dst, src, (u32)(src - dst));
+    vec[1] = vec[1] - (src - dst);
+    (void)param;
+    return 1;
 }
 
 // @ 0x00c59b50

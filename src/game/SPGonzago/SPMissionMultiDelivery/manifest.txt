@@ -1,5 +1,7 @@
 # source  symbol  va  flags
 ../src/game/SPGonzago/SPMissionMultiDelivery.cpp  ?ReturnForRewards@cSPMissionMultiDelivery@@QAEXXZ  00c4b760  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPMissionMultiDelivery.cpp  ?Update@cSPMissionMultiDelivery_s00c5_62b0@SP@@QAEHI@Z  00c56b90  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPMissionMultiDelivery.cpp  ?UpdateItemName@cSPMissionMultiDelivery_s00c5_62b0@SP@@QAEXXZ  00c56d90  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPMissionMultiDelivery.cpp  ??5SP@@YAAAUIArchiver@0@AAU10@AAUtItemInfo@0@@Z  00c56de0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPMissionMultiDelivery.cpp  ?IsItemTargetPlanet@cSPMissionMultiDelivery_s00c5_62b0@SP@@QAE_NPAX@Z  00c57070  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPMissionMultiDelivery.cpp  ?DeliveredToAllBuyers@cSPMissionMultiDelivery_s00c5_62b0@SP@@QAE_NXZ  00c57270  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
