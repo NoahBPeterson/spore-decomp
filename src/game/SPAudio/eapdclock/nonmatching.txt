@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+00a490f0 92 clock_set — `if (c_set==1) clock_unset(c); t=max(s_time,systime); c_settime=t;` then the ordered-list insert; max() FP compare + edi=1 constant + esi=c regalloc differ from retail. difftest: WEAK (394/400 valid, 47.1% coverage). flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast

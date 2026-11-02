@@ -13,17 +13,17 @@
 00a48ea0  EA::Audio::Eapd::class_new (varargs, 2 types)
 00a48f00  EA::Audio::Eapd::class_new (varargs, 3 types)
 00a48f60  EA::Audio::Eapd::mess_init  # creates the "list" object/template classes, sets the object anymethod
-00a49080  EA::Audio::Eapd::clock_new  # getbytes(0x18); c_settime=0x1454410, c_set=0, owner, method, next=0
-00a490b0  EA::Audio::Eapd::clock_unset  # unlink c from s_clocklist if c_set==1
-00a490f0  EA::Audio::Eapd::clock_set  # t=max(s_time,arg); ordered insert into s_clocklist; c_set=1
-00a49170  EA::Audio::Eapd::clock_pause  # if c_set==1: c_settime=c_settime-s_time; unset; c_set=2
-00a491a0  EA::Audio::Eapd::clock_unpause  # if c_set==2: clock_set(c, c_settime+s_time)
-00a491d0  EA::Audio::Eapd::clock_ispaused  # c_set==2
-00a491e0  EA::Audio::Eapd::clock_delay  # clock_set(c, delay*0.001f + s_time)
-00a49210  EA::Audio::Eapd::clock_getlogicaltime  # s_time
-00a49220  EA::Audio::Eapd::clock_gettimesince  # (s_time-systime)*0x1454428
-00a49240  EA::Audio::Eapd::clock_getlogicaltimeafter  # s_time + arg (via 0x1454428 scaling)
-00a49260  EA::Audio::Eapd::clock_free  # unlink + freebytes(c,0x18)
+00a49080 ?clock_new@Eapd@Audio@EA@@YAPAUt_clock@123@PAX0@Z  # clock_new migrated from s00a488d0 (verbatim, slice spelling)
+00a490b0 ?clock_unset@Eapd@Audio@EA@@YAXPAUt_clock@123@@Z  # clock_unset migrated from s00a488d0 (verbatim, slice spelling)
+00a490f0 ?clock_set@Eapd@Audio@EA@@YAXPAUt_clock@123@N@Z  # clock_set migrated from s00a488d0 (verbatim, slice spelling)
+00a49170 ?clock_pause@Eapd@Audio@EA@@YAXPAUt_clock@123@@Z  # clock_pause migrated from s00a488d0 (verbatim, slice spelling)
+00a491a0 ?clock_unpause@Eapd@Audio@EA@@YAXPAUt_clock@123@@Z  # clock_unpause migrated from s00a488d0 (verbatim, slice spelling)
+00a491d0 ?clock_ispaused@Eapd@Audio@EA@@YA_NPAUt_clock@123@@Z  # clock_ispaused migrated from s00a488d0 (verbatim, slice spelling)
+00a491e0 ?clock_delay@Eapd@Audio@EA@@YAXPAUt_clock@123@M@Z  # clock_delay migrated from s00a488d0 (verbatim, slice spelling)
+00a49210 ?clock_getlogicaltime@Eapd@Audio@EA@@YANXZ  # EA::Audio::Eapd::clock_getlogicaltime migrated from s00a488d0
+00a49220 ?clock_gettimesince@Eapd@Audio@EA@@YANN@Z  # EA::Audio::Eapd::clock_gettimesince migrated from s00a488d0
+00a49240 ?clock_getlogicaltimeafter@Eapd@Audio@EA@@YANM@Z  # EA::Audio::Eapd::clock_getlogicaltimeafter migrated from s00a488d0
+00a49260 ?clock_free@Eapd@Audio@EA@@YAXPAUt_clock@123@@Z  # clock_free migrated from s00a488d0 (verbatim, slice spelling)
 00a492c0 ?clock_setftime@Eapd@Audio@EA@@YAXN@Z  # clock_setftime migrated from s00a488d0 (verbatim, slice spelling)
 00a492e0 ?sched_tick@Eapd@Audio@EA@@YAXM@Z  # sched_tick migrated from s00a488d0 (verbatim, slice spelling)
 00a49390  EA::Audio::Eapd::pd_new  # getbytes(c_size); g_pd=c; if c_patchable init save/gop/anything fields

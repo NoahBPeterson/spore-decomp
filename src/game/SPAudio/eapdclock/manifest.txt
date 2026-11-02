@@ -1,0 +1,11 @@
+# source  symbol  va  flags
+../src/game/SPAudio/eapdclock.cpp  ?clock_new@Eapd@Audio@EA@@YAPAUt_clock@123@PAX0@Z  00a49080  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdclock.cpp  ?clock_unset@Eapd@Audio@EA@@YAXPAUt_clock@123@@Z  00a490b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdclock.cpp  ?clock_pause@Eapd@Audio@EA@@YAXPAUt_clock@123@@Z  00a49170  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdclock.cpp  ?clock_unpause@Eapd@Audio@EA@@YAXPAUt_clock@123@@Z  00a491a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdclock.cpp  ?clock_ispaused@Eapd@Audio@EA@@YA_NPAUt_clock@123@@Z  00a491d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdclock.cpp  ?clock_delay@Eapd@Audio@EA@@YAXPAUt_clock@123@M@Z  00a491e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdclock.cpp  ?clock_getlogicaltime@Eapd@Audio@EA@@YANXZ  00a49210  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdclock.cpp  ?clock_gettimesince@Eapd@Audio@EA@@YANN@Z  00a49220  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdclock.cpp  ?clock_getlogicaltimeafter@Eapd@Audio@EA@@YANM@Z  00a49240  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdclock.cpp  ?clock_free@Eapd@Audio@EA@@YAXPAUt_clock@123@@Z  00a49260  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
