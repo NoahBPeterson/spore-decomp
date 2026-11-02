@@ -1,1 +1,1 @@
-01118f50 hkGeomConvexHullBuilder::buildPlaneEquations  # symbols/havok_names.txt (8-arg overload)
+01118f50 ?buildPlaneEquations@hkGeomConvexHullBuilder_s0111_8f50@@SA?AVhkBool_s0111_8f50@@ABUhkGeomConvexHullTolerances_s0111_8f50@@AAUhkGeomHull_s0111_8f50@@ABV?$hkArray_s0111_8f50@UhkVector4_s0111_8f50@@@@AAUhkVector4_s0111_8f50@@AAV2@AAV5@AAV?$hkArray_s0111_8f50@UPlaneAndPoints@hkGeomConvexHullBuilder_s0111_8f50@@@@@Z  # hkGeomConvexHullBuilder_s0111_8f50::buildPlaneEquations migrated from s01118f50 (verbatim, slice spelling)

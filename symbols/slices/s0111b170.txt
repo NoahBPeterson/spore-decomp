@@ -1,1 +1,1 @@
-0111b170 hkGeomConvexHullBuilder::mergeHulls  # symbols/havok_names.txt (havok identical-code), mangled name reproduced exactly
+0111b170 ?mergeHulls@hkGeomConvexHullBuilder_s0111_b170@@SA?AW4hkResult@@ABUhkGeomConvexHullTolerances_s0111_b170@@AAVhkGeomHull_s0111_b170@@11@Z  # hkGeomConvexHullBuilder_s0111_b170::mergeHulls migrated from s0111b170 (verbatim, slice spelling)

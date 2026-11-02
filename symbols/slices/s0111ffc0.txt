@@ -1,4 +1,4 @@
-0111ffc0 MoppCompiler::buildNode  # recursive MOPP tree-node builder; leaf path -> 0111f9e0, else pops free list A, copies 6 dwords from parent, registers 3 child shapes with container B, splits via 0111fe30 and recurses (name coined; no symbol in image)
+0111ffc0 ?buildNode@MoppCompiler_s0111_ffc0@@QAEPAUMoppChainNode@@PAU2@PBHHH@Z  # MoppCompiler_s0111_ffc0::buildNode migrated from s0111ffc0 (verbatim, slice spelling)
 011202d0 MoppCompiler::compile  # MOPP compile entry: stores 6 pointers, builds two free lists (0x400 x 0xf8 and 0x400 x 0xbc), queries the container ifaces, allocates the entry array, one buildNode pass over the whole range (name coined)
 01120460 hkMoppCompilerSettingsBlock::costDirect  # returns *(float*)(leaf[0x24]+0x10); this unused (name coined)
 01120470 hkMoppCompilerSettingsBlock::costRange  # |i14-i34|*f1c, *(v-0.75)*6 boost when i00<i04, then v^4 * this[0x10] (name coined)

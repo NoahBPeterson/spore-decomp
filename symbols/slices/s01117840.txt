@@ -1,1 +1,2 @@
-01117840 hkGeomConvexHullBuilder::generateHullFromPlanarPoints  # havok_names.txt (identical-code match)
+01117840 ?generateHullFromPlanarPoints@hkGeomConvexHullBuilder_s0111_7840@@SAXABUhkVector4_s0111_7840@@PBU2@HAAV?$hkArray@UhkVector4_s0111_7840@@@@2@Z  # hkGeomConvexHullBuilder_s0111_7840::generateHullFromPlanarPoints migrated from s01117840 (verbatim, slice spelling)
+01118340 ?removeCollinearVertices@hkGeomConvexHullBuilder_s0111_7840@@SAXAAV?$hkArray@UhkVector4_s0111_7840@@@@M@Z  # hkGeomConvexHullBuilder_s0111_7840::removeCollinearVertices migrated from s01117840 (verbatim, slice spelling)

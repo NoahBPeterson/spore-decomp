@@ -1,2 +1,1 @@
-# va Name  # evidence
-011187d0 hkGeomConvexHullBuilder::markRedundantVertices  # name guessed (collinear/coplanar vertex flagging on a half-edge hull)
+011187d0 ?markRedundantVertices@@YAXAAUhkGeomHull@@HHABUhkGeomConvexHullTolerances@@AAVhkBool_s0111_87d0@@@Z  # markRedundantVertices migrated from s011187d0 (verbatim, slice spelling)

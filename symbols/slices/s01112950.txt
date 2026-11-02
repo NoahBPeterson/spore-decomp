@@ -1,0 +1,1 @@
+01112950 ?hkGsk_calcToi@@YAXABUhkAgent3ProcessInput@@MMMAAUhkGskCache@@AAVhkVector4_s0111_2950@@AAUhkProcessCollisionOutput@@@Z  # hkGsk_calcToi migrated from s01112950 (verbatim, slice spelling)

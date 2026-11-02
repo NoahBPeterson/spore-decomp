@@ -1,1 +1,1 @@
-01114370 ?cast@hkMoppAabbCastVirtualMachine@@QAEXPBUhkMoppXform@@PBEPAM@Z  # assert string names hkMoppAabbCastVirtualMachine.cpp, line 0x1c7
+01114370 ?cast@hkMoppAabbCastVirtualMachine@@QAEXPBUhkMoppXform@@PBEPAM@Z  # hkMoppAabbCastVirtualMachine::cast migrated from s01114370 (verbatim, slice spelling)
