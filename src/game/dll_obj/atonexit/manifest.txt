@@ -1,0 +1,2 @@
+# source  symbol  va  flags
+../src/game/dll_obj/atonexit.cpp  ?crt_unlock_8_helper@@YAXXZ  011e07e6  /O2 /MD /Gy /EHsc /TP /Isrc/game/include

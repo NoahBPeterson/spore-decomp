@@ -1,5 +1,5 @@
 011e0560 DSO_merge  # OpenSSL .\crypto\dso\dso_win32.c string
-011e07e6 crt_unlock_8_helper  # push 8; call; pop ecx
+011e07e6 ?crt_unlock_8_helper@@YAXXZ  # crt_unlock_8_helper migrated from s011e0560 (verbatim, slice spelling)
 011e0906 ?iat_floor@@YANN@Z  # iat_floor migrated from s011e0560 (verbatim, slice spelling)
 011e1368 crt_amsg_exit  # jmp [msvcr90!_amsg_exit]
 011e1545 crt_return_zero  # xor eax,eax; ret
