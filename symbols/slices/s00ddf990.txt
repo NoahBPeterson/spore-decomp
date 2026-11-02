@@ -1,9 +1,9 @@
-00ddf990 ??0cInterfaceState@@QAE@PAUcDispatchObject@@@Z  # cInterfaceState::cInterfaceState
-00ddfaa0 ??1cInterfaceState@@QAE@XZ  # cInterfaceState::~cInterfaceState
-00ddfaf0 ?ResetDefaults@cInterfaceState@@QAE_NXZ  # bool cInterfaceState::ResetDefaults
+00ddf990 ??0cInterfaceState@@QAE@PAUcDispatchObject@@@Z  # cInterfaceState::cInterfaceState migrated from s00ddf990 (verbatim, slice spelling)
+00ddfaa0 ??1cInterfaceState@@QAE@XZ  # cInterfaceState::~cInterfaceState migrated from s00ddf990 (verbatim, slice spelling)
+00ddfaf0 ?ResetDefaults@cInterfaceState@@QAE_NXZ  # cInterfaceState::ResetDefaults migrated from s00ddf990 (verbatim, slice spelling)
 00ddfb50 ?PushMatrix@cInterfaceState@@QAEXI@Z  # cInterfaceState::PushMatrix migrated from s00ddf990 (verbatim, slice spelling)
-00ddfbe0 ?UpdateTransition@cInterfaceState@@QAEXII@Z  # void cInterfaceState::UpdateTransition
-00ddfef0 ?UpdateFade@cInterfaceState@@QAEXM@Z  # void cInterfaceState::UpdateFade
+00ddfbe0 ?UpdateTransition@cInterfaceState@@QAEXII@Z  # cInterfaceState::UpdateTransition migrated from s00ddf990 (verbatim, slice spelling)
+00ddfef0 ?UpdateFade@cInterfaceState@@QAEXM@Z  # cInterfaceState::UpdateFade migrated from s00ddf990 (verbatim, slice spelling)
 00de00e0 ?UpdateSequence@cInterfaceState@@QAEXH@Z  # void cInterfaceState::UpdateSequence
 00de0450 ?UpdateAlpha@cInterfaceState@@QAEXH@Z  # void cInterfaceState::UpdateAlpha
 00de0670 ?BeginSequence@cInterfaceState@@QAEXEE@Z  # void cInterfaceState::BeginSequence

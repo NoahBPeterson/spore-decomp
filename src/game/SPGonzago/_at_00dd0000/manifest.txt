@@ -1,0 +1,33 @@
+# source  symbol  va  flags
+../src/game/SPGonzago/_at_00dd0000.cpp  ?GetCityBannerId@cMilitaryAttackCityOrder@@QAEIXZ  00dd0550  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_00dd0000.cpp  ?QueryInterface@cMilitaryAttackCityOrder@@QAEPAXI@Z  00dd0590  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_00dd0000.cpp  ?IsInSimulatorContext@cMilitaryAttackCityOrder@@QAE_NXZ  00dd05e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_00dd0000.cpp  ?IsActive@cMilitaryAttackCityOrder@@QAE_NXZ  00dd0600  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_00dd0000.cpp  ?QueryInterface2@cMilitaryAttackCityOrder@@QAEPAXI@Z  00dd0610  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_00dd0000.cpp  ?GetIconKey@cMilitaryAttackCityOrder@@QAEIXZ  00dd0650  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_00dd0000.cpp  ?GetMissionKey@cMilitaryAttackCityOrder@@QAEIXZ  00dd06a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_00dd0000.cpp  ?AssignFromScenario@AssetDiscovery_Data@@QAEXPAXI@Z  00dd0710  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_00dd0000.cpp  ?GetAvatarName@AssetDiscovery_Data@@QAEIXZ  00dd0940  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_00dd0000.cpp  ?GetCreatureName@AssetDiscovery_Data@@QAEIXZ  00dd0960  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_00dd0000.cpp  ?GetSceneKey@AssetDiscovery_Data@@QAEXPAI@Z  00dd0990  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_00dd0000.cpp  ?GetSceneKeyOut@AssetDiscovery_Data@@QAEPAIPAI@Z  00dd0a00  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_00dd0000.cpp  ?GetStatKeyOut@AssetDiscovery_Data@@QAEPAIPAI@Z  00dd0ac0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_00dd0000.cpp  ?GetField78@AssetDiscovery_Data@@QAE_KXZ  00dd0b30  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_00dd0000.cpp  ?ConstructBase@AssetDiscovery_Data@@QAEPAXXZ  00dd0b50  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_00dd0000.cpp  ?AssignCityName@AssetDiscovery_DataCStr@@QAEXPAUeastl_wstring@@@Z  00dd0c00  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_00dd0000.cpp  ?CreateAssetDiscoveryDataTag@@YAPAXXZ  00dd0c50  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_00dd0000.cpp  ?ConstructString@AssetDiscovery_DataCStr@@QAEPAXXZ  00dd0ca0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_00dd0000.cpp  ?Delete@AssetDiscovery_DataCStr@@QAEPAXE@Z  00dd0cf0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_00dd0000.cpp  ?CreateAssetDiscoveryData@@YAPAXXZ  00dd0d50  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_00dd0000.cpp  ?ConstructPlain@AssetDiscovery_Data@@QAEPAXXZ  00dd0da0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_00dd0000.cpp  ?CollectTerrainKeys@AssetDiscovery_Data@@QAE_NPAUeastl_u32vec@@@Z  00dd1070  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_00dd0000.cpp  ?SetKeyAgain@SomeObj@@QAEXI@Z  00dd1240  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_00dd0000.cpp  ?FUN_00dd9750@Swarm@@QAEXPAUBoid@@@Z  00dd9750  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00dd0000.cpp  ?FUN_00dd97a0@Swarm@@QAE_NPAUBoid@@H@Z  00dd97a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00dd0000.cpp  ?FUN_00dda060@Swarm@@QAEHH@Z  00dda060  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00dd0000.cpp  ?FUN_00dda090@Swarm@@QAEXHD@Z  00dda090  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00dd0000.cpp  ?FUN_00dda0d0@Swarm@@QAEXH@Z  00dda0d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00dd0000.cpp  ?FUN_00dda160@Swarm@@QAEMPBUVec3@@H@Z  00dda160  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00dd0000.cpp  ?FUN_00dda380@Swarm@@QAEHXZ  00dda380  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00dd0000.cpp  ?FUN_00dda920@ObjA@@QAEPAV1@XZ  00dda920  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00dd0000.cpp  ?FUN_00dda9a0@ObjA@@QAEXXZ  00dda9a0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
