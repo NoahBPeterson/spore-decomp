@@ -1,12 +1,12 @@
-00a50150 ?gatom_key@Eapd@Audio@EA@@YAXHM@Z  # Eapd gatom_key
-00a502d0 ?gatom_click@Eapd@Audio@EA@@YAXHMMMHM@Z  # Eapd gatom_click
-00a503a0 ?gatom_param@Eapd@Audio@EA@@YAXHPAX0HPAUt_atom@123@@Z  # Eapd gatom_param
-00a50600 ?FUN_00a50600@Eapd@Audio@EA@@YAXHHPAX0HPAUt_atom@123@@Z  # Eapd canvas_atom (no PDB name; Ghidra candidate)
-00a509c0 ?canvas_symbolatom@Eapd@Audio@EA@@YAXPAX0000@Z  # Eapd canvas_symbolatom
-00a509f0 ?gatom_free@Eapd@Audio@EA@@YAXH@Z  # Eapd gatom_free
-00a50a40 ?gatom_properties@Eapd@Audio@EA@@YAXH@Z  # Eapd gatom_properties
-00a50ae0 ?FUN_00a50ae0@Eapd@Audio@EA@@YAXHPAUt_glist@123@PAH111@Z  # Eapd text_getrect (no PDB name; Ghidra candidate)
-00a50c20 ?text_activate@Eapd@Audio@EA@@YAXPAHPAUt_glist@123@H@Z  # Eapd text_activate
-00a50c70 ?text_shouldvis@Eapd@Audio@EA@@YAHPAHPAUt_glist@123@@Z  # Eapd text_shouldvis
-00a50cc0 ?text_click@Eapd@Audio@EA@@YAHHPAXHHHH0H@Z  # Eapd text_click
-00a50e00 ?text_save@Eapd@Audio@EA@@YAXPAHPAX@Z  # Eapd text_save
+00a50150 ?gatom_key@Eapd@Audio@EA@@YAXHM@Z  # gatom_key migrated from s00a50150 (verbatim, slice spelling)
+00a502d0 ?gatom_click@Eapd@Audio@EA@@YAXHMMMHM@Z  # gatom_click migrated from s00a50150 (verbatim, slice spelling)
+00a503a0 ?gatom_param@Eapd@Audio@EA@@YAXHPAX0HPAUt_atom_s00a5_0150@123@@Z  # gatom_param migrated from s00a50150 (verbatim, slice spelling)
+00a50600 ?FUN_00a50600@Eapd@Audio@EA@@YAXHHPAX0HPAUt_atom_s00a5_0150@123@@Z  # FUN_00a50600 migrated from s00a50150 (verbatim, slice spelling)
+00a509c0 ?canvas_symbolatom@Eapd@Audio@EA@@YAXPAX0000@Z  # canvas_symbolatom migrated from s00a50150 (verbatim, slice spelling)
+00a509f0 ?gatom_free@Eapd@Audio@EA@@YAXH@Z  # gatom_free migrated from s00a50150 (verbatim, slice spelling)
+00a50a40 ?gatom_properties@Eapd@Audio@EA@@YAXH@Z  # gatom_properties migrated from s00a50150 (verbatim, slice spelling)
+00a50ae0 ?text_getrect@Eapd@Audio@EA@@YAXHPAUt_glist_s00a5_0150@123@PAH111@Z  # text_getrect migrated from s00a50150 (verbatim, slice spelling)
+00a50c20 ?text_activate@Eapd@Audio@EA@@YAXPAHPAUt_glist_s00a5_0150@123@H@Z  # text_activate migrated from s00a50150 (verbatim, slice spelling)
+00a50c70 ?text_shouldvis@Eapd@Audio@EA@@YAHPAUt_text@123@PAUt_glist@123@@Z  # text_shouldvis migrated from s00a50150 (verbatim, slice spelling)
+00a50cc0 ?text_click@Eapd@Audio@EA@@YAHHPAXHHHH0H@Z  # text_click migrated from s00a50150 (verbatim, slice spelling)
+00a50e00 ?text_save@Eapd@Audio@EA@@YAXPAHPAX@Z  # text_save migrated from s00a50150 (verbatim, slice spelling)

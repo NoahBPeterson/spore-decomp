@@ -1,5 +1,22 @@
 # source  symbol  va  flags
+../src/game/SPAudio/eapdtext.cpp  ?canvas_objfor@@YAXPAUGlist@@PAUText@@HPAUt_atom_s00a4_f1e0@@@Z  00a4f590  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdtext.cpp  ?messresponder_symbol@@YAXPAUText@@Ut_symbol@@@Z  00a4f670  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdtext.cpp  ?message_bang@@YAXPAUText@@@Z  00a4f6f0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdtext.cpp  ?message_float@@YAXPAUText@@M@Z  00a4f710  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdtext.cpp  ?message_symbol@@YAXPAUText@@Ut_symbol@@@Z  00a4f750  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdtext.cpp  ?message_list@@YAXPAUText@@Ut_symbol@@HPAUt_atom_s00a4_f1e0@@@Z  00a4f790  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdtext.cpp  ?message_add2@@YAXPAUText@@Ut_symbol@@HPAUt_atom_s00a4_f1e0@@@Z  00a4f810  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdtext.cpp  ?message_addcomma@@YAXPAUText@@@Z  00a4f880  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdtext.cpp  ?message_adddollar@@YAXPAUText@@M@Z  00a4f8b0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdtext.cpp  ?message_adddollsym@@YAXPAUText@@Ut_symbol@@@Z  00a4f900  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdtext.cpp  ?message_click@@YAXPAUText@@@Z  00a4f950  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdtext.cpp  ?message_tick@@YAXPAUText@@@Z  00a4f9e0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdtext.cpp  ?clock_free_msg@@YAXPAUText@@@Z  00a4fa30  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdtext.cpp  ?gatom_set@@YAXPAUGatom@@Ut_symbol@@HPAUt_atom_s00a4_f1e0@@@Z  00a4fd50  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPAudio/eapdtext.cpp  ?gatom_bang@Eapd@Audio@EA@@YAXPAUt_gatom@123@@Z  00a4fdb0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdtext.cpp  ?gatom_click@Eapd@Audio@EA@@YAXHMMMHM@Z  00a502d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdtext.cpp  ?canvas_symbolatom@Eapd@Audio@EA@@YAXPAX0000@Z  00a509c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdtext.cpp  ?text_activate@Eapd@Audio@EA@@YAXPAHPAUt_glist_s00a5_0150@123@H@Z  00a50c20  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPAudio/eapdtext.cpp  ?glist_drawiofor@Eapd@Audio@EA@@YAXPAUt_glist@123@PAUt_text@123@HPBDHHHH@Z  00a510e0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPAudio/eapdtext.cpp  ?glist_eraseiofor@Eapd@Audio@EA@@YAXPAUt_glist@123@PAUt_text@123@PBD@Z  00a51450  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPAudio/eapdtext.cpp  ?text_eraseborder@Eapd@Audio@EA@@YAXPAUt_text@123@PAUt_glist@123@PBD@Z  00a514d0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
