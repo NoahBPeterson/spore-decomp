@@ -1,9 +1,20 @@
+00692f90 ??0cVarListSerializer@SP@@QAE@PBXPAUcDataSerializerGeneric@1@I@Z  # SP::cVarListSerializer::cVarListSerializer (callee of s00c8aa60, named from the dev publics; slice address comment)
+00c8add0 eastl::vector<SP::cSpatialObjectView::tEffectInfo,eastl::sp_vector_allocator>::push_back  # Ghidra real name
 00c8ae20 SP::cSpatialObjectView::CreateEffectInternal  # Ghidra real name
 00c8b040 SP::cSpatialObjectView::CreateEffect  # overload, 4 args
 00c8b060 SP::cSpatialObjectView::CreateEffect  # overload, 3 args + flag 1
 00c8b080 SP::cSpatialObjectView::CreateEffect  # overload, 1 arg
 00c8b0a0 SP::cSpatialObjectView::DestroyAllEffects  # Ghidra real name
 00c8b3e0 Simulator::ISimulatorSerializable::Read  # Ghidra real name
-00c8b640 Simulator::cStar::cStar  # Ghidra real name + vtbl 0x1473990
-00c8b790 Simulator::cGameData::RemoveOwner  # Ghidra real name
-00c8add0 eastl::vector<SP::cSpatialObjectView::tEffectInfo,eastl::sp_vector_allocator>::push_back  # Ghidra real name
+00c8b450 ?c8b450@@YA_NH@Z  # c8b450 migrated from s00c8aa60 (verbatim, slice spelling)
+00c8b520 ?c8b520@@YA_NH@Z  # c8b520 migrated from s00c8aa60 (verbatim, slice spelling)
+00c8b640 ??0cStar_s00c8_aa60@@QAE@XZ  # cStar_s00c8_aa60::cStar migrated from s00c8aa60 (verbatim, slice spelling)
+00c8b6d0 ?sub_b6d0@Obj48@@QAEXPAX@Z  # Obj48::sub_b6d0 migrated from s00c8aa60 (verbatim, slice spelling)
+00c8b700 ?sub_b700@Owner40@@QAEXXZ  # Owner40::sub_b700 migrated from s00c8aa60 (verbatim, slice spelling)
+00c8b790 ?RemoveOwner@cGameData_s00c8_aa60@@QAEXXZ  # cGameData_s00c8_aa60::RemoveOwner migrated from s00c8aa60 (verbatim, slice spelling)
+00c8b7d0 ?sub_b7d0@Obj48@@QAEXXZ  # Obj48::sub_b7d0 migrated from s00c8aa60 (verbatim, slice spelling)
+00c8b7e0 ?sub_b7e0@Obj48@@QAE_NXZ  # Obj48::sub_b7e0 migrated from s00c8aa60 (verbatim, slice spelling)
+00c8b800 ?sub_b800@Obj48@@QAE_NXZ  # Obj48::sub_b800 migrated from s00c8aa60 (verbatim, slice spelling)
+00c8b820 ?c8b820@@YAXPAXH@Z  # c8b820 migrated from s00c8aa60 (verbatim, slice spelling)
+00c8b920 ?c8b920@@YA_NPAXH@Z  # c8b920 migrated from s00c8aa60 (verbatim, slice spelling)
+00c8ba00 ?c8ba00@@YA_NPAX@Z  # c8ba00 migrated from s00c8aa60 (verbatim, slice spelling)

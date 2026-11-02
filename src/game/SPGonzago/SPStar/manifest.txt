@@ -1,4 +1,9 @@
 # source  symbol  va  flags
+../src/game/SPGonzago/SPStar.cpp  ?RemoveOwner@cGameData_s00c8_aa60@@QAEXXZ  00c8b790  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPStar.cpp  ?sub_b7d0@Obj48@@QAEXXZ  00c8b7d0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPStar.cpp  ?c8b820@@YAXPAXH@Z  00c8b820  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPStar.cpp  ?c8b920@@YA_NPAXH@Z  00c8b920  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPStar.cpp  ?c8ba00@@YA_NPAX@Z  00c8ba00  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
 ../src/game/SPGonzago/SPStar.cpp  ?FUN_00c8bb00@@YA_NPAUcSim@@@Z  00c8bb00  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPStar.cpp  ?Destroy@cStar@@QAEXXZ  00c8be70  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPStar.cpp  ?FUN_00c8bee0@@YAMPAUFloatMap@@HPAH@Z  00c8bee0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include

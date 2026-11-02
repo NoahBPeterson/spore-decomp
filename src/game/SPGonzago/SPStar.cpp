@@ -1,4 +1,4 @@
-// src/game/SPGonzago/SPStar.cpp -- migrated from slice(s) s00c8bb00 by tools/migrate/rewrite.py
+// src/game/SPGonzago/SPStar.cpp -- migrated from slice(s) s01353d90, s00c8aa60, s00c8bb00 by tools/migrate/rewrite.py
 // Object file: SPGonzago/SPStar.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -15,6 +15,10 @@ extern void* vtStarMain[];       // 0x01473990
 extern void* vtStarAux[];        // 0x0147397c
 #include <string.h>
 #include <math.h>
+#include "EA/Text/Font.h"
+#include "SP/cVarListSerializer.h"
+#include "SP/cSolarSystem.h"
+#include <stddef.h>
 
 // ---- items of slice s00c8bb00 begin (TODO(rewrite): local stubs, replace by canonical classes)
 typedef unsigned int   u32;
@@ -228,6 +232,367 @@ float* FloatMap::Insert(const u32& key)
 // unnamed retail callees and globals that name local stubs (address in the comment)
 extern RandomLCG gMathRandom;                    // 0x01601760
 
+// ---- items of slice s00c8aa60 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C" void* __cdecl operator_new(int size, const char* name, int a, int b, int c, int d); // 0x00f473a0
+extern "C" int __cdecl FUN_00801920(void* a, void* b);
+extern "C" void* __cdecl cSolarSystem_ctor(void* p);
+extern "C" void  __cdecl sub_c86760(void* p);
+extern float g_13ec4d0;   // 0x013ec4d0 = 100.0f
+#pragma optimize("", off)
+struct Sub48 {
+    void sub_bb9af0(int v);   // 0x00bb9af0
+    void sub_bb9b90(int v);   // 0x00bb9b90
+    void sub_bb9ad0(int v);   // 0x00bb9ad0
+    void sub_a16a90(void* p); // 0x00a16a90
+    int  sub_801920();        // 0x00801920
+};
+struct Font {
+    void SetUserData(void* p); // 0x00fd9450
+};
+struct Obj48 {
+    char pad_00[0x34];
+    int  mField34;           // +0x34
+    int  mField38;           // +0x38
+    char pad_3c[4];
+    Font* mpFont;            // +0x40
+    char pad_44[4];
+    Sub48* mp48;             // +0x48
+    int   mField4c;          // +0x4c
+
+    void sub_b560();               // 0x00c8b560
+    void sub_b570(int param);      // 0x00c8b570
+    void sub_b5c0(void* p);        // 0x00c8b5c0
+    void sub_b7d0();               // 0x00c8b7d0
+    bool sub_b7e0();               // 0x00c8b7e0
+    bool sub_b800();               // 0x00c8b800
+    void sub_b6d0(void* param);    // 0x00c8b6d0
+};
+struct cGameDataStub { void ctor(); };
+struct cStar_s00c8_aa60 {
+    void** vftable;              // +0x00
+    void** vftable2;             // +0x04
+    char pad_08[0x34 - 0x08];
+    int  mField34;               // +0x34
+    int  mField38;               // +0x38
+    u8   mFlag3c;                // +0x3c
+    char pad_3d[3];
+    void* mpSolarSystem;         // +0x40
+    u8   mFlag44;                // +0x44
+    char pad_45[3];
+    void* mpStarRecord;          // +0x48
+    int  mKey;                   // +0x4c
+    cStar_s00c8_aa60();
+    bool Read(int param);        // 0x00c8b3e0
+};
+struct cSolarSystem { char pad[0x54]; };
+struct Owner40 {
+    char pad_00[0x40];
+    cSolarSystem* mpSolar;       // +0x40
+    void sub_b700();
+};
+struct OwnerObj { void sub_c86e50(); };
+struct cGameData_s00c8_aa60 {
+    char pad_00[0x2c];
+    void* mpOwner2c;             // +0x2c
+    char pad_30[0x10];
+    OwnerObj* mpOwner40;         // +0x40
+    void RemoveOwner();  // 0x00cbb790 (cGameData::RemoveOwner)
+};
+struct Vec2 { void** pBegin; void** pEnd; };
+struct ItemObj {
+    u8    pad_00[0x38];
+    int   mId;        // +0x38
+    float mValue;     // +0x3c
+    int   GetId();            // 0x00a1ad10
+    void  SetId(int id);      // 0x00ff03b0
+    void  SetValue(float v);  // 0x00ff03c0
+    float GetValue();         // 0x00b7e0a0
+};
+struct Obj2 {
+    u8        pad_00[0x3c];
+    ItemObj** pItems;         // +0x3c
+    ItemObj** pItemsEnd;      // +0x40
+};
+struct Node2 {
+    u8      pad_00[0x28];
+    int     mKind;            // +0x28
+    u8      pad_2c[0x130];
+    Obj2**  pObjs;            // +0x15c
+    Obj2**  pObjsEnd;         // +0x160
+    u8      pad_164[0x30];
+    int     mType;            // +0x194
+    int     GetType();        // 0x00b8dab0
+    char    IsFlagged();      // 0x00b8d970
+    Obj2*   GetObj(int i);    // 0x00b8dec0
+};
+struct View2 {
+    Vec2* GetList();          // 0x00bba790
+};
+// ---- items of slice s00c8aa60 end
+
+// callees this slice defines outside this object (rewrite.py held_callee_protos)
+void __cdecl c8b470(int k, int* b, int* c);  // 0x00c8b470 (stays in the slice: not this object's)
+
+// ---- items of slice s01353d90 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern void DefaultOffset();            // 0x00692ca0  Simulator::Attribute::DefaultOffset
+extern void Read4Int();                 // 0x00572810  Simulator::Read4<int>
+extern void Write4();                   // 0x00572840  Simulator::Write4
+extern void ParseLong();                // 0x00692ff0
+extern void WriteTextLong();            // 0x00694ee0
+extern void AlwaysValid();              // 0x00b1fbf0
+extern void ToXmlInt();                 // 0x0057cde0
+extern void ReadULong();                // 0x00ac8750
+extern void WriteULong();               // 0x00ac8780
+extern void ParseULong();               // 0x00693090
+extern void WriteTextULong();           // 0x00694fa0
+extern void ToXmlULong();               // 0x0057ce00
+extern void WriteTextKey();             // 0x00694f00
+extern void ToXmlKey();                 // 0x00675ca0
+extern void ReadSolarSystem();          // 0x00c8bfa0
+extern void WriteSolarSystem();         // 0x01006600
+extern void ReadTextSolarSystem();      // 0x00c2e4e0
+extern void WriteTextSolarSystem();     // 0x00692fb0
+extern void ValidSolarSystem();         // 0x00fd9e80
+extern void ToXmlSolarSystem();         // 0x00ac8050
+typedef void (*AttrFn)();
+struct cAttributeDesc {
+    const char* mpName;                 // +0x00
+    const char* mpKey;                  // +0x04
+    int mOffset;                        // +0x08
+    int mUnk0c;                         // +0x0c  (left indeterminate by the constructor)
+    int mUnk10;                         // +0x10
+    int mUnk14;                         // +0x14
+    int mUnk18;                         // +0x18
+    int mUnk1c;                         // +0x1c
+    AttrFn mpDefaultOffset;             // +0x20  Simulator::Attribute::DefaultOffset
+    AttrFn mpRead;                      // +0x24
+    AttrFn mpWrite;                     // +0x28
+    AttrFn mpParse;                     // +0x2c
+    AttrFn mpTextWrite;                 // +0x30
+    AttrFn mpValid;                     // +0x34
+    AttrFn mpToXml;                     // +0x38
+};
+cAttributeDesc gAttributeTable[6];      // 0x0157a828
+typedef bool (*ReadFn)(void*, void*);
+typedef bool (*WriteFn)(void*, void*);
+typedef void (*ReadTextFn)(const void*, void*);
+typedef void (*WriteTextFn)(char*, void*);
+typedef bool (*UnkFn)();
+typedef bool (*Unk2Fn)(void*, const char*, int);
+struct Attribute;
+typedef void* (*OffsetFn)(Attribute*);
+void* DefaultOffset(Attribute*);                       // 0x692ca0
+struct Attribute {
+  const char* name;
+  uint32_t id;
+  unsigned offset;
+  int field_0C, field_10, field_14;
+  void* pCurrentObject;
+  int field_1C;
+  OffsetFn offsetFunction;
+  ReadFn readFunction;
+  WriteFn writeFunction;
+  ReadTextFn readTextFunction;
+  WriteTextFn writeTextFunction;
+  UnkFn field_34;
+  Unk2Fn field_38;
+
+  Attribute() {}
+  __forceinline Attribute(const char* n, uint32_t i, unsigned o, ReadFn r, WriteFn w, ReadTextFn rt,
+                          WriteTextFn wt, UnkFn u, Unk2Fn u2) {
+    name = n;
+    id = i;
+    pCurrentObject = 0;
+    field_1C = 0;
+    offsetFunction = DefaultOffset;
+    readFunction = r;
+    writeFunction = w;
+    readTextFunction = rt;
+    writeTextFunction = wt;
+    field_34 = u;
+    field_38 = u2;
+    offset = o;
+  }
+};
+// ---- items of slice s01353d90 end
+
+// @ 0x00c8b450
+bool __cdecl c8b450(int k)
+{
+    if (k == 0) return false;
+    if (k <= 6) return false;
+    if (k > 0xc) return false;
+    return true;
+}
+
+// @ 0x00c8b520
+bool __cdecl c8b520(int k)
+{
+    if (k == 0) return false;
+    if (k <= 0) return true;
+    if (k <= 3) return false;
+    return true;
+}
+
+// @ 0x00c8b640
+cStar_s00c8_aa60::cStar_s00c8_aa60()
+{
+    ((cGameDataStub*)this)->ctor();
+    mField34 = 0;
+    mField38 = 0;
+    mFlag3c = 0;
+    vftable = (void**)0x1473990;
+    vftable2 = (void**)0x147397c;
+    mpSolarSystem = 0;
+    mpStarRecord = 0;
+    mFlag44 = 1;
+    mKey = -1;
+}
+
+// @ 0x00c8b6d0
+#pragma optimize("", off)
+void Obj48::sub_b6d0(void* param)
+{
+    mp48 = (Sub48*)param;
+    mField4c = *(int*)((char*)param + 0x70);
+    int* a = &mField34;
+    int* b = &mField38;
+    int v = ((int (__fastcall*)(void*))FUN_00801920)(param);
+    c8b470(v, a, b);
+}
+#pragma optimize("", on)
+
+// @ 0x00c8b700
+void Owner40::sub_b700()
+{
+    if (mpSolar) return;
+    void* p = operator_new(0x54, "Simulator/cSolarSystem", 0, 0, 0, 0);
+    cSolarSystem* n = p ? (cSolarSystem*)cSolarSystem_ctor(p) : 0;
+    cSolarSystem* old = mpSolar;
+    if (n != old) {
+        if (n) ((void(__thiscall*)(void*))(*(void***)n)[4 / 4])(n);
+        mpSolar = n;
+        if (old) ((void(__thiscall*)(void*))(*(void***)old)[8 / 4])(old);
+    }
+    sub_c86760(this);
+}
+
+// @ 0x00c8b790
+void cGameData_s00c8_aa60::RemoveOwner()
+{
+    if (mpOwner40) {
+        mpOwner40->sub_c86e50();
+        OwnerObj* b = mpOwner40;
+        if (b) {
+            mpOwner40 = 0;
+            ((void(__thiscall*)(void*))(*(void***)b)[8 / 4])(b);
+        }
+    }
+    void* c = mpOwner2c;
+    if (c) {
+        mpOwner2c = 0;
+        ((void(__thiscall*)(void*))(*(void***)c)[4 / 4])(c);
+    }
+}
+
+// @ 0x00c8b7d0
+void Obj48::sub_b7d0()
+{
+    if (mpFont) mpFont->SetUserData(this);
+}
+
+// @ 0x00c8b7e0
+bool Obj48::sub_b7e0()
+{
+    int k = mp48->sub_801920();
+    if (k != 0) { unsigned int v = (unsigned int)(k - 7); return v <= 5u; }
+    return false;
+}
+
+// @ 0x00c8b800
+bool Obj48::sub_b800()
+{
+    int k = mp48->sub_801920();
+    if (k != 0) { unsigned int v = (unsigned int)(k - 1); return v > 2u; }
+    return false;
+}
+
+// @ 0x00c8b820
+void __cdecl c8b820(void* view, int id)
+{
+    Vec2* list = ((View2*)view)->GetList();
+    int n = (int)(list->pEnd - list->pBegin);
+    for (int i = 0; i < n; ++i) {
+        Node2* node = (Node2*)list->pBegin[i];
+        int kind = node->mKind;
+        if (kind == 1 || kind == 0) continue;
+        if (node->IsFlagged()) continue;
+        int j = 0;
+        int n2 = (int)(node->pObjsEnd - node->pObjs);
+        for (; j < n2; ++j) {
+            Obj2* obj = node->GetObj(j);
+            int n3 = (int)(obj->pItemsEnd - obj->pItems);
+            for (int k = 0; k < n3; ++k) {
+                ItemObj* item = obj->pItems[k];
+                if (item->GetId() == id) {
+                    item->SetId(-1);
+                    item->SetValue(0.0f);
+                }
+            }
+        }
+    }
+}
+
+// @ 0x00c8b920
+bool __cdecl c8b920(void* view, int id)
+{
+    Node2* node = (Node2*)view;
+    if (node->GetType() == 5) {
+        int kind = node->mKind;
+        if (kind != 1 && kind != 0 && !node->IsFlagged()) {
+            int j = 0;
+            int n2 = (int)(node->pObjsEnd - node->pObjs);
+            for (; j < n2; ++j) {
+                Obj2* obj = node->GetObj(j);
+                int n3 = (int)(obj->pItemsEnd - obj->pItems);
+                for (int k = 0; k < n3; ++k) {
+                    ItemObj* item = obj->pItems[k];
+                    if (item->GetId() != id) return false;
+                    if (item->GetValue() < g_13ec4d0) return false;
+                }
+            }
+            if (node->pObjs != node->pObjsEnd) return true;
+        }
+    }
+    return false;
+}
+
+// @ 0x00c8ba00
+bool __cdecl c8ba00(void* view)
+{
+    Node2* node = (Node2*)view;
+    if (node->GetType() == 5) {
+        int kind = node->mKind;
+        if (kind != 1 && kind != 0 && !node->IsFlagged()) {
+            int first = -1;
+            int j = 0;
+            int n2 = (int)(node->pObjsEnd - node->pObjs);
+            for (; j < n2; ++j) {
+                Obj2* obj = node->GetObj(j);
+                int n3 = (int)(obj->pItemsEnd - obj->pItems);
+                for (int k = 0; k < n3; ++k) {
+                    ItemObj* item = obj->pItems[k];
+                    if (item->GetValue() != g_13ec4d0) return false;
+                    if (first == -1) first = item->GetId();
+                    if (first != item->GetId()) return false;
+                }
+            }
+            if (node->pObjs != node->pObjsEnd) return true;
+        }
+    }
+    return false;
+}
+
 // @ 0x00c8bb00
 bool FUN_00c8bb00(cSim* sim)
 {
@@ -428,4 +793,94 @@ void SP_GenerateNewStarName(cStar* star)
     return;
   }
   }
+}
+
+// @ 0x013547b0
+void InitAttributeTable()
+{
+    cAttributeDesc d;
+
+    d.mpName = (const char*)0x01473a38;
+    d.mpKey = (const char*)0x041f80ad;
+    d.mUnk18 = 0;
+    d.mUnk1c = 0;
+    d.mpDefaultOffset = &DefaultOffset;
+    d.mpRead = &Read4Int;
+    d.mpWrite = &Write4;
+    d.mpParse = &ParseLong;
+    d.mpTextWrite = &WriteTextLong;
+    d.mpValid = &AlwaysValid;
+    d.mpToXml = &ToXmlInt;
+    d.mOffset = 0x34;
+    gAttributeTable[0] = d;
+
+    d.mpName = (const char*)0x01473a28;
+    d.mpKey = (const char*)0x041f80b0;
+    d.mUnk18 = 0;
+    d.mUnk1c = 0;
+    d.mpDefaultOffset = &DefaultOffset;
+    d.mpRead = &Read4Int;
+    d.mpWrite = &Write4;
+    d.mpParse = &ParseLong;
+    d.mpTextWrite = &WriteTextLong;
+    d.mpValid = &AlwaysValid;
+    d.mpToXml = &ToXmlInt;
+    d.mOffset = 0x38;
+    gAttributeTable[1] = d;
+
+    d.mpName = (const char*)0x01473a14;
+    d.mpKey = (const char*)0x03755020;
+    d.mUnk18 = 0;
+    d.mUnk1c = 0;
+    d.mpDefaultOffset = &DefaultOffset;
+    d.mpRead = &ReadULong;
+    d.mpWrite = &WriteULong;
+    d.mpParse = &ParseULong;
+    d.mpTextWrite = &WriteTextULong;
+    d.mpValid = &AlwaysValid;
+    d.mpToXml = &ToXmlULong;
+    d.mOffset = 0x3c;
+    gAttributeTable[2] = d;
+
+    d.mpName = (const char*)0x01465750;
+    d.mpKey = (const char*)0x0355fa98;
+    d.mUnk18 = 0;
+    d.mUnk1c = 0;
+    d.mpDefaultOffset = &DefaultOffset;
+    d.mpRead = &Read4Int;
+    d.mpWrite = &Write4;
+    d.mpParse = &ParseULong;
+    d.mpTextWrite = &WriteTextKey;
+    d.mpValid = &AlwaysValid;
+    d.mpToXml = &ToXmlKey;
+    d.mOffset = 0x4c;
+    gAttributeTable[3] = d;
+
+    d.mpName = (const char*)0x01473a04;
+    d.mpKey = (const char*)0x039d4a3f;
+    d.mUnk18 = 0;
+    d.mUnk1c = 0;
+    d.mpDefaultOffset = &DefaultOffset;
+    d.mpRead = &ReadSolarSystem;
+    d.mpWrite = &WriteSolarSystem;
+    d.mpParse = &ReadTextSolarSystem;
+    d.mpTextWrite = &WriteTextSolarSystem;
+    d.mpValid = &ValidSolarSystem;
+    d.mpToXml = &ToXmlSolarSystem;
+    d.mOffset = 0x40;
+    gAttributeTable[4] = d;
+
+    d.mpName = (const char*)0x014739f0;
+    d.mpKey = (const char*)0x056cfe97;
+    d.mUnk18 = 0;
+    d.mUnk1c = 0;
+    d.mpDefaultOffset = &DefaultOffset;
+    d.mpRead = &ReadULong;
+    d.mpWrite = &WriteULong;
+    d.mpParse = &ParseULong;
+    d.mpTextWrite = &WriteTextULong;
+    d.mpValid = &AlwaysValid;
+    d.mpToXml = &ToXmlULong;
+    d.mOffset = 0x44;
+    gAttributeTable[5] = d;
 }
