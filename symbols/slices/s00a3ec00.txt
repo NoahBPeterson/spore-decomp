@@ -6,18 +6,18 @@
 00a3f000 SendGame_Register  # SP::Audio::SendGame::Register: gensym "sendgame", class_new(spSendGameClass), class_addanything
 00a3f050 ?FindByName@TrackList@@QAEPAUTrack@@PAX@Z  # TrackList::FindByName migrated from s00a3ec00 (verbatim, slice spelling)
 00a3f090 ?trixie_read@@YAXHHHHPAH@Z  # trixie_read migrated from s00a3ec00 (verbatim, slice spelling)
-00a3f300 FUN_00a3f300  # eastl uninitialized forward range copy of 0x20-stride elements (3 dwords + vector<_atom> copy ctor)
-00a3f3a0 TrackEntry::~TrackEntry  # 0x24 element: string + vector<tItem> dtor, frame-less (throw())
-00a3f3f0 FUN_00a3f3f0  # destroy range of 0x24 TrackEntry elements (string + vector<tItem>), returns advanced accumulator
-00a3f480 FUN_00a3f480  # eastl backward range assign of 0x20 elements (vector<_atom>::operator=)
-00a3f4d0 FUN_00a3f4d0  # eastl forward range assign of 0x20 elements (vector<_atom>::operator=)
-00a3f520 VecTE::DestroyRange  # destroys 0x24 TrackEntry elements in [first,last); stdcall ret 8
-00a3f5d0 TrackEntry::TrackEntry  # 0x24 copy ctor: TeString + vector<tItem> copy ctor
-00a3f770 Track::~Track  # 0x38 dtor: mRythms@+0x24, mShufflers@+0x10, mName@+0; frame-less
-00a3f880 VecTItem::DoInsertAtom  # eastl vector<tItem> grow/insert at position
-00a3fa50 VecTE::VecTE  # vector<TrackEntry> copy ctor over uninit-copy-EH helper 0xa3f660 (this in ecx)
-00a3fb00 VecTItem::PushBackDefault  # appends a default-constructed tItem (zeroed vector<_atom>) or grows
-00a3fb90 Track::Track  # 0x38 copy ctor: TeString + vector<TrackEntry> @+0x10/@+0x24
-00a3fcd0 FUN_00a3fcd0  # eastl backward range assign of 0x24 TrackEntry elements (string self-assign guarded + vector<tItem>)
-00a3fd20 FUN_00a3fd20  # eastl forward range assign of 0x24 TrackEntry elements (string self-assign guarded + vector<tItem>)
-00a3fd70 Pixie::~Pixie  # 0x34 dtor: destroy vector<Track> mSlots@+0x20 then TeString mResourceName@+0x10; frame-less
+00a3f300 ?FUN_00a3f300@@YAPAUtItem@@PAU1@00@Z  # FUN_00a3f300 migrated from s00a3ec00 (verbatim, slice spelling)
+00a3f3a0 ??1TrackEntry@@QAE@XZ  # TrackEntry::~TrackEntry migrated from s00a3ec00 (verbatim, slice spelling)
+00a3f3f0 ?FUN_00a3f3f0@@YAHPAI0H@Z  # FUN_00a3f3f0 migrated from s00a3ec00 (verbatim, slice spelling)
+00a3f480 ?FUN_00a3f480@@YAPAIPAI00@Z  # FUN_00a3f480 migrated from s00a3ec00 (verbatim, slice spelling)
+00a3f4d0 ?FUN_00a3f4d0@@YAPAIPAI00@Z  # FUN_00a3f4d0 migrated from s00a3ec00 (verbatim, slice spelling)
+00a3f520 ?DestroyRange@VecTE@@QAEXPAUTrackEntry@@0@Z  # VecTE::DestroyRange migrated from s00a3ec00 (verbatim, slice spelling)
+00a3f5d0 ??0TrackEntry@@QAE@ABU0@@Z  # TrackEntry::TrackEntry migrated from s00a3ec00 (verbatim, slice spelling)
+00a3f770 ??1Track@@QAE@XZ  # Track::~Track migrated from s00a3ec00 (verbatim, slice spelling)
+00a3f880 ?DoInsertAtom@VecTItem@@QAEXPAUtItem@@PBU2@@Z  # VecTItem::DoInsertAtom migrated from s00a3ec00 (verbatim, slice spelling)
+00a3fa50 ??0VecTE@@QAE@ABU0@@Z  # VecTE::VecTE migrated from s00a3ec00 (verbatim, slice spelling)
+00a3fb00 ?PushBackDefault@VecTItem@@QAEXXZ  # VecTItem::PushBackDefault migrated from s00a3ec00 (verbatim, slice spelling)
+00a3fb90 ??0Track@@QAE@ABU0@@Z  # Track::Track migrated from s00a3ec00 (verbatim, slice spelling)
+00a3fcd0 ?FUN_00a3fcd0@@YAPAIPAI00@Z  # FUN_00a3fcd0 migrated from s00a3ec00 (verbatim, slice spelling)
+00a3fd20 ?FUN_00a3fd20@@YAPAIPAI00@Z  # FUN_00a3fd20 migrated from s00a3ec00 (verbatim, slice spelling)
+00a3fd70 ??1Pixie@@QAE@XZ  # Pixie::~Pixie migrated from s00a3ec00 (verbatim, slice spelling)

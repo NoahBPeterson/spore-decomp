@@ -1,1 +1,12 @@
 # source  symbol  va  flags
+../src/game/SPAudio/SPAudioObjectTrixie.cpp  ?FUN_00a3f300@@YAPAUtItem@@PAU1@00@Z  00a3f300  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPAudio/SPAudioObjectTrixie.cpp  ??1TrackEntry@@QAE@XZ  00a3f3a0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPAudio/SPAudioObjectTrixie.cpp  ?FUN_00a3f3f0@@YAHPAI0H@Z  00a3f3f0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPAudio/SPAudioObjectTrixie.cpp  ?FUN_00a3f480@@YAPAIPAI00@Z  00a3f480  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPAudio/SPAudioObjectTrixie.cpp  ?FUN_00a3f4d0@@YAPAIPAI00@Z  00a3f4d0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPAudio/SPAudioObjectTrixie.cpp  ?DestroyRange@VecTE@@QAEXPAUTrackEntry@@0@Z  00a3f520  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPAudio/SPAudioObjectTrixie.cpp  ??1Track@@QAE@XZ  00a3f770  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPAudio/SPAudioObjectTrixie.cpp  ?FUN_00a3fcd0@@YAPAIPAI00@Z  00a3fcd0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPAudio/SPAudioObjectTrixie.cpp  ?FUN_00a3fd20@@YAPAIPAI00@Z  00a3fd20  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPAudio/SPAudioObjectTrixie.cpp  ??1Pixie@@QAE@XZ  00a3fd70  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPAudio/SPAudioObjectTrixie.cpp  ?FUN_00a401d0@@YAPAUTrack_s00a3_fde0@@PAU1@00@Z  00a401d0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
