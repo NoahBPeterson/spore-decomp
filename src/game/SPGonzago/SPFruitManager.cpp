@@ -1,4 +1,4 @@
-// src/game/SPGonzago/SPFruitManager.cpp -- migrated from slice(s) s00b01690, s00437b00, s0040fe00, s0040f4a0, s0040eb70, s0040ccb0 by tools/migrate/rewrite.py
+// src/game/SPGonzago/SPFruitManager.cpp -- migrated from slice(s) s01317d30, s0089d3b0, s005f4310, s00b01690, s00437b00, s0040fe00, s0040f4a0, s0040eb70, s0040ccb0 by tools/migrate/rewrite.py
 // Object file: SPGonzago/SPFruitManager.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -6,6 +6,27 @@
 #include <string.h>
 #include <intrin.h>
 #include <new>
+#include "EA/Messaging/IHandler.h"
+#include "EA/UTFWin/IWinProc.h"
+#include "EA/UTFWin/IWindow.h"
+#include "EA/Messaging/Server.h"
+#include "EA/Stopwatch.h"
+#include "SP/cICameraController.h"
+#include "SP/cICameraManager.h"
+#include "SP/cModelWorld.h"
+#include "SP/cSPEditorEconomy.h"
+#include "SP/cSPOLDPaletteItemUIDragAndBuy.h"
+#include "SP/cSPPaletteInfo.h"
+#include "SP/cSPPaletteItem.h"
+#include "SP/cSPSwatch.h"
+#include "cSPUILayout.h"
+#include "SP/cString.h"
+#include "cSPUILayeredObject.h"
+#include <math.h>
+#include "EA/Text/GlyphLayoutInfo.h"
+#include "EA/Text/LayoutSettings.h"
+#include "EA/Text/LineLayout.h"
+#include "EA/Text/TextStyle.h"
 
 // ---- items of slice s0040ccb0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 struct Vector3 {
@@ -590,10 +611,535 @@ typedef unsigned int       u32;
 typedef float              f32;
 struct CMatrix3Ops { void Assign(const void* src); };                    // 0x0041cb40
 #define M3(p) ((CMatrix3Ops*)(p))
+struct CTransformAssignOps {
+    void* Assign(const void* src);                    // 0x00537dc0
+};
 static f32 g_167af5c = 0.0f;             // 0x0167af5c
 static f32 g_167af60 = 0.0f;             // 0x0167af60
 static f32 g_167af64 = 0.0f;             // 0x0167af64
 // ---- items of slice s00b01690 end
+
+// ---- items of slice s005f4310 begin (TODO(rewrite): local stubs, replace by canonical classes)
+#define PV(n) virtual void pv##n();
+namespace EA {
+template <typename T>
+class AutoRefCount_s005f_4310 {
+ public:
+  T* mpObject;
+  AutoRefCount_s005f_4310() : mpObject(0) {}
+  AutoRefCount_s005f_4310(T* p) : mpObject(p) { if (mpObject) mpObject->AddRef(); }
+  AutoRefCount_s005f_4310(const AutoRefCount_s005f_4310& x) : mpObject(x.mpObject) { if (mpObject) mpObject->AddRef(); }
+  ~AutoRefCount_s005f_4310() { if (mpObject) mpObject->Release(); }
+  AutoRefCount_s005f_4310& operator=(T* p) {
+    if (p != mpObject) {
+      T* const pTemp = mpObject;
+      if (p)
+        p->AddRef();
+      mpObject = p;
+      if (pTemp)
+        pTemp->Release();
+    }
+    return *this;
+  }
+  AutoRefCount_s005f_4310& operator=(const AutoRefCount_s005f_4310& x) { return operator=(x.mpObject); }
+  T*& AsOutParam() {
+    if (mpObject) {
+      T* const p = mpObject;
+      mpObject = 0;
+      p->Release();
+    }
+    return mpObject;
+  }
+  T* operator->() const { return mpObject; }
+  operator T*() const { return mpObject; }
+};
+}
+using EA::AutoRefCount_s005f_4310;
+namespace SP {
+class cModelWorld_s005f_4310 {
+ public:
+  PV(0) PV(1) PV(2) PV(3) PV(4) PV(5) PV(6) PV(7) PV(8) PV(9) PV(10) PV(11) PV(12) PV(13) PV(14)
+  PV(15) PV(16) PV(17) PV(18) PV(19) PV(20) PV(21) PV(22) PV(23) PV(24)
+  virtual int GetEffectCount(struct cMWModel_s005f_4310* model);  // +0x64
+  PV(26) PV(27)
+  virtual void StartEffect(cMWModel_s005f_4310* model, uint32_t effectID, int a, float b, int index);  // +0x70
+  PV(29) PV(30) PV(31) PV(32) PV(33) PV(34) PV(35) PV(36) PV(37) PV(38) PV(39) PV(40) PV(41) PV(42)
+  PV(43) PV(44) PV(45) PV(46) PV(47) PV(48) PV(49) PV(50) PV(51) PV(52) PV(53) PV(54) PV(55) PV(56)
+  PV(57) PV(58) PV(59) PV(60) PV(61) PV(62) PV(63) PV(64) PV(65) PV(66) PV(67) PV(68) PV(69) PV(70)
+  PV(71) PV(72) PV(73) PV(74) PV(75) PV(76) PV(77) PV(78) PV(79) PV(80) PV(81) PV(82) PV(83) PV(84)
+  PV(85) PV(86) PV(87) PV(88) PV(89) PV(90) PV(91)
+  virtual void DestroyModel(struct cMWModel_s005f_4310* model, bool immediate);  // +0x170
+};
+}
+namespace SP {
+struct cMWModel_s005f_4310 { private:
+ public:
+  cModelWorld_s005f_4310* mpWorld;  // +0x0
+  uint32_t mFlags;       // +0x4
+  uint32_t pad8[14];
+  int mRefCount;         // +0x40
+  void AddRef() { mRefCount++; }
+  void Release();
+};
+}
+namespace SP {
+inline void cMWModel_s005f_4310::Release() {
+  if (mRefCount > 1)
+    mRefCount--;
+  else
+    mpWorld->DestroyModel(this, (mFlags >> 31) & 1);
+}
+}
+namespace SP {
+struct Blob38 {
+  unsigned short mFlags;             // +0x00
+  unsigned short mModificationCount; // +0x02
+  float mTranslation[3];             // +0x04
+  float mScale;                      // +0x10
+  float mRotation[9];                // +0x14
+  Blob38& operator=(const Blob38& o);
+};
+}
+namespace SP {
+inline Blob38& Blob38::operator=(const Blob38& o) {
+  mFlags = o.mFlags;
+  mModificationCount = o.mModificationCount;
+  for (int i = 0; i < 3; ++i)
+    mTranslation[i] = o.mTranslation[i];
+  mScale = o.mScale;
+  for (int i = 0; i < 9; ++i)
+    mRotation[i] = o.mRotation[i];
+  return *this;
+}
+}
+// ---- items of slice s005f4310 end
+
+// ---- items of slice s01317d30 begin (TODO(rewrite): local stubs, replace by canonical classes)
+namespace eastl {
+ struct string8_s0131_7d30; 
+}
+typedef eastl::string8_s0131_7d30 string8_s0131_7d30;
+namespace Simulator {
+class ISerializerReadStream;
+}
+namespace Simulator {
+class ISerializerWriteStream;
+}
+namespace Simulator {
+struct Attribute;
+}
+namespace Simulator {
+typedef bool  (*ReadFunction_t)(ISerializerReadStream*, void*);
+}
+namespace Simulator {
+typedef bool  (*WriteFunction_t)(ISerializerWriteStream*, void*);
+}
+namespace Simulator {
+typedef void  (*ReadTextFunction_t)(const string8_s0131_7d30&, void*);
+}
+namespace Simulator {
+typedef void  (*WriteTextFunction_t)(char*, void*);
+}
+namespace Simulator {
+typedef bool  (*ValidateFunction_t)();
+}
+namespace Simulator {
+typedef bool  (*ToXmlFunction_t)(void*, const char*, int);
+}
+namespace Simulator {
+typedef void* (*OffsetFunction_t)(Attribute*);
+}
+namespace Simulator {
+typedef void  (*SetDefaultFunction_t)(Attribute*);
+}
+namespace Simulator {
+void* DefaultOffset(Attribute* pAttr);   // 0x00692ca0: pAttr->pCurrentObject + pAttr->offset
+}
+namespace Simulator {
+void* StaticOffset(Attribute* pAttr);    // 0x011874d0: (void*)pAttr->offset (class statics)
+}
+namespace Simulator {
+struct Attribute
+{
+    // Member attribute: offset is relative to the current object.
+    Attribute(const char* pName, uint32_t nID, uint32_t nOffset,
+              ReadFunction_t pRead, WriteFunction_t pWrite,
+              ReadTextFunction_t pReadText, WriteTextFunction_t pWriteText,
+              ValidateFunction_t pValidate, ToXmlFunction_t pToXml,
+              SetDefaultFunction_t pSetDefault = 0)
+    {
+        name = pName;
+        id = nID;
+        pCurrentObject = 0;
+        setDefaultFunction = pSetDefault;
+        offsetFunction = DefaultOffset;
+        readFunction = pRead;
+        writeFunction = pWrite;
+        readTextFunction = pReadText;
+        writeTextFunction = pWriteText;
+        validateFunction = pValidate;
+        toXmlFunction = pToXml;
+        offset = nOffset;
+    }
+
+    // Record with a default value: the store of the default (GetDefaultValue<T>()) is part of the
+    // record's construction and sits just before the offset store.
+    template<typename Store>
+    __forceinline Attribute(const char* pName, uint32_t nID, uint32_t nOffset,
+              ReadFunction_t pRead, WriteFunction_t pWrite,
+              ReadTextFunction_t pReadText, WriteTextFunction_t pWriteText,
+              ValidateFunction_t pValidate, ToXmlFunction_t pToXml,
+              SetDefaultFunction_t pSetDefault, const Store& storeDefault)
+    {
+        name = pName;
+        id = nID;
+        pCurrentObject = 0;
+        setDefaultFunction = pSetDefault;
+        offsetFunction = DefaultOffset;
+        readFunction = pRead;
+        writeFunction = pWrite;
+        readTextFunction = pReadText;
+        writeTextFunction = pWriteText;
+        validateFunction = pValidate;
+        toXmlFunction = pToXml;
+        storeDefault();
+        offset = nOffset;
+    }
+
+    // Static attribute: the offset field holds the static's address; no ToXml callback.
+    Attribute(const char* pName, uint32_t nID, void* pStatic,
+              ReadFunction_t pRead, WriteFunction_t pWrite,
+              ReadTextFunction_t pReadText, WriteTextFunction_t pWriteText,
+              ValidateFunction_t pValidate)
+    {
+        name = pName;
+        id = nID;
+        pCurrentObject = 0;
+        setDefaultFunction = 0;
+        offsetFunction = StaticOffset;
+        readFunction = pRead;
+        writeFunction = pWrite;
+        readTextFunction = pReadText;
+        writeTextFunction = pWriteText;
+        validateFunction = pValidate;
+        toXmlFunction = 0;
+        offset = (uint32_t)pStatic;
+    }
+
+    /* 00h */ const char* name;
+    /* 04h */ uint32_t id;
+    /* 08h */ uint32_t offset;
+    /* 0Ch */ int field_0C;   // not initialized
+    /* 10h */ int field_10;   // not initialized
+    /* 14h */ int field_14;   // not initialized
+    /* 18h */ void* pCurrentObject;
+    /* 1Ch */ SetDefaultFunction_t setDefaultFunction;
+    /* 20h */ OffsetFunction_t offsetFunction;
+    /* 24h */ ReadFunction_t readFunction;
+    /* 28h */ WriteFunction_t writeFunction;
+    /* 2Ch */ ReadTextFunction_t readTextFunction;
+    /* 30h */ WriteTextFunction_t writeTextFunction;
+    /* 34h */ ValidateFunction_t validateFunction;
+    /* 38h */ ToXmlFunction_t toXmlFunction;
+};
+}
+namespace Simulator {
+struct AttrSlot { uint32_t d[15]; };
+}
+namespace Simulator {
+bool Read_00b6e3a0(ISerializerReadStream*, void*);   // Vector3
+}
+namespace Simulator {
+bool Read_00572810(ISerializerReadStream*, void*);   // raw 4 bytes
+}
+namespace Simulator {
+bool Read_00ae3430(ISerializerReadStream*, void*);   // ResourceKey
+}
+namespace Simulator {
+bool Read_00b04d20(ISerializerReadStream*, void*);
+}
+namespace Simulator {
+bool Read_00b0a310(ISerializerReadStream*, void*);
+}
+namespace Simulator {
+bool Write_00ac88c0(ISerializerWriteStream*, void*);
+}
+namespace Simulator {
+bool Write_00572840(ISerializerWriteStream*, void*);
+}
+namespace Simulator {
+bool Write_00ac88f0(ISerializerWriteStream*, void*);
+}
+namespace Simulator {
+bool Write_00ae3450(ISerializerWriteStream*, void*);
+}
+namespace Simulator {
+bool Write_00aca730(ISerializerWriteStream*, void*);
+}
+namespace Simulator {
+bool Write_00b00390(ISerializerWriteStream*, void*);
+}
+namespace Simulator {
+void ReadText_006930f0(const string8_s0131_7d30&, void*);
+}
+namespace Simulator {
+void ReadText_006930b0(const string8_s0131_7d30&, void*);
+}
+namespace Simulator {
+void ReadText_00693090(const string8_s0131_7d30&, void*);
+}
+namespace Simulator {
+void ReadText_00692ff0(const string8_s0131_7d30&, void*);
+}
+namespace Simulator {
+void ReadText_00693150(const string8_s0131_7d30&, void*);
+}
+namespace Simulator {
+void ReadText_00c2e4e0(const string8_s0131_7d30&, void*);
+}
+namespace Simulator {
+void WriteText_00695010(char*, void*);
+}
+namespace Simulator {
+void WriteText_00694fc0(char*, void*);
+}
+namespace Simulator {
+void WriteText_00694f00(char*, void*);
+}
+namespace Simulator {
+void WriteText_00694ee0(char*, void*);
+}
+namespace Simulator {
+void WriteText_00695080(char*, void*);
+}
+namespace Simulator {
+void WriteText_00692fb0(char*, void*);
+}
+namespace Simulator {
+bool Validate_00b1fbf0();
+}
+namespace Simulator {
+bool Validate_00b6f860();
+}
+namespace Simulator {
+bool Validate_00b00400();
+}
+namespace Simulator {
+bool ToXml_00acbba0(void*, const char*, int);
+}
+namespace Simulator {
+bool ToXml_00acbb80(void*, const char*, int);
+}
+namespace Simulator {
+bool ToXml_00675ca0(void*, const char*, int);
+}
+namespace Simulator {
+bool ToXml_0057cde0(void*, const char*, int);
+}
+namespace Simulator {
+bool ToXml_00ae5720(void*, const char*, int);
+}
+namespace Simulator {
+bool ToXml_00c6c390(void*, const char*, int);
+}
+namespace Simulator {
+bool ToXml_00b03fd0(void*, const char*, int);
+}
+namespace Simulator {
+#define VEC3_ATTR  Read_00b6e3a0, Write_00ac88c0, ReadText_006930f0, WriteText_00695010, Validate_00b1fbf0, ToXml_00acbba0
+}
+namespace Simulator {
+#define FLOAT_ATTR Read_00572810, Write_00ac88f0, ReadText_006930b0, WriteText_00694fc0, Validate_00b1fbf0, ToXml_00acbb80
+}
+namespace Simulator {
+#define UINT_ATTR  Read_00572810, Write_00572840, ReadText_00693090, WriteText_00694f00, Validate_00b1fbf0, ToXml_00675ca0
+}
+namespace Simulator {
+#define INT_ATTR   Read_00572810, Write_00572840, ReadText_00692ff0, WriteText_00694ee0, Validate_00b1fbf0, ToXml_0057cde0
+}
+namespace Simulator {
+#define KEY_ATTR   Read_00ae3430, Write_00ae3450, ReadText_00693150, WriteText_00695080, Validate_00b1fbf0, ToXml_00ae5720
+}
+namespace Simulator {
+#define TREES_ATTR Read_00b04d20, Write_00aca730, ReadText_00c2e4e0, WriteText_00692fb0, Validate_00b6f860, ToXml_00c6c390
+}
+namespace Simulator {
+#define DEPR_ATTR  Read_00b0a310, Write_00b00390, ReadText_00c2e4e0, WriteText_00692fb0, Validate_00b00400, ToXml_00b03fd0
+}
+namespace Simulator {
+bool Read_00b00430(ISerializerReadStream*, void*);
+}
+namespace Simulator {
+bool Read_00aff7e0(ISerializerReadStream*, void*);
+}
+namespace Simulator {
+bool Read_00b02540(ISerializerReadStream*, void*);
+}
+namespace Simulator {
+bool Read_00b06e10(ISerializerReadStream*, void*);
+}
+namespace Simulator {
+bool Read_00b04e00(ISerializerReadStream*, void*);
+}
+namespace Simulator {
+bool Write_00b02570(ISerializerWriteStream*, void*);
+}
+namespace Simulator {
+bool Write_00aff810(ISerializerWriteStream*, void*);
+}
+namespace Simulator {
+bool Write_00bca960(ISerializerWriteStream*, void*);
+}
+namespace Simulator {
+bool Write_00b00450(ISerializerWriteStream*, void*);
+}
+namespace Simulator {
+bool Write_00c761c0(ISerializerWriteStream*, void*);
+}
+namespace Simulator {
+bool Validate_00b6f550();
+}
+namespace Simulator {
+bool ToXml_00ac8050(void*, const char*, int);
+}
+namespace Simulator {
+bool ToXml_00f29b90(void*, const char*, int);
+}
+namespace Simulator {
+bool ToXml_00eafe40(void*, const char*, int);
+}
+namespace Simulator {
+void SetDefault_00b02610(Attribute*);
+}
+namespace Simulator {
+struct Tag_mFlags;
+}
+namespace Simulator {
+struct Tag_mFruitIdx;
+}
+namespace Simulator {
+struct Tag_mElapsedOnGroundTime;
+}
+namespace Simulator {
+struct Tag_mTreeSpeciesBracket;
+}
+namespace Simulator {
+struct Tag_mTreeSeqID;
+}
+namespace Simulator {
+struct Tag_mTreeDistSequenceIdx;
+}
+namespace Simulator {
+struct Tag_mState;
+}
+namespace Simulator {
+struct Tag_sFruitCount;
+}
+namespace Simulator {
+struct Tag_ValidCommon;      // rows 1..7 and the static row share their validate symbol
+}
+namespace Simulator {
+struct Tag_mSeqID;
+}
+namespace Simulator {
+struct Tag_mSpeciesBracket2;
+}
+namespace Simulator {
+struct Tag_mDistSequenceIdx;
+}
+namespace Simulator {
+struct Tag_mSpeciesKey;
+}
+namespace Simulator {
+struct Tag_mTransform;
+}
+namespace Simulator {
+struct Tag_mFlags2;
+}
+namespace Simulator {
+struct Tag_mFruitTransforms;
+}
+namespace Simulator {
+struct Tag_mFruitDistEffectIdxs;
+}
+namespace Simulator {
+struct Tag_ValidSeq;         // mSeqID + mDistSequenceIdx share their validate symbol
+}
+namespace Simulator {
+template<typename T> bool Read4(ISerializerReadStream*, void*);
+}
+namespace Simulator {
+template<typename T> bool Write4(ISerializerWriteStream*, void*);
+}
+namespace Simulator {
+template<typename T> void ReadTextInt(const string8_s0131_7d30&, void*);
+}
+namespace Simulator {
+template<typename T> bool ToXmlUInt(void*, const char*, int);
+}
+namespace Simulator {
+template<typename T> bool ToXmlInt(void*, const char*, int);
+}
+namespace Simulator {
+template<typename T> bool AlwaysValid();
+}
+namespace Simulator {
+extern AttrSlot cTreeFruit_sAttributes[8];   // 0x01567860
+}
+namespace Simulator {
+extern AttrSlot cFruit_sAttributes[10];      // 0x0167b858
+}
+namespace Simulator {
+#define ADD_TF(IDX, ...) { Attribute a(__VA_ARGS__); *(Attribute*)&cTreeFruit_sAttributes[IDX] = a; }
+}
+namespace Simulator {
+#define ADD_FR(IDX, ...) { Attribute a(__VA_ARGS__); *(Attribute*)&cFruit_sAttributes[IDX] = a; }
+}
+namespace Simulator {
+#define UINT_ROW(T)   Read4<T>, Write4<T>, ReadTextInt<T>, WriteText_00694f00, AlwaysValid<Tag_ValidCommon>, ToXmlUInt<T>
+}
+namespace Simulator {
+#define INT_ROW(T)    Read4<T>, Write4<T>, ReadTextInt<T>, WriteText_00694ee0, AlwaysValid<T>, ToXmlInt<T>
+}
+namespace Simulator {
+#define STATIC_ROW(T) Read4<T>, Write4<T>, ReadTextInt<T>, WriteText_00694f00, AlwaysValid<Tag_ValidCommon>
+}
+namespace Simulator {
+struct Vector3_s0131_7d30 { float x, y, z; Vector3_s0131_7d30(const Vector3_s0131_7d30& v) : x(v.x), y(v.y), z(v.z) {} };
+}
+namespace Simulator {
+struct Matrix3_s0131_7d30 {
+    float m[3][3];
+    Matrix3_s0131_7d30& Assign(const Matrix3_s0131_7d30& other);        // 0x0041cb40
+};
+}
+namespace Simulator {
+extern const Vector3_s0131_7d30 kDefaultOffset;              // 0x0167af5c (this module's zero vector)
+}
+namespace Simulator {
+extern const Matrix3_s0131_7d30 kDefaultRotation;            // 0x0167b554 (this module's identity)
+}
+namespace Simulator {
+struct cSPTransform {
+    uint16_t mFlags;
+    uint16_t mModificationCount;
+    Vector3_s0131_7d30  mOffset;
+    float    mScale;
+    Matrix3_s0131_7d30  mRotation;
+    cSPTransform() : mFlags(0), mModificationCount(0), mOffset(kDefaultOffset), mScale(1.0f)
+    {
+        mRotation.Assign(kDefaultRotation);
+    }
+    cSPTransform& operator=(const cSPTransform& other);   // 0x00537dc0
+};
+}
+namespace Simulator {
+cSPTransform& GetDefaultTransform();              // 0x00b02590 (SP::GetDefaultValue<cSPTransform;79537323>)
+}
+namespace Simulator {
+struct StoreTransform { const cSPTransform& v; StoreTransform(const cSPTransform& x) : v(x) {} void operator()() const { GetDefaultTransform() = v; } };
+}
+// ---- items of slice s01317d30 end
 
 // @ 0x0040ccb0
 void Modifier::Accumulate(const Modifier& o)
@@ -787,6 +1333,44 @@ void Model::SetFlag(bool v)
     flags.set(0, v);
 }
 
+// @ 0x005f4e10
+namespace SP {
+AutoRefCount_s005f_4310<SP::cMWModel_s005f_4310>* copy_refs(AutoRefCount_s005f_4310<SP::cMWModel_s005f_4310>* first, AutoRefCount_s005f_4310<SP::cMWModel_s005f_4310>* last, AutoRefCount_s005f_4310<SP::cMWModel_s005f_4310>* out)
+{
+  for (; first != last; ++first, ++out)
+    *out = *first;
+  return out;
+}
+}  // namespace SP
+
+// @ 0x0089e040
+namespace EA { namespace Text {
+int GetSpaceProperties(wchar_t c)
+{
+    switch ((unsigned short)c) {
+    case 9: return 0x15;
+    case 10: case 11: case 12: case 13: return 0x14;
+    case 0x20: case 0x2000: case 0x2001: case 0x2002: case 0x2003: case 0x2004: case 0x2005: case 0x2006:
+    case 0x2008: case 0x2009: case 0x200a: case 0x3000: return 5;
+    case 0xa0: case 0x2007: return 9;
+    case 0x200b: case 0x200c: return 6;
+    case 0x200d: case 0x2060: case 0xfeff: return 10;
+    }
+    return 0;
+}
+}}  // namespace EA::Text
+
+// @ 0x0089e0e0
+namespace EA { namespace Text {
+bool IsSpace(wchar_t c, int mask, bool all)
+{
+    int p = GetSpaceProperties(c);
+    if (all)
+        return (p & mask) == mask;
+    return (p & mask) != 0;
+}
+}}  // namespace EA::Text
+
 // @ 0x00b02590
 void* GetDefaultValue_B(void)
 {
@@ -802,3 +1386,45 @@ void* GetDefaultValue_B(void)
     }
     return (void*)0x0167bb8c;
 }
+
+// @ 0x00b02610
+void FUN_00b02610(void* obj)
+{
+    void* t = (*(void*(*)(void*))(*(void**)((char*)obj + 0x20)))(obj);
+    void* d = GetDefaultValue_B();
+    ((CTransformAssignOps*)t)->Assign(d);
+}
+
+// @ 0x013184d0
+namespace Simulator {
+void InitTreeFruitAttributes()
+{
+    ADD_TF(0, "mFlags", 0x3fe7ec0, 0x148, Read_00b00430, Write_00b02570, ReadText_00c2e4e0, WriteText_00692fb0, AlwaysValid<Tag_mFlags>, ToXml_00ac8050)
+    ADD_TF(1, "mFruitIdx", 0x410d8c8, 0x164, UINT_ROW(Tag_mFruitIdx))
+    ADD_TF(2, "mElapsedOnGroundTime", 0x410d8fe, 0x168, UINT_ROW(Tag_mElapsedOnGroundTime))
+    ADD_TF(3, "mTreeSpeciesBracket", 0x67ddca4, 0x158, INT_ROW(Tag_mTreeSpeciesBracket))
+    ADD_TF(4, "mTreeSeqID", 0x67ddca8, 0x15c, UINT_ROW(Tag_mTreeSeqID))
+    ADD_TF(5, "mTreeDistSequenceIdx", 0x67ddcab, 0x160, UINT_ROW(Tag_mTreeDistSequenceIdx))
+    ADD_TF(6, "mState", 0x420798f, 0x16c, INT_ROW(Tag_mState))
+    ADD_TF(7, "sFruitCount", 0x410d9be, (void*)0x167af58, STATIC_ROW(Tag_sFruitCount))
+}
+}  // namespace Simulator
+
+// @ 0x01318800
+namespace Simulator {
+void InitFruitAttributes()
+{
+    ADD_FR(0, "mSeqID", 0x4bda4a8, 0x4c, Read4<Tag_mSeqID>, Write4<Tag_mSeqID>, ReadTextInt<Tag_mSeqID>, WriteText_00694f00, AlwaysValid<Tag_ValidSeq>, ToXml_00675ca0)
+    ADD_FR(1, "mSpeciesBracket", 0x4bda4af, 0x50, Read4<Tag_mSpeciesBracket2>, Write4<Tag_mSpeciesBracket2>, ReadTextInt<Tag_mSpeciesBracket2>, WriteText_00694ee0, AlwaysValid<Tag_mSpeciesBracket2>, ToXml_0057cde0)
+    ADD_FR(2, "mDistSequenceIdx", 0x4bda4aa, 0x54, Read4<Tag_mDistSequenceIdx>, Write4<Tag_mDistSequenceIdx>, ReadTextInt<Tag_mDistSequenceIdx>, WriteText_00694f00, AlwaysValid<Tag_ValidSeq>, ToXml_00675ca0)
+    cSPTransform defaultTransform;
+    ADD_FR(3, "mTransform", 0x4bda4ab, 0x58, Read_00aff7e0, Write_00aff810, ReadText_00c2e4e0, WriteText_00692fb0, AlwaysValid<Tag_mTransform>, ToXml_00ac8050, SetDefault_00b02610, StoreTransform(defaultTransform))
+    ADD_FR(4, "mFlags", 0x4bda4ac, 0x90, Read_00b00430, Write_00b02570, ReadText_00c2e4e0, WriteText_00692fb0, AlwaysValid<Tag_mFlags2>, ToXml_00ac8050)
+    ADD_FR(5, "mSpeciesKey", 0x4bda4ad, 0x94, Read_00ae3430, Write_00ae3450, ReadText_00693150, WriteText_00695080, AlwaysValid<Tag_mSpeciesKey>, ToXml_00ae5720)
+    ADD_FR(6, "mpInteractingWith", 0x410d913, 0xa0, Read_00b02540, Write_00bca960, ReadText_00c2e4e0, WriteText_00692fb0, Validate_00b6f550, ToXml_00ac8050)
+    ADD_FR(7, "mFruitTransforms", 0x62073d2, 0xa4, Read_00b06e10, Write_00b00450, ReadText_00c2e4e0, WriteText_00692fb0, AlwaysValid<Tag_mFruitTransforms>, ToXml_00f29b90)
+    ADD_FR(8, "mFruitDistEffectIdxs", 0x62073d8, 0x19c, Read_00b04e00, Write_00c761c0, ReadText_00c2e4e0, WriteText_00692fb0, AlwaysValid<Tag_mFruitDistEffectIdxs>, ToXml_00eafe40)
+    // "field_name" sentinel: a static record (id -1, no callbacks) built in place at table slot 9.
+    new (&cFruit_sAttributes[9]) Attribute("field_name", 0xffffffff, (void*)0, 0, 0, 0, 0, 0);
+}
+}  // namespace Simulator

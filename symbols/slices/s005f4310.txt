@@ -8,7 +8,7 @@
 005f49f0 ?OnMouseDown@cSPOLDPaletteItemUIDragAndBuy_s005f_4310@SP@@UAEXXZ  # cSPOLDPaletteItemUIDragAndBuy_s005f_4310::OnMouseDown migrated from s005f4310 (verbatim, slice spelling)
 005f4b80 ?OnMouseUp@cSPOLDPaletteItemUIDragAndBuy_s005f_4310@SP@@QAEXXZ  # cSPOLDPaletteItemUIDragAndBuy_s005f_4310::OnMouseUp migrated from s005f4310 (verbatim, slice spelling)
 005f4d00 copy 0x38 records  # untyped copy loop
-005f4e10 eastl::copy_impl<...>::do_copy<AutoRefCount<cMWModel>*>  # PDB name on card; byte-exact
+005f4e10 ?copy_refs@SP@@YAPAV?$AutoRefCount_s005f_4310@UcMWModel_s005f_4310@SP@@@EA@@PAV23@00@Z  # copy_refs migrated from s005f4310 (verbatim, slice spelling)
 005f4e80 ?Matrix3FromEulerXYZ@SP@@YAPAUMatrix33_s005f_4310@1@PAU21@PBX@Z  # Matrix3FromEulerXYZ migrated from s005f4310 (verbatim, slice spelling)
 005f4eb0 ?RemoveModel@cSwatch3DView_s005f_4310@SP@@QAEXPAUcMWModel_s005f_4310@2@@Z  # RemoveModel migrated from s005f4310 (verbatim, slice spelling)
 005f4f80 ?Init@cSPSwatch_s005f_4310@SP@@QAEXPAUKey_s005f_4310@ResourceMan@EA@@IIIIII@Z  # cSPSwatch_s005f_4310::Init migrated from s005f4310 (verbatim, slice spelling)

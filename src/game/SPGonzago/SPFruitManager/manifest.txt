@@ -10,3 +10,9 @@
 ../src/game/SPGonzago/SPFruitManager.cpp  ?HandleMessage@EditorHandler@@QAE_NPAUEditorMessage@@@Z  0040fe00  /Od /Ob1 /MD /Gy /TP /arch:SSE /Isrc/game/include
 ../src/game/SPGonzago/SPFruitManager.cpp  ?TryGetUIntProperty@@YA_NPAUIPropertyMap@@IPAI@Z  00410370  /Od /Ob1 /MD /Gy /TP /arch:SSE /Isrc/game/include
 ../src/game/SPGonzago/SPFruitManager.cpp  ?SetFlag@Model@@QAEX_N@Z  00437f70  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPFruitManager.cpp  ?copy_refs@SP@@YAPAV?$AutoRefCount_s005f_4310@UcMWModel_s005f_4310@SP@@@EA@@PAV23@00@Z  005f4e10  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPFruitManager.cpp  ?GetSpaceProperties@Text@EA@@YAH_W@Z  0089e040  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPGonzago/SPFruitManager.cpp  ?IsSpace@Text@EA@@YA_N_WH_N@Z  0089e0e0  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPGonzago/SPFruitManager.cpp  ?FUN_00b02610@@YAXPAX@Z  00b02610  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPFruitManager.cpp  ?InitTreeFruitAttributes@Simulator@@YAXXZ  013184d0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include
+../src/game/SPGonzago/SPFruitManager.cpp  ?InitFruitAttributes@Simulator@@YAXXZ  01318800  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include
