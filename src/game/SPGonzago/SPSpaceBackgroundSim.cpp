@@ -90,7 +90,15 @@ public:
     void** mpEnd;                               // 0x004
     void** mpCapacity;                          // 0x008
 };
+struct cPlanetRange {
+    void** mpBegin;                             // 0x000
+    void** mpEnd;                               // 0x004
+};
 void FUN_00bab900(cPlanetList* pList, cDispatchObject** ppPlanet);
+int ComparePlanetsByDistance(void* pLhs, void* pRhs);       // 0x1021110
+int ComparePlanetsByRadius(void* pLhs, void* pRhs);         // 0x1021140
+void SwapPlanetsByDistance(void** ppBegin, void** ppEnd, cPointerCompare pCompare);
+void SwapPlanetsByRadius(void** ppBegin, void** ppEnd, cPointerCompare pCompare);
 void SwapPlanetSlots(void** ppLhs, void** ppRhs);           // 0x10216a0
 void** SelectMedianPlanet(void** ppFirst, void** ppMiddle, void** ppLast,
                           cPointerCompare pCompare);        // 0x1021180
@@ -484,6 +492,18 @@ void ShutdownBackgroundSimulator()
     }
 }
 
+// @ 0x01022510
+void SortPlanetsByDistance(cPlanetRange* pRange)
+{
+    SwapPlanetsByDistance(pRange->mpBegin, pRange->mpEnd, ComparePlanetsByDistance);
+}
+
+// @ 0x01022530
+void SortPlanetsByRadius(cPlanetRange* pRange)
+{
+    SwapPlanetsByRadius(pRange->mpBegin, pRange->mpEnd, ComparePlanetsByRadius);
+}
+
 // @ 0x01022550
 void StopBackgroundSim()
 {
@@ -496,6 +516,20 @@ void StopBackgroundSim()
         pManager->Destroy(1);
         g_pBackgroundSim = nullptr;
     }
+}
+
+// @ 0x01022580
+void StartBackgroundSim()
+{
+    if (g_bBackgroundSimStarted)
+        return;
+
+    cSPBackgroundSimManager* pManager = g_pBackgroundSim;
+    g_bBackgroundSimStarted = 1;
+    if (pManager->mpStar == nullptr)
+        InitBackgroundSimulator(((cStarManager*)StarManager())->GetActiveStar());
+    if (g_pBackgroundSim->mnState != 0)
+        g_pBackgroundSim->mnState = 0;
 }
 
 // @ 0x013a1150
