@@ -1,0 +1,11 @@
+# va  diff-bytes  reason
+00828df0 46 three vcalls: null-test of mObj emitted as `cmp [mem],0; reload` vs `mov ecx,[mem]; test`; difftest PASS (382 valid, 100% coverage) after naming it C25b::Do in symbols/slices and adding the // @ marker flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+00828e30 6 BeginRender: complete; edx vs eax for Begin2D arg flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+00829110 64 UninitCopyRefs: complete; params kept in regs vs stack flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+008294c0 374 SetRect2: complete; branch layout/scheduling differs flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+00829690 9 GetRectLocal: complete; ecx load order flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+00829ad0 132 RefVec::operator=: complete; prologue push placement differs; difftest PASS with --alias 0.5 --inputs 800 (332 valid, 69.2% coverage; WEAK 174 valid/41% at defaults) after naming it ?4RefVec in symbols/slices (the checker cannot match operator= by name) flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+00829c50 163 complete translation; register allocation of the refcounted-vector push_back differs flags: /O2 /MD /Gy /TP /fp:fast /arch:SSE2
+00829f30 173 complete logic; the matrix-pointer argument (ecx) mapping is uncertain flags: /O2 /MD /Gy /TP /fp:fast /arch:SSE2
+0082dae0 109 map<uint, 16-byte record>::operator[]: complete; value_type temporary zero-store scheduling and callee-saved register choice differ; difftest PASS (operator[] wrapped as XmlIdMap::Index with __forceinline operator[]; per-map DoInsertValue annotated 0x0082cac0 via CRTP) flags: /O2 /MD /Gy /TP /fp:fast /arch:SSE2 /GS-
+0082db80 15 map<Object*, int>::operator[]: complete; one zero-store of the temporary value_type is scheduled earlier than the original; difftest PASS (operator[] wrapped as ObjectBindingMap::Index; DoInsertValue annotated 0x0082cb90) flags: /O2 /MD /Gy /TP /fp:fast /arch:SSE2 /GS-

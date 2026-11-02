@@ -3,3 +3,5 @@
 0082d7b0 ?ParseProps@SerializeHelper_s0082_cd30@@QAEPAUProp@@PAUToken@@@Z  # SerializeHelper_s0082_cd30::ParseProps migrated from s0082cd30 (verbatim, slice spelling)
 0082d910 ?ParseObject@SerializeHelper_s0082_cd30@@QAEPAUSerObject@@PAUToken@@@Z  # SerializeHelper_s0082_cd30::ParseObject migrated from s0082cd30 (verbatim, slice spelling)
 0082d9f0 ?Read@cSPUIDeserializer@@UAEIPAUIStream@@HPAXHHH@Z  # cSPUIDeserializer::Read migrated from s0082cd30 (verbatim, slice spelling)
+0082dae0 ?Index@XmlIdMap@@QAEAAUSlot16@@ABI@Z  # XmlIdMap::Index migrated from s0082cd30 (verbatim, slice spelling)
+0082db80 ?Index@ObjectBindingMap@@QAEAAHABQAUSerObject@@@Z  # Index migrated from s0082cd30 (verbatim, slice spelling)

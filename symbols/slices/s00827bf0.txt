@@ -1,8 +1,8 @@
 008120d0 ?Init@cSPUILayout@@QAE_NABVKey@ResourceMan@EA@@_NI@Z  # cSPUILayout::Init (callee of s00827bf0, named from the dev publics; slice address comment)
 00823e30 ?ProcessSpinnerButtons@cPropertyUI@SP@@QAEXI@Z  # SP::cPropertyUI::ProcessSpinnerButtons (callee of s00827bf0, named from the dev publics; slice address comment)
 00827bf0 ?DoMessage@cPropertyUI_s0082_7bf0@SP@@QAE_NHPAUMsg@@@Z  # cPropertyUI_s0082_7bf0::DoMessage migrated from s00827bf0 (verbatim, slice spelling)
-00827fc0 cSPUIPropertyLayout::SetKey (SPKeyFromName into +0x24/+0x28)
-00828020 cSPUIPropertyLayout::SetFlag (bool +0x74 + window vcalls)
+00827fc0 ?SetKey@CPL@@QAEXPB_WH@Z  # CPL::SetKey migrated from s00827bf0 (verbatim, slice spelling)
+00828020 ?SetFlag@CPL@@QAEX_N@Z  # CPL::SetFlag migrated from s00827bf0 (verbatim, slice spelling)
 00828070 ?GetEventMask@CPL@@UAEIXZ  # CPL::GetEventMask migrated from s00827bf0 (verbatim, slice spelling)
 00828080 ?DoMessage@CPL@@UAE_NHPAX@Z  # CPL::DoMessage migrated from s00827bf0 (verbatim, slice spelling)
 00828100 ?GetRootWindow@cSPUIPropertyLayout@@QAEPAVIWindow@UTFWin@EA@@XZ  # cSPUIPropertyLayout::GetRootWindow migrated from s00827bf0
