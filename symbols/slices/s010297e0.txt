@@ -3,26 +3,26 @@
 010297e0 ?f@C010297e0@@QAEXXZ  # C010297e0::f migrated from s010297e0 (verbatim, slice spelling)
 01029950 SP::IsPlanetAttackableByPlayer  # empire != player && distance/priority checks
 010299c0 SP::PlayerHasAnyAutoblaster  # inventory HasItem on the three autoblaster keys
-01029a10 SP::IsValidSpaceCommTarget  # game-mode + star/empire/planet checks
-01029a60 SP::ShouldShowSpaceCommOption  # f714 type + hostile + inventory + idle-animation checks
-01029af0 SP::cSPSpaceCombatTuning::GetAirRaidSirenTimeMS  # PDB
-01029cc0 SP::cSPSpaceCombatTuning::GetBackgroundFighterDPS  # PDB
-01029d50 SP::cSPSpaceCombatTuning::GetBackgroundBomberDPS  # PDB
-01029de0 SP::cSPSpaceCombatTuning::GetBackgroundTurretDPS  # PDB
-01029f60 SP::cSPSpaceCombatTuning::GetLootMinMoneyDrop  # PDB
-01029fd0 SP::cSPSpaceCombatTuning::GetLootMaxMoneyDrop  # PDB
-0102a1d0 SP::cSPSpaceCombatTuning::GetLootUFOMoneyChance  # PDB candidate
-0102a230 SP::cSPSpaceCombatTuning::GetLootCityMinMoneyDrop  # PDB
-0102a2a0 SP::cSPSpaceCombatTuning::GetLootCityMaxMoneyDrop  # PDB
-0102a360 SP::cSPSpaceCombatTuning::GetWeaponLevel  # PDB
-0102a3e0 SP::cSPSpaceCombatTuning::GetModelOffset  # static Vector3 initialised from three 1.0f globals
-0102a630 SP::cSPSpaceCombatTuning::GetUFOHealth  # PDB
-0102a780 SP::cSPSpaceCombatTuning::GetTurretHealth  # PDB
-0102a840 SP::cSPSpaceCombatTuning::GetLootRaiderMoneyChance  # type-keyed property float
-0102a8f0 SP::cSPSpaceCombatTuning::GetLootMoneyChance2  # type-keyed property float
-0102aa50 SP::cSPSpaceCommCanTarget  # two-object f714 type matrix
-0102ac50 SP::CreateUFOForSolarOrGalaxy  # PDB
-0102acb0 SP::CreateUFO  # PDB
-0102adf0 SP::IsMissionActiveAtPlanet  # mission list scan by target planet + type
-0102ae60 SP::IsMissionOfTypeActiveAtPlanet  # mission list scan
-0102aec0 SP::IsNearbyObject  # object distance vs configured radius
+01029a10 ?FUN_01029a10@@YA_NHH@Z  # FUN_01029a10 migrated from s010297e0 (verbatim, slice spelling)
+01029a60 ?FUN_01029a60@@YA_NPAUPlanet@@_N@Z  # FUN_01029a60 migrated from s010297e0 (verbatim, slice spelling)
+01029af0 ?GetAirRaidSirenTimeMS@cSPSpaceCombatTuning_s0102_97e0@@QAEHXZ  # cSPSpaceCombatTuning_s0102_97e0::GetAirRaidSirenTimeMS migrated from s010297e0 (verbatim, slice spelling)
+01029cc0 ?GetBackgroundFighterDPS@cSPSpaceCombatTuning_s0102_97e0@@QAEMH@Z  # cSPSpaceCombatTuning_s0102_97e0::GetBackgroundFighterDPS migrated from s010297e0 (verbatim, slice spelling)
+01029d50 ?GetBackgroundBomberDPS@cSPSpaceCombatTuning_s0102_97e0@@QAEMH@Z  # cSPSpaceCombatTuning_s0102_97e0::GetBackgroundBomberDPS migrated from s010297e0 (verbatim, slice spelling)
+01029de0 ?GetBackgroundTurretDPS@cSPSpaceCombatTuning_s0102_97e0@@QAEMH@Z  # cSPSpaceCombatTuning_s0102_97e0::GetBackgroundTurretDPS migrated from s010297e0 (verbatim, slice spelling)
+01029f60 ?GetLootMinMoneyDrop@cSPSpaceCombatTuning_s0102_97e0@@QAEMH@Z  # cSPSpaceCombatTuning_s0102_97e0::GetLootMinMoneyDrop migrated from s010297e0 (verbatim, slice spelling)
+01029fd0 ?GetLootMaxMoneyDrop@cSPSpaceCombatTuning_s0102_97e0@@QAEMH@Z  # cSPSpaceCombatTuning_s0102_97e0::GetLootMaxMoneyDrop migrated from s010297e0 (verbatim, slice spelling)
+0102a1d0 ?GetLootUFOMoneyChance@cSPSpaceCombatTuning_s0102_97e0@@QAEMH@Z  # cSPSpaceCombatTuning_s0102_97e0::GetLootUFOMoneyChance migrated from s010297e0 (verbatim, slice spelling)
+0102a230 ?GetLootCityMinMoneyDrop@cSPSpaceCombatTuning_s0102_97e0@@QAEMH@Z  # cSPSpaceCombatTuning_s0102_97e0::GetLootCityMinMoneyDrop migrated from s010297e0 (verbatim, slice spelling)
+0102a2a0 ?GetLootCityMaxMoneyDrop@cSPSpaceCombatTuning_s0102_97e0@@QAEMH@Z  # cSPSpaceCombatTuning_s0102_97e0::GetLootCityMaxMoneyDrop migrated from s010297e0 (verbatim, slice spelling)
+0102a360 ?GetWeaponLevel@cSPSpaceCombatTuning_s0102_97e0@@QAEHMMM@Z  # cSPSpaceCombatTuning_s0102_97e0::GetWeaponLevel migrated from s010297e0 (verbatim, slice spelling)
+0102a3e0 ?f@Vec3Holder@@QAEPAUVec3@@XZ  # Vec3Holder::f migrated from s010297e0 (verbatim, slice spelling)
+0102a630 ?GetUFOHealth@cSPSpaceCombatTuning_s0102_97e0@@QAEMHH@Z  # cSPSpaceCombatTuning_s0102_97e0::GetUFOHealth migrated from s010297e0 (verbatim, slice spelling)
+0102a780 ?GetTurretHealth@cSPSpaceCombatTuning_s0102_97e0@@QAEMH@Z  # cSPSpaceCombatTuning_s0102_97e0::GetTurretHealth migrated from s010297e0 (verbatim, slice spelling)
+0102a840 ?LootChanceA@cSPSpaceCombatTuning_s0102_97e0@@QAEMH@Z  # cSPSpaceCombatTuning_s0102_97e0::LootChanceA migrated from s010297e0 (verbatim, slice spelling)
+0102a8f0 ?LootChanceB@cSPSpaceCombatTuning_s0102_97e0@@QAEMH@Z  # cSPSpaceCombatTuning_s0102_97e0::LootChanceB migrated from s010297e0 (verbatim, slice spelling)
+0102aa50 ?FUN_0102aa50@@YA_NPAUPlanet@@0_N@Z  # FUN_0102aa50 migrated from s010297e0 (verbatim, slice spelling)
+0102ac50 ?SP_CreateUFOForSolarOrGalaxy@@YAPAXHH@Z  # SP_CreateUFOForSolarOrGalaxy migrated from s010297e0 (verbatim, slice spelling)
+0102acb0 ?SP_CreateUFO@@YAPAXHPAHPAUVec3@@@Z  # SP_CreateUFO migrated from s010297e0 (verbatim, slice spelling)
+0102adf0 ?FUN_0102adf0@@YA_NPAUObj4c@@@Z  # FUN_0102adf0 migrated from s010297e0 (verbatim, slice spelling)
+0102ae60 ?FUN_0102ae60@@YA_NPAUObj4c@@@Z  # FUN_0102ae60 migrated from s010297e0 (verbatim, slice spelling)
+0102aec0 ?FUN_0102aec0@@YA_NPAUDistObj@@PAUVec3@@1@Z  # FUN_0102aec0 migrated from s010297e0 (verbatim, slice spelling)

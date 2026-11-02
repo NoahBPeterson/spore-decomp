@@ -1,9 +1,18 @@
-// src/game/SPGonzago/SPSpaceCombatUtilities.cpp -- migrated from slice(s) s0102af80 by tools/migrate/rewrite.py
+// src/game/SPGonzago/SPSpaceCombatUtilities.cpp -- migrated from slice(s) s0102be20, s010297e0, s0102af80 by tools/migrate/rewrite.py
 // Object file: SPGonzago/SPSpaceCombatUtilities.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
 #include "game/types.h"
 #include "EA/Random/RandomLinearCongruential.h"
+#include "SP/cSPCreatureBase.h"
+#include "SP/cGameNounManager.h"
+#include "SP/cPlanetModel.h"
+#include "EA/ResourceMan/Key.h"
+#include "SP/cEmpire.h"
+#include "SP/cRelationshipManager.h"
+#include "SP/cSPGameDataUFO.h"
+#include "SP/cSPMission.h"
+#include "SP/cStarManager.h"
 
 // unnamed retail callees and globals (address in the comment)
 extern "C" void* __cdecl FUN_01002bd0(void);          // SP::SpaceGameGet()
@@ -199,6 +208,727 @@ extern "C" uint32_t __cdecl FUN_011e0970(uint32_t lo, uint32_t hi, uint32_t b, u
 extern RLC DAT_1601760;
 extern Obj DAT_015b7510;
 extern "C" void  __cdecl FUN_00435ed0(uint32_t, void*);
+
+// ---- items of slice s010297e0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern float g_100;        // 0x013ec4d0
+extern float g_1_1;        // 0x013ef54c
+extern float g_13ec5b4;    // 0x013ec5b4
+extern float g_15b7504;    // 0x015b7504
+extern float g_v0, g_v1, g_v2;     // 0x015b74d0, 0x015b74d4, 0x015b74d8
+extern float g_16de114;              // 0x016de114
+extern float g_16de118;              // 0x016de118
+extern float g_16de11c;              // 0x016de11c
+extern float g_13eb1bc;              // 0x013eb1bc
+extern float g_140f7ac;              // 0x0140f7ac
+typedef unsigned int uint;
+struct cPropertyList;
+struct GetsFloat {
+virtual void q0();
+virtual void q1();
+virtual void q2();
+virtual void q3();
+virtual void q4();
+virtual void q5();
+virtual void q6();
+virtual void q7();
+    virtual void q8();
+    virtual bool GetProperty(uint id, void** out);       // +0x24
+};
+struct Prop {
+    char pad[0x12];
+    unsigned short type;
+    float* GetFloat();   // 0x0041ea70
+};
+struct cPropertyList : GetsFloat {
+};
+struct Obj4c {   // vtable slot +0x4c returns int
+virtual void a0();
+virtual void a1();
+virtual void a2();
+virtual void a3();
+virtual void a4();
+virtual void a5();
+virtual void a6();
+virtual void a7();
+virtual void a8();
+virtual void a9();
+virtual void a10();
+virtual void a11();
+virtual void a12();
+virtual void a13();
+virtual void a14();
+virtual void a15();
+virtual void a16();
+virtual void a17();
+virtual void a18();
+    virtual int v4c();
+};
+struct Obj0c {   // vtable slot +0xc
+virtual void b0();
+virtual void b1();
+virtual void b2();
+    virtual void* v0c(int id);
+};
+struct Obj10 {   // vtable slot +0x10 returns int
+virtual void c0();
+virtual void c1();
+virtual void c2();
+virtual void c3();
+    virtual int v10();
+};
+struct Obj38 {   // vtable slot +0x38 returns int
+virtual void d0();
+virtual void d1();
+virtual void d2();
+virtual void d3();
+virtual void d4();
+virtual void d5();
+virtual void d6();
+virtual void d7();
+virtual void d8();
+virtual void d9();
+virtual void d10();
+virtual void d11();
+virtual void d12();
+virtual void d13();
+    virtual int v38();
+};
+struct Obj68 {   // vtable slot +0x68: bool(void*)
+virtual void e0();
+virtual void e1();
+virtual void e2();
+virtual void e3();
+virtual void e4();
+virtual void e5();
+virtual void e6();
+virtual void e7();
+virtual void e8();
+virtual void e9();
+virtual void e10();
+virtual void e11();
+virtual void e12();
+virtual void e13();
+virtual void e14();
+virtual void e15();
+virtual void e16();
+virtual void e17();
+virtual void e18();
+virtual void e19();
+virtual void e20();
+virtual void e21();
+virtual void e22();
+virtual void e23();
+virtual void e24();
+virtual void e25();
+    virtual bool v68(void* id);
+};
+struct cSPSpaceCombatTuning_s0102_97e0 {
+    char pad[8];
+    cPropertyList* mPropList;
+    int   GetAirRaidSirenTimeMS();  // 0x01029af0 (cSPSpaceCombatTuning::GetAirRaidSirenTimeMS)
+    float GetBackgroundFighterDPS(int index);  // 0x01029cc0 (cSPSpaceCombatTuning::GetBackgroundFighterDPS)
+    float GetBackgroundBomberDPS(int index);  // 0x01029d50 (cSPSpaceCombatTuning::GetBackgroundBomberDPS)
+    float GetBackgroundTurretDPS(int index);  // 0x01029de0 (cSPSpaceCombatTuning::GetBackgroundTurretDPS)
+    float GetLootMinMoneyDrop(int index);  // 0x01029f60 (cSPSpaceCombatTuning::GetLootMinMoneyDrop)
+    float GetLootMaxMoneyDrop(int index);  // 0x01029fd0 (cSPSpaceCombatTuning::GetLootMaxMoneyDrop)
+    float GetLootCityMinMoneyDrop(int index);  // 0x0102a230 (cSPSpaceCombatTuning::GetLootCityMinMoneyDrop)
+    float GetLootCityMaxMoneyDrop(int index);  // 0x0102a2a0 (cSPSpaceCombatTuning::GetLootCityMaxMoneyDrop)
+    float GetLootUFOMoneyChance(int type);
+    float GetLootRaiderMoneyChance();        // 0x0102a090
+    float GetLootBomberMoneyChance();        // 0x0102a040
+    float GetLootThiefMoneyChance();         // 0x0102a180
+    float GetLootDefenderMoneyChance();      // 0x0102a0e0
+    float GetLootInterceptorMoneyChance();   // 0x0102a130
+    int   GetWeaponLevel(float x, float y, float z);  // 0x0102a360 (cSPSpaceCombatTuning::GetWeaponLevel)
+    float GetUFOHealth(int type, int index);  // 0x0102a630 (cSPSpaceCombatTuning::GetUFOHealth)
+    float GetTurretHealth(int index);  // 0x0102a780 (cSPSpaceCombatTuning::GetTurretHealth)
+    float LootChanceA(int type);
+    float LootChanceB(int type);
+};
+struct cSPGameDataUFO {
+    void Init(int a, int b);                                 // 0x00c3e0b0 (ret 8)
+    void SetDesiredModel(void* model, bool flag);            // 0x00c37180 (ret 8)
+    void SetOrientation(void* scaledNormal, void* orientation);  // 0x00c3aa40 (ret 8)
+};
+struct MissionVec { Obj4c** begin; Obj4c** end; Obj4c** cap; };
+struct cSPMission  { Obj4c* GetTargetPlanet(); bool IsActive(); };
+struct cSPMissionManager {
+    MissionVec* GetMissionList();            // 0x00fedd50
+};
+void* StarManager();                                        // 0x00b3d2a0
+void* NounManager();                                        // 0x00b3d300
+void* GetPlanetModel();                                     // 0x00b3d350
+void* GetUFOSimulator();                                    // 0x00ffbe50
+int   GetCurrentGameMode();                                 // 0x00b5b800
+void* GetMissionManager();                                  // 0x00feb9f0
+void* GetPlayerHomePlanet();                                // 0x01021370
+void* GetUniverseContext();                                 // 0x01021080
+void* IsArchived();                                         // 0x01021240
+struct GameNounMgr {
+    void* GetAvatar();                                      // 0x00b1fdb0
+};
+void  GetPropertyAsFloatArray(cPropertyList* list, uint id, int* count, float** out);  // 0x006a08b0
+void  GetPropertyAsVector3(cPropertyList* list, uint id, void* out);                    // 0x006a1110
+void  CreateMinimapIcon(void* ufo, void* param);            // 0x01042080
+struct TerrainSphere {
+    float Clamp(unsigned id);   // 0x00c75c30
+};
+struct NounMgrObj {
+    TerrainSphere* GetCurrentTerrainSphere();   // 0x00f67d90
+};
+extern cPropertyList* g_15b7518;   // 0x015b7518
+template<class T> inline const T& tmin(const T& a, const T& b) { return a < b ? a : b; }
+template<class T> inline const T& tmax(const T& a, const T& b) { return a < b ? b : a; }
+struct cStarManager {
+    int    m_885c90();                       // 0x00885c90
+    Obj4c* GetEmpireByID(int id);            // 0x00ba9370
+};
+struct cEmpire { bool IsHostileToPlayer(); };   // 0x00c309e0
+struct Inventory;
+struct SpaceGame {
+    Inventory* GetPlayerInventory();   // 0x00a1ad60
+};
+struct Planet {
+    Obj4c base;                              // vptr @0
+    char pad0[0x220 - 4];
+    float f220;                              // +0x220
+    char pad1[0x544 - 0x224];
+    void* f544;                              // +0x544
+    char pad2[0x6c8 - 0x548];
+    struct Creature* f6c8;                   // +0x6c8
+    char pad3[0x714 - 0x6cc];
+    int f714;                                // +0x714
+    char pad4[0x748 - 0x718];
+    float f748;                              // +0x748
+};
+struct Inventory {
+    Obj68 base;
+    bool HasItem(const void* key);           // 0x00ff3bb0
+};
+struct CreatureBase {
+    int PlayIdleAnimation(int a, int b);   // 0x00bc96a0
+};
+struct Creature { char pad[8]; CreatureBase base; };
+struct UFOInv { char pad[0x508]; Obj10 f508; };
+struct Vec3 { float x, y, z; };
+struct Vec3Holder {
+    char pad[8];
+    cPropertyList* mPropList;
+    Vec3* f();
+};
+struct Obj2c {   // vtable slot +0x2c: bool()
+virtual void z0();
+virtual void z1();
+virtual void z2();
+virtual void z3();
+virtual void z4();
+virtual void z5();
+virtual void z6();
+virtual void z7();
+virtual void z8();
+virtual void z9();
+virtual void z10();
+    virtual bool pred();
+};
+bool FUN_01029a60(Planet* p, bool b);
+struct NounMgr { Obj0c* CreateNoun(int id); };
+struct SurfaceOrientation { uint32_t mWords[4]; };
+struct PlanetModel {
+    char pad[0x24];
+    void* mpSphere;                                             // +0x24
+    void GetPosition(Vec3* out);                                // 0x00b81720 (ret 4)
+    void* BuildSurfaceOrientation(SurfaceOrientation* out, Vec3* in);  // 0x00b7f190 (ret 8)
+};
+void* MinimapIconSource();                                      // 0x010666a0
+struct IconSource {
+    char pad[0x31c];
+    void* mpMinimapParam;                                       // +0x31c
+    void* GetMinimapParam();                                    // 0x01067e60
+};
+struct DistObj {
+    char pad[0x148];
+    float f148;
+    char pad2[0x1cc - 0x14c];
+    float f1cc;
+    float Dist() { return f1cc * f148; }   // 0x0104be30
+};
+// ---- items of slice s010297e0 end
+
+// ---- items of slice s0102be20 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern float gPosseFlockOffsets[3];
+extern float gPosseRadius;
+extern float gPosseAxisX;
+extern float gPosseAxisY;
+extern float gPosseAxisZ;
+extern float gPosseScaleA;
+extern float gPosseScaleB;
+extern float gPosseScaleC;
+extern void* gColorProperties;
+typedef int intptr_t;
+#define nullptr 0
+struct Vec3_s0102_be20 {
+    float mX;
+    float mY;
+    float mZ;
+};
+struct cObjectVector {
+    void** mpBegin;                             // 0x00
+    void** mpEnd;                               // 0x04
+    void** mpCapacity;                          // 0x08
+};
+struct cIntVector {
+    uint32_t* mpBegin;                          // 0x00
+    uint32_t* mpEnd;                            // 0x04
+    uint32_t* mpCapacity;                       // 0x08
+};
+struct cCreatureData {
+    uint8_t mPad000[0x68c];                     // 0x000
+    void* mpMission;                            // 0x68c
+    uint8_t mPad690[0x04];                      // 0x690
+    Vec3_s0102_be20 mPosseOffset;                          // 0x694
+    Vec3_s0102_be20 mPosseAxis;                            // 0x6a0
+    uint8_t mPad6ac[0x04];                      // 0x6ac
+    int mnPosseIndex;                           // 0x6b0
+    uint8_t mPad6b4[0x60];                      // 0x6b4
+    int mnState;                                // 0x714
+};
+void* GetCreatureDataVector();
+void* GetCombatantDataVector();
+void* GetCurrentGameMode_s0102_be20();
+void* BeginGameModeIteration();
+void* SpaceGameGet();
+void* SpaceGameGet(uint32_t nA, int nB);
+void* ResolveNoun(void* pNoun);
+void* GetMissionManager(void* pA);
+void* GetActivePlanet();
+void* RandomMath();
+char ResolveSpaceObject(void* pObject);
+char ResolvePlanet(void* pPlanet);
+char IsTribeOwned(void* pOwner);
+char CheckMissionAllowed(void* pOwner, void* pMission);
+char DoMissionsPreventHostility(void* pOwner, void* pMission);
+char GetPropertyAsColorRGB(void* pProperties, uint32_t nId, void* pOut);
+int GetCreatureCount(void* pData);
+int GetCombatantDamageState(void* pCombatant);
+int GetLanguageId(void* pCreature);
+int GetEmpireId(void* pCreature);
+int GetLanguageOwner(int nLanguage);
+int GetEmbassyData(void* pA, void* pB);
+int IsCreatureComplete(void* pCreature);
+uint32_t RandomUint32Uniform(void* pRandom, int nRange);
+float fsinf(float fAngle);
+float fcosf(float fAngle);
+void ReleaseRef(void* pObject);
+void* SelectCombatTargets(void* pA, void* pB);
+void ClearActionGroup(int nSlot);
+void ResetCreatureAction(void* pCreature);
+void UpdateMissionState(void* pCreature);
+void RemoveCreatureFromGroup(void* pCreature);
+void RemoveNounFromManager(void* pManager, void* pNoun);
+void operator_delete__(void* pMemory);
+// ---- items of slice s0102be20 end
+
+// @ 0x01029a10
+bool FUN_01029a10(int empireId, int planetId)
+{
+    if (GetCurrentGameMode() == 0x1654c05) {
+        if (empireId == -1) return false;
+        if (empireId == ((cStarManager*)StarManager())->m_885c90()) return false;
+        if (((cStarManager*)StarManager())->GetEmpireByID(empireId) == 0) return false;
+        if (planetId == (int)GetPlayerHomePlanet()) return false;
+    }
+    return true;
+}
+
+// @ 0x01029a60
+bool FUN_01029a60(Planet* p, bool b)
+{
+    bool r;
+    if (p->f714 == 6) {
+        r = b;
+    } else {
+        cEmpire* emp = (cEmpire*)((cStarManager*)StarManager())->GetEmpireByID(p->base.v4c());
+        if (emp == 0 || emp->IsHostileToPlayer()) r = 1;
+        else r = 0;
+    }
+    UFOInv* inv = (UFOInv*)((SpaceGame*)GetUFOSimulator())->GetPlayerInventory();
+    if (r == 0) {
+        int cur = (int)p->f544;
+        if (cur == inv->f508.v10()) r = 1;
+    } else {
+        r = 1;
+    }
+    Creature* c = p->f6c8;
+    if (c && c->base.PlayIdleAnimation(0x10, 0)) return false;
+    return r;
+}
+
+// @ 0x01029af0
+int cSPSpaceCombatTuning_s0102_97e0::GetAirRaidSirenTimeMS()
+{
+    float v = 0.0f;
+    cPropertyList* pl = mPropList;
+    if (pl) {
+        Prop* p;
+        if (pl->GetProperty(0x289453d, (void**)&p) && p->type == 0xd)
+            v = *p->GetFloat();
+    }
+    return (int)(v * g_13ec5b4);
+}
+
+// @ 0x01029cc0
+float cSPSpaceCombatTuning_s0102_97e0::GetBackgroundFighterDPS(int index)
+{
+    float result = 1.0f;
+    float* arr = 0;
+    int count = 0;
+    GetPropertyAsFloatArray(g_15b7518, 0x56b734f, &count, &arr);
+    if (count > 0)
+        result = arr[tmax(0, tmin(index, count - 1))];
+    return result;
+}
+
+// @ 0x01029d50
+float cSPSpaceCombatTuning_s0102_97e0::GetBackgroundBomberDPS(int index)
+{
+    float result = 1.0f;
+    float* arr = 0;
+    int count = 0;
+    GetPropertyAsFloatArray(g_15b7518, 0x56b7354, &count, &arr);
+    if (count > 0)
+        result = arr[tmax(0, tmin(index, count - 1))];
+    return result;
+}
+
+// @ 0x01029de0
+float cSPSpaceCombatTuning_s0102_97e0::GetBackgroundTurretDPS(int index)
+{
+    float result = 1.0f;
+    float* arr = 0;
+    int count = 0;
+    GetPropertyAsFloatArray(g_15b7518, 0x56b7358, &count, &arr);
+    if (count > 0)
+        result = arr[tmax(0, tmin(index, count - 1))];
+    return result;
+}
+
+// @ 0x01029f60
+float cSPSpaceCombatTuning_s0102_97e0::GetLootMinMoneyDrop(int index)
+{
+    if (mPropList) {
+        float* arr = 0;
+        int count = 0;
+        GetPropertyAsFloatArray(mPropList, 0x5d23ad7, &count, &arr);
+        if (count > 0)
+            return arr[tmin(count - 1, index)];
+    }
+    return 0.0f;
+}
+
+// @ 0x01029fd0
+float cSPSpaceCombatTuning_s0102_97e0::GetLootMaxMoneyDrop(int index)
+{
+    if (mPropList) {
+        float* arr = 0;
+        int count = 0;
+        GetPropertyAsFloatArray(mPropList, 0x5d23ae0, &count, &arr);
+        if (count > 0)
+            return arr[tmin(count - 1, index)];
+    }
+    return 0.0f;
+}
+
+// @ 0x0102a1d0
+float cSPSpaceCombatTuning_s0102_97e0::GetLootUFOMoneyChance(int type)
+{
+    switch (type) {
+    case 4: return GetLootBomberMoneyChance();
+    case 2: return GetLootRaiderMoneyChance();
+    case 6: return GetLootDefenderMoneyChance();
+    case 8: return GetLootInterceptorMoneyChance();
+    case 5: return GetLootThiefMoneyChance();
+    default: return 0.0f;
+    }
+}
+
+// @ 0x0102a230
+float cSPSpaceCombatTuning_s0102_97e0::GetLootCityMinMoneyDrop(int index)
+{
+    if (mPropList) {
+        float* arr = 0;
+        int count = 0;
+        GetPropertyAsFloatArray(mPropList, 0x5d282ce, &count, &arr);
+        if (count > 0)
+            return arr[tmin(count - 1, index)];
+    }
+    return 0.0f;
+}
+
+// @ 0x0102a2a0
+float cSPSpaceCombatTuning_s0102_97e0::GetLootCityMaxMoneyDrop(int index)
+{
+    if (mPropList) {
+        float* arr = 0;
+        int count = 0;
+        GetPropertyAsFloatArray(mPropList, 0x5d282d4, &count, &arr);
+        if (count > 0)
+            return arr[tmin(count - 1, index)];
+    }
+    return 0.0f;
+}
+
+// @ 0x0102a360
+int cSPSpaceCombatTuning_s0102_97e0::GetWeaponLevel(float x, float y, float z)
+{
+    float* arr = 0;
+    int count = 0;
+    GetPropertyAsFloatArray(mPropList, 0x578e8dc, &count, &arr);
+    float dist = sqrtf(y * y + x * x + z * z);
+    int n = 0;
+    while (count > 0) {
+        count = count - 1;
+        if (arr[count] > dist) ++n;
+    }
+    return n;
+}
+
+// @ 0x0102a3e0
+Vec3* Vec3Holder::f()
+{
+    static Vec3 v = { g_v0, g_v1, g_v2 };
+    if (mPropList)
+        GetPropertyAsVector3(mPropList, 0x5f89281, &v);
+    return &v;
+}
+
+// @ 0x0102a630
+float cSPSpaceCombatTuning_s0102_97e0::GetUFOHealth(int type, int index)
+{
+    float* arr = 0;
+    int count = 0;
+    unsigned keys[12] = {
+        0x33b0a8d, 0x578ce0c, 0x33b0a8d, 0x5d67a3a,
+        0x33b0a90, 0x398f85c, 0x5d67a28, 0x33b0a8d,
+        0x5d67a34, 0x33b0a8d, 0x33b0a8d, 0x640f84a
+    };
+    GetPropertyAsFloatArray(g_15b7518, keys[type], &count, &arr);
+    if (count < 1) return g_100;
+    int idx = tmin(index, count - 1);
+    float mult = 1.0f;
+    switch (type) {
+    case 1: case 2: case 4: case 5: case 6: case 7: case 8: case 9:
+        if (NounManager() && ((NounMgrObj*)NounManager())->GetCurrentTerrainSphere())
+            mult = ((NounMgrObj*)NounManager())->GetCurrentTerrainSphere()->Clamp(0xbd68b7c6);
+        break;
+    case 3:
+        mult = ((NounMgrObj*)NounManager())->GetCurrentTerrainSphere()->Clamp(0x17e57dec);
+        break;
+    }
+    return mult * arr[idx];
+}
+
+// @ 0x0102a780
+float cSPSpaceCombatTuning_s0102_97e0::GetTurretHealth(int index)
+{
+    float* arr = 0;
+    int count = 0;
+    GetPropertyAsFloatArray(g_15b7518, 0x57e2cff, &count, &arr);
+    if (count > 0)
+        return arr[tmin(count - 1, index)];
+    return g_100;
+}
+
+// @ 0x0102a840
+float cSPSpaceCombatTuning_s0102_97e0::LootChanceA(int type)
+{
+    float v = 1.0f;
+    uint id = 0;
+    switch (type) {
+    case 3:  id = 0x6259d65; break;
+    case 6:  id = 0x6259d76; break;
+    case 8:  id = 0x6259d7e; break;
+    case 2:  id = 0x6259d90; break;
+    case 1:  id = 0x6259d99; break;
+    case 11: id = 0x6259da2; break;
+    }
+    cPropertyList* pl = mPropList;
+    if (pl) {
+        Prop* p;
+        if (pl->GetProperty(id, (void**)&p) && p->type == 0xd)
+            v = *p->GetFloat();
+    }
+    return v;
+}
+
+// @ 0x0102a8f0
+float cSPSpaceCombatTuning_s0102_97e0::LootChanceB(int type)
+{
+    float v = 1.0f;
+    uint id = 0;
+    switch (type) {
+    case 3:  id = 0x6259dc1; break;
+    case 6:  id = 0x6259e0b; break;
+    case 8:  id = 0x6259e11; break;
+    case 2:  id = 0x6259e17; break;
+    case 1:  id = 0x6259e1c; break;
+    case 11: id = 0x6259e22; break;
+    case 4:  id = 0x6270bf8; break;
+    }
+    cPropertyList* pl = mPropList;
+    if (pl) {
+        Prop* p;
+        if (pl->GetProperty(id, (void**)&p) && p->type == 0xd)
+            v = *p->GetFloat();
+    }
+    return v;
+}
+
+// @ 0x0102aa50
+bool FUN_0102aa50(Planet* a, Planet* b, bool c)
+{
+    if (a && ((Obj2c*)a)->pred()) return false;
+    if (b && ((Obj2c*)b)->pred()) return false;
+    int bType = b->f714;
+    int aType = a->f714;
+    int bId = b->base.v4c();
+    int aId = a->base.v4c();
+    switch (bType) {
+    case 0: case 3:
+        if (aType == 0) return false;
+        if (aType == 3) return false;
+        if (FUN_01029a60(a, c)) return true;
+        if (aType != 8) return false;
+        if (GetUniverseContext() != 0) return false;
+        if (((GameNounMgr*)IsArchived())->GetAvatar() != (void*)a->base.v4c()) return false;
+        return c != 0;
+    case 1:
+        if (aType != 2 && aType != 4 && aType != 5 && aType != 8) return false;
+        if (a->f6c8 == 0) return true;
+        if (a->f6c8->base.PlayIdleAnimation(8, 0) != 0) return false;
+        return true;
+    case 2: case 4: case 5:
+        if (b->f6c8->base.PlayIdleAnimation(0x10, 0) == 0 &&
+            (aType == 0 || aType == 3) && FUN_01029a60(b, c))
+            return true;
+        if (aType != 6) return false;
+        return bId != aId;
+    case 6:
+        if ((aType == 2 || aType == 4 || aType == 5) && bId != aId) {
+            if (a->f6c8 == 0) return true;
+            if (a->f6c8->base.PlayIdleAnimation(8, 0) == 0) return true;
+        }
+        if (aType != 0 && aType != 3) return false;
+        return FUN_01029a60(b, c);
+    case 8:
+        if (aType != 0 && aType != 3) return false;
+        return FUN_01029a60(b, c);
+    case 11:
+        if (aType == 0 || aType == 3) return true;
+        return false;
+    default:
+        return false;
+    }
+}
+
+// @ 0x0102ac50
+void* SP_CreateUFOForSolarOrGalaxy(int arg1, int arg2)
+{
+    Obj0c* n = ((NounMgr*)NounManager())->CreateNoun(0x18ebadc);
+    cSPGameDataUFO* d;
+    if (n) d = (cSPGameDataUFO*)n->v0c(0xb033b403);
+    else d = 0;
+    d->Init(arg1, arg2);
+    return d;
+}
+
+// @ 0x0102acb0
+void* SP_CreateUFO(int arg1, int* arg2, Vec3* arg3)
+{
+    Obj0c* n = ((NounMgr*)NounManager())->CreateNoun(0x18ebadc);
+    cSPGameDataUFO* d;
+    if (n) d = (cSPGameDataUFO*)n->v0c(0xb033b403);
+    else d = 0;
+    void* emp = 0;
+    if (*arg2 != -1)
+        emp = ((cStarManager*)StarManager())->GetEmpireByID(*arg2);
+    d->Init(arg1, (int)emp);
+    bool flag;
+    Vec3 tmp;
+    if (arg3 == 0) {
+        if (arg1 == 0) return d;
+        tmp.x = -18057132.0f;
+        tmp.y = 60056.777f;
+        tmp.z = g_15b7504;
+        arg3 = &tmp;
+        flag = true;
+    } else {
+        flag = arg1 != 1;
+    }
+    d->SetDesiredModel(arg3, flag);
+    if (arg1 != 0) {
+        PlanetModel* pm = (PlanetModel*)GetPlanetModel();
+        if (pm && pm->mpSphere) {
+            Vec3 p;
+            pm->GetPosition(&p);
+            Vec3 scaled;
+            scaled.x = p.x * g_1_1;
+            scaled.y = p.y * g_1_1;
+            scaled.z = p.z * g_1_1;
+            SurfaceOrientation orient;
+            void* orientPtr = pm->BuildSurfaceOrientation(&orient, &p);
+            d->SetOrientation(&scaled, orientPtr);
+        }
+        if (GetCurrentGameMode() == 0x1654c05) {
+            IconSource* src = (IconSource*)MinimapIconSource();
+            CreateMinimapIcon(d, src->GetMinimapParam());
+        }
+    }
+    return d;
+}
+
+// @ 0x0102adf0
+bool FUN_0102adf0(Obj4c* planet)
+{
+    MissionVec* list = ((cSPMissionManager*)GetMissionManager())->GetMissionList();
+    int n = list->end - list->begin;
+    for (int i = 0; i < n; ++i) {
+        cSPMission* m = (cSPMission*)list->begin[i];
+        if ((Obj4c*)m->GetTargetPlanet() == planet) {
+            Obj38* o = (Obj38*)m;
+            if (o->v38() == 0x397bff2 || o->v38() == 0x3960c0a)
+                return m->IsActive();
+        }
+    }
+    return false;
+}
+
+// @ 0x0102ae60
+bool FUN_0102ae60(Obj4c* planet)
+{
+    MissionVec* list = ((cSPMissionManager*)GetMissionManager())->GetMissionList();
+    int n = list->end - list->begin;
+    for (int i = 0; i < n; ++i) {
+        cSPMission* m = (cSPMission*)list->begin[i];
+        if ((Obj4c*)m->GetTargetPlanet() == planet) {
+            if (((Obj38*)m)->v38() == 0x3960c0a) return m->IsActive();
+        }
+    }
+    return false;
+}
+
+// @ 0x0102aec0
+bool FUN_0102aec0(DistObj* self, Vec3* a, Vec3* b)
+{
+    float d = self->Dist();
+    if (d == g_13eb1bc) d = g_140f7ac;
+    else d = self->Dist();
+    if ((g_16de114 != b->x || g_16de118 != b->y || g_16de11c != b->z) &&
+        sqrtf((b->x - a->x) * (b->x - a->x) +
+              (b->y - a->y) * (b->y - a->y) +
+              (b->z - a->z) * (b->z - a->z)) > d)
+        return true;
+    return false;
+}
 
 // @ 0x0102af80
 bool __cdecl FUN_0102af80(void* p1, void* p2)
@@ -655,5 +1385,300 @@ int __cdecl FUN_0102bc90(void* param_1, void* param_2, char param_3)
             return local_14 + 0x508;
         }
     }
+    return 0;
+}
+
+// @ 0x0102be20
+void PositionPosseMembers()
+{
+    void* pManager = NounManager();
+    (void)pManager;
+    cObjectVector* pCreatures = (cObjectVector*)GetCreatureDataVector();
+
+    int nCount = (int)(((uint8_t*)pCreatures->mpEnd - (uint8_t*)pCreatures->mpBegin) >> 2);
+    int nPlaced = 0;
+    int nIndex = 0;
+    int nFlockCount = 0;
+    (void)nPlaced;
+
+    BeginGameModeIteration();
+    void* pList = nullptr;
+    (void)pList;
+    for (int i = 0; i < nCount; ++i) {
+        cCreatureData* pData = (cCreatureData*)pCreatures->mpBegin[i];
+        if (pData->mnState != 3)
+            continue;
+
+        pData->mPosseOffset.mX = gPosseFlockOffsets[0];
+        pData->mPosseOffset.mY = gPosseFlockOffsets[1];
+        pData->mPosseOffset.mZ = gPosseFlockOffsets[2];
+        pData->mnPosseIndex = nIndex;
+
+        float fAngle = ((float)nIndex / (float)nFlockCount) * gPosseRadius * 0.5f;
+        float fSin = fsinf(fAngle);
+        float fCos = fcosf(fAngle);
+
+        float fX = gPosseAxisX * fSin;
+        float fY = gPosseAxisY * fSin;
+        float fZ = gPosseAxisZ * fSin;
+
+        pData->mPosseAxis.mX = ((fY * fZ - fCos * fX) * gPosseScaleB +
+                               (fCos * fY + fX * fZ) * gPosseScaleC) * 2.0f +
+                              (1.0f - (fX * fX + fZ * fZ) * 2.0f) * gPosseScaleA;
+        pData->mPosseAxis.mY = ((fZ * fX - fCos * fY) * gPosseScaleB +
+                               (fCos * fZ + fY * fX) * gPosseScaleC) * 2.0f +
+                              (1.0f - (fZ * fZ + fY * fY) * 2.0f) * gPosseScaleA;
+        pData->mPosseAxis.mZ = ((fCos * fX + fZ * fY) * gPosseScaleC +
+                               (fX * fY - fCos * fZ) * gPosseScaleA) * 2.0f +
+                              (1.0f - (fY * fY + fX * fX) * 2.0f) * gPosseScaleB;
+
+        ++nIndex;
+        nFlockCount = nIndex;
+    }
+}
+
+// @ 0x0102c0c0
+void ReleaseCreaturePosse(void* pNoun)
+{
+    if (pNoun == nullptr)
+        return;
+    if (ResolveSpaceObject(pNoun) == 0)
+        return;
+
+    cObjectVector* pCreatures = (cObjectVector*)GetCreatureDataVector();
+    (void)pCreatures;
+    cObjectVector list;
+    list.mpBegin = nullptr;
+    list.mpEnd = nullptr;
+    list.mpCapacity = nullptr;
+
+    int nCount = (int)(((uint8_t*)list.mpEnd - (uint8_t*)list.mpBegin) >> 2);
+    for (int i = 0; i < nCount; ++i) {
+        cCreatureData* pData = (cCreatureData*)(intptr_t)list.mpBegin[i];
+        int nState = pData->mnState;
+        if ((nState == 2 || nState == 4 || nState == 5 || nState == 0xb) &&
+            IsTribeOwned(pNoun) == 0)
+            ResetCreatureAction(list.mpBegin[i]);
+    }
+    for (void** p = list.mpBegin; p != list.mpEnd; ++p) {
+        if (*p != nullptr)
+            ReleaseRef(*p);
+    }
+    if (list.mpBegin != nullptr && ((uint32_t*)list.mpBegin)[-1] != 0)
+        operator_delete__(list.mpBegin);
+}
+
+// @ 0x0102c1a0
+void UpdatePosseMembers(void* pNest)
+{
+    ResolveNoun(pNest);
+    if (ResolveSpaceObject(pNest) == 0)
+        return;
+
+    cIntVector* pList = (cIntVector*)GetCreatureCount(nullptr);
+    int nCount = (int)(((uint8_t*)pList->mpEnd - (uint8_t*)pList->mpBegin) >> 2);
+    int nLoop = nCount;
+    for (int i = 0; i < nLoop; ++i) {
+        void* pCreature = (void*)(intptr_t)pList->mpBegin[i];
+        void* pMember = nullptr;
+        ResolveNoun(pCreature);
+        (void)pMember;
+        if (ResolvePlanet(pMember) == 0) {
+            ClearActionGroup(0);
+            continue;
+        }
+
+        cObjectVector* pCreatures = (cObjectVector*)GetCreatureDataVector();
+        int nCreatureCount = (int)(((uint8_t*)pCreatures->mpEnd -
+                                    (uint8_t*)pCreatures->mpBegin) >> 2);
+        uint32_t* pBuffer = nullptr;
+        if (nCreatureCount != 0)
+            pBuffer = (uint32_t*)pCreatures->mpBegin;
+        cObjectVector group;
+        group.mpBegin = (void**)pBuffer;
+        group.mpEnd = (void**)pBuffer;
+
+        int nGroup = (int)(((uint8_t*)group.mpEnd - (uint8_t*)group.mpBegin) >> 2);
+        for (int j = 0; j < nGroup; ++j) {
+            cCreatureData* pData = (cCreatureData*)(intptr_t)pBuffer[j];
+            if (pData->mnState == 6 && IsTribeOwned(pMember) == 0)
+                ResetCreatureAction((void*)(intptr_t)pBuffer[j]);
+        }
+        for (void** p = group.mpBegin; p != group.mpEnd; ++p) {
+            if (*p != nullptr)
+                ReleaseRef(*p);
+        }
+        if (pBuffer != nullptr && pBuffer[-1] != 0)
+            operator_delete__(pBuffer);
+        ClearActionGroup(0);
+    }
+}
+
+// @ 0x0102c340
+void DestroyCreature(cCreatureData* pCreature, uint32_t nFlags)
+{
+    void* pManager = NounManager();
+    cObjectVector* pCreatures = (cObjectVector*)GetCreatureDataVector();
+    int nCount = (int)(((uint8_t*)pCreatures->mpEnd - (uint8_t*)pCreatures->mpBegin) >> 2);
+
+    for (int i = 0; i < nCount; ++i) {
+        cCreatureData* pData = (cCreatureData*)pCreatures->mpBegin[i];
+        if (pData == nullptr)
+            continue;
+        if (pData->mpMission != (void*)pCreature)
+            continue;
+        void* pMission = pData->mpMission;
+        if (pMission == nullptr)
+            continue;
+        pData->mpMission = nullptr;
+        ReleaseRef(pMission);
+    }
+
+    if (pCreature->mPad000[0] && *(int*)((uint8_t*)pCreature + 0x714) == 3) {
+        (void)0;
+    }
+    if (*(int*)((uint8_t*)pCreature + 0x714) == 3) {
+        void* pResult = ((void* (*)(void*, uint32_t))((void**)*(void**)pCreature)[0x4c >> 2])(
+            pCreature, nFlags);
+        BeginGameModeIteration();
+        (void)pResult;
+    }
+
+    if (GetCurrentGameMode_s0102_be20() == (void*)0x01654c05) {
+        void* pGame = SpaceGameGet();
+        if (pGame != nullptr) {
+            void* pSub = *(void**)((uint8_t*)pGame + 0x18);
+            (void)pSub;
+            void* pMinimap = nullptr;
+            (void)pMinimap;
+        }
+    }
+
+    (void)pManager;
+    void* pSlot = *(void**)((uint8_t*)pCreature + 0x508);
+    (void)pSlot;
+    RemoveCreatureFromGroup(pCreature);
+    RemoveNounFromManager(pManager, pCreature);
+}
+
+// @ 0x0102c460
+cCreatureData* PickCombatTarget(cCreatureData* pCreature)
+{
+    void* pManager = NounManager();
+    (void)pManager;
+    void* pCombatants = GetCombatantDataVector();
+    void* pSource = ((void* (*)(void*))((void**)*(void**)pCreature)[0x2c >> 2])(pCreature);
+    (void)pSource;
+    void* pResult = SelectCombatTargets(pCombatants, pSource);
+    if (pResult == nullptr)
+        return nullptr;
+
+    cObjectVector list;
+    list.mpBegin = nullptr;
+    list.mpEnd = nullptr;
+    list.mpCapacity = nullptr;
+    while (list.mpBegin != list.mpEnd) {
+        uint32_t nPick = RandomUint32Uniform(RandomMath(),
+                                             (int)(((uint8_t*)list.mpEnd -
+                                                    (uint8_t*)list.mpBegin) >> 2));
+        cCreatureData* pCandidate = (cCreatureData*)list.mpBegin[nPick];
+        if (GetCombatantDamageState((uint8_t*)pCandidate + 0x588) == 0) {
+            if (pCandidate == nullptr) {
+                UpdateMissionState(pCreature);
+                return nullptr;
+            }
+            UpdateMissionState(pCandidate);
+            return (cCreatureData*)((uint8_t*)pCandidate + 0x588);
+        }
+        list.mpEnd = (void**)((uint8_t*)list.mpEnd - 4);
+    }
+    UpdateMissionState(pCreature);
+    return nullptr;
+}
+
+// @ 0x0102c600
+char IsHostileToAll(void* pPlanet)
+{
+    if (ResolveSpaceObject(pPlanet) == 0)
+        return 0;
+    int nMode = GetLanguageId(nullptr);
+    if (nMode != 5 && nMode != 4)
+        return 0;
+
+    cObjectVector* pCreatures = (cObjectVector*)GetCreatureDataVector();
+    void** pBegin = pCreatures->mpBegin;
+    int nCount = (int)(((uint8_t*)pCreatures->mpEnd - (uint8_t*)pBegin) >> 2);
+    for (int i = 0; i < nCount; ++i) {
+        void* pCreature = pBegin[i];
+        void* pOwner = ((void* (*)(void*))((void**)*(void**)pCreature)[0x4c >> 2])(pCreature);
+        (void)pOwner;
+        int nEmpire = GetLanguageOwner(0);
+        int nPlayerEmpire = GetEmpireId(nullptr);
+        if (nEmpire == nPlayerEmpire)
+            continue;
+        if ((float)((int*)pCreature)[0x1d2] < 100.0f) {
+            if (0.0f < (float)((int*)pCreature)[0x88])
+                goto CheckPrevention;
+            if (nEmpire != 0) {
+                (void)CheckMissionAllowed((void*)(intptr_t)nEmpire, (void*)(intptr_t)nPlayerEmpire);
+                if (IsCreatureComplete((void*)(intptr_t)nEmpire) != 0)
+                    goto CheckPrevention;
+            }
+        }
+        continue;
+
+CheckPrevention:
+        {
+            void* pMission = nullptr;
+            (void)pMission;
+            void* pManager = GetMissionManager(pPlanet);
+            (void)pManager;
+            if (DoMissionsPreventHostility(pPlanet, (void*)0x016de144) == 0)
+                return 1;
+            return 0;
+        }
+    }
+    return 0;
+}
+
+// @ 0x0102c720
+char GetCreatureColorProperty(void* pUnused, void* pObject, void* pOut)
+{
+    (void)pUnused;
+    if (GetCurrentGameMode_s0102_be20() != (void*)0x01654c05)
+        return 0;
+    if (pObject == nullptr)
+        return 0;
+
+    void* pType = ((void* (*)(void*))((void**)*(void**)pObject)[0x20 >> 2])(pObject);
+    uint32_t nProperty = 0;
+    if (pType == (void*)0x018ebadc) {
+        cCreatureData* pCreature =
+            (cCreatureData*)((void* (*)(void*, uint32_t))((void**)*(void**)pObject)[0xc >> 2])(
+                pObject, 0xb033b403);
+        if (pCreature == nullptr)
+            return 0;
+        if (pCreature->mnState == 0)
+            return 0;
+        if (pCreature->mnState == 3) {
+            nProperty = 0x2587f996;
+        } else {
+            uint32_t nFlag = 0;
+            if (GetUniverseContext() == nullptr) {
+                void* pPlanet = GetActivePlanet();
+                nFlag = (uint32_t)IsHostileToAll(pPlanet);
+            }
+            char bHostile = (char)GetEmbassyData((void*)pCreature, (void*)(intptr_t)nFlag);
+            nProperty = (bHostile != 0) ? 0xc10fd3ec : 0x62872966;
+        }
+    } else {
+        void* pPlanet = GetActivePlanet();
+        char bHostile = IsHostileToAll(pPlanet);
+        nProperty = (bHostile != 0) ? 0xc10fd3ec : 0x62872966;
+    }
+
+    if (gColorProperties != nullptr &&
+        GetPropertyAsColorRGB(gColorProperties, nProperty, pOut) != 0)
+        return 1;
     return 0;
 }

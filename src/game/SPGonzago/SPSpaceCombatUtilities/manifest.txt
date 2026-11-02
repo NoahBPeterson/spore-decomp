@@ -1,3 +1,20 @@
 # source  symbol  va  flags
+../src/game/SPGonzago/SPSpaceCombatUtilities.cpp  ?FUN_01029a10@@YA_NHH@Z  01029a10  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPSpaceCombatUtilities.cpp  ?FUN_01029a60@@YA_NPAUPlanet@@_N@Z  01029a60  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPSpaceCombatUtilities.cpp  ?GetBackgroundFighterDPS@cSPSpaceCombatTuning_s0102_97e0@@QAEMH@Z  01029cc0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPSpaceCombatUtilities.cpp  ?GetBackgroundBomberDPS@cSPSpaceCombatTuning_s0102_97e0@@QAEMH@Z  01029d50  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPSpaceCombatUtilities.cpp  ?GetBackgroundTurretDPS@cSPSpaceCombatTuning_s0102_97e0@@QAEMH@Z  01029de0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPSpaceCombatUtilities.cpp  ?GetLootMinMoneyDrop@cSPSpaceCombatTuning_s0102_97e0@@QAEMH@Z  01029f60  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPSpaceCombatUtilities.cpp  ?GetLootMaxMoneyDrop@cSPSpaceCombatTuning_s0102_97e0@@QAEMH@Z  01029fd0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPSpaceCombatUtilities.cpp  ?GetLootUFOMoneyChance@cSPSpaceCombatTuning_s0102_97e0@@QAEMH@Z  0102a1d0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPSpaceCombatUtilities.cpp  ?GetLootCityMinMoneyDrop@cSPSpaceCombatTuning_s0102_97e0@@QAEMH@Z  0102a230  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPSpaceCombatUtilities.cpp  ?GetLootCityMaxMoneyDrop@cSPSpaceCombatTuning_s0102_97e0@@QAEMH@Z  0102a2a0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPSpaceCombatUtilities.cpp  ?f@Vec3Holder@@QAEPAUVec3@@XZ  0102a3e0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPSpaceCombatUtilities.cpp  ?GetTurretHealth@cSPSpaceCombatTuning_s0102_97e0@@QAEMH@Z  0102a780  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPSpaceCombatUtilities.cpp  ?LootChanceA@cSPSpaceCombatTuning_s0102_97e0@@QAEMH@Z  0102a840  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPSpaceCombatUtilities.cpp  ?LootChanceB@cSPSpaceCombatTuning_s0102_97e0@@QAEMH@Z  0102a8f0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPSpaceCombatUtilities.cpp  ?SP_CreateUFOForSolarOrGalaxy@@YAPAXHH@Z  0102ac50  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPSpaceCombatUtilities.cpp  ?FUN_0102adf0@@YA_NPAUObj4c@@@Z  0102adf0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPSpaceCombatUtilities.cpp  ?FUN_0102ae60@@YA_NPAUObj4c@@@Z  0102ae60  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
 ../src/game/SPGonzago/SPSpaceCombatUtilities.cpp  ?FUN_0102b140@Owner01402@@QAEPAXE@Z  0102b140  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPSpaceCombatUtilities.cpp  ?Init@cSPSpaceCombatTuning@SP@@QAEXXZ  0102b190  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
