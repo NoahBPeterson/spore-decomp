@@ -8,9 +8,9 @@
 00fc2ab0 TerraScatter  # descriptive: lighting direction vs sample direction fpatan angle
 00fc2c10 rw::graphics::RasterState::Construct  # descriptive: placement-new style initialiser
 00fc2c70 TerraSmooth  # descriptive: plane-classification + TerraPaint boundary pass (calls 0xfc2870 and 0x11e0744)
-00fc2ec0 SpTerraFill::Zero3  # descriptive
-00fc2ee0 SpTerraBounds::CopyCorners  # descriptive
-00fc2f10 SpTerraConfig::SetBlendIndex  # descriptive
-00fc2f30 SpTerraConfig::SetWeather  # descriptive
-00fc2f50 SpTerraConfig::GetTerraClass  # descriptive
-00fc2f90 SpTerraRefOwner::~SpTerraRefOwner  # descriptive
+00fc2ec0 ?Zero3@SpTerraFill@@QAEXPAMI@Z  # SpTerraFill::Zero3 migrated from s00fc2080 (verbatim, slice spelling)
+00fc2ee0 ?CopyCorners@SpTerraBounds@@QAEXPAI@Z  # SpTerraBounds::CopyCorners migrated from s00fc2080 (verbatim, slice spelling)
+00fc2f10 ?SetBlendIndex@SpTerraConfig@@QAEXI@Z  # SpTerraConfig::SetBlendIndex migrated from s00fc2080 (verbatim, slice spelling)
+00fc2f30 ?SetWeather@SpTerraConfig@@QAEXI@Z  # SpTerraConfig::SetWeather migrated from s00fc2080 (verbatim, slice spelling)
+00fc2f50 ?GetTerraClass@SpTerraConfig@@QAEIXZ  # SpTerraConfig::GetTerraClass migrated from s00fc2080 (verbatim, slice spelling)
+00fc2f90 ??1SpTerraRefOwner@@QAE@XZ  # SpTerraRefOwner::~SpTerraRefOwner migrated from s00fc2080 (verbatim, slice spelling)

@@ -1,1 +1,4 @@
+00fc7430 ?FUN_00fc7430@WeatherMgr@@QAEXXZ  # WeatherMgr::FUN_00fc7430 migrated from s00fc7430 (verbatim, slice spelling)
+00fc7950 ?Shutdown@WeatherMgr@@QAE_NXZ  # WeatherMgr::Shutdown migrated from s00fc7430 (verbatim, slice spelling)
+00fc7b30 ?UpdateEffects@WeatherMgr@@QAEXH@Z  # WeatherMgr::UpdateEffects migrated from s00fc7430 (verbatim, slice spelling)
 00fc7f80 ?GetCost@cBuilding@Simulator@@QAEMXZ  # cBuilding::GetCost migrated from s00fc7430 (verbatim, slice spelling)

@@ -1,2 +1,11 @@
 # source  symbol  va  flags
+../src/game/SPTerrain/SPWeatherManager.cpp  ?Zero3@SpTerraFill@@QAEXPAMI@Z  00fc2ec0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPTerrain/SPWeatherManager.cpp  ?CopyCorners@SpTerraBounds@@QAEXPAI@Z  00fc2ee0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPTerrain/SPWeatherManager.cpp  ?SetBlendIndex@SpTerraConfig@@QAEXI@Z  00fc2f10  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPTerrain/SPWeatherManager.cpp  ?SetWeather@SpTerraConfig@@QAEXI@Z  00fc2f30  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPTerrain/SPWeatherManager.cpp  ?GetTerraClass@SpTerraConfig@@QAEIXZ  00fc2f50  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPTerrain/SPWeatherManager.cpp  ??1cJetStreamMap@@QAE@XZ  00fc30f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPTerrain/SPWeatherManager.cpp  ?SetValuesPressure@cJetStreamMap@@QAE_NPAURefCounted@@II@Z  00fc3150  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPTerrain/SPWeatherManager.cpp  ?UpdateProperties@cWeatherManager_s00fc_31f0@SP@@QAEXXZ  00fc31f0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPTerrain/SPWeatherManager.cpp  ??0cWeatherManager_s00fc6640@@QAE@XZ  00fc6640  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPTerrain/SPWeatherManager.cpp  ?UpdateEffects@WeatherMgr@@QAEXH@Z  00fc7b30  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
