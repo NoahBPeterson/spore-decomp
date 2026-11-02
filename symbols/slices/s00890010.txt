@@ -7,3 +7,4 @@
 00890e20 ?GetMinDescent@Layout_s0089_0010@Text@EA@@QAEMPBUTextStyle_s0089_0010@23@@Z  # Layout_s0089_0010::GetMinDescent migrated from s00890010 (verbatim, slice spelling)
 00890f50 ??0Layout@Text@EA@@QAE@XZ  # Layout::Layout migrated from s00890010 (verbatim, slice spelling)
 00890f60 ?CompareFontCallback@@YAHPAUIFontCompareTarget@Text@EA@@HHH@Z  # CompareFontCallback migrated from s00890010 (verbatim, slice spelling)
+00890fa0 ?SetOption@OutlineFont@Text@EA@@QAEXHH@Z  # OutlineFont::SetOption migrated from s00890010 (verbatim, slice spelling)

@@ -1,0 +1,2 @@
+# source  symbol  va  flags
+../src/game/UTFSpore_Win32/EATextOutlineFont.cpp  ?SetOption@OutlineFont@Text@EA@@QAEXHH@Z  00890fa0  /O2 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
