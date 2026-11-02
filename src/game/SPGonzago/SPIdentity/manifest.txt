@@ -1,0 +1,3 @@
+# source  symbol  va  flags
+../src/game/SPGonzago/SPIdentity.cpp  ?RegisterDirectory@@YAXIPB_W@Z  00688bb0  /O2 /MD /Gy /TP /EHsc /GS- /Isrc/game/include
+../src/game/SPGonzago/SPIdentity.cpp  ?InitIDColorAttributes@Simulator@@YAXXZ  01320f20  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
