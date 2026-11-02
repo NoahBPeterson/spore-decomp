@@ -1,11 +1,11 @@
 00e2f6e0 ?Init@cSPUIAssetDiscoveryCard@@QAEXXZ  # cSPUIAssetDiscoveryCard::Init migrated from s00e2f6e0 (verbatim, slice spelling)
 00e2f980 ?ReloadTuning@cSPUIAssetDiscoveryManager@@QAEXXZ  # void cSPUIAssetDiscoveryManager::ReloadTuning
 00e2fc40 ?HandleCardMessage@cSPUIAssetDiscoveryManager@@QAEHHHH@Z  # cSPUIAssetDiscoveryManager::HandleCardMessage migrated from s00e2f6e0 (verbatim, slice spelling)
-00e2fcb0 ?ApplyFrame@cSPUIAssetDiscoveryCard@@QAEXPAH@Z  # void cSPUIAssetDiscoveryCard::ApplyFrame
-00e2fd40 ?ReleaseCurrentCard@cSPUIAssetDiscoveryManager@@QAEXXZ  # void cSPUIAssetDiscoveryManager::ReleaseCurrentCard
-00e2fda0 ?Clone@cSPUIAssetDiscoveryCard@@QAEPAV1@XZ  # cSPUIAssetDiscoveryCard* cSPUIAssetDiscoveryCard::Clone
-00e2fe10 ?Init@cSPUIAssetDiscoveryManager@@QAEXXZ  # void cSPUIAssetDiscoveryManager::Init
-00e2feb0 ?HandleAssetMessage@cSPUIAssetDiscoveryManager@@QAEHHH@Z  # int cSPUIAssetDiscoveryManager::HandleAssetMessage
+00e2fcb0 ?ApplyFrame@cSPUIAssetDiscoveryCard@@QAEXPAH@Z  # cSPUIAssetDiscoveryCard::ApplyFrame migrated from s00e2f6e0 (verbatim, slice spelling)
+00e2fd40 ?ReleaseCurrentCard@cSPUIAssetDiscoveryManager@@QAEXXZ  # cSPUIAssetDiscoveryManager::ReleaseCurrentCard migrated from s00e2f6e0 (verbatim, slice spelling)
+00e2fda0 ?Clone@cSPUIAssetDiscoveryCard@@QAEPAV1@XZ  # cSPUIAssetDiscoveryCard::Clone migrated from s00e2f6e0 (verbatim, slice spelling)
+00e2fe10 ?Init@cSPUIAssetDiscoveryManager@@QAEXXZ  # cSPUIAssetDiscoveryManager::Init migrated from s00e2f6e0 (verbatim, slice spelling)
+00e2feb0 ?HandleAssetMessage@cSPUIAssetDiscoveryManager@@QAEHHH@Z  # cSPUIAssetDiscoveryManager::HandleAssetMessage migrated from s00e2f6e0 (verbatim, slice spelling)
 00e30010 ?PushCard@cSPUIAssetDiscoveryManager@@QAEXPAPAVcSPUIAssetDiscoveryCard@@H@Z  # cSPUIAssetDiscoveryManager::PushCard migrated from s00e2f6e0 (verbatim, slice spelling)
 00e300f0 ?Shutdown@cSPUIAssetDiscoveryManager@@QAEXXZ  # cSPUIAssetDiscoveryManager::Shutdown migrated from s00e2f6e0 (verbatim, slice spelling)
 00e30230 ?Update@cSPUIAssetDiscoveryManager@@QAEXI@Z  # cSPUIAssetDiscoveryManager::Update migrated from s00e2f6e0 (verbatim, slice spelling)

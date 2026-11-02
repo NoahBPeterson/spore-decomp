@@ -1,0 +1,5 @@
+# source  symbol  va  flags
+../src/game/SPGonzago/_at_00e20000.cpp  ?Shutdown@PatchMgr@@QAEXXZ  00e20800  /O2 /MD /Gy /TP /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_00e20000.cpp  ?PosseSetFrameCallbackA@@YIXPAUIWindow@@@Z  00e21960  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_00e20000.cpp  ?PosseSetFrameCallbackB@@YIXPAUIWindow@@@Z  00e21980  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_00e20000.cpp  ?SPUIInvalidIndex@@YAHXZ  00e21ab0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
