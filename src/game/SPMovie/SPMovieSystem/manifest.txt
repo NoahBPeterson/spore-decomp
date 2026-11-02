@@ -1,4 +1,9 @@
 # source  symbol  va  flags
+../src/game/SPMovie/SPMovieSystem.cpp  ?FUN_00fc7e60@StreamA@@QAEHXZ  00fc7e60  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPMovie/SPMovieSystem.cpp  ?FUN_00fc7e90@StreamA@@QAEIXZ  00fc7e90  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPMovie/SPMovieSystem.cpp  ?FUN_00fc7eb0@StreamA@@QAEIXZ  00fc7eb0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPMovie/SPMovieSystem.cpp  ?FUN_00fc7ec0@StreamA@@QAEXPAUAudioSamples@@@Z  00fc7ec0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPMovie/SPMovieSystem.cpp  ??0StreamC@@QAE@XZ  00fc7f30  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
 ../src/game/SPMovie/SPMovieSystem.cpp  ?PauseMovie2@cMovieSystem@@QAEDXZ  00fd7610  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPMovie/SPMovieSystem.cpp  ?FUN_00fd7730@@YAXHPAUIWindowCtl@@@Z  00fd7730  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPMovie/SPMovieSystem.cpp  ?GetSomething@cMovieSystem@@QAEPAXXZ  00fd7a90  /O2 /MD /Gy /EHsc /TP /Isrc/game/include

@@ -1,4 +1,4 @@
-# va  diff-bytes  reason  (incomplete / approximate source; not counted as decompiled)
+# va  diff-bytes  reason
 00fd7260  652  DrawLayer: simplified; viewer/SetMaterialColor render path omitted
 00fd7f80  350  EndRecording: packet list teardown approximated
 00fd8190  SP::cMovieSystem::RecordMovie: in-progress.  Lock/encoder/AviEncoder/audio/AVI call skeleton and the aspect-ratio clamp are present, but the wide-string path build, the FFeedback frame-target query (v10 out-params) and the eastl_string append are approximated, so behavioural equivalence is not guaranteed. difftest: UNSUPPORTED (unresolved GetDefaultAllocator fake)

@@ -1,4 +1,4 @@
-// src/game/SPMovie/SPMovieSystem.cpp -- migrated from slice(s) s00fd90c0, s00fd8190, s00fd71e0 by tools/migrate/rewrite.py
+// src/game/SPMovie/SPMovieSystem.cpp -- migrated from slice(s) s00fc7430, s00fd90c0, s00fd8190, s00fd71e0 by tools/migrate/rewrite.py
 // Object file: SPMovie/SPMovieSystem.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -413,6 +413,96 @@ struct MovieSys {
     bool Init();
 };
 // ---- items of slice s00fd90c0 end
+
+// ---- items of slice s00fc7430 begin (TODO(rewrite): local stubs, replace by canonical classes)
+struct Vtbl { void* p[64]; };
+typedef int  (__thiscall* FnInt)(void*);
+struct AudioSamples {
+  int mTag;        // +0x00
+  int mRate;       // +0x04
+  int mChannels;   // +0x08
+  int mBits;       // +0x0c
+  int mCount;      // +0x10
+};
+struct StreamA {
+  Vtbl* mpVtable;      // +0x00
+  void* mpField04;     // +0x04
+  void* mpCallback08;  // +0x08
+  void* mpErrorCb0c;   // +0x0c
+  void* mpField10;     // +0x10
+  int   mStreamHandle; // +0x14
+  int   mField18;      // +0x18
+  int   mField1c;      // +0x1c
+
+  StreamA(void* arg);            // 0x00fc7dd0
+  void  Shutdown();              // 0x00fc7ce0
+  void  SetStreamTapHandle(void* stream, int requestId); // 0x00fc7d20
+  int   FUN_00fc7e60();          // 0x00fc7e60
+  unsigned FUN_00fc7e90();       // 0x00fc7e90
+  unsigned FUN_00fc7eb0();       // 0x00fc7eb0
+  void  FUN_00fc7ec0(AudioSamples* samples); // 0x00fc7ec0
+};
+struct StreamC {
+  Vtbl* mpVtable;      // +0x00
+  int   mField04;      // +0x04
+  int   mField08;      // +0x08
+  int   mField0c;      // +0x0c
+  int   mField10;      // +0x10
+  int   mField14;      // +0x14
+  int   mField18;      // +0x18
+  int   mField1c;      // +0x1c
+
+  StreamC();                     // 0x00fc7f30
+};
+// ---- items of slice s00fc7430 end
+
+// @ 0x00fc7e60
+int StreamA::FUN_00fc7e60()
+{
+  return ((FnInt)mpVtable->p[15])(this) * mField1c * mField18;
+}
+
+// @ 0x00fc7e90
+unsigned StreamA::FUN_00fc7e90()
+{
+  return (unsigned)(((FnInt)mpVtable->p[15])(this) * mField1c) >> 3;
+}
+
+// @ 0x00fc7eb0
+unsigned StreamA::FUN_00fc7eb0()
+{
+  return (unsigned)((FnInt)mpVtable->p[13])(this) >> 2;
+}
+
+// @ 0x00fc7ec0
+void StreamA::FUN_00fc7ec0(AudioSamples* samples)
+{
+  if (samples->mTag == 1 && samples->mRate == mField18 &&
+      samples->mChannels == mField1c) {
+    unsigned size = (unsigned)(((FnInt)mpVtable->p[15])(this) *
+                               samples->mBits * samples->mChannels) >> 3;
+    if (mpCallback08 != 0) {
+      ((void (__cdecl*)(int, unsigned, void*))mpCallback08)(
+          samples->mCount, size, mpField10);
+      return;
+    }
+  } else if (mpErrorCb0c != 0) {
+    ((void (__cdecl*)(const char*, int))mpErrorCb0c)(
+        "AudioEncoder_Pcm: the supplied AudioSamples object has the wrong sampling properties.",
+        mStreamHandle);
+  }
+}
+
+// @ 0x00fc7f30
+StreamC::StreamC()
+{
+  mpVtable = (Vtbl*)0x1491730;
+  mField04 = 0;
+  mField08 = 0;
+  mField0c = 0;
+  mField18 = 0;
+  mField1c = 0;
+}
 
 // @ 0x00fd7260
 void cMovieSystem::DrawLayer(int, int, int, int arg3)
