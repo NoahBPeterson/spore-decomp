@@ -1,0 +1,1 @@
+00fb3f10 ?RebuildDecalIndices@cTerrainSphereQuad_s00fb_39b0@SP@@QAEEPAI@Z  # cTerrainSphereQuad_s00fb_39b0::RebuildDecalIndices migrated from s00fb39b0 (verbatim, slice spelling)

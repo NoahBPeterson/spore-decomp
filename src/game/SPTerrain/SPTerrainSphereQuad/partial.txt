@@ -1,0 +1,1 @@
+# partial.txt -- functions from slice s00fb0100 (gold4 #130) not fully reconstructed.
