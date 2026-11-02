@@ -140,9 +140,15 @@ def main():
         t0 = time.time()
         why_none = {}
         before = markers_at_head(m)
-        for sid in sids:
+        # a slice whose listed functions live in a flag-variant source (s00a80240_g7.cpp) needs one more rewrite.py run per
+        # variant, which the plain run names in a VARIANT SOURCE line (mig33: 10 modules rolled back with nothing written)
+        todo = [(sid, None) for sid in sids]
+        while todo:
+            sid, var = todo.pop(0)
             rc, out = run([PY, "tools/migrate/rewrite.py", sid, "--module", m, "--batch", a.batch,
-                           "--scratch", os.path.join(SCRATCH, "rw"), "--apply", "--quiet"])
+                           "--scratch", os.path.join(SCRATCH, "rw"), "--apply", "--quiet"] + (["--variant", var] if var is not None else []))
+            if var is None:
+                todo[:0] = [(sid, v.strip('"')) for v in re.findall(r"(?m)^VARIANT SOURCE: .* --variant (\S+)$", out)]
             if rc:
                 log("  %s %s: rewrite exit %d: %s" % (m, sid, rc, out.strip().splitlines()[-1][:200] if out.strip() else ""))
             elif "COMPILE FAILED" in out:
