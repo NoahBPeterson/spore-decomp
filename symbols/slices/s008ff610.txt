@@ -5,5 +5,5 @@
 008fff80 EA::XHTML::Resource::ResourceProvider::~ResourceProvider  # byte-exact
 00900070 EA::XHTML::Resource::ResourceProvider::Request  # PDB candidate on card
 009002f0 ?SetEncoding@ResourceRequest@@QAE_NHH@Z  # ResourceRequest::SetEncoding migrated from s008ff610 (verbatim, slice spelling)
-00900310 EA::XHTML::Resource::ResourceRequest::ResourceRequest  # ctor, mRequestId = gNextRequestId++
+00900310 ??0ResourceRequest@@QAE@PBGPAUILogListener@@@Z  # ResourceRequest::ResourceRequest migrated from s008ff610 (verbatim, slice spelling)
 0143a02c ??_7ResourceProvider@@6B@  # ResourceProvider vtable (our class models only the dtor slot)

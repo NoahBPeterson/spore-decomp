@@ -16,6 +16,8 @@
 00901c60 ?WriteComment@XmlTextWriter@XML@EA@@UAE_NPB_W_N@Z  # EA::XML::XmlTextWriter::WriteComment migrated from s009013e0
 00901d30 ?SetOutputStream@XmlTextWriter@XML@EA@@QAEXPAVIStream@IO@3@_N@Z  # EA::XML::XmlTextWriter::SetOutputStream migrated from s009013e0
 00901d90 ?WriteText@XmlTextWriter@XML@EA@@UAE_NPB_WI@Z  # EA::XML::XmlTextWriter::WriteText migrated from s009013e0
+00901df0 ?FUN_00901df0@XmlTextReader@XML@EA@@QAE_NXZ  # XmlTextReader::FUN_00901df0 migrated from s009013e0 (verbatim, slice spelling)
+00901e40 ?FUN_00901e40@XmlTextReader@XML@EA@@QAE_NXZ  # XmlTextReader::FUN_00901e40 migrated from s009013e0 (verbatim, slice spelling)
 00901e60 ?FUN_00901e60@@YA_NPB_W@Z  # FUN_00901e60 migrated from s009013e0 (verbatim, slice spelling)
 00901f90 ?FUN_00901f90@HashA@@QAEPAUHashNode@@PAU2@ABQB_WI@Z  # HashA::FUN_00901f90 migrated from s009013e0 (verbatim, slice spelling)
 009020b0 ?FUN_009020b0@HashA@@QAE?AUHIter@@ABQB_W@Z  # HashA::FUN_009020b0 migrated from s009013e0 (verbatim, slice spelling)

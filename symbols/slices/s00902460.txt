@@ -13,4 +13,12 @@
 009031f0 ?Read@XmlTokenReader@XML@EA@@QAE_NPB_W0@Z  # XmlTokenReader::Read migrated from s00902460 (verbatim, slice spelling)
 00903230 ?Read2@XmlTokenReader@XML@EA@@QAE_NPB_W00@Z  # XmlTokenReader::Read2 migrated from s00902460 (verbatim, slice spelling)
 009032b0 EA::XML::FreeTokenList  # static helper, eax=list head ebx=owner
+009032e0 ?FUN_009032e0@@YAXPAHH@Z  # FUN_009032e0 migrated from s00902460 (verbatim, slice spelling)
+00903300 ?FUN_00903300@@YAXPADHH@Z  # FUN_00903300 migrated from s00902460 (verbatim, slice spelling)
+00903320 ?FUN_00903320@@YAXPADH@Z  # FUN_00903320 migrated from s00902460 (verbatim, slice spelling)
+00903330 ?FUN_00903330@@YAXPADH@Z  # FUN_00903330 migrated from s00902460 (verbatim, slice spelling)
+00903340 ?FUN_00903340@@YAXPADH@Z  # FUN_00903340 migrated from s00902460 (verbatim, slice spelling)
+00903350 ?FUN_00903350@@YAXPADH@Z  # FUN_00903350 migrated from s00902460 (verbatim, slice spelling)
+00903370 ?FUN_00903370@@YAXPADHH@Z  # FUN_00903370 migrated from s00902460 (verbatim, slice spelling)
+009033d0 ?FUN_009033d0@@YAHPADH@Z  # FUN_009033d0 migrated from s00902460 (verbatim, slice spelling)
 0093c0c0 ?SetPosition@MemoryStream@IO@EA@@UAE_NJW4PositionType@23@@Z  # EA::IO::MemoryStream::SetPosition (callee of s00902460, named from the dev publics; slice address comment)

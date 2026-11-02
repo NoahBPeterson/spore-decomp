@@ -1,0 +1,15 @@
+# source  symbol  va  flags
+../src/game/UTFSpore_Win32/_at_00900000.cpp  ?FUN_00901df0@XmlTextReader@XML@EA@@QAE_NXZ  00901df0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/_at_00900000.cpp  ?FUN_00901e40@XmlTextReader@XML@EA@@QAE_NXZ  00901e40  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/_at_00900000.cpp  ?FUN_009032e0@@YAXPAHH@Z  009032e0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/UTFSpore_Win32/_at_00900000.cpp  ?FUN_00903300@@YAXPADHH@Z  00903300  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/UTFSpore_Win32/_at_00900000.cpp  ?FUN_00903320@@YAXPADH@Z  00903320  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/UTFSpore_Win32/_at_00900000.cpp  ?FUN_00903330@@YAXPADH@Z  00903330  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/UTFSpore_Win32/_at_00900000.cpp  ?FUN_00903340@@YAXPADH@Z  00903340  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/UTFSpore_Win32/_at_00900000.cpp  ?FUN_00903350@@YAXPADH@Z  00903350  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/UTFSpore_Win32/_at_00900000.cpp  ?FUN_00903370@@YAXPADHH@Z  00903370  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/UTFSpore_Win32/_at_00900000.cpp  ?FUN_009033d0@@YAHPADH@Z  009033d0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/UTFSpore_Win32/_at_00900000.cpp  ?XmlGetParsingStatus@@YAXPADPAH@Z  009035d0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/_at_00900000.cpp  ?XmlGetByteIndex@@YAHPAD@Z  009035f0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/_at_00900000.cpp  ?XmlFlushTailA@@YAHPAD@Z  00903610  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/_at_00900000.cpp  ?XmlFlushTailB@@YAHPAD@Z  00903660  /O2 /MD /Gy /EHsc /TP /Isrc/game/include

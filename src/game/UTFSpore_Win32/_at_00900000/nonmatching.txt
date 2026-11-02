@@ -1,0 +1,3 @@
+# slice s00903400 (expat XML parser internals: xmlparse.c / xmltok hashing)
+00900310 56 ResourceRequest ctor: complete; store scheduling differs flags: /O2 /MD /Gy /TP /GS- /arch:SSE2
+00903550 81 size 66 vs 114, 81 diff. The mode transition (0x1e0 == 2/3 cases, the 0x25/0x24/0x21 status codes, the 0x1e8 final-flag check) is complete; the original measures the region through the following accessor so its byte count is inflated, and the branch on `final` is laid out differently (test/je vs the original's cmp/setne chain). flags: /O2 /MD /Gy /EHsc /TP
