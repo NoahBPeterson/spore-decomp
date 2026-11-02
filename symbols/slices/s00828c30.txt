@@ -3,10 +3,13 @@
 00828e30 ?BeginRender@@YAPAVcRender2D@@PAVRenderContext@@PAVIProv@@PAPAVcWrap@@@Z  # BeginRender migrated from s00828c30 (verbatim, slice spelling)
 00828ea0 deleting destructor
 00828ef0 ?EndRender@@YAXPAVRenderContext@@PAVcWrap@@@Z  # EndRender migrated from s00828c30 (verbatim, slice spelling)
+00828f40 ?MeasureOverflow@cPropLayout@@QAEMXZ  # cPropLayout::MeasureOverflow migrated from s00828c30 (verbatim, slice spelling)
 00829080 ?GetRect@cPropLayout@@QAEPAURect@@PAU2@@Z  # cPropLayout::GetRect migrated from s00828c30 (verbatim, slice spelling)
 008290e0 ?Do@C25c@@QAEXH@Z  # C25c::Do migrated from s00828c30 (verbatim, slice spelling)
 00829110 ?UninitCopyRefs@@YAPAPAPAVIRef@@PAPAPAV1@PAPAV1@11@Z  # UninitCopyRefs migrated from s00828c30 (verbatim, slice spelling)
+00829160 ?UpdateLayout@cPropLayout@@QAEX_N@Z  # cPropLayout::UpdateLayout migrated from s00828c30 (verbatim, slice spelling)
 008294c0 ?SetRect2@cPropLayout@@QAEXPBURect@@_N@Z  # cPropLayout::SetRect2 migrated from s00828c30 (verbatim, slice spelling)
 00829690 ?GetRectLocal@cPropLayout@@QAEPAURect@@PAU2@@Z  # cPropLayout::GetRectLocal migrated from s00828c30 (verbatim, slice spelling)
 00829770 ??0cPropLayout@@QAE@XZ  # cPropLayout::cPropLayout migrated from s00828c30 (verbatim, slice spelling)
+008297b0 ?Tick@cPropLayout@@QAEXXZ  # cPropLayout::Tick migrated from s00828c30 (verbatim, slice spelling)
 00829ad0 ??4RefVec@@QAEAAV0@ABV0@@Z  # RefVec::operator= migrated from s00828c30 (verbatim, slice spelling)

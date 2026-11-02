@@ -1,2 +1,3 @@
 00965230 ?EmbeddedCalcSize@WinButton@@QAEXD@Z  # WinButton::EmbeddedCalcSize migrated from s00965230 (verbatim, slice spelling)
 009653f0 ?Refresh@WinButton@@QAEXXZ  # WinButton::Refresh migrated from s00965230 (verbatim, slice spelling)
+00965670 ?FUN_00965670@ButtonDrawableRadio@@QAEXXZ  # ButtonDrawableRadio::FUN_00965670 migrated from s00965230 (verbatim, slice spelling)

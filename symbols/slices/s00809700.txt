@@ -1,4 +1,4 @@
-00809700 ?FUN_00809700@@YAXXZ  # FUN_00809700 migrated from s00809700 (verbatim, slice spelling)
+00809700 ?FUN_00809700@@YA_NPAUIWin@@P6A_N0PAX@Z1@Z  # FUN_00809700 migrated from s00809700 (verbatim, slice spelling)
 008098b0 ?set894@@YAXE@Z  # set894 migrated from s00809700 (verbatim, slice spelling)
 008098d0 ?set898@@YAXI@Z  # set898 migrated from s00809700 (verbatim, slice spelling)
 008098f0 ?set895@@YAXE@Z  # set895 migrated from s00809700 (verbatim, slice spelling)
@@ -7,7 +7,7 @@
 00809950 ?set8a0@@YAXI@Z  # set8a0 migrated from s00809700 (verbatim, slice spelling)
 00809970 ?FUN_00809970@@YAHXZ  # FUN_00809970 migrated from s00809700 (verbatim, slice spelling)
 008099a0 ?SPUIHelpers_BeginModal@@YAXXZ  # SPUIHelpers_BeginModal migrated from s00809700 (verbatim, slice spelling)
-00809c50 ?SPUIHelpers_EndModal@@YAXXZ  # SPUIHelpers_EndModal migrated from s00809700 (verbatim, slice spelling)
+00809c50 ?EndModal@SPUIHelpers@@YA_NPAVIWindow@UTFWin@EA@@H_N@Z  # SPUIHelpers::EndModal migrated from s00809700
 00809db0 ?FUN_00809db0@@YADPAXPBX@Z  # FUN_00809db0 migrated from s00809700 (verbatim, slice spelling)
 00809e40 EA::UTFWin subobject rebind (AutoRefCount<IWinText>)  # callee 0xb5f950
 00809f40 ?Fn@HelperObj@@QAEXPAUIWin@@PAX@Z  # HelperObj::Fn migrated from s00809700 (verbatim, slice spelling)

@@ -1,4 +1,4 @@
-// src/game/Spui/SPUIHelpers.cpp -- migrated from slice(s) s00829bc0, s00809700, s008087f0, s00807840, s008068d0, s00805940, s00804920 by tools/migrate/rewrite.py
+// src/game/Spui/SPUIHelpers.cpp -- migrated from slice(s) s00965230, s00828c30, s00829bc0, s00809700, s008087f0, s00807840, s008068d0, s00805940, s00804920 by tools/migrate/rewrite.py
 // Object file: Spui/SPUIHelpers.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -17,6 +17,10 @@ extern "C" void  DeallocEAL(void*);
 #include "EA/ResourceMan/Resource.h"
 #include "EA/ResourceMan/Manager.h"
 #include "EA/ResourceMan/Key.h"
+#include "cSPUIMessageBox.h"
+#include "EA/UTFWin/RenderContext.h"
+#include "EA/Variant.h"
+#include <string.h>
 
 // ---- items of slice s00804920 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern "C" int   AddCore(void*, int, int);
@@ -549,14 +553,23 @@ void* operator new(unsigned size, const char* name, int a, int b, int c, int d);
 // ---- items of slice s008087f0 end
 
 // ---- items of slice s00809700 begin (TODO(rewrite): local stubs, replace by canonical classes)
-extern uint8_t g_894, g_895, g_896;  // 0x0164c894/5/6
-extern uint32_t g_898, g_89c, g_8a0;// 0x0164c898/9c/a0
+extern uint8_t g_894;                // 0x0164c894
+extern uint8_t g_895;                // 0x0164c895
+extern uint8_t g_896;                // 0x0164c896
+extern uint32_t g_898;               // 0x0164c898
+extern uint32_t g_89c;               // 0x0164c89c
+extern uint32_t g_8a0;               // 0x0164c8a0
+extern "C" void efree(void* p); // 0x00a222c0
+extern "C" void* dbgnew(unsigned size, const void* data, int a, int b, const char* file, int line); // 0x00f473a0
+extern char g_data_13f6b3c;
+extern int         gWindowNodeOffset;// 0x01440aec
+extern char        g_allocFile_13ebb38[]; // 0x013ebb38
 struct AppInner { char pad[0x118]; int flag; };
 struct AppOuter { char pad[0x3c]; AppInner* inner; };
 extern AppOuter* g_app;              // 0x015fd918
 struct WM {
-virtual void w0();
-virtual void w1();
+    virtual void w0();                              // +0x00
+    virtual void* w1();                             // +0x04
 virtual void w2();
 virtual void w3();
 virtual void w4();
@@ -573,8 +586,8 @@ virtual void w14();
 virtual void w15();
 virtual void w16();
 virtual void w17();
-virtual void w18();
-virtual void w19();
+    virtual void w18();
+    virtual void w19(void* a, void* b);             // +0x4c
 virtual void w20();
 virtual void w21();
 virtual void w22();
@@ -588,25 +601,88 @@ virtual void w29();
 virtual void w30();
 virtual void w31();
     virtual void w32();
-    virtual int Fn84();      // +0x84 (index 33)
+    virtual int Fn84();                             // +0x84 (index 33)
 };
-extern "C" WM* WindowManager();
+extern "C" WM* WindowManager();     // 0x0067caa0
+#define VSLOT(o, off) (*(void***)(o))[(off) / 4]
+static inline void* vp0(void* o, int off) { return ((void* (__thiscall*)(void*))VSLOT(o, off))(o); }
+static inline void  vcall1(void* o, int off, void* a) { ((void (__thiscall*)(void*, void*))VSLOT(o, off))(o, a); }
+static inline void* vp1(void* o, int off, void* a) { return ((void* (__thiscall*)(void*, void*))VSLOT(o, off))(o, a); }
+static inline void  vcall2(void* o, int off, void* a, void* b) { ((void (__thiscall*)(void*, void*, void*))VSLOT(o, off))(o, a, b); }
+struct AutoRefIWin {
+    IWin* p;
+    AutoRefIWin& operator=(IWin* q);   // 0x00b5f950
+};
+struct ChildNode_s0080_9700 { ChildNode_s0080_9700* mpNext; ChildNode_s0080_9700* mpPrev; };
+struct TraverseNode { TraverseNode* mpNext; TraverseNode* mpPrev; IWin* mpValue; };
+struct FixedPool0080 {
+    void* mpHead;
+    void* mpPad;
+    void* mpNext;
+    void* mpCapacity;
+    unsigned mnNodeSize;
+};
+struct FixedList008097 {
+    TraverseNode* mpNext;
+    TraverseNode* mpPrev;
+    FixedPool0080 mPool;
+    char mBuffer[0x600];
+};
+extern "C" void* __fastcall FixedListCtor00809670(FixedList008097* self); // 0x00809670
+extern "C" void  __fastcall FixedListFreeNodes0080(FixedList008097* self); // 0x00a222c0
+static __forceinline TraverseNode* listAlloc008097(FixedList008097* l)
+{
+    FixedPool0080* p = &l->mPool;
+    if (p->mpHead) {
+        TraverseNode* n = (TraverseNode*)p->mpHead;
+        p->mpHead = n->mpNext;
+        return n;
+    }
+    return (TraverseNode*)dbgnew(p->mnNodeSize, &g_data_13f6b3c, 0, 0,
+                                 g_allocFile_13ebb38, 0xd1);
+}
+static __forceinline void listPush008097(FixedList008097* l, IWin* v)
+{
+    TraverseNode* n = listAlloc008097(l);
+    n->mpValue = v;
+    n->mpNext = (TraverseNode*)l;
+    n->mpPrev = l->mpPrev;
+    l->mpPrev->mpNext = n;
+    l->mpPrev = n;
+}
+static __forceinline void listPop008097(FixedList008097* l)
+{
+    TraverseNode* n = l->mpNext;
+    n->mpPrev->mpNext = n->mpNext;
+    n->mpNext->mpPrev = n->mpPrev;
+    if ((unsigned)n < (unsigned)l->mPool.mpNext || (unsigned)n >= (unsigned)l->mPool.mpCapacity) {
+        efree(n);
+    } else {
+        n->mpNext = (TraverseNode*)l->mPool.mpHead;
+        l->mPool.mpHead = n;
+    }
+}
+extern AutoRefIWin g_msgBoxObj;      // 0x0164c8f8
+extern void*       g_modalWin;       // 0x0164c890
 // ---- items of slice s00809700 end
 
 // ---- items of slice s00829bc0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern char g_sfvVtbl0;        // 0x141a0f4
+extern char g_sfvVtbl1;        // 0x141a0e4
+extern char g_sfvBase1Vtbl;    // 0x13ec458
 struct Rect { float left, top, right, bottom; };
 struct ObjT1 {
 virtual void m0();
 virtual void m1();
 virtual void m2();
-virtual void m3();
+virtual void* m3(unsigned id);
 virtual ObjT1* m4();
 virtual void m5();
 virtual void m6();
 virtual void m7();
 virtual void m8();
 virtual void m9();
-virtual void m10();
+virtual int m10();
 virtual void m11();
 virtual void m12();
 virtual void m13();
@@ -623,11 +699,11 @@ virtual void m23();
 virtual void m24();
 virtual void m25();
 virtual void m26();
-virtual void m27();
+virtual void m27(Rect* area);
 virtual void m28();
 virtual void m29();
 virtual void m30();
-virtual void m31();
+virtual void m31(int a, int b);
 virtual void m32();
 virtual void m33();
 virtual void m34();
@@ -639,7 +715,7 @@ virtual void m39();
 virtual void m40();
 virtual void m41();
 virtual void m42();
-virtual void m43();
+virtual void m43(int a);
 virtual void m44();
 virtual void m45();
 virtual void m46();
@@ -661,8 +737,8 @@ virtual void m61();
 virtual void m62();
 virtual void m63();
 virtual void m64();
-virtual void m65();
-virtual void m66();
+virtual void m65(void* p);
+virtual void m66(void* p);
 virtual void m67();
 };
 struct ObjT2 {
@@ -735,10 +811,47 @@ virtual void m65();
 virtual void m66();
 virtual void m67();
 };
+struct ScrollBar {
+virtual void m0();
+virtual void m1();
+virtual void m2();
+virtual void* m3(unsigned id);
+virtual void m4();
+virtual void m5();
+virtual void m6();
+virtual void m7();
+virtual void m8();
+virtual void m9(int value, int notify);
+virtual int m10();
+virtual void m11(int value, int notify);
+virtual int m12();
+virtual void m13(int value, int notify);
+virtual int m14();
+virtual void m15(int value, int notify);
+virtual void m16();
+virtual void m17();
+virtual void m18();
+virtual void m19();
+virtual int m20();
+virtual void m21();
+virtual void m22();
+virtual void m23();
+virtual void m24();
+};
+struct ScrollHost { virtual float m0(float value); };
+struct Msg {
+  ObjT1* mSrc;       // +0x00
+  ObjT1* mDst;       // +0x04
+  unsigned mType;    // +0x08
+  int mArg1;         // +0x0c
+  int mArg2;         // +0x10
+  int mArg3;         // +0x14
+  union { int mArg4; ObjT1* mArg4p; };   // +0x18
+};
 template<class T>
 struct AutoRef {
   T* mpObject;
-  AutoRef() : mpObject(0) {}
+  AutoRef() {}
   T* operator->() const { return mpObject; }
   AutoRef(T* p) { mpObject = p; if (p) p->m0(); }
   AutoRef(const AutoRef<T>& o) { mpObject = o.mpObject; if (mpObject) mpObject->m0(); }
@@ -753,24 +866,32 @@ struct AutoRef {
     return *this;
   }
 };
+unsigned FNV1_String16(const unsigned short* s, unsigned seed, int mode);
+struct Key { int mId; uint32_t mType; uint32_t mGroup; };
 struct SPUILayout : ObjT2 {
-  bool Init(void* desc, int a, int b);
-  ObjT1* FindWindowByID(unsigned id, int a);
-  void SetParentWin(ObjT1* parent, int a, unsigned id);
+  uint32_t mRefCount;          // +0x04
+  uint32_t mResourceKey[3];    // +0x08
+  void* mpObjectCollection;    // +0x14
+  SPUILayout();                               // 0x00810000
+  bool Init(const Key* key, bool a, int b);
+  ObjT1* FindWindowByID(unsigned id, bool a);
+  bool SetParentWin(ObjT1* parent, bool a, unsigned id);
   void Shutdown(int a);
 };
+void* operator new(unsigned int size, const char* name, int a, int b, int c, int d);
+Rect* AccumulateBounds(Rect* out, ObjT1* node, bool a, bool b);   // 0x00e36670
 typedef ObjT1 Win;
 struct SFV {
-  ObjT1* vtbl0;      // +0x00
-  ObjT1* vtbl1;      // +0x04
+  volatile ObjT1* vtbl0;      // +0x00
+  volatile ObjT1* vtbl1;      // +0x04
   uint32_t m8;       // +0x08
   SPUILayout* mLayout;  // +0x0c
   AutoRef<ObjT1> m10;   // +0x10
   AutoRef<ObjT1> m14;   // +0x14
   AutoRef<ObjT1> m18;   // +0x18
   AutoRef<ObjT1> m1c;   // +0x1c
-  AutoRef<ObjT1> m20;   // +0x20
-  uint32_t m24;      // +0x24
+  AutoRef<ScrollBar> m20;   // +0x20
+  ScrollHost* m24;   // +0x24
   float m28;         // +0x28
   float m2c;         // +0x2c
   float m30;         // +0x30
@@ -781,15 +902,255 @@ struct SFV {
   uint32_t m44;      // +0x44
 
   SFV();
-  __declspec(noinline) bool Create(int a, unsigned b, unsigned c);
+  __declspec(noinline) bool Create(int a, bool b, unsigned c);
   void Destroy();
   float GetScrollOffset();
-  bool CreateFromName(const unsigned short* name, unsigned a, unsigned b);
+  bool CreateFromName(const unsigned short* name, bool a, bool b);
   void Shutdown();
-  void Update();
-  bool OnMessage(Win* pSender, void* pMsg);
+  void Update(bool force);
+  bool OnMessage(Win* pSender, Msg* pMsg);
 };
 // ---- items of slice s00829bc0 end
+
+// ---- items of slice s00828c30 begin (TODO(rewrite): local stubs, replace by canonical classes)
+struct Pt_s0082_8c30 {
+  float x, y;
+  Pt_s0082_8c30() {}
+  Pt_s0082_8c30(float a, float b) : x(a), y(b) {}
+  Pt_s0082_8c30(const Pt_s0082_8c30& o) : x(o.x), y(o.y) {}
+};
+struct Rect_s0082_8c30 {
+  float l, t, r, b;
+  Rect_s0082_8c30() {}
+  Rect_s0082_8c30(float a, float b_, float c, float d) : l(a), t(b_), r(c), b(d) {}
+  Rect_s0082_8c30(const Rect_s0082_8c30& o) : l(o.l), t(o.t), r(o.r), b(o.b) {}
+  Rect_s0082_8c30& operator=(const Rect_s0082_8c30& o) { l = o.l; t = o.t; r = o.r; b = o.b; return *this; }
+};
+#define TL(rc) (*(Pt_s0082_8c30*)&(rc).l)
+#define BR(rc) (*(Pt_s0082_8c30*)&(rc).r)
+class IWin_s0082_8c30;
+class IRef {
+public:
+    virtual void AddRef();  // slot 0 +0x0
+    virtual void Release();  // slot 1 +0x4
+};
+class IText {
+public:
+    virtual void AddRef();  // slot 0 +0x0
+    virtual void Release();  // slot 1 +0x4
+    virtual void s2();
+    virtual void s3();
+    virtual void s4();
+    virtual void s5();
+    virtual void s6();
+    virtual void s7();
+    virtual void Measure(Rect_s0082_8c30* out, int a, int b);  // slot 8 +0x20
+};
+class IParent {
+public:
+    virtual void s0();
+    virtual void s1();
+    virtual void s2();
+    virtual void s3();
+    virtual void s4();
+    virtual void s5();
+    virtual void s6();
+    virtual void s7();
+    virtual void s8();
+    virtual void s9();
+    virtual void s10();
+    virtual void s11();
+    virtual void s12();
+    virtual void s13();
+    virtual void s14();
+    virtual void s15();
+    virtual void s16();
+    virtual void s17();
+    virtual void s18();
+    virtual void Place(int a, IWin_s0082_8c30* w);  // slot 19 +0x4c
+};
+class IWin_s0082_8c30 {
+public:
+    virtual void AddRef();  // slot 0 +0x0
+    virtual void Release();  // slot 1 +0x4
+    virtual void s2();
+    virtual IText* QueryText(unsigned id);  // slot 3 +0xc
+    virtual IWin_s0082_8c30* GetParent();  // slot 4 +0x10
+    virtual IParent* GetContainer();  // slot 5 +0x14
+    virtual void s6();
+    virtual void s7();
+    virtual void s8();
+    virtual void s9();
+    virtual unsigned GetFlags();  // slot 10 +0x28
+    virtual void s11();
+    virtual void s12();
+    virtual void s13();
+    virtual Rect_s0082_8c30* GetArea();  // slot 14 +0x38
+    virtual void s15();
+    virtual int GetStyleId();  // slot 16 +0x40
+    virtual void s17();
+    virtual void s18();
+    virtual void s19();
+    virtual void s20();
+    virtual void s21();
+    virtual void s22();
+    virtual void s23();
+    virtual void s24();
+    virtual void s25();
+    virtual void s26();
+    virtual void SetArea(const Rect_s0082_8c30* r);  // slot 27 +0x6c
+    virtual void s28();
+    virtual void s29();
+    virtual void s30();
+    virtual void s31();
+    virtual void s32();
+    virtual void s33();
+    virtual void s34();
+    virtual void s35();
+    virtual void s36();
+    virtual void s37();
+    virtual void s38();
+    virtual void s39();
+    virtual void s40();
+    virtual void s41();
+    virtual void s42();
+    virtual void s43();
+    virtual void s44();
+    virtual void s45();
+    virtual void s46();
+    virtual void s47();
+    virtual Pt_s0082_8c30* ToScreen(Pt_s0082_8c30* out, Pt_s0082_8c30 p);  // slot 48 +0xc0
+    virtual Pt_s0082_8c30* ToLocal(Pt_s0082_8c30* out, Pt_s0082_8c30 p);  // slot 49 +0xc4
+    virtual void s50();
+    virtual void s51();
+    virtual void s52();
+    virtual void s53();
+    virtual void Detach(IWin_s0082_8c30* w);  // slot 54 +0xd8
+    virtual void Attach(IWin_s0082_8c30* w);  // slot 55 +0xdc
+};
+class IRectCb {
+public:
+    virtual bool IsDragging();  // slot 0 +0x0
+    virtual void GetRect(Rect_s0082_8c30* out);  // slot 1 +0x4
+    virtual void SetRect(const Rect_s0082_8c30* r);  // slot 2 +0x8
+};
+class IWinMgr {
+public:
+    virtual void s0();
+    virtual void s1();
+    virtual void s2();
+    virtual void s3();
+    virtual void s4();
+    virtual void s5();
+    virtual void s6();
+    virtual void s7();
+    virtual void s8();
+    virtual void s9();
+    virtual void s10();
+    virtual void s11();
+    virtual void s12();
+    virtual void s13();
+    virtual void s14();
+    virtual void s15();
+    virtual void s16();
+    virtual void s17();
+    virtual IWin_s0082_8c30* GetFocus(int a);  // slot 18 +0x48
+};
+template <class T> class AutoRef_s0082_8c30 {
+ public:
+  T* p;
+  AutoRef_s0082_8c30() : p(0) {}
+  AutoRef_s0082_8c30(T* n) : p(n) { if (n) n->AddRef(); }
+  ~AutoRef_s0082_8c30() { if (p) p->Release(); }
+  AutoRef_s0082_8c30& operator=(T* n) {
+    T* old = p;
+    if (n != old) {
+      if (n) n->AddRef();
+      p = n;
+      if (old) old->Release();
+    }
+    return *this;
+  }
+};
+class AutoRefWin {
+ public:
+  IWin_s0082_8c30* p;
+  AutoRefWin() : p(0) {}
+  ~AutoRefWin();
+  AutoRefWin& operator=(IWin_s0082_8c30* n);
+};
+inline AutoRefWin::~AutoRefWin() {
+  if (p) ((IRef*)p)->Release();
+}
+class RefVec {
+ public:
+  IRef** mpBegin;
+  IRef** mpEnd;
+  IRef** mpCap;
+  RefVec() : mpBegin(0), mpEnd(0), mpCap(0) {}
+  ~RefVec();                                              // 0x004b5440
+  IRef** DoAllocateAndCopy(unsigned n, IRef** f, IRef** l);   // 0x00829a10
+  void DoDestroy(IRef** f, IRef** l);                     // 0x00b007f0
+  RefVec& operator=(const RefVec& x);
+};
+class cLayoutBase {
+ public:
+  cLayoutBase() : m4(0) {}
+  virtual ~cLayoutBase() {}
+  int m4;
+};
+class cPropLayout : public cLayoutBase {
+ public:
+  bool mBusy;          // +8
+  bool mMoved;         // +9
+  bool mPending;       // +0xa
+  float mOffset;       // +0xc
+  IRectCb* m10;        // +0x10
+  RefVec mKids;        // +0x14
+  char pad20[0x28 - 0x20];
+  AutoRef_s0082_8c30<IWin_s0082_8c30> m28;   // +0x28
+  AutoRef_s0082_8c30<IWin_s0082_8c30> m2c;   // +0x2c
+  AutoRefWin m30;      // +0x30
+  cPropLayout();
+  static void operator delete(void* p);
+  float MeasureOverflow();
+  Rect_s0082_8c30* GetRect(Rect_s0082_8c30* out);
+  Rect_s0082_8c30* GetRectLocal(Rect_s0082_8c30* out);
+  void SetRect2(const Rect_s0082_8c30* in, bool flag);
+  void ApplyRect(const Rect_s0082_8c30* r);   // 0x008290e0
+  void UpdateLayout(bool active);
+  void Tick();
+};
+Rect_s0082_8c30* __cdecl GetWindowArea(Rect_s0082_8c30* out, IWin_s0082_8c30* w);                      // 0x00805ef0
+void __cdecl GetBoundingScreenRect(Rect_s0082_8c30* out, IWin_s0082_8c30* w, int a);        // 0x00808d20
+void __cdecl UpdateMouseFocus(int a);                                 // 0x00804f50
+bool __cdecl FUN_00805150(IWin_s0082_8c30* w, IWin_s0082_8c30* x);                          // 0x00805150
+IWinMgr* __cdecl GetWindowManager();                                  // 0x0067caa0
+class Style { public: char pad[0x254]; int mMode; };
+class StyleManager { public: Style* GetStyle(int id, int a); };       // 0x00894670
+StyleManager* __cdecl GetStyleManager(int a);                         // 0x00885bd0
+// ---- items of slice s00828c30 end
+
+// ---- items of slice s00965230 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C" char vtbl_ButtonDrawableRadio[];  // 0x1441088
+extern "C" char ptr_01441070[];              // 0x1441070
+extern "C" char ptr_01441058[];              // 0x1441058
+extern "C" char vtbl_GmeEditorResBase[];     // 0x13eb938
+#pragma pack(push, 4)
+#pragma pack(pop)
+struct RefCounted {
+  virtual int v0();
+  virtual int v1();
+};
+struct ButtonDrawableRadio {
+  void* mVT0;      // 0x00
+  void* mVT1;      // 0x04
+  void* mUnk08;    // 0x08
+  void* mVT2;      // 0x0c
+  void* mObj10;    // 0x10
+  void  FUN_00965670();
+};
+// ---- items of slice s00965230 end
 
 // @ 0x00804f50
 void UpdateMouseFocus(int v)
@@ -2669,8 +3030,33 @@ IWin* SPUIHelpers_CreateRolloverFrame(const wchar_t* layoutName, float a, float 
 }
 
 // @ 0x00809700
-void FUN_00809700()
-{ /* modal-window state machine; not reconstructed */ }
+bool __cdecl FUN_00809700(IWin* root, bool (__cdecl* pred)(IWin*, void*), void* ctx)
+{
+    FixedList008097 list;
+    FixedListCtor00809670(&list);
+    listPush008097(&list, root);
+    while (list.mpNext != (TraverseNode*)&list) {
+        IWin* w = list.mpNext->mpValue;
+        if (!pred(w, ctx)) {
+            FixedListFreeNodes0080(&list);
+            return false;
+        }
+        ChildNode_s0080_9700* cur;
+        ChildNode_s0080_9700* end;
+        vcall1(w, 0xcc, &cur);
+        ChildNode_s0080_9700** endp = (ChildNode_s0080_9700**)vp1(w, 0xd0, &end);
+        while (cur != *endp) {
+            ChildNode_s0080_9700* next = cur->mpNext;
+            IWin* child = (IWin*)((char*)cur + gWindowNodeOffset);
+            cur = next;
+            listPush008097(&list, child);
+            endp = (ChildNode_s0080_9700**)vp1(w, 0xd0, &end);
+        }
+        listPop008097(&list);
+    }
+    FixedListFreeNodes0080(&list);
+    return true;
+}
 
 // @ 0x008098b0
 void set894(uint8_t v)
@@ -2712,16 +3098,256 @@ void SPUIHelpers_BeginModal()
 { /* creates the modal window/message box; not reconstructed */ }
 
 // @ 0x00809c50
-void SPUIHelpers_EndModal()
-{ /* tears down the modal window; not reconstructed */ }
+namespace SPUIHelpers {
+bool EndModal(EA::UTFWin::IWindow * w, int result, bool flag)
+{
+    if (!w) return false;
+    if (g_app->inner->flag != 0 && g_msgBoxObj.p) {
+        if (vp0(w, 0x10) && g_modalWin == w) {
+            vcall1((IWin*)vp0(w, 0x10), 0xdc, g_msgBoxObj.p);
+            g_modalWin = 0;
+        }
+    }
+    vcall2(WindowManager(), 0x78, w, (void*)result);
+    if (flag) {
+        if (vp0(w, 0x10)) vcall1((IWin*)vp0(w, 0x10), 0xdc, w);
+    }
+    if (g_app->inner->flag != 0 && (g_894 != 0 || g_895 != 0)) {
+        IWin* m = (IWin*)vp0(WindowManager(), 0x84);
+        if (m && g_modalWin == 0 && (m == (IWin*)g_898 || m == (IWin*)g_89c)) {
+            vcall1((IWin*)vp0(m, 0x10), 0xd8, g_msgBoxObj.p);
+            vcall1((IWin*)vp0(m, 0x10), 0xe8, m);
+            vcall1((IWin*)vp0(m, 0x10), 0xe8, g_msgBoxObj.p);
+            g_modalWin = m;
+        }
+    }
+    return true;
+}
+}  // namespace SPUIHelpers
+
+// @ 0x00828f40
+float cPropLayout::MeasureOverflow()
+{
+  float best = 0.0f;
+  unsigned i = 0;
+  unsigned count = (unsigned)(mKids.mpEnd - mKids.mpBegin);
+  if (0 < count) {
+    do {
+      IWin_s0082_8c30* w = (IWin_s0082_8c30*)mKids.mpBegin[i];
+      if (w) {
+        w->AddRef();
+        IText* t = w->QueryText(0xf15f4bd);
+        if (t && (w->GetFlags() & 1)) {
+          Rect_s0082_8c30 area;
+          GetWindowArea(&area, w);
+          int sid = w->GetStyleId();
+          Style* st = GetStyleManager(1)->GetStyle(sid, 0);
+          if (st->mMode != 2) {
+            w->Release();
+            goto next;
+          }
+          st->mMode = 0;
+          Rect_s0082_8c30 tr;
+          t->Measure(&tr, 0, 1);
+          st->mMode = 2;
+          float tw = tr.r - tr.l;
+          float aw = area.r - area.l;
+          if (!(aw >= tw)) {
+            float f = (tw - aw) + 8.0f;
+            if (best < f) best = f;
+          }
+        }
+        w->Release();
+      }
+    next:
+      i++;
+    } while (i < (unsigned)(((char*)mKids.mpEnd - (char*)mKids.mpBegin) >> 2));
+  }
+  return best;
+}
+
+// @ 0x00829160
+void cPropLayout::UpdateLayout(bool active)
+{
+  if (mBusy) return;
+  mBusy = true;
+  if (m28.p) {
+    if (active) {
+      float w = MeasureOverflow();
+      if (w > 0.0f) {
+        Rect_s0082_8c30 r30;
+        GetRect(&r30);
+        if (!mMoved) mOffset = r30.r - r30.l;
+        if (!m30.p && m2c.p) {
+          Rect_s0082_8c30 bound;
+          GetBoundingScreenRect(&bound, m28.p, 0);
+          m30 = m28.p->GetParent();
+          m30.p->Attach(m28.p);
+          m2c.p->Detach(m28.p);
+          m28.p->GetContainer()->Place(1, m28.p);
+          Rect_s0082_8c30 b2 = bound;
+          Pt_s0082_8c30 o1;
+          m28.p->GetParent()->ToLocal(&o1, TL(b2));
+          Pt_s0082_8c30 s1 = o1;
+          Pt_s0082_8c30 o2;
+          m28.p->GetParent()->ToLocal(&o2, BR(b2));
+          Rect_s0082_8c30 conv(s1.x, s1.y, o2.x, o2.y);
+          m28.p->SetArea(&conv);
+          Pt_s0082_8c30 o3;
+          m30.p->ToScreen(&o3, TL(r30));
+          Pt_s0082_8c30 o4;
+          m28.p->GetParent()->ToLocal(&o4, o3);
+          float nr = (r30.r - r30.l) + o4.x;
+          float nb = (r30.b - r30.t) + o4.y;
+          r30 = Rect_s0082_8c30(o4.x, o4.y, nr, nb);
+        }
+        Rect_s0082_8c30 tmp;
+        Rect_s0082_8c30* wa = GetWindowArea(&tmp, m28.p);
+        Rect_s0082_8c30 nr(r30.l, r30.t, ((wa->r - wa->l) + r30.l) + w, r30.b);
+        ApplyRect(&nr);
+        mMoved = true;
+        mPending = false;
+      }
+    } else if (mMoved) {
+      if (m30.p) mPending = true;
+      mMoved = false;
+      Rect_s0082_8c30 g;
+      GetRect(&g);
+      Rect_s0082_8c30 r40(g.l, g.t, (mOffset - (g.r - g.l)) + g.r, g.b);
+      ApplyRect(&r40);
+    }
+  }
+  mBusy = false;
+  UpdateMouseFocus(1);
+}
+
+// @ 0x008297b0
+void cPropLayout::Tick()
+{
+  bool act;
+  if (m10) {
+    act = m10->IsDragging();
+  } else {
+    IWin_s0082_8c30* f = GetWindowManager()->GetFocus(1);
+    act = FUN_00805150(m28.p, f) != 0;
+  }
+  UpdateLayout(act);
+  if (mPending) {
+    mMoved = false;
+    IWin_s0082_8c30* par = m28.p->GetParent();
+    Rect_s0082_8c30 tmp;
+    Rect_s0082_8c30* wa = GetWindowArea(&tmp, m28.p);
+    float delta = mOffset - (wa->r - wa->l);
+    IWin_s0082_8c30* cur = m30.p;
+    if (cur && par != cur) {
+      float ad = delta < 0 ? -delta : delta;
+      if (!(ad < 0.1f)) return;
+      Rect_s0082_8c30 L = *m28.p->GetArea();
+      Pt_s0082_8c30 a1;
+      par->ToScreen(&a1, TL(L));
+      Pt_s0082_8c30 s1 = a1;
+      Pt_s0082_8c30 a2;
+      par->ToScreen(&a2, BR(L));
+      Pt_s0082_8c30 s2 = a2;
+      par->Attach(m28.p);
+      m30.p->Detach(m28.p);
+      Pt_s0082_8c30 p1;
+      m30.p->ToLocal(&p1, s1);
+      Pt_s0082_8c30 p2;
+      m30.p->ToLocal(&p2, s2);
+      Rect_s0082_8c30 nr(p1.x, p1.y, p2.x, p2.y);
+      m28.p->SetArea(&nr);
+      cur = m30.p;
+    }
+    if (cur) {
+      m30.p = 0;
+      ((IRef*)cur)->Release();
+    }
+    mPending = false;
+  }
+}
+
+// @ 0x0082a040
+SFV::SFV()
+{
+  vtbl1 = (ObjT1*)&g_sfvBase1Vtbl;
+  m8 = 0;
+  _ReadWriteBarrier();
+  vtbl0 = (ObjT1*)&g_sfvVtbl0;
+  vtbl1 = (ObjT1*)&g_sfvVtbl1;
+  mLayout = 0;
+  m10.mpObject = 0;
+  m14.mpObject = 0;
+  m18.mpObject = 0;
+  m1c.mpObject = 0;
+  m20.mpObject = 0;
+  SPUILayout* pNew = new ("UI", 0, 0, 0, 0) SPUILayout();
+  SPUILayout* pOld = mLayout;
+  if (pNew != pOld) {
+    if (pNew) ((ObjT2*)pNew)->m1();
+    mLayout = pNew;
+    if (pOld) ((ObjT2*)pOld)->m2();
+  }
+}
 
 // @ 0x0082a140
-bool SFV::Create(int a, unsigned b, unsigned c)
+bool SFV::Create(int a, bool b, unsigned c)
 {
-  // Reconstruction of the layout lookup + window setup; see disassembly for the
-  // complete call sequence.  Returns the failure parameter on any missing window.
-  (void)a; (void)b; (void)c;
-  return false;
+  Key key;
+  key.mId = a;
+  key.mType = 0x510a95b;
+  key.mGroup = 0x40464100;
+  if (!mLayout->Init(&key, true, 0)) return b;
+
+  m10 = mLayout->FindWindowByID(0x4ab5e60, false);
+  m14 = mLayout->FindWindowByID(0x4ab5e50, true);
+  m18 = mLayout->FindWindowByID(0x580a910, true);
+  m1c = mLayout->FindWindowByID(0x4ab5e70, true);
+  m20 = m1c.mpObject ? (ScrollBar*)m1c.mpObject->m3(0x2ef0c885) : 0;
+
+  if (!m10.mpObject || !m14.mpObject || !m18.mpObject || !m1c.mpObject || !m20.mpObject) {
+    mLayout->Shutdown(1);
+    return b;
+  }
+
+  m20.mpObject->m9(0, 0);
+
+  Rect* p14 = m14.mpObject->m14();
+  Rect client;
+  client.left = p14->left;
+  client.top = p14->top;
+  client.right = p14->right;
+  client.bottom = p14->bottom;
+
+  Rect view;
+  view.left = 0.0f;
+  view.top = 0.0f;
+  view.right = client.right - client.left;
+  view.bottom = client.bottom - client.top;
+  m18.mpObject->m27(&view);
+
+  Rect* p1c = m1c.mpObject->m14();
+
+  m28 = client.left;
+  m2c = client.top;
+
+  Rect* p10 = m10.mpObject->m14();
+  m34 = (p10->bottom - p10->top) - client.bottom;
+  p10 = m10.mpObject->m14();
+  m30 = (p10->right - p10->left) - p1c->right;
+  m38 = p1c->left - client.right;
+  m3c = 0;
+  m40 = 0;
+
+  m10.mpObject->m43(0);
+  m14.mpObject->m43(0);
+  m18.mpObject->m43(0);
+
+  mLayout->SetParentWin(0, false, 0x5b598fa);
+  m44 = b ? 0xc1 : 0x80;
+  m10.mpObject->m65(this);
+  m24 = (ScrollHost*)c;
+  return true;
 }
 
 // @ 0x0082a450
@@ -2735,7 +3361,7 @@ void SFV::Shutdown()
   m14 = (ObjT1*)0;
   m18 = (ObjT1*)0;
   m1c = (ObjT1*)0;
-  m20 = (ObjT1*)0;
+  m20 = (ScrollBar*)0;
   mLayout->Shutdown(1);
 }
 
@@ -2747,7 +3373,100 @@ float SFV::GetScrollOffset()
 }
 
 // @ 0x0082a500
-void SFV::Update()
+void SFV::Update(bool force)
 {
-  // Recomputes the scroll extents from the layout/window rectangles.
+  Rect* p10 = m10.mpObject->m14();
+  Rect rView;
+  rView.left = m28;
+  rView.top = m2c;
+  rView.right = (p10->right - p10->left) - m30;
+  rView.bottom = (p10->bottom - p10->top) - m34;
+
+  Rect rClip = rView;
+  Rect* p1c = m1c.mpObject->m14();
+  rClip.right = rClip.right - (p1c->right - p1c->left);
+  m1c.mpObject->m27(&rClip);
+
+  float viewH = rView.bottom - rView.top;
+  float content;
+  float best;
+  // Retail keeps the accumulation target 16-byte aligned (prologue does and esp,-16).
+  __declspec(align(16)) Rect area;
+  if (m24) {
+    content = m24->m0(rView.right - rView.left);
+    best = m24->m0((rView.right - rView.left) - (rClip.right - rClip.left) - m38);
+  } else {
+    AccumulateBounds(&area, m18.mpObject, true, true);
+    if (area.left == area.right || area.top == area.bottom) {
+      content = rView.bottom - rView.top;
+    } else {
+      content = area.bottom - area.top;
+    }
+    best = content;
+  }
+
+  bool scroll = false;
+  float page = content;
+  if (content > viewH) {
+    rView.right = rView.right - ((rClip.right - rClip.left) + m38);
+    scroll = true;
+    page = best;
+  }
+
+  ScrollBar* bar = m1c.mpObject ? (ScrollBar*)m1c.mpObject->m3(0x2ef0c885) : 0;
+  int range = (int)page;
+  int visible = (int)(rView.bottom - rView.top);
+  int oldVal = m1c.mpObject->m10();
+  m1c.mpObject->m31(1, scroll);
+  m14.mpObject->m27(&rView);
+  m14.mpObject->m31(0x400, scroll);
+
+  Rect* p18 = m18.mpObject->m14();
+  area.left = p18->left;
+  area.top = p18->top;
+  area.right = p18->left + (rView.right - rView.left);
+  area.bottom = p18->top + page;
+  m18.mpObject->m27(&area);
+
+  if (scroll) {
+    if ((oldVal & 1) && m3c == (uint32_t)range && m40 == (uint32_t)visible) {
+      if (force) bar->m9(bar->m12(), 1);
+    } else {
+      bar->m11(0, 1);
+      m3c = range;
+      bar->m13(range, 1);
+      m40 = visible;
+      bar->m15(visible, 1);
+      int val = bar->m10();
+      if (force || val < bar->m12() || val > bar->m14()) val = bar->m12();
+      bar->m9(val, 1);
+    }
+  } else {
+    if (oldVal & 1) bar->m9(bar->m12(), 1);
+  }
+  if (!scroll) {
+    bar->m11(0, 1);
+    bar->m15(0, 1);
+  }
+  m1c.mpObject->m36();
+}
+
+// @ 0x0082aa20
+bool SFV::CreateFromName(const unsigned short* name, bool a, bool b)
+{
+  unsigned h = FNV1_String16(name, 0x811c9dc5, 1);
+  return Create((int)h, a, b);
+}
+
+// @ 0x00965670
+void ButtonDrawableRadio::FUN_00965670()
+{
+  RefCounted* pObj = (RefCounted*)mObj10;
+  mVT0 = vtbl_ButtonDrawableRadio;
+  mVT1 = ptr_01441070;
+  mVT2 = ptr_01441058;
+  if (pObj != 0) pObj->v1();
+  mVT2 = vtbl_GmeEditorResBase;
+  mVT1 = vtbl_GmeEditorResBase;
+  mVT0 = vtbl_GmeEditorResBase;
 }

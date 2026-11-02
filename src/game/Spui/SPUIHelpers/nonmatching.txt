@@ -55,4 +55,12 @@
 00808b20 268 complete rollover-frame placement (both useChildren paths, clamp math, FnC4 Pt-by-value + Fn70 reposition); original saves all four callee-saved registers up front (single epilogue), ours shrink-wraps them, which shifts the frame (M at +0x48 vs +0x44) [equiv: WEAK (195 valid inputs, 13.5% coverage; no mismatch)]
 00808d40 1274 complete UpdateRolloverFrame, 43 calls/43 in the same order (flags /O2 /MD /Gy /TP /arch:SSE2 /fp:fast, no EH): frame size matches; xmm register assignment for rect staging and ebp table-pointer base differ
 008093b0 707 complete CreateRolloverFrame (layout alloc/Init/3 FindWindowByID checks, Update, child-move loop, outputs); vptr-store scheduling around the layout-member copy ctor and the AddRef null-merge differ [equiv: UNSUPPORTED (our vtable reaches ??_E vector-deleting dtor)]
-0082a450 128 complete translation; AutoRef release sequence codegen differs
+00809700 304 COMPLETE breadth-first window traversal: construct the 0x600-byte inline-pool fixed list (0x00809670), push the root, then pop-front each window, visit its children through vt[0xcc]/vt[0xd0], push every child node (child = node + gWindowNodeOffset) and finally free list nodes through 0x00a222c0; remaining diff is the inlined fixed-list node insert (missing node+8 null guard) and loop register schedule; flags /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast; difftest WEAK (242 valid inputs, 32.9% coverage)
+00828f40 257 MeasureOverflow: complete; loop var/this register allocation flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+00829160 799 UpdateLayout: complete (call sequence verified); scheduling differs flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+008297b0 509 Tick: complete; scheduling differs flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+0082a040 22 complete translation; cl groups the operator-new argument pushes instead of interleaving them with the vptr/member stores flags: /O2 /MD /Gy /TP /fp:fast /arch:SSE2
+0082a140 664 complete translation; local frame is 0x2c vs the retail 0x3c and the early-failure path/rect copy schedule differs flags: /O2 /MD /Gy /TP /fp:fast /arch:SSE2
+0082a450 128 complete translation; AutoRef release sequence codegen differs flags: /O2 /MD /Gy /TP /fp:fast /arch:SSE2
+0082a500 782 complete translation; retail 16-byte-aligns the frame and builds the rect corners with unary-negation xorps/movss pairs; cl emits movdqa copies and different stack offsets flags: /O2 /MD /Gy /TP /fp:fast /arch:SSE2
+0082aa20 22 complete translation; callee schedule differs when the callee body is visible in the TU flags: /O2 /MD /Gy /TP /fp:fast /arch:SSE2

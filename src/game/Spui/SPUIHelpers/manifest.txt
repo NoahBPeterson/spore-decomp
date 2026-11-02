@@ -36,4 +36,6 @@
 ../src/game/Spui/SPUIHelpers.cpp  ?set896@@YAXE@Z  00809930  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/Spui/SPUIHelpers.cpp  ?set8a0@@YAXI@Z  00809950  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/Spui/SPUIHelpers.cpp  ?FUN_00809970@@YAHXZ  00809970  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/Spui/SPUIHelpers.cpp  ?EndModal@SPUIHelpers@@YA_NPAVIWindow@UTFWin@EA@@H_N@Z  00809c50  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/Spui/SPUIHelpers.cpp  ?GetScrollOffset@SFV@@QAEMXZ  0082a4e0  /O2 /MD /Gy /TP /fp:fast /arch:SSE2 /Isrc/game/include
+../src/game/Spui/SPUIHelpers.cpp  ?FUN_00965670@ButtonDrawableRadio@@QAEXXZ  00965670  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include

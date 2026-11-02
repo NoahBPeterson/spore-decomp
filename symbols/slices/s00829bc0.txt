@@ -4,11 +4,12 @@
 00829dd0 ??0cSPUIRotateEffect_@@QAE@XZ  # cSPUIRotateEffect_::cSPUIRotateEffect_ migrated from s00829bc0 (verbatim, slice spelling)
 00829ef0 UTFWin::cSPUIRotateEffect::`scalar deleting destructor'  # sets cSPUIRotateEffect vtables + operator_delete
 00829f30 ?UpdateTransform@cSPUIRotateEffect_@@QAEXPAUMat@@HM@Z  # cSPUIRotateEffect_::UpdateTransform migrated from s00829bc0 (verbatim, slice spelling)
-0082a040 UI::ScrollFrameVertical::ScrollFrameVertical  # vtable 0x141a0f4 vtbl_UI::ScrollFrameVertical
+0082a040 ??0SFV@@QAE@XZ  # SFV::SFV migrated from s00829bc0 (verbatim, slice spelling)
 0082a0d0 ?Destroy@SFV@@QAEXXZ  # SFV::Destroy migrated from s00829bc0 (verbatim, slice spelling)
-0082a140 ?Create@SFV@@QAE_NHII@Z  # SFV::Create migrated from s00829bc0 (verbatim, slice spelling)
+0082a140 ?Create@SFV@@QAE_NH_NI@Z  # SFV::Create migrated from s00829bc0 (verbatim, slice spelling)
 0082a450 ?Shutdown@SFV@@QAEXXZ  # SFV::Shutdown migrated from s00829bc0 (verbatim, slice spelling)
 0082a4e0 ?GetScrollOffset@SFV@@QAEMXZ  # SFV::GetScrollOffset migrated from s00829bc0 (verbatim, slice spelling)
-0082a500 ?Update@SFV@@QAEXXZ  # SFV::Update migrated from s00829bc0 (verbatim, slice spelling)
+0082a500 ?Update@SFV@@QAEX_N@Z  # SFV::Update migrated from s00829bc0 (verbatim, slice spelling)
+0082aa20 ?CreateFromName@SFV@@QAE_NPBG_N1@Z  # SFV::CreateFromName migrated from s00829bc0 (verbatim, slice spelling)
 0082ab00 ?RangeCheck@@YAHHH@Z  # RangeCheck migrated from s00829bc0 (verbatim, slice spelling)
 0082ab40 ?TableLookup@@YAIPAUTable@@PBG@Z  # TableLookup migrated from s00829bc0 (verbatim, slice spelling)
