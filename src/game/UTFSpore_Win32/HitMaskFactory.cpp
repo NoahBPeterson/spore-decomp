@@ -65,9 +65,162 @@ struct Obj34 {
 struct HMFactory { bool CreateResource(int param2, void** out, void* p4, void* p5); };
 // ---- items of slice s00997f50 end
 
-
 // callees this slice defines outside this object (rewrite.py held_callee_protos)
 const unsigned short* __cdecl FUN_00957080(const unsigned short* first, const unsigned short* last, const unsigned int* pKey);  // 0x00957080 (stays in the slice: not this object's)
+
+// ---- items of slice s009568c0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+void* __cdecl operator new(unsigned int, const char*, int, int, int, int);        // 0xf473a0 (EA allocator, name/flags form)
+void* __cdecl operator_new(unsigned int, const char*, int, int, const char*, int); // 0xf473a0 (EASTL allocator.h form)
+void  __cdecl operator_delete__(void*) throw();                                    // 0xf47380
+int* __cdecl _DoInsertValue_(void*, void*, int);          // 0x11e0744 memcpy thunk (vector DoInsertValue)
+void* __cdecl operator new(unsigned int, void* p) { return p; }
+struct UShortVec {
+    unsigned short* mpBegin;
+    unsigned short* mpEnd;
+    unsigned short* mpCapacity;
+    UShortVec& Assign(const UShortVec& x);   // 0x957160 (eastl operator=; a named method so the checker can find the symbol)
+    void swap(UShortVec& x);                                                                 // 0x9573e0
+    unsigned short* DoAllocateAndCopy(unsigned int n, const unsigned short* first, const unsigned short* last);   // 0x957110
+    void DoInsertValue(unsigned short* pPos, const unsigned short& v);                       // 0x6f5bc0
+    void push_back(const unsigned short& v) {
+        if (mpEnd < mpCapacity)
+            ::new(mpEnd++) unsigned short(v);
+        else
+            DoInsertValue(mpEnd, v);
+    }
+    void clear() {
+        unsigned short* pFirst = mpBegin;
+        unsigned short* pLast = mpEnd;
+        _DoInsertValue_(pFirst, pLast, (int)((char*)mpEnd - (char*)pLast));
+        mpEnd -= (pLast - pFirst);
+    }
+};
+struct HitMask {
+    char     pad[0xc];
+    int      mWidth;        // +0xc
+    int      mHeight;       // +0x10
+    UShortVec mRuns;        // +0x14
+    bool Contains(const int* pt);                                          // 0x9570c0
+    void BuildFromMask(const int* dims, int stride, const unsigned char* data);     // 0x957230
+    void BuildFromAlpha(const int* dims, int stride, const unsigned char* data);    // 0x957300
+    void BuildAssign(const int* dims, UShortVec* runs);                    // 0x9574c0
+};
+// ---- items of slice s009568c0 end
+
+// @ 0x00957080
+const unsigned short* __cdecl FUN_00957080(const unsigned short* first, const unsigned short* last, const unsigned int* pKey)
+{
+    int n = (int)(last - first);
+    while (n > 0) {
+        int half = n >> 1;
+        const unsigned short* mid = first + half;
+        if (!(*pKey < *mid)) {
+            first = mid + 1;
+            n -= half + 1;
+        } else
+            n = half;
+    }
+    return first;
+}
+
+// @ 0x00957160
+UShortVec& UShortVec::Assign(const UShortVec& x)
+{
+    if (&x != this) {
+        const unsigned int n = (unsigned int)(x.mpEnd - x.mpBegin);
+        if (n > (unsigned int)(mpCapacity - mpBegin)) {
+            unsigned short* pNew = DoAllocateAndCopy(n, x.mpBegin, x.mpEnd);
+            if (mpBegin && ((int*)mpBegin)[-1] != 0)
+                operator_delete__(mpBegin);
+            mpBegin = pNew;
+            mpCapacity = pNew + n;
+            mpEnd = pNew + n;
+        } else if (n > (unsigned int)(mpEnd - mpBegin)) {
+            _DoInsertValue_(mpBegin, x.mpBegin, (int)(mpEnd - mpBegin) * 2);
+            _DoInsertValue_(mpEnd, (void*)(x.mpBegin + (mpEnd - mpBegin)),
+                            (int)((char*)x.mpEnd - (char*)(x.mpBegin + (mpEnd - mpBegin))));
+            mpEnd = mpBegin + n;
+        } else {
+            _DoInsertValue_(mpBegin, x.mpBegin, (int)((char*)x.mpEnd - (char*)x.mpBegin));
+            mpEnd = mpBegin + n;
+        }
+    }
+    return *this;
+}
+
+// @ 0x00957230
+void HitMask::BuildFromMask(const int* dims, int stride, const unsigned char* data)
+{
+    mRuns.clear();
+    bool bPrev = false;
+    for (int y = 0; y < dims[1]; ++y) {
+        for (int x = 0; x < dims[0]; ++x) {
+            bool bCur = data[x] != 0;
+            if (bCur != bPrev) {
+                unsigned short v = (unsigned short)((short)dims[0] * (short)y + (short)x);
+                mRuns.push_back(v);
+                bPrev = bCur;
+            }
+        }
+        data += stride;
+    }
+    mWidth = dims[0];
+    mHeight = dims[1];
+}
+
+// @ 0x00957300
+void HitMask::BuildFromAlpha(const int* dims, int stride, const unsigned char* data)
+{
+    mRuns.clear();
+    bool bPrev = false;
+    for (int y = 0; y < dims[1]; ++y) {
+        for (int x = 0; x < dims[0]; ++x) {
+            bool bCur = data[x * 4 + 3] > 0x7f;
+            if (bCur != bPrev) {
+                unsigned short v = (unsigned short)((short)dims[0] * (short)y + (short)x);
+                mRuns.push_back(v);
+                bPrev = bCur;
+            }
+        }
+        data += stride * 4;
+    }
+    mWidth = dims[0];
+    mHeight = dims[1];
+}
+
+// @ 0x009573e0
+void UShortVec::swap(UShortVec& x)
+{
+    if ((mpBegin && ((int*)mpBegin)[-1] == 0) || (x.mpBegin && ((int*)x.mpBegin)[-1] == 0)) {
+        UShortVec temp;
+        unsigned int n = (unsigned int)(mpEnd - mpBegin);
+        unsigned short* const pNew = n ? (unsigned short*)operator_new(n * 2, "EASTL", 0, 0,
+            "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h", 0xd1) : 0;
+        unsigned short* const pCap = pNew + n;
+        temp.mpBegin = pNew;
+        temp.mpCapacity = pCap;
+        int nBytes = (int)((char*)mpEnd - (char*)mpBegin);
+        unsigned short* pDest = (unsigned short*)_DoInsertValue_(pNew, mpBegin, nBytes);
+        temp.mpEnd = pDest + (nBytes >> 1);
+        Assign(x);
+        x.Assign(temp);
+        if (pNew && ((int*)pNew)[-1] != 0)
+            operator_delete__(pNew);
+    } else {
+        unsigned short* t;
+        t = mpBegin; mpBegin = x.mpBegin; x.mpBegin = t;
+        t = mpEnd; mpEnd = x.mpEnd; x.mpEnd = t;
+        t = mpCapacity; mpCapacity = x.mpCapacity; x.mpCapacity = t;
+    }
+}
+
+// @ 0x009574c0
+void HitMask::BuildAssign(const int* dims, UShortVec* runs)
+{
+    mRuns.swap(*runs);
+    mWidth = dims[0];
+    mHeight = dims[1];
+}
 
 // @ 0x00997d40
 int Obj33::GetSupportedTypes(unsigned* out, unsigned n)

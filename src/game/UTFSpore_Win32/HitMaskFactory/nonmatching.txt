@@ -1,4 +1,7 @@
 # va  diff-bytes  reason
+00957160 158 UShortVec::operator=: complete; load order and ebx/ebp regalloc differ; difftest WEAK (176 valid, 42% coverage) after naming it UShortVec::Assign so the checker finds the symbol (operator= has no identifier to match) flags: /O2 /MD /Gy /TP /GS- /arch:SSE2 /fp:fast
+00957300 142 HitMask::BuildFromAlpha: complete; compiler strength-reduces data[x*4+3] where orig indexes; difftest FAIL is a checker artifact: the push_back value's address is a reused incoming-argument slot (orig the dims slot at entry+4, ours the stride slot at entry+8), which the checker compares raw instead of as STK; with argument-slot pointers normalised: PASS, 273 valid, 100% coverage flags: /O2 /MD /Gy /TP /GS- /arch:SSE2 /fp:fast
+009573e0 23 UShortVec::swap: complete; extra 8-byte frame slots and ternary shape differ flags: /O2 /MD /Gy /TP /GS- /arch:SSE2 /fp:fast
 00997d90 32 Obj33::Release: lock/dec scheduling and branch layout differ
 00997dc0 245 HitMaskFactory::ReadResource: image decode arg/loop schedule differs
 00997f50 46 HitMaskResource::HitMaskResource: ctor returns `this` in eax (caller reads it); vtable/zero-init store scheduling differs

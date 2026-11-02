@@ -11,14 +11,14 @@
 00956f30 ?FUN_00956f30@@YAXXZ  # FUN_00956f30 migrated from s009568c0 (verbatim, slice spelling)
 00956fa0 ?FreeDisplayListEntries@@YAXPAUDLNode@@@Z  # FreeDisplayListEntries migrated from s009568c0 (verbatim, slice spelling)
 00956ff0 ?AllocDisplayListEntry@@YAPAUDisplayList@@XZ  # AllocDisplayListEntry migrated from s009568c0 (verbatim, slice spelling)
-00957080 EA::UTFWin::UpperBound16  # upper_bound over a uint16 run table
+00957080 ?FUN_00957080@@YAPBGPBG0PBI@Z  # FUN_00957080 migrated from s009568c0 (verbatim, slice spelling)
 009570c0 ?Contains@HitMask@@QAE_NPBH@Z  # HitMask::Contains migrated from s009568c0 (verbatim, slice spelling)
 00957110 eastl::vector<unsigned short>::DoAllocateAndCopy  # new(n*2,"EASTL") + memcpy
-00957160 eastl::vector<unsigned short>::operator=  # copy assignment
-00957230 EA::UTFWin::HitMask::BuildFromMask  # byte mask -> run table
-00957300 EA::UTFWin::HitMask::BuildFromAlpha  # alpha>0x7f -> run table
-009573e0 eastl::vector<unsigned short>::swap  # copy-swap unless both own heap storage
-009574c0 EA::UTFWin::HitMask::BuildAssign  # swap runs + width/height
+00957160 ?Assign@UShortVec@@QAEAAU1@ABU1@@Z  # UShortVec::Assign migrated from s009568c0 (verbatim, slice spelling)
+00957230 ?BuildFromMask@HitMask@@QAEXPBHHPBE@Z  # HitMask::BuildFromMask migrated from s009568c0 (verbatim, slice spelling)
+00957300 ?BuildFromAlpha@HitMask@@QAEXPBHHPBE@Z  # HitMask::BuildFromAlpha migrated from s009568c0 (verbatim, slice spelling)
+009573e0 ?swap@UShortVec@@QAEXAAU1@@Z  # UShortVec::swap migrated from s009568c0 (verbatim, slice spelling)
+009574c0 ?BuildAssign@HitMask@@QAEXPBHPAUUShortVec@@@Z  # HitMask::BuildAssign migrated from s009568c0 (verbatim, slice spelling)
 00957530 ?FUN_00957530@@YIXPAH@Z  # FUN_00957530 migrated from s009568c0 (verbatim, slice spelling)
 00957550 ?Release@Image@UTFWin@EA@@UAEHXZ  # EA::UTFWin::Image::Release migrated from s009568c0
 00957570 ?Cast@UIObj@@QAEPAXI@Z  # UIObj::Cast migrated from s009568c0 (verbatim, slice spelling)
