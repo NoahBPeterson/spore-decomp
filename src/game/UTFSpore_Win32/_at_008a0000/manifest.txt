@@ -1,0 +1,4 @@
+# source  symbol  va  flags
+../src/game/UTFSpore_Win32/_at_008a0000.cpp  ?FUN_008a4900@@YIIPBM@Z  008a4900  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/_at_008a0000.cpp  ??0RangeFit@@QAE@PBVColourSet@@@Z  008a5920  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/_at_008a0000.cpp  ?ff_set_memfuncs@@YAXP6APAXI@ZP6AXPAX@ZP6APAX1I@Z@Z  008a7790  /O2 /MD /Gy /EHsc /TP /Isrc/game/include

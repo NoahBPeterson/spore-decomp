@@ -1,1 +1,2 @@
-008a4a20 WeightedCovariance  # weighted 3D covariance (xx,xy,xz,yy,yz,zz) about the weighted mean; cdecl(float*,int,Vec3*,float*)
+008a4900 ?FUN_008a4900@@YIIPBM@Z  # FUN_008a4900 migrated from s008a47f0 (verbatim, slice spelling)
+008a4a20 ?WeightedCovariance@@YAXPAMHPBUVec3@@PBM@Z  # WeightedCovariance migrated from s008a47f0 (verbatim, slice spelling)

@@ -1,1 +1,1 @@
-008a6430 ColorFit::Fit  # squish ClusterFit::SolveLeastSquares: 565 least-squares endpoint fit, floor() quantisation to /31 /63
+008a6430 ?Fit@ColorFit@@QAEMPAVVec3_s008a_6430@@0@Z  # ColorFit::Fit migrated from s008a6430 (verbatim, slice spelling)

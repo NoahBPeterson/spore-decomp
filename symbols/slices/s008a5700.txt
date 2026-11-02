@@ -1,1 +1,5 @@
-008a5ba0 ClusterFit::ClusterFit  # squish ClusterFit ctor: perceptual metric 0.2126/0.7152/0.0722, principal-axis ordering, xxsum
+008a5700 ?Select@AxisFit@@QAEXHPBUColorRows@@@Z  # AxisFit::Select migrated from s008a5700 (verbatim, slice spelling)
+008a5880 ?FUN_008a5880@@YAXPBVVec3_s008a_5700@@0PBEPAX@Z  # FUN_008a5880 migrated from s008a5700 (verbatim, slice spelling)
+008a5920 ??0RangeFit@@QAE@PBVColourSet@@@Z  # RangeFit::RangeFit migrated from s008a5700 (verbatim, slice spelling)
+008a5a40 ??0ColourSet@@QAE@PBEHH@Z  # ColourSet::ColourSet migrated from s008a5700 (verbatim, slice spelling)
+008a5ba0 ??0ClusterFit@@QAE@PBVColourSet@@@Z  # ClusterFit::ClusterFit migrated from s008a5700 (verbatim, slice spelling)
