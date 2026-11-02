@@ -1,0 +1,7 @@
+009c5cb0 ?UpdateBodyShapes@creature_mesh_instance_data@@QAEXHHH@Z  # creature_mesh_instance_data::UpdateBodyShapes migrated from s009c56c0 (verbatim, slice spelling)
+009c6440 ?SetStateInWorld@creature_mesh_instance_data@@QAEXHHPAX@Z  # creature_mesh_instance_data::SetStateInWorld migrated from s009c56c0 (verbatim, slice spelling)
+009c6500 ?UcopyOut@@YAXPAPAUmesh_instance@@PAU1@11@Z  # UcopyOut migrated from s009c56c0 (verbatim, slice spelling)
+009c6560 ?Ufill@@YAXPAUmesh_instance@@IPBU1@@Z  # Ufill migrated from s009c56c0 (verbatim, slice spelling)
+009c65b0 ?UcopyRange@@YAXPAUmesh_instance@@00@Z  # UcopyRange migrated from s009c56c0 (verbatim, slice spelling)
+009c6600 ?DestroyRange@@YAPAUmesh_instance@@PAU1@00@Z  # DestroyRange migrated from s009c56c0 (verbatim, slice spelling)
+009c6660 ?Transpose3x3@@YAPAMPAMPBM@Z  # Transpose3x3 migrated from s009c56c0 (verbatim, slice spelling)

@@ -1,8 +1,8 @@
-009c7ff0 ?Clear@creature_mesh_instance_data@@QAEXXZ  # nSPCreatureAnim::creature_mesh_instance_data::Clear (name read from callers; no PDB symbol)
-009c8050 ?Bind@creature_mesh_instance_data@@QAE_NPAUcreature_instance_data@@PAUcIModelWorld@@PAXPAUResKey@@_N@Z  # creature_mesh_instance_data::Bind
-009c8170 ?SetBodyCount@creature_mesh_instance_data@@QAEXK@Z  # creature_mesh_instance_data::SetBodyCount
-009c8200 ?ctor@creature_mesh_instance_data@@QAEPAU1@XZ  # creature_mesh_instance_data::ctor
-009c8230 ?Init@creature_mesh_instance_data@@QAE_NPAUcreature_instance_data@@PAUcIModelWorld@@PAX@Z  # creature_mesh_instance_data::Init
+009c7ff0 ?Clear@creature_mesh_instance_data_s009c_7ff0@@QAEXXZ  # creature_mesh_instance_data_s009c_7ff0::Clear migrated from s009c7ff0 (verbatim, slice spelling)
+009c8050 ?Bind@creature_mesh_instance_data_s009c_7ff0@@QAE_NPAUcreature_instance_data@@PAUcIModelWorld@@PAXPAUResKey@@_N@Z  # creature_mesh_instance_data_s009c_7ff0::Bind migrated from s009c7ff0 (verbatim, slice spelling)
+009c8170 ?SetBodyCount@?$sp_vector@Ubody_mesh_data_s009c_7ff0@@@@QAEXK@Z  # SetBodyCount migrated from s009c7ff0 (verbatim, slice spelling)
+009c8200 ?ctor@creature_mesh_instance_data_s009c_7ff0@@QAEPAU1@XZ  # creature_mesh_instance_data_s009c_7ff0::ctor migrated from s009c7ff0 (verbatim, slice spelling)
+009c8230 ?Init@creature_mesh_instance_data_s009c_7ff0@@QAE_NPAUcreature_instance_data@@PAUcIModelWorld@@PAX@Z  # creature_mesh_instance_data_s009c_7ff0::Init migrated from s009c7ff0 (verbatim, slice spelling)
 009c8460 ?Dispose@creature_mesh_instance_data@@QAEXXZ  # creature_mesh_instance_data::Dispose migrated from s009c7ff0 (verbatim, slice spelling)
 009c8510 ?Elem28CopyFwd@@YAXPAUElem28@@00@Z  # Elem28CopyFwd migrated from s009c7ff0 (verbatim, slice spelling)
 009c85c0 ?Elem28CopyBack@@YAXPAUElem28@@00@Z  # Elem28CopyBack migrated from s009c7ff0 (verbatim, slice spelling)
