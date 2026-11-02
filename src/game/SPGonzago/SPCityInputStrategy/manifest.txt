@@ -1,8 +1,13 @@
 # source  symbol  va  flags
+../src/game/SPGonzago/SPCityInputStrategy.cpp  ?FUN_00cf1000@cCityInputStrategy@@QAEIPAXI@Z  00cf1000  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPCityInputStrategy.cpp  ?FUN_00cf1060@@YGIPAXI@Z  00cf1060  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPCityInputStrategy.cpp  ?FUN_00cf14d0@cCityInputStrategy@@QAEXXZ  00cf14d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPCityInputStrategy.cpp  ?FUN_00cf1540@cCityInputStrategy@@QAEIXZ  00cf1540  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPCityInputStrategy.cpp  ?FUN_00cf15e0@@YGIPAXI@Z  00cf15e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPCityInputStrategy.cpp  ?FUN_00cf1aa0@@YGIPAX0@Z  00cf1aa0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPCityInputStrategy.cpp  ?FUN_00cf1be0@cCityInputStrategy@@QAEXH@Z  00cf1be0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPCityInputStrategy.cpp  ?ToggleTribeBanning@CityInputStrategy_s00cf_2fd0@@QAEXXZ  00cf2fd0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCityInputStrategy.cpp  ?ToggleCityBanning@CityInputStrategy_s00cf_2fd0@@QAEXXZ  00cf3040  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCityInputStrategy.cpp  ?FUN_00cf4440@CityInputStrategy_s00cf_3bf0@@QAEHII@Z  00cf4440  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPCityInputStrategy.cpp  ?Reset@CityInputStrategy@@QAEXI@Z  00cf4c00  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPCityInputStrategy.cpp  ?SetEnabled@cToolButton@@QAEX_N@Z  00e34ea0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

@@ -1,1 +1,5 @@
 00cf4660 ?Init@CityInputStrategy@@QAEXXZ  # CityInputStrategy::Init migrated from s00cf4660 (verbatim, slice spelling)
+00cf4c00 ?Reset@CityInputStrategy@@QAEXI@Z  # CityInputStrategy::Reset migrated from s00cf4660 (verbatim, slice spelling)
+00cf4ca0 ?Ctor@CityInputStrategy@@QAEPAU1@I@Z  # CityInputStrategy::Ctor migrated from s00cf4660 (verbatim, slice spelling)
+00cf4ea0 ?Destroy@CityInputStrategy@@QAEXXZ  # CityInputStrategy::Destroy migrated from s00cf4660 (verbatim, slice spelling)
+00cf50e0 ?FUN_00cf50e0@@YGIPAX0@Z  # FUN_00cf50e0 migrated from s00cf4660 (verbatim, slice spelling)

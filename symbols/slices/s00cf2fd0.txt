@@ -1,0 +1,4 @@
+00cf2fd0 ?ToggleTribeBanning@CityInputStrategy_s00cf_2fd0@@QAEXXZ  # CityInputStrategy_s00cf_2fd0::ToggleTribeBanning migrated from s00cf2fd0 (verbatim, slice spelling)
+00cf3040 ?ToggleCityBanning@CityInputStrategy_s00cf_2fd0@@QAEXXZ  # CityInputStrategy_s00cf_2fd0::ToggleCityBanning migrated from s00cf2fd0 (verbatim, slice spelling)
+00cf30b0 ?Func_CF30B0@CityInputStrategy_s00cf_2fd0@@QAEXPAXUVec3_s00cf_2fd0@@H@Z  # CityInputStrategy_s00cf_2fd0::Func_CF30B0 migrated from s00cf2fd0 (verbatim, slice spelling)
+00cf31f0 ?HandleMenuItem@CityInputStrategy_s00cf_2fd0@@QAE_NH@Z  # CityInputStrategy_s00cf_2fd0::HandleMenuItem migrated from s00cf2fd0 (verbatim, slice spelling)
