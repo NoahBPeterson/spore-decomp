@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+01337610 251 complete five-record Simulator::Attribute table initializer at 0x01573038 (mAmountInBundle/mpContainer/mType/mDisplayType/mLoose); 509 vs 518 bytes; cl caches Validate_00b1fbf0 in ebx while retail stores immediates, shifting the stack-temp slots; equiv PASS (400/400) flags: /O2 /MD /Gy /EHsc /TP
