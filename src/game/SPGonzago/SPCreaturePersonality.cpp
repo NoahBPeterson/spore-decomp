@@ -12,15 +12,24 @@
 #define TC0(ret, name) ((ret(__thiscall*)(void*)) name)
 #define TC1(ret, name) ((ret(__thiscall*)(void*, void*)) name)
 #define TC2(ret, name) ((ret(__thiscall*)(void*, void*, void*)) name)
+#define TC3(ret, name) ((ret(__thiscall*)(void*, void*, void*, void*)) name)
 #define TCS(ret, params, name) ((ret(__thiscall*)params) name)
 void*  SP_NounManager();                              // 0x00b3d300 cdecl
 void*  FUN_00b1fdb0(void*);                           // 0x00b1fdb0 thiscall (GetAvatar)
 void*  FUN_00d99500(void*);                           // 0x00d99500 cdecl
+void*  FUN_00d99470(void*);                           // 0x00d99470 cdecl
+void*  FUN_00d99420(void*, void*);                    // 0x00d99420 cdecl
+void*  FUN_00d996e0(void*, void*);                    // 0x00d996e0 cdecl
 float  FUN_00d99ac0(void*, void*, int);               // 0x00d99ac0 cdecl
 void   FUN_00d997e0(void*);                           // 0x00d997e0 thiscall
+void   FUN_00d99e20(void*, void*);                    // 0x00d99e20 cdecl
 void*  FUN_00d20610(void*);                           // 0x00d20610 thiscall (GetVelocity)
 void*  FUN_00c0ee60(void*);                           // 0x00c0ee60 thiscall
+void*  FUN_00c0ee70(void*);                           // 0x00c0ee70 thiscall
 void*  FUN_00c41ec0(void*);                           // 0x00c41ec0 thiscall
+void*  FUN_00c0bc00(void*, void*, void*);             // 0x00c0bc00 thiscall
+void*  FUN_00b3d4c0();                                // 0x00b3d4c0 cdecl
+int    FUN_00ba3f90(void*, void*, void*, void*);      // 0x00ba3f90 thiscall
 int    FUN_00c0f570(void*);                           // 0x00c0f570 thiscall (CountValid)
 uint32_t FUN_00c0f780(void*);                         // 0x00c0f780 thiscall (FindFirstValid)
 void*  FUN_00c0f8a0(void*, uint32_t);                 // 0x00c0f8a0 thiscall (GetAt)
@@ -30,6 +39,7 @@ char   FUN_00c02600(void*, void*);                    // 0x00c02600 thiscall (Is
 void   FUN_00b3d850(void*);                           // 0x00b3d850 thiscall
 void*  FUN_00bc97f0(void*, int, int, float, void*);   // 0x00bc97f0 thiscall
 char   FUN_00d6e1a0(void*, void*);                    // 0x00d6e1a0 cdecl
+int    FUN_00bc96a0(void*, int, int);                 // 0x00bc96a0 thiscall (Play)
 void*  FUN_00c04590(void*);                           // 0x00c04590 thiscall (Get)
 char   FUN_00c12400(void*, int);                      // 0x00c12400 thiscall (AnimationFinished)
 char   FUN_00c42e20(void*);                           // 0x00c42e20 thiscall (IsNearGoal)
@@ -41,8 +51,17 @@ void*  FUN_00b3d350(void*, void*);                    // 0x00b3d350 (PlanetModel
 void   FUN_00b81780(void*, void*, void*);             // 0x00b81780 thiscall (MakeRandomWorldPosition)
 float* FUN_00449c20(void*, void*);                    // 0x00449c20 cdecl (normalized_safe)
 void   FUN_00c1c5c0(void*, int, void*, void*, int);   // 0x00c1c5c0 thiscall
+char   FUN_00c123f0(void*, int);                      // 0x00c123f0 thiscall
+void   FUN_00c14940(void*, int, void*, int, int);     // 0x00c14940 thiscall
+void*  FUN_00699800(void*, void*);                    // 0x00699800 cdecl (SegmentPhysics)
+void   FUN_00b815a0(void*, void*, void*);             // 0x00b815a0 thiscall (DirectionToSurfacePosition)
+void   FUN_00c14750(int);                             // 0x00c14750
+char   FUN_00c0e0c0(int);                             // 0x00c0e0c0
 float            g_1471064;    // 0x01471064
 float            g_147bc9c;    // 0x0147bc9c
+float            g_147bc8c;    // 0x0147bc8c
+float            g_147bc88;    // 0x0147bc88
+float            g_1470f1c;    // 0x01470f1c
 float            g_1473c70;    // 0x01473c70
 float            g_147bc98;    // 0x0147bc98
 unsigned char    g_1582df6;    // 0x01582df6
@@ -67,6 +86,14 @@ struct State {
     void*  mpPartner;        // +0x1ac
     int    mAnim0;           // +0x1b0
     int    mAnim1;           // +0x1b4
+};
+struct PState {
+    int    mField0;          // +0x00
+    int    mMode;            // +0x04
+    float  mAccum;           // +0x08
+    int    mAnim;            // +0x0c
+    char   _p010[0x2d - 0x10];
+    int    mField2d;         // +0x2d
 };
 struct Holder {
     char   _p000[0x600];
@@ -275,6 +302,219 @@ float __cdecl FUN_00d6e680(Creature* self, int a1, int a2, int a3, Stimuli* stim
         }
     }
     return 0.0f;
+}
+
+// @ 0x00d6e7c0
+float __cdecl FUN_00d6e7c0(Creature* self, int a1, int a2, int a3, Stimuli* stimuli, char* out, int a6, PState* p7)
+{
+    (void)a1; (void)a2; (void)a3; (void)a6;
+    if (stimuli != 0)
+        TC0(void, FUN_00d997e0)((void*)stimuli);
+    *out = 1;
+
+    void* uVar2 = FUN_00d99420((void*)((char*)self->mpB4C + 0x1d0),
+                               (void*)p7->mField2d);
+    FUN_00d996e0(uVar2, (void*)stimuli);
+
+    void* piVar1 = stimuli->mpAny;
+    uint32_t arg = piVar1
+        ? ((uint32_t(__thiscall*)(void*, uint32_t)) (*(void***)piVar1)[0x5c / 4])
+              (piVar1, 0xce9f6639u)
+        : 0;
+    Creature* pcVar3 = (Creature*)FUN_00d99470((void*)arg);
+
+    Spatial* pfVar6;
+    if (pcVar3 == 0) {
+        pfVar6 = 0;
+    } else {
+        pfVar6 = &pcVar3->mLoco;
+        if (pfVar6 != 0)
+            goto have_partner;
+    }
+
+    if (TCS(int, (void*, int, int), FUN_00bc96a0)((void*)((char*)self->mpB4C + 8), 0x4000000, 0)) {
+        void* av = TC0(void*, FUN_00b1fdb0)(SP_NounManager());
+        pcVar3 = (Creature*)av;
+        if (av == 0)
+            pfVar6 = 0;
+        else
+            pfVar6 = &((Creature*)av)->mLoco;
+        void* av2 = TC0(void*, FUN_00b1fdb0)(SP_NounManager());
+        void* val = av2 ? (void*)&((Creature*)av2)->mSub5a8 : 0;
+        stimuli->mpAny = val;
+    }
+
+have_partner:
+    if (pcVar3 != 0) {
+        void* t = TC0(void*, FUN_00c0ee70)((void*)pcVar3);
+        if (t != (void*)self) {
+            float thr = g_147bc88;
+            void* iv = FUN_00b3d4c0();
+            if (iv != 0) {
+                void* u = TC2(void*, FUN_00c0bc00)((void*)self, (void*)self,
+                                                   (void*)pcVar3);
+                int r = TC3(int, FUN_00ba3f90)(iv, u, (void*)self, (void*)pcVar3);
+                if (r == 4 || r == 6)
+                    thr = g_1470f1c;
+            }
+            float res = FUN_00d99ac0((void*)pfVar6, (void*)&self->mLoco, 1);
+            if (res < thr)
+                return 1.0f;
+        }
+    }
+    return 0.0f;
+}
+
+// @ 0x00d6e910
+uint8_t __cdecl PERSONAL_SPACE_Tick(Creature* self, int a1, int a2, int a3, PState* other, PState* st, float dt)
+{
+    (void)a1; (void)a2; (void)a3;
+    void* t = TC0(void*, FUN_00c0ee70)((void*)self);
+    Creature* pcVar3 = (Creature*)FUN_00d99470(t);
+    if (pcVar3 == 0)
+        return 0;
+    void* t2 = TC0(void*, FUN_00c0ee70)((void*)pcVar3);
+    if (t2 == (void*)self)
+        return 0;
+
+    Spatial* pfVar7  = &pcVar3->mLoco;
+    Spatial* pfVar11 = self ? &self->mLoco : 0;
+
+    if (st->mMode == 0) {
+        float r = FUN_00d99ac0((void*)pfVar7, (void*)pfVar11, 1);
+        if (1.0f <= r) {
+            if (st->mAnim == 0 || TCS(char, (void*, int), FUN_00c123f0)((void*)self, st->mAnim)) {
+                st->mAnim = 0x4212960;
+                TCS(void, (void*, int, void*, int, int), FUN_00c14940)((void*)self, 0x4212960, (void*)pfVar7, -1, -1);
+            }
+            st->mAccum = st->mAccum + dt;
+            if (st->mAccum <= 5.0f)
+                return 1;
+        }
+        st->mMode = 1;
+        return 1;
+    }
+
+    if (st->mMode == 1) {
+        float f12 = ((float(__thiscall*)(void*))
+                     (*(void***)pfVar7)[0x74 / 4])((void*)pfVar7);
+        float f13 = ((float(__thiscall*)(void*))
+                     (*(void***)pfVar11)[0x74 / 4])((void*)pfVar11);
+        char c = ((char(__thiscall*)(void*))
+                  (*(void***)self)[0xd0 / 4])((void*)self);
+        float dist = (c == 0) ? 7.5f : 1.0f;
+        dist = dist + (f13 + f12);
+
+        Vec3* pfa = ((Vec3*(__thiscall*)(void*))
+                     (*(void***)pfVar7)[0x2c / 4])((void*)pfVar7);
+        Vec3* pfb = ((Vec3*(__thiscall*)(void*))
+                     (*(void***)pfVar11)[0x2c / 4])((void*)pfVar11);
+        Vec3 d;
+        d.x = pfb->x - pfa->x;
+        d.y = pfb->y - pfa->y;
+        d.z = pfb->z - pfa->z;
+        Vec3 n;
+        FUN_00449c20(&n, &d);
+        Vec3 step;
+        step.x = n.x * dist;
+        step.y = n.y * dist;
+        step.z = n.z * dist;
+        Vec3* pfa2 = ((Vec3*(__thiscall*)(void*))
+                      (*(void***)pfVar7)[0x2c / 4])((void*)pfVar7);
+        Vec3 tgt;
+        tgt.x = pfa2->x + step.x;
+        tgt.y = pfa2->y + step.y;
+        tgt.z = pfa2->z + step.z;
+
+        float rr = FUN_00d99ac0((void*)pfVar11, (void*)pfVar7, 1);
+        if (rr < 1.0f) {
+            float d2 = dist + 1.0f;
+            Vec3* fwd = ((Vec3*(__thiscall*)(void*, void*))
+                         (*(void***)pfVar7)[0x5c / 4])((void*)pfVar7, (void*)0);
+            Vec3 neg;
+            neg.x = -fwd->x;
+            neg.y = -fwd->y;
+            neg.z = -fwd->z;
+            ((void*(__thiscall*)(void*, void*))
+             (*(void***)pfVar11)[0x2c / 4])((void*)pfVar11, &neg);
+            float fa = ((float(__thiscall*)(void*))
+                        (*(void***)pfVar7)[0x74 / 4])((void*)pfVar7);
+            void* ub = ((void*(__thiscall*)(void*))
+                        (*(void***)pfVar7)[0x2c / 4])((void*)pfVar7);
+            void* sp = FUN_00699800(ub, (void*)(uint32_t)fa);
+            Vec3 p2;
+            p2.x = ((float*)sp)[0];
+            p2.y = ((float*)sp)[1];
+            p2.z = ((float*)sp)[2];
+            Vec3* pa = ((Vec3*(__thiscall*)(void*))
+                        (*(void***)pfVar7)[0x2c / 4])((void*)pfVar7);
+            Vec3 dd;
+            dd.x = p2.x - pa->x;
+            dd.y = p2.y - pa->y;
+            dd.z = p2.z - pa->z;
+            Vec3 nn;
+            FUN_00449c20(&nn, &dd);
+            Vec3 stp;
+            stp.x = nn.x * d2;
+            stp.y = nn.y * d2;
+            stp.z = nn.z * d2;
+            Vec3* pa3 = ((Vec3*(__thiscall*)(void*))
+                         (*(void***)pfVar7)[0x2c / 4])((void*)pfVar7);
+            tgt.x = pa3->x + stp.x;
+            tgt.y = pa3->y + stp.y;
+            tgt.z = pa3->z + step.z;
+        }
+
+        Vec3* pp = ((Vec3*(__thiscall*)(void*))
+                    (*(void***)pfVar11)[0x2c / 4])((void*)pfVar11);
+        FUN_00d99e20(pp, &tgt);
+        float dx = pp->x - tgt.x, dy = pp->y - tgt.y, dz = pp->z - tgt.z;
+        if (dx * dx + dy * dy + dz * dz < g_147bc8c) {
+            Vec3* pf2 = ((Vec3*(__thiscall*)(void*))
+                         (*(void***)pfVar7)[0x2c / 4])((void*)pfVar7);
+            Vec3 dd;
+            dd.x = pf2->x - pp->x;
+            dd.y = pf2->y - pp->y;
+            dd.z = pf2->z - pp->z;
+            Vec3 nn;
+            FUN_00449c20(&nn, &dd);
+            Vec3 stp;
+            stp.x = nn.x * dist;
+            stp.y = nn.y * dist;
+            stp.z = nn.z * dist;
+            Vec3* pf3 = ((Vec3*(__thiscall*)(void*))
+                         (*(void***)pfVar7)[0x2c / 4])((void*)pfVar7);
+            tgt.x = stp.x + pf3->x;
+            tgt.y = stp.y + pf3->y;
+            tgt.z = stp.z + pf3->z;
+            FUN_00d99e20(pp, &tgt);
+        }
+
+        ((void*(__thiscall*)(void*, void*, int, int))
+         (*(void***)pfVar11)[0x5c / 4])((void*)pfVar11, (void*)0, 1, 2);
+        Vec3 outv;
+        void* pm = FUN_00b3d350(&outv, &tgt);
+        TC2(void, FUN_00b815a0)(pm, &outv, &tgt);
+        TCS(void, (void*, int, void*, void*, int), FUN_00c1c5c0)((void*)self, 2, &tgt, &outv, 1);
+        Creature* r = (Creature*)TC0(void*, FUN_00c41ec0)((void*)&self->mLoco);
+        r->mLoco.mField5c = 4;
+        other->mMode = 2;
+        return 1;
+    }
+
+    if (st->mMode != 2)
+        return 1;
+
+    if (TC0(char, FUN_00c42e20)((void*)&self->mLoco))
+        return 0;
+    if (self->mByteB5C == 0 && (self->mFlagsB58 & 0x1000) == 0) {
+        FUN_00c14750(0);
+        return 1;
+    }
+    if (FUN_00c0e0c0(0x26f1f86))
+        return 1;
+    TCS(void, (void*, int, void*, int, int), FUN_00c14940)((void*)self, 0x26f1f86, (void*)&pcVar3->mLoco, -1, -1);
+    return 1;
 }
 
 // @ 0x00d6eeb0
