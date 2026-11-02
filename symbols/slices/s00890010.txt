@@ -1,4 +1,9 @@
-00890d20 ?GetMaxBaseline@Layout@Text@EA@@QAEMPBUTextStyle@23@@Z  # EA::Text::Layout::GetMaxBaseline (nonmatching: register allocation)
-00890e20 ?GetMinDescent@Layout@Text@EA@@QAEMPBUTextStyle@23@@Z  # EA::Text::Layout::GetMinDescent (nonmatching: register allocation)
+00890010 ?LayoutText@Layout_s0089_0010@Text@EA@@QAEIPBUTextRun@23@HIIPBHPAUClusterArray@23@PAUGlyphAdvanceSlot@23@PAHMPAIIPAM@Z  # Layout_s0089_0010::LayoutText migrated from s00890010 (verbatim, slice spelling)
+00890500 ?AnalyzeText@Layout_s0089_0010@Text@EA@@QAEHPBUAnalysisInfo_s0089_0010@23@HPAUAnalysisArray@23@H@Z  # Layout_s0089_0010::AnalyzeText migrated from s00890010 (verbatim, slice spelling)
+00890570 ?LayoutTextLine@Layout_s0089_0010@Text@EA@@QAEHHHMMPBUTextStyle_s0089_0010@23@PAUGlyphAttributes_s0089_0010@23@IPAULayoutMetrics@23@@Z  # Layout_s0089_0010::LayoutTextLine migrated from s00890010 (verbatim, slice spelling)
+00890830 ?LayoutTextParagraph@Layout_s0089_0010@Text@EA@@QAEHHHMMMMPBUTextStyle_s0089_0010@23@HIPAULayoutMetrics@23@@Z  # Layout_s0089_0010::LayoutTextParagraph migrated from s00890010 (verbatim, slice spelling)
+00890cc0 ?GetTextLayoutMetrics@Layout_s0089_0010@Text@EA@@QAEMHHPBUTextStyle_s0089_0010@23@PAULayoutMetrics@23@@Z  # Layout_s0089_0010::GetTextLayoutMetrics migrated from s00890010 (verbatim, slice spelling)
+00890d20 ?GetMaxBaseline@Layout_s0089_0010@Text@EA@@QAEMPBUTextStyle_s0089_0010@23@@Z  # Layout_s0089_0010::GetMaxBaseline migrated from s00890010 (verbatim, slice spelling)
+00890e20 ?GetMinDescent@Layout_s0089_0010@Text@EA@@QAEMPBUTextStyle_s0089_0010@23@@Z  # Layout_s0089_0010::GetMinDescent migrated from s00890010 (verbatim, slice spelling)
 00890f50 ??0Layout@Text@EA@@QAE@XZ  # EA::Text::Layout::Layout
 00890f60 ?CompareFontCallback@@YAHPAUIFontCompareTarget@Text@EA@@HHH@Z  # font-set comparison callback used by the fixed_set ctor
