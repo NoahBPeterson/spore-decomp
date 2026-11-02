@@ -1,11 +1,11 @@
-00a35d20 ?Update@cAmbienceLayer@Audio@SP@@QAEXXZ  # SP::Audio::cAmbienceLayer::Update, slice s00a35d20
-00a35ef0 ?pushPair@S106@@QAEXPAPAX@Z  # S106 vector push_back helper, slice s00a35d20
-00a35f70 ?Shutdown@cAmbienceLayer@Audio@SP@@QAE_NXZ  # SP::Audio::cAmbienceLayer::Shutdown, slice s00a35d20
-00a36070 ?ConnectPrimitive@cAmbienceLayer@Audio@SP@@QAEXIPAX@Z  # SP::Audio::cAmbienceLayer::ConnectPrimitive, slice s00a35d20
-00a36250 ?ConfigurePrimitives@cAmbienceLayer@Audio@SP@@QAE_NXZ  # SP::Audio::cAmbienceLayer::ConfigurePrimitives, slice s00a35d20
-00a36490 ?ReadTuningValues@cAmbienceLayer@Audio@SP@@QAE_NXZ  # SP::Audio::cAmbienceLayer::ReadTuningValues, slice s00a35d20
-00a36570 ?Init@cAmbienceLayer@Audio@SP@@QAE_NXZ  # SP::Audio::cAmbienceLayer::Init, slice s00a35d20
-00a366e0 ?fA366e0@@YAPAXH@Z  # fixed-size-block allocator helper, slice s00a35d20
+00a35d20 ?Update@cAmbienceLayer@Audio@SP@@QAEXXZ  # Update migrated from s00a35d20 (verbatim, slice spelling)
+00a35ef0 ?pushPair@S106@@QAEXPAPAX@Z  # S106::pushPair migrated from s00a35d20 (verbatim, slice spelling)
+00a35f70 ?Shutdown@cAmbienceLayer@Audio@SP@@QAE_NXZ  # Shutdown migrated from s00a35d20 (verbatim, slice spelling)
+00a36070 ?ConnectPrimitive@cAmbienceLayer@Audio@SP@@QAEXIPAX@Z  # ConnectPrimitive migrated from s00a35d20 (verbatim, slice spelling)
+00a36250 ?ConfigurePrimitives@cAmbienceLayer@Audio@SP@@QAE_NXZ  # ConfigurePrimitives migrated from s00a35d20 (verbatim, slice spelling)
+00a36490 ?ReadTuningValues@cAmbienceLayer@Audio@SP@@QAE_NXZ  # ReadTuningValues migrated from s00a35d20 (verbatim, slice spelling)
+00a36570 ?Init@cAmbienceLayer@Audio@SP@@QAE_NXZ  # Init migrated from s00a35d20 (verbatim, slice spelling)
+00a366e0 ?fA366e0@@YAPAXH@Z  # fA366e0 migrated from s00a35d20 (verbatim, slice spelling)
 00a36750 ?ShouldUpdate@PrimitiveAggregate_s00a3_5d20@Audio@EA@@QAE_NI@Z  # ShouldUpdate migrated from s00a35d20 (verbatim, slice spelling)
 00a367a0 ?CalculateAggregate@PrimitiveAggregate_s00a3_5d20@Audio@EA@@QAEMXZ  # CalculateAggregate migrated from s00a35d20 (verbatim, slice spelling)
 00a36990 ?SetParam@PrimitiveAggregate_s00a3_5d20@Audio@EA@@QAEXMH@Z  # SetParam migrated from s00a35d20 (verbatim, slice spelling)
