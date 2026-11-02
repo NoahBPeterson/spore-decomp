@@ -1,10 +1,10 @@
-008cc770 New_T2KTTClass
-008ccb20 FUN_008ccb20   # T2K scale function, mode "shift"
-008ccb40 FUN_008ccb40   # T2K scale function, mode "div"
-008ccb90 fnt_FixRound    # T2K scale function, mode "fixmul"
-008ccbb0 SetScale_T2KTTClass
-008cceb0 GridOutline_T2KTTClass
-008cd0f0 FUN_008cd0f0   # T2KTTClass destructor
+008cc770 ?New_T2KTTClass@@YAPAXPAXPAH0@Z  # New_T2KTTClass migrated from s008cc770 (verbatim, slice spelling)
+008ccb20 ?FUN_008ccb20@@YAHPAEH@Z  # FUN_008ccb20 migrated from s008cc770 (verbatim, slice spelling)
+008ccb40 ?FUN_008ccb40@@YAHPAEH@Z  # FUN_008ccb40 migrated from s008cc770 (verbatim, slice spelling)
+008ccb90 ?fnt_FixRound@@YAXPAEH@Z  # fnt_FixRound migrated from s008cc770 (verbatim, slice spelling)
+008ccbb0 ?FUN_008ccbb0@@YAXPAEHH@Z  # FUN_008ccbb0 migrated from s008cc770 (verbatim, slice spelling)
+008cceb0 ?FUN_008cceb0@@YAXPAE0@Z  # FUN_008cceb0 migrated from s008cc770 (verbatim, slice spelling)
+008cd0f0 ?FUN_008cd0f0@@YAXPAE@Z  # FUN_008cd0f0 migrated from s008cc770 (verbatim, slice spelling)
 008cd1b0 setT2KScaleFactors
 008cd260 FUN_008cd260   # cmap format-4 glyph lookup
 008cd350 FUN_008cd350   # cmap format-4 binary search
