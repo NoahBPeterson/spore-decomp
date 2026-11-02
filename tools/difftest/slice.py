@@ -505,6 +505,27 @@ def slice_symbol_name(sid, va):
     return None
 
 
+SID_RE = re.compile(r"^s[0-9a-f]{8}$")
+_STUB_SUFFIX = re.compile(r"_s[0-9a-f]{4}_[0-9a-f]{4}")
+_landed_syms = None
+
+
+def landed_symbol_name(va):
+    """The decorated name some symbols/slices/s*.txt records for va (only names that are decorated: '?...')."""
+    global _landed_syms
+    if _landed_syms is None:
+        _landed_syms = {}
+        for path in sorted(glob.glob(os.path.join(ROOT, "symbols", "slices", "s*.txt"))):
+            for line in open(path, encoding="utf-8", errors="replace"):
+                p = line.split("#", 1)[0].strip().split(None, 1)
+                if len(p) >= 2 and p[1].startswith("?"):
+                    try:
+                        _landed_syms.setdefault(int(p[0], 16), p[1].strip())
+                    except ValueError:
+                        pass
+    return _landed_syms.get(va)
+
+
 def base_ident(mangled):
     """Leading identifier of a symbol: '?f@C@@..'->'f', '??$f@..'->'f', '??0C@@'->'C', '_f'->'f'."""
     m = mangled
@@ -562,6 +583,16 @@ def find_symbol(coff, sid, va, src, orig_size=None):
                 return c[0], "manifest"
     names = marker_names(src, va)
     sn = slice_symbol_name(sid, va)
+    if not sn and not SID_RE.match(sid):
+        # a module TU has no symbols/slices file of its own: the slice the function was landed from records its
+        # decorated name (rewrite.py, "migrated from s..."), which separates overloads (mig23: hkBoxMotion::applyForce
+        # 0x01098430 / 0x010984c0 were "ambiguous" and gated against nothing)
+        sn = landed_symbol_name(va)
+    if sn and sn not in funcs:
+        # the name is in rewrite.py's spelling (stub types renamed `hkVector4_s0109_8200`), the object may spell it the
+        # other way: the slice source after its function was landed, or a module TU that uses the real type
+        alt = [f for f in funcs if _STUB_SUFFIX.sub("", f) == _STUB_SUFFIX.sub("", sn)]
+        sn = alt[0] if len(alt) == 1 else sn
     if sn and sn in funcs:
         # symbols/slices/<sid>.txt holds the exact decorated name (rewrite.py writes it from the compiled module TU): an
         # overload set (GetProperty(key) const / GetProperty(key, Variant const **) const / ...) must not fall back to the

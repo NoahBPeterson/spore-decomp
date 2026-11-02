@@ -28,12 +28,19 @@ def norm(name):
 
 
 def slice_of(va):
-    """The slice whose source carries the `// @ 0x<va>` marker (first by id)."""
+    """The slice whose source carries the `// @ 0x<va>` marker: one whose manifest/nonmatching/partial rows list va,
+    else the first by id (0x0109f040: s0108d0b0 carries a copy of the marker without the definition, s0109e8e0 owns it)."""
     pat = re.compile(r"(?mi)^// @ 0x0*%x\b" % va)
+    found = []
     for f in sorted(glob.glob(os.path.join(ROOT, "match", "slices", "s*", "*.c*"))):
-        if pat.search(open(f, errors="replace").read()):
-            return os.path.basename(os.path.dirname(f))
-    return None
+        if os.path.isfile(f) and pat.search(open(f, errors="replace").read()):
+            found.append(os.path.basename(os.path.dirname(f)))
+    for sid in found:
+        d = S.slice_dir(sid)
+        if any(va in {r[0] for r in S.read_rows(os.path.join(d, n))} for n in ("nonmatching.txt", "partial.txt")) or \
+                any(r[2] == va for r in S.manifest_rows(sid)):
+            return sid
+    return found[0] if found else None
 
 
 _objs = {}
