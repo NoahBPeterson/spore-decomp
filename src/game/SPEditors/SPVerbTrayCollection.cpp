@@ -1,4 +1,4 @@
-// src/game/SPEditors/SPVerbTrayCollection.cpp -- migrated from slice(s) s00605870 by tools/migrate/rewrite.py
+// src/game/SPEditors/SPVerbTrayCollection.cpp -- migrated from slice(s) s00604890, s00605870 by tools/migrate/rewrite.py
 // Object file: SPEditors/SPVerbTrayCollection.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -10,6 +10,15 @@
 #include "SP/cPropertyList.h"
 #include "SP/cSPEditorVerbIconTray.h"
 #include "SP/cString.h"
+#include "EA/UTFWin/IDrawable.h"
+#include "EA/UTFWin/IWinProc.h"
+#include "EA/UTFWin/Message.h"
+#include "SP/cSPUICredits.h"
+#include "cSPUIPropertyLayout.h"
+#include "SP/cSPUISettings.h"
+#include "cSPUITooltipWinProc.h"
+#include "cSPVerbIconRollover.h"
+#include "SP/cSettingsTab.h"
 
 // ---- items of slice s00605870 begin (TODO(rewrite): local stubs, replace by canonical classes)
 #define PV(n) virtual void pv##n();
@@ -93,7 +102,7 @@ class IWindow_s0060_5870 {
 using EA::AutoRefCount_s0060_5870;
 using EA::UTFWin::IWindow_s0060_5870;
 namespace eastl {
-struct allocator_s0060_5870 {};
+class allocator_s0060_5870 { public:};
 }
 namespace eastl {
 struct sp_vector_allocator_s0060_5870 {
@@ -344,7 +353,7 @@ class cSPVerbTrayCollection_s0060_5870 : public EA::COM::IUnknown32_s0060_5870, 
   float GetTotalLevel();
   IWindow_s0060_5870* FindWindow(uint32_t controlID);
   void SetVerbIconList(void* list);
-  void Init(IWindow_s0060_5870* parent, ResourceKey propList, const ResourceKey* trayKeys, int trayCount, bool ignoreKeyPress);
+  void Init(IWindow_s0060_5870* parent, ResourceKey propList, const ResourceKey* trayKeys, int trayCount, bool ignoreKeyPress);  // 0x00605980 (SP::cSPVerbTrayCollection::Init)
   void ShutdownTrays();
 
   TrayVector mVerbTrays;                  // +0xc
@@ -386,7 +395,127 @@ struct ConstraintNode {
 }
 using SP::FunctionalMatch::ConstraintNode;
 template <> eastl::vector_s0060_5870<ConstraintNode>::vector_s0060_5870(const vector_s0060_5870& x);  // 0x004e38d0
+struct WStr {
+  wchar_t* mpBegin;
+  wchar_t* mpEnd;
+  wchar_t* mpCapacity;
+  uint32_t mAllocator;
+  WStr& append(const wchar_t* first, const wchar_t* last);                 // 0x429580
+  WStr& replace(size_t position, size_t n, const wchar_t* p);              // 0x5f8f80
+  size_t size() const { return (size_t)(mpEnd - mpBegin); }
+  wchar_t back() const { return mpBegin[size() - 1]; }
+  const wchar_t* c_str() const { return mpBegin; }
+};
+inline size_t wstrlen(const wchar_t* p) {
+  const wchar_t* e = p;
+  while (*e) e++;
+  return (size_t)(e - p);
+}
+inline WStr& operator+=(WStr& s, const wchar_t* p) { return s.append(p, p + wstrlen(p)); }
 // ---- items of slice s00605870 end
+
+// ---- items of slice s00604890 begin (TODO(rewrite): local stubs, replace by canonical classes)
+namespace EA {
+namespace UTFWin {
+class IWinProc_s0060_4890 {
+ public:
+  virtual ~IWinProc_s0060_4890() {}
+  virtual void p0();
+  virtual void p1();
+};
+}
+}
+namespace EA {
+namespace UTFWin {
+class IWindow_s0060_4890 {
+ public:
+  virtual int AddRef();                  // +0x00 0
+  virtual int Release();                 // +0x04 1
+  PV(2)                                  // +0x08 2
+  virtual void* Cast(uint32_t);          // +0x0c 3
+  virtual IWindow_s0060_4890* GetParent10();        // +0x10 4
+  PV(5) PV(6)                            // +0x14 5, +0x18 6
+  virtual uint32_t GetControlID();       // +0x1c 7
+  virtual int GetState20();              // +0x20 8
+  virtual void SetState24(int v);        // +0x24 9
+  virtual int GetFlag28();               // +0x28 10
+  PV(11) PV(12) PV(13)                   // +0x2c 11, +0x30 12, +0x34 13
+  virtual float* GetRect();               // +0x38 14
+  PV(15) PV(16)                          // +0x3c 15, +0x40 16
+  virtual void SetState44(uint32_t v);   // +0x44 17
+  PV(18) PV(19) PV(20) PV(21)            // +0x48..0x54
+  PV(22) PV(23) PV(24) PV(25)            // +0x58..0x64
+  PV(26)                                 // +0x68
+  virtual void SetArea(float* rect);     // +0x6c 27
+  PV(28) PV(29) PV(30)                   // +0x70..0x78
+  virtual void SetFlag(int v, uint32_t a);  // +0x7c 31
+  PV(32) PV(33) PV(34) PV(35) PV(36) PV(37) PV(38) PV(39)
+  PV(40) PV(41)
+  virtual void* GetDrawableA8();         // +0xa8 42
+  PV(43) PV(44) PV(45) PV(46) PV(47)
+  PV(48) PV(49) PV(50)
+  virtual void FirstChildCC(void** out); // +0xcc 51
+  virtual IWindow_s0060_4890* NextChildD0(void** out); // +0xd0 52
+  PV(53)
+  virtual void AddChild(IWindow_s0060_4890* w);     // +0xd8 54
+  virtual void RemoveChild(IWindow_s0060_4890* w);  // +0xdc 55
+  PV(56) PV(57) PV(58) PV(59) PV(60) PV(61) PV(62) PV(63) PV(64)
+  virtual void AddWinProc(IWinProc_s0060_4890* p);  // +0x104 65
+  PV(66) PV(67)
+};
+}
+}
+using EA::UTFWin::IWinProc_s0060_4890;
+using EA::UTFWin::IWindow_s0060_4890;
+struct cVerbIconOwner {
+  char pad0c[0xc];
+  IWindow_s0060_4890** mpBegin;  // +0x0c
+  IWindow_s0060_4890** mpEnd;    // +0x10
+  void SetStateOnAll(int v);
+};
+// ---- items of slice s00604890 end
+
+// @ 0x00605830
+void cVerbIconOwner::SetStateOnAll(int v)
+{
+  const int n = (int)(mpEnd - mpBegin);
+  for (int i = 0; i < n; ++i) mpBegin[i]->SetState24(v);
+}
+
+// @ 0x00605870
+void SP::cSPVerbTrayCollection_s0060_5870::SetValue(void* value)
+{
+  int count = (int)mVerbTrays.size();
+  for (int i = 0; i < count; i++) mVerbTrays[i]->SetValue(value);
+}
+
+// @ 0x006058b0
+float SP::cSPVerbTrayCollection_s0060_5870::GetTotalLevel()
+{
+  float total = 0.0f;
+  int count = (int)mVerbTrays.size();
+  for (int i = 0; i < count; i++) total += mVerbTrays[i]->GetLevel();
+  return total;
+}
+
+// @ 0x00605900
+IWindow_s0060_5870* SP::cSPVerbTrayCollection_s0060_5870::FindWindow(uint32_t controlID)
+{
+  if (controlID) {
+    IWindow_s0060_5870* window = mWinParent->FindWindowByID(controlID, true);
+    if (window) return window;
+  }
+  return mWinVerbTray;
+}
+
+// @ 0x00605940
+void SP::cSPVerbTrayCollection_s0060_5870::SetVerbIconList(void* list)
+{
+  if (list) {
+    int count = (int)mVerbTrays.size();
+    for (int i = 0; i < count; i++) mVerbTrays[i]->SetVerbIconList(list);
+  }
+}
 
 // @ 0x00605980
 void SP::cSPVerbTrayCollection_s0060_5870::Init(IWindow_s0060_5870* parent, ResourceKey propList, const ResourceKey* trayKeys, int trayCount, bool ignoreKeyPress)
@@ -399,6 +528,44 @@ void SP::cSPVerbTrayCollection_s0060_5870::Init(IWindow_s0060_5870* parent, Reso
   mIgnoreKeyPress = ignoreKeyPress;
   InitTrays(propList, trayKeys, trayCount);
   Layout();
+}
+
+// @ 0x00605b20
+template <typename Key, typename T> void eastl::map_s0060_5870<Key, T>::DoNukeSubtree(node_type* pNode)
+{
+  while (pNode) {
+    DoNukeSubtree((node_type*)pNode->mpNodeRight);
+    node_type* const pNodeLeft = (node_type*)pNode->mpNodeLeft;
+    DoFreeNode(pNode);
+    pNode = pNodeLeft;
+  }
+}
+
+// @ 0x00605cb0
+SP::cSPVerbTrayCollection_s0060_5870::~cSPVerbTrayCollection_s0060_5870()
+{}
+
+// @ 0x00605d10
+void SP::cSPVerbTrayCollection_s0060_5870::ShutdownTrays()
+{
+  int count = (int)mVerbTrays.size();
+  for (int i = 0; i < count; i++) mVerbTrays[i]->Shutdown();
+  if (mWinParent) mWinParent = 0;
+  if (mWinVerbTray) mWinVerbTray = 0;
+  mVerbTrays.clear();
+}
+
+// @ 0x00605e60
+SP::cSPVerbTrayCollection_s0060_5870::cSPVerbTrayCollection_s0060_5870()
+: mJustification(0), mAnimateValues(true), mImageGroup(0xb5ac9c22), mIgnoreKeyPress(false) {}
+
+// @ 0x00605ee0
+template <typename Key, typename T> T& eastl::map_s0060_5870<Key, T>::operator[](const Key& key)
+{
+  iterator itLower(lower_bound(key));
+  if ((itLower == end()) || mCompare(key, (*itLower.mpNode).mValue.first))
+    itLower = insert(itLower, value_type(key, T()));
+  return (*itLower.mpNode).mValue.second;
 }
 
 // @ 0x00605f90

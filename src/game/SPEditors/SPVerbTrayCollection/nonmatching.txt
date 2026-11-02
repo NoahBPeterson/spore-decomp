@@ -1,2 +1,3 @@
 # va  diff-bytes  reason
-00605f90 741 cSPVerbTrayCollection::InitTrays: same control flow; frame slot assignment of the per-tray locals and block order differ, original also skips the null test when copying the new tray into the map vector
+00605ee0 11 map::operator[]: insert()'s returned iterator gets its own frame slot (+4) instead of reusing the dead argument slot | equiv: UNSUPPORTED (unresolved callees ??_V, uninitialized_copy_impl) after symbol fix flags: /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+00605f90 737 cSPVerbTrayCollection::InitTrays: same control flow; frame slot assignment of the per-tray locals and block order differ, original also skips the null test when copying the new tray into the map vector flags: /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast

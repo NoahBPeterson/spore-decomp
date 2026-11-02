@@ -6,7 +6,7 @@
 006052c0 ?SetVisibility@cSPVerbIconRollover_s0060_4890@@QAEXII@Z  # cSPVerbIconRollover_s0060_4890::SetVisibility migrated from s00604890 (verbatim, slice spelling)
 00605340 ?Init@cSPVerbIconRollover_s0060_4890@@QAE_NXZ  # cSPVerbIconRollover_s0060_4890::Init migrated from s00604890 (verbatim, slice spelling)
 006053a0 ?SP_cSPVerbIconRollover_Layout@@YAXH@Z  # SP_cSPVerbIconRollover_Layout migrated from s00604890 (verbatim, slice spelling)
-00605830  SetStateOnAll(int)  # 58 B, iterates icon vector (member of the tray/collection)
+00605830 ?SetStateOnAll@cVerbIconOwner@@QAEXH@Z  # cVerbIconOwner::SetStateOnAll migrated from s00604890 (verbatim, slice spelling)
 008120d0 ?Init@cSPUILayout@@QAE_NABVKey@ResourceMan@EA@@_NI@Z  # cSPUILayout::Init (callee of s00604890, named from the dev publics; slice address comment)
 00828010 ?SetAutoUpdateInterval@cSPUIPropertyLayout@@QAEXM@Z  # cSPUIPropertyLayout::SetAutoUpdateInterval (callee of s00604890, named from the dev publics; slice address comment)
 00828020 ?AsInterface@cSPUIPropertyLayout@@UAEPAXW4InterfaceId@COM@EA@@@Z  # cSPUIPropertyLayout::AsInterface (callee of s00604890, named from the dev publics; slice address comment)
