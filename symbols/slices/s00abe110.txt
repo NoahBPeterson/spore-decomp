@@ -1,5 +1,5 @@
-00abe110 cNoiseSource::Init  # global noise lattice init; 64 pairs x2, RNG seed 0x58, sinf ramp
-00abe2f0 EA::Swarm::cShakeDescription::create  # operator_new 0x4c; vtbl/hash/floats; FUN_00abd9c0
+00abe110 ?Init@cNoiseSource@@QAEXPAUINoiseConfig@@PAX1@Z  # cNoiseSource::Init migrated from s00abe110 (verbatim, slice spelling)
+00abe2f0 ?create@cShakeDescription@Swarm@EA@@SAPAU123@PAX0@Z  # cShakeDescription::create migrated from s00abe110 (verbatim, slice spelling)
 00abe370 InitializeSwarmFactories  # registers cShakeDescription/MapDescription/cAbilityEventModifier factories
 00abe3a0 EA::Swarm::MapDescription::read  # EA_IO: flags&0x1f, vector at +0x10, ints at +0x18..+0x24
 00abe420 cAbility::SetParam  # bool SetParam(int, void const*, void*)

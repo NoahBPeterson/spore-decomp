@@ -1,5 +1,3 @@
-00abda70 FUN_00abda70
-00abdbb0 FUN_00abdbb0
 00abd170 FUN_00abd170
 00abd1f0 FUN_00abd1f0
 00abd290 FUN_00abd290
@@ -8,3 +6,11 @@
 00abd590 FUN_00abd590
 00abd640 FUN_00abd640
 00abd6f0 FUN_00abd6f0
+00abd970 ?FUN_00abd970@Eff@@QAEPAXD@Z  # Eff::FUN_00abd970 migrated from s00abd170 (verbatim, slice spelling)
+00abd9c0 ?FUN_00abd9c0@@YAXPAHHPAD@Z  # FUN_00abd9c0 migrated from s00abd170 (verbatim, slice spelling)
+00abda70 ?FUN_00abda70@@YAPAMPAMH00@Z  # FUN_00abda70 migrated from s00abd170 (verbatim, slice spelling)
+00abdb20 ?FUN_00abdb20@Eff@@QAEXH@Z  # Eff::FUN_00abdb20 migrated from s00abd170 (verbatim, slice spelling)
+00abdb70 ?FUN_00abdb70@Eff@@QAEDHPAXH@Z  # Eff::FUN_00abdb70 migrated from s00abd170 (verbatim, slice spelling)
+00abdbb0 ?FUN_00abdbb0@Eff@@QAEXMMH@Z  # Eff::FUN_00abdbb0 migrated from s00abd170 (verbatim, slice spelling)
+00abe010 ?FUN_00abe010@@YAPAXH@Z  # FUN_00abe010 migrated from s00abd170 (verbatim, slice spelling)
+00abe090 ?FUN_00abe090@Eff@@QAEXPAUCTrans@@0@Z  # Eff::FUN_00abe090 migrated from s00abd170 (verbatim, slice spelling)
