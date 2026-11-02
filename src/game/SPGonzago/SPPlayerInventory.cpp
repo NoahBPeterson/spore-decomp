@@ -315,6 +315,8 @@ extern u32 gCargoKey[3];                // 0x016daedc
 
 // ---- items of slice s00ff4d50 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern char g_15b5ed8;      // [0x015b5ed8] variable-list table used when reading
+extern void* g_vtbl_cPlayerInventory;    // [0x01494d68]
+extern void* g_vtbl_cPlayerInventoryI;   // [0x01494d54]
 struct VObj { void** vt; };
 typedef void* (__thiscall *FnVp0)(void*);
 struct IStream;
@@ -1080,6 +1082,30 @@ bool __thiscall cPlayerInventory_s00ff_4d50::Read(IStream* s)
     if (ok && ser.SerializeRead(s))
         return true;
     return false;
+}
+
+// @ 0x00ff5190
+cPlayerInventory_s00ff_4d50* __thiscall cPlayerInventory_s00ff_4d50::ctor()
+{
+    BaseCtor();
+    void* zero = 0;
+    mpVtbl0 = &g_vtbl_cPlayerInventory;
+    mpVtbl1 = &g_vtbl_cPlayerInventoryI;
+    mUnlockableTools.mpBegin = (cRefCounted*)zero;
+    mUnlockableTools.mpEnd = (cRefCounted*)zero;
+    mUnlockableTools.mpCapacity = (cRefCounted*)zero;
+    mTransitionRewardTools.mpBegin = (cRefCounted*)zero;
+    mTransitionRewardTools.mpEnd = (cRefCounted*)zero;
+    mTransitionRewardTools.mpCapacity = (cRefCounted*)zero;
+    mDecorationTools.mpBegin = (cRefCounted*)zero;
+    mDecorationTools.mpEnd = (cRefCounted*)zero;
+    mDecorationTools.mpCapacity = (cRefCounted*)zero;
+    mProjectileTools.mpBegin = (cRefCounted*)zero;
+    mProjectileTools.mpEnd = (cRefCounted*)zero;
+    mProjectileTools.mpCapacity = (cRefCounted*)zero;
+    mb94 = 0;
+    LoadToolData();
+    return this;
 }
 
 // @ 0x01399700
