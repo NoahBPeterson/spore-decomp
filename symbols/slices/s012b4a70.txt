@@ -1,7 +1,3 @@
-# va  name  # evidence
-# SporeApp static-initialiser / technique-table block (compiled /O2 /arch:SSE /fp:fast).  Names are
-# descriptive; only 012f5e60 has a PDB name ($E115) and the lib_crt array-ctor stubs are identified
-# by their atexit registration (??_L@YGXPAXIHP6EX0@Z1@Z @ 0x011e0b85).
 012b4a70  CrossGameData_InitProps        # copies five 0x3c PropDesc records into 0x1529330 stride 0x3c; "mAchievementSet" etc.
 012c5ae0  RegList_Init                  # lib_crt array ctor: 0x16032a8, 0x150 objs of 0xb, ctor 0x6ac770, dtor 0x6ac6f0, atexit 0x13bed40
 012c7900  Mask_1                       # bit-mask write into mask table lane 1
@@ -27,7 +23,7 @@
 012e3f10  BuildBasis_RegisterTechniques # FNV-1 of 4 names -> 0x1633e34..0x1633e40
 012e45f0  SetRecipSqrt_2                # 1/sqrt broadcast into recip-sqrt lane 2
 012e4930  SetRecipSqrt_3                # 1/sqrt broadcast into recip-sqrt lane 3
-012f5e60  InitDescTable                 # $E115 in PDB: 3 descriptor records at 0x15424bc/0x15424e0/0x15424f8
+012f5e60 ?InitDescTable@@YAXXZ  # InitDescTable migrated from s012b4a70 (verbatim, slice spelling)
 012f61e0  SetColor_1                    # UintArray::Self(0x164b394) + RGB {1,1,1}
 012f6210  SetColor_2                    # 0x164b200 {0,0,0}
 012f6240  SetColor_3                    # 0x164b3e4 {1,0,0}

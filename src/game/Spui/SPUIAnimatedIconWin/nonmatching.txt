@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+012f5e60 87 InitDescTable: retail is a compiler-generated aggregate-initialiser lowering (frame pointer + one `mov dword ptr [mem], imm32` per field); writing the same stores as statements makes cl hoist the repeated 0/1 constants into eax/ecx and drop the frame pointer (149 vs 200 bytes).  Same values written to the same 0x15424bc..0x1542504 slots; difftest PASS. flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
