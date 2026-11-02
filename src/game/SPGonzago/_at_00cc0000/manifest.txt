@@ -1,0 +1,7 @@
+# source  symbol  va  flags
+../src/game/SPGonzago/_at_00cc0000.cpp  ??0cDefaultBeamProjectileView@@QAE@XZ  00cc28c0  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_00cc0000.cpp  ?FUN_00cce590@@YA_NXZ  00cce590  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_00cc0000.cpp  ?FUN_00cce5b0@cSPUITCCCursorStrategy@@QAEXXZ  00cce5b0  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_00cc0000.cpp  ?FUN_00cce5e0@cSPUITCCCursorStrategy@@QAEXXZ  00cce5e0  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_00cc0000.cpp  ?FUN_00cce940@cSPUITCCCursorStrategy@@QAEXXZ  00cce940  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_00cc0000.cpp  ?FUN_00ccebd0@cSPUITCCCursorStrategy@@QAEIPAXH0@Z  00ccebd0  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include

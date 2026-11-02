@@ -1,2 +1,5 @@
+00ccfc20 ?F_ccfc20@CInput@@QAEXPAX@Z  # CInput::F_ccfc20 migrated from s00ccfc20 (verbatim, slice spelling)
+00ccfcf0 ?F_ccfcf0@CInput@@QAEXPAXH00@Z  # CInput::F_ccfcf0 migrated from s00ccfc20 (verbatim, slice spelling)
+00ccff40 ?FUN_00ccff40@@YAXXZ  # FUN_00ccff40 migrated from s00ccfc20 (verbatim, slice spelling)
 00cd0260 ?FUN_00cd0260@@YGEPAX@Z  # FUN_00cd0260 migrated from s00ccfc20 (verbatim, slice spelling)
 00cd0660 ?F_cd0660@CInput@@QAEHPAX00@Z  # CInput::F_cd0660 migrated from s00ccfc20 (verbatim, slice spelling)
