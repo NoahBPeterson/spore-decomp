@@ -1,1 +1,6 @@
 # source  symbol  va  flags
+../src/game/UTFSpore_Win32/Scrollbar.cpp  ?InvalidateLayoutNoArgs@IWinSB2@UTFWinControls@EA@@QAEXXZ  009816c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/Scrollbar.cpp  ?GetDrawable@IWinScrollbar@@QAEPAVIScrollbarDrawable@@XZ  00981b60  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/Scrollbar.cpp  ?OnRebuild@WinScrollbar@@QAE_NPAX@Z  00981cc0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/Scrollbar.cpp  ?RenderComponent@WinScrollbar@@QAEXPAXI@Z  00981d50  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/Scrollbar.cpp  ?PickComponent@WinScrollbar@@QAEHMM@Z  00981e10  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

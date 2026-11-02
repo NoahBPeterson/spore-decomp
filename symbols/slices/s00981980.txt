@@ -1,0 +1,7 @@
+00981980 ?ComputeContentSize@WinScrollbar@@QAE_NHPAM@Z  # ComputeContentSize migrated from s00981980 (verbatim, slice spelling)
+00981b60 ?GetDrawable@IWinScrollbar@@QAEPAVIScrollbarDrawable@@XZ  # GetDrawable migrated from s00981980 (verbatim, slice spelling)
+00981b70 ?OnMouseMove@WinScrollbar@@QAE_NMMM@Z  # OnMouseMove migrated from s00981980 (verbatim, slice spelling)
+00981cc0 ?OnRebuild@WinScrollbar@@QAE_NPAX@Z  # OnRebuild migrated from s00981980 (verbatim, slice spelling)
+00981d50 ?RenderComponent@WinScrollbar@@QAEXPAXI@Z  # RenderComponent migrated from s00981980 (verbatim, slice spelling)
+00981e10 ?PickComponent@WinScrollbar@@QAEHMM@Z  # PickComponent migrated from s00981980 (verbatim, slice spelling)
+00981f80 ?Refresh@WinScrollbar@@QAEXXZ  # Refresh migrated from s00981980 (verbatim, slice spelling)

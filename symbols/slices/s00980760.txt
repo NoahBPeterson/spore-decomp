@@ -1,0 +1,1 @@
+009816c0 ?InvalidateLayoutNoArgs@IWinSB2@UTFWinControls@EA@@QAEXXZ  # IWinSB2::InvalidateLayoutNoArgs migrated from s00980760 (verbatim, slice spelling)
