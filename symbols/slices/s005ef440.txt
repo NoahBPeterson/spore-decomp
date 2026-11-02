@@ -8,13 +8,14 @@
 005ef760 ??1cSPPaletteItemUIPlannerEdit_s005e_f440@SP@@UAE@XZ  # cSPPaletteItemUIPlannerEdit_s005e_f440::~cSPPaletteItemUIPlannerEdit migrated from s005ef440 (verbatim, slice spelling)
 005ef850 ?Init@cSPPaletteItemUIPlannerEdit_s005e_f440@SP@@UAEXPAVcSPPaletteItem_s005e_f440@2@PAVIWindow_s005e_f440@UTFWin@EA@@HPAUcSPPaletteInfo_s005e_f440@2@@Z  # cSPPaletteItemUIPlannerEdit_s005e_f440::Init migrated from s005ef440 (verbatim, slice spelling)
 005efcb0 ?DoMessage@cSPPaletteItemUIPlannerEdit_s005e_f440@SP@@UAE_NPAVIWindow_s005e_f440@UTFWin@EA@@ABUMessage_s005e_f440@45@@Z  # cSPPaletteItemUIPlannerEdit_s005e_f440::DoMessage migrated from s005ef440 (verbatim, slice spelling)
-005efd40 hkCollisionFilter::~hkCollisionFilter  # interface vtable restores, hkBaseObject vptr
-005efd80 SP::SPSpineCollisionFilter::isCollisionEnabled  # (infoA, infoB) layer table at +0x1c, hkpGroupFilter layout
-005efe30 SP::SPSpineCollisionFilter::isCollisionEnabled  # hkpShapeCollectionFilter override (this-0xc)
-005eff00 SP::SPSpineCollisionFilter::isCollisionEnabled  # hkpRayShapeCollectionFilter override (this-0x10)
-005eff70 SP::SPSpineCollisionFilter::enableCollisionsBetween  # hkpGroupFilter body
-005effa0 SP::SPSpineCollisionFilter::disableCollisionsUsingBitfield  # hkpGroupFilter body
-005effe0 SP::SPSpineCollisionFilter::SPSpineCollisionFilter  # table filled with -1, m_nextFreeSystemGroup=0
+005efd40 ??1SPSpineCollisionFilter@SP@@UAE@XZ  # SPSpineCollisionFilter::~SPSpineCollisionFilter migrated from s005ef440 (verbatim, slice spelling)
+005efd70 ?AddTwo@SP@@YAHH@Z  # AddTwo migrated from s005ef440 (verbatim, slice spelling)
+005efd80 ?isCollisionEnabled@SPSpineCollisionFilter@SP@@QBE?AVhkBool_s005e_f440@@II@Z  # SPSpineCollisionFilter::isCollisionEnabled migrated from s005ef440 (verbatim, slice spelling)
+005efe30 ?isCollisionEnabled@SPSpineCollisionFilter@SP@@UBE?AVhkBool_s005e_f440@@ABUhkpCollisionInput@@ABUhkpCdBody@@1ABVhkpShapeContainer@@I@Z  # SPSpineCollisionFilter::isCollisionEnabled migrated from s005ef440 (verbatim, slice spelling)
+005eff00 ?isCollisionEnabled@SPSpineCollisionFilter@SP@@UBE?AVhkBool_s005e_f440@@ABUhkpShapeRayCastInput@@ABVhkpShapeContainer@@I@Z  # SPSpineCollisionFilter::isCollisionEnabled migrated from s005ef440 (verbatim, slice spelling)
+005eff70 ?enableCollisionsBetween@SPSpineCollisionFilter@SP@@QAEXHH@Z  # SPSpineCollisionFilter::enableCollisionsBetween migrated from s005ef440 (verbatim, slice spelling)
+005effa0 ?disableCollisionsUsingBitfield@SPSpineCollisionFilter@SP@@QAEXII@Z  # SPSpineCollisionFilter::disableCollisionsUsingBitfield migrated from s005ef440 (verbatim, slice spelling)
+005effe0 ??0SPSpineCollisionFilter@SP@@QAE@XZ  # SPSpineCollisionFilter::SPSpineCollisionFilter migrated from s005ef440 (verbatim, slice spelling)
 005f00f0 hkCollisionFilter::`scalar deleting destructor'  # hkMemory deallocateChunk(p, m_memSizeAndFlags, 0x24)
 005f0140 ?Init@cSPSwatchManager@SP@@QAEXXZ  # cSPSwatchManager::Init migrated from s005ef440 (verbatim, slice spelling)
 005f0390 eastl::rbtree<unsigned_int,pair<unsigned_int_const,AutoRefCount<SP::cSPSwatch>>>::DoInsertValueImpl  # mIDToSwatchMap node insert

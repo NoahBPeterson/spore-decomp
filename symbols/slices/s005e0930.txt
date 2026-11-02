@@ -1,8 +1,7 @@
-# va  Name  # evidence
-005e0930  EditorWidget_005e0930  # card
-005e0cf0  SP::cSPVerbTray ctor  # base call SP::cSPVerbTrayCollection::cSPVerbTrayCollection
-005e0d80  EditorWidget_005e0d80  # card
-005e0e50  SP::cSPVerbTray::Shutdown  # releases m54
-005e0e80  EditorWidget_005e0e80  # card
-005e1020  EditorWidget_005e1020  # card
-005e12c0  EditorWidget_005e12c0  # card
+005e0930 ?LayoutAbilities@AbilityLayoutData@@QAEXPAVIEditorWidget@@_N@Z  # AbilityLayoutData::LayoutAbilities migrated from s005e0930 (verbatim, slice spelling)
+005e0cf0 ??0VerbTray@@QAE@XZ  # VerbTray::VerbTray migrated from s005e0930 (verbatim, slice spelling)
+005e0d80 ??1VehicleTray@@QAE@XZ  # VehicleTray::~VehicleTray migrated from s005e0930 (verbatim, slice spelling)
+005e0e50 ?Shutdown@CShut@@QAEXXZ  # CShut::Shutdown migrated from s005e0930 (verbatim, slice spelling)
+005e0e80 ?Update@VehicleTray@@UAEXI@Z  # VehicleTray::Update migrated from s005e0930 (verbatim, slice spelling)
+005e1020 ?SetList@VehicleTray@@UAEXPAX@Z  # VehicleTray::SetList migrated from s005e0930 (verbatim, slice spelling)
+005e12c0 ?Layout@VehicleTray@@UAEXXZ  # VehicleTray::Layout migrated from s005e0930 (verbatim, slice spelling)

@@ -2,7 +2,7 @@
 005c6670 ?IsNew@cSPPaletteItem@SP@@QBE_NPAVcCollectableItems@2@@Z  # SP::cSPPaletteItem::IsNew (callee of s005ee480, named from the dev publics; slice address comment)
 005c6b10 ?HandleMessage@cSPPaletteItemUISelectable@SP@@MAE_NIPAX@Z  # SP::cSPPaletteItemUISelectable::HandleMessage (callee of s005ee480, named from the dev publics; slice address comment)
 005c6ca0 ?Init@cSPPaletteItemUI@SP@@UAEXPAVcSPPaletteItem@2@PAVIWindow@UTFWin@EA@@1PAUcSPPaletteInfo@2@@Z  # SP::cSPPaletteItemUI::Init (callee of s005ee480, named from the dev publics; slice address comment)
-005ee480 cSPUIPropertyLayout::SetItem  # byte-exact; called from palette rollovers with (item, paletteInfo, content, show)
+005ee480 ?SetItem@cSPUIPropertyLayout_s005e_e480@@QAEXPAVcSPPaletteItem_s005e_e480@SP@@PAUcSPPaletteInfo_s005e_e480@3@PAVcSPEditorVehicleAbilities@3@_N@Z  # cSPUIPropertyLayout_s005e_e480::SetItem migrated from s005ee480 (verbatim, slice spelling)
 005ee500 ?Cast@cSPPaletteItemUIDrag@SP@@UBEPAXI@Z  # cSPPaletteItemUIDrag::Cast migrated from s005ee480 (verbatim, slice spelling)
 005ee540 ??0cSPPaletteItemUIDrag@SP@@QAE@XZ  # cSPPaletteItemUIDrag::cSPPaletteItemUIDrag migrated from s005ee480 (verbatim, slice spelling)
 005ee590 SP::cSPPaletteItemUIDrag::`scalar deleting destructor'  # vtable 0x13f98f8 slot 0, byte-exact

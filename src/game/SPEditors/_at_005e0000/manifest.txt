@@ -1,0 +1,18 @@
+# source  symbol  va  flags
+../src/game/SPEditors/_at_005e0000.cpp  ??0cSPRolloverModelData@SP@@QAE@ABUKey@1@0III@Z  005e0370  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPEditors/_at_005e0000.cpp  ??1cSPRolloverModelData@SP@@UAE@XZ  005e0440  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPEditors/_at_005e0000.cpp  ??1VehicleTray@@QAE@XZ  005e0d80  /O2 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
+../src/game/SPEditors/_at_005e0000.cpp  ?Shutdown@CShut@@QAEXXZ  005e0e50  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPEditors/_at_005e0000.cpp  ?Update@VehicleTray@@UAEXI@Z  005e0e80  /O2 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
+../src/game/SPEditors/_at_005e0000.cpp  ?SetIcon@cSPEditorVerbIcon_s005e_16c0@SP@@QAEXPAVIWindow_s005e_16c0@UTFWin@EA@@UKey_s005e_16c0@ResourceMan@5@HH@Z  005e1b70  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPEditors/_at_005e0000.cpp  ?GetIconDescription@cSPEditorVerbIconData_s005e_5d40@SP@@QAE?AVwstring_s005e_5d40@eastl@@XZ  005e5d40  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/_at_005e0000.cpp  ?AddBox@cSPPaletteItemRollover_s005e_cf80@SP@@QAEXH@Z  005ed320  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/_at_005e0000.cpp  ?SetItem@cSPUIPropertyLayout_s005e_e480@@QAEXPAVcSPPaletteItem_s005e_e480@SP@@PAUcSPPaletteInfo_s005e_e480@3@PAVcSPEditorVehicleAbilities@3@_N@Z  005ee480  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/_at_005e0000.cpp  ??1SPSpineCollisionFilter@SP@@UAE@XZ  005efd40  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/_at_005e0000.cpp  ?AddTwo@SP@@YAHH@Z  005efd70  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/_at_005e0000.cpp  ?isCollisionEnabled@SPSpineCollisionFilter@SP@@QBE?AVhkBool_s005e_f440@@II@Z  005efd80  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/_at_005e0000.cpp  ?isCollisionEnabled@SPSpineCollisionFilter@SP@@UBE?AVhkBool_s005e_f440@@ABUhkpCollisionInput@@ABUhkpCdBody@@1ABVhkpShapeContainer@@I@Z  005efe30  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/_at_005e0000.cpp  ?isCollisionEnabled@SPSpineCollisionFilter@SP@@UBE?AVhkBool_s005e_f440@@ABUhkpShapeRayCastInput@@ABVhkpShapeContainer@@I@Z  005eff00  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/_at_005e0000.cpp  ?enableCollisionsBetween@SPSpineCollisionFilter@SP@@QAEXHH@Z  005eff70  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/_at_005e0000.cpp  ?disableCollisionsUsingBitfield@SPSpineCollisionFilter@SP@@QAEXII@Z  005effa0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/_at_005e0000.cpp  ??0SPSpineCollisionFilter@SP@@QAE@XZ  005effe0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

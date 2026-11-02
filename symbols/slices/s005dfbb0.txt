@@ -1,6 +1,7 @@
 005dfbb0  SP::cSPEditorUI::OnFileDrop  # ?OnFileDrop@cSPEditorUI@SP@@QAEXABUKey@2@@Z
 005dfd00  SP::cSPEditorUI::DoCommand  # ?DoCommand@cSPEditorUI@SP@@QAE_NH@Z
 005e0000  SP::cSPEditorUIProc::DoMessage  # ?DoMessage@cSPEditorUIProc@SP@@QAE_NPAXPAUUIMessage@2@@Z
-005e0370  SP::cSPRolloverModelData ctor  # ??0cSPRolloverModelData@SP@@QAE@ABUKey@1@0III@Z
-005e0440  SP::cSPRolloverModelData dtor  # ??1cSPRolloverModelData@SP@@UAE@XZ
+005e0370 ??0cSPRolloverModelData@SP@@QAE@ABUKey@1@0III@Z  # cSPRolloverModelData::cSPRolloverModelData migrated from s005dfbb0 (verbatim, slice spelling)
+005e0440 ??1cSPRolloverModelData@SP@@UAE@XZ  # cSPRolloverModelData::~cSPRolloverModelData migrated from s005dfbb0 (verbatim, slice spelling)
 005e04d0  SP::AbilityLayoutData::LayoutLine  # ?LayoutLine@AbilityLayoutData@SP@@QAEMPAVIWindow@2@PBUKey@2@MI1PAVcString@2@M@Z
+008120d0 ?Init@cSPUILayout@@QAE_NABVKey@ResourceMan@EA@@_NI@Z  # cSPUILayout::Init (callee of s005dfbb0, named from the dev publics; slice address comment)

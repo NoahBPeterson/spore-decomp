@@ -1,5 +1,5 @@
-005e16c0  SP::cSPEditorVerbIcon_Update  # card
-005e1b70  SP::cSPEditorVerbIcon_Helper_005e1b70  # card
+005e16c0 ?InitTrays@cSPVerbTrayCollection_s005e_16c0@SP@@QAEXUKey_s005e_16c0@ResourceMan@EA@@PBXH@Z  # cSPVerbTrayCollection_s005e_16c0::InitTrays migrated from s005e16c0 (verbatim, slice spelling)
+005e1b70 ?SetIcon@cSPEditorVerbIcon_s005e_16c0@SP@@QAEXPAVIWindow_s005e_16c0@UTFWin@EA@@UKey_s005e_16c0@ResourceMan@5@HH@Z  # cSPEditorVerbIcon_s005e_16c0::SetIcon migrated from s005e16c0 (verbatim, slice spelling)
 005e1c80 ?Init@cVerbIconInterpolationValue_s005e_16c0@SP@@QAEXMMMMM@Z  # cVerbIconInterpolationValue_s005e_16c0::Init migrated from s005e16c0 (verbatim, slice spelling)
 005e1cd0 ?IsAtTarget@cVerbIconInterpolationValue_s005e_16c0@SP@@QAEHXZ  # cVerbIconInterpolationValue_s005e_16c0::IsAtTarget migrated from s005e16c0 (verbatim, slice spelling)
 005e1d00 ?FUN_005e1d00@@YAXPAX@Z  # FUN_005e1d00 migrated from s005e16c0 (verbatim, slice spelling)
@@ -8,3 +8,6 @@
 005e2000 ?FUN_005e2000@@YAXPAX@Z  # FUN_005e2000 migrated from s005e16c0 (verbatim, slice spelling)
 005e2280 ?FUN_005e2280@@YAXPAX@Z  # FUN_005e2280 migrated from s005e16c0 (verbatim, slice spelling)
 005e23b0 ?FUN_005e23b0@@YAXPAX@Z  # FUN_005e23b0 migrated from s005e16c0 (verbatim, slice spelling)
+005e6390 ?GetHeight@cSPEditorVerbIconTray@SP@@QAEMXZ  # SP::cSPEditorVerbIconTray::GetHeight (callee of s005e16c0, named from the dev publics; slice address comment)
+00605f90 ?InitTrays@cSPVerbTrayCollection@SP@@MAEXVKey@ResourceMan@EA@@PAV345@H@Z  # SP::cSPVerbTrayCollection::InitTrays (callee of s005e16c0, named from the dev publics; slice address comment)
+008120d0 ?Init@cSPUILayout@@QAE_NABVKey@ResourceMan@EA@@_NI@Z  # cSPUILayout::Init (callee of s005e16c0, named from the dev publics; slice address comment)

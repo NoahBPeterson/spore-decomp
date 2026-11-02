@@ -6,3 +6,4 @@
 005e5b60 ??0cSPCreatureVerbIconData@SP@@QAE@XZ  # cSPCreatureVerbIconData::cSPCreatureVerbIconData migrated from s005e4db0 (verbatim, slice spelling)
 005e5ba0 ??1cSPCreatureVerbIconData@SP@@UAE@XZ  # cSPCreatureVerbIconData::~cSPCreatureVerbIconData migrated from s005e4db0 (verbatim, slice spelling)
 005e5c00 ?SetHotKey@cSPEditorVerbIconData_s005e_4db0@SP@@QAEXI@Z  # cSPEditorVerbIconData_s005e_4db0::SetHotKey migrated from s005e4db0 (verbatim, slice spelling)
+005e5c80 ?GetIconName@cSPEditorVerbIconData_s005e_4db0@SP@@QAE?AVwstring@eastl@@_N@Z  # cSPEditorVerbIconData_s005e_4db0::GetIconName migrated from s005e4db0 (verbatim, slice spelling)

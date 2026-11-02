@@ -1,0 +1,1 @@
+005ed750 ?Show@cSPPaletteItemRollover_s005e_d750@SP@@QAEXABUResourceKey_s005e_d750@@PAVIAbilityProvider@@PAVIItemStatusProvider@@_W_N4@Z  # cSPPaletteItemRollover_s005e_d750::Show migrated from s005ed750 (verbatim, slice spelling)
