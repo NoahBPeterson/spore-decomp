@@ -2,3 +2,5 @@
 00fc7950 ?Shutdown@WeatherMgr@@QAE_NXZ  # WeatherMgr::Shutdown migrated from s00fc7430 (verbatim, slice spelling)
 00fc7b30 ?UpdateEffects@WeatherMgr@@QAEXH@Z  # WeatherMgr::UpdateEffects migrated from s00fc7430 (verbatim, slice spelling)
 00fc7f80 ?GetCost@cBuilding@Simulator@@QAEMXZ  # cBuilding::GetCost migrated from s00fc7430 (verbatim, slice spelling)
+00fc8390 ?SetBuffer@BufferedWriter@movie@rw@@QAEXPAXH@Z  # BufferedWriter::SetBuffer migrated from s00fc7430 (verbatim, slice spelling)
+00fc83b0 ?Flush@Writer@@QAEXXZ  # Writer::Flush migrated from s00fc7430 (verbatim, slice spelling)

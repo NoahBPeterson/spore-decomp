@@ -4,11 +4,11 @@
 00922bf0 ThreadMemSize  # stubbed `mov eax,4 / ret`
 00922c00 EA::Thread::ThreadFactory::ConstructThread  # cdecl, 1 arg
 00fc83b0 rw::movie::BufferedWriter::Flush  # unnamed in the PDB (called by every writer method with `mov ecx,esi`); flushes mBuffer[0..mPos) and advances mBase
-00fc8450 rw::movie::BufferedWriter::Seek  # coined name; thiscall ret 8 -- origin 1 = absolute (offset - mBase - mPos), 2 = from end (mEnd - mBase - mPos + offset), 0 = relative
-00fc84b0 rw::movie::BufferedWriter::Write  # coined name; memcpy loop over the free space, flush on a full buffer
-00fc8500 rw::movie::BufferedWriter::WriteFill  # PDB name; memset loop, same clamp/flush shape as Write
-00fc8550 rw::movie::BufferedWriter::Write16  # PDB name; flush if fewer than 2 bytes are free, then store a u16
-00fc8580 rw::movie::BufferedWriter::Write32  # PDB name; same with 4 bytes / u32
+00fc8450 ?Seek@BufferedWriter_s00fc_8450@movie@rw@@QAEXHH@Z  # BufferedWriter_s00fc_8450::Seek migrated from s00fc8450 (verbatim, slice spelling)
+00fc84b0 ?Write@BufferedWriter_s00fc_8450@movie@rw@@QAEXPBXH@Z  # BufferedWriter_s00fc_8450::Write migrated from s00fc8450 (verbatim, slice spelling)
+00fc8500 ?WriteFill@BufferedWriter_s00fc_8450@movie@rw@@QAEXEH@Z  # BufferedWriter_s00fc_8450::WriteFill migrated from s00fc8450 (verbatim, slice spelling)
+00fc8550 ?Write16@BufferedWriter_s00fc_8450@movie@rw@@QAEXG@Z  # BufferedWriter_s00fc_8450::Write16 migrated from s00fc8450 (verbatim, slice spelling)
+00fc8580 ?Write32@BufferedWriter_s00fc_8450@movie@rw@@QAEXI@Z  # BufferedWriter_s00fc_8450::Write32 migrated from s00fc8450 (verbatim, slice spelling)
 00fc85b0 ?ValidateChunk@movie@rw@@YAHPBHIIPAUChunkTracker@12@P6A_N0PAX@Z2PAI@Z  # ValidateChunk migrated from s00fc8450 (verbatim, slice spelling)
 00fc8620 IsMChunk  # coined name; unnamed static 'M' + ('V' or 'P') tag test, absorbed into 0x00fc85b0's symbol size
 00fc8640 ?IsSCChunk@movie@rw@@YA_NPBD@Z  # IsSCChunk migrated from s00fc8450 (verbatim, slice spelling)

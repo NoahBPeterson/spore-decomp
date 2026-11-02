@@ -1,0 +1,8 @@
+# source  symbol  va  flags
+../src/game/SPMovie/bufferedwriter.cpp  ?SetBuffer@BufferedWriter@movie@rw@@QAEXPAXH@Z  00fc8390  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPMovie/bufferedwriter.cpp  ?Flush@Writer@@QAEXXZ  00fc83b0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPMovie/bufferedwriter.cpp  ?Seek@BufferedWriter_s00fc_8450@movie@rw@@QAEXHH@Z  00fc8450  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPMovie/bufferedwriter.cpp  ?Write@BufferedWriter_s00fc_8450@movie@rw@@QAEXPBXH@Z  00fc84b0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPMovie/bufferedwriter.cpp  ?WriteFill@BufferedWriter_s00fc_8450@movie@rw@@QAEXEH@Z  00fc8500  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPMovie/bufferedwriter.cpp  ?Write16@BufferedWriter_s00fc_8450@movie@rw@@QAEXG@Z  00fc8550  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPMovie/bufferedwriter.cpp  ?Write32@BufferedWriter_s00fc_8450@movie@rw@@QAEXI@Z  00fc8580  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
