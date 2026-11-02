@@ -1,3 +1,12 @@
-00c41360 SP::cInterCityRoad::BuildPath  # name guessed; builds mPathData (+0x128) from a landAvoidCities curve between mpCity1/mpCity2 (+0x11c/+0x120)
-00c41190 ?insert@?$SpVector@UcCurvePoint@@@@QAEPAUcCurvePoint@@PAU2@ABU2@@Z  # SpVector<cCurvePoint>::insert(pos, value): ret 8, shifts via 0xac45e0
 00c410e0 ?push_back_default@?$SpVector@UcCurvePoint@@@@QAEXXZ  # appends a default cCurvePoint (pos=0x168e690, 1.0f at +0xc, 0 at +0x10, byte +0x38=0)
+00c41190 ?insert@?$SpVector@UcCurvePoint@@@@QAEPAUcCurvePoint@@PAU2@ABU2@@Z  # SpVector<cCurvePoint>::insert(pos, value): ret 8, shifts via 0xac45e0
+00c41360 SP::cInterCityRoad::BuildPath  # name guessed; builds mPathData (+0x128) from a landAvoidCities curve between mpCity1/mpCity2 (+0x11c/+0x120)
+00c41ed0 ?FUN_00c41ed0@@YIHPAUcRoad@@MM@Z  # FUN_00c41ed0 migrated from s00c41360 (verbatim, slice spelling)
+00c420f0 ?FUN_00c420f0@@YAMPAUcRandomGlobal@@MM@Z  # FUN_00c420f0 migrated from s00c41360 (verbatim, slice spelling)
+00c42140 ?FUN_00c42140@@YIXPAUcRoad@@H@Z  # FUN_00c42140 migrated from s00c41360 (verbatim, slice spelling)
+00c421f0 ?FUN_00c421f0@@YIPAHPAUcRoad@@@Z  # FUN_00c421f0 migrated from s00c41360 (verbatim, slice spelling)
+00c42210 ?FUN_00c42210@@YI_NPAUcRoad@@M@Z  # FUN_00c42210 migrated from s00c41360 (verbatim, slice spelling)
+00c422c0 ?FUN_00c422c0@@YIMPAUcRoad@@@Z  # FUN_00c422c0 migrated from s00c41360 (verbatim, slice spelling)
+00c42310 ?FUN_00c42310@@YAHPAUIdLookupSource@@@Z  # FUN_00c42310 migrated from s00c41360 (verbatim, slice spelling)
+00c42350 ?FUN_00c42350@@YIXPAUcRoad@@@Z  # FUN_00c42350 migrated from s00c41360 (verbatim, slice spelling)
+00c423c0 ?FUN_00c423c0@@YIPAHPAUcRoadTail@@@Z  # FUN_00c423c0 migrated from s00c41360 (verbatim, slice spelling)

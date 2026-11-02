@@ -1,1 +1,4 @@
 # source  symbol  va  flags
+../src/game/SPGonzago/SPLocomotiveObject.cpp  ?FUN_00c420f0@@YAMPAUcRandomGlobal@@MM@Z  00c420f0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPLocomotiveObject.cpp  ?FUN_00c42310@@YAHPAUIdLookupSource@@@Z  00c42310  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPLocomotiveObject.cpp  ?FUN_00c423c0@@YIPAHPAUcRoadTail@@@Z  00c423c0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
