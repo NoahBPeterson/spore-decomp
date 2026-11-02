@@ -1,0 +1,6 @@
+010d4730 ?getClosestPoints@hkCapsuleCapsuleAgent_s010d_4730@@QAEXABVhkCdBody_s010d_4730@@0ABUhkCollisionInput_s010d_4730@@AAVhkCdPointCollector_s010d_4730@@@Z  # hkCapsuleCapsuleAgent_s010d_4730::getClosestPoints migrated from s010d4730 (verbatim, slice spelling)
+010d4b00 ?staticGetClosestPoints@hkCapsuleCapsuleAgent_s010d_4730@@SAXABVhkCdBody_s010d_4730@@0ABUhkCollisionInput_s010d_4730@@AAVhkCdPointCollector_s010d_4730@@@Z  # hkCapsuleCapsuleAgent_s010d_4730::staticGetClosestPoints migrated from s010d4730 (verbatim, slice spelling)
+010d4ed0 ?staticGetPenetrations@hkCapsuleCapsuleAgent_s010d_4730@@SAXABVhkCdBody_s010d_4730@@0ABUhkCollisionInput_s010d_4730@@AAVhkCdBodyPairCollector_s010d_4730@@@Z  # hkCapsuleCapsuleAgent_s010d_4730::staticGetPenetrations migrated from s010d4730 (verbatim, slice spelling)
+010d5320 ?hkCapsuleCapsuleAgent__registerAgent@@YAXAAVhkCollisionDispatcher_s010d_4730@@@Z  # hkCapsuleCapsuleAgent__registerAgent migrated from s010d4730 (verbatim, slice spelling)
+010d5370 _hkSphereBoxAgent__create  # hkSphereBoxAgent__create migrated from s010d4730 (verbatim, slice spelling)
+010d53a0 _hkSymmetricSphereBoxAgent__create  # hkSymmetricSphereBoxAgent__create migrated from s010d4730 (verbatim, slice spelling)

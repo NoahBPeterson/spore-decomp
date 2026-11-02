@@ -1,6 +1,22 @@
-010df160 hkSymmetricAgent<hkListAgent>::linearCast  # flipped path + FlipCastCollector, tail call hkListAgent::linearCast (named callee)
-010df500 hkPhantomAgent::registerAgent  # registers createPhantomAgent/staticGetPenetrations for shape type 0x1a both ways
-010df5d0 ?4hkMotionState  # word-wise copy of 0xb0 bytes, used by createTransformAAgent
+010df100 ?destroy@hkReferencedObjectWithArray@@QAEPAU1@I@Z  # hkReferencedObjectWithArray::destroy migrated from s010df100 (verbatim, slice spelling)
+010df160 ?linearCast@hkSymmetricAgent_hkListAgent@@UAEXABVhkCdBody_s010d_f100@@0ABUhkLinearCastCollisionInput_s010d_f100@@AAVhkCdPointCollector_s010d_f100@@PAV4@@Z  # hkSymmetricAgent_hkListAgent::linearCast migrated from s010df100 (verbatim, slice spelling)
+010df280 ?createListBAgent@hkSymmetricAgent_hkListAgent@@SAPAVhkCollisionAgent_s010d_f100@@ABVhkCdBody_s010d_f100@@0ABUhkCollisionInput_s010d_f100@@PAVhkContactMgr@@@Z  # hkSymmetricAgent_hkListAgent::createListBAgent migrated from s010df100 (verbatim, slice spelling)
+010df350 ?cleanup@hkPhantomAgent@@UAEXXZ  # hkPhantomAgent::cleanup migrated from s010df100 (verbatim, slice spelling)
+010df390 ?getPenetrations@hkPhantomAgent@@UAEXABVhkCdBody_s010d_f100@@0ABUhkCollisionInput_s010d_f100@@AAVhkCdBodyPairCollector_s010d_f100@@@Z  # hkPhantomAgent::getPenetrations migrated from s010df100 (verbatim, slice spelling)
+010df3b0 ?staticGetPenetrations@hkPhantomAgent@@SAXABVhkCdBody_s010d_f100@@0ABUhkCollisionInput_s010d_f100@@AAVhkCdBodyPairCollector_s010d_f100@@@Z  # hkPhantomAgent::staticGetPenetrations migrated from s010df100 (verbatim, slice spelling)
+010df3d0 ??0hkPhantomAgent@@QAE@ABVhkCdBody_s010d_f100@@0PAVhkContactMgr@@@Z  # hkPhantomAgent::hkPhantomAgent migrated from s010df100 (verbatim, slice spelling)
+010df440 ?createPhantomAgent@hkPhantomAgent@@SAPAVhkCollisionAgent_s010d_f100@@ABVhkCdBody_s010d_f100@@0ABUhkCollisionInput_s010d_f100@@PAVhkContactMgr@@@Z  # hkPhantomAgent::createPhantomAgent migrated from s010df100 (verbatim, slice spelling)
+010df500 ?registerAgent@hkPhantomAgent@@SAXPAVhkCollisionDispatcher_s010d_f100@@@Z  # hkPhantomAgent::registerAgent migrated from s010df100 (verbatim, slice spelling)
+010df560 ?cleanup@hkTransformAgent@@UAEXXZ  # hkTransformAgent::cleanup migrated from s010df100 (verbatim, slice spelling)
+010df5d0 ??4hkMotionState@@QAEAAV0@ABV0@@Z  # hkMotionState::operator= migrated from s010df100 (verbatim, slice spelling)
+010df6b0 ?createTransformAAgent@hkTransformAgent@@SAPAU1@ABVhkCdBody_s010d_f100@@0ABUhkCollisionInput_s010d_f100@@PAVhkContactMgr@@@Z  # hkTransformAgent::createTransformAAgent migrated from s010df100 (verbatim, slice spelling)
+010df7a0 ?processCollision@hkTransformAgent@@UAEXABVhkCdBody_s010d_f100@@0ABUhkProcessCollisionInput_s010d_f100@@AAUhkProcessCollisionOutput_s010d_f100@@@Z  # hkTransformAgent::processCollision migrated from s010df100 (verbatim, slice spelling)
+010df9e0 ?linearCast@hkTransformAgent@@UAEXABVhkCdBody_s010d_f100@@0ABUhkLinearCastCollisionInput_s010d_f100@@AAVhkCdPointCollector_s010d_f100@@PAV4@@Z  # hkTransformAgent::linearCast migrated from s010df100 (verbatim, slice spelling)
+010dfae0 ?staticLinearCast@hkTransformAgent@@SAXABVhkCdBody_s010d_f100@@0ABUhkLinearCastCollisionInput_s010d_f100@@AAVhkCdPointCollector_s010d_f100@@PAV4@@Z  # hkTransformAgent::staticLinearCast migrated from s010df100 (verbatim, slice spelling)
+010dfc00 ?getClosestPoints@hkTransformAgent@@UAEXABVhkCdBody_s010d_f100@@0ABUhkCollisionInput_s010d_f100@@AAVhkCdPointCollector_s010d_f100@@@Z  # hkTransformAgent::getClosestPoints migrated from s010df100 (verbatim, slice spelling)
+010dfd00 ?staticGetClosestPoints@hkTransformAgent@@SAXABVhkCdBody_s010d_f100@@0ABUhkCollisionInput_s010d_f100@@AAVhkCdPointCollector_s010d_f100@@@Z  # hkTransformAgent::staticGetClosestPoints migrated from s010df100 (verbatim, slice spelling)
+010dfe10 ?getPenetrations@hkTransformAgent@@UAEXABVhkCdBody_s010d_f100@@0ABUhkCollisionInput_s010d_f100@@AAVhkCdBodyPairCollector_s010d_f100@@@Z  # hkTransformAgent::getPenetrations migrated from s010df100 (verbatim, slice spelling)
+010dff10 ?staticGetPenetrations@hkTransformAgent@@SAXABVhkCdBody_s010d_f100@@0ABUhkCollisionInput_s010d_f100@@AAVhkCdBodyPairCollector_s010d_f100@@@Z  # hkTransformAgent::staticGetPenetrations migrated from s010df100 (verbatim, slice spelling)
 010e0200 hkSymmetricAgent<hkTransformAgent>::getPenetrations  # flip body collector around hkTransformAgent::getPenetrations
 010e0240 hkSymmetricAgent<hkTransformAgent>::getClosestPoints  # flip collector around hkTransformAgent::getClosestPoints
 010e0280 hkSymmetricAgent<hkTransformAgent>::processCollision  # flips contact points and toi normal around hkTransformAgent::processCollision

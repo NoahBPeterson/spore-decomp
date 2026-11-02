@@ -1,0 +1,3 @@
+010d28c0 ?processCollision@hkCapsuleTriangleAgent@@UAEXABVhkCdBody_s010d_28c0@@0ABUhkProcessCollisionInput_s010d_28c0@@AAUhkProcessCollisionOutput_s010d_28c0@@@Z  # hkCapsuleTriangleAgent::processCollision migrated from s010d28c0 (verbatim, slice spelling)
+010d2d80 ?getClosestPoints@hkCapsuleTriangleAgent@@UAEXABVhkCdBody_s010d_28c0@@0ABUhkCollisionInput_s010d_28c0@@AAVhkCdPointCollector_s010d_28c0@@@Z  # hkCapsuleTriangleAgent::getClosestPoints migrated from s010d28c0 (verbatim, slice spelling)
+010d32a0 ?staticGetClosestPoints@hkCapsuleTriangleAgent@@SAXABVhkCdBody_s010d_28c0@@0ABUhkCollisionInput_s010d_28c0@@AAVhkCdPointCollector_s010d_28c0@@@Z  # hkCapsuleTriangleAgent::staticGetClosestPoints migrated from s010d28c0 (verbatim, slice spelling)
