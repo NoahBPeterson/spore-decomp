@@ -1,4 +1,4 @@
-// src/game/UTFSpore_Win32/EAMessage.cpp -- migrated from slice(s) s00884a20 by tools/migrate/rewrite.py
+// src/game/UTFSpore_Win32/EAMessage.cpp -- migrated from slice(s) s010678e0, s00883730, s00884a20 by tools/migrate/rewrite.py
 // Object file: UTFSpore_Win32/EAMessage.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -6,6 +6,12 @@
 #include "EA/Messaging/MessageQueue.h"
 #include "EA/Thread/Mutex.h"
 #include "EA/Messaging/Server.h"
+#include "EA/Stopwatch.h"
+#include "SP/cGameData.h"
+#include "SP/cGameNounManager.h"
+#include "SP/cPlanet.h"
+#include "SP/cPlanetRecord.h"
+#include "SP/cString.h"
 
 // unnamed retail callees and globals (address in the comment)
 extern void* e_opnew(int size, const char* name, int a, int b, const char* file, int line); // 0xf473a0
@@ -161,6 +167,661 @@ struct HRec {                       // collected handler record (5 ints)
     void* ctx;                      // +0x10
 };
 // ---- items of slice s00884a20 end
+
+// ---- items of slice s00883730 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern void* e_copyov(void* dst, void* first, void* last);   // 0x11e0744
+extern "C" __declspec(dllimport) void* memmove(void* dst, const void* src, unsigned int n);
+extern "C" __declspec(dllimport) int __stdcall QueryPerformanceCounter(long long* out);
+static const char* const kAllocFile =
+    "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h";
+struct Message_s0088_3730 {
+    int   mId;                      // +0x00
+    void* mpMessageRC;              // +0x04
+    void* mpHandlerRC;              // +0x08
+    int   mnPriority;               // +0x0c
+    void* mpHandlerFunction;        // +0x10
+    void* mpHandlerFunctionContext; // +0x14
+
+    Message_s0088_3730() {}
+    Message_s0088_3730& operator=(const Message_s0088_3730& o)
+    {
+        mId = o.mId;
+        mpMessageRC = o.mpMessageRC;
+        mpHandlerRC = o.mpHandlerRC;
+        mnPriority = o.mnPriority;
+        mpHandlerFunction = o.mpHandlerFunction;
+        mpHandlerFunctionContext = o.mpHandlerFunctionContext;
+        return *this;
+    }
+    Message_s0088_3730(const Message_s0088_3730& o)
+    {
+        mId = o.mId;
+        mpMessageRC = o.mpMessageRC;
+        mpHandlerRC = o.mpHandlerRC;
+        mnPriority = o.mnPriority;
+        mpHandlerFunction = o.mpHandlerFunction;
+        mpHandlerFunctionContext = o.mpHandlerFunctionContext;
+    }
+};
+struct HObj_s0088_3730 {                       // handler object vtbl: [1]=invoke, [2]=addref, [3]=release
+    virtual void v0();
+    virtual void v1(uint id, void* rc);   // +4
+    virtual void v2();                    // +8
+    virtual void v3();                    // +0xc
+};
+struct HandlerInfo {
+    void*         mpHandler;                 // +0x00
+    int           mnPriority;                // +0x04
+    unsigned char mbRefCounted;              // +0x08
+    unsigned char _pad[3];
+    void*         mpHandlerFunction;         // +0x0c
+    void*         mpHandlerFunctionContext;  // +0x10
+
+    HandlerInfo& operator=(const HandlerInfo& o)
+    {
+        mpHandler = o.mpHandler;
+        mnPriority = o.mnPriority;
+        *(int*)&mbRefCounted = *(const int*)&o.mbRefCounted;
+        mpHandlerFunction = o.mpHandlerFunction;
+        mpHandlerFunctionContext = o.mpHandlerFunctionContext;
+        return *this;
+    }
+};
+struct HandlerListNode {
+    HandlerListNode* next;                   // +0x00
+    HandlerListNode* prev;                   // +0x04
+    HandlerInfo      info;                   // +0x08
+};
+struct DequeIter_s0088_3730 {
+    Message_s0088_3730* cur;                   // +0x00
+    Message_s0088_3730* beg;                   // +0x04
+    Message_s0088_3730* end;                   // +0x08
+    void**   arr;                   // +0x0c
+
+    DequeIter_s0088_3730& operator=(const DequeIter_s0088_3730& o)
+    {
+        cur = o.cur;
+        beg = o.beg;
+        end = o.end;
+        arr = o.arr;
+        return *this;
+    }
+    DequeIter_s0088_3730(const DequeIter_s0088_3730& o)
+    {
+        cur = o.cur;
+        beg = o.beg;
+        end = o.end;
+        arr = o.arr;
+    }
+    DequeIter_s0088_3730& advanceBy(int n);
+    DequeIter_s0088_3730& inc()
+    {
+        cur = (Message_s0088_3730*)((char*)cur + 0x18);
+        if (cur == end) {
+            ++arr;
+            cur = (Message_s0088_3730*)arr[0];
+            end = (Message_s0088_3730*)((char*)cur + 0xc0);
+            beg = cur;
+        }
+        return *this;
+    }
+    DequeIter_s0088_3730  add(int n) const;
+};
+struct Deque_s0088_3730 {
+    void*     mpPtrArray;           // +0x00
+    int       mnPtrArraySize;       // +0x04
+    DequeIter_s0088_3730 itBegin;              // +0x08
+    DequeIter_s0088_3730 itEnd;                // +0x18
+
+    int  count() const
+    {
+        return (int)(itBegin.end - itBegin.cur) / 0x18
+             + ((int)((char*)itEnd.arr - (char*)itBegin.arr) >> 2) * 8
+             + (int)(itEnd.cur - itEnd.beg) / 0x18
+             - 8;
+    }
+    void init(int n);                       // 0x883f10
+    void grow(uint n, int side);            // 0x883de0
+    void pushFrontAux(const Message_s0088_3730* v);    // 0x8842e0
+    void pushBackAux(const Message_s0088_3730* v);     // 0x884390
+    void pushFront(const Message_s0088_3730* v);       // 0x8848a0
+    void pushBack(const Message_s0088_3730* v);        // 0x8848e0
+    DequeIter_s0088_3730* insertNode(DequeIter_s0088_3730* out, HandlerListNode* list, const HandlerInfo* info); // 0x884260
+};
+struct MessageQueue_s0088_3730 {
+    Deque_s0088_3730 mQueue;                   // +0x00
+    int   _pad[2];                  // +0x28
+    bool  GetNextMessage(Message_s0088_3730* out);     // 0x884550
+};
+struct Hashtable_s0088_3730 {
+    void*        f00;               // +0x00
+    void**       mpBucketArray;     // +0x04
+    unsigned int mnBucketCount;     // +0x08
+    int          mnElementCount;    // +0x0c
+    float        mfMaxLoadFactor;   // +0x10
+    float        mfGrowthFactor;    // +0x14
+    int          mnNextResize;      // +0x18
+    int          f1c;               // +0x1c
+
+    void find(void* out, int* key); // 0x645ed0
+    void erase(int* key);           // 0xa460d0
+};
+struct Mutex_s0088_3730 {
+    char _pad[0x30];                // 0x30 bytes
+    int  Lock(int* user);           // 0x9221b0
+    int  Unlock();                  // 0x922270
+};
+struct StopwatchHolder {            // EA::LimitStopwatch (0x20 bytes)
+    long long    mnStartTime;          // +0x00
+    long long    mnTotalElapsedTime;   // +0x08
+    unsigned int mnUnits;              // +0x10
+    float        mfCoeff;              // +0x14
+    long long    mnEndTime;            // +0x18
+
+    StopwatchHolder(int units, bool b);                    // 0x93a560
+    void SetTimeLimit(unsigned int timeLimit, bool b);     // 0x93a480
+};
+struct Server_s0088_3730 {
+    void**       vftable;                   // +0x00
+    int          _pad04;                    // +0x04
+    MessageQueue_s0088_3730 mQueue;                    // +0x08
+    Mutex_s0088_3730        mQueueMutex;               // +0x38
+    long long    mnQueueProcessedMessageCount; // +0x68
+    Hashtable_s0088_3730    mHandlerInfoMap;           // +0x70
+    Mutex_s0088_3730        mHandlerInfoMapMutex;      // +0x90
+    unsigned char mbThreadSafetyEnabled;    // +0xc0
+    unsigned char mbReentrantSafetyEnabled; // +0xc1
+    unsigned char mbQueueProcessingEnabled; // +0xc2
+    unsigned char mbClearQueueEnabled;      // +0xc3
+    unsigned char mbRefCountEnabled;        // +0xc4
+    unsigned char mbTraceEnabled;           // +0xc5
+
+    int  GetOption(int option) const;                       // 0x883880
+    void SetOption(int option, int value);                  // 0x883910
+    void AddHandlerObj(void* handler, uint id);             // 0x8839a0
+    void AddHandlerRC(void* handler, uint id);              // 0x8839e0
+    void AddHandlerFn(void* fn, void* ctx, uint id, char refcounted, int priority); // 0x883a30
+    int  LockMutexes(bool lock);                            // 0x883ab0
+    int  ProcessQueueTimeout(uint threshold, uint maxCount, uint timeout); // 0x884100
+    bool RemoveHandlerInternal(void* handler, uint id, int priority);      // 0x8845d0
+    int  ProcessQueueRun();                                 // 0x884700
+};
+// ---- items of slice s00883730 end
+
+// ---- items of slice s010678e0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+#pragma warning(disable : 4100)
+typedef unsigned int  u32;
+void  SP_DeleteArray(void* p);             // 0x00f47380 operator delete[]
+struct DeqNode {
+    void*    m00;       // +0x00
+    void*    m04;       // +0x04
+    DeqNode* m08;       // +0x08
+};
+struct Deque_s0106_78e0 {
+    void* m00; void* m04; void* m08; u32 m0c;
+    int* clear(int* out, DeqNode* self, DeqNode* root); // 0x01068380
+};
+// ---- items of slice s010678e0 end
+
+// @ 0x00883880
+int EA::Messaging::Server::GetOption(int option) const
+{
+    switch (option) {
+    case 1: return this->mbThreadSafetyEnabled != false;
+    case 2: return this->mbReentrantSafetyEnabled != false;
+    case 3: return this->mbQueueProcessingEnabled != false;
+    case 4: return this->mbClearQueueEnabled != false;
+    case 5: return this->mbRefCountEnabled != false;
+    case 6: return this->mbTraceEnabled != false;
+    default: return 0;
+    }
+}
+
+// @ 0x00883910
+void EA::Messaging::Server::SetOption(int option, int value)
+{
+    switch (option) {
+    case 1: this->mbThreadSafetyEnabled = value != 0; return;
+    case 2: this->mbReentrantSafetyEnabled = value != 0; return;
+    case 3: this->mbQueueProcessingEnabled = value != 0; return;
+    case 4: this->mbClearQueueEnabled = value != 0; return;
+    case 5: this->mbRefCountEnabled = value != 0; return;
+    case 6: this->mbTraceEnabled = value != 0; return;
+    }
+}
+
+// @ 0x008839a0
+void Server_s0088_3730::AddHandlerObj(void* handler, uint id)
+{
+    if (handler != 0) {
+        HandlerInfo info;
+        info.mpHandler = handler;
+        info.mnPriority = 0;
+        info.mbRefCounted = 0;
+        info.mpHandlerFunction = 0;
+        info.mpHandlerFunctionContext = 0;
+        typedef void (__thiscall* Fn)(Server_s0088_3730*, HandlerInfo*, uint);
+        ((Fn)this->vftable[0x44 / 4])(this, &info, id);
+    }
+}
+
+// @ 0x008839e0
+void Server_s0088_3730::AddHandlerRC(void* handler, uint id)
+{
+    if (handler != 0) {
+        HandlerInfo info;
+        info.mpHandler = handler;
+        info.mnPriority = 0;
+        info.mbRefCounted = 1;
+        info.mpHandlerFunction = 0;
+        info.mpHandlerFunctionContext = 0;
+        if (this->mbRefCountEnabled != 0)
+            ((RCObj*)handler)->v2();
+        typedef void (__thiscall* Fn)(Server_s0088_3730*, HandlerInfo*, uint);
+        ((Fn)this->vftable[0x44 / 4])(this, &info, id);
+    }
+}
+
+// @ 0x00883a30
+void Server_s0088_3730::AddHandlerFn(void* fn, void* ctx, uint id, char refcounted, int priority)
+{
+    if (fn != 0) {
+        HandlerInfo info;
+        info.mnPriority = priority;
+        info.mpHandler = 0;
+        info.mpHandlerFunction = fn;
+        info.mpHandlerFunctionContext = ctx;
+        info.mbRefCounted = refcounted;
+        if (this->mbRefCountEnabled != 0 && refcounted != 0)
+            ((void(*)(int, int, void*))fn)(1, 0, info.mpHandlerFunctionContext);
+        typedef void (__thiscall* Fn)(Server_s0088_3730*, HandlerInfo*, uint);
+        ((Fn)this->vftable[0x44 / 4])(this, &info, id);
+    }
+}
+
+// @ 0x00883ab0
+int Server_s0088_3730::LockMutexes(bool lock)
+{
+    if (this->mbThreadSafetyEnabled != 0) {
+        if (lock != 0) {
+            this->mHandlerInfoMapMutex.Lock(&g_1427918);
+            return this->mQueueMutex.Lock(&g_1427918);
+        }
+        this->mHandlerInfoMapMutex.Unlock();
+        return this->mQueueMutex.Unlock();
+    }
+    return 0;
+}
+
+// @ 0x00883b00
+DequeIter_s0088_3730& DequeIter_s0088_3730::advanceBy(int n)
+{
+    unsigned int u = (unsigned int)((int)(this->cur - this->beg) + n);
+    if (u < 8) {
+        this->cur = this->cur + n;
+        return *this;
+    }
+    int d = (int)(u + 0x1000000);
+    int idx = ((d + ((d >> 31) & 7)) >> 3) - 0x200000;
+    this->arr = this->arr + idx;
+    Message_s0088_3730* base = (Message_s0088_3730*)this->arr[0];
+    this->beg = base;
+    this->end = (Message_s0088_3730*)((char*)base + 0xc0);
+    this->cur = base + (int)(u - (unsigned)(idx * 8));
+    return *this;
+}
+
+// @ 0x00883b80
+DequeIter_s0088_3730* DequeCopyForward(DequeIter_s0088_3730* out, DequeIter_s0088_3730 first, DequeIter_s0088_3730 last, DequeIter_s0088_3730 result)
+{
+    while (first.cur != last.cur) {
+        *result.cur = *first.cur;
+        result.inc();
+        first.inc();
+    }
+    *out = result;
+    return out;
+}
+
+// @ 0x00883c60
+void DequeCopyBackward(DequeIter_s0088_3730* out, DequeIter_s0088_3730 first, DequeIter_s0088_3730 last, DequeIter_s0088_3730 result)
+{
+    while (first.cur != last.cur) {
+        if (first.cur == first.beg) {
+            --first.arr;
+            first.beg = (Message_s0088_3730*)first.arr[0];
+            first.end = first.beg + 8;
+            first.cur = first.end;
+        }
+        --first.cur;
+        if (result.cur == result.beg) {
+            --result.arr;
+            result.beg = (Message_s0088_3730*)result.arr[0];
+            result.end = result.beg + 8;
+            result.cur = result.end;
+        }
+        --result.cur;
+        *result.cur = *first.cur;
+    }
+    *out = result;
+}
+
+// @ 0x00883d30
+void __stdcall HandlerList_Init(HandlerListNode* list, const HandlerInfo* info)
+{
+    HandlerListNode* node = (HandlerListNode*)e_opnew(0x1c, "EASTL", 0, 0, kAllocFile, 0xd1);
+    if (&node->info != 0)
+        node->info = *info;
+    node->next = list;
+    node->prev = list->prev;
+    list->prev->next = node;
+    list->prev = node;
+}
+
+// @ 0x00883d90
+DequeIter_s0088_3730 DequeIter_s0088_3730::add(int n) const
+{
+    DequeIter_s0088_3730 tmp = *this;
+    return tmp.advanceBy(n);
+}
+
+// @ 0x00883de0
+void Deque_s0088_3730::grow(uint n, int side)
+{
+    int oldCount = (int)((char*)this->itEnd.arr - (char*)this->itBegin.arr) / 4 + 1;
+    uint newCount = (uint)oldCount + n;
+    uint cap = (uint)this->mnPtrArraySize;
+    void** first = this->itBegin.arr;
+    void** last = this->itEnd.arr + 1;
+    void** dest;
+
+    if (newCount * 2 < cap) {
+        int extra = (side == 0) ? (int)n : 0;
+        dest = (void**)((char*)this->mpPtrArray + (((cap - newCount) >> 1) + extra) * 4);
+        if (dest < first)
+            e_copyov(dest, first, last);
+        else
+            memmove(dest + (oldCount - (int)((char*)last - (char*)first) / 4),
+                    first, (unsigned int)oldCount * 4);
+    } else {
+        uint maxv = cap > n ? cap : n;
+        uint newCap = maxv + cap + 2;
+        void** arr = (void**)e_opnew((int)(newCap * 4), "EASTL", 0, 0, kAllocFile, 0xd1);
+        int extra = (side == 0) ? (int)n : 0;
+        dest = arr + ((int)((char*)first - (char*)this->mpPtrArray) >> 2) + extra;
+        if (this->mpPtrArray != 0)
+            e_copyov(dest, first, last);
+        if (this->mpPtrArray != 0)
+            e_opdel(this->mpPtrArray);
+        this->mpPtrArray = arr;
+        this->mnPtrArraySize = (int)newCap;
+    }
+
+    this->itBegin.arr = dest;
+    Message_s0088_3730* bbase = (Message_s0088_3730*)dest[0];
+    this->itBegin.beg = bbase;
+    this->itBegin.end = (Message_s0088_3730*)((char*)bbase + 0xc0);
+    this->itEnd.arr = dest + (oldCount - 1);
+    Message_s0088_3730* ebase = (Message_s0088_3730*)this->itEnd.arr[0];
+    this->itEnd.beg = ebase;
+    this->itEnd.end = (Message_s0088_3730*)((char*)ebase + 0xc0);
+}
+
+// @ 0x00883f10
+void Deque_s0088_3730::init(int n)
+{
+    int k = (n >> 3) + 1;
+    int c = (n >> 3) + 3;
+    unsigned int cap = (unsigned int)((c > 8) ? c : 8);
+    this->mnPtrArraySize = (int)cap;
+
+    void** arr = (void**)e_opnew((int)(cap * 4), "EASTL", 0, 0, kAllocFile, 0xd1);
+    void** p = arr + ((cap - (unsigned int)k) >> 1);
+    void** pe = p + k;
+    for (void** q = p; q < pe; ++q)
+        *q = e_opnew(0xc0, "EASTL", 0, 0, kAllocFile, 0xd1);
+
+    this->mpPtrArray = arr;
+    this->itBegin.arr = p;
+    Message_s0088_3730* bbase = (Message_s0088_3730*)p[0];
+    this->itBegin.beg = bbase;
+    this->itBegin.end = (Message_s0088_3730*)((char*)bbase + 0xc0);
+    this->itBegin.cur = this->itBegin.beg;
+    this->itEnd.arr = pe - 1;
+    Message_s0088_3730* ebase = (Message_s0088_3730*)this->itEnd.arr[0];
+    this->itEnd.beg = ebase;
+    this->itEnd.end = (Message_s0088_3730*)((char*)ebase + 0xc0);
+    this->itEnd.cur = (Message_s0088_3730*)((char*)ebase + (n & 7) * 0x18);
+}
+
+// @ 0x00884100
+int Server_s0088_3730::ProcessQueueTimeout(uint threshold, uint maxCount, uint timeout)
+{
+    int total = 0;
+    unsigned int count = 0;
+    if (this->mbQueueProcessingEnabled != 0) {
+        StopwatchHolder sw(4, false);
+        sw.SetTimeLimit(timeout, true);
+        if (maxCount != 0) {
+            do {
+                if (this->mQueue.mQueue.count() == 0)
+                    return total;
+                typedef int (__thiscall* Fn)(Server_s0088_3730*);
+                total += ((Fn)this->vftable[0x38 / 4])(this);
+                if (threshold < count) {
+                    long long now;
+                    QueryPerformanceCounter(&now);
+                    long long remain = sw.mnEndTime - now;
+                    if (remain < 0)
+                        return total;
+                }
+                ++count;
+            } while (count < maxCount);
+        }
+    }
+    return total;
+}
+
+// @ 0x00884260
+DequeIter_s0088_3730* Deque_s0088_3730::insertNode(DequeIter_s0088_3730* out, HandlerListNode* list, const HandlerInfo* info)
+{
+    HandlerListNode* node = (HandlerListNode*)e_opnew(0x1c, "EASTL", 0, 0, kAllocFile, 0xd1);
+    if (&node->info != 0)
+        node->info = *info;
+    node->next = list;
+    node->prev = list->prev;
+    list->prev->next = node;
+    list->prev = node;
+    out->cur = (Message_s0088_3730*)node;
+    return out;
+}
+
+// @ 0x008842e0
+void Deque_s0088_3730::pushFrontAux(const Message_s0088_3730* value)
+{
+    Message_s0088_3730 v = *value;
+    if (this->itBegin.arr == (void**)this->mpPtrArray)
+        this->grow(1, 0);
+    Message_s0088_3730* node = (Message_s0088_3730*)e_opnew(0xc0, "EASTL", 0, 0, kAllocFile, 0xd1);
+    this->itBegin.arr[-1] = node;
+    --this->itBegin.arr;
+    Message_s0088_3730* base = (Message_s0088_3730*)this->itBegin.arr[0];
+    this->itBegin.beg = base;
+    this->itBegin.end = (Message_s0088_3730*)((char*)base + 0xc0);
+    this->itBegin.cur = (Message_s0088_3730*)((char*)base + 0xc0 - 0x18);
+    if (this->itBegin.cur != 0)
+        *this->itBegin.cur = v;
+}
+
+// @ 0x00884390
+void Deque_s0088_3730::pushBackAux(const Message_s0088_3730* value)
+{
+    Message_s0088_3730 v = *value;
+    if (((int)((char*)this->itEnd.arr - (char*)this->mpPtrArray) >> 2) + 1 >= this->mnPtrArraySize)
+        this->grow(1, 1);
+    Message_s0088_3730* node = (Message_s0088_3730*)e_opnew(0xc0, "EASTL", 0, 0, kAllocFile, 0xd1);
+    this->itEnd.arr[1] = node;
+    Message_s0088_3730* cur = this->itEnd.cur;
+    if (cur != 0)
+        *cur = v;
+    ++this->itEnd.arr;
+    Message_s0088_3730* base = (Message_s0088_3730*)this->itEnd.arr[0];
+    this->itEnd.beg = base;
+    this->itEnd.end = (Message_s0088_3730*)((char*)base + 0xc0);
+    this->itEnd.cur = this->itEnd.beg;
+}
+
+// @ 0x00884550
+bool MessageQueue_s0088_3730::GetNextMessage(Message_s0088_3730* out)
+{
+    Message_s0088_3730* p = this->mQueue.itBegin.cur;
+    if (p == this->mQueue.itEnd.cur)
+        return false;
+    *out = *p;
+    Message_s0088_3730* next = p + 1;
+    if (next != this->mQueue.itBegin.end) {
+        this->mQueue.itBegin.cur = next;
+        return true;
+    }
+    if (this->mQueue.itBegin.beg != 0)
+        e_opdel(this->mQueue.itBegin.beg);
+    ++this->mQueue.itBegin.arr;
+    Message_s0088_3730* nb = (Message_s0088_3730*)this->mQueue.itBegin.arr[0];
+    this->mQueue.itBegin.beg = nb;
+    this->mQueue.itBegin.end = nb + 8;
+    this->mQueue.itBegin.cur = nb;
+    return true;
+}
+
+// @ 0x008845d0
+bool Server_s0088_3730::RemoveHandlerInternal(void* handler, uint id, int priority)
+{
+    unsigned char found = 0;
+    if (this->mbThreadSafetyEnabled != 0)
+        this->mHandlerInfoMapMutex.Lock(&g_1427918);
+
+    int it[2];
+    this->mHandlerInfoMap.find(it, (int*)&id);
+    void** ba = this->mHandlerInfoMap.mpBucketArray;
+    if ((void*)it[0] != (void*)ba[this->mHandlerInfoMap.mnBucketCount]) {
+        HandlerListNode* list = (HandlerListNode*)*(void**)((char*)it[0] + 4);
+        for (HandlerListNode* p = list->next; p != list; p = p->next) {
+            HandlerInfo* h = &p->info;
+            if ((h->mpHandler == handler || h->mpHandlerFunction == handler) &&
+                (priority == -9999 || h->mnPriority == priority)) {
+                if (this->mbRefCountEnabled != 0 && h->mbRefCounted != 0) {
+                    if (h->mpHandler != 0)
+                        (*(void(**)(void))(*(unsigned int*)((char*)h->mpHandler + 0xc)))();
+                    else
+                        ((void(*)(int, int, void*))h->mpHandlerFunction)(
+                            2, 0, h->mpHandlerFunctionContext);
+                }
+                found = 1;
+                if (p != list) {
+                    p->next->prev = p->prev;
+                    p->prev->next = p->next;
+                    e_opdel(p);
+                    if (list->next == list) {
+                        HandlerListNode* q = list->next;
+                        while (q != list) {
+                            HandlerListNode* nx = q->next;
+                            e_opdel(q);
+                            q = nx;
+                        }
+                        e_opdel(list);
+                        this->mHandlerInfoMap.erase((int*)&id);
+                    }
+                }
+                break;
+            }
+        }
+    }
+
+    if (this->mbThreadSafetyEnabled != 0)
+        this->mHandlerInfoMapMutex.Unlock();
+    return found != 0;
+}
+
+// @ 0x00884700
+int Server_s0088_3730::ProcessQueueRun(void)
+{
+    int processed = 0;
+    if (this->mbThreadSafetyEnabled != 0)
+        this->mQueueMutex.Lock(&g_1427918);
+
+    unsigned int size = (unsigned int)this->mQueue.mQueue.count();
+    unsigned long long target =
+        (unsigned long long)size + (unsigned long long)this->mnQueueProcessedMessageCount;
+
+    if (this->mbThreadSafetyEnabled != 0)
+        this->mQueueMutex.Unlock();
+
+    for (;;) {
+        if (this->mbThreadSafetyEnabled != 0)
+            this->mQueueMutex.Lock(&g_1427918);
+        Message_s0088_3730 msg;
+        bool got = this->mQueue.GetNextMessage(&msg);
+        if (got) {
+            ++this->mnQueueProcessedMessageCount;
+            ++processed;
+        }
+        if (this->mbThreadSafetyEnabled != 0)
+            this->mQueueMutex.Unlock();
+        if (!got)
+            return processed;
+
+        if (msg.mpHandlerRC != 0) {
+            ((HObj_s0088_3730*)msg.mpHandlerRC)->v1((uint)msg.mId, msg.mpMessageRC);
+            if (this->mbRefCountEnabled != 0)
+                ((HObj_s0088_3730*)msg.mpHandlerRC)->v3();
+        } else if (msg.mpHandlerFunction != 0) {
+            ((void(*)(int, void*, void*))msg.mpHandlerFunction)(
+                msg.mId, msg.mpMessageRC, msg.mpHandlerFunctionContext);
+            if (this->mbRefCountEnabled != 0)
+                ((void(*)(int, int, void*))msg.mpHandlerFunction)(
+                    2, 0, msg.mpHandlerFunctionContext);
+        } else {
+            typedef void (__thiscall* Fn)(Server_s0088_3730*, uint, void*, int);
+            ((Fn)this->vftable[0x14 / 4])(this, (uint)msg.mId, msg.mpMessageRC, 0);
+        }
+
+        if (msg.mpMessageRC != 0 && this->mbRefCountEnabled != 0)
+            ((RCObj*)msg.mpMessageRC)->v2();
+
+        if (this->mbClearQueueEnabled != 0)
+            continue;
+        if ((unsigned long long)this->mnQueueProcessedMessageCount >= target)
+            return processed;
+    }
+}
+
+// @ 0x008848a0
+void Deque_s0088_3730::pushFront(const Message_s0088_3730* value)
+{
+    Message_s0088_3730* cur = this->itBegin.cur;
+    if (cur != this->itBegin.beg) {
+        Message_s0088_3730* p = cur - 1;
+        this->itBegin.cur = p;
+        if (p != 0)
+            *p = *value;
+        return;
+    }
+    this->pushFrontAux(value);
+}
+
+// @ 0x008848e0
+void Deque_s0088_3730::pushBack(const Message_s0088_3730* value)
+{
+    Message_s0088_3730* cur = this->itEnd.cur;
+    Message_s0088_3730* next = cur + 1;
+    if (next != this->itEnd.end) {
+        this->itEnd.cur = next;
+        if (cur != 0)
+            *cur = *value;
+        return;
+    }
+    this->pushBackAux(value);
+}
 
 // @ 0x00884a20
 Server* Server::ctor_init()
@@ -753,4 +1414,33 @@ void Server::MessagePostFunction(int a, void* rc, int b, void* fn, void* ctx)
     this->mQueue.InsertMessage(&msg);
     if (this->mbThreadSafetyEnabled != 0)
         this->mQueueMutex.Unlock();
+}
+
+// @ 0x01068380
+int* Deque_s0106_78e0::clear(int* out, DeqNode* self, DeqNode* root)
+{
+    DeqNode* n = self->m08;
+    out[1] = (int)root;
+    out[0] = (int)n;
+    while (n == 0) {
+        out[1] += 4;
+        n = *(DeqNode**)out[1];
+        out[0] = (int)n;
+    }
+    DeqNode* r = (DeqNode*)root->m00;
+    if (r == self) {
+        root->m00 = r->m08;
+        SP_DeleteArray(self);
+        m0c = m0c - 1;
+        return out;
+    }
+    DeqNode* e = r->m08;
+    while (e != self) {
+        r = e;
+        e = r->m08;
+    }
+    r->m08 = e->m08;
+    SP_DeleteArray(self);
+    m0c = m0c - 1;
+    return out;
 }

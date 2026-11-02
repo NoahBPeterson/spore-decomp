@@ -1,4 +1,13 @@
 # source  symbol  va  flags
+../src/game/UTFSpore_Win32/EAMessage.cpp  ?GetOption@Server@Messaging@EA@@UBEHH@Z  00883880  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/EAMessage.cpp  ?SetOption@Server@Messaging@EA@@UAEXHH@Z  00883910  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/EAMessage.cpp  ?AddHandlerObj@Server_s0088_3730@@QAEXPAXI@Z  008839a0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/EAMessage.cpp  ?AddHandlerRC@Server_s0088_3730@@QAEXPAXI@Z  008839e0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/EAMessage.cpp  ?LockMutexes@Server_s0088_3730@@QAEH_N@Z  00883ab0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/EAMessage.cpp  ?HandlerList_Init@@YGXPAUHandlerListNode@@PBUHandlerInfo@@@Z  00883d30  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/EAMessage.cpp  ?add@DequeIter_s0088_3730@@QBE?AU1@H@Z  00883d90  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/EAMessage.cpp  ?pushFront@Deque_s0088_3730@@QAEXPBUMessage_s0088_3730@@@Z  008848a0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/EAMessage.cpp  ?pushBack@Deque_s0088_3730@@QAEXPBUMessage_s0088_3730@@@Z  008848e0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2 /fp:fast /Isrc/game/include
 ../src/game/UTFSpore_Win32/EAMessage.cpp  ?dtor_impl@Server@@QAEXXZ  00884fb0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2 /fp:fast /Isrc/game/include
 ../src/game/UTFSpore_Win32/EAMessage.cpp  ?MessagePost@Server@@QAEXHPAXH0@Z  00885890  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2 /fp:fast /Isrc/game/include
 ../src/game/UTFSpore_Win32/EAMessage.cpp  ?MessagePostFunction@Server@@QAEXHPAXH00@Z  00885930  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2 /fp:fast /Isrc/game/include
