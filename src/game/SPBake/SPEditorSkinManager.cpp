@@ -1,4 +1,4 @@
-// src/game/SPBake/SPEditorSkinManager.cpp -- migrated from slice(s) s005002d0, s004c38e0, s004c3230, s004c2100 by tools/migrate/rewrite.py
+// src/game/SPBake/SPEditorSkinManager.cpp -- migrated from slice(s) s004c6190, s004c5200, s004c4650, s005002d0, s004c38e0, s004c3230, s004c2100 by tools/migrate/rewrite.py
 // Object file: SPBake/SPEditorSkinManager.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -13,6 +13,9 @@
 #include <new>
 #include "SP/cMeshData.h"
 #include <stdio.h>
+#include "SP/cRuntimeCreatureResource.h"
+#include "SP/cSkinObject.h"
+#include <intrin.h>
 #pragma pack(push, 4)
 
 // ---- items of slice s004c3230 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -391,6 +394,282 @@ public:
 };
 // ---- items of slice s005002d0 end
 
+// ---- items of slice s004c4650 begin (TODO(rewrite): local stubs, replace by canonical classes)
+namespace SP {
+struct cSPVector3 {
+    float x, y, z;
+    cSPVector3() {}
+    cSPVector3(const cSPVector3& v) : x(v.x), y(v.y), z(v.z) {}
+    cSPVector3& operator=(const cSPVector3& v) { x = v.x; y = v.y; z = v.z; return *this; }
+};
+}
+namespace SP {
+class cSPEditorBlock_s004c_4650;
+}
+namespace SP {
+template <class T> class AutoRefCount_s004c_4650 {
+public:
+    AutoRefCount_s004c_4650() : mpObject(0) {}
+    AutoRefCount_s004c_4650(T* p) : mpObject(p) { if (mpObject) mpObject->AddRef(); }
+    AutoRefCount_s004c_4650(const AutoRefCount_s004c_4650& o) : mpObject(o.mpObject) { if (mpObject) mpObject->AddRef(); }
+    ~AutoRefCount_s004c_4650() { if (mpObject) mpObject->Release(); }
+    AutoRefCount_s004c_4650& operator=(T* p) {
+        if (p != mpObject) {
+            T* const pTemp = mpObject;
+            if (p) p->AddRef();
+            mpObject = p;
+            if (pTemp) pTemp->Release();
+        }
+        return *this;
+    }
+    AutoRefCount_s004c_4650& operator=(const AutoRefCount_s004c_4650& o) { return operator=(o.mpObject); }
+    T* operator->() const { return mpObject; }
+    operator T*() const { return mpObject; }
+    T* get() const { return mpObject; }
+    T* mpObject;
+};
+}
+namespace SP {
+struct RefVec {
+    void* mpBegin;
+    void* mpEnd;
+    void* mpCapacity;
+    void ctorRef(void* p);                              // 0x429360
+    void eraseRange(void* first, void* last);           // 0x426280
+    void resize(int n);                                 // 0x41ee90
+    void dtorRef();                                     // 0x41eb80
+    bool emptyRef() const;                              // 0x526430
+};
+}
+namespace SP {
+class TickState {
+public:
+    static TickState* Get();                            // 0x401080
+    void ClearPtr(void* p);                             // 0x522a40
+    void ClearPtr100();                                 // 0x5227a0
+};
+}
+namespace SP {
+class ThreadedObject {
+public:
+    void Release();                                     // 0x404f90
+};
+}
+namespace SP {
+struct DeformRecord {
+    char pad[0x8c];
+};
+}
+namespace SP {
+class cRuntimeCreatureResource_s004c_4650 {
+public:
+    char pad0[0x98];
+    DeformRecord* mDeformBegin;     // +0x98
+    DeformRecord* mDeformEnd;       // +0x9c
+};
+}
+namespace SP {
+class cSkinObject_s004c_4650 {
+public:
+    char pad0[8];
+    AutoRefCount_s004c_4650<cRuntimeCreatureResource_s004c_4650> mResource;   // +0x8
+};
+}
+namespace SP {
+class cSPEditorSkinPart_s004c_4650 : public cSkinObject_s004c_4650 {
+public:
+    char pad9c[0xa4 - 0xc];
+    RefVec mOrderedBlocks;        // +0xa4 (erase/resize through RefVec)
+    char padac[0xc0 - 0xb0];
+    void** mBlockMatInfosBegin;   // +0xc0
+    void** mBlockMatInfosEnd;     // +0xc4
+    char padc8[0xd0 - 0xc8];
+    uint32_t mDrawMaterial;       // +0xd0
+    uint32_t mInstance;           // +0xd4
+    char padd8[0xfc - 0xd8];
+    void* mDiffuseTex;            // +0xfc
+    void* mNormalTex;             // +0x100
+    char pad104[0x120 - 0x104];
+    float mSkinResolutionRealtime;    // +0x120
+    float mSkinResolutionHighQuality; // +0x124
+    float mSkinResolution;            // +0x128
+
+    void AddRef() { _InterlockedIncrement((long*)((char*)this + 4)); }
+    void Release() { if (_InterlockedDecrement((long*)((char*)this + 4)) == 0) Destroy(); }
+    void Destroy();
+
+    bool BuildSkeleton();                              // 0x4ca6e0
+    void RebuildSkinA();                               // 0x4cb340
+    void RebuildSkinB();                               // 0x4cb820
+    void Shutdown();                                   // 0x4cced0
+    cSPEditorBlock_s004c_4650* GetBlockOnSkin(cSPVector3 pos);    // 0x4ccb70
+    void SetDefaultMaterial(uint32_t id);              // 0x4cd020
+    void SetSkinResolutions(float realtime, float highQuality);  // 0x4cd060
+    bool PickSkinPart(cSPVector3 lod, cSPVector3 dir, cSPVector3* outPos,
+                      cSPVector3* outNormal, float* outDist, char flag);  // 0x4ccae0
+};
+}
+namespace SP {
+class cSPEditorSkinManager_s004c_4650 {
+public:
+    char pad0[0x10];
+    void* mModel;                        // +0x10
+    void* mSceneObjectModelWorld;        // +0x14
+    AutoRefCount_s004c_4650<cSPEditorSkinPart_s004c_4650> mTorsoSkin;    // +0x18
+    AutoRefCount_s004c_4650<cSPEditorSkinPart_s004c_4650> mCompleteSkin; // +0x1c
+    char pad20[0x48 - 0x20];
+    struct BlockPart { void* block; AutoRefCount_s004c_4650<cSPEditorSkinPart_s004c_4650> part; };
+    struct BlockVec {
+        BlockPart* mpBegin;              // +0x48
+        BlockPart* mpEnd;                // +0x4c
+        int Size() { return (int)(mpEnd - mpBegin); }
+        bool Empty() { return mpEnd == mpBegin; }
+        BlockPart& Back() { return mpEnd[-1]; }
+        void PopBack();                  // 0x4c6070
+    };
+    BlockVec mBlockTransforms;           // +0x48
+    char pad50[0x5c - 0x50];
+    AutoRefCount_s004c_4650<struct cPaintRequest> mPaintRequest;   // +0x5c
+    uint32_t mDefaultMaterial;           // +0x60
+    char pad64[0x78 - 0x64];
+    float mPaintResolution;              // +0x78
+    float mRealtimeResolution;           // +0x7c
+    float mHighQualityResolution;        // +0x80
+    uint8_t mPaintEnabled;               // +0x84
+
+    bool CheckPaint() const;             // 0x4c58b0
+    void* GetSkin(uint32_t which);
+    void Update(uint32_t p2, char p3, uint32_t p4, uint32_t p5);   // 0x4c38e0
+    void EnablePaint(char enable);                                 // 0x4c4650
+    bool PickSkin(uint32_t which, cSPVector3 lod, cSPVector3 dir,
+                  cSPVector3* outPos, cSPVector3* outNormal, float* outDist, char flag);
+    cSPEditorBlock_s004c_4650* GetBlockOnSkin(uint32_t which, cSPVector3 pos);
+    void DetachSkinParts();                                        // 0x4c4eb0
+    void SetDefaultMaterial(uint32_t id);
+    void SetDefaultMaterialToDetachedLimb(uint32_t id, const void* block);
+    void SetSkinResolutions(float realtime, float highQuality);
+};
+}
+namespace SP {
+class cPaintRequest {
+public:
+    void AddRef() {}
+    void Release();                      // 0x453540
+};
+}
+namespace SP {
+cSPVector3 operator-(const cSPVector3& a, const cSPVector3& b); // 0x41db10
+}
+// ---- items of slice s004c4650 end
+
+// ---- items of slice s004c5200 begin (TODO(rewrite): local stubs, replace by canonical classes)
+#pragma intrinsic(_InterlockedExchangeAdd, _InterlockedIncrement)
+template<int N> inline void ScratchSlots_s004c_5200() { uint32_t s[N]; }
+struct IRef { virtual void AddRef(); virtual void Release(); };
+struct EObj { char pad[0xbc]; IRef ref; };
+struct EPtr {
+    EObj* p;
+    EPtr() {}
+    EPtr(const EPtr& o) : p(o.p) { if (p) p->ref.AddRef(); }
+    EPtr& operator=(EObj* np) {
+        if (np != p) { EObj* old = p; if (np) np->ref.AddRef(); p = np; if (old) old->ref.Release(); }
+        return *this;
+    }
+    ~EPtr() { if (p) p->ref.Release(); }
+    void Dtor5d50();
+    EPtr& Assign5d80(EObj* np);
+    EPtr* Copy6150(EPtr* o);
+};
+struct Pair { int key; EPtr ptr; };
+struct PairVec {
+    Pair* mpBegin; Pair* mpEnd; Pair* mpCapacity;
+    void Dtor5f40();
+    void PushBack5fc0(const Pair& v);
+    void PopBack6070();
+    void DoInsertValue(Pair* pos, const Pair& v);
+    void Base45daf0();
+};
+struct TexData { int format; int pad4; int pad8; uint16_t w; uint16_t h; };
+struct Tex {
+    TexData* mpData; uint8_t mFlags; uint8_t mPad[3]; long mnRefCount;
+    void Release();                             // AtomicRefCounted::Release @ 0x402420
+};
+void* operator new(unsigned int size, const char* pName, int flags, unsigned int debugFlags, int a, int b) throw();
+struct ThrObj {                                 // Resource::ThreadedObject: atomic count at +4
+    void* vt; long mnRefCount;
+    void Release();                             // @ 0x404f90
+};
+struct ThrRef {
+    ThrObj* mp;
+    ThrRef& operator=(ThrObj* p) {
+        if (p != mp) { ThrObj* old = mp; if (p) _InterlockedIncrement(&p->mnRefCount); mp = p; if (old) old->Release(); }
+        return *this;
+    }
+};
+struct SkinKey { uint32_t a, b, c; };
+struct SkinObj;
+struct SkinRef {
+    SkinObj* mp;
+    SkinRef& operator=(SkinObj* p);
+    SkinRef& AssignA(SkinObj* p);               // operator= with the extra frame hole of the failure-path expansion
+};
+struct Vec3 { float x, y, z; };
+struct SkinObj {
+    void* vt; int mnRefCount; ThrRef mpThr; SkinKey mKey;
+    uint32_t mAbil[3]; uint32_t m24; uint32_t m28[3]; uint32_t pad34; Vec3 mPos[3];
+    int m5c; int m60; uint8_t pad64; bool f65, f66, f67, f68, f69, f6a, f6b, f6c; uint8_t pad6d[3]; uint32_t pad70[5];
+    SkinObj();                                  // @ 0x51df40
+    int AddRef() { return mnRefCount++ + 1; }
+    void Release();                             // EA::RefCountTemplate<int>::Release @ 0x453540
+};
+inline SkinRef& SkinRef::operator=(SkinObj* p) {
+    if (p != mp) { SkinObj* old = mp; if (p) p->AddRef(); mp = p; if (old) old->Release(); }
+    return *this;
+}
+inline SkinRef& SkinRef::AssignA(SkinObj* p) {
+    if (p != mp) { SkinObj* old = mp; ScratchSlots_s004c_5200<3>(); if (p) p->AddRef(); mp = p; if (old) old->Release(); }
+    return *this;
+}
+struct SkinDesc {                               // the descriptor passed to the update
+    char pad[0x10]; uint32_t mId; char pad2[0x44]; uint32_t mModelType;
+    char pad3[0x30]; uint32_t mAbilA[3]; uint32_t mAbilB[3]; Vec3 mPos[3];
+    Vec3 GetPos(int i);                         // @ 0x4adca0 (sret)
+    uint32_t GetAbilA(int i);                   // @ 0x4adc60
+    uint32_t GetAbilB(int i);                   // @ 0x4adc80
+    uint32_t ModelType() { return mModelType; }
+};
+struct Ed {
+    char pad[0x1c]; ThrObj* m1c; char pad1c[0x3c]; SkinRef mpSkin; char pad60[4]; SkinKey mKey; Tex* m70; Tex* m74; char pad3[0x0c]; uint8_t mActive;
+    SkinObj* Skin() { return mpSkin.mp; }
+    ThrObj* Thr() { return m1c; }
+    Tex* Diffuse() { return m70; }
+    Tex* Normal() { return m74; }
+    bool Check58b0();
+    bool Update5200(SkinDesc* desc);
+    void Get5910(Tex** a, Tex** b);
+    void Diag5980(const wchar_t* dir, const wchar_t* name);
+};
+__forceinline void DestructRange(Pair* first, Pair* last) { for (; first < last; ++first) first->~Pair(); }
+struct Transform { uint32_t d[14]; Transform(); };
+struct TVec {
+    Transform* mpBegin; Transform* mpEnd; Transform* mpCapacity;
+    void EmplaceBack5eb0();
+    void DoInsertValue(Transform* pos, const Transform& v);
+};
+// ---- items of slice s004c5200 end
+
+// ---- items of slice s004c6190 begin (TODO(rewrite): local stubs, replace by canonical classes)
+void  __cdecl operator delete(void*);                       // 0x00F47380
+struct Elem { int val; void* obj; };
+struct Vec8 { Elem* mpBegin; Elem* mpEnd; Elem* mpCap; char alloc[4]; void* mpBuffer; };
+// ---- items of slice s004c6190 end
+
+// @ 0x004c2eb0
+void cSPEditorSkinManager_dtor(void* self)
+{
+    (void)self;
+}
+
 // @ 0x004c3030
 namespace SP
 {
@@ -494,6 +773,135 @@ void cSPEditorSkinManager_UpdatePaintedSkin(void* self, uint32_t a, uint32_t b, 
     (void)self; (void)a; (void)b; (void)c;
 }
 }  // namespace SP
+
+// @ 0x004c4650
+namespace SP {
+void cSPEditorSkinManager_s004c_4650::EnablePaint(char enable)
+{
+    if (enable == 0 || mPaintEnabled != 0) {
+        if (enable == 0 && mPaintEnabled != 0) {
+            if (CheckPaint()) {
+                void* req = mPaintRequest;
+                TickState::Get()->ClearPtr(req);
+            }
+            TickState::Get()->ClearPtr100();
+            mPaintRequest = 0;
+            mPaintEnabled = 0;
+        }
+    } else {
+        Update(0, 1, 0, 0);
+
+        cSPEditorSkinPart_s004c_4650* part = mCompleteSkin;
+        part->BuildSkeleton();
+        part->RebuildSkinA();
+        part->RebuildSkinB();
+
+        cRuntimeCreatureResource_s004c_4650* res = part->mResource;
+        DeformRecord* deformBegin = res->mDeformBegin;
+        void** blockMatInfos = part->mBlockMatInfosBegin;
+        int count = (int)((char*)res->mDeformEnd - (char*)res->mDeformBegin) / 0x8c;
+
+        RefVec vec;
+        vec.mpBegin = 0;
+        vec.mpEnd = 0;
+        vec.mpCapacity = 0;
+        unsigned char pad = 0;
+        vec.ctorRef(&pad);
+
+        part->mOrderedBlocks.eraseRange(part->mOrderedBlocks.mpBegin, part->mOrderedBlocks.mpEnd);
+        part->mOrderedBlocks.resize(count);
+
+        for (int i = 0; i < count; ++i) {
+            if ((*(uint16_t*)((char*)deformBegin + i * 0x8c + 8) & 1) == 0) {
+                void* matInfo = blockMatInfos[i];
+                char* sub = *(char**)((char*)matInfo + 0x10);
+                vec.eraseRange(vec.mpBegin, vec.mpEnd);
+                (*(void(__thiscall**)(void*, void*))(*(char**)sub + 0xf4))(sub, &vec);
+                if (!vec.emptyRef()) {
+                    void* newVal = *(void**)vec.mpBegin;
+                    void** slot = (void**)((char*)part->mOrderedBlocks.mpBegin + i * 4);
+                    if (newVal != *slot) {
+                        void* oldVal = *slot;
+                        if (newVal != 0) {
+                            long* rc = (long*)((char*)newVal + 4);
+                            _InterlockedIncrement(rc);
+                        }
+                        *slot = newVal;
+                        if (oldVal != 0) {
+                            ((ThreadedObject*)oldVal)->Release();
+                        }
+                    }
+                }
+            }
+        }
+        TickState::Get()->ClearPtr100();
+        mPaintEnabled = 1;
+        vec.dtorRef();
+    }
+}
+}  // namespace SP
+
+// @ 0x004c58b0
+bool Ed::Check58b0()
+{
+    return Skin() && !Skin()->f6b && !Skin()->f6c;
+}
+
+// @ 0x004c5d50
+void EPtr::Dtor5d50()
+{ if (p) p->ref.Release(); }
+
+// @ 0x004c5d80
+EPtr& EPtr::Assign5d80(EObj* np)
+{
+    if (np != p) { EObj* old = p; if (np) np->ref.AddRef(); p = np; if (old) old->ref.Release(); }
+    return *this;
+}
+
+// @ 0x004c5eb0
+void TVec::EmplaceBack5eb0()
+{
+    if (mpEnd < mpCapacity) { new (mpEnd++) Transform(); }
+    else DoInsertValue(mpEnd, Transform());
+    ScratchSlots_s004c_5200<26>();
+}
+
+// @ 0x004c5f40
+void PairVec::Dtor5f40()
+{
+    DestructRange(mpBegin, mpEnd);
+    ScratchSlots_s004c_5200<3>();
+    Base45daf0();
+}
+
+// @ 0x004c5fc0
+void PairVec::PushBack5fc0(const Pair& v)
+{
+    if (mpEnd < mpCapacity) { new (mpEnd++) Pair(v); }
+    else DoInsertValue(mpEnd, v);
+}
+
+// @ 0x004c60e0
+void Editor_Erase60e0(void* self)
+{ (void)self; }
+
+// @ 0x004c6150
+EPtr* EPtr::Copy6150(EPtr* o)
+{ p = o->p; if (p) p->ref.AddRef(); return this; }
+
+// @ 0x004c64d0
+void __fastcall FUN_004c64d0(Vec8* self)
+{
+    if (self->mpBegin != 0) {
+        int nBytes = (char*)self->mpCap - (char*)self->mpBegin;
+        Elem* p = self->mpBegin;
+        if (p != self->mpBuffer) {
+            Elem* q = p;
+            operator delete(q);
+            (void)nBytes;
+        }
+    }
+}
 
 // @ 0x00500880
 void cExportHelper::ExportMeshBegin(uint numSubmeshes, bool ascii)

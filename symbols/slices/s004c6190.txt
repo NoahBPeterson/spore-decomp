@@ -1,5 +1,5 @@
 004c6190 ?FUN_004c6190@@YIPAUElem@@PAUVec8@@HPAU1@1@Z  # FUN_004c6190 migrated from s004c6190 (verbatim, slice spelling)
-004c64d0  deallocate            # free begin unless it is the inline buffer pointer
+004c64d0 ?FUN_004c64d0@@YIXPAUVec8@@@Z  # FUN_004c64d0 migrated from s004c6190 (verbatim, slice spelling)
 004c6520 ?FUN_004c6520@@YAPAUElem@@PAU1@00@Z  # FUN_004c6520 migrated from s004c6190 (verbatim, slice spelling)
 004c6560 ?FUN_004c6560@@YIXPADH0I0@Z  # FUN_004c6560 migrated from s004c6190 (verbatim, slice spelling)
 004c69b0 ?FUN_004c69b0@@YAPAUElem@@PAU1@00@Z  # FUN_004c69b0 migrated from s004c6190 (verbatim, slice spelling)

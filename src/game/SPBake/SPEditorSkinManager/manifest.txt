@@ -1,3 +1,10 @@
 # source  symbol  va  flags
 ../src/game/SPBake/SPEditorSkinManager.cpp  ?UpdateTorso@cSPEditorSkinManager_s004c_3230@SP@@QAEXUTorsoFlags@2@H@Z  004c3230  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
+../src/game/SPBake/SPEditorSkinManager.cpp  ?Check58b0@Ed@@QAE_NXZ  004c58b0  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
+../src/game/SPBake/SPEditorSkinManager.cpp  ?Dtor5d50@EPtr@@QAEXXZ  004c5d50  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
+../src/game/SPBake/SPEditorSkinManager.cpp  ?Assign5d80@EPtr@@QAEAAU1@PAUEObj@@@Z  004c5d80  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
+../src/game/SPBake/SPEditorSkinManager.cpp  ?EmplaceBack5eb0@TVec@@QAEXXZ  004c5eb0  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
+../src/game/SPBake/SPEditorSkinManager.cpp  ?Dtor5f40@PairVec@@QAEXXZ  004c5f40  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
+../src/game/SPBake/SPEditorSkinManager.cpp  ?PushBack5fc0@PairVec@@QAEXABUPair@@@Z  004c5fc0  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
+../src/game/SPBake/SPEditorSkinManager.cpp  ?Copy6150@EPtr@@QAEPAU1@PAU1@@Z  004c6150  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
 ../src/game/SPBake/SPEditorSkinManager.cpp  ?ExportMeshBegin@cExportHelper@@QAEXI_N@Z  00500880  /Od /Ob1 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include

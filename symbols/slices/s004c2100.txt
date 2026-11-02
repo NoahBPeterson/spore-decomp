@@ -5,5 +5,6 @@
 004c2740 ?VectorAssign4@@YAXPAI0@Z  # VectorAssign4 migrated from s004c2100 (verbatim, slice spelling)
 004c29c0 ?eastl_set_capacity@@YAXPAUWideFixedStr@eastl@@I@Z  # eastl_set_capacity migrated from s004c2100 (verbatim, slice spelling)
 004c2ad0 ?WideFixedStr_SwapHeap@@YAXPAUWideFixedStr@eastl@@0@Z  # WideFixedStr_SwapHeap migrated from s004c2100 (verbatim, slice spelling)
+004c2eb0 ?cSPEditorSkinManager_dtor@@YAXPAX@Z  # cSPEditorSkinManager_dtor migrated from s004c2100 (verbatim, slice spelling)
 004c3030 SP::cSPEditorSkinManager::AsInterface  # near-match
 004c3070 ?create_ui_raster@@YAXPAX000@Z  # create_ui_raster migrated from s004c2100 (verbatim, slice spelling)

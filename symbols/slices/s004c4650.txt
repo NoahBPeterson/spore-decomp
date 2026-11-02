@@ -1,3 +1,4 @@
+004c4650 ?EnablePaint@cSPEditorSkinManager_s004c_4650@SP@@QAEXD@Z  # cSPEditorSkinManager_s004c_4650::EnablePaint migrated from s004c4650 (verbatim, slice spelling)
 004c49e0 ?GetSkin@cSPEditorSkinManager_s004c_4650@SP@@QAEPAXI@Z  # cSPEditorSkinManager_s004c_4650::GetSkin migrated from s004c4650 (verbatim, slice spelling)
 004c4a30 ?PickSkin@cSPEditorSkinManager_s004c_4650@SP@@QAE_NIUcSPVector3@2@0PAU32@1PAMD@Z  # cSPEditorSkinManager_s004c_4650::PickSkin migrated from s004c4650 (verbatim, slice spelling)
 004c4d30 ?GetBlockOnSkin@cSPEditorSkinManager_s004c_4650@SP@@QAEPAVcSPEditorBlock_s004c_4650@2@IUcSPVector3@2@@Z  # cSPEditorSkinManager_s004c_4650::GetBlockOnSkin migrated from s004c4650 (verbatim, slice spelling)
