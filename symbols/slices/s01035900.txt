@@ -1,4 +1,6 @@
-01035900 SP::cSPSpaceGfx::InitForGame  # PDB name; creates effects worlds/renderers once (mInitedForGame flag)
+007c4dd0 ?Init@cSPEditorPhysicsWorld@SP@@QAEXXZ  # SP::cSPEditorPhysicsWorld::Init (callee of s01035900, named from the dev publics; slice address comment)
+010346e0 ??0cSPSpaceGfx@SP@@QAE@XZ  # SP::cSPSpaceGfx::cSPSpaceGfx (callee of s01035900, named from the dev publics; slice address comment)
+01035900 ?InitForGame@cSPSpaceGfx_s0103_5900@@QAEXXZ  # cSPSpaceGfx_s0103_5900::InitForGame migrated from s01035900 (verbatim, slice spelling)
 010361c0 SP::cSPSpaceGfx::ApplyUniverseContext  # free function; switch on GetUniverseContext: setup render manager for planet / space / toggle objects
 010362e0 SP::cSPSpaceGfx::ToggleGfxObjectsA  # free function; byte-exact
 010363a0 SP::cSPSpaceGfx::EnterSpaceMode  # register window slots, deactivate objects, SetPair -> tail call ApplyUniverseContext

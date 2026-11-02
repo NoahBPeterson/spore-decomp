@@ -7,11 +7,11 @@
 01034630 ?FUN_01034630@@YAMHMD@Z  # FUN_01034630 migrated from s01033de0 (verbatim, slice spelling)
 01034680 ?FUN_01034680@@YAHPAUView@@@Z  # FUN_01034680 migrated from s01033de0 (verbatim, slice spelling)
 010346b0 ?FUN_010346b0@@YGXMMM@Z  # FUN_010346b0 migrated from s01033de0 (verbatim, slice spelling)
-010346e0 FUN_010346e0  # Ghidra FUN; refresh the four tuning factors/variants; not byte-exact (inline jump table at 0x0103478c)
+010346e0 ?FUN_010346e0@Behavior@@QAEXXZ  # Behavior::FUN_010346e0 migrated from s01033de0 (verbatim, slice spelling)
 010347a0 ?FUN_010347a0@BigThing@@QAEPAXE@Z  # BigThing::FUN_010347a0 migrated from s01033de0 (verbatim, slice spelling)
 010347e0 ?FUN_010347e0@Behavior@@QAEXXZ  # Behavior::FUN_010347e0 migrated from s01033de0 (verbatim, slice spelling)
 01034810 ?FUN_01034810@Behavior@@QAEXXZ  # Behavior::FUN_01034810 migrated from s01033de0 (verbatim, slice spelling)
 01034840 ?FUN_01034840@Behavior@@QAEXXZ  # Behavior::FUN_01034840 migrated from s01033de0 (verbatim, slice spelling)
 01034880 ?FUN_01034880@Behavior@@QAEXXZ  # Behavior::FUN_01034880 migrated from s01033de0 (verbatim, slice spelling)
-01034950 FUN_01034950  # Ghidra FUN; interface-bank arm/disarm per death mode (2 stack args, the second unused); byte-exact
+01034950 ?FUN_01034950@Behavior@@QAEXHH@Z  # Behavior::FUN_01034950 migrated from s01033de0 (verbatim, slice spelling)
 01034b90 ?FUN_01034b90@Behavior@@QAEXPAX@Z  # Behavior::FUN_01034b90 migrated from s01033de0 (verbatim, slice spelling)

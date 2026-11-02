@@ -1,1 +1,2 @@
 # source  symbol  va  flags
+../src/game/SPGonzago/SPSpaceGfx.cpp  ?FUN_01034950@Behavior@@QAEXHH@Z  01034950  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

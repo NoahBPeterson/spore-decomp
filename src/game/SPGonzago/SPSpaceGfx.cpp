@@ -1,4 +1,4 @@
-// src/game/SPGonzago/SPSpaceGfx.cpp -- migrated from slice(s) s010377f0, s01036830 by tools/migrate/rewrite.py
+// src/game/SPGonzago/SPSpaceGfx.cpp -- migrated from slice(s) s01035900, s01033de0, s010377f0, s01036830 by tools/migrate/rewrite.py
 // Object file: SPGonzago/SPSpaceGfx.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -12,6 +12,13 @@
 #include "SP/cTerrainSphere.h"
 #include "SP/cTradeRouteData.h"
 #include "SP/cVarListSerializer.h"
+#include "SP/cSPCreatureBase.h"
+#include "SP/cPlanetModel.h"
+#include "SP/cSPTimer.h"
+#include "EA/Variant.h"
+#include "SP/cSolarSystem.h"
+#include <math.h>
+#include "SP/cSPEditorPhysicsWorld.h"
 
 // unnamed retail callees and globals (address in the comment)
 extern "C" void* FUN_01021230();                       // 0x01021230  effect owner (this)
@@ -526,6 +533,497 @@ public:
     uint32_t mUnk13c;                   // 0x13c
 };
 // ---- items of slice s010377f0 end
+
+// ---- items of slice s01033de0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+#define PV_s0103_3de0(n) virtual void pv##n();
+#define G_FACTOR_TABLE   ((float*)0x016df330)      // +0x000 4 per-behaviour float factors
+#define G_TUNE_VARIANTS  ((TuningVariant*)0x016df3d8)  // +0x000 4 tuning variants, 0x14 bytes each
+struct Iface {                                  // reference-counted interface (+0x00 vtable)
+    PV_s0103_3de0(0)
+    virtual void pv1();                         // +0x04  Release
+    virtual void pv2(int value);                // +0x08
+    virtual void pv3(int value);                // +0x0c
+    virtual bool pv4();                         // +0x10
+};
+struct ObjA0 {                                  // object looked up at +0xa0
+    PV_s0103_3de0(0) PV_s0103_3de0(1) PV_s0103_3de0(2) PV_s0103_3de0(3) PV_s0103_3de0(4) PV_s0103_3de0(5) PV_s0103_3de0(6) PV_s0103_3de0(7) PV_s0103_3de0(8) PV_s0103_3de0(9)
+    PV_s0103_3de0(10) PV_s0103_3de0(11) PV_s0103_3de0(12) PV_s0103_3de0(13) PV_s0103_3de0(14) PV_s0103_3de0(15) PV_s0103_3de0(16) PV_s0103_3de0(17) PV_s0103_3de0(18) PV_s0103_3de0(19)
+    PV_s0103_3de0(20) PV_s0103_3de0(21) PV_s0103_3de0(22) PV_s0103_3de0(23) PV_s0103_3de0(24) PV_s0103_3de0(25) PV_s0103_3de0(26) PV_s0103_3de0(27) PV_s0103_3de0(28) PV_s0103_3de0(29)
+    PV_s0103_3de0(30) PV_s0103_3de0(31) PV_s0103_3de0(32)
+    virtual void pv33(void* name, uint32_t value);   // +0x84
+};
+struct TuningVariant {                          // EA::Variant, 0x14 bytes
+    uint8_t mPad00[0x14];
+    void Set(uint32_t value);                   // 0x00542b80
+};
+struct TuningSource {                           // object pointed at by +0x13c
+    PV_s0103_3de0(0) PV_s0103_3de0(1) PV_s0103_3de0(2) PV_s0103_3de0(3) PV_s0103_3de0(4) PV_s0103_3de0(5) PV_s0103_3de0(6) PV_s0103_3de0(7) PV_s0103_3de0(8)
+    virtual bool pv9(uint32_t key, void** out); // +0x24
+    virtual uint32_t pv10(uint32_t value);      // +0x28
+};
+struct Entry {                                  // record returned through TuningSource::pv9
+    union { void* mPtr; float mFloat; };        // +0x00
+    uint8_t  mPad04[0x10 - 4];
+    uint8_t  mFlags;                            // +0x10
+    uint8_t  mPad11;
+    uint16_t mType;                             // +0x12
+};
+struct Loco {                                   // locomotion sub-object
+    PV_s0103_3de0(0) PV_s0103_3de0(1) PV_s0103_3de0(2) PV_s0103_3de0(3) PV_s0103_3de0(4) PV_s0103_3de0(5) PV_s0103_3de0(6) PV_s0103_3de0(7) PV_s0103_3de0(8) PV_s0103_3de0(9) PV_s0103_3de0(10)
+    virtual Vec3* pv11();                       // +0x2c  GetPosition
+    PV_s0103_3de0(12) PV_s0103_3de0(13)
+    virtual void pv14(const Vec3* pos);         // +0x38
+    void FUN_c41d60(void* str);                 // 0x00c41d60
+    void FUN_c41d90(void* str);                 // 0x00c41d90
+};
+struct Queryable {                              // object returned by the behaviour's vt+0x58 slot
+    PV_s0103_3de0(0) PV_s0103_3de0(1)
+    virtual Queryable* pv2(uint32_t tag);       // +0x08
+    PV_s0103_3de0(3) PV_s0103_3de0(4) PV_s0103_3de0(5) PV_s0103_3de0(6) PV_s0103_3de0(7) PV_s0103_3de0(8) PV_s0103_3de0(9) PV_s0103_3de0(10) PV_s0103_3de0(11) PV_s0103_3de0(12) PV_s0103_3de0(13) PV_s0103_3de0(14) PV_s0103_3de0(15)
+    PV_s0103_3de0(16) PV_s0103_3de0(17) PV_s0103_3de0(18) PV_s0103_3de0(19) PV_s0103_3de0(20)
+    virtual void pv21();                        // +0x54
+    PV_s0103_3de0(22) PV_s0103_3de0(23) PV_s0103_3de0(24) PV_s0103_3de0(25) PV_s0103_3de0(26) PV_s0103_3de0(27) PV_s0103_3de0(28) PV_s0103_3de0(29) PV_s0103_3de0(30) PV_s0103_3de0(31)
+    PV_s0103_3de0(32) PV_s0103_3de0(33) PV_s0103_3de0(34) PV_s0103_3de0(35) PV_s0103_3de0(36) PV_s0103_3de0(37) PV_s0103_3de0(38) PV_s0103_3de0(39) PV_s0103_3de0(40) PV_s0103_3de0(41)
+    PV_s0103_3de0(42) PV_s0103_3de0(43) PV_s0103_3de0(44) PV_s0103_3de0(45) PV_s0103_3de0(46) PV_s0103_3de0(47) PV_s0103_3de0(48) PV_s0103_3de0(49)
+    virtual void pv50(int value);               // +0xc8
+    uint8_t mPad04_to_c0[0xc0 - 0x04];
+    Loco    mLoco;                              // +0xc0 (embedded sub-object)
+    uint8_t mPadC4[0x130 - 0xc4];
+    uint8_t mFlag130;                           // +0x130
+};
+struct AgentRefChunk;                           // blocks of the agent reference table
+struct AgentRefEntry {                          // 8-byte entry inside a block
+    void*    mAgent;                            // +0x00
+    uint32_t mType;                             // +0x04
+};
+struct AgentRefChunk {
+    uint32_t      mCount;                       // +0x00
+    AgentRefEntry mEntries[1];                  // +0x04
+};
+struct AgentRef {                               // argument of RemoveAgent
+    AgentRefChunk** mChunks;                    // +0x00
+};
+struct RemoveArgs {                             // 0x18-byte argument block of cInteraction::RemoveAgent
+    void*    mRef;                              // +0x00
+    uint32_t mIndex;                            // +0x04
+    int32_t  mA;                                // +0x08
+    int32_t  mB;                                // +0x0c
+    int32_t  mC;                                // +0x10
+    int32_t  mD;                                // +0x14
+};
+struct IfaceBank {                              // interface bank used by FUN_01034950's subject
+    uint8_t  mPad00[0x60];
+    Iface*   mIface60;                          // +0x60
+    Iface*   mIface64;                          // +0x64
+    Iface*   mIface68;                          // +0x68
+    Iface*   mIface6C;                          // +0x6c
+    Iface*   mIface70;                          // +0x70
+    Iface*   mIface74;                          // +0x74
+    Iface*   mIface78;                          // +0x78
+    Iface*   mIface7C;                          // +0x7c
+    Iface*   mIface80;                          // +0x80
+    Iface*   mIface84;                          // +0x84
+    Iface*   mIface88;                          // +0x88
+    Iface*   mIface8C;                          // +0x8c
+    Iface*   mIface90;                          // +0x90
+    Iface*   mIface94;                          // +0x94
+    Iface*   mIface98;                          // +0x98
+    uint8_t  mPad9C[0x110 - 0x9c];
+    Vec3     mVec110;                           // +0x110
+};
+struct Iface44 {                                // +0x80 sub-object, slot 0x44 method
+    PV_s0103_3de0(0) PV_s0103_3de0(1) PV_s0103_3de0(2) PV_s0103_3de0(3) PV_s0103_3de0(4) PV_s0103_3de0(5) PV_s0103_3de0(6) PV_s0103_3de0(7) PV_s0103_3de0(8) PV_s0103_3de0(9) PV_s0103_3de0(10) PV_s0103_3de0(11)
+    PV_s0103_3de0(12) PV_s0103_3de0(13) PV_s0103_3de0(14) PV_s0103_3de0(15) PV_s0103_3de0(16)
+    virtual void pv17(int mode, const Vec3* value, int count);   // +0x44
+};
+struct Behavior {                               // large behaviour/editor subject
+    PV_s0103_3de0(0) PV_s0103_3de0(1) PV_s0103_3de0(2) PV_s0103_3de0(3) PV_s0103_3de0(4) PV_s0103_3de0(5) PV_s0103_3de0(6) PV_s0103_3de0(7) PV_s0103_3de0(8) PV_s0103_3de0(9)
+    PV_s0103_3de0(10) PV_s0103_3de0(11) PV_s0103_3de0(12) PV_s0103_3de0(13) PV_s0103_3de0(14) PV_s0103_3de0(15) PV_s0103_3de0(16) PV_s0103_3de0(17) PV_s0103_3de0(18) PV_s0103_3de0(19)
+    PV_s0103_3de0(20) PV_s0103_3de0(21)
+    virtual Queryable* pv22();                  // +0x58
+
+    uint32_t mVt4;                              // +0x04
+    uint8_t  mPad08[0x60 - 0x08];
+    Iface*   mIface60;                          // +0x60
+    Iface*   mIface64;                          // +0x64
+    Iface*   mIface68;                          // +0x68
+    uint8_t  mPad6C[0x74 - 0x6c];
+    int32_t  m74;                               // +0x74
+    uint8_t  mPad78[0x90 - 0x78];
+    Iface*   mIface90;                          // +0x90
+    uint8_t  mPad94[0x98 - 0x94];
+    int32_t  m98;                               // +0x98
+    uint8_t  mPad9C[0xa0 - 0x9c];
+    ObjA0*   mObjA0;                            // +0xa0
+    uint8_t  mPadA4[0x130 - 0xa4];
+    uint8_t  m130;                              // +0x130
+    uint8_t  mPad131[0x13c - 0x131];
+    TuningSource* mTuning13C;                   // +0x13c
+
+    bool FUN_00abf640(int value);               // 0x00abf640
+    void baseRemoveAgent(RemoveArgs args);      // 0x00abedb0
+
+    int  FUN_01033f50();
+    void FUN_01034260(int deathType);
+    void FUN_01034950(int mode, int unused);
+    void FUN_01034b90(void* star);
+
+    bool   FUN_01033ea0(int value);
+    void   RemoveAgent(AgentRef* ref, uint32_t index, int a2, int a3, int a4, int a5);
+    void   FUN_010346e0();
+    void   FUN_010347e0();
+    void   FUN_01034810();
+    void   FUN_01034840();
+    void   FUN_01034880();
+};
+// ---- items of slice s01033de0 end
+
+// ---- items of slice s01035900 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern float g_SpaceCullNear;             // 0x015b7ca0
+extern float g_SpaceCullFar;              // 0x015b7ca4
+extern float g_SpaceFov;                  // 0x015b7ca8
+#define PV_s0103_5900(n) virtual void _v##n();
+struct Eff {                              // visual effect handle
+  virtual int AddRef();                   // 0x00
+  virtual int Release();                  // 0x04
+  virtual bool Play(int n);               // 0x08
+};
+struct World {                            // effects world / renderer / planet-like owners
+  virtual int AddRef();                   // 0x00
+  virtual int Release();                  // 0x04
+  virtual bool Create(uint32_t id, int flags, Eff** out);   // 0x08: spawn effect `id` into *out
+  virtual void SetState(int n);           // 0x0c
+  PV_s0103_5900(4) PV_s0103_5900(5) PV_s0103_5900(6)
+  virtual void Attach(World* other);      // 0x1c
+  PV_s0103_5900(8) PV_s0103_5900(9) PV_s0103_5900(10) PV_s0103_5900(11) PV_s0103_5900(12) PV_s0103_5900(13) PV_s0103_5900(14) PV_s0103_5900(15) PV_s0103_5900(16) PV_s0103_5900(17) PV_s0103_5900(18) PV_s0103_5900(19) PV_s0103_5900(20) PV_s0103_5900(21)
+  PV_s0103_5900(22) PV_s0103_5900(23) PV_s0103_5900(24) PV_s0103_5900(25) PV_s0103_5900(26) PV_s0103_5900(27) PV_s0103_5900(28) PV_s0103_5900(29)
+  virtual void SetMode(int n);            // 0x78
+  PV_s0103_5900(31) PV_s0103_5900(32)
+  virtual void SetView(int a, int b);     // 0x84
+};
+namespace EA {
+template <class T> class AutoRefCount_s0103_5900 {
+public:
+  T* mpObject;
+  AutoRefCount_s0103_5900() : mpObject(0) {}
+  ~AutoRefCount_s0103_5900() { if (mpObject) mpObject->Release(); }
+  AutoRefCount_s0103_5900& operator=(T* p)
+  {
+    if (p != mpObject) {
+      T* const pTemp = mpObject;
+      if (p)
+        p->AddRef();
+      mpObject = p;
+      if (pTemp)
+        pTemp->Release();
+    }
+    return *this;
+  }
+  T* operator->() const { return mpObject; }
+  operator T*() const { return mpObject; }
+  T** AsPPTypeParam()
+  {
+    if (mpObject) {
+      T* const p = mpObject;
+      mpObject = 0;
+      p->Release();
+    }
+    return &mpObject;
+  }
+};  // namespace EA
+}
+using EA::AutoRefCount_s0103_5900;
+struct Vec3_s0103_5900 {
+  float x, y, z;
+  Vec3_s0103_5900() {}
+  Vec3_s0103_5900(float ax, float ay, float az) : x(ax), y(ay), z(az) {}
+};
+struct Property {
+  char pad[0x12];
+  int16_t type;                           // +0x12
+  uint32_t* GetUInt();                    // 0x0041ea00
+};
+struct PropertyList {
+  virtual int AddRef();
+  virtual int Release();
+  PV_s0103_5900(2) PV_s0103_5900(3) PV_s0103_5900(4) PV_s0103_5900(5) PV_s0103_5900(6) PV_s0103_5900(7) PV_s0103_5900(8)
+  virtual bool GetProperty(uint32_t id, Property** out);   // 0x24
+};
+struct PropertyManagerT {
+  PV_s0103_5900(0) PV_s0103_5900(1) PV_s0103_5900(2) PV_s0103_5900(3) PV_s0103_5900(4) PV_s0103_5900(5) PV_s0103_5900(6) PV_s0103_5900(7) PV_s0103_5900(8) PV_s0103_5900(9) PV_s0103_5900(10)
+  virtual void GetPropertyList(uint32_t group, uint32_t id, PropertyList** out);   // 0x2c
+};
+struct EffectsManagerT {
+  PV_s0103_5900(0) PV_s0103_5900(1) PV_s0103_5900(2) PV_s0103_5900(3) PV_s0103_5900(4) PV_s0103_5900(5) PV_s0103_5900(6) PV_s0103_5900(7) PV_s0103_5900(8) PV_s0103_5900(9) PV_s0103_5900(10) PV_s0103_5900(11) PV_s0103_5900(12) PV_s0103_5900(13) PV_s0103_5900(14) PV_s0103_5900(15) PV_s0103_5900(16) PV_s0103_5900(17) PV_s0103_5900(18)
+  virtual World* Create(uint32_t id, int flags);           // 0x4c
+};
+struct AppT {
+  PV_s0103_5900(0) PV_s0103_5900(1) PV_s0103_5900(2) PV_s0103_5900(3) PV_s0103_5900(4) PV_s0103_5900(5) PV_s0103_5900(6) PV_s0103_5900(7) PV_s0103_5900(8) PV_s0103_5900(9) PV_s0103_5900(10) PV_s0103_5900(11) PV_s0103_5900(12) PV_s0103_5900(13) PV_s0103_5900(14) PV_s0103_5900(15) PV_s0103_5900(16) PV_s0103_5900(17) PV_s0103_5900(18) PV_s0103_5900(19)
+  virtual void* GetViewA();               // 0x50
+  PV_s0103_5900(21)
+  virtual void* GetViewB();               // 0x58
+};
+struct PhysWorld {
+  void Init(bool b);                      // 0x007c4dd0 cSPEditorPhysicsWorld::Init
+};
+PropertyManagerT* PropertyManager();      // 0x0067de30
+EffectsManagerT* EffectsManager();        // 0x0067ddd0
+AppT* App();                              // 0x0067dd10
+World* NewWorld();                        // 0x006eea10
+void ModelManager();                      // 0x0067dd80 (returns the manager; only the tail call matters here)
+void GetPropertyAsVector3(PropertyList* props, uint32_t id, Vec3_s0103_5900* out);   // 0x006a1110
+extern PhysWorld g_PhysWorldA;            // 0x015b7844
+extern PhysWorld g_PhysWorldB;            // 0x015b79b8
+extern PhysWorld g_PhysWorldC;            // 0x015b7b2c
+class cSPSpaceGfx_s0103_5900 {
+public:
+  void InitForGame();                     // 0x01035900
+  void InitSub();                         // 0x010346e0
+
+  char pad0[0x1c];
+  AutoRefCount_s0103_5900<Eff> mGalaxyCrossfadeEffect;     // +0x1c
+  AutoRefCount_s0103_5900<Eff> mGalaxyEffect;              // +0x20
+  AutoRefCount_s0103_5900<Eff> mGalaxyScreenEffect;        // +0x24
+  AutoRefCount_s0103_5900<Eff> mGalaxyAmbienceEffect;      // +0x28
+  AutoRefCount_s0103_5900<Eff> mGalaxyBackgroundGalaxies;  // +0x2c
+  AutoRefCount_s0103_5900<Eff> mTraveLineEffect;           // +0x30
+  AutoRefCount_s0103_5900<Eff> mSporepediaPlotPathEffect;  // +0x34
+  void* mTravelLineStar;                        // +0x38
+  char pad3c[0x5c - 0x3c];
+  int mPlanetScreenEffect;                      // +0x5c
+  AutoRefCount_s0103_5900<Eff> mLavaPlanetScreenEffect;    // +0x60
+  AutoRefCount_s0103_5900<Eff> mSkyboxEffect;              // +0x64
+  AutoRefCount_s0103_5900<Eff> mSolarScreenEffect;         // +0x68
+  AutoRefCount_s0103_5900<Eff> mSolarClouds;               // +0x6c
+  AutoRefCount_s0103_5900<Eff> mSolarLoopbox;              // +0x70
+  AutoRefCount_s0103_5900<Eff> mSolarBackgroundEffect;     // +0x74
+  AutoRefCount_s0103_5900<Eff> mSolarBackgroundDustEffect; // +0x78
+  AutoRefCount_s0103_5900<Eff> mPlanetBackgroundEffect;    // +0x7c
+  AutoRefCount_s0103_5900<Eff> mPlanetBackgroundDustEffect;// +0x80
+  AutoRefCount_s0103_5900<Eff> mSolarComets;               // +0x84
+  AutoRefCount_s0103_5900<Eff> mpMeaningOfLifeEffect;      // +0x88
+  char pad8c[0x94 - 0x8c];
+  AutoRefCount_s0103_5900<World> mTrailEffectsWorld;       // +0x94
+  AutoRefCount_s0103_5900<World> mPtolemaicEffectsWorld;   // +0x98
+  AutoRefCount_s0103_5900<World> mPtolemaicEffectsRenderer;// +0x9c
+  AutoRefCount_s0103_5900<World> mSolarBackgroundEffectsWorld; // +0xa0
+  AutoRefCount_s0103_5900<World> mSolarBackgroundRenderer; // +0xa4
+  AutoRefCount_s0103_5900<World> mGalaxyEffectsWorld;      // +0xa8
+  AutoRefCount_s0103_5900<World> mMoneyEffect;             // +0xac
+  AutoRefCount_s0103_5900<World> mMoneyEffectPlanet;       // +0xb0
+  AutoRefCount_s0103_5900<World> mMoneyEffectUFO;          // +0xb4
+  char padb8[0x100 - 0xb8];
+  bool mInitedForGame;                          // +0x100
+  char pad101[3];
+  Vec3_s0103_5900 mVecA;                                   // +0x104
+  Vec3_s0103_5900 mVecB;                                   // +0x110
+  Vec3_s0103_5900 mVecC;                                   // +0x11c
+  char pad128[4];
+  uint32_t mTravelLineValue;                    // +0x12c
+  Vec3_s0103_5900 mTravelLineVec;                          // +0x130
+  AutoRefCount_s0103_5900<PropertyList> mProps;            // +0x13c (placed below)
+};
+// ---- items of slice s01035900 end
+
+// @ 0x010346e0
+void Behavior::FUN_010346e0()
+{
+    for (int i = 0; i < 4; i++) {
+        uint32_t key = 0;
+        uint32_t value = 0;
+        switch (i) {
+        case 0: key = 0x195f002; value = key - 1; break;
+        case 1: key = 0x195f004; value = key - 1; break;
+        case 2: key = 0x195f008; value = key - 1; break;
+        case 3: key = 0x195f006; value = key - 1; break;
+        }
+        if (mTuning13C != 0) {
+            Entry* entry;
+            if (mTuning13C->pv9(key, (void**)&entry)) {
+                if (entry->mType == 0xd) {
+                    const void* src = ((entry->mFlags & 0x30) != 0) ? entry->mPtr : (const void*)entry;
+                    G_FACTOR_TABLE[i] = *(const float*)src;
+                }
+            }
+            G_TUNE_VARIANTS[i].Set(mTuning13C->pv10(value));
+        }
+    }
+}
+
+// @ 0x01034950
+void Behavior::FUN_01034950(int mode, int unused)
+{
+    IfaceBank* self = (IfaceBank*)this;
+    Iface* iface6C = self->mIface6C;
+    if (iface6C == 0) {
+        return;
+    }
+    if (mode == 1) {
+        iface6C->pv2(0);
+        self->mIface84->pv2(0);
+        self->mIface88->pv2(0);
+        self->mIface60->pv2(0);
+        self->mIface70->pv3(1);
+        FUN_01034880();
+        self->mIface74->pv3(1);
+        self->mIface78->pv3(1);
+        self->mIface7C->pv3(1);
+        self->mIface80->pv3(1);
+        self->mIface98->pv3(2);
+        return;
+    }
+    if (mode == 2) {
+        iface6C->pv2(0);
+        self->mIface60->pv3(1);
+        self->mIface64->pv3(1);
+        Iface* iface68 = self->mIface68;
+        if (iface68 != 0) {
+            iface68->pv3(1);
+        }
+        self->mIface70->pv2(0);
+        self->mIface74->pv2(0);
+        self->mIface78->pv2(0);
+        self->mIface7C->pv2(0);
+        self->mIface80->pv2(0);
+        self->mIface84->pv3(1);
+        self->mIface88->pv3(1);
+        self->mIface98->pv3(0);
+        Vec3 surface;
+        surface.x = self->mVec110.x;
+        surface.y = self->mVec110.y;
+        surface.z = self->mVec110.z;
+        ((Iface44*)self->mIface80)->pv17(5, &surface, 3);
+        return;
+    }
+    if (mode == 3 || mode == 0) {
+        self->mIface60->pv3(1);
+        self->mIface64->pv3(1);
+        Iface* iface68 = self->mIface68;
+        if (iface68 != 0) {
+            iface68->pv3(1);
+        }
+        self->mIface70->pv3(1);
+        self->mIface78->pv3(1);
+        self->mIface7C->pv3(1);
+        self->mIface80->pv2(0);
+        self->mIface84->pv3(1);
+        self->mIface88->pv3(1);
+        self->mIface98->pv3(2);
+    }
+}
+
+// @ 0x01035900
+void cSPSpaceGfx_s0103_5900::InitForGame()
+{
+  if (mInitedForGame)
+    return;
+  mInitedForGame = true;
+
+  PropertyManager()->GetPropertyList(0xa0cb680a, 0x2ae0c7e, mProps.AsPPTypeParam());
+  InitSub();
+  g_PhysWorldA.Init(false);
+  g_PhysWorldB.Init(false);
+  g_PhysWorldC.Init(false);
+  g_SpaceCullNear = 50000.0f;
+  g_SpaceCullFar = 200000.0f;
+  g_SpaceFov = 90.0f;
+
+  mTrailEffectsWorld = EffectsManager()->Create(0x17f40c7, 0);
+  mTrailEffectsWorld->SetState(2);
+  mMoneyEffect = EffectsManager()->Create(0x17f40c9, 0);
+  mMoneyEffect->SetState(2);
+  mPtolemaicEffectsWorld = EffectsManager()->Create(0x17f40c8, 0);
+  mPtolemaicEffectsWorld->SetState(2);
+  mPtolemaicEffectsRenderer = EffectsManager()->Create(0x26f8fcb, 0);
+
+  mSolarBackgroundEffectsWorld = NewWorld();
+  mSolarBackgroundEffectsWorld->SetMode(7);
+  mSolarBackgroundEffectsWorld->SetView((int)App()->GetViewB(), (int)App()->GetViewA());
+  mPtolemaicEffectsRenderer->Attach(mSolarBackgroundEffectsWorld);
+  {
+    World* r = mPtolemaicEffectsRenderer;
+    r->Create(0x3ebf4ae, 0, mSolarComets.AsPPTypeParam());
+  }
+  {
+    World* r = mPtolemaicEffectsRenderer;
+    r->Create(0x3ebf4b5, 0, mpMeaningOfLifeEffect.AsPPTypeParam());
+  }
+
+  mMoneyEffectPlanet = EffectsManager()->Create(0x67247e6, 0);
+  mMoneyEffectPlanet->SetState(2);
+  mMoneyEffectUFO = NewWorld();
+  mMoneyEffectUFO->SetMode(0);
+  mMoneyEffectUFO->SetView((int)App()->GetViewB(), (int)App()->GetViewA());
+  mMoneyEffectPlanet->Attach(mMoneyEffectUFO);
+
+  mSolarBackgroundRenderer = EffectsManager()->Create(0x284e479, 0);
+  mGalaxyEffectsWorld = NewWorld();
+  mGalaxyEffectsWorld->SetMode(4);
+  mGalaxyEffectsWorld->SetView((int)App()->GetViewB(), (int)App()->GetViewA());
+  mSolarBackgroundRenderer->Attach(mGalaxyEffectsWorld);
+  {
+    World* r = mSolarBackgroundRenderer;
+    r->Create(0x3eac08a, 0, mPlanetBackgroundEffect.AsPPTypeParam());
+  }
+  {
+    World* r = mSolarBackgroundRenderer;
+    r->Create(0x3eaf98c, 0, mPlanetBackgroundDustEffect.AsPPTypeParam());
+  }
+
+  {
+    World* w = mTrailEffectsWorld;
+    mPlanetScreenEffect = 1;
+    w->Create(0x275fdf3d, 0, mSolarClouds.AsPPTypeParam());
+  }
+  { World* w = mTrailEffectsWorld; w->Create(0x4cab5702, 0, mLavaPlanetScreenEffect.AsPPTypeParam()); }
+  { World* w = mTrailEffectsWorld; w->Create(0x4e7a261f, 0, mSkyboxEffect.AsPPTypeParam()); }
+  { World* w = mTrailEffectsWorld; w->Create(0xc150010a, 0, mSolarScreenEffect.AsPPTypeParam()); }
+  { World* w = mTrailEffectsWorld; w->Create(0xf1f7d4dc, 0, mSolarLoopbox.AsPPTypeParam()); }
+  { World* w = mTrailEffectsWorld; w->Create(0xbf4763d8, 0, mSolarBackgroundEffect.AsPPTypeParam()); }
+  { World* w = mTrailEffectsWorld; w->Create(0xa0c77d6f, 0, mSolarBackgroundDustEffect.AsPPTypeParam()); }
+
+  {
+    World* w = mMoneyEffect;
+    if (w->Create(0x803132fa, 0, mGalaxyCrossfadeEffect.AsPPTypeParam()))
+      mGalaxyCrossfadeEffect->Play(1);
+  }
+  {
+    World* w = mMoneyEffect;
+    if (w->Create(0x5c830352, 0, mGalaxyEffect.AsPPTypeParam()))
+      mGalaxyEffect->Play(1);
+  }
+  {
+    World* w = mMoneyEffect;
+    if (w->Create(0x61609a45, 0, mGalaxyAmbienceEffect.AsPPTypeParam()))
+      mGalaxyAmbienceEffect->Play(1);
+  }
+  { World* w = mMoneyEffect; w->Create(0xc467b744, 0, mGalaxyBackgroundGalaxies.AsPPTypeParam()); }
+  { World* w = mMoneyEffect; w->Create(0xbbc2a565, 0, mGalaxyScreenEffect.AsPPTypeParam()); }
+  { World* w = mTrailEffectsWorld; w->Create(0x840cea6, 0, mTraveLineEffect.AsPPTypeParam()); }
+  {
+    World* w = mTrailEffectsWorld;
+    mTravelLineStar = 0;
+    w->Create(0x45846142, 0, mSporepediaPlotPathEffect.AsPPTypeParam());
+  }
+
+  mMoneyEffect->SetState(2);
+  mTrailEffectsWorld->SetState(0);
+  mPtolemaicEffectsWorld->SetState(0);
+  mPtolemaicEffectsRenderer->SetState(0);
+  mSolarBackgroundRenderer->SetState(0);
+  mMoneyEffectPlanet->SetState(0);
+
+  Vec3_s0103_5900 zero(0.0f, 0.0f, 0.0f);
+  mVecB = zero;
+  mVecA = zero;
+  mVecC = zero;
+
+  Property* prop;
+  if (mProps && mProps->GetProperty(0x68c45d1, &prop) && prop->type == 10)
+    mTravelLineValue = *prop->GetUInt();
+  GetPropertyAsVector3(mProps, 0x68c4614, &mTravelLineVec);
+  ModelManager();
+}
 
 // @ 0x01036830
 void cSPSpaceGfx::SetEffectEnabled(char enable)
