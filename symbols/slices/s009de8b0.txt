@@ -1,1 +1,7 @@
-009de8b0 ?OnRegister@cGaitKeyBlockCommand@?A0xd4e43742@@QAEXPAUcIParser_s009d_e8b0@ArgScript@EA@@PAUcState_s009d_e8b0@45@@Z  # OnRegister migrated from s009de8b0 (verbatim, slice spelling)
+009de8b0 ?OnRegister@cGaitKeyBlockCommand@?A0x66ccffac@@QAEXPAUcIParser_s009d_e8b0@ArgScript@EA@@PAUcState_s009d_e8b0@45@@Z  # OnRegister migrated from s009de8b0 (verbatim, slice spelling)
+009df360 ?OnRegister@cStepLengthKeyBlockCommand@?A0x66ccffac@@QAEXPAUcIParser_s009d_e8b0@ArgScript@EA@@PAUcState_s009d_e8b0@45@@Z  # OnRegister migrated from s009de8b0 (verbatim, slice spelling)
+009df400 ?reserve@?$Vec_s009d_e8b0@UGaitA_s009d_e8b0@@@@QAEXH@Z  # reserve migrated from s009de8b0 (verbatim, slice spelling)
+009df570 ?reserve@?$Vec_s009d_e8b0@UGaitC_s009d_e8b0@@@@QAEXH@Z  # reserve migrated from s009de8b0 (verbatim, slice spelling)
+009df6e0 ?allocate_copy@?$Vec_s009d_e8b0@UAnalysisInfo@@@@QAEPAUAnalysisInfo@@HPAU2@0@Z  # allocate_copy migrated from s009de8b0 (verbatim, slice spelling)
+009df800 ?reserve@?$Vec_s009d_e8b0@UGaitItem@@@@QAEXH@Z  # reserve migrated from s009de8b0 (verbatim, slice spelling)
+009df9b0 ??4?$Vec_s009d_e8b0@UAnalysisInfo@@@@QAEAAU0@ABU0@@Z  # None migrated from s009de8b0 (verbatim, slice spelling)

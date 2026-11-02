@@ -1,11 +1,10 @@
-# slice s009e4450 symbols
-009e4450 GaitTable::Sample  # per-lane channel curve eval + group blend chain; complete, regalloc/scheduling differ
-009e4600 GaitTable::SampleAt  # 7-arg clamped 2-vector sample; complete, only the this-save register differs (edx vs esi); equiv PASS
-009e4630 VecEntry::VecEntry  # 0xa4-element array ctor (EAAllocate/EntryConstructN/implicit ~Entry); complete, 68-byte regalloc diff; equiv PASS
-009e47c0 VecEntry::realloc_insert  # in-place fast path + grow/copy path; complete, regalloc/slot diff; equiv UNSUPPORTED
-009e4940 EntryArr::Reset  # destroy all entries and rewind e (v.e -= last - first); byte-exact
-009e4990 VecEntry::insert  # append-or-realloc insert returning the computed index; byte-exact
-009e4a00 EntryArr::Insert  # ordered insert with in-place duplicate overwrite; complete, block layout differs
-009e4aa0 Gcmdst::ResetDefault  # erase + default 0x0c elem + arr.Reset + default Entry; complete, elem materialisation/regalloc differ
-009e4c00 Gcmdst::BuildFromSource  # build elem list + ordered Entry list from the source object; complete, regalloc differs
-009e4e30 gait_record_static_data::ReadFromText  # ArgScript parser skeleton; structural port only
+009e4450 ?Sample@GaitTable@@QAEXMH_NI@Z  # GaitTable::Sample migrated from s009e4450 (verbatim, slice spelling)
+009e4600 ?SampleAt@GaitTable@@QAEXMMMHHHH@Z  # GaitTable::SampleAt migrated from s009e4450 (verbatim, slice spelling)
+009e4630 ??0VecEntry@@QAE@IABUEntry_s009e_4450@@@Z  # VecEntry::VecEntry migrated from s009e4450 (verbatim, slice spelling)
+009e47c0 ?realloc_insert@VecEntry@@QAEXPAUEntry_s009e_4450@@ABU2@@Z  # VecEntry::realloc_insert migrated from s009e4450 (verbatim, slice spelling)
+009e4940 ?Reset@EntryArr_s009e_4450@@QAEXXZ  # EntryArr_s009e_4450::Reset migrated from s009e4450 (verbatim, slice spelling)
+009e4990 ?insert@VecEntry@@QAEPAUEntry_s009e_4450@@PAU2@ABU2@@Z  # VecEntry::insert migrated from s009e4450 (verbatim, slice spelling)
+009e4a00 ?Insert@EntryArr_s009e_4450@@QAEXPBUEntry_s009e_4450@@@Z  # EntryArr_s009e_4450::Insert migrated from s009e4450 (verbatim, slice spelling)
+009e4aa0 ?ResetDefault@Gcmdst@@QAEXXZ  # Gcmdst::ResetDefault migrated from s009e4450 (verbatim, slice spelling)
+009e4c00 ?BuildFromSource@Gcmdst@@QAEXPBX@Z  # Gcmdst::BuildFromSource migrated from s009e4450 (verbatim, slice spelling)
+009e4e30 ?ReadFromText@gait_record_static_data@nSPCreatureAnim@@QAE_NPADH@Z  # nSPCreatureAnim::gait_record_static_data::ReadFromText migrated from s009e4450

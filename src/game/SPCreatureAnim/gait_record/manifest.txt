@@ -1,2 +1,35 @@
 # source  symbol  va  flags
-../src/game/SPCreatureAnim/gait_record.cpp  ?OnRegister@cGaitKeyBlockCommand@?A0xd4e43742@@QAEXPAUcIParser_s009d_e8b0@ArgScript@EA@@PAUcState_s009d_e8b0@45@@Z  009de8b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPCreatureAnim/gait_record.cpp  ?CopyMasked@Inner_s009d_b6d0@@QAEXPBU1@I@Z  009dba90  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPCreatureAnim/gait_record.cpp  ?Assign@Inner_s009d_b6d0@@QAEXPBU1@@Z  009dbc60  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPCreatureAnim/gait_record.cpp  ?Ctor@Rec44@@QAEPAU1@PBU1@@Z  009dbe30  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPCreatureAnim/gait_record.cpp  ?Ctor@Rec58@@QAEPAU1@PBU1@@Z  009dbe80  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPCreatureAnim/gait_record.cpp  ?Ctor@Rec1C@@QAEPAU1@PBU1@@Z  009dbed0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPCreatureAnim/gait_record.cpp  ?Copy1C@@YAPAURec1C@@PBU1@0PAU1@@Z  009dc1d0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPCreatureAnim/gait_record.cpp  ?vcopyGaitC@@YAPAUGaitC_s009d_b6d0@@PBU1@0PAU1@@Z  009dc2b0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPCreatureAnim/gait_record.cpp  ?CopyVal3b@@YAPAUVal3b@@PBU1@0PAU1@@Z  009dc300  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPCreatureAnim/gait_record.cpp  ?vcopyGaitCBack@@YAPAUGaitC_s009d_b6d0@@PBU1@0PAU1@@Z  009dc3c0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPCreatureAnim/gait_record.cpp  ?FUN_009de770@@YGXPAE0@Z  009de770  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPCreatureAnim/gait_record.cpp  ?FUN_009de7d0@@YAPAEPAE00@Z  009de7d0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPCreatureAnim/gait_record.cpp  ?OnRegister@cGaitKeyBlockCommand@?A0x66ccffac@@QAEXPAUcIParser_s009d_e8b0@ArgScript@EA@@PAUcState_s009d_e8b0@45@@Z  009de8b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPCreatureAnim/gait_record.cpp  ?OnRegister@cStepLengthKeyBlockCommand@?A0x66ccffac@@QAEXPAUcIParser_s009d_e8b0@ArgScript@EA@@PAUcState_s009d_e8b0@45@@Z  009df360  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPCreatureAnim/gait_record.cpp  ?reserve@?$Vec_s009d_e8b0@UGaitA_s009d_e8b0@@@@QAEXH@Z  009df400  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPCreatureAnim/gait_record.cpp  ?reserve@?$Vec_s009d_e8b0@UGaitC_s009d_e8b0@@@@QAEXH@Z  009df570  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPCreatureAnim/gait_record.cpp  ??1AnimA@@QAE@XZ  009dfc40  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPCreatureAnim/gait_record.cpp  ??1AnimC@@QAE@XZ  009dfd30  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPCreatureAnim/gait_record.cpp  ?clear@Vec44@@QAEXXZ  009e0940  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPCreatureAnim/gait_record.cpp  ?clear@Vec58@@QAEXXZ  009e0980  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPCreatureAnim/gait_record.cpp  ?clear@Vec1C@@QAEXXZ  009e09c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPCreatureAnim/gait_record.cpp  ?resize@Vec0C@@QAEXIABUElem0C@@@Z  009e0a00  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPCreatureAnim/gait_record.cpp  ?Copy40@@YAPAUElem40@@PAU1@00@Z  009e0cd0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPCreatureAnim/gait_record.cpp  ?CopyBack40@@YAPAUElem40@@PAU1@00@Z  009e0d30  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPCreatureAnim/gait_record.cpp  ?PushFlag@Outer@@QAEX_N@Z  009e0ff0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPCreatureAnim/gait_record.cpp  ??0Gait_s009e_0d90@@QAE@ABU0@@Z  009e1100  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPCreatureAnim/gait_record.cpp  ??1RecBlob@@QAE@XZ  009e1710  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPCreatureAnim/gait_record.cpp  ?AssignGaitsN@Inner_s009e_1df0@@QAEXPBU1@I@Z  009e1fe0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPCreatureAnim/gait_record.cpp  ?AssignGaitsF@Inner_s009e_1df0@@QAEXPBU1@I@Z  009e2140  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPCreatureAnim/gait_record.cpp  ?AssignGaits@Inner_s009e_1df0@@QAEXPBU1@@Z  009e22f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPCreatureAnim/gait_record.cpp  ?Create@gcmddHost@@QAEXH@Z  009e3740  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPCreatureAnim/gait_record.cpp  ??0gcmddTable@@QAE@XZ  009e3ec0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPCreatureAnim/gait_record.cpp  ?Reset@gcmddTable@@QAEXHH@Z  009e3f70  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPCreatureAnim/gait_record.cpp  ?Reset@EntryArr_s009e_4450@@QAEXXZ  009e4940  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPCreatureAnim/gait_record.cpp  ?insert@VecEntry@@QAEPAUEntry_s009e_4450@@PAU2@ABU2@@Z  009e4990  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include

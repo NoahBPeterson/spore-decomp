@@ -1,0 +1,1 @@
+# partial: source exists and compiles, but the translation is not verified complete / not
