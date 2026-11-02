@@ -1,1 +1,2 @@
 00c9c8a0 SP::cTribeHut::TakeHit  # PDB candidate; cCombatant::TakeHit override (this = cCombatant subobject hut+0x120), calls cCombatant::TakeHit 0xbfcdd0
+00c9cec0 ?FUN_00c9cec0@@YAIH@Z  # FUN_00c9cec0 migrated from s00c9c1b0 (verbatim, slice spelling)

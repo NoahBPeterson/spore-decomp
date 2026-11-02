@@ -1,0 +1,6 @@
+# source  symbol  va  flags
+../src/game/SPGonzago/_at_00c90000.cpp  ?ReserveToolSlot@cTribe_s00c9_82a0@SP@@QAEPAXHPAHPAUcGameData_s00c9_82a0@2@@Z  00c986d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00c90000.cpp  ?SetOwner@cTribeFoodMat@@QAEXPAX@Z  00c9bb80  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_00c90000.cpp  ?IsPlayerTribe@cTribe_s00c9_afb0@SP@@QAE_NXZ  00c9bd30  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_00c90000.cpp  ??_GcTribeFoodMat@@UAEPAXI@Z  00c9bda0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_00c90000.cpp  ?FUN_00c9cec0@@YAIH@Z  00c9cec0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

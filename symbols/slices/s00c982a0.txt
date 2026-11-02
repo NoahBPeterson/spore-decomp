@@ -1,0 +1,1 @@
+00c986d0 ?ReserveToolSlot@cTribe_s00c9_82a0@SP@@QAEPAXHPAHPAUcGameData_s00c9_82a0@2@@Z  # cTribe_s00c9_82a0::ReserveToolSlot migrated from s00c982a0 (verbatim, slice spelling)
