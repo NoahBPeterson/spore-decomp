@@ -1,1 +1,6 @@
-00ee3e40 SP::cScenarioEditModeBehaviorUI::Show  # installs/removes the behaviour message handler
+00ee3800 ?f00ee3800@@YA_NHHHH@Z  # f00ee3800 migrated from s00ee3800 (verbatim, slice spelling)
+00ee3940 ?F3940@Bee@@QAE_NXZ  # Bee::F3940 migrated from s00ee3800 (verbatim, slice spelling)
+00ee3e40 ?F3E40@Bee@@QAEXD@Z  # Bee::F3E40 migrated from s00ee3800 (verbatim, slice spelling)
+00ee3f20 ?F3F20@Bee@@QAEXH@Z  # Bee::F3F20 migrated from s00ee3800 (verbatim, slice spelling)
+00ee3f60 ?F3F60@Hee@@QAE_NHPAX@Z  # Hee::F3F60 migrated from s00ee3800 (verbatim, slice spelling)
+00ee40f0 ?F40F0@Bee@@QAEXXZ  # Bee::F40F0 migrated from s00ee3800 (verbatim, slice spelling)

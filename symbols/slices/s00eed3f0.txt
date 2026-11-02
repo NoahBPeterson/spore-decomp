@@ -1,2 +1,10 @@
-00eed840 Scenario::cSPScenarioPropertyUI::IsValidIndex  # property bag lookup + FNV compare
-00eed920 Scenario::cSPScenarioPropertyUI::SetIntProperty  # property bag write
+00eed3f0 ?f00eed3f0@@YAMPAUcNoun@@MDDPAM@Z  # f00eed3f0 migrated from s00eed3f0 (verbatim, slice spelling)
+00eed720 ?f00eed720@@YAXPAUcNoun@@PAUSpinOwner@@PAUSpinOut@@@Z  # f00eed720 migrated from s00eed3f0 (verbatim, slice spelling)
+00eed840 ?f00eed840@@YA_NH@Z  # f00eed840 migrated from s00eed3f0 (verbatim, slice spelling)
+00eed8c0 ?f00eed8c0@@YAHPBUResourceKey_s00ee_d3f0@@@Z  # f00eed8c0 migrated from s00eed3f0 (verbatim, slice spelling)
+00eed920 ?f00eed920@@YA_NHH@Z  # f00eed920 migrated from s00eed3f0 (verbatim, slice spelling)
+00eed970 ?f00eed970@@YA_NHH@Z  # f00eed970 migrated from s00eed3f0 (verbatim, slice spelling)
+00eed9c0 ?f00eed9c0@@YA_NHH@Z  # f00eed9c0 migrated from s00eed3f0 (verbatim, slice spelling)
+00eeda20 ?f00eeda20@@YAXPBXPAH@Z  # f00eeda20 migrated from s00eed3f0 (verbatim, slice spelling)
+00eedba0 ?f00eedba0@@YAXPAMI@Z  # f00eedba0 migrated from s00eed3f0 (verbatim, slice spelling)
+00eedc10 ?f00eedc10@@YA_NPAUcSpinPoint@@PAX@Z  # f00eedc10 migrated from s00eed3f0 (verbatim, slice spelling)

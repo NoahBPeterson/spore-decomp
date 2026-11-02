@@ -1,8 +1,10 @@
-# UI::cScenarioTutorialsChecklistUI-adjacent float/state helpers (names inferred from role,
-# no dev-PDB names recovered for this range).
 00edfed0  Checklist_FloatPairMatch  # thiscall; compares [this+0x18],[this+0x1c] to FUN_00edd440 outputs
-00ee0310  Checklist_SetProperty4a8  # table5-mapped int property at entry+0x4a8
-00ee0450  Checklist_SetProperty4b0  # table3-mapped int property at entry+0x4b0
-00ee0590  Checklist_SetProperty4b4  # table3-mapped int property at entry+0x4b4
-00ee0af0  Checklist_SetProperty4bc  # int property at entry+0x4bc
-00ee0c30  Checklist_SetProperty4c0  # int property at entry+0x4c0
+00ee0080 ?f_ee0080@@YGXPAXH@Z  # f_ee0080 migrated from s00edfed0 (verbatim, slice spelling)
+00ee01e0 ?f_ee01e0@@YA_NPAUContainer@@PADD@Z  # f_ee01e0 migrated from s00edfed0 (verbatim, slice spelling)
+00ee0310 ?f_ee0310@@YA_NPAUContainer@@PAUElem@@I@Z  # f_ee0310 migrated from s00edfed0 (verbatim, slice spelling)
+00ee0450 ?f_ee0450@@YA_NPAUContainer@@PAUElem@@I@Z  # f_ee0450 migrated from s00edfed0 (verbatim, slice spelling)
+00ee0590 ?f_ee0590@@YA_NPAUContainer@@PAUElem@@I@Z  # f_ee0590 migrated from s00edfed0 (verbatim, slice spelling)
+00ee06d0 ?f_ee06d0@@YA_NPAUContainer@@PAUElem@@HPAX@Z  # f_ee06d0 migrated from s00edfed0 (verbatim, slice spelling)
+00ee0960 ?f_ee0960@@YA_NHHH@Z  # f_ee0960 migrated from s00edfed0 (verbatim, slice spelling)
+00ee0af0 ?f_ee0af0@@YA_NPAUContainer@@PAUElem@@H@Z  # f_ee0af0 migrated from s00edfed0 (verbatim, slice spelling)
+00ee0c30 ?f_ee0c30@@YA_NPAUContainer@@PAUElem@@H@Z  # f_ee0c30 migrated from s00edfed0 (verbatim, slice spelling)

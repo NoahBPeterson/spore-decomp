@@ -1,7 +1,13 @@
-00ee2860 SP::cScenarioEditModeBehaviorUI::SetTooltip  # reads cString/hint at +0x184
+00ee2860 ?f00ee2860@@YAXHPAUcString_s00ee_2860@@0@Z  # f00ee2860 migrated from s00ee2860 (verbatim, slice spelling)
 00ee2960 f00ee2960  # palette item refresh (window, item, flag, flag); PDB candidate SP::cSPUISpace::SetToolTipForItem unverified
-00ee3020 Beh::F3020  # thiscall (); refreshes 8 palette windows at stride 0x188, window ids 0x715cde0+i
-00ee3230 f00ee3230  # cdecl (int key, void* behaviour); palette selection rebuild + audio cue + checklist hints
-00ee3430 f00ee3430  # cdecl (int key, void* behaviour, char flag); tutorial index text handler
-00ee3540 Beh::F3540  # thiscall (void* item, void* list); writes list->item[slot].count
-00ee3630 Beh::F3630  # thiscall (int arg); resyncs selected behaviour with the tutorial system
+00ee3020 ?F3020@Beh@@QAEXXZ  # Beh::F3020 migrated from s00ee2860 (verbatim, slice spelling)
+00ee30d0 ?F30D0@Beh@@QAEXXZ  # Beh::F30D0 migrated from s00ee2860 (verbatim, slice spelling)
+00ee3140 ?F3140@Beh@@QAEXH@Z  # Beh::F3140 migrated from s00ee2860 (verbatim, slice spelling)
+00ee31d0 ?F31D0@Beh@@QAEXXZ  # Beh::F31D0 migrated from s00ee2860 (verbatim, slice spelling)
+00ee3230 ?f00ee3230@@YAXHPAX@Z  # f00ee3230 migrated from s00ee2860 (verbatim, slice spelling)
+00ee3400 ?f00ee3400@@YAXPAX@Z  # f00ee3400 migrated from s00ee2860 (verbatim, slice spelling)
+00ee3430 ?f00ee3430@@YAXHPAXD@Z  # f00ee3430 migrated from s00ee2860 (verbatim, slice spelling)
+00ee3540 ?F3540@Beh@@QAEXPAX0@Z  # Beh::F3540 migrated from s00ee2860 (verbatim, slice spelling)
+00ee3630 ?F3630@Beh@@QAEXH@Z  # Beh::F3630 migrated from s00ee2860 (verbatim, slice spelling)
+00ee3710 ?F3710@Beh@@QAEXH@Z  # Beh::F3710 migrated from s00ee2860 (verbatim, slice spelling)
+00ee3760 ?F3760@Beh@@QAEXPAH@Z  # Beh::F3760 migrated from s00ee2860 (verbatim, slice spelling)

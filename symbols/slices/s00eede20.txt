@@ -1,0 +1,5 @@
+00ca6630 ?Init@cVehicle@SP@@QAEXW4eVehicleLocomotion@2@W4eVehiclePurpose@2@VKey@ResourceMan@EA@@@Z  # SP::cVehicle::Init (callee of s00eede20, named from the dev publics; slice address comment)
+00eede20 ?FUN_00eede20@@YAPAUNoun@@PBUResourceKey_s00ee_de20@@PBUVector3@@PBUQuaternion@@M_NHHHH@Z  # FUN_00eede20 migrated from s00eede20 (verbatim, slice spelling)
+00eee530 ?FUN_00eee530@@YAXPAM00000@Z  # FUN_00eee530 migrated from s00eede20 (verbatim, slice spelling)
+00eee760 ?FUN_00eee760@@YAXPAXPAUListRange@@@Z  # FUN_00eee760 migrated from s00eede20 (verbatim, slice spelling)
+00eeea50 ?FUN_00eeea50@@YA_NPAUAssetRef@@PAUExtCall@@@Z  # FUN_00eeea50 migrated from s00eede20 (verbatim, slice spelling)

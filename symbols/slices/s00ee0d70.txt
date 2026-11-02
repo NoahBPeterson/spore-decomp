@@ -1,3 +1,9 @@
-# UI::cScenarioTutorialsChecklistUI-adjacent helpers (names inferred).
-00ee0eb0  Checklist_PropertyDispatcher  # dispatches 0x742bdb0/bdc0/bdd0 to the f_00ee0af0/0c30/0d70 setters
-00ee1060  RefCountedReleaseThunk       # if(*p) tail-call FUN_00edfbf0(p)
+00ee0d70 ?f_ee0d70@@YA_NPAUContainer@@PAUElem_s00ee_0d70@@H@Z  # f_ee0d70 migrated from s00ee0d70 (verbatim, slice spelling)
+00ee0eb0 ?f_ee0eb0@@YA_NPAUContainer@@PAUElem_s00ee_0d70@@PAXHI@Z  # f_ee0eb0 migrated from s00ee0d70 (verbatim, slice spelling)
+00ee0f50 ?f_ee0f50@@YIXPAUCCLarge@@@Z  # f_ee0f50 migrated from s00ee0d70 (verbatim, slice spelling)
+00ee1060 ?f_ee1060@@YGXPAH@Z  # f_ee1060 migrated from s00ee0d70 (verbatim, slice spelling)
+00ee1140 ?f_ee1140@@YAXHD@Z  # f_ee1140 migrated from s00ee0d70 (verbatim, slice spelling)
+00ee1200 ?f_ee1200@@YAXHH@Z  # f_ee1200 migrated from s00ee0d70 (verbatim, slice spelling)
+00ee12c0 ?f_ee12c0@@YIXPAUCCLarge2@@@Z  # f_ee12c0 migrated from s00ee0d70 (verbatim, slice spelling)
+00ee1510 ?f_ee1510@@YAXHM@Z  # f_ee1510 migrated from s00ee0d70 (verbatim, slice spelling)
+00ee1630 ?f_ee1630@@YAXH@Z  # f_ee1630 migrated from s00ee0d70 (verbatim, slice spelling)

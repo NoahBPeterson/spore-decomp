@@ -1,4 +1,13 @@
-# Adviser / planet-surface helper TU (names inferred).
-00eebf80  GetRefCounted18   # tail-call to FUN_006c0200 ([p+0x18])
-00eebf90  WinCallbackSetup  # FUN_005bf860 + FUN_005bf120 pairs
-00eec540  FindFirstGE       # scans g_016c7a24[0..g_016c7a28) for >= p
+00eeb770 ?f_00eeb770@@YIXPAUCCList@@HHD@Z  # f_00eeb770 migrated from s00eeb770 (verbatim, slice spelling)
+00eeb920 ?f_00eeb920@@YIXPAUCCList@@HPAUFloatVec@@PAUVec3Vec@@@Z  # f_00eeb920 migrated from s00eeb770 (verbatim, slice spelling)
+00eebf80 ?f_00eebf80@@YAHPAUXGet@@@Z  # f_00eebf80 migrated from s00eeb770 (verbatim, slice spelling)
+00eebf90 ?f_00eebf90@@YAXHH@Z  # f_00eebf90 migrated from s00eeb770 (verbatim, slice spelling)
+00eebfc0 ?f_00eebfc0@@YA_NHPAH@Z  # f_00eebfc0 migrated from s00eeb770 (verbatim, slice spelling)
+00eec0d0 ?f_00eec0d0@@YAXH@Z  # f_00eec0d0 migrated from s00eeb770 (verbatim, slice spelling)
+00eec0f0 ?f_00eec0f0@@YAMPAMDPAHD@Z  # f_00eec0f0 migrated from s00eeb770 (verbatim, slice spelling)
+00eec2b0 ?f_00eec2b0@@YAXPAM0HPAHH@Z  # f_00eec2b0 migrated from s00eeb770 (verbatim, slice spelling)
+00eec370 ?f_00eec370@@YAMPAMHH@Z  # f_00eec370 migrated from s00eeb770 (verbatim, slice spelling)
+00eec3d0 ?f_00eec3d0@@YA?AUVec3i@@PAH@Z  # f_00eec3d0 migrated from s00eeb770 (verbatim, slice spelling)
+00eec440 ?f_00eec440@@YAXPAH@Z  # f_00eec440 migrated from s00eeb770 (verbatim, slice spelling)
+00eec540 ?f_00eec540@@YAXH@Z  # f_00eec540 migrated from s00eeb770 (verbatim, slice spelling)
+00eec580 ?f_00eec580@@YAHH@Z  # f_00eec580 migrated from s00eeb770 (verbatim, slice spelling)
