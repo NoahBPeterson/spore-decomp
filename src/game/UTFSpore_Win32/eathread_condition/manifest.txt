@@ -1,0 +1,2 @@
+# source  symbol  va  flags
+../src/game/UTFSpore_Win32/eathread_condition.cpp  ?Wait@Condition@Thread@EA@@QAE?AW4Result@123@PAVMutex@23@ABI@Z  00921f80  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
