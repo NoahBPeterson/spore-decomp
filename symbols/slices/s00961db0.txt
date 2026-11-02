@@ -15,7 +15,7 @@
 009628f0 ?f@S9628f0@@QAEXPAX@Z
 00962950 ?f@S962950@@QAEXXZ
 00962a10 ?f@S962a10@@QAEPAU1@XZ
-00962d10 ?f@S962d10@@QAEXXZ
-00962da0 ?f@S962da0@@QAE_NXZ
-00962e80 ?f@S962e80@@QAEIII@Z
-00962f00 ?f@S962f00@@QAEXXZ
+00962d10 ?f@S962d10@@QAEXXZ  # S962d10::f migrated from s00961db0 (verbatim, slice spelling)
+00962da0 ?f@S962da0@@QAE_NXZ  # S962da0::f migrated from s00961db0 (verbatim, slice spelling)
+00962e80 ?f@S962e80@@QAEIII@Z  # S962e80::f migrated from s00961db0 (verbatim, slice spelling)
+00962f00 ?f@S962f00@@QAEXXZ  # S962f00::f migrated from s00961db0 (verbatim, slice spelling)

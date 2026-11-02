@@ -1,0 +1,12 @@
+# source  symbol  va  flags
+../src/game/UTFSpore_Win32/_at_00960000.cpp  ?f@S962d10@@QAEXXZ  00962d10  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/_at_00960000.cpp  ?f@S962da0@@QAE_NXZ  00962da0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/_at_00960000.cpp  ?f@S962f00@@QAEXXZ  00962f00  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/_at_00960000.cpp  ?m@S_967690@@QAEXXZ  00967690  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/UTFSpore_Win32/_at_00960000.cpp  ?m@S_9676f0@@QAEXIPBD@Z  009676f0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/UTFSpore_Win32/_at_00960000.cpp  ?m@S_967770@@QAEII@Z  00967770  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/UTFSpore_Win32/_at_00960000.cpp  ?m@S_9677d0@@QAEPAII@Z  009677d0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/UTFSpore_Win32/_at_00960000.cpp  ?SetComboAlpha@@YAXM@Z  00969ae0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/_at_00960000.cpp  ?m@Obj96@@QAE_NPAX0@Z  0096ecf0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/_at_00960000.cpp  ?FUN_0096ef80@@YAXXZ  0096ef80  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/_at_00960000.cpp  ??0FadeEffect@@QAE@XZ  0096f060  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include

@@ -1,8 +1,10 @@
 0096e3a0 EA::UTFWin::cDropShadowDescriptor::CopyWithQualityAdjustment  # 2008 dev-PDB name
 0096e500 EA::UTFWin::cDropShadowDescriptor::SetQuality              # 2008 dev-PDB name
+0096e6d0 ?resize@GlyphVec@@QAEXI@Z  # GlyphVec::resize migrated from s0096e3a0 (verbatim, slice spelling)
+0096ecf0 ?m@Obj96@@QAE_NPAX0@Z  # Obj96::m migrated from s0096e3a0 (verbatim, slice spelling)
 0096eee0 EA::UTFWinControls::ExplicitNavigator::`scalar deleting destructor'  # 2008 dev-PDB name
-0096ef80 EA::UTFWinControls registration chain                      # sequence of static registrations
-0096f060 UI::FadeEffect::FadeEffect                                 # 2008 dev-PDB name
+0096ef80 ?FUN_0096ef80@@YAXXZ  # FUN_0096ef80 migrated from s0096e3a0 (verbatim, slice spelling)
+0096f060 ??0FadeEffect@@QAE@XZ  # FadeEffect::FadeEffect migrated from s0096e3a0 (verbatim, slice spelling)
 0096f080 ?BiStateEffect_func84h@@YAXPAHM@Z  # BiStateEffect_func84h migrated from s0096e3a0 (verbatim, slice spelling)
 0096f120 ?BasicFactory_FadeEffect_CreateInstance@@YGPAXHH@Z  # BasicFactory_FadeEffect_CreateInstance migrated from s0096e3a0 (verbatim, slice spelling)
 0096f1b0 ?a@Ctx96@@QAEXPAMM@Z  # Ctx96::a migrated from s0096e3a0 (verbatim, slice spelling)

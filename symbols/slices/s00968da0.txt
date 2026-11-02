@@ -11,3 +11,4 @@
 00969950 ?AddValue@WinComboBox@@QAEXPB_W@Z  # WinComboBox::AddValue migrated from s00968da0 (verbatim, slice spelling)
 009699d0 ?InsertValue@WinComboBox@@QAE_NIPB_W@Z  # WinComboBox::InsertValue migrated from s00968da0 (verbatim, slice spelling)
 00969a60 ?RemoveAllValues@WinComboBox@@QAEXXZ  # WinComboBox::RemoveAllValues migrated from s00968da0 (verbatim, slice spelling)
+00969ae0 ?SetComboAlpha@@YAXM@Z  # SetComboAlpha migrated from s00968da0 (verbatim, slice spelling)

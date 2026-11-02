@@ -13,11 +13,11 @@
 00967320   ?m@S_967320@@QAEXM@Z                   S_967320::m                 MATCH
 009673b0   ?m@S_9673b0@@QAEIPAXPAE@Z              S_9673b0::m                 nonmatching (DoMessage)
 009675c0   ?m@S_9675c0@@QAEPAXXZ                  S_9675c0::m                 nonmatching (dead vtable stores)
-00967690   ?m@S_967690@@QAEXXZ                    S_967690::m                 MATCH
-009676a0   ?m@S_9676a0@@QAEIII@Z                  S_9676a0::m                 nonmatching (align mask fold)
-009676f0   ?m@S_9676f0@@QAEXIPBD@Z                S_9676f0::m                 MATCH
-00967770   ?m@S_967770@@QAEII@Z                   S_967770::m                 MATCH
-009677d0   ?m@S_9677d0@@QAEPAII@Z                 S_9677d0::m                 MATCH
+00967690 ?m@S_967690@@QAEXXZ  # S_967690::m migrated from s00966b20 (verbatim, slice spelling)
+009676a0 ?m@S_9676a0@@QAEIII@Z  # S_9676a0::m migrated from s00966b20 (verbatim, slice spelling)
+009676f0 ?m@S_9676f0@@QAEXIPBD@Z  # S_9676f0::m migrated from s00966b20 (verbatim, slice spelling)
+00967770 ?m@S_967770@@QAEII@Z  # S_967770::m migrated from s00966b20 (verbatim, slice spelling)
+009677d0 ?m@S_9677d0@@QAEPAII@Z  # S_9677d0::m migrated from s00966b20 (verbatim, slice spelling)
 00967890 _FUN_00967890  # FUN_00967890 migrated from s00966b20 (verbatim, slice spelling)
 009678f0 _FUN_009678f0  # FUN_009678f0 migrated from s00966b20 (verbatim, slice spelling)
 00967980 ?m@S_967980@@QAEXXZ  # S_967980::m migrated from s00966b20 (verbatim, slice spelling)
