@@ -1,10 +1,10 @@
 00a8b940 ?Stream_Quad_V4F_N4F_G3F_C4B_T4B@Swarm@EA@@YAXPAUcDistributeEffect@12@PAUIVertexStream@12@PAE@Z  # EA::Swarm::Stream_Quad_V4F_N4F_G3F_C4B_T4B (slice 52 streamer)
 00a8bf10 ?RegisterMeshStreamers@Swarm@EA@@YAX_N@Z  # EA::Swarm::RegisterMeshStreamers (installs the G3F streamer table)
-00a8bf60 ?reserve@?$SpVector@URefVertex@Swarm@EA@@@Swarm@EA@@QAEXI@Z  # EA::Swarm::SpVector<RefVertex>::reserve
-00a8c070 ?UninitCopyVertex@Swarm@EA@@YAPAURefVertex@12@PAU312@00@Z  # EA::Swarm::UninitCopyVertex (0x18-byte ref-counted vertices)
+00a8bf60 ?reserve@?$SpVector_s00a8_b940@URefVertex@Swarm@EA@@@Swarm@EA@@QAEXI@Z  # reserve migrated from s00a8b940 (verbatim, slice spelling)
+00a8c070 ?UninitCopyVertex@Swarm@EA@@YAPAURefVertex@12@PAU312@00@Z  # UninitCopyVertex migrated from s00a8b940 (verbatim, slice spelling)
 00a8c0e0 ?StreamModelParticles@cDistributeEffect@Swarm@EA@@QAEXPAUIVertexStream@23@@Z  # EA::Swarm::cDistributeEffect::StreamModelParticles
 00a8c440 ??1?$SpVector@URefVertex@Swarm@EA@@@Swarm@EA@@QAE@XZ  # EA::Swarm::SpVector<RefVertex>::~SpVector
-00a8c480 ??0SampleVector@Swarm@EA@@QAE@ABU012@@Z  # EA::Swarm::SampleVector::SampleVector(const&) (vector<cDistributeSample> copy ctor)
-00a8c4e0 ?erase@PtrVector@Swarm@EA@@QAEPAURefPtr@23@PAU423@0@Z  # EA::Swarm::PtrVector::erase(first,last)
-00a8c540 ?insert@?$SpVector@URefVertex@Swarm@EA@@@Swarm@EA@@QAEXPAURefVertex@23@ABU423@@Z  # EA::Swarm::SpVector<RefVertex>::insert(pos,const T&)
-00a8c690 ?insert@PtrVector@Swarm@EA@@QAEXPAURefPtr@23@IABU423@@Z  # EA::Swarm::PtrVector::insert(pos,n,const T&)
+00a8c480 ??0SampleVector_s00a8_b940@Swarm@EA@@QAE@ABU012@@Z  # SampleVector_s00a8_b940::SampleVector migrated from s00a8b940 (verbatim, slice spelling)
+00a8c4e0 ?erase@PtrVector@Swarm@EA@@QAEPAURefPtr@23@PAU423@0@Z  # PtrVector::erase migrated from s00a8b940 (verbatim, slice spelling)
+00a8c540 ?insert@?$SpVector_s00a8_b940@URefVertex@Swarm@EA@@@Swarm@EA@@QAEXPAURefVertex@23@ABU423@@Z  # insert migrated from s00a8b940 (verbatim, slice spelling)
+00a8c690 ?insert@PtrVector@Swarm@EA@@QAEXPAURefPtr@23@IABU423@@Z  # PtrVector::insert migrated from s00a8b940 (verbatim, slice spelling)

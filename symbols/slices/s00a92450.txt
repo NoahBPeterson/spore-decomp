@@ -1,3 +1,3 @@
-00a92450 ?SetFloatParams@cDistributeEffect@@QAE_NHPBMH@Z  # cDistributeEffect::SetFloatParams (IVisualEffect vtable slot +0x1c)
-00a92920 ?SetIntParams@cDistributeEffect@@QAE_NHPBHH@Z  # cDistributeEffect::SetIntParams (IVisualEffect vtable slot +0x20)
-00a92b80 ?SetUnknownParam@cDistributeEffect@@QAE_NHPAX@Z  # cDistributeEffect::SetUnknownParam (IVisualEffect vtable slot +0x24)
+00a92450 ?SetFloatParams@cDistributeEffect_s00a9_2450@@QAE_NHPBMH@Z  # cDistributeEffect_s00a9_2450::SetFloatParams migrated from s00a92450 (verbatim, slice spelling)
+00a92920 ?SetIntParams@cDistributeEffect_s00a9_2450@@QAE_NHPBHH@Z  # cDistributeEffect_s00a9_2450::SetIntParams migrated from s00a92450 (verbatim, slice spelling)
+00a92b80 ?SetUnknownParam@cDistributeEffect_s00a9_2450@@QAE_NHPAX@Z  # cDistributeEffect_s00a9_2450::SetUnknownParam migrated from s00a92450 (verbatim, slice spelling)

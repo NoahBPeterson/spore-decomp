@@ -1,3 +1,10 @@
 # source  symbol  va  flags
 ../src/game/Swarm/DistributeEffect.cpp  ?mul_705290@@YAXPAUV3@@0@Z  00705290  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Swarm/DistributeEffect.cpp  ?ReleaseRenderSet@cDistributeEffect@@QAEXXZ  00a89490  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Swarm/DistributeEffect.cpp  ?SetTransforms@cDistributeEffect@@QAEXPAUcTransform_s00a8_8d50@@0@Z  00a89a00  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Swarm/DistributeEffect.cpp  ?Dispatch@cDistributeEffectPart@@QAEXH@Z  00a89a30  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Swarm/DistributeEffect.cpp  ?MapSample@cDistributeEffect@@QAEXPAUVector3@@@Z  00a89ce0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Swarm/DistributeEffect.cpp  ??0cDistributeSample_s00a8_9de0@@QAE@ABU0@@Z  00a89de0  /O2 /MD /Gy /EHsc /TP /GS- /fp:fast /arch=SSE /Isrc/game/include
+../src/game/Swarm/DistributeEffect.cpp  ?FUN_00a8a0a0@@YAPAUcDistributeSample_s00a8_9de0@@PAU1@00@Z  00a8a0a0  /O2 /MD /Gy /EHsc /TP /GS- /fp:fast /arch=SSE /Isrc/game/include
+../src/game/Swarm/DistributeEffect.cpp  ?FUN_00a8a0f0@@YAPAUcDistributeSample_s00a8_9de0@@PAU1@00@Z  00a8a0f0  /O2 /MD /Gy /EHsc /TP /GS- /fp:fast /arch=SSE /Isrc/game/include
 ../src/game/Swarm/DistributeEffect.cpp  ??1cDistributeEffect_s00a8_c850@@QAE@XZ  00a8cb00  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

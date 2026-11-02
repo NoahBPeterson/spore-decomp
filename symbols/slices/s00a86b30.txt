@@ -1,3 +1,4 @@
+00a86b30 ?Update@SimUpd@@QAEXMMPAX@Z  # SimUpd::Update migrated from s00a86b30 (verbatim, slice spelling)
 00a870b0 ?Apply@SimOps@@QAEXPAX0@Z  # SimOps::Apply migrated from s00a86b30 (verbatim, slice spelling)
 00a871e0 ?SerializeElems@@YAPAXPAXPAUElemVec@@@Z  # SerializeElems migrated from s00a86b30 (verbatim, slice spelling)
 00a87280 ?CopyFrom@Elem@@QAEPAU1@PBU1@@Z  # Elem::CopyFrom migrated from s00a86b30 (verbatim, slice spelling)

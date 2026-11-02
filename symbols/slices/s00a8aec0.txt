@@ -1,2 +1,2 @@
-00a8aec0 EA::Swarm::Stream_Quad_V4F_N4F_C4B_T2F  # cDistributeEffect member: 4-vertex quad writer, T2F
-00a8b420 EA::Swarm::Stream_Quad_V4F_N4F_C4B_T4B  # cDistributeEffect member: 4-vertex quad writer, T4B
+00a8aec0 ?Stream_Quad_V4F_N4F_C4B_T2F@Swarm@EA@@YAXPAVcDistributeEffect_s00a8_aec0@12@PAUIVertexStream_s00a8_aec0@12@PAE@Z  # Stream_Quad_V4F_N4F_C4B_T2F migrated from s00a8aec0 (verbatim, slice spelling)
+00a8b420 ?Stream_Quad_V4F_N4F_C4B_T4B@Swarm@EA@@YAXPAVcDistributeEffect_s00a8_aec0@12@PAUIVertexStream_s00a8_aec0@12@PAE@Z  # Stream_Quad_V4F_N4F_C4B_T4B migrated from s00a8aec0 (verbatim, slice spelling)

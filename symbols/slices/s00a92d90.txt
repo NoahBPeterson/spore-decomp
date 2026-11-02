@@ -1,3 +1,5 @@
+00a92d90 ?UpdateSamples@cDistributeEffect_s00a9_2d90@@QAEHH@Z  # cDistributeEffect_s00a9_2d90::UpdateSamples migrated from s00a92d90 (verbatim, slice spelling)
+00a934e0 ?ApplyEffect@cDistributeEffect_s00a9_2d90@@QAEHPAXM0@Z  # cDistributeEffect_s00a9_2d90::ApplyEffect migrated from s00a92d90 (verbatim, slice spelling)
 00a938d0 ?RegisterMeshStreamers2@@YAX_N@Z  # RegisterMeshStreamers2 migrated from s00a92d90 (verbatim, slice spelling)
 00a93910 ??1cMetaParticlesEffect@@QAE@XZ  # cMetaParticlesEffect::~cMetaParticlesEffect migrated from s00a92d90 (verbatim, slice spelling)
 00a93980 ??0cMetaParticlesEffect@@QAE@XZ  # cMetaParticlesEffect::cMetaParticlesEffect migrated from s00a92d90 (verbatim, slice spelling)
