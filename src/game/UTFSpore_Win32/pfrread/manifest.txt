@@ -1,1 +1,2 @@
 # source  symbol  va  flags
+../src/game/UTFSpore_Win32/pfrread.cpp  ?ReadHi@NibSrcTC@@QAEEXZ  008b1040  /O2 /MD /Gy /TP /Isrc/game/include
