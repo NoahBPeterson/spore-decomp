@@ -1,7 +1,8 @@
 0061c350 ?HandleResult@cAssetFeedTransaction@Pollen@SP@@QAE_NHPAXPAUDeque@23@@Z  # cAssetFeedTransaction::HandleResult migrated from s0061c350 (verbatim, slice spelling)
-0061c570 SP::Pollen::cFeedTransactionBase::cFeedTransactionBase  # (type, const FixedPtrVector&); mAssets = assets
-0061c5e0 SP::Pollen::cGetAssetFeedTransaction::cGetAssetFeedTransaction  # base(4,assets); vtable 0x13fc604; mFlag=1
-0061c610 eastl::vector<SP::Feed::FeedDescription>::insert/DoInsertValues  # 0x70 stride, DoAllocate via 0x61c1c0
+0061c570 ??0cFeedTransactionBase_s0061_c350@Pollen@SP@@QAE@IABUFixedPtrVector_s0061_c350@12@@Z  # cFeedTransactionBase_s0061_c350::cFeedTransactionBase migrated from s0061c350 (verbatim, slice spelling)
+0061c5e0 ??0cGetAssetFeedTransaction_s0061_c350@Pollen@SP@@QAE@ABUFixedPtrVector_s0061_c350@12@@Z  # cGetAssetFeedTransaction_s0061_c350::cGetAssetFeedTransaction migrated from s0061c350 (verbatim, slice spelling)
+0061c610 ?AssignBackward@FDVec@Pollen@SP@@QAEXPAUFeedDescription_s0061_c350@23@0H@Z  # FDVec::AssignBackward migrated from s0061c350 (verbatim, slice spelling)
+0061c760 ?Assign@FDVec@Pollen@SP@@QAEXPAUFeedDescription_s0061_c350@23@0H@Z  # FDVec::Assign migrated from s0061c350 (verbatim, slice spelling)
 0061c880 ?RequestAssetsFromFeed@Pollen@SP@@YAIPAXIPAUDeque@12@D@Z  # RequestAssetsFromFeed migrated from s0061c350 (verbatim, slice spelling)
 0061cf60 ?HandleResult@cGetAssetFeedTransaction_s0061_c350@Pollen@SP@@QAE_NHPAXPAUDeque@23@@Z  # cGetAssetFeedTransaction_s0061_c350::HandleResult migrated from s0061c350 (verbatim, slice spelling)
 0061d0d0 ?HandleResult@cEditFeedTransaction_s0061_c350@Pollen@SP@@QAE_NHPAXPAUDeque@23@@Z  # cEditFeedTransaction_s0061_c350::HandleResult migrated from s0061c350 (verbatim, slice spelling)

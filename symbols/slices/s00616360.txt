@@ -4,6 +4,7 @@
 00616500 ?Dtor@cTxE@@QAEXXZ  # cTxE::Dtor migrated from s00616360 (verbatim, slice spelling)
 00616580 ?HandleResult@cTxF@@QAE_NHPAX0@Z  # cTxF::HandleResult migrated from s00616360 (verbatim, slice spelling)
 00616610 ?HandleResult@cTxG@@QAE_NHPAUcHttpResult_s0061_6360@@PAX@Z  # cTxG::HandleResult migrated from s00616360 (verbatim, slice spelling)
+00616660 ?Init@cTxH@@QAEPAU1@PAUIAddRef1@@HH@Z  # cTxH::Init migrated from s00616360 (verbatim, slice spelling)
 006166b0 ?HandleResult@cTxI@@QAE_NHPAUcHttpResult_s0061_6360@@PAX@Z  # cTxI::HandleResult migrated from s00616360 (verbatim, slice spelling)
 006166e0 ?Init@cTxJ@@QAEPAU1@PAUIAddRef1@@0@Z  # cTxJ::Init migrated from s00616360 (verbatim, slice spelling)
 00616730 ?HandleResult@cTxK@@QAE_NHPAUcHttpResult2@@PAX@Z  # cTxK::HandleResult migrated from s00616360 (verbatim, slice spelling)

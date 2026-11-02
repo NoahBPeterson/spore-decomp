@@ -55,6 +55,7 @@ extern void* kVtbl13fc52c[];
 #pragma intrinsic(wcscmp)
 
 // ---- items of slice s00614f20 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern void* kVtbl13eb938[]; extern void* kVtbl13fc4e4[]; extern void* kVtbl13fc508[];
 typedef unsigned int size_type;
 typedef int off_type;
 typedef unsigned __int64 u64;
@@ -239,20 +240,20 @@ public:
     virtual int AddRef();
     virtual int Release();
     virtual unsigned int GetType() const;
-    virtual int GetAccessFlags() const;
-    virtual int GetState() const;
-    virtual bool Close();
+    virtual int GetAccessFlags() const;  // 0x006148c0 (SP::Pollen::cServerResponse::GetAccessFlags)
+    virtual int GetState() const;  // 0x006148d0 (SP::Pollen::cServerResponse::GetState)
+    virtual bool Close();  // 0x00614880 (SP::Pollen::cServerResponse::Close)
     virtual size_type GetSize() const;
     virtual bool SetSize(size_type size);
-    virtual off_type GetPosition(int positionType = 0) const;
+    virtual off_type GetPosition(int positionType = 0) const;  // 0x00614900 (SP::Pollen::cServerResponse::GetPosition)
     virtual bool SetPosition(off_type position, int positionType = 0);   // 0x006154c0
     virtual size_type GetAvailable() const;
     virtual size_type Read(void* pData, size_type nSize);                // 0x00615430
     virtual bool Flush();
-    virtual bool Write(const void* pData, size_type nSize);
+    virtual bool Write(const void* pData, size_type nSize);  // 0x00614840 (SP::Pollen::cServerResponse::Write)
 
     bool Open();                                                         // 0x00615450
-    void GetStatus();  // 0x00614ab0 (SP::Pollen::cServerResponse::GetStatus)
+    void GetStatus();                     // 0x00614ab0
     void StartPollinatorResponse();   // 0x00614930
     void EndPollinatorResponse();     // 0x00614940
     void Noop();                      // 0x00c2e4e0
@@ -260,8 +261,8 @@ public:
     const wchar_t* GetField(const wchar_t* name);                        // 0x00614e50
     void IDListElement();                                                // 0x00615520
     static void SetupDict();                                             // 0x006155f0
-    static void CharacterData(cServerResponse_s0061_4f20* self, const wchar_t* s, int len);
-    static void StartElement(cServerResponse_s0061_4f20* self, const wchar_t* name);
+    static void CharacterData(cServerResponse_s0061_4f20* self, const wchar_t* s, int len);  // 0x00614da0 (SP::Pollen::cServerResponse::CharacterData)
+    static void StartElement(cServerResponse_s0061_4f20* self, const wchar_t* name);  // 0x00614ed0 (SP::Pollen::cServerResponse::StartElement)
     static void EndElementHandler(cServerResponse_s0061_4f20* self, const wchar_t* name);   // 0x00615330
 };
 }
@@ -299,7 +300,10 @@ struct IResourceManager {
 IResourceManager* GetManager();    // 0x0067dcd0
 IResourceManager* GetManager2();   // 0x008de1a0
 struct IMessageServer {
-    virtual int slot00(); virtual int slot04(); virtual int slot08(); virtual int slot0c();
+virtual int slot00();
+virtual int slot04();
+virtual int slot08();
+virtual int slot0c();
     virtual int slot10();
     virtual bool PostMessage(uint32_t id, void* data, int flag);   // 0x14
 };
@@ -395,14 +399,23 @@ struct cTripleObj {
     cTripleObj* Init();                 // 0x00616160
     cTripleObj* Destroy(unsigned flags);  // 0x006161c0
 };
+struct ReleasableIface { virtual int slot0(); virtual int ReleaseRef(); };
 struct sTimedRec { char pad[0x30]; __int64 mTime; char pad2[0x118 - 0x38]; };
 struct sTimedOwner { char pad[0x60]; sTimedRec* mpTable; };
 struct cTimeGreater {
     sTimedOwner* mpOwner;
     bool operator()(unsigned a, unsigned b) const;   // 0x00616220
 };
+struct cSmallA {
+    void** vtbl; int mnRef; int mA; int mB; bool mC;
+    cSmallA* Init(int a, int b, bool c);   // 0x00616260
+};
 struct cHandlerStub {
     bool HandleResult(int err, cHttpResult* r, void* unused);   // 0x006162a0
+};
+struct cSmallB {
+    void** vtbl; int mnRef; int mA; int mB;
+    cSmallB* Init(int a, int b);
 };
 struct sTriple { int a, b, c; };
 struct cSmallC {
@@ -495,11 +508,13 @@ IResourceManager_s0061_6360* GetManager2_s0061_6360();   // 0x008de1a0
 IMessageServer* GetMessageServer2();     // 0x00883860 (EA::Messaging::GetServer)
 struct IWorkerObj { virtual int s0(); virtual int s1(); virtual int s2(); virtual int s3(); virtual int s4(); virtual int s5(); virtual int s6(); virtual int s7(); virtual int s8(); virtual int s9(); virtual int s10(); virtual int s11(); virtual int s12(); virtual int s13(); virtual int s14(); virtual int s15(); virtual void Fn40(int v); };
 struct IWorker {
-    virtual int s0(); virtual int s1();
+virtual int s0();
+virtual int s1();
     virtual int ReleaseWorker();          // +8
     virtual int s3();
     virtual int Fn10();                   // +0x10
-    virtual int s5(); virtual int s6();
+virtual int s5();
+virtual int s6();
     virtual IWorkerObj* Fn1c();           // +0x1c
     virtual int s8();
     virtual void Fn24();                  // +0x24
@@ -516,6 +531,10 @@ struct IResp { virtual int s0(); virtual int s1(); virtual int s2(); virtual int
 struct cTxG {
     void** vtbl; int mnRef; void* mp8; int mpC;
     bool HandleResult(int err, cHttpResult_s0061_6360* r, void* unused);   // 0x00616610
+};
+struct cTxH {
+    void** vtbl; int mnRef; IAddRef1* mp8; int pad; int m10; int m14;
+    cTxH* Init(IAddRef1* p, int a, int b);
 };
 struct cTxI {
     bool HandleResult(int err, cHttpResult_s0061_6360* r, void* unused);
@@ -577,7 +596,11 @@ struct cServerResponseLite {              // SP::Pollen::cServerResponse (only w
     const wchar_t* GetField(const wchar_t* name);   // 0x00614e50
 };
 struct IStreamLite {
-    virtual int s0(); virtual int s1(); virtual int s2(); virtual int s3(); virtual int s4();
+virtual int s0();
+virtual int s1();
+virtual int s2();
+virtual int s3();
+virtual int s4();
     virtual int GetState();               // +0x14
     virtual bool Close();                 // +0x18
 };
@@ -632,7 +655,10 @@ struct cJob {                             // SP::cJob
     void Release();                       // 0x00690120 (smart pointer release)
 };
 struct cJobManager {
-    virtual int s0(); virtual int s1(); virtual int s2(); virtual int s3();
+virtual int s0();
+virtual int s1();
+virtual int s2();
+virtual int s3();
     virtual bool CreateJob(cJob** out);   // +0x10
 };
 cJobManager* GetJobManager();             // 0x0068f4d0
@@ -649,7 +675,8 @@ struct cResponseObj {                     // cServerResponse: IStream subobject 
     IStreamLite stream;
 };
 struct cResponseRef {
-    virtual int s0(); virtual int s1();
+virtual int s0();
+virtual int s1();
     virtual int ReleaseSlot2();
 };
 struct cTxDownload {
@@ -665,11 +692,28 @@ struct cFeedDoc {                         // SP::Feed::AtomDocument: entries of 
     char* mpEntriesEnd;
 };
 struct IRecordLite {
-    virtual int s0(); virtual int s1(); virtual int s2(); virtual int s3(); virtual int s4(); virtual int s5();
+virtual int s0();
+virtual int s1();
+virtual int s2();
+virtual int s3();
+virtual int s4();
+virtual int s5();
     virtual void* GetStream();            // +0x18
 };
 struct IDatabase {
-    virtual int s0(); virtual int s1(); virtual int s2(); virtual int s3(); virtual int s4(); virtual int s5(); virtual int s6(); virtual int s7(); virtual int s8(); virtual int s9(); virtual int s10(); virtual int s11(); virtual int s12();
+virtual int s0();
+virtual int s1();
+virtual int s2();
+virtual int s3();
+virtual int s4();
+virtual int s5();
+virtual int s6();
+virtual int s7();
+virtual int s8();
+virtual int s9();
+virtual int s10();
+virtual int s11();
+virtual int s12();
     virtual bool OpenRecord(const ResourceKey_s0061_6360* key, IRel2** pOut, int access, int createMode, int a, int b);   // +0x34
 };
 struct cHttpRequestRef {                  // EA::AutoRefCount<HTTPRequest> wrapper (out-of-line helpers)
@@ -701,7 +745,8 @@ extern void* kVtbl15206f0[];
 void operator delete[](void* p);                                                    // 0x00f47380
 struct ResourceKey_s0061_7130 { uint32_t instanceID, typeID, groupID; };
 struct IRel2_s0061_7130 {                          // Release at slot 2 (+8)
-    virtual int s0(); virtual int s1();
+virtual int s0();
+virtual int s1();
     virtual int ReleaseSlot2();
 };
 struct string8_s0061_7130 {
@@ -720,7 +765,7 @@ struct string8_s0061_7130 {
         if (n < nLength)
             erase(mpBegin + n, mpEnd);
         else if (n > nLength)
-            append(n - nLength, c);  // 0x00616960 (string8::append)
+            append(n - nLength, c);
     }
     void Resize0(size_type n);                         // 0x006174e0
     ~string8_s0061_7130()
@@ -760,20 +805,44 @@ struct IObj4 {                          // refcounted: Release at +4 (slot 1)
     virtual void* Cast(uint32_t typeID);    // +0x0c
 };
 struct IDb {
-    virtual int s0(); virtual int s1(); virtual int s2(); virtual int s3(); virtual int s4(); virtual int s5(); virtual int s6();
+virtual int s0();
+virtual int s1();
+virtual int s2();
+virtual int s3();
+virtual int s4();
+virtual int s5();
+virtual int s6();
     virtual bool Fn1c(void* obj, void** pOut, int a, uint32_t b);                  // +0x1c
-    virtual int s8(); virtual int s9(); virtual int s10(); virtual int s11(); virtual int s12();
+virtual int s8();
+virtual int s9();
+virtual int s10();
+virtual int s11();
+virtual int s12();
     virtual bool OpenRecord(const ResourceKey_s0061_7130* key, void** pOut, int a, int b, int c, int d);   // +0x34
 };
 struct IResMgr {
-    virtual int s0(); virtual int s1(); virtual int s2();
+virtual int s0();
+virtual int s1();
+virtual int s2();
     virtual bool GetResource(const ResourceKey_s0061_7130* key, void** pOut, int a, int b, int c, int d);   // +0x0c
-    virtual int s4(); virtual int s5(); virtual int s6(); virtual int s7();
+virtual int s4();
+virtual int s5();
+virtual int s6();
+virtual int s7();
     virtual void Fn20(void* obj, int a, void* area, int b, int c);                  // +0x20
-    virtual int s9(); virtual int s10(); virtual int s11(); virtual int s12(); virtual int s13(); virtual int s14();
-    virtual int s15(); virtual int s16(); virtual int s17();
+virtual int s9();
+virtual int s10();
+virtual int s11();
+virtual int s12();
+virtual int s13();
+virtual int s14();
+virtual int s15();
+virtual int s16();
+virtual int s17();
     virtual IDb* FindDatabase(uint32_t id, int flags);                              // +0x48
-    virtual int s19(); virtual int s20(); virtual int s21();
+virtual int s19();
+virtual int s20();
+virtual int s21();
     virtual IDb* FindDatabaseByKey(const ResourceKey_s0061_7130* key);                        // +0x58
 };
 IResMgr* GetManager_s0061_7130();                  // 0x0067dcd0
@@ -956,9 +1025,23 @@ public:
     virtual int s0();
     virtual int AddRef();
     virtual int Release();
-    virtual int s3(); virtual int s4(); virtual int s5(); virtual int s6(); virtual int s7(); virtual int s8();
-    virtual int s9(); virtual int s10(); virtual int s11(); virtual int s12(); virtual int s13(); virtual int s14();
-    virtual int s15(); virtual int s16(); virtual int s17(); virtual int s18(); virtual int s19();
+virtual int s3();
+virtual int s4();
+virtual int s5();
+virtual int s6();
+virtual int s7();
+virtual int s8();
+virtual int s9();
+virtual int s10();
+virtual int s11();
+virtual int s12();
+virtual int s13();
+virtual int s14();
+virtual int s15();
+virtual int s16();
+virtual int s17();
+virtual int s18();
+virtual int s19();
     virtual bool AddFile(const char* field, void* data, const char* contentType, const char* fileName, int flags);   // +0x50
     virtual bool AddField(const char* field, const char* value);                                                    // +0x54
 };
@@ -995,7 +1078,7 @@ void* operator new(unsigned int size, const char* name, int flags, unsigned debu
                    int line); // 0x00f473a0
 inline void operator delete(void*, const char*, int, unsigned, const char*, int) {}
 namespace eastl {
-struct allocator_s0061_8150 {
+class allocator_s0061_8150 { public:
   allocator_s0061_8150() {}
 };
 }
@@ -1418,11 +1501,21 @@ struct IMsgBaseA {
 }
 namespace SP {
 namespace Pollen {
+void IMsgBaseA::a0() {}
+}
+}
+namespace SP {
+namespace Pollen {
 struct IMsgBaseB {
   IMsgBaseB() { _InterlockedExchange(&mRefCount, 0); }
   virtual void b0();
   long mRefCount;
 };
+}
+}
+namespace SP {
+namespace Pollen {
+void IMsgBaseB::b0() {}
 }
 }
 namespace SP {
@@ -1673,7 +1766,7 @@ struct ReqPtrEx {
 
 // ---- items of slice s00619150 begin (TODO(rewrite): local stubs, replace by canonical classes)
 namespace eastl {
-struct allocator_s0061_9150 {
+class allocator_s0061_9150 { public:
   allocator_s0061_9150() {}
 };
 }
@@ -2481,7 +2574,7 @@ void* AllocateAndCopy70(unsigned int n, void* a, void* b);
 struct ICoreAllocator;
 void* operator new(unsigned int size, int alignment, const char* name, ICoreAllocator* pAllocator);
 namespace eastl {
-struct allocator_s0061_c350 {
+class allocator_s0061_c350 { public:
   allocator_s0061_c350() {}
 };
 }
@@ -2723,7 +2816,7 @@ struct Key3 { unsigned a; unsigned b; unsigned c; };   // 12-byte resource key (
 }
 namespace SP {
 namespace Pollen {
-struct cAssetDirectory_s0061_c350 {
+class cAssetDirectory_s0061_c350 { public:
   bool GetLocalKey(unsigned a, unsigned b, Key3* out);        // 0x54e460
   void AddMapping(unsigned a, unsigned b, Key3* k);           // 0x54e250
   void FUN_0054e7b0(unsigned a, unsigned b, int flag);        // 0x54e7b0
@@ -2868,7 +2961,53 @@ struct cAssetFeedTransaction {
 }
 namespace SP {
 namespace Pollen {
-struct cAssetMetadata_s0061_c350 {
+struct FDVec {
+  FeedDescription_s0061_c350* mpBegin;
+  FeedDescription_s0061_c350* mpEnd;
+  FeedDescription_s0061_c350* mpCapacity;
+  FeedDescription_s0061_c350* AllocCopyBackward(unsigned n, FeedDescription_s0061_c350* a, FeedDescription_s0061_c350* b);   // 0x61c1c0
+  FeedDescription_s0061_c350* AllocCopy(unsigned n, FeedDescription_s0061_c350* a, FeedDescription_s0061_c350* b);           // 0x61c220
+  void DestructRange(FeedDescription_s0061_c350* newEnd, FeedDescription_s0061_c350* oldEnd);                      // 0x60e910
+  // third argument: the iterator-tag slot (ignored, but it makes both ret 0xc)
+  void AssignBackward(FeedDescription_s0061_c350* last, FeedDescription_s0061_c350* first, int tag);
+  void Assign(FeedDescription_s0061_c350* first, FeedDescription_s0061_c350* last, int tag);
+};
+}
+}
+namespace SP {
+namespace Pollen {
+FeedDescription_s0061_c350* CopyBackward(FeedDescription_s0061_c350* last, FeedDescription_s0061_c350* first, FeedDescription_s0061_c350* destEnd);   // 0x619650
+}
+}
+namespace SP {
+namespace Pollen {
+void UninitializedCopyBackward(FeedDescription_s0061_c350** out, FeedDescription_s0061_c350* a, FeedDescription_s0061_c350* b, FeedDescription_s0061_c350* c, FeedDescription_s0061_c350* d);  // 0x6195d0
+}
+}
+namespace SP {
+namespace Pollen {
+FeedDescription_s0061_c350* Copy(FeedDescription_s0061_c350* first, FeedDescription_s0061_c350* last, FeedDescription_s0061_c350* dest);              // 0x60ee50
+}
+}
+namespace SP {
+namespace Pollen {
+void UninitializedCopy(FeedDescription_s0061_c350** out, FeedDescription_s0061_c350* a, FeedDescription_s0061_c350* b, FeedDescription_s0061_c350* c, FeedDescription_s0061_c350* d);        // 0x619610
+}
+}
+namespace SP {
+namespace Pollen {
+static __forceinline void DestroyAndFree(FDVec* v) {
+  FeedDescription_s0061_c350* b = v->mpBegin;
+  FeedDescription_s0061_c350* e = v->mpEnd;
+  for (; b < e; ++b) b->~FeedDescription_s0061_c350();
+  void* p = v->mpBegin;
+  if (p && ((int*)p)[-1]) operator_delete_arr(p);
+}
+}
+}
+namespace SP {
+namespace Pollen {
+class cAssetMetadata_s0061_c350 { public:
   cAssetMetadata_s0061_c350();                                                    // 0x550450
   virtual void AddRef();
   virtual void Release();
@@ -3037,6 +3176,28 @@ class cITransaction_s0061_d240 : public EA::RefCountVTemplate_s0061_d240<int> {
 }
 namespace SP {
 namespace Pollen {
+struct IRefObject {
+  virtual int slot0();    // +0
+  virtual int AddRef();   // +4
+  virtual int Release();  // +8
+};
+}
+}
+namespace SP {
+namespace Pollen {
+struct RefObject {
+  IRefObject* mpObject;
+  RefObject(IRefObject* p);
+};
+}
+}
+namespace SP {
+namespace Pollen {
+int SubHelper(int a, int b, int c, int d);  // 0x0093abd0
+}
+}
+namespace SP {
+namespace Pollen {
 class cHandshakeTransaction_s0061_d240 : public cITransaction_s0061_d240 {
  public:
   uint8_t pad[0x70 - 0x8];
@@ -3060,6 +3221,51 @@ bool EditFeedConstructRequest(void* self, void* ppRequest);
 }
 }
 // ---- items of slice s0061d240 end
+
+// @ 0x00615d30
+cAssetUploadTransaction::cAssetUploadTransaction(cAssetMetadata_s0061_4f20* m, cAssetDirectory_s0061_4f20* dir, bool a, bool b, unsigned n)
+: mKey(), mpAssetDir(dir), mnNextAssetID((u64)-1)
+{
+    mbA = a;
+    mbB = b;
+    mpAssetMetadata = m;
+    mnRetries = n;
+    if (mpAssetMetadata) {
+        mKey = *mpAssetMetadata->GetKey();
+        mpAssetMetadata->AddRef();
+    }
+}
+
+// @ 0x00615db0
+void cModelUploadTransaction_s0061_4f20::OnFailure()
+{
+    int a = mpAssetMetadata->Fn5507e0(0);
+    int b = mpAssetMetadata->Fn5508c0(0, a);
+    int c = mpAssetMetadata->Fn414e10(b);
+    mpAssetMetadata->Fn551240(&mKey, c);
+    cAssetMetadata_s0061_4f20* m = mpAssetMetadata;
+    cAssetMetadata_s0061_4f20* x = m ? (cAssetMetadata_s0061_4f20*)m->Cast(0x2269ed1) : 0;
+    void* db = GetManager2()->FindDatabase((ResourceKey*)((char*)x + 8));
+    GetManager2()->WriteResource(x, 0, db, 0, 0);
+    Fn6ac0a0(10, x);
+    Fn6ad010(x);
+    GetImportExport(mpAssetMetadata->GetKey())->UpdateExportThumb();
+}
+
+// @ 0x00615e50
+cModelUploadTransaction_s0061_4f20::cModelUploadTransaction_s0061_4f20(cAssetMetadata_s0061_4f20* m, cAssetDirectory_s0061_4f20* dir, bool a, bool b, unsigned n)
+: mKey(), mpAssetDir(dir), mnNextAssetID((u64)-1)
+{
+    mbA = a;
+    mbB = b;
+    mpAssetMetadata = m;
+    mnRetries = n;
+    mbDone = false;
+    if (mpAssetMetadata) {
+        mKey = *mpAssetMetadata->GetKey();
+        mpAssetMetadata->AddRef();
+    }
+}
 
 // @ 0x00615ed0
 bool cModelUploadTransaction_s0061_4f20::HandleResult(int err, cHttpResult* r, cTransactionQueue_s0061_4f20* q)
@@ -3151,10 +3357,36 @@ cTripleObj* cTripleObj::Init()
     return this;
 }
 
+// @ 0x006161c0
+cTripleObj* cTripleObj::Destroy(unsigned flags)
+{
+    v0 = kVtbl13fc4d4;
+    v4 = kVtbl13fc4d0;
+    v8 = kVtbl13fc4cc;
+    _ReadWriteBarrier();
+    if (m14) m14->sub.ReleaseSub();
+    if (m10) ((ReleasableIface*)m10)->ReleaseRef();
+    v8 = kVtbl13ef094;
+    v0 = kVtbl13eb938;
+    if (flags & 1) EASTL_free(this);
+    return this;
+}
+
 // @ 0x00616220
 bool cTimeGreater::operator()(unsigned a, unsigned b) const
 {
     return mpOwner->mpTable[a].mTime > mpOwner->mpTable[b].mTime;
+}
+
+// @ 0x00616260
+cSmallA* cSmallA::Init(int a, int b, bool c)
+{
+    mA = a;
+    mnRef = 0;
+    vtbl = kVtbl13fc4e4;
+    mB = b;
+    mC = c;
+    return this;
 }
 
 // @ 0x006162a0
@@ -3167,6 +3399,16 @@ bool cHandlerStub::HandleResult(int err, cHttpResult* r, void* unused)
     bool result = false;
     if (err == 0) result = true;
     return result;
+}
+
+// @ 0x006162d0
+cSmallB* cSmallB::Init(int a, int b)
+{
+    mnRef = 0;
+    vtbl = kVtbl13fc508;
+    mA = a;
+    mB = b;
+    return this;
 }
 
 // @ 0x00616300
@@ -3310,6 +3552,18 @@ bool cTxG::HandleResult(int err, cHttpResult_s0061_6360* r, void* unused)
     if (b)
         GetPollinatorLite()->Notify(0x3cf0359, mp8);
     return b;
+}
+
+// @ 0x00616660
+cTxH* cTxH::Init(IAddRef1* p, int a, int b)
+{
+    mnRef = 0;
+    vtbl = kVtbl13fc598;
+    mp8 = p;
+    if (p) p->AddRef1();
+    m10 = a;
+    m14 = b;
+    return this;
 }
 
 // @ 0x006166b0
@@ -4664,6 +4918,79 @@ bool cAssetFeedTransaction::HandleResult(int code, void* result, Deque* queue)
 }
 }}  // namespace SP::Pollen
 
+// @ 0x0061c570
+namespace SP { namespace Pollen {
+cFeedTransactionBase_s0061_c350::cFeedTransactionBase_s0061_c350(uint32_t type, const FixedPtrVector_s0061_c350& assets)
+: mpFeed(0), mFeedType(type), mnIntParam(0), mnCount(0xffffffff), mUnk18(0) {
+  mAssets = assets;
+  mFlag = 0;
+}
+}}  // namespace SP::Pollen
+
+// @ 0x0061c5e0
+namespace SP { namespace Pollen {
+cGetAssetFeedTransaction_s0061_c350::cGetAssetFeedTransaction_s0061_c350(const FixedPtrVector_s0061_c350& assets)
+: cFeedTransactionBase_s0061_c350(4, assets) {
+  mFlag = 1;
+}
+}}  // namespace SP::Pollen
+
+// @ 0x0061c610
+namespace SP { namespace Pollen {
+void FDVec::AssignBackward(FeedDescription_s0061_c350* last, FeedDescription_s0061_c350* first, int)
+{
+  unsigned n = (unsigned)(last - first);
+  if (n > (unsigned)(mpCapacity - mpBegin)) {
+    FeedDescription_s0061_c350* nb = AllocCopyBackward(n, last, first);
+    DestroyAndFree(this);
+    mpBegin = nb;
+    mpEnd = nb + n;
+    mpCapacity = nb + n;
+    return;
+  }
+  unsigned sz = (unsigned)(mpEnd - mpBegin);
+  if (n <= sz) {
+    FeedDescription_s0061_c350* ne = CopyBackward(last, first, mpBegin);
+    DestructRange(ne, mpEnd);
+    mpEnd = ne;
+    return;
+  }
+  FeedDescription_s0061_c350* mid = last - sz;
+  CopyBackward(last, mid, mpBegin);
+  FeedDescription_s0061_c350* res;
+  UninitializedCopyBackward(&res, mid, first, mpEnd, first);
+  mpEnd = res;
+}
+}}  // namespace SP::Pollen
+
+// @ 0x0061c760
+namespace SP { namespace Pollen {
+void FDVec::Assign(FeedDescription_s0061_c350* first, FeedDescription_s0061_c350* last, int)
+{
+  unsigned n = (unsigned)(last - first);
+  if (n > (unsigned)(mpCapacity - mpBegin)) {
+    FeedDescription_s0061_c350* nb = AllocCopy(n, first, last);
+    DestroyAndFree(this);
+    mpEnd = nb + n;
+    mpCapacity = nb + n;
+    mpBegin = nb;
+    return;
+  }
+  unsigned sz = (unsigned)(mpEnd - mpBegin);
+  if (n <= sz) {
+    FeedDescription_s0061_c350* ne = Copy(first, last, mpBegin);
+    DestructRange(ne, mpEnd);
+    mpEnd = ne;
+    return;
+  }
+  FeedDescription_s0061_c350* mid = first + sz;
+  Copy(first, mid, mpBegin);
+  FeedDescription_s0061_c350* res;
+  UninitializedCopy(&res, mid, last, mpEnd, last);
+  mpEnd = res;
+}
+}}  // namespace SP::Pollen
+
 // @ 0x0061c880
 namespace SP { namespace Pollen {
 unsigned RequestAssetsFromFeed(void* feed, unsigned maxCount, Deque* queue, char flag)
@@ -4904,5 +5231,22 @@ bool cHandshakeTransaction_s0061_d240::HandleResult(int code, void* result, void
   (void)result;
   (void)queue;
   return false;
+}
+}}  // namespace SP::Pollen
+
+// @ 0x0061dea0
+namespace SP { namespace Pollen {
+int PollenWrapper(int a, int b)
+{
+  SubHelper(a, b, -1, 0);
+  return a;
+}
+}}  // namespace SP::Pollen
+
+// @ 0x0061df40
+namespace SP { namespace Pollen {
+RefObject::RefObject(IRefObject* p)
+: mpObject(p) {
+  if (p) p->AddRef();
 }
 }}  // namespace SP::Pollen

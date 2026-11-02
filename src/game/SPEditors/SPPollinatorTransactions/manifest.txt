@@ -1,7 +1,10 @@
 # source  symbol  va  flags
 ../src/game/SPEditors/SPPollinatorTransactions.cpp  ?Init@cTripleObj@@QAEPAU1@XZ  00616160  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/SPEditors/SPPollinatorTransactions.cpp  ?Destroy@cTripleObj@@QAEPAU1@I@Z  006161c0  /O2 /MD /Gy /TP /Isrc/game/include
 ../src/game/SPEditors/SPPollinatorTransactions.cpp  ??RcTimeGreater@@QBE_NII@Z  00616220  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/SPEditors/SPPollinatorTransactions.cpp  ?Init@cSmallA@@QAEPAU1@HH_N@Z  00616260  /O2 /MD /Gy /TP /Isrc/game/include
 ../src/game/SPEditors/SPPollinatorTransactions.cpp  ?HandleResult@cHandlerStub@@QAE_NHPAUcHttpResult@@PAX@Z  006162a0  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/SPEditors/SPPollinatorTransactions.cpp  ?Init@cSmallB@@QAEPAU1@HH@Z  006162d0  /O2 /MD /Gy /TP /Isrc/game/include
 ../src/game/SPEditors/SPPollinatorTransactions.cpp  ?Init@cSmallC@@QAEPAU1@PBUsTriple@@PAHH@Z  00616300  /O2 /MD /Gy /TP /Isrc/game/include
 ../src/game/SPEditors/SPPollinatorTransactions.cpp  ?Dtor@cTxC@@QAEXXZ  00616360  /O2 /MD /Gy /TP /Isrc/game/include
 ../src/game/SPEditors/SPPollinatorTransactions.cpp  ?Init@cTxD@@QAEPAU1@UResourceKey_s0061_6360@@PAUIAddRef@@PAURCObj@@I_N@Z  006163e0  /O2 /MD /Gy /TP /Isrc/game/include
@@ -9,6 +12,7 @@
 ../src/game/SPEditors/SPPollinatorTransactions.cpp  ?Dtor@cTxE@@QAEXXZ  00616500  /O2 /MD /Gy /TP /Isrc/game/include
 ../src/game/SPEditors/SPPollinatorTransactions.cpp  ?HandleResult@cTxF@@QAE_NHPAX0@Z  00616580  /O2 /MD /Gy /TP /Isrc/game/include
 ../src/game/SPEditors/SPPollinatorTransactions.cpp  ?HandleResult@cTxG@@QAE_NHPAUcHttpResult_s0061_6360@@PAX@Z  00616610  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/SPEditors/SPPollinatorTransactions.cpp  ?Init@cTxH@@QAEPAU1@PAUIAddRef1@@HH@Z  00616660  /O2 /MD /Gy /TP /Isrc/game/include
 ../src/game/SPEditors/SPPollinatorTransactions.cpp  ?HandleResult@cTxI@@QAE_NHPAUcHttpResult_s0061_6360@@PAX@Z  006166b0  /O2 /MD /Gy /TP /Isrc/game/include
 ../src/game/SPEditors/SPPollinatorTransactions.cpp  ?Init@cTxJ@@QAEPAU1@PAUIAddRef1@@0@Z  006166e0  /O2 /MD /Gy /TP /Isrc/game/include
 ../src/game/SPEditors/SPPollinatorTransactions.cpp  ?HandleResult@cTxK@@QAE_NHPAUcHttpResult2@@PAX@Z  00616730  /O2 /MD /Gy /TP /Isrc/game/include
@@ -39,5 +43,8 @@
 ../src/game/SPEditors/SPPollinatorTransactions.cpp  ??0cYouTubeAuthenticationTransaction_s0061_9150@Pollen@SP@@QAE@PBD00_N@Z  00619300  /O2 /MD /Gy /TP /Isrc/game/include
 ../src/game/SPEditors/SPPollinatorTransactions.cpp  ??0cYouTubeVideoUploadTransaction_s0061_9150@Pollen@SP@@QAE@PBD0000UKey@12@0@Z  00619390  /O2 /MD /Gy /TP /Isrc/game/include
 ../src/game/SPEditors/SPPollinatorTransactions.cpp  ??0cYouTubeVideoURLTransaction_s0061_9150@Pollen@SP@@QAE@PBD000@Z  00619470  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/SPEditors/SPPollinatorTransactions.cpp  ??0cGetAssetFeedTransaction_s0061_c350@Pollen@SP@@QAE@ABUFixedPtrVector_s0061_c350@12@@Z  0061c5e0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
 ../src/game/SPEditors/SPPollinatorTransactions.cpp  ?HandleResult@cEditFeedTransaction_s0061_c350@Pollen@SP@@QAE_NHPAXPAUDeque@23@@Z  0061d0d0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
 ../src/game/SPEditors/SPPollinatorTransactions.cpp  ??0cFeedStateTransaction@Pollen@SP@@QAE@XZ  0061d1c0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPEditors/SPPollinatorTransactions.cpp  ?PollenWrapper@Pollen@SP@@YAHHH@Z  0061dea0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPEditors/SPPollinatorTransactions.cpp  ??0RefObject@Pollen@SP@@QAE@PAUIRefObject@12@@Z  0061df40  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include

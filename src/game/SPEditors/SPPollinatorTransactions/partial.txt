@@ -9,7 +9,7 @@
 0061b9a0  na  Pollen request helper (534 bytes): skeleton; not identified
 0061bcf0  na  WritePropertyListAndPNG: skeleton; property-list serialization omitted
 0061c1c0  na  DoAllocate + uninitialized_copy of 0x70-byte records: skeleton; copy call omitted
-0061d240  na  asset helper (288 bytes): skeleton; not identified
-0061d380  na  cGetAssetFeedTransaction::ConstructRequest: skeleton; feed GET request omitted
-0061d960  na  cEditFeedTransaction::ConstructRequest: skeleton; edit-feed POST body omitted
-0061de00  na  cHandshakeTransaction::HandleResult: skeleton; result parsing omitted
+0061d240  na  asset helper (288 bytes): skeleton; not identified flags: /O2 /MD /Gy /TP /arch:SSE
+0061d380  na  cGetAssetFeedTransaction::ConstructRequest: skeleton; feed GET request omitted flags: /O2 /MD /Gy /TP /arch:SSE
+0061d960  na  cEditFeedTransaction::ConstructRequest: skeleton; edit-feed POST body omitted flags: /O2 /MD /Gy /TP /arch:SSE
+0061de00  na  cHandshakeTransaction::HandleResult: skeleton; result parsing omitted flags: /O2 /MD /Gy /TP /arch:SSE
