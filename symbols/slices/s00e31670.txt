@@ -1,3 +1,8 @@
+00e31670 ?F0e31670@cSPUISocialRainbow@@QAEXXZ  # cSPUISocialRainbow::F0e31670 migrated from s00e31670 (verbatim, slice spelling)
+00e319d0 ?SetCurrent@cSPUISocialRainbow@@QAEXHM@Z  # cSPUISocialRainbow::SetCurrent migrated from s00e31670 (verbatim, slice spelling)
+00e31a30 ?Ratio@cSPUISocialRainbow@@QAENH@Z  # cSPUISocialRainbow::Ratio migrated from s00e31670 (verbatim, slice spelling)
+00e31b30 ?F0e31b30@@YAXPAXPAIPAUVariant@@@Z  # F0e31b30 migrated from s00e31670 (verbatim, slice spelling)
+00e31b70 ?F0e31b70@@YA_NPAXPAIH@Z  # F0e31b70 migrated from s00e31670 (verbatim, slice spelling)
 00e31c90 ?Fwd@cSPUISocialRainbow@@QAEXXZ  # cSPUISocialRainbow::Fwd migrated from s00e31670 (verbatim, slice spelling)
 00e31cb0 ?Mode@cSPUISocialRainbow@@QAEXH@Z  # cSPUISocialRainbow::Mode migrated from s00e31670 (verbatim, slice spelling)
 00e320c0 ?F0e320c0@@YAXPAXPAI11M@Z  # F0e320c0 migrated from s00e31670 (verbatim, slice spelling)

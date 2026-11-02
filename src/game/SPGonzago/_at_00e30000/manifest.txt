@@ -1,0 +1,17 @@
+# source  symbol  va  flags
+../src/game/SPGonzago/_at_00e30000.cpp  ?SetCurrent@cSPUISocialRainbow@@QAEXHM@Z  00e319d0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00e30000.cpp  ?Ratio@cSPUISocialRainbow@@QAENH@Z  00e31a30  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00e30000.cpp  ?F0e31b30@@YAXPAXPAIPAUVariant@@@Z  00e31b30  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00e30000.cpp  ?F0e31b70@@YA_NPAXPAIH@Z  00e31b70  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00e30000.cpp  ?SetSporepediaLargeAssetValue@@YGXPAX@Z  00e33d40  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00e30000.cpp  ?AddConfiguredModelKey@cSPUISwatchView@@QAEXXZ  00e33d60  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00e30000.cpp  ?ShutdownView@cSPUISwatchView@@QAEXXZ  00e33d70  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00e30000.cpp  ?Destroy@cUISporepediaPlanetLargeAssetView@@QAEXXZ  00e33f30  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00e30000.cpp  ??0cSPUISwatchView@@QAE@XZ  00e34220  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00e30000.cpp  ?InitLayout@cAssetSwatchWidget@@QAEXXZ  00e34470  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00e30000.cpp  ?RefreshRecord@cAssetView@@QAEXI@Z  00e34da0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00e30000.cpp  ?SetTool@cToolButton@@QAE_NII@Z  00e34eb0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00e30000.cpp  ?ShowRelationship@cAssetView@@QAEXHH_N@Z  00e35290  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00e30000.cpp  ?Shutdown@cUITimedTooltip@@QAEXXZ  00e36500  /O2 /Ob2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_00e30000.cpp  ?Hide@cUITimedTooltip@@QAEXXZ  00e36620  /O2 /Ob2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_00e30000.cpp  ?ResetState@cUITimedTooltip@@QAEXXZ  00e36de0  /O2 /Ob2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

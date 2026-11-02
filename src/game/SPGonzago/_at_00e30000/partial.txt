@@ -1,0 +1,3 @@
+# va  diff-bytes  reason (complete, not byte-exact)
+00e30b60  hashtable find-or-add: miss path builds the value temp (key, node, 0, one stray byte, 0) before insert(&it,&val,0); the stray +0x10 byte is not reproduced, equiv FAIL on the pool node at 0x484e0014; 124 vs 160 bytes flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
+00e31670  854  rainbow frame update (large): stub only; 1 vs 854 B - the frame-update body is not reconstructed flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
