@@ -1,0 +1,3 @@
+# va  diff-bytes  reason
+008c3580 333 /O2 /MD /Gy /TP; difftest UNSUPPORTED (0/400 valid: ESI-context object parameter and jump-through imports): ours 433 vs 1054 bytes, loop scaffolding and the ramp/palette tables are reconstructed but the object comes from ESI in the original flags: /O2 /MD /Gy /TP
+008c39a0 454 /O2 /MD /Gy /TP; difftest FAIL (5/5 valid inputs mismatch on execution; 25.8% coverage): ours 499 vs 1308 bytes, the original takes its object pointer from the stack but keeps an internal static table pointer in a register, and our reconstruction faults in the palette lookup flags: /O2 /MD /Gy /TP

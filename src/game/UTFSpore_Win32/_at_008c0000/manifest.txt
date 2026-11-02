@@ -1,0 +1,2 @@
+# source  symbol  va  flags
+../src/game/UTFSpore_Win32/_at_008c0000.cpp  _Delete_T2KMemHeader  008cc020  /O2 /MD /Gy /TP /GS- /arch:SSE /Isrc/game/include
