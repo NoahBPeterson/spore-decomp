@@ -1,0 +1,56 @@
+# va  diff-bytes  reason
+00a59a10 51 UNSUP  pdint class registration flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00a59ab0 11 UNSUP  float constructor (variadic creator) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00a59b00 10 UNSUP  float constructor (explicit creator) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00a59b50 67 ART    float handler; FAIL is a live-register/callee artifact flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00a59bb0 52 UNSUP  pdfloat class registration flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00a59c50 10 UNSUP  symbol constructor (pd_new + outlet_new + symbolinlet_new) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00a59cc0 26 ART    symbol/anything handler; calls outlet_symbol flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00a59cf0 38 UNSUP  pdsymbol class registration flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00a59dc0 95 UNSUP  bang class registration (7-arg class_new) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00a59f00 7 UNSUP  send constructor flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00a59f30 85 UNSUP  send class registration flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00a5a050 12 UNSUP  forward constructor (symbolinlet_new failure path) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00a5a0a0 65 UNSUP  forward class registration flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00a5a140 9 ART    receive symbol handler; calls outlet_symbol flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00a5a160 33 UNSUP  receive constructor (pd_bind + outlet_new) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00a5a1b0 94 UNSUP  receive class registration flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00a5a280 25 PASS   select-1 float handler flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00a5a2f0 11 ART    select-1 symbol handler; calls outlet_symbol flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00a5a330 61 PASS   select-2 float handler (table scan + fan-out) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00a5a410 286 UNSUP  select/select2 constructor; largest function in the slice flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00a5a590 60 select_setup: class_new 6-arg + outlet_new/addmethod call-scheduling shape (and card size over-read) flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+00a5a730 275 route_list: per-element key/symbol dispatch + outlet fan-out; loops reshaped to the original `while (n-- != 0)` form, equiv PASS 351 inputs flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+00a5a980 184 route_new: argument-parse loop with list-of-args expansion flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+00a5aae0 253 pack_new: object init + argument-parse loop shape flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+00a5ac40 22 pack_bang: memcpy thunk inlining argument/order flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+00a5b190 202 trigger_new: object init + argument-parse loop shape flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+00a5b330 68 trigger_list: per-element dispatch/outlet chain shape (outlet hoisted; remaining diff is the type==2/else tail ordering) flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+00a5b550 125 complete trigger_setup (gensym "trigger"/"t", class_new_t2 sz 0x30 args 9,0, class_addcreator "t", then list/bang/float/symbol/anything bindings, `&`-chain return); only the boolean `and` chain scheduling differs [equiv UNSUPPORTED: 0/400 valid, pd_new faults reading the unset class global 0x1675638] flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+00a5b620 28 complete spigot_new (pd_new, floatinlet to +0x28, outlet_new storing to +0x2c, float store); register/movss scheduling differs [equiv UNSUPPORTED: 0/400 valid, faults on the unset class global] flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+00a5b6a0 10 complete spigot_float (guarded outlet_float); diff is the inline outlet-nesting counter (gOutletCount++ / <1000 / --) which the original emits as a call to a shared wrapper [equiv PASS: 381/400 valid, 100.0% coverage] flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+00a5b7b0 88 complete spigot_setup (class_new_t2 sz 0x30 args 5,0 + the five method bindings); `and bl, al` accumulation scheduling differs [equiv UNSUPPORTED: 0/400 valid, faults on the unset class global] flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+00a5b850 77 complete gate_new (clamp n to >=1, clamp init into [0,n], getbytes n*4, per-outlet outlet_new loop, floatinlet); loop and clamp codegen differs [equiv UNSUPPORTED: 0/400 valid, faults on the unset class global] flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+00a5b940 21 complete gate_bang (cvttss2si of +0x30, clamp to +0x2c, tail jmp outlet_bang); the float->int conversion placement differs [equiv PASS: 370/400 valid, 100.0% coverage] flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+00a5b970 26 complete gate_float; same clamp shape as gate_bang plus the outlet-nesting counter [equiv PASS: 384/400 valid, 100.0% coverage] flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+00a5b9e0 31 complete gate_symbol [equiv PASS: 392/400 valid, 100.0% coverage] flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+00a5ba20 41 complete gate_list (forwards the t_symbol by value plus argc/argv) [equiv PASS: 384/400 valid, 100.0% coverage] flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+00a5ba60 41 complete gate_anything [equiv PASS: 366/400 valid, 100.0% coverage] flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+00a5baa0 88 complete gate_setup (class_new_t3 sz 0x34 args 5,5,0 + bindings) [equiv UNSUPPORTED: 0/400 valid, faults on the unset class global] flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+00a5bb50 119 complete switch_new (clamp, getbytes n*0x30, outlet_new once, per-spigot init at 0x30 stride with the spigot class pointer / shared outlet / on-flag, then two inlet_new); the spigot init loop and the two-symbol inlet argument setups differ [equiv UNSUPPORTED: 0/400 valid, faults on the unset class global] flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+00a5bcf0 27 complete switch_setup (class_new_t3 sz 0x34 flags 8 args 5,5,0, float method) [equiv UNSUPPORTED: 0/400 valid, faults on the unset class global] flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+00a5bd50 35 complete moses_new (floatinlet to +0x2c, two outlet_new, store +0x28 then the float); movss/lea scheduling differs [equiv UNSUPPORTED: 0/400 valid, faults on the unset class global] flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+00a5bdb0 30 complete moses_float (compare the stored +0x2c against the input, send out +0x28 or the object's own first outlet); the comparison branch layout and the outlet-nesting counter differ [equiv PASS: 357/400 valid, 100.0% coverage] flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+00a5be50 23 complete moses_setup (class_new_t2 sz 0x30 args 5,0, float method) [equiv UNSUPPORTED: 0/400 valid, faults on the unset class global] flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+00a5bfb0 68 complete until_setup (class_new_t1 sz 0x30, bang/float methods, then the "bang2" method via class_addmethod1) [equiv UNSUPPORTED: 0/400 valid, faults on the unset class global] flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+00a5c040 32 complete makefilename_new (gensym "file.%d" when no format arg, outlet_new, store the symbol at +0x28) [equiv UNSUPPORTED: 0/400 valid, faults on the unset class global] flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+00a5c0b0 33 complete makefilename_float (1000-byte buffer sprintf through the stored format, gensym, outlet_symbol) [equiv UNSUPPORTED: 0/400 valid, the sprintf import is not stubbable] flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+00a5c100 33 complete makefilename_symbol (sprintf with the symbol name, gensym, outlet_symbol) [equiv UNSUPPORTED: 0/400 valid, the sprintf import is not stubbable] flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+00a5c150 70 complete makefilename_setup (class_new_t2 sz 0x30 args 6,0, float/symbol methods, the "set" method via class_addmethod2) [equiv UNSUPPORTED: 0/400 valid, faults on the unset class global] flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+00a5c1f0 28 complete swap_new (store float to +0x30 and 0 to +0x2c, two outlet_new, store +0x28, floatinlet to +0x30); movss/lea scheduling differs [equiv UNSUPPORTED: 0/400 valid, faults on the unset class global] flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+00a5c260 31 complete swap_bang (send the +0x2c value out +0x28 then the +0x30 value out the object's first outlet); both sends inline the outlet-nesting counter which the original emits as a shared wrapper call [equiv PASS: 280/400 valid, 100.0% coverage] flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+00a5c300 37 complete swap_float (store to +0x2c then tail-call swap_bang); the input-to-+0x2c store lands in ecx in our build, the original leaves ecx untouched [equiv FAIL: 5/23 valid, first difference is ecx only - a pure register artifact, all memory results match] flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+00a5c320 66 complete swap_setup (class_new_t2 sz 0x34 args 5,0, class_addcreator "fswap", bang/float methods) [equiv UNSUPPORTED: 0/400 valid, faults on the unset class global] flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+00a5c3c0 14 complete change_new (store float to +0x28 then outlet_new) [equiv UNSUPPORTED: 0/400 valid, faults on the unset class global] flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+00a5c400 21 complete change_float (outlet-nesting guard via gOutletCount >= 999, then outlet_float of the stored value) [equiv PASS: 353/400 valid, 100.0% coverage] flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+00a5c6a0 38 class pointer load scheduled after the two key loads (register pressure in the 3-arg tail call) flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
