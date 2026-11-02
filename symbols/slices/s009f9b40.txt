@@ -1,4 +1,5 @@
 009f9c60 ?animLayoutScale@@YAMPAUAnimLayout@@@Z  # animLayoutScale migrated from s009f9b40 (verbatim, slice spelling)
+009f9ce0 ?animNameAllowed@@YAHPAUAnimNameHolder@@@Z  # animNameAllowed migrated from s009f9b40 (verbatim, slice spelling)
 009f9dc0 ?animLayoutSyncMat@@YAXPAXPAUAnimLayout@@@Z  # animLayoutSyncMat migrated from s009f9b40 (verbatim, slice spelling)
 009fa770 ?animLayoutEvaluateAll@@YAXPAUAnimLayout@@0@Z  # animLayoutEvaluateAll migrated from s009f9b40 (verbatim, slice spelling)
 009fa7d0 ?animLayoutResetOne@@YAXPAUAnimLayout@@0@Z  # animLayoutResetOne migrated from s009f9b40 (verbatim, slice spelling)
