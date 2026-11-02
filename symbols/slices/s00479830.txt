@@ -1,0 +1,5 @@
+00479830 ?Insert8@V8@@QAEXPAUP8@@IABU2@@Z  # V8::Insert8 migrated from s00479830 (verbatim, slice spelling)
+00479c00 ?Shift8Out@@YAPAPAUP8@@PAPAU1@PAU1@11@Z  # Shift8Out migrated from s00479830 (verbatim, slice spelling)
+00479c80 ?Insert8b@@YAXAAPAUP8@@00PAU1@IABU1@@Z  # Insert8b migrated from s00479830 (verbatim, slice spelling)
+0047a040 ?Insert16@@YAXAAPAUP16@@00PAU1@IABU1@@Z  # Insert16 migrated from s00479830 (verbatim, slice spelling)
+0047a500 ?UninitializedCopy_Elem16@@YA?AUElem16Iter_s0047_9830@@U1@00Ufalse_type2@@@Z  # UninitializedCopy_Elem16 migrated from s00479830 (verbatim, slice spelling)

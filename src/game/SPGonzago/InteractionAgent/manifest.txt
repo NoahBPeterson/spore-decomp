@@ -1,2 +1,17 @@
 # source  symbol  va  flags
 ../src/game/SPGonzago/InteractionAgent.cpp  ?VectorConstructorIterator@@  00401930  /Od /Ob1 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/InteractionAgent.cpp  ?resize@?$vector@UPair8@@$03@@QAEXI@Z  00473dc0  /Od /Ob1 /MD /Gy /TP /Isrc/game/include
+../src/game/SPGonzago/InteractionAgent.cpp  ??0?$vector_s0047_3e40@UElem16@@$03@@QAE@ABU0@@Z  004742e0  /Od /Ob1 /MD /Gy /TP /Isrc/game/include
+../src/game/SPGonzago/InteractionAgent.cpp  ?reserve@?$vector_s0047_3e40@UElem16@@$03@@QAEXI@Z  004744d0  /Od /Ob1 /MD /Gy /TP /Isrc/game/include
+../src/game/SPGonzago/InteractionAgent.cpp  ?resize@Str8@@QAEXI@Z  00478930  /Od /Ob1 /MD /Gy /TP /Isrc/game/include
+../src/game/SPGonzago/InteractionAgent.cpp  ??4RefPtr@@QAEAAU0@PAUCounted_s0047_8930@@@Z  00478db0  /Od /Ob1 /MD /Gy /TP /Isrc/game/include
+../src/game/SPGonzago/InteractionAgent.cpp  ?DoAssignFromIterator@TransformVec@@QAEXPBUcSPTransform_s0047_b480@@0URandomAccessTag@@@Z  0047b480  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/InteractionAgent.cpp  ?QuickSortImpl@@YAXPAUSortKey@@0HUKeyLess@@@Z  0047b6d0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/InteractionAgent.cpp  ??0Obj8C@@QAE@ABU0@@Z  0047b950  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/InteractionAgent.cpp  ??0Obj29C@@QAE@ABU0@@Z  0047bbf0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/InteractionAgent.cpp  ?Median@@YAABUSortKey@@ABU1@00UKeyLess@@@Z  0047c2c0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/InteractionAgent.cpp  ?get_partition@@YAPAUFloatKeyPair@@PAU1@0U1@UFloatKeyLess@@@Z  0047c400  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/InteractionAgent.cpp  ?partial_sort@@YAXPAUFloatKeyPair@@00UFloatKeyLess@@@Z  0047c4e0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/InteractionAgent.cpp  ?reserve@string@@QAEXI@Z  0047c600  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/InteractionAgent.cpp  ?set_capacity@string@@QAEXI@Z  0047d240  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/InteractionAgent.cpp  ?RangeInitialize@string@@QAEXPBD0@Z  0047d390  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

@@ -1,0 +1,5 @@
+0047a5a0 ?Insert@VM44@@QAEXPAUMatrix44@@IABU2@@Z  # VM44::Insert migrated from s0047a5a0 (verbatim, slice spelling)
+0047a9a0 ?CopyM44Range@@YAPAUMatrix44@@PAU1@00@Z  # CopyM44Range migrated from s0047a5a0 (verbatim, slice spelling)
+0047aa40 ?Insert@V16@@QAEXPAUP16@@IABU2@@Z  # V16::Insert migrated from s0047a5a0 (verbatim, slice spelling)
+0047ae60 ?DoInsertValues@Vec32_s0047_a5a0@@QAEXPAUElem32@@IABU2@@Z  # Vec32_s0047_a5a0::DoInsertValues migrated from s0047a5a0 (verbatim, slice spelling)
+0047b3d0 ?Copy20Range@@YAPAUElem20@@PAU1@00@Z  # Copy20Range migrated from s0047a5a0 (verbatim, slice spelling)

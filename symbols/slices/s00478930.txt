@@ -1,0 +1,6 @@
+00478930 ?resize@Str8@@QAEXI@Z  # Str8::resize migrated from s00478930 (verbatim, slice spelling)
+00478990 ?IntVectorInsert@IntVec@@QAEXPAHIABH@Z  # IntVec::IntVectorInsert migrated from s00478930 (verbatim, slice spelling)
+00478db0 ??4RefPtr@@QAEAAU0@PAUCounted_s0047_8930@@@Z  # RefPtr::operator= migrated from s00478930 (verbatim, slice spelling)
+00478e00 ?Elem29Insert@Vec29c@@QAEXPAUElem29c@@IABU2@@Z  # Vec29c::Elem29Insert migrated from s00478930 (verbatim, slice spelling)
+00479330 ?Elem12Insert@Vec12@@QAEXPAUE12_s0047_8930@@IABU2@@Z  # Vec12::Elem12Insert migrated from s00478930 (verbatim, slice spelling)
+004797a0 ?Shift12Out@@YAXPAPAUE12_s0047_8930@@PAU1@11@Z  # Shift12Out migrated from s00478930 (verbatim, slice spelling)

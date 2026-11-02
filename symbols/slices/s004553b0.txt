@@ -9,6 +9,6 @@
 00455c50  ClampDot                               # clamped dot product
 00455cc0  Dot3                                   # free helper: a . b
 00455cf0 ?InitFixed@FixedC@@QAEPAHPAX@Z  # FixedC::InitFixed migrated from s004553b0 (verbatim, slice spelling)
-00455d60  eastl::basic_string<char,eastl::allocator>::append
+00455d60 ?StringAppend@@YAPAHPAHPBD1@Z  # StringAppend migrated from s004553b0 (verbatim, slice spelling)
 00455f50  FindFirst                              # first matching element scan
 00455fa0  eastl::vector<...0x20-stride...>::insert

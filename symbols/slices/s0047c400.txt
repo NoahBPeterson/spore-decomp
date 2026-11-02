@@ -1,0 +1,5 @@
+0047c400 ?get_partition@@YAPAUFloatKeyPair@@PAU1@0U1@UFloatKeyLess@@@Z  # get_partition migrated from s0047c400 (verbatim, slice spelling)
+0047c4e0 ?partial_sort@@YAXPAUFloatKeyPair@@00UFloatKeyLess@@@Z  # partial_sort migrated from s0047c400 (verbatim, slice spelling)
+0047c600 ?reserve@string@@QAEXI@Z  # string::reserve migrated from s0047c400 (verbatim, slice spelling)
+0047d240 ?set_capacity@string@@QAEXI@Z  # string::set_capacity migrated from s0047c400 (verbatim, slice spelling)
+0047d390 ?RangeInitialize@string@@QAEXPBD0@Z  # string::RangeInitialize migrated from s0047c400 (verbatim, slice spelling)

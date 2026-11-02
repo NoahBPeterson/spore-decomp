@@ -2,6 +2,8 @@
 00473f30 ?push_back@?$vector_s0047_3e40@UPairFF@@$03@@QAEXABUPairFF@@@Z  # push_back migrated from s00473e40 (verbatim, slice spelling)
 00474170 ?reserve@?$vector_s0047_3e40@UElem8@@$01@@QAEXI@Z  # reserve migrated from s00473e40 (verbatim, slice spelling)
 00474260 ?push_back@?$vector_s0047_3e40@UElem8@@$03@@QAEXABUElem8@@@Z  # push_back migrated from s00473e40 (verbatim, slice spelling)
+004742e0 ??0?$vector_s0047_3e40@UElem16@@$03@@QAE@ABU0@@Z  # vector migrated from s00473e40 (verbatim, slice spelling)
+004744d0 ?reserve@?$vector_s0047_3e40@UElem16@@$03@@QAEXI@Z  # reserve migrated from s00473e40 (verbatim, slice spelling)
 00474600 ?push_back@?$vector_s0047_3e40@UElem16@@$03@@QAEXABUElem16@@@Z  # push_back migrated from s00473e40 (verbatim, slice spelling)
 004746c0 ?resize@?$vector_s0047_3e40@I$03@@QAEXIABI@Z  # resize migrated from s00473e40 (verbatim, slice spelling)
 004747c0 ?push_back@?$vector_s0047_3e40@UMatrix44@@$03@@QAEXABUMatrix44@@@Z  # push_back migrated from s00473e40 (verbatim, slice spelling)

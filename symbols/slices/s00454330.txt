@@ -1,2 +1,3 @@
 004544d0 ?find_or_insert@RbUIntMap2@@QAEPAIPBI@Z  # RbUIntMap2::find_or_insert migrated from s00454330 (verbatim, slice spelling)
 00454b10 ?VariantTypeTraits_Key_GetTPTR@@YIPAXPAUVariant@@@Z  # VariantTypeTraits_Key_GetTPTR migrated from s00454330 (verbatim, slice spelling)
+00454cb0 ?assign@BasicString@@QAEPAU1@PBD0@Z  # assign migrated from s00454330 (verbatim, slice spelling)

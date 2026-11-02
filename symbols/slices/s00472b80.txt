@@ -7,3 +7,4 @@
 004737f0 ?size@?$vector@UPod12@@$03@@QBEIXZ  # size migrated from s00472b80 (verbatim, slice spelling)
 00473890 vector::reserve  # vector<Pod12,4>::reserve (explicit instantiation)
 00473b00 ??4?$vector@UPair8@@$03@@QAEAAU0@ABU0@@Z  # operator= migrated from s00472b80 (verbatim, slice spelling)
+00473dc0 ?resize@?$vector@UPair8@@$03@@QAEXI@Z  # resize migrated from s00472b80 (verbatim, slice spelling)
