@@ -3,7 +3,7 @@
 008e68f0 ?SetStyle@Background@Layout@XHTML@EA@@QAEXAAVStyleState_s008e_6340@Style@34@@Z  # Background::SetStyle migrated from s008e6340 (verbatim, slice spelling)
 008e69b0 ?Fn8e69b0@Fn8e69b0Target@Layout@XHTML@EA@@QAEXPAVElement@DOM@34@IPAXPAV?$Point2DT@M@4@@Z  # Fn8e69b0Target::Fn8e69b0 migrated from s008e6340 (verbatim, slice spelling)
 008e6a20 ?DrawContent@Block_s008e_6340@Layout@XHTML@EA@@QAEXAAVRenderingContext@234@@Z  # Block_s008e_6340::DrawContent migrated from s008e6340 (verbatim, slice spelling)
-008e6b70 EA::XHTML::Layout::Block::PickContent  # hit-tests a point against a block then its children
-008e6c60 EA::XHTML::Layout::Block::PlaceControls  # offsets rects the element wants placed
-008e6d30 EA::XHTML::Layout::Block::Layout  # Block vtable slot +0x34; places block in a StackingContext, grows bounds
+008e6b70 ?PickContent@Block_s008e_6340@Layout@XHTML@EA@@QAE_NAAVPickingContext@234@PAX@Z  # Block_s008e_6340::PickContent migrated from s008e6340 (verbatim, slice spelling)
+008e6c60 ?PlaceControls@Block_s008e_6340@Layout@XHTML@EA@@QAEXAAV?$Point2DT@M@4@@Z  # Block_s008e_6340::PlaceControls migrated from s008e6340 (verbatim, slice spelling)
+008e6d30 ?Layout@Block_s008e_6340@0XHTML@EA@@UAEXAAVStackingContext_s008e_6340@023@AAVStyleState_s008e_6340@Style@23@@Z  # Block_s008e_6340::Layout migrated from s008e6340 (verbatim, slice spelling)
 008ec5e0 ?LoadImage@Page@Layout@XHTML@EA@@QAEXPAVImageRequester@234@PB_W@Z  # EA::XHTML::Layout::Page::LoadImage (callee of s008e6340, named from the dev publics; slice address comment)

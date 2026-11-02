@@ -1,10 +1,11 @@
-// src/game/UTFSpore_Win32/Block.cpp -- migrated from slice(s) s008e8af0, s008e7230 by tools/migrate/rewrite.py
+// src/game/UTFSpore_Win32/Block.cpp -- migrated from slice(s) s008e6340, s008e8af0, s008e7230 by tools/migrate/rewrite.py
 // Object file: UTFSpore_Win32/Block.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
 #include "game/types.h"
 #include "EA/Text/Typesetter.h"
 #include <math.h>
+#include "EA/XHTML/Layout/Page.h"
 
 // ---- items of slice s008e7230 begin (TODO(rewrite): local stubs, replace by canonical classes)
 namespace EA {
@@ -483,6 +484,473 @@ inline float Max(float a, float b) { return (a > b) ? a : b; }
 }
 }
 // ---- items of slice s008e8af0 end
+
+// ---- items of slice s008e6340 begin (TODO(rewrite): local stubs, replace by canonical classes)
+namespace EA {
+template <typename T>
+class RectT_s008e_6340 { public:
+    T mLeft, mTop, mRight, mBottom;
+    RectT_s008e_6340() {}
+    RectT_s008e_6340(T l, T t, T r, T b) : mLeft(l), mTop(t), mRight(r), mBottom(b) {}
+    RectT_s008e_6340(const RectT_s008e_6340& x) : mLeft(x.mLeft), mTop(x.mTop), mRight(x.mRight), mBottom(x.mBottom) {}
+    RectT_s008e_6340& operator=(const RectT_s008e_6340& x)
+    {
+        mLeft = x.mLeft; mTop = x.mTop; mRight = x.mRight; mBottom = x.mBottom;
+        return *this;
+    }
+    T Width() const { return mRight - mLeft; }
+    T Height() const { return mBottom - mTop; }
+};
+}
+namespace EA {
+template <typename T>
+class Point2DT { public:
+    T mX, mY;
+    Point2DT() {}
+    Point2DT(T x, T y) : mX(x), mY(y) {}
+};
+}
+namespace EA {
+namespace COM {
+class IUnknown32_s008e_6340 {
+public:
+    virtual void v00();                                      // +0x0
+    virtual void v04();                                      // +0x4
+    virtual void v08();                                      // +0x8
+    virtual IUnknown32_s008e_6340* AsInterface(uint32_t interfaceId);   // +0xc
+};  // namespace COM
+}
+}
+namespace EA {
+namespace XHTML {
+namespace Text {
+class Typesetter {
+public:
+    ~Typesetter();
+    uint32_t mData[0x530 / 4];
+};  // namespace Text
+}
+}
+}
+namespace EA {
+namespace XHTML {
+namespace Style {
+enum Units_s008e_6340 { kUnitsPixels_s008e_6340 = 1, kUnitsPercentage = 9, kUnitsAuto_s008e_6340 = 10 };
+}
+}
+}
+namespace EA {
+namespace XHTML {
+namespace Style {
+struct Length_s008e_6340 {
+    float mValue;   // +0
+    int mUnits;     // +4
+    float ToPixels(float reference, const FontMetrics& fm) const;   // 0x008f95c0
+};
+}
+}
+}
+namespace EA {
+namespace XHTML {
+namespace Style {
+class StyleState_s008e_6340 {
+public:
+    StyleState_s008e_6340* mpBase;                    // +0x0
+    uint32_t pad004[(0x2a0 - 0x4) / 4];
+    const wchar_t* mpBackgroundImage;      // +0x2a0
+    int mBackgroundRepeat;                 // +0x2a4
+    int mBackgroundAttachment;             // +0x2a8
+    Length_s008e_6340 mBackgroundPosX;                // +0x2ac
+    Length_s008e_6340 mBackgroundPosY;                // +0x2b4
+    uint32_t pad2bc[(0x374 - 0x2bc) / 4];
+    Length_s008e_6340 mBoxHeight;                     // +0x374  (units at +0x378)
+    uint32_t pad37c[(0x430 - 0x37c) / 4];
+    FontMetrics mFontMetrics;              // +0x430
+};
+}
+}
+}
+namespace EA {
+namespace XHTML {
+namespace DOM {
+class Element_s008e_6340 {
+public:
+    virtual void v00();                                    // +0x00
+    virtual void v04();                                    // +0x04
+    virtual void v08();                                    // +0x08
+    virtual void v0c();                                    // +0x0c
+    virtual void GetIntrinsicSize(SizeT<float>* pSize);    // +0x10
+    virtual bool v14();                                    // +0x14
+    virtual bool v18();                                    // +0x18
+    virtual void v1c();                                    // +0x1c
+    virtual void v20(RectT_s008e_6340<float>* pRect);                 // +0x20
+
+    int Type();                                            // 0x00fc7e50
+    Element_s008e_6340* Parent();                                     // 0x00ff0420
+    int Fn8e42d0();                                        // 0x008e42d0
+
+    char mPad[0x3c];                                       // +0x04..+0x3f
+    void* mpDocument;                                      // +0x40
+};  // namespace DOM
+}
+}
+}
+namespace EA {
+namespace XHTML {
+namespace Layout {
+class Page_s008e_6340;
+}
+}
+}
+namespace EA {
+namespace XHTML {
+namespace Layout {
+class Block_s008e_6340;
+}
+}
+}
+namespace EA {
+namespace XHTML {
+namespace Layout {
+class Item_s008e_6340;
+}
+}
+}
+namespace EA {
+namespace XHTML {
+namespace Layout {
+class ContainerItem_s008e_6340;
+}
+}
+}
+namespace EA {
+namespace XHTML {
+namespace Layout {
+class RenderingContext;
+}
+}
+}
+namespace EA {
+namespace XHTML {
+namespace Layout {
+class PickingContext;
+}
+}
+}
+namespace EA {
+namespace XHTML {
+namespace Layout {
+class StackingContext_s008e_6340;
+}
+}
+}
+namespace EA {
+namespace XHTML {
+namespace Layout {
+class SizingContext_s008e_6340;
+}
+}
+}
+namespace EA {
+namespace XHTML {
+namespace Layout {
+class ImageRequester {
+public:
+    virtual void r00();
+    void* mpNextLoading;    // +0x4
+    uint32_t mnJobId;       // +0x8
+};
+}
+}
+}
+namespace EA {
+namespace XHTML {
+namespace Layout {
+class Page_s008e_6340 {
+public:
+    COM::IUnknown32_s008e_6340* GetResource(unsigned int index);                    // 0x008eb960
+    void LoadImage(ImageRequester* pRequester, const wchar_t* pURL);     // 0x008ec5e0
+};
+}
+}
+}
+namespace EA {
+namespace XHTML {
+namespace Layout {
+class RenderingContext {
+public:
+    void* mpDC;                            // +0x0
+    Text::Typesetter mTypesetter;          // +0x4 (0x530 bytes)
+    RectT_s008e_6340<float> mContextRect;             // +0x534
+    RectT_s008e_6340<float> mViewRect;                // +0x544
+    float mMarginLeft;                     // +0x554
+    float mMarginRight;                    // +0x558
+    float mYPos;                           // +0x55c
+
+    void SetContextRectRelative(float l, float t, float r, float b);     // 0x008eedb0
+    void Fn8ee7a0(int arg);                                              // 0x008ee7a0
+    void Fn8ee770(Style::ParagraphStyle* pOut);                          // 0x008ee770
+    void SetParagraphStyle(const Style::ParagraphStyle& ps);             // 0x008ee740
+    void Fn8eec80(float l, float t, float r, float b, void* p);          // 0x008eec80
+    void Fn8ef6d0();                                                     // 0x008ef6d0
+};
+}
+}
+}
+namespace EA {
+namespace XHTML {
+namespace Layout {
+class PickingContext {
+public:
+    uint32_t mData0[0x538 / 4];            // +0x0
+    Point2DT<float> mRelPos;               // +0x538
+    void* mpElement;                       // +0x540
+    RectT_s008e_6340<float> mContextRect;             // +0x544
+    float mMarginLeft;                     // +0x554
+    float mMarginRight;                    // +0x558
+    float mYPos;                           // +0x55c
+
+    void SetContextRectRelative(float l, float t, float r, float b);     // 0x008edeb0
+    void Fn8edd80(Style::ParagraphStyle* pOut);                          // 0x008edd80
+    void Fn8edd50(const Style::ParagraphStyle& ps);                      // 0x008edd50
+    bool Fn8ee4a0(void* p);                                              // 0x008ee4a0
+};
+}
+}
+}
+namespace EA {
+namespace XHTML {
+namespace Layout {
+class Item_s008e_6340 {
+public:
+virtual void v00();
+virtual void v01();
+virtual void v02();
+virtual void v03();
+virtual void v04();
+virtual void v05();
+virtual void v06();
+virtual void v07();
+    virtual void MeasureContent(SizingContext_s008e_6340& sc, Style::StyleState_s008e_6340& style);   // +0x20
+    virtual void LayoutChildren(StackingContext_s008e_6340& sc, Style::StyleState_s008e_6340& style); // +0x24
+    virtual void PlaceControl(RectT_s008e_6340<float>* pRect);                             // +0x28
+virtual void v0b();
+virtual void v0c();
+    virtual void Layout(StackingContext_s008e_6340& sc, Style::StyleState_s008e_6340& style);         // +0x34
+
+    void* mpNext;                          // +0x4
+    void* mpPrev;                          // +0x8
+    Page_s008e_6340* mpPage;                          // +0xc
+    int mItemType;                         // +0x10
+    unsigned int mSelectableIndex;         // +0x14
+};
+}
+}
+}
+namespace EA {
+namespace XHTML {
+namespace Layout {
+class ContainerItem_s008e_6340 : public Item_s008e_6340 {
+public:
+    void* mChildItems[2];                  // +0x18
+    DOM::Element_s008e_6340* mpElement;               // +0x20
+    Style::Rule* mStyleRules;              // +0x24
+    unsigned int mnRuleCount;              // +0x28
+    int mDisplay;                          // +0x2c
+    int mPosition;                         // +0x30
+    uint32_t pad34[(0x48 - 0x34) / 4];
+    Style::ParagraphStyle mParaStyle;      // +0x48
+};
+}
+}
+}
+namespace EA {
+namespace XHTML {
+namespace Layout {
+class StackingContext_s008e_6340 {
+public:
+    void SetParagraphStyle(const Style::ParagraphStyle& ps);   // 0x008ee740
+    void SetContextRect(const RectT_s008e_6340<float>& rect);             // 0x008efc80
+    void Fn8efcd0(int arg);                                    // 0x008efcd0
+    void Fn8f0010();                                           // 0x008f0010
+
+    Item_s008e_6340* mpContextRoot;                   // +0x0
+    Text::Typesetter mTypesetter;          // +0x4
+    RectT_s008e_6340<float> mContextRect;             // +0x534
+    RectT_s008e_6340<float> mBoundsRect;              // +0x544
+    float mMarginLeft;                     // +0x554
+    float mMarginRight;                    // +0x558
+    float mYPos;                           // +0x55c
+    float mPendingCollapse;                // +0x560
+    float mMaxBreak;                       // +0x564
+    float mMinBreak;                       // +0x568
+    float mFirstLineBaseline;              // +0x56c
+    float mFirstLineHeight;                // +0x570
+    bool mbAtLineBreak;                    // +0x574
+    Block_s008e_6340* mpFloatHead;                    // +0x578
+    Block_s008e_6340* mpFloatTail;                    // +0x57c
+    Block_s008e_6340* mpOutOfFlowList;                // +0x580
+};
+}
+}
+}
+namespace EA {
+namespace XHTML {
+namespace Layout {
+class Block_s008e_6340 : public ContainerItem_s008e_6340 {
+public:
+    virtual void SetMargins(StackingContext_s008e_6340& sc, Style::StyleState_s008e_6340& style);        // +0x38 0x008e7230
+    virtual void PlaceOutOfFlow(StackingContext_s008e_6340& sc, Style::StyleState_s008e_6340& style);    // +0x3c 0x008e8af0
+
+    void Fn8eab50(RenderingContext& ctx);                     // 0x008eab50
+    bool Fn8eaba0(PickingContext& pc, void* pArg);            // 0x008eaba0
+    void DrawContent(RenderingContext& ctx);                  // 0x008e6a20
+    bool PickContent(PickingContext& pc, void* pArg);         // 0x008e6b70
+    void PlaceControls(Point2DT<float>& pos);                 // 0x008e6c60
+    void Layout(StackingContext_s008e_6340& sc, Style::StyleState_s008e_6340& style);   // 0x008e6d30
+
+    bool mbOutOfFlow;                      // +0x50
+    int mFloat;                            // +0x54
+    float mVerticalOffset;                 // +0x58
+    Block_s008e_6340* mpNextFloat;                    // +0x5c
+    Block_s008e_6340* mpNextOOF;                      // +0x60
+    RectT_s008e_6340<float> mOuterRect;               // +0x64
+    RectT_s008e_6340<float> mBorderRect;              // +0x74
+    RectT_s008e_6340<float> mPaddingRect;             // +0x84
+    RectT_s008e_6340<float> mContentRect;             // +0x94
+    RectT_s008e_6340<float> mPickRect;                // +0xa4
+    RectT_s008e_6340<float> mBorderWidth;             // +0xb4
+};
+}
+}
+}
+// ---- items of slice s008e6340 end
+
+// @ 0x008e6b70
+namespace EA { namespace XHTML { namespace Layout {
+bool Block_s008e_6340::PickContent(PickingContext& pc, void* pArg)
+{
+    if (pc.mRelPos.mX < mPickRect.mLeft)
+        return false;
+    if (pc.mRelPos.mY < mPickRect.mTop)
+        return false;
+    if (mPickRect.mRight <= pc.mRelPos.mX)
+        return false;
+    if (mPickRect.mBottom <= pc.mRelPos.mY)
+        return false;
+
+    Style::ParagraphStyle saved;
+    pc.Fn8edd80(&saved);
+    pc.Fn8edd50(mParaStyle);
+    pc.SetContextRectRelative(mContentRect.mLeft, mContentRect.mTop, mContentRect.mRight,
+                              mContentRect.mBottom);
+    pc.mYPos = 0.0f;
+    if (Fn8eaba0(pc, pArg))
+        return true;
+    if (pc.Fn8ee4a0(pArg))
+        return true;
+    pc.Fn8edd50(saved);
+    return false;
+}
+}}}  // namespace EA::XHTML::Layout
+
+// @ 0x008e6c60
+namespace EA { namespace XHTML { namespace Layout {
+void Block_s008e_6340::PlaceControls(Point2DT<float>& pos)
+{
+    RectT_s008e_6340<float> rect(pos.mX + mContentRect.mLeft, mContentRect.mTop + pos.mY,
+                      pos.mX + mContentRect.mRight, mContentRect.mBottom + pos.mY);
+    if (mpElement != 0) {
+        if (mpElement->v18()) {
+            RectT_s008e_6340<float> elementRect = rect;
+            mpElement->v20(&elementRect);
+        }
+    }
+    PlaceControl(&rect);
+}
+}}}  // namespace EA::XHTML::Layout
+
+// @ 0x008e6d30
+namespace EA { namespace XHTML { namespace Layout {
+void Block_s008e_6340::Layout(StackingContext_s008e_6340& sc, Style::StyleState_s008e_6340& style)
+{
+    const float padContentDiff = mPaddingRect.mBottom - mContentRect.mBottom;
+    const float borderPadDiff = mBorderRect.mBottom - mPaddingRect.mBottom;
+    const float outerBorderDiff = mOuterRect.mBottom - mBorderRect.mBottom;
+
+    const RectT_s008e_6340<float> savedContextRect(sc.mContextRect);
+
+    RectT_s008e_6340<float> contextRect(mContentRect.mLeft + sc.mContextRect.mLeft,
+                             mContentRect.mTop + sc.mContextRect.mTop,
+                             mContentRect.mRight + sc.mContextRect.mLeft,
+                             mContentRect.mBottom + sc.mContextRect.mTop);
+    sc.SetContextRect(contextRect);
+
+    Block_s008e_6340* pOutOfFlow = sc.mpOutOfFlowList;
+    sc.mpOutOfFlowList = 0;
+    const RectT_s008e_6340<float> savedBounds(sc.mBoundsRect);
+    sc.mBoundsRect.mLeft = 0.0f;
+    sc.mBoundsRect.mTop = 0.0f;
+    sc.mBoundsRect.mRight = 0.0f;
+    sc.mBoundsRect.mBottom = 0.0f;
+    sc.mYPos = 0.0f;
+
+    if (mpElement != 0 && (mpElement->v14() || mpElement->v18())) {
+        SizeT<float> intrinsic(16.0f, 16.0f);
+        mpElement->GetIntrinsicSize(&intrinsic);
+        sc.mYPos = intrinsic.h;
+        sc.mFirstLineBaseline = 0.0f;
+        sc.mFirstLineHeight = intrinsic.h;
+    } else {
+        LayoutChildren(sc, style);
+        sc.Fn8f0010();
+    }
+
+    if (sc.mpContextRoot == this)
+        sc.Fn8efcd0(3);
+
+    if (style.mBoxHeight.mUnits == Style::kUnitsAuto_s008e_6340)
+        mContentRect.mBottom = mContentRect.mTop + sc.mYPos;
+
+    mPaddingRect.mBottom = mContentRect.mBottom + padContentDiff;
+    mBorderRect.mBottom = mPaddingRect.mBottom + borderPadDiff;
+    mOuterRect.mBottom = mBorderRect.mBottom + outerBorderDiff;
+
+    sc.mContextRect = mPaddingRect;
+    sc.mContextRect.mLeft -= mContentRect.mLeft;
+    sc.mContextRect.mTop -= mContentRect.mTop;
+    sc.mContextRect.mRight -= mContentRect.mLeft;
+    sc.mContextRect.mBottom -= mContentRect.mTop;
+
+    for (Block_s008e_6340* pBlock = sc.mpOutOfFlowList; pBlock != 0; pBlock = pBlock->mpNextOOF)
+        pBlock->PlaceOutOfFlow(sc, style);
+
+    if (sc.mBoundsRect.mLeft == sc.mBoundsRect.mRight ||
+        sc.mBoundsRect.mTop == sc.mBoundsRect.mBottom) {
+        sc.mBoundsRect = mBorderRect;
+    } else {
+        sc.mBoundsRect.mLeft += mContentRect.mLeft;
+        sc.mBoundsRect.mTop += mContentRect.mTop;
+        sc.mBoundsRect.mRight += mContentRect.mLeft;
+        sc.mBoundsRect.mBottom += mContentRect.mTop;
+        sc.mBoundsRect.mLeft = Min(mBorderRect.mLeft, sc.mBoundsRect.mLeft);
+        sc.mBoundsRect.mTop = Min(mBorderRect.mTop, sc.mBoundsRect.mTop);
+        sc.mBoundsRect.mRight = Max(mBorderRect.mRight, sc.mBoundsRect.mRight);
+        sc.mBoundsRect.mBottom = Max(mBorderRect.mBottom, sc.mBoundsRect.mBottom);
+    }
+
+    mPickRect = sc.mBoundsRect;
+    sc.mBoundsRect.mLeft = Min(savedBounds.mLeft, sc.mBoundsRect.mLeft);
+    sc.mBoundsRect.mTop = Min(savedBounds.mTop, sc.mBoundsRect.mTop);
+    sc.mBoundsRect.mRight = Max(savedBounds.mRight, sc.mBoundsRect.mRight);
+    sc.mBoundsRect.mBottom = Max(savedBounds.mBottom, sc.mBoundsRect.mBottom);
+
+    sc.SetContextRect(savedContextRect);
+    sc.mpOutOfFlowList = pOutOfFlow;
+    sc.mPendingCollapse = outerBorderDiff;
+    sc.mYPos = mOuterRect.mBottom;
+}
+}}}  // namespace EA::XHTML::Layout
 
 // @ 0x008e7230
 namespace EA { namespace XHTML { namespace Layout {
