@@ -2,10 +2,10 @@
 00674d30 ?Detokenize@Detok2@@QAEXPBGPAX@Z  # Detok2::Detokenize migrated from s00674640 (verbatim, slice spelling)
 00674dc0 ?sBuildXHTMLDocument@@YAXPAX0@Z  # sBuildXHTMLDocument migrated from s00674640 (verbatim, slice spelling)
 00675080 ?LoadSporeGuidePage@cSPUISporeGuidePage@SP@@QAEXI@Z  # SP::cSPUISporeGuidePage::LoadSporeGuidePage migrated from s00674640
-006751a0 PropertyManager setter wrapper (0x5befd27)  # unnamed; SP::PropertyManager vcall
+006751a0 ?FUN_006751a0@@YGXPAX0@Z  # FUN_006751a0 migrated from s00674640 (verbatim, slice spelling)
 006751c0 ?FUN_006751c0@@YG_NPAI@Z  # FUN_006751c0 migrated from s00674640 (verbatim, slice spelling)
 00675260 ?Serialize@CVarList@@QAEXPAH@Z  # CVarList::Serialize migrated from s00674640 (verbatim, slice spelling)
-00675370 accessor: returns +0x28 or *(int*)(p+8)+0x3c  # unnamed
+00675370 ?FUN_00675370@@YIHPAD@Z  # FUN_00675370 migrated from s00674640 (verbatim, slice spelling)
 006753a0 achievement_test cheat teardown  # PDB string "achievement_test ..."
 00675440 vector<cVar>::Deserialize  # read-vcall loop
 006754d0 object-database loader for achievement_test  # GetSaveArea + cObjectDatabase

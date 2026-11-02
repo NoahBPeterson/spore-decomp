@@ -1,6 +1,15 @@
 # va  diff-bytes  reason
-00675260 181 cVar-list serialize: complete behaviour; writer vcall/WriteUint32 scheduling and cVarListSerializer construction differ
-0067a090 116 SP::Achievements::Controller::Shutdown: complete behaviour; cl shrink-wraps the epilogue (pops edi/esi early) shifting the local by 8 bytes
-0067a120 124 destroy-every-element: complete behaviour; same early-epilogue shrink-wrap plus FUN_00679e50 call scheduling differs
+00675260 181 cVar-list serialize: complete behaviour; writer vcall/WriteUint32 scheduling and cVarListSerializer construction differ flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
+00675d70 72 complete; constructor resetting the four 0x20-byte uint hash maps (shared empty bucket array, bucket count 1, element count 0, prime rehash policy seed) at identical size 198; retail interleaves the four stores differently across the maps. flags /O2 /MD /Gy /TP /arch:SSE; difftest PASS (400/400).
+006763e0 69 complete; same save-area payload store (stream open, name write, size write, EA_IO_WriteUint32 of the subject, database close) at identical size 166; only instruction scheduling/register assignment differs. flags /O2 /MD /Gy /TP /arch:SSE; difftest PASS (400/400).
+00676540 238 complete; same uint32 id list entry (name widened through a temporary/Clone/release, Begin/Text with gEmptyEntryName fallback, one typed entry per element, End, release) with the corrected __cdecl(IPropWriter*, U32Vec*) signature; retail interleaves the temporary/name slots with the writer calls, size 257 vs 277. flags /O2 /MD /Gy /TP /arch:SSE; difftest UNSUPPORTED (0/400 valid: generated writer argument faults before the first call; discards fault(read)=375, fake-arity=25).
+006792f0 17 advance-one-element: complete behaviour; pass the current element [this+8] to FUN_00678f70 (not this), lea vs add for +0x134 and the final reload of [this+0xc] differ; slice equiv WEAK 242 valid, 33.3% coverage, no mismatch; replay PASS flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+00679630 950 SP::cPropertyUI::ModifyBool: complete behaviour; equiv WEAK (339 valid, 28.3% cov); stack frame 0x30 vs 0x2c and the manager/property-lookup + visitor block schedule differ flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
+00679b40 284 cPropertyUI element copy-construct: complete behaviour; equiv WEAK (117 valid, 100% cov); inline-vector init order and refcount AddRef schedule differ flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
+00679c90 330 cPropertyUI element assign: complete behaviour; equiv WEAK (114 valid, 100% cov); vector erase+assign and refcount swap scheduling differ flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
+00679e50 336 cPropertyUI container reset: complete behaviour; equiv WEAK (192 valid, 56.2% cov); modal teardown/tree-walk block scheduling and call attribution differ flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
+0067a090 116 SP::Achievements::Controller::Shutdown: complete behaviour; cl shrink-wraps the epilogue (pops edi/esi early) shifting the local by 8 bytes flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
+0067a120 124 destroy-every-element: complete behaviour; same early-epilogue shrink-wrap plus FUN_00679e50 call scheduling differs flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
+0067a1b0 737 property UI update: complete behaviour; x87 easing + property reads reconstructed; equiv UNSUPPORTED (0/400 valid - the original 0x0067a1b0 faults on every generated input, confirmed with a trivial stub source) flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
 0067a590 122 complete: register/frame scheduling and temp-slot placement differ (cl used a different loop/temp layout)
 0067a6e0 166 HintManager::HandleHintMessage complete; branch layout (End block out of line, redundant cur!=win test) and ebx/esi/edi allocation differ [equiv: WEAK 22% coverage]
