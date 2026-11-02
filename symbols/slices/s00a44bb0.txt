@@ -7,9 +7,13 @@
 00a426f0 SP::Audio::cSystem::SetCurrentContext  # pdb_names anchor
 00a43580 SP::Audio::cSystem::AddSymbolList  # pdb_names caller-scored
 00a43d30 SP::Audio::cSystem::Init  # pdb_names anchor
-00a44bb0 SP::Audio::cSystem::HandleMessage  # PDB candidate (caller-single); cSystem vtable 0x01453418
+00a44bb0 ?HandleMessage@cSystem@@QAEXIPAH@Z  # cSystem::HandleMessage migrated from s00a44bb0 (verbatim, slice spelling)
 00a44e80 ?FUN_00a44e80@cSystem@@QAEXI@Z  # cSystem::FUN_00a44e80 migrated from s00a44bb0 (verbatim, slice spelling)
+00a44f70 ?FUN_00a44f70@cSystem@@QAEXH@Z  # cSystem::FUN_00a44f70 migrated from s00a44bb0 (verbatim, slice spelling)
+00a44fc0 ?ctor@FixedHashtable@@QAEPAXHH@Z  # FixedHashtable::ctor migrated from s00a44bb0 (verbatim, slice spelling)
+00a450c0 ??0FixedString@@QAE@PBDH@Z  # FixedString::FixedString migrated from s00a44bb0 (verbatim, slice spelling)
 00a45130 ?FUN_00a45130@cSystem@@QAE_NXZ  # cSystem::FUN_00a45130 migrated from s00a44bb0 (verbatim, slice spelling)
+00a45610 ?FUN_00a45610@cSystem@@QAEXHH@Z  # cSystem::FUN_00a45610 migrated from s00a44bb0 (verbatim, slice spelling)
 00a45780 ?DoCommandMainThread@cSystem@@QAEXPAX@Z  # cSystem::DoCommandMainThread migrated from s00a44bb0 (verbatim, slice spelling)
 00a458b0 ?FUN_00a458b0@cSystem@@QAEXPAD0@Z  # cSystem::FUN_00a458b0 migrated from s00a44bb0 (verbatim, slice spelling)
 00a67c60 EA::Audio::Eapd::ISystem::GetSingletonPtr  # pdb_names callee-single

@@ -1,2 +1,23 @@
 # source  symbol  va  flags
+../src/game/SPAudio/SPAudioSystem.cpp  ??0cSound@Audio@SP@@QAE@XZ  00a41ed0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/SPAudioSystem.cpp  ?ConstructcEmitterModelSound@@YAPAVcEmitterModelSound@Audio@SP@@XZ  00a42190  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/SPAudioSystem.cpp  ?StaticConvertSymbolToId@Audio@SP@@YAIPBD@Z  00a42200  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/SPAudioSystem.cpp  ?PreInit@cAudioSystem@Audio@SP@@QAE_NPAX@Z  00a42220  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/SPAudioSystem.cpp  ?SetupContext@cSystem_s00a4_1c40@Audio@SP@@QAEXXZ  00a422c0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/SPAudioSystem.cpp  ?SetupTypePriorities@cSystem@Audio@SP@@UAEXXZ  00a42310  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/SPAudioSystem.cpp  ?ResolveCurve@cAudioSystem@Audio@SP@@QAEHPAUCurveDesc@@@Z  00a423a0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/SPAudioSystem.cpp  ?ResetCurveIds@cAudioSystem@Audio@SP@@QAEXXZ  00a424b0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/SPAudioSystem.cpp  ?GetProperty@cAudioSystem@Audio@SP@@QAE_NIPAM@Z  00a42640  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/SPAudioSystem.cpp  ?CreateSound@@YG_NPAPAVcSound@Audio@SP@@@Z  00a42670  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/SPAudioSystem.cpp  ?SetCurrentContext@cAudioSystem@Audio@SP@@QAEXPAX@Z  00a426f0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/SPAudioSystem.cpp  ?GetContextId@cAudioSystem@Audio@SP@@QAEHXZ  00a42740  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/SPAudioSystem.cpp  ?GetListenerVectors@cAudioSystem@Audio@SP@@QAEXPAUVector3@@000@Z  00a42750  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/SPAudioSystem.cpp  ?RegisterModules@cAudioSystem@Audio@SP@@QAEXXZ  00a427e0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/SPAudioSystem.cpp  ?FUN_00a42830@@YA_NXZ  00a42830  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/SPAudioSystem.cpp  ?CommandResolve@cAudioSystem@Audio@SP@@QAEXPAX@Z  00a429a0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/SPAudioSystem.cpp  ?OnEventModifier@cAudioSystem@Audio@SP@@QAE_NPAX@Z  00a42aa0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/SPAudioSystem.cpp  ?RegisterHandler@cAudioSystem@Audio@SP@@QAE_NIPAX@Z  00a42c10  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/SPAudioSystem.cpp  ?UnregisterHandler@cAudioSystem@Audio@SP@@QAE_NI@Z  00a42c30  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPAudio/SPAudioSystem.cpp  ?ReadTuningValues@cSystemTuning@SP@@QAE_NPBUResourceKey@2@@Z  00a43a50  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/SPAudioSystem.cpp  ?SetListener@Eapd_s00a4_3d30@@QAEXPBUEapdGroupParam@@@Z  00a44230  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPAudio/SPAudioSystem.cpp  ?Set@Holder@@QAEXPAVRefC@@@Z  00a45cb0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
