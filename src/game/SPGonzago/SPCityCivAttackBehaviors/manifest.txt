@@ -1,1 +1,4 @@
 # source  symbol  va  flags
+../src/game/SPGonzago/SPCityCivAttackBehaviors.cpp  ?CanJoin@SP@@YG_NPAXH@Z  00d54730  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCityCivAttackBehaviors.cpp  ?StopAirRaidEffect@SP@@YAXXZ  00d54760  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCityCivAttackBehaviors.cpp  ??0WeaponData@SP@@QAE@ABU01@@Z  00d54780  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

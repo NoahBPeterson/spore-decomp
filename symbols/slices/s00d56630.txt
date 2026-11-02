@@ -1,0 +1,2 @@
+00d56630 ?Init@cBehaviorSpaceTurret_s00d5_6630@@QAEXH@Z  # cBehaviorSpaceTurret_s00d5_6630::Init migrated from s00d56630 (verbatim, slice spelling)
+00d56870 ?StopDefense@cBehaviorSpaceTurret_s00d5_6630@@QAEXXZ  # cBehaviorSpaceTurret_s00d5_6630::StopDefense migrated from s00d56630 (verbatim, slice spelling)

@@ -1,6 +1,6 @@
 00d79470 SP::cTribeGameBehaviorParty::Action  # preserved; nonmatching
 00d79fd0 SP::cEditorGameObject::Destroy  # newly claimed; byte-exact
-00d7a020 SP::InitEditorParams  # newly claimed; partial
+00d7a020 ?InitEditorParams@SP@@YAXIIIIII@Z  # InitEditorParams migrated from s00d79470 (verbatim, slice spelling)
 00d7a070 SP::UpdateEditorSelection  # newly claimed; nonmatching
 00d7a260 SP::IsDanceFinisher  # newly claimed; nonmatching
 00d7a320 SP::IsSub58FlagSet  # newly claimed; byte-exact

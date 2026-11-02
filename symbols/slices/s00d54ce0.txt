@@ -1,3 +1,7 @@
+00d54ce0 ?GetActiveTurretCount@cBehaviorSpaceTurret@@QAEHXZ  # cBehaviorSpaceTurret::GetActiveTurretCount migrated from s00d54ce0 (verbatim, slice spelling)
+00d54d90 ?CountAttackableTurrets@cBehaviorSpaceTurret@@QAEHXZ  # cBehaviorSpaceTurret::CountAttackableTurrets migrated from s00d54ce0 (verbatim, slice spelling)
+00d54e50 ??1cBehaviorSpaceTurret@@QAE@XZ  # cBehaviorSpaceTurret::~cBehaviorSpaceTurret migrated from s00d54ce0 (verbatim, slice spelling)
 00d54fa0 ??0cBehaviorSpaceTurret@@QAE@XZ  # cBehaviorSpaceTurret::cBehaviorSpaceTurret migrated from s00d54ce0 (verbatim, slice spelling)
 00d55060 ?SpaceTurret_SampleHelix@@YAXHPAUcVector3Array@@MMMMMMMMMM@Z  # SpaceTurret_SampleHelix migrated from s00d54ce0 (verbatim, slice spelling)
+00d552c0 ?SpaceTurret_SampleGrid@@YAXHPAUcVector3Array@@MMMMMMMMMM@Z  # SpaceTurret_SampleGrid migrated from s00d54ce0 (verbatim, slice spelling)
 00d554f0 ?SpaceTurret_SampleCorners@@YAXIPAUcVector3Array@@MMMMMMMMMM@Z  # SpaceTurret_SampleCorners migrated from s00d54ce0 (verbatim, slice spelling)
