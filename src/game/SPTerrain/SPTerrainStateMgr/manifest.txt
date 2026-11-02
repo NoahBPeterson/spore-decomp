@@ -1,4 +1,9 @@
 # source  symbol  va  flags
 ../src/game/SPTerrain/SPTerrainStateMgr.cpp  ?StaticInit@cTerrainStateMgr@SP@@SAXXZ  00fba330  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPTerrain/SPTerrainStateMgr.cpp  ??4RenderState@@QAEAAU0@ABU0@@Z  00fbce30  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPTerrain/SPTerrainStateMgr.cpp  ?ReleaseAuxObjects@cPlanet@@QAEXXZ  00fbd650  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPTerrain/SPTerrainStateMgr.cpp  ?SetRampEnabled@cPlanet@@QAEX_N@Z  00fbd6b0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPTerrain/SPTerrainStateMgr.cpp  ?SetExtent@cPlanet@@QAEXMM@Z  00fbd880  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPTerrain/SPTerrainStateMgr.cpp  ?CurrentRatio@cPlanet@@QAEOXZ  00fbda80  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPTerrain/SPTerrainStateMgr.cpp  ?ResetRenderState@cPlanet@@QAEXXZ  00fbdb10  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPTerrain/SPTerrainStateMgr.cpp  ?Initialize@cTerrainStateMgr@@QAEXXZ  00fbe7d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
