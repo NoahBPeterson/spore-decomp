@@ -1,18 +1,18 @@
-00683f80 ??1Factory@@QAE@XZ  # Factory::~Factory migrated from s00683f80 (verbatim, slice spelling)
-00684040 ?Create@Factory@@QAEDPAHPAPAHHH@Z  # Factory::Create migrated from s00683f80 (verbatim, slice spelling)
-006840d0 ?ReadMapA@Factory@@QAEXPAUMapA@@PAUIRd@@@Z  # Factory::ReadMapA migrated from s00683f80 (verbatim, slice spelling)
-006841a0 ?WriteMapC@Factory@@QAEXPAUMapC@@PAUIWrt@@@Z  # Factory::WriteMapC migrated from s00683f80 (verbatim, slice spelling)
-006842c0 ?ser_6842c0@FactSer@@QAEHPAH0HH@Z  # FactSer::ser_6842c0 migrated from s00683f80 (verbatim, slice spelling)
-00684330 ?InsertHint@MapB@@QAEXPAPAUNodeB@@PAU2@PBXD@Z  # MapB::InsertHint migrated from s00683f80 (verbatim, slice spelling)
-006844a0 ?insert@Map844@@QAEPAXPAPAXPAXPAHD@Z  # Map844::insert migrated from s00683f80 (verbatim, slice spelling)
-00684500 ?InsertUnique@MapC@@QAEXPAXPBXD@Z  # MapC::InsertUnique migrated from s00683f80 (verbatim, slice spelling)
-00684610 ?Idx@MapB@@QAEPAUObj2A10_s0068_3f80@@ABH@Z  # MapB::Idx migrated from s00683f80 (verbatim, slice spelling)
-00684740 ?ReadMapB@Factory@@QAEXPAUMapB@@PAUIRd@@@Z  # Factory::ReadMapB migrated from s00683f80 (verbatim, slice spelling)
-00684890 ?InsertHint@MapC@@QAEXPAPAUNodeC@@PAU2@PBXD@Z  # MapC::InsertHint migrated from s00683f80 (verbatim, slice spelling)
-00684980 ?Idx@MapC@@QAEPAUObjY@@ABH@Z  # MapC::Idx migrated from s00683f80 (verbatim, slice spelling)
-00684a90 ?ReadMapC@Factory@@QAEXPAUMapC@@PAUIRd@@@Z  # Factory::ReadMapC migrated from s00683f80 (verbatim, slice spelling)
-00684b40 ?ser_684b40@@YAHPAH0@Z  # ser_684b40 migrated from s00683f80 (verbatim, slice spelling)
-00684be0 ?TruncFloat_684be0@@YAHM@Z  # TruncFloat_684be0 migrated from s00683f80 (verbatim, slice spelling)
+00683f80 App::cConversationFactory::~cConversationFactory-like  # EH teardown of members at +0x6c/+0x5c/+0x40/+0x24
+00684040 App::cConversationFactory::Create  # operator_new(0x80,"App/cConversationFactory") + virtual init
+006840d0 App::cConversationFactory::ReadCollection
+006841a0 App::cConversationFactory::WriteCollection
+006842c0 FactSer::ser_6842c0  # vt[0xc](0x355d6f5), then 4 sub-serializers
+00684330 rbtree insert-or-assign (0x226a1de-style key compare)
+006844a0 rbtree insert wrapper (int-key map at +0xc)
+00684500 rbtree find-or-insert (int-key map)
+00684610 MapB::Idx  # map operator[] (int key), renamed from operator[] so the harness can parse it
+00684740 read records
+00684890 rbtree insert-or-assign
+00684980 MapC::Idx  # map operator[] (int key), renamed from operator[] so the harness can parse it
+00684a90 read records
+00684b40 App::cConversationFactory serializer entry (alt path, lookups 0x226a1de/0x355d6f5)
+00684be0 float->int truncation helper
 00684bf0 ?SP_CoordToIndex@@YAPAHPAHHPAM@Z  # SP_CoordToIndex migrated from s00683f80 (verbatim, slice spelling)
 00684c50 index->coordinate (inverse of CoordToIndex)
 00684ca0 ?SP_WrapCubeFace@@YAHHPAI0PAH11@Z  # SP_WrapCubeFace migrated from s00683f80 (verbatim, slice spelling)

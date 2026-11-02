@@ -1,8 +1,3 @@
-0068c330 ?TryPop@FreeQueue@@QAE_NPAPAX@Z  # FreeQueue::TryPop migrated from s0068c330 (verbatim, slice spelling)
-0068c460 ?Drain@FreeQueue@@QAEXXZ  # FreeQueue::Drain migrated from s0068c330 (verbatim, slice spelling)
-0068c4e0 ?Shutdown@FreeQueue@@QAEXXZ  # FreeQueue::Shutdown migrated from s0068c330 (verbatim, slice spelling)
-0068c520 ?FreeQueueCreate@@YAPAUFreeQueue@@XZ  # FreeQueueCreate migrated from s0068c330 (verbatim, slice spelling)
-0068c590 ?Flush@FreeQueue@@QAEXXZ  # FreeQueue::Flush migrated from s0068c330 (verbatim, slice spelling)
 0068c6d0  SP::SetKeyKind  # Ghidra PDB symbol
 0068c700 ?InvalidEditorModelKey@@YAPAUResKey@@PAU1@I@Z  # InvalidEditorModelKey migrated from s0068c330 (verbatim, slice spelling)
 0068c720 ?FindLastCharW@@YAPA_WPA_W0PB_W@Z  # FindLastCharW migrated from s0068c330 (verbatim, slice spelling)
@@ -16,5 +11,4 @@
 0068d1c0 ?Swap@PackStr@@QAEXAAU1@@Z  # PackStr::Swap (was PackStrSwap)
 0068d290 ?SPNameFromKeyA@@YAXPBUResKey@@PAXPBD@Z  # SPNameFromKeyA migrated from s0068c330 (verbatim, slice spelling)
 0068d340 ?Lookup@HashMap@@QAEPAXPBI@Z  # HashMap::Lookup (was HashMapOp; stands in for operator[])
-0068d420 ?HashClearBuckets@@YGXPAPAXI@Z  # HashClearBuckets migrated from s0068c330 (verbatim, slice spelling)
 0068d5a0 ?SPKeyFromName@@YA_NPAUResKey@@PBDII@Z  # SPKeyFromName migrated from s0068c330 (verbatim, slice spelling)

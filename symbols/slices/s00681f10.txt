@@ -1,14 +1,15 @@
-00681f10 ?WriteMap1700@SerCtx@@QAEXPAUMap2@@PAUIWrt@@@Z  # SerCtx::WriteMap1700 migrated from s00681f10 (verbatim, slice spelling)
-00682060 ??1Cls60@@QAE@XZ  # Cls60::~Cls60 migrated from s00681f10 (verbatim, slice spelling)
-006820c0 ?WriteVec1800@SerCtx@@QAEXPAUVV12@@PAUIWrt@@@Z  # SerCtx::WriteVec1800 migrated from s00681f10 (verbatim, slice spelling)
-006823f0 ?WriteVecA@SerCtx@@QAEXPAUVV12@@PAUIWrt@@@Z  # SerCtx::WriteVecA migrated from s00681f10 (verbatim, slice spelling)
-006825d0 ?InsertHint@Map1@@QAEXPAPAUNode1@@PAU2@PAHD@Z  # Map1::InsertHint migrated from s00681f10 (verbatim, slice spelling)
-00682740 ??0VV12@@QAE@ABU0@@Z  # VV12::VV12 migrated from s00681f10 (verbatim, slice spelling)
-00682800 ?FreeNodes@Map3@@QAEXPAUNode3@@@Z  # Map3::FreeNodes migrated from s00681f10 (verbatim, slice spelling)
-006828a0 ?InsertHint@Map2@@QAEXPAPAUNode2@@PAU2@PAHD@Z  # Map2::InsertHint migrated from s00681f10 (verbatim, slice spelling)
-00682900 ?InsertUnique@Map2@@QAEXPAUPairOut2@@PBH@Z  # Map2::InsertUnique migrated from s00681f10 (verbatim, slice spelling)
-00682a10 ??0Obj2A10@@QAE@ABU0@@Z  # Obj2A10::Obj2A10 migrated from s00681f10 (verbatim, slice spelling)
-00682af0 ??AMap1@@QAEPAUObjC30_s0068_1f10@@ABH@Z  # Map1::operator[] migrated from s00681f10 (verbatim, slice spelling)
-00682be0 ?Clone@Map2@@QAEPAUNode2@@PAU2@0@Z  # Map2::Clone migrated from s00681f10 (verbatim, slice spelling)
-00682ca0 ?WriteMap2A10@SerCtx@@QAEXPAUMap3@@PAUIWrt@@@Z  # SerCtx::WriteMap2A10 migrated from s00681f10 (verbatim, slice spelling)
-00682e90 ?LoadMap1@SerCtx@@QAEXPAUMap1@@PAUIRd@@@Z  # SerCtx::LoadMap1 migrated from s00681f10 (verbatim, slice spelling)
+# s00681f10 recovered names (invented stub names; no PDB names for these VAs)
+00681f10 SerCtx::WriteMap1700  # member: write rbtree map<int,Obj1700>; per node 0x681700 copy + string + two 0x680390 vector writes
+00682060 Cls60::~Cls60  # dtor: MapC2 free (0x681480) then guarded buffer free; layout {Buf mVec; MapC2 mMap;} at +0/+0x10
+006820c0 SerCtx::WriteVec1800  # member: write vector<Obj1800> (stride 0xc4); 4x 0x680500 field saves + 0x6805c0 + four u32 vectors
+006823f0 SerCtx::WriteVecA  # member: write vector<ObjA> (stride 0x60); 0x681a10 copy + 3 dwords + mF0/mF2 u32 vectors
+006825d0 Map1::InsertHint  # eastl rbtree insert with hint; value ObjC30; anchor +4 begin +8 root +0xc size +0x14
+00682740 VV12::VV12     # vector<Obj1800> copy ctor; EASTL_alloc6 stride 0xc4, UninitCopy 0x681ca0
+00682800 Map3::FreeNodes  # thiscall recursive free; value Obj2A10 (dtor inline w/ EH); node key +0x10 value +0x14
+006828a0 Map2::InsertHint  # rbtree insert with hint; canInsert = !flag && hint!=anchor && hint->key<=*key
+00682900 Map2::InsertUnique # eastl insert_unique with hint -> pair<iter,bool>
+00682a10 Obj2A10::Obj2A10  # value copy ctor: S8 + 5 bytes + 4 dwords + M5a0(0x680a50) + vector<Obj1800>(0x682740)
+00682af0 ?AMap1  # find-or-insert, returns &value at node+0x14
+00682be0 Map2::Clone     # eastl rbtree copy ctor helper (CreateNode2 0x6826c0)
+00682ca0 SerCtx::WriteMap2A10    # member: write rbtree map<int,Obj2A10>; per node 0x682a10 copy + fields + 0x6805c0 + vector
+00682e90 SerCtx::LoadMap1        # member: read map<int,ObjC30>: operator[] + string resize + 0x6812c0 LoadEntries
