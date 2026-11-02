@@ -3,6 +3,8 @@
 0091b6d0 ?Dasm@DisassemblerX86@@QAEPAXPBE0II@Z  # DisassemblerX86::Dasm migrated from s0091b5d0 (verbatim, slice spelling)
 0091b810 ?ScalarDtor@DisassemblerX86@@QAEPAEE@Z  # DisassemblerX86::ScalarDtor migrated from s0091b5d0 (verbatim, slice spelling)
 0091b840 ?Undecorate@DisassemblerX86@@QAEHPADPBDII@Z  # DisassemblerX86::Undecorate migrated from s0091b5d0 (verbatim, slice spelling)
+0091b880 ?StrReplace@@YAPAUEStr@@PAU1@PAD111@Z  # StrReplace migrated from s0091b5d0 (verbatim, slice spelling)
+0091ba20 ?StrReplaceN@@YAPAUEStr@@PAU1@IIPBD@Z  # StrReplaceN migrated from s0091b5d0 (verbatim, slice spelling)
 0091ba90 ?StrConcat3@@YAPAUEStr@@PAU1@PBD01@Z  # StrConcat3 migrated from s0091b5d0 (verbatim, slice spelling)
 0091bb00 ?Parse@MapFile@@QAEEPAE@Z  # MapFile::Parse migrated from s0091b5d0 (verbatim, slice spelling)
 0091bc30 ?ReadRecord@MapFile@@QAEEPAE@Z  # MapFile::ReadRecord migrated from s0091b5d0 (verbatim, slice spelling)

@@ -1,0 +1,3 @@
+# <va>  <diff-bytes>  <reason>
+0091b880 89 complete: eastl::string::replace(first,last,newFirst,newLast) -- grows/overwrites in place with memmove, shifting the tail and bumping `end`. Not exact: our declaration is a free function whereas the original keeps `this` in ecx and takes four pointers; the README-level signature cannot be reproduced without the real member form. flags: /O2 /MD /Gy /EHsc /TP
+0091ba20 62 complete: eastl::string::replace(pos,n,const char*) -- clamps n to the available suffix, computes src+strlen(src), and delegates to the four-pointer replace. Not exact: same free-function/member mismatch as 0091b880 plus a different min() materialisation. flags: /O2 /MD /Gy /EHsc /TP
