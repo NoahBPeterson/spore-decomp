@@ -1,15 +1,12 @@
 # va  diff-bytes  reason
-00692880 80 complete; Init serializer-record layout near-miss
-00692900 371 complete; Serialize: tmp/ok stack-slot assignment and store scheduling differ (bool flag wants the dead param slot); equiv: UNSUPPORTED (0/400 valid inputs)
-00692c50 53 complete; Unload near-miss
-00692cb0 95 complete; record insertion sort near-miss
-00692d20 57 complete; unguarded insertion sort: induction-variable choice (src derived from dst + constant offset) differs; equiv: WEAK (19% cov)
-00692e00 2 complete; WriteBlob32 one-register near-miss
-00692e50 2 complete; WriteBlob16 one-register near-miss; equiv FAIL (eax&0xffff return value)
-00692ee0 24 complete; registry resolve walk near-miss
-00692f20 28 complete; registry release walk near-miss; equiv WEAK (25% cov)
-00692f90 18 complete; cVarListSerializer constructor near-miss
-006930b0 16 complete; ParseFloat stack-slot reuse near-miss
+00692880 80 complete; Init serializer-record layout near-miss flags: /O2 /MD /Gy /EHsc /TP /GS-
+00692900 371 complete; Serialize: tmp/ok stack-slot assignment and store scheduling differ (bool flag wants the dead param slot); equiv: UNSUPPORTED (0/400 valid inputs) flags: /O2 /MD /Gy /EHsc /TP /GS-
+00692d20 57 complete; unguarded insertion sort: induction-variable choice (src derived from dst + constant offset) differs; equiv: WEAK (19% cov) flags: /O2 /MD /Gy /EHsc /TP /GS-
+00692e00 2 complete; WriteBlob32 one-register near-miss flags: /O2 /MD /Gy /EHsc /TP /GS-
+00692e50 2 complete; WriteBlob16 one-register near-miss; equiv FAIL (eax&0xffff return value) flags: /O2 /MD /Gy /EHsc /TP /GS-
+00692ee0 24 complete; registry resolve walk near-miss flags: /O2 /MD /Gy /EHsc /TP /GS-
+00692f20 28 complete; registry release walk near-miss; equiv WEAK (25% cov) flags: /O2 /MD /Gy /EHsc /TP /GS-
+006930b0 16 complete; ParseFloat stack-slot reuse near-miss flags: /O2 /MD /Gy /EHsc /TP /GS-
 00693390  772  Variant writer (complete; flags /O2 /MD /Gy /EHsc /TP /GS-): io/info register roles swapped and cl cross-jumps identical case tails the original keeps separate [equiv: WEAK]
 00693900  158  binder destructor: vtable store, +0x18/+0x14 probe, two smart-ref releases present; cl EH frame/state layout differs
 006939b0 165 binder bind A: virtual +0x18 probe, +0x1c release, AutoRef assignment all present; EH frame and this-arg reordering differ
@@ -25,8 +22,9 @@
 00694d00  186  introsort: size/depth cutoff, median-of-three pivot and recursive partition all present; register/loop scheduling differ
 00694e60 51 fixed-size table init: all 24 field stores present; this/arg register assignment and store order differ
 006950b0 74 introsort entry: depth computation and 0x1c split reproduced; bit-count loop register allocation differs
-00695140 440 Parent::GetOrCreate complete (hashtable find, node create/name, two vector push_backs, insert, tag strings); register allocation and EH slot layout differ [equiv: FAIL only on call #9 third stack arg of 0x7c3990 = uninitialised high bytes of a reused arg slot in the original, callee ignores it]
-00695450 14 short-circuit range scan + sort entry; only the bool-literal argument materialisation differs
-00695490 111 vector reserve: allocate/copy/destroy/pointer fix-up all present; allocator-arg and ratio scheduling differ
-00695550 216 vector<Obj60>::DoInsertValue complete (in-place shift and reallocating path); original spills pData/nNewSize to the frame (3 locals vs 2) and the EH state slots differ [equiv: UNSUPPORTED 0/400 valid inputs (faults)]
-00695960 281 cVarListSerializer::GetFields complete; register assignment differs (this in esi, zero in ebx in the original) and loop induction anchors at info+0xc [equiv: PASS 274 valid, 83.8% coverage]
+00695140 440 Parent::GetOrCreate complete (hashtable find, node create/name, two vector push_backs, insert, tag strings); register allocation and EH slot layout differ [equiv: FAIL only on call #9 third stack arg of 0x7c3990 = uninitialised high bytes of a reused arg slot in the original, callee ignores it] flags: /O2 /MD /Gy /EHsc /TP /GS-
+00695450 20 short-circuit range scan + sort entry; only the bool-literal argument materialisation differs (the int cmp arg is first with its low byte cleared, matching the retail's bool stack-slot quirk); equiv PASS (1200 valid inputs) flags: /O2 /MD /Gy /EHsc /TP /GS-
+00695490 110 vector reserve: capacity check is cap-begin (not end-begin); allocate/copy/destroy/pointer fix-up all present; equiv PASS (930 valid inputs) flags: /O2 /MD /Gy /EHsc /TP /GS-
+00695550 216 vector<Obj60>::DoInsertValue complete (in-place shift and reallocating path); original spills pData/nNewSize to the frame (3 locals vs 2) and the EH state slots differ [equiv: UNSUPPORTED 0/400 valid inputs (faults)] flags: /O2 /MD /Gy /EHsc /TP /GS-
+00695960 281 cVarListSerializer::GetFields complete; register assignment differs (this in esi, zero in ebx in the original) and loop induction anchors at info+0xc [equiv: PASS 274 valid, 83.8% coverage] flags: /O2 /MD /Gy /EHsc /TP /GS-
+00695b40 151 complete: parent-child node link (find/create + serializer Execute); stack-frame slot and register allocation differ; flags /O2 /MD /Gy /EHsc /TP /GS- [equiv: WEAK]

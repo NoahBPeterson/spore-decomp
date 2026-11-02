@@ -86,12 +86,17 @@ public:
     void Unload();
     cVarListSerializer(void* obj, cDataSerializerGeneric* list, unsigned int sig);
 };
+void FUN_0093a800(void*, void*, void*, void*);
 bool EA_IO_WriteBytes(void*, const void*, int);
 bool EA_IO_WriteUint16(void*, const void*, int, int);
+void FUN_0093ab10(void*, const void*, void*, void*);
 struct SortRec { unsigned int f[15]; };
 struct BlobRange { void* mpBegin; void* mpEnd; };
 struct cRegNode { void* mpVtbl; cRegNode* mpNext; void* mpData; char mState; cRegNode* Construct(void* data); };
 extern cRegNode* g_pRegList;   // 0x01600c58
+struct VarListCtorHost : cVarListSerializer {
+    cVarListSerializer* cVarListSerializer_Construct(void* obj, cDataSerializerGeneric* list, unsigned int sig);
+};
 // ---- items of slice s006925c0 end
 
 // unnamed retail callees and globals that name local stubs (address in the comment)
@@ -325,7 +330,7 @@ inline size_t CharStrlen(const char* p)
 }
 }
 namespace eastl {
-struct allocator_s0069_5140 {
+class allocator_s0069_5140 { public:
     void deallocate(void* p, size_t) { delete[] (char*)p; }
 };
 }
@@ -422,7 +427,7 @@ struct FieldReport {
     SubB mTexts;                        // +0x5c
 };
 namespace SP {
-struct cVarListSerializer_s0069_5140 {
+class cVarListSerializer_s0069_5140 { public:
     cDataSerializationInfo_s0069_5140 mDataSerializationInfos[128];   // +0x0
     int mSerializableVarCount;                              // +0xa00
     int mSerializedVarCount;                                // +0xa04
@@ -536,6 +541,26 @@ struct NodeTable {
 };
 extern NodeTable gNodeTable;                        // 0x0152d69c
 // ---- items of slice s00695140 end
+
+// @ 0x00692760
+void IO_Fwd_B(void* a, void* b, void* c)
+{ FUN_0093a800(a, b, (void*)1, c); }
+
+// @ 0x00692780
+void IO_WriteValue(void* a, int value)
+{ EA_IO_WriteBytes(a, &value, 1); }
+
+// @ 0x006927a0
+void IO_WriteUint16(void* a, unsigned short b, void* c)
+{ EA_IO_WriteUint16(a, &b, 1, (int)c); }
+
+// @ 0x006927c0
+void IO_WriteUint32(void* a, unsigned int b, void* c)
+{ EA_IO_WriteUint32(a, &b, 1, (int)c); }
+
+// @ 0x006927e0
+void IO_Fwd_C(void* a, void* b, void* c, void* d)
+{ FUN_0093ab10(a, &b, (void*)1, d); }
 
 // @ 0x00692880
 void cVarListSerializer::Init(void* obj, cDataSerializerGeneric* list, unsigned int sig)
@@ -733,12 +758,6 @@ cRegNode* cRegNode::Construct(void* data)
 }
 
 // @ 0x00692f90
-// The original is __thiscall (ecx = object being constructed, three stack args,
-// `ret 0xc`, returns ecx). This compiler rejects __thiscall on free functions
-// (C3865), so it is modelled as a non-static member (implicit __thiscall).
-struct VarListCtorHost : cVarListSerializer {
-    cVarListSerializer* cVarListSerializer_Construct(void* obj, cDataSerializerGeneric* list, unsigned int sig);
-};
 cVarListSerializer* VarListCtorHost::cVarListSerializer_Construct(void* obj, cDataSerializerGeneric* list, unsigned int sig)
 {
     Init(obj, list, sig);
@@ -1696,4 +1715,20 @@ int SP::cVarListSerializer_s0069_5140::GetFields(FieldVec& out)
         out.push_back(entry);
     }
     return mSerializableVarCount;
+}
+
+// @ 0x00695b40
+bool Parent::AddChild(unsigned obj, const void* desc, const wchar_t* name)
+{
+    HashIter it = gNodeTable.find(obj);
+    if (it == gNodeTable.end()) {
+        Node* node = GetOrCreate(obj, name);
+        SP::cVarListSerializer_s0069_5140 local((void*)obj, (SP::cDataSerializerGeneric_s0069_5140*)desc, 0x1a80d26);
+        return local.Execute((FieldReport*)node) != 0;
+    }
+    HashPair* entry = (HashPair*)it.mpNode;
+    mChildren.push_back(entry->second);
+    Node* node = entry->second;
+    node->mParents.push_back(this);
+    return true;
 }

@@ -1,7 +1,15 @@
 # source  symbol  va  flags
+../src/game/SPEngine/SPLoadSaveHelp.cpp  ?IO_Fwd_B@@YAXPAX00@Z  00692760  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPLoadSaveHelp.cpp  ?IO_WriteValue@@YAXPAXH@Z  00692780  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPLoadSaveHelp.cpp  ?IO_WriteUint16@@YAXPAXG0@Z  006927a0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPLoadSaveHelp.cpp  ?IO_WriteUint32@@YAXPAXI0@Z  006927c0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPLoadSaveHelp.cpp  ?IO_Fwd_C@@YAXPAX000@Z  006927e0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPLoadSaveHelp.cpp  ?Unload@cVarListSerializer@@QAEXXZ  00692c50  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/SPEngine/SPLoadSaveHelp.cpp  ?Info_AddOffset@@YAHPAX@Z  00692ca0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPLoadSaveHelp.cpp  ?SortRecords_A@@YAXPAX0@Z  00692cb0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/SPEngine/SPLoadSaveHelp.cpp  ?SortRecords_C@@YAXPAUSortRec@@HHU1@@Z  00692d90  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/SPEngine/SPLoadSaveHelp.cpp  ?Construct@cRegNode@@QAEPAU1@PAX@Z  00692f60  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPLoadSaveHelp.cpp  ?cVarListSerializer_Construct@VarListCtorHost@@QAEPAVcVarListSerializer@@PAXPAUcDataSerializerGeneric@@I@Z  00692f90  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/SPEngine/SPLoadSaveHelp.cpp  ?ClearBuffer@@YAXPAPAC@Z  00692fb0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/SPEngine/SPLoadSaveHelp.cpp  ?ParseInt64@@YAXPAPBDPA_J@Z  00692fd0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/SPEngine/SPLoadSaveHelp.cpp  ?ParseLong@@YAXPAPBDPAJ@Z  00692ff0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
