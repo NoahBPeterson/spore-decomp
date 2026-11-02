@@ -14,7 +14,7 @@
 0112d420 ReChannelGainWrite6x4  # rwaudio MixKernels; centre fold at gain*0.707
 0112d4e0 ?ReChannelGainWrite6x6@core@audio@rw@@YAXPAPAM0MH@Z  # PDB/xmatch
 0112d590 ?ReChannelGainWrite@core@audio@rw@@YAXPAPAM0MIIH@Z  # rwaudio MixKernels dispatcher
-0112d8e0 ?AddTimer@TimerManager@core@audio@rw@@QAEHPAUTimerHandle@234@PAX1PBDHE@Z  # PDB name (real)
+0112d8e0 ?AddTimer@TimerManager_s0112_ce20@core@audio@rw@@QAE_NPAVTimerHandle_s0112_ce20@234@PAX1PBDHE@Z  # TimerManager_s0112_ce20::AddTimer migrated from s0112ce20 (verbatim, slice spelling)
 0112d940 TimerManager::RemoveTimer  # rwaudio; deferred self-remove path
 0112d9b0 TimerManager::ExecuteTimers  # rwaudio; walks Collection used list
 0112da30 TimerManager::Defragment  # rwaudio; 2x Collection::Defragment

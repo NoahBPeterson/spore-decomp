@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+0112d8e0 76 TimerManager::AddTimer: complete; /LTCG register allocation across Collection::AddItem; flags /vc71 /O2 /MD /Gy /TP; equiv PASS (302 valid, 100% cov)
