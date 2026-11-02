@@ -1,0 +1,2 @@
+# Slice s00fcb210: complete functions that are not byte-exact.
+00fcc0b0 40 48	UNSUPPORTED (0 valid; imports GetCurrentProcess) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
