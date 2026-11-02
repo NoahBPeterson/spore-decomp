@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+00cd0950 24 CInput::F_cd0950 (287 vs 287): nearest miss -- only the 12-byte wstring local frame (0x10 vs 0xc) and the callee-saved register chosen for the literal/`&str` operands differ.  equiv UNSUPPORTED: only 0/400 inputs valid (fault(read)=218). flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
