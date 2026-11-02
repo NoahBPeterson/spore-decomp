@@ -6,4 +6,8 @@
 008f23b0 ?F_8f23b0@TextItemX@Layout@XHTML@EA@@QAEXPAX@Z  # TextItemX::F_8f23b0 migrated from s008f16c0 (verbatim, slice spelling)
 008f23d0 ?F_8f23d0@TextItemX@Layout@XHTML@EA@@QAE_NPAX0@Z  # TextItemX::F_8f23d0 migrated from s008f16c0 (verbatim, slice spelling)
 008f2440 ?F_8f2440@PropNodeX@Layout@XHTML@EA@@QAEPAV1234@HPBG@Z  # PropNodeX::F_8f2440 migrated from s008f16c0 (verbatim, slice spelling)
-008f25b0 ?F_8f25b0@PoolNodeX@Layout@XHTML@EA@@QAEXH@Z  # resolves a packed byte offset (table[offset] -> +0x14 stride, +0x0c base, +0x10 table) and tail-calls the +0x08 handler with the index in ecx and the +0x18 payload as its argument; byte-exact
+008f24a0 ?F_8f24a0@PropNodeX@Layout@XHTML@EA@@QAEPAV1234@HPBG@Z  # PropNodeX::F_8f24a0 migrated from s008f16c0 (verbatim, slice spelling)
+008f24f0 ?F_8f24f0@HeadTailX@Layout@XHTML@EA@@QAEXPAUListNodeX@234@@Z  # HeadTailX::F_8f24f0 migrated from s008f16c0 (verbatim, slice spelling)
+008f2550 ?FUN_008f2550@Layout@XHTML@EA@@YAPAVPoolNodeX@123@PAVPoolX@123@IIII@Z  # FUN_008f2550 migrated from s008f16c0 (verbatim, slice spelling)
+008f25b0 ?F_8f25b0@PoolNodeX@Layout@XHTML@EA@@QAEXH@Z  # PoolNodeX::F_8f25b0 migrated from s008f16c0 (verbatim, slice spelling)
+008f25f0 ?FUN_008f25f0@Layout@XHTML@EA@@YAPAVPoolNodeX@123@PAVPoolX@123@IIIII@Z  # FUN_008f25f0 migrated from s008f16c0 (verbatim, slice spelling)

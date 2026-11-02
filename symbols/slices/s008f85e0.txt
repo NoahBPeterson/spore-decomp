@@ -1,0 +1,3 @@
+008f85e0 ?ParsePropertyValue@CSSParser_s008f_85e0@Style@XHTML@EA@@QAE_NHPAVPropertyList_s008f_85e0@234@@Z  # CSSParser_s008f_85e0::ParsePropertyValue migrated from s008f85e0 (verbatim, slice spelling)
+008f8cb0 ?ParsePropertyByID@CSSParser_s008f_85e0@Style@XHTML@EA@@SA_NHPAGPAVStackAllocator_s008f_85e0@Allocator@4@PAVPropertyList_s008f_85e0@234@W4Units@234@PAX@Z  # CSSParser_s008f_85e0::ParsePropertyByID migrated from s008f85e0 (verbatim, slice spelling)
+008f8d50 ?ParseProperty@CSSParser_s008f_85e0@Style@XHTML@EA@@QAE_NPAVPropertyList_s008f_85e0@234@@Z  # CSSParser_s008f_85e0::ParseProperty migrated from s008f85e0 (verbatim, slice spelling)
