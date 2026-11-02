@@ -1,7 +1,8 @@
-007ed1b0 EA::Swarm::ScaleCurve  # PDB name
+007ed1b0 ?ScaleCurve@Vec3Vec@@QAEXPAUVec3@@0@Z  # Vec3Vec::ScaleCurve migrated from s007ed1b0 (verbatim, slice spelling)
 007ed2e0 RegisterTextEffect  # ArgScript command registration (new TextEffect + GroupText command objects)
-007ed490 BattleCommand::ColorCommand  # "color" command: erase mColorVec, ArgToVec3 each arg, optional /255 scaling
-007ed560 BattleCommand::FloatListCommand  # "engine scale" float-vector command
-007ed670 BattleCommand::FloatListParentCommand  # "engine scale" command with parentScale flag
+007ed3e0 ?PushBack@Vec3Vec@@QAEXPAUVec3@@@Z  # Vec3Vec::PushBack migrated from s007ed1b0 (verbatim, slice spelling)
+007ed490 ?ColorCommand@BattleCommand@@QAEXPAVcArguments_s007e_d1b0@ArgScript@EA@@@Z  # BattleCommand::ColorCommand migrated from s007ed1b0 (verbatim, slice spelling)
+007ed560 ?FloatListCommand@BattleCommand@@QAEXPAVcArguments_s007e_d1b0@ArgScript@EA@@@Z  # BattleCommand::FloatListCommand migrated from s007ed1b0 (verbatim, slice spelling)
+007ed670 ?FloatListParentCommand@BattleCommand@@QAEXPAVcArguments_s007e_d1b0@ArgScript@EA@@@Z  # BattleCommand::FloatListParentCommand migrated from s007ed1b0 (verbatim, slice spelling)
 007ed980 TextEffectCommand::EffectCommand  # "effect" command execute: copy text/description, register with iface
 007eda60 TextEffectCommand::SyncInherited  # register inherited effect description when flag == 0

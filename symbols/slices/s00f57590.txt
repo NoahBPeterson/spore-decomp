@@ -1,7 +1,7 @@
-00f57590 ??4cCloudDescription@@QAEAAU0@ABU0@@Z  # cCloudDescription::operator=
-00f57a30 ?Execute@cCloudSurfaceCommand@@QAEXAAVcArguments@ArgScript@EA@@@Z  # cCloudSurfaceCommand::Execute
-00f57ba0 ?Execute@cCloudEffect@@QAEXAAVcArguments@ArgScript@EA@@@Z  # cCloudEffect::Execute
-00f57c50 ?ReadDescription@@YAXPAUArchive@@HPAUcCloudDescription@@@Z  # ReadDescription
+00f57590 ??4cCloudDescription_s00f5_7590@@QAEAAU0@ABU0@@Z  # cCloudDescription_s00f5_7590::operator= migrated from s00f57590 (verbatim, slice spelling)
+00f57a30 ?Execute@cCloudSurfaceCommand@@QAEXAAVcArguments_s00f5_7590@ArgScript@EA@@@Z  # cCloudSurfaceCommand::Execute migrated from s00f57590 (verbatim, slice spelling)
+00f57ba0 ?Execute@cCloudEffect_s00f5_7590@@QAEXAAVcArguments_s00f5_7590@ArgScript@EA@@@Z  # cCloudEffect_s00f5_7590::Execute migrated from s00f57590 (verbatim, slice spelling)
+00f57c50 ?ReadDescription@@YAXPAUArchive@@HPAUcCloudDescription_s00f5_7590@@@Z  # ReadDescription migrated from s00f57590 (verbatim, slice spelling)
 00f58120 ?AdvanceCloud@@YA_NPAUCloudAdvance@@MPAD1@Z  # AdvanceCloud
 00f58230 ?SetCloudGlobal@@YAXHH@Z  # SetCloudGlobal
 00f58240 ?Process@cCloudCmdState@@QAE_NHPAHH@Z  # cCloudCmdState::Process

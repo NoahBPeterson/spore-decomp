@@ -1,0 +1,1 @@
+00f574c0 ?SWARM_CloudAddCommands@@YAXPAURegistrar@@0@Z  # SWARM_CloudAddCommands migrated from s00f56950 (verbatim, slice spelling)

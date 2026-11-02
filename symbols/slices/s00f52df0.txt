@@ -1,5 +1,5 @@
-00f53420 ??1cCloudDescription@@QAE@XZ  # cCloudDescription::~cCloudDescription (byte-exact)
-00f53590 ??0cCloudDescription@@QAE@XZ  # cCloudDescription::cCloudDescription default ctor (nonmatching)
+00f53420 ??1cCloudDescription@@QAE@XZ  # cCloudDescription::~cCloudDescription migrated from s00f52df0 (verbatim, slice spelling)
+00f53590 ??0cCloudDescription@@QAE@XZ  # cCloudDescription::cCloudDescription migrated from s00f52df0 (verbatim, slice spelling)
 016c9234 g_16c9234  # float constant table read by the ctor (zero in the analysis image)
 016c9238 g_16c9238  # float constant table read by the ctor
 016c923c g_16c923c  # float constant table read by the ctor

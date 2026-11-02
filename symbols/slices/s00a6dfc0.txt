@@ -4,13 +4,13 @@
 00a6e320 ?FUN_00a6e320@cEffectsManager@Swarm@EA@@QAEXPAUVecBase@23@PAX1@Z  # cEffectsManager append-range + hash dispatch (no PDB name)
 00a6e3e0 ?FUN_00a6e3e0@cEffectsManager@Swarm@EA@@QAEXPAUVecBase@23@PAX@Z  # cEffectsManager append-range + list dispatch (no PDB name)
 00a6e4b0 ?FUN_00a6e4b0@cEffectsManager@Swarm@EA@@QAEPAXXZ  # FUN_00a6e4b0 migrated from s00a6dfc0 (verbatim, slice spelling)
-00a6e600 ?EffectsMapID@cEffectsParser@Swarm@EA@@QAE_JPBD@Z  # EA::Swarm::cEffectsParser::EffectsMapID (name from caller)
+00a6e600 ?EffectsMapID@cEffectsParser@Swarm@EA@@QAE_JPBD@Z  # EffectsMapID migrated from s00a6dfc0 (verbatim, slice spelling)
 00a6e6e0 ?FUN_00a6e6e0@Swarm@EA@@YAXPAX0PAH@Z  # FUN_00a6e6e0 migrated from s00a6dfc0 (verbatim, slice spelling)
 00a6e7e0 ?FUN_00a6e7e0@Swarm@EA@@YAXPAXPADI0@Z  # FUN_00a6e7e0 migrated from s00a6dfc0 (verbatim, slice spelling)
 00a6eaf0 ?MapFindA@cEffectsParser@Swarm@EA@@QAE_JPBD@Z  # MapFindA migrated from s00a6dfc0 (verbatim, slice spelling)
 00a6eb60 ?MapFindB@cEffectsParser@Swarm@EA@@QAE_JPBDH@Z  # MapFindB migrated from s00a6dfc0 (verbatim, slice spelling)
-00a6ebd0 ?MapFindC@cEffectsParser@Swarm@EA@@QAE_JPBDH@Z  # cEffectsParser string-map find, table +0x78 (no PDB name)
-00a6ec40 ?LookupRes@cEffectsParser@Swarm@EA@@QAE_JHPBD@Z  # eastl vector<Vector3>::resize per PDB (candidate); implemented as LookupRes
+00a6ebd0 ?MapFindC@cEffectsParser@Swarm@EA@@QAE_JPBDH@Z  # MapFindC migrated from s00a6dfc0 (verbatim, slice spelling)
+00a6ec40 ?LookupRes@cEffectsParser@Swarm@EA@@QAE_JHPBD@Z  # LookupRes migrated from s00a6dfc0 (verbatim, slice spelling)
 00a6ed80 ?ParseDrawInfoOptions@cEffectsParser@Swarm@EA@@QAEXPAX0PAUDrawInfoTarget@23@@Z  # EA::Swarm::cEffectsParser::ParseDrawInfoOptions
 00a6f090 ?GetInheritedA@cEffectsParser@Swarm@EA@@QAEHHHPAX@Z  # GetInheritedDescription variant A (PDB: GetInheritedDescription)
 00a6f0d0 ?GetInheritedB@cEffectsParser@Swarm@EA@@QAEHHHPAX@Z  # GetInheritedDescription variant B (PDB: GetInheritedDescription)
