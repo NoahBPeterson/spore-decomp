@@ -1,4 +1,4 @@
-// src/game/SPGonzago/SPSimulatorPlanet.cpp -- migrated from slice(s) s00ffb180, s00ffa2c0, s00ff8460, s00ff5d20, s00ff4d50 by tools/migrate/rewrite.py
+// src/game/SPGonzago/SPSimulatorPlanet.cpp -- migrated from slice(s) s00ff6a50, s00ffb180, s00ffa2c0, s00ff8460, s00ff5d20, s00ff4d50 by tools/migrate/rewrite.py
 // Object file: SPGonzago/SPSimulatorPlanet.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -25,20 +25,41 @@
 #include "SP/cRelationshipManager.h"
 #include "SP/cTerrainSphere.h"
 #include "EA/Random/RandomLinearCongruential.h"
+#include "cSPQuaternion.h"
+#include "EA/ResourceMan/Key.h"
+#include "cSPVector3.h"
+#include "SP/cBuilding.h"
+#include "SP/cBuildingData.h"
+#include "SP/cCityData.h"
+#include "SP/cCivData.h"
+#include "SP/cCombatant.h"
+#include "SP/cGameData.h"
+#include "SP/cOrnament.h"
+#include "SP/cOrnamentData.h"
+#include "SP/cPlanet.h"
+#include "SP/cSpeciesProfile.h"
+#include "SP/cVehicle.h"
+#include "SP/cVehicleData.h"
+#include "SP/cITerrainSphere.h"
 
 // unnamed retail callees and globals (address in the comment)
 extern char g_15b6160;      // [0x015b6160] variable-list table used when writing
 extern char g_13f09b4[];    // [0x013f09b4] "Simulator"
 
 // ---- items of slice s00ff4d50 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern char g_1654c05[];    // [0x01654c05] active-vignette identifier
+extern char g_67b69c4[];    // [0x067b69c4] UFO-count message fragments
+extern char g_67b69d0[];    // [0x067b69d0]
+extern char g_67b69d8[];    // [0x067b69d8]
+extern char g_67b69e3[];    // [0x067b69e3]
+extern char g_67b69eb[];    // [0x067b69eb]
+extern char g_67b69f1[];    // [0x067b69f1]
 struct VObj { void** vt; };
 typedef void* (__thiscall *FnVp0)(void*);
 struct IStream;
 bool __cdecl EA_IO_WriteUint32(void* s, const void* p, uint32_t n, int endian); // 0x0093aa70
 bool __cdecl EA_IO_ReadInt32(void* s, void* p, uint32_t n, int endian);         // 0x0093a780
 void* __cdecl operator_new(uint32_t size, const char* tag, int a, int b, int c, int d); // 0x00f473a0
-extern char g_15b6160;      // [0x015b6160] variable-list table used when writing
-extern char g_13f09b4[];    // [0x013f09b4] "Simulator"
 struct cDataSerializationInfo { char d[0x14]; };
 class cVarListSerializer {
 public:
@@ -83,6 +104,24 @@ struct cColonySimulator {
     void __thiscall DoGrowthSim(void* city);                   // 0x00ff5720
     void __thiscall OnTick(int a, int b, int c);               // 0x00ff5840
 };
+struct CB8de30 { void* __thiscall GetNounManager(); };   // 0x00b8de30
+struct CC8b560 { char  __thiscall IsSomething(); };       // 0x00c8b560
+struct CB8dab0 { int   __thiscall GetType(); };           // 0x00b8dab0
+struct CAvatar { void* __thiscall GetAvatar(); };         // 0x00b1fdb0
+struct CStarManager {
+    void* __thiscall GetEmpireByID();                     // 0x00ba9370
+    void* __thiscall FUN_00baf700();                      // 0x00baf700
+};
+struct CTerraforming {
+    char __thiscall IsEnabled();                          // 0x00bbe5c0
+};
+void* __cdecl FUN_01021230();                     // 0x01021230
+int   __cdecl FUN_01021090();                     // 0x01021090
+void* __stdcall FUN_00b3d2a0(void* which);        // 0x00b3d2a0  SP::StarManager
+void* __stdcall FUN_00b3d430(void* which);        // 0x00b3d430  SP::TerraformingManager
+char  __cdecl FUN_00c6fe50(void* p);              // 0x00c6fe50
+int   __cdecl FUN_0102b010(void* a, char* b, char* c); // 0x0102b010  SP::sGetNumUFOs
+void* __cdecl FUN_010666a0_s00ff_4d50();                     // 0x010666a0
 struct cSPSimPlanetHighLOD {
     void** mpVtbl;                        // +0x00
     char   pad04[0x20 - 0x04];
@@ -92,6 +131,14 @@ struct cSPSimPlanetHighLOD {
     char __thiscall ReadBase(IStream* s);        // 0x00b5b650
     bool __thiscall Write(IStream* s);           // 0x00ff5a90
     char __thiscall Read(IStream* s);            // 0x00ff5c50
+};
+struct CGetter10666a0B {
+    int __thiscall FUN_01067e60();        // 0x01067e60
+};
+void __cdecl FUN_00ce8f70(void* a, int b);            // 0x00ce8f70
+void* __cdecl FUN_00b3d480_0();   // 0x00b3d480  (no-argument form)
+struct CCityVisualizer {
+    void __thiscall setActiveVignette(char* name);   // 0x00ad2560
 };
 // ---- items of slice s00ff4d50 end
 
@@ -106,6 +153,7 @@ struct cGameNounManager;
 struct cTerraformingManager;
 struct cTriggerMgr;
 struct cMessageServer;
+struct cEffectsManager;
 struct cSPSimulatorSpaceGame;
 struct cSPMissionManager;
 struct cMoviePlayer;
@@ -115,6 +163,7 @@ cGameNounManager*      __cdecl FUN_00b3d300();   // 0x00b3d300 SP::NounManager
 cTerraformingManager*  __cdecl FUN_00b3d430();   // 0x00b3d430 SP::TerraformingManager
 cTriggerMgr*           __cdecl FUN_00b3d4d0();   // 0x00b3d4d0 SP::GetTriggerMgr
 cMessageServer*        __cdecl FUN_0067dcc0();   // 0x0067dcc0 MessageServer
+cEffectsManager*       __cdecl FUN_0067ddd0();   // 0x0067ddd0 EffectsManagerPtr
 cSPSimulatorSpaceGame* __cdecl FUN_00ffbe50();   // 0x00ffbe50 SP::GetUFOSimulator
 cSPMissionManager*     __cdecl FUN_00feb9f0();   // 0x00feb9f0 SP::GetMissionManager
 cMoviePlayer*          __cdecl FUN_010666a0();   // 0x010666a0
@@ -200,6 +249,20 @@ virtual void  v24();
 virtual void  v28();
     virtual void* v2c(f32);
 };
+struct cSub2cU {
+virtual void  v00();
+virtual void  v04();
+virtual void  v08();
+virtual void  v0c();
+virtual void  v10();
+virtual void  v14();
+virtual void  v18();
+virtual void  v1c();
+virtual void  v20();
+virtual void  v24();
+virtual void  v28();
+    virtual void* v2c(u32);
+};
 struct cCityHall {
     u8        pad00[0x34];
     cHallSub  mSub;                    // +0x34
@@ -253,6 +316,20 @@ virtual void v10();
 virtual void v14();
     virtual void v18(u32, u32, u32, u32);
 };
+struct cEffectsManager {
+virtual void v00();
+virtual void v04();
+virtual void v08(u32);
+virtual void v0c();
+virtual void v10();
+virtual void v14();
+virtual void v18(void*);
+virtual void v1c();
+virtual void v20();
+virtual void v24();
+virtual void v28();
+    virtual bool v2c(u32, u32, void*);
+};
 struct cPlayerInventory {
     void FUN_00c37130(u32);               // 0x00c37130
     void FUN_00c3aa40(Vec3*, void*);      // 0x00c3aa40
@@ -282,7 +359,37 @@ struct cActivePlanet {
     void* FUN_008414c0();                 // 0x008414c0
     void  FUN_00c7e2f0(u32);              // 0x00c7e2f0
 };
+struct cInvInner {
+virtual void v00();
+virtual void v04();
+virtual void v08();
+virtual void v0c();
+virtual void v10();
+virtual void v14();
+virtual void v18();
+virtual void v1c();
+virtual void v20();
+virtual void v24();
+virtual void v28();
+virtual void v2c();
+virtual void v30();
+virtual void v34();
+virtual void v38();
+virtual void v3c();
+    virtual void v40(u32, void*);
+};
+struct Mat3 { f32 m[9]; };
 struct TriggerCtx { u32 a, b, c; };   // 12-byte trigger payload
+struct XformMsg {
+    void ctor();
+    u16  mFlags;      // +0x00
+    u16  mSequence;   // +0x02
+    Vec3 mPos;        // +0x04  (its x slot is re-used as the 1.0 "w" tag)
+    u16  mPad10;      // +0x10
+    u16  mPad12;      // +0x12
+    Mat3 mMat;        // +0x14
+};
+void __cdecl Matrix3FromQuaternion(f32*, void*);   // 0x0059c190
 struct cVisualEffect : RefObj {
 virtual void v10();
 virtual void v14();
@@ -360,11 +467,57 @@ struct cSPSimPlanetHighLOD_s00ff_5d20 {
 // ---- items of slice s00ff5d20 end
 
 // ---- items of slice s00ff8460 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern void quick_sort_impl(int a, int b, int depth);   // 0x00ff8260
+extern void FUN_00ff5ba0(int a, int b);                 // 0x00ff5ba0
+extern void FUN_00ff5be0(int a, int b);                 // 0x00ff5be0
 extern void* __cdecl SP_NounManager();                     // 0x00b3d300
 extern void op_delete_array(void* p);   // operator_delete_array 0x00f47380
 extern void __fastcall BaseGonzagoSim_ctor(void* self);   // 0x00b5b6c0
 extern void* __cdecl operator_new(unsigned size, const char* desc,
                                   int a, int b, int c, int d);   // 0x00f473a0
+extern void* __cdecl FUN_01067e60(void* a);                // 0x01067e60
+extern void  __cdecl FUN_010421c0(void* a, void* b);       // 0x010421c0
+extern void  __cdecl FUN_01009a40(void* a);                // 0x01009a40
+extern int   __cdecl FUN_00b8e040(void* a, int b);         // 0x00b8e040
+extern void  __cdecl FUN_00ac9200(void* a);                // 0x00ac9200
+extern void  __cdecl FUN_00c74a30(void* a);                // 0x00c74a30
+extern void  __cdecl FUN_00c74860(void* a);                // 0x00c74860
+extern void  __cdecl FUN_00f924e0(void* a, float f);       // 0x00f924e0
+extern void  __cdecl FUN_00dd85c0(void* a, void* b);       // 0x00dd85c0
+extern void* __cdecl SP_PropertyManager();                 // 0x0067de30
+extern void  __cdecl SP_GetPropertyAsKeyInstance(void* a, unsigned k, void* out);  // 0x006a12a0
+extern void* __cdecl SP_CreateNoun(void* self, unsigned key);    // 0x00b20c60
+extern void* __cdecl SP_QuaternionFromDirections(void* q, void* d, void* up);      // 0x00698180
+extern float* __cdecl SP_GetPropertyAsFloat();             // 0x0041ea70
+extern void* __cdecl SP_StarManager(void* a);              // 0x00b3d2a0
+extern void* __cdecl SP_GetEmpireByID(void* sm);           // 0x00ba9370
+extern void* __cdecl SP_GetStarRecords(void* sm);          // 0x00bb1080
+extern void* __cdecl SP_GetStars(void* emp);               // 0x00c308d0
+extern void* __cdecl SP_GetUFOKey(void* emp);              // 0x00c326b0
+extern void* __cdecl SP_CreateUFO(int a, void* b, void* c);     // 0x0102acb0
+extern void* __cdecl SP_SpaceGameGet(void* ufo);           // 0x01002bd0
+extern void* __cdecl SP_GetSpaceCombatTuning();            // 0x01029940
+extern void* __cdecl SP_EffectsManager();                  // 0x0067ddd0
+extern void* __cdecl SP_GetSystemAT();                     // 0x00a206f0
+extern int   __cdecl SP_FNVHash(const char* s, unsigned seed, int a);   // 0x00932e80
+extern void* __cdecl SP_GetUFOSimulator();                 // 0x00ffbe50
+extern void* __cdecl SP_GetPlayerInventory(void* sim);     // 0x00a1ad60
+extern void  __cdecl SP_Matrix3Assign(void* m, void* src); // 0x0041cb40
+extern void* __cdecl SP_Matrix3FromFacingAndUp(void* out, void* a, void* b);  // 0x0069b440
+extern void* __cdecl SP_GetSetting9();                     // 0x00401090
+extern void* __cdecl SP_GetAvatarProfile(void* a);         // 0x004df420
+extern void* __cdecl SP_GetGameDataVector(void* self, unsigned a, void* b,
+                                          void* c, void* d, void* e);   // 0x00b21340
+extern void* __cdecl FUN_00bd9d70(void* a, int b);         // 0x00bd9d70
+extern void* __cdecl SP_GetPlayerCivilization(void* self); // 0x00b25fb0
+extern void* __cdecl SP_GetPlayerEmpireOrMinus1();         // 0x00b1f9d0
+extern void  __cdecl SP_SetPlayerEmpire(void* a, void* b, int c, unsigned d, int e);
+extern void  __cdecl SP_ReduceCitiesOnPlanet(void* self, void* city);   // 0x00bf4370
+extern void* __cdecl SP_GetCivilization(void* city);       // 0x00bd9bf0
+extern void* __cdecl FUN_00be8680(void* a, int b, int c, int d, int e,
+                                  int f, int g, int h, int i, int j);   // 0x00be8680
+extern void* __cdecl GetPlayerEmpireIDFn();                // 0x01021090
+extern unsigned g_placeEmbassy;                            // 0x016db738
 struct FixedPoolBase {
     void* mpHead;                                  // +0x00
     void* mpUnk04;                                 // +0x04  (never written here)
@@ -474,6 +627,8 @@ struct cSPSimPlanetHighLOD_s00ff_8460 {
     void SpawnRallyChargeup(void* pTarget, float* pPos);               // 0x00ff8e00
 };
 extern RCObject* __fastcall Simulator_alloc(void* mem);   // 0x00ff54e0
+extern void* __cdecl FUN_01021240_s00ff_8460();                       // 0x01021240  SimulatorUniverse::instance
+extern void* __cdecl FUN_010666a0_s00ff_8460();                       // 0x010666a0
 // ---- items of slice s00ff8460 end
 
 // ---- items of slice s00ffa2c0 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -917,17 +1072,24 @@ public:
 // ---- items of slice s00ffa2c0 end
 
 // ---- items of slice s00ffb180 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C" void  __cdecl operator_delete_array(void* pBlock);                                                          // 0x00f47380
 extern char g_nounListPlanet[];        // 0x018c43e8
+extern char g_nounListHarvest[];       // 0x0142db2a
+extern uint32_t g_planetBusterKey[3];  // 0x016db5c4 planet-buster bomb key
 extern float    g_defaultVector[3];    // 0x016db418
 extern char     g_szUFOString[];       // 0x015b60ec
 extern void*    g_slotMessageVtable[]; // 0x013eb844
 extern void*    g_slotMessageBaseVtable[]; // 0x013eb90c
 extern uint32_t g_gameModeGalaxy;      // 0x01654c05
 extern uint32_t g_ufoMessageKey;       // 0x019d6324
+extern float g_kRealZero;           // 0x01485378
 void __cdecl FUN_00cd7d10();           // 0x00cd7d10
 void __cdecl FUN_00d3d420();           // 0x00d3d420
 void __cdecl FUN_00acdff0();           // 0x00acdff0
 void __cdecl FUN_00b1e500();           // 0x00b1e500
+void __cdecl FUN_00ae7060();           // 0x00ae7060 VecT_clear_cb
+void __cdecl FUN_00ae7080();           // 0x00ae7080 CollectSubsystemA
+void __cdecl FUN_00b1e520();           // 0x00b1e520
 class cSimGameData;
 class cCityHall_s00ff_b180;
 class tEffectHandle;
@@ -1052,6 +1214,11 @@ public:
     void       FUN_00c38740(float fA, double fB);           // 0x00c38740
     void       FUN_00bdbf10();                              // 0x00bdbf10
 };
+class cRelationshipManager {
+public:
+    void RecordEvent(uint32_t nKey, void* pFrom, void* pTo, float fValue);   // 0x00d06240
+};
+cRelationshipManager* __cdecl RelationshipManager();    // 0x00b3d2c0
 class tEffectHandle {
 public:
     virtual void v00();             // +0x00
@@ -1109,12 +1276,36 @@ public:
     virtual void v4c();             // +0x4c
     virtual void v50(void* pListener);  // +0x50
 };
+tMessageServer* __cdecl MessageServer_s00ff_b180();            // 0x0067dcc0
 namespace EA {
 namespace Messaging {
  tMessageServer* __cdecl GetServer();   // 0x00883860
 }
 }
 uint32_t        __cdecl GetCurrentGameMode();       // 0x00b5b800
+class tBombKey {
+public:
+    virtual void v00();             // +0x00
+    virtual void v04();             // +0x04
+    virtual void v08();             // +0x08
+    virtual void v0c();             // +0x0c
+    virtual void v10();             // +0x10
+    virtual void v14();             // +0x14
+    virtual uint32_t* v18();        // +0x18
+};
+class tSimThing {
+public:
+    virtual void v00();             // +0x00
+    uint8_t   mPad04[0x514];        // +0x004
+    tBombKey* mp518;                // +0x518
+};
+class tHarvestNoun {
+public:
+    virtual void      v00();                    // +0x00
+    virtual tSimThing* v04(uint32_t nKey);      // +0x04
+    uint8_t   mPad04[0x0c];         // +0x004
+    bool      mb10;                 // +0x010
+};
 class tUFOData : public tRefObject {        // vptr +0x00
 public:
     virtual void  v08();            // +0x08
@@ -1211,6 +1402,39 @@ public:
     void FUN_00c77bf0(uint32_t nKey);   // 0x00c77bf0
     bool Check();                       // 0x00c75650
 };
+class tPlanetGate {
+public:
+    virtual void v00();             // +0x00
+    virtual void v04();             // +0x04
+    virtual void v08();             // +0x08
+    virtual void v0c();             // +0x0c
+    virtual void v10();             // +0x10
+    virtual void v14();             // +0x14
+    virtual void v18();             // +0x18
+    virtual void v1c();             // +0x1c
+    virtual void v20();             // +0x20
+    virtual void v24();             // +0x24
+    virtual void v28();             // +0x28
+    virtual void v2c();             // +0x2c
+    virtual void v30();             // +0x30
+    virtual void v34();             // +0x34
+    virtual void v38();             // +0x38
+    virtual void v3c();             // +0x3c
+    virtual void v40();             // +0x40
+    virtual void v44();             // +0x44
+    virtual void v48();             // +0x48
+    virtual void v4c();             // +0x4c
+    virtual bool v50();             // +0x50
+};
+class cPlanetModel_s00ff_b180 {
+public:
+    uint8_t      mPad00[0x24];      // +0x000
+    tPlanetGate* mp24;              // +0x024 planet gate object
+
+    float GetWaterHeight();                                         // 0x00b7e390
+    tVector3* DirectionToSurfacePosition(tVector3* pOut, void* pID); // 0x00b815a0
+};
+cPlanetModel_s00ff_b180* __cdecl PlanetModel_s00ff_b180();    // 0x00b3d350
 class tRenderConsumer {
 public:
     virtual void v00();                             // +0x00
@@ -1260,7 +1484,483 @@ public:
     void FUN_00ff7530(uint32_t nTimeLo, uint32_t nTimeHi);          // 0x00ff7530
     void FUN_00ffa900(cSimGameData* pNoun, int32_t nEmpire);        // 0x00ffa900
 };
+class tCityVector {
+public:
+    void** mpBegin;                 // +0x00
+    void** mpEnd;                   // +0x04
+    void** mpCapacity;              // +0x08
+
+    tCityVector() : mpBegin(0), mpEnd(0), mpCapacity(0) {}
+    void DoInsertValue(void** pEnd, void* const& pValue);   // 0x00aea5d0
+    void DoDestroy();                                       // 0x00ae6970
+};
 // ---- items of slice s00ffb180 end
+
+// ---- items of slice s00ff6a50 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C" long __cdecl _InterlockedExchange(volatile long* target, long value);
+extern "C" void __cdecl operator_delete_arr(void* p);              // 0x00f47380 (operator delete[])
+#pragma intrinsic(_InterlockedExchange)
+typedef unsigned short char16;
+void* operator new(unsigned int size, const char* pName, int flags, unsigned debugFlags, const char* pFile, int line);  // 0x00f473a0
+extern const char16 gEmptyString16[1];                              // 0x01667bac
+struct Vector3 {
+    float x, y, z;
+    Vector3() {}
+    Vector3(const Vector3& v) : x(v.x), y(v.y), z(v.z) {}
+    bool operator==(const Vector3& v) const { return x == v.x && y == v.y && z == v.z; }
+    bool operator!=(const Vector3& v) const { return x != v.x || y != v.y || z != v.z; }
+};
+extern const Vector3 kZeroVector;                                  // 0x016db418
+struct Quaternion { float x, y, z, w; };
+struct ResourceKey_s00ff_6a50 { uint32_t instanceID, typeID, groupID; };
+extern const ResourceKey_s00ff_6a50 kPlayerColorKey;                          // 0x01572b54
+struct string16 {
+    char16* mpBegin;
+    char16* mpEnd;
+    char16* mpCapacity;
+    uint32_t mAllocator;
+    string16() {
+        mpBegin = mpEnd = (char16*)gEmptyString16;
+        mpCapacity = mpBegin + 1;
+    }
+    ~string16() {
+        if ((mpCapacity - mpBegin) > 1) {
+            if (mpBegin)
+                operator_delete_arr(mpBegin);
+        }
+    }
+    bool empty() const { return mpBegin == mpEnd; }
+    const char16* c_str() const { return mpBegin; }
+    void assign(const char16* pBegin, const char16* pEnd);         // 0x00423650
+    static unsigned int CharStrlen(const char16* p) {
+        const char16* pCurrent = p;
+        while (*pCurrent)
+            ++pCurrent;
+        return (unsigned int)(pCurrent - p);
+    }
+    string16& operator=(const string16& x) {
+        if (&x != this)
+            assign(x.mpBegin, x.mpEnd);
+        return *this;
+    }
+    string16& operator=(const char16* p) {
+        assign(p, p + CharStrlen(p));
+        return *this;
+    }
+};
+template <typename T> struct sp_vector {
+    T* mpBegin;
+    T* mpEnd;
+    T* mpCapacity;
+    uint32_t mAllocator[2];
+    bool empty() const { return mpBegin == mpEnd; }
+    unsigned int size() const { return (unsigned int)(mpEnd - mpBegin); }
+    T& operator[](unsigned int n) { return mpBegin[n]; }
+    const T& operator[](unsigned int n) const { return mpBegin[n]; }
+};
+template <typename T> inline const T& min_ref(const T& a, const T& b) { return (b < a) ? b : a; }
+struct cBuildingData {                   // 0x38
+    Vector3 mPosition;                   // +00
+    Quaternion mOrientation;             // +0c
+    float mHealthPoints;                 // +1c
+    int mDamageState;                    // +20
+    bool mConnected;                     // +24
+    bool mbUnk25;                        // +25
+    uint16_t pad26;
+    int mEffectiveness;                  // +28
+    int mFreezeCount;                    // +2c
+    int mSlot;                           // +30
+    uint32_t mClassId;                   // +34
+};
+struct cOrnamentData {                   // 0x34
+    Vector3 mPosition;                   // +00
+    Quaternion mOrientation;             // +0c
+    float mHealthPoints;                 // +1c
+    int mDamageState;                    // +20
+    ResourceKey_s00ff_6a50 mModelKey;               // +24
+    uint32_t mClassId;                   // +30
+};
+struct cVehicleData {                    // 0x14
+    Vector3 mPosition;                   // +00
+    int mLocomotion;                     // +0c
+    int mPurpose;                        // +10
+    const Vector3& GetPosition();        // 0x00572590
+    int GetLocomotion();                 // 0x00fc7e50
+    int GetPurpose();                    // 0x007f54d0
+};
+struct cCityData {
+    uint32_t pad00[0x30 / 4];
+    float mSpiceProduction;              // +30
+    int mSize;                           // +34
+    uint32_t pad38[(0x7c - 0x38) / 4];
+    sp_vector<cBuildingData> mBuildings; // +7c
+    sp_vector<cOrnamentData> mOrnaments; // +90
+    uint32_t padA4[(0xb8 - 0xa4) / 4];
+    int mLayout;                         // +b8
+    int mFieldBC;                        // +bc
+    int mFieldC0;                        // +c0
+
+    const Vector3& GetPosition();        // 0x00572590
+    const string16& GetName();           // 0x00ff0390
+    const uint32_t& GetBuildingLinks();  // 0x00ff03a0
+    int GetMaxSize();                    // 0x00ff35d0
+    void SetMaxSize(int n);              // 0x009879d0
+    float GetHappiness();                // 0x00b7e0a0
+    int GetIncome();                     // 0x00a1ad10
+    const Quaternion& GetOrientation();  // 0x008dc790
+    uint8_t GetTurretLocations();        // 0x00ffc0c0
+    void RestoreWalls(struct cCity_s00ff_6a50* city, int planetType);      // 0x00ff2810
+    void RestoreCityWalls(int size, int planetType);            // 0x00ff1da0
+};
+struct cCivData {
+    sp_vector<ResourceKey_s00ff_6a50> mModelKeys;   // +00
+    int GetPoliticalID();                // 0x00ff0420
+    int GetColorID();                    // 0x006c0200
+    float GetWealth();                   // 0x00fd9410
+    const sp_vector<cVehicleData*>& GetVehicles();  // 0x00830a50
+    const sp_vector<cCityData*>& GetCities();       // 0x005c65e0
+    const ResourceKey_s00ff_6a50& GetResourceKey(const cBuildingData* data);  // 0x00ff0cd0
+    void LoadModelKeys(void* dst);       // 0x00ff3540
+    void DefaultModelKeys(void* dst);    // 0x00ff3190
+};
+class cSpatial {
+public:
+virtual void _v00();
+virtual void _v04();
+    virtual void SetOwner(uint32_t v);                       // 08
+virtual void _v0c();
+virtual void _v10();
+virtual void _v14();
+virtual void _v18();
+virtual void _v1c();
+virtual void _v20();
+virtual void _v24();
+virtual void _v28();
+    virtual int GetModelID();                                // 2c
+virtual void _v30();
+virtual void _v34();
+    virtual void SetPosition(const Vector3& v);              // 38
+    virtual void SetOrientation(const Quaternion& q);        // 3c
+virtual void _v40();
+virtual void _v44();
+virtual void _v48();
+virtual void _v4c();
+virtual void _v50();
+virtual void _v54();
+virtual void _v58();
+virtual void _v5c();
+virtual void _v60();
+virtual void _v64();
+virtual void _v68();
+virtual void _v6c();
+virtual void _v70();
+virtual void _v74();
+virtual void _v78();
+virtual void _v7c();
+virtual void _v80();
+virtual void _v84();
+virtual void _v88();
+virtual void _v8c();
+    virtual void _v90();
+    virtual void SetModelKey(const ResourceKey_s00ff_6a50& key);        // 94
+};
+class cGameData {
+public:
+    virtual int AddRef();                                    // 00
+    virtual int Release();                                   // 04
+    virtual void _v08();
+    virtual void* Cast(uint32_t typeID);                     // 0c
+};
+struct cCombatant {
+    void SetHealthPoints(float hp);      // 0x00f924e0
+    void SetDamageState(int state);      // 0x00bfc460
+};
+template <typename T> inline T* object_cast(cGameData* p, uint32_t typeID)
+{
+    return p ? (T*)p->Cast(typeID) : 0;
+}
+struct cSPTimer_s00ff_6a50 { void Restart(); };     // 0x00bc3130
+struct cCity_s00ff_6a50;
+class cBuilding {
+public:
+virtual void _v00();
+virtual void _v04();
+virtual void _v08();
+virtual void _v0c();
+virtual void _v10();
+virtual void _v14();
+virtual void _v18();
+virtual void _v1c();
+virtual void _v20();
+virtual void _v24();
+virtual void _v28();
+virtual void _v2c();
+virtual void _v30();
+virtual void _v34();
+virtual void _v38();
+virtual void _v3c();
+virtual void _v40();
+virtual void _v44();
+virtual void _v48();
+virtual void _v4c();
+    virtual void _v50();
+    virtual void SetCity(cCity_s00ff_6a50* city);                       // 54
+    uint32_t pad04[(0x34 - 4) / 4];
+    cSpatial mSpatial;                                       // +34
+    uint32_t pad38[(0x120 - 0x38) / 4];
+    cCombatant mCombatant;                                   // +120
+    uint32_t pad124[(0x258 - 0x124) / 4];
+    cSPTimer_s00ff_6a50 mTimer;                                         // +258
+    uint32_t pad25C[(0x28c - 0x25c) / 4];
+    int mEffectiveness;                                      // +28c
+
+    void SetConnected(bool b);           // 0x00bcc6e0
+    void SetUnk25(bool b);               // 0x00bcd550
+    void SetFreezeCount(int n);          // 0x00bcc760
+};
+class cOrnament {
+public:
+    virtual void _v00();
+    uint32_t pad04[(0x70 - 4) / 4];
+    cSpatial mSpatial;                                       // +70
+    void SetModel(uint32_t groupID, uint32_t politicalID, uint32_t instanceID);  // 0x00c6f770
+};
+struct cBuildingNet {
+    void AddBuilding(cBuilding* b);      // 0x00afa030
+};
+struct cCityGrid {
+    cBuildingNet* GetNet(int modelID);   // 0x00afad70
+};
+struct cCityState {
+    uint32_t pad[0x350 / 4];
+    bool mbRestored;                     // +350
+    void SetActive(int b);               // 0x00becd70
+};
+struct cCity_s00ff_6a50 {
+virtual void _v00();
+virtual void _v04();
+virtual void _v08();
+virtual void _v0c();
+virtual void _v10();
+virtual void _v14();
+virtual void _v18();
+virtual void _v1c();
+virtual void _v20();
+virtual void _v24();
+virtual void _v28();
+virtual void _v2c();
+virtual void _v30();
+virtual void _v34();
+virtual void _v38();
+virtual void _v3c();
+virtual void _v40();
+virtual void _v44();
+    virtual void SetPoliticalID(int id);                     // 48
+virtual void _v4c();
+virtual void _v50();
+virtual void _v54();
+virtual void _v58();
+virtual void _v5c();
+virtual void _v60();
+virtual void _v64();
+virtual void _v68();
+    virtual cCityState* GetState();                          // 6c
+virtual void _v70();
+virtual void _v74();
+virtual void _v78();
+virtual void _v7c();
+virtual void _v80();
+virtual void _v84();
+virtual void _v88();
+    virtual void SetIsPlayer(bool b);                        // 8c
+    uint32_t pad04[(0x34 - 4) / 4];
+    cSpatial mOwner;                                         // +34
+    uint32_t pad38[(0x120 - 0x38) / 4];
+    cSpatial mSpatial;                                       // +120
+    uint32_t pad124[(0x2e8 - 0x124) / 4];
+    int mField2E8;                                           // +2e8
+    int mField2EC;                                           // +2ec
+    uint32_t pad2F0[(0x304 - 0x2f0) / 4];
+    float mSpiceProduction;                                  // +304
+
+    void SetCityData(cCityData* data);   // 0x00bd81e0
+    void SetSize(int size, int b);       // 0x00be73d0
+    void SetIncome(int income, float happiness);             // 0x00bd7d10
+    int GetMaxSize();                    // 0x00bd8110
+    void Layout(const Vector3* pos, float wealth, int turrets, int buildings, bool isPlayer, int a,
+                int layout, int b, int c, int d);            // 0x00be8680
+    void Initialize(int layout, int a, int b, int c);        // 0x00be7bf0
+    void SetUnk(int a);                  // 0x00be32f0
+    cBuilding* GetCityHall();            // 0x00bd9b40
+    void AddBuilding(cBuilding* b, int a);                   // 0x00be1ef0
+    cCityGrid* GetGrid();                // 0x00bd7f40
+    void AddOrnament(cOrnament* o);      // 0x00be1e80
+    void UpdateBuildings();              // 0x00bdbbb0
+    void AddTurret(int slot);            // 0x00be3990
+    void SetUnk2(int a);                 // 0x00c01e20
+};
+class cVehicle {
+public:
+    virtual int AddRef();                                    // 00
+    virtual int Release();                                   // 04
+    uint32_t pad04[(0x34 - 4) / 4];
+    cSpatial mSpatial;                                       // +34
+    uint32_t pad38[(0x5d0 - 0x38) / 4];
+    uint32_t mBehavior;                                      // +5d0
+
+    void Init(int locomotion, int purpose, ResourceKey_s00ff_6a50 key);  // 0x00ca6630
+    void SetVehicleData(cVehicleData* data);                 // 0x00a110b0
+    void SetCivData(cCivData* data);                         // 0x00c9eae0
+    void SetJustEyeCandy(bool b);                            // 0x00c9ecb0
+};
+struct cTextHolder { void SetText(const string16& s); };     // 0x00b6f380
+struct cCivilization_s00ff_6a50 {
+    uint32_t pad00[0x3c / 4];
+    cTextHolder mName;                   // +3c
+    int mField40;                        // +40
+    uint32_t pad44[(0x6c - 0x44) / 4];
+    uint32_t mModelKeys;                 // +6c
+    uint32_t pad70[(0x98 - 0x70) / 4];
+    float mWealth;                       // +98
+
+    void Init(int politicalID, bool isPlayer, int colorID, int a);  // 0x00bf8170
+    void SetWealth(float w, int a);      // 0x00befd80
+    void SetColor(const ResourceKey_s00ff_6a50* key);                   // 0x00bef8f0
+    void SetTribeData(void* data);       // 0x00bebdd0
+    void AddCity(cCity_s00ff_6a50* city);           // 0x00bf4370
+    const sp_vector<cCity_s00ff_6a50*>* GetCities();  // 0x00bef6c0
+    void AddVehicle(cVehicle* v);        // 0x00bf5630
+    const ResourceKey_s00ff_6a50& GetModelTypeKey(uint32_t id);         // 0x00bf9770
+};
+struct cGameNounManager_s00ff_6a50 {
+    cCivilization_s00ff_6a50* GetCivilization(int politicalID);         // 0x00b25f40
+    cGameData* CreateNoun(uint32_t classID);                 // 0x00b20c60
+    cGameData* Func_00b25c30();                              // 0x00b25c30 (the requested class's noun)
+};
+struct cSpeciesProfile { void GetUiName(string16& name); };  // 0x004da330
+struct cTribeInfo { uint32_t pad[4]; int mID; };
+struct cPlanet {
+    uint32_t pad00[0x13c / 4];
+    int mType;                           // +13c
+    cTribeInfo* GetTribe();              // 0x00c71e30
+    cSpeciesProfile* GetSpecies();       // 0x00c70860
+    int GetTechLevel();                  // 0x00c70e00
+};
+struct cStarManager { int GetPlayerPoliticalID(); };         // 0x00885c90
+struct cPlanetModel_s00ff_6a50 { Vector3 DirectionToSurfacePosition(const Vector3& dir); };  // 0x00b815a0
+struct cLocaleManager { string16 GetText(uint32_t id); };   // 0x005ecf80
+class IMessageServer {
+public:
+virtual void _v00();
+virtual void _v04();
+virtual void _v08();
+virtual void _v0c();
+virtual void _v10();
+virtual void _v14();
+    virtual void PostMessage(uint32_t messageID, void* msg, int a, int b);  // 18
+};
+class IBehaviorManager {
+public:
+virtual void _v00();
+virtual void _v04();
+virtual void _v08();
+virtual void _v0c();
+virtual void _v10();
+virtual void _v14();
+virtual void _v18();
+virtual void _v1c();
+virtual void _v20();
+virtual void _v24();
+virtual void _v28();
+virtual void _v2c();
+virtual void _v30();
+virtual void _v34();
+    virtual void Register(uint32_t* behavior);               // 38
+};
+cGameNounManager_s00ff_6a50* NounManager_s00ff_6a50();                             // 0x00b3d300
+cStarManager* StarManager_s00ff_6a50();                                 // 0x00b3d2a0
+cPlanetModel_s00ff_6a50* PlanetModel_s00ff_6a50();                                 // 0x00b3d350
+IMessageServer* MessageServer();                             // 0x0067dcc0
+IBehaviorManager* BehaviorManager();                         // 0x00b3d260
+int GetPlayerEmpireID();                                     // 0x01021090
+cPlanet* GetActivePlanet_s00ff_6a50();                                  // 0x01021260
+cLocaleManager* LocaleManager();                             // 0x004010a0
+const ResourceKey_s00ff_6a50* GetColorKey(int colorID);                 // 0x00b6f0c0
+cCity_s00ff_6a50* CreateCity(const Vector3* pos, const char16* name);   // 0x00bd9d70
+void GetCityLimits(int maxSize, int* a, int* b, int* c, int* d, int* e);  // 0x00ff5330
+int GetTurretCount(int maxSize);                             // 0x00ff53f0
+class cBehaviorMessage {
+public:
+    virtual void _v00();
+    volatile long mnRefCount;            // +04
+    cBehaviorMessage() { _InterlockedExchange(&mnRefCount, 0); }
+};
+struct cMessageHeader {
+    void* mpData0;                       // +08
+    uint32_t pad0C;
+    void* mpData1;                       // +10
+    uint32_t pad14;
+    void* mpData2;                       // +18
+    uint32_t pad1C[5];
+    uint32_t mMessageID;                 // +30
+    uint32_t field_34;
+    cMessageHeader(uint32_t id) : mMessageID(id) {}
+};
+class cSimMessage : public cMessageHeader, public cBehaviorMessage {
+public:
+    void* mpExtra;                       // +38
+    uint32_t field_3C;
+    cSimMessage() : cMessageHeader(0), mpExtra(0) {}
+    virtual void _v00();
+};
+struct cPlanetSimHost {
+    void LoadCivilization(cCivData* civ, cPlanetSimHost* host);
+    uint32_t pad[0x504 / 4];
+    uint32_t mTribeData;                 // +504
+};
+class Screen {
+public:
+    void setModal(bool modal);           // 0x00ad7e40 (ret 4)
+};
+Screen* GetTriggerMgr();                 // 0x00b3d4d0
+class cSpaceGameHudHost {
+public:
+    void Func_01066d60();                // 0x01066d60
+};
+cSpaceGameHudHost* FUN_010666a0_s00ff_6a50();       // 0x010666a0
+class cSPSimPlanetHighLOD_s00ff_6a50 {              // holds the celebrated noun at +0x30
+public:
+    void StartUFOCelebration(cGameData* target);   // 0x00ff65f0 (ret 4)
+    void Func_00ff74f0();                          // 0x00ff74f0
+};
+// ---- items of slice s00ff6a50 end
+
+// @ 0x00ff5930
+int __cdecl FUN_00ff5930(void* param_1)
+{
+    CB8de30* nounMgr = (CB8de30*)((CB8de30*)param_1)->GetNounManager();
+    if (((CC8b560*)FUN_01021230())->IsSomething() == 0) {
+        if (((CB8dab0*)param_1)->GetType() == 5) {
+            CAvatar* avatarMgr = (CAvatar*)nounMgr;
+            if (avatarMgr->GetAvatar() != (void*)FUN_01021090()) {
+                void* starMgr = FUN_00b3d2a0(avatarMgr->GetAvatar());
+                void* empire = ((CStarManager*)starMgr)->GetEmpireByID();
+                void* starMgr2 = FUN_00b3d2a0(empire);
+                void* ufo = ((CStarManager*)starMgr2)->FUN_00baf700();
+
+                if (FUN_00c6fe50(param_1) != 0)
+                    return FUN_0102b010(ufo, g_67b69e3, g_67b69f1);
+
+                CTerraforming* terra = (CTerraforming*)FUN_00b3d430(param_1);
+                if (terra->IsEnabled() != 0)
+                    return FUN_0102b010(ufo, g_67b69d8, g_67b69eb);
+
+                return FUN_0102b010(ufo, g_67b69c4, g_67b69d0);
+            }
+        }
+    }
+    return 0;
+}
 
 // @ 0x00ff5a90
 bool __thiscall cSPSimPlanetHighLOD::Write(IStream* s)
@@ -1275,6 +1975,20 @@ bool __thiscall cSPSimPlanetHighLOD::Write(IStream* s)
     if (ok && ser.Serialize(s))
         return true;
     return false;
+}
+
+// @ 0x00ff5b30
+void __stdcall FUN_00ff5b30(void* param_1)
+{
+    CGetter10666a0B* g = (CGetter10666a0B*)FUN_010666a0_s00ff_4d50();
+    FUN_00ce8f70(param_1, g->FUN_01067e60());
+}
+
+// @ 0x00ff5b50
+void __cdecl FUN_00ff5b50()
+{
+    CCityVisualizer* v = (CCityVisualizer*)FUN_00b3d480_0();
+    v->setActiveVignette(g_1654c05);
 }
 
 // @ 0x00ff5ba0
@@ -1622,6 +2336,111 @@ void __cdecl FUN_00ff6570(int* a, int lo, int n, int i, int v)
     a[i] = v;
 }
 
+// @ 0x00ff65f0
+void cSPSimPlanetHighLOD_s00ff_5d20::StartUFOCelebration(cCity* param)
+{
+    if (param == 0)
+        return;
+    if (param != mpCity) {
+        ((RefObj*)param)->v00();
+        cCity* old = mpCity;
+        mpCity = param;
+        if (old)
+            ((RefObj*)old)->v04();
+    }
+    if (mp18) {
+        mp18->v0c((void*)1);
+        if (mp18) {
+            cVisualEffect* p = mp18;
+            mp18 = 0;
+            p->v04();
+        }
+    }
+    if (mp1c) {
+        mp1c->v0c((void*)1);
+        if (mp1c) {
+            cVisualEffect* p = mp1c;
+            mp1c = 0;
+            p->v04();
+        }
+    }
+    void* home = FUN_01021370();
+    cPlayerInventory* inv = 0;
+    if (FUN_010212a0() == home)
+        inv = ((cSPSimulatorSpaceGame*)FUN_00ffbe50())->GetPlayerInventory();
+    cCityHall* hall = mpCity->GetCityHall();
+    if (inv != 0 && hall != 0) {
+        cHallSub* sub = (cHallSub*)((char*)hall + 0x34);
+        void* r = sub->vac();
+        f32 f = sub->v34() * *(f32*)((char*)r + 0x84);
+        Vec3 tmp;
+        Vec3* n = Swarm_Normalize(&tmp, sub->v2c());
+        f32 sx = n->x * f;
+        f32 sy = n->y * f;
+        f32 sz = n->z * f;
+        Vec3* c = (Vec3*)sub->v2c();
+        Vec3 off;
+        off.x = c->x + sx;
+        off.y = c->y + sy;
+        off.z = c->z + sz;
+        inv->FUN_00c3aa40(&off, sub->v30());
+        inv->FUN_00c3daa0(sqrtf(off.x * off.x + off.y * off.y + off.z * off.z) + g_f1486110);
+    }
+    cEffectsManager* em = FUN_0067ddd0();
+    if (mp18) {
+        cVisualEffect* p = mp18;
+        mp18 = 0;
+        p->v04();
+    }
+    if (em->v2c(0x60713c20, 0, &mp18)) {
+        cCityHall* hall2 = mpCity->GetCityHall();
+        if (hall2 != 0) {
+            cHallSub* sub = (cHallSub*)((char*)hall2 + 0x34);
+            XformMsg m1;
+            m1.ctor();
+            m1.mPos = *(Vec3*)sub->v2c();
+            m1.mFlags |= 4;
+            m1.mSequence++;
+            Mat3 rot;
+            Matrix3FromQuaternion(rot.m, sub->v30());
+            m1.mMat = rot;
+            m1.mFlags |= 2;
+            m1.mSequence++;
+            m1.mPos.x = 1.0f;                  // re-uses the +0x04 slot as the scale tag
+            ((cInvInner*)inv)->v40(9, ((cSub2cU*)((char*)inv + 0x34))->v2c(1));
+            mp18->v44(10, &m1, 1);
+            mp18->v18(&m1);
+            mp18->v08(0);
+            cCivilization* civ = mpCity->GetCivilization();
+            if (civ != 0) {
+                cGovernment* gov = civ->FUN_00bef8e0();
+                if (gov != 0)
+                    gov->FUN_01062e60(1);
+            }
+            cEffectsManager* em2 = FUN_0067ddd0();
+            if (mp1c) {
+                cVisualEffect* p = mp1c;
+                mp1c = 0;
+                p->v04();
+            }
+            if (em2->v2c(0x5dd13c64, 0, &mp1c)) {
+                XformMsg m2;
+                m2.ctor();
+                m2.mPos = *(Vec3*)((cHallSub*)((char*)inv + 0x34))->v2c();
+                m2.mFlags |= 4;
+                m2.mSequence++;
+                Mat3 rot2;
+                Matrix3FromQuaternion(rot2.m, sub->v30());
+                m2.mMat = rot2;
+                m2.mFlags |= 2;
+                m2.mSequence++;
+                mp1c->v18(&m2);
+                mp1c->v08(0);
+            }
+        }
+    }
+}
+
 // @ 0x00ff69c0
 void __cdecl FUN_00ff69c0(u32* begin, u32* end)
 {
@@ -1646,6 +2465,191 @@ void __cdecl FUN_00ff6a00(u32* begin, u32* end)
     }
 }
 
+// @ 0x00ff6a50
+void cPlanetSimHost::LoadCivilization(cCivData* civ, cPlanetSimHost* host)
+{
+    cGameNounManager_s00ff_6a50* nounManager = NounManager_s00ff_6a50();
+    int politicalID = civ->GetPoliticalID();
+    int playerID = GetPlayerEmpireID();
+    if (nounManager == 0)
+        return;
+
+    cPlanet* planet = GetActivePlanet_s00ff_6a50();
+    cTribeInfo* tribe = planet->GetTribe();
+    cCivilization_s00ff_6a50* civilization = nounManager->GetCivilization(politicalID);
+    if (civilization == 0) {
+        civilization = object_cast<cCivilization_s00ff_6a50>(nounManager->CreateNoun(0x18c816a), 0x901f1362);
+        civilization->Init(politicalID, politicalID == playerID, civ->GetColorID(), 0);
+        if (tribe)
+            civilization->mField40 = tribe->mID;
+        string16 name;
+        planet->GetSpecies()->GetUiName(name);
+        civilization->mName.SetText(name);
+        civilization->SetWealth(civ->GetWealth(), 0);
+    }
+    if (civilization == 0)
+        return;
+
+    uint32_t instance = civ->mModelKeys.mpBegin->instanceID;
+    if (instance != 0 && instance != 0xffffffff)
+        civ->LoadModelKeys(&civilization->mModelKeys);
+    else
+        civ->DefaultModelKeys(&civilization->mModelKeys);
+
+    int starPlayerID = StarManager_s00ff_6a50()->GetPlayerPoliticalID();
+    if (civ->GetPoliticalID() == starPlayerID)
+        civilization->SetColor(&kPlayerColorKey);
+    else
+        civilization->SetColor(GetColorKey(civ->GetColorID()));
+    civilization->SetTribeData(&host->mTribeData);
+    GetActivePlanet_s00ff_6a50();
+
+    int cityCount = (int)civ->GetCities().size();
+    for (int i = 0; i < cityCount; i++) {
+        cCityData* data = civ->GetCities()[i];
+        const Vector3& pos = data->GetPosition();
+        if (pos != kZeroVector) {
+            string16 cityName;
+            if (data->GetName().empty())
+                cityName = LocaleManager()->GetText(0x58f4c251).c_str();
+            else
+                cityName = data->GetName();
+
+            cCity_s00ff_6a50* city = CreateCity(&pos, cityName.c_str());
+            city->mOwner.SetOwner(data->GetBuildingLinks());
+            city->mField2E8 = data->mFieldBC;
+            city->mField2EC = data->mFieldC0;
+            city->SetPoliticalID(politicalID);
+            city->SetCityData(data);
+            city->mSpiceProduction = data->mSpiceProduction;
+            city->SetSize(data->mSize, 0);
+            city->SetIncome(data->GetIncome(), data->GetHappiness());
+            civilization->AddCity(city);
+
+            if (data->mBuildings.empty()) {
+                int a = 0, b = 0, c = 0, d = 0, e = 0;
+                int cityMax = city->GetMaxSize();
+                int dataMax = data->GetMaxSize();
+                data->SetMaxSize(min_ref(cityMax, dataMax));
+                GetCityLimits(data->GetMaxSize(), &a, &b, &c, &d, &e);
+                int turrets = GetTurretCount(data->GetMaxSize());
+                city->Layout(&pos, civilization->mWealth, turrets, d + c + b, politicalID == playerID, e,
+                             data->mLayout, 0, 0, 1);
+                data->RestoreWalls(city, planet->mType);
+            } else {
+                city->mSpatial.SetPosition(PlanetModel_s00ff_6a50()->DirectionToSurfacePosition(pos));
+                city->mSpatial.SetOrientation(data->GetOrientation());
+                city->Initialize(data->mLayout, 0, 0, 1);
+                city->GetState()->mbRestored = true;
+                city->SetIsPlayer(politicalID == playerID);
+                data->RestoreCityWalls(city->GetMaxSize(), planet->mType);
+                city->SetUnk(0);
+                city->GetCityHall()->SetCity(city);
+
+                for (unsigned int j = 0; j < data->mBuildings.size(); j++) {
+                    cBuildingData* bd = &data->mBuildings[j];
+                    if (bd->mClassId == 0x18ea1eb) {
+                        cBuilding* hall = city->GetCityHall();
+                        hall->mSpatial.SetPosition(bd->mPosition);
+                        hall->mSpatial.SetOrientation(bd->mOrientation);
+                        hall->mSpatial.SetModelKey(civ->GetResourceKey(bd));
+                        hall->mCombatant.SetHealthPoints(bd->mHealthPoints);
+                        hall->mCombatant.SetDamageState(bd->mDamageState);
+                        hall->SetConnected(bd->mConnected);
+                        hall->mEffectiveness = bd->mEffectiveness;
+                        hall->SetFreezeCount(bd->mFreezeCount);
+                    } else {
+                        cBuilding* building = (cBuilding*)NounManager_s00ff_6a50()->CreateNoun(bd->mClassId);
+                        if (building) {
+                            building->SetCity(city);
+                            building->mSpatial.SetPosition(bd->mPosition);
+                            building->mSpatial.SetOrientation(bd->mOrientation);
+                            building->mSpatial.SetModelKey(civ->GetResourceKey(bd));
+                            building->mCombatant.SetHealthPoints(bd->mHealthPoints);
+                            building->mCombatant.SetDamageState(bd->mDamageState);
+                            building->SetConnected(bd->mConnected);
+                            building->SetUnk25(bd->mbUnk25);
+                            building->mEffectiveness = bd->mEffectiveness;
+                            building->SetFreezeCount(bd->mFreezeCount);
+                            city->AddBuilding(building, 1);
+                            cBuildingNet* net = city->GetGrid()->GetNet(building->mSpatial.GetModelID());
+                            if (net)
+                                net->AddBuilding(building);
+                            if (bd->mDamageState == 2)
+                                building->mTimer.Restart();
+                        }
+                    }
+                }
+
+                for (unsigned int j = 0; j < data->mOrnaments.size(); j++) {
+                    cOrnamentData* od = &data->mOrnaments[j];
+                    cOrnament* ornament = (cOrnament*)NounManager_s00ff_6a50()->CreateNoun(od->mClassId);
+                    if (ornament) {
+                        ornament->SetModel(0x2ae5ba7, civ->GetPoliticalID(), od->mModelKey.instanceID);
+                        ornament->mSpatial.SetPosition(od->mPosition);
+                        ornament->mSpatial.SetOrientation(od->mOrientation);
+                        city->AddOrnament(ornament);
+                    }
+                }
+
+                city->UpdateBuildings();
+                uint8_t turrets = data->GetTurretLocations();
+                for (int t = 0; t < 8; t++) {
+                    if (turrets & (1 << t))
+                        city->AddTurret(t);
+                }
+            }
+
+            city->GetState()->SetActive(1);
+            city->SetUnk2(0);
+            cSimMessage* msg = new ("Simulator", 0, 0, 0, 0) cSimMessage();
+            msg->mpData0 = city;
+            MessageServer()->PostMessage(0x56e50f1, msg, 0, 0);
+        }
+    }
+
+    const sp_vector<cVehicleData*>& vehicles = civ->GetVehicles();
+    int vehicleCount = (int)vehicles.size();
+    for (int i = 0; i < vehicleCount; i++) {
+        cVehicleData* vd = vehicles[i];
+        Vector3 pos = vd->GetPosition();
+        if (pos == kZeroVector) {
+            cSimMessage* msg = new ("Simulator", 0, 0, 0, 0) cSimMessage();
+            msg->mpData0 = civilization->GetCities()->mpBegin[0];
+            msg->mpData1 = vd;
+            msg->mpData2 = civ;
+            MessageServer()->PostMessage(0x5416d55, msg, 0, 0);
+        } else {
+            cVehicle* vehicle = object_cast<cVehicle>(nounManager->CreateNoun(0x18c6de8), 0x137e8e0);
+            if (vehicle)
+                vehicle->AddRef();
+            civilization->AddVehicle(vehicle);
+            uint32_t modelType = 0xffffffff;
+            switch (vd->GetLocomotion()) {
+            case 0: modelType = 0xbc1041e6; break;
+            case 1: modelType = 0xc15695da; break;
+            case 2: modelType = 0x2090a11b; break;
+            }
+            vehicle->Init(vd->GetLocomotion(), vd->GetPurpose(), civilization->GetModelTypeKey(modelType));
+            vehicle->SetVehicleData(vd);
+            vehicle->SetCivData(civ);
+            vehicle->mSpatial.SetPosition(pos);
+            if (planet->GetTechLevel() == 5)
+                vehicle->SetJustEyeCandy(true);
+            BehaviorManager()->Register(&vehicle->mBehavior);
+            vehicle->Release();
+        }
+    }
+}
+
+// @ 0x00ff74f0
+void cSPSimPlanetHighLOD_s00ff_6a50::Func_00ff74f0()
+{
+    StartUFOCelebration(NounManager_s00ff_6a50()->Func_00b25c30());
+    GetTriggerMgr()->setModal(true);
+    FUN_010666a0_s00ff_6a50()->Func_01066d60();
+}
+
 // @ 0x00ff8460
 PooledRegion* PooledRegion::FUN_00ff8460()
 {
@@ -1665,6 +2669,49 @@ PooledRegion* PooledRegion::FUN_00ff8460()
     mPrev = this;
     mNext = this;
     return this;
+}
+
+// @ 0x00ff84f0
+void FUN_00ff84f0(int a, int b)
+{
+    if (a == b)
+        return;
+    int n = (b - a) >> 2;
+    int t = n;
+    int bits = 0;
+    for (; t != 0; t >>= 1)
+        bits++;
+    quick_sort_impl(a, b, bits * 2 - 2);
+    if (n > 0x1c) {
+        FUN_00ff5ba0(a, a + 0x70);
+        FUN_00ff5be0(a + 0x70, b);
+    } else {
+        FUN_00ff5ba0(a, b);
+    }
+}
+
+// @ 0x00ff8560
+void FUN_00ff8560(int param_1, float* param_2, unsigned param_3)
+{
+    void* pUniverse = FUN_01021260();
+    int   taken     = (int)FUN_00b8e040(pUniverse, param_1) & 0xff;
+    if (taken == 0)
+        FUN_00ac9200(param_2);
+
+    void* pm   = SP_PropertyManager();
+    SP_GetPropertyAsKeyInstance(pm, 0x30608f0bu, param_2);
+    void* tool = SP_CreateNoun(SP_NounManager(), 0x4e3fab5u);
+    void* prop = tool ? ((RCObject*)tool)->v0c(0x4e3faaf) : 0;
+    if (prop) {
+        FUN_00c74a30(prop);
+        FUN_00c74860(prop);
+        FUN_00f924e0(prop, 0.0f);
+    }
+    void* q = 0;
+    SP_QuaternionFromDirections(&q, param_2, 0);
+    if ((unsigned)param_1 == g_placeEmbassy)
+        SP_StarManager(0);
+    FUN_010421c0(FUN_01067e60(FUN_010666a0_s00ff_8460()), 0);
 }
 
 // @ 0x00ff8780
@@ -1786,6 +2833,69 @@ cSPSimPlanetHighLOD_s00ff_8460* __fastcall cSPSimPlanetHighLOD_ctor(cSPSimPlanet
     return self;
 }
 
+// @ 0x00ff8ad0
+void FUN_00ff8ad0(void)
+{
+    void* self   = FUN_01021240_s00ff_8460();
+    void* avatar = SP_StarManager(self);
+    void* empire = SP_GetEmpireByID(SP_StarManager(avatar));
+    if (empire == 0)
+        return;
+
+    float range = 10.0f;
+    if (SP_GetSpaceCombatTuning() != 0) {
+        float* pf = SP_GetPropertyAsFloat();
+        if (pf) range = *pf;
+    }
+
+    void* stars = SP_GetStars(empire);
+    SP_GetStarRecords(SP_StarManager(0));
+    SP_GetPropertyAsKeyInstance(stars, 0x1601760u, 0);
+
+    int count = 3;
+    if (SP_GetSpaceCombatTuning() != 0) {
+        float* pf = SP_GetPropertyAsFloat();
+        if (pf) count = (int)*pf;
+    }
+
+    void* ufoKey = SP_GetUFOKey(empire);
+    for (int i = 0; i < count; ++i) {
+        void* ufo = SP_CreateUFO(8, 0, ufoKey);
+        SP_SpaceGameGet(ufo);
+        FUN_01009a40(ufo);
+    }
+
+    RCObject* audio = (RCObject*)SP_GetSystemAT();
+    if (audio != 0) {
+        audio->v0c(0x3475365);
+        audio->v0c(0x3475381);
+        audio->v0c((int)GetPlayerEmpireIDFn());
+    }
+    (void)range;
+}
+
+// @ 0x00ff8e00
+void cSPSimPlanetHighLOD_s00ff_8460::SpawnRallyChargeup(void* pTarget, float* pPos)
+{
+    void* fx     = SP_EffectsManager();
+    unsigned hash = (unsigned)SP_FNVHash("SG_ufo_raider_rally_chargeup", 0x811c9dc5u, 1);
+    RCObject* effect = (RCObject*)((RCObject*)fx)->v0c((int)hash);
+
+    if (effect != 0) {
+        void* sim = SP_GetUFOSimulator();
+        void* inv = SP_GetPlayerInventory(sim);
+        float pos[3];
+        pos[0] = pPos[0];
+        pos[1] = pPos[1];
+        pos[2] = pPos[2];
+        float mat[9];
+        SP_Matrix3Assign(mat, pos);
+        SP_Matrix3FromFacingAndUp(mat, pos, (void*)pTarget);
+        FUN_00dd85c0(&this->mTree1c0, mat);
+        this->mpFx18 = effect;
+    }
+}
+
 // @ 0x00ff9070
 void FUN_00ff9070(void)
 {
@@ -1818,6 +2928,44 @@ void FUN_00ff9070(void)
             ++it;
         } while (it != r->mpEnd);
     }
+}
+
+// @ 0x00ff9100
+void* FUN_00ff9100(int arg0, void* arg1)
+{
+    void* setting = SP_GetSetting9();
+    if (setting == 0)
+        return 0;
+
+    void* profile = SP_GetAvatarProfile(setting);
+    void* nounVec = SP_GetGameDataVector(SP_NounManager(),
+                                         0x18c43e8u, 0, 0, 0, 0);
+    (void)profile; (void)nounVec;
+
+    RCObject* city = (RCObject*)FUN_00bd9d70(arg1, 0);
+    if (city == 0)
+        return 0;
+
+    RCObject* player = (RCObject*)SP_GetPlayerCivilization(SP_NounManager());
+    if (player == 0) {
+        RCObject* created = (RCObject*)SP_CreateNoun(SP_NounManager(), 0x18c816au);
+        if (created)
+            player = (RCObject*)created->v0c(0x901f1362);
+        SP_SetPlayerEmpire(player, SP_GetPlayerEmpireOrMinus1(), 1, 0x53dbcf2u, 0);
+    }
+
+    SP_ReduceCitiesOnPlanet(player, city);
+
+    RCObject* civil = (RCObject*)SP_GetCivilization(city);
+    if (civil == 0)
+        return city;
+
+    void* mem = operator_new(0x50, "Simulator/cCivData", 0, 0, 0, 0);
+    if (mem)
+        FUN_00be8680(mem, 0, 0, 0, 1, 0, 0, 0, 1, 0);
+
+    (void)arg0;
+    return city;
 }
 
 // @ 0x00ffa2c0
@@ -2064,6 +3212,157 @@ void FUN_00ffab60()
     }
 }
 }  // namespace SP
+
+// @ 0x00ffb180
+void cSPSimPlanetHighLOD_s00ff_b180::FUN_00ffb180()
+{
+    cGameNounManager_s00ff_b180* pManager = NounManager_s00ff_b180();
+    tGameDataList* pList = pManager->GetGameDataVector((void*)FUN_00cd7d10, (void*)FUN_00ae7060,
+                                                       (void*)FUN_00ae7080, (void*)FUN_00b1e520,
+                                                       g_nounListHarvest);
+    tPtrVector* pNouns = &pList->mData;
+    void** pCur = pNouns->mpBegin;
+    void** pEnd = pNouns->mpEnd;
+    if (pCur != pEnd)
+    {
+        do
+        {
+            tHarvestNoun* pNoun = (tHarvestNoun*)*pCur;
+            if (pNoun != 0)
+            {
+                tSimThing* pThing = pNoun->v04(0x024270c4);
+                if (pThing != 0)
+                {
+                    tBombKey* pKey = pThing->mp518;
+                    if (pKey != 0)
+                    {
+                        uint32_t* pValue = pKey->v18();
+                        if (pValue[0] == g_planetBusterKey[0] && pValue[1] == g_planetBusterKey[1] &&
+                            pValue[2] == g_planetBusterKey[2])
+                        {
+                            pNoun->mb10 = false;
+                        }
+                    }
+                }
+            }
+            ++pCur;
+        } while (pCur != pEnd);
+    }
+
+    MessageServer_s00ff_b180()->v18(0x04f4d25e, 0, 0, 0);
+    mb1e0 = false;
+    if (mp1dc != 0)
+    {
+        mp1dc->v0c(1);
+        if (mp1dc != 0)
+        {
+            tEffectHandle* pOld = mp1dc;
+            mp1dc = 0;
+            pOld->Release();
+        }
+    }
+}
+
+// @ 0x00ffb830
+void cSPSimPlanetHighLOD_s00ff_b180::CheckForCityDestruction()
+{
+    float fWater = PlanetModel_s00ff_b180()->GetWaterHeight();
+    float fWater2 = fWater * fWater;
+    tCityVector cities;
+    GetActivePlanet_s00ff_b180();
+    if (!PlanetModel_s00ff_b180()->mp24->v50())
+    {
+        cities.DoDestroy();
+        return;
+    }
+
+    int32_t nEmpire = -1;
+    cGameNounManager_s00ff_b180* pManager = NounManager_s00ff_b180();
+    tGameDataList* pList = pManager->GetGameDataVector((void*)FUN_00cd7d10, (void*)FUN_00d3d420,
+                                                       (void*)FUN_00acdff0, (void*)FUN_00b1e500,
+                                                       g_nounListPlanet);
+    tPtrVector* pNouns = &pList->mData;
+    int32_t nCount = (int32_t)(pNouns->mpEnd - pNouns->mpBegin);
+    for (int32_t i = 0; i < nCount; ++i)
+    {
+        cSimGameData* pCity = (cSimGameData*)pNouns->mpBegin[i];
+        cCityHall_s00ff_b180* pHall = pCity->GetCityHall();
+        tVector3 vPos;
+        PlanetModel_s00ff_b180()->DirectionToSurfacePosition(&vPos, pCity->mObj120.v2c());
+        bool bInside = vPos.x * vPos.x + vPos.y * vPos.y + vPos.z * vPos.z < fWater2;
+
+        bool bDamaged = pHall->mObj120.FUN_008e7f80() != 0;
+        if (bDamaged)
+        {
+            nEmpire = pHall->mn15c;
+        }
+        else
+        {
+            if (!bInside)
+                continue;
+            nEmpire = -1;
+        }
+
+        cSimGameData* pRef = pCity;
+        if (pCity != 0)
+            pCity->AddRef();
+        if (cities.mpEnd < cities.mpCapacity)
+        {
+            *cities.mpEnd = pCity;
+            ++cities.mpEnd;
+            if (pCity != 0)
+                pCity->AddRef();
+        }
+        else
+        {
+            cities.DoInsertValue(cities.mpEnd, pRef);
+        }
+        if (pRef != 0)
+            pRef->Release();
+
+        if (GetCurrentGameMode() == (uint32_t)g_gameModeGalaxy)
+        {
+            if (bInside)
+            {
+                if (pCity->v4c() != GetPlayerEmpireID())
+                {
+                    RelationshipManager()->RecordEvent(0x0526e5cf, (void*)GetPlayerEmpireID(),
+                                                       (void*)(uint32_t)pCity->v4c(), 1.0f);
+                }
+            }
+            if (pCity->mf220 > g_kRealZero)
+            {
+                tGameDataList* pList2 = pManager->GetGameDataVector((void*)FUN_00cd7d10, (void*)FUN_00d3d420,
+                                                                    (void*)FUN_00acdff0, (void*)FUN_00b1e500,
+                                                                    g_nounListPlanet);
+                tPtrVector* pNouns2 = &pList2->mData;
+                int32_t nCount2 = (int32_t)(pNouns2->mpEnd - pNouns2->mpBegin);
+                for (int32_t k = 0; k < nCount2; ++k)
+                {
+                    cSimGameData* pOther = (cSimGameData*)pNouns2->mpBegin[k];
+                    if ((void*)pOther->v4c() == (void*)pCity->v4c())
+                        pOther->FUN_00bdbf10();
+                }
+            }
+        }
+    }
+
+    void** pSlot = cities.mpBegin;
+    while (pSlot != cities.mpEnd)
+    {
+        FUN_00ffa900((cSimGameData*)*pSlot, nEmpire);
+        ++pSlot;
+    }
+    pSlot = cities.mpBegin;
+    while (pSlot < cities.mpEnd)
+    {
+        if (*pSlot != 0)
+            ((tRefObject*)*pSlot)->Release();
+        ++pSlot;
+    }
+    if (cities.mpBegin != 0 && ((int32_t*)cities.mpBegin)[-1] != 0)
+        operator_delete_array(cities.mpBegin);
+}
 
 // @ 0x00ffbb20
 void cSPSimPlanetHighLOD_s00ff_b180::OnTick(uint32_t nTimeLo, uint32_t nTimeHi)
