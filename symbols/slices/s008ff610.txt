@@ -1,10 +1,13 @@
-008ff610 EA::XHTML::Resource::ResourceProvider::CancelRequest  # looks up mRequests by id, calls handler cancel + callback(type 4), deletes request
+008ff610 ?CancelRequest@ResourceProvider_s008f_f610@@QAE_NI@Z  # ResourceProvider_s008f_f610::CancelRequest migrated from s008ff610 (verbatim, slice spelling)
+008ff7f0 ?CancelAll@ResourceProvider_s008f_f610@@QAE_NXZ  # ResourceProvider_s008f_f610::CancelAll migrated from s008ff610 (verbatim, slice spelling)
+008ff9b0 ?erase@UMap_s008f_f610@@QAEIPAI@Z  # UMap_s008f_f610::erase migrated from s008ff610 (verbatim, slice spelling)
 008ffa20 ?DoInsertValue@WMap@@QAEPAUWIns@@PAU2@PAUWKV@@UTagT@@@Z  # WMap::DoInsertValue migrated from s008ff610 (verbatim, slice spelling)
-008ffb40 EA::XHTML::Resource::ResourceProvider::FinishRequest  # PDB candidate on card
+008ffb40 ?FinishRequest@ResourceProvider_s008f_f610@@QAEXPAUResourceRequest@@H@Z  # ResourceProvider_s008f_f610::FinishRequest migrated from s008ff610 (verbatim, slice spelling)
+008ffd50 ?SetFactory@ResourceProvider_s008f_f610@@QAEXPAURCObjN_s008f_f610@@_N@Z  # ResourceProvider_s008f_f610::SetFactory migrated from s008ff610 (verbatim, slice spelling)
 008ffdf0 ?GetOrInsert@UMap@@QAEPAPAUResourceRequest@@PAI@Z  # UMap::GetOrInsert migrated from s008ff610 (verbatim, slice spelling)
-008ffe80 EA::XHTML::Resource::ResourceProvider::ResourceProvider  # ctor: sets mpAllocator, mFactories, mCache(0x500000,10)
-008fff80 EA::XHTML::Resource::ResourceProvider::~ResourceProvider  # byte-exact
-00900070 EA::XHTML::Resource::ResourceProvider::Request  # PDB candidate on card
+008ffe80 ??0ResourceProvider_s008f_f610@@QAE@PAUIAlloc_s008f_f610@@@Z  # ResourceProvider_s008f_f610::ResourceProvider migrated from s008ff610 (verbatim, slice spelling)
+008fff80 ??1ResourceProvider_s008f_f610@@UAE@XZ  # ResourceProvider_s008f_f610::~ResourceProvider migrated from s008ff610 (verbatim, slice spelling)
+00900070 ?Request@ResourceProvider_s008f_f610@@QAE_NPAIPBGP6AXPAX2@Z2PAUILogListener@@_N@Z  # ResourceProvider_s008f_f610::Request migrated from s008ff610 (verbatim, slice spelling)
 009002f0 ?SetEncoding@ResourceRequest@@QAE_NHH@Z  # ResourceRequest::SetEncoding migrated from s008ff610 (verbatim, slice spelling)
 00900310 ??0ResourceRequest@@QAE@PBGPAUILogListener@@@Z  # ResourceRequest::ResourceRequest migrated from s008ff610 (verbatim, slice spelling)
 0143a02c ??_7ResourceProvider@@6B@  # ResourceProvider vtable (our class models only the dtor slot)

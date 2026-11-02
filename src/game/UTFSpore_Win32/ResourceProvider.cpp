@@ -183,10 +183,10 @@ struct IHTable_s008f_e610 {
         mBucketArray[64] = (CacheEntry*)-1;
     }
     CacheEntry* DoFindNode(CacheEntry* head, const uint16_t* const* key);  // 0x008fe430
-    IterR* DoInsertValue(IterR* out, CacheEntry* node, TagT);
+    IterR* DoInsertValue(IterR* out, CacheEntry* node, TagT);  // 0x008fe610 (IHTable::DoInsertValue)
     void erase(const uint16_t* const* key);                                 // 0x008fe510
     void find(IterC* out, const uint16_t* const* key);                      // 0x008fe490
-    void insert(IterC* out, CacheEntry* e);                                 // 0x008fe970
+    void insert(IterR* out, CacheEntry* e);                                 // 0x008fe970 (passes out to DoInsertValue: writes all 12 bytes)
 };
 static inline const uint16_t* const& ExtractKey(CacheEntry& e) { return e.mKey; }
 struct ResourceCache {
@@ -272,6 +272,10 @@ struct IHandlerList {
     virtual const uint16_t* GetAt(unsigned); // +0x1c
     virtual void Done(void* ctx);            // +0x20
 };
+struct KV2 {  // pair whose value is refcounted via vt+8
+    const uint16_t* key;
+    RCObjN* val;
+};
 struct HolderMap {
     char pad[0x264];
     PMap map;   // +0x264
@@ -300,6 +304,12 @@ struct VObj {
     VObj* CopyCtor(VObj* src);
 };
 void __cdecl EastlCopy(void** out, void* first, void* last, void* dst, void* tag);  // 0x0076ffd0
+struct VOut {
+    void* a;
+    void* b;
+    VBase v;   // +8
+    void* end; // +0xc is v.mpEnd
+};
 struct CreateCtx;
 struct IFactory {
     virtual void v0();
@@ -330,18 +340,67 @@ struct ResourceProvider {
     IFactory** mEnd;    // +0x10
     int CreateResource(unsigned a, unsigned b, CreateCtx* c);
 };
+struct UPair {
+    unsigned first;
+    void* second;
+};
+UPair* __cdecl LowerBound(UPair* b, UPair* e, unsigned* key, uint8_t flag);  // 0x00d01260
+struct UMap {
+    char pad[0x124];
+    UPair* mpBegin;  // +0x124
+    UPair* mpEnd;    // +0x128
+    char pad2[0xc];
+    uint8_t mFlag;   // +0x138
+    void* Find(unsigned key);
+};
+void __cdecl MoveElems(RCObjN** first, RCObjN** last, RCObjN** dst);       // 0x00d3b3c0
+void __cdecl MoveBackward(RCObjN** first, RCObjN** last, RCObjN** dstEnd); // 0x00a690d0
+void* __cdecl operator_new_eastl(unsigned n, const char* name, int a, int b, const char* file, int line);
+static __forceinline void RelRC(RCObjN* o)
+{
+    int n = (*(volatile int*)&o->mRef += -1);
+    if (n == 0) {
+        o->mRef = 1;
+        _ReadWriteBarrier();
+        o->v0(1);
+    }
+}
+struct RCVec {
+    RCObjN** mpBegin;  // +0
+    RCObjN** mpEnd;    // +4
+    RCObjN** mpCap;    // +8
+    char pad[4];
+    RCObjN** mpFixed;  // +0x10
+    RCObjN** erase(RCObjN** pos);
+    void InsertValue(RCObjN** pos, RCObjN** val);
+};
 // ---- items of slice s008fe610 end
 
 // ---- items of slice s008ff610 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern void* gEmptyBuckets[1];   // 0x0154df28
+struct IAlloc_s008f_f610 {
+    virtual void v0();
+    virtual void* Alloc(unsigned sz, const char* name, unsigned flags, unsigned align, unsigned off);
+    virtual void* AllocSimple(unsigned sz, const char* name, unsigned flags);
+    virtual void Free(void* p, unsigned sz);
+};
+IAlloc_s008f_f610* GetDefaultAllocator();   // 0x00925cb0 EA::Allocator::ICoreAllocator::GetDefaultAllocator
 struct IUnk_s008f_f610 {
     virtual void AddRef();
     virtual void Release();
+};
+struct ARC_s008f_f610 {
+    IUnk_s008f_f610* mp;
+    void Assign(IUnk_s008f_f610* p);   // 0x00b5f950
 };
 struct IRC {  // refcounted interface (dtor, AddRef, Release)
     virtual void v0(int);
     virtual void AddRef();
     virtual void Release();
+};
+struct RCObjN_s008f_f610 {  // vptr + refcount
+    virtual void v0(int);
+    int mRef;
 };
 struct ResourceRequest;
 typedef void (__cdecl *ReqCb)(void* evt, void* ctx);
@@ -351,6 +410,13 @@ struct Evt {
     uint8_t flag;           // +8
     const uint16_t* url;    // +0xc
     IUnk_s008f_f610* obj;              // +0x10
+};
+struct EvtA {
+    int type;
+    unsigned id;
+    uint8_t flag;
+    const uint16_t* url;
+    ARC_s008f_f610 obj;
 };
 struct CbPair {
     ReqCb fn;
@@ -364,6 +430,12 @@ struct CbVec {
     char alloc[4];
     char pad[4];
     CbVec* CopyCtor(CbVec* src);   // 0x008ff0b0
+};
+struct CbVecRaw {
+    CbPair* mpBegin;
+    CbPair* mpEnd;
+    CbPair* mpCap;
+    void InsertAux(CbPair* pos, CbPair* val);  // 0x009a0c50
 };
 struct WNode {
     const uint16_t* key;    // +0
@@ -455,7 +527,186 @@ struct ResourceRequest {
     ResourceRequest(const uint16_t* url, ILogListener* el);
     bool SetEncoding(int enc, int src);
 };
+struct UPair_s008f_f610 {
+    unsigned first;
+    ResourceRequest* second;
+};
+UPair_s008f_f610* __cdecl LowerBound_s008f_f610(UPair_s008f_f610* b, UPair_s008f_f610* e, unsigned* key, uint8_t flag);  // 0x00d01260
+struct UMap_s008f_f610 {
+    UPair_s008f_f610* mpBegin;     // +0
+    UPair_s008f_f610* mpEnd;       // +4
+    UPair_s008f_f610* mpCap;       // +8
+    char pad[8];
+    uint8_t mFlag;      // +0x14
+    UMap_s008f_f610()
+    {
+        mpBegin = 0;
+        mpEnd = 0;
+        mpCap = 0;
+    }
+    unsigned erase(unsigned* key);
+    ResourceRequest** GetOrInsert(unsigned* key);   // vector_map operator[] (named so the checker can find it) 0x008ffdf0
+    UPair_s008f_f610* insert(UPair_s008f_f610* pos, UPair_s008f_f610* val);   // 0x009970e0
+};
+struct ListBase {  // eastl::intrusive_list_base
+    void* mpNext;
+    void* mpPrev;
+    ~ListBase();   // 0x00620230
+};
+struct ResourceCache_s008f_f610 {
+    char data[0x128];
+    ResourceCache_s008f_f610(IAlloc_s008f_f610* a, unsigned maxSize, uint16_t frac);   // 0x008fe830
+    void Clear();                                                // 0x008feae0
+    IUnk_s008f_f610* Find(const uint16_t* key);                             // 0x008feba0
+    bool Insert(const uint16_t* key, IUnk_s008f_f610* data, unsigned size); // 0x008fec20
+    void Destroy()
+    {
+        Clear();  // 0x008feae0 (ResourceCache::Clear)
+        ((ListBase*)(data + 0x120))->~ListBase();
+    }
+};
+struct RCVec_s008f_f610 {
+    RCObjN_s008f_f610** mpBegin;
+    RCObjN_s008f_f610** mpEnd;
+    RCObjN_s008f_f610** mpCap;
+    char pad[4];
+    RCObjN_s008f_f610** mpFixed;
+    RCVec_s008f_f610(RCObjN_s008f_f610** b)
+    {
+        mpFixed = b;
+        mpEnd = b;
+        mpBegin = b;
+        mpCap = b + 64;
+    }
+    void Destroy()
+    {
+        DestroyRange(mpBegin, mpEnd);
+        RCObjN_s008f_f610** b = mpBegin;
+        if (b && b != mpFixed)
+            operator_delete__(b);
+    }
+    RCObjN_s008f_f610** erase(RCObjN_s008f_f610** pos);                   // 0x008ff370
+    void InsertValue(RCObjN_s008f_f610** pos, RCObjN_s008f_f610** val);   // 0x008ff4c0
+    void DestroyRange(RCObjN_s008f_f610** f, RCObjN_s008f_f610** l);      // 0x00a693f0
+    RCObjN_s008f_f610** find(RCObjN_s008f_f610* f)
+    {
+        RCObjN_s008f_f610** p = mpBegin;
+        RCObjN_s008f_f610** e = mpEnd;
+        for (; p != e && *p != f; ++p) {
+        }
+        return p;
+    }
+    void push_back(RCObjN_s008f_f610* const& v)
+    {
+        if (mpEnd < mpCap) {
+            RCObjN_s008f_f610** slot = mpEnd++;
+            if (slot) {
+                *slot = v;
+                if (v)
+                    v->mRef += 1;
+            }
+        } else {
+            InsertValue(mpEnd, (RCObjN_s008f_f610**)&v);  // 0x008ff4c0 (RCVec::InsertValue)
+        }
+    }
+};
+struct PMapNode;
+struct PMap_s008f_f610 {
+    int unk0;
+    PMapNode** mBuckets;
+    unsigned mBucketCount;
+    unsigned mCount;
+    RehashPolicy_s008f_f610 mPolicy;
+    PMap_s008f_f610()
+    {
+        mPolicy.maxLoad = 1.0f;
+        mPolicy.growth = 2.0f;
+        mCount = 0;
+        mPolicy.nextResize = 0;
+        mBuckets = (PMapNode**)gEmptyBuckets;
+        mBucketCount = 1;
+    }
+    void FreeNodes(PMapNode** b, unsigned n);   // 0x008feea0
+    void Destroy()
+    {
+        FreeNodes(mBuckets, mBucketCount);
+        mCount = 0;
+        if (mBucketCount > 1)
+            operator_delete__(mBuckets);
+    }
+};
+struct IProtocolHandler {
+    virtual void v0();
+    virtual void v1();
+    virtual void v2();
+    virtual void v3();
+    virtual bool Start(ResourceRequest* r, bool noCache);   // +0x10
+    virtual bool IsCacheValid(const uint16_t* url);         // +0x14
+    virtual void v6();
+    virtual void v7();
+    virtual void v8();
+    virtual void Cancel(ResourceRequest* r);                // +0x24
+};
+struct VecVal {  // by-value vector argument to BuildVec
+    int u0;
+    int z0, z1, z2;
+    int u4, u5;
+    VecVal() { z0 = 0; z1 = 0; z2 = 0; }
+};
+struct VOut_s008f_f610 {
+    const uint16_t* key;
+    CbVec val;
+};
+VOut_s008f_f610* __cdecl BuildVec(VOut_s008f_f610* out, const uint16_t* key, VecVal v);   // 0x008ff450
+struct IResourceProvider {
+    IResourceProvider() : mRefCount(0) {}
+    virtual ~IResourceProvider() {}
+    int mRefCount;
+};
+struct ResourceProvider_s008f_f610 : IResourceProvider {
+    IAlloc_s008f_f610* mpAllocator;       // +8
+    RCVec_s008f_f610 mFactories;          // +0xc
+    char fpad[0x24 - 0xc - sizeof(RCVec_s008f_f610)];
+    char fbuf[0x100];
+    UMap_s008f_f610 mRequests;            // +0x124
+    ResourceCache_s008f_f610 mCache;      // +0x13c
+    PMap_s008f_f610 mProtocolTable;       // +0x264
+    char ppad[0x284 - 0x264 - sizeof(PMap_s008f_f610)];
+    unsigned mCurrentId;       // +0x284
+    WMap mWaiting;             // +0x288
+
+    ResourceProvider_s008f_f610(IAlloc_s008f_f610* a);
+    virtual ~ResourceProvider_s008f_f610();
+    IProtocolHandler* GetProtocolHandler(const uint16_t* url);   // 0x008feef0
+    int CreateResource(void** out, unsigned* size, ResourceRequest* r);  // 0x008ff170
+    bool CancelRequest(unsigned id);
+    bool CancelAll();
+    void SetFactory(RCObjN_s008f_f610* f, bool add);
+    void FinishRequest(ResourceRequest* r, int stage);
+    bool Request(unsigned* outId, const uint16_t* url, ReqCb cb, void* ctx, ILogListener* el, bool noCache);
+};
+static __forceinline void ReleaseRC(RCObjN_s008f_f610* o)
+{
+    if (o) {
+        int n = (*(volatile int*)&o->mRef += -1);
+        if (n == 0) {
+            o->mRef = 1;
+            _ReadWriteBarrier();
+            o->v0(1);
+        }
+    }
+}
 // ---- items of slice s008ff610 end
+
+// @ 0x008fe3f0
+const wchar16* FindFirstOf(const wchar16* first, const wchar16* last, const wchar16* sfirst, const wchar16* slast)
+{
+    for (; first != last; ++first)
+        for (const wchar16* s = sfirst; s != slast; ++s)
+            if (*first == *s)
+                return first;
+    return last;
+}
 
 // @ 0x008fe430
 int* IHTableW::DoFindNode(int* node, const wchar16** key) const
@@ -553,7 +804,7 @@ IterR* IHTable_s008f_e610::DoInsertValue(IterR* out, CacheEntry* node, TagT)
     return out;
 }
 
-// @ 0x008fe6a0 — the original leaves eax = out at every ret (equiv void_hides_eax): return the out slot.
+// @ 0x008fe6a0
 void** ListHdr::Find(void** out, void* limit)
 {
     LNode* h = (LNode*)this;
@@ -646,7 +897,7 @@ RCObjN* SetGlobalProvider(RCObjN* p)
     return old;
 }
 
-// @ 0x008fe9a0 — the original leaves eax = out at the ret (void_hides_eax): return the out slot.
+// @ 0x008fe9a0
 SIter* SMap::find(SIter* out, const uint16_t* const* key)
 {
     uint32_t h = HashStr(*key);
@@ -731,8 +982,8 @@ bool ResourceCache::Insert(const uint16_t* key, IUnk* data, unsigned size)
     if (size == 0 || key == 0)
         return false;
     bool inserted = false;
-    IterC it;
-    mMap.find(&it, &key);
+    IterR it;   // the original's 12-byte slot: insert 0x8fe970 writes iterator + inserted flag into it
+    mMap.find((IterC*)&it, &key);
     if (size > mMaxEntrySize) {
         if (it.node != mMap.mBucketArray[64])
             Remove(it.node);
@@ -926,6 +1177,283 @@ int ResourceProvider::CreateResource(unsigned a, unsigned b, CreateCtx* c)
     return 1;
 }
 
+// @ 0x008ff270
+void HolderMap::Register(IHandlerList* l, bool add)
+{
+    if (l) {
+        unsigned n = l->GetCount();
+        for (unsigned i = 0; i < n; i++) {
+            const uint16_t* k = l->GetAt(i);
+            if (add) {
+                KV2 kv;
+                kv.key = k;
+                kv.val = (RCObjN*)l;
+                ((IHandlerList*)kv.val)->AddRef();
+                PIter r;
+                map.DoInsertValue(&r, (SrcNode*)&kv, TagT());
+                if (kv.val)
+                    kv.val->v2();
+            } else {
+                map.erase(&k);
+            }
+        }
+        l->Done(this);
+    }
+}
+
+// @ 0x008ff320
+void* UMap::Find(unsigned key)
+{
+    UPair* e = mpEnd;
+    UPair* it = LowerBound(mpBegin, e, &key, mFlag);
+    if (it == e || key < it->first)
+        it = e;
+    else if (it == it + 1)
+        it = e;
+    if (it != e)
+        return it->second;
+    return 0;
+}
+
+// @ 0x008ff370
+RCObjN** RCVec::erase(RCObjN** pos)
+{
+    if (pos + 1 < mpEnd)
+        MoveElems(pos + 1, mpEnd, pos);
+    mpEnd -= 1;
+    RCObjN* o = *mpEnd;
+    if (o)
+        RelRC(o);
+    return pos;
+}
+
+// @ 0x008ff3c0
+SIter* SMap::erase(SIter* out, SNode* n, SNode** slot)
+{
+    SNode* nx = n->next;
+    out->slot = slot;
+    out->node = nx;
+    while (nx == 0) {
+        out->slot = out->slot + 1;
+        nx = *out->slot;
+        out->node = nx;
+    }
+    SNode* cur = *slot;
+    if (cur == n) {
+        *slot = cur->next;
+    } else {
+        SNode* p = cur->next;
+        while (p != n) {
+            cur = p;
+            p = p->next;
+        }
+        cur->next = p->next;
+    }
+    void* arr = n->arr;
+    if (arr && ((int*)arr)[-1] != 0)
+        operator_delete__(arr);
+    operator_delete__(n);
+    mCount -= 1;
+    return out;
+}
+
+// @ 0x008ff450
+VOut* __cdecl BuildVec(VOut* out, void* a2, void* a3, char* begin, char* end, int a6, int alloc7)
+{
+    VOut* o = out;
+    out->a = a2;
+    out->b = a3;
+    o->v.AllocInit((end - begin) >> 3, &alloc7);
+    EastlCopy((void**)&out, begin, end, o->v.mpBegin, out);
+    o->v.mpEnd = out;
+    if (begin && ((int*)begin)[-1] != 0)
+        operator_delete__(begin);
+    return o;
+}
+
+// @ 0x008ff4c0
+void RCVec::InsertValue(RCObjN** pos, RCObjN** val)
+{
+    if (mpEnd != mpCap) {
+        RCObjN** v = val;
+        if (val >= pos && val < mpEnd)
+            v = val + 1;
+        if (mpEnd) {
+            RCObjN* t = mpEnd[-1];
+            *mpEnd = t;
+            if (t)
+                t->mRef += 1;
+        }
+        MoveBackward(pos, mpEnd - 1, mpEnd);
+        RCObjN* nv = *v;
+        RCObjN* old = *pos;
+        if (nv != old) {
+            if (nv)
+                nv->mRef += 1;
+            *pos = nv;
+            if (old)
+                RelRC(old);
+        }
+        mpEnd += 1;
+        return;
+    }
+    unsigned cnt = (unsigned)(mpEnd - mpBegin);
+    unsigned newCap;
+    if (cnt > 0) {
+        newCap = cnt * 2;
+    } else {
+        newCap = 1;
+    }
+    RCObjN** nb;
+    if (newCap)
+        nb = (RCObjN**)operator_new_eastl(newCap * 4, "EASTL", 0, 0,
+            "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h", 0xd1);
+    else
+        nb = 0;
+    int bytes = (char*)pos - (char*)mpBegin;
+    RCObjN** p = (RCObjN**)memcpy(nb, mpBegin, bytes);
+    p = p + (bytes >> 2);
+    if (p) {
+        RCObjN* t = *val;
+        *p = t;
+        if (t)
+            t->mRef += 1;
+    }
+    int bytes2 = (char*)mpEnd - (char*)pos;
+    RCObjN** q = (RCObjN**)memcpy(p + 1, pos, bytes2);
+    RCObjN** ne = q + (bytes2 >> 2);
+    if (mpBegin && mpBegin != mpFixed)
+        operator_delete__(mpBegin);
+    mpBegin = nb;
+    mpEnd = ne;
+    mpCap = nb + newCap;
+}
+
+// @ 0x008ff610
+bool ResourceProvider_s008f_f610::CancelRequest(unsigned id)
+{
+    UPair_s008f_f610* e = mRequests.mpEnd;
+    UPair_s008f_f610* it = LowerBound_s008f_f610(mRequests.mpBegin, e, &id, mRequests.mFlag);
+    if (it == e || id < it->first)
+        it = e;
+    else if (it == it + 1)
+        it = e;
+    if (it == e)
+        return false;
+    ResourceRequest* r = it->second;
+    IProtocolHandler* h = GetProtocolHandler(r->mpURL);
+    if (h)
+        h->Cancel(r);
+    Evt evt;
+    evt.obj = 0;
+    evt.id = r->mRequestId;
+    evt.flag = 0;
+    evt.type = 4;
+    evt.url = r->mpURL;
+    r->mpCallback(&evt, r->mpContext);
+    mWaiting.Notify(&evt);
+    if (r->mpURL)
+        mpAllocator->Free((void*)r->mpURL, 0);
+    r->mpURL = 0;
+    IAlloc_s008f_f610* a = mpAllocator;
+    if (r->mpStream)
+        r->mpStream->Release();
+    if (r->mpResource)
+        r->mpResource->Release();
+    if (r->mTypeCap - r->mTypeBegin > 1 && r->mTypeBegin)
+        operator_delete__(r->mTypeBegin);
+    a->Free(r, 0);
+    UPair_s008f_f610* s = it + 1;
+    UPair_s008f_f610* e2 = mRequests.mpEnd;
+    if (s < e2) {
+        UPair_s008f_f610* d = it;
+        do {
+            *d = *s;
+            s++;
+            d++;
+        } while (s != e2);
+    }
+    mRequests.mpEnd -= 1;
+    if (evt.obj)
+        evt.obj->Release();
+    return true;
+}
+
+// @ 0x008ff7f0
+bool ResourceProvider_s008f_f610::CancelAll()
+{
+    UPair_s008f_f610* p = mRequests.mpBegin;
+    Evt evt;
+    evt.obj = 0;
+    evt.flag = 0;
+    evt.type = 4;
+    bool any = false;
+    if (p != mRequests.mpEnd) {
+        any = true;
+        do {
+            ResourceRequest* r = p->second;
+            IProtocolHandler* h = GetProtocolHandler(r->mpURL);
+            if (h)
+                h->Cancel(r);
+            evt.id = r->mRequestId;
+            evt.url = r->mpURL;
+            r->mpCallback(&evt, r->mpContext);
+            mWaiting.Notify(&evt);
+            if (r->mpURL)
+                mpAllocator->Free((void*)r->mpURL, 0);
+            r->mpURL = 0;
+            IAlloc_s008f_f610* a = mpAllocator;
+            if (r->mpStream)
+                r->mpStream->Release();
+            if (r->mpResource)
+                r->mpResource->Release();
+            if (r->mTypeCap - r->mTypeBegin > 1 && r->mTypeBegin)
+                operator_delete__(r->mTypeBegin);
+            a->Free(r, 0);
+            p++;
+        } while (p != mRequests.mpEnd);
+    }
+    UPair_s008f_f610* last = mRequests.mpEnd;
+    UPair_s008f_f610* first = mRequests.mpBegin;
+    UPair_s008f_f610* d = first;
+    UPair_s008f_f610* s = last;
+    if (last != mRequests.mpEnd) {
+        do {
+            *d = *s;
+            s++;
+            d++;
+        } while (s != mRequests.mpEnd);
+    }
+    mRequests.mpEnd -= (last - first);
+    if (evt.obj)
+        evt.obj->Release();
+    return any;
+}
+
+// @ 0x008ff9b0
+unsigned UMap_s008f_f610::erase(unsigned* key)
+{
+    UPair_s008f_f610* e = mpEnd;
+    UPair_s008f_f610* it = LowerBound_s008f_f610(mpBegin, e, key, mFlag);
+    if (it == e || *key < it->first)
+        it = e;
+    else if (it == it + 1)
+        it = e;
+    if (it == e)
+        return 0;
+    UPair_s008f_f610* s = it + 1;
+    if (s < e) {
+        UPair_s008f_f610* d = it;
+        do {
+            *d = *s;
+            s++;
+            d++;
+        } while (s != e);
+    }
+    mpEnd -= 1;
+    return 1;
+}
+
 // @ 0x008ffa20
 WIns* WMap::DoInsertValue(WIns* out, WKV* kv, TagT)
 {
@@ -960,4 +1488,203 @@ WIns* WMap::DoInsertValue(WIns* out, WKV* kv, TagT)
     out->slot = slot;
     out->inserted = 0;
     return out;
+}
+
+// @ 0x008ffb40
+void ResourceProvider_s008f_f610::FinishRequest(ResourceRequest* r, int stage)
+{
+    Evt evt;
+    evt.url = r->mpURL;
+    evt.obj = 0;
+    evt.type = stage;
+    evt.id = r->mRequestId;
+    if (mCurrentId != 0) {
+        evt.flag = 1;
+        if (mCurrentId == evt.id)
+            goto flagdone;
+    }
+    evt.flag = 0;
+flagdone:
+    if (stage == 2) {
+        // the original keeps the created resource in the dead `stage` argument slot
+        IUnk_s008f_f610*& res = *(IUnk_s008f_f610**)&stage;
+        res = 0;
+        unsigned size = 0;
+        int rc = CreateResource((void**)&res, &size, r);
+        if (rc == 0) {
+            if (r->mCacheable) {
+                if (mCache.Insert(r->mpURL, res, size))
+                    r->mpURL = 0;
+            }
+            IUnk_s008f_f610* nv = res;
+            IUnk_s008f_f610* old = evt.obj;
+            if (nv != old) {
+                if (nv)
+                    nv->AddRef();
+                evt.obj = nv;
+                if (old)
+                    old->Release();
+            }
+            res->Release();
+        } else {
+            if (rc == 2) {
+                if (evt.obj)
+                    evt.obj->Release();
+                return;
+            }
+            evt.type = 3;
+        }
+    }
+    r->mpCallback(&evt, r->mpContext);
+    mWaiting.Notify(&evt);
+    if (r->mpURL)
+        mpAllocator->Free((void*)r->mpURL, 0);
+    // the original keeps the request id in the dead `stage` argument slot
+    *(unsigned*)&stage = r->mRequestId;
+    r->mpURL = 0;
+    mRequests.erase((unsigned*)&stage);
+    IAlloc_s008f_f610* a = mpAllocator;
+    if (r->mpStream)
+        r->mpStream->Release();
+    if (r->mpResource)
+        r->mpResource->Release();
+    if (r->mTypeCap - r->mTypeBegin > 1 && r->mTypeBegin)
+        operator_delete__(r->mTypeBegin);
+    a->Free(r, 0);
+    if (evt.obj)
+        evt.obj->Release();
+}
+
+// @ 0x008ffd50
+void ResourceProvider_s008f_f610::SetFactory(RCObjN_s008f_f610* f, bool add)
+{
+    RCObjN_s008f_f610** end = mFactories.mpEnd;
+    RCObjN_s008f_f610** p = mFactories.mpBegin;
+    for (; p != end && *p != f; ++p) {
+    }
+    if (add) {
+        if (p == end) {
+            RCObjN_s008f_f610* tmp = f;
+            if (tmp)
+                tmp->mRef += 1;
+            RCObjN_s008f_f610** slot = mFactories.mpEnd;
+            if (slot < mFactories.mpCap) {
+                mFactories.mpEnd = slot + 1;
+                if (slot) {
+                    *slot = f;
+                    if (f)
+                        f->mRef += 1;
+                }
+            } else {
+                mFactories.InsertValue(slot, &tmp);
+            }
+            ReleaseRC(tmp);
+        }
+    } else if (p != end) {
+        mFactories.erase(p);
+    }
+}
+
+// @ 0x008ffe80
+ResourceProvider_s008f_f610::ResourceProvider_s008f_f610(IAlloc_s008f_f610* a)
+: mpAllocator(a ? a : GetDefaultAllocator()),
+      mFactories((RCObjN_s008f_f610**)fbuf),
+      mCache(a ? a : GetDefaultAllocator(), 0x500000, 10),
+      mCurrentId(0)
+{
+}
+
+// @ 0x008fff80
+ResourceProvider_s008f_f610::~ResourceProvider_s008f_f610()
+{
+    mWaiting.Destroy();
+    mProtocolTable.Destroy();
+    mCache.Destroy();
+    if (mRequests.mpBegin)
+        operator_delete__(mRequests.mpBegin);
+    mFactories.Destroy();
+}
+
+// @ 0x00900070
+bool ResourceProvider_s008f_f610::Request(unsigned* outId, const uint16_t* url, ReqCb cb, void* ctx, ILogListener* el, bool noCache)
+{
+    const uint16_t* u = url;
+    IProtocolHandler* h = GetProtocolHandler(u);
+    if (!h)
+        return false;
+    if (!noCache) {
+        IUnk_s008f_f610* res = mCache.Find(u);
+        if (res) {
+            if (h->IsCacheValid(u)) {
+                EvtA evt;
+                evt.obj.mp = 0;
+                evt.type = 2;
+                evt.id = 0;
+                evt.flag = 1;
+                evt.url = u;
+                evt.obj.Assign(res);
+                *outId = 0;
+                cb(&evt, ctx);
+                if (evt.obj.mp)
+                    evt.obj.mp->Release();
+                return true;
+            }
+        }
+    }
+    WIter wi;
+    mWaiting.find(&wi, &url);
+    if (wi.node != mWaiting.mBuckets[mWaiting.mBucketCount]) {
+        WNode* n = wi.node;
+        CbPair cp;
+        cp.fn = cb;
+        cp.arg = ctx;
+        if (n->mpEnd < n->mpCap) {
+            CbPair* slot = n->mpEnd;
+            n->mpEnd = slot + 1;
+            if (slot) {
+                slot->fn = cb;
+                slot->arg = ctx;
+            }
+        } else {
+            ((CbVecRaw*)&n->mpBegin)->InsertAux(n->mpEnd, &cp);
+        }
+        *outId = n->req->mRequestId;
+        return true;
+    }
+    ResourceRequest* rq = (ResourceRequest*)mpAllocator->Alloc(0x40, "ResourceProvider/ResourceRequest", 0, 4, 0);
+    ResourceRequest* r;
+    if (rq) {
+        new (rq) ResourceRequest(0, el);
+        r = rq;
+    } else {
+        r = 0;
+    }
+    const uint16_t* q = u;
+    while (*q)
+        q++;
+    unsigned len = (unsigned)(q - u);
+    uint16_t* dup = (uint16_t*)mpAllocator->AllocSimple(len * 2 + 2, "ResourceProvider/StrDup", 0);
+    memcpy(dup, u, len * 2);
+    dup[len] = 0;
+    r->mpURL = dup;
+    r->mpCallback = cb;
+    r->mpContext = ctx;
+    *outId = r->mRequestId;
+    *mRequests.GetOrInsert(outId) = r;
+    VOut_s008f_f610 bv;
+    BuildVec(&bv, r->mpURL, VecVal());
+    WKV kv;
+    kv.key = bv.key;
+    kv.val.CopyCtor(&bv.val);
+    WIns ins;
+    mWaiting.DoInsertValue(&ins, &kv, TagT());
+    if (kv.val.mpBegin && ((int*)kv.val.mpBegin)[-1] != 0)
+        operator_delete__(kv.val.mpBegin);
+    if (bv.val.mpBegin && ((int*)bv.val.mpBegin)[-1] != 0)
+        operator_delete__(bv.val.mpBegin);
+    ins.node->req = r;
+    mCurrentId = *outId;
+    bool ok = h->Start(r, noCache);
+    mCurrentId = 0;
+    return ok;
 }
