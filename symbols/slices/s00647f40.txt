@@ -1,3 +1,4 @@
+00648730 ?Ctor@cSPUIAssetGrid@@QAEPAXXZ  # cSPUIAssetGrid::Ctor migrated from s00647f40 (verbatim, slice spelling)
 00648aa0 ?sub_648b40@@YAXXZ  # sub_648b40 migrated from s00647f40 (verbatim, slice spelling)
 00648af0 ?EraseAt@GridVec@@QAEPAUEntry14@@PAU2@@Z  # GridVec::EraseAt migrated from s00647f40 (verbatim, slice spelling)
 00648b40 ?Insert@GridVec@@QAEPAUEntry14@@PAU2@ABU2@@Z  # GridVec::Insert migrated from s00647f40 (verbatim, slice spelling)
