@@ -5,9 +5,9 @@
 00947030 EA::Internet::HTTPMultipartFormDataPostBodyStream::AddFormData  # PDB name (vtable slot +0x40 of the class vtable)
 00947270 EA::Internet::HTTPMultipartFormDataPostBodyStream::CreateChildStream  # PDB name (vtable slot +0x44)
 009473a0 eastl::vector<eastl::string>::DoInsertValue fast-path helper  # descriptive: appends a default (empty) eastl::string; thiscall with the vector in ecx, elements 0x10 bytes, fills {0x1667bac,0x1667bac,0x1667bad}; slow path calls 0x554820 DoInsertValue (no PDB name for this VA)
-00947410 EA::Internet::TimeToSeconds  # PDB name
-00947480 EA::Internet::WeekdayStringToInteger  # PDB name
-00947500 MonthStringToInteger  # descriptive: _stricmp against the 12 short month names at 0x143f54c (stride 4), returns 1..12 or 0 (no PDB name for this VA)
-00947540 EA::Internet::GetDateTypeFromString  # PDB name
+00947410 ?TimeToSeconds@Internet@EA@@YAIIIIIIIII@Z  # EA::Internet::TimeToSeconds migrated from s00946dc0
+00947480 ?WeekdayStringToInteger@Internet@EA@@YAIPBD_N@Z  # EA::Internet::WeekdayStringToInteger migrated from s00946dc0
+00947500 ?MonthStringToInteger@@YAHPBD@Z  # MonthStringToInteger migrated from s00946dc0 (verbatim, slice spelling)
+00947540 ?GetDateTypeFromString@@YAHPBUStrStub@eastl@@@Z  # GetDateTypeFromString migrated from s00946dc0 (verbatim, slice spelling)
 00947700 EA::Internet::ParseDateTimeString  # PDB name
 00947cd0 TimeStringToSeconds  # descriptive: ParseDateTimeString (0x947700) into 8 ints then TimeToSeconds (0x947410) via _mktime64 (no PDB name for this VA)
