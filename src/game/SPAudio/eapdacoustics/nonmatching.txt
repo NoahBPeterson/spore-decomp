@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+00a52570 218 non-byte-exact; acoustics class-registration setup; gensym/class_new arg order and bl-accumulate ordering differ; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include; equiv UNSUPPORTED (5 unresolved float global refs)

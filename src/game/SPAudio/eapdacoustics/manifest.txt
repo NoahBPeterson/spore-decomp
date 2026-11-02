@@ -1,0 +1,2 @@
+# source  symbol  va  flags
+../src/game/SPAudio/eapdacoustics.cpp  ?control_objects_init@Eapd@Audio@EA@@YA_NXZ  00a51f90  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include

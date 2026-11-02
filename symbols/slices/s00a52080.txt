@@ -1,12 +1,10 @@
-; slice s00a52080 = 0x00a52080..0x00a52fb0 (EAPD sound-unit/group setup stubs) - exact decorated names
-; (manifest.txt rows are byte-exact; the rest are the nonmatching.txt entries)
 00a52080 ?FUN_00a52080@@YAPAXXZ  # complete, non-exact (card ctor region over-measured)
 00a52170 ?FUN_00a52170@@YAPAXXZ  # complete, non-exact
 00a52230 ?FUN_00a52230@@YAPAXXZ  # complete, non-exact
 00a522f0 ?FUN_00a522f0@@YAPAXXZ  # complete, non-exact
 00a523b0 ?FUN_00a523b0@@YAPAXXZ  # complete, non-exact
 00a52490 ?FUN_00a52490@@YAPAXXZ  # complete, non-exact
-00a52570 ?x_acoustics_setup@@YAEXZ  # complete, non-exact
+00a52570 ?x_acoustics_setup@Eapd@Audio@EA@@YA_NXZ  # EA::Audio::Eapd::x_acoustics_setup migrated from s00a52080
 00a52780 ?FUN_00a52780@@YAXPAD@Z  # byte-exact
 00a527b0 ?FUN_00a527b0@@YAXPADHH@Z  # complete, non-exact
 00a52840 ?FUN_00a52840@@YAXPADHHHPAH@Z  # complete, non-exact
@@ -29,3 +27,4 @@
 00a52dd0 ?Insert@PairVec@@QAEXHIPAH@Z  # complete, non-exact
 00a52f70 ?Init@GroupHelp@@QAEPAXH@Z  # complete, non-exact
 00a52fa0 ?Resize@PairVec@@QAEXI@Z  # complete, non-exact
+; (manifest.txt rows are byte-exact; the rest are the nonmatching.txt entries)
