@@ -1,10 +1,10 @@
 006ed2c0 ?SetTextureParticleActive@cEffectsRenderer@@QAEXH_N@Z  # cEffectsRenderer::SetTextureParticleActive migrated from s006ed2c0 (verbatim, slice spelling)
 006ed340 ?RemoveParticleSet@cEffectsRenderer@@QAEXH@Z  # cEffectsRenderer::RemoveParticleSet migrated from s006ed2c0 (verbatim, slice spelling)
-006ed440 ActivateByKey  # guard `(a & b) != -1`; virtual call +0x58 on object at +0xc; returns vector index
+006ed440 ?ActivateByKey@cEffectsKeyedList@@QAEHII@Z  # cEffectsKeyedList::ActivateByKey migrated from s006ed2c0 (verbatim, slice spelling)
 006ed5b0 DoInsertValue  # eastl::vector<cTextureParticleSet,sp_vector_allocator>::DoInsertValue
 006ed6f0 DoInsertValue  # eastl::vector<cModelParticleSet,sp_vector_allocator>::DoInsertValue
 006ed8d0 ??0cEffectsModel@@QAE@IIIPBM@Z  # cEffectsModel::cEffectsModel migrated from s006ed2c0 (verbatim, slice spelling)
-006edaa0 AddResourceRef  # SP::cEffectsModel; AutoRefCount temp + push_back into refs vector at +0x70
-006edb10 Reset  # SP::cEffectsModel; box min=+FLT_MAX max=-FLT_MAX, radius 0, release async (+0x6c), clear +8/+0x70
+006edaa0 ?AddResourceRef@cEffectsModel@@QAEXPAUIRefCounted@@@Z  # cEffectsModel::AddResourceRef migrated from s006ed2c0 (verbatim, slice spelling)
+006edb10 ?Reset@cEffectsModel@@QAEXXZ  # cEffectsModel::Reset migrated from s006ed2c0 (verbatim, slice spelling)
 006edbc0 UpdateFromResource  # SP::cEffectsModel (PDB candidate); arena exported objects -> bbox
-006ee140 Update  # SP::cEffectsModel; polls async request (+0x6c) then UpdateFromResource
+006ee140 ?Update@cEffectsModel@@QAEDXZ  # cEffectsModel::Update migrated from s006ed2c0 (verbatim, slice spelling)

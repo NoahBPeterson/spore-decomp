@@ -5,19 +5,42 @@
 ../src/game/SPEngine/SPGraphicsEffectsRenderer.cpp  ?CallF2@ShaderHost@@QAEXHM@Z  006e69a0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsEffectsRenderer.cpp  ?CallIface@ShaderHost@@QAEXH@Z  006e6c20  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsEffectsRenderer.cpp  ?Method7880@Host3@@QAEXH@Z  006e7880  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPEngine/SPGraphicsEffectsRenderer.cpp  ?SetFlag@Host3@@QAEXHE@Z  006e7aa0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsEffectsRenderer.cpp  ?Method7c60@Host3@@QAEDXZ  006e7c60  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsEffectsRenderer.cpp  ?Method7c80@Host3@@QAEDHHHHHH@Z  006e7c80  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsEffectsRenderer.cpp  ?Method7cc0@Host3@@QAEXHHHH@Z  006e7cc0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsEffectsRenderer.cpp  ?Method7d00@Host3@@QAEXM@Z  006e7d00  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsEffectsRenderer.cpp  ?Method8090@Host3@@QAEXHHM@Z  006e8090  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPEngine/SPGraphicsEffectsRenderer.cpp  ?m8200@CCreature@@QAEDPADH@Z  006e8200  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsEffectsRenderer.cpp  ?m82b0@CCreature@@QAEXHHMM@Z  006e82b0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsEffectsRenderer.cpp  ?m8360@CCreature@@QAEXH@Z  006e8360  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsEffectsRenderer.cpp  ?m8420@CCreature@@QAEXHPAX@Z  006e8420  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPEngine/SPGraphicsEffectsRenderer.cpp  ?m8e40@CCreature@@QAEXHH@Z  006e8e40  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPEngine/SPGraphicsEffectsRenderer.cpp  ?m8ee0@CCreature@@QAEHHHH@Z  006e8ee0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPEngine/SPGraphicsEffectsRenderer.cpp  ?m8f20@CCreature@@QAEDHHHHH@Z  006e8f20  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPEngine/SPGraphicsEffectsRenderer.cpp  ?f8f50@@YAHXZ  006e8f50  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPEngine/SPGraphicsEffectsRenderer.cpp  ?m8f60@CCreature@@QAE_KH@Z  006e8f60  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPEngine/SPGraphicsEffectsRenderer.cpp  ?m9120@S5@@QAEHII@Z  006e9120  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/SPGraphicsEffectsRenderer.cpp  ?m91c0@S5@@QAEXXZ  006e91c0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/SPGraphicsEffectsRenderer.cpp  ?m91e0@S5@@QAEXHH@Z  006e91e0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/SPGraphicsEffectsRenderer.cpp  ??0C9230@@QAE@ABU0@@Z  006e9230  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPEngine/SPGraphicsEffectsRenderer.cpp  ?m9330@S5@@QAEXPAX@Z  006e9330  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/SPGraphicsEffectsRenderer.cpp  ?m9530@S5@@QAEPAU1@XZ  006e9530  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/SPGraphicsEffectsRenderer.cpp  ?m9910@S5@@QAEXM@Z  006e9910  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/SPGraphicsEffectsRenderer.cpp  ??1C9990@@UAE@XZ  006e9990  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsEffectsRenderer.cpp  ?mabc0@R70@@QAEPAU1@ABU1@@Z  006eabc0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/SPEngine/SPGraphicsEffectsRenderer.cpp  ?f990@@YGXPAD0@Z  006eb990  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/SPEngine/SPGraphicsEffectsRenderer.cpp  ?m6ebb80@S7@@QAEPAU1@PAX@Z  006ebb80  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/SPEngine/SPGraphicsEffectsRenderer.cpp  ?mec090@S7@@QAEXXZ  006ec090  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/SPGraphicsEffectsRenderer.cpp  ?mac80@R70@@QAEPAU1@ABU1@@Z  006eac80  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/SPGraphicsEffectsRenderer.cpp  ??0RenderEntity@@QAE@ABU0@@Z  006eb8c0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPEngine/SPGraphicsEffectsRenderer.cpp  ?f990@@YGXPAD0@Z  006eb990  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPEngine/SPGraphicsEffectsRenderer.cpp  ?m6ebb80@S7@@QAEPAU1@PAX@Z  006ebb80  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPEngine/SPGraphicsEffectsRenderer.cpp  ??1FxEntity@@QAE@XZ  006ec000  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPEngine/SPGraphicsEffectsRenderer.cpp  ?mec090@S7@@QAEXXZ  006ec090  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsEffectsRenderer.cpp  ?f6d0@@YAHHHH@Z  006ec6d0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsEffectsRenderer.cpp  ?fca50@@YGXPAD0@Z  006eca50  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/SPGraphicsEffectsRenderer.cpp  ?AddResourceRef@cEffectsModel@@QAEXPAUIRefCounted@@@Z  006edaa0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /Isrc/game/include
+../src/game/SPEngine/SPGraphicsEffectsRenderer.cpp  ?Update@cEffectsModel@@QAEDXZ  006ee140  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsEffectsRenderer.cpp  ?Release@@YAXPAUcEffectsModelR@@@Z  006ef990  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsEffectsRenderer.cpp  ?Init@cEffectsRendererSystem@@QAE_NXZ  006ef9e0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /Isrc/game/include
+../src/game/SPEngine/SPGraphicsEffectsRenderer.cpp  ?Forward1840@@YGXHH@Z  006f1840  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /Isrc/game/include
+../src/game/SPEngine/SPGraphicsEffectsRenderer.cpp  ?Call@Owner1950@@QAEHHHHH@Z  006f1950  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /Isrc/game/include
+../src/game/SPEngine/SPGraphicsEffectsRenderer.cpp  ?FindEntry@EffectsRenderer_s006f_1770@@QAEPAXII@Z  006f2050  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /Isrc/game/include
