@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+009e5c00 32 complete; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast; size 44 vs 46; Quake fast inverse-sqrt (magic 0x5f375a86, consts 0.5f/1.5f); the original keeps the result in x87 st(0) (float10 return, no /arch:SSE for this TU) whereas /arch:SSE forces an xmm0 float return and a different multiply order; equiv FAIL (x87 st0)
