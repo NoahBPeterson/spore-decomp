@@ -3,3 +3,22 @@
 ../src/game/SPAudio/SPAudioMixMode.cpp  ?GetDirty@PrimBase@@QAE_NH@Z  00a16eb0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPAudio/SPAudioMixMode.cpp  ?ClearDirty@PrimBase@@QAEXH@Z  00a16ec0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPAudio/SPAudioMixMode.cpp  ?HandleMessage@PrimBase@@QAE_NHPAX@Z  00a16f00  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/SPAudioMixMode.cpp  ?ScalarDeletingDtor@Prim@@QAEPAXE@Z  00ea5350  /O2 /MD /Gy /TP /arch:SSE /GR- /fp:fast /Isrc/game/include
+../src/game/SPAudio/SPAudioMixMode.cpp  ?Shutdown@MixHolder@@QAEXXZ  00ea5380  /O2 /MD /Gy /TP /arch:SSE /GR- /fp:fast /Isrc/game/include
+../src/game/SPAudio/SPAudioMixMode.cpp  ?UpdateSounds@MixHolder@@QAEXM@Z  00ea53b0  /O2 /MD /Gy /TP /arch:SSE /GR- /fp:fast /Isrc/game/include
+../src/game/SPAudio/SPAudioMixMode.cpp  ?SetValue@Prim@@QAEXM@Z  00ea53d0  /O2 /MD /Gy /TP /arch:SSE /GR- /fp:fast /Isrc/game/include
+../src/game/SPAudio/SPAudioMixMode.cpp  ?Init0@Prim@@QAE_NXZ  00ea53f0  /O2 /MD /Gy /TP /arch:SSE /GR- /fp:fast /Isrc/game/include
+../src/game/SPAudio/SPAudioMixMode.cpp  ?FUN_00ea5420@@YA_NPAX@Z  00ea5420  /O2 /MD /Gy /TP /arch:SSE /GR- /fp:fast /Isrc/game/include
+../src/game/SPAudio/SPAudioMixMode.cpp  ?Init1@Prim@@QAE_NXZ  00ea54f0  /O2 /MD /Gy /TP /arch:SSE /GR- /fp:fast /Isrc/game/include
+../src/game/SPAudio/SPAudioMixMode.cpp  ?Update0@Prim@@QAEXMI@Z  00ea5510  /O2 /MD /Gy /TP /arch:SSE /GR- /fp:fast /Isrc/game/include
+../src/game/SPAudio/SPAudioMixMode.cpp  ?MsgShutdown@Prim@@QAE_NXZ  00ea5650  /O2 /MD /Gy /TP /arch:SSE /GR- /fp:fast /Isrc/game/include
+../src/game/SPAudio/SPAudioMixMode.cpp  ?Init2@Prim@@QAE_NXZ  00ea56a0  /O2 /MD /Gy /TP /arch:SSE /GR- /fp:fast /Isrc/game/include
+../src/game/SPAudio/SPAudioMixMode.cpp  ?ConfigParam@Prim@@QAEXXZ  00ea5700  /O2 /MD /Gy /TP /arch:SSE /GR- /fp:fast /Isrc/game/include
+../src/game/SPAudio/SPAudioMixMode.cpp  ?Update1@Prim@@QAEXMI@Z  00ea5720  /O2 /MD /Gy /TP /arch:SSE /GR- /fp:fast /Isrc/game/include
+../src/game/SPAudio/SPAudioMixMode.cpp  ?Update3@Prim@@QAEXMI@Z  00ea5a60  /O2 /MD /Gy /TP /arch:SSE /GR- /fp:fast /Isrc/game/include
+../src/game/SPAudio/SPAudioMixMode.cpp  ?Update5@Prim@@QAEXMI@Z  00ea5d60  /O2 /MD /Gy /TP /arch:SSE /GR- /fp:fast /Isrc/game/include
+../src/game/SPAudio/SPAudioMixMode.cpp  ?Update6@Prim@@QAEXMI@Z  00ea5e40  /O2 /MD /Gy /TP /arch:SSE /GR- /fp:fast /Isrc/game/include
+../src/game/SPAudio/SPAudioMixMode.cpp  ?Update7@Prim@@QAEXMI@Z  00ea5f20  /O2 /MD /Gy /TP /arch:SSE /GR- /fp:fast /Isrc/game/include
+../src/game/SPAudio/SPAudioMixMode.cpp  ?Update8@Prim@@QAEXMI@Z  00ea5fe0  /O2 /MD /Gy /TP /arch:SSE /GR- /fp:fast /Isrc/game/include
+../src/game/SPAudio/SPAudioMixMode.cpp  ?Update11@Prim@@QAEXMI@Z  00ea6340  /O2 /MD /Gy /TP /arch:SSE /GR- /fp:fast /Isrc/game/include
+../src/game/SPAudio/SPAudioMixMode.cpp  ??1cMixMode_s00ea_8f90@Audio@SP@@QAE@XZ  00ea93c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

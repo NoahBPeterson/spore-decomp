@@ -1,9 +1,9 @@
-00ea8f90 SP::Audio::cMixMode::Start  # PDB FUN_00ea8f90
-00ea9260 SP::Audio::cMixMode::Stop(bool)  # PDB FUN_00ea9260 (card label "Group::Subscribe" is wrong)
-00ea9320 SP::Audio::cMixMode::cMixMode(SP::Audio::cMixModeManager*, EA::ResourceMan::Key)  # PDB FUN_00ea9320
-00ea93c0 SP::Audio::cMixMode::~cMixMode  # PDB FUN_00ea93c0
-00ea9440 eastl::vector<unsigned int, SP_STL_Sound>::DoInsertValue  # PDB FUN_00ea9440 (SoundVector insert helper)
-00ea9550 SP::Audio::cMixMode::ConfigurePrimitive  # PDB FUN_00ea9550
+00ea8f90 ?Start@cMixMode_s00ea_8f90@Audio@SP@@QAE_NXZ  # cMixMode_s00ea_8f90::Start migrated from s00ea8f90 (verbatim, slice spelling)
+00ea9260 ?Stop@cMixMode_s00ea_8f90@Audio@SP@@QAE_N_N@Z  # cMixMode_s00ea_8f90::Stop migrated from s00ea8f90 (verbatim, slice spelling)
+00ea9320 ??0cMixMode_s00ea_8f90@Audio@SP@@QAE@PAVcMixModeManager_s00ea_8f90@12@UKey@12@@Z  # cMixMode_s00ea_8f90::cMixMode migrated from s00ea8f90 (verbatim, slice spelling)
+00ea93c0 ??1cMixMode_s00ea_8f90@Audio@SP@@QAE@XZ  # cMixMode_s00ea_8f90::~cMixMode migrated from s00ea8f90 (verbatim, slice spelling)
+00ea9440 ?VectorInsert@SoundVector@Audio@SP@@QAEXPAIPBI@Z  # SoundVector::VectorInsert migrated from s00ea8f90 (verbatim, slice spelling)
+00ea9550 ?ConfigureVector@Audio@SP@@YAXPAUSoundVector@12@PAXI@Z  # ConfigureVector migrated from s00ea8f90 (verbatim, slice spelling)
 00ea9790 SP::Audio::IsMixableKey(unsigned int)  # PDB FUN_00ea9790 (__stdcall)
 00ea9880 SP::Audio::cMixModeManager::UpdateSounds(float)  # PDB FUN_00ea9880
 00ea99a0 ?RemoveSound@cMixModeManager_s00ea_8f90@Audio@SP@@QAEXI_N@Z  # cMixModeManager_s00ea_8f90::RemoveSound migrated from s00ea8f90 (verbatim, slice spelling)
