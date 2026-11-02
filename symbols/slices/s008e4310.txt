@@ -1,2 +1,7 @@
+008e48a0 ?ReleaseChildren@Element@@QAEXXZ  # Element::ReleaseChildren migrated from s008e4310 (verbatim, slice spelling)
+008e48f0 ?ReleaseChildren2@Element@@QAEXXZ  # Element::ReleaseChildren2 migrated from s008e4310 (verbatim, slice spelling)
+008e4940 ?Ctor1@Element@@QAEPAU1@PAXPBG@Z  # Element::Ctor1 migrated from s008e4310 (verbatim, slice spelling)
 008e49e0 ?CollectText@Element@@QAEXPAX@Z  # Element::CollectText migrated from s008e4310 (verbatim, slice spelling)
 008e4b10 ?AddSubElement@Element@@QAEEPBG@Z  # Element::AddSubElement migrated from s008e4310 (verbatim, slice spelling)
+008e5210 ?HandleEvent@Form@@QAEXPAXH@Z  # Form::HandleEvent migrated from s008e4310 (verbatim, slice spelling)
+008e52b0 ?Init@Node@@QAEPAXPAXH@Z  # Node::Init migrated from s008e4310 (verbatim, slice spelling)

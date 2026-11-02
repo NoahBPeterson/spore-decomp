@@ -1,4 +1,9 @@
 # source  symbol  va  flags
+../src/game/UTFSpore_Win32/Document.cpp  ??0Der43@@QAE@PAX00@Z  008e2430  /O2 /MD /Gy /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/Document.cpp  ??0Der4f@@QAE@PAX00@Z  008e24f0  /O2 /MD /Gy /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/Document.cpp  ?AllocBlock@@YAPAXIPAUSA@@@Z  008e2540  /O2 /MD /Gy /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/Document.cpp  ?SetChild@DocX@@QAEXH@Z  008e2800  /O2 /MD /Gy /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/Document.cpp  ?CallA@DocX@@QAEXXZ  008e2870  /O2 /MD /Gy /TP /GS- /Isrc/game/include
 ../src/game/UTFSpore_Win32/Document.cpp  ?DestroyFormControls@Document@DOM@XHTML@EA@@QAEXXZ  008e2890  /O2 /MD /Gy /TP /GS- /Isrc/game/include
 ../src/game/UTFSpore_Win32/Document.cpp  ??0D29a@@QAE@PAX0@Z  008e2960  /O2 /MD /Gy /TP /GS- /Isrc/game/include
 ../src/game/UTFSpore_Win32/Document.cpp  ??0D29b@@QAE@PAX0@Z  008e2990  /O2 /MD /Gy /TP /GS- /Isrc/game/include
