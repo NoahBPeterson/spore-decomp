@@ -1,7 +1,7 @@
 00773f60 ?get_partition@@YAPAUSortElem@@PAU1@0U1@P6A_NABU1@2@Z@Z  # get_partition migrated from s00773f60 (verbatim, slice spelling)
 00774010 ?partial_sort@@YAXPAUSortElem@@00P6A_NABU1@1@Z@Z  # partial_sort migrated from s00773f60 (verbatim, slice spelling)
 007740f0 ?FUN_007740f0@@YAXIPAH@Z  # FUN_007740f0 migrated from s00773f60 (verbatim, slice spelling)
-00774110 UI/resource glue  # EH frame, ctor + factory calls through the globals at 0x016c8b44
+00774110 ?FUN_00774110@@YAXPAHI0@Z  # FUN_00774110 migrated from s00773f60 (verbatim, slice spelling)
 00774290 ?introsort_loop@@YAXPAUSortElem@@0HP6A_NABU1@1@Z@Z  # introsort_loop migrated from s00773f60 (verbatim, slice spelling)
 007743b0 ?InsertN@Vec30@@QAEXPAUBlob30@@IABU2@@Z  # Vec30::InsertN migrated from s00773f60 (verbatim, slice spelling)
 007745d0 ?InsertN@VecB0@@QAEXPAUBlobB0@@IABU2@@Z  # VecB0::InsertN migrated from s00773f60 (verbatim, slice spelling)

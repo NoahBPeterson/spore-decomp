@@ -13,6 +13,6 @@
 0076f920  CopyElem30  # 0x30 element uninitialized copy
 0076f990  CopyElem30InPlace  # 0x30 element copy
 0076fa70  CopyElem30Back  # backward 0x30 element copy
-0076fb10  SP::cAnimationBaker::BakeToArena  # PDB candidate
-0076fc20  helper FC20  # arena/animation helper
-0076fc90  helper FC90  # arena/animation helper
+0076fb10 ?BakeToArena@@YAHH@Z  # BakeToArena migrated from s0076ed30 (verbatim, slice spelling)
+0076fc20 ?HelperFC20@@YA_NPAUFC20A@@PAUFC20B@@PAPAH@Z  # HelperFC20 migrated from s0076ed30 (verbatim, slice spelling)
+0076fc90 ?HelperFC90@@YAXHHHHHHH@Z  # HelperFC90 migrated from s0076ed30 (verbatim, slice spelling)

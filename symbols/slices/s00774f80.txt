@@ -1,4 +1,4 @@
-00774f80 SP::cRuntimeModelBuilder mesh-array comparison  # EH-framed (skeleton)
-00775230 SP::cRuntimeModelBuilder helper  # EH-framed (skeleton)
-007754d0 index-builder  # __alloca_probe (skeleton)
-007756b0 vector<0x20>::push_back  # EH-framed (skeleton)
+00774f80 ?CompareModelBuilders@@YA_NPAURuntimeModelBuilder@@0@Z  # CompareModelBuilders migrated from s00774f80 (verbatim, slice spelling)
+00775230 ?BuildCellArray@RuntimeModelBuilder@@QAEXPAPAX@Z  # RuntimeModelBuilder::BuildCellArray migrated from s00774f80 (verbatim, slice spelling)
+007754d0 ?BuildElementIndex@@YA_NPAX0@Z  # BuildElementIndex migrated from s00774f80 (verbatim, slice spelling)
+007756b0 ?PushElem20@@YAXPAXPAUElem20@@@Z  # PushElem20 migrated from s00774f80 (verbatim, slice spelling)
