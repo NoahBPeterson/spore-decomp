@@ -1,0 +1,2 @@
+# source  symbol  va  flags
+../src/game/SPGonzago/_at_00de0000.cpp  ?CollectKeys@KeyCollector@@QAEXPAUKeyVector@@@Z  00de7530  /O2 /MD /Gy /TP /GS- /Isrc/game/include

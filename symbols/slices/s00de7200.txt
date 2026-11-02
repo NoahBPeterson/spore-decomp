@@ -1,8 +1,8 @@
-00de7200 ReadWorldMap  # cSPUILayoutManager::cWorld map deserializer: nuke+reset the tree, read a count, then each entry is (Key, cWorld) read as two triples with a NextKey between; inserts and stores the value at node+0x1c (names Claude-coined)
-00de7330 SerializeFeedback  # writes a FeedbackMap through a writer: empty-map early-out, Begin(name), one WriteKeyValue(ResourceMan::Key) per node, End(name)
-00de74c0 FeedbackMap::EraseUintKey  # erase a uint-keyed feedback entry (count--, RBTreeIncrement/Erase/delete) and drop the matching record from the +0x70 key tree; takes the key by pointer
-00de7530 KeyCollector::CollectKeys  # copy every 3-dword key from the +0x3c tree into an sp_vector (in-place append, DoInsertKey on overflow)
-00de7590 FeedbackMap::FindOrInsertKey  # find-or-insert on the 3-dword ResourceMan key (ordered a,c,b); returns the payload slot at node+0x1c
-00de7630 IntMap::Slot  # map<int,Handler*>::operator[]: lower-bound search on node+0x10, insert on miss, returns &node->mpValue
-00de7eb0 SimTeardown::Teardown  # full controller teardown: base reset, global manager shutdown, RemoveHandler, release the cached refs, stop/detach handler effects, clear the effect vector and the 3x3 grid
-00de76b0 Ctl::Ctor  # pre-existing: Simulator controller constructor (per-mode handler map at +0x124, item refs, six inventories, message-id table)
+00de7200 ?ReadWorldMap@@YAXPAUReader@@PAUWorldMap@@@Z  # ReadWorldMap migrated from s00de7200 (verbatim, slice spelling)
+00de7330 ?SerializeFeedback@@YA_NPAUFeedbackWriter@@PB_WPAUFeedbackMap@@@Z  # SerializeFeedback migrated from s00de7200 (verbatim, slice spelling)
+00de74c0 ?EraseUintKey@FeedbackMap@@QAEXPBI@Z  # FeedbackMap::EraseUintKey migrated from s00de7200 (verbatim, slice spelling)
+00de7530 ?CollectKeys@KeyCollector@@QAEXPAUKeyVector@@@Z  # KeyCollector::CollectKeys migrated from s00de7200 (verbatim, slice spelling)
+00de7590 ?FindOrInsertKey@FeedbackMap@@QAEPAXPBUKey@@@Z  # FeedbackMap::FindOrInsertKey migrated from s00de7200 (verbatim, slice spelling)
+00de7630 ?Slot@IntMap@@QAEPAPAUHandler@@PAH@Z  # IntMap::Slot migrated from s00de7200 (verbatim, slice spelling)
+00de76b0 ?Ctor@Ctl@@QAEXXZ  # Ctl::Ctor migrated from s00de7200 (verbatim, slice spelling)
+00de7eb0 ?Teardown@SimTeardown@@QAEXXZ  # SimTeardown::Teardown migrated from s00de7200 (verbatim, slice spelling)
