@@ -1,1 +1,2 @@
 # va  diff-bytes  reason
+01041090 20 cl15 folds retail's second null test (if (mpServer && mpHandler) where mpHandler == this, 62 vs 66 B); raw-arg/late-bound call shape also differs; equiv PASS (395 inputs) flags: /O2 /MD /Gy /TP /arch:SSE

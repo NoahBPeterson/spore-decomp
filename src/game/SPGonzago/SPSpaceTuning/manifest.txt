@@ -4,3 +4,6 @@
 ../src/game/SPGonzago/SPSpaceTuning.cpp  ?FUN_01040870@cSpaceTuning@@QAEIXZ  01040870  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPSpaceTuning.cpp  ?FUN_010408f0@cSpaceRelationshipTuning@@QAEXXZ  010408f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPSpaceTuning.cpp  ??1cSpaceRelationshipTuning@@UAE@XZ  01040950  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPSpaceTuning.cpp  ?ReloadTuning@cSpaceRelationshipTuning_s0104_09b0@SP@@QAEXXZ  010409b0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPSpaceTuning.cpp  ?HandleMessage@cSpaceRelationshipTuning_s0104_09b0@SP@@QAE_NHPAVCMessage@@@Z  010410e0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPSpaceTuning.cpp  ?ScalarDeletingDestructor@cTuningEntrySet@SP@@QAEPAXE@Z  01041110  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

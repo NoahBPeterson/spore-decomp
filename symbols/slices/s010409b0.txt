@@ -1,1 +1,4 @@
-010409b0 SP::cSpaceRelationshipTuning::ReloadTuning  # PDB; byte-exact, retail layout 0xa0
+010409b0 ?ReloadTuning@cSpaceRelationshipTuning_s0104_09b0@SP@@QAEXXZ  # cSpaceRelationshipTuning_s0104_09b0::ReloadTuning migrated from s010409b0 (verbatim, slice spelling)
+01041090 ?Init@cSpaceRelationshipTuning_s0104_09b0@SP@@QAEXXZ  # cSpaceRelationshipTuning_s0104_09b0::Init migrated from s010409b0 (verbatim, slice spelling)
+010410e0 ?HandleMessage@cSpaceRelationshipTuning_s0104_09b0@SP@@QAE_NHPAVCMessage@@@Z  # cSpaceRelationshipTuning_s0104_09b0::HandleMessage migrated from s010409b0 (verbatim, slice spelling)
+01041110 ?ScalarDeletingDestructor@cTuningEntrySet@SP@@QAEPAXE@Z  # cTuningEntrySet::ScalarDeletingDestructor migrated from s010409b0 (verbatim, slice spelling)
