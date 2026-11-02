@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+0091b3d0 263 GetCallstack: same DbgHelp stack walk (StackWalk64 via 0x01667b50, ReadProcessMemory callback, machine type 0x14c, CONTEXT 0x2cc, STACKFRAME 0xa4) but the frame filtering and the dbghelp init state machine are reconstructed from shape only (size 343 vs 422). flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-, equiv UNSUPPORTED (0/400 valid inputs, import LoadLibraryA)
