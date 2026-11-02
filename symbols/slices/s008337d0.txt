@@ -4,7 +4,7 @@
 00833af0 ?FUN_00833af0@@YAPAXPAX0@Z  # FUN_00833af0 migrated from s008337d0 (verbatim, slice spelling)
 00833ba0 cTextureManager::LoadTexture  # "image/..." texture-instance loader (1105B)
 00834000 cTextureManager::LoadTextureThunk  # __stdcall, forwards (-1,-1)
-00834020 UTFWin::cSPUITextWin::cSPUITextWin  # vtables 0x141ac90/0x141ab70/+0x20c
+00834020 ??0cSPUITextWin@@QAE@XZ  # cSPUITextWin::cSPUITextWin migrated from s008337d0 (verbatim, slice spelling)
 00834140 UI::TextZoomName::SetText  # virtual slot 0x8c, global 0x164f0e0
 00834160 UI::TextZoomName::~TextZoomName  # vtable 0x141ada8
 00834200 ?Release@cGonzagoSimulator@SP@@UAEHXZ  # SP::cGonzagoSimulator::Release migrated from s008337d0

@@ -1,0 +1,10 @@
+# va  diff-bytes  reason
+008329b0 670 Subtitles::SetWindow: complete; typesetter/line-layout and message-text paths; residual is load scheduling (original reloads [ebp]/[ebx]), x87-vs-SSE float copies and our /GS cookie (original has none); equiv WEAK (143 valid, 7.5% cov, no mismatch, inline-calls tolerated) flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+00988710 15 codegen shape: original keeps the v10() result in whole eax and computes (b ^ 0xff) & 1 in ebx; cl widens through bl/movzx (same value). flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
+009887b0 51 default 40; under `/O2 /arch:SSE /fp:fast` only 11 (original `mov eax, [ecx-0x208]; mov edx,[eax+0x90]; movss [ecx+8]; add ecx,-0x208; call edx`, cl schedules the vtable-slot load after the store). Same size (48), identical logic; /fp:fast fixes the whole SSE compare. flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
+009887e0 126 default 134; under /fp:fast 26 — compare chain byte-identical, only the vtable-slot load placement vs the four stores differs (same size 123). flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
+00988920 282 full layout/draw routine; large scheduling differences (this-0x208 slot 0x14/0x8c/0x23 chain, 9-arg Layout call, shadow-draw call). flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
+00988ad0 209 Typesetter layout + min/max clamp pair; x87-vs-SSE and scheduling. flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
+00988cd0 626 large CalcSize variant; heavy scheduling + float-register differences. flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
+00989000 154 constructor init sequence; store ordering differs throughout. flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
+00989130 58 factory: slot 0x28 / slot 0x10 / slot 0x84 chain; p1 kept in edi vs reloaded from the argument slot, and cold-return placement. flags: /O2 /MD /Gy /EHsc /TP /arch:SSE

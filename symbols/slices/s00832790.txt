@@ -1,7 +1,7 @@
 00832790 cSPUISubtitles::Clear  # object with Stopwatch@0x10, "UI/cSPUISubtitles", vtable 0x141a894
 008328b0 cSPUISubtitles::HandleMessage  # secondary subobject at obj+8, msg 0x61dd1b7
 00832900 cSPUISubtitles::cSPUISubtitles  # vtables 0x141a894/0x141a884
-008329b0 cSPUISubtitles::SetWindow  # allocates "UI/cSPUISubtitles" window, text typesetter
+008329b0 ?SetWindow@Subtitles@@QAE_NPAX@Z  # Subtitles::SetWindow migrated from s00832790 (verbatim, slice spelling)
 00832d50 cSPUISubtitles::Set  # sets text on WFixed@0x88
 00832dc0 rw::math::Matrix34::Init  # copies 3x3 from 0x164efc8, vec from 0x164ee48
 00832e10 cSPUISwarmEffect::GetEventMask  # base IWinProc::GetEventMask | 0x288

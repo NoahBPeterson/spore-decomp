@@ -1,0 +1,13 @@
+# source  symbol  va  flags
+../src/game/UTFSpore_Win32/text1.cpp  ??0cSPUITextWin@@QAE@XZ  00834020  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/text1.cpp  ?m_9886d0@WinText@@QAEXPAH@Z  009886d0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/text1.cpp  ?m_988760@WinText@@QAEXPAX@Z  00988760  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/text1.cpp  ?m_988780@WinText@@QAEXH@Z  00988780  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/text1.cpp  ?m_988860@WinText@@QAEXI@Z  00988860  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/text1.cpp  ?m_988890@WinText@@QAEXXZ  00988890  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/text1.cpp  ?m_9888c0@WinText@@QAEXI@Z  009888c0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/text1.cpp  ?m_988c40@WinText@@QAEXI@Z  00988c40  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/text1.cpp  ?m_988c90@WinText@@QAEXI@Z  00988c90  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/text1.cpp  ?m_988f60@WinText@@QAEDIPAM@Z  00988f60  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/text1.cpp  ?m_988f90@WinText@@QAEXXZ  00988f90  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/text1.cpp  ?m_9890d0@WinText@@QAEPAU1@E@Z  009890d0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
