@@ -1,0 +1,8 @@
+# source  symbol  va  flags
+../src/game/SPAudio/eapdrtext.cpp  ?rtext_free@Eapd@Audio@EA@@YAXPAUt_rtext@123@@Z  00a4e920  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdrtext.cpp  ?rtext_gettag@Eapd@Audio@EA@@YAPBDPAUt_rtext@123@@Z  00a4e990  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdrtext.cpp  ?rtext_measures@Eapd@Audio@EA@@YAXPAH00@Z  00a4e9a0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdrtext.cpp  ?glist_findrtext@Eapd@Audio@EA@@YAPAUt_rtext@123@PAUt_glist@123@PAUt_text@123@@Z  00a4efb0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdrtext.cpp  ?rtext_erase@Eapd@Audio@EA@@YAXPAUt_rtext@123@@Z  00a4f080  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdrtext.cpp  ?rtext_displace@Eapd@Audio@EA@@YAXPAUt_rtext@123@HH@Z  00a4f0b0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdrtext.cpp  ?rtext_select@Eapd@Audio@EA@@YAXPAUt_rtext@123@H@Z  00a4f0e0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include

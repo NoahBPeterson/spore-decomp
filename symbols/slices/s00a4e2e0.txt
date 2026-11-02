@@ -9,17 +9,17 @@
 00a4e7a0 EA::Audio::Eapd::guiconnect_signoff  # tell Tk the target is gone, reset the symbol to gEmptySymbol and free the guiconnect
 00a4e7e0 guiconnect_anything  # forward any message to the guiconnect target via pd_typedmess while a target exists
 00a4e810 EA::Audio::Eapd::g_guiconnect_setup  # create the guiconnect class (size 0x3c) and register the anything method plus the "signoff" method
-00a4e8a0 EA::Audio::Eapd::rtext_new  # allocate a t_rtext, initialise owner/glist/ypix=-1, link it at the head of gl_editor->e_rtextlist, read the owner's text and make the ".x%lx.t%lx" tag
-00a4e920 EA::Audio::Eapd::rtext_free  # unlink from e_textedfor/e_rtextlist/rtext_entered and free the text buffer and the rtext
-00a4e990 EA::Audio::Eapd::rtext_gettag  # return the Tk tag of an rtext
-00a4e9a0 EA::Audio::Eapd::rtext_measures  # copy the two leading ints of a measure block into two out-parameters
-00a4e9c0 EA::Audio::Eapd::rtext_senditup  # text layout and Tk update: font metrics, wrap width (default 60), line splitting at spaces, selection offsets, pdtk_text_new / pdtk_text_set, text_drawborder on size change, caret/selection commands; mode 0 measures only
-00a4ee20 EA::Audio::Eapd::rtext_retext  # re-read the owner's binbuf text and shorten over-long message text (signed mantissa for a single float, otherwise '>' terminator), then senditup(2)
-00a4efb0 EA::Audio::Eapd::glist_findrtext  # find the rtext whose owner is the given object
-00a4efd0 EA::Audio::Eapd::rtext_width  # measure-only senditup, return the width
-00a4f010 EA::Audio::Eapd::rtext_height  # measure-only senditup, return the height
-00a4f050 EA::Audio::Eapd::rtext_draw  # senditup in draw mode
-00a4f080 EA::Audio::Eapd::rtext_erase  # SetSerializer delete of the rtext's Tk tag
-00a4f0b0 EA::Audio::Eapd::rtext_displace  # SetSerializer move of the rtext's Tk tag by dx/dy
-00a4f0e0 EA::Audio::Eapd::rtext_select  # itemconfigure -fill blue/black and remember the editing canvas
-00a4f130 EA::Audio::Eapd::rtext_activate  # enter/leave text editing: focus tag, set/clear e_textedfor, mask e_flags bit 0x10, select-all field setup, then senditup(2)
+00a4e8a0 ?rtext_new@Eapd@Audio@EA@@YAPAUt_rtext@123@PAUt_glist@123@PAUt_text@123@@Z  # rtext_new migrated from s00a4e2e0 (verbatim, slice spelling)
+00a4e920 ?rtext_free@Eapd@Audio@EA@@YAXPAUt_rtext@123@@Z  # rtext_free migrated from s00a4e2e0 (verbatim, slice spelling)
+00a4e990 ?rtext_gettag@Eapd@Audio@EA@@YAPBDPAUt_rtext@123@@Z  # rtext_gettag migrated from s00a4e2e0 (verbatim, slice spelling)
+00a4e9a0 ?rtext_measures@Eapd@Audio@EA@@YAXPAH00@Z  # rtext_measures migrated from s00a4e2e0 (verbatim, slice spelling)
+00a4e9c0 ?rtext_senditup@Eapd@Audio@EA@@YAXPAUt_rtext@123@HPAH11@Z  # rtext_senditup migrated from s00a4e2e0 (verbatim, slice spelling)
+00a4ee20 ?rtext_retext@Eapd@Audio@EA@@YAXPAUt_rtext@123@@Z  # rtext_retext migrated from s00a4e2e0 (verbatim, slice spelling)
+00a4efb0 ?glist_findrtext@Eapd@Audio@EA@@YAPAUt_rtext@123@PAUt_glist@123@PAUt_text@123@@Z  # glist_findrtext migrated from s00a4e2e0 (verbatim, slice spelling)
+00a4efd0 ?rtext_width@Eapd@Audio@EA@@YAHPAUt_rtext@123@@Z  # rtext_width migrated from s00a4e2e0 (verbatim, slice spelling)
+00a4f010 ?rtext_height@Eapd@Audio@EA@@YAHPAUt_rtext@123@@Z  # rtext_height migrated from s00a4e2e0 (verbatim, slice spelling)
+00a4f050 ?rtext_draw@Eapd@Audio@EA@@YAXPAUt_rtext@123@@Z  # rtext_draw migrated from s00a4e2e0 (verbatim, slice spelling)
+00a4f080 ?rtext_erase@Eapd@Audio@EA@@YAXPAUt_rtext@123@@Z  # rtext_erase migrated from s00a4e2e0 (verbatim, slice spelling)
+00a4f0b0 ?rtext_displace@Eapd@Audio@EA@@YAXPAUt_rtext@123@HH@Z  # rtext_displace migrated from s00a4e2e0 (verbatim, slice spelling)
+00a4f0e0 ?rtext_select@Eapd@Audio@EA@@YAXPAUt_rtext@123@H@Z  # rtext_select migrated from s00a4e2e0 (verbatim, slice spelling)
+00a4f130 ?rtext_activate@Eapd@Audio@EA@@YAXPAUt_rtext@123@H@Z  # rtext_activate migrated from s00a4e2e0 (verbatim, slice spelling)
