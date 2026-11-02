@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+00e86a50 12 SP::SphereTreeCreate complete; 125 vs 123 bytes. The null path uses an immediate store (`mov dword [tree+4],0`) where retail emits `xor eax,eax; mov [tree+4],eax`, adding two bytes; the rest is relocation/padding. difftest PASS 342/400 valid, 84.6% coverage (33/39 insns). flags /O2 /MD /Gy /TP /arch:SSE /fp:fast

@@ -5,6 +5,7 @@
 00e868f0 ?FUN_00e868f0@@YAXPAUSphereTree@@PBUVector3_s00e8_5dc0@@MH@Z  # FUN_00e868f0 migrated from s00e85dc0 (verbatim, slice spelling)
 00e86930 ?FUN_00e86930@@YAXPAUSphereTree@@PAUNode@@@Z  # FUN_00e86930 migrated from s00e85dc0 (verbatim, slice spelling)
 00e86980 ?FUN_00e86980@@YAXPAUSphereTree@@PAUNode@@@Z  # FUN_00e86980 migrated from s00e85dc0 (verbatim, slice spelling)
+00e86a50 ?SphereTreeCreate@SP@@YAPAUSphereTree@@XZ  # SphereTreeCreate migrated from s00e85dc0 (verbatim, slice spelling)
 00e86ad0 ?FUN_00e86ad0@@YAXXZ  # FUN_00e86ad0 migrated from s00e85dc0 (verbatim, slice spelling)
 00e86ae0 ?FUN_00e86ae0@@YAXXZ  # FUN_00e86ae0 migrated from s00e85dc0 (verbatim, slice spelling)
 00e86b60 ?FUN_00e86b60@@YAXXZ  # FUN_00e86b60 migrated from s00e85dc0 (verbatim, slice spelling)
