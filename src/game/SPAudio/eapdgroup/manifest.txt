@@ -1,0 +1,2 @@
+# source  symbol  va  flags
+../src/game/SPAudio/eapdgroup.cpp  ?FUN_00a52bb0@@YIHPAX@Z  00a52bb0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

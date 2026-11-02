@@ -14,12 +14,12 @@
 00a529e0 ?FUN_00a529e0@@YAPAXHHHPAH@Z  # complete, non-exact
 00a52a90 ?FUN_00a52a90@@YAXPAD@Z  # byte-exact
 00a52ab0 ?groupsize_new@@YAPAXXZ  # complete, non-exact
-00a52af0 ?FUN_00a52af0@@YIXPAH@Z  # complete, non-exact
-00a52b40 ?Call6@AnyObj@@QAEHHH@Z  # complete, non-exact
-00a52b70 ?Call4@AnyObj@@QAEXH@Z  # complete, non-exact
-00a52b90 ?CallC@AnyObj@@QAEXH@Z  # complete, non-exact
-00a52bb0 ?FUN_00a52bb0@@YIHPAX@Z  # byte-exact
-00a52bc0 ?Get@IdxVec@@QAEXPAUt_symbol@@I@Z  # complete, non-exact
+00a52af0 ?FUN_00a52af0@@YIXPAH@Z  # FUN_00a52af0 migrated from s00a52080 (verbatim, slice spelling)
+00a52b40 ?Call6@AnyObj@@QAEHHH@Z  # Call6 migrated from s00a52080 (verbatim, slice spelling)
+00a52b70 ?Call4@AnyObj@@QAEXH@Z  # Call4 migrated from s00a52080 (verbatim, slice spelling)
+00a52b90 ?CallC@AnyObj@@QAEXH@Z  # CallC migrated from s00a52080 (verbatim, slice spelling)
+00a52bb0 ?FUN_00a52bb0@@YIHPAX@Z  # FUN_00a52bb0 migrated from s00a52080 (verbatim, slice spelling)
+00a52bc0 ?Get@IdxVec@@QAEXPAUt_symbol@@I@Z  # IdxVec::Get migrated from s00a52080 (verbatim, slice spelling)
 00a52c00 ?FUN_00a52c00@@YAXPAD@Z  # complete, non-exact
 00a52c80 ?groupsize_symbol@@YAXPADHH@Z  # complete, non-exact
 00a52d00 ?a_group_setup@@YAEXZ  # complete, non-exact
