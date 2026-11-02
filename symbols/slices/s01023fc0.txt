@@ -1,5 +1,8 @@
+00c485d0 ?Abort@cSPMission@SP@@QAEXXZ  # SP::cSPMission::Abort (callee of s01023fc0, named from the dev publics; slice address comment)
+00c485e0 ?Complete@cSPMission@SP@@QAEXXZ  # SP::cSPMission::Complete (callee of s01023fc0, named from the dev publics; slice address comment)
+00c485f0 ?Fail@cSPMission@SP@@QAEXXZ  # SP::cSPMission::Fail (callee of s01023fc0, named from the dev publics; slice address comment)
 01023fc0 ?Execute@cCommandMission@nSpaceCheats@SP@@QAEXPAVcArguments@ArgScript@EA@@@Z  # cCommandMission::Execute: mission subcommand dispatch; nonmatching (1645 bytes)
-01024630 ?Rename@cCommandCheat@nSpaceCheats@SP@@QAEXPAVcArguments@ArgScript@EA@@@Z  # rename active star/planet; nonmatching
-01024920 ?FUN_01024920@nSpaceCheats@SP@@YAXPAPAH0HP6AHHH@Z@Z  # introsort depth loop over ref slots; nonmatching
-010249f0 ?Badge@cCommandCheat@nSpaceCheats@SP@@QAEXPAVcArguments@ArgScript@EA@@@Z  # badge cheat name->id chain + level set walk; nonmatching
-01024e90 ?reserve@LayoutNodeVec@nSpaceCheats@SP@@QAEXI@Z  # byte-exact: vector<LayoutNode>::reserve (0x1c-byte nodes)
+01024630 ?Rename@cCommandCheat@nSpaceCheats@SP@@QAEXPAVcArguments_s0102_3fc0@ArgScript@EA@@@Z  # cCommandCheat::Rename migrated from s01023fc0 (verbatim, slice spelling)
+01024920 ?FUN_01024920@nSpaceCheats@SP@@YAXPAPAH0HP6AHHH@Z@Z  # FUN_01024920 migrated from s01023fc0 (verbatim, slice spelling)
+010249f0 ?Badge@cCommandCheat@nSpaceCheats@SP@@QAEXPAVcArguments_s0102_3fc0@ArgScript@EA@@@Z  # cCommandCheat::Badge migrated from s01023fc0 (verbatim, slice spelling)
+01024e90 ?reserve@LayoutNodeVec@nSpaceCheats@SP@@QAEXI@Z  # LayoutNodeVec::reserve migrated from s01023fc0 (verbatim, slice spelling)

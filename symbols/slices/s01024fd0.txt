@@ -1,3 +1,4 @@
+01024fd0 ?DoFillInsert@VecSet@@QAEXPAUSetInt@@IABU2@@Z  # VecSet::DoFillInsert migrated from s01024fd0 (verbatim, slice spelling)
 010251e0 ?Execute@cCommandRaidCheat@@QAEXPAUcArguments@@@Z  # cCommandRaidCheat::Execute migrated from s01024fd0 (verbatim, slice spelling)
 010255f0 ?DoInsertValue@Vec14@@QAEXPAUT14@@ABU2@@Z  # Vec14::DoInsertValue migrated from s01024fd0 (verbatim, slice spelling)
 01025750 ?resize@VecSet@@QAEXI@Z  # VecSet::resize migrated from s01024fd0 (verbatim, slice spelling)

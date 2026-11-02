@@ -1,4 +1,4 @@
-// src/game/SPGonzago/SPSpaceCheats.cpp -- migrated from slice(s) s01025840, s01024fd0, s01021e50 by tools/migrate/rewrite.py
+// src/game/SPGonzago/SPSpaceCheats.cpp -- migrated from slice(s) s01023fc0, s01025840, s01024fd0, s01021e50 by tools/migrate/rewrite.py
 // Object file: SPGonzago/SPSpaceCheats.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -17,9 +17,30 @@
 #include "SP/cStarManager.h"
 #include "SP/cStarRecord.h"
 #include "SP/cVehicle.h"
+#include "SP/cSPMission.h"
+#include "eastl/string.h"
 
 // ---- items of slice s01021e50 begin (TODO(rewrite): local stubs, replace by canonical classes)
 #define nullptr 0
+struct cVTable {
+    void* mpSlots[0x100];                       // 0x000
+};
+class cDispatchObject {
+public:
+    void* Call(int nSlot) {
+        return ((void* (*)(cDispatchObject*))mpTable->mpSlots[nSlot >> 2])(this);
+    }
+
+    int32_t CallInt(int nSlot) {
+        return ((int32_t (*)(cDispatchObject*))mpTable->mpSlots[nSlot >> 2])(this);
+    }
+
+    void CallVoid(int nSlot) {
+        ((void (*)(cDispatchObject*))mpTable->mpSlots[nSlot >> 2])(this);
+    }
+
+    cVTable* mpTable;                           // 0x000
+};
 class cRefCounted {
 public:
     virtual void AddRef();                      // slot 0x00
@@ -69,6 +90,26 @@ public:
     cVector3* GetCities();
 };
 cVector3* g_pCityReferencePoint = nullptr;                  // 0x16ddb34
+class cSPSimulatorUFO {
+public:
+    int32_t GetTravelCharge();
+    void TravelToStarCharge(int32_t nStarIndex);
+    cDispatchObject* GetPlayerInventory();
+};
+class cSPGameDataUFO {
+public:
+    void PopToDestination();
+};
+class cPlayerInventory {
+public:
+    int32_t GetStarCount();
+    void SetStarCount(int32_t nStars);
+};
+int32_t GetUFOContextId();
+int32_t GetUniverseContextId();
+void* GetUFOSimulator_s0102_1e50(int32_t nContext);
+void* GetUFOSimulator_s0102_1e50();
+void* GetPlayerUniverse();
 // ---- items of slice s01021e50 end
 
 // ---- items of slice s01024fd0 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -102,6 +143,20 @@ struct SetInt {                                  // eastl::set<int>  (0x1c)
     }
     ~SetInt() { DoNukeSubtree(mAnchor.mpNodeParent); }
 };
+void UninitCopyFill(SetInt* p, u32 n, const SetInt& v);      // 0x10249c0
+void AssignRange(SetInt* first, SetInt* last, SetInt* dest); // 0x1023180
+SetInt* UninitMove(SetInt* first, SetInt* last, SetInt* dest);// 0x1023230
+void CopyRange(SetInt* first, SetInt* last, SetInt* dest);   // 0x10233e0
+SetInt* CopyBackward(SetInt* first, SetInt* last, SetInt* dest); // 0x1023460
+void FillRange(SetInt* first, SetInt* last, const SetInt& v);// 0x1024e60
+void* DoAlloc28(u32 n, const char*, int, int, const char*, int); // 0xf473a0
+void  DoFree28(void* p);                                     // 0xf47380
+inline SetInt* AllocSetInt(u32 n)
+{
+    return n ? (SetInt*)DoAlloc28(n * 0x1c, "Simulator", 0, 0,
+                    "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h", 0xd1)
+             : 0;
+}
 struct VecSet {                                  // eastl::vector<eastl::set<int> >
     SetInt* mpBegin;
     SetInt* mpEnd;
@@ -1430,6 +1485,282 @@ public:
 }
 // ---- items of slice s01025840 end
 
+// ---- items of slice s01023fc0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+#pragma intrinsic(strlen, memcpy)
+namespace eastl {
+class allocator_s0102_3fc0 { public: allocator_s0102_3fc0() {} };
+}
+namespace eastl {
+class string16_s0102_3fc0 {
+public:
+    wchar_t* mpBegin;
+    wchar_t* mpEnd;
+    wchar_t* mpCapacity;
+    allocator_s0102_3fc0 mAllocator;
+    string16_s0102_3fc0() : mpBegin(gEmptyString16), mpEnd(gEmptyString16), mpCapacity(gEmptyString16 + 1) {}
+    ~string16_s0102_3fc0() { DeallocateSelf(); }
+    void DeallocateSelf();                                      // 0x00933960
+    const wchar_t* c_str() const { return mpBegin; }
+};
+}
+namespace eastl {
+class sim_string_s0102_3fc0 {
+public:
+    char* mpBegin;
+    char* mpEnd;
+    char* mpCapacity;
+    sim_allocator mAllocator;
+
+    __forceinline sim_string_s0102_3fc0(const char* p) { RangeInit(p, p + strlen(p)); }
+    __forceinline void RangeInit(const char* pBegin, const char* pEnd)
+    {
+        const size_t n = (size_t)(pEnd - pBegin);
+        AllocateSelf(n);
+        memcpy(mpBegin, pBegin, n);
+        mpEnd = mpBegin + (pEnd - pBegin);
+        *mpEnd = 0;
+    }
+    ~sim_string_s0102_3fc0() { DeallocateSelf(); }
+    __forceinline void AllocateSelf(size_t nLen)
+    {
+        if (nLen + 1 > 1) {
+            mpBegin = (char*)mAllocator.allocate(nLen + 1);
+            mpCapacity = mpBegin + nLen + 1;
+        } else {
+            mpBegin = (char*)gEmptyString16;
+            mpCapacity = (char*)gEmptyString16 + 1;
+        }
+    }
+    void DeallocateSelf()
+    {
+        if ((mpCapacity - mpBegin) > 1 && mpBegin)
+            mAllocator.deallocate(mpBegin);
+    }
+};
+}
+namespace eastl {
+bool operator==(const sim_string_s0102_3fc0& a, const char* b);            // 0x00555020
+}
+namespace EA {
+namespace ArgScript {
+class FormatParser_s0102_3fc0 {
+public:
+virtual void vf00();
+virtual void vf04();
+virtual void vf08();
+virtual void vf0C();
+virtual void vf10();
+virtual void vf14();
+virtual void vf18();
+virtual void vf1C();
+virtual void vf20();
+virtual void vf24();
+virtual void vf28();
+virtual void vf2C();
+virtual void vf30();
+virtual void vf34();
+virtual void vf38();
+virtual void vf3C();
+virtual void vf40();
+virtual void vf44();
+virtual void vf48();
+virtual void vf4C();
+virtual void vf50();
+virtual void vf54();
+virtual void vf58();
+virtual void vf5C();
+virtual void vf60();
+virtual void vf64();
+virtual void vf68();
+virtual void vf6C();
+virtual void vf70();
+virtual void vf74();
+virtual void vf78();
+virtual void vf7C();
+virtual void vf80();
+virtual void vf84();
+virtual void vf88();
+virtual void vf8C();
+    virtual void vf90();
+    virtual bool ParseBool(const char* s) const;                // 0x94
+    virtual float ParseFloat(const char* s) const;              // 0x98
+    virtual int ParseInt(const char* s) const;                  // 0x9C
+};
+}
+}
+namespace EA {
+namespace ArgScript {
+class cArguments_s0102_3fc0 {
+public:
+    int NumArguments();                                         // 0x00837F30
+    const char* operator[](int i);                              // 0x00837F20
+};
+}
+}
+namespace EA {
+namespace ArgScript {
+void Output(FormatParser_s0102_3fc0* parser, const char* fmt, ...);        // 0x00841000
+}
+}
+namespace SP {
+class cSPSimulatorSpaceGame_s0102_3fc0;
+}
+namespace SP {
+namespace nSpaceCheats {
+struct LayoutNode {
+    uint32_t mPad0[3];        // +0x00
+    void*    mpSubtree;       // +0x0c
+    uint32_t mPad1[3];        // +0x10
+};
+}
+}
+namespace SP {
+namespace nSpaceCheats {
+struct SimAllocHeader { int mSize; };
+}
+}
+namespace SP {
+namespace nSpaceCheats {
+struct LayoutNodeVec {
+    LayoutNode* mpBegin;
+    LayoutNode* mpEnd;
+    LayoutNode* mpCap;
+    void reserve(unsigned n);                                   // 0x01024E90
+};
+}
+}
+namespace SP {
+namespace nSpaceCheats {
+LayoutNode* FUN_01023230(LayoutNode* b, LayoutNode* e, LayoutNode* d);  // 0x01023230
+}
+}
+namespace SP {
+namespace nSpaceCheats {
+LayoutNode* FUN_01023180(LayoutNode* b, LayoutNode* e, LayoutNode* d);  // 0x01023180
+}
+}
+namespace SP {
+namespace nSpaceCheats {
+struct LayoutRefObj { virtual void vSlot(); };
+}
+}
+namespace SP {
+namespace nSpaceCheats {
+typedef int (__cdecl* LayoutRefCmp)(int, int);
+}
+}
+namespace SP {
+namespace nSpaceCheats {
+int** FUN_01021180(int** a, int** b, int** c, LayoutRefCmp cmp);              // 0x01021180
+}
+}
+namespace SP {
+namespace nSpaceCheats {
+int** FUN_01023270(int** begin, int** end, int* obj, LayoutRefCmp cmp);      // 0x01023270
+}
+}
+namespace SP {
+namespace nSpaceCheats {
+void  FUN_010232f0(int** begin, int** end, int** end2, LayoutRefCmp cmp);    // 0x010232f0
+}
+}
+namespace SP {
+namespace nSpaceCheats {
+int   FUN_01021240();                                                       // 0x01021240
+}
+}
+namespace SP {
+namespace nSpaceCheats {
+void* FUN_010212a0();                                                       // 0x010212a0
+}
+}
+namespace SP {
+namespace nSpaceCheats {
+eastl::string16_s0102_3fc0* ConvertToString16(eastl::string16_s0102_3fc0* dst, const eastl::sim_string_s0102_3fc0* src); // 0x0093c6d0
+}
+}
+namespace SP {
+namespace nSpaceCheats {
+extern "C" __declspec(dllimport) int __cdecl tolower(int c);
+}
+}
+namespace SP {
+namespace nSpaceCheats {
+struct RenameStarRecord {
+    void Rename(eastl::string16_s0102_3fc0* name);                                     // 0x00bba4b0
+};
+}
+}
+namespace SP {
+namespace nSpaceCheats {
+struct RenamePlanetRecord {
+    uint32_t mPad0[0xb];                                                    // +0x00 .. +0x2b
+    unsigned char mFlags;                                                   // +0x2c
+    void Rename(eastl::string16_s0102_3fc0* name);                                     // 0x00b8e3f0
+};
+}
+}
+namespace SP {
+namespace nSpaceCheats {
+struct PlanetKeyNode {
+    PlanetKeyNode* mpLeft;                                                  // +0x00
+    PlanetKeyNode* mpRight;                                                 // +0x04
+    PlanetKeyNode* mpParent;                                                // +0x08
+    uint32_t       mColor;                                                  // +0x0c
+    uint32_t       mKey;                                                    // +0x10
+};
+}
+}
+namespace SP {
+namespace nSpaceCheats {
+struct PlanetKeySet {
+    PlanetKeyNode* mpSentinel;                                              // +0x00
+    PlanetKeyNode* mpBegin;                                                 // +0x04
+    PlanetKeyNode* mpRoot;                                                  // +0x08
+    uint32_t       mColor;                                                  // +0x0c
+    void Init(uint32_t key);                                                // 0x00d01a40
+    void DoNukeSubtree(PlanetKeyNode* node);                                // 0x009a9600
+};
+}
+}
+namespace SP {
+namespace nSpaceCheats {
+struct PlanetKeyIter {
+    PlanetKeyNode* mpNode;
+    void Increment();                                                       // 0x01022b90
+};
+}
+}
+namespace SP {
+namespace nSpaceCheats {
+struct cPlayerTribe {
+    uint32_t GetPlanetKey();                                                // 0x00b7e380
+    void     UnlockBadge(uint32_t id);                                      // 0x00fe5a20
+    int      CheckBadge(uint32_t id, int n);                                // 0x00fe45f0
+    void     GrantBadge(int id, int n);                                     // 0x00fe5430
+};
+}
+}
+namespace SP {
+namespace nSpaceCheats {
+struct cSpaceGameImpl {
+    cPlayerTribe* GetPlayerTribe();                                         // 0x00bfc5f0
+};
+}
+}
+namespace SP {
+namespace nSpaceCheats {
+struct cCommandCheat {
+    virtual void vf00();
+    virtual const char* vf04(int arg);
+    EA::ArgScript::FormatParser_s0102_3fc0* mpFormatParser;                            // +0x04
+    void Rename(EA::ArgScript::cArguments_s0102_3fc0* args);                           // 0x01024630
+    void Badge(EA::ArgScript::cArguments_s0102_3fc0* args);                            // 0x010249F0
+};
+}
+}
+// ---- items of slice s01023fc0 end
+
 // @ 0x01022990
 cObjectKey& cObjectKey::Init(void* pFirst, void* pSecond)
 {
@@ -1437,6 +1768,36 @@ cObjectKey& cObjectKey::Init(void* pFirst, void* pSecond)
     mpFirst = pFirst;
     mpSecond = pSecond;
     return *this;
+}
+
+// @ 0x010229b0
+int32_t cObjectKey::Matches(cObjectKey* pOther)
+{
+    if (pOther->mnType != mpSecond)
+        return 0;
+    if (pOther->mpFirst != mpFirst)
+        return 0;
+    return 1;
+}
+
+// @ 0x010229d0
+void TravelToStar(int32_t nStarIndex)
+{
+    if (nStarIndex == 0)
+        return;
+    if (GetUniverseContextId() != 2)
+        return;
+
+    cSPSimulatorUFO* pSimulator = (cSPSimulatorUFO*)GetUFOSimulator_s0102_1e50(GetUFOContextId());
+    int32_t nCharge = pSimulator->GetTravelCharge();
+    int32_t nStars = ((cPlayerInventory*)GetPlayerUniverse())->GetStarCount();
+
+    ((cPlayerInventory*)GetPlayerUniverse())->SetStarCount(nCharge + nStars);
+    ((cSPSimulatorUFO*)GetUFOSimulator_s0102_1e50(nStarIndex))->TravelToStarCharge(0);
+
+    cSPGameDataUFO* pGameData = (cSPGameDataUFO*)((cSPSimulatorUFO*)GetUFOSimulator_s0102_1e50())
+                                    ->GetPlayerInventory();
+    pGameData->PopToDestination();
 }
 
 // @ 0x01022bb0
@@ -1561,6 +1922,195 @@ int32_t CompareCityDistance(cCivData* pLhs, cCivData* pRhs)
     float fRhsLength = vRhs.mfZ * vRhs.mfZ + vRhs.mfY * vRhs.mfY + vRhs.mfX * vRhs.mfX;
     float fLhsLength = vLhs.mfZ * vLhs.mfZ + vLhs.mfY * vLhs.mfY + vLhs.mfX * vLhs.mfX;
     return fRhsLength > fLhsLength;
+}
+
+// @ 0x01024630
+namespace SP { namespace nSpaceCheats {
+void cCommandCheat::Rename(EA::ArgScript::cArguments_s0102_3fc0* args)
+{
+    int n = args->NumArguments();
+    if (n != 3) {
+        if (n == 1)
+            EA::ArgScript::Output(mpFormatParser, vf04(1));
+        else
+            EA::ArgScript::Output(mpFormatParser, "Error: must have two arguments\n");
+        return;
+    }
+    eastl::sim_string_s0102_3fc0 which(args->operator[](1));
+    eastl::sim_string_s0102_3fc0 name(args->operator[](2));
+    for (char* p = which.mpBegin; p < which.mpEnd; ++p)
+        *p = (char)tolower((unsigned char)*p);
+    if (which == "star") {
+        RenameStarRecord* rec = (RenameStarRecord*)FUN_01021240();
+        if (!rec) {
+            EA::ArgScript::Output(mpFormatParser, "Error: must be at a star\n");
+        } else {
+            eastl::string16_s0102_3fc0 name16;
+            rec->Rename(ConvertToString16(&name16, &name));
+        }
+    } else if (which == "planet") {
+        RenamePlanetRecord* rec = (RenamePlanetRecord*)FUN_010212a0();
+        if (!rec) {
+            EA::ArgScript::Output(mpFormatParser, "Error: must be at a planet\n");
+        } else if (rec->mFlags & 1) {
+            EA::ArgScript::Output(mpFormatParser, "Error: you cannot rename a saved game\n");
+        } else {
+            eastl::string16_s0102_3fc0 name16;
+            rec->Rename(ConvertToString16(&name16, &name));
+        }
+    } else {
+        EA::ArgScript::Output(mpFormatParser, "Error: first argument must be 'star' or 'planet'\n");
+    }
+}
+}}  // namespace SP::nSpaceCheats
+
+// @ 0x01024920
+namespace SP { namespace nSpaceCheats {
+void FUN_01024920(int** begin, int** end, int depth, LayoutRefCmp cmp)
+{
+    while (((int)((char*)end - (char*)begin) & ~3) > 0x70 && depth > 0) {
+        int** p = FUN_01021180(begin, begin + (end - begin) / 2, end - 1, cmp);
+        int* obj = *p;
+        if (obj)
+            ((LayoutRefObj*)obj)->vSlot();
+        int** pivot = FUN_01023270(begin, end, obj, cmp);
+        --depth;
+        FUN_01024920(pivot, end, depth, cmp);
+        end = pivot;
+    }
+    if (depth == 0)
+        FUN_010232f0(begin, end, end, cmp);
+}
+}}  // namespace SP::nSpaceCheats
+
+// @ 0x010249f0
+namespace SP { namespace nSpaceCheats {
+void cCommandCheat::Badge(EA::ArgScript::cArguments_s0102_3fc0* args)
+{
+    cSpaceGameImpl* game = (cSpaceGameImpl*)SpaceGameGet();
+    cPlayerTribe* tribe = game->GetPlayerTribe();
+    eastl::sim_string_s0102_3fc0 which(args->operator[](1));
+    int badge = (int)(unsigned)args;   // unmatched names keep the args pointer (as in the binary)
+    if (which == "colonize")
+        badge = 0;
+    else if (which == "rare")
+        badge = 0xb;
+    else if (which == "eco")
+        badge = 9;
+    else if (which == "alliance")
+        badge = 1;
+    else if (which == "terraform")
+        badge = 3;
+    else if (which == "explore")
+        badge = 2;
+    else if (which == "empire")
+        badge = 4;
+    else if (which == "war")
+        badge = 5;
+    else if (which == "fetch")
+        badge = 7;
+    else if (which == "eradicate")
+        badge = 8;
+    else if (which == "foodweb")
+        badge = 0xa;
+    else if (which == "mission")
+        badge = 0xe;
+    else if (which == "trade")
+        badge = 0xd;
+    else if (which == "defeatgrob")
+        badge = 0xf;
+    else if (which == "allygrob")
+        badge = 0x10;
+    else if (which == "flight101")
+        badge = 0x11;
+    else if (which == "archetype")
+        badge = 0x1e;
+    else if (which == "defend")
+        badge = 0x12;
+    else if (which == "level") {
+        if (args->operator[](2) != 0) {
+            int level = mpFormatParser->ParseInt(args->operator[](2));
+            PlanetKeySet set;
+            set.Init(tribe->GetPlanetKey());
+            PlanetKeyNode* it = set.mpBegin;
+            while (it != (PlanetKeyNode*)&set) {
+                uint32_t id = it->mKey;
+                if (tribe->CheckBadge(id, 1) == level)
+                    tribe->UnlockBadge(id);
+                PlanetKeyIter iter;
+                iter.mpNode = it;
+                iter.Increment();
+                it = iter.mpNode;
+            }
+            set.DoNukeSubtree(set.mpRoot);
+            badge = (int)(unsigned)args;   // original keeps the args pointer in this slot
+        }
+    }
+    if (args->operator[](2) != 0) {
+        for (int k = mpFormatParser->ParseInt(args->operator[](2)); k != 0; --k)
+            tribe->GrantBadge(badge, 1);
+    }
+}
+}}  // namespace SP::nSpaceCheats
+
+// @ 0x01024e90
+namespace SP { namespace nSpaceCheats {
+void LayoutNodeVec::reserve(unsigned n)
+{
+    unsigned cap = (unsigned)(mpCap - mpBegin);
+    if (n <= cap)
+        return;
+    LayoutNode* p = n ? (LayoutNode*)operator new[](n * sizeof(LayoutNode),
+        "Simulator", 0, 0, EASTL_SIM_FILE, 0xd1) : 0;
+    LayoutNode* e = mpEnd;
+    LayoutNode* b = mpBegin;
+    FUN_01023230(b, e, p);
+    FUN_01023180(b, e, p);
+    if (mpBegin && ((SimAllocHeader*)mpBegin)[-1].mSize != 0)
+        operator delete[](mpBegin);
+    unsigned count = (unsigned)(mpEnd - mpBegin);
+    mpBegin = p;
+    mpEnd = p + count;
+    mpCap = p + n;
+}
+}}  // namespace SP::nSpaceCheats
+
+// @ 0x01024fd0
+void VecSet::DoFillInsert(SetInt* position, u32 n, const SetInt& value)
+{
+    SetInt* const destPosition = position;
+
+    if (n <= (u32)(mpCapacity - mpEnd)) {
+        if (n > 0) {
+            const SetInt temp = value;                    // 0x7d0ac0
+            const u32 nExtra = (u32)(mpEnd - destPosition);
+            if (n < nExtra) {
+                CopyRange(mpEnd - n, mpEnd, mpEnd);        // 0x10233e0
+                CopyBackward(destPosition, mpEnd - n, mpEnd); // 0x1023460
+                FillRange(destPosition, destPosition + n, temp); // 0x1024e60
+            } else {
+                UninitCopyFill(mpEnd, n - nExtra, temp);   // 0x10249c0
+                CopyRange(destPosition, mpEnd, mpEnd + n - nExtra); // 0x10233e0
+                FillRange(destPosition, mpEnd, temp);      // 0x1024e60
+            }
+            mpEnd += n;
+        }
+    } else {
+        const u32 nPrevSize = (u32)(mpEnd - mpBegin);
+        const u32 nGrowSize = nPrevSize ? (2 * nPrevSize) : 1;
+        const u32 nNewSize  = nGrowSize > (nPrevSize + n) ? nGrowSize : (nPrevSize + n);
+        SetInt* const pNewData = AllocSetInt(nNewSize);
+        SetInt* pNewEnd = UninitMove(mpBegin, destPosition, pNewData);   // 0x1023230
+        AssignRange(mpBegin, destPosition, pNewData);                    // 0x1023180
+        UninitCopyFill(pNewEnd, n, value);                               // 0x10249c0
+        pNewEnd = UninitMove(destPosition, mpEnd, pNewEnd + n);          // 0x1023230
+        AssignRange(destPosition, mpEnd, pNewEnd);                       // 0x1023180
+        if (mpBegin && ((int*)mpBegin)[-1])
+            DoFree28(mpBegin);
+        mpBegin    = pNewData;
+        mpEnd      = pNewEnd;
+        mpCapacity = pNewData + nNewSize;
+    }
 }
 
 // @ 0x010251e0
