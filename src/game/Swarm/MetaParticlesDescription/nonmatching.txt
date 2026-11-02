@@ -1,0 +1,2 @@
+# s00addb50 -- EA Simulator ArgScript / config-manager cluster (11 functions).
+00ade1d0 865 cMetaParticleForceCommand::Execute: all calls reconstructed with the correct conventions -- erase (0x50f740, thiscall on o+0x6c), DoInsertValue (0x4b5ad0, thiscall on o+0x6c), OptionArguments(name,&count,min,max) (0x838130, thiscall on args), AddMessage(0x7e4190, thiscall on [self+0xc]). Residual is register allocation across this large function. equiv: WEAK (68 valid, 58.2% cov). flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
