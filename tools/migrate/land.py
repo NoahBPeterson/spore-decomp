@@ -10,7 +10,8 @@ For every module of work/batches/<batch>.json (entries {id, vas, module}, tools:
   3. pass: tools/migrate/commit_obj.sh <batch> M (re-checks run_all and the audit, commits);
      fail: the module's files are restored to HEAD and the reason is logged.
 
-usage: land.py <batch> [--only SUBSTR] [--log work/migrate/land_<batch>.log] [--check]
+usage: land.py <batch> [--only SUBSTR | --exact MODULE] [--log work/migrate/land_<batch>.log] [--check]
+       (several modules at once: tools/migrate/land_par.py)
 """
 import argparse, glob, json, os, re, subprocess, sys, time
 
@@ -18,7 +19,8 @@ ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)
 PY = os.path.join(ROOT, ".venv", "bin", "python")
 SWEEP = os.path.join(ROOT, "work", "sweep_pod")
 RANK = {"PASS": 4, "PASS-FP": 4, "WEAK": 3, "WEAK-FP": 3, "TIMEOUT": 2, "UNSUPPORTED": 1, "FAIL": 0}
-SCRATCH = os.path.join(ROOT, "work", "migrate", "land_scratch")
+# one scratch per worktree when tools/migrate/land_par.py runs several (work/ is shared through a symlink there)
+SCRATCH = os.environ.get("LAND_SCRATCH") or os.path.join(ROOT, "work", "migrate", "land_scratch")
 
 
 def run(args, timeout=3600):
@@ -87,7 +89,8 @@ def gate(m, log):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("batch")
-    ap.add_argument("--only")
+    ap.add_argument("--only", help="modules whose name contains SUBSTR")
+    ap.add_argument("--exact", help="only this module")
     ap.add_argument("--log")
     ap.add_argument("--check", action="store_true", help="gate the batch's committed modules as they are; no rewrite, commit or rollback")
     a = ap.parse_args()
@@ -103,7 +106,7 @@ def main():
     ents = json.load(open(os.path.join(ROOT, "work", "batches", a.batch + ".json")))
     mods = []
     for e in ents:
-        if e["module"] not in mods and (not a.only or a.only in e["module"]):
+        if e["module"] not in mods and (not a.only or a.only in e["module"]) and (not a.exact or a.exact == e["module"]):
             mods.append(e["module"])
     log("== %s %s: %d modules" % (time.strftime("%Y-%m-%d %H:%M"), a.batch, len(mods)))
     for m in mods if a.check else []:
@@ -126,7 +129,8 @@ def main():
                 log("  %s %s: rewrite exit %d: %s" % (m, sid, rc, out.strip().splitlines()[-1][:200] if out.strip() else ""))
         ok, why = gate(m, log)
         if ok:
-            rc, out = run(["bash", "tools/migrate/commit_obj.sh", a.batch, m])
+            # the gate just ran run_all and the asm audit on these files: commit_obj.sh need not repeat them
+            rc, out = run(["env", "LAND_GATED=1", "bash", "tools/migrate/commit_obj.sh", a.batch, m])
             ok, why = rc == 0, (out.strip().splitlines() or [""])[-1][:200]
         if not ok:
             rollback(m, sids)
