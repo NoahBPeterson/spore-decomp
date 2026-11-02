@@ -1,1 +1,6 @@
+00c69090 ??0cSPPlanetaryArtifact@SP@@QAE@XZ  # SP::cSPPlanetaryArtifact::cSPPlanetaryArtifact (callee of s0105aa50, named from the dev publics; slice address comment)
 0105aa50 StartTool  # SP::cSPDropCargoToolStrategy::StartTool (PDB candidate); stdcall(self,pos,arg)
+0105b0f0 ?EnergyRepairDoToolAction@@YG_NPAUStrategy@@PAXH1@Z  # EnergyRepairDoToolAction migrated from s0105aa50 (verbatim, slice spelling)
+0105b180 ?FUN_0105b180@@YG_NPAUStrategy@@PAXH1@Z  # FUN_0105b180 migrated from s0105aa50 (verbatim, slice spelling)
+0105b240 ?GetOutOfUFODoToolAction@@YG_NPAUStrategy@@PAXH1@Z  # GetOutOfUFODoToolAction migrated from s0105aa50 (verbatim, slice spelling)
+0105b6a0 ?PlaceColonyCanUseToolAtLocation@@YG_NPAUStrategy@@PAUVec3_s0105_aa50@@H@Z  # PlaceColonyCanUseToolAtLocation migrated from s0105aa50 (verbatim, slice spelling)

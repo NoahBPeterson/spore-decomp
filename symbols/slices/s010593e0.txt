@@ -1,4 +1,8 @@
+00ba6490 ?GetTradeRouteManager@cStarManager@SP@@QAEPAVcSpaceTradeRouteManager@2@XZ  # SP::cStarManager::GetTradeRouteManager (callee of s010593e0, named from the dev publics; slice address comment)
+00ba9370 ?GetEmpireByID@cStarManager@SP@@QBEPAVcEmpire@2@I@Z  # SP::cStarManager::GetEmpireByID (callee of s010593e0, named from the dev publics; slice address comment)
+00bb1080 ?GetStarRecords@cStarManager@SP@@QAEXABUcSPVector3@@AAUtStarSearchCriteria@12@AAV?$vector@V?$AutoRefCount@VcStarRecord@SP@@@EA@@Usp_vector_allocator@eastl@@@eastl@@@Z  # SP::cStarManager::GetStarRecords (callee of s010593e0, named from the dev publics; slice address comment)
+00d06240 ?RecordEvent@cRelationshipManager@SP@@QAEMIIW4eRelationshipEvents@2@M@Z  # SP::cRelationshipManager::RecordEvent (callee of s010593e0, named from the dev publics; slice address comment)
 010593e0 SP::cSPToolStrategy::OnHit  # vtable slot 0x30 OnHit(pTool, position, SpaceToolHit, int) per ModAPI cToolStrategy; PDB caller-scored candidate cSPToolStrategy
-0105a050 SP::DefaultAoEOnHit  # newly claimed; nonmatching; shared tool-hit helper
-01059f20 SP::cSPDefaultBeamTool::StartTool  # newly claimed; nonmatching; PDB candidate
-0105a100 SP::cSPDefaultAoETool::DoToolAction  # newly claimed; byte-exact
+01059f20 ?StartTool@cSPDefaultBeamTool_s0105_93e0@SP@@QAE_NPAVcSPToolStrategy_s0105_93e0@2@ABUVector3_s0105_93e0@@H@Z  # cSPDefaultBeamTool_s0105_93e0::StartTool migrated from s010593e0 (verbatim, slice spelling)
+0105a050 ?DefaultAoEOnHit@SP@@YG_NPAVcSpaceToolData_s0105_93e0@@PBUVector3_s0105_93e0@@HH@Z  # DefaultAoEOnHit migrated from s010593e0 (verbatim, slice spelling)
+0105a100 ?DoToolAction@cSPDefaultAoETool_s0105_93e0@SP@@QAE_NPAVcSpaceToolData_s0105_93e0@@ABUVector3_s0105_93e0@@HH@Z  # cSPDefaultAoETool_s0105_93e0::DoToolAction migrated from s010593e0 (verbatim, slice spelling)

@@ -1,0 +1,8 @@
+01056160 ?CanUseTool_56160@@YG_NPAVcSPToolStrategy_s0105_6160@@HPAH@Z  # CanUseTool_56160 migrated from s01056160 (verbatim, slice spelling)
+010568b0 ?StartTool_568b0@@YG_NPAVcSPToolStrategy_s0105_6160@@HH@Z  # StartTool_568b0 migrated from s01056160 (verbatim, slice spelling)
+01056b50 ?StartTool@cSPDefaultAoETool_s0105_6160@@QAE_NHHH@Z  # cSPDefaultAoETool_s0105_6160::StartTool migrated from s01056160 (verbatim, slice spelling)
+01056bb0 ?CanUseTool_56bb0@@YG_NPAVcSPToolStrategy_s0105_6160@@HPAH@Z  # CanUseTool_56bb0 migrated from s01056160 (verbatim, slice spelling)
+01056bf0 ?CanUseTool_56bf0@@YG_NPAVcSPToolStrategy_s0105_6160@@HPAH@Z  # CanUseTool_56bf0 migrated from s01056160 (verbatim, slice spelling)
+01056c70 ?StartTool@cSPRepairAOEToolStrategy@@QAE_NHHH@Z  # cSPRepairAOEToolStrategy::StartTool migrated from s01056160 (verbatim, slice spelling)
+01056cb0 ?CanUseTool_56cb0@@YG_NPAVcSPToolStrategy_s0105_6160@@HPAH@Z  # CanUseTool_56cb0 migrated from s01056160 (verbatim, slice spelling)
+01056d30 ?CanUseTool_56d30@@YG_NPAVcSPToolStrategy_s0105_6160@@HPAH@Z  # CanUseTool_56d30 migrated from s01056160 (verbatim, slice spelling)

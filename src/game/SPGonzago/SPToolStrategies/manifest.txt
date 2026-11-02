@@ -1,6 +1,12 @@
 # source  symbol  va  flags
 ../src/game/SPGonzago/SPToolStrategies.cpp  ?AdjustCost@cSPEnergyRepairToolStrategy@@QAEHH@Z  01053590  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPToolStrategies.cpp  ?RegisterStaticRegistrations@Simulator_s0105_54c0@@YAXXZ  01055890  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/SPGonzago/SPToolStrategies.cpp  ?StartTool@cSPDefaultAoETool_s0105_6160@@QAE_NHHH@Z  01056b50  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPToolStrategies.cpp  ?CanUseTool_56bf0@@YG_NPAVcSPToolStrategy_s0105_6160@@HPAH@Z  01056bf0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPToolStrategies.cpp  ?StartTool@cSPRepairAOEToolStrategy@@QAE_NHHH@Z  01056c70  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPToolStrategies.cpp  ?CanUseTool_56cb0@@YG_NPAVcSPToolStrategy_s0105_6160@@HPAH@Z  01056cb0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPToolStrategies.cpp  ?ScanBuildingSpecies@@YAXPAXH@Z  01058660  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPGonzago/SPToolStrategies.cpp  ?DoToolAction@cSPDefaultAoETool_s0105_93e0@SP@@QAE_NPAVcSpaceToolData_s0105_93e0@@ABUVector3_s0105_93e0@@HH@Z  0105a100  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPToolStrategies.cpp  ?DoToolAction@cSPScanToolStrategy_s0105_a110@@UAE_NPAVcSpaceToolData@@ABUVector3@@HH@Z  0105a890  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPToolStrategies.cpp  ?DoToolAction@cSPCityMarkerStrategy@@UAE_NPAVcSpaceToolData_s0105_b960@@ABUVector3_s0105_b960@@HH@Z  0105b960  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPToolStrategies.cpp  ?DoToolAction@cSPPlaceObjectStrategy@@UAE_NPAVcSpaceToolData_s0105_b960@@ABUVector3_s0105_b960@@HH@Z  0105bc70  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

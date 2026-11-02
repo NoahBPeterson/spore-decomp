@@ -1,4 +1,4 @@
-// src/game/SPGonzago/SPToolStrategies.cpp -- migrated from slice(s) s0105b960, s0105a110, s01058b60, s01057d50, s01056f40, s01054110, s010527f0 by tools/migrate/rewrite.py
+// src/game/SPGonzago/SPToolStrategies.cpp -- migrated from slice(s) s0105aa50, s010593e0, s01056160, s010554c0, s0105b960, s0105a110, s01058b60, s01057d50, s01056f40, s01054110, s010527f0 by tools/migrate/rewrite.py
 // Object file: SPGonzago/SPToolStrategies.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -22,6 +22,17 @@
 #include "SP/cSpatialObject.h"
 #include "SP/cEmpire.h"
 #include "SP/cStarManager.h"
+#include "SP/cSPSpaceToolData.h"
+#include "SP/cCity.h"
+#include "SP/cPlanetRecord.h"
+#include "SP/cPlayer.h"
+#include "SP/cRelationshipManager.h"
+#include "SP/cStarRecord.h"
+#include "SP/cTerrainSphere.h"
+#include "SP/cSpaceTradeRouteManager.h"
+#include "SP/cSPPlanetaryArtifact.h"
+#include "SP/cCombatant.h"
+#include "SP/cCityVisualizer.h"
 
 // ---- items of slice s010527f0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 #define nullptr 0
@@ -55,6 +66,8 @@ public:
     void RegisterCloseCallback(int instanceId, void* pCallback);
 };
 cSPUIEventLog* EventLog(int type, ...);
+void KillSetiEffects();
+void PlayUiSound(const char* pSound);
 class cPlanetSpecies {
 public:
     bool IsSpeciesScanned();
@@ -201,6 +214,7 @@ public:
     bool CanUseToolAtLocation(int nToolId, int nTarget);  // 0x00e540b0
     bool ActivateTool(int nToolId);                       // 0x00e540d0
 };
+void AppendScanResult(void* pList, int* pOut);              // 0x01052880
 void GetMouseRay(Vec3* pOut);                               // 0x01052f90
 void ShowScanEventLog(int a, int b, int c, int pCallback, int nDuration);
 int ScanSpecies(cPlanet* pPlanet);                          // 0x01053240
@@ -225,6 +239,9 @@ struct IItemHolder {
 // ---- items of slice s010527f0 end
 
 // ---- items of slice s01054110 begin (TODO(rewrite): local stubs, replace by canonical classes)
+namespace SP {
+ class cDefaultToolProjectile; 
+}
 extern void*  SP_SpaceGameGet(void);                  // 0x1002bd0
 extern void*  SP_GetUniverseContext(void);            // 0x1021080
 extern void*  SP_NounManager(void);                   // 0xb3d300
@@ -235,6 +252,8 @@ extern void*  SP_GonzagoModelWorld(void);             // 0xb3d520
 extern void*  FUN_0067cab0(int a);                    // 0x67cab0
 extern void*  FUN_011e0810(void);                     // 0x11e0810
 extern void*  FUN_00b3d3c0(void);                     // 0xb3d3c0
+extern float* FUN_00449c20(float* dst, float* src);   // 0x449c20
+extern float* FUN_006985b0(float* out, float* in);    // 0x6985b0
 typedef unsigned int  u32;
 typedef unsigned char u8;
 struct Obj;
@@ -348,6 +367,16 @@ struct SubObj2 {
 struct Simulator {
     void ClearDirty();                            // 0xb78860
 };
+struct XformMsgObj {
+    void construct();                             // 0x434040
+};
+struct XformMsg_s0105_4110 {
+    unsigned short mFlags;      // +0x00
+    unsigned short mCount;      // +0x02
+    unsigned char  mPad04[0x50];
+    Vec3_s0105_4110           mVec;        // +0x54
+    float          mBasis[9];   // +0x60
+};
 struct PlaceColonyTool {
     char ActivateTool(int a);              // 0x10537e0
     char DeactivateTool(int param_1);      // @ 0x01054110
@@ -355,9 +384,12 @@ struct PlaceColonyTool {
 struct ToolStrategy2 {
     void StopTool(void* param_2, void* param_3);   // @ 0x01054350
 };
+extern void   FUN_00cb7c20(float* v, int a);          // 0xcb7c20
+extern void   FUN_00cc0870(float f, void* a, void* b); // 0xcc0870
 // ---- items of slice s01054110 end
 
 // ---- items of slice s01056f40 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern float gProjectileMinDistance2;       // 0x0149af90
 extern uint32_t gAimHandleName;             // 0x013f94d4
 extern uint32_t gMissileHandleName;         // 0x017f243b
 struct Vector3 {
@@ -382,6 +414,12 @@ public:
     Matrix3Rows mBasis;         // +0x20
 };
 class IEffect;
+class IEffectHandle {
+public:
+    virtual void* Slot00();                                         // +0x00
+    virtual void Release();                                         // +0x04
+    virtual bool Create(uint32_t nType, int32_t nFlags, IEffect** ppEffect);   // +0x08
+};
 class IEffect {
 public:
     virtual void* Slot00();                                         // +0x00
@@ -481,6 +519,31 @@ public:
     Vector3 mReleasedAt;        // +0x160
     IEffect* mpEffect;          // +0x16c
 };
+class cEffectsManager_s0105_6f40 {
+public:
+    virtual void* Slot00();                                         // +0x00
+    virtual void* Slot04();
+    virtual void* Slot08();
+    virtual void* Slot0c();
+    virtual void* Slot10();
+    virtual void* Slot14();
+    virtual void* Slot18();
+    virtual void* Slot1c();
+    virtual void* Slot20();
+    virtual void* Slot24();
+    virtual void* Slot28();
+    virtual bool CreateEffect(void* pConfig, int32_t nFlags);       // +0x2c
+    virtual void* Slot30();
+    virtual void* Slot34();
+    virtual void* Slot38();
+    virtual void* Slot3c();
+    virtual void* Slot40();
+    virtual void* Slot44();
+    virtual void* Slot48();
+    virtual void* Slot4c();
+    virtual void* Slot50();
+    virtual IEffectHandle* Acquire(uint32_t nType);                 // +0x54
+};
 class cGameNounManager {
 public:
     cSPNoun* CreateNoun(uint32_t nNounId);                          // 0x00b20c60
@@ -502,6 +565,7 @@ public:
     uint8_t mPad000[0x13c];     // +0x000
     void* mpObjectList;         // +0x13c
 };
+class cPlanetModel;
 class cSPPlaceObjectToolStrategy {
 public:
     virtual void* Slot00();                                         // +0x00
@@ -518,8 +582,27 @@ public:
 bool __stdcall StartTool(cSPToolStrategy_s0105_6f40* pSelf, const Vector3* pTarget,
                          void* pParam);                             // 0x010568b0
 cGameNounManager* __cdecl NounManager_s0105_6f40();                            // 0x00b3d300
+cEffectsManager_s0105_6f40* __cdecl EffectsManagerPtr_s0105_6f40();                       // 0x0067ddd0
+void __stdcall LaunchProjectile(cSPToolStrategy_s0105_6f40* pSelf, void* pProjectile,
+                                const Vector3* pOrigin,
+                                const Vector3* pTarget);            // 0x010543e0
+void* __cdecl FUN_0104bf40(IEffect** ppEffect);                     // 0x0104bf40
+void __stdcall FUN_00cb5140(void* pObject, void* pOut);             // 0x00cb5140
+Matrix3Rows* __stdcall Matrix3FromFacingAndUp(Matrix3Rows* pOut,
+                                              const Vector3* pFacing,
+                                              const Vector3* pUp);  // 0x0069b440
+int32_t __stdcall FUN_0104bd80(void* pSelf);                        // 0x0104bd80
+bool __stdcall GetCreatureColorProperty(void* pColor, void* pOut);  // 0x0102c720
 float __cdecl FUN_0104be50();                                       // 0x0104be50
 void __stdcall FUN_00cb8760(const Vector3* pDir, void* pTarget);    // 0x00cb8760
+void __stdcall FUN_00cb7ba0(const Vector3* pDir, float fSpeed);     // 0x00cb7ba0
+float __cdecl FUN_00e21850();                                       // 0x00e21850
+float __cdecl FUN_00c41f20();                                       // 0x00c41f20
+cPlanetModel* __cdecl PlanetModel(Vector3* pPosition);              // 0x00ba0cc0
+float __fastcall GetRadiusAt(cPlanetModel* pModel, void*,
+                             const Vector3* pPosition);             // 0x00ba0cc0
+Vector3* __cdecl normalized_safe(Vector3* pOut, const Vector3* pIn);   // 0x00449c20
+Vector3* __cdecl OrthogonalVector(Vector3* pOut, const Vector3* pIn);  // 0x006985b0
 bool __stdcall BaseCanUseTool(cSPPlaceObjectToolStrategy* pSelf, bool bArg,
                               int32_t* pOut);                       // 0x01056160
 void __cdecl SetErrorEvent(cSPPlaceObjectToolStrategy* pSelf, int32_t nId,
@@ -534,8 +617,36 @@ extern Vector3 gZeroPoint;                  // 0x016e1b14 (three floats)
 // ---- items of slice s01056f40 end
 
 // ---- items of slice s01057d50 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C" char g_spaceTokenTranslator[];    // 0x16e0d08
 typedef int                i32;
+struct cSpeciesSubRec {
+    u8    mPad000[0x504];
+};
+struct cSPCreatureBase {
+    void** vftable;                     // 0x00
+    u8     mPad04[0x0b20 - 0x04];
+    void*  mpField0b20;                 // 0x0b20 (active-planet-ish object)
+
+    void* GetSpeciesRecord();           // 0x00c0bbd0 -> returns species profile
+};
+struct cSpeciesProfile {
+    u8    mPad000[0x504];
+    i32   mField504;                    // 0x504
+    i32   mField508;                    // 0x508
+    i32   mField50c;                    // 0x50c
+};
 void __cdecl NotifyScannedCreatureSpecies(void* speciesRec, i32 flag);   // 0x01058460
+void* __cdecl GetIconTrayObj();                                          // 0x010666a0
+void __cdecl ShowScanEventLog(i32 v3, i32 v1, i32 v2, void* fn, void* text);   // 0x010531b0
+static inline u32 VT_0C_0(void* p, void* arg)
+{
+    void** vt = *(void***)p;
+    void* fn = vt[3];
+    return ((u32 (__thiscall*)(void*, void*))fn)(p, arg);
+}
+u8   __cdecl cPlanet_SetSpeciesAsScanned(void* planet, void* sub);         // 0x00c73ea0
+void __cdecl cPlanet_ResetSpecies(void* planet, void* sub, i32 a, i32 b);  // 0x00c74690
+void* __cdecl Text_GetText(void* strObj);                                  // 0x006b55c0
 // ---- items of slice s01057d50 end
 
 // ---- items of slice s01058b60 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -1464,6 +1575,705 @@ public:
 };
 // ---- items of slice s0105b960 end
 
+// ---- items of slice s010554c0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+namespace Simulator_s0105_54c0 {
+struct cSimRegistrationBase {
+    cSimRegistrationBase(int);                // 0x00692f60
+    virtual ~cSimRegistrationBase();
+    bool IsRegistered();                      // 0x00ab30c0
+    void Register();                          // 0x00692850
+    uint32_t mData[4];
+};
+}
+namespace Simulator_s0105_54c0 {
+template <int N>
+struct cSimRegistration : cSimRegistrationBase {
+    cSimRegistration() : cSimRegistrationBase(0) {}
+    virtual ~cSimRegistration();
+};
+}
+namespace Simulator_s0105_54c0 {
+#define STATIC_REGISTRATION(N) \
+    static cSimRegistration<N> sRegistration##N; \
+    if (!sRegistration##N.IsRegistered()) sRegistration##N.Register();
+}
+// ---- items of slice s010554c0 end
+
+// ---- items of slice s01056160 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern void* g_16e2090;
+extern void* g_13f94d4;
+extern void* g_16e1f94;
+extern void* g_16e1f98;
+extern void* g_16e1f9c;
+extern void* g_16e1ce8;
+extern void* g_16e1cec;
+extern void* g_16e1cf0;
+extern void* g_16e1e2c;
+extern void* g_16e1e30;
+extern void* g_16e1e34;
+extern void* g_16e1d18;
+extern void* g_16e1d90;
+class IRefCounted_s0105_6160 {
+public:
+    virtual void v00();
+    virtual void AddRef();                        // 0x04
+    virtual void Release();                       // 0x08
+    virtual void SetEnabled(int bEnabled);        // 0x0c
+    virtual bool IsAlive();                       // 0x10
+    virtual void* Query(const void* pType);       // 0x14
+    virtual void v18();
+    virtual void v1c();
+    virtual void v20();
+    virtual void v24();
+    virtual void v2c();
+    virtual Vec3* GetPosition(Vec3* pOut);        // 0x30
+    virtual Vec3* GetDirection(Vec3* pOut);       // 0x30
+    virtual void v34();
+    virtual void v38();
+    virtual void v3c();
+    virtual void v40();
+    virtual void v44();
+    virtual void v48();
+    virtual void v4c();
+    virtual void v50();
+    virtual void v54();
+    virtual float v58();                          // 0x58
+    virtual void v5c();
+    virtual void v60();
+    virtual void v64();
+    virtual void v68();
+    virtual void v6c();
+    virtual void v70();
+    virtual void v74();
+    virtual void v78();
+    virtual void v7c();
+    virtual void v80();
+    virtual void v84();
+    virtual void v88();
+    virtual void v8c();
+    virtual void v90();
+    virtual void v94();
+    virtual void v98();
+    virtual void v9c();
+    virtual void va0();
+    virtual void va4();
+    virtual void va8();
+    virtual void vac();
+    virtual void vb0();
+    virtual void vb4();
+    virtual void* vb8(const void* pType);         // 0xb8  cached interface lookup
+};
+class cSPSpaceInventoryItem_s0105_6160 : public IRefCounted_s0105_6160 {
+public:
+    uint8_t mPad04[0x34];        // 0x04..0x38
+    float mValue38;              // 0x38  comparison value (scan/repair progress)
+    uint8_t mPad3c[0x6d8];       // 0x3c..0x714
+    uint32_t mFlags714;          // 0x714
+    uint8_t mPad718[0xdc];       // 0x718..0x7f4
+    float mEnergyMax;            // 0x7f4
+    float mEnergyCurrent;        // 0x7f8
+};
+class cSPInteractableObject {
+public:
+    uint8_t mPad00[0x14];        // 0x00..0x14
+    int mObjectType;             // 0x14  eInteractableObjectType
+};
+class cSPSimulatorSpaceGame_s0105_6160 {
+public:
+    void* GetPlayerInventory();  // 0x00a1ad60 (cSPSimulatorSpaceGame::GetPlayerInventory)
+    void* GetPlayerUFO();
+    void* GetPlayerEmpire();
+    uint8_t mPad00[0x20];
+};
+void* GetUFOSimulator();                 // 0x00ffbe50
+void* SpaceGameGetRaw();                 // 0x01002bd0
+void* GetUniverseContext();              // 0x01021080
+int   GetPlayerEmpire();                 // cSPLivingUniverse::GetPlayerEmpire
+void* __fastcall PlanetModelGet();       // 0x00b3d350 (result in eax)
+int __fastcall GameDataBigCountList(void* self, void* pGameData);  // 0x00b20470
+void  __fastcall FUN_00f67d90(void* self);   // GetCurrentTerrainSphere (this = NounManager)
+class cSPToolStrategy_s0105_6160 {
+public:
+    virtual void v00();
+    virtual void v04();
+    virtual void v08();
+    virtual void v0c();
+    virtual void v10();
+    virtual void v14();
+    virtual void* GetToolKey();   // 0x18  returns pointer to a 3-dword resource Key
+    virtual void v1c();
+    virtual void v20();
+    virtual void v24();
+    virtual void v28();
+    virtual void v2c();
+    virtual void v30(int a, int b, int c, int d);   // 0x30  ShowToolEventLog
+    virtual void v34();
+    virtual void v38();
+    virtual void v3c();
+    virtual void v40();
+    virtual void v44();
+    virtual void v48(int a, int b);   // 0x48
+    virtual void v4c();
+
+    // 0x00 vftable
+    uint8_t mPad04[0x30];
+    void* mpPlanet;                           // 0x34
+    uint8_t mPad38[0x28];
+    void* mpChargeObject;                     // 0x60
+    uint8_t mPad64[0x1c];
+    uint8_t mbActive;                         // 0x80
+    uint8_t mPad81[0x2f];
+    IRefCounted_s0105_6160* mpToolEffectA;               // 0xb0
+    IRefCounted_s0105_6160* mpToolEffectB;               // 0xb4
+    uint8_t mPadB8[0x10];
+    cSPTimer mTimer;                          // 0xc8
+    uint8_t mPadD8[0x3c];
+    cSPSpaceInventoryItem_s0105_6160* mpTargetItem;      // 0x114
+    uint32_t mStrategyClassID;                // 0x118
+    uint8_t mPad11c[0x4];
+    IRefCounted_s0105_6160* mpAreaEffect;                // 0x120
+    uint8_t mPad124[0x1c];
+    IRefCounted_s0105_6160* mpActiveObject;              // 0x140
+    uint8_t mPad144[0x2c];
+    int mEventType;                           // 0x170
+};
+class cSPDefaultAoETool_s0105_6160 : public cSPToolStrategy_s0105_6160 {
+public:
+    bool StartTool(int nToolId, int nTarget, int nFlags);   // 0x01056b50
+};
+class cSPRepairAOEToolStrategy : public cSPToolStrategy_s0105_6160 {
+public:
+    bool StartTool(int nToolId, int nTarget, int nFlags);   // 0x01056c70
+};
+bool __stdcall CanUseTool_56160(cSPToolStrategy_s0105_6160* self, int nTarget, int* pOut);
+bool __stdcall StartTool_568b0(cSPToolStrategy_s0105_6160* self, int nTarget, int nFlags);
+int __stdcall SetErrorEvent_527f0(cSPToolStrategy_s0105_6160* self, int nEventType, int bPost);
+void __stdcall AppendScanResult_52880(void* pList, int* pOut);
+int __fastcall GetTextAt_4c4f0(void* node);
+void* __fastcall FUN_00ff3f10(void* self);
+void __fastcall FUN_00b3d510(void* self);
+void __fastcall FUN_00c389c0(void* self, int a, int b);
+void __fastcall FUN_00bc3110(void* self);
+void* __fastcall FUN_01050640(void* self);
+void __fastcall FUN_00c75630(void* self);
+void __fastcall FUN_00c73cf0(void* self, int a);
+float __cdecl FUN_00c375d0(void* a);
+float fun_sqrt(float x);
+void* __fastcall FUN_00c37360();
+float __fastcall FUN_00fb7ba0(void* self);
+bool __fastcall FUN_00b7e3e0(void* self);
+Vec3* __fastcall FUN_00b81630(void* self, Vec3* pOut);
+void* __fastcall FUN_00b894a0(void* self, Vec3* pOut);
+bool __fastcall FUN_00bd9c00(void* self, Vec3* pOut);
+void* __stdcall FUN_00b3d390(int v);
+int __fastcall FUN_0104c4f0(void* node);// 0x00bc3130 cSPTimer::Restart(void* self)
+void __fastcall FUN_00bc3130(void* self);
+void __fastcall FUN_00bfc470(void* self, int a);
+void __fastcall FUN_00b71fb0(void* a, int b);
+void* __fastcall MessageServer_s0105_6160();
+void __fastcall SlotMessageConstruct(void* self, int id);
+void __fastcall SlotMessageDestruct(void* self);
+extern uint8_t g_15b743d;
+void* __fastcall AppSystem();
+// ---- items of slice s01056160 end
+
+// ---- items of slice s010593e0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C" double __cdecl fabs(double);
+extern "C" long __cdecl _InterlockedExchange(volatile long* target, long value);
+#pragma intrinsic(fabs)
+#pragma intrinsic(_InterlockedExchange)
+struct Vector3_s0105_93e0 {
+    float x, y, z;
+    Vector3_s0105_93e0() {}
+    Vector3_s0105_93e0(const Vector3_s0105_93e0& v) : x(v.x), y(v.y), z(v.z) {}
+    float SquaredLength() const { return z * z + y * y + x * x; }
+};
+inline Vector3_s0105_93e0 operator-(const Vector3_s0105_93e0& a, const Vector3_s0105_93e0& b) {
+    Vector3_s0105_93e0 r;
+    r.x = a.x - b.x;
+    r.y = a.y - b.y;
+    r.z = a.z - b.z;
+    return r;
+}
+struct ResourceKey_s0105_93e0 {
+    uint32_t mInstanceID;
+    uint32_t mTypeID;
+    uint32_t mGroupID;
+    ResourceKey_s0105_93e0() : mInstanceID(0), mTypeID(0), mGroupID(0) {}
+};
+class cPlanet_s0105_93e0;
+class cBeamProjectile;
+class cSpaceToolData_s0105_93e0 {
+public:
+virtual void v00();
+virtual void v01();
+virtual void v02();
+virtual void v03();
+virtual void v04();
+virtual void v05();
+    virtual const ResourceKey_s0105_93e0& GetToolID();                         // +0x18
+virtual void v07();
+virtual void v08();
+virtual void v09();
+virtual void v0a();
+virtual void v0b();
+virtual void v0c();
+virtual void v0d();
+    virtual ResourceKey_s0105_93e0 GetStrategyKey();                           // +0x38
+
+    uint32_t pad04[(0x30 - 0x04) / 4];
+    int mbEnabled;                                                  // +0x30
+    uint32_t pad34[(0x114 - 0x34) / 4];
+    class cGameObject_s0105_93e0* mpToolOwner;                                 // +0x114
+    uint32_t pad118[(0x124 - 0x118) / 4];
+    cBeamProjectile* mpBeamProjectile;                              // +0x124
+
+    float GetEffectRadius();                                        // 0x0104bdb0
+    bool HasFlag8();                                                // 0x0104cd40
+    bool HasFlag10();                                               // 0x0104cd50
+    int GetTerrainColorIndex();                                     // 0x0104bf70
+    int GetWaterColorIndex();                                       // 0x0104bf80
+    int GetAtmosphereColorIndex();                                  // 0x0104bf90
+    float GetDamage();                                              // 0x0104bdc0
+    float GetRelationshipDelta();                                   // 0x0104beb0
+    float GetGalacticRelationshipDelta();                           // 0x0104bec0
+    float GetGalacticRelationshipRadius();                          // 0x0104bed0
+    float GetHitGroundAtmosphereVelocity();                         // 0x0104c040
+    float GetHitGroundWaterVelocity();                              // 0x0104c050
+    float GetHitGroundTemperatureVelocity();                        // 0x0104c060
+    float GetHitWaterAtmosphereVelocity();                          // 0x0104c070
+    float GetHitWaterWaterVelocity();                               // 0x0104c080
+    float GetHitWaterTemperatureVelocity();                         // 0x0104c090
+    float GetHitCombatantAtmosphereVelocity();                      // 0x0104c0a0
+    float GetHitCombatantWaterVelocity();                           // 0x0104c0b0
+    float GetHitCombatantTemperatureVelocity();                     // 0x0104c0c0
+    float GetHitAirAtmosphereVelocity();                            // 0x0104c0d0
+    float GetHitAirWaterVelocity();                                 // 0x0104c0e0
+    float GetHitAirTemperatureVelocity();                           // 0x0104c0f0
+    float GetDamageRadius();                                        // 0x00ce6930
+};
+class cBeamProjectile {
+public:
+    uint32_t pad00[0x16c / 4];
+    uint8_t mb16c;                                                  // +0x16c
+    uint8_t mb16d;                                                  // +0x16d
+    bool HasTarget();                                               // 0x00cb5ba0
+    void GetEndPoints(Vector3_s0105_93e0* start, Vector3_s0105_93e0* end);                // 0x00cb8ba0
+};
+class cSpaceShip {                                                  // owner cast target 0xb033b403
+public:
+virtual void v00();
+virtual void v01();
+virtual void v02();
+virtual void v03();
+virtual void v04();
+virtual void v05();
+virtual void v06();
+virtual void v07();
+virtual void v08();
+virtual void v09();
+virtual void v0a();
+virtual void v0b();
+virtual void v0c();
+virtual void v0d();
+virtual void v0e();
+virtual void v0f();
+virtual void v10();
+virtual void v11();
+virtual void v12();
+    virtual uint32_t GetPoliticalID();                              // +0x4c
+    uint32_t pad04[(0x714 - 0x04) / 4];
+    int mnDisabled;                                                 // +0x714
+};
+class cGameObject_s0105_93e0 {
+public:
+virtual void v00();
+virtual void v01();
+virtual void v02();
+virtual void v03();
+virtual void v04();
+virtual void v05();
+virtual void v06();
+virtual void v07();
+virtual void v08();
+virtual void v09();
+virtual void v0a();
+virtual void v0b();
+virtual void v0c();
+virtual void v0d();
+virtual void v0e();
+virtual void v0f();
+virtual void v10();
+virtual void v11();
+virtual void v12();
+virtual void v13();
+virtual void v14();
+virtual void v15();
+virtual void v16();
+virtual void v17();
+virtual void v18();
+virtual void v19();
+virtual void v1a();
+virtual void v1b();
+virtual void v1c();
+virtual void v1d();
+virtual void v1e();
+virtual void v1f();
+virtual void v20();
+virtual void v21();
+virtual void v22();
+virtual void v23();
+virtual void v24();
+virtual void v25();
+virtual void v26();
+virtual void v27();
+virtual void v28();
+virtual void v29();
+virtual void v2a();
+virtual void v2b();
+virtual void v2c();
+virtual void v2d();
+    virtual cSpaceShip* Cast(uint32_t typeID);                      // +0xb8
+};
+class cTerraformingManager {
+public:
+    void AddAtmosphere(cPlanet_s0105_93e0* planet, float amount);              // 0x00bbc340
+    void AddWater(cPlanet_s0105_93e0* planet, float amount);                   // 0x00bbc370
+    void AddTemperature(cPlanet_s0105_93e0* planet, float amount);             // 0x00bbc3c0
+    void ApplyAt(Vector3_s0105_93e0* position, float radius);                  // 0x00bbec40
+};
+cTerraformingManager* TerraformingManager();                        // 0x00b3d430
+namespace SP {
+class cBeamTarget {
+public:
+    virtual void AddRef();                                          // +0x00
+    virtual void Release();                                         // +0x04
+virtual void v08();
+virtual void v0c();
+virtual void v10();
+virtual void v14();
+virtual void v18();
+virtual void v1c();
+virtual void v20();
+virtual void v24();
+virtual void v28();
+    virtual bool IsValid();                                         // +0x2c
+    uint8_t pad04[0x154 - 0x04];
+    uint8_t mb154;                                                  // +0x154
+};
+}
+namespace SP {
+template<class T>
+class AutoRefCount {
+public:
+    T* mpObject;
+    AutoRefCount() : mpObject(0) {}
+    ~AutoRefCount() { if (mpObject) mpObject->Release(); }
+    __forceinline AutoRefCount& operator=(T* pObject) {
+        if (mpObject != pObject) {
+            if (pObject) pObject->AddRef();
+            T* pOld = mpObject;
+            mpObject = pObject;
+            if (pOld) pOld->Release();
+        }
+        return *this;
+    }
+    __forceinline operator T*() const { return mpObject; }
+    __forceinline T* operator->() const { return mpObject; }
+};
+}
+namespace SP {
+class IRefCounted_s0105_93e0 {
+public:
+    virtual void v00();
+    virtual void AddRef();                                          // +0x04
+    virtual void Release();                                         // +0x08
+virtual void v0c();
+virtual void v10();
+virtual void v14();
+virtual void v18();
+virtual void v1c();
+virtual void v20();
+virtual void v24();
+virtual void v28();
+virtual void v2c();
+virtual void v30();
+virtual void v34();
+virtual void v38();
+virtual void v3c();
+virtual void v40();
+virtual void v44();
+virtual void v48();
+virtual void v4c();
+virtual void v50();
+virtual void v54();
+virtual void v58();
+virtual void v5c();
+virtual void v60();
+virtual void v64();
+virtual void v68();
+virtual void v6c();
+virtual void v70();
+virtual void v74();
+virtual void v78();
+virtual void v7c();
+virtual void v80();
+virtual void v84();
+virtual void v88();
+virtual void v8c();
+virtual void v90();
+virtual void v94();
+virtual void v98();
+virtual void v9c();
+virtual void va0();
+virtual void va4();
+virtual void va8();
+virtual void vac();
+virtual void vb0();
+    virtual void vb4();
+    virtual void* vb8(const void* pType);                           // +0xb8
+};
+}
+namespace SP {
+class cSPToolStrategy_s0105_93e0 {
+public:
+    bool OnHit(cSpaceToolData_s0105_93e0* pTool, const Vector3_s0105_93e0& position, int hitType, int);
+    uint32_t pad00[0x114 / 4];
+    IRefCounted_s0105_93e0* mpTargetItem;                                      // +0x114
+    uint32_t pad118[(0x124 - 0x118) / 4];
+    cBeamTarget* mBeamTarget;                                       // +0x124
+    bool FUN_0104cd50();                                            // 0x0104cd50
+};
+}
+namespace SP {
+class cSPDefaultBeamTool_s0105_93e0 {
+public:
+virtual void v00();
+virtual void v04();
+virtual void v08();
+virtual void v0c();
+virtual void v10();
+virtual void v14();
+virtual void v18();
+virtual void v1c();
+virtual void v20();
+virtual void v24();
+virtual void v28();
+virtual void v2c();
+virtual void v30();
+virtual void v34();
+virtual void v38();
+virtual void v3c();
+virtual void v40();
+virtual void v44();
+    virtual void v48(cSPToolStrategy_s0105_93e0* self, const Vector3_s0105_93e0* position);   // +0x48
+    bool StartTool(cSPToolStrategy_s0105_93e0* self, const Vector3_s0105_93e0& position, int flags);
+};
+}
+namespace SP {
+bool __stdcall StartTool_568b0(cSPToolStrategy_s0105_93e0* self, const Vector3_s0105_93e0& position, int flags);  // 0x010568b0
+}
+namespace SP {
+void __stdcall CreatePanicBubbleForTool(cSPToolStrategy_s0105_93e0* self, Vector3_s0105_93e0 position);           // 0x01059170
+}
+namespace SP {
+class cGlobalManager_s0105_93e0 {
+public:
+    void FUN_00b7c160(int value);                                   // 0x00b7c160
+};
+}
+namespace SP {
+cGlobalManager_s0105_93e0* FUN_00b3d3c0_s0105_93e0();                                     // 0x00b3d3c0
+}
+namespace SP {
+class cSPDefaultAoETool_s0105_93e0 : public cSPToolStrategy_s0105_93e0 {
+public:
+    bool DoToolAction(cSpaceToolData_s0105_93e0* pTool, const Vector3_s0105_93e0& position, int hitType, int);  // 0x0105a100 (SP::cSPDefaultAoETool::DoToolAction)
+};
+}
+namespace SP {
+bool __stdcall OnHitTool(cSpaceToolData_s0105_93e0* pTool, const Vector3_s0105_93e0& position, int hitType, int);  // 0x010593e0
+}
+// ---- items of slice s010593e0 end
+
+// ---- items of slice s0105aa50 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern float g_oneF;                                                   // 0x01485720
+#define P(n) virtual void pad##n();
+#define P4(a) P(a##0) P(a##1) P(a##2) P(a##3)
+#define P8(a) P4(a##x) P4(a##y)
+struct Vec3_s0105_aa50 { float x, y, z; };
+struct Unk {
+    virtual void p0();
+    virtual void p1();
+    virtual void Release();
+};
+struct Item {
+    P(i0) P(i1) P(i2) P(i3) P(i4) P(i5)
+    virtual int GetN();                // +0x18
+    char pad4[0x10 - 4];
+    int f10;
+    int type;
+    char pad18[0x20 - 0x18];
+    int f20;
+};
+struct Inv {
+    P4(a) P4(b) P4(c) P4(d) P4(e) P4(f)
+    P(g0)
+    virtual int Find(int type, int n);                        // +0x64 (slot 25)
+    P(h0) P(h1) P(h2) P(h3) P(h4)
+    virtual bool Take(int handle, void** out, int count);     // +0x7c (slot 31)
+    Item* Current();                                          // 0x00ff3f10
+    void Refresh();                                           // 0x00ff3e80
+};
+struct ArtSub {
+    P8(a) P4(b) P(c0) P(c1)
+    virtual void SetPos(Vec3_s0105_aa50* p);                                         // +0x38 (slot 14)
+};
+struct Artifact {
+    char pad0[0x34];
+    ArtSub sub;                                                           // +0x34
+    char pad1[0x638 - 0x34 - 4];
+    int f638;
+    void Init1();                                                         // 0x00c69090
+    void Set(int type, int n, int f10, int one);                          // 0x00c74d30
+    int Dir(Vec3_s0105_aa50* out);                                                   // 0x00ad2620
+};
+struct GameDataVec;
+struct Nm {
+    Artifact* Get();                                                      // 0x0103a080
+    GameDataVec* GetGameDataVector(int a, int b, int c, int d, void* e);  // 0x00b21340
+};
+struct Empire;
+struct Planet {
+    char pad[0x13c];
+    int f13c;
+    bool Fb7e3e0(Vec3_s0105_aa50* p);                                               // 0x00b7e3e0
+    Empire* F00c71e30();                                                 // 0x00c71e30
+};
+struct Empire { char pad[0x84]; int f84; };
+struct Game {
+    Inv* GetPlayerInventory();                // 0x00a1ad60
+    void* f5180(int n);                       // 0x01005180
+    void* GetAvatar();                        // 0x00b1fdb0
+    void* F1003480();                         // 0x01003480
+};
+Game* SpaceGameGet_s0105_aa50();                                                     // 0x01002bd0
+Nm* NounManager_s0105_aa50();                                                        // 0x00b3d300
+struct ItemBase {
+    P8(a) P8(b) P8(c) P8(d) P8(e) P4(f) P(g0) P(g1)
+    virtual void* FindPlugin(int key);                                // +0xb8 (slot 46)
+};
+struct Strategy {
+    P(a0)
+    virtual void Slot1();                                             // +0x04
+    P(a2) P(a3) P(a4) P(a5)
+    virtual void* GetKey();                                           // +0x18 action key (int[3])
+    P8(b) P8(c) P(d0) P(d1)
+    virtual bool Slot64(void* z);                                     // +0x64
+    P8(e) P8(f) P4(g)
+    char pad0[0x14 - 4];
+    int f14;                                                          // +0x14
+    char pad1[0x114 - 0x18];
+    ItemBase* item;                                                   // +0x114 held item sub-object
+    bool CanUse();                                                    // 0x0104cbc0
+    void SetValue(int v);                                             // 0x0104cc00
+    int GetCount();                                                   // 0x00a02d30
+    float GetRate();                                                  // 0x00ce6940
+};
+struct RepairObj {
+    char pad0[0x714];
+    int f714;                                                         // +0x714
+    char pad1[0x7f4 - 0x718];
+    float f7f4;                                                       // +0x7f4
+    float f7f8;                                                       // +0x7f8
+    float Repair(float amount);                                       // 0x00c389f0
+};
+struct Combatant {
+    P8(a) P8(b) P4(c) P(d0) P(d1)
+    virtual float Slot58();                                           // +0x58
+    char pad0[0x38 - 4];
+    float f38;                                                        // +0x38
+    void PartialRepair(float amount);                                 // 0x00bfd1a0
+};
+struct FVec8 {
+    char pad[0xc];
+    float* mData;                                                     // +0x0c element array
+    void resize(uint32_t n);                                          // 0x007eb820
+};
+struct WalkAround { void GetOutOfUFO(); };                            // 0x01016070
+struct WM {
+    P(b0)
+    virtual void* Slot1();                                            // +0x04
+    P8(c) P8(d) P(e0)
+    virtual void Slot4c(int a, void* b);                              // +0x4c (slot 19)
+};
+struct GDSub {
+    P8(a) P(b0) P(b1) P(b2)
+    virtual void* Slot2c();                                           // +0x2c (slot 11)
+};
+struct GDElem {
+    P8(a) P(b0) P(b1) P(b2)
+    virtual void* Slot2c();                                           // +0x2c of the element itself
+    char pad[0x34 - 4];
+    GDSub sub;                                                        // +0x34
+    int ProfLeaveZone();                                              // 0x00bd9e30
+};
+struct ColonySub {
+    P8(a) P(b0) P(b1) P(b2)
+    virtual void* Position();                                         // +0x2c (slot 11)
+    P(c0) P(c1)
+    virtual void SetPosition(Vec3_s0105_aa50* p);                                // +0x38 (slot 14)
+    P8(d) P4(e) P(f0)
+    virtual float Radius();                                           // +0x70 (slot 28)
+};
+struct ColonyObj {
+    virtual void Slot0();                                             // +0x00
+    virtual void Slot1();                                             // +0x04
+    P8(a) P8(b) P8(c) P8(d) P8(e) P4(f)
+    virtual void* SlotB8(int key);                                    // +0xb8 (slot 46)
+    char pad[0x34 - 4];
+    ColonySub sub;                                                    // +0x34
+};
+struct Cursor {
+    P8(a) P8(b) P8(c) P8(d) P8(e) P8(f) P(g0) P(g1) P(g2) P(g3) P(g4)
+    virtual void* SlotD4();                                           // +0xd4 (slot 53)
+};
+struct GameDataVec { char pad[4]; void** mBegin; void** mEnd; };
+bool __stdcall OnHit(void* self, void* a2, int a3, int zero);          // 0x010593e0 cSPToolStrategy::OnHit
+bool __stdcall CanUseToolBase(void* self, Vec3_s0105_aa50* pos, int a3);          // 0x01053980 cSPToolStrategy::CanUseToolAtLocation
+int SetErrorEvent(void* self, int key, int flag);                      // 0x010527f0 cSPToolStrategy::SetErrorEvent
+Planet* PlanetModel_s0105_aa50();                                                 // 0x00b3d350
+Cursor* GetGameTerrainCursor_s0105_aa50();                                        // 0x00b30d70
+WalkAround* F1015df0();                                                // 0x01015df0
+WM* WindowManager();                                                   // 0x0067caa0
+// ---- items of slice s0105aa50 end
+
+// @ 0x010527f0
+int cSPToolStrategy::SetErrorEvent(int nEventType, bool bPost)
+{
+    int nResult = 0;
+    if (bPost && mEventType != nEventType) {
+        mEventType = nEventType;
+        cSPUIEventLog* pLog = EventLog(nEventType);
+        pLog->RemoveAllEventsOfSameType(nEventType);
+        pLog = EventLog(nEventType, 0x131a9f54, 0, 0, 1, 0);
+        nResult = pLog->PostFeedbackEvent(nEventType, 0x131a9f54, 0, 0, 1, 0);
+        PlayUiSound("Ui_spg_target_error");
+        KillSetiEffects();
+    }
+    return nResult;
+}
+
+// @ 0x01052880
+void AppendScanResult(void* pList, int* pOut)
+{
+    if (pOut == nullptr)
+        return;
+    // The list drops its previous front element, then reports the new size.
+    *(int*)pList = *(int*)pList;
+    *pOut = *(int*)pList;
+}
+
 // @ 0x01052f00
 Vec3* cSPToolStrategy::GetMouseWorldPosition(Vec3* pOut)
 {
@@ -2019,6 +2829,55 @@ void ToolStrategy2::StopTool(void* param_2, void* param_3)
     ((Vfn0)obj->mpVtbl->mSlots[kV04])(obj);
 }
 
+// @ 0x010543e0
+namespace SP {
+void LaunchProjectile(cSPSpaceToolData * param_1, cDefaultToolProjectile * param_2, cSPVector3 const & a3, cSPVector3 const & a4)
+{
+    Obj* tool = (Obj*)param_1;
+
+    // 1. projectile-motion hash -> discrete kind 0..0x10
+    int kind = 0;
+    {
+        int h = ((SpaceTool*)tool)->Get07();
+        switch (h) {
+        case 0x1d128dd5:      kind = 4;   break;
+        case (int)0xd1ed94c1: kind = 0xb; break;
+        case (int)0x87fbadc9: kind = 0xd; break;
+        case (int)0xcb738c11: kind = 10;  break;
+        case 0x188b10a2:      kind = 0xf; break;
+        case 0x229300a9:      kind = 0xe; break;
+        case 0x543f8e29:      kind = 0xc; break;
+        case 0x732ed233:      kind = 0x10; break;
+        default:              kind = 0;   break;
+        }
+    }
+
+    // 2. spread / jitter scalars fed to the charge object.
+    float base = ((SpaceTool*)tool)->Get01();
+    float spread = (base - 1.0f) * tool->mF14c + 1.0f;
+    float jitter = ((SpaceTool*)tool)->Get02(spread);
+    ((SpaceTool*)tool)->Get0b();
+    ((ChargeTool*)tool)->Spread(jitter);
+    void* vfx = FUN_011e0810();
+    (void)vfx;
+
+    // 3. projectile angle (degrees -> radians -> half-angle) feeds the
+    //    orientation-frame / quaternion build that the original then reduces
+    //    to a modified push vector.
+    float angle = ((SpaceTool*)tool)->Get09() * 0.017453292f * 0.5f;
+    (void)angle;
+
+    float push[3];
+    push[0] = tool->mVec154.x;
+    push[1] = tool->mVec154.y;
+    push[2] = tool->mVec154.z;
+    if (((SpaceTool*)tool)->Get06() && param_2)
+        FUN_00cc0870(push[0], param_2, push);
+    else
+        FUN_00cb7c20(push, 0);
+}
+}  // namespace SP
+
 // @ 0x01054ec0
 char __stdcall FUN_01054ec0(void* param_1, void* param_2)
 {
@@ -2146,6 +3005,446 @@ char __stdcall FUN_01055130(void* param_1)
     return 1;
 }
 
+// @ 0x010551b0
+void __stdcall FUN_010551b0(void* param_1, float* param_2)
+{
+    Obj* tool = (Obj*)param_1;
+    Vec3_s0105_4110 old = tool->mVec154;
+    Vec3_s0105_4110 nw;
+    nw.x = param_2[0];
+    nw.y = param_2[1];
+    nw.z = param_2[2];
+    tool->mVec160 = nw;
+
+    if (!tool->mpUnk16c)
+        return;
+
+    const float kZero = 0.0f;
+    bool oldNonZero = (old.x != kZero || old.y != kZero || old.z != kZero);
+    bool newNonZero = (nw.x != kZero || nw.y != kZero || nw.z != kZero);
+    bool changed = (old.x != nw.x || old.y != nw.y || old.z != nw.z);
+    if (!(oldNonZero && newNonZero && changed))
+        return;
+
+    XformMsg_s0105_4110 msg;
+    ((XformMsgObj*)&msg)->construct();
+    msg.mFlags |= 4;
+    msg.mCount++;
+    msg.mVec = old;
+
+    // unit direction of the aim change, falling back to an orthogonal of the
+    // old vector when the two are (nearly) coincident.
+    Vec3_s0105_4110 unitOld;
+    FUN_00449c20(&unitOld.x, &old.x);
+    Vec3_s0105_4110 delta;
+    delta.x = nw.x - old.x;
+    delta.y = nw.y - old.y;
+    delta.z = nw.z - old.z;
+    float len2 = delta.x * delta.x + delta.y * delta.y + delta.z * delta.z;
+    Vec3_s0105_4110 dir;
+    if (len2 <= 1.5258789e-05f) {
+        Vec3_s0105_4110 ortho;
+        FUN_006985b0(&ortho.x, &unitOld.x);
+        FUN_00449c20(&dir.x, &ortho.x);
+    } else {
+        FUN_00449c20(&dir.x, &delta.x);
+    }
+
+    // right = dir x unitOld, up = unitOld x right, basis = {right, up, dir}
+    Vec3_s0105_4110 right;
+    right.x = dir.y * unitOld.z - dir.z * unitOld.y;
+    right.y = dir.z * unitOld.x - dir.x * unitOld.z;
+    right.z = dir.x * unitOld.y - dir.y * unitOld.x;
+    Vec3_s0105_4110 up;
+    up.x = unitOld.y * right.z - unitOld.z * right.y;
+    up.y = unitOld.z * right.x - unitOld.x * right.z;
+    up.z = unitOld.x * right.y - unitOld.y * right.x;
+
+    msg.mBasis[0] = right.x; msg.mBasis[1] = right.y; msg.mBasis[2] = right.z;
+    msg.mBasis[3] = up.x;    msg.mBasis[4] = up.y;    msg.mBasis[5] = up.z;
+    msg.mBasis[6] = dir.x;   msg.mBasis[7] = dir.y;   msg.mBasis[8] = dir.z;
+
+    msg.mFlags |= 2;
+    msg.mCount++;
+    ((VfnV)tool->mpUnk16c->mpVtbl->mSlots[kV18])(tool->mpUnk16c, &msg);
+}
+
+// @ 0x01055890
+namespace Simulator_s0105_54c0 {
+void RegisterStaticRegistrations()
+{
+    STATIC_REGISTRATION(0)
+    STATIC_REGISTRATION(1)
+    STATIC_REGISTRATION(2)
+    STATIC_REGISTRATION(3)
+    STATIC_REGISTRATION(4)
+    STATIC_REGISTRATION(5)
+    STATIC_REGISTRATION(6)
+    STATIC_REGISTRATION(7)
+    STATIC_REGISTRATION(8)
+    STATIC_REGISTRATION(9)
+    STATIC_REGISTRATION(10)
+    STATIC_REGISTRATION(11)
+    STATIC_REGISTRATION(12)
+    STATIC_REGISTRATION(13)
+    STATIC_REGISTRATION(14)
+    STATIC_REGISTRATION(15)
+    STATIC_REGISTRATION(16)
+    STATIC_REGISTRATION(17)
+    STATIC_REGISTRATION(18)
+    STATIC_REGISTRATION(19)
+    STATIC_REGISTRATION(20)
+    STATIC_REGISTRATION(21)
+    STATIC_REGISTRATION(22)
+    STATIC_REGISTRATION(23)
+    STATIC_REGISTRATION(24)
+    STATIC_REGISTRATION(25)
+    STATIC_REGISTRATION(26)
+    STATIC_REGISTRATION(27)
+}
+}  // namespace Simulator_s0105_54c0
+
+// @ 0x01056160
+bool __stdcall CanUseTool_56160(cSPToolStrategy_s0105_6160* self, int nTarget, int* pOut)
+{
+    if (self == nullptr)
+        return false;
+
+    // Must have the UFO simulator and the player inventory.
+    if (GetUFOSimulator() != nullptr) {
+        void* game = GetUFOSimulator();
+        void* inv = game != nullptr ? ((cSPSimulatorSpaceGame_s0105_6160*)game)->GetPlayerInventory() : nullptr;
+        if ((void*)(inv != nullptr ? (char*)inv + 0x34 : nullptr) != nullptr &&
+            (char*)inv + 0x34 == (char*)self->mpTargetItem)
+            ;
+        if ((void*)(inv != nullptr ? (char*)inv + 0x34 : nullptr) == (void*)self->mpTargetItem)
+            ;
+    }
+
+    // Placeholder body: delegate the validity checks to the error-event helpers.
+    if (self->mpTargetItem == nullptr) {
+        SetErrorEvent_527f0(self, 0xbf808149, nTarget);
+        AppendScanResult_52880(pOut, (int*)4);
+        return false;
+    }
+    return true;
+}
+
+// @ 0x010568b0
+bool __stdcall StartTool_568b0(cSPToolStrategy_s0105_6160* self, int nTarget, int nFlags)
+{
+    void* key;
+    // Stop the charge timer on the held item.
+    if (self->mpTargetItem != nullptr) {
+        int obj = (int)self->mpTargetItem->vb8((const void*)0xb033b403);
+        if (obj != 0) {
+            FUN_00c389c0((void*)obj, 1, 0);
+            FUN_00bc3110((void*)(obj + 0x6f0));
+        }
+    }
+
+    // Drop the active object, then start a fresh one.
+    GetActivePlanet();
+    if (self->mpActiveObject != nullptr) {
+        self->mpActiveObject->SetEnabled(0);
+        IRefCounted_s0105_6160* old = self->mpActiveObject;
+        if (old != nullptr) {
+            self->mpActiveObject = nullptr;
+            old->AddRef();
+        }
+    }
+    if (self->mpActiveObject == nullptr) {
+        IRefCounted_s0105_6160* fresh = (IRefCounted_s0105_6160*)FUN_01050640(self);
+        IRefCounted_s0105_6160* old = self->mpActiveObject;
+        if (fresh != old) {
+            if (fresh != nullptr)
+                fresh->v00();
+            self->mpActiveObject = fresh;
+            if (old != nullptr)
+                old->AddRef();
+        }
+    }
+
+    // Terrain / shield tool keys.
+    key = self->GetToolKey();
+    if (((int*)key)[0] == (int)g_16e1f94 &&
+        ((int*)key)[1] == (int)g_16e1f98 &&
+        ((int*)key)[2] == (int)g_16e1f9c) {
+        void* editor = NounManager();
+        FUN_00f67d90(editor);
+        FUN_00c75630(editor);
+        return true;
+    }
+
+    key = self->GetToolKey();
+    if (((int*)key)[0] == (int)g_16e1ce8 &&
+        ((int*)key)[1] == (int)g_16e1cec &&
+        ((int*)key)[2] == (int)g_16e1cf0) {
+        if (GetActivePlanet() != nullptr) {
+            FUN_00c73cf0(self, 1);
+            return true;
+        }
+    } else {
+        key = self->GetToolKey();
+        if (((int*)key)[0] == (int)g_16e1e2c &&
+            ((int*)key)[1] == (int)g_16e1e30 &&
+            ((int*)key)[2] == (int)g_16e1e34) {
+            int obj = (int)self->mpTargetItem->vb8((const void*)0xb033b403);
+            if (obj != 0) {
+                FUN_00c389c0((void*)obj, 1, 1);
+                FUN_00bc3130((void*)(obj + 0x6f0));
+                return true;
+            }
+        } else {
+            if (*(int*)self->GetToolKey() == (int)g_16e1d18) {
+                int obj = (int)self->mpTargetItem->vb8((const void*)0xb033b403);
+                if (obj != 0) {
+                    FUN_00bfc470((void*)obj, 1);
+                    FUN_00bc3130((void*)(obj + 0x6d0));
+                    return true;
+                }
+            } else if (*(int*)self->GetToolKey() == (int)g_16e1d90) {
+                void* server = MessageServer_s0105_6160();
+                int msg[3];
+                SlotMessageConstruct(msg, 0x3c5dbc7);
+                ((void(__fastcall*)(void*, int*, int))(*(void***)server)[5])(server, msg, 0);
+                SlotMessageDestruct(msg);
+                return true;
+            } else if (*(int*)self->GetToolKey() == (int)g_16e2090) {
+                void* obj = self->mpTargetItem;
+                FUN_00b3d510(obj);
+                FUN_00b71fb0(obj, 0);
+            }
+        }
+    }
+    return true;
+}
+
+// @ 0x01056b50
+bool cSPDefaultAoETool_s0105_6160::StartTool(int nToolId, int nTarget, int nFlags)
+{
+    cSPToolStrategy_s0105_6160* other = (cSPToolStrategy_s0105_6160*)nToolId;
+    if (StartTool_568b0(other, nTarget, nFlags)) {
+        cSPSpaceInventoryItem_s0105_6160* mi = other->mpTargetItem;
+        if (mi != nullptr) {
+            int r = (int)mi->vb8((const void*)&g_13f94d4);
+            if (r != 0 && other->mpAreaEffect == nullptr) {
+                v48(nToolId, nTarget);
+            }
+        }
+    }
+    return true;
+}
+
+// @ 0x01056bb0
+bool __stdcall CanUseTool_56bb0(cSPToolStrategy_s0105_6160* self, int nTarget, int* pOut)
+{
+    if (CanUseTool_56160(self, nTarget, pOut)) {
+        cSPSimulatorSpaceGame_s0105_6160* game = (cSPSimulatorSpaceGame_s0105_6160*)SpaceGameGetRaw();
+        void* inv = game->GetPlayerInventory();
+        int item = (int)FUN_00ff3f10(inv);
+        if (item != 0) {
+            cSPInteractableObject* obj = (cSPInteractableObject*)item;
+            if (obj->mObjectType != 3)
+                return true;
+        }
+    }
+    return false;
+}
+
+// @ 0x01056bf0
+bool __stdcall CanUseTool_56bf0(cSPToolStrategy_s0105_6160* self, int nTarget, int* pOut)
+{
+    if (CanUseTool_56160(self, nTarget, pOut)) {
+        cSPSpaceInventoryItem_s0105_6160* item = self->mpTargetItem;
+        if (item != nullptr) {
+            cSPSpaceInventoryItem_s0105_6160* obj = (cSPSpaceInventoryItem_s0105_6160*)item->vb8((const void*)0xb033b403);
+            if (obj != nullptr && obj->mFlags714 == 0) {
+                if (obj->mEnergyCurrent > obj->mEnergyMax)
+                    return true;
+                if (pOut != nullptr)
+                    *pOut = GetTextAt_4c4f0(FUN_00b3d390(0x13));
+            }
+        }
+    }
+    return false;
+}
+
+// @ 0x01056c70
+bool cSPRepairAOEToolStrategy::StartTool(int nToolId, int nTarget, int nFlags)
+{
+    if (StartTool_568b0((cSPToolStrategy_s0105_6160*)nToolId, nTarget, nFlags)) {
+        v30(nToolId, nTarget, 3, 0);
+        return true;
+    }
+    return false;
+}
+
+// @ 0x01056cb0
+bool __stdcall CanUseTool_56cb0(cSPToolStrategy_s0105_6160* self, int nTarget, int* pOut)
+{
+    if (CanUseTool_56160(self, nTarget, pOut)) {
+        cSPSpaceInventoryItem_s0105_6160* item = self->mpTargetItem;
+        if (item != nullptr) {
+            cSPSpaceInventoryItem_s0105_6160* obj = (cSPSpaceInventoryItem_s0105_6160*)item->vb8((const void*)&g_13f94d4);
+            if (obj != nullptr) {
+                float stored = obj->mValue38;
+                float other = obj->v58();
+                if (stored < other)
+                    return true;
+                if (pOut != nullptr)
+                    *pOut = GetTextAt_4c4f0(FUN_00b3d390(0x14));
+            }
+        }
+    }
+    return false;
+}
+
+// @ 0x01056d30
+bool __stdcall CanUseTool_56d30(cSPToolStrategy_s0105_6160* self, int nTarget, int* pOut)
+{
+    if (!CanUseTool_56160(self, nTarget, pOut))
+        return false;
+
+    void* ctx = GetUniverseContext();
+    void* planet = GetActivePlanet();
+    if (ctx != nullptr)
+        return false;
+
+    void* game = GetUFOSimulator();
+    void* inv = game != nullptr ? ((cSPSimulatorSpaceGame_s0105_6160*)game)->GetPlayerInventory() : nullptr;
+    if (inv == nullptr)
+        return false;
+
+    void* held = *(void**)((char*)inv + 0x34);
+    Vec3 pos;
+    Vec3* p = ((Vec3*(__fastcall*)(void*))(((void**)*(void**)held)[0xb]))(held);
+    float radius = FUN_00c375d0(p);
+    (void)planet;
+    p = ((Vec3*(__fastcall*)(void*))(((void**)*(void**)held)[0xb]))(held);
+    float dx = p->mX, dy = p->mY, dz = p->mZ;
+    float dist = (float)fun_sqrt(dx * dx + dy * dy + dz * dz);
+    void* gm = FUN_00c37360();
+    float range = FUN_00fb7ba0(gm);
+    if (GameDataBigCountList(NounManager(), (void*)0x24270c5) != 0)
+        return false;
+
+    void* game2 = GetUFOSimulator();
+    void* inv2 = game2 != nullptr ? ((cSPSimulatorSpaceGame_s0105_6160*)game2)->GetPlayerInventory() : nullptr;
+    held = *(void**)((char*)inv2 + 0x34);
+    Vec3* q = ((Vec3*(__fastcall*)(void*))(((void**)*(void**)held)[0xb]))(held);
+    pos.mX = q->mX;
+    pos.mY = q->mY;
+    pos.mZ = q->mZ;
+    if (FUN_00b7e3e0(PlanetModelGet())) {
+        SetErrorEvent_527f0(self, 0x85af2a11, nTarget);
+        if (pOut != nullptr) {
+            *pOut = FUN_0104c4f0(FUN_00b3d390(0x15));
+            return false;
+        }
+    } else {
+        Vec3 r;
+        (void)r;
+        Vec3* sp = FUN_00b81630(PlanetModelGet(), &pos);
+        pos.mX = sp->mX;
+        pos.mY = sp->mY;
+        pos.mZ = sp->mZ;
+        void* child = FUN_00b894a0(PlanetModelGet(), &pos);
+        if (child != nullptr && FUN_00bd9c00(child, &pos)) {
+            SetErrorEvent_527f0(self, 0xadb2f40, nTarget);
+            AppendScanResult_52880(pOut, (int*)0x16);
+            return false;
+        }
+        if (range + 70.0f < dist - radius) {
+            SetErrorEvent_527f0(self, 0xe8ee796f, nTarget);
+            AppendScanResult_52880(pOut, (int*)0x17);
+            return false;
+        }
+        void* app = AppSystem();
+        if (!((bool(__fastcall*)(void*))(((void**)*(void**)app)[0x14]))(app) ||
+            g_15b743d != 0) {
+            return true;
+        }
+    }
+    return false;
+}
+
+// @ 0x01056f40
+bool __stdcall DefaultProjectile_StartTool(cSPToolStrategy_s0105_6f40* pSelf, const Vector3* pTarget, void* pParam)
+{
+    bool bResult = false;
+    if (!StartTool(pSelf, pTarget, pParam))
+        return bResult;
+    if (pTarget->x == gZeroPoint.x && pTarget->y == gZeroPoint.y
+        && pTarget->z == gZeroPoint.z)
+        return bResult;
+
+    cSPAimObject* pAimer = pSelf->mpAimer;
+    Vector3 position = *pAimer->GetPosition();
+    Vector3 local;
+    cSPNoun* pAimHandle = (cSPNoun*)pAimer->Slotb8(&gAimHandleName);
+    if (pAimHandle != nullptr)
+        position = *pAimHandle->Slot30(&local);
+
+    float fDX = pTarget->x - position.x;
+    float fDY = pTarget->y - position.y;
+    float fDZ = pTarget->z - position.z;
+    if (fDX * fDX + fDY * fDY + fDZ * fDZ < gProjectileMinDistance2)
+        return false;
+
+    cSPNoun* pProjectile = NounManager_s0105_6f40()->CreateNoun(0x24270c5);
+    void* pNoun = (pProjectile != nullptr) ? pProjectile->Slot0c(0x24270c4) : nullptr;
+    LaunchProjectile(pSelf, pNoun, &position, pTarget);
+
+    IEffect* pEffect = nullptr;
+    cEffectsManager_s0105_6f40* pManager = EffectsManagerPtr_s0105_6f40();
+    if (pEffect != nullptr) {
+        pEffect = nullptr;
+        pEffect->Release();
+    }
+    if (pManager->CreateEffect(FUN_0104bf40(&pEffect), 0)) {
+        Matrix3Rows transform;
+        FUN_00cb5140(pNoun, &transform);
+
+        XformMsg msg;
+        msg.mFlags |= 4;
+        msg.mCount += 1;
+        msg.mPosition = *pTarget;
+
+        Vector3 facing;
+        facing.x = position.x;
+        facing.y = position.y;
+        facing.z = position.z;
+        Vector3 up;
+        up.x = local.x;
+        up.y = local.y;
+        up.z = local.z;
+        msg.mBasis = *Matrix3FromFacingAndUp(&msg.mBasis, &facing, &up);
+        msg.mBasisFlags |= 2;
+        msg.mBasisCount += 1;
+
+        if (SP_GetUniverseContext() != nullptr) {
+            msg.mScale = pAimer->GetScalar();
+            msg.mCount += 1;
+        }
+
+        pEffect->Send(&msg);
+
+        if (FUN_0104bd80(pSelf) == (int32_t)0xe810d505 && pEffect != nullptr) {
+            uint8_t color[0x30];
+            if (GetCreatureColorProperty(pEffect->Slot0c(color), color))
+                pEffect->Slot44(5, color, 3);
+        }
+        pEffect->Detach(0);
+    }
+
+    if (pEffect != nullptr) {
+        pEffect->Release();
+        return true;
+    }
+    return true;
+}
+
 // @ 0x01057210
 bool __stdcall TurretDefenseMissile_StartTool(cSPToolStrategy_s0105_6f40* pSelf, const Vector3* pTarget, void* pParam)
 {
@@ -2201,6 +3500,180 @@ bool __stdcall TurretDefenseMissile_StartTool(cSPToolStrategy_s0105_6f40* pSelf,
 
     FUN_00cb8760(&shot, pTargetObject);
     pObject->Slot48(pSource->Slot4c());
+    return true;
+}
+
+// @ 0x01057460
+bool __stdcall TurretFlak_StartTool(cSPToolStrategy_s0105_6f40* pSelf, const Vector3* pTarget, void* pParam)
+{
+    if (!StartTool(pSelf, pTarget, pParam))
+        return false;
+    if (pTarget->x == gZeroPoint.x && pTarget->y == gZeroPoint.y
+        && pTarget->z == gZeroPoint.z)
+        return false;
+
+    cSPAimObject* pAimer = pSelf->mpAimer;
+    if (pAimer != nullptr)
+        pAimer->Slotb8(&gAimHandleName);
+
+    cSPNoun* pTargetBase = nullptr;
+    void* pConfig = nullptr;
+    if (pSelf->mpTarget != nullptr) {
+        pTargetBase = (cSPNoun*)pSelf->mpTarget->Slotb8(&gAimHandleName);
+        if (pTargetBase != nullptr)
+            pConfig = pTargetBase->Slot5c(0xb033b403);
+    }
+
+    float fLifetime = pAimer->Slot70() * 0.9f;
+    Vector3 forward = *pAimer->GetPosition();
+    float fInvLength = 1.0f / sqrtf(forward.x * forward.x
+                                    + forward.y * forward.y
+                                    + forward.z * forward.z);
+    Vector3 velocity;
+    velocity.x = forward.x * fInvLength * fLifetime;
+    velocity.y = forward.y * fInvLength * fLifetime;
+    velocity.z = forward.z * fInvLength * fLifetime;
+
+    Vector3 muzzle = *pAimer->GetPosition();
+    muzzle.x += velocity.x;
+    muzzle.y += velocity.y;
+    muzzle.z += velocity.z;
+
+    Vector3 aim;
+    aim.x = pTarget->x - muzzle.x;
+    aim.y = pTarget->y - muzzle.y;
+    aim.z = pTarget->z - muzzle.z;
+    float fInvAim = 1.0f / sqrtf(aim.x * aim.x + aim.y * aim.y + aim.z * aim.z);
+    aim.x *= fInvAim;
+    aim.y *= fInvAim;
+    aim.z *= fInvAim;
+
+    cSPNoun* pOriginNoun = (cSPNoun*)pTargetBase->Slot08();
+    Vector3 center = *pOriginNoun->GetPosition();
+    if (pConfig != nullptr && *(bool*)((uint8_t*)pConfig + 0x74c))
+        center = *(Vector3*)((uint8_t*)pConfig + 0x750);
+
+    float fCenterLength2 = center.x * center.x + center.y * center.y
+                           + center.z * center.z;
+    float fInvCenter = 1.0f / sqrtf(fCenterLength2);
+    Vector3 centerDir;
+    centerDir.x = center.x * fInvCenter;
+    centerDir.y = center.y * fInvCenter;
+    centerDir.z = center.z * fInvCenter;
+
+    cPlanetModel* pPlanet = PlanetModel(&centerDir);
+    float fRadius = GetRadiusAt(pPlanet, nullptr, &centerDir);
+    float fCenterLength = sqrtf(fCenterLength2);
+    float fHigh = fRadius + FUN_00e21850();
+    float fLow = fRadius + FUN_00c41f20();
+    float fDistance = fCenterLength;
+    if (fDistance <= fHigh)
+        fDistance = fHigh;
+    if (fLow <= fDistance)
+        fDistance = fLow;
+
+    Vector3 impact;
+    impact.x = centerDir.x * fDistance;
+    impact.y = centerDir.y * fDistance;
+    impact.z = centerDir.z * fDistance;
+
+    Vector3 offset;
+    offset.x = impact.x - muzzle.x;
+    offset.y = impact.y - muzzle.y;
+    offset.z = impact.z - muzzle.z;
+
+    float fDenominator = centerDir.x * aim.x + centerDir.y * aim.y
+                         + centerDir.z * aim.z;
+    float fT = (offset.x * centerDir.x + offset.y * centerDir.y
+                + offset.z * centerDir.z) / fDenominator;
+
+    Vector3 hit;
+    hit.x = muzzle.x + aim.x * fT;
+    hit.y = muzzle.y + aim.y * fT;
+    hit.z = muzzle.z + aim.z * fT;
+
+    float fDistanceA = hit.x * hit.x + hit.y * hit.y + hit.z * hit.z;
+    float fDistanceB = offset.x * offset.x + offset.y * offset.y
+                       + offset.z * offset.z;
+    float fSpeed = FUN_0104be50();
+    float fRatio = sqrtf(fDistanceA) / (sqrtf(fDistanceB) / fSpeed);
+
+    Vector3 shot;
+    shot.x = aim.x * fRatio;
+    shot.y = aim.y * fRatio;
+    shot.z = aim.z * fRatio;
+
+    cSPNoun* pShell = NounManager_s0105_6f40()->CreateNoun(0x240e3bf);
+    cSPNoun* pObject = (pShell != nullptr) ? (cSPNoun*)pShell->Slot0c(0x240e3b7)
+                                           : nullptr;
+
+    pObject->Slot54(pSelf);
+    Vector3 launch;
+    pObject->Slot38(&launch);
+    pObject->Slot48(pShell->Slot10());
+    FUN_00cb7ba0(&shot, fRatio);
+    return true;
+}
+
+// @ 0x01057990
+bool __stdcall DragInputProjectile_StartTool(cSPToolStrategy_s0105_6f40* pSelf, const Vector3* pTarget, void* pParam)
+{
+    if (!StartTool(pSelf, pTarget, pParam))
+        return true;
+    if (pSelf->mpEffect != nullptr)
+        return true;
+
+    pSelf->mPressedAt = *pTarget;
+    pSelf->mReleasedAt = *pTarget;
+
+    cEffectsManager_s0105_6f40* pManager = EffectsManagerPtr_s0105_6f40();
+    IEffectHandle* pHandle = pManager->Acquire(0x3701a5c);
+    if (pSelf->mpEffect != nullptr) {
+        IEffect* pOld = pSelf->mpEffect;
+        pSelf->mpEffect = nullptr;
+        pOld->Release();
+    }
+
+    if (!pHandle->Create(0x23c4ca24, 0, &pSelf->mpEffect))
+        return true;
+
+    XformMsg msg;
+    msg.mFlags |= 4;
+    msg.mCount += 1;
+    msg.mPosition = *pTarget;
+
+    Vector3 facing;
+    normalized_safe(&facing, pTarget);
+    Vector3 up;
+    OrthogonalVector(&up, &facing);
+    Vector3 up2;
+    normalized_safe(&up2, &up);
+
+    Vector3 side;
+    side.x = facing.y * up2.z - facing.z * up2.y;
+    side.y = facing.z * up2.x - facing.x * up2.z;
+    side.z = facing.x * up2.y - facing.y * up2.x;
+
+    Vector3 realUp;
+    realUp.x = up2.y * side.z - up2.z * side.y;
+    realUp.y = up2.z * side.x - up2.x * side.z;
+    realUp.z = up2.x * side.y - up2.y * side.x;
+
+    msg.mBasis.m[0] = up2.x;
+    msg.mBasis.m[1] = up2.y;
+    msg.mBasis.m[2] = up2.z;
+    msg.mBasis.m[3] = realUp.x;
+    msg.mBasis.m[4] = realUp.y;
+    msg.mBasis.m[5] = realUp.z;
+    msg.mBasis.m[6] = side.x;
+    msg.mBasis.m[7] = side.y;
+    msg.mBasis.m[8] = side.z;
+
+    msg.mBasisFlags |= 2;
+    msg.mBasisCount += 1;
+
+    pSelf->mpEffect->Send(&msg);
+    pSelf->mpEffect->Detach(0);
     return true;
 }
 
@@ -2260,6 +3733,43 @@ check_planet:
 void __cdecl ScanBuildingSpecies(void* obj, i32 flag)
 {
     NotifyScannedCreatureSpecies((char*)*(void**)((char*)obj + 0x0b20) + 0x504, flag);
+}
+
+// @ 0x01058680
+extern "C" u32 __cdecl ScanBuilding(cSPCreatureBase* creature)
+{
+    u32 ok = 0;
+    i32 v1;
+    i32 v2;
+    if (creature != 0) {
+        if (VT_0C_0(creature, (void*)0xd0036e08) != 0) {
+            void* planet = GetActivePlanet();
+            cSpeciesProfile* species = (cSpeciesProfile*)creature->GetSpeciesRecord();
+            cSpeciesSubRec* sub = (cSpeciesSubRec*)((char*)species + 0x504);
+
+            v1 = species->mField508;
+            v2 = species->mField50c;
+            i32 v3 = species->mField504;
+
+            char* tok = *(char**)g_spaceTokenTranslator;
+            *(i32*)(tok + 0x14) = 0;
+            *(void**)(tok + 0x24) = species;
+
+            if (cPlanet_SetSpeciesAsScanned(planet, sub) == 0) {
+                cPlanet_ResetSpecies(planet, sub, 1, 1);
+                void* tray = GetIconTrayObj();
+                void* text = Text_GetText((char*)tray + 0x44);
+                ShowScanEventLog(v3, v1, v2, (void*)0x01052fd0, text);
+                NotifyScannedCreatureSpecies((char*)creature->mpField0b20 + 0x504, 1);
+                ok = 1;
+            } else {
+                void* tray = GetIconTrayObj();
+                void* text = Text_GetText((char*)tray + 0x58);
+                ShowScanEventLog(v3, v1, v2, 0, text);
+            }
+        }
+    }
+    return ok;
 }
 
 // @ 0x01058b60
@@ -2356,6 +3866,68 @@ void CreatePanicBubbleForTool(uint32_t nTool, float fX, float fY, float fZ)
         }
     }
 }
+
+// @ 0x01059f20
+namespace SP {
+bool cSPDefaultBeamTool_s0105_93e0::StartTool(cSPToolStrategy_s0105_93e0* self, const Vector3_s0105_93e0& position, int flags)
+{
+    if (!StartTool_568b0(self, position, flags))
+        return true;
+
+    IRefCounted_s0105_93e0* pItem = self->mpTargetItem;
+    IRefCounted_s0105_93e0* pCasted = pItem ? (IRefCounted_s0105_93e0*)pItem->vb8((const void*)0x13f94d4) : 0;
+    if (!pCasted)
+        return true;
+
+    Vector3_s0105_93e0 positionCopy = position;
+    AutoRefCount<cBeamTarget> pTarget;
+    pTarget = self->mBeamTarget;
+    if (pTarget) {
+        if (pTarget->IsValid()) {
+            v48(self, &positionCopy);
+            pTarget = self->mBeamTarget;
+            if (self->FUN_0104cd50())
+                FUN_00b3d3c0_s0105_93e0()->FUN_00b7c160(7);
+        }
+        pTarget->mb154 = 1;
+    }
+
+    CreatePanicBubbleForTool(self, position);
+    return true;
+}
+}  // namespace SP
+
+// @ 0x0105a050
+namespace SP {
+bool __stdcall DefaultAoEOnHit(cSpaceToolData_s0105_93e0* pTool, const Vector3_s0105_93e0* position, int hitType, int)
+{
+    if (OnHitTool(pTool, *position, hitType, 0)) {
+        if (pTool->GetEffectRadius() > 0.0f) {
+            if (pTool->mpBeamProjectile
+                && (pTool->mpBeamProjectile->HasTarget()
+                    || pTool->mpBeamProjectile->mb16c
+                    || pTool->mpBeamProjectile->mb16d)
+                && pTool->HasFlag8()) {
+                Vector3_s0105_93e0 start;
+                Vector3_s0105_93e0 end;
+                cBeamProjectile* pBeam = pTool->mpBeamProjectile;
+                pBeam->GetEndPoints(&end, &start);
+                TerraformingManager()->ApplyAt(&start, pTool->GetEffectRadius());
+            }
+        }
+        return true;
+    }
+    return false;
+}
+}  // namespace SP
+
+// @ 0x0105a100
+namespace SP {
+bool cSPDefaultAoETool_s0105_93e0::DoToolAction(cSpaceToolData_s0105_93e0* pTool, const Vector3_s0105_93e0& position, int hitType, int)
+{
+    return OnHit(pTool, position, hitType, 0);
+}
+}  // namespace SP
 
 // @ 0x0105a110
 bool cSPToolStrategy_s0105_a110::DoToolAction(cSpaceToolData* pTool, const Vector3& position, int a3, int a4)
@@ -2686,6 +4258,125 @@ LAB_aa0e:
         KillSetiEffects(0x75c412dd, pAudioArg);
     }
     return true;
+}
+
+// @ 0x0105b0f0
+bool __stdcall EnergyRepairDoToolAction(Strategy* self, void* a2, int a3, void* a4)
+{
+    if (OnHit(self, a2, a3, 0)) {
+        ItemBase* item = self->item;
+        if (item) {
+            RepairObj* obj = (RepairObj*)item->FindPlugin(0xb033b403);
+            if (obj && !obj->f714) {
+                float v = obj->f7f8;
+                if (v > obj->f7f4) obj->Repair(v * self->GetRate() * 0.01f);
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+// @ 0x0105b180
+bool __stdcall FUN_0105b180(Strategy* self, void* a2, int a3, void* a4)
+{
+    if (OnHit(self, a2, a3, 0)) {
+        Combatant* c = 0;
+        ItemBase* item = self->item;
+        if (item) c = (Combatant*)item->FindPlugin(0x13f94d4);
+        float cap = c->f38;
+        if (c->Slot58() > cap) {
+            float r = c->Slot58() * self->GetRate() * 0.01f;
+            c->PartialRepair(r);
+            FVec8* v = (FVec8*)SpaceGameGet_s0105_aa50()->f5180(0xc);
+            v->resize(8);
+            v->mData[7] = r;
+            return true;
+        }
+    }
+    return false;
+}
+
+// @ 0x0105b240
+bool __stdcall GetOutOfUFODoToolAction(Strategy* self, void* a2, int a3, void* a4)
+{
+    if (OnHit(self, a2, a3, 0)) {
+        if (self->CanUse()) {
+            self->SetValue(-1);
+            if (self->GetCount() <= 0) {
+                Inv* inv = SpaceGameGet_s0105_aa50()->GetPlayerInventory();
+                int handle = inv->Find(self->f14, (int)self->GetKey());
+                void* taken = self;
+                self->Slot1();
+                if (SpaceGameGet_s0105_aa50()->GetPlayerInventory()->Take(handle, &taken, -1)) {
+                    SpaceGameGet_s0105_aa50()->GetPlayerInventory()->Refresh();
+                }
+                if (taken) ((Unk*)taken)->Release();
+            }
+        }
+        SpaceGameGet_s0105_aa50()->F1003480();
+        WalkAround* wa = F1015df0();
+        wa->GetOutOfUFO();
+        WindowManager()->Slot4c(0, WindowManager()->Slot1());
+        return true;
+    }
+    return false;
+}
+
+// @ 0x0105b6a0
+bool __stdcall PlaceColonyCanUseToolAtLocation(Strategy* self, Vec3_s0105_aa50* pos, int a3)
+{
+    if (!CanUseToolBase(self, pos, a3)) return false;
+    Planet* pm = PlanetModel_s0105_aa50();
+    if (pm && pm->Fb7e3e0(pos)) {
+        SetErrorEvent(self, 0xd7ff4c0b, a3);
+        return false;
+    }
+    Cursor* cur = GetGameTerrainCursor_s0105_aa50();
+    ColonyObj* probe = (ColonyObj*)cur->SlotD4();
+    if (!probe) return false;
+    ColonyObj* obj = (ColonyObj*)probe->SlotB8(0x2450023);
+    if (!obj) return false;
+    obj->Slot0();
+    obj->sub.SetPosition(pos);
+    Nm* nm = NounManager_s0105_aa50();
+    GameDataVec* vec = NounManager_s0105_aa50()->GetGameDataVector(0xcd7d10, 0xd3d420, 0xacdff0, 0xb1e500, (void*)0x18c43e8);
+    GDElem** it = (GDElem**)vec->mBegin;
+    GDElem** end = (GDElem**)vec->mEnd;
+    for (; it != end; ++it) {
+        GDElem* e = *it;
+        if (!e->Slot2c()) {
+            int z = e->ProfLeaveZone();
+            if (z && self->Slot64((void*)z)) {
+                SetErrorEvent(self, 0x147e3c98, a3);
+                obj->Slot1();
+                return false;
+            }
+        }
+    }
+    GameDataVec* vec2 = nm->GetGameDataVector(0xcd7d10, 0xd3d420, 0xae5ea0, 0xb1e500, (void*)0x403df5c);
+    float r = obj->sub.Radius();
+    float radius = r * obj->sub.Radius() - g_oneF;
+    bool found = false;
+    GDElem** it2 = (GDElem**)vec2->mBegin;
+    GDElem** end2 = (GDElem**)vec2->mEnd;
+    for (; it2 != end2; ++it2) {
+        Vec3_s0105_aa50* p = (Vec3_s0105_aa50*)(*it2)->sub.Slot2c();
+        if ((pos->y - p->y) * (pos->y - p->y) + (pos->z - p->z) * (pos->z - p->z)
+            + (pos->x - p->x) * (pos->x - p->x) <= 14400.0f) {
+            SetErrorEvent(self, 0x1458fe70, a3);
+            obj->Slot1();
+            return false;
+        }
+        Vec3_s0105_aa50* q = (Vec3_s0105_aa50*)(*it2)->sub.Slot2c();
+        if ((pos->z - q->z) * (pos->z - q->z) + (pos->y - q->y) * (pos->y - q->y)
+            + (pos->x - q->x) * (pos->x - q->x) <= radius) {
+            found = true;
+        }
+    }
+    if (!found) SetErrorEvent(self, 0xc18c8011, a3);
+    obj->Slot1();
+    return found;
 }
 
 // @ 0x0105b960

@@ -1,5 +1,5 @@
-010527f0 ?SetErrorEvent@cSPToolStrategy@@QAEHH_N@Z  # int cSPToolStrategy::SetErrorEvent(int, bool)
-01052880 ?AppendScanResult@@YAXPAXPAH@Z  # void AppendScanResult(void*, int*)
+010527f0 ?SetErrorEvent@cSPToolStrategy@@QAEHH_N@Z  # cSPToolStrategy::SetErrorEvent migrated from s010527f0 (verbatim, slice spelling)
+01052880 ?AppendScanResult@@YAXPAXPAH@Z  # AppendScanResult migrated from s010527f0 (verbatim, slice spelling)
 01052f00 ?GetMouseWorldPosition@cSPToolStrategy@@UAEPAUVec3@@PAU2@@Z  # cSPToolStrategy::GetMouseWorldPosition migrated from s010527f0 (verbatim, slice spelling)
 01052f90 ?GetMouseRay@@YAXPAUVec3@@@Z  # GetMouseRay migrated from s010527f0 (verbatim, slice spelling)
 010531b0 ?ShowScanEventLog@@YAXHHHHH@Z  # ShowScanEventLog migrated from s010527f0 (verbatim, slice spelling)
