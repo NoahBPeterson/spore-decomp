@@ -1,0 +1,4 @@
+# source  symbol  va  flags
+../src/game/SPAudio/AudioGroup.cpp  ?Pause@Group@@QAEX_N@Z  00a13650  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/AudioGroup.cpp  ?GetProperty@Group@@QAE_NIAAM@Z  00a137b0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/AudioGroup.cpp  ?HasProperty@Group@@QAE_NI@Z  00a13800  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include

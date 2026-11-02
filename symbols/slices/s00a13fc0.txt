@@ -1,3 +1,5 @@
+00a13fc0 ?ConnectPrimitive@Group_s00a1_3fc0@@QAE_NIPAX@Z  # Group_s00a1_3fc0::ConnectPrimitive migrated from s00a13fc0 (verbatim, slice spelling)
+00a141c0 ?Shutdown@Group_s00a1_3fc0@@QAE_NXZ  # Group_s00a1_3fc0::Shutdown migrated from s00a13fc0 (verbatim, slice spelling)
 00a14380 ??1Group@@QAE@XZ  # Group::~Group migrated from s00a13fc0 (verbatim, slice spelling)
 00a144c0 ??0HTable28@@QAE@AAI0@Z  # HTable28::HTable28 migrated from s00a13fc0 (verbatim, slice spelling)
 00a145c0 ??0Group@@QAE@I@Z  # Group::Group migrated from s00a13fc0 (verbatim, slice spelling)

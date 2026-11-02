@@ -6,7 +6,7 @@
 00ea9550 SP::Audio::cMixMode::ConfigurePrimitive  # PDB FUN_00ea9550
 00ea9790 SP::Audio::IsMixableKey(unsigned int)  # PDB FUN_00ea9790 (__stdcall)
 00ea9880 SP::Audio::cMixModeManager::UpdateSounds(float)  # PDB FUN_00ea9880
-00ea99a0 SP::Audio::cMixModeManager::RemoveSound(unsigned int, bool)  # PDB FUN_00ea99a0
+00ea99a0 ?RemoveSound@cMixModeManager_s00ea_8f90@Audio@SP@@QAEXI_N@Z  # cMixModeManager_s00ea_8f90::RemoveSound migrated from s00ea8f90 (verbatim, slice spelling)
 00ea9a40 SP::Audio::cMixModeManager::StartMode(unsigned int)  # PDB FUN_00ea9a40
 00ea9a80 SP::Audio::cMixModeManager::StopMode(unsigned int, bool)  # PDB FUN_00ea9a80
 00ea9ac0 SP::Audio::cMixModeManager::IsModeActive(unsigned int)  # PDB FUN_00ea9ac0
