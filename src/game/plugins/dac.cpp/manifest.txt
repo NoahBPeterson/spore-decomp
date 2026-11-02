@@ -1,0 +1,3 @@
+# source  symbol  va  flags
+../src/game/plugins/dac.cpp.cpp  ?FUN_0113ccf0@@YA_KPAE@Z  0113ccf0  /vc71 /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/plugins/dac.cpp.cpp  ?FUN_0113cd80@Ctx@@QAE_NPAE@Z  0113cd80  /vc71 /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
