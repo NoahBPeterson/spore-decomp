@@ -30,12 +30,12 @@
 00a4a1c0 ?pd_checkobject@Eapd@Audio@EA@@YAPAUt_object@123@PAPAUt_class@123@@Z  # pd_checkobject migrated from s00a49670 (verbatim, slice spelling)
 00a4a1e0 ?FUN_00a4a1e0@Eapd@Audio@EA@@YAXPAUt_object@123@PAUt_inlet@123@@Z  # FUN_00a4a1e0 migrated from s00a49670 (verbatim, slice spelling)
 00a4a220 ?FUN_00a4a220@Eapd@Audio@EA@@YAXPAUt_object@123@PAUt_outlet@123@@Z  # FUN_00a4a220 migrated from s00a49670 (verbatim, slice spelling)
-00a4a260 glist_doupdatewindowlist  # (glist, buf): if gl_havewindow and strlen(buf)+strlen(gl_name)+100 <= 1024 sprintf "{%s .x%lx} " and strcat; recurse into gl_list members whose g_pd == gpCanvasClass
-00a4a320 canvas_updatewindowlist  # buf = "pdtk_updatewindowlist {", walk gpCanvasList via gl_nextwin, append "}\n", sys_gui(buf)
-00a4a3c0 canvas_removewindow  # remove x from gpCanvasList (head or gl_nextwin scan); arg2 in edx (LTCG register ABI)
-00a4a3f0 set_newfilename_symbol2  # gSymNewFile2 (0x167547c) = s
-00a4a410 set_newfilename_symbol  # gSymNewFile (0x1675474) = s
-00a4a430 canvas_getcurrent  # pd_findbyclass(gHashXSymbol, gpCanvasClass)
-00a4a450 canvas_getcurrentinstance  # canvas_getcurrent()->gl_instance (+0x7c)
-00a4a490 canvas_getenv  # walk gl_owner until gl_env, return it
-00a4a4b0 canvas_getdollarzero  # canvas_getcurrent()->gl_env->ce_dollarzero (+0x10), or 0
+00a4a260 ?glist_doupdatewindowlist@Eapd@Audio@EA@@YAXPAUt_glist@123@PAD@Z  # glist_doupdatewindowlist migrated from s00a49670 (verbatim, slice spelling)
+00a4a320 ?canvas_updatewindowlist@Eapd@Audio@EA@@YAXXZ  # EA::Audio::Eapd::canvas_updatewindowlist migrated from s00a49670
+00a4a3c0 ?FUN_00a4a3c0@Eapd@Audio@EA@@YIXHPAUt_glist@123@@Z  # FUN_00a4a3c0 migrated from s00a49670 (verbatim, slice spelling)
+00a4a3f0 ?FUN_00a4a3f0@Eapd@Audio@EA@@YAXUt_symbol@123@@Z  # FUN_00a4a3f0 migrated from s00a49670 (verbatim, slice spelling)
+00a4a410 ?FUN_00a4a410@Eapd@Audio@EA@@YAXUt_symbol@123@@Z  # FUN_00a4a410 migrated from s00a49670 (verbatim, slice spelling)
+00a4a430 ?canvas_getcurrent@Eapd@Audio@EA@@YAPAUt_glist@123@XZ  # canvas_getcurrent migrated from s00a49670 (verbatim, slice spelling)
+00a4a450 ?canvas_getcurrentinstance@Eapd@Audio@EA@@YAPAXXZ  # canvas_getcurrentinstance migrated from s00a49670 (verbatim, slice spelling)
+00a4a490 ?canvas_getenv@Eapd@Audio@EA@@YAPAUt_canvasenv@123@PAUt_glist@123@@Z  # canvas_getenv migrated from s00a49670 (verbatim, slice spelling)
+00a4a4b0 ?canvas_getdollarzero@Eapd@Audio@EA@@YAPAXXZ  # canvas_getdollarzero migrated from s00a49670 (verbatim, slice spelling)

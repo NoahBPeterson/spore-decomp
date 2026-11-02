@@ -1,2 +1,8 @@
 # source  symbol  va  flags
+../src/game/SPAudio/eapdcanvas.cpp  ?glist_doupdatewindowlist@Eapd@Audio@EA@@YAXPAUt_glist@123@PAD@Z  00a4a260  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdcanvas.cpp  ?FUN_00a4a3f0@Eapd@Audio@EA@@YAXUt_symbol@123@@Z  00a4a3f0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdcanvas.cpp  ?FUN_00a4a410@Eapd@Audio@EA@@YAXUt_symbol@123@@Z  00a4a410  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdcanvas.cpp  ?canvas_getcurrent@Eapd@Audio@EA@@YAPAUt_glist@123@XZ  00a4a430  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdcanvas.cpp  ?canvas_getcurrentinstance@Eapd@Audio@EA@@YAPAXXZ  00a4a450  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdcanvas.cpp  ?canvas_getenv@Eapd@Audio@EA@@YAPAUt_canvasenv@123@PAUt_glist@123@@Z  00a4a490  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPAudio/eapdcanvas.cpp  ?FUN_00a4b3a0@@YAXPAUcCanvas@@HHHPAUcAtom@@@Z  00a4b3a0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
