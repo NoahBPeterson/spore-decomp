@@ -1,3 +1,11 @@
+00d15440 ?FUN_00d15440@cGameEditInputStrategy_s00d1_5440@SP@@QAEXPAUVec3@@@Z  # cGameEditInputStrategy_s00d1_5440::FUN_00d15440 migrated from s00d15440 (verbatim, slice spelling)
+00d15550 ?FUN_00d15550@cGameEditInputStrategy_s00d1_5440@SP@@QAEXXZ  # cGameEditInputStrategy_s00d1_5440::FUN_00d15550 migrated from s00d15440 (verbatim, slice spelling)
 00d15600 ?FUN_00d15600@cGameEditInputStrategy_s00d1_5440@SP@@QAEXXZ  # cGameEditInputStrategy_s00d1_5440::FUN_00d15600 migrated from s00d15440 (verbatim, slice spelling)
+00d15630 ?FUN_00d15630@cGameEditInputStrategy_s00d1_5440@SP@@QAEXPAXPAM1@Z  # cGameEditInputStrategy_s00d1_5440::FUN_00d15630 migrated from s00d15440 (verbatim, slice spelling)
+00d15780 ?FUN_00d15780@cGameEditInputStrategy_s00d1_5440@SP@@QAEMPAXPAM1@Z  # cGameEditInputStrategy_s00d1_5440::FUN_00d15780 migrated from s00d15440 (verbatim, slice spelling)
+00d15980 ?FUN_00d15980@cGameEditInputStrategy_s00d1_5440@SP@@QAEXPAX0@Z  # cGameEditInputStrategy_s00d1_5440::FUN_00d15980 migrated from s00d15440 (verbatim, slice spelling)
+00d15a10 ?FUN_00d15a10@cGameEditInputStrategy_s00d1_5440@SP@@QAEXPAX@Z  # cGameEditInputStrategy_s00d1_5440::FUN_00d15a10 migrated from s00d15440 (verbatim, slice spelling)
 00d15ab0 ?StartSelection@cGameEditInputStrategy@SP@@QAEHPAVcGameData@2@HABUcSPVector3@@@Z  # SP::cGameEditInputStrategy::StartSelection migrated from s00d15440
 00d15af0 ?FUN_00d15af0@cGameEditInputStrategy_s00d1_5440@SP@@QAEIPAXEI@Z  # cGameEditInputStrategy_s00d1_5440::FUN_00d15af0 migrated from s00d15440 (verbatim, slice spelling)
+00d15b30 ?GetGameplayMarkerClassId@@YAII@Z  # GetGameplayMarkerClassId migrated from s00d15440 (verbatim, slice spelling)
+00d15fb0 ?GetGameplayMarkerTypeFromUI@cGameEditInputStrategy_s00d1_5440@SP@@QAEIXZ  # cGameEditInputStrategy_s00d1_5440::GetGameplayMarkerTypeFromUI migrated from s00d15440 (verbatim, slice spelling)

@@ -12,4 +12,6 @@
 00d14f70 ?Init@cCommandGameplayMarkerTemplate@@QAEPAXPBUcVec3@@0@Z  # cCommandGameplayMarkerTemplate::Init migrated from s00d14460 (verbatim, slice spelling)
 00d15090 ?FUN_00d15090@@YGXPAX@Z  # FUN_00d15090 migrated from s00d14460 (verbatim, slice spelling)
 00d15100 ?FUN_00d15100@@YGXHH@Z  # FUN_00d15100 migrated from s00d14460 (verbatim, slice spelling)
+00d15160 ?FUN_00d15160@@YGXPBUcVec3@@H@Z  # FUN_00d15160 migrated from s00d14460 (verbatim, slice spelling)
+00d15280 ?FUN_00d15280@@YG_NHHH@Z  # FUN_00d15280 migrated from s00d14460 (verbatim, slice spelling)
 00d15350 ?FUN_00d15350@@YAXPAUcNoun@@HHPB_W@Z  # FUN_00d15350 migrated from s00d14460 (verbatim, slice spelling)

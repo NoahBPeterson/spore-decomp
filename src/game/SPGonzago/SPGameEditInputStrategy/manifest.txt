@@ -10,3 +10,5 @@
 ../src/game/SPGonzago/SPGameEditInputStrategy.cpp  ?SortInsert@@YAXPAI0UcStrCmp@@@Z  00d16cc0  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPGameEditInputStrategy.cpp  ?SiftUp@@YAXPAIHHIUcStrCmp@@@Z  00d16eb0  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPGameEditInputStrategy.cpp  ?Activate@cGameEditInputStrategy_s00d1_6f40@@QAEXXZ  00d17250  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPGameEditInputStrategy.cpp  ?AdjustHeapHole@@YAXPAIHHHIUcPropertyListNameSort_s00d1_78a0@@@Z  00d180c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPGameEditInputStrategy.cpp  ?AdjustHeap@@YAXPAI0UcPropertyListNameSort_s00d1_78a0@@@Z  00d18180  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

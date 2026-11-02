@@ -1,4 +1,4 @@
-// src/game/SPGonzago/SPGameEditInputStrategy.cpp -- migrated from slice(s) s00d1a2b0, s00d16f40, s00d160c0, s00d15440, s00d14460, s00cd16a0 by tools/migrate/rewrite.py
+// src/game/SPGonzago/SPGameEditInputStrategy.cpp -- migrated from slice(s) s00d1afe0, s00d197a0, s00d18df0, s00d178a0, s00d1a2b0, s00d16f40, s00d160c0, s00d15440, s00d14460, s00cd16a0 by tools/migrate/rewrite.py
 // Object file: SPGonzago/SPGameEditInputStrategy.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -17,6 +17,15 @@
 #include "EA/UTFWinControls/IWinScrollbar.h"
 #include "EA/UTFWin/IWindow.h"
 #include "EA/ResourceMan/Key.h"
+#include "cSPVector3.h"
+#include "SP/cHerd.h"
+#include "SP/cPropertyList.h"
+#include "SP/cGonzagoTimer.h"
+#include "EA/UTFWinControls/IWinGrid.h"
+#include "SP/cITerrainSphere.h"
+#include "EA/UTFWinControls/IWinTextEdit.h"
+#include <intrin.h>
+#include "EA/DateTime/DateTime.h"
 
 // unnamed retail callees and globals (address in the comment)
 extern "C" void operator_delete(void* p);                    // 0x00f47380
@@ -55,6 +64,18 @@ extern "C" void operator_delete(void* p);                    // 0x00f47380
 extern "C" __declspec(dllimport) uint32_t __cdecl wide_to_ulong(const wchar_t* pText, wchar_t** ppEnd, int32_t nBase);   // msvcr90!wcstoul
 extern "C" __declspec(dllimport) int __cdecl wide_compare(const wchar_t* pA, const wchar_t* pB);  // msvcr90!wcscmp
 extern "C" __declspec(dllimport) double __cdecl wide_to_double(const wchar_t* pText, wchar_t** ppEnd);   // msvcr90!wcstod
+extern const char* kTemplateName;                           // 0x015825e4
+struct cVec3 {
+    float x;                                                // +0x00
+    float y;                                                // +0x04
+    float z;                                                // +0x08
+};
+struct cVec4 {
+    float x;                                                // +0x00
+    float y;                                                // +0x04
+    float z;                                                // +0x08
+    float w;                                                // +0x0c
+};
 struct cSpatial {
     virtual void  p000();                                   // +0x00
     virtual void  p004();                                   // +0x04
@@ -115,23 +136,238 @@ struct cNoun {
     int32_t       mValueCount;                              // +0x118
     int32_t       mValues[64];                              // +0x11c
 };
+struct cTerrainCursor {
+    virtual void  t000();                                   // +0x00
+    virtual void  t004();                                   // +0x04
+    virtual void  t008();                                   // +0x08
+    virtual void  t00c();                                   // +0x0c
+    virtual void  t010();                                   // +0x10
+    virtual void  t014();                                   // +0x14
+    virtual void  t018();                                   // +0x18
+    virtual void  t01c();                                   // +0x1c
+    virtual void  t020();                                   // +0x20
+    virtual void  t024();                                   // +0x24
+    virtual void  t028();                                   // +0x28
+    virtual void  t02c();                                   // +0x2c
+    virtual void  t030();                                   // +0x30
+    virtual void  t034();                                   // +0x34
+    virtual void  t038();                                   // +0x38
+    virtual void  t03c();                                   // +0x3c
+    virtual void  t040();                                   // +0x40
+    virtual void  t044();                                   // +0x44
+    virtual void  t048();                                   // +0x48
+    virtual void  t04c();                                   // +0x4c
+    virtual void  t050();                                   // +0x50
+    virtual void  t054();                                   // +0x54
+    virtual void  t058();                                   // +0x58
+    virtual void  t05c();                                   // +0x5c
+    virtual void  t060();                                   // +0x60
+    virtual void  t064();                                   // +0x64
+    virtual void  t068();                                   // +0x68
+    virtual void  t06c();                                   // +0x6c
+    virtual int32_t t070();                                 // +0x70
+    virtual void  t074();                                   // +0x74
+    virtual void  t078();                                   // +0x78
+    virtual void  t07c();                                   // +0x7c
+    virtual void  t080();                                   // +0x80
+    virtual void  t084();                                   // +0x84
+    virtual void  t088();                                   // +0x88
+    virtual void  t08c();                                   // +0x8c
+    virtual void  t090();                                   // +0x90
+    virtual void  t094();                                   // +0x94
+    virtual void  t098();                                   // +0x98
+    virtual void  t09c();                                   // +0x9c
+    virtual void  t0a0();                                   // +0xa0
+    virtual void  t0a4();                                   // +0xa4
+    virtual void  t0a8();                                   // +0xa8
+    virtual void  t0ac(float fValue);                       // +0xac
+    virtual void  t0b0(float fValue);                       // +0xb0
+    virtual void  t0b4();                                   // +0xb4
+    virtual void  t0b8(int32_t nMode);                      // +0xb8
+};
+struct cParser;
+struct cArguments;
+struct cArgumentSpec {
+    uint8_t mPad00[0xc8];                                   // +0x00 .. +0xc7
+
+    void  Init(bool bFlag);                                 // 0x0083a9f0
+    void  Parse(cArguments* pArguments, cParser* pParser);   // 0x0083b9d0
+    void  Done();                                           // 0x00405050
+    const char* HelpString(const char* pName, int32_t nFlags);   // 0x0083a2f0
+};
+struct cArguments {
+    uint8_t mPad00[0x40];                                   // +0x00 .. +0x3f
+
+    void  Init();                                           // 0x00837ff0
+    void  Done();                                           // 0x00837fa0
+    void  SplitIntoArguments(const wchar_t* pText);         // 0x008383c0
+    void* MainArguments(int32_t nMin);                      // 0x00838320
+    void* MainArguments(void** ppOut, int32_t nA, int32_t nB);   // 0x00838020
+};
+struct cParser {
+    virtual void  v000();                                   // +0x00
+    virtual void  v004();                                   // +0x04
+    virtual void  v008();                                   // +0x08
+    virtual void  v00c();                                   // +0x0c
+    virtual void  v010();                                   // +0x10
+    virtual void* v014(void* pKey, void* pValue);           // +0x14
+    virtual void  v018();                                   // +0x18
+    virtual void  v01c();                                   // +0x1c
+    virtual void  v020();                                   // +0x20
+    virtual void  v024();                                   // +0x24
+    virtual void  v028();                                   // +0x28
+    virtual void  v02c();                                   // +0x2c
+    virtual void  v030();                                   // +0x30
+    virtual void  v034();                                   // +0x34
+    virtual void* v038();                                   // +0x38
+    virtual void  v03c(void* pArg);                         // +0x3c
+    virtual void  v040();                                   // +0x40
+    virtual void  v044();                                   // +0x44
+    virtual void  v048();                                   // +0x48
+    virtual void  v04c();                                   // +0x4c
+    virtual void  v050();                                   // +0x50
+    virtual void  v054();                                   // +0x54
+    virtual void  v058();                                   // +0x58
+    virtual void  v05c();                                   // +0x5c
+    virtual void  v060();                                   // +0x60
+    virtual void  v064();                                   // +0x64
+    virtual void  v068();                                   // +0x68
+    virtual void  v06c();                                   // +0x6c
+    virtual void  v070();                                   // +0x70
+    virtual void  v074();                                   // +0x74
+    virtual void  v078();                                   // +0x78
+    virtual void  v07c();                                   // +0x7c
+    virtual void  v080();                                   // +0x80
+    virtual void  v084();                                   // +0x84
+    virtual void  v088();                                   // +0x88
+    virtual void  v08c();                                   // +0x8c
+    virtual void* v090(const void* pArg, const char* pText);   // +0x90
+    virtual bool  v094(const wchar_t* pArg);                // +0x94
+    virtual float v098(const wchar_t* pArg);                // +0x98
+    virtual void* v09c(const wchar_t* pArg);                // +0x9c
+    virtual void  v0a0();                                   // +0xa0
+    virtual void  v0a4();                                   // +0xa4
+    virtual void* v0a8(void* pOut, const void* pArg);       // +0xa8
+    virtual void* v0ac(void* pOut, const void* pArg);       // +0xac
+    virtual void  v0b0();                                   // +0xb0
+    virtual void  v0b4();                                   // +0xb4
+    virtual void  v0b8();                                   // +0xb8
+    virtual void  v0bc(const wchar_t* pName);               // +0xbc
+    virtual void  v0c0();                                   // +0xc0
+    virtual void* v0c4();                                   // +0xc4
+};
+struct cCameraCtl {
+    virtual void  v000();                                   // +0x00
+    virtual void  v004();                                   // +0x04
+    virtual void  v008();                                   // +0x08
+    virtual void  v00c();                                   // +0x0c
+    virtual void  v010();                                   // +0x10
+    virtual void  v014();                                   // +0x14
+    virtual void  v018();                                   // +0x18
+    virtual void  v01c();                                   // +0x1c
+    virtual void  v020();                                   // +0x20
+    virtual void  v024();                                   // +0x24
+    virtual void  v028();                                   // +0x28
+    virtual void  v02c();                                   // +0x2c
+    virtual void  v030();                                   // +0x30
+    virtual void  v034();                                   // +0x34
+    virtual void  v038();                                   // +0x38
+
+    void  GetForward(cVec3* pForward);                      // 0x00b13a10
+    void  BlendTo(const void* pBlend, int32_t nFlag);       // 0x00b12dd0
+    void  LookAt(float x, float y, float z);                // 0x00b10760
+};
+struct cCurMgr {
+    bool FindLocal(uint32_t nID);                           // 0x00801bb0
+};
 struct cTerraformingManager {
     void SetMode(int32_t nMode);                            // 0x00bc08d0
 };
+void* __cdecl operator_new(uint32_t nSize, const char* pFile, int32_t a, int32_t b,
+                           const char* pAlloc, int32_t nLine);      // 0x00f473a0
+cCameraCtl* __cdecl GetCameraCtl();                         // 0x00b3d280
+void* __cdecl SP_GetGameTerrainCursor_s00d1_4460();                    // 0x00b30d70
 void* __cdecl SP_TerraformingManager();                     // 0x00b3d430
+void* __cdecl SP_CheatManager();                            // 0x0067de20
+void* __cdecl SP_ResourceManager();                         // 0x0067dcd0
+int32_t __cdecl SP_OpenRecordAsStream(const void* pKey, int32_t* pOut);   // 0x00686490
+void  __cdecl SP_EraseEntry(int32_t nRecord);               // 0x006861d0
+void* __cdecl ArgScript_CreateParser();                     // 0x008408d0
+int32_t __cdecl FUN_00b99530(int32_t nA, int32_t nB, int32_t nC);   // 0x00b99530
+void   __cdecl FUN_00ba1280();                              // 0x00ba1280
+void*  __cdecl FUN_0067cab0();                               // 0x0067cab0
+struct cCommandGameplayMarker_s00d1_4460 {
+    void*          mpVTable;                                // +0x000
+    cParser*       mpParser;                                // +0x004
+    uint8_t        mPad008[0x08];                           // +0x008 .. +0x00f
+    cArgumentSpec  mArgSpec;                                // +0x010
+    cArguments     mArguments;                              // +0x0d8
+    int32_t        mValueCount;                             // +0x118
+    int32_t        mType;                                   // +0x11c
+    int32_t        mID;                                     // +0x120
+    int32_t        mDefinitionID;                           // +0x124
+    int32_t        mGroupID;                                // +0x128
+    cVec3          mPosition;                               // +0x12c
+    cVec4          mOrientation;                            // +0x138
+    cNoun*         mpGameplayMarker;                        // +0x148
+
+    void* Init();                                           // 0x00d14e50
+    void* Destroy(uint8_t nFlags);                          // 0x00d14f00
+    const char* Description(int32_t nFlags);                // 0x00d14460
+    void  SetFromArguments(cArguments* pArguments);         // 0x00d144d0
+    void  OnEndParse(bool bCommit);                         // 0x00d14650
+    void  SpawnMarker(cArguments* pArguments);              // 0x00d14830
+
+    static void* ParseTypeEnum(const char* pName);          // 0x00d14600
+};
+struct cCommandGameplayMarkerTemplate : cCommandGameplayMarker_s00d1_4460 {
+    cVec3  mAlphaVector;                                    // +0x14c
+    cVec3  mBetaVector;                                     // +0x158
+    float  mAlpha;                                          // +0x164
+    float  mBeta;                                           // +0x168
+
+    void* Init(const cVec3* pAlpha, const cVec3* pBeta);    // 0x00d14f70
+    bool  Parse(const wchar_t** ppArguments);               // 0x00d14690
+    void  UpdateMarker(cArguments* pArguments);             // 0x00d14a60
+};
 // ---- items of slice s00d14460 end
 
 // ---- items of slice s00d15440 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C" wchar_t DAT_01479b30[] = L"LevelEditor";// 0x01479b30  tuning set name
+extern "C" void* SP_cPlanetModel_DirectionToSurfacePosition(void* pModel, void* pOut, void* pDir);
+extern "C" void* SP_cPlanetModel_BuildSurfaceOrientation(void* pModel, void* pOut, void* pPos);
 typedef unsigned char  u8;
+typedef unsigned short u16;
 typedef unsigned int   u32;
 struct Vec3 { float x, y, z; };
 struct Obj;
 #define VTSLOT(obj, off) ((*(void***)(obj))[(off) / 4])
 typedef void  (__thiscall *Fn_v_p)(void*);
+typedef void  (__thiscall *Fn_v_pi)(void*, int);
 typedef void  (__thiscall *Fn_v_pii)(void*, int, int);
+typedef void  (__thiscall *Fn_v_piii)(void*, int, int, int);
+typedef void  (__thiscall *Fn_v_pp)(void*, void*);
 typedef void  (__thiscall *Fn_v_ppb)(void*, bool, void*);
+typedef void  (__thiscall *Fn_v_pff)(void*, float, float);
+typedef Obj* (__thiscall *Fn_p_p)(void*);
 typedef Obj* (__thiscall *Fn_p_pi)(void*, int);
+typedef bool  (__thiscall *Fn_b_p)(void*);
+typedef bool  (__thiscall *Fn_b_pui)(void*, u32, void**);
+extern "C" float DAT_0169dc28 = 0.0f;              // 0x0169dc28  selection anchor (x)
+extern "C" float DAT_0169dc2c = 0.0f;              // 0x0169dc2c  selection anchor (y)
+extern "C" float DAT_0169dc30 = 0.0f;              // 0x0169dc30  selection anchor (z)
+extern "C" void* DAT_0169dc64 = 0;                 // 0x0169dc64  current marker owner
+extern "C" int*  DAT_0169dc68 = 0;                 // 0x0169dc68  marker entry vector begin
 extern "C" int*  DAT_0169dc6c = 0;                 // 0x0169dc6c  marker entry vector end
+extern "C" float DAT_013ec4b8 = 1e-08f;            // 0x013ec4b8  normalisation epsilon
+extern "C" float DAT_013ec478 = 0.05f;             // 0x013ec478  spin step (radians)
+extern "C" float DAT_01470f1c = 2.0f;              // 0x01470f1c  squared-scale constant
+extern "C" float DAT_014763b8 = 0.0f;              // 0x014763b8  label area (w)
+extern "C" float DAT_013ebc4c = 0.0f;              // 0x013ebc4c  label area (h)
+extern "C" float DAT_013f08e8 = 160.0f;            // 0x013f08e8  label x advance
+extern "C" float DAT_01486ebc = 250.0f;            // 0x01486ebc  combo box width
+extern "C" float DAT_013eecd8 = 20.0f;             // 0x013eecd8  combo box height
+extern "C" float DAT_01479c0c = 270.0f;            // 0x01479c0c  combo box y advance
 struct Obj {
     void* m_slot30();                       // vftable slot 0x30
     Vec3* m_position();                     // vftable slot 0x2c
@@ -141,7 +377,22 @@ struct cSPUILayout_s00d1_5440 {
     Obj*  FindWindowByID(int id, int flag); // 0x008105b0
     void  SetVisibility(int v);             // 0x00810590
 };
+struct cGameNounManager_s00d1_5440 {
+    void RemoveNoun(Obj* p);                // 0x00b225d0
+};
+Obj*  __cdecl SP_PlanetModel();                       // 0x00b3d350
+Obj*  __cdecl SP_PropertyManager();                   // 0x0067de30
 Obj*  __cdecl SP_GetGameTerrainCursor();              // 0x00b30d70
+cGameNounManager_s00d1_5440* __cdecl SP_NounManager(void* pNoun); // 0x00b3d300
+void* __cdecl FUN_00d1bf00();                         // 0x00d1bf00  GetEditSelection
+u32   __cdecl EA_Hash_FNV1_String16(const wchar_t* p, u32 seed, int flag); // 0x00932f30
+void  __cdecl EA_Messaging_RemoveHandler(void*, void*, void*, void*, void*); // 0x00571db0
+void* __cdecl FUN_009512c0();                         // 0x009512c0
+void* __cdecl FUN_009512d0(int size, int align, const char* name, void* pPool); // 0x009512d0
+Obj*  __cdecl WinText_CreateDefault(int a, u32 b);    // 0x00989130  WinText::CreateDefault
+Obj*  __cdecl ComboBoxDrawable_ctor(Obj* pThis);      // 0x00969000  UI::ComboBoxDrawable::c
+Obj*  __cdecl ScrollbarDrawable_ctor(Obj* pThis);     // 0x009838a0  UI::ScrollbarDrawable::c
+Obj*  __cdecl WinComboBox_ctor(Obj* pThis);           // 0x00969450  WinComboBox::c
 namespace SP {
 struct cGameEditInputStrategy_s00d1_5440 {
     u8    mPad00[0x40];
@@ -163,16 +414,17 @@ struct cGameEditInputStrategy_s00d1_5440 {
 
     void  FUN_00d15440(Vec3* pTarget);
     void  FUN_00d15550();
-    void  FUN_00d15600();
+    void  FUN_00d15600();  // 0x00d15600 (SP::cGameEditInputStrategy::FUN_00d15600)
     void  FUN_00d15630(void* a1, float* pX, float* pY);
     float FUN_00d15780(void* a1, float* pX, float* pY);
     void  FUN_00d15980(void* a1, void* pObj);
     void  FUN_00d15a10(void* p);
     u32   StartSelection(void* p, u8 flag, u32 a3);  // 0x00d15ab0 (SP::cGameEditInputStrategy::StartSelection)
-    u32   FUN_00d15af0(void* p, u8 flag, u32 a3);
+    u32   FUN_00d15af0(void* p, u8 flag, u32 a3);  // 0x00d15af0 (SP::cGameEditInputStrategy::FUN_00d15af0)
     u32   GetGameplayMarkerTypeFromUI();  // 0x00d15fb0 (SP::cGameEditInputStrategy::GetGameplayMarkerTypeFromUI)
 };
 }
+u32 __cdecl GetGameplayMarkerClassId(u32 classId);
 // ---- items of slice s00d15440 end
 
 // ---- items of slice s00d160c0 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -919,6 +1171,1065 @@ public:
 }
 // ---- items of slice s00d1a2b0 end
 
+// ---- items of slice s00d178a0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern void operator_delete__(void* p);            // 0x00f47380
+extern uint8_t    g_169dc20;                       // 0x0169dc20  "herd needs an update" flag
+extern float      g_f169dc94;                      // 0x0169dc94  two pi
+extern float      g_f1470f1c;                      // 0x01470f1c  2.0f
+extern float      g_f1582664;                      // 0x01582664  half turn
+namespace eastl {
+class allocator_s00d1_78a0 {
+public:
+    void deallocate(void* p, unsigned int) { operator_delete__(p); }
+};
+}
+namespace eastl {
+template <class T> struct basic_string_s00d1_78a0 {
+    T* mpBegin;
+    T* mpEnd;
+    T* mpCapacity;
+    allocator_s00d1_78a0 mAllocator;
+
+    void AllocateSelf(unsigned int n);             // 0x00429760 (out of line)
+
+    basic_string_s00d1_78a0(const basic_string_s00d1_78a0& x) : mpBegin(0), mpEnd(0), mpCapacity(0) {
+        RangeInitialize(x.mpBegin, x.mpEnd);
+    }
+    ~basic_string_s00d1_78a0() { DeallocateSelf(); }
+
+    void RangeInitialize(const T* pBegin, const T* pEnd) {
+        const int n = (int)(pEnd - pBegin);
+        AllocateSelf(n + 1);
+        T* p = mpBegin;
+        memcpy(p, pBegin, n * sizeof(T));
+        mpEnd = p + n;
+        *mpEnd = 0;
+    }
+    void DeallocateSelf() {
+        if ((mpCapacity - mpBegin) > 1)
+            DoFree(mpBegin, (unsigned int)(mpCapacity - mpBegin));
+    }
+    void DoFree(T* p, unsigned int n) {
+        if (p)
+            mAllocator.deallocate(p, n * sizeof(T));
+    }
+};
+}
+namespace eastl {
+typedef basic_string_s00d1_78a0<wchar_t> string16_s00d1_78a0;
+}
+struct Property_s00d1_78a0 {
+    union {
+        struct { void* mpData; uint32_t mnItemSize; uint32_t mnItemCount; };
+        uint32_t mValue[4];
+    };
+    unsigned short mnFlags;                        // +0x10  (0x30 mask => pointer valued)
+    unsigned short mnType;                         // +0x12
+    void* GetValue() { return (mnFlags & 0x30) ? mpData : (mnType != 0 ? (void*)this : 0); }
+};
+namespace EA {
+namespace ResourceMan {
+class IResourceManager_s00d1_78a0;
+}
+}
+struct cPropertyListNameSort_s00d1_78a0 {
+    uint32_t mGroupID;                             // +0x00
+    EA::ResourceMan::IResourceManager_s00d1_78a0* mpResMan;   // +0x04
+    eastl::string16_s00d1_78a0 mNameA;                        // +0x08
+    eastl::string16_s00d1_78a0 mNameB;                        // +0x18
+
+    cPropertyListNameSort_s00d1_78a0(const cPropertyListNameSort_s00d1_78a0& x);      // 0x00d18000
+    bool operator()(uint32_t a, uint32_t b) const;              // 0x00d16760
+};
+void AdjustHeapHole(uint32_t* first, int topIndex, int len, int holeIndex, uint32_t value,
+                    cPropertyListNameSort_s00d1_78a0 compare);              // 0x00d180c0
+void SiftUp(uint32_t* first, int topIndex, int holeIndex, uint32_t value,
+            cPropertyListNameSort_s00d1_78a0 compare);                      // 0x00d16eb0
+void AdjustHeap(uint32_t* first, uint32_t* last, cPropertyListNameSort_s00d1_78a0 compare);  // 0x00d18180
+class cUiObject_s00d1_78a0;
+class cPropertyList;
+class cUiObject_s00d1_78a0 {
+public:
+    virtual void v00();                            // 0x00
+    virtual void v04();                            // 0x04
+    virtual void v08();                            // 0x08
+    virtual cUiObject_s00d1_78a0* v0c(uint32_t id);           // 0x0c  child by id
+    virtual cPropertyList* v10();                  // 0x10  property list
+    virtual void v14();                            // 0x14
+    virtual void v18();                            // 0x18
+    virtual Property_s00d1_78a0* v1c(uint32_t index);         // 0x1c
+    virtual uint32_t v20();                        // 0x20  class id
+    virtual void v24();                            // 0x24
+    virtual void v28();                            // 0x28
+    virtual void v2c();                            // 0x2c
+    virtual void v30();                            // 0x30
+    virtual void v34();                            // 0x34
+    virtual uint32_t v38();                        // 0x38
+    virtual void v3c();                            // 0x3c
+    virtual void v40();                            // 0x40
+    virtual void v44();                            // 0x44
+    virtual void v48();                            // 0x48
+    virtual void v4c();                            // 0x4c
+    virtual void v50();                            // 0x50
+    virtual void v54(cUiObject_s00d1_78a0* obj, int flag);    // 0x54  bind the manipulated object
+    virtual cUiObject_s00d1_78a0* v58();                      // 0x58  bound object
+    virtual void v5c();                            // 0x5c
+    virtual void v60();                            // 0x60
+    virtual void v64();                            // 0x64
+    virtual void v68();                            // 0x68
+    virtual void v6c();                            // 0x6c
+    virtual void v70();                            // 0x70
+    virtual void v74();                            // 0x74
+    virtual void v78();                            // 0x78
+    virtual void v7c();                            // 0x7c
+    virtual void v80();                            // 0x80
+    virtual void v84();                            // 0x84
+    virtual void v88();                            // 0x88
+    virtual void v8c();                            // 0x8c
+    virtual void v90();                            // 0x90
+    virtual void v94();                            // 0x94
+    virtual void v98();                            // 0x98
+    virtual void v9c();                            // 0x9c
+    virtual void va0();                            // 0xa0
+    virtual void va4();                            // 0xa4
+    virtual void va8();                            // 0xa8
+    virtual void vac();                            // 0xac
+    virtual void vb0();                            // 0xb0
+    virtual void vb4();                            // 0xb4
+    virtual cUiObject_s00d1_78a0* vb8(uint32_t id);           // 0xb8  handler for a script id
+    virtual void vbc();                            // 0xbc
+};
+class cPropertyList {
+public:
+    virtual void p00();                            // 0x00
+    virtual void p04();                            // 0x04
+    virtual void p08();                            // 0x08
+    virtual void p0c();                            // 0x0c
+    virtual void p10();                            // 0x10
+    virtual void p14();                            // 0x14
+    virtual void p18();                            // 0x18
+    virtual Property_s00d1_78a0* v1c(uint32_t index);         // 0x1c
+};
+class cSpatial_s00d1_78a0 {
+public:
+    virtual void s00();                            // 0x00
+    virtual void s04();                            // 0x04
+    virtual void s08();                            // 0x08
+    virtual void s0c();                            // 0x0c
+    virtual void s10();                            // 0x10
+    virtual void s14();                            // 0x14
+    virtual void s18();                            // 0x18
+    virtual void s1c();                            // 0x1c
+    virtual void s20();                            // 0x20
+    virtual void s24();                            // 0x24
+    virtual void s28();                            // 0x28
+    virtual void* v2c();                           // 0x2c  position
+    virtual void* v30();                           // 0x30  rotation
+    virtual void s34();                            // 0x34
+    virtual void v38(void* position);              // 0x38  set position
+    virtual void v3c(void* rotation);              // 0x3c  set rotation
+    virtual void s40();                            // 0x40
+    virtual void s44();                            // 0x44
+    virtual void s48();                            // 0x48
+    virtual void s4c();                            // 0x4c
+    virtual bool v50();                            // 0x50  movable / editable
+};
+class cMarkerInfo_s00d1_78a0 {
+public:
+    char      mPad00[0x34];
+    cSpatial_s00d1_78a0  mSub34;                              // +0x34
+    char      mPad38[0x1a4 - 0x38];
+    cUiObject_s00d1_78a0* mpField1a4;                         // +0x1a4
+};
+class cHerdMember {
+public:
+    virtual void h00();                            // 0x00
+    virtual void h04();                            // 0x04
+    virtual void h08();                            // 0x08
+    virtual void h0c();                            // 0x0c
+    virtual void h10();                            // 0x10
+    virtual void h14();                            // 0x14
+    virtual void h18();                            // 0x18
+    virtual void h1c();                            // 0x1c
+    virtual void h20();                            // 0x20
+    virtual void h24();                            // 0x24
+    virtual void h28();                            // 0x28
+    virtual void h2c();                            // 0x2c
+    virtual void h30();                            // 0x30
+    virtual void h34();                            // 0x34
+    virtual void h38();                            // 0x38
+    virtual void h3c();                            // 0x3c
+    virtual void h40();                            // 0x40
+    virtual void h44();                            // 0x44
+    virtual void h48();                            // 0x48
+    virtual void h4c();                            // 0x4c
+    virtual void h50();                            // 0x50
+    virtual void h54();                            // 0x54
+    virtual void h58();                            // 0x58
+    virtual void h5c();                            // 0x5c
+    virtual void h60();                            // 0x60
+    virtual void h64();                            // 0x64
+    virtual void h68();                            // 0x68
+    virtual void v6c(int value);                   // 0x6c
+    char      mPad04[0xc0 - 0x70];
+    cSpatial_s00d1_78a0  mSpatial;                            // +0xc0
+};
+class cHerd {
+public:
+    char          mPad00[0x40];
+    cHerdMember** mMembersBegin;                   // +0x40
+    cHerdMember** mMembersEnd;                     // +0x44
+    char          mPad48[0x160 - 0x48];
+    uint32_t      mField160;                       // +0x160
+    void SetPosition(Vector3* position);           // 0x00c6ba20
+};
+struct AutoRefCount_s00d1_78a0 {
+    cUiObject_s00d1_78a0* mpObject;
+    void Assign(cUiObject_s00d1_78a0* value);                 // 0x00c70110
+};
+class cPlanetModel {
+public:
+    Vector3*    DirectionToSurfacePosition(Vector3* out, const Vector3* direction);   // 0xb815a0
+    Quaternion* BuildSurfaceOrientation(Quaternion* out, const Vector3* position);   // 0xb7f190
+    Quaternion* BuildSurfaceOrientation2(Quaternion* out, const Vector3* position,
+                                         const Vector3* up);                         // 0xb7f250
+    Vector3*    GetNormalAt(Vector3* out, const Vector3* position);                  // 0xb7e3b0
+};
+class IReferencePoint {
+public:
+    virtual void r00();                            // 0x00
+    virtual void r04();                            // 0x04
+    virtual void r08();                            // 0x08
+    virtual void r0c();                            // 0x0c
+    virtual void r10();                            // 0x10
+    virtual void r14();                            // 0x14
+    virtual void r18();                            // 0x18
+    virtual void r1c();                            // 0x1c
+    virtual void r20();                            // 0x20
+    virtual void r24();                            // 0x24
+    virtual void r28();                            // 0x28
+    virtual void r2c();                            // 0x2c
+    virtual void r30();                            // 0x30
+    virtual void r34();                            // 0x34
+    virtual Vector3 GetPos(int flag, Vector3 offset);   // 0x38
+};
+class cTimer {
+public:
+    uint32_t mPad[8];
+    void Restart();                                // 0x00bc3130
+};
+class cGameNounManager {
+public:
+    void RemoveNoun(cUiObject_s00d1_78a0* noun);              // 0x00b225d0
+    cUiObject_s00d1_78a0* CreateRotationRing();               // 0x00d0a610
+};
+class cGameEditModeStrategy_s00d1_78a0 {
+public:
+    char         mPad00[0x40];
+    cUiObject_s00d1_78a0**  mSelectedBegin;                   // +0x40
+    cUiObject_s00d1_78a0**  mSelectedEnd;                     // +0x44
+};
+class cGameEditInputStrategy_s00d1_78a0 {
+public:
+    char         mPad00[0x4c];
+    AutoRefCount_s00d1_78a0 mpSelectedObject;                 // +0x4c  the object being manipulated
+    AutoRefCount_s00d1_78a0 mpField50;                        // +0x50
+    cUiObject_s00d1_78a0*   mpSelectedObjectManipulator;      // +0x54
+    cTimer       mHoverTimer;                      // +0x58
+    char         mPad5c[0xc4 - 0x78];
+    Vector3      mFacing;                          // +0xc4
+    Vector3      mFrameD0;                         // +0xd0
+
+    void DoObjectManipulation(uint32_t action, cUiObject_s00d1_78a0* message);   // 0x00d178a0
+    void FUN_00d15440(Vector3* target);                               // 0x00d15440
+    void FUN_00d16f40(Vector3* target);                               // 0x00d16f40
+};
+extern Vector3    g_v169dc28;                      // 0x0169dc28  reference point offset
+extern Vector3    g_v169dc88;                      // 0x0169dc88  world up
+extern Vector3    g_v1582668;                      // 0x01582668  spin axis
+extern Vector3    g_v1582674;                      // 0x01582674  spin axis
+extern IReferencePoint* FUN_00b3d240();            // 0x00b3d240
+extern cPlanetModel*    PlanetModel_s00d1_78a0();             // 0x00b3d350
+extern cGameNounManager* NounManager_s00d1_78a0();            // 0x00b3d300
+extern cGameEditModeStrategy_s00d1_78a0* GetEditSelection();  // 0x00d1bf00
+extern cUiObject_s00d1_78a0* RotateObject(AutoRefCount_s00d1_78a0* object);                  // 0x00d15330
+extern cUiObject_s00d1_78a0* FUN_00ad7360(cUiObject_s00d1_78a0** slot);                      // 0x00ad7360
+extern void*      FUN_00ac80d0(cUiObject_s00d1_78a0* object, uint32_t classId);   // 0x00ac80d0
+extern Vector3*   Vector3_Normalize(Vector3* out, const Vector3* in);  // 0x00436ce0
+extern Vector3*   FUN_0059aed0(Vector3* out, const Vector3* v, const Quaternion* q);  // 0x0059aed0
+extern Quaternion* FUN_0059b060(Quaternion* out, const Vector3* axis, float angle);   // 0x0059b060
+extern void*      FUN_007dcb00(void* out, const Quaternion* a, const Quaternion* b);  // 0x007dcb00
+extern void       OrthogonalVector(Vector3* out, const Vector3* in);                  // 0x006985b0
+extern Quaternion* QuaternionFromFacingAndUp(Quaternion* out, const Vector3* facing,
+                                             const Vector3* up);                      // 0x0069b600
+// ---- items of slice s00d178a0 end
+
+// ---- items of slice s00d18df0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+void operator delete(void* p);   // 0x00f47380 (operator delete[])
+namespace eastl {
+class allocator_s00d1_8df0 { public:
+    void deallocate(void* p, unsigned int) { operator delete(p); }
+};
+}
+namespace eastl {
+template <class T> struct basic_string_s00d1_8df0 {
+    T* mpBegin;
+    T* mpEnd;
+    T* mpCapacity;
+    allocator_s00d1_8df0 mAllocator;
+
+    __forceinline basic_string_s00d1_8df0() { AllocateSelf(); }
+    ~basic_string_s00d1_8df0() { DeallocateSelf(); }
+
+    void AllocateSelf() {
+        mpBegin = (T*)gEmptyString;
+        mpEnd = (T*)gEmptyString;
+        mpCapacity = (T*)gEmptyString + 1;
+    }
+    void DoFree(T* p, unsigned int n) {
+        if (p)
+            mAllocator.deallocate(p, n * sizeof(T));
+    }
+    void DeallocateSelf() {
+        if ((mpCapacity - mpBegin) > 1)
+            DoFree(mpBegin, (unsigned int)(mpCapacity - mpBegin));
+    }
+    const T* c_str() const { return mpBegin; }
+    int size() const { return (int)(mpEnd - mpBegin); }
+
+    void sprintf(const T* fmt, ...);                        // 0x00472fe0 (char) / 0x0041e050 (wchar_t)
+    void append_sprintf(const T* fmt, ...);                 // 0x005f9450 (char)
+    void append(const T* pBegin, const T* pEnd);            // 0x00455d60 (char)
+};
+}
+namespace eastl {
+typedef basic_string_s00d1_8df0<wchar_t> string16_s00d1_8df0;
+}
+namespace eastl {
+typedef basic_string_s00d1_8df0<char> string8_s00d1_8df0;
+}
+#define PVCAT2(a, b) a##b
+#define PVCAT(a, b) PVCAT2(a, b)
+#define PV virtual void PVCAT(pv_, __COUNTER__)();
+#define PV2 PV PV
+#define PV4 PV2 PV2
+#define PV8 PV4 PV4
+#define PV16 PV8 PV8
+struct Vec3c {                       // Vector3 with a user copy ctor (movss member copies)
+    float x, y, z;
+    Vec3c() {}
+    Vec3c(const Vec3c& o) : x(o.x), y(o.y), z(o.z) {}
+};
+inline Vec3c Scale(const Vec3c& v, const float& s)
+{
+    Vec3c r;
+    r.x = v.x * s;
+    r.y = v.y * s;
+    r.z = v.z * s;
+    return r;
+}
+inline Vec3c& operator-=(Vec3c& a, const Vec3c& b)
+{
+    a.x -= b.x;
+    a.y -= b.y;
+    a.z -= b.z;
+    return a;
+}
+struct ResKey { uint32_t instance, type, group; };
+struct IWriter {
+    PV8 PV4 PV2                                              // +0x00..+0x34
+    virtual void Write(const void* pData, uint32_t size);    // +0x38
+};
+struct IRefCounted {
+    PV
+    virtual void AddRef();                                    // +0x04
+    virtual void Release();                                   // +0x08
+};
+struct IFileStream : IRefCounted {
+    PV2 PV                                                    // +0x0c..+0x14
+    virtual IWriter* GetWriter();                             // +0x18
+    PV2
+    virtual void Close();                                     // +0x24
+};
+struct IRecordDB {
+    PV8 PV4 PV
+    virtual bool OpenRecord(ResKey* key, IFileStream** pStream, int mode, int access, int create,
+                            int flags);                       // +0x34
+};
+struct IResourceManager_s00d1_8df0 {
+    PV16 PV8 PV4 PV2                                          // +0x00..+0x74
+    virtual void GetKey(ResKey* pKey, const wchar_t* pPath, uint32_t typeID, uint32_t groupID);  // +0x78
+};
+IResourceManager_s00d1_8df0* GetManager_s00d1_8df0();                               // 0x0067dcd0
+IRecordDB* FindRecordDB(ResKey* key);                         // 0x00685d40 (cdecl)
+struct IMarkerPart {                                          // sub-object at marker +0x34
+    PV8 PV2 PV
+    virtual const Vec3* GetPosition();                        // +0x2c
+    PV4 PV4
+    virtual bool IsPlaced();                                  // +0x50
+};
+struct cGameplayMarkerCmd {                                   // object returned by Cast(0x36be278)
+    uint32_t pad00[13];
+    IMarkerPart part;                                         // +0x34
+    uint32_t pad38[(0x108 - 0x38) / 4];
+    uint32_t ids[4];                                          // +0x108
+    uint32_t mCount;                                          // +0x118
+    int mValues[32];                                          // +0x11c
+};
+struct ISelectable {
+    PV16 PV16 PV8 PV4 PV2                                     // +0x00..+0xb4
+    virtual cGameplayMarkerCmd* Cast(uint32_t typeID);        // +0xb8
+};
+struct SelectionList {
+    ISelectable** mpBegin;                                    // +0x00
+    ISelectable** mpEnd;                                      // +0x04
+};
+struct cEditSelection {
+    char pad[0x40];
+    SelectionList mSelected;                                  // +0x40
+};
+cEditSelection* GetEditSelection_s00d1_8df0();                           // 0x00d1bf00
+struct cPlanetModel_s00d1_8df0 {
+    Vec3c* GetNormalAt(Vec3c* pOut, const Vec3c* pPos);          // 0x00b7e3b0 (thiscall, ret 8)
+};
+cPlanetModel_s00d1_8df0* PlanetModel_s00d1_8df0();                                  // 0x00b3d350
+struct cCameraCtl_s00d1_8df0 {
+    void GetDirection(Vec3c* pOut);                            // 0x00b13a10 (thiscall, ret 4)
+};
+cCameraCtl_s00d1_8df0* GetCameraCtl_s00d1_8df0();                                   // 0x00b3d280
+bool __cdecl GetGameplayMarkerTypes(uint32_t id, uint32_t* pTypes);   // 0x00d16620
+extern Vec3c gZeroVec3;                                        // 0x0169dc28
+template <class T> struct AutoRefCount_s00d1_8df0 {
+    T* mpObject;
+    AutoRefCount_s00d1_8df0() : mpObject(0) {}
+    ~AutoRefCount_s00d1_8df0() { if (mpObject) mpObject->Release(); }
+    T** operator&() { return &mpObject; }
+    T* operator->() const { return mpObject; }
+};
+namespace SP {
+class cGameEditInputStrategy_s00d1_8df0 { public:
+    void DoSaveSelectedFile(eastl::string16_s00d1_8df0* pName);          // 0x00d18df0
+};
+}
+// ---- items of slice s00d18df0 end
+
+// ---- items of slice s00d197a0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern uint32_t gIgnoreParam;           // 0x0158265c
+extern uint32_t gMarkerVisibilityMode;  // 0x0169dc1c
+extern uint8_t gEditorFlag20;           // 0x0169dc20
+extern uint8_t gEditorFlag21;           // 0x0169dc21
+#define VS1(n) virtual void n();
+#define VS4(n) VS1(n##0) VS1(n##1) VS1(n##2) VS1(n##3)
+#define VS16(n) VS4(n##a) VS4(n##b) VS4(n##c) VS4(n##d)
+struct string16_s00d1_97a0 {
+    wchar_t* mpBegin;
+    wchar_t* mpEnd;
+    wchar_t* mpCapacity;
+    uint32_t mAllocator;
+    string16_s00d1_97a0()
+    {
+        mpBegin = (wchar_t*)eastl::gEmptyString;
+        mpEnd = (wchar_t*)eastl::gEmptyString;
+        mpCapacity = (wchar_t*)eastl::gEmptyString + 1;
+    }
+    ~string16_s00d1_97a0() { DeallocateSelf(); }
+    void DeallocateSelf();   // 0x00933960
+};
+class IWindow {
+public:
+    virtual void s00();
+    virtual void s04();
+    virtual void s08();
+    virtual void s0c();
+    virtual void s10();
+    virtual void s14();
+    virtual void s18();
+    virtual void s1c();
+    virtual void s20();
+    virtual void s24();
+    virtual int GetValue();  // +0x28
+    virtual void s2c();
+    virtual void s30();
+    virtual uint32_t GetText(int index);  // +0x34
+    virtual void s38();
+    virtual void s3c();
+    virtual int GetSelection();  // +0x40
+    virtual void s44();
+    virtual void s48();
+    virtual void s4c();
+    virtual void s50();
+    virtual void s54();
+    virtual void s58();
+    virtual void s5c();
+    virtual void SetText(const void* p, int v);  // +0x60
+    virtual void SetArea(float x, float y);  // +0x64
+    virtual void s68();
+    virtual void s6c();
+    virtual void s70();
+    virtual void s74();
+    virtual void s78();
+    virtual void SetFlag(int flag, int value);  // +0x7c
+};
+class IGrid {
+public:
+    virtual void s00();
+    virtual void s04();
+    virtual void s08();
+    virtual void s0c();
+    virtual void s10();
+    virtual void s14();
+    virtual void s18();
+    virtual void s1c();
+    virtual void s20();
+    virtual void s24();
+    virtual void s28();
+    virtual void s2c();
+    virtual void s30();
+    virtual void s34();
+    virtual void s38();
+    virtual void s3c();
+    virtual void s40();
+    virtual void s44();
+    virtual void s48();
+    virtual void s4c();
+    virtual void s50();
+    virtual void s54();
+    virtual void s58();
+    virtual void s5c();
+    virtual void s60();
+    virtual void s64();
+    virtual void s68();
+    virtual void s6c();
+    virtual void s70();
+    virtual void s74();
+    virtual void s78();
+    virtual void s7c();
+    virtual void s80();
+    virtual void s84();
+    virtual void s88();
+    virtual void s8c();
+    virtual void s90();
+    virtual void s94();
+    virtual void s98();
+    virtual void s9c();
+    virtual void sa0();
+    virtual bool GetSelected(void** ppItem, int* pIndex);  // +0xa4
+    virtual void sa8();
+    virtual void sac();
+    virtual void sb0();
+    virtual void sb4();
+    virtual void sb8();
+    virtual void sbc();
+    virtual void sc0();
+    virtual void sc4();
+    virtual void sc8();
+    virtual void scc();
+    virtual void sd0();
+    virtual void sd4();
+    virtual void sd8();
+    virtual void sdc();
+    virtual void se0();
+    virtual void se4();
+    virtual void se8();
+    virtual void sec();
+    virtual void sf0();
+    virtual void sf4();
+    virtual void sf8();
+    virtual void sfc();
+    virtual void s100();
+    virtual void s104();
+    virtual void s108();
+    virtual void s10c();
+    virtual void s110();
+    virtual void s114();
+    virtual void s118();
+    virtual void s11c();
+    virtual void s120();
+    virtual void s124();
+    virtual void s128();
+    virtual void s12c();
+    virtual void s130();
+    virtual void s134();
+    virtual void s138();
+    virtual void s13c();
+    virtual void s140();
+    virtual void s144();
+    virtual void s148();
+    virtual void s14c();
+    virtual void s150();
+    virtual void s154();
+    virtual void s158();
+    virtual void s15c();
+    virtual void s160();
+    virtual void s164();
+    virtual void s168();
+    virtual void s16c();
+    virtual void s170();
+    virtual void s174();
+    virtual void s178();
+    virtual void s17c();
+    virtual void s180();
+    virtual void s184();
+    virtual void s188();
+    virtual void s18c();
+    virtual void s190();
+    virtual void s194();
+    virtual void s198();
+    virtual void s19c();
+    virtual void GetItemText(int a, int index, wchar_t** ppText);  // +0x1a0
+    virtual void s1a4();
+    virtual void s1a8();
+    virtual void s1ac();
+    virtual void s1b0();
+    virtual void s1b4();
+    virtual void s1b8();
+    virtual void s1bc();
+    virtual void s1c0();
+    virtual int GetItemKey(int a, int index);  // +0x1c4
+};
+class IGameInput {
+public:
+    virtual void s00();
+    virtual void s04();
+    virtual void s08();
+    virtual void s0c();
+    virtual void s10();
+    virtual void s14();
+    virtual void s18();
+    virtual void s1c();
+    virtual void s20();
+    virtual void s24();
+    virtual void s28();
+    virtual void s2c();
+    virtual void s30();
+    virtual void s34();
+    virtual void s38();
+    virtual void s3c();
+    virtual void s40();
+    virtual void s44();
+    virtual void s48();
+    virtual void s4c();
+    virtual void s50();
+    virtual void s54();
+    virtual void s58();
+    virtual void s5c();
+    virtual void s60();
+    virtual void SetCursorMode(uint32_t id, bool b);  // +0x64
+};
+class IMessageServer {
+public:
+    virtual void s00();
+    virtual void s04();
+    virtual void s08();
+    virtual void s0c();
+    virtual void s10();
+    virtual void s14();
+    virtual void Post(uint32_t id, void* pMsg, int a, int b);  // +0x18
+};
+class IPlanetTerrain {
+public:
+    virtual void s00();
+    virtual void s04();
+    virtual void s08();
+    virtual void s0c();
+    virtual void s10();
+    virtual void s14();
+    virtual void s18();
+    virtual void s1c();
+    virtual void s20();
+    virtual void s24();
+    virtual void s28();
+    virtual void s2c();
+    virtual void s30();
+    virtual void s34();
+    virtual void s38();
+    virtual void s3c();
+    virtual void s40();
+    virtual void s44();
+    virtual void s48();
+    virtual void s4c();
+    virtual void s50();
+    virtual void s54();
+    virtual void s58();
+    virtual void s5c();
+    virtual void s60();
+    virtual void s64();
+    virtual void s68();
+    virtual void s6c();
+    virtual void s70();
+    virtual void s74();
+    virtual void s78();
+    virtual void s7c();
+    virtual void s80();
+    virtual void s84();
+    virtual void s88();
+    virtual void SetSomething(uint32_t v);  // +0x8c
+};
+struct SourceRef {
+    IWindow* mp;
+    SourceRef(IWindow* p);                         // 0x00572660
+    SourceRef(const SourceRef& o) : mp(o.mp) {}
+};
+struct PlanetKey { uint32_t a, b, c; };
+class MessageBasicRC5 {
+public:
+    virtual void s00();
+    virtual int AddRef();
+    virtual int Release();
+    uint32_t pad04[(0x8 - 0x4) / 4];
+    int mValue;                       // +0x08
+    uint32_t pad0c;
+    int mFlag;                        // +0x10
+    uint32_t pad14[(0x30 - 0x14) / 4];
+    uint32_t mMessageID;              // +0x30
+    uint32_t pad34[3];
+    explicit MessageBasicRC5(int a);  // 0x00421c80
+};
+void* operator new(unsigned int n, const char* name, int a, int b, int c, int d);   // 0x00f473a0
+class cCommandGameplayMarker_s00d1_97a0 {
+public:
+    uint32_t pad00[0x108 / 4];
+    uint32_t mMarkerType;             // +0x108
+    uint32_t pad10c[(0x124 - 0x10c) / 4];
+    uint32_t mShape;                  // +0x124
+    uint32_t pad128[(0x19c - 0x128) / 4];
+    void* mpFirst;                    // +0x19c
+};
+class IReleasable {
+public:
+    VS16(a) VS16(b) VS16(c)
+    virtual void ReleaseRef();        // +0xc0
+};
+struct SelectedRef {
+    IReleasable* mpObject;
+};
+class cNounManager_s00d1_97a0 {
+public:
+    void FUN_00b25fe0();                              // 0x00b25fe0
+    void RemoveNoun(void* pNoun);                     // 0x00b225d0
+    void RemoveNounsOfType(uint32_t typeID);          // 0x00b22650
+};
+class cPlanetModel_s00d1_97a0 {
+public:
+    uint32_t pad00[0x24 / 4];
+    class IPlanetTerrain* mpTerrain;                  // +0x24
+    void FUN_00b8c0f0();                              // 0x00b8c0f0
+    void FUN_00b8d8a0(const PlanetKey* pKey, int a, int b);   // 0x00b8d8a0 (ret 0xc)
+};
+class cEditMode {
+public:
+    void MarkDirty();                                 // 0x00d1bf10
+};
+cNounManager_s00d1_97a0* NounManager_s00d1_97a0();                          // 0x00b3d300
+cPlanetModel_s00d1_97a0* PlanetModel_s00d1_97a0();                          // 0x00b3d350
+IGameInput* GameInputManager();                       // 0x00b3d250
+IMessageServer* MessageServer_s00d1_97a0();                      // 0x0067dcc0
+cEditMode* GetEditMode();                             // 0x00d1bf00
+uint32_t HashName(const wchar_t* pName);              // 0x00572c50
+uint32_t GetPlanetThing();                            // 0x0067dd50
+void PrepareDialog();                                 // 0x00b908c0
+int GetCurrentGameModeAlt();                          // 0x00b5b820
+void EnterGameMode(int mode);                         // 0x00ba1c60
+void LoadScenario(cCommandGameplayMarker_s00d1_97a0* p, uint32_t classId, uint32_t x);   // 0x00b931c0
+void SaveScenario(const wchar_t* pName);              // 0x00d1cb00
+void InterfaceCast(uint32_t id, int b);               // 0x00d1c610
+uint32_t GetGameplayMarkerClassId(uint32_t type);     // 0x00d15b30
+struct UIMessage {
+    IWindow* mpSource;                  // +0x00
+    uint32_t pad04;
+    uint32_t mType;                     // +0x08
+    uint32_t mParam;                    // +0x0c
+};
+class cInputStrategyBase {
+public:
+    virtual void v00();
+    uint32_t pad04[(0x3c - 4) / 4];
+};
+class IHandlerRC4 {
+public:
+    virtual void h00();
+};
+class IWinProc_s00d1_97a0 {
+public:
+    virtual void w00();
+    virtual bool HandleUIMessage(IWindow* pWindow, const UIMessage& msg);
+};
+class RefCountV {
+public:
+    virtual void r00();
+    int mRefCount;
+};
+class cGameEditInputStrategy_s00d1_97a0 : public cInputStrategyBase, public IHandlerRC4, public IWinProc_s00d1_97a0, public RefCountV {
+public:
+    SelectedRef mpSelectedObject;                 // +0x4c
+    uint32_t pad50;
+    void* mpSelectedObjectManipulator;            // +0x54
+    uint32_t pad58[(0x78 - 0x58) / 4];
+    IWindow* mLevelNameTextEdit;                  // +0x78
+    uint32_t pad7c;
+    IWindow* mLoadDialogWindow;                   // +0x80
+    IWindow* mLoadPlanetDialogWindow;             // +0x84
+    IGrid* mGridFileList;                         // +0x88
+    IGrid* mPlanetGridFileList;                   // +0x8c
+    PlanetKey* mPlanetKeysBegin;                  // +0x90
+    uint32_t pad94[(0xa4 - 0x94) / 4];
+    IWindow* mGameplayMarkerRoot;                 // +0xa4
+    IWindow* mGameplayMarkerArea;                 // +0xa8
+    IWindow* mGameplayMarkerScrollbar;            // +0xac
+    IWindow* mVisibilityCombo;                    // +0xb0
+    IWindow* mRuleOptionsList;                    // +0xb4
+    uint32_t padb8;
+    IWindow* mTemplateOptionsList;                // +0xbc
+
+    virtual bool HandleUIMessage(IWindow* pWindow, const UIMessage& msg);
+
+    void SetButtonHighlight(SourceRef arg);                           // 0x00d18860
+    uint32_t GetGameplayMarkerTypeFromUI();                           // 0x00d15fb0
+    uint32_t FUN_00d16820();                                          // 0x00d16820
+    void CommitChangesToGameplayMarker(cCommandGameplayMarker_s00d1_97a0* p, bool b);   // 0x00d172d0
+    void PopulateLoadDialogGridWithLevels();                          // 0x00d16960
+    void PopulateLoadPlanetDialogGrid();                              // 0x00d194c0
+    bool GetSaveFileName(string16_s00d1_97a0* pName, int a);                     // 0x00d18b40
+    void DoSaveSelectedFile(string16_s00d1_97a0* pName);                         // 0x00d18df0
+    void SetPlanet(const PlanetKey* pKey);                            // 0x00d16b90
+    void FUN_00d15a10(int v);                                         // 0x00d15a10
+    void FUN_00d15600();                                              // 0x00d15600
+    static cCommandGameplayMarker_s00d1_97a0* RotateObject(SelectedRef* pSelected);   // 0x00d15330
+
+    void ShowOptionWindows(int templateValue, int ruleValue)
+    {
+        IWindow* w = mGameplayMarkerRoot;
+        if (w)
+            w->SetFlag(1, 0);
+        w = mTemplateOptionsList;
+        if (w)
+            w->SetFlag(1, templateValue);
+        w = mRuleOptionsList;
+        if (w)
+            w->SetFlag(1, ruleValue);
+    }
+};
+namespace eastl {
+extern void FreeNode(void* p);                       // 0x00F47380
+}
+namespace eastl {
+class allocator_s00d1_97a0 {
+public:
+    void deallocate(void* p, unsigned int) { FreeNode(p); }
+};
+}
+namespace eastl {
+template <class T> struct basic_string_s00d1_97a0 {
+    T* mpBegin;                                      // +0x00
+    T* mpEnd;                                        // +0x04
+    T* mpCapacity;                                   // +0x08
+    allocator_s00d1_97a0 mAllocator;                            // +0x0c
+    ~basic_string_s00d1_97a0() { DeallocateSelf(); }
+    void DeallocateSelf() {
+        if ((mpCapacity - mpBegin) > 1)
+            DoFree(mpBegin, (unsigned int)(mpCapacity - mpBegin));
+    }
+    void DoFree(T* p, unsigned int n) {
+        if (p)
+            mAllocator.deallocate(p, n * sizeof(T));
+    }
+};
+}
+namespace eastl {
+typedef basic_string_s00d1_97a0<wchar_t> string16_s00d1_97a0;
+}
+// ---- items of slice s00d197a0 end
+
+// ---- items of slice s00d1afe0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+struct Vector3_s00d1_afe0 {
+    float x, y, z;
+    Vector3_s00d1_afe0() {}
+    Vector3_s00d1_afe0(const Vector3_s00d1_afe0& v) : x(v.x), y(v.y), z(v.z) {}
+};
+bool operator!=(const Vector3_s00d1_afe0& a, const Vector3_s00d1_afe0& b); // 0x0041dd30 (out of line)
+class IObject {
+public:
+    virtual int AddRef();               // +0x00
+    virtual int Release();              // +0x04
+    virtual void v08();
+    virtual void* Cast(uint32_t typeID); // +0x0c
+};
+class IWindow_s00d1_afe0 {
+public:
+    VS4(a)
+    VS4(b)
+    VS1(c0)
+    virtual void SetValue(int value, bool b); // +0x24
+    virtual uint32_t GetFlags();               // +0x28
+    VS1(c3)
+    VS1(d0)
+    virtual uint32_t GetText(int index);       // +0x34
+    VS1(d2)
+    VS1(d3)
+    virtual int GetSelection();                // +0x40
+    VS4(e)
+    VS4(f)
+    virtual void SetArea(float x, float y);    // +0x64
+    VS1(g2)
+    VS1(g3)
+    VS1(h0)
+    VS1(h1)
+    VS1(h2)
+    virtual void SetFlag(int flag, int value); // +0x7c
+};
+class cSPUILayout_s00d1_afe0 {
+public:
+    uint8_t mData[0x18];
+    void Construct();                                          // 0x00810000
+    void Destroy();                                            // 0x00811fe0
+    IObject* FindWindowByID(uint32_t controlID, bool recursive); // 0x008105b0
+};
+class cSpatialPart {
+public:
+    VS4(a)
+    VS4(b)
+    VS4(c)
+    VS1(d0)
+    VS1(d1)
+    virtual void SetPosition(const Vector3_s00d1_afe0* pPos);       // +0x38
+    virtual void SetOrientation(const Quaternion* pQuat); // +0x3c
+};
+class cCommandGameplayMarker_s00d1_afe0;
+class MarkerRef {
+public:
+    cCommandGameplayMarker_s00d1_afe0* mpObject;
+    MarkerRef& operator=(cCommandGameplayMarker_s00d1_afe0* p); // 0x00b5f950
+    void Assign(MarkerRef* other);                   // 0x00ac9480
+};
+class cCommandGameplayMarker_s00d1_afe0 {
+public:
+    uint32_t pad00[0x34 / 4];
+    cSpatialPart mSpatial;            // +0x34
+    uint32_t pad38[(0x108 - 0x38) / 4];
+    uint32_t mMarkerType;             // +0x108
+    uint32_t mField10c;               // +0x10c
+    uint32_t mField110;               // +0x110
+    uint32_t mMarkerID;               // +0x114
+    uint32_t pad118;
+    int mGroupIndex;                  // +0x11c
+    float mScale;                     // +0x120
+    uint32_t mShape;                  // +0x124
+    uint32_t pad128[(0x19c - 0x128) / 4];
+    MarkerRef mFirst;                 // +0x19c
+    MarkerRef mPrev;                  // +0x1a0
+
+    void AddChild(cCommandGameplayMarker_s00d1_afe0* pChild); // 0x00c3eac0
+};
+struct HighlightArg {
+    int mValue;
+    HighlightArg(int v) : mValue(v) {}
+    HighlightArg(const HighlightArg& o) : mValue(o.mValue) {}
+};
+class SelectedRef_s00d1_afe0 {
+public:
+    void* mpObject;
+    void SetSelected(cSpatialPart* p); // 0x00c70110
+};
+class cInputStrategyBase_s00d1_afe0 {
+public:
+    virtual void v00();
+    void SetVtable(void* p) { *reinterpret_cast<void**>(this) = p; }
+    uint32_t mField04;
+    uint32_t mListHead08;
+    uint32_t mListTail0c;
+    uint32_t mListCount10;
+    uint32_t mListAlloc14;
+    uint32_t mListAux18;
+    uint32_t mField1c;
+    uint32_t mField20;
+    IObject* mpEditorMode24;
+    IObject* mpEditorAux28;
+    uint32_t mField2c;
+    uint32_t mField30;
+    uint32_t mField34;
+    uint32_t mField38;
+};
+class IMessageHandler {
+public:
+    virtual void h00();
+    virtual void h04();
+    virtual void h08();
+    virtual bool HandleMessage(uint32_t messageID, void* pMessage);
+    void SetVtable(void* p) { *reinterpret_cast<void**>(this) = p; }
+};
+struct cEditSubobject58 {
+    uint8_t mData[0x20];
+    void Construct();                         // 0x00b63890
+    void Destroy();                           // 0x00b638b0
+};
+void DestroyTransitionHandle(uint32_t handle, uint32_t a, uint32_t b,
+                             uint32_t c, uint32_t d);       // 0x00571db0
+class cGameEditInputStrategy_s00d1_afe0 : public cInputStrategyBase_s00d1_afe0, public IMessageHandler {
+public:
+    void* mpVtable40;                      // +0x40
+    void* mpVtable44;                      // +0x44
+    uint32_t mField48;                     // +0x48
+    SelectedRef_s00d1_afe0 mpSelectedObject;          // +0x4c
+    IObject* mpField50;                    // +0x50
+    uint32_t mField54;                     // +0x54
+    cEditSubobject58 mSubobject58;         // +0x58
+    IObject* mpField78;                    // +0x78
+    IObject* mpField7c;                    // +0x7c
+    IObject* mpField80;                    // +0x80
+    IObject* mpField84;                    // +0x84
+    IObject* mpField88;                    // +0x88
+    IObject* mpField8c;                    // +0x8c
+    IObject* mpField90;                    // +0x90
+    IObject* mpField94;                    // +0x94
+    IObject* mpField98;                    // +0x98
+    uint32_t mField9c;                     // +0x9c
+    uint32_t mFieldA0;                     // +0xa0
+    IWindow_s00d1_afe0* mGameplayMarkerRoot;          // +0xa4
+    IWindow_s00d1_afe0* mGameplayMarkerArea;          // +0xa8
+    IWindow_s00d1_afe0* mGameplayMarkerScrollbar;     // +0xac
+    uint32_t padb0;
+    IWindow_s00d1_afe0* mRuleOptionsList;             // +0xb4
+    IWindow_s00d1_afe0* mTemplateOptions;             // +0xb8
+    IWindow_s00d1_afe0* mTemplateOptionsList;         // +0xbc
+    IWindow_s00d1_afe0* mPlanetNameEdit;              // +0xc0
+    uint32_t mFieldC4;                     // +0xc4
+    uint32_t mFieldC8;                     // +0xc8
+    uint32_t mFieldCC;                     // +0xcc
+    uint32_t mFieldD0;                     // +0xd0
+    uint32_t mFieldD4;                     // +0xd4
+    uint32_t mFieldD8;                     // +0xd8
+    uint32_t mFieldDC;                     // +0xdc
+    cSPUILayout_s00d1_afe0 mLayout;                   // +0xe0
+    uint32_t mTransitionHandle;            // +0x104
+    uint32_t mTransition108;               // +0x108
+    uint32_t mTransition10c;               // +0x10c
+    uint32_t mTransition110;               // +0x110
+    uint32_t mTransition114;               // +0x114
+
+    bool HandleMessage(uint32_t messageID, void* pMessage);  // 0x00d1afe0 (cGameEditInputStrategy::HandleMessage)
+
+    void HotloadLevelEditorProp();                                                      // 0x00d160c0
+    void CommitChangesToGameplayMarker(IObject* pMarker, bool b);                       // 0x00d172d0
+    void ShowGameplayMarkerProperties(IObject* pMarker, bool bReadOnly, bool bDefaults); // 0x00d1a2b0
+    void StartSelection(void* pObject, int value, Vector3_s00d1_afe0* pPos);                       // 0x00d15ab0
+    void SelectionDrag(void* pObject, int value, Vector3_s00d1_afe0* pPos);                        // 0x00d15af0
+    void SelectionEnd(void* pObject, int value, Vector3_s00d1_afe0* pPos);                         // 0x00d15280
+    void DoObjectManipulation(uint32_t messageID, void* pMessage);                      // 0x00d178a0
+    void HandleRotateMessage(uint32_t messageID, void* pMessage);                       // 0x00d15980
+    void DeleteSelected();                                                              // 0x00d164d0
+    void SaveLevel(Vector3_s00d1_afe0* pPos, uint32_t name);                                       // 0x00d15160
+    void LoadLevel(bool b);                                                             // 0x00d15c00
+    void Copy();                                                                        // 0x00d19460
+    void SetButtonHighlight(HighlightArg arg);                                          // 0x00d18860
+    cGameEditInputStrategy_s00d1_afe0* ConstructFields();                                          // 0x00d1bb60
+    void DestroyFields();                                                               // 0x00d1bcc0
+    void MarkEditorActive();                                                            // 0x00d1bf10
+    bool ActivateEditor();                                                              // 0x00d1bf20
+
+    static cCommandGameplayMarker_s00d1_afe0* RotateObject(SelectedRef_s00d1_afe0* pSelected);                // 0x00d15330
+};
+// ---- items of slice s00d1afe0 end
+
 // @ 0x00cd1750
 void* Simulator::cScenarioEditModeInputStrategy::Destroy(uint8_t flags)
 {
@@ -945,6 +2256,72 @@ void __stdcall FUN_00d15100(int32_t nA, int32_t nB)
     }
 }
 
+// @ 0x00d15160
+void __stdcall FUN_00d15160(const cVec3* pAlpha, int32_t nUnused)
+{
+    (void)nUnused;
+    cCameraCtl* pCamera = GetCameraCtl();
+    if (!pCamera)
+        return;
+
+    cVec3 vForward;
+    pCamera->GetForward(&vForward);
+    if (!SP_ResourceManager())
+        return;
+
+    int32_t nHandle = 0;
+    struct StreamRequest {
+        const cVec3* mpSeed;                                // +0x00
+        uint32_t     mGroupID;                              // +0x04
+        uint32_t     mTypeID;                               // +0x08
+    } request;
+    request.mpSeed = pAlpha;
+    request.mGroupID = 0xf2b924b3;
+    request.mTypeID = 0x72b924b5;
+    int32_t nRecord = SP_OpenRecordAsStream(&request, &nHandle);
+
+    if (nRecord != -1) {
+        cParser* pParser = (cParser*)ArgScript_CreateParser();
+        pParser->v008();
+        cCommandGameplayMarkerTemplate* pTemplate =
+            (cCommandGameplayMarkerTemplate*)operator_new(0x16c, "App/cCommandGameplayMarkerTemplate",
+                                                         0, 0, 0, 0);
+        if (pTemplate)
+            pTemplate->Init(pAlpha, &vForward);
+        else
+            pTemplate = 0;
+        pParser->v014((void*)kTemplateName, pTemplate);
+        cParser* pCheat = (cParser*)SP_CheatManager();
+        cParser* pWindow = (cParser*)pCheat->v038();
+        pParser->v0bc((const wchar_t*)pWindow->v0c4());
+        pParser->v03c(&nHandle);
+        SP_EraseEntry(nRecord);
+    }
+
+    FUN_00b99530(1, 0, 0);
+    FUN_00ba1280();
+}
+
+// @ 0x00d15280
+bool __stdcall FUN_00d15280(int32_t nA, int32_t nFlags, int32_t nC)
+{
+    (void)nA;
+    (void)nC;
+    ((cTerrainCursor*)SP_GetGameTerrainCursor_s00d1_4460())->t0b8(0);
+    ((cTerrainCursor*)SP_GetGameTerrainCursor_s00d1_4460())->t0a4();
+    ((cTerrainCursor*)SP_GetGameTerrainCursor_s00d1_4460())->t0ac(1.0f);
+    ((cTerrainCursor*)SP_GetGameTerrainCursor_s00d1_4460())->t0b0(1.0f);
+
+    cCurMgr* pManager = (cCurMgr*)FUN_0067cab0();
+    pManager->FindLocal(0x1002);
+
+    if (nFlags & 1)
+        ((cTerrainCursor*)SP_GetGameTerrainCursor_s00d1_4460())->t064();
+    ((cTerrainCursor*)SP_GetGameTerrainCursor_s00d1_4460())->t074();
+    int32_t nZero = 0;
+    return ((cTerrainCursor*)SP_GetGameTerrainCursor_s00d1_4460())->t070() == nZero;
+}
+
 // @ 0x00d15350
 void FUN_00d15350(cNoun* pNoun, int32_t nIndex, int32_t nType, const wchar_t* pValue)
 {
@@ -967,11 +2344,234 @@ void FUN_00d15350(cNoun* pNoun, int32_t nIndex, int32_t nType, const wchar_t* pV
     }
 }
 
+// @ 0x00d15440
+void SP::cGameEditInputStrategy_s00d1_5440::FUN_00d15440(Vec3* pTarget)
+{
+    void* o = ((Fn_p_p)VTSLOT(mpNoun, 0x58))(mpNoun);
+    if (o == 0)
+        return;
+
+    void* o2 = ((Fn_p_p)VTSLOT(mpNoun, 0x58))(mpNoun);
+    Vec3* p = ((Obj*)o2)->m_position();
+    float dx = pTarget->x - p->x;
+    float dy = pTarget->y - p->y;
+    float dz = pTarget->z - p->z;
+    float inv = 1.0f / sqrtf(dx * dx + dy * dy + dz * dz);
+    mVecC4.x = inv * dx;
+    mVecC4.y = inv * dy;
+    mVecC4.z = inv * dz;
+
+    void* o3 = ((Fn_p_p)VTSLOT(mpNoun, 0x58))(mpNoun);
+    float* q = (float*)((Obj*)o3)->m_slot30();
+    mQuatD0[0] = q[0];
+    mQuatD0[1] = q[1];
+    mQuatD0[2] = q[2];
+    mQuatD0[3] = q[3];
+}
+
+// @ 0x00d15550
+void SP::cGameEditInputStrategy_s00d1_5440::FUN_00d15550()
+{
+    Obj* w = mLayout.FindWindowByID(0x30170d2c, 1);
+    if (w != 0) {
+        ((Fn_v_p)VTSLOT(w, 0))(w);
+        void* pSub = (this != 0) ? (void*)&mSub40 : (void*)0;
+        ((Fn_v_pp)VTSLOT(w, 0x108))(w, pSub);
+    }
+
+    if (mpNoun != 0) {
+        cGameNounManager_s00d1_5440* m = SP_NounManager(mpNoun);
+        m->RemoveNoun((Obj*)mpNoun);
+        mpNoun = 0;
+    }
+
+    mLayout.SetVisibility(0);
+
+    if (mpHandler != 0) {
+        void* h = mpHandler;
+        mpHandler = 0;
+        EA_Messaging_RemoveHandler(h, mHandlerArgs[0], mHandlerArgs[1],
+                                   mHandlerArgs[2], mHandlerArgs[3]);
+    }
+
+    if (w != 0)
+        ((Fn_v_p)VTSLOT(w, 4))(w);
+}
+
 // @ 0x00d15600
 void SP::cGameEditInputStrategy_s00d1_5440::FUN_00d15600()
 {
     ((Fn_v_pii)VTSLOT(mpFieldA4, 0x7c))(mpFieldA4, 1, 0);
     ((Fn_v_p)VTSLOT(mpFieldA8, 0xe4))(mpFieldA8);
+}
+
+// @ 0x00d15630
+void SP::cGameEditInputStrategy_s00d1_5440::FUN_00d15630(void* a1, float* pX, float* pY)
+{
+    Obj* label = WinText_CreateDefault(-1, 0xacbf4564);
+    if (label != 0)
+        ((Fn_v_p)VTSLOT(label, 0))(label);
+
+    float area[4];
+    area[0] = 0.0f;
+    area[1] = 0.0f;
+    area[2] = DAT_014763b8;
+    area[3] = DAT_013ebc4c;
+
+    Obj* c;
+    c = ((Fn_p_p)VTSLOT(label, 0x10))(label); ((Fn_v_pi)VTSLOT(c, 0x84))(c, 1);
+    c = ((Fn_p_p)VTSLOT(label, 0x10))(label); ((Fn_v_pp)VTSLOT(c, 0x60))(c, area);
+    c = ((Fn_p_p)VTSLOT(label, 0x10))(label); ((Fn_v_pi)VTSLOT(c, 0xac))(c, (int)0xffbac1b3);
+    c = ((Fn_p_p)VTSLOT(label, 0x10))(label); ((Fn_v_pi)VTSLOT(c, 0x5c))(c, -1);
+    c = ((Fn_p_p)VTSLOT(label, 0x10))(label); ((Fn_v_pi)VTSLOT(c, 0x80))(c, (int)a1);
+    c = ((Fn_p_p)VTSLOT(label, 0x10))(label); ((Fn_v_p)VTSLOT(c, 0x90))(c);
+    ((Fn_v_pi)VTSLOT(label, 0x14))(label, 1);
+    c = ((Fn_p_p)VTSLOT(label, 0x10))(label); ((Fn_v_pff)VTSLOT(c, 0x64))(c, *pX, *pY);
+
+    *pX += DAT_013f08e8;
+
+    void* owner = mpFieldA8;
+    Obj* t = ((Fn_p_p)VTSLOT(label, 0x10))(label);
+    ((Fn_v_pp)VTSLOT(owner, 0xd8))(owner, t);
+
+    ((Fn_v_p)VTSLOT(label, 4))(label);
+}
+
+// @ 0x00d15780
+float SP::cGameEditInputStrategy_s00d1_5440::FUN_00d15780(void* a1, float* pX, float* pY)
+{
+    Obj* comboDrawable = 0;
+    Obj* scrollbar = 0;
+    Obj* combo = 0;
+
+    // Each drawable is allocated through the factory (pool, alignment, class name,
+    // pool handle) and then placement-constructed; a +0xc / +0x20c offset yields the
+    // window sub-object, which is add-ref'd immediately.
+    {
+        Obj* p = (Obj*)FUN_009512d0(0x1c, 4, "UI/ComboBoxDrawable", FUN_009512c0());
+        if (p != 0) {
+            p = ComboBoxDrawable_ctor(p);
+            if (p != 0) {
+                comboDrawable = (Obj*)((char*)p + 0xc);
+                if (comboDrawable != 0)
+                    ((Fn_v_p)VTSLOT(comboDrawable, 0))(comboDrawable);
+            }
+        }
+    }
+    {
+        Obj* p = (Obj*)FUN_009512d0(0x2c, 4, "UI/ScrollbarDrawable", FUN_009512c0());
+        if (p != 0) {
+            p = ScrollbarDrawable_ctor(p);
+            if (p != 0) {
+                scrollbar = (Obj*)((char*)p + 0xc);
+                if (scrollbar != 0)
+                    ((Fn_v_p)VTSLOT(scrollbar, 0))(scrollbar);
+            }
+        }
+    }
+    {
+        Obj* p = (Obj*)FUN_009512d0(0x2b8, 4, "UI/WinComboBox", FUN_009512c0());
+        if (p != 0) {
+            p = WinComboBox_ctor(p);
+            if (p != 0) {
+                combo = (Obj*)((char*)p + 0x20c);
+                if (combo != 0)
+                    ((Fn_v_p)VTSLOT(combo, 0))(combo);
+            }
+        }
+    }
+
+    ((Fn_v_pp)VTSLOT(combo, 0x68))(combo, comboDrawable);
+    ((Fn_v_pp)VTSLOT(combo, 0x60))(combo, scrollbar);
+    ((Fn_v_pi)VTSLOT(combo, 0x18))(combo, 1);
+    ((Fn_v_pi)VTSLOT(combo, 0x50))(combo, 0xf);
+
+    Obj* c;
+    c = ((Fn_p_p)VTSLOT(combo, 0x10))(combo); ((Fn_v_pp)VTSLOT(c, 0x54))(c, a1);
+    c = ((Fn_p_p)VTSLOT(combo, 0x10))(combo); ((Fn_v_pp)VTSLOT(c, 0x50))(c, a1);
+    c = ((Fn_p_p)VTSLOT(combo, 0x10))(combo); ((Fn_v_pii)VTSLOT(c, 0x7c))(c, 1, 1);
+
+    float rect[4];
+    rect[0] = *pX;
+    rect[1] = *pY;
+    rect[2] = *pX + DAT_01486ebc;
+    rect[3] = *pY + DAT_013eecd8;
+
+    c = ((Fn_p_p)VTSLOT(combo, 0x10))(combo); ((Fn_v_pp)VTSLOT(c, 0x60))(c, rect);
+
+    *pX += DAT_01479c0c;
+
+    Obj* t = ((Fn_p_p)VTSLOT(combo, 0x10))(combo);
+    ((Fn_v_pp)VTSLOT(mpFieldA8, 0xd8))(mpFieldA8, t);
+
+    ((Fn_v_p)VTSLOT(combo, 4))(combo);
+    if (scrollbar != 0)
+        ((Fn_v_p)VTSLOT(scrollbar, 4))(scrollbar);
+    if (comboDrawable != 0)
+        ((Fn_v_p)VTSLOT(comboDrawable, 4))(comboDrawable);
+
+    return rect[1];
+}
+
+// @ 0x00d15980
+void SP::cGameEditInputStrategy_s00d1_5440::FUN_00d15980(void* a1, void* pObj)
+{
+    (void)a1;
+
+    Obj* o1 = (Obj*)((Fn_p_p)VTSLOT(pObj, 0x10))(pObj);
+    Obj* o2 = (Obj*)((Fn_p_pi)VTSLOT(o1, 0x1c))(o1, 0);
+
+    Obj* p;
+    if ((*(u32*)((char*)o2 + 0x10) & 0x30) != 0)
+        p = *(Obj**)o2;
+    else if (*(u16*)((char*)o2 + 0x12) == 0)
+        return;
+    else
+        p = o2;
+
+    if (p == 0)
+        return;
+
+    Obj* q = (Obj*)((Fn_p_pi)VTSLOT(p, 0xc))(p, 0x17f243b);
+    if (q != 0) {
+        void* id = ((Fn_p_pi)VTSLOT(q, 0xc))(q, (int)0x01186577);
+        if (id == mpField4C) {
+            Obj* f = (Obj*)mpField4C;
+            if (f != 0) {
+                mpField4C = 0;
+                ((Fn_v_p)VTSLOT(f, 0xc0))(f);
+            }
+        }
+        SP_NounManager(q)->RemoveNoun(q);
+        FUN_00ba1280();
+    }
+}
+
+// @ 0x00d15a10
+void SP::cGameEditInputStrategy_s00d1_5440::FUN_00d15a10(void* p)
+{
+    void* g = DAT_0169dc64;
+    if (g != 0) {
+        Obj* q = (Obj*)((Fn_p_pi)VTSLOT(g, 0xc))(g, (int)0x01186577);
+        if (q != 0)
+            ((Fn_v_pp)VTSLOT(q, 0x94))(q, p);
+    }
+
+    int* it = DAT_0169dc68;
+    int i = 0;
+    if (it != DAT_0169dc6c) {
+        do {
+            ((Fn_v_piii)VTSLOT(mpField88, 0x1c0))(mpField88, 0, i, 0);
+            it += 3;
+            ++i;
+        } while (it != DAT_0169dc6c);
+    }
+
+    void* g2 = DAT_0169dc64;
+    if (g2 != 0) {
+        DAT_0169dc64 = 0;
+        ((Fn_v_p)VTSLOT(g2, 4))(g2);
+    }
 }
 
 // @ 0x00d15ab0
@@ -999,6 +2599,166 @@ u32 SP::cGameEditInputStrategy_s00d1_5440::FUN_00d15af0(void* p, u8 flag, u32 a3
     else
         key = (void*)0;
     ((Fn_v_ppb)VTSLOT(cursor, 0xa0))(cursor, flag & 1, key);
+    return 0;
+}
+
+// @ 0x00d15b30
+u32 __cdecl GetGameplayMarkerClassId(u32 classId)
+{
+    void* prop = 0;
+    Obj* pm = SP_PropertyManager();
+    (void)pm;
+
+    u32 h = EA_Hash_FNV1_String16(DAT_01479b30, 0x811c9dc5, 1);
+
+    if (((Fn_b_pui)VTSLOT(pm, 0x30))(pm, h, &prop)) {
+        Obj* table = (Obj*)((Fn_p_pi)VTSLOT(prop, 0x28))(prop, 0x69623444);
+
+        void* base;
+        u32 count;
+        if ((*(u32*)((char*)table + 0x10) & 0x30) != 0) {
+            base = *(void**)table;
+            count = *(u32*)((char*)table + 0x08);
+        } else {
+            count = (u32)(*(u16*)((char*)table + 0x12) != 0);
+            base = (*(u16*)((char*)table + 0x12) != 0) ? (void*)table : (void*)0;
+        }
+
+        for (u32 i = 0; i < count; i += 2) {
+            void* key = *(void**)((char*)base + i * 4);
+            u32 val = *(u32*)((char*)base + i * 4 + 4);
+            if ((void*)classId == key) {
+                if (prop != 0)
+                    ((Fn_v_p)VTSLOT(prop, 4))(prop);
+                return val;
+            }
+        }
+    }
+
+    if (prop != 0)
+        ((Fn_v_p)VTSLOT(prop, 4))(prop);
+    return 0;
+}
+
+// @ 0x00d15c00
+extern "C" void __cdecl FUN_00d15c00(char bForward)
+{
+    Vec3 avg;
+    avg.x = DAT_0169dc28;
+    avg.y = DAT_0169dc2c;
+    avg.z = DAT_0169dc30;
+    int count = 0;
+
+    void* selRaw = FUN_00d1bf00();
+    void** begin = *(void***)((char*)selRaw + 0x40);
+    void** end = *(void***)((char*)selRaw + 0x44);
+
+    for (void** it = begin; it != end; ++it) {
+        if (*it != 0) {
+            Obj* m = (Obj*)((Fn_p_pi)VTSLOT(*it, 0xb8))(*it, 0x36be278);
+            if (m != 0) {
+                Obj* sub = (Obj*)((char*)m + 0x34);
+                if (((Fn_b_p)VTSLOT(sub, 0x50))(sub)) {
+                    Vec3* p = sub->m_position();
+                    avg.x += p->x;
+                    avg.y += p->y;
+                    avg.z += p->z;
+                    ++count;
+                }
+            }
+        }
+    }
+
+    float inv = 1.0f / (float)count;
+    float spin = bForward ? 1.0f : -1.0f;
+    float s = sinf(spin * DAT_013ec478);
+    float c = cosf(spin * DAT_013ec478);
+
+    Vec3 dir;
+    dir.x = inv * avg.x;
+    dir.y = inv * avg.y;
+    dir.z = inv * avg.z;
+
+    float n = 1.0f / sqrtf(dir.x * dir.x + dir.y * dir.y + dir.z * dir.z + DAT_013ec4b8);
+    float qx = n * dir.x;
+    float qy = n * dir.y;
+    float qz = n * dir.z;
+
+    // rotation components (the original synthesises a quaternion from the spin)
+    float r0 = c;
+    float r1 = s * qx;
+    float r2 = s * qy;
+    float r3 = s * qz;
+
+    for (void** it = begin; it != end; ++it) {
+        if (*it != 0) {
+            Obj* m = (Obj*)((Fn_p_pi)VTSLOT(*it, 0xb8))(*it, 0x36be278);
+            if (m != 0) {
+                Obj* sub = (Obj*)((char*)m + 0x34);
+                if (((Fn_b_p)VTSLOT(sub, 0x50))(sub)) {
+                    Vec3* p = sub->m_position();
+                    Vec3 out;
+                    out.x = (1.0f - (r2 * r2 + r3 * r3) * DAT_01470f1c) * p->x
+                          + (r1 * r2 - r0 * r3) * DAT_01470f1c * p->y
+                          + (r0 * r2 + r1 * r3) * DAT_01470f1c * p->z;
+                    out.y = (r1 * r2 + r0 * r3) * DAT_01470f1c * p->x
+                          + (1.0f - (r1 * r1 + r3 * r3) * DAT_01470f1c) * p->y
+                          + (r2 * r3 - r0 * r1) * DAT_01470f1c * p->z;
+                    out.z = (r1 * r3 - r0 * r2) * DAT_01470f1c * p->x
+                          + (r2 * r3 + r0 * r1) * DAT_01470f1c * p->y
+                          + (1.0f - (r1 * r1 + r2 * r2) * DAT_01470f1c) * p->z;
+
+                    void* surf = SP_cPlanetModel_DirectionToSurfacePosition(
+                        SP_PlanetModel(), &out, &avg);
+                    ((Fn_v_pp)VTSLOT(sub, 0x38))(sub, surf);
+
+                    void* orient = SP_cPlanetModel_BuildSurfaceOrientation(
+                        SP_PlanetModel(), &avg, sub->m_position());
+                    ((Fn_v_pp)VTSLOT(sub, 0x3c))(sub, orient);
+                }
+            }
+        }
+    }
+}
+
+// @ 0x00d15fb0
+u32 SP::cGameEditInputStrategy_s00d1_5440::GetGameplayMarkerTypeFromUI()
+{
+    void* prop = 0;
+    Obj* pm = SP_PropertyManager();
+    (void)pm;
+
+    u32 h = EA_Hash_FNV1_String16(DAT_01479b30, 0x811c9dc5, 1);
+
+    if (((Fn_b_pui)VTSLOT(pm, 0x30))(pm, h, &prop)) {
+        Obj* win = mLayout.FindWindowByID((int)0xabc0fff8, 1);
+        if (win != 0) {
+            Obj* combo = (Obj*)((Fn_p_pi)VTSLOT(win, 0xc))(win, 0x2f5528d9);
+            if (combo != 0) {
+                ((Fn_v_p)VTSLOT(combo, 0))(combo);
+
+                Obj* table = (Obj*)((Fn_p_pi)VTSLOT(prop, 0x28))(prop, 0x185a7a14);
+                u32 idx = (u32)((Fn_p_p)VTSLOT(combo, 0x40))(combo);
+
+                void* base;
+                if ((*(u32*)((char*)table + 0x10) & 0x30) != 0)
+                    base = *(void**)table;
+                else
+                    base = (*(u16*)((char*)table + 0x12) != 0) ? (void*)table : (void*)0;
+
+                const wchar_t* label = *(const wchar_t**)((char*)base + idx * 16);
+                u32 h2 = EA_Hash_FNV1_String16(label, 0x811c9dc5, 1);
+
+                ((Fn_v_p)VTSLOT(combo, 4))(combo);
+                if (prop != 0)
+                    ((Fn_v_p)VTSLOT(prop, 4))(prop);
+                return h2;
+            }
+        }
+    }
+
+    if (prop != 0)
+        ((Fn_v_p)VTSLOT(prop, 4))(prop);
     return 0;
 }
 
@@ -1281,6 +3041,532 @@ void cGameEditInputStrategy_s00d1_6f40::CommitChangesToGameplayMarker(cGameEditM
         selectedText.mpObject->v04();
 }
 
+// @ 0x00d178a0
+void cGameEditInputStrategy_s00d1_78a0::DoObjectManipulation(uint32_t action, cUiObject_s00d1_78a0* message)
+{
+    cPropertyList* list = message->v10();
+    Property_s00d1_78a0* valueProperty = list->v1c(0);
+    cUiObject_s00d1_78a0* values = (cUiObject_s00d1_78a0*)valueProperty->GetValue();
+    cUiObject_s00d1_78a0* targetRef = 0;                      // 0x17f243b
+    cUiObject_s00d1_78a0* sourceRef = 0;                      // 0x1186577
+    if (values != 0) {
+        targetRef = values->v0c(0x17f243b);
+        sourceRef = values->v0c(0x1186577);
+    }
+    uint32_t mode = list->v1c(1)->mValue[0];
+
+    switch (action) {
+    case 0x1271936:
+        mpSelectedObject.Assign(sourceRef);
+        return;
+
+    case 0x1270f6b: {
+        if (mpSelectedObject.mpObject == 0)
+            return;
+
+        Vector3 refPos = FUN_00b3d240()->GetPos(0, g_v169dc28);
+        cUiObject_s00d1_78a0* marker = RotateObject(&mpSelectedObject);
+        if (marker == 0)
+            return;
+
+        cMarkerInfo_s00d1_78a0* markerInfo = (cMarkerInfo_s00d1_78a0*)marker;
+        Vector3* ringPos = (Vector3*)markerInfo->mSub34.v2c();
+        Vector3 delta;
+        delta.x = refPos.x - ringPos->x;
+        delta.y = refPos.y - ringPos->y;
+        delta.z = refPos.z - ringPos->z;
+
+        cPlanetModel* pm = PlanetModel_s00d1_78a0();
+        cGameEditModeStrategy_s00d1_78a0* selection = GetEditSelection();
+        for (cUiObject_s00d1_78a0** it = selection->mSelectedBegin; it != selection->mSelectedEnd; ++it) {
+            cUiObject_s00d1_78a0* noun = *it;
+            if (noun == 0)
+                continue;
+            cMarkerInfo_s00d1_78a0* info = (cMarkerInfo_s00d1_78a0*)noun->vb8(0x36be278);
+            if (info == 0)
+                continue;
+            cSpatial_s00d1_78a0* sub = &info->mSub34;
+            if (!sub->v50())
+                continue;
+
+            Vector3* cur = (Vector3*)sub->v2c();
+            Vector3 target;
+            target.x = cur->x + delta.x;
+            target.y = cur->y + delta.y;
+            target.z = cur->z + delta.z;
+
+            Vector3 placed;
+            Vector3* position = pm->DirectionToSurfacePosition(&placed, &target);
+            sub->v38(position);
+            Quaternion orient;
+            Quaternion* rotation = pm->BuildSurfaceOrientation(&orient, (Vector3*)sub->v2c());
+            sub->v3c(rotation);
+
+            if (mode != 0x29b || info->mpField1a4 == 0)
+                continue;
+
+            cSpatial_s00d1_78a0* handler = (cSpatial_s00d1_78a0*)FUN_00ad7360(&info->mpField1a4);
+            if (handler == 0) {
+                if (info->mpField1a4->v20() != 0x1be418e)
+                    continue;
+                cHerd* herd = (cHerd*)FUN_00ac80d0(info->mpField1a4, 0x1be418e);
+                if (herd == 0)
+                    continue;
+
+                if (herd->mField160 != 0)
+                    g_169dc20 = 1;
+                herd->SetPosition(&placed);
+
+                Vector3 normal;
+                Vector3_Normalize(&normal, &placed);
+                Quaternion spinA;
+                Quaternion spinB;
+                FUN_0059b060(&spinA, &g_v1582668, g_f1582664);
+                FUN_0059b060(&spinB, &g_v1582674, g_f1582664);
+                Quaternion matrix;
+                FUN_007dcb00(&matrix, &spinA, &spinB);
+                Vector3 facing;
+                FUN_0059aed0(&facing, &placed, &matrix);
+                Quaternion frame;
+                pm->BuildSurfaceOrientation2(&frame, &placed, &facing);
+                Vector3 up;
+                FUN_0059aed0(&up, &g_v169dc88, &frame);
+                Vector3 upDir;
+                Vector3_Normalize(&upDir, &up);
+
+                int index = 1;
+                int ring = 1;
+                int step = 6;
+                for (cHerdMember** member = herd->mMembersBegin;
+                     member != herd->mMembersEnd; ++member) {
+                    cHerdMember* creature = *member;
+                    if (step <= index) {
+                        ++ring;
+                        step += 6;
+                        index = 0;
+                    }
+                    float radius = (float)ring * g_f1470f1c;
+                    float angle = ((float)index * g_f169dc94) / (float)step;
+                    Quaternion swing;
+                    FUN_0059b060(&swing, &upDir, angle);
+                    Vector3 offset;
+                    FUN_0059aed0(&offset, &upDir, &swing);
+                    Vector3 spot;
+                    spot.x = offset.x * radius + placed.x;
+                    spot.y = offset.y * radius + placed.y;
+                    spot.z = offset.z * radius + placed.z;
+                    Vector3 home;
+                    creature->mSpatial.v38(pm->DirectionToSurfacePosition(&home, &spot));
+                    Quaternion creatureFrame;
+                    creature->mSpatial.v3c(pm->BuildSurfaceOrientation(
+                        &creatureFrame, (Vector3*)creature->mSpatial.v2c()));
+                    creature->v6c(100);
+                    ++index;
+                }
+            } else {
+                handler->v38(position);
+                Vector3 normal;
+                pm->GetNormalAt(&normal, position);
+                Vector3 tangent;
+                OrthogonalVector(&tangent, &normal);
+                Quaternion rotation2;
+                Quaternion* q = QuaternionFromFacingAndUp(&rotation2, &tangent, &normal);
+                handler->v3c(q);
+            }
+        }
+        return;
+    }
+
+    case 0x127433b: {
+        if (sourceRef == 0)
+            return;
+        mpField50.Assign(sourceRef);
+        if (targetRef->v38() == 0x2ee8eeb)
+            return;
+        if (targetRef->v38() == 0x7292112)
+            return;
+        if (targetRef->v20() != 0x36be27e)
+            return;
+        mHoverTimer.Restart();
+        if (mpSelectedObjectManipulator != 0) {
+            if (mpSelectedObjectManipulator->v58() == sourceRef)
+                return;
+            NounManager_s00d1_78a0()->RemoveNoun(mpSelectedObjectManipulator);
+        }
+        mpSelectedObjectManipulator = NounManager_s00d1_78a0()->CreateRotationRing();
+        mpSelectedObjectManipulator->v54(sourceRef, 0);
+        return;
+    }
+
+    case 0x127e78c: {
+        Vector3 pos = FUN_00b3d240()->GetPos(0, g_v169dc28);
+        FUN_00d16f40(&pos);
+        return;
+    }
+
+    case 0x127ec9d: {
+        Vector3 pos = FUN_00b3d240()->GetPos(0, g_v169dc28);
+        FUN_00d15440(&pos);
+        return;
+    }
+    }
+}
+
+// @ 0x00d18000
+cPropertyListNameSort_s00d1_78a0::cPropertyListNameSort_s00d1_78a0(const cPropertyListNameSort_s00d1_78a0& x)
+: mGroupID(x.mGroupID), mpResMan(x.mpResMan), mNameA(x.mNameA), mNameB(x.mNameB)
+{
+}
+
+// @ 0x00d180c0
+void AdjustHeapHole(uint32_t* first, int topIndex, int len, int holeIndex, uint32_t value, cPropertyListNameSort_s00d1_78a0 compare)
+{
+    int secondChild = 2 * holeIndex + 2;
+    while (secondChild < len) {
+        if (compare(first[secondChild], first[secondChild - 1]))
+            --secondChild;
+        first[holeIndex] = first[secondChild];
+        holeIndex = secondChild;
+        secondChild = 2 * (secondChild + 1);
+    }
+    if (secondChild == len) {
+        first[holeIndex] = first[secondChild - 1];
+        holeIndex = secondChild - 1;
+    }
+    SiftUp(first, topIndex, holeIndex, value, compare);
+}
+
+// @ 0x00d18180
+void AdjustHeap(uint32_t* first, uint32_t* last, cPropertyListNameSort_s00d1_78a0 compare)
+{
+    uint32_t value = *(last - 1);
+    *(last - 1) = *first;
+    AdjustHeapHole(first, 0, (int)(last - first) - 1, 0, value, compare);
+}
+
+// @ 0x00d18df0
+void SP::cGameEditInputStrategy_s00d1_8df0::DoSaveSelectedFile(eastl::string16_s00d1_8df0* pName)
+{
+    SelectionList* pSel = &GetEditSelection_s00d1_8df0()->mSelected;
+    ISelectable** pBegin = pSel->mpBegin;
+    ISelectable** pEnd = pSel->mpEnd;
+    if (pBegin == pEnd)
+        return;
+
+    Vec3c sum(gZeroVec3);
+    int count = 0;
+    for (ISelectable** it = pBegin; it != pEnd; ++it) {
+        if (*it) {
+            cGameplayMarkerCmd* pMarker = (*it)->Cast(0x36be278);
+            if (pMarker && pMarker->part.IsPlaced()) {
+                const Vec3* pPos = pMarker->part.GetPosition();
+                sum.x = pPos->x + sum.x;
+                sum.y = pPos->y + sum.y;
+                sum.z = pPos->z + sum.z;
+                count++;
+            }
+        }
+    }
+
+    cCameraCtl_s00d1_8df0* pCam = GetCameraCtl_s00d1_8df0();
+    if (count == 0 || !pCam)
+        return;
+
+    Vec3c centroid(Scale(sum, 1.0f / (float)(uint32_t)count));
+
+    eastl::string16_s00d1_8df0 path;
+    path.sprintf(L"%s.%s", pName->c_str(), L"ltp");
+
+    Vec3c n;
+    PlanetModel_s00d1_8df0()->GetNormalAt(&n, &centroid);
+    Vec3c u;
+    pCam->GetDirection(&u);
+
+    // Gram-Schmidt: tangent = normalize(u - n * (n . u)), binormal = tangent x n
+    float d = n.x * u.x + n.y * u.y + n.z * u.z;
+    u -= Scale(n, d);
+    Vec3c t(Scale(u, 1.0f / sqrtf(u.x * u.x + u.y * u.y + u.z * u.z + 1e-8f)));
+    Vec3 b;
+    b.x = t.y * n.z - t.z * n.y;
+    b.y = t.z * n.x - n.z * t.x;
+    b.z = n.y * t.x - t.y * n.x;
+
+    IResourceManager_s00d1_8df0* pMgr = GetManager_s00d1_8df0();
+    if (!pMgr)
+        return;
+    ResKey key;
+    key.instance = 0;
+    key.type = 0;
+    key.group = 0;
+    pMgr->GetKey(&key, path.c_str(), 0xf2b924b3, 0x72b924b5);
+    IRecordDB* pDB = FindRecordDB(&key);
+    if (!pDB)
+        return;
+    AutoRefCount_s00d1_8df0<IFileStream> pStream;
+    if (!pDB->OpenRecord(&key, &pStream, 2, 2, 1, 0))
+        return;
+    IWriter* pWriter = pStream->GetWriter();
+    eastl::string8_s00d1_8df0 line;
+    for (ISelectable** it = pSel->mpBegin; it != pSel->mpEnd; ++it) {
+        if (*it) {
+            cGameplayMarkerCmd* pMarker = (*it)->Cast(0x36be278);
+            if (pMarker && pMarker->part.IsPlaced()) {
+                line.sprintf("GameplayMarkerTemplate %d %d %d %d", pMarker->ids[0], pMarker->ids[1],
+                             pMarker->ids[2], pMarker->ids[3]);
+                if (count == 1) {
+                    line.append_sprintf(" %f %f\n", 0.0, 0.0);
+                } else {
+                    pMarker->part.GetPosition();
+                    const Vec3* pPos = pMarker->part.GetPosition();
+                    float dx = pPos->x - centroid.x;
+                    float dy = pPos->y - centroid.y;
+                    float dz = pPos->z - centroid.z;
+                    double tx = dx * t.x + dy * t.y + dz * t.z;
+                    double bx = dx * b.x + dy * b.y + dz * b.z;
+                    line.append_sprintf(" %f %f\n", bx, tx);
+                }
+                uint32_t types[32];
+                if (GetGameplayMarkerTypes(pMarker->ids[0], types)) {
+                    for (uint32_t i = 0; i < pMarker->mCount; i++) {
+                        switch (types[i]) {
+                        case 1:
+                            line.append_sprintf("bool %s\n", pMarker->mValues[i] == 1 ? "true" : "false");
+                            break;
+                        case 9:
+                            line.append_sprintf("int %d\n", pMarker->mValues[i]);
+                            break;
+                        case 10:
+                            line.append_sprintf("uint %d\n", pMarker->mValues[i]);
+                            break;
+                        case 13:
+                            line.append_sprintf("float %f\n", (double)*(float*)&pMarker->mValues[i]);
+                            break;
+                        default:
+                            line.append_sprintf("enum %d\n", pMarker->mValues[i]);
+                            break;
+                        }
+                    }
+                }
+                line.append("end\n", "end\n" + 4);
+                pWriter->Write(line.mpBegin, line.mpEnd - line.mpBegin);
+                if (count == 1)
+                    break;
+            }
+        }
+    }
+    pStream->Close();
+}
+
+// @ 0x00d197a0
+bool cGameEditInputStrategy_s00d1_97a0::HandleUIMessage(IWindow* pWindow, const UIMessage& msg)
+{
+    if (msg.mParam == gIgnoreParam)
+        return false;
+
+    IGameInput* pInput = GameInputManager();
+
+    if (msg.mType == 0x8ef0c8dd) {
+        if (msg.mParam == 0x36c3e74) {
+            int v = mGameplayMarkerScrollbar->GetValue();
+            mGameplayMarkerArea->SetArea(0.0f, (float)-v);
+        }
+        return true;
+    }
+
+    if (msg.mType == 0x4f5527e8) {
+        switch ((int)msg.mParam) {
+        case 0xabc0fff8: {
+            MessageBasicRC5* pMsg = new("App", 0, 0, 0, 0) MessageBasicRC5(0);
+            if (pMsg)
+                pMsg->AddRef();
+            pMsg->mMessageID = 0x3d0891e;
+            pMsg->mValue = mGameplayMarkerScrollbar ? mGameplayMarkerScrollbar->GetValue() : 0;
+            pMsg->mFlag = 1;
+            MessageServer_s00d1_97a0()->Post(pMsg->mMessageID, pMsg, 0, 0);
+            pMsg->Release();
+            break;
+        }
+        case 0xabc0fff9:
+            if (RotateObject(&mpSelectedObject)) {
+                uint32_t classId = GetGameplayMarkerClassId(GetGameplayMarkerTypeFromUI());
+                uint32_t x = FUN_00d16820();
+                cCommandGameplayMarker_s00d1_97a0* pMarker = RotateObject(&mpSelectedObject);
+                LoadScenario(pMarker, classId, x);
+            }
+            break;
+        case 0x3e0691c:
+            if (mVisibilityCombo) {
+                int sel = mVisibilityCombo->GetSelection();
+                if (sel == 0)
+                    gMarkerVisibilityMode = 0;
+                else
+                    gMarkerVisibilityMode = HashName((const wchar_t*)mVisibilityCombo->GetText(sel));
+            }
+            break;
+        }
+    }
+
+    switch ((int)msg.mParam) {
+    case 0x135688e:
+        SetButtonHighlight(SourceRef(msg.mpSource));
+        pInput->SetCursorMode(0x137d8fe, true);
+        ShowOptionWindows(0, 0);
+        return true;
+    case 0x92b3c8eb:
+        SetButtonHighlight(SourceRef(msg.mpSource));
+        pInput->SetCursorMode(0x12ba6ae8, true);
+        return true;
+    case 0x136abf8:
+        SetButtonHighlight(SourceRef(msg.mpSource));
+        pInput->SetCursorMode(0x137c407, true);
+        ShowOptionWindows(0, 0);
+        return true;
+    case 0x13e7786:
+        mLoadDialogWindow->SetFlag(1, 1);
+        PopulateLoadDialogGridWithLevels();
+        return true;
+    case 0x13e7736: {
+        string16_s00d1_97a0 name;
+        if (GetSaveFileName(&name, 0)) {
+            GetEditMode();
+            SaveScenario(name.mpBegin);
+        }
+        return true;
+    }
+    case 0x13e778c: {
+        NounManager_s00d1_97a0()->FUN_00b25fe0();
+        if (mpSelectedObjectManipulator) {
+            NounManager_s00d1_97a0()->RemoveNoun(mpSelectedObjectManipulator);
+            mpSelectedObjectManipulator = 0;
+        }
+        PrepareDialog();
+        gEditorFlag20 = 1;
+        mGameplayMarkerRoot->SetFlag(1, 0);
+        return true;
+    }
+    case 0x14143be: {
+        mLoadDialogWindow->SetFlag(1, 0);
+        void* pItem;
+        int index;
+        wchar_t* pPath;
+        int key = 0;
+        if (mGridFileList->GetSelected(&pItem, &index)) {
+            mGridFileList->GetItemText(0, index, &pPath);
+            key = mGridFileList->GetItemKey(0, index);
+        }
+        if (gEditorFlag21) {
+            if (key == 0)
+                return true;
+            FUN_00d15a10(key);
+            return true;
+        }
+        wchar_t name[256];
+        EA::IO::SplitPath(pPath, 0, 0, name, 0, 4);
+        NounManager_s00d1_97a0()->RemoveNounsOfType(0x36be27e);
+        InterfaceCast(HashName(name), 1);
+        mLevelNameTextEdit->SetText(name, 0);
+        return true;
+    }
+    case 0x14143b4:
+        mLoadDialogWindow->SetFlag(1, 0);
+        mGameplayMarkerRoot->SetFlag(1, 0);
+        return true;
+    case 0x147c3f6:
+        mLoadPlanetDialogWindow->SetFlag(1, 1);
+        PopulateLoadPlanetDialogGrid();
+        return true;
+    case 0x147ccec:
+        mLoadPlanetDialogWindow->SetFlag(1, 0);
+        return true;
+    case 0x147ccf2: {
+        mLoadPlanetDialogWindow->SetFlag(1, 0);
+        NounManager_s00d1_97a0()->FUN_00b25fe0();
+        void* pItem;
+        int index;
+        if (!mPlanetGridFileList->GetSelected(&pItem, &index))
+            return true;
+        PlanetKey key = mPlanetKeysBegin[index];
+        SetPlanet(&key);
+        PlanetModel_s00d1_97a0()->FUN_00b8c0f0();
+        PlanetModel_s00d1_97a0()->FUN_00b8d8a0(&key, 0, 1);
+        PlanetModel_s00d1_97a0()->mpTerrain->SetSomething(GetPlanetThing());
+        GetEditMode()->MarkDirty();
+        return true;
+    }
+    case 0x2afbb64:
+        SetButtonHighlight(SourceRef(msg.mpSource));
+        pInput->SetCursorMode(0x2afab18, true);
+        ShowOptionWindows(0, 0);
+        return true;
+    case 0x29fe4ed:
+        PrepareDialog();
+        EnterGameMode(GetCurrentGameModeAlt());
+        return true;
+    case 0x36c46d4:
+        CommitChangesToGameplayMarker(RotateObject(&mpSelectedObject), true);
+        return false;
+    case 0x36c4718: {
+        FUN_00d15600();
+        cCommandGameplayMarker_s00d1_97a0* p = RotateObject(&mpSelectedObject);
+        if (!p)
+            return false;
+        LoadScenario(p, 0xffffffff, 0xffffffff);
+        return false;
+    }
+    case 0x3a869e8:
+        SetButtonHighlight(SourceRef(msg.mpSource));
+        pInput->SetCursorMode(0x3a86a56, true);
+        ShowOptionWindows(1, 0);
+        return true;
+    case 0x12b933e5:
+        SetButtonHighlight(SourceRef(msg.mpSource));
+        pInput->SetCursorMode(0x3a86a57, true);
+        ShowOptionWindows(0, 1);
+        return true;
+    case 0x4f65940: {
+        cCommandGameplayMarker_s00d1_97a0* p = RotateObject(&mpSelectedObject);
+        if (!(p && p->mMarkerType == 0xc012ae1f && p->mShape == 4 && p->mpFirst == 0)) {
+            IReleasable* q = mpSelectedObject.mpObject;
+            if (q) {
+                mpSelectedObject.mpObject = 0;
+                q->ReleaseRef();
+            }
+        }
+        pInput->SetCursorMode(0x4f64c5d, true);
+        return true;
+    }
+    case 0x52b3c8d7: {
+        string16_s00d1_97a0 name;
+        if (GetSaveFileName(&name, 0))
+            DoSaveSelectedFile(&name);
+        return true;
+    }
+        case 0x72b3c8e2:
+        SetButtonHighlight(SourceRef(msg.mpSource));
+        pInput->SetCursorMode(0xb2ba6adb, true);
+        return true;
+    }
+    return false;
+}
+
+// @ 0x00d1a080
+namespace eastl {
+inline int Log2(int n)
+{
+    int m = n;
+    n = 0;
+    _ReadWriteBarrier();
+    int i = 0;
+    if (m != 0) {
+        do {
+            m >>= 1;
+            ++i;
+        } while (m != 0);
+    }
+    return i;
+}
+}  // namespace eastl
+
 // @ 0x00d1a2b0
 namespace SP {
 void cGameEditInputStrategy_s00d1_a2b0::ShowGameplayMarkerProperties(cCommandGameplayMarker* pMarker, bool bReadOnly, bool bSetDefaults)
@@ -1453,3 +3739,104 @@ void cGameEditInputStrategy_s00d1_a2b0::ShowGameplayMarkerProperties(cCommandGam
     }
 }
 }  // namespace SP
+
+// @ 0x00d1bb60
+cGameEditInputStrategy_s00d1_afe0* cGameEditInputStrategy_s00d1_afe0::ConstructFields()
+{
+    const uint32_t base = reinterpret_cast<uint32_t>(this);
+
+    mListCount10 = 0;
+    mListAlloc14 = 0;
+    mListAux18 = 0;
+    mListHead08 = base + 8;
+    mListTail0c = mListHead08;
+    mListCount10 = 0;
+    mListAux18 = 0;
+
+    mpEditorMode24 = (IObject*)(base + 0x24);
+    mpEditorAux28 = (IObject*)(base + 0x24);
+    mField2c = 0;
+    mField30 = 0;
+    mField34 = 0;
+
+    // Provisional base/subobject vtables, then the final cGameEditInputStrategy ones.
+    IMessageHandler::SetVtable((void*)0x13eb384);
+    mpVtable40 = (void*)0x14426a0;
+    mpVtable44 = (void*)0x13ec458;
+    mField48 = 0;
+    cInputStrategyBase_s00d1_afe0::SetVtable((void*)0x1479e0c);
+    IMessageHandler::SetVtable((void*)0x1479dfc);
+    mpVtable40 = (void*)0x1479de0;
+    mpVtable44 = (void*)0x1479dd0;
+
+    mpSelectedObject.mpObject = 0;
+    mpField50 = 0;
+    mField54 = 0;
+    mSubobject58.Construct();
+
+    mpField78 = 0;
+    mpField7c = 0;
+    mpField80 = 0;
+    mpField84 = 0;
+    mpField88 = 0;
+    mpField8c = 0;
+    mpField90 = 0;
+    mpField94 = 0;
+    mpField98 = 0;
+
+    mGameplayMarkerRoot = 0;
+    mGameplayMarkerArea = 0;
+    mGameplayMarkerScrollbar = 0;
+    padb0 = 0;
+    mRuleOptionsList = 0;
+    mTemplateOptions = 0;
+    mTemplateOptionsList = 0;
+    mPlanetNameEdit = 0;
+
+    mLayout.Construct();
+    mTransitionHandle = 0;
+    mTransition108 = 0;
+    mTransition10c = 0;
+    mTransition110 = 0;
+    mTransition114 = 0;
+    return this;
+}
+
+// @ 0x00d1bcc0
+void cGameEditInputStrategy_s00d1_afe0::DestroyFields()
+{
+    cInputStrategyBase_s00d1_afe0::SetVtable((void*)0x1479e0c);
+    IMessageHandler::SetVtable((void*)0x1479dfc);
+    mpVtable40 = (void*)0x1479de0;
+    mpVtable44 = (void*)0x1479dd0;
+
+    if (mTransitionHandle != 0) {
+        uint32_t handle = mTransitionHandle;
+        mTransitionHandle = 0;
+        DestroyTransitionHandle(handle, mTransition108, mTransition10c,
+                                mTransition110, mTransition114);
+    }
+    mLayout.Destroy();
+
+    if (mPlanetNameEdit) mPlanetNameEdit->a1();
+    if (mTemplateOptionsList) mTemplateOptionsList->a1();
+    if (mTemplateOptions) mTemplateOptions->a1();
+    if (mRuleOptionsList) mRuleOptionsList->a1();
+    if (mGameplayMarkerScrollbar) mGameplayMarkerScrollbar->a1();
+    if (mGameplayMarkerArea) mGameplayMarkerArea->a1();
+    if (mGameplayMarkerRoot) mGameplayMarkerRoot->a1();
+    if (mpField8c) mpField8c->Release();
+    if (mpField88) mpField88->Release();
+    if (mpField84) mpField84->Release();
+    if (mpField80) mpField80->Release();
+    if (mpField7c) mpField7c->Release();
+    if (mpField78) mpField78->Release();
+    mSubobject58.Destroy();
+    if (mpField50) mpField50->Release();
+    if (mpSelectedObject.mpObject) ((IObject*)mpSelectedObject.mpObject)->Release();
+
+    mpVtable44 = (void*)0x13ec458;
+    mpVtable40 = (void*)0x13eb938;
+    IMessageHandler::SetVtable((void*)0x13eb394);
+    cInputStrategyBase_s00d1_afe0::SetVtable((void*)0x14771e0);
+}

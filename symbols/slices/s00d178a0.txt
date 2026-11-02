@@ -1,0 +1,4 @@
+00d178a0 ?DoObjectManipulation@cGameEditInputStrategy_s00d1_78a0@@QAEXIPAVcUiObject_s00d1_78a0@@@Z  # cGameEditInputStrategy_s00d1_78a0::DoObjectManipulation migrated from s00d178a0 (verbatim, slice spelling)
+00d18000 ??0cPropertyListNameSort_s00d1_78a0@@QAE@ABU0@@Z  # cPropertyListNameSort_s00d1_78a0::cPropertyListNameSort migrated from s00d178a0 (verbatim, slice spelling)
+00d180c0 ?AdjustHeapHole@@YAXPAIHHHIUcPropertyListNameSort_s00d1_78a0@@@Z  # AdjustHeapHole migrated from s00d178a0 (verbatim, slice spelling)
+00d18180 ?AdjustHeap@@YAXPAI0UcPropertyListNameSort_s00d1_78a0@@@Z  # AdjustHeap migrated from s00d178a0 (verbatim, slice spelling)

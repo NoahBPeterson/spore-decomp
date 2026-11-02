@@ -1,1 +1,2 @@
-# va  diff-bytes  reason
+# va  reason
+00d15160  178  FUN_00d15160: same camera method (0x00b13a10) filling the local cVec3, the 0xf2b924b3/0x72b924b5 request struct and the template Init call, but MSVC keeps pAlpha cached in ebp where retail reloads `[esp+0x2c]` for every component, so the whole prologue and the store sequence differ (size 278 vs 278). flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-, equiv WEAK (400 valid inputs, 6.5% coverage)
