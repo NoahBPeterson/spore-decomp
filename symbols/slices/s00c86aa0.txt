@@ -1,4 +1,7 @@
 00c719d0 ?SetPlanetVisibility@cPlanet@SP@@QAEXW4ePlanetVisibility@2@@Z  # SP::cPlanet::SetPlanetVisibility (callee of s00c86aa0, named from the dev publics; slice address comment)
+00c86aa0 ?ActivatePtolemaicHitSpheres@cSolarSystem_s00c8_6aa0@@QAEX_N@Z  # cSolarSystem_s00c8_6aa0::ActivatePtolemaicHitSpheres migrated from s00c86aa0 (verbatim, slice spelling)
+00c86c70 ?ActivateGraphics@cSolarSystem_s00c8_6aa0@@QAEX_N@Z  # cSolarSystem_s00c8_6aa0::ActivateGraphics migrated from s00c86aa0 (verbatim, slice spelling)
+00c86e50 ?Destroy@cSolarSystem_s00c8_6aa0@@QAEXXZ  # cSolarSystem_s00c8_6aa0::Destroy migrated from s00c86aa0 (verbatim, slice spelling)
 00c86f10 ?Cast@cSpaceInventoryItem@@UAEPAXI@Z  # cSpaceInventoryItem::Cast migrated from s00c86aa0 (verbatim, slice spelling)
 00c86f40 ?IsCargoType@cSpaceInventoryItem@@UAE_NXZ  # cSpaceInventoryItem::IsCargoType migrated from s00c86aa0 (verbatim, slice spelling)
 00c86f90 ?GetItemCount@cSpaceInventoryItem@@UAE_NAAI@Z  # cSpaceInventoryItem::GetItemCount migrated from s00c86aa0 (verbatim, slice spelling)

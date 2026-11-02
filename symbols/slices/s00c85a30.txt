@@ -1,3 +1,6 @@
-00c85a30 SP::cSolarSystem::InitComets  # PDB name; returns early if a type-2 body exists, else builds 3-6 random comets
+00c85a30 ?InitComets@cSolarSystem_s00c8_5a30@@QAEXXZ  # cSolarSystem_s00c8_5a30::InitComets migrated from s00c85a30 (verbatim, slice spelling)
+00c86390 ?UpdateBodies@cSolarSystem_s00c8_5a30@@QAEXM@Z  # cSolarSystem_s00c8_5a30::UpdateBodies migrated from s00c85a30 (verbatim, slice spelling)
+00c86640 ?InitTuning@cSolarSystem@SP@@SAXXZ  # SP::cSolarSystem::InitTuning migrated from s00c85a30
+00c86760 ?InitStar@cSolarSystem_s00c8_5a30@@QAEXPAUcStar_s00c8_5a30@@@Z  # cSolarSystem_s00c8_5a30::InitStar migrated from s00c85a30 (verbatim, slice spelling)
 00c8b450 IsGasStarType  # type != 0 && 6 < type <= 12, cdecl bool
 00c8b550 cStar::GetType  # thiscall, tail-jumps to a getter of [this+0x48]

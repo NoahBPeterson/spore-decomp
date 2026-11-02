@@ -1,0 +1,4 @@
+00c84d60 ?UpdatePlanet@cSolarSystem_s00c8_4d60@SP@@QAEXPAUcPlanet_s00c8_4d60@@M@Z  # cSolarSystem_s00c8_4d60::UpdatePlanet migrated from s00c84d60 (verbatim, slice spelling)
+00c85200 ?InitBinarySystem@cSolarSystem_s00c8_4d60@SP@@QAEXPAUWString@@@Z  # cSolarSystem_s00c8_4d60::InitBinarySystem migrated from s00c84d60 (verbatim, slice spelling)
+00c85380 ?UpdatePlanets@cSolarSystem_s00c8_4d60@SP@@QAEXM@Z  # cSolarSystem_s00c8_4d60::UpdatePlanets migrated from s00c84d60 (verbatim, slice spelling)
+00c85540 ?GetBinarySuffix@cSolarSystem_s00c8_4d60@SP@@QAEXXZ  # cSolarSystem_s00c8_4d60::GetBinarySuffix migrated from s00c84d60 (verbatim, slice spelling)
