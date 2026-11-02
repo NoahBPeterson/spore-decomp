@@ -1,9 +1,9 @@
-006deee0 eastl::insertion_sort_simple<SP::cClusterRect*, cRectAreaSort>  # PDB-derived comparator/type; stride 0x34, key at +8
-006defe0 eastl::fill<Elem16*, Elem16>  # 16-byte element, intrusive ptr at +0xc
-006df170 eastl::make_heap<SP::cClusterRect*, cRectAreaSort>  # make_heap shape, calls adjust_heap 0x6dea60
+006deee0 ?InsertionSortSimpleCR@@YAXPAUcClusterRect_s006d_eee0@SP@@0ABUcRectAreaSort@@@Z  # InsertionSortSimpleCR migrated from s006deee0 (verbatim, slice spelling)
+006defe0 ?FillElem16@@YAXPAUElem16@@0PBU1@@Z  # FillElem16 migrated from s006deee0 (verbatim, slice spelling)
+006df170 ?MakeHeapCR@@YAXPAUcClusterRect_s006d_eee0@SP@@0ABUcRectAreaSort@@@Z  # MakeHeapCR migrated from s006deee0 (verbatim, slice spelling)
 006df280 ?AssignRefPtr@RefPtr@@QAEAAU1@PBU1@@Z  # RefPtr::AssignRefPtr migrated from s006deee0 (verbatim, slice spelling)
-006df2d0 eastl::copy<Elem16*, Elem16*>  # forward element assign
-006df340 eastl::copy_backward<Elem16*, Elem16*>  # backward element assign
+006df2d0 ?CopyElem16@@YAPAUElem16@@PAU1@00@Z  # CopyElem16 migrated from s006deee0 (verbatim, slice spelling)
+006df340 ?CopyBackwardElem16@@YAPAUElem16@@PAU1@00@Z  # CopyBackwardElem16 migrated from s006deee0 (verbatim, slice spelling)
 006df3b0 ?Destroy@Elem16Vector@@QAEXXZ  # Elem16Vector::Destroy migrated from s006deee0 (verbatim, slice spelling)
 006df420 ?GetPartitionKeyGT@@YAPAPAUSortKeyObj@@PAPAU1@0PAU1@ABUSortKeyGreater@@@Z  # GetPartitionKeyGT migrated from s006deee0 (verbatim, slice spelling)
 006df470 ?PartialSortKeyGT@@YAXPAPAUSortKeyObj@@00ABUSortKeyGreater@@@Z  # PartialSortKeyGT migrated from s006deee0 (verbatim, slice spelling)
@@ -22,4 +22,4 @@
 006dfca0 ?Elem16VecEraseRange@Elem16Vector@@QAEHHH@Z  # Elem16Vector::Elem16VecEraseRange migrated from s006deee0 (verbatim, slice spelling)
 006dfd00 ?QuickSortCR@@YAXPAUcClusterRect_s006d_eee0@SP@@0ABUcRectAreaSort@@@Z  # QuickSortCR migrated from s006deee0 (verbatim, slice spelling)
 006dfd90 ?Elem16VecInsert@Elem16Vector@@QAEXHIPAUElem16@@@Z  # Elem16Vector::Elem16VecInsert migrated from s006deee0 (verbatim, slice spelling)
-006dffc0 ?Init@ClusterMap@@QAEPAU1@XZ  # ClusterMap::Init migrated from s006deee0 (returns this)
+006dffc0 ?Init@ClusterMap@@QAEPAU1@XZ  # ClusterMap::Init migrated from s006deee0 (verbatim, slice spelling)

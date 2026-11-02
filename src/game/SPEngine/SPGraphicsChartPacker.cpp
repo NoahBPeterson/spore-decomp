@@ -1,9 +1,10 @@
-// src/game/SPEngine/SPGraphicsChartPacker.cpp -- migrated from slice(s) s006e0030, s006deee0 by tools/migrate/rewrite.py
+// src/game/SPEngine/SPGraphicsChartPacker.cpp -- migrated from slice(s) s006de020, s006e0030, s006deee0 by tools/migrate/rewrite.py
 // Object file: SPEngine/SPGraphicsChartPacker.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
 #include "game/types.h"
 #include "SP/cClusterRect.h"
+#include <xmmintrin.h>
 
 // unnamed retail callees and globals (address in the comment)
 extern "C" long _InterlockedIncrement(volatile long*);
@@ -16,10 +17,8 @@ struct ClusterPtrVec {
 };
 
 // ---- items of slice s006deee0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C" void  VecPushBackSlow(void* end, const void* value);                                          // 0x6ec4a0
 typedef unsigned int uint;
-extern "C" long _InterlockedIncrement(volatile long*);
-extern "C" long _InterlockedDecrement(volatile long*);
-extern "C" long _InterlockedExchange(volatile long*, long);
 namespace SP {
 struct cSPVector2 { float x, y; };
 }
@@ -48,6 +47,7 @@ struct cRectAreaSort {
         return *(const uint*)&a.mArea > *(const uint*)&b.mArea;
     }
 };
+inline uint AreaKey(const SP::cClusterRect_s006d_eee0& r) { return *(const uint*)&r.mArea; }
 template <typename T, typename Compare>
 const T& Median3(const T& a, const T& b, const T& c, const Compare& compare) {
     if (compare(a, b)) {
@@ -119,11 +119,6 @@ struct RefPtr {
         return *this;
     }
 };
-extern "C" long _InterlockedIncrement(volatile long*);
-extern "C" long _InterlockedDecrement(volatile long*);
-extern "C" long _InterlockedExchange(volatile long*, long);
-extern "C" void  FreeMem(void* p);                                                  // 0xf47380
-extern "C" void* AllocMem(unsigned n, const char* name, int a, int b, const char* file, int line);  // 0xf473a0
 extern "C" void  AdjustHeapCR(SP::cClusterRect_s006d_eee0* first, int top, int size, int pos, SP::cClusterRect_s006d_eee0 value, const cRectAreaSort* cmp);  // 0x6dea60
 extern "C" void  SortHeapCR(SP::cClusterRect_s006d_eee0* first, SP::cClusterRect_s006d_eee0* last, const cRectAreaSort* cmp);  // 0x6df220
 extern "C" void  InsertionSortCR(SP::cClusterRect_s006d_eee0* first, SP::cClusterRect_s006d_eee0* last, const cRectAreaSort* cmp);  // 0x6dede0
@@ -135,7 +130,6 @@ extern "C" void  SortHeapKeyGT(SortKeyObj** first, SortKeyObj** last, const Sort
 extern "C" void  SortHeapKeyLT(SortKeyObj** first, SortKeyObj** last, const SortKeyLess* cmp);          // 0x6df120
 extern "C" void  Elem16Fill(Elem16* first, Elem16* last, const Elem16* value);                          // 0x6de8f0
 extern "C" void  Elem16MoveBack(Elem16* first, Elem16* last, void* dest, void* destEnd, Elem16* p);     // 0x6de850
-extern "C" void  VecPushBackSlow(void* end, const void* value);                                          // 0x6ec4a0
 struct Elem16Vector {
     Elem16* mpBegin;    // +0x00
     Elem16* mpEnd;      // +0x04
@@ -182,17 +176,6 @@ struct ClusterMap {
 // ---- items of slice s006deee0 end
 
 // unnamed retail callees and globals that name local stubs (address in the comment)
-extern "C" void  AdjustHeapCR(SP::cClusterRect_s006d_eee0* first, int top, int size, int pos, SP::cClusterRect_s006d_eee0 value, const cRectAreaSort* cmp);  // 0x6dea60
-extern "C" void  SortHeapCR(SP::cClusterRect_s006d_eee0* first, SP::cClusterRect_s006d_eee0* last, const cRectAreaSort* cmp);  // 0x6df220
-extern "C" void  InsertionSortCR(SP::cClusterRect_s006d_eee0* first, SP::cClusterRect_s006d_eee0* last, const cRectAreaSort* cmp);  // 0x6dede0
-extern "C" void  AdjustHeapKeyGT(SortKeyObj** first, int top, int size, int pos, SortKeyObj* value, const SortKeyGreater* cmp);  // 0x6de980
-extern "C" void  AdjustHeapKeyLT(SortKeyObj** first, int top, int size, int pos, SortKeyObj* value, const SortKeyLess* cmp);  // 0x6de9f0
-extern "C" void  MakeHeapKeyGT(SortKeyObj** first, SortKeyObj** last, const SortKeyGreater* cmp);       // 0x6df050
-extern "C" void  MakeHeapKeyLT(SortKeyObj** first, SortKeyObj** last, const SortKeyLess* cmp);          // 0x6df0e0
-extern "C" void  SortHeapKeyGT(SortKeyObj** first, SortKeyObj** last, const SortKeyGreater* cmp);       // 0x6df090
-extern "C" void  SortHeapKeyLT(SortKeyObj** first, SortKeyObj** last, const SortKeyLess* cmp);          // 0x6df120
-extern "C" void  Elem16Fill(Elem16* first, Elem16* last, const Elem16* value);                          // 0x6de8f0
-extern "C" void  Elem16MoveBack(Elem16* first, Elem16* last, void* dest, void* destEnd, Elem16* p);     // 0x6de850
 
 // callees this slice defines outside this object (rewrite.py held_callee_protos)
 void InsertionSortSimpleCR(SP::cClusterRect_s006d_eee0* first, SP::cClusterRect_s006d_eee0* last, const cRectAreaSort& compare);  // 0x006deee0 (stays in the slice: not this object's)
@@ -205,9 +188,6 @@ extern int   DAT_01532b94;      // grid resolution
 extern float DAT_01532da4;
 extern float _DAT_01532da0;
 extern "C" void  FUN_004746c0(int n, void* p);
-extern "C" void  FUN_007b00d0();
-extern "C" void  FUN_007b0fa0(int a, int b);
-extern "C" int   FUN_007b1e70(int a, int b);
 extern "C" int   FUN_0071ddc0(int a, int b, int c, int d, int e);
 extern "C" void  FUN_006dec60(int obj, float f);
 extern "C" char  FUN_006de710(int obj);
@@ -216,7 +196,7 @@ extern "C" void  FUN_006dfa00();
 extern "C" void  FUN_006dfa80(void* a, void* b, int c);
 extern "C" void  VecBoolDoInsertValue(void* a, void* b, int c);
 extern "C" void  ThreadSleep(void* p);
-extern "C" void  operator_delete__(void* p);
+extern "C" void  FUN_00f47380(void* p);
 extern "C" void  QuickSortCRExtern(void* first, void* last, int cmp);
 typedef unsigned short ushort;
 struct Vertex2 { float x, y; };
@@ -257,10 +237,574 @@ void Insert(int position, int n, void* value);   // 0x006dfd90
 void Erase(int position, int end);               // 0x006dfca0
 void Resize(uint n);
 };
+struct C20Pool {
+    void* mBegin;                       // +0x00  node array
+    void* mEnd;                         // +0x04
+    void* mCapacity;                    // +0x08
+    int   mPad0c;                       // +0x0c
+    int   mPad10;                       // +0x10
+    void* mBegin2;                      // +0x14  second node array
+    void* mEnd2;                        // +0x18
+    void* mCapacity2;                   // +0x1c
+    void FUN_007b00d0();                // @ 0x7b00d0 (ctor)
+    void FUN_007b0fa0(int a, int b);    // @ 0x7b0fa0 (C20::AddNode)
+    int  FUN_007b1e70(int a, int b);    // @ 0x7b1e70
+};
 struct Elem16_s006e_0030 {
     uint32_t f0; uint32_t f4; uint16_t f8; uint16_t fa; void* ref;
 };
+struct ChartBase41 {
+    void FUN_0041ebe0(int* list);       // @ 0x41ebe0
+};
 // ---- items of slice s006e0030 end
+
+// ---- items of slice s006de020 begin (TODO(rewrite): local stubs, replace by canonical classes)
+static inline float BakeSqrtSS(float x)
+{
+    return _mm_cvtss_f32(_mm_sqrt_ss(_mm_set_ss(x)));
+}
+struct RefObject
+{
+    virtual void AddRef();
+    virtual void Release();
+};
+int DAT_01532b94_s006d_e020 = 0;
+struct ImagePacker
+{
+    char pad[0x25c];
+    int* mOffsets;
+    void BestFit(int param_2);   // 0x006de5e0
+    void BestFit2(int param_2);  // 0x006de710
+};
+struct Rec13
+{
+    int a, b;               // +0, +4
+    float c;                // +8
+    int d;                  // +c
+    float e, f, g, h, i, j, k;   // +10..+28
+    int l;                  // +2c
+    float m;                // +30
+    Rec13& operator=(const Rec13& src);   // 0x006de7f0
+};
+Rec13& Rec13::operator=(const Rec13& src)   // @ 0x006de7f0
+{
+    a = src.a;
+    b = src.b;
+    c = src.c;
+    d = src.d;
+    e = src.e;
+    f = src.f;
+    g = src.g;
+    h = src.h;
+    i = src.i;
+    j = src.j;
+    k = src.k;
+    l = src.l;
+    m = src.m;
+    return *this;
+}
+struct Elem16_s006d_e020
+{
+    uint32_t a, b;
+    uint16_t c, d;
+    uint32_t pad;
+    RefObject* mpRef;   // +0xc
+};
+typedef void (__cdecl* SiftUpRecFn)(int, int, int, Rec13);
+struct MeshScaleData
+{
+    char pad00[0x18];
+    uint32_t mVertexBase;      // +0x18
+    void Scale(int* param_2, float param_3);   // 0x006dec60
+};
+// ---- items of slice s006de020 end
+
+// callees this slice defines outside this object (rewrite.py held_callee_protos)
+void FUN_006de4e0(int param_1, int param_2, int param_3, int param_4);  // 0x006de4e0 (stays in the slice: not this object's)
+void FUN_006de530(int param_1, int param_2, int param_3, int param_4);  // 0x006de530 (stays in the slice: not this object's)
+void FUN_006de580(int param_1, int param_2, int param_3, uint32_t param_4, ...);  // 0x006de580 (stays in the slice: not this object's)
+
+// @ 0x006de3a0
+void FUN_006de3a0(int* param_1, int* param_2) // @ 0x006de3a0
+{
+    int* pi2 = param_1;
+    if (param_1 != param_2)
+    {
+        while (pi2 = pi2 + 1, pi2 != param_2)
+        {
+            int v = *pi2;
+            int* pi3 = pi2;
+            while (pi3 != param_1 && *(uint32_t*)(v + 4) > *(uint32_t*)(pi3[-1] + 4))
+            {
+                *pi3 = pi3[-1];
+                pi3 = pi3 - 1;
+            }
+            *pi3 = v;
+        }
+    }
+}
+
+// @ 0x006de3f0
+void FUN_006de3f0(int* param_1, int* param_2)
+{
+    for (; param_1 != param_2; param_1 = param_1 + 1)
+    {
+        int v = *param_1;
+        int prev = param_1[-1];
+        int* ecx = param_1 - 1;
+        int* eax = param_1;
+        if (*(uint32_t*)(v + 4) > *(uint32_t*)(prev + 4))
+        {
+            do
+            {
+                *eax = prev;
+                eax = ecx;
+                prev = eax[-1];
+                ecx = eax - 1;
+            } while (*(uint32_t*)(v + 4) > *(uint32_t*)(prev + 4));
+        }
+        *eax = v;
+    }
+}
+
+// @ 0x006de440
+void FUN_006de440(int* param_1, int* param_2) // @ 0x006de440
+{
+    int* pi2 = param_1;
+    if (param_1 != param_2)
+    {
+        while (pi2 = pi2 + 1, pi2 != param_2)
+        {
+            int v = *pi2;
+            int* pi3 = pi2;
+            while (pi3 != param_1 && *(uint32_t*)(v + 4) < *(uint32_t*)(pi3[-1] + 4))
+            {
+                *pi3 = pi3[-1];
+                pi3 = pi3 - 1;
+            }
+            *pi3 = v;
+        }
+    }
+}
+
+// @ 0x006de490
+void FUN_006de490(int* param_1, int* param_2)
+{
+    for (; param_1 != param_2; param_1 = param_1 + 1)
+    {
+        int v = *param_1;
+        int prev = param_1[-1];
+        int* ecx = param_1 - 1;
+        int* eax = param_1;
+        if (*(uint32_t*)(v + 4) < *(uint32_t*)(prev + 4))
+        {
+            do
+            {
+                *eax = prev;
+                eax = ecx;
+                prev = eax[-1];
+                ecx = eax - 1;
+            } while (*(uint32_t*)(v + 4) < *(uint32_t*)(prev + 4));
+        }
+        *eax = v;
+    }
+}
+
+// @ 0x006de5e0
+void ImagePacker::BestFit(int param_2)
+{
+    int local_20, local_1c, local_18, local_14, local_10;
+    local_18 = -1;
+    local_10 = -1;
+    int iVar7 = (*(int*)(param_2 + 0x4c) - *(int*)(param_2 + 0x48)) >> 2;
+    local_14 = DAT_01532b94_s006d_e020 * iVar7;
+    bool bVar1 = false;
+    bool bVar2 = false;
+    local_1c = 0;
+    if (-1 < DAT_01532b94_s006d_e020 - iVar7)
+    {
+        do
+        {
+            int iVar6 = 0, iVar3 = 0;
+            local_20 = 0;
+            if (0 < iVar7)
+            {
+                int* pi5 = *(int**)(param_2 + 0x48);
+                int* pi8 = (int*)(mOffsets + local_1c);
+                do
+                {
+                    int iVar4 = *pi8 - *pi5;
+                    bVar1 = bVar2;
+                    if (DAT_01532b94_s006d_e020 <= *(int*)(param_2 + 0x5c) + iVar4)
+                        goto next;
+                    local_20 += iVar4;
+                    if (iVar3 < iVar4)
+                        iVar3 = iVar4;
+                    ++iVar6;
+                    ++pi8;
+                    ++pi5;
+                } while (iVar6 < iVar7);
+            }
+            local_20 = iVar3 * iVar7 - local_20;
+            if (local_20 < local_14)
+            {
+                bVar2 = true;
+                local_18 = iVar3;
+                local_14 = local_20;
+                local_10 = local_1c;
+                bVar1 = true;
+            }
+        next:
+            ++local_1c;
+        } while (local_1c <= DAT_01532b94_s006d_e020 - iVar7);
+        if (bVar1)
+        {
+            *(int*)(param_2 + 100) = local_18;
+            int iVar3 = 0;
+            *(int*)(param_2 + 0x60) = local_10;
+            if (0 < iVar7)
+            {
+                int off = local_10 * 4;
+                do
+                {
+                    *(int*)((char*)mOffsets + off) = *(int*)(*(int*)(param_2 + 0x34) + iVar3 * 4) + local_18;
+                    ++iVar3;
+                    off += 4;
+                } while (iVar3 < iVar7);
+            }
+        }
+    }
+}
+
+// @ 0x006de710
+void ImagePacker::BestFit2(int param_2)
+{
+    int iVar7 = (*(int*)(param_2 + 0x4c) - *(int*)(param_2 + 0x48)) >> 2;
+    int local_10 = DAT_01532b94_s006d_e020;
+    int iVar2 = 0;
+    int local_8 = 0;
+    int iVar4 = 0;
+    if (-1 < DAT_01532b94_s006d_e020 - iVar7)
+    {
+        do
+        {
+            iVar4 = 0;
+            if (0 < iVar7)
+            {
+                int* pi6 = *(int**)(param_2 + 0x48);
+                int* pi3 = (int*)(mOffsets + iVar2);
+                int iVar5 = iVar7;
+                do
+                {
+                    if (iVar4 < *pi3 - *pi6)
+                        iVar4 = *pi3 - *pi6;
+                    ++pi3;
+                    ++pi6;
+                    --iVar5;
+                } while (iVar5 != 0);
+            }
+            if (iVar4 < local_10)
+            {
+                local_10 = iVar4;
+                local_8 = iVar2;
+            }
+            ++iVar2;
+            iVar4 = local_8;
+        } while (iVar2 <= DAT_01532b94_s006d_e020 - iVar7);
+    }
+    *(int*)(param_2 + 0x60) = iVar4;
+    *(int*)(param_2 + 100) = local_10;
+    int iVar5 = 0;
+    bool bVar1 = true;
+    int off = iVar4 * 4;
+    do
+    {
+        if (iVar7 <= iVar5)
+            return;
+        *(int*)((char*)mOffsets + off) = *(int*)(*(int*)(param_2 + 0x34) + iVar5 * 4) + local_10;
+        if (DAT_01532b94_s006d_e020 <= *(int*)((char*)mOffsets + off))
+            bVar1 = false;
+        ++iVar5;
+        off += 4;
+    } while (bVar1);
+}
+
+// @ 0x006de850
+int* FUN_006de850(int* param_1, uint32_t* param_2, uint32_t* param_3, int param_4)
+{
+    *param_1 = param_4;
+    for (; param_2 != param_3; param_2 += 4)
+    {
+        Elem16_s006d_e020* dst = (Elem16_s006d_e020*)*param_1;
+        if (dst != 0)
+        {
+            dst->a = param_2[0];
+            dst->b = param_2[1];
+            dst->c = *(uint16_t*)(param_2 + 2);
+            dst->d = *(uint16_t*)((char*)param_2 + 10);
+            dst->mpRef = (RefObject*)param_2[3];
+            if (dst->mpRef)
+                dst->mpRef->AddRef();
+        }
+        *param_1 = *param_1 + 0x10;
+    }
+    return param_1;
+}
+
+// @ 0x006de8f0
+void FUN_006de8f0(uint32_t* param_1, int param_2, uint32_t* param_3)
+{
+    for (; param_2 != 0; --param_2)
+    {
+        if (param_1 != 0)
+        {
+            param_1[0] = param_3[0];
+            param_1[1] = param_3[1];
+            *(uint16_t*)(param_1 + 2) = *(uint16_t*)(param_3 + 2);
+            *(uint16_t*)((char*)param_1 + 10) = *(uint16_t*)((char*)param_3 + 10);
+            RefObject* p = (RefObject*)param_3[3];
+            param_1[3] = (uint32_t)p;
+            if (p)
+                p->AddRef();
+        }
+        param_1 += 4;
+    }
+}
+
+// @ 0x006de980
+void FUN_006de980(int param_1, int param_2, int param_3, int param_4, int param_5, int param_6)
+{
+    int iVar1, iVar2;
+    while (true)
+    {
+        iVar1 = param_4 * 2;
+        iVar2 = iVar1 + 2;
+        if (param_3 <= iVar2)
+            break;
+        if (*(uint32_t*)(*(int*)(param_1 + -4 + iVar2 * 4) + 4) <
+            *(uint32_t*)(*(int*)(param_1 + iVar2 * 4) + 4))
+            iVar2 = iVar1 + 1;
+        *(int*)(param_1 + param_4 * 4) = *(int*)(param_1 + iVar2 * 4);
+        param_4 = iVar2;
+    }
+    if (iVar2 == param_3)
+    {
+        *(int*)(param_1 + param_4 * 4) = *(int*)(param_1 + -4 + iVar2 * 4);
+        param_4 = iVar1 + 1;
+    }
+    FUN_006de4e0(param_1, param_2, param_4, param_5);
+}
+
+// @ 0x006de9f0
+void FUN_006de9f0(int param_1, int param_2, int param_3, int param_4, int param_5, int param_6)
+{
+    int iVar1, iVar2;
+    while (true)
+    {
+        iVar1 = param_4 * 2;
+        iVar2 = iVar1 + 2;
+        if (param_3 <= iVar2)
+            break;
+        if (*(uint32_t*)(*(int*)(param_1 + iVar2 * 4) + 4) <
+            *(uint32_t*)(*(int*)(param_1 + -4 + iVar2 * 4) + 4))
+            iVar2 = iVar1 + 1;
+        *(int*)(param_1 + param_4 * 4) = *(int*)(param_1 + iVar2 * 4);
+        param_4 = iVar2;
+    }
+    if (iVar2 == param_3)
+    {
+        *(int*)(param_1 + param_4 * 4) = *(int*)(param_1 + -4 + iVar2 * 4);
+        param_4 = iVar1 + 1;
+    }
+    FUN_006de530(param_1, param_2, param_4, param_5);
+}
+
+// @ 0x006dea60
+void FUN_006dea60(int param_1, int param_2, int param_3, int param_4, Rec13 record)
+{
+    int iVar1, iVar2;
+    while (true)
+    {
+        iVar2 = param_4 * 2;
+        iVar1 = iVar2 + 2;
+        if (param_3 <= iVar1)
+            break;
+        if (*(uint32_t*)(iVar1 * 0x34 + param_1 + -0x2c) < *(uint32_t*)(iVar1 * 0x34 + 8 + param_1))
+            iVar1 = iVar2 + 1;
+        uint32_t* pu4 = (uint32_t*)(iVar1 * 0x34 + param_1);
+        uint32_t* pu5 = (uint32_t*)(param_4 * 0x34 + param_1);
+        for (int i = 0xd; param_4 = iVar1, i != 0; --i)
+            *pu5++ = *pu4++;
+    }
+    if (iVar1 == param_3)
+    {
+        uint32_t* pu4 = (uint32_t*)(iVar1 * 0x34 + -0x34 + param_1);
+        uint32_t* pu5 = (uint32_t*)(param_4 * 0x34 + param_1);
+        for (int i = 0xd; i != 0; --i)
+            *pu5++ = *pu4++;
+        param_4 = iVar2 + 1;
+    }
+    ((SiftUpRecFn)FUN_006de580)(param_1, param_2, param_4, record);
+}
+
+// @ 0x006dec60
+void MeshScaleData::Scale(int* param_2, float param_3)
+{
+    if ((char)param_2[0xc] == '\0')
+    {
+        float f = BakeSqrtSS(param_3);
+        int iVar4 = *param_2 * 0x10 + mVertexBase;
+        int iVar3 = param_2[3];
+        if (iVar3 < param_2[4])
+        {
+            do
+            {
+                float* pf = (float*)((uint32_t)*(uint16_t*)(iVar4 + 10) * iVar3 + *(int*)(iVar4 + 4));
+                ++iVar3;
+                pf[0] = pf[0] * f;
+                pf[1] = pf[1] * f;
+            } while (iVar3 < param_2[4]);
+        }
+        iVar3 = 0;
+        int n = (param_2[6] - param_2[5]) >> 3;
+        if (3 < n)
+        {
+            do
+            {
+                int off = iVar3 * 8;
+                float* pf = (float*)(param_2[5] + off);
+                pf[0] = *(float*)(param_2[5] + off) * f;
+                pf[1] = pf[1] * f;
+                pf = (float*)(param_2[5] + 8 + off);
+                pf[0] = *(float*)(param_2[5] + 8 + off) * f;
+                pf[1] = pf[1] * f;
+                off += 0x18;
+                pf = (float*)(param_2[5] + -8 + off);
+                pf[0] = *(float*)(param_2[5] + -8 + off) * f;
+                pf[1] = pf[1] * f;
+                pf = (float*)(param_2[5] + off);
+                pf[0] = *(float*)(param_2[5] + off) * f;
+                iVar3 += 4;
+                pf[1] = pf[1] * f;
+            } while (iVar3 < n - 3);
+        }
+        for (; iVar3 < n; ++iVar3)
+        {
+            float* pf = (float*)(param_2[5] + iVar3 * 8);
+            pf[0] = *(float*)(param_2[5] + iVar3 * 8) * f;
+            pf[1] = pf[1] * f;
+        }
+        float f28 = *(float*)&param_2[10] * f;
+        float f2c = f * *(float*)&param_2[0xb];
+        *(float*)&param_2[0xb] = f2c;
+        *(float*)&param_2[10] = f28;
+        *(float*)&param_2[1] = param_3 * *(float*)&param_2[1];
+    }
+}
+
+// @ 0x006dede0
+void FUN_006dede0(uint32_t* param_1, uint32_t* param_2)
+{
+    if (param_1 != param_2)
+    {
+        uint32_t* pu3 = param_1 + 0xd;
+        if (pu3 != param_2)
+        {
+            uint32_t* pu1 = param_1 + 0x14;
+            do
+            {
+                uint32_t tmp[13];
+                tmp[2] = pu1[-5];
+                tmp[3] = pu1[-4];
+                tmp[0] = *pu3;
+                tmp[1] = pu1[-6];
+                tmp[4] = pu1[-3];
+                tmp[5] = pu1[-2];
+                tmp[6] = pu1[-1];
+                tmp[7] = *pu1;
+                tmp[8] = pu1[1];
+                tmp[9] = pu1[2];
+                tmp[10] = pu1[3];
+                tmp[11] = pu1[4];
+                tmp[12] = pu1[5];
+                uint32_t* pu7 = pu3;
+                while (pu7 != param_1 && pu7[-0xb] < tmp[2])
+                {
+                    uint32_t* pu5 = pu7 - 0xd;
+                    uint32_t* pu6 = pu7;
+                    uint32_t* pu4 = pu5;
+                    for (int i = 0xd; pu7 = pu5, i != 0; --i)
+                        *pu6++ = *pu4++;
+                }
+                pu3 += 0xd;
+                pu1 += 0xd;
+                uint32_t* pu5 = tmp;
+                for (int i = 0xd; i != 0; --i)
+                    *pu7++ = *pu5++;
+            } while (pu3 != param_2);
+        }
+    }
+}
+
+// @ 0x006deee0
+void InsertionSortSimpleCR(SP::cClusterRect_s006d_eee0* first, SP::cClusterRect_s006d_eee0* last, const cRectAreaSort& compare)
+{
+    for (SP::cClusterRect_s006d_eee0* current = first; current != last; ++current) {
+        SP::cClusterRect_s006d_eee0* end = current;
+        SP::cClusterRect_s006d_eee0* prev = current;
+        const SP::cClusterRect_s006d_eee0 value(*current);
+        for (--prev; compare(value, *prev); --end, --prev)
+            *end = *prev;
+        *end = value;
+    }
+}
+
+// @ 0x006defe0
+void FillElem16(Elem16* first, Elem16* last, const Elem16* value)
+{
+    for (; first != last; ++first)
+        *first = *value;
+}
+
+// @ 0x006df170
+void MakeHeapCR(SP::cClusterRect_s006d_eee0* first, SP::cClusterRect_s006d_eee0* last, const cRectAreaSort& compare)
+{
+    const int heapSize = (int)(last - first);
+    if (heapSize >= 2) {
+        int parentPosition = ((heapSize - 2) >> 1) + 1;
+        do {
+            --parentPosition;
+            AdjustHeapCR(first, parentPosition, heapSize, parentPosition,
+                         *(first + parentPosition), &compare);
+        } while (parentPosition != 0);
+    }
+}
+
+// @ 0x006df2d0
+Elem16* CopyElem16(Elem16* first, Elem16* last, Elem16* dest)
+{
+    if (first == last)
+        return dest;
+    do {
+        *dest = *first;
+        ++first;
+        ++dest;
+    } while (first != last);
+    return dest;
+}
+
+// @ 0x006df340
+Elem16* CopyBackwardElem16(Elem16* first, Elem16* last, Elem16* destEnd)
+{
+    if (first == last)
+        return destEnd;
+    do {
+        --last;
+        --destEnd;
+        *destEnd = *last;
+    } while (last != first);
+    return destEnd;
+}
 
 // @ 0x006df420
 SortKeyObj** GetPartitionKeyGT(SortKeyObj** first, SortKeyObj** last, SortKeyObj* pivotValue, const SortKeyGreater& compare)
@@ -384,12 +928,12 @@ void QuickSortImplKeyLT(SortKeyObj** first, SortKeyObj** last, int kRecursionCou
 // @ 0x006df8f0
 SP::cClusterRect_s006d_eee0* GetPartitionCR(SP::cClusterRect_s006d_eee0* first, SP::cClusterRect_s006d_eee0* last, SP::cClusterRect_s006d_eee0 pivotValue, const cRectAreaSort& compare)
 {
-    uint pivotArea = *(const uint*)&pivotValue.mArea;
+    uint pivotArea = AreaKey(pivotValue);
     for (;; ++first) {
-        while (*(const uint*)&first->mArea > pivotArea)
+        while (AreaKey(*first) > pivotArea)
             ++first;
         --last;
-        while (pivotArea > *(const uint*)&last->mArea)
+        while (pivotArea > AreaKey(*last))
             --last;
         if (first >= last)
             return first;
@@ -856,11 +1400,10 @@ int ChartSet::RectPackCharts(int flag)
 void SP_RectPackCharts(int* param_1, int* param_2, float param_3, int param_4)
 {
     uint local_74 = 0;
-    int local_48 = 0;
-    int local_34 = 0;
-    FUN_007b00d0();
+    C20Pool pool;
+    pool.FUN_007b00d0();
     float fVar17 = (float)param_4;
-    FUN_007b0fa0(param_4, param_4);
+    pool.FUN_007b0fa0(param_4, param_4);
 
     int first = *param_2;
     param_3 = 1.0f / param_3;
@@ -930,7 +1473,7 @@ void SP_RectPackCharts(int* param_1, int* param_2, float param_3, int param_4)
                 float sc = *(float*)(o + 0x28) *
                            ((0.9f - f16 * 0.01f) / ((fVar19 + fVar20) + fVar18));
                 *(float*)(o + 0x30) = sc;
-                int r = FUN_007b1e70(
+                int r = pool.FUN_007b1e70(
                     (int)(((*(float*)(o + 0x18) - *(float*)(o + 0x10)) * sc) * fVar17 + 0.5f),
                     (int)(((*(float*)(o + 0x1c) - *(float*)(o + 0x14)) * fVar17) * sc + 0.5f));
                 *(int*)(o + 0x2c) = r;
@@ -950,7 +1493,7 @@ void SP_RectPackCharts(int* param_1, int* param_2, float param_3, int param_4)
         uint off = 0;
         do {
             uint* pu = (uint*)(*param_2 + off);
-            int* pi = (int*)(pu[0xb] * 0x20 + local_48);
+            int* pi = (int*)(pu[0xb] * 0x20 + (int)pool.mBegin);
             int i12 = *pi;
             int i11 = pi[1];
             int i9 = FUN_0071ddc0(*(int*)(*param_1 + pu[3] * 4), 8, 1, 2, 0xe);
@@ -981,10 +1524,10 @@ void SP_RectPackCharts(int* param_1, int* param_2, float param_3, int param_4)
     }
 
 done:
-    if (local_34 != 0 && *(int*)(local_34 - 4) != 0)
-        operator_delete__((void*)local_34);
-    if (local_48 != 0 && *(int*)(local_48 - 4) != 0)
-        operator_delete__((void*)local_48);
+    if (pool.mBegin2 != 0 && *(int*)((char*)pool.mBegin2 - 4) != 0)
+        FUN_00f47380((void*)pool.mBegin2);
+    if (pool.mBegin != 0 && *(int*)((char*)pool.mBegin - 4) != 0)
+        FUN_00f47380((void*)pool.mBegin);
 }
 
 // @ 0x006e0e00
@@ -999,4 +1542,42 @@ void Elem16VecMem::Resize(uint n)
         return;
     }
     Erase((int)(n * 0x10 + begin), self[1]);
+}
+
+// @ 0x006e0ea0
+void ChartSet::FillVertices(int* list)
+{
+    int* self = (int*)this;
+    *(char*)self = 1;
+    *(int*)((char*)self + 0x230) = 0;
+    ((ChartBase41*)((char*)self + 4))->FUN_0041ebe0(list);
+    ((Elem16VecMem*)((char*)self + 0x18))->Resize((list[1] - *list) >> 2);
+    int i = 0;
+    int n = list[1] - *list >> 2;
+    if (0 < n) {
+        int off = 0;
+        do {
+            int r = FUN_0071ddc0(*(int*)(*list + i * 4), 8, 1, 2, 0xe);
+            if (-1 < r) {
+                int model = *(int*)(*(int*)(*list + i * 4) + 8);
+                int* dst = (int*)(*(int*)((char*)self + 0x18) + off);
+                int src = model + 0x10 + r * 0x20;
+                dst[0] = *(int*)(model + 0x10 + r * 0x20);
+                dst[1] = *(int*)(src + 4);
+                *(uint16_t*)(dst + 2) = *(uint16_t*)(src + 8);
+                *(uint16_t*)((char*)dst + 10) = *(uint16_t*)(src + 10);
+                void* oldRef = (void*)dst[3];
+                void* newRef = *(void**)(src + 0xc);
+                if (newRef != oldRef) {
+                    if (newRef)
+                        (*(void(**)(void*))newRef)(newRef);
+                    dst[3] = (int)newRef;
+                    if (oldRef)
+                        (*(void(**)(void*))((int*)oldRef)[1])(oldRef);
+                }
+            }
+            off = off + 0x10;
+            i = i + 1;
+        } while (i < n);
+    }
 }

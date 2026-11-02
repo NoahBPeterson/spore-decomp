@@ -1,4 +1,7 @@
 # source  symbol  va  flags
+../src/game/SPEngine/SPGraphicsChartPacker.cpp  ?FUN_006de3a0@@YAXPAH0@Z  006de3a0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/SPGraphicsChartPacker.cpp  ?FUN_006de440@@YAXPAH0@Z  006de440  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/SPGraphicsChartPacker.cpp  ?FillElem16@@YAXPAUElem16@@0PBU1@@Z  006defe0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsChartPacker.cpp  ?GetPartitionKeyGT@@YAPAPAUSortKeyObj@@PAPAU1@0PAU1@ABUSortKeyGreater@@@Z  006df420  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsChartPacker.cpp  ?GetPartitionKeyLT@@YAPAPAUSortKeyObj@@PAPAU1@0PAU1@ABUSortKeyLess@@@Z  006df4e0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsChartPacker.cpp  ?DestroyRange58@@YGXPAUElem58@@0@Z  006df9d0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include

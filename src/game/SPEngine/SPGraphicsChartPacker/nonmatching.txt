@@ -1,18 +1,34 @@
 # va  diff-bytes  reason (complete, not byte-exact)
-006df470 80 eastl::partial_sort<SortKeyObj**,SortKeyGreater>; make_heap/select/sort_heap shape matches, pointer register schedule differs
-006df530 80 eastl::partial_sort<SortKeyObj**,SortKeyLess>; mirrored variant, same schedule difference
-006df5a0 271 eastl::partial_sort<cClusterRect*>; make_heap/adjust_heap/sort_heap calls all present, value-copy and call-argument schedule differ
-006df700 97 eastl::copy<RefPtr*>; intrusive-pointer element assign reproduced, schedule differs
-006df770 90 eastl::quick_sort_impl<SortKeyObj**,int,SortKeyGreater>; median-of-three/get_partition/recursion reproduced, pivot register assignment (eax/esi/ebp) differs
-006df830 90 eastl::quick_sort_impl<SortKeyObj**,int,SortKeyLess>; mirrored variant, same register assignment difference
-006df8f0 229 eastl::get_partition<cClusterRect*>; pivot-by-value partition reproduced, cl keeps the pivot copy as a frame temp instead of reusing the argument slots
-006dfb00 181 eastl::quick_sort_impl<cClusterRect*,int,cRectAreaSort>; median/partition/recursion reproduced, value partition schedule differs
-006dfc30 69 cluster-map add callback; every path/field and the area accumulation reproduced, vector push schedule differs; equiv: FAIL (5/89 inputs mismatched, memory pool)
-006dfca0 72 Elem16 vector erase-range; copy + release + size adjust reproduced, helper scheduling differs; equiv: WEAK (374 valid, 56.8% coverage)
-006dfd00 75 eastl::quick_sort<cClusterRect*>; Log2/quick_sort_impl/insertion_sort dispatch present, helper call schedule differs
-006dfd90 389 Elem16 vector DoInsertValues; all grow in-place branches reproduced (source complete, 462 vs 547 bytes), helper/temp schedule differs; equiv: WEAK (502 valid, 14.3% coverage)
-006dffc0 82 cluster-map constructor; all 20 stores reproduced, register/ordering differs
-006e0030 735 chart vertical-span builder; all scanline/ABS branches, the two clamped raster loops and the max pass translated, vector<bool> helper and float ROUND schedule differ
-006e04d0 1144 rect-pack charts; weighted-area accumulation, 0x20-iteration retry loop, UV scale/bias and zeroing paths all present (transliterated), register/helper schedule differs; equiv: UNSUPPORTED (0/1200 valid inputs; now ChartSet member for ECX this)
-006e09d0 929 SP::RectPackCharts; area scaling, quick_sort, fit-retry loop and UV snap/transform translated, EH frame and scheduling differ
-006e0e00 90 Elem16 vector resize; grow (FUN_006dfd90) and shrink (FUN_006dfca0) paths both present, helper ABI approximated; equiv: PASS (785 valid, 100% coverage)
+006de3f0 15 insertion sort variant (prev-shift form); register naming only, not reproduced; equiv WEAK (29% cov) flags: /O2 /MD /Gy /EHsc /TP
+006de490 15 insertion sort variant (prev-shift form, opposite compare); register naming only; equiv WEAK (29% cov) flags: /O2 /MD /Gy /EHsc /TP
+006de5e0 278 image best-fit packer (thiscall); control flow + register allocation differ; equiv WEAK (48.5% cov) flags: /O2 /MD /Gy /EHsc /TP
+006de710 226 image best-fit packer variant (thiscall); control flow + register allocation differ; equiv PASS flags: /O2 /MD /Gy /EHsc /TP
+006de850 91 construct run of 0x10-byte refcounted elements; EH/frame differs; equiv WEAK (66.7% cov) flags: /O2 /MD /Gy /EHsc /TP
+006de8f0 71 fill run of 0x10-byte refcounted elements; EH/frame differs; equiv PASS flags: /O2 /MD /Gy /EHsc /TP
+006de980 88 heap sift-down wrapper (unsigned); call/argument shape differs; equiv PASS flags: /O2 /MD /Gy /EHsc /TP
+006de9f0 86 heap sift-down wrapper (signed); call/argument shape differs; equiv PASS flags: /O2 /MD /Gy /EHsc /TP
+006dea60 168 heap sift-down wrapper for 0x34-byte elements; takes the 0x34-byte record by value and forwards it to the sift-up helper; equiv: PASS 333/600 valid, 100% cov flags: /O2 /MD /Gy /EHsc /TP
+006dec60 391 mesh position/uv scale by sqrt; thiscall (ECX=mesh, two stack args) with a named mVertexBase field, BakeSqrtSS root and float stores; equiv: WEAK 523 valid, 46.9% cov flags: /O2 /MD /Gy /EHsc /TP
+006dede0 280 insertion sort of 0x34-byte records; block copy schedule differs; equiv WEAK (20.9% cov) flags: /O2 /MD /Gy /EHsc /TP
+006deee0 189 eastl::insertion_sort_simple<cClusterRect*>; same algorithm/shape, but cl copies the 52-byte value with rep movsd instead of the original per-field movss block and schedules the loop test differently flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+006df170 77 eastl::make_heap<cClusterRect*>; identical make_heap/adjust_heap call shape, register assignment inside the parent loop differs flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+006df2d0 96 eastl::copy<Elem16*>; element-wise smart-pointer assign reproduced, helper scheduling/copy-ctor anchor differs flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+006df340 105 eastl::copy_backward<Elem16*>; same backwards assign loop, register/temp schedule differs flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+006df470 80 eastl::partial_sort<SortKeyObj**,SortKeyGreater>; make_heap/select/sort_heap shape matches, pointer register schedule differs flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+006df530 80 eastl::partial_sort<SortKeyObj**,SortKeyLess>; mirrored variant, same schedule difference flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+006df5a0 271 eastl::partial_sort<cClusterRect*>; make_heap/adjust_heap/sort_heap calls all present, value-copy and call-argument schedule differ flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+006df700 97 eastl::copy<RefPtr*>; intrusive-pointer element assign reproduced, schedule differs flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+006df770 90 eastl::quick_sort_impl<SortKeyObj**,int,SortKeyGreater>; median-of-three/get_partition/recursion reproduced, pivot register assignment (eax/esi/ebp) differs flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+006df830 90 eastl::quick_sort_impl<SortKeyObj**,int,SortKeyLess>; mirrored variant, same register assignment difference flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+006df8f0 46 eastl::get_partition<cClusterRect*>; pivot-by-value partition reproduced, pivot area cached and the pivot argument slots reused as the swap temp (rep movsd vs cl per-field block); equiv: PASS (376 valid inputs, 100% coverage) flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+006dfb00 181 eastl::quick_sort_impl<cClusterRect*,int,cRectAreaSort>; median/partition/recursion reproduced, value partition schedule differs flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+006dfc30 70 cluster-map add callback; area accumulation now reads the float bits and the grow path is the thiscall vector::DoInsertValue (ecx=vector); code schedule differs; equiv: PASS (229 valid inputs, 100% coverage) flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+006dfca0 72 Elem16 vector erase-range; copy + release + size adjust reproduced, helper scheduling differs; equiv: WEAK (374 valid, 56.8% coverage) flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+006dfd00 75 eastl::quick_sort<cClusterRect*>; Log2/quick_sort_impl/insertion_sort dispatch present, helper call schedule differs flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+006dfd90 389 Elem16 vector DoInsertValues; all grow in-place branches reproduced (source complete, 462 vs 547 bytes), helper/temp schedule differs; equiv: WEAK (502 valid, 14.3% coverage) flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+006dffc0 93 cluster-map constructor; all 20 stores reproduced and it now returns this in eax; register allocation/order differs; equiv: PASS (400 valid inputs, 100% coverage) flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+006e0030 735 chart vertical-span builder; all scanline/ABS branches, the two clamped raster loops and the max pass translated, vector<bool> helper and float ROUND schedule differ flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+006e04d0 1144 rect-pack charts; weighted-area accumulation, 0x20-iteration retry loop, UV scale/bias and zeroing paths all present (transliterated), register/helper schedule differs; equiv: UNSUPPORTED (0/1200 valid inputs; now ChartSet member for ECX this) flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+006e09d0 969 SP::RectPackCharts: complete, equivalence WEAK (95 valid inputs, 35.1% coverage, 0 mismatches). 0x7b00d0/0x7b0fa0/0x7b1e70 are three thiscall methods of one C20 node pool the original keeps on the stack; the pool owns two EASTL vectors at +0 and +0x14 and its two begin pointers are released through 0xf47380 at the end, which is what the pool-memory comparison caught. EH frame and scheduling still differ. flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+006e0e00 90 Elem16 vector resize; grow (FUN_006dfd90) and shrink (FUN_006dfca0) paths both present, helper ABI approximated; equiv: PASS (785 valid, 100% coverage) flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+006e0ea0 215 chart vertex fill: complete, equivalence WEAK (102 valid inputs, 39.5% coverage, 0 mismatches). 0x41ebe0 is a thiscall on the object embedded at context+4 (not on the context itself) and the resized Elem16 vector lives at context+0x18; the per-element model copy incl. intrusive-ptr assign is translated, schedule/vtable anchor differs. flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
