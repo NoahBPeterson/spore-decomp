@@ -1,9 +1,12 @@
+007abc90 ?Update@cTextureManager_s007a_bc90@@QAEXXZ  # cTextureManager_s007a_bc90::Update migrated from s007abc90 (verbatim, slice spelling)
 007ac080 ??ATextureInstanceMap_s007a_bc90@@QAEAAPAXABUResourceKey@@@Z  # TextureInstanceMap_s007a_bc90::operator[] migrated from s007abc90 (verbatim, slice spelling)
 007ac0f0 ??0cLoadQueue_s007a_bc90@@QAE@XZ  # cLoadQueue_s007a_bc90::cLoadQueue migrated from s007abc90 (verbatim, slice spelling)
 007ac1e0 SP::cTextureManager::cTextureManager  # PDB card name
-007ac2f0 ?CreateInstance@cTextureManager_s007a_bc90@@QAAPAXPAUResourceKey@@PAXHIDZZ  # cTextureManager_s007a_bc90::CreateInstance migrated from s007abc90 (verbatim, slice spelling)
-007ac480 eastl::deque<SP::cTextureAsyncQueueEntry,eastl::allocator,64>::erase  # PDB card name
+007ac2f0 ?CreateInstance@cTextureManager_s007a_bc90@@QAEPAXPAUResourceKey@@PAX1ID@Z  # cTextureManager_s007a_bc90::CreateInstance migrated from s007abc90 (verbatim, slice spelling)
+007ac480 ?erase@AsyncDeque@@QAE?AUDqIterB@@U2@@Z  # AsyncDeque::erase migrated from s007abc90 (verbatim, slice spelling)
 007ac600 ?RegisterBuiltInGameTexture@cTextureManager_s007a_bc90@@QAEPAXPAXI@Z  # cTextureManager_s007a_bc90::RegisterBuiltInGameTexture migrated from s007abc90 (verbatim, slice spelling)
-007ac750 ?GetTextureSync@cTextureManager@SP@@QAEPAVcTextureInstance@2@VKey@ResourceMan@EA@@W4tUseFlags@cITextureManager@2@@Z  # SP::cTextureManager::GetTextureSync migrated from s007abc90
-007ac850 ?GetTextureAsync@cTextureManager@SP@@QAEPAVcTextureInstance@2@VKey@ResourceMan@EA@@W4tUseFlags@cITextureManager@2@@Z  # SP::cTextureManager::GetTextureAsync migrated from s007abc90
-007ac8d0 ?StallUntilLoadedUnderLock@cTextureManager@SP@@QAE_NPAUcTextureInstanceInternal@2@@Z  # SP::cTextureManager::StallUntilLoadedUnderLock migrated from s007abc90
+007ac750 ?GetTextureSync@cTextureManager_s007a_bc90@@QAEPAXUResourceKey@@H@Z  # cTextureManager_s007a_bc90::GetTextureSync migrated from s007abc90 (verbatim, slice spelling)
+007ac850 ?GetTextureAsync@cTextureManager_s007a_bc90@@QAEPAXUResourceKey@@H@Z  # cTextureManager_s007a_bc90::GetTextureAsync migrated from s007abc90 (verbatim, slice spelling)
+007ac8d0 ?StallUntilLoadedUnderLock@cTextureManager_s007a_bc90@@QAEPAXPAUResourceKey@@@Z  # cTextureManager_s007a_bc90::StallUntilLoadedUnderLock migrated from s007abc90 (verbatim, slice spelling)
+007aca00 ?CreateGameTextureFromSerializer@cTextureManager_s007a_bc90@@QAEPAXPAX00I@Z  # cTextureManager_s007a_bc90::CreateGameTextureFromSerializer migrated from s007abc90 (verbatim, slice spelling)
+007acae0 ?CreateGameTextureRaw@cTextureManager_s007a_bc90@@QAEPAXPAX0II@Z  # cTextureManager_s007a_bc90::CreateGameTextureRaw migrated from s007abc90 (verbatim, slice spelling)

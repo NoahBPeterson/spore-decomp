@@ -1,9 +1,9 @@
-008337d0 eastl::hashtable<ResourceMan::Key,cTextureInstance*>::create_node  # alloc +0x1c, 0x14-byte node
-00833a20 eastl::hashtable<ResourceMan::Key,cTextureInstance*>::DoFreeNodes  # frees nodes via allocator slot 0xc
-00833a80 cTextureManager::~cTextureManager  # vtables 0x141aabc/0x141aab8, clears 2 global maps
+008337d0 ?CreateNode@TexTable@@QAEPAUTexNode@@PBX@Z  # TexTable::CreateNode migrated from s008337d0 (verbatim, slice spelling)
+00833a20 ?Clear@TexTable@@QAEXPAPAUTexNode@@I@Z  # TexTable::Clear migrated from s008337d0 (verbatim, slice spelling)
+00833a80 ?Dtor@TexMgr@@QAEXXZ  # TexMgr::Dtor migrated from s008337d0 (verbatim, slice spelling)
 00833af0 ?FUN_00833af0@@YAPAXPAX0@Z  # FUN_00833af0 migrated from s008337d0 (verbatim, slice spelling)
-00833ba0 cTextureManager::LoadTexture  # "image/..." texture-instance loader (1105B)
-00834000 cTextureManager::LoadTextureThunk  # __stdcall, forwards (-1,-1)
+00833ba0 ?FUN_00833ba0@@YA_NPAXH0MM@Z  # FUN_00833ba0 migrated from s008337d0 (verbatim, slice spelling)
+00834000 ?FUN_00834000@@YGXHHH@Z  # FUN_00834000 migrated from s008337d0 (verbatim, slice spelling)
 00834020 ??0cSPUITextWin@@QAE@XZ  # cSPUITextWin::cSPUITextWin migrated from s008337d0 (verbatim, slice spelling)
 00834140 UI::TextZoomName::SetText  # virtual slot 0x8c, global 0x164f0e0
 00834160 UI::TextZoomName::~TextZoomName  # vtable 0x141ada8

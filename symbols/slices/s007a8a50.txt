@@ -6,19 +6,19 @@
 007a93b0 ?FUN_007a93b0@@YAXXZ  # FUN_007a93b0 migrated from s007a8a50 (verbatim, slice spelling)
 007a93c0 ?GetTexture@cTextureManager@@QAEXHHH@Z  # cTextureManager::GetTexture migrated from s007a8a50 (verbatim, slice spelling)
 007a93f0 ?HasTexture@cTextureManager@@QAEXHH@Z  # cTextureManager::HasTexture migrated from s007a8a50 (verbatim, slice spelling)
-007a9420 ?GetKeyFromTexture@cTextureManager@@QAEXPAHH@Z  # cTextureManager::GetKeyFromTexture migrated from s007a8a50 (verbatim, slice spelling)
+007a9420 ?GetKeyFromTexture@cTextureManager@@QAEPAHPAHH@Z  # cTextureManager::GetKeyFromTexture migrated from s007a8a50 (verbatim, slice spelling)
 007a9450 ?StallUntilLoaded@cTextureManager@SP@@UAE_NPBVcTextureInstance@2@@Z  # SP::cTextureManager::StallUntilLoaded migrated from s007a8a50
 007a9470 ?CreateTexture@cTextureManager@@QAEXXZ  # cTextureManager::CreateTexture migrated from s007a8a50 (verbatim, slice spelling)
 007a94f0 ?CreateTextureEx@cTextureManager@@QAEXHHHHHIHH@Z  # cTextureManager::CreateTextureEx migrated from s007a8a50 (verbatim, slice spelling)
 007a9540 ?RegisterGameTexture@cTextureManager@@QAEXHH@Z  # cTextureManager::RegisterGameTexture migrated from s007a8a50 (verbatim, slice spelling)
-007a95b0 ?FUN_007a95b0@@YAXHD@Z  # FUN_007a95b0 migrated from s007a8a50 (verbatim, slice spelling)
+007a95b0 ?FUN_007a95b0@@YGXHD@Z  # FUN_007a95b0 migrated from s007a8a50 (verbatim, slice spelling)
 007a95e0 ?ReloadTexture@cTextureManager@@QAEXHH@Z  # cTextureManager::ReloadTexture migrated from s007a8a50 (verbatim, slice spelling)
 007a9620 ?CleanupJob@cTextureManager@@QAEXXZ  # cTextureManager::CleanupJob migrated from s007a8a50 (verbatim, slice spelling)
 007a9680 ?FUN_007a9680@@YAXPAPAHPAH1000@Z  # FUN_007a9680 migrated from s007a8a50 (verbatim, slice spelling)
-007a9730 ?WriteTexture@cTextureManager@@QAEDHD@Z  # cTextureManager::WriteTexture migrated from s007a8a50 (verbatim, slice spelling)
+007a9730 ?WriteTexture@cTextureManager@@QAEDHHD@Z  # cTextureManager::WriteTexture migrated from s007a8a50 (verbatim, slice spelling)
 007a9840 ?RemoveMatching@DequeOwner@@QAEXPAH@Z  # DequeOwner::RemoveMatching migrated from s007a8a50 (verbatim, slice spelling)
 007a9880 ?Clear@RefPtrSlot@@QAEXXZ  # RefPtrSlot::Clear migrated from s007a8a50 (verbatim, slice spelling)
-007a98b0 ?StallUntilLoaded@@YAXPAPAHPAH1101@Z  # StallUntilLoaded migrated from s007a8a50 (verbatim, slice spelling)
+007a98b0 ?StallUntilLoaded@@YAPAPAHPAPAHPAH1101HHHH@Z  # StallUntilLoaded migrated from s007a8a50 (verbatim, slice spelling)
 007a9a80 ??YDequeIter2@@QAEAAU0@H@Z  # DequeIter2::operator+= migrated from s007a8a50 (verbatim, slice spelling)
 007aa0d0 SP::cTextureManager::AddTextureLoadDependency  # pdb_names.json
 007aa200 SP::cTextureManager::ReloadTexture  # pdb_names.json

@@ -1,22 +1,45 @@
 # va  diff-bytes  reason
-007a93b0 6 wrapper: register choice + tail-call vs call
-007a9420 14 GetKeyFromTexture: base pointer register/lea shape differs
-007a9450 20 GetResourceForTexture: null path folds to absolute [0x24]
-007a9470 34 CreateTexture: IDGenerator + vtable forwarding schedule; fixed 2026-10-12: generator call now goes through its vtable slot 1 (was the object field at +4)
-007a95b0 7 set/clear flag bit: epilogue merge differs
-007a9620 27 CleanupJob: EH frame + virtual-release shape
-007a9680 83 deque range copy loop
-007a9730 94 WriteTexture: async/sync path + key packing
-007a9840 44 remove-first-matching in deque; equiv: WEAK 43 valid inputs, 32% coverage (member of DequeOwner, ECX fixed)
-007a9880 34 refptr clear (lock xadd release); equiv: PASS (fixed ECX receiver: member of RefPtrSlot)
-007a98b0 68 cLoadQueue<...>::StallUntilLoaded deque scan
-007a9a80 89 DequeIterator::operator+=; equiv: FAIL 5/100 mismatched, memory pool (member operator+=, ECX fixed, symbol entry ?YDequeIter2)
-007a9d70 99 deque reverse range copy: iterator register schedule differs
-007a9eb0 34 hashtable DoFreeNodes: EH frame + refcount schedule
-007aa3a0 101 job-info transfer: virtual call/register schedule; equiv: FAIL 5/23 mismatched, eax (member of JobSlots, ECX fixed)
-007aa800 69 cNodeAllocator::Create: loop rotation differs
-007aa850 21 deque push_back with block alloc: map-growth schedule; equiv: PASS (now DequeMap::PushBack, ECX fixed)
+007a9420 6 GetKeyFromTexture: returns the out buffer; base-pointer register/lea shape differs; equiv: PASS 205 valid, 92.9% cov flags: /O2 /MD /Gy /EHsc /TP /GS-
+007a9450 20 GetResourceForTexture: null path folds to absolute [0x24]; equiv: PASS 400 valid, 62.5% cov flags: /O2 /MD /Gy /EHsc /TP /GS-
+007a9470 34 CreateTexture: IDGenerator + vtable forwarding schedule; fixed 2026-10-12: generator call now goes through its vtable slot 1 (was the object field at +4) flags: /O2 /MD /Gy /EHsc /TP /GS-
+007a9620 22 CleanupJob: no EH frame (31 vs 87 B) and virtual-release shape differs; equiv: PASS 366 valid, 100% cov (release is a normal call, _ReadWriteBarrier blocks TCO) flags: /O2 /MD /Gy /EHsc /TP /GS-
+007a9680 83 deque range copy loop flags: /O2 /MD /Gy /EHsc /TP /GS-
+007a9730 95 WriteTexture: (tex, extra, async) 3-arg ABI; sync path manager vt[0x20] + packed key, async path cdecl FUN_006b4b60(mJob, extra, 0, &key); equiv: WEAK 211 valid, 19.7% cov flags: /O2 /MD /Gy /EHsc /TP /GS-
+007a9840 44 remove-first-matching in deque; equiv: WEAK 43 valid inputs, 32% coverage (member of DequeOwner, ECX fixed) flags: /O2 /MD /Gy /EHsc /TP /GS-
+007a9880 34 refptr clear (lock xadd release); equiv: PASS (fixed ECX receiver: member of RefPtrSlot) flags: /O2 /MD /Gy /EHsc /TP /GS-
+007a98b0 64 StallUntilLoaded: ten-dword arg list (value is arg10 at E+0x28), returns the out buffer; equiv: PASS 348 valid, 100% cov flags: /O2 /MD /Gy /EHsc /TP /GS-
+007a9a80 89 DequeIterator::operator+=: behaviourally correct, but MSVC relocates `this` ecx->eax so ours clobbers ecx; equiv: FAIL-KEPT (register-ABI non-lever, callers in other objects) flags: /O2 /MD /Gy /EHsc /TP /GS-
+007a9ae0 225 deque map InsertAt: EASTL deque growth schedule differs flags: /O2 /MD /Gy /EHsc /TP
+007a9d70 50 eastl deque copy_backward: three iterator args by value (4 dwords each) + result out; chk diff 50; equiv PASS 1110/2000 valid (66.7% cov); src PASS flags: /O2 /MD /Gy /EHsc /TP
+007a9e10 68 property-list ctor: vtable/EH schedule flags: /O2 /MD /Gy /EHsc /TP
+007a9eb0 34 hashtable DoFreeNodes: EH frame + refcount schedule flags: /O2 /MD /Gy /EHsc /TP
+007a9f30  331  placeholder-texture one-time init (FUN_007a9f30 __fastcall, ecx=self): builds both placeholder textures through the manager's own vtable; chk diff 331 (size 410 vs 402); equiv WEAK 297/400 valid (6.0% cov, need 60%) — the two texture-creation paths are rarely reachable from generated inputs flags: /O2 /MD /Gy /EHsc /TP
+007aa0d0  268  AddTextureLoadDependency (FUN_007aa0d0 __fastcall, ecx=self): chk diff 268 (size 250 vs 302); equiv WEAK 220/400 valid (33.3% cov) flags: /O2 /MD /Gy /EHsc /TP
+007aa200  262  ReloadTexture (FUN_007aa200 __fastcall, ecx=self): chk diff 262 (size 162 vs 279); equiv WEAK 171/400 valid (30.2% cov) flags: /O2 /MD /Gy /EHsc /TP
+007aa320 73 JobSlots::Clear: 0x690120 is thiscall cJob::Release (ecx=this), vtable slots need *(void***) deref; chk diff 75; equiv PASS 280/500 valid (88.1% cov) flags: /O2 /MD /Gy /EHsc /TP
+007aa3a0 100 JobSlots::Transfer: returns char in al; vtable slots deref via *(void***); chk diff 127; equiv PASS 481/500 valid (92.7% cov); src PASS flags: /O2 /MD /Gy /EHsc /TP
+007aa430  163  job-descriptor submit (FUN_007aa430 __fastcall, ecx=self): chk diff 163 (size 243 vs 241); equiv WEAK 156/400 valid (42.0% cov) flags: /O2 /MD /Gy /EHsc /TP
+007aa530  220  TextureJob release/cleanup (FUN_007aa530 __fastcall, ecx=self): chk diff 220 (size 190 vs 239); equiv PASS 370/400 valid (88.0% cov) flags: /O2 /MD /Gy /EHsc /TP
+007aa620 12 empty 16-byte ctor: EH frame shape; equiv: PASS (now Empty16 ctor, ECX fixed) flags: /O2 /MD /Gy /EHsc /TP
+007aa660  155  texture job slot destructor (FUN_007aa660 __fastcall, ecx=self): chk diff 155 (size 91 vs 165); equiv PASS 282/400 valid (100% cov) flags: /O2 /MD /Gy /EHsc /TP
+007aa710  213  eastl hashtable find-or-insert (FUN_007aa710 __fastcall, ecx=self): chk diff 213 (size 248 vs 226); equiv PASS 225/400 valid (100% cov) flags: /O2 /MD /Gy /EHsc /TP
+007aa800 63 cNodeAllocator::Create: retail does xchg [chunk+0x10],1 not add; chk diff 73; equiv PASS 460/500 valid (100% cov); src PASS flags: /O2 /MD /Gy /EHsc /TP
+007aa850 21 deque push_back with block alloc: map-growth schedule; equiv: PASS (now DequeMap::PushBack, ECX fixed) flags: /O2 /MD /Gy /EHsc /TP
+007aaa00  373  build + submit job descriptor (FUN_007aaa00 __fastcall, ecx=self; args slot/refArg/flag/kind): chk diff 373 (size 356 vs 429); equiv PASS 202/400 valid (95.5% cov) flags: /O2 /MD /Gy /EHsc /TP
 007ab0d0 194 COMPLETE hash_map DoInsertValue; frame 0xc vs 0x8 (original reuses the value param home slot for the bucket index) and the rehash/allocate scheduling differs.
 007ab5f0 108 COMPLETE HasTexture; no /EHsc prologue (the original keeps unwind state around the mutex) and the find argument/stack layout differs.
 007ab6c0 54 COMPLETE ReloadTexture; the return-0 block is laid out inline instead of cold and the vtable loads are hoisted out of the pInstance test.
-007ac080 74 COMPLETE eastl::hash_map::operator[] (find + DoInsertValue on miss); frame 0x24 vs 0x1c and this/key register assignment swapped, so the whole schedule differs.; equiv: PASS (symbol entry ?ATextureInstanceMap)
+007abc90 642 cTextureManager::Update complete: app-property mip-LOD query, list walk with interlocked refcount steering, deque-entry cleanup + hash erase, changed-LOD raster notify over the RW arena export list. Non-exact: LTCG inlines the property query, the hashtable find/erase and the inline erase helper, and hoists this/param into fs-based frames; per-TU register/stack schedule differs throughout. flags /O2 /MD /Gy /EHsc /TP /GS- [equiv: UNSUPPORTED (unresolved AppPropsView::GetIntProperty/Query, Vec128Ctor dtor)]
+007ac080 74 COMPLETE eastl::hash_map::operator[] (find + DoInsertValue on miss); frame 0x24 vs 0x1c and this/key register assignment swapped, so the whole schedule differs.; equiv: PASS (symbol entry ?ATextureInstanceMap) flags: /O2 /MD /Gy /EHsc /TP
+007ac0f0 82 cLoadQueue::cLoadQueue complete: mpManager=0, _eh_vector_constructor_iterator_ over 4x 0x10-byte entries (0x7aa620/0x7aa660), 10 dwords zeroed with the EH state store interleaved, mQueue.Init(0) (0x7a9c10), mField70=0. Non-exact: original hoists `xor edi,edi` before the vector ctor and uses `mov [x],edi` for all 11 zero stores and saves/restores edi; ours uses immediates/eax and no push edi. flags /O2 /MD /Gy /EHsc /TP /GS- [equiv: UNSUPPORTED (CQEntry ctor/dtor unresolved)]
+007ac2f0 92 cTextureManager::CreateInstance complete: scoped Lock, node alloc (0x7aa800), insert into the +0x50 list, fill node fields (next/prev/pRaster/mField0c/mRefCount xchg 1/mCacheFrames/key copy/mpResource intr-ptr/flags), flags&4 + raster-format + mip check -> vtable[0xb] notify, map[key]=node, Unlock, return node+8. Non-exact: original's list-insert and flags&4 scheduling and the __stdcall raster notify differ. flags /O2 /MD /Gy /EHsc /TP /GS- [equiv: UNSUPPORTED (0/400 valid; import WaitForSingleObject + write faults)]
+007ac480 302 eastl::deque<cTextureAsyncQueueEntry,eastl::allocator,64>::erase complete (iterator-recompute, block index, size/2 pivot, move_backward/move_forward block-boundary fixup, plus_assign result). Non-exact: the whole helper/member call schedule differs. [equiv: FAIL (2/134 valid inputs diverge; ours faults at 0x7a9690 where the original returns -- residual begin/end mapping error in the else-branch)] flags: /O2 /MD /Gy /EHsc /TP
+007ac600 263 cTextureManager::RegisterBuiltInGameTexture complete: flags&8 -> SetCachingType(2,obj), key from obj[2..4] + AdjustKey (0x6acfe0), scoped Lock, hash find; on hit release old intrusive ptr and install obj, set field+8=obj[6], field+0xc=9, return inst+8; on miss CreateInstance(&key,obj,obj[6],flags,9). Non-exact: LTCG inlines the hashtable find and the mutex lock/unlock frame; schedule differs. flags /O2 /MD /Gy /EHsc /TP /GS- [equiv: WEAK]
+007ac750 131 cTextureManager::GetTextureSync complete: key.mType=0x2f4e681c, GetResource(&key,&inst,0,0,0,0); on hit pRaster=inst[6], flags&8 -> SetCachingType(5,inst); on miss use mInvalidRaster when the app property is set; CreateInstance(&key,inst,pRaster,flags,1); release inst. Non-exact: register/stack schedule + frame differ. flags /O2 /MD /Gy /EHsc /TP /GS- [equiv: PASS]
+007ac850 111 cTextureManager::GetTextureAsync complete: key.mType=0x2f4e681c, GetResource(&key,0), CreateInstance(&key,0,mLoadingRaster,flags,0), schedule the handle (&inst-8) on the load queue (0x7abae0), return inst. Non-exact: original reuses the dead flags arg home for the handle local and keeps this in edi; ours allocates a fresh slot. flags /O2 /MD /Gy /EHsc /TP /GS- [equiv: WEAK]
+007ac8d0 121 cTextureManager::StallUntilLoadedUnderLock complete: slot scan over the 4 queue entries (free or owning the instance), round-robin allocate via mField70, StallFinishBackgroundLoad (0x7aafc0); on the loaded path StallUntilLoaded (0x7a98b0), Setup the async info, deque erase and stall-finish. Non-exact: the do/while control flow and the 16-byte key/state copies passed to the helpers differ. flags /O2 /MD /Gy /EHsc /TP /GS- [equiv: FAIL (5/5 valid inputs; return value eax differs -- control-flow reconstruction of the outer do/while is wrong)]
+007aca00 105 create-instance-from-serializer complete: conditional this->vtbl[0x34/4](arg2) notify, placement GameTexture (0x765f10) from arg2[0x1c], base/derived vtable + refcount init, f18/f08/f0c=0x2f4e681c/f10 stores, RegisterBuiltInGameTexture, scoped release guard. Non-exact: original schedules the derived-vptr store between f14 and f18, keeps this in ebx and arg0 in ebp, and stores the guard in arg0's home slot; per-TU allocation differs. flags /O2 /MD /Gy /EHsc /TP /GS- [equiv: WEAK]
+007acae0 117 create-instance-from-raw-params complete: placement object (0x1c bytes) with base (vtbl 0x13ebcdc, rc xchg 0) + derived (vtbl 0x140e12c) init, f18=arg2(key), f08=arg0, f0c=0x2f4e681c, f10=arg1, RegisterBuiltInGameTexture(p,flags), scoped release guard, return result. Non-exact: same per-TU register/stack allocation divergence as 007aca00. flags /O2 /MD /Gy /EHsc /TP /GS- [equiv: UNSUPPORTED (unresolved ?v0@TiBaseA@@UAEXXZ)]
+00833300 115 eastl hashtable rehash: register allocation differs (behaviorally complete) flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+00833a20 4 TexTable::Clear: loop-carried register scheduling (edi/esi) differs flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+00834000 12 FUN_00834000: __stdcall arg evaluation order differs flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

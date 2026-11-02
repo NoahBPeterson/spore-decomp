@@ -1,4 +1,4 @@
-// src/game/SPEngine/SPGraphicsTextureManager.cpp -- migrated from slice(s) s008337d0, s007acbb0, s007abc90, s007aabb0, s007a9ae0, s007a8a50 by tools/migrate/rewrite.py
+// src/game/SPEngine/SPGraphicsTextureManager.cpp -- migrated from slice(s) s00832790, s008337d0, s007acbb0, s007abc90, s007aabb0, s007a9ae0, s007a8a50 by tools/migrate/rewrite.py
 // Object file: SPEngine/SPGraphicsTextureManager.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -21,6 +21,10 @@ extern "C" char  FUN_006b4b60();
 #include "SP/cTextureAsyncInfo.h"
 #include "SP/cJob.h"
 #include "EA/Thread/Mutex.h"
+#include "EA/ResourceMan/Key.h"
+#include "SP/cTextureAsyncQueueEntry.h"
+#include "SP/cTextureInstanceInternal.h"
+#include <math.h>
 
 // ---- items of slice s007a8a50 begin (TODO(rewrite): local stubs, replace by canonical classes)
 struct TextureKey { int mKey; unsigned int mType; int mExtra; };
@@ -45,7 +49,7 @@ struct cTextureManager {
 };
 struct RefPtrSlot {
     int* mPtr;
-    void Assign(int* value);   // 007a97e0
+    RefPtrSlot* Assign(int* value);   // 007a97e0
     void Clear();              // 007a9880
 };
 struct DequeOwner {
@@ -61,9 +65,49 @@ struct DequeIter2 {
 // ---- items of slice s007a9ae0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern "C" void* EASTL_allocator_allocate(unsigned int n, const char* name, int flags,
                                           unsigned debugFlags, const char* file, int line); // 0x00f473a0
-extern "C" void  FUN_00761b40();
-extern "C" void  FUN_00761c00();
-extern "C" char VT_ArenaResource[];
+extern "C" void  EASTL_allocator_deallocate(void* p); // 0x00f47380
+extern "C" void  memmove(void*, const void*, unsigned int);
+extern "C" void* VectorDoInsertValue(void*, void*, unsigned int);
+extern "C" void  FUN_006913c0_AddWeakDep(void*);            // 0x006913c0  cJob::AddWeakDependency
+extern "C" void  FUN_006926b0_Cancel(void*);                // 0x006926b0  cJob::Cancel
+extern "C" void  FUN_006909b0_Refresh(void*);               // 0x006909b0  Editor::Refresh
+extern "C" void  FUN_00576650_Assign(void*);                // 0x00576650  cAtomicRefPtr::operator=
+extern "C" void  FUN_00630540_Assign(void*);                // 0x00630540  JobRef::operator=
+extern "C" void  FUN_009221b0_Lock(void*);                  // 0x009221b0  Mutex::Lock
+extern "C" void  FUN_00922270_Unlock(void*);                // 0x00922270  Mutex::Unlock
+extern "C" void  FUN_00921440_Needed(void*);                // 0x00921440  RehashPolicy::Needed
+extern "C" void  FUN_011ef750_Open(void*);                  // 0x011ef750  texture Open
+extern "C" void  FUN_011ef880_Close(void*);                 // 0x011ef880  texture Close
+extern "C" void  FUN_007a99d0_Rehash(void*);                // 0x007a99d0  hashtable rehash
+extern "C" void* FUN_0067dd60();                            // 0x0067dd60  GetItemManager
+extern "C" void* FUN_0067dcd0();                            // 0x0067dcd0  GetFactory
+extern "C" void* FUN_0067dcc0();                            // 0x0067dcc0  MessageManager
+extern "C" void* FUN_0068f4d0();                            // 0x0068f4d0  GetJobManager
+extern "C" void  FUN_006ac040_SetCachingType(int, void*);   // 0x006ac040
+extern "C" unsigned int FUN_00932e80_hash(const char*, unsigned int, int);  // 0x00932e80
+extern "C" void* FUN_00761b40();                            // 0x00761b40
+extern "C" void* FUN_00761c00();                            // 0x00761c00
+extern "C" int*  FUN_0041e990_GetInt();                     // 0x0041e990
+extern "C" void* g_15fd918;                                 // 0x015fd918
+extern "C" char VT_PropertyListA[];   // 0x013ebcdc
+extern "C" char VT_PropertyListB[];   // 0x01453eac
+extern "C" char VT_PropertyListB2[];  // 0x013ebcb8
+extern "C" char VT_PropertyListC[];   // 0x0140fef4
+extern "C" char VT_ArenaResource[];   // 0x013eb938
+typedef int (__thiscall* cJobReleaseFn)(void*);
+typedef void (__thiscall* FnV0)(void*);
+typedef void (__thiscall* FnV1)(void*, int);
+typedef void (__thiscall* FnV2)(void*, int, int);
+typedef void (__thiscall* FnVP)(void*, void*);
+typedef bool (__thiscall* FnB1)(void*, void*);
+typedef int  (__thiscall* FnI1)(void*, int);
+typedef void*(__thiscall* FnP8)(void*, unsigned, int, int, int, int, int, int, int);
+struct DequeIterator {
+    int*  mpCurrent;         // +0x00
+    int*  mpBegin;           // +0x04
+    int*  mpEnd;             // +0x08
+    int** mpCurrentArrayPtr; // +0x0c
+};
 struct DequeMap {
     int*  mpBegin;      // +0x00
     int   mCapacity;    // +0x04
@@ -96,10 +140,93 @@ struct cNodeAllocator {
     Chunk* mpHeadChunk; // +0x10
     Chunk* Create();
 };
+struct Mutex {                      // EA::Thread::Mutex (0x009221b0 Lock, 0x00922270 Unlock)
+    int mData[6];
+};
+struct TexManager {
+    void**        mpVT;             // +0x00
+    int           mField04;         // +0x04
+    int           mField08;         // +0x08
+    unsigned char mInitFlag;        // +0x0c
+    void*         mField10;         // +0x10
+    void*         mField14;         // +0x14
+    void*         mNormalMap;       // +0x18  placeholder normal-map ref (cAtomicRefPtr)
+    void*         mSpecGlossMap;    // +0x1c  placeholder spec/gloss ref (cAtomicRefPtr)
+    Mutex         mMutex;           // +0x20
+    unsigned char mPad[0xcc - 0x20 - sizeof(Mutex)];
+    int           mFieldCC;         // +0xcc
+    void*         mFieldD0;         // +0xd0
+    TexManager*   mSelfD4;          // +0xd4
+};
 struct JobSlots {
     void Clear();      // 007aa320
     char Transfer(int param_2);   // 007aa3a0 (returns in al)
 };
+struct JobSlotGroup {
+    void* mSlot0;                   // +0x00
+    void* mSlot1;                   // +0x04
+    void* mSlot2;                   // +0x08
+    void* mSlot3;                   // +0x0c
+};
+struct JobObject {
+    void*         mpVT;             // +0x00
+    int           mField04;         // +0x04
+    void*         mField08;         // +0x08
+    unsigned char mState0C;         // +0x0c
+    unsigned char mPad0D[3];
+    void*         mField10;         // +0x10
+    void*         mField14;         // +0x14
+    void*         mField18;         // +0x18
+    int           mField1C;         // +0x1c
+    void*         mField20;         // +0x20
+    void*         mField24;         // +0x24
+    unsigned char mFlags28;         // +0x28
+    unsigned char mPad29[3];
+    void*         mField2C;         // +0x2c
+};
+struct TextureJob {
+    void** mpVT;                    // +0x00
+    int    mField04;                // +0x04
+    void*  mField08;                // +0x08
+    void*  mField0C;                // +0x0c
+    void*  mField10;                // +0x10
+};
+struct RehashResult { bool doRehash; unsigned newBucketCount; };
+struct HashTable {
+    int      mField00;              // +0x00
+    void**   mTable;                // +0x04
+    unsigned mBucketCount;          // +0x08
+    unsigned mCount;                // +0x0c
+    int      mPolicy[4];            // +0x10
+};
+struct JobDesc {
+    int           mField00;         // +0x00
+    int           mField04;         // +0x04
+    unsigned char mFlag08;          // +0x08  (only this byte is written)
+    unsigned char mPad09;           // +0x09  (left uninitialised, as in the original)
+    unsigned char mPad0A;           // +0x0a
+    unsigned char mPad0B;           // +0x0b
+    int           mField0C;         // +0x0c
+    int           mField10;         // +0x10
+    int           mField14;         // +0x14
+    int           mField18;         // +0x18
+    int           mField1C;         // +0x1c
+    int           mField20;         // +0x20
+    int           mField24;         // +0x24
+    int           mField28;         // +0x28
+};
+static inline void AddRef(void* p)  { if (p) ((FnV0)(*(void***)p)[0])(p); }
+static inline void Release(void* p) { if (p) ((FnV0)(*(void***)p)[1])(p); }
+static inline void ReleaseAt10(void* p)
+{
+    if (!p) return;
+    volatile long* rc = (volatile long*)((char*)p + 0x10);
+    _InterlockedExchangeAdd(rc, -1);
+    long cur = _InterlockedExchangeAdd(rc, 0);
+if (cur < 1) _InterlockedExchangeAdd(rc, 1);
+else _InterlockedExchangeAdd(rc, 0);
+}
+struct Empty16 { int a, b, c, d; Empty16(); };
 struct FixedAllocatorBase { bool AddCore(int, int); };
 // ---- items of slice s007a9ae0 end
 
@@ -301,10 +428,25 @@ public:
 // ---- items of slice s007aabb0 end
 
 // ---- items of slice s007abc90 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern void* g_emptyBucketArray; // 0x0154df28
+extern "C" char SP_SetCachingType(int type, void* p);        // 0x006ac040
+extern "C" void AdjustKey(void* pKey, void* pObj);           // 0x006acfe0
+extern "C" void StallUntilLoadedFn(void** pOut, int* a, int* b, void* c); // 0x007a98b0
+extern "C" void* __fastcall NodeCreate(void* pClassId);   // 0x007aa800
+extern "C" void __cdecl gfxFree(void* p);                                   // 0x00f47380
+extern "C" int rwArenaNumExported(void* arena);                          // 0x011e23a0
+extern "C" void rwArenaExportedByIndex(void* arena, int index, void* pOut); // 0x011e28e0
+extern int gMipLodSetting;              // 0x0153bce0
+extern int gAppProperties;              // 0x015fd918
+extern "C" void cLoadQueueUpdate(void* pQueue);  // 0x007aba40 (cLoadQueue::Update)
+extern "C" void RemoveMatching(void* pDeque, void* pKey); // 0x007a9840
+extern "C" void TextureEraseNode(void* pMap, void* pNode);            // 0x00b4f930
 namespace EA {
 namespace Thread {
 class Mutex_s007a_bc90 {
 public:
+    Mutex_s007a_bc90(const void* pParams, bool bDefault);   // 0x009222a0
+    ~Mutex_s007a_bc90();
     bool Lock(void* pAttribute);  // 0x009221b0 (EA::Thread::Mutex::Lock)
     void Unlock();  // 0x00922270 (EA::Thread::Mutex::Unlock)
 private:
@@ -312,6 +454,14 @@ private:
 };
 }
 }
+struct ResManMgr {
+virtual void v0();
+virtual void v1();
+virtual void v2();
+    virtual bool GetResource(void* key, int a, int b, int c, int d, int e); // slot 3 (+0xc)
+};
+extern "C" ResManMgr* ResManager();                    // 0x0067dcd0
+class cTextureInstanceInternal;
 struct TextureNode_s007a_bc90;
 struct TextureValue {
     ResourceKey first;   // +0x00
@@ -328,6 +478,8 @@ struct InsertResult {
     bool         second;
 };
 struct true_type {};
+struct cTextureAsyncInfo_s007a_bc90;
+struct AsyncDeque;
 class TextureInstanceMap_s007a_bc90 {
 public:
     struct RehashPolicy {
@@ -339,6 +491,15 @@ public:
     InsertResult  DoInsertValue(const TextureValue& value, true_type); // 0x007ab0d0
     void*&        operator[](const ResourceKey& key);                  // 0x007ac080
     void          DoFreeNodes(void*, uint32_t);
+    TextureInstanceMap_s007a_bc90() {
+        mRehashPolicy.mfMaxLoadFactor = 1.0f;
+        mRehashPolicy.mfGrowthFactor = 2.0f;
+        mnBucketCount = 1;
+        mpBucketArray = (TextureNode_s007a_bc90**)&g_emptyBucketArray;
+        mnElementCount = 0;
+        mRehashPolicy.mnNextResize = 0;
+    }
+    ~TextureInstanceMap_s007a_bc90();
 
     char            mEmpty[4];     // +0x00
     TextureNode_s007a_bc90**   mpBucketArray; // +0x04
@@ -347,33 +508,96 @@ public:
     RehashPolicy    mRehashPolicy; // +0x10
     char            mRest[4];      // +0x1c
 };
+struct CQEntry {           // 0x10-byte queue entry (element ctor 0x007aa620 / dtor 0x007aa660)
+    int a, b, c, d;
+    CQEntry();
+    ~CQEntry();
+};
+struct CQState {           // POD queue state at +0x44
+    int  mData[10];        // +0x00..+0x27
+    void Init(int);        // 0x007a9c10
+};
 class cLoadQueue_s007a_bc90 {
 public:
-    cLoadQueue_s007a_bc90();                                   // 0x007ac0f0
+    __declspec(noinline) cLoadQueue_s007a_bc90();              // 0x007ac0f0
     void Schedule(void* pEntry);                    // 0x007abae0
     void*           mpManager;    // +0x00
-    char            mEntry[0x40]; // +0x04
-    char            mQueue[0x30]; // +0x44
+    CQEntry         mEntries[4];  // +0x04 .. +0x43
+    CQState         mQueue;       // +0x44 .. +0x6b
+    char            mPad6c[4];    // +0x6c
+    int             mField70;     // +0x70
 };
-class cTextureManager_s007a_bc90 {
+class cTmBaseA {
+public:
+    virtual ~cTmBaseA();
+};
+class cTmBaseB {
+public:
+    cTmBaseB() : mRefCount(0) {}
+    virtual ~cTmBaseB();
+    int mRefCount;
+};
+struct cTmDtorMember {   // 4-byte members with destructors at +0x18 and +0x1c
+    int v;
+    cTmDtorMember() : v(0) {}
+    ~cTmDtorMember();
+};
+struct cTmListHead {     // intrusive list head at +0x50
+    cTmListHead* mpNext;
+    cTmListHead* mpPrev;
+    cTmListHead() { mpPrev = this; mpNext = this; }
+    ~cTmListHead();
+};
+class cTIRefCounted {           // object held by the intrusive pointer at +0x24
+public:
+    virtual void AddRef();      // vtable slot 0
+    virtual void Release();     // vtable slot 1
+};
+class cTextureInstanceInternal {
+public:
+    cTextureInstanceInternal* mpNext;   // +0x00
+    cTextureInstanceInternal* mpPrev;   // +0x04
+    void*   mpRaster;                   // +0x08  (public handle)
+    char    mField0c;                   // +0x0c
+    int     mRefCount;                  // +0x10
+    int     mCacheFrames;               // +0x14
+    ResourceKey mKey;                   // +0x18
+    cTIRefCounted* mpResource;          // +0x24
+    uint32_t mUseFlags;                 // +0x28
+};
+typedef void (__cdecl *RasterNotifyFn)(void* pRaster, int setting);
+class cScopedLock {
+public:
+    EA::Thread::Mutex_s007a_bc90* mMutex;
+    cScopedLock(EA::Thread::Mutex_s007a_bc90* pMutex)
+    { mMutex = pMutex; pMutex->Lock(&g_mutexAttribute); }
+    ~cScopedLock();     // out-of-line: SP::MutexLock::~MutexLock (0x00697b70)
+};
+class cTextureManager_s007a_bc90 : public cTmBaseA, public cTmBaseB {
 public:
     cTextureManager_s007a_bc90();                              // 0x007ac1e0
-    void* CreateInstance(ResourceKey* key, void* pResource, int a, uint32_t flags, char b, ...); // 0x007ac2f0
+    virtual ~cTextureManager_s007a_bc90();
+    void Update();                                  // 0x007abc90
+    void CleanupJob();                              // 0x007a9620
+    bool StallFinishBackgroundLoad(void* pEntry);   // 0x007aafc0
+    void* CreateInstance(ResourceKey* key, void* pResource, void* pRaster, uint32_t flags, char b); // 0x007ac2f0
     void* GetTextureSync(ResourceKey key, int flags);   // 0x007ac750
     void* GetTextureAsync(ResourceKey key, int flags);  // 0x007ac850
     void* StallUntilLoadedUnderLock(ResourceKey* key);  // 0x007ac8d0
     void* RegisterBuiltInGameTexture(void* p1, uint32_t flags); // 0x007ac600
+    void* CreateGameTextureFromSerializer(void* arg0, void* arg1, void* arg2, uint32_t flags); // 0x007aca00
+    void* CreateGameTextureRaw(void* arg0, void* arg1, uint32_t key, uint32_t flags);           // 0x007acae0
 
-    char            mPad00[0x0c]; // +0x00
-    bool            mIsInitialized;
+    bool            mIsInitialized; // +0x0c
     char            mPad0d[3];
     void*           mInvalidRaster; // +0x10
     void*           mLoadingRaster; // +0x14
-    char            mPad18[8];
+    cTmDtorMember   mMember18;      // +0x18
+    cTmDtorMember   mMember1c;      // +0x1c
     EA::Thread::Mutex_s007a_bc90 mMutex;       // +0x20
-    char            mPad50[8];
+    cTmListHead     mList;          // +0x50
     TextureInstanceMap_s007a_bc90 mTextureInstanceMap; // +0x58
-    char            mPad78[0x20];
+    TextureInstanceMap_s007a_bc90 mTextureArenas;      // +0x78
     EA::Thread::Mutex_s007a_bc90 mArenaMutex;  // +0x98
     int             mNumCacheFrames;      // +0xc8
     int             mCurrentMipLodSetting; // +0xcc
@@ -381,15 +605,146 @@ public:
     cLoadQueue_s007a_bc90      mLoadQueue;     // +0xd4
     char            mTail[0x14];
 };
+struct DqIterB {                        // 16-byte deque iterator
+    int*  cur;
+    int*  first;
+    int*  last;
+    int** node;
+    DqIterB* __thiscall plus_assign(int n);                                 // 0x007a9a80
+    DqIterB* __thiscall move_backward(DqIterB* first, DqIterB* last, DqIterB* out);        // 0x007ac170
+    DqIterB* __thiscall move_forward(DqIterB* tmp, DqIterB* next, DqIterB* e, DqIterB* out); // 0x007abb80
+};
+struct AsyncDeque {
+    char     mPad0[8];
+    DqIterB  begin;                     // +0x08
+    DqIterB  end;                       // +0x18
+    DqIterB  erase(DqIterB pos);        // 0x007ac480
+};
+struct MtxNode {                        // intrusive list node look-alike at +0x04 of the inst
+    int* mpNext;                        // +0x00
+    int* mpPrev;                        // +0x04
+};
+struct cTextureAsyncInfo_s007a_bc90 {
+    MtxNode  mList;                     // +0x00 .. +0x07
+    void*    mpObject;                  // +0x08
+    char     mField0c;
+    int      mRefCount;                 // +0x10
+    int      mCacheFrames;              // +0x14
+    ResourceKey mKey;                   // +0x18
+    int*     mpResource;                // +0x24
+    uint32_t Setup(ResourceKey* pKey);  // 0x007ab860
+};
+struct Vec128Ctor { Vec128Ctor(); ~Vec128Ctor(); int mData[2]; };
+class TiListHead {                      // intrusive list anchor at +0x50
+public:
+    TiListHead* mpNext;
+    TiListHead* mpPrev;
+};
+struct AppPropsView {
+    int __thiscall GetIntProperty(int id);
+    char __thiscall Query(void** pOut, int id);
+};
+extern AppPropsView* gAppProps;                  // 0x015fd918
+struct PropObject {
+    int* __thiscall GetInt();                    // 0x0041e990
+};
+extern "C" void* TextureFindRaw(void* pMap, const ResourceKey* pKey);  // 0x00833840
+struct TiRefCount {
+    volatile long mRefCount;                    // +0x04
+    TiRefCount() { _InterlockedExchange(&mRefCount, 0); }
+};
+struct TiBaseA {                                // vtable 0x013ebcdc
+    virtual void v0();
+    TiRefCount  mRef;                           // +0x04
+    uint32_t    f08;                            // +0x08
+    uint32_t    f0c;                            // +0x0c
+    uint32_t    f10;                            // +0x10
+    uint32_t    f14;                            // +0x14
+    virtual void v1();
+    TiBaseA() : f08(0), f0c(0), f10(0), f14(0) {}
+};
+struct TiDerivedA : TiBaseA {                   // vtable 0x0140e12c, 0x1c bytes
+    uint32_t f18;                               // +0x18
+    TiDerivedA() : f18(0) {}
+};
+struct GameTexture {                            // 0x20 bytes, ctor 0x00765f10
+    GameTexture(void* pArg);
+    virtual void v0();
+    virtual void v1();
+    uint32_t f04, f08, f0c, f10, f14, f18, f1c;
+};
+template <class T> class TiInstancePtr {        // scoped release guard (dtor 0x007a9610)
+public:
+    T* mpPtr;
+    TiInstancePtr(T* p) : mpPtr(p) {}
+    ~TiInstancePtr() { if (mpPtr != 0) mpPtr->v1(); }
+};
+void* __cdecl operator new(unsigned int sz, const char* name, int, int, int, int);  // 0x00f473a0
+template <class T> void* operator new(unsigned int, T* p) { return p; }
 // ---- items of slice s007abc90 end
 
 // ---- items of slice s008337d0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern char g_vtblX0;          // 0x141aabc
+extern char g_vtblX4;          // 0x141aab8
+extern char g_vtblEditorRes;   // 0x13eb938
+extern char g_vtblImgTmp;      // 0x13ef094
+extern uint32_t g_counter164efec; // 0x164efec
+extern char g_htA;             // 0x1547f54
+extern void* g_htA_buckets;    // 0x1547f58
+extern uint32_t g_htA_count;   // 0x1547f5c
+extern uint32_t g_flagF60;     // 0x1547f60
+extern char g_htB;             // 0x1547f78
+extern void* g_htB_buckets;    // 0x1547f7c
+extern uint32_t g_htB_count;   // 0x1547f80
+extern uint32_t g_flagF84;     // 0x1547f84
 extern "C" void  FUN_00833840(void);
 extern "C" void  FUN_008338c0(void);
-#pragma intrinsic(_InterlockedExchange)
 typedef void   (__thiscall *VFv)(void*);
 static inline void** VT(void* o) { return *(void***)o; }
+struct TexNode {
+    uint32_t k0, k4, k8;  // +0x00 ResourceKey
+    void*    value;       // +0x0c
+    TexNode* next;        // +0x10
+};
+struct TexTable {
+    uint32_t f0;          // +0x00
+    void*    f4;          // +0x04
+    uint32_t f8;          // +0x08
+    char     pad0c[0x10];
+    void*    alloc;       // +0x1c
+    uint32_t f20;         // +0x20
+    TexNode* CreateNode(const void* src);
+    void     Clear(TexNode** buckets, uint32_t count);
+};
+struct TexMgr {
+    void*    vptr0;   // +0x00
+    void*    vptr4;   // +0x04
+    uint32_t f8;      // +0x08
+    TexMgr*  Init();
+    void     Dtor();
+};
 // ---- items of slice s008337d0 end
+
+// ---- items of slice s00832790 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C" void  FUN_0011e073e(void);         // operator new[]
+#pragma intrinsic(_InterlockedExchangeAdd, _InterlockedIncrement, _InterlockedExchange)
+struct RefHolder {
+    char  pad[0x10];
+    void* p;          // +0x10
+    uint32_t GetC();
+    uint32_t GetE();
+};
+struct HashNode { uint32_t key; uint32_t hash; uint32_t field8; uint32_t f0c; HashNode* next; };
+struct Hashtable {
+    uint32_t   f0;
+    HashNode** mpBuckets;   // +0x04
+    uint32_t   mnElementCount; // +0x08
+    char       pad0c[0x10];
+    void*      mpAllocator; // +0x1c
+    uint32_t   f20;         // +0x20
+    void Rehash(uint32_t nNewBucketCount);
+};
+// ---- items of slice s00832790 end
 
 // @ 0x007a93b0
 void FUN_007a93b0()
@@ -594,9 +949,8 @@ void RefPtrSlot::Clear()
     }
 }
 
-// @ 0x007a98b0  cLoadQueue<...>::StallUntilLoaded
-int** StallUntilLoaded(int** out, int* begin, int* first, int* end, int** map, int* stop,
-                       int reserved7, int reserved8, int reserved9, int value)
+// @ 0x007a98b0
+int** StallUntilLoaded(int** out, int* begin, int* first, int* end, int** map, int* stop, int reserved7, int reserved8, int reserved9, int value)
 {
     int* cur = begin;
     int* chunk = first;
@@ -636,32 +990,86 @@ DequeIter2& DequeIter2::operator+=(int n)
     return *this;
 }
 
-// @ 0x007a9d70
-// eastl deque copy_backward: move [first, last) to the range ending at last2.
-// The three iterators arrive by value (4 dwords each); the function returns the
-// new destination begin, so all 13 stack dwords of the original are consumed.
-DequeIter2* FUN_007a9d70(DequeIter2* result, DequeIter2 first, DequeIter2 last, DequeIter2 last2)
+// @ 0x007a9ae0
+void DequeMap::InsertAt(int count, int zero)
 {
-    while (last.cur != first.cur) {
-        if (last.cur == last.first) {
-            --last.map;
-            last.first = *last.map;
-            last.last = last.first + 0x40;      // EASTL subarray = 64 ints
-        }
-        --last.cur;
-        if (last2.cur == last2.first) {
-            --last2.map;
-            last2.first = *last2.map;
-            last2.last = last2.first + 0x40;
-        }
-        --last2.cur;
-        *last2.cur = *last.cur;
+    int* first = this->mCur;
+    int used = ((char*)this->mTailLast - (char*)first) >> 2;
+    int n = used + 1;
+    int need = n + count;
+    unsigned int cap = (unsigned int)this->mCapacity;
+    if ((unsigned int)(need * 2) < cap) {
+        int* dst = (int*)((char*)this->mpBegin +
+            ((int)((cap - need) >> 1) + (~-(unsigned)(zero != 0) & count)) * 4);
+        if (dst < first)
+            VectorDoInsertValue(dst, first, (used + 1) * 4);
+        else
+            memmove(dst + (n - (((used + 1) * 4) >> 2)), first, (used + 1) * 4);
     }
-    result->cur = last2.cur;
-    result->first = last2.first;
-    result->last = last2.last;
-    result->map = last2.map;
+    else {
+        int cap2 = (this->mCapacity < count) ? count : this->mCapacity;
+        int total = cap2 + 2 + (int)cap;
+        int* nb = (int*)EASTL_allocator_allocate(total * 4, "Graphics", 0, 0,
+            "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h",
+            0xd1);
+        int* src = (int*)this->mCur;
+        int* dst = (int*)((char*)nb + ((((char*)src - (char*)this->mpBegin) >> 2) +
+                          (~-(unsigned)(zero != 0) & count)) * 4);
+        if (this->mpBegin)
+            VectorDoInsertValue(dst, src, this->mTailLast - src + 1);
+        if (this->mpBegin)
+            EASTL_allocator_deallocate(this->mpBegin);
+        this->mpBegin = nb;
+        this->mCapacity = total;
+    }
+    this->mCur = 0;
+}
+
+// @ 0x007a9d70
+DequeIterator* FUN_007a9d70(DequeIterator* result, DequeIterator first, DequeIterator last, DequeIterator last2)
+{
+    while (last.mpCurrent != first.mpCurrent) {
+        if (last.mpCurrent == last.mpBegin) {
+            --last.mpCurrentArrayPtr;
+            last.mpBegin = *last.mpCurrentArrayPtr;
+            last.mpEnd = last.mpBegin + 0x40;      // EASTL subarray = 64 ints
+        }
+        --last.mpCurrent;
+        if (last2.mpCurrent == last2.mpBegin) {
+            --last2.mpCurrentArrayPtr;
+            last2.mpBegin = *last2.mpCurrentArrayPtr;
+            last2.mpEnd = last2.mpBegin + 0x40;
+        }
+        --last2.mpCurrent;
+        *last2.mpCurrent = *last.mpCurrent;
+    }
+    result->mpCurrent = last2.mpCurrent;
+    result->mpBegin = last2.mpBegin;
+    result->mpEnd = last2.mpEnd;
+    result->mpCurrentArrayPtr = last2.mpCurrentArrayPtr;
     return result;
+}
+
+// @ 0x007a9e10
+void* FUN_007a9e10(void* self, int w, int h)
+{
+    *(void**)self = (void*)VT_PropertyListA;
+    *(void**)((char*)self + 4) = 0;
+    *(void**)((char*)self + 8) = 0;
+    *(void**)((char*)self + 0xc) = 0;
+    *(void**)((char*)self + 0x10) = 0;
+    *(void**)((char*)self + 0x14) = 0;
+    *(void**)((char*)self + 0x18) = (void*)VT_PropertyListB;
+    *(int*)((char*)self + 0x1c) = w;
+    *(int*)((char*)self + 0x20) = h;
+    *(int*)((char*)self + 0x24) = -1;
+    *(void**)((char*)self + 0x28) = 0;
+    *(void**)self = (void*)VT_PropertyListC;
+    *(void**)((char*)self + 0x18) = (void*)VT_PropertyListB2;
+    void* buf = EASTL_allocator_allocate((unsigned)(w * h), "Graphics", 0, 0, 0, 0);
+    *(void**)((char*)self + 0x28) = buf;
+    *(int*)((char*)self + 0x24) = 1;
+    return self;
 }
 
 // @ 0x007a9eb0
@@ -675,23 +1083,158 @@ void FUN_007a9eb0(int* self)
 }
 
 // @ 0x007a9f30
-int FUN_007a9f30(int* self)
+extern "C" bool __fastcall FUN_007a9f30(TexManager* self, int dummy)
 {
-    // behavioural skeleton
-    if (*(char*)((char*)self + 0xc)) return 0;
-    *(unsigned char*)((char*)self + 0xc) = 1;
-    *(void**)((char*)self + 0x10) = (void*)FUN_00761b40;
-    *(void**)((char*)self + 0x14) = (void*)FUN_00761c00;
-    return 1;
+    (void)dummy;
+    if (self->mInitFlag) return false;
+    self->mInitFlag = 1;
+    self->mField10 = FUN_00761b40();
+    self->mField14 = FUN_00761c00();
+    if (g_15fd918) {
+        int out = 0;
+        if (((bool(__thiscall*)(void*, int, void*))(*(void***)g_15fd918)[9])(g_15fd918, 0x2840048, &out)
+            && *(short*)((char*)out + 0x12) == 9)
+            self->mFieldCC = *FUN_0041e990_GetInt();
+    }
+    self->mSelfD4 = self;
+
+    unsigned h1 = FUN_00932e80_hash("PlaceholderNormalMap", 0x811c9dc5, 1);
+    void* o1 = ((FnP8)(*(void***)self)[15])(self, h1, 0x40002700, 1, 1, 1, 8, 0x15, 0);
+    ((void(__thiscall*)(void*, void*))FUN_00576650_Assign)(&self->mNormalMap, o1);
+    {
+        void* o = self->mNormalMap;
+        if (!(*(unsigned char*)((char*)o + 4) & 1)) {
+            void* im = FUN_0067dd60();
+            ((FnVP)(*(void***)im)[13])(im, o);
+        }
+    }
+    {
+        void* o = self->mNormalMap;
+        int out = 0;
+        if (((int(__thiscall*)(void*, int, int, void*))FUN_011ef750_Open)(*(void**)o, 2, 0, &out)) {
+            *(int*)out = 0x7f7fff;
+            void* o2 = self->mNormalMap;
+            if (!(*(unsigned char*)((char*)o2 + 4) & 1)) {
+                void* im = FUN_0067dd60();
+                ((FnVP)(*(void***)im)[13])(im, o2);
+            }
+            ((void(__thiscall*)(void*, void*))FUN_011ef880_Close)(*(void**)o2, &out);
+        }
+    }
+    unsigned h2 = FUN_00932e80_hash("PlaceholderSpecGlossMap", 0x811c9dc5, 1);
+    void* o3 = ((FnP8)(*(void***)self)[15])(self, h2, 0x40002700, 1, 1, 1, 8, 0x15, 0);
+    ((void(__thiscall*)(void*, void*))FUN_00576650_Assign)(&self->mSpecGlossMap, o3);
+    {
+        void* o = self->mSpecGlossMap;
+        if (!(*(unsigned char*)((char*)o + 4) & 1)) {
+            void* im = FUN_0067dd60();
+            ((FnVP)(*(void***)im)[13])(im, o);
+        }
+    }
+    {
+        void* o = self->mSpecGlossMap;
+        int out = 0;
+        if (((int(__thiscall*)(void*, int, int, void*))FUN_011ef750_Open)(*(void**)o, 2, 0, &out)) {
+            *(int*)out = 0x806464;
+            void* o2 = self->mSpecGlossMap;
+            if (!(*(unsigned char*)((char*)o2 + 4) & 1)) {
+                void* im = FUN_0067dd60();
+                ((FnVP)(*(void***)im)[13])(im, o2);
+            }
+            ((void(__thiscall*)(void*, void*))FUN_011ef880_Close)(*(void**)o2, &out);
+        }
+    }
+    return true;
 }
 
 // @ 0x007aa0d0
-int FUN_007aa0d0(int* self)
-{ (void)self; return 0; }
+extern "C" bool __fastcall FUN_007aa0d0(TexManager* self, int dummy, JobSlotGroup* slots, void* mgr)
+{
+    (void)dummy;
+    JobObject* obj = slots ? (JobObject*)((char*)slots - 8) : 0;
+    if (obj->mState0C & 1) return true;
+    void* dep = obj->mField2C;
+    if (dep) {
+        ((FnVP)FUN_006913c0_AddWeakDep)(mgr, dep);
+        return true;
+    }
+    void* job = 0;
+    void* jm = FUN_0068f4d0();
+    if (job) Release(job);
+    if (!((FnB1)(*(void***)jm)[4])(jm, &job)) {
+        Release(job);
+        return false;
+    }
+    ((FnV1)FUN_009221b0_Lock)(&self->mMutex, 0x140fa10);
+    if (!obj->mField2C && !(obj->mState0C & 1))
+        ((void(__thiscall*)(void*, void*))FUN_00630540_Assign)(&obj->mField2C, job);
+    ((FnV0)FUN_00922270_Unlock)(&self->mMutex);
+    if (!(obj->mState0C & 1)) {
+        void* d = obj->mField2C;
+        if (!d) { Release(job); return false; }
+        ((FnVP)FUN_006913c0_AddWeakDep)(mgr, d);
+    }
+    Release(job);
+    return true;
+}
 
 // @ 0x007aa200
-int FUN_007aa200(int* self)
-{ (void)self; return 0; }
+extern "C" bool __fastcall FUN_007aa200(TexManager* self, int dummy, JobSlotGroup* slots)
+{
+    (void)dummy;
+    JobObject* obj = slots ? (JobObject*)((char*)slots - 8) : 0;
+    void* old = obj->mField24;
+    if (!old) return false;
+    int s08 = *(int*)((char*)old + 8);
+    int s0C = *(int*)((char*)old + 0xc);
+    int s10 = *(int*)((char*)old + 0x10);
+    (void)s08; (void)s0C; (void)s10;
+    void* saved = obj->mField24;
+    obj->mField24 = 0;
+    void* factory = FUN_0067dcd0();
+    Release(obj->mField24);
+    if (((bool(__thiscall*)(void*, void*, void*, int, int, int, int))(*(void***)factory)[3])(
+            factory, &obj->mField24, 0, 0, 0, 0, 0)) {
+        ((FnV1)FUN_009221b0_Lock)(&self->mMutex, 0x140fa10);
+        void* nv = obj->mField24;
+        obj->mField08 = *(void**)((char*)nv + 0x18);
+        ((FnV0)FUN_00922270_Unlock)(&self->mMutex);
+        Release(saved);
+        return true;
+    }
+    obj->mField24 = saved;
+    return false;
+}
+
+// @ 0x007aa320
+void JobSlots::Clear()
+{
+    int* self = (int*)this;
+    if (self[1]) {
+        void* old = (void*)self[1];
+        self[1] = 0;
+        ((cJobReleaseFn)FUN_00690_120_GetStatus)(old);      // thiscall: this in ecx
+    }
+    if (self[0]) {
+        volatile long* rc = (volatile long*)((char*)self[0] + 0x10);
+        self[0] = 0;
+        _InterlockedExchangeAdd(rc, -1);
+        long cur = _InterlockedExchangeAdd(rc, 0);
+        if (cur < 1) _InterlockedExchangeAdd(rc, 1); else _InterlockedExchangeAdd(rc, 0);
+    }
+    if (self[2]) {
+        int* p = (int*)self[2];
+        self[2] = 0;
+        void** vt = *(void***)p;                            // vtable at *p, slot 1
+        ((void(__thiscall*)(void*))vt[1])(p);
+    }
+    if (self[3]) {
+        int* p = (int*)self[3];
+        self[3] = 0;
+        void** vt = *(void***)p;
+        ((void(__thiscall*)(void*))vt[1])(p);
+    }
+}
 
 // @ 0x007aa3a0
 char JobSlots::Transfer(int param_2)
@@ -700,11 +1243,20 @@ char JobSlots::Transfer(int param_2)
     int* a = *(int**)(self + 0xc);
     if (a && *(int*)(self + 8) == 0) {
         int* b = *(int**)(self + 8);
-        if (b) { *(int*)(self + 8) = 0; ((void(__thiscall*)(void*))(*(void***)b)[1])(b); }
-        ((void(__thiscall*)(void*, int*))(*(void***)a)[0x14 / 4])(a, (int*)(self + 8));
+        if (b) {
+            *(int*)(self + 8) = 0;
+            void** vt = *(void***)b;
+            ((void(__thiscall*)(void*))vt[1])(b);
+        }
+        void** vt = *(void***)a;                            // slot 5 with &self[2]
+        ((void(__thiscall*)(void*, int*))vt[0x14 / 4])(a, (int*)(self + 8));
     }
     int* c = *(int**)(self + 0xc);
-    if (c) { *(int*)(self + 0xc) = 0; ((void(__thiscall*)(void*))(*(void***)c)[1])(c); }
+    if (c) {
+        *(int*)(self + 0xc) = 0;
+        void** vt = *(void***)c;
+        ((void(__thiscall*)(void*))vt[1])(c);
+    }
     int* d = *(int**)(self + 8);
     if (d && d[6]) {
         void (*cb)(int) = *(void(**)(int))(param_2 + 0x24);
@@ -717,14 +1269,143 @@ char JobSlots::Transfer(int param_2)
     return 0;
 }
 
+// @ 0x007aa430
+extern "C" void __fastcall FUN_007aa430(TexManager* self, int dummy, JobSlotGroup* slots)
+{
+    (void)dummy;
+    JobObject* job = (JobObject*)slots->mSlot0;
+    if (!(job->mState0C & 1)) {
+        void* ed = slots->mSlot1;
+        void* p = 0;
+        if (ed) {
+            ((FnV0)FUN_006926b0_Cancel)(ed);
+            p = *(void**)((char*)slots->mSlot1 + 0x20);
+        }
+        if (p) {
+            if (!(job->mFlags28 & 4)) {
+                void* q = *(void**)((char*)p + 4);
+                if (((unsigned char)(unsigned)q & 0x1f) == 8) {
+                    void* r = *(void**)((char*)p + 8);
+                    ((FnV2)(*(void***)r)[11])(r, self->mFieldCC, (int)q);
+                }
+            }
+            job->mField08 = p;
+            void* nv = slots->mSlot2;
+            void* ov = job->mField24;
+            if (nv != ov) {
+                AddRef(nv);
+                job->mField24 = nv;
+                Release(ov);
+            }
+            if (!(job->mFlags28 & 8)) {
+                void* t = slots->mSlot2;
+                int arg = t ? ((FnI1)(*(void***)t)[3])(t, 0x355d6f5) : 0;
+                FUN_006ac040_SetCachingType(5, (void*)arg);
+            }
+        } else {
+            job->mField08 = self->mField10;
+            job->mState0C |= 4;
+        }
+        job->mState0C |= 1;
+    }
+    {
+        void* r = job->mField2C;
+        if (r) {
+            ((FnV0)FUN_006909b0_Refresh)(r);
+            r = job->mField2C;
+            if (r) { job->mField2C = 0; ((FnV0)FUN_00690_120_GetStatus)(r); }
+        }
+    }
+    ((JobSlots*)slots)->Clear();
+}
+
 // @ 0x007aa530
-int FUN_007aa530(int self, int a2, int a3, int a4, int a5)
-{ (void)self;a2;a3;a4;a5; return 0; }
+extern "C" void __fastcall FUN_007aa530(TextureJob* self, int dummy, int a1, int a2, int a3, int a4)
+{
+    (void)dummy; (void)a1; (void)a2; (void)a3; (void)a4;
+    void* f8 = self->mField08;
+    void* x;
+    if (f8) {
+        if (!(*(unsigned char*)((char*)f8 + 4) & 1)) {
+            void* im0 = FUN_0067dd60();
+            ((FnVP)(*(void***)im0)[13])(im0, f8);
+        }
+        x = *(void**)f8;
+    } else {
+        x = self->mField0C;
+    }
+    void* tmp = 0;
+    void* im = FUN_0067dd60();
+    Release(tmp);
+    ((void(__thiscall*)(void*, void*, void*, int, int))(*(void***)im)[22])(im, x, &tmp, 0, 0);
+    void* f10 = self->mField10;
+    void* t = tmp;
+    if ((*(int*)((char*)f10 + 0x38) & 1) && *(void**)((char*)f10 + 8))
+        Release(*(void**)((char*)f10 + 8));
+    *(void**)((char*)f10 + 8) = t;
+    AddRef(t);
+    *(int*)((char*)f10 + 0x38) |= 1;
+    *(void**)((char*)f10 + 0x20) = x;
+    void* mm = FUN_0067dcc0();
+    void* f10b = self->mField10;
+    ((void(__thiscall*)(void*, void*, void*, int, int))(*(void***)mm)[6])(
+        mm, *(void**)((char*)f10b + 0x30), f10b, 0, 0);
+    Release(tmp);
+}
+
+// @ 0x007aa620
+Empty16::Empty16()
+{
+    Empty16* self = this;
+    self->a = 0; self->b = 0; self->c = 0; self->d = 0;
+}
+
+// @ 0x007aa660
+extern "C" void __fastcall FUN_007aa660(JobSlotGroup* self, int dummy)
+{
+    (void)dummy;
+    Release(self->mSlot3);
+    Release(self->mSlot2);
+    if (self->mSlot1) ((FnV0)FUN_00690_120_GetStatus)(self->mSlot1);
+    ReleaseAt10(self->mSlot0);
+}
 
 // @ 0x007aa710
-void FUN_007aa710(int* self)
+extern "C" void* __fastcall FUN_007aa710(HashTable* self, int dummy, int* out, int* key, int unused)
 {
-    if (self[3]) { void* p = (void*)self[3]; self[3] = 0; ((void(__thiscall*)(void*))((void**)p)[1])(p); }
+    (void)dummy; (void)unused;
+    unsigned k = (unsigned)*key;
+    unsigned idx = k % self->mBucketCount;
+    void* node = self->mTable[idx];
+    while (node) {
+        if (*(unsigned*)node == k) {
+            out[0] = (int)node;
+            out[1] = (int)&self->mTable[idx];
+            ((unsigned char*)out)[8] = 0;
+            return out;
+        }
+        node = *(void**)((char*)node + 4);
+    }
+    RehashResult rr;
+    rr.doRehash = false; rr.newBucketCount = 0;
+    ((void(__thiscall*)(void*, void*, int, int, int))FUN_00921440_Needed)(
+        &self->mPolicy, &rr, (int)self->mBucketCount, (int)self->mCount, 1);
+    void* n = EASTL_allocator_allocate(8, "Graphics", 0, 0,
+        "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h",
+        0xd1);
+    if (n) *(unsigned*)n = k;
+    *(void**)((char*)n + 4) = 0;
+    if (rr.doRehash) {
+        idx = k % rr.newBucketCount;
+        ((void(__thiscall*)(void*, int))FUN_007a99d0_Rehash)(self, (int)rr.newBucketCount);
+    }
+    *(void**)((char*)n + 4) = self->mTable[idx];
+    self->mTable[idx] = n;
+    self->mCount++;
+    out[0] = (int)n;
+    out[1] = (int)&self->mTable[idx];
+    ((unsigned char*)out)[8] = 1;
+    return out;
 }
 
 // @ 0x007aa800
@@ -740,7 +1421,7 @@ Chunk* cNodeAllocator::Create()
     *(int*)((char*)p + 0) = 0;
     *(int*)((char*)p + 8) = 0;
     *(unsigned char*)((char*)p + 0xc) = 0;
-    _InterlockedExchange((volatile long*)((char*)p + 0x10), 1);   // retail: xchg [p+0x10], 1
+    _InterlockedExchange(&p->mRef, 1);          // retail: xchg [p+0x10], 1 (not add)
     *(int*)((char*)p + 0x18) = 0;
     *(int*)((char*)p + 0x1c) = 0;
     *(int*)((char*)p + 0x20) = 0;
@@ -770,8 +1451,66 @@ void DequeMap::PushBack(int* value)
 }
 
 // @ 0x007aaa00
-int FUN_007aaa00(int* self)
-{ (void)self; return 0; }
+extern "C" void __fastcall FUN_007aaa00(TextureJob* self, int dummy, JobSlotGroup* slots, void* refArg, int flag, int kind)
+{
+    (void)dummy;
+    JobObject* obj = slots ? (JobObject*)((char*)slots - 8) : 0;
+    if (!(unsigned char)flag) {
+        if (!(obj->mState0C & 1))
+            ((FnVP)(*(void***)self)[13])(self, (char*)obj + 8);
+        ((void(__thiscall*)(void*, void*, void*, int, int))(*(void***)self)[22])(
+            self, *(void**)((char*)obj + 8), refArg, 0, 0);
+        return;
+    }
+    if (!kind) kind = 0x522264d;
+    void* j = EASTL_allocator_allocate(0x40, "Graphics", 0, 0, 0, 0);
+    if (j) {
+        *(int*)((char*)j + 0x30) = kind;
+        *(void**)j = (void*)0x13eb90c;
+        _InterlockedExchange((volatile long*)((char*)j + 4), 0);
+        *(void**)j = (void*)0x13eb844;
+        *(int*)((char*)j + 0x38) = 0;
+    }
+    *(void**)((char*)j + 0x10) = *(void**)((char*)obj + 0x20);
+    *(void**)((char*)j + 0x18) = *(void**)((char*)obj + 0x18);
+    void* k = EASTL_allocator_allocate(0x14, "Graphics", 0, 0, 0, 0);
+    if (k) {
+        *(void**)k = (void*)0x140faa8;
+        _InterlockedExchange((volatile long*)((char*)k + 4), 0);
+        *(void**)k = (void*)0x140fab8;
+        *(int*)((char*)k + 8) = 0;
+        *(int*)((char*)k + 0xc) = 0;
+        *(int*)((char*)k + 0x10) = 0;
+    }
+    AddRef(k);
+    {
+        void* ov = *(void**)((char*)k + 0x10);
+        if (j != ov) {
+            Release(j);
+            *(void**)((char*)k + 0x10) = j;
+            if (ov) ((FnV0)(*(void***)ov)[2])(ov);
+        }
+    }
+    ((void(__thiscall*)(void*, void*))FUN_00576650_Assign)((char*)k + 8, slots);
+    *(int*)((char*)k + 0xc) = 0;
+    {
+        JobDesc desc;
+        desc.mField00 = 4;
+        desc.mField04 = 0;
+        desc.mFlag08  = 1;
+        desc.mField0C = 0;
+        desc.mField10 = 0;
+        desc.mField14 = 0;
+        desc.mField18 = 0;
+        desc.mField1C = 0;
+        desc.mField20 = 0;
+        desc.mField24 = 0;
+        desc.mField28 = 0;
+        void* jm = FUN_0067dd50();
+        ((void(__thiscall*)(void*, void*, int, void*))(*(void***)jm)[0x78 / 4])(jm, k, 0, &desc);
+    }
+    Release(k);
+}
 
 // @ 0x007aabb0
 bool cTextureManager_s007a_abb0::CreateTextureRaster(Raster* a, void** b, bool c, int d)
@@ -1036,9 +1775,128 @@ void cLoadQueue::Schedule(ResourceKey* pKey)
 }
 
 // @ 0x007abc90
-extern "C" void FUN_007abc90(void)
+void cTextureManager_s007a_bc90::Update()
 {
-    // PARTIAL: large texture-creation EH routine.
+    int  nLodBefore;
+    char bChanged;
+    int  nLeft;
+
+    cScopedLock lock(&mMutex);
+
+    {
+        AppPropsView* pProps = gAppProps;
+        if (pProps != 0)
+        {
+            int reqFrames = pProps->GetIntProperty(0x0101de7d);
+            if (reqFrames > 0)
+                mNumCacheFrames = reqFrames;
+        }
+    }
+
+    nLodBefore = mCurrentMipLodSetting;
+    if (gAppProps != 0)
+    {
+        void* pProp = 0;
+        if (gAppProps->Query(&pProp, 0x02840048) && *(short*)((char*)pProp + 0x12) == 9)
+            mCurrentMipLodSetting = *((PropObject*)pProp)->GetInt();
+    }
+    bChanged = (nLodBefore != mCurrentMipLodSetting);
+
+    cLoadQueueUpdate((char*)this + 0xd4);
+
+    TiListHead** ppAnchor = (TiListHead**)((char*)this + 0xd0);
+    TiListHead*  pEnd = (TiListHead*)((char*)this + 0x50);
+    if (*ppAnchor == 0 || *ppAnchor == pEnd)
+        *ppAnchor = *(TiListHead**)pEnd;
+
+    cTextureAsyncInfo_s007a_bc90* pCur = bChanged ? *(cTextureAsyncInfo_s007a_bc90**)pEnd
+                                       : (cTextureAsyncInfo_s007a_bc90*)*ppAnchor;
+
+    nLeft = bChanged ? 0x7fffffff : (int)gMipLodSetting;
+
+    while (pCur != (cTextureAsyncInfo_s007a_bc90*)pEnd && nLeft != 0)
+    {
+        cTextureAsyncInfo_s007a_bc90* pNext = (cTextureAsyncInfo_s007a_bc90*)pCur->mList.mpNext;
+        volatile long* pCounter = (volatile long*)((char*)pCur + 0x10);
+
+        if (_InterlockedExchange(pCounter, 0) == 1)
+        {
+            if (pCur->mCacheFrames < 1)
+            {
+                if ((pCur->mField0c & 1) == 0)
+                {
+                    int* pLocal = (int*)pCur;
+                    RemoveMatching((char*)this + 0xd4, &pLocal);
+                }
+                {
+                    ResourceKey k = pCur->mKey;
+                    void* pNode = TextureFindRaw(&mTextureInstanceMap, &k);
+                    if (pNode != mTextureInstanceMap.mpBucketArray[mTextureInstanceMap.mnBucketCount])
+                        TextureEraseNode(&mTextureInstanceMap, pNode);
+                }
+                *pCur->mList.mpPrev = *pCur->mList.mpNext;
+                *(int*)pCur->mList.mpNext = (int)pCur->mList.mpPrev;
+                pCur->mList.mpNext = 0;
+                pCur->mList.mpPrev = 0;
+                CleanupJob();
+            }
+            else
+            {
+                pCur->mCacheFrames = pCur->mCacheFrames - 1;
+            }
+        }
+        else if (_InterlockedExchange(pCounter, 0) > 0 && bChanged != 0 &&
+                 pCur->mpObject != 0 &&
+                 (*(uint32_t*)((char*)pCur->mpObject + 0x28) & 4) == 0)
+        {
+            void* pRaster = *(void**)((char*)pCur->mpObject + 8);
+            if (pRaster != 0 && (*(uint8_t*)((char*)pRaster + 4) & 0x1f) == 8)
+                ((void (__thiscall*)(void*, int))(*(void***)pRaster)[0xb])(pRaster, mCurrentMipLodSetting);
+        }
+
+        nLeft--;
+        pCur = pNext;
+    }
+    *ppAnchor = (TiListHead*)pCur;
+
+    if (bChanged)
+    {
+        cScopedLock arenaLock(&mArenaMutex);
+
+        void** pBegin = *(void***)((char*)this + 0x7c);
+        int*   pNode  = *(int**)pBegin;
+        if (pNode == 0)
+        {
+            void** pSlot = pBegin + 1;
+            while (*pSlot == 0)
+                pSlot++;
+            pNode = (int*)*pSlot;
+        }
+        int* pLast = *(int**)(*(int**)((char*)this + 0x7c) + *(int*)((char*)this + 0x80) * 4);
+        while (pNode != pLast)
+        {
+            int* pArenaObj = *(int**)pNode;
+            int  nObjects = rwArenaNumExported(*(void**)((char*)pArenaObj + 0x18));
+            for (int i = 0; i < nObjects; i++)
+            {
+                Vec128Ctor v128;
+                void* pOut = 0;
+                rwArenaExportedByIndex(*(void**)((char*)pArenaObj + 0x18), i, &pOut);
+                if (pOut != 0 && ((int*)&v128.mData[0])[0] == 0x20003)
+                {
+                    void* pObj = *(void**)((char*)pOut + 8);
+                    if (pObj != 0)
+                        ((void (__thiscall*)(void*, int))(*(void***)pObj)[0xb])(pObj, mCurrentMipLodSetting);
+                }
+            }
+            pNode = (int*)pNode[1];
+            while (pNode == 0)
+            {
+                pBegin++;
+                pNode = (int*)*(pBegin - 1);
+            }
+        }
+    }
 }
 
 // @ 0x007ac080
@@ -1052,67 +1910,299 @@ void*& TextureInstanceMap_s007a_bc90::operator[](const ResourceKey& key)
 
 // @ 0x007ac0f0
 cLoadQueue_s007a_bc90::cLoadQueue_s007a_bc90()
+: mpManager(0), mEntries(), mQueue()
 {
-    // PARTIAL: EH member construction (entry vector + deque).
-    mpManager = 0;
+    mQueue.Init(0);
+    mField70 = 0;
 }
 
 // @ 0x007ac2f0
-void* cTextureManager_s007a_bc90::CreateInstance(ResourceKey* key, void* pResource, int a, uint32_t flags, char b, ...)
+void* cTextureManager_s007a_bc90::CreateInstance(ResourceKey* key, void* pResource, void* pRaster, uint32_t flags, char b)
 {
-    (void)key; (void)pResource; (void)a; (void)flags; (void)b;
-    // PARTIAL: texture-instance allocation + map insert.
-    return 0;
+    cScopedLock lock(&mMutex);
+
+    cTextureInstanceInternal* inst = (cTextureInstanceInternal*)NodeCreate((void*)0x1634f5c);
+
+    inst->mpPrev = (cTextureInstanceInternal*)mList.mpPrev;
+    inst->mpNext = (cTextureInstanceInternal*)&mList;
+    mList.mpPrev = (cTmListHead*)inst;
+    inst->mpPrev->mpNext = inst;
+
+    inst->mKey = *key;
+    inst->mKey.mType = 0;
+
+    cTIRefCounted* pOld = inst->mpResource;
+    if ((cTIRefCounted*)pResource != pOld)
+    {
+        if (pResource != 0)
+            ((cTIRefCounted*)pResource)->AddRef();
+        inst->mpResource = (cTIRefCounted*)pResource;
+        if (pOld != 0)
+            pOld->Release();
+    }
+
+    inst->mUseFlags = flags;
+    inst->mpRaster = pRaster;
+    inst->mField0c = b;
+
+    if ((flags & 4) == 0)
+    {
+        if ((*(uint32_t*)((char*)pRaster + 4) & 0x1f) == 8)
+        {
+            if (*(void**)((char*)this + 0xcc) != 0)
+            {
+                void* r = *(void**)((char*)pRaster + 8);
+                void** vt = *(void***)r;
+                ((RasterNotifyFn)vt[0xb])(r, mCurrentMipLodSetting);
+            }
+        }
+    }
+    _InterlockedExchange((volatile long*)&inst->mRefCount, 1);
+    inst->mCacheFrames = mNumCacheFrames;
+
+    mTextureInstanceMap[inst->mKey] = inst;
+
+    return (char*)inst + 8;
 }
 
 // @ 0x007ac480
-extern "C" void FUN_007ac480(void)
+DqIterB AsyncDeque::erase(DqIterB pos)
 {
-    // PARTIAL: eastl::deque<cTextureAsyncQueueEntry>::erase.
+    DqIterB result;                     // NRVO candidate: the caller's return slot
+    DqIterB next = pos;
+    next.cur = pos.cur + 1;
+    if (next.cur == pos.last)
+    {
+        next.node  = pos.node + 1;
+        next.first = *next.node;
+        next.last  = next.first + 0x40;
+        next.cur   = next.first;
+    }
+
+    int n = (int)(pos.node - begin.node) * 0x40
+          + (int)(begin.last - begin.cur)
+          + (int)(pos.cur - pos.first)
+          - 0x40;
+
+    int size = ((int)(end.node - begin.node) - 1) * 0x40
+             + (int)(end.cur - end.first)
+             + (int)(begin.last - begin.cur);
+
+    if (n < (size >> 1))
+    {
+        next.move_backward(&begin, &pos, &result);
+        if (begin.cur + 1 == begin.last)
+        {
+            if (begin.first != 0)
+                gfxFree(begin.first);
+            begin.node  = begin.node + 1;
+            begin.first = *begin.node;
+            begin.last  = begin.first + 0x40;
+            begin.cur   = begin.first;
+        }
+        else
+        {
+            begin.cur = begin.cur + 1;
+        }
+    }
+    else
+    {
+        pos.move_forward(&next, &next, &end, &result);
+        if (end.cur == end.first)
+        {
+            if (end.first != 0)
+                gfxFree(end.first);
+            end.node  = end.node - 1;
+            end.first = *end.node;
+            end.last  = end.first + 0x40;
+            end.cur   = end.last - 1;
+        }
+        else
+        {
+            end.cur = end.cur - 1;
+        }
+    }
+
+    DqIterB t = begin;
+    DqIterB* r = t.plus_assign(n);
+    result = *r;
+    return result;
 }
 
 // @ 0x007ac600
 void* cTextureManager_s007a_bc90::RegisterBuiltInGameTexture(void* p1, uint32_t flags)
 {
-    (void)p1; (void)flags;
-    // PARTIAL: lookup-or-create built-in texture.
-    return 0;
+    int* obj = (int*)p1;
+
+    if ((flags & 8) == 0)
+        SP_SetCachingType(2, obj);
+
+    ResourceKey key;
+    key.mInstance = obj[2];
+    key.mType     = obj[3];
+    key.mGroup    = obj[4];
+    AdjustKey(&key, obj);                       // 0x006acfe0
+
+    cScopedLock lock(&mMutex);
+
+    HashIterator it = mTextureInstanceMap.find(key);
+    if (it.mpNode != mTextureInstanceMap.mpBucketArray[mTextureInstanceMap.mnBucketCount])
+    {
+        int* inst = (int*)((char*)it.mpNode + 0xc);
+        void* handle = inst;
+        if ((*(uint8_t*)((char*)inst + 0xc) & 1) == 0)
+            RemoveMatching(&mLoadQueue, &handle);
+
+        int* pOld = *(int**)((char*)inst + 0x24);
+        if (obj != pOld)
+        {
+            (*(void (__thiscall**)(int*))*(int*)obj)(obj);
+            *(int**)((char*)inst + 0x24) = obj;
+            if (pOld != 0)
+                (*(void (__thiscall**)(int*))(*(int*)pOld + 4))(pOld);
+        }
+        *(int*)((char*)inst + 8) = obj[6];
+        *(uint8_t*)((char*)inst + 0xc) = 9;
+        return (char*)inst + 8;
+    }
+
+    return CreateInstance(&key, obj, (void*)obj[6], flags, (char)9);
 }
 
 // @ 0x007ac750
-SP::cTextureInstance * SP::cTextureManager::GetTextureSync(EA::ResourceMan::Key key, SP::cITextureManager::tUseFlags flags)
+void* cTextureManager_s007a_bc90::GetTextureSync(ResourceKey key, int flags)
 {
-    (void)key; (void)flags;
-    // PARTIAL: synchronous resource load.
-    return 0;
+    void* inst = 0;
+    ResManMgr* mgr = (ResManMgr*)ResManager();
+    key.mType = 0x2f4e681c;
+
+    void* pRaster = 0;
+    if (mgr->GetResource(&key, (int)&inst, 0, 0, 0, 0))
+    {
+        pRaster = *(void**)((char*)inst + 0x18);
+        if ((flags & 8) == 0)
+            SP_SetCachingType(5, inst);
+    }
+    else
+    {
+        int* pProps = (int*)gAppProperties;
+        if (pProps != 0 && *(int*)(*(int*)((char*)pProps + 0x3c) + 0x94) != 0)
+            pRaster = mInvalidRaster;
+    }
+
+    void* res = 0;
+    if (pRaster != 0)
+        res = CreateInstance(&key, inst, pRaster, (uint32_t)flags, (char)1);
+
+    if (inst != 0)
+        (*(void (__thiscall**)(void*))(*(int*)inst + 4))(inst);
+    return res;
 }
 
 // @ 0x007ac850
-SP::cTextureInstance * SP::cTextureManager::GetTextureAsync(EA::ResourceMan::Key key, SP::cITextureManager::tUseFlags flags)
+void* cTextureManager_s007a_bc90::GetTextureAsync(ResourceKey key, int flags)
 {
-    (void)key; (void)flags;
-    // PARTIAL: asynchronous resource load + queue schedule.
-    return 0;
+    ResManMgr* mgr = (ResManMgr*)ResManager();
+    key.mType = 0x2f4e681c;
+    if (!mgr->GetResource(&key, 0, 0, 0, 0, 0))
+        return 0;
+    void* inst = CreateInstance(&key, 0, mLoadingRaster, flags, 0);
+    void* local = inst ? (void*)((char*)inst - 8) : 0;
+    mLoadQueue.Schedule(&local);
+    return inst;
 }
 
 // @ 0x007ac8d0
-bool SP::cTextureManager::StallUntilLoadedUnderLock(SP::cTextureInstanceInternal * key)
+void* cTextureManager_s007a_bc90::StallUntilLoadedUnderLock(ResourceKey* key)
 {
-    (void)key;
-    // PARTIAL: wait for the queued load of the requested key.
-    return 0;
+    cLoadQueue_s007a_bc90* q = &mLoadQueue;                // this in ecx; the queue's own fields are used
+
+    for (;;)
+    {
+        cTextureInstanceInternal* inst = *(cTextureInstanceInternal**)key;
+        CQEntry* pSlot = 0;
+
+        char* pBase = inst ? (char*)inst + 8 : 0;
+        if ((*(uint8_t*)(pBase + 4) & 1) != 0 || pSlot != 0)
+        {
+            if ((*(uint8_t*)(pBase + 4) & 1) == 0)
+            {
+                void* pOut = 0;
+                StallUntilLoadedFn(&pOut, q->mQueue.mData, q->mQueue.mData + 4, inst);
+                if (pOut != (void*)q->mQueue.mData[6])
+                {
+                    ((cTextureAsyncInfo_s007a_bc90*)pSlot)->Setup((ResourceKey*)q->mQueue.mData);
+                    ((AsyncDeque*)((char*)q + 0x44))->erase(*(DqIterB*)pSlot);
+                    ((cTextureManager_s007a_bc90*)q->mpManager)->StallFinishBackgroundLoad(pSlot);
+                }
+            }
+            return 0;
+        }
+
+        // scan the four slot entries for a free/owning one
+        for (int i = 0; i < 4; i++)
+        {
+            if (q->mEntries[i].a == 0 || q->mEntries[i].a == (int)inst)
+            {
+                pSlot = &q->mEntries[i];
+                break;
+            }
+        }
+        if (pSlot == 0)
+        {
+            int n = q->mField70;
+            pSlot = &q->mEntries[n];
+            if (++q->mField70 >= 4)
+                q->mField70 = 0;
+        }
+        if (pSlot->a == 0)
+            continue;                           // restart the scan
+        ((cTextureManager_s007a_bc90*)q->mpManager)->StallFinishBackgroundLoad(pSlot);
+        if (pSlot->a == 0)
+            continue;
+        // restart from the top of the outer loop (the slot is now busy)
+        continue;
+    }
 }
 
 // @ 0x007aca00
-extern "C" void FUN_007aca00(void)
+void* cTextureManager_s007a_bc90::CreateGameTextureFromSerializer(void* arg0, void* arg1, void* arg2, uint32_t flags)
 {
-    // PARTIAL: create texture-instance from a serializer object.
+    if ((*(uint8_t*)((char*)arg2 + 4) & 1) == 0)
+        (*(void(__thiscall**)(void*, void*))(*(uint32_t*)this + 0x34))(this, arg2);
+
+    GameTexture* p = 0;
+    GameTexture* raw = (GameTexture*)operator new(0x20, "Graphics", 0, 0, 0, 0);
+    if (raw != 0)
+        p = new (raw) GameTexture(*(void**)((char*)arg2 + 0x1c));
+    if (p != 0)
+        p->v0();
+
+    p->f18 = *(uint32_t*)arg2;
+    p->f08 = (uint32_t)arg0;
+    p->f0c = 0x2f4e681c;
+    p->f10 = (uint32_t)arg1;
+
+    void* res = RegisterBuiltInGameTexture(p, flags);
+    p->v1();
+    return res;
 }
 
 // @ 0x007acae0
-extern "C" void FUN_007acae0(void)
+void* cTextureManager_s007a_bc90::CreateGameTextureRaw(void* arg0, void* arg1, uint32_t key, uint32_t flags)
 {
-    // PARTIAL: create texture-instance from raw parameters.
+    TiDerivedA* raw = (TiDerivedA*)operator new(0x1c, "Graphics", 0, 0, 0, 0);
+    TiInstancePtr<TiDerivedA> guard(raw != 0 ? new (raw) TiDerivedA() : 0);
+    TiDerivedA* p = guard.mpPtr;
+    if (p != 0)
+        p->v0();
+
+    p->f18 = key;
+    p->f08 = (uint32_t)arg0;
+    p->f0c = 0x2f4e681c;
+    p->f10 = (uint32_t)arg1;
+
+    return RegisterBuiltInGameTexture(p, flags);
 }
 
 // @ 0x007acbb0
@@ -1125,6 +2215,105 @@ extern "C" void FUN_007acbb0(void)
 extern "C" void FUN_007acd90(void)
 {
     // PARTIAL: cTextureManager::StallUntilLoaded (EH).
+}
+
+// @ 0x008332a0
+uint32_t RefHolder::GetC()
+{
+    void* p = *(void**)((char*)this + 0x10);
+    if ((*(uint8_t*)((char*)p + 4) & 1) == 0) {
+        void* m = FUN_0067dd60();
+        ((void (__thiscall*)(void*, void*))VT(m)[0x34 / 4])(m, p);
+    }
+    return *(uint16_t*)((char*)(*(void**)p) + 0xc);
+}
+
+// @ 0x008332d0
+uint32_t RefHolder::GetE()
+{
+    void* p = *(void**)((char*)this + 0x10);
+    if ((*(uint8_t*)((char*)p + 4) & 1) == 0) {
+        void* m = FUN_0067dd60();
+        ((void (__thiscall*)(void*, void*))VT(m)[0x34 / 4])(m, p);
+    }
+    return *(uint16_t*)((char*)(*(void**)p) + 0xe);
+}
+
+// @ 0x00833300
+void Hashtable::Rehash(uint32_t nNewBucketCount)
+{
+    uint32_t size = nNewBucketCount * 4;
+    HashNode** pNew = (HashNode**)((void* (__thiscall*)(void*, uint32_t, int, uint32_t))
+        VT(mpAllocator)[8 / 4])(mpAllocator, f20, 0, size + 4);
+    ((void (__cdecl*)(void*, int, uint32_t))FUN_0011e073e)(pNew, 0, size);
+    *(uint32_t*)((char*)pNew + size) = 0xffffffff;
+    for (uint32_t i = 0; i < mnElementCount; ++i) {
+        HashNode* node = mpBuckets[i];
+        while (node != 0) {
+            uint32_t b = (node->hash ^ node->key) % nNewBucketCount;
+            mpBuckets[i] = node->next;
+            node->next = pNew[b];
+            pNew[b] = node;
+            node = mpBuckets[i];
+        }
+    }
+    if (mnElementCount > 1)
+        ((void (__thiscall*)(void*, HashNode**, uint32_t))VT(mpAllocator)[0xc / 4])
+            (mpAllocator, mpBuckets, mnElementCount * 4 + 4);
+    mpBuckets = pNew;
+    mnElementCount = nNewBucketCount;
+}
+
+// @ 0x008337d0
+TexNode* TexTable::CreateNode(const void* src)
+{
+    void* alloc = *(void**)((char*)this + 0x1c);
+    TexNode* node = (TexNode*)((void* (__thiscall*)(void*, int, int, int))VT(alloc)[8 / 4])
+        (alloc, 0x14, 0, *(int*)((char*)this + 0x20));
+    if (node) {
+        node->k0 = *(uint32_t*)((char*)src + 0);
+        node->k4 = *(uint32_t*)((char*)src + 4);
+        node->k8 = *(uint32_t*)((char*)src + 8);
+        void* v = *(void**)((char*)src + 0xc);
+        node->value = v;
+        if (v)
+            ((VFv)VT(v)[0 / 4])(v);
+    }
+    *(uint32_t*)((char*)node + 0x10) = 0;
+    return node;
+}
+
+// @ 0x00833a20
+void TexTable::Clear(TexNode** buckets, uint32_t count)
+{
+    for (uint32_t i = 0; i < count; ++i) {
+        TexNode* node = buckets[i];
+        while (node != 0) {
+            TexNode* cur = node;
+            void* v = *(void**)((char*)cur + 0xc);
+            node = node->next;
+            if (v)
+                ((VFv)VT(v)[4 / 4])(v);
+            void* alloc = *(void**)((char*)this + 0x1c);
+            ((void (__thiscall*)(void*, TexNode*, int))VT(alloc)[0xc / 4])(alloc, cur, 0x14);
+        }
+        buckets[i] = 0;
+    }
+}
+
+// @ 0x00833a80
+void TexMgr::Dtor()
+{
+    *(void* volatile*)((char*)this + 0) = &g_vtblX0;
+    *(void* volatile*)((char*)this + 4) = &g_vtblX4;
+    if (--g_counter164efec == 0) {
+        ((TexTable*)&g_htA)->Clear((TexNode**)g_htA_buckets, g_htA_count);
+        g_flagF60 = 0;
+        ((TexTable*)&g_htB)->Clear((TexNode**)g_htB_buckets, g_htB_count);
+        g_flagF84 = 0;
+    }
+    *(void* volatile*)((char*)this + 0) = &g_vtblEditorRes;
+    *(void* volatile*)((char*)this + 4) = &g_vtblImgTmp;
 }
 
 // @ 0x00833af0
@@ -1142,4 +2331,18 @@ void* FUN_00833af0(void* self, void* key)
     if (local_4)
         ((VFv)VT(local_4)[4 / 4])(local_4);
     return (char*)local_1c[0] + 0xc;
+}
+
+// @ 0x00833ba0
+__declspec(noinline) bool FUN_00833ba0(void* param_1, int param_2, void* param_3, float param_4, float param_5)
+{
+    (void)param_1; (void)param_3; (void)param_4; (void)param_5;
+    g_counter164efec = g_counter164efec + (uint32_t)param_2;
+    return false;
+}
+
+// @ 0x00834000
+void __stdcall FUN_00834000(int a1, int a2, int a3)
+{
+    ((void (__stdcall*)(int, int, int, int, int))FUN_00833ba0)(a1, a2, a3, -1, -1);
 }
