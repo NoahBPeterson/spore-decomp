@@ -1,0 +1,4 @@
+00a0d660 ?resize@RecVec@@QAEXI@Z  # RecVec::resize migrated from s00a0d2d0 (verbatim, slice spelling)
+00a0d7a0 ??0S@@QAE@ABU0@@Z  # S::S migrated from s00a0d2d0 (verbatim, slice spelling)
+00a0d850 ?FUN_00a0d850@@YAXPAUKF@@0PBU1@@Z  # FUN_00a0d850 migrated from s00a0d2d0 (verbatim, slice spelling)
+00a0d880 ?Execute_880@Cheat@@QAEXPAX@Z  # Cheat::Execute_880 migrated from s00a0d2d0 (verbatim, slice spelling)

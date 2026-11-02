@@ -1,0 +1,4 @@
+# va  diff-bytes  reason
+00a0d660 121 RecVec::resize: grow/shrink of the 0x1c-stride record vector.  The allocation and the move/copy loops are faithful; VC9 selects different callee-saved registers and orders the two `if` tests differently.  difftest FAIL (memory pool @40010004 differs). flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00a0d7a0 122 S::S(const S&): copy ctor — id, wide-string assign, the float/byte/uint fields, then the KVec copy.  Field-for-field correct; the wide-string assign and the KVec copy are scheduled differently.  difftest WEAK (73 valid, 100.0% cov). flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00a0d880 178 Cheat::Execute_880: cheat handler, same shape as Execute_470.  difftest UNSUPPORTED (0/400 valid: 296 discard on _CxxThrowException). flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast

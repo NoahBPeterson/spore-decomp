@@ -1,0 +1,2 @@
+# source  symbol  va  flags
+../src/game/SPCreatureAnim/SPAppModeCreatureAnimViewer.cpp  ?FUN_00a0d850@@YAXPAUKF@@0PBU1@@Z  00a0d850  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
