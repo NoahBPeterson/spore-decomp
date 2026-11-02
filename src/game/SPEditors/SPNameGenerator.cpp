@@ -1,4 +1,4 @@
-// src/game/SPEditors/SPNameGenerator.cpp -- migrated from slice(s) s005e8470, s005ec030, s005eb160, s005ea3d0, s005e9440 by tools/migrate/rewrite.py
+// src/game/SPEditors/SPNameGenerator.cpp -- migrated from slice(s) s005ecf80, s005e8470, s005ec030, s005eb160, s005ea3d0, s005e9440 by tools/migrate/rewrite.py
 // Object file: SPEditors/SPNameGenerator.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -17,6 +17,7 @@ extern "C" void EASTL_allocator_deallocate(void* p);  // 0x00f47380
 #include "cSPUILayout.h"
 #include "SP/cSPVerbTrayCollection.h"
 #include <ctype.h>
+#include "cSPUIPropertyLayout.h"
 
 // ---- items of slice s005e9440 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern "C" void EASTL_allocator_deallocate(void* p);  // 0x00f47380
@@ -829,7 +830,7 @@ static inline bool PropBool(PropList* l, uint32_t id, bool def) {
 
 // ---- items of slice s005e8470 begin (TODO(rewrite): local stubs, replace by canonical classes)
 namespace eastl {
-struct allocator_s005e_8470 {
+class allocator_s005e_8470 { public:
   allocator_s005e_8470() {}
   void* allocate(size_t n) {
     return operator new[](n, "Editor", 0, 0, "c:\\EASTL\\include\\EASTL/allocator.h", 0xd1);
@@ -1009,6 +1010,70 @@ typedef basic_string_s005e_8470<wchar_t> wstring_s005e_8470;
 struct Key2_s005e_8470 { uint16_t a, b; };
 inline bool operator<(const Key2_s005e_8470& x, const Key2_s005e_8470& y) { return (x.a < y.a) || (!(y.a < x.a) && (x.b < y.b)); }
 // ---- items of slice s005e8470 end
+
+// ---- items of slice s005ecf80 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern void* gDefaultWStr;   // 0x015f0a1c
+namespace eastl {
+template <typename T>
+struct basic_string_s005e_cf80 {
+  T* mpBegin;
+  T* mpEnd;
+  T* mpCapacity;
+  int mAllocator;  // empty; padded to 4 (string is 16 bytes)
+
+  void RangeInitialize(const T* p);  // 0x00579a90
+};  // namespace eastl
+}
+struct NameVec20 { uint32_t mWords[5]; };    // 20-byte string vector
+struct NameVec28 { uint32_t mWords[7]; };    // 28-byte string collection
+struct NameVec40 { uint32_t mWords[10]; };   // 40-byte string collection
+struct NameVec60 { uint32_t mWords[15]; };   // 60-byte string collection
+class cSPNameGenerator_s005e_cf80 {
+ public:
+  uint32_t pad00[5];           // +0x00
+  NameVec20 mVec14;            // +0x14
+  NameVec20 mVec28;            // +0x28
+  NameVec20 mVec3c;            // +0x3c
+  NameVec20 mVec50;            // +0x50
+  NameVec20 mVec64;            // +0x64
+  NameVec20 mVec78;            // +0x78
+  NameVec20 mVec8c;            // +0x8c
+  NameVec20 mVecA0;            // +0xa0
+  uint32_t padB4[10];          // +0xb4
+  NameVec60 mVecDc;            // +0xdc
+  NameVec60 mVec118;           // +0x118
+  NameVec60 mVec154;           // +0x154
+  NameVec60 mVec190;           // +0x190
+  NameVec60 mVec1cc;           // +0x1cc
+  NameVec60 mVec208;           // +0x208
+  uint8_t mFlag244;            // +0x244
+  uint8_t pad245[3];
+  NameVec40 mVec248;           // +0x248
+  NameVec40 mVec270;           // +0x270
+  NameVec40 mVec298;           // +0x298
+  NameVec40 mVec2c0;           // +0x2c0
+  NameVec40 mVec2e8;           // +0x2e8
+  NameVec40 mVec310;           // +0x310
+  NameVec40 mVec338;           // +0x338
+  NameVec40 mVec360;           // +0x360
+  NameVec28 mVec388;           // +0x388
+  NameVec20 mVec3a4;           // +0x3a4
+  uint8_t mFlag3b8;            // +0x3b8
+  uint8_t mFlag3b9;            // +0x3b9
+  uint8_t pad3ba;
+  uint8_t mFlag3bb;            // +0x3bb
+  uint8_t mFlag3bc;            // +0x3bc
+  uint8_t mFlag3bd;            // +0x3bd
+  uint8_t mFlag3be;            // +0x3be
+  uint8_t mFlag3bf;            // +0x3bf
+
+  void* CreateRandomName(void* out, void* vec, bool flag);                    // 0x005ebb00
+  void* PickName(void* out, void* a, void* b, void* c, void* d, bool flag);   // 0x005ec370
+  void* CreateRandomCompoundName(void* out, void* a, void* b, void* c, void* d,
+                                 void* e, bool flag);                          // 0x005eb540
+  void* GetName(void* out, unsigned int key);                                 // 0x005ecf80
+};
+// ---- items of slice s005ecf80 end
 
 // @ 0x005e8ff0
 namespace eastl {
@@ -1790,4 +1855,111 @@ void cSPNameGenerator_s005e_c030::Init()
   }
   exStr.Free();
   if (list) list->Release();
+}
+
+// @ 0x005ecf80
+void* cSPNameGenerator_s005e_cf80::GetName(void* out, unsigned int key)
+{
+  char* const o = (char*)out;
+  if ((int)key < 0x7e1310b) {
+    if (key == 0x7e1310a) {
+      if (!mFlag244) {
+        CreateRandomName(o, &mVec3a4, true);
+        return out;
+      }
+      if (mFlag3b8)
+        PickName(o, &mVec270, &mVec388, &mVec3a4, this, true);
+      else
+        CreateRandomCompoundName(o, &mVec270, &mVecA0, &mVec388, &mVec3a4, this, true);
+      return out;
+    }
+    if ((int)key < 0x3dee115) {
+      if (key == 0x3dee114) {
+        if (!mFlag244) {
+          CreateRandomName(o, &mVec8c, false);
+          return out;
+        }
+        if (mFlag3bf)
+          PickName(o, &mVec360, &mVec388, &mVec3a4, &mVec8c, false);
+        else
+          CreateRandomCompoundName(o, &mVec360, &mVec208, &mVec388, &mVec3a4, &mVec8c, false);
+        return out;
+      }
+      if (key == 0xba1fd5ac) {
+        if (!mFlag244) {
+          CreateRandomName(o, &mVec78, false);
+          return out;
+        }
+        if (mFlag3be)
+          PickName(o, &mVec338, &mVec388, &mVec3a4, &mVec78, false);
+        else
+          CreateRandomCompoundName(o, &mVec338, &mVec1cc, &mVec388, &mVec3a4, &mVec78, false);
+        return out;
+      }
+      if (key == 0xdeb2d943) {
+        if (!mFlag244) {
+          CreateRandomName(o, &mVec28, false);
+          return out;
+        }
+        PickName(o, &mVec298, &mVec388, &mVec3a4, &mVec28, false);
+        return out;
+      }
+      goto empty_string;
+    }
+    if (key == 0x55ea490) {
+      if (!mFlag244) {
+        CreateRandomName(o, &mVec50, false);
+        return out;
+      }
+      if (mFlag3bc)
+        PickName(o, &mVec2e8, &mVec388, &mVec3a4, &mVec50, false);
+      else
+        CreateRandomCompoundName(o, &mVec2e8, &mVec118, &mVec388, &mVec3a4, &mVec50, false);
+      return out;
+    }
+    goto empty_string;
+  }
+  if (key == 0x51aa76bb) {
+    if (!mFlag244) {
+      CreateRandomName(o, &mVec3c, false);
+      return out;
+    }
+    if (mFlag3bb)
+      PickName(o, &mVec2c0, &mVec388, &mVec3a4, &mVec3c, false);
+    else
+      CreateRandomCompoundName(o, &mVec2c0, &mVec190, &mVec388, &mVec3a4, &mVec3c, false);
+    return out;
+  }
+  if (key == 0x58f4c251) {
+    if (!mFlag244) {
+      CreateRandomName(o, &mVec64, false);
+      return out;
+    }
+    if (mFlag3bd)
+      PickName(o, &mVec310, &mVec388, &mVec3a4, &mVec64, false);
+    else
+      CreateRandomCompoundName(o, &mVec310, &mVec154, &mVec388, &mVec3a4, &mVec64, false);
+    return out;
+  }
+  if (key == 0x7cab064c) {
+    if (!mFlag244) {
+      CreateRandomName(o, &mVec14, true);
+      return out;
+    }
+    if (mFlag3b9)
+      PickName(o, &mVec248, &mVec388, &mVec3a4, &mVec14, true);
+    else
+      CreateRandomCompoundName(o, &mVec248, &mVecDc, &mVec388, &mVec3a4, &mVec14, true);
+    return out;
+  }
+
+empty_string:
+  {
+    eastl::basic_string_s005e_cf80<wchar_t>* s = (eastl::basic_string_s005e_cf80<wchar_t>*)o;
+    s->mpBegin = 0;
+    s->mpEnd = 0;
+    s->mpCapacity = 0;
+    s->RangeInitialize((const wchar_t*)gDefaultWStr);
+  }
+  return out;
 }

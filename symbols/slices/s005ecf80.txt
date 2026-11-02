@@ -1,4 +1,4 @@
-005ecf80 ?GetName@cSPNameGenerator@@QAEPAXPAXI@Z  # cSPNameGenerator::GetName(out,key): seven-key part dispatch to CreateRandomName / PickName / CreateRandomCompoundName, empty wstring otherwise
+005ecf80 ?GetName@cSPNameGenerator_s005e_cf80@@QAEPAXPAXI@Z  # cSPNameGenerator_s005e_cf80::GetName migrated from s005ecf80 (verbatim, slice spelling)
 005ed320 ?AddBox@cSPPaletteItemRollover_s005e_cf80@SP@@QAEXH@Z  # cSPPaletteItemRollover_s005e_cf80::AddBox migrated from s005ecf80 (verbatim, slice spelling)
 005ed340 ?GetAreaPair@cSPPaletteItemRollover_s005e_cf80@SP@@QAEXPAH@Z  # cSPPaletteItemRollover_s005e_cf80::GetAreaPair migrated from s005ecf80 (verbatim, slice spelling)
 005ed360 ??0cSPPaletteItemRollover@SP@@QAE@_N@Z  # cSPPaletteItemRollover::cSPPaletteItemRollover(bool): base ctor, vtables, field zeroing, SetKey + SetRootWindowId

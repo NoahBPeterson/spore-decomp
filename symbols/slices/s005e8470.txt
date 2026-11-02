@@ -9,6 +9,6 @@
 005e91c0 ?lower_bound@?$rbtree_s005e_8470@UKey2_s005e_8470@@U?$less_s005e_8470@UKey2_s005e_8470@@@eastl@@@eastl@@QAE?AU?$rbtree_iterator_s005e_8470@UKey2_s005e_8470@@@2@ABUKey2_s005e_8470@@@Z  # lower_bound migrated from s005e8470 (verbatim, slice spelling)
 005e9200 ?lower_bound@?$rbtree_s005e_8470@UKey3@@U?$less_s005e_8470@UKey3@@@eastl@@@eastl@@QAE?AU?$rbtree_iterator_s005e_8470@UKey3@@@2@ABUKey3@@@Z  # lower_bound migrated from s005e8470 (verbatim, slice spelling)
 005e9260 ?compare@?$basic_string_s005e_9440@_WUallocator_s005e_9440@eastl@@@eastl@@SAHPB_W000@Z  # compare migrated from s005e8470 (verbatim, slice spelling)
-005e92c0 ??0?$VectorBase_s005e_8470@GUallocator_s005e_8470@eastl@@@eastl@@QAE@IABUallocator_s005e_8470@1@@Z  # VectorBase migrated from s005e8470 (verbatim, slice spelling)
-005e93a0 ?AllocateSelf@?$basic_string_s005e_8470@_WUallocator_s005e_8470@eastl@@@eastl@@QAEXXZ  # AllocateSelf migrated from s005e8470 (verbatim, slice spelling)
+005e92c0 ??0?$VectorBase_s005e_8470@GVallocator_s005e_8470@eastl@@@eastl@@QAE@IABVallocator_s005e_8470@1@@Z  # VectorBase migrated from s005e8470 (verbatim, slice spelling)
+005e93a0 ?AllocateSelf@?$basic_string_s005e_8470@_WVallocator_s005e_8470@eastl@@@eastl@@QAEXXZ  # AllocateSelf migrated from s005e8470 (verbatim, slice spelling)
 00605f90 ?InitTrays@cSPVerbTrayCollection@SP@@MAEXVKey@ResourceMan@EA@@PAV345@H@Z  # SP::cSPVerbTrayCollection::InitTrays (callee of s005e8470, named from the dev publics; slice address comment)
