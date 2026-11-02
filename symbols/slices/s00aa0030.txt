@@ -1,8 +1,8 @@
-00aa0030 GObj::ctor         # GmeRefCount/GmeIComponent-derived emitter ctor (2 args, ret 8)
-00aa04a0 GObj::dtor         # destructor: effect vector, spawner vector, intrusive list, vtbls
-00aa0600 GObj::compact      # drop released effect entries from the 0x250 vector
-00aa06b0 GObj::on_msg       # effect message handler: gate, XformMsg text update, spawner index, free-list return
-00aa09e0 GObj::pool_alloc   # allocate one 0xa0 effect object from the free list / pool
-00aa0a90 GObj::clear_list   # unlink and free every intrusive-list node at +0x24
-00aa0b00 GObj::set_target   # commit target id, notify component, rebind effect entries
-00aa0ba0 GObj::bind_cfg     # refresh cached config tables, spawner interfaces and value vectors
+00aa0030 ?ctor@GObj@@QAEPAU1@HH@Z  # GObj::ctor migrated from s00aa0030 (verbatim, slice spelling)
+00aa04a0 ?dtor@GObj@@QAEXXZ  # GObj::dtor migrated from s00aa0030 (verbatim, slice spelling)
+00aa0600 ?compact@GObj@@QAEXXZ  # GObj::compact migrated from s00aa0030 (verbatim, slice spelling)
+00aa06b0 ?on_msg@GObj@@QAEXPAX@Z  # GObj::on_msg migrated from s00aa0030 (verbatim, slice spelling)
+00aa09e0 ?pool_alloc@GObj@@QAEPAXXZ  # GObj::pool_alloc migrated from s00aa0030 (verbatim, slice spelling)
+00aa0a90 ?clear_list@GObj@@QAEXXZ  # GObj::clear_list migrated from s00aa0030 (verbatim, slice spelling)
+00aa0b00 ?set_target@GObj@@QAEXH@Z  # GObj::set_target migrated from s00aa0030 (verbatim, slice spelling)
+00aa0ba0 ?bind_cfg@GObj@@QAEXPAX@Z  # GObj::bind_cfg migrated from s00aa0030 (verbatim, slice spelling)
