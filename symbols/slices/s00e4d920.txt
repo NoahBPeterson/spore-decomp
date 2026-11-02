@@ -1,4 +1,5 @@
 00e4d920 SP::ImportAdvectMap  # decomp index name
+00e4dbc0 ?FUN_00e4dbc0@@YAHPAXPAH1HH@Z  # FUN_00e4dbc0 migrated from s00e4d920 (verbatim, slice spelling)
 00e4dc90 ?SP_sPositionToCellIndex@@YIHPAM@Z  # SP_sPositionToCellIndex migrated from s00e4d920 (verbatim, slice spelling)
 00e4dd20 ?FUN_00e4dd20@@YIXPAM0@Z  # FUN_00e4dd20 migrated from s00e4d920 (verbatim, slice spelling)
 00e4e170 ?FUN_00e4e170@@YAXMHHPAHPAM10@Z  # FUN_00e4e170 migrated from s00e4d920 (verbatim, slice spelling)
