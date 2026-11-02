@@ -1,1 +1,24 @@
 # source  symbol  va  flags
+../src/game/SPCreatureAnim/creature_spore.cpp  ?RefreshWorldState@creature_mesh_instance_data@@QAEXXZ  009c8900  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPCreatureAnim/creature_spore.cpp  ?FUN_009c90d0@cEffectBlockCommand@@QAEXPAVcArguments_s009c_8a90@ArgScript@EA@@@Z  009c90d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPCreatureAnim/creature_spore.cpp  ?FUN_009c9130@cEffectBlockCommand@@QAEXPAVcArguments_s009c_8a90@ArgScript@EA@@@Z  009c9130  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPCreatureAnim/creature_spore.cpp  ?FUN_009c9170@cEffectBlockCommand@@QAEXPAVcArguments_s009c_8a90@ArgScript@EA@@@Z  009c9170  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPCreatureAnim/creature_spore.cpp  ?FUN_009c9200@cEffectBlockCommand@@QAEXPAVcArguments_s009c_8a90@ArgScript@EA@@@Z  009c9200  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPCreatureAnim/creature_spore.cpp  ?FUN_009c9230@cEffectBlockCommand@@QAEXPAVcArguments_s009c_8a90@ArgScript@EA@@@Z  009c9230  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPCreatureAnim/creature_spore.cpp  ?FUN_009c9260@cEffectBlockCommand@@QAEXPAVcArguments_s009c_8a90@ArgScript@EA@@@Z  009c9260  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPCreatureAnim/creature_spore.cpp  ?FUN_009c92e0@cEffectBlockCommand@@QAEXPAVcArguments_s009c_8a90@ArgScript@EA@@@Z  009c92e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPCreatureAnim/creature_spore.cpp  ?FUN_009c9340@cEffectBlockCommand@@QAEXPAVcArguments_s009c_8a90@ArgScript@EA@@@Z  009c9340  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPCreatureAnim/creature_spore.cpp  ?FUN_009c93c0@cEffectBlockCommand@@QAEXPAVcArguments_s009c_8a90@ArgScript@EA@@@Z  009c93c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPCreatureAnim/creature_spore.cpp  ?FUN_009c9460@cEffectBlockCommand@@QAEXPAVcArguments_s009c_8a90@ArgScript@EA@@@Z  009c9460  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPCreatureAnim/creature_spore.cpp  ?FUN_009c94c0@cEffectBlockCommand@@QAEXPAVcArguments_s009c_8a90@ArgScript@EA@@@Z  009c94c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPCreatureAnim/creature_spore.cpp  ?FUN_009c95e0@cEffectBlockCommand@@QAEXPAVcArguments_s009c_8a90@ArgScript@EA@@@Z  009c95e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPCreatureAnim/creature_spore.cpp  ?FUN_009c9650@cEffectBlockCommand@@QAEXPAVcArguments_s009c_8a90@ArgScript@EA@@@Z  009c9650  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPCreatureAnim/creature_spore.cpp  ??1creature_effect_s009c_8a90@nSPCreatureAnim@@QAE@XZ  009c9870  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPCreatureAnim/creature_spore.cpp  ?OnRegister@cBlockBlockCommand_s009c_a4b0@?A0xe9673dc5@@QAEXPAUcIParser_s009c_a4b0@ArgScript@EA@@PAUcState_s009c_a4b0@45@@Z  009ca4b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPCreatureAnim/creature_spore.cpp  ??0creature_effect_s009c_a4b0@nSPCreatureAnim@@QAE@XZ  009caac0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPCreatureAnim/creature_spore.cpp  ?LookupEffect@creature_instance_data_full@nSPCreatureAnim@@QAEPAHK@Z  009cab60  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPCreatureAnim/creature_spore.cpp  ?FUN_009cabb0@@YAXPAUcreature_effect_s009c_a4b0@nSPCreatureAnim@@@Z  009cabb0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPCreatureAnim/creature_spore.cpp  ??4creature_effect_s009c_a4b0@nSPCreatureAnim@@QAEAAU01@ABU01@@Z  009cabd0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPCreatureAnim/creature_spore.cpp  ?Execute@cNumBlocksCommand@?A0xe9673dc5@@UAEXAAUcArguments@2@@Z  009cb9b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPCreatureAnim/creature_spore.cpp  ?Execute@cParentIndexCommand@nSPCreatureAnim@@UAEXAAUcArguments_s009c_cfe0@2@@Z  009ccfe0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPCreatureAnim/creature_spore.cpp  ?Execute@cBlockBlockCommand_s009c_cfe0@nSPCreatureAnim@@UAEXAAUcArguments_s009c_cfe0@2@@Z  009cd040  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

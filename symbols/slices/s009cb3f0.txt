@@ -1,10 +1,11 @@
-009cb3f0 ?EraseEffect@creature_instance_data@nSPCreatureAnim@@QAE?AUhashtable_iterator@2@U32@@Z
-009cb460 ?RemoveEffect@creature_instance_data@nSPCreatureAnim@@QAEXPAUcreature_effect@2@@Z
-009cb4f0 ?ClearAllEffects@creature_instance_data@nSPCreatureAnim@@QAEXXZ
-009cb5a0 ?AttachEffect@creature_instance_data@nSPCreatureAnim@@QAEXPAUhashtable_iterator@2@PAU12@PAUeffect_node@2@PAPAU42@K0@Z
-009cb760 ?FUN_009cb760@nSPCreatureAnim@@YAXPAUcreature_instance_data@1@@Z
-009cb840 ?resize@body_static_vec@nSPCreatureAnim@@QAEXK@Z
-009cb8f0 ?resize@effect_item_vec@nSPCreatureAnim@@QAEXK@Z
-009cb9b0 ?Execute@cNumBlocksCommand@?A0x6012a564@@UAEXAAUcArguments@2@@Z
-009cb9f0 ?FUN_009cb9f0@nSPCreatureAnim@@YAXPAMPAKPAD@Z
-009cbdb0 ?FUN_009cbdb0@nSPCreatureAnim@@YAXPAD@Z
+0099cab0 ?AddRef@creature_instance_data@nSPCreatureAnim@@QAEJXZ  # nSPCreatureAnim::creature_instance_data::AddRef (callee of s009cb3f0, named from the dev publics; slice address comment)
+009cb3f0 ?EraseEffect@creature_instance_data_s009c_b3f0@nSPCreatureAnim@@QAE?AUhashtable_iterator_s009c_b3f0@2@U32@@Z  # creature_instance_data_s009c_b3f0::EraseEffect migrated from s009cb3f0 (verbatim, slice spelling)
+009cb460 ?RemoveEffect@creature_instance_data_s009c_b3f0@nSPCreatureAnim@@QAEXPAUcreature_effect_s009c_b3f0@2@@Z  # creature_instance_data_s009c_b3f0::RemoveEffect migrated from s009cb3f0 (verbatim, slice spelling)
+009cb4f0 ?ClearAllEffects@creature_instance_data_s009c_b3f0@nSPCreatureAnim@@QAEXXZ  # creature_instance_data_s009c_b3f0::ClearAllEffects migrated from s009cb3f0 (verbatim, slice spelling)
+009cb5a0 ?AttachEffect@creature_instance_data_s009c_b3f0@nSPCreatureAnim@@QAEXPAUhashtable_iterator_s009c_b3f0@2@PAU12@PAUeffect_node_s009c_b3f0@2@PAPAU42@K0@Z  # creature_instance_data_s009c_b3f0::AttachEffect migrated from s009cb3f0 (verbatim, slice spelling)
+009cb760 ?FUN_009cb760@nSPCreatureAnim@@YAXPAUcreature_instance_data_s009c_b3f0@1@@Z  # FUN_009cb760 migrated from s009cb3f0 (verbatim, slice spelling)
+009cb840 ?resize@body_static_vec@nSPCreatureAnim@@QAEXK@Z  # body_static_vec::resize migrated from s009cb3f0 (verbatim, slice spelling)
+009cb8f0 ?resize@effect_item_vec@nSPCreatureAnim@@QAEXK@Z  # effect_item_vec::resize migrated from s009cb3f0 (verbatim, slice spelling)
+009cb9b0 ?Execute@cNumBlocksCommand@?A0xe9673dc5@@UAEXAAUcArguments@2@@Z  # Execute migrated from s009cb3f0 (verbatim, slice spelling)
+009cb9f0 ?FUN_009cb9f0@nSPCreatureAnim@@YAXPAMPAKPAD@Z  # FUN_009cb9f0 migrated from s009cb3f0 (verbatim, slice spelling)
+009cbdb0 ?FUN_009cbdb0@nSPCreatureAnim@@YAXPAD@Z  # FUN_009cbdb0 migrated from s009cb3f0 (verbatim, slice spelling)

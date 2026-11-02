@@ -1,6 +1,6 @@
-009ccfe0 ?Execute@cParentIndexCommand@nSPCreatureAnim@@UAEXAAUcArguments@2@@Z  # `anonymous namespace'::cParentIndexCommand::Execute derived in s009ccfe0
-009cd040 ?Execute@cBlockBlockCommand@nSPCreatureAnim@@UAEXAAUcArguments@2@@Z  # `anonymous namespace'::cBlockBlockCommand::Execute derived in s009ccfe0
-009cd110 ?FUN_009cd110@@YAHPAUcreature_static_data@nSPCreatureAnim@@PBD@Z  # nSPCreatureAnim::InitCreatureStaticDataFromBlocksFile (body reconstructed in s009ccfe0)
+009ccfe0 ?Execute@cParentIndexCommand@nSPCreatureAnim@@UAEXAAUcArguments_s009c_cfe0@2@@Z  # cParentIndexCommand::Execute migrated from s009ccfe0 (verbatim, slice spelling)
+009cd040 ?Execute@cBlockBlockCommand_s009c_cfe0@nSPCreatureAnim@@UAEXAAUcArguments_s009c_cfe0@2@@Z  # cBlockBlockCommand_s009c_cfe0::Execute migrated from s009ccfe0 (verbatim, slice spelling)
+009cd110 ?FUN_009cd110@@YAHPAUcreature_static_data_s009c_cfe0@nSPCreatureAnim@@PBD@Z  # FUN_009cd110 migrated from s009ccfe0 (verbatim, slice spelling)
 009cd580 ?FUN_009cd580@@YAXPADPAMPAXH@Z  # unnamed; position/rect accessor derived in s009ccfe0
 009cd930 ?FUN_009cd930@@YAXPADPAM@Z  # unnamed; body-accumulate helper derived in s009ccfe0
 009cda70 ?FUN_009cda70@@YAPAMPAMPBM@Z  # FUN_009cda70 migrated from s009ccfe0 (verbatim, slice spelling)
