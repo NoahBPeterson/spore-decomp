@@ -1,4 +1,4 @@
-006f9250  SP::cFilterChain::AddFilterChain            # thiscall, two args, Updates chain vector
+006f9250 ?AddFilterChain@CFilterChain@@QAE_NHH@Z  # CFilterChain::AddFilterChain migrated from s006f9250 (verbatim, slice spelling)
 006f94b0  SP::cFilterChain::OnEvent                  # vtable slot 3; message 0x16 handler
 006f9520  eastl::vector<FilterElem28>::vector        # range constructor (alloc + uninitialized_copy)
 006f95e0  eastl::vector<FilterElem28>::operator=     # five-vector descriptor copy
@@ -8,8 +8,8 @@
 006f99e0  eastl::copy_backward<FilterElem28*>       # backward range copy
 006f9a50  eastl::vector<Elem78>::erase              # erase(first,last)
 006f9ac0  SP::cFilterChain::UpdateParams            # hashtable/param update
-006f9cf0  SP::cFilterChain::Shutdown                # teardown (MessageServer)
-006f9e20  SP::cFilterChain::Notify                  # three-arg virtual notify
+006f9cf0 ?Shutdown@CFilterChain@@QAEXXZ  # CFilterChain::Shutdown migrated from s006f9250 (verbatim, slice spelling)
+006f9e20 ?Notify3@CFilterChain@@QAEXHPAHG@Z  # CFilterChain::Notify3 migrated from s006f9250 (verbatim, slice spelling)
 006f9f00 ?GenerateInputStruct@@YAPADPADIII@Z  # GenerateInputStruct migrated from s006f9250 (verbatim, slice spelling)
 006fa010 ?GenerateCurrentStruct@@YAPADPADI@Z  # GenerateCurrentStruct migrated from s006f9250 (verbatim, slice spelling)
 006fa0a0 ?GenerateOutputStruct@@YAPADPADI@Z  # GenerateOutputStruct migrated from s006f9250 (verbatim, slice spelling)

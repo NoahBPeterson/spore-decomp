@@ -5,7 +5,7 @@
 006f66d0 FilterChain_StateVector_Destroy  # frees vectors at +0x64/+0x50/+0x3c/+0x28/+0x14/+0x0
 006f6770 vector_bool_assign  # eastl::vector<bool,fixed_vector_allocator>
 006f6830 ?AddCameraTexture@cFilterChain@@QAE_NGGPAH@Z  # cFilterChain::AddCameraTexture migrated from s006f6430 (verbatim, slice spelling)
-006f6910 cFilterChain_RemoveCameraTextures  # frame::release loop + erase
+006f6910 ?RemoveCameraTextures@cFilterChain@@QAEXXZ  # cFilterChain::RemoveCameraTextures migrated from s006f6430 (verbatim, slice spelling)
 006f69c0 ?Init@cFilterChainInit@@QAE_NXZ  # cFilterChainInit::Init migrated from s006f6430 (verbatim, slice spelling)
 006f6c30 ?W6f6c30@cState@@QAEXPAUcTables@@PAUcDesc@@HHHHH@Z  # cState::W6f6c30 migrated from s006f6430 (verbatim, slice spelling)
 006f6f40 ?W6f6f40@cState@@QAEXPAUcTables@@PAUcDesc@@HHHHH@Z  # cState::W6f6f40 migrated from s006f6430 (verbatim, slice spelling)
