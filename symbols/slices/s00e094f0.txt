@@ -9,11 +9,11 @@
 00e099d0 FUN_00e099d0  # Ghidra FUN; enter the spyglass mode overlay: switch the local cursor, show both windows, hold the pause gate and post the mode message; byte-exact
 00e09a50 FUN_00e09a50  # Ghidra FUN; leave the spyglass mode overlay: restore the cursor, hide both windows, release the pause gate and post the completion message; byte-exact
 00e09ad0 FUN_00e09ad0  # Ghidra FUN; true when the resolved identity object of the caller's object carries a record; byte-exact
-00e09b10 FUN_00e09b10  # Ghidra FUN; resolve the display name of the caller's object, falling back to the shared empty string; byte-exact
+00e09b10 ?FUN_00e09b10@@YAPB_WPAUcGameObject@@@Z  # FUN_00e09b10 migrated from s00e094f0 (verbatim, slice spelling)
 00e09bf0 FUN_00e09bf0  # Ghidra FUN; launch the asset browser on the caller's object when both its name and its record exist; byte-exact
-00e09ca0 CellStart  # PDB name SP::cGrid::CellStart; cGrid member: cell index for (row, col), a plain stride*row+col walk for the uniform grid and the merged-row walk when the grid has a row table; not byte-exact
+00e09ca0 ?CellStart@cGrid@@QAEHHH@Z  # cGrid::CellStart migrated from s00e094f0 (verbatim, slice spelling)
 00e09d10 FUN_00e09d10  # Ghidra FUN; cGrid member: rebuild the spyglass property grid (recompute the stride, cell metrics and centred origin from the child window rectangles, refill the element vector, re-init the layout); not reconstructed
-00e0a270 LayoutCells  # PDB name SP::cGrid::LayoutCells; cGrid member: rebuild every cell rectangle row by row from the cell metrics and push it to the cell object, then refresh the owner; not byte-exact
-00e0a390 Init  # PDB name SP::cGrid::Init; cGrid member: build the grid owner (vtable, element vector, row table, cell metrics, handler slots) and return this; byte-exact
-00e0a400 Destroy  # PDB name SP::cGrid::Destroy; cGrid member: detach the message handler, free the row table, destroy the element vector, release the two refcounted bases and install the paint-system vtable; not byte-exact
-00e0a480 HandleMessage  # PDB name SP::cGrid::HandleMessage; cGrid member: a grid refresh request carrying our target handle rebuilds the property grid and relays the cell rectangles; byte-exact
+00e0a270 ?LayoutCells@cGrid@@QAEXXZ  # cGrid::LayoutCells migrated from s00e094f0 (verbatim, slice spelling)
+00e0a390 ?Init@cGrid@@QAEPAXXZ  # cGrid::Init migrated from s00e094f0 (verbatim, slice spelling)
+00e0a400 ?Destroy@cGrid@@QAEXXZ  # cGrid::Destroy migrated from s00e094f0 (verbatim, slice spelling)
+00e0a480 ?HandleMessage@cGrid@@QAE_NIPAX@Z  # cGrid::HandleMessage migrated from s00e094f0 (verbatim, slice spelling)
