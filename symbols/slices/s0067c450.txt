@@ -1,6 +1,13 @@
 0067ad00 cUIHints::UpdateVisibleHint  # PDB name, called from UpdateHintTimers
 0067bc30 cUIHints::SetVisibility  # PDB name, called from this slice
-0067c960 cUIHints::Update  # PDB name (symbols/pdb_names.json)
+0067c450 ?UpdateHintTimers@cUIHints_s0067_c450@@QAEXM@Z  # cUIHints_s0067_c450::UpdateHintTimers migrated from s0067c450 (verbatim, slice spelling)
+0067c790 ?FUN_0067c790@@YAXXZ  # FUN_0067c790 migrated from s0067c450 (verbatim, slice spelling)
+0067c830 ?ActivateHint@cUIHints_s0067_c450@@QAEXI@Z  # cUIHints_s0067_c450::ActivateHint migrated from s0067c450 (verbatim, slice spelling)
+0067c8c0 ?SetHintState@cUIHints_s0067_c450@@QAEXI_N@Z  # cUIHints_s0067_c450::SetHintState migrated from s0067c450 (verbatim, slice spelling)
+0067c960 ?Update@cUIHints_s0067_c450@@QAEXXZ  # cUIHints_s0067_c450::Update migrated from s0067c450 (verbatim, slice spelling)
+0067c9b0 ?Refresh@cUIHints_s0067_c450@@QAEXXZ  # cUIHints_s0067_c450::Refresh migrated from s0067c450 (verbatim, slice spelling)
+0067ca40 ?FUN_0067ca40@@YIXPAUcUIHintsThunkTarget@@@Z  # FUN_0067ca40 migrated from s0067c450 (verbatim, slice spelling)
+0067ca50 ?AddCondition@cUIHints_s0067_c450@@QAEXPAX@Z  # cUIHints_s0067_c450::AddCondition migrated from s0067c450 (verbatim, slice spelling)
 0067cc70 ?FUN_0067cc70@@YAXPAX0H@Z  # FUN_0067cc70 migrated from s0067c450 (verbatim, slice spelling)
 0067cca0 ?FUN_0067cca0@@YAXPAX0H@Z  # FUN_0067cca0 migrated from s0067c450 (verbatim, slice spelling)
 0067cce0 ?FUN_0067cce0@@YAXPAX0H@Z  # FUN_0067cce0 migrated from s0067c450 (verbatim, slice spelling)

@@ -1,10 +1,11 @@
-// src/game/Spui/SPHints.cpp -- migrated from slice(s) s0067b4c0, s0067a590 by tools/migrate/rewrite.py
+// src/game/Spui/SPHints.cpp -- migrated from slice(s) s0067c450, s0067b4c0, s0067a590 by tools/migrate/rewrite.py
 // Object file: Spui/SPHints.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
 #include "game/types.h"
 #include <string.h>
 #include <math.h>
+#include "cSPUILayout.h"
 
 // unnamed retail callees and globals (address in the comment)
 extern "C" __declspec(dllimport) void* __cdecl memmove(void*, const void*, unsigned int);
@@ -359,6 +360,107 @@ class cUIHints { public:
 struct UhRet { int UpdateHints(char b, char c); };   // 0x0067c350
 // ---- items of slice s0067b4c0 end
 
+// ---- items of slice s0067c450 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C" float SPUIHelpers_GetElapsedSeconds();
+struct cHint_s0067_c450;
+struct HintVec_s0067_c450 {
+  cHint_s0067_c450** mpBegin;
+  cHint_s0067_c450** mpEnd;
+  cHint_s0067_c450** mpCapacity;
+};
+struct PtrVec {
+  void** mpBegin;
+  void** mpEnd;
+  void** mpCapacity;
+  void DoInsertValue(void** pPos, void** pValue);
+};
+struct cHint_s0067_c450 {
+  void* mpVtable;              // +0x00
+  int mRefCount;               // +0x04
+  unsigned int mTriggerID;     // +0x08
+  unsigned int mPresentList[3];// +0x0c
+  unsigned int mGap18[2];      // +0x18
+  unsigned int mAbsentList[3]; // +0x20
+  unsigned int mGap2c[2];      // +0x2c
+  unsigned int mCancelList[3]; // +0x34
+  unsigned int mGap40;         // +0x40
+  unsigned int mGap44;         // +0x44
+  float mPeriod;               // +0x48
+  float mWait;                 // +0x4c
+  float mLife;                 // +0x50
+  float mPriority;             // +0x54
+  float mFlash;                // +0x58
+  unsigned int mType;          // +0x5c
+  unsigned int mGap60[4];      // +0x60
+  unsigned int mIcon;          // +0x70
+  unsigned char mbHasTextA;    // +0x74
+  unsigned char mbHasText;     // +0x75
+  unsigned char mbHasTextB;    // +0x76
+  unsigned char mGap77;        // +0x77
+  unsigned int mText[5];       // +0x78 (SP::cString)
+  unsigned int mTextColor;     // +0x8c
+  int mState;                  // +0x90
+  float mTimer;                // +0x94
+};
+class ConfigObj {
+ public:
+virtual void s00();
+virtual void s04();
+virtual void s08();
+virtual void s0c();
+virtual void s10();
+virtual void s14();
+virtual void s18();
+virtual void s1c();
+virtual void s20();
+virtual void s24();
+virtual void s28();
+  virtual void vf2c(int, int);
+  virtual int vf30(int);
+};
+class MsgObj {
+ public:
+virtual void s00();
+virtual void s04();
+virtual void s08();
+virtual void s0c();
+  virtual void s10();
+  virtual void vf14(int, int, int);
+};
+class cUIHints_s0067_c450 {
+ public:
+  bool CheckConditions(cHint_s0067_c450* pHint);       // @ 0x0067afd0
+  bool CheckCancelList(unsigned int* pVec); // @ 0x0067af10
+  bool SetVisibility(int bVisible, cHint_s0067_c450* pHint);  // @ 0x0067bc30
+  void UpdateVisibleHint(cHint_s0067_c450* pHint, float dt);  // @ 0x0067ad00
+
+  void UpdateHintTimers(float dt);   // @ 0x0067c450
+  void ActivateHint(unsigned int id);// 0x0067c830
+  void SetHintState(unsigned int id, bool active); // 0x0067c8c0
+  void Update();                     // @ 0x0067c960
+  void Refresh();                    // 0x0067c9b0
+  void AddCondition(void* pCondition);// @ 0x0067ca50
+
+  unsigned int mBase[3];             // +0x00
+  PtrVec mConditionFunc;             // +0x0c
+  unsigned int mGap18[2];            // +0x18
+  HintVec_s0067_c450 mHintList;                 // +0x20
+  unsigned int mGap2c[2];            // +0x2c
+  float mLastUpdateTime;             // +0x34
+  float mLastHintTime;               // +0x38
+  unsigned int mGap3c[3];            // +0x3c
+  unsigned int mAnimState;           // +0x48
+  cHint_s0067_c450* mCurrentlyVisible;          // +0x4c
+};
+extern "C" cUIHints_s0067_c450* FUN_0067cac0();
+extern "C" ConfigObj* FUN_0067dd30();
+extern "C" MsgObj* FUN_0067dcc0();
+struct cUIHintsThunkTarget {
+  unsigned int mGap00[4];   // +0x00
+  int mValue;               // +0x10
+};
+// ---- items of slice s0067c450 end
+
 // @ 0x0067aee0
 E_aee0* C_aee0::find(int id)
 {
@@ -408,6 +510,7 @@ char* Vec16::insert(char* pos, unsigned short v)
     *(unsigned short*)p = v;
     DoInsertValueVec((int*)(p + 2), pos, (unsigned)(end - pos));
     char* newEnd = p + 2 + (end - pos);
+    *(unsigned short*)newEnd = 0;
     if (begin && (int)((cap - begin) & 0xfffffffe) > 2)
         EASTL_deallocate(begin);
     begin = mem;
@@ -470,8 +573,8 @@ void VecRef::insert(int* pos, int** value)
 {
     int* e = end;
     if (e != cap) {
-        if (pos <= *value && *value < e)
-            *value += 1;
+        if ((int*)pos <= (int*)value && (int*)value < e)
+            value += 1;
         if (e) {
             int v = e[-1];
             *e = v;
@@ -479,7 +582,7 @@ void VecRef::insert(int* pos, int** value)
                 (*(int*)(v + 4))++;
         }
         FUN_00a690d0(pos, end - 1, end);
-        int nv = **value;
+        int nv = (int)*value;
         int ov = *pos;
         if (nv != ov) {
             if (nv)
@@ -501,10 +604,10 @@ void VecRef::insert(int* pos, int** value)
     unsigned capNew = n ? n * 2 : 1;
     int* mem = (int*)EASTL_alloc16(capNew * 4, "Editor", 0, 0,
         "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h", 0xd1);
-    DoInsertValueVec(mem, begin, (unsigned)(pos - begin));
+    DoInsertValueVec(mem, begin, (unsigned)((char*)pos - (char*)begin));
     int* p = (int*)((char*)mem + ((char*)pos - (char*)begin));
     if (p) {
-        int v = **value;
+        int v = (int)*value;
         *p = v;
         if (v)
             (*(int*)(v + 4))++;
@@ -827,4 +930,255 @@ int cUIHints::SetFlag(char a, int b)
     }
     *(int*)((char*)this + 0x48) = 2;
     return ((UhRet*)this)->UpdateHints(0, (char)b);
+}
+
+// @ 0x0067c450
+void cUIHints_s0067_c450::UpdateHintTimers(float dt)
+{
+  unsigned int bestType = 0xffffffff;
+  unsigned int uBest = 0;
+  cHint_s0067_c450* pBest = 0;
+  cHint_s0067_c450** pCurrent = mHintList.mpBegin;
+  cHint_s0067_c450** pRangeEnd = mHintList.mpEnd;
+  for (; pCurrent != pRangeEnd; ++pCurrent) {
+    cHint_s0067_c450* pHint = *pCurrent;
+      switch (pHint->mState) {
+        case 1:
+          pHint->mTimer += dt;
+          if (pHint->mTimer > pHint->mPeriod && pHint->mTimer != pHint->mPeriod) {
+            if (CheckConditions(pHint)) pHint->mState = 2;
+            pHint->mTimer = 0;
+          }
+          continue;
+        case 2:
+          pHint->mTimer += dt;
+          if (pHint->mTimer > pHint->mWait && pHint->mTimer != pHint->mWait) {
+            pHint->mState = CheckConditions(pHint) ? 3 : 1;
+            pHint->mTimer = 0;
+          }
+          continue;
+        case 3:
+          if (((pHint->mCancelList[1] - pHint->mCancelList[0]) & 0xfffffffcU) != 0 &&
+              CheckCancelList(pHint->mCancelList)) {
+            pHint->mState = (pHint->mIcon != 0x1f9e21e8);
+            pHint->mTimer = 0;
+            continue;
+          }
+          break;
+        case 4:
+          pHint->mTimer += dt;
+          if (pHint->mTimer > pHint->mPriority && pHint->mTimer != pHint->mPriority) {
+            pHint->mState = 5;
+            pHint->mTimer = 0;
+          }
+          break;
+        case 7:
+          pHint->mTimer += dt;
+          if (pHint->mTimer > pHint->mFlash && pHint->mTimer != pHint->mFlash) {
+            pHint->mState = (pHint->mIcon != 0x1f9e21e8);
+            SetVisibility(0, pHint);
+            pHint->mTimer = 0;
+            continue;
+          }
+          break;
+        case 6:
+          pHint->mTimer += dt;
+          if (pHint->mTimer > pHint->mFlash && pHint->mTimer != pHint->mFlash) {
+            pHint->mState = (pHint->mIcon == 0x4527c498);
+            SetVisibility(0, pHint);
+            pHint->mTimer = 0;
+            continue;
+          }
+          break;
+        case 5:
+          pHint->mTimer += dt;
+          {
+            float threshold = pHint->mLife;
+            if (pHint->mTimer > threshold && threshold != 0.0f) {
+              pHint->mState = 7;
+              pHint->mTimer = 0;
+            } else if (((pHint->mCancelList[1] - pHint->mCancelList[0]) & 0xfffffffcU) != 0 &&
+                       CheckCancelList(pHint->mCancelList)) {
+              pHint->mState = 6;
+              pHint->mTimer = 0;
+            }
+          }
+          break;
+        default:
+          break;
+      }
+      if (mAnimState == 0 || pHint->mbHasText != 0) {
+        unsigned int uType = pHint->mIcon;
+        if (uType == 2) {
+          if (uBest == 2) {
+            if (pHint->mType > bestType) {
+              bestType = pHint->mType;
+              uBest = uType;
+              pBest = pHint;
+            }
+          } else {
+            bestType = pHint->mType;
+            uBest = uType;
+            pBest = pHint;
+          }
+        } else if (uBest != 2) {
+          if (pHint->mType > bestType) {
+            bestType = pHint->mType;
+            uBest = uType;
+            pBest = pHint;
+          }
+        }
+      }
+    }
+
+    if (pBest != 0) {
+      if (pBest->mIcon == 0x1f9e21e8 || mLastUpdateTime - 20.0f > mLastHintTime) {
+        cHint_s0067_c450* pVisible = mCurrentlyVisible;
+        if (pVisible != 0 && pVisible != pBest) {
+          pVisible->mState = 3;
+          SetVisibility(0, pVisible);
+        }
+        if (pBest->mState == 3) {
+          pBest->mState = 4;
+          SetVisibility(1, pBest);
+          pBest->mTimer = 0;
+          mLastHintTime = mLastUpdateTime;
+        }
+      }
+      UpdateVisibleHint(pBest, dt);
+    }
+}
+
+// @ 0x0067c790
+void FUN_0067c790()
+{
+  cUIHints_s0067_c450* pThis = FUN_0067cac0();
+  if (pThis->mAnimState <= 2) {
+    cHint_s0067_c450* pVisible = pThis->mCurrentlyVisible;
+    pThis->mAnimState = 2;
+    if (pVisible != 0) {
+      pThis->mCurrentlyVisible->mState =
+          (pThis->mCurrentlyVisible->mIcon == 0x1f9e21e8) ? 0 : 1;
+      pThis->mCurrentlyVisible->mTimer = 0.0f;
+      pThis->SetVisibility(0, pThis->mCurrentlyVisible);
+    }
+    pThis->mCurrentlyVisible = 0;
+  }
+  pThis = FUN_0067cac0();
+  pThis->mAnimState = 3;
+  FUN_0067dd30()->vf2c(0x4ea96cb, 0);
+  FUN_0067dcc0()->vf14(0x670eccd, 0, 0);
+}
+
+// @ 0x0067c830
+void cUIHints_s0067_c450::ActivateHint(unsigned int id)
+{
+  cHint_s0067_c450** pCurrent = mHintList.mpBegin;
+  cHint_s0067_c450** pRangeEnd = mHintList.mpEnd;
+  cHint_s0067_c450* pHint = 0;
+  while (pCurrent != pRangeEnd) {
+    pHint = *pCurrent;
+    if (pHint->mTriggerID == id && pHint != mCurrentlyVisible) break;
+    ++pCurrent;
+  }
+  if (pCurrent == pRangeEnd) return;
+  if (mCurrentlyVisible != 0) {
+    mCurrentlyVisible->mState =
+        (mCurrentlyVisible->mIcon == 0x1f9e21e8) ? 0 : 1;
+    mCurrentlyVisible->mTimer = 0.0f;
+    SetVisibility(0, mCurrentlyVisible);
+  }
+  mCurrentlyVisible = 0;
+  pHint->mState = 3;
+  pHint->mTimer = 0.0f;
+}
+
+// @ 0x0067c8c0
+void cUIHints_s0067_c450::SetHintState(unsigned int id, bool active)
+{
+  cHint_s0067_c450** pCurrent = mHintList.mpBegin;
+  cHint_s0067_c450** pRangeEnd = mHintList.mpEnd;
+  cHint_s0067_c450* pHint = 0;
+  while (pCurrent != pRangeEnd) {
+    pHint = *pCurrent;
+    if (pHint->mTriggerID == id) break;
+    ++pCurrent;
+  }
+  if (pCurrent == pRangeEnd) return;
+  if (mCurrentlyVisible == pHint) {
+    if (pHint != 0) {
+      if (pHint->mIcon == 0x1f9e21e8) active = true;
+      pHint->mState = (active == false);
+      pHint->mTimer = 0.0f;
+      SetVisibility(0, mCurrentlyVisible);
+    }
+    mCurrentlyVisible = 0;
+    return;
+  }
+  pHint->mTimer = 0.0f;
+  pHint->mState = (active == false);
+}
+
+// @ 0x0067c960
+void cUIHints_s0067_c450::Update()
+{
+  float elapsed = SPUIHelpers_GetElapsedSeconds();
+  float delta = elapsed - mLastUpdateTime;
+  mLastUpdateTime = elapsed;
+  if (mAnimState <= 1) {
+    int n = FUN_0067dd30()->vf30(0x5b5bb5e);
+    mAnimState = (n == 0);
+    UpdateHintTimers(delta);
+  }
+}
+
+// @ 0x0067c9b0
+void cUIHints_s0067_c450::Refresh()
+{
+  cHint_s0067_c450* pVisible = mCurrentlyVisible;
+  if (pVisible != 0) {
+    pVisible->mState = (pVisible->mIcon != 0x1f9e21e8);
+    pVisible->mTimer = 0.0f;
+    SetVisibility(0, pVisible);
+  }
+  mCurrentlyVisible = 0;
+  cHint_s0067_c450** pCurrent = mHintList.mpBegin;
+  cHint_s0067_c450** pRangeEnd = mHintList.mpEnd;
+  do {
+    if (pCurrent == pRangeEnd) return;
+    cHint_s0067_c450* pHint = *pCurrent;
+    int state = pHint->mState;
+    if (state == 1) {
+      pHint->mTimer = 0.0f;
+    } else if ((unsigned int)(state - 2) < 2) {
+      pHint->mState = (pHint->mIcon != 0x1f9e21e8);
+      pHint->mTimer = 0.0f;
+    }
+    ++pCurrent;
+  } while (true);
+}
+
+// @ 0x0067ca40
+void __fastcall FUN_0067ca40(cUIHintsThunkTarget* self)
+{
+  self->mValue -= 4;
+  reinterpret_cast<cUIHints_s0067_c450*>(self)->Refresh();
+}
+
+// @ 0x0067ca50
+void cUIHints_s0067_c450::AddCondition(void* pCondition)
+{
+  PtrVec& vec = mConditionFunc;
+  void** pSlot = vec.mpEnd;
+  if (pSlot < vec.mpCapacity) {
+    vec.mpEnd = pSlot + 1;
+    if (pSlot != 0) {
+      *pSlot = pCondition;
+      Refresh();
+      return;
+    }
+  } else {
+    vec.DoInsertValue(pSlot, &pCondition);
+  }
+  Refresh();
 }
