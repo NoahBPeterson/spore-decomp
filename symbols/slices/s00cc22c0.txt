@@ -3,11 +3,11 @@
 00cc27f0 ?UpdateState@cSpatialObjectView@@QAEHXZ  # int cSpatialObjectView::UpdateState
 00cc28c0 ??0cDefaultBeamProjectileView@@QAE@XZ  # cDefaultBeamProjectileView::cDefaultBeamProjectileView migrated from s00cc22c0 (verbatim, slice spelling)
 00cc28f0 ?MakeFlakProjectileView@@YAPAVcSpatialObjectView@@PAX@Z  # MakeFlakProjectileView migrated from s00cc22c0 (verbatim, slice spelling)
-00cc2980 ?MakeDefaultToolProjectileView@@YAPAVcSpatialObjectView@@PAX@Z  # cSpatialObjectView* MakeDefaultToolProjectileView
-00cc2b60 ?MakeDeepSpaceProjectileView@@YAPAVcSpatialObjectView@@PAX@Z  # cSpatialObjectView* MakeDeepSpaceProjectileView
-00cc2c90 ??0cSpaceDefenseMissileView@@QAE@XZ  # cSpaceDefenseMissileView::cSpaceDefenseMissileView
+00cc2980 ?MakeDefaultToolProjectileView@@YAPAVcSpatialObjectView@@PAX@Z  # MakeDefaultToolProjectileView migrated from s00cc22c0 (verbatim, slice spelling)
+00cc2b60 ?MakeDeepSpaceProjectileView@@YAPAVcSpatialObjectView@@PAX@Z  # MakeDeepSpaceProjectileView migrated from s00cc22c0 (verbatim, slice spelling)
+00cc2c90 ??0cSpaceDefenseMissileView@@QAE@XZ  # cSpaceDefenseMissileView::cSpaceDefenseMissileView migrated from s00cc22c0 (verbatim, slice spelling)
 00cc2cb0 ??1cSpaceDefenseMissileView@@QAE@XZ  # cSpaceDefenseMissileView::~cSpaceDefenseMissileView migrated from s00cc22c0 (verbatim, slice spelling)
 00cc2d30 ?HandleSimulationUpdate@cSpaceDefenseMissileView@@QAEXHH@Z  # cSpaceDefenseMissileView::HandleSimulationUpdate migrated from s00cc22c0 (verbatim, slice spelling)
 00cc2d70 ?MakeDefaultBeamProjectileView@@YAPAVcSpatialObjectView@@PAX@Z  # MakeDefaultBeamProjectileView migrated from s00cc22c0 (verbatim, slice spelling)
-00cc3000 ?MakeDefaultAoEAreaView@@YAPAVcSpatialObjectView@@PAX@Z  # cSpatialObjectView* MakeDefaultAoEAreaView
+00cc3000 ?MakeDefaultAoEAreaView@@YAPAVcSpatialObjectView@@PAX@Z  # MakeDefaultAoEAreaView migrated from s00cc22c0 (verbatim, slice spelling)
 00cc3140 ?MakeView@cCulturalProjectileView@@SAPAVcSpatialObjectView@@PAX@Z  # cCulturalProjectileView::MakeView migrated from s00cc22c0 (verbatim, slice spelling)

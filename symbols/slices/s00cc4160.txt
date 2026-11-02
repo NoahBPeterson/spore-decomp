@@ -1,1 +1,1 @@
-00cc4160  FUN_00cc4160  # eastl vector<float>::insert (grow + shift path)
+00cc4160 ?insert@cc4160_vec@@QAEXPAMPBM@Z  # cc4160_vec::insert migrated from s00cc4160 (verbatim, slice spelling)

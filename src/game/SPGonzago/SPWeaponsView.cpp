@@ -1,4 +1,4 @@
-// src/game/SPGonzago/SPWeaponsView.cpp -- migrated from slice(s) s00cc4270, s00cc3220, s00cc22c0 by tools/migrate/rewrite.py
+// src/game/SPGonzago/SPWeaponsView.cpp -- migrated from slice(s) s00cc4160, s00cc4270, s00cc3220, s00cc22c0 by tools/migrate/rewrite.py
 // Object file: SPGonzago/SPWeaponsView.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -31,6 +31,14 @@ public:
     virtual void v08();
     virtual void* Query(const void* pType);     // 0x0c
     virtual void v10();
+};
+class cDefaultAoEArea : public IRefCounted {
+public:
+    virtual void v14();
+    virtual uint32_t GetNoteEffectID();
+    virtual void v1c();
+    virtual void v20();
+    uint8_t mPad18[0x1c];
 };
 class cEffectInfo : public IRefCounted {
 public:
@@ -96,12 +104,15 @@ uint32_t GetHitEffectIdB();
 uint32_t GetHitEffectIdC();
 uint32_t GetBeamEffectId();
 uint32_t GetMuzzleEffectId();
+uint32_t GetChargeEffectId();
 uint32_t GetTrailEffectId();
 uint32_t GetProjectileType();
 void* FindEffect(uint32_t id);
 void CreateEffectRef(uint32_t id, int a, uint32_t group);
 void SetEffectScale(uint32_t id, uint32_t fScaleBits);
 bool IsEmpireObjectValid(void* pObject);
+bool IsAoEPreviewActive();
+uint32_t GetAoEPreviewEffectId();
 void* FindNounFromId(uint32_t id);
 void UpdateMissileEffect(void* pView, void* pEffect, int a);
 void UpdateBeamEffect(void* pView, void* pEffect, int a);
@@ -113,19 +124,34 @@ typedef unsigned int u32;
 typedef unsigned long long u64;
 void __cdecl EAFree(void* p);                        // 0x00f47380  operator delete[]
 void* __cdecl EANew(int size, const char* name, int, int, int, int);  // 0x00f473a0
+void* __cdecl GetCurrentGameMode_s00cc_3220();                                   // 0x00b5b800
+void  __cdecl FUN_00cf74c0();                                         // 0x00cf74c0
+void  __cdecl FUN_00cf74f0();                                         // 0x00cf74f0
+u8    __cdecl FUN_00cf1540();                                         // 0x00cf1540
+u8    __cdecl FUN_00c8e7c0();                                         // 0x00c8e7c0
 void  __cdecl FUN_00c8b130(u32 kind, int a, int b);                   // 0x00c8b130
 void  __cdecl FUN_00c88a00(u32 a, float b);                           // 0x00c88a00
+void  __cdecl FUN_00c8ad30(int a, int b);                             // 0x00c8ad30
 int   __cdecl FUN_00b25f40(u32 a);                                    // 0x00b25f40
 void  __cdecl NounManager_s00cc_3220(u32 a);                                     // 0x00b3d300
 u32   __cdecl FUN_00c9c2b0();                                         // 0x00c9c2b0
 int   __cdecl FUN_00cb37c0();                                         // 0x00cb37c0
 void  __cdecl FUN_00434040();                                         // 0x00434040
 void* __cdecl GonzagoModelWorld();                                    // 0x00b3d520
+void  __cdecl FUN_00cb5d80(void* a, void* b);                         // 0x00cb5d80
+void  __cdecl FUN_00cb5450(void* a, void* b);                         // 0x00cb5450
+float __cdecl FUN_0104bdb0();                                         // 0x0104bdb0
+void* __cdecl SP_Matrix3FromFacingAndUp(void* out, void* a, void* b); // 0x0041cb40
+float* __cdecl SP_Matrix3FromQuaternion(void* out, const void* q);    // 0x0059c190
+void* __cdecl FUN_00b894a0(float* v);                                 // 0x00b894a0
 static inline void* VT_B8_1(void* p, int a) {
     return ((void* (__thiscall*)(void*, int))*((void***)*(void**)p + 0xb8 / 4))(p, a);
 }
 static inline void VT_44_3(void* p, int a, float* b, int c) {
     ((void (__thiscall*)(void*, int, float*, int))*((void***)*(void**)p + 0x44 / 4))(p, a, b, c);
+}
+static inline void VT_30_1(void* p, int a) {
+    ((void (__thiscall*)(void*, int))*((void***)*(void**)p + 0x30 / 4))(p, a);
 }
 static inline void VT_18_1(void* p, void* a) {
     ((void (__thiscall*)(void*, void*))*((void***)*(void**)p + 0x18 / 4))(p, a);
@@ -138,6 +164,9 @@ static inline void VT_24_1(void* p, void* a) {
 }
 static inline int VT_0C_1(void* p, int a) {
     return ((int (__thiscall*)(void*, int))*((void***)*(void**)p + 0x0c / 4))(p, a);
+}
+static inline void* VT_0C_0(void* p) {
+    return ((void* (__thiscall*)(void*))*((void***)*(void**)p + 0x0c / 4))(p);
 }
 static inline void* VT_0C_3(void* p, int a, int b, int c) {
     return ((void* (__thiscall*)(void*, int, int, int))*((void***)*(void**)p + 0x0c / 4))(p, a, b, c);
@@ -162,6 +191,18 @@ static inline float VT_34_F(void* p) {
 }
 static inline void* VT_E0_0(void* p) {
     return ((void* (__thiscall*)(void*))*((void***)*(void**)p + 0xe0 / 4))(p);
+}
+static inline void* VT_6C_0(void* p) {
+    return ((void* (__thiscall*)(void*))*((void***)*(void**)p + 0x6c / 4))(p);
+}
+static inline void* PM_DirToSurface(float* out, const float* dir) {
+    return ((void* (__thiscall*)(float*, const float*))0x00b815a0)(out, dir);
+}
+static inline void* PM_BuildSurfaceOrientation(float* a, float* b) {
+    return ((void* (__thiscall*)(float*, float*))0x00b7f190)(a, b);
+}
+static inline void PM_Construct(void* pm, float* out, float* dir) {
+    ((void (__thiscall*)(void*, float*, float*))0x00b3d350)(pm, out, dir);
 }
 struct Vector3 { float x, y, z; };
 struct Matrix33 {
@@ -196,6 +237,16 @@ struct cSubObject {
     char  pad038[0x504 - 0x038];
     void* mpTool;                                    // 0x504  current tool instance
 };
+struct cToolInstance {
+    char    pad000[0x544];
+    int     mState;                                  // 0x544  1 = on ground, 2 = in air
+    char    pad548[0x58c - 0x548];
+    Vector3 mPosition;                               // 0x58c  world position
+};
+struct cTerrainObject {
+    char  pad000[0x25c];
+    float mHeight;                                   // 0x25c  surface height for the effect
+};
 struct cNounObject {
     char  pad000[0x0cc];
     u32   mEffectParam;                              // 0x0cc
@@ -224,6 +275,9 @@ struct cSpatialObjectView_s00cc_3220 {
     void  FUN_00cc3950(u32 fbits, u32 f2);           // 0x00cc3950
     void  FUN_00cc3c30(u32 fbits, u32 f2);           // 0x00cc3c30
     void  FUN_00cc3f40(u32 fbits, u32 f2);           // 0x00cc3f40
+};
+struct cResourceProjectileView : cSpatialObjectView_s00cc_3220 {
+    static void* MakeView(cSpatialObject* p);        // 0x00cc3380
 };
 struct cSpaceDefenseMissileView_s00cc_3220 : cSpatialObjectView_s00cc_3220 {
     static void* MakeView(cSpatialObject* p);        // 0x00cc3570
@@ -499,6 +553,117 @@ static __forceinline void UpdateEffectRunning(cSpatialObject_s00cc_4270* obj, ui
 }
 // ---- items of slice s00cc4270 end
 
+// ---- items of slice s00cc4160 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C" void* __cdecl memcpy(void* dst, const void* src, unsigned int n);
+extern "C" void* __cdecl memmove(void* dst, const void* src, unsigned int n);
+void* EAAllocate(unsigned int size, const char* name, int a, int b, void* alloc, int line);
+void eaFree(void* p);
+struct cc4160_vec {
+    float* m_begin;
+    float* m_end;
+    float* m_cap;
+    float* m_alloc;
+    void insert(float* pos, const float* value);
+};
+// ---- items of slice s00cc4160 end
+
+// @ 0x00cc2980
+cSpatialObjectView* MakeDefaultToolProjectileView(void* pObject)
+{
+    cSpatialObjectView* pView =
+        (cSpatialObjectView*)operator_new(0x38, "Simulator/cDefaultToolProjectileView", 0);
+    if (pView == nullptr)
+        pView = nullptr;
+    else
+        pView->SetObject(nullptr);
+
+    if (pObject == nullptr)
+        return pView;
+
+    void* pData = ((IRefCounted*)pObject)->Query((const void*)0x24270c4);
+    if (pData == nullptr)
+        return pView;
+
+    pView->SetObject(pObject);
+    pView->mFlag38 = 0;
+
+    uint32_t nEffectId = GetMuzzleEffectId();
+    if (nEffectId != 0) {
+        uint32_t nKind = GetTrailEffectId();
+        CreateEffectRef(nKind, 0, 0x500f162u);
+        uint32_t fScale = (nKind == 0x203c5a15u || nKind == 0x992387aeu) ? 0x45000000u : 0x44800000u;
+        SetEffectScale(0x500f162u, fScale);
+    }
+
+    if (GetChargeEffectId() != 0) {
+        pView->mFlag39 = 0;
+        uint32_t nCharge = GetChargeEffectId();
+        CreateEffectRef(nCharge, 0, 0x6565ae1u);
+        SetEffectScale(0x6565ae1u, 0x44800000u);
+        uint32_t nChargeKind = GetTrailEffectId();
+        if (nChargeKind == 0x79c7d671u || nChargeKind == 0x992387aeu || nChargeKind == 0xe8d95fb4u)
+            pView->mFlag39 = 1;
+    }
+
+    float fScale = ((cSpaceProjectile*)*(void**)((uint8_t*)pData + 0x504))->GetEffectId();
+    void* pEffect = FindEffect(0x500f162u);
+    if (pEffect != nullptr) {
+        UpdateBeamEffect(pEffect, &fScale, 1);
+        if (GetProjectileType() == 0xe810d505u) {
+            void* pTarget = (void*)(intptr_t)((cSpaceProjectile*)*(void**)((uint8_t*)pData + 0x504))->GetEffectId();
+            if (pTarget != nullptr) {
+                uint32_t nColor = ((cSpaceProjectile*)*(void**)((uint8_t*)pData + 0x504))->GetEffectId();
+                if (IsEmpireObjectValid((void*)(intptr_t)nColor))
+                    UpdateBeamEffect(pEffect, &nColor, 5);
+            }
+        }
+    }
+    return pView;
+}
+
+// @ 0x00cc2b60
+cSpatialObjectView* MakeDeepSpaceProjectileView(void* pObject)
+{
+    cSpatialObjectView* pView =
+        (cSpatialObjectView*)operator_new(0x34, "Simulator/cDeepSpaceProjectileView", 0, 0, 0, 0);
+    if (pView == nullptr)
+        pView = nullptr;
+    else
+        pView->SetObject(nullptr);
+
+    if (pObject == nullptr)
+        return pView;
+
+    void* pData = ((IRefCounted*)pObject)->Query((const void*)0x24270c6);
+    if (pData == nullptr)
+        return pView;
+
+    pView->SetObject(pObject);
+    uint32_t nEffect0 = GetTrailEffectId();
+    CreateEffectRef(nEffect0, 0, 0);
+    uint32_t nEffect1 = GetBeamEffectId();
+    CreateEffectRef(nEffect1, 0, 1);
+    uint32_t nEffect2 = GetMuzzleEffectId();
+    CreateEffectRef(nEffect2, 0, 2);
+    uint32_t nEffect3 = GetChargeEffectId();
+    CreateEffectRef(nEffect3, 0, 3);
+    SetEffectScale(0, 0x45000000u);
+    SetEffectScale(1, 0x45000000u);
+    SetEffectScale(2, 0x45000000u);
+    SetEffectScale(3, 0x45000000u);
+    return pView;
+}
+
+// @ 0x00cc2c90
+cSpaceDefenseMissileView::cSpaceDefenseMissileView()
+{
+    mpEffectInfo = nullptr;
+    mFlag38 = 0;
+    mFlag39 = 0;
+    mFlag3a = 0;
+    mFlag3b = 0;
+}
+
 // @ 0x00cc2cb0
 cSpaceDefenseMissileView::~cSpaceDefenseMissileView()
 {
@@ -603,6 +768,46 @@ cSpatialObjectView* MakeDefaultBeamProjectileView(void* pObject)
     return pView;
 }
 
+// @ 0x00cc3000
+cSpatialObjectView* MakeDefaultAoEAreaView(void* pObject)
+{
+    cSpatialObjectView* pView =
+        (cSpatialObjectView*)operator_new(0x34, "Simulator/cDefaultAoEAreaView", 0, 0, 0, 0);
+    if (pView == nullptr)
+        pView = nullptr;
+    else
+        pView->SetObject(nullptr);
+
+    cDefaultAoEArea* pArea = nullptr;
+    if (pObject != nullptr)
+        pArea = (cDefaultAoEArea*)((IRefCounted*)pObject)->Query((const void*)0x4167194);
+
+    pView->SetObject(pObject);
+
+    if (IsAoEPreviewActive()) {
+        uint32_t nPreviewEffect = GetAoEPreviewEffectId();
+        CreateEffectRef(nPreviewEffect, 0, 0x4178e6eu);
+    }
+
+    uint32_t nNoteEffect = pArea->GetNoteEffectID();
+    CreateEffectRef(nNoteEffect, 0, 0x4178e6fu);
+
+    uint32_t nNounId = ((cSpaceProjectile*)pArea)->GetEffectId();
+    if (nNounId != 0xffffffffu) {
+        uint32_t nId = ((cSpaceProjectile*)pArea)->GetEffectId();
+        NounManager(nId);
+        if (FindNounFromId(nId) != nullptr) {
+            void* pEffect = FindEffect(0x4178e6eu);
+            if (pEffect != nullptr)
+                UpdateBeamEffect(pEffect, &nId, 5);
+            pEffect = FindEffect(0x4178e6fu);
+            if (pEffect != nullptr)
+                UpdateBeamEffect(pEffect, &nId, 5);
+        }
+    }
+    return pView;
+}
+
 // @ 0x00cc3140
 cSpatialObjectView* cCulturalProjectileView::MakeView(void* pObject)
 {
@@ -627,6 +832,76 @@ cSpatialObjectView* cCulturalProjectileView::MakeView(void* pObject)
             UpdateBeamEffect(pEffect, &nColor, 5);
     }
     return pView;
+}
+
+// @ 0x00cc3220
+void cSpatialObjectView_s00cc_3220::FUN_00cc3220(u32 fbits, u32 f2)
+{
+    HandleSimulationUpdate(fbits, f2);
+
+    void* r = 0;
+    if (mpObject)
+        r = VT_B8_1(mpObject, 0x4f76f08);
+
+    u8 inGame = 0;
+    if (GetCurrentGameMode_s00cc_3220() == (void*)0x1654c04) {
+        FUN_00cf74c0();
+        FUN_00cf74f0();
+        if (FUN_00cf1540())
+            inGame = 1;
+    }
+    if (inGame != mInGameMode) {
+        mInGameMode = inGame;
+        cSpatialObject* o = (cSpatialObject*)mpObject;
+        if (o->GetEffect(0))
+            VT_30_1(o->GetEffectObject(0), (int)inGame);
+    }
+
+    if (r && ((cSpatialObject*)r)->FUN_00cb41b0() != 0) {
+        void* e = ((cSpatialObject*)mpObject)->GetEffectObject(0);
+        if (e) {
+            u64 v = ((cSpatialObject*)r)->FUN_00cb41b0();
+            float f = 1.0f - (float)v * *(float*)0x13f999c;
+            if (f < 0.0f)
+                f = 0.0f;
+            if (f > 1.0f)
+                f = 1.0f;
+            VT_44_3(e, 4, &f, 1);
+        }
+    }
+}
+
+// @ 0x00cc3380
+void* cResourceProjectileView::MakeView(cSpatialObject* p)
+{
+    cResourceProjectileView* v = (cResourceProjectileView*)
+        EANew(0x34, "Simulator/cResourceProjectileView", 0, 0, 0, 0);
+    if (v) {
+        v->ctor();
+        v->mpVtbl = (void*)0x14607a8;
+    }
+    VT_24_1(v, p);
+
+    u32 kind = 0x4aad8baf;
+    if (p) {
+        void* hit = (void*)VT_0C_1(p, 0x5776a28);
+        if (hit && FUN_00c8e7c0())
+            kind = 0xf95108a3;
+    }
+    FUN_00c8b130(kind, 0, 0);
+    FUN_00c88a00(0, 1024.0f);
+    void* e = ((cSpatialObject*)v)->GetEffectObject(0);
+    if (e) {
+        int id = VT_4C_0(p);
+        NounManager_s00cc_3220(id);
+        if (FUN_00b25f40(id)) {
+            EffectUpdate blk;
+            blk.mFlags = 0;
+            blk.mCount = 0;
+            VT_44_3(e, 5, (float*)&blk, 3);
+        }
+    }
+    return v;
 }
 
 // @ 0x00cc3490
@@ -765,6 +1040,224 @@ void* cArtilleryProjectileView::MakeView(cSpatialObject* p)
         }
     }
     return v;
+}
+
+// @ 0x00cc3950
+void cSpatialObjectView_s00cc_3220::FUN_00cc3950(u32 fbits, u32 f2)
+{
+    HandleSimulationUpdate(fbits, f2);
+
+    u8 inGame = 0;
+    if (GetCurrentGameMode_s00cc_3220() == (void*)0x1654c04) {
+        FUN_00cf74c0();
+        FUN_00cf74f0();
+        if (FUN_00cf1540())
+            inGame = 1;
+    }
+    if (inGame != mInGameMode) {
+        mInGameMode = inGame;
+        cSpatialObject* o = (cSpatialObject*)mpObject;
+        if (o->GetEffect(0x500f162))
+            VT_30_1(o->GetEffectObject(0x500f162), (int)inGame);
+        if (o->GetEffect(0x6565ae1))
+            VT_30_1(o->GetEffectObject(0x6565ae1), (int)inGame);
+    }
+
+    if (((cSpatialObject*)mpObject)->GetEffect(0x6565ae1)) {
+        void* sub = VT_0C_0(this);
+        if (sub) {
+            cToolInstance* tool = (cToolInstance*)VT_0C_1(sub, 0x24270c4);
+            if (tool) {
+                float tmp[3];
+                tmp[0] = tool->mPosition.x;
+                tmp[1] = tool->mPosition.y;
+                tmp[2] = tool->mPosition.z;
+
+                EffectUpdate blk;
+                blk.mFlags = 0;
+                blk.mCount = 0;
+                blk.mOrientation.Ctor((void*)0x0169b024);
+                float out[4];
+                PM_Construct(out, out, tmp);
+                float* surf = (float*)PM_DirToSurface(out, tmp);
+                blk.mPosition.x = surf[0];
+                blk.mPosition.y = surf[1];
+                blk.mPosition.z = surf[2];
+                blk.mFlags |= 4;
+                blk.mCount = (u8)(blk.mCount + 1);
+                float* orient = (float*)PM_BuildSurfaceOrientation(tmp, out);
+                SP_Matrix3FromQuaternion(out, orient);
+                blk.mFlags |= 2;
+                blk.mCount = (u8)(blk.mCount + 1);
+                blk.mScale = FUN_0104bdb0();
+                blk.mCount = (u8)(blk.mCount + 1);
+                if (mModeVariant) {
+                    float v[3];
+                    v[0] = tool->mPosition.x;
+                    v[1] = tool->mPosition.y;
+                    v[2] = tool->mPosition.z;
+                    cTerrainObject* terrain = (cTerrainObject*)FUN_00b894a0(v);
+                    if (terrain) {
+                        void* m = VT_6C_0(terrain);
+                        blk.mScale = ((cTerrainObject*)m)->mHeight;
+                        blk.mCount = (u8)(blk.mCount + 1);
+                    }
+                }
+                void* e = ((cSpatialObject*)mpObject)->GetEffectObject(0x6565ae1);
+                VT_18_1(e, &blk);
+            }
+        }
+    }
+
+    if (mpObject) {
+        cToolInstance* tool = (cToolInstance*)VT_B8_1(mpObject, 0x24270c4);
+        if (tool && tool->mState == 1) {
+            FUN_00c8ad30(0x500f162, 0);
+            FUN_00c8ad30(0x6565ae1, 1);
+        }
+    }
+}
+
+// @ 0x00cc3c30
+void cSpatialObjectView_s00cc_3220::FUN_00cc3c30(u32 fbits, u32 f2)
+{
+    HandleSimulationUpdate(fbits, f2);
+
+    if (mpObject) {
+        cToolInstance* tool = (cToolInstance*)VT_B8_1(mpObject, 0x24270c4);
+        if (tool && tool->mState == 2)
+            FUN_00c8ad30(0, 0);
+    }
+    if (mpObject)
+        VT_B8_1(mpObject, 0x24270c6);
+
+    float pos[3];
+    float dir[3];
+    FUN_00cb5450(pos, dir);
+
+    void* e1 = ((cSpatialObject*)mpObject)->GetEffectObject(1);
+    if (e1) {
+        EffectUpdate blk;
+        blk.mFlags = 0;
+        blk.mCount = 0;
+        blk.mPosition.x = pos[0];
+        blk.mPosition.y = pos[1];
+        blk.mPosition.z = pos[2];
+        blk.mOrientation.m[0] = dir[0];
+        blk.mOrientation.m[1] = dir[1];
+        blk.mOrientation.m[2] = dir[2];
+        VT_44_3(e1, 0xd, (float*)&blk, 6);
+    }
+
+    void* e2 = ((cSpatialObject*)mpObject)->GetEffectObject(2);
+    if (e2) {
+        float off[3];
+        off[0] = dir[0] - pos[0];
+        off[1] = dir[1] - pos[1];
+        off[2] = dir[2] - pos[2];
+        EffectUpdate blk;
+        blk.mFlags = 0;
+        blk.mCount = 0;
+        blk.mPosition.x = pos[0];
+        blk.mPosition.y = pos[1];
+        blk.mPosition.z = pos[2];
+        blk.mOrientation.Ctor((void*)0x0169b024);
+        SP_Matrix3FromFacingAndUp(blk.mOrientation.m, off, pos);
+        blk.mFlags |= 2;
+        blk.mCount = (u8)(blk.mCount + 1);
+        VT_18_1(e2, &blk);
+    }
+
+    void* e3 = ((cSpatialObject*)mpObject)->GetEffectObject(3);
+    if (e3) {
+        float surf[3];
+        surf[0] = *(float*)0x0169b048;
+        surf[1] = *(float*)0x0169b04c;
+        surf[2] = *(float*)0x0169b050;
+        EffectUpdate blk;
+        blk.mFlags = 0;
+        blk.mCount = 0;
+        blk.mOrientation.Ctor((void*)0x0169b024);
+        float out[4];
+        PM_Construct(out, out, surf);
+        float* p = (float*)PM_DirToSurface(out, surf);
+        blk.mPosition.x = p[0];
+        blk.mPosition.y = p[1];
+        blk.mPosition.z = p[2];
+        blk.mFlags |= 4;
+        blk.mCount = (u8)(blk.mCount + 1);
+        float* orient = (float*)PM_BuildSurfaceOrientation(dir, out);
+        SP_Matrix3FromQuaternion(out, orient);
+        blk.mFlags |= 2;
+        blk.mCount = (u8)(blk.mCount + 1);
+        VT_18_1(e3, &blk);
+    }
+}
+
+// @ 0x00cc3f40
+void cSpatialObjectView_s00cc_3220::FUN_00cc3f40(u32 fbits, u32 f2)
+{
+    HandleSimulationUpdate(fbits, f2);
+    if (!mpObject)
+        return;
+    void* area = (void*)VT_B8_1(mpObject, 0x4167194);
+    if (!area)
+        return;
+    void* e = ((cSpatialObject*)mpObject)->GetEffectObject(0x4178e6e);
+    if (!e)
+        return;
+
+    float scratch[4];
+    FUN_00cb5d80(scratch, scratch + 2);
+
+    EffectUpdate blk;
+    blk.mFlags = 0;
+    blk.mCount = 0;
+    blk.mPosition.x = scratch[0];
+    blk.mPosition.y = scratch[1];
+    blk.mPosition.z = scratch[2];
+    blk.mOrientation.Ctor((void*)0x0169b024);
+    float* q = (float*)SP_Matrix3FromQuaternion(blk.mOrientation.m, scratch + 1);
+    for (int i = 0; i < 9; ++i)
+        blk.mOrientation.m[i] = q[i];
+    // NOTE: the final scale component comes from the AoE area object (offset not
+    // reconstructed).
+    blk.mFlags |= 4;
+    blk.mCount = (u8)(blk.mCount + 1);
+    VT_18_1(e, &blk);
+}
+
+// @ 0x00cc4160
+void cc4160_vec::insert(float* pos, const float* value)
+{
+    float* end = m_end;
+    if (end != m_cap) {
+        if (pos <= value && value < end)
+            ++value;
+        if (end)
+            *end = end[-1];
+        int n = (int)((char*)(m_end - 1) - (char*)pos);
+        memmove((char*)m_end - ((n >> 2) << 2), pos, (unsigned int)n);
+        *pos = *value;
+        m_end = m_end + 1;
+        return;
+    }
+    int count = (int)(m_end - m_begin);
+    int newCap = count == 0 ? 1 : count * 2;
+    float* dst = 0;
+    if (newCap != 0)
+        dst = (float*)EAAllocate((unsigned int)(newCap * 4), "Simulator", 0, 0, (void*)0x13ebb38, 0xd1);
+    memcpy(dst, m_begin, (unsigned int)((char*)pos - (char*)m_begin));
+    float* p = dst + (pos - m_begin);
+    if (p)
+        *p = *value;
+    float* q = (float*)memcpy(p + 1, pos, (unsigned int)((char*)m_end - (char*)pos));
+    float* newEnd = q + (m_end - pos);
+    if (m_begin != 0 && m_begin != m_alloc)
+        eaFree(m_begin);
+    m_begin = dst;
+    m_end = newEnd;
+    m_cap = dst + newCap;
 }
 
 // @ 0x00cc4270
