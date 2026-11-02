@@ -3,3 +3,6 @@
 006ff680 ?FUN_006ff680@@YAXH@Z  # FUN_006ff680 migrated from s006ff170 (verbatim, slice spelling)
 006ff750 SP::cVertexFragmentTable::ReadTable  # reads the 255-entry global table at 0x1624710 (scalars, two sized strings, region vector, flags&2 space-filled string); nonmatching (loop/frame shape)
 006ffaf0 ?TestClip1@VertexCtx@@QAEHPBM0@Z  # VertexCtx::TestClip1 migrated from s006ff170 (verbatim, slice spelling)
+006ffbd0 ?TestClip2@VertexCtx@@QAEHPBMM@Z  # VertexCtx::TestClip2 migrated from s006ff170 (verbatim, slice spelling)
+006ffc60 ?FUN_006ffc60@@YGXPAH@Z  # FUN_006ffc60 migrated from s006ff170 (verbatim, slice spelling)
+006ffdc0 ?FUN_006ffdc0@@YAPAMPAMPBM@Z  # FUN_006ffdc0 migrated from s006ff170 (verbatim, slice spelling)
