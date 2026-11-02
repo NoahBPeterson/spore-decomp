@@ -1,15 +1,21 @@
 # va  diff-bytes  reason
-0083f630 25 complete: cFileParser::Init; base-subobject adjust and call shape differ
-0083f680 42 complete: cFileParser::Shutdown; secondary-base vtable slots differ
-0083f6f0 70 complete: cFileParser::SetParser; AutoRefCount vtable call sequence differs
-0083f740 43 complete: cFileParser::Parser; AutoRefCount vtable call sequence differs
-0083f8f0 24 complete: AutoRefCount<RefCounted<FileChangeNotification>>::release; slot/register differ
-0083f940 25 complete: AutoRefCount<RefCounted<FileChangeNotification>>::operator=; refcount scheduling differs
-0083fa00 53 complete: hashtable hash_node dtor; refcount/EH frame differ
-0083fbc0 120 complete: uninitialized_copy<cInputFileSpec*>; string copy loop scheduling differs
-0083fcd0 48 complete: copy_backward<cInputFileSpec*>; assign scheduling differs
-0083fd20 58 complete: copy_backward (reverse); assign scheduling differs
-0083fde0 195 complete: hashtable<FileChangeNotification>::DoInsertValue; hash walk/EH differ
-0083fee0 86 complete: hashtable<FileChangeNotification>::DoFreeNodes; node dtor scheduling differs
-0083ff30 76 complete: hash_map<FileChangeNotification>::operator[]; insert/find scheduling differ
-0092fbe0 67 complete; Arm(): notify-filter bit composition and dispatch to Worker/Watch
+0083f630 14 complete: cFileParser::Init (byte-flag guard at +0xc, server registration slot 8 with msg 0x6f41f272, returns bool in al); call-shape/register diff only - [equiv: PASS, 400 valid inputs, 66.7% cov] flags: /O2 /MD /Gy /EHsc /TP /GS-
+0083f680 24 complete: cFileParser::Shutdown (clear flag, server unregister slot 11 with 0x6f41f272/0xffffd8f1, parser slot 3 + clear + slot 1, own slot 6, returns bool in al); call-shape/register diff only - [equiv: PASS, 399 valid inputs, 79.5% cov] flags: /O2 /MD /Gy /EHsc /TP /GS-
+0083f740 43 complete: cFileParser::Parser; AutoRefCount vtable call sequence differs flags: /O2 /MD /Gy /EHsc /TP /GS-
+0083f790 112 complete: cFileParser::ParseFiles (timer lazy-start/QPC-vs-rdtsc, per-spec parse+exn guard, accumulated time, reset, message post, return !failed); cl pins the object in edi where the original used esi (and keeps an extra parser spill), so every [reg+disp] operand differs -- callee-saved allocation not reproducible from equivalent C++; instruction stream/size otherwise matches - [equiv: WEAK, 281 valid inputs, no mismatch] flags: /O2 /MD /Gy /EHsc /TP /GS-
+0083f8f0 24 complete: AutoRefCount<RefCounted<FileChangeNotification>>::release; slot/register differ flags: /O2 /MD /Gy /EHsc /TP /GS-
+0083f940 25 complete: AutoRefCount<RefCounted<FileChangeNotification>>::operator=; refcount scheduling differs flags: /O2 /MD /Gy /EHsc /TP /GS-
+0083fa00 53 complete: hashtable hash_node dtor; refcount/EH frame differ flags: /O2 /MD /Gy /EHsc /TP /GS-
+0083fbc0 120 complete: uninitialized_copy<cInputFileSpec*>; string copy loop scheduling differs flags: /O2 /MD /Gy /EHsc /TP /GS-
+0083fcd0 48 complete: copy_backward<cInputFileSpec*>; assign scheduling differs flags: /O2 /MD /Gy /EHsc /TP /GS-
+0083fd20 58 complete: copy_backward (reverse); assign scheduling differs flags: /O2 /MD /Gy /EHsc /TP /GS-
+0083fde0 195 complete: hashtable<FileChangeNotification>::DoInsertValue; hash walk/EH differ flags: /O2 /MD /Gy /EHsc /TP /GS-
+0083fee0 86 complete: hashtable<FileChangeNotification>::DoFreeNodes; node dtor scheduling differs flags: /O2 /MD /Gy /EHsc /TP /GS-
+0083ff30 76 complete: hash_map<FileChangeNotification>::operator[]; insert/find scheduling differ flags: /O2 /MD /Gy /EHsc /TP /GS-
+0083fff0 254 complete: vector<cInputFileSpec>::DoInsertValue (no-realloc relocate path + realloc: grow, uninit copy, construct, destroy-range pass, free, re-point begin/end/capacity); MSVC C++EH frame (SEH/scopetable, trylevel 0/1 around the copy regions) not reproducible from an equivalent hand-written body - [equiv: UNSUPPORTED, 0 valid inputs (pointer args fault under the harness)] flags: /O2 /MD /Gy /EHsc /TP /GS-
+0092f650 417 complete; FileWatcher::Worker reconstructed with 0x1fff stack change buffer + memset, CreateEventA, ReadDirectoryChangesW via g_pfnTable, WaitForMultipleObjectsEx, per-record filename copy, ConcatenatePathComponents, GetLongPathNameW, DirectoryExists/flag filter, and callback(this, fullPath, filename, flags, data); remaining diff is record-walk/local-buffer layout and helper ABI (521 vs 596 bytes). [equiv: UNSUPPORTED 0/400 valid, import:CreateEventA discarded] flags: /O2 /MD /Gy /EHsc /TP
+0092f8b0 123 complete; FindFirstChangeNotificationW watch loop (register allocation and callback-arg layout differ) flags: /O2 /MD /Gy /EHsc /TP
+0092f960 23 complete; constructor stores in place, cl hoists m_path[0]=0 above m_hFile=0 (same stores, 2 instr reorder) flags: /O2 /MD /Gy /EHsc /TP
+0092fa50 35 complete; path copy loop, cl fails to strength-reduce the two pointers to one index (edx = dst-src) flags: /O2 /MD /Gy /EHsc /TP
+0092faf0 128 complete; Start(): CreateFileW/CreateEventA + thread start; helper ABI approximated flags: /O2 /MD /Gy /EHsc /TP
+0092fbe0 67 complete; Arm(): notify-filter bit composition and dispatch to Worker/Watch flags: /O2 /MD /Gy /EHsc /TP
