@@ -593,6 +593,24 @@ void ReportBlockError(cRigBlock* block, const char* msg);      // 0x00563de0
 // ---- items of slice s00524a50 end
 
 // ---- items of slice s00525360 begin (TODO(rewrite): local stubs, replace by canonical classes)
+template <int N> inline void ScratchSlots_s0052_5360() { uint32_t slots[N]; }
+template <> inline void ScratchSlots_s0052_5360<0>() {}
+inline void* operator new(unsigned int, void* p) { return p; }
+void* operator new(unsigned int size, const char* name, int flags, unsigned debugFlags,
+                   const char* file, int line);                            // 0x00f473a0
+struct sp_vector_allocator_s0052_5360 {
+    uint32_t mFlags[2];
+    void* allocate(uint32_t n, uint32_t align, uint32_t ofs);
+};
+struct IRefObj {
+    virtual void AddRef();
+    virtual void Release();
+};
+template <typename T> struct intrusive_ptr {
+    T* mp;
+    intrusive_ptr() : mp(0) {}
+    ~intrusive_ptr() { if (mp) mp->Release(); }
+};
 struct PoolNode {
     PoolNode* mpNext;
 };
@@ -621,17 +639,298 @@ struct PoolPtr {
     ~PoolPtr();
     PoolPtr& operator=(PooledObj* p);
 };
+struct Elem38 {
+    uint32_t data[11];
+    intrusive_ptr<IRefObj> mpObj;   // +0x2c
+    uint32_t m30;
+    PoolPtr mpPooled;               // +0x34
+    Elem38() {}
+    ~Elem38();
+};
+template <typename T> struct VectorBase_s0052_5360 {
+    T* mpBegin;
+    T* mpEnd;
+    T* mpCapacity;
+    sp_vector_allocator_s0052_5360 mAllocator;
+    ~VectorBase_s0052_5360();      // declined inline in the original
+};
+template <typename T> inline void destruct(T* first, T* last)
+{
+    for (; first < last; ++first) {
+        ScratchSlots_s0052_5360<3>();
+        first->~T();
+    }
+}
+struct VectorElem38 : VectorBase_s0052_5360<Elem38> {
+    typedef Elem38 value_type;
+    typedef uint32_t size_type;
+    ~VectorElem38();
+    void resize(size_type n);
+    void push_back();
+    void DoInsertValues(Elem38* position, size_type n, const value_type& value);  // 0x00527570
+    void DoInsertValue(Elem38* position, const value_type& value);              // 0x005267c0
+    Elem38* erase(Elem38* first, Elem38* last);                                 // 0x005266f0
+    void insert(Elem38* position, size_type n, const value_type& value)
+    {
+        DoInsertValues(position, n, value);
+    }
+};
+struct cSPVector2_s0052_5360 {
+    float x, y;
+    float& operator[](int i) { return (&x)[i]; }
+};
+struct VectorVec2_s0052_5360 : VectorBase_s0052_5360<cSPVector2_s0052_5360> {
+    void push_back(const cSPVector2_s0052_5360& value);
+    void DoInsertValue(cSPVector2_s0052_5360* position, const cSPVector2_s0052_5360& value);   // 0x00533960
+};
+struct Elem48 {
+    uint32_t data[0x12];
+};
+struct DequeIterator48 {
+    Elem48* mpCurrent;
+    Elem48* mpBegin;
+    Elem48* mpEnd;
+    Elem48** mpCurrentArrayPtr;
+};
+struct DequeElem48 {
+    Elem48** mpPtrArray;
+    uint32_t mnPtrArraySize;
+    DequeIterator48 mItBegin;       // +0x08
+    DequeIterator48 mItEnd;         // +0x18
+    void pop_front();
+    void DoPopFront();              // 0x00527110
+    bool empty() const;             // 0x00425430
+};
+struct VectorU32_s0052_5360 : VectorBase_s0052_5360<uint32_t> {
+    typedef uint32_t size_type;
+    bool empty() const;  // 0x00526430 (VectorU32::empty)
+    size_type size() const { return (size_type)(mpEnd - mpBegin); }
+    uint32_t* erase(uint32_t* first, uint32_t* last);     // 0x004769b0
+    void clear() { erase(mpBegin, mpEnd); }
+};
+struct DefaultRefCounted_s0052_5360 {
+    void* vtbl;
+    int mnRefCount;     // +0x4
+    int AddRef() { return mnRefCount++ + 1; }
+    int Release();      // 0x00453540
+};
+template <typename T> struct AutoRefCount_s0052_5360 {
+    T* mpObject;
+    AutoRefCount_s0052_5360(T* p) : mpObject(p)
+    {
+        if (mpObject)
+            mpObject->AddRef();
+    }
+    ~AutoRefCount_s0052_5360()
+    {
+        if (mpObject)
+            mpObject->Release();
+    }
+    T* operator->() const { return mpObject; }
+    operator T*() const { return mpObject; }
+    T* detach()
+    {
+        T* const p = mpObject;
+        mpObject = 0;
+        return p;
+    }
+};
+template <typename T> struct vector : VectorBase_s0052_5360<T> {
+    typedef uint32_t size_type;
+    size_type size() const { return (size_type)(mpEnd - mpBegin); }
+    T* begin() { return mpBegin; }
+    T& operator[](size_type i) { return mpBegin[i]; }
+};
+namespace nSPSkinner {
+class cMesh_s0052_5360 : public DefaultRefCounted_s0052_5360 { public:          // retail size 0x1d0
+    uint32_t pad08[0xa];
+    vector<cSPVector2_s0052_5360> mTextureCoordinates;         // +0x30
+    uint32_t pad44[5];
+    VectorU32_s0052_5360 mVertexIndices_TV;                    // +0x58
+    uint32_t pad6c[5];
+    VectorU32_s0052_5360 mTextureIndices_TV;                   // +0x80
+    uint32_t pad94[0x4f];
+    cMesh_s0052_5360();                        // 0x00507380
+    void Prepare();                 // 0x00509450
+    void Reset();                   // 0x00508400
+    void ClearTextureIndices() { mTextureIndices_TV.clear(); }
+};  // namespace nSPSkinner
+}
+using nSPSkinner::cMesh_s0052_5360;
+struct cSkinnerResult_s0052_5360 : DefaultRefCounted_s0052_5360 {
+    void AddMesh(cMesh_s0052_5360* mesh);      // 0x0050c6c0
+    void Finish();                  // 0x0050c3b0
+};
+struct cSkinnerFactory_s0052_5360 : DefaultRefCounted_s0052_5360 {
+    cSkinnerResult_s0052_5360* Create();       // 0x00523570
+    cSkinnerResult_s0052_5360* NewResult()
+    {
+        ScratchSlots_s0052_5360<1>();
+        return Create();
+    }
+};
+struct cMeshData_s0052_5360 : DefaultRefCounted_s0052_5360 {
+};
+struct cRigBlock_s0052_5360 {                  // 0x8c bytes
+    uint32_t pad00[2];
+    uint16_t mFlags;                // +0x08
+    uint16_t pad0a;
+    uint32_t pad0c[0x20];
+};
+struct cRigModel_s0052_5360 : DefaultRefCounted_s0052_5360 {
+    uint32_t pad08[0x24];
+    vector<cRigBlock_s0052_5360> mBlocks;      // +0x98
+};
+struct cSPRect {
+    float x0, y0, x1, y1;
+};
+struct cSkinnerSource_s0052_5360 {
+    uint32_t pad00[2];
+    AutoRefCount_s0052_5360<cRigModel_s0052_5360> mpModel;            // +0x08
+    uint32_t pad0c[0xa];
+    AutoRefCount_s0052_5360<cSkinnerFactory_s0052_5360> mpFactory;    // +0x34
+    uint32_t pad38[0x16];
+    vector<cSPRect> mTexRects;                  // +0x90
+    vector<AutoRefCount_s0052_5360<cMeshData_s0052_5360> > mMeshData; // +0xa4
+};
+bool LoadSkinnerMesh(cMeshData_s0052_5360* data, cMesh_s0052_5360* mesh);                // 0x0052a700
+void ReportBlockError(cRigBlock_s0052_5360* block, const char* msg);          // 0x00563de0
+inline float Lerp(float a, float b, float t)
+{
+    float r = b - a;
+    r *= t;
+    return a + r;
+}
+struct cSkinnerBuilder {
+    void BuildMeshes(cSkinnerSource_s0052_5360* src, cSkinnerResult_s0052_5360** ppResult);
+};
+struct cDequeHolder {
+    uint32_t pad00[0xa];
+    DequeElem48 mPending;           // +0x28
+};
+struct cPaintLayer {
+    uint32_t pad00[2];
+    cDequeHolder* mpQueue;          // +0x08
+};
+template <typename T> struct Ptr {
+    T* mp;
+    operator T*() const { return mp; }
+    T* operator->() const { return mp; }
+};
+struct cPaintJob {
+    uint32_t pad00[3];
+    Ptr<cPaintLayer> mpLayer;       // +0x0c
+    uint32_t pad10[0xb];
+    VectorU32_s0052_5360 mStrokes;             // +0x3c
+    bool IsBusy();
+};
+struct cTexture {
+    uint32_t mHandle;
+    uint8_t mFlags;                 // +0x04
+    uint32_t GetHandle();
+};
+struct cTextureManager {
+virtual void v00();
+virtual void v01();
+virtual void v02();
+virtual void v03();
+virtual void v04();
+virtual void v05();
+virtual void v06();
+virtual void v07();
+virtual void v08();
+virtual void v09();
+virtual void v10();
+virtual void v11();
+    virtual void v12();
+    virtual void Load(cTexture* tex);           // +0x34
+};
+struct cRenderer {
+virtual void v00();
+virtual void v01();
+virtual void v02();
+virtual void v03();
+virtual void v04();
+virtual void v05();
+virtual void v06();
+virtual void v07();
+virtual void v08();
+virtual void v09();
+virtual void v10();
+virtual void v11();
+virtual void v12();
+virtual void v13();
+virtual void v14();
+virtual void v15();
+virtual void v16();
+virtual void v17();
+virtual void v18();
+virtual void v19();
+virtual void v20();
+virtual void v21();
+    virtual uint32_t GetDefaultTexture();       // +0x58
+};
+cTextureManager* TextureManager();  // 0x0067dd60
+cRenderer* Renderer();              // 0x0067dd40
+inline uint32_t cTexture::GetHandle()
+{
+    if (!(mFlags & 1))
+        TextureManager()->Load(this);
+    return mHandle;
+}
+struct cPaintSurface {
+    uint8_t mbEnabled;              // used at +0x6a
+};
+struct cSkinPaintTarget {
+    uint32_t pad00[7];
+    Ptr<cPaintSurface> mpSurface;   // +0x1c  (bool at +0x6a)
+    uint32_t pad20[0x38];
+    Ptr<cTexture> mpTexture;        // +0x100
+    uint32_t GetTextureHandle();
+};
+typedef void (*CommandFn)();
+void SPSkinPaintCmdA1();
+void SPSkinPaintCmdA2();
+void SPSkinPaintCmdA3();
+void SPSkinPaintCmdA4();
+void SPSkinPaintCmdB1();
+void SPSkinPaintCmdB2();
+void SPSkinPaintCmdB3();
+void SPSkinPaintCmdB4();
+void SWARM_SPSkinPaintParticleAddCommands();
+void SPSkinPaintCmdC2();
+void SPSkinPaintCmdC3();
+void SPSkinPaintCmdC4();
+void SWARM_SPSkinPaintFloodAddCommands();
+void SPSkinPaintCmdD2();
+void SPSkinPaintCmdD3();
+void SPSkinPaintCmdD4();
+struct CommandKey {
+    uint32_t mInstance, mType, mGroup;
+};
+extern CommandKey kSkinPaintKeyA, kSkinPaintKeyB, kSkinPaintKeyC, kSkinPaintKeyD;
+struct CommandDesc {
+    void* mpOwner;
+    CommandFn mpAdd;
+    CommandFn mpParse;
+    CommandFn mpExecute;
+    CommandFn mpDestroy;
+    int mFlags;
+    uint32_t mType;
+    uint32_t mGroup;
+    CommandDesc(void* owner, CommandFn add, CommandFn parse, CommandFn execute, CommandFn destroy,
+                int flags, uint32_t type, uint32_t group)
+        : mpOwner(owner), mpAdd(add), mpParse(parse), mpExecute(execute), mpDestroy(destroy),
+          mFlags(flags), mType(type), mGroup(group)
+    {
+    }
+};
+extern CommandDesc gSkinPaintCmdA, gSkinPaintCmdB, gSkinPaintCmdC, gSkinPaintCmdD;
 // ---- items of slice s00525360 end
 
 // @ 0x0051fb90
 void FUN_0051fb90(void* self)
 { (void)self; }
-
-
-
-
-
-
 
 // @ 0x00520110
 unsigned FUN_00520110(int p, unsigned v)
@@ -640,12 +939,6 @@ unsigned FUN_00520110(int p, unsigned v)
         return (unsigned)*(unsigned char*)(*(int*)(p + 0x20) + (v & 0x7fffffffu));
     return v;
 }
-
-
-
-
-
-
 
 // @ 0x00520140
 void FUN_00520140(int p, int flags, float* outDir, float* outVal)
@@ -667,12 +960,6 @@ void FUN_00520140(int p, int flags, float* outDir, float* outVal)
     }
 }
 
-
-
-
-
-
-
 // @ 0x00520220
 void FUN_00520220(int p, float* outA, float* outB)
 {
@@ -687,11 +974,6 @@ void FUN_00520220(int p, float* outA, float* outB)
     float* n2 = (float*)FUN_00436ce0(t5, FUN_0044e460(t4, p, outA));
     outB[0] = n2[0]; outB[1] = n2[1]; outB[2] = n2[2];
 }
-
-
-
-
-
 
 // @ 0x005218e0
 TickState& TickState::Assign(const TickState& o)
@@ -712,11 +994,6 @@ TickState& TickState::Assign(const TickState& o)
 #undef S
     return *this;
 }
-
-
-
-
-
 
 // @ 0x005219d0
 bool TickState::HandleMessage(int id, void* msg)
@@ -761,11 +1038,6 @@ bool TickState::HandleMessage(int id, void* msg)
     return true;
 }
 
-
-
-
-
-
 // @ 0x00521ba0
 void TickState::Tick(int dt)
 {
@@ -798,11 +1070,6 @@ void TickState::Tick(int dt)
         rng->SetSeed(saved);
     }
 }
-
-
-
-
-
 
 // @ 0x00521d70
 void TickState::HandleUpdateMessage(int dt)
@@ -911,11 +1178,6 @@ void TickState::HandleUpdateMessage(int dt)
     }
 }
 
-
-
-
-
-
 // @ 0x00522720
 bool TickState::ShouldTick()
 {
@@ -926,28 +1188,15 @@ bool TickState::ShouldTick()
              *(unsigned char*)((char*)this + 0x60) == 0);
 }
 
-
-
-
-
-
 // @ 0x005227a0
 void TickState::ClearPtr100()
 {
     ((RefPtr<AtomicRefCounted>*)((char*)this + 0x100))->Clear();
 }
 
-
-
-
-
 // @ 0x00522800
 void FUN_00522800(void* self)
 { (void)self; }
-
-
-
-
 
 // @ 0x005229c0
 void FUN_005229c0(int idx, float* v)
@@ -968,17 +1217,9 @@ void FUN_005229c0(int idx, float* v)
     g2[2] = r[2];
 }
 
-
-
-
-
 // @ 0x00522a40
 void FUN_00522a40(void* self)
 { (void)self; }
-
-
-
-
 
 // @ 0x00522ad0
 void PaintReq::Set(int a2, int a3, int a4, int a5, char a6, char a7, char a8)
@@ -991,10 +1232,6 @@ void PaintReq::Set(int a2, int a3, int a4, int a5, char a6, char a7, char a8)
     *(char*)((char*)this + 0x79) = a7;
     *(char*)((char*)this + 0x7a) = a8;
 }
-
-
-
-
 
 // @ 0x00522b40
 namespace nSPSkinner {
@@ -1118,10 +1355,6 @@ void cPaintSystem_s0052_2800::SetCreatureSkin(cSkinObject* skin, bool keepMesh)
 }
 }  // namespace nSPSkinner
 
-
-
-
-
 // @ 0x00523570
 void* Factory::Make()
 {
@@ -1134,23 +1367,13 @@ void* Factory::Make()
     return result;
 }
 
-
-
-
-
 // @ 0x005235c0
 void FUN_005235c0(void* self)
 { (void)self; }
 
-
-
-
 // @ 0x00523690
 void FUN_00523690(void* self)
 { (void)self; }
-
-
-
 
 // @ 0x00523900
 void Ctx9::BuildHit(HitRec9* out, Param9* p, cMeshPos9 pos, uint32_t seed)
@@ -1225,35 +1448,23 @@ void Ctx9::BuildHit(HitRec9* out, Param9* p, cMeshPos9 pos, uint32_t seed)
     out->i30 = 0;
 }
 
-
-
-
 // @ 0x005240e0
 void FUN_005240e0(void* self)
 { (void)self; }
-
-
-
 
 // @ 0x00524150
 void FUN_00524150(void* self)
 { (void)self; }
 
-
-
 // @ 0x005241e0
 void FUN_005241e0(void* self)
 { (void)self; }
-
-
 
 // @ 0x005247b0
 int Model::Get(int i)
 {
     return i * 0x40 + g_mt.base;
 }
-
-
 
 // @ 0x005247d0
 int Model::GetChecked(int i)
@@ -1279,8 +1490,6 @@ int Model::GetChecked(int i)
     return result;
 }
 
-
-
 // @ 0x00524870
 void Y::AddPair(int a1, int a2)
 {
@@ -1291,12 +1500,9 @@ void Y::AddPair(int a1, int a2)
     ((PairVec_s0052_41e0*)((char*)this + 0x94))->push_back(local);
 }
 
-
-
 // @ 0x005248a0
 void FUN_005248a0(void* self)
 { (void)self; }
-
 
 // @ 0x00524a50
 bool __cdecl BuildMeshJobCallback(SPcJob* job, BuildMeshContext* ctx)
@@ -1416,6 +1622,109 @@ bool __cdecl BuildMeshJobCallback(SPcJob* job, BuildMeshContext* ctx)
     return job->Continuation((void*)&BuildMeshJobCallback, ctx);
 }
 
+// @ 0x00525360
+void cSkinnerBuilder::BuildMeshes(cSkinnerSource_s0052_5360* src, cSkinnerResult_s0052_5360** ppResult)
+{
+    AutoRefCount_s0052_5360<cMesh_s0052_5360> i(new ("Skinner", 0, 0, 0, 0) cMesh_s0052_5360());
+    AutoRefCount_s0052_5360<cSkinnerResult_s0052_5360> f(src->mpFactory->NewResult());
+    cRigBlock_s0052_5360* data = src->mpModel->mBlocks.begin();
+    int nSize = (int)src->mpModel->mBlocks.size();
+    int v7 = 0;
+    int n8;
+    int n30;
+    int n25;
+next:
+    n8 = v7;
+    while (n8 < nSize && (data[n8].mFlags & 1))
+        n8++;
+    n30 = 0;
+    for (n25 = 0; n25 < n8; n25++)
+        if (!(data[n25].mFlags & 1))
+            n30++;
+    while (n8 < nSize) {
+        cRigBlock_s0052_5360* pRB = &data[n8];
+        if (!src->mMeshData[n8] || !LoadSkinnerMesh(src->mMeshData[n8], i))
+            ReportBlockError(pRB, "contains an invalid mesh");
+        i->Prepare();
+        bool bBad = false;
+        bool bShift = false;
+        for (int t = 0, n = (int)i->mTextureCoordinates.size(); t < n; t++) {
+            cSPVector2_s0052_5360& uv = i->mTextureCoordinates[t];
+            if (uv[0] < 0.0f || uv[0] > 1.0f || uv[1] < -1.0f || uv[1] > 1.0f)
+                bBad = true;
+            else if (uv[1] < 0.0f)
+                bShift = true;
+        }
+        if (bShift && !bBad) {
+            for (int t = 0, n = (int)i->mTextureCoordinates.size(); t < n; t++) {
+                cSPVector2_s0052_5360& uv = i->mTextureCoordinates[t];
+                uv[1] += 1.0f;
+                if (uv[1] < 0.0f || uv[1] > 1.0f)
+                    bBad = true;
+            }
+        }
+        if (bBad) {
+            ReportBlockError(pRB, "contains out-of-bounds texture coordinates");
+            i->mTextureIndices_TV.clear();
+        } else {
+            cSPRect& rect = src->mTexRects[n8];
+            for (int t = 0, n = (int)i->mTextureCoordinates.size(); t < n; t++) {
+                cSPVector2_s0052_5360& uv = i->mTextureCoordinates[t];
+                uv[0] = Lerp(rect.x0, rect.x1, uv[0]);
+                uv[1] = Lerp(rect.y0, rect.y1, uv[1]);
+            }
+        }
+        if (i->mVertexIndices_TV.empty())
+            ReportBlockError(pRB, "is not in a recognized format -- please make sure the maya material exports tangents");
+        else if (i->mTextureIndices_TV.empty())
+            ReportBlockError(pRB, "does not have any texture coordinates");
+        else if (i->mTextureIndices_TV.size() != i->mVertexIndices_TV.size())
+            ReportBlockError(pRB, "does not have a texture coordinate at every vertex");
+        else
+            f->AddMesh(i);
+        i->Reset();
+        v7 = n8 + 1;
+        goto next;
+    }
+    f->Finish();
+    *ppResult = f.detach();
+    ScratchSlots_s0052_5360<6>();
+}
+
+// @ 0x00525a40
+bool cPaintJob::IsBusy()
+{
+    return !mStrokes.empty() || (mpLayer && !mpLayer->mpQueue->mPending.empty());
+}
+
+// @ 0x00525aa0
+uint32_t cSkinPaintTarget::GetTextureHandle()
+{
+    if (mpSurface && ((uint8_t*)(cPaintSurface*)mpSurface)[0x6a] && mpTexture)
+        return mpTexture->GetHandle();
+    else
+        return Renderer()->GetDefaultTexture();
+}
+
+// @ 0x00525b40
+void RegisterSkinPaintCommands()
+{
+    gSkinPaintCmdA = CommandDesc(0, SPSkinPaintCmdA1, SPSkinPaintCmdA2, SPSkinPaintCmdA3, SPSkinPaintCmdA4, 0,
+                                 kSkinPaintKeyA.mType, kSkinPaintKeyA.mGroup);
+    gSkinPaintCmdB = CommandDesc(0, SPSkinPaintCmdB1, SPSkinPaintCmdB2, SPSkinPaintCmdB3, SPSkinPaintCmdB4, 0,
+                                 kSkinPaintKeyB.mType, kSkinPaintKeyB.mGroup);
+    gSkinPaintCmdC = CommandDesc(0, SWARM_SPSkinPaintParticleAddCommands, SPSkinPaintCmdC2, SPSkinPaintCmdC3,
+                                 SPSkinPaintCmdC4, 0, kSkinPaintKeyC.mType, kSkinPaintKeyC.mGroup);
+    gSkinPaintCmdD = CommandDesc(0, SWARM_SPSkinPaintFloodAddCommands, SPSkinPaintCmdD2, SPSkinPaintCmdD3,
+                                 SPSkinPaintCmdD4, 0, kSkinPaintKeyD.mType, kSkinPaintKeyD.mGroup);
+}
+
+// @ 0x00525ce0
+void InitSkinPaintCommands()
+{
+    RegisterSkinPaintCommands();
+}
+
 // @ 0x00525d90
 PoolPtr& PoolPtr::operator=(PooledObj* p)
 {
@@ -1428,4 +1737,52 @@ PoolPtr& PoolPtr::operator=(PooledObj* p)
             pTemp->Release();
     }
     return *this;
+}
+
+// @ 0x00525e10
+VectorElem38::~VectorElem38()
+{
+    destruct(mpBegin, mpEnd);
+    ScratchSlots_s0052_5360<3>();
+}
+
+// @ 0x00525e70
+void VectorElem38::resize(size_type n)
+{
+    if (n > (size_type)(mpEnd - mpBegin)) {
+        insert(mpEnd, n - (size_type)(mpEnd - mpBegin), value_type());
+        ScratchSlots_s0052_5360<3>();
+    } else {
+        ScratchSlots_s0052_5360<15>();
+        erase(mpBegin + n, mpEnd);
+    }
+}
+
+// @ 0x00525f40
+void VectorElem38::push_back()
+{
+    if (mpEnd < mpCapacity)
+        ::new (mpEnd++) value_type();
+    else {
+        DoInsertValue(mpEnd, value_type());
+        ScratchSlots_s0052_5360<3>();
+    }
+}
+
+// @ 0x00525ff0
+void VectorVec2_s0052_5360::push_back(const cSPVector2_s0052_5360& value)
+{
+    if (mpEnd < mpCapacity)
+        ::new (mpEnd++) cSPVector2_s0052_5360(value);
+    else
+        DoInsertValue(mpEnd, value);
+}
+
+// @ 0x005263f0
+void DequeElem48::pop_front()
+{
+    if ((mItBegin.mpCurrent + 1) != mItBegin.mpEnd)
+        ++mItBegin.mpCurrent;
+    else
+        DoPopFront();
 }

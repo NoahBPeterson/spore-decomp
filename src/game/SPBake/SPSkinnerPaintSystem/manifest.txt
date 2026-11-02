@@ -4,4 +4,14 @@
 ../src/game/SPBake/SPSkinnerPaintSystem.cpp  ?Set@PaintReq@@QAEXHHHHDDD@Z  00522ad0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPBake/SPSkinnerPaintSystem.cpp  ?Get@Model@@QAEHH@Z  005247b0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPBake/SPSkinnerPaintSystem.cpp  ?AddPair@Y@@QAEXHH@Z  00524870  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/SPSkinnerPaintSystem.cpp  ?BuildMeshes@cSkinnerBuilder@@QAEXPAUcSkinnerSource_s0052_5360@@PAPAUcSkinnerResult_s0052_5360@@@Z  00525360  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/SPSkinnerPaintSystem.cpp  ?IsBusy@cPaintJob@@QAE_NXZ  00525a40  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/SPSkinnerPaintSystem.cpp  ?GetTextureHandle@cSkinPaintTarget@@QAEIXZ  00525aa0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/SPSkinnerPaintSystem.cpp  ?RegisterSkinPaintCommands@@YAXXZ  00525b40  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/SPSkinnerPaintSystem.cpp  ?InitSkinPaintCommands@@YAXXZ  00525ce0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPBake/SPSkinnerPaintSystem.cpp  ??4PoolPtr@@QAEAAU0@PAUPooledObj@@@Z  00525d90  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/SPSkinnerPaintSystem.cpp  ??1VectorElem38@@QAE@XZ  00525e10  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/SPSkinnerPaintSystem.cpp  ?resize@VectorElem38@@QAEXI@Z  00525e70  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/SPSkinnerPaintSystem.cpp  ?push_back@VectorElem38@@QAEXXZ  00525f40  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/SPSkinnerPaintSystem.cpp  ?push_back@VectorVec2_s0052_5360@@QAEXABUcSPVector2_s0052_5360@@@Z  00525ff0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/SPSkinnerPaintSystem.cpp  ?pop_front@DequeElem48@@QAEXXZ  005263f0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
