@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+01133120 143 complete Snd9::System::Init: full init sequence (lock/poll voice, FUN_0113eda0 Voice::CreateInstance, FUN_0113ee40, SNDSYSI_init, two FUN_0112cd60 registrations, FUN_0112e720 voice construction, "Snd9 Service" tag, FUN_0112ccc0); the ctor descriptor layout is reconstructed from the stores; flags /vc71 /O2 /MD /Gy /TP; equiv UNSUPPORTED 0/400 valid (fault(fetch)/import:WaitForSingleObject/budget) - object-heavy init cannot be driven from random inputs.

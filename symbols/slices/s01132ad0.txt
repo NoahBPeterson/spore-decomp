@@ -9,7 +9,7 @@
 01133050 ?Voice_CreateInstance@@YAHH@Z  # Voice_CreateInstance migrated from s01132ad0 (verbatim, slice spelling)
 011330e0 ?FUN_011330e0@@YA_NXZ  # FUN_011330e0 migrated from s01132ad0 (verbatim, slice spelling)
 011330f0 FUN_011330f0  # lock, Voice::Release(g_voice), unlock
-01133120 Snd9::System::Init  # PDB name; full Snd9 service init
+01133120 ?Snd9_System_Init@@YAHH@Z  # Snd9_System_Init migrated from s01132ad0 (verbatim, slice spelling)
 01133250 ?FUN_01133250@@YAXXZ  # FUN_01133250 migrated from s01132ad0 (verbatim, slice spelling)
 01133290 ?FUN_01133290@@YAXXZ  # FUN_01133290 migrated from s01132ad0 (verbatim, slice spelling)
 011332c0 ?FUN_011332c0@@YAXXZ  # FUN_011332c0 migrated from s01132ad0 (verbatim, slice spelling)
