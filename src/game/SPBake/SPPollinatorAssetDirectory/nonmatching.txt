@@ -25,4 +25,10 @@
 00550cf0 118 complete; /Od string-vector join schedule differs
 005519d0 202 complete; /Od name/description assign+clamp schedule differs
 00551af0 64 complete; /Od parent-id+timestamp setter frame/slot schedule differs
+00552af0 200 complete; /Od hashtable<uint64>::erase(key) schedule differs flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+00552c20 151 complete; /Od hashtable::erase(iterator) schedule differs flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+005531b0 240 complete; /Od hashtable<key3>::erase(key) schedule differs flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+00553620 200 complete; /Od hashtable<pair>::erase(key) schedule differs flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+00553b90 53 complete; equivalence PASS; element-dtor loop + VectorBase::~VectorBase thiscall (this in ecx); /Od schedule differs flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+00553be0 122 complete; equivalence PASS; VectorBase reserve thiscall (this in ecx + 3 stack args); /Od schedule differs flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast
 005687d0 33 complete hashtable DoFreeNodes; /Od frame differs; equiv: FAIL (ours faults at 00927111)

@@ -3,8 +3,9 @@
 00551ba0 ?UpdateFromEntry@cAssetMetadata_s0055_1b60@Pollen@SP@@QAE_NPBUAtomEntry_s0055_1b60@Feed@3@ABU?$basic_string_s0055_1b60@D@eastl@@@Z  # cAssetMetadata_s0055_1b60::UpdateFromEntry migrated from s00551b60 (verbatim, slice spelling)
 00551ff0 ?RemoveFeedURI@cAssetMetadata_s0055_1b60@Pollen@SP@@QAE_NABU?$basic_string_s0055_1b60@D@eastl@@@Z  # cAssetMetadata_s0055_1b60::RemoveFeedURI migrated from s00551b60 (verbatim, slice spelling)
 00552080 ?GetParentServerID@Pollen@SP@@YA_NPAVcAssetMetadata_s0055_1b60@12@PA_K1@Z  # GetParentServerID migrated from s00551b60 (verbatim, slice spelling)
-00552450 SP::Pollen::GetAssetMetadata  # loads cAssetMetadata resource (type 0x030BDEE3) for a key, AddRef'd out-param
-00552580 SP::Pollen::GetAssetName  # metadata resource -> name string
+00552300 ?GetAssetState@Pollen@SP@@YAHABVKey_s0055_1b60@ResourceMan@EA@@@Z  # GetAssetState migrated from s00551b60 (verbatim, slice spelling)
+00552450 ?GetAssetMetadata@Pollen@SP@@YA_NABVKey_s0055_1b60@ResourceMan@EA@@PAPAVcAssetMetadata_s0055_1b60@12@@Z  # GetAssetMetadata migrated from s00551b60 (verbatim, slice spelling)
+00552580 ?GetAssetName@Pollen@SP@@YAPB_WABVKey_s0055_1b60@ResourceMan@EA@@@Z  # GetAssetName migrated from s00551b60 (verbatim, slice spelling)
 00552750 eastl::hashtable_iterator_base::increment_bucket  # ++mpBucket until non-null
 005527a0 eastl::basic_string<char>::resize  # erase/append(n, c) pattern
-00552800 eastl::basic_string<wchar_t>::resize  # erase/append(n, c) pattern
+00552800 ?resize@?$basic_string_s0055_1b60@_W@eastl@@QAEXI_W@Z  # resize migrated from s00551b60 (verbatim, slice spelling)
