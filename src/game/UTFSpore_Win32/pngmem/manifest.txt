@@ -1,0 +1,2 @@
+# source  symbol  va  flags
+../src/game/UTFSpore_Win32/pngmem.cpp  ?png_destroy_struct@@YAXPAX@Z  0086d7d0  /O2 /MD /Gy /GS- /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
