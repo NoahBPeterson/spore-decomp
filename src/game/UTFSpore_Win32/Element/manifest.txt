@@ -1,0 +1,2 @@
+# source  symbol  va  flags
+../src/game/UTFSpore_Win32/Element.cpp  ?ScalarDeletingDtor@Element@@QAEPAXE@Z  008e4450  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
