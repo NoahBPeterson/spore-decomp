@@ -1,0 +1,4 @@
+# source  symbol  va  flags
+../src/game/SPEditors/_at_00630000.cpp  ?GetPhotoAt@cSPPlayModePhotoBrowser@@QAEPAUcPlayModePhoto@@I_N@Z  00630060  /O2 /MD /Gy /TP /GS- /Isrc/game/include
+../src/game/SPEditors/_at_00630000.cpp  ??0cPlayModeTokenTranslator@@QAE@XZ  006345b0  /O2 /MD /Gy /TP /GS- /Isrc/game/include
+../src/game/SPEditors/_at_00630000.cpp  ??0cSPPlayModeSubModeDance@@QAE@XZ  0063b5a0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include

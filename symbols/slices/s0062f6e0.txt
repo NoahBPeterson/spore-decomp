@@ -11,6 +11,7 @@
 0062fe40 ?EnterDeleteMode@cSPPlayModePhotoBrowser@SP@@QAEXXZ  # SP::cSPPlayModePhotoBrowser::EnterDeleteMode migrated from s0062f6e0
 0062fee0 ?GetHeaderInfo@@YGHPAXH@Z  # GetHeaderInfo migrated from s0062f6e0 (verbatim, slice spelling)
 0062ff90 ?RFindFirstOf@@YAPBDPBD000@Z  # RFindFirstOf migrated from s0062f6e0 (verbatim, slice spelling)
+00630060 ?GetPhotoAt@cSPPlayModePhotoBrowser@@QAEPAUcPlayModePhoto@@I_N@Z  # cSPPlayModePhotoBrowser::GetPhotoAt migrated from s0062f6e0 (verbatim, slice spelling)
 00630090 ?SelectAll@cSPPlayModePhotoBrowser@SP@@QAEX_N@Z  # SP::cSPPlayModePhotoBrowser::SelectAll migrated from s0062f6e0
 006300d0 ?GetImageFromRaster@cSPPlayModePhotoBrowser@@SGPAUUIImageView@@PAX@Z  # cSPPlayModePhotoBrowser::GetImageFromRaster migrated from s0062f6e0 (verbatim, slice spelling)
 006301a0 ?ExitDeleteMode@cSPPlayModePhotoBrowser@SP@@QAEXXZ  # SP::cSPPlayModePhotoBrowser::ExitDeleteMode migrated from s0062f6e0
