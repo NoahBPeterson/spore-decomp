@@ -1,5 +1,7 @@
 # source  symbol  va  flags
 ../src/game/Spui/SPUILayers.cpp  ?SetFlag8@@YGXPAD@Z  0080d590  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include
+../src/game/Spui/SPUILayers.cpp  ?FUN_0080d770@@YAXPAX00@Z  0080d770  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/Spui/SPUILayers.cpp  ?Set790@FlagSetter@@QAEHDD@Z  0080d790  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
 ../src/game/Spui/SPUILayers.cpp  ?FUN_0080d7e0@@YAHPAM0@Z  0080d7e0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
 ../src/game/Spui/SPUILayers.cpp  ?FUN_0080de80@@YAPAXPAPAX00@Z  0080de80  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
 ../src/game/Spui/SPUILayers.cpp  ?FUN_0080df00@@YAPAXPAPAX00@Z  0080df00  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include

@@ -1,8 +1,4 @@
 # va  diff-bytes  reason
-0080d810  -   approximate: 6-entry scan + min/max rectangle computation stubbed
-0080da50  -   approximate: bounding-box / raster ratio path approximated
-0080dfe0  -   approximate: get_camera_location_and_zoom accumulation stubbed
-0080e270  -   approximate: RenderBegin body stubbed
 0080e6b0  -   approximate: only the opening calls/float-box path reconstructed
 0080e850  -   approximate: Matrix3::Assign / cViewer / winproc construction simplified
 0080ead0 193  approximate: model-vector destroy + refcount teardown simplified

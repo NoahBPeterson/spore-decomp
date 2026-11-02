@@ -11,32 +11,65 @@
 #include "cSPUILayoutObjectCollection.h"
 #include "cSPUILayoutResourceFactory.h"
 #include "cSPUIResourcesKeyFilter.h"
+#include <math.h>
+#include <xmmintrin.h>
 
 // ---- items of slice s0080d670 begin (TODO(rewrite): local stubs, replace by canonical classes)
 typedef unsigned char  u8;
+typedef unsigned short u16;
+typedef unsigned int   u32;
 typedef int            i32;
 typedef float          f32;
+void  __cdecl  VisitTree(void*, void*, void*);    // 0x807d30 SPUIHelpers::VisitWindowTreeDepthFirst
 void* __cdecl  BBoxAdd();                          // 0x67cad0 cSPBoundingBox::AddBoundingBox
+void* __cdecl  ModelMgr();                         // 0x67dd80
+void* __cdecl  EffectsMgr();                       // 0x67ddd0
 void* __cdecl  GetRaster();                        // 0x67dd50
 void* __cdecl  Fun82e4a0();                        // 0x82e4a0
-void  __cdecl  Fun7c4a60(void*, void*);            // 0x7c4a60
-void  __cdecl  Fun7c4b50(void*, float);            // 0x7c4b50
-void  __cdecl  Fun7c3c50(void*, int);              // 0x7c3c50
+void  __fastcall Fun7c4a60(void*, void*, void*);        // 0x7c4a60 cViewer::FUN_007c4a60
+void  __fastcall Fun7c4b50(void*, void*, float);        // 0x7c4b50 cViewer::FUN_007c4b50
+void  __fastcall Fun7c3c50(void*, void*, int);          // 0x7c3c50 cViewer::Clear
+void  __fastcall BoundingBox_TransformBy(void*, void*, void*); // 0x409dd0 cSPBoundingBox::Transform
 typedef void* (__thiscall *VF0)(void*);
 typedef void  (__thiscall *VF0v)(void*);
+typedef void* (__thiscall *VF1)(void*, void*);
 typedef void  (__thiscall *VF1v)(void*, void*);
+typedef void* (__thiscall *VF1a)(void*, void*, void*);
+typedef void  (__thiscall *VF2v)(void*, void*, void*, int);
+typedef void  (__thiscall *VF3v)(void*, void*, void*, void*, void*);
+struct Vec2 {
+    f32 x, y;
+    Vec2() {}
+    Vec2(f32 a, f32 b) : x(a), y(b) {}
+    Vec2(const Vec2& o) : x(o.x), y(o.y) {}
+};
+struct Rect4 { f32 x0, y0, x1, y1; };
+typedef void  (__thiscall *VFtf)(void*, void*, Vec2);
 static inline void** VT(void* o) { return *(void***)o; }
+static inline f32 SseSub(f32 a, f32 b) { return _mm_cvtss_f32(_mm_sub_ss(_mm_set_ss(a), _mm_set_ss(b))); }
 struct Layered {
-    u8  pad0[0xc];
+    u8  pad0[8];
+    void* renderer;  // +0x8
     void** vBegin;   // +0xc
     void** vEnd;     // +0x10
     void** v2Begin;  // +0x14
     void** v2End;    // +0x18
-    u8  pad1c[0x20];
+    u8  pad1c[0x10];          // +0x1c..+0x2b
+    u8  modelTransform[0x10]; // +0x2c..+0x3b
     void* obj3c;     // +0x3c
     u8  pad40[4];
-    u8  bits44;      // +0x44 .. bitset
-    u8  pad60[0x1cc - 0x60];
+    u8  bits44[0x1c]; // +0x44..+0x5f
+    u8  pad60[4];     // +0x60..+0x63
+    f32 rectMinX;     // +0x64
+    f32 rectMinY;     // +0x68
+    f32 rectMaxX;     // +0x6c
+    f32 rectMaxY;     // +0x70
+    u8  flag74;       // +0x74
+    u8  flag75;       // +0x75
+    u8  flag76;       // +0x76
+    u8  pad77;        // +0x77
+    u8  flag78;       // +0x78
+    u8  pad79[0x1cc - 0x79];
     u8  flag1cc;     // +0x1cc
     u8  pad1d4[0x1d4 - 0x1cd];
     i32 r1d4;        // +0x1d4
@@ -52,22 +85,64 @@ struct Layered {
     void* p25c;      // +0x25c
     void* p260;      // +0x260
 
-    u8*  Method810();                     // 0x80d810
-    void MethodDA50(void*);               // 0x80da50
+    u8*  Method810(void* win);            // 0x80d810
+    void MethodDA50(void* param, void*, void*, void*, void*); // 0x80da50
     void ReleaseAll();                    // 0x80dbb0
     void MethodDC50(int);                 // 0x80dc50
     void* MethodDC90();                   // 0x80dc90
     int  MethodDD50();                    // 0x80dd50
     void SetObj(void* p, u8 b);           // 0x80dda0
     void RenderEnd();                     // 0x80de20
-    void CameraLocZoom();                 // 0x80dfe0
-    void RenderBegin();                   // 0x80e270
+    void* CameraLocZoom(void* outVec3, float* outZoom); // 0x80dfe0
+    bool RenderBegin(int id);             // 0x80e270
+};
+struct Renderer {
+    void __thiscall SetViewport(int x, int y, int w, int h); // 0x7c5310
+    void __thiscall SetAspect(float aspect);                 // 0x7c4b50
+    void __thiscall SetFov(float fov);                       // 0x7c53d0
+    void __thiscall SetNearFar(float d);                     // 0x7c4ba0
+    void __thiscall Snapshot(void* state);                   // 0x7c40f0
+    void __thiscall Submit(void* state);                     // 0x7c4d00
+};
+struct CamState {
+    u16 flags;      // +0x00
+    u16 count;      // +0x02
+    f32 x;          // +0x04
+    f32 y;          // +0x08
+    f32 z;          // +0x0c
+    f32 w;          // +0x10
+    f32 basis[9];   // +0x14..+0x37
+};
+u8   __cdecl  FUN_8050b0(void*);              // 0x8050b0
+void __cdecl  FUN_805ea0(void* outRect);      // 0x805ea0
+void __cdecl  CamStateInit(CamState* s);      // 0x409930
+struct FlagSetter { int __thiscall Set790(char p2, char p3); };
+struct DARecord {
+    void* obj;   // +0
+    void* a;     // +4
+    void* b;     // +8
+};
+struct DDBounds {
+    i32 flag;    // +0 (only the low byte is used)
+    i32 lo;      // +4
+    i32 hi;      // +8
+};
+struct Box6 {
+    f32 minx, miny, minz;   // +0x00
+    f32 maxx, maxy, maxz;   // +0x0c
+};
+struct ModelObj {
+    u8  pad0[4];
+    u32 flags;   // +0x04
+    u8  pad8[4];
+    f32 tx;      // +0x0c
+    f32 ty;      // +0x10
+    f32 tz;      // +0x14
 };
 // ---- items of slice s0080d670 end
 
 // ---- items of slice s0080e6b0 begin (TODO(rewrite): local stubs, replace by canonical classes)
-typedef unsigned short u16;
-typedef unsigned int   u32;
+
 void* __cdecl  GameAlloc(size_t size, const char* name, int, int, int, int);
 void  __cdecl  GameFree(void* p);
 void  __fastcall Fun_7c3f70(void*);          // 0x7c3f70
@@ -79,7 +154,7 @@ void  __fastcall SharedVecDtor(void*);        // 0x5c7f10
 void* __cdecl  ModelManagerGet();             // 0x67dd80
 void  __fastcall Fun_82e4b0(void*, void*);    // 0x82e4b0
 void  __fastcall Fun_82e4c0(void*, void*);    // 0x82e4c0
-typedef void* (__thiscall *VF1)(void*, void*);
+
 struct cMWModel { u8 pad[0x40]; i32 mRefCount; u8 pad44[4]; };
 struct cSPUILayeredObject_s0080_e6b0 {
     void**  vtbl;        // +0
@@ -247,11 +322,29 @@ struct ObjStub {
 };
 // ---- items of slice s0080f7c0 end
 
+// callees this slice defines outside this object (rewrite.py held_callee_protos)
+u8 __cdecl FUN_0080d670(void* p, u8* p2);  // 0x0080d670 (stays in the slice: not this object's)
+u16 __cdecl FUN_0080d6d0(void* p, u8* p2);  // 0x0080d6d0 (stays in the slice: not this object's)
+
 // @ 0x0080d590
 void __stdcall SetFlag8(char* p)
 { p[0x10] = 0; }
 
+// @ 0x0080d770
+void __cdecl FUN_0080d770(void* a, void* b, void* p3)
+{
+    ((VF2v)VT(p3)[0xc / 4])(p3, a, b, 4);
+}
 
+// @ 0x0080d790
+int FlagSetter::Set790(char p2, char p3)
+{
+    char* self = (char*)this;
+    self[0x75] = p2;
+    int v = (p2 && !p3);
+    self[0x76] = v;
+    return v;
+}
 
 // @ 0x0080d7e0
 i32 __cdecl FUN_0080d7e0(float* a, float* b)
@@ -260,56 +353,213 @@ i32 __cdecl FUN_0080d7e0(float* a, float* b)
     return 1;
 }
 
-
-
 // @ 0x0080d810
-u8* Layered::Method810()
+u8* Layered::Method810(void* win)
 {
-    for (int i = 0; i < 6; ++i) {
-        u8* e = entries1e4 + i * 0x14;
-        if (e[0] == 0) {
-            // approximate: the original computes a min/max rectangle from two source rects
-            r1d4 = r1d8 = r1dc = r1e0 = 0;
-            return (u8*)((char*)this + 0x1d4);
-        }
-    }
-    return 0;
+    u32 i = 0;
+    u8* e = entries1e4;
+    for (; i < 6; ++i, e += 0x14)
+        if (*e == 0) break;
+    if (i == 6) return 0;
+    *e = 1;
+
+    f32* r = (f32*)((VF0)VT(win)[0x38 / 4])(win);
+    f32 w = SseSub(r[2], r[0]);
+    f32 h = SseSub(r[3], r[1]);
+
+    Vec2 p0, p1, p2, p3;
+    VFtf tf = (VFtf)VT(win)[0xc0 / 4];
+    tf(win, &p0, Vec2(0.0f, 0.0f));
+    tf(win, &p1, Vec2(w, h));
+    tf(win, &p2, Vec2(w, 0.0f));
+    tf(win, &p3, Vec2(0.0f, h));
+
+    const f32& maxY1 = p3.y > p2.y ? p3.y : p2.y;
+    const f32& maxY2 = maxY1 > p1.y ? maxY1 : p1.y;
+    const f32& maxY = maxY2 > p0.y ? maxY2 : p0.y;
+    const f32& maxX1 = p3.x > p2.x ? p3.x : p2.x;
+    const f32& maxX2 = maxX1 > p1.x ? maxX1 : p1.x;
+    const f32& maxX = maxX2 > p0.x ? maxX2 : p0.x;
+    const f32& minY1 = p2.y > p3.y ? p3.y : p2.y;
+    const f32& minY2 = p1.y > minY1 ? minY1 : p1.y;
+    const f32& minY = p0.y > minY2 ? minY2 : p0.y;
+    const f32& minX1 = p2.x > p3.x ? p3.x : p2.x;
+    const f32& minX2 = p1.x > minX1 ? minX1 : p1.x;
+    const f32& minX = p0.x > minX2 ? minX2 : p0.x;
+
+    u8* rect = (u8*)((char*)this + i * 0x14 + 0x1d4);
+    ((i32*)rect)[0] = (i32)minX;
+    ((i32*)rect)[1] = (i32)minY;
+    ((i32*)rect)[2] = (i32)maxX;
+    ((i32*)rect)[3] = (i32)maxY;
+    return rect;
 }
 
-
-
 // @ 0x0080da50
-void Layered::MethodDA50(void* param)
+void Layered::MethodDA50(void* param, void* a2, void* a3, void* a4, void* a5)
 {
+    (void)a2; (void)a3; (void)a4; (void)a5;
     void* bb = BBoxAdd();
     if (*(i32*)((char*)bb + 0x38) != 0) return;
     if (flag24c && param) {
-        Fun7c4a60((char*)this + 0x60, param);
+        Fun7c4a60((char*)this + 0x60, 0, param);
         flag1cc = 0;
-        i32 w = *(i32*)((char*)param + 8) - *(i32*)param;
-        i32 h = *(i32*)((char*)param + 0xc) - *(i32*)((char*)param + 4);
-        if (w > 0 && h > 0) {
+        u32 w = (u32)(*(i32*)((char*)param + 8) - *(i32*)param);
+        u32 h = (u32)(*(i32*)((char*)param + 0xc) - *(i32*)((char*)param + 4));
+        if (w != 0 && h != 0) {
             void* r = GetRaster();
             void* info = ((VF0)VT(r)[0x1c / 4])(r);
             f32 f = (f32)w * *(f32*)((char*)info + 0x1c) / (f32)h;
-            Fun7c4b50((char*)this + 0x60, f);
+            Fun7c4b50((char*)this + 0x60, 0, f);
         }
     }
-    Fun7c3c50((char*)this + 0x60, 6);
-    u8* begin = (u8*)vBegin;
-    i32 n = (i32)((u8*)vEnd - begin) / 0xc;
+    Fun7c3c50((char*)this + 0x60, 0, 6);
+    DARecord* begin = (DARecord*)vBegin;
+    i32 n = (i32)((u8*)vEnd - (u8*)vBegin) / 0xc;
     if (n > 0) {
-        u8* it = begin;
-        for (i32 i = 0; i < n; ++i, it += 0xc) {
-            void* o = *(void**)it;
-            void* cb = (void*)(*(u8**)o + 0xc);
-            (void)cb;
-            Fun82e4a0();
+        struct Local { i32 a, b, c, pad0, pad1; } local;
+        local.a = local.b = local.c = local.pad0 = local.pad1 = 0;
+        DARecord* it = begin;
+        for (i32 i = 0; i < n; ++i, ++it) {
+            void* o = it->obj;
+            void* result = Fun82e4a0();
+            ((VF3v)VT(o)[0xc / 4])(o, it->b, it->a, &local, result);
         }
     }
 }
 
+// @ 0x0080db70
+void* __fastcall FUN_0080db70(char* p)
+{
+    if (p) return *(void**)(p + 8);
+    return *(void* volatile*)(p + 0x258);
+}
 
+// @ 0x0080db90
+void* __fastcall FUN_0080db90(char* p)
+{
+    if (p) return *(void**)(p + 4);
+    return *(void* volatile*)(p + 0x254);
+}
+
+// @ 0x0080dbb0
+void Layered::ReleaseAll()
+{
+    if (!p258) return;
+    if (p258) {
+        void* o = p258;
+        p258 = 0;
+        ((VF0v)VT(o)[1])(o);
+    }
+    {
+        void* m = ModelMgr();
+        ((VF1v)VT(m)[0x18 / 4])(m, p25c);
+    }
+    p25c = 0;
+    if (p254) {
+        void* o = p254;
+        p254 = 0;
+        ((VF0v)VT(o)[1])(o);
+    }
+    {
+        void* m = EffectsMgr();
+        ((VF1v)VT(m)[0x50 / 4])(m, p260);
+    }
+    p260 = 0;
+    ((VF0v)VT(p250)[0x7c / 4])(p250);
+    if (p250) {
+        void* o = p250;
+        p250 = 0;
+        ((VF0v)VT(o)[1])(o);
+    }
+}
+
+// @ 0x0080dc50
+void Layered::MethodDC50(int)
+{
+    if (!obj3c) return;
+    void* r = ((VF1)VT(obj3c)[0x144 / 4])(obj3c, 0);
+    if (!r) return;
+    void* r2 = ((VF1)VT(obj3c)[0x144 / 4])(obj3c, 0);
+    ((VF0v)VT(r2)[0x30 / 4])(r2);
+}
+
+// @ 0x0080dc90
+void* Layered::MethodDC90()
+{
+    if (!obj3c) return 0;
+    void* r = ((VF1)VT(obj3c)[0x144 / 4])(obj3c, 0);
+    if (!r) return 0;
+    void* r2 = ((VF1)VT(obj3c)[0x144 / 4])(obj3c, 0);
+    return ((VF0)VT(r2)[0x34 / 4])(r2);
+}
+
+// @ 0x0080dcd0
+void __stdcall FUN_0080dcd0(void* a, i32 b, u8 c)
+{
+    u8 local_c[8];
+    *(i32*)(local_c + 4) = 10000;
+    *(i32*)(local_c + 8) = 0xffffd8f0;
+    local_c[0] = 1;
+    VisitTree(a, (void*)FUN_0080d6d0, local_c);
+    i32 d = b - *(i32*)(local_c + 4);
+    u8 local14[8];
+    local14[0] = c;
+    *(i32*)(local14 + 4) = d;
+    if (d != 0) VisitTree(a, (void*)FUN_0080d670, local14);
+}
+
+// @ 0x0080dd50
+int Layered::MethodDD50()
+{
+    void* p = vBegin;
+    if (!p) return 0;
+    BBoxAdd();
+    DDBounds local;
+    local.flag = 0;
+    local.lo = 10000;
+    local.hi = -10000;
+    VisitTree(p, (void*)FUN_0080d6d0, &local);
+    return local.lo;
+}
+
+// @ 0x0080dda0
+void Layered::SetObj(void* param, u8 b)
+{
+    void* old = vBegin;
+    if (old == param) return;
+    if (*(u8*)((char*)this + 0x74)) {
+        ((VF1v)VT(old)[0x108 / 4])(old, *(void**)((char*)this + 0x10));
+    }
+    if (param != old) {
+        if (param) ((VF0v)VT(param)[0])(param);
+        vBegin = (void**)param;
+        if (old) ((VF0v)VT(old)[1])(old);
+    }
+    u8 nv;
+    if (vBegin == 0 || b == 0) nv = 0; else nv = 1;
+    *(u8*)((char*)this + 0x74) = nv;
+    if (nv) {
+        void* cur = vBegin;
+        ((VF1v)VT(cur)[0x104 / 4])(cur, *(void**)((char*)this + 0x10));
+    }
+}
+
+// @ 0x0080de20
+void Layered::RenderEnd()
+{
+    void** it = v2Begin;
+    void** end = v2End;
+    while (it != end) {
+        void* o = *it++;
+        void* m = ModelMgr();
+        u32 idx = (u32)(size_t)((VF1)VT(m)[0x28 / 4])(m, (void*)0x32fab27);
+        if (idx < 0x40) {
+            u32* p = (u32*)((char*)o + 0x44 + (idx >> 5) * 4);
+            *p &= ~(1u << (idx & 0x1f));
+        }
+    }
+}
 
 // @ 0x0080de80
 void* __cdecl FUN_0080de80(void** first, void** last, void** dest)
@@ -324,8 +574,6 @@ void* __cdecl FUN_0080de80(void** first, void** last, void** dest)
     }
     return dest;
 }
-
-
 
 // @ 0x0080df00
 void* __cdecl FUN_0080df00(void** first, void** last, void** dest)
@@ -343,7 +591,12 @@ void* __cdecl FUN_0080df00(void** first, void** last, void** dest)
     return dest;
 }
 
-
+// @ 0x0080df50
+int __fastcall FUN_0080df50(char* p)
+{
+    char* b = (p && p != (char*)0x250) ? p - 0x24c : 0;
+    return _InterlockedIncrement((long*)(b + 4));
+}
 
 // @ 0x0080df80
 int cSPUIModelsAndEffectsRenderer::Release()
@@ -361,8 +614,6 @@ int cSPUIModelsAndEffectsRenderer::Release()
     return n;
 }
 
-
-
 // @ 0x0080dfc0
 void __fastcall FUN_0080dfc0(char* p)
 {
@@ -370,23 +621,160 @@ void __fastcall FUN_0080dfc0(char* p)
     else   ((Layered*)0)->ReleaseAll();
 }
 
-
-
 // @ 0x0080dfe0
-void Layered::CameraLocZoom()
+void* Layered::CameraLocZoom(void* outVec3, float* outZoom)
 {
-    // approximate: accumulate a bounding region over v2 children
-    r1d4 = r1d8 = r1dc = r1e0 = 0;
+    Box6 box;
+    box.minx = box.miny = box.minz = 3.402823466e+38F;
+    box.maxx = box.maxy = box.maxz = -3.402823466e+38F;
+
+    void* bbox = BBoxAdd();
+    void* mgr = *(void**)((char*)bbox + 0x3c);
+    ModelObj** begin = (ModelObj**)v2Begin;
+    u32 n = (u32)((u8*)v2End - (u8*)v2Begin) >> 2;
+    void* lastObj = bbox;
+
+    for (u32 i = 0; i < n; ++i) {
+        ModelObj* obj = begin[i];
+        lastObj = obj;
+        u32 flags = obj->flags;
+        if (((flags >> 0xf) & 1) && (flags & 1)) {
+            float* pf = (float*)((VF1)VT(mgr)[0x60 / 4])(mgr, obj);
+            obj = begin[i];
+            f32 tx = obj->tx, ty = obj->ty, tz = obj->tz;
+            f32 cmnx = tx + pf[0];
+            f32 cmny = ty + pf[1];
+            f32 cmnz = tz + pf[2];
+            f32 cmxx = tx + pf[3];
+            f32 cmxy = ty + pf[4];
+            f32 cmxz = tz + pf[5];
+            if (box.minx <= box.maxx) {
+                if (cmnx < box.minx) box.minx = cmnx;
+                if (box.maxx < cmxx) box.maxx = cmxx;
+                if (cmny < box.miny) box.miny = cmny;
+                if (box.maxy < cmxy) box.maxy = cmxy;
+                if (cmnz < box.minz) box.minz = cmnz;
+                if (box.maxz < cmxz) box.maxz = cmxz;
+            } else {
+                box.minx = cmnx; box.miny = cmny; box.minz = cmnz;
+                box.maxx = cmxx; box.maxy = cmxy; box.maxz = cmxz;
+            }
+        }
+    }
+
+    if (box.minx <= box.maxx) {
+        BoundingBox_TransformBy(&box, 0, modelTransform);
+        ((float*)outVec3)[0] = (box.maxx + box.minx) * 0.5f;
+        ((float*)outVec3)[1] = (box.maxy + box.miny) * 0.5f;
+        ((float*)outVec3)[2] = (box.maxz + box.minz) * 0.5f;
+        double dx = (double)box.maxx - (double)box.minx;
+        double dy = (double)box.maxy - (double)box.miny;
+        double dz = (double)box.maxz - (double)box.minz;
+        double sum = (dx * dx + dz * dz) + dy * dy;
+        *outZoom = (f32)(sqrt(sum) * 1.8f);
+        return outVec3;
+    }
+    return lastObj;
 }
-
-
 
 // @ 0x0080e270
-void Layered::RenderBegin()
+bool Layered::RenderBegin(int id)
 {
-    // approximate: begin rendering of the layered object
-}
+    if (!vBegin) return false;
+    if (MethodDD50() != id) return false;
+    void** it = v2Begin;
+    void** end = v2End;
+    if (it == end) return false;
+    if (!FUN_8050b0(vBegin)) return false;
 
+    f32 cb = 0.0f, cg = 0.0f, cr = 0.0f, ca = 0.0f;
+    if (flag78) {
+        u32 c = (u32)(size_t)((VF0)VT(vBegin)[0x30 / 4])(vBegin);
+        const f32 k = 0.0039215689f;
+        cb = (f32)((c >> 16) & 0xff) * k;
+        cg = (f32)((c >> 8) & 0xff) * k;
+        cr = (f32)(c & 0xff) * k;
+        ca = (f32)(c >> 24) * k;
+    }
+
+    for (; it != end; ++it) {
+        void* obj = *it;
+        void* mgr = ModelMgr();
+        u32 idx = (u32)(size_t)((VF1a)VT(mgr)[0x28 / 4])(mgr, (void*)0x32fab27, (void*)0);
+        if (idx < 0x40) {
+            u32* bits = (u32*)((char*)obj + 0x44 + (idx >> 5) * 4);
+            *bits |= 1u << (idx & 0x1f);
+        }
+        if (flag78) {
+            u32 flags = *(u32*)((char*)obj + 4);
+            if (flags & 2) {
+                *(f32*)((char*)obj + 0x4c) = cb;
+                *(f32*)((char*)obj + 0x50) = cg;
+                *(f32*)((char*)obj + 0x54) = cr;
+                *(f32*)((char*)obj + 0x58) = ca;
+            }
+        }
+    }
+
+    if (!flag75 && !flag76) return true;
+
+    f32* wr = (f32*)((VF0)VT(vBegin)[0x38 / 4])(vBegin);
+    f32 rx0 = wr[0], ry0 = wr[1], rx1 = wr[2], ry1 = wr[3];
+
+    Vec2 p0, p1;
+    VFtf tf = (VFtf)VT(vBegin)[0xc0 / 4];
+    tf(vBegin, &p0, Vec2(0.0f, 0.0f));
+    tf(vBegin, &p1, Vec2(rx1 - rx0, ry1 - ry0));
+
+    bool changed = FUN_0080d7e0((float*)&p0, &rectMinX) != 0
+                || FUN_0080d7e0((float*)&p1, &rectMaxX) != 0;
+
+    rectMinX = p0.x;
+    rectMinY = p0.y;
+    rectMaxX = p1.x;
+    rectMaxY = p1.y;
+    if (rectMinX >= rectMaxX) return false;
+    if (rectMinY >= rectMaxY) return false;
+
+    Rect4 vp;
+    FUN_805ea0(&vp);
+    if (0.0f > rectMaxX) return false;
+    if (0.0f > rectMaxY) return false;
+    if (rectMinX > vp.x1 - vp.x0) return false;
+    if (rectMinY > vp.y1 - vp.y0) return false;
+
+    if (!changed) return true;
+
+    f32 w = rectMaxX - rectMinX;
+    f32 h = rectMaxY - rectMinY;
+    int iw = (int)w;
+    int ih = (int)h;
+    int ix = (int)rectMinX;
+    int iy = (int)rectMinY;
+
+    Renderer* dev = (Renderer*)renderer;
+    dev->SetViewport(ix, iy, iw, ih);
+    dev->SetAspect((f32)iw / (f32)ih);
+    if (flag76) return true;
+
+    dev->SetFov(50.0f);
+    dev->SetNearFar(0.01f);
+
+    f32 camPos[3];
+    f32 zoom;
+    CameraLocZoom(camPos, &zoom);
+
+    CamState cs;
+    CamStateInit(&cs);
+    dev->Snapshot(&cs);
+    cs.flags |= 4;
+    ++cs.count;
+    cs.x = camPos[0] - zoom * cs.basis[3];
+    cs.y = camPos[1] - zoom * cs.basis[4];
+    cs.z = camPos[2] - zoom * cs.basis[5];
+    dev->Submit(&cs);
+    return true;
+}
 
 // @ 0x0080e6b0
 void __thiscall cSPUILayeredObject_s0080_e6b0::MethodE6B0(void* a, void* b)
@@ -403,7 +791,6 @@ void __thiscall cSPUILayeredObject_s0080_e6b0::MethodE6B0(void* a, void* b)
         (void)v;
     }
 }
-
 
 // @ 0x0080e850
 cSPUILayeredObject_s0080_e6b0* __thiscall cSPUILayeredObject_s0080_e6b0::ctor()
@@ -438,7 +825,6 @@ cSPUILayeredObject_s0080_e6b0* __thiscall cSPUILayeredObject_s0080_e6b0::ctor()
     return this;
 }
 
-
 // @ 0x0080e980
 u32 __thiscall cSPUILayeredObject_s0080_e6b0::RemoveModel(cMWModel* param)
 {
@@ -472,13 +858,11 @@ u32 __thiscall cSPUILayeredObject_s0080_e6b0::RemoveModel(cMWModel* param)
     return 0;
 }
 
-
 // @ 0x0080ea50
 void cSPUILayeredObject::RemoveAllModels()
 {
     while (mModels.mpBegin != mModels.mpEnd) RemoveModel(*mModels.mpBegin);
 }
-
 
 // @ 0x0080ea80
 void __thiscall LayerInfoVec::dtor()
@@ -491,7 +875,6 @@ void __thiscall LayerInfoVec::dtor()
     void* b = begin;
     if (b && b != inline_) GameFree(b);
 }
-
 
 // @ 0x0080ead0
 void __thiscall cSPUILayeredObject_s0080_e6b0::dtor()
@@ -526,7 +909,6 @@ void __thiscall cSPUILayeredObject_s0080_e6b0::dtor()
     vtbl = (void**)0x13ec458;
 }
 
-
 // @ 0x0080ebc0
 void* __thiscall cSPUICustomRendererImpl::ctor()
 {
@@ -547,7 +929,6 @@ void* __thiscall cSPUICustomRendererImpl::ctor()
     return this;
 }
 
-
 // @ 0x0080ec40
 void* __thiscall cSPUICustomRendererImpl::VectorDtor(u8 flags)
 {
@@ -562,7 +943,6 @@ void* __thiscall cSPUICustomRendererImpl::VectorDtor(u8 flags)
     if (flags & 1) GameFree(this);
     return this;
 }
-
 
 // @ 0x0080eca0
 void __thiscall cSPUICustomRendererImpl::ScalarDtor()
@@ -583,7 +963,6 @@ void __thiscall cSPUICustomRendererImpl::ScalarDtor()
     vtbl = (void**)0x13eb938;
 }
 
-
 // @ 0x0080ed50
 void* __cdecl FUN_0080ed50()
 {
@@ -596,7 +975,6 @@ void* __cdecl FUN_0080ed50()
     p->p250 = 0; p->p254 = 0; p->p258 = 0;
     return (u8*)p + 0x250;
 }
-
 
 // @ 0x0080edb0
 UI_LayerManager* __thiscall UI_LayerManager::ctor()
@@ -624,7 +1002,6 @@ UI_LayerManager* __thiscall UI_LayerManager::ctor()
     return this;
 }
 
-
 // @ 0x0080ee10
 void* __thiscall UI_LayerManager::VectorDtor(u8 flags)
 {
@@ -640,7 +1017,6 @@ void* __thiscall UI_LayerManager::VectorDtor(u8 flags)
     if (flags & 1) GameFree(this);
     return this;
 }
-
 
 // @ 0x0080efe0
 void __thiscall PtrVec::Insert1(void** pos, void** val)
@@ -671,7 +1047,6 @@ void __thiscall PtrVec::Insert1(void** pos, void** val)
     begin = mem; end = begin; cap = mem + nc;
 }
 
-
 // @ 0x0080f140
 void __thiscall PtrVec::Insert12(void** pos, void** val)
 {
@@ -695,7 +1070,6 @@ void __thiscall PtrVec::Insert12(void** pos, void** val)
     (void)mem;
 }
 
-
 // @ 0x0080f2e0
 void __fastcall FUN_0080f2e0(char* self, void** obj, void* a, void* b)
 {
@@ -718,14 +1092,12 @@ void __fastcall FUN_0080f2e0(char* self, void** obj, void* a, void* b)
     if (x) ((VF0v)VT(x)[1])(x);
 }
 
-
 // @ 0x0080f360
 void __fastcall FUN_0080f360(char* p, void** obj, void* a, void* b)
 {
     char* q = p ? p - 0xc : 0;
     FUN_0080f2e0(q, obj, a, b);
 }
-
 
 // @ 0x0080f380
 void __thiscall cSPUICustomRendererImpl::MethodF380(void* param)
@@ -741,11 +1113,9 @@ void __thiscall cSPUICustomRendererImpl::MethodF380(void* param)
     }
 }
 
-
 // @ 0x0080f530
 void __fastcall FUN_0080f530(void* self, void* a)
 { (void)self; (void)a; }
-
 
 // @ 0x0080f730
 void __cdecl FUN_0080f730()

@@ -1,5 +1,19 @@
 # va  diff-bytes  reason
-0080df80 55 complete; interlocked refcount/release schedule differs
+0080d810 494 complete; float->Vec2 arg copies use x87 fld/fstp vs retail movss and SSE helper temps clobber xmm4; frame 16- vs 8-byte aligned flags: /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+0080da50 147 complete; first stack arg is the rect; 0x14 frame needed for callee stack residue flags: /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+0080db70 6 complete; null-arm address folded to absolute instead of kept in eax flags: /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+0080db90 6 complete; null-arm address folded to absolute instead of kept in eax flags: /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+0080dbb0 136 complete; early-out gate on +0x258 added; virtual call register schedule differs flags: /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+0080dc50 48 complete; vtable slot 0x144/0x30 call schedule differs flags: /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+0080dc90 53 complete; vtable slot 0x144/0x34 call schedule differs flags: /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+0080dcd0 77 complete; two VisitWindowTreeDepthFirst passes / record layout differ flags: /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+0080dd50 50 complete; scalar local avoids /GS cookie; branch layout differs flags: /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+0080dda0 109 complete; refcount/vtable call schedule differs flags: /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+0080de20 57 complete; ModelManager call/bit-clear schedule differs flags: /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+0080df50 31 complete; this-adjustment expression shape differs flags: /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+0080df80 55 complete; interlocked refcount/release schedule differs flags: /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+0080dfe0 530 complete; early-return eax = last object / bbox; float path matches flags: /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+0080e270 838 complete; WEAK equiv (10% coverage); renderer/camera-state field layout and float->int rounding (cvtss2si) codegen differ flags: /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
 0080e980 130 complete; refcount release/call schedule differs
 0080ea50 14 complete; load of vector begin reuses eax instead of a fresh ecx
 0080ed50 39 complete; null-return block placement + store ordering differ
