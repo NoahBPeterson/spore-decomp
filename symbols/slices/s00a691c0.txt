@@ -1,0 +1,2 @@
+00a69310 ?ForEachRegA@Ctx@@QAEXI@Z  # Ctx::ForEachRegA migrated from s00a691c0 (verbatim, slice spelling)
+00a69380 ?ForEachRegB@Ctx@@QAEXI@Z  # Ctx::ForEachRegB migrated from s00a691c0 (verbatim, slice spelling)
