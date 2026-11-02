@@ -1,1 +1,3 @@
 # va  diff-bytes  reason
+00c4f4e0 612 partial: FUN_00c4f4e0 source incomplete (best-effort translation: vcall field-init + property lookup + target/animal species + PickPlanet sequence; ours 665 bytes vs 612); equivalence UNSUPPORTED (0/400 valid; discards fault(read)=352, fake-arity=41, fault(pool-limit)=3); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00c4fe60 600 partial: cSPMissionEradicate::OnCombatantKilled decoded but the recursive message path passes the wstring local as the gEmptyA/gEmptyB globals (stand-in for a stack eastl::wstring); frame/EH layout not reproduced, not behaviourally verified flags: /O2 /MD /Gy /EHsc /TP

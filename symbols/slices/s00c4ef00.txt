@@ -6,6 +6,7 @@
 00c4f160 ?FUN_00c4f160@cSPMissionEradicate_s00c4_ef00@@QAEXXZ  # cSPMissionEradicate_s00c4_ef00::FUN_00c4f160 migrated from s00c4ef00 (verbatim, slice spelling)
 00c4f220 ?ValidateHerds@cSPMissionEradicate_s00c4_ef00@@QAEXXZ  # cSPMissionEradicate_s00c4_ef00::ValidateHerds migrated from s00c4ef00 (verbatim, slice spelling)
 00c4f320 ?FUN_00c4f320@cSPMissionEradicate_s00c4_ef00@@QAEXXZ  # cSPMissionEradicate_s00c4_ef00::FUN_00c4f320 migrated from s00c4ef00 (verbatim, slice spelling)
+00c4f4e0 ?FUN_00c4f4e0@cSPMissionEradicate_s00c4_ef00@@QAEDXZ  # cSPMissionEradicate_s00c4_ef00::FUN_00c4f4e0 migrated from s00c4ef00 (verbatim, slice spelling)
 00c4f750 ?Update@cSPMissionEradicate_s00c4_ef00@@QAEHH@Z  # cSPMissionEradicate_s00c4_ef00::Update migrated from s00c4ef00 (verbatim, slice spelling)
 00c4f7b0 ?Init@cSPMissionEradicate_s00c4_ef00@@QAEPAXXZ  # cSPMissionEradicate_s00c4_ef00::Init migrated from s00c4ef00 (verbatim, slice spelling)
 00c4f890 ?GetUIShortDescription@cSPMissionEradicate_s00c4_ef00@@QAEXPAX@Z  # cSPMissionEradicate_s00c4_ef00::GetUIShortDescription migrated from s00c4ef00 (verbatim, slice spelling)

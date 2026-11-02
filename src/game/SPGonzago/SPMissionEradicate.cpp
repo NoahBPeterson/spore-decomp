@@ -52,7 +52,11 @@ public:
 // ---- items of slice s00c4bc00 end
 
 // ---- items of slice s00c4dbf0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C" void* __stdcall FUN_00b3d3e0a(int a);                     // SP::EventLog (1-arg, stdcall)
+extern "C" void  __cdecl FUN_00c44b80(void* self);
+extern "C" void  __cdecl FUN_00c44bd0(void* self);
 typedef unsigned int u32;
+extern "C" void* __stdcall FUN_00b3d3e0_s00c4_dbf0(int a, int b);              // SP::EventLog (2-arg, stdcall)
 namespace SP {
 class ThisStubs
 {
@@ -92,6 +96,8 @@ extern wchar_t gEmpty16;                  // 0x01667bac
 extern wchar_t gEmpty16b;                 // 0x01667bae
 extern float gNegOne;                                   // 0x013eb1bc (-1.0f)
 typedef unsigned int  uint;
+typedef unsigned short ushort;
+typedef unsigned char uchar;
 #define VT(p, off) (*(void**)((char*)(*(void**)(p)) + (off)))
 struct Key { uint mA, mB, mC; };                    // 12 bytes
 struct WString {
@@ -121,6 +127,27 @@ struct PtrVec {
   void** mpCap;             // +0x08
   void   FUN_00d01790(int n);   // 0x00d01790
 };
+struct cProperty {
+  char   pad00[0x12];       // +0x00..0x11
+  ushort m12;               // +0x12
+  char*  GetBool();         // 0x0041e920
+};
+struct PickReq {
+  int    mType;             // +0x00
+  int    mA4;               // +0x04
+  int    mA8;               // +0x08
+  char   pad0c[2];          // +0x0c..0x0d
+  uchar  m0e;               // +0x0e
+  void   FUN_00ba7bd0();    // 0x00ba7bd0
+  void   FUN_00ba8220();    // 0x00ba8220
+};
+struct cSpeciesManager {
+  void*  GetProfile(const Key& k);        // 0x004df550
+};
+void* __cdecl GetSetting9(const Key* k);  // 0x00401090
+extern uint gKeyG1;                       // 0x016901c4
+extern uint gKeyG2;                       // 0x016901c8
+extern uint gKeyG3;                       // 0x016901cc
 struct WStringN {
   wchar_t* mpBegin;         // +0x00
   wchar_t* mpEnd;           // +0x04
@@ -258,16 +285,21 @@ extern "C" void  __cdecl FUN_00b93c60(int n, void* p);
 extern "C" void* __cdecl FUN_00b21340(void* self, void* a, void* b, void* c, void* d, void* e);
 extern "C" void  __cdecl FUN_00fefbb0(void* ctx, void* animal, int n, void* herd, int eff);
 extern "C" void  __cdecl FUN_00e25bd0(void* begin, void* end);  // vector erase
+extern "C" void  __cdecl FUN_00933960(void* ws);                              // 0x00933960
 extern "C" int   __cdecl FUN_0041e050(void* out, void* fmt, int v);          // 0x0041e050 WStr_Format
 extern "C" void  __cdecl FUN_006a1250(void* a, int key, void* out);           // 0x006a1250 SP::GetPropertyAsKey
 extern "C" void  __cdecl FUN_004b5ad0(void* pos, void* val);    // 0x004b5ad0 SpVector<Vector3>::DoInsertValue
 extern "C" void  __cdecl FUN_00829110(void* out, void* a, void* b, void* c, void* d);  // 0x00829110
+extern "C" void* __cdecl FUN_00c23e40d(void* p);                // 0x00c23e40 cSPCreatureCitizen::GetCity
+extern "C" void* __cdecl FUN_00c0bbd0d(void* p);                // 0x00c0bbd0 cSPCreatureBase::GetSpeciesProfile
 extern "C" int   __cdecl FUN_00bd8160d(void* p);                // 0x00bd8160
 extern "C" void  __cdecl FUN_00bd8140d(void* p, int a);         // 0x00bd8140
 extern "C" void* __cdecl FUN_00b3d480d(void* p);                // 0x00b3d480
 extern "C" void* __cdecl FUN_00ae33b0d(void* p);                // 0x00ae33b0 cSPMissionBiosphere::OnAbduction
 extern "C" void* __cdecl FUN_00c04590d(void* p);                // 0x00c04590 Get()
 extern "C" void* __cdecl FUN_00c4bdc0v(void* out, void* vec, int v);   // 0x00c4bdc0
+extern void* gEmptyA;              // 0x01667bac
+extern void* gEmptyB;              // 0x01667bae
 typedef unsigned char u8;
 class Mob
 {
@@ -311,6 +343,7 @@ class EventLog
 static inline int  ld32(void* p, int off) { return *(int*)((char*)p + off); }
 static inline void st32(void* p, int off, int v) { *(int*)((char*)p + off) = v; }
 static inline u8   ldb(void* p, int off) { return *(u8*)((char*)p + off); }
+static inline void stb(void* p, int off, u8 v) { *(u8*)((char*)p + off) = v; }
 static inline void** vtbl(void* p) { return *(void***)p; }
 // ---- items of slice s00c4fe60 end
 
@@ -369,6 +402,50 @@ uint32_t __thiscall cSPMissionEradicate::GetDiseaseEffectID()
 }
 }  // namespace SP
 
+// @ 0x00c4ec90
+void __fastcall FUN_00c4ec90(void* ecx_this, void* edx)
+{
+    int id = *(int*)((char*)ecx_this + 0x218);
+    if (id != -1) {
+        void* log = FUN_00b3d3e0_s00c4_dbf0(id, 0);
+        ((SP::ThisStubs*)log)->RemoveEvent();
+        *(int*)((char*)ecx_this + 0x218) = -1;
+    }
+}
+
+// @ 0x00c4ecc0
+void __fastcall FUN_00c4ecc0(void* ecx_this, void* edx)
+{
+    int id = *(int*)((char*)ecx_this + 0x21c);
+    if (id != -1) {
+        void* log = FUN_00b3d3e0_s00c4_dbf0(id, 0);
+        ((SP::ThisStubs*)log)->RemoveEvent();
+        *(int*)((char*)ecx_this + 0x21c) = -1;
+    }
+}
+
+// @ 0x00c4ecf0
+void __fastcall FUN_00c4ecf0(void* ecx_this, void* edx)
+{
+    int id = *(int*)((char*)ecx_this + 0x218);
+    if (id != -1) {
+        void* log = FUN_00b3d3e0a(id);
+        if (!((SP::ThisStubs*)log)->RegisterCallback())
+            *(int*)((char*)ecx_this + 0x218) = -1;
+    }
+}
+
+// @ 0x00c4ed20
+void __fastcall FUN_00c4ed20(void* ecx_this, void* edx)
+{
+    int id = *(int*)((char*)ecx_this + 0x21c);
+    if (id != -1) {
+        void* log = FUN_00b3d3e0a(id);
+        if (!((SP::ThisStubs*)log)->RegisterCallback())
+            *(int*)((char*)ecx_this + 0x21c) = -1;
+    }
+}
+
 // @ 0x00c4ed50
 int __fastcall FUN_00c4ed50(void* ecx_this, void* edx)
 {
@@ -378,6 +455,30 @@ int __fastcall FUN_00c4ed50(void* ecx_this, void* edx)
     int r = (ge - 1) & 0x2ee1aa4e;
     r = r + (int)0xa2b7bfa8;
     return r;
+}
+
+// @ 0x00c4edd0
+void __fastcall FUN_00c4edd0(void* ecx_this, void* edx)
+{
+    FUN_00c44b80(ecx_this);
+    void** vt = *(void***)ecx_this;
+    (*(void(__thiscall**)(void*, u32))(*(char**)ecx_this + 0x14c))(ecx_this, 0x1622184);
+    (*(void(__thiscall**)(void*, u32))(*(char**)ecx_this + 0x14c))(ecx_this, 0x5e37a53);
+    (*(void(__thiscall**)(void*, u32))(*(char**)ecx_this + 0x14c))(ecx_this, 0x2489760);
+    (*(void(__thiscall**)(void*, u32))(*(char**)ecx_this + 0x14c))(ecx_this, 0x3029f11);
+    (*(void(__thiscall**)(void*, u32))(*(char**)ecx_this + 0x14c))(ecx_this, 0x3337cbb);
+    (void)vt;
+}
+
+// @ 0x00c4ee30
+void __fastcall FUN_00c4ee30(void* ecx_this, void* edx)
+{
+    FUN_00c44bd0(ecx_this);
+    (*(void(__thiscall**)(void*, u32))(*(char**)ecx_this + 0x150))(ecx_this, 0x1622184);
+    (*(void(__thiscall**)(void*, u32))(*(char**)ecx_this + 0x150))(ecx_this, 0x5e37a53);
+    (*(void(__thiscall**)(void*, u32))(*(char**)ecx_this + 0x150))(ecx_this, 0x2489760);
+    (*(void(__thiscall**)(void*, u32))(*(char**)ecx_this + 0x150))(ecx_this, 0x3029f11);
+    (*(void(__thiscall**)(void*, u32))(*(char**)ecx_this + 0x150))(ecx_this, 0x3337cbb);
 }
 
 // @ 0x00c4ee90
@@ -390,6 +491,15 @@ int __fastcall FUN_00c4ee90(void* ecx_this, void* edx, int planet, int b)
             return 1;
     }
     return 0;
+}
+
+// @ 0x00c4eec0
+void __fastcall FUN_00c4eec0(void* ecx_this, void* edx, int v)
+{
+    if (*(int*)((char*)ecx_this + 0x1f4) != v) {
+        *(int*)((char*)ecx_this + 0x1f4) = v;
+        ((SP::ThisStubs*)ecx_this)->TriggerUIUpdate();
+    }
 }
 
 // @ 0x00c4eee0
@@ -543,6 +653,74 @@ void cSPMissionEradicate_s00c4_ef00::FUN_00c4f320()
     key = 0xffffffff;
   }
   FUN_00feff80(mp16c, n, m1fc, m200, mPoliticalID, key, &mVec220);
+}
+
+// @ 0x00c4f4e0
+char cSPMissionEradicate_s00c4_ef00::FUN_00c4f4e0()
+{
+  m1f8 = ((int(__thiscall*)(void*))VT(this, 0x1ac))(this);
+  m204 = ((int(__thiscall*)(void*))VT(this, 0x1a8))(this);
+  m20c = ((int(__thiscall*)(void*))VT(this, 0x1a4))(this);
+  m1fc = ((int(__thiscall*)(void*))VT(this, 0x1b4))(this);
+  m200 = ((int(__thiscall*)(void*))VT(this, 0x1b8))(this);
+  m210 = 0;
+  if (m204 == 0)
+    m204 = m1f8;
+  if (!cSPMission::Init())
+    return 0;
+  ((void(__thiscall*)(void*))VT(this, 0x16c))(this);
+  Key k;
+  k.mA = 0;
+  k.mB = 0;
+  k.mC = 0;
+  if (SP_GetPropertyAsKey(mp180, 0x3eb161a1, &k))
+    mMissionType = k.mA;
+  if (mp180 != 0) {
+    void* prop = 0;
+    if (((bool(__thiscall*)(void*, uint, void**))VT(mp180, 0x24))(mp180, 0x7a2db2de, &prop)
+        && ((cProperty*)prop)->m12 == 1)
+      mBool214 = *((cProperty*)prop)->GetBool();
+  }
+  void* rec = GetPlanetRecordFromTargetType(ReadTargetPlanetType());
+  if (rec != 0)
+    FUN_00c47180(rec);
+  if (((mFlags130 >> 3) & 1) != 0 && mMissionID == 0x509cc23f) {
+    GetAnimalSpeciesFromType(ReadTargetAnimalSpeciesType(&mKey170));
+    if (mKey170.mA == gKeyG1 && mKey170.mB == gKeyG2 && mKey170.mC == gKeyG3)
+      return 0;
+    mp16c = ((cSpeciesManager*)GetSetting9((Key*)&mKey170))->GetProfile(mKey170);
+    if (mp16c == 0)
+      return 0;
+  }
+  if (GetTargetPlanet() == 0) {
+    PickReq req;
+    req.FUN_00ba7bd0();
+    req.mType = 0x38;
+    if (mMissionType != 0x1e8763) {
+      if (mMissionType == 0x389683f8) {
+        req.m0e = 1;
+        req.mA4 = req.mA8 = 2;
+      }
+    } else {
+      req.mA4 = req.mA8 = 0x30;
+    }
+    void* pl = PickPlanet(&req);
+    if (pl == 0) {
+      req.FUN_00ba8220();
+      return 0;
+    }
+    FUN_00c47180(pl);
+    req.FUN_00ba8220();
+  }
+  if (mKey170.mA == gKeyG1 && mKey170.mB == gKeyG2 && mKey170.mC == gKeyG3) {
+    if (!((bool(__thiscall*)(void*))VT(this, 0x18c))(this))
+      return 0;
+  }
+  if (!((bool(__thiscall*)(void*))VT(this, 0x128))(this))
+    return 0;
+  FUN_00c4a0c0();
+  ((void(__thiscall*)(void*))VT(this, 0x170))(this);
+  return 1;
 }
 
 // @ 0x00c4f750
@@ -755,6 +933,119 @@ void cSPMissionEradicate_s00c4_ef00::OnAbduction(void* arg)
   int r = ((int(__thiscall*)(void*, int, int, void*))VT(pl, 0x58))(pl, -1, 0, dir);
   ((void(__thiscall*)(void*, float))VT(pl, 0x18))(pl, (float)r);
   DeallocateSelf(&s);
+}
+
+// @ 0x00c4fe60
+void __fastcall FUN_00c4fe60(void* ecx_this, void* edx, void* combatant)
+{
+    (void)edx;
+    Mob* self = (Mob*)ecx_this;
+    void* tp = self->GetTargetPlanet();
+    void* ap = FUN_01021260();
+    if (ap != tp)
+        return;
+    if (ld32(ecx_this, 0x1f4) != 0)
+        return;
+    int owner = ld32(ecx_this, 0x1f0);
+    if (owner == 0x1e8763) {
+        if (!combatant)
+            return;
+        void* pA = (*(void* (__thiscall**)(void*, u32))((char*)vtbl(combatant) + 0x5c))(combatant, 0x4f176642u);
+        if (!pA)
+            return;
+        void* city = FUN_00c23e40d(pA);
+        if (!city)
+            return;
+        if (ldb(pA, 0xb62) != 0) {
+            stb(pA, 0xb62, 0);
+            int n = FUN_00bd8160d(city) - 1;
+            FUN_00bd8140d(city, (n > 0) ? n : 0);
+            int c = ld32(ecx_this, 0x208) + 1;
+            st32(ecx_this, 0x208, c);
+            if (c < ld32(ecx_this, 0x204)) {
+                self->TriggerUIUpdate();
+                self->UnkFfa();
+                return;
+            }
+            self->UnkF160();
+            self->UnkFfa();
+            return;
+        }
+        if (ldb(ecx_this, 0x214) != 0) {
+            int c = ld32(ecx_this, 0x210) + 1;
+            st32(ecx_this, 0x210, c);
+            if (c < ld32(ecx_this, 0x20c)) {
+                int id = ld32(ecx_this, 0x21c);
+                char ok = ((EventLog*)FUN_00b3d3e0())->RegisterCallback(id);
+                if (!ok)
+                    st32(ecx_this, 0x21c, -1);
+                if (ld32(ecx_this, 0x21c) == -1) {
+                    gEmptyA = (void*)0x1667bac;
+                    gEmptyB = (void*)0x1667bae;
+                    self->GetText(0xed4727a9, &gEmptyA);
+                    int eid = ((EventLog*)FUN_00b3d3e0())->AddEvent(
+                        0xcc0a183b, 0x131a9f54, 0, 0, 1, 0);
+                    st32(ecx_this, 0x21c, eid);
+                    ((EventLog*)FUN_00b3d3e0())->ModifyEventText(eid, gEmptyA);
+                    self->Unk48e50(eid);
+                    FUN_00933960(&gEmptyA);
+                    self->UnkFfa();
+                    return;
+                }
+            } else {
+                (*(void (__thiscall**)(void*))((char*)vtbl(ecx_this) + 0x70))(ecx_this);
+                self->SetState(2);
+                self->Unk472e0();
+            }
+        }
+        self->UnkFfa();
+        return;
+    }
+    if (owner == 0x389683f8) {
+        if (!combatant)
+            return;
+        void* sp = (*(void* (__thiscall**)(void*, u32))((char*)vtbl(combatant) + 0x5c))(combatant, 0xd0036e08u);
+        if (!sp)
+            return;
+        void* profile = FUN_00c0bbd0d(sp);
+        if (profile != (void*)ld32(ecx_this, 0x16c))
+            return;
+        if (ldb(sp, 0xb62) != 0) {
+            int eff = self->GetDiseaseEffectID(0);
+            FUN_00c17350d(sp, eff);
+            int c = ld32(ecx_this, 0x208) + 1;
+            st32(ecx_this, 0x208, c);
+            if (c < ld32(ecx_this, 0x204)) {
+                self->TriggerUIUpdate();
+                self->UnkFfa();
+                return;
+            }
+            self->UnkF160();
+            self->UnkFfa();
+            return;
+        }
+        if (ldb(ecx_this, 0x214) != 0) {
+            int c = ld32(ecx_this, 0x210) + 1;
+            st32(ecx_this, 0x210, c);
+            if (c >= ld32(ecx_this, 0x20c)) {
+                (*(void (__thiscall**)(void*))((char*)vtbl(ecx_this) + 0x70))(ecx_this);
+                self->SetState(2);
+                self->Unk472e0();
+                self->UnkFfa();
+                return;
+            }
+            self->UnkEin();
+            self->PostWarningEvent();
+            gEmptyA = (void*)0x1667bac;
+            gEmptyB = (void*)0x1667bae;
+            self->GetText(0xed4727a9, &gEmptyA);
+            int id = ld32(ecx_this, 0x21c);
+            ((EventLog*)FUN_00b3d3e0())->ModifyEventText(id, gEmptyA);
+            self->UnkFfa();
+            return;
+        }
+        self->UnkFfa();
+    }
 }
 
 // @ 0x00c50190
