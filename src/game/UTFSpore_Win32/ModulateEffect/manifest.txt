@@ -1,0 +1,4 @@
+# source  symbol  va  flags
+../src/game/UTFSpore_Win32/ModulateEffect.cpp  ?Update@ModulateEffect@UTFWinControls@EA@@QAEXPAUIColorTarget@23@M@Z  00980120  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/ModulateEffect.cpp  ?Get@PairHolder@UTFWinControls@EA@@QAEXPAI0@Z  00980150  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/ModulateEffect.cpp  ?CreateInstance@BasicFactory_ModulateEffect@UTFWinControls@EA@@QAEPAXPAX0@Z  009802b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

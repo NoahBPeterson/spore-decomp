@@ -1,4 +1,7 @@
 0097f390 ?Refresh@WinMessageBox@@QAE_NXZ  # WinMessageBox::Refresh migrated from s0097f390 (verbatim, slice spelling)
+00980120 ?Update@ModulateEffect@UTFWinControls@EA@@QAEXPAUIColorTarget@23@M@Z  # ModulateEffect::Update migrated from s0097f390 (verbatim, slice spelling)
+00980150 ?Get@PairHolder@UTFWinControls@EA@@QAEXPAI0@Z  # PairHolder::Get migrated from s0097f390 (verbatim, slice spelling)
+009802b0 ?CreateInstance@BasicFactory_ModulateEffect@UTFWinControls@EA@@QAEPAXPAX0@Z  # BasicFactory_ModulateEffect::CreateInstance migrated from s0097f390 (verbatim, slice spelling)
 00980490 ?Destroy@CascadeEffect@UTFWinControls@EA@@QAEPAU123@E@Z  # CascadeEffect::Destroy migrated from s0097f390 (verbatim, slice spelling)
 00980520 ?Process2@IOwner@UTFWinControls@EA@@QAE_NPAUIObj@23@PAUArg2@23@@Z  # IOwner::Process2 migrated from s0097f390 (verbatim, slice spelling)
 00980580 ?Apply@FloatHolder@UTFWinControls@EA@@QAEXPAUFloatSink@23@@Z  # FloatHolder::Apply migrated from s0097f390 (verbatim, slice spelling)
