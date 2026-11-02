@@ -1,1 +1,1 @@
-00648d90 SP::cSPUIAssetGrid::FilterGridEntries  # PDB candidate (caller-scored) card.py
+00648d90 ?FilterGridEntries@cSPUIAssetBrowserR@@QAEXPAUFilterMsg@@@Z  # cSPUIAssetBrowserR::FilterGridEntries migrated from s00648d90 (verbatim, slice spelling)

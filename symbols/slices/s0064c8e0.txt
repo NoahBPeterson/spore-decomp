@@ -1,1 +1,2 @@
-0064c8e0 SP::cSPUIAssetBrowser::HandleMessage  # IHandler override: ret 8, switch on message id, returns bool (mov al,1 / xor al,al); PDB caller-single candidate SetSporeGuideVisibility does not fit
+00645e20 ?ShowPublishDialog@cSPUIAssetBrowser@SP@@QAEXXZ  # SP::cSPUIAssetBrowser::ShowPublishDialog (callee of s0064c8e0, named from the dev publics; slice address comment)
+0064c8e0 ?HandleMessage@cSPUIAssetBrowser_s0064_c8e0@@QAE_NIPAX@Z  # cSPUIAssetBrowser_s0064_c8e0::HandleMessage migrated from s0064c8e0 (verbatim, slice spelling)

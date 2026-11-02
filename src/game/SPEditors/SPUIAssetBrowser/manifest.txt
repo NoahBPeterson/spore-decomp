@@ -1,4 +1,6 @@
 # source  symbol  va  flags
+../src/game/SPEditors/SPUIAssetBrowser.cpp  ?Query910@@YGEPBUKey3@@PAU1@@Z  00644910  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPUIAssetBrowser.cpp  ??0LocaleMsg@@QAE@PAURCBase@@PBUKey3@@E@Z  00644a80  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEditors/SPUIAssetBrowser.cpp  ?IsA@Browser@@QAEHXZ  00644db0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEditors/SPUIAssetBrowser.cpp  ?IsB@Browser@@QAEHXZ  00644dd0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEditors/SPUIAssetBrowser.cpp  ?CanSporepediaShowSporeGuide@Browser@@QAEHXZ  00644df0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
@@ -19,4 +21,5 @@
 ../src/game/SPEditors/SPUIAssetBrowser.cpp  ?Insert138@Owner@@QAE_NIPAUIRef@@@Z  00646e40  /O2 /MD /Gy /TP /Isrc/game/include
 ../src/game/SPEditors/SPUIAssetBrowser.cpp  ?Insert15C@Owner@@QAE_NIPAUIRef@@@Z  00646ec0  /O2 /MD /Gy /TP /Isrc/game/include
 ../src/game/SPEditors/SPUIAssetBrowser.cpp  ?reserve@Vec14@@QAEXI@Z  00646fc0  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/SPEditors/SPUIAssetBrowser.cpp  ?InsertSorted@GridVec@@QAEPAUEntry14@@PAU2@ABU2@@Z  00648c60  /O2 /MD /Gy /TP /Isrc/game/include
 ../src/game/SPEditors/SPUIAssetBrowser.cpp  ?ShowSporeGuide@cSPUIAssetBrowser_s0064_acd0@@QAEXXZ  0064b6a0  /O2 /MD /Gy /TP /Isrc/game/include

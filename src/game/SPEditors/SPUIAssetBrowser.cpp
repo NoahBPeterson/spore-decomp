@@ -1,4 +1,4 @@
-// src/game/SPEditors/SPUIAssetBrowser.cpp -- migrated from slice(s) s006470b0, s0064bc50, s0064acd0, s00649f60, s00647f40, s00646370, s00645620, s00644b90 by tools/migrate/rewrite.py
+// src/game/SPEditors/SPUIAssetBrowser.cpp -- migrated from slice(s) s0064c8e0, s00648d90, s00643b50, s006470b0, s0064bc50, s0064acd0, s00649f60, s00647f40, s00646370, s00645620, s00644b90 by tools/migrate/rewrite.py
 // Object file: SPEditors/SPUIAssetBrowser.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -17,6 +17,13 @@
 #include "EA/Audio/FactoryBinarySampleData.h"
 #include "EA/UTFWin/IWindow.h"
 #include "cSPUIAnimator.h"
+#include "SP/cPollinator.h"
+#include "SP/cSPUIAssetVerbs.h"
+#include "SP/cISPLargeAssetView.h"
+#include "SP/cSPUIAssetWebBrowser.h"
+#include "SP/cSPUIFeedEdit.h"
+#include "SP/cSPUIFeedList.h"
+#include "SP/cSPUISporeGuidePage.h"
 
 // ---- items of slice s00644b90 begin (TODO(rewrite): local stubs, replace by canonical classes)
 void* EASTL_allocator_allocate(size_t, const char*, int, int, const char*, int); // 0x00f473a0
@@ -843,6 +850,174 @@ struct LaunchParams {
     uint32_t f3c, f40, f44;
 };
 extern "C" void __cdecl AdvancedLaunch(LaunchParams* p);   // 0x0064a990
+struct AssetEntry {
+    char pad[0x10];
+    void* mpObject;
+};
+struct StopwatchData {
+    uint32_t f00, f04, f08, f0c;
+};
+struct AssetKey {
+    uint32_t mInstance;   // +0x00
+    uint32_t mType;       // +0x04
+    uint32_t mGroup;      // +0x08
+};
+struct EaHashIter {
+    void* mpNode;         // +0x00 (buckets[count] means "not found")
+    void* mpBucket;       // +0x04
+};
+struct EaMap {
+    void* mpAllocator;    // +0x00
+    void** mpBuckets;     // +0x04
+    uint32_t mBucketCount;// +0x08
+    uint32_t mSize;       // +0x0c
+    EaHashIter find(const uint32_t& key) const;  // 0x00645ed0
+    void** FindOrInsert(const uint32_t& key);    // 0x00646f40
+};
+struct cSPUIAssetBrowserLayout {
+    char pad00[0x14];
+    void* mpAnimator;             // +0x14
+    void* mpSomething18;          // +0x18
+    unsigned char mActive;        // +0x1c
+    char pad1d[2];
+    unsigned char mField1f;       // +0x1f
+    char pad20[0x1c];
+    float mTimer;                 // +0x3c
+    StopwatchData mStopwatch;     // +0x40
+    char pad50[0xc];
+    void* mpSomething5c;          // +0x5c
+    char pad60[4];
+    void* mpSomething64;          // +0x64
+    char pad68[0x18];
+    void* mpSomething80;          // +0x80
+    void* mpSomething84;          // +0x84
+    char pad88[0x30];
+    void* mpSomethingB8;          // +0xb8
+    void* mpSomethingBC;          // +0xbc
+    void* mpSomethingC0;          // +0xc0
+    char padC4[4];
+    void* mpSomethingC8;          // +0xc8
+    AssetEntry* mpEntriesBegin;   // +0xcc
+    AssetEntry* mpEntriesEnd;     // +0xd0
+    AssetEntry* mpEntriesCap;     // +0xd4
+    char padD8[0xc];
+    AssetKey* mpVec2Begin;        // +0xe4 (key vector)
+    AssetKey* mpVec2End;          // +0xe8
+    AssetKey* mpVec2Cap;          // +0xec
+    char padF0[0x68];
+    void* mpSomething158;         // +0x158
+    EaMap mMap;                   // +0x15c
+    char pad16C[0x10];
+    void* mpSomething17c;         // +0x17c
+    char pad180[0x20];
+    void* mpServer;               // +0x1a0
+    void* mpHandler;              // +0x1a4
+    uint32_t mMsgId;              // +0x1a8
+    unsigned char mField1ac;      // +0x1ac
+    char pad1AD[0x1a];
+    unsigned char mField1c7;      // +0x1c7
+    unsigned char mExpanded;      // +0x1c8
+    char pad1C9[0x5f];
+    void* mpSomething228;         // +0x228 (= handler's +0x224)
+    char pad22C[4];
+    int mState230;                // +0x230 (= handler's +0x22c)
+    unsigned char mField234;      // +0x234
+    char pad235[0x17];
+    unsigned char mField24c;      // +0x24c
+    char pad24D[1];
+    unsigned char mField24e;      // +0x24e
+
+    void* Get_10();                           // 0x00645300
+    void Fn_e20(char one);                    // 0x00644e20
+    void BanItem();                           // 0x0064b4b0
+    void SetVisibility(int a, int b, int c);  // 0x0064a400
+    void LaunchEditorEnd();                   // 0x0064acd0
+};
+typedef void (__fastcall *VCall_Int)(void*, int, int);
+typedef void (__fastcall *VCall_IntInt)(void*, int, int, int);
+typedef unsigned int (__fastcall *VCall_UInt)(void*);
+typedef void (__fastcall *VCall_Ptr)(void*, int, void*);
+static void** VTableOf(void* p) { return *(void***)p; }
+void* __cdecl FUN_0067cab0(void);                                         // 0x0067cab0
+struct SpVector {
+    AssetKey* mpBegin;    // +0x00
+    AssetKey* mpEnd;      // +0x04
+    AssetKey* mpCap;      // +0x08
+    void DoInsertKey(AssetKey* pos, const AssetKey* value);  // 0x004e3e10
+    AssetKey* Erase(AssetKey* first, AssetKey* last);        // 0x0050f740
+};
+struct LocaleString {
+    void* mpBegin;        // +0x00
+    void* mpEnd;          // +0x04
+    void* mpCap;          // +0x08
+    void Init(const void* name, const uint32_t* id);          // 0x0057ed80
+    void Dtor();                                             // 0x00530670
+};
+struct LocaleMsg2_s0064_bc50 {
+    char pad[0x18];
+    void Ctor(int arg);                                      // 0x00666a60
+    void Dtor();                                             // 0x00644ff0
+};
+struct Feed {                                                // object at base+0x228
+    char pad[0x50];
+    void* mpName;         // +0x50
+};
+struct cSPUIAssetBrowserModalHandler {
+    char pad00[0x3c];
+    StopwatchData mStopwatch;     // +0x3c (= base +0x40)
+    char pad4c[0x10c];
+    EaMap mMap;                   // +0x158 (= base +0x15c)
+    char pad168[0xbc];
+    void* mpFeed;                 // +0x224 (= base +0x228)
+    char pad228[4];
+    int mModalState;              // +0x22c (= base +0x230)
+    void OnModalWindowEnd(int unused, uint32_t messageId);   // 0x0064bcd0
+};
+inline cSPUIAssetBrowserLayout* BrowserOf(cSPUIAssetBrowserModalHandler* handler) {
+    return (cSPUIAssetBrowserLayout*)((char*)handler - 4);
+}
+struct BrowserGlobals {
+    char pad00[0x1f];
+    unsigned char mField1f;   // +0x1f
+    char pad20[0x3c];
+    void* mpPanel;            // +0x5c
+    char pad60[0x20];
+    void* mpTarget;           // +0x80
+};
+struct MsgMgr { void* Find(uint32_t id, int one); };                    // 0x0045ae10
+struct AchievementsSystem {
+    void AutoTest(uint32_t id, int one);                               // 0x00676e90
+};
+struct cSPUIAssetVerbs {
+    bool IsVerb(int verb);                     // 0x00656740
+    void SetSelection(int a, int b, int c);    // 0x006571e0
+};
+struct Pollinator {
+    void UnsubscribeToFeed(void* arg);         // 0x00610810
+    void DeleteMyFeed(void* arg);              // 0x006106f0
+};
+struct AppRuntimeState { char pad[0x118]; int mField118; };
+struct AppPropertyList { char pad[0x3c]; AppRuntimeState* mpState; };
+extern AppPropertyList* g_AppProperties;       // 0x015fd918
+void  __fastcall FUN_00801360(void* self);                        // 0x00801360
+void* __cdecl AssetBrowser_s0064_bc50();                                     // 0x00401030
+void* __cdecl MessageManager();                                   // 0x00401050
+void* __cdecl MessageServer_s0064_bc50();                                    // 0x0067dcc0
+void* __cdecl AudioSystem();                                      // 0x00a206f0
+AchievementsSystem* __cdecl AchievementsController();             // 0x00675250
+void  __cdecl RecordEvent2(uint32_t id, uint32_t value);          // 0x00435ed0
+Pollinator* __cdecl GetPollinator();                              // 0x0067cb30
+void  __cdecl OperatorDelete(void* p);                            // 0x00f47380
+void  __fastcall StopwatchRestart(StopwatchData* self);           // 0x00571e80
+typedef AssetKey* (__fastcall *VCall_Key)(void*);
+typedef bool (__fastcall *VCall_Bool_Key)(void*, int, AssetKey*);
+typedef bool (__fastcall *VCall_Bool_KeyInt)(void*, int, AssetKey*, int);
+typedef void (__fastcall *VCall_Msg)(void*, int, uint32_t, void*, int);
+__forceinline void AutoTestMessage(uint32_t id) {
+    if (g_AppProperties->mpState->mField118 == 0)
+        AchievementsController()->AutoTest(id, 1);
+}
+__declspec(noinline) void __fastcall sub_64c280(cSPUIAssetBrowserLayout* self);
 // ---- items of slice s0064bc50 end
 
 // ---- items of slice s006470b0 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -1025,6 +1200,631 @@ void __cdecl SetScale(IWindowS* win, float sx, float sy);                       
 #define NEXT_P() { LargeAssetView* t = view; p = t ? static_cast<cISPLargeAssetView*>(t) : 0; }
     void* operator new(unsigned int, void*, int, int, int, int); // 0x00f473a0
 // ---- items of slice s006470b0 end
+
+// ---- items of slice s00643b50 begin (TODO(rewrite): local stubs, replace by canonical classes)
+MsgServer* MessageServer_s0064_3b50();
+struct Q4 { uint32_t a, b, c, d; };
+extern Q4 g15da784_s0064_3b50, g15da7c4;
+struct PropOwner { char pad[0x3c]; struct { char pad[0x118]; int flag; }* inner; };
+extern PropOwner* g_15fd918;
+struct EditorLaunchData { EditorLaunchData* ctor(); };
+struct SlotCall { virtual void s0(); virtual void s1(); };
+#define OF(T, off) (*(T*)((char*)o + (off)))
+struct Msg910 { Key3 k; uint8_t flag; uint8_t pad[3]; Key3 out; };
+extern Key3 g1525858, g1525864, g1525870, g152587c, g15258ac;
+void Dlg809db0(void* a, const Key3* k);
+struct HubD {
+    void Fn990();
+    void Fn_a40();
+};
+struct RCBase { virtual void v0(); virtual void v1(); virtual void v2(); };
+struct LocaleMsg {
+    uint32_t vt0, vt1, f8; RCBase* owner; Key3 key; uint8_t b;
+    LocaleMsg(RCBase* o, const Key3* k, uint8_t bb);
+    void Dtor();
+};
+// ---- items of slice s00643b50 end
+
+// ---- items of slice s00647f40 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C" void  operator_delete(void* p);                                                                // 0xf47380
+extern "C" void EA_RemoveHandler(void* h, void* a, void* b, void* c, void* d);   // 0x571db0
+extern "C" void DoFreeNodes34(void* buckets, unsigned int n);                    // 0x961d60
+extern "C" void DoFreeBucketsVoidP(void* buckets, unsigned int n);               // 0x693230
+struct Primary {
+    virtual void p0();
+    uint8_t pad[0xc];
+};
+struct IRef2_s0064_7f40 {
+    virtual void AddRef();
+    virtual void Release();
+};
+struct RefObj : Primary, IRef2_s0064_7f40 {};
+struct AutoRefObj {
+    RefObj* p;
+    AutoRefObj() : p(0) {}
+    ~AutoRefObj() { if (p) p->Release(); }
+};
+struct AutoRef {
+    IRef2_s0064_7f40* p;
+    ~AutoRef() { if (p) p->Release(); }
+};
+struct Entry14 {
+    uint32_t f00, f04, f08;
+    AutoRef  h0c;   // +0xc  (primary base)
+    AutoRefObj h10; // +0x10 (secondary base)
+    void Construct(const Entry14& v);      // 0x645390: copy whole element
+    void AssignHandles(const Entry14& v);  // 0x645db0: assign the two handles (this=&h0c)
+};
+inline bool EntryLess(const Entry14& a, const Entry14& b)
+{
+    if (a.f00 == b.f00) {
+        if (a.f08 == b.f08)
+            return a.f04 < b.f04;
+        return a.f08 < b.f08;
+    }
+    return a.f00 < b.f00;
+}
+struct Key12 { uint32_t a, b, c; };
+struct GridVec {
+    Entry14* mpBegin;
+    Entry14* mpEnd;
+    Entry14* mpCapacity;
+    uint32_t mFieldC;    // +0xc
+    uint32_t mField10;   // +0x10
+    uint8_t  mField14;   // +0x14
+
+    Entry14* EraseAt(Entry14* pos);   // 0x648af0
+    Entry14* Insert(Entry14* pos, const Entry14& v); // 0x648b40
+    void InsertAt(Entry14* pos, const Entry14& v);   // 0x6485e0 (declared)
+    Entry14* InsertSorted(Entry14* pos, const Entry14& v); // 0x648c60 (declared)
+    Entry14* FindOrInsert(const Key12& k);           // 0x648ce0
+    void GrowTo(unsigned int n);                     // 0x648bb0
+    void ClearAssetViews();                          // 0x648aa0
+    void DoInsertValuesEnd(Entry14* pos, unsigned int n, const Entry14& v); // 0x6483d0
+};
+extern "C" Entry14* __cdecl f646030(Entry14* first, Entry14* last, const Key12* key, uint8_t flag);
+struct GridOps {
+    void DestroyRange(Entry14* first, Entry14* last);  // 0x645ff0 (this = GridVec)
+    void Sift(Entry14* first, Entry14* last);          // 0x648380 (this = GridVec)
+};
+typedef void (__thiscall *Fn_v0)(void*);
+struct cSPUIAssetGrid {
+    void Dtor();       // @ 0x00647f40
+    void* Ctor();      // @ 0x00648730
+};
+// ---- items of slice s00647f40 end
+
+// ---- items of slice s00648d90 begin (TODO(rewrite): local stubs, replace by canonical classes)
+#define SV(n) virtual void v##n();
+struct IObj;
+struct IBanObj_s0064_8d90;
+struct ViewSub;
+struct IViewRef;
+struct Elem_s0064_8d90 {
+  uint32_t  key0;     // +0x00
+  uint32_t  key1;     // +0x04
+  uint32_t  key2;     // +0x08
+  IViewRef* mpView;   // +0x0c
+  IBanObj_s0064_8d90*  mpObj;    // +0x10
+};
+struct Key3_s0064_8d90 { uint32_t a, b, c; };
+struct IObj {
+  virtual int AddRef();
+  virtual int Release();
+};
+struct IViewRef {
+  virtual int AddRef();                 // slot 0
+  virtual int Release();                // slot 1
+  SV(2) SV(3) SV(4) SV(5) SV(6) SV(7) SV(8) SV(9) SV(10)
+  SV(11) SV(12) SV(13) SV(14) SV(15) SV(16) SV(17) SV(18) SV(19) SV(20)
+  SV(21) SV(22) SV(23) SV(24) SV(25) SV(26) SV(27) SV(28) SV(29) SV(30)
+  SV(31) SV(32) SV(33) SV(34) SV(35) SV(36) SV(37) SV(38) SV(39) SV(40)
+  SV(41) SV(42) SV(43) SV(44) SV(45) SV(46) SV(47) SV(48) SV(49)
+  virtual void SetFirstUpdate(int v);   // slot 50 -> 0x00657930
+};
+struct ViewSub {
+  SV(0) SV(1) SV(2) SV(3) SV(4) SV(5) SV(6) SV(7) SV(8)
+  virtual uint32_t GetTypeID();         // slot 9  (vtable+0x24)
+  SV(10) SV(11) SV(12) SV(13) SV(14)
+  virtual Key3_s0064_8d90*    GetKey();            // slot 16 (vtable+0x40)
+  virtual int      AddRef();            // slot 17
+  virtual int      Release();           // slot 18
+};
+struct IBanObj_s0064_8d90 {
+  SV(0) SV(1) SV(2) SV(3) SV(4) SV(5) SV(6) SV(7) SV(8) SV(9) SV(10)
+  SV(11) SV(12) SV(13) SV(14) SV(15)
+  virtual Key3_s0064_8d90* GetKey();               // slot 16
+};
+struct Vec14_s0064_8d90 {
+  Elem_s0064_8d90* mpBegin;     // +0x00
+  Elem_s0064_8d90* mpEnd;       // +0x04
+  Elem_s0064_8d90* mpCapacity;  // +0x08
+  int size() const { return (int)(mpEnd - mpBegin); }
+};
+void __stdcall Vec14Reserve(Vec14_s0064_8d90* v, uint32_t n);     // 0x00646fc0
+void __stdcall Vec14SwapInto(Vec14_s0064_8d90* v, Vec14_s0064_8d90* tmp);    // 0x00646c90
+void __stdcall Vec14Make(Vec14_s0064_8d90* tmp, uint32_t n);      // 0x00646c00
+void __stdcall GridVecErase(Vec14_s0064_8d90* v, Elem_s0064_8d90* pos);      // 0x00648af0
+Elem_s0064_8d90* __stdcall GridVecInsert(Elem_s0064_8d90* first, Elem_s0064_8d90* last, uint32_t* key);  // 0x00648ce0
+Elem_s0064_8d90* __stdcall ListInsertPos(Elem_s0064_8d90* first, Elem_s0064_8d90* last, uint32_t* key, uint8_t flag); // 0x00646030
+Elem_s0064_8d90* __stdcall ListCopy(Elem_s0064_8d90* first, Elem_s0064_8d90* last, Elem_s0064_8d90* dst);           // 0x00646140
+void  __stdcall ListDestroy(Elem_s0064_8d90* first, Elem_s0064_8d90* last);                   // 0x00645ff0
+void  __stdcall ElemInit(Elem_s0064_8d90* e);                                      // 0x00645db0
+void  __stdcall SpVecGrow(const uint32_t* val, uint32_t** end);         // 0x00630b30
+void  __stdcall BlobInit(uint32_t* blob);                               // 0x006563c0
+void  __stdcall BlobOneArg(int a, uint32_t* blob, int c);               // 0x006571e0
+void  __stdcall BlobTwoArg(int a, uint32_t* blob, uint32_t* out);       // 0x00656c70
+uint32_t* __stdcall MakeKey4(uint32_t* out, uint32_t* src, int c);      // 0x00805fe0
+void  __cdecl  FreeBlock(void* p);                                      // 0x00f47380
+struct FilterMsg {
+  uint32_t  pad0[3];
+  IViewRef* mpView;  // +0x0c
+  uint8_t   b10;     // +0x10
+  uint8_t   pad11[3];
+  int       n14;     // +0x14
+  uint8_t   b18;     // +0x18
+  uint8_t   b19;     // +0x19
+  uint8_t   pad1a[2];
+};
+struct AssetGrid_s0064_8d90 {
+  int  IndexOfView(IViewRef* v);      // 0x0064f280
+  Elem_s0064_8d90* GetEntry(int index);          // 0x0064f2c0
+  int  FindFirstVisibleEntry();       // 0x00653b80
+  int  FindLastVisibleEntry();        // 0x00653c40
+  void UpdateStatsText();             // 0x006528f0
+};
+struct HandlerMap {
+  uint32_t* FindOrInsert(uint32_t* key);   // 0x00646f40
+};
+struct cSPUIAssetBrowserR {
+  uint8_t  pad00[0x20];
+  uint32_t f20;             // +0x20
+  uint8_t  b24;             // +0x24
+  uint8_t  pad25[0x2a - 0x25];
+  uint8_t  b2a;             // +0x2a
+  uint8_t  pad2b[0xbc - 0x2b];
+  AssetGrid_s0064_8d90* mpGrid;        // +0xbc
+  uint8_t  padc0[0xc8 - 0xc0];
+  uint32_t mpCallerData;    // +0xc8
+  Vec14_s0064_8d90    mBan;            // +0xcc
+  uint8_t  padf8[0xe0 - 0xd8];
+  uint32_t mpPreloadRef;    // +0xe0
+  uint8_t  padf8b[0x138 - 0xe4];
+  HandlerMap mHandlers;     // +0x138
+  uint8_t  pad13c[0x1a8 - 0x13c];
+  uint32_t f1a8;            // +0x1a8
+  uint8_t  pad1ac[0x236 - 0x1ac];
+  uint8_t  b236;            // +0x236
+  uint8_t  pad237[0x23d - 0x237];
+  uint8_t  b23d;            // +0x23d
+
+  void SetLargeCardVisibility(int b, uint32_t* data, int c);   // 0x006478c0
+  void FilterGridEntries(FilterMsg* msg);                      // 0x00648d90
+};
+struct ViewBody {
+  uint8_t  pad00[0x24];
+  IObj*    mp24;   // +0x24
+  IObj*    mp28;   // +0x28
+  uint8_t  pad2c[0x90 - 0x2c];
+  ViewSub* mp90;   // +0x90
+};
+// ---- items of slice s00648d90 end
+
+// ---- items of slice s0064c8e0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+#define VPAD4(p)  virtual void p##0(); virtual void p##1(); virtual void p##2(); virtual void p##3();
+#define VPAD8(p)  VPAD4(p##a) VPAD4(p##b)
+#define VPAD16(p) VPAD8(p##c) VPAD8(p##d)
+#define VPAD32(p) VPAD16(p##e) VPAD16(p##f)
+struct ResourceKey_s0064_c8e0 {
+    uint32_t instance, type, group;
+};
+struct IVisibleObject {                 // windows / views / large asset views
+VPAD16(a) VPAD8(b) VPAD4(c) virtual void v1c();
+virtual void v1d();
+virtual void v1e();
+    virtual void SetVisible(bool visible, bool animate);       // +0x7c
+};
+struct IAssetDataList {
+    VPAD32(a) VPAD16(b) VPAD8(c) VPAD4(d)
+    virtual IVisibleObject* FindView(uint32_t id, bool create);  // +0xf0
+};
+struct IAuthManager {
+VPAD8(a) virtual void v20();
+virtual bool IsLoggedIn();
+};
+struct IMessageServer_s0064_c8e0 {
+    VPAD4(a) virtual void v10();
+    virtual void MessageSend(uint32_t messageID, void* pMessage, void* pHandler);  // +0x14
+};
+struct IGameModeManager {
+VPAD8(a) VPAD4(b) virtual void v30();
+virtual void v34();
+    virtual uint32_t GetActiveModeID();                          // +0x38
+};
+struct Viewport { int x, y; };
+struct IRenderView {
+VPAD32(a) VPAD16(b) virtual void v30();
+virtual void v31();
+virtual void v32();
+virtual void v33();
+virtual void v34();
+virtual void v35();
+    virtual void GetViewport(Viewport* pRect);                        // +0xd8
+};
+struct ICameraManager {
+VPAD16(a) VPAD4(b) virtual void v14();
+virtual void v15();
+virtual void v16();
+    virtual void SetMode(int a, int b);                          // +0x5c
+};
+struct IKeySource {
+    VPAD16(a) virtual const ResourceKey_s0064_c8e0* GetKey();               // +0x40
+};
+struct IUpdatable {
+VPAD8(a) virtual void v20();
+virtual void Update();
+};
+struct ITypedObject {
+    VPAD4(a) virtual uint32_t GetType();                         // +0x10
+};
+struct IBoolQuery {
+    VPAD4(a) virtual bool IsActive();                            // +0x10
+};
+struct cCaptureJob {
+    void Capture(Viewport* pViewport);                                // 0x0076dee0
+};
+struct cSPUILayoutCollection {
+    void Hide();                                                 // 0x00801380
+};
+struct SporeGuideState {
+    uint32_t pad0[7];
+    bool mbVisible;                                              // +0x1c
+};
+struct AppProperties {
+    uint32_t pad0[15];
+    struct Inner { uint32_t pad[0x118 / 4]; uint32_t mValue; }* mpInner;   // +0x3c
+};
+struct cSPUIFeedListItem {
+    uint32_t pad0[0x128 / 4];
+    const wchar_t* mWebURL;          // +0x128
+    const wchar_t* mSporeGuidePage;  // +0x12c
+    uint32_t pad130;
+    uint32_t mFeedArg;               // +0x134
+    uint32_t pad138[6];
+    uint32_t mFeedID;                // +0x150
+    uint32_t mConfigID;              // +0x154
+    uint32_t pad158[8];
+    uint32_t mItemType;              // +0x178
+    uint32_t mItemID;                // +0x17c
+
+    void SetSelected(bool b);                                    // 0x00666490
+    void GetAssetList(void* pList);                              // 0x00668d90
+};
+struct cSPUIFeedList {
+    cSPUIFeedListItem* FindItem(uint32_t id);                    // 0x00662960
+    cSPUIFeedListItem* FindItemByIndex(uint32_t id);             // 0x006629a0
+};
+struct cSPUIFeedEdit {
+    void SetEditActive(bool active);                             // 0x0065d9f0
+    void Refresh();                                              // 0x0065e720
+    void OnEvent(void* pMsg);                                    // 0x0065dd30
+};
+struct cSPUIAssetWebBrowser {
+    void SetActive(bool active);                                 // 0x0065b2a0
+    void ClearPage();                                            // 0x0065b510
+};
+struct cSPUISporeGuidePage {
+    void LoadSporeGuidePage(const wchar_t* name);                // 0x00675080
+};
+void operator delete[](void* p);                                 // 0x00f47380
+struct InsertResult_s0064_c8e0 { uint32_t* it; bool inserted; };
+struct IDSet {
+    uint32_t* mpBegin;
+    uint32_t* mpEnd;
+    uint32_t* mpCapacity;
+    IDSet() : mpBegin(0), mpEnd(0), mpCapacity(0) {}
+    ~IDSet() { if (mpBegin) delete[] (char*)mpBegin; }
+    void reserve(uint32_t n);                                    // 0x00565f50
+    InsertResult_s0064_c8e0 insert(const uint32_t& value);                  // 0x00554020
+};
+struct FeedEntry {                  // 0x34 bytes
+    uint32_t mID;
+    uint32_t pad[12];
+};
+struct FeedEntryVector {
+    FeedEntry* mpBegin;
+    FeedEntry* mpEnd;
+    FeedEntry* mpCapacity;
+    FeedEntryVector() : mpBegin(0), mpEnd(0), mpCapacity(0) {}
+    ~FeedEntryVector();                                          // 0x00647080
+    uint32_t size() const { return (uint32_t)(mpEnd - mpBegin); }
+};
+struct AssetList_s0064_c8e0 {                   // 12 bytes, dtor 0x007a41a0
+    uint32_t mpBegin, mpEnd, mpCapacity;
+    AssetList_s0064_c8e0() : mpBegin(0), mpEnd(0), mpCapacity(0) {}
+    ~AssetList_s0064_c8e0();                                                // 0x007a41a0
+};
+struct cAssetFilterPreview {
+    void SetFeedFilter(IDSet* pIDs);                             // 0x00661380
+    void Apply(uint32_t feedID, uint32_t configID, bool reset);  // 0x00662750
+};
+struct cSPUIAssetGrid_s0064_c8e0 {
+    uint32_t pad0[0xe0 / 4];
+    cAssetFilterPreview* mpFilterPreview;                        // +0xe0
+    uint32_t pade4[(0x1e4 - 0xe4) / 4];
+    bool mbIsEditorGrid;                                         // +0x1e4
+
+    const ResourceKey_s0064_c8e0* GetEntryByID(uint32_t id);                // 0x006505d0
+    bool SelectAsset(const ResourceKey_s0064_c8e0* key, bool a, bool b, bool c);   // 0x00655840
+    void ResetScroll();                                          // 0x0064e5b0
+    void Repopulate();                                           // 0x0064f310
+    void SetAssetList(AssetList_s0064_c8e0* list);                          // 0x00656310
+    void SetFeed(struct cBrowserConfig* config, cSPUIFeedListItem* item);       // 0x00654730
+    void ShowItem(struct cBrowserConfig* config, cSPUIFeedListItem* item);      // 0x00654f50
+};
+struct ConfigMapIterator { void* mpNode; };
+struct ConfigMap {                   // eastl::map<ResourceKey, ...>
+    uint32_t mCompare;
+    uint32_t mAnchor[5];
+    ConfigMapIterator find(const ResourceKey_s0064_c8e0& key);              // 0x00a21dc0
+};
+struct QueryKey {                    // ResourceKey + extra flag, 16 bytes
+    ResourceKey_s0064_c8e0 key;
+    uint32_t flags;
+};
+struct cBrowserConfig {
+    uint32_t pad0[0x48 / 4];
+    ConfigMap mConfigs;                                          // +0x48
+    void SetQuery(const QueryKey* q, int flags);                 // 0x00643f70
+    void SetQueryKey(const ResourceKey_s0064_c8e0* key);                    // 0x006435e0
+    void SetAssets(AssetList_s0064_c8e0* list, int flags);                  // 0x00644550
+};
+struct BrowserMessage {              // id 0xb3d53f95
+    uint32_t pad0[3];
+    uint32_t mFeedItemID;            // +0x0c
+    cSPUIFeedListItem* mpItem;       // +0x10
+    bool mbByIndex;                  // +0x14
+    bool mbForceReset;               // +0x15
+    uint16_t pad16;
+    explicit BrowserMessage(uint32_t feedItemID);               // 0x00666af0
+    explicit BrowserMessage(cSPUIFeedListItem* item);           // 0x00666a60
+    ~BrowserMessage();                                          // 0x00644ff0
+};
+template<typename T> struct AutoRefCount {
+    T* mpObject;
+    AutoRefCount() : mpObject(0) {}
+    ~AutoRefCount() { if (mpObject) mpObject->Release(); }
+    AutoRefCount& operator=(T* p);                              // 0x00b5f950
+    T* get() const { return mpObject; }
+};
+struct cRefFeedListItem : cSPUIFeedListItem {};
+struct RefItem { virtual void AddRef(); virtual void Release(); };
+struct SelectItemMessage {           // id 0x3b60b3ad, 0x20 bytes
+    uint32_t pad0[3];
+    AutoRefCount<RefItem> mpItem;    // +0x0c
+    ResourceKey_s0064_c8e0 mKey;                // +0x10
+    bool mbHasQueryFlags;            // +0x1c
+    uint8_t pad1d;
+    uint16_t pad1e;
+    SelectItemMessage(cSPUIFeedListItem* item, const ResourceKey_s0064_c8e0* key, int flags);   // 0x00644a80
+    ~SelectItemMessage();                                       // 0x00644af0
+};
+struct AssetPollinatedMessage {      // id 0x068cd252
+    bool mbSuccess;                  // +0x00
+    uint8_t pad1[3];
+    ResourceKey_s0064_c8e0 mKey;                // +0x04
+};
+struct DialogResultMessage {         // id 0x1dd7bda9
+    int mResult;
+    ITypedObject* mpDialog;
+};
+struct EventMessage {                // id 0x54495773
+    uint8_t pad0[0x33];
+    uint8_t mBrowserIndex;           // +0x33
+};
+struct IHandlerBase { virtual void h0(); };
+struct IModalWindowCallback { virtual void m0(); };
+class cSPUIAssetBrowser_s0064_c8e0 : public IHandlerBase, public IModalWindowCallback {
+public:
+    uint32_t pad08[5];
+    bool mIsVisible;                         // +0x1c
+    uint8_t pad1d[0xc];
+    uint8_t mBrowserIndex;                   // +0x29
+    bool mbIsForEditor;                      // +0x2a
+    uint8_t pad2b[0x15];
+    uint32_t mCardWindows[4];                // +0x40
+    uint32_t pad50[5];
+    IAssetDataList* mpAssetListData;         // +0x64
+    uint32_t pad68[10];
+    IVisibleObject* mpLargeViewA;            // +0x90
+    IVisibleObject* mpLargeViewB;            // +0x94
+    IVisibleObject* mpSporeGuideView;        // +0x98
+    uint32_t pad9c[7];
+    cBrowserConfig* mpConfig;                // +0xb8
+    cSPUIAssetGrid_s0064_c8e0* mpAssetGrid;             // +0xbc
+    cSPUIFeedList* mpFeedList;               // +0xc0
+    cSPUIFeedEdit* mpFeedEditor;             // +0xc4
+    uint32_t padc8;
+    uint8_t* mSelectionBegin;                // +0xcc  (vector of 20-byte entries)
+    uint8_t* mSelectionEnd;                  // +0xd0
+    uint32_t padd4[0x21];
+    IBoolQuery* mpFilterPanel;               // +0x158
+    uint32_t pad15c[8];
+    uint32_t mCallToAction;                  // +0x17c
+    uint32_t pad180[0x12];
+    bool mbLockSelection;                    // +0x1c8
+    uint8_t pad1c9[0x17];
+    uint32_t mPendingButton;                 // +0x1e0
+    uint32_t mFeedOverride;                  // +0x1e4
+    uint32_t mConfigOverride;                // +0x1e8
+    uint8_t pad1ec;
+    bool mbForceReset;                       // +0x1ed
+    uint8_t pad1ee[0x22];
+    uint32_t mCurrentWebURL;                 // +0x210
+    uint32_t pad214[2];
+    cSPUIAssetWebBrowser* mpWebBrowserA;     // +0x21c
+    cSPUIAssetWebBrowser* mpWebBrowserB;     // +0x220
+    cSPUISporeGuidePage* mpSporeGuide;       // +0x224
+    AutoRefCount<cRefFeedListItem> mpCurrentItem;   // +0x228
+    uint32_t pad22c[2];
+    bool mbLaunchingEditor;                  // +0x234
+    bool mbEnteringEditor;                   // +0x235
+    uint8_t pad236[0x17];
+    bool mbPublishAllowed;                   // +0x24d
+    bool mbAwaitingPollination;              // +0x24e
+    bool mbPublishBlocked;                   // +0x24f
+
+    bool HandleMessage(uint32_t messageID, void* pMessage);  // 0x0064b6b0 (cSPUIAssetBrowser::HandleMessage)
+
+    // out-of-line members called from here
+    void ShowPublishDialog();                                    // 0x00645e20
+    void OnRefresh();                                            // 0x0064c6b0
+    void LaunchEditorEnd();                                      // 0x0064acd0
+    void OnLayoutChanged();                                      // 0x00645260
+    void SetLargeCardState(bool show, uint32_t id);              // 0x00644d10
+    void ShowLargeCard(bool show, uint32_t a, uint32_t b);       // 0x00644c50
+    void SetLargeCardVisibility(bool a, bool b, bool c);         // 0x006478c0
+    void Update();                                               // 0x0064ab20
+    void OnTabChanged();                                         // 0x00644a40
+    uint32_t GetSelectedID();                                    // 0x006452c0
+    IKeySource* GetSelectedAsset();                              // 0x00645300
+    void FilterGridEntries(void* filter);                        // 0x00648d90
+    void ClosePollinationUI(int a);                              // 0x00644e20
+    bool IsWebPageShown();                                       // 0x00644dd0
+    void SetWebBrowserVisibility(bool visible, const wchar_t* url);   // 0x00644b90
+    void OnEditorChosen();                                       // 0x0064c0d0
+    int CanLaunchEditor();                                       // 0x00645cc0
+    void SetVisibility(int a, int b, int c);                     // 0x0064a400
+    void HandleEvent(void* pMsg);                                // 0x0064b6b0
+
+    __forceinline void HideLargeViewA();
+    __forceinline void HideLargeViewB();
+};
+IAuthManager* AuthManager_s0064_c8e0();                                     // 0x00607a60
+IMessageServer_s0064_c8e0* MessageServer_s0064_c8e0();                                 // 0x0067dcc0
+IRenderView* RenderView();                                       // 0x0067dd40
+cCaptureJob* CaptureJob();                                       // 0x0067dda0
+ICameraManager* CameraManager();                                 // 0x0067dd50
+IGameModeManager* GameModeManager();                             // 0x0067dd10
+cSPUILayoutCollection* LayoutCollection();                       // 0x0067cab0
+SporeGuideState* SporeGuide_s0064_c8e0();                                   // 0x00401040
+cSPUIAssetBrowser_s0064_c8e0* AssetBrowser_s0064_c8e0();                               // 0x00401030
+uint32_t GetRecorderState();                                     // 0x00435e90
+void KillSetiEffects(uint32_t id, uint32_t state);               // 0x00435ed0
+uint32_t SPIDFromName(const char* name);                         // 0x00571cf0
+void CalloutMessageBox(IModalWindowCallback* cb, const ResourceKey_s0064_c8e0* key);   // 0x00809db0
+bool KeysEqual(const ResourceKey_s0064_c8e0* a, const ResourceKey_s0064_c8e0* b);      // 0x004eb930
+bool GetCreatorType(const ResourceKey_s0064_c8e0* key);                     // 0x00641900
+IUpdatable* UpdateSaveAreas(const ResourceKey_s0064_c8e0* key);             // 0x006b22a0
+void GetFeedEntries(uint32_t feedID, FeedEntryVector* out);      // 0x00661900
+extern AppProperties* sAppProperties;                            // 0x015fd918
+extern const ResourceKey_s0064_c8e0 kPollinateFailedDialog;                 // 0x01525840
+extern const ResourceKey_s0064_c8e0 kConfirmDialogA;                        // 0x015258b8
+extern const ResourceKey_s0064_c8e0 kConfirmDialogB;                        // 0x015258c4
+__forceinline void cSPUIAssetBrowser_s0064_c8e0::HideLargeViewA() {
+    AuthManager_s0064_c8e0()->IsLoggedIn();
+    if (mpAssetListData) {
+        IVisibleObject* view = mpAssetListData->FindView(0x561e0a8, true);
+        if (view)
+            view->SetVisible(true, false);
+    }
+    if (mpLargeViewA)
+        mpLargeViewA->SetVisible(true, false);
+    if (mpWebBrowserA)
+        mpWebBrowserA->SetActive(false);
+}
+__forceinline void cSPUIAssetBrowser_s0064_c8e0::HideLargeViewB() {
+    AuthManager_s0064_c8e0()->IsLoggedIn();
+    if (mpAssetListData) {
+        IVisibleObject* view = mpAssetListData->FindView(0x561e0a8, true);
+        if (view)
+            view->SetVisible(true, false);
+    }
+    if (mpLargeViewB)
+        mpLargeViewB->SetVisible(true, false);
+    if (mpWebBrowserB)
+        mpWebBrowserB->SetActive(false);
+}
+// ---- items of slice s0064c8e0 end
+
+// @ 0x006447c0
+void MakeLaunchData(char flag, RCObj** out)
+{
+    if (!out) return;
+    bool b = flag != 0;
+    Q4 q = g15da784_s0064_3b50;
+    uint8_t bl = 1;
+    uint8_t nb = 1;
+    uint8_t bb = 0;
+    uint8_t nb2 = bl;
+    if (b) {
+        q = g15da7c4;
+        bl = 0; nb = 0; bb = 1; nb2 = bl;
+    }
+    if (g_15fd918->inner->flag != 0) bl = 0;
+    void* mem = EASTL_allocator_allocate(0x9c, "Editor", 0, 0, 0, 0);
+    char* o = (char*)(mem ? ((EditorLaunchData*)mem)->ctor() : 0);
+    OF(uint32_t, 0x24) = q.a;
+    OF(uint32_t, 0x28) = q.b;
+    OF(uint32_t, 0x2c) = q.c;
+    OF(uint8_t, 0x34) = nb;
+    OF(uint32_t, 0x30) = q.d;
+    OF(uint8_t, 0x3d) = bb;
+    OF(uint8_t, 0x6d) = flag;
+    OF(uint8_t, 0x6f) = nb2;
+    OF(uint8_t, 0x36) = 1; OF(uint8_t, 0x37) = 1; OF(uint8_t, 0x38) = 1;
+    OF(uint8_t, 0x3a) = bl;
+    OF(uint8_t, 0x64) = 1;
+    ((SlotCall*)o)->s1();
+    *out = (RCObj*)o;
+}
+
+// @ 0x00644910
+uint8_t __stdcall Query910(const Key3* in, Key3* out)
+{
+    Msg910 m;
+    m.k = *in;
+    m.flag = 1;
+    m.out.a = 0; m.out.b = 0; m.out.c = 0;
+    MessageServer_s0064_3b50()->Send(0xf1ff568b, &m, 0);
+    *out = m.out;
+    return m.flag;
+}
+
+// @ 0x00644990
+void HubD::Fn990()
+{
+    Key3 k; k.a = 0; k.b = 0; k.c = 0;
+    uint8_t flag = 0;
+    const Key3* p;
+    if (AT(uint32_t, 0x22c) == 0) {
+        MessageServer_s0064_3b50()->Send(0x12a93f05, &flag, 0);
+        p = &g1525858;
+        if (!flag) p = &g1525864;
+    } else {
+        MessageServer_s0064_3b50()->Send(0x12a93f05, &flag, 0);
+        p = &g1525870;
+        if (!flag) p = &g152587c;
+    }
+    k.a = p->a;
+    k.b = p->b;
+    k.c = p->c;
+    Dlg809db0(&AT(char, 4), &k);
+    AT(uint32_t, 0x230) = 1;
+}
+
+// @ 0x00644a80
+LocaleMsg::LocaleMsg(RCBase* o, const Key3* k, uint8_t bb)
+{
+    *(volatile uint32_t*)&vt1 = 0x13ef094;
+    f8 = 0;
+    vt0 = 0x13ff800;
+    vt1 = 0x13ff7fc;
+    owner = o;
+    if (o) o->v0();
+    key = *k;
+    b = bb;
+}
 
 // @ 0x00644b90
 void SP::cSPUIAssetBrowser::SetWebBrowserVisibility(bool vis, unsigned int x)
@@ -1930,9 +2730,327 @@ void __thiscall cSPUIAssetBrowser_s0064_70b0::SetLargeCardVisibililty(bool visib
     MessageServer()->PostMessage(0x5c81b25, 0, 0);
 }
 
+// @ 0x00647f40
+void cSPUIAssetGrid::Dtor()
+{
+    AT(void*, 0) = (void*)0x13ff844;
+    AT(void*, 4) = (void*)0x13ff838;
+    AT(void*, 8) = (void*)0x13ff81c;
+    AT(void*, 0xc) = (void*)0x13ff80c;
+    for (;;) {
+        void* p;
+        p = AT(void*, 0x228); if (p) { ((Fn_v0)VSLOT(p, 4))(p); }
+        p = AT(void*, 0x224); if (p) { ((Fn_v0)VSLOT(p, 8))(p); }
+        p = AT(void*, 0x220); if (p) { ((Fn_v0)VSLOT(p, 4))(p); }
+        p = AT(void*, 0x21c); if (p) { ((Fn_v0)VSLOT(p, 4))(p); }
+        p = AT(void*, 0x218); if (p) { ((Fn_v0)VSLOT(p, 4))(p); }
+        p = AT(void*, 0x1bc); if (p) { ((Fn_v0)VSLOT(p, 4))(p); }
+        p = AT(void*, 0x1b4); if (p) { ((Fn_v0)VSLOT(p, 8))(p); }
+        p = AT(void*, 0x1b0); if (p) { ((Fn_v0)VSLOT(p, 8))(p); }
+        p = AT(void*, 0x194); if (p) { ((Fn_v0)VSLOT(p, 4))(p); }
+        if (AT(void*, 0x180)) {
+            EA_RemoveHandler(AT(void*, 0x180), AT(void*, 0x184), AT(void*, 0x188),
+                             AT(void*, 0x18c), AT(void*, 0x190));
+            AT(void*, 0x180) = 0;
+        }
+        p = AT(void*, 0x17c); if (p) { ((Fn_v0)VSLOT(p, 4))(p); }
+        break;
+    }
+    DoFreeNodes34(AT(void*, 0x160), AT(unsigned int, 0x164));
+    AT(unsigned int, 0x168) = 0;
+    if (AT(unsigned int, 0x164) > 1)
+        operator_delete(AT(void*, 0x160));
+    if (AT(void*, 0x158)) ((Fn_v0)VSLOT(AT(void*, 0x158), 4))(AT(void*, 0x158));
+    DoFreeNodes34(AT(void*, 0x13c), AT(unsigned int, 0x140));
+    AT(unsigned int, 0x144) = 0;
+    if (AT(unsigned int, 0x140) > 1)
+        operator_delete(AT(void*, 0x13c));
+    DoFreeBucketsVoidP(AT(void*, 0x11c), AT(unsigned int, 0x120));
+    AT(unsigned int, 0x124) = 0;
+    if (AT(unsigned int, 0x120) > 1)
+        operator_delete(AT(void*, 0x11c));
+    DoFreeBucketsVoidP(AT(void*, 0xfc), AT(unsigned int, 0x100));
+    AT(unsigned int, 0x104) = 0;
+    if (AT(unsigned int, 0x100) > 1)
+        operator_delete(AT(void*, 0xfc));
+    if (AT(void*, 0xe4) && *(uint32_t*)((char*)AT(void*, 0xe4) - 4))
+        operator_delete(AT(void*, 0xe4));
+    reinterpret_cast<GridOps*>(this)->DestroyRange(AT(Entry14*, 0xcc), AT(Entry14*, 0xd0));
+    if (AT(void*, 0xcc))
+        operator_delete(AT(void*, 0xcc));
+    for (;;) {
+        void* p;
+        p = AT(void*, 0xc8); if (p) { ((Fn_v0)VSLOT(p, 4))(p); }
+        p = AT(void*, 0xc4); if (p) { ((Fn_v0)VSLOT(p, 8))(p); }
+        p = AT(void*, 0xc0); if (p) { ((Fn_v0)VSLOT(p, 4))(p); }
+        p = AT(void*, 0xbc); if (p) { ((Fn_v0)VSLOT(p, 4))(p); }
+        p = AT(void*, 0xb8); if (p) { ((Fn_v0)VSLOT(p, 4))(p); }
+        p = AT(void*, 0xb4); if (p) { ((Fn_v0)VSLOT(p, 4))(p); }
+        p = AT(void*, 0xb0); if (p) { ((Fn_v0)VSLOT(p, 4))(p); }
+        p = AT(void*, 0xac); if (p) { ((Fn_v0)VSLOT(p, 4))(p); }
+        p = AT(void*, 0xa8); if (p) { ((Fn_v0)VSLOT(p, 4))(p); }
+        p = AT(void*, 0xa4); if (p) { ((Fn_v0)VSLOT(p, 4))(p); }
+        p = AT(void*, 0xa0); if (p) { ((Fn_v0)VSLOT(p, 4))(p); }
+        p = AT(void*, 0x9c); if (p) { ((Fn_v0)VSLOT(p, 4))(p); }
+        p = AT(void*, 0x98); if (p) { ((Fn_v0)VSLOT(p, 4))(p); }
+        p = AT(void*, 0x94); if (p) { ((Fn_v0)VSLOT(p, 4))(p); }
+        p = AT(void*, 0x90); if (p) { ((Fn_v0)VSLOT(p, 4))(p); }
+        p = AT(void*, 0x8c); if (p) { ((Fn_v0)VSLOT(p, 4))(p); }
+        p = AT(void*, 0x88); if (p) { ((Fn_v0)VSLOT(p, 4))(p); }
+        p = AT(void*, 0x84); if (p) { ((Fn_v0)VSLOT(p, 4))(p); }
+        p = AT(void*, 0x80); if (p) { ((Fn_v0)VSLOT(p, 4))(p); }
+        p = AT(void*, 0x7c); if (p) { ((Fn_v0)VSLOT(p, 4))(p); }
+        p = AT(void*, 0x78); if (p) { ((Fn_v0)VSLOT(p, 4))(p); }
+        p = AT(void*, 0x74); if (p) { ((Fn_v0)VSLOT(p, 4))(p); }
+        p = AT(void*, 0x70); if (p) { ((Fn_v0)VSLOT(p, 4))(p); }
+        p = AT(void*, 0x6c); if (p) { ((Fn_v0)VSLOT(p, 4))(p); }
+        p = AT(void*, 0x68); if (p) { ((Fn_v0)VSLOT(p, 4))(p); }
+        p = AT(void*, 0x64); if (p) { ((Fn_v0)VSLOT(p, 4))(p); }
+        p = AT(void*, 0x60); if (p) { ((Fn_v0)VSLOT(p, 4))(p); }
+        p = AT(void*, 0x5c); if (p) { ((Fn_v0)VSLOT(p, 4))(p); }
+        p = AT(void*, 0x58); if (p) { ((Fn_v0)VSLOT(p, 8))(p); }
+        p = AT(void*, 0x18); if (p) { ((Fn_v0)VSLOT(p, 4))(p); }
+        break;
+    }
+    AT(void*, 0xc) = (void*)0x13ec458;
+    AT(void*, 8) = (void*)0x13eb938;
+    AT(void*, 0) = (void*)0x13eb394;
+}
+
+// @ 0x00648c60
+Entry14* GridVec::InsertSorted(Entry14* pos, const Entry14& v)
+{
+    Entry14* const end = mpEnd;
+    bool less = false;
+    if (pos != end)
+        less = EntryLess(v, *pos);
+    Entry14* where = less
+        ? f646030(mpBegin, pos, (const Key12*)&v, mField14)
+        : f646030(pos, end, (const Key12*)&v, mField14);
+    if (where != end) {
+        if (!EntryLess(v, *where))
+            return where;
+    }
+    return Insert(where, v);
+}
+
 // @ 0x00648ce0
-void __cdecl sub_648ce0()
-{}
+Entry14* GridVec::FindOrInsert(const Key12& k)
+{
+    Entry14* const end = mpEnd;
+    Entry14* p = f646030(mpBegin, end, &k, mField14);
+    if (p != end) {
+        bool less;
+        if (k.a == p->f00) {
+            if (k.c == p->f08)
+                less = k.b < p->f04;
+            else
+                less = k.c < p->f08;
+        } else {
+            less = k.a < p->f00;
+        }
+        if (!less)
+            return (Entry14*)((char*)p + 0xc);
+    }
+    Entry14 value;
+    value.f00 = k.a;
+    value.f04 = k.b;
+    value.f08 = k.c;
+    value.h0c.p = 0;
+    value.h10.p = 0;
+    Entry14* r = InsertSorted(p, value);
+    return (Entry14*)((char*)r + 0xc);
+}
+
+// @ 0x00648d90
+void cSPUIAssetBrowserR::FilterGridEntries(FilterMsg* msg)
+{
+  cSPUIAssetBrowserR* self = this;
+  uint8_t  b41 = 0;   // msg->b10
+  uint8_t  b42 = 0;   // msg->b18
+  uint8_t  b43 = 0;   // msg->b19
+  IViewRef* p34 = 0;  // msg->mpView
+  uint32_t n30 = 0;   // msg->n14
+
+  if (msg != 0) {
+    b41 = msg->b10;
+    p34 = msg->mpView;
+    n30 = (uint32_t)msg->n14;
+    b42 = msg->b18;
+    b43 = msg->b19;
+  }
+
+  if (msg == 0 || b42 == 0) {
+    // clear the ban list
+    for (int i = 0; i < self->mBan.size(); i++) {
+      if (self->mBan.mpBegin[i].mpView != 0)
+        self->mBan.mpBegin[i].mpView->SetFirstUpdate(0);
+    }
+    Elem_s0064_8d90* b = self->mBan.mpBegin;
+    Elem_s0064_8d90* e = self->mBan.mpEnd;
+    Elem_s0064_8d90* d = ListCopy(e, e, b);
+    ListDestroy(d, self->mBan.mpEnd);
+    self->mBan.mpEnd = self->mBan.mpEnd - (int)((e - b) / 0x14);
+  }
+
+  if (p34 != 0 && ((ViewBody*)p34)->mp90 != 0) {
+    ViewBody* v = (ViewBody*)p34;
+    Key3_s0064_8d90 key;
+    int  idx = -1;
+    int  lim = -1;
+
+    Key3_s0064_8d90* kp = v->mp90->GetKey();
+    key.a = kp->a; key.b = kp->b; key.c = kp->c;
+
+    if (self->mpGrid != 0)
+      idx = self->mpGrid->IndexOfView(p34);
+
+    if (b43 != 0 && self->mpGrid != 0 && idx >= 0) {
+      int lo = self->mpGrid->FindFirstVisibleEntry();
+      int hi = self->mpGrid->FindLastVisibleEntry();
+      if (lo >= 0 && hi >= 0) {
+        lim = (hi <= idx) ? hi : lo;
+        if (lim >= 0) {
+          int d = lim - idx;
+          int sgn = d >> 31;
+          Vec14Reserve(&self->mBan, (uint32_t)((d ^ sgn) - sgn) + (uint32_t)self->mBan.size());
+        }
+      }
+    }
+
+    do {
+      if (self->mpGrid != 0 && idx >= 0) {
+        Elem_s0064_8d90* hit = self->mpGrid->GetEntry(idx);
+        if (hit != 0) {
+          key.a = hit->key0;
+          key.b = hit->key1;
+          key.c = hit->key2;
+          p34 = hit->mpView;
+        }
+      }
+      if (key.a != 0 || key.b != 0 || key.c != 0) {
+        Elem_s0064_8d90* b = self->mBan.mpBegin;
+        Elem_s0064_8d90* e = self->mBan.mpEnd;
+        Elem_s0064_8d90* inserted = ListInsertPos(b, e, (uint32_t*)&key, (uint8_t)self->mpPreloadRef);
+        Elem_s0064_8d90* where = e;
+        if (inserted != e) {
+          bool before = key.a < inserted->key0;
+          if (key.a == inserted->key0) {
+            before = key.c < inserted->key2;
+            if (key.c == inserted->key2)
+              before = key.b < inserted->key1;
+          }
+          if (!before && (Elem_s0064_8d90*)((char*)inserted + 0x14) != inserted)
+            where = inserted;
+        }
+        if (where == self->mBan.mpEnd) {
+          p34->SetFirstUpdate(1);
+          {
+            IViewRef* held = p34;
+            if (held != 0)
+              held->AddRef();
+            {
+              ViewSub* sub = v->mp90;
+              if (sub != 0)
+                sub->AddRef();
+              Elem_s0064_8d90 tmpKey;
+              tmpKey.key0 = key.a;
+              tmpKey.key1 = key.b;
+              tmpKey.key2 = key.c;
+              tmpKey.mpView = held;
+              tmpKey.mpObj = 0;
+              Elem_s0064_8d90* node = GridVecInsert(self->mBan.mpBegin, self->mBan.mpEnd, (uint32_t*)&tmpKey);
+              ElemInit(node);
+              if (sub != 0)
+                sub->Release();
+            }
+            if (held != 0)
+              held->Release();
+          }
+        } else if (b42 != 0 && b43 == 0) {
+          p34->SetFirstUpdate(0);
+          GridVecErase(&self->mBan, where);
+          p34 = 0;
+        }
+      }
+      if (idx >= 0 && lim >= 0) {
+        if (idx < lim) idx++;
+        else if (lim < idx) idx--;
+      }
+    } while (b42 != 0 && b43 != 0 && lim >= 0 && idx != lim);
+  }
+
+  {
+    // move the built vector into a temp, refill from keys.
+    Vec14_s0064_8d90 tmp;
+    tmp.mpBegin = 0; tmp.mpEnd = 0; tmp.mpCapacity = 0;
+    Vec14SwapInto(&tmp, &self->mBan);
+    Elem_s0064_8d90* oldB = self->mBan.mpBegin;
+    Elem_s0064_8d90* oldE = self->mBan.mpEnd;
+    self->mBan.mpBegin = tmp.mpBegin;
+    self->mBan.mpEnd = tmp.mpEnd;
+    self->mBan.mpCapacity = tmp.mpCapacity;
+    ListDestroy(oldB, oldE);
+    if (oldB != 0)
+      FreeBlock(oldB);
+
+    if (self->mpCallerData != 0) {
+      Vec14_s0064_8d90 keys;
+      keys.mpBegin = 0; keys.mpEnd = 0; keys.mpCapacity = 0;
+      Vec14Make(&keys, (uint32_t)self->mBan.size());
+      for (int i = 0; i < self->mBan.size(); i++) {
+        uint32_t val = 0;
+        if (keys.mpEnd < keys.mpCapacity) {
+          *(uint32_t*)keys.mpEnd = val;
+          keys.mpEnd = (Elem_s0064_8d90*)((char*)keys.mpEnd + 4);
+        } else {
+          SpVecGrow(&val, (uint32_t**)&keys.mpEnd);
+        }
+      }
+      if (keys.mpBegin == keys.mpEnd) {
+        BlobInit((uint32_t*)&tmp);
+        BlobOneArg(0, (uint32_t*)&tmp, 0);
+      } else {
+        BlobInit((uint32_t*)&tmp);
+        BlobTwoArg(1, (uint32_t*)&tmp, (uint32_t*)&keys);
+      }
+      if (keys.mpBegin != 0 && ((uint32_t*)keys.mpBegin)[-1] != 0)
+        FreeBlock(keys.mpBegin);
+    }
+  }
+
+  {
+    uint32_t u1 = 0;
+    uint32_t u12 = 0;
+    ViewBody* v = (ViewBody*)p34;
+    bool vis = false;
+    if (b41 != 0 && p34 != 0 && v->mp90 != 0) {
+      uint32_t typeId = v->mp90->GetTypeID();
+      uint32_t* slot = self->mHandlers.FindOrInsert(&typeId);
+      if (*slot != 0) {
+        if (n30 != 0) {
+          u12 = 1;
+        } else if (self->b2a != 0 && v->mp28 != 0) {
+          n30 = (uint32_t)(size_t)MakeKey4(&typeId, (uint32_t*)v->mp28, 0);
+          u12 = 1;
+        } else {
+          n30 = 0;
+          u12 = 1;
+        }
+        vis = true;
+      }
+    }
+    if (!vis) {
+      u1 = 0;
+      n30 = 0;
+      u12 = 0;
+    }
+    self->SetLargeCardVisibility((int)u12, &n30, (int)u1);
+  }
+
+  if (self->mpGrid != 0)
+    self->mpGrid->UpdateStatsText();
+}
 
 // @ 0x00649f60
 void __fastcall sub_649f60(void*)
@@ -2407,4 +3525,630 @@ void __cdecl Launch(uint32_t a, uint32_t b, uint32_t c)
     p.f38 = b;
     p.f30 = c;
     AdvancedLaunch(&p);
+}
+
+// @ 0x0064bcd0
+void cSPUIAssetBrowserModalHandler::OnModalWindowEnd(int unused, uint32_t messageId)
+{
+    (void)unused;
+    switch (mModalState) {
+    case 1: {
+        mModalState = 0;
+        void* audio = AudioSystem();
+        uint32_t value = audio ? ((VCall_UInt)VTableOf(audio)[0x20 / 4])(audio) : 0;
+        RecordEvent2(0xe76c9b4f, value);
+        if (messageId == 0x5107b1a)
+            BrowserOf(this)->BanItem();
+        return;
+    }
+    case 2: {
+        mModalState = 0;
+        if (messageId != 0x5107b1a)
+            return;
+        cSPUIAssetBrowserLayout* base = BrowserOf(this);
+        if (!base->Get_10())
+            return;
+        void* view = base->Get_10();
+        AssetKey* src = ((VCall_Key)VTableOf(view)[0x40 / 4])(view);
+        AssetKey key;
+        key.mInstance = src->mInstance;
+        key.mType = src->mType;
+        key.mGroup = src->mGroup;
+        base->Fn_e20(1);
+        void* endNode = mMap.mpBuckets[mMap.mBucketCount];
+        EaHashIter it = mMap.find(key.mType);
+        if (it.mpNode == endNode) {
+            void* value = *mMap.FindOrInsert(key.mType);
+            if (((VCall_Bool_Key)VTableOf(value)[0xc / 4])(value, 0, &key))
+                return;
+        }
+        FUN_00801360(FUN_0067cab0());
+        StopwatchRestart(&mStopwatch);
+        void* server = MessageServer_s0064_bc50();
+        ((VCall_Msg)VTableOf(server)[0x14 / 4])(server, 0, 0x2ba2010, &key, 0);
+        switch (key.mInstance) {
+        case 0x4178b8e8: case 0x372e2c04: case 0x65672ade:
+        case 0x9ea3031a: case 0xccc35c46: case 0xdfad9f51:
+            AutoTestMessage(0x2e3fc8f2);
+            break;
+        case 0x72c49181: case 0x4e3f7777: case 0x47c10953:
+        case 0xbdd15f3d: case 0x99e92f05:
+            AutoTestMessage(0x71c5a637);
+            break;
+        case 0x2090a11b: case 0x1a4e0708: case 0x1f2a25b6:
+        case 0x2a5147a9: case 0x441cd3e6: case 0x449c040f:
+        case 0xbc1041e6: case 0x9ad7d4aa: case 0x98e03c0d:
+        case 0x7d433fad: case 0x8f963dcb: case 0xc0b74287:
+        case 0xc15695da: case 0xf670aa43:
+            AutoTestMessage(0xadda228a);
+            break;
+        default:
+            break;
+        }
+        return;
+    }
+    case 5: {
+        mModalState = 0;
+        if (messageId != 0x5107b1a || !mpFeed)
+            return;
+        LocaleString str;
+        LocaleMsg2_s0064_bc50 msg;
+        str.Init(((Feed*)mpFeed)->mpName, &messageId);
+        msg.Ctor(0);
+        void* server = MessageServer_s0064_bc50();
+        ((VCall_Msg)VTableOf(server)[0x14 / 4])(server, 0, 0xb3d53f95, &msg, 0);
+        GetPollinator()->UnsubscribeToFeed(str.mpBegin);
+        msg.Dtor();
+        str.Dtor();
+        return;
+    }
+    case 6: {
+        mModalState = 0;
+        if (messageId != 0x5107b1a || !mpFeed)
+            return;
+        LocaleString str;
+        LocaleMsg2_s0064_bc50 msg;
+        str.Init(((Feed*)mpFeed)->mpName, &messageId);
+        msg.Ctor(0);
+        void* server = MessageServer_s0064_bc50();
+        ((VCall_Msg)VTableOf(server)[0x14 / 4])(server, 0, 0xb3d53f95, &msg, 0);
+        GetPollinator()->DeleteMyFeed(str.mpBegin);
+        msg.Dtor();
+        str.Dtor();
+        return;
+    }
+    case 7:
+        mModalState = 0;
+        return;
+    default:
+        return;
+    }
+}
+
+// @ 0x0064c0d0
+void __fastcall sub_64c0d0(cSPUIAssetBrowserLayout* self)
+{
+    AssetKey key;
+    key.mInstance = 0;
+    key.mType = 0;
+    key.mGroup = 0;
+    if (self->mpEntriesBegin != self->mpEntriesEnd) {
+        if (self->mpEntriesEnd - self->mpEntriesBegin == 1) {
+            void* obj = self->mpEntriesBegin[0].mpObject;
+            if (obj) {
+                AssetKey* src = ((VCall_Key)VTableOf(obj)[0x40 / 4])(obj);
+                key.mInstance = src->mInstance;
+                key.mType = src->mType;
+                key.mGroup = src->mGroup;
+            }
+        }
+    }
+    void* endNode = self->mMap.mpBuckets[self->mMap.mBucketCount];
+    EaHashIter it = self->mMap.find(key.mType);
+    if (it.mpNode != endNode) {
+        void* value = *self->mMap.FindOrInsert(key.mType);
+        if (((VCall_Bool_KeyInt)VTableOf(value)[8 / 4])(value, 0, &key, 0)) {
+            self->SetVisibility(0, 0, 0);
+            return;
+        }
+    }
+    self->mField234 = 1;
+    BrowserGlobals* browser = (BrowserGlobals*)AssetBrowser_s0064_bc50();
+    if (browser->mpTarget && browser->mpPanel) {
+        ((VCall_IntInt)VTableOf(browser->mpTarget)[0x7c / 4])(browser->mpTarget, 0, 1, 1);
+        ((VCall_IntInt)VTableOf(browser->mpTarget)[0x7c / 4])(browser->mpTarget, 0, 0x40, 1);
+        ((VCall_Ptr)VTableOf(browser->mpPanel)[0xe8 / 4])(browser->mpPanel, 0, browser->mpTarget);
+        browser->mField1f = 1;
+    }
+    void* handle = self->mpSomething17c;
+    if (handle) {
+        ((VCall_Int)VTableOf(handle)[0xc / 4])(handle, 0, 0);
+        handle = self->mpSomething17c;
+        if (handle) {
+            self->mpSomething17c = 0;
+            ((VCall_UInt)VTableOf(handle)[4 / 4])(handle);
+        }
+    }
+    void* item = ((MsgMgr*)MessageManager())->Find(0x4cf52822, 1);
+    if (item) {
+        ((VCall_UInt)VTableOf(item)[0])(item);
+        ((VCall_UInt)VTableOf(item)[4 / 4])(item);
+    } else {
+        self->LaunchEditorEnd();
+    }
+}
+
+// @ 0x0064c280
+void __fastcall sub_64c280(cSPUIAssetBrowserLayout* self)
+{
+    if (self->mField1ac && self->mpSomethingC8 &&
+        ((cSPUIAssetVerbs*)self->mpSomethingC8)->IsVerb(2))
+        return sub_64c0d0(self);
+
+    void* server = self->mpServer;
+    if (!server && !self->mpHandler)
+        return;
+    if (self->mpEntriesBegin == self->mpEntriesEnd)
+        return;
+
+    void* handler = self->mpHandler;
+    SpVector keyVec;
+    keyVec.mpBegin = 0;
+    keyVec.mpEnd = 0;
+    keyVec.mpCap = 0;
+    for (int i = 0; i < (int)(self->mpEntriesEnd - self->mpEntriesBegin); ++i) {
+        void* obj = self->mpEntriesBegin[i].mpObject;
+        if (!obj)
+            continue;
+        AssetKey* src = ((VCall_Key)VTableOf(obj)[0x40 / 4])(obj);
+        if (src->mInstance == 0)
+            continue;
+        if (keyVec.mpEnd < keyVec.mpCap) {
+            AssetKey* dst = keyVec.mpEnd;
+            keyVec.mpEnd = dst + 1;
+            if (dst) {
+                dst->mInstance = src->mInstance;
+                dst->mType = src->mType;
+                dst->mGroup = src->mGroup;
+            }
+        } else {
+            keyVec.DoInsertKey(keyVec.mpEnd, src);
+        }
+    }
+    self->SetVisibility(0, 0, 0);
+    if (server) {
+        if (keyVec.mpBegin == keyVec.mpEnd) {
+            AssetKey empty;
+            empty.mInstance = 0;
+            empty.mType = 0;
+            empty.mGroup = 0;
+            ((VCall_Ptr)VTableOf(server)[0])(server, 0, &empty);
+        } else {
+            ((VCall_Ptr)VTableOf(server)[0])(server, 0, keyVec.mpBegin);
+        }
+    }
+    if (handler)
+        ((VCall_Ptr)VTableOf(handler)[0])(handler, 0, &keyVec);
+    if (keyVec.mpBegin) {
+        uint32_t* header = (uint32_t*)keyVec.mpBegin;
+        if (header[-1] != 0)
+            OperatorDelete(keyVec.mpBegin);
+    }
+}
+
+// @ 0x0064c8e0
+bool cSPUIAssetBrowser_s0064_c8e0::HandleMessage(uint32_t messageID, void* pMessage)
+{
+    switch (messageID) {
+    case 0x044edd9c:
+        if (mIsVisible) {
+            IRenderView* view = RenderView();
+            if (view) {
+                Viewport viewport;
+                viewport.x = -1;
+                viewport.y = -1;
+                view->GetViewport(&viewport);
+                cCaptureJob* job = CaptureJob();
+                if (job)
+                    job->Capture(&viewport);
+            }
+        }
+        break;
+
+    case 0x044db12e:
+        if (pMessage && mbPublishAllowed && !mbPublishBlocked)
+            ShowPublishDialog();
+        break;
+
+    case 0x0141a7b3:
+        OnRefresh();
+        break;
+
+    case 0x0462c656:
+        if (mbLaunchingEditor)
+            LaunchEditorEnd();
+        break;
+
+    case 0x05132389:
+        if (*(uint32_t*)pMessage && mpCurrentItem.get() && mIsVisible) {
+            BrowserMessage msg(mpCurrentItem.get()->mItemID);
+            MessageServer_s0064_c8e0()->MessageSend(0xb3d53f95, &msg, 0);
+        }
+        break;
+
+    case 0x05a86fa1:
+        if (mpCurrentItem.get())
+            OnLayoutChanged();
+        break;
+
+    case 0x05b96086:
+    case 0x05b98f52:
+    case 0x05c5594a:
+        mbPublishAllowed = false;
+        break;
+
+    case 0x05bd6378:
+        mbPublishBlocked = true;
+        break;
+
+    case 0x05dd52c7:
+        mbPublishBlocked = false;
+        if (mbPublishAllowed)
+            ShowPublishDialog();
+        break;
+
+    case 0x05de7b4a:
+        if (!mIsVisible && mpFeedList)
+            mPendingButton = 0;
+        break;
+
+    case 0x05e7cb29:
+        if (mCallToAction)
+            CameraManager()->SetMode(0x16, 2);
+        break;
+
+    case 0x06134914: {
+        cSPUIFeedListItem* item = (cSPUIFeedListItem*)pMessage;
+        if (item->mItemType == 0x11f44f6b) {
+            HideLargeViewA();
+            HideLargeViewB();
+            if (mpSporeGuideView)
+                mpSporeGuideView->SetVisible(true, false);
+            SetLargeCardState(true, item->mFeedArg);
+        }
+        break;
+    }
+
+    case 0x06255f5e: {
+        uint32_t id = *(uint32_t*)pMessage;
+        if (id) {
+            cSPUIFeedListItem* item = mpFeedList->FindItemByIndex(id);
+            if (item && item->mItemType == 0x11f44f6b) {
+                BrowserMessage msg(item);
+                MessageServer_s0064_c8e0()->MessageSend(0xb3d53f95, &msg, 0);
+                HideLargeViewA();
+                if (mpSporeGuideView)
+                    mpSporeGuideView->SetVisible(true, false);
+                HideLargeViewB();
+                SetLargeCardState(true, id);
+            }
+        }
+        break;
+    }
+
+    case 0x0639cceb:
+        if (pMessage && mpFeedEditor)
+            mpFeedEditor->OnEvent(pMessage);
+        break;
+
+    case 0x062d7860:
+        KillSetiEffects(0x2ddb6155, GetRecorderState());
+        HideLargeViewB();
+        break;
+
+    case 0x06299932:
+        if (pMessage) {
+            uint32_t a = ((uint32_t*)pMessage)[0];
+            uint32_t b = ((uint32_t*)pMessage)[1];
+            if (mpSporeGuideView)
+                mpSporeGuideView->SetVisible(true, false);
+            ShowLargeCard(true, a, b);
+        }
+        break;
+
+    case 0x066fcce4: {
+        cSPUIFeedList* feedList = mpFeedList;
+        cSPUIFeedListItem* item = feedList->FindItem(SPIDFromName("Feed_RecentDownloads"));
+        if (item)
+            item->SetSelected(true);
+        break;
+    }
+
+    case 0x068cd252: {
+        if (!mIsVisible)
+            break;
+        AssetPollinatedMessage* msg = (AssetPollinatedMessage*)pMessage;
+        if (!msg)
+            break;
+        ResourceKey_s0064_c8e0 key;
+        key.instance = 0;
+        key.type = 0;
+        key.group = 0;
+        if (GetSelectedAsset())
+            key = *GetSelectedAsset()->GetKey();
+        if (KeysEqual(&key, &msg->mKey) && mbAwaitingPollination) {
+            ClosePollinationUI(0);
+            if (mCardWindows[0] | mCardWindows[1]) {
+                LayoutCollection()->Hide();
+                mCardWindows[0] = 0;
+                mCardWindows[1] = 0;
+                mCardWindows[2] = 0;
+                mCardWindows[3] = 0;
+            }
+            if (msg->mbSuccess) {
+                if (GetCreatorType(&key)) {
+                    if (mbIsForEditor) {
+                        if (mpFeedList) {
+                            BrowserMessage m(mpCurrentItem.get());
+                            MessageServer_s0064_c8e0()->MessageSend(0xb3d53f95, &m, 0);
+                        }
+                    } else {
+                        SetLargeCardVisibility(false, false, false);
+                        SetLargeCardVisibility(true, false, false);
+                    }
+                }
+            } else {
+                CalloutMessageBox(this, &kPollinateFailedDialog);
+            }
+            if (key.instance && key.group) {
+                IUpdatable* p = UpdateSaveAreas(&key);
+                if (p)
+                    p->Update();
+            }
+            mbAwaitingPollination = false;
+            break;
+        }
+        if (!mbIsForEditor || !mpFeedList)
+            break;
+        cSPUIFeedListItem* item = mpCurrentItem.get();
+        if (!item)
+            break;
+        cBrowserConfig* config = mpConfig;
+        if (!config || !mpAssetGrid)
+            break;
+        if (item->mItemType == 0x11f44f6b) {
+            if (config->mConfigs.find(key).mpNode == (void*)&config->mConfigs.mAnchor)
+                break;
+            SelectItemMessage m(item, &msg->mKey, 0);
+            MessageServer_s0064_c8e0()->MessageSend(0x3b60b3ad, &m, 0);
+            mpAssetGrid->ResetScroll();
+            m.mbHasQueryFlags = true;
+            MessageServer_s0064_c8e0()->MessageSend(0x3b60b3ad, &m, 0);
+        } else if (item->mItemType == 0xe8104769) {
+            BrowserMessage m(item);
+            MessageServer_s0064_c8e0()->MessageSend(0xb3d53f95, &m, 0);
+        }
+        break;
+    }
+
+    case 0x148f5c9d:
+        if (mpCurrentItem.get())
+            OnTabChanged();
+        break;
+
+    case 0x14ac4938:
+        KillSetiEffects(0x2ddb6155, GetRecorderState());
+        SetLargeCardVisibility(false, false, false);
+        if (mbIsForEditor) {
+            if (mpAssetGrid && mpAssetGrid->mbIsEditorGrid && GetSelectedID() && GetSelectedAsset()) {
+            ResourceKey_s0064_c8e0 key;
+            key.instance = 0;
+            key.type = 0;
+            key.group = 0;
+            ResourceKey_s0064_c8e0 entryKey;
+            entryKey.instance = 0;
+            entryKey.type = 0;
+            entryKey.group = 0;
+            key = *GetSelectedAsset()->GetKey();
+            mpAssetGrid->GetEntryByID(GetSelectedID());
+            FilterGridEntries(0);
+            if (!mpAssetGrid->SelectAsset(&entryKey, false, true, false))
+                mpAssetGrid->SelectAsset(&key, false, true, false);
+            }
+        } else {
+            Update();
+        }
+        break;
+
+    case 0x1dd7bda9: {
+        DialogResultMessage* msg = (DialogResultMessage*)pMessage;
+        if (!msg || !msg->mpDialog)
+            break;
+        bool accepted = msg->mResult == 1;
+        if (msg->mpDialog->GetType() == 0x3ffd6b1) {
+            if (accepted) {
+            send_refresh:
+                BrowserMessage m(0xe2415c7d);
+                MessageServer_s0064_c8e0()->MessageSend(0xb3d53f95, &m, 0);
+                MessageServer_s0064_c8e0()->MessageSend(0x53dd093, 0, 0);
+                break;
+            }
+            CalloutMessageBox(this, &kConfirmDialogA);
+        } else if (msg->mpDialog->GetType() == 0x3cf01e6) {
+            if (accepted)
+                goto send_refresh;
+            CalloutMessageBox(this, &kConfirmDialogB);
+        }
+        break;
+    }
+
+    case 0x3b60b3ad: {
+        SelectItemMessage* msg = (SelectItemMessage*)pMessage;
+        cSPUIFeedListItem* item =
+            (cSPUIFeedListItem*)(msg ? msg->mpItem : AutoRefCount<RefItem>()).get();
+        if (msg && item && item == mpCurrentItem.get() && !mbLockSelection &&
+            item->mItemType != 0x49daa92a && !item->mWebURL && !item->mSporeGuidePage &&
+            mpConfig && mpAssetGrid) {
+            if (msg->mbHasQueryFlags) {
+                QueryKey q;
+                q.key = msg->mKey;
+                q.flags = 0;
+                mpConfig->SetQuery(&q, 0);
+            } else {
+                mpConfig->SetQueryKey(&msg->mKey);
+            }
+            mpAssetGrid->ShowItem(mpConfig, item);
+        }
+        return false;
+    }
+
+    case 0x54495773: {
+        EventMessage* msg = (EventMessage*)pMessage;
+        if (mIsVisible && mpFeedList && msg && msg->mBrowserIndex == mBrowserIndex)
+            HandleEvent(msg);
+        break;
+    }
+
+    case 0x94174b89:
+        if (pMessage)
+            FilterGridEntries(pMessage);
+        break;
+
+    case 0xb3d53f95: {
+        if (!mIsVisible || !mpFeedList)
+            break;
+        BrowserMessage* msg = (BrowserMessage*)pMessage;
+        if (!msg)
+            break;
+        if (!mBrowserIndex && SporeGuide_s0064_c8e0()->mbVisible)
+            break;
+        bool webPageShown = IsWebPageShown();
+        HideLargeViewA();
+        HideLargeViewB();
+        if (mpSporeGuideView)
+            mpSporeGuideView->SetVisible(true, false);
+        SetLargeCardState(false, 0);
+
+        cSPUIFeedListItem* item = msg->mpItem;
+        if (!item) {
+            if (msg->mbByIndex)
+                item = mpFeedList->FindItemByIndex(msg->mFeedItemID);
+            else
+                item = mpFeedList->FindItem(msg->mFeedItemID);
+        }
+        AssetList_s0064_c8e0 assets;
+        if (item) {
+            mCurrentWebURL = (uint32_t)item->mWebURL;
+            if (item->mItemType == 0x49daa92a) {
+                bool loggedIn = AuthManager_s0064_c8e0()->IsLoggedIn();
+                if (mpAssetListData) {
+                    IVisibleObject* view = mpAssetListData->FindView(0x561e0a8, true);
+                    if (view)
+                        view->SetVisible(true, loggedIn);
+                }
+                if (mpFeedEditor) {
+                    if (!loggedIn) {
+                        mpFeedEditor->SetEditActive(true);
+                        mpFeedEditor->Refresh();
+                    } else {
+                        mpFeedEditor->SetEditActive(false);
+                    }
+                }
+            } else if (item->mWebURL) {
+                SetWebBrowserVisibility(true, item->mWebURL);
+                goto update_grid;
+            } else if (item->mSporeGuidePage) {
+                if (mpSporeGuideView) {
+                    mpSporeGuideView->SetVisible(true, true);
+                    mpSporeGuide->LoadSporeGuidePage(item->mSporeGuidePage);
+                }
+            } else {
+                if (mpAssetGrid) {
+                    uint32_t feedID = mFeedOverride;
+                    if (!feedID)
+                        feedID = item->mFeedID;
+                    uint32_t configID = mConfigOverride;
+                    if (!configID)
+                        configID = item->mConfigID;
+                    bool reset = msg->mbForceReset || mbForceReset;
+                    mbForceReset = false;
+                    IDSet ids;
+                    if (feedID != item->mFeedID) {
+                        FeedEntryVector entries;
+                        GetFeedEntries(item->mFeedID, &entries);
+                        ids.reserve(entries.size());
+                        for (uint32_t i = 0; i < entries.size(); ++i) {
+                            if (entries.mpBegin[i].mID)
+                                ids.insert(entries.mpBegin[i].mID);
+                        }
+                    }
+                    cAssetFilterPreview* preview = mpAssetGrid->mpFilterPreview;
+                    if (preview) {
+                        preview->SetFeedFilter(&ids);
+                        preview->Apply(feedID, configID, !reset);
+                    }
+                    if (reset)
+                        mpAssetGrid->Repopulate();
+                }
+                item->GetAssetList(&assets);
+            }
+        }
+        if (webPageShown && mpWebBrowserA)
+            mpWebBrowserA->ClearPage();
+    update_grid:
+        if (mpConfig && mpAssetGrid) {
+            bool haveKeys = false;
+            bool filterActive = false;
+            ResourceKey_s0064_c8e0 key;
+            key.instance = 0;
+            key.type = 0;
+            key.group = 0;
+            ResourceKey_s0064_c8e0 entryKey;
+            entryKey.instance = 0;
+            entryKey.type = 0;
+            entryKey.group = 0;
+            if ((mSelectionEnd - mSelectionBegin) / 20 == 1 && GetSelectedID() && GetSelectedAsset()) {
+                key = *GetSelectedAsset()->GetKey();
+                const ResourceKey_s0064_c8e0* entry = mpAssetGrid->GetEntryByID(GetSelectedID());
+                if (entry)
+                    entryKey = *entry;
+                haveKeys = true;
+            }
+            if (mpFilterPanel && mpFilterPanel->IsActive())
+                filterActive = true;
+            FilterGridEntries(0);
+            mpAssetGrid->SetAssetList(&assets);
+            mpConfig->SetAssets(&assets, 0);
+            mpAssetGrid->SetFeed(mpConfig, item);
+            if (haveKeys && !mpAssetGrid->SelectAsset(&entryKey, filterActive, true, false))
+                mpAssetGrid->SelectAsset(&key, filterActive, true, false);
+        }
+        mpCurrentItem = (cRefFeedListItem*)item;
+        break;
+    }
+
+    case 0xbf7280e2:
+        if (AssetBrowser_s0064_c8e0() && AssetBrowser_s0064_c8e0()->CanLaunchEditor()) {
+            mbEnteringEditor = true;
+            if (sAppProperties->mpInner->mValue && GameModeManager()->GetActiveModeID() == 0xdbdba1) {
+                MessageServer_s0064_c8e0()->MessageSend(0x56d39e9, 0, 0);
+                mbEnteringEditor = false;
+                AssetBrowser_s0064_c8e0()->SetVisibility(0, 0, 0);
+            } else {
+                OnEditorChosen();
+            }
+        }
+        break;
+
+    case 0xcadf3aca: {
+        ResourceKey_s0064_c8e0 key = *(ResourceKey_s0064_c8e0*)pMessage;
+        if (!mpAssetGrid->SelectAsset(&key, true, true, false) && SetAssetData(key.type, true)) {
+            BrowserMessage m(0xe2415c7d);
+            MessageServer_s0064_c8e0()->MessageSend(0xb3d53f95, &m, 0);
+            mpAssetGrid->SelectAsset(&key, true, true, false);
+        }
+        break;
+    }
+    }
+    return true;
 }

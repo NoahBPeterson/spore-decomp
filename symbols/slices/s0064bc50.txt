@@ -1,4 +1,6 @@
 0064bc50 ?Launch@@YAXIII@Z  # Launch migrated from s0064bc50 (verbatim, slice spelling)
-0064bcd0 SP::cSPUIAssetBrowser::OnModalWindowEnd  # PDB candidate (caller-single) card.py
+0064bcd0 ?OnModalWindowEnd@cSPUIAssetBrowserModalHandler@@QAEXHI@Z  # cSPUIAssetBrowserModalHandler::OnModalWindowEnd migrated from s0064bc50 (verbatim, slice spelling)
+0064c0d0 ?sub_64c0d0@@YIXPAUcSPUIAssetBrowserLayout@@@Z  # sub_64c0d0 migrated from s0064bc50 (verbatim, slice spelling)
+0064c280 ?sub_64c280@@YIXPAUcSPUIAssetBrowserLayout@@@Z  # sub_64c280 migrated from s0064bc50 (verbatim, slice spelling)
 0064c400 SP::cSPUIAssetBrowser::Update      # PDB candidate (caller-single) card.py
 0064c6b0 ?sub_64c6b0@@YIXPAUcSPUIAssetBrowserLayout@@@Z  # sub_64c6b0 migrated from s0064bc50 (verbatim, slice spelling)

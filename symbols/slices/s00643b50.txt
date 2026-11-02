@@ -1,0 +1,4 @@
+006447c0 ?MakeLaunchData@@YAXDPAPAURCObj@@@Z  # MakeLaunchData migrated from s00643b50 (verbatim, slice spelling)
+00644910 ?Query910@@YGEPBUKey3@@PAU1@@Z  # Query910 migrated from s00643b50 (verbatim, slice spelling)
+00644990 ?Fn990@HubD@@QAEXXZ  # HubD::Fn990 migrated from s00643b50 (verbatim, slice spelling)
+00644a80 ??0LocaleMsg@@QAE@PAURCBase@@PBUKey3@@E@Z  # LocaleMsg::LocaleMsg migrated from s00643b50 (verbatim, slice spelling)
