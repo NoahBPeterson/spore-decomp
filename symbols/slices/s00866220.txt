@@ -4,3 +4,4 @@
 008666e0 ?FUN_008666e0@@YAXPAUObj@@@Z  # FUN_008666e0 migrated from s00866220 (verbatim, slice spelling)
 00866700 ?FUN_00866700@@YAXPAUObj@@@Z  # FUN_00866700 migrated from s00866220 (verbatim, slice spelling)
 00866b80 ?crc32_little@@YAIIPBEI@Z  # crc32_little migrated from s00866220 (verbatim, slice spelling)
+00866eb0 ?FUN_00866eb0@@YAXPAUBuf@@@Z  # FUN_00866eb0 migrated from s00866220 (verbatim, slice spelling)

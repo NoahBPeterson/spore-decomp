@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+00866eb0 74 complete FUN_00866eb0(Buf* buf): refill the destination cursor from the source cursor -- memcpy the smaller of the two remaining counts (src+0x14 vs buf+0x10), advance both cursors and both counters and rewind the source cursor to its base (src+0x08) when it empties; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast; equiv UNSUPPORTED (the original takes `buf` in eax). Diff: 80 vs 78 bytes, the only real difference is `mov esi,eax` vs `mov esi,[esp+8]`; the cmova/cmovb encoding also differs.
