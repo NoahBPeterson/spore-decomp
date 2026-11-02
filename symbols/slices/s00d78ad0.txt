@@ -1,4 +1,4 @@
-00d78ad0 ?FUN_00d78ad0@@YADPAUCreature@@IIIIPAI@Z                    # agent-state helper (Creature*, 4 ints, U32* out)
+00d78ad0 ?FUN_00d78ad0@@YADPAUCreature_s00d7_8ad0@@IIIIPAI@Z  # FUN_00d78ad0 migrated from s00d78ad0 (verbatim, slice spelling)
 00d78e20 ?FUN_00d78e20@@YAXPAPAX0UComparator@@@Z  # FUN_00d78e20 migrated from s00d78ad0 (verbatim, slice spelling)
 00d78e90 ?CanJoin@cTribeGameBehaviorParty@@QAEDPAXI@Z  # cTribeGameBehaviorParty::CanJoin migrated from s00d78ad0 (verbatim, slice spelling)
 00d78f50 ?PreAction@cTribeGameBehaviorParty@@QAEXXZ  # cTribeGameBehaviorParty::PreAction migrated from s00d78ad0 (verbatim, slice spelling)

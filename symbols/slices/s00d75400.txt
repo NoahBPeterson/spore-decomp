@@ -1,4 +1,5 @@
 00d75400 ?CalledByStimulus@cTribeGameBehaviorFish_s00d7_5400@@QAEXPAVcGameObject@@PAVcStimulus@@@Z  # cTribeGameBehaviorFish_s00d7_5400::CalledByStimulus migrated from s00d75400 (verbatim, slice spelling)
+00d75450 ??1FruitState@@QAE@XZ  # FruitState::~FruitState migrated from s00d75400 (verbatim, slice spelling)
 00d75700 ?SP_DropFruitTarget@@YAXPAXPAUFruitState@@@Z  # SP_DropFruitTarget migrated from s00d75400 (verbatim, slice spelling)
 00d75740 ?SP_NearestFruitIndex@@YAIPAVcGameObject@@0@Z  # SP_NearestFruitIndex migrated from s00d75400 (verbatim, slice spelling)
 00d75870 ?SP_CanReachFruit@@YAIPAVcGameObject@@0@Z  # SP_CanReachFruit migrated from s00d75400 (verbatim, slice spelling)

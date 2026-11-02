@@ -1,1 +1,4 @@
+00d77360 ?FUN_00d77360@@YAXPAUCreature@@@Z  # FUN_00d77360 migrated from s00d77360 (verbatim, slice spelling)
+00d773c0 ?FUN_00d773c0@@YA_NPAX0@Z  # FUN_00d773c0 migrated from s00d77360 (verbatim, slice spelling)
+00d77400 ?FUN_00d77400@@YAMPAUCreature@@@Z  # FUN_00d77400 migrated from s00d77360 (verbatim, slice spelling)
 00d77510 ?TRIBE_MATE_Activate@SP@@YA_NPAUCreature@@HHHHPAUHolder@@@Z  # TRIBE_MATE_Activate migrated from s00d77360 (verbatim, slice spelling)
