@@ -1,4 +1,4 @@
-// src/game/SPGonzago/SPTribe.cpp -- migrated from slice(s) s013551e0, s00c99140, s00c96950, s00c947d0, s00c93a40, s00c92a90, s00c91ca0, s00c91a40, s00c90b40, s00c8fbb0, s00c8ec60, s00c8db30 by tools/migrate/rewrite.py
+// src/game/SPGonzago/SPTribe.cpp -- migrated from slice(s) s00c9afb0, s00c9a080, s00c97220, s00c95980, s013551e0, s00c99140, s00c96950, s00c947d0, s00c93a40, s00c92a90, s00c91ca0, s00c91a40, s00c90b40, s00c8fbb0, s00c8ec60, s00c8db30 by tools/migrate/rewrite.py
 // Object file: SPGonzago/SPTribe.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -32,10 +32,39 @@
 #include "SP/cReservationGrid.h"
 #include "SP/cTribeHut.h"
 #include "SP/cSPEditorSpeciesManager.h"
+#include "SP/cITerrainSphere.h"
+#include "cSPVector3.h"
+#include <string.h>
+#include "EA/Variant.h"
+#include "SP/cPropertyList.h"
+#include "SP/cGonzagoTimer.h"
+#include "SP/cInteractionTarget.h"
+#include "SP/cSPTimer.h"
 
 // ---- items of slice s00c8db30 begin (TODO(rewrite): local stubs, replace by canonical classes)
 struct Vec3 { float x, y, z; };
 struct Vec6 { uint32_t w[6]; };
+namespace EA {
+namespace IO {
+bool ReadInt32(void* pStream, void* pData, unsigned int uCount, int nFlags);
+}
+}
+namespace EA {
+namespace IO {
+bool WriteUint32(void* pStream, const void* pData, unsigned int uCount, int nFlags);
+}
+}
+struct IOObject {
+virtual void  v00();
+virtual void v01();
+virtual void v02();
+virtual void v03();
+virtual void  v04();
+virtual void v05();
+    virtual void* v06();                 // +0x18 -> EA::IO stream
+    virtual void  v07();                 // +0x1c -> finish hook
+    virtual IOObject* v08();             // +0x20 -> reader/writer
+};
 struct Grid {
     uint8_t      pad000[0x504];          // +0x000..+0x503
     Vec3         mPos;                   // +0x504
@@ -161,6 +190,13 @@ virtual void v6c();
     virtual float GetRadius();                              // 0x074
 
     bool Write(void* pStream);                              // 0x00c88a90
+};
+class cRefCounted_s00c8_ec60 {
+public:
+    virtual void v00();
+    virtual void Release();                                 // 0x004
+    virtual void v08();
+    virtual void Disable(int32_t nA);                       // 0x00c
 };
 class cRefCountedNode {
 public:
@@ -293,6 +329,11 @@ public:
     bool IsLeader();                                        // 0x00c232d0
     void FUN_00c0b9d0(float fValue);                        // 0x00c0b9d0
 };
+class cGameNounManager_s00c8_ec60 {
+public:
+    void RemoveNoun(void* pNoun);                           // 0x00b225d0
+};
+cGameNounManager_s00c8_ec60* __stdcall NounManagerOf(void* pNoun);     // 0x00b3d300
 class cValueNode {
 public:
 virtual void w00();
@@ -516,6 +557,7 @@ void* __stdcall FUN_00b3d2b0(float fValue, void* pTarget, uint32_t nId);   // 0x
 void* FUN_00bc8000(uint32_t nId, void* pValue);                     // 0x00bc8000
 void* FUN_00bc8400(uint32_t nId, void* pValue);                     // 0x00bc8400
 void* FUN_00ba5df0(void* pKeys, cSpeciesKey* pKey);                 // 0x00ba5df0
+void* PlanetModel(void* pOut, const void* pElement, const void* pExtra);   // 0x00b3d350
 void* GetSetting9();                                                // 0x00401090
 bool FUN_00c24560(cCreature* pCreature);                            // 0x00c24560
 bool FUN_00c005b0(cTribe* pTribe, void* pStream);                   // 0x00c005b0
@@ -678,8 +720,13 @@ virtual void v09c();
 // ---- items of slice s00c8fbb0 end
 
 // ---- items of slice s00c90b40 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C" double __cdecl sin(double);              // x87 fsin in retail
+extern "C" double __cdecl cos(double);              // x87 fcos in retail
+extern "C" double __cdecl sqrt(double);
+extern "C" void*  __cdecl GetCurrentGameMode();              // 0x00b5b800
 extern "C" void*  __cdecl PlanetModel();                     // 0x00b3d350
 extern "C" void*  __cdecl ModeStrategyInstance();            // 0x00cd40b0
+extern "C" void*  __cdecl FUN_00cc9740(void* self);                         // 0x00cc9740
 typedef unsigned int   u32;
 typedef int            s32;
 typedef unsigned char  u8;
@@ -690,6 +737,10 @@ struct Elem14 {
   float mX, mY, mZ, mW;                  // 0x00
   u8    mB_10;                           // 0x10
   u8    mPad_11[3];                      // 0x11
+};
+struct RefCnt {
+  virtual void AddRef();                 // 0x00
+  virtual void Release();                // 0x04
 };
 struct cSpatial {
   virtual void  v00();                   // 0x00
@@ -775,6 +826,36 @@ struct Matrix33Obj {
   Matrix33 mMat_00;                      // 0x00
   void ctor(const void* preset);         // 0x0041cb40
 };
+struct cInteractable {
+  virtual void  AddRef();                // 0x00
+  virtual void  Release();               // 0x04
+  virtual void* QueryInterface(u32 id);  // 0x08
+  virtual void  v0c();                   // 0x0c
+  void SetAreaData(Vec3* pos, float radius);   // 0x00c3f160
+  void SetParams(float a, float b);            // 0x00c3f1b0
+  void AttachEffect(void* effect);             // 0x00c3f2d0
+};
+struct cSplashEffect {
+  virtual void  AddRef();                // 0x00
+  virtual void  Release();               // 0x04
+virtual void  v08();
+virtual void v0c();
+virtual void  v10();
+virtual void v14();
+virtual void v18();
+virtual void v1c();
+virtual void  v20();
+virtual void v24();
+virtual void v28();
+virtual void v2c();
+virtual void  v30();
+virtual void v34();
+  virtual void  SetPosition(Vec3* p);    // 0x38
+  u8        mPad_04[0x70 - 0x04];        // 0x04
+  cSpatial  mPlacement_70;               // 0x70
+  u8        mPad_d0[0xe1 - 0xd0];        // 0xd0
+  u8        mVisible_e1;                 // 0xe1
+};
 struct cTool_s00c9_0b40 {
   u8       mPad_00[0x34];                // 0x00
   cSpatial mAnchor_34;                   // 0x34
@@ -831,6 +912,17 @@ virtual void v2c();
   void SetPlacementArea(cPlacementArea* area);     // 0x00c91800
   cTribe_s00c9_0b40* Tribe() { return (cTribe_s00c9_0b40*)((u8*)this - 0xec); }
 };
+struct cFishingHotSpot_s00c9_0b40 {
+  u8              mPad_00[0x24];         // 0x00
+  cInteractable*  mpInteractable_24;     // 0x24
+  cSplashEffect*  mpSplashEffect_28;     // 0x28
+  u8              mPad_2c[0x3c - 0x2c];  // 0x2c
+
+  void SetupArea(Vec3* pos, float radius);    // 0x00c91030
+};
+struct cGameNounManager_s00c9_0b40 {
+  void* CreateNoun(u32 id);              // 0x00b20c60
+};
 struct cTribeModeStrategy {
 virtual void* v00();
 virtual void* v04();
@@ -868,21 +960,73 @@ struct cGameData {
 };
 extern "C" void*  __cdecl NounManager_s00c9_0b40();                     // 0x00b3d300
 extern "C" s32    __cdecl GetTutorialToolPrice(u32 tbl, u32 key, s32 idx);  // 0x004e1c30
+extern "C" void*  __cdecl FUN_00c6f770(void* self, u32 key, s32 a, s32 b);  // 0x00c6f770
 extern "C" void*  __cdecl Matrix3FromQuaternion(void* out, const Quat* q);  // 0x0059c190
 extern "C" void*  __cdecl FUN_0059aed0(void* out, const void* m, const Quat* q); // 0x0059aed0
+extern "C" Vec3*  __cdecl DirectionToSurfacePosition(cPlanetModel* model, Vec3* out,
+Vec3* dir);            // 0x00b815a0
+extern "C" u8     __cdecl GetPropertyAsVector3(void* obj, u32 key, Vec3* out); // 0x00b81d50
+struct SegIter {
+  RefCnt**  mpCur;                       // 0x00
+  RefCnt**  mpBegin;                     // 0x04
+  RefCnt**  mpEnd;                       // 0x08
+  RefCnt*** mppPage;                     // 0x0c (slot holding the next page)
+};
 // ---- items of slice s00c90b40 end
 
 // ---- items of slice s00c91a40 begin (TODO(rewrite): local stubs, replace by canonical classes)
 typedef int           i32;
 typedef float         f32;
+namespace eastl {
+    class sp_vector_allocator_s00c9_1a40 {};
+}
+namespace eastl {
+    template <class Elem, class Alloc>
+    class vector_s00c9_1a40 {
+    public:
+        Elem *mBegin;         // first element
+        u32   mCount;         // number of elements
+        u32   mCapacity;      // allocated capacity
+    };
+}
+namespace eastl {
+    template <class Elem, class Alloc>
+    bool reserve(vector_s00c9_1a40<Elem, Alloc> *self, u32 id, u32 *count, Elem **begin);
+}
 namespace SP {
 class cTool_s00c9_1a40;
+}
+namespace SP {
+class cMWModel_s00c9_1a40;
 }
 namespace SP {
 class cRefCounted {
 public:
     virtual void AddRef(void);           // 0x00
     virtual void Release(void);          // 0x04
+};
+}
+namespace SP {
+class cMWModel_s00c9_1a40 : public cRefCounted {
+public:
+};
+}
+namespace SP {
+template <class T>
+class AutoRefCount {
+public:
+    T *mPtr;
+    AutoRefCount &operator=(T *p)
+    {
+        T *old = mPtr;
+        if (p != old) {
+            p->AddRef();
+            mPtr = p;
+            if (old != 0)
+                old->Release();
+        }
+        return *this;
+    }
 };
 }
 namespace SP {
@@ -983,6 +1127,23 @@ public:
 };
 }
 namespace SP {
+class cPropertyManager_s00c9_1a40 {
+public:
+virtual void pm00(void);
+virtual void pm01(void);
+virtual void pm02(void);
+virtual void pm03(void);
+virtual void pm04(void);
+virtual void pm05(void);
+virtual void pm06(void);
+virtual void pm07(void);
+virtual void pm08(void);
+virtual void pm09(void);
+virtual void pm10(void);
+    virtual bool Query(u32 a, u32 b, void *out);     // 0x2c
+};
+}
+namespace SP {
 class cTribe_s00c9_1a40 {
 public:
     cTool_s00c9_1a40 *GetToolOfType(int toolType);  // 0x00c8f6e0
@@ -1006,6 +1167,9 @@ public:
     void *ChooseNewHutModel(void);       // 0x00c91b60
     f32  GetWaterOrHeight(void);         // 0x00c91c80
 };
+}
+namespace SP {
+    void  *PropertyManager_s00c9_1a40(void);        // 0x0067de30
 }
 // ---- items of slice s00c91a40 end
 
@@ -1412,9 +1576,15 @@ struct HotSpotRow {
   cFishingHotSpot mSpot;      // 0x08
 };
 cFishingHotSpot* findHotSpot(u32 key);
+extern "C" void __cdecl HeapMake(Vec3_s00c9_3a40* first, Vec3_s00c9_3a40* last, float x, float y, float z);          // 0x00c938f0
+extern "C" void __cdecl HeapAdjust(Vec3_s00c9_3a40* first, int top, int heapSize, int pos,
+                                   Vec3_s00c9_3a40 value, float x, float y, float z);                    // 0x00c92e20
+extern "C" void __cdecl HeapSort(Vec3_s00c9_3a40* first, Vec3_s00c9_3a40* last, float x, float y, float z);          // 0x00c93980
 void __cdecl PartitionPositions(Vec3_s00c9_3a40* first, Vec3_s00c9_3a40* last,
                                 float px, float py, float pz,
                                 float qx, float qy, float qz);
+void __cdecl PartialSortPositions(Vec3_s00c9_3a40* first, Vec3_s00c9_3a40* mid, Vec3_s00c9_3a40* last,
+                                  float x, float y, float z);
 struct cSub34 { void** mpVtable; };                 // embedded at cTribe+0x34
 struct cSpatial120Base {
   void** mpVtable;          // 0x000
@@ -2599,6 +2769,1192 @@ namespace Simulator {
 }
 // ---- items of slice s013551e0 end
 
+// ---- items of slice s00c95980 begin (TODO(rewrite): local stubs, replace by canonical classes)
+typedef unsigned int   uint;
+typedef unsigned char  uchar;
+struct SVec {
+    void* mpBegin;
+    void* mpEnd;
+    void* mpCapacity;
+    void* mAllocator;
+    void* mpX;
+};
+namespace SP {
+class cTribe_s00c9_5980;
+}
+namespace SP {
+void* __cdecl FUN_00b3d350();                     // 0xb3d350  SP::PlanetModel()
+}
+namespace SP {
+void* __cdecl FUN_00b3d300();                     // 0xb3d300  SP::NounManager()
+}
+namespace SP {
+void* __cdecl FUN_00b3d260();                     // 0xb3d260  SP::BehaviorManager()
+}
+namespace SP {
+void* __cdecl FUN_00b3d480(void* a);              // 0xb3d480
+}
+namespace SP {
+void* __cdecl FUN_00b20c60(void* nounMgr, uint ci);// 0xb20c60  cGameNounManager::CreateNoun
+}
+namespace SP {
+void* __cdecl FUN_00b815a0(void* out, void* in);  // 0xb815a0  DirectionToSurfacePosition
+}
+namespace SP {
+void* __cdecl FUN_0059aed0(void* a, void* b, void* c); // 0x59aed0
+}
+namespace SP {
+void* __cdecl FUN_00c8ec60(void* a, void* b, void* c); // 0xc8ec60
+}
+namespace SP {
+void* __cdecl FUN_00c8f310();                     // 0xc8f310  cTribe::PickAPeon
+}
+namespace SP {
+void* __cdecl FUN_00c0b760();                     // 0xc0b760
+}
+namespace SP {
+void  __cdecl FUN_00e1c7f0(void* a);              // 0xe1c7f0
+}
+namespace SP {
+void  __cdecl FUN_00afc470(void* a);              // 0xafc470
+}
+namespace SP {
+void  __cdecl FUN_00bab900(void* a, void* b);     // 0xbab900
+}
+namespace SP {
+void  __cdecl FUN_00c22ee0(void* a);              // 0xc22ee0
+}
+namespace SP {
+void  __cdecl FUN_00c00660(void* a);              // 0xc00660
+}
+namespace SP {
+void  __cdecl FUN_00c95150(void* a);              // 0xc95150
+}
+namespace SP {
+void  __cdecl FUN_00c950f0(void* a);              // 0xc950f0
+}
+namespace SP {
+void  __cdecl FUN_00c955e0(void* a, int n);       // 0xc955e0  vector<cTribeChatArea>::resize
+}
+namespace SP {
+void  __cdecl FUN_00cc8350(void* a);              // 0xcc8350
+}
+namespace SP {
+void* __cdecl FUN_00cc7070(uint a);               // 0xcc7070
+}
+namespace SP {
+void  __cdecl FUN_006a0990(void* a, uint b, void* c, void* d); // 0x6a0990
+}
+namespace SP {
+void  __cdecl FUN_0050d4e0(void* a, void* b);     // 0x50d4e0  vector<float>::operator=
+}
+namespace SP {
+void  __cdecl FUN_00bdefa0(void* a, void* b, void* c, void* d); // 0xbdefa0
+}
+namespace SP {
+void  __cdecl FUN_00cee440(void* a, void* b);     // 0xcee440
+}
+namespace SP {
+void  __cdecl FUN_00c00530(void* a, void* b);     // 0xc00530
+}
+namespace SP {
+void  __cdecl FUN_00c88b00(void* a, void* b);     // 0xc88b00
+}
+namespace SP {
+int   __cdecl FUN_00c232d0();                     // 0xc232d0  IsLeader
+}
+namespace SP {
+void  __cdecl FUN_00b225d0(void* a, void* b);     // 0xb225d0  RemoveNoun
+}
+namespace SP {
+void  __cdecl FUN_00b7f250(void* a, void* b, void* c); // 0xb7f250  BuildSurfaceOrientation2
+}
+namespace SP {
+int   __cdecl FUN_00acd410(void* a);              // 0xacd410
+}
+namespace SP {
+void* __cdecl FUN_00aea5d0(void* a, void* b);     // 0xaea5d0  DoInsertPtr
+}
+namespace SP {
+void  __cdecl FUN_004548d0(int n);                // 0x4548d0
+}
+namespace SP {
+void  __cdecl FUN_00cc7830(void* a, float b, float c); // 0xcc7830 ComputeGridResolution
+}
+namespace SP {
+void  __cdecl FUN_0067de30();                     // 0x67de30  PropertyManager
+}
+namespace SP {
+class cTribe_s00c9_5980 {
+ public:
+    uchar pad_000[0x120];              // 0x000..0x120  (cCommunity base)
+    uchar mSpatial_120[0x140];         // 0x120..0x260  (cSpatialObject sub-object)
+    void* mpHandle_260;                // 0x260  creature-ish handle
+    uchar pad_264[0x4];                // 0x264..0x268
+    float mfScale_268;                 // 0x268  scale/proximity scalar
+    uchar pad_26c[0x28];               // 0x26c..0x294
+    void* mpChatAreas_294;             // 0x294  vector<cTribeChatArea>.mpBegin
+    void* mpChatAreas_298;             // 0x298  vector<cTribeChatArea>.mpEnd
+    uchar pad_29c[0x38];               // 0x29c..0x2d4
+    void* mpTools_2d4;                 // 0x2d4  mTools.mpBegin (non-null guard)
+    uchar pad_2d8[0x5c];               // 0x2d8..0x334
+    uchar mbPacking_334;               // 0x334  enum (kHexPacking)
+    uchar pad_335[0x3];                // 0x335..0x338
+    int   mnCount_338;                 // 0x338  creature count
+    uchar pad_33c[0x4];                // 0x33c..0x340
+    SVec  mCreatures_340;              // 0x340  begin / end(0x344) / capacity(0x348)
+    SVec  mChatAreaHandles_354;        // 0x354  begin / end(0x358) / capacity(0x35c)
+    void* mpObject_368;                // 0x368  object whose +0x34 is a spatial sub-object
+    uchar pad_36c[0x4];                // 0x36c..0x370
+    void* mpStructVec_370;             // 0x370  arg to FUN_00bdefa0 in GetStructures
+    uchar pad_374[0x19c];              // 0x374..0x510
+    uchar mTimer_510[0x48];            // 0x510  cSPTimer
+    uchar mReservationGrid_558[0x94];  // 0x558  cReservationGrid
+    uchar pad_5ec[0x1904 - 0x5ec];     // 0x5ec..0x1904
+    void* mpVec1904_begin;             // 0x1904 sp_vector<Vector3>.mpBegin
+    void* mpVec1904_end;               // 0x1908 sp_vector<Vector3>.mpEnd
+
+    void  SetupChatAreas();                                 // 0x00c95af0
+    void  AddChatArea_5cc0(void* pObj);                     // 0x00c95cc0
+    void  AddExistingCreatureInternal(void* pCreature);     // 0x00c95d70
+    void  RemoveCreature(void* pCreature, uchar bRemove);   // 0x00c95ee0
+    void* SpawnHut_5fe0(void* pArg);                        // 0x00c95fe0
+    bool  AddTool_6150(void* pTool);                        // 0x00c96150
+    bool  UpdateHut_62b0();                                 // 0x00c962b0
+    bool  Read(void* pStream);                              // 0x00c96410
+    void* GetStructures();                                  // 0x00c966d0
+    void* GetInhabitants();                                 // 0x00c967a0
+    void* CopyFrom_6840(void* pOther);                      // 0x00c96840
+};
+}
+using SP::cTribe_s00c9_5980;
+static void* vc(void* obj, int off) {
+    return ((void**)*(void**)obj)[off / 4];
+}
+namespace eastl {
+template <typename RandomAccessIterator, typename Compare>
+void quick_sort_impl(RandomAccessIterator first, RandomAccessIterator last, int kRecursionCount, Compare compare);   // 0x00c94ec0
+}
+namespace eastl {
+template <typename RandomAccessIterator, typename Compare>
+void insertion_sort(RandomAccessIterator first, RandomAccessIterator last, Compare compare);   // 0x00c90920
+}
+namespace eastl {
+template <typename RandomAccessIterator, typename Compare>
+void insertion_sort_simple(RandomAccessIterator first, RandomAccessIterator last, Compare compare);   // 0x00c90a40
+}
+namespace eastl {
+template <typename Size>
+inline Size Log2(Size n) {
+    int i;
+    for (i = 0; n; ++i)
+        n >>= 1;
+    return i - 1;
+}
+}
+namespace eastl {
+static const int kQuickSortLimit = 28;
+}
+// ---- items of slice s00c95980 end
+
+// ---- items of slice s00c97220 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C" void* __cdecl FUN_011e0744(void* dst, const void* src, unsigned n);   // memcpy thunk
+extern "C" void* __cdecl FUN_011e073e(void* dst, int c, unsigned n);              // memset thunk
+extern bool gTribeArchetypesLoaded;                               // 0x01695371
+extern float kRegionScale;   // 0x01470f1c
+extern float kRegionBias;    // 0x01473c2c
+struct Property {
+    void*    mpData;      // +0x00 (array data, or the inline value itself)
+    uint32_t pad04[3];
+    uint16_t mnFlags;     // +0x10 (0x30 = array / external data)
+    uint16_t mnType;      // +0x12
+
+    void* GetValuePtr()
+    {
+        if (mnFlags & 0x30)
+            return mpData;
+        else if (mnType != 0)
+            return this;
+        return 0;
+    }
+};
+class cPropertyList {
+public:
+    virtual int  AddRef();                                       // 0x00
+    virtual int  Release();                                      // 0x04
+    virtual void v08();
+    virtual void v0c();
+    virtual void v10();
+    virtual void v14();
+    virtual void v18();
+    virtual void v1c();
+    virtual void v20();
+    virtual bool GetProperty(uint32_t id, Property*& result);    // 0x24
+};
+struct Vec2_s00c9_7220 { float x, y; };
+bool __cdecl GetPropertyAsUint32Array(cPropertyList* pl, uint32_t id, int* count, uint32_t** data);   // 0x006a0840
+void __cdecl GetPropertyAsVector2(cPropertyList* pl, uint32_t id, Vec2_s00c9_7220* out);                        // 0x006a10c0
+void operator delete[](void* p);                                                 // 0x00f47380
+class cPropertyManager_s00c9_7220 {
+public:
+virtual int  v00();
+virtual int v04();
+virtual void v08();
+virtual void v0c();
+virtual void v10();
+virtual void v14();
+virtual void v18();
+virtual void v1c();
+virtual void v20();
+virtual void v24();
+    virtual void v28();
+    virtual bool GetPropertyList(uint32_t instanceID, uint32_t groupID, cPropertyList** result);   // 0x2c
+virtual void v30();
+virtual void v34();
+virtual void v38();
+virtual void v3c();
+virtual void v40();
+    virtual void v44();
+    virtual void GetPropertyListIDs(uint32_t groupID, struct SpVec* ids);                          // 0x48
+};
+cPropertyManager_s00c9_7220* __cdecl PropertyManager_s00c9_7220();                                                       // 0x0067de30
+struct SpVec {
+    uint32_t* mpBegin;
+    uint32_t* mpEnd;
+    uint32_t* mpCapacity;
+    uint32_t mAllocator;
+
+    void reserve(uint32_t n);                                    // 0x004e0880 (ret 4)
+    void DoInsertValue(uint32_t* pos, const uint32_t& v);        // 0x004558a0 (ret 8)
+    void clear()
+    {
+        uint32_t* first = mpBegin;
+        uint32_t* last = mpEnd;
+        FUN_011e0744(first, last, (unsigned)((char*)mpEnd - (char*)last));
+        mpEnd = mpEnd - (last - first);
+    }
+    void push_back(const uint32_t& v)
+    {
+        if (mpEnd < mpCapacity) {
+            uint32_t* p = mpEnd;
+            mpEnd = p + 1;
+            if (p) *p = v;
+        } else {
+            DoInsertValue(mpEnd, v);
+        }
+    }
+    void free()
+    {
+        if (mpBegin && ((int*)mpBegin)[-1])
+            operator delete[](mpBegin);
+    }
+};
+struct PLRef {
+    cPropertyList* p;
+    PLRef& operator=(cPropertyList* rhs)
+    {
+        if (p != rhs) {
+            cPropertyList* old = p;
+            if (rhs) rhs->AddRef();
+            p = rhs;
+            if (old) old->Release();
+        }
+        return *this;
+    }
+};
+struct TribeArchetype {
+    uint32_t f00, f04, f08;       // +0x00
+    uint32_t list[16];            // +0x0c
+    uint32_t listCount;           // +0x4c
+    uint32_t f50;                 // +0x50
+    uint32_t f54;
+    float    f58, f5c, f60, f64, f68, f6c, f70, f74, f78;   // +0x58
+    uint32_t pad7c[4];            // +0x7c
+    uint32_t f8c;                 // +0x8c
+    float    f90, f94;            // +0x90
+    Vec2_s00c9_7220     v98;                 // +0x98
+    SpVec    textures;            // +0xa0
+    uint32_t padb0;
+    cPropertyList* mpRef;         // +0xb4
+
+    TribeArchetype()
+    {
+        f00 = 3;
+        f04 = 10;
+        f08 = 12;
+        f50 = 0xb750af68;
+        f8c = 0;
+        f90 = 10.0f;
+        f94 = 10.0f;
+        textures.mpBegin = 0;
+        textures.mpEnd = 0;
+        textures.mpCapacity = 0;
+        mpRef = 0;
+        FUN_011e073e(list, 0, 0x40);
+        listCount = 0;
+        FUN_011e073e(&f54, 0, 0x38);
+    }
+    ~TribeArchetype()
+    {
+        if (mpRef) mpRef->Release();
+        textures.free();
+    }
+    TribeArchetype& operator=(const TribeArchetype& o);           // 0x00c96840 (ret 4)
+};
+extern TribeArchetype gTribeArchetypes[96];                       // 0x01695458
+struct cRefObj { virtual void AddRef(); virtual void Release(); virtual void Release2(); };
+struct SlotPair { uint32_t a, b, c, d; };
+struct RegionSlot {
+    uint32_t  pad00[2];       // +0x00
+    uint32_t* mpBegin;        // +0x08  first bucket entry
+    uint32_t  m0c;            // +0x0c
+    uint32_t* mpBucketEnd;    // +0x10  end of the current bucket
+    uint32_t** mpBuckets;     // +0x14  per-bucket start pointers
+    uint32_t* mpEnd;          // +0x18  overall end of the value array
+    uint32_t* mpValueBase;    // +0x1c  value array base
+    uint32_t* mpCapacity;     // +0x20  value array capacity
+    uint32_t  m24;            // +0x24
+
+    SlotPair& Lo() { return *(SlotPair*)&mpBegin; }     // +0x08 .. +0x14
+    SlotPair& Hi() { return *(SlotPair*)&mpEnd; }       // +0x18 .. +0x24
+
+    void Update(const SlotPair* out, SlotPair value);   // 0x00c95660
+    void Insert(void** value);                          // 0x00c92bd0
+};
+struct TribeMap {             // cTribe+0x4e4
+    uint32_t  m00;            // +0x00
+    uint32_t  m04;            // +0x04
+    uint32_t  m08;            // +0x08
+    uint32_t  m0c;            // +0x0c
+
+    RegionSlot* Find(const uint32_t* key);              // 0x00c96950
+    void Destroy(uint32_t a, uint32_t b);               // 0x00c95930
+};
+struct TribeMapB {
+    uint32_t  m00;
+    uint32_t  m04;
+    uint32_t  m08;
+    uint32_t  m0c;
+
+    void Destroy(uint32_t a, uint32_t b);               // 0x00c93700
+};
+void SlotRehash(SlotPair* out, SlotPair lo, SlotPair hi, uint32_t** extra);   // 0x00c8ecb0
+void __fastcall SubDtor_cc7c50(void* p);                  // 0x00cc7c50
+void __fastcall SubDtor_b638b0(void* p);                  // 0x00b638b0
+void __fastcall SubDtor_afbad0(void* p);                  // 0x00afbad0
+void __fastcall SubDtor_ae6970(void* p);                  // 0x00ae6970
+void __fastcall SubDtor_ad92d0(void* p);                  // 0x00ad92d0
+void __fastcall SubDtor_b6edf0(void* p);                  // 0x00b6edf0
+void __fastcall SubDtor_cee7a0(void* p);                  // 0x00cee7a0
+void __fastcall SubDtor_ac0520(void* p);                  // 0x00ac0520
+void __fastcall SubDtor_c8a420(void* p);                  // 0x00c8a420
+void __fastcall SubDtor_c2e4e0(void* p);                  // 0x00c2e4e0
+void __fastcall BaseDtor(void* p);                        // 0x00bdd680
+struct cTribeSub120 {
+virtual void s00();
+virtual void s04();
+virtual void s08();
+virtual void s0c();
+virtual void s10();
+virtual void s14();
+virtual void s18();
+virtual void s1c();
+virtual void s20();
+virtual void s24();
+virtual void s28();
+    virtual bool Query();                                 // slot 0x2c
+};
+typedef SpVec* (__thiscall* cGetValueListFn)(void* self);
+struct cTribeVtbl {
+    void* mSlots[36];                 // +0x00 .. +0x8c
+    cGetValueListFn GetValueList;     // +0x90
+};
+struct cTribeRandCtx { float Next(uint32_t salt); };      // 0x00ce6a40
+extern cTribeRandCtx gTribeRandCtx;                       // 0x01581208
+struct cPlanetModel_s00c9_7220 { Vec3* DirectionToSurfacePosition(Vec3* out, const Vec3* in); };   // 0x00b815a0
+cPlanetModel_s00c9_7220* PlanetModel_s00c9_7220();                              // 0x00b3d350
+struct cTribe_s00c9_7220 {
+    cTribeVtbl* mpVtbl;           // +0x00
+    void*       mpVtbl04;         // +0x04
+    char        pad08[0x2c];      // +0x08 .. +0x34
+    void*       mpVtbl34;         // +0x34
+    char        pad38[0xe8];      // +0x38 .. +0x120
+    void*       mpVtbl120;        // +0x120
+    char        sub124[0xd0];     // +0x124 .. +0x1f4
+    void*       mpVtbl1f4;        // +0x1f4
+    char        sub1f8[0x14];     // +0x1f8 .. +0x20c
+    void*       mpVtbl20c;        // +0x20c
+    char        sub210[0x20];     // +0x210 .. +0x230
+    void*       mpVtbl230;        // +0x230
+    char        pad234[0x2c];     // +0x234 .. +0x260
+    void*       mpRef260;         // +0x260
+    char        pad264[0xc];      // +0x264 .. +0x270
+    char        sub270[0x20];     // +0x270
+    void*       mpRef290;         // +0x290
+    void*       mpArray294;       // +0x294
+    char        pad298[0x10];     // +0x298 .. +0x2a8
+    void*       mpArray2a8;       // +0x2a8
+    char        pad2ac[0x24];     // +0x2ac .. +0x2d0
+    void*       mpRef2d0;         // +0x2d0
+    void*       mpRef2d4;         // +0x2d4
+    char        pad2d8[0x38];     // +0x2d8 .. +0x310
+    void*       mp310;            // +0x310
+    void*       mpArray314;       // +0x314
+    char        pad318[0x10];     // +0x318 .. +0x328
+    uint32_t    m328;             // +0x328
+    uint32_t    m32c;             // +0x32c
+    float       m330;             // +0x330
+    uint8_t     m334;             // +0x334
+    uint8_t     pad335[3];
+    uint32_t    m338;             // +0x338
+    uint8_t     m33c;             // +0x33c
+    uint8_t     pad33d[3];        // +0x33d .. +0x340
+    char        sub340[0x14];     // +0x340
+    char        sub354[0x14];     // +0x354
+    void*       mpRef368;         // +0x368
+    char        sub36c[0x14];     // +0x36c
+    char        sub380[0x14];     // +0x380
+    TribeMapB   map394;           // +0x394
+    char        pad3a4[0x10];     // +0x3a4 .. +0x3b4
+    char        sub3b4[0x64];     // +0x3b4
+    void*       mpArray418;       // +0x418
+    char        pad41c[0xc8];     // +0x41c .. +0x4e4
+    TribeMap    map4e4;           // +0x4e4
+    float       m4f4;             // +0x4f4
+    float       m4f8;             // +0x4f8
+    uint32_t    m4fc;             // +0x4fc
+    char        pad500[0x10];     // +0x500 .. +0x510
+    char        sub510[0x20];     // +0x510
+    char        sub530[0x28];     // +0x530
+    char        sub558[0x18c8 - 0x558];   // +0x558 .. +0x18c8
+    void*       mpOwned18c8;      // +0x18c8
+    uint32_t    m18cc;            // +0x18cc
+    char        pad18d0[0x34];    // +0x18d0 .. +0x1904
+    void*       mpArray1904;      // +0x1904
+    char        pad1908[0xbc];    // +0x1908 .. +0x19c4
+    void*       mpRef19c4;        // +0x19c4
+    void*       mpRef19c8;        // +0x19c8
+    void*       mpRef19cc;        // +0x19cc
+    void*       mpRef19d0;        // +0x19d0
+
+    // Frame query for a region: returns the region origin in a and its extent in b.
+    void Frame(uint32_t key, Vec3* a, Vec3* b);           // 0x00c905c0
+
+    Vec3*    RandomRegionPoint(Vec3* out, uint32_t key, int);     // 0x00c979e0
+    Vec3*    RandomRegionPointAt(int unused, Vec3* out, uint32_t key);   // 0x00c97b10
+    int      FindRegionIndex(uint32_t key, int unused);           // 0x00c97c40
+    int      InsertRegionValue(uint32_t key, void* obj);          // 0x00c97ca0
+    void     UpdateRegionSlot(uint32_t key, uint32_t* extra);     // 0x00c97d40
+    void     Destroy();                                           // 0x00c97de0
+    bool     Sub120Query();                                       // 0x00c98080
+    uint32_t AllocateRegion(uint32_t key);                        // 0x00c98230
+
+    uint32_t Sub120Count();                                       // 0x00c8eae0
+    uint32_t Sub120Index(uint32_t key);                           // 0x00c8e5a0
+    void     Sub120Set(uint32_t value, int flag);                 // 0x00c95d70
+};
+static inline void LoadU32(cPropertyList* pl, uint32_t id, uint32_t* dst)
+{
+    Property* p;
+    if (pl && pl->GetProperty(id, p) && p->mnType == 10)
+        *dst = *(uint32_t*)p->GetValuePtr();
+}
+static inline float PropFloat(Property* p) { return *(float*)p->GetValuePtr(); }
+static inline void LoadFloat(cPropertyList* pl, uint32_t id, float* dst)
+{
+    Property* p;
+    if (pl && pl->GetProperty(id, p) && p->mnType == 13)
+        *dst = PropFloat(p);
+}
+// ---- items of slice s00c97220 end
+
+// ---- items of slice s00c9a080 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C" long __cdecl _InterlockedExchange(volatile long* target, long value);
+extern float kDefaultFloat;             // 0x015d9c6c
+extern float g_ZoningRadius;            // 0x01581268
+#pragma intrinsic(_InterlockedExchange)
+#define VPAD(n) virtual void vpad##n()
+struct Vector3_s00c9_a080 {
+    float x, y, z;
+    Vector3_s00c9_a080() {}
+    Vector3_s00c9_a080(float a, float b, float c) : x(a), y(b), z(c) {}
+};
+inline Vector3_s00c9_a080 operator-(const Vector3_s00c9_a080& v) { return Vector3_s00c9_a080(-v.x, -v.y, -v.z); }
+template <class T> struct AutoRef_s00c9_a080 {
+    T* p;
+    void Assign(T* n)
+    {
+        T* old = p;
+        if (n != old) {
+            if (n) n->AddRef();
+            p = n;
+            if (old) old->Release();
+        }
+    }
+};
+struct Property_s00c9_a080 {
+    uint32_t pad0[4];
+    uint16_t mFlags;                    // +0x10 (0x30 = data behind a pointer)
+    uint16_t mType;                     // +0x12 (0xd float, 0x10 void)
+    float* GetValueFloat();
+};
+inline float* Property_s00c9_a080::GetValueFloat()
+{
+    if (mType == 0xd || mType == 0x10) {
+        if (mFlags & 0x30)
+            return *(float**)this;
+        return mType ? (float*)this : 0;
+    }
+    return &kDefaultFloat;
+}
+struct PropertyList : IRefCounted {
+VPAD(0);
+VPAD(1);
+VPAD(2);
+VPAD(3);
+VPAD(4);
+VPAD(5);
+VPAD(6);
+    virtual bool GetProperty(uint32_t id, Property_s00c9_a080*& out);                     // +0x24
+};
+struct PropManager {
+VPAD(0);
+VPAD(1);
+VPAD(2);
+VPAD(3);
+VPAD(4);
+VPAD(5);
+VPAD(6);
+VPAD(7);
+VPAD(8);
+VPAD(9);
+VPAD(10);
+    virtual bool GetPropertyList(uint32_t inst, uint32_t group, AutoRef_s00c9_a080<PropertyList>& dst);   // +0x2c
+};
+PropManager* PropertyManager_s00c9_a080();         // 0x0067de30
+struct IMapSet { float GetHeightAt(const Vector3_s00c9_a080* pos); };                     // 0x00f927c0
+struct IDistGrid {
+VPAD(0);
+VPAD(1);
+VPAD(2);
+    virtual IMapSet* GetMapSet();                                              // +0x0c
+};
+struct cPlanetModel_s00c9_a080 {
+    uint32_t pad[0x24 / 4];
+    IDistGrid* mpGrid;                                                         // +0x24
+    void DirectionToSurfacePosition(Vector3_s00c9_a080* out, const Vector3_s00c9_a080* dir);         // 0x00b815a0
+    Quaternion BuildSurfaceOrientation(const Vector3_s00c9_a080& pos);                    // 0x00b7f190
+    Quaternion BuildSurfaceOrientation(const Vector3_s00c9_a080& pos, const Vector3_s00c9_a080& dir);// 0x00b7f250
+};
+cPlanetModel_s00c9_a080* PlanetModel_s00c9_a080();            // 0x00b3d350
+struct cModelWorld;
+cModelWorld* GonzagoModelWorld();       // 0x00b3d520
+struct cSpatialPart_s00c9_a080 {
+VPAD(0);
+VPAD(1);
+VPAD(2);
+VPAD(3);
+VPAD(4);
+VPAD(5);
+VPAD(6);
+VPAD(7);
+VPAD(8);
+VPAD(9);
+VPAD(10);
+    virtual const Vector3_s00c9_a080& GetPosition();                                      // +0x2c
+    virtual const Quaternion& GetOrientation();                                // +0x30
+    VPAD(13);
+    virtual void SetPosition(const Vector3_s00c9_a080& p);                                // +0x38
+    virtual void SetOrientation(const Quaternion& q);                          // +0x3c
+VPAD(16);
+VPAD(17);
+VPAD(18);
+VPAD(19);
+VPAD(20);
+VPAD(21);
+    virtual bool IsEditor();                                                   // +0x58
+};
+struct cPlacedPart {
+VPAD(0);
+VPAD(1);
+VPAD(2);
+VPAD(3);
+VPAD(4);
+VPAD(5);
+VPAD(6);
+VPAD(7);
+VPAD(8);
+VPAD(9);
+VPAD(10);
+VPAD(11);
+VPAD(12);
+VPAD(13);
+    virtual void SetPosition(const Vector3_s00c9_a080* p);                                // +0x38
+    virtual void SetOrientation(const Quaternion* q);                          // +0x3c
+VPAD(16);
+VPAD(17);
+VPAD(18);
+VPAD(19);
+VPAD(20);
+VPAD(21);
+VPAD(22);
+    virtual Vector3_s00c9_a080 GetDirection();                                            // +0x5c
+VPAD(24);
+VPAD(25);
+VPAD(26);
+VPAD(27);
+VPAD(28);
+VPAD(29);
+VPAD(30);
+VPAD(31);
+VPAD(32);
+VPAD(33);
+VPAD(34);
+VPAD(35);
+VPAD(36);
+VPAD(37);
+VPAD(38);
+VPAD(39);
+    virtual void SetModelWorld(cModelWorld* w);                                // +0xa0
+};
+struct cTribe_s00c9_a080;
+struct cTribeNoun : IRefCounted {                                              // hut or food mat
+    VPAD(0);                                                                   // +0x08
+    virtual void* Cast(uint32_t id);                                           // +0x0c
+    uint32_t pad04[(0x34 - 0x4) / 4];
+    cPlacedPart mPart;                                                         // +0x34
+};
+struct cTribeHut : cTribeNoun {
+VPAD(4);
+VPAD(5);
+VPAD(6);
+VPAD(7);
+VPAD(8);
+VPAD(9);
+VPAD(10);
+VPAD(11);
+VPAD(12);
+VPAD(13);
+VPAD(14);
+VPAD(15);
+VPAD(16);
+VPAD(17);
+VPAD(18);
+VPAD(19);
+VPAD(20);
+    virtual void SetTribe(cTribe_s00c9_a080* t);                                          // +0x54
+};
+struct cTribeFoodMat : cTribeNoun {
+VPAD(4);
+VPAD(5);
+VPAD(6);
+VPAD(7);
+VPAD(8);
+VPAD(9);
+VPAD(10);
+VPAD(11);
+VPAD(12);
+VPAD(13);
+VPAD(14);
+VPAD(15);
+VPAD(16);
+VPAD(17);
+VPAD(18);
+VPAD(19);
+VPAD(20);
+    virtual void SetTribe(cTribe_s00c9_a080* t);                                          // +0x54
+};
+struct cTimerLike {
+VPAD(0);
+VPAD(1);
+VPAD(2);
+VPAD(3);
+VPAD(4);
+VPAD(5);
+VPAD(6);
+VPAD(7);
+VPAD(8);
+VPAD(9);
+VPAD(10);
+    virtual void SetEnabled(int on);                                           // +0x2c
+};
+struct BehaviorMgr {
+VPAD(0);
+VPAD(1);
+VPAD(2);
+VPAD(3);
+VPAD(4);
+VPAD(5);
+VPAD(6);
+VPAD(7);
+VPAD(8);
+VPAD(9);
+VPAD(10);
+VPAD(11);
+VPAD(12);
+VPAD(13);
+    virtual void Register(void* p);                                            // +0x38
+};
+BehaviorMgr* BehaviorManager();         // 0x00b3d260
+extern const Vector3_s00c9_a080 kInvalidPos;       // 0x01695374
+struct cCitizen_s00c9_a080 : IRefCounted {
+VPAD(0);
+VPAD(1);
+VPAD(2);
+VPAD(3);
+VPAD(4);
+VPAD(5);
+VPAD(6);
+VPAD(7);
+VPAD(8);
+VPAD(9);
+VPAD(10);
+VPAD(11);
+VPAD(12);
+VPAD(13);
+VPAD(14);
+VPAD(15);
+VPAD(16);
+VPAD(17);
+VPAD(18);
+VPAD(19);
+VPAD(20);
+VPAD(21);
+VPAD(22);
+VPAD(23);
+VPAD(24);
+VPAD(25);
+VPAD(26);
+VPAD(27);
+VPAD(28);
+VPAD(29);
+VPAD(30);
+VPAD(31);
+VPAD(32);
+VPAD(33);
+VPAD(34);
+VPAD(35);
+VPAD(36);
+VPAD(37);
+VPAD(38);
+VPAD(39);
+VPAD(40);
+VPAD(41);
+VPAD(42);
+VPAD(43);
+VPAD(44);
+VPAD(45);
+VPAD(46);
+VPAD(47);
+VPAD(48);
+VPAD(49);
+VPAD(50);
+VPAD(51);
+VPAD(52);
+VPAD(53);
+VPAD(54);
+VPAD(55);
+    virtual void Init(int a, cTribe_s00c9_a080* tribe, int b, const Vector3_s00c9_a080* where);      // +0xe8
+};
+struct cNounManager { IRefCounted* CreateNoun(uint32_t id); };                  // 0x00b20c60
+cNounManager* NounManager_s00c9_a080();            // 0x00b3d300
+struct cSpecies { uint32_t pad[0x608 / 4]; uint32_t mCount608; uint32_t mCount60c; };
+inline bool HasA(const cSpecies* s) { return s && s->mCount60c > 0; }
+inline bool HasB(const cSpecies* s) { return s && s->mCount608 > 0; }
+struct cSpeciesGlobals {
+    float GetRadius(cSpecies* s);       // 0x00ce6a40
+    int GetPopulation();                // 0x0104bd80
+    int GetFood();                      // 0x0104c100
+};
+extern cSpeciesGlobals g_Species;       // 0x01581208
+struct cBundle {                        // cGameBundleContainer at +0x20c
+    void Init(cTribe_s00c9_a080* owner, int type, float cap, float amount, int mode);     // 0x00cee2c0
+};
+struct cBundleMgr { void Add(float amount, cBundle* b, int type); };           // 0x00ac7ab0
+cBundleMgr* BundleManager();            // 0x00b3d2b0
+struct cReservationGrid {
+    float ComputeGridResolution(float res, float zero);    // 0x00cc7830
+};
+struct cTimer {
+    uint32_t mData;
+    void Restart();                                        // 0x00bc3130
+    bool IsRunning();                                      // 0x00feba90
+    void Stop();                                           // 0x00bc3110
+    void FUN_00bc3170();                                   // 0x00bc3170
+    uint64_t GetElapsedTime();                             // 0x00bc3190
+};
+struct IMsgServer {
+VPAD(0);
+VPAD(1);
+VPAD(2);
+VPAD(3);
+VPAD(4);
+    virtual void Post(uint32_t id, void* msg, int flags);                      // +0x14
+};
+IMsgServer* MessageServer();            // 0x0067dcc0
+struct RefBaseA22 {
+    virtual void v0();
+    volatile long rc;
+    RefBaseA22() { _InterlockedExchange(&rc, 0); }
+};
+struct MsgTribe : RefBaseA22 {
+    cTribe_s00c9_a080* mTribe;                     // +8
+    uint32_t pad[9];
+    uint32_t mID;                       // +0x30
+    uint32_t pad34;
+    uint32_t mZero;                     // +0x38
+    MsgTribe(cTribe_s00c9_a080* t) : mID(0x1e8c9e0), mZero(0), mTribe(t) {}
+    ~MsgTribe();                        // 0x00421cf0 SlotMessage::Destruct
+    virtual void v0();
+};
+struct cIdentity { uint32_t d[12]; void Init(); };                              // 0x00c2e4e0 (cIdentityColorable)
+struct cTribe_s00c9_a080 {
+    virtual void vp0();
+VPAD(1);
+VPAD(2);
+VPAD(3);
+VPAD(4);
+VPAD(5);
+VPAD(6);
+VPAD(7);
+VPAD(8);
+VPAD(9);
+VPAD(10);
+VPAD(11);
+VPAD(12);
+VPAD(13);
+VPAD(14);
+VPAD(15);
+VPAD(16);
+VPAD(17);
+VPAD(18);
+    virtual int GetPoliticalID();                                              // +0x4c
+VPAD(20);
+VPAD(21);
+VPAD(22);
+VPAD(23);
+VPAD(24);
+VPAD(25);
+VPAD(26);
+VPAD(27);
+VPAD(28);
+VPAD(29);
+VPAD(30);
+VPAD(31);
+VPAD(32);
+VPAD(33);
+VPAD(34);
+VPAD(35);
+VPAD(36);
+VPAD(37);
+VPAD(38);
+VPAD(39);
+VPAD(40);
+VPAD(41);
+    virtual void funcA8();                                                     // +0xa8
+
+    uint32_t pad04[(0x38 - 0x4) / 4];
+    uint32_t mField38;                                                         // +0x38 (FUN_00ff03b0)
+    uint32_t pad3c[(0x6c - 0x3c) / 4];
+    uint8_t mFlag6c;                                                           // +0x6c
+    uint8_t pad6d[3];
+    uint32_t pad70[(0x120 - 0x70) / 4];
+    cSpatialPart_s00c9_a080 mSpatial;                                                     // +0x120
+    uint32_t pad124[(0x20c - 0x124) / 4];
+    cBundle mBundle;                                                           // +0x20c
+    uint32_t pad20c[(0x230 - 0x20c - 4) / 4];
+    // +0x230: identity sub-object (cIdentityColorable)
+    cIdentity mIdentity;                                                       // +0x230
+    AutoRef_s00c9_a080<cTribeFoodMat> mpFoodMat;                                          // +0x260
+    uint32_t pad264;
+    float mRSquareSize;                                                        // +0x268
+    uint32_t pad26c[(0x2d4 - 0x26c) / 4];
+    AutoRef_s00c9_a080<PropertyList> mpPropList;                                          // +0x2d4
+    uint32_t pad2d8[(0x2e8 - 0x2d8) / 4];
+    Vector3_s00c9_a080 mCenter;                                                           // +0x2e8
+    uint32_t pad2f4[(0x300 - 0x2f4) / 4];
+    uint8_t mbCheckedForWater;                                                 // +0x300
+    uint8_t pad301[0x2f];
+    float mZoningRadius;                                                       // +0x330
+    uint8_t mbRoboTribe;                                                       // +0x334
+    uint8_t pad335[3];
+    uint32_t mRoboPopulationCount;                                             // +0x338
+    uint8_t mbVisualized;                                                      // +0x33c
+    uint8_t pad33d[3];
+    uint32_t pad340[(0x354 - 0x340) / 4];
+    int* mSelectableBegin;                                                     // +0x354
+    int* mSelectableEnd;                                                       // +0x358
+    uint32_t pad35c[(0x368 - 0x35c) / 4];
+    AutoRef_s00c9_a080<cTribeHut> mpHut;                                                  // +0x368
+    uint32_t pad36c[(0x510 - 0x36c) / 4];
+    cTimer mPopulationTimer;                                                   // +0x510
+    uint32_t pad514[(0x530 - 0x514) / 4];
+    cTimer mToolsTimer;                                                        // +0x530
+    uint32_t pad534[(0x550 - 0x534) / 4];
+    uint32_t mTribeArchetype;                                                  // +0x550
+    uint32_t pad554;
+    cReservationGrid mRGrid;                                                   // +0x558
+    uint32_t pad55c[(0x18cc - 0x55c) / 4];
+    cSpecies* mpSpecies0;                                                      // +0x18cc
+
+    // methods (all thiscall)
+    void SetOwner(int a);                                                      // 0x00b18550
+    Vector3_s00c9_a080* GetClosestWater();                                                // 0x00c8fe20
+    void UpdateRoboTribeness();                                                // 0x00c8fbb0
+    void SetupChatAreas();                                                     // 0x00c95af0
+    void UpdateToolPositions();                                                // 0x00c91250
+    void ResetToolLayout();                                                    // 0x00c951d0
+    void ResetDefaultToolPlacement(int n);                                     // 0x00c8f770
+    int GetMaxPopulation();                                                    // 0x00c8eae0
+    void ChooseNewHutModel();                                                  // 0x00c99c30
+    void ReserveToolsSlots(int n);                                             // 0x00c998c0
+    void UpgradeHut();                                                         // 0x00c919e0
+    void UpdateModel();                                                        // 0x00c91a40
+    void FUN_00c91700();                                                       // 0x00c91700
+    void AddExistingCreatureInternal(cCitizen_s00c9_a080* c, int flag);                   // 0x00c95d70
+    void FUN_00ff03b0(int v);                                                  // 0x00ff03b0
+    bool CheckToolsTimeout();                                                  // 0x00c9a960
+
+    void Init(const Vector3_s00c9_a080* pos, int numMembers, int foodAmount, bool flag);
+};
+int FUN_00c00aa0(int n);                // 0x00c00aa0 (cdecl)
+extern cTimer g_hotSpotTimer;               // 0x016953f8
+struct cHotSpotNode {
+    Vector3_s00c9_a080 mPosition;                                             // +0x00
+    float   mField0c;                                              // +0x0c
+    float   mField10;                                              // +0x10
+    uint8_t pad14[0x39 - 0x14];
+    uint8_t mField39;                                              // +0x39
+    uint8_t pad3a[0x60 - 0x3a];
+};
+void __fastcall HotSpotGridRelease(void* slot);                    // 0x00c8efc0 (ecx = slot)
+struct HotSpotMap {
+    cHotSpotNode* mpBegin;                                         // +0x00
+    union {
+        cHotSpotNode* mpEnd;                                       // +0x04
+        uint32_t      mpEndRaw;
+    };
+    uint8_t pad08[0xc18 - 0x08];
+    uint8_t mField0c18;                                            // +0xc18
+    void FreeRange(cHotSpotNode* begin, cHotSpotNode* end);        // 0x00c93690 (ret 8)
+    cHotSpotNode* operator[](const Vector3_s00c9_a080** key);                 // 0x00c9aa10 (ret 4)
+};
+extern HotSpotMap g_hotSpots;               // 0x0157abb0
+// ---- items of slice s00c9a080 end
+
+// ---- items of slice s00c9afb0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C" double __cdecl fabs(double);
+extern const uint8_t kFaceAxes[3][4];                                            // 0x01473bc0
+extern float g_DefaultFloat;                                                     // 0x015d9c6c
+extern uint8_t g_HotSpotsFlag;                                               // 0x0157b7c8
+extern uint64_t g_NextFishTime;                                              // 0x01695368
+struct Vector3_s00c9_afb0 { float x, y, z; };
+struct CubeIndex { int x, y, face; };
+struct CubeCoord { float u, v; int face; };
+CubeIndex* __cdecl CoordToIndex(CubeIndex* out, int res, const CubeCoord* in);   // 0x00684bf0
+CubeCoord* __cdecl IndexToCoord(CubeCoord* out, int res, const CubeIndex* in);   // 0x00684c50
+void __cdecl WrapCubeFace(int res, int* face, int* x, int* y, int a, int b);     // 0x00684ca0
+struct Property_s00c9_afb0 {
+    void*    mpData;       // +0x00
+    uint32_t pad04[3];
+    uint16_t mnFlags;      // +0x10
+    uint16_t mnType;       // +0x12
+};
+struct PropertyList_s00c9_afb0 {
+    virtual int  AddRef();  // 0x00432be0 (PropertyList::AddRef)
+    virtual int  Release();
+virtual void v2();
+virtual void v3();
+virtual void v4();
+virtual void v5();
+virtual void v6();
+virtual void v7();
+virtual void v8();
+    virtual bool GetProperty(uint32_t id, Property_s00c9_afb0*& prop);                      // +0x24
+};
+extern PropertyList_s00c9_afb0* g_pTribeTuning;                                             // 0x0158128c
+struct IRef_s00c9_afb0 {
+    virtual void v0();
+    virtual void Release();
+};
+struct HotSpot {
+    Vector3_s00c9_afb0   mPos;          // +0x00
+    float     mFood;         // +0x0c
+    float     mMaxFood;      // +0x10
+    float     mResupply;     // +0x14
+    CubeIndex mCube;         // +0x18
+    IRef_s00c9_afb0*     mpEffect;      // +0x24
+    IRef_s00c9_afb0*     mpHitSphere;   // +0x28
+    uint32_t  pad2c;
+    uint64_t  mStartTime;    // +0x30
+    bool      mbActive;      // +0x38
+    bool      mbRemove;      // +0x39
+    IRef_s00c9_afb0*     mpOrnament;    // +0x3c
+    void*     mpArray;       // +0x40
+    uint32_t  pad44, pad48, pad4c;
+
+    HotSpot()
+        : mFood(30.0f), mMaxFood(30.0f), mResupply(0.0f), mpEffect(0), mpHitSphere(0),
+          mStartTime(0), mbActive(false), mbRemove(false), mpOrnament(0), mpArray(0)
+    {
+        pad44 = 0; pad48 = 0; pad4c = 0;
+        mPos.x = 0; mPos.y = 0; mPos.z = 0;
+    }
+    ~HotSpot()
+    {
+        if (mpArray && ((int*)mpArray)[-1] != 0)
+            operator_delete__(mpArray);
+        if (mpOrnament) mpOrnament->Release();
+        if (mpHitSphere) mpHitSphere->Release();
+        if (mpEffect) mpEffect->Release();
+    }
+    void Assign(const HotSpot& o);                       // 0x00c95010 (ret 4)
+    void SetupArea(const Vector3_s00c9_afb0& pos, float radius);    // 0x00c91030 (ret 8)
+};
+struct HotSpotElem { uint32_t key; uint32_t pad; HotSpot value; };   // stride 0x60
+struct HotSpotMap_s00c9_afb0 {
+    HotSpotElem* mpBegin;      // +0
+    HotSpotElem* mpEnd;        // +4
+    uint32_t     pad[0x3040 / 4 - 2];   // up to the flag at +0xc18 (kept symbolic below)
+};
+extern HotSpotMap_s00c9_afb0 g_HotSpots;                                                // 0x0157abb0
+HotSpotElem* __cdecl HotSpotLowerBound_s00c9_afb0(HotSpotElem* first, HotSpotElem* last, const uint32_t* key, uint8_t flag);   // 0x00c92d50
+struct HotSpotMapRef {
+    HotSpot* at(const uint32_t* key);                                        // 0x00c9aa10 (thiscall, ret 4)
+};
+struct PlanetModelT {
+    int     ClassifyPoint(const Vector3_s00c9_afb0* dir);                               // 0x00b82fc0 (ret 4)
+    Vector3_s00c9_afb0 SurfacePoint(const Vector3_s00c9_afb0& dir);                                // 0x00b81630 (ret 8, sret)
+    bool    IsWaterPoint(const Vector3_s00c9_afb0* pos);                                // 0x00b7e3e0 (ret 4)
+    Quaternion BuildSurfaceOrientation(const Vector3_s00c9_afb0& pos);                  // 0x00b7f190 (ret 4, sret)
+};
+PlanetModelT* __cdecl PlanetModel_s00c9_afb0();                                         // 0x00b3d350
+struct GameTimeMgr { uint64_t GetTime(); };                                  // 0x00b316c0
+GameTimeMgr* __cdecl GameTimeManager();                                      // 0x00b3d380
+struct cSPTimer_s00c9_afb0 {
+    bool     IsRunning();                                                    // 0x00feba90
+    void     Start();                                                        // 0x00bc30f0
+    void     Restart();                                                      // 0x00bc3130
+    uint64_t GetElapsedTime();                                               // 0x00bc3190
+};
+extern cSPTimer_s00c9_afb0 g_FishTimer;                                                 // 0x016953f8
+extern Vector3_s00c9_afb0  g_FishTarget;                                                // 0x01695374 (last water test point)
+inline float ReadFloatProperty(uint32_t id, float def)
+{
+    Property_s00c9_afb0* p;
+    if (g_pTribeTuning && g_pTribeTuning->GetProperty(id, p)) {
+        uint16_t t = p->mnType;
+        if (t == 0xd || t == 0x10) {
+            if (p->mnFlags & 0x30)
+                return **(float**)p;
+            return *(float*)(t ? (void*)p : (void*)0);
+        }
+        return g_DefaultFloat;
+    }
+    return def;
+}
+struct RefCounted {
+    virtual int   AddRef();                 // +0x00
+    virtual void  Release();                // +0x04
+    virtual void  r08();                    // +0x08
+    virtual void  r0c();                    // +0x0c
+    virtual void  r10();                    // +0x10
+    virtual void  r14();                    // +0x14
+    virtual void  r18();                    // +0x18
+    virtual void  r1c();                    // +0x1c
+    virtual void  r20();                    // +0x20
+    virtual void  r24();                    // +0x24
+    virtual void  r28();                    // +0x28
+    virtual void* GetPosition();            // +0x2c
+    virtual void  r30();                    // +0x30
+    virtual void  r34();                    // +0x34
+    virtual void  r38();                    // +0x38
+    virtual void  r3c();                    // +0x3c
+    virtual void  r40();                    // +0x40
+    virtual void  r44();                    // +0x44
+    virtual void  r48();                    // +0x48
+    virtual void  r4c();                    // +0x4c
+    virtual void  r50();                    // +0x50
+    virtual void  r54();                    // +0x54
+    virtual void* v58();                    // +0x58
+    virtual void* v5c(void* out);           // +0x5c
+    virtual void  v60();                    // +0x60
+};
+struct CompactObj {
+    virtual void  k00();                    // +0x00
+    virtual void  k04();                    // +0x04
+    virtual void  k08();                    // +0x08
+    virtual void  k0c();                    // +0x0c
+    virtual void  k10();                    // +0x10
+    virtual void  k14();                    // +0x14
+    virtual void  k18(float value, int id); // +0x18
+    virtual void  k1c();                    // +0x1c
+    virtual void  k20();                    // +0x20
+    virtual void  k24();                    // +0x24
+    virtual void  k28();                    // +0x28
+    virtual void* k2c();                    // +0x2c
+    char mTail[0x18];                       // total 0x1c
+};
+struct cSpatialObject_s00c9_afb0 {
+    virtual void s00();
+    cSpatialObject_s00c9_afb0();                                   // 0x00c89630
+    ~cSpatialObject_s00c9_afb0();                                  // 0x00c8a420
+    void  SetLocalExtents(void* ext, float radius);     // 0x00c89160
+    void* Cast(int type);                               // 0x00c884f0
+    bool  Write(void* io);                              // 0x00c88a90
+    void  func80h();                                    // 0x00c88510
+    void  func54h(void* a);                             // 0x00c88670
+    void  func58h(void* a);                             // 0x00c886d0
+    void  OnExtentsChanged(void* a, float b);           // 0x00c9be50
+
+    char      mPad004[0x50];                            // +0x004
+    int       mMaterialType;                            // +0x054 (abs +0x088)
+    char      mPad058[0x38];                            // +0x058
+    uint32_t  mModelInstance;                           // +0x090 (abs +0x0c4)
+    uint32_t  mPad094;                                  // +0x094
+    uint32_t  mModelGroup;                              // +0x098 (abs +0x0cc)
+    char      mPad09c[8];                               // +0x09c
+    void*     mpTribe;                                  // +0x0a4 (abs +0x0d8)
+    char      mPad0a8[0x10];                            // +0x0a8
+    CompactObj mSub;                                    // +0x0b8 (abs +0x0ec)
+};
+namespace SP {
+class cTribe_s00c9_afb0 { public:
+    static uint32_t SetupHotSpot(const Vector3_s00c9_afb0& dir, int force = 0);  // 0x00c9afb0 (SP::cTribe::SetupHotSpot)
+    const Vector3_s00c9_afb0* GetClosestWater();                            // 0x00c8fe20
+    void func54h(void* a);                                       // 0x00c88670
+    bool IsPlayerTribe();                                        // 0x00c9bd30
+    void HandleEvent(void* a);                                   // 0x00c9bd50
+    char mPad000[0xd8];
+    void* mpTribeD8;                                             // +0x0d8
+    char mPad0dc[0x120 - 0x0dc];
+    CompactObj mSub120;                                          // +0x120
+};  // namespace SP
+}
+struct TribeObj { void Notify(int id); };                                // 0x00c987b0
+// ---- items of slice s00c9afb0 end
+
+// @ 0x00c8e310
+IOObject* __cdecl F8e310(IOObject* pStream, const uint32_t* pData)
+{
+    uint32_t v0 = pData[0];
+    EA::IO::WriteUint32(pStream->v08()->v06(), &v0, 1, 0);
+    uint32_t v1 = pData[1];
+    EA::IO::WriteUint32(pStream->v08()->v06(), &v1, 1, 0);
+    uint32_t v2 = pData[2];
+    EA::IO::WriteUint32(pStream->v08()->v06(), &v2, 1, 0);
+    return pStream;
+}
+
+// @ 0x00c8e3a0
+IOObject* __cdecl F8e3a0(IOObject* pStream, uint32_t* pData)
+{
+    EA::IO::ReadInt32(pStream->v08()->v06(), &pData[0], 1, 0);
+    EA::IO::ReadInt32(pStream->v08()->v06(), &pData[1], 1, 0);
+    EA::IO::ReadInt32(pStream->v08()->v06(), &pData[2], 1, 0);
+    return pStream;
+}
+
 // @ 0x00c8e420
 void* __fastcall Tribe_AsInterface(Tribe* pSelf, int, unsigned int nID)
 {
@@ -2765,6 +4121,34 @@ bool __fastcall F8e870(Tribe* pSelf)
     return false;
 }
 
+// @ 0x00c8e890
+void __fastcall F8e890(Tribe* pSelf, int, Vec6* pOut, unsigned int nKind, int)
+{
+    int nRow;
+    if (nKind == 7) {
+        nRow = 0;
+    } else if (nKind == 8) {
+        nRow = 1;
+    } else if (nKind == 9) {
+        nRow = 2;
+    } else {
+        pOut->w[0] = 0;
+        pOut->w[1] = 0;
+        pOut->w[2] = 0;
+        pOut->w[3] = 0xffffffff;
+        pOut->w[4] = 0;
+        pOut->w[5] = 0;
+        return;
+    }
+    Vec6* pRow = &pSelf->mSegmentTable_1868[nRow];
+    pOut->w[0] = pRow->w[0];
+    pOut->w[1] = pRow->w[1];
+    pOut->w[2] = pRow->w[2];
+    pOut->w[3] = pRow->w[3];
+    pOut->w[4] = pRow->w[4];
+    pOut->w[5] = pRow->w[5];
+}
+
 // @ 0x00c8e930
 bool __fastcall F8e930(Tribe* pSelf, int, int* pArg)
 {
@@ -2780,6 +4164,24 @@ bool __fastcall F8e930(Tribe* pSelf, int, int* pArg)
         }
     }
     return false;
+}
+
+// @ 0x00c8e990
+uint32_t __fastcall F8e990(Tribe* pSelf)
+{
+    Grid* pGrid = (Grid*)pSelf->mpGrid_18cc;
+    if (pGrid != 0 && pGrid->HasA()) {
+        if (!(pGrid != 0 && pGrid->HasB())) {
+            return 1;
+        }
+    }
+    if (!(pGrid != 0 && pGrid->HasB())) {
+        return 3;
+    }
+    if (pGrid != 0 && pGrid->HasA()) {
+        return 3;
+    }
+    return 2;
 }
 
 // @ 0x00c8e9f0
@@ -3010,6 +4412,53 @@ void** FUN_00c8eeb0(void** pBegin, void** pEnd, void** pOut)
     return pOut;
 }
 
+// @ 0x00c8ef20
+void cSpatialThing_FUN_00c8ef20(cSpatialThing* pThis, cSPVector3_s00c8_ec60* pOut)
+{
+    cTransformNode* pNode = &pThis->mNode;
+    float fRadius = pNode->GetRadius();
+
+    cSPVector3_s00c8_ec60 aOrientation;
+    cSPVector3_s00c8_ec60* pOrientation = pNode->GetScale(&aOrientation);
+
+    cSPVector3_s00c8_ec60* pPosition = pThis->mNode.GetPosition();
+
+    pOut->mx = pPosition->mx + fRadius * pOrientation->mx;
+    pOut->my = pPosition->my + fRadius * pOrientation->my;
+    pOut->mz = pPosition->mz + fRadius * pOrientation->mz;
+}
+
+// @ 0x00c8efc0
+void cTribe_FUN_00c8efc0(cTribe* pThis)
+{
+    if (pThis->mppToolBegin != nullptr) {
+        NounManagerOf(pThis->mppToolBegin)->RemoveNoun(pThis->mppToolBegin);
+        if (pThis->mppToolBegin != nullptr) {
+            cRefCounted_s00c8_ec60* pNoun = (cRefCounted_s00c8_ec60*)pThis->mppToolBegin;
+            pThis->mppToolBegin = nullptr;
+            pNoun->Release();
+        }
+    }
+
+    if (pThis->mppToolEnd != nullptr) {
+        NounManagerOf(pThis->mppToolEnd)->RemoveNoun(pThis->mppToolEnd);
+        if (pThis->mppToolEnd != nullptr) {
+            cRefCounted_s00c8_ec60* pNoun = (cRefCounted_s00c8_ec60*)pThis->mppToolEnd;
+            pThis->mppToolEnd = nullptr;
+            pNoun->Release();
+        }
+    }
+
+    if (pThis->mpField19C4 != nullptr) {
+        pThis->mpField19C4->v0c(1);
+        if (pThis->mpField19C4 != nullptr) {
+            cRefCountedNode* pNode = pThis->mpField19C4;
+            pThis->mpField19C4 = nullptr;
+            pNode->Release();
+        }
+    }
+}
+
 // @ 0x00c8f2b0
 void cCommunity::func58h(int32_t nA)
 {
@@ -3114,6 +4563,35 @@ void cTribe::SetStimuli(int32_t nA1, int32_t nA2, float fA3, void* pA4)
     }
 }
 
+// @ 0x00c8f540
+void cTribe::FUN_00c8f540(cSPVector3_s00c8_ec60* pPosition, float fRadius, int32_t nA, void* pB, void* pC, void* pD)
+{
+    uint32_t* pList = (uint32_t*)GetAgents();
+
+    for (uint32_t* pIt = (uint32_t*)pList[0]; pIt != (uint32_t*)pList[1]; ++pIt) {
+        cCreature* pCreature = (cCreature*)*pIt;
+        cTransformNode* pNode = &pCreature->mNode;
+
+        cSPVector3_s00c8_ec60* pMemberPosition = pNode->GetPosition();
+        float fDx = pMemberPosition->mx - pPosition->mx;
+        float fDy = pMemberPosition->my - pPosition->my;
+        float fDz = pMemberPosition->mz - pPosition->mz;
+
+        float fMemberRadius = pNode->GetRadius();
+        float fLimit = fMemberRadius + fRadius;
+
+        float fDistSq = fDz * fDz + fDy * fDy + fDx * fDx;
+        if (!(fLimit * fLimit > fDistSq))
+            continue;
+
+        cStimulusEntry* pEntry =
+            (cStimulusEntry*)pCreature->mpBehaviorTree->mStimuli.Play(nA, pB, (float)(int32_t)pC, pD);
+        pEntry->mPosition = *pPosition;
+        pEntry->mnField0C = (int32_t)fRadius;
+        (void)fMemberRadius;
+    }
+}
+
 // @ 0x00c8f660
 void cTribe::FUN_00c8f660(int32_t nValue)
 {
@@ -3156,6 +4634,29 @@ bool cTribe::FUN_00c8f730(int32_t nId)
     }
 
     return false;
+}
+
+// @ 0x00c8f770
+void cTribe::ResetDefaultToolPlacement(int32_t nType)
+{
+    if (GetToolOfType(nType) != nullptr)
+        return;
+
+    cSPVector3_s00c8_ec60 aPosition = *mNode.GetPosition();
+
+    cSpatialThing* pThing = GetThing(nType);
+    pThing->mNode.FUN_00c8f03c(this);
+
+    cSPVector3_s00c8_ec60 aScale;
+    cSPVector3_s00c8_ec60* pScale = mNode.GetScale(&aScale);
+
+    cSPVector3_s00c8_ec60 aOrientation;
+    void* pSurface = PlanetModel(&aOrientation, &aPosition, pScale);
+    ((cSpatialThing*)pSurface)->mNode.GetOrientation(&aOrientation);
+
+    cTransformNode* pNode = &pThing->mNode;
+    pNode->GetOrientation(&aPosition);
+    pNode->FUN_00c8f03c(&aScale);
 }
 
 // @ 0x00c8f820
@@ -3500,6 +5001,40 @@ void __cdecl CopyElems14Range(Elem14* first, const Elem14* last, Elem14* dst)
   }
 }
 
+// @ 0x00c90e80
+void __cdecl AssignRefRange(SegIter* out, SegIter src, SegIter dst, RefCnt*** dstPageSlot)
+{
+  while (src.mpCur != dst.mpEnd) {
+    RefCnt* value = *src.mpCur;
+    RefCnt* old   = *dst.mpCur;
+    if (value != old) {
+      if (value != 0)
+        value->AddRef();
+      *dst.mpCur = value;
+      if (old != 0)
+        old->Release();
+    }
+    dst.mpCur++;
+    if (dst.mpCur == dst.mpEnd) {
+      dst.mpBegin = (RefCnt**)*dstPageSlot;
+      dst.mpEnd   = dst.mpBegin + 0x40;
+      dst.mpCur   = dst.mpBegin;
+      dstPageSlot++;
+    }
+    src.mpCur++;
+    if (src.mpCur == src.mpEnd) {
+      src.mppPage++;
+      src.mpBegin = (RefCnt**)*src.mppPage;
+      src.mpEnd   = src.mpBegin + 0x40;
+      src.mpCur   = src.mpBegin;
+    }
+  }
+  out->mpCur   = dst.mpCur;
+  out->mpBegin = dst.mpBegin;
+  out->mpEnd   = dst.mpEnd;
+  out->mppPage = dst.mppPage;
+}
+
 // @ 0x00c90f50
 void __cdecl PromoteHeap(Vec3* heap, s32 size, s32 hole, float x, float y, float z, float px, float py, float pz)
 {
@@ -3520,6 +5055,58 @@ void __cdecl PromoteHeap(Vec3* heap, s32 size, s32 hole, float x, float y, float
   out->x = x;
   out->y = y;
   out->z = z;
+}
+
+// @ 0x00c91030
+void cFishingHotSpot_s00c9_0b40::SetupArea(Vec3* pos, float radius)
+{
+  if (GetCurrentGameMode() != (void*)0x1654c02)
+    return;
+
+  if (mpSplashEffect_28 == 0) {
+    cSplashEffect* noun = (cSplashEffect*)((cGameNounManager_s00c9_0b40*)NounManager_s00c9_0b40())
+                              ->CreateNoun(0x18c88e4);
+    cSplashEffect* old = mpSplashEffect_28;
+    if (noun != old) {
+      if (noun != 0)
+        noun->AddRef();
+      mpSplashEffect_28 = noun;
+      if (old != 0)
+        old->Release();
+    }
+  }
+
+  FUN_00c6f770(mpSplashEffect_28, 0x356eb8a, -1, 0);
+  mpSplashEffect_28->mPlacement_70.SetPosition(pos);
+  mpSplashEffect_28->mVisible_e1 = 1;
+
+  if (mpInteractable_24 == 0) {
+    cInteractable* noun = (cInteractable*)((cGameNounManager_s00c9_0b40*)NounManager_s00c9_0b40())
+                              ->CreateNoun(0x2e72cae);
+    cInteractable* itr = 0;
+    if (noun != 0)
+      itr = (cInteractable*)noun->QueryInterface(0x2e71a5a);
+    cInteractable* old = mpInteractable_24;
+    if (itr != old) {
+      if (itr != 0)
+        itr->AddRef();
+      mpInteractable_24 = itr;
+      if (old != 0)
+        old->Release();
+    }
+  }
+
+  mpInteractable_24->SetAreaData(pos, radius);
+  mpInteractable_24->SetParams(0.0f, *(float*)0x14763b8);
+  mpInteractable_24->AttachEffect(mpSplashEffect_28);
+
+  cTribeModeStrategy* strat = (cTribeModeStrategy*)ModeStrategyInstance();
+  void* target = strat->v6c(0, Vec3(), 0, 0);
+  if (target == 0)
+    return;
+  cTribeModeStrategy* strat2 = (cTribeModeStrategy*)ModeStrategyInstance();
+  void* obj = strat2->v6c(mpSplashEffect_28, *pos, 0, 1);
+  FUN_00cc9740(obj);
 }
 
 // @ 0x00c91190
@@ -3559,6 +5146,65 @@ float* cTribe_s00c9_0b40::GetToolPosition(float* out, s32 kind)
   out[1] = mToolSlots_2dc[kind].y;
   out[2] = mToolSlots_2dc[kind].z;
   return out;
+}
+
+// @ 0x00c91250
+void cTribe_s00c9_0b40::UpdateToolPositions()
+{
+  cPlanetModel* planet = (cPlanetModel*)PlanetModel();
+
+  Vec3 center = *GetPosition();
+  Vec3 up;
+  v5c(&up);
+
+  float sum = (center.z * center.z + (center.x * center.x + center.y * center.y))
+              + 1e-08f;
+  float invLen = 1.0f / (float)sqrt((double)sum);
+  Vec3 axis = { center.z * invLen, center.x * invLen, center.y * invLen };
+
+  Vec3 ring[3];
+  for (s32 i = 0; i < 3; i++) {
+    float angle = (float)i * 90.0f;
+    float s = (float)sin((double)angle);
+    float c = (float)cos((double)angle);
+    float ax = axis.x * s;
+    float ay = axis.y * s;
+    float az = axis.z * s;
+    Vec3 dir;
+    dir.x = (((c * ay + az * ax) * up.z + (ay * ax - c * az) * up.x) * 2.0f +
+             (1.0f - (az * az + ay * ay) * 2.0f) * up.y) * 9.5f + center.x;
+    dir.y = (((c * az + ay * ax) * up.y + (az * ay - c * ax) * up.z) * 2.0f +
+             (1.0f - (az * az + ax * ax) * 2.0f) * up.x) * 9.5f + center.y;
+    dir.z = (((az * ax - c * ay) * up.y + (c * ax + az * ay) * up.x) * 2.0f +
+             (1.0f - (ax * ax + ay * ay) * 2.0f) * up.z) * 9.5f + center.z;
+    Vec3 projected;
+    DirectionToSurfacePosition(planet, &projected, &dir);
+    ring[i] = projected;
+  }
+
+  Vec3 social;
+  if (GetPropertyAsVector3(mToolSlots_2dc, 0x5777f17, &social) != 0) {
+    Quat* q = GetRotation();
+    float qx = q->x, qy = q->y, qz = q->z, qw = q->w;
+    float sx = social.x, sy = social.y, sz = social.z;
+    float tx = (qz * qx - qw * qy) * sx;
+    float ty = (qw * qz + qy * qx) * sx;
+    Vec3 r;
+    r.x = ((qy * qx - qw * qz) * sy + (qw * qy + qz * qx) * sz) * 2.0f +
+          (1.0f - (qz * qz + qy * qy) * 2.0f) * sx;
+    float t2 = (qw * qx + qz * qy) * sy;
+    r.y = ((qz * qy - qw * qx) * sz + ty) * 2.0f +
+          (1.0f - (qz * qz + qx * qx) * 2.0f) * sy;
+    r.z = (t2 + tx) * 2.0f +
+          (1.0f - (qy * qy + qx * qx) * 2.0f) * sz;
+    Vec3* pos = GetPosition();
+    r.x += pos->x;
+    r.y += pos->y;
+    r.z += pos->z;
+    Vec3 out;
+    DirectionToSurfacePosition(planet, &out, &r);
+    mToolSlots_2dc[1] = out;
+  }
 }
 
 // @ 0x00c91700
@@ -3636,6 +5282,44 @@ void cTribe_s00c9_0b40::CheckFoodTutorialComplete()
   if (((cTribeModeStrategy*)ModeStrategyInstance())->TerrainHasKey(0x14363974) == 0) {
     ((cTribeModeStrategy*)ModeStrategyInstance())->SignalTribeEvent(0x14363974);
   }
+}
+
+// @ 0x00c91b60
+void *SP::cTribeToolView::ChooseNewHutModel(void)
+{
+    if (!mDef.IsActive())
+        return 0;
+
+    // pick the hut-model id: a fully-built model beats a partially-built one
+    u32 id;
+    cHutModelState *pState = m18cc;
+    if (pState != 0 && pState->m608 > 0 && pState->m60c > 0)
+        id = 0x654e036;
+    else if (pState != 0 && pState->m60c > 0)
+        id = 0x654e034;
+    else
+        id = 0x654e035;
+
+    // ask the property manager for the model list, then take the variant that
+    // matches the current game mode
+    SP::AutoRefCount<cMWModel_s00c9_1a40> found;
+    found.mPtr = 0;
+    cPropertyManager_s00c9_1a40 *pm = (cPropertyManager_s00c9_1a40 *)PropertyManager_s00c9_1a40();
+    found = 0;
+    if (pm->Query(0xc42e83f6, 0x2be764e2, &found)) {
+        eastl::vector_s00c9_1a40<SP::AutoRefCount<cMWModel_s00c9_1a40>, eastl::sp_vector_allocator_s00c9_1a40> list;
+        u32 count = 0;
+        if (eastl::reserve(&list, id, &count, &list.mBegin)) {
+            i32 index = GetModeVariant() - 1;
+            if (index < (i32)count) {
+                SP::AutoRefCount<cMWModel_s00c9_1a40> chosen = list.mBegin[index];
+                found = 0;
+                return chosen.mPtr;
+            }
+        }
+    }
+    found = 0;
+    return 0;
 }
 
 // @ 0x00c91c80
@@ -4278,6 +5962,32 @@ void __cdecl PartitionPositions(Vec3_s00c9_3a40* first, Vec3_s00c9_3a40* last, f
   }
 }
 
+// @ 0x00c94270
+void __cdecl PartialSortPositions(Vec3_s00c9_3a40* first, Vec3_s00c9_3a40* mid, Vec3_s00c9_3a40* last, float x, float y, float z)
+{
+  HeapMake(first, mid, x, y, z);
+
+  for (Vec3_s00c9_3a40* p = mid; p < last; ++p) {
+    float ax = x - p->x;
+    float ay = y - p->y;
+    float az = z - p->z;
+    float da = ax * ax + ay * ay + az * az;
+
+    float bx = x - first->x;
+    float by = y - first->y;
+    float bz = z - first->z;
+    float db = bx * bx + by * by + bz * bz;
+
+    if (da < db) {
+      Vec3_s00c9_3a40 tmp = *p;
+      *p = *first;
+      HeapAdjust(first, 0, (int)(mid - first), 0, tmp, x, y, z);
+    }
+  }
+
+  HeapSort(first, mid, x, y, z);
+}
+
 // @ 0x00c94430
 cFishingHotSpot* findHotSpot(u32 key)
 {
@@ -4393,6 +6103,18 @@ void cSpatialView::GetDebugToolTip(cString* out)
   }
 
   text.dtor();
+}
+
+// @ 0x00c947d0
+void __thiscall cTribe_s00c9_47d0::ShowFishingString(float amount, const Vector3_s00c9_47d0* pos)
+{
+    if (!mSpatial.IsVisible())
+        return;
+
+    if (amount > 0.0f)
+        DoShowFishingString(0xdbf1ae1f, L"%lc%lc%s", L'+', 0x268f, amount, pos);
+    else
+        DoShowFishingString(0xd2bf5747, L"%lc%lc%ls", L'-', 0x268f, amount, pos);
 }
 
 // @ 0x00c94b50
@@ -4643,6 +6365,340 @@ void __stdcall FreeBubbleLists(cBubbleNode** pLists, unsigned count)
     }
 }
 
+// @ 0x00c95980
+namespace eastl {
+template <typename RandomAccessIterator, typename Compare> void quick_sort(RandomAccessIterator first, RandomAccessIterator last, Compare compare)
+{
+    if (first != last) {
+        quick_sort_impl<RandomAccessIterator, Compare>(first, last, 2 * Log2((int)(last - first)), compare);
+        if ((int)(last - first) > kQuickSortLimit) {
+            insertion_sort<RandomAccessIterator, Compare>(first, first + kQuickSortLimit, compare);
+            insertion_sort_simple<RandomAccessIterator, Compare>(first + kQuickSortLimit, last, compare);
+        } else
+            insertion_sort<RandomAccessIterator, Compare>(first, last, compare);
+    }
+}
+}  // namespace eastl
+
+// @ 0x00c95af0
+void SP::cTribe_s00c9_5980::SetupChatAreas()
+{
+    if (!mpTools_2d4) return;
+    (void)mpChatAreas_298;
+    (void)mfScale_268;
+    (void)mTimer_510;
+    (void)mpVec1904_begin;
+    (void)mpVec1904_end;
+    (void)mpStructVec_370;
+
+    void* id = FUN_00cc7070(0x60ba14a);
+    FUN_00cc8350((void*)(size_t)0);
+    (void)id;
+
+    int local_40 = 0;
+    int local_34 = 0;
+    FUN_006a0990(mpTools_2d4, 0x5786667, &local_40, &local_34);
+
+    void* planet = FUN_00b3d350();
+    (void)planet;
+
+    FUN_00c955e0((void*)((uchar*)this + 0x294), local_40);
+
+    for (int i = 0; i < local_40; ++i) {
+        uchar* area = (uchar*)(size_t)mpChatAreas_294 + i * 0x14;
+        area[0x10] = 0;
+        *(float*)(area + 0) = 0.0f;
+        *(float*)(area + 4) = 0.0f;
+        *(float*)(area + 8) = 0.0f;
+        *(float*)(area + 0xc) = *(float*)(area + 8);
+        *(float*)(area + 8) = 0.0f;
+
+        float tmp[3];
+        float* pf = (float*)FUN_0059aed0(tmp, area, (void*)(size_t)mpHandle_260);
+        (void)pf;
+
+        float p[3];
+        p[0] = tmp[0]; p[1] = tmp[1]; p[2] = tmp[2];
+        float surf[3];
+        FUN_00b815a0(surf, p);
+        *(float*)(area + 0) = surf[0];
+        *(float*)(area + 4) = surf[1];
+        *(float*)(area + 8) = surf[2];
+
+        void* id2 = FUN_00cc7070(0x60ba14a);
+        FUN_00cc8350(id2);
+    }
+}
+
+// @ 0x00c95cc0
+void SP::cTribe_s00c9_5980::AddChatArea_5cc0(void* pObj)
+{
+    void** begin = (void**)mChatAreaHandles_354.mpBegin;
+    void** end   = (void**)mChatAreaHandles_354.mpEnd;
+    void** it = begin;
+    for (; it != end; ++it) {
+        void* want = pObj ? (void*)((uchar*)pObj + 0xc0) : 0;
+        if (*it == want) break;
+    }
+    if (it != end) return;
+
+    void* val = pObj ? (void*)((uchar*)pObj + 0xc0) : 0;
+    if (val) ((void(__thiscall*)(void*))vc(val, 0xbc))(val);
+
+    void** slot = (void**)mChatAreaHandles_354.mpEnd;
+    if (slot < (void**)mChatAreaHandles_354.mpCapacity) {
+        mChatAreaHandles_354.mpEnd = (uchar*)slot + 4;
+        if (slot) {
+            *slot = val;
+            if (!val) return;
+            ((void(__thiscall*)(void*))vc(val, 0xbc))(val);
+        }
+    } else {
+        FUN_00bab900(slot, &val);
+    }
+    if (val) ((void(__thiscall*)(void*))vc(val, 0xc0))(val);
+}
+
+// @ 0x00c95d70
+void SP::cTribe_s00c9_5980::AddExistingCreatureInternal(void* pCreature)
+{
+    if (!pCreature) { ++mnCount_338; return; }
+
+    void** begin = (void**)mCreatures_340.mpBegin;
+    void** end   = (void**)mCreatures_340.mpEnd;
+    void** it = begin;
+    for (; it != end; ++it) { if (*it == pCreature) break; }
+    if (it != end) return;
+
+    void** slot = (void**)FUN_00c8ec60(begin, end, &pCreature);
+    if (slot != end) return;
+
+    ((void(__thiscall*)(void*))vc(pCreature, 0))(pCreature);
+    void* held = pCreature;
+    FUN_00e1c7f0(&held);
+    if (held) ((void(__thiscall*)(void*))vc(held, 4))(held);
+
+    if (FUN_00c0b760()) {
+        void* val = (void*)((uchar*)pCreature + 0xc0);
+        void* hold = val;
+        if (hold) ((void(__thiscall*)(void*))vc(hold, 0xbc))(hold);
+        FUN_00afc470(&hold);
+        if (hold) ((void(__thiscall*)(void*))vc(hold, 0xc0))(hold);
+    }
+}
+
+// @ 0x00c95ee0
+void SP::cTribe_s00c9_5980::RemoveCreature(void* pCreature, uchar bRemove)
+{
+    uchar packing = mbPacking_334;
+    if (packing != 0 && mnCount_338 != 0) --mnCount_338;
+
+    void* cr = pCreature;
+    if (!cr) {
+        if (packing != 0) return;
+        cr = (void*)FUN_00c8f310();
+        if (!cr) return;
+    }
+
+    if (FUN_00c232d0()) {
+        FUN_00c00660((void*)0);
+    }
+
+    void* spatial = (void*)((uchar*)cr + 0x58);
+    if (bRemove) {
+        void* bm = (void*)FUN_00b3d260();
+        ((void(__thiscall*)(void*, void*))vc(bm, 0x3c))(bm, spatial);
+    } else {
+        ((void(__thiscall*)(void*))vc(spatial, 0x34))(spatial);
+    }
+
+    uchar hadInteraction = ((uchar*)cr)[0xb5e];
+    ((uchar*)cr)[0x130] = 0;
+    ((uchar*)cr)[0x12f] = 0;
+    if (!hadInteraction) {
+        ((void(__thiscall*)(void*))vc(cr, 0x8c))(cr);
+    }
+
+    FUN_00c95150(cr);
+    FUN_00c950f0(cr);
+
+    if (bRemove) {
+        if (((uchar*)cr)[0xb67]) {
+            void* nm = (void*)FUN_00b3d480(cr);
+            if ((bool)(uint)(size_t)FUN_00acd410(nm)) return;
+        }
+        void* nm = (void*)FUN_00b3d300();
+        FUN_00b225d0(nm, cr);
+    } else {
+        FUN_00c22ee0(cr);
+    }
+}
+
+// @ 0x00c95fe0
+void* SP::cTribe_s00c9_5980::SpawnHut_5fe0(void* pArg)
+{
+    (void)pArg;
+    void* nounMgr = (void*)FUN_00b3d300();
+    void* noun = (void*)FUN_00b20c60(nounMgr, 0x18c8f0c);
+    return noun;
+}
+
+// @ 0x00c96150
+bool SP::cTribe_s00c9_5980::AddTool_6150(void* pTool)
+{
+    (void)pTool;
+    return mpTools_2d4 != 0;
+}
+
+// @ 0x00c962b0
+bool SP::cTribe_s00c9_5980::UpdateHut_62b0()
+{
+    bool r = false;
+    (void)r;
+    if (!mpObject_368) return false;
+
+    void* nounMgr = (void*)FUN_00b3d300();
+    void* noun = (void*)FUN_00b20c60(nounMgr, 0x629bafe);
+    void* tool = 0;
+    if (noun) tool = ((void*(__thiscall*)(void*, uint))vc(noun, 0xc))(noun, 0x629baec);
+
+    void* prev = mpHandle_260;
+    if (tool != prev) {
+        if (tool) ((void(__thiscall*)(void*))vc(tool, 0))(tool);
+        mpHandle_260 = tool;
+        if (prev) ((void(__thiscall*)(void*))vc(prev, 4))(prev);
+    }
+
+    ((void(__thiscall*)(void*, void*))vc(mpHandle_260, 0x54))(mpHandle_260, this);
+
+    void* o = mpObject_368;
+    void* sub = (void*)((uchar*)o + 0x34);
+    ((void(__thiscall*)(void*, void*))vc(sub, 0x38))(sub, (void*)0);
+
+    float v[3];
+    void* res = ((void*(__thiscall*)(void*, float*))vc(sub, 0x5c))(sub, v);
+
+    float nv[3];
+    nv[0] = ((float*)res)[0] * -1.0f;
+    nv[1] = ((float*)res)[1] * -1.0f;
+    nv[2] = ((float*)res)[2] * -1.0f;
+
+    float out[3];
+    void* planet = (void*)FUN_00b3d350();
+    FUN_00b7f250(planet, nv, out);
+
+    ((void(__thiscall*)(void*, void*))vc(sub, 0x3c))(sub, out);
+    return true;
+}
+
+// @ 0x00c96410
+bool SP::cTribe_s00c9_5980::Read(void* pStream)
+{
+    void* reader = (void*)((void*(__thiscall*)(void*))vc(pStream, 0x20))(pStream);
+    void* handle = (void*)((void*(__thiscall*)(void*))vc(reader, 0x18))(reader);
+    int tmp = 0;
+    (void)handle; (void)tmp;
+
+    bool ok = true;
+    FUN_00c00530(this, pStream);
+    FUN_00c88b00(this, pStream);
+    FUN_00cee440(this, pStream);
+    (void)ok;
+
+    FUN_00c955e0((void*)((uchar*)this + 0x1904), 0xe);
+    FUN_00b7f250((void*)((uchar*)this + 0x510), 0, 0);
+    FUN_004548d0(0xe);
+    FUN_0067de30();
+
+    float g = 0.0f;
+    FUN_00cc7830((void*)((uchar*)this + 0x558), mfScale_268, g);
+    return true;
+}
+
+// @ 0x00c966d0
+void* SP::cTribe_s00c9_5980::GetStructures()
+{
+    void* o = mpObject_368;
+    if (o) {
+        void* sub = (void*)((uchar*)o + 0x120);
+        void* r = (void*)((void*(__thiscall*)(void*))vc(sub, 8))(sub);
+        void* val = r;
+        if (val) ((void(__thiscall*)(void*))vc(val, 0xbc))(val);
+
+        void** end = (void**)mChatAreaHandles_354.mpEnd;
+        if (end < (void**)mChatAreaHandles_354.mpCapacity) {
+            mChatAreaHandles_354.mpEnd = (uchar*)end + 4;
+            if (end) *end = val;
+        } else {
+            FUN_00bab900(end, &val);
+        }
+        if (val) ((void(__thiscall*)(void*))vc(val, 0xc0))(val);
+    }
+
+    FUN_00bdefa0(mChatAreaHandles_354.mpBegin, mpObject_368, mpStructVec_370, (uchar*)this + 0x36c);
+    return (void*)&mChatAreaHandles_354;
+}
+
+// @ 0x00c967a0
+void* SP::cTribe_s00c9_5980::GetInhabitants()
+{
+    void** it = (void**)mCreatures_340.mpBegin;
+    void** end = (void**)mCreatures_340.mpEnd;
+    for (; it != end; ++it) {
+        void* cr = *it;
+        if (FUN_00c0b760()) {
+            void* hold = cr;
+            if (hold) ((void(__thiscall*)(void*))vc(hold, 0))(hold);
+
+            void** e2 = (void**)mChatAreaHandles_354.mpEnd;
+            if (e2 < (void**)mChatAreaHandles_354.mpCapacity) {
+                mChatAreaHandles_354.mpEnd = (uchar*)e2 + 4;
+                if (e2) {
+                    *e2 = cr;
+                    if (cr) ((void(__thiscall*)(void*))vc(cr, 0))(cr);
+                }
+            } else {
+                FUN_00aea5d0(e2, &cr);
+            }
+            if (cr) ((void(__thiscall*)(void*))vc(cr, 4))(cr);
+        }
+    }
+    return (void*)&mCreatures_340;
+}
+
+// @ 0x00c96840
+void* SP::cTribe_s00c9_5980::CopyFrom_6840(void* pOther)
+{
+    uchar* d = (uchar*)this;
+    uchar* s = (uchar*)pOther;
+    *(uint*)(d + 0)  = *(uint*)(s + 0);
+    *(uint*)(d + 4)  = *(uint*)(s + 4);
+    *(uint*)(d + 8)  = *(uint*)(s + 8);
+    for (int i = 0; i < 0x10; ++i) *(uint*)(d + 0xc + i * 4) = *(uint*)(s + 0xc + i * 4);
+    *(uint*)(d + 0x4c) = *(uint*)(s + 0x4c);
+    *(uint*)(d + 0x50) = *(uint*)(s + 0x50);
+    for (int i = 0; i < 2; ++i) {
+        uchar* de = d + 0x54 + i * 0x1c;
+        uchar* se = s + 0x54 + i * 0x1c;
+        for (int j = 0; j < 7; ++j) *(uint*)(de + j * 4) = *(uint*)(se + j * 4);
+    }
+    *(uint*)(d + 0x8c)  = *(uint*)(s + 0x8c);
+    *(float*)(d + 0x90) = *(float*)(s + 0x90);
+    *(float*)(d + 0x94) = *(float*)(s + 0x94);
+    *(uint*)(d + 0x98)  = *(uint*)(s + 0x98);
+    *(uint*)(d + 0x9c)  = *(uint*)(s + 0x9c);
+    FUN_0050d4e0(d + 0xa0, s + 0xa0);
+
+    void* so  = *(void**)(s + 0xb4);
+    void* dof = *(void**)(d + 0xb4);
+    if (so != dof) {
+        if (so) ((void(__thiscall*)(void*))vc(so, 0))(so);
+        *(void**)(d + 0xb4) = so;
+        if (dof) ((void(__thiscall*)(void*))vc(dof, 4))(dof);
+    }
+    return this;
+}
+
 // @ 0x00c96950
 void* CHash::FUN_00c96950(void* pArg)
 {
@@ -4701,6 +6757,373 @@ u32 CHash::FUN_00c96a00(void* pKey)
 void CRes::FUN_00c96e80(u32 a)
 {
     SELF(this)->FUN_00c95d70((void*)(size_t)a, 1);
+}
+
+// @ 0x00c97220
+bool LoadTribeArchetypeData()
+{
+    if (gTribeArchetypesLoaded)
+        return true;
+
+    bool loadedAny = false;
+    cPropertyManager_s00c9_7220* pm = PropertyManager_s00c9_7220();
+    uint32_t groupIDs[3];
+    groupIDs[0] = 0xab83a874;
+    groupIDs[1] = 0x27adfe33;
+    groupIDs[2] = 0xf29db649;
+
+    int cnt1, cnt2;
+    uint32_t* data1;
+    uint32_t* data2;
+    for (uint32_t g = 0; g < 3; g++) {
+        uint32_t groupID = groupIDs[g];
+        for (int i = 0; i < 32; i++)
+            gTribeArchetypes[g * 32 + i] = TribeArchetype();
+
+        PLRef pl;
+        pl.p = 0;
+        struct IdVec : SpVec { uint32_t extra; } ids;
+        ids.mpBegin = 0;
+        ids.mpEnd = 0;
+        ids.mpCapacity = 0;
+        PropertyManager_s00c9_7220()->GetPropertyListIDs(groupID, &ids);
+
+        uint32_t* it = ids.mpBegin;
+        uint32_t* itEnd = ids.mpEnd;
+        if (it == itEnd) {
+            ids.free();
+            if (pl.p) pl.p->Release();
+        } else {
+            for (; it != itEnd; it++) {
+                uint32_t instanceID = *it;
+                if (pl.p) {
+                    cPropertyList* old = pl.p;
+                    pl.p = 0;
+                    old->Release();
+                }
+                Property* p;
+                if (pm->GetPropertyList(instanceID, groupID, &pl.p) && pl.p &&
+                    pl.p->GetProperty(0x64aaf64e, p) && p->mnType == 10) {
+                    uint32_t idx = *(uint32_t*)p->GetValuePtr();
+                    if (idx - 1 <= 0x1e) {
+                        TribeArchetype* a = &gTribeArchetypes[(g << 5) + idx];
+                        loadedAny = true;
+                        {
+                            cPropertyList* cur = pl.p;
+                            if (cur != a->mpRef) {
+                                cPropertyList* old = a->mpRef;
+                                if (cur) cur->AddRef();
+                                a->mpRef = cur;
+                                if (old) old->Release();
+                            }
+                        }
+                        LoadU32(pl.p, 0x2857b21e, &a->f00);
+                        LoadU32(pl.p, 0x80fe0f1b, &a->f04);
+                        LoadU32(pl.p, 0xb0eb1e38, &a->f08);
+                        LoadU32(pl.p, 0x982c7059, &a->f8c);
+                        LoadFloat(pl.p, 0xe0be991f, &a->f90);
+                        LoadFloat(pl.p, 0x1570506e, &a->f94);
+                        GetPropertyAsVector2(pl.p, 0xd164f429, &a->v98);
+                        {
+                            cnt1 = 0;
+                            data1 = 0;
+                            if (GetPropertyAsUint32Array(pl.p, 0xa9a2d5e0, &cnt1, &data1)) {
+                                a->textures.clear();
+                                a->textures.reserve(cnt1);
+                                for (int k = 0; k < cnt1; k++)
+                                    a->textures.push_back(data1[k]);
+                            }
+                        }
+                        LoadU32(pl.p, 0x91fe517b, &a->f50);
+                        a->listCount = 0;
+                        {
+                            cnt2 = 0;
+                            data2 = 0;
+                            if (GetPropertyAsUint32Array(pl.p, 0x7862aee7, &cnt2, &data2)) {
+                                for (int k = 0; k < cnt2; k++) {
+                                    uint32_t v = data2[k];
+                                    if (v - 1 <= 9)
+                                        a->list[a->listCount++] = v;
+                                }
+                            }
+                        }
+                        LoadFloat(pl.p, 0x80a52ac0, &a->f58);
+                        LoadFloat(pl.p, 0xd5291551, &a->f5c);
+                        LoadFloat(pl.p, 0x58a47b38, &a->f60);
+                        LoadFloat(pl.p, 0x27df57be, &a->f64);
+                        LoadFloat(pl.p, 0xac245f82, &a->f68);
+                        LoadFloat(pl.p, 0x2df9a743, &a->f6c);
+                        LoadFloat(pl.p, 0xf74c0eb9, &a->f70);
+                        LoadFloat(pl.p, 0xa3102906, &a->f74);
+                        LoadFloat(pl.p, 0x2b793112, &a->f78);
+                    }
+                }
+            }
+            ids.free();
+            if (pl.p) pl.p->Release();
+        }
+    }
+
+    if (loadedAny)
+        gTribeArchetypesLoaded = true;
+    return loadedAny;
+}
+
+// @ 0x00c979e0
+Vec3* cTribe_s00c9_7220::RandomRegionPoint(Vec3* out, uint32_t key, int)
+{
+    RegionSlot* slot = this->map4e4.Find(&key);
+
+    Vec3 a, b;
+    Frame(key, &a, &b);
+
+    if (slot->mpBegin == slot->mpEnd) {
+        out->x = a.x;
+        out->y = a.y;
+        out->z = a.z;
+        return out;
+    }
+
+    int d0 = (int)(slot->m24 - (uint32_t)slot->mpBuckets) >> 2;
+    int d1 = (int)((uint32_t)slot->mpEnd - (uint32_t)slot->mpValueBase) >> 2;
+    int d2 = (int)((uint32_t)slot->mpBucketEnd - (uint32_t)slot->mpBegin) >> 2;
+    int n = ((d0 << 6) + d1 + d2) - 0x40;
+
+    float r = gTribeRandCtx.Next(this->m18cc);
+    float s = (float)n * (r * kRegionScale + kRegionBias);
+
+    Vec3 t;
+    t.x = b.x * s + a.x;
+    t.y = b.y * s + a.y;
+    t.z = b.z * s + a.z;
+    PlanetModel_s00c9_7220()->DirectionToSurfacePosition(out, &t);
+    return out;
+}
+
+// @ 0x00c97b10
+Vec3* cTribe_s00c9_7220::RandomRegionPointAt(int, Vec3* out, uint32_t key)
+{
+    Vec3 a, b;
+    Frame(key, &a, &b);
+
+    RegionSlot* slot = this->map4e4.Find(&key);
+
+    uint32_t* it = slot->mpBegin;
+    uint32_t* end = slot->mpEnd;
+    uint32_t* bucketEnd = slot->mpBucketEnd;
+    uint32_t** buckets = slot->mpBuckets;
+    int idx = 0;
+    if (it != end) {
+        do {
+            if (*it == key)
+                break;
+            ++it;
+            if (it == bucketEnd) {
+                it = buckets[1];
+                ++buckets;
+                bucketEnd = it + 0x40;
+            }
+            ++idx;
+        } while (it != end);
+    }
+
+    if (idx == 0) {
+        out->x = a.x;
+        out->y = a.y;
+        out->z = a.z;
+        return out;
+    }
+
+    float r = gTribeRandCtx.Next(this->m18cc);
+    float s = (2.0f * r + kRegionBias) * (float)idx;
+
+    Vec3 t;
+    t.x = b.x * s + a.x;
+    t.y = b.y * s + a.y;
+    t.z = b.z * s + a.z;
+    PlanetModel_s00c9_7220()->DirectionToSurfacePosition(out, &t);
+    return out;
+}
+
+// @ 0x00c97c40
+int cTribe_s00c9_7220::FindRegionIndex(uint32_t key, int)
+{
+    uint32_t k = key;
+    RegionSlot* slot = this->map4e4.Find(&k);
+
+    uint32_t* it = slot->mpBegin;
+    uint32_t** buckets = slot->mpBuckets;
+    uint32_t* bucketEnd = slot->mpBucketEnd;
+    uint32_t* end = slot->mpEnd;
+    int idx = 0;
+    while (it != end) {
+        if (*it == k)
+            return idx;
+        ++it;
+        if (it == bucketEnd) {
+            it = *++buckets;
+            bucketEnd = it + 0x40;
+        }
+        ++idx;
+    }
+    return -1;
+}
+
+// @ 0x00c97ca0
+int cTribe_s00c9_7220::InsertRegionValue(uint32_t key, void* obj)
+{
+    uint32_t k = key;
+    RegionSlot* slot = this->map4e4.Find(&k);
+    cRefObj* o = (cRefObj*)obj;
+
+    if (o)
+        o->AddRef();
+
+    uint32_t* pos = slot->mpEnd;
+    uint32_t* next = pos + 1;
+    if (next != slot->mpCapacity) {
+        slot->mpEnd = next;
+        if (pos) {
+            *pos = (uint32_t)obj;
+            if (o)
+                o->AddRef();
+        }
+    } else {
+        slot->Insert(&obj);
+    }
+
+    if (o)
+        o->Release();
+
+    int d0 = (int)(slot->m24 - (uint32_t)slot->mpBuckets) >> 2;
+    int d1 = (int)((uint32_t)slot->mpEnd - (uint32_t)slot->mpValueBase) >> 2;
+    int d2 = (int)((uint32_t)slot->mpBucketEnd - (uint32_t)slot->mpBegin) >> 2;
+    return ((d0 << 6) + d1 + d2) - 0x40;
+}
+
+// @ 0x00c97d40
+void cTribe_s00c9_7220::UpdateRegionSlot(uint32_t key, uint32_t* extra)
+{
+    uint32_t k = key;
+    RegionSlot* slot = this->map4e4.Find(&k);
+
+    SlotPair out;
+    SlotPair lo = slot->Lo();
+    SlotPair hi = slot->Hi();
+    SlotRehash(&out, lo, hi, &extra);
+    if (out.a != (uint32_t)slot->mpEnd)
+        slot->Update(&out, out);
+}
+
+// @ 0x00c97de0
+void cTribe_s00c9_7220::Destroy()
+{
+    void* owned = this->mpOwned18c8;
+
+    this->mpVtbl    = (cTribeVtbl*)0x1473e58;
+    this->mpVtbl04  = (void*)0x1473e44;
+    this->mpVtbl34  = (void*)0x1469cc0;
+    this->mpVtbl120 = (void*)0x1473d80;
+    this->mpVtbl1f4 = (void*)0x1473d64;
+    this->mpVtbl20c = (void*)0x1473d20;
+    this->mpVtbl230 = (void*)0x1473d00;
+
+    if (owned) {
+        SubDtor_c2e4e0(owned);
+        operator delete[](owned);
+    }
+    this->mpOwned18c8 = 0;
+
+    if (this->mpRef19d0) ((cRefObj*)this->mpRef19d0)->Release();
+    if (this->mpRef19cc) ((cRefObj*)this->mpRef19cc)->Release();
+    if (this->mpRef19c8) ((cRefObj*)this->mpRef19c8)->Release();
+    if (this->mpRef19c4) ((cRefObj*)this->mpRef19c4)->Release();
+
+    if (this->mpArray1904 && ((int*)this->mpArray1904)[-1])
+        operator delete[](this->mpArray1904);
+
+    SubDtor_cc7c50(&this->sub558[0]);
+    SubDtor_b638b0(&this->sub530[0]);
+    SubDtor_b638b0(&this->sub510[0]);
+
+    this->map4e4.Destroy(this->map4e4.m04, this->map4e4.m08);
+    {
+        uint32_t cap = this->map4e4.m08;
+        this->map4e4.m0c = 0;
+        if (cap > 1)
+            operator delete[]((void*)this->map4e4.m04);
+    }
+
+    if (this->mpArray418 && ((int*)this->mpArray418)[-1])
+        operator delete[](this->mpArray418);
+
+    SubDtor_afbad0(&this->sub3b4[0]);
+
+    this->map394.Destroy(this->map394.m04, this->map394.m08);
+    {
+        uint32_t cap = this->map394.m08;
+        this->map394.m0c = 0;
+        if (cap > 1)
+            operator delete[]((void*)this->map394.m04);
+    }
+
+    SubDtor_ae6970(&this->sub380[0]);
+    SubDtor_ae6970(&this->sub36c[0]);
+
+    if (this->mpRef368) ((cRefObj*)this->mpRef368)->Release();
+
+    SubDtor_ad92d0(&this->sub354[0]);
+    SubDtor_ae6970(&this->sub340[0]);
+
+    if (this->mpArray314 && ((int*)this->mpArray314)[-1])
+        operator delete[](this->mpArray314);
+
+    if (this->mpRef2d4) ((cRefObj*)this->mpRef2d4)->Release();
+    if (this->mpRef2d0) ((cRefObj*)this->mpRef2d0)->Release();
+
+    if (this->mpArray2a8 && ((int*)this->mpArray2a8)[-1])
+        operator delete[](this->mpArray2a8);
+
+    if (this->mpArray294 && ((int*)this->mpArray294)[-1])
+        operator delete[](this->mpArray294);
+
+    if (this->mpRef290) ((cRefObj*)this->mpRef290)->Release2();
+
+    SubDtor_b638b0(&this->sub270[0]);
+
+    if (this->mpRef260) ((cRefObj*)this->mpRef260)->Release();
+
+    SubDtor_b6edf0(&this->mpVtbl230);
+    SubDtor_cee7a0(&this->mpVtbl20c);
+    SubDtor_ac0520(&this->mpVtbl1f4);
+    SubDtor_c8a420(&this->mpVtbl120);
+
+    BaseDtor(this);
+}
+
+// @ 0x00c98080
+bool cTribe_s00c9_7220::Sub120Query()
+{
+    return ((cTribeSub120*)&this->mpVtbl120)->Query();
+}
+
+// @ 0x00c98230
+uint32_t cTribe_s00c9_7220::AllocateRegion(uint32_t key)
+{
+    uint32_t count;
+    if (this->m334 && !this->m33c) {
+        count = this->m338;
+    } else {
+        SpVec* v = this->mpVtbl->GetValueList(this);
+        count = (uint32_t)(((int)(uint32_t)v->mpEnd - (int)(uint32_t)v->mpBegin) >> 2);
+    }
+
+    if (count < this->Sub120Count()) {
+        uint32_t idx = this->Sub120Index(key);
+        this->Sub120Set(idx, 1);
+        return idx;
+    }
+    return 0;
 }
 
 // @ 0x00c99550
@@ -5063,6 +7486,317 @@ TribeToolRef* __thiscall ToolVec::PushBackAt(TribeToolRef* pos, const TribeToolR
     }
     this->InsertAt(pos, val);
     return (TribeToolRef*)((char*)this->mpBegin + index * 0x60);
+}
+
+// @ 0x00c9a080
+void HotSpotsShutdown()
+{
+    if (g_hotSpotTimer.IsRunning())
+    {
+        g_hotSpotTimer.FUN_00bc3170();
+        g_hotSpotTimer.Stop();
+    }
+    cHotSpotNode* begin = g_hotSpots.mpBegin;
+    cHotSpotNode* end = g_hotSpots.mpEnd;
+    while (begin != end)
+    {
+        HotSpotGridRelease(&begin->mPosition.z);
+        ++begin;
+    }
+    begin = g_hotSpots.mpBegin;
+    end = g_hotSpots.mpEnd;
+    g_hotSpots.FreeRange(begin, end);
+    g_hotSpots.mpEndRaw += ((char*)end - (char*)begin) / 0x60 * 0x60;
+}
+
+// @ 0x00c9a100
+void cTribe_s00c9_a080::Init(const Vector3_s00c9_a080* pos, int numMembers, int foodAmount, bool flag)
+{
+    SetOwner(0);
+    mIdentity.Init();
+    mZoningRadius = g_ZoningRadius;
+    PlanetModel_s00c9_a080()->mpGrid->GetMapSet()->GetHeightAt(pos);
+    Vector3_s00c9_a080 surfPos;
+    PlanetModel_s00c9_a080()->DirectionToSurfacePosition(&surfPos, pos);
+    cSpatialPart_s00c9_a080* sp = &mSpatial;
+    sp->SetPosition(surfPos);
+    Quaternion orient;
+    if (sp->IsEditor()) {
+        const Vector3_s00c9_a080* w = GetClosestWater();
+        if (w->x == kInvalidPos.x && w->y == kInvalidPos.y && w->z == kInvalidPos.z) {
+            orient = PlanetModel_s00c9_a080()->BuildSurfaceOrientation(surfPos);
+        } else {
+            const Vector3_s00c9_a080& c = sp->GetPosition();
+            Vector3_s00c9_a080 d(w->x - c.x, w->y - c.y, w->z - c.z);
+            float inv = 1.0f / sqrtf(d.x * d.x + d.y * d.y + d.z * d.z + 1e-8f);
+            Vector3_s00c9_a080 dir(d.x * inv, d.y * inv, d.z * inv);
+            orient = PlanetModel_s00c9_a080()->BuildSurfaceOrientation(surfPos, dir);
+            mbCheckedForWater = 0;
+        }
+    } else {
+        orient = PlanetModel_s00c9_a080()->BuildSurfaceOrientation(surfPos);
+    }
+    sp->SetOrientation(orient);
+    UpdateRoboTribeness();
+    if (GetPoliticalID() == -1)
+        funcA8();
+    mpHut.Assign((cTribeHut*)NounManager_s00c9_a080()->CreateNoun(0x1e4daae));
+    {
+        cTribeHut* hut = mpHut.p;
+        hut->mPart.SetModelWorld(GonzagoModelWorld());
+        hut->SetTribe(this);
+        hut = mpHut.p;
+        hut->mPart.SetOrientation(&sp->GetOrientation());
+        hut = mpHut.p;
+        hut->mPart.SetPosition(&sp->GetPosition());
+        (void)sp->GetPosition();
+    }
+    PropManager* pm = PropertyManager_s00c9_a080();
+    if (mpPropList.p) {
+        PropertyList* old = mpPropList.p;
+        mpPropList.p = 0;
+        old->Release();
+    }
+    pm->GetPropertyList(0x535dc193, 0x2be764e2, mpPropList);
+    SetupChatAreas();
+    UpdateToolPositions();
+    mFlag6c = 1;
+    float scale = g_Species.GetRadius(mpSpecies0);
+    float base;
+    Property_s00c9_a080* prop;
+    if (mpPropList.p && mpPropList.p->GetProperty(0x1fb2b4e, prop))
+        base = *prop->GetValueFloat();
+    else
+        base = 1.5f;
+    float r = base * scale * 2.0f;
+    mRSquareSize = r;
+    mRGrid.ComputeGridResolution(r, 0.0f);
+    mPopulationTimer.Restart();
+    Vector3_s00c9_a080 center = mCenter;
+    {
+        cTribeFoodMat* fm = (cTribeFoodMat*)0;
+        IRefCounted* n = NounManager_s00c9_a080()->CreateNoun(0x629bafe);
+        if (n) fm = (cTribeFoodMat*)((cTribeNoun*)n)->Cast(0x629baec);
+        mpFoodMat.Assign(fm);
+    }
+    mpFoodMat.p->SetTribe(this);
+    mpFoodMat.p->mPart.SetPosition(&center);
+    {
+        Vector3_s00c9_a080 nd = -mpHut.p->mPart.GetDirection();
+        Quaternion q = PlanetModel_s00c9_a080()->BuildSurfaceOrientation(center, nd);
+        mpFoodMat.p->mPart.SetOrientation(&q);
+    }
+    ResetToolLayout();
+    ResetDefaultToolPlacement(10);
+    if (!sp->IsEditor()) {
+        int n = mTribeArchetype ? GetMaxPopulation() : numMembers;
+        FUN_00ff03b0(FUN_00c00aa0(n));
+    }
+    ChooseNewHutModel();
+    ReserveToolsSlots(1);
+    if (!sp->IsEditor()) {
+        int n = mTribeArchetype ? GetMaxPopulation() : numMembers;
+        FUN_00ff03b0(FUN_00c00aa0(n));
+        UpgradeHut();
+    }
+    UpdateModel();
+    if (flag)
+        FUN_00c91700();
+    if (numMembers == 0x29a)
+        numMembers = g_Species.GetPopulation();
+    UpdateRoboTribeness();
+    if (mbRoboTribe) {
+        mRoboPopulationCount = numMembers;
+    } else {
+        int have = mSelectableEnd - mSelectableBegin;
+        if (have < numMembers) {
+            int n = numMembers - have;
+            do {
+                cCitizen_s00c9_a080* c;
+                if (mbRoboTribe && !mbVisualized) {
+                    c = 0;
+                } else {
+                    c = (cCitizen_s00c9_a080*)NounManager_s00c9_a080()->CreateNoun(0x18eb4b7);
+                    c->Init(0, this, 1, &kInvalidPos);
+                    ((cTimerLike*)((char*)c + 0x5a8))->SetEnabled(1);
+                    BehaviorManager()->Register((char*)c + 0x58);
+                }
+                AddExistingCreatureInternal(c, 0);
+            } while (--n);
+        }
+    }
+    if (foodAmount == 0x29a)
+        foodAmount = g_Species.GetFood();
+    int mode;
+    cSpecies* spc = mpSpecies0;
+    if (spc && HasA(spc) && !HasB(spc)) mode = 1;
+    else if (spc && HasB(spc) && !HasA(spc)) mode = 2;
+    else mode = 3;
+    float f = (float)foodAmount;
+    mBundle.Init(this, 8, 1000.0f, f * 0.85f, mode);
+    BundleManager()->Add(f * 0.15f, &mBundle, 4);
+    MsgTribe msg(this);
+    MessageServer()->Post(msg.mID, &msg, 0);
+}
+
+// @ 0x00c9a960
+bool cTribe_s00c9_a080::CheckToolsTimeout()
+{
+    if (mToolsTimer.IsRunning())
+    {
+        if (mToolsTimer.GetElapsedTime() > 1000)
+        {
+            ReserveToolsSlots(false);
+            mToolsTimer.FUN_00bc3170();
+            return true;
+        }
+    }
+    return false;
+}
+
+// @ 0x00c9af30
+void GetHotSpotValues(const Vector3_s00c9_a080* pos, float* out0c, float* out10, uint8_t* outFlag)
+{
+    *out0c = g_hotSpots[&pos]->mField0c;
+    *out10 = g_hotSpots[&pos]->mField10;
+    *outFlag = g_hotSpots[&pos]->mField39;
+}
+
+// @ 0x00c9af80
+Vector3_s00c9_a080* GetHotSpotPosition(Vector3_s00c9_a080* out, const Vector3_s00c9_a080* pos)
+{
+    cHotSpotNode* node = g_hotSpots[&pos];
+    out->x = node->mPosition.x;
+    out->y = node->mPosition.y;
+    out->z = node->mPosition.z;
+    return out;
+}
+
+// @ 0x00c9afb0
+namespace SP {
+uint32_t cTribe_s00c9_afb0::SetupHotSpot(const Vector3_s00c9_afb0& dir, int force)
+{
+    (void)force;
+    float x = dir.x, y = dir.y, z = dir.z;
+    float ax = (float)fabs(x), ay = (float)fabs(y), az = (float)fabs(z);
+    CubeCoord coord;
+    if (ax > az || ay > az) {
+        if (ax > ay) {
+            coord.u = (y / x + 1.0f) * 0.5f;
+            coord.v = (z / ax + 1.0f) * 0.5f;
+            coord.face = 2;
+            if (x < 0.0f) coord.face = 3;
+        } else {
+            coord.u = (z / y + 1.0f) * 0.5f;
+            coord.v = (x / ay + 1.0f) * 0.5f;
+            if (y < 0.0f) coord.face = 5;
+            else coord.face = 4;
+        }
+    } else {
+        coord.u = (x / z + 1.0f) * 0.5f;
+        coord.v = (y / az + 1.0f) * 0.5f;
+        if (z < 0.0f) coord.face = 1;
+        else coord.face = 0;
+    }
+
+    CubeIndex idx;
+    CoordToIndex(&idx, 0x80, &coord);
+    int xStart = idx.x - 4, xEnd = idx.x + 4;
+    int yStart = idx.y - 4, yEnd = idx.y + 4;
+
+    HotSpot spot;
+    bool bFound = false;
+    bool bWater = false;
+    uint32_t result = 0xffffffff;
+    Vector3_s00c9_afb0 d;
+    uint64_t now = GameTimeManager()->GetTime();
+
+    for (int i = xStart; i < xEnd; ++i) {
+        if (bFound) goto done;
+        for (int j = yStart; j < yEnd; ++j) {
+            if (bFound) break;
+            int face = idx.face, wx = i, wy = j;
+            WrapCubeFace(0x80, &face, &wx, &wy, 0, 0);
+            CubeIndex cell;
+            cell.x = wx; cell.y = wy; cell.face = face;
+            uint32_t key = (((wx & 0xffff8fff) + (face << 13)) << 16) + wy;
+            HotSpotElem* it = HotSpotLowerBound_s00c9_afb0(g_HotSpots.mpBegin, g_HotSpots.mpEnd, &key, g_HotSpotsFlag);
+            if (it != g_HotSpots.mpEnd && key >= it->key) {
+                bFound = true;
+                result = key;
+                d = ((HotSpotMapRef*)&g_HotSpots)->at(&key)->mPos;
+                ((HotSpotMapRef*)&g_HotSpots)->at(&key)->mStartTime = now;
+            } else {
+                CubeCoord uv;
+                IndexToCoord(&uv, 0x80, &cell);
+                float up = (float)((double)uv.u * 2.0 - 1.0);
+                float vp = (float)((double)uv.v * 2.0 - 1.0);
+                float k = (float)(1.0 / sqrt((double)(vp * vp + up * up) + 1.0));
+                float kn = (uv.face & 1) ? -k : k;
+                const uint8_t* axes = kFaceAxes[uv.face >> 1];
+                float* dv = &d.x;
+                dv[axes[0]] = kn * up;
+                dv[axes[1]] = k * vp;
+                dv[axes[2]] = kn;
+                if (PlanetModel_s00c9_afb0()->ClassifyPoint(&d) == 3) {
+                    spot.mCube = cell;
+                    spot.mPos = PlanetModel_s00c9_afb0()->SurfacePoint(d);
+                    bWater = true;
+                }
+            }
+        }
+    }
+    if (!bFound && bWater) {
+        float food = ReadFloatProperty(0xd1e9eaf0, 15.0f);
+        float resupply = ReadFloatProperty(0x3c8e6fb2, 0.05f);
+        spot.mbActive = true;
+        float v = (food > 1.0f) ? food : 1.0f;
+        spot.mFood = v;
+        spot.mMaxFood = v;
+        spot.mResupply = resupply;
+        result = (((spot.mCube.x & 0xffff8fff) + (spot.mCube.face << 13)) << 16) + spot.mCube.y;
+        spot.mStartTime = now;
+        ((HotSpotMapRef*)&g_HotSpots)->at(&result)->Assign(spot);
+        ((HotSpotMapRef*)&g_HotSpots)->at(&result)->SetupArea(spot.mPos, 10.0f);
+    }
+done:
+    if (!g_FishTimer.IsRunning()) {
+        g_FishTimer.Start();
+        g_NextFishTime = 240000;
+    } else {
+        g_NextFishTime = g_FishTimer.GetElapsedTime() + 240000;
+    }
+    return result;
+}
+}  // namespace SP
+
+// @ 0x00c9b6d0
+void __cdecl FUN_00c9b6d0(SP::cTribe_s00c9_afb0* self)
+{
+    if (!self)
+        return;
+    if (!g_FishTimer.IsRunning())
+        return;
+    const Vector3_s00c9_afb0* p = self->GetClosestWater();
+    if (p->x != g_FishTarget.x || p->y != g_FishTarget.y || p->z != g_FishTarget.z)
+        SP::cTribe_s00c9_afb0::SetupHotSpot(*p, 1);
+}
+
+// @ 0x00c9bd50
+void SP::cTribe_s00c9_afb0::HandleEvent(void* a)
+{
+    func54h(a);
+    ((TribeObj*)mpTribeD8)->Notify(0xd);
+}
+
+// @ 0x00c9be50
+void cSpatialObject_s00c9_afb0::OnExtentsChanged(void* a, float b)
+{
+    SetLocalExtents(a, b);
+    RefCounted* outer = (RefCounted*)((char*)this - 0x34);
+    void* r = outer->v58();
+    if (r)
+        ((TribeObj*)r)->Notify(0xc);
 }
 
 // @ 0x013551e0

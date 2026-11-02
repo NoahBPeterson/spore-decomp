@@ -37,4 +37,13 @@
 ../src/game/SPGonzago/SPTribe.cpp  ?AddPanicBubble@cTribe_s00c9_47d0@@QAEXABUVector3_s00c9_47d0@@MH@Z  00c95540  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPTribe.cpp  ?FreeBubbleLists@@YGXPAPAUcBubbleNode@@I@Z  00c95930  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPTribe.cpp  ?FUN_00c96e80@CRes@@QAEXI@Z  00c96e80  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPTribe.cpp  ?LoadTribeArchetypeData@@YA_NXZ  00c97220  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPTribe.cpp  ?Sub120Query@cTribe_s00c9_7220@@QAE_NXZ  00c98080  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPTribe.cpp  ?AllocateRegion@cTribe_s00c9_7220@@QAEII@Z  00c98230  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
 ../src/game/SPGonzago/SPTribe.cpp  ?NotifyToolSelection@cTribe_s00c9_9140@@QAEXXZ  00c99840  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPTribe.cpp  ?CheckToolsTimeout@cTribe_s00c9_a080@@QAE_NXZ  00c9a960  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPTribe.cpp  ?GetHotSpotValues@@YAXPBUVector3_s00c9_a080@@PAM1PAE@Z  00c9af30  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPTribe.cpp  ?GetHotSpotPosition@@YAPAUVector3_s00c9_a080@@PAU1@PBU1@@Z  00c9af80  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPTribe.cpp  ?FUN_00c9b6d0@@YAXPAVcTribe_s00c9_afb0@SP@@@Z  00c9b6d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPTribe.cpp  ?HandleEvent@cTribe_s00c9_afb0@SP@@QAEXPAX@Z  00c9bd50  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPTribe.cpp  ?OnExtentsChanged@cSpatialObject_s00c9_afb0@@QAEXPAXM@Z  00c9be50  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

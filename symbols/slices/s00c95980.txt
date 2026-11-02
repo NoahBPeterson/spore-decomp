@@ -1,11 +1,11 @@
-00c95af0 ?SetupChatAreas@cTribe@SP@@QAEXXZ  # symbol; touches mTools guard 0x2d4, chat-area vec 0x294/0x298, grid 0x558
-00c95cc0 ?AddChatArea_5cc0@cTribe@SP@@QAEXPAX@Z  # symbol; AutoRefCount roster 0x354/0x358/0x35c, vtable 0xbc/0xc0
-00c95d70 ?AddExistingCreatureInternal@cTribe@SP@@QAEXPAX@Z  # symbol; roster 0x340/0x344, count 0x338, string 0xb38
-00c95ee0 ?RemoveCreature@cTribe@SP@@QAEXPAXE@Z  # symbol; packing 0x334, count 0x338, PickAPeon 0xc8f310
-00c95fe0 ?SpawnHut_5fe0@cTribe@SP@@QAEPAXPAX@Z  # symbol; CreateNoun 0xb20c60
-00c96150 ?AddTool_6150@cTribe@SP@@QAE_NPAX@Z  # symbol; mTools 0x2d4
-00c962b0 ?UpdateHut_62b0@cTribe@SP@@QAE_NXZ  # symbol; handle 0x260, object 0x368
-00c96410 ?Read@cTribe@SP@@QAE_NPAX@Z  # symbol; spatial 0x120, 0x20c, timer 0x510, grid 0x558, vec3 0x1904/0x1908
-00c966d0 ?GetStructures@cTribe@SP@@QAEPAXXZ  # symbol; object 0x368, struct vec 0x370/0x36c
-00c967a0 ?GetInhabitants@cTribe@SP@@QAEPAXXZ  # symbol; roster 0x340/0x344, 0xe4
-00c96840 ?CopyFrom_6840@cTribe@SP@@QAEPAXPAX@Z  # symbol; plain sub-object copy + vector assign + refcount swap
+00c95af0 ?SetupChatAreas@cTribe_s00c9_5980@SP@@QAEXXZ  # cTribe_s00c9_5980::SetupChatAreas migrated from s00c95980 (verbatim, slice spelling)
+00c95cc0 ?AddChatArea_5cc0@cTribe_s00c9_5980@SP@@QAEXPAX@Z  # cTribe_s00c9_5980::AddChatArea_5cc0 migrated from s00c95980 (verbatim, slice spelling)
+00c95d70 ?AddExistingCreatureInternal@cTribe_s00c9_5980@SP@@QAEXPAX@Z  # cTribe_s00c9_5980::AddExistingCreatureInternal migrated from s00c95980 (verbatim, slice spelling)
+00c95ee0 ?RemoveCreature@cTribe_s00c9_5980@SP@@QAEXPAXE@Z  # cTribe_s00c9_5980::RemoveCreature migrated from s00c95980 (verbatim, slice spelling)
+00c95fe0 ?SpawnHut_5fe0@cTribe_s00c9_5980@SP@@QAEPAXPAX@Z  # cTribe_s00c9_5980::SpawnHut_5fe0 migrated from s00c95980 (verbatim, slice spelling)
+00c96150 ?AddTool_6150@cTribe_s00c9_5980@SP@@QAE_NPAX@Z  # cTribe_s00c9_5980::AddTool_6150 migrated from s00c95980 (verbatim, slice spelling)
+00c962b0 ?UpdateHut_62b0@cTribe_s00c9_5980@SP@@QAE_NXZ  # cTribe_s00c9_5980::UpdateHut_62b0 migrated from s00c95980 (verbatim, slice spelling)
+00c96410 ?Read@cTribe_s00c9_5980@SP@@QAE_NPAX@Z  # cTribe_s00c9_5980::Read migrated from s00c95980 (verbatim, slice spelling)
+00c966d0 ?GetStructures@cTribe_s00c9_5980@SP@@QAEPAXXZ  # cTribe_s00c9_5980::GetStructures migrated from s00c95980 (verbatim, slice spelling)
+00c967a0 ?GetInhabitants@cTribe_s00c9_5980@SP@@QAEPAXXZ  # cTribe_s00c9_5980::GetInhabitants migrated from s00c95980 (verbatim, slice spelling)
+00c96840 ?CopyFrom_6840@cTribe_s00c9_5980@SP@@QAEPAXPAX@Z  # cTribe_s00c9_5980::CopyFrom_6840 migrated from s00c95980 (verbatim, slice spelling)

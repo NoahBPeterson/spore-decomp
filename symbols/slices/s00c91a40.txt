@@ -1,4 +1,4 @@
 00c91a40 ?UpdateModel@cTribeToolView@SP@@QAEXXZ  # cTribeToolView::UpdateModel migrated from s00c91a40 (verbatim, slice spelling)
-00c91b60 SP::cTribeToolView::ChooseNewHutModel(void)  ; 0x00c91b60  thiscall, ret 0 (PDB candidate SP::cTribe::ChooseNewHutModel): gates on the +0x120 definition sub-object's IsActive (slot 0x58); selects a hut-model id (0x654e036 if the +0x18cc state has +0x608>0 and +0x60c>0, 0x654e034 if +0x60c>0, else 0x654e035); queries the property manager (Query 0xc42e83f6/0x2be764e2, vtable slot 0x2c) and fills an eastl::vector<EA::AutoRefCount<SP::cMWModel>,eastl::sp_vector_allocator> via the 4-arg helper at 0x6a0ae0, then returns the 12-byte entry at GetModeVariant()-1; NOT byte-exact (282 vs 285, 245 diff bytes) -- recorded in nonmatching.txt
+00c91b60 ?ChooseNewHutModel@cTribeToolView@SP@@QAEPAXXZ  # cTribeToolView::ChooseNewHutModel migrated from s00c91a40 (verbatim, slice spelling)
 00c91c80 ?GetWaterOrHeight@cTribeToolView@SP@@QAEMXZ  # cTribeToolView::GetWaterOrHeight migrated from s00c91a40 (verbatim, slice spelling)
 ; flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast (manifest.txt, 2/3 MATCH; run_all -> 2/2)

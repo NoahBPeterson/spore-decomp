@@ -5,8 +5,8 @@
 00c8df10 ?PostDataLoad@TotemPole@@QAE_NI@Z  # TotemPole::PostDataLoad migrated from s00c8db30 (verbatim, slice spelling)
 00c8df60 ?TP_ResetModels@@YIXPAUSpatialBody@@@Z  # TP_ResetModels migrated from s00c8db30 (verbatim, slice spelling)
 00c8e000  Spatial::LoadModel  # cSpatialObject::LoadModel (this = cTotemPole+0x34) [partial]
-00c8e310  F8e310  # stream writer: 3 x EA::IO::WriteUint32 via v08()->v06()
-00c8e3a0  F8e3a0  # stream reader: 3 x EA::IO::ReadInt32 via v08()->v06()
+00c8e310 ?F8e310@@YAPAUIOObject@@PAU1@PBI@Z  # F8e310 migrated from s00c8db30 (verbatim, slice spelling)
+00c8e3a0 ?F8e3a0@@YAPAUIOObject@@PAU1@PAI@Z  # F8e3a0 migrated from s00c8db30 (verbatim, slice spelling)
 00c8e420 ?Tribe_AsInterface@@YIPAXPAUTribe@@HI@Z  # Tribe_AsInterface migrated from s00c8db30 (verbatim, slice spelling)
 00c8e490 ?Tribe_ReleaseRel@@YIXPAUTribe@@@Z  # Tribe_ReleaseRel migrated from s00c8db30 (verbatim, slice spelling)
 00c8e4d0 ?Community_IsPlayer@@YI_NPAUTribe@@@Z  # Community_IsPlayer migrated from s00c8db30 (verbatim, slice spelling)
@@ -21,9 +21,9 @@
 00c8e830 ?F8e830@@YIXPAUTribe@@HPAXH@Z  # F8e830 migrated from s00c8db30 (verbatim, slice spelling)
 00c8e850 ?F8e850@@YI_NPAUTribe@@@Z  # F8e850 migrated from s00c8db30 (verbatim, slice spelling)
 00c8e870 ?F8e870@@YI_NPAUTribe@@@Z  # F8e870 migrated from s00c8db30 (verbatim, slice spelling)
-00c8e890  F8e890  # copy mSegmentTable_1868[row] six dwords to out; null row for other kinds
+00c8e890 ?F8e890@@YIXPAUTribe@@HPAUVec6@@IH@Z  # F8e890 migrated from s00c8db30 (verbatim, slice spelling)
 00c8e930 ?F8e930@@YI_NPAUTribe@@HPAH@Z  # F8e930 migrated from s00c8db30 (verbatim, slice spelling)
-00c8e990  F8e990  # relation state 1/2/3 from grid counters
+00c8e990 ?F8e990@@YIIPAUTribe@@@Z  # F8e990 migrated from s00c8db30 (verbatim, slice spelling)
 00c8e9f0 ?F8e9f0@@YIIPAUTribe@@@Z  # F8e9f0 migrated from s00c8db30 (verbatim, slice spelling)
 00c8ea70 ?F8ea70@@YAPAXI@Z  # F8ea70 migrated from s00c8db30 (verbatim, slice spelling)
 00c8eae0 ?Tribe_GetMaxPopulation@@YIHPAUTribe@@@Z  # Tribe_GetMaxPopulation migrated from s00c8db30 (verbatim, slice spelling)

@@ -1,17 +1,17 @@
 00c92d50 SP::HotSpotMap::lower_bound  # Claude-coined; 0x60-byte elements, key at +0
 00c95010 SP::cFishingHotSpot::operator=  # Claude-coined; copies pos/food/rate/cube index and AddRefs the effect refs
 00c9aa10 SP::HotSpotMap::operator[]  # Claude-coined; thiscall(ecx=0x157abb0 map, key*) returns the value slot (elem+8), inserting a default hot spot
-00c9afb0 SP::cTribe::SetupHotSpot  # PDB name; picks/refreshes a fishing hot spot around the view direction (cube-map cells, water test via planet model)
-00c9b6d0 SP::cTribe::FishingRegister  # PDB name; if the fish timer runs and the closest water point moved, retargets the hot spot
+00c9afb0 ?SetupHotSpot@cTribe_s00c9_afb0@SP@@SAIABUVector3_s00c9_afb0@@H@Z  # SetupHotSpot migrated from s00c9afb0 (verbatim, slice spelling)
+00c9b6d0 ?FUN_00c9b6d0@@YAXPAVcTribe_s00c9_afb0@SP@@@Z  # FUN_00c9b6d0 migrated from s00c9afb0 (verbatim, slice spelling)
 00c9b740 SP::cTribe::HotSpotsUpdate  # PDB name; per-frame fishing hot-spot scan/spawn/resupply/effect update
 00c9ba80 ??0cTribeFoodMat@@QAE@XZ  # cTribeFoodMat::cTribeFoodMat migrated from s00c9afb0 (verbatim, slice spelling)
 00c9bb80 ?SetOwner@cTribeFoodMat@@QAEXPAX@Z  # cTribeFoodMat::SetOwner migrated from s00c9afb0 (verbatim, slice spelling)
 00c9bc00 ?Write@cTribeFoodMat@@QAE_NPAX@Z  # cTribeFoodMat::Write migrated from s00c9afb0 (verbatim, slice spelling)
 00c9bd30 ?IsPlayerTribe@cTribe_s00c9_afb0@SP@@QAE_NXZ  # IsPlayerTribe migrated from s00c9afb0 (verbatim, slice spelling)
-00c9bd50 SP::cTribe::HandleEvent  # Claude-coined; forwards an event to the cCommunity vtable-0xc987b0 handler
+00c9bd50 ?HandleEvent@cTribe_s00c9_afb0@SP@@QAEXPAX@Z  # HandleEvent migrated from s00c9afb0 (verbatim, slice spelling)
 00c9bda0 ??_GcTribeFoodMat@@UAEPAXI@Z  # cTribeFoodMat::~cTribeFoodMat migrated from s00c9afb0 (verbatim, slice spelling)
 00c9bdf0 ?Cast@cTribeHut_s00c9_afb0@@QAEPAXH@Z  # cTribeHut_s00c9_afb0::Cast migrated from s00c9afb0 (verbatim, slice spelling)
-00c9be50 SP::cSpatialObject::OnExtentsChanged  # Claude-coined; forwards to SetLocalExtents then notifies the owner's handler
+00c9be50 ?OnExtentsChanged@cSpatialObject_s00c9_afb0@@QAEXPAXM@Z  # cSpatialObject_s00c9_afb0::OnExtentsChanged migrated from s00c9afb0 (verbatim, slice spelling)
 00c9be90 ?TribalEvent@cGameData@@QAEXH@Z  # cGameData::TribalEvent migrated from s00c9afb0 (verbatim, slice spelling)
 00c9bef0 ?SetRefCountDelta@cTribeHut@@QAEXD@Z  # cTribeHut::SetRefCountDelta migrated from s00c9afb0 (verbatim, slice spelling)
 00c9bf30 ?UpdateEmpireColor@cTribeHut@@QAEXXZ  # cTribeHut::UpdateEmpireColor migrated from s00c9afb0 (verbatim, slice spelling)

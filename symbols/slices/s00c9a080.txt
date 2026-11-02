@@ -1,1 +1,5 @@
-00c9a100 SP::cTribe::Init  # dev-PDB name via caller-scored (pdb_candidates); ModAPI cTribe::SpawnTribe(position, numMembers, int, bool)
+00c9a080 ?HotSpotsShutdown@@YAXXZ  # HotSpotsShutdown migrated from s00c9a080 (verbatim, slice spelling)
+00c9a100 ?Init@cTribe_s00c9_a080@@QAEXPBUVector3_s00c9_a080@@HH_N@Z  # cTribe_s00c9_a080::Init migrated from s00c9a080 (verbatim, slice spelling)
+00c9a960 ?CheckToolsTimeout@cTribe_s00c9_a080@@QAE_NXZ  # cTribe_s00c9_a080::CheckToolsTimeout migrated from s00c9a080 (verbatim, slice spelling)
+00c9af30 ?GetHotSpotValues@@YAXPBUVector3_s00c9_a080@@PAM1PAE@Z  # GetHotSpotValues migrated from s00c9a080 (verbatim, slice spelling)
+00c9af80 ?GetHotSpotPosition@@YAPAUVector3_s00c9_a080@@PAU1@PBU1@@Z  # GetHotSpotPosition migrated from s00c9a080 (verbatim, slice spelling)
