@@ -1,0 +1,10 @@
+# source  symbol  va  flags
+../src/game/SPGonzago/_at_00c20000.cpp  ?FindOrAddKey@cActionMapOwner@@QAEHH@Z  00c27db0  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_00c20000.cpp  ?FUN_00c27ff0@@YAEPAVcActionCircle@@@Z  00c27ff0  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_00c20000.cpp  ?FUN_00c28000@@YAPAEPAE00P6A_N0@Z@Z  00c28000  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_00c20000.cpp  ?Init@C_s00c296b0@@QAEPAU1@XZ  00c296b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00c20000.cpp  ?f_00c29940@@YAXPAUC_s00c289b0@@@Z  00c29940  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00c20000.cpp  ?CopyFrom@cOrientation@@QAEPAXPBU1@@Z  00c29ab0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPGonzago/_at_00c20000.cpp  ?FUN_00c29b00@@YAHI@Z  00c29b00  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPGonzago/_at_00c20000.cpp  ?CopyFrom@Value@@QAEPAU1@PBIPAUTraceCache@@@Z  00c2b030  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_00c20000.cpp  ?FindOrInsert@Ht@@QAEPAUTraceCache@@PBI@Z  00c2b080  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
