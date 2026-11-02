@@ -1,6 +1,6 @@
 00697650 SP::cLocaleManager::BroadcastLocaleChange  # vtable slot +0x20/+0x14 then MessageServer dispatch of App/cLocaleChangeMessage
 00697710 ?cLocaleManagerSetLocale@SP@@YA_NPAX0@Z  # cLocaleManagerSetLocale migrated from s00696c80 (verbatim, slice spelling)
-00697960 SP::cLocalInputState zero-init helper  # memset(this,0,0x48); return this (__fastcall)
+00697960 ?ZeroLocalInputState@@YIPAXPAX@Z  # ZeroLocalInputState migrated from s00696c80 (verbatim, slice spelling)
 00697980 ?Reset@cLocalInputState@SP@@QAEXXZ  # SP::cLocalInputState::Reset migrated from s00696c80
 006979c0 ?UpdateModifiers@cLocalInputState@SP@@QAEXXZ  # SP::cLocalInputState::UpdateModifiers migrated from s00696c80
 00697a10 ?ResetIf@cLocalInputState_s0069_6c80@SP@@QAEX_N@Z  # cLocalInputState_s0069_6c80::ResetIf migrated from s00696c80 (verbatim, slice spelling)

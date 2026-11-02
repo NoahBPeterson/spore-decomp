@@ -1,3 +1,6 @@
+0069d090 ?clr090@ClrTriple@@QAEXXZ  # ClrTriple::clr090 migrated from s0069d090 (verbatim, slice spelling)
+0069d100 ?clr100@ClrTriple@@QAEXXZ  # ClrTriple::clr100 migrated from s0069d090 (verbatim, slice spelling)
+0069d150 ?clr150@ClrTriple@@QAEXXZ  # ClrTriple::clr150 migrated from s0069d090 (verbatim, slice spelling)
 0069d1d0 ?f@C2a@@QAE_NHH@Z  # C2a::f migrated from s0069d090 (verbatim, slice spelling)
 0069d210 ?read@C3@@QAE_NH@Z  # C3::read migrated from s0069d090 (verbatim, slice spelling)
 0069d280 ?g@C2b@@QAE_NHH@Z  # C2b::g migrated from s0069d090 (verbatim, slice spelling)
