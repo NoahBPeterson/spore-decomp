@@ -1,8 +1,13 @@
+00c64a70 ?Contains@A@@QAE_NH@Z  # A::Contains migrated from s00c649b0 (verbatim, slice spelling)
+00c64ad0 ?FUN_00c64ad0@@YAXPAM0@Z  # FUN_00c64ad0 migrated from s00c649b0 (verbatim, slice spelling)
+00c64b50 ?EnableFlag@A@@QAEXD@Z  # A::EnableFlag migrated from s00c649b0 (verbatim, slice spelling)
 00c64bf0 Simulator::cArrowMorphHandle::cArrowMorphHandle  # PDB-resolved
-00c64b50 Simulator::cArrowMorphHandle::EnableFlag  # bitfield flag at +0xd0 bitmap
 00c64db0 Simulator::cArrowMorphHandle local-position update
 00c64f00 Simulator::cArrowMorphHandle local-quaternion update
-00c653e0 Simulator::cSimpleRotationRing dtor
-00c65540 Simulator::cSimpleRotationBall dtor
+00c653e0 ?FUN_00c653e0@@YIXPAX@Z  # FUN_00c653e0 migrated from s00c649b0 (verbatim, slice spelling)
+00c654b0 ?SetA@A@@QAEXM@Z  # A::SetA migrated from s00c649b0 (verbatim, slice spelling)
 00c654b0/c654e0/c65510 float setters (dirty -> FUN_00c640e0/0xc64170)
-00c658e0 Simulator::cMorphHandle position setter
+00c654e0 ?SetB@A@@QAEXM@Z  # A::SetB migrated from s00c649b0 (verbatim, slice spelling)
+00c65510 ?SetC@A@@QAEXM@Z  # A::SetC migrated from s00c649b0 (verbatim, slice spelling)
+00c65540 ?FUN_00c65540@@YIXPAX@Z  # FUN_00c65540 migrated from s00c649b0 (verbatim, slice spelling)
+00c658e0 ?SetPos@A@@QAEXPAM@Z  # A::SetPos migrated from s00c649b0 (verbatim, slice spelling)

@@ -1,17 +1,15 @@
-# Slice s00c6f6e0 -- recovered symbols (worker 14, gold7).
-# Format: <va> <Name>  # evidence
-00c6f6e0 SimOrnament::Cast  # retailer class-id 0x175cdc9 returns this; msgmap dispatch
-00c6f770 SimOrnament::SetStyleModel  # writes +0x228/+0x22c style/model, calls vtable slot 0x48
-00c6f7b0 SimSpatial::IsPlayerOwnedOrnament  # lea esi,[ecx-0x70]; NounManager/GetPlayerEmpire; vtable slot 0x4c
-00c6f7f0 SimOrnament::SimOrnament  # ctor: sub-ctors GameData/Spatial/Combatant/IntTarget + vtable stores
-00c6f990 SimOrnament::Write  # cVarListSerializer on stack, class-id 0x175cdc9 written
-00c6fac0 SimOrnament::Destroy  # releases +0x2c refcount, destroys +0x210 and spatial +0x70
-00c6fb80 SimSpatial::LoadModelOrnament  # reads style +0x1b8, calls LoadModel 0xc8a550
-00c6fcd0 SimCursorAttachment::SimCursorAttachment  # ctor with GameData/Spatial sub-ctors, class-id 0x2c5c935
-00c6fd20 SimCursorAttachment::Cast  # class-id 0x2c5c935 returns this; GameData/Spatial fallback
-00c6fdc0 SimCursorAttachment::Destroy  # releases +0x2c refcount, destroys spatial +0x34
-00c6fe00 SP::GetClassFromTypeMaybe  # dense switch 4..12 -> {1,2,0}
-00c6fe50 SimPlanetRec::IsHomePlanetOfPlayerMaybe  # GetWorld->GetType==5, empire home-planet compare
+00c6f6e0 ?Cast@SimOrnament@@QAEPAXI@Z  # SimOrnament::Cast migrated from s00c6f6e0 (verbatim, slice spelling)
+00c6f770 ?SetStyleModel@SimOrnament@@QAEXHPAXH@Z  # SimOrnament::SetStyleModel migrated from s00c6f6e0 (verbatim, slice spelling)
+00c6f7b0 ?IsPlayerOwnedOrnament@SimSpatial@@QAE_NXZ  # SimSpatial::IsPlayerOwnedOrnament migrated from s00c6f6e0 (verbatim, slice spelling)
+00c6f7f0 ??0SimOrnament@@QAE@XZ  # SimOrnament::SimOrnament migrated from s00c6f6e0 (verbatim, slice spelling)
+00c6f990 ?Write@SimOrnament@@QAE_NPAX@Z  # SimOrnament::Write migrated from s00c6f6e0 (verbatim, slice spelling)
+00c6fac0 ?Destroy@SimOrnament@@QAEXXZ  # SimOrnament::Destroy migrated from s00c6f6e0 (verbatim, slice spelling)
+00c6fb80 ?LoadModelOrnament@SimSpatial@@QAE_NPAX@Z  # SimSpatial::LoadModelOrnament migrated from s00c6f6e0 (verbatim, slice spelling)
+00c6fcd0 ??0SimCursorAttachment@@QAE@XZ  # SimCursorAttachment::SimCursorAttachment migrated from s00c6f6e0 (verbatim, slice spelling)
+00c6fd20 ?Cast@SimCursorAttachment@@QAEPAXI@Z  # SimCursorAttachment::Cast migrated from s00c6f6e0 (verbatim, slice spelling)
+00c6fdc0 ?Destroy@SimCursorAttachment@@QAEXXZ  # SimCursorAttachment::Destroy migrated from s00c6f6e0 (verbatim, slice spelling)
+00c6fe00 ?Func6fe00@@YAHH@Z  # Func6fe00 migrated from s00c6f6e0 (verbatim, slice spelling)
+00c6fe50 ?Func6fe50@@YA_NPAUWorldObject@@@Z  # Func6fe50 migrated from s00c6f6e0 (verbatim, slice spelling)
 00c6fec0 VisiblePlanet::Cast  # class-id 0x3275872 returns this; GameData(+0xd4)/Spatial fallback
 00c6ff00 VisiblePlanet::Write  # cVarListSerializer, GameData::Write + Spatial::Write
 00c6ffd0 VisiblePlanet::Cast2  # class-id 0x44462a6 returns this; GameData(+0xd4)/Spatial fallback

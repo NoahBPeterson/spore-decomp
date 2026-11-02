@@ -1,7 +1,7 @@
-00c678f0 Ctrl::Update  # camera ring controller: camera ray vs target plane -> angle -> quaternion compose; writes +0x1a4 quat, calls 0x00c66c10 when changed
-00c67560 Vec12Vector::Insert  # eastl vector<12-byte>::insert(pos,count,value): grow / shift / fill paths, capacity max(2*size, size+n), 0xd1 alloc line, +0x10 inline-buffer free guard
-00c67730 Ctrl::Attach  # refresh the cached target position (+0x198), orientation quat (+0x1a4) and span (+0x1b4), then republish when anything changed
-00c680d0 Ctrl::SetState  # store the ring state (+0x1b8) and rebuild + flush the orientation
-00c68100 RemoveFromVec  # detach + RemoveNoun, erase one pointer from the vector, release the vacated slot
-00c68190 PathObj::Fn68190  # reset the anchor triple from 0x01693d74, prune neighbours within 2.0 units, then re-propagate via 0x00c64460
-00c68250 PathObj::Fn68250  # remove a path point unless it is the only one left
+00c67560 ?Insert@Vec12Vector@@QAEXPAUVec12@@IABU2@@Z  # Vec12Vector::Insert migrated from s00c67560 (verbatim, slice spelling)
+00c67730 ?Attach@Ctrl_s00c6_7560__g7@@QAEXPAUCtrlTarget@@@Z  # Ctrl_s00c6_7560__g7::Attach migrated from s00c67560 (verbatim, slice spelling)
+00c678f0 ?Update@Ctrl_s00c6_7560@@QAEXXZ  # Ctrl_s00c6_7560::Update migrated from s00c67560 (verbatim, slice spelling)
+00c680d0 ?SetState@Ctrl_s00c6_7560__g7@@QAEXH@Z  # Ctrl_s00c6_7560__g7::SetState migrated from s00c67560 (verbatim, slice spelling)
+00c68100 ?RemoveFromVec@@YAXPAUPtrVec@@PAX@Z  # RemoveFromVec migrated from s00c67560 (verbatim, slice spelling)
+00c68190 ?Fn68190@PathObj_s00c6_7560__g7@@QAEXPAX@Z  # PathObj_s00c6_7560__g7::Fn68190 migrated from s00c67560 (verbatim, slice spelling)
+00c68250 ?Fn68250@PathObj_s00c6_7560__g7@@QAE_NPAX@Z  # PathObj_s00c6_7560__g7::Fn68250 migrated from s00c67560 (verbatim, slice spelling)

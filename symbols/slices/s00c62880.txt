@@ -1,8 +1,10 @@
 00c4ad50 ?Init@cSPMission@SP@@UAE_NXZ  # SP::cSPMission::Init (callee of s00c62880, named from the dev publics; slice address comment)
-00c62880 Simulator::cMissionUseTool::cMissionUseTool  # PDB-resolved
+00c62880 ?cMissionUseTool_ctor@@YIPAXPAXH@Z  # cMissionUseTool_ctor migrated from s00c62880 (verbatim, slice spelling)
+00c62930 ?cMissionUseTool_dtor@@YIPAXPAXHE@Z  # cMissionUseTool_dtor migrated from s00c62880 (verbatim, slice spelling)
+00c62990 ?M_C62990@@YIIPAXHH0@Z  # M_C62990 migrated from s00c62880 (verbatim, slice spelling)
 00c62a80 ?M_InitUseTool@@YIXPAXH@Z  # M_InitUseTool migrated from s00c62880 (verbatim, slice spelling)
 00c62b30 ?M_C62b30@@YI_NPAXH@Z  # M_C62b30 migrated from s00c62880 (verbatim, slice spelling)
-00c62cc0 Simulator::cMissionWar::cMissionWar  # PDB-resolved
+00c62cc0 ?cMissionWar_ctor@@YIPAXPAXH@Z  # cMissionWar_ctor migrated from s00c62880 (verbatim, slice spelling)
 00c62ed0 ?M_GetUIMedium@@YIXPAXH0@Z  # M_GetUIMedium migrated from s00c62880 (verbatim, slice spelling)
 00c62f60 ?M_GetUILong@@YIXPAXH0@Z  # M_GetUILong migrated from s00c62880 (verbatim, slice spelling)
 00c62ff0 ?M_C62ff0@@YIMPAXHH0@Z  # M_C62ff0 migrated from s00c62880 (verbatim, slice spelling)
@@ -16,3 +18,8 @@
 00c63570 ?M_GetProgressDisplayText@@YIXPAXH0@Z  # M_GetProgressDisplayText migrated from s00c62880 (verbatim, slice spelling)
 00c635c0 ?M_GetNumCities@@YIHPAXH@Z  # M_GetNumCities migrated from s00c62880 (verbatim, slice spelling)
 00c63740 ?M_GetTagString@@YIIPAXHH0@Z  # M_GetTagString migrated from s00c62880 (verbatim, slice spelling)
+00c637b0 ?M_C637b0@@YIXPAXHH0@Z  # M_C637b0 migrated from s00c62880 (verbatim, slice spelling)
+00c639a0 ?Adjust0@Adj@@QAEPAXPAX@Z  # Adj::Adjust0 migrated from s00c62880 (verbatim, slice spelling)
+00c639d0 ?Adjust1@Adj@@QAEPAXPAX@Z  # Adj::Adjust1 migrated from s00c62880 (verbatim, slice spelling)
+00c63a10 ?FUN_00c63a10@@YAXXZ  # FUN_00c63a10 migrated from s00c62880 (verbatim, slice spelling)
+00c63a20 ?Adjust2@Adj@@QAEPAXPAX@Z  # Adj::Adjust2 migrated from s00c62880 (verbatim, slice spelling)

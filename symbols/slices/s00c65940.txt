@@ -1,12 +1,12 @@
-00c65940  Simulator::cSimpleRotationRing::SetFacing  # PDB/vtable name cSimpleRotationRing; normalises dir into +0x15c
-00c65af0  Simulator::cSimpleRotationRing::SetT  # clamp +0x174..+0x178 into +0x17c
-00c65b50  Simulator::cSimpleRotationRing::SetTLerp  # lerp of the same clamp
-00c65bc0  Simulator::cSimpleRotationRing::_scalar_deleting_destructor  # vtable 0x14711a4, frees +0x30
-00c65c00  Simulator::cSimpleRotationRing::cSimpleRotationRing  # PDB name
-00c65e80  FUN_00c65e80  # model/world event; uses +0x9c/+0xa0/+0x19c
-00c65f00  Simulator::cSimpleRotationBall::cSimpleRotationBall  # PDB name
-00c660f0  Simulator::cSimpleRotationBall::OnView  # vtable slot 0x54 of vtbl 0x14713c8
-00c662b0  FUN_00c662b0  # setter of +0x1ac
-00c66310  FUN_00c66310  # setter of +0x1b0
-00c66370  FUN_00c66370  # quaternion/matrix update (calls QuaternionFromFacingAndUp)
-00c666f0  FUN_00c666f0  # setter of +0x174/+0x178 then re-clamp
+00c65940 ?SetFacing@cMorphHandle_s00c6_5940@@QAEXABUcSPVector3_s00c6_5940@@@Z  # cMorphHandle_s00c6_5940::SetFacing migrated from s00c65940 (verbatim, slice spelling)
+00c65af0 ?SetT@cMorphHandle_s00c6_5940@@QAEXM@Z  # cMorphHandle_s00c6_5940::SetT migrated from s00c65940 (verbatim, slice spelling)
+00c65b50 ?SetTLerp@cMorphHandle_s00c6_5940@@QAEXM@Z  # cMorphHandle_s00c6_5940::SetTLerp migrated from s00c65940 (verbatim, slice spelling)
+00c65bc0 ?ScalarDtor@cSimpleRotationRing@@QAEPAXE@Z  # cSimpleRotationRing::ScalarDtor migrated from s00c65940 (verbatim, slice spelling)
+00c65c00 ??0cSimpleRotationRing@@QAE@XZ  # cSimpleRotationRing::cSimpleRotationRing migrated from s00c65940 (verbatim, slice spelling)
+00c65e80 ?OnEvent@cMorphHandle_s00c6_5940@@QAE_NPAX@Z  # cMorphHandle_s00c6_5940::OnEvent migrated from s00c65940 (verbatim, slice spelling)
+00c65f00 ??0cSimpleRotationBall@@QAE@XZ  # cSimpleRotationBall::cSimpleRotationBall migrated from s00c65940 (verbatim, slice spelling)
+00c660f0 ?OnView@cMorphHandle_s00c6_5940@@QAEXPAX@Z  # cMorphHandle_s00c6_5940::OnView migrated from s00c65940 (verbatim, slice spelling)
+00c662b0 ?SetPhase@cMorphHandle_s00c6_5940@@QAEXM@Z  # cMorphHandle_s00c6_5940::SetPhase migrated from s00c65940 (verbatim, slice spelling)
+00c66310 ?SetAmplitude@cMorphHandle_s00c6_5940@@QAEXM@Z  # cMorphHandle_s00c6_5940::SetAmplitude migrated from s00c65940 (verbatim, slice spelling)
+00c66370 ?UpdateMatrix@cMorphHandle_s00c6_5940@@QAEXXZ  # cMorphHandle_s00c6_5940::UpdateMatrix migrated from s00c65940 (verbatim, slice spelling)
+00c666f0 ?SetRange@cMorphHandle_s00c6_5940@@QAEXMM@Z  # cMorphHandle_s00c6_5940::SetRange migrated from s00c65940 (verbatim, slice spelling)
