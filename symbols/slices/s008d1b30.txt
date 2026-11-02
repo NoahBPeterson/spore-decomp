@@ -1,1 +1,4 @@
+008d1b30 ?get_using_str_hashClass@@YAHPAUTsiHashClass@@PBDPAG@Z  # get_using_str_hashClass migrated from s008d1b30 (verbatim, slice spelling)
+008d1c50 ?put_hashClass@@YAXPAUTsiHashClass@@IGPBD@Z  # put_hashClass migrated from s008d1b30 (verbatim, slice spelling)
+008d1cb0 ?Delete_hashClass@@YAXPAUTsiHashClass@@@Z  # Delete_hashClass migrated from s008d1b30 (verbatim, slice spelling)
 008d1da0 ?EnumDeviceCallback@@YG_NPAX0@Z  # EnumDeviceCallback migrated from s008d1b30 (verbatim, slice spelling)

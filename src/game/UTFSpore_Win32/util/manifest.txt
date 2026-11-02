@@ -1,0 +1,7 @@
+# source  symbol  va  flags
+../src/game/UTFSpore_Win32/util.cpp  ?util_FixDiv@@YAHII@Z  008d16d0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/util.cpp  ?util_FixSin@@YAHH@Z  008d1730  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/util.cpp  ?util_EuclidianDistance@@YAHHH@Z  008d17d0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/util.cpp  ?FUN_008d1960@@YIHI@Z  008d1960  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/UTFSpore_Win32/util.cpp  ?put_hashClass@@YAXPAUTsiHashClass@@IGPBD@Z  008d1c50  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/util.cpp  ?Delete_hashClass@@YAXPAUTsiHashClass@@@Z  008d1cb0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
