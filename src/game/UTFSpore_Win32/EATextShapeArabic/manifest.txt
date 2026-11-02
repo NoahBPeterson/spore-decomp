@@ -1,0 +1,5 @@
+# source  symbol  va  flags
+../src/game/UTFSpore_Win32/EATextShapeArabic.cpp  ?Insert@CWordVector@@QAEXPAGABG@Z  008a1900  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/EATextShapeArabic.cpp  ?Insert@CVectorEntryArray@SP@@QAEXPAUCVectorEntry@2@ABU32@@Z  008a1a10  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/EATextShapeArabic.cpp  ?SetupArabicGsubLookup@Text@EA@@YAXAAUFeatureLookupArray@12@PBUOTF_s008a_2a00@12@@Z  008a2a00  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/EATextShapeArabic.cpp  ?PlaceGeneralGlyphCluster@Typesetter_s008a_2a00@Text@EA@@QAEXII@Z  008a2d60  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

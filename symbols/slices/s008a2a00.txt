@@ -1,6 +1,7 @@
-008a2a00 EA::Text::SetupArabicGsubLookup  # byte-exact (retail FeatureLookupArray 10x0x60 fixed buffer)
-008a2b10 EA::Text::Typesetter::ShapeArabic  # complete, retail layout; pOTF/glyphCount stack slots swapped and FeatureLookupArray init store order differs; equiv UNSUPPORTED (0/400 valid: the harness cannot build a callable Typesetter, fault(read))
-008a2d60 EA::Text::Typesetter::PlaceGeneralGlyphCluster  # byte-exact
+00897ab0 ?GetGlyphIndexFromCharIndex@LineLayout@Text@EA@@QBEII@Z  # EA::Text::LineLayout::GetGlyphIndexFromCharIndex (callee of s008a2a00, named from the dev publics; slice address comment)
+008a2a00 ?SetupArabicGsubLookup@Text@EA@@YAXAAUFeatureLookupArray@12@PBUOTF_s008a_2a00@12@@Z  # SetupArabicGsubLookup migrated from s008a2a00 (verbatim, slice spelling)
+008a2b10 ?ShapeArabic@Typesetter_s008a_2a00@Text@EA@@QAEXII@Z  # Typesetter_s008a_2a00::ShapeArabic migrated from s008a2a00 (verbatim, slice spelling)
+008a2d60 ?PlaceGeneralGlyphCluster@Typesetter_s008a_2a00@Text@EA@@QAEXII@Z  # Typesetter_s008a_2a00::PlaceGeneralGlyphCluster migrated from s008a2a00 (verbatim, slice spelling)
 008a2ee0 EA::Text::Typesetter::GetGeneralCharCluster  # byte-exact
 008a2fe0 EA::Text::GlyphLayoutVector::DoInsertValue  # complete; append path byte-identical, grow path register/slot assignment differs; equiv WEAK (12 valid, 39.0% coverage)
 008a3110 EA::Text::Typesetter::AppendGeneralGlyphCluster  # complete; retail inlines GlyphLayoutInfo push_back, this build outlines it; equiv WEAK (174 valid, 23.8% coverage)

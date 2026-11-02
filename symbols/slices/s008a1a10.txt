@@ -1,8 +1,8 @@
-008a1a10 ?Insert@CVectorEntryArray@SP@@QAEXPAUCVectorEntry@2@ABU32@@Z  # SP::CVectorEntryArray::Insert
+008a1a10 ?Insert@CVectorEntryArray@SP@@QAEXPAUCVectorEntry@2@ABU32@@Z  # CVectorEntryArray::Insert migrated from s008a1a10 (verbatim, slice spelling)
 008a1b30 ?DestroyInlineBuffers@SP@@YAPAUCInlineBuffer@1@PAU21@00@Z  # SP::DestroyInlineBuffers
-008a1b70 ?SubstituteGlyphs2@Text@EA@@YAXPAULineLayout@12@IIG@Z  # EA::Text::SubstituteGlyphs2
+008a1b70 ?SubstituteGlyphs2@Text@EA@@YAXPAULineLayout_s008a_1a10@12@IIG@Z  # SubstituteGlyphs2 migrated from s008a1a10 (verbatim, slice spelling)
 008a1c20 ?DoDestroyValues@FeatureLookupVector@Text@EA@@QAEXPAUFeatureLookup@23@0@Z  # eastl::vector<EA::Text::FeatureLookup>::DoDestroyValues
-008a1c60 ?AppendArabicGlyphCluster@ArabicLayout@Text@EA@@QAEXIIPBGI0IIPAVOTF@23@@Z  # EA::Text::Typesetter::AppendArabicGlyphCluster
+008a1c60 ?AppendArabicGlyphCluster@ArabicLayout@Text@EA@@QAEXIIPBGI0IIPAVOTF@23@@Z  # ArabicLayout::AppendArabicGlyphCluster migrated from s008a1a10 (verbatim, slice spelling)
 008a1db0 ?AssignRange@LookupPtrVector@Text@EA@@QAEXPBQAVOTFLookup@23@0I@Z  # eastl::vector<EA::Text::OTFLookup *>::DoAssignFromIterator
 008a2120 ?DoGlyphSubstitutionsInLine@Text@EA@@YAXPAULineLayout@12@IPBUFeatureLookupRange@12@PBVOTF@12@@Z  # EA::Text::DoGlyphSubstitution
 008a2380 ?CopyFeatureLookups@Text@EA@@YAPAUFeatureLookup@12@PBU312@0PAU312@@Z  # eastl::copy_impl<0>::do_copy<EA::Text::FeatureLookup *,EA::Text::FeatureLookup *>
