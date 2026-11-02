@@ -3,11 +3,11 @@
 004bc080 ?Init@cSPEditorResourceFactory@SP@@UAE_NXZ  # SP::cSPEditorResourceFactory::Init migrated from s004bbfb0
 004bc210 ?GetSupportedTypes@cSPEditorResourceFactory@SP@@UAEIPAII@Z  # SP::cSPEditorResourceFactory::GetSupportedTypes migrated from s004bbfb0
 004bc290 ?CanConvert@cSPEditorResourceFactory@SP@@UBE_NII@Z  # SP::cSPEditorResourceFactory::CanConvert migrated from s004bbfb0
-004bc300 ?CreateResource@cSPEditorResourceFactory@@QAE_NPAUStreamObject@@PAHIH@Z  # cSPEditorResourceFactory::CreateResource migrated from s004bbfb0 (verbatim, slice spelling)
-004bc540 ?ReadResource@cSPEditorResourceFactory@@QAE_NPAUStreamObject@@IIH@Z  # cSPEditorResourceFactory::ReadResource migrated from s004bbfb0 (verbatim, slice spelling)
-004bc620 ?WriteResource@cSPEditorResourceFactory@@QAE_NPAUStreamObject@@IIH@Z  # cSPEditorResourceFactory::WriteResource migrated from s004bbfb0 (verbatim, slice spelling)
-004bc6d0 ?ReadResourceFromStream@cSPEditorResourceFactory@@QAE_NPAUStreamObject@@IH@Z  # cSPEditorResourceFactory::ReadResourceFromStream migrated from s004bbfb0 (verbatim, slice spelling)
-004bc8a0 ?Create@FixedBufferAllocator_s004b_bfb0@Allocator@EA@@QAEPAU123@PAXIE@Z  # FixedBufferAllocator_s004b_bfb0::Create migrated from s004bbfb0 (verbatim, slice spelling)
-004bc990 ?IsValid@FixedBufferAllocator@Allocator@EA@@QAE_NXZ  # EA::Allocator::FixedBufferAllocator::IsValid migrated from s004bbfb0
-004bca10 ?destroy_shared@FixedBufferAllocator@Allocator@EA@@QAEXXZ  # EA::Allocator::FixedBufferAllocator::destroy_shared migrated from s004bbfb0
-004bcab0 ?Free@FixedBufferAllocator@Allocator@EA@@QAEXPAX@Z  # EA::Allocator::FixedBufferAllocator::Free migrated from s004bbfb0
+004bc300 ?CreateResource@cSPEditorResourceFactory@@QAE_NPAUStreamObject_s004b_bfb0@@PAHIH@Z  # cSPEditorResourceFactory::CreateResource migrated from s004bbfb0 (verbatim, slice spelling)
+004bc540 ?ReadResource@cSPEditorResourceFactory@@QAE_NPAUStreamObject_s004b_bfb0@@IIH@Z  # cSPEditorResourceFactory::ReadResource migrated from s004bbfb0 (verbatim, slice spelling)
+004bc620 ?WriteResource@cSPEditorResourceFactory@@QAE_NPAUStreamObject_s004b_bfb0@@IIH@Z  # cSPEditorResourceFactory::WriteResource migrated from s004bbfb0 (verbatim, slice spelling)
+004bc6d0 ?ReadResourceFromStream@cSPEditorResourceFactory@@SA_NPAUStreamObject_s004b_bfb0@@IH@Z  # cSPEditorResourceFactory::ReadResourceFromStream migrated from s004bbfb0 (verbatim, slice spelling)
+004bc8a0 ?Create@FixedBufferAllocator_s004b_bfb0@Allocator@EA@@QAEPAV123@PAXIE@Z  # Create migrated from s004bbfb0 (verbatim, slice spelling)
+004bc990 ?IsValid@FixedBufferAllocator_s004b_bfb0@Allocator@EA@@QAE_NXZ  # IsValid migrated from s004bbfb0 (verbatim, slice spelling)
+004bca10 ?destroy_shared@FixedBufferAllocator_s004b_bfb0@Allocator@EA@@QAEXXZ  # destroy_shared migrated from s004bbfb0 (verbatim, slice spelling)
+004bcab0 ?Free@FixedBufferAllocatorStub@@QAEXPAX@Z  # Free migrated from s004bbfb0 (verbatim, slice spelling)

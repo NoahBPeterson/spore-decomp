@@ -1,4 +1,4 @@
-// src/game/SPBake/SPEditorResourceFactory.cpp -- migrated from slice(s) s004bf430, s004bd850, s005002d0, s004be5d0, s004bcc50, s004bbfb0 by tools/migrate/rewrite.py
+// src/game/SPBake/SPEditorResourceFactory.cpp -- migrated from slice(s) s01244f50, s004b11f0, s004af210, s004bf430, s004bd850, s005002d0, s004be5d0, s004bcc50, s004bbfb0 by tools/migrate/rewrite.py
 // Object file: SPBake/SPEditorResourceFactory.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -8,6 +8,9 @@
 #include "EA/XML/XmlTextWriter.h"
 #include <stdio.h>
 #include <wchar.h>
+#include "SP/cEditorModelParser.h"
+#include <stddef.h>
+#include <math.h>
 
 // unnamed retail callees and globals (address in the comment)
 struct StreamObject;
@@ -39,7 +42,23 @@ extern "C" long _InterlockedExchange(volatile long* Target, long Value);
 #pragma intrinsic(_InterlockedExchange)
 
 // ---- items of slice s004bbfb0 begin (TODO(rewrite): local stubs, replace by canonical classes)
-struct StreamObject;
+struct StreamObject {
+virtual void v0();
+virtual void v4();
+virtual void v8();
+virtual void vC();
+    virtual int* v10();                                  // +0x10
+    virtual void v14();
+    virtual int v18(int a, int b);                       // +0x18
+    virtual void v1C();
+virtual void v20();
+virtual void v24();
+virtual void v28();
+virtual void v2C();
+    virtual int v30(int* buf, int n);                    // +0x30
+};
+extern bool WriteResourceToStream(int* data, int stream, int typeHash); // 0x4bcc50
+struct StreamObject_s004b_bfb0;
 struct cSPEditorResourceFactory {
     virtual void v0();
     virtual void v4();
@@ -58,10 +77,10 @@ struct cSPEditorResourceFactory {
     int GetSupportedTypes(uint32_t* types, uint32_t count);  // 004bc210
     bool CanConvert(int inType, int outType);                // 004bc290
     int Init();                                              // 004bc080
-    bool CreateResource(StreamObject* obj, int* out, uint32_t param_4, int typeHash);   // 004bc300
-    bool ReadResource(StreamObject* stream, uint32_t param_2, uint32_t param_3, int typeHash);   // 004bc540
-    bool WriteResource(StreamObject* stream, uint32_t param_1, uint32_t param_2, int typeHash);  // 004bc620
-    static bool ReadResourceFromStream(StreamObject* stream, uint32_t key, int typeHash);               // 004bc6d0
+    bool CreateResource(StreamObject_s004b_bfb0* obj, int* out, uint32_t param_4, int typeHash);   // 004bc300
+    bool ReadResource(StreamObject_s004b_bfb0* stream, uint32_t param_2, uint32_t param_3, int typeHash);   // 004bc540
+    bool WriteResource(StreamObject_s004b_bfb0* stream, uint32_t param_1, uint32_t param_2, int typeHash);  // 004bc620
+    static bool ReadResourceFromStream(StreamObject_s004b_bfb0* stream, uint32_t key, int typeHash);               // 004bc6d0
 };
 struct TypeEntry {
     uint32_t mHash;        // +0
@@ -86,12 +105,7 @@ struct RefCounted_s004b_bfb0 {
     RefCounted_s004b_bfb0* FUN_004b9c70();  // 0x4b9c70 (thiscall ctor, ecx = raw allocation)
     RefCounted_s004b_bfb0* FUN_004b9da0();  // 0x4b9da0 (thiscall ctor, ecx = raw allocation)
 };
-struct WriteTarget_s004b_bfb0 {
-    virtual void w0(); virtual void w4(); virtual void w8(); virtual void wC();
-    virtual void w10(); virtual void w14();
-    virtual int v18(int a, ...);                         // +0x18 (caller-cleanup)
-};
-struct StreamObject {
+struct StreamObject_s004b_bfb0 {
 virtual void v0();
 virtual void v4();
 virtual void v8();
@@ -106,19 +120,27 @@ virtual void v28();
 virtual void v2C();
     virtual int v30(int* buf, int n);                    // +0x30
 };
+struct WriteTarget {
+virtual void w0();
+virtual void w4();
+virtual void w8();
+virtual void wC();
+virtual void w10();
+virtual void w14();
+    virtual int v18(int a, ...);                         // +0x18
+};
 struct EditorCreature : RefCounted_s004b_bfb0 {
     uint32_t pad4;
     uint32_t f8, fC, f10;
 };
-extern RefCounted_s004b_bfb0* FUN_004b9c70(void* self);                       // 0x4b9c70
-extern RefCounted_s004b_bfb0* FUN_004b9da0(void* self);                       // 0x4b9da0
+extern bool ReadBinaryEditorModel(StreamObject_s004b_bfb0* stream, uint32_t key); // 0x4bf9f0
 static inline void ReleaseRef(RefCounted_s004b_bfb0* p) {
     if (p)
         p->Release();
 }
 namespace EA {
 namespace Allocator {
-struct FixedBufferAllocator_s004b_bfb0 {
+class FixedBufferAllocator_s004b_bfb0 { public:
     struct buffer_info {
         int32_t mSignature;   // +0x0
         int32_t mSize;        // +0x4
@@ -147,6 +169,23 @@ namespace Allocator {
 extern GlobalAllocator* g_pGlobalAllocator;  // 0x016c8b44
 }
 }
+struct cEditorModelParser_s004b_bfb0 : EA::Allocator::FixedBufferAllocator_s004b_bfb0 {
+    char mBuffer[0x3a98];       // +0x04 .. +0x3a9b
+    void* mpXMLParser;          // +0x3a9c
+    int m3aa0;                  // +0x3aa0
+    int m3aa4;                  // +0x3aa4
+    int m3aa8;                  // +0x3aa8
+    int m3aac;                  // +0x3aac
+    uint16_t mBuffer2[0x400];   // +0x3ab0
+    int mLength;                // +0x42b0
+    int mCursor;                // +0x42b4
+
+    void FUN_004bd9f0(int data);                 // 0x4bd9f0
+    int  FUN_004bdc00(int n);                    // 0x4bdc00
+    bool FUN_004bdc60(int* buf, int n, int done); // 0x4bdc60
+    bool FUN_004be5d0();                         // 0x4be5d0
+    void FUN_004bdae0();                         // 0x4bdae0
+};
 struct FactoryObject {
     void* vptr;          // +0x0
     int32_t mnRefCount;  // +0x4
@@ -299,7 +338,6 @@ public:
 // ---- items of slice s004bcc50 end
 
 // ---- items of slice s004be5d0 begin (TODO(rewrite): local stubs, replace by canonical classes)
-extern "C" int __cdecl wcscmp(const wchar_t* a, const wchar_t* b);
 extern "C" wchar_t* __cdecl wcscpy(wchar_t* dst, const wchar_t* src);
 extern "C" __declspec(dllimport) wchar_t* __cdecl _ultow(unsigned long value, wchar_t* buf, int radix);
 extern "C" void* __cdecl memset(void* dst, int val, unsigned int n);
@@ -308,6 +346,49 @@ struct Vector3_s004b_e5d0 {
     float x, y, z;
     float LengthSquared() const { return x * x + y * y + z * z; }
 };
+template <class T> struct vector {
+    T* mpBegin;
+    T* mpEnd;
+    T* mpCapacity;
+    int size() const { return (int)(mpEnd - mpBegin); }
+};
+struct ParseElem {
+    int mKind;              // 0x00
+    int mType;              // 0x04
+    int mParent;            // 0x08
+    int mPartner;           // 0x0C (mirror element, -1 if none)
+    float mScale;           // 0x10
+    uint32_t pad14[9];      // 0x14
+    Vector3_s004b_e5d0 mAxes[3];       // 0x38
+    uint32_t pad5c[13];     // 0x5C
+    uint32_t mNumValues;    // 0x90
+    float mValues[8];       // 0x94
+    int mValueIds[8];       // 0xB4
+    uint32_t mNumSlots;     // 0xD4
+    uint32_t padD8[64];     // 0xD8
+
+    const Vector3_s004b_e5d0& GetAxis(int k) const { return mAxes[k]; }
+};
+struct ParseData {
+    uint32_t pad0[38];          // 0x00
+    vector<ParseElem> mElems;   // 0x98
+};
+class XmlParseContext {
+public:
+    bool Validate();
+    bool ParseFloat(float* out);       // 0x004BE2E0
+    bool ParseUInt(uint32_t* out);     // 0x004BE380
+    void SelectElement(uint32_t index);// 0x004BE420
+
+    uint32_t pad0[0x3AA0 / 4];
+    ParseData* mpData;      // 0x3AA0
+    int mCurrent;           // 0x3AA4
+    int m3AA8;              // 0x3AA8
+    int mCurrentId;         // 0x3AAC
+    wchar_t mText[256];     // 0x3AB0
+};
+int MapKind(uint32_t value);   // 0x004BD850
+int MapType(uint32_t value);   // 0x004BD9C0
 wchar_t* FtoaEnglish16(double value, wchar_t* buf, int bufSize, int precision, bool trim);
 class IXmlWriter {
 public:
@@ -327,7 +408,7 @@ union FloatBits {
     float f;
     uint32_t u;
 };
-class IStream_s004b_e5d0 {
+struct IStream_s004b_e5d0 { private:
 public:
     virtual void Unk0();
     virtual void Unk1();
@@ -460,8 +541,15 @@ extern char PTR_FUN_0150c50c[];
 extern void StartElementCb();   // 0x4bdcd0
 extern void EndElementCb();     // 0x4be100
 extern void CharDataCb();       // 0x4be070
+extern void FUN_009055d0(void* parser);   // XML_ParserFree, 0x9055d0
 extern void FUN_00903550(void* parser, int arg);   // 0x903550 (XML_StopParser-style, cdecl)
+extern "C" void* __cdecl memset_impl(void* dst, int value, uint32_t n);   // 0x11e073e
+extern float HK_REAL_ONE;   // 0x1485720  (_HK_REAL_ONE, Havok's 1.0f)
 extern int FUN_00903400(void* parser, int param);                       // 0x903400
+extern int FUN_00905740(void* parser, int a, int b, int c);             // 0x905740
+extern float FUN_0092ddc0(const wchar_t*, wchar_t**);   // 0x92ddc0
+extern int FUN_00903b40(void* parser);   // 0x903b40
+extern "C" void* __cdecl memcpy_impl(void* dst, const void* src, uint32_t n);  // 0x11e0744
 #pragma intrinsic(wcscmp)
 struct cEditorModelParser;
 __declspec(thread) cEditorModelParser* g_pCurrentParser;
@@ -481,10 +569,20 @@ struct cEditorModelParser {
     void FUN_004bd9f0(int param);                   // 004bd9f0
     int FUN_004bdc00(int param);                    // 004bdc00
     bool FUN_004bdc60(int a, int b, uint8_t c);     // 004bdc60
-    bool FUN_004be5d0();                            // 004be5d0
     bool ReadULong(unsigned long* out);   // 004be380
     bool ReadFloat(float* out);           // 004be2e0
 };
+struct FBAStub {
+    void* mpBufferInfo;
+    FBAStub* Create(void* pBuffer, uint32_t size, uint8_t bShared);
+    void destroy_shared();
+};
+FBAStub* FBAStub::Create(void* pBuffer, uint32_t size, uint8_t bShared) {
+    (void)pBuffer; (void)size; (void)bShared;
+    return this;
+}
+void FBAStub::destroy_shared() {
+}
 __declspec(dllimport) unsigned long __cdecl wcstoul(const wchar_t*, wchar_t**, int);
 struct ParserBlockOps {
     void AddBlock(int index);                      // 0x004be420 (thiscall, ret 4)
@@ -492,12 +590,43 @@ struct ParserBlockOps {
 struct ParserModelBlocks {
     void Reserve(uint32_t count);                  // 0x004c0250 (thiscall, ret 4)
 };
+struct EditorModelElem {
+    uint32_t        mHash;      // +0x00  FNV1 hash of the element name
+    const wchar_t*  mpName;     // +0x04
+    int             mKind;      // +0x08  0 = index-based target
+    bool (__cdecl*  mpFn)(void* self, void* target, void* arg);   // +0x0c
+    int             mOffset;    // +0x10  added to the resolved target
+    void*           mpArg;      // +0x14
+};
+extern EditorModelElem g_editorModelElems[];    // 0x150c518, 36 entries
+extern EditorModelElem* FUN_004c0600(EditorModelElem* first, EditorModelElem* last,
+                                     const uint32_t* value, uint8_t ordered);  // 0x4c0600
+struct ModelBlock {                  // 0x1d8 bytes
+    int   mField00;                  // +0x00
+    int   mField04;                  // +0x04
+    int   mField08;                  // +0x08
+    int   mField0C;                  // +0x0c
+    uint8_t mPad10[0x5c - 0x10];
+    float mMatrix[3][3];             // +0x5c  (diagonal set to 1.0f)
+    uint8_t mPad80[0x84 - 0x80];
+    int   mField84;                  // +0x84
+    uint8_t mPad88[0x1d8 - 0x88];
+};
+struct ModelBlockVec {
+    int mpBegin;                     // +0x00  (first block address)
+    int mpEnd;                       // +0x04
+    int mpCapacity;                  // +0x08
+    uint8_t mPad0C[0x14 - 0x0c];
+    void Reserve(uint32_t count);    // 0x004afd00 (thiscall, ret 4)
+};
 // ---- items of slice s004bd850 end
 
 // ---- items of slice s004bf430 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern "C" long _InterlockedExchangeAdd(volatile long* Addend, long Value);
+extern void* FUN_00928a80(void* p, uint32_t size, int zero);   // 0x928a80
 extern int FUN_004afd00(int n);                                  // 0x4afd00
 extern void operator_new__(void* p, int a, int n);               // in-place new
+extern void* ZoneObject_operator_new(uint32_t size, const char* name, int, int, int, int);  // 0x926020
 #pragma intrinsic(_InterlockedExchangeAdd)
 struct SPMemPoolStub {
     void* LockedAlloc(uint32_t size, int a, int b, int c, int d, int e);                      // 0x009289f0 (ret 0x18)
@@ -513,12 +642,78 @@ struct FixedBufferAllocatorStub {
     void Free(void* p);                 // 0x4bcab0
 };
 __declspec(thread) void* g_tls_current;
+struct ResourceObject {
+    void* vptr;          // +0
+    int32_t mnRefCount;  // +4
+    int GetReferenceCount();
+};
 #define FBA_MASK 0x3fffffff
 #define FBA_INUSE 0x80000000
 #define FBA_TRAILER 0x40000000
 void FixedBufferAllocatorStub::Free(void* p) {
     (void)p;
 }
+struct IStream_s004b_f430 {
+virtual void Unk00();
+virtual void Unk04();
+virtual void Unk08();
+virtual void Unk0C();
+virtual void Unk10();
+virtual void Unk14();
+virtual void Unk18();
+virtual void Unk1C();
+virtual void Unk20();
+virtual void Unk24();
+virtual void Unk28();
+virtual void Unk2C();
+    virtual int  Read(void* dst, uint32_t size);              // +0x30
+    virtual void Unk34();
+    virtual bool Write(const void* src, uint32_t size);       // +0x38
+};
+struct ChunkHeader {              // 8-byte block header
+    uint32_t mMagic;              // 0xabb455b7
+    uint32_t mVersion;            // 9 or 10
+};
+struct ChunkCounts {              // 0x10-byte element counts (0xc at version 9)
+    uint32_t mNumElements;        // 0x8c-byte element records
+    uint32_t mNumValues;          // 4-byte values, plus one byte each
+    uint32_t mNumFloats;          // floats, spread over three arrays
+    uint32_t mNumBones;           // 0x38-byte bone records (version 10 only)
+};
+struct Element8c { uint32_t mData[0x8c / 4]; };
+struct Bone38    { uint32_t mData[0x38 / 4]; };
+template <int N> inline void ScratchSlots_s004b_f430() { uint32_t slots[N]; }
+template <class T> struct SpVector {
+    T* mpBegin; T* mpEnd; T* mpCapacity;
+    T* begin() const { return mpBegin; }
+    int size() const { return (int)(mpEnd - mpBegin); }
+    void resize(uint32_t n);
+};
+template <> void SpVector<Element8c>::resize(uint32_t n);   // 0x4c0350
+template <> void SpVector<uint32_t>::resize(uint32_t n);    // 0x4cd3c0
+template <> void SpVector<uint8_t>::resize(uint32_t n);     // 0x4c0410
+template <> void SpVector<float>::resize(uint32_t n);       // 0x4afc80
+template <> void SpVector<Bone38>::resize(uint32_t n);      // 0x4c0480
+struct CreatureData {
+    uint32_t mPad00[6];                  // 0x00
+    uint8_t  mPayload[0x80];             // 0x18 RLE-compressed block
+    SpVector<Element8c> mElements;       // 0x98
+    uint32_t mPadA4[2];                  // 0xa4
+    SpVector<uint32_t>  mValues;         // 0xac
+    uint32_t mPadB8[2];                  // 0xb8
+    SpVector<uint8_t>   mValueBytes;     // 0xc0
+    uint32_t mPadCC[2];                  // 0xcc
+    SpVector<uint32_t>  mScalars;        // 0xd4
+    uint32_t mPadE0[2];                  // 0xe0
+    SpVector<float>     mFloats0;        // 0xe8
+    uint32_t mPadF4[2];                  // 0xf4
+    SpVector<float>     mFloats1;        // 0xfc
+    uint32_t mPad108[2];                 // 0x108
+    uint32_t mFlags;                     // 0x110
+    SpVector<Bone38>    mBones;          // 0x114
+};
+extern bool ReadRLE(IStream_s004b_f430* stream, uint8_t* data, uint32_t size);        // 0x4bf2a0
+extern bool WriteRLE(IStream_s004b_f430* stream, const uint8_t* data, uint32_t size); // 0x4bf0a0
 struct StreamWriter {
 virtual void v0();
 virtual void v4();
@@ -553,6 +748,23 @@ virtual void v2C();
     virtual int v30(void* buf, int n);   // +0x30
 };
 extern bool FUN_004bf2a0(StreamReader* r, int addr, int n);      // 0x4bf2a0
+struct FactoryObject_s004b_f430 {
+    void* vptr;
+    int32_t mnRefCount;
+};
+struct FactoryCtor {
+    FactoryObject_s004b_f430* Init();   // 0x4bbfb0
+};
+struct FactoryVtbl {
+virtual void v0();
+virtual void v4();
+virtual void v8();
+virtual void vC();
+virtual void v10();
+virtual void v14();
+virtual void v18();
+virtual void v1C();
+};
 struct XmlTextWriter {
     int* mpBuffer;      // +0
     int* mpBufferEnd;   // +4
@@ -566,6 +778,266 @@ void XmlTextWriter::FUN_00422c80(void* out) {
     (void)out;
 }
 // ---- items of slice s004bf430 end
+
+// ---- items of slice s004af210 begin (TODO(rewrite): local stubs, replace by canonical classes)
+struct Block194 { uint32_t d[0x76]; };
+struct VecBase {
+    char* mpBegin;      // +0x0
+    char* mpEnd;        // +0x4
+    char* mpCapacity;   // +0x8
+    char* mpAllocName;  // +0xc (eastl allocator name passed to EASTL_Allocate)
+
+    void Resize4(unsigned int n);     // 0x4afbf0
+    void Resize4F(unsigned int n);    // 0x4afc80
+    void Resize24(unsigned int n);    // 0x4aff80
+    void Resize1d8(unsigned int n);   // 0x4afd00
+    void Reserve194(unsigned int n);  // 0x4afdd0
+    Block194* Erase194(Block194* dst, Block194* end);  // 0x4b0340
+    void* Init8();                    // 0x4b0040
+
+    // out-of-line vector primitives: thiscall, ecx is the vector base, the callee pops the stack args
+    void FUN_00454280(char* first, char* last);            // 0x454280
+    void FUN_004b0590(char* end, int n, void** out);       // 0x4b0590
+    void FUN_004b0a10(char* end, int n, void** out);       // 0x4b0a10
+    void FUN_004b1800(char* end, int n, void* elem);       // 0x4b1800
+    void FUN_004b11f0(char* end, int n, void* elem);       // 0x4b11f0
+    void FUN_004b0490(char* first, char* last);            // 0x4b0490
+    char* FUN_004769b0(char* first, char* last);           // 0x4769b0
+    void FUN_004b0180(void* local);                        // 0x4b0180
+};
+// ---- items of slice s004af210 end
+
+// ---- items of slice s004b11f0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+template <int N> inline void ScratchSlots_s004b_11f0() { uint32_t s[N]; }
+void EASTLFree(void* p);                                                         // 0x00F47380 operator delete[]
+void* EASTLAlloc(void* allocator, uint32_t n, uint32_t align, uint32_t offset);  // 0x0042DEE0
+namespace eastl {
+struct false_type {};
+}
+namespace eastl {
+struct EASTLAllocator { const char* mpName; EASTLAllocator() {} };
+}
+namespace eastl {
+struct random_access_iterator_tag { random_access_iterator_tag() {} };
+}
+namespace eastl {
+struct Big {                                   // 0x1d8-byte element, out-of-line copy ctor (0x004721E0)
+    uint32_t d[0x76];
+    Big(const Big& o);
+};
+}
+namespace eastl {
+template <class T> class generic_iterator { public:
+    T mIterator;
+    explicit generic_iterator(const T& x) : mIterator(x) {}
+    const T& base() const { return mIterator; }
+};
+}
+namespace eastl {
+template <class T> struct value_of;
+}
+namespace eastl {
+template <class T> struct value_of<T*> { typedef T type; };
+}
+namespace eastl {
+template <class T> struct value_of<const T*> { typedef T type; };
+}
+namespace eastl {
+template <class T> struct has_trivial_relocate : public false_type {};
+}
+namespace eastl {
+template <class T> T* uninitialized_move(T* first, T* last, T* dest);              // out of line
+}
+namespace eastl {
+template <class In, class Out>
+generic_iterator<Out> uninitialized_copy_impl(generic_iterator<In> first, generic_iterator<In> last,
+                                              generic_iterator<Out> dest, false_type);
+}
+namespace eastl {
+template <class It, class T>
+void uninitialized_fill_n_impl(generic_iterator<It> first, uint32_t n, const T& value, false_type);
+}
+namespace eastl {
+template <class First, class Last, class Result>
+inline Result uninitialized_copy_ptr(First first, Last last, Result result)
+{
+    const generic_iterator<Result> i(uninitialized_copy_impl(generic_iterator<First>(first),
+                                                             generic_iterator<Last>(last),
+                                                             generic_iterator<Result>(result),
+                                                             has_trivial_relocate<typename value_of<Result>::type>()));
+    return i.base();
+}
+}
+namespace eastl {
+template <class T>
+inline void uninitialized_fill_n_ptr(T* first, uint32_t n, const T& value)
+{
+    uninitialized_fill_n_impl(generic_iterator<T*>(first), n, value, has_trivial_relocate<T>());
+}
+}
+namespace eastl {
+template <class Bi1, class Bi2>
+__forceinline Bi2 copy_backward_impl(Bi1 first, Bi1 last, Bi2 resultEnd)
+{
+    while (last != first)
+        *--resultEnd = *--last;
+    return resultEnd;
+}
+}
+namespace eastl {
+template <class T>
+__forceinline T* copy_backward_loop(T* first, T* last, T* resultEnd)
+{
+    const bool bIsMove = false;
+    const bool bCanMemmove = false;
+    const bool bIsPod = false;
+    return copy_backward_impl(first, last, resultEnd);
+}
+}
+namespace eastl {
+template <class T>
+inline void fill(T* first, T* last, const T& value)
+{
+    for (; first != last; ++first)
+        *first = value;
+}
+}
+namespace eastl {
+template <class T>
+class vector_s004b_11f0 { public:
+    T* mpBegin;
+    T* mpEnd;
+    T* mpCapacity;
+    EASTLAllocator mAllocator;
+
+    inline uint32_t GetNewCapacity(uint32_t currentCapacity) { return (currentCapacity > 0) ? (2 * currentCapacity) : 1; }
+    inline T* DoAllocate(uint32_t n) { return n ? (T*)EASTLAlloc(&mAllocator, n * sizeof(T), 4, 0) : 0; }
+    inline void DoFree(T* p, uint32_t n) { if (p) deallocate(p, n * sizeof(T)); }
+    static void deallocate(void* p, uint32_t) { if (*((uint32_t*)p - 1)) FreeBlock(p); }
+    static void FreeBlock(void* p) { void* pBlock = p; EASTLFree(pBlock); }
+    void DoInsertValues(T* position, uint32_t n, const T& value);
+    T* DoRealloc(uint32_t n, const T* first, const T* last);                      // 0x0050E750 (S24)
+    void DoAssignFromIterator(const T* first, const T* last, random_access_iterator_tag);
+    void DoAssignValues(uint32_t n, const T& value);
+    vector_s004b_11f0() {}
+    vector_s004b_11f0(uint32_t n, const EASTLAllocator& a);                                  // 0x004AA350
+    ~vector_s004b_11f0();                                                                    // 0x004E1BF0
+    void swap(vector_s004b_11f0& o);                                                         // 0x0052C730
+    void erase_ool(T* first, T* last);                                            // 0x004769B0
+};
+}
+// ---- items of slice s004b11f0 end
+
+// ---- items of slice s01244f50 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern void FUN_004be950(void);   // 0x4be950
+extern void FUN_004bead0(void);   // 0x4bead0
+extern void FUN_004beb70(void);   // 0x4beb70
+extern void FUN_004bebd0(void);   // 0x4bebd0
+extern void FUN_004bec30(void);   // 0x4bec30
+extern void FUN_004bec80(void);   // 0x4bec80
+extern void FUN_004be8d0(void);   // 0x4be8d0
+extern void FUN_004be820(void);   // 0x4be820
+#pragma intrinsic(log)
+struct Vec3 { float x, y, z; };
+struct ViewRowsA { int paintregion; char pad[0x34]; Vec3 rows[3]; };  // rows at 0x38
+struct ViewRowsB { char pad[0x5c]; Vec3 rows[3]; };                    // rows at 0x5c
+struct ViewPaintId { char pad[0xd8]; int paintid; };
+struct ViewColor1 { char pad[0xf8]; int color1; };
+struct ViewColor2 { char pad[0x118]; Vec3 color2; };
+struct ViewPaintBlob { char pad[0x178]; Vec3 paint; };
+#define FLD(i, m) (*(uint32_t*)(0x150c720 + (i) * 0xc + (m)))
+#define OFF(S, m) ((uint32_t)offsetof(S, m))
+// ---- items of slice s01244f50 end
+
+// @ 0x004afd00
+void VecBase::Resize1d8(unsigned int n)
+{
+    int count = (int)((mpEnd - mpBegin) / 0x1d8);
+    if ((unsigned int)count < n) {
+        char tmp[0x1d8];
+        void* elem = ((VecBase*)tmp)->Init8();
+        FUN_004b11f0(mpEnd, (int)(n - (unsigned int)count), elem);
+    }
+    else {
+        Erase194((Block194*)(mpBegin + n * 0x1d8), (Block194*)mpEnd);
+    }
+}
+
+// @ 0x004b0040
+void* VecBase::Init8()
+{
+    int local_8 = 8;
+    char* local_4 = (char*)this + 0x118;
+    while (true) {
+        local_8 = local_8 - 1;
+        if (local_8 < 0) break;
+        local_4 += 0xc;
+    }
+    int local_10 = 8;
+    char* local_c = (char*)this + 0x178;
+    while (true) {
+        local_10 = local_10 - 1;
+        if (local_10 < 0) break;
+        local_c += 0xc;
+    }
+    return this;
+}
+
+// @ 0x004b0340
+Block194* VecBase::Erase194(Block194* dst, Block194* end)
+{
+    Block194* out = (Block194*)mpEnd;
+    Block194* local_14 = dst;
+    for (Block194* local_10 = end; local_10 != out; ++local_10) {
+        *local_14 = *local_10;
+        ++local_14;
+    }
+    for (Block194* local_1c = local_14; local_1c < (Block194*)mpEnd; ++local_1c) {
+    }
+    mpEnd = (char*)mpEnd + ((char*)end - (char*)dst) / 0x1d8 * -0x1d8;
+    return dst;
+}
+
+// @ 0x004b11f0
+namespace eastl {
+template <> void vector_s004b_11f0<Big>::DoInsertValues(Big* position, uint32_t n, const Big& value)
+{
+    if (n <= (uint32_t)(mpCapacity - mpEnd)) {
+        if (n > 0) {
+            const Big temp(value);
+            ScratchSlots_s004b_11f0<1>();
+            const uint32_t nExtra = (uint32_t)(mpEnd - position);
+            Big* const pEnd = mpEnd;
+            if (n < nExtra) {
+                uninitialized_copy_ptr(mpEnd - n, mpEnd, mpEnd);
+                mpEnd += n;
+                copy_backward_loop(position, pEnd - n, pEnd);
+                fill(position, position + n, temp);
+            } else {
+                uninitialized_fill_n_ptr(mpEnd, n - nExtra, temp);
+                mpEnd += n - nExtra;
+                uninitialized_copy_ptr(position, pEnd, mpEnd);
+                mpEnd += nExtra;
+                fill(position, pEnd, temp);
+            }
+        }
+    } else {
+        const uint32_t nPrevSize = (uint32_t)(mpEnd - mpBegin);
+        const uint32_t nGrowSize = GetNewCapacity(nPrevSize);
+        const uint32_t nNewSize = nGrowSize > (nPrevSize + n) ? nGrowSize : (nPrevSize + n);
+        Big* const pNewData = DoAllocate(nNewSize);
+        Big* pNewEnd = uninitialized_move(mpBegin, position, pNewData);
+        ScratchSlots_s004b_11f0<8>();
+        uninitialized_fill_n_ptr(pNewEnd, n, value);
+        pNewEnd = uninitialized_move(position, mpEnd, pNewEnd + n);
+        ScratchSlots_s004b_11f0<8>();
+        DoFree(mpBegin, (uint32_t)(mpCapacity - mpBegin));
+        mpBegin = pNewData;
+        mpEnd = pNewEnd;
+        mpCapacity = pNewData + nNewSize;
+    }
+}
+}  // namespace eastl
 
 // @ 0x004bc030
 FactoryObject* FactoryObject::Destroy(uint32_t param_2)
@@ -633,7 +1105,7 @@ bool SP::cSPEditorResourceFactory::CanConvert(unsigned int inType, unsigned int 
 }
 
 // @ 0x004bc300
-bool cSPEditorResourceFactory::CreateResource(StreamObject* obj, int* out, uint32_t param_4, int typeHash)
+bool cSPEditorResourceFactory::CreateResource(StreamObject_s004b_bfb0* obj, int* out, uint32_t param_4, int typeHash)
 {
     RefCounted_s004b_bfb0* local_8 = 0;
     if (!SetAssetData((uint32_t)typeHash, 0)) {
@@ -671,7 +1143,7 @@ bool cSPEditorResourceFactory::CreateResource(StreamObject* obj, int* out, uint3
 }
 
 // @ 0x004bc540
-bool cSPEditorResourceFactory::ReadResource(StreamObject* stream, uint32_t param_2, uint32_t param_3, int typeHash)
+bool cSPEditorResourceFactory::ReadResource(StreamObject_s004b_bfb0* stream, uint32_t param_2, uint32_t param_3, int typeHash)
 {
     if (typeHash != 0xf43029a) {
         if (typeHash != 0x3d97a8e4 && typeHash != 0x2b978c46 && typeHash != 0x2399be55 &&
@@ -679,7 +1151,7 @@ bool cSPEditorResourceFactory::ReadResource(StreamObject* stream, uint32_t param
             return false;
         int* p = stream->v10();
         int data = stream->v18(param_2, p[1]);
-        bool ok = ReadResourceFromStream((StreamObject*)data, param_2, p[1]);
+        bool ok = ReadResourceFromStream((StreamObject_s004b_bfb0*)data, param_2, p[1]);
         return ok;
     }
     int handle = (int)FUN_004c0500(param_2);
@@ -694,10 +1166,10 @@ bool cSPEditorResourceFactory::ReadResource(StreamObject* stream, uint32_t param
 }
 
 // @ 0x004bc620
-bool cSPEditorResourceFactory::WriteResource(StreamObject* stream, uint32_t param_1, uint32_t param_2, int typeHash)
+bool cSPEditorResourceFactory::WriteResource(StreamObject_s004b_bfb0* stream, uint32_t param_1, uint32_t param_2, int typeHash)
 {
     (void)param_2;
-    WriteTarget_s004b_bfb0* target = (WriteTarget_s004b_bfb0*)(uint32_t)param_1;
+    WriteTarget* target = (WriteTarget*)(uint32_t)param_1;
     if (typeHash == 0xf43029a) {
         int handle = (int)FUN_004c0500((uint32_t)stream);
         bool ok = false;
@@ -712,22 +1184,20 @@ bool cSPEditorResourceFactory::WriteResource(StreamObject* stream, uint32_t para
     if (!bakeable && typeHash != 0x1a99b06b)
         return false;
     int data = target->v18((int)stream, typeHash);
-    return SP::cSPEditorResourceFactory_s004b_cc50::WriteResourceToStream((IStream*)data, (int)stream, typeHash) != 0;
+    return WriteResourceToStream((int*)data, (int)stream, typeHash) != 0;
 }
 
 // @ 0x004bc6d0
-bool cSPEditorResourceFactory::ReadResourceFromStream(StreamObject* stream, uint32_t key, int typeHash)
+bool cSPEditorResourceFactory::ReadResourceFromStream(StreamObject_s004b_bfb0* stream, uint32_t key, int typeHash)
 {
     int data = WriteBinaryEditorModel(key);
     if (data == 0)
         return false;
     if (typeHash == 0x1a99b06b)
         return ReadBinaryEditorModel(stream, key);
-    cEditorModelParser parser;
-    EA::Allocator::FixedBufferAllocator_s004b_bfb0* fba =
-        (EA::Allocator::FixedBufferAllocator_s004b_bfb0*)&parser;
-    fba->mpBufferInfo = 0;
-    fba->Create((char*)&parser + 4, 15000, 0);
+    cEditorModelParser_s004b_bfb0 parser;
+    parser.mpBufferInfo = 0;
+    parser.Create(parser.mBuffer, 15000, 0);
     parser.FUN_004bd9f0(data);
     bool ok = true;
     bool done = false;
@@ -738,16 +1208,16 @@ bool cSPEditorResourceFactory::ReadResourceFromStream(StreamObject* stream, uint
         } else {
             int got = stream->v30((int*)n, 0x200);
             done = got != 0x200;
-            if (got == -1 || !parser.FUN_004bdc60(n, got, (uint8_t)done))
+            if (got == -1 || !parser.FUN_004bdc60((int*)n, got, done))
                 ok = false;
         }
     }
     if (ok)
         ok = parser.FUN_004be5d0();
     parser.FUN_004bdae0();
-    if (fba->mpBufferInfo != 0 && (fba->mpBufferInfo[1].mSignature & 0x40000000) != 0)
-        fba->destroy_shared();
-    fba->mpBufferInfo = 0;
+    if (parser.mpBufferInfo != 0 && (parser.mpBufferInfo[1].mSignature & 0x40000000) != 0)
+        parser.destroy_shared();
+    parser.mpBufferInfo = 0;
     return ok;
 }
 
@@ -780,7 +1250,8 @@ FixedBufferAllocator_s004b_bfb0* FixedBufferAllocator_s004b_bfb0::Create(void* p
 }}  // namespace EA::Allocator
 
 // @ 0x004bc990
-bool EA::Allocator::FixedBufferAllocator::IsValid()
+namespace EA { namespace Allocator {
+bool FixedBufferAllocator_s004b_bfb0::IsValid()
 {
     if (mpBufferInfo->mSignature == 0x86421357 &&
         mpBufferInfo->mSizeFree < mpBufferInfo->mSize &&
@@ -791,27 +1262,31 @@ bool EA::Allocator::FixedBufferAllocator::IsValid()
         return true;
     return false;
 }
+}}  // namespace EA::Allocator
 
 // @ 0x004bca10
-void EA::Allocator::FixedBufferAllocator::destroy_shared()
+namespace EA { namespace Allocator {
+void FixedBufferAllocator_s004b_bfb0::destroy_shared()
 {
     for (uint32_t* p = (uint32_t*)((char*)&mpBufferInfo[1] + (mpBufferInfo[1].mSignature & 0x3fffffff));
          p < (uint32_t*)((char*)&mpBufferInfo[1] + mpBufferInfo->mSize);
          p = (uint32_t*)((*p & 0x3fffffff) + (char*)p)) {
         if ((int)*p < 0) {
-            FixedBufferAllocator* owner;
+            FixedBufferAllocator_s004b_bfb0* owner;
             if ((*p & 0x40000000) == 0)
                 owner = 0;
             else
-                owner = *(FixedBufferAllocator**)((char*)p + (*p & 0x3fffffff) - 4);
+                owner = *(FixedBufferAllocator_s004b_bfb0**)((char*)p + (*p & 0x3fffffff) - 4);
             if (owner == this)
                 Free(p + 2);
         }
     }
 }
+}}  // namespace EA::Allocator
 
 // @ 0x004bcab0
-void EA::Allocator::FixedBufferAllocator::Free(void * p)
+namespace EA { namespace Allocator {
+void FixedBufferAllocator_s004b_bfb0::Free(void* p)
 {
     if (mpBufferInfo == 0) {
         g_pGlobalAllocator->Free(p);
@@ -826,11 +1301,11 @@ void EA::Allocator::FixedBufferAllocator::Free(void * p)
     }
     int* h = (int*)((char*)p - 8);
     if (*h < 0) {
-        FixedBufferAllocator* owner;
+        FixedBufferAllocator_s004b_bfb0* owner;
         if ((*h & 0x40000000) == 0)
             owner = 0;
         else
-            owner = *(FixedBufferAllocator**)((char*)h + (*h & 0x3fffffff) - 4);
+            owner = *(FixedBufferAllocator_s004b_bfb0**)((char*)h + (*h & 0x3fffffff) - 4);
         if (owner == this) {
             *h &= 0x3fffffff;
             if ((char*)mpBufferInfo->mpFirstFree > (char*)h)
@@ -850,6 +1325,7 @@ void EA::Allocator::FixedBufferAllocator::Free(void * p)
         mpBufferInfo->mSizeFree += *block;
     }
 }
+}}  // namespace EA::Allocator
 
 // @ 0x004bcc50
 namespace SP {
@@ -995,6 +1471,15 @@ bool cSPEditorResourceFactory_s004b_cc50::WriteResourceToStream(IStream* stream,
 }
 }  // namespace SP
 
+// @ 0x004bd9c0
+int FUN_004bd9c0(int param)
+{
+    switch (param) {
+    case 0x5e49ce2c: return 0xd05c53a3;
+    default: return param;
+    }
+}
+
 // @ 0x004bd9f0
 void cEditorModelParser::FUN_004bd9f0(int param)
 {
@@ -1011,11 +1496,46 @@ void cEditorModelParser::FUN_004bd9f0(int param)
     mCursor = 0;
 }
 
+// @ 0x004bdae0
+void cEditorModelParser::FUN_004bdae0()
+{
+    if (mpXMLParser != 0) {
+        g_pCurrentParser = this;
+        FUN_009055d0(mpXMLParser);
+        mpXMLParser = 0;
+        g_pCurrentParser = 0;
+        FBAStub* fba = (FBAStub*)this;
+        if (fba->mpBufferInfo != 0 &&
+            (*(int*)((char*)fba->mpBufferInfo + 0x10) & 0x40000000) != 0)
+            fba->destroy_shared();
+        fba->mpBufferInfo = 0;
+        fba->Create((char*)this + 4, 0x3a98, 0);
+    }
+    m3aa0 = 0;
+}
+
+// @ 0x004bdbd0
+int cEditorModelParser::FUN_004bdbd0()
+{
+    if (mpXMLParser)
+        return FUN_00903b40(mpXMLParser);
+    return -1;
+}
+
 // @ 0x004bdc00
 int cEditorModelParser::FUN_004bdc00(int param)
 {
     g_pCurrentParser = this;
     int result = FUN_00903400(mpXMLParser, param);
+    g_pCurrentParser = 0;
+    return result;
+}
+
+// @ 0x004bdc60
+bool cEditorModelParser::FUN_004bdc60(int a, int b, uint8_t c)
+{
+    g_pCurrentParser = this;
+    bool result = FUN_00905740(mpXMLParser, a, b, c) == 1;
     g_pCurrentParser = 0;
     return result;
 }
@@ -1070,10 +1590,231 @@ void cEditorModelParser_StartElement(void* userData, const wchar_t* name, const 
     }
 }
 
-// @ 0x004be420
-void FUN_004be420(void* self, int index)
+// @ 0x004be070
+void FUN_004be070(void* self, const void* src, int n)
 {
-    (void)self; (void)index;
+    void* p = self;
+    if ((uint32_t)(*(int*)((char*)p + 0x42b0) + n) > 0x3ff)
+        n = 0x3ff - *(int*)((char*)p + 0x42b0);
+    void* dst = (char*)p + *(int*)((char*)p + 0x42b0) * 2 + 0x3ab0;
+    memcpy_impl(dst, src, n * 2);
+    *(int*)((char*)p + 0x42b0) = *(int*)((char*)p + 0x42b0) + n;
+    *(uint16_t*)((char*)p + *(int*)((char*)p + 0x42b0) * 2 + 0x3ab0) = 0;
+}
+
+// @ 0x004be100
+void FUN_004be100(void* userData, const wchar_t* name)
+{
+    cEditorModelParser* self = (cEditorModelParser*)userData;
+    uint32_t hash = EA_Hash_FNV1_String16(name, 0x811c9dc5, 0);
+
+    EditorModelElem* data = g_editorModelElems;
+    EditorModelElem* end  = data + 36;
+    bool ordered = false;
+    bool ok;
+    int  target;
+    EditorModelElem* item = FUN_004c0600(data, end, &hash, ordered);
+
+    for (; item != end && item->mHash == hash; ++item) {
+        if (wcscmp(item->mpName, name) == 0) {
+            target = 0;
+            if (item->mKind == 0) {
+                if (self->m3aa4 == -1)
+                    target = self->m3aa0 + 0x18;
+            } else {
+                if (self->m3aa4 != -1)
+                    target = self->m3aa4 * 0x1d8 + *(int*)(self->m3aa0 + 0x98);
+            }
+            ok = (target != 0) && (item->mpFn(self, (char*)target + item->mOffset, item->mpArg) != 0);
+            if (!ok) {
+                FUN_00903550(self->mpXMLParser, 0);
+                return;
+            }
+            break;
+        }
+    }
+    self->mBuffer[0] = 0;
+    self->mLength = 0;
+    self->mCursor = 0;
+}
+
+// @ 0x004be2e0
+bool cEditorModelParser::ReadFloat(float* out)
+{
+    wchar_t* local_4 = (wchar_t*)((char*)mBuffer + mCursor * 2);
+    *out = FUN_0092ddc0((wchar_t*)((char*)mBuffer + mCursor * 2), &local_4);
+    if (local_4 == (wchar_t*)((char*)mBuffer + mCursor * 2))
+        return false;
+    if (*local_4 == L',')
+        local_4++;
+    mCursor = (int)((char*)local_4 - (char*)mBuffer) >> 1;
+    return true;
+}
+
+// @ 0x004be380
+bool cEditorModelParser::ReadULong(unsigned long* out)
+{
+    wchar_t* local_8 = (wchar_t*)((char*)mBuffer + mCursor * 2);
+    *out = wcstoul((wchar_t*)((char*)mBuffer + mCursor * 2), &local_8, 0);
+    if (local_8 == (wchar_t*)((char*)mBuffer + mCursor * 2))
+        return false;
+    if (*local_8 == L',')
+        local_8++;
+    mCursor = (int)((char*)local_8 - (char*)mBuffer) >> 1;
+    return true;
+}
+
+// @ 0x004be420
+void ParserBlockOps::AddBlock(int index)
+{
+    ModelBlockVec* pVec = (ModelBlockVec*)(((cEditorModelParser*)this)->m3aa0 + 0x98);
+    int count = (pVec->mpEnd - pVec->mpBegin) / 0x1d8;
+    if (count <= index) {
+        int newCount = index + 1;
+        pVec->Reserve(newCount);
+        ModelBlock* base = (ModelBlock*)pVec->mpBegin;
+        memset_impl((char*)base + count * 0x1d8, 0, (newCount - count) * 0x1d8);
+        for (int i = count; i < newCount; ++i) {
+            ModelBlock* e = &base[i];
+            e->mField00 = -1;
+            e->mField04 = -1;
+            e->mField08 = -1;
+            e->mField0C = -1;
+            e->mMatrix[0][0] = HK_REAL_ONE;
+            e->mMatrix[1][1] = HK_REAL_ONE;
+            e->mMatrix[2][2] = HK_REAL_ONE;
+            e->mField84 = 3;
+        }
+    }
+}
+
+// @ 0x004be5d0
+bool XmlParseContext::Validate()
+{
+    ParseElem* data = mpData->mElems.mpBegin;
+    int count = mpData->mElems.size();
+    bool foundRoot = false;
+    for (int j = 0; j < count; j++) {
+        if (data[j].mType == -1)
+            return false;
+        if (data[j].mParent == -1)
+            foundRoot = true;
+        if (data[j].mPartner == j)
+            return false;
+        if (data[j].mPartner != -1 && data[data[j].mPartner].mPartner != j)
+            return false;
+        if (data[j].mScale < 1.5258789e-05f)
+            return false;
+        if (data[j].GetAxis(0).LengthSquared() < 0.9f)
+            return false;
+        if (data[j].GetAxis(1).LengthSquared() < 0.9f)
+            return false;
+        if (data[j].GetAxis(2).LengthSquared() < 0.9f)
+            return false;
+    }
+    if (!foundRoot)
+        return false;
+    return true;
+}
+
+// @ 0x004be820
+bool ParseBoolAttr(XmlParseContext* ctx, void* out, int size)
+{
+    int value = wcscmp(ctx->mText, L"true") == 0;
+    if (size == 4)
+        *(int*)out = value;
+    else if (size == 1)
+        *(uint8_t*)out = (uint8_t)value;
+    else
+        return false;
+    return true;
+}
+
+// @ 0x004be8d0
+bool ParseUIntAttr(XmlParseContext* ctx, void* out, int size)
+{
+    return size == 4 && ctx->ParseUInt((uint32_t*)out);
+}
+
+// @ 0x004be910
+bool ParseFloatAttr(XmlParseContext* ctx, void* out, int size)
+{
+    return size == 4 && ctx->ParseFloat((float*)out);
+}
+
+// @ 0x004be950
+bool ParseVector3Attr(XmlParseContext* ctx, void* out, int size)
+{
+    float* v = (float*)out;
+    return size == 12 && ctx->ParseFloat(v) && ctx->ParseFloat(v + 1) && ctx->ParseFloat(v + 2);
+}
+
+// @ 0x004be9c0
+bool ParseKindAndType(XmlParseContext* ctx)
+{
+    ParseElem* node = &ctx->mpData->mElems.mpBegin[ctx->mCurrent];
+    uint32_t kind = (uint32_t)-1;
+    uint32_t type = (uint32_t)-1;
+    if (!ctx->ParseUInt(&kind) || !ctx->ParseUInt(&type))
+        return false;
+    node->mKind = MapKind(kind);
+    node->mType = MapType(type);
+    return true;
+}
+
+// @ 0x004bea50
+bool ParseChild(XmlParseContext* ctx)
+{
+    uint32_t index = (uint32_t)-1;
+    if (!ctx->ParseUInt(&index) || index >= 0x100)
+        return false;
+    ctx->SelectElement(index);
+    ParseElem* child = &ctx->mpData->mElems.mpBegin[index];
+    if (child->mParent != -1)
+        return false;
+    child->mParent = ctx->mCurrent;
+    return true;
+}
+
+// @ 0x004bead0
+bool ParseValue(XmlParseContext* ctx)
+{
+    ParseElem* elem = &ctx->mpData->mElems.mpBegin[ctx->mCurrent];
+    if (elem->mNumValues >= 8)
+        return false;
+    if (!ctx->ParseFloat(&elem->mValues[elem->mNumValues]))
+        return false;
+    elem->mValueIds[elem->mNumValues] = ctx->mCurrentId;
+    elem->mNumValues++;
+    return true;
+}
+
+// @ 0x004beb70
+bool ParseSlotUInt(XmlParseContext* ctx, char* out, int stride)
+{
+    ParseElem* elem = &ctx->mpData->mElems.mpBegin[ctx->mCurrent];
+    if (elem->mNumSlots >= 8)
+        return false;
+    return ParseUIntAttr(ctx, out + stride * elem->mNumSlots, stride);
+}
+
+// @ 0x004bebd0
+bool ParseSlotVector3(XmlParseContext* ctx, char* out, int stride)
+{
+    ParseElem* elem = &ctx->mpData->mElems.mpBegin[ctx->mCurrent];
+    if (elem->mNumSlots >= 8)
+        return false;
+    return ParseVector3Attr(ctx, out + stride * elem->mNumSlots, stride);
+}
+
+// @ 0x004bec30
+bool EndSlot(XmlParseContext* ctx)
+{
+    ParseElem* elem = &ctx->mpData->mElems.mpBegin[ctx->mCurrent];
+    if (elem->mNumSlots >= 8)
+        return false;
+    elem->mNumSlots++;
+    return true;
 }
 
 // @ 0x004beca0
@@ -1230,15 +1971,112 @@ bool ReadRLE(IStream_s004b_e5d0* stream, uint8_t* data, uint32_t size)
 // @ 0x004bf430
 bool FUN_004bf430(int* stream, int data)
 {
-    (void)stream; (void)data;
-    return false;
+    ChunkHeader header;
+    uint32_t nPayload;
+    ChunkCounts counts;
+
+    if (((IStream_s004b_f430*)stream)->Read(&header, 8) != 8
+        || header.mMagic != 0xabb455b7 || header.mVersion < 9 || header.mVersion > 10)
+        return false;
+    if (header.mVersion >= 10) {
+        if (((IStream_s004b_f430*)stream)->Read(&counts, 0x10) != 0x10)
+            return false;
+    } else {
+        if (((IStream_s004b_f430*)stream)->Read(&counts, 0xc) != 0xc)
+            return false;
+        counts.mNumBones = 0;
+    }
+    if (counts.mNumElements > 0x100 || counts.mNumValues > 0x1000 || counts.mNumFloats > 0x400)
+        return false;
+    ScratchSlots_s004b_f430<10>();
+    ((CreatureData*)data)->mElements.resize(counts.mNumElements);
+    ScratchSlots_s004b_f430<10>();
+    ((CreatureData*)data)->mValues.resize(counts.mNumValues);
+    ScratchSlots_s004b_f430<10>();
+    ((CreatureData*)data)->mValueBytes.resize(counts.mNumValues);
+    ScratchSlots_s004b_f430<10>();
+    ((CreatureData*)data)->mScalars.resize(counts.mNumFloats);
+    ScratchSlots_s004b_f430<10>();
+    ((CreatureData*)data)->mFloats0.resize(counts.mNumFloats);
+    ScratchSlots_s004b_f430<10>();
+    ((CreatureData*)data)->mFloats1.resize(counts.mNumFloats);
+    ScratchSlots_s004b_f430<10>();
+    ((CreatureData*)data)->mBones.resize(counts.mNumBones);
+    memset(((CreatureData*)data)->mPayload, 0, 0x80);
+    nPayload = 0x80;
+    if (header.mVersion < 8)
+        nPayload -= 0x3c;
+    if (!ReadRLE((IStream_s004b_f430*)stream, ((CreatureData*)data)->mPayload, nPayload))
+        return false;
+    if (((IStream_s004b_f430*)stream)->Read(((CreatureData*)data)->mElements.begin(),
+                                 counts.mNumElements * 0x8c) != counts.mNumElements * 0x8c)
+        return false;
+    if (((IStream_s004b_f430*)stream)->Read(((CreatureData*)data)->mValues.begin(),
+                                 counts.mNumValues * 4) != counts.mNumValues * 4)
+        return false;
+    if (((IStream_s004b_f430*)stream)->Read(((CreatureData*)data)->mValueBytes.begin(),
+                                 counts.mNumValues) != counts.mNumValues)
+        return false;
+    if (((IStream_s004b_f430*)stream)->Read(((CreatureData*)data)->mScalars.begin(),
+                                 counts.mNumFloats * 4) != counts.mNumFloats * 4)
+        return false;
+    if (((IStream_s004b_f430*)stream)->Read(((CreatureData*)data)->mFloats0.begin(),
+                                 counts.mNumFloats * 4) != counts.mNumFloats * 4)
+        return false;
+    if (((IStream_s004b_f430*)stream)->Read(((CreatureData*)data)->mFloats1.begin(),
+                                 counts.mNumFloats * 4) != counts.mNumFloats * 4)
+        return false;
+    if (((IStream_s004b_f430*)stream)->Read(&((CreatureData*)data)->mFlags, 4) != 4)
+        return false;
+    if (header.mVersion >= 10) {
+        if (((IStream_s004b_f430*)stream)->Read(((CreatureData*)data)->mBones.begin(),
+                                     counts.mNumBones * 0x38) != counts.mNumBones * 0x38)
+            return false;
+    }
+    return true;
 }
 
 // @ 0x004bf770
 bool FUN_004bf770(int* stream, int data)
 {
-    (void)stream; (void)data;
-    return false;
+    ChunkHeader header;
+    ChunkCounts counts;
+
+    header.mMagic = 0xabb455b7;
+    header.mVersion = 10;
+    counts.mNumElements = ((CreatureData*)data)->mElements.size();
+    counts.mNumValues = ((CreatureData*)data)->mValues.size();
+    counts.mNumFloats = ((CreatureData*)data)->mFloats0.size();
+    counts.mNumBones = ((CreatureData*)data)->mBones.size();
+    if (!((IStream_s004b_f430*)stream)->Write(&header, 8)
+        || !((IStream_s004b_f430*)stream)->Write(&counts, 0x10))
+        return false;
+    if (!WriteRLE((IStream_s004b_f430*)stream, ((CreatureData*)data)->mPayload, 0x80))
+        return false;
+    if (!((IStream_s004b_f430*)stream)->Write(((CreatureData*)data)->mElements.begin(),
+                                   counts.mNumElements * 0x8c))
+        return false;
+    if (!((IStream_s004b_f430*)stream)->Write(((CreatureData*)data)->mValues.begin(),
+                                   counts.mNumValues * 4))
+        return false;
+    if (!((IStream_s004b_f430*)stream)->Write(((CreatureData*)data)->mValueBytes.begin(),
+                                   counts.mNumValues))
+        return false;
+    if (!((IStream_s004b_f430*)stream)->Write(((CreatureData*)data)->mScalars.begin(),
+                                   counts.mNumFloats * 4))
+        return false;
+    if (!((IStream_s004b_f430*)stream)->Write(((CreatureData*)data)->mFloats0.begin(),
+                                   counts.mNumFloats * 4))
+        return false;
+    if (!((IStream_s004b_f430*)stream)->Write(((CreatureData*)data)->mFloats1.begin(),
+                                   counts.mNumFloats * 4))
+        return false;
+    if (!((IStream_s004b_f430*)stream)->Write(&((CreatureData*)data)->mFlags, 4))
+        return false;
+    if (!((IStream_s004b_f430*)stream)->Write(((CreatureData*)data)->mBones.begin(),
+                                   counts.mNumBones * 0x38))
+        return false;
+    return true;
 }
 
 // @ 0x004bf9f0
@@ -1378,6 +2216,42 @@ void* FixedBufferAllocatorStub::Malloc(uint32_t nSize, uint32_t nAlignment)
     return g_pSPMemPool->LockedAligned(n40, nAlignment, 0, 0, 0, 0, 0, 0);
 }
 
+// @ 0x004c0020
+void* FUN_004c0020(void* p, uint32_t size)
+{
+    FixedBufferAllocatorStub* fba = (FixedBufferAllocatorStub*)g_tls_current;
+    if (p >= (void*)(fba->mpBufferInfo + 1) &&
+        p < (void*)((char*)&fba->mpBufferInfo[1] + fba->mpBufferInfo->mSize)) {
+        void* dst = fba->Malloc((uint32_t)p, 4);
+        uint32_t oldSize = *(uint32_t*)((char*)p - 8) & 0x3fffffff;
+        uint32_t n = size < oldSize ? size : oldSize;
+        memcpy_impl(dst, p, n);
+        fba->Free(p);
+        return dst;
+    }
+    return FUN_00928a80(p, size, 0);
+}
+
+// @ 0x004c0130
+FactoryObject_s004b_f430* FUN_004c0130()
+{
+    FactoryObject_s004b_f430* n40 = (FactoryObject_s004b_f430*)ZoneObject_operator_new(8, "Editor", 0, 0, 0, 0);
+    FactoryObject_s004b_f430* len;
+    if (n40)
+        len = ((FactoryCtor*)n40)->Init();
+    else
+        len = 0;
+    FactoryObject_s004b_f430* v33 = len;
+    ((FactoryVtbl*)v33)->v10();
+    return v33;
+}
+
+// @ 0x004c0190
+int ResourceObject::GetReferenceCount()
+{
+    return _InterlockedExchangeAdd((volatile long*)&mnRefCount, 0);
+}
+
 // @ 0x004c01b0
 int* XmlTextWriter::Init()
 {
@@ -1401,4 +2275,109 @@ void cExportHelper::ExportMeshEnd()
     fprintf(f, "</MESH>\n");
     fclose(f);
     export_mesh_FILE = 0;
+}
+
+// @ 0x01244f50
+void init_150c720()
+{
+    FLD(0, 0) = OFF(ViewRowsA, rows[0]);
+    FLD(0, 4) = 12;
+    FLD(0, 8) = 0;
+    FLD(0, 12) = (uint32_t)L"row1";
+    FLD(0, 16) = 1;
+    FLD(0, 20) = (uint32_t)FUN_004be950;
+
+    FLD(1, 0) = OFF(ViewRowsA, rows[1]);
+    FLD(1, 4) = 12;
+    FLD(1, 8) = 0;
+    FLD(1, 12) = (uint32_t)L"row2";
+    FLD(1, 16) = 1;
+    FLD(1, 20) = (uint32_t)FUN_004be950;
+
+    FLD(2, 0) = OFF(ViewRowsA, rows[2]);
+    FLD(2, 4) = 12;
+    FLD(2, 8) = 0;
+    FLD(2, 12) = (uint32_t)L"userorientation_row0";
+    FLD(2, 16) = 1;
+    FLD(2, 20) = (uint32_t)FUN_004be950;
+
+    FLD(3, 0) = OFF(ViewRowsB, rows[0]);
+    FLD(3, 4) = 12;
+    FLD(3, 8) = 0;
+    FLD(3, 12) = (uint32_t)L"userorientation_row1";
+    FLD(3, 16) = 1;
+    FLD(3, 20) = (uint32_t)FUN_004be950;
+
+    FLD(4, 0) = OFF(ViewRowsB, rows[1]);
+    FLD(4, 4) = 12;
+    FLD(4, 8) = 0;
+    FLD(4, 12) = (uint32_t)L"userorientation_row2";
+    FLD(4, 16) = 1;
+    FLD(4, 20) = (uint32_t)FUN_004be950;
+
+    FLD(5, 0) = OFF(ViewRowsB, rows[2]);
+    FLD(5, 4) = 12;
+    FLD(5, 8) = 0;
+    FLD(5, 12) = (uint32_t)L"weight";
+    FLD(5, 16) = 1;
+    FLD(5, 20) = (uint32_t)FUN_004bead0;
+
+    FLD(6, 0) = 0;
+    FLD(6, 4) = 4;
+    FLD(6, 8) = 0;
+    FLD(6, 12) = (uint32_t)L"paintregion";
+    FLD(6, 16) = 1;
+    FLD(6, 20) = (uint32_t)FUN_004beb70;
+
+    FLD(7, 0) = OFF(ViewPaintId, paintid);
+    FLD(7, 4) = 4;
+    FLD(7, 8) = 0;
+    FLD(7, 12) = (uint32_t)L"paintid";
+    FLD(7, 16) = 1;
+    FLD(7, 20) = (uint32_t)FUN_004beb70;
+
+    FLD(8, 0) = OFF(ViewColor1, color1);
+    FLD(8, 4) = 4;
+    FLD(8, 8) = 0;
+    FLD(8, 12) = (uint32_t)L"color1";
+    FLD(8, 16) = 1;
+    FLD(8, 20) = (uint32_t)FUN_004bebd0;
+
+    FLD(9, 0) = OFF(ViewColor2, color2);
+    FLD(9, 4) = 12;
+    FLD(9, 8) = 0;
+    FLD(9, 12) = (uint32_t)L"color2";
+    FLD(9, 16) = 1;
+    FLD(9, 20) = (uint32_t)FUN_004bebd0;
+
+    FLD(10, 0) = OFF(ViewPaintBlob, paint);
+    FLD(10, 4) = 12;
+    FLD(10, 8) = 0;
+    FLD(10, 12) = (uint32_t)L"paint";
+    FLD(10, 16) = 1;
+    FLD(10, 20) = (uint32_t)FUN_004bec30;
+
+    FLD(11, 0) = 0;
+    FLD(11, 4) = 4;
+    FLD(11, 8) = 0;
+    FLD(11, 12) = (uint32_t)L"blockref";
+    FLD(11, 16) = 1;
+    FLD(11, 20) = (uint32_t)FUN_004bec80;
+
+    FLD(12, 0) = 0;
+    FLD(12, 4) = 4;
+    FLD(12, 8) = 0;
+    FLD(12, 12) = (uint32_t)L"zcorpscore";
+    FLD(12, 16) = 0;
+    FLD(12, 20) = (uint32_t)FUN_004be8d0;
+
+    FLD(13, 0) = 4;
+    FLD(13, 4) = 4;
+    FLD(13, 8) = 0;
+    FLD(13, 12) = (uint32_t)L"isasymmetric";
+    FLD(13, 16) = 1;
+    FLD(13, 20) = (uint32_t)FUN_004be820;
+
+    FLD(28, 0) = 0x81;
+    FLD(28, 4) = 1;
 }

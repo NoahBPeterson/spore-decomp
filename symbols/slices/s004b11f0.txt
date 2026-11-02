@@ -1,4 +1,5 @@
 00424340 ??$uninitialized_move@US24@eastl@@@eastl@@YAPAUS24@0@PAU10@00@Z  # Vec24_UninitCopy: move of 24-byte records (called by 004b1800)
+004b11f0 ?DoInsertValues@?$vector_s004b_11f0@UBig@eastl@@@eastl@@QAEXPAUBig@2@IABU32@@Z  # DoInsertValues migrated from s004b11f0 (verbatim, slice spelling)
 004b1800 ?DoInsertValues@?$vector_s004b_11f0@US24@eastl@@@eastl@@QAEXPAUS24@2@IABU32@@Z  # DoInsertValues migrated from s004b11f0 (verbatim, slice spelling)
 004b1cc0 ?DoAssignFromIterator@?$vector_s004b_11f0@US24@eastl@@@eastl@@QAEXPBUS24@2@0Urandom_access_iterator_tag@2@@Z  # DoAssignFromIterator migrated from s004b11f0 (verbatim, slice spelling)
 004b2030 ?DoAssignValues@?$vector_s004b_11f0@I@eastl@@QAEXIABI@Z  # DoAssignValues migrated from s004b11f0 (verbatim, slice spelling)

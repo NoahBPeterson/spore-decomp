@@ -1,12 +1,4 @@
-# slice s01244f50 -- VA to symbol map (frozen gold3 k=64, /Od batch)
-# 14 byte-exact (manifest.txt, 2 sources: /Od /Ob1 main + /O2 tail), 17 complete-but-diff
-# (nonmatching.txt), 0 partial.
-# Note: 0125fa80 / 0126ecd0 additionally verify byte-exact under the file's own
-#       /Od /Ob1 /MD /Gy /TP /arch:SSE recipe; they are kept out of manifest.txt so the
-#       default-flag run_all pass stays green (see nonmatching.txt footer).
-#
-# va          symbol                              source fn     status
-01244f50 init_150c720  # Simulator field-descriptor table at 0x150c720 (14 entries + 2 tail dwords)
+01244f50 ?init_150c720@@YAXXZ  # init_150c720 migrated from s01244f50 (verbatim, slice spelling)
 0124aa60 init_15d98f0  # stores (float)log(1e-6f) at 0x15d98f0
 0124aab0 init_15d9834  # copies float pair from 0x15d9bc4 to 0x15d9834
 0124aae0 init_15d9764  # copies float pair from 0x15d9bc4 to 0x15d9764
@@ -29,7 +21,7 @@
 0126db60 init_15e2f54  # bool tag slot init
 0126ecd0 init_15e3294  # const triple (0x1749a6e,0x1749a6e,1) at 0x15e3294  MATCH (/Od /Ob1 recipe)
 01277f40 init_150d100  # descriptor-table record copies
+0127caa0 init_15d5ff4  # 0x15d5ff4 bootstrap
 012817b0 init_15e8840  # three stores (pop edi placement differs)
 01281800 init_15e89f8  # three stores (pop edi placement differs)
 012967b0 init_15f9e8c  # 0x15f9e8c table bootstrap
-0127caa0 init_15d5ff4  # 0x15d5ff4 bootstrap

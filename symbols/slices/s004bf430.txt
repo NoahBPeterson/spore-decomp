@@ -4,9 +4,9 @@
 004bfb20 ?FUN_004bfb20@@YA_NPAUStreamWriter@@H@Z  # FUN_004bfb20 migrated from s004bf430 (verbatim, slice spelling)
 004bfc10 ?FUN_004bfc10@@YAXPAX@Z  # FUN_004bfc10 migrated from s004bf430 (verbatim, slice spelling)
 004bfc40 ?Malloc@FixedBufferAllocatorStub@@QAEPAXII@Z  # FixedBufferAllocatorStub::Malloc migrated from s004bf430 (verbatim, slice spelling)
-004c0020 `anonymous namespace'::LocalExpatRealloc  # PDB candidate (caller-scored)
-004c0130 SP::cSPEditorResourceFactory factory creator  # operator_new(8) + ctor + vcall +0x10
-004c0190 Resource::ResourceObject::GetReferenceCount  # lock xadd
+004c0020 ?FUN_004c0020@@YAPAXPAXI@Z  # FUN_004c0020 migrated from s004bf430 (verbatim, slice spelling)
+004c0130 ?FUN_004c0130@@YAPAUFactoryObject_s004b_f430@@XZ  # FUN_004c0130 migrated from s004bf430 (verbatim, slice spelling)
+004c0190 ?GetReferenceCount@ResourceObject@@QAEHXZ  # ResourceObject::GetReferenceCount migrated from s004bf430 (verbatim, slice spelling)
 004c01b0 ?Init@XmlTextWriter@@QAEPAHXZ  # XmlTextWriter::Init migrated from s004bf430 (verbatim, slice spelling)
 004c0250 grow vector<cEditorModelBlock>  # 0x1d8-stride resize
 004c0350 grow vector  # 0x8c-stride resize

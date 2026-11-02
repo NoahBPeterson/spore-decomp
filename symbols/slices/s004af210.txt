@@ -1,2 +1,5 @@
 004af210 SP::GetPropertyAsUint32  # PDB (symbols/pdb_names.json)
 004af260 ?SaveResource@@YA_NPAX0@Z  # SaveResource migrated from s004af210 (verbatim, slice spelling)
+004afd00 ?Resize1d8@VecBase@@QAEXI@Z  # VecBase::Resize1d8 migrated from s004af210 (verbatim, slice spelling)
+004b0040 ?Init8@VecBase@@QAEPAXXZ  # VecBase::Init8 migrated from s004af210 (verbatim, slice spelling)
+004b0340 ?Erase194@VecBase@@QAEPAUBlock194@@PAU2@0@Z  # VecBase::Erase194 migrated from s004af210 (verbatim, slice spelling)
