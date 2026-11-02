@@ -1,1 +1,8 @@
+00d2cea0 ?Deactivate@cCreatureDisplayStrategy_s00d2_cea0@SP@@QAEXXZ  # cCreatureDisplayStrategy_s00d2_cea0::Deactivate migrated from s00d2cea0 (verbatim, slice spelling)
+00d2d0b0 ?Tick@cCreatureDisplayStrategy_s00d2_cea0@SP@@QAEXXZ  # cCreatureDisplayStrategy_s00d2_cea0::Tick migrated from s00d2cea0 (verbatim, slice spelling)
+00d2d300 ?Construct@cCreatureDisplayStrategy_s00d2_cea0@SP@@QAEPAU12@PAX0@Z  # cCreatureDisplayStrategy_s00d2_cea0::Construct migrated from s00d2cea0 (verbatim, slice spelling)
+00d2d3d0 ?Destroy@cCreatureDisplayStrategy_s00d2_cea0@SP@@QAEXXZ  # cCreatureDisplayStrategy_s00d2_cea0::Destroy migrated from s00d2cea0 (verbatim, slice spelling)
 00d2d560 ?Append@cRoundedQueue@SP@@QAEXM@Z  # cRoundedQueue::Append migrated from s00d2cea0 (verbatim, slice spelling)
+00d2d5c0 ?Construct@cRectHashTable@SP@@QAEPAU12@PAX0@Z  # cRectHashTable::Construct migrated from s00d2cea0 (verbatim, slice spelling)
+00d2d690 ?Init@cCreatureDisplayStrategy_s00d2_cea0@SP@@QAEPAU12@XZ  # cCreatureDisplayStrategy_s00d2_cea0::Init migrated from s00d2cea0 (verbatim, slice spelling)
+00d2d7d0 ?UpdateDrama@cCreatureDisplayStrategy_s00d2_cea0@SP@@QAEXXZ  # cCreatureDisplayStrategy_s00d2_cea0::UpdateDrama migrated from s00d2cea0 (verbatim, slice spelling)
