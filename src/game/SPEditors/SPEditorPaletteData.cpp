@@ -354,6 +354,96 @@ inline bool GetIntProperty(cPropertyList_s005c_6340* list, uint32_t id, int& val
 }
 // ---- items of slice s005c6340 end
 
+// @ 0x005c5c50
+namespace SP {
+int cSPPalette_s005c_53c0::CountItems(cSPPalettePage_s005c_53c0* page, int* pOut)
+{
+  int n = (int)(page->mItemsEnd - page->mItemsBegin);
+  int total = 0;
+  int unassigned = 0;
+  for (int i = 0; i < n; i++) {
+    cSPPaletteItem_s005c_53c0* item = page->GetItem(i);
+    if (item) {
+      total++;
+      if (item->mRegion == -1)
+        unassigned++;
+      else
+        total++;
+    }
+  }
+  *pOut = unassigned;
+  return total;
+}
+}  // namespace SP
+
+// @ 0x005c5cc0
+namespace SP {
+bool cSPPalette_s005c_53c0::AllItemsListed(cSPPalettePage_s005c_53c0* page, cSPPaletteCategory_s005c_53c0* cat)
+{
+  int nItems = (int)(page->mItemsEnd - page->mItemsBegin);
+  int nPages = (int)(cat->mPagesEnd - cat->mPagesBegin);
+  int seen = 0;
+  int fixed = 0;
+  for (int i = 0; i < nItems; i++) {
+    cSPPaletteItem_s005c_53c0* item = page->GetItem(i);
+    if (!item)
+      continue;
+    seen++;
+    Key* ik = &item->mItemKey;
+    for (int j = 0; j < nPages; j++) {
+      cSPPalettePage_s005c_53c0* other = cat->GetPage(j);
+      if (other->m5c == 1) {
+        int nOther = (int)(other->mItemsEnd - other->mItemsBegin);
+        for (int k = 0; k < nOther; k++) {
+          cSPPaletteItem_s005c_53c0* o = other->GetItem(k);
+          if (o && o->mItemKey.mInstance == ik->mInstance &&
+              o->mItemKey.mType == ik->mType &&
+              o->mItemKey.mGroup == ik->mGroup) {
+            item->Init(ik, -1, item->mThumbKey_Group);
+            fixed++;
+            goto nextItem;
+          }
+        }
+      }
+    }
+  nextItem:;
+  }
+  return fixed == seen;
+}
+}  // namespace SP
+
+// @ 0x005c5df0
+namespace SP {
+cSPPaletteCategory_s005c_53c0* cSPPalette_s005c_53c0::FindCategory(int id)
+{
+  cSPPaletteCategory_s005c_53c0** end = mCats.mEnd;
+  for (cSPPaletteCategory_s005c_53c0** it = mCats.mBegin; it != end; ++it) {
+    cSPPaletteCategory_s005c_53c0* c = *it;
+    if (c->mId == id)
+      return c;
+    cSPPaletteCategory_s005c_53c0* r = c->FindSubCategory(id);
+    if (r)
+      return r;
+  }
+  return 0;
+}
+}  // namespace SP
+
+// @ 0x005c5e30
+namespace SP {
+cSPPalette_s005c_53c0::cSPPalette_s005c_53c0()
+{
+  m24 = 0;
+  m28 = 0;
+  m2c = 0;
+  m30 = 0;
+  m34 = 0;
+  m20 = 0x8511b8a;
+  m38 = -1;
+  m3c = -1;
+}
+}  // namespace SP
+
 // @ 0x005c5e90
 namespace SP {
 cSPPalette_s005c_53c0::~cSPPalette_s005c_53c0()
