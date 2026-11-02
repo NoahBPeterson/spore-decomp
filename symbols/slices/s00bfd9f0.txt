@@ -1,31 +1,30 @@
-; slice s00bfd9f0 = 0x00bfd9f0..0x00bfec30 - exact decorated names for the difftest resolver
-; (manifest.txt rows are byte-exact; the rest are the nonmatching.txt entries)
-00bfd9f0 ?GetNounID@cCommunity@@QAEXPAM@Z  # complete, non-exact (see nonmatching.txt)
-00bfdc50 ?Push@cCommunity@@QAEXPAX0@Z  # complete, non-exact
-00bfddc0 ?EnsureTimer@cCommunity@@QAEXPAX@Z  # complete, non-exact
-00bfde50 ?ReadPhase@cCommunity@@QAEME@Z  # byte-exact
-00bfdea0 ?GetPhaseRatio@cCommunity@@QAEMXZ  # byte-exact
-00bfdeb0 ?ResolveID@cCommunity@@QAEPAXH@Z  # byte-exact
-00bfdf00 ?GetScaledFloat@cCommunity@@QAEMXZ  # complete, non-exact
-00bfdf20 ?AdvancePhase@cCommunity@@QAEXM@Z  # byte-exact
-00bfdf60 ?SetID@cCommunity@@QAEXH@Z  # byte-exact
-00bfdf80 ?GetNoun@cCommunity@@QAEPAXXZ  # complete, non-exact
-00bfdfb0 ?SetState@cCommunity@@QAEXH@Z  # byte-exact
-00bfdff0 ?GetProgress@cCommunity@@QAEMXZ  # complete, non-exact
-00bfe0c0 ?HasNoun@cCommunity@@QAEHXZ  # complete, non-exact
-00bfe0f0 ?Write@cCommunity@@QAEEPAX@Z  # complete, non-exact
-00bfe230 ?FUN_00bfe230@CStub230@@QAEXPAD0@Z  # byte-exact
-00bfe260 ?FillPair@cCommunity@@QAEPAXPAD@Z  # byte-exact
-00bfe310 ?FUN_00bfe310@@YAXPAD@Z  # byte-exact
-00bfe450 ?Activate@cCommunity@@QAEXHPAURefObj@@@Z  # complete, non-exact
-00bfe4d0 ?Deactivate@cCommunity@@QAEXXZ  # complete, non-exact
-00bfe530 ?SetupScenery@cCommunity@@QAEXXZ  # complete, non-exact
-00bfe5d0 ?Read@cCommunity@@QAEEPAX@Z  # complete, non-exact
-00bfe690 ?LoadModel@cCommunity@@QAEXPAX@Z  # complete, non-exact
-00bfe6c0 ?ReleaseTable@cCommunity@@QAEXXZ  # complete, non-exact
-00bfe7c0 ?FUN_00bfe7c0@@YAXPAUSeqIter@@PAPAPAURefObj@@PAPAU2@2PAPAX@Z  # complete, non-exact
-00bfe840 ?FUN_00bfe840@@YAXPAUSeqIter@@00@Z  # complete, non-exact
-00bfe900 ?SpawnAt@cCommunity@@QAEXPAM@Z  # complete, non-exact
+00bfd9f0 ?GetNounID@cCommunity_s00bf_d9f0@@QAEXPAM@Z  # cCommunity_s00bf_d9f0::GetNounID migrated from s00bfd9f0 (verbatim, slice spelling)
+00bfdc50 ?Push@cCommunity_s00bf_d9f0@@QAEXPAX0@Z  # cCommunity_s00bf_d9f0::Push migrated from s00bfd9f0 (verbatim, slice spelling)
+00bfddc0 ?EnsureTimer@cCommunity_s00bf_d9f0@@QAEXPAX@Z  # cCommunity_s00bf_d9f0::EnsureTimer migrated from s00bfd9f0 (verbatim, slice spelling)
+00bfde50 ?ReadPhase@cCommunity_s00bf_d9f0@@QAEME@Z  # cCommunity_s00bf_d9f0::ReadPhase migrated from s00bfd9f0 (verbatim, slice spelling)
+00bfdea0 ?GetPhaseRatio@cCommunity_s00bf_d9f0@@QAEMXZ  # cCommunity_s00bf_d9f0::GetPhaseRatio migrated from s00bfd9f0 (verbatim, slice spelling)
+00bfdeb0 ?ResolveID@cCommunity_s00bf_d9f0@@QAEPAXH@Z  # cCommunity_s00bf_d9f0::ResolveID migrated from s00bfd9f0 (verbatim, slice spelling)
+00bfdf00 ?GetScaledFloat@cCommunity_s00bf_d9f0@@QAEMXZ  # cCommunity_s00bf_d9f0::GetScaledFloat migrated from s00bfd9f0 (verbatim, slice spelling)
+00bfdf20 ?AdvancePhase@cCommunity_s00bf_d9f0@@QAEXM@Z  # cCommunity_s00bf_d9f0::AdvancePhase migrated from s00bfd9f0 (verbatim, slice spelling)
+00bfdf60 ?SetID@cCommunity_s00bf_d9f0@@QAEXH@Z  # cCommunity_s00bf_d9f0::SetID migrated from s00bfd9f0 (verbatim, slice spelling)
+00bfdf80 ?GetNoun@cCommunity_s00bf_d9f0@@QAEPAXXZ  # cCommunity_s00bf_d9f0::GetNoun migrated from s00bfd9f0 (verbatim, slice spelling)
+00bfdfb0 ?SetState@cCommunity_s00bf_d9f0@@QAEXH@Z  # cCommunity_s00bf_d9f0::SetState migrated from s00bfd9f0 (verbatim, slice spelling)
+00bfdff0 ?GetProgress@cCommunity_s00bf_d9f0@@QAEMXZ  # cCommunity_s00bf_d9f0::GetProgress migrated from s00bfd9f0 (verbatim, slice spelling)
+00bfe0c0 ?HasNoun@cCommunity_s00bf_d9f0@@QAEHXZ  # cCommunity_s00bf_d9f0::HasNoun migrated from s00bfd9f0 (verbatim, slice spelling)
+00bfe0f0 ?Write@cCommunity_s00bf_d9f0@@QAEEPAX@Z  # cCommunity_s00bf_d9f0::Write migrated from s00bfd9f0 (verbatim, slice spelling)
+00bfe230 ?FUN_00bfe230@CStub230@@QAEXPAD0@Z  # CStub230::FUN_00bfe230 migrated from s00bfd9f0 (verbatim, slice spelling)
+00bfe260 ?FillPair@cCommunity_s00bf_d9f0@@QAEPAXPAD@Z  # cCommunity_s00bf_d9f0::FillPair migrated from s00bfd9f0 (verbatim, slice spelling)
+00bfe310 ?FUN_00bfe310@@YAXPAD@Z  # FUN_00bfe310 migrated from s00bfd9f0 (verbatim, slice spelling)
+00bfe450 ?Activate@cCommunity_s00bf_d9f0@@QAEXHPAURefObj@@@Z  # cCommunity_s00bf_d9f0::Activate migrated from s00bfd9f0 (verbatim, slice spelling)
+00bfe4d0 ?Deactivate@cCommunity_s00bf_d9f0@@QAEXXZ  # cCommunity_s00bf_d9f0::Deactivate migrated from s00bfd9f0 (verbatim, slice spelling)
+00bfe530 ?SetupScenery@cCommunity_s00bf_d9f0@@QAEXXZ  # cCommunity_s00bf_d9f0::SetupScenery migrated from s00bfd9f0 (verbatim, slice spelling)
+00bfe5d0 ?Read@cCommunity_s00bf_d9f0@@QAEEPAX@Z  # cCommunity_s00bf_d9f0::Read migrated from s00bfd9f0 (verbatim, slice spelling)
+00bfe690 ?LoadModel@cCommunity_s00bf_d9f0@@QAEXPAX@Z  # cCommunity_s00bf_d9f0::LoadModel migrated from s00bfd9f0 (verbatim, slice spelling)
+00bfe6c0 ?ReleaseTable@cCommunity_s00bf_d9f0@@QAEXXZ  # cCommunity_s00bf_d9f0::ReleaseTable migrated from s00bfd9f0 (verbatim, slice spelling)
+00bfe7c0 ?FUN_00bfe7c0@@YAXPAUSeqIter@@PAPAPAURefObj@@PAPAU2@2PAPAX@Z  # FUN_00bfe7c0 migrated from s00bfd9f0 (verbatim, slice spelling)
+00bfe840 ?FUN_00bfe840@@YAXPAUSeqIter@@00@Z  # FUN_00bfe840 migrated from s00bfd9f0 (verbatim, slice spelling)
+00bfe900 ?SpawnAt@cCommunity_s00bf_d9f0@@QAEXPAM@Z  # cCommunity_s00bf_d9f0::SpawnAt migrated from s00bfd9f0 (verbatim, slice spelling)
 00bfea10 ?Teardown@cCommunity@@QAEXXZ  # complete, non-exact
-00bfeb00 ?InitScenery@cCommunity@@QAEXXZ  # complete, non-exact
-00bfec10 ?Front@cCommunity@@QAEPAXXZ  # complete, non-exact
+00bfeb00 ?InitScenery@cCommunity_s00bf_d9f0@@QAEXXZ  # cCommunity_s00bf_d9f0::InitScenery migrated from s00bfd9f0 (verbatim, slice spelling)
+00bfec10 ?Front@cCommunity_s00bf_d9f0@@QAEPAXXZ  # cCommunity_s00bf_d9f0::Front migrated from s00bfd9f0 (verbatim, slice spelling)
+; (manifest.txt rows are byte-exact; the rest are the nonmatching.txt entries)

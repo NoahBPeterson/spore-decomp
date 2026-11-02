@@ -1,0 +1,1 @@
+00bf5cb0 ?Update@TribeAI@@QAEXXZ  # TribeAI::Update migrated from s00bf5cb0 (verbatim, slice spelling)

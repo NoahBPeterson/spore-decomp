@@ -1,17 +1,17 @@
-00bf0be0 FUN_00bf0be0
-00bf0c60 FUN_00bf0c60
-00bf0cf0 FUN_00bf0cf0
-00bf0d10 FUN_00bf0d10
-00bf0db0 FUN_00bf0db0
-00bf0e00 Write
-00bf0f10 FUN_00bf0f10
-00bf0f40 FUN_00bf0f40
-00bf0f90 UpdateCityMusicPosition
-00bf1070 FUN_00bf1070
-00bf1170 FUN_00bf1170
-00bf1270 FUN_00bf1270
-00bf14b0 FUN_00bf14b0
-00bf1790 SuperweaponOnCooldown
-00bf17f0 GetSuperweaponCooldown
-00bf1880 FUN_00bf1880
-00bf19c0 FUN_00bf19c0
+00bf0be0 ?FUN_00bf0be0@cCivilization@@QAEXPAX@Z  # cCivilization::FUN_00bf0be0 migrated from s00bf0be0 (verbatim, slice spelling)
+00bf0c60 ?FUN_00bf0c60@cCivilization@@QAEHHHHH@Z  # cCivilization::FUN_00bf0c60 migrated from s00bf0be0 (verbatim, slice spelling)
+00bf0cf0 ?FUN_00bf0cf0@cCivilization@@QAEHHHH@Z  # cCivilization::FUN_00bf0cf0 migrated from s00bf0be0 (verbatim, slice spelling)
+00bf0d10 ?FUN_00bf0d10@cCivilization@@QAEHPAVcNounEntity@@@Z  # cCivilization::FUN_00bf0d10 migrated from s00bf0be0 (verbatim, slice spelling)
+00bf0db0 ?FUN_00bf0db0@cCivilization@@QAE_NPAX@Z  # cCivilization::FUN_00bf0db0 migrated from s00bf0be0 (verbatim, slice spelling)
+00bf0e00 ?Write@cCivilization@@QBEHPAX@Z  # cCivilization::Write migrated from s00bf0be0 (verbatim, slice spelling)
+00bf0f10 ?FUN_00bf0f10@cCivilization@@QAEHXZ  # cCivilization::FUN_00bf0f10 migrated from s00bf0be0 (verbatim, slice spelling)
+00bf0f40 ?FUN_00bf0f40@cCivilization@@QAEHXZ  # cCivilization::FUN_00bf0f40 migrated from s00bf0be0 (verbatim, slice spelling)
+00bf0f90 ?UpdateCityMusicPosition@cCivilization@@QAEXXZ  # cCivilization::UpdateCityMusicPosition migrated from s00bf0be0 (verbatim, slice spelling)
+00bf1070 ?FUN_00bf1070@cCivilization@@QAEXXZ  # cCivilization::FUN_00bf1070 migrated from s00bf0be0 (verbatim, slice spelling)
+00bf1170 ?FUN_00bf1170@cCivilization@@QAEXXZ  # cCivilization::FUN_00bf1170 migrated from s00bf0be0 (verbatim, slice spelling)
+00bf1270 ?FUN_00bf1270@cCivilization@@QAEXXZ  # cCivilization::FUN_00bf1270 migrated from s00bf0be0 (verbatim, slice spelling)
+00bf14b0 ?FUN_00bf14b0@cCivilization@@QAEXXZ  # cCivilization::FUN_00bf14b0 migrated from s00bf0be0 (verbatim, slice spelling)
+00bf1790 ?SuperweaponOnCooldown@cCivilization@@QAE_NH@Z  # cCivilization::SuperweaponOnCooldown migrated from s00bf0be0 (verbatim, slice spelling)
+00bf17f0 ?GetSuperweaponCooldown@cCivilization@@QAEMH@Z  # cCivilization::GetSuperweaponCooldown migrated from s00bf0be0 (verbatim, slice spelling)
+00bf1880 ?FUN_00bf1880@cCivilization@@QAEMM@Z  # cCivilization::FUN_00bf1880 migrated from s00bf0be0 (verbatim, slice spelling)
+00bf19c0 ?FUN_00bf19c0@cCivilization@@QAE_NPAV1@@Z  # cCivilization::FUN_00bf19c0 migrated from s00bf0be0 (verbatim, slice spelling)

@@ -1,5 +1,5 @@
 00692f90 ??0cVarListSerializer@SP@@QAE@PBXPAUcDataSerializerGeneric@1@I@Z  # SP::cVarListSerializer::cVarListSerializer (callee of s00bfbbf0, named from the dev publics; slice address comment)
-00bfbbf0 ?Update@Civ@@QAEXXZ  # cCivilization per-update tick (pre-existing body in this slice)
+00bfbbf0 ?Update@Civ_s00bf_bbf0@@QAEXXZ  # Civ_s00bf_bbf0::Update migrated from s00bfbbf0 (verbatim, slice spelling)
 00bfc3a0 ?NodePresent@VtObj@@QAE_NXZ  # VtObj::NodePresent migrated from s00bfbbf0 (verbatim, slice spelling)
 00bfc3d0 ?NodePresentArg@VtObj@@QAE_NH@Z  # VtObj::NodePresentArg migrated from s00bfbbf0 (verbatim, slice spelling)
 00bfc400 ?NodeValue@VtObj@@QAEMXZ  # VtObj::NodeValue migrated from s00bfbbf0 (verbatim, slice spelling)

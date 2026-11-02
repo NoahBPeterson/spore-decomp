@@ -1,10 +1,10 @@
-00bf51d0 FUN_00bf51d0  # __thiscall 3-arg helper; naked asm, byte-exact
-00bf5220 FUN_00bf5220  # __thiscall array/record routine; naked asm, byte-exact
-00bf5420 FUN_00bf5420  # __thiscall pair routine; naked asm, byte-exact
-00bf55d0 FUN_00bf55d0  # no-arg helper; naked asm, byte-exact
-00bf5630 FUN_00bf5630  # __thiscall container routine; naked asm, byte-exact
+00bf51d0 ?eraseRange@TimerVec@@QAEPAUGonzagoTimer@@PAU2@0@Z  # TimerVec::eraseRange migrated from s00bf51d0 (verbatim, slice spelling)
+00bf5220 ?insertN@TimerVec@@QAEXPAUGonzagoTimer@@IPBU2@@Z  # TimerVec::insertN migrated from s00bf51d0 (verbatim, slice spelling)
+00bf5420 ?insertOne@TimerVec@@QAEXPAUGonzagoTimer@@PBU2@@Z  # TimerVec::insertOne migrated from s00bf51d0 (verbatim, slice spelling)
+00bf55d0 ?FUN_00bf55d0@@YAXXZ  # FUN_00bf55d0 migrated from s00bf51d0 (verbatim, slice spelling)
+00bf5630 ?AddPair@FeedbackSink@@QAEXPAX@Z  # FeedbackSink::AddPair migrated from s00bf51d0 (verbatim, slice spelling)
 00bf5720 FUN_00bf5720  # __thiscall gameplay query (cGameNounManager); naked asm, byte-exact
-00bf57b0 FUN_00bf57b0  # __thiscall factory returning cVehicle*; naked asm, byte-exact
-00bf59d0 FUN_00bf59d0  # __fastcall gameplay update; naked asm, byte-exact
-00bf5b90 FUN_00bf5b90  # float10 helper; naked asm, byte-exact
-00bf5be0 FUN_00bf5be0  # __thiscall gameplay helper; naked asm, byte-exact
+00bf57b0 ?CreateVehicle@VehicleFactory@@QAEPAXPAX00000@Z  # VehicleFactory::CreateVehicle migrated from s00bf51d0 (verbatim, slice spelling)
+00bf59d0 ?UpdateDistances@CityThing@@QAEXXZ  # CityThing::UpdateDistances migrated from s00bf51d0 (verbatim, slice spelling)
+00bf5b90 ?GetDistance@CityThing@@QAEMPAX@Z  # CityThing::GetDistance migrated from s00bf51d0 (verbatim, slice spelling)
+00bf5be0 ?OnEvent@CityEventSub@@QAE_NHPAX@Z  # CityEventSub::OnEvent migrated from s00bf51d0 (verbatim, slice spelling)

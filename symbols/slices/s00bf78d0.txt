@@ -1,10 +1,5 @@
-# slice s00bf78d0 - Simulator cCivilization; DB names (symbols/vtable_names.txt 792-803)
-# VA        name                              mangled name
-00bf78d0    Simulator::cCivilization::cCivilization  ??0cCivilization@@QAE@XZ
-00bf7d80    Simulator::cGameData::RemoveOwner  ?RemoveOwner@cCivilization@@UAEXXZ
-00bf8140    Simulator::cGameData::cGameData_func3Ch  ?cGameData_func3Ch@cCivilization@@UAEDH@Z
-00bf8170    cCivilization::FUN_00bf8170  ?FUN_00bf8170@cCivilization@@QAEXHDHD@Z
-00bf8440    cCivilization::FUN_00bf8440  ?FUN_00bf8440@cCivilization@@QAEXXZ
-# 00bf8170 and 00bf8440 are unnamed in the DB (no vtable slot): 00bf8170 is a non-virtual
-# helper writing the four listener slots (ownerId/playerOwned/key/flag) and 00bf8440 the
-# per-frame political-score/timer update; both use the mangled names from the slice source.
+00bf78d0 ??0cCivilization_s00bf_78d0@@QAE@XZ  # cCivilization_s00bf_78d0::cCivilization migrated from s00bf78d0 (verbatim, slice spelling)
+00bf7d80 ?RemoveOwner@cCivilization_s00bf_78d0@@UAEXXZ  # cCivilization_s00bf_78d0::RemoveOwner migrated from s00bf78d0 (verbatim, slice spelling)
+00bf8140 ?cGameData_func3Ch@cCivilization_s00bf_78d0@@UAEDH@Z  # cCivilization_s00bf_78d0::cGameData_func3Ch migrated from s00bf78d0 (verbatim, slice spelling)
+00bf8170 ?FUN_00bf8170@cCivilization_s00bf_78d0@@QAEXHDHD@Z  # cCivilization_s00bf_78d0::FUN_00bf8170 migrated from s00bf78d0 (verbatim, slice spelling)
+00bf8440 ?FUN_00bf8440@cCivilization_s00bf_78d0@@QAEXXZ  # cCivilization_s00bf_78d0::FUN_00bf8440 migrated from s00bf78d0 (verbatim, slice spelling)

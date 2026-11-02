@@ -1,1 +1,3 @@
-00bfb020  SP::cSPSimulatorSpaceGame::UpdateCivAI  # sibling of FUN_00bfa660; uses this+0x188 cSPTimer, SpaceTelemetry_Add(this,2), 60000ms tick, buys type-2 vehicles via FUN_00bddda0
+00b88590 ?GetContinent@cPlanetModel@SP@@QBEHABUcSPVector3@@@Z  # SP::cPlanetModel::GetContinent (callee of s00bfb020, named from the dev publics; slice address comment)
+00bfb020 ?Tick@Game@@QAEXXZ  # Game::Tick migrated from s00bfb020 (verbatim, slice spelling)
+00bfb930 ?SubTick1@Civ_s00bf_b020@@QAEXXZ  # Civ_s00bf_b020::SubTick1 migrated from s00bfb020 (verbatim, slice spelling)

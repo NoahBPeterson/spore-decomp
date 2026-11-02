@@ -11,6 +11,6 @@
 00bfd430 ?FUN_00bfd430@@YAXPBUHostileEntry@@0PAU1@@Z  # FUN_00bfd430 migrated from s00bfcc80 (verbatim, slice spelling)
 00bfd490 ?FUN_00bfd490@@YAXPAUHostileEntry@@00@Z  # FUN_00bfd490 migrated from s00bfcc80 (verbatim, slice spelling)
 00bfd4e0 ?Combatant_ctor@@YIPAUCombatant@@PAU1@@Z  # Combatant_ctor migrated from s00bfcc80 (verbatim, slice spelling)
-00bfd610 ?Cleanup@GameData@@QAEXXZ  # SP::cGameData::Cleanup
-00bfd800 ?SetDefinitionID@GameData@@QAEXXZ  # SP::cGameData::SetDefinitionID
-00bfd840 ?SetGameDataOwner@GameData@@QAEPAMPAMH@Z  # SP::cGameData::SetGameDataOwner
+00bfd610 ?Cleanup@GameData_s00bf_cc80@@QAEXXZ  # GameData_s00bf_cc80::Cleanup migrated from s00bfcc80 (verbatim, slice spelling)
+00bfd800 ?SetDefinitionID@GameData_s00bf_cc80@@QAEXXZ  # GameData_s00bf_cc80::SetDefinitionID migrated from s00bfcc80 (verbatim, slice spelling)
+00bfd840 ?SetGameDataOwner@GameData_s00bf_cc80@@QAEPAMPAMH@Z  # GameData_s00bf_cc80::SetGameDataOwner migrated from s00bfcc80 (verbatim, slice spelling)
