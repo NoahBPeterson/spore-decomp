@@ -1,6 +1,10 @@
 # source  symbol  va  flags
 ../src/game/SPGonzago/SPTribeTool.cpp  ?GetTutorialToolPrice@@YAHPAUPropertyHolder@@HH@Z  004e1c30  /Od /Ob1 /MD /Gy /TP /Isrc/game/include
+../src/game/SPGonzago/SPTribeTool.cpp  ?AddStrikePoint@cTribeTool_s00c9_c1b0@@QAEX_N@Z  00c9cf90  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPTribeTool.cpp  ?GetToolTypeAsCharStar@cTribeTool_s00c9_c1b0@@QAEPBDXZ  00c9d090  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPTribeTool.cpp  ?GetToolIconKey@cTribeTool_s00c9_c1b0@@QAEIXZ  00c9d110  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPTribeTool.cpp  ??1cTribeTool@@QAE@XZ  00c9d3b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPTribeTool.cpp  ?SetLocalExtents@cTribeTool@@QAEXIM@Z  00c9d570  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPTribeTool.cpp  ?GetIsPlayerOwned@cTribeTool@@QAE_NXZ  00c9d9c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPTribeTool.cpp  ?GetCastID@cTribeTool@@QAEXH@Z  00c9d9f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPTribeTool.cpp  ?FormatName@cLoco@@QAEXPAUcString_s00c9_de50@@@Z  00c9e5a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

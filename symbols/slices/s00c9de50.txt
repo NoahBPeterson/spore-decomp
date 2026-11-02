@@ -1,6 +1,7 @@
-00c9de50 ?LoadTribeToolData@cTribeTool@SP@@SA_NXZ  # cTribeTool::LoadTribeToolData: populate the twelve tribe-tool description records (pre-existing impl)
-00c9e530 ?DestroyTribeToolData@@YAXXZ  # DestroyTribeToolData: release the twelve gTribeTools records and clear the loaded flag
-00c9e5a0 ?FormatName@cLoco@@QAEXPAUcString@@@Z  # cLoco::FormatName(out): sprintf the owner's slot-0x5c name through kNameFormat
+00b88590 ?GetContinent@cPlanetModel@SP@@QBEHABUcSPVector3@@@Z  # SP::cPlanetModel::GetContinent (callee of s00c9de50, named from the dev publics; slice address comment)
+00c9de50 ?LoadTribeToolData@cTribeTool_s00c9_de50@SP@@SA_NXZ  # LoadTribeToolData migrated from s00c9de50 (verbatim, slice spelling)
+00c9e530 ?DestroyTribeToolData@@YAXXZ  # DestroyTribeToolData migrated from s00c9de50 (verbatim, slice spelling)
+00c9e5a0 ?FormatName@cLoco@@QAEXPAUcString_s00c9_de50@@@Z  # cLoco::FormatName migrated from s00c9de50 (verbatim, slice spelling)
 00c9e5d0 ?TryCivModeTutorial@@YAXXZ  # TryCivModeTutorial: config gate, then the civ-mode strategy's seen/next tutorial pair
 00c9e610 ?Find@cVehicle@@QAEPAU1@I@Z  # cVehicle::Find(id): null-object short circuit, then loco/vehicle/combatant/three child containers
 00c9e690 ?IsLocalPlayer@cLoco@@QAE_NXZ  # cLoco::IsLocalPlayer: non-ten-mode, compare the owner's slot 0x4c with the local empire index
