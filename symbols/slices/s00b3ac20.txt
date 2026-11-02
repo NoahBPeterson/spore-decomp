@@ -1,0 +1,2 @@
+007c4dd0 ?Init@cSPEditorPhysicsWorld@SP@@QAEXXZ  # SP::cSPEditorPhysicsWorld::Init (callee of s00b3ac20, named from the dev publics; slice address comment)
+00b3ac20 ?Setup@B@@QAEXXZ  # B::Setup migrated from s00b3ac20 (verbatim, slice spelling)

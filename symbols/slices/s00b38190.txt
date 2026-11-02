@@ -1,0 +1,8 @@
+00b38260 ?FUN_00b38260@Vec8Ins@@QAEXPBUVec8Pair@@@Z  # Vec8Ins::FUN_00b38260 migrated from s00b38190 (verbatim, slice spelling)
+00b382a0 ?FUN_00b382a0@FilterOwner@@QAE_NPAXMPAUAutoRefVec@@EP6A_N00@Z0@Z  # FilterOwner::FUN_00b382a0 migrated from s00b38190 (verbatim, slice spelling)
+00b38420 ?FUN_00b38420@FilterOwner@@QAE_NPAX0PAUAutoRefVec@@E@Z  # FilterOwner::FUN_00b38420 migrated from s00b38190 (verbatim, slice spelling)
+00b385d0 ?FUN_00b385d0@SortCmp@@QBE_NPAURefPair_s00b3_8190@@0@Z  # SortCmp::FUN_00b385d0 migrated from s00b38190 (verbatim, slice spelling)
+00b388a0 ?FUN_00b388a0@@YAXPAURefPair_s00b3_8190@@0USortCmp@@@Z  # FUN_00b388a0 migrated from s00b38190 (verbatim, slice spelling)
+00b389f0 ?FUN_00b389f0@@YAXPAURefPair_s00b3_8190@@0USortCmp@@@Z  # FUN_00b389f0 migrated from s00b38190 (verbatim, slice spelling)
+00b38b40 ?FUN_00b38b40@@YAPAURefPair_s00b3_8190@@PAU1@0U1@USortCmp@@@Z  # FUN_00b38b40 migrated from s00b38190 (verbatim, slice spelling)
+00b38bf0 ?FUN_00b38bf0@@YAXPAURefPair_s00b3_8190@@HHU1@USortCmp@@@Z  # FUN_00b38bf0 migrated from s00b38190 (verbatim, slice spelling)

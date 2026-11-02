@@ -1,1 +1,1 @@
-00b3fe40 SphereVsBoxContact  # descriptive: sphere (center, radius) vs cSPTransform-ed AABB, fills a contact manifold (point x2, count=1, normal, penetration)
+00b3fe40 ?SphereVsBoxContact@@YAIABUVector3_s00b3_fe40@@MABUBoundingBox@@ABUcSPTransform_s00b3_fe40@@_NPAUContactManifold@@@Z  # SphereVsBoxContact migrated from s00b3fe40 (verbatim, slice spelling)
