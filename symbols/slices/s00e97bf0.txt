@@ -1,2 +1,3 @@
-00e97bf0 cCreatureCameraEffects::Update  # per-frame update of creature models and attached effects (0x77f5813c hidden, 0x69244d69 selected, 0xc22c8057 list); Claude-coined name, replaces the wrong PDB candidate cCreatureCamera::OnKeyDown
 00e97310 cCreatureCameraEffects::ClearEffects  # Stop(1) every effect of the list then destroy the range; this unused
+00e97bf0 ?Update@cCreatureCameraEffects_s00e9_7bf0@@QAEXHH@Z  # cCreatureCameraEffects_s00e9_7bf0::Update migrated from s00e97bf0 (verbatim, slice spelling)
+00e98440 ??1cPlanetGfxView@@QAE@XZ  # cPlanetGfxView::~cPlanetGfxView migrated from s00e97bf0 (verbatim, slice spelling)
