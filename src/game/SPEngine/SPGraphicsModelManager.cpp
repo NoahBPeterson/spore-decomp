@@ -1357,9 +1357,17 @@ struct PropRef {
   }
 };
 struct IPropMgr {
-  virtual void pv0(); virtual void pv1(); virtual void pv2(); virtual void pv3();
-  virtual void pv4(); virtual void pv5(); virtual void pv6(); virtual void pv7();
-  virtual void pv8(); virtual void pv9(); virtual void pv10();
+virtual void pv0();
+virtual void pv1();
+virtual void pv2();
+virtual void pv3();
+virtual void pv4();
+virtual void pv5();
+virtual void pv6();
+virtual void pv7();
+virtual void pv8();
+virtual void pv9();
+virtual void pv10();
   virtual bool GetPropertyList(uint32_t id, uint32_t group, IRefObj** out);   // +0x2c
 };
 IPropMgr* __cdecl PropertyManager();                                          // 0x0067de30
@@ -1508,6 +1516,8 @@ static inline void ListPushBack(cModelNode* s, cModelNode* n) {
 // ---- items of slice s0074d4b0 end
 
 // ---- items of slice s0074e2b0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern const float gFltMax;           // 0x0140d674
+extern const float gNegFltMax;        // 0x013f51ac
 struct IntVec {
     int* mpBegin; int* mpEnd; int* mpCapacity;
     int size() const { return (int)(mpEnd - mpBegin); }
@@ -1584,22 +1594,98 @@ void __cdecl RBTreeErase(RBNodeBase* pNode, RBNodeBase* pNodeAnchor); // 0x00921
 struct IListenerV {           // vtable with slot 94
     virtual int AddRef();
     virtual int Release();
-    virtual void s2(); virtual void s3(); virtual void s4(); virtual void s5(); virtual void s6(); virtual void s7();
-    virtual void s8(); virtual void s9(); virtual void s10(); virtual void s11(); virtual void s12(); virtual void s13();
-    virtual void s14(); virtual void s15(); virtual void s16(); virtual void s17(); virtual void s18(); virtual void s19();
-    virtual void s20(); virtual void s21(); virtual void s22(); virtual void s23(); virtual void s24(); virtual void s25();
-    virtual void s26(); virtual void s27(); virtual void s28(); virtual void s29(); virtual void s30(); virtual void s31();
-    virtual void s32(); virtual void s33(); virtual void s34(); virtual void s35(); virtual void s36(); virtual void s37();
-    virtual void s38(); virtual void s39(); virtual void s40(); virtual void s41(); virtual void s42(); virtual void s43();
-    virtual void s44(); virtual void s45(); virtual void s46(); virtual void s47(); virtual void s48(); virtual void s49();
-    virtual void s50(); virtual void s51(); virtual void s52(); virtual void s53(); virtual void s54(); virtual void s55();
-    virtual void s56(); virtual void s57(); virtual void s58(); virtual void s59(); virtual void s60(); virtual void s61();
-    virtual void s62(); virtual void s63(); virtual void s64(); virtual void s65(); virtual void s66(); virtual void s67();
-    virtual void s68(); virtual void s69(); virtual void s70(); virtual void s71(); virtual void s72(); virtual void s73();
-    virtual void s74(); virtual void s75(); virtual void s76(); virtual void s77(); virtual void s78(); virtual void s79();
-    virtual void s80(); virtual void s81(); virtual void s82(); virtual void s83(); virtual void s84(); virtual void s85();
-    virtual void s86(); virtual void s87(); virtual void s88(); virtual void s89(); virtual void s90(); virtual void s91();
-    virtual void s92(); virtual void s93();
+virtual void s2();
+virtual void s3();
+virtual void s4();
+virtual void s5();
+virtual void s6();
+virtual void s7();
+virtual void s8();
+virtual void s9();
+virtual void s10();
+virtual void s11();
+virtual void s12();
+virtual void s13();
+virtual void s14();
+virtual void s15();
+virtual void s16();
+virtual void s17();
+virtual void s18();
+virtual void s19();
+virtual void s20();
+virtual void s21();
+virtual void s22();
+virtual void s23();
+virtual void s24();
+virtual void s25();
+virtual void s26();
+virtual void s27();
+virtual void s28();
+virtual void s29();
+virtual void s30();
+virtual void s31();
+virtual void s32();
+virtual void s33();
+virtual void s34();
+virtual void s35();
+virtual void s36();
+virtual void s37();
+virtual void s38();
+virtual void s39();
+virtual void s40();
+virtual void s41();
+virtual void s42();
+virtual void s43();
+virtual void s44();
+virtual void s45();
+virtual void s46();
+virtual void s47();
+virtual void s48();
+virtual void s49();
+virtual void s50();
+virtual void s51();
+virtual void s52();
+virtual void s53();
+virtual void s54();
+virtual void s55();
+virtual void s56();
+virtual void s57();
+virtual void s58();
+virtual void s59();
+virtual void s60();
+virtual void s61();
+virtual void s62();
+virtual void s63();
+virtual void s64();
+virtual void s65();
+virtual void s66();
+virtual void s67();
+virtual void s68();
+virtual void s69();
+virtual void s70();
+virtual void s71();
+virtual void s72();
+virtual void s73();
+virtual void s74();
+virtual void s75();
+virtual void s76();
+virtual void s77();
+virtual void s78();
+virtual void s79();
+virtual void s80();
+virtual void s81();
+virtual void s82();
+virtual void s83();
+virtual void s84();
+virtual void s85();
+virtual void s86();
+virtual void s87();
+virtual void s88();
+virtual void s89();
+virtual void s90();
+virtual void s91();
+virtual void s92();
+virtual void s93();
     virtual void Notify();    // slot 94 (+0x178)
 };
 struct MapNode {              // rbtree_node<pair<unsigned, AutoRefCount<IListenerV>>>
@@ -1684,6 +1770,28 @@ struct Vec3_s0074_e2b0 {
     Vec3_s0074_e2b0(float ax, float ay, float az) : x(ax), y(ay), z(az) {}
     Vec3_s0074_e2b0(const Vec3_s0074_e2b0& v) : x(v.x), y(v.y), z(v.z) {}
 };
+struct Matrix33_s0074_e2b0 {
+    float m[9];
+    Matrix33_s0074_e2b0() {}
+    Matrix33_s0074_e2b0(const Matrix33_s0074_e2b0& o);                  // 0x0041cb40
+};
+struct cSPTransform_s0074_e2b0 {
+    unsigned short mFlags;                // +0x00
+    unsigned short mModificationCount;    // +0x02
+    Vec3_s0074_e2b0 mTranslation;                    // +0x04
+    float mScale;                         // +0x10
+    unsigned int pad14;                   // +0x14
+    Matrix33_s0074_e2b0 mRotation;                   // +0x18
+    cSPTransform_s0074_e2b0& operator=(const cSPTransform_s0074_e2b0& x);   // 0x00537dc0
+    cSPTransform_s0074_e2b0(const Vec3_s0074_e2b0& t, const Matrix33_s0074_e2b0& r) : mTranslation(t), mRotation(r)
+    {
+        mModificationCount = 0;
+        mFlags = 0;
+        mScale = 1.0f;
+    }
+};
+extern const Vec3_s0074_e2b0 gVec3Zero;          // 0x0162eb0c
+extern const Matrix33_s0074_e2b0 gMatrix33Identity;  // 0x0162ec4c
 struct HitPair { void* mpModel; float mDistance; };
 struct HitVec {                       // eastl::vector<pair<cMWModel*, float>, sp_vector_allocator>
     HitPair* mpBegin; HitPair* mpEnd; HitPair* mpCapacity;
@@ -1697,6 +1805,28 @@ struct ModelFilter {
     unsigned char mDefaultLOD;            // +0x14
     unsigned char mFlags;                 // +0x15 (1: use model LOD, 2: ignore model scale)
 };
+struct LODData { char pad[0xcc]; int mValid; };
+struct ModelItem : Node {             // cMWModelInternal (intrusive list node first)
+    void* mpModel;                    // +0x08
+    unsigned mFlags;                  // +0x0c
+    cSPTransform_s0074_e2b0 mTransform;          // +0x10
+    unsigned __int64 mMask;           // +0x4c
+    char pad2[0x65 - 0x54];
+    unsigned char mLOD;               // +0x65
+    char pad3[0x74 - 0x66];
+    float mBoundRadius;               // +0x74
+    float mBox[6];                    // +0x78
+    char pad4[0x9c - 0x90];
+    LODData* mpLOD3;                  // +0x9c
+    char pad5[0xac - 0xa0];
+    LODData* mpLOD2;                  // +0xac
+};
+bool __cdecl RaySphereHit(const Vec3_s0074_e2b0* start, const Vec3_s0074_e2b0* end, const Vec3_s0074_e2b0* center, float radius, float* pDist);  // 0x00700c80
+bool __cdecl RayModelLOD(const Vec3_s0074_e2b0* start, const Vec3_s0074_e2b0* end, const cSPTransform_s0074_e2b0* xf, const float* bounds, const Matrix33_s0074_e2b0* basis,
+                         ModelItem* item, int variant, float* pDist, float radius);   // 0x00748ad0
+bool __cdecl RayBox(const Vec3_s0074_e2b0* start, const Vec3_s0074_e2b0* end, const cSPTransform_s0074_e2b0* xf, float x0, float y0, float z0, float x1, float y1, float z1,
+                    float* pDist, float radius);                                      // 0x007442c0
+Matrix33_s0074_e2b0* __cdecl BuildBasis(Matrix33_s0074_e2b0* out, const Vec3_s0074_e2b0* dir, const Vec3_s0074_e2b0* up);         // 0x0069b1c0
 // ---- items of slice s0074e2b0 end
 
 // ---- items of slice s0074f200 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -2538,20 +2668,20 @@ struct cModelInstance_s0074_a290_s0074_a290 {
     bool GetMeshesX(void* arg);       // FUN_0073eb90
 };
 namespace SP {
-struct cModelWorld_s0074_a290_s0074_a290 {
+class cModelWorld_s0074_a290_s0074_a290 { public:
     char pad[0x800];
 
-    void ReleaseTransformedHull(void** pp);              // 0074a650
-    void FreeTransformedBuffer();                        // 0074b150
+    void ReleaseTransformedHull(void** pp);              // 0074a650 0x0074a650
+    void FreeTransformedBuffer();                        // 0074b150 0x0074b150
     void RemoveOccluder(int idx);                        // 0074a8c0
-    bool GetBakedMeshes(void* model, void* arg2);        // 0074a690
-    bool GetBakedMeshesUnscaled(void* model, void* arg2); // 0074a700
-    bool GetBakedMeshes2(void* model, void* arg2, cSPTransform_s0074_a290_s0074_a290* out);  // 0074a780
-    bool GetMeshes(void* model, void* arg2, cSPTransform_s0074_a290_s0074_a290* out);        // 0074a850
-    static void __stdcall SetExternalEffectsTransform(void* a, void* b, void* c);  // 0074a290
-    void SubA490(void* a, void* b);                      // 0074a490
-    void SubA920(void* list, void* obj, uint32_t flags); // 0074a920
-    void AddAttachments(char* model);                    // 0074ac80
+    bool GetBakedMeshes(void* model, void* arg2);        // 0074a690 0x0074a690
+    bool GetBakedMeshesUnscaled(void* model, void* arg2); // 0074a700 0x0074a700
+    bool GetBakedMeshes2(void* model, void* arg2, cSPTransform_s0074_a290_s0074_a290* out);  // 0074a780 0x0074a780
+    bool GetMeshes(void* model, void* arg2, cSPTransform_s0074_a290_s0074_a290* out);        // 0074a850 0x0074a850
+    static void __stdcall SetExternalEffectsTransform(void* a, void* b, void* c);  // 0074a290 0x0074a290
+    void SubA490(void* a, void* b);                      // 0074a490 0x0074a490
+    void SubA920(void* list, void* obj, uint32_t flags); // 0074a920 0x0074a920
+    void AddAttachments(char* model);                    // 0074ac80 0x0074ac80
 };  // namespace SP
 }
 struct EffRec {
@@ -2582,6 +2712,297 @@ struct Rec48_s0074_a290 {
 void* operator new[](size_t, const char*, int, int, int, int);   // 0xf473a0
 #define VCALL(T, obj, off) ((T)VT(obj)[(off) / 4])
 // ---- items of slice s0074a290 end
+
+// ---- items of slice s0074b170 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C" void* __cdecl eastl_alloc(uint32_t size, const char* name, int a, int b, const char* file, int line);
+extern "C" void* FUN_0099efa0(char* first, char* last, char* dst);          // 0x0099efa0 uninit move
+struct T1c {
+    uint32_t b[7];                 // 0x1c bytes
+    T1c(const T1c&);
+    void CopyFrom(const T1c& v);   // @ 0x743b60 retail copy constructor
+};
+struct Vec1c {
+    char pad[0x18];
+    T1c* end;      // +0x18
+    char pad2[4];
+    T1c* cap;      // +0x20
+    void Grow(const T1c* v);       // @ 0x747980 reallocate/grow path
+    void DoInsert(const T1c* v);
+};
+struct ListLink {                    // intrusive list head / node link (8 bytes)
+    ListLink* mPrev;                 // +0x00
+    ListLink* mNext;                 // +0x04
+};
+struct ListNode_s0074_b170_s0074_b170 {                    // embedded node
+    ListLink  mLink;                 // +0x00
+    uint32_t  mPad;                  // +0x08
+    uint32_t  mFlags;                // +0x0c
+};
+struct ListNodeTail {                // what the caller passes: 8 bytes into the node
+    uint32_t  mPad;                  // +0x00 (node +0x08)
+    uint32_t  mFlags;                // +0x04 (node +0x0c)
+};
+namespace SP {
+class cModelWorld_s0074_b170_s0074_b170 { public:
+    char pad0[0x1c];
+    char mWorldType;                 // +0x1c
+    char pad1[0x19c - 0x1d];
+    ListLink  mListA;                // +0x19c
+    ListLink  mListB;                // +0x1a4
+    void AddAttachments(ListNode_s0074_b170_s0074_b170* n);      // @ 0x74ac80
+    void ShutdownModel(ListNode_s0074_b170_s0074_b170* n);       // @ 0x746b90
+    void SetInWorld(ListNodeTail* n, bool b);
+    void UpdateFromPropList(IPropList* pl, void* mdl, uint32_t flags, int unused);
+};
+}
+struct SlotEntry_s0074_b170 {                                      // 0x1c-byte local (EH-scoped)
+    uint32_t w[7];
+    SlotEntry_s0074_b170();
+    ~SlotEntry_s0074_b170();
+};
+SlotEntry_s0074_b170::~SlotEntry_s0074_b170() {}
+__forceinline const float* ValFloat_s0074_b170(Property* p)
+{
+    if (p->mnType == 0xd || p->mnType == 0x10) return (const float*)p->Items();
+    return &kDefaultFloat;
+}
+struct Quad { uint32_t v[4]; };
+extern "C" void ChunkFind(uint32_t* out, Quad a, Quad b, int key);            // 0x00745560
+struct Stub747190 { void* F(int*); };                                         // 0x00747190
+struct SlotList {
+    char pad0[0x28c];
+    Quad mQ1;                                     // +0x28c
+    Quad mQ2;                                     // +0x29c
+    void Find(void* key);
+    void Erase(int* key);
+};
+struct Pair8_s0074_b170 { uint32_t a, b; };
+struct Vec8Ins {
+    void Insert(void* pos, void* val);
+};
+// ---- items of slice s0074b170 end
+
+// ---- items of slice s00753270 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern void* g_mwFreeList_162ed38;      // 0x0162ed38 (clip-map node free list)
+extern void* g_mwFreeList_162ed18;      // 0x0162ed18 (model free list)
+extern "C" void* eastl_copydispatch_copy_intrusive(void*, void*, void*);  // 0x006f43e0
+extern "C" void  DestroyRange_mw(void* a, void* b);                   // 0x0070f520
+extern "C" void  SortWithCmp_mw(void* range, void* cmp);              // 0x0073bd60
+extern "C" int   Cmp_mw(void* a, void* b);                            // 0x00743910
+extern "C" void* AllocIntro_mw();                                     // 0x0067dd60
+extern "C" void  FinishBackgroundLoad_mw(void* self, void* entry);    // 0x00751560
+extern "C" int  ChunkFind_lq(void* p, void* a, void* b);              // 0x00745560
+extern "C" void StartFeedbackJobs_lq(void* self, void** range);       // 0x0074fea0
+extern "C" void helper_50180_lq(void* dst, void* a);                  // 0x00750180
+extern "C" void cHierGrid_ctor_cw(void* p);                            // 0x00703ce0
+extern "C" void __stdcall eh_vec_ctor_cw(void* p, unsigned sz, int n,
+                                   void* ctor, void* dtor);                // 0x011e0b85
+extern "C" void Small7_Init_cw(void* p);                               // 0x007453a0
+extern "C" void Small7_Dtor_cw(void* p);                               // 0x007445a0
+extern "C" void IPtrVec_Ctor_cw(void* p);                              // 0x006e5790
+extern "C" void IPtrVec_Dtor_cw(void* p);                              // 0x0041e640
+extern "C" void cLoadQueue_ctor_cw(void* p);                           // 0x00753880
+extern float g_f1470f1c;   // 0x01470f1c = 2.0
+extern float g_f1473c70;   // 0x01473c70
+extern float g_f1471064;   // 0x01471064 = 0.5
+extern float g_f1486110;   // 0x01486110
+extern float g_f1537b10, g_f1537b14, g_f1537b18, g_f1537b1c;
+void __cdecl operator_delete__(void* p);   // 0x00f47380 (CRT operator delete)
+struct cSPTransform_s0075_3270 {
+    uint32_t m[12];
+    cSPTransform_s0075_3270& operator=(const cSPTransform_s0075_3270& o);
+};
+struct FixedAllocatorBase_00926650 { bool AddCore(void* core, unsigned n); };   // 0x00926650
+extern FixedAllocatorBase_00926650 g_fixedAlloc_162ed28;                        // 0x0162ed28
+void* __cdecl operator_new_753d10(unsigned size, const char* name, int, int, int, int); // 0x00f473a0
+struct CompactMap_74f200 { void** Subscript(const uint32_t& key); };            // 0x0074f200
+struct Ctor753900 { void* ctor(void* a, void* b); };                            // 0x00753900
+struct MwModel_mw {
+  virtual void mv0();
+  virtual void mv1();
+  uint32_t  m4;          // +0x04 (high bit used as a flag)
+  char      pad08[0x38]; // +0x08
+  int       m40;         // +0x40 refcount
+  void      AddRefOrDestroy();
+};
+struct cJob_mw {
+  void AddRef();     // 0x0068f950
+  void Wait();       // 0x006926b0
+  void GetStatus();  // 0x00690120 (Release is used here in practice)
+  void Release();    // 0x00690120
+};
+struct LoadEntry_mw {
+  MwModel_mw* mpModel;   // +0x00
+  char      pad04[0x18];     // +0x04
+  uint8_t   m1c;             // +0x1c
+  char      pad1d[3];        // +0x1d
+  cJob_mw* mpJob;        // +0x20
+  char      pad24[0x10];     // +0x24
+  void*     mpLists[5];      // +0x34  five intrusive model-owner lists
+};
+static void CModelWorld_ReleaseModel753270(MwModel_mw* m)
+{
+  if (m == 0)
+    return;
+  const int n = m->m40;
+  if (n < 2)
+    (*(void(__thiscall**)(MwModel_mw*, unsigned))(*(void***)m)[0x170 / 4])(m, m->m4 >> 0x1f);
+  else
+    m->m40 = n - 1;
+}
+struct cMWGroupInternal_00753580 {
+  char pad_0[0x4c];
+  void* m4c;                             // +0x4c
+  char pad_50[0xc];
+  void* m5c;                             // +0x5c
+  __declspec(noinline) ~cMWGroupInternal_00753580();
+};
+struct QueueSlot_lq {
+  void*   mpJob;    // +0x00
+  char    pad04[0x18];
+  uint8_t m1c;      // +0x1c occupied flag
+};
+struct Matrix3_41cb40 { float m[9]; void Assign(const void* src); };   // 0x0041cb40
+struct ArrayHolder_7535d0 { void* mArray; void Init(int count); };     // 0x007535d0
+extern float g_f162eb0c, g_f162eb10, g_f162eb14, g_f1485720;
+extern char  g_m162ec4c_s0075_3270[];
+struct CspElem_753770 {
+  void*        mpObject;    // +0x00
+  uint32_t     mFlags;      // +0x04
+  uint16_t     m8;          // +0x08
+  uint16_t     ma;          // +0x0a
+  float        m0c;         // +0x0c
+  float        m10;         // +0x10
+  float        m14;         // +0x14
+  float        m18;         // +0x18
+  Matrix3_41cb40 m1c;       // +0x1c
+  uint32_t     m40;         // +0x40
+  ArrayHolder_7535d0 m44;   // +0x44
+  void* Init(void* p0, void* p1);
+};
+struct CspVec_753810 {
+  uint32_t       m0;      // +0x00
+  uint32_t       m4;      // +0x04
+  CspElem_753770 m8;      // +0x08
+  void* Init(void* p0, int count, void** arr);
+};
+struct CLoadingModel_73880 { uint8_t m[0x50]; CLoadingModel_73880(); ~CLoadingModel_73880(); };
+struct Deque_7458d0 { uint32_t m[10]; void Init(int n); };   // 0x007458d0
+struct cLoadQueue_00753880 {
+  uint32_t           m0;       // +0x000
+  CLoadingModel_73880 mArr[8]; // +0x004 (8 x cLoadingModel; compiler emits the EH vector ctor)
+  Deque_7458d0       mDeque;   // +0x284
+  uint32_t           m2ac;     // +0x2ac
+  uint32_t           m2b0;     // +0x2b0
+  cLoadQueue_00753880();
+};
+class cModelWorld_00753900 {
+ public:
+  cModelWorld_00753900(unsigned arg0, unsigned char arg1);
+
+  char     pad00[0x04];     // +0x000
+  void*    mvptr04;         // +0x004
+  void*    mvptr08;         // +0x008
+  void*    mvptr0c;         // +0x00c
+  void*    mvptr10;         // +0x010
+  uint32_t m14;             // +0x014
+  uint32_t m18;             // +0x018
+  uint8_t  m1c;             // +0x01c
+  uint8_t  m1d;             // +0x01d
+  uint8_t  m1e;             // +0x01e
+  char     pad1f[0x01];     // +0x01f
+  void*    m20;             // +0x020
+  uint8_t  m24;             // +0x024
+  char     pad25[0x118 - 0x25]; // +0x025
+  char     m118[0x84];      // +0x118 cHierGrid (ends at +0x19c)
+  // list heads
+  void*    m19c_prev;       // +0x19c
+  void*    m1a0_next;       // +0x1a0
+  void*    m1a4_prev;       // +0x1a4
+  void*    m1a8_next;       // +0x1a8
+  void*    m1ac_prev;       // +0x1ac
+  void*    m1b0_next;       // +0x1b0
+  char     m1b4[8 * 0x20];  // +0x1b4 (8 x 0x20)
+  float    m2b4;            // +0x2b4
+  float    m2b8;            // +0x2b8
+  uint32_t m2bc;            // +0x2bc
+  uint32_t m2c0;            // +0x2c0
+  uint32_t m2c4;            // +0x2c4
+  char     pad2c8[0x2d0 - 0x2c8];
+  uint32_t m2d0;            // +0x2d0
+  uint32_t m2d4;            // +0x2d4
+  uint32_t m2d8;            // +0x2d8
+  uint32_t m2dc;            // +0x2dc
+  uint32_t m2e0;            // +0x2e0
+  char     pad2e4[0x2ec - 0x2e4];
+  uint32_t m2ec;            // +0x2ec
+  uint32_t m2f0;            // +0x2f0
+  uint32_t m2f4;            // +0x2f4
+  char     pad2f8[0x300 - 0x2f8];
+  uint32_t m300;            // +0x300
+  uint32_t m304;            // +0x304
+  uint32_t m308;            // +0x308
+  cLoadQueue_00753880 m314; // +0x314
+  uint32_t m5c8;            // +0x5c8
+  uint8_t  m5cc;            // +0x5cc
+  char     m5d0[16 * 0x14]; // +0x5d0
+  char     m710[16 * 0x14]; // +0x710
+  float    m850;            // +0x850
+  float    m854;            // +0x854
+  float    m858;            // +0x858
+  float    m85c;            // +0x85c
+  float    m860;            // +0x860
+  uint32_t m864;            // +0x864
+  uint32_t m868;            // +0x868
+  uint32_t m86c;            // +0x86c
+  char     pad870[0x878 - 0x870];
+  float    m878;            // +0x878
+  float    m87c;            // +0x87c
+  uint32_t m880;            // +0x880
+  uint32_t m884;            // +0x884
+  float    m888;            // +0x888
+  float    m88c;            // +0x88c
+  float    m890;            // +0x890
+  uint32_t m894;            // +0x894
+  uint32_t m898;            // +0x898
+  uint32_t m89c;            // +0x89c
+  uint32_t m8a0;            // +0x8a0
+  uint32_t m8a4;            // +0x8a4
+  uint32_t m8a8;            // +0x8a8
+  uint32_t m8ac;            // +0x8ac
+  uint8_t  m8b0;            // +0x8b0
+  uint32_t m8b4;            // +0x8b4
+};
+struct MwOwner_753bb0 {
+  char  pad_0[0x1ac];
+  void* m1ac;   // +0x1ac (list head.prev / sentinel)
+  void* m1b0;   // +0x1b0 (list head.next)
+  void* Register(void* a, void* b);
+};
+struct List_753c50 { void erase(void* key); };            // 0x0074be40
+struct MwNode_753c50 { MwNode_753c50* mpPrev; MwNode_753c50* mpNext; };
+struct NodeFc_753c50 { void F746fc0(); };                 // 0x00746fc0
+struct cModelWorld_753c50 {
+  virtual void cv0();
+  virtual void cv1();
+  char     pad_4[0x1c - 4];
+  uint8_t  m1c;                       // +0x1c mWorldType
+  char     pad_1d[0x314 - 0x1d];
+  List_753c50 mList;                  // +0x314
+  char     pad_318[0x894 - 0x318];
+  uint32_t m894;                      // +0x894
+  uint32_t m898;                      // +0x898
+  void FinalRelease(void** p2, char p3);
+  void ShutdownModel753c50(void* p);
+};
+struct IEventObject_753d10 { virtual void ev0(); virtual void ev1(); };
+struct MwOwner_753d10 {
+  virtual void ov0();
+  char              pad_4[0xc - 4];
+  CompactMap_74f200 mMap;         // +0x0c
+  void* Create(uint32_t key, void* unused, void* a2);
+};
+// ---- items of slice s00753270 end
 
 // @ 0x00743940
 int cModelWorld56::Adjustor(int unused)
@@ -5613,10 +6034,8 @@ void SP::cModelWorld_s0074_a290_s0074_a290::FreeTransformedBuffer()
 }
 
 // @ 0x0074b170
-void cloadqueue_b170(void* self)
-{
-    (void)self;
-}
+SlotEntry_s0074_b170::SlotEntry_s0074_b170()
+{ w[0] = 0; w[1] = 0; w[2] = 0; w[3] = 0; w[4] = 0; w[5] = 0; w[6] = 0; }
 
 // @ 0x0074b2b0
 SP::cLoadQueue::~cLoadQueue()
@@ -5629,15 +6048,15 @@ void partial_sort_b390(void* a, void* b, void* c, void* cmp)
 }
 
 // @ 0x0074b690
-void SP::cModelWorld_s0074_b170::SetInWorld(ListNodeTail_s0074_b170* n, bool b)
+void SP::cModelWorld_s0074_b170_s0074_b170::SetInWorld(ListNodeTail* n, bool b)
 {
     if (mWorldType == 0)
         return;
     if (((n->mFlags >> 0xf) & 1) == (uint32_t)b)
         return;
-    ListNode_s0074_b170* node = (ListNode_s0074_b170*)((char*)n - 8);
-    ListLink_s0074_b170* prev = node->mLink.mPrev;
-    ListLink_s0074_b170* next = node->mLink.mNext;
+    ListNode_s0074_b170_s0074_b170* node = (ListNode_s0074_b170_s0074_b170*)((char*)n - 8);
+    ListLink* prev = node->mLink.mPrev;
+    ListLink* next = node->mLink.mNext;
     next->mPrev = prev;
     prev->mNext = next;
     node->mLink.mPrev = 0;
@@ -5662,28 +6081,198 @@ void SP::cModelWorld_s0074_b170::SetInWorld(ListNodeTail_s0074_b170* n, bool b)
 }
 
 // @ 0x0074b760
-__forceinline const float* ValFloat(Property* p)
+void SP::cModelWorld_s0074_b170_s0074_b170::UpdateFromPropList(IPropList* pl, void* mdl, uint32_t flags, int unused)
 {
-    if (p->mnType == 0xd || p->mnType == 0x10) return (const float*)p->Items();
-    return &kDefaultFloat;
+    ModelRec* m = (ModelRec*)mdl;
+    XForm* t = &m->mXform;
+    BBoxMember* box = &m->mBox;
+    t->mRot = gIdentity3;
+    t->mScale = 1.0f;
+    t->mOffset = gZeroVec3;
+    t->mFlags = 0;
+    t->mCount = 0;
+    box->mMin.x = -1.0f; box->mMin.y = -1.0f; box->mMin.z = -1.0f;
+    box->mMax.x = 1.0f; box->mMax.y = 1.0f; box->mMax.z = 1.0f;
+    m->mRadius = 1.0f;
+
+    Property* prop = 0;
+    bool hasBBox = false;
+
+    if (pl->Get(0xfba611, &prop)) {
+        t->mScale = *ValFloat_s0074_b170(prop);
+        t->mCount++;
+    }
+    if (pl->Get(0xfba610, &prop)) {
+        V3 v(*(const V3*)ValVec3(prop));
+        t->mFlags |= 4;
+        t->mCount++;
+        t->mOffset = *(Vec3f*)&v;
+    }
+    if (pl->Get(0xfba613, &prop)) {
+        const Vec3f* d = ValVec3(prop);
+        float dx = d->x, dy = d->y, dz = d->z;
+        V3 e(dx * 0.017453292f, dy * 0.017453292f, dz * 0.017453292f);
+        RwMat33 rot(Matrix33FromEulerXYZ(e));
+        t->mFlags |= 2;
+        t->mCount++;
+        *(RwMat33*)&t->mRot = rot;
+    }
+    if (pl->Get(0x3704e55, &prop) && !*ValBool(prop))
+        m->mFlags |= 0x40000;
+    else
+        m->mFlags &= 0xfffbffff;
+
+    if (m->f9c == 0 && m->fac == 0) {
+        if (pl->Get(0x31d2791, &prop)) {
+            hasBBox = true;
+            BBoxf* b = prop->GetBBox();
+            box->mMax = b->mMax;
+            box->mMin = b->mMin;
+            if (t->mScale != 1.0f || (t->mFlags & 6))
+                box->TransformBy(t);
+        }
+        if (pl->Get(0x31d2792, &prop)) {
+            hasBBox = false;
+            m->mRadius = *prop->GetFloat();
+            if (t->mScale != 1.0f || (t->mFlags & 6)) {
+                float r = m->mRadius.v * t->mScale;
+                m->mRadius.v = r;
+                m->mRadius.v = Len3(t->mOffset) + r;
+            }
+        }
+    }
+    m->mFlags &= 0xfffcffff;
+
+    if (pl->Get(0xf9efba, &prop)) {
+        hasBBox = true;
+        const BBoxf* b = ValBBox(prop);
+        box->mMax = b->mMax;
+        box->mMin = b->mMin;
+        if (t->mScale != 1.0f || (t->mFlags & 6))
+            box->TransformBy(t);
+        m->mFlags |= 0x10000;
+        m->mFlags |= 0x20000;
+    }
+    if (pl->Get(0xf9efb9, &prop)) {
+        m->mRadius = *ValFloat_s0074_b170(prop);
+        if (t->mScale != 1.0f || (t->mFlags & 6)) {
+            float r = t->mScale * m->mRadius.v;
+            m->mRadius.v = r;
+            m->mRadius.v = Len3(t->mOffset) + r;
+        }
+        m->mFlags |= 0x20000;
+    } else if (hasBBox) {
+        Vec3f n;
+        n.x = -box->mMin.x;
+        n.y = -box->mMin.y;
+        n.z = -box->mMin.z;
+        const Vec3f& mx = m->mBox.mMax;
+        const float& cz = MaxF(n.z, mx.z);
+        const float& cy = MaxF(n.y, mx.y);
+        const float& cx = MaxF(n.x, mx.x);
+        m->mRadius.v = sqrtf(cz * cz + cy * cy + cx * cx);
+    }
+    if (!(flags & 0x10000000)) {
+        int count;
+        if (GetPropertyAsFloatArray(pl, 0x2e33a81, &count, &m->mpArr)) {
+            if (count > 0)
+                m->mCount129 = (uint8_t)count;
+            else
+                m->mpArr = 0;
+        }
+    }
+    if (pl->Get(0xfba612, &prop)) {
+        const float* q = ValVec4(prop);
+        float a = q[0], b2 = q[1], c = q[2];
+        float d = q[3];
+        m->mQuat[0] = a; m->mQuat[1] = b2; m->mQuat[2] = c; m->mQuat[3] = d;
+        m->mFlags |= 2;
+    }
+    AddAttachments((ListNode_s0074_b170_s0074_b170*)m);
+    m->mUpdateCount++;
 }
 
 // @ 0x0074bda0
-void list_find_bda0(void* self, void* key)
+void SlotList::Find(void* key_)
 {
-    (void)self; (void)key;
+    char* self = (char*)this;
+    int* key = (int*)key_;
+    int out[4];
+    ChunkFind((uint32_t*)out, mQ1, mQ2, key[0]);
+    if (out[0] != *(int*)(self + 0x29c)) {
+        ((Stub747190*)out[0])->F(key);
+        return;
+    }
+    ((Vec1c*)(self + 0x284))->DoInsert((const T1c*)key);
 }
 
 // @ 0x0074be40
-void list_erase_be40(void* self, int* key)
+void SlotList::Erase(int* key)
 {
-    (void)self; (void)key;
+    char* self = (char*)this;
+    int* p        = *(int**)(self + 0x28c);
+    int* chunkEnd = *(int**)(self + 0x294);
+    int** chunkArr = *(int***)(self + 0x298);
+    int* limit    = *(int**)(self + 0x29c);
+    if (p == limit)
+        return;
+    do {
+        if (*p == *key) {
+            SlotEntry_s0074_b170 scratch;
+            (void)scratch;
+            *p = 0;
+            void* q = (void*)p[1];
+            if (q) {
+                p[1] = 0;
+                ((void(__thiscall*)(void*))VT(q)[1])(q);
+            }
+            p[2] = 0; p[3] = 0; p[4] = 0; p[5] = 0; p[6] = 0;
+        }
+        p += 7;
+        if (p == chunkEnd) {
+            chunkArr += 1;
+            p = *chunkArr;
+            chunkEnd = p + 0x38;
+        }
+    } while (p != limit);
 }
 
 // @ 0x0074bf10
-void vec_insert_bf10(void* self, void* pos, void* val)
+void Vec8Ins::Insert(void* pos_, void* val_)
 {
-    (void)self; (void)pos; (void)val;
+    char* self = (char*)this;
+    Pair8_s0074_b170* end = *(Pair8_s0074_b170**)(self + 4);
+    if (end != *(Pair8_s0074_b170**)(self + 8)) {
+        Pair8_s0074_b170* position = (Pair8_s0074_b170*)pos_;
+        const Pair8_s0074_b170* value = (const Pair8_s0074_b170*)val_;
+        const Pair8_s0074_b170* pValue = value;
+        if (pValue >= position && pValue < end)
+            ++pValue;
+        if (end)
+            *end = end[-1];
+        Pair8_s0074_b170* src = end - 1;
+        Pair8_s0074_b170* dst = end;
+        while (src != position) {
+            --src; --dst;
+            *dst = *src;
+        }
+        *position = *pValue;
+        *(Pair8_s0074_b170**)(self + 4) = end + 1;
+        return;
+    }
+    int nPrev = (int)(*(Pair8_s0074_b170**)(self + 4) - *(Pair8_s0074_b170**)self);
+    int nNew = (nPrev > 0) ? nPrev * 2 : 1;
+    Pair8_s0074_b170* pNew = nNew ? (Pair8_s0074_b170*)eastl_alloc((uint32_t)(nNew * 8), "Graphics", 0, 0, "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h", 0xd1) : 0;
+    Pair8_s0074_b170* p = (Pair8_s0074_b170*)FUN_0099efa0((char*)*(Pair8_s0074_b170**)self, (char*)pos_, (char*)pNew);
+    if (p)
+        *p = *(const Pair8_s0074_b170*)val_;
+    Pair8_s0074_b170* pEnd = (Pair8_s0074_b170*)FUN_0099efa0((char*)pos_, (char*)*(Pair8_s0074_b170**)(self + 4), (char*)(p + 1));
+    Pair8_s0074_b170* begin0 = *(Pair8_s0074_b170**)self;
+    if (begin0 && begin0 != *(Pair8_s0074_b170**)(self + 0x10))
+        eastl_dealloc(begin0);
+    *(Pair8_s0074_b170**)self = pNew;
+    *(Pair8_s0074_b170**)(self + 4) = pEnd;
+    *(Pair8_s0074_b170**)(self + 8) = pNew + nNew;
 }
 
 // @ 0x0074c020
@@ -6113,6 +6702,97 @@ bool cModelWorld_s0074_d4b0::CollectModels(PtrVec* out, const cModelFilter* f)
   return out->mpBegin != out->mpEnd;
 }
 
+// @ 0x0074e2b0
+bool cModelWorld_s0074_e2b0::RayCastModels(const Vec3_s0074_e2b0* start, const Vec3_s0074_e2b0* end, HitVec* out, const ModelFilter* filter, float radius)
+{
+    out->erase(out->mpBegin, out->mpEnd);
+    cSPTransform_s0074_e2b0 xform(gVec3Zero, gMatrix33Identity);
+    int count = 0;
+    float bounds[6];
+    Matrix33_s0074_e2b0 basis;
+    Vec3_s0074_e2b0 bmin(gFltMax, gFltMax, gFltMax);
+    Vec3_s0074_e2b0 bmax(gNegFltMax, gNegFltMax, gNegFltMax);
+    bounds[0] = bmin.x; bounds[1] = bmin.y; bounds[2] = bmin.z;
+    bounds[3] = bmax.x; bounds[4] = bmax.y; bounds[5] = bmax.z;
+    if (0.0f < radius) {
+        Vec3_s0074_e2b0 d(end->x - start->x, end->y - start->y, end->z - start->z);
+        float len = sqrtf(d.x * d.x + d.y * d.y + d.z * d.z);
+        Vec3_s0074_e2b0 up(0.0f, 0.0f, 1.0f);
+        float inv = 1.0f / (len + 1e-10f);
+        Vec3_s0074_e2b0 dir(inv * d.x, inv * d.y, inv * d.z);
+        Matrix33_s0074_e2b0 tmp;
+        basis = *BuildBasis(&tmp, &dir, &up);
+        bounds[0] = -radius; bounds[1] = -radius; bounds[2] = -radius;
+        bounds[3] = radius; bounds[4] = radius; bounds[5] = len + radius;
+    }
+    HitPair hit;
+    float dist;
+    if (mHierGrid.mGridsBegin != mHierGrid.mGridsEnd && gAppProperties->mpValues->mValue > 1) {
+        Node* items[0x400];
+        int n = mHierGrid.QueryRay(start, end, radius, 0x400, items);
+        for (int i = 0; i < n; ++i) {
+            ModelItem* item = (ModelItem*)items[i];
+            if (!(item->mFlags & 1)) continue;
+            if (!((filter->mInclude == 0 || (item->mMask & filter->mInclude) != 0) && (item->mMask & filter->mExclude) == 0))
+                continue;
+            if (filter->mpCallback && !filter->mpCallback((char*)item + 8)) continue;
+            int lod;
+            if ((filter->mFlags & 1) && ((item->mFlags >> 8) & 1)) lod = item->mLOD; else lod = filter->mDefaultLOD;
+            xform = item->mTransform;
+            if (((item->mFlags >> 7) & 1) || (filter->mFlags & 2)) {
+                ++xform.mModificationCount;
+                xform.mScale = 1.0f;
+            }
+            Vec3_s0074_e2b0 center(xform.mTranslation.x, xform.mTranslation.y, xform.mTranslation.z);
+            if (!RaySphereHit(start, end, &center, item->mBoundRadius * xform.mScale + radius, &dist)) continue;
+            if (lod >= 3 && item->mpLOD3 && item->mpLOD3->mValid) {
+                if (!RayModelLOD(start, end, &xform, bounds, &basis, item, 0, &dist, radius)) continue;
+            } else if (lod >= 2 && item->mpLOD2 && item->mpLOD2->mValid) {
+                if (!RayModelLOD(start, end, &xform, bounds, &basis, item, 4, &dist, radius)) continue;
+            } else if (lod >= 1 && item->mBox[0] <= item->mBox[3]) {
+                if (!RayBox(start, end, &xform, item->mBox[0], item->mBox[1], item->mBox[2], item->mBox[3], item->mBox[4], item->mBox[5], &dist, radius)) continue;
+            }
+            hit.mpModel = (char*)item + 8;
+            hit.mDistance = dist;
+            int idx = 0;
+            while (idx < count && !(dist <= out->mpBegin[idx].mDistance)) ++idx;
+            out->insert(out->mpBegin + idx, hit);
+            ++count;
+        }
+        return count != 0;
+    } else {
+        for (ModelItem* item = (ModelItem*)mGroupList.next; item != (ModelItem*)&mGroupList; item = (ModelItem*)item->next) {
+            if (!(item->mFlags & 1)) continue;
+            if (!((filter->mInclude == 0 || (item->mMask & filter->mInclude) != 0) && (item->mMask & filter->mExclude) == 0))
+                continue;
+            if (filter->mpCallback && !filter->mpCallback((char*)item + 8)) continue;
+            int lod;
+            if ((filter->mFlags & 1) && ((item->mFlags >> 8) & 1)) lod = item->mLOD; else lod = filter->mDefaultLOD;
+            xform = item->mTransform;
+            if (((item->mFlags >> 7) & 1) || (filter->mFlags & 2)) {
+                ++xform.mModificationCount;
+                xform.mScale = 1.0f;
+            }
+            Vec3_s0074_e2b0 center(xform.mTranslation.x, xform.mTranslation.y, xform.mTranslation.z);
+            if (!RaySphereHit(start, end, &center, item->mBoundRadius * xform.mScale + radius, &dist)) continue;
+            if (lod >= 3 && item->mpLOD3 && item->mpLOD3->mValid) {
+                if (!RayModelLOD(start, end, &xform, bounds, &basis, item, 0, &dist, radius)) continue;
+            } else if (lod >= 2 && item->mpLOD2 && item->mpLOD2->mValid) {
+                if (!RayModelLOD(start, end, &xform, bounds, &basis, item, 4, &dist, radius)) continue;
+            } else if (lod >= 1 && item->mBox[0] <= item->mBox[3]) {
+                if (!RayBox(start, end, &xform, item->mBox[0], item->mBox[1], item->mBox[2], item->mBox[3], item->mBox[4], item->mBox[5], &dist, radius)) continue;
+            }
+            hit.mpModel = (char*)item + 8;
+            hit.mDistance = dist;
+            int idx = 0;
+            while (idx < count && !(dist <= out->mpBegin[idx].mDistance)) ++idx;
+            out->insert(out->mpBegin + idx, hit);
+            ++count;
+        }
+    }
+    return out->mpBegin != out->mpEnd;
+}
+
 // @ 0x0074eb70
 bool cModelWorld_s0074_e2b0::FindModelsInShape(const void* p, float f, ModelVec* out, void* ctx)
 {
@@ -6215,6 +6895,14 @@ bool EditorResource::Shutdown()
         ((MapNode*)n)->mpValue->Notify();
     mListeners.clear();
     return true;
+}
+
+// @ 0x0074f130
+void EditorResource::RemoveListener(unsigned key)
+{
+    ListenerMap::iterator it = mListeners.find(key);
+    if (it.mpNode != mListeners.end().mpNode)
+        mListeners.erase(it);
 }
 
 // @ 0x0074f1a0
@@ -6880,6 +7568,74 @@ void cEffectsRenderer_RenderMainEffectsLayer(void* self)
 { (void)self; }
 }  // namespace SP
 
+// @ 0x00753270
+void FUN_00753270(void* self, LoadEntry_mw* entry)
+{
+  MwModel_mw* model = entry->mpModel;
+  if (model != 0)
+    ++model->m40;
+
+  cJob_mw* job = entry->mpJob;
+  if (job != 0)
+    job->AddRef();
+  entry->mpJob->Wait();
+
+  if (entry->m1c != 0 && entry->mpJob == job) {
+    char* obj = (char*)AllocIntro_mw();
+
+    // Local growable vector<P> scratch (begin/end/cap + allocator).
+    void* vec[2] = { 0, 0 };
+    void* scratch[2] = { 0, 0 };
+    char* work = (char*)vec;  // work area reused for the temporary block
+
+    for (int i = 0; i < 5; ++i) {
+      void** list = (void**)((char*)entry + 0x34 + i * 4);
+      if (*list == 0)
+        continue;
+
+      void* endRec = eastl_copydispatch_copy_intrusive(scratch, scratch, vec);
+      DestroyRange_mw(endRec, scratch);
+      // Sorting the collected range with the model comparator.
+      SortWithCmp_mw(&scratch[0], (void*)Cmp_mw);
+
+      void** p   = (void**)scratch[0];
+      void** end = (void**)scratch[1];
+      while (p != end) {
+        (*(void(__thiscall**)(void*))(*(void***)obj + 0x34))(*p);
+
+        if (entry->m1c == 0 || entry->mpJob != job) {
+          DestroyRange_mw(scratch[0], scratch[1]);
+          if (scratch[0] != 0 && ((int*)scratch[0])[-1] != 0)
+            operator_delete__(scratch[0]);
+          if (job != 0)
+            job->Release();
+          CModelWorld_ReleaseModel753270(model);
+          return;
+        }
+        ++p;
+      }
+    }
+
+    FinishBackgroundLoad_mw(self, entry);
+    DestroyRange_mw(scratch[0], scratch[1]);
+    if (scratch[0] != 0 && ((int*)scratch[0])[-1] != 0)
+      operator_delete__(scratch[0]);
+    if (job != 0)
+      job->Release();
+    CModelWorld_ReleaseModel753270(model);
+    return;
+  }
+
+  if (job != 0)
+    job->Release();
+  if (model != 0) {
+    if (model->m40 < 2)
+      (*(void(__thiscall**)(MwModel_mw*, unsigned))(*(void***)model)[0x170 / 4])(model, model->m4 >> 0x1f);
+    else
+      --model->m40;
+  }
+}
+
 // @ 0x00753540
 void TreeWalker_00753540::ForEach(float a, float b)
 {
@@ -6891,30 +7647,277 @@ void TreeWalker_00753540::ForEach(float a, float b)
   }
 }
 
+// @ 0x00753580
+cMWGroupInternal_00753580::~cMWGroupInternal_00753580()
+{
+  ((SP::MWGroupDtorStub*)this)->F();
+  void* p = m4c;
+  if (p != 0 && p != m5c)
+    operator_delete__(p);
+}
+
 // @ 0x00753630
-void FUN_00753630(void* self, int* p)
-{ (void)self; (void)p; }
+void FUN_00753630(void* self, void* param)
+{
+  char* base = (char*)self;
+  for (;;) {
+    // Phase 1: look for a free / matching slot among the 8 fixed ones.
+    QueueSlot_lq* found = 0;
+    do {
+      void* job = *(void**)param;
+      if (((*(uint32_t*)((char*)job + 4) >> 0xe) & 1) != 0 || found != 0) {
+        // A job with the busy bit (or we already found a slot): try to start.
+        if (((*(uint32_t*)((char*)job + 4) >> 0xe) & 1) == 0) {
+          int range[4];
+          int rc = ChunkFind_lq(&range[0], *(void**)(base + 0x28c),
+                                    *(void**)(base + 0x29c));
+          (void)rc;
+          if (range[0] != *(int*)(base + 0x29c)) {
+            StartFeedbackJobs_lq(found, (void**)range[0]);
+            helper_50180_lq((char*)base + 0x284, &range[0]);
+            FUN_00753270(*(void**)base, (LoadEntry_mw*)found);
+          }
+        }
+        return;
+      }
+
+      QueueSlot_lq* slot = (QueueSlot_lq*)(base + 4);
+      found = 0;
+      for (unsigned i = 0; i < 8; ++i) {
+        if (slot->m1c != 0 && slot->mpJob == job) {
+          found = slot;
+          break;
+        }
+        slot = (QueueSlot_lq*)((char*)slot + 0x50);
+      }
+
+      if (found == 0) {
+        uint32_t n = *(uint32_t*)(base + 0x2b0);
+        found = (QueueSlot_lq*)(base + 4 + n * 0x50);
+        ++n;
+        *(uint32_t*)(base + 0x2b0) = n;
+        if (n >= 8)
+          *(uint32_t*)(base + 0x2b0) = 0;
+      }
+
+      if (found->m1c == 0)
+        break;
+      FUN_00753270(*(void**)base, (LoadEntry_mw*)found);
+      if (found->m1c == 0)
+        break;
+    } while (true);
+  }
+}
 
 // @ 0x00753770
-void* FUN_00753770(void* self, void* a, void* b)
-{ (void)a; (void)b; return self; }
+void* CspElem_753770::Init(void* p0, void* p1)
+{
+  mpObject = p0;
+  mFlags = 0;
+  m8 = 0;
+  ma = 0;
+  m0c = g_f162eb0c;
+  m10 = g_f162eb10;
+  m14 = g_f162eb14;
+  m18 = g_f1485720;
+  m1c.Assign(&g_m162ec4c_s0075_3270);
+  m40 = 0;
+  m44.Init((int)p1);
+  mFlags |= 0x80000000u;
+  return this;
+}
 
 // @ 0x00753810
-void* FUN_00753810(void* self, void* a, int n, void* src)
-{ (void)a; (void)n; (void)src; return self; }
+void* CspVec_753810::Init(void* p0, int count, void** arr)
+{
+  m4 = 0;
+  m0 = 0;
+  m8.Init(p0, (void*)count);
+  for (int i = 0; i < count; i++) {
+    void* p = arr[i];
+    *(void**)((char*)m8.m44.mArray + i * 0x3c) = p;
+    if (p != 0) {
+      *(cSPTransform_s0075_3270*)((char*)m8.m44.mArray + i * 0x3c + 4) = *(cSPTransform_s0075_3270*)((char*)p + 8);
+      ++*(int*)((char*)p + 0x40);
+    }
+  }
+  return this;
+}
 
 // @ 0x00753880
-void cLoadQueue_ctor_00753880(void* self)
-{ (void)self; }
+cLoadQueue_00753880::cLoadQueue_00753880()
+: m0(0) {
+  mDeque.m[0] = 0; mDeque.m[1] = 0; mDeque.m[2] = 0; mDeque.m[3] = 0; mDeque.m[4] = 0;
+  mDeque.m[5] = 0; mDeque.m[6] = 0; mDeque.m[7] = 0; mDeque.m[8] = 0; mDeque.m[9] = 0;
+  mDeque.Init(0);
+  m2b0 = 0;
+}
+
+// @ 0x00753900
+cModelWorld_00753900::cModelWorld_00753900(unsigned arg0, unsigned char arg1)
+{
+  mvptr04 = (void*)0x013f1ab0;   // cILayer vtable
+  mvptr08 = (void*)0x013eb384;   // cListenerBase vtable
+  mvptr0c = (void*)0x013f1ab0;
+  mvptr10 = (void*)0x013ef094;   // hkReferencedObject vtable
+  m14     = 0;
+  m1e     = arg1;
+
+  // Final vtables / model-world header.
+  *(void**)this      = (void*)0x0140d790;
+  mvptr04            = (void*)0x0140d780;
+  mvptr08            = (void*)0x0140d770;
+  mvptr0c            = (void*)0x0140d760;
+  mvptr10            = (void*)0x0140d75c;
+  m18                = arg0;
+  m1c                = 0;
+  m1d                = 0;
+  m20                = 0;
+  m24                = 1;
+
+  cHierGrid_ctor_cw(m118);
+
+  m19c_prev = &m19c_prev;  m1a0_next = &m19c_prev;
+  m1a4_prev = &m1a4_prev;  m1a8_next = &m1a4_prev;
+  m1ac_prev = &m1ac_prev;  m1b0_next = &m1ac_prev;
+
+  eh_vec_ctor_cw(m1b4, 0x20, 8, (void*)Small7_Init_cw, (void*)Small7_Dtor_cw);
+
+  m2b4 = 0.0f;
+  m2b8 = g_f1485720;
+  m2bc = 0;
+  m2c0 = 0;
+  m2c4 = 0;
+  m2d0 = 0x3fffffff;
+  m2d4 = 0x3fffffff;
+  m2d8 = 0;
+  m2dc = 0;
+  m2e0 = 0;
+  m2ec = 0;
+  m2f0 = 0;
+  m2f4 = 0;
+  m300 = 0;
+  m304 = 0;
+  m308 = 0;
+
+  cLoadQueue_ctor_cw(&m314);
+
+  m5c8 = 0;
+  m5cc = 0;
+  eh_vec_ctor_cw(m5d0, 0x14, 0x10, (void*)IPtrVec_Ctor_cw, (void*)IPtrVec_Dtor_cw);
+  eh_vec_ctor_cw(m710, 0x14, 0x10, (void*)IPtrVec_Ctor_cw, (void*)IPtrVec_Dtor_cw);
+
+  m850 = g_f1537b10;
+  m854 = g_f1537b14;
+  m858 = g_f1537b18;
+  m85c = g_f1537b1c;
+  m860 = 0.0f;
+  m864 = 0;
+  m868 = 0;
+  m86c = 0;
+  m878 = g_f1470f1c;
+  m87c = g_f1485720;
+  m880 = 0;
+  m888 = g_f1473c70;
+  m88c = g_f1471064;
+  m890 = g_f1486110;
+  m894 = 0;
+  m898 = 0;
+  m89c = 0;
+  m8a0 = 0;
+  m8a4 = 0;
+  m8a8 = 0;
+  m8ac = 0;
+  m8b0 = 0;
+  m8b4 = 0;
+  m884 = 0xc8;
+}
 
 // @ 0x00753bb0
-void* FUN_00753bb0(void* self, void* a, void* b)
-{ (void)a; (void)b; return 0; }
+void* MwOwner_753bb0::Register(void* a, void* b)
+{
+  CspVec_753810* node;
+  for (;;) {
+    node = (CspVec_753810*)g_mwFreeList_162ed38;
+    if (node != 0) {
+      g_mwFreeList_162ed38 = *(void**)node;
+      break;
+    }
+    if (!g_fixedAlloc_162ed28.AddCore(0, 0))
+      break;
+  }
+  CspVec_753810* obj;
+  if (node != 0)
+    obj = (CspVec_753810*)node->Init(this, (int)a, (void**)b);
+  else
+    obj = 0;
+  void* next = *(void**)((char*)this + 0x1b0);
+  *(void**)((char*)obj + 0) = (char*)this + 0x1ac;
+  *(void**)((char*)obj + 4) = next;
+  *(void**)((char*)this + 0x1b0) = obj;
+  *(void**)next = obj;
+  return (char*)obj + 8;
+}
 
 // @ 0x00753c50
-void cModelWorld_FinalRelease_00753c50(void* self)
-{ (void)self; }
+void cModelWorld_753c50::FinalRelease(void** p2, char p3)
+{
+  *p2 = 0;
+  MwNode_753c50* node = (MwNode_753c50*)((char*)p2 - 8);
+  if (p3 != 0) {
+    if (m1c != 0) {
+      MwNode_753c50* mpN = node->mpNext;
+      MwNode_753c50* mpP = node->mpPrev;
+      mpN->mpPrev = mpP;
+      mpP->mpNext = mpN;
+      node->mpPrev = 0;
+      node->mpNext = 0;
+    } else {
+      cv1();
+    }
+    ((cMWGroupInternal_00753580*)node)->~cMWGroupInternal_00753580();
+    node->mpPrev = (MwNode_753c50*)g_mwFreeList_162ed38;
+    g_mwFreeList_162ed38 = node;
+    return;
+  }
+  if (m1c != 0) {
+    MwNode_753c50* mpN = node->mpNext;
+    MwNode_753c50* mpP = node->mpPrev;
+    mpN->mpPrev = mpP;
+    mpP->mpNext = mpN;
+    node->mpPrev = 0;
+    node->mpNext = 0;
+    void* tmp = (char*)node + 8;
+    mList.erase(&tmp);
+    ShutdownModel753c50(node);
+    m894 += 0xffffffffu;
+    if ((*(uint32_t*)((char*)node + 0x138) & 0x80000010u) == 0)
+      m898 += 0xffffffffu;
+  } else {
+    cv1();
+  }
+  ((NodeFc_753c50*)node)->F746fc0();
+  node->mpPrev = (MwNode_753c50*)g_mwFreeList_162ed18;
+  g_mwFreeList_162ed18 = node;
+}
 
 // @ 0x00753d10
-void* FUN_00753d10(void* self, void* a, void* b, void* c)
-{ (void)a; (void)b; (void)c; return 0; }
+void* MwOwner_753d10::Create(uint32_t key, void* unused, void* a2)
+{
+  (void)unused;
+  void* mem = operator_new_753d10(0x8b8, "Graphics", 0, 0, 0, 0);
+  IEventObject_753d10* obj = 0;
+  if (mem != 0)
+    obj = (IEventObject_753d10*)((Ctor753900*)mem)->ctor(this, a2);
+  typedef void (__thiscall *Fn174)(void*);
+  (*(Fn174*)((char*)(*(void***)obj) + 0x174))(obj);
+  void** slot = mMap.Subscript(key);
+  IEventObject_753d10* old = (IEventObject_753d10*)*slot;
+  if (obj != old) {
+    obj->ev0();
+    *slot = obj;
+    if (old != 0)
+      old->ev1();
+  }
+  return obj;
+}

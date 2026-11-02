@@ -17,11 +17,7 @@
 00747980 175 deque push_back approximated (block allocator details)
 00748530 327 FilterModelSphere approximated (transform/pick protocol guessed)
 00748ad0 241 model pick/distance helper approximated
-0074b170  -  partial: cLoadQueue reset/clear (307B, refcount/list walk) stubbed.
 0074b390  -  partial: eastl::partial_sort<cOccluder*> (254B template) stubbed.
-0074bda0  -  partial: slot-list find helper (152B) stubbed.
-0074be40  -  partial: slot-list erase-by-key (202B EH) stubbed.
-0074bf10  -  partial: vector::insert element 8B (262B) stubbed.
 0074c020  -  partial: vector::insert element 0x18B (334B) stubbed.
 00750180  -  partial: helper (386B) stubbed.
 00750310  -  partial: destructor helper (131B EH) stubbed.
@@ -34,10 +30,3 @@
 00751ff0   240  EH init (MessageServer handler registration + draw-set reset); skeleton only
 007520e0   703  EH shutdown (large object teardown); skeleton only
 007523a0  623  render-dispatch built from masked renderer/global-state calls and per-viewer draw lists; not yet byte-exact. Compiling skeleton.
-00753630  316  job queue lookup; skeleton only
-00753770  126  element constructor with inlined cSPTransform ctor; skeleton only
-00753810  108  vector-of-model-info constructor; skeleton only
-00753880  127  cLoadQueue constructor (EH); skeleton only
-00753bb0  155  fixed-allocator + intrusive node insert; skeleton only
-00753c50  187  cModelWorld::FinalRelease; skeleton only
-00753d10  174  operator new + ctor + assign (EH); skeleton only
