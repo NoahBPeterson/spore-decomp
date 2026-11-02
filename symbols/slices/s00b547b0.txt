@@ -1,1 +1,9 @@
+00b547b0 ?Init@cPoolHolderA@@QAEPAV1@HH@Z  # cPoolHolderA::Init migrated from s00b547b0 (verbatim, slice spelling)
+00b54890 ?Init@cPoolHolderB@@QAEPAV1@HH@Z  # cPoolHolderB::Init migrated from s00b547b0 (verbatim, slice spelling)
+00b54970 ?Init@cPoolHolderC@@QAEPAV1@HH@Z  # cPoolHolderC::Init migrated from s00b547b0 (verbatim, slice spelling)
+00b54a40 ?Lookup@cPairMapInner@@QAEPAIPBUSPKeyPair@@@Z  # cPairMapInner::Lookup migrated from s00b547b0 (verbatim, slice spelling)
+00b54b40 ?Insert@cPairMap@@QAEXIIM@Z  # cPairMap::Insert migrated from s00b547b0 (verbatim, slice spelling)
+00b54b80 ?FUN_00b54b80@@YAXXZ  # FUN_00b54b80 migrated from s00b547b0 (verbatim, slice spelling)
+00b54be0 ?FUN_00b54be0@@YAPAHPAHH@Z  # FUN_00b54be0 migrated from s00b547b0 (verbatim, slice spelling)
+00b54c40 ?FUN_00b54c40@@YAPAXPAUShapeObj@@MPAUShapeReq@@@Z  # FUN_00b54c40 migrated from s00b547b0 (verbatim, slice spelling)
 00b55020 SP::Havok::CreateShape  # also named in s00b56090.txt

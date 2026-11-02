@@ -1,0 +1,22 @@
+# source  symbol  va  flags
+../src/game/SPGonzago/_at_00b50000.cpp  ??4Obj501A0@@QAEAAUS24@@ABU1@@Z  00b501a0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00b50000.cpp  ?F@Obj50780@@QAEXIPAUSVec@@@Z  00b50780  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00b50000.cpp  ??1HkOwner@@UAE@XZ  00b50de0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/_at_00b50000.cpp  ?GetResourceTypes@@YGHPAII@Z  00b50e80  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/_at_00b50000.cpp  ?IsResourceType@@YG_NII@Z  00b50ea0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/_at_00b50000.cpp  ??_GcHavokResource@@UAEPAXI@Z  00b50ef0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/_at_00b50000.cpp  ?RegisterHavokResourceFactory@@YAXXZ  00b50ff0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/_at_00b50000.cpp  ?LoadPlanetTuning@@YAXPAUPropSet@@@Z  00b51460  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/_at_00b50000.cpp  ?Update@PlanetWatcher@@QAEXXZ  00b515e0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/_at_00b50000.cpp  _FUN_00b54200  00b54200  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00b50000.cpp  _FUN_00b54300  00b54300  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00b50000.cpp  _FUN_00b544c0  00b544c0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00b50000.cpp  _FUN_00b544f0  00b544f0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00b50000.cpp  _FUN_00b54520  00b54520  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00b50000.cpp  _FUN_00b545b0@4  00b545b0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00b50000.cpp  ?Convert@HkPtrConverter@@QAEXPAUHkPtrPair@@@Z  00b57680  /O2 /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00b50000.cpp  ?AddNode@HkNodePool@@QAEXPBUHkNodeData@@@Z  00b576d0  /O2 /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00b50000.cpp  ?Destroy@HkContainerOwner@@QAEXXZ  00b57720  /O2 /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00b50000.cpp  ?Remove@HkRefOwner@@QAEXPAUHkRangeSource@@@Z  00b579b0  /O2 /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00b50000.cpp  ?FUN_00b57bf0@@YAXPAX0M@Z  00b57bf0  /O2 /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00b50000.cpp  ?FUN_00b5a260@HavokSystem@@QAEXPAX0@Z  00b5a260  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include

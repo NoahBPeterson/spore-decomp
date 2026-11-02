@@ -1,0 +1,3 @@
+00b5a260 ?FUN_00b5a260@HavokSystem@@QAEXPAX0@Z  # HavokSystem::FUN_00b5a260 migrated from s00b5a260 (verbatim, slice spelling)
+00b5a2d0 ?FUN_00b5a2d0@HavokSystem@@QAEXXZ  # HavokSystem::FUN_00b5a2d0 migrated from s00b5a260 (verbatim, slice spelling)
+00b5a410 ?FUN_00b5a410@HavokSystem@@QAEXXZ  # HavokSystem::FUN_00b5a410 migrated from s00b5a260 (verbatim, slice spelling)
