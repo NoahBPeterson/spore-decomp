@@ -1,1 +1,4 @@
-# va  diff-bytes  reason
+# va  diff-bytes  reason (compiled with /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-)
+00d79080    8  RBTree16::InsertNode(RBNode16**, RBNodeBase*, const RBValue16*, char): flags: /nologo /c /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+00d79270  193  cTribeGameBehaviorParty::RemoveAgent(void**, 6 ints): remove one agent -- flags: /nologo /c /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+00d79350  122  RBTree::InsertOrFind(const U32*): look the 0x14-keyed pair up by key -- flags: /nologo /c /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-

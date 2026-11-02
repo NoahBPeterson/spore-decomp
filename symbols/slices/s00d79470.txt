@@ -1,5 +1,5 @@
-00d79470 SP::cTribeGameBehaviorParty::Action  # preserved; nonmatching
-00d79fd0 SP::cEditorGameObject::Destroy  # newly claimed; byte-exact
+00d79470 ?Action@cTribeGameBehaviorParty_s00d7_9470@SP@@UAEHXZ  # cTribeGameBehaviorParty_s00d7_9470::Action migrated from s00d79470 (verbatim, slice spelling)
+00d79fd0 ?Destroy@cEditorGameObject@SP@@QAEXXZ  # cEditorGameObject::Destroy migrated from s00d79470 (verbatim, slice spelling)
 00d7a020 ?InitEditorParams@SP@@YAXIIIIII@Z  # InitEditorParams migrated from s00d79470 (verbatim, slice spelling)
 00d7a070 SP::UpdateEditorSelection  # newly claimed; nonmatching
 00d7a260 SP::IsDanceFinisher  # newly claimed; nonmatching
