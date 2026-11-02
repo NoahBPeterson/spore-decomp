@@ -1,1 +1,8 @@
+00c53180 ?Update@cSPMissionFetch_s00c5_3180@@QAEHH@Z  # cSPMissionFetch_s00c5_3180::Update migrated from s00c53180 (verbatim, slice spelling)
+00c532d0 ?Fulfill@cSPMissionFetch_s00c5_3180@@QAEXXZ  # cSPMissionFetch_s00c5_3180::Fulfill migrated from s00c53180 (verbatim, slice spelling)
+00c53720 ?GetUIShortDescription@cSPMissionFetch_s00c5_3180@@QAEXPAVWString@@@Z  # cSPMissionFetch_s00c5_3180::GetUIShortDescription migrated from s00c53180 (verbatim, slice spelling)
+00c53800 ?GetFetchItemName@cSPMissionFetch_s00c5_3180@@QAEXPAVWString@@@Z  # cSPMissionFetch_s00c5_3180::GetFetchItemName migrated from s00c53180 (verbatim, slice spelling)
+00c53a50 ?push_back@cFetchSampleVector@@QAEXABUcFetchSample@@@Z  # cFetchSampleVector::push_back migrated from s00c53180 (verbatim, slice spelling)
 00c53a90 ?clear@cFetchSampleVector@@QAEXXZ  # cFetchSampleVector::clear migrated from s00c53180 (verbatim, slice spelling)
+00c53ac0 ?ReadFetchSamples@@YAXPAVcSerializer@@AAVcFetchSampleVector@@@Z  # ReadFetchSamples migrated from s00c53180 (verbatim, slice spelling)
+00c53bc0 ?PickFetchItem@cSPMissionFetch_s00c5_3180@@QAE_NXZ  # cSPMissionFetch_s00c5_3180::PickFetchItem migrated from s00c53180 (verbatim, slice spelling)

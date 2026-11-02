@@ -1,4 +1,4 @@
-00c54f90 ?VerifyTargetPlanet@cSPMissionFetch@@QAEDPAX0@Z  # char cSPMissionFetch::VerifyTargetPlanet(void*, void*)
+00c54f90 ?VerifyTargetPlanet@cSPMissionFetch_s00c5_4f90@@QAEDPAX0@Z  # cSPMissionFetch_s00c5_4f90::VerifyTargetPlanet migrated from s00c54f90 (verbatim, slice spelling)
 00c55130 ??0cMissionFindAliens@@QAE@XZ  # cMissionFindAliens::cMissionFindAliens migrated from s00c54f90 (verbatim, slice spelling)
 00c552d0 ?GetUIMediumDescription@cMissionFindAliens@@QAEXPAX@Z  # cMissionFindAliens::GetUIMediumDescription migrated from s00c54f90 (verbatim, slice spelling)
 00c55330 ?GetUILongDescription@cMissionFindAliens@@QAEXPAX@Z  # cMissionFindAliens::GetUILongDescription migrated from s00c54f90 (verbatim, slice spelling)

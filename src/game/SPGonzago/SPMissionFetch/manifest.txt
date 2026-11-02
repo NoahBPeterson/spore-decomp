@@ -12,4 +12,6 @@
 ../src/game/SPGonzago/SPMissionFetch.cpp  ?FindPlayerItem@@YA_NPAUcVec3Vector@@PAUcVec3@@@Z  00c52f20  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPMissionFetch.cpp  ?SP_SetMissionFlagDefault@@YAXPAX0@Z  00c52f80  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPMissionFetch.cpp  ?Destroy@cSPMissionFetch@@QAEPAU1@D@Z  00c53120  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPMissionFetch.cpp  ?push_back@cFetchSampleVector@@QAEXABUcFetchSample@@@Z  00c53a50  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPMissionFetch.cpp  ?clear@cFetchSampleVector@@QAEXXZ  00c53a90  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPMissionFetch.cpp  ?ReadFetchSamples@@YAXPAVcSerializer@@AAVcFetchSampleVector@@@Z  00c53ac0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
