@@ -118,6 +118,19 @@ struct TraitData {
 };
 // ---- items of slice s005709b0 end
 
+// ---- items of slice s005709b0_g7 begin (TODO(rewrite): local stubs, replace by canonical classes)
+struct Key12_s0057_09b0__g7 {
+    uint32_t mA;    // +0x00
+    uint32_t mB;    // +0x04
+    float mC;       // +0x08
+};
+struct cFeatureVector_s0057_09b0__g7 {
+    Key12_s0057_09b0__g7* mpBegin;     // +0x00
+    Key12_s0057_09b0__g7* mpEnd;       // +0x04
+    Key12_s0057_09b0__g7* mpCapacity;  // +0x08
+};
+// ---- items of slice s005709b0_g7 end
+
 // @ 0x00570400
 Elem1cB* UninitCopyB(Elem1cB* first, Elem1cB* last, Elem1cB* dst)
 {
@@ -313,6 +326,25 @@ float cTraitQuery::Op3(cFeatureVector* a, cFeatureVector* b)
     float nA = (float)sqrt((double)fB);
     float nB = (float)sqrt((double)fC);
     return (float)acos((double)(fA / (nA * nB)));
+}
+
+// @ 0x00571530
+bool IntersectWeights(const cFeatureVector_s0057_09b0__g7* a, const WeightVector* b)
+{
+    WeightPair* wtIt = b->mpBegin;
+    WeightPair* wtEnd = b->mpEnd;
+    Key12_s0057_09b0__g7* fit = a->mpBegin;
+    Key12_s0057_09b0__g7* fitEnd = a->mpEnd;
+
+    for (; fit != fitEnd; ++fit)
+    {
+        for (; wtIt != wtEnd && wtIt->mKey < fit->mA; ++wtIt)
+            ;
+        if (wtIt == wtEnd || wtIt->mKey != fit->mA)
+            return false;
+        fit->mC *= wtIt->mVal;
+    }
+    return true;
 }
 
 // @ 0x005715d0

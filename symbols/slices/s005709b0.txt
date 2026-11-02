@@ -2,7 +2,7 @@
 00570c40 ?Op1@cTraitQuery@@QAEMPAUcFeatureVector@@0@Z  # cTraitQuery::Op1 migrated from s005709b0 (verbatim, slice spelling)
 00570e50 ?Op2@cTraitQuery@@QAEMPAUcFeatureVector@@0@Z  # cTraitQuery::Op2 migrated from s005709b0 (verbatim, slice spelling)
 00571100 ?Op3@cTraitQuery@@QAEMPAUcFeatureVector@@0@Z  # cTraitQuery::Op3 migrated from s005709b0 (verbatim, slice spelling)
-00571530 IntersectWeights  # merge-join cFeatureVector (12-byte Key12) against a {u32 key,float weight} vector; multiplies mC by the matched weight, false on an unmatched key
+00571530 ?IntersectWeights@@YA_NPBUcFeatureVector_s0057_09b0__g7@@PBUWeightVector@@@Z  # IntersectWeights migrated from s005709b0 (verbatim, slice spelling)
 005715d0 ??MKey12@@QBE_NABU0@@Z  # Key12::operator< migrated from s005709b0 (verbatim, slice spelling)
 00571610 ??8Key12@@QBE_NABU0@@Z  # Key12::operator== migrated from s005709b0 (verbatim, slice spelling)
 00571640 ??0cFeatureVector@@QAE@XZ  # cFeatureVector::cFeatureVector migrated from s005709b0 (verbatim, slice spelling)
