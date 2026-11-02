@@ -1,1 +1,8 @@
+008120d0 ?Init@cSPUILayout@@QAE_NABVKey@ResourceMan@EA@@_NI@Z  # cSPUILayout::Init (callee of s00e3eca0, named from the dev publics; slice address comment)
+00e3eca0 ?WorldAt@ModelTree@@QAEPAMPBI@Z  # ModelTree::WorldAt migrated from s00e3eca0 (verbatim, slice spelling)
+00e3ed30 ?BoundsAt@ModelTree@@QAEPAMPBI@Z  # ModelTree::BoundsAt migrated from s00e3eca0 (verbatim, slice spelling)
+00e3ede0 ?FUN_00e3ede0@@YAXPAUKeyVector@@@Z  # FUN_00e3ede0 migrated from s00e3eca0 (verbatim, slice spelling)
 00e3ee30 Interp::Run  # keyframe state machine over map<int,IObj*>; GetVec4 slot 14, SetVec4 slot 27
+00e3f010 ?PreloadModelBounds@cSPUILayoutManager_s00e3_eca0@@QAEXXZ  # cSPUILayoutManager_s00e3_eca0::PreloadModelBounds migrated from s00e3eca0 (verbatim, slice spelling)
+00e3f2a0 ?FUN_00e3f2a0@@YI_NPAUcSPUILayoutManager_s00e3_eca0@@HPAUModelSelectionSource@@PAUcMWModel@@@Z  # FUN_00e3f2a0 migrated from s00e3eca0 (verbatim, slice spelling)
+00e3f7a0 ?FUN_00e3f7a0@@YIMPAUcSPUILayoutManager_s00e3_eca0@@HI@Z  # FUN_00e3f7a0 migrated from s00e3eca0 (verbatim, slice spelling)

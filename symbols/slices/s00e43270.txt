@@ -1,1 +1,8 @@
+004df420 ?GetAvatarProfile@cSPEditorSpeciesManager@SP@@QAEPBUcSpeciesProfile@2@XZ  # SP::cSPEditorSpeciesManager::GetAvatarProfile (callee of s00e43270, named from the dev publics; slice address comment)
+00e423a0 ?Update@cSPPalettePageUI@SP@@QAEXI@Z  # SP::cSPPalettePageUI::Update (callee of s00e43270, named from the dev publics; slice address comment)
+00e43270 ?Update@cTimelinePageHost@@QAEXII@Z  # cTimelinePageHost::Update migrated from s00e43270 (verbatim, slice spelling)
+00e43280 ?Reset@cUITimelineSubsystem@@QAEXXZ  # cUITimelineSubsystem::Reset migrated from s00e43270 (verbatim, slice spelling)
+00e434a0 ?CollectSpeciesModelKeys@@YAXPAUKeyVector_s00e4_3270@@@Z  # CollectSpeciesModelKeys migrated from s00e43270 (verbatim, slice spelling)
+00e435c0 ?CollectAllSpeciesModelKeys@@YAXPAUKeyVector_s00e4_3270@@@Z  # CollectAllSpeciesModelKeys migrated from s00e43270 (verbatim, slice spelling)
+00e43710 ?CollectCivilizationModelKeys@@YAXPAUKeyVector_s00e4_3270@@@Z  # CollectCivilizationModelKeys migrated from s00e43270 (verbatim, slice spelling)
 00e43830 cUITimelineSubsystem::cUITimelineSubsystem  # new("Simulator/SubSystem/UITimeline", 0x708) at 0x00b6245f constructs it

@@ -1,0 +1,2 @@
+00ba9370 ?GetEmpireByID@cStarManager@SP@@QBEPAVcEmpire@2@I@Z  # SP::cStarManager::GetEmpireByID (callee of s00e3cf60, named from the dev publics; slice address comment)
+00e3d9e0 ?RemapCursorKeys@CursorProvider@ImageCursorProvider@@QAEXIUCursorKeys@2@@Z  # CursorProvider::RemapCursorKeys migrated from s00e3cf60 (verbatim, slice spelling)

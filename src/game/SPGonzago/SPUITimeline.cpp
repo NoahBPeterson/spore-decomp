@@ -1,4 +1,4 @@
-// src/game/SPGonzago/SPUITimeline.cpp -- migrated from slice(s) s00e423a0, s00e42100, s00e40700, s00e3b9e0, s00e3a990, s00e39ab0, s00e38ce0, s00e37f90, s00e36ff0, s00e36150 by tools/migrate/rewrite.py
+// src/game/SPGonzago/SPUITimeline.cpp -- migrated from slice(s) s00e44200, s00e43270, s00e3eca0, s00e3cf60, s00e423a0, s00e42100, s00e40700, s00e3b9e0, s00e3a990, s00e39ab0, s00e38ce0, s00e37f90, s00e36ff0, s00e36150 by tools/migrate/rewrite.py
 // Object file: SPGonzago/SPUITimeline.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -16,6 +16,18 @@
 #include <new>
 #include <stddef.h>
 #include <intrin.h>
+#include "SP/cEmpire.h"
+#include "SP/cPlanetRecord.h"
+#include "cSPUILayoutManager.h"
+#include "EA/ResourceMan/Key.h"
+#include "SP/cCivilization.h"
+#include "SP/cGameNounManager.h"
+#include "SP/cIGonzagoSubsystem.h"
+#include "SP/cSPEditorSpeciesManager.h"
+#include "SP/cSPPalettePageUI.h"
+#include "SP/cSpeciesProfile.h"
+#include "SP/cConfigManager.h"
+#include "SP/cSPPaletteItem.h"
 
 // ---- items of slice s00e36150 begin (TODO(rewrite): local stubs, replace by canonical classes)
 struct RectF {
@@ -159,6 +171,7 @@ public:
 };
 uint32_t __cdecl SP_GetCurrentGameMode();        // 0x00b5b800
 void* __cdecl FUN_00b3d410();                    // 0x00b3d410
+uint32_t __cdecl GetGameModeHash();              // 0x00e36c80
 class cUITimedTooltip : public IBase {
 public:
     cUITimedTooltip();                                          // 0x00e36480
@@ -689,15 +702,27 @@ typedef unsigned int   u32;
 typedef unsigned short u16;
 typedef unsigned char  u8;
 typedef          int   s32;
+typedef unsigned long long u64_s00e3_8ce0;
 struct cSPUILayout_s00e3_8ce0;
 struct cSPUIAnimator_s00e3_8ce0;
 struct AnimRaw_s00e3_8ce0;
+struct AssetDir;
+struct Pool;
+cSPUILayout_s00e3_8ce0* __cdecl FUN_0067de90_s00e3_8ce0();          // 0x0067de90 - active layout
+void*        __cdecl FUN_0067cb30();          // 0x0067cb30
+void*        __cdecl SP_GetCurrentGameMode_s00e3_8ce0(); // 0x00b5b800
+void*        __cdecl SP_GameTimeManager();    // 0x00b3d380
 void*        __cdecl SPUIHelpers_GetMainWindowArea(void* out); // 0x00805ea0
 float        __cdecl SPUIHelpers_GetElapsedSeconds(float a, s32 b, void* c, s32 d); // 0x00805080
+float        __cdecl RandomFloatRange(float lo, float hi);     // 0x00572a10
 AnimRaw_s00e3_8ce0*     __cdecl SPUICreateWindowAnimationTargetPosition(AnimRaw_s00e3_8ce0* buf, void* wnd,
                                                              float a, float b, float c,
                                                              float d, s32 e); // 0x007f80d0
 void         __cdecl FUN_00571e80(void* stopwatch);            // 0x00571e80
+s32   __cdecl Time_Current();        // 0x00e5c520
+float __cdecl Time_SourceLevel();    // 0x00e5c530
+float __cdecl Time_TimelineForest(); // 0x00d386a0
+float __cdecl Time_TimelineSpace();  // 0x00cdb8b0
 struct Vec3 { float x, y, z; };
 struct Vec4_s00e3_8ce0 { float x, y, z, w; };
 struct AnimRaw_s00e3_8ce0 { u32 w[0x1a]; };
@@ -755,6 +780,19 @@ struct IVec {
   u32*  data;                            // +0x0c
   void  resize(u32 n);                   // 0x007eb820
 };
+struct Pool {
+  IVec* New(u32 size, u32 flags);        // 0x007ec160
+};
+struct AssetDir {
+  u8 GetServerId(void* key, u64_s00e3_8ce0* out, u8 flag); // 0x0054e530
+};
+struct AssetOwner {
+  u8        pad00[0x58];
+  AssetDir* dir;                         // +0x58
+};
+struct GameTimeMgr {
+  u64_s00e3_8ce0 GetTicks();                        // 0x00b316c0
+};
 struct Timeline_s00e3_8ce0 {
   u8          pad00[0x30];
   Wnd*        p30;                       // +0x030
@@ -787,10 +825,22 @@ struct Rand {
 };
 #define G_RAND          ((Rand*)0x01601760)
 #define G_LAST_RANDOM   (*(u32*)0x016acc60)
+static u32 NowMs(void)
+{
+  GameTimeMgr* m = (GameTimeMgr*)SP_GameTimeManager();
+  u64_s00e3_8ce0 t = m->GetTicks();
+  return (u32)(t / 1000);
+}
 // ---- items of slice s00e38ce0 end
 
 // ---- items of slice s00e39ab0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern uint32_t g_variantIntDefault;   // 0x015d9c68
+#define PVCAT2(a, b) a##b
+#define PVCAT(a, b) PVCAT2(a, b)
+#define PV virtual void PVCAT(pv_, __COUNTER__)();
+#define PV2 PV PV
+#define PV4 PV2 PV2
+#define PV8 PV4 PV4
 struct Variant {
     union {
         uint32_t  mData[4];
@@ -859,12 +909,40 @@ struct Image {
     void BindA(void* pWindow, void* pVector, int index);            // 0x00677df0
     void BindB(void* pWindow, void* pVector, uint32_t key, int index); // 0x00677d90
 };
+void* operator new(unsigned size, const char* name, int a, int b, int c, int d);   // 0x00f473a0
+struct IEditorData {
+    PV2 PV                         // slots 0..2
+    virtual void* FindService(uint32_t id);         // slot 3  (+0x0c)
+};
+struct IImageOwner {
+    PV4 PV                         // slots 0..4
+    virtual void SetImage(void* pImage);           // slot 5  (+0x14)
+};
+struct IEditorHost {
+    PV8 PV8 PV8 PV8 PV8 PV2        // slots 0..41
+    virtual IEditorData* GetEditorData();          // slot 42 (+0xa8)
+};
+void* CreateImageFromResource2(void* pKey, void** ppImage, int a, int b, int c);   // 0x00806230
 struct cCellRecord {
     uint8_t  mPad000[0xe4];
     uint32_t mTerrainKey;      // +0x0e4
     uint8_t  mPad0e8[0x08];
     uint32_t mTerrainKind;     // +0x0f0
 };
+struct cTerrainSphere {
+    uint8_t  mPad0000[0x10fc];
+    uint32_t mField10fc;       // +0x10fc
+    uint32_t mField1100;       // +0x1100
+    uint32_t mField1104;       // +0x1104
+    uint32_t mField1108;       // +0x1108
+    uint32_t GetTerrainIndex(uint32_t key);        // 0x00c756e0
+};
+struct cTerrainEditor {
+    cTerrainSphere* GetCurrentTerrainSphere();     // 0x00f67d90
+};
+cTerrainEditor* NounManager();                     // 0x00b3d300
+uint32_t FUN_00556440(uint32_t a, uint32_t b, uint32_t c, uint32_t d);   // 0x00556440
+int32_t  TerrainKeyToIndex(uint32_t key);           // 0x00e36f50
 void     FUN_00e39420(ChangeMessage* msg, int index, void* pOut);        // 0x00e39420
 template<class T>
 struct Vec {
@@ -1029,15 +1107,15 @@ public:
 
     cTimelineTrack* FindNextTrack(uint32_t nFlags, float* pProgress);
     cTimelineTrack* FindPreviousTrack(uint32_t nFlags, float* pProgress);
-    bool ShowNextPlayItem();
+    bool ShowNextPlayItem();  // 0x00e3b0b0 (cSPUITimeline::ShowNextPlayItem)
     void StartPlayback();
-    void RestorePlayback();
+    void RestorePlayback();  // 0x00e3b180 (cSPUITimeline::RestorePlayback)
     void HidePanels();
     void ShowPanels();
     bool LoadImage(cUIWindow* pWindow, void* pResource);
     bool HandleMessage(void* pMessage);
     uint32_t GetSelectedPaletteId();
-    void UpdateState();
+    void UpdateState();  // 0x00e3afb0 (cSPUITimeline::UpdateState)
 };
 class cTimelineTrack {
 public:
@@ -1048,17 +1126,38 @@ public:
 // ---- items of slice s00e3a990 end
 
 // ---- items of slice s00e3b9e0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C" unsigned int  g_16acc84;                          // 0x016acc84  one-time-init bitmask
+extern "C" float         g_16acc7c, g_16acc80;               // 0x016acc7c
+extern "C" float         g_16acc74, g_16acc78;               // 0x016acc74
+extern "C" float         g_16acc6c, g_16acc70;               // 0x016acc6c
+extern "C" float         g_16acc64, g_16acc68;               // 0x016acc64
+extern "C" unsigned int  DAT_016acd90, DAT_016acda0, DAT_016acdb0, DAT_016acdc0, DAT_016acdd0;
 extern "C" int           DAT_016acf2c;                       // 0x016acf2c
 extern "C" float         DAT_016acecc;                       // 0x016acecc
+extern "C" float         DAT_016acde0;                       // 0x016acde0
 extern "C" float         DAT_016acf0c;                       // 0x016acf0c
 extern "C" float         DAT_015a5890;                       // 0x015a5890
+extern "C" unsigned int  g_15a5984[12];                      // 0x015a5984..0x015a59b3 (mode colours)
+extern "C" unsigned int  PTR_PTR_015a59b4;                   // 0x015a59b4
 extern "C" unsigned int  DAT_013eb844;                       // 0x013eb844  vtable
+struct U3 { u32 x, y, z; };                                 // 12-byte uint triple (by value)
+struct V3 { float x, y, z; };                               // 12-byte float triple (by value)
+struct cSPHintMgr                                          // object returned by the argless getter
+{
+    void FUN_0067aaf0(U3 col, void* p, int a, V3 v, int b, int c);  // 0x0067aaf0 (__thiscall, ret 0x28)
+};
+int   SP_GetCurrentGameMode_s00e3_b9e0();                              // 0x00b5b800
+void* FUN_0067caf0();                                       // 0x0067caf0 (argless getter; args belong to FUN_0067aaf0)
+void  FUN_00677360(int);                                    // 0x00677360
+void* FUN_00e3a730(unsigned int, int);                      // 0x00e3a730
+int   FUN_00e36f50(unsigned int);                           // 0x00e36f50
 float* FUN_00e3a000(void*, Vector2*, Vector2*, Vector2*, Vector2*, float); // 0x00e3a000
 float* FUN_00e3a570(void*, float, float, Vector2*, float, Vector2*, float, float); // 0x00e3a570
 void* SP_MessageServer();                                   // 0x0067dcc0
 void* FUN_0067de90();                                       // 0x0067de90
 void  SP_cTelemetry_Reset(void*);                           // 0x007ebb60
 void  eastl_rbtree_DoNukeSubtree(unsigned int);             // 0x009a9600
+void  FUN_00e37840(unsigned int, ...);                      // 0x00e37840
 void  SlotMessage_Destruct(void*);                          // 0x00421cf0
 #define MEM(T, o) (*(T*)((char*)this + (o)))
 struct cUIManager
@@ -1621,6 +1720,980 @@ inline void AssignRef(IWindow_s00e4_23a0*& dst, IWindow_s00e4_23a0* src)
     }
 }
 // ---- items of slice s00e423a0 end
+
+// ---- items of slice s00e3cf60 begin (TODO(rewrite): local stubs, replace by canonical classes)
+struct ResourceKey {
+    uint32_t instanceID;
+    uint32_t typeID;
+    uint32_t groupID;
+    __forceinline ResourceKey() {}
+    __forceinline ResourceKey(uint32_t i, uint32_t t, uint32_t g) : instanceID(i), typeID(t), groupID(g) {}
+};
+namespace ImageCursorProvider {
+struct CursorData;
+}
+namespace ImageCursorProvider {
+struct CursorNodeValue {
+    uint32_t mID;                       // +0x00
+    uint32_t mPad04;                    // +0x04
+    uint32_t mPad08;                    // +0x08
+    CursorData* mpData;                 // +0x0c
+};
+}
+namespace ImageCursorProvider {
+struct CursorListNode {
+    CursorListNode* mpNext;             // +0x00
+    CursorListNode* mpPrev;             // +0x04
+    CursorNodeValue mValue;             // +0x08
+};
+}
+namespace ImageCursorProvider {
+struct CursorBucket {
+    uint32_t mKey;                      // +0x00
+    CursorListNode mAnchor;             // +0x04 (anchor.mpNext is the first record)
+};
+}
+namespace ImageCursorProvider {
+struct CursorKey {                      // resource key as stored on a cursor object
+    uint32_t typeID;                    // +0x00
+    uint32_t instanceID;                // +0x04
+    uint32_t groupID;                   // +0x08
+};
+}
+namespace ImageCursorProvider {
+struct CursorData {
+    uint32_t mPad00[3];                 // +0x00
+    CursorKey mKeyA;                    // +0x0c
+    CursorKey mKeyB;                    // +0x18
+};
+}
+namespace ImageCursorProvider {
+struct CursorKeys {
+    ResourceKey mSearch;                // +0x00
+    ResourceKey mReplace;               // +0x0c
+    void Apply(CursorNodeValue* value); // 0x00e39de0
+};
+}
+namespace ImageCursorProvider {
+class CursorMap {
+public:
+    struct Iterator {
+        CursorBucket* mpNode;           // +0x00
+        CursorBucket** mpBucket;        // +0x04
+    };
+    void find(Iterator& out, const uint32_t& key);   // 0x00db4780
+
+    uint32_t mPad00;                    // +0x00
+    CursorBucket** mpBuckets;           // +0x04
+    uint32_t mnBucketCount;             // +0x08
+};
+}
+namespace ImageCursorProvider {
+class CursorProvider {
+public:
+    void RemapCursorKeys(uint32_t key, CursorKeys keys);
+
+    uint32_t mPad00[3];                 // +0x00
+    CursorMap mCursorMap;               // +0x0c
+};
+}
+// ---- items of slice s00e3cf60 end
+
+// ---- items of slice s00e3eca0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C" void* FUN_01021260();                                   // GetActivePlanet
+struct RBNodeBase {
+    RBNodeBase* mpGreater;    // +0x00
+    RBNodeBase* mpLess;       // +0x04
+    RBNodeBase* mpParent;     // +0x08
+    uint8_t     mColor;       // +0x0c
+    uint8_t     mPad0d[3];    // +0x0d
+};
+struct RBAnchor {
+    RBNodeBase* mpLeft;       // +0x00  anchor address == end()
+    RBNodeBase* mpRight;      // +0x04
+    RBNodeBase* mpParent;     // +0x08  root
+    uint8_t     mColor;       // +0x0c
+    uint8_t     mPad0d[3];    // +0x0d
+    uint32_t    mLength;      // +0x10
+};
+struct ModelTree {
+    void*       mpAllocator;  // +0x00
+    RBAnchor    mAnchor;      // +0x04
+    uint32_t    mPad18;       // +0x18
+
+    float* WorldAt(const uint32_t* pKey);      // 0x00e3eca0
+    float* BoundsAt(const uint32_t* pKey);     // 0x00e3ed30
+};
+struct WorldNode : RBNodeBase {
+    uint32_t mKey;            // +0x10
+    float    mWidth;          // +0x14
+    float    mHeight;         // +0x18
+    uint32_t mPad1c;          // +0x1c
+};
+struct BoundsNode : RBNodeBase {
+    uint32_t mKey;            // +0x10
+    float    mLeft;           // +0x14
+    float    mTop;            // +0x18
+    float    mRight;          // +0x1c
+    float    mBottom;         // +0x20
+};
+struct WorldPair {
+    union { uint32_t mKey; float mKeyValue; };       // +0x00
+    union { float mWidth; uint32_t mWidthBits; };    // +0x04
+    union { float mHeight; uint32_t mHeightBits; };  // +0x08
+};
+struct BoundsPair {
+    union { uint32_t mKey; float mKeyValue; };       // +0x00
+    union { float mLeft;   uint32_t mLeftBits;   };  // +0x04
+    union { float mTop;    uint32_t mTopBits;    };  // +0x08
+    union { float mRight;  uint32_t mRightBits;  };  // +0x0c
+    union { float mBottom; uint32_t mBottomBits; };  // +0x10
+};
+struct InsertPos {
+    RBNodeBase* mpNode;       // +0x00
+};
+void __stdcall InsertWorldPair(WorldNode** ppResult, InsertPos pos,
+                               const WorldPair* pValue, bool bMulti);      // 0x00e3db00
+void __stdcall InsertBoundsPair(BoundsNode** ppResult, InsertPos pos,
+                                const BoundsPair* pValue, bool bMulti);    // 0x00e3dbd0
+void __stdcall DoNukeSubtree(void* pTree, RBNodeBase* pRoot);              // 0x009a9600
+RBNodeBase* FindInWorldTree(ModelTree* pTree, const uint32_t* pKey);       // 0x00e5c780
+struct KeyVector {
+    uint32_t* mpBegin;        // +0x00
+    uint32_t* mpEnd;          // +0x04
+    uint32_t* mpCapacity;     // +0x08
+    uint32_t* begin() { return mpBegin; }
+    uint32_t* end()   { return mpEnd; }
+    uint32_t* erase(uint32_t* pFirst, uint32_t* pLast);            // 0x0050f740
+};
+struct ModelSelector { void __thiscall Select(KeyVector* pKeys); };// 0x00acc800 (thiscall)
+void* FUN_00b3d480();                                              // model selector owner
+void  FUN_004f6b70(uint32_t* pFirst, uint32_t* pLast);             // eastl::sort
+uint32_t* FUN_004f6830(uint32_t* pFirst, uint32_t* pLast);         // eastl::unique
+struct ResourceKey_s00e3_eca0 {
+    uint32_t mType;           // +0x00
+    uint32_t mInstance;       // +0x04
+    uint32_t mGroup;          // +0x08
+};
+struct KeyInstance {
+    uint32_t mId;             // +0x00
+    float    mValue;          // +0x04
+    uint32_t mExtra;          // +0x08
+};
+struct Property {
+    virtual void v00();            // +0x00
+    virtual void Release();        // +0x04
+    uint8_t  mPad08[0x0a];         // +0x08
+    uint16_t mValueType;           // +0x12
+    bool*    GetBool();            // 0x0041e920
+    int*     GetInt();             // 0x0041e990
+};
+struct PropertyManager {
+virtual void v00();
+virtual void v01();
+virtual void v02();
+virtual void v03();
+virtual void v04();
+virtual void v05();
+virtual void v06();
+virtual void v07();
+    virtual void v08();
+    virtual bool GetPropertyByKey(uint32_t key, uint32_t prop, Property** ppOut);   // +0x24
+    virtual void v0a();                                                              // +0x28
+    virtual bool GetProperty(uint32_t key, uint32_t prop, Property** ppOut);          // +0x2c
+};
+struct KeyVector12 {
+    ResourceKey_s00e3_eca0* mpBegin;             // +0x00
+    ResourceKey_s00e3_eca0* mpEnd;               // +0x04
+    ResourceKey_s00e3_eca0* mpCapacity;          // +0x08
+};
+struct ModelManager {
+virtual void v00();
+virtual void v01();
+virtual void v02();
+virtual void v03();
+virtual void v04();
+virtual void v05();
+virtual void v06();
+virtual void v07();
+virtual void v08();
+virtual void v09();
+virtual void v10();
+virtual void v11();
+virtual void v12();
+virtual void v13();
+    virtual void GetModels(KeyVector12* pOut, const ResourceKey_s00e3_eca0* pKey, int bFlag);  // +0x38
+};
+struct IWin_s00e3_eca0 {
+virtual void v00();
+virtual void v01();
+virtual void v02();
+virtual void v03();
+virtual void v04();
+virtual void v05();
+virtual void v06();
+virtual void v07();
+virtual void v08();
+virtual void v09();
+virtual void v10();
+virtual void v11();
+virtual void v12();
+virtual void v13();
+    virtual float* GetRect();                                                      // +0x38
+};
+struct cSPUILayout_s00e3_eca0 {
+    cSPUILayout_s00e3_eca0();                                                // 0x00810000
+    bool Init(const ResourceKey_s00e3_eca0& key, bool bFlag, uint32_t id);   // 0x008120d0
+    IWin_s00e3_eca0* FindWindowByID(uint32_t id, int bFlag);                 // 0x008105b0
+    void Shutdown(uint32_t flags);                                // 0x00811ad0
+    ~cSPUILayout_s00e3_eca0();                                               // 0x00811fe0
+};
+struct ModelKeySet {
+    uint32_t   mPad00[2];           // +0x00
+    void**     mppBuckets;          // +0x08
+    uint32_t   mBucketCount;        // +0x0c
+};
+struct BoundsStringTree {
+    void*    mpAllocator;         // +0x00
+    RBAnchor mAnchor;             // +0x04
+    uint32_t mPad18;              // +0x18
+};
+struct cSPUILayoutManager_s00e3_eca0 {
+    uint32_t         mPad000[0x10];       // +0x000
+    IWin_s00e3_eca0*            mpSelectionTarget;   // +0x040
+    uint32_t         mPad044[0x3D];       // +0x044
+    ModelTree        m_worlds;            // +0x138
+    ModelTree        m_bounds;            // +0x154
+    uint32_t         mPad170[0x38];       // +0x170
+    BoundsStringTree m_boundsTree;        // +0x250
+    uint32_t         mPad26c[0xBD];       // +0x26c
+    ModelKeySet      m_keySet;            // +0x560
+    uint32_t         mPad570[0x04];       // +0x570
+
+    void ResetTree(ModelTree& tree);
+    void PreloadModelBounds();
+};
+struct ModelHash;
+void*    EA_ResourceMan_GetManager();                             // 0x0067dcd0
+PropertyManager* SP_PropertyManager();                            // 0x0067de30
+bool     SP_GetPropertyAsKeyInstance(Property* pProp, uint32_t prop,
+                                     uint32_t* pOut);             // 0x006a12a0
+float*   SPUIHelpers_GetBoundingScreenRect(float* pRect, IWin_s00e3_eca0* pWin,
+                                           char bFlag);           // 0x00808d20
+void     operator_delete(void* p);                                // 0x00f47380
+uint32_t g_layoutKeyGroup;                                        // 0x015a5930
+void cSPUILayoutManager_s00e3_eca0::ResetTree(ModelTree& tree)
+{
+    DoNukeSubtree(&tree, tree.mAnchor.mpParent);
+    RBNodeBase* pAnchor = (RBNodeBase*)&tree.mAnchor;
+    tree.mAnchor.mpLeft   = pAnchor;
+    tree.mAnchor.mpRight  = pAnchor;
+    tree.mAnchor.mpParent = 0;
+    tree.mAnchor.mColor   = 0;
+    tree.mAnchor.mLength  = 0;
+}
+struct cMWModel {
+    uint32_t     mPad00;            // +0x00
+    cMWModel*    mpNext;            // +0x04
+    uint32_t     mPad08[3];         // +0x08
+    KeyInstance* mpKeyInstance;     // +0x14
+    uint32_t     mPad18[0x16];      // +0x18
+    uint32_t     mSizeBudget;       // +0x70
+};
+struct ModelHash {
+    cMWModel* mpFirst;              // +0x00
+    uint32_t  mPad04;               // +0x04
+    uint32_t  mPad08;               // +0x08
+};
+struct SizeKeyVector {
+    uint32_t* mpBegin;              // +0x00
+    uint32_t* mpEnd;                // +0x04
+    uint32_t* mpCapacity;           // +0x08
+    void DoInsertKey4(uint32_t* pWhere, const uint32_t& value);   // 0x00b96600
+};
+struct ModelSelectionSource {
+    uint32_t  mKey;                 // +0x00
+    uint32_t* mpOwner;              // +0x04
+    uint32_t  mPad08;               // +0x08
+    uint32_t  mPad0c[0x17];         // +0x0c
+    uint32_t  mSizeBudget;          // +0x68
+};
+void FUN_00b41b90(void* pSet, void* pOut, const cMWModel* pModel, int bFlag);   // 0x00b41b90
+void FUN_00e48f30(void* pThis, const uint32_t* pBudget,
+                  uint32_t iChosen, uint32_t iTotal);                            // 0x00e48f30
+void FUN_00e47700(void* pThis, const void* pVec);                                // 0x00e47700
+void  FUN_007eb100(ModelHash* pThis);                                            // 0x007eb100
+void  SP_GetPropertyVector(Property* pProp, uint32_t id,
+                           void* pOutA, void* pOutB);                            // 0x006a0ae0
+float  FUN_00e37d70(void* pThis, float fValue);                    // 0x00e37d70
+float* FUN_00be0790(const uint32_t* pKey);                        // 0x00be0790
+void*  FUN_0067de90(int nSize);                                   // pool alloc (sized)
+uint32_t* FindInBoundsTree(BoundsStringTree* pTree, const uint32_t* pKey);  // 0x00e39fb0
+float  g_flHeightLimit;                                           // 0x016ace30
+// ---- items of slice s00e3eca0 end
+
+// ---- items of slice s00e43270 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern const float kTimelineF_0_5;           // 0x01471064 = 0.5
+extern const float kTimelineF_8;             // 0x013eeda0 = 8.0
+extern const float kTimelineF_0_25;          // 0x013eb8a0 = 0.25
+extern const float kTimelineF_5;             // 0x01481c9c = 5.0
+extern const float kTimelineF_0_3;           // 0x01481cd0 = 0.3
+extern const float kTimelineF_1;             // 0x01485720 = 1.0
+extern const float kTimelineF_2;             // 0x01470f1c = 2.0
+namespace EA {
+class Stopwatch_s00e4_3270 { public:
+    uint64_t mnStartTime;                  // +0x00
+    uint64_t mnTotalElapsedTime;           // +0x08
+    int mnUnits;                           // +0x10
+    float mfStopwatchCyclesToUnitsCoefficient;  // +0x14
+    Stopwatch_s00e4_3270(int units, bool bStartImmediately);  // 0x0093a560
+};
+}
+namespace EA {
+class LimitStopwatch_s00e4_3270 : public Stopwatch_s00e4_3270 { public:
+    uint64_t mnEndTime;                    // +0x18
+    LimitStopwatch_s00e4_3270(int units, uint32_t nLimit = 0, bool bStartImmediately = false)
+        : Stopwatch_s00e4_3270(units, false) { SetTimeLimit(nLimit, bStartImmediately); }
+    void SetTimeLimit(uint32_t nLimit, bool bStartImmediately);  // 0x0093a480
+};
+}
+namespace eastl {
+template <typename T> struct less_s00e4_3270 { less_s00e4_3270() {} };
+}
+namespace eastl {
+struct rbtree_node_base_s00e4_3270 {
+    rbtree_node_base_s00e4_3270* mpNodeRight;
+    rbtree_node_base_s00e4_3270* mpNodeLeft;
+    rbtree_node_base_s00e4_3270* mpNodeParent;
+    char mColor;
+};
+}
+namespace eastl {
+template <typename K>
+class rbtree_s00e4_3270 { public:
+    less_s00e4_3270<K> mCompare;                      // +0x00
+    rbtree_node_base_s00e4_3270 mAnchor;              // +0x04
+    uint32_t mnSize;                       // +0x14
+    uint32_t mAllocator;                   // +0x18 (EASTL allocator; nothing to construct)
+
+    rbtree_s00e4_3270() : mAnchor(), mnSize(0) { reset(); }
+    void reset() {
+        mAnchor.mpNodeRight = &mAnchor;
+        mAnchor.mpNodeLeft = &mAnchor;
+        mAnchor.mpNodeParent = 0;
+        mAnchor.mColor = 0;
+        mnSize = 0;
+    }
+};
+}
+namespace eastl {
+extern wchar_t gEmptyString[];             // 0x01667bac
+}
+namespace eastl {
+struct string16_s00e4_3270 {
+    wchar_t* mpBegin;
+    wchar_t* mpEnd;
+    wchar_t* mpCapacity;
+    uint32_t mAllocator;
+    string16_s00e4_3270() : mpBegin(&gEmptyString[0]), mpEnd(&gEmptyString[0]), mpCapacity(&gEmptyString[1]) {}
+};
+}
+struct RefObject {
+    virtual void Slot00();                 // +0x00
+    virtual void Release();                // +0x04
+    virtual void Slot08();
+    virtual void Slot0c();
+    virtual void Slot10();
+    virtual void Slot14();
+    virtual void Slot18();
+    virtual void Slot1c();
+    virtual void Slot20();
+    virtual void Slot24();                 // +0x24
+};
+struct cTimelineTrack_s00e4_3270 {
+    virtual void Slot00();                 // +0x00
+    virtual void Release();                // +0x04
+    void Flush();                          // 0x00e48f60 (thiscall, no arguments)
+};
+struct TraceVector {
+    cTimelineTrack_s00e4_3270** mpBegin;              // +0x00
+    cTimelineTrack_s00e4_3270** mpEnd;                // +0x04
+    cTimelineTrack_s00e4_3270** mpCapacity;           // +0x08
+    int size() const { return (int)(mpEnd - mpBegin); }
+    void erase(cTimelineTrack_s00e4_3270** first, cTimelineTrack_s00e4_3270** last);   // 0x00e25bd0 (thiscall, pops 8)
+};
+RefObject** DoCopyRefPtrs(RefObject** srcFirst, RefObject** srcLast, RefObject** dest);
+struct fixed_vector_allocator {
+    uint32_t mOverflowAllocator;           // +0x00
+    void* mpPoolBegin;                     // +0x04
+    fixed_vector_allocator(void* pNodeBuffer) : mpPoolBegin(pNodeBuffer) {}
+};
+struct RefPtrFixedVector6 {
+    RefObject** mpBegin;                   // +0x00
+    RefObject** mpEnd;                     // +0x04
+    RefObject** mpCapacity;                // +0x08
+    fixed_vector_allocator mAllocator;     // +0x0c
+    uint32_t mPad14;                       // +0x14
+    RefObject* mBuffer[6];                 // +0x18
+
+    // vector::DoInsertValues(position, n, value) instance @ 0x00cbc200
+    void DoInsertValues(RefObject** position, uint32_t n, RefObject* const& value);
+    uint32_t size() const { return (uint32_t)(mpEnd - mpBegin); }
+    void resize(uint32_t n) {
+        RefObject* value = 0;
+        if (n > size())
+            DoInsertValues(mpEnd, n - size(), value);
+        else
+            mpEnd = mpBegin + n;
+    }
+    // eastl::vector::erase(first, last): shift the tail down, release the tail slots, fix the end.
+    void erase(RefObject** first, RefObject** last) {
+        RefObject** pCursor = DoCopyRefPtrs(last, mpEnd, first);
+        while (pCursor < mpEnd) {
+            RefObject* pOld = *pCursor;
+            if (pOld != 0)
+                pOld->Release();
+            ++pCursor;
+        }
+        mpEnd -= (last - first);
+    }
+    void clear() { erase(mpBegin, mpEnd); }
+
+    explicit RefPtrFixedVector6(uint32_t n) : mAllocator(&mBuffer[0]) {
+        mpBegin = mpEnd = &mBuffer[0];
+        mpCapacity = mpBegin + 6;
+        resize(n);
+    }
+};
+struct Vector4 {
+    float x, y, z, w;
+    Vector4(const Vector4& v) : x(v.x), y(v.y), z(v.z), w(v.w) {}
+};
+extern const Vector4 kTimelineColorDefault;  // 0x015a5880 = (1, 1, 1, 0)
+struct TimelineStaticInfo;                   // 0x0154df28 (static object)
+extern TimelineStaticInfo gTimelineStaticInfo;
+struct TimelineSub560 {
+    uint32_t m00;                            // +0x00
+    TimelineStaticInfo* mpInfo;              // +0x04
+    uint32_t mCount;                         // +0x08
+    uint32_t m0c;                            // +0x0c
+    float mf10, mf14;                        // +0x10
+    TimelineSub560() : mf10(kTimelineF_1), mf14(kTimelineF_2) {
+        mCount = 1;
+        mpInfo = &gTimelineStaticInfo;
+        m0c = 0;
+    }
+};
+struct ITimelineIfc0 {                       // vptr at +0
+    virtual void Ifc0Slot0();
+    virtual void Ifc0Slot1() = 0;
+};
+struct ITimelineIfc1 {                       // vptr at +4
+    virtual void Ifc1Slot0() = 0;
+    virtual void Ifc1Slot1() = 0;
+    virtual void Ifc1Slot2();
+};
+namespace SP {
+class cIGonzagoSubsystem_s00e4_3270 { public: virtual void GonzagoSlot0(); };
+}
+namespace SP {
+struct RefCountTemplateInt { virtual void RefSlot0(); int mnRefCount; };
+}
+namespace SP {
+class cGonzagoSubsystem_s00e4_3270 : public cIGonzagoSubsystem_s00e4_3270, public RefCountTemplateInt { public:
+    int mPreModeTransitionState;
+    int mPostModeTransitionState;
+    int mCurrentTransition;
+    int mCurrentTransitionPhase;
+    cGonzagoSubsystem_s00e4_3270();                     // 0x00b5b960
+};
+}
+namespace SP {
+class cStringTokenTranslator_s00e4_3270 { public:
+    virtual void TokenSlot0();
+    int mnRefCount;
+    cStringTokenTranslator_s00e4_3270();                // 0x006b5870
+};
+}
+class cUITimelineSubsystem
+    : public ITimelineIfc0, public ITimelineIfc1, public SP::cGonzagoSubsystem_s00e4_3270,
+      public SP::cStringTokenTranslator_s00e4_3270 {
+public:
+    cUITimelineSubsystem();
+    void Reset();                            // 0x00e43280
+    virtual void Ifc0Slot0();
+    virtual void Ifc0Slot1();
+    virtual void Ifc1Slot0();
+    virtual void Ifc1Slot1();
+    virtual void Ifc1Slot2();
+    virtual void GonzagoSlot0();
+    virtual void RefSlot0();
+    virtual void TokenSlot0();
+
+    uint32_t m02c, m030, m034, m038, m03c, m040, m044, m048, m04c, m050, m054, m058, m05c,
+        m060, m064;                          // +0x02c
+    uint32_t m068, m06c, m070, m074;         // +0x068
+    uint32_t m078[4];                        // +0x078 (not initialised)
+    float m088, m08c, m090, m094, m098, m09c, m0a0, m0a4;  // +0x088
+    uint32_t m0a8;                           // +0x0a8
+    EA::Stopwatch_s00e4_3270 mStopwatch0b0;             // +0x0b0
+    eastl::rbtree_s00e4_3270<uint32_t> mMap0c8;         // +0x0c8
+    eastl::rbtree_s00e4_3270<uint32_t> mMap0e4;         // +0x0e4
+    eastl::rbtree_s00e4_3270<uint32_t> mMap100;         // +0x100
+    eastl::rbtree_s00e4_3270<uint32_t> mMap11c;         // +0x11c
+    eastl::rbtree_s00e4_3270<uint32_t> mMap138;         // +0x138
+    eastl::rbtree_s00e4_3270<uint32_t> mMap154;         // +0x154
+    uint32_t m170, m174, m178;               // +0x170
+    uint32_t m17c, m180;                     // +0x17c (not initialised)
+    uint32_t m184, m188, m18c;               // +0x184
+    uint32_t m190, m194;                     // +0x190 (not initialised)
+    RefPtrFixedVector6 mRefVec198;           // +0x198
+    uint32_t m1c8, m1cc, m1d0, m1d4, m1d8, m1dc, m1e0, m1e4;  // +0x1c8
+    Vector4 mColor1e8, mColor1f8, mColor208, mColor218, mColor228, mColor238;  // +0x1e8
+    bool m248, m249;                         // +0x248
+    float m24c;                              // +0x24c
+    eastl::rbtree_s00e4_3270<uint32_t> mMap250;         // +0x250
+    bool m26c, m26d;                         // +0x26c
+    float m270, m274, m278;                  // +0x270
+    bool m27c;                               // +0x27c
+    uint32_t m280, m284, m288;               // +0x280
+    float m28c, m290;                        // +0x28c
+    uint32_t m294, m298, m29c, m2a0, m2a4, m2a8, m2ac, m2b0, m2b4, m2b8, m2bc, m2c0, m2c4,
+        m2c8, m2cc, m2d0, m2d4, m2d8, m2dc, m2e0;  // +0x294
+    uint32_t m2e4[7];                        // +0x2e4 (not initialised)
+    int m300, m304;                          // +0x300
+    uint32_t m308, m30c, m310, m314, m318, m31c, m320, m324, m328;  // +0x308
+    int m32c;                                // +0x32c
+    uint32_t m330, m334, m338, m33c, m340, m344, m348, m34c;  // +0x330
+    EA::LimitStopwatch_s00e4_3270 mLimitStopwatch350;   // +0x350
+    bool m370, m371;                         // +0x370
+    uint32_t m374, m378, m37c, m380, m384, m388, m38c, m390, m394, m398, m39c, m3a0, m3a4,
+        m3a8, m3ac, m3b0, m3b4, m3b8, m3bc, m3c0, m3c4, m3c8, m3cc, m3d0, m3d4, m3d8, m3dc,
+        m3e0, m3e4, m3e8, m3ec, m3f0;        // +0x374
+    EA::Stopwatch_s00e4_3270 mStopwatch3f8;             // +0x3f8
+    float m410;                              // +0x410
+    EA::Stopwatch_s00e4_3270 mStopwatch418;             // +0x418
+    float m430;                              // +0x430
+    EA::Stopwatch_s00e4_3270 mStopwatch438;             // +0x438
+    float m450;                              // +0x450
+    bool m454;                               // +0x454
+    uint32_t m458;                           // +0x458
+    int m45c;                                // +0x45c
+    uint32_t m460, m464, m468;               // +0x460
+    uint32_t m46c, m470;                     // +0x46c (not initialised)
+    uint32_t m474, m478, m47c;               // +0x474
+    uint32_t m480, m484;                     // +0x480 (not initialised)
+    uint32_t m488;                           // +0x488
+    bool m48c;                               // +0x48c
+    uint32_t m490;                           // +0x490
+    float m494, m498;                        // +0x494
+    bool m49c;                               // +0x49c
+    uint32_t m4a0;                           // +0x4a0
+    EA::Stopwatch_s00e4_3270 mStopwatch4a8;             // +0x4a8
+    float m4c0;                              // +0x4c0
+    EA::Stopwatch_s00e4_3270 mStopwatch4c8;             // +0x4c8
+    float m4e0, m4e4;                        // +0x4e0
+    bool m4e8;                               // +0x4e8
+    EA::Stopwatch_s00e4_3270 mStopwatch4f0;             // +0x4f0
+    bool m508;                               // +0x508
+    EA::Stopwatch_s00e4_3270 mStopwatch510;             // +0x510
+    bool m528;                               // +0x528
+    EA::Stopwatch_s00e4_3270 mStopwatch530;             // +0x530
+    EA::Stopwatch_s00e4_3270 mStopwatch548;             // +0x548
+    TimelineSub560 mSub560;                  // +0x560
+    uint32_t m578;                           // +0x578
+    uint32_t m57c;                           // +0x57c (not initialised)
+    uint32_t m580, m584, m588, m58c, m590, m594, m598, m59c, m5a0, m5a4, m5a8, m5ac, m5b0,
+        m5b4, m5b8, m5bc, m5c0, m5c4, m5c8, m5cc, m5d0;  // +0x580
+    eastl::string16_s00e4_3270 mStr5d4, mStr5e4, mStr5f4, mStr604, mStr614, mStr624, mStr634, mStr644,
+        mStr654, mStr664, mStr674, mStr684, mStr694, mStr6a4, mStr6b4, mStr6c4, mStr6d4,
+        mStr6e4, mStr6f4;                    // +0x5d4
+};
+cUITimelineSubsystem::cUITimelineSubsystem()
+    : m02c(0), m030(0), m034(0), m038(0), m03c(0), m040(0), m044(0), m048(0), m04c(0),
+      m050(0), m054(0), m058(0), m05c(0), m060(0), m064(0),
+      m068(0), m06c(0), m070(0), m074(0),
+      m088(0.0f), m08c(0.0f), m090(0.0f), m094(0.0f), m098(0.0f), m09c(0.0f), m0a0(0.0f),
+      m0a4(0.0f), m0a8(0),
+      mStopwatch0b0(4, false),
+      m170(0), m174(0), m178(0), m184(0), m188(0), m18c(0),
+      mRefVec198(6),
+      m1c8(0), m1cc(0), m1d0(0), m1d4(0), m1d8(0), m1dc(0), m1e0(0), m1e4(0),
+      mColor1e8(kTimelineColorDefault), mColor1f8(kTimelineColorDefault),
+      mColor208(kTimelineColorDefault), mColor218(kTimelineColorDefault),
+      mColor228(kTimelineColorDefault), mColor238(kTimelineColorDefault),
+      m248(false), m249(false), m24c(0.0f),
+      m26c(false), m26d(false), m270(0.0f), m274(0.0f), m278(0.0f), m27c(false),
+      m280(0), m284(0), m288(0), m28c(0.0f), m290(0.0f),
+      m294(0), m298(0), m29c(0), m2a0(0), m2a4(0), m2a8(0), m2ac(0), m2b0(0), m2b4(0),
+      m2b8(0), m2bc(0), m2c0(0), m2c4(0), m2c8(0), m2cc(0), m2d0(0), m2d4(0), m2d8(0),
+      m2dc(0), m2e0(0),
+      m300(-1), m304(-1),
+      m308(0), m30c(0), m310(0), m314(0), m318(0), m31c(0), m320(0), m324(0), m328(0),
+      m32c(-1),
+      m330(0), m334(0), m338(0), m33c(0), m340(0), m344(0), m348(0), m34c(0),
+      mLimitStopwatch350(4),
+      m370(false), m371(false),
+      m374(0), m378(0), m37c(0), m380(0), m384(0), m388(0), m38c(0), m390(0), m394(0),
+      m398(0), m39c(0), m3a0(0), m3a4(0), m3a8(0), m3ac(0), m3b0(0), m3b4(0), m3b8(0),
+      m3bc(0), m3c0(0), m3c4(0), m3c8(0), m3cc(0), m3d0(0), m3d4(0), m3d8(0), m3dc(0),
+      m3e0(0), m3e4(0), m3e8(0), m3ec(0), m3f0(0),
+      mStopwatch3f8(5, false), m410(kTimelineF_0_5),
+      mStopwatch418(5, false), m430(kTimelineF_8),
+      mStopwatch438(5, false), m450(kTimelineF_0_25),
+      m454(false), m458(0), m45c(-1), m460(0), m464(0), m468(0),
+      m474(0), m478(0), m47c(0), m488(0), m48c(false), m490(0),
+      m494(0.0f), m498(0.0f), m49c(false), m4a0(0),
+      mStopwatch4a8(5, false), m4c0(0.0f),
+      mStopwatch4c8(5, false), m4e0(kTimelineF_5), m4e4(kTimelineF_0_3), m4e8(false),
+      mStopwatch4f0(5, false), m508(false),
+      mStopwatch510(5, false), m528(false),
+      mStopwatch530(5, false),
+      mStopwatch548(5, false),
+      m578(0),
+      m580(0), m584(0), m588(0), m58c(0), m590(0), m594(0), m598(0), m59c(0), m5a0(0),
+      m5a4(0), m5a8(0), m5ac(0), m5b0(0), m5b4(0), m5b8(0), m5bc(0), m5c0(0), m5c4(0),
+      m5c8(0), m5cc(0), m5d0(0) {
+}
+struct cSPPalettePageUI_s00e4_3270 {
+    void Update(uint32_t deltaMs);         // 0x00e423a0 (thiscall, pops 4)
+};
+struct cTimelinePageHost {
+    void Update(uint32_t arg0, uint32_t arg1);
+};
+struct TimelineHintSink {
+    void Notify(int a, int b) {
+        uint32_t* pVtable = *(uint32_t**)this;
+        typedef void (__thiscall* Fn)(TimelineHintSink*, int, int);
+        ((Fn)pVtable[0x7c / 4])(this, a, b);
+    }
+};
+struct TimelineEntry {
+    uint32_t m00, m04, m08;
+};
+struct ResourceKey_s00e4_3270 {
+    uint32_t mTypeID;                      // +0x00
+    uint32_t mInstanceID;                  // +0x04
+    uint32_t mGroupID;                     // +0x08
+};
+void SortKeys(ResourceKey_s00e4_3270* first, ResourceKey_s00e4_3270* last);              // 0x004f6b70 (eastl::sort)
+ResourceKey_s00e4_3270* UniqueKeys(ResourceKey_s00e4_3270* first, ResourceKey_s00e4_3270* last);    // 0x004f6830 (eastl::unique)
+struct KeyVector_s00e4_3270 {
+    ResourceKey_s00e4_3270* mpBegin;                  // +0x00
+    ResourceKey_s00e4_3270* mpEnd;                    // +0x04
+    ResourceKey_s00e4_3270* mpCapacity;               // +0x08
+    int size() const { return (int)(mpEnd - mpBegin); }
+    ResourceKey_s00e4_3270* end() const { return mpEnd; }
+    void reserve(int n);                   // 0x0041e4d0 (thiscall, pops 4)
+    void DoInsertKey(ResourceKey_s00e4_3270* position, const ResourceKey_s00e4_3270& key);   // 0x004e3e10
+    void push_back(const ResourceKey_s00e4_3270& key) {
+        if (mpEnd < mpCapacity)
+            ::new (mpEnd++) ResourceKey_s00e4_3270(key);
+        else
+            DoInsertKey(mpEnd, key);
+    }
+    void erase(ResourceKey_s00e4_3270* first, ResourceKey_s00e4_3270* last);
+};
+void KeyVector_s00e4_3270::erase(ResourceKey_s00e4_3270* first, ResourceKey_s00e4_3270* last)
+{
+    ResourceKey_s00e4_3270* pOldEnd = mpEnd;
+    ResourceKey_s00e4_3270* pTarget = first;
+    for (ResourceKey_s00e4_3270* pSource = last; pSource != pOldEnd; ++pSource)
+        *pTarget++ = *pSource;
+    ResourceKey_s00e4_3270* pNewEnd = pTarget;
+    for (ResourceKey_s00e4_3270* pIt = pNewEnd; pIt != mpEnd; ++pIt) {
+        // ResourceKey is a POD: nothing to destroy.
+    }
+    mpEnd -= (last - first);
+}
+struct cSpeciesProfile_s00e4_3270 {
+    uint8_t mPad00[0x504];                 // +0x000
+    ResourceKey_s00e4_3270 mModelKey;                 // +0x504
+};
+struct cGameNoun {
+    uint8_t mPad00[0xa4];                  // +0x000
+    cSpeciesProfile_s00e4_3270* mpProfile;            // +0x0a4
+    bool HasProperty(uint32_t propertyID);              // 0x00bf2cb0 (thiscall, pops 4)
+    ResourceKey_s00e4_3270* GetModelTypeKey(uint32_t propertyID);  // 0x00bf9770 (thiscall, pops 4)
+};
+struct SpVectorAllocatorBase {
+    void* mpAllocator;                     // +0x00
+};
+struct GameDataVector : SpVectorAllocatorBase {
+    cGameNoun** mpBegin;                   // +0x04
+    cGameNoun** mpEnd;                     // +0x08
+    cGameNoun** mpCapacity;                // +0x0c
+    int count() const { return (int)(mpEnd - mpBegin); }
+};
+struct cTerrainSphere_s00e4_3270 {
+    uint8_t mPad00[0x1168];                // +0x0000
+    ResourceKey_s00e4_3270 mKey1168;                  // +0x1168
+};
+class cGameNounManager_s00e4_3270 {
+public:
+    SpVectorAllocatorBase* GetGameDataVector(void* p0, void* p1, void* p2, void* p3, void* p4);  // 0x00b21340
+    cTerrainSphere_s00e4_3270* GetCurrentTerrainSphere();             // 0x00f67d90 (thiscall)
+};
+cGameNounManager_s00e4_3270* NounManager_s00e4_3270();                           // 0x00b3d300
+struct cKeyCollector { void FUN_00acc800(); };             // 0x00acc800 (thiscall, no arguments)
+cKeyCollector* __stdcall FUN_00b3d480(KeyVector_s00e4_3270* keys);    // 0x00b3d480 (callee pops its argument)
+class cSPEditorSpeciesManager_s00e4_3270 {
+public:
+    cSpeciesProfile_s00e4_3270* GetAvatarProfile();                   // 0x004df420 (thiscall)
+};
+cSPEditorSpeciesManager_s00e4_3270* GetSpeciesManager();              // 0x00401090 (cdecl)
+void* GetActivePlanet();
+class cSimSingleton {
+public:
+    uint8_t mData[0x100];                  // +0x000 (0x100-byte singleton)
+    cSimSingleton();                       // 0x00cc5a70
+    void FUN_00cc5bc0(KeyVector_s00e4_3270* keys);    // 0x00cc5bc0 (thiscall, pops 4)
+};
+extern cSimSingleton* gSimSingleton;       // 0x0169b054
+void* operator new(unsigned int size, const char* name, int a, int b, int c, int d);  // 0x00f473a0
+const uint32_t gCreaturePropertyIDs[7] = {
+    0x99e92f05, 0x4e3f7777, 0x47c10953, 0x72c49181, 0x2090a11b, 0xbc1041e6, 0xc15695da
+};
+// ---- items of slice s00e43270 end
+
+// ---- items of slice s00e44200 begin (TODO(rewrite): local stubs, replace by canonical classes)
+struct Vector4_s00e4_4200 { float x, y, z, w; };
+struct Object_s00e4_4200 {
+    virtual int  AddRef();                                 // +0x00 0x00432a50
+    virtual int  Release();                                // +0x04
+    virtual void Delete();                                 // +0x08
+};
+#define IOFF(n) virtual void v##n();
+struct IWindow_s00e4_4200 : Object_s00e4_4200 {
+    IOFF(0c) IOFF(10) IOFF(14) IOFF(18) IOFF(1c)
+    virtual void BeforeRelease();                          // +0x20
+    virtual void Unload();                                 // +0x24
+    IOFF(28) IOFF(2c) IOFF(30) IOFF(34) IOFF(38) IOFF(3c) IOFF(40)
+    IOFF(44) IOFF(48) IOFF(4c) IOFF(50) IOFF(54) IOFF(58)
+    virtual void SetShadeColor(uint32_t color);            // +0x5c
+    virtual void SetLayoutData(const Vector4_s00e4_4200* data);       // +0x60
+    IOFF(64) IOFF(68) IOFF(6c) IOFF(70) IOFF(74) IOFF(78)
+    virtual void SetVisible(int visible, int recursive);   // +0x7c
+    IOFF(80) IOFF(84) IOFF(88) IOFF(8c) IOFF(90) IOFF(94) IOFF(98) IOFF(9c)
+    IOFF(a0) IOFF(a4) IOFF(a8) IOFF(ac) IOFF(b0) IOFF(b4) IOFF(b8) IOFF(bc)
+    IOFF(c0) IOFF(c4) IOFF(c8) IOFF(cc) IOFF(d0) IOFF(d4) IOFF(d8) IOFF(dc)
+    IOFF(e0) IOFF(e4) IOFF(e8) IOFF(ec) IOFF(f0) IOFF(f4) IOFF(f8) IOFF(fc)
+    IOFF(100) IOFF(104)
+    virtual void SetParent(void* parent);                  // +0x108
+};
+class cSPUILayout_s00e4_4200 : public IWindow_s00e4_4200 {
+public:
+    bool      IsVisible();                                 // 0x00810070
+    void      SetVisibility(int visible);                  // 0x00810590
+    IWindow_s00e4_4200*  FindWindowByID(uint32_t id, bool recursive); // 0x008105b0
+    void      Shutdown(int everything);                    // 0x00811ad0
+};
+struct cSPPaletteItem : Object_s00e4_4200 {
+    void Shutdown();                                       // 0x005c6710
+};
+struct RefCountBase {
+    virtual int AddRef();                                  // +0x00
+    virtual int Release();                                 // +0x04
+};
+struct cTwoBaseObj {
+    virtual int  AddRef();                                 // +0x00
+    virtual int  Release();                                // +0x04
+    virtual void Delete();                                 // +0x08
+    uint32_t     mPad04[3];                                // +0x04 .. +0x0f
+    RefCountBase mSecond;                                  // +0x10
+};
+struct IFlaggedRelease {
+    virtual void Release(int keep);                        // +0x00
+};
+struct IEffectsHandler {
+    virtual void pad00();                                  // +0x00
+    virtual void Release();                                // +0x04
+    virtual void Delete(int unused);                       // +0x08
+    virtual void SetEnabled(int enabled);                  // +0x0c
+};
+struct KeyVec {
+    void* mpBegin;                                         // +0x00
+    void* mpEnd;                                           // +0x04
+    void* mpCap;                                           // +0x08
+    void  DoCopy(void* first, void* last);                 // 0x0050f740
+};
+struct cSPUILayoutManager_s00e4_4200 {
+    void SetAllWorldsVisibility(bool visible);             // 0x008106a0
+    void SetLayerVisible(uint32_t id, bool visible);       // 0x00810660
+};
+struct IMessageServer {
+    IOFF(00) IOFF(04) IOFF(08) IOFF(0c) IOFF(10)
+    virtual void BeginModal(uint32_t id, int a, int b);    // +0x14
+    virtual void SendMessage(uint32_t id, int a, int b, int c); // +0x18
+};
+struct cEffectsManager {
+    IOFF(00) IOFF(04) IOFF(08) IOFF(0c) IOFF(10) IOFF(14) IOFF(18)
+    IOFF(1c) IOFF(20) IOFF(24) IOFF(28)
+    virtual bool AddMessageHandler(uint32_t id, int priority,
+                                   IEffectsHandler** handlerOut); // +0x2c
+};
+struct cNotifier67dd50 {
+    IOFF(00) IOFF(04) IOFF(08) IOFF(0c) IOFF(10) IOFF(14) IOFF(18) IOFF(1c)
+    IOFF(20) IOFF(24) IOFF(28) IOFF(2c) IOFF(30) IOFF(34) IOFF(38) IOFF(3c)
+    IOFF(40) IOFF(44) IOFF(48) IOFF(4c) IOFF(50) IOFF(54) IOFF(58)
+    virtual void SetNotificationA(uint32_t id, int value); // +0x5c
+    virtual void SetNotificationB(uint32_t id, int value); // +0x60
+};
+struct cWindowManager {                                    // 0x0067caa0
+    IOFF(00) IOFF(04) IOFF(08) IOFF(0c) IOFF(10) IOFF(14) IOFF(18) IOFF(1c)
+    IOFF(20) IOFF(24) IOFF(28) IOFF(2c) IOFF(30) IOFF(34) IOFF(38) IOFF(3c)
+    IOFF(40) IOFF(44) IOFF(48) IOFF(4c) IOFF(50) IOFF(54) IOFF(58)
+    virtual void ShowWindow(int show, IWindow_s00e4_4200* window);    // +0x5c
+};
+struct cUIHints {
+    int  SetFlag(char flag, int value);                    // 0x0067c420
+};
+struct IAudioSystem_s00e4_4200 {                                      // EA::Audio::GetSystemAT result
+    IOFF(00) IOFF(04) IOFF(08) IOFF(0c) IOFF(10) IOFF(14) IOFF(18) IOFF(1c)
+    virtual void* GetListener();                           // +0x20
+};
+cSPUILayoutManager_s00e4_4200* SPUIHelpers_GetLayoutManager();        // 0x00805070
+void SPUIHelpers_BeginModal(IWindow_s00e4_4200* owner, int a, int b);  // 0x008099a0
+void SPUIHelpers_EndModal(IWindow_s00e4_4200* owner, int a, int b);    // 0x00809c50
+void SP_KillSetiEffects(uint32_t id, void* system);        // 0x00435ed0
+IMessageServer* SP_MessageServer_s00e4_4200();                        // 0x0067dcc0
+cEffectsManager* SP_EffectsManager();                      // 0x0067ddd0
+cWindowManager* SP_WindowManager_s00e4_4200();                        // 0x0067caa0
+IAudioSystem_s00e4_4200* EA_Audio_GetSystemAT();                      // 0x00a206f0
+extern "C" cNotifier67dd50* FUN_0067dd50();                // 0x0067dd50
+extern "C" cUIHints*        FUN_0067cac0();                // 0x0067cac0
+struct cSPUITimeline_s00e4_4200 {
+    uint32_t         mVtbl;                                // +0x00
+    uint32_t         mSelfWindow;                          // +0x04 head of the embedded window subobject
+    uint32_t         mPad08[3];                            // +0x08 .. +0x13
+    void*            mpCallbackTarget;                     // +0x14 handed to the render targets
+    uint32_t         mPad18;                               // +0x18
+    IFlaggedRelease* mpAnimatorA;                          // +0x1c
+    cSPUILayout_s00e4_4200*     mpLayoutA;                            // +0x20
+    cSPUILayout_s00e4_4200*     mpLayoutB;                            // +0x24
+    IWindow_s00e4_4200*         mpWindowA;                            // +0x28
+    IWindow_s00e4_4200*         mpWindowB;                            // +0x2c
+    cSPUILayout_s00e4_4200*     mpLayout;                             // +0x30 the timeline layout Show() drives
+    uint32_t         mPad34;                               // +0x34
+    IWindow_s00e4_4200*         mpModalOwner;                         // +0x38
+    IWindow_s00e4_4200*         mpCreatureWindow;                     // +0x3c
+    uint32_t         mPad40;                               // +0x40
+    IWindow_s00e4_4200*         mpTribeWindow;                        // +0x44
+    uint32_t         mPad48;                               // +0x48
+    IWindow_s00e4_4200*         mpCivWindow;                          // +0x4c
+    uint32_t         mPad50[2];                            // +0x50 .. +0x57
+    IWindow_s00e4_4200*         mpCreatureButton;                     // +0x58
+    uint32_t         mPad5c;                               // +0x5c
+    IWindow_s00e4_4200*         mpTribeButton;                        // +0x60
+    uint32_t         mPad64[0x56];                         // +0x64 .. +0x1bb
+    cSPPaletteItem*  mpPaletteItem;                        // +0x1bc
+    Object_s00e4_4200*          mpPaletteInfo;                        // +0x1c0
+    IWindow_s00e4_4200*         mpPaletteRollover;                    // +0x1c4
+    IWindow_s00e4_4200*         mpEventRollover;                      // +0x1c8
+    uint32_t         mPad1cc[0x28];                        // +0x1cc .. +0x26b
+    bool             mbCreatureWindowShown;                // +0x26c
+    bool             mbTribeWindowShown;                   // +0x26d
+    uint8_t          mPad26e[0x0e];                        // +0x26e .. +0x27b
+    bool             mbPanelReady;                         // +0x27c
+    uint8_t          mPad27d[3];                           // +0x27d .. +0x27f
+    int              mnPanelState;                         // +0x280
+    int              mnShowMode;                           // +0x284
+    uint32_t         mPad288[3];                           // +0x288 .. +0x293
+    int              mnGameLevel;                          // +0x294
+    uint32_t         mPad298[0x23];                        // +0x298 .. +0x323
+    void*            mpMsgServer;                          // +0x324
+    void*            mpMsgOwner;                           // +0x328
+    void*            mpMsgIDs;                             // +0x32c
+    IEffectsHandler* mpEffectsHandler;                     // +0x330
+    unsigned         mMsgFlags;                            // +0x334
+    cSPUILayout_s00e4_4200*     mpLayoutC;                            // +0x338
+    cSPUILayout_s00e4_4200*     mpLayoutD;                            // +0x33c
+    uint32_t         mPad340[9];                           // +0x340 .. +0x363
+    IWindow_s00e4_4200*         mpRowWindows[10];                     // +0x364
+    IWindow_s00e4_4200*         mpRowIcons[10];                       // +0x38c
+    cTwoBaseObj*     mpRowData;                            // +0x3b4
+    IWindow_s00e4_4200*         mpRowExtras[10];                      // +0x3b8
+    uint32_t         mPad3e0[26];                          // +0x3e0 .. +0x447
+    IFlaggedRelease* mpAnimatorB;                          // +0x448
+    uint32_t         mPad44c;                              // +0x44c
+    KeyVec           mCellKeys;                            // +0x450
+    uint32_t         mPad45c[2];                           // +0x45c .. +0x463
+    KeyVec           mCreatureKeys;                        // +0x464
+
+    IWindow_s00e4_4200* Self() { return (IWindow_s00e4_4200*)&mSelfWindow; }     // the embedded window at +0x04
+
+    void Show(int show);                                   // 0x00e44200
+    bool HandleTimelineMessage(uint32_t msgID, void* payload); // 0x00e449b0
+    void FUN_00e37910();                                   // 0x00e37910
+    void FUN_00e3e7f0();                                   // 0x00e3e7f0
+    void FUN_00e42100();                                   // 0x00e42100
+    void FUN_00e43280();                                   // 0x00e43280
+};
+static __forceinline void HideLevelWindow(cSPUILayout_s00e4_4200* layout, uint32_t id)
+{
+    if (layout->FindWindowByID(id, 1))
+        layout->FindWindowByID(id, 1)->SetVisible(1, 0);
+}
+static __forceinline void ShowWindowByID(cSPUILayout_s00e4_4200* layout, uint32_t id, int visible)
+{
+    layout->FindWindowByID(id, 1)->SetVisible(1, visible);
+}
+static __forceinline void ClearWindowRect(cSPUILayout_s00e4_4200* layout, uint32_t id)
+{
+    IWindow_s00e4_4200* hidden = layout->FindWindowByID(id, 1);
+    hidden->SetVisible(1, 0);
+    IWindow_s00e4_4200* cleared = layout->FindWindowByID(id, 1);
+    Vector4_s00e4_4200 empty = { 0.0f, 0.0f, 0.0f, 0.0f };
+    cleared->SetLayoutData(&empty);
+}
+static __forceinline void TintWindow(cSPUILayout_s00e4_4200* layout, uint32_t id)
+{
+    layout->FindWindowByID(id, 1)->SetShadeColor(0xff4b4b4b);
+}
+// ---- items of slice s00e44200 end
+
+// @ 0x00e36c80
+uint32_t __cdecl GetGameModeHash()
+{
+    switch (SP_GetCurrentGameMode()) {
+    case 0x1654c00:
+        return 0xa426730b;
+    case 0x1654c01:
+        return 0xad56080c;
+    case 0x1654c02:
+        return 0xf71fa311;
+    case 0x1654c04:
+        return 0xbeb528cb;
+    case 0x1654c05:
+        return 0x2db6dad3;
+    default:
+        return 0;
+    }
+}
+
+// @ 0x00e36e20
+bool cUITimedTooltip::UpdateD()
+{
+    EA::Stopwatch_s00e3_6150& sw = m_sw4c8;
+    if ((double)sw.GetElapsedTimeFloat() * sw.m_fRate > m_fThreshold4e0) {
+        if (m_pAnimator458->Empty()) {
+            sw.SetBoolProperty();
+            return true;
+        }
+    }
+    return false;
+}
+
+// @ 0x00e36e80
+bool cUITimedTooltip::UpdateE()
+{
+    EA::Stopwatch_s00e3_6150& sw = m_sw4a8;
+    if ((double)sw.GetElapsedTimeFloat() * sw.m_fRate > m_fThreshold4c0) {
+        sw.SetBoolProperty();
+        return true;
+    }
+    return false;
+}
 
 // @ 0x00e36ed0
 int32_t __cdecl GetGameLevel(int32_t nGameMode)
@@ -2650,6 +3723,17 @@ void __fastcall FUN_00e39350(Timeline_s00e3_8ce0* self, void* dummy, s32 v)
   }
 }
 
+// @ 0x00e393b0
+s32 __fastcall FUN_00e393b0(Timeline_s00e3_8ce0* self, void* dummy)
+{
+  (void)dummy;
+  if (self->b370 != 0) goto ret1;
+  if (self->p30 != 0 && self->p30->IsVisible() != 0) goto ret1;
+  return 0;
+ret1:
+  return 1;
+}
+
 // @ 0x00e393e0
 void FUN_00e393e0(void* node, s32 idx, Vec3* v)
 {
@@ -2666,6 +3750,171 @@ void FUN_00e39420(void* node, s32 idx, Vec3* v)
   *(u32*)&v->y = ((IVec*)node)->data[idx];
   *(u32*)&v->x = ((IVec*)node)->data[idx + 1];
   *(u32*)&v->z = ((IVec*)node)->data[idx + 2];
+}
+
+// @ 0x00e39450
+void FUN_00e39450(void* node, void* key1, void* key2)
+{
+  AssetOwner* owner = (AssetOwner*)FUN_0067cb30();
+  AssetDir* dir = owner->dir;
+  if (dir == 0) return;
+
+  u64_s00e3_8ce0 id = (u64_s00e3_8ce0)-1;
+  if (dir->GetServerId(key1, &id, 0) && id != (u64_s00e3_8ce0)-1) {
+    ((IVec*)node)->data[3] = ((u32*)&id)[1];
+    ((IVec*)node)->data[4] = ((u32*)&id)[0];
+  }
+  if (dir->GetServerId(key2, &id, 0) && id != (u64_s00e3_8ce0)-1) {
+    ((IVec*)node)->data[5] = ((u32*)&id)[1];
+    ((IVec*)node)->data[6] = ((u32*)&id)[0];
+  }
+}
+
+// @ 0x00e394f0
+IVec* FUN_00e394f0(u32 id, Vec3* p2, Vec3* p3, Vec3* p4, Vec3* p5)
+{
+  IVec* first = 0;
+  u8 b1 = (SP_GetCurrentGameMode_s00e3_8ce0() == (void*)0x01654c00) ||
+          (SP_GetCurrentGameMode_s00e3_8ce0() == (void*)0x00dbdba1);
+
+  Pool* pool = (Pool*)FUN_0067de90_s00e3_8ce0();
+  if (pool == 0) goto done;
+
+  first = pool->New(0x0c, 0);
+  first->resize(0x1b);
+
+  ((IVec*)first)->data[0] = id;
+  float t = b1 ? Time_SourceLevel() : RandomFloatRange(-0.15f, 0.15f);
+  *(float*)&((IVec*)first)->data[1] = t;
+  ((IVec*)first)->data[2] = b1 ? (u32)(Time_Current() / 1000) : NowMs();
+
+  ((IVec*)first)->data[3] = *(u32*)&p2->y;
+  ((IVec*)first)->data[4] = *(u32*)&p2->x;
+  ((IVec*)first)->data[5] = *(u32*)&p2->z;
+  ((IVec*)first)->data[6] = *(u32*)&p3->y;
+  ((IVec*)first)->data[7] = *(u32*)&p3->x;
+  ((IVec*)first)->data[8] = *(u32*)&p3->z;
+  ((IVec*)first)->data[0x10] = *(u32*)&p4->y;
+  ((IVec*)first)->data[0x11] = *(u32*)&p4->x;
+  ((IVec*)first)->data[0x12] = *(u32*)&p4->z;
+  ((IVec*)first)->data[0x0d] = *(u32*)&p5->y;
+  ((IVec*)first)->data[0x0e] = *(u32*)&p5->x;
+  ((IVec*)first)->data[0x0f] = *(u32*)&p5->z;
+
+  IVec* second = pool->New(6, 0);
+  second->resize(0x18);
+  ((IVec*)second)->data[0] = id;
+  *(float*)&((IVec*)second)->data[1] = t;
+  ((IVec*)second)->data[2] = b1 ? (u32)(Time_Current() / 1000) : NowMs();
+
+  FUN_00e39450(second, p2, p3);
+  ((IVec*)second)->data[0x0e] = *(u32*)&p4->y;
+  ((IVec*)second)->data[0x0f] = *(u32*)&p4->x;
+  ((IVec*)second)->data[0x10] = *(u32*)&p4->z;
+  ((IVec*)second)->data[0x0b] = *(u32*)&p5->y;
+  ((IVec*)second)->data[0x0c] = *(u32*)&p5->x;
+  ((IVec*)second)->data[0x0d] = *(u32*)&p5->z;
+
+done:
+  return first;
+}
+
+// @ 0x00e39710
+IVec* FUN_00e39710(u32 id, Vec3* p2, Vec3* p3, Vec3* p4, Vec3* p5)
+{
+  IVec* first = 0;
+  u8 b1 = (SP_GetCurrentGameMode_s00e3_8ce0() == (void*)0x01654c01) ||
+          (SP_GetCurrentGameMode_s00e3_8ce0() == (void*)0x00dbdba1);
+
+  Pool* pool = (Pool*)FUN_0067de90_s00e3_8ce0();
+  if (pool == 0) goto done;
+
+  first = pool->New(0x0c, 0);
+  first->resize(0x1b);
+
+  ((IVec*)first)->data[0] = id;
+  float t = b1 ? Time_TimelineForest() : RandomFloatRange(-0.15f, 0.15f);
+  *(float*)&((IVec*)first)->data[1] = t;
+  ((IVec*)first)->data[2] = NowMs();
+
+  ((IVec*)first)->data[3] = *(u32*)&p2->y;
+  ((IVec*)first)->data[4] = *(u32*)&p2->x;
+  ((IVec*)first)->data[5] = *(u32*)&p2->z;
+  ((IVec*)first)->data[6] = *(u32*)&p3->y;
+  ((IVec*)first)->data[7] = *(u32*)&p3->x;
+  ((IVec*)first)->data[8] = *(u32*)&p3->z;
+  ((IVec*)first)->data[0x10] = *(u32*)&p4->y;
+  ((IVec*)first)->data[0x11] = *(u32*)&p4->x;
+  ((IVec*)first)->data[0x12] = *(u32*)&p4->z;
+  ((IVec*)first)->data[0x0d] = *(u32*)&p5->y;
+  ((IVec*)first)->data[0x0e] = *(u32*)&p5->x;
+  ((IVec*)first)->data[0x0f] = *(u32*)&p5->z;
+
+  IVec* second = pool->New(6, 0);
+  second->resize(0x18);
+  ((IVec*)second)->data[0] = id;
+  *(float*)&((IVec*)second)->data[1] = t;
+  ((IVec*)second)->data[2] = NowMs();
+
+  FUN_00e39450(second, p2, p3);
+  ((IVec*)second)->data[0x0e] = *(u32*)&p4->y;
+  ((IVec*)second)->data[0x0f] = *(u32*)&p4->x;
+  ((IVec*)second)->data[0x10] = *(u32*)&p4->z;
+  ((IVec*)second)->data[0x0b] = *(u32*)&p5->y;
+  ((IVec*)second)->data[0x0c] = *(u32*)&p5->x;
+  ((IVec*)second)->data[0x0d] = *(u32*)&p5->z;
+
+done:
+  return first;
+}
+
+// @ 0x00e398e0
+IVec* FUN_00e398e0(u32 id, Vec3* p2, Vec3* p3, Vec3* p4, u32 v1, u32 v2, u32 v3)
+{
+  IVec* first = 0;
+  u8 b1 = (SP_GetCurrentGameMode_s00e3_8ce0() == (void*)0x01654c02) ||
+          (SP_GetCurrentGameMode_s00e3_8ce0() == (void*)0x00dbdba1);
+
+  Pool* pool = (Pool*)FUN_0067de90_s00e3_8ce0();
+  if (pool == 0) goto done;
+
+  first = pool->New(0x0c, 0);
+  first->resize(0x1b);
+
+  ((IVec*)first)->data[0] = id;
+  float t = b1 ? Time_TimelineSpace() : RandomFloatRange(-0.15f, 0.15f);
+  *(float*)&((IVec*)first)->data[1] = t;
+  ((IVec*)first)->data[2] = NowMs();
+
+  ((IVec*)first)->data[3] = *(u32*)&p2->y;
+  ((IVec*)first)->data[4] = *(u32*)&p2->x;
+  ((IVec*)first)->data[5] = *(u32*)&p2->z;
+  ((IVec*)first)->data[6] = *(u32*)&p3->y;
+  ((IVec*)first)->data[7] = *(u32*)&p3->x;
+  ((IVec*)first)->data[8] = *(u32*)&p3->z;
+  ((IVec*)first)->data[0x10] = *(u32*)&p4->y;
+  ((IVec*)first)->data[0x11] = *(u32*)&p4->x;
+  ((IVec*)first)->data[0x12] = *(u32*)&p4->z;
+  ((IVec*)first)->data[0x0b] = v1;
+  ((IVec*)first)->data[0x0c] = v2;
+  ((IVec*)first)->data[0x1a] = v3;
+
+  IVec* second = pool->New(6, 0);
+  second->resize(0x18);
+  ((IVec*)second)->data[0] = id;
+  *(float*)&((IVec*)second)->data[1] = t;
+  ((IVec*)second)->data[2] = NowMs();
+
+  FUN_00e39450(second, p2, p3);
+  ((IVec*)second)->data[0x0e] = *(u32*)&p4->y;
+  ((IVec*)second)->data[0x0f] = *(u32*)&p4->x;
+  ((IVec*)second)->data[0x10] = *(u32*)&p4->z;
+  ((IVec*)second)->data[9]  = v1;
+  ((IVec*)second)->data[0x0a] = v2;
+  ((IVec*)second)->data[0x17] = v3;
+
+done:
+  return first;
 }
 
 // @ 0x00e39de0
@@ -2706,6 +3955,24 @@ bool IntPropertyBinding::SetValue(IPropertyList* pList)
         return true;
     }
     return false;
+}
+
+// @ 0x00e3a000
+void EvalCatmullRom2D(float* pOut, const float* p0, const float* p1, const float* p2, const float* p3, float t)
+{
+    pOut[0] = (2.0f * p1[0] + (p2[0] - p0[0]) * t
+               + (2.0f * p0[0] - 5.0f * p1[0] + 4.0f * p2[0] - p3[0]) * t * t
+               + (p3[0] - p0[0] + 3.0f * p1[0] - 3.0f * p2[0]) * t * t * t) * 0.5f;
+    pOut[1] = (2.0f * p1[1] + (p2[1] - p0[1]) * t
+               + (2.0f * p0[1] - 5.0f * p1[1] + 4.0f * p2[1] - p3[1]) * t * t
+               + (p3[1] - p0[1] + 3.0f * p1[1] - 3.0f * p2[1]) * t * t * t) * 0.5f;
+}
+
+// @ 0x00e3a230
+int cBigEditorObject::GetDrawPriority()
+{
+    bool bVisible = mFlag36c || (mSub24.mpLayout && mSub24.mpLayout->IsVisible());
+    return bVisible ? 0x87 : 0;
 }
 
 // @ 0x00e3a270
@@ -2796,6 +4063,134 @@ void cBigEditorObject::OnChange(uint32_t messageId, ChangeMessage* msg)
     }
 }
 
+// @ 0x00e3a570
+void ClampToCirclePair(float* pOut, float x, float y, const float* c, float r1, const float* d, float r2, float sgn)
+{
+    float yA = y;
+    float dxA = x - c[0];
+    float dyA = y - c[1];
+    if (r1 * r1 >= dxA * dxA + dyA * dyA)
+        yA = c[1] + sgn * sqrtf(r1 * r1 - dxA * dxA);
+
+    float yB = y;
+    float dxB = x - d[0];
+    float dyB = y - d[1];
+    if (r2 * r2 >= dxB * dxB + dyB * dyB)
+        yB = d[1] + sgn * sqrtf(r2 * r2 - dxB * dxB);
+
+    float ptA[2] = { x, yA };
+    float ptB[2] = { x, yB };
+
+    const float* pSrc;
+    if (sgn >= 0.0f)
+        pSrc = (yA > yB) ? ptA : ptB;
+    else
+        pSrc = (yB > yA) ? ptA : ptB;
+
+    pOut[0] = pSrc[0];
+    pOut[1] = pSrc[1];
+}
+
+// @ 0x00e3a6b0
+bool CreateAndBindEditorImage(void* pHost, void* pKey)
+{
+    if (pHost != 0) {
+        IEditorData* pData = ((IEditorHost*)pHost)->GetEditorData();
+        if (pData != 0) {
+            IImageOwner* pOwner = (IImageOwner*)pData->FindService(0xef3c47cf);
+            if (pOwner != 0) {
+                void* pImage = 0;
+                CreateImageFromResource2(pKey, &pImage, 0, -1, -1);
+                if (pImage != 0) {
+                    pOwner->SetImage(pImage);
+                    if (pImage)
+                        ((Image*)pImage)->Release();
+                    return true;
+                }
+            }
+        }
+    }
+    return false;
+}
+
+// @ 0x00e3a730
+Image* cBigEditorObject::GetTerrainImage(uint32_t key, bool bRecompute)
+{
+    Image* pImage = 0;
+    cTerrainSphere* pSphere = NounManager()->GetCurrentTerrainSphere();
+    uint32_t index = 0;
+    if (mTerrainKey.mGroupID == 0x2b978c46) {
+        index = pSphere->GetTerrainIndex(key);
+    } else {
+        cCellRecord* pCell = mCells.mpEnd[-1];
+        if (pCell)
+            index = pCell->mTerrainKind;
+    }
+    if (bRecompute) {
+        if (pSphere->mField1108)
+            index = FUN_00556440(pSphere->mField10fc, pSphere->mField1100,
+                                 pSphere->mField1104, pSphere->mField1108);
+    }
+    if (index) {
+        int32_t n = TerrainKeyToIndex(key);
+        if (void* pMem = operator new(0xa0, "UI", 0, 0, 0, 0)) {
+            Image* pNewImage = ((Image*)pMem)->Init();
+            if (pNewImage)
+                pNewImage->AddRef();
+            pImage = pNewImage;
+        }
+        void* pWindow = mpLayout30->FindWindowByID(n + 0x6299720, 1);
+        UIVec3* pVec = &mVecs[n];
+        if (pVec->m0 == 0) {
+            pImage->Setup(pWindow, 1, 1);
+            int colors[3] = { (int)index, 0xb1b104, 0xf865c777 };
+            pImage->SetFlags(1, colors, 0);
+        } else if (key == 0xa426730b) {
+            pImage->BindA(pWindow, pVec, (int)index);
+        } else {
+            pImage->BindB(pWindow, pVec, key, (int)index);
+        }
+        if (bRecompute) {
+            int colors[3] = { (int)index, 0xb1b104, 0xf865c777 };
+            pImage->SetFlags(1, colors, 0);
+        }
+        RefPtrImage* pSlot = &mImages.mpBegin[n];
+        Image* pOld = pSlot->mpObject;
+        if (pImage != pOld) {
+            if (pImage)
+                pImage->AddRef();
+            pSlot->mpObject = pImage;
+            if (pOld)
+                pOld->Release();
+        }
+        if (pImage)
+            pImage->Release();
+    }
+    return pImage;
+}
+
+// @ 0x00e3a990
+cTimelineTrack* cSPUITimeline_s00e3_a990::FindNextTrack(uint32_t nFlags, float* pProgress)
+{
+    (void)nFlags;
+    (void)pProgress;
+    return 0;
+}
+
+// @ 0x00e3aac0
+cTimelineTrack* cSPUITimeline_s00e3_a990::FindPreviousTrack(uint32_t nFlags, float* pProgress)
+{
+    (void)nFlags;
+    (void)pProgress;
+    return 0;
+}
+
+// @ 0x00e3abf0
+void cSPUITimeline_s00e3_a990::UpdateTransition(float fTime)
+{
+    (void)fTime;
+}
+
 // @ 0x00e3afb0
 void cSPUITimeline_s00e3_a990::UpdateState()
 {
@@ -2848,6 +4243,28 @@ bool cSPUITimeline_s00e3_a990::ShowNextPlayItem()
     return bResult;
 }
 
+// @ 0x00e3b0f0
+void cSPUITimeline_s00e3_a990::StartPlayback()
+{
+    mnPlayIndex = 0;
+    ResetClip();
+    SetRunning(1);
+    InitGonzagoSubsystem(1);
+    if (mpClip != (void*)0x1654c10)
+        mnMode = 1;
+    mbTimerReset = false;
+    if (mnTimerMode == 1) {
+        mnTimerStartLow = 0;
+        mnTimerStartHigh = 0;
+    } else {
+        mnTimerStartLow = 0;
+        mnTimerStartHigh = 0;
+    }
+    mnTimerEndLow = 0;
+    mnTimerEndHigh = 0;
+    mnState = 1;
+}
+
 // @ 0x00e3b180
 void cSPUITimeline_s00e3_a990::RestorePlayback()
 {
@@ -2861,6 +4278,243 @@ void cSPUITimeline_s00e3_a990::RestorePlayback()
             pWindow->SetVisible(1, 0);
     }
     mpAnimator->ClearAll();
+}
+
+// @ 0x00e3b1f0
+void cSPUITimeline_s00e3_a990::HidePanels()
+{
+    SetRunning(0);
+    mpAnimator->ClearAll();
+    mnMode = 12;
+    cUIWindow* pWindow = mpLeftLayout->FindWindowByID(0x64d29c0, 1);
+    pWindow->SetVisible(1, 1);
+    InitGonzagoSubsystem(0);
+    mbExtraReset = false;
+    if (mnExtraMode == 1) {
+        mnExtraStartLow = 0;
+        mnExtraStartHigh = 0;
+        mnExtraEndLow = 0;
+        mnExtraEndHigh = 0;
+    } else {
+        mnExtraStartLow = 0;
+        mnExtraStartHigh = 0;
+        mnExtraEndLow = 0;
+        mnExtraEndHigh = 0;
+    }
+}
+
+// @ 0x00e3b2a0
+bool cSPUITimeline_s00e3_a990::LoadImage(cUIWindow* pWindow, void* pResource)
+{
+    (void)pWindow;
+    (void)pResource;
+    return false;
+}
+
+// @ 0x00e3b390
+bool cSPUITimeline_s00e3_a990::HandleMessage(void* pMessage)
+{
+    (void)pMessage;
+    return false;
+}
+
+// @ 0x00e3b5d0
+uint32_t cSPUITimeline_s00e3_a990::GetSelectedPaletteId()
+{
+    return mnCachedPaletteId;
+}
+
+// @ 0x00e3b630
+bool IsPaletteIdPresent(uint32_t nId)
+{
+    (void)nId;
+    return false;
+}
+
+// @ 0x00e3b670
+void InsertTrackRef(void* pResult, void* pParent, const void* pValue, bool bLeft)
+{
+    (void)pResult;
+    (void)pParent;
+    (void)pValue;
+    (void)bLeft;
+}
+
+// @ 0x00e3b700
+void InsertTrackPoint(void* pResult, void* pParent, const void* pValue, bool bLeft)
+{
+    (void)pResult;
+    (void)pParent;
+    (void)pValue;
+    (void)bLeft;
+}
+
+// @ 0x00e3b790
+void InsertTrackRect(void* pResult, void* pParent, const void* pValue, bool bLeft)
+{
+    (void)pResult;
+    (void)pParent;
+    (void)pValue;
+    (void)bLeft;
+}
+
+// @ 0x00e3b9e0
+void cUIManager::FUN_00e3b9e0(int dt)
+{
+    MEM(int, 0x288) -= dt;
+    int iVar5 = MEM(int, 0x288);
+
+    float scratch;
+    switch (MEM(int, 0x284))
+    {
+    case 1:
+    {
+        int iVar5b = *(int*)(MEM(unsigned int, 0x188) - 4);
+        if (iVar5b != 0 && *(int*)(iVar5b + 0xf0) != 0)
+        {
+            if (MEM(char, 0x27c) != 0)
+                return;
+
+            U3 col;
+            switch (SP_GetCurrentGameMode_s00e3_b9e0())
+            {
+            case 0x1654c00: col.x = g_15a5984[0]; col.y = g_15a5984[1]; col.z = g_15a5984[2]; break;
+            case 0x1654c01: col.x = g_15a5984[3]; col.y = g_15a5984[4]; col.z = g_15a5984[5]; break;
+            case 0x1654c02: col.x = g_15a5984[6]; col.y = g_15a5984[7]; col.z = g_15a5984[8]; break;
+            case 0x1654c04: col.x = g_15a5984[9]; col.y = g_15a5984[10]; col.z = g_15a5984[11]; break;
+            default: goto label_1654c03;
+            }
+            V3 v3;
+            v3.x = -1.0f; v3.y = -1.0f; v3.z = 0.0f;
+            ((cSPHintMgr*)FUN_0067caf0())->FUN_0067aaf0(col, &PTR_PTR_015a59b4, 0, v3, 0, 0);
+            MEM(char, 0x27c) = 1;
+        }
+    label_1654c03:
+        if (MEM(char, 0x27c) == 0)
+        {
+            MEM(int, 0x284) = 2;
+            return;
+        }
+        break;
+    }
+    case 2:
+        if (MEM(unsigned int, 0x5c) != 0)
+            ((void(__thiscall*)(void*, int, int))(*(unsigned int**)(char*)MEM(void*, 0x5c))[0x7c / 4])((void*)MEM(unsigned int, 0x5c), 2, 1);
+        {
+            float v = MEM(float, 0x28c) - (MEM(float, 0x98) + 1.0f);
+            scratch = 0.0f;
+            float* picked = &scratch;
+            if (v > 0.0f) picked = &v;
+            MEM(float, 0x28c) = *picked;
+        }
+        if (MEM(unsigned int, 0x3c) != 0)
+        {
+            void* o = (void*)MEM(unsigned int, 0x3c);
+            float* pf = (float*)((void*(__thiscall*)(void*))(*(unsigned int**)(char*)o)[0x38 / 4])(o);
+            float v = MEM(float, 0x28c) - (pf[2] - pf[0]) * DAT_016acde0;
+            scratch = 0.0f;
+            float* picked = &scratch;
+            if (v > 0.0f) picked = &v;
+            MEM(float, 0x270) = *picked;
+            MEM(float, 0x290) = *picked;
+        }
+        MEM(unsigned int, 0x288) = DAT_016acd90;
+        MEM(int, 0x284) = 3;
+        return;
+    case 3:
+        if (iVar5 < 1)
+        {
+            MEM(unsigned int, 0x288) = DAT_016acda0;
+            MEM(int, 0x284) = 4;
+            return;
+        }
+        break;
+    case 4:
+        MEM(float, 0x270) = ((float)(DAT_016acda0 - iVar5) / (float)DAT_016acda0) *
+                            (MEM(float, 0x28c) - MEM(float, 0x290)) + MEM(float, 0x290);
+        if (iVar5 < 1)
+        {
+            if (MEM(unsigned int, 0x5c) != 0)
+                ((void(__thiscall*)(void*, int, int))(*(unsigned int**)(char*)MEM(void*, 0x5c))[0x7c / 4])((void*)MEM(unsigned int, 0x5c), 2, 0);
+            MEM(unsigned int, 0x288) = DAT_016acdb0;
+            MEM(int, 0x284) = 5;
+            return;
+        }
+        break;
+    case 5:
+        if (0 < iVar5)
+            return;
+        {
+            int i = *(int*)(MEM(unsigned int, 0x188) - 4);
+            if (i != 0 && *(int*)(i + 0xf0) != 0)
+            {
+                void* r = FUN_00e3a730(*(unsigned int*)(i + 0xe4), 0);
+                if (r != 0)
+                    FUN_00677360(1);
+                MEM(unsigned int, 0x288) = DAT_016acdc0;
+                MEM(int, 0x284) = 6;
+                return;
+            }
+        }
+        goto label_00e3bddf;
+    case 6:
+        if (0 < iVar5)
+            return;
+        {
+            int i = *(int*)(MEM(unsigned int, 0x188) - 4);
+            unsigned int id = (i != 0) ? *(unsigned int*)(i + 0xe4) : 0xa426730bu;
+            int idx = FUN_00e36f50(id);
+            if (*(int*)(MEM(unsigned int, 0x198) + idx * 4) != 0)
+                FUN_00677360(0);
+            if (i != 0 && *(unsigned int*)(i + 0xe4) == 0xbeb528cbu)
+            {
+                void* r = FUN_00e3a730(0x2db6dad3u, 1);
+                if (r != 0)
+                    FUN_00677360(1);
+                MEM(unsigned int, 0x288) = DAT_016acdd0;
+                MEM(int, 0x284) = 7;
+                return;
+            }
+        }
+        goto label_00e3bddf;
+    case 7:
+        if (0 < iVar5)
+            return;
+        if (*(int*)(MEM(unsigned int, 0x198) + 0x10) != 0)
+            FUN_00677360(0);
+    label_00e3bddf:
+        MEM(int, 0x284) = 8;
+        break;
+    default:
+        break;
+    }
+}
+
+// @ 0x00e3be20
+void cUIManager::FUN_00e3be20(unsigned int p2, float a, float b, float c, float d, float e, float f, float g, float h, float i, char p8)
+{
+    if ((g_16acc84 & 1) == 0) g_16acc84 |= 1;
+    if ((g_16acc84 & 2) == 0) g_16acc84 |= 2;
+    if ((g_16acc84 & 4) == 0) g_16acc84 |= 4;
+    if ((g_16acc84 & 8) == 0) g_16acc84 |= 8;
+
+    void* o = (void*)MEM(unsigned int, 0x54);
+    unsigned int vt = *(unsigned int*)o;
+    void* (__thiscall* f1)(void*, float, float) =
+        (void*(__thiscall*)(void*, float, float))(*(unsigned int**)(char*)o)[0xc4 / 4];
+
+    float* r1 = (float*)f1(o, a, b);
+    g_16acc7c = r1[0]; g_16acc80 = r1[1];
+    float* r2 = (float*)f1(o, c, d);
+    g_16acc74 = r2[0]; g_16acc78 = r2[1];
+    float* r3 = (float*)f1(o, e, f);
+    g_16acc6c = r3[0]; g_16acc70 = r3[1];
+    float* r4 = (float*)f1(o, g, h);
+    g_16acc64 = r4[0]; g_16acc68 = r4[1];
+
+    FUN_00e37840(p2, g_16acc74, g_16acc78, g_16acc7c, g_16acc80, g_16acc6c, g_16acc70,
+                 g_16acc64, g_16acc68);
+    (void)i; (void)p8; (void)vt;
 }
 
 // @ 0x00e3c100
@@ -3036,6 +4690,320 @@ void FUN_00e3c760(void)
         *(int*)(esi + 0x14) = 0;
         *(int*)(p + 0x298) = 0;
     }
+}
+
+// @ 0x00e3d9e0
+namespace ImageCursorProvider {
+void CursorProvider::RemapCursorKeys(uint32_t key, CursorKeys keys)
+{
+    CursorMap& map = mCursorMap;
+    CursorMap::Iterator it;
+    map.find(it, key);
+
+    if (it.mpNode == map.mpBuckets[map.mnBucketCount])
+        return;
+
+    CursorBucket* bucket = it.mpNode;
+    for (CursorListNode* p = bucket->mAnchor.mpNext; p != &bucket->mAnchor; p = p->mpNext)
+        keys.Apply(&p->mValue);
+}
+}  // namespace ImageCursorProvider
+
+// @ 0x00e3eca0
+float* ModelTree::WorldAt(const uint32_t* pKey)
+{
+    RBNodeBase* pAnchor = (RBNodeBase*)&mAnchor;
+    RBNodeBase* pPos = pAnchor;
+    RBNodeBase* pNode = mAnchor.mpParent;
+
+    while (pNode != 0) {
+        if (!(((WorldNode*)pNode)->mKey < *pKey)) {
+            pPos = pNode;
+            pNode = pNode->mpLess;
+        } else {
+            pNode = pNode->mpGreater;
+        }
+    }
+    if (pPos != pAnchor && !(*pKey < ((WorldNode*)pPos)->mKey)) {
+        return &((WorldNode*)pPos)->mWidth;
+    }
+
+    WorldPair value;
+    value.mKey    = *pKey;
+    value.mWidth  = value.mKeyValue;
+    value.mHeight = value.mWidth;
+
+    InsertPos pos = { pPos };
+    WorldNode* pNew;
+    InsertWorldPair(&pNew, pos, &value, false);
+    return &pNew->mWidth;
+}
+
+// @ 0x00e3ed30
+float* ModelTree::BoundsAt(const uint32_t* pKey)
+{
+    RBNodeBase* pAnchor = (RBNodeBase*)&mAnchor;
+    RBNodeBase* pPos = pAnchor;
+    RBNodeBase* pNode = mAnchor.mpParent;
+
+    while (pNode != 0) {
+        if (!(((BoundsNode*)pNode)->mKey < *pKey)) {
+            pPos = pNode;
+            pNode = pNode->mpLess;
+        } else {
+            pNode = pNode->mpGreater;
+        }
+    }
+    if (pPos != pAnchor && !(*pKey < ((BoundsNode*)pPos)->mKey)) {
+        return &((BoundsNode*)pPos)->mLeft;
+    }
+
+    BoundsPair value;
+    value.mKey     = *pKey;
+    value.mLeft    = value.mKeyValue;
+    value.mTop     = value.mLeft;
+    value.mRight   = value.mTop;
+    value.mBottom  = value.mRight;
+
+    InsertPos pos = { pPos };
+    BoundsNode* pNew;
+    InsertBoundsPair(&pNew, pos, &value, false);
+    return &pNew->mLeft;
+}
+
+// @ 0x00e3ede0
+void FUN_00e3ede0(KeyVector* pKeys)
+{
+    if (FUN_01021260() != 0) {
+        ((ModelSelector*)FUN_00b3d480())->Select(pKeys);
+        FUN_004f6b70(pKeys->begin(), pKeys->end());
+        uint32_t* pLast = FUN_004f6830(pKeys->begin(), pKeys->end());
+        pKeys->erase(pLast, pKeys->end());
+    }
+}
+
+// @ 0x00e3f010
+void cSPUILayoutManager_s00e3_eca0::PreloadModelBounds()
+{
+    KeyVector12  models  = { 0, 0, 0 };
+    ResourceKey_s00e3_eca0  listKey = { 0x013f662c, 0x00b1b104, 0xe1d7164f };
+
+    ((ModelManager*)EA_ResourceMan_GetManager())->GetModels(&models, &listKey, 0);
+
+    ResetTree(m_worlds);
+    ResetTree(m_bounds);
+
+    cSPUILayout_s00e3_eca0 layout;
+
+    int count = models.mpEnd - models.mpBegin;
+    for (int i = 0; i < count; ++i) {
+        ResourceKey_s00e3_eca0* pEntry = &models.mpBegin[i];
+        Property*    pProp  = 0;
+        if (!SP_PropertyManager()->GetProperty(pEntry->mType, pEntry->mGroup, &pProp))
+            continue;
+
+        uint32_t iKeyInstance = 0;
+        if (!SP_GetPropertyAsKeyInstance(pProp, 0x34e3b684, &iKeyInstance))
+            continue;
+
+        if (FindInWorldTree(&m_worlds, &iKeyInstance) == (RBNodeBase*)&m_worlds.mAnchor)
+            continue;
+
+        ResourceKey_s00e3_eca0 layoutKey = { iKeyInstance, 0x0510a95b, g_layoutKeyGroup };
+        layout.Init(layoutKey, true, 0x05b598fa);
+
+        IWin_s00e3_eca0* pWindow = layout.FindWindowByID(0x94e2c6d2, 1);
+        if (pWindow != 0) {
+            float* pRect   = pWindow->GetRect();
+            float  fWidth  = pRect[2] - pRect[0];
+            float  fHeight = pRect[3] - pRect[1];
+
+            float* pWorld = m_worlds.WorldAt(&iKeyInstance);
+            pWorld[0] = fWidth;
+            pWorld[1] = fHeight;
+
+            float screenRect[4];
+            SPUIHelpers_GetBoundingScreenRect(screenRect, pWindow, 1);
+
+            float* pBounds = m_bounds.BoundsAt(&iKeyInstance);
+            pBounds[0] = screenRect[0];
+            pBounds[1] = screenRect[1];
+            pBounds[2] = screenRect[2];
+            pBounds[3] = screenRect[3];
+        }
+        layout.Shutdown(1);
+    }
+    layout.~cSPUILayout_s00e3_eca0();
+
+    if (models.mpBegin != 0 && ((uint32_t*)models.mpBegin)[-1] != 0)
+        operator_delete(models.mpBegin);
+}
+
+// @ 0x00e3f2a0
+bool __fastcall FUN_00e3f2a0(cSPUILayoutManager_s00e3_eca0* pThis, int, ModelSelectionSource* pSource, cMWModel* pStart)
+{
+    uint32_t* pBudget = pSource->mpOwner + 2;
+    if (pBudget == 0)
+        return false;
+
+    bool      bEnabled  = false;
+    int       iLimit    = 0;
+    int       iChosen   = 1;
+    int       iIndex    = 2;
+    int       iCountA   = 0;
+    int       iCountB   = 0;
+    uint32_t  iKey      = pSource->mKey;
+    uint32_t  iTotal    = 0;
+    Property* pProp     = 0;
+    uint32_t  iEntryA   = 0;
+    uint32_t  iEntryB   = 0;
+    uint32_t  iKeyInst  = 0;
+    float     fOther    = 0.0f;
+    float     fHeight   = 0.0f;
+    SizeKeyVector modelsA = { 0, 0, 0 };
+    SizeKeyVector modelsB = { 0, 0, 0 };
+    SizeKeyVector modelsC = { 0, 0, 0 };
+
+    PropertyManager* pProps = SP_PropertyManager();
+    pProps->GetProperty(iKey, 0xe1d7164f, &pProp);
+
+    if (pProp != 0) {
+        Property* pB = 0;
+        pProps->GetPropertyByKey(iKey, 0x94f79745, (Property**)&iEntryA);
+        if (pProp != 0 && pProps->GetPropertyByKey(iKey, 0xd53426dd, &pB)) {
+            if (pB != 0 && pB->mValueType == 1)
+                bEnabled = *pB->GetBool();
+        }
+        if (pProp != 0 && pProps->GetPropertyByKey(iKey, 0xd52d9182, &pB)) {
+            if (pB != 0 && pB->mValueType == 9)
+                iLimit = *pB->GetInt();
+        }
+    }
+
+    SP_GetPropertyVector(pProp, 0xd52d9183, &iCountA, &modelsA);
+    SP_GetPropertyVector(pProp, 0x066f843b, &iCountB, &modelsB);
+    SP_GetPropertyAsKeyInstance(pProp, 0x34e3b684, &iKeyInst);
+
+    fOther  = 0.0f;
+    fHeight = 0.0f;
+    if (bEnabled) {
+        if (FindInWorldTree(&pThis->m_worlds, &iKeyInst) != (RBNodeBase*)&pThis->m_worlds.mAnchor)
+            fHeight = pThis->m_worlds.WorldAt(&iKeyInst)[1];
+        if (pThis->mpSelectionTarget != 0) {
+            float* pRect = pThis->mpSelectionTarget->GetRect();
+            fOther = pRect[3] - pRect[1];
+        }
+    }
+
+    bool bAny = (iCountA > 0 || iLimit > 0 || iCountB > 0);
+
+    ModelHash* pHash = (ModelHash*)FUN_0067de90();
+    FUN_007eb100(pHash);
+    cMWModel* pEnd = pHash->mpFirst;
+
+    if (pStart != pEnd) {
+        for (cMWModel* pNode = pStart; pNode != pEnd; pNode = pNode->mpNext) {
+            KeyInstance* pInst     = pNode->mpKeyInstance;
+            uint32_t     iModelKey = pInst->mId;
+            uint32_t     iModelSize = pInst->mExtra;
+            bool         bFlag     = false;
+            bool         bFound    = false;
+
+            if (bAny) {
+                if (iLimit > 0 && *pBudget - iModelSize > (uint32_t)iLimit)
+                    bFlag = true;
+                for (int i = 0; i < iCountA; ++i) {
+                    if (modelsA.mpBegin[i] == iModelKey) { bFlag = true; break; }
+                }
+                for (int i = 0; i < iCountB; ++i) {
+                    if (modelsB.mpBegin[i] == iModelKey) { bFound = true; break; }
+                }
+                if (iCountB > 0 && !bFound)
+                    bFlag = true;
+            }
+            if (bEnabled && iCountB == 0 && (float)iIndex * fHeight < fOther)
+                goto Select;
+            if (bFlag)
+                goto Select;
+            if (iModelKey != iKey && !bFound)
+                continue;
+
+        Select:
+            ++iChosen;
+            ++iIndex;
+            iTotal += pNode->mSizeBudget;
+            {
+                uint32_t   iBucket = (uint32_t)pNode % pThis->m_keySet.mBucketCount;
+                cMWModel** ppSlot  = (cMWModel**)&((cMWModel**)pThis->m_keySet.mppBuckets)[iBucket];
+                cMWModel*  pCur    = *ppSlot;
+                bool       bInSet  = false;
+                for (; pCur != 0; pCur = pCur->mpNext) {
+                    if (pCur == pNode) { bInSet = true; break; }
+                }
+                if (!bInSet)
+                    FUN_00b41b90(&pThis->m_keySet, ppSlot, pNode, 0);
+            }
+            {
+                uint32_t iModel = (uint32_t)pNode;
+                modelsC.DoInsertKey4(modelsC.mpEnd, iModel);
+            }
+        }
+    }
+
+    FUN_00e48f30(pStart, pBudget, (uint32_t)iChosen, iTotal);
+    FUN_00e47700(pThis, &modelsC);
+    if (pProp != 0)
+        pProp->Release();
+    if (modelsC.mpBegin != 0 && ((uint32_t*)modelsC.mpBegin)[-1] != 0)
+        operator_delete(modelsC.mpBegin);
+    return true;
+}
+
+// @ 0x00e3f7a0
+float __fastcall FUN_00e3f7a0(cSPUILayoutManager_s00e3_eca0* pThis, int, uint32_t iKey)
+{
+    if (iKey != 0xa426730b && iKey != 0xad56080c)
+        return 0.0f;
+
+    if (FindInBoundsTree(&pThis->m_boundsTree, &iKey) != (uint32_t*)&pThis->m_boundsTree.mAnchor)
+        return *FUN_00be0790(&iKey);
+
+    if (FUN_0067de90() == 0)
+        return 0.0f;
+
+    ModelHash* pHash = (ModelHash*)FUN_0067de90(0x0c);
+    if (pHash == 0) {
+        *FUN_00be0790(&iKey) = 0.0f;
+        return 0.0f;
+    }
+    FUN_007eb100(pHash);
+
+    cMWModel* pEnd = pHash->mpFirst;
+    if (pEnd != 0) {
+        for (cMWModel* pNode = pHash->mpFirst; pNode != pEnd; pNode = pNode->mpNext) {
+            KeyInstance* pInst     = pNode->mpKeyInstance;
+            uint32_t     iModelKey = pInst->mId;
+            Property*    pProp     = 0;
+
+            SP_PropertyManager()->GetProperty(iModelKey, 0xe1d7164f, &pProp);
+
+            if (pProp != 0) {
+                uint32_t iOtherKey = 0;
+                SP_GetPropertyAsKeyInstance(pProp, 0x91ad064, &iOtherKey);
+                if (iOtherKey == iKey) {
+                    float fValue = FUN_00e37d70(pThis, pInst->mValue);
+                    if (fValue < -g_flHeightLimit) fValue = -g_flHeightLimit;
+                    if (fValue >  g_flHeightLimit) fValue =  g_flHeightLimit;
+                    *FUN_00be0790(&iKey) = fValue;
+                    pProp->Release();
+                    return fValue;
+                }
+                pProp->Release();
+            }
+        }
+    }
+    *FUN_00be0790(&iKey) = 0.0f;
+    return 0.0f;
 }
 
 // @ 0x00e40700
@@ -3486,4 +5454,279 @@ skipRestart:
         time = gTimelineMaxTime_016acf2c;
     mTime = time;
     mpAnimator->Update_007f63b0();
+}
+
+// @ 0x00e43270
+void cTimelinePageHost::Update(uint32_t arg0, uint32_t)
+{
+    cSPPalettePageUI_s00e4_3270* page = (cSPPalettePageUI_s00e4_3270*)((char*)this - 8);
+    page->Update(arg0);
+}
+
+// @ 0x00e43280
+void cUITimelineSubsystem::Reset()
+{
+    m284 = 0;
+    m28c = 0.0f;
+    m290 = 0.0f;
+    m294 = 0;
+
+    if (m0a8 != 0) {
+        cTimelineTrack_s00e4_3270* pOld = (cTimelineTrack_s00e4_3270*)(void*)m0a8;
+        m0a8 = 0;
+        pOld->Release();
+    }
+    if (m1c8 != 0)
+        ((cTimelineTrack_s00e4_3270*)(void*)m1c8)->Flush();
+    if (m1c8 != 0) {
+        cTimelineTrack_s00e4_3270* pOld = (cTimelineTrack_s00e4_3270*)(void*)m1c8;
+        m1c8 = 0;
+        pOld->Release();
+    }
+
+    TraceVector* tracks = (TraceVector*)&m184;
+    int nTracks = tracks->size();
+    for (int i = 0; i < nTracks; ++i)
+        tracks->mpBegin[i]->Flush();
+    tracks->erase(tracks->mpBegin, tracks->mpEnd);
+
+    TimelineEntry* entries = (TimelineEntry*)&m29c;
+    for (int i = 0; i < 6; ++i) {
+        entries[i].m00 = 0;
+        entries[i].m04 = 0;
+        entries[i].m08 = 0;
+    }
+
+    for (int i = 0; i < 6; ++i) {
+        RefObject* pSlot = mRefVec198.mpBegin[i];
+        if (pSlot != 0)
+            pSlot->Slot24();
+    }
+
+    // fixed_vector::clear() followed by fixed_vector::resize(6), both inlined.
+    mRefVec198.clear();
+    if (mRefVec198.size() < 6) {
+        RefObject* value = 0;
+        mRefVec198.DoInsertValues(mRefVec198.mpEnd, 6 - mRefVec198.size(), value);
+    } else {
+        mRefVec198.erase(mRefVec198.mpBegin + 6, mRefVec198.mpEnd);
+    }
+
+    if (m05c != 0)
+        ((TimelineHintSink*)(void*)m05c)->Notify(2, 0);
+
+    if (m030 != 0) {
+        m300 = -1;
+        m304 = -1;
+        m308 = 0;
+        m30c = 0;
+        m310 = 0;
+        m314 = 0;
+        m318 = 0;
+        m31c = 0;
+        m320 = 0;
+        m324 = 0;
+        m328 = 0;
+        m32c = -1;
+    }
+}
+
+// @ 0x00e434a0
+void CollectSpeciesModelKeys(KeyVector_s00e4_3270* keys)
+{
+    cGameNounManager_s00e4_3270* pManager = NounManager_s00e4_3270();
+    GameDataVector* nouns = static_cast<GameDataVector*>(pManager->GetGameDataVector(
+        (void*)0x00cd7d10, (void*)0x00d3d420, (void*)0x00accc30, (void*)0x00b1e500, (void*)0x01be418e));
+    keys->reserve(nouns->count() + keys->size());
+    cSpeciesProfile_s00e4_3270* avatarProfile = GetSpeciesManager()->GetAvatarProfile();
+    for (cGameNoun** pNoun = nouns->mpBegin, ** pNounEnd = nouns->mpEnd; pNoun != pNounEnd;
+         ++pNoun) {
+        cSpeciesProfile_s00e4_3270* profile = (*pNoun)->mpProfile;
+        if (profile != 0 && profile != avatarProfile)
+            keys->push_back(profile->mModelKey);
+    }
+    SortKeys(keys->mpBegin, keys->mpEnd);
+    ResourceKey_s00e4_3270* pNewEnd = UniqueKeys(keys->mpBegin, keys->mpEnd);
+    keys->erase(pNewEnd, keys->mpEnd);
+}
+
+// @ 0x00e435c0
+void CollectAllSpeciesModelKeys(KeyVector_s00e4_3270* keys)
+{
+    cGameNounManager_s00e4_3270* pManager = NounManager_s00e4_3270();
+    GameDataVector* nouns = static_cast<GameDataVector*>(pManager->GetGameDataVector(
+        (void*)0x00cd7d10, (void*)0x00d3d420, (void*)0x00accc30, (void*)0x00b1e500, (void*)0x01be418e));
+    keys->reserve(nouns->count() + keys->size());
+    for (cGameNoun** pNoun = nouns->mpBegin, ** pNounEnd = nouns->mpEnd; pNoun != pNounEnd;
+         ++pNoun) {
+        cSpeciesProfile_s00e4_3270* profile = (*pNoun)->mpProfile;
+        if (profile != 0)
+            keys->push_back(profile->mModelKey);
+    }
+    if (gSimSingleton == 0)
+        gSimSingleton = new ("Simulator/SimSingleton", 0, 0, 0, 0) cSimSingleton();
+    gSimSingleton->FUN_00cc5bc0(keys);
+    SortKeys(keys->mpBegin, keys->mpEnd);
+    ResourceKey_s00e4_3270* pNewEnd = UniqueKeys(keys->mpBegin, keys->mpEnd);
+    keys->erase(pNewEnd, keys->mpEnd);
+}
+
+// @ 0x00e43710
+void CollectCivilizationModelKeys(KeyVector_s00e4_3270* keys)
+{
+    if (GetActivePlanet() == 0)
+        return;
+    FUN_00b3d480(keys)->FUN_00acc800();
+    cGameNounManager_s00e4_3270* pManager = NounManager_s00e4_3270();
+    GameDataVector* nouns = static_cast<GameDataVector*>(pManager->GetGameDataVector(
+        (void*)0x00b21080, (void*)0x00d3d420, (void*)0x00b236c0, (void*)0x00b1e500, (void*)0x018c816a));
+    if (nouns->mpBegin != nouns->mpEnd) {
+        cGameNoun* pCiv = *nouns->mpBegin;
+        for (uint32_t i = 0; i < 7; ++i) {
+            if (pCiv->HasProperty(gCreaturePropertyIDs[i]))
+                keys->push_back(*pCiv->GetModelTypeKey(gCreaturePropertyIDs[i]));
+        }
+    }
+    cTerrainSphere_s00e4_3270* pSphere = NounManager_s00e4_3270()->GetCurrentTerrainSphere();
+    keys->push_back(pSphere->mKey1168);
+    SortKeys(keys->mpBegin, keys->mpEnd);
+    ResourceKey_s00e4_3270* pNewEnd = UniqueKeys(keys->mpBegin, keys->mpEnd);
+    keys->erase(pNewEnd, keys->mpEnd);
+}
+
+// @ 0x00e44200
+void cSPUITimeline_s00e4_4200::Show(int show)
+{
+    if (!show && !mpLayout->IsVisible())
+        return;
+
+    if (show != mpLayout->IsVisible()) {
+        cSPUILayoutManager_s00e4_4200* mgr = SPUIHelpers_GetLayoutManager();
+        if (show) {
+            mgr->SetAllWorldsVisibility(false);
+            mgr->SetLayerVisible(0x8c509d6c, true);
+            mgr->SetLayerVisible(0x5b598f6, true);
+            mgr->SetLayerVisible(0x5b598f7, true);
+        } else {
+            mgr->SetLayerVisible(0x8c509d6c, false);
+            mgr->SetLayerVisible(0x5b598f6, false);
+            mgr->SetLayerVisible(0x5b598f7, false);
+            mgr->SetAllWorldsVisibility(true);
+        }
+    }
+    mpLayout->SetVisibility(show);
+
+    if (show) {
+        IAudioSystem_s00e4_4200* audio = EA_Audio_GetSystemAT();
+        SP_KillSetiEffects(0x6d093bee, audio ? audio->GetListener() : 0);
+        SPUIHelpers_BeginModal(mpModalOwner, 0, 0);
+        SP_MessageServer_s00e4_4200()->BeginModal(0x4a07018, 0, 0);
+        mbPanelReady = false;
+        mnPanelState = 0;
+    } else {
+        SPUIHelpers_EndModal(mpModalOwner, 0, 0);
+        if (mbCreatureWindowShown) {
+            SP_WindowManager_s00e4_4200()->ShowWindow(1, mpCreatureWindow);
+            mbCreatureWindowShown = false;
+        }
+        if (mbTribeWindowShown) {
+            SP_WindowManager_s00e4_4200()->ShowWindow(1, mpTribeWindow);
+            mbTribeWindowShown = false;
+        }
+    }
+
+    FUN_0067cac0()->SetFlag(show == 0, 1);
+
+    if (mpCreatureButton)
+        mpCreatureButton->SetVisible(1, show);
+    if (mpTribeButton)
+        mpTribeButton->SetVisible(1, show);
+
+    if (IWindow_s00e4_4200* w = mpLayout->FindWindowByID(0x4486ae8, 1))
+        w->SetVisible(1, show);
+    if (IWindow_s00e4_4200* w = mpLayout->FindWindowByID(0x4486b30, 1))
+        w->SetVisible(1, show);
+    if (IWindow_s00e4_4200* w = mpLayout->FindWindowByID(0x54e53d9d, 1))
+        w->SetVisible(1, show);
+    if (IWindow_s00e4_4200* w = mpLayout->FindWindowByID(0xf54a5ddc, 1))
+        w->SetVisible(1, show);
+    if (IWindow_s00e4_4200* w = mpLayout->FindWindowByID(0x61388da, 1))
+        w->SetVisible(1, show);
+    if (IWindow_s00e4_4200* w = mpLayout->FindWindowByID(0x61388db, 1))
+        w->SetVisible(1, show);
+    if (IWindow_s00e4_4200* w = mpLayout->FindWindowByID(0x694d94c, 1))
+        w->SetVisible(1, show);
+    if (IWindow_s00e4_4200* w = mpLayout->FindWindowByID(0x694d94b, 1))
+        w->SetVisible(1, show);
+
+    if (show) {
+        int level;
+        switch (SP_GetCurrentGameMode()) {
+        case 0x1654c00: level = 0; break;
+        case 0x1654c01: level = 1; break;
+        case 0x1654c02: level = 2; break;
+        case 0x1654c04: level = 3; break;
+        case 0x1654c05: level = 4; break;
+        case 0x1654c10: level = 5; break;
+        default:        level = show; break;
+        }
+
+        HideLevelWindow(mpLayout, 0x15503770);
+        HideLevelWindow(mpLayout, 0x15503771);
+        HideLevelWindow(mpLayout, 0x15503772);
+        HideLevelWindow(mpLayout, 0x15503773);
+        HideLevelWindow(mpLayout, 0x15503774);
+
+        if (mpLayout->FindWindowByID(0x15503770 + level, 1)) {
+            int shown;
+            switch (SP_GetCurrentGameMode()) {
+            case 0x1654c00: shown = 0; break;
+            case 0x1654c01: shown = 1; break;
+            case 0x1654c02: shown = 2; break;
+            case 0x1654c04: shown = 3; break;
+            case 0x1654c05: shown = 4; break;
+            case 0x1654c10: shown = 5; break;
+            default:        shown = show; break;
+            }
+            ShowWindowByID(mpLayout, 0x15503770 + shown, 1);
+        }
+
+        if (cEffectsManager* effects = SP_EffectsManager()) {
+            if (IEffectsHandler* old = mpEffectsHandler) {
+                mpEffectsHandler = 0;
+                old->Release();
+            }
+            if (effects->AddMessageHandler(0x4c4ba0a9, 0, &mpEffectsHandler))
+                mpEffectsHandler->Delete(0);
+        }
+
+        SP_MessageServer_s00e4_4200()->SendMessage(0x6123dbe, 0, 0, 0);
+
+        ClearWindowRect(mpLayout, 0x74ed2970);
+        ClearWindowRect(mpLayout, 0x74ed2971);
+        ClearWindowRect(mpLayout, 0x74ed2972);
+        ClearWindowRect(mpLayout, 0x74ed2973);
+        ClearWindowRect(mpLayout, 0x74ed2974);
+
+        TintWindow(mpLayout, 0x60be2e0);
+        TintWindow(mpLayout, 0x60be2e1);
+        TintWindow(mpLayout, 0x60be2e2);
+        TintWindow(mpLayout, 0x60be2e3);
+        TintWindow(mpLayout, 0x60be2e4);
+
+        FUN_00e42100();
+        FUN_00e3e7f0();
+        FUN_00e37910();
+    } else {
+        if (IEffectsHandler* old = mpEffectsHandler) {
+            old->SetEnabled(0);
+            if (IEffectsHandler* released = mpEffectsHandler) {
+                mpEffectsHandler = 0;
+                released->Release();
+            }
+        }
+        FUN_0067dd50()->SetNotificationB(0x16, 2);
+        FUN_00e43280();
+        FUN_00e37910();
+    }
 }
