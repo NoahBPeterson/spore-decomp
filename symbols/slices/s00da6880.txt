@@ -1,3 +1,4 @@
+00da6880 ?FUN_00da6880@@YAMPAUcSPCreatureCitizen_s00da_6880@@IIEPAUbehavior_stimuli_s00da_6880@@PAE@Z  # FUN_00da6880 migrated from s00da6880 (verbatim, slice spelling)
 00da6920 ?FUN_00da6920@@YAMPAUcSPCreatureCitizen@@IIE@Z  # FUN_00da6920 migrated from s00da6880 (verbatim, slice spelling)
 00da69e0 ?FUN_00da69e0@@YAMPAUcSPCreatureCitizen@@IIE@Z  # FUN_00da69e0 migrated from s00da6880 (verbatim, slice spelling)
 00da6aa0 ?FUN_00da6aa0@@YAMPAUcSPCreatureCitizen@@IIEPAUbehavior_stimuli@@PAE@Z  # FUN_00da6aa0 migrated from s00da6880 (verbatim, slice spelling)
