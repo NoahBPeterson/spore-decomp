@@ -3,3 +3,10 @@
 ../src/game/UTFSpore_Win32/URL.cpp  ?SetComponent@URL_s0094_9cc0@Internet@EA@@QAEXHPBD@Z  0094a6f0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/UTFSpore_Win32/URL.cpp  ?SetPort@URL@Internet@EA@@QAEXI@Z  0094a750  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/UTFSpore_Win32/URL.cpp  ?ParseURLFILE@URL_s0094_9cc0@Internet@EA@@QAE_NPAU?$basic_string_s0094_9cc0@D@eastl@@@Z  0094aae0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/URL.cpp  ?ParseURLMailTo@URL@Internet@EA@@QAE_NAAV?$basic_string@DVallocator@eastl@@@eastl@@@Z  0094abe0  /O2 /MD /Gy /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/URL.cpp  ?ParseURLUnknown@URL@Internet@EA@@QAE_NAAV?$basic_string@DVallocator@eastl@@@eastl@@@Z  0094ac90  /O2 /MD /Gy /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/URL.cpp  ?assign@Str@@QAEAAU1@HD@Z  0094acc0  /O2 /MD /Gy /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/URL.cpp  ?Fn94b760@URL@@QAE_NAAUStr@@@Z  0094b760  /O2 /MD /Gy /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/URL.cpp  ?IsURLRelative@URL@@SA_NPBD@Z  0094ba30  /O2 /MD /Gy /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/URL.cpp  ?Fn94baa0@URL@@QAEHXZ  0094baa0  /O2 /MD /Gy /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/URL.cpp  ?GetPart@URL@@QAEPAUStr@@H@Z  0094baf0  /O2 /MD /Gy /TP /GS- /Isrc/game/include
