@@ -1,2 +1,7 @@
 # source  symbol  va  flags
+../src/game/SPGonzago/SPMissionTerraform.cpp  ?HasAnyRequiredTool@cSPMissionTerraform@@QAE_NXZ  00c609d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPMissionTerraform.cpp  ?GetTargetPlanetScore@cSPMissionTerraform@@QAEHXZ  00c60a70  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPMissionTerraform.cpp  ?GetTargetTerraformScore@cSPMissionTerraform@@QAEHXZ  00c60ab0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPMissionTerraform.cpp  ?IsStageOneComplete@cSPMissionTerraform@@QAE_NXZ  00c60af0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPMissionTerraform.cpp  ?Init@cSPMissionTerraform@@QAE_NXZ  00c60e90  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPMissionTerraform.cpp  ?GetTagString@cSPMissionTerraform@@QAE_NIPAUwstring@@@Z  00c61300  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
