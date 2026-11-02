@@ -1,11 +1,11 @@
-0084af40 ?RebuildCandidates@IMECompositionStringDataEx@@QAEXXZ  # IMECompositionStringDataEx::RebuildCandidates
-0084afc0 ?InsertCandidates@IMECompositionStringDataEx@@QAEPAXPAUWString@@IPBU2@@Z  # IMECompositionStringDataEx::InsertCandidates
-0084b1a0 ?Reset@IMECompositionStringDataEx@@QAEXXZ  # IMECompositionStringDataEx::Reset
-0084b1f0 ?Clear@IMECompositionStringDataEx@@QAEXXZ  # IMECompositionStringDataEx::Clear
-0084b260 ?ResizeCandidates@IMECompositionStringDataEx@@QAEXI@Z  # IMECompositionStringDataEx::ResizeCandidates
-0084b2e0 ?IMEServerWin32Ctor@@YAPAXPAX@Z  # EA::App::IMEServerWin32::IMEServerWin32
-0084b390 ?SetIMECandidateListData@IMEServerWin32@@QAEXI@Z  # EA::App::IMEServerWin32::SetIMECandidateListData
-0084b600 ?WinProc@IMEServerWin32@@QAEJPAXIIJ@Z  # EA::App::IMEServerWin32::WinProc
+0084af40 ?RebuildCandidates@IMECompositionStringDataEx_s0084_af40@@QAEXXZ  # IMECompositionStringDataEx_s0084_af40::RebuildCandidates migrated from s0084af40 (verbatim, slice spelling)
+0084afc0 ?InsertCandidates@IMECompositionStringDataEx_s0084_af40@@QAEPAXPAUWString_s0084_af40@@IPBU2@@Z  # IMECompositionStringDataEx_s0084_af40::InsertCandidates migrated from s0084af40 (verbatim, slice spelling)
+0084b1a0 ?Reset@IMECompositionStringDataEx_s0084_af40@@QAEXXZ  # IMECompositionStringDataEx_s0084_af40::Reset migrated from s0084af40 (verbatim, slice spelling)
+0084b1f0 ?Clear@IMECompositionStringDataEx_s0084_af40@@QAEXXZ  # IMECompositionStringDataEx_s0084_af40::Clear migrated from s0084af40 (verbatim, slice spelling)
+0084b260 ?ResizeCandidates@IMECompositionStringDataEx_s0084_af40@@QAEXI@Z  # IMECompositionStringDataEx_s0084_af40::ResizeCandidates migrated from s0084af40 (verbatim, slice spelling)
+0084b2e0 ?IMEServerWin32Ctor@@YAPAXPAX@Z  # IMEServerWin32Ctor migrated from s0084af40 (verbatim, slice spelling)
+0084b390 ?SetIMECandidateListData@IMEServerWin32_s0084_af40@@QAEXPAXIII@Z  # IMEServerWin32_s0084_af40::SetIMECandidateListData migrated from s0084af40 (verbatim, slice spelling)
+0084b600 ?WinProc@IMEServerWin32_s0084_af40@@QAEJPAXIIJ@Z  # IMEServerWin32_s0084_af40::WinProc migrated from s0084af40 (verbatim, slice spelling)
 0084bc80 ?DGifGetCodeNext@@YAHPAUGifFileType@@PAPAE@Z  # giflib DGifGetCodeNext
 0084bce0 ?DGifCloseFile@@YAHPAUGifFileType@@@Z  # giflib DGifCloseFile
 0084bd20 ?DGifSetupDecompress@@YAHPAUGifFileType@@@Z  # giflib DGifSetupDecompress

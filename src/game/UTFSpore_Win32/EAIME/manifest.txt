@@ -1,3 +1,6 @@
 # source  symbol  va  flags
 ../src/game/UTFSpore_Win32/EAIME.cpp  ?EnsureInitialized@IMEServer@@QAE_NXZ  0084a590  /O2 /MD /Gy /TP /Isrc/game/include
 ../src/game/UTFSpore_Win32/EAIME.cpp  ?Shutdown@IMEServer@@QAE_NXZ  0084a5d0  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/EAIME.cpp  ?SetFlag@IMEServerWin32@@QAEX_N@Z  0084a600  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/EAIME.cpp  ?SetCandidateSelection@IMEServerWin32@@QAE_NI@Z  0084a640  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/EAIME.cpp  ??1IMECompositionStringDataEx@@QAE@XZ  0084a6a0  /O2 /MD /Gy /TP /Isrc/game/include
