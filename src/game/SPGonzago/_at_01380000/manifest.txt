@@ -1,0 +1,12 @@
+# source  symbol  va  flags
+../src/game/SPGonzago/_at_01380000.cpp  ?InitMyCaptainLevels@Simulator@@YAXXZ  01388f50  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPGonzago/_at_01380000.cpp  ?InitLimitStopwatch@Simulator@@YAXXZ  01389390  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPGonzago/_at_01380000.cpp  ?InitScenarioModeUI@@YAXXZ  013894f0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPGonzago/_at_01380000.cpp  ?InitHeadArray@@YAXXZ  01389680  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPGonzago/_at_01380000.cpp  ?InitServerIdAttributes@@YAXXZ  0138a250  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPGonzago/_at_01380000.cpp  ?InitSensorTagAttributes@@YAXXZ  0138a400  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPGonzago/_at_01380000.cpp  ?InitScenarioClassActAttributes@@YAXXZ  0138a710  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPGonzago/_at_01380000.cpp  ?InitVsliderAttributes@@YAXXZ  0138b9b0  /O2 /MD /Gy /TP /GS- /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_01380000.cpp  ?InitAssetPartAttributes@@YAXXZ  0138bc70  /O2 /MD /Gy /TP /GS- /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_01380000.cpp  ?f0138c5d0@@YAXXZ  0138c5d0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPGonzago/_at_01380000.cpp  ?init_16c8b40@@YAXXZ  0138e640  /O2 /MD /Gy /EHsc /TP /Isrc/game/include

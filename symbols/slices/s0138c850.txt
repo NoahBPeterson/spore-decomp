@@ -1,1 +1,1 @@
-0138c850 InitScenarioResourceAttributes  # dynamic initializer of the cScenarioResource attribute table at 0x015af500 (names/offsets match ModAPI cScenarioResource.h)
+0138c850 ?InitScenarioResourceAttributes@Simulator@@YAXXZ  # InitScenarioResourceAttributes migrated from s0138c850 (verbatim, slice spelling)
