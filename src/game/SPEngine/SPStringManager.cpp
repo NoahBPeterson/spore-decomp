@@ -40,7 +40,7 @@ void* __cdecl operator new(unsigned int n, const char* name, int a, int b, int c
 #define EASTL_ALLOC(n) ::operator new((n), "App", 0, 0, \
     "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h", 0xd1)
 namespace SP {
-struct cString_s006b_6920 { bool Load(int a, int b, int c); };   // 0x006b54b0
+class cString_s006b_6920 { public: bool Load(int a, int b, int c); };   // 0x006b54b0
 }
 namespace SP {
 class cStringDetokenizer { public:
@@ -144,10 +144,23 @@ struct IResKeySrc  { virtual void s0(); virtual void s1(); virtual void s2(); vi
 }
 namespace SP {
 struct IResMan {
-    virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3(); virtual void v4();
-    virtual void v5(); virtual void v6(); virtual void v7(); virtual void v8(); virtual void v9();
-    virtual void v10(); virtual void v11(); virtual void v12(); virtual void v13(); virtual void v14();
-    virtual void v15(); virtual void v16();
+virtual void v0();
+virtual void v1();
+virtual void v2();
+virtual void v3();
+virtual void v4();
+virtual void v5();
+virtual void v6();
+virtual void v7();
+virtual void v8();
+virtual void v9();
+virtual void v10();
+virtual void v11();
+virtual void v12();
+virtual void v13();
+virtual void v14();
+virtual void v15();
+virtual void v16();
     virtual void RegisterFactory(int on, void* factory, int zero);   // +0x44
 };
 }
@@ -164,10 +177,15 @@ struct FactoryBase {
 };
 }
 namespace SP {
-struct cStringTableResourceFactory_s006b_6920 : FactoryBase {
+class cStringTableResourceFactory_s006b_6920 : public FactoryBase { public:
     // slots 3..8 padding, 9 = ReadResource (see 6b6bf0)
-    virtual void f3(); virtual void f4(); virtual void f5(); virtual void f6(); virtual void f7(); virtual void f8();
-    virtual bool ReadResource(IKeyStream* pIn, StringTable* pTable, uint32_t arg3, uint32_t type);
+virtual void f3();
+virtual void f4();
+virtual void f5();
+virtual void f6();
+virtual void f7();
+virtual void f8();
+    virtual bool ReadResource(IKeyStream* pIn, StringTable* pTable, uint32_t arg3, uint32_t type);  // 0x006b7430 (SP::cStringTableResourceFactory::ReadResource)
     uint32_t m_bytes_to_read;       // +0x08
     uint32_t m_pos;                 // +0x0c
     uint32_t m_bytes_read;          // +0x10
@@ -241,6 +259,7 @@ class cStringManager { public:
     bool LoadAll();
 };
 }
+extern SP::StringSetNode* gEmptyBucketArray[];   // 0x0154df28
 namespace EA {
 namespace Text {
 int __cdecl GetCharacterAsUTF16(wchar16* dst, uint32_t dstCap, const char* src, int srcLen);   // 0x0093cf60
@@ -356,6 +375,38 @@ template <> void SPVector<Pair8>::reserve(uint32_t n)
 }
 }  // namespace SP
 
+// @ 0x006b6af0
+namespace SP {
+template <> void SPVector<uint16_t>::reserve(uint32_t n)
+{
+    if (n > (uint32_t)(mpCapacity - mpBegin)) {
+        uint16_t* pNew = n ? (uint16_t*)EASTL_ALLOC(n * 2) : 0;
+        memcpy(pNew, mpBegin, (char*)mpEnd - (char*)mpBegin);
+        Free(mpBegin);
+        uint32_t sz = mpEnd - mpBegin;
+        mpBegin = pNew;
+        mpEnd = pNew + sz;
+        mpCapacity = pNew + n;
+    }
+}
+}  // namespace SP
+
+// @ 0x006b6b70
+namespace SP {
+template <> void SPVector<uint8_t>::reserve(uint32_t n)
+{
+    if (n > (uint32_t)(mpCapacity - mpBegin)) {
+        uint8_t* pNew = n ? (uint8_t*)EASTL_ALLOC(n) : 0;
+        memcpy(pNew, mpBegin, mpEnd - mpBegin);
+        Free(mpBegin);
+        uint32_t sz = mpEnd - mpBegin;
+        mpBegin = pNew;
+        mpEnd = pNew + sz;
+        mpCapacity = pNew + n;
+    }
+}
+}  // namespace SP
+
 // @ 0x006b6bf0
 bool SP::cStringTableResourceFactory_s006b_6920::Create(IResKeySrc* pSrc, StringTable** ppOut, uint32_t arg3, uint32_t type)
 {
@@ -379,6 +430,21 @@ bool SP::cStringTableResourceFactory_s006b_6920::Create(IResKeySrc* pSrc, String
     return ok;
 }
 
+// @ 0x006b6d10
+SP::cStringManager::cStringManager()
+{
+    mStringList.mfMaxLoadFactor = 1.0f;
+    mStringList.mfGrowthFactor = 2.0f;
+    mStringList.mnBucketCount = 1;
+    mStringList.mpBucketArray = gEmptyBucketArray;
+    mStringList.mnElementCount = 0;
+    mStringList.mnNextResize = 0;
+    mpFactory.mp = 0;
+    mpFactory = new ("UI/SP::cString", 0, 0, 0, 0) cStringTableResourceFactory_s006b_6920();
+    GetResourceManager()->RegisterFactory(1, mpFactory.mp, 0);
+    mpDetokenizer = new ("App/cStringDetokenizer", 0, 0, 0, 0) cStringDetokenizer();
+}
+
 // @ 0x006b6e50
 bool SP::cStringManager::AddString(SP::cString_s006b_6920* p)
 {
@@ -386,6 +452,140 @@ bool SP::cStringManager::AddString(SP::cString_s006b_6920* p)
     mStringList.insert(result, &p, InsertTag());
     return true;
 }
+
+// @ 0x006b6e80
+namespace SP {
+template <> void SPVector<uint8_t>::insert(uint8_t* pos, const uint8_t& val)
+{
+    if (mpEnd != mpCapacity) {
+        const uint8_t* pv = &val;
+        if (pv >= pos && pv < mpEnd)
+            ++pv;
+        if (mpEnd)
+            *mpEnd = mpEnd[-1];
+        uint8_t* pLast = mpEnd - 1;
+        memmove(pos + (mpEnd - pLast), pos, pLast - pos);
+        *pos = *pv;
+        ++mpEnd;
+    } else {
+        uint32_t nPrev = mpEnd - mpBegin;
+        uint32_t nNew = nPrev ? nPrev * 2 : 1;
+        uint8_t* pNew = nNew ? (uint8_t*)EASTL_ALLOC(nNew) : 0;
+        uint32_t nBefore = pos - mpBegin;
+        uint8_t* p = (uint8_t*)memcpy(pNew, mpBegin, nBefore) + nBefore;
+        if (p)
+            *p = val;
+        uint32_t nAfter = mpEnd - pos;
+        uint8_t* pEndNew = (uint8_t*)memcpy(p + 1, pos, nAfter) + nAfter;
+        Free(mpBegin);
+        mpBegin = pNew;
+        mpEnd = pEndNew;
+        mpCapacity = pNew + nNew;
+    }
+}
+}  // namespace SP
+
+// @ 0x006b6f80
+namespace SP {
+template <> void SPVector<uint16_t>::insert(uint16_t* pos, uint32_t n, const uint16_t& val)
+{
+    if ((uint32_t)(mpCapacity - mpEnd) >= n) {
+        if (n > 0) {
+            const uint16_t temp = val;
+            uint16_t* const pEndOld = mpEnd;
+            const uint32_t nElementsAfter = pEndOld - pos;
+            if (n < nElementsAfter) {
+                uint16_t* pMoved = pEndOld - n;
+                memcpy(mpEnd, pMoved, (char*)pEndOld - (char*)pMoved);
+                mpEnd += n;
+                memmove(pEndOld - (pMoved - pos), pos, (char*)pMoved - (char*)pos);
+                for (uint16_t* p = pos; p != pos + n; ++p)
+                    *p = temp;
+            } else {
+                uint32_t nExtra = n - nElementsAfter;
+                uint16_t* p;
+                if (nExtra) {
+                    for (p = pEndOld; p != pEndOld + nExtra; ++p)
+                        *p = temp;
+                }
+                mpEnd += nExtra;
+                memcpy(mpEnd, pos, (char*)pEndOld - (char*)pos);
+                mpEnd += nElementsAfter;
+                for (p = pos; p != pEndOld; ++p)
+                    *p = temp;
+            }
+        }
+    } else {
+        uint32_t nPrev = mpEnd - mpBegin;
+        uint32_t nGrow = nPrev ? nPrev * 2 : 1;
+        uint32_t nNew = nPrev + n;
+        if (nNew < nGrow)
+            nNew = nGrow;
+        uint16_t* pNew = nNew ? (uint16_t*)EASTL_ALLOC(nNew * 2) : 0;
+        uint32_t nBefore = (char*)pos - (char*)mpBegin;
+        uint16_t* p = (uint16_t*)((char*)memcpy(pNew, mpBegin, nBefore) + (((int)nBefore >> 1) * 2));
+        uint16_t v = val;
+        for (uint32_t i = 0; i < n; ++i)
+            p[i] = v;
+        uint32_t nAfter = (char*)mpEnd - (char*)pos;
+        uint16_t* pEndNew = (uint16_t*)((char*)memcpy(p + n, pos, nAfter) + (((int)nAfter >> 1) * 2));
+        Free(mpBegin);
+        mpBegin = pNew;
+        mpEnd = pEndNew;
+        mpCapacity = pNew + nNew;
+    }
+}
+}  // namespace SP
+
+// @ 0x006b7180
+namespace SP {
+template <> void SPVector<uint8_t>::insert(uint8_t* pos, uint32_t n, const uint8_t& val)
+{
+    if ((uint32_t)(mpCapacity - mpEnd) >= n) {
+        if (n > 0) {
+            const uint8_t temp = val;
+            uint8_t* const pEndOld = mpEnd;
+            const uint32_t nElementsAfter = pEndOld - pos;
+            if (n < nElementsAfter) {
+                uint8_t* pMoved = pEndOld - n;
+                memcpy(mpEnd, pMoved, pEndOld - pMoved);
+                mpEnd += n;
+                memmove(pEndOld - (pMoved - pos), pos, pMoved - pos);
+                memset(pos, temp, n);
+            } else {
+                uint32_t nExtra = n - nElementsAfter;
+                if (nExtra)
+                    memset(pEndOld, temp, nExtra);
+                mpEnd += nExtra;
+                memcpy(mpEnd, pos, pEndOld - pos);
+                mpEnd += nElementsAfter;
+                memset(pos, temp, pEndOld - pos);
+            }
+        }
+    } else {
+        uint32_t nPrev = mpEnd - mpBegin;
+        uint32_t nGrow = nPrev ? nPrev * 2 : 1;
+        uint32_t nNew = nPrev + n;
+        if (nNew < nGrow)
+            nNew = nGrow;
+        uint8_t* pNew = nNew ? (uint8_t*)EASTL_ALLOC(nNew) : 0;
+        uint32_t nBefore = pos - mpBegin;
+        uint8_t* p = (uint8_t*)memcpy(pNew, mpBegin, nBefore) + nBefore;
+        uint8_t v = val;
+        // The original /O2 build reuses the val-pointer stack slot for the byte fill value and reloads the
+        // full 32-bit slot for memset (only the low byte matters to memset). Reproduce that exact argument.
+        uint32_t mval = ((uint32_t)&val & 0xFFFFFF00u) | v;
+        if (n)
+            memset(p, mval, n);
+        uint32_t nAfter = mpEnd - pos;
+        uint8_t* pEndNew = (uint8_t*)memcpy(p + n, pos, nAfter) + nAfter;
+        Free(mpBegin);
+        mpBegin = pNew;
+        mpEnd = pEndNew;
+        mpCapacity = pNew + nNew;
+    }
+}
+}  // namespace SP
 
 // @ 0x006b7320
 namespace SP {
@@ -400,6 +600,36 @@ const wchar16* SP::StringTable::GetString(uint32_t id)
     if (it != pEnd && it->offset < (uint32_t)(mChars.mpEnd - mChars.mpBegin))
         return mChars.mpBegin + it->offset;
     return gEmptyString;
+}
+}  // namespace SP
+
+// @ 0x006b7380
+namespace SP {
+template <> void SPVector<uint16_t>::resize(uint32_t n)
+{
+    uint16_t* pEnd = mpEnd;
+    uint32_t nSize = pEnd - mpBegin;
+    if (n > nSize) {
+        uint16_t zero = 0;
+        insert(pEnd, n - nSize, zero);
+    } else {
+        erase(mpBegin + n, pEnd);
+    }
+}
+}  // namespace SP
+
+// @ 0x006b73e0
+namespace SP {
+template <> void SPVector<uint8_t>::resize(uint32_t n)
+{
+    uint8_t* pEnd = mpEnd;
+    uint8_t* pBegin = mpBegin;
+    if (n > (uint32_t)(pEnd - pBegin)) {
+        uint8_t zero = 0;
+        insert(pEnd, n - (pEnd - pBegin), zero);
+    } else {
+        erase(pBegin + n, pEnd);
+    }
 }
 }  // namespace SP
 
