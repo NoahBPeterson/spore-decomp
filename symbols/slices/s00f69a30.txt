@@ -1,9 +1,9 @@
-00f69a30 Init  # SP::cTerrainEditor::Init
-00f69e50 HandleMessage  # SP::cTerrainEditor::HandleMessage
-00f69f50 ReadTile  # SP::cTerrainEditor::ReadTile (Ghidra: FUN_00f69f50)
-00f6a3a0 DrawBrushLayer  # SP::cTerrainEditor::DrawBrushLayer
-00f6a4b0 Construct  # SP::cTerrainEditor::Construct
-00f6a5d0 Destroy  # SP::cTerrainEditor::Destroy
+00f69a30 ?Init@cTerrainEditor_s00f6_9a30@@QAEXXZ  # cTerrainEditor_s00f6_9a30::Init migrated from s00f69a30 (verbatim, slice spelling)
+00f69e50 ?HandleMessage@cTerrainEditor_s00f6_9a30@@QAEIIPAX@Z  # cTerrainEditor_s00f6_9a30::HandleMessage migrated from s00f69a30 (verbatim, slice spelling)
+00f69f50 ?ReadTile@cTerrainEditor_s00f6_9a30@@QAE_NHPBHM@Z  # cTerrainEditor_s00f6_9a30::ReadTile migrated from s00f69a30 (verbatim, slice spelling)
+00f6a3a0 ?DrawBrushLayer@cTerrainEditor_s00f6_9a30@@QAE_NI@Z  # cTerrainEditor_s00f6_9a30::DrawBrushLayer migrated from s00f69a30 (verbatim, slice spelling)
+00f6a4b0 ?Construct@cTerrainEditor_s00f6_9a30@@QAEXXZ  # cTerrainEditor_s00f6_9a30::Construct migrated from s00f69a30 (verbatim, slice spelling)
+00f6a5d0 ?Destroy@cTerrainEditor_s00f6_9a30@@QAEXXZ  # cTerrainEditor_s00f6_9a30::Destroy migrated from s00f69a30 (verbatim, slice spelling)
 00f6a6a0 DrawBrush  # SP::cTerrainEditor::DrawBrush
-00f6a710 SetBrushShaderData  # SP::cTerrainEditor::SetBrushShaderData
+00f6a710 ?SetBrushShaderData@cTerrainEditor_s00f6_9a30@@QAEXPAXH@Z  # cTerrainEditor_s00f6_9a30::SetBrushShaderData migrated from s00f69a30 (verbatim, slice spelling)
 00f6a8d0 TextureMapQuadRTT  # SP::cTerrainEditor::TextureMapQuadRTT

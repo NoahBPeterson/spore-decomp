@@ -1,2 +1,17 @@
 # source  symbol  va  flags
+../src/game/SPTerrain/SPTerrainEditor.cpp  ?back@BrushVertexVector@@QAEPAUcBrushVertex@@XZ  00f4b180  /O2 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
+../src/game/SPTerrain/SPTerrainEditor.cpp  ?CopyElemsBackward@@YAPAUBrushBigElem@@PAU1@00@Z  00f4b190  /O2 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
+../src/game/SPTerrain/SPTerrainEditor.cpp  ?ApplyEffect@cTerrainBrushEffect_s00f4_c300@@UAEXMMPAUcComponentStats@@@Z  00f4c300  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPTerrain/SPTerrainEditor.cpp  ??1cDistCellMesh@SP@@QAE@XZ  00f66e70  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPTerrain/SPTerrainEditor.cpp  ?TerrainDrawDestroy@@YAXPAX@Z  00f672b0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPTerrain/SPTerrainEditor.cpp  ?AllocTerrainDraw@@YAPAXPAX00@Z  00f672f0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPTerrain/SPTerrainEditor.cpp  ?Destroy@TempExtract@@QAEXXZ  00f674c0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPTerrain/SPTerrainEditor.cpp  ?Draw@TerrainFace@@QAEXHPAX@Z  00f67810  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPTerrain/SPTerrainEditor.cpp  ?GetDepth@TerrainFace@@QAEMXZ  00f678d0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPTerrain/SPTerrainEditor.cpp  ?DrawRaster@cTerrainEditor_s00f6_7e70@SP@@QAEXHIPAHI@Z  00f68c80  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPTerrain/SPTerrainEditor.cpp  ?Draw@Compositor@@QAE_NPAUSource@@PBIHURect@@MMMHPAX@Z  00f6a960  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPTerrain/SPTerrainEditor.cpp  ??0ImgDesc@@QAE@ABU0@@Z  00f6b000  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPTerrain/SPTerrainEditor.cpp  ?Release@QuadSource@@QAEXXZ  00f6b2d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPTerrain/SPTerrainEditor.cpp  ?Assign@ImgDesc@@QAEAAU1@PBD@Z  00f6b330  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPTerrain/SPTerrainEditor.cpp  ?FreeAll@QuadNode@@QAEXXZ  00f6b7c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPTerrain/SPTerrainEditor.cpp  ?PushFront@ListHead@TE@@QAEXPBX@Z  00f6bd20  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include

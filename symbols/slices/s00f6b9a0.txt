@@ -1,3 +1,5 @@
+00f6bc10 ?ResetEditor@cTerrainEditor@TE@@QAEXXZ  # cTerrainEditor::ResetEditor migrated from s00f6b9a0 (verbatim, slice spelling)
+00f6bd20 ?PushFront@ListHead@TE@@QAEXPBX@Z  # ListHead::PushFront migrated from s00f6b9a0 (verbatim, slice spelling)
 00f6bd70 ?UpdateCPUFromGPU@cTerrainEditor@TE@@QAE_NM@Z  # cTerrainEditor::UpdateCPUFromGPU migrated from s00f6b9a0 (verbatim, slice spelling)
 00f99ac0 SP::cTerrainSphere::MarkFaceDirty  # thiscall(face, Rect*) ret 8, from UpdateCPUFromGPU
 00fa43e0 SP::cTerrainSphere::Relevel  # thiscall(float,int) ret 8

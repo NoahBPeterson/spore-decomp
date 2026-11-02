@@ -2,5 +2,5 @@
 00f4bcb0 ?ApplyGlobalBrush@cTerrainBrushEffect_s00f4_baa0@@QAEXMPBUcRibbonFalloffParams@SP@@@Z  # cTerrainBrushEffect_s00f4_baa0::ApplyGlobalBrush migrated from s00f4baa0 (verbatim, slice spelling)
 00f4bf30 ?DoInsertValue@?$vector_s00f4_baa0@UcBrushVertex_s00f4_baa0@SP@@Usp_vector_allocator_s00f4_baa0@eastl@@@eastl@@QAEXPAUcBrushVertex_s00f4_baa0@SP@@ABU34@@Z  # DoInsertValue migrated from s00f4baa0 (verbatim, slice spelling)
 00f4c150 ?push_back@?$vector_s00f4_baa0@UcBrushVertex_s00f4_baa0@SP@@Usp_vector_allocator_s00f4_baa0@eastl@@@eastl@@QAEXXZ  # push_back migrated from s00f4baa0 (verbatim, slice spelling)
-00f4c180 ?DoInsertValue@?$vector@UcRibbonBrushPoly@SP@@Usp_vector_allocator@eastl@@@eastl@@QAEXPAUcRibbonBrushPoly@SP@@ABU34@@Z  # eastl::vector<cRibbonBrushPoly>::DoInsertValue
+00f4c180 ?DoInsertValue@?$vector_s00f4_baa0@UcRibbonBrushPoly@SP@@Usp_vector_allocator_s00f4_baa0@eastl@@@eastl@@QAEXPAUcRibbonBrushPoly@SP@@ABU34@@Z  # DoInsertValue migrated from s00f4baa0 (verbatim, slice spelling)
 00f4c2c0 ?Start@cTerrainBrushEffect@@QAEXH@Z  # SP::cTerrainBrushEffect::Start(int)

@@ -1,1 +1,1 @@
-00f4c300 SP::cTerrainBrushEffect::ApplyEffect  # vtable 0x0148e714 (vtbl_Terrain::SWARM_TerrainBrushCreate) slot 5 = Swarm IComponent::ApplyEffect(float,float,cComponentStats*), ret 0xc; members match PDB SP::cTerrainBrushEffect
+00f4c300 ?ApplyEffect@cTerrainBrushEffect_s00f4_c300@@UAEXMMPAUcComponentStats@@@Z  # cTerrainBrushEffect_s00f4_c300::ApplyEffect migrated from s00f4c300 (verbatim, slice spelling)

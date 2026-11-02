@@ -4,12 +4,12 @@
 00f4ac10  SWARM_TerrainBrushAddCommands       # MAJOR: registers the four SWARM brush commands (inlined ctors)
 00f4adf0  ReadTerrainBrushDesc                # MAJOR: stream reader for cTerrainBrushDescription fields
 00f4b110 ?SetParam@cTerrainBrushEffect@@QAE_NHPAMH@Z  # cTerrainBrushEffect::SetParam migrated from s00f4aaf0 (verbatim, slice spelling)
-00f4b180  BrushVertexVector::back              # MAJOR: end-1 element of the cBrushVertex vector
-00f4b190  CopyElemsBackward                   # MAJOR: backward range copy of BrushBigElem (0x28-stride)
+00f4b180 ?back@BrushVertexVector@@QAEPAUcBrushVertex@@XZ  # BrushVertexVector::back migrated from s00f4aaf0 (verbatim, slice spelling)
+00f4b190 ?CopyElemsBackward@@YAPAUBrushBigElem@@PAU1@00@Z  # CopyElemsBackward migrated from s00f4aaf0 (verbatim, slice spelling)
 00f4b1d0 ?CopyF7@@YAPAUF7@@PAU1@00@Z  # CopyF7 migrated from s00f4aaf0 (verbatim, slice spelling)
 00f4b220 ??0SWARM_TerrainBrushCreate@@QAE@PAX@Z  # SWARM_TerrainBrushCreate::SWARM_TerrainBrushCreate migrated from s00f4aaf0 (verbatim, slice spelling)
 00f4b3a0 ??1SWARM_TerrainBrushCreate@@QAE@XZ  # SWARM_TerrainBrushCreate::~SWARM_TerrainBrushCreate migrated from s00f4aaf0 (verbatim, slice spelling)
 00f4b420 ?Initialize@cTerrainBrushEffect@@UAEXPAX00@Z  # cTerrainBrushEffect::Initialize migrated from s00f4aaf0 (verbatim, slice spelling)
-00f4b4c0  CopyElemsForward                    # MAJOR: forward range copy of BrushHugeElem (~0x1c0-stride, x87)
-00f4b6e0  cTerrainBrushEffect::SetTransform   # MAJOR: build transform, pre-transform, init previous values
+00f4b4c0 ?CopyElemsForward@@YAXPAUBrushHugeElem@@00@Z  # CopyElemsForward migrated from s00f4aaf0 (verbatim, slice spelling)
+00f4b6e0 ?SetTransform@cTerrainBrushEffect@@QAEXPAXPBUcTransform@@@Z  # cTerrainBrushEffect::SetTransform migrated from s00f4aaf0 (verbatim, slice spelling)
 00f4b870 ?Imprint@cTerrainBrushEffect@@QAEXABUVector3@@HHHPBX@Z  # cTerrainBrushEffect::Imprint migrated from s00f4aaf0 (verbatim, slice spelling)

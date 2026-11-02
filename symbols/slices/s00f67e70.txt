@@ -1,7 +1,7 @@
 00f67e70 Init  # SP::cTerrainEditor::Init
 00f67ff0 Enable  # SP::cTerrainEditor::Enable
-00f684c0 UpdateRange  # SP::cTerrainEditor::UpdateRange
-00f68070 BuildBrush  # SP::cTerrainEditor::BuildBrush
-00f68650 DrawUnitQuad  # SP::cTerrainEditor::DrawUnitQuad
-00f687f0 TessellateBrush  # SP::cTerrainEditor::TessellateBrush (Ghidra card comment)
-00f68c80 DrawRaster  # SP::cTerrainEditor::DrawRaster
+00f68070 ?BuildBrush@cTerrainEditor_s00f6_7e70@SP@@QAE_NPAUFaceVec@@III@Z  # BuildBrush migrated from s00f67e70 (verbatim, slice spelling)
+00f684c0 ?UpdateRange@cTerrainEditor_s00f6_7e70@SP@@QAEXPAH@Z  # UpdateRange migrated from s00f67e70 (verbatim, slice spelling)
+00f68650 ?DrawUnitQuad@cTerrainEditor_s00f6_7e70@SP@@QAE_NHII@Z  # DrawUnitQuad migrated from s00f67e70 (verbatim, slice spelling)
+00f687f0 ?TessellateBrush@cTerrainEditor_s00f6_7e70@SP@@SGXPAX0PBMHHHH@Z  # TessellateBrush migrated from s00f67e70 (verbatim, slice spelling)
+00f68c80 ?DrawRaster@cTerrainEditor_s00f6_7e70@SP@@QAEXHIPAHI@Z  # DrawRaster migrated from s00f67e70 (verbatim, slice spelling)

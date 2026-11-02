@@ -1,1 +1,2 @@
+00f6e120 ?SplitPolysToCubeFaces@BrushCubeSplitter@@QAEXHPAUBrushTarget@@HPBUcRibbonBrushPoly_s00f6_df40@SP@@H@Z  # BrushCubeSplitter::SplitPolysToCubeFaces migrated from s00f6df40 (verbatim, slice spelling)
 00f6eb40 ?FUN_00f6eb40@@YGXPAUAABox@@@Z  # FUN_00f6eb40 migrated from s00f6df40 (verbatim, slice spelling)
