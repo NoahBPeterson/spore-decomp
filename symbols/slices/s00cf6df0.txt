@@ -2,7 +2,7 @@
 00cf6e30  FUN_00cf6e30() -> u32  # property list 0x15fd918 GetDescription(0x61b67b6) ? FNVHash("CVG-CamRotate-MAC") : FNVHash("CVG-CamRotate") seed 0x811c9dc5 flag 1
 00cf6e70 ?FUN_00cf6e70@@YAMXZ  # FUN_00cf6e70 migrated from s00cf6df0 (verbatim, slice spelling)
 00cf7090 ?FUN_00cf7090@@YAMXZ  # FUN_00cf7090 migrated from s00cf6df0 (verbatim, slice spelling)
-00cf7150  FUN_00cf7150() -> void  # city= FUN_00b25c30(NounManager); civ= GetPlayerCivilization; sphere pos @0x115c; FUN_00bddda0(city,spec,0,Vec3,0); cost= FUN_00bf2170(civ,spec,0); FUN_00bef710(civ,cost)
+00cf7150 ?FUN_00cf7150@@YAXXZ  # FUN_00cf7150 migrated from s00cf6df0 (verbatim, slice spelling)
 00cf71d0 ?FUN_00cf71d0@@YIXPAX0I@Z  # FUN_00cf71d0 migrated from s00cf6df0 (verbatim, slice spelling)
 00cf7360 ?ShutdownGonzagoSubsystem@@YAXXZ  # ShutdownGonzagoSubsystem migrated from s00cf6df0 (verbatim, slice spelling)
 00cf7380 ?OnMouseDown@cCivModeStrategy@@QAEXIMMI@Z  # cCivModeStrategy::OnMouseDown migrated from s00cf6df0 (verbatim, slice spelling)

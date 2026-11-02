@@ -1,4 +1,5 @@
 # source  symbol  va  flags
+../src/game/SPGonzago/SPCityModeStrategy.cpp  ?FUN_00cf7150@@YAXXZ  00cf7150  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPCityModeStrategy.cpp  ?ShutdownGonzagoSubsystem@@YAXXZ  00cf7360  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPCityModeStrategy.cpp  ?OnMouseDown@cCivModeStrategy@@QAEXIMMI@Z  00cf7380  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPCityModeStrategy.cpp  ?OnMouseMove@cCivModeStrategy@@QAEXMMI@Z  00cf73d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

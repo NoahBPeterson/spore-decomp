@@ -1,1 +1,8 @@
+00cfab90 ?FUN_00cfab90@@YAXXZ  # FUN_00cfab90 migrated from s00cfab90 (verbatim, slice spelling)
+00cfadf0 ?FUN_00cfadf0@@YAXXZ  # FUN_00cfadf0 migrated from s00cfab90 (verbatim, slice spelling)
+00cfb040 ?FUN_00cfb040@@YAXXZ  # FUN_00cfb040 migrated from s00cfab90 (verbatim, slice spelling)
+00cfb0b0 ?FUN_00cfb0b0@@YAXXZ  # FUN_00cfb0b0 migrated from s00cfab90 (verbatim, slice spelling)
+00cfb140 ?FUN_00cfb140@@YAXXZ  # FUN_00cfb140 migrated from s00cfab90 (verbatim, slice spelling)
+00cfb2c0 ?FUN_00cfb2c0@@YAXXZ  # FUN_00cfb2c0 migrated from s00cfab90 (verbatim, slice spelling)
 00cfb610 ?GetNumberedCity@cCivModeStrategy_s00cf_ab90@@QAEPAXH@Z  # cCivModeStrategy_s00cf_ab90::GetNumberedCity migrated from s00cfab90 (verbatim, slice spelling)
+00cfb660 ?FUN_00cfb660@@YAXXZ  # FUN_00cfb660 migrated from s00cfab90 (verbatim, slice spelling)

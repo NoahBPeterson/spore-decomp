@@ -51,17 +51,14 @@ extern "C" void *FUN_0067cac0();         // 0x0067cac0
 extern "C" void  FUN_0067c8c0();         // 0x0067c8c0 (thiscall)
 
 // ---- items of slice s00cf6df0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C" void  *FUN_00b25c30();                               // 0x00b25c30
+extern "C" void   FUN_00bddda0();                               // 0x00bddda0 cCity method (thiscall)
+extern "C" float  FUN_00bf2170();                               // 0x00bf2170 cCivilization method (thiscall)
+extern "C" void   FUN_00bef710();                               // 0x00bef710 cCivilization::SpendMoney (thiscall)
 typedef unsigned int   u32;
 typedef unsigned char  u8;
 typedef int            i32;
-extern "C" void  *SP_NounManager();                         // 0x00b3d300
-extern "C" void  *GetTriggerMgr();                          // 0x00b3d4d0
-extern "C" void  *CheatManager();                           // 0x0067de20
-extern "C" void  *SP_GetTerrainSphere();                    // 0x00f67d90 cTerrainEditor::GetCurrentTerrainSphere
 extern "C" i32    FUN_00c75420(void *o);                    // 0x00c75420
-extern "C" void  *GetPlayerCivilization(void *mgr);         // 0x00b25fb0
-extern "C" bool   FUN_007cd9c0(void *o);                    // 0x007cd9c0
-extern "C" bool   FUN_007cfac0(void *o);                    // 0x007cfac0
 struct cCivModeStrategy {
     void **m_vtbl;              // +0x00
     u8     m_pad04[0xb0];
@@ -86,11 +83,7 @@ struct cCivModeStrategy {
     void  OnMouseUp(u32 a, float x, float y, u32 b);   // 0x00cf7420
     void  DoCVGCompletionAchievements();               // 0x00cf7630
 };
-extern const float kDefaultTerrainA;   // 0x169ca8c
-extern const float kDefaultTerrainB;   // 0x169ca88
-extern const float kDefaultTerrainC;   // 0x169ca84
 extern "C" i32 FUN_00bd81d0(void *city);      // 0x00bd81d0 cCity::GetVehicleSpecialty
-extern "C" void FUN_00bd91e0(void *city);      // 0x00bd91e0
 struct Vec4Arr {
     void **m_begin;     // +0x00
     void **m_end;       // +0x04
@@ -103,34 +96,12 @@ struct CivEventReq {
     u32 m_pad04;    // +0x04
     u32 m_hash;     // +0x08 (0xaa9a8ed7)
 };
-extern "C" bool FUN_00c78420();                                 // 0x00c78420 (thiscall)
-extern "C" bool FUN_00c77c50();                                 // 0x00c77c50 (thiscall)
 extern "C" u32 FNVHash(const char *s, u32 seed, int flag);      // 0x00932e80
-extern "C" bool FUN_006a25a0();                                // 0x006a25a0 cDirectPropertyList::GetDescription (thiscall)
 extern u32 g_propList15fd918;                                   // 0x015fd918
-extern "C" void  *GameTimeManager();                            // 0x00b3d380
-extern "C" void  *FUN_00b3d4f0();                               // 0x00b3d4f0
-extern "C" void   FUN_00b32250();                               // 0x00b32250
-extern "C" void   FUN_00e2f270();                               // 0x00e2f270
-extern "C" void *GameInputManager();    // 0x00b3d250
-extern "C" void  FUN_00697ab0();        // 0x00697ab0 cLocalInputState::OnMouseDown (thiscall)
-extern "C" void  FUN_00697af0();        // 0x00697af0 cLocalInputState::OnMouseUp   (thiscall)
-extern "C" void  FUN_00697b20();        // 0x00697b20 cLocalInputState::OnMouseWheel (thiscall)
+struct Vec3f { u32 x, y, z; };
 extern u8   g_serTable[];               // 0x168caf0 .. 0x168cb44 (stride 0x1c)
 extern u32  g_serVersion;               // 0x145f8dc
-extern "C" bool WriteUint32();          // 0x0093aa70 EA::IO::WriteUint32 (cdecl)
-extern "C" bool ReadInt32();            // 0x0093a780 EA::IO::ReadInt32 (cdecl)
-extern "C" void FUN_00befc00(void *stream, void *elem);   // 0x00befc00 write one record
-extern "C" void FUN_00befbc0(void *stream, void *elem);   // 0x00befbc0 read one record
-extern "C" void *AchievementsController();      // 0x00675250
 extern "C" i32   FUN_00bf01f0();                // 0x00bf01f0 count_specialty_cities (thiscall)
-extern "C" void  FUN_00676e90();                // 0x00676e90 Achievements::Controller::AutoTest (thiscall)
-extern "C" void  FUN_00676710();                // 0x00676710 Achievements::Controller::AwardAchievement (thiscall)
-extern "C" bool  FUN_00c772c0();                // 0x00c772c0 (thiscall)
-extern "C" void  FUN_0067caf0();            // 0x0067caf0 (cdecl)
-extern "C" void  FUN_0067aaf0();            // 0x0067aaf0 (thiscall)
-extern "C" void  FUN_00b32220();            // 0x00b32220 IncPauseGate (thiscall)
-extern "C" void *SP_ConfigManager();        // 0x0067dd30
 struct V3 { float x, y, z; };
 extern u32 g_1581b48, g_1581b4c, g_1581b50;
 extern u8  g_1581bd0;
@@ -139,9 +110,6 @@ extern u32 g_1581bc0, g_1581bc4, g_1581bc8;
 extern u8  g_1581bcc;
 struct U3 { u32 x, y, z; };
 extern "C" i32  FUN_00b320d0();          // 0x00b320d0 GetPauseGateCount (thiscall)
-extern "C" void FUN_00b32250();          // 0x00b32250 DecPauseGate (thiscall)
-extern "C" void *FUN_0067cac0();         // 0x0067cac0
-extern "C" void  FUN_0067c8c0();         // 0x0067c8c0 (thiscall)
 static void MarkCivEventId(u32 id)
 {
     CivEventReq req;
@@ -156,19 +124,6 @@ static void MarkCivEventId(u32 id)
 // ---- items of slice s00cf6df0 end
 
 // unnamed retail callees and globals that name local stubs (address in the comment)
-extern "C" i32    FUN_00c75420(void *o);                    // 0x00c75420
-extern "C" i32 FUN_00bd81d0(void *city);      // 0x00bd81d0 cCity::GetVehicleSpecialty
-extern "C" u32 FNVHash(const char *s, u32 seed, int flag);      // 0x00932e80
-extern u32 g_propList15fd918;                                   // 0x015fd918
-extern u8   g_serTable[];               // 0x168caf0 .. 0x168cb44 (stride 0x1c)
-extern u32  g_serVersion;               // 0x145f8dc
-extern "C" i32   FUN_00bf01f0();                // 0x00bf01f0 count_specialty_cities (thiscall)
-extern u32 g_1581b48, g_1581b4c, g_1581b50;
-extern u8  g_1581bd0;
-extern u32 g_1581bb4, g_1581bb8, g_1581bbc;
-extern u32 g_1581bc0, g_1581bc4, g_1581bc8;
-extern u8  g_1581bcc;
-extern "C" i32  FUN_00b320d0();          // 0x00b320d0 GetPauseGateCount (thiscall)
 
 // ---- items of slice s00cf8d70 begin (TODO(rewrite): local stubs, replace by canonical classes)
 namespace SP {
@@ -1027,6 +982,19 @@ class cCivModeStrategy_s00cf_d3a0 : public cGonzagoSubsystem_s00cf_d3a0, public 
 // ---- items of slice s00cfe160 begin
 #pragma warning(disable : 4100)
 // ---- items of slice s00cfe160 end
+
+// @ 0x00cf7150
+void FUN_00cf7150()
+{
+    void *city = ((void *(__thiscall *)(void *))FUN_00b25c30)(SP_NounManager());
+    void *civ = ((void *(__thiscall *)(void *))GetPlayerCivilization)(SP_NounManager());
+    void *sphere = ((void *(__thiscall *)(void *))SP_GetTerrainSphere)(SP_NounManager());
+    ((void (__thiscall *)(void *, i32, int, Vec3f, int))FUN_00bddda0)(
+        city, ((i32 (__thiscall *)(void *))FUN_00bd81d0)(city), 0,
+        *(Vec3f *)((u8 *)sphere + 0x115c), 0);
+    float cost = ((float (__thiscall *)(void *, i32, int))FUN_00bf2170)(civ, ((i32 (__thiscall *)(void *))FUN_00bd81d0)(city), 0);
+    ((void (__thiscall *)(void *, float))FUN_00bef710)(civ, cost);
+}
 
 // @ 0x00cf7360
 void ShutdownGonzagoSubsystem()
@@ -1903,6 +1871,30 @@ void Strat::SignalCivEvent(int a, float b, float c, int d)
     ((GameInput*)gim)->Signal(a, b, c, d);
 }
 
+// @ 0x00cfab90
+void FUN_00cfab90(void)
+{}
+
+// @ 0x00cfadf0
+void FUN_00cfadf0(void)
+{}
+
+// @ 0x00cfb040
+void FUN_00cfb040(void)
+{}
+
+// @ 0x00cfb0b0
+void FUN_00cfb0b0(void)
+{}
+
+// @ 0x00cfb140
+void FUN_00cfb140(void)
+{}
+
+// @ 0x00cfb2c0
+void FUN_00cfb2c0(void)
+{}
+
 // @ 0x00cfb610
 void* cCivModeStrategy_s00cf_ab90::GetNumberedCity(int index)
 {
@@ -1915,6 +1907,10 @@ void* cCivModeStrategy_s00cf_ab90::GetNumberedCity(int index)
         return ((void**)items[0])[index];
     return 0;
 }
+
+// @ 0x00cfb660
+void FUN_00cfb660(void)
+{}
 
 // @ 0x00cfd3a0
 namespace SP {
