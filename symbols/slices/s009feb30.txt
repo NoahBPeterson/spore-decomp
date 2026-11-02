@@ -1,3 +1,4 @@
+009feb30 ?RegisterSPSkinPaintCommands@@YA_NXZ  # RegisterSPSkinPaintCommands migrated from s009feb30 (verbatim, slice spelling)
 009fee90 ?Init@AnimGoal@@QAEXXZ  # AnimGoal::Init migrated from s009feb30 (verbatim, slice spelling)
 009fef20 ?CopyFiltersFrom@AnimGoal@@QAEXPAU1@@Z  # AnimGoal::CopyFiltersFrom migrated from s009feb30 (verbatim, slice spelling)
 009fef70 ?packHandle@@YAHHE@Z  # packHandle migrated from s009feb30 (verbatim, slice spelling)

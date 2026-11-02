@@ -14,17 +14,17 @@
 009fbe80 ?EffectsEmitEvent@@YAXPAXH0@Z  # EffectsEmitEvent migrated from s009fb8e0 (verbatim, slice spelling)
 009fbfc0 ?EffectsSpawn@@YA_NPAXH0HHPAPAX@Z  # EffectsSpawn migrated from s009fb8e0 (verbatim, slice spelling)
 009fc050 ?EffectsSpawnThunk@@YA_NHHHHH@Z  # EffectsSpawnThunk migrated from s009fb8e0 (verbatim, slice spelling)
-009fc090 PackFourCC  # pack up to 4 chars little-endian
+009fc090 ?PackFourCC@@YAIPBD@Z  # PackFourCC migrated from s009fb8e0 (verbatim, slice spelling)
 009fc0f0 ?FeedbackLookupName@@YAHPBD@Z  # FeedbackLookupName migrated from s009fb8e0 (verbatim, slice spelling)
 009fc140 ?BehaviorTableExpand@@YAXH@Z  # BehaviorTableExpand migrated from s009fb8e0 (verbatim, slice spelling)
 009fc220 ?BehaviorTableDedup@@YAXH@Z  # BehaviorTableDedup migrated from s009fb8e0 (verbatim, slice spelling)
 009fc310 ?BehaviorLookup@@YAHPAI@Z  # BehaviorLookup migrated from s009fb8e0 (verbatim, slice spelling)
-009fc3e0 ?cCommandBase_InitDeform@@YAXPAXHH@Z  # cCommandBase_InitDeform migrated from s009fb8e0 (verbatim, slice spelling)
-009fc440 ElemCtor  # Elem14 string triple ctors
-009fc4a0 RBTreeInsertIdx  # rbtree node insert
-009fc5b0 ElemConstructRange  # copy-construct element range
+009fc3e0 ?InitDeform@cCmdObj@@QAEXHH@Z  # cCmdObj::InitDeform migrated from s009fb8e0 (verbatim, slice spelling)
+009fc440 ?ElemCopy@Elem14@@QAEPAU1@PBU1@@Z  # Elem14::ElemCopy migrated from s009fb8e0 (verbatim, slice spelling)
+009fc4a0 ?InsertIdx@RBTreeX@@QAEXPAPAXPAXPAID@Z  # RBTreeX::InsertIdx migrated from s009fb8e0 (verbatim, slice spelling)
+009fc5b0 ?ElemConstructRange@@YAXPAPAUElem14@@PAU1@11@Z  # ElemConstructRange migrated from s009fb8e0 (verbatim, slice spelling)
 009fc680 ?ElemAssignFrom@@YAXPAUElem14@@00@Z  # ElemAssignFrom migrated from s009fb8e0 (verbatim, slice spelling)
-009fc6c0 ElemFill  # copy-construct n elements
-009fc8b0 ElemCopyRange  # copy-construct element range
+009fc6c0 ?ElemFill@@YAXPAUElem14@@I0@Z  # ElemFill migrated from s009fb8e0 (verbatim, slice spelling)
+009fc8b0 ?ElemCopyRange@@YAPAUElem14@@PAU1@00@Z  # ElemCopyRange migrated from s009fb8e0 (verbatim, slice spelling)
 009fc970 ?ElemMove@@YAPAUElem14@@PAU1@00@Z  # ElemMove migrated from s009fb8e0 (verbatim, slice spelling)
-009fc9c0 ElemHeapSiftUp  # binary-heap sift-up for Elem14
+009fc9c0 ?ElemHeapSiftUp@@YAXHHHUElem14@@P6A_NPAU1@1@Z@Z  # ElemHeapSiftUp migrated from s009fb8e0 (verbatim, slice spelling)

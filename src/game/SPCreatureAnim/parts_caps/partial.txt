@@ -1,2 +1,2 @@
 # partial: source exists and compiles, but is not verified complete / not behaviourally
-009fc3e0 75/89 /O2 /MD /Gy /TP /arch:SSE /fp:fast UNSUPPORTED cCommandBase::InitDeform: store arg at +0x30, FUN_0083c780, operator new(0x10)+ctor/overwrite vftable, then virtual slot 0x18. difftest: original reads ecx at entry (__thiscall) but our declaration is a free function.
+009fc8b0 159/184 /O2 /MD /Gy /TP /arch:SSE /fp:fast UNSUPPORTED ElemCopyRange: copy-construct [a,b) into c. difftest: 0/400 valid inputs (raw-buffer objects fault in both binaries; the original inlines the Elements copy with SSO and string pooling). flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
