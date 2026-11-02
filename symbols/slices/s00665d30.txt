@@ -9,4 +9,8 @@
 00666630 ?Reserve@CFeed@@QAEXHH@Z  # CFeed::Reserve migrated from s00665d30 (verbatim, slice spelling)
 00666680 ?CheckFlag@CFeed@@QAE_N_N@Z  # CFeed::CheckFlag migrated from s00665d30 (verbatim, slice spelling)
 006666c0 ?Refresh@CItem@@QAEXPAG@Z  # CItem::Refresh migrated from s00665d30 (verbatim, slice spelling)
+006668e0 ?SetImg@CW@@QAEXPAXHH@Z  # CW::SetImg migrated from s00665d30 (verbatim, slice spelling)
+00666a60 ??0WidA@@QAE@PAUIRef2@@@Z  # WidA::WidA migrated from s00665d30 (verbatim, slice spelling)
+00666af0 ??0WidB@@QAE@H@Z  # WidB::WidB migrated from s00665d30 (verbatim, slice spelling)
 00666b20 ?GetVec4@@YAPAMPAMPAUProp@@HMMMM@Z  # GetVec4 migrated from s00665d30 (verbatim, slice spelling)
+00666bc0 ?Action@CB@@QAE_NPAH@Z  # CB::Action migrated from s00665d30 (verbatim, slice spelling)

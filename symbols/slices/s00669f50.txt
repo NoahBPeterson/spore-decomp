@@ -1,5 +1,6 @@
 00669f50 ?Init@FeedItemInit@@QAE_NPAX0I0H@Z  # FeedItemInit::Init migrated from s00669f50 (verbatim, slice spelling)
 0066a5c0 ?FindIndex0066a5c0@@YAHH@Z  # FindIndex0066a5c0 migrated from s00669f50 (verbatim, slice spelling)
+0066a5e0 ?Set@FillBuf@@QAEPAU1@EH@Z  # FillBuf::Set migrated from s00669f50 (verbatim, slice spelling)
 0066a610 ?Neg@Neger@@QAEHHH@Z  # Neger::Neg migrated from s00669f50 (verbatim, slice spelling)
 0066a630 ?Get@Switcher@@QAEIXZ  # Switcher::Get migrated from s00669f50 (verbatim, slice spelling)
 0066a680 ??RCmpA680@@QAEIHH@Z  # CmpA680::operator() migrated from s00669f50 (verbatim, slice spelling)

@@ -23,7 +23,7 @@ struct Obj184 {
   void SetKey(const float* v, int a);
   void GetKey(float* out);
 };
-struct cSPUILayout_s0066_5d30 {
+class cSPUILayout_s0066_5d30 { public:
   virtual void v0();
   virtual void v1();
   virtual void v2();
@@ -79,14 +79,47 @@ struct VObj { void** vt; };
 typedef void* (__thiscall *FnV0)(void*);
 typedef void  (__thiscall *FnV1p)(void*, void*);
 typedef void  (__thiscall *FnV1i)(void*, int);
+typedef void  (__thiscall *FnV2f)(void*, float, float);
 typedef void  (__thiscall *FnV2b)(void*, int, bool);
 typedef void* (__thiscall *FnV0i)(void*, int);
 typedef bool  (__thiscall *FnVb1i)(void*, int, void**);
+typedef bool  (__thiscall *FnVb2i)(void*, int, int, void**);
+struct IRef2 { virtual void AddRef(); virtual void Release(); };
+struct B0 { virtual void f0(); virtual void f1(); };
+struct B1 { virtual void g0(); virtual void g1(); int m8; B1() : m8(0) {} };
+struct WidA : B0, B1 {
+  int mC; IRef2* m10; bool b14; bool b15;
+  WidA(IRef2* p);
+};
+struct WidB : B0, B1 {
+  int mC; int m10; bool b14; bool b15;
+  WidB(int p);
+};
 struct Asset { char pad[0x18]; void* m18; };
 Asset* AssetBrowser();
+void GetFloatProperty(void* obj, uint32_t key, float* out);
+void SPUIHelpers_SetWindowImage(void* w, void* img, int a);
+struct CW {
+  char pad[0x78];
+  void* m78; void* m7c; void* m80;
+  char pad84[0x20];      // 0x84..0xa4
+  void* ma4;             // +0xa4
+  char padA8[0xc];       // 0xa8..0xb4
+  void* mb4;             // +0xb4
+  void SetImg(void* img, int b, int c);
+};
 struct Prop {
   void** vt;
   float* AsVec();          // FUN_006bb610
+};
+void GetBoolProperty(void* prop, uint32_t key, bool* out);
+void GetPropertyAsKeyInstance(void* prop, uint32_t key, void* out);
+void* FUN_005c1cc0(void* a, void* b, void* c);
+struct CB {
+  void* m4; void* m8;
+  char padC[8];
+  int m18;               // +0x18
+  bool Action(int* p);
 };
 void* GetFloatProp2(void* obj, uint32_t key, float* out);
 int wcscmp(const wchar_t*, const wchar_t*);
@@ -99,14 +132,28 @@ struct CItem {
 // ---- items of slice s00665d30 end
 
 // ---- items of slice s00666cb0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern float gG1a, gG1b, gG1c, gG1d;   // 0x015fae5c
+extern float gG2a, gG2b, gG2c, gG2d;   // 0x01527678
+extern float gG3a, gG3b, gG3c, gG3d;   // 0x015275e8
+extern float g13f08c0;                 // 0x013f08c0
+extern int   g14004c;                  // 0x0140042c
 extern int gVt6f0_0, gVt6f0_1, gVt6f0_2, gVt6f0_3;
+extern int gVt6f0_4, gVt6f0_5, gVt6f0_6;
+extern int gEmptyStrA, gEmptyStrB, gEmptyStrC;
 extern int gVT_base0, gVT_base1, gVT_base2;
+extern int gVtbl676b0;
+extern void* vtMessageBase[];  // 0x013eb90c
+extern void* vtMessage5[];     // 0x013eb844
+extern void* vtFeedMsg0[];     // 0x0140029c
+extern void* vtFeedMsg1[];     // 0x01400298
 typedef void  (__thiscall *FnVoid)(void*);
 typedef void  (__thiscall *FnVoidI)(void*, int);
 typedef void  (__thiscall *FnVoidII)(void*, int, int);
 typedef void* (__thiscall *FnPtrV)(void*);
-typedef void  (__thiscall *FnVoidIP)(void*, int, void*);
+typedef void  (__thiscall *FnVoidIIP)(void*, int, void*, int);
 #define VT(p) (*(void***)(p))
+void* __cdecl SP_AssetBrowser();                              // 0x00401030
+void* __cdecl FUN_00666b20(void* out, void* a, unsigned key); // 0x00666b20
 void  __cdecl EASTL_allocator_deallocate(void* p);            // 0x00f47380
 void  __cdecl FUN_00571db0(void* h, void* a, void* b, void* c, void* d); // RemoveHandler
 void* __cdecl EA_Audio_GetSystemAT();                         // 0x00a206f0
@@ -115,8 +162,46 @@ struct WString {
     void assign(const void* b, const void* e);   // 0x00423650
     void assignPair(void** p);                   // 0x00667c40
 };
+float __cdecl FUN_004e1c70(void* a, unsigned key, float v);   // 0x004e1c70 GetPropertyT<float>
+class cSPUILayout_s0066_6cb0 { public:
+    virtual void s0();
+    virtual void s1();
+    virtual int  Release();                        // +0x08
+    void Shutdown(bool);                           // 0x00811ad0
+    void* FindWindowByID(unsigned id, int flag);   // 0x008105b0
+};
+struct Sub158 { void init(int a, void* b); };      // 0x0066a5e0
 struct P184Obj { void FUN_00829160(int v); };      // 0x00829160
+struct P40Obj  { void SetCallToActionMessage(void* p); }; // 0x006455b0
+struct Sub54   { unsigned char FUN_0054eac0(int v); };     // 0x0054eac0
+struct Key16 { uint32_t a, b, c, d; };
+struct FeedItemMessage {       // id 0xb3d53f95 browser message (WidA: B0+B1 bases)
+    void*      mpVtbl0;        // +0x00  B0 vtable 0x0140029c
+    void*      mpVtbl1;        // +0x04  B1 vtable 0x01400298
+    uint32_t   mReserved08;    // +0x08
+    uint32_t   mnFeedItemID;   // +0x0c
+    struct FeedItem* mpItem;   // +0x10  AddRef'd while the message lives
+    uint8_t    mbByItem;       // +0x14
+    uint8_t    mbForceReset;   // +0x15
+};
+struct MessageBasicRC5 {       // 0x40-byte refcounted message object
+    void*     mpVtbl;          // +0x00
+    long      mnRef;           // +0x04
+    uint32_t  mData[5][2];     // +0x08
+    uint32_t  mnId;            // +0x30
+    uint32_t  mReserved34;     // +0x34
+    uint32_t  mnRCFlags;       // +0x38
+    uint32_t  mReserved3c;     // +0x3c
+    void Destruct();           // 0x00421cf0
+};
 struct FeedItem {
+    uint8_t    mPad000[0x142];     // +0x000
+    uint8_t    mbMouseDownFlag;    // +0x142  cleared when the left button goes down
+    uint8_t    mPad143[0x14c - 0x143];
+    uint32_t   mnExtraMessageID;   // +0x14c  optional custom message posted on mouse-down
+    uint8_t    mPad150[0x184 - 0x150];
+    P184Obj*   mpField184;         // +0x184
+    void*      mpExtraMessageData; // +0x188  first payload word of the custom message
     void       FUN_00666cb0();
     void       FUN_006673a0(bool sel);
     FeedItem*  FUN_006676b0(unsigned flags);
@@ -126,7 +211,6 @@ struct FeedItem {
     void       FUN_00667ae0();
     void       FUN_00667b00();
 };
-struct MsgBuffer { uint32_t a, b, c, d; void* e; uint8_t f, g; };
 // ---- items of slice s00666cb0 end
 
 // ---- items of slice s00668be0 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -302,6 +386,11 @@ extern unsigned g_1527824;                  // 0x01527824
 extern unsigned g_140041c;                  // 0x0140041c
 extern unsigned g_Keys24[24];               // 0x01400480
 extern unsigned g_MsgIds[2];                // 0x014003a0
+struct FillBuf {
+  int a0, a1, a2, a3, a4, a5, m18;
+  bool m1c;
+  FillBuf* Set(unsigned char b, int p);
+};
 void __cdecl operator_delete_array(void* p);  // 0x00f47380
 void* __cdecl operator_new_tag(unsigned size, const char* tag, int a, int b, int c, int d);  // 0x00f473a0
 struct FStr {                               // eastl::basic_string<wchar_t> (16 bytes)
@@ -526,6 +615,41 @@ void CItem::Refresh(unsigned short* s)
   }
 }
 
+// @ 0x006668e0
+void CW::SetImg(void* img, int b, int c)
+{
+  if (!ma4 || !mb4) return;
+  float f1 = ((float*)((FnV0)((VObj*)ma4)->vt[14])(ma4))[1];
+  float f2 = ((float*)((FnV0)((VObj*)mb4)->vt[14])(mb4))[2];
+  if (img) {
+    m78 = img;
+    m7c = (void*)b;
+    m80 = (void*)c;
+    SPUIHelpers_SetWindowImage(mb4, &img, 0);
+    float v = 2.0f;
+    if (AssetBrowser() && AssetBrowser()->m18)
+      GetFloatProperty(AssetBrowser()->m18, 0x2beb75e, &v);
+    ((FnV2f)((VObj*)ma4)->vt[28])(ma4, f2 + v, f1);
+  } else {
+    float v = 6.0f;
+    if (AssetBrowser() && AssetBrowser()->m18)
+      GetFloatProperty(AssetBrowser()->m18, 0xa05a01c6, &v);
+    ((FnV2f)((VObj*)ma4)->vt[28])(ma4, v, f1);
+  }
+}
+
+// @ 0x00666a60
+WidA::WidA(IRef2* p)
+: mC(0), m10(p) {
+  if (p) p->AddRef();
+  b14 = false;
+  b15 = false;
+}
+
+// @ 0x00666af0
+WidB::WidB(int p)
+: mC(p), m10(0), b14(false), b15(false) {}
+
 // @ 0x00666b20
 float* GetVec4(float* out, Prop* p, int key, float a, float b, float c, float d)
 {
@@ -555,6 +679,273 @@ float* GetVec4(float* out, Prop* p, int key, float a, float b, float c, float d)
   out[2] = c;
   out[3] = d;
   return out;
+}
+
+// @ 0x00666bc0
+bool CB::Action(int* p)
+{
+  bool b = false;
+  if (p[1] == 0xb1b104 && p[2] == m18) {
+    void* prop = 0;
+    void* pm = PropertyManager();
+    bool ok = ((FnVb2i)((VObj*)pm)->vt[11])(pm, (int)p[0], p[2], &prop);
+    if (ok) {
+      GetBoolProperty(prop, 0x71efa6c, &b);
+      if (b && m4 != m8) {
+        void* key = 0;
+        GetPropertyAsKeyInstance(prop, 0x5cd8beab, &key);
+        void* r = FUN_005c1cc0(m4, m8, &key);
+        if (r == m8) b = false;
+      }
+    }
+    if (prop) ((IRef2*)prop)->Release();
+  }
+  return b;
+}
+
+// @ 0x00666cb0
+void FeedItem::FUN_00666cb0()
+{
+    void* self = this;
+    void* b = SP_AssetBrowser();
+    if (!b) return;
+    b = SP_AssetBrowser();
+    if (!*(void**)((char*)b + 0x18)) return;
+
+    const uint8_t c3 = *(uint8_t*)((char*)self + 0xc3);
+    const uint8_t c2 = *(uint8_t*)((char*)self + 0xc2);
+    const uint8_t c1 = *(uint8_t*)((char*)self + 0xc1);
+    const int     e  = *(int*)((char*)self + 0x13c);
+
+    uint32_t h1, h2;
+    const float* g2;
+    const float* g3;
+    if (c3) {
+        g2 = &gG1a; g3 = &gG1a;
+        if (e == 0xb) { h1 = 0x3c9e2f78; h2 = 0x29bb594b; }
+        else          { h1 = 0x01374de4; h2 = 0x662e782f; }
+    } else if (c2 && c1) {
+        g2 = &gG2a; g3 = &gG3a;
+        if (e == 0xb) { h1 = 0x2fe293fe; h2 = 0x1ebe1819; }
+        else          { h1 = 0x7dfbb96a; h2 = 0x9f1eaf9d; }
+    } else if (c2) {
+        g2 = &gG2a; g3 = &gG3a;
+        if (e == 0xb) { h1 = 0x77db09a5; h2 = 0x808686c2; }
+        else          { h1 = 0x2fba3a11; h2 = 0xd2c09a86; }
+    } else if (c1) {
+        g2 = &gG2a; g3 = &gG3a;
+        if (e == 0xb) { h1 = 0x6fe3fc19; h2 = 0xb924dfa6; }
+        else          { h1 = 0x2eeb1c55; h2 = 0x5c2eddea; }
+    } else {
+        g2 = &gG2a; g3 = &gG3a;
+        if (e == 0xb) { h1 = 0x139ac029; h2 = 0xe025f710; }
+        else          { h1 = 0x6b9f30ed; h2 = 0x2695d23c; }
+    }
+
+    float tmp[4] = { g2[0], g2[1], g2[2], g2[3] };
+    void* br = SP_AssetBrowser();
+    void* r = FUN_00666b20(tmp, *(void**)((char*)br + 0x18), h1);
+    *(Key16*)((char*)self + 0xd4) = *(Key16*)r;
+
+    float tmp2[4] = { g3[0], g3[1], g3[2], g3[3] };
+    void* br2 = SP_AssetBrowser();
+    void* r2 = FUN_00666b20(tmp2, *(void**)((char*)br2 + 0x18), h2);
+    *(Key16*)((char*)self + 0xf4) = *(Key16*)r2;
+}
+
+// @ 0x006673a0
+void FeedItem::FUN_006673a0(bool sel)
+{
+    void* self = this;
+    *(uint8_t*)((char*)self + 0xc2) = sel ? 1 : 0;
+    void* b = SP_AssetBrowser();
+    if (!b) return;
+    b = SP_AssetBrowser();
+    if (!*(void**)((char*)b + 0x18)) return;
+
+    FUN_00666cb0();
+
+    if (*(uint8_t*)((char*)self + 0xc2)) {
+        void* p = *(void**)((char*)self + 0x40);
+        void* bb = SP_AssetBrowser();
+        ((P40Obj*)bb)->SetCallToActionMessage(p);
+    }
+
+    void* ecx = *(void**)((char*)self + 0xa0);
+    if (!ecx) return;
+    int e = *(int*)((char*)self + 0x13c);
+    if (!(e == 1 || e == 2 || e == 3 || e == 0xb)) return;
+
+    ((FnVoid)VT(ecx)[14])(ecx);
+
+    float v = 0.0f;
+    e = *(int*)((char*)self + 0x13c);
+    if (e == 1 || e == 8 || e == 0xb) {
+        v = FUN_004e1c70(SP_AssetBrowser(), 0x34dbde45, g13f08c0);
+        void* q = *(void**)((char*)self + 0xb8);
+        if (q) ((FnVoidII)VT(q)[31])(q, 1, *(uint8_t*)((char*)self + 0xc2));
+    } else {
+        v = FUN_004e1c70(SP_AssetBrowser(), 0xc6bcae27, g13f08c0);
+    }
+
+    void* q = *(void**)((char*)self + 0xbc);
+    if (q) ((FnVoidII)VT(q)[31])(q, 1, *(uint8_t*)((char*)self + 0xc2));
+
+    float add = *(uint8_t*)((char*)self + 0xc2) ? v : 0.0f;
+    float base = *(float*)((char*)self + 0xc8);
+    *(float*)((char*)self + 0xcc) = base + add;
+
+    void* layout = *(void**)((char*)self + 0x94);
+    if (!layout) return;
+    void* w = ((cSPUILayout_s0066_6cb0*)layout)->FindWindowByID(0x07d5f060, 1);
+    if (w) {
+        int flag;
+        if (*(int*)((char*)self + 0x13c) == 0xb && *(uint8_t*)((char*)self + 0xc2))
+            flag = 1;
+        else
+            flag = 0;
+        ((FnVoidII)VT(w)[31])(w, 1, flag);
+    }
+
+    if (*(uint8_t*)((char*)self + 0x140)) {
+        void* layout2 = *(void**)((char*)self + 0x94);
+        void* w2 = ((cSPUILayout_s0066_6cb0*)layout2)->FindWindowByID(0x948f0e66, 1);
+        if (w2)
+            ((FnVoidII)VT(w2)[31])(w2, 1, *(uint8_t*)((char*)self + 0xc2));
+        void* layout3 = *(void**)((char*)self + 0x94);
+        void* w3 = ((cSPUILayout_s0066_6cb0*)layout3)->FindWindowByID(0xd48f0e8a, 1);
+        if (!w3) return;
+        ((FnVoidII)VT(w3)[31])(w3, 1, *(uint8_t*)((char*)self + 0xc2));
+        return;
+    }
+
+    if (*(int*)((char*)self + 0x13c) != 0xb) {
+        void* layout4 = *(void**)((char*)self + 0x94);
+        void* w4 = ((cSPUILayout_s0066_6cb0*)layout4)->FindWindowByID(0x748e61d2, 1);
+        if (w4)
+            ((FnVoidII)VT(w4)[31])(w4, 1, *(uint8_t*)((char*)self + 0xc2));
+        if (*(uint32_t*)((char*)self + 0x38) | *(uint32_t*)((char*)self + 0x3c)) {
+            void* layout5 = *(void**)((char*)self + 0x94);
+            void* w5 = ((cSPUILayout_s0066_6cb0*)layout5)->FindWindowByID(0xb48e8be4, 1);
+            if (w5)
+                ((FnVoidII)VT(w5)[31])(w5, 1, *(uint8_t*)((char*)self + 0xc2));
+        }
+        return;
+    }
+
+    void* ms = SP_MessageServer();
+    void* sub = *(void**)((char*)ms + 0x58);
+    unsigned char bl = ((Sub54*)sub)->FUN_0054eac0(*(int*)((char*)self + 0x134));
+    void* layout6 = *(void**)((char*)self + 0x94);
+    void* w6 = ((cSPUILayout_s0066_6cb0*)layout6)->FindWindowByID(0x07c64218, 1);
+    if (w6) {
+        bool flag = *(uint8_t*)((char*)self + 0xc2) && !bl;
+        ((FnVoidII)VT(w6)[31])(w6, 1, flag ? 1 : 0);
+    }
+    void* layout7 = *(void**)((char*)self + 0x94);
+    void* w7 = ((cSPUILayout_s0066_6cb0*)layout7)->FindWindowByID(0x07c64df0, 1);
+    if (!w7) return;
+    bool flag2 = *(uint8_t*)((char*)self + 0xc2) && bl;
+    ((FnVoidII)VT(w7)[31])(w7, 1, flag2 ? 1 : 0);
+}
+
+// @ 0x006676b0
+FeedItem* FeedItem::FUN_006676b0(unsigned flags)
+{
+    void* self = this;
+    void* p = *(void**)((char*)self + 4);
+    if (p && *(int*)((char*)p - 4) != 0)
+        EASTL_allocator_deallocate(p);
+    *(void**)self = &gVtbl676b0;
+    if (flags & 1)
+        EASTL_allocator_deallocate(self);
+    return this;
+}
+
+// @ 0x006676f0
+FeedItem* FeedItem::FUN_006676f0()
+{
+    void* self = this;
+    *(void**)((char*)self + 4)  = &gVt6f0_4;
+    *(void**)((char*)self + 8)  = &gVt6f0_5;
+    *(void**)((char*)self + 0xc) = &gVt6f0_6;
+    *(uint32_t*)((char*)self + 0x10) = 0;
+    *(void**)self = &gVt6f0_0;
+    *(void**)((char*)self + 4)  = &gVt6f0_1;
+    *(void**)((char*)self + 8)  = &gVt6f0_2;
+    *(void**)((char*)self + 0xc) = &gVt6f0_3;
+    *(uint8_t*)((char*)self + 0x14) = 0;
+    *(uint8_t*)((char*)self + 0x15) = 0;
+    *(uint8_t*)((char*)self + 0x16) = 0;
+    *(void**)((char*)self + 0x18) = &gEmptyStrB;
+    *(void**)((char*)self + 0x1c) = &gEmptyStrB;
+    *(void**)((char*)self + 0x20) = &gEmptyStrA;
+    *(void**)((char*)self + 0x28) = &gEmptyStrB;
+    *(void**)((char*)self + 0x2c) = &gEmptyStrB;
+    *(void**)((char*)self + 0x30) = &gEmptyStrA;
+    *(void**)((char*)self + 0x38) = 0;
+    *(void**)((char*)self + 0x3c) = 0;
+    *(void**)((char*)self + 0x40) = &gEmptyStrB;
+    *(void**)((char*)self + 0x44) = &gEmptyStrB;
+    *(void**)((char*)self + 0x48) = &gEmptyStrA;
+    *(void**)((char*)self + 0x50) = &gEmptyStrB;
+    *(void**)((char*)self + 0x54) = &gEmptyStrB;
+    *(void**)((char*)self + 0x58) = &gEmptyStrC;
+    *(uint32_t*)((char*)self + 0x60) = 0;
+    *(uint32_t*)((char*)self + 0x64) = 0xffffffff;
+    *(uint32_t*)((char*)self + 0x78) = 0;
+    *(uint32_t*)((char*)self + 0x7c) = 0;
+    *(uint32_t*)((char*)self + 0x80) = 0;
+    *(uint8_t*)((char*)self + 0x84) = 0;
+    *(uint8_t*)((char*)self + 0x85) = 0;
+    *(uint8_t*)((char*)self + 0x86) = 0;
+    *(uint32_t*)((char*)self + 0x88) = 0;
+    *(uint32_t*)((char*)self + 0x8c) = 0;
+    *(uint32_t*)((char*)self + 0x90) = 0;
+    *(uint32_t*)((char*)self + 0x94) = 0;
+    *(uint32_t*)((char*)self + 0x98) = 0;
+    *(uint32_t*)((char*)self + 0x9c) = 0;
+    *(uint32_t*)((char*)self + 0xa0) = 0;
+    *(uint32_t*)((char*)self + 0xa4) = 0;
+    *(uint32_t*)((char*)self + 0xa8) = 0;
+    *(uint32_t*)((char*)self + 0xac) = 0;
+    *(uint32_t*)((char*)self + 0xb0) = 0;
+    *(uint32_t*)((char*)self + 0xb4) = 0;
+    *(uint32_t*)((char*)self + 0xb8) = 0;
+    *(uint32_t*)((char*)self + 0xbc) = 0;
+    *(uint8_t*)((char*)self + 0xc0) = 0;
+    *(uint8_t*)((char*)self + 0xc1) = 0;
+    *(uint8_t*)((char*)self + 0xc2) = 0;
+    *(uint8_t*)((char*)self + 0xc3) = 0;
+    *(uint32_t*)((char*)self + 0xc4) = 0;
+    *(uint32_t*)((char*)self + 0xc8) = 0;
+    *(uint32_t*)((char*)self + 0xcc) = 0;
+    *(uint32_t*)((char*)self + 0x114) = 0;
+    *(uint32_t*)((char*)self + 0x118) = 0;
+    *(uint32_t*)((char*)self + 0x11c) = 0;
+    *(uint32_t*)((char*)self + 0x120) = 0;
+    *(uint32_t*)((char*)self + 0x124) = 0;
+    *(uint32_t*)((char*)self + 0x128) = 0;
+    *(uint32_t*)((char*)self + 0x12c) = 0;
+    *(uint32_t*)((char*)self + 0x130) = 0;
+    *(uint32_t*)((char*)self + 0x134) = 0;
+    *(uint32_t*)((char*)self + 0x138) = 0xffffffff;
+    *(uint32_t*)((char*)self + 0x13c) = 0;
+    *(uint8_t*)((char*)self + 0x140) = 0;
+    *(uint8_t*)((char*)self + 0x141) = 0;
+    *(uint8_t*)((char*)self + 0x142) = 0;
+    *(uint32_t*)((char*)self + 0x144) = 0xffffffff;
+    *(uint32_t*)((char*)self + 0x148) = 0xffffffff;
+    *(uint32_t*)((char*)self + 0x14c) = 0;
+    *(uint32_t*)((char*)self + 0x150) = 0;
+    *(uint32_t*)((char*)self + 0x154) = 0;
+    ((Sub158*)((char*)self + 0x158))->init(1, (void*)g14004c);
+    *(uint32_t*)((char*)self + 0x178) = 0xffffffff;
+    *(uint32_t*)((char*)self + 0x17c) = 0;
+    *(uint32_t*)((char*)self + 0x180) = 0;
+    *(uint32_t*)((char*)self + 0x184) = 0;
+    *(uint32_t*)((char*)self + 0x188) = 0;
+    return this;
 }
 
 // @ 0x006678f0
@@ -649,9 +1040,8 @@ void FeedItem::FUN_00667ae0()
 }
 
 // @ 0x00667b00
-void SP::cSPUIFeedListItem::OnLeftMouseDown()
+void FeedItem::FUN_00667b00()
 {
-    void* self = this;
     void* at = EA_Audio_GetSystemAT();
     void* r = at ? ((FnPtrV)VT(at)[8])(at) : 0;
 
@@ -664,30 +1054,33 @@ void SP::cSPUIFeedListItem::OnLeftMouseDown()
     }
 
     void* ms = SP_MessageServer();
-    MsgBuffer buf;
-    buf.a = 0x0140029c;
-    buf.b = 0x01400298;
-    buf.c = 0;
-    buf.d = 0;
-    buf.e = self;
-    if (self) ((FnVoid)VT(self)[0])(self);
-    buf.f = 0;
-    buf.g = 0;
-    ((FnVoidIP)VT(ms)[5])(ms, 0xb3d53f95, &buf);
+    FeedItemMessage buf;
+    buf.mReserved08 = 0;
+    buf.mpVtbl0 = vtFeedMsg0;
+    buf.mpVtbl1 = vtFeedMsg1;
+    buf.mnFeedItemID = 0;
+    buf.mpItem = this;
+    if (this) ((FnVoid)VT(this)[0])(this);
+    buf.mbByItem = 0;
+    buf.mbForceReset = 0;
+    ((FnVoidIIP)VT(ms)[5])(ms, 0xb3d53f95, &buf, 0);
 
-    *(uint8_t*)((char*)self + 0x142) = 0;
-    void* p = *(void**)((char*)self + 0x14c);
-    if (p) {
-        MsgBuffer buf2;
-        buf2.a = 0x013eb90c;
-        buf2.b = 0x013eb844;
-        buf2.d = 0;
-        buf2.e = 0;
-        (void)buf2;
+    mbMouseDownFlag = 0;
+    const uint32_t extraId = mnExtraMessageID;
+    if (extraId) {
+        MessageBasicRC5 extra;
+        extra.mnId = extraId;
+        extra.mpVtbl = vtMessageBase;
+        _InterlockedExchange(&extra.mnRef, 0);
+        extra.mData[0][0] = (uint32_t)mpExtraMessageData;
+        extra.mpVtbl = vtMessage5;
+        extra.mnRCFlags = 0;
+        ((FnVoidIIP)VT(ms)[5])(ms, (int)extraId, &extra, 0);
+        extra.Destruct();
     }
 
-    void* q = *(void**)((char*)self + 0x184);
-    if (q) ((P184Obj*)q)->FUN_00829160(1);
+    if (mpField184) mpField184->FUN_00829160(1);
+    if (this) ((FnVoid)VT(this)[1])(this);
 }
 
 // @ 0x00667c40
@@ -1147,4 +1540,13 @@ bool FeedItemInit::Init(void* a1, void* a2, unsigned a3, void* a4, int a5)
       ((void(__thiscall*)(void*, void*, unsigned))VTS(srv, 0x24))(srv, handler, *(unsigned*)((char*)g_MsgIds + u));
   }
   return true;
+}
+
+// @ 0x0066a5e0
+FillBuf* FillBuf::Set(unsigned char b, int p)
+{
+  memset(this, b, 0x18);
+  m18 = p;
+  m1c = false;
+  return this;
 }

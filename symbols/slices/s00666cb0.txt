@@ -1,8 +1,9 @@
-006673a0 SP::cSPUIFeedListItem::SetIsSelected  # PDB candidate on card (caller-scored)
-006676b0 SP::cSPUIFeedListItem::ScalarDeletingDtor  # shape: [this+4] refcounted free; vtable reset; flags&1 self-free
-006676f0 SP::cSPUIFeedListItem::cSPUIFeedListItem  # ctor: 4 vtable stores + field/string init, returns this
+00666cb0 ?FUN_00666cb0@FeedItem@@QAEXXZ  # FeedItem::FUN_00666cb0 migrated from s00666cb0 (verbatim, slice spelling)
+006673a0 ?FUN_006673a0@FeedItem@@QAEX_N@Z  # FeedItem::FUN_006673a0 migrated from s00666cb0 (verbatim, slice spelling)
+006676b0 ?FUN_006676b0@FeedItem@@QAEPAU1@I@Z  # FeedItem::FUN_006676b0 migrated from s00666cb0 (verbatim, slice spelling)
+006676f0 ?FUN_006676f0@FeedItem@@QAEPAU1@XZ  # FeedItem::FUN_006676f0 migrated from s00666cb0 (verbatim, slice spelling)
 006678f0 ?FUN_006678f0@FeedItem@@QAEXXZ  # FeedItem::FUN_006678f0 migrated from s00666cb0 (verbatim, slice spelling)
 00667ac0 ?FUN_00667ac0@FeedItem@@QAEXXZ  # FeedItem::FUN_00667ac0 migrated from s00666cb0 (verbatim, slice spelling)
 00667ae0 ?FUN_00667ae0@FeedItem@@QAEXXZ  # FeedItem::FUN_00667ae0 migrated from s00666cb0 (verbatim, slice spelling)
-00667b00 ?OnLeftMouseDown@cSPUIFeedListItem@SP@@QAEXXZ  # SP::cSPUIFeedListItem::OnLeftMouseDown migrated from s00666cb0
-00667c40 ?assignPair@WString@@QAEXPAPAX@Z  # WString::assignPair (was FUN_00667c40); thiscall preserves incoming ecx
+00667b00 ?FUN_00667b00@FeedItem@@QAEXXZ  # FeedItem::FUN_00667b00 migrated from s00666cb0 (verbatim, slice spelling)
+00667c40 ?assignPair@WString@@QAEXPAPAX@Z  # WString::assignPair migrated from s00666cb0 (verbatim, slice spelling)
