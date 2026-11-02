@@ -1,0 +1,2 @@
+# source  symbol  va  flags
+../src/game/cmn/_at_01120000.cpp  ?FUN_0112e980@core@audio@rw@@YAXPAXH@Z  0112e980  /vc71 /O2 /MD /Gy /TP /Isrc/game/include

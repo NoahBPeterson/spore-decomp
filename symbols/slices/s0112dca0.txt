@@ -14,7 +14,7 @@
 0112e700 Voice release command  # release *(arg+4), return 8 (byte-exact)
 0112e720 Voice::Voice (ctor)  # allocate and initialise a voice + plug-ins
 0112e950 ?Release@Voice@core@audio@rw@@QAEXXZ  # rw::audio::core::Voice::Release migrated from s0112dca0
-0112e980 System::Alloc singleton wrapper  # byte-exact
-0112e9b0 sound-packet submit  # build gain table and submit to the sound player
-0112eab0 stream chunk pump  # pull chunks from the filesys stream and submit
-0112eb70 chunk release/pump  # release a chunk slot and pump the stream
+0112e980 ?FUN_0112e980@core@audio@rw@@YAXPAXH@Z  # FUN_0112e980 migrated from s0112dca0 (verbatim, slice spelling)
+0112e9b0 ?FUN_0112e9b0@core@audio@rw@@YAXPAHHIHE@Z  # FUN_0112e9b0 migrated from s0112dca0 (verbatim, slice spelling)
+0112eab0 ?FUN_0112eab0@core@audio@rw@@YAXH@Z  # FUN_0112eab0 migrated from s0112dca0 (verbatim, slice spelling)
+0112eb70 ?FUN_0112eb70@core@audio@rw@@YAXHH@Z  # FUN_0112eb70 migrated from s0112dca0 (verbatim, slice spelling)
