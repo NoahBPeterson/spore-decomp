@@ -1,4 +1,4 @@
-// src/game/Havok/_at_01090000.cpp -- migrated from slice(s) s0109f870, s0109e8e0, s0109c3b0, s01098e50, s01098200, s010960e0, s01095320, s01094510, s01092e10, s01091a60 by tools/migrate/rewrite.py
+// src/game/Havok/_at_01090000.cpp -- migrated from slice(s) s01090a70, s0109f870, s0109e8e0, s0109c3b0, s01098e50, s01098200, s010960e0, s01095320, s01094510, s01092e10, s01091a60 by tools/migrate/rewrite.py
 // Object file: Havok/_at_01090000.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -1465,6 +1465,25 @@ virtual void v2();
 };
 struct hkConstraintInfo_s0109_f870 { int m_maxSizeOfJacobians, m_sizeOfJacobians, m_sizeOfSchemas, m_numSolverResults; };
 // ---- items of slice s0109f870 end
+
+// ---- items of slice s01090a70 begin (TODO(rewrite): local stubs, replace by canonical classes)
+struct hkQuaternionOps
+{
+	void setMulInverse(const hkQuaternion& a, const hkQuaternion& b);   // 0x01091970 (this = out)
+	void setMul(const hkQuaternion& a, const hkQuaternion& b);         // 0x01082210
+	void normalize();                                                  // 0x010821A0
+};
+// ---- items of slice s01090a70 end
+
+// @ 0x01091970
+void hkQuaternionOps::setMulInverse(const hkQuaternion& q0, const hkQuaternion& q1)
+{
+    hkQuaternion& out = *(hkQuaternion*)this;
+    out.x = q0.z * q1.y - q0.y * q1.z - q0.w * q1.x + q1.w * q0.x;
+    out.y = q0.x * q1.z - q0.z * q1.x - q0.w * q1.y + q1.w * q0.y;
+    out.z = q0.y * q1.x - q0.x * q1.y - q0.w * q1.z + q1.w * q0.z;
+    out.w = q0.x * q1.x + q0.y * q1.y + q0.w * q1.w + q0.z * q1.z;
+}
 
 // @ 0x01091a60
 void hkRelativeOrientationConstraintData::buildJacobian( const hkConstraintQueryIn &in, hkConstraintQueryOut &out) const

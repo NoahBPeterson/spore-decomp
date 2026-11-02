@@ -1,0 +1,1 @@
+01091970 ?setMulInverse@hkQuaternionOps@@QAEXABVhkVector4_s0109_8200@@0@Z  # hkQuaternionOps::setMulInverse migrated from s01090a70 (verbatim, slice spelling)
