@@ -2,7 +2,7 @@
 00bad810 ?Reset@cStarManager@@QAEXXZ  # cStarManager::Reset migrated from s00bad7a0 (verbatim, slice spelling)
 00bad8d0 ?Shutdown@cStarManager@@QAEXXZ  # cStarManager::Shutdown migrated from s00bad7a0 (verbatim, slice spelling)
 00bad940 ?LoadFromObject@cStarManager@@QAEXPAX@Z  # cStarManager::LoadFromObject migrated from s00bad7a0 (verbatim, slice spelling)
-00badae0 ?UpdateVisibility@cStarManager@@QAEXPAX0MMPBUVector3@@@Z  # void cStarManager::UpdateVisibility(void*, void*, float, float, const Vector3*)
+00badae0 ?UpdateVisibility@cStarManager@@QAEXPAX0MMPBUVector3@@@Z  # cStarManager::UpdateVisibility migrated from s00bad7a0 (verbatim, slice spelling)
 00badd10 ?UpdateItem@cStarManager@@QAEXPAX0@Z  # cStarManager::UpdateItem migrated from s00bad7a0 (verbatim, slice spelling)
 00badea0 ?GetCounter@CivCounterMap@@QAEAAIPAVcCivilization@@@Z  # CivCounterMap::GetCounter migrated from s00bad7a0 (verbatim, slice spelling)
 00bae000 ?Reserve@WStringVector@@QAEXI@Z  # void WStringVector::Reserve(unsigned int)

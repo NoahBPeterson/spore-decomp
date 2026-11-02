@@ -1,15 +1,17 @@
+00812160 ?Init@cSPUILayout@@QAE_NPB_WH_NI@Z  # cSPUILayout::Init (callee of s00e043c0, named from the dev publics; slice address comment)
 00e043c0 CivComm_GetStateIconName  # state 0..11 -> icon id (jump-table getter); equiv PASS (manifest)
 00e04450 CivComm_GetStateIconIndex  # state 0..11 -> 0x70..0x73 via byte map + 4-way jump table; equiv PASS
 00e044b0 CivComm_GetStateIconName2  # state 0..11 -> second-row icon id; equiv PASS (manifest)
 00e04540 cSPUIGlobalUICiv_SetProgress  # forwards (float value, int mode) to the owned cSPUINewProgressBar; equiv PASS (manifest)
-00e04560 cSPUIGlobalUICiv_SetMinimapStateFromButton  # minimap button state from mode + mbField88, tooltip via cString 0xc0152a6d
-00e046b0 cSPUIGlobalUICiv_SetStanceButtonsState  # two stance windows 0x4c61dd8/0x4c61b50, 5 flag bytes
-00e04770 cSPUIGlobalUICiv_ActivateCommRelPanel  # rebind civ entry buttons, colour labels, animate fly-in (0.0/67.0/100.0f)
-00e04960 cSPUIGlobalUICiv_UpdateButtonState  # rebind entry pair, release old callback, clear mbVisible
-00e04a50 FlashCivCommButton  # __stdcall(int, void*, int); re-apply 0x147f2c8 material unless the child already has it; equiv PASS (manifest)
-00e04aa0 cSPUIGlobalUICiv_OnPlayerCivChanged  # poll active civ vs [0x15a4880], refresh tooltip + panel
-00e04b40 cSPUIGlobalUICiv_Initialize  # label title + 4 slots, reset 4 entries, register 3 msg handlers, set planet name
-00e04d10 cSPUIGlobalUICiv_SetButtonProgress  # flash/clear entry, push clamped 0..100 progress into both label windows
-00e04f10 cSPUIGlobalUICiv_Destroy  # reset vptrs, nuke anchor, release layout/bar/callbacks/handler, tail-call 0xe03b20; equiv PASS
-00e05000 cSPUIGlobalUICiv_CreatePanel  # 0xe03620 + Initialize, construct progress bar (0x38) and layout (0x18), Init/SetVisibility
-00e05120 cSPUIGlobalUICiv_RemovePanel  # unregister handler, clear 5 labels, nuke anchor, shutdown layout/bar, 0xe03740; equiv WEAK
+00e04560 ?SetMinimapStateFromButton@cSPUIGlobalUICiv_s00e0_43c0@@QAEXH@Z  # cSPUIGlobalUICiv_s00e0_43c0::SetMinimapStateFromButton migrated from s00e043c0 (verbatim, slice spelling)
+00e046b0 ?SetStanceButtonsState@cSPUIGlobalUICiv_s00e0_43c0@@QAEXHHHHH@Z  # cSPUIGlobalUICiv_s00e0_43c0::SetStanceButtonsState migrated from s00e043c0 (verbatim, slice spelling)
+00e04770 ?ActivateCommRelPanel@cSPUIGlobalUICiv_s00e0_43c0@@QAEXH@Z  # cSPUIGlobalUICiv_s00e0_43c0::ActivateCommRelPanel migrated from s00e043c0 (verbatim, slice spelling)
+00e04960 ?UpdateButtonState@cSPUIGlobalUICiv_s00e0_43c0@@QAEXH@Z  # cSPUIGlobalUICiv_s00e0_43c0::UpdateButtonState migrated from s00e043c0 (verbatim, slice spelling)
+00e04a50 ?FlashCivCommButton@@YGXHPAXH@Z  # FlashCivCommButton migrated from s00e043c0 (verbatim, slice spelling)
+00e04aa0 ?OnPlayerCivChanged@cSPUIGlobalUICiv_s00e0_43c0@@QAEXXZ  # cSPUIGlobalUICiv_s00e0_43c0::OnPlayerCivChanged migrated from s00e043c0 (verbatim, slice spelling)
+00e04b40 ?Initialize@cSPUIGlobalUICiv_s00e0_43c0@@QAE_NXZ  # cSPUIGlobalUICiv_s00e0_43c0::Initialize migrated from s00e043c0 (verbatim, slice spelling)
+00e04d10 ?SetButtonProgress@cSPUIGlobalUICiv_s00e0_43c0@@QAEXH@Z  # cSPUIGlobalUICiv_s00e0_43c0::SetButtonProgress migrated from s00e043c0 (verbatim, slice spelling)
+00e04f10 ?Destroy@cSPUIGlobalUICiv_s00e0_43c0@@QAEPAU1@XZ  # cSPUIGlobalUICiv_s00e0_43c0::Destroy migrated from s00e043c0 (verbatim, slice spelling)
+00e05000 ?CreatePanel@cSPUIGlobalUICiv_s00e0_43c0@@QAE_NH@Z  # cSPUIGlobalUICiv_s00e0_43c0::CreatePanel migrated from s00e043c0 (verbatim, slice spelling)
+00e05120 ?RemovePanel@cSPUIGlobalUICiv_s00e0_43c0@@QAEXXZ  # cSPUIGlobalUICiv_s00e0_43c0::RemovePanel migrated from s00e043c0 (verbatim, slice spelling)
+00e28a80 ?Shutdown@cSPUINewProgressBar@SP@@QAEXXZ  # SP::cSPUINewProgressBar::Shutdown (callee of s00e043c0, named from the dev publics; slice address comment)

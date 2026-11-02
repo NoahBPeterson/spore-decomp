@@ -13,12 +13,20 @@
 #include "SP/cVehicle.h"
 #include "EA/Random/RandomLinearCongruential.h"
 #include "cSPUILayout.h"
+#include "SP/cSPUINewProgressBar.h"
 
 // ---- items of slice s00ba9810 begin (TODO(rewrite): local stubs, replace by canonical classes)
 struct cSortTriple {                                                    // 12-byte sort / run key
     float mX;                                                           // +0x00
     float mY;                                                           // +0x04
-    float mZ;                                                           // +0x08
+    uint32_t mZ;                                                        // +0x08 (third word copied as an integer)
+};
+void* FUN_00ba96e0(void* pBegin, void* pEnd);                           // 0x00ba96e0
+void FUN_00ba9740(void* pBegin, void* pMiddle, void* pEnd, void* pPred); // 0x00ba9740
+struct ISortKey {
+    virtual void v00(void* pArg);
+    uint8_t mPad04[0x24];                                               // +0x04
+    int mnKey;                                                          // +0x28
 };
 // ---- items of slice s00ba9810 end
 
@@ -242,6 +250,9 @@ struct Self440 {                            // incoming ecx: unused `this` (this
 
 // ---- items of slice s00bad7a0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern int32_t gCheatStarCount;                 // 0x0168964c
+extern float gRandomScale;                      // 0x01471064
+extern float gRandomScale2;                     // 0x01470f1c
+extern float gRealOne;                          // 0x01485720
 #define nullptr 0
 class IGameObject {
 public:
@@ -342,7 +353,16 @@ public:
 void __cdecl operator_delete(void* pBlock);                             // 0x00f47380
 cGameNounManager* __cdecl NounManager();                                // 0x00b3d300
 IGameObject* __cdecl SaveLoadManager();                                 // 0x00fd9c60
+void* __cdecl cStar_GetSolarSystem(void* pStar);                        // 0x00c8b770
+float __cdecl cStar_GetOrbitRadius(void* pSolarSystem, int32_t nIndex,
+                                   int32_t nOne);                       // 0x00c84d40
+float __cdecl cPlanet_GetOrbitRadius(void* pPlanet, int32_t nIndex,
+                                     int32_t nOne);                     // 0x00c84c60
+void __cdecl SetVisible(void* pObject, int32_t nOne);                   // 0x00c70f90
+float __cdecl VectorLength(const Vector3* pVector);                     // 0x0040ae50
+uint32_t __cdecl RandomUint32Uniform(uint32_t nRange);                  // 0x00a68fb0
 void* __cdecl ChildGetSomething(uint32_t nPrompt);                      // 0x00401090
+void* __cdecl AddRefObject(void* pObject);                              // 0x00801920
 void* __cdecl FUN_006b42e0(void* pObject);                              // 0x006b42e0
 uint32_t __cdecl FUN_00b8d8f0(void);                                    // 0x00b8d8f0
 void* __cdecl FUN_00ba6d80(uint32_t nA);                                // 0x00ba6d80
@@ -512,21 +532,140 @@ struct cSPUIGlobalUI {
 // ---- items of slice s00e033d0 end
 
 // ---- items of slice s00e043c0 begin (TODO(rewrite): local stubs, replace by canonical classes)
-void __cdecl SPUIHelpers_SetWindowSPMaterial(void* window, int material, int flags);  // 0x00808ad0
-static inline int  VT_0C_1(void* p, int a)
-{
-    return ((int (__thiscall*)(void*, int))(*(void***)p)[3])(p, a);
-}
-static inline void* VT_4C_0(void* p)
-{
-    return ((void* (__thiscall*)(void*))(*(void***)p)[0x13])(p);
-}
+struct cSPUINewProgressBar {
+    void** mpVptr;                                   // +0x00
+    int    mRefCount;                                // +0x04
+    u8     mData[0x30];                              // +0x08 (retail allocation is 0x38 bytes)
+
+    void Update(float value, int mode);              // 0x00e29da0
+    void SetMode(int mode);                          // 0x00e29c80
+    void Shutdown();                                 // 0x00e28a80
+    void Release()                                   // inline refcount drop, vtbl[0] at zero
+    {
+        if (--mRefCount == 0) {
+            mRefCount = 1;
+            ((void (__thiscall*)(void*, int))mpVptr[0])(this, 1);
+        }
+    }
+};
+struct cString {
+    char        mData[0x18];
+    cString();                                    // 0x006b5060
+    void Load(int key, int table, int flags);     // 0x006b54b0
+    const char* c_str(int unused, int alloc);     // 0x006b55c0
+    ~cString();                                   // 0x006b5240
+};
+struct cSPUILayout_s00e0_43c0 {
+    char          mPad00[0x14];
+    void*         mpWindows;                                  // +0x14 (hash table)
+    void*         FindWindowByID(int id, int flag);           // 0x008105b0
+    bool          Init(void* a, int b, int c, void* d);       // 0x00812160
+    void          SetVisibility(int visible);                 // 0x00810590
+    void          Shutdown(int flag);                         // 0x00811ad0
+};
+struct cSPUIGlobalUI_s00e0_43c0 {
+    char          mPad00[8];
+    cSPUILayout_s00e0_43c0*  mpLayout;                                   // +0x08
+    void*         FindWindowByID(int id);                     // 0x00e012b0
+};
+void __cdecl SPUIHelpers_SetWindowSPMaterial(void* window, int material, int flags); // 0x00808ad0
+void __cdecl SPUIHelpers_SetTooltipText(void* window, const char* text);             // 0x00806de0
+void* __cdecl SPUIHelpers_ConstructLayout(void* mem);                                // 0x00810000
+void __cdecl RemoveHandler(void* a, void* b, void* c, void* d, void* e);             // 0x00571db0
+void* __cdecl AppAllocate(unsigned size, const char* name, int a, int b,
+                          const char* file, int line);                               // 0x00f473a0
+void* __cdecl MessageServer();                                                       // 0x0067dcc0
+void* __cdecl NounManagerInstance();                                                 // 0x00b3d300
+int   __cdecl GameTime();                                                            // 0x011e0810
+void* __cdecl GetActivePlanet();                                                     // 0x01021260
+int   __cdecl ProgressLookup(int value);                                             // 0x00b6f0c0
+int   __cdecl ProgressToColor(int value);                                            // 0x00458a40
+int   __cdecl StateToMode(int index);                                                // 0x00bef920
+int   __fastcall GetStateIndex(void* p, int edx);                                    // 0x00bf0f40
+float __fastcall GetProgressFloat(void* p, int edx);                                 // 0x00bd80d0
+static inline void  WShow(void* w)                        { ((void (__thiscall*)(void*))(*(void***)w)[0])(w); }
+static inline void  WSetFloat(void* w, float v)           { ((void (__thiscall*)(void*, float))(*(void***)w)[1])(w, v); }
+static inline void  WRelease(void* w)                     { ((void (__thiscall*)(void*))(*(void***)w)[1])(w); }
+static inline int   WGetInt(void* w, int id)              { return ((int (__thiscall*)(void*, int))(*(void***)w)[3])(w, id); }
+static inline void* WSetText10(void* w, const char* s)    { return ((void* (__thiscall*)(void*, const char*))(*(void***)w)[4])(w, s); }
+static inline int   WGetFlags(void* w)                    { return ((int (__thiscall*)(void*))(*(void***)w)[8])(w); }
+static inline void* WCall9(void* w, void* self, void* a)  { return ((void* (__thiscall*)(void*, void*, void*))(*(void***)w)[9])(w, self, a); }
+static inline void  WSetProp(void* w, int a, int b)       { ((void (__thiscall*)(void*, int, int))(*(void***)w)[0xa])(w, a, b); }
+static inline void  WSetMaterial(void* w, int a, int b)   { ((void (__thiscall*)(void*, int, int))(*(void***)w)[0x1f])(w, a, b); }
+static inline void  WSetTitle(void* w, const char* s)     { ((void (__thiscall*)(void*, const char*))(*(void***)w)[0x20])(w, s); }
+static inline void  WRefresh(void* w)                     { ((void (__thiscall*)(void*))(*(void***)w)[0x24])(w); }
+static inline void* WGetChild(void* w)                    { return ((void* (__thiscall*)(void*))(*(void***)w)[0x2a])(w); }
+static inline void* WSetCallback(void* w, int id, void* h) { return ((void* (__thiscall*)(void*, int, void*))(*(void***)w)[0x3c])(w, id, h); }
+static inline void  WSetText104(void* w, const char* s)   { ((void (__thiscall*)(void*, const char*))(*(void***)w)[0x41])(w, s); }
+static inline void  WSetText108(void* w, const char* s)   { ((void (__thiscall*)(void*, const char*))(*(void***)w)[0x42])(w, s); }
+void __stdcall FlashCivCommButton(int unused1, void* window, int unused3);  // 0x00e04a50
+struct CivButtonEntry {
+    int   mIconIndex;            // +0x00
+    u8    mbFlash;               // +0x04
+    u8    mbVisible;             // +0x05
+    u8    mPad06[2];             // +0x06
+    void* mpCallback;            // +0x08
+};
+struct cSPUIGlobalUICiv_s00e0_43c0 : cSPUIGlobalUI_s00e0_43c0 {
+    u8                    mPad000C[0x5c];      // +0x0c
+    void*                 mvpField68;          // +0x68 vptr of the first embedded sub-object
+    u8                    mPad6C[4];           // +0x6c
+    void*                 mvpField70;          // +0x70 vptr of the message-handler sub-object
+    void*                 mpField74;           // +0x74 message handler holder
+    void*                 mpField78;           // +0x78 (handler identity: this)
+    void*                 mpField7C;           // +0x7c (handler id table)
+    int                   mField80;            // +0x80
+    int                   mField84;            // +0x84
+    u8                    mbField88;           // +0x88 minimap toggle byte
+    u8                    mPad89[3];           // +0x89
+    CivButtonEntry        mButtons[4];         // +0x8c .. +0xbb
+    u8                    mPadBC[4];           // +0xbc
+    cSPUINewProgressBar*  mpProgressBarC0;     // +0xc0
+    cSPUILayout_s00e0_43c0*          mpFieldC4;           // +0xc4 panel layout
+    int                   mFieldC8;            // +0xc8
+    int                   mFieldCC;            // +0xcc
+    int                   mFieldD0;            // +0xd0
+    int                   mFieldD4;            // +0xd4
+    u8                    mbFieldsD8[4];       // +0xd8
+    u8                    mPadDC[4];           // +0xdc (rbtree anchor starts here)
+    u8                    mFieldE0[0x10];      // +0xe0
+
+    void  SetProgress(float value, int mode);                       // 0x00e04540
+    void  SetMinimapStateFromButton(int mode);                      // 0x00e04560
+    void  SetStanceButtonsState(int a, int b, int c, int d, int e); // 0x00e046b0
+    void  ActivateCommRelPanel(int index);                          // 0x00e04770
+    void  UpdateButtonState(int index);                             // 0x00e04960
+    void  OnPlayerCivChanged();                                     // 0x00e04aa0
+    bool  Initialize();                                             // 0x00e04b40
+    void  SetButtonProgress(int index);                             // 0x00e04d10
+    cSPUIGlobalUICiv_s00e0_43c0* Destroy();                                    // 0x00e04f10
+    bool  CreatePanel(int param);                                   // 0x00e05000
+    void  RemovePanel();                                            // 0x00e05120
+};
 // ---- items of slice s00e043c0 end
 
 // ---- items of slice s00e052d0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 #define VSLOT(n) virtual void _v##n();
+void __cdecl EASTL_allocator_deallocate(void* p);   // 0x00f47380
+struct SimpleVectorU32 {
+    uint32_t* mpBegin;      // +0x00
+    uint32_t* mpEnd;        // +0x04
+    uint32_t* mpCapacity;   // +0x08
+    void push_back(const uint32_t& value);   // 0x00454860
+};
+void VectorAddModels(uint32_t nModel, SimpleVectorU32* pOut);   // 0x00555e80
+void FreeSimpleVector(SimpleVectorU32* pVector) {
+    if (pVector->mpBegin && ((int32_t*)pVector->mpBegin)[-1] != 0)
+        EASTL_allocator_deallocate(pVector->mpBegin);
+}
 class cCivilization_s00e0_52d0;
+class cVehicle;
+class cIObject;
 class cMessage;
+struct sCivilizationList {          // 0x00b25ca0 result
+    cCivilization_s00e0_52d0** mpBegin;        // +0x00
+    cCivilization_s00e0_52d0** mpEnd;          // +0x04
+};
 class cCivilization_s00e0_52d0 {
 public:
     int32_t GetRwTypeKind(uint32_t nType);          // 0x00bef980 ret 4
@@ -540,6 +679,56 @@ public:
     uint8_t mnPad00[0x8a];                          // +0x00
     uint8_t mbHidden;                               // +0x8a
 };
+struct sTerrainCurrency {           // SP::GetGameTerrainCursor result
+    VSLOT(0) VSLOT(1) VSLOT(2) VSLOT(3) VSLOT(4) VSLOT(5) VSLOT(6) VSLOT(7) VSLOT(8) VSLOT(9)
+    VSLOT(10) VSLOT(11) VSLOT(12) VSLOT(13) VSLOT(14) VSLOT(15) VSLOT(16) VSLOT(17) VSLOT(18)
+    VSLOT(19) VSLOT(20) VSLOT(21) VSLOT(22) VSLOT(23)
+    virtual void GetSelection(SimpleVectorU32* pOut, uint32_t nType);   // +0x60
+    VSLOT(25) VSLOT(26) VSLOT(27)
+    virtual bool HasSelection();                                        // +0x70
+};
+sTerrainCurrency* GetGameTerrainCursor();   // 0x00b30d70
+class cIObject {
+public:
+    VSLOT(0) VSLOT(1) VSLOT(2) VSLOT(3) VSLOT(4) VSLOT(5) VSLOT(6) VSLOT(7) VSLOT(8) VSLOT(9)
+    VSLOT(10) VSLOT(11) VSLOT(12) VSLOT(13) VSLOT(14) VSLOT(15) VSLOT(16) VSLOT(17) VSLOT(18)
+    VSLOT(19) VSLOT(20) VSLOT(21) VSLOT(22) VSLOT(23) VSLOT(24) VSLOT(25) VSLOT(26) VSLOT(27)
+    VSLOT(28) VSLOT(29) VSLOT(30) VSLOT(31) VSLOT(32) VSLOT(33) VSLOT(34) VSLOT(35) VSLOT(36)
+    VSLOT(37) VSLOT(38) VSLOT(39) VSLOT(40) VSLOT(41) VSLOT(42) VSLOT(43) VSLOT(44) VSLOT(45)
+    virtual cVehicle* AsVehicle(uint32_t nType);    // +0xb8
+    VSLOT(47)
+    virtual void Release();                         // +0xc0
+};
+class cVehicle : public cIObject {
+public:
+    uint8_t mnPadC4[0xa60];     // +0xc4
+    int32_t mnStance;           // +0xb24
+    void SetStance(int32_t nStance, bool bInstant);   // 0x00c9fa70 ret 8
+};
+class cTerrainEditor {
+public:
+    uint8_t mnPad00[0x10fc];    // +0x00
+    uint32_t mnModel0;          // +0x10fc
+    uint32_t mnModel1;          // +0x1100
+    uint32_t mnModel2;          // +0x1104
+};
+class cGameNounManager_s00e0_52d0 {
+public:
+    cCivilization_s00e0_52d0* GetPlayerCivilization();       // 0x00b25fb0 ret 0
+    sCivilizationList* GetCivilizationList();     // 0x00b25ca0 ret 0
+    cTerrainEditor* GetCurrentTerrainSphere();    // 0x00f67d90 ret 0
+};
+cGameNounManager_s00e0_52d0* NounManager_s00e0_52d0();   // 0x00b3d300
+struct sGameTime {
+    uint8_t mnPad00[0x48];      // +0x00
+    uint8_t mbPaused;           // +0x48
+};
+sGameTime* GameTimeManager();   // 0x00b3d380
+class cCommScreen {
+public:
+    bool IsActive();            // 0x00ae9390 ret 0
+};
+cCommScreen* CommManager();     // 0x00b3d4a0
 class cCivModeState;
 class cCommRelay {
 public:
@@ -613,6 +802,14 @@ public:
     void* Begin2D(void* pRenderMode);    // 0x0095bc10 ret 4
     void End2D();                        // 0x0095bb20 ret 0
 };
+struct sBatch2D {
+    VSLOT(0)
+    virtual void SetColor(uint32_t nColor);   // +0x04
+};
+void DrawArc(void* pBatch, float fA, float fB, float fC, uint32_t nColor0, uint32_t nColor1,
+             float fD, float fE, int32_t nArg, float fF);   // 0x00805740
+bool SetTooltipByKey(cUIWindow* pWindow, uint32_t nValue, const wchar_t* pText, int32_t nArg);
+const wchar_t* GetKindName(int32_t nKind);              // 0x00e04330
 struct tCommButton {                // base class comm-rel button record
     void* mpObject;                 // +0x00
     uint32_t mnPad04;               // +0x04
@@ -660,6 +857,8 @@ struct cCivIndexMap {
     uint32_t mnSize;                // +0x14
     void find(const uint32_t& key, sCivIndexNode** ppResult);   // 0x00e5c780 ret 8
 };
+sCivIndexNode* RBTreeIncrement_s00e0_52d0(sCivIndexNode* pNode);                 // 0x00921580
+void RBTreeErase(sCivIndexNode* pAnchor, sCivIndexNode* pNode);       // 0x00921880
 class cMessage {
 public:
     uint8_t mnPad00[0x08];          // +0x00
@@ -699,6 +898,8 @@ public:
     uint8_t mbCooldownShown[4];     // +0xd8
     cCivIndexMap mCivToIndex;       // +0xdc
 };
+bool DrawSuperweaponCooldown(cUIWindow* pButton, cMessage* pMsg);   // 0x00e05590
+void UpdateSuperweaponTooltip(cUIWindow* pWindow, uint32_t nRwType);   // 0x00e05de0
 int32_t GetSuperweaponKind(uint32_t nButtonId);                        // 0x00e053c0
 // ---- items of slice s00e052d0 end
 
@@ -779,6 +980,23 @@ public:
 
     int32_t GetTurn();                           // 0x00bf01e0
 };
+class cCivilizationList {
+public:
+    cCivilization_s00e0_6220** m_pBegin;                    // +0x00
+    cCivilization_s00e0_6220** m_pEnd;                      // +0x04
+    cCivilization_s00e0_6220** m_pCapacity;                 // +0x08
+};
+class cGameNounManager_s00e0_6220 {
+public:
+    cCivilization_s00e0_6220* GetPlayerCivilization();      // 0x00b25fb0
+    cCivilizationList* GetCivilizationList();    // 0x00b25ca0
+};
+cGameNounManager_s00e0_6220* __cdecl NounManager_s00e0_6220();         // 0x00b3d300
+class cCommManager {
+public:
+    bool IsActive();                             // 0x00ae9390
+};
+cCommManager* __cdecl CommManager_s00e0_6220();             // 0x00b3d4a0
 class cCivIndexMap_s00e0_6220 {
 public:
     struct Node {
@@ -838,6 +1056,8 @@ public:
     uint32_t m_nFlags0d8;                        // +0xd8
     cCivIndexMap_s00e0_6220 mCivToIndex;                    // +0xdc
 };
+int32_t __cdecl GetCurrentTurn();                              // 0x00922bf0
+int32_t __cdecl GetLastTurn();                                 // 0x00befd30
 void __stdcall FUN_00e05930(int32_t nMode);                     // 0x00e05930
 struct cCivMessage {
     uint8_t m_pad000[8];
@@ -845,6 +1065,17 @@ struct cCivMessage {
     uint8_t m_pad00c[4];                         // +0x0c
     cCivilization_s00e0_6220* m_pCiv;                       // +0x10
 };
+static const uint32_t kCommWindowIDs[2] = { 0x063bf17c, 0x063bf17d };
+static const uint32_t kCommRelDataKeys[4] = { 0x05a55b10, 0x05a55b20, 0x05a55b30, 0x05a55b40 };
+static const uint32_t kRelPanelMainWindow = 0x046977ff;
+static const uint32_t kRelPanelSubWindow = 0x055d626f;
+static const uint32_t kRelPanelChildKey = 0x8ed27e7a;
+static const uint32_t kProgressCurrentA = 0x0643d8b3;
+static const uint32_t kProgressCurrentB = 0x04cac3c5;
+static const uint32_t kProgressCurrentC = 0x0643edb7;
+static const uint32_t kProgressLoyaltyA = 0x0643d8da;
+static const uint32_t kProgressLoyaltyB = 0xf47c278d;
+static const uint32_t kProgressLoyaltyC = 0x0643edbe;
 static const uint32_t kMessageCommCivA = 0x03ac86ad;
 static const uint32_t kMessageCommCivB = 0x03ac86b5;
 static const uint32_t kMessageCommClose = 0x052f1544;
@@ -893,6 +1124,43 @@ public:
     ILink* m_pLinkB;                                    // +0x38
 };
 // ---- items of slice s00e06220 end
+
+// @ 0x00baa730
+void SortKeyChain(ISortKey** pBegin, ISortKey** pEnd, int nDepth, void* pArg)
+{
+    for (;;) {
+        if ((int)(((uint32_t)pEnd - (uint32_t)pBegin) & ~3u) <= 0x70 || nDepth < 1) {
+            if (nDepth == 0) FUN_00ba9740(pBegin, pEnd, pEnd, pArg);
+            return;
+        }
+        ISortKey** pMid = pBegin + ((pEnd - pBegin) >> 1);
+        ISortKey* pFirst = *pBegin;
+        ISortKey* pMiddle = *pMid;
+        ISortKey* pLast = *(pEnd - 1);
+        ISortKey** pPivot;
+        if (pFirst->mnKey < pMiddle->mnKey) {
+            if (pLast->mnKey <= pMiddle->mnKey) {
+                if (pFirst->mnKey < pLast->mnKey) pPivot = pEnd - 1;
+                else pPivot = pBegin;
+            } else {
+                pPivot = pMid;
+            }
+        } else {
+            if (pLast->mnKey <= pFirst->mnKey) {
+                if (pMiddle->mnKey < pLast->mnKey) pPivot = pEnd - 1;
+                else pPivot = pMid;
+            } else {
+                pPivot = pBegin;
+            }
+        }
+        ISortKey* pItem = *pPivot;
+        if (pItem) pItem->v00(pArg);
+        ISortKey** pSplit = (ISortKey**)FUN_00ba96e0(pBegin, pEnd);
+        nDepth--;
+        SortKeyChain(pSplit, pEnd, nDepth, pArg);
+        pEnd = pSplit;
+    }
+}
 
 // @ 0x00baa810
 cSortTriple* PartitionTriples(cSortTriple* pFirst, cSortTriple* pLast, cSortTriple value, char (*pPredicate)(const cSortTriple*, const cSortTriple*))
@@ -1819,6 +2087,57 @@ void cStarManager::LoadFromObject(void* pObject)
     *(bool*)((uint8_t*)pStar + 0x49) = true;
 }
 
+// @ 0x00badae0
+void cStarManager::UpdateVisibility(void* pStar, void* pPlanet, float fNear, float fFar, const Vector3* pOffset)
+{
+    if ((mnFlags >> 2 & 1) == 0 && mnState != 2)
+        return;
+
+    float fOuter;
+    float fInner;
+    if (pStar != nullptr && pPlanet != nullptr) {
+        void* pSystem = cStar_GetSolarSystem(pStar);
+        fOuter = cStar_GetOrbitRadius(pSystem, 1, 1);
+        fInner = cStar_GetOrbitRadius(pSystem, 2, 1);
+        SetVisible(pPlanet, 1);
+    } else if (pStar != nullptr && !mbLoaded) {
+        IGameObject* pObject = (IGameObject*)AddRefObject(pStar);
+        fOuter = cPlanet_GetOrbitRadius(pObject, 1, 1);
+        fInner = cPlanet_GetOrbitRadius(pObject, 2, 1);
+        float fLength = VectorLength(pOffset != nullptr ? pOffset : &mOffset);
+        if (fLength < fOuter) {
+            mbVisible = true;
+            if (mOffset.x > 0.0f)
+                mOffset.x = (float)RandomUint32Uniform(3) * gRandomScale;
+            else
+                mOffset.x = (float)(int32_t)(mOffset.x * gRandomScale2) * gRandomScale;
+        } else if (fLength > fInner) {
+            mbVisible = false;
+            if (mOffset.x > 0.0f)
+                mOffset.x = (float)(int32_t)(mOffset.x * gRandomScale2) * gRandomScale;
+            else
+                mOffset.x = (float)RandomUint32Uniform(3) * gRandomScale;
+        } else if (mnState != 2) {
+            return;
+        } else {
+            mbVisible = gRealOne;
+            if (mOffset.x > 0.0f)
+                mOffset.x = (float)RandomUint32Uniform(3) * gRandomScale;
+            else if (mOffset.x < 0.0f)
+                mOffset.x = 0.0f;
+            else
+                mOffset.x = gRealOne;
+        }
+        return;
+    } else {
+        return;
+    }
+
+    if (fNear > fOuter) {
+        (void)fInner;
+    }
+}
+
 // @ 0x00badd10
 void cStarManager::UpdateItem(void* pItem, void* pConfig)
 {
@@ -1962,16 +2281,497 @@ int __cdecl FUN_00e04330(int type)
     }
 }
 
+// @ 0x00e04560
+void cSPUIGlobalUICiv_s00e0_43c0::SetMinimapStateFromButton(int mode)
+{
+    void* a = FindWindowByID(0x562a141);
+    void* b = FindWindowByID(0x562a0f7);
+    void* c = FindWindowByID(0x55d626f);
+    void* d = FindWindowByID(0x46977ff);
+
+    cString text;
+
+    int textId;
+    if (mode == 0 && (WGetFlags(a) & 4) == 0) {
+        WSetProp(b, 4, 0);
+        WSetMaterial(d, 1, 0);
+        WSetMaterial(c, 1, mbField88);
+        textId = 0x615ffa7;
+    } else {
+        WSetProp(b, 4, 1);
+        int flag = (mode == 0 && mbField88 != 0) ? 1 : 0;
+        WSetMaterial(d, 1, flag);
+        WSetMaterial(c, 1, 0);
+        textId = 0x615ffa8;
+    }
+    text.Load(0xc0152a6d, textId, 0);
+    const char* str = text.c_str(-1, 1);
+    void* target = WSetText10(c, str);
+    SPUIHelpers_SetTooltipText(target, str);
+}
+
+// @ 0x00e046b0
+void cSPUIGlobalUICiv_s00e0_43c0::SetStanceButtonsState(int a0, int a1, int a2, int a3, int a4)
+{
+    if (a0 != 0) {
+        a3 = 1;
+        a1 = 1;
+    }
+
+    void* w1 = FindWindowByID(0x4c61dd8);
+    int icon1 = (int)WGetInt(w1, 0x8ed27e7a);
+    WSetMaterial(w1, 2, a1);
+    WSetProp((void*)icon1, 4, a1);
+    WRefresh(w1);
+
+    void* w2 = FindWindowByID(0x4c61b50);
+    int icon2 = (int)WGetInt(w2, 0x8ed27e7a);
+    WSetMaterial(w2, 2, a3);
+    WSetProp((void*)icon2, 4, a3);
+    WRefresh(w2);
+    (void)a2;
+    (void)a4;
+}
+
+// @ 0x00e04770
+void cSPUIGlobalUICiv_s00e0_43c0::ActivateCommRelPanel(int index)
+{
+    CivButtonEntry* entry = (CivButtonEntry*)((char*)this + 0x8c + index * 12);
+    int   icon    = entry->mIconIndex;
+    void* context = entry->mpCallback;
+
+    void* w1 = FindWindowByID(0x46977ff);
+    void* child1 = WSetCallback(w1, icon, 0);
+
+    void* w2 = FindWindowByID(0x55d626f);
+    void* child2 = WSetCallback(w2, icon, 0);
+
+    void* w3 = FindWindowByID(0x46977ff);
+    void* child3 = WSetCallback(w3, icon + 0x323776, 0);
+
+    void* w4 = FindWindowByID(0x55d626f);
+    void* child4 = WSetCallback(w4, icon + 0x323776, 0);
+
+    WSetMaterial(child2, 1, 0);
+    WSetMaterial(child1, 1, 1);
+    WSetMaterial(child4, 1, 1);
+    WSetMaterial(child3, 1, 1);
+
+    // Current value for the entry, mapped to a label colour.
+    int value = 0;
+    if (context != 0)
+        value = ProgressToColor(ProgressLookup(*(int*)((char*)context + 0x40)));
+
+    void* label1 = WGetChild(child1);
+    int labelId1 = 0;
+    if (label1 != 0)
+        labelId1 = WGetInt(label1, 0x53eb526);
+    ((void (__thiscall*)(void*, int, int))0x00831170)((void*)labelId1, 0, value);
+    ((void (__thiscall*)(void*, int, int))0x00831170)((void*)labelId1, 2, value);
+
+    void* label2 = WGetChild(child2);
+    int labelId2 = 0;
+    if (label2 != 0)
+        labelId2 = WGetInt(label2, 0x53eb526);
+    ((void (__thiscall*)(void*, int, int))0x00831170)((void*)labelId2, 0, value);
+    ((void (__thiscall*)(void*, int, int))0x00831170)((void*)labelId2, 2, value);
+
+    // Fly-in value: 0 for mode 1, 67.0f for mode 2, otherwise 100.0f.
+    int mode = StateToMode(GetStateIndex(context, 0));
+    float target = 100.0f;
+    if (mode == 1)
+        target = 0.0f;
+    else if (mode == 2)
+        target = 67.0f;
+
+    void* title = WSetCallback(child1, 0x55d5429, (void*)1);
+    int titleId = WGetInt(title, 0x10edf11);
+    WSetFloat((void*)titleId, target);
+}
+
+// @ 0x00e04960
+void cSPUIGlobalUICiv_s00e0_43c0::UpdateButtonState(int index)
+{
+    CivButtonEntry* entry = (CivButtonEntry*)((char*)this + 0x8c + index * 12);
+    int icon = entry->mIconIndex;
+
+    void* w1 = FindWindowByID(0x46977ff);
+    void* child1 = WSetCallback(w1, icon, 0);
+
+    void* w2 = FindWindowByID(0x55d626f);
+    void* child2 = WSetCallback(w2, icon, 0);
+
+    if (entry->mpCallback != 0) {
+        void* old = entry->mpCallback;
+        entry->mpCallback = 0;
+        WRelease(old);
+    }
+
+    WSetMaterial(child1, 1, 0);
+    WSetMaterial(child2, 1, 0);
+
+    void* w3 = FindWindowByID(0x46977ff);
+    void* child3 = WSetCallback(w3, icon + 0x323776, 0);
+
+    void* w4 = FindWindowByID(0x55d626f);
+    void* child4 = WSetCallback(w4, icon + 0x323776, 0);
+
+    WSetMaterial(child3, 1, 1);
+    WSetMaterial(child4, 1, 1);
+
+    entry->mbVisible = 0;
+}
+
 // @ 0x00e04a50
 void __stdcall FlashCivCommButton(int unused1, void* window, int unused3)
 {
+    (void)unused1;
+    (void)unused3;
     if (window != 0)
-        VT_0C_1(window, 0x8ed27e7a);
-    void* child = VT_4C_0(window);
-    if (child == 0)
+        WGetInt(window, 0x8ed27e7a);
+    void* child = ((void* (__thiscall*)(void*))(*(void***)window)[0x13])(window);
+    if (child == 0) {
         SPUIHelpers_SetWindowSPMaterial(window, 0x0147f2c8, 0);
-    else if (VT_0C_1(child, 0x5234b49) == 0)
+    } else if (WGetInt(child, 0x5234b49) == 0) {
         SPUIHelpers_SetWindowSPMaterial(window, 0x0147f2c8, 0);
+    }
+}
+
+// @ 0x00e04aa0
+void cSPUIGlobalUICiv_s00e0_43c0::OnPlayerCivChanged()
+{
+    void* civ = ((void* (__thiscall*)(void*))0x00b25fb0)(NounManagerInstance());
+    if (civ == 0)
+        return;
+
+    ((void (__thiscall*)(void*, int))0x00bf6fa0)(civ, 0);
+    int id = GameTime();
+    if (id == *(int*)0x015a4880)
+        return;
+
+    void* w = FindWindowByID(0xabcd1001);
+    *(int*)0x015a4880 = id;
+    ((void (__thiscall*)(void*, void*))0x00cfe780)(*(void**)0x0169d3c8, civ);
+
+    cString text;
+    text.Load(0xc0152a6d, 0x65f79f0, 0);
+    SPUIHelpers_SetTooltipText(w, text.c_str(-1, 1));
+    WRefresh(w);
+}
+
+// @ 0x00e04b40
+bool cSPUIGlobalUICiv_s00e0_43c0::Initialize()
+{
+    void* title = FindWindowByID(-1);
+    if (title != 0) {
+        WShow(title);
+        WSetText104(title, (const char*)this + 0x70);
+    }
+
+    static const int kSlotIds[4] = { 0x5a55b10, 0x5a55b20, 0x5a55b30, 0x5a55b40 };
+    for (int i = 0; i < 4; ++i) {
+        void* w = FindWindowByID(kSlotIds[i]);
+        if (w != 0)
+            WSetText104(w, (const char*)this + 0x70);
+    }
+
+    // Reset the four entry slots and drop their old callbacks.
+    for (int i = 0; i < 4; ++i) {
+        CivButtonEntry* e = &mButtons[i];
+        e->mIconIndex = 0x4655fd5 + i;
+        e->mbFlash = 0;
+        e->mbVisible = 0;
+        void* cb = e->mpCallback;
+        e->mpCallback = 0;
+        if (cb != 0)
+            WRelease(cb);
+    }
+
+    // Register the async message holder and its three handlers.
+    void* holder = MessageServer();
+    mpField74 = holder;
+    mpField78 = this;
+    mpField7C = (void*)0x15a4884;
+    mField80 = 3;
+    mField84 = 0;
+    if (holder != 0 && this != 0) {
+        for (int off = 0; off < 0xc; off += 4) {
+            void* arg = *(void**)(off + 0x15a4884);
+            WCall9(holder, this, arg);
+        }
+    }
+
+    for (int i = 0; i < 4; ++i) {
+        mButtons[i].mbFlash = 0;
+        UpdateButtonState(i);
+    }
+
+    void* nameWin = FindWindowByID(0x562a0f7);
+    void* nameChild = WSetCallback(nameWin, 0x562a2da, (void*)1);
+    void* planet = GetActivePlanet();
+    const char* name = (const char*)((void* (__thiscall*)(void*))0x00c707e0)(planet);
+    name = *(const char**)name;
+    WSetTitle(nameChild, name);
+
+    if (title != 0)
+        WRelease(title);
+    return true;
+}
+
+// @ 0x00e04d10
+void cSPUIGlobalUICiv_s00e0_43c0::SetButtonProgress(int index)
+{
+    CivButtonEntry* entry = (CivButtonEntry*)((char*)this + 0x8c + index * 12);
+    int   icon    = entry->mIconIndex;
+    void* context = entry->mpCallback;
+
+    void* w1 = FindWindowByID(0x46977ff);
+    void* child1 = WSetCallback(w1, icon, 0);
+
+    void* w2 = FindWindowByID(0x55d626f);
+    void* child2 = WSetCallback(w2, entry->mIconIndex, 0);
+
+    if (context != 0 && *(int*)((char*)context + 0x2a0) != -1) {
+        bool visible = ((bool (__thiscall*)(void*))0x00ae9f10)(
+            ((void* (__thiscall*)(void*))0x00b3d4a0)(context));
+        if (!visible) {
+            entry->mbVisible = 1;
+            FlashCivCommButton(0, child1, 0);
+            FlashCivCommButton(0, child2, 0);
+            goto clamp;
+        }
+    }
+
+    if (entry->mbVisible != 0) {
+        int c1 = (int)WGetInt(child1, 0x8ed27e7a);
+        int c2 = (int)WGetInt(child2, 0x8ed27e7a);
+        WSetProp((void*)c1, 8, 0);
+        SPUIHelpers_SetWindowSPMaterial((void*)c1, 0x13f9c70, 0);
+        WSetProp((void*)c2, 8, 0);
+        SPUIHelpers_SetWindowSPMaterial((void*)c2, 0x13f9c70, 0);
+        entry->mbVisible = 0;
+    }
+
+clamp:
+    void* label1 = WSetCallback(child1, 0x46adf86, (void*)1);
+    void* label2 = WSetCallback(child2, 0x46adf86, (void*)1);
+
+    float value = GetProgressFloat(context, 0);
+    if (value < 0.0f)
+        value = 0.0f;
+    if (value > 100.0f)
+        value = 100.0f;
+
+    WSetFloat(label1, value);
+    WSetFloat(label2, value);
+}
+
+// @ 0x00e04f10
+cSPUIGlobalUICiv_s00e0_43c0* cSPUIGlobalUICiv_s00e0_43c0::Destroy()
+{
+    *(void**)this = (void*)0x147f394;
+    mvpField68 = (void*)0x147f384;
+    mvpField70 = (void*)0x147f368;
+
+    void* anchor = (char*)this + 0xdc;
+    ((void (__thiscall*)(void*, void*))0x009a9600)(anchor, *(void**)((char*)anchor + 0xc));
+
+    if (mpFieldC4 != 0)
+        ((void (__thiscall*)(void*))(*(void***)mpFieldC4)[2])(mpFieldC4);
+    if (mpProgressBarC0 != 0)
+        mpProgressBarC0->Release();
+
+    for (int i = 3; i >= 0; --i) {
+        void* cb = mButtons[i].mpCallback;
+        if (cb != 0)
+            WRelease(cb);
+    }
+
+    if (mpField74 != 0) {
+        void* handler = mpField74;
+        mpField74 = 0;
+        RemoveHandler(handler, mpField78, mpField7C, (void*)mField80, (void*)mField84);
+    }
+
+    mvpField70 = (void*)0x13eb938;
+    mvpField68 = (void*)0x13ec458;
+    // Retail tails into the base-class destructor, so its result is this function's result.
+    return ((cSPUIGlobalUICiv_s00e0_43c0* (__thiscall*)(void*))0x00e03b20)(this);
+}
+
+// @ 0x00e05000
+bool cSPUIGlobalUICiv_s00e0_43c0::CreatePanel(int param)
+{
+    if (!((bool (__thiscall*)(void*, int, void*))0x00e03620)(this, param, this))
+        return false;
+    if (!Initialize())
+        return false;
+
+    void* mem = AppAllocate(0x38, (const char*)0x147f400, 0, 0, 0, 0);
+    cSPUINewProgressBar* bar;
+    if (mem != 0) {
+        void* arg = ((void* (__thiscall*)(void*, void*))0x0093b6c0)(this, (void*)0x147f3ec);
+        bar = (cSPUINewProgressBar*)((void* (__thiscall*)(void*, void*))0x00e28a10)(mem, arg);
+    } else {
+        bar = 0;
+    }
+    ((void (__thiscall*)(void**, void*))0x00572680)((void**)&mpProgressBarC0, bar);
+    if (mpProgressBarC0 != 0)
+        mpProgressBarC0->SetMode(0);
+
+    void* mem2 = AppAllocate(0x18, (const char*)0x147f3cc, 0, 0, 0, 0);
+    cSPUILayout_s00e0_43c0* layout;
+    if (mem2 != 0)
+        layout = (cSPUILayout_s00e0_43c0*)SPUIHelpers_ConstructLayout(mem2);
+    else
+        layout = 0;
+
+    if (layout != mpFieldC4) {
+        if (layout != 0)
+            ((void (__thiscall*)(void*))(*(void***)layout)[1])(layout);
+        cSPUILayout_s00e0_43c0* old = mpFieldC4;
+        mpFieldC4 = layout;
+        if (old != 0)
+            ((void (__thiscall*)(void*))(*(void***)old)[2])(old);
+    }
+
+    bool ok = mpFieldC4->Init((void*)0x147f3a4, 0x40464100, 1, (void*)0x5b598fa);
+    if (ok)
+        mpFieldC4->SetVisibility(0);
+
+    for (int i = 0; i < 4; ++i) {
+        (&mFieldC8)[i] = 0xc;
+        mbFieldsD8[i] = 0;
+    }
+    return true;
+}
+
+// @ 0x00e05120
+void cSPUIGlobalUICiv_s00e0_43c0::RemovePanel()
+{
+    if (mpField74 != 0) {
+        void* handler = mpField74;
+        mpField74 = 0;
+        RemoveHandler(handler, mpField78, mpField7C, (void*)mField80, (void*)mField84);
+    }
+
+    void* w0 = FindWindowByID(-1);
+    if (w0 != 0) {
+        WShow(w0);
+        WSetText108(w0, (const char*)this + 0x70);
+    }
+
+    static const int kSlotIds[4] = { 0x5a55b10, 0x5a55b20, 0x5a55b30, 0x5a55b40 };
+    for (int i = 0; i < 4; ++i) {
+        void* w = FindWindowByID(kSlotIds[i]);
+        if (w != 0)
+            WSetText108(w, (const char*)this + 0x70);
+    }
+
+    void* anchor = (char*)this + 0xdc;
+    ((void (__thiscall*)(void*, void*))0x009a9600)(anchor, *(void**)((char*)anchor + 0xc));
+    *(void**)((char*)anchor + 8) = (char*)anchor + 4;
+    *(void**)((char*)anchor + 0xc) = 0;
+    *(u8*)((char*)anchor + 0x10) = 0;
+    *(void**)((char*)anchor + 0x14) = 0;
+    *(void**)((char*)anchor + 4) = (char*)anchor + 4;
+
+    if (mpProgressBarC0 != 0) {
+        mpProgressBarC0->Shutdown();
+        if (mpProgressBarC0 != 0) {
+            cSPUINewProgressBar* bar = mpProgressBarC0;
+            mpProgressBarC0 = 0;
+            bar->Release();
+        }
+    }
+
+    if (mpFieldC4 != 0) {
+        mpFieldC4->Shutdown(1);
+        if (mpFieldC4 != 0) {
+            cSPUILayout_s00e0_43c0* p = mpFieldC4;
+            mpFieldC4 = 0;
+            ((void (__thiscall*)(void*))(*(void***)p)[2])(p);
+        }
+    }
+
+    ((void (__thiscall*)(void*))0x00e03740)(this);
+}
+
+// @ 0x00e052d0
+void cSPUIGlobalUICiv::RemoveCivFeedback(cCivilization_s00e0_52d0* pCiv)
+{
+    sCivIndexNode* pNode;
+    mCivToIndex.find((const uint32_t&)pCiv, &pNode);
+    sCivIndexNode* pAnchor = (sCivIndexNode*)&mCivToIndex.mpAnchorLeft;
+    if (pNode != pAnchor) {
+        uint32_t nIndex = pNode->mnValue;
+        DeactivateCommRelPanel((int32_t)nIndex);
+        cIWinProc** ppObject = &mButtons[nIndex].mpObject;
+        cIWinProc* pObject = *ppObject;
+        if (pObject) {
+            *ppObject = 0;
+            pObject->Release();
+        }
+        --mCivToIndex.mnSize;
+        RBTreeIncrement_s00e0_52d0(pNode);
+        RBTreeErase(pAnchor, pNode);
+        EASTL_allocator_deallocate(pNode);
+    }
+
+    bool bHasOther = false;
+    cCivilization_s00e0_52d0* pPlayer = NounManager_s00e0_52d0()->GetPlayerCivilization();
+    sCivilizationList* pCivs = NounManager_s00e0_52d0()->GetCivilizationList();
+    cCivilization_s00e0_52d0** it = pCivs->mpBegin;
+    while (it != pCivs->mpEnd && !bHasOther) {
+        cCivilization_s00e0_52d0* pIter = *it;
+        if (pIter != pPlayer && pIter != pCiv && !pIter->mbHidden)
+            bHasOther = true;
+        ++it;
+    }
+    mbMinimapVisible = mbMinimapVisible && bHasOther;
+    SetMinimapStateFromButton(0);
+}
+
+// @ 0x00e053c0
+int32_t GetSuperweaponKind(uint32_t nButtonId)
+{
+    int32_t nKind = -1;
+    cCivilization_s00e0_52d0* pPlayer = NounManager_s00e0_52d0()->GetPlayerCivilization();
+    if (!pPlayer)
+        return nKind;
+    if (nButtonId == 0x5a55b40) {
+        switch (pPlayer->GetSuperweaponSpeccy()) {
+        case 0: nKind = 2; break;
+        case 1: nKind = 8; break;
+        case 2: nKind = 5; break;
+        }
+    } else {
+        SimpleVectorU32 models = {0, 0, 0};
+        cTerrainEditor* pTerrain = NounManager_s00e0_52d0()->GetCurrentTerrainSphere();
+        if (pTerrain) {
+            VectorAddModels(pTerrain->mnModel0, &models);
+            VectorAddModels(pTerrain->mnModel1, &models);
+            VectorAddModels(pTerrain->mnModel2, &models);
+        }
+        uint32_t nCount = (uint32_t)(models.mpEnd - models.mpBegin);
+        for (uint32_t i = 0; i < nCount; ++i) {
+            int32_t nModelKind = pPlayer->GetRwTypeKind(models.mpBegin[i]);
+            bool bMatch;
+            switch (nModelKind) {
+            case 0: case 6: case 11: bMatch = (nButtonId == 0x5a55b20); break;
+            case 1: case 4: case 7: bMatch = (nButtonId == 0x5a55b30); break;
+            case 3: case 9: case 10: bMatch = (nButtonId == 0x5a55b10); break;
+            default: bMatch = false; break;
+            }
+            if (bMatch) {
+                nKind = nModelKind;
+                if (nKind != -1)
+                    break;
+            }
+        }
+        FreeSimpleVector(&models);
+    }
+    return nKind;
 }
 
 // @ 0x00e05530
@@ -1986,6 +2786,303 @@ void cSPUIGlobalUICiv::SuperweaponClick(uint32_t nButtonId)
         return;
     }
     GetCivModeStrategy()->ExecuteMessage(0x1b, 0);
+}
+
+// @ 0x00e05590
+bool DrawSuperweaponCooldown(cUIWindow* pButton, cMessage* pMsg)
+{
+    uint32_t nButtonId = pButton->GetID();
+    cCivilization_s00e0_52d0* pPlayer = NounManager_s00e0_52d0()->GetPlayerCivilization();
+    if (!pPlayer)
+        return false;
+    int32_t nKind = GetSuperweaponKind(nButtonId);
+    if (nKind == -1)
+        return false;
+    if (!pPlayer->SuperweaponOnCooldown(nKind))
+        return false;
+    cUIWindow* pRenderable = pButton->GetRenderable();
+    pRenderable->GetRenderable()->SetFlag(0, pButton != 0);
+    pButton->GetRenderable()->SetFlag(0, true);
+
+    cRenderCtx* pCtx = (cRenderCtx*)pMsg->mpWindow;
+    DSub* pSub = pButton->GetSub(0x53eb526);
+    float* pArea = (float*)pButton->GetArea();
+    int32_t nWidth = pSub->mnWidth;
+    int32_t nHeight = pSub->mnHeight;
+    float mfHalfW = (pArea[2] - pArea[0]) * 0.5f;
+    float mfHalfH = (pArea[3] - pArea[1]) * 0.5f;
+    float mfW = (float)nWidth;
+    float mfH = (float)nHeight;
+    float pair38[4];
+    float pair40[4];
+    pSub->GetPair38(pair38, 4);
+    pSub->GetPair40(pair40, 4);
+    float mfA = pair38[0] * mfW * 0.5f;
+    float mfB = pair38[1] * mfH * 0.5f;
+    float mfRadius = mfA < mfB ? mfA : mfB;
+    sBatch2D* pBatch = (sBatch2D*)pCtx->Begin2D(0);
+    pBatch->SetColor(0xbf0000ff);
+    float mfRatio = pPlayer->GetSuperweaponCooldown(nKind) * 0.0f;
+    DrawArc(pBatch, pArea[0] + mfHalfW, pArea[1] + mfHalfH, mfRadius, 0xbf0000ff, 0xbf0000ff,
+            mfRatio, mfRatio, 0, 0.0f);
+    pCtx->End2D();
+    return true;
+}
+
+// @ 0x00e057a0
+cSPUIGlobalUICiv::cSPUIGlobalUICiv()
+: mnPad74(0)
+    , mnPad78(0)
+    , mnPad7c(0)
+    , mnPad80(0)
+    , mnPad84(0)
+    , mbMinimapVisible(0)
+    , mbPad89(0) {
+    for (int i = 0; i < 4; ++i)
+        mButtons[i].mpObject = 0;
+    mfCooldown = 0.0f;
+    mnPadC0 = 0;
+    mnPadC4 = 0;
+    mCivToIndex.mpAnchorRight = 0;
+    mCivToIndex.mpAnchorParent = 0;
+    mCivToIndex.mbAnchorColor = 0;
+    mCivToIndex.mpAnchorParent = 0;
+    mCivToIndex.mbAnchorColor = 0;
+    mCivToIndex.mnSize = 0;
+    mCivToIndex.mpAnchorRight = (sCivIndexNode*)&mCivToIndex.mpAnchorLeft;
+    mCivToIndex.mpAnchorLeft = (sCivIndexNode*)&mCivToIndex.mpAnchorLeft;
+}
+
+// @ 0x00e05870
+void cSPUIGlobalUICiv::SelectStance(int32_t nStance)
+{
+    SimpleVectorU32 selection = {0, 0, 0};
+    GetGameTerrainCursor()->GetSelection(&selection, 0x137e8e0);
+    for (uint32_t* it = selection.mpBegin; it != selection.mpEnd; ++it) {
+        cVehicle* pVehicle = 0;
+        if (*it)
+            pVehicle = ((cIObject*)*it)->AsVehicle(0x137e8e0);
+        pVehicle->SetStance(nStance, false);
+    }
+    for (uint32_t* it = selection.mpBegin; it < selection.mpEnd; ++it) {
+        if (*it)
+            ((cIObject*)*it)->Release();
+    }
+    FreeSimpleVector(&selection);
+}
+
+// @ 0x00e05930
+void cSPUIGlobalUICiv::SyncStanceWithSelection(int32_t nStance)
+{
+    if (!GetGameTerrainCursor()->HasSelection()) {
+        SetStanceButtonsState(0, 0, 0, 0, 0);
+        return;
+    }
+    SimpleVectorU32 selection = {0, 0, 0};
+    GetGameTerrainCursor()->GetSelection(&selection, 0x137e8e0);
+    bool bSetStance = false;
+    bool bHasStance1 = false;
+    bool bHasStance0 = false;
+    if (nStance != -1) {
+        bSetStance = true;
+        if (nStance == 0)
+            bHasStance0 = true;
+        else if (nStance == 1)
+            bHasStance1 = true;
+    }
+    for (uint32_t* it = selection.mpBegin; it != selection.mpEnd; ++it) {
+        if (bHasStance0 && bHasStance1)
+            break;
+        cVehicle* pVehicle = 0;
+        if (*it)
+            pVehicle = ((cIObject*)*it)->AsVehicle(0x137e8e0);
+        if (bSetStance) {
+            pVehicle->SetStance(nStance, false);
+        } else {
+            switch (pVehicle->mnStance) {
+            case 0: bHasStance0 = true; break;
+            case 1: bHasStance1 = true; break;
+            }
+        }
+    }
+    bool bBoth = bHasStance0 && bHasStance1;
+    SetStanceButtonsState(bHasStance0, 1, bHasStance1, 1, bBoth);
+    for (uint32_t* it = selection.mpBegin; it < selection.mpEnd; ++it) {
+        if (*it)
+            ((cIObject*)*it)->Release();
+    }
+    FreeSimpleVector(&selection);
+}
+
+// @ 0x00e05bb0
+bool cSPUIGlobalUICiv::DoMessage(void* pWindow, cMessage* pMsg)
+{
+    bool bResult = false;
+    if (pMsg->mnId == 0x1b) {
+        cUIWindow* pSource = pMsg->mpWindow;
+        if ((uint32_t)(pSource->GetID() - 0x4655fd5) <= 3) {
+            cIWinProc* pButton = mButtons[pSource->GetID() - 0x4655fd5].mpObject;
+            cCivModeState* pState = GetCivModeStrategy()->GetState();
+            ((cCommRelay*)pState->mpRelay)->OnMessage(pSource, pButton->GetCommandId(1));
+            return bResult;
+        }
+    } else if (pMsg->mnId == 0x1c) {
+        cUIWindow* pSource = pMsg->mpWindow;
+        if ((uint32_t)(pSource->GetID() - 0x4655fd5) <= 3) {
+            cCivModeState* pState = GetCivModeStrategy()->GetState();
+            ((cCommRelay*)pState->mpRelay)->OnEnd();
+            return bResult;
+        }
+    } else if (pMsg->mnId == 0x287259f6) {
+        if (CommManager()->IsActive())
+            return bResult;
+        uint32_t nCommand = pMsg->mnParam;
+        bool bStance1 = false;
+        bool bStance0 = false;
+        switch (nCommand) {
+        case 0x5a55b10:
+        case 0x5a55b20:
+        case 0x5a55b30:
+        case 0x5a55b40:
+            SuperweaponClick(nCommand);
+            bResult = true;
+            break;
+        case 0x4655fd5:
+        case 0x4655fd6:
+        case 0x4655fd7:
+        case 0x4655fd8:
+            if (!(GameTimeManager()->mbPaused & 1)) {
+                mButtons[nCommand - 0x4655fd5].mpObject->FireSelectedCommEvent();
+                bResult = true;
+            }
+            break;
+        case 0x4c61b50:
+            bStance0 = true;
+            bStance1 = true;
+            SetStanceButtonsState(bStance1, 1, bStance0, 1, 0);
+            SelectStance(bStance0 ? 1 : 0);
+            break;
+        case 0x4c61dd8:
+            bStance1 = true;
+            SetStanceButtonsState(bStance1, 1, bStance0, 1, 0);
+            SelectStance(bStance0 ? 1 : 0);
+            break;
+        case 0x562a141:
+            SetMinimapStateFromButton(0);
+            bResult = true;
+            break;
+        case 0x6453746:
+            GetCivModeStrategy()->OnTechLevelUpgradeButtonPress();
+            break;
+        }
+        return bResult;
+    } else if (pMsg->mnId == 0xd) {
+        return DrawSuperweaponCooldown((cUIWindow*)pWindow, pMsg);
+    }
+    return bResult;
+}
+
+// @ 0x00e060c0
+void cSPUIGlobalUICiv::SyncSuperweaponButton(uint32_t nWindowId, int32_t* pnState, int32_t nIndex)
+{
+    cCivilization_s00e0_52d0* pPlayer = NounManager_s00e0_52d0()->GetPlayerCivilization();
+    if (!pPlayer)
+        return;
+    cUIWindow* pWindow = FindWindowByID(nWindowId);
+    int32_t nSelected = GetCivModeStrategy()->GetState()->mnSelectedWeapon;
+    int32_t nKind = GetSuperweaponKind(nWindowId);
+    if (nKind != *pnState) {
+        *pnState = nKind;
+        SetTooltipByKey(pWindow, mnPadC4, GetKindName(nKind), -1);
+    }
+    UpdateSuperweaponTooltip(pWindow, (uint32_t)nKind);
+    bool bVisible = (nKind != -1);
+    pWindow->SetVisible(1, bVisible);
+    pWindow->SetVisible(2, pPlayer->CanUseSuperweapon(nKind));
+    cUIWindow* pInner = pWindow->FindWindowByID(0x8ed27e7a);
+    pInner->SetFlag(4, nSelected == nKind);
+    cUIWindow* pNext = FindWindowByID(nWindowId + 1);
+    if (pNext)
+        pNext->SetVisible(1, !bVisible);
+    if (nKind != -1) {
+        if (pPlayer->SuperweaponOnCooldown(nKind)) {
+            pWindow->Invalidate();
+            mbCooldownShown[nIndex] = 1;
+        } else if (mbCooldownShown[nIndex]) {
+            pWindow->Invalidate();
+            mbCooldownShown[nIndex] = 0;
+        }
+    }
+}
+
+// @ 0x00e06220
+void cSPUIGlobalUICiv_s00e0_6220::Update(int32_t nDelta)
+{
+    m_fCommRelTimer += (float)(uint32_t)nDelta;
+
+    bool bCommActive = CommManager_s00e0_6220()->IsActive();
+    const uint32_t aWindowIDs[2] = { kCommWindowIDs[0], kCommWindowIDs[1] };
+    for (int32_t i = 0; i < 2; ++i) {
+        IWindow* pWindow = FindWindowByID(aWindowIDs[i]);
+        if (pWindow == nullptr)
+            continue;
+        bool bVisible = pWindow->IsVisible();
+        if (bVisible != bCommActive)
+            pWindow->SetState(1, bVisible == 0);
+    }
+
+    if (bCommActive != m_bCommScreenActive)
+        SetMinimapStateFromButton(bCommActive);
+    m_bCommScreenActive = bCommActive;
+
+    for (int32_t i = 0; i < 4; ++i) {
+        if (m_commRelPanels[i].m_bActive && m_commRelPanels[i].m_pCiv != nullptr)
+            UpdateCommRelPanel(nDelta, i);
+    }
+
+    BindCommRelData(kCommRelDataKeys[0], &m_apCommRelData[0], 0);
+    BindCommRelData(kCommRelDataKeys[1], &m_apCommRelData[1], 1);
+    BindCommRelData(kCommRelDataKeys[2], &m_apCommRelData[2], 2);
+    BindCommRelData(kCommRelDataKeys[3], &m_apCommRelData[3], 3);
+
+    RefreshCommRelPanels();
+
+    cCivilization_s00e0_6220* pCiv = NounManager_s00e0_6220()->GetPlayerCivilization();
+    if (pCiv != nullptr) {
+        int32_t nTurn = pCiv->GetTurn();
+        SetCommRelProgress(kProgressCurrentA, kProgressCurrentB, kProgressCurrentC,
+                           pCiv->m_nStage < 3 ? GetCurrentTurn() - nTurn : 0);
+        SetCommRelProgress(kProgressLoyaltyA, kProgressLoyaltyB, kProgressLoyaltyC,
+                           pCiv->m_nStage < 4 ? GetLastTurn() - nTurn : 0);
+    }
+}
+
+// @ 0x00e063d0
+void cSPUIGlobalUICiv_s00e0_6220::SetCommScreenVisibility(cCivilization_s00e0_6220* pCiv, bool bOn)
+{
+    if (pCiv == NounManager_s00e0_6220()->GetPlayerCivilization())
+        return;
+    if (mCivToIndex.Find(pCiv) == &mCivToIndex.m_stHeader)
+        return;
+
+    uint32_t nIndex = mCivToIndex.GetCounter(pCiv);
+    cCommRelPanel* pPanel = &m_commRelPanels[nIndex];
+
+    IWindow* pMain = FindWindowByID(kRelPanelMainWindow)->CreateChild(pPanel->m_pData, 0);
+    IWindow* pSub = FindWindowByID(kRelPanelSubWindow)->CreateChild(pPanel->m_pData, 0);
+
+    pMain->Select();
+    pMain->SetState(0x10, bOn);
+    pSub->SetState(0x10, bOn);
+
+    ISubWindow* pMainChild = pMain->GetSubWindow(kRelPanelChildKey);
+    ISubWindow* pSubChild = pSub->GetSubWindow(kRelPanelChildKey);
+
+    pMainChild->SetState(4, bOn);
+    pSubChild->SetState(4, bOn);
+
+    pMain->Refresh();
+    pSub->Refresh();
 }
 
 // @ 0x00e064f0
@@ -2022,4 +3119,47 @@ void cSPUIGlobalUICiv_s00e0_6220::HandleMessage(uint32_t nMessage, void* pData)
         break;
     }
     cSPUIGlobalUI_s00e0_6220::HandleMessage(nMessage, pData);
+}
+
+// @ 0x00e065c0
+void cSPUIGlobalUICiv_s00e0_6220::InitCommRelPanels()
+{
+    bool bAny = false;
+    cCivilizationList* pList = NounManager_s00e0_6220()->GetCivilizationList();
+    cCivilization_s00e0_6220** pCiv = pList->m_pBegin;
+    cCivilization_s00e0_6220** pCivEnd = pList->m_pEnd;
+    if (pCiv != pCivEnd) {
+        do {
+            cCivilization_s00e0_6220* pCur = *pCiv;
+            if (!pCur->m_bNotPlayable && pCur->m_bVisible) {
+                AssignCommRelPanel(pCur->m_nPanelIndex, pCur);
+                bAny = true;
+            }
+            ++pCiv;
+        } while (pCiv != pCivEnd);
+
+        if (bAny) {
+            m_bFlag88 = true;
+            SetMinimapStateFromButton(0);
+        }
+    }
+}
+
+// @ 0x00e06630
+void cSPUIGlobalUICiv_s00e0_6220::AssignFreeCommRelPanel(cCivilization_s00e0_6220* pCiv)
+{
+    if (mCivToIndex.Find(pCiv) != &mCivToIndex.m_stHeader)
+        return;
+
+    uint32_t nIndex = 0;
+    while (nIndex < 4 && m_commRelPanels[nIndex].m_bActive)
+        ++nIndex;
+
+    AssignCommRelPanel(nIndex, pCiv);
+    pCiv->m_nPanelIndex = nIndex;
+
+    if (nIndex == 0) {
+        m_bFlag88 = true;
+        SetMinimapStateFromButton(0);
+    }
 }
