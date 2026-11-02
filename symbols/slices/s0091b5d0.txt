@@ -1,0 +1,8 @@
+0091b840 ?Undecorate@DisassemblerX86@@QAEHPADPBDII@Z  # DisassemblerX86::Undecorate migrated from s0091b5d0 (verbatim, slice spelling)
+0091ba90 ?StrConcat3@@YAPAUEStr@@PAU1@PBD01@Z  # StrConcat3 migrated from s0091b5d0 (verbatim, slice spelling)
+0091bb00 ?Parse@MapFile@@QAEEPAE@Z  # MapFile::Parse migrated from s0091b5d0 (verbatim, slice spelling)
+0091bc30 ?ReadRecord@MapFile@@QAEEPAE@Z  # MapFile::ReadRecord migrated from s0091b5d0 (verbatim, slice spelling)
+0091bce0 ?CompareName@MapFile@@QAEEPBDPAE@Z  # MapFile::CompareName migrated from s0091b5d0 (verbatim, slice spelling)
+0091bd40 ?Open@MapFile@@QAEEPAX@Z  # MapFile::Open migrated from s0091b5d0 (verbatim, slice spelling)
+0091bd70 ?ReadSymbolBytes@MapFile@@QAEEHPAE@Z  # MapFile::ReadSymbolBytes migrated from s0091b5d0 (verbatim, slice spelling)
+0091bdd0 ?FindByAddress@MapFile@@QAEPAEPAEI@Z  # MapFile::FindByAddress migrated from s0091b5d0 (verbatim, slice spelling)

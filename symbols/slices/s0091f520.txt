@@ -6,8 +6,8 @@
 0091fe40 EA::Debug::FileReportWriter::~FileReportWriter  # vtable store + fclose
 0091fe60 ?WriteStackMemoryView@ReportWriter@Debug@EA@@QAE_NPBEI@Z  # EA::Debug::ReportWriter::WriteStackMemoryView migrated from s0091f520
 0091ff10 EA::Debug::FileReportWriter::ScalarDeletingDtor  # vtable store + fclose + delete
-0091ff50 EA::Debug::GetUptime  # _mktime64(1970)/_time64 delta
-0091ffd0 EA::Debug::GetTickCount100ns  # GetSystemTime/SystemTimeToFileTime delta
+0091ff50 ?GetUptime@@YAXPAI@Z  # GetUptime migrated from s0091f520 (verbatim, slice spelling)
+0091ffd0 ?GetTickCount100ns@@YAXPAI@Z  # GetTickCount100ns migrated from s0091f520 (verbatim, slice spelling)
 009200b0 EA::Debug::CallRefCtor  # vtable+0xc(1) forwarder
 009200d0 EA::Debug::Mgr::Create  # vtable+0x14 then +0x8
 00920110 EA::Debug::Mgr::Factory24  # vtable+0x24 factory + release on failure

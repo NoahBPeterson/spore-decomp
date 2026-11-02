@@ -1,0 +1,3 @@
+00917600 ?LerpColor@@YAIIIM@Z  # LerpColor migrated from s00916960 (verbatim, slice spelling)
+009176c0 ?LerpSpriteRect@@YAPAMPAM00M@Z  # LerpSpriteRect migrated from s00916960 (verbatim, slice spelling)
+00917770 ?Push@SpriteList@@QAEXPBI@Z  # SpriteList::Push migrated from s00916960 (verbatim, slice spelling)

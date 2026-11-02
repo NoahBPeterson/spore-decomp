@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+0091b2f0  45  cAddressRepCache::cAddressRepCache: same field initialisation (gOne/gTwo load factors, static 1-bucket array 0x0154df28, zero counts, list heads self-linked, flags 1/0, 0x3c = 0, 0x40 = 8), but the compiler interleaves the bucket-count/list-head stores differently from retail's straight-line order. flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-, equiv PASS (400 valid inputs, 100.0% coverage)
