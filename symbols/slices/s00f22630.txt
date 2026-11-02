@@ -1,0 +1,1 @@
+00f22630 ?FUN_00f22630@@YAXPAUOwner@@I@Z  # FUN_00f22630 migrated from s00f22630 (verbatim, slice spelling)

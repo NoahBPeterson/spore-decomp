@@ -1,10 +1,39 @@
-# Slice s00f24b30 names.
-#
-# No dev-build PDB names or ModAPI names could be confirmed for these small
-# __thiscall type/key predicates, so no symbol is asserted here.  The 32-bit
-# constants they compare against are FNV hashes of Spore type names; without the
-# name registry they are kept as literals in the source.
-#
-# Provisional observations (not asserted as names):
-#   016c8318  singleton pointer to the 0x38-byte two-eastl-map layout object (fn24d30)
-#   00f257f0  constructs SP::cVarListSerializer over the object and serializes
+00f24b30 ?fn24b30@@YAXPAUEffectRoot@@I@Z  # fn24b30 migrated from s00f24b30 (verbatim, slice spelling)
+00f24d30 ?fn24d30@@YAXXZ  # fn24d30 migrated from s00f24b30 (verbatim, slice spelling)
+00f24d90 ?fn24d90@@YAXXZ  # fn24d90 migrated from s00f24b30 (verbatim, slice spelling)
+00f25050 ?fn25050@@YGHPAXI@Z  # fn25050 migrated from s00f24b30 (verbatim, slice spelling)
+00f25080 ?fn25080@Obj@@QAEHPAU1@@Z  # Obj::fn25080 migrated from s00f24b30 (verbatim, slice spelling)
+00f25110 ?fn25110@Obj@@QAEXPAUVec3i@@PA_N@Z  # Obj::fn25110 migrated from s00f24b30 (verbatim, slice spelling)
+00f25160 ?fn25160@Obj@@QAEXPAUVec3i@@@Z  # Obj::fn25160 migrated from s00f24b30 (verbatim, slice spelling)
+00f25190 ?fn25190@Obj@@QAEXPAUVec3i@@PA_N@Z  # Obj::fn25190 migrated from s00f24b30 (verbatim, slice spelling)
+00f251f0 ?fn251f0@Obj@@QAEPAUVec3i@@PAU2@@Z  # Obj::fn251f0 migrated from s00f24b30 (verbatim, slice spelling)
+00f25240 ?fn25240@Obj@@QAEPAUVec3i@@PAU2@PA_N@Z  # Obj::fn25240 migrated from s00f24b30 (verbatim, slice spelling)
+00f252c0 ?fn252c0@Obj@@QAEHXZ  # Obj::fn252c0 migrated from s00f24b30 (verbatim, slice spelling)
+00f252f0 ?fn252f0@Obj@@QAEHXZ  # Obj::fn252f0 migrated from s00f24b30 (verbatim, slice spelling)
+00f25330 ?fn25330@Obj@@QAE_NXZ  # Obj::fn25330 migrated from s00f24b30 (verbatim, slice spelling)
+00f25360 ?fn25360@Obj@@QAE_NXZ  # Obj::fn25360 migrated from s00f24b30 (verbatim, slice spelling)
+00f25370 ?fn25370@Obj@@QAE_NXZ  # Obj::fn25370 migrated from s00f24b30 (verbatim, slice spelling)
+00f253e0 ?fn253e0@Obj@@QAEDXZ  # Obj::fn253e0 migrated from s00f24b30 (verbatim, slice spelling)
+00f253f0 ?fn253f0@Obj@@QAEDXZ  # Obj::fn253f0 migrated from s00f24b30 (verbatim, slice spelling)
+00f25420 ?fn25420@Obj@@QAEDXZ  # Obj::fn25420 migrated from s00f24b30 (verbatim, slice spelling)
+00f25430 ?fn25430@Obj@@QAE_NXZ  # Obj::fn25430 migrated from s00f24b30 (verbatim, slice spelling)
+00f25470 ?fn25470@Obj@@QAE_NXZ  # Obj::fn25470 migrated from s00f24b30 (verbatim, slice spelling)
+00f25490 ?fn25490@Obj@@QAE_NXZ  # Obj::fn25490 migrated from s00f24b30 (verbatim, slice spelling)
+00f254d0 ?fn254d0@Obj@@QAE_NXZ  # Obj::fn254d0 migrated from s00f24b30 (verbatim, slice spelling)
+00f25530 ?fn25530@Obj@@QAEHXZ  # Obj::fn25530 migrated from s00f24b30 (verbatim, slice spelling)
+00f25560 ?fn25560@Obj@@QAE_NXZ  # Obj::fn25560 migrated from s00f24b30 (verbatim, slice spelling)
+00f25580 ?fn25580@Obj@@QAE_NXZ  # Obj::fn25580 migrated from s00f24b30 (verbatim, slice spelling)
+00f255d0 ?fn255d0@Obj@@QAE_NXZ  # Obj::fn255d0 migrated from s00f24b30 (verbatim, slice spelling)
+00f25600 ?fn25600@Obj@@QAE_NXZ  # Obj::fn25600 migrated from s00f24b30 (verbatim, slice spelling)
+00f25640 ?fn25640@Obj@@QAE_NXZ  # Obj::fn25640 migrated from s00f24b30 (verbatim, slice spelling)
+00f25670 ?fn25670@Obj@@QAE_NXZ  # Obj::fn25670 migrated from s00f24b30 (verbatim, slice spelling)
+00f25680 ?fn25680@Obj@@QAEHXZ  # Obj::fn25680 migrated from s00f24b30 (verbatim, slice spelling)
+00f256a0 ?fn256a0@Obj@@QAE_NXZ  # Obj::fn256a0 migrated from s00f24b30 (verbatim, slice spelling)
+00f256e0 ?fn256e0@Obj@@QAE_NXZ  # Obj::fn256e0 migrated from s00f24b30 (verbatim, slice spelling)
+00f25720 ?fn25720@Obj@@QAE_NXZ  # Obj::fn25720 migrated from s00f24b30 (verbatim, slice spelling)
+00f25730 ?fn25730@Obj@@QAE_NXZ  # Obj::fn25730 migrated from s00f24b30 (verbatim, slice spelling)
+00f25750 ?fn25750@Obj@@QAEHXZ  # Obj::fn25750 migrated from s00f24b30 (verbatim, slice spelling)
+00f257b0 ?fn257b0@Obj@@QAEPAU1@XZ  # Obj::fn257b0 migrated from s00f24b30 (verbatim, slice spelling)
+00f257f0 ?fn257f0@Obj@@QAEDPAX@Z  # Obj::fn257f0 migrated from s00f24b30 (verbatim, slice spelling)
+00f25930 ?fn25930@@YA_NPAX0PAUVec3i@@@Z  # fn25930 migrated from s00f24b30 (verbatim, slice spelling)
+00f259b0 ?fn259b0@@YA_NPAHPAPAX@Z  # fn259b0 migrated from s00f24b30 (verbatim, slice spelling)

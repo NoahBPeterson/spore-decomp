@@ -1,0 +1,7 @@
+00f23220 ?FUN_00f23220@@YAXPAHPAXMMM@Z  # FUN_00f23220 migrated from s00f22d50 (verbatim, slice spelling)
+00f232a0 ?FUN_00f232a0@@YAXPAXI@Z  # FUN_00f232a0 migrated from s00f22d50 (verbatim, slice spelling)
+00f23300 ?FUN_00f23300@@YAXPAH0PAX1D@Z  # FUN_00f23300 migrated from s00f22d50 (verbatim, slice spelling)
+00f238e0 ?FUN_00f238e0@@YAPAXPAH@Z  # FUN_00f238e0 migrated from s00f22d50 (verbatim, slice spelling)
+00f239f0 ?FUN_00f239f0@@YAXPAH@Z  # FUN_00f239f0 migrated from s00f22d50 (verbatim, slice spelling)
+00f23be0 ?FUN_00f23be0@@YAXPAXPAH1@Z  # FUN_00f23be0 migrated from s00f22d50 (verbatim, slice spelling)
+00f23c80 ?FUN_00f23c80@@YAHHH@Z  # FUN_00f23c80 migrated from s00f22d50 (verbatim, slice spelling)
