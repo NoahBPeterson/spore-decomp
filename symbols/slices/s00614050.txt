@@ -1,8 +1,8 @@
 0054e460 ?GetLocalKey@cAssetDirectory@Pollen@SP@@QBE_N_KPAVKey@ResourceMan@EA@@@Z  # SP::Pollen::cAssetDirectory::GetLocalKey (callee of s00614050, named from the dev publics; slice address comment)
 00614050 SP::Pollen::cAssetCache::LoadAll  # lists every Pollinator asset record and maps server id -> loaded asset
-00614280 SP::Pollen::cAssetCache::AddAsset  # finds or loads the asset for a 64-bit id, stores data, writes and caches it
+00614280 ??2cPollenAsset@@SAPAXIPBDHHHH@Z  # new migrated from s00614050 (verbatim, slice spelling)
 006144c0 SP::Pollen::cAssetCache::RemoveAsset  # find id in the vector_map and drop it
-00614560 SP::Pollen::cAssetCache::ReadRecord  # PFRecordRead callback: copies the record key into the asset (type 0xfd60f0c1)
+00614560 ?ReadRecord@cAssetCache@@QAE_NPAXPAUcPollenAsset@@II@Z  # cAssetCache::ReadRecord migrated from s00614050 (verbatim, slice spelling)
 006145d0 SP::Pollen::cAssetCache::Init  # registers the PFRecordRead factory and two message ids, then LoadAll
 006146c0 SP::Pollen::cAssetCache::HandleMessage  # messages 0x4249453 (remove by key) and 0x1dd7bda9 (asset list)
 00614840 ?Write@cServerResponse_s0061_4050@Pollen@SP@@UAE_NPBXI@Z  # cServerResponse_s0061_4050::Write migrated from s00614050 (verbatim, slice spelling)

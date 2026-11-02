@@ -6,9 +6,9 @@
 006a2660 ?GetIntProperty@cDirectPropertyList@SP@@QBEHI@Z  # SP::cDirectPropertyList::GetIntProperty migrated from s006a22a0
 006a2710 ?GetFloatProperty@cDirectPropertyList@SP@@QBEMI@Z  # SP::cDirectPropertyList::GetFloatProperty migrated from s006a22a0
 006a27d0 ?HasProperty@cDirectPropertyList@SP@@UBE_NI@Z  # SP::cDirectPropertyList::HasProperty migrated from s006a22a0
-006a2800 ?GetProperty@cDirectPropertyList@SP@@UBEABUVariant@EA@@I@Z  # SP::cDirectPropertyList::GetProperty migrated from s006a22a0
+006a2800 ?GetProperty@cDirectPropertyList_s006a_22a0@SP@@QBEABUVariant_s006a_22a0@EA@@I@Z  # cDirectPropertyList_s006a_22a0::GetProperty migrated from s006a22a0 (verbatim, slice spelling)
 006a28c0 ?GetProperty@cDirectPropertyList@SP@@UBE_NIPAPBUVariant@EA@@@Z  # SP::cDirectPropertyList::GetProperty migrated from s006a22a0
-006a28f0 ?ClearMapOnly@cPropertyList_s006a_22a0@SP@@QAEXXZ  # cPropertyList_s006a_22a0::ClearMapOnly migrated from s006a22a0 (verbatim, slice spelling)
+006a28f0 ?ClearMapOnly@VariantMap@SP@@QAEXXZ  # VariantMap::ClearMapOnly migrated from s006a22a0 (verbatim, slice spelling)
 006a2940 ?insert@pvector_s006a_22a0@eastl@@QAEPAUVariantPair_s006a_22a0@@PAU3@ABU3@@Z  # pvector_s006a_22a0::insert migrated from s006a22a0 (verbatim, slice spelling)
 006a2a40 SP::cPropertyList::Copy  # copies map + compare byte then SetParent
 006a2a80 ?Clear@cPropertyList_s006a_22a0@SP@@UAEXXZ  # cPropertyList_s006a_22a0::Clear migrated from s006a22a0 (verbatim, slice spelling)

@@ -1,4 +1,4 @@
-// src/game/SPEngine/SPPropertyList.cpp -- migrated from slice(s) s00612270, s006a22a0, s006a11b0 by tools/migrate/rewrite.py
+// src/game/SPEngine/SPPropertyList.cpp -- migrated from slice(s) s00614050, s00613240, s00612270, s006a22a0, s006a11b0 by tools/migrate/rewrite.py
 // Object file: SPEngine/SPPropertyList.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -22,13 +22,24 @@ extern "C" long _InterlockedExchange(volatile long*, long);
 #include <string.h>
 #include "SP/FunctionalMatch/Constraint.h"
 #include "SP/cPollinator.h"
+#include <intrin.h>
+#include "eastl/allocator.h"
 
 // ---- items of slice s006a11b0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+namespace eastl {
+eastl::pair<unsigned int, EA::Variant>* lower_bound(eastl::pair<unsigned int, EA::Variant>* first, eastl::pair<unsigned int, EA::Variant>* last,
+                         const unsigned int* key, unsigned char comp);  // 0x00612db0 (0x18-stride instance)
+}
+namespace EA {
+namespace IO {
+bool WriteUint32(IStream* stream, const void* pData, unsigned int count, int flags);  // namespace EA
+}
+}
 namespace EA {
 namespace Allocator {
-class ZoneObject {
+class ZoneObject_s006a_11b0 {
 public:
-  virtual ~ZoneObject();
+  virtual ~ZoneObject_s006a_11b0();
   static void* operator new(unsigned int n, const char* pName, int flags = 0,
                             unsigned int debugFlags = 0, const char* pFile = 0,
                             int line = 0);
@@ -40,7 +51,7 @@ void Memset32(void* dest, int value, int count);
 void* operator new[](size_t size, const char* pName, int flags, unsigned debugFlags,
                      const char* file, int line);
 namespace eastl {
-struct allocator_s006a_11b0;
+class allocator_s006a_11b0;
 }
 namespace eastl {
 struct basic_string8;
@@ -49,13 +60,18 @@ namespace eastl {
 struct basic_string16;
 }
 namespace SP {
-class cString;
+class cString_s006a_11b0;
 }
 namespace SP {
 class cPropertyList_s006a_11b0;
 }
-struct cSPColorRGB { float x, y, z; };
-struct cSPColorRGBA { float x, y, z, w; };
+namespace EA {
+namespace IO {
+struct IStream_s006a_11b0;  // namespace EA
+}
+}
+struct cSPColorRGB_s006a_11b0 { float x, y, z; };
+struct cSPColorRGBA_s006a_11b0 { float x, y, z, w; };
 namespace EA {
 namespace Thread {
 template <class T> class AtomicInt_s006a_11b0 {
@@ -68,7 +84,7 @@ public:
 }
 namespace EA {
 namespace ResourceMan {
-struct Key_s006a_11b0 {
+class Key_s006a_11b0 { public:
   uint32_t mInstance;  // +0x0
   uint32_t mType;      // +0x4
   uint32_t mGroup;     // +0x8
@@ -81,28 +97,26 @@ struct Variant_s006a_11b0 {
   Variant_s006a_11b0(const int& v);
   Variant_s006a_11b0(const float& v);
   Variant_s006a_11b0(const bool& v);
-  Variant_s006a_11b0& operator=(const Variant_s006a_11b0& o);
-  Variant_s006a_11b0& operator=(const EA::ResourceMan::Key_s006a_11b0& k);
-  void Destruct(int flags);
+  Variant_s006a_11b0& operator=(const Variant_s006a_11b0& o);  // 0x00542b80
+  void Destruct(int flags);  // 0x0093db80 (EA::Variant::Destruct)
   ~Variant_s006a_11b0() {
     if (mFlags & 4) Destruct(0);
   }
   uint32_t mData[4];  // +0x0
   uint16_t mFlags;    // +0x10
   uint16_t mTypeId;   // +0x12
-  cSPColorRGB* GetColorRGB();
-  cSPColorRGBA* GetColorRGBA();
-  EA::ResourceMan::Key_s006a_11b0* GetKey();
-  SP::cString* GetText();
-  eastl::basic_string8* GetString8();
-  eastl::basic_string16* GetString16();
+  cSPColorRGB_s006a_11b0* GetColorRGB();  // 0x006a0fd0 (EA::Variant::GetColorRGB)
+  cSPColorRGBA_s006a_11b0* GetColorRGBA();  // 0x006a1000 (EA::Variant::GetColorRGBA)
+  EA::ResourceMan::Key_s006a_11b0* GetKey();  // 0x006a1030 (EA::Variant::GetKey)
+  SP::cString_s006a_11b0* GetText();  // 0x006a1090 (EA::Variant::GetText)
+  eastl::basic_string8* GetString8();  // 0x0060ebf0 (EA::Variant::GetString8)
+  eastl::basic_string16* GetString16();  // 0x0068a4f0 (EA::Variant::GetString16)
 };
-EA::Variant_s006a_11b0& __fastcall VariantAssignCopy_s006a_11b0(
-    EA::Variant_s006a_11b0* self, int reserved,
-    const EA::Variant_s006a_11b0& o);  // 0x00542b80
 }
+EA::Variant_s006a_11b0& __fastcall VariantAssignCopy(EA::Variant_s006a_11b0* self, int reserved,
+                                          const EA::Variant_s006a_11b0& o);  // 0x00542b80
 namespace eastl {
-struct allocator_s006a_11b0 {};
+class allocator_s006a_11b0 { public:};
 }
 namespace eastl {
 struct basic_string8 {
@@ -122,19 +136,22 @@ struct basic_string16 {
   void assign(const wchar_t* p, const wchar_t* e);
 };
 }
+namespace SP {
+class cString_s006a_11b0;
+}
 struct VariantPair {  // size 0x18
   unsigned int first;  // +0x0
   EA::Variant_s006a_11b0 second;  // +0x4
 };
 namespace eastl {
-eastl::pair<unsigned int, EA::Variant>* lower_bound(eastl::pair<unsigned int, EA::Variant>* first, eastl::pair<unsigned int, EA::Variant>* last,
+VariantPair* lower_bound(VariantPair* first, VariantPair* last,
                          const unsigned int* key, unsigned char comp);  // 0x00612db0 (0x18-stride instance)
 }
 namespace SP {
 class cResourceBase_s006a_11b0 {
 public:
-  virtual int AddRef();
-  virtual int Release();
+  virtual int AddRef();  // 0x00432be0 (SP::cResourceBase::AddRef)
+  virtual int Release();  // 0x00432b50 (SP::cResourceBase::Release)
   virtual ~cResourceBase_s006a_11b0();
   virtual void* Cast(unsigned int);
   virtual int GetReferenceCount();
@@ -165,20 +182,20 @@ namespace SP {
 class cPropertyList_s006a_11b0 : public cResourceBase_s006a_11b0 {
 public:
   // vtable slot indices (byte offset / 4).
-  virtual void SetProperty(unsigned int key, EA::Variant_s006a_11b0* value);  // 5  (0x14)
-  virtual void RemoveProperty(unsigned int key);                    // 6  (0x18)
+  virtual void SetProperty(unsigned int key, EA::Variant_s006a_11b0* value);  // 5  (0x14) 0x006a2e20
+  virtual void RemoveProperty(unsigned int key);                    // 6  (0x18) 0x006a2ef0
   virtual void v7();                                               // 7  (0x1c)
   virtual bool GetPropertyA(unsigned int key, EA::Variant_s006a_11b0** out);  // 8  (0x20)
   virtual bool GetProperty(unsigned int key, EA::Variant_s006a_11b0** out) const;  // 9 (0x24)
-  virtual EA::Variant_s006a_11b0* GetPropertyValue(unsigned int key);         // 10 (0x28)
+  virtual EA::Variant_s006a_11b0* GetPropertyValue(unsigned int key);         // 10 (0x28) 0x006a24d0
   virtual void v11();                                              // 11 (0x2c)
   virtual void v12(cPropertyList_s006a_11b0* src);                            // 12 (0x30)
-  virtual void DeepCopy(cPropertyList_s006a_11b0* src);                       // 13 (0x34)
-  virtual void DeepAdd(cPropertyList_s006a_11b0* src);                        // 14 (0x38)
+  virtual void DeepCopy(cPropertyList_s006a_11b0* src);                       // 13 (0x34) 0x006a14d0
+  virtual void DeepAdd(cPropertyList_s006a_11b0* src);                        // 14 (0x38) 0x006a1510
   virtual void v15();                                              // 15 (0x3c)
-  virtual bool Write(EA::IO::IStream* stream) const;               // 16 (0x40)
+  virtual bool Write(EA::IO::IStream_s006a_11b0* stream) const;               // 16 (0x40) 0x006a1540
   virtual void v17();                                              // 17 (0x44)
-  virtual void Clear();                                            // 18 (0x48)
+  virtual void Clear();                                            // 18 (0x48) 0x006a2a80
 
   Vec<VariantPair> mPropertyMap;  // +0x18
   unsigned int mAlloc;            // +0x24
@@ -192,12 +209,29 @@ public:
   void SetParent(cPropertyList_s006a_11b0* parent);
 };
 }
+namespace SP {
+class cDirectPropertyList_s006a_11b0 : public cPropertyList_s006a_11b0 {
+public:
+  unsigned int mNumDirectProps;  // +0x38
+  int* mDirectProps;             // +0x3c
+  EA::Variant_s006a_11b0 mTempDirectVariant;  // +0x40
+
+  virtual bool GetPropertyA(unsigned int key, EA::Variant_s006a_11b0** out);  // 8 (0x20)
+  virtual void Add(cPropertyList_s006a_11b0* src);                            // 12 (0x30) 0x006a1600
+
+  cDirectPropertyList_s006a_11b0(unsigned int count);
+  virtual ~cDirectPropertyList_s006a_11b0();
+  void SetBoolProperty(unsigned int index, bool value);  // 0x0093a2e0 (SP::cDirectPropertyList::SetBoolProperty)
+  void SetIntProperty(unsigned int index, int value);  // 0x006a1880 (SP::cDirectPropertyList::SetIntProperty)
+  void SetFloatProperty(unsigned int index, float value);  // 0x006a1910 (SP::cDirectPropertyList::SetFloatProperty)
+};
+}
 namespace EA {
 namespace IO {
-bool WriteUint32(IStream* stream, const void* pData, unsigned int count, int flags);  // namespace EA
+bool WriteUint32(IStream_s006a_11b0* stream, const void* pData, unsigned int count, int flags);  // namespace EA
 }
 }
-bool WriteVariant(EA::IO::IStream* stream, EA::Variant_s006a_11b0* value, int flags);
+bool WriteVariant(EA::IO::IStream_s006a_11b0* stream, EA::Variant_s006a_11b0* value, int flags);
 VariantPair* __fastcall PairsRealloc(void* self, int reserved, unsigned int n,
                                      VariantPair* first, VariantPair* last);  // 0x006a1d80
 void __fastcall PairsDestroy(void* self, int reserved, VariantPair* first,
@@ -262,7 +296,7 @@ public:
 }
 namespace EA {
 namespace ResourceMan {
-struct Key_s006a_22a0 {
+class Key_s006a_22a0 { public:
   uint32_t mInstance;
   uint32_t mType;
   uint32_t mGroup;
@@ -272,12 +306,12 @@ struct Key_s006a_22a0 {
 namespace EA {
 struct Variant_s006a_22a0 {
   Variant_s006a_22a0() : mFlags(0), mTypeId(0) {}
-  Variant_s006a_22a0(const int& v);
-  Variant_s006a_22a0(const float& v);
-  Variant_s006a_22a0(const bool& v);
+  Variant_s006a_22a0& operator=(const bool& v);   // 0x00422e20
+  Variant_s006a_22a0& operator=(const int& v);    // 0x00422eb0
+  Variant_s006a_22a0& operator=(const float& v);  // 0x00428060
   Variant_s006a_22a0& operator=(const Variant_s006a_22a0& o);
   Variant_s006a_22a0& operator=(const ResourceMan::Key_s006a_22a0& k);
-  void Destruct(int flags);  // 0x0093db80 (EA::Variant::Destruct)
+  void Destruct(bool flags);           // 0x0093db80
   ~Variant_s006a_22a0() {
     if (mFlags & 4) Destruct(0);
   }
@@ -288,12 +322,14 @@ struct Variant_s006a_22a0 {
   void* GetKey();  // 0x006a1030 (EA::Variant::GetKey)
 };
 }
+void __fastcall VariantCopyAssign(EA::Variant_s006a_22a0* dst, int unused,
+                                  const EA::Variant_s006a_22a0* src); // 0x00542b80
 struct VariantPair_s006a_22a0 {
   unsigned int first;
   EA::Variant_s006a_22a0 second;
 };
 namespace eastl {
-VariantPair_s006a_22a0* lower_bound(VariantPair_s006a_22a0* first, VariantPair_s006a_22a0* last,
+VariantPair_s006a_22a0* lower_bound_s006a_22a0(VariantPair_s006a_22a0* first, VariantPair_s006a_22a0* last,
                          const unsigned int* key, unsigned char comp);  // 0x00612db0 (0x18-stride instance)
 }
 namespace SP {
@@ -326,6 +362,7 @@ struct VariantMap {
   VariantPair_s006a_22a0* insert(VariantPair_s006a_22a0* out, const VariantPair_s006a_22a0& value);
   VariantPair_s006a_22a0* InsertOrGet(const unsigned int& key, const EA::Variant_s006a_22a0& value);
   VariantPair_s006a_22a0* insert_pos(VariantPair_s006a_22a0* position, const VariantPair_s006a_22a0& value);
+  void ClearMapOnly();
 };
 }
 namespace SP {
@@ -353,7 +390,6 @@ public:
   cPropertyList_s006a_22a0(const char* name);
   cPropertyList_s006a_22a0();
   void SetParent(cPropertyList_s006a_22a0* parent);
-  void ClearMapOnly();  // 0x006a28f0 (SP::cPropertyList::ClearMapOnly)
 };
 }
 namespace SP {
@@ -367,8 +403,7 @@ public:
   virtual bool HasProperty(unsigned int index) const;                       // 7 0x006a27d0
   virtual bool GetPropertyA(unsigned int index, EA::Variant_s006a_22a0** out);         // 8
   virtual bool GetProperty(unsigned int index, EA::Variant_s006a_22a0** out) const;    // 9
-  EA::Variant_s006a_22a0 const& GetProperty(unsigned int key) const;                   // 0x006a2800
-  virtual EA::Variant_s006a_22a0* GetPropertyValue(unsigned int index) const;          // 10
+  EA::Variant_s006a_22a0 const& GetProperty(unsigned int key) const;
   virtual void Copy(cPropertyList_s006a_22a0* src);                                    // 11 0x006a2ad0
   virtual void Add(cPropertyList_s006a_22a0* src);                                     // 12 0x006a1600
   virtual unsigned int GetPropertyIDs(unsigned int* ids);                   // 17 0x006a3180
@@ -402,29 +437,50 @@ public:
 }
 extern EA::Variant_s006a_22a0 g_sNullVariant;  // 0x016027d0
 void* PropertyManager();            // 0x0067de30
-bool WriteVariant(EA::IO::IStream_s006a_22a0* stream, EA::Variant_s006a_22a0* value, int flags);
-// PropertyManager vtable slot +0x50 (GetPropertyByID) is a thiscall member: `this` in ecx and the
-// key on the stack, so it is declared as a __fastcall shim with one dummy stack argument.
-typedef void* (__fastcall* PropertyLookup_s006a_22a0)(void* mgr, int unused, unsigned int key);
-// EA::Variant's assignments (0x00542b80 copy, 0x00422e20/0x00422eb0/0x00428060 scalar) cannot carry
-// an annotation (the overloads are ambiguous), so they are called through these annotated shims;
-// `dst` arrives in ecx and the scalar overloads take a pointer to a temporary, matching the retail
-// `operator=(const T&)` argument.
-void __fastcall VariantCopyAssign_EA(EA::Variant* dst, int unused, const EA::Variant* src);  // 0x00542b80
-void __fastcall VariantAssignBool_EA(EA::Variant* dst, int unused, const bool* src);   // 0x00422e20
-void __fastcall VariantAssignInt_EA(EA::Variant* dst, int unused, const int* src);     // 0x00422eb0
-void __fastcall VariantAssignFloat_EA(EA::Variant* dst, int unused, const float* src);  // 0x00428060
-// The retail bulk pair helpers: 0x00612b20 copies [first,last) to dst (cdecl), 0x00685a30
-// destroys [first,last) and pops its two arguments (stdcall), 0x011e0744 is the memcpy thunk.
-void PairsCopyRange_s006a_22a0(VariantPair_s006a_22a0* first, VariantPair_s006a_22a0* last,
-                               VariantPair_s006a_22a0* dst);  // 0x00612b20
-void __stdcall PairsDestroyRange_s006a_22a0(VariantPair_s006a_22a0* first,
-                                            VariantPair_s006a_22a0* last);  // 0x00685a30
-void PairsCopyBytes_s006a_22a0(void* dst, const void* src, unsigned int size);  // 0x011e0744
-// Address of the retail map-clear helper: it is a VariantMap method, so the map goes in ecx.
-void __fastcall MapClearOnly_s006a_22a0(SP::VariantMap* map, int unused);  // 0x006a28f0
-// eastl::vector<unsigned int> stub used by GetPropertyIDs (the retail argument is a vector).
-struct UIntVector_s006a_22a0 {
+typedef void* (__fastcall* PropertyLookup)(void* mgr, int unused, unsigned int key);
+bool WriteVariant(EA::IO::IStream_s006a_22a0* stream, EA::Variant_s006a_22a0* value, int flags);  // 0x00694440
+namespace EA {
+namespace IO {
+bool ReadInt32(IStream_s006a_22a0* stream, void* pData, unsigned int count, int flags);  // 0x0093a780
+}
+}
+struct VariantBytes {
+  unsigned int mData[4];   // +0x00
+  unsigned short mFlags;   // +0x10
+  unsigned short mTypeId;  // +0x12
+};
+struct VariantOps {
+  void* ToStr(const void* src);    // 0x006a19b0
+  void* ToInt(const void* src);    // 0x0060d990
+  void* ToFloat(const void* src);  // 0x006a1a10
+};
+static const void* VariantData(const VariantBytes* v, unsigned short tA,
+                               unsigned short tB, unsigned int emptyAddr) {
+  unsigned short t = v->mTypeId;
+  if (t == tA || t == tB) {
+    if ((v->mFlags & 0x30) == 0)
+      return (const void*)(-(unsigned)(t != 0) & (unsigned)(size_t)v);
+    return *(const void**)(const void*)v;
+  }
+  return (const void*)(size_t)emptyAddr;
+}
+static VariantPair_s006a_22a0* PairsAllocate(unsigned int n) {
+  if (n == 0) return 0;
+  return new ("App/cDirectPropertyList", 0, 0, 0, 0) VariantPair_s006a_22a0[n];
+}
+void PairsCopyRange(VariantPair_s006a_22a0* first, VariantPair_s006a_22a0* last, VariantPair_s006a_22a0* dst);  // 0x00612b20
+void __stdcall PairsDestroyRange(VariantPair_s006a_22a0* first, VariantPair_s006a_22a0* last);      // 0x00685a30
+void PairsCopyBytes(void* dst, const void* src, unsigned int size);           // 0x011e0744
+static void PairsDestroy_s006a_22a0(VariantPair_s006a_22a0* first, VariantPair_s006a_22a0* last) {
+  PairsDestroyRange(first, last);
+}
+static void PairsCopy(VariantPair_s006a_22a0* dst, VariantPair_s006a_22a0* first, VariantPair_s006a_22a0* last) {
+  PairsCopyRange(first, last, dst);
+}
+static void PairsMoveBack(VariantPair_s006a_22a0* dstEnd, VariantPair_s006a_22a0* first, VariantPair_s006a_22a0* last) {
+  for (; last != first;) *--dstEnd = *--last;
+}
+struct UIntVector {
   unsigned int* mpBegin;     // +0x00
   unsigned int* mpEnd;       // +0x04
   unsigned int* mpCapacity;  // +0x08
@@ -432,41 +488,6 @@ struct UIntVector_s006a_22a0 {
   void DoInsertValue(unsigned int* position, const unsigned int& value);  // 0x004558a0
   void DoInsertValues(unsigned int* position, unsigned int n, const unsigned int& value);  // 0x004cea40
 };
-namespace EA {
-namespace IO {
-bool ReadInt32(IStream_s006a_22a0* stream, void* pData, unsigned int count, int flags);
-}
-}
-static VariantPair_s006a_22a0* PairsAllocate(unsigned int n) {
-  if (n == 0) return 0;
-  return new ("App/cDirectPropertyList", 0, 0, 0, 0) VariantPair_s006a_22a0[n];
-}
-static void PairsDestroy_s006a_22a0(VariantPair_s006a_22a0* first, VariantPair_s006a_22a0* last) {
-  for (; first != last; ++first) first->~VariantPair_s006a_22a0();
-}
-static void PairsCopy(VariantPair_s006a_22a0* dst, VariantPair_s006a_22a0* first, VariantPair_s006a_22a0* last) {
-  for (; first != last; ++first, ++dst) *dst = *first;
-}
-static void PairsMoveBack(VariantPair_s006a_22a0* dstEnd, VariantPair_s006a_22a0* first, VariantPair_s006a_22a0* last) {
-  for (; last != first;) *--dstEnd = *--last;
-}
-// The clear paths shrink an end pointer by the whole elements of the signed byte distance; the pair
-// map divides by truncation, the unsigned-int vector by a floor shift.
-static VariantPair_s006a_22a0* ShrinkEnd(VariantPair_s006a_22a0* begin, VariantPair_s006a_22a0* end) {
-  int diff = (int)((char*)end - (char*)begin);
-  return (VariantPair_s006a_22a0*)((char*)end - diff / 0x18 * 0x18);
-}
-static unsigned int* ShrinkUIntEnd(unsigned int* base, unsigned int* end) {
-  int diff = (int)((char*)end - (char*)base);
-  return (unsigned int*)((char*)end - (diff >> 2) * 4);
-}
-static void MapPairsCopy(VariantPair_s006a_22a0* dst, VariantPair_s006a_22a0* first,
-                         VariantPair_s006a_22a0* last) {
-  PairsCopyRange_s006a_22a0(first, last, dst);
-}
-static void MapPairsDestroy(VariantPair_s006a_22a0* first, VariantPair_s006a_22a0* last) {
-  PairsDestroyRange_s006a_22a0(first, last);
-}
 VariantPair_s006a_22a0* SP::VariantMap::insert_pos(VariantPair_s006a_22a0* position, const VariantPair_s006a_22a0& value) {
   if (position == mpEnd && mpEnd != mpCapacity) {
     *mpEnd = value;
@@ -487,6 +508,10 @@ VariantPair_s006a_22a0* SP::VariantMap::insert_pos(VariantPair_s006a_22a0* posit
   mpEnd = p + cur + 1;
   mpCapacity = p + newCap;
   return p + n;
+}
+static VariantPair_s006a_22a0* ShrinkEnd(VariantPair_s006a_22a0* begin, VariantPair_s006a_22a0* end) {
+  int diff = (int)((char*)end - (char*)begin);
+  return (VariantPair_s006a_22a0*)((char*)end - diff / 0x18 * 0x18);
 }
 VariantPair_s006a_22a0* eastl::pvector_s006a_22a0::erase(VariantPair_s006a_22a0* first, VariantPair_s006a_22a0* last) {
   unsigned int n = (unsigned int)(last - first);
@@ -510,11 +535,17 @@ void eastl::pvector_s006a_22a0::DoInsertValues(VariantPair_s006a_22a0* position,
   mpEnd = p + cur + n;
   mpCapacity = p + cur + n;
 }
+static unsigned int* ShrinkUIntEnd(unsigned int* base, unsigned int* end) {
+  int diff = (int)((char*)end - (char*)base);
+  return (unsigned int*)((char*)end - (diff >> 2) * 4);
+}
     void* operator new[](unsigned int, char*, int, unsigned int, char*, int); // 0x00f473a0
 // ---- items of slice s006a22a0 end
 
 // ---- items of slice s00612270 begin (TODO(rewrite): local stubs, replace by canonical classes)
+void* __cdecl EASTL_allocator_allocate(uint32_t size, const char* name, int flags, int debugFlags, const char* file, int line);  // 0x00f473a0
 void __cdecl EASTL_allocator_deallocate(void* p);                                                                                  // 0x00f47380
+#define EASTL_ALLOCATOR_FILE "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h"
 namespace EA {
 struct Variant_s0061_2270 {
     char mData[16];
@@ -558,6 +589,16 @@ struct pair_s0061_2270 {
     }
 };
 }
+namespace eastl {
+class fixed_vector_allocator { public:
+    const char* mpName;
+    void* mpPoolBegin;
+    void deallocate(void* p) {
+        if (p != mpPoolBegin) EASTL_allocator_deallocate(p);
+    }
+    void* allocate(size_t n) { return EASTL_allocator_allocate(n, "Editor", 0, 0, EASTL_ALLOCATOR_FILE, 0xd1); }
+};
+}
 typedef eastl::pair_s0061_2270<uint32_t, EA::Variant_s0061_2270> PropPair;
 struct IRefObj {
     virtual int AddRef();
@@ -576,6 +617,18 @@ struct Elem16 {
         if (pObj) pObj->Release();
     }
 };
+namespace eastl {
+struct PropVector {
+    PropPair* mpBegin;
+    PropPair* mpEnd;
+    PropPair* mpCapacity;
+    fixed_vector_allocator mAllocator;
+    void reserve(size_t n);                                             // 0x00613020
+    PropPair* DoRealloc(size_t n, const PropPair* first, int tag);        // 0x00612ea0
+    void DestructRangeV(PropPair* first, PropPair* last);                 // 0x00685a30
+    void assign(const PropPair* first, const PropPair* last, int tag);  // 0x00613140
+};  // namespace eastl
+}
 struct Elem16VectorD {
     Elem16* mpBegin;
     Elem16* mpEnd;
@@ -622,7 +675,575 @@ struct cPropertyListWriter {
     bool Write(EA::IO::IStream_s0061_2270* pStream, const cPropertyBag* pBag);  // 0x00612ba0
     bool WriteResource(void* pObject, void* pStreamHolder, int unused, uint32_t typeId);  // 0x00612e50
 };
+struct IObjectLike {
+virtual void v0();
+virtual void v1();
+virtual void v2();
+    virtual cPropertyBag* Cast(uint32_t typeId);  // +0xc
+};
+struct IStreamHolder {
+virtual void v0();
+virtual void v1();
+virtual void v2();
+virtual void v3();
+virtual void v4();
+virtual void v5();
+    virtual EA::IO::IStream_s0061_2270* GetStream();  // +0x18
+};
 // ---- items of slice s00612270 end
+
+// callees this slice defines outside this object (rewrite.py held_callee_protos)
+__declspec(noinline) PropPair* DestructRange(PropPair* first, PropPair* last, PropPair* dest);  // 0x00612a90 (stays in the slice: not this object's)
+
+// ---- items of slice s00613240 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C" void* __cdecl memcpy(void*, const void*, size_t);
+extern const float kDefaultFloat;  // 0x015d1168
+extern const int kDefaultInt;      // 0x015d1160
+namespace EA {
+struct Variant_s0061_3240 {
+    char mData[16];
+    uint16_t mFlags;
+    uint16_t mTypeId;
+    Variant_s0061_3240& Assign(const Variant_s0061_3240& x);  // 0x00542b80 (copy-assign; named Assign to avoid the
+                                        // 0x00478300 symbol collision on the same mangled name)
+    void Destruct(int);                    // 0x0093db80
+    Variant_s0061_3240() : mFlags(0), mTypeId(0) {}
+    Variant_s0061_3240(const Variant_s0061_3240& x) : mFlags(0), mTypeId(0) { Assign(x); }
+    ~Variant_s0061_3240() {
+        if (mFlags & 4) Destruct(0);
+    }
+};
+}
+namespace EA {
+namespace IO {
+struct IStream_s0061_3240;
+}
+}
+namespace EA {
+namespace IO {
+bool ReadInt32(IStream_s0061_3240* pStream, int32_t* pData, uint32_t count, int endian);    // 0x0093a780
+}
+}
+namespace EA {
+namespace IO {
+bool ReadUint64(IStream_s0061_3240* pStream, uint64_t* pData, uint32_t count, int endian);  // 0x0093a800
+}
+}
+namespace EA {
+namespace Messaging {
+void RemoveHandler(void* a, void* b, void* c, void* d, void* e);  // 0x00571db0
+}
+}
+namespace eastl {
+template <class T1, class T2>
+struct pair_s0061_3240 {
+    T1 first;
+    T2 second;
+    pair_s0061_3240() : second() {}
+    pair_s0061_3240(const T1& a, const T2& b) : first(a), second(b) {}
+    pair_s0061_3240(const pair_s0061_3240& x) : first(x.first), second(x.second) {}
+    pair_s0061_3240& operator=(const pair_s0061_3240& x) {
+        first = x.first;
+        second.Assign(x.second);
+        return *this;
+    }
+};
+}
+namespace eastl {
+struct MapCompare {};  // empty comparator (1 byte member)
+}
+typedef eastl::pair_s0061_3240<uint32_t, EA::Variant_s0061_3240> PropPair_s0061_3240;
+struct Elem16_s0061_3240 {  // pair<uint64, intrusive_ptr<IRefObj>> (16 bytes)
+    uint32_t a;
+    uint32_t b;
+    IRefObj* p;
+    uint32_t pad;
+    Elem16_s0061_3240(const uint64_t& key, IRefObj* ptr) : a(((const uint32_t*)&key)[0]), b(((const uint32_t*)&key)[1]), p(ptr) {}
+    Elem16_s0061_3240(const Elem16_s0061_3240& x) : a(x.a), b(x.b), p(x.p) {
+        if (p) p->AddRef();
+    }
+    Elem16_s0061_3240& operator=(const Elem16_s0061_3240& x) {
+        a = x.a;
+        b = x.b;
+        IRefObj* const pNew = x.p;
+        if (pNew != p) {
+            IRefObj* const pTemp = p;
+            if (pNew) pNew->AddRef();
+            p = pNew;
+            if (pTemp) pTemp->Release();
+        }
+        return *this;
+    }
+    ~Elem16_s0061_3240() {
+        IRefObj* const pObj = p;
+        if (pObj) pObj->Release();
+    }
+};
+void* operator new(size_t, const char*, int, int, const char*, int);
+PropPair_s0061_3240* __cdecl UninitializedCopy(const PropPair_s0061_3240*, const PropPair_s0061_3240*, PropPair_s0061_3240*);   // 0x00612d50
+PropPair_s0061_3240* __cdecl DestructRange_s0061_3240(PropPair_s0061_3240*, PropPair_s0061_3240*, PropPair_s0061_3240*);                   // 0x00612a90
+PropPair_s0061_3240* __cdecl CopyPairs(const PropPair_s0061_3240*, const PropPair_s0061_3240*, PropPair_s0061_3240*);           // 0x00612b20
+PropPair_s0061_3240* __cdecl CopyBackward(PropPair_s0061_3240*, PropPair_s0061_3240*, PropPair_s0061_3240*);                    // 0x00612b60
+const PropPair_s0061_3240* __cdecl LowerBound(const PropPair_s0061_3240*, const PropPair_s0061_3240*, const uint32_t&, eastl::MapCompare);  // 0x00612db0
+Elem16_s0061_3240* __cdecl CopyElem16(Elem16_s0061_3240*, Elem16_s0061_3240*, Elem16_s0061_3240*);                              // 0x007c7e10
+const uint32_t* __cdecl LowerBoundSet(const uint32_t*, const uint32_t*, const uint32_t*, eastl::MapCompare);  // 0x00555a20
+inline PropPair_s0061_3240* RelocatePairs(PropPair_s0061_3240* first, PropPair_s0061_3240* last, PropPair_s0061_3240* dest) {
+    PropPair_s0061_3240* const pEnd = UninitializedCopy(first, last, dest);
+    DestructRange_s0061_3240(first, last, dest);
+    return pEnd;
+}
+namespace eastl {
+struct PropVector_s0061_3240 {
+    PropPair_s0061_3240* mpBegin;
+    PropPair_s0061_3240* mpEnd;
+    PropPair_s0061_3240* mpCapacity;
+    fixed_vector_allocator mAllocator;
+
+    PropPair_s0061_3240* DoAllocate(size_t n) { return n ? (PropPair_s0061_3240*)mAllocator.allocate(n * sizeof(PropPair_s0061_3240)) : 0; }
+    void DoInsertValue(PropPair_s0061_3240* position, const PropPair_s0061_3240& value);   // 0x00613240
+    PropPair_s0061_3240* insert(PropPair_s0061_3240* position, const PropPair_s0061_3240& value);     // 0x00613920
+    void DestructRangeV(PropPair_s0061_3240* first, PropPair_s0061_3240* last);            // 0x00685a30
+    void reserve(size_t n);                                          // 0x00613020 (other slice)
+    PropPair_s0061_3240* erase(PropPair_s0061_3240* first, PropPair_s0061_3240* last) {
+        PropPair_s0061_3240* const pNewEnd = CopyPairs(last, mpEnd, first);
+        DestructRangeV(pNewEnd, mpEnd);
+        mpEnd -= (last - first);
+        return first;
+    }
+};  // namespace eastl
+}
+struct Elem16Vector {
+    Elem16_s0061_3240* mpBegin;
+    Elem16_s0061_3240* mpEnd;
+    Elem16_s0061_3240* mpCapacity;
+    eastl::fixed_vector_allocator mAllocator;
+    eastl::MapCompare mCompare;  // +0x14
+
+    Elem16Vector() : mpBegin(0), mpEnd(0), mpCapacity(0) {}
+    ~Elem16Vector();
+    Elem16_s0061_3240* DoAllocate(size_t n) { return n ? (Elem16_s0061_3240*)mAllocator.allocate(n * sizeof(Elem16_s0061_3240)) : 0; }
+    void DoInsertValue(Elem16_s0061_3240* position, const Elem16_s0061_3240& value);       // 0x006133b0
+    Elem16_s0061_3240* insert(Elem16_s0061_3240* position, const Elem16_s0061_3240& value);           // 0x006139a0
+    Elem16_s0061_3240* insertHint(Elem16_s0061_3240* hint, const Elem16_s0061_3240& value);           // 0x00613bf0
+    size_t erase(const uint64_t& key);                                // 0x00613b10
+    Elem16_s0061_3240* eraseRange(Elem16_s0061_3240* first, Elem16_s0061_3240* last);                  // 0x006130e0
+    IRefObj** FindOrInsert(const uint64_t& key);                     // 0x00613dd0
+};
+Elem16_s0061_3240* Elem16Vector::eraseRange(Elem16_s0061_3240* first, Elem16_s0061_3240* last) {
+    Elem16_s0061_3240* const pNewEnd = CopyElem16(last, mpEnd, first);
+    for (Elem16_s0061_3240* p = pNewEnd; p < mpEnd; ++p) p->~Elem16_s0061_3240();
+    mpEnd -= (last - first);
+    return first;
+}
+struct RefCountBase_s0061_3240 {
+    virtual int AddRef();
+    virtual int Release();
+    virtual ~RefCountBase_s0061_3240() {}
+    volatile long mRefCount;
+    RefCountBase_s0061_3240() { _InterlockedExchange(&mRefCount, 0); }
+};
+struct PropertyBagBase_s0061_3240 : public RefCountBase_s0061_3240 {
+    uint32_t pad8, padC, pad10, pad14;
+    uint64_t mId;
+    PropertyBagBase_s0061_3240(uint64_t id) : pad8(0), padC(0), pad10(0), pad14(0), mId(id) {}
+};
+struct PropMap {
+    eastl::PropVector_s0061_3240 mVec;      // +0x00
+    char pad14[4];
+    char mBuffer[0xf0];          // +0x18
+    eastl::MapCompare mCompare;  // +0x108
+
+    PropMap() {
+        mVec.mpBegin = mVec.mpEnd = (PropPair_s0061_3240*)(mVec.mAllocator.mpPoolBegin = mBuffer);
+        mVec.mpCapacity = (PropPair_s0061_3240*)((char*)mVec.mpBegin + 0xf0);
+    }
+    EA::Variant_s0061_3240& operator[](const uint32_t& key);             // 0x00613d20
+    PropPair_s0061_3240* insertHint(PropPair_s0061_3240* hint, const PropPair_s0061_3240& value);  // 0x00613b90
+    ~PropMap() {
+        mVec.DestructRangeV(mVec.mpBegin, mVec.mpEnd);
+        if (mVec.mpBegin && mVec.mpBegin != mVec.mAllocator.mpPoolBegin) EASTL_allocator_deallocate(mVec.mpBegin);
+    }
+    const PropPair_s0061_3240* find(const uint32_t& key) const {
+        const PropPair_s0061_3240* const itEnd = mVec.mpEnd;
+        const PropPair_s0061_3240* it = LowerBound(mVec.mpBegin, itEnd, key, mCompare);
+        if (it != itEnd && !(key < it->first)) return it;
+        return itEnd;
+    }
+};
+struct cPropertyBag_s0061_3240 : public PropertyBagBase_s0061_3240 {
+    PropMap mMap;  // +0x20
+    char pad12c[4];
+    cPropertyBag_s0061_3240();  // 0x00613530
+    bool GetFloat(uint32_t key, float* pOut);     // 0x006135d0
+    bool GetInt32(uint32_t key, int32_t* pOut);   // 0x00613660
+};
+struct MsgHandle {
+    void* a;
+    void* b;
+    void* c;
+    void* d;
+    void* e;
+    MsgHandle() : a(0), b(0), c(0), d(0), e(0) {}
+    ~MsgHandle() { Reset(); }
+    void Reset() {
+        if (a) {
+            void* const pa = a;
+            a = 0;
+            EA::Messaging::RemoveHandler(pa, b, c, d, e);
+        }
+    }
+};
+struct FixedUIntSet {
+    uint32_t* mpBegin;   // +0x1c
+    uint32_t* mpEnd;     // +0x20
+    uint32_t* mpCapacity;// +0x24
+    const char* mpName;  // +0x28
+    void* mpPoolBegin;   // +0x2c
+    char pad[4];         // +0x30
+    uint32_t mBuffer[20];// +0x34
+    eastl::MapCompare mCompare;  // +0x84
+
+    FixedUIntSet() {
+        mpBegin = mpEnd = (uint32_t*)(mpPoolBegin = mBuffer);
+        mpCapacity = mpBegin + 20;
+    }
+    void DoInsertValue(uint32_t* position, const uint32_t& value);  // 0x0060a600
+    bool contains(uint32_t key) const {
+        const uint32_t* const itEnd = mpEnd;
+        const uint32_t* it = LowerBoundSet(mpBegin, itEnd, &key, mCompare);
+        if (it == itEnd || key < *it) it = itEnd;
+        else if (it == it + 1) it = itEnd;
+        return it != itEnd;
+    }
+    __forceinline void insert(uint32_t key) {
+        uint32_t* const pEnd = mpEnd;
+        const uint32_t* it = LowerBoundSet(mpBegin, pEnd, &key, mCompare);
+        if (it != pEnd && !(key < *it)) return;
+        if (it == pEnd && pEnd != mpCapacity) {
+            uint32_t* const p = mpEnd;
+            mpEnd = p + 1;
+            if (p) *p = key;      // the original skips the store when the (null) begin is the write slot
+        } else {
+            DoInsertValue((uint32_t*)it, key);
+        }
+    }
+    void erase(uint32_t* pFirst, uint32_t* pLast) {
+        memcpy(pFirst, pLast, (size_t)((char*)mpEnd - (char*)pLast));
+        mpEnd -= (pLast - pFirst);
+    }
+    void clear() { erase(mpBegin, mpEnd); }
+    ~FixedUIntSet() {
+        if (mpBegin && mpBegin != mpPoolBegin) EASTL_allocator_deallocate(mpBegin);
+    }
+};
+struct Elem16VectorD_s0061_3240 {
+    Elem16_s0061_3240* mpBegin;
+    Elem16_s0061_3240* mpEnd;
+    ~Elem16VectorD_s0061_3240();  // 0x00612d10
+};
+inline Elem16Vector::~Elem16Vector() { ((Elem16VectorD_s0061_3240*)this)->~Elem16VectorD_s0061_3240(); }
+struct cMessageBase {
+    virtual ~cMessageBase() {}
+};
+struct cListenerSet : public cMessageBase {
+    MsgHandle mHandle;       // +4
+    uint32_t mField18;
+    FixedUIntSet mSet;       // +0x1c
+    Elem16Vector mListeners; // +0x88
+
+    cListenerSet();                               // 0x00613790
+    void DestroyBody();                           // 0x006137e0
+    void Shutdown();                              // 0x00613a10
+    bool HandleMessage(char* pMsg);               // 0x00613c60
+    bool contains(uint32_t key);                  // 0x00613860
+    void insertKey(uint32_t key);                 // 0x00613ab0
+};
+struct cStreamReader {
+    EA::IO::IStream_s0061_3240* mpStream;
+    int mEndian;
+    bool mbOk;
+    char pad[7];
+    cStreamReader(EA::IO::IStream_s0061_3240* pStream, bool bBigEndian);  // 0x006b4f60
+    void Accumulate(bool bResult);                              // 0x006b4f90
+    void ReadVariant(EA::Variant_s0061_3240* v);                           // 0x006b4fd0
+    ~cStreamReader();                                           // 0x006b5000
+};
+struct cPropertyReader {
+    bool Read(EA::IO::IStream_s0061_3240* pStream, cPropertyBag_s0061_3240* pBag);
+};
+// ---- items of slice s00613240 end
+
+// ---- items of slice s00614050 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C" int __cdecl wcscmp(const wchar_t*, const wchar_t*);
+#pragma intrinsic(wcscmp)
+typedef unsigned int size_type;
+typedef unsigned __int64 u64;
+void EASTL_free(void* p);
+void* PollNew(unsigned size, const char* name, int a, int b, int c, int d);   // 0x00f473a0
+void* operator new(unsigned size, const char* name, int a, int b, int c, int d);   // 0x00926020 (ZoneObject::operator new)
+struct ResourceKey { uint32_t instanceID, typeID, groupID; };
+struct IRefCounted {
+    virtual int AddRef();
+    virtual int Release();
+    virtual int slot8();
+    virtual void* Cast(uint32_t typeID);
+};
+template <typename T> struct RefPtrNI {   // AutoRefCount whose operator= stays out of line (0x00b5f950)
+    T* p;
+    RefPtrNI() : p(0) {}
+    __declspec(noinline) RefPtrNI& operator=(T* o) {
+        if (o != p) {
+            T* t = p;
+            if (o) o->AddRef();
+            p = o;
+            if (t) t->Release();
+        }
+        return *this;
+    }
+};
+template <typename T> struct RefPtr {
+    T* p;
+    RefPtr() : p(0) {}
+    RefPtr(T* o) : p(o) { if (p) p->AddRef(); }
+    __declspec(noinline) RefPtr& operator=(const RefPtrNI<T>& x) { return operator=(x.p); }   // 0x00ac9480
+    ~RefPtr() { if (p) p->Release(); }
+    __forceinline RefPtr& operator=(T* o) {
+        if (o != p) {
+            T* t = p;
+            if (o) o->AddRef();
+            p = o;
+            if (t) t->Release();
+        }
+        return *this;
+    }
+};
+inline size_type CharStrlen(const wchar_t* s) {
+    const wchar_t* p = s;
+    while (*p) ++p;
+    return (size_type)(p - s);
+}
+void* MemCopy(void* d, const void* s, size_type n);   // 0x011e0744 (memcpy thunk)
+template <typename T> inline const T& emin(const T& a, const T& b) { return (b < a) ? b : a; }
+struct string16 {
+    wchar_t* mpBegin;
+    wchar_t* mpEnd;
+    wchar_t* mpCapacity;
+    int mAllocator;
+    string16() : mpBegin(0), mpEnd(0), mpCapacity(0) {}
+    string16(const string16& x) : mpBegin(0), mpEnd(0), mpCapacity(0) { RangeInitialize(x.mpBegin, x.mpEnd); }
+    static wchar_t* CharStringUninitializedCopy(const wchar_t* pFirst, const wchar_t* pLast, wchar_t* pResult) {
+        MemCopy(pResult, pFirst, (pLast - pFirst) * 2);
+        return pResult + (pLast - pFirst);
+    }
+    void RangeInitialize(const wchar_t* pBegin, const wchar_t* pEnd) {
+        const size_type n = (size_type)(pEnd - pBegin);
+        AllocateSelf(n + 1);
+        mpEnd = CharStringUninitializedCopy(pBegin, pEnd, mpBegin);
+        *mpEnd = 0;
+    }
+    ~string16() {
+        if ((mpCapacity - mpBegin) > 1) {
+            if (mpBegin) EASTL_free(mpBegin);
+        }
+    }
+    void AllocateSelf(size_type n);                      // 0x00429760
+    string16& erase(size_type position, size_type n);   // 0x004228e0
+    size_type find_first_not_of(const wchar_t* p, size_type pos) const;   // 0x00579af0
+    void resize(size_type n);                            // 0x00429520
+    void append(const wchar_t* b, const wchar_t* e);     // 0x00429580
+    void RangeInitialize(const wchar_t* p);              // 0x00579a90 (string(const wchar_t*))
+    static int Compare(const wchar_t* a, const wchar_t* b, size_type n) {
+        for (; n > 0; ++a, ++b, --n)
+            if (*a != *b) return (*a < *b) ? -1 : 1;
+        return 0;
+    }
+    __forceinline int compare(const wchar_t* p) const {
+        const wchar_t* pEnd2 = p + CharStrlen(p);
+        const int n1 = (int)(mpEnd - mpBegin);
+        const int n2 = (int)(pEnd2 - p);
+        const int nMin = emin(n1, n2);
+        const int c = Compare(mpBegin, p, nMin);
+        return c ? c : (n1 < n2 ? -1 : (n1 > n2 ? 1 : 0));
+    }
+    int compare(const string16& x) const;
+    int compare_out(const wchar_t* p) const;   // out-of-line compare(const wchar_t*) at 0x00614950
+};
+int StringCompare(const wchar_t* b1, const wchar_t* e1, const wchar_t* b2, const wchar_t* e2);  // 0x005e9260
+inline int string16::compare(const string16& x) const { return StringCompare(mpBegin, mpEnd, x.mpBegin, x.mpEnd); }
+inline bool operator<(const string16& a, const string16& b) { return a.compare(b) < 0; }
+struct IKeyFilter;
+template <typename T> struct KeyVec { T* mpBegin; T* mpEnd; T* mpCapacity; };
+struct IResourceManager {
+    virtual ~IResourceManager();
+    virtual bool Initialize();
+    virtual bool Dispose();
+    virtual bool GetResource(const ResourceKey* key, RefPtr<IRefCounted>* dst, void* a, void* b, void* c, void* d);  // 0x0c
+    virtual bool GetResourceAsync();
+    virtual bool GetLoadedResource(const ResourceKey* key, RefPtr<IRefCounted>* dst);                                 // 0x14
+    virtual bool ReloadResource();
+    virtual bool GetPrivateResource();
+    virtual bool WriteResource(IRefCounted* res, void* data, void* db, void* factory, void* name);                    // 0x20
+    virtual void SetTypeMapping();
+    virtual int GetRecordTypesFromResourceType();
+    virtual int GetTypeMapping();
+    virtual int FindRecord();
+    virtual int GetResourceKeyList();
+    virtual int GetRecordKeyList(KeyVec<ResourceKey>* dst, IKeyFilter* filter, void* dbs);                            // 0x38
+    virtual int GetRecordKeyList2();
+    virtual bool RegisterChangeNotification();
+    virtual bool RegisterFactory(bool add, struct IFactory* factory, int arg);                                            // 0x44
+    virtual int FindFactory();
+    virtual int GetFactoryList();
+    virtual bool RegisterDatabase();
+    virtual bool IsDatabaseRegistered();
+    virtual int FindDatabase();
+    virtual int GetDatabaseList();
+    virtual void DoDatabaseChanged();
+    virtual bool RegisterCache();
+    virtual int FindCache();
+    virtual bool CacheResource(IRefCounted* res, bool flag);                                                          // 0x6c
+};
+IResourceManager* GetManager();   // 0x0067dcd0 (EA::ResourceMan::GetManager)
+struct IKeyFilter { virtual bool Accept(const ResourceKey*); };
+struct cAssetDirectory {
+    char pad[0];
+    bool GetLocalKey(u64 id, ResourceKey* out);                 // 0x0054e460
+    bool HasAsset(u64 id);                                      // 0x0054e740
+    bool GetServerId(const ResourceKey* key, u64* out, bool b); // 0x0054e530
+};
+struct cPollinator {
+    char pad[0x58];
+    cAssetDirectory* mpAssetDirectory;
+};
+cPollinator* GetPollinator();   // 0x0067cb30
+struct cPollenAssetData {
+    char mData[0x130 - 0x20];
+    void SetData(uint32_t a, uint32_t b, void* c);   // 0x00613140
+};
+struct cPollenAsset : IRefCounted {
+    int mnRef;                      // +4
+    ResourceKey mKey;               // +8
+    int pad14;
+    u64 mId;                        // +0x18
+    u64 GetId() const { return mId; }
+    cPollenAssetData mData;         // +0x20
+    cPollenAsset(u64 id);           // 0x00612f00
+    static void* operator new(size_t n, const char* name, int a, int b, int c, int d);   // 0x00f473a0
+};
+void* GetSaveArea(uint32_t id);    // SP::GetSaveArea 0x006b1f90
+struct AssetEntry {
+    u64 key;
+    RefPtr<cPollenAsset> value;
+    int pad;
+};
+struct AssetMap {
+    AssetEntry* mpBegin;
+    AssetEntry* mpEnd;
+    char pad[0x14 - 8];
+    bool mbFlag;                                   // +0x14 (== cache +0x9c)
+    RefPtr<cPollenAsset>* operator_index(const u64& key);   // 0x00613dd0
+    AssetEntry* find(const u64& key);
+};
+AssetEntry* lower_bound_asset(AssetEntry* b, AssetEntry* e, const u64* key, bool flag);   // 0x007c8160
+struct AssetRange { AssetEntry* first; AssetEntry* second; };
+inline AssetEntry* AssetMap::find(const u64& key) {
+    AssetRange r;
+    AssetEntry* const itEnd = mpEnd;
+    AssetEntry* it = lower_bound_asset(mpBegin, itEnd, &key, mbFlag);
+    if (it != itEnd && !(key < it->key)) {
+        r.first = it;
+        r.second = it + 1;
+    } else {
+        r.first = it;
+        r.second = it;
+    }
+    return (r.first != r.second) ? r.first : itEnd;
+}
+struct IMessageServer {
+virtual int slot00();
+virtual int slot04();
+virtual int slot08();
+virtual int slot0c();
+    virtual int slot10();
+    virtual bool PostMessage(uint32_t id, void* data, int flag);   // 0x14
+virtual int slot18();
+virtual int slot1c();
+virtual int slot20();
+    virtual bool AddListener(void* listener, uint32_t id);          // 0x24
+};
+struct cAssetCache {
+    void* vtbl;                     // +0
+    IMessageServer* mpServer;       // +4
+    cAssetCache* mpSelf;            // +8
+    const uint32_t* mpMessages;     // +0xc
+    int mnMessages;                 // +0x10
+    int mnZero;                     // +0x14
+    cPollinator* mpPollinator;      // +0x18
+    char pad1c[0x88 - 0x1c];
+    AssetMap mMap;                  // +0x88
+
+    void LoadAll();                                      // 0x00614050
+    void AddAsset(u64 id, const void* data);             // 0x00614280
+    bool RemoveAsset(u64 id);                            // 0x006144c0
+    bool Fn613c60(cPollenAsset* a);                      // 0x00613c60
+    bool Fn613e50(uint32_t a, cPollenAsset* b);          // 0x00613e50
+    void Fn613ab0(uint32_t a);                           // 0x00613ab0
+    bool ReadRecord(void* rec, struct cPollenAsset* obj, uint32_t unused, uint32_t type);   // 0x00614560
+    void Init(cPollinator* pollinator);                  // 0x006145d0
+    bool HandleMessage(uint32_t id, void* msg);          // 0x006146c0
+};
+struct IRecord {
+virtual int slot00();
+virtual int slot04();
+virtual int slot08();
+virtual int slot0c();
+    virtual const ResourceKey* GetKey();    // 0x10
+    virtual int slot14();
+    virtual uint32_t GetSize();             // 0x18
+};
+struct IFactory { virtual void slot0(); virtual int AddRef(); virtual int Release(); };
+void cAssetCache::AddAsset(u64 id, const void* data)
+{
+    cPollenAsset* a;
+    RefPtrNI<cPollenAsset> e;
+    AssetEntry* it = mMap.find(id);
+    if (it != mMap.mpEnd) {
+        a = it->value.p;
+        if (!a) return;
+        a->AddRef();
+    } else {
+        ResourceKey lk = { 0, 0, 0 };
+        if (!GetPollinator()->mpAssetDirectory->GetLocalKey(id, &lk)) return;
+        if (!GetPollinator()->mpAssetDirectory->HasAsset(id)) {
+            if (!GetManager()->GetResource(&lk, 0, 0, 0, 0, 0)) return;
+        }
+        ResourceKey key = { lk.instanceID, 0xfd60f0c1, lk.groupID };
+        RefPtr<IRefCounted> res;
+        IResourceManager* mgr = GetManager();
+        res = 0;
+        if (mgr->GetLoadedResource(&key, &res)) {
+            if (res.p)
+                e = (cPollenAsset*)res.p->Cast(0xaaff1cde);
+            else
+                e = 0;
+            a = e.p;
+        } else {
+            e = new ("Pollinator", 0, 0, 0, 0) cPollenAsset(id);
+            a = e.p;
+            a->mKey = key;
+            RefPtr<cPollenAsset>* slot = mMap.operator_index(id);
+            *slot = e;
+        }
+    }
+    if (a) {
+        a->mData.SetData(((uint32_t*)data)[0], ((uint32_t*)data)[1], (void*)data);
+        void* area = GetSaveArea(0x11ac19d);
+        GetManager()->WriteResource(a, 0, area, 0, 0);
+        GetManager()->CacheResource(a, true);
+        a->Release();
+    }
+}
+// ---- items of slice s00614050 end
 
 // @ 0x00612ba0
 bool cPropertyListWriter::Write(EA::IO::IStream_s0061_2270* pStream, const cPropertyBag* pBag)
@@ -672,6 +1293,180 @@ const PropPair* LowerBound(const PropPair* first, const PropPair* last, const ui
     return first;
 }
 
+// @ 0x00612e50
+bool cPropertyListWriter::WriteResource(void* pObject, void* pStreamHolder, int, uint32_t typeId)
+{
+    IObjectLike* pObj = (IObjectLike*)pObject;
+    if (typeId == 0xfd60f0c1 && pObj) {
+        cPropertyBag* pBag = pObj->Cast(0xaaff1cde);
+        if (pBag) {
+            if (Write(((IStreamHolder*)pStreamHolder)->GetStream(), pBag)) return true;
+        }
+    }
+    return false;
+}
+
+// @ 0x00613020
+void eastl::PropVector::reserve(size_t n)
+{
+    if (n > (size_t)(mpCapacity - mpBegin)) {
+        PropPair* const pNewData = n ? (PropPair*)mAllocator.allocate(n * sizeof(PropPair)) : 0;
+        PropPair* const pOldEnd = mpEnd;
+        PropPair* const pOldBegin = mpBegin;
+        UninitializedCopy(pOldBegin, pOldEnd, pNewData);
+        DestructRange(pOldBegin, pOldEnd, pNewData);
+        if (mpBegin) mAllocator.deallocate(mpBegin);
+        mpEnd = pNewData + (mpEnd - mpBegin);
+        mpBegin = pNewData;
+        mpCapacity = pNewData + n;
+    }
+}
+
+// @ 0x00613240
+void eastl::PropVector_s0061_3240::DoInsertValue(PropPair_s0061_3240* position, const PropPair_s0061_3240& value)
+{
+    if (mpEnd != mpCapacity) {
+        const PropPair_s0061_3240* pValue = &value;
+        if ((pValue >= position) && (pValue < mpEnd)) ++pValue;
+        ::new (mpEnd) PropPair_s0061_3240(*(mpEnd - 1));
+        CopyBackward(position, mpEnd - 1, mpEnd);
+        *position = *pValue;
+        ++mpEnd;
+    } else {
+        const size_t nPrevSize = (size_t)(mpEnd - mpBegin);
+        const size_t nNewSize = (nPrevSize > 0) ? (2 * nPrevSize) : 1;
+        PropPair_s0061_3240* const pNewData = DoAllocate(nNewSize);
+        PropPair_s0061_3240* pNewEnd = RelocatePairs(mpBegin, position, pNewData);
+        ::new (pNewEnd) PropPair_s0061_3240(value);
+        ++pNewEnd;
+        pNewEnd = RelocatePairs(position, mpEnd, pNewEnd);
+        if (mpBegin && mpBegin != mAllocator.mpPoolBegin) EASTL_allocator_deallocate(mpBegin);
+        mpEnd = pNewEnd;
+        mpBegin = pNewData;
+        mpCapacity = pNewData + nNewSize;
+    }
+}
+
+// @ 0x006135d0
+bool cPropertyBag_s0061_3240::GetFloat(uint32_t key, float* pOut)
+{
+    const PropPair_s0061_3240* const itEnd = mMap.mVec.mpEnd;
+    const PropPair_s0061_3240* it = LowerBound(mMap.mVec.mpBegin, itEnd, key, mMap.mCompare);
+    if (it == itEnd || key < it->first) it = itEnd;
+    else if (it == it + 1) it = itEnd;
+    if (it != itEnd) {
+        if (pOut) {
+            const EA::Variant_s0061_3240& v = it->second;
+            if (v.mTypeId == 0xd || v.mTypeId == 0x10) {
+                if (v.mFlags & 0x30)
+                    *pOut = **(float**)v.mData;
+                else
+                    *pOut = *(const float*)(v.mTypeId ? (const void*)v.mData : 0);
+            } else {
+                *pOut = kDefaultFloat;
+            }
+        }
+        return true;
+    }
+    return false;
+}
+
+// @ 0x00613660
+bool cPropertyBag_s0061_3240::GetInt32(uint32_t key, int32_t* pOut)
+{
+    const PropPair_s0061_3240* const itEnd = mMap.mVec.mpEnd;
+    const PropPair_s0061_3240* it = LowerBound(mMap.mVec.mpBegin, itEnd, key, mMap.mCompare);
+    if (it == itEnd || key < it->first) it = itEnd;
+    else if (it == it + 1) it = itEnd;
+    if (it != itEnd) {
+        if (pOut) {
+            const EA::Variant_s0061_3240& v = it->second;
+            if (v.mTypeId == 9 || v.mTypeId == 0x10) {
+                if (v.mFlags & 0x30)
+                    *pOut = **(int**)v.mData;
+                else
+                    *pOut = *(const int*)(v.mTypeId ? (const void*)v.mData : 0);
+            } else {
+                *pOut = kDefaultInt;
+            }
+        }
+        return true;
+    }
+    return false;
+}
+
+// @ 0x006137e0
+void cListenerSet::DestroyBody()
+{
+    mListeners.~Elem16Vector();
+    mSet.~FixedUIntSet();
+    mHandle.~MsgHandle();
+    this->cMessageBase::~cMessageBase();
+}
+
+// @ 0x00613d20
+EA::Variant_s0061_3240& PropMap::operator[](const uint32_t& key)
+{
+    const PropPair_s0061_3240* const itEnd = mVec.mpEnd;
+    const PropPair_s0061_3240* it = LowerBound(mVec.mpBegin, itEnd, key, mCompare);
+    if (it == itEnd || key < it->first) {
+        it = insertHint((PropPair_s0061_3240*)it, PropPair_s0061_3240(key, EA::Variant_s0061_3240()));
+    }
+    return ((PropPair_s0061_3240*)it)->second;
+}
+
+// @ 0x00613e50
+bool cPropertyReader::Read(EA::IO::IStream_s0061_3240* pStream, cPropertyBag_s0061_3240* pBag)
+{
+    cStreamReader r(pStream, true);
+    int32_t version = 0;
+    if (r.mbOk) r.Accumulate(EA::IO::ReadInt32(r.mpStream, &version, 1, r.mEndian));
+    if (!r.mbOk || (uint32_t)version < 3) return false;
+    if (r.mbOk) r.Accumulate(EA::IO::ReadUint64(r.mpStream, &pBag->mId, 1, r.mEndian));
+    int32_t count = 0;
+    if (r.mbOk) r.Accumulate(EA::IO::ReadInt32(r.mpStream, &count, 1, r.mEndian));
+    if (!r.mbOk) return false;
+    pBag->mMap.mVec.reserve((size_t)count);
+    for (uint32_t i = 0; i < (uint32_t)count; ++i) {
+        uint32_t key = 0;
+        EA::Variant_s0061_3240 v;
+        *(int*)v.mData = 0;
+        v.mTypeId = 9;
+        v.mFlags = 0;
+        if (r.mbOk) r.Accumulate(EA::IO::ReadInt32(r.mpStream, (int32_t*)&key, 1, r.mEndian));
+        r.ReadVariant(&v);
+        if (!r.mbOk) goto fail;
+        pBag->mMap[key].Assign(v);
+    }
+    if (r.mbOk) return true;
+fail:
+    pBag->mMap.mVec.erase(pBag->mMap.mVec.mpBegin, pBag->mMap.mVec.mpEnd);
+    return false;
+}
+
+// @ 0x00614280
+inline void* cPollenAsset::operator new(size_t n, const char* name, int a, int b, int c, int d)
+{
+    return PollNew((unsigned)n, name, a, b, c, d);
+}
+
+// @ 0x00614560
+bool cAssetCache::ReadRecord(void* rec, cPollenAsset* obj, uint32_t unused, uint32_t type)
+{
+    if (type == 0xfd60f0c1 && obj) {
+        cPollenAsset* a = (cPollenAsset*)obj->Cast(0xaaff1cde);
+        if (a) {
+            IRecord* r = (IRecord*)rec;
+            if (Fn613e50(r->GetSize(), a)) {
+                const ResourceKey* k = r->GetKey();
+                obj->mKey = *k;
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
 // @ 0x006a14d0
 void SP::cPropertyList::DeepCopy(SP::cPropertyList * src)
 {
@@ -693,7 +1488,7 @@ void SP::cPropertyList::DeepAdd(SP::cPropertyList * src)
 }
 
 // @ 0x006a1540
-bool SP::cPropertyList_s006a_11b0::Write(EA::IO::IStream* stream) const
+bool SP::cPropertyList_s006a_11b0::Write(EA::IO::IStream_s006a_11b0* stream) const
 {
   int nCount = (int)(mPropertyMap.mpEnd - mPropertyMap.mpBegin);
   bool bResult = EA::IO::WriteUint32(stream, &nCount, 1, 0);
@@ -748,7 +1543,7 @@ VariantPair* PairsFillN(VariantPair* dest, unsigned int n, const VariantPair& va
       dest->first = value.first;
       dest->second.mFlags = 0;
       dest->second.mTypeId = 0;
-      VariantAssignCopy_s006a_11b0(&dest->second, 0, value.second);
+      VariantAssignCopy(&dest->second, 0, value.second);
       result = (uint32_t)&dest->second;
     }
   }
@@ -761,9 +1556,9 @@ SP::cPropertyList::cPropertyList(char const * name)
 : SP::cResourceBase(), mParent(), mModificationCount(0) {}
 
 // @ 0x006a1bd0
-SP::cDirectPropertyList::~cDirectPropertyList()
+SP::cDirectPropertyList_s006a_11b0::~cDirectPropertyList_s006a_11b0()
 {
-  EA::Allocator::ZoneObject::operator delete(mDirectProps); // 0x00f47380
+  EA::Allocator::ZoneObject_s006a_11b0::operator delete(mDirectProps); // 0x00f47380
 }
 
 // @ 0x006a1c40
@@ -783,10 +1578,11 @@ SP::cDirectPropertyList::cDirectPropertyList(int count)
 }
 
 // @ 0x006a1de0
-bool SP::cPropertyList::GetProperty(unsigned int key, EA::Variant ** out)
+namespace SP {
+bool cPropertyList_s006a_11b0::GetPropertyA(unsigned int key, EA::Variant_s006a_11b0** out)
 {
-  eastl::pair<unsigned int, EA::Variant>* end = mPropertyMap.mpEnd;
-  eastl::pair<unsigned int, EA::Variant>* it = eastl::lower_bound(mPropertyMap.mpBegin, end, &key, (*(unsigned char *)&mPropertyMap.mCompare));
+  VariantPair* end = mPropertyMap.mpEnd;
+  VariantPair* it = eastl::lower_bound(mPropertyMap.mpBegin, end, &key, mCompare);
   if (it == end || key < it->first)
     it = end;
   else if (it == it + 1)
@@ -795,9 +1591,10 @@ bool SP::cPropertyList::GetProperty(unsigned int key, EA::Variant ** out)
     *out = &it->second;
     return true;
   }
-  if (mParent.mpObject) return mParent.mpObject->GetProperty(key, out);
+  if (mParent) return mParent->GetPropertyA(key, out);
   return false;
 }
+}  // namespace SP
 
 // @ 0x006a1e50
 bool SP::cDirectPropertyList::GetProperty(unsigned int key, EA::Variant ** out)
@@ -819,7 +1616,7 @@ eastl::pvector& eastl::pvector::operator=(const eastl::pvector& x)
   if (n > capacity()) {
     VariantPair* p = PairsRealloc(this, 0, n, x.mpBegin, x.mpEnd);
     PairsDestroy(this, 0, mpBegin, mpEnd);
-    if (mpBegin) EA::Allocator::ZoneObject::operator delete(mpBegin);
+    if (mpBegin) EA::Allocator::ZoneObject_s006a_11b0::operator delete(mpBegin);
     mpCapacity = p + n;
     mpBegin = p;
     mpEnd = p + n;
@@ -858,7 +1655,7 @@ void eastl::pvector::DoInsertValues(VariantPair* position, unsigned int n, const
   VariantPair* dest2 = p + idx + n;
   PairsUninitMoveStart(&dest2, mpBegin + idx, mpEnd, p + idx + n);
   PairsDestroy(this, 0, mpBegin, mpEnd);
-  if (mpBegin) EA::Allocator::ZoneObject::operator delete(mpBegin);
+  if (mpBegin) EA::Allocator::ZoneObject_s006a_11b0::operator delete(mpBegin);
   mpBegin = p;
   mpEnd = p + cur + n;
   mpCapacity = p + newCap;
@@ -905,7 +1702,7 @@ bool SP::cPropertyList::HasProperty(unsigned int key) const
 EA::Variant_s006a_22a0* SP::cPropertyList_s006a_22a0::GetPropertyValue(unsigned int key) const
 {
   VariantPair_s006a_22a0* end = mPropertyMap.mpEnd;
-  VariantPair_s006a_22a0* it = eastl::lower_bound(mPropertyMap.mpBegin, end, &key, mPropertyMap.mCompare);
+  VariantPair_s006a_22a0* it = eastl::lower_bound_s006a_22a0(mPropertyMap.mpBegin, end, &key, mPropertyMap.mCompare);
   if (it == end || key < it->first)
     it = end;
   else if (it == it + 1)
@@ -937,30 +1734,56 @@ bool SP::cDirectPropertyList_s006a_22a0::GetDescription(unsigned int key) const
 {
   if (key < mNumDirectProps) return mDirectProps[key] != 0;
   VariantPair_s006a_22a0* end = mPropertyMap.mpEnd;
-  VariantPair_s006a_22a0* it = eastl::lower_bound(mPropertyMap.mpBegin, end, &key, mPropertyMap.mCompare);
+  VariantPair_s006a_22a0* it = eastl::lower_bound_s006a_22a0(mPropertyMap.mpBegin, end, &key, mPropertyMap.mCompare);
   if (it == end || key < it->first)
     it = end;
   else if (it == it + 1)
     it = end;
   if (it == end) return false;
-  EA::Variant_s006a_22a0* v = &it->second;
-  return v->mTypeId != 0;
+  VariantBytes v;
+  const VariantBytes* rv = (const VariantBytes*)((VariantOps*)&v)->ToStr(&it->second);
+  const void* p = VariantData(rv, 1, 0x10, 0x15d115d);
+  bool res = *(const bool*)p;
+  if (v.mFlags & 4) ((EA::Variant_s006a_22a0*)&v)->Destruct(0);
+  return res;
 }
 
 // @ 0x006a2660
 int SP::cDirectPropertyList::GetIntProperty(unsigned int index) const
 {
   if (index < mNumDirectProps) return mDirectProps[index];
-  EA::Variant* v = ((EA::Variant *)&GetProperty(index));
-  return v->mFloat;
+  eastl::pair<unsigned int,EA::Variant>* end = mPropertyMap.mpEnd;
+  eastl::pair<unsigned int,EA::Variant>* it = eastl::lower_bound(mPropertyMap.mpBegin, end, &index, (*(unsigned char *)&mPropertyMap.mCompare));
+  if (it == end || index < it->first)
+    it = end;
+  else if (it == it + 1)
+    it = end;
+  if (it == end) return 0;
+  VariantBytes v;
+  const VariantBytes* rv = (const VariantBytes*)((VariantOps*)&v)->ToInt(&it->second);
+  const void* p = VariantData(rv, 9, 0x10, 0x15d1160);
+  int r = *(const int*)p;
+  if (v.mFlags & 4) ((EA::Variant*)&v)->Destruct(0);
+  return r;
 }
 
 // @ 0x006a2710
 float SP::cDirectPropertyList::GetFloatProperty(unsigned int index) const
 {
   if (index < mNumDirectProps) return ((float*)mDirectProps)[index];
-  EA::Variant* v = ((EA::Variant *)&GetProperty(index));
-  return *(float*)&v->mFloat;
+  eastl::pair<unsigned int,EA::Variant>* end = mPropertyMap.mpEnd;
+  eastl::pair<unsigned int,EA::Variant>* it = eastl::lower_bound(mPropertyMap.mpBegin, end, &index, (*(unsigned char *)&mPropertyMap.mCompare));
+  if (it == end || index < it->first)
+    it = end;
+  else if (it == it + 1)
+    it = end;
+  if (it == end) return 0.0f;
+  VariantBytes v;
+  const VariantBytes* rv = (const VariantBytes*)((VariantOps*)&v)->ToFloat(&it->second);
+  const void* p = VariantData(rv, 0xd, 0x10, 0x15d1168);
+  float r = *(const float*)p;
+  if (v.mFlags & 4) ((EA::Variant*)&v)->Destruct(0);
+  return r;
 }
 
 // @ 0x006a27d0
@@ -975,29 +1798,24 @@ bool SP::cDirectPropertyList::HasProperty(unsigned int key) const
 }
 
 // @ 0x006a2800
-EA::Variant const & SP::cDirectPropertyList::GetProperty(unsigned int key) const
+EA::Variant_s006a_22a0 const& SP::cDirectPropertyList_s006a_22a0::GetProperty(unsigned int key) const
 {
   if (key < mNumDirectProps) {
-    EA::Variant* out = const_cast<EA::Variant*>(&mTempDirectVariant);
+    EA::Variant_s006a_22a0* out = const_cast<EA::Variant_s006a_22a0*>(&mTempDirectVariant);
     void* mgr = PropertyManager();
-    void* entry = (*(PropertyLookup_s006a_22a0*)(*(int*)mgr + 0x50))(mgr, 0, key);
-    VariantCopyAssign_EA(out, 0, (const EA::Variant*)entry);
+    void* entry = (*(PropertyLookup*)(*(int*)mgr + 0x50))(mgr, 0, key);
+    VariantCopyAssign(out, 0, (EA::Variant_s006a_22a0*)entry);
     if (!(out->mFlags & 0x10)) {
-      // A variant that is not constructed from a raw pointer is rebuilt from the direct slot.
-      if (out->mTypeId == EA::Variant::kTypeBool) {
-        bool value = mDirectProps[key] != 0;
-        VariantAssignBool_EA(out, 0, &value);
-      } else if (out->mTypeId == EA::Variant::kTypeInt32) {
-        int value = mDirectProps[key];
-        VariantAssignInt_EA(out, 0, &value);
-      } else if (out->mTypeId == EA::Variant::kTypeFloat) {
-        float value = ((float*)mDirectProps)[key];
-        VariantAssignFloat_EA(out, 0, &value);
-      }
+      if (out->mTypeId == 1)
+        *out = (bool)(mDirectProps[key] != 0);
+      else if (out->mTypeId == 9)
+        *out = mDirectProps[key];
+      else if (out->mTypeId == 0xd)
+        *out = ((float*)mDirectProps)[key];
     }
     return mTempDirectVariant;
   }
-  return cPropertyList::GetProperty(key);
+  return *cPropertyList_s006a_22a0::GetPropertyValue(key);
 }
 
 // @ 0x006a28c0
@@ -1011,21 +1829,16 @@ bool SP::cDirectPropertyList::GetProperty(unsigned int key, EA::Variant const **
 }
 
 // @ 0x006a28f0
-void SP::cPropertyList_s006a_22a0::ClearMapOnly()
+void SP::VariantMap::ClearMapOnly()
 {
-  // The retail helper is a VariantMap method (it takes the map itself in ecx), so this member form
-  // works on the object as the map it was named after.
-  VariantMap* map = (VariantMap*)(void*)this;
-  MapPairsCopy(map->mpBegin, map->mpEnd, map->mpEnd);
-  MapPairsDestroy(map->mpBegin, map->mpEnd);
-  map->mpEnd = ShrinkEnd(map->mpBegin, map->mpEnd);
+  PairsCopy(mpBegin, mpEnd, mpEnd);
+  PairsDestroy_s006a_22a0(mpBegin, mpEnd);
+  mpEnd = ShrinkEnd(mpBegin, mpEnd);
 }
 
 // @ 0x006a2940
 VariantPair_s006a_22a0* eastl::pvector_s006a_22a0::insert(VariantPair_s006a_22a0* position, const VariantPair_s006a_22a0& value)
 {
-  // The append fast path is inlined here (the original only calls DoInsertValue when it has to
-  // grow), and the result is indexed off the *new* begin.
   VariantPair_s006a_22a0* beg = mpBegin;
   unsigned int idx = (unsigned int)(position - beg);
   if (position == mpEnd && mpEnd != mpCapacity) {
@@ -1045,8 +1858,8 @@ VariantPair_s006a_22a0* eastl::pvector_s006a_22a0::insert(VariantPair_s006a_22a0
 void SP::cPropertyList_s006a_22a0::Clear()
 {
   VariantMap* map = &mPropertyMap;
-  MapPairsCopy(map->mpBegin, map->mpEnd, map->mpEnd);
-  MapPairsDestroy(map->mpBegin, map->mpEnd);
+  PairsCopy(map->mpBegin, map->mpEnd, map->mpEnd);
+  PairsDestroy_s006a_22a0(map->mpBegin, map->mpEnd);
   map->mpEnd = ShrinkEnd(map->mpBegin, map->mpEnd);
   mModificationCount++;
 }
@@ -1055,11 +1868,11 @@ void SP::cPropertyList_s006a_22a0::Clear()
 void SP::cDirectPropertyList_s006a_22a0::Copy(cPropertyList_s006a_22a0* src)
 {
   if (this == src) return;
-  MapClearOnly_s006a_22a0(&mPropertyMap, 0);
+  mPropertyMap.ClearMapOnly();
   VariantPair_s006a_22a0* it = src->mPropertyMap.mpBegin;
   VariantPair_s006a_22a0* end = src->mPropertyMap.mpEnd;
   for (; it != end; ++it) SetProperty(it->first, &it->second);
-  SetParent(mParent);  // the original re-parents to its own (already current) parent
+  SetParent(mParent);
 }
 
 // @ 0x006a2b20
@@ -1074,7 +1887,7 @@ void SP::cDirectPropertyList_s006a_22a0::Clear()
 VariantPair_s006a_22a0* SP::VariantMap::insert(VariantPair_s006a_22a0* out, const VariantPair_s006a_22a0& value)
 {
   VariantPair_s006a_22a0* end = mpEnd;
-  VariantPair_s006a_22a0* it = eastl::lower_bound(mpBegin, end, &value.first, mCompare);
+  VariantPair_s006a_22a0* it = eastl::lower_bound_s006a_22a0(mpBegin, end, &value.first, mCompare);
   if (it == end || value.first < it->first)
     it = end;
   else if (it == it + 1)
@@ -1093,7 +1906,7 @@ VariantPair_s006a_22a0* SP::VariantMap::insert(VariantPair_s006a_22a0* out, cons
 unsigned int SP::VariantMap::erase(const unsigned int& key)
 {
   VariantPair_s006a_22a0* end = mpEnd;
-  VariantPair_s006a_22a0* it = eastl::lower_bound(mpBegin, end, &key, mCompare);
+  VariantPair_s006a_22a0* it = eastl::lower_bound_s006a_22a0(mpBegin, end, &key, mCompare);
   if (it == end || key < it->first)
     it = end;
   else if (it == it + 1)
@@ -1115,7 +1928,7 @@ void SP::cPropertyList::RemoveProperty(unsigned int key)
 // @ 0x006a2f60
 bool SP::cPropertyList_s006a_22a0::Read(EA::IO::IStream_s006a_22a0* stream)
 {
-  int nCount = 0;
+  int nCount;
   bool bResult = EA::IO::ReadInt32(stream, &nCount, 1, 0);
   if (bResult && nCount < 0) {
     int key[3] = {0, 0, 0};
@@ -1130,10 +1943,7 @@ bool SP::cPropertyList_s006a_22a0::Read(EA::IO::IStream_s006a_22a0* stream)
                                                              (void**)&mParent);
   }
   unsigned int want = (unsigned int)nCount & 0x7fffffff;
-  while ((unsigned int)(mPropertyMap.mpEnd - mPropertyMap.mpBegin) < want) {
-    VariantPair_s006a_22a0 v;
-    mPropertyMap.insert_pos(mPropertyMap.mpEnd, v);
-  }
+  ((eastl::pvector_s006a_22a0*)&mPropertyMap)->resize(want);
   for (VariantPair_s006a_22a0* it = mPropertyMap.mpBegin; it != mPropertyMap.mpEnd; ++it) {
     if (!bResult) break;
     bResult = EA::IO::ReadInt32(stream, &it->first, 1, 0);
@@ -1145,7 +1955,7 @@ bool SP::cPropertyList_s006a_22a0::Read(EA::IO::IStream_s006a_22a0* stream)
 // @ 0x006a3070
 unsigned int SP::cPropertyList_s006a_22a0::GetPropertyIDs(unsigned int* ids)
 {
-  UIntVector_s006a_22a0* v = (UIntVector_s006a_22a0*)ids;
+  UIntVector* v = (UIntVector*)ids;
   unsigned int n = (unsigned int)(mPropertyMap.mpEnd - mPropertyMap.mpBegin);
   v->resize(n);
   unsigned int i = 0;
@@ -1159,12 +1969,12 @@ unsigned int SP::cPropertyList_s006a_22a0::GetPropertyIDs(unsigned int* ids)
 // @ 0x006a3180
 unsigned int SP::cDirectPropertyList_s006a_22a0::GetPropertyIDs(unsigned int* ids)
 {
-  UIntVector_s006a_22a0* v = (UIntVector_s006a_22a0*)ids;
-  PairsCopyBytes_s006a_22a0(v->mpBegin, v->mpEnd, 0);
+  UIntVector* v = (UIntVector*)ids;
+  PairsCopyBytes(v->mpBegin, v->mpEnd, 0);
   v->mpEnd = ShrinkUIntEnd(v->mpBegin, v->mpEnd);
   void* mgr = PropertyManager();
   for (unsigned int i = 1; i < mNumDirectProps; i++) {
-    void* entry = (*(PropertyLookup_s006a_22a0*)(*(int*)mgr + 0x50))(mgr, 0, i);
+    void* entry = (*(PropertyLookup*)(*(int*)mgr + 0x50))(mgr, 0, i);
     if (*(short*)((char*)entry + 0x12) != 0) {
       unsigned int* e = v->mpEnd;
       if (e < v->mpCapacity) {
@@ -1183,7 +1993,7 @@ unsigned int SP::cDirectPropertyList_s006a_22a0::GetPropertyIDs(unsigned int* id
     v->DoInsertValues(v->mpEnd, total - oldN, zero);
   } else {
     unsigned int* dst = v->mpBegin + total;
-    PairsCopyBytes_s006a_22a0(dst, v->mpEnd, 0);
+    PairsCopyBytes(dst, v->mpEnd, 0);
     v->mpEnd = ShrinkUIntEnd(dst, v->mpEnd);
   }
   unsigned int k = oldN;

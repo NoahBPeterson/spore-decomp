@@ -1,5 +1,8 @@
+00613240 ?DoInsertValue@PropVector_s0061_3240@eastl@@QAEXPAU?$pair_s0061_3240@IUVariant_s0061_3240@EA@@@2@ABU32@@Z  # PropVector_s0061_3240::DoInsertValue migrated from s00613240 (verbatim, slice spelling)
 00613530 SP::cPropertyBag::cPropertyBag  # default ctor: vptr, refcount xchg, uint64 id=-1, fixed vector_map<uint32,Variant> storage (0xf0 bytes)
 00613580 SP::cPropertyBag::`scalar deleting destructor'  # releases fixed-vector storage, vptr, deallocate if flag&1
-006135d0 SP::cPropertyBag::GetFloat  # Variant types 0xd/0x10 -> float, default global otherwise
-00613660 SP::cPropertyBag::GetInt32  # Variant types 9/0x10 -> int
-00613d20 eastl::vector_map<unsigned int,EA::Variant>::operator[]  # lower_bound + insert default Variant
+006135d0 ?GetFloat@cPropertyBag_s0061_3240@@QAE_NIPAM@Z  # cPropertyBag_s0061_3240::GetFloat migrated from s00613240 (verbatim, slice spelling)
+00613660 ?GetInt32@cPropertyBag_s0061_3240@@QAE_NIPAH@Z  # cPropertyBag_s0061_3240::GetInt32 migrated from s00613240 (verbatim, slice spelling)
+006137e0 ?DestroyBody@cListenerSet@@QAEXXZ  # cListenerSet::DestroyBody migrated from s00613240 (verbatim, slice spelling)
+00613d20 ??APropMap@@QAEAAUVariant_s0061_3240@EA@@ABI@Z  # PropMap::operator[] migrated from s00613240 (verbatim, slice spelling)
+00613e50 ?Read@cPropertyReader@@QAE_NPAUIStream_s0061_3240@IO@EA@@PAUcPropertyBag_s0061_3240@@@Z  # cPropertyReader::Read migrated from s00613240 (verbatim, slice spelling)

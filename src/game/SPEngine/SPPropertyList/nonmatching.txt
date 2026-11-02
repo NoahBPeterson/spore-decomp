@@ -1,24 +1,32 @@
 # va  diff-bytes  reason
-00612ba0 93 frame 0x34 vs 0x30: count local not sharing dead param slot
-006a1540 134 SP::cPropertyList::Write - complete; recomputed count + per-element WriteUint32/WriteVariant loop present, schedule differs
-006a1a70 73 eastl pair uninitialized-move-start helper - complete loop; EH frame and argument spill differ
-006a1b00 62 eastl fill_n helper - complete loop (71 vs 130 bytes; original carries an EH frame)
-006a1bd0 36 SP::cDirectPropertyList::~cDirectPropertyList - complete; EH state numbering differs
-006a1de0 51 SP::cPropertyList::GetPropertyA - complete; cl folds it=end then if(it!=end) that the original keeps; equiv: PASS (lower_bound annotated 0x612db0, 2026-10-11)
-006a1e80  67   eastl::vector<pair<unsigned int,EA::Variant> >::operator= - complete reimplementation (383 vs 316 bytes); equiv FAIL (fake-arity: no call site before 460e0000; ours failed where original succeeded)
-006a2010 197 eastl::vector<pair<unsigned int,EA::Variant> >::DoInsertValues - complete reimplementation (235 vs 646 bytes)
-006a22a0 271 eastl::vector<pair<unsigned int,EA::Variant> >::DoInsertValue - complete reimplementation, size differs
-006a2470 36 SP::cPropertyList::HasProperty - complete; cl folds it=end/if(it!=end) that the original keeps
-006a24d0 34 SP::cPropertyList::GetPropertyValue - complete; same fold difference
-006a2530 51 SP::cPropertyList::GetProperty (const, bool) - complete; same fold difference; equiv: PASS (lower_bound annotated 0x612db0 after the hybrid crashed on a wrong instantiation, 2026-10-11)
-006a27d0 26 SP::cDirectPropertyList::HasProperty - complete
-006a2800 23 SP::cDirectPropertyList::GetPropertyValue - complete
-006a28f0 51 SP::cPropertyList::ClearMapOnly - complete; _Destroy helper schedule differs
-006a2940 41 eastl::vector<pair>::insert(iterator,value) - complete; DoInsertValue call schedule differs
-006a2a80 47 SP::cPropertyList::Clear - complete; _Destroy helper schedule differs
-006a2ad0 27 SP::cDirectPropertyList::Copy - complete
-006a2b20 58 SP::cDirectPropertyList::Clear - complete
-006a2c50 70 eastl::vector_map::insert(value) - complete
-006a2cb0 82 eastl::vector_map::erase(key) - complete
-006a3070 55 SP::cPropertyList::GetPropertyIDs - complete
-006a3180 81 SP::cDirectPropertyList::GetPropertyIDs - complete
+00612ba0 93 frame 0x34 vs 0x30: count local not sharing dead param slot flags: /O2 /MD /Gy /TP /arch:SSE /GS-
+00613240 16 tail register allocation of spilled pNewEnd/pNewData/nNewSize; recheck FAIL was symbol misresolution: EA::Variant copy-assign resolved to 0x00478300 (symbols(mangled) collision) instead of the original call target 0x00542b80, so renamed the member to Assign (annotation // 0x00542b80 wins); equiv now no mismatch, verdict UNSUPPORTED (18/400 valid inputs, original faults on soup) flags /O2 /MD /Gy /TP /GS-
+006135d0 118 find() result merge is threaded by cl (original keeps cmp it,end after merge) flags: /O2 /MD /Gy /TP /GS-
+00613660 116 same as GetFloat flags: /O2 /MD /Gy /TP /GS-
+00613e50 359 deserializer: variant/key stack layout and slot reuse flags: /O2 /MD /Gy /TP /GS-
+00614280 1 cAssetCache::AddAsset: complete; id half loaded into registers vs memory, out-of-line RefPtr helper placement differs [equiv: WEAK 185/400 valid, 28.2% coverage] flags: /O2 /MD /Gy /TP
+006a1540 134 SP::cPropertyList::Write - complete; recomputed count + per-element WriteUint32/WriteVariant loop present, schedule differs flags: /O2 /MD /Gy /EHsc /TP /GS-
+006a1a70 73 eastl pair uninitialized-move-start helper - complete loop; EH frame and argument spill differ flags: /O2 /MD /Gy /EHsc /TP /GS-
+006a1b00 72 eastl fill_n helper - complete; copies via the annotated EA::Variant copy assignment at 0x00542b80 and returns the last assignment result (0xffffffff for n==0); equiv PASS 484 valid, 100% coverage (slice and src/game/SPEngine/SPPropertyList.cpp) flags: /O2 /MD /Gy /EHsc /TP /GS-
+006a1bd0 36 SP::cDirectPropertyList::~cDirectPropertyList - complete; EH state numbering differs flags: /O2 /MD /Gy /EHsc /TP /GS-
+006a1de0 51 SP::cPropertyList::GetPropertyA - complete; cl folds it=end then if(it!=end) that the original keeps; equiv: PASS (lower_bound annotated 0x612db0, 2026-10-11) flags: /O2 /MD /Gy /EHsc /TP /GS-
+006a1e80 245 eastl::vector<pair<unsigned int,EA::Variant> >::operator= - complete; uses annotated PairsRealloc (0x006a1d80), PairsDestroy (0x00685a30), UninitializedCopyPairs (0x00612b20) and PairsUninitMoveStart; equiv WEAK 221 valid, 45% coverage, no mismatches (slice and src/game/SPEngine/SPPropertyList.cpp) flags: /O2 /MD /Gy /EHsc /TP /GS-
+006a2010 210 eastl::vector<pair<unsigned int,EA::Variant> >::DoInsertValues - complete reimplementation (235 vs 646 bytes) flags: /O2 /MD /Gy /EHsc /TP /GS-
+006a22a0 242 eastl::vector<pair<unsigned int,EA::Variant> >::DoInsertValue - complete reimplementation, size differs flags: /O2 /MD /Gy /EHsc /TP /GS-
+006a2470 36 SP::cPropertyList::HasProperty - complete; cl folds it=end/if(it!=end) that the original keeps flags: /O2 /MD /Gy /EHsc /TP /GS-
+006a24d0 34 SP::cPropertyList::GetPropertyValue - complete; same fold difference flags: /O2 /MD /Gy /EHsc /TP /GS-
+006a2530 51 SP::cPropertyList::GetProperty (const, bool) - complete; same fold difference; equiv: PASS (lower_bound annotated 0x612db0 after the hybrid crashed on a wrong instantiation, 2026-10-11) flags: /O2 /MD /Gy /EHsc /TP /GS-
+006a25a0 129 SP::cDirectPropertyList::GetDescription - complete; inlined lower_bound + string-Variant accessor (hashtable find 0x6a19b0, Destruct 0x93db80); register allocation and block layout differ [equiv: PASS] flags: /O2 /MD /Gy /EHsc /TP /GS-
+006a2660 121 SP::cDirectPropertyList::GetIntProperty - complete; inlined lower_bound + VariantT<int> conversion (0x60d990); register allocation differs [equiv: WEAK] flags: /O2 /MD /Gy /EHsc /TP /GS-
+006a2710 124 SP::cDirectPropertyList::GetFloatProperty - complete; inlined lower_bound + VariantT<float> conversion (0x6a1a10); register allocation differs [equiv: WEAK] flags: /O2 /MD /Gy /EHsc /TP /GS-
+006a27d0 30 SP::cDirectPropertyList::HasProperty - complete; 0<key<num returns true, otherwise the inherited lookup is called (no tail call) and its bool widened to a full-width 0/1 [equiv: PASS] flags: /O2 /MD /Gy /EHsc /TP /GS-
+006a2800 128 SP::cDirectPropertyList::GetPropertyValue - complete; PropertyManager slot +0x50 lookup copied into mTempDirectVariant, then bool/int/float re-assigned from the direct slot when flag 0x10 is clear [equiv: WEAK: those type branches are unreachable with generated inputs] flags: /O2 /MD /Gy /EHsc /TP /GS-
+006a28f0 59 SP::cPropertyList::ClearMapOnly - complete; empty-range copy + __stdcall destroy + truncating end shrink, body works on the map in ecx [equiv: PASS] flags: /O2 /MD /Gy /EHsc /TP /GS-
+006a2940 100 eastl::vector<pair>::insert(iterator,value) - complete; append fast path inlined, DoInsertValue only when growing [equiv: PASS] flags: /O2 /MD /Gy /EHsc /TP /GS-
+006a2a80 64 SP::cPropertyList::Clear - complete; same copy/destroy/shrink sequence plus the modification count [equiv: PASS] flags: /O2 /MD /Gy /EHsc /TP /GS-
+006a2b20 34 SP::cDirectPropertyList::Clear - complete flags: /O2 /MD /Gy /EHsc /TP /GS-
+006a2c50 70 eastl::vector_map::insert(value) - complete flags: /O2 /MD /Gy /EHsc /TP /GS-
+006a2cb0 62 eastl::vector_map::erase(key) - complete flags: /O2 /MD /Gy /EHsc /TP /GS-
+006a2f60 194 SP::cPropertyList::Read - complete; IO/PropertyManager/vtable+0x2c/resize path reproduced [equiv: WEAK] flags: /O2 /MD /Gy /EHsc /TP /GS-
+006a3070 8 SP::cPropertyList::GetPropertyIDs - complete; vector resize to the map size, then an indexed key copy [equiv: PASS] flags: /O2 /MD /Gy /EHsc /TP /GS-
+006a3180 271 SP::cDirectPropertyList::GetPropertyIDs - complete; vector argument is an eastl::vector<unsigned int> (empty-copy shrink, per-property appends, grow/trim to oldN+mapN, map keys at the tail) [equiv: PASS] flags: /O2 /MD /Gy /EHsc /TP /GS-

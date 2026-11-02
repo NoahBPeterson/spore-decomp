@@ -4,5 +4,5 @@
 00612ba0 ?Write@cPropertyListWriter@@QAE_NPAUIStream_s0061_2270@IO@EA@@PBUcPropertyBag@@@Z  # cPropertyListWriter::Write migrated from s00612270 (verbatim, slice spelling)
 00612d10 ??1Elem16VectorD@@QAE@XZ  # DestroyElem16VectorD migrated from s00612270 (verbatim, slice spelling)
 00612db0 ?LowerBound@@YAPBU?$pair_s0061_2270@IUVariant_s0061_2270@EA@@@eastl@@PBU12@0ABI@Z  # LowerBound migrated from s00612270 (verbatim, slice spelling)
-00612e50 SP::cPropertyListWriter::WriteResource  # typeId 0xfd60f0c1 gate, QueryInterface 0xaaff1cde, then Write
-00613020 eastl::vector<eastl::pair<unsigned int,EA::Variant>,fixed_vector_allocator>::reserve  # 24-byte elements, fixed pool
+00612e50 ?WriteResource@cPropertyListWriter@@QAE_NPAX0HI@Z  # cPropertyListWriter::WriteResource migrated from s00612270 (verbatim, slice spelling)
+00613020 ?reserve@PropVector@eastl@@QAEXI@Z  # PropVector::reserve migrated from s00612270 (verbatim, slice spelling)

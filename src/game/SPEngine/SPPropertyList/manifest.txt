@@ -1,6 +1,11 @@
 # source  symbol  va  flags
 ../src/game/SPEngine/SPPropertyList.cpp  ??1Elem16VectorD@@QAE@XZ  00612d10  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
 ../src/game/SPEngine/SPPropertyList.cpp  ?LowerBound@@YAPBU?$pair_s0061_2270@IUVariant_s0061_2270@EA@@@eastl@@PBU12@0ABI@Z  00612db0  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPEngine/SPPropertyList.cpp  ?WriteResource@cPropertyListWriter@@QAE_NPAX0HI@Z  00612e50  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPEngine/SPPropertyList.cpp  ?reserve@PropVector@eastl@@QAEXI@Z  00613020  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPEngine/SPPropertyList.cpp  ?DestroyBody@cListenerSet@@QAEXXZ  006137e0  /O2 /MD /Gy /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPPropertyList.cpp  ??APropMap@@QAEAAUVariant_s0061_3240@EA@@ABI@Z  00613d20  /O2 /MD /Gy /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPPropertyList.cpp  ?ReadRecord@cAssetCache@@QAE_NPAXPAUcPollenAsset@@II@Z  00614560  /O2 /MD /Gy /TP /Isrc/game/include
 ../src/game/SPEngine/SPPropertyList.cpp  ?DeepCopy@cPropertyList@SP@@UAEXPAV12@@Z  006a14d0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/SPEngine/SPPropertyList.cpp  ?DeepAdd@cPropertyList@SP@@UAEXPAV12@@Z  006a1510  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/SPEngine/SPPropertyList.cpp  ?Add@cDirectPropertyList@SP@@UAEXPAVcPropertyList@2@@Z  006a1600  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
@@ -9,4 +14,5 @@
 ../src/game/SPEngine/SPPropertyList.cpp  ??0cDirectPropertyList@SP@@QAE@H@Z  006a1ca0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/SPEngine/SPPropertyList.cpp  ?GetProperty@cDirectPropertyList@SP@@UAE_NIPAPAUVariant@EA@@@Z  006a1e50  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/SPEngine/SPPropertyList.cpp  ?GetProperty@cDirectPropertyList@SP@@UBE_NIPAPBUVariant@EA@@@Z  006a28c0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPPropertyList.cpp  ?Copy@cDirectPropertyList_s006a_22a0@SP@@UAEXPAVcPropertyList_s006a_22a0@2@@Z  006a2ad0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/SPEngine/SPPropertyList.cpp  ?RemoveProperty@cPropertyList@SP@@UAEXI@Z  006a2ef0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
