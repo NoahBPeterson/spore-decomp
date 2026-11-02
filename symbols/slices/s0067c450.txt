@@ -1,19 +1,19 @@
+0067ad00 cUIHints::UpdateVisibleHint  # PDB name, called from UpdateHintTimers
+0067bc30 cUIHints::SetVisibility  # PDB name, called from this slice
 0067c960 cUIHints::Update  # PDB name (symbols/pdb_names.json)
 0067cf20 FUN_0067cf20  # D3D9 register-table callback used by FUN_0067d0c0 at key 0x241
-0067bc30 cUIHints::SetVisibility  # PDB name, called from this slice
-0067ad00 cUIHints::UpdateVisibleHint  # PDB name, called from UpdateHintTimers
 0067d230 zlib zalloc shim  # stored into z_stream_s::zalloc at 0x0067d390
 0067d260 zlib zfree shim  # stored into z_stream_s::zfree at 0x0067d39a
-0067d280 EA::IO::StreamCompressionZLib::SetCompressedFormat  # PDB
-0067d2a0 EA::IO::StreamCompressionZLib::SetBufferSize  # PDB
-0067d2e0 EA::IO::StreamCompressionZLib::SetCompressionHint  # PDB
-0067d300 EA::IO::StreamCompressionZLib::GetAccessFlags  # PDB
-0067d310 EA::IO::StreamCompressionZLib::GetState  # PDB
+0067d280 ?SetCompressedFormat@StreamCompressionZLib@IO@EA@@QAE_NW4eCompressedFormat@23@@Z  # StreamCompressionZLib::SetCompressedFormat migrated from s0067c450 (verbatim, slice spelling)
+0067d2a0 ?SetBufferSize@StreamCompressionZLib@IO@EA@@QAE_NI@Z  # StreamCompressionZLib::SetBufferSize migrated from s0067c450 (verbatim, slice spelling)
+0067d2e0 ?SetCompressionHint@StreamCompressionZLib@IO@EA@@QAE_NH@Z  # StreamCompressionZLib::SetCompressionHint migrated from s0067c450 (verbatim, slice spelling)
+0067d300 ?GetAccessFlags@StreamCompressionZLib@IO@EA@@QBEHXZ  # StreamCompressionZLib::GetAccessFlags migrated from s0067c450 (verbatim, slice spelling)
+0067d310 ?GetState@StreamCompressionZLib@IO@EA@@QBEHXZ  # StreamCompressionZLib::GetState migrated from s0067c450 (verbatim, slice spelling)
 0067d330 EA::IO::StreamCompressionZLib::InitPointers  # PDB
-0067d3f0 EA::IO::StreamCompressionZLib::GetPosition  # PDB
-0067d410 EA::IO::StreamDecompressionZLib::SetCompressedFormat  # PDB
-0067d420 EA::IO::StreamDecompressionZLib::SetBufferSize  # PDB
-0067d460 EA::IO::StreamDecompressionZLib::GetAccessFlags  # PDB
-0067d470 EA::IO::StreamDecompressionZLib::GetState  # PDB
+0067d3f0 ?GetPosition@StreamCompressionZLib@IO@EA@@QBEIH@Z  # StreamCompressionZLib::GetPosition migrated from s0067c450 (verbatim, slice spelling)
+0067d410 ?SetCompressedFormat@StreamDecompressionZLib@IO@EA@@QAE_NW4eCompressedFormat@23@@Z  # StreamDecompressionZLib::SetCompressedFormat migrated from s0067c450 (verbatim, slice spelling)
+0067d420 ?SetBufferSize@StreamDecompressionZLib@IO@EA@@QAE_NI@Z  # StreamDecompressionZLib::SetBufferSize migrated from s0067c450 (verbatim, slice spelling)
+0067d460 ?GetAccessFlags@StreamDecompressionZLib@IO@EA@@QBEHXZ  # StreamDecompressionZLib::GetAccessFlags migrated from s0067c450 (verbatim, slice spelling)
+0067d470 ?GetState@StreamDecompressionZLib@IO@EA@@QBEHXZ  # StreamDecompressionZLib::GetState migrated from s0067c450 (verbatim, slice spelling)
 0067d490 EA::IO::StreamDecompressionZLib::InitPointers  # PDB
-0067d530 EA::IO::StreamDecompressionZLib::GetPosition  # PDB
+0067d530 ?GetPosition@StreamDecompressionZLib@IO@EA@@QBEIH@Z  # StreamDecompressionZLib::GetPosition migrated from s0067c450 (verbatim, slice spelling)

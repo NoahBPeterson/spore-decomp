@@ -1,12 +1,14 @@
-0067d550 EA::IO::StreamCompressionZLib::Open  # attach output stream, init deflate (zlib or gzip header), reset state
-0067d680 EA::IO::StreamCompressionZLib::WriteData  # IStream::Write: deflate loop, flush output buffer, gzip crc32/input size
-0067d720 EA::IO::StreamCompressionZLib::Close  # finish deflate (Z_FINISH), flush tail, write gzip trailer, release stream
-0067d800 EA::IO::StreamDecompressionZLib::StreamDecompressionZLib  # two-base ctor: vptrs, atomic refcount, 0x2000 input buffer
-0067d890 EA::IO::StreamDecompressionZLib::Open  # attach input stream, init inflate, prime input buffer, set EOF
-0067d960 EA::IO::StreamDecompressionZLib::ReadData  # IStream::Read: refill input, inflate loop, return produced bytes
-0067da10 EA::IO::StreamDecompressionZLib::Close  # clear mOpen and release the input stream
-0067da30 EA::Internet::HTTPMultipartFormDataPostBodyStream::Release  # atomic refcount release (RCAtomicBlock)
-0067da60 EA::IO::StreamCompressionZLib::StreamCompressionZLib  # two-base ctor: vptrs, atomic refcount, members, conditional Open
+0067d330 ?InitPointers@StreamCompressionZLib@IO@EA@@IAE_NXZ  # EA::IO::StreamCompressionZLib::InitPointers (callee of s0067d550, named from the dev publics; slice address comment)
+0067d490 ?InitPointers@StreamDecompressionZLib@IO@EA@@IAE_NXZ  # EA::IO::StreamDecompressionZLib::InitPointers (callee of s0067d550, named from the dev publics; slice address comment)
+0067d550 ?Open@StreamCompressionZLib_s0067_d550@IO@EA@@QAE_NPAVIStream_s0067_d550@23@H@Z  # StreamCompressionZLib_s0067_d550::Open migrated from s0067d550 (verbatim, slice spelling)
+0067d680 ?WriteData@StreamCompressionZLib_s0067_d550@IO@EA@@QAE_NPBXI@Z  # StreamCompressionZLib_s0067_d550::WriteData migrated from s0067d550 (verbatim, slice spelling)
+0067d720 ?Close@StreamCompressionZLib_s0067_d550@IO@EA@@UAE_NXZ  # StreamCompressionZLib_s0067_d550::Close migrated from s0067d550 (verbatim, slice spelling)
+0067d800 ??0StreamDecompressionZLib_s0067_d550@IO@EA@@QAE@H@Z  # StreamDecompressionZLib_s0067_d550::StreamDecompressionZLib migrated from s0067d550 (verbatim, slice spelling)
+0067d890 ?Open@StreamDecompressionZLib_s0067_d550@IO@EA@@QAE_NPAVIStream_s0067_d550@23@@Z  # StreamDecompressionZLib_s0067_d550::Open migrated from s0067d550 (verbatim, slice spelling)
+0067d960 ?ReadData@StreamDecompressionZLib_s0067_d550@IO@EA@@QAEHPAXI@Z  # StreamDecompressionZLib_s0067_d550::ReadData migrated from s0067d550 (verbatim, slice spelling)
+0067da10 ?Close@StreamDecompressionZLib_s0067_d550@IO@EA@@UAE_NXZ  # StreamDecompressionZLib_s0067_d550::Close migrated from s0067d550 (verbatim, slice spelling)
+0067da30 ?Release@RCAtomicBlock@Internet@EA@@QAEHXZ  # RCAtomicBlock::Release migrated from s0067d550 (verbatim, slice spelling)
+0067da60 ??0StreamCompressionZLib_s0067_d550@IO@EA@@QAE@PAVIStream_s0067_d550@12@H@Z  # StreamCompressionZLib_s0067_d550::StreamCompressionZLib migrated from s0067d550 (verbatim, slice spelling)
 0067db10 EA::IO::StreamCompressionZLib::~StreamCompressionZLib  # Close if open, deflateEnd + free stream/output buffer
 0067dbc0 EA::IO::StreamDecompressionZLib::~StreamDecompressionZLib  # release input if open, inflateEnd + free stream/input buffer
 0067e100 CheatReporter::CheatReporter  # LogReporter base ctor + AutoRef target

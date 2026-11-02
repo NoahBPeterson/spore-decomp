@@ -1,0 +1,14 @@
+# source  symbol  va  flags
+../src/game/SPEngine/EACompressionStreamZLib.cpp  ?SetCompressedFormat@StreamCompressionZLib@IO@EA@@QAE_NW4eCompressedFormat@23@@Z  0067d280  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPEngine/EACompressionStreamZLib.cpp  ?SetBufferSize@StreamCompressionZLib@IO@EA@@QAE_NI@Z  0067d2a0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPEngine/EACompressionStreamZLib.cpp  ?SetCompressionHint@StreamCompressionZLib@IO@EA@@QAE_NH@Z  0067d2e0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPEngine/EACompressionStreamZLib.cpp  ?GetAccessFlags@StreamCompressionZLib@IO@EA@@QBEHXZ  0067d300  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPEngine/EACompressionStreamZLib.cpp  ?GetState@StreamCompressionZLib@IO@EA@@QBEHXZ  0067d310  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPEngine/EACompressionStreamZLib.cpp  ?GetPosition@StreamCompressionZLib@IO@EA@@QBEIH@Z  0067d3f0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPEngine/EACompressionStreamZLib.cpp  ?SetCompressedFormat@StreamDecompressionZLib@IO@EA@@QAE_NW4eCompressedFormat@23@@Z  0067d410  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPEngine/EACompressionStreamZLib.cpp  ?SetBufferSize@StreamDecompressionZLib@IO@EA@@QAE_NI@Z  0067d420  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPEngine/EACompressionStreamZLib.cpp  ?GetAccessFlags@StreamDecompressionZLib@IO@EA@@QBEHXZ  0067d460  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPEngine/EACompressionStreamZLib.cpp  ?GetState@StreamDecompressionZLib@IO@EA@@QBEHXZ  0067d470  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPEngine/EACompressionStreamZLib.cpp  ?GetPosition@StreamDecompressionZLib@IO@EA@@QBEIH@Z  0067d530  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPEngine/EACompressionStreamZLib.cpp  ?WriteData@StreamCompressionZLib_s0067_d550@IO@EA@@QAE_NPBXI@Z  0067d680  /O2 /MD /Gy /GS- /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/EACompressionStreamZLib.cpp  ?Close@StreamCompressionZLib_s0067_d550@IO@EA@@UAE_NXZ  0067d720  /O2 /MD /Gy /GS- /EHsc /TP /Isrc/game/include
