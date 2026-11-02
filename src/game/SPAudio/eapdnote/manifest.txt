@@ -1,0 +1,7 @@
+# source  symbol  va  flags
+../src/game/SPAudio/eapdnote.cpp  ?stripnote_new@@YAPAXXZ  00a5deb0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include
+../src/game/SPAudio/eapdnote.cpp  ?poly_free@Eapd@Audio@EA@@YAXPAD@Z  00a5e7d0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdnote.cpp  ?bag_new@Eapd@Audio@EA@@YAPAXXZ  00a5e8a0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdnote.cpp  ?bag_flush@Eapd@Audio@EA@@YAXPAD@Z  00a5e9c0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdnote.cpp  ?bag_clear@Eapd@Audio@EA@@YAXPAD@Z  00a5ea40  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdnote.cpp  ?x_note_setup@Eapd@Audio@EA@@YA_NXZ  00a5eb20  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include

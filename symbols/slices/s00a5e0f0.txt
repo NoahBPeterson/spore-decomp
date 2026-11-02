@@ -1,14 +1,14 @@
-00a5e0f0 poly_doaddfloat  # PD x_arithmetic.c poly_doAddFloat; 3 guarded outlet sends (0x38/0x34/0xc), 0x28 nelt, 0x2c pelts, 0x30 steer, 0x3c voice counter, 0x40 steal flag
-00a5e630 poly_list  # PD poly_doList; lists live voices then clears them
-00a5e7a0 poly_clear  # PD poly_clear (clears pitch+voice per voice, 0xc stride)
-00a5e7d0 poly_free  # PD poly_free (Free(pelts, nelt*0xc))
-00a5e7f0 poly_setup  # class_new("poly"), "stop"=poly_list, "clear"=poly_clear
-00a5e8a0 bag_new  # class_new("bag") allocator; list at +0x2c
-00a5e8f0 bag_float  # PD bag_float (append or remove by value)
-00a5e9c0 bag_flush  # PD bag_flush (drain list, free each element)
-00a5ea40 bag_clear  # PD bag_clear
-00a5ea70 bag_setup  # class_new("bag"), "flush"/"clear" methods
-00a5eb20 x_note_setup  # makenote + stripnote + poly + bag registration chain
+00a5e0f0 ?poly_doaddfloat@Eapd@Audio@EA@@YAXPADM@Z  # poly_doaddfloat migrated from s00a5e0f0 (verbatim, slice spelling)
+00a5e630 ?poly_list@Eapd@Audio@EA@@YAXPADHUt_symbol_s00a5_e0f0@123@PAUt_atom@123@@Z  # poly_list migrated from s00a5e0f0 (verbatim, slice spelling)
+00a5e7a0 ?poly_clear@Eapd@Audio@EA@@YAXPAD@Z  # poly_clear migrated from s00a5e0f0 (verbatim, slice spelling)
+00a5e7d0 ?poly_free@Eapd@Audio@EA@@YAXPAD@Z  # poly_free migrated from s00a5e0f0 (verbatim, slice spelling)
+00a5e7f0 ?poly_setup@Eapd@Audio@EA@@YA_NXZ  # poly_setup migrated from s00a5e0f0 (verbatim, slice spelling)
+00a5e8a0 ?bag_new@Eapd@Audio@EA@@YAPAXXZ  # bag_new migrated from s00a5e0f0 (verbatim, slice spelling)
+00a5e8f0 ?bag_float@Eapd@Audio@EA@@YAXPADM@Z  # bag_float migrated from s00a5e0f0 (verbatim, slice spelling)
+00a5e9c0 ?bag_flush@Eapd@Audio@EA@@YAXPAD@Z  # bag_flush migrated from s00a5e0f0 (verbatim, slice spelling)
+00a5ea40 ?bag_clear@Eapd@Audio@EA@@YAXPAD@Z  # bag_clear migrated from s00a5e0f0 (verbatim, slice spelling)
+00a5ea70 ?bag_setup@Eapd@Audio@EA@@YA_NXZ  # bag_setup migrated from s00a5e0f0 (verbatim, slice spelling)
+00a5eb20 ?x_note_setup@Eapd@Audio@EA@@YA_NXZ  # EA::Audio::Eapd::x_note_setup migrated from s00a5e0f0
 00a5eb50 print_new  # class_new("print") allocator; stores the help symbol at +0x28
 00a5ebb0 print_anything  # PD print_anything (postargs into a 1000-byte buffer)
 00a5ebe0 print_setup  # class_new("print"); bang/float/symbol route to sys_gui, list/anything to print_anything

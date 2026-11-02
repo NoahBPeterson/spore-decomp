@@ -16,8 +16,8 @@
 00a5dbd0 makenote_float  # note-on: emit velocity and note, then allocate a t_hang tick and clock_delay it
 00a5dcf0 makenote_release_all  # "stop" method: release every hung note (note-off plus its note) and free the ticks
 00a5ddc0 makenote_free_all  # free method / "clear": drop every pending tick without output
-00a5de00 makenote_setup  # registers "makenote" (size 0x3c), adds float, "stop" and "clear"
-00a5deb0 stripnote_new  # stripnote ctor: velocity inlet and two float outlets
-00a5df10 stripnote_float  # forwards note and velocity unless the inlet velocity is zero
-00a5dfc0 stripnote_setup  # registers "stripnote" (size 0x34) and adds the float method
-00a5e010 poly_new  # poly ctor: voice array of (pitch, note, flag), one inlet, three float outlets
+00a5de00 ?makenote_setup@@YAEXZ  # makenote_setup migrated from s00a5d3c0 (verbatim, slice spelling)
+00a5deb0 ?stripnote_new@@YAPAXXZ  # stripnote_new migrated from s00a5d3c0 (verbatim, slice spelling)
+00a5df10 ?stripnote_float@@YAXPAXM@Z  # stripnote_float migrated from s00a5d3c0 (verbatim, slice spelling)
+00a5dfc0 ?stripnote_setup@@YAEXZ  # stripnote_setup migrated from s00a5d3c0 (verbatim, slice spelling)
+00a5e010 ?poly_new@@YAPAXMM@Z  # poly_new migrated from s00a5d3c0 (verbatim, slice spelling)
