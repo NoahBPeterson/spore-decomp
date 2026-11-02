@@ -1,15 +1,16 @@
+005c6670 ?IsNew@cSPPaletteItem@SP@@QBE_NPAVcCollectableItems@2@@Z  # SP::cSPPaletteItem::IsNew (callee of s005f4310, named from the dev publics; slice address comment)
 005ed6c0 ?Hide@cSPPaletteItemRollover@SP@@QAEXXZ  # SP::cSPPaletteItemRollover::Hide (callee of s005f4310, named from the dev publics; slice address comment)
-005f4310 ?Init@cSPOLDPaletteItemUIDragAndBuy_s005f_4310@SP@@QAEXPAUKey_s005f_4310@ResourceMan@EA@@PAX1II11_N@Z  # cSPOLDPaletteItemUIDragAndBuy_s005f_4310::Init migrated from s005f4310 (verbatim, slice spelling)
+005f4310 ?Init@cSPOLDPaletteItemUIDragAndBuy_s005f_4310@SP@@QAEXPAUKey_s005f_4310@ResourceMan@EA@@PAX1I11_N@Z  # cSPOLDPaletteItemUIDragAndBuy_s005f_4310::Init migrated from s005f4310 (verbatim, slice spelling)
 005f46c0 ?EndDrag@cSPPaletteSwatch_s005f_4310@SP@@QAEXXZ  # cSPPaletteSwatch_s005f_4310::EndDrag migrated from s005f4310 (verbatim, slice spelling)
 005f46f0 ?HandleMessage@cHandlerView@SP@@QAE_NIPAX@Z  # cHandlerView::HandleMessage migrated from s005f4310 (verbatim, slice spelling)
 005f4750 ?OnLeftMouseDown@cSPOLDPaletteItemUIDragAndBuy_s005f_4310@SP@@QAEXXZ  # cSPOLDPaletteItemUIDragAndBuy_s005f_4310::OnLeftMouseDown migrated from s005f4310 (verbatim, slice spelling)
-005f49a0 SP::cSPPaletteSwatch::SetShowCost  # byte-exact
+005f49a0 ?SetShowCost@cSPPaletteSwatch_s005f_4310@SP@@QAEX_N@Z  # cSPPaletteSwatch_s005f_4310::SetShowCost migrated from s005f4310 (verbatim, slice spelling)
 005f49f0 ?OnMouseDown@cSPOLDPaletteItemUIDragAndBuy_s005f_4310@SP@@UAEXXZ  # cSPOLDPaletteItemUIDragAndBuy_s005f_4310::OnMouseDown migrated from s005f4310 (verbatim, slice spelling)
 005f4b80 ?OnMouseUp@cSPOLDPaletteItemUIDragAndBuy_s005f_4310@SP@@QAEXXZ  # cSPOLDPaletteItemUIDragAndBuy_s005f_4310::OnMouseUp migrated from s005f4310 (verbatim, slice spelling)
 005f4d00 copy 0x38 records  # untyped copy loop
 005f4e10 eastl::copy_impl<...>::do_copy<AutoRefCount<cMWModel>*>  # PDB name on card; byte-exact
 005f4e80 SP::Matrix3FromEulerXYZ  # PDB name on card; byte-exact
-005f4eb0 ?RemoveModel@cSwatch3DView_s005f_4310@SP@@QAEXPAVcMWModel_s005f_4310@2@@Z  # cSwatch3DView_s005f_4310::RemoveModel migrated from s005f4310 (verbatim, slice spelling)
+005f4eb0 ?RemoveModel@cSwatch3DView_s005f_4310@SP@@QAEXPAUcMWModel_s005f_4310@2@@Z  # RemoveModel migrated from s005f4310 (verbatim, slice spelling)
 005f4f80 ?Init@cSPSwatch_s005f_4310@SP@@QAEXPAUKey_s005f_4310@ResourceMan@EA@@IIIIII@Z  # cSPSwatch_s005f_4310::Init migrated from s005f4310 (verbatim, slice spelling)
 005f5000 ?Init@cSPSwatch_s005f_4310@SP@@QAEXPAUKey_s005f_4310@ResourceMan@EA@@PAX1IIIII@Z  # cSPSwatch_s005f_4310::Init migrated from s005f4310 (verbatim, slice spelling)
 008120d0 ?Init@cSPUILayout@@QAE_NABVKey@ResourceMan@EA@@_NI@Z  # cSPUILayout::Init (callee of s005f4310, named from the dev publics; slice address comment)

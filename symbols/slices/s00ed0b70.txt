@@ -1,0 +1,6 @@
+00ed10b0 ?f@Obj10B0@@QAEXHHHH@Z  # Obj10B0::f migrated from s00ed0b70 (verbatim, slice spelling)
+00ed1380 ?FUN_00ed1380@@YI_NPAX@Z  # FUN_00ed1380 migrated from s00ed0b70 (verbatim, slice spelling)
+00ed1460 ?FUN_00ed1460@@YAXXZ  # FUN_00ed1460 migrated from s00ed0b70 (verbatim, slice spelling)
+00ed14c0 ?f@Obj14C0@@QAEXPAH@Z  # Obj14C0::f migrated from s00ed0b70 (verbatim, slice spelling)
+00ed1500 ?FUN_00ed1500@@YAEXZ  # FUN_00ed1500 migrated from s00ed0b70 (verbatim, slice spelling)
+00ed1550 ?FUN_00ed1550@@YIXPAX@Z  # FUN_00ed1550 migrated from s00ed0b70 (verbatim, slice spelling)

@@ -1,0 +1,1 @@
+00f0d3f0 ?GetViewportMaxScale@cSPSwatch@SP@@UBE?BMXZ  # SP::cSPSwatch::GetViewportMaxScale migrated from s00f0cad0

@@ -1,0 +1,6 @@
+00ecdc70 ?FUN_00ecdc70@Obj_ecdc70@@QAEHXZ  # Obj_ecdc70::FUN_00ecdc70 migrated from s00ecda80 (verbatim, slice spelling)
+00ecdcc0 ?FUN_00ecdcc0@@YIXH@Z  # FUN_00ecdcc0 migrated from s00ecda80 (verbatim, slice spelling)
+00ecdf60 ?FUN_00ecdf60_fn@@YAXXZ  # FUN_00ecdf60_fn migrated from s00ecda80 (verbatim, slice spelling)
+00ecdfc0 ?FUN_00ecdfc0@@YIXH@Z  # FUN_00ecdfc0 migrated from s00ecda80 (verbatim, slice spelling)
+00ece140 ?SetMode@PaletteSwatch_ece140@@QAEXH@Z  # PaletteSwatch_ece140::SetMode migrated from s00ecda80 (verbatim, slice spelling)
+00ece3b0 ?FUN_00ece3b0@@YAHPAH@Z  # FUN_00ece3b0 migrated from s00ecda80 (verbatim, slice spelling)

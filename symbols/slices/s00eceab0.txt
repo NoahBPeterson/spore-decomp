@@ -1,2 +1,2 @@
-00eceab0 SP::cSPEditorDevUI::LoadLayout  # PDB caller-scored candidate
+00eceab0 ?FUN_00eceab0@@YAXHH@Z  # FUN_00eceab0 migrated from s00eceab0 (verbatim, slice spelling)
 00ecf150 UTFWin::cSPScenarioSwatchEditItemUI::cSPScenarioSwatchEditItemUI  # PDB caller-scored name
