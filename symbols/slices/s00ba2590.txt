@@ -1,12 +1,13 @@
 00ba2750 SP::cSpeciesRelationshipManager message handler  # EA::Messaging::GetServer queue
 00ba2a80 species-relationship AutoRef node create
-00ba2c70 species-relationship message filter
-00ba2f20 PlayerPlanetData destructor
-00ba2f90 PlayerPlanetData constructor
-00ba2af0 SP::cPosseSimulator::ReloadTuning  # PDB candidate; reads property tuning globals
-00ba2d80 iterate relationship rbtree, deallocating value strings
-00ba2e00 free array of relationship node-lists
-00ba2e50 eastl lower_bound over 16-byte relationship records
+00ba2af0 ?FUN_00ba2af0@@YAXXZ  # FUN_00ba2af0 migrated from s00ba2590 (verbatim, slice spelling)
+00ba2c70 ?FUN_00ba2c70@@YGEHPAX@Z  # FUN_00ba2c70 migrated from s00ba2590 (verbatim, slice spelling)
+00ba2ca0 ?Run_00ba2ca0@W@@QAEXPAX@Z  # W::Run_00ba2ca0 migrated from s00ba2590 (verbatim, slice spelling)
+00ba2d80 ?Run_00ba2d80@W@@QAEDPAX@Z  # W::Run_00ba2d80 migrated from s00ba2590 (verbatim, slice spelling)
+00ba2e00 ?FreeNodes@VecHdr@@QAEXPAXI@Z  # VecHdr::FreeNodes migrated from s00ba2590 (verbatim, slice spelling)
+00ba2e50 ?FUN_00ba2e50@@YAPAXHHPAI@Z  # FUN_00ba2e50 migrated from s00ba2590 (verbatim, slice spelling)
+00ba2f20 ?Run_00ba2f20@W@@QAEXXZ  # W::Run_00ba2f20 migrated from s00ba2590 (verbatim, slice spelling)
+00ba2f90 ?Run_00ba2f90@W@@QAEPAXXZ  # W::Run_00ba2f90 migrated from s00ba2590 (verbatim, slice spelling)
 00ba30c0 eastl hashtable insert (relationship node)
 00ba31d0 eastl hashtable erase (relationship node)
 00ba3310 clear relationship hashnode sets
