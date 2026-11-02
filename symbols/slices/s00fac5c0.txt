@@ -6,6 +6,6 @@
 00fad040 ?CopyBoxElemsChecked@@YAXPBUBoxElem@@0PAU1@@Z  # CopyBoxElemsChecked migrated from s00fac5c0 (verbatim, slice spelling)
 00fad0a0 ?CopyBoxElems@@YAXPBUBoxElem@@0PAU1@@Z  # CopyBoxElems migrated from s00fac5c0 (verbatim, slice spelling)
 00fad0f0 ?CopyBoxElemsBackward@@YAXPBUBoxElem@@0PAU1@@Z  # CopyBoxElemsBackward migrated from s00fac5c0 (verbatim, slice spelling)
-00fad140 ?GetBBoxForFace@cTerrainSphereDecal@SP@@QAE_NIPAM@Z  # pdb_names SP::cTerrainSphereDecal::GetBBoxForFace; 0x14-byte face records at +0x80, copies the 4-float box of the matching face
-00fad1d0 ?DecalNode_UpdateBasis@@YAXPAUDecalNode@@@Z  # cdecl(DecalNode*): copies the +0x14 basis, replaces its third row with the unit +0x04 normal, rebuilds the two remaining rows from the more perpendicular one, sets flag 2 and bumps the +0x2 stamp
-00fad4f0 ?Destroy@DecalOwner@@QAEXXZ  # stores vtable 0x01491090, atomic release of the +0x128 record (count at +8), frees the +0x80 block, stores base vtable 0x013ef094
+00fad140 ?GetBBoxForFace@cTerrainSphereDecal_s00fa_c5c0@SP@@QAE_NIPAM@Z  # cTerrainSphereDecal_s00fa_c5c0::GetBBoxForFace migrated from s00fac5c0 (verbatim, slice spelling)
+00fad1d0 ?DecalNode_UpdateBasis@@YAXPAUDecalNode@@@Z  # DecalNode_UpdateBasis migrated from s00fac5c0 (verbatim, slice spelling)
+00fad4f0 ?Destroy@DecalOwner@@QAEXXZ  # DecalOwner::Destroy migrated from s00fac5c0 (verbatim, slice spelling)

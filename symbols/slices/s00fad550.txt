@@ -1,3 +1,4 @@
+00fad550 ?DispatchStaticDecal@cTerrainSphereDecal_s00fa_d550@@QAE_NHH@Z  # cTerrainSphereDecal_s00fa_d550::DispatchStaticDecal migrated from s00fad550 (verbatim, slice spelling)
 00fad730 ?Construct@cTerrainSphereDecal@@QAEPAU1@XZ  # cTerrainSphereDecal::Construct migrated from s00fad550 (verbatim, slice spelling)
 00fad930 ?DoGrow@DecalEntryVector@@QAEXPAUDecalEntry@@PBU2@@Z  # DecalEntryVector::DoGrow migrated from s00fad550 (verbatim, slice spelling)
 00fada70 ?push_back@DecalEntryVector@@QAEXABUDecalEntry@@@Z  # DecalEntryVector::push_back migrated from s00fad550 (verbatim, slice spelling)
