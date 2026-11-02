@@ -1,4 +1,4 @@
-// src/game/SPGonzago/SPCitizenBehaviorTree.cpp -- migrated from slice(s) s00d97420, s00d964a0, s00d95c40, s00d93fd0, s00d93230, s00d922f0, s00d91540, s00d90640 by tools/migrate/rewrite.py
+// src/game/SPGonzago/SPCitizenBehaviorTree.cpp -- migrated from slice(s) s00acc140, s00d97420, s00d964a0, s00d95c40, s00d93fd0, s00d93230, s00d922f0, s00d91540, s00d90640 by tools/migrate/rewrite.py
 // Object file: SPGonzago/SPCitizenBehaviorTree.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -22,6 +22,7 @@
 #include "SP/cViewer.h"
 #include <float.h>
 #include "SP/cAnimatingCreature.h"
+#include <string.h>
 
 // ---- items of slice s00d90640 begin (TODO(rewrite): local stubs, replace by canonical classes)
 #define PVN(n) virtual void pv##n();
@@ -42,6 +43,16 @@ struct behavior_stimuli_s00d9_0640 {
     void* GetAny();                                     // 0x00d997e0
 };
 }
+struct BehaviorStateOut {
+    int      m00;                                       // +0x00
+    float    mf04;                                      // +0x04
+    int      m08;                                       // +0x08
+    float    mf0C;                                      // +0x0c
+    uint8_t  m10;                                       // +0x10
+    uint8_t  mPad11[3];
+    float    mf14;                                      // +0x14
+    uint8_t  m18;                                       // +0x18
+};
 struct TickState  { int mMode; float mf4; };            // +0x00 / +0x04
 struct AdmireState { char mFlag; uint8_t pad0[3]; int mCount; };     // +0x00 / +0x04
 struct RubbleState { char mFlag; uint8_t pad0[3]; int mId; int mAnim; };  // +0x00 / +0x04 / +0x08
@@ -187,10 +198,11 @@ public:
     void FUN_00c0d0c0(int a, int b);                    // 0x00c0d0c0
 };
 void* GetCurrentGameMode();                             // 0x00b5b800
+struct cLocoWrapper { void FUN_00b45410(); };           // 0x00b45410
+cLocoWrapper* __stdcall FUN_00b3d310(void* p);          // 0x00b3d310
 // ---- items of slice s00d90640 end
 
 // unnamed retail callees and globals that name local stubs (address in the comment)
-extern EA::Random::RandomLinearCongruential_s00d9_0640 sMathRandom;  // 0x01601760
 
 // ---- items of slice s00d91540 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern "C" void* __cdecl SP_PlanetModel();                 // 0x00b3d350
@@ -286,6 +298,12 @@ struct PlanetModel_s00d9_22f0 {
     Vec3* DirectionToSurfacePosition(Vec3* out, const Vec3* pos);                               // 0x00b815a0
 };
 int   GetPlayerEmpireID();                                 // 0x01021090
+struct EffectMgr {                                         // 0x00b3d240 returns this
+    PV(0) PV(1) PV(2) PV(3) PV(4) PV(5) PV(6) PV(7) PV(8) PV(9) PV(10) PV(11) PV(12)
+    PV(13) PV(14) PV(15) PV(16) PV(17) PV(18) PV(19) PV(20) PV(21) PV(22) PV(23) PV(24) PV(25)
+    virtual void PlayEffect(uint32_t id, const Vec3* pos, const Vec3* dir);   // +0x68
+};
+EffectMgr* FUN_00b3d240();                                 // 0x00b3d240
 namespace EA {
 namespace Random {
 class RandomLinearCongruential_s00d9_22f0 {
@@ -312,6 +330,7 @@ struct AnimComponent {                                     // at creature + 0xb4
     AnimPlayer mPlayer;                                    // +0x08
 };
 struct TimedPoint { float mTime; Vec3 mPoint; };           // +0,+4,+8,+0xc
+struct WanderState { int mMode; int mFlag; };              // +0,+4
 struct DangerState {                                       // +0,+4,+8,+0x14
     float mf0;
     float mf4;
@@ -410,7 +429,6 @@ void RunFromDanger_ChooseDestination(Creature_s00d9_22f0* c, Vec3* cached, Vec3*
 // ---- items of slice s00d922f0 end
 
 // ---- items of slice s00d93230 begin (TODO(rewrite): local stubs, replace by canonical classes)
-extern "C" float __cdecl sqrtf(float);
 typedef double f64;
 #define VT(p) (*(void***)(p))
 struct cSub;
@@ -1190,6 +1208,50 @@ public:
 }
 // ---- items of slice s00d97420 end
 
+// ---- items of slice s00acc140 begin (TODO(rewrite): local stubs, replace by canonical classes)
+static void* vc(void* obj, int off) { return ((void**)*(void**)obj)[off / 4]; }
+bool  FUN_00acca00(int* vec, int* val);
+// ---- items of slice s00acc140 end
+
+// @ 0x00acca00
+bool FUN_00acca00(int* vec, int* val)
+{
+    int* p = (int*)*vec;
+    int* end = (int*)vec[1];
+    if (p != end) {
+        do {
+            if (*p == *val) {
+                if (p + 1 < end) {
+                    // shift left
+                    int* d = p;
+                    int* s = p + 1;
+                    for (; s < end; s++, d++) *d = *s;
+                }
+                vec[1] -= 4;
+                int* last = (int*)vec[1];
+                if (*last) ((void (__thiscall*)(void*))vc((void*)*last, 4))((void*)*last);
+                return 1;
+            }
+            p++;
+        } while (p != end);
+    }
+    return 0;
+}
+
+// @ 0x00d90ac0
+namespace SP {
+void FUN_00d90ac0(cSPCreatureCitizen_s00d9_0640* p, BehaviorStateOut* pOut)
+{
+    if (p->mf5E0 <= 1.5258789e-05f) {
+        FUN_00b3d310(&p->mLoco)->FUN_00b45410();
+        p->Flag8c();
+        pOut->mf0C = 10.0f;
+        pOut->mf14 = 1.5f;
+        pOut->m18 = 0;
+    }
+}
+}  // namespace SP
+
 // @ 0x00d90ce0
 namespace SP {
 bool FUN_00d90ce0(cSPCreatureCitizen_s00d9_0640* p)
@@ -1852,6 +1914,61 @@ bool FUN_00d921c0(void* p0, u32 a1, u32 a2, u32 flags, u32 a4, u32* out)
     ((Interrupt*)c)->Do(0x2481db0, 0xffffffff, 0);
     ((MoveTo*)c)->Do(2, &pos, 1.0f, *(f32*)0x147b9f0);
     return true;
+}
+
+// @ 0x00d922f0
+bool FUN_00d922f0(Creature_s00d9_22f0* c, int, int, uint32_t flags, int, WanderState* st)
+{
+    if ((flags & 2) != (uint32_t)st->mFlag) {
+        return 0;
+    }
+    if (st->mMode == 0 || st->mMode == 1) {
+        if (c->mLoco.IsNearGoal()) {
+            c->InterruptAnimation(0x2481de5, -1, 0);
+            st->mMode = 2;
+        }
+        return 1;
+    }
+
+    const Vec3* pos = c->mLoco.GetPosition();
+    Vec3 delta;
+    delta.x = c->mpOwner->mV138.x - pos->x;
+    delta.y = c->mpOwner->mV138.y - pos->y;
+    delta.z = c->mpOwner->mV138.z - pos->z;
+
+    Vec3 dir;
+    normalized_safe(&dir, &delta);
+
+    const Vec3* fwd = c->mLoco.GetForward(&delta);
+    if (fwd->y * dir.y + fwd->z * dir.z + fwd->x * dir.x < 0.7f) {
+        c->InterruptAnimation(0x2481db0, -1, 0);
+        c->MoveToPointAndFacingAtSpeed(2, c->mLoco.GetPosition(), &dir, 1.0f, 2.0f);
+        st->mMode = 1;
+        return 1;
+    }
+
+    StimulusSource* src = c->mpSourceB54;
+    if (src == 0) {
+        return 1;
+    }
+    int      iCount;
+    uint32_t iAnim;
+    src->GetTargetInfo((int*)&iAnim, 0, &iCount, 0);
+    if (iCount >= 1 || iAnim == 0x2481de5) {
+        if (c->mAnim->mPlayer.Play(0x20, 0) != 0) {
+            c->InterruptAnimation(0x2481dd7 + sMathRandom_s00d9_22f0.RandomUint32Uniform(3), -1, 0);
+            return 1;
+        }
+        if (c->mAnim->mPlayer.Play(0x40, 0) != 0) {
+            if (sMathRandom_s00d9_22f0.RandomDoubleUniform() < 0.1f) {
+                c->InterruptAnimation(0x2481dd4 + sMathRandom_s00d9_22f0.RandomUint32Uniform(3), -1, 0);
+            } else {
+                c->InterruptAnimation(0x2d5f9bf, -1, 0);
+                FUN_00b3d240()->PlayEffect(0x22941e7, c->mLoco.GetPosition(), &c->mpOwner->mV138);
+            }
+        }
+    }
+    return 1;
 }
 
 // @ 0x00d92560

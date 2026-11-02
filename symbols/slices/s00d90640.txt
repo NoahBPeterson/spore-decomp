@@ -1,7 +1,7 @@
 00d90640 ?FUN_00d90640@SP@@YAMPAVcSPCreatureCitizen_s00d9_0640@@PAX1I1PAD@Z  # FUN_00d90640 migrated from s00d90640 (verbatim, slice spelling)
 00d90950 ?FUN_00d90950@SP@@YAMPAVcSPCreatureCitizen_s00d9_0640@@PAX1I1PAD@Z  # FUN_00d90950 migrated from s00d90640 (verbatim, slice spelling)
 00d90a60 ?FUN_00d90a60@SP@@YAMPAVcSPCreatureCitizen_s00d9_0640@@@Z  # FUN_00d90a60 migrated from s00d90640 (verbatim, slice spelling)
-00d90ac0 FUN_00d90ac0  # warp-home activate
+00d90ac0 ?FUN_00d90ac0@SP@@YAXPAVcSPCreatureCitizen_s00d9_0640@@PAUBehaviorStateOut@@@Z  # FUN_00d90ac0 migrated from s00d90640 (verbatim, slice spelling)
 00d90b20 ?FUN_00d90b20@SP@@YA_NPAVcSPCreatureCitizen_s00d9_0640@@PAX1I1PAUBehaviorStateOut@@@Z  # FUN_00d90b20 migrated from s00d90640 (verbatim, slice spelling)
 00d90bb0 ?FUN_00d90bb0@SP@@YAMPAVcSPCreatureCitizen_s00d9_0640@@PAX1I1PAD@Z  # FUN_00d90bb0 migrated from s00d90640 (verbatim, slice spelling)
 00d90c40 ?FUN_00d90c40@SP@@YAXPAVcSPCreatureCitizen_s00d9_0640@@@Z  # FUN_00d90c40 migrated from s00d90640 (verbatim, slice spelling)

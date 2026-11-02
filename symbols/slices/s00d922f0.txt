@@ -1,4 +1,4 @@
-00d922f0 FUN_00d922f0  # Ghidra FUN; wander/ufo tick (flag gate, IsNearGoal mode transitions, random animation pick); not byte-exact
+00d922f0 ?FUN_00d922f0@@YA_NPAUCreature_s00d9_22f0@@HHIHPAUWanderState@@@Z  # FUN_00d922f0 migrated from s00d922f0 (verbatim, slice spelling)
 00d92560 ?FUN_00d92560@@YA_NPAUCreature_s00d9_22f0@@@Z  # FUN_00d92560 migrated from s00d922f0 (verbatim, slice spelling)
 00d92660 ?FUN_00d92660@@YA_NPAUCreature_s00d9_22f0@@HHHHPAH@Z  # FUN_00d92660 migrated from s00d922f0 (verbatim, slice spelling)
 00d92880 ?FUN_00d92880@@YA_NPAUCreature_s00d9_22f0@@HHHHPAH@Z  # FUN_00d92880 migrated from s00d922f0 (verbatim, slice spelling)

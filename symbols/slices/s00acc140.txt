@@ -1,4 +1,4 @@
-00accf80 SP::cCityVisualizer::SetupCultureStages                      # Ghidra symbol
 00acc390 SP::`anonymous namespace'::sGetClosestRare                   # PDB candidate (caller-scored)
 00acc800 SP::`anonymous namespace'::LoadSelector                      # PDB candidate (caller-scored)
-00acca00 spstl::remove_1st<eastl::vector<EA::AutoRefCount<SP::cSPCreatureCitizen>,eastl::sp_vector_allocator>,SP::cSPCreatureCitizen_*>  # Ghidra symbol
+00acca00 ?FUN_00acca00@@YA_NPAH0@Z  # FUN_00acca00 migrated from s00acc140 (verbatim, slice spelling)
+00accf80 SP::cCityVisualizer::SetupCultureStages                      # Ghidra symbol
