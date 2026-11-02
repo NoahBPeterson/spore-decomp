@@ -1,4 +1,10 @@
-# va  diff-bytes  reason
-007fdfa0 31 complete; SList allocator propagation; vcall schedule differs
-007fdfe0 49 complete; SetValue + SList allocator; schedule differs
-007fe330 34 complete; interpolator deleting-dtor; vtable/base-dtor schedule differs; equiv: FAIL (vtable stores not reproduced)
+# va diff reason
+007fdbc0 286 complete; Interp HandleMessage; message guards follow the base call, per-branch lazy field loads; register schedule differs (size 310 vs 299); equiv: PASS (399 valid, 60.9% coverage) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
+007fdd10 133 complete; Interp SetEnabled; base gate + owner coefficient arm differ only in schedule (size 159 vs 160); equiv: UNSUPPORTED (0/400 valid; the retail itself faults on every generated input) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
+007fde00 43 complete; SerItem vector load; loop/register schedule differs flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
+007fdfa0 31 complete; SList allocator propagation; vcall schedule differs flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
+007fdfe0 49 complete; SetValue + SList allocator; schedule differs flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
+007fe070 25 complete; State ctor; multi-base vtable store order differs; equiv: PASS (400 valid, 100.0% coverage) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
+007fe130 362 complete; State::Refresh; selector resolution arms schedule differs (size 471 vs 497); equiv: WEAK (355 valid, 56.6% coverage) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
+007fe390 11 complete; state deleting-dtor; vtable-store order preserved, only the [this+0x40] load is hoisted above the stores (scheduling-only); equiv PASS flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
+007fe3f0 188 complete; State::Activate; switch arms and COM interface casts differ only in schedule (size 664 vs 668); equiv: UNSUPPORTED (0/400 valid; the retail itself faults on every generated input) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
