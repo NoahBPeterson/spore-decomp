@@ -1,11 +1,16 @@
 005ad9a0 SP::cSPEditorManipulationInterpenetration::cSPEditorManipulationInterpenetration  # vtable 0x13f72bc slots match dev-build class; byte-exact
 005ada50 SP::cSPEditorManipulationInterpenetration::DoOnMouseDown  # vtable slot 6; same size as dev (113)
+005adb00 ?ClearSymmetricHighlights@cSPEditorManipulationLimb@SP@@QAEXXZ  # cSPEditorManipulationLimb::ClearSymmetricHighlights migrated from s005ad9a0 (verbatim, slice spelling)
 005adb20 ?OnMouseUp@cSPEditorManipulationLimb@SP@@QAE_NHMMH@Z  # cSPEditorManipulationLimb::OnMouseUp migrated from s005ad9a0 (verbatim, slice spelling)
-005addb0 SP::cSPEditorManipulationLimb::GetMaxLimbPlacementHeight  # returns model height * 0.95, inlined in RecalculateLimbMissPlane
+005addb0 ?GetMaxLimbPlacementHeight@cSPEditorManipulationLimb@SP@@QAEMXZ  # cSPEditorManipulationLimb::GetMaxLimbPlacementHeight migrated from s005ad9a0 (verbatim, slice spelling)
+005addf0 ?UpdateSymmetricJointPositions@cSPEditorManipulationLimb@SP@@QAEXXZ  # cSPEditorManipulationLimb::UpdateSymmetricJointPositions migrated from s005ad9a0 (verbatim, slice spelling)
+005adf10 ?CopyJointsToSymmetricLimbs@cSPEditorManipulationLimb@SP@@QAEXXZ  # cSPEditorManipulationLimb::CopyJointsToSymmetricLimbs migrated from s005ad9a0 (verbatim, slice spelling)
+005adfd0 ?Mirror@cSPEditorJointMirror_s005a_d9a0@SP@@QAEXPAVcSPEditorLimbJoint_s005a_d9a0@2@@Z  # cSPEditorJointMirror_s005a_d9a0::Mirror migrated from s005ad9a0 (verbatim, slice spelling)
 005ae0b0 ?DoOnMouseMove@cSPEditorManipulationLimb@SP@@QAE_NMMH@Z  # cSPEditorManipulationLimb::DoOnMouseMove migrated from s005ad9a0 (verbatim, slice spelling)
 005ae120 ?Shutdown@cSPEditorManipulationLimb@SP@@QAEXXZ  # cSPEditorManipulationLimb::Shutdown migrated from s005ad9a0 (verbatim, slice spelling)
-005ae1b0 SP::cSPEditorManipulationLimb::~cSPEditorManipulationLimb  # destroys mTries[400]
-005ae300 SP::cSPEditorManipulationLimb::RecalculateLimbMissPlane  # writes mLimbMissPlanePosition/Normal
+005ae1b0 ??1cSPEditorManipulationLimb@SP@@UAE@XZ  # cSPEditorManipulationLimb::~cSPEditorManipulationLimb migrated from s005ad9a0 (verbatim, slice spelling)
+005ae300 ?RecalculateLimbMissPlane@cSPEditorManipulationLimb@SP@@QAEXXZ  # cSPEditorManipulationLimb::RecalculateLimbMissPlane migrated from s005ad9a0 (verbatim, slice spelling)
 005ae480 ?DoOnMouseDown@cSPEditorManipulationLimb@SP@@QAE_NHMMH@Z  # cSPEditorManipulationLimb::DoOnMouseDown migrated from s005ad9a0 (verbatim, slice spelling)
-005ae610 SP::cSPEditorManipulationLimb::cSPEditorManipulationLimb  # sets vtable 0x13f7358
-005ae840 SP::cSPEditortLimbTry::operator=  # mLoc, mBadness, mDebugVals copy
+005ae610 ??0cSPEditorManipulationLimb@SP@@QAE@XZ  # cSPEditorManipulationLimb::cSPEditorManipulationLimb migrated from s005ad9a0 (verbatim, slice spelling)
+005ae750 ?RefreshJointLists@cSPEditorManipulationLimb@SP@@QAEXXZ  # cSPEditorManipulationLimb::RefreshJointLists migrated from s005ad9a0 (verbatim, slice spelling)
+005ae840 ??4cSPEditortLimbTry@SP@@QAEAAU01@ABU01@@Z  # cSPEditortLimbTry::operator= migrated from s005ad9a0 (verbatim, slice spelling)

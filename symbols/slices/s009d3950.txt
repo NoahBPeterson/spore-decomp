@@ -1,0 +1,3 @@
+009d40c0 ?adjust_heap@@YAXPAUSA_s009d_3950@@HHHU1@USAGreater@@@Z  # adjust_heap migrated from s009d3950 (verbatim, slice spelling)
+009d4230 ?pop_heap@@YAXPAUSA_s009d_3950@@0USAGreater@@@Z  # pop_heap migrated from s009d3950 (verbatim, slice spelling)
+009d42b0 ?FUN_009d42b0@AnimDyn@@QAEXPAUObj2@@@Z  # AnimDyn::FUN_009d42b0 migrated from s009d3950 (verbatim, slice spelling)

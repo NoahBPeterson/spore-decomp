@@ -1,0 +1,2 @@
+009d7b20 ?SortElems@@YAXPAUTElem@@0UCmpObj@@@Z  # SortElems migrated from s009d75b0 (verbatim, slice spelling)
+009d7d10 ?AddElem@TOwner@@QAEHPAXPBUV3@@PBUV4@@@Z  # TOwner::AddElem migrated from s009d75b0 (verbatim, slice spelling)

@@ -1,0 +1,3 @@
+009d46d0 ?UpdateOrbit@Cam@@QAEXPAUParams@@@Z  # Cam::UpdateOrbit migrated from s009d46d0 (verbatim, slice spelling)
+009d49b0 ?Update@Cam@@QAEXPAUParams@@HM@Z  # Cam::Update migrated from s009d46d0 (verbatim, slice spelling)
+009d52f0 ?UpdateSpin@Cam@@QAEXPAUParams@@MMMMMM@Z  # Cam::UpdateSpin migrated from s009d46d0 (verbatim, slice spelling)

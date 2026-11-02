@@ -1,0 +1,1 @@
+009d3840 ?GetTurnFactor@Locomotion@@QAEMPAUVec3@@@Z  # Locomotion::GetTurnFactor migrated from s009d29b0 (verbatim, slice spelling)

@@ -1,4 +1,4 @@
-005b0f80 SP::cSPEditorManipulationObject::cSPEditorManipulationObject  # vtable 013f73e4; mDeadZoneSize=2.0f
+005b0f80 ??0MObj@@QAE@XZ  # MObj::MObj migrated from s005b0f80 (verbatim, slice spelling)
 005b0fd0 ?Stub_005b0fd0@@YAXXZ  # Stub_005b0fd0 migrated from s005b0f80 (verbatim, slice spelling)
 005b1010 ?Stub_005b1010@@YAXXZ  # Stub_005b1010 migrated from s005b0f80 (verbatim, slice spelling)
 005b1080 ??0S80@@QAE@MMMMMM@Z  # S80::S80 migrated from s005b0f80 (verbatim, slice spelling)
