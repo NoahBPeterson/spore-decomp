@@ -1,1 +1,5 @@
 # va  diff-bytes  reason
+0062db30 118 FindPassableNeighbor: complete; orig keeps 'exclude' on stack (register allocation differs) flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+0062dc70 74 GetBestOpenNode: complete; orig re-reads vector end/begin each loop iteration, mine hoists flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+0062df10 242 ExpandNode: complete; orig loop pointer lives in the param slot, constant 1 held in ebx flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+0062e010 480 FindPath: complete; inlined grid lookup uses reciprocal multiply with negative stride, plus ExpandNode-style regalloc flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
