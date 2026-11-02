@@ -1,6 +1,9 @@
-00d32330 SP::cCreatureModeInputStrategy::UpdateAvatarGoalKeyboard  # PDB caller-scored candidate; body = WASD/auto-run/edge-turn goal steering, ends in UpdateAvatarGoal(false,true)
-00d2f2a0 GetScenarioTurnSpeed  # static helper (avatar in eax): exp ease from 50 deg/s at rest to 20 at |max(standard,desired speed)|*0.25; compiled byte-identical as a same-TU static
+008d2fb0 IsModifierKeyDown  # maps 0x3e8..0x3ec to virtual keys, GetKeyState high bit
+00c423c0 ?GetPosition@cSpatialObject@SP@@UBEABUcSPVector3@@XZ  # SP::cSpatialObject::GetPosition (callee of s00d32330, named from the dev publics; slice address comment)
 00d2eab0 IsStrafeLeftDown  # key 5, or modifier 0x3ea + key 3
 00d2eaf0 IsStrafeRightDown  # key 6, or modifier 0x3ea + key 4
-008d2fb0 IsModifierKeyDown  # maps 0x3e8..0x3ec to virtual keys, GetKeyState high bit
 00d2ee70 GetCameraMoveVectors  # cdecl (Vector3* forward, Vector3* right) from the avatar up vector
+00d2f2a0 GetScenarioTurnSpeed  # static helper (avatar in eax): exp ease from 50 deg/s at rest to 20 at |max(standard,desired speed)|*0.25; compiled byte-identical as a same-TU static
+00d32330 SP::cCreatureModeInputStrategy::UpdateAvatarGoalKeyboard  # PDB caller-scored candidate; body = WASD/auto-run/edge-turn goal steering, ends in UpdateAvatarGoal(false,true)
+00d32df0 ?UpdateInput@cCreatureModeInputStrategy_s00d3_2330@SP@@QAEXPAVcGameInputManager_s00d3_2330@2@I@Z  # cCreatureModeInputStrategy_s00d3_2330::UpdateInput migrated from s00d32330 (verbatim, slice spelling)
+00d32fb0 ?Update@cCreatureModeInputStrategy_s00d3_2330@SP@@QAEXI@Z  # cCreatureModeInputStrategy_s00d3_2330::Update migrated from s00d32330 (verbatim, slice spelling)

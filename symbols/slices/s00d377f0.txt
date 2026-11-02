@@ -1,3 +1,6 @@
+00d377f0 ?CleanUp@cScenarioEditModeInputStrategy@@QAEXXZ  # cScenarioEditModeInputStrategy::CleanUp migrated from s00d377f0 (verbatim, slice spelling)
+00d37970 ?Construct@cScenarioEditModeInputStrategy@@QAEPAV1@XZ  # cScenarioEditModeInputStrategy::Construct migrated from s00d377f0 (verbatim, slice spelling)
+00d37b60 ?Destroy@cScenarioEditModeInputStrategy@@QAEXXZ  # cScenarioEditModeInputStrategy::Destroy migrated from s00d377f0 (verbatim, slice spelling)
 00d37cf0 ?Init@cSPCreatureMissionManager@@QAEPAV1@XZ  # cSPCreatureMissionManager::Init migrated from s00d377f0 (verbatim, slice spelling)
 00d37d80 ?Write@cSPCreatureMissionManager@@QAE_NPAX@Z  # cSPCreatureMissionManager::Write migrated from s00d377f0 (verbatim, slice spelling)
 00d37e10 ?Read@cSPCreatureMissionManager@@QAE_NPAX@Z  # cSPCreatureMissionManager::Read migrated from s00d377f0 (verbatim, slice spelling)

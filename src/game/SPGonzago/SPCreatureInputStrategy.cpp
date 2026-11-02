@@ -1,4 +1,4 @@
-// src/game/SPGonzago/SPCreatureInputStrategy.cpp -- migrated from slice(s) s00d366c0, s00d35190, s00d34f90, s00d31a70, s00d311b0, s00d30830, s00d2f940, s00d2ec50, s00d2dd20, s00b1a7b0 by tools/migrate/rewrite.py
+// src/game/SPGonzago/SPCreatureInputStrategy.cpp -- migrated from slice(s) s00d377f0, s00d32fd0, s00d32330, s00d366c0, s00d35190, s00d34f90, s00d31a70, s00d311b0, s00d30830, s00d2f940, s00d2ec50, s00d2dd20, s00b1a7b0 by tools/migrate/rewrite.py
 // Object file: SPGonzago/SPCreatureInputStrategy.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -20,6 +20,12 @@
 #include "SP/cSPTimer.h"
 #include "SP/cMWModel.h"
 #include "SP/cRenderer.h"
+#include "SP/tNavigationGoal.h"
+#include <new>
+#include "cSPMatrix3.h"
+#include "cSPTransform.h"
+#include "cSPVector3.h"
+#include "SP/cGonzagoTimer.h"
 
 // unnamed retail callees and globals (address in the comment)
 extern "C" void* __cdecl memcpy(void*, const void*, unsigned int);
@@ -718,7 +724,12 @@ public:
 // ---- items of slice s00d31a70 end
 
 // ---- items of slice s00d34f90 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern int     g_modelCreateArg;  // 0x0169e1c8  third model-create argument
 struct Vtbl { void* mSlots[0x200 / 4]; };
+typedef void* (__thiscall *VFn_pi)(void*, int);
+typedef void* (__thiscall *VFn_piii)(void*, int, int, int);
+typedef void  (__thiscall *VFn_v)(void*);
+typedef void  (__thiscall *VFn_vpi)(void*, void*, int);
 typedef void  (__thiscall *VFn_vvc)(void*, void*, uint8_t);
 #define VSLOT(o, n) (((Vtbl*)*(void**)(o))->mSlots[(n) / 4])
 struct Vector3_s00d3_4f90 {
@@ -732,7 +743,10 @@ struct Quaternion {
     Quaternion() {}
     Quaternion(const Quaternion& q) { x = q.x; y = q.y; z = q.z; w = q.w; }
 };
+extern Vector3_s00d3_4f90 sZeroVector;       // 0x0169e17c  Vector3::ZERO
+extern Matrix3 sIdentityMatrix3;  // 0x0169e1cc  Matrix3::IDENTITY
 struct IGameInputManager;
+void*              __cdecl ModelManager();         // 0x0067dd80
 struct IModelWorld;
 struct Transform {
     uint16_t mFlags;      // 0x00
@@ -793,7 +807,7 @@ public:
     void CleanUpCreatureHitBoxes();                        // 0x00d34230
     void FUN_00d32df0(IGameInputManager* pInput, int arg); // 0x00d32df0
 
-    void FUN_00d34f90(int arg);
+    void FUN_00d34f90(int arg);  // 0x00d34f90 (cCreatureModeInputStrategy::FUN_00d34f90)
     void InitSubstate();
 };
 struct Compare7 {
@@ -1425,6 +1439,502 @@ public:
     void InitSubstate();                                            // 0x00d35030
 };
 // ---- items of slice s00d366c0 end
+
+// ---- items of slice s00d32330 begin (TODO(rewrite): local stubs, replace by canonical classes)
+namespace SP {
+struct Vector3_s00d3_2330 {
+  float x, y, z;
+  Vector3_s00d3_2330() {}
+  Vector3_s00d3_2330(float ax, float ay, float az) : x(ax), y(ay), z(az) {}
+  Vector3_s00d3_2330(const Vector3_s00d3_2330& v) : x(v.x), y(v.y), z(v.z) {}
+  void Set(const Vector3_s00d3_2330& v) { x = v.x; y = v.y; z = v.z; }
+  Vector3_s00d3_2330 operator-() const { return Vector3_s00d3_2330(-x, -y, -z); }
+  Vector3_s00d3_2330 operator+(const Vector3_s00d3_2330& v) const { return Vector3_s00d3_2330(x + v.x, y + v.y, z + v.z); }
+  Vector3_s00d3_2330 operator-(const Vector3_s00d3_2330& v) const { return Vector3_s00d3_2330(x - v.x, y - v.y, z - v.z); }
+  Vector3_s00d3_2330 operator*(float f) const { return Vector3_s00d3_2330(x * f, y * f, z * f); }
+  friend Vector3_s00d3_2330 operator*(float f, const Vector3_s00d3_2330& v) { return Vector3_s00d3_2330(v.x * f, v.y * f, v.z * f); }
+  Vector3_s00d3_2330& operator+=(const Vector3_s00d3_2330& v) { x += v.x; y += v.y; z += v.z; return *this; }
+  Vector3_s00d3_2330& operator*=(float f) { x *= f; y *= f; z *= f; return *this; }
+};
+}
+namespace SP {
+class cSpatialObject_s00d3_2330;
+}
+namespace SP {
+class cLocomotiveObject_s00d3_2330 {
+public:
+  virtual void vf00();
+  virtual void vf04();
+  virtual void vf08();
+  virtual void vf0c();
+  virtual void vf10();
+  virtual void vf14();
+  virtual void vf18();
+  virtual void vf1c();
+  virtual void vf20();
+  virtual void vf24();
+  virtual void vf28();
+  virtual const Vector3_s00d3_2330& GetPosition();              // 0x2c
+  virtual void vf30();
+  virtual void vf34();
+  virtual void vf38();
+  virtual void vf3c();
+  virtual void vf40();
+  virtual void vf44();
+  virtual void vf48();
+  virtual void vf4c();
+  virtual void vf50();
+  virtual void vf54();
+  virtual void vf58();
+  virtual Vector3_s00d3_2330 GetDirection();                     // 0x5c
+  virtual void vf60();
+  virtual void vf64();
+  virtual void vf68();
+  virtual void vf6c();
+  virtual void vf70();
+  virtual void vf74();
+  virtual void vf78();
+  virtual void vf7c();
+  virtual void vf80();
+  virtual void vf84();
+  virtual void vf88();
+  virtual void vf8c();
+  virtual void vf90();
+  virtual void vf94();
+  virtual void vf98();
+  virtual void vf9c();
+  virtual void vfa0();
+  virtual void vfa4();
+  virtual void vfa8();
+  virtual void vfac();
+  virtual void vfb0();
+  virtual void vfb4();
+  virtual void vfb8();
+  virtual void vfbc();
+  virtual void vfc0();
+  virtual void vfc4();
+  virtual float GetDesiredSpeed();                    // 0xc8
+  virtual float GetStandardSpeed();                   // 0xcc
+  virtual void vfd0();
+  virtual void vfd4();
+  virtual void vfd8();
+  virtual void RequestMove(const cLocomotionRequest& request);   // 0xdc
+  const Vector3_s00d3_2330& GetVelocity();                       // 0x00d20610
+  cSpatialObject_s00d3_2330* GetSpatialState();                  // 0x00c41ec0
+};
+}
+namespace SP {
+class cSpatialObject_s00d3_2330 {
+public:
+  const Vector3_s00d3_2330* GetPosition();      // 0x00c423c0
+  char pad00[0x5c];
+  void* mpTarget;                    // +0x5c
+};
+}
+namespace SP {
+struct cBehaviorTreeData_s00d3_2330 {
+  char pad[0x1c8];
+  uint64_t mFlags;   // +0x1c8
+};
+}
+namespace SP {
+struct cCombatant_s00d3_2330;
+}
+namespace SP {
+struct cCreatureAnimal_s00d3_2330 {
+  void SetCreatureTarget(cCombatant_s00d3_2330* target, bool b, int intention) {
+    ((void(__thiscall*)(void*, cCombatant_s00d3_2330*, bool, int))VFUNC(this, 0x84))(this, target, b, intention);
+  }
+  cCreatureAnimal_s00d3_2330* GetTargetAsCreature();                                         // 0x00c0ee70
+  void PlayAnimation(uint64_t flags, float range, int a, int b, int c, int d);    // 0x00c03190
+
+  char pad0[0xc0];
+  cLocomotiveObject_s00d3_2330 mLoco;            // +0xc0
+  char padc4[0x110 - 0xc4];
+  uint32_t mf110;                     // +0x110
+  char pad114[0x137 - 0x114];
+  bool mb137;                         // +0x137
+  char pad138[0xb4c - 0x138];
+  cBehaviorTreeData_s00d3_2330* mpBehavior;      // +0xb4c
+  char padb50[0xb5c - 0xb50];
+  bool mbB5C;                         // +0xb5c
+  bool mbB5D;
+  bool mbDead;                        // +0xb5e
+};
+}
+namespace SP {
+class cGameNounManager_s00d3_2330 { public: cCreatureAnimal_s00d3_2330* GetAvatar(); };   // 0x00b1fdb0
+}
+namespace SP {
+class cGameInputManager_s00d3_2330 {
+public:
+  virtual void vf00();
+  virtual void vf04();
+  virtual void vf08();
+  virtual void vf0c();
+  virtual void vf10();
+  virtual void vf14();
+  virtual bool IsKeyDown(int key);          // +0x18
+  virtual void vf1c();
+  virtual void vf20();
+  virtual void vf24();
+  virtual void vf28();
+  virtual void vf2c();
+  virtual void vf30();
+  virtual void* GetInputDevice();           // +0x34
+};
+}
+namespace SP {
+cGameNounManager_s00d3_2330* NounManager_s00d3_2330();              // 0x00b3d300
+}
+namespace SP {
+cGameInputManager_s00d3_2330* GameInputManager_s00d3_2330();        // 0x00b3d250
+}
+namespace SP {
+extern bool g_bLastAutoRun;              // 0x0169e37d
+}
+namespace SP {
+extern bool g_bKeyboardTurning;          // 0x0169e37f
+}
+namespace SP {
+extern bool g_bKeyboardMoving;           // 0x0169e380
+}
+namespace SP {
+extern char g_KeyboardGoalActive;        // 0x0169e381
+}
+namespace SP {
+struct cSPTimer_s00d3_2330 {
+  char mState[0x20];
+  bool IsRunning();                            // 0x00feba90
+};
+}
+namespace SP {
+class cAvatarMarker {
+public:
+  virtual void vf00();
+  virtual void Release();                      // +0x04
+  virtual void vf08();
+  virtual void Activate(bool bEnable);         // +0x0c
+};
+}
+namespace SP {
+class cGoalUser {
+public:
+  char pad00[0x314];
+  bool mb314;                                  // +0x314
+};
+}
+namespace SP {
+class cScenario {
+public:
+  virtual void vf00();
+  virtual void vf04();
+  virtual void vf08();
+  virtual cGoalUser* GetProperty(uint32_t id);  // +0x0c
+};
+}
+namespace SP {
+class cGameModeHost {
+public:
+virtual void vf00();
+virtual void vf04();
+virtual void vf08();
+virtual void vf0c();
+virtual void vf10();
+virtual void vf14();
+virtual void vf18();
+virtual void vf1c();
+virtual void vf20();
+virtual void vf24();
+virtual void vf28();
+virtual void vf2c();
+virtual void vf30();
+virtual void vf34();
+  virtual cScenario* GetActiveScenario();       // +0x38
+};
+}
+namespace SP {
+class cApp_s00d3_2330 {
+public:
+virtual void vf00();
+virtual void vf04();
+virtual void vf08();
+virtual void vf0c();
+virtual void vf10();
+virtual void vf14();
+virtual void vf18();
+virtual void vf1c();
+virtual void vf20();
+virtual void vf24();
+virtual void vf28();
+virtual void vf2c();
+virtual void vf30();
+virtual void vf34();
+virtual void vf38();
+virtual void vf3c();
+virtual void vf40();
+virtual void vf44();
+virtual void vf48();
+virtual void vf4c();
+  virtual cGameModeHost* GetGameModeHost();     // +0x50
+};
+}
+namespace SP {
+cApp_s00d3_2330* App_s00d3_2330();                                   // 0x0067dd10
+}
+namespace SP {
+extern bool g_bLookModeActive;       // 0x0169e37e  tracks the 0x16 ('V') key mode
+}
+namespace SP {
+extern bool g_bAcceptKeyboardInput;  // 0x0169e170  gates the keyboard goal steering
+}
+namespace SP {
+class cCreatureModeInputStrategy_s00d3_2330 {
+public:
+  void UpdateInput(cGameInputManager_s00d3_2330* pInput, uint32_t dtBits);   // 0x00d32df0
+  void Update(uint32_t dtBits);                                   // 0x00d32fb0
+  void UpdateAvatarGoalKeyboard();                         // 0x00d32330
+  void UpdateAvatarGoal(bool a, bool b);                   // 0x00d31a70
+
+  char pad0[0x54];
+  bool mbEnabled;              // +0x54
+  char pad55[0xa0 - 0x55];
+  cSPTimer_s00d3_2330 mUpdateTimer;       // +0xa0
+  bool mbUpdateAvatarGoals;    // +0xc0
+  bool mbAllowWASDGoals;       // +0xc1
+  char padc2[0xe0 - 0xc2];
+  cAvatarMarker* mpMarker;     // +0xe0
+  Vector3_s00d3_2330 mLastMarkerPos;      // +0xe4
+};
+}
+// ---- items of slice s00d32330 end
+
+// ---- items of slice s00d32fd0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+namespace SP {
+class cSPTimer_s00d3_2fd0 { public:
+  bool IsRunning();   // 0x00feba90
+  void Start();       // 0x00bc30f0
+  uint32_t mData[8];
+};
+}
+namespace SP {
+struct Command {
+  void Init();               // 0x00b63890
+  char mData[0x20];
+};
+}
+namespace SP {
+struct CommandMap {
+  void AddCommand(uint32_t id, Command* command, bool flag);   // 0x00ba8420
+  char mStorage[0x34];
+};
+}
+namespace SP {
+class cCreatureModeInputStrategy_s00d3_2fd0 {
+public:
+  void InteractWithObject(void* obj);   // 0x00d32fd0
+  void UpdateAvatarGoal(bool a, bool b);   // 0x00d31a70
+  void RegisterCommandHandlers();       // 0x00d33c30
+
+  char pad0[0x6c];
+  CommandMap mCommandMap;    // +0x6c
+  cSPTimer_s00d3_2fd0 mMouseDownTime;   // +0xa0
+  bool mbMoveOnRelease;      // +0xc0
+  bool mbMouseMoved;         // +0xc1
+  char padc2[0x106 - 0xc2];
+  bool mbHoldMove;           // +0x106
+};
+}
+namespace SP {
+struct SortRef {
+  void* mpObject;                    // +0x00
+};
+}
+namespace SP {
+struct SortCompare {
+  float mFields[7];                  // +0x00 .. +0x18
+  bool Less(const SortRef& a, const SortRef& b);   // 0x00d2f3c0
+};
+}
+namespace SP {
+static void AddRefRaw(void* p) {
+  if (p)
+    ((void (__thiscall*)(void*))((void**)p)[0xbc / 4])(p);
+}
+}
+namespace SP {
+static void ReleaseRaw(void* p) {
+  if (p)
+    ((void (__thiscall*)(void*))((void**)p)[0xc0 / 4])(p);
+}
+}
+namespace SP {
+static void AssignSortRef(SortRef& dst, void* src) {
+  if (dst.mpObject != src) {
+    AddRefRaw(src);
+    void* old = dst.mpObject;
+    dst.mpObject = src;
+    ReleaseRaw(old);
+  }
+}
+}
+namespace SP {
+static void SwapSortRefs(SortRef& a, SortRef& b) {
+  if (a.mpObject == b.mpObject)
+    return;
+  void* oldA = a.mpObject;
+  void* oldB = b.mpObject;
+  AddRefRaw(oldB);
+  a.mpObject = oldB;
+  ReleaseRaw(oldA);
+  AddRefRaw(oldA);
+  b.mpObject = oldA;
+  ReleaseRaw(oldB);
+}
+}
+namespace SP {
+static void AdjustHeap(SortRef* first, int hole, int len, void* value, SortCompare& comp) {
+  SortRef v;
+  v.mpObject = value;
+  int child = hole * 2 + 2;
+  while (child < len) {
+    if (comp.Less(first[child], first[child - 1]))
+      --child;
+    if (!comp.Less(v, first[child]))
+      break;
+    AssignSortRef(first[hole], first[child].mpObject);
+    hole = child;
+    child = hole * 2 + 2;
+  }
+  if (child == len) {
+    if (comp.Less(v, first[child - 1])) {
+      AssignSortRef(first[hole], first[child - 1].mpObject);
+      hole = child - 1;
+    }
+  }
+  AssignSortRef(first[hole], value);
+}
+}
+namespace SP {
+static SortRef* MedianOfThree(SortRef* a, SortRef* b, SortRef* c, SortCompare& comp) {
+  if (comp.Less(*b, *a)) {
+    if (comp.Less(*c, *b))
+      return b;
+    return comp.Less(*c, *a) ? c : a;
+  }
+  if (comp.Less(*c, *a))
+    return a;
+  return comp.Less(*c, *b) ? c : b;
+}
+}
+namespace SP {
+static SortRef* Partition(SortRef* first, SortRef* last, SortCompare& comp) {
+  SortRef* mid = first + (last - first) / 2;
+  SortRef* pivot = MedianOfThree(first, mid, last - 1, comp);
+  SwapSortRefs(*pivot, *(last - 1));
+  SortRef* p = last - 1;
+  SortRef* i = first;
+  for (SortRef* j = first; j < p; ++j) {
+    if (comp.Less(*j, *p)) {
+      SwapSortRefs(*i, *j);
+      ++i;
+    }
+  }
+  SwapSortRefs(*i, *p);
+  return i;
+}
+}
+// ---- items of slice s00d32fd0 end
+
+// ---- items of slice s00d377f0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C" void* __cdecl X_RBTreeIncrement(void*);             // 0x00921580
+extern "C" void  __cdecl X_FUN_00f47380(void*);                // 0x00f47380  operator_delete
+struct cSPVector3_s00d3_77f0 { float x, y, z; };
+typedef void  (__thiscall *FnV0)(void*);
+typedef void  (__thiscall *FnVI0)(void*, int);
+static inline void** VTBL(void* p) { return *(void***)p; }
+extern "C" void  __cdecl X_RemoveHandler(void*, u32, u32, u32, u32);         // 0x00571db0
+extern cSPVector3_s00d3_77f0 g_vDefault_169e17c;      // 0x00169e17c   default (x,y,z) copied twice in the ctor
+struct ModelVec {                          // eastl vector<AutoRefCount<cMWModel>>
+    void* mpBegin;                         // +0x00
+    void* mpEnd;                           // +0x04
+    void* mpCapacity;                      // +0x08
+    void  DoDestroyValues(void*, void*);   // 0x005f3680
+};
+struct RBTree {                            // eastl int-keyed rbtree  (0x18 bytes)
+    void* mParent;                         // +0x00
+    void* mSelf;                           // +0x04
+    void* mEnd;                            // +0x08
+    void* mCount;                          // +0x0c
+    u8    mFlag;                           // +0x10
+    u32   mField14;                        // +0x14
+    void FUN_b1b830(void* value);          // 0x00b1b830
+    void FUN_e4b990(void* value);          // 0x00e4b990
+    void DoNukeSubtree(void* node);        // 0x009a9600
+};
+struct cGonzagoTimer {
+    u32 mData[8];
+    void Ctor();                           // 0x00b63890
+    void Dtor();                           // 0x00b638b0
+};
+class cCreatureModeInputStrategy_s00d3_77f0 {
+public:
+    void CleanUpCreatureHitBoxes();        // 0x00d34230
+};
+class cScenarioEditModeInputStrategy : public cCreatureModeInputStrategy_s00d3_77f0 {
+public:
+    void*  mpVtbl;                         // +0x00
+    RBTree mTree4;                         // +0x04
+    u32    mField1c;                       // +0x1c
+    RBTree mTree20;                        // +0x20
+    u32    mField38;                       // +0x38
+    void*  mpSubVtbl3c;                    // +0x3c
+    u32    mField40;                       // +0x40
+    void*  mpSubVtbl44;                    // +0x44
+    void*  mpSubVtbl48;                    // +0x48
+    void*  mpSubVtbl4c;                    // +0x4c
+    u32    mField50;                       // +0x50
+    u8     mFlag54;                        // +0x54
+    u8     mPad55[3];                      // +0x55
+    u32    mField58;                       // +0x58
+    u32    mField5c;                       // +0x5c
+    u32    mField60;                       // +0x60
+    u32    mField64;                       // +0x64
+    u32    mField68;                       // +0x68
+    RBTree mTree6c;                        // +0x6c
+    u32    mField84;                       // +0x84
+    void*  mpHandler88;                    // +0x88
+    u32    mHandler8c;                     // +0x8c
+    u32    mHandler90;                     // +0x90
+    u32    mHandler94;                     // +0x94
+    u32    mHandler98;                     // +0x98
+    u32    mField9c;                       // +0x9c
+    cGonzagoTimer mTimerA0;                // +0xa0
+    u8     mFlagC0;                        // +0xc0
+    u8     mFlagC1;                        // +0xc1
+    u8     mPadC2[2];                      // +0xc2
+    void*  mpObjC4;                        // +0xc4
+    cSPVector3_s00d3_77f0 mVecC8;                     // +0xc8
+    cSPVector3_s00d3_77f0 mVecD4;                     // +0xd4
+    void*  mpObjE0;                        // +0xe0
+    u32    mFieldE4;                       // +0xe4
+    u32    mFieldE8;                       // +0xe8
+    u32    mFieldEc;                       // +0xec
+    void*  mpObjF0;                        // +0xf0
+    void*  mpObjF4;                        // +0xf4
+    u32    mFieldF8;                       // +0xf8
+    u8     mFlagFc;                        // +0xfc
+    u8     mPadFd[3];                      // +0xfd
+    float  mFloat100;                      // +0x100
+    u8     mFlag104;                       // +0x104
+    u8     mFlag105;                       // +0x105
+    u8     mFlag106;                       // +0x106
+public:
+    void  CleanUp();                                    // 0x00d377f0
+    cScenarioEditModeInputStrategy* Construct();        // 0x00d37970
+    void  Destroy();                                    // 0x00d37b60
+};
+// ---- items of slice s00d377f0 end
 
 // @ 0x00b1b410
 void cStateMachineHost::LoadStateMachine(const char* name)
@@ -2134,6 +2644,153 @@ bool cCreatureModeInputStrategy_s00d3_1a70::UpdateAvatarGoal(bool mouseMode, boo
 }
 }  // namespace SP
 
+// @ 0x00d32df0
+namespace SP {
+void cCreatureModeInputStrategy_s00d3_2330::UpdateInput(cGameInputManager_s00d3_2330* pInput, uint32_t dtBits)
+{
+  if (mbEnabled) {
+    cCreatureAnimal_s00d3_2330* avatar = NounManager_s00d3_2330()->GetAvatar();
+    if (avatar != 0 && !pInput->IsKeyDown(0x16))
+      g_bLookModeActive = false;
+
+    void* pDevice = GameInputManager_s00d3_2330()->GetInputDevice();
+    cScenario* pScenario = App_s00d3_2330()->GetGameModeHost()->GetActiveScenario();
+    cGoalUser* pGoal = pScenario != 0 ? pScenario->GetProperty(0x2a7ecd2) : 0;
+    if ((pDevice == 0 || (pGoal != 0 && pGoal->mb314)) && g_bAcceptKeyboardInput)
+      UpdateAvatarGoalKeyboard();
+
+    if (mUpdateTimer.IsRunning()) {
+      UpdateAvatarGoal(true, false);
+      if (g_bAcceptKeyboardInput)
+        UpdateAvatarGoalKeyboard();
+    }
+
+    if (mpMarker != 0) {
+      bool bLeft = true;
+      cSpatialObject_s00d3_2330* pSpatial = avatar->mLoco.GetSpatialState();
+      if (pSpatial->mpTarget != 0) {
+        const Vector3_s00d3_2330* pPos = pSpatial->GetPosition();
+        float dx = pPos->x - mLastMarkerPos.x;
+        float dz = pPos->z - mLastMarkerPos.z;
+        float dy = pPos->y - mLastMarkerPos.y;
+        bLeft = dx * dx + dz * dz + dy * dy > 1.0f;
+      }
+      if (bLeft) {
+        mpMarker->Activate(true);
+        if (mpMarker != 0) {
+          cAvatarMarker* pMarker = mpMarker;
+          mpMarker = 0;
+          pMarker->Release();
+        }
+      }
+    }
+  } else {
+    g_bLastAutoRun = false;
+    g_bAutoRun = false;
+    g_bLookModeActive = false;
+    g_KeyboardGoalActive = 0;
+    g_bKeyboardTurning = false;
+    g_bKeyboardMoving = false;
+  }
+
+  if (!mbAllowWASDGoals && !pInput->IsKeyDown(0x16) && !pInput->IsKeyDown(1) &&
+      !pInput->IsKeyDown(2))
+    mbAllowWASDGoals = true;
+}
+}  // namespace SP
+
+// @ 0x00d32fb0
+namespace SP {
+void cCreatureModeInputStrategy_s00d3_2330::Update(uint32_t dtBits)
+{
+  cGameInputManager_s00d3_2330* pInput = GameInputManager_s00d3_2330();
+  if (pInput != 0)
+    UpdateInput(pInput, dtBits);
+}
+}  // namespace SP
+
+// @ 0x00d33930
+namespace SP {
+void __cdecl MakeHeap(SortRef* first, SortRef* last, SortCompare comp)
+{
+  int count = (int)(last - first);
+  if (count < 2)
+    return;
+  for (int hole = (count - 2) / 2; hole >= 0; --hole) {
+    void* value = first[hole].mpObject;
+    AddRefRaw(value);
+    AdjustHeap(first, hole, count, value, comp);
+    ReleaseRaw(value);
+  }
+}
+}  // namespace SP
+
+// @ 0x00d339d0
+namespace SP {
+void __cdecl SortHeap(SortRef* first, SortRef* last, SortCompare comp)
+{
+  while (last - first > 1) {
+    --last;
+    void* value = last->mpObject;
+    AddRefRaw(value);
+    AssignSortRef(*last, first->mpObject);
+    AssignSortRef(*first, value);
+    ReleaseRaw(value);
+    AdjustHeap(first, 0, (int)(last - first), first->mpObject, comp);
+  }
+}
+}  // namespace SP
+
+// @ 0x00d33a60
+namespace SP {
+void __cdecl PartialSort(SortRef* first, SortRef* middle, SortRef* last, SortCompare comp)
+{
+  MakeHeap(first, middle, comp);
+  for (SortRef* i = middle; i < last; ++i) {
+    if (comp.Less(*i, *first)) {
+      void* value = i->mpObject;
+      AddRefRaw(value);
+      AssignSortRef(*i, first->mpObject);
+      AssignSortRef(*first, value);
+      ReleaseRaw(value);
+      AdjustHeap(first, 0, (int)(middle - first), first->mpObject, comp);
+    }
+  }
+  SortHeap(first, middle, comp);
+}
+}  // namespace SP
+
+// @ 0x00d33c30
+namespace SP {
+void cCreatureModeInputStrategy_s00d3_2fd0::RegisterCommandHandlers()
+{
+  Command* cmd16 = (Command*)::operator new(sizeof(Command));
+  cmd16->Init();
+  mCommandMap.AddCommand(0x16, cmd16, false);
+
+  Command* cmd18 = (Command*)::operator new(sizeof(Command));
+  cmd18->Init();
+  mCommandMap.AddCommand(0x18, cmd18, false);
+}
+}  // namespace SP
+
+// @ 0x00d33ce0
+namespace SP {
+void __cdecl IntrosortLoop(SortRef* first, SortRef* last, int depth, SortCompare comp)
+{
+  while (last - first > 28) {
+    if (depth == 0) {
+      PartialSort(first, last, last, comp);
+      return;
+    }
+    --depth;
+    SortRef* pivot = Partition(first, last, comp);
+    IntrosortLoop(pivot + 1, last, depth, comp);
+    last = pivot;
+  }
+}
+}  // namespace SP
+
 // @ 0x00d34f90
 void cCreatureModeInputStrategy_s00d3_4f90::FUN_00d34f90(int arg)
 {
@@ -2149,6 +2806,42 @@ void cCreatureModeInputStrategy_s00d3_4f90::FUN_00d34f90(int arg)
 void FUN_00d34fc0(void* first, void* last, Compare7 compare)
 {
     FUN_00d340d0(first, last, compare);
+}
+
+// @ 0x00d35030
+void cCreatureModeInputStrategy_s00d3_4f90::InitSubstate()
+{
+    MWModelVector& hitBoxes = mCreatureHitBoxes;
+
+    if (hitBoxes.mpEnd - hitBoxes.mpBegin)
+        CleanUpCreatureHitBoxes();
+
+    void* mm = ModelManager();
+    void* pWorld = ((VFn_pi)VSLOT(mm, 0x1c))(mm, 0xeb9968);
+    if (pWorld)
+        ((VFn_v)VSLOT(pWorld, 0))(pWorld);
+
+    hitBoxes.resize(5);
+
+    size_t count = hitBoxes.mpEnd - hitBoxes.mpBegin;
+    for (size_t i = 0; i < count; i++) {
+        if (hitBoxes.mpBegin[i].get() == 0) {
+            hitBoxes.mpBegin[i] =
+                (cMWModel*)((VFn_piii)VSLOT(pWorld, 0xc))(pWorld, 0x2e81370,
+                                                          g_modelCreateArg, 0x10);
+            cMWModel* model = hitBoxes.mpBegin[i].get();
+            model->mTransform.mRotation = sIdentityMatrix3;
+            model->mTransform.mScale = 1.0f;
+            model->mTransform.mOffset = sZeroVector;
+            model->mTransform.mFlags = 0;
+            model->mTransform.mnChanges = 0;
+            model->mFlags &= ~1;
+            ((VFn_vpi)VSLOT(model->mpWorld, 0x16c))(model->mpWorld, model, 0);
+        }
+    }
+
+    if (pWorld)
+        ((VFn_v)VSLOT(pWorld, 4))(pWorld);
 }
 
 // @ 0x00d35190
@@ -2563,4 +3256,204 @@ void cCreatureModeInputStrategy_s00d3_66c0::InitCursors()
         mbUseKeyArray = *pProperty->GetBool();
     }
     mbUnk105 = false;
+}
+
+// @ 0x00d377f0
+void cScenarioEditModeInputStrategy::CleanUp()
+{
+    CleanUpCreatureHitBoxes();
+
+    // release the objects stored in the +0x6c layout tree
+    for (void* node = mTree6c.mEnd; node != (void*)&mTree6c.mSelf;
+         node = X_RBTreeIncrement(node))
+    {
+        void** slot = (void**)((char*)node + 0x14);
+        void* obj = *slot;
+        if (obj != 0)
+            ((FnVI0)VTBL(obj)[0])(obj, 1);
+    }
+
+    // free the +0x6c tree nodes themselves
+    for (void** p = (void**)mTree6c.mCount; p != 0; )
+    {
+        void** next = (void**)p[1];
+        mTree6c.DoNukeSubtree(p[0]);
+        X_FUN_00f47380(p);
+        p = next;
+    }
+    mTree6c.mSelf  = &mTree6c.mSelf;
+    mTree6c.mEnd   = &mTree6c.mSelf;
+    mTree6c.mCount = 0;
+    mTree6c.mFlag  = 0;
+    mTree6c.mField14 = 0;
+
+    // unhook the EA::Messaging handler
+    if (mpHandler88 != 0)
+    {
+        void* h = mpHandler88;
+        mpHandler88 = 0;
+        X_RemoveHandler(h, mHandler8c, mHandler90, mHandler94, mHandler98);
+    }
+
+    mTree4.FUN_b1b830(mTree4.mCount);
+    mTree4.mSelf  = &mTree4.mSelf;
+    mTree4.mEnd   = &mTree4.mSelf;
+    mTree4.mCount = 0;
+    mTree4.mFlag  = 0;
+    mTree4.mField14 = 0;
+
+    mTree20.FUN_e4b990(mTree20.mCount);
+    mTree20.mSelf  = &mTree20.mSelf;
+    mTree20.mEnd   = &mTree20.mSelf;
+    mTree20.mCount = 0;
+    mTree20.mFlag  = 0;
+    mTree20.mField14 = 0;
+
+    if (mpObjC4 != 0)
+    {
+        void* o = mpObjC4;
+        mpObjC4 = 0;
+        ((FnV0)VTBL(o)[0xc0 / 4])(o);
+    }
+    if (mpObjE0 != 0)
+    {
+        ((FnVI0)VTBL(mpObjE0)[0xc / 4])(mpObjE0, 1);
+        if (mpObjE0 != 0)
+        {
+            void* o = mpObjE0;
+            mpObjE0 = 0;
+            ((FnV0)VTBL(o)[1])(o);
+        }
+    }
+    if (mpObjF0 != 0)
+    {
+        ((FnVI0)VTBL(mpObjF0)[0xc / 4])(mpObjF0, 1);
+        if (mpObjF0 != 0)
+        {
+            void* o = mpObjF0;
+            mpObjF0 = 0;
+            ((FnV0)VTBL(o)[1])(o);
+        }
+    }
+    if (mpObjF4 != 0)
+    {
+        void* o = mpObjF4;
+        mpObjF4 = 0;
+        ((FnV0)VTBL(o)[1])(o);
+    }
+}
+
+// @ 0x00d37970
+cScenarioEditModeInputStrategy* cScenarioEditModeInputStrategy::Construct()
+{
+    mpVtbl = (void*)0x14771e0;
+
+    mTree4.mEnd = 0; mTree4.mCount = 0; mTree4.mField14 = 0;
+    mTree4.mSelf = &mTree4.mSelf;
+    mTree4.mEnd = &mTree4.mSelf;
+    mTree4.mCount = 0;
+    mTree4.mFlag = 0;
+    mTree4.mField14 = 0;
+
+    mTree20.mCount = 0; mTree20.mEnd = 0; mTree20.mField14 = 0;
+    mTree20.mSelf = &mTree20.mSelf;
+    mTree20.mEnd = &mTree20.mSelf;
+    mTree20.mCount = 0;
+    mTree20.mFlag = 0;
+    mTree20.mField14 = 0;
+
+    ((void(__thiscall*)(void*))0x008014a0)((char*)this + 0x3c);
+
+    mpSubVtbl44 = (void*)0x14426a0;
+    mpSubVtbl48 = (void*)0x13eb384;
+    mpSubVtbl4c = (void*)0x13ec458;
+    mField50 = 0;
+
+    mpVtbl = (void*)0x147a8b4;
+    mpSubVtbl3c = (void*)0x147a89c;
+    mpSubVtbl44 = (void*)0x147a880;
+    mpSubVtbl48 = (void*)0x147a870;
+    mpSubVtbl4c = (void*)0x147a860;
+
+    mFlag54 = 1;
+    mField58 = 0;
+    mField5c = 0;
+    mField60 = 0;
+
+    mTree6c.mEnd = 0; mTree6c.mCount = 0; mTree6c.mField14 = 0;
+    mTree6c.mSelf = &mTree6c.mSelf;
+    mTree6c.mEnd = &mTree6c.mSelf;
+    mTree6c.mCount = 0;
+    mTree6c.mFlag = 0;
+    mTree6c.mField14 = 0;
+
+    mpHandler88 = 0;
+    mHandler8c = 0;
+    mHandler90 = 0;
+    mHandler94 = 0;
+    mHandler98 = 0;
+    mTimerA0.Ctor();
+
+    mFlagC0 = 1;
+    mFlagC1 = 1;
+    mpObjC4 = 0;
+
+    mVecC8 = g_vDefault_169e17c;
+    mVecD4 = g_vDefault_169e17c;
+
+    mpObjE0 = 0;
+    mpObjF0 = 0;
+    mpObjF4 = 0;
+    mFieldF8 = 0x1002;
+    mFlagFc = 1;
+    mFloat100 = 0.0f;
+    mFlag105 = 0;
+    mFlag106 = 1;
+
+    ((void(__thiscall*)(void*))0x00d33c30)(this);
+    return this;
+}
+
+// @ 0x00d37b60
+void cScenarioEditModeInputStrategy::Destroy()
+{
+    mpVtbl = (void*)0x147a8b4;
+    mpSubVtbl3c = (void*)0x147a89c;
+    mpSubVtbl44 = (void*)0x147a880;
+    mpSubVtbl48 = (void*)0x147a870;
+    mpSubVtbl4c = (void*)0x147a860;
+
+    if (mpObjF4 != 0) ((FnV0)VTBL(mpObjF4)[1])(mpObjF4);
+    if (mpObjF0 != 0) ((FnV0)VTBL(mpObjF0)[1])(mpObjF0);
+    if (mpObjE0 != 0) ((FnV0)VTBL(mpObjE0)[1])(mpObjE0);
+    if (mpObjC4 != 0) ((FnV0)VTBL(mpObjC4)[0xc0 / 4])(mpObjC4);
+
+    mTimerA0.Dtor();
+
+    if (mpHandler88 != 0)
+    {
+        void* h = mpHandler88;
+        mpHandler88 = 0;
+        X_RemoveHandler(h, mHandler8c, mHandler90, mHandler94, mHandler98);
+    }
+
+    mTree6c.DoNukeSubtree(mTree6c.mCount);
+
+    ModelVec* mv = (ModelVec*)((char*)this + 0x58);
+    mv->DoDestroyValues(mv->mpBegin, mv->mpEnd);
+    if (mv->mpBegin != 0)
+    {
+        if (((u32*)mv->mpBegin)[-1] != 0)
+            X_FUN_00f47380(mv->mpBegin);
+    }
+
+    mpSubVtbl4c = (void*)0x13ec458;
+    mpSubVtbl48 = (void*)0x13eb394;
+    mpSubVtbl44 = (void*)0x13eb938;
+
+    ((void(__thiscall*)(void*))0x008014b0)((char*)this + 0x3c);
+    mpVtbl = (void*)0x14771e0;
+
+    mTree20.FUN_e4b990(mTree20.mCount);
+    mTree4.FUN_b1b830(mTree4.mCount);
 }
