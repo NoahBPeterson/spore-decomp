@@ -1,2 +1,6 @@
+00875b40 ?png_set_cHRM@@YAXPAUPngStruct@@PAUPngInfo@@NNNNNNNN@Z  # png_set_cHRM migrated from s008752b0 (verbatim, slice spelling)
+00875e50 ?png_set_cHRM_fixed@@YAXPAUPngStruct@@PAUPngInfo@@HHHHHHHH@Z  # png_set_cHRM_fixed migrated from s008752b0 (verbatim, slice spelling)
+00876040 ?png_set_gamma@@YAXPAUPngStruct@@PAUPngInfo@@N@Z  # png_set_gamma migrated from s008752b0 (verbatim, slice spelling)
+008760c0 ?png_set_gamma_fixed@@YAXPAUPngStruct@@PAUPngInfo@@H@Z  # png_set_gamma_fixed migrated from s008752b0 (verbatim, slice spelling)
 00877d30 ?png_write_sig@@YAXPAUPngStruct@@@Z  # png_write_sig migrated from s008752b0 (verbatim, slice spelling)
 00877da0 ?png_write_compressed@@YAHHPAUPngStruct@@IPAEPAH@Z  # png_write_compressed migrated from s008752b0 (verbatim, slice spelling)

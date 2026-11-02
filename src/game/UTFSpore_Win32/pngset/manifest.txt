@@ -1,0 +1,4 @@
+# source  symbol  va  flags
+../src/game/UTFSpore_Win32/pngset.cpp  ?png_set_cHRM@@YAXPAUPngStruct@@PAUPngInfo@@NNNNNNNN@Z  00875b40  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/pngset.cpp  ?png_set_cHRM_fixed@@YAXPAUPngStruct@@PAUPngInfo@@HHHHHHHH@Z  00875e50  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/pngset.cpp  ?png_set_gamma@@YAXPAUPngStruct@@PAUPngInfo@@N@Z  00876040  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
