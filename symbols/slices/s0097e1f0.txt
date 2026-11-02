@@ -1,4 +1,6 @@
 0097e8a0 ?FUN_0097e8a0@@YIXPAUAreaHolder@@HPAUINode@@PAM@Z  # FUN_0097e8a0 migrated from s0097e1f0 (verbatim, slice spelling)
+0097efe0 ?DoMessage@WinMessageBox_s0097_e1f0@@QAE_NPAUMsg_s0097_e1f0@@@Z  # WinMessageBox_s0097_e1f0::DoMessage migrated from s0097e1f0 (verbatim, slice spelling)
+0097f130 ?UpdateArea@WinGrid@@QAEXXZ  # WinGrid::UpdateArea migrated from s0097e1f0 (verbatim, slice spelling)
 0x0097e1f0 EA::UTFWinControls::ImageCursorProvider::~ImageCursorProvider  # dev PDB name; dtor of the image-cursor provider (map +0xc, AutoRefCount window +0x75c)
 0x0097e2b0 eastl::fixed_hash_map<unsigned,ImageCursor,64,64,1,...>::fixed_hash_map  # card symbol
 0x0097e380 EA::UTFWinControls::ImageCursorProvider::ImageCursorProvider  # dev PDB name

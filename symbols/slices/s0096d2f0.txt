@@ -6,4 +6,4 @@
 0096e000 ?Init@DialogDrawable@UTFWinControls@EA@@QAEXXZ  # EA::UTFWinControls::DialogDrawable::Init (retail ctor) migrated from s0096d2f0 (verbatim, slice spelling)
 0096e0c0 ?Init@WinDialog@UTFWinControls@EA@@QAEPAV123@XZ  # EA::UTFWinControls::WinDialog::Init (retail ctor) migrated from s0096d2f0 (verbatim, slice spelling)
 0096e260 ?Destroy@WinDialog@UTFWinControls@EA@@QAEXXZ  # EA::UTFWinControls::WinDialog::Destroy migrated from s0096d2f0 (verbatim, slice spelling)
-0096e350 ?SetTitleText@IWinDialogSub@UTFWinControls@EA@@UAEXPB_W@Z  # EA::UTFWinControls::IWinDialogSub::SetTitleText migrated from s0096d2f0 (verbatim, slice spelling)
+0096e350 ?SetTitleText@IWinDialogSub@UTFWinControls@EA@@UAEXPB_W@Z  # IWinDialogSub::SetTitleText migrated from s0096d2f0 (verbatim, slice spelling)
