@@ -1,0 +1,2 @@
+# source  symbol  va  flags
+../src/game/UTFSpore_Win32/t2ksbit.cpp  ?Delete_blocClass@@YAXPAH@Z  008c4000  /O2 /MD /Gy /TP /Isrc/game/include
