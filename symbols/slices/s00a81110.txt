@@ -1,4 +1,4 @@
-00a81110  cSurfaceDecalManager::AddDecal
+00a81110 ?AddDecal@cSurfaceDecalManager@Swarm@EA@@QAEPAXHIPBXM@Z  # cSurfaceDecalManager::AddDecal migrated from s00a81110 (verbatim, slice spelling)
 00a81310 ?SetSurface@cSurfaceDecalManager@Swarm@EA@@QAEXPAX0@Z  # cSurfaceDecalManager::SetSurface migrated from s00a81110 (verbatim, slice spelling)
 00a81530 ?FUN_00a81530@@YIXPAX@Z  # FUN_00a81530 migrated from s00a81110 (verbatim, slice spelling)
 00a81580 ?FUN_00a81580@@YAPAMPAM0@Z  # FUN_00a81580 migrated from s00a81110 (verbatim, slice spelling)

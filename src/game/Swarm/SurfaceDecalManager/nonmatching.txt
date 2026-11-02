@@ -1,1 +1,3 @@
-# va  diff-bytes  reason
+# va  diff-bytes  reason  (complete behaviourally-equivalent source, not byte-exact)
+00a80240 1309 complete (flags /O2 /MD /Gy /TP /arch:SSE /fp:fast); same Lock/Unlock vslots (0, 2), same constants, ToByte via _mm intrinsics gives the original's aligned ebp frame; 1534 vs 1758 bytes: frame 0xe4 vs 0xf4, register allocation (stream ptr spilled) and rotation-term scheduling differ
+00a81110 367 cSurfaceDecalManager::AddDecal: complete.  The original is heavily inlined (EAAllocate/intrusive-list/map/vector/transform code) and our reconstruction allocates registers and materialises the intrusive list/vector nodes in a different shape; size 459 vs 505.  Equiv FAIL, 5/240 valid inputs, memory-pool dword differs (low validity: the reconstructed callees fault on random `this`). flags: /O2 /MD /Gy /EHsc /TP
