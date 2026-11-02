@@ -39,14 +39,18 @@ extern const wchar_t* gAttrTabIndex;  // 0x015212b0
 #pragma intrinsic(strlen)
 
 // ---- items of slice s00622f20 begin (TODO(rewrite): local stubs, replace by canonical classes)
+namespace SP {
+namespace Pollen {
+extern const wchar_t* gAttrValue;     // L"value"    at 0x013fda1c
+}
+}
+extern const wchar_t* gTypeHidden;    // 0x015212c0
 #define PV(n) virtual void pv##n();
-extern "C" void EASTL_allocator_deallocate(void* p); // 0x00f47380
-extern "C" void* EASTL_allocator_allocate(unsigned int n, const char* name, int flags, unsigned debugFlags,
-                                          const char* file, int line);
-extern "C" void* __cdecl memmove(void*, const void*, unsigned int);
-extern char gEmptyString[];  // 0x01667bac (shared "" for char and wchar_t strings)
+void* operator new(unsigned int size, const char* name, int flags, unsigned debugFlags, const char* file, int line);
+struct ICoreAllocator;
+void* operator new(unsigned int size, int alignment, const char* name, ICoreAllocator* pAllocator);
 namespace eastl {
-struct allocator_s0062_2f20 {
+class allocator_s0062_2f20 { public:
   allocator_s0062_2f20() {}
 };
 }
@@ -244,7 +248,7 @@ class IWindow_s0062_2f20;
 }
 namespace EA {
 namespace UTFWin {
-struct Message_s0062_2f20 {
+class Message_s0062_2f20 { public:
   IWindow_s0062_2f20* mpSource;  // +0x0
   uint32_t pad4;
   uint32_t mEventType;  // +0x8
@@ -357,8 +361,6 @@ class cSPUILayout_s0062_2f20 {
 namespace SP {
 EA::UTFWin::IWindowManager* WindowManager();  // 0x0067caa0
 }
-extern "C" __declspec(dllimport) double __cdecl wcstod(const wchar_t*, wchar_t**);
-extern "C" __declspec(dllimport) int __cdecl _wcsicmp(const wchar_t*, const wchar_t*);
 using EA::AutoRefCount_s0062_2f20;
 struct DomHook {  // eastl::intrusive_list_node
   DomHook* mpNext;
@@ -394,9 +396,6 @@ struct DomElement : DomNode {
   void SetControl(void* p);                          // 0x008e4b60
   DomElement* GetParent();                           // 0x00ff0420
 };
-extern const wchar_t* gAttrType;      // 0x01521294
-extern const wchar_t* gTypeSubmit;    // 0x015212b8
-extern const wchar_t* gAttrTabIndex;  // 0x015212b0
 inline unsigned int WStrLen(const wchar_t* s) {
   const wchar_t* ps = s + 1;
   do {
@@ -417,6 +416,17 @@ namespace SP {
 namespace Pollen {
 struct DomHookX : DomHook {
   DomNode** GetNode(DomNode** ppNode);
+};
+}
+}
+namespace SP {
+namespace Pollen {
+struct RefCounted {
+  virtual void pv0();
+  virtual void pv1();
+  virtual void Destroy(int flags);  // +8
+  int mRefCount;                    // +4
+  int ReleaseRef();
 };
 }
 }
@@ -562,7 +572,37 @@ struct IPropValue {
 }
 namespace SP {
 namespace Pollen {
+struct PropListNode {  // SP::cPropertyList
+  uint32_t pad[0x30 / 4];
+  PropListNode* mpParent;  // +0x30
+  uint32_t mnModCount;     // +0x34
+  uint32_t GetModificationCount();  // 0x006237a0
+};
+}
+}
+namespace SP {
+namespace Pollen {
 extern const float gDefaultFloat;  // 0x015d9c6c
+}
+}
+namespace SP {
+namespace Pollen {
+struct IPropListener {
+  virtual void pv0();
+  virtual void OnPropertiesLoaded(PropListNode* pProps);  // +4
+  uint32_t pad;
+  IPropListener* mpNext;  // +8
+};
+}
+}
+namespace SP {
+namespace Pollen {
+struct PropChangeNotifier {
+  IPropListener* mpFirst;  // +0
+  uint32_t mnVersion;      // +4
+  // @ 0x006237d0
+  bool Notify(PropListNode* pProps);
+};
 }
 }
 namespace SP {
@@ -621,7 +661,30 @@ class cSPHoverTitle : public HoverBaseA, public EA::RefCountVTemplate_s0062_2f20
 }
 namespace SP {
 namespace Pollen {
+extern const float gHoverDelay;  // 0x013fda5c
+}
+}
+namespace SP {
+namespace Pollen {
 extern const float gHoverOffsetX, gHoverOffsetY;  // 0x013fdcf4, 0x013fdcf8
+}
+}
+namespace SP {
+namespace Pollen {
+struct IPropertyMgr {
+  PV(0) PV(1) PV(2) PV(3) PV(4) PV(5) PV(6) PV(7) PV(8) PV(9) PV(10) PV(11)
+  virtual bool GetPropertyList(uint32_t id, IPropertyListV** ppList);  // +0x30
+};
+}
+}
+namespace SP {
+namespace Pollen {
+IPropertyMgr* PropertyManager();  // 0x0067de30
+}
+}
+namespace SP {
+namespace Pollen {
+extern PropChangeNotifier gHoverPropNotifier;  // 0x015215a4
 }
 }
 namespace SP {
@@ -636,6 +699,11 @@ extern const float gPadX, gPadFlipX, gPadY, gPadFlipY;  // 0x015f6144, 0x015f619
 }
 namespace SP {
 namespace Pollen {
+extern PropChangeNotifier gXHTMLWinHandlerObj;  // 0x015215a0
+}
+}
+namespace SP {
+namespace Pollen {
 extern int gWindowNodeOffset;  // 0x01440aec : offset from an intrusive child-list node to its IWindow
 }
 }
@@ -646,7 +714,7 @@ extern const wchar_t* gAttrSelected;  // L"selected" at 0x013fdd28
 }
 namespace SP {
 namespace Pollen {
-extern const wchar_t* gAttrValue;     // L"value"    at 0x013fda1c
+extern const wchar_t* gAttrValue_s0062_2f20;     // L"value"    at 0x013fda1c
 }
 }
 namespace SP {
@@ -1010,6 +1078,38 @@ bool cXHTMLWin::OnKeyUp(int a, int key, int c)
 }
 }}  // namespace SP::Pollen
 
+// @ 0x00623000
+namespace SP { namespace Pollen {
+bool __stdcall IsSubmittableControl(DomElement* e)
+{
+  if (e) {
+    if (!e->GetAttrValue(gAttrDisabled)) {
+      int tag = e->mTag;
+      const wchar_t* type = e->GetAttrValue(gAttrType);
+      if (tag != 0x15 && tag != 0x16) {
+        if (tag != 0x17 || (type && _wcsicmp(type, gTypeHidden) != 0)) return true;
+      }
+    }
+  }
+  return false;
+}
+}}  // namespace SP::Pollen
+
+// @ 0x00623070
+namespace SP { namespace Pollen {
+int RefCounted::ReleaseRef()
+{
+  int n = mRefCount + -1;
+  mRefCount = n;
+  if (n == 0) {
+    mRefCount = 1;
+    Destroy(1);
+    return 0;
+  }
+  return n;
+}
+}}  // namespace SP::Pollen
+
 // @ 0x006230b0
 namespace SP { namespace Pollen {
 bool CreateXHTMLButton(IWindow_s0062_2f20** ppButton)
@@ -1246,6 +1346,15 @@ bool cXHTMLWin::SubmitForm()
 }
 }}  // namespace SP::Pollen
 
+// @ 0x00623730
+namespace SP { namespace Pollen {
+cSPHoverTitle::cSPHoverTitle(IWindow_s0062_2f20* pParent)
+: mpParent(pParent), mDelay(gHoverDelay) {
+  mpLayout.mpObject = 0;
+  mpTitleWin.mpObject = 0;
+}
+}}  // namespace SP::Pollen
+
 // @ 0x00623830
 namespace SP { namespace Pollen {
 void cSPHoverTitle::Layout()
@@ -1281,6 +1390,56 @@ void cSPHoverTitle::Layout()
 }
 }}  // namespace SP::Pollen
 
+// @ 0x006239c0
+namespace SP { namespace Pollen {
+void cSPHoverTitle::Load()
+{
+  IPropertyMgr* pm = PropertyManager();
+  IPropertyListV** pp = &mpProps.mpObject;
+  if (*pp) {
+    IPropertyListV* p = *pp;
+    *pp = 0;
+    p->Release();
+  }
+  if (pm->GetPropertyList(0x5c770db7, pp)) gHoverPropNotifier.Notify((PropListNode*)*pp);
+  mpLayout = new ("UI/XHTML Hover Layout", 0, 0, 0, 0) cSPUILayout_s0062_2f20();
+  {
+    ResourceKey key = ResourceKey::Make(0x16bcc4fd, 0x510a95b, 0x40464100);
+    mpLayout.mpObject->Init(key, 1, 0x5b598fa);
+  }
+  mpLayout.mpObject->SetVisibility(false);
+  mpLayout.mpObject->SetParentWin(mpParent.mpObject, true, 0x5b598fa);
+  mpTitleWin = mpLayout.mpObject->FindWindowByID(0x7db2908, true);
+  IWindow_s0062_2f20* wt = mpTitleWin.mpObject;
+  if (wt) wt->SetFlag(0x10, true);
+}
+}}  // namespace SP::Pollen
+
+// @ 0x00623af0
+namespace SP { namespace Pollen {
+cSPHoverTitle::~cSPHoverTitle()
+{
+  mpTitleWin = 0;
+  mpParent = 0;
+  if (mpLayout.mpObject) mpLayout.mpObject->Shutdown(true);
+  mpLayout = 0;
+  mpProps = 0;
+}
+}}  // namespace SP::Pollen
+
+// @ 0x00623be0
+namespace SP { namespace Pollen {
+cXHTMLWin::cXHTMLWin()
+{
+  mFormList.mpNext = (XListNode*)&mFormList;
+  mFormList.mpPrev = (XListNode*)&mFormList;
+  mbSubmitting = false;
+  ((WXBase1*)this)->SetHoverHandler(&gXHTMLWinHandlerObj);
+  cSPHoverTitle* t = new ("UI/cSPHoverTitle", 0, 0, 0, 0) cSPHoverTitle((IWindow_s0062_2f20*)(WXBase1*)this);
+  ((WXBase1*)this)->SetHoverHandler(t);
+}
+}}  // namespace SP::Pollen
+
 // @ 0x00623c90
 namespace SP { namespace Pollen {
 void cXHTMLWin::SetFormControlValue(DomElement* e, const wchar_t* value)
@@ -1313,7 +1472,7 @@ void cXHTMLWin::SetFormControlValue(DomElement* e, const wchar_t* value)
     DomNode* n = static_cast<DomNode*>(anchor->mpNext);
     while (n != static_cast<DomNode*>(anchor)) {
       if (n->Type() == 1 && n->AsElement()->mTag == 0x19) {
-        const wchar_t* v = n->AsElement()->GetAttrValue(gAttrValue);
+        const wchar_t* v = n->AsElement()->GetAttrValue(gAttrValue_s0062_2f20);
         if (v) {
           if (_wcsicmp(v, value) == 0) {
             sel = counter;
