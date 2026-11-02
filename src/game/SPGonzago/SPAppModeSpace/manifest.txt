@@ -8,3 +8,4 @@
 ../src/game/SPGonzago/SPAppModeSpace.cpp  ?StopEditorPlay@cAppModeSpace_s00fd_bd60@@QAEXXZ  00fdc490  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPAppModeSpace.cpp  ?Shutdown@cAppModeSpace_s00fd_dba0@@QAE_NXZ  00fde180  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPAppModeSpace.cpp  ?FUN_00fdf9f0@cAppModeSpace_s00fd_f9f0@SP@@QAEXXZ  00fdf9f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPAppModeSpace.cpp  ?FUN_00fe0e10@cAppModeSpace_s00fe_0570__g7@@QAEXXZ  00fe0e10  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

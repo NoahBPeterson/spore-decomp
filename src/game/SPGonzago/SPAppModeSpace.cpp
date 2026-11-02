@@ -3075,7 +3075,7 @@ public:
     void Func_fda750();                                       // 0x00fda750
     void Func_fdf9f0();                                       // 0x00fdf9f0
 
-    void InitSpaceMode();
+    void InitSpaceMode();  // 0x00fe0570 (cAppModeSpace::InitSpaceMode)
 };
 // ---- items of slice s00fe0570 end
 
@@ -3468,6 +3468,118 @@ inline bool InTerrainSphere(uint32_t id)
     return sphere->IsInTerrainSphere((void*)id);
 }
 // ---- items of slice s010414c0 end
+
+// ---- items of slice s00fe0570_g7 begin (TODO(rewrite): local stubs, replace by canonical classes)
+namespace eastl {
+struct ListNodeBase_s00fe_0570__g7 {
+    ListNodeBase_s00fe_0570__g7* mpNext;
+    ListNodeBase_s00fe_0570__g7* mpPrev;
+};
+}
+namespace eastl {
+template <typename T>
+struct ListNode_s00fe_0570__g7 : public ListNodeBase_s00fe_0570__g7 {
+    T mValue;
+};
+}
+namespace eastl {
+template <typename T>
+class list_s00fe_0570__g7 { public:
+    typedef ListNode_s00fe_0570__g7<T> node_type;
+    ListNodeBase_s00fe_0570__g7 mNode;
+    uint32_t mAllocator;
+
+    void clear()
+    {
+        node_type* pNode = (node_type*)mNode.mpNext;
+        while (pNode != (node_type*)&mNode) {
+            node_type* pCur = pNode;
+            pNode = (node_type*)pNode->mpNext;
+            operator delete[](pCur);
+        }
+        mNode.mpNext = &mNode;
+        mNode.mpPrev = &mNode;
+    }
+};
+}
+struct IMessageServer_s00fe_0570__g7 {
+    PV4 PV
+    virtual void Post(uint32_t id, SlotMessage* msg, int flag);  // +0x14
+    virtual void PostEx(uint32_t id, int a, int b, int c);       // +0x18
+};
+IMessageServer_s00fe_0570__g7* MessageServer_s00fe_0570__g7();                              // 0x0067dcc0
+struct cSPUISpace_s00fe_0570__g7 {
+    void ShowBakeTimeSplash();                                // 0x01065af0
+};
+struct cStar;
+struct cSPSimulatorSpaceGame_s00fe_0570__g7 {
+    uint32_t pad00[0x14 / 4];
+    cSPUISpace_s00fe_0570__g7* mpUI;                                         // +0x14
+    uint32_t pad18[(0x40 - 0x18) / 4];
+    void* mpField40;                                          // +0x40
+    uint32_t pad44[(0x50 - 0x44) / 4];
+    uint32_t mFlags;                                          // +0x50
+
+    void DestroyNPC_UFOs(char a, char b, int c);              // 0x01009470
+    void FUN_010039c0(cStar* star);                           // 0x010039c0
+    void StepC();                                             // 0x01003690
+    void ChaseFromSolarToPlanet();                            // 0x01007bf0
+};
+struct cSPSimulatorPlayerUFO_s00fe_0570__g7 {
+    void InitForPlanet();                                     // 0x00ffd390
+};
+cSPSimulatorPlayerUFO_s00fe_0570__g7* GetUFOSimulator_s00fe_0570__g7();                     // 0x00ffbe50
+struct cPlanet_s00fe_0570__g7;
+cPlanet_s00fe_0570__g7* GetActivePlanet_s00fe_0570__g7();                                   // 0x01021260
+struct cTerrainSphere_s00fe_0570__g7 {
+    void FUN_00c77bf0(uint32_t flag);                         // 0x00c77bf0
+};
+struct cGameNounManager_s00fe_0570__g7 {
+    cTerrainSphere_s00fe_0570__g7* GetCurrentTerrainSphere();                // [this+0x74]
+    void ProcessPending();                                    // 0x00b22960
+};
+cGameNounManager_s00fe_0570__g7* NounManager_s00fe_0570__g7();                              // 0x00b3d300
+struct cPlanetModel_s00fe_0570__g7 {
+    uint32_t pad00[0x24 / 4];
+    uint32_t mField24;                                        // +0x24
+    void FUN_00b8d750(int value);                             // 0x00b8d750
+    int GetPlanetKey();                                       // 0x00b7e380
+    void Refresh();                                           // 0x00b88420
+};
+cPlanetModel_s00fe_0570__g7* PlanetModel_s00fe_0570__g7();                                  // 0x00b3d350
+struct cPlanet_s00fe_0570__g7 {
+    int FUN_00c713e0(int flag);                               // 0x00c713e0
+    void FUN_00c713c0(int key);                               // 0x00c713c0
+};
+struct cThingB3D360 {
+    void FUN_00b7dec0();                                      // 0x00b7dec0
+};
+cThingB3D360* FUN_00b3d360_s00fe_0570__g7();                                 // 0x00b3d360
+struct cThingB3D310 {
+    void FUN_00b515e0();                                      // 0x00b515e0
+};
+cThingB3D310* FUN_00b3d310_s00fe_0570__g7();                                 // 0x00b3d310
+class cAppModeSpace_s00fe_0570__g7 {
+public:
+    uint32_t pad000[0x15c / 4];
+    cSPSimulatorSpaceGame_s00fe_0570__g7* mpSimulatorSpaceGame;              // +0x15c
+    uint32_t pad160;
+    uint32_t mElapsedBakeTimeForTransitionMS;                 // +0x164
+    uint8_t pad168;
+    bool mbBakeStarted;                                       // +0x169
+    bool mBakingForPlanetEntryEnded;                          // +0x16a
+    uint8_t pad16b;
+    uint32_t mCommContext;                                    // +0x16c
+    uint8_t pad170[0x17c - 0x170];
+    eastl::list_s00fe_0570__g7<bool> mInputFlags;                            // +0x17c
+
+    void SetPlanetTimeOnFirstEntry();                         // 0x00fda530
+    void FUN_00fdf9f0();                                      // 0x00fdf9f0
+
+    void CompleteTransitionFromSolarToPlanet();  // 0x00fe0c60 (cAppModeSpace::CompleteTransitionFromSolarToPlanet)
+    void FUN_00fe0e10();
+};
+// ---- items of slice s00fe0570_g7 end
 
 // @ 0x00fd9c90
 void AppMode::f9c90(int a)
@@ -5850,6 +5962,32 @@ void cAppModeSpace_s00fe_0570::InitSpaceMode()
         mbBakeStarted = true;
     }
     mpSimulatorSpaceGame->mFlags |= 0x10;
+}
+
+// @ 0x00fe0e10
+void cAppModeSpace_s00fe_0570__g7::FUN_00fe0e10()
+{
+    FUN_00b3d360_s00fe_0570__g7()->FUN_00b7dec0();
+    cPlanet_s00fe_0570__g7* planet = GetActivePlanet_s00fe_0570__g7();
+    FUN_01021230();
+    cPlanetModel_s00fe_0570__g7* model = PlanetModel_s00fe_0570__g7();
+    if (model->mField24 == 0)
+        model->FUN_00b8d750(planet->FUN_00c713e0(1));
+    else
+        planet->FUN_00c713c0(model->GetPlanetKey());
+    FUN_00b3d310_s00fe_0570__g7()->FUN_00b515e0();
+    model->Refresh();
+    GetUFOSimulator_s00fe_0570__g7()->InitForPlanet();
+    MessageServer_s00fe_0570__g7()->Post(0x279a5da, 0, 0);
+    mpSimulatorSpaceGame->StepC();
+
+    SlotMessage msg;
+    msg.mTarget = (uint32_t)GetActivePlanet_s00fe_0570__g7();
+    FUN_00fdf9f0();
+    FUN_010213b0(-1);
+    NounManager_s00fe_0570__g7()->ProcessPending();
+    MessageServer_s00fe_0570__g7()->Post(0x248975f, &msg, 0);
+    MessageServer_s00fe_0570__g7()->PostEx(0x5e37a53, 0, 0, 0);
 }
 
 // @ 0x00fe1a20
