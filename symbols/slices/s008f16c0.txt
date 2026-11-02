@@ -1,4 +1,7 @@
+008f16c0 ?Dispose@TableRow_s008f_16c0@Layout@XHTML@EA@@QAEXXZ  # TableRow_s008f_16c0::Dispose migrated from s008f16c0 (verbatim, slice spelling)
 008f1700 ?Build@TableRow@Layout@XHTML@EA@@QAEXPAVTable@234@@Z  # TableRow::Build(Table*): appends the row, rebuilds mCells from the table-cell children (colspan/rowspan clamped to >=1)
+008f1850 ?Dispose@Table_s008f_16c0@Layout@XHTML@EA@@QAEXXZ  # Table_s008f_16c0::Dispose migrated from s008f16c0 (verbatim, slice spelling)
+008f18c0 ?resize@?$Vector@VTableColumn_s008f_16c0@Layout@XHTML@EA@@@Layout@XHTML@EA@@QAEXI@Z  # resize migrated from s008f16c0 (verbatim, slice spelling)
 008f1960 EA::XHTML::Layout::Table::Build  # PDB candidate; thiscall no args, run once (mBuilt flag at +0x108)
 008f1c40 ?MeasureContent@Table_s008f_16c0@Layout@XHTML@EA@@UAEXAAVSizingContext@234@AAVStyleState_s008f_16c0@Style@34@@Z  # Table_s008f_16c0::MeasureContent migrated from s008f16c0 (verbatim, slice spelling)
 008f2350 ?F_8f2350@TextItemX@Layout@XHTML@EA@@QAEXPAX0@Z  # TextItemX::F_8f2350 migrated from s008f16c0 (verbatim, slice spelling)

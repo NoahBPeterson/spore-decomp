@@ -9,9 +9,9 @@
 008eeee0 ?DrawTextLine@RenderingContext@Layout@XHTML@EA@@QAEXPAULineLayout_s008e_ebb0@Text@4@@Z  # RenderingContext::DrawTextLine migrated from s008eebb0 (verbatim, slice spelling)
 008ef550 RenderingContext::BeginContent  # position the typesetter and lay out every line of type 1: finalize, draw, advance Y by ceil-floor of the line metrics, purge floats, advance the line base index, NextLine; byte-exact
 008ef6d0 RenderingContext::Reset  # same layout loop until the typesetter reports type 2, then Reset(1) and clear the selection range / line base index; byte-exact
-008ef870 SizingContext::SizingContext  # typesetter ctor + zeroed maxima, height from the argument, Reset(1); byte-exact
-008ef8b0 SizingContext::Clear  # zero both maxima and Reset(1); byte-exact
+008ef870 ??0SizingContext_s008e_ebb0@Layout@XHTML@EA@@QAE@M@Z  # SizingContext_s008e_ebb0::SizingContext migrated from s008eebb0 (verbatim, slice spelling)
+008ef8b0 ?Clear@SizingContext_s008e_ebb0@Layout@XHTML@EA@@QAEXXZ  # SizingContext_s008e_ebb0::Clear migrated from s008eebb0 (verbatim, slice spelling)
 008ef8d0 ?AddRun@SizingContext_s008e_ebb0@Layout@XHTML@EA@@QAEXPB_WIH@Z  # SizingContext_s008e_ebb0::AddRun migrated from s008eebb0 (verbatim, slice spelling)
-008ef900 SizingContext::Finish  # two measure passes (max ceil advance metric, then max metric), Reset(0)/Reset(1) and game-data render mode 3, width falls back to the height maximum when 0; nonmatching
+008ef900 ?Finish@SizingContext_s008e_ebb0@Layout@XHTML@EA@@QAEXXZ  # SizingContext_s008e_ebb0::Finish migrated from s008eebb0 (verbatim, slice spelling)
 008efa50 RenderingContext::AddTextRun  # set the run style, append a text run, clear the float flag and the selection start; byte-exact
 008efa90 RenderingContext::AddLineBreak  # set the run style, append a line break run, clear the float flag and the selection start; byte-exact
