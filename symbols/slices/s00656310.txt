@@ -1,5 +1,5 @@
 00656310 ?m56310@cSPUIAssetView_s0065_6310@@QAEXPAX@Z  # cSPUIAssetView_s0065_6310::m56310 migrated from s00656310 (verbatim, slice spelling)
-006563c0  C563c0::C563c0  # retail helper object ctor; disasm stores f0=0,f4..f6=0,f8=1,fc=0
+006563c0 ??0C563c0@@QAE@XZ  # C563c0::C563c0 migrated from s00656310 (verbatim, slice spelling)
 00656410 ?cSPUIAssetVerbs_dtor@@YIXPAUcSPUIAssetVerbs@@@Z  # cSPUIAssetVerbs_dtor migrated from s00656310 (verbatim, slice spelling)
 00656510 ?UpdatePos@cSPUIAssetVerbs@@QAEXPAX@Z  # cSPUIAssetVerbs::UpdatePos migrated from s00656310 (verbatim, slice spelling)
 006566f0 ?Shutdown@cSPUIAssetVerbs@@QAEXXZ  # cSPUIAssetVerbs::Shutdown migrated from s00656310 (verbatim, slice spelling)

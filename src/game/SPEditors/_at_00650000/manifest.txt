@@ -1,0 +1,2 @@
+# source  symbol  va  flags
+../src/game/SPEditors/_at_00650000.cpp  ??0C563c0@@QAE@XZ  006563c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
