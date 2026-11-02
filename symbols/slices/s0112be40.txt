@@ -1,7 +1,3 @@
-# va  name  # evidence
-# 0112be40-0112c4f0 Havok packfile reader (hkPackfileReader/hkStructureLayout/hkVtableClassRegistry),
-# VC .NET 2003 (cl 13.10); 0112c500-0112ce00 RenderWare 4 rwaudio core (System/VoiceList/NodeList).
-# Equivalence-only range per symbols/renderware4_core.txt; only leaves are byte-exact.
 0112be40  hkPackfileReader::convertClassVersion1Inplace
 0112bec0  hkPackfileReader::AllocatedData::~AllocatedData
 0112bf90  hkStructureLayout::hkStructureLayout
@@ -16,19 +12,19 @@
 0112c600  System::Lock
 0112c620  System::Unlock
 0112c640  System::someCheck
-0112c690  System::updateVoices
-0112c6e0  System::pump
-0112c820  System::Alloc
-0112c850  System::Free
-0112c880  System::shutdown
-0112c9e0  System::CreateInstance
-0112cc10  audio_createObject
-0112cc80  AttributeSet::getFloat
-0112cca0  AttributeSet::getDouble
-0112ccd0  RtCommandHandler::execute
-0112ccf0  AudioObject::IsCommandComplete
-0112cd30  NodeList::find
-0112cd60  NodeList::insert
-0112cdb0  audio_allocNode
-0112cdf0  AllocNode::freeSelf
-0112ce00  VoiceList::getOrCreate
+0112c690 ?updateVoices@System@@QAEXXZ  # System::updateVoices migrated from s0112be40 (verbatim, slice spelling)
+0112c6e0 ?pump@System@@QAEXXZ  # System::pump migrated from s0112be40 (verbatim, slice spelling)
+0112c820 ?Alloc@System@core@audio@rw@@QAEPAXIPBDIPAVICoreAllocator@Allocator@EA@@@Z  # rw::audio::core::System::Alloc migrated from s0112be40
+0112c850 ?Free@System@core@audio@rw@@QAEXPAXPAVICoreAllocator@Allocator@EA@@@Z  # rw::audio::core::System::Free migrated from s0112be40
+0112c880 ?shutdown@System@@QAEXXZ  # System::shutdown migrated from s0112be40 (verbatim, slice spelling)
+0112c9e0 ?CreateInstance@System@@SAPAU1@PAUICoreAllocator@@I@Z  # System::CreateInstance migrated from s0112be40 (verbatim, slice spelling)
+0112cc10 ?audio_createObject@@YAPAEPAEIPAUFactory@@PBUInitData@@E@Z  # audio_createObject migrated from s0112be40 (verbatim, slice spelling)
+0112cc80 ?getFloat@AttributeSet@@QAEXHPAM@Z  # AttributeSet::getFloat migrated from s0112be40 (verbatim, slice spelling)
+0112cca0 ?getDouble@AttributeSet@@QAEXHPAN@Z  # AttributeSet::getDouble migrated from s0112be40 (verbatim, slice spelling)
+0112ccd0 ?execute@RtCommandHandler@@SAIPAUCompiledCmd@@@Z  # RtCommandHandler::execute migrated from s0112be40 (verbatim, slice spelling)
+0112ccf0 ?IsCommandComplete@AudioObject@@QAEXIM@Z  # AudioObject::IsCommandComplete migrated from s0112be40 (verbatim, slice spelling)
+0112cd30 ?find@NodeList@@QAEPAUNode@@I@Z  # NodeList::find migrated from s0112be40 (verbatim, slice spelling)
+0112cd60 ?insert@NodeList@@QAEPAUNode@@PAU2@@Z  # NodeList::insert migrated from s0112be40 (verbatim, slice spelling)
+0112cdb0 ?audio_allocNode@@YAPAIPAUSystem@@@Z  # audio_allocNode migrated from s0112be40 (verbatim, slice spelling)
+0112cdf0 ?freeSelf@AllocNode@@QAEXXZ  # AllocNode::freeSelf migrated from s0112be40 (verbatim, slice spelling)
+0112ce00 ?getOrCreate@VoiceList@@QAEPAXXZ  # VoiceList::getOrCreate migrated from s0112be40 (verbatim, slice spelling)

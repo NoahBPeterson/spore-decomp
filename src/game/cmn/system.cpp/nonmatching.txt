@@ -1,0 +1,8 @@
+# va  diff-bytes  reason  (complete behaviourally-equivalent source, not byte-exact)
+0112c690 65 System::updateVoices: loop, SSE compares and movss store all match; only the rotated loop pre-test differs (original `xor eax,eax; cmp ax,[edi+0xf0]`, ours `cmp [edi+0xf0],si`) plus the resulting 1-byte loop-alignment nop. /vc71 is required for comiss (cl 15 compares floats with x87). flags /vc71 /O2 /MD /Gy /EHsc /TP /arch:SSE
+0112c6e0 152 System::pump: full command-pump sequence reconstructed; the original keeps the cmd-list head/mutex in ebx/esi across both Lock() calls, ours re-loads them. flags /O2 /MD /Gy /EHsc /TP
+0112c880 200 System::shutdown: complete teardown (command enqueue, pump loop, voice release); the loop bodies use different registers than the original's /GL allocation. flags /O2 /MD /Gy /EHsc /TP
+0112c9e0 387 System::CreateInstance: full constructor reconstructed (allocator dispatch, two Mutex placements, SYSTEM_INFO probe, cleanup path). The allocator's Alloc slot is loaded into a register before the call, as in the original. difftest PASSes. flags /vc71 /O2 /MD /Gy /EHsc /TP /arch:SSE
+0112cd30 10 NodeList::find: semantically identical; ours tests m_id before loading the next pointer, the original loads next first (pure scheduling). flags /O2 /MD /Gy /EHsc /TP
+0112cd60 78 NodeList::insert: list splice is exact; the original walks with the sentinel offset folded into the index register, ours subtracts 0x24 per iteration. flags /vc71 /O2 /MD /Gy /EHsc /TP
+0112cdb0 11 audio_allocNode: call, null test and all six stores exact; ours stores the back-pointer +0x10 first (releases esi early), the original stores it third. flags /O2 /MD /Gy /EHsc /TP

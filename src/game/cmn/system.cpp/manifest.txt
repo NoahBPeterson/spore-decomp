@@ -1,0 +1,10 @@
+# source  symbol  va  flags
+../src/game/cmn/system.cpp.cpp  ?Alloc@System@core@audio@rw@@QAEPAXIPBDIPAVICoreAllocator@Allocator@EA@@@Z  0112c820  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/cmn/system.cpp.cpp  ?Free@System@core@audio@rw@@QAEXPAXPAVICoreAllocator@Allocator@EA@@@Z  0112c850  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/cmn/system.cpp.cpp  ?audio_createObject@@YAPAEPAEIPAUFactory@@PBUInitData@@E@Z  0112cc10  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/cmn/system.cpp.cpp  ?getFloat@AttributeSet@@QAEXHPAM@Z  0112cc80  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/cmn/system.cpp.cpp  ?getDouble@AttributeSet@@QAEXHPAN@Z  0112cca0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/cmn/system.cpp.cpp  ?execute@RtCommandHandler@@SAIPAUCompiledCmd@@@Z  0112ccd0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/cmn/system.cpp.cpp  ?IsCommandComplete@AudioObject@@QAEXIM@Z  0112ccf0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/cmn/system.cpp.cpp  ?freeSelf@AllocNode@@QAEXXZ  0112cdf0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/cmn/system.cpp.cpp  ?getOrCreate@VoiceList@@QAEPAXXZ  0112ce00  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
