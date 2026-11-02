@@ -1,1 +1,2 @@
 0072f9b0 FUN_0072f9b0  # bone-matrix palette stream builder (0x7000c skin objects) over the meshes built from an RW4 arena
+00730210 ?FUN_00730210@@YAXPAHH@Z  # FUN_00730210 migrated from s0072f830 (verbatim, slice spelling)

@@ -1,6 +1,8 @@
 0073a4b0 ?QuadricVectorResize@@YAXPAXI@Z  # QuadricVectorResize migrated from s0073a110 (verbatim, slice spelling)
-0073a800 SetFlags                 # two flag bits at +8 (bit0 arg1, bit1 arg2)
-0073a820 Release                  # RefPtr::Release at +0
+0073a7a0 ?GetMat@MatOwner@@QAE_NPAUMat24@@@Z  # MatOwner::GetMat migrated from s0073a110 (verbatim, slice spelling)
+0073a800 ?SetFlags@FlagObj@@QAEX_N0@Z  # FlagObj::SetFlags migrated from s0073a110 (verbatim, slice spelling)
+0073a820 ?Release@RefPtr@@QAEXXZ  # RefPtr::Release migrated from s0073a110 (verbatim, slice spelling)
+0073a850 ?ScaleMat@@YAHPBUMat43In@@PAUMat44Out@@@Z  # ScaleMat migrated from s0073a110 (verbatim, slice spelling)
 0073aa70 ??0AbilityB@@QAE@PAUAbHeld@@HHH@Z  # AbilityB::AbilityB migrated from s0073a110 (verbatim, slice spelling)
 0073abb0 ?GetAnimationMoveToTimes@cModelInstance_s0073_a110@SP@@QAEHHPAHD@Z  # cModelInstance_s0073_a110::GetAnimationMoveToTimes migrated from s0073a110 (verbatim, slice spelling)
 0073ac20 ?SetActive@cModelInstance_s0073_a110@SP@@QAE_NHH_NM0@Z  # cModelInstance_s0073_a110::SetActive migrated from s0073a110 (verbatim, slice spelling)

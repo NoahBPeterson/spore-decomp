@@ -1,1 +1,1 @@
-00730240  FUN_00730240  # no PDB name; EltArrayRef-in/EltArrayRef-out per-vertex blend (SP::cDynamicDraw path)
+00730240 ?FUN_00730240@@YAIPAUEltArray@@0I000000PAED@Z  # FUN_00730240 migrated from s00730240 (verbatim, slice spelling)
