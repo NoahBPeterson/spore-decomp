@@ -1,4 +1,5 @@
 # source  symbol  va  flags
+../src/game/SPGonzago/SPSimulatorUniverse.cpp  ?GetTimerSeconds@cSPSimulatorSpaceGame@@QAEMXZ  0100d410  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPSimulatorUniverse.cpp  ?CompareProtectorDistances@@YA_NPAUcGameNoun@@0@Z  0100d960  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPSimulatorUniverse.cpp  ?Reset@cGrobShockSelection@@QAEXXZ  0100d9f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPSimulatorUniverse.cpp  ?Get@cGrobShockSelection@@QAE_NPAI@Z  0100da10  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
