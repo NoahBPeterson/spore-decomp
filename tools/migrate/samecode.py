@@ -28,19 +28,20 @@ def norm(name):
 
 
 def slice_of(va):
-    """The slice whose source carries the `// @ 0x<va>` marker: one whose manifest/nonmatching/partial rows list va,
-    else the first by id (0x0109f040: s0108d0b0 carries a copy of the marker without the definition, s0109e8e0 owns it)."""
+    """(slice, source file) whose source carries the `// @ 0x<va>` marker: one whose manifest/nonmatching/partial rows list va,
+    else the first by id (0x0109f040: s0108d0b0 carries a copy of the marker without the definition, s0109e8e0 owns it).
+    The file, not <slice>.cpp: a slice whose main source has migrated can keep a flag variant (s007f9550_od.cpp)."""
     pat = re.compile(r"(?mi)^// @ 0x0*%x\b" % va)
     found = []
     for f in sorted(glob.glob(os.path.join(ROOT, "match", "slices", "s*", "*.c*"))):
         if os.path.isfile(f) and pat.search(open(f, errors="replace").read()):
-            found.append(os.path.basename(os.path.dirname(f)))
-    for sid in found:
+            found.append((os.path.basename(os.path.dirname(f)), f))
+    for sid, f in found:
         d = S.slice_dir(sid)
         if any(va in {r[0] for r in S.read_rows(os.path.join(d, n))} for n in ("nonmatching.txt", "partial.txt")) or \
                 any(r[2] == va for r in S.manifest_rows(sid)):
-            return sid
-    return found[0] if found else None
+            return sid, f
+    return found[0] if found else (None, None)
 
 
 _objs = {}
@@ -87,12 +88,12 @@ def main():
     mid = module_id(tu)
     bad = 0
     for va in vas:
-        sid = slice_of(va)
+        sid, ssrc = slice_of(va)
         try:
             if not sid:
                 raise RuntimeError("no slice carries the marker")
             a = code(mid, va, tu)
-            b = code(sid, va, S.source_path(sid))
+            b = code(sid, va, ssrc)
         except RuntimeError as e:
             print("%08x ERROR %s" % (va, e))
             bad += 1

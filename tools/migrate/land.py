@@ -42,6 +42,19 @@ def module_files(m):
     return ["src/game/%s/%s.cpp" % (d, stem), "src/game/%s/%s" % (d, stem)]
 
 
+MARK = re.compile(r"(?m)^// @ 0x0*([0-9a-fA-F]+)")
+
+
+def markers_at_head(m):
+    r = subprocess.run(["git", "show", "HEAD:" + module_files(m)[0]], cwd=ROOT, capture_output=True, text=True)
+    return {v.lower() for v in MARK.findall(r.stdout)} if r.returncode == 0 else set()
+
+
+def markers_now(m):
+    p = os.path.join(ROOT, module_files(m)[0])
+    return {v.lower() for v in MARK.findall(open(p, errors="replace").read())} if os.path.exists(p) else set()
+
+
 def rollback(m, sids):
     paths = module_files(m) + ["symbols/slices/%s.txt" % s for s in sids] + ["src/game/include"]
     tracked = run(["git", "ls-files", "--"] + paths)[1].split()
@@ -64,9 +77,12 @@ def gate(m, log):
     if rc:
         return False, "asm audit: " + out.strip()[:200]
     rc, out = run([PY, "tools/migrate/samecode.py", tu])
+    if "Traceback" in out:
+        # mig27 SPUIBehavior: the traceback's first line was gated as a row ("verdict None -> None at Traceback")
+        return False, "samecode crashed: " + out.strip().splitlines()[-1][:200]
     for line in out.splitlines():
         p = line.split()
-        if len(p) < 2 or p[1] == "SAME":
+        if len(p) < 2 or p[1] == "SAME" or not re.match(r"[0-9a-f]{8}$", p[0]):
             continue
         va = p[0]
         ms = re.search(r"\((s[0-9a-f]{8})\)\s*$", line)
@@ -122,7 +138,8 @@ def main():
             continue
         sids = [e["id"] for e in ents if e["module"] == m]
         t0 = time.time()
-        failed = []
+        why_none = {}
+        before = markers_at_head(m)
         for sid in sids:
             rc, out = run([PY, "tools/migrate/rewrite.py", sid, "--module", m, "--batch", a.batch,
                            "--scratch", os.path.join(SCRATCH, "rw"), "--apply", "--quiet"])
@@ -132,12 +149,18 @@ def main():
                 # rewrite.py restores the TU and exits 0: the gate then passes the unchanged TU and commit_obj.sh finds nothing
                 # to commit (mig27: 20 modules logged as "nothing added to commit")
                 err = next((l.strip() for l in out.splitlines() if re.search(r"error C\d+", l)), "?")
-                failed.append(sid)
+                why_none.setdefault("compile failed", []).append(sid)
                 log("  %s %s: rewrite COMPILE FAILED: %s" % (m, sid, re.sub(r"^.*\\src\\game\\", "", err)[:200]))
-        if failed and len(failed) == len(sids):
+            elif "no reconstructed functions" in out:
+                # markers only in a banner or after macro lines (s006d0940 DEFINE_BAKE), or the code is a vendored
+                # #include (s008894a0 EAWebKit): nothing rewrite.py can move
+                why_none.setdefault("no line-start markers", []).append(sid)
+        if not (markers_now(m) - before):
+            # nothing new reached the TU: commit_obj.sh would fail on an empty commit (mig27: 20 modules)
             rollback(m, sids)
-            log("%s: ROLLED BACK (%d slices, %.0fs) rewrite compile failed in every slice (%s)" % (
-                m, len(sids), time.time() - t0, " ".join(failed)))
+            log("%s: ROLLED BACK (%d slices, %.0fs) no new function written%s" % (
+                m, len(sids), time.time() - t0,
+                "".join("; %s: %s" % (k, " ".join(v)) for k, v in sorted(why_none.items())) or "; every listed function stayed in its slice"))
             continue
         ok, why = gate(m, log)
         if ok:
