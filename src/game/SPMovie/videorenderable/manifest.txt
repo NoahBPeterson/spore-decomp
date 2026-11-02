@@ -1,0 +1,4 @@
+# source  symbol  va  flags
+../src/game/SPMovie/videorenderable.cpp  ??0VideoRenderable@@QAE@XZ  00fcdec0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPMovie/videorenderable.cpp  @FUN_00fcdf10@4  00fcdf10  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPMovie/videorenderable.cpp  ?rw_movie_VideoRenderable_GetDataBufSizes@@YAXHHHHPAI@Z  00fcdf40  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
