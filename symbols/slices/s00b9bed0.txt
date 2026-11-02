@@ -1,0 +1,2 @@
+00b88590 ?GetContinent@cPlanetModel@SP@@QBEHABUcSPVector3@@@Z  # SP::cPlanetModel::GetContinent (callee of s00b9bed0, named from the dev publics; slice address comment)
+00b9c630 ?Read@Clue@@QAEXPAUGenParams@@HM@Z  # Clue::Read migrated from s00b9bed0 (verbatim, slice spelling)

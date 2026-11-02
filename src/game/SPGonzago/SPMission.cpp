@@ -1,4 +1,4 @@
-// src/game/SPGonzago/SPMission.cpp -- migrated from slice(s) s00c4a850, s00c498e0, s00c48970, s00c47a10, s00c46ab0, s00c44a20, s00c44080 by tools/migrate/rewrite.py
+// src/game/SPGonzago/SPMission.cpp -- migrated from slice(s) s00c45860, s00b9bed0, s00c4a850, s00c498e0, s00c48970, s00c47a10, s00c46ab0, s00c44a20, s00c44080 by tools/migrate/rewrite.py
 // Object file: SPGonzago/SPMission.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -27,6 +27,12 @@
 #include "SP/cGameData.h"
 #include "EA/Variant.h"
 #include "SP/cVarListSerializer.h"
+#include "SP/cStarClue.h"
+#include "SP/cDirectPropertyList.h"
+#include "SP/cPlanetModel.h"
+#include <new>
+#include "SP/cRelationshipManager.h"
+#include "SP/cTerrainSphere.h"
 
 // ---- items of slice s00c44080 begin (TODO(rewrite): local stubs, replace by canonical classes)
 typedef unsigned char  u8;
@@ -600,8 +606,16 @@ static uint32_t WcsLen(const wchar_t* p)
 struct WStr;
 struct CStr;
 struct SPObject;
+void __cdecl EAFree(void* p);                                    // 0x00f47380  operator delete[]
+void* __cdecl MessageServer();                                   // 0x0067dcc0
 extern "C" void __cdecl WStr3(WStr* out, const wchar_t* fmt, int a);         // 0x0041e050
 extern "C" void __cdecl WStr4(WStr* out, const wchar_t* fmt, int a, float b);// 0x0041e050
+void __cdecl FUN_00881730(int a, int b, int c, wchar_t* buf, int n, const wchar_t* fmt); // 0x00881730
+void __cdecl FUN_00c48900(WStr* out);                            // 0x00c48900
+void __cdecl FUN_00c48940(WStr* out);                            // 0x00c48940
+void __cdecl FUN_00c486f0(WStr* out);                            // 0x00c486f0
+void __cdecl FUN_00c48740(WStr* out);                            // 0x00c48740
+void* __cdecl FUN_00bb9de0(void* p);                             // 0x00bb9de0
 struct Timer {
     char pad[0x20];
     void TimerCtor();                                            // 0x00b63890
@@ -663,6 +677,12 @@ struct VecU32 {                   // eastl::vector<unsigned int>
         }
         Insert(mpEnd, v);
     }
+};
+struct Translator {
+    char pad00[0x10];
+    int  mField10;                                               // 0x10
+    char pad14[0x2c];
+    int  mField40;                                               // 0x40
 };
 struct SPObject {
     void*  mpVtbl0;            // 0x000
@@ -766,9 +786,65 @@ struct SPObject {
     SPObject();                                              // 0x00c48e90
 };
 typedef char (__thiscall *FnChar)(void*);
+typedef char (__thiscall *FnCharArg)(void*, int);
+typedef void (__thiscall *FnVoid2)(void*, void*, int);
 static inline char VT_F8(void* p) {
     return ((FnChar*)*(void**)p)[0xf8 / 4](p);
 }
+static inline char VT_154(void* p, int a) {
+    return ((FnCharArg*)*(void**)p)[0x154 / 4](p, a);
+}
+static inline void VT_20(void* p, void* a, int b) {
+    ((FnVoid2*)*(void**)p)[0x20 / 4](p, a, b);
+}
+static inline void VT_2C(void* p, void* a, int b, int c) {
+    ((void (__thiscall*)(void*, void*, int, int))*((void***)*(void**)p + 0x2c / 4))(p, a, b, c);
+}
+static inline void VT_B4(void* p, WStr* out) {
+    ((void (__thiscall*)(void*, WStr*))*((void***)*(void**)p + 0xb4 / 4))(p, out);
+}
+static inline void VT_CC(void* p, int a, WStr* out) {
+    ((void (__thiscall*)(void*, int, WStr*))*((void***)*(void**)p + 0xcc / 4))(p, a, out);
+}
+static inline void VT_D0(void* p, WStr* out) {
+    ((void (__thiscall*)(void*, WStr*))*((void***)*(void**)p + 0xd0 / 4))(p, out);
+}
+static inline void VT_D4(void* p, WStr* out) {
+    ((void (__thiscall*)(void*, WStr*))*((void***)*(void**)p + 0xd4 / 4))(p, out);
+}
+static inline void VT_D8(void* p, WStr* out) {
+    ((void (__thiscall*)(void*, WStr*))*((void***)*(void**)p + 0xd8 / 4))(p, out);
+}
+static inline void VT_DC(void* p, WStr* out) {
+    ((void (__thiscall*)(void*, WStr*))*((void***)*(void**)p + 0xdc / 4))(p, out);
+}
+static inline void VT_E0(void* p, WStr* out) {
+    ((void (__thiscall*)(void*, WStr*))*((void***)*(void**)p + 0xe0 / 4))(p, out);
+}
+static inline u32 VT_AC(void* p) {
+    return ((u32 (__thiscall*)(void*))*((void***)*(void**)p + 0xac / 4))(p);
+}
+static inline u32 WStrLen(const wchar_t* s)
+{
+    const wchar_t* e = s;
+    if (*e) {
+        do {
+            ++e;
+        } while (*e);
+    }
+    return (u32)(e - s);
+}
+struct CivData {
+    void  FUN_c30c80();                                          // 0x00c30c80
+    int*  GetCities();                                           // 0x005c65e0
+};
+struct SorterObj {
+    void* operator()();                                          // 0x00b8de30
+    WStr* FUN_00bb9de0();                                        // 0x00bb9de0
+};
+struct PlanetObj {
+    WStr* GetName();                                             // 0x00c707e0
+};
 struct ToolSet {
     char  HasTag(u32 tag) {                                      // vtable +0x1c
         return ((char (__thiscall*)(void*, u32))*((void***)*(void**)this + 0x1c / 4))(this, tag);
@@ -1040,6 +1116,12 @@ struct SpVec11C {
 // ---- items of slice s00c498e0 end
 
 // ---- items of slice s00c4a850 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern uint32_t    g_missionKeyGroup;                       // 0x01574e28
+struct ResourceKey_s00c4_a850 {
+    uint32_t mInstanceID;                                   // +0x00
+    uint32_t mGroupID;                                      // +0x04
+    uint32_t mTypeID;                                       // +0x08
+};
 template <class T>
 struct cVec {
     T*       mpBegin;                                       // +0x00
@@ -1091,21 +1173,397 @@ struct AutoRefCount {
 
     T* operator->() const { return mpObject; }
 };
+struct cPlanet_s00c4_a850 {
+    char     mPad000[0x13c];                                // +0x000
+    void*    mpData13C;                                     // +0x13c
+    char     mPad140[0x2c];                                 // +0x140
+};
+struct cPlanetRecord;
+struct cProperty_s00c4_a850 {
+    void*     mpValue;                                      // +0x00
+    uint32_t  mPad04;                                       // +0x04
+    uint32_t  mCount;                                       // +0x08
+    uint32_t  mPad0c;                                       // +0x0c
+    uint16_t  mFlags;                                       // +0x10
+    uint16_t  mType;                                        // +0x12
+
+    bool*     GetBool();                                    // 0x0041e920
+    int32_t*  GetInt();                                     // 0x0041e990
+};
+struct cPropertyList_s00c4_a850 {
+    virtual void        v00();                              // +0x00
+    virtual void        v04();                              // +0x04
+    virtual void        v08();                              // +0x08
+    virtual void        v0c();                              // +0x0c
+    virtual void        v10();                              // +0x10
+    virtual void        v14();                              // +0x14
+    virtual void        v18();                              // +0x18
+    virtual void        v1c();                              // +0x1c
+    virtual void        v20();                              // +0x20
+    virtual bool        Find(uint32_t nKey, cProperty_s00c4_a850** ppOut);   // +0x24
+    virtual cProperty_s00c4_a850*  Get(uint32_t nKey);                 // +0x28
+};
+struct cSPMission_s00c4_a850;
+struct cSPMissionMultiDelivery;
+struct cPlanetSearch;
+struct cSPMission_s00c4_a850 {
+    // vtable +0x00 (slots used by this slice: +0x6c, +0x128, +0x16c, +0x170, +0x188)
+virtual void v000();
+virtual void v004();
+virtual void v008();
+virtual void v00c();
+virtual void v010();
+virtual void v014();
+virtual void v018();
+virtual void v01c();
+virtual void v020();
+virtual void v024();
+virtual void v028();
+virtual void v02c();
+virtual void v030();
+virtual void v034();
+virtual void v038();
+virtual void v03c();
+virtual void v040();
+virtual void v044();
+virtual void v048();
+virtual void v04c();
+virtual void v050();
+virtual void v054();
+virtual void v058();
+virtual void v05c();
+virtual void v060();
+virtual void v064();
+virtual void v068();
+    virtual void Abort();                                   // +0x06c
+virtual void v070();
+virtual void v074();
+virtual void v078();
+virtual void v07c();
+virtual void v080();
+virtual void v084();
+virtual void v088();
+virtual void v08c();
+virtual void v090();
+virtual void v094();
+virtual void v098();
+virtual void v09c();
+virtual void v0a0();
+virtual void v0a4();
+virtual void v0a8();
+virtual void v0ac();
+virtual void v0b0();
+virtual void v0b4();
+virtual void v0b8();
+virtual void v0bc();
+virtual void v0c0();
+virtual void v0c4();
+virtual void v0c8();
+virtual void v0cc();
+virtual void v0d0();
+virtual void v0d4();
+virtual void v0d8();
+virtual void v0dc();
+virtual void v0e0();
+virtual void v0e4();
+virtual void v0e8();
+virtual void v0ec();
+virtual void v0f0();
+virtual void v0f4();
+virtual void v0f8();
+virtual void v0fc();
+virtual void v100();
+virtual void v104();
+virtual void v108();
+virtual void v10c();
+virtual void v110();
+virtual void v114();
+virtual void v118();
+virtual void v11c();
+virtual void v120();
+virtual void v124();
+    virtual bool CheckTargetValid();                        // +0x128
+virtual void v12c();
+virtual void v130();
+virtual void v134();
+virtual void v138();
+virtual void v13c();
+virtual void v140();
+virtual void v144();
+virtual void v148();
+virtual void v14c();
+virtual void v150();
+virtual void v154();
+virtual void v158();
+virtual void v15c();
+virtual void v160();
+virtual void v164();
+virtual void v168();
+    virtual void OnMissionStarted();                        // +0x16c
+    virtual void OnMissionSucceeded();                      // +0x170
+virtual void v174();
+virtual void v178();
+virtual void v17c();
+virtual void v180();
+    virtual void v184();
+    virtual void OnPropertiesLoaded();                      // +0x188
+
+    char           mPad004[0x12c];                          // +0x004 .. +0x12f
+    uint32_t       mFlags;                                  // +0x130
+    char           mPad134[0x4c];                           // +0x134 .. +0x17f
+    cPropertyList_s00c4_a850* mpPropertyList;                          // +0x180
+    int32_t        mField184;                               // +0x184
+    int32_t        mField188;                               // +0x188
+    char           mPad18c[4];                              // +0x18c
+    int32_t        mField190;                               // +0x190
+    cVec<ResourceKey_s00c4_a850> mKeys194;                             // +0x194
+    cVec<ResourceKey_s00c4_a850> mKeys1a8;                             // +0x1a8
+    cVec<ResourceKey_s00c4_a850> mKeys1bc;                             // +0x1bc
+    char           mPad1d0[0x20];                           // +0x1d0 .. +0x1ef
+    int32_t        mStatus;                                 // +0x1f0
+    void*          mpData1f4;                               // +0x1f4
+    char           mPad1f8[0xc];                            // +0x1f8 .. +0x203
+    int32_t        mField204;                               // +0x204
+    int32_t        mField208;                               // +0x208
+
+    char           Init();                                  // 0x00c4ad50
+    void           PickGiveOnAcceptItems();                 // 0x00c4a980
+    cPlanet_s00c4_a850*       GetTargetPlanet();                       // 0x00970b30
+    void           SetTargetPlanet(void* pPlanet);          // 0x00c47180
+    void           SetInitialized();                        // 0x00c4a0c0
+    void           TriggerUIUpdate();                       // 0x00c47d80
+    int32_t        Update(void* pArg);                      // 0x00c478b0
+    void*          PickPlanet(cPlanetSearch* pSearch);      // 0x00c47e20
+    uint32_t       ReadTargetPlanetType();                  // 0x00c45b40
+    cPlanetRecord* GetPlanetRecordFromTargetType(uint32_t nType);   // 0x00c474b0
+};
+struct cSPMissionMultiDelivery : cSPMission_s00c4_a850 {
+    void    ReturnForRewards();                             // 0x00c4b760
+    int32_t Update(void* pArg);                             // 0x00c4b7a0
+    bool    IsAtDeliveryTarget(void* pPlanet, ResourceKey_s00c4_a850* pKey);   // 0x00c4bb60
+    bool    InitWrapper();                                  // 0x00c4baa0
+    int32_t GetCountA();                                    // 0x00c4bba0
+    int32_t GetCountB();                                    // 0x00c4bbc0
+};
+struct cMissionMessageHandler {
+virtual void v000();
+virtual void v004();
+virtual void v008();
+virtual void v00c();
+virtual void v010();
+virtual void v014();
+virtual void v018();
+virtual void v01c();
+virtual void v020();
+virtual void v024();
+virtual void v028();
+virtual void v02c();
+virtual void v030();
+virtual void v034();
+virtual void v038();
+virtual void v03c();
+virtual void v040();
+virtual void v044();
+virtual void v048();
+virtual void v04c();
+virtual void v050();
+virtual void v054();
+virtual void v058();
+virtual void v05c();
+virtual void v060();
+virtual void v064();
+virtual void v068();
+virtual void v06c();
+virtual void v070();
+virtual void v074();
+virtual void v078();
+virtual void v07c();
+virtual void v080();
+virtual void v084();
+virtual void v088();
+virtual void v08c();
+virtual void v090();
+virtual void v094();
+virtual void v098();
+virtual void v09c();
+virtual void v0a0();
+virtual void v0a4();
+virtual void v0a8();
+virtual void v0ac();
+virtual void v0b0();
+virtual void v0b4();
+virtual void v0b8();
+virtual void v0bc();
+virtual void v0c0();
+virtual void v0c4();
+virtual void v0c8();
+virtual void v0cc();
+virtual void v0d0();
+virtual void v0d4();
+virtual void v0d8();
+virtual void v0dc();
+virtual void v0e0();
+virtual void v0e4();
+virtual void v0e8();
+virtual void v0ec();
+virtual void v0f0();
+virtual void v0f4();
+virtual void v0f8();
+virtual void v0fc();
+virtual void v100();
+virtual void v104();
+virtual void v108();
+virtual void v10c();
+virtual void v110();
+virtual void v114();
+virtual void v118();
+virtual void v11c();
+virtual void v120();
+virtual void v124();
+virtual void v128();
+virtual void v12c();
+virtual void v130();
+virtual void v134();
+virtual void v138();
+virtual void v13c();
+virtual void v140();
+virtual void v144();
+virtual void v148();
+virtual void v14c();
+virtual void v150();
+virtual void v154();
+virtual void v158();
+virtual void v15c();
+virtual void v160();
+virtual void v164();
+virtual void v168();
+virtual void v16c();
+virtual void v170();
+virtual void v174();
+virtual void v178();
+virtual void v17c();
+virtual void v180();
+virtual void v184();
+virtual void v188();
+virtual void v18c();
+virtual void v190();
+virtual void v194();
+virtual void v198();
+virtual void v19c();
+virtual void v1a0();
+virtual void v1a4();
+virtual void v1a8();
+virtual void v1ac();
+virtual void v1b0();
+virtual void v1b4();
+virtual void v1b8();
+    virtual void HandleMessage(uint32_t nMessage, void* pMessage);
+
+    int32_t    mStatus;                                     // +0x1bc (cSPMission +0x1f0)
+    void*      mpData1f4;                                   // +0x1c0 (cSPMission +0x1f4)
+
+    void BaseHandleMessage(uint32_t nMessage, void* pMessage);   // 0x00c4a6b0
+    cSPMissionMultiDelivery* GetMission() { return (cSPMissionMultiDelivery*)((char*)this - 0x34); }
+};
+struct cMissionMessage {
+    uint32_t mPad00;
+    uint32_t mPad04;
+    void*    mpPlanetRef;                                   // +0x08
+    uint32_t mPad0c;
+    uint32_t mField10;                                      // +0x10
+    uint32_t mPad14;
+    uint32_t mField18;                                      // +0x18
+};
+struct cPlanetSearch {                                      // pick request built by cMissionBalance::Init
+    uint32_t mKind;                                         // +0x00 (0x20 / 0x38)
+    char     mPad004[0x40];                                 // +0x004
+
+    cPlanetSearch();                                        // 0x00ba7bd0
+    ~cPlanetSearch();                                       // 0x00ba8220
+};
+struct cSPMissionAdventureBase : cSPMission_s00c4_a850 {
+    void* PickAdventureAsset();                             // 0x00c4b220
+    bool  RerollAdventureAsset();                           // 0x00c4b250
+    void  InitAdventure();                                  // 0x00c4b2b0
+};
+struct cMissionBalance : cSPMission_s00c4_a850 {
+    bool Init();                                            // 0x00c4b7f0
+};
 struct cBannerListHost {
     char mPad000[0x1c];                                     // +0x000
     cVec<AutoRefCount<cGameData> > mEntries;                // +0x01c
     bool ReadBannerList(void* pArchive);                    // 0x00c4a850
 };
+namespace Simulator {
+struct cMissionAdventure {
+    void**  mpVtbl;                                         // +0x000
+    void**  mpVtbl04;                                       // +0x004
+    char    mPad008[0x2c];                                  // +0x008 .. +0x033
+    void**  mpVtbl34;                                       // +0x034
+    char    mPad038[0x1b8];                                 // +0x038 .. +0x1ef
+    int32_t mField1f0;                                      // +0x1f0
+    void*   mpData1f4;                                      // +0x1f4
+
+    cMissionAdventure();                                    // 0x00c4af60
+    bool InitMission();                                     // 0x00c4b440
+};
+}
+namespace Simulator {
+struct cMissionBalance {
+    void**  mpVtbl;                                         // +0x000
+    void**  mpVtbl04;                                       // +0x004
+    char    mPad008[0x2c];                                  // +0x008 .. +0x033
+    void**  mpVtbl34;                                       // +0x034
+    char    mPad038[0x1b8];                                 // +0x038 .. +0x1ef
+    int32_t mField1f0;                                      // +0x1f0
+    int32_t mThreshold;                                     // +0x1f4
+
+    cMissionBalance();                                      // 0x00c4b570
+    long double GetBalanceFactor(void* pA, void* pB);       // 0x00c4b6c0
+};
+}
 struct cStarManager_s00c4_a850 {
     bool PickRandomAsset();                                 // 0x00bb7940
     cGameData* GetBannerByID(uint32_t nID);                 // 0x00ba6d80
     void* GetEmpireByID();                                  // 0x00ba9370
 };
+struct cMissionManager_s00c4_a850 {
+    bool IsAdventureActive();                               // 0x00fee110
+};
+namespace Achievements {
+struct Controller {
+    void AwardAchievement();                                // 0x00676710
+    void AutoTest();                                        // 0x00676e90
+};
+}
+namespace Achievements {
+Controller* __stdcall GetController(uint32_t nID);                              // 0x00675250
+}
+namespace Achievements {
+Controller* __stdcall GetController(uint32_t nID, int32_t nFlag);               // 0x00675250
+}
+void __fastcall Simulator_cGenericPressureEvent_ctor(void* pThis);      // 0x00c48e90
 cStarManager_s00c4_a850*          __stdcall StarManager(uint32_t nID);             // 0x00b3d2a0
 cStarManager_s00c4_a850*          __stdcall StarManager(void* pObject);            // 0x00b3d2a0
 cStarManager_s00c4_a850*          __stdcall StarManager(void* pOut, int32_t nKind);   // 0x00b3d2a0
 cStarManager_s00c4_a850*          __stdcall StarManager(void* pA, void* pB);       // 0x00b3d2a0
+cMissionManager_s00c4_a850*       __stdcall GetMissionManager_s00c4_a850(void* pPlanet);      // 0x00feb9f0
+void*  __stdcall FUN_01021300(void* pAsset);                            // 0x01021300
+void   __fastcall FUN_00baf790(cStarManager_s00c4_a850* pThis);                    // 0x00baf790
+void*  __stdcall FUN_00b3d360(void* pPlanet);                           // 0x00b3d360
+void   __fastcall FUN_00b7d580(void* pThis);                            // 0x00b7d580
+void   __fastcall FUN_00c47a10(cSPMission_s00c4_a850* pThis);                      // 0x00c47a10
+bool   __fastcall FUN_00c46b80(void* pThis);                            // 0x00c46b80
 void   __cdecl EA_IO_ReadInt32(void* pStream, int32_t* pValue, int32_t nCount, int32_t nFlags);   // 0x0093a780
+long double __stdcall FUN_00c44d00(void* pA, void* pB);                 // 0x00c44d00
+char   __fastcall FUN_00bb9bd0(void* pThis);                            // 0x00bb9bd0
+int32_t __fastcall FUN_00b8dab0(void* pThis);                           // 0x00b8dab0
+bool   __fastcall FUN_00bba100(void* pThis);                            // 0x00bba100
+bool   __fastcall FUN_00bb9d90(void* pThis);                            // 0x00bb9d90
+bool   __fastcall FUN_00bb9c30(void* pThis);                            // 0x00bb9c30
+void   __cdecl FUN_00e39ab0(uint32_t nKey, int32_t nFlags, ResourceKey_s00c4_a850* pOut3, ResourceKey_s00c4_a850* pOut2,
+                            void* pData, int32_t nFlags2, ResourceKey_s00c4_a850* pOut1, ResourceKey_s00c4_a850* pOut0);   // 0x00e39ab0
+void   __cdecl FUN_00f27e00(ResourceKey_s00c4_a850* pKey);                         // 0x00f27e00
 struct cVarListSerializer {
     char mData[0xa08];                                      // +0x000
 
@@ -1127,7 +1585,416 @@ struct cArchiveVtbl {
     void* mpSlots00[8];                                     // +0x00 .. +0x1f
     cStreamHost* (__fastcall* pGetStreamHost)(cArchive* pThis);   // +0x20
 };
+static bool GetBoolProperty(cPropertyList_s00c4_a850* pList, uint32_t nKey)
+{
+    cProperty_s00c4_a850* pProperty;
+    if (!pList)
+        return false;
+    if (!pList->Find(nKey, &pProperty))
+        return false;
+    if (pProperty->mType != 1)
+        return false;
+    return *pProperty->GetBool();
+}
+static int32_t GetIntProperty(cPropertyList_s00c4_a850* pList, uint32_t nKey)
+{
+    cProperty_s00c4_a850* pProperty;
+    if (!pList)
+        return 0;
+    if (!pList->Find(nKey, &pProperty))
+        return 0;
+    if (pProperty->mType != 9)
+        return 0;
+    return *pProperty->GetInt();
+}
+struct cAdventurePlanet {
+    char    mPad000[0x28];                                  // +0x00
+    int32_t mField28;                                       // +0x28
+};
 // ---- items of slice s00c4a850 end
+
+// ---- items of slice s00b9bed0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern const char kProcLevelGenName[];        // 0x01465be0  "Simulator/ProcLevelGen"
+extern "C" void __cdecl FUN_00b90720();                               // 0x00b90720
+extern "C" void __stdcall FUN_00401930(void* ptr, unsigned stride,
+                                       unsigned count, void* ctor);   // 0x00401930
+extern const int   kMaxClueCount;             // 0x0146596c  = 128
+extern const float kNegOne;                   // 0x013eb1bc  = -1.0f
+extern const float kI16Scale;                 // 0x01449540  = 32767.0f
+void* __cdecl operator_new(unsigned size, const char* name, int a, int b,
+                           const void* allocator, int line);            // 0x00f473a0
+struct Elem12 { int m00; int m04; float m08; };
+struct Container14 {                          // 0x14-byte owned container at clue+8
+    int m00, m04, m08, m0c, m10;
+    void Init(int count);                     // 0x00d01790
+};
+struct GenRecord {                            // ref-counted record
+    void** mVtable;                           // +0x00
+    int    mRefCount;                         // +0x04
+    int    mSize;                             // +0x08
+    int    m0c;                               // +0x0c
+    int    mValue10;                          // +0x10
+};
+struct GenParams {
+    int m00;                                  // +0x00
+    int m04;                                  // +0x04
+    GenRecord* mA08;                          // +0x08
+    GenRecord* mB0c;                          // +0x0c
+    int m10, m14, m18, m1c, m20, m24, m28, m2c, m30;
+    float m34;                                // +0x34
+    float m38;                                // +0x38
+    float m3c;                                // +0x3c
+};
+struct cDirectPropertyList {
+    int GetIntProperty(unsigned id);          // 0x006a2660
+};
+extern cDirectPropertyList* g_pAppProperties; // 0x015fd918
+struct Clue {
+    int  mType00;                             // +0x00
+    unsigned char mFlag04;                    // +0x04
+    char mPad05[3];                           // +0x05
+    Container14 mC08;                         // +0x08
+    GenRecord* mRef1c;                        // +0x1c
+    GenRecord* mRef20;                        // +0x20
+    int    m24;                               // +0x24
+    float  m28;                               // +0x28
+    int    m2c;                               // +0x2c
+    int    m30;                               // +0x30
+    Elem12* m34;                              // +0x34
+    int    m38;                               // +0x38
+    int    m3c;                               // +0x3c
+    int    m40;                               // +0x40
+    float  m44;                               // +0x44
+    int    m48;                               // +0x48
+    float  m4c;                               // +0x4c
+    int    m50;                               // +0x50
+    unsigned char* mProc54;                   // +0x54
+
+    void Reset();                             // 0x00b9a630
+    void Read(GenParams* src, int count, float value);
+};
+// ---- items of slice s00b9bed0 end
+
+// ---- items of slice s00c45860 begin (TODO(rewrite): local stubs, replace by canonical classes)
+typedef int                i32;
+typedef float              f32;
+typedef unsigned long long u64;
+typedef long long          i64;
+template <class T>
+struct Vec {
+    T*  mpBegin;      // 0x00
+    T*  mpEnd;        // 0x04
+    T*  mpCap;        // 0x08
+};
+typedef Vec<u32> VecU32_s00c4_5860;
+struct Timer20 {                 // cSPMission + 0x38 / +0x58
+    u32 raw[8];
+    void Ctor();                 // 0x00b63890
+    void Dtor();                 // 0x00b638b0
+};
+struct Key12 { u32 a, b, c; };
+typedef Vec<Key12> VecKey12;
+struct cProperty_s00c4_5860 {
+    void*  mpValue;    // 0x00
+    u32    pad04;      // 0x04
+    i32    mCount;     // 0x08
+    u32    pad0c;      // 0x0c
+    u16    mFlags;     // 0x10
+    u16    mType;      // 0x12
+    u8*    GetBool();  // 0x0041e920  ?GetBool@cProperty@@QAEPA_NXZ
+    f32*   GetFloat(); // 0x0041ea70  Property::GetFloat
+};
+struct MissionPropList {
+virtual void vf00();
+virtual void vf04();
+virtual void vf08();
+virtual void vf0c();
+virtual void vf10();
+virtual void vf14();
+    virtual void vf18();
+    virtual bool HasProperty(u32 key);                    // slot +0x1c
+    virtual void vf20();
+    virtual bool GetProperty(u32 key, cProperty_s00c4_5860** out);   // slot +0x24
+    virtual cProperty_s00c4_5860* GetPropertyByKey(u32 key);         // slot +0x28
+};
+struct cEntity {
+    u32 pad000[0x15];        // 0x00
+    u32 mRelation;           // 0x54
+    u32 pad058[0xb];         // 0x58
+    u32 mEmpireID;           // 0x84
+    u32 GetWeaponryLevel();  // 0x00c317a0
+    u8  EmpireCommAllowed(void* planetClue);  // 0x00c308e0
+};
+struct cPlanetClueObj {
+    cPlanetClueObj* SortBanners(u32 zero);               // 0x00b8de30
+    void FUN_00bb9c10();                                 // 0x00bb9c10
+    void* GetCommContext();                              // 0x00ce6950 (returns [this+0x184])
+};
+struct cPlanet_s00c4_5860 {
+    u32 pad000[0x4f];        // 0x00
+    cPlanetClueObj* mpPlanetClue;     // 0x13c
+    void* GetRandomAnimalSpecies();   // 0x00c70c10
+    void* FUN_00c71e30();             // 0x00c71e30
+};
+struct cPlayerInventory {
+    void* GetToolByKeySlot68(void* key);        // vtable +0x68 (this, key)
+    void* GetToolByKey(u32 which, void* key);   // vtable +0x64 (this, which, key)
+    void* ResolveTool(void* item);              // vtable +0x60 (this, item)
+    void  AddTool(Key12* key);                  // 0x00ff45e0
+};
+struct cSimSpaceGame {
+    cPlayerInventory* GetPlayerInventory();     // 0x00a1ad60
+};
+struct cGameDataBase {
+    void Ctor();           // 0x00b18660
+    void Dtor();           // 0x00b184c0
+};
+class cGenericPressureEvent : public cGameDataBase {
+ public:
+    void* mpVtbl;          // 0x000
+    void* mpVtbl4;         // 0x004
+    u32   pad008[0xb];     // 0x008
+    void* mpVtbl34;        // 0x034
+    Timer20 mTimer38;      // 0x038
+    Timer20 mTimer58;      // 0x058
+
+    cGenericPressureEvent* ctor();           // 0x00c46500
+    void* ScalarDeletingDtor(u32 flags);     // 0x00c46540
+};
+class cSPMission_s00c4_5860 {
+ public:
+    void* mpVtbl0;             // 0x000
+    void* mpVtbl4;             // 0x004
+    u32   pad008[5];           // 0x008
+    VecU32_s00c4_5860 mVec1c;             // 0x01c
+    u32   pad028[3];           // 0x028
+    void* mpVtbl34;            // 0x034
+    Timer20 mTimer38;          // 0x038
+    Timer20 mTimer58;          // 0x058
+    f32   mRewardMoney;        // 0x078
+    u32   pad07c;              // 0x07c
+    u32   mDuration;           // 0x080
+    u32   mState;              // 0x084  (eMissionState)
+    u8    mSystemsShutdown;    // 0x088
+    u8    pad089[3];           // 0x089
+    u32   mOwnerEmpireID;      // 0x08c
+    void* mpOwnerEmpire;       // 0x090
+    u32   pad094[2];           // 0x094
+    cPlanet_s00c4_5860* mpSourcePlanet;   // 0x09c
+    u32   pad0a0[0x18];        // 0x0a0
+    u32   mStarMapIconEffect;  // 0x100
+    u32   mStarMapDestEffect;  // 0x104
+    VecU32_s00c4_5860 mStarMapEffects;    // 0x108
+    u32   pad114[7];           // 0x114
+    u32   mFlags130;           // 0x130
+    VecU32_s00c4_5860 mEventLogsToRemove; // 0x134
+    u32   pad140[2];           // 0x140
+    u32   mProgressEventID;    // 0x148
+    u32   pad14c[8];           // 0x14c
+    void* mTargetAnimalSpecies;// 0x16c
+    u32   mTargetSpeciesKey[3];// 0x170
+    u32   pad17c;              // 0x17c
+    void* mpMissionPropList;   // 0x180
+    u32   mRewardToolKey;      // 0x184
+    u32   pad188[3];           // 0x188
+    VecKey12 mVec194;          // 0x194
+    u32   pad1a0[2];           // 0x1a0
+    VecKey12 mVec1a8;          // 0x1a8
+    u32   pad1b4[2];           // 0x1b4
+    VecKey12 mVec1bc;          // 0x1bc
+    u32   pad1c8[7];           // 0x1c8
+    u32   mField1e4;           // 0x1e4
+    cPlanet_s00c4_5860* mpTargetPlanet;   // 0x1e8
+
+    // helpers defined in the same object elsewhere
+    void* GetOwnerEmpire();                 // 0x00c451e0
+    f32   GetPunishmentRelation();          // 0x00c45920
+    f32   FUN_00c45970();                   // 0x00c45970
+
+    // this slice
+    f32   GetRewardRelation();              // 0x00c45860
+    u32   CalculateDuration();              // 0x00c45a10
+    u32   ReadTargetPlanetType();           // 0x00c45b40
+    u32   ReadTargetAnimalSpeciesType();    // 0x00c45b60
+    u8    ReadPickClosestStar();            // 0x00c45c60
+    Key12* GetMessageVector(Key12* out);    // 0x00c45ca0
+    void  SetOwnerEmpire(cEntity* empire);  // 0x00c45d30
+    u32   IsTargetPlanetClue(u32 clue);     // 0x00c45d80
+    u32   GetMissionIconEffect();           // 0x00c45db0
+    u32   GetMissionIconEffectGroup();      // 0x00c45de0
+    void  UpdateStarMapEffects(u8 useZero);// 0x00c45e10
+    u8    IsTutorialMission();              // 0x00c45f80
+    void  UpdateHints(u8 param);            // 0x00c45f90
+    bool  CanShowOnMap();                   // 0x00c460f0
+    u32   HasValidDescription();            // 0x00c46120
+    void  RemoveToolVector194();            // 0x00c46160
+    void  RemoveToolVector1bc();            // 0x00c461d0
+    void  RemoveToolVector1a8();            // 0x00c46250
+    u8    SerializeVarList(void* stream);   // 0x00c46310
+    void  WriteUintVector(VecU32_s00c4_5860* vec, void* stream); // 0x00c46470
+    void  ShutdownSystems();                // 0x00c46590
+    void  PostLoad();                       // 0x00c466d0
+    u8    PickTargetAnimalSpecies();        // 0x00c46790
+    u32   QueueConversation();              // 0x00c46800
+    u32   CanAccept();                      // 0x00c46840
+    void  OnReject();                       // 0x00c468b0
+    void  OnFail();                         // 0x00c469f0
+};
+extern "C" extern f32 g_missionTimeScale;    // 0x013ec5b4
+extern "C" extern f32 g_oneHalf;             // 0x013f9428
+extern "C" extern f32 g_defaultHintValue;    // 0x0146d130
+extern "C" extern u32 g_zeroSpeciesKey[3];   // 0x0168e844
+struct cStarMap {
+    void RemoveVisual(u32 handle, u32 flag);             // 0x01045a60
+    void* Lookup(u32 a, u32 b);                          // 0x01045120
+};
+struct cSPUIEventLog_s00c4_5860 {
+    void RemoveEvent(u32 id, u32 flag);                  // 0x00dd6d10
+};
+struct cCommManager {
+    void RemoveMatching(i32 a, i32 b, void* mission);    // 0x00aea720
+    void* FindEntry(u32 a, u32 b, u32 c, u32 d, u32 e);  // 0x00ae93f0
+    void  RemoveByPtr(void* entry);                      // 0x00aea7f0
+    void  Add(u32 a, u32 b, u32 c, u32 d, u32 e, u32 f, u32 g); // 0x00aeb7a0
+};
+u32   __cdecl GetPlayerEmpireID();                       // 0x01021090
+void* __cdecl GetPlayerEmpire();                         // 0x01021300
+void  __cdecl GetPropertyAsFloatArray(void* list, u32 key, i32* count, void** out); // 0x006a08b0
+u8    __cdecl GetPropertyAsKeyInstance(void* list, u32 key, void** out);          // 0x006a12a0
+void* __cdecl NounManager();                             // 0x00b3d300
+struct cGameTimeManager {
+    u64 GetTime();                                       // 0x00b316c0 ([this+0x38])
+};
+cGameTimeManager* __cdecl GameTimeManager();             // 0x00b3d380
+cStarMap* __cdecl GetStarMap();                          // 0x01046fc0 (no args, returns singleton)
+struct cTerrainSphere {
+    f32 GetValue(u32 key);                               // 0x00c75c30
+};
+struct cNounManager {
+    cTerrainSphere* GetCurrentTerrainSphere();           // 0x00f67d90 ([this+0x74])
+};
+void* __cdecl SpaceGameGet();                            // 0x01002bd0
+void* __cdecl SpaceGameGet(int a);                       // 0x01002bd0
+void* __cdecl FUN_010666a0(void* p);                     // 0x010666a0
+void  __cdecl FUN_0106f120(void* p);                     // 0x0106f120
+void* __cdecl FUN_01005180(u32 a);                       // 0x01005180
+void  __cdecl IntVectorResize(void* v, u32 n);           // 0x007eb820
+void* __cdecl GetMissionManager();                       // 0x00feb9f0 (no push: arg in ecx)
+void* __stdcall GetMissionManager(u32 a);                // 0x00feb9f0 (arg on stack)
+struct cMissionManager {
+    void  RemoveMission();                               // 0x00febe00
+    void  Event();                                       // 0x00fecbb0
+    void* GetOtherVec();                                 // 0x00897670
+    void* GetVec();                                      // 0x00febaa0
+};
+void* __cdecl PropertyManager();                         // 0x0067de30
+cSPUIEventLog_s00c4_5860* __cdecl EventLog();                       // 0x00b3d3e0
+cCommManager* __cdecl CommManager();                     // 0x00b3d4a0
+void  __cdecl WriteUint32(void* stream, void* value, u32 count, u32 flag); // 0x0093aa70
+void  __cdecl cSPUILayoutCtor();                         // 0x00dd1ca0
+void  __cdecl cSPUILayoutAdd();                          // 0x00dd27c0
+struct cTerraformingManager {
+    void  AddPlanet();                                   // 0x00bc1b10
+};
+cTerraformingManager* __stdcall TerraformingManager(void* planet);  // 0x00b3d430
+struct cRelationshipManager {
+    void RecordEvent(u32 a, u32 b, u32 ev, f32 v);       // 0x00d06240
+    f32 RelGetRelation(u32 a, u32 b, u32 c);             // 0x00d00a10
+};
+cRelationshipManager* __cdecl RelationshipManager();     // 0x00b3d2c0
+struct cSpaceRelationshipTuning {
+    f32 TuningGetThreshold();                            // 0x01040860
+};
+cSpaceRelationshipTuning* __cdecl GetSpaceRelationshipTuning();  // 0x010407c0
+void  __cdecl OperatorDeleteArray(void* p);              // 0x00f47380
+struct cVarListSerializer_s00c4_5860 {
+    void Ctor(void* self, void* mission, const char* name, u32 id);  // 0x00692f90
+    u8   Serialize(void* stream);                                    // 0x00692900
+};
+// ---- items of slice s00c45860 end
+
+// @ 0x00b9c630
+void Clue::Read(GenParams* src, int count, float value)
+{
+    Reset();                                                          // 0xb9a630
+    mFlag04 = 1;
+    mType00 = g_pAppProperties->GetIntProperty(0x4f421d6);             // 0x6a2660
+    if (mType00 < 0 || mType00 > 2) mType00 = 0;
+
+    mC08.Init(0xc000);                                                // 0xd01790
+
+    unsigned char* proc = (unsigned char*)operator_new(
+        0x120000, kProcLevelGenName, 0, 0, 0, 0);                     // 0xf473a0
+    if (proc != 0) {
+        FUN_00401930(proc, 0x18, 0xc000, (void*)&FUN_00b90720);       // 0x401930
+    }
+    mProc54 = proc;
+    for (int i = 0; i < 0xc000; i++) {
+        mProc54[i * 0x18] = 0;
+    }
+
+    m24 = (count < 0x80) ? count : kMaxClueCount;
+    m28 = value;
+
+    float scaled = src->m3c * kI16Scale;
+    int biased = _mm_cvt_ss2si(*(__m128*)&scaled) + 0x8000;
+    m40 = (biased > 0) ? (int)(unsigned short)biased : 0;
+    m44 = src->m38;
+    m4c = src->m34;
+
+    GenRecord* recA = src->mA08;
+    int size = recA->mSize;
+    m38 = size;
+    m3c = size * size;
+    m48 = (int)(((unsigned)size / (unsigned)(2 * count)) *
+                (unsigned)(size + 1));
+
+    if (recA != mRef1c) {
+        recA->mRefCount += 1;
+        GenRecord* old = mRef1c;
+        mRef1c = recA;
+        if (old != 0) {
+            int c = old->mRefCount - 1;
+            old->mRefCount = c;
+            if (c == 0) {
+                old->mRefCount = 1;
+                ((void(__thiscall*)(GenRecord*, int))
+                    old->mVtable[0])(old, 1);
+            }
+        }
+    }
+    GenRecord* recB = src->mB0c;
+    if (recB != mRef20) {
+        if (recB != 0) recB->mRefCount += 1;
+        GenRecord* old = mRef20;
+        mRef20 = recB;
+        if (old != 0) {
+            int c = old->mRefCount - 1;
+            old->mRefCount = c;
+            if (c == 0) {
+                old->mRefCount = 1;
+                ((void(__thiscall*)(GenRecord*, int))
+                    old->mVtable[0])(old, 1);
+            }
+        }
+    }
+    m2c = mRef1c->mValue10;
+    m30 = mRef20->mValue10;
+
+    int total = count * count * 6;
+    unsigned bytes = (unsigned)total * 12u;
+    if (bytes / 12u != (unsigned)total) bytes = 0xffffffffu;
+    Elem12* arr = (Elem12*)operator_new(bytes, kProcLevelGenName,
+                                        0, 0, 0, 0);                  // 0xf473a0
+    if (arr != 0) {
+        for (int i = 0; i < total; i++) {
+            arr[i].m00 = 0;
+            arr[i].m04 = 0;
+            arr[i].m08 = kNegOne;
+        }
+    }
+    m34 = arr;
+}
 
 // @ 0x00c44a20
 int GameObj::Read_c44a20(void* stream)
@@ -1152,6 +2019,35 @@ bool GameObj::Write_c44ad0(void* stream)
   if (mKey.instance != 0)
     mpResource = FUN_00401090()->FUN_004df550(&mKey);
   return ok;
+}
+
+// @ 0x00c44b40
+void GameObj::Serialize_c44b40(void* stream)
+{
+  LocalSerializer s(this, DAT_015745f0, 0x1a80d26);
+  s.FUN_00695960(stream);
+}
+
+// @ 0x00c44b80
+void GameObj::RegisterIds_c44b80()
+{
+  v83(0x35ec3de);
+  v83(0x248975f);
+  v83(0x2489760);
+  v83(0x4249453);
+}
+
+// @ 0x00c44c40
+void GameObj::ForwardToResource_c44c40(void* p)
+{
+  if (mpResource)
+    mpResource->FUN_004da330(p);
+}
+
+// @ 0x00c44c60
+int GameObj::CallV48_c44c60(int a)
+{
+  return v48(a);
 }
 
 // @ 0x00c44c90
@@ -1246,6 +2142,20 @@ int cSPMission::SetUITextValue(int value)
     return value;
 }
 
+// @ 0x00c45340
+bool cSPMission::IsVisibleInUI()
+{
+    bool visible = true;
+    if (mpPropertyList180 != 0) {
+        cProperty* prop = 0;
+        if (mpPropertyList180->GetProperty(0x05590946, &prop)) {
+            if (prop->mType12 == 1)
+                visible = *prop->GetBool();
+        }
+    }
+    return visible;
+}
+
 // @ 0x00c45380
 int cSPMission::GetNumAvailable()
 {
@@ -1274,6 +2184,22 @@ int cSPMission::GetTotalTravelCost()
     return 2 * GetUFOSimulator(originID)->ComputeCost(targetID);
 }
 
+// @ 0x00c45560
+float cSPMission::GetTotalTravelCostFloat()
+{
+    cPlanet* origin = mpOriginPlanet9c;
+    if (origin == 0)
+        return 0.0f;
+    cPlanet* target = mpTargetPlanet1e8;
+    if (target == 0)
+        return 0.0f;
+    cStarRecord* targetRec = target->mpStarRecord13c;
+    cStarRecord* originRec = origin->mpStarRecord13c;
+    u32 targetID = targetRec->GetStarID();
+    u32 originID = originRec->GetStarID();
+    return GetUFOSimulator(originID)->ComputeCostFloat(targetID) * 2.0f;
+}
+
 // @ 0x00c455b0
 bool cSPMission::IsAtStar(int empireID, int commContext)
 {
@@ -1295,6 +2221,628 @@ int cSPMission::GetDynamicResponseID(int a, int b)
     (void)a;
     (void)b;
     return (mFlags130 & 1) ? -1 : 0xb6a7851e;
+}
+
+// @ 0x00c45860
+f32 cSPMission_s00c4_5860::GetRewardRelation()
+{
+    u32 relation = 0;
+    cEntity* owner = (cEntity*)GetOwnerEmpire();
+    if (owner != 0)
+        relation = owner->mRelation;
+    f32 result = 0.0f;
+    if (mpMissionPropList == 0)
+        return result;
+    u32 key = 0x6fa6f0f4;
+    MissionPropList* list = (MissionPropList*)mpMissionPropList;
+    if (relation >= 1 && relation <= 3) {
+        u32 alt = relation == 1 ? 0x5cf5e5e0 : (relation == 2 ? 0xaef74c9a : 0xe3833365);
+        if (list->HasProperty(alt))
+            key = alt;
+    }
+    if (list->HasProperty(key) && mpMissionPropList != 0) {
+        cProperty_s00c4_5860* prop = 0;
+        if (list->GetProperty(key, &prop) && prop->mType == 0xd) {
+            result = *prop->GetFloat();
+        }
+    }
+    return result;
+}
+
+// @ 0x00c45a10
+u32 cSPMission_s00c4_5860::CalculateDuration()
+{
+    f32 duration = 0.0f;
+    if (mpMissionPropList != 0) {
+        cProperty_s00c4_5860* prop = 0;
+        if (((MissionPropList*)mpMissionPropList)->GetProperty(0xd71a8119, &prop) &&
+            prop->mType == 0xd)
+            duration = *prop->GetFloat();
+    }
+    u8 carry = 0;
+    if (mpMissionPropList != 0) {
+        cProperty_s00c4_5860* prop = 0;
+        if (((MissionPropList*)mpMissionPropList)->GetProperty(0xd71a811a, &prop) &&
+            prop->mType == 1)
+            carry = *prop->GetBool();
+    }
+    if (carry != 0)
+        mFlags130 |= 0x20;
+    else
+        mFlags130 &= ~0x20;
+    if (mOwnerEmpireID != 0xffffffff &&
+        mOwnerEmpireID != GetPlayerEmpireID()) {
+        i32 count = 0;
+        void* array = 0;
+        GetPropertyAsFloatArray(mpMissionPropList, 0x5efaf8b, &count, &array);
+        if (count > 0) {
+            cEntity* owner = (cEntity*)GetOwnerEmpire();
+            owner->GetWeaponryLevel();
+        }
+    }
+    cTerrainSphere* sphere = ((cNounManager*)NounManager())->GetCurrentTerrainSphere();
+    f32 scale = sphere->GetValue(0x77174715);
+    f32 total = (scale * duration) * g_missionTimeScale;
+    u32 v = (u32)(i64)total;
+    mDuration = v;
+    return v;
+}
+
+// @ 0x00c45b40
+u32 cSPMission_s00c4_5860::ReadTargetPlanetType()
+{
+    void* out;
+    GetPropertyAsKeyInstance(mpMissionPropList, 0x1f7aaaaa, &out);
+    return (u32)out;
+}
+
+// @ 0x00c45b60
+u32 cSPMission_s00c4_5860::ReadTargetAnimalSpeciesType()
+{
+    void* out;
+    GetPropertyAsKeyInstance(mpMissionPropList, 0x1f7aaaab, &out);
+    return (u32)out;
+}
+
+// @ 0x00c45c60
+u8 cSPMission_s00c4_5860::ReadPickClosestStar()
+{
+    if (mpMissionPropList != 0) {
+        cProperty_s00c4_5860* prop;
+        if (((MissionPropList*)mpMissionPropList)->GetProperty(0x1f707857, &prop) &&
+            prop->mType == 1)
+            return *prop->GetBool();
+    }
+    return 0;
+}
+
+// @ 0x00c45ca0
+Key12* cSPMission_s00c4_5860::GetMessageVector(Key12* out)
+{
+    void* vec;
+    if ((mFlags130 & 1) != 0) {
+        cMissionManager* mgr = (cMissionManager*)GetMissionManager();
+        vec = mgr->GetOtherVec();
+    } else {
+        cMissionManager* mgr = (cMissionManager*)GetMissionManager();
+        vec = mgr->GetVec();
+    }
+    *out = *(Key12*)vec;
+    return out;
+}
+
+// @ 0x00c45d30
+void cSPMission_s00c4_5860::SetOwnerEmpire(cEntity* empire)
+{
+    mOwnerEmpireID = empire != 0 ? empire->mEmpireID : 0xffffffff;
+    void* old = mpOwnerEmpire;
+    if (empire != (cEntity*)old) {
+        if (empire != 0)
+            (*(void(__thiscall**)(void*))*(void**)empire)(empire);
+        mpOwnerEmpire = empire;
+        if (old != 0)
+            (*(void(__thiscall**)(void*))((char*)*(void**)old + 4))(old);
+    }
+}
+
+// @ 0x00c45d80
+u32 cSPMission_s00c4_5860::IsTargetPlanetClue(u32 clue)
+{
+    if (mpTargetPlanet != 0 && (u32)mpTargetPlanet->mpPlanetClue == clue)
+        return 1;
+    return 0;
+}
+
+// @ 0x00c45db0
+u32 cSPMission_s00c4_5860::GetMissionIconEffect()
+{
+    if (mpMissionPropList != 0) {
+        void* out;
+        if (GetPropertyAsKeyInstance(mpMissionPropList, 0x45c00672, &out))
+            return (u32)out;
+    }
+    return 0xcda5f5d;
+}
+
+// @ 0x00c45de0
+u32 cSPMission_s00c4_5860::GetMissionIconEffectGroup()
+{
+    if (mpMissionPropList != 0) {
+        void* out;
+        if (GetPropertyAsKeyInstance(mpMissionPropList, 0xf924ebf3, &out))
+            return (u32)out;
+    }
+    return 0x166521a5;
+}
+
+// @ 0x00c45e10
+void cSPMission_s00c4_5860::UpdateStarMapEffects(u8 useZero)
+{
+    cGameTimeManager* gt = GameTimeManager();
+    u64 time = gt->GetTime();
+    u64 rem = time % 1000;
+    f32 frac = (f32)((double)rem * g_oneHalf);
+
+    if (mStarMapIconEffect != 0xffffffff) {
+        f32 v = useZero != 0 ? g_defaultHintValue : frac;
+        void* obj = GetStarMap()->Lookup(0, mStarMapIconEffect);
+        if (obj != 0)
+            (*(void(__thiscall**)(void*, u32, f32*, u32))((char*)*(void**)obj + 0x44))(obj, 4, &v, 1);
+    }
+    if (mStarMapDestEffect != 0xffffffff) {
+        f32 v = useZero != 0 ? g_defaultHintValue : frac;
+        void* obj = GetStarMap()->Lookup(0, mStarMapDestEffect);
+        if (obj != 0)
+            (*(void(__thiscall**)(void*, u32, f32*, u32))((char*)*(void**)obj + 0x44))(obj, 4, &v, 1);
+    }
+    if (mStarMapEffects.mpBegin != mStarMapEffects.mpEnd) {
+        i32 n = (i32)(mStarMapEffects.mpEnd - mStarMapEffects.mpBegin);
+        if (n > 0) {
+            i32 i = 0;
+            do {
+                u32 h = mStarMapEffects.mpBegin[i];
+                if (h != 0xffffffff) {
+                    f32 v = useZero != 0 ? g_defaultHintValue : frac;
+                    void* obj = GetStarMap()->Lookup(0, h);
+                    if (obj != 0)
+                        (*(void(__thiscall**)(void*, u32, f32*, u32))((char*)*(void**)obj + 0x44))(obj, 4, &v, 1);
+                }
+                ++i;
+            } while (i < n);
+        }
+    }
+}
+
+// @ 0x00c45f80
+u8 cSPMission_s00c4_5860::IsTutorialMission()
+{
+    return (u8)(~(u8)(mFlags130 >> 1)) & 1;
+}
+
+// @ 0x00c45f90
+void cSPMission_s00c4_5860::UpdateHints(u8 param)
+{
+    if (mpMissionPropList != 0) {
+        cProperty_s00c4_5860* prop;
+        if (((MissionPropList*)mpMissionPropList)->GetProperty(0x5590946, &prop)) {
+            if (prop->mType == 1 && *prop->GetBool() == 0)
+                return;
+        }
+    }
+    {
+        u32 e1;
+        cEntity* owner1 = (cEntity*)GetOwnerEmpire();
+        if (owner1 != 0) {
+            owner1 = (cEntity*)GetOwnerEmpire();
+            e1 = owner1->mEmpireID;
+        } else {
+            e1 = 0xffffffff;
+        }
+        void* ctx1 = mpSourcePlanet->mpPlanetClue->GetCommContext();
+        void* entry1 = CommManager()->FindEntry(e1, (u32)ctx1, 0, 0xc8fbf7d7, 0x305a4a16);
+        if (entry1 != 0)
+            CommManager()->RemoveByPtr(entry1);
+
+        u32 e2;
+        cEntity* owner2 = (cEntity*)GetOwnerEmpire();
+        if (owner2 != 0) {
+            owner2 = (cEntity*)GetOwnerEmpire();
+            e2 = owner2->mEmpireID;
+        } else {
+            e2 = 0xffffffff;
+        }
+        void* ctx2 = mpSourcePlanet->mpPlanetClue->GetCommContext();
+        void* entry2 = CommManager()->FindEntry(e2, (u32)ctx2, 0, 0xc8fbf7d7, 0xa789391d);
+        if (entry2 != 0)
+            CommManager()->RemoveByPtr(entry2);
+
+        u32 e3;
+        cEntity* owner3 = (cEntity*)GetOwnerEmpire();
+        if (owner3 != 0) {
+            owner3 = (cEntity*)GetOwnerEmpire();
+            e3 = owner3->mEmpireID;
+        } else {
+            e3 = 0xffffffff;
+        }
+        u32 key = (param != 0 ? 0x88d110f9 : 0) + 0xa789391d;
+        void* ctx3 = mpSourcePlanet->mpPlanetClue->GetCommContext();
+        CommManager()->Add(e3, (u32)ctx3, 0xc8fbf7d7, key, 0, 1, 0x493e0);
+    }
+}
+
+// @ 0x00c460f0
+bool cSPMission_s00c4_5860::CanShowOnMap()
+{
+    u32 flags = mFlags130;
+    u32 bit5 = flags >> 5;
+    if ((bit5 & 1) != 0) {
+        u32 bit6 = flags >> 6;
+        if ((bit6 & 1) == 0)
+            return false;
+    }
+    u8 r = (*(u8(__thiscall**)(void*))((char*)*(void**)this + 0xf8))(this);
+    bool b = (r == 0);
+    return b;
+}
+
+// @ 0x00c46120
+u32 cSPMission_s00c4_5860::HasValidDescription()
+{
+    u32 n = (*(u32(__thiscall**)(void*))((char*)*(void**)this + 0xa8))(this);
+    if (n > 0 && (mFlags130 & 1) == 0) {
+        if ((*(u8(__thiscall**)(void*))((char*)*(void**)this + 0x104))(this) != 0)
+            return 1;
+    }
+    return 0;
+}
+
+// @ 0x00c46160
+void cSPMission_s00c4_5860::RemoveToolVector194()
+{
+    i32 n = (i32)(mVec194.mpEnd - mVec194.mpBegin);
+    if (n > 0) {
+        i32 off = 0;
+        do {
+            cSimSpaceGame* game = (cSimSpaceGame*)SpaceGameGet();
+            cPlayerInventory* inv = game->GetPlayerInventory();
+            void* key = (void*)((char*)mVec194.mpBegin + off);
+            void* item = (*(void*(__thiscall**)(void*, void*))((char*)*(void**)inv + 0x68))(inv, key);
+            if (item != 0) {
+                void* r = FUN_010666a0(item);
+                FUN_0106f120(r);
+            }
+            off += 0xc;
+            --n;
+        } while (n != 0);
+    }
+}
+
+// @ 0x00c461d0
+void cSPMission_s00c4_5860::RemoveToolVector1bc()
+{
+    cSimSpaceGame* game = (cSimSpaceGame*)SpaceGameGet();
+    cPlayerInventory* inv = game->GetPlayerInventory();
+    i32 n = (i32)(mVec1bc.mpEnd - mVec1bc.mpBegin);
+    if (n > 0) {
+        i32 off = 0;
+        do {
+            void* key = (void*)((char*)mVec1bc.mpBegin + off);
+            void* item = (*(void*(__thiscall**)(void*, u32, void*))((char*)*(void**)inv + 0x64))(inv, 0, key);
+            item = (*(void*(__thiscall**)(void*, void*))((char*)*(void**)inv + 0x60))(inv, item);
+            if (item != 0) {
+                void* r = FUN_010666a0(item);
+                FUN_0106f120(r);
+            }
+            off += 0xc;
+            --n;
+        } while (n != 0);
+    }
+}
+
+// @ 0x00c46250
+void cSPMission_s00c4_5860::RemoveToolVector1a8()
+{
+    cSimSpaceGame* game = (cSimSpaceGame*)SpaceGameGet();
+    cPlayerInventory* inv = game->GetPlayerInventory();
+    i32 n = (i32)(mVec1a8.mpEnd - mVec1a8.mpBegin);
+    if (n > 0) {
+        i32 off = 0;
+        do {
+            void* key = (void*)((char*)mVec1a8.mpBegin + off);
+            void* item = (*(void*(__thiscall**)(void*, u32, void*))((char*)*(void**)inv + 0x64))(inv, 1, key);
+            item = (*(void*(__thiscall**)(void*, void*))((char*)*(void**)inv + 0x60))(inv, item);
+            if (item != 0) {
+                void* r = FUN_010666a0(item);
+                FUN_0106f120(r);
+            }
+            off += 0xc;
+            --n;
+        } while (n != 0);
+    }
+}
+
+// @ 0x00c46310
+u8 cSPMission_s00c4_5860::SerializeVarList(void* stream)
+{
+    cVarListSerializer_s00c4_5860 ser;
+    ser.Ctor(&ser, this, "Mission", 0x1a80d26);
+    u8 result = ser.Serialize(stream);
+    i32 n = (i32)(mVec1c.mpEnd - mVec1c.mpBegin);
+    void* o = (*(void*(__thiscall**)(void*))((char*)*(void**)stream + 0x20))(stream);
+    void* s = (*(void*(__thiscall**)(void*))((char*)*(void**)o + 0x18))(o);
+    i32 count = n;
+    WriteUint32(s, &count, 1, 0);
+    for (i32 i = 0; i < n; ++i) {
+        i32 field = *(i32*)((char*)mVec1c.mpBegin[i] + 0x70);
+        void* o2 = (*(void*(__thiscall**)(void*))((char*)*(void**)stream + 0x20))(stream);
+        void* s2 = (*(void*(__thiscall**)(void*))((char*)*(void**)o2 + 0x18))(o2);
+        i32 v = field;
+        WriteUint32(s2, &v, 1, 0);
+    }
+    return result;
+}
+
+// @ 0x00c463d0
+void** __fastcall ReleaseRefMember(void** self)
+{
+    void* obj = *self;
+    if (obj != 0) {
+        *self = 0;
+        (*(void(__thiscall**)(void*))((char*)*(void**)obj + 8))(obj);
+    }
+    return self;
+}
+
+// @ 0x00c46470
+void cSPMission_s00c4_5860::WriteUintVector(VecU32_s00c4_5860* vec, void* stream)
+{
+    i32 n = (i32)(vec->mpEnd - vec->mpBegin);
+    void* o = (*(void*(__thiscall**)(void*))((char*)*(void**)stream + 0x20))(stream);
+    void* s = (*(void*(__thiscall**)(void*))((char*)*(void**)o + 0x18))(o);
+    i32 count = n;
+    WriteUint32(s, &count, 1, 0);
+    u32* p = vec->mpBegin;
+    u32* end = vec->mpEnd;
+    while (p != end) {
+        void* o2 = (*(void*(__thiscall**)(void*))((char*)*(void**)stream + 0x20))(stream);
+        void* s2 = (*(void*(__thiscall**)(void*))((char*)*(void**)o2 + 0x18))(o2);
+        u32 v = *p;
+        WriteUint32(s2, &v, 1, 0);
+        ++p;
+    }
+    (*(void(__thiscall**)(void*))((char*)*(void**)stream + 0x1c))(stream);
+}
+
+// @ 0x00c46500
+cGenericPressureEvent* cGenericPressureEvent::ctor()
+{
+    Ctor();
+    *(void* volatile*)((char*)this + 0x34) = (void*)0x13eb384;
+    mpVtbl = (void*)0x146d188;
+    mpVtbl4 = (void*)0x146d174;
+    mpVtbl34 = (void*)0x146d164;
+    mTimer38.Ctor();
+    mTimer58.Ctor();
+    return this;
+}
+
+// @ 0x00c46540
+void* cGenericPressureEvent::ScalarDeletingDtor(u32 flags)
+{
+    mpVtbl = (void*)0x146d188;
+    mpVtbl4 = (void*)0x146d174;
+    mpVtbl34 = (void*)0x146d164;
+    mTimer58.Dtor();
+    mTimer38.Dtor();
+    mpVtbl34 = (void*)0x13eb394;
+    Dtor();
+    if ((flags & 1) != 0)
+        OperatorDeleteArray(this);
+    return this;
+}
+
+// @ 0x00c46590
+void cSPMission_s00c4_5860::ShutdownSystems()
+{
+    mSystemsShutdown = 1;
+    CommManager()->RemoveMatching(-1, -1, this);
+    if (mStarMapIconEffect != 0xffffffff) {
+        GetStarMap()->RemoveVisual(mStarMapIconEffect, 0);
+        mStarMapIconEffect = 0xffffffff;
+    }
+    if (mStarMapDestEffect != 0xffffffff) {
+        GetStarMap()->RemoveVisual(mStarMapDestEffect, 0);
+        mStarMapDestEffect = 0xffffffff;
+    }
+    i32 n = (i32)(mStarMapEffects.mpEnd - mStarMapEffects.mpBegin);
+    if (n > 0) {
+        do {
+            u32 handle = mStarMapEffects.mpEnd[-1];
+            GetStarMap()->RemoveVisual(handle, 0);
+            mStarMapEffects.mpEnd -= 1;
+            --n;
+        } while (n != 0);
+    }
+    if (mpTargetPlanet != 0) {
+        cPlanetClueObj* clue = mpTargetPlanet->mpPlanetClue;
+        clue->SortBanners(0)->FUN_00bb9c10();
+    }
+    if (mProgressEventID != 0xffffffff) {
+        EventLog()->RemoveEvent(mProgressEventID, 1);
+        mProgressEventID = 0xffffffff;
+    }
+    (*(void(__thiscall**)(void*))((char*)*(void**)this + 0x148))(this);
+    i32 m = (i32)(mEventLogsToRemove.mpEnd - mEventLogsToRemove.mpBegin);
+    if (m > 0) {
+        do {
+            u32 id = mEventLogsToRemove.mpEnd[-1];
+            mEventLogsToRemove.mpEnd -= 1;
+            EventLog()->RemoveEvent(id, 0);
+            --m;
+        } while (m != 0);
+    }
+}
+
+// @ 0x00c466d0
+void cSPMission_s00c4_5860::PostLoad()
+{
+    void* mgr = PropertyManager();
+    void* old = mpMissionPropList;
+    if (old != 0) {
+        mpMissionPropList = 0;
+        (*(void(__thiscall**)(void*))((char*)*(void**)old + 4))(old);
+    }
+    (*(void(__thiscall**)(void*, u32, u32, void**))((char*)*(void**)mgr + 0x2c))(mgr, *(u32*)&mRewardMoney, 0x2ae1a8e, &mpMissionPropList);
+    if (mpMissionPropList == 0) {
+        mState = 1;
+        cMissionManager* mm = (cMissionManager*)GetMissionManager((u32)(void*)this);
+        mm->RemoveMission();
+        (*(void(__thiscall**)(void*))((char*)*(void**)this + 0x44))(this);
+    }
+    if (mState == 2 || mState == 3) {
+        (*(void(__thiscall**)(void*))((char*)*(void**)this + 0x144))(this);
+        (*(void(__thiscall**)(void*))((char*)*(void**)this + 0x194))(this);
+    }
+    if (mpTargetPlanet != 0)
+        TerraformingManager(mpTargetPlanet)->AddPlanet();
+    (*(void(__thiscall**)(void*, u32))((char*)*(void**)this + 0x190))(this, 0);
+}
+
+// @ 0x00c46790
+u8 cSPMission_s00c4_5860::PickTargetAnimalSpecies()
+{
+    void* species = mpTargetPlanet->GetRandomAnimalSpecies();
+    mTargetAnimalSpecies = species;
+    if (species == 0) {
+        u32 zero0 = g_zeroSpeciesKey[0];
+        mTargetSpeciesKey[0] = zero0;
+        mTargetSpeciesKey[1] = g_zeroSpeciesKey[1];
+        mTargetSpeciesKey[2] = g_zeroSpeciesKey[2];
+        return 0;
+    }
+    *(Key12*)mTargetSpeciesKey = *(Key12*)((char*)species + 0x504);
+    return 1;
+}
+
+// @ 0x00c46800
+u32 cSPMission_s00c4_5860::QueueConversation()
+{
+    cEntity* owner = (cEntity*)GetOwnerEmpire();
+    if (mOwnerEmpireID != 0xffffffff && owner != 0) {
+        cPlanet_s00c4_5860* planet = mpSourcePlanet;
+        void* clue;
+        if (planet != 0) {
+            clue = planet->mpPlanetClue;
+            if (owner->EmpireCommAllowed(clue) == 0)
+                return 0;
+        }
+    }
+    return 1;
+}
+
+// @ 0x00c46840
+u32 cSPMission_s00c4_5860::CanAccept()
+{
+    cEntity* owner = (cEntity*)GetOwnerEmpire();
+    if (mOwnerEmpireID != 0xffffffff && owner != 0) {
+        cEntity* player = (cEntity*)GetPlayerEmpire();
+        if (owner != player) {
+            player = (cEntity*)GetPlayerEmpire();
+            u32 pid = player->mEmpireID;
+            u32 oid = owner->mEmpireID;
+            f32 relation = RelationshipManager()->RelGetRelation(oid, pid, 0);
+            f32 threshold = GetSpaceRelationshipTuning()->TuningGetThreshold();
+            if (relation < threshold)
+                return 0;
+        }
+    }
+    return 1;
+}
+
+// @ 0x00c468b0
+void cSPMission_s00c4_5860::OnReject()
+{
+    if ((mFlags130 & 8) != 0) {
+        cMissionManager* mm = (cMissionManager*)GetMissionManager(*(u32*)&mRewardMoney);
+        mm->Event();
+    }
+    cEntity* owner = (cEntity*)GetOwnerEmpire();
+    if (owner != 0 && owner != (cEntity*)GetPlayerEmpire()) {
+        f32 rel = FUN_00c45970();
+        rel = fabsf(rel);
+        {
+            u32 oid = owner->mEmpireID;
+            u32 id = GetPlayerEmpireID();
+            cRelationshipManager* rm = RelationshipManager();
+            rm->RecordEvent(oid, id, 0x526e51d, rel);
+        }
+        {
+            u32 oid2 = owner->mEmpireID;
+            u32 id2 = GetPlayerEmpireID();
+            cRelationshipManager* rm2 = RelationshipManager();
+            rm2->RelGetRelation(oid2, id2, 0);
+        }
+        cSPUILayoutCtor();
+        cSPUILayoutAdd();
+    }
+    SpaceGameGet(4);
+    void* v = FUN_01005180(4);
+    IntVectorResize(v, 8);
+    *(f32*)((char*)*(void**)((char*)v + 0xc) + 0x1c) = mRewardMoney;
+
+    cProperty_s00c4_5860* prop = ((MissionPropList*)mpMissionPropList)->GetPropertyByKey(0x1625a62e);
+    u16 flags = prop->mFlags & 0x30;
+    i32 count;
+    if (flags != 0) {
+        count = prop->mCount;
+        if (count <= 0)
+            return;
+    } else {
+        if (prop->mType == 0)
+            return;
+        count = 1;
+    }
+    do {
+        Key12 key;
+        key.a = *(u32*)prop->mpValue;
+        key.b = 0;
+        key.c = 0;
+        cSimSpaceGame* game = (cSimSpaceGame*)SpaceGameGet();
+        cPlayerInventory* inv = game->GetPlayerInventory();
+        inv->AddTool(&key);
+        --count;
+    } while (count != 0);
+}
+
+// @ 0x00c469f0
+void cSPMission_s00c4_5860::OnFail()
+{
+    cEntity* owner = (cEntity*)GetOwnerEmpire();
+    if (owner != 0 && owner != (cEntity*)GetPlayerEmpire()) {
+        f32 rel = GetPunishmentRelation();
+        rel = fabsf(rel);
+        {
+            u32 oid = owner->mEmpireID;
+            u32 id = GetPlayerEmpireID();
+            cRelationshipManager* rm = RelationshipManager();
+            rm->RecordEvent(oid, id, 0x526e51c, rel);
+        }
+        {
+            u32 oid2 = owner->mEmpireID;
+            u32 id2 = GetPlayerEmpireID();
+            cRelationshipManager* rm2 = RelationshipManager();
+            rm2->RelGetRelation(oid2, id2, 0);
+        }
+        cSPUILayoutCtor();
+        cSPUILayoutAdd();
+    }
+    SpaceGameGet(7);
+    void* v = FUN_01005180(7);
+    IntVectorResize(v, 8);
+    *(f32*)((char*)*(void**)((char*)v + 0xc) + 0x1c) = mRewardMoney;
+    if ((mFlags130 & 1) != 0)
+        UpdateHints(0);
+    (*(void(__thiscall**)(void*))((char*)*(void**)this + 0x84))(this);
 }
 
 // @ 0x00c46ab0
@@ -1694,6 +3242,148 @@ void cSPMission_s00c4_7a10::GetText(WString* out, int32_t textStyle)
     text.Destruct();
 }
 
+// @ 0x00c48900
+void cSPMission_s00c4_7a10::FUN_00c48900(WString* out)
+{
+    if (mPlanet9C == 0) {
+        return;
+    }
+    PlanetNameHolder* holder = ((cPlanet_s00c4_7a10*)mPlanet9C)->mField13C->FUN_00b8de30();
+    if (holder == 0) {
+        return;
+    }
+    WString* name = holder->FUN_00bb9de0();
+    out->assign(name->mBegin, name->mEnd);
+}
+
+// @ 0x00c48940
+void cSPMission_s00c4_7a10::FUN_00c48940(WString* out)
+{
+    if (mPlanet9C == 0) {
+        return;
+    }
+    WString* name = ((cPlanet_s00c4_7a10*)mPlanet9C)->GetName();
+    if (name == out) {
+        return;
+    }
+    out->assign(name->mBegin, name->mEnd);
+}
+
+// @ 0x00c48970
+void SPObject::FUN_00c48970(int idx, WStr* out)
+{
+    int v = (int)mArrE0[idx];
+    if (v == 0)
+        return;
+    switch (mArrCC[idx]) {
+    case 0:
+        out->append(((CStr*)0x168ee08)->GetText());
+        return;
+    case 1:
+        (*(Translator**)0x16e0d08)->mField10 = v;
+        out->append(((CStr*)0x168ee1c)->GetText());
+        return;
+    case 2:
+        (*(Translator**)0x16e0d08)->mField10 = v;
+        out->append(((CStr*)0x168ee30)->GetText());
+        return;
+    case 3:
+        (*(Translator**)0x16e0d08)->mField10 = v;
+        out->append(((CStr*)0x168ee44)->GetText());
+        return;
+    case 4:
+        (*(Translator**)0x16e0d08)->mField10 = v;
+        out->append(((CStr*)0x168ee58)->GetText());
+        return;
+    case 5:
+        (*(Translator**)0x16e0d08)->mField10 = v;
+        out->append(((CStr*)0x168ee6c)->GetText());
+        return;
+    case 6:
+        out->append(((CStr*)0x168ee80)->GetText());
+        return;
+    }
+}
+
+// @ 0x00c48a90
+void SPObject::FUN_00c48a90(WStr* out)
+{
+    int i = mFieldFC;
+    if (i >= 0 && i < 10) {
+        const wchar_t* p = ((CStr*)(0x168ef48 + i * 0x14))->GetText();
+        out->assign(p, p + WStrLen(p));
+    }
+}
+
+// @ 0x00c48ae0
+void SPObject::FUN_00c48ae0(WStr* out)
+{
+    switch (mKindF8) {
+    case 0:
+        out->append(((CStr*)0x168ee94)->GetText());
+        break;
+    case 1:
+        out->append(((CStr*)0x168eea8)->GetText());
+        return;
+    case 2:
+        out->append(((CStr*)0x168eebc)->GetText());
+        return;
+    case 3:
+        out->append(((CStr*)0x168eed0)->GetText());
+        return;
+    case 4:
+        out->append(((CStr*)0x168eee4)->GetText());
+        return;
+    case 5:
+        out->append(((CStr*)0x168eef8)->GetText());
+        return;
+    }
+}
+
+// @ 0x00c48ba0
+void SPObject::FUN_00c48ba0(int arg)
+{
+    u32* p = mVec1D0.mpBegin;
+    while (p != mVec1D0.mpEnd) {
+        if ((int)*p == arg) {
+            VT_2C(MessageServer(), (char*)this + 0x34, arg, -10000);
+            u32* next = p + 1;
+            if (next < mVec1D0.mpEnd)
+                memcpy(p, next, (char*)mVec1D0.mpEnd - (char*)next);
+            mVec1D0.mpEnd = (u32*)((char*)mVec1D0.mpEnd - 4);
+        } else {
+            p++;
+        }
+    }
+}
+
+// @ 0x00c48c20
+void SPObject::GetRewardsNames(WStr* out)
+{
+    bool b3 = !(mStarClueA4 == *(u32*)0x168e844 &&
+                mStarClueA8 == *(u32*)0x168e848 &&
+                mStarClueAC == *(u32*)0x168e84c);
+    bool b2 = mFieldA0 > 0.0f;
+    if (b3) {
+        WStr temp;
+        temp.mpBegin = 0;
+        temp.mpEnd = 0;
+        temp.mpCapacity = 0;
+        temp.RangeInitialize(mStrB0.GetText());
+        out->Append(temp.mpBegin, temp.mpEnd);
+        if (temp.mpCapacity - temp.mpBegin > 1 && temp.mpBegin)
+            EAFree(temp.mpBegin);
+        if (!b2)
+            return;
+        out->Append(L" %s ", ((CStr*)0x168ef0c)->GetText());
+    }
+    if (b2) {
+        (*(Translator**)0x16e0d08)->mField40 = *(int*)&mFieldA0;
+        const wchar_t* p = ((CStr*)0x168ef20)->GetText();
+        out->assign(p, p + wcslen(p));
+    }
+}
+
 // @ 0x00c48d40
 void SPObject::GetUITitle(WStr* out)
 {
@@ -1729,6 +3419,216 @@ void SPObject::FUN_00c48e00(WStr* out)
         else
             GetText(0xba93258e, out);
     }
+}
+
+// @ 0x00c48e90
+SPObject::SPObject()
+{
+    BaseCtor();
+    mpVtbl34 = (void*)0x13eb384;
+    mpVtbl0  = (void*)0x146d188;
+    mpVtbl4  = (void*)0x146d174;
+    mpVtbl34 = (void*)0x146d164;
+    mTimer38.TimerCtor();
+    mTimer58.TimerCtor();
+    mpVtbl0  = (void*)0x146d200;
+    mpVtbl4  = (void*)0x146dfb4;
+    mpVtbl34 = (void*)0x146fbf0;
+    mField78 = 0;
+    mField7C = 0;
+    mField80 = 0;
+    mGroup84 = 0;
+    mField88 = 0;
+    mField8C = -1;
+    mField90 = 0;
+    mField94 = -1;
+    mField98 = 0;
+    mField9C = 0;
+    mFieldA0 = 0.0f;
+    mStarClueA4 = *(u32*)0x168e844;
+    mStarClueA8 = *(u32*)0x168e848;
+    mStarClueAC = *(u32*)0x168e84c;
+    mStrB0.CStrCtor();
+    mFieldC4 = -1;
+    mFieldC8 = 0.0f;
+    mArrCC = 0;
+    mArrD0 = 0;
+    mArrD4 = 0;
+    mArrE0 = 0;
+    mArrE4 = 0;
+    mArrE8 = 0;
+    mFieldF4 = -1;
+    mKindF8 = -1;
+    mFieldFC = -1;
+    mField100 = -1;
+    mField104 = -1;
+    mField108 = 0;
+    mField10C = 0;
+    mField110 = 0;
+    mVec11C.mpBegin = 0;
+    mVec11C.mpEnd = 0;
+    mVec11C.mpCapacity = 0;
+    mFlags130 = 0;
+    mVec134.mpBegin = 0;
+    mVec134.mpEnd = 0;
+    mVec134.mpCapacity = 0;
+    mField148 = -1;
+    mStr14C.mpBegin = (wchar_t*)0x1667bac;
+    mStr14C.mpEnd = (wchar_t*)0x1667bac;
+    mStr14C.mpCapacity = (wchar_t*)0x1667bae;
+    mStr15C.mpBegin = (wchar_t*)0x1667bac;
+    mStr15C.mpEnd = (wchar_t*)0x1667bac;
+    mStr15C.mpCapacity = (wchar_t*)0x1667bae;
+    mField16C = 0;
+    mField170 = 0;
+    mField174 = 0;
+    mField178 = 0;
+    mField17C = 0;
+    mpField180 = 0;
+    mField184 = 0;
+    mField188 = 0;
+    mField18C = 0;
+    mField190 = 0;
+    mField194 = 0;
+    mField198 = 0;
+    mField19C = 0;
+    mField1A8 = 0;
+    mField1AC = 0;
+    mField1B0 = 0;
+    mField1BC = 0;
+    mField1C0 = 0;
+    mField1C4 = 0;
+    mVec1D0.mpBegin = 0;
+    mVec1D0.mpEnd = 0;
+    mVec1D0.mpCapacity = 0;
+    mField1E4 = 0;
+    mpTargetPlanet = 0;
+    mVec11C.Reserve(5);
+    {
+        u32* first = mVec134.mpBegin;
+        u32* last  = mVec134.mpEnd;
+        u32* end   = mVec134.mpEnd;
+        memcpy(first, last, (char*)end - (char*)last);
+        mVec134.mpEnd = end - (last - first);
+    }
+}
+
+// @ 0x00c490e0
+void SPObject::FUN_00c490e0(u32 arg)
+{
+    if (VT_154(this, arg) == 0) {
+        VT_20(MessageServer(), (char*)this + 0x34, arg);
+        mVec1D0.push_back(arg);
+    }
+}
+
+// @ 0x00c49140
+void SPObject::FUN_00c49140(WStr* out)
+{
+    CivData* o = (CivData*)GetCivData();
+    if (o) {
+        o->FUN_c30c80();
+        WStr3(out, (const wchar_t*)0x13f5c04, *o->GetCities());
+    }
+}
+
+// @ 0x00c49180
+void SPObject::FUN_00c49180(WStr* out)
+{
+    CivData* o = (CivData*)GetOwnerEmpire();
+    if (o) {
+        o->FUN_c30c80();
+        WStr3(out, (const wchar_t*)0x13f5c04, *o->GetCities());
+    }
+}
+
+// @ 0x00c491c0
+int SPObject::GetTagString(u32 tag, WStr* out)
+{
+    wchar_t buf[64];
+
+    if (tag == 0xa593874e) {
+        if (mpTargetPlanet) {
+            void* sorter = *(void**)((char*)mpTargetPlanet + 0x13c);
+            if (sorter) {
+                void* r = ((SorterObj*)sorter)->operator()();
+                if (r) {
+                    WStr* w = ((SorterObj*)r)->FUN_00bb9de0();
+                    out->assign(w->mpBegin, w->mpEnd);
+                }
+            }
+        }
+        return 1;
+    }
+
+    if (tag == 0xa499e2f0) {
+        if (mpTargetPlanet) {
+            WStr* name = ((PlanetObj*)mpTargetPlanet)->GetName();
+            if (name != out)
+                out->assign(name->mpBegin, name->mpEnd);
+        }
+        return 1;
+    }
+
+    if (tag == 0xcaf36e4a) { FUN_00c48900(out); return 1; }
+    if (tag == 0x8b0eb564) { FUN_00c48940(out); return 1; }
+    if (tag == 0x200cc87d) { VT_B4(this, out);  return 1; }
+    if (tag == 0xe3224d84) { GetRewardsNames(out); return 1; }
+    if (tag == 0x68e2e9c6) { FUN_00c49140(out); return 1; }
+    if (tag == 0xc2efec3f) { FUN_00c486f0(out); return 1; }
+    if (tag == 0xfb301e72) { FUN_00c49180(out); return 1; }
+
+    if (tag != 0x4434801b) {
+        if (tag == 0x85f50ff7) {
+            if ((mFlags130 >> 1) & 1) { VT_CC(this, 0, out); return 1; }
+        }
+        else if (tag == 0x85f50ff4) {
+            if ((mFlags130 >> 1) & 1) { VT_CC(this, 1, out); return 1; }
+        }
+        else if (tag == 0x3eae770b) {
+            if ((mFlags130 >> 1) & 1) { VT_D0(this, out); return 1; }
+        }
+        else if (tag == 0x4bf8f3dc) {
+            if ((mFlags130 >> 1) & 1) { VT_D4(this, out); return 1; }
+        }
+        else {
+            if (tag != 0x53f90032) {
+                if (tag == 0xd1c3d278) {
+                    if ((mFlags130 >> 2) & 1) { VT_DC(this, out); return 1; }
+                }
+                else {
+                    if (tag != 0x39e8da5f) {
+                        if (tag == 0xd1ce9de3) {
+                            u32 ms = VT_AC(this);
+                            u32 total = ms / 1000;
+                            FUN_00881730(0, (int)(total / 60), (int)(total % 60), buf, 0x40,
+                                         (const wchar_t*)0x146d3c4);
+                            out->append(buf);
+                            return 1;
+                        }
+                        if (tag == 0x22e33d08) {
+                            (*(Translator**)0x16e0d08)->mField40 = (float)mField184;
+                        }
+                        else {
+                            if (tag != 0xad9e5ea2 && tag != 0xc22d2221)
+                                return 0;
+                            (*(Translator**)0x16e0d08)->mField40 = (float)mField188;
+                        }
+                        out->append(((CStr*)0x168ef20)->GetText());
+                        return 1;
+                    }
+                    if ((mFlags130 >> 2) & 1) { VT_E0(this, out); return 1; }
+                }
+                out->append(L"ERROR: PLANET NAME IS NOT HIDDEN");
+                return 1;
+            }
+            if ((mFlags130 >> 1) & 1) { VT_D8(this, out); return 1; }
+        }
+        out->append(L"ERROR: STAR NAME IS NOT HIDDEN");
+        return 1;
+    }
+    FUN_00c48740(out);
+    return 1;
 }
 
 // @ 0x00c495c0
@@ -2315,4 +4215,172 @@ bool cBannerListHost::ReadBannerList(void* pArchive)
         mEntries.push_back(pBanner);
     }
     return bResult;
+}
+
+// @ 0x00c4a980
+void cSPMission_s00c4_a850::PickGiveOnAcceptItems()
+{
+    if (!mpPropertyList)
+        return;
+
+    if (GetBoolProperty(mpPropertyList, 0xf924ebf6)) {
+        static const uint32_t kSpeciesTables[3] = { 0xbcd73e89, 0xb8669ec9, 0x37148141 };
+        for (uint32_t i = 0; i < 3; ++i) {
+            cVec<uint32_t> profiles;
+            uint32_t nCount = static_cast<uint32_t>((int32_t)0);
+            if (nCount > 0) {
+                profiles.mpBegin = 0;
+            }
+            int32_t nFound = 0;
+            (void)nFound;
+            (void)kSpeciesTables;
+        }
+    }
+    if (GetBoolProperty(mpPropertyList, 0xf924ebf7)) {
+        for (uint32_t i = 0; i < 2; ++i) {
+            (void)i;
+        }
+    }
+    if (GetIntProperty(mpPropertyList, 0xf924ebf5) != 0)
+        mField190 = 0;
+}
+
+// @ 0x00c4ad50
+char cSPMission_s00c4_a850::Init()
+{
+    if (GetBoolProperty(mpPropertyList, 0x874b25b7))
+        mFlags |= 1;
+    if (GetBoolProperty(mpPropertyList, 0x874b25b8))
+        mFlags |= 8;
+    if (GetBoolProperty(mpPropertyList, 0x0767624b))
+        mFlags |= 0x80;
+    if (GetBoolProperty(mpPropertyList, 0xf924ebfd))
+        mFlags |= 2;
+    if (GetBoolProperty(mpPropertyList, 0xf924ebfe))
+        mFlags |= 4;
+
+    bool bValue = true;
+    {
+        cProperty_s00c4_a850* pProperty;
+        if (mpPropertyList && mpPropertyList->Find(0xfa24ee00, &pProperty) && pProperty->mType == 1)
+            bValue = *pProperty->GetBool();
+    }
+    if (!bValue)
+        mFlags |= 0x10;
+    else
+        mFlags &= ~0x10;
+
+    if (mpPropertyList) {
+        cProperty_s00c4_a850* pProperty;
+        if (mpPropertyList->Find(0x874b25ba, &pProperty) && pProperty->mType == 9)
+            mField184 = *pProperty->GetInt();
+    }
+    if (mpPropertyList) {
+        cProperty_s00c4_a850* pProperty;
+        if (mpPropertyList->Find(0xf924eeee, &pProperty) && pProperty->mType == 9)
+            mField188 = *pProperty->GetInt();
+    }
+    OnPropertiesLoaded();
+    PickGiveOnAcceptItems();
+    return 1;
+}
+
+// @ 0x00c4af60
+Simulator::cMissionAdventure::cMissionAdventure()
+{
+    Simulator_cGenericPressureEvent_ctor(this);
+    mField1f0 = 0;
+    mpData1f4 = 0;
+    mpVtbl = (void**)0x146d638;
+    mpVtbl04 = (void**)0x146dfb4;
+    mpVtbl34 = (void**)0x146d624;
+}
+
+// @ 0x00c4b0c0
+long double __stdcall Simulator_GetAdventurePressureFactor(cAdventurePlanet* pPlanet, void* pArg)
+{
+    long double fResult = FUN_00c44d00(pPlanet, pArg);
+    if (fResult > 0.0) {
+        if (GetMissionManager_s00c4_a850(pPlanet)->IsAdventureActive())
+            return -1.0f;
+        void* pObject = FUN_00b8de30(pPlanet);
+        char cFlag = FUN_00bb9bd0(pObject);
+        if (FUN_00b8dab0(pPlanet) < 2) {
+            if (!FUN_00bba100(pPlanet) && !FUN_00bb9d90(pPlanet) && !FUN_00bb9c30(pObject)) {
+                int32_t nKind = pPlanet->mField28;
+                if (nKind == 2)
+                    return cFlag ? 0.5f : 1.0f;
+                if (nKind == 3 || nKind == 4)
+                    return 0.25f;
+            }
+        }
+        fResult = -1.0f;
+    }
+    return fResult;
+}
+
+// @ 0x00c4b2b0
+void cSPMissionAdventureBase::InitAdventure()
+{
+    FUN_00c47a10(this);
+    StarManager(&mpData1f4, 1)->PickRandomAsset();
+    if (mpData1f4) {
+        cPlanet_s00c4_a850* pPlanet = GetTargetPlanet();
+        void* pPlanetData = pPlanet->mpData13C;
+        void* pAssetRef = FUN_01021300(mpData1f4);
+        FUN_00baf790(StarManager(pPlanetData, pAssetRef));
+        FUN_00b7d580(FUN_00b3d360(pPlanet));
+    }
+}
+
+// @ 0x00c4b310
+void __fastcall Simulator_StartMission(Simulator::cMissionAdventure* pMission)
+{
+    FUN_00c46b80(pMission);
+    ResourceKey_s00c4_a850 aKeys[4] = { { 0, 0, 0 }, { 0, 0, 0 }, { 0, 0, 0 }, { 0, 0, 0 } };
+    FUN_00e39ab0(0x1af2f7b7, 0, &aKeys[3], &aKeys[2], pMission->mpData1f4, 0, &aKeys[1], &aKeys[0]);
+    Achievements::GetController(0x51684fd3)->AwardAchievement();
+    Achievements::GetController(0x9c119e6b, 1)->AutoTest();
+    if (pMission->mpData1f4) {
+        ResourceKey_s00c4_a850 key;
+        key.mInstanceID = (uint32_t)pMission->mpData1f4;
+        key.mGroupID = 0x366a930d;
+        key.mTypeID = g_missionKeyGroup;
+        FUN_00f27e00(&key);
+    }
+}
+
+// @ 0x00c4b3d0
+void cMissionMessageHandler::HandleMessage(uint32_t nMessage, void* pMessage)
+{
+    if (nMessage == 0x43f2592 && GetMission()->mStatus != 1) {
+        cMissionMessage* pBody = (cMissionMessage*)pMessage;
+        uint32_t nField18 = pBody->mField18;
+        uint32_t nField10 = pBody->mField10;
+        void* pPlanetRef = pBody->mpPlanetRef;
+        cSPMissionMultiDelivery* pMission = GetMission();
+        if (pPlanetRef == pMission->GetTargetPlanet()->mpData13C &&
+            nField10 == (uint32_t)pMission->mpData1f4 &&
+            nField18 == 1)
+            pMission->ReturnForRewards();
+    }
+    BaseHandleMessage(nMessage, pMessage);
+}
+
+// @ 0x00c4b440
+bool Simulator::cMissionAdventure::InitMission()
+{
+    (void)0;
+    return false;
+}
+
+// @ 0x00c4b570
+Simulator::cMissionBalance::cMissionBalance()
+{
+    Simulator_cGenericPressureEvent_ctor(this);
+    mField1f0 = 0;
+    mThreshold = 0;
+    mpVtbl = (void**)0x146d840;
+    mpVtbl04 = (void**)0x146dfb4;
+    mpVtbl34 = (void**)0x146fbf0;
 }

@@ -11,5 +11,5 @@
 00c48740 ?FUN_00c48740@cSPMission_s00c4_7a10@@QAEXPAUWString@@@Z  # cSPMission_s00c4_7a10::FUN_00c48740 migrated from s00c47a10 (verbatim, slice spelling)
 00c48790 ?FUN_00c48790@cSPMission_s00c4_7a10@@QAEXPAUWString@@@Z  # cSPMission_s00c4_7a10::FUN_00c48790 migrated from s00c47a10 (verbatim, slice spelling)
 00c487d0 ?GetText@cSPMission_s00c4_7a10@@QAEXPAUWString@@H@Z  # cSPMission_s00c4_7a10::GetText migrated from s00c47a10 (verbatim, slice spelling)
-00c48900 FUN_00c48900  # Ghidra FUN; cSPMission member: write the mission's own label string into the given string; byte-exact
-00c48940 FUN_00c48940  # Ghidra FUN; cSPMission member: write the mission's cached label text into the given string; byte-exact
+00c48900 ?FUN_00c48900@cSPMission_s00c4_7a10@@QAEXPAUWString@@@Z  # cSPMission_s00c4_7a10::FUN_00c48900 migrated from s00c47a10 (verbatim, slice spelling)
+00c48940 ?FUN_00c48940@cSPMission_s00c4_7a10@@QAEXPAUWString@@@Z  # cSPMission_s00c4_7a10::FUN_00c48940 migrated from s00c47a10 (verbatim, slice spelling)
