@@ -11,7 +11,7 @@
 0068f0b0 ?SetJob@CJobHolder@@QAE_NPAX0@Z  # CJobHolder::SetJob migrated from s0068e670 (verbatim, slice spelling)
 0068f180 ?Attach@CJobHolder2@@QAE_NPAX@Z  # CJobHolder2::Attach migrated from s0068e670 (verbatim, slice spelling)
 0068f1d0 ??0JobLock@@QAE@PAX00@Z  # JobLock::JobLock migrated from s0068e670 (verbatim, slice spelling)
-0068f2b0 ??1JobLock@@QAE@XZ      # JobLock::~JobLock (refcount release + job release, vtbl 0x13eb938/0x13ef094)
+0068f2b0 ??1JobLock@@QAE@XZ  # JobLock::~JobLock migrated from s0068e670 (verbatim, slice spelling)
 0068f350 ?TryLockJobs@JobLockTable@@QAE_NPAX0@Z  # JobLockTable::TryLockJobs: try-lock two jobs, create a JobLock
 0068f450 ?GetHighestBitPowerOf2@EA@@YAHI@Z  # EA::GetHighestBitPowerOf2 migrated from s0068e670
 0068f4a0 ?Reset@ClsF4A0@@QAEXXZ  # ClsF4A0::Reset migrated from s0068e670 (verbatim, slice spelling)

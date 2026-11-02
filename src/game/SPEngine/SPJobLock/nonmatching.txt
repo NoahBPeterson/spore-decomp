@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+0068f2b0 63 complete: JobLock::~JobLock - cJob::Release 0x690120 on mJob @+0x10, lock-xadd -1 refcount on mRefObj @+0xc (on last ref: xchg 1 + vtbl[0](1)), restore vtbls 0x13eb938/0x13ef094; mine 71 B vs 128 B; residual is the interleaved EH byte-state stores (local_4 = 2/1) vs my straighter sequence. equiv PASS (294 valid, 100% cov) flags: /O2 /MD /Gy /EHsc /TP /GS-
