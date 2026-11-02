@@ -1,2 +1,8 @@
 00449ed0 ?A49ed0@Blk_s0044_9ed0@@QAEXXZ  # Blk_s0044_9ed0::A49ed0 migrated from s00449ed0 (verbatim, slice spelling)
 0044a070 ?A4a070@Blk_s0044_9ed0@@QAEXXZ  # Blk_s0044_9ed0::A4a070 migrated from s00449ed0 (verbatim, slice spelling)
+0044a0e0 ?A4a0e0@Blk_s0044_9ed0@@QAEXUM3@@_N@Z  # Blk_s0044_9ed0::A4a0e0 migrated from s00449ed0 (verbatim, slice spelling)
+0044a8c0 ?Assign@hkRot@@QAEXABU1@@Z  # hkRot::Assign migrated from s00449ed0 (verbatim, slice spelling)
+0044a9a0 ?A4a9a0@Blk_s0044_9ed0@@QAE_NPAU1@@Z  # Blk_s0044_9ed0::A4a9a0 migrated from s00449ed0 (verbatim, slice spelling)
+0044aa10 ?A4aa10@Blk_s0044_9ed0@@QAEHH@Z  # Blk_s0044_9ed0::A4aa10 migrated from s00449ed0 (verbatim, slice spelling)
+0044aaa0 ?A4aaa0@Blk_s0044_9ed0@@QAE?AUBBox@@H@Z  # Blk_s0044_9ed0::A4aaa0 migrated from s00449ed0 (verbatim, slice spelling)
+0044ad00 ?Scale@BBox@@QAEXM@Z  # BBox::Scale migrated from s00449ed0 (verbatim, slice spelling)

@@ -1,13 +1,13 @@
-0044e460  Cross                                   # free math helper: out = a x b
-0044e510  PlaneFromPointNormal                    # free math helper: (n, -n.p)
-0044e5d0  PlaneEval                               # free math helper: n.p + d
-0044e640  IntersectRayPlane                       # free math helper: ray/plane t
-0044e720  SP::cSPEditorBlock::GetBounds
-0044e830  SP::cSPEditorBlock::GetBlockType
-0044e980  SP::cSPEditorBlock::SetBaseJointScale       # writes mBaseJointScale (+0x1c0), PDB member
-0044ea80  SP::cSPEditorBlock::RefreshLinkedFlag       # recurses over mChildBlockList (+0x340)
-0044ede0  SP::cSPEditorBlock::RecursiveFlagA
-0044eea0  SP::cSPEditorBlock::RecursiveFlagB
-0044efb0  SP::cSPEditorBlock::RecursiveFlagC
+0044e460 ?Cross@@YAPAUVec3_s0044_e460@@PAU1@PBU1@1@Z  # Cross migrated from s0044e460 (verbatim, slice spelling)
+0044e510 ?PlaneFromPointNormal@@YAPAUVec4_s0044_e460@@PAU1@PBUVec3_s0044_e460@@1@Z  # PlaneFromPointNormal migrated from s0044e460 (verbatim, slice spelling)
+0044e5d0 ?PlaneEval@@YAMPBUVec4_s0044_e460@@PBUVec3_s0044_e460@@@Z  # PlaneEval migrated from s0044e460 (verbatim, slice spelling)
+0044e640 ?IntersectRayPlane@@YA_NPBUVec3_s0044_e460@@0PBUVec4_s0044_e460@@PAM@Z  # IntersectRayPlane migrated from s0044e460 (verbatim, slice spelling)
+0044e720 ?GetBounds@cSPEditorBlock@@QAEPAUBounds_s0044_e460@@PAU2@MMMM@Z  # cSPEditorBlock::GetBounds migrated from s0044e460 (verbatim, slice spelling)
+0044e830 ?GetBlockType@cSPEditorBlock@@QAEHI@Z  # cSPEditorBlock::GetBlockType migrated from s0044e460 (verbatim, slice spelling)
+0044e980 ?SetBaseJointScale@cSPEditorBlock@@QAEXM@Z  # cSPEditorBlock::SetBaseJointScale migrated from s0044e460 (verbatim, slice spelling)
+0044ea80 ?RefreshLinkedFlag@cSPEditorBlock@@QAEXXZ  # cSPEditorBlock::RefreshLinkedFlag migrated from s0044e460 (verbatim, slice spelling)
+0044ede0 ?RecursiveFlagA@cSPEditorBlock@@QAEXXZ  # cSPEditorBlock::RecursiveFlagA migrated from s0044e460 (verbatim, slice spelling)
+0044eea0 ?RecursiveFlagB@cSPEditorBlock@@QAEXXZ  # cSPEditorBlock::RecursiveFlagB migrated from s0044e460 (verbatim, slice spelling)
+0044efb0 ?RecursiveFlagC@cSPEditorBlock@@QAEXXZ  # cSPEditorBlock::RecursiveFlagC migrated from s0044e460 (verbatim, slice spelling)
 0044f130 ?SetScaleType@cSPEditorBlock@@QAEXH@Z  # cSPEditorBlock::SetScaleType migrated from s0044e460 (verbatim, slice spelling)
 0044f240 ?CalculateSymmetrySign@cSPEditorBlock@@QAEHXZ  # cSPEditorBlock::CalculateSymmetrySign migrated from s0044e460 (verbatim, slice spelling)

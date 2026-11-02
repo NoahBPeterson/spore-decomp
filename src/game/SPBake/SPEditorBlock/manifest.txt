@@ -1,4 +1,9 @@
 # source  symbol  va  flags
+../src/game/SPBake/SPEditorBlock.cpp  ?SetOffsetB@Tracker_s0043_7b00@@QAEXUVector3_s0043_7b00@@_N@Z  004380a0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPBake/SPEditorBlock.cpp  ?GetOffsetA@Tracker_s0043_7b00@@QAE?AUVector3_s0043_7b00@@_N@Z  00438120  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPBake/SPEditorBlock.cpp  ?GetOffsetB@Tracker_s0043_7b00@@QAE?AUVector3_s0043_7b00@@_N@Z  004381e0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPBake/SPEditorBlock.cpp  ?HasRelevantPoints@Tracker_s0043_7b00@@QAE_NPAUCtx@@@Z  004382a0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPBake/SPEditorBlock.cpp  ?F830@cSPEditorBlock_s0043_a460@SP@@QAEXE@Z  0043a830  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPBake/SPEditorBlock.cpp  ?F9a0@cSPEditorBlock_s0043_a460@SP@@QAEXEE@Z  0043a9a0  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPBake/SPEditorBlock.cpp  ?F_43bbc0@cSPEditorBlock_s0043_bbc0@SP@@QAE_NH@Z  0043bbc0  /Od /Ob1 /Oi /MD /EHsc /TP /arch:SSE /fp:fast /Gy /Isrc/game/include
 ../src/game/SPBake/SPEditorBlock.cpp  ?F_43bc40@cSPEditorBlock_s0043_bbc0@SP@@QAEXM@Z  0043bc40  /Od /Ob1 /Oi /MD /EHsc /TP /arch:SSE /fp:fast /Gy /Isrc/game/include
@@ -45,14 +50,29 @@
 ../src/game/SPBake/SPEditorBlock.cpp  ?F41080@cSPEditorBlock_s0044_1080@SP@@QAEXXZ  00441080  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPBake/SPEditorBlock.cpp  ?Sub_446ff0@@YIPAHPAH@Z  00446ff0  /Od /Ob1 /Oi /MD /EHsc /TP /arch:SSE /fp:fast /Gy /GS- /Isrc/game/include
 ../src/game/SPBake/SPEditorBlock.cpp  ?InitializeHandleData@cSPEditorBlock_s0044_7150@SP@@QAEXPAVcPropertyList_s0044_7150@@@Z  00447150  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/SPEditorBlock.cpp  ?RecordHandlePositionAt@cSPEditorBlock_s0044_8380@SP@@QAE_NHD@Z  00448480  /Od /Ob1 /Oi /MD /EHsc /TP /arch:SSE /fp:fast /Gy /GS- /Isrc/game/include
+../src/game/SPBake/SPEditorBlock.cpp  ?RecordAllHandlePositions@cSPEditorBlock_s0044_8380@SP@@QAE_NXZ  004484f0  /Od /Ob1 /Oi /MD /EHsc /TP /arch:SSE /fp:fast /Gy /GS- /Isrc/game/include
+../src/game/SPBake/SPEditorBlock.cpp  ?UpdateAllHandles@cSPEditorBlock_s0044_8380@SP@@QAEXXZ  004485d0  /Od /Ob1 /Oi /MD /EHsc /TP /arch:SSE /fp:fast /Gy /GS- /Isrc/game/include
+../src/game/SPBake/SPEditorBlock.cpp  ?InitDeformAnimationsB@cSPEditorBlock_s0044_8380@SP@@QAEX_N@Z  00448b80  /Od /Ob1 /Oi /MD /EHsc /TP /arch:SSE /fp:fast /Gy /GS- /Isrc/game/include
+../src/game/SPBake/SPEditorBlock.cpp  ?SetPosition@cSPEditorBlock_s0044_8380@SP@@QAEXABUcSPVector3@2@_N@Z  00448e90  /Od /Ob1 /Oi /MD /EHsc /TP /arch:SSE /fp:fast /Gy /GS- /Isrc/game/include
+../src/game/SPBake/SPEditorBlock.cpp  ?A49ce0@cSPEditorBlock_s0044_8fa0@@QAEXXZ  00449ce0  /Od /Ob1 /Oi /MD /EHsc /TP /arch:SSE /fp:fast /Gy /Isrc/game/include
 ../src/game/SPBake/SPEditorBlock.cpp  ?A4a070@Blk_s0044_9ed0@@QAEXXZ  0044a070  /Od /Ob1 /Oi /MD /EHsc /TP /arch:SSE /fp:fast /Gy /Isrc/game/include
+../src/game/SPBake/SPEditorBlock.cpp  ?Assign@hkRot@@QAEXABU1@@Z  0044a8c0  /Od /Ob1 /Oi /MD /EHsc /TP /arch:SSE /fp:fast /Gy /Isrc/game/include
+../src/game/SPBake/SPEditorBlock.cpp  ?Scale@BBox@@QAEXM@Z  0044ad00  /Od /Ob1 /Oi /MD /EHsc /TP /arch:SSE /fp:fast /Gy /Isrc/game/include
 ../src/game/SPBake/SPEditorBlock.cpp  ?B550@Blk_s0044_ae00@@QAEPAUV3_s0044_ae00@@PAU2@@Z  0044b550  /Od /Ob1 /Oi /MD /EHsc /TP /arch:SSE /fp:fast /Gy /Isrc/game/include
 ../src/game/SPBake/SPEditorBlock.cpp  ?B640@Blk_s0044_ae00@@QAEXH@Z  0044b640  /Od /Ob1 /Oi /MD /EHsc /TP /arch:SSE /fp:fast /Gy /Isrc/game/include
 ../src/game/SPBake/SPEditorBlock.cpp  ?B6b0@Blk_s0044_ae00@@QAEXXZ  0044b6b0  /Od /Ob1 /Oi /MD /EHsc /TP /arch:SSE /fp:fast /Gy /Isrc/game/include
 ../src/game/SPBake/SPEditorBlock.cpp  ?B780@Blk_s0044_ae00@@QAE_NXZ  0044b780  /Od /Ob1 /Oi /MD /EHsc /TP /arch:SSE /fp:fast /Gy /Isrc/game/include
 ../src/game/SPBake/SPEditorBlock.cpp  ?B7b0@Blk_s0044_ae00@@QAEXI@Z  0044b7b0  /Od /Ob1 /Oi /MD /EHsc /TP /arch:SSE /fp:fast /Gy /Isrc/game/include
 ../src/game/SPBake/SPEditorBlock.cpp  ?C480@Blk_s0044_bcf0@@QAEXH@Z  0044c480  /Od /Ob1 /Oi /MD /EHsc /TP /arch:SSE /fp:fast /Gy /Isrc/game/include
+../src/game/SPBake/SPEditorBlock.cpp  ?Apply@Xform_s0044_d4f0@@QAEXPAUV3_s0044_d4f0@@@Z  0044d4f0  /Od /Ob1 /Oi /MD /TP /arch:SSE /fp:fast /Gy /Isrc/game/include
 ../src/game/SPBake/SPEditorBlock.cpp  ?D570@Blk_s0044_d4f0@@QAEXXZ  0044d570  /Od /Ob1 /Oi /MD /TP /arch:SSE /fp:fast /Gy /Isrc/game/include
+../src/game/SPBake/SPEditorBlock.cpp  ?GetBounds@Blk_s0044_d4f0@@QAE?AUBounds@@H@Z  0044d8f0  /Od /Ob1 /Oi /MD /TP /arch:SSE /fp:fast /Gy /Isrc/game/include
+../src/game/SPBake/SPEditorBlock.cpp  ??4Bounds@@QAEAAU0@ABU0@@Z  0044d960  /Od /Ob1 /Oi /MD /EHsc /TP /arch:SSE /fp:fast /Gy /Isrc/game/include
+../src/game/SPBake/SPEditorBlock.cpp  ??0V4@@QAE@MMMM@Z  0044e410  /Od /Ob1 /Oi /MD /EHsc /TP /arch:SSE /fp:fast /Gy /Isrc/game/include
+../src/game/SPBake/SPEditorBlock.cpp  ?PlaneFromPointNormal@@YAPAUVec4_s0044_e460@@PAU1@PBUVec3_s0044_e460@@1@Z  0044e510  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/SPEditorBlock.cpp  ?PlaneEval@@YAMPBUVec4_s0044_e460@@PBUVec3_s0044_e460@@@Z  0044e5d0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/SPEditorBlock.cpp  ?IntersectRayPlane@@YA_NPBUVec3_s0044_e460@@0PBUVec4_s0044_e460@@PAM@Z  0044e640  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPBake/SPEditorBlock.cpp  ?SetScaleType@cSPEditorBlock@@QAEXH@Z  0044f130  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPBake/SPEditorBlock.cpp  ?GetA@Block2@@QAEHXZ  004511f0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPBake/SPEditorBlock.cpp  ?GetB@Block2@@QAEHXZ  00451210  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

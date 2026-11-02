@@ -1,3 +1,7 @@
 0041daf0  ??D@YA?AUVector3@@ABU0@ABUMatrix3@@@Z  # Vector3 operator*(const Vector3&, const Matrix3&) as declared in s00448fa0.cpp (called right after 0x41dca0 in 0x448fa0)
 0041dca0  ??D@YA?AUVector3@@ABU0@ABM@Z  # Vector3 operator*(const Vector3&, const float&) as declared in s00448fa0.cpp (mulss of each component by *s)
+00448fa0 ?A48fa0@cSPEditorBlock_s0044_8fa0@@QAEXUVector3_s0044_8fa0@@_N@Z  # cSPEditorBlock_s0044_8fa0::A48fa0 migrated from s00448fa0 (verbatim, slice spelling)
+00449420 ?A49420@cSPEditorBlock_s0044_8fa0@@QAEXABUMatrix3_s0044_8fa0@@_N@Z  # cSPEditorBlock_s0044_8fa0::A49420 migrated from s00448fa0 (verbatim, slice spelling)
 00449c20 ?normalized_safe@@YAPAMPAMPBM@Z  # normalized_safe migrated from s00448fa0 (verbatim, slice spelling)
+00449ce0 ?A49ce0@cSPEditorBlock_s0044_8fa0@@QAEXXZ  # cSPEditorBlock_s0044_8fa0::A49ce0 migrated from s00448fa0 (verbatim, slice spelling)
+00449d40 ?A49d40@cSPEditorBlock_s0044_8fa0@@QAEXPAUcSPBoundingBox_s0044_8fa0@@@Z  # cSPEditorBlock_s0044_8fa0::A49d40 migrated from s00448fa0 (verbatim, slice spelling)

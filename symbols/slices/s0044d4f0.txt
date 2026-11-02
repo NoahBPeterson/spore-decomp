@@ -1,1 +1,6 @@
+0044d4f0 ?Apply@Xform_s0044_d4f0@@QAEXPAUV3_s0044_d4f0@@@Z  # Xform_s0044_d4f0::Apply migrated from s0044d4f0 (verbatim, slice spelling)
 0044d570 ?D570@Blk_s0044_d4f0@@QAEXXZ  # Blk_s0044_d4f0::D570 migrated from s0044d4f0 (verbatim, slice spelling)
+0044d8f0 ?GetBounds@Blk_s0044_d4f0@@QAE?AUBounds@@H@Z  # Blk_s0044_d4f0::GetBounds migrated from s0044d4f0 (verbatim, slice spelling)
+0044d960 ??4Bounds@@QAEAAU0@ABU0@@Z  # Bounds::operator= migrated from s0044d4f0 (verbatim, slice spelling)
+0044d9e0 ?D9e0@Blk_s0044_d4f0@@QAEHUVec3_s0044_d4f0@@M@Z  # Blk_s0044_d4f0::D9e0 migrated from s0044d4f0 (verbatim, slice spelling)
+0044e410 ??0V4@@QAE@MMMM@Z  # V4::V4 migrated from s0044d4f0 (verbatim, slice spelling)

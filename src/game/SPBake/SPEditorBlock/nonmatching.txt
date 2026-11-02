@@ -1,10 +1,18 @@
 # va  diff-bytes  reason
-004388b0 218 Attach - entity attach; /Od accessor/refcount slots differ
-00438b10 250 Detach - entity detach; /Od accessor/refcount slots differ
+00438440 176 FindEntry - key-vector search; /Od local slot layout differs flags: /Od /MD /Gy /EHsc /TP
+004385e0 140 HasZeroKey - exact-key search; /Od slots differ flags: /Od /MD /Gy /EHsc /TP
+00438700 197 RefreshLinks - link refresh; /Od accessor slots differ flags: /Od /MD /Gy /EHsc /TP
+004388b0 218 Attach - entity attach; /Od accessor/refcount slots differ flags: /Od /MD /Gy /EHsc /TP
+00438a40 83 RefreshLinked - linked refresh; /Od slots differ flags: /Od /MD /Gy /EHsc /TP
+00438b10 250 Detach - entity detach; erase on the begin/end pair, flag 11 -> SetFlag(9,1) on both, link33c released through vtable +0x08 and LinkRec::field4 through vtable +0x04 (its own LinkTarget type), dead [field4]+0 block, then field44 = -1; /Od local/register slots differ flags: /Od /MD /Gy /EHsc /TP
+00438cc0 238 SetLink3e0 - bidirectional ref link; /Od reference-local pattern differs flags: /Od /MD /Gy /EHsc /TP
+00438df0 238 SetLink3e4 - bidirectional ref link; /Od reference-local pattern differs flags: /Od /MD /Gy /EHsc /TP
+00438f20 366 GetKey - recursive property lookup; /Od frame differs flags: /Od /MD /Gy /EHsc /TP
 00439110 95 complete; same 1138 instructions, call/vslot/constant sequence and named-local frame as the original; only the end-of-function vector-dtor frame holes (+0xc after each loop var) differ, shifting the this-spill slot (flags /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast); difftest WEAK (297 valid, no mismatch, 5.4% coverage: random objects rarely pass the IsFrozen/mpPropList early returns; fixed: folded empty/erase and the declined-inline push_back instances mapped in symbols/slices/s00439110.txt)
-0043a870 265 GetSkinIdentifierForPicking - /Od frame/build differs
-0043a9e0 249 F9e0 selection-state update - /Od slot layout differs
-0043ab90 109 Fb90 state setter - Vector4 temp + /Od frame differ
+0043a5e0 447 cSPEditorBlock::SetUIState (?SetUIState@cSPEditorBlock@SP@@QAE_NW4eBlockUIState@2@_N11@Z): complete; rebuilds the pile list via BuildPileList (0x0048C790), erase-removes the block itself (eastl::remove 0x004549B0 + vector::erase 0x00454280 around an AutoRefCount temporary) and ANDs F3AC40 over every remaining pile (state 0 -> 2 when F5a0/F5c0 report a settled child else 0; states 1/2/4/5 -> the state; 3 skipped). The inlined eastl::vector / sp_vector_allocator model and the /Od local-slot allocation differ (544 bytes vs 584; original frame 0x9C vs our 0x54), so the local-operand encodings all differ. flags /Od /Ob1 /MD /Gy /GS- /TP /arch:SSE /fp:fast (the original has neither a /GS cookie nor an unwind frame, so it was built without /GS and without /EHsc). difftest WEAK (361 valid, 54.1% coverage, 0 mismatches; the loop body needs a non-empty pile list, which no generated input produces).
+0043a870 260 GetSkinIdentifierForPicking - /Od frame/build differs; equiv PASS after making the key-vector test a KeyVec::empty() thiscall (0x00526430 needs this in ecx, not a stack arg) flags: /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+0043a9e0 251 F9e0 selection-state update - /Od slot layout differs; equiv PASS after swapping the F3cfc0 args to F3cfc0(0, b) (retail symbol is QAEXHD) flags: /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+0043ab90 109 Fb90 state setter - Vector4 temp + /Od frame differ flags: /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 0043ac40 1072 F3AC40 state-application switch - /Od accessor slots/inlined BitField::Set artifacts differ
 0043bd80 282 complete; original spills outgoing-arg esp to a stack slot before copy-constructing the by-value Matrix3 arg (one extra slot shifts later offsets); otherwise instruction-identical
 0043ce40 240 F3ce40 - reset all slot states; /Od frame + inlined accessor slots differ
@@ -27,14 +35,32 @@
 00440ff0 79 Trans::Trans(copy) - x87 field copy shape differs
 00441440 20408 (flags /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast, no /EHsc) complete source (all 23 KB of paths, calls and stores; call/vcall/property-hash sequence matches the original); not byte-exact: /Od frame layout (0x2d5c vs 0x3314) and slot order differ, a few inline-vs-call choices (fabs, AutoRefCount<cPropertyList>::operator=)
 00447030 183 complete behaviour; /Od name-hash frame layout, scratch-ctor loop and obj temp differ
-004485d0 77 complete behaviour; /Od frame and vector-size local differ
-00449ed0 200 Blk::A49ed0 complete; AutoRefCount operator-> temps and frame layout differ; difftest PASS (347 valid, 74.2% coverage) after the GetScale annotation became a // 0x004adaa0 line comment
+00448380 180 GetEffectsMaskScale - /Od frame/slot layout differs (retail declares the float result first, a/b after it, and keeps the mField33c test in a pointer slot); equiv PASS flags: /Od /Ob1 /Oi /MD /EHsc /TP /arch:SSE /fp:fast /Gy /GS-
+00448690 358 AddToEffectsMask - complete but retail inlines a two-branch mGroups set-bit (or/and form, +159 bytes) and copies pos through cSPVector3::operator[]; /Od frame differs; equiv PASS flags: /Od /Ob1 /Oi /MD /EHsc /TP /arch:SSE /fp:fast /Gy /GS-
+00448a80 16 RemoveFromEffectsMask - complete; /Od frame is 8 bytes larger in retail (two unnamed operator= temps) and the mEffectsMaskObject condition copy sits in the higher slot; equiv PASS flags: /Od /Ob1 /Oi /MD /EHsc /TP /arch:SSE /fp:fast /Gy /GS-
+00448fa0 821 complete; /Od frame layout (inline AutoRefCount operator-> temp slots, uninit copy pattern) not reproduced; difftest PASS (78% coverage) after mapping the two operator* overloads by mangled name in symbols/slices/s00448fa0.txt flags: /Od /Ob1 /Oi /MD /EHsc /TP /arch:SSE /fp:fast /Gy
+00449420 90 complete; /Od frame holes and the by-value Matrix3 dest-pointer temp slot not reproduced flags: /Od /Ob1 /Oi /MD /EHsc /TP /arch:SSE /fp:fast /Gy
+00449d40 215 complete; /Od inline operator-> junk-copy temps (3 extra slots) not reproduced flags: /Od /Ob1 /Oi /MD /EHsc /TP /arch:SSE /fp:fast /Gy
+00449ed0 200 Blk::A49ed0 complete; AutoRefCount operator-> temps and frame layout differ; difftest PASS (347 valid, 74.2% coverage) after the GetScale annotation became a // 0x004adaa0 line comment flags: /Od /Ob1 /Oi /MD /EHsc /TP /arch:SSE /fp:fast /Gy
+0044a0e0 1263 Blk::A4a0e0 (SetOrientation) complete; /Od frame layout and inline temps differ flags: /Od /Ob1 /Oi /MD /EHsc /TP /arch:SSE /fp:fast /Gy
+0044a9a0 42 complete behaviour; /Od frame/slot order differs flags: /Od /Ob1 /Oi /MD /EHsc /TP /arch:SSE /fp:fast /Gy
+0044aa10 54 complete behaviour; /Od frame/slot order differs flags: /Od /Ob1 /Oi /MD /EHsc /TP /arch:SSE /fp:fast /Gy
+0044aaa0 335 Blk::A4aaa0 (GetBounds by value) complete; inline bool helpers / switch layout differ flags: /Od /Ob1 /Oi /MD /EHsc /TP /arch:SSE /fp:fast /Gy
 0044ae00 1442 complete GetBBox; /Od hole/slot layout differs (frame 0x108 vs 0x168), instruction shapes otherwise close
 0044b590 26 tight loop body identical; original reserves a 0x30 frame (extra 0x24 local), ours only reserves the this slot
 0044b5c0 16 complete GetDefaultScale; only local slot order (hash) differs
 0044ba20 567 complete recursive visibility/flags update; /Od named-local slot order and inline-set this temps differ; difftest FAIL is a checker artifact: the generated vtable slot m3ec->vtbl[0x30] holds 0x44bc01 (a jump target inside the original Ba20, harvested from its immediates), so both sides jump into the middle of the original body, which reads the original's own frame slots; seed 2 gives PASS (324 valid, 69.8% coverage)
 0044c050 10 instruction sequence identical; only the hidden this-home slot and the result slot are swapped
-0044f240 311 CalculateSymmetrySign: inlined property/bool lookups and /Od frames not reproduced (size mismatch)
+0044d9e0 1707 complete; original Clamp uses maxss/minss (inline-asm only) and /Od slot hash fits for 7+18 locals unmatched flags: /Od /Ob1 /Oi /MD /EHsc /TP /arch:SSE /fp:fast /Gy
+0044e460 58 Cross: this cl build evaluates the left product first; original computes the subtrahend first (same result, mirrored instruction order) flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+0044e720 160 GetBounds: inlined Bounds construct/destroy and snap-axis (0x234 base, stride 0x20) handling not reproduced flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+0044e830 237 GetBlockType: /Od property-list virtual calls, per-branch ResourceKey frames and hash-ordered locals not reproduced flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+0044e980 166 SetBaseJointScale: sentinel/base-uniform scales are raw int bit patterns (arg compared as *(int*)&-2, mUniformScale stores 0xffffffff); FUN_0044f220 returns int; linked scale negated as an integer. Equivalence WEAK: 400 valid inputs, 0 mismatches, 56.1% coverage -- the uncovered block is only the scale==-2 sentinel path, which the corpus never generates (still 56.1% at 1999 inputs). flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+0044ea80 461 RefreshLinkedFlag: AutoRefCount reset/assign chains (vtable+4 AddRef, vtable+8 Release) now modelled; the flag test reads mpSocketConnector, not this. Equivalence PASS (317 valid, 90.6% coverage). Not byte-exact: the twice-inlined reset chain and /Od frames differ. flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+0044ede0 124 RecursiveFlagA: predicate is mpSocketConnector->FUN_00435c80() (out-of-line GetFlag(0x39)), not FUN_0044c050(this). Equivalence PASS (355 valid, 76.7% coverage). flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+0044eea0 98 RecursiveFlagB: inlined recursive branch shape and /Od frame layout not reproduced flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+0044efb0 153 RecursiveFlagC: inlined release chain and /Od frame layout not reproduced flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+0044f240 407 CalculateSymmetrySign: result is a ? a : b (the old code returned 0 when a==0 && b!=0); -1 only when both are 0 and the 0x7bd0ca3e bool property is set. The socket-connector flag prelude is dead code. Equivalence PASS (392 valid, 92.1% coverage). flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
 0044f420 582 Split: /Od local frames, inlined eastl::vector<> ctor/dtor and the refcount socket handling not reproduced
 0044f7c0 4633 CloneBlock (flags /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS-): complete; instruction stream matches except /Od slot layout (frame 0x2d8 vs 0x320), inner fixed_vector dtor inlined in original, Matrix3 by-value arg temp order
 00450f70 493 Rebuild: inlined bit-array set/clear and the 9-arg BuildBlock wrapper not reproduced
