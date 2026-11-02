@@ -1,5 +1,6 @@
 0103fe90 ?CollectSpicePile@cSPSpaceTrading_s0103_fe90@@SAXPAX0@Z  # cSPSpaceTrading_s0103_fe90::CollectSpicePile migrated from s0103fe90 (verbatim, slice spelling)
 010406d0 ?FUN_010406d0@cSPSpaceTrading_s0103_fe90@@QAEXXZ  # cSPSpaceTrading_s0103_fe90::FUN_010406d0 migrated from s0103fe90 (verbatim, slice spelling)
+01040730 ?FUN_01040730@cSpaceTuningInit@@QAEPAV1@XZ  # cSpaceTuningInit::FUN_01040730 migrated from s0103fe90 (verbatim, slice spelling)
 010407d0 ?FUN_010407d0@cSpaceTuning@@QAEHPAX@Z  # cSpaceTuning::FUN_010407d0 migrated from s0103fe90 (verbatim, slice spelling)
 01040820 ?FUN_01040820@cSpaceTuning@@QAEMM@Z  # cSpaceTuning::FUN_01040820 migrated from s0103fe90 (verbatim, slice spelling)
 01040870 ?FUN_01040870@cSpaceTuning@@QAEIXZ  # cSpaceTuning::FUN_01040870 migrated from s0103fe90 (verbatim, slice spelling)

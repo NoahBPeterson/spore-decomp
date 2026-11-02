@@ -1,0 +1,6 @@
+# source  symbol  va  flags
+../src/game/SPGonzago/_at_01040000.cpp  ?Init@cTerraformTuning@@QAEXXZ  01049a20  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_01040000.cpp  ?FUN_01049f50@cSpaceTokenTranslator@@QAEPB_WH@Z  01049f50  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_01040000.cpp  ??0cSpaceTokenTranslator@@QAE@XZ  0104a020  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_01040000.cpp  ?FUN_0104bff0@cSPSpaceToolData_s0104_bcc0@SP@@QAEEXZ  0104bff0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_01040000.cpp  ?FUN_0104c010@cSPSpaceToolData_s0104_bcc0@SP@@QAEEXZ  0104c010  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

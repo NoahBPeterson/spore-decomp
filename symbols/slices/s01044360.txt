@@ -1,0 +1,4 @@
+00692f90 ??0cVarListSerializer@SP@@QAE@PBXPAUcDataSerializerGeneric@1@I@Z  # SP::cVarListSerializer::cVarListSerializer (callee of s01044360, named from the dev publics; slice address comment)
+01044360 ?FUN_01044360@SP@@YA_NXZ  # FUN_01044360 migrated from s01044360 (verbatim, slice spelling)
+01044640 ?FUN_01044640@SP@@YA_NXZ  # FUN_01044640 migrated from s01044360 (verbatim, slice spelling)
+01044920 ?FUN_01044920@SP@@YA_NXZ  # FUN_01044920 migrated from s01044360 (verbatim, slice spelling)
