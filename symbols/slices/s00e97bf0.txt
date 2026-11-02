@@ -1,3 +1,5 @@
 00e97310 cCreatureCameraEffects::ClearEffects  # Stop(1) every effect of the list then destroy the range; this unused
 00e97bf0 ?Update@cCreatureCameraEffects_s00e9_7bf0@@QAEXHH@Z  # cCreatureCameraEffects_s00e9_7bf0::Update migrated from s00e97bf0 (verbatim, slice spelling)
 00e98440 ??1cPlanetGfxView@@QAE@XZ  # cPlanetGfxView::~cPlanetGfxView migrated from s00e97bf0 (verbatim, slice spelling)
+00e98a40 ?GetCreatureDetailLevel@@YAHPAUSimPlanetOrbitView@@@Z  # GetCreatureDetailLevel migrated from s00e97bf0 (verbatim, slice spelling)
+00e98ae0 ?sGetClosestDiseasedCreature@@YADPAX0@Z  # sGetClosestDiseasedCreature migrated from s00e97bf0 (verbatim, slice spelling)

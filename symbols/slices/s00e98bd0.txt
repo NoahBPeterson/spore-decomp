@@ -1,6 +1,6 @@
-00e98bd0 ?FUN_00e98bd0@@YA_NPAX0@Z  # bool MissionLookupA(void*, void*) - first active mission on the active planet whose fetch object verifies the target
-00e98c80 ?FUN_00e98c80@@YA_NPAX0@Z  # bool MissionLookupB(void*, void*) - same walk with key 0x2afd27e and cSPMissionFetch::VerifyTargetPlanet
-00e98d30 ?FUN_00e98d30@@YA_NPAVcNounHolder@@@Z  # bool NounHasTerraformingKey(cNounHolder*) - terraforming key compare plus the unscanned-object walk
+00e98bd0 ?FUN_00e98bd0@@YA_NPAX0@Z  # FUN_00e98bd0 migrated from s00e98bd0 (verbatim, slice spelling)
+00e98c80 ?FUN_00e98c80@@YA_NPAX0@Z  # FUN_00e98c80 migrated from s00e98bd0 (verbatim, slice spelling)
+00e98d30 ?FUN_00e98d30@@YA_NPAVcNounHolder@@@Z  # FUN_00e98d30 migrated from s00e98bd0 (verbatim, slice spelling)
 00e98db0 ?SetVisible@cSPUFOGfx@@QAEX_N@Z  # cSPUFOGfx::SetVisible migrated from s00e98bd0 (verbatim, slice spelling)
 00e98f60 ?FUN_00e98f60@@YAPAXPAVcNounVector@@PBUVector3@@P6ADPAX@Z@Z  # FUN_00e98f60 migrated from s00e98bd0 (verbatim, slice spelling)
 00e99010 ?FUN_00e99010@@YAXPAUVector3@@PAVcNounVector@@PBU1@@Z  # FUN_00e99010 migrated from s00e98bd0 (verbatim, slice spelling)

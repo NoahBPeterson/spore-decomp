@@ -1,2 +1,2 @@
-00e9b2b0 SP::cSPUFOGfx::UpdateHitEffects  # PDB candidate name; erases stopped collision effects, places the rest on the UFO
-00e9b8e0 SP::cSPUFOGfx::ClearEffects  # PDB candidate name; releases all effect slots, erases collision vector, removes messaging handler
+00e9b2b0 ?UpdateHitEffects@cSPUFOGfx_s00e9_b2b0@@QAEXXZ  # cSPUFOGfx_s00e9_b2b0::UpdateHitEffects migrated from s00e9b2b0 (verbatim, slice spelling)
+00e9b8e0 ?ClearEffects@cSPUFOGfx_s00e9_b2b0@@QAEXXZ  # cSPUFOGfx_s00e9_b2b0::ClearEffects migrated from s00e9b2b0 (verbatim, slice spelling)
