@@ -1,1 +1,6 @@
 # source  symbol  va  flags
+../src/game/SPTerrain/SPTerrainMap.cpp  ?SetCell@?$cTerrainMap_s00f8_7b30@M@SP@@QAEXABUcCubeMapIndex_s00f8_7b30@2@M@Z  00f87b30  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPTerrain/SPTerrainMap.cpp  ?SetCell@?$cTerrainMap_s00f8_7b30@UcSPVector3_s00f8_7b30@SP@@@SP@@QAEXABUcCubeMapIndex_s00f8_7b30@2@UcSPVector3_s00f8_7b30@2@@Z  00f87bd0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPTerrain/SPTerrainMap.cpp  ?CopyMap@?$cTerrainMap_s00f8_7b30@M@SP@@QAEXABV12@@Z  00f88360  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPTerrain/SPTerrainMap.cpp  ?CopyMap@?$cTerrainMap_s00f8_7b30@UcSPVector3_s00f8_7b30@SP@@@SP@@QAEXABV12@@Z  00f88400  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPTerrain/SPTerrainMap.cpp  ?ComputeThresholdFraction@@YAXABUMapU32@@ABUMapU16@@MPAM222@Z  00f8afd0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

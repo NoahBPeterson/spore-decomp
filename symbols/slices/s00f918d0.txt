@@ -1,4 +1,5 @@
 00f918d0 ?SmoothEdges@CubeMapBuffer@@QAEXXZ  # CubeMapBuffer::SmoothEdges migrated from s00f918d0 (verbatim, slice spelling)
+00f921d0 ?SetSize@CubeMapBuffer@@QAEXHH@Z  # CubeMapBuffer::SetSize migrated from s00f918d0 (verbatim, slice spelling)
 00f92520 ?Set@PairSink@@QAEXPBI@Z  # PairSink::Set migrated from s00f918d0 (verbatim, slice spelling)
 00f92540 ?Init@HeightRanges@@QAEPAU1@XZ  # HeightRanges::Init migrated from s00f918d0 (verbatim, slice spelling)
 00f925b0 ?Merge@HeightRanges@@QAEHHHHHHH@Z  # HeightRanges::Merge migrated from s00f918d0 (verbatim, slice spelling)
