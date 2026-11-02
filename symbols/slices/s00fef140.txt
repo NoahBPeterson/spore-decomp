@@ -3,4 +3,8 @@
 00fef5d0 ?ShutdownForGame@cSPMissionManager_s00fe_f140@@QAEXXZ  # cSPMissionManager_s00fe_f140::ShutdownForGame migrated from s00fef140 (verbatim, slice spelling)
 00fef670 ?FUN_00fef670@@YAPAXXZ  # FUN_00fef670 migrated from s00fef140 (verbatim, slice spelling)
 00fef6b0 ?FUN_00fef6b0@@YAXXZ  # FUN_00fef6b0 migrated from s00fef140 (verbatim, slice spelling)
+00fef810 ?FUN_00fef810@@YAPAXPAUcReqElem@@00@Z  # FUN_00fef810 migrated from s00fef140 (verbatim, slice spelling)
 00fefbb0 ?FUN_00fefbb0@@YAXPAX0HII@Z  # FUN_00fefbb0 migrated from s00fef140 (verbatim, slice spelling)
+00fefe70 ?FUN_00fefe70@@YAXI@Z  # FUN_00fefe70 migrated from s00fef140 (verbatim, slice spelling)
+00fefe90 ?FUN_00fefe90@@YAXIII@Z  # FUN_00fefe90 migrated from s00fef140 (verbatim, slice spelling)
+00fefec0 ?FUN_00fefec0@@YAXPAPAX@Z  # FUN_00fefec0 migrated from s00fef140 (verbatim, slice spelling)

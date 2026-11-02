@@ -1,0 +1,13 @@
+# source  symbol  va  flags
+../src/game/SPGonzago/_at_00fe0000.cpp  ?FUN_00fe3b10@@YA_NPAVcGalaxyPlanet@@@Z  00fe3b10  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00fe0000.cpp  ?FUN_00fe3b30@@YA_NPAVcGalaxyPlanet@@@Z  00fe3b30  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00fe0000.cpp  ?RefreshNumbers_73c0@@YAXXZ  00fe73c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_00fe0000.cpp  ?RefreshPips_74a0@@YAXXZ  00fe74a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_00fe0000.cpp  ?ForwardWindowMessage_7590@@YAXII@Z  00fe7590  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_00fe0000.cpp  ?Destroy@cSimOwner@@QAEPAXH@Z  00fe7680  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_00fe0000.cpp  ?f7d70@CBr@@QAEXXZ  00fe7d70  /O2 /MD /Gy /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00fe0000.cpp  ?f7e10@CBr@@QAEXXZ  00fe7e10  /O2 /MD /Gy /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00fe0000.cpp  ?ReadBrush@Brush_s00fe_8630@@QAEDPAX@Z  00fe8880  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_00fe0000.cpp  ?FUN_00feb050@@YIPAXPAUVtableHolder@@@Z  00feb050  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/_at_00fe0000.cpp  ?FUN_00fef810@@YAPAXPAUcReqElem@@00@Z  00fef810  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00fe0000.cpp  ?FUN_00fefe70@@YAXI@Z  00fefe70  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include

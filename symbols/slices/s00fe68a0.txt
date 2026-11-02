@@ -1,3 +1,4 @@
+00fe68a0 ??0cCachedEventData@@QAE@XZ  # cCachedEventData::cCachedEventData migrated from s00fe68a0 (verbatim, slice spelling)
 00fe6bc0 ?RebuildNearbyEmpireStarsCache@cCachedEventData@@QAEXXZ  # cCachedEventData::RebuildNearbyEmpireStarsCache migrated from s00fe68a0 (verbatim, slice spelling)
 00fe6dc0 ?RebuildAllyColonyPlanetCache@cCachedEventData@@QAEXXZ  # cCachedEventData::RebuildAllyColonyPlanetCache migrated from s00fe68a0 (verbatim, slice spelling)
 00fe6e40 ?RebuildPlayerColonyPlanetCache@cCachedEventData@@QAEXXZ  # cCachedEventData::RebuildPlayerColonyPlanetCache migrated from s00fe68a0 (verbatim, slice spelling)
@@ -5,7 +6,10 @@
 00fe7020 ?Flush@cCachedEventData@@QAEXXZ  # cCachedEventData::Flush migrated from s00fe68a0 (verbatim, slice spelling)
 00fe7100 ?Prime@cCachedEventData@@QAEXXZ  # cCachedEventData::Prime migrated from s00fe68a0 (verbatim, slice spelling)
 00fe71c0 ?Shutdown@cCachedEventData@@QAEXXZ  # cCachedEventData::Shutdown migrated from s00fe68a0 (verbatim, slice spelling)
-00fe73c0 ?RefreshNumbers_73c0@@YAXXZ  # unnamed UI refresh helper (locale SetNumberString into a single 0x80 buffer); byte-exact MATCH
-00fe74a0 ?RefreshPips_74a0@@YAXXZ  # unnamed UI refresh helper (pip count bracket); byte-exact MATCH
-00fe7590 ?ForwardWindowMessage_7590@@YAXII@Z  # unnamed helper forwarding a window message via FindWindowByID; byte-exact MATCH
-00fe7680 ?Destroy@cSimOwner@@QAEPAXH@Z  # EA::Simulator owner teardown slot (block+0x30 call, block+4 vtable call at slot 8, conditional operator_delete); byte-exact MATCH
+00fe7210 ?HandleEvent@cHelper7210@@QAE_NIPAH@Z  # cHelper7210::HandleEvent migrated from s00fe68a0 (verbatim, slice spelling)
+00fe72b0 ?RefreshNumbers_72b0@@YAXXZ  # RefreshNumbers_72b0 migrated from s00fe68a0 (verbatim, slice spelling)
+00fe73c0 ?RefreshNumbers_73c0@@YAXXZ  # RefreshNumbers_73c0 migrated from s00fe68a0 (verbatim, slice spelling)
+00fe74a0 ?RefreshPips_74a0@@YAXXZ  # RefreshPips_74a0 migrated from s00fe68a0 (verbatim, slice spelling)
+00fe7590 ?ForwardWindowMessage_7590@@YAXII@Z  # ForwardWindowMessage_7590 migrated from s00fe68a0 (verbatim, slice spelling)
+00fe75d0 ??0cSimOwner@@QAE@XZ  # cSimOwner::cSimOwner migrated from s00fe68a0 (verbatim, slice spelling)
+00fe7680 ?Destroy@cSimOwner@@QAEPAXH@Z  # cSimOwner::Destroy migrated from s00fe68a0 (verbatim, slice spelling)

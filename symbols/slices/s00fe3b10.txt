@@ -1,3 +1,6 @@
+00fe3b10 ?FUN_00fe3b10@@YA_NPAVcGalaxyPlanet@@@Z  # FUN_00fe3b10 migrated from s00fe3b10 (verbatim, slice spelling)
+00fe3b30 ?FUN_00fe3b30@@YA_NPAVcGalaxyPlanet@@@Z  # FUN_00fe3b30 migrated from s00fe3b10 (verbatim, slice spelling)
+00fe3b90 ?FUN_00fe3b90@@YA_NPAVtBadgeVec@@@Z  # FUN_00fe3b90 migrated from s00fe3b10 (verbatim, slice spelling)
 00fe3c40 ?Write@cISerializableObject@@UAEXPAVcOutStream@@@Z  # cISerializableObject::Write migrated from s00fe3b10 (verbatim, slice spelling)
 00fe3d30 ?FUN_00fe3d30@@YAPB_WH@Z  # FUN_00fe3d30 migrated from s00fe3b10 (verbatim, slice spelling)
 00fe3df0 ?FUN_00fe3df0@@YGHI@Z  # FUN_00fe3df0 migrated from s00fe3b10 (verbatim, slice spelling)

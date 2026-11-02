@@ -1,0 +1,7 @@
+00c308d0 ?GetStars@cEmpire@SP@@QBEABV?$vector@V?$AutoRefCount@VcStarRecord@SP@@@EA@@Usp_vector_allocator@eastl@@@eastl@@XZ  # SP::cEmpire::GetStars (callee of s00fe8630, named from the dev publics; slice address comment)
+00fe8630 ?Brush_f8630@@YAMPAUBrush_s00fe_8630@@PBM@Z  # Brush_f8630 migrated from s00fe8630 (verbatim, slice spelling)
+00fe86d0 ?Brush_f86d0@@YAPAMPAUBrush_s00fe_8630@@MPAM@Z  # Brush_f86d0 migrated from s00fe8630 (verbatim, slice spelling)
+00fe8780 ?Brush_f8780@@YAPAMPAMPBM1PAUBrush_s00fe_8630@@M@Z  # Brush_f8780 migrated from s00fe8630 (verbatim, slice spelling)
+00fe8880 ?ReadBrush@Brush_s00fe_8630@@QAEDPAX@Z  # Brush_s00fe_8630::ReadBrush migrated from s00fe8630 (verbatim, slice spelling)
+00fe88d0 ?Brush_f88d0@@YAXPAUBrush_s00fe_8630@@PAUSpVectorV3@@H@Z  # Brush_f88d0 migrated from s00fe8630 (verbatim, slice spelling)
+00fe8990 ?ShouldGrow@GrowthState@@QAE_NXZ  # GrowthState::ShouldGrow migrated from s00fe8630 (verbatim, slice spelling)
