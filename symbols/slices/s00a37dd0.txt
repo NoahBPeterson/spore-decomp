@@ -1,18 +1,18 @@
 00a37dd0 ?FUN_00a37dd0@Audio@SP@@YI_NPAX@Z  # SP::Audio::cEmitterEAPD::Init, slice s00a37dd0
-00a37f20 ?Init@cEmitterModelSound@Audio@SP@@QAE_NXZ  # SP::Audio::cEmitterModelSound::Init, slice s00a37dd0
-00a37fe0 ?Shutdown@cEmitterModelSound@Audio@SP@@QAE_NXZ  # SP::Audio::cEmitterModelSound::Shutdown, slice s00a37dd0
-00a38030 ?SetPaused@cEmitterModelSound@Audio@SP@@QAE_ND@Z  # SP::Audio::cEmitterModelSound::SetPaused, slice s00a37dd0
-00a38080 ?Start@cEmitterModelSound@Audio@SP@@QAE_NII@Z  # SP::Audio::cEmitterModelSound::Start, slice s00a37dd0
-00a381d0 ?Stop@cEmitterModelSound@Audio@SP@@QAE_NXZ  # SP::Audio::cEmitterModelSound::Stop, slice s00a37dd0
-00a38290 ?SetFlags@cEmitterModelSound@Audio@SP@@QAEXI@Z  # SP::Audio::cEmitterModelSound::SetFlags, slice s00a37dd0
-00a382c0 ?SetConfiguration@cEmitterModelSound@Audio@SP@@QAEXPAX@Z  # SP::Audio::cEmitterModelSound::SetConfiguration, slice s00a37dd0
-00a38310 ?SetProperty@cEmitterModelSound@Audio@SP@@QAE_NHMI@Z  # SP::Audio::cEmitterModelSound::SetProperty, slice s00a37dd0
-00a383b0 ?SetData@cEmitterModelSound@Audio@SP@@QAE_NIII@Z  # SP::Audio::cEmitterModelSound::SetData, slice s00a37dd0
-00a383f0 ?ReadTuningValues@cEmitterModelSound@Audio@SP@@QAEXXZ  # SP::Audio::cEmitterModelSound::ReadTuningValues, slice s00a37dd0
-00a38490 ?ShouldTick@cEmitterModelSound@Audio@SP@@QAEHXZ  # SP::Audio::cEmitterModelSound::ShouldTick, slice s00a37dd0
-00a384d0 ?Tick@cEmitterModelSound@Audio@SP@@QAEXIM@Z  # SP::Audio::cEmitterModelSound::Tick, slice s00a37dd0
-00a38900 ?CreateEmitter@cEmitterModelSound@Audio@SP@@QAE_NIPAXPAPAX@Z  # SP::Audio::cEmitterModelSound::CreateEmitter, slice s00a37dd0
-00a38a50 ?Create@cEmitterModelSound@Audio@SP@@QAE_NII@Z  # SP::Audio::cEmitterModelSound::Create, slice s00a37dd0
+00a37f20 ?Init@cEmitterModelSound_s00a3_7dd0@Audio@SP@@QAE_NXZ  # Init migrated from s00a37dd0 (verbatim, slice spelling)
+00a37fe0 ?Shutdown@cEmitterModelSound_s00a3_7dd0@Audio@SP@@QAE_NXZ  # Shutdown migrated from s00a37dd0 (verbatim, slice spelling)
+00a38030 ?SetPaused@cEmitterModelSound_s00a3_7dd0@Audio@SP@@QAE_ND@Z  # SetPaused migrated from s00a37dd0 (verbatim, slice spelling)
+00a38080 ?Start@cEmitterModelSound_s00a3_7dd0@Audio@SP@@QAE_NII@Z  # Start migrated from s00a37dd0 (verbatim, slice spelling)
+00a381d0 ?Stop@cEmitterModelSound_s00a3_7dd0@Audio@SP@@QAE_NXZ  # Stop migrated from s00a37dd0 (verbatim, slice spelling)
+00a38290 ?SetFlags@cEmitterModelSound_s00a3_7dd0@Audio@SP@@QAEXI@Z  # SetFlags migrated from s00a37dd0 (verbatim, slice spelling)
+00a382c0 ?SetConfiguration@cEmitterModelSound_s00a3_7dd0@Audio@SP@@QAEXPAX@Z  # SetConfiguration migrated from s00a37dd0 (verbatim, slice spelling)
+00a38310 ?SetProperty@cEmitterModelSound_s00a3_7dd0@Audio@SP@@QAE_NHMI@Z  # SetProperty migrated from s00a37dd0 (verbatim, slice spelling)
+00a383b0 ?SetData@cEmitterModelSound_s00a3_7dd0@Audio@SP@@QAE_NIII@Z  # SetData migrated from s00a37dd0 (verbatim, slice spelling)
+00a383f0 ?ReadTuningValues@cEmitterModelSound_s00a3_7dd0@Audio@SP@@QAEXXZ  # ReadTuningValues migrated from s00a37dd0 (verbatim, slice spelling)
+00a38490 ?ShouldTick@cEmitterModelSound_s00a3_7dd0@Audio@SP@@QAEHXZ  # ShouldTick migrated from s00a37dd0 (verbatim, slice spelling)
+00a384d0 ?Tick@cEmitterModelSound_s00a3_7dd0@Audio@SP@@QAEXIM@Z  # Tick migrated from s00a37dd0 (verbatim, slice spelling)
+00a38900 ?CreateEmitter@cEmitterModelSound_s00a3_7dd0@Audio@SP@@QAE_NIPAXPAPAX@Z  # CreateEmitter migrated from s00a37dd0 (verbatim, slice spelling)
+00a38a50 ?Create@cEmitterModelSound_s00a3_7dd0@Audio@SP@@QAE_NII@Z  # Create migrated from s00a37dd0 (verbatim, slice spelling)
 00a38b30 ??1cEmitterModelSound@Audio@SP@@QAE@XZ  # SP::Audio::cEmitterModelSound::~cEmitterModelSound, slice s00a37dd0
 00a38c70 ??0cEmitterModelSound@Audio@SP@@QAE@XZ  # SP::Audio::cEmitterModelSound::cEmitterModelSound, slice s00a37dd0
 00a38d90 ??0cEmitterSndPlayer@Audio@SP@@QAE@XZ  # cEmitterSndPlayer migrated from s00a37dd0 (verbatim, slice spelling)

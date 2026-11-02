@@ -1,2 +1,9 @@
 # source  symbol  va  flags
 ../src/game/SPAudio/SPAudioEmitterModelSound.cpp  ?ComputeGainAttenuation@cEmitterModelSound@@QAEMPAX000@Z  00a37b70  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/SPAudioEmitterModelSound.cpp  ?Init@cEmitterModelSound_s00a3_7dd0@Audio@SP@@QAE_NXZ  00a37f20  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/SPAudioEmitterModelSound.cpp  ?Stop@cEmitterModelSound_s00a3_7dd0@Audio@SP@@QAE_NXZ  00a381d0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/SPAudioEmitterModelSound.cpp  ?SetFlags@cEmitterModelSound_s00a3_7dd0@Audio@SP@@QAEXI@Z  00a38290  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/SPAudioEmitterModelSound.cpp  ?SetConfiguration@cEmitterModelSound_s00a3_7dd0@Audio@SP@@QAEXPAX@Z  00a382c0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/SPAudioEmitterModelSound.cpp  ?SetProperty@cEmitterModelSound_s00a3_7dd0@Audio@SP@@QAE_NHMI@Z  00a38310  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/SPAudioEmitterModelSound.cpp  ?SetData@cEmitterModelSound_s00a3_7dd0@Audio@SP@@QAE_NIII@Z  00a383b0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/SPAudioEmitterModelSound.cpp  ?ReadTuningValues@cEmitterModelSound_s00a3_7dd0@Audio@SP@@QAEXXZ  00a383f0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
