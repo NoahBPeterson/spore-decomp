@@ -1,0 +1,4 @@
+010b1d00 ?next@hkp2Lin2AngJacobian@@QAEPAUhkJacobianElement@@H@Z  # hkp2Lin2AngJacobian::next migrated from s010b17a0 (verbatim, slice spelling)
+010b1d10 ?getEnd@hkJacobianStiffSpringChainSchema@@QAEPAUhkJacobianElement@@PAU2@@Z  # hkJacobianStiffSpringChainSchema::getEnd migrated from s010b17a0 (verbatim, slice spelling)
+010b1d30 ?getEnd@hkJacobianBallSocketChainSchema@@QAEPAUhkJacobianElement@@PAU2@@Z  # hkJacobianBallSocketChainSchema::getEnd migrated from s010b17a0 (verbatim, slice spelling)
+010b1d50 ?getEnd@hkJacobianPoweredChainSchema@@QAEPAUhkJacobianElement@@PAU2@@Z  # hkJacobianPoweredChainSchema::getEnd migrated from s010b17a0 (verbatim, slice spelling)

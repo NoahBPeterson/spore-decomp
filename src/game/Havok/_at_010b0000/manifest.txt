@@ -1,0 +1,5 @@
+# source  symbol  va  flags
+../src/game/Havok/_at_010b0000.cpp  ?next@hkp2Lin2AngJacobian@@QAEPAUhkJacobianElement@@H@Z  010b1d00  /vc71 /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/Havok/_at_010b0000.cpp  ?getEnd@hkJacobianStiffSpringChainSchema@@QAEPAUhkJacobianElement@@PAU2@@Z  010b1d10  /vc71 /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/Havok/_at_010b0000.cpp  ?getEnd@hkJacobianBallSocketChainSchema@@QAEPAUhkJacobianElement@@PAU2@@Z  010b1d30  /vc71 /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/Havok/_at_010b0000.cpp  ?getEnd@hkJacobianPoweredChainSchema@@QAEPAUhkJacobianElement@@PAU2@@Z  010b1d50  /vc71 /O2 /MD /Gy /TP /Isrc/game/include

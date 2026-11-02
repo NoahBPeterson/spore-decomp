@@ -1,0 +1,1 @@
+010b3b20 ?hkPoweredChain_Solve@@YAXPBUhkPoweredChainSolverParams@@PADPAUhkPoweredChainSchema@@1PAM@Z  # hkPoweredChain_Solve migrated from s010b3b20 (verbatim, slice spelling)
