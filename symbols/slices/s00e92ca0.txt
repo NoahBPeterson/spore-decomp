@@ -1,2 +1,4 @@
 00e932a0 ??0cTribeToolView@@QAE@XZ  # cTribeToolView::cTribeToolView migrated from s00e92ca0 (verbatim, slice spelling)
 00e939c0 ?HandleSimulationUpdate@cBabySackView@@QAEXHH@Z  # cBabySackView::HandleSimulationUpdate migrated from s00e92ca0 (verbatim, slice spelling)
+00e93b80 ??0cTribeView_s00e9_2ca0@@QAE@XZ  # cTribeView_s00e9_2ca0::cTribeView migrated from s00e92ca0 (verbatim, slice spelling)
+00e93c00 ??1cTribeView_s00e9_2ca0@@QAE@XZ  # cTribeView_s00e9_2ca0::~cTribeView migrated from s00e92ca0 (verbatim, slice spelling)
