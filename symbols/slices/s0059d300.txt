@@ -1,5 +1,6 @@
-0059d300 SP::cSPEditorAnimatedCreatureManager::HandleAnimatedEvent  # PDB caller-single
-0059d610 SP::cSPEditorAnimatedCreatureManager::Update  # PDB caller-single
+0059c060 ?Init@cSPEditorAnimatedCreatureManager@SP@@QAEXPAVcIModelWorld@2@_N@Z  # SP::cSPEditorAnimatedCreatureManager::Init (callee of s0059d300, named from the dev publics; slice address comment)
+0059d300 ?HandleAnimatedEvent@cSPEditorAnimatedCreatureManager_s0059_d300@SP@@QAE_NPAX@Z  # cSPEditorAnimatedCreatureManager_s0059_d300::HandleAnimatedEvent migrated from s0059d300 (verbatim, slice spelling)
+0059d610 ?Update@cSPEditorAnimatedCreatureManager_s0059_d300@SP@@QAEXI@Z  # cSPEditorAnimatedCreatureManager_s0059_d300::Update migrated from s0059d300 (verbatim, slice spelling)
 0059d840 ?MessagePost@cSPEditorAnimatedEventInfo@SP@@QAEXW4eAnimatedEvent@12@PAVcSPEditorBlock@2@PAVcSPEditorModel@2@I_NM3IM@Z  # SP::cSPEditorAnimatedEventInfo::MessagePost migrated from s0059d300
 0059d8b0 ?MessageSend@cSPEditorAnimatedEventInfo_s0059_d300@SP@@QAEXW4eAnimatedEvent@2@PAUcSPEditorBlock_s0059_d300@2@PAUcSPEditorModel_s0059_d300@2@I_NM3IM@Z  # cSPEditorAnimatedEventInfo_s0059_d300::MessageSend migrated from s0059d300 (verbatim, slice spelling)
 0059d930 ?GetRefCount@AtomicCounter@@QAEHXZ  # AtomicCounter::GetRefCount migrated from s0059d300 (verbatim, slice spelling)
