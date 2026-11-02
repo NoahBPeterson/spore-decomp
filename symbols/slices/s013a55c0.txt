@@ -1,2 +1,7 @@
+013a55c0 ?FUN_013a55c0@@YAXXZ  # FUN_013a55c0 migrated from s013a55c0 (verbatim, slice spelling)
+013a56b0 ?FUN_013a56b0@@YAXXZ  # FUN_013a56b0 migrated from s013a55c0 (verbatim, slice spelling)
+013a5880 ?FUN_013a5880@@YAXXZ  # FUN_013a5880 migrated from s013a55c0 (verbatim, slice spelling)
+013a58d0 ?FUN_013a58d0@@YAXXZ  # FUN_013a58d0 migrated from s013a55c0 (verbatim, slice spelling)
+013a5900 ?FUN_013a5900@@YAXXZ  # FUN_013a5900 migrated from s013a55c0 (verbatim, slice spelling)
 013a6f80 ?FUN_013a6f80@@YAXXZ  # FUN_013a6f80 migrated from s013a55c0 (verbatim, slice spelling)
 013a72b0 ?FUN_013a72b0@@YAXXZ  # FUN_013a72b0 migrated from s013a55c0 (verbatim, slice spelling)
