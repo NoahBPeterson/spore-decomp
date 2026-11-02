@@ -1,0 +1,7 @@
+# va  diff-bytes  reason
+005a2200 3 Cam::ZoomBy: complete; (factor + 1.0f) operand order emitted reversed flags: /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+005a2260 21 Cam::ComputeView: complete; constant-load scheduling differs flags: /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+005a6e00 26 Clamp01(float): complete; original clamps with SSE maxss/minss and writes only xmm0, but cl 15.00 always materialises the 1.0f in xmm1 (any _mm_max_ss/_mm_min_ss shape, with or without a stack frame); evaluated in x87 (double compares) so no SSE register is clobbered; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast; equiv PASS (400 valid, 100% cov)
+005a83d0 43 CalculateBadness complete; only the normalized-axis dot product x87 stack order differs (inv*zero term) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
+005a8900 6 GetEditorTuningValue: complete; load/store interleave of the 3 dwords differs flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
+005a8b20 165 GetAttachPoint complete; cSPBBTransform ctor store order and xmm register allocation of the rotated offset differ flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast

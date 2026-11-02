@@ -1,12 +1,12 @@
 0047db30 ?Init@cSPEditorHandle@SP@@UAEXPAVcSPEditorBlock@2@_NII@Z  # SP::cSPEditorHandle::Init (callee of s005a7d00, named from the dev publics; slice address comment)
 005a7d00 ?CalculateValues@cSPEditorGeneralBadnessCalculator_s005a_7d00@SP@@UAEXPAVcSPEditorLimbJoint_s005a_7d00@2@UcSPVector3@2@11@Z  # cSPEditorGeneralBadnessCalculator_s005a_7d00::CalculateValues migrated from s005a7d00 (verbatim, slice spelling)
-005a83d0 editor helper  # unnamed
+005a83d0 ?CalculateBadness@cSPEditorGeneralBadnessCalculator_s005a_7d00@SP@@UAEMPAVcSPEditorLimbJoint_s005a_7d00@2@UcSPVector3@2@11@Z  # cSPEditorGeneralBadnessCalculator_s005a_7d00::CalculateBadness migrated from s005a7d00 (verbatim, slice spelling)
 005a85f0 ?CalculateBadness@cSPEditorHandBadnessCalculator@SP@@UAEMPAVcSPEditorLimbJoint_s005a_7d00@2@UcSPVector3@2@11@Z  # cSPEditorHandBadnessCalculator::CalculateBadness migrated from s005a7d00 (verbatim, slice spelling)
-005a88a0 36-byte struct assignment  # rep movsd 9 dwords
-005a8900 EditorTuning Vector3 accessor (__stdcall)  # returns EditorTuning()+0x60
+005a88a0 ?Assign@cCopy9@@QAEPAV1@ABUS36@@@Z  # cCopy9::Assign migrated from s005a7d00 (verbatim, slice spelling)
+005a8900 ?GetEditorTuningValue@@YGPAUVector3@@PAU1@@Z  # GetEditorTuningValue migrated from s005a7d00 (verbatim, slice spelling)
 005a8930 SP::cSPEditorHandleSpine scalar deleting destructor  # Shutdown + base dtor
 005a8970 ?Init@cSPEditorHandleSpine_s005a_7d00@SP@@QAEXPAXPBUcSPVector3@2@PBUcSPMatrix3@2@@Z  # cSPEditorHandleSpine_s005a_7d00::Init migrated from s005a7d00 (verbatim, slice spelling)
-005a8a60 cHandleish::SetState  # fields 0x10/0x14/0x18
-005a8a80 cHandleish::SetEnabled  # fields 0x10/0x14/0x18, vcalls 0x14/0x30
-005a8ad0 SP::cSPEditorHandleSpine::cSPEditorHandleSpine  # base ctor + mOffset(0x50)/mOrient(0x5c)
-005a8b20 editor helper  # unnamed
+005a8a60 ?SetState@cHandleish@@QAEXH@Z  # cHandleish::SetState migrated from s005a7d00 (verbatim, slice spelling)
+005a8a80 ?SetEnabled@cHandleish@@QAEX_N@Z  # cHandleish::SetEnabled migrated from s005a7d00 (verbatim, slice spelling)
+005a8ad0 ??0cSPEditorHandleSpine_s005a_7d00@SP@@QAE@XZ  # cSPEditorHandleSpine_s005a_7d00::cSPEditorHandleSpine migrated from s005a7d00 (verbatim, slice spelling)
+005a8b20 ?GetAttachPoint@cSPEditorHandleSpine_s005a_7d00@SP@@QAEPAUcSPVector3@2@PAU32@@Z  # cSPEditorHandleSpine_s005a_7d00::GetAttachPoint migrated from s005a7d00 (verbatim, slice spelling)

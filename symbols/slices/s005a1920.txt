@@ -1,13 +1,13 @@
 005a1920 SP::cSPEditorBlockAbilities::LayoutAbilitiesCompact  # icon-only ability row layout; falls back to LayoutAbilities (0x5a0510) when count <= mMaxFullRows
-005a2010 cTerrainUI vector setter (Vec3 + bool)
-005a2080 cTerrainUI key handler -> cLocalInputState::OnKeyDown  # key switch 0x6b/0x6d/0xbb..0xbe
-005a2120 cTerrainUI key handler -> cLocalInputState::OnKeyUp
-005a21c0 cTerrainUI mouse-up -> cLocalInputState::OnMouseUp
-005a2200 cTerrainUI zoom-by-factor
-005a2240 cTerrainUI add-angle
-005a2260 cTerrainUI compute-view vector
-005a22d0 cTerrainUI update-pitch
-005a2300 cTerrainUI vtable reset
+005a2010 ?SetSomething@Cam@@QAEXUVec3@@_N@Z  # Cam::SetSomething migrated from s005a1920 (verbatim, slice spelling)
+005a2080 ?OnKeyDown@Cam@@QAE_NHH@Z  # Cam::OnKeyDown migrated from s005a1920 (verbatim, slice spelling)
+005a2120 ?OnKeyUp@Cam@@QAE_NHH@Z  # Cam::OnKeyUp migrated from s005a1920 (verbatim, slice spelling)
+005a21c0 ?OnMouseUp@Cam@@QAE_NHMMH@Z  # Cam::OnMouseUp migrated from s005a1920 (verbatim, slice spelling)
+005a2200 ?ZoomBy@Cam@@QAEXM@Z  # Cam::ZoomBy migrated from s005a1920 (verbatim, slice spelling)
+005a2240 ?AddAngle@Cam@@QAEXM@Z  # Cam::AddAngle migrated from s005a1920 (verbatim, slice spelling)
+005a2260 ?ComputeView@Cam@@QAEXPAM000@Z  # Cam::ComputeView migrated from s005a1920 (verbatim, slice spelling)
+005a22d0 ?UpdatePitch@Cam@@QAEXXZ  # Cam::UpdatePitch migrated from s005a1920 (verbatim, slice spelling)
+005a2300 ?ClearVtables@Cam@@QAEXXZ  # Cam::ClearVtables migrated from s005a1920 (verbatim, slice spelling)
 005a2370 ?SetCenterCameraOffset@cEditorCameraController@SP@@QAEXXZ  # SP::cEditorCameraController::SetCenterCameraOffset (member, not a free function)
 005a2400 ?SetPartModeCameraOffset@cEditorCameraController@SP@@QAEXXZ  # SP::cEditorCameraController::SetPartModeCameraOffset (member)
 005a24c0 ?SetPaintModeCameraOffset@cEditorCameraController@SP@@QAEXXZ  # SP::cEditorCameraController::SetPaintModeCameraOffset (member)
