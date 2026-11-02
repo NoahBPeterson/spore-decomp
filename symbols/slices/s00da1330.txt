@@ -1,1 +1,7 @@
-00da1330 CommunityApproach::Start  # Claude-coined: retail class unnamed; thiscall ret 0x10 (community, obj2, entity, other); builds 5-point marker fan at +0xf4, starts effect +0x178, mode +0xec from RelationshipManager
+00da1330 ?Start@CommunityApproach@@QAEXPAUCommunity@@PAUObject2@@PAUEntity@@2@Z  # CommunityApproach::Start migrated from s00da1330 (verbatim, slice spelling)
+00da1b00 ?AddCreature@SocialBand@@QAEXPAUCreature_s00da_1330@@@Z  # SocialBand::AddCreature migrated from s00da1330 (verbatim, slice spelling)
+00da1b90 ?AddOther@SocialBand@@QAEXPAUCreature_s00da_1330@@@Z  # SocialBand::AddOther migrated from s00da1330 (verbatim, slice spelling)
+00da1c10 ?FUN_00da1c10@@YA_NPAUCreature_s00da_1330@@HHHPAUReactResult@@@Z  # FUN_00da1c10 migrated from s00da1330 (verbatim, slice spelling)
+00da1db0 ?resize@BigVec@@QAEXI@Z  # BigVec::resize migrated from s00da1330 (verbatim, slice spelling)
+00da1e70 ?assign@IntV@@QAEXPBH0H@Z  # IntV::assign migrated from s00da1330 (verbatim, slice spelling)
+00da1fc0 ?OnMessage@SocialBand@@QAE_NIPAUMsg@@@Z  # SocialBand::OnMessage migrated from s00da1330 (verbatim, slice spelling)

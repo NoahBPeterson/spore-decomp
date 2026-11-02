@@ -1,4 +1,4 @@
-// src/game/SPGonzago/SPCreatureBehaviorTrees.cpp -- migrated from slice(s) s00da5900, s00da49f0, s00da2360, s00d9ec20, s00d9dce0, s00d9bee0, s00d9af60 by tools/migrate/rewrite.py
+// src/game/SPGonzago/SPCreatureBehaviorTrees.cpp -- migrated from slice(s) s00da3b90, s00da1330, s00da5900, s00da49f0, s00da2360, s00d9ec20, s00d9dce0, s00d9bee0, s00d9af60 by tools/migrate/rewrite.py
 // Object file: SPGonzago/SPCreatureBehaviorTrees.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -19,12 +19,17 @@
 #include "SP/cBehaviorTreeData.h"
 #include "SP/cTribe.h"
 #include <new>
+#include "nSPBehaviorTree/behavior_memory_block.h"
+#include "EA/Random/RandomLinearCongruential.h"
 
 // unnamed retail callees and globals (address in the comment)
 extern "C" extern float g_f1;            // 0x01485720 (1.0f)
 extern "C" extern void* g_p016c7aa4;           // 0x016c7aa4
 
 // ---- items of slice s00d9af60 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C" extern float g_f5;            // 0x01486110 (5.0f)
+extern "C" extern float g_f2;            // 0x01582f24 (2.0f)
+extern "C" extern float g_f0p1;          // 0x01582f1c (0.1f)
 typedef unsigned int uint;
 struct Creature;                       // cSPCreatureBase / cSPCreatureCitizen
 struct Loco;                           // cLocomotiveObject, addressed as creature + 0xc0
@@ -166,6 +171,17 @@ virtual void s3f();
 struct Loco {
     char pad0[0xc0];
 };
+bool  Anim_QueryB(Creature* c, int id);                   // 0x00a02b70 (cAnimatingCreature::QueryB, [c+0xb54])
+typedef bool (__thiscall *AnimGetProgressFn)(int self, int id, float* a, float* b); // virtual [anim+0x5c]
+static bool Anim_GetProgress(Creature* c, int id, float* a, float* b)
+{
+    void* anim = (void*)c->mpAnimating;
+    AnimGetProgressFn fn = *(AnimGetProgressFn*)(*(char**)anim + 0x5c);
+    return fn((int)anim, id, a, b);
+}
+struct cSPUISocialRainbow {
+    void StartFill(int side, int seg, float minRate, float rate, float frac, uint color, int p); // 0x00e33ab0 (ret 0x1c)
+};
 struct SocialWidget {
     bool  Check0(int a, int b);              // 0x00e31aa0 (ret 8)
     bool  IsBusy();                          // 0x00e31a90 (ret)
@@ -175,6 +191,41 @@ struct SocialWidget {
     void  Clear(int a);                      // 0x00e324f0 (ret 4)
     void  Reset();                           // 0x00e31c90 (ret)
     void  SetNode(int a);                    // 0x00e31cb0 (ret 4)
+};
+struct SocialValues {
+    float mTotal;                       // +0x00
+    float mFillRate;                    // +0x04
+    float mDrainAmount;                 // +0x08
+    bool  mbDrain;                      // +0x0c
+    bool  mbFailed;                     // +0x0d
+    char  pad0e[6];
+    bool  mbTimerRunning;               // +0x14
+    char  pad15[3];
+    int   mHandle0;                     // +0x18 (behaviour node / anim handle)
+    int   mHandle1;                     // +0x1c
+    SocialWidget* mpWidget;             // +0x20 (cSPUISocialRainbow-ish UI object)
+
+    bool  AnyActive();                                             // 0x00d9b010 (thiscall)
+    void  SetDrainDelay(bool v);                                  // 0x00d9b040
+    void  StartFillRight(float rate, float d);                     // 0x00d9b090
+    void  StartFillLeft(float rate, float d);                      // 0x00d9b0d0
+    void  Update(int a0, int a1, Creature* c0, Creature* c1);     // 0x00d9ba60 (thiscall, ret 0x10)
+};
+struct cCreatureDisplayStrategy {
+    char   pad00[0x14];
+    int    mGoal14;               // +0x14 (== SocialValues.mHandle kind to match)
+    int    mUnk18;                // +0x18
+    int    mUnk1c;                // +0x1c
+    char   pad20[0x24 - 0x20];
+    char   mb24;                  // +0x24
+    char   mb25;                  // +0x25
+    char   pad26[0x38 - 0x26];
+    SocialWidget* mpWidget38;     // +0x38 (same widget as SocialValues.mpWidget)
+    char   mb40;                  // +0x40
+    char   pad41[0x58 - 0x41];
+    uint   mFlags58;              // +0x58
+
+    int    Drain(Creature* c);    // 0x00d9b110 (thiscall, ret 4)
 };
 struct SocialProposeBlock {
     int    mState;                                       // +0x00
@@ -197,14 +248,15 @@ void*  FUN_00d37cb0();                                    // 0x00d37cb0
 void   FUN_00f1d430(Creature* c);                         // 0x00f1d430
 void   FUN_00c77bf0(int a);                               // 0x00c77bf0
 void   FUN_00c756a0(float f, int a);                      // 0x00c756a0
+void   SetGlobalProperty(uint key, float v);              // 0x005ca880
 void   NotifyEventFull(float f, int a);                   // 0x00d2e8a0 (2-arg form)
 float  FUN_00c03440(int a);                               // 0x00c03440
 float  FUN_00c04140(int a);                               // 0x00c04140
 void*  FUN_00b3d4c0(void* a, void* b, void* c);           // 0x00b3d4c0 (ret)
 AnimHandle* FUN_00ba3f90(void* a, void* b, void* c);      // 0x00ba3f90 (ret 0xc)
 void        FUN_00ba48b0(void* a, void* b, void* c);      // 0x00ba48b0 (ret 0xc)
-extern "C" extern float g_f1;            // 0x01485720 (1.0f)
-extern "C" extern void* g_p016c7aa4;           // 0x016c7aa4
+bool LocoLess(Loco* a, Loco* b);                          // 0x00ac0730
+bool LocoLessStack(Loco* a, Loco* b);                     // 0x00ac0730
 // ---- items of slice s00d9af60 end
 
 // ---- items of slice s00d9bee0 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -361,6 +413,108 @@ struct SOCIAL_RESPOND_memory_block {
 
 // ---- items of slice s00d9dce0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 #define nullptr 0
+struct cMethodTable {
+    void* mpSlots[0x100];                       // 0x000
+};
+class cDispatchObject {
+public:
+    void* Call(int nSlot) {
+        return ((void* (*)(cDispatchObject*))mpTable->mpSlots[nSlot >> 2])(this);
+    }
+
+    char CallChar(int nSlot) {
+        return ((char (*)(cDispatchObject*))mpTable->mpSlots[nSlot >> 2])(this);
+    }
+
+    void CallVoid(int nSlot) {
+        ((void (*)(cDispatchObject*))mpTable->mpSlots[nSlot >> 2])(this);
+    }
+
+    cMethodTable* mpTable;                      // 0x000
+};
+class cBehaviorStimuli {
+public:
+    void ClearAll(uint32_t nFlags, uint32_t nValue);
+    void* Play(uint32_t nFlags, uint32_t nValue);
+};
+class nBehaviorTree {
+public:
+    uint8_t mPad000[0x08];                      // 0x000
+    cBehaviorStimuli mStimuli;                  // 0x008
+
+    uint8_t mPad_600[0x600 - 0x008 - sizeof(cBehaviorStimuli)];
+    void* mpCurrentTask;                        // 0x600
+};
+struct cBehaviorTask {
+    int32_t mnState;                            // 0x000
+    uint32_t mnAnimId;                          // 0x004
+};
+struct cActionCircleLink {
+    uint8_t mPad000[0x20c];                     // 0x000
+    uint32_t mnLink;                            // 0x20c
+};
+struct cTargetData {
+    uint8_t mPad000[0x43c];                     // 0x000
+    int32_t mnCount;                            // 0x43c
+};
+class cLocationComponent {
+public:
+    void* GetObject();
+    void* GetOwner();
+};
+class cActionObject;
+class cSimCreature {
+public:
+    void* GetCombatTarget();
+    void* GetTargetCreature();
+    void* GetActionObject();
+    int32_t GetBehaviorPhase();
+    char IsGroupLeader();
+    int32_t InterruptAnimation(uint32_t nAnimId, int32_t nA, int32_t nB);
+    char AnimationFinished(uint32_t nAnimId);
+    char WaitForAnimEvent(uint32_t nEventId, void* pData, int32_t nA,
+                          uint32_t nAnimId, int32_t nB);
+    void SetCombatEngaged(char bEngaged);
+    void StopLocomotion(int32_t nA, int32_t nB);
+    void* GetTargetData();
+    void UpdatePose();
+    void ResetPose();
+    void UpdateTargetPose();
+    void UpdateAttackTarget();
+    void NotifyTargetLost();
+    void UpdateWorldTarget();
+    void* GetTargetRecord();
+
+    uint8_t mPad000[0x34];                      // 0x000
+    cLocationComponent mLocation;               // 0x034
+    uint8_t mPad038[0x88];                      // 0x038
+    cDispatchObject mMovement;                  // 0x0c0
+    uint8_t mPad0c4[0xa88];                     // 0x0c4
+    nBehaviorTree* mpBehaviorTree;              // 0xb4c
+};
+class cActionObject {
+public:
+    float GetRadius();
+    void* GetBounds();
+    void SetTarget(float fValue);
+    void MoveTowards(float fValue);
+};
+class cNounManager_s00d9_dce0 {
+public:
+    void* GetInfo(void* pObject);
+    void SetInfo(void* pObject, void* pInfo);
+    float GetDistance(void* pObject, float fValue, int32_t nMode);
+    void MoveTo(void* pObject, void* pTarget, float fValue, int32_t nMode);
+};
+class cWorldManager {
+public:
+    void* FindObject(void* pObject);
+    void* GetObjectData(void* pObject);
+};
+class cEpisodeObject {
+public:
+    void* GetRecord();
+};
 class cPoolObject {
 public:
     virtual void Destroy(char bFree);           // slot 0x00
@@ -389,16 +543,184 @@ public:
     uint32_t mnTailIndex;                       // 0x014
     uint32_t mnHeadIndex;                       // 0x018
 };
+void* NounManager_s00d9_dce0();
+void* WorldManager();
+char IsValidBehaviorTarget(void* pTarget);
+void SetBehaviorState(cSimCreature* pCreature, int32_t nState);
+int32_t GetWorldConstant(int32_t nValue, uint32_t nSalt, int32_t nDefault);
+static uint32_t* GetActionLink(cSimCreature* pCreature)
+{
+    cActionCircleLink* pLink = (cActionCircleLink*)pCreature->GetActionObject();
+    if (pLink == nullptr)
+        return nullptr;
+    return &pLink->mnLink;
+}
+static void AttachTargetInfo(cSimCreature* pCreature, void* pTarget,
+                             void* pLocation)
+{
+    cNounManager_s00d9_dce0* pManager = (cNounManager_s00d9_dce0*)NounManager_s00d9_dce0();
+    void* pInfo = pManager->GetInfo(pLocation);
+    ((cNounManager_s00d9_dce0*)NounManager_s00d9_dce0())->SetInfo(pTarget, pInfo);
+}
 // ---- items of slice s00d9dce0 end
 
 // ---- items of slice s00d9ec20 begin (TODO(rewrite): local stubs, replace by canonical classes)
 #pragma pack(push, 4)
+typedef bool (__cdecl* CompareFn)(const void* a, const void* b);
+struct cSocialBand_s00d9_ec20 {
+    int   mField00;                     // +0x00
+    int   mField04;                     // +0x04
+    int   mTribeID;                     // +0x08
+    int   mField0c;                     // +0x0c
+    Vec3  mPos;                         // +0x10
+
+    void Free();                        // 0x008e2b20 (Vec2b::Free shape)
+};
+struct cSocialBandPool_s00d9_ec20 {
+    int*  mpBegin;                      // +0x00 (gSocialBandPool @0x015935a8)
+    int*  mpEnd;                        // +0x04 (gSocialBandPoolEnd @0x015935ac)
+
+    cSocialBand_s00d9_ec20* GetObject(unsigned int id);   // 0x00d9eb70
+};
+extern cSocialBandPool_s00d9_ec20 g_SocialBandPool;      // 0x015935a8
+struct cLocomotiveObject;
+struct cSPCreatureBase_s00d9_ec20 {
+virtual void v00();
+virtual int v04();
+virtual void v08();
+    virtual void* v0c(unsigned int iid);        // +0x0c
+virtual void v10();
+virtual int v14();
+virtual void v18();
+virtual int  v1c();
+virtual int v20();
+virtual void v24();
+virtual void v28();
+virtual void v2c();
+virtual void v30();
+virtual void v34();
+virtual void v38();
+virtual void v3c();
+virtual void v40();
+virtual void v44();
+virtual void v48();
+virtual void v4c();
+virtual void v50();
+virtual void v54();
+virtual void v58();
+virtual void v5c();
+virtual void v60();
+virtual void v64();
+virtual void v68();
+virtual void v6c();
+virtual void v70();
+virtual void v74();
+virtual void v78();
+virtual void v7c();
+virtual void v80();
+    virtual void v84(int a, int b, int c);      // +0x84
+virtual void v88();
+virtual void v8c();
+virtual void v90();
+virtual void v94();
+virtual void v98();
+virtual void v9c();
+
+    cLocomotiveObject* GetLocomotive();          // +0xb4c -> object
+    void PlayAnimation(int id, int a, int b);    // 0x00c12190
+    int  InterruptAnimation(int id, int a, int b);   // 0x00c12310 / 0x00c11xxx
+    bool AnimationFinished(int handle);          // 0x00c123f0 / 0x00c12400
+    bool WaitForAnimEventOrEnd(int id, void* out, int a, int handle, int b); // 0x00c14ef0
+    void OneShotOverheadEffect(int id);          // 0x00c11920
+};
+bool   Fbc9b50(void* r);                // 0x00bc9b50 TextRunIterator::AtBegin
+bool   Fa75010();                       // 0x00a75010
+void   F4797a0(void* self, void* a, void* b, void* c, const void* d); // 0x004797a0
+void   Fabced0(void* a, void* b, void* c);                      // 0x00abced0 copy_backward
+void   Fa177f0(void* a, void* b, const void* c);                // 0x00a177f0 fill
+void   F6a4100(void* a, int n, const void* v);                  // 0x006a4100 CopyVec12
+void*  F7ec550(void* a, void* b, void* c);                      // 0x007ec550 find
+void Fd9d9a0(void* first, int hole, int len, int extra, int a, int b, int c, int d,
+             int e, int f, int g, int h, CompareFn cmp);    // 0x00d9d9a0
 struct Vec3Data { float x, y, z; };
 struct Vector3 : Vec3Data {
     Vector3() {}
     Vector3(const Vector3& o) { x = o.x; y = o.y; z = o.z; }
 };
+struct KeyCmp {
+    Vector3 mKey;
+    bool Compare(const char* a, const char* b);   // 0x00ac0730
+};
 void Fd9da80(int* first, int hole, int len, int extra, int v, Vector3 vec); // 0x00d9da80
+struct PaintSystem {
+virtual void v00();
+virtual void v04();
+virtual void v08();
+virtual void v0c();
+virtual void v10();
+virtual void v14();
+virtual void v18();
+virtual void v1c();
+virtual void v20();
+virtual void v24();
+virtual void v28();
+virtual void v2c();
+virtual void v30();
+virtual void v34();
+virtual void v38();
+virtual void v3c();
+virtual void v40();
+virtual void v44();
+virtual void v48();
+virtual void v4c();
+virtual void v50();
+virtual void v54();
+virtual void v58();
+virtual void v5c();
+virtual void v60();
+virtual void v64();
+virtual void v68();
+virtual void v6c();
+virtual void v70();
+virtual void v74();
+virtual void v78();
+virtual void v7c();
+virtual void v80();
+virtual void v84();
+virtual void v88();
+virtual void v8c();
+virtual void v90();
+virtual void v94();
+virtual void v98();
+virtual void v9c();
+virtual void vA0();
+virtual void vA4();
+virtual void vA8();
+virtual void vAC();
+virtual void vB0();
+virtual void vB4();
+virtual void vB8();
+
+    int*   mpField1e4;                  // +0x1e4
+    int*   mpField1f4;                  // +0x1f4
+    char   mActionCircle[0x100];        // +0x178
+    void*  mpField0e8;                  // +0x0e8
+    void*  mpField0e4;                  // +0x0e4
+    char   mVec2b8c[0x18];              // +0x08c
+    char   mVec78[0x14];                // +0x078
+    char   mVec64[0x14];                // +0x064
+    void*  mpField0c;                   // +0x0c
+    void*  mpField08;                   // +0x08
+};
+struct SocialBandState {
+    int mMode;                          // +0x00
+    int mField04;                       // +0x04
+    int mAnimHandle;                    // +0x08
+};
+struct SocialBandSlot {
+    unsigned int mBits : 31;    // +0x00
+    unsigned int mUsed : 1;     // bit 31
+};
 // ---- items of slice s00d9ec20 end
 
 // ---- items of slice s00da2360 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -1062,6 +1384,724 @@ struct cTribeModeStrategy {
 };
 // ---- items of slice s00da5900 end
 
+// ---- items of slice s00da1330 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern float g_markerAngle;      // 0x01593470
+extern uint32_t g_vtxInit[3];    // 0x0169f32c
+extern const float kFloatMax;                          // 0x0147c190
+extern const float kSmallEpsilon;                      // 0x0147c194
+extern const float g_reactionTimer;                    // 0x0158132c
+Vec3* __cdecl RotateByQuat(Vec3* out, const Vec3* v, const Quat* q);    // 0x0059aed0
+struct IRef { virtual void AddRef(); virtual void Release(); };
+struct PosSub {
+virtual void s0();
+virtual void s1();
+virtual void s2();
+virtual void s3();
+virtual void s4();
+virtual void s5();
+virtual void s6();
+virtual void s7();
+virtual void s8();
+virtual void s9();
+    virtual void s10();
+    virtual Vec3* GetPos();                       // +0x2c
+virtual void s12();
+virtual void s13();
+virtual void s14();
+virtual void s15();
+virtual void s16();
+virtual void s17();
+virtual void s18();
+virtual void s19();
+virtual void s20();
+virtual void s21();
+virtual void s22();
+virtual void s23();
+virtual void s24();
+virtual void s25();
+    virtual float* GetRange();                    // +0x68: floats at +8 and +0x14
+};
+struct KeyedRef : IRef {
+virtual void v2();
+virtual void SetParam(uint32_t id);
+virtual void v4();
+virtual void v5();
+virtual void v6();
+virtual void v7();
+virtual void v8();
+virtual void v9();
+virtual void v10();
+virtual void v11();
+virtual void v12();
+virtual void v13();
+virtual void v14();
+virtual void v15();
+virtual void v16();
+virtual void v17();
+virtual void v18();
+    virtual uint32_t GetKey();                    // +0x4c
+};
+struct Entity : KeyedRef {
+    char pad04[0xc0 - 4];
+    PosSub sub;                                   // +0xc0
+    char padC4[0xb20 - 0xc4];
+    uint32_t levelId;                             // +0xb20
+};
+struct Community : KeyedRef {
+    Entity* GetLeader();                          // 0x00c00650 (thiscall)
+};
+struct Object2 : KeyedRef {                       // object bound at +0xc; its +0x2cc float is cleared at the end
+    char pad04[0x2cc - 4];
+    float f2cc;
+};
+struct Strategy;
+struct StrategyObj { char pad[0x50]; IRef* held; };     // field at +0x50
+struct Strategy {
+virtual void v0();
+virtual void v1();
+virtual void v2();
+virtual void v3();
+virtual void v4();
+virtual void v5();
+virtual void v6();
+virtual void v7();
+virtual void v8();
+virtual void v9();
+virtual void v10();
+virtual void v11();
+virtual void v12();
+virtual void v13();
+virtual void v14();
+virtual void v15();
+virtual void v16();
+virtual void v17();
+virtual void v18();
+virtual void v19();
+virtual void v20();
+virtual void v21();
+virtual void v22();
+virtual void v23();
+virtual void v24();
+virtual void v25();
+virtual void v26();
+    virtual StrategyObj* GetObj();                // +0x6c
+    bool Has(int id);                             // 0x00cd6ef0 (thiscall, ret 4)
+    static Strategy* __cdecl Instance();          // 0x00cd40b0
+};
+struct IMessageServer {
+virtual void v0();
+virtual void v1();
+virtual void v2();
+virtual void v3();
+virtual void v4();
+virtual void v5();
+virtual void v6();
+virtual void v7();
+virtual void v8();
+    virtual void Post(void* sender, uint32_t msg);   // +0x24
+};
+IMessageServer* __cdecl MessageServer();             // 0x0067dcc0
+struct RelationshipManager {
+    float Score(uint32_t a, uint32_t b, int c);      // 0x00d00a10 (thiscall, ret 0xc)
+    int Classify(float score);                       // 0x00d00780 (thiscall, ret 4)
+};
+RelationshipManager* __cdecl GetRelationshipManager();   // 0x00b3d2c0
+struct LevelTable {
+    float Value(uint32_t id);                        // 0x00ce6a40 (thiscall, ret 4)
+};
+extern LevelTable g_levelTable;                      // global instance, address 0x01581208
+struct Effect {                                      // object embedded at +0x178
+    void Init(const Vec3* pos, float f, const Vec3* dir, float g);   // 0x00af9cf0 (thiscall, ret 0x10)
+    void SetMode(int mode, float v);                                 // 0x00afef10 (thiscall, ret 8)
+};
+void __cdecl EffectStart(Effect* e);                 // 0x00d9aa20 (cdecl)
+struct MarkerRef : IRef {
+    void Reset();                                    // 0x00e31550 (thiscall)
+    void SetMode(int mode);                          // 0x00e311b0 (thiscall, ret 4)
+};
+struct IntVec {                                      // eastl::vector<int> at +0x1e4
+    int* mpBegin; int* mpEnd; int* mpCapacity;
+    void DoInsertValue(int* pos, const int& v);      // 0x00cd0550 (thiscall, ret 8)
+    void push_back(const int& v)
+    {
+        if (mpEnd < mpCapacity) {
+            int* p = mpEnd;
+            mpEnd = p + 1;
+            if (p)
+                *p = v;
+        } else {
+            DoInsertValue(mpEnd, v);
+        }
+    }
+};
+template <class T> static inline void AssignRef(T*& slot, T* v)
+{
+    T* old = slot;
+    if (v != old) {
+        if (v)
+            v->AddRef();
+        slot = v;
+        if (old)
+            old->Release();
+    }
+}
+struct CommunityApproach {
+    char pad00[8];
+    Community* mCommunity;       // +0x08
+    Object2* mObj2;              // +0x0c
+    Vec3 mTarget;                // +0x10
+    Vec3 mDir;                   // +0x1c
+    Vec3 mAim;                   // +0x28
+    char pad34[0x5c - 0x34];
+    float mSavedF;               // +0x5c
+    char pad60[0xe4 - 0x60];
+    Entity* mEntity;             // +0xe4
+    MarkerRef* mMarker;          // +0xe8
+    int mMode;                   // +0xec
+    char padF0[0xf4 - 0xf0];
+    Vec3* mVerts;                // +0xf4
+    char padF8[0x150 - 0xf8];
+    uint32_t* mZeroes;           // +0x150
+    char pad154[0x178 - 0x154];
+    Effect mEffect;              // +0x178
+    char padE[0x1e4 - 0x178 - 4];
+    IntVec mCommands;            // +0x1e4
+
+    void Start(Community* comm, Object2* o2, Entity* ent, Entity* other);   // 0x00da1330
+};
+struct Creature_s00da_1330;
+struct OrderNode;
+struct AutoRefCount {                                  // 4-byte ref-counted handle (AutoRefCount)
+    Entity* mpObj;
+    AutoRefCount(Entity* o) : mpObj(o) { if (o) o->AddRef(); }
+    AutoRefCount(const AutoRefCount& o) : mpObj(o.mpObj) { if (mpObj) mpObj->AddRef(); }
+    ~AutoRefCount() { if (mpObj) mpObj->Release(); }
+};
+struct RefVec {                                        // SPVector<AutoRefCount>
+    AutoRefCount* mpBegin;                             // +0x00
+    AutoRefCount* mpEnd;                               // +0x04
+    AutoRefCount* mpCapacity;                          // +0x08
+    void DoInsertPtr(AutoRefCount* pos, const AutoRefCount& v);   // 0x00aea5d0 (thiscall, ret 8)
+
+    void push_back(const AutoRefCount& v)
+    {
+        AutoRefCount* p = mpEnd;
+        if (p < mpCapacity) {
+            mpEnd = p + 1;
+            if (p) {
+                Entity* o = v.mpObj;
+                p->mpObj = o;
+                if (o)
+                    o->AddRef();
+            }
+        } else {
+            DoInsertPtr(p, v);
+        }
+    }
+};
+__forceinline void PushCreature(RefVec& list, Entity* e)
+{
+    AutoRefCount ref(e);
+    list.push_back(ref);
+}
+struct RefToSkin {                                     // EA::AutoRefCount<...>, out-of-line ctor
+    Entity* mpObj;
+    RefToSkin(Entity* o);                              // 0x00572660 (thiscall, ret 4)
+    ~RefToSkin() { if (mpObj) mpObj->Release(); }
+};
+struct SkinVec {                                       // vector at +0x8c
+    void* mpBegin; void* mpEnd; void* mpCapacity;
+    void Insert(const RefToSkin& v);                   // 0x00e26c40 (thiscall, ret 4)
+};
+struct TribeSlot {                                     // 0xac-byte slot of the +0xb4c holder
+    char pad00[4];
+    int mState;                                        // +0x04
+    char pad08[4];
+    IRef* mObj;                                        // +0x0c
+    uint8_t mFlag10;                                   // +0x10
+};
+struct Anim {                                          // sub-object at +8 of the +0xb4c holder
+    void* Play(int a, uint32_t flags);                 // 0x00bc96a0 (thiscall, ret 8)
+    void PlayWait(int a, uint32_t flags, float f, int b);   // 0x00bc97f0 (thiscall, ret 0x10)
+};
+struct TribeHolder {                                   // creature +0xb4c
+    char pad00[8];
+    Anim anim;                                         // +0x08
+    char pad0c[0x1d0 - 0x0c];
+    TribeSlot mSlots[1];                               // +0x1d0 (slot i lives at &mSlots[0] + i*0xac - 0x70)
+    int mIndex;                                        // +0x1dc
+    void Close();                                      // 0x00b45410 (thiscall)
+    void FUN_00bcb480(OrderNode* n, Creature_s00da_1330* c, void* r, void* fn);   // 0x00bcb480 (ret 0x10)
+};
+__forceinline TribeSlot* TribeSlotAt(TribeHolder* h, int i)
+{
+    return (TribeSlot*)((char*)&h->mSlots[0] + i * 0xac - 0x70);
+}
+struct Creature_s00da_1330 : Entity {
+    char padB24[0xb4c - 0xb24];
+    TribeHolder* mTribe;                               // +0xb4c
+    char padB50[0xb58 - 0xb50];
+    uint32_t mFlags;                                   // +0xb58
+    uint32_t GetTribe();                               // 0x00c22f50 (thiscall)
+    void UpdateLocomotion(int on);                     // 0x00c14750 (thiscall, ret 4)
+    int FUN_00c22dc0();                                // 0x00c22dc0 (thiscall)
+    void FUN_00c0b2f0(int anim, void* obj, int* out);  // 0x00c0b2f0 (thiscall, ret 0xc)
+    int InterruptAnimation(int anim, int a, int b);    // 0x00c12310 (thiscall, ret 0xc)
+    void FUN_00c1d460(uint32_t a, uint32_t b);         // 0x00c1d460 (thiscall, ret 8)
+};
+Creature_s00da_1330* __cdecl FUN_00c0c380(Entity* e);             // 0x00c0c380
+TribeHolder* __stdcall FUN_00b3d310(PosSub* sub);      // 0x00b3d310 (stdcall, 1 arg)
+struct Owner {                                         // object at band +0x0c
+    char pad00[0x550];
+    void* mBandInfo;                                   // +0x550
+};
+struct Msg {                                           // audio EAPD message
+    uint32_t GetType();                                // 0x00fcc210 (thiscall)
+    bool GetNextFloat(float* out);                     // 0x00a34e30 (thiscall, ret 4)
+};
+struct MsgSink { void Close(); };                      // 0x0067c830 (thiscall)
+MsgSink* __cdecl FUN_0067cac0(uint32_t id);            // 0x0067cac0
+struct Random {
+    uint32_t RandomUint32Uniform(uint32_t n);          // 0x00a68fb0 (thiscall, ret 4)
+};
+extern Random g_random;                                // 0x01601760
+struct SocialBand;                                     // band object returned by the pool
+struct SocialBandPool {
+    void* GetObject(uint32_t id);                      // 0x00d9eb70 (thiscall, ret 4)
+};
+extern SocialBandPool g_socialBandPool;                // 0x015935a8
+struct BandKey { uint32_t mTribe1, mTribe2; Vec3 mPos; };
+struct OrderNode { char pad00[0x1a8]; uint32_t mBandId; };
+struct OrderManager {
+    OrderNode* FindNode(uint32_t id, void* fn, void* ctx);          // 0x00bca620 (thiscall, ret 0xc)
+};
+OrderManager* __cdecl FUN_00bc9b00(uint32_t id, void* fn, void* ctx);   // 0x00bc9b00
+void* __cdecl SP_FindSocialBandGroup(BandKey* key);                     // 0x00d9f0a0 (address used only)
+void* __cdecl WatchMemoryBlock(void* block);                            // 0x00d999d0
+Creature_s00da_1330* __cdecl FUN_00d994c0_s00da_1330(void* block);                            // 0x00d994c0
+struct ReactResult {
+    uint32_t f0, f1, f2, f3;
+};
+struct ReactRunner {
+    void FUN_00d9d100(Creature_s00da_1330* c, void* band);        // 0x00d9d100 (thiscall, ret 8)
+};
+float __cdecl RandomInRange(const float* range);       // 0x004df2d0
+void __cdecl FUN_00d9b480();                           // 0x00d9b480 (address used only)
+void* __cdecl FUN_00c8ea70(void* info);                // 0x00c8ea70
+void __cdecl FUN_00e26de0(void* begin, void* end, void* fn);   // 0x00e26de0
+struct SocialBand {
+    char pad00[4];
+    int mState04;                                      // +0x04 (6 = done)
+    char pad08[4];
+    Owner* mOwner;                                     // +0x0c
+    char pad10[0x44 - 0x10];
+    uint32_t mCount;                                   // +0x44
+    uint32_t mLimit;                                   // +0x48
+    float mDelay;                                      // +0x4c
+    char pad50[1];
+    uint8_t mFlag51;                                   // +0x51
+    char pad52[2];
+    float mTimer;                                      // +0x54
+    uint8_t mFlag58;                                   // +0x58
+    char pad59[0x60 - 0x59];
+    uint32_t mHandle;                                  // +0x60
+    RefVec mListA;                                     // +0x64
+    char pad70[0x78 - 0x70];
+    RefVec mListB;                                     // +0x78
+    char pad84[0x8c - 0x84];
+    SkinVec mSkins;                                    // +0x8c
+    char pad98[0x1dc - 0x98];
+    int mMode;                                         // +0x1dc
+    uint32_t mChosen;                                  // +0x1e0
+    IntVec mCommands;                                  // +0x1e4
+
+    void AddCreature(Creature_s00da_1330* e);                     // 0x00da1b00
+    void AddOther(Creature_s00da_1330* e);                        // 0x00da1b90
+    bool OnMessage(uint32_t msg, Msg* m);              // 0x00da1fc0
+};
+struct Elem32 { uint32_t mWords[8]; };                 // 32-byte value element
+struct BigVec {                                        // eastl::vector<32-byte element>
+    void* mpBegin; void* mpEnd; void* mpCapacity;
+    __forceinline uint32_t size() const { return (uint32_t)((int)((char*)mpEnd - (char*)mpBegin) >> 5); }
+    void DoInsert(void* pos, uint32_t n, const Elem32& value);     // 0x00d9fb20 (thiscall, ret 0xc)
+    void Erase(void* first, void* last);                           // 0x00899420 (thiscall, ret 8)
+    void resize(uint32_t n);                           // 0x00da1db0
+};
+struct IntV {                                          // eastl::vector<int>
+    int* mpBegin; int* mpEnd; int* mpCapacity;
+    void assign(const int* first, const int* last, int tag);       // 0x00da1e70
+};
+// ---- items of slice s00da1330 end
+
+// ---- items of slice s00da3b90 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern const float kAngleA;   // 0x01593470 (pi/4)
+extern const float kAngleB;   // 0x01593474 (pi/2)
+extern const float kAngleC;   // 0x01593478 (pi)
+extern unsigned int gSocialTimeA;             // 0x01582f14
+extern unsigned int gSocialTimeB;             // 0x01582f10
+#define PVCAT2(a, b) a##b
+#define PVCAT(a, b) PVCAT2(a, b)
+#define PV virtual void PVCAT(pv_, __COUNTER__)();
+#define PV2 PV PV
+#define PV4 PV2 PV2
+#define PV8 PV4 PV4
+struct Vec3_s00da_3b90 {
+    float x, y, z;
+    Vec3_s00da_3b90() {}
+    Vec3_s00da_3b90(float _x, float _y, float _z) : x(_x), y(_y), z(_z) {}
+    Vec3_s00da_3b90(const Vec3_s00da_3b90& v) : x(v.x), y(v.y), z(v.z) {}
+    Vec3_s00da_3b90& operator=(const Vec3_s00da_3b90& v) { x = v.x; y = v.y; z = v.z; return *this; }
+};
+struct Quat_s00da_3b90 {
+    float x, y, z, w;
+    Quat_s00da_3b90() {}
+    Quat_s00da_3b90(float _x, float _y, float _z, float _w) : x(_x), y(_y), z(_z), w(_w) {}
+    Quat_s00da_3b90(const Quat_s00da_3b90& q) : x(q.x), y(q.y), z(q.z), w(q.w) {}
+};
+Vec3_s00da_3b90 QuatRotate(const Vec3_s00da_3b90& v, const Quat_s00da_3b90& q);   // 0x0059aed0
+inline Quat_s00da_3b90 AxisAngle(const Vec3_s00da_3b90& axis, float angle)
+{
+    float h = angle * 0.5f;
+    float s = sinf(h);
+    float c = cosf(h);
+    return Quat_s00da_3b90(axis.x * s, axis.y * s, axis.z * s, c);
+}
+struct Loco_s00da_3b90 {
+    PV8 PV2 PV                       // slots 0..10
+    virtual const Vec3_s00da_3b90* GetPosition();   // slot 11 (+0x2c)
+    PV8 PV8 PV                       // slots 12..28
+    virtual float GetRadius();           // slot 29 (+0x74)
+    PV8 PV8 PV8 PV4 PV               // slots 30..58
+    virtual void Stop();                 // slot 59 (+0xec)
+};
+struct Obj {
+    virtual int pv_0();
+    virtual int Release();
+};
+struct Creature_s00da_3b90;
+struct Planet {
+    Vec3_s00da_3b90* DirectionToSurfacePosition(Vec3_s00da_3b90* out, const Vec3_s00da_3b90* p);   // 0x00b815a0
+};
+Planet* __cdecl PlanetModel_s00da_3b90();                                    // 0x00b3d350
+struct Creature_s00da_3b90 {
+    char pad00[0xc0];
+    Loco_s00da_3b90 loco;                                                     // +0xc0
+    void MoveToPointAtSpeed(int mode, const Vec3_s00da_3b90* p, float speed, float f);   // 0x00c1c1d0
+};
+struct Cand {
+    int kind;
+    Vec3_s00da_3b90 dir;
+    Vec3_s00da_3b90 pos;
+    float dist2;
+};
+struct CandVec {
+    Cand* mpBegin;
+    Cand* mpEnd;
+    Cand* mpCapacity;
+    int mAlloc;
+    Cand* mpPool;
+    void Resize(unsigned n);                                       // 0x00da1db0
+};
+void __cdecl SortCands(Cand* first, Cand* last, bool (__cdecl* less)(const Cand*, const Cand*));   // 0x00da1e00
+bool __cdecl CandLess(const Cand* a, const Cand* b) { return a->dist2 < b->dist2; }
+void __cdecl operator_delete_array(void* p);                        // 0x00f47380
+struct SocialRespond;
+int __cdecl MoveToTarget(Creature_s00da_3b90* c, unsigned pick, CandVec* cands, Obj*** targets);   // 0x00d9bee0
+inline Vec3_s00da_3b90 Target(const Vec3_s00da_3b90& origin, const Vec3_s00da_3b90& dir, float scale)
+{
+    return Vec3_s00da_3b90(dir.x * scale + origin.x, origin.y + dir.y * scale, origin.z + dir.z * scale);
+}
+struct SocialGoalRuntime;
+struct SocialRespond {
+    Creature_s00da_3b90* mOwner;                // +0x00
+    Creature_s00da_3b90* mPartner;              // +0x04
+    uint32_t mStartTime;             // +0x08 (number of proposed socials)
+    uint32_t pad0c[3];               // +0x0c..+0x14
+    float mDuration;                 // +0x18
+    float mProposalTime;             // +0x1c
+    uint32_t pad20[2];               // +0x20,+0x24
+    float mResponseTime;             // +0x28
+    uint32_t pad2c[3];               // +0x2c..+0x34
+    SocialGoalRuntime* mRuntime;     // +0x38
+    int mSocialGoal;                 // +0x3c
+    uint32_t pad40[4];               // +0x40..+0x4f
+    uint32_t mCount;                 // +0x50
+    uint32_t pad54;                  // +0x54
+    uint32_t mFlags;                 // +0x58
+    Obj** mTargets;                  // +0x5c
+
+    int Activate(Creature_s00da_3b90* c, int slot);
+    void Deactivate();               // 0x00d9f7e0
+};
+struct CreatureEx;
+struct LocoEx;
+struct BehaviorBlock;
+struct BehaviorMemory;
+struct AnimState;
+struct OrderState;
+struct AnimRecord;
+struct SocialGoal;
+struct StimulusRef;
+struct StimulusObject;
+struct ObjEx;
+struct NounManager_s00da_3b90;
+struct TerrainSphere;
+struct UIHints;
+struct SocialProposalContext;
+struct CreatureModeStrategy;
+struct SocialGoalContext;
+struct SomeGlobal;
+struct LocoVtbl {
+    void* mSlots[22];                                      // +0x00..+0x54
+    bool  (__thiscall* mIsMoving)(LocoEx*);                // +0x58
+    void* mSlots23[36];                                    // +0x5c..+0xe8
+    void  (__thiscall* mStop)(LocoEx*);                    // +0xec
+};
+struct LocoEx {
+    LocoVtbl* mVtable;
+};
+struct CreatureVtbl {
+    void* mSlots[33];                                      // +0x00..+0x80
+    void (__thiscall* mSetSocialTarget)(CreatureEx*, void*, int, int); // +0x84
+};
+struct IntVector {
+    int* mpBegin;
+    int* mpEnd;
+    int* mpCapacity;
+    unsigned int Count() const { return (unsigned int)(mpEnd - mpBegin); }
+    void Resize(unsigned int count);
+};
+struct PtrVector {
+    void** mpBegin;
+    void** mpEnd;
+    void** mpCapacity;
+};
+struct RandomLCG {
+    unsigned int RandomUint32Uniform(unsigned int count);
+};
+extern RandomLCG gMathRandom;                 // 0x01601760 SP::sMathRandom
+struct AnimRecord {
+    char pad00[0x0c];
+    int mStatus;                              // +0x0c
+};
+struct AnimTarget {
+    AnimRecord* PlayIdleAnimation(int id, int flags);                       // 0x00bc96a0
+    void PlaySocialAnimation(int id, int flags, float amount, CreatureEx* owner); // 0x00bc97f0
+    void ClearAll(int id, int flags);                                       // 0x00bc98f0
+};
+struct OrderState {
+    char pad00[0x08];
+    AnimTarget mAnimTarget;                   // +0x08
+    void InitializeBehavior(BehaviorBlock* block, CreatureEx* owner, int flags, void* callback); // 0x00bcb480
+};
+struct SocialEntry {
+    char pad00[0x3c];
+    float mWeight;                            // +0x3c
+};
+struct AnimState {
+    char pad00[0x6d4];
+    SocialEntry** mSocialEntries;             // +0x6d4
+    char pad6d8[0x7a4 - 0x6d8];
+    IntVector mSocialIds;                     // +0x7a4
+};
+struct SocialGoal {
+    char pad00[0x424];
+    unsigned int mProposalStart;              // +0x424
+    float mField428;                          // +0x428
+    float mField42c;                          // +0x42c
+    int mMaxProposals;                        // +0x430
+};
+struct SocialGoalRuntime {
+    void Initialize();                        // 0x00e33ce0
+    void SetActive(int active);               // 0x00e31a10
+    void SetCount(unsigned int count);        // 0x00e31b20
+    void SetValue(void* value);               // 0x00e31cb0
+};
+struct ProposeResult {
+    unsigned int mField00;                    // +0x00
+    unsigned int mField04;                    // +0x04
+    bool mActive;                             // +0x08
+    char pad09[3];
+    int mSlot;                                // +0x0c
+};
+struct StimulusRef {
+    void* mObject;                            // +0x00
+};
+struct StimulusObject {
+    void* pad00[2];
+    void* mSubObject;                         // +0x08
+};
+struct ObjExVtbl {
+    void* mSlots[8];
+    unsigned int (__thiscall* mGetType)(void*); // +0x20
+};
+struct ObjEx {
+    ObjExVtbl* mVtable;
+};
+struct BehaviorBlock {
+    char pad00[0x1a4];
+    SocialRespond mPropose;                   // +0x1a4
+    char pad204[0x228 - 0x204];
+    void* mVtable;                            // +0x228
+};
+struct BehaviorMemory {
+    BehaviorBlock* Construct();               // 0x00bcb0b0
+    BehaviorBlock* Lookup();                  // 0x00bca620
+};
+struct CreatureEx {
+    CreatureVtbl* mVtable;                    // +0x000
+    char pad04[0xbc];                         // +0x004..+0x0bf
+    LocoEx mLoco;                             // +0x0c0
+    char padC4[0x5a8 - 0xc4];
+    void* mCaster;                            // +0x5a8
+    char pad5ac[0xb20 - 0x5ac];
+    AnimState* mAnimState;                    // +0xb20
+    Vec3_s00da_3b90 mPosition;                           // +0xb28
+    char padB34[0xb4c - 0xb34];
+    OrderState* mOrders;                      // +0xb4c
+    char padB50[0xb58 - 0xb50];
+    unsigned char mFlagsB58;                  // +0xb58
+    char padB59[0x1020 - 0xb59];
+    IntVector mProposedSocials;               // +0x1020
+    char pad102c[0x1124 - 0x102c];
+    PtrVector mSocialStimuli;                 // +0x1124
+
+    SocialGoal* GetSocialGoal();              // 0x00c0c1a0
+    int GetSocialGoalType();                  // 0x00c0e6a0
+    bool IsSocialActive();                    // 0x00c0b770
+};
+struct TerrainSphere {
+    bool IsSomething();                       // 0x00c772c0
+};
+struct NounManager_s00da_3b90 {
+    TerrainSphere* GetCurrentTerrainSphere(); // 0x00f67d90
+};
+struct UIHints {
+    void Show();                              // 0x0067c830
+};
+struct SocialProposalContext {
+    void* GetValue();                         // 0x00ba3f90
+};
+struct SocialGoalContext {
+    SocialGoalRuntime* GetRuntime();          // 0x00d2ba50
+};
+struct CreatureModeStrategy {
+    char pad00[0x68];
+    SocialGoalContext mContext;               // +0x68
+};
+struct SomeGlobal {
+    char pad00[0x6c];
+    void* mObject;                            // +0x6c
+};
+extern SomeGlobal* gSomeGlobal;               // 0x016c7aa4
+void* GetAnimalFromStimulus(AnimRecord* anim);                    // 0x00d99980
+CreatureEx* FUN_00d99500(void* animal);                            // 0x00d99500
+BehaviorMemory* FUN_00bc9b00(int id, int size, int type, void* callback); // 0x00bc9b00
+BehaviorMemory* FUN_00bc9b00_lookup(void* target, void* callback, int id); // 0x00bc9b00 (3-arg path)
+void FUN_00b5f950(Creature_s00da_3b90** ref, Creature_s00da_3b90* value);               // 0x00b5f950
+void FUN_00da1010(Obj*** targets, int count);                     // 0x00da1010
+void* FUN_00b3d4c0(Vec3_s00da_3b90* position, CreatureEx* owner, CreatureEx* partner); // 0x00b3d4c0
+NounManager_s00da_3b90* FUN_00b3d300(int nounType);                          // 0x00b3d300
+void* FUN_005e1fc0(void* object);                                 // 0x005e1fc0
+CreatureModeStrategy* FUN_00d38840();                             // 0x00d38840
+void* GetCurrentGameMode();                                       // 0x00b5b800
+UIHints* FUN_0067cac0(int hintId);                                // 0x0067cac0
+// ---- items of slice s00da3b90 end
+
+// @ 0x00d9b010
+bool SocialValues::AnyActive()
+{
+    return mpWidget->Check0(1, 1) || mpWidget->Check0(0, 1);
+}
+
+// @ 0x00d9b040
+void SocialValues::SetDrainDelay(bool v)
+{
+    mbTimerRunning = v;
+    mpWidget->Fade(1, 0.5f, 0.0f);
+    mpWidget->Fade(0, 0.5f, 0.0f);
+}
+
+// @ 0x00d9b090
+void SocialValues::StartFillRight(float rate, float d)
+{
+    float r = rate / mTotal;
+    ((cSPUISocialRainbow*)mpWidget)->StartFill(0, 1, 0.0f, 0.0f, r, 0xff7bcc76, 1);
+    mHandle0 = *(int*)&d;
+}
+
+// @ 0x00d9b110
+int cCreatureDisplayStrategy::Drain(Creature* c)
+{
+    cCreatureDisplayStrategy* self = this;
+    AnimHandle* h = c->mpBehaviorTreeData->mStimuli.Play(0x10000000, 0);
+    if (h == 0) return -1;
+    int st = h->mState;
+    if (st == 2) {
+        if (h->mKind == self->mGoal14) {
+            self->mFlags58 |= 0xc;
+        } else {
+            self->mFlags58 = (self->mFlags58 & ~8u) | 4u;
+        }
+    } else if (st == 1) {
+        self->mb40 = 0;
+        if (self->mFlags58 & 1) {
+            self->mpWidget38->Clear(0);
+            self->mb24 = 0;
+            self->mb25 = 0;
+        }
+        int slot = c->mpAgentOrders->FindSlot(2, 1, 0, 0);
+        float f = h->mValue;
+        if (slot != -1) f = g_f2 * f;
+        SocialValues* vals = (SocialValues*)((char*)self + 0x18);
+        if (h->mKind == self->mGoal14) {
+            vals->StartFillLeft(f, (float)h->mExtra);
+        } else {
+            vals->StartFillLeft(g_f0p1 * h->mValue, (float)h->mExtra);
+        }
+        self->mFlags58 |= 2;
+    }
+    c->mpBehaviorTreeData->mStimuli.ClearAll(0x10000000, 0);
+    return st;
+}
+
+// @ 0x00d9b230
+void __stdcall FUN_00d9b230(Creature* self, char* list, uint param)
+{
+    char* elem = list + 0x24;
+    for (uint i = 0; i < *(uint*)(list + 0x18); ++i) {
+        Creature* pc = *(Creature**)elem;
+        if (pc != 0 && pc != self && *(char*)(elem - 4) != 0) {
+            pc->mpBehaviorTreeData->mStimuli.SetStimulus(0x10000000, 0, g_f5);
+            AnimHandle* h = pc->mpBehaviorTreeData->mStimuli.Play(0x10000000, 0);
+            h->mState = 3;
+            h->mId = param;
+        }
+        elem += 0xc;
+    }
+}
+
+// @ 0x00d9b770
+void FUN_00d9b770(Creature** first, Creature** last)
+{
+    if (first == last) return;
+    for (Creature** cur = first + 1; cur != last; ++cur) {
+        Creature* val = *cur;
+        Creature** hole = cur;
+        Creature** scan = cur;
+        while (scan != first) {
+            Creature** prev = scan - 1;
+            Loco* pa = *prev ? (Loco*)((char*)*prev + 0xc0) : 0;
+            Loco* pb = val   ? (Loco*)((char*)val   + 0xc0) : 0;
+            if (!LocoLess(pb, pa)) break;
+            *hole = *prev;
+            hole = prev;
+            scan = prev;
+        }
+        *hole = val;
+    }
+}
+
 // @ 0x00d9b7f0
 char* FUN_00d9b7f0(char* first, char* last, char* out)
 {
@@ -1077,6 +2117,116 @@ char* FUN_00d9b7f0(char* first, char* last, char* out)
         out += 0x210;
     }
     return out;
+}
+
+// @ 0x00d9b840
+Creature** FUN_00d9b840(Creature** a, Creature** b, Creature** c)
+{
+    Loco* la = *a ? (Loco*)((char*)*a + 0xc0) : 0;
+    Loco* lb = *b ? (Loco*)((char*)*b + 0xc0) : 0;
+    Loco* lc = *c ? (Loco*)((char*)*c + 0xc0) : 0;
+    if (LocoLess(la, lb)) {
+        if (LocoLess(lb, lc)) return a;
+        if (LocoLess(lc, la)) return c;
+        return b;
+    } else {
+        if (LocoLess(lc, lb)) return b;
+        if (LocoLess(la, lc)) return c;
+        return a;
+    }
+}
+
+// @ 0x00d9b950
+void FUN_00d9b950(char* base, int hole, int parent)
+{
+    char tmp[0x20];
+    while (parent > hole) {
+        int p = (parent - 1) >> 1;
+        char* pElem = base + p * 0x20;
+        // copy the candidate into the temporary, then compare (comparator is the stack functor)
+        *(int*)tmp = p;   // placeholder slot; array of 8 dwords copied below
+        if (!LocoLessStack(*(Loco**)pElem, *(Loco**)tmp)) break;
+        char* dst = base + parent * 0x20;
+        int* dp = (int*)dst; int* sp = (int*)pElem;
+        for (int i = 0; i < 8; ++i) dp[i] = sp[i];
+        parent = p;
+    }
+    char* dst = base + parent * 0x20;
+    int* dp = (int*)dst; int* sp = (int*)tmp;
+    for (int i = 0; i < 8; ++i) dp[i] = sp[i];
+}
+
+// @ 0x00d9b9b0
+void FUN_00d9b9b0(Creature** base, int hole, int parent, Creature* val)
+{
+    if (parent <= hole) {
+        base[parent] = val;
+        return;
+    }
+    for (;;) {
+        int p = (parent - 1) >> 1;
+        Loco* lval  = val ? (Loco*)((char*)val + 0xc0) : 0;
+        Creature* pv = base[p];
+        Loco* lpv = pv ? (Loco*)((char*)pv + 0xc0) : 0;
+        if (!LocoLess(lpv, lval)) break;
+        base[parent] = pv;
+        parent = p;
+        if (parent <= hole) break;
+    }
+    base[parent] = val;
+}
+
+// @ 0x00d9ba30
+bool FUN_00d9ba30(BehaviorMgr* self, uint v)
+{
+    if (!self->IsEmpty() && self->mKey1a4 == (int)v) return true;
+    return false;
+}
+
+// @ 0x00d9ba60
+void SocialValues::Update(int a0, int a1, Creature* c0, Creature* c1)
+{
+    if (mpWidget->IsBusy()) return;
+    if (mbTimerRunning) return;
+    if (mbFailed) return;
+    if (mbDrain) return;
+    float v0 = mpWidget->Get(0);
+    float v1 = mpWidget->Get(1);
+
+    if (c0 != 0 && mHandle0 != 0) {
+        float r;
+        if (!Anim_QueryB(c0, mHandle0)) {
+            r = g_f1;
+        } else {
+            float pa = 0.0f, pb = 0.0f;
+            if (!Anim_GetProgress(c0, mHandle0, &pb, &pa)) {
+                r = 0.0f;
+            } else {
+                float q = pa / pb;
+                r = (q > g_f1) ? g_f1 : q;
+            }
+        }
+        mpWidget->Set(0, r);
+    }
+    if (c1 != 0 && mHandle1 != 0) {
+        float r;
+        if (!Anim_QueryB(c1, mHandle1)) {
+            r = g_f1;
+        } else {
+            float pa = 0.0f, pb = 0.0f;
+            if (!Anim_GetProgress(c1, mHandle1, &pa, &pb)) {
+                r = 0.0f;
+            } else {
+                float q = pa / pb;
+                r = (q > g_f1) ? g_f1 : q;
+            }
+        }
+        mpWidget->Set(1, r);
+    }
+    if (mpWidget->Check0(0, 0) && c0 != 0) SetGlobalProperty(0xd02c025e, v0);
+    if (mpWidget->Check0(1, 0) && c0 != 0) SetGlobalProperty(0xeb1b600f, v1);
+    (void)a0; (void)a1;
+    return;
 }
 
 // @ 0x00d9bc70
@@ -1348,6 +2498,99 @@ bool __cdecl SOCIAL_RESPOND_Tick(cSPCreatureBase* c, int, int, int, int, SOCIAL_
     return true;
 }
 
+// @ 0x00d9e570
+char RunTargetBehavior(cSimCreature* pCreature, void* pA, void* pB, void* pC, void* pD, cBehaviorTask* pTask)
+{
+    uint8_t mEventData[0x44];
+    void* pTarget = pCreature->GetTargetCreature();
+    if (!IsValidBehaviorTarget(pTarget)) {
+        SetBehaviorState(pCreature, 0x15);
+        return 0;
+    }
+
+    switch (pTask->mnState) {
+    case 0:
+        if (pCreature->WaitForAnimEvent(0xbfa50b5a, mEventData, 0,
+                                        pTask->mnAnimId, 0)) {
+            void* pLocation = pCreature->mLocation.GetObject();
+            if (pLocation != nullptr)
+                AttachTargetInfo(pCreature, pTarget, pLocation);
+        }
+        if (pCreature->AnimationFinished(pTask->mnAnimId))
+            pTask->mnState = 1;
+        break;
+
+    case 1:
+        if (pCreature->WaitForAnimEvent(0xbfa50b5a, mEventData, 0,
+                                        pTask->mnAnimId, 0)) {
+            pCreature->StopLocomotion(0, -1);
+            int32_t nCount = 5;
+            void* pData = pCreature->GetTargetRecord();
+            if (pData != nullptr)
+                nCount = GetWorldConstant(((cTargetData*)pData)->mnCount,
+                                          0xeb69140e, 5);
+            void* pLocation = pCreature->mLocation.GetObject();
+            uint32_t* pLink = GetActionLink(pCreature);
+            float fDistance = ((cNounManager_s00d9_dce0*)NounManager_s00d9_dce0())->GetDistance(
+                pLink, (float)nCount, 0);
+            if (fDistance < 0.0f) {
+                ((cActionObject*)pCreature->GetActionObject())->SetTarget(
+                    fDistance);
+                ((cNounManager_s00d9_dce0*)NounManager_s00d9_dce0())->MoveTo(pLocation, pLink,
+                                                       -fDistance, 6);
+                SetBehaviorState(pCreature, 0x15);
+                return 0;
+            }
+            ((cActionObject*)pCreature->GetActionObject())->MoveTowards(
+                fDistance);
+            ((cNounManager_s00d9_dce0*)NounManager_s00d9_dce0())->MoveTo(pLocation, pLink, fDistance,
+                                                   6);
+        }
+        if (pCreature->AnimationFinished(pTask->mnAnimId))
+            pTask->mnState = 2;
+        break;
+
+    case 2:
+        pCreature->NotifyTargetLost();
+        pCreature->ResetPose();
+        break;
+
+    case 3:
+        if (pCreature->WaitForAnimEvent(0xbfa50b5a, mEventData, 0,
+                                        pTask->mnAnimId, 0)) {
+            void* pLocation = pCreature->mLocation.GetObject();
+            if (pLocation != nullptr)
+                AttachTargetInfo(pCreature, pTarget, pLocation);
+            void* pRecord = ((cWorldManager*)WorldManager())->FindObject(
+                pLocation);
+            if (pRecord != nullptr) {
+                void* pEpisode = ((cWorldManager*)WorldManager())
+                                     ->GetObjectData(pRecord);
+                if (pEpisode != nullptr)
+                    ((cEpisodeObject*)pEpisode)->GetRecord();
+            }
+        }
+        if (pCreature->AnimationFinished(pTask->mnAnimId)) {
+            void* pNewTarget = pCreature->GetTargetCreature();
+            if (IsValidBehaviorTarget(pNewTarget))
+                pCreature->mMovement.CallVoid(0x2c);
+        }
+        break;
+
+    case 4:
+        pCreature->UpdateTargetPose();
+        pCreature->UpdateWorldTarget();
+        SetBehaviorState(pCreature, 0x15);
+        pCreature->GetActionObject();
+        SetBehaviorState(pCreature, 0x15);
+        break;
+
+    default:
+        break;
+    }
+    return 1;
+}
+
 // @ 0x00d9eb70
 cPoolObject* cSocialBandPool::GetObject(uint32_t nIndex)
 {
@@ -1376,6 +2619,93 @@ void cSocialBandPool::ReleaseObject(uint32_t nIndex)
         mnTailIndex = GetNextFreeSlot(nIndex);
 }
 
+// @ 0x00d9ec20
+void Fd9ec20(int* first, int* last, CompareFn cmp)
+{
+    if (first == last)
+        return;
+    int* cur = first + 8;
+    if (cur == last)
+        return;
+    do {
+        int tmp[8];
+        for (int i = 0; i < 8; ++i)
+            tmp[i] = cur[i];
+        int* p = cur;
+        while (p != first) {
+            int* prev = p - 8;
+            if (!cmp(tmp, prev))
+                break;
+            for (int i = 0; i < 8; ++i)
+                p[i] = prev[i];
+            p = prev;
+        }
+        for (int i = 0; i < 8; ++i)
+            p[i] = tmp[i];
+        cur += 8;
+    } while (cur != last);
+}
+
+// @ 0x00d9ed10
+void Fd9ed10(int* first, int* last, CompareFn cmp)
+{
+    if (first == last)
+        return;
+    int* cur = first;
+    do {
+        int tmp[8];
+        for (int i = 0; i < 8; ++i)
+            tmp[i] = cur[i];
+        int* p = cur;
+        int* prev = p - 8;
+        bool more = cmp(tmp, prev);
+        while (more) {
+            for (int i = 0; i < 8; ++i)
+                p[i] = prev[i];
+            p = prev;
+            prev = p - 8;
+            more = cmp(tmp, prev);
+        }
+        for (int i = 0; i < 8; ++i)
+            p[i] = tmp[i];
+        cur += 8;
+    } while (cur + 5 != last);
+}
+
+// @ 0x00d9edf0
+void Fd9edf0(int* first, int* last, CompareFn cmp)
+{
+    int n = (last - first) >> 5;
+    if (n < 2)
+        return;
+    int hole = ((n - 2) >> 1) + 1;
+    int* e = (int*)((char*)first + (hole - 1) * 0x20 + 0x20);
+    do {
+        --hole;
+        Fd9d9a0(first, hole, n, hole, e[-0xb], e[-0xa], e[-9], e[-8],
+                 e[-7], e[-6], e[-5], e[-4], cmp);
+        e -= 8;
+    } while (hole != 0);
+}
+
+// @ 0x00d9ee70
+void Fd9ee70(int* first, int* last, CompareFn cmp)
+{
+    int n = (int)(last - first) >> 5;
+    if (n < 2)
+        return;
+    int* e = last - 5;
+    do {
+        int v0 = e[-3], v1 = e[-2], v2 = e[-1], v3 = e[0];
+        int v4 = e[1], v5 = e[2], v6 = e[3], v7 = e[4];
+        for (int i = 0; i < 8; ++i)
+            e[-3 + i] = first[i];
+        Fd9d9a0(first, 0, n - 1, 0, v0, v1, v2, v3, v4, v5, v6, v7, cmp);
+        e -= 8;
+        n = (int)((char*)e + 0x14 - (char*)first) >> 5;
+    } while (n > 1);
+}
+
 // @ 0x00d9ef40
 void Fd9ef40(int* first, int* last, Vector3 vec)
 {
@@ -1387,6 +2717,627 @@ void Fd9ef40(int* first, int* last, Vector3 vec)
         --hole;
         Fd9da80(first, hole, n, hole, first[hole], vec);
     } while (hole != 0);
+}
+
+// @ 0x00d9efa0
+void Fd9efa0(int* first, int* last, Vector3 vec)
+{
+    int n = last - first;
+    if (n < 2)
+        return;
+    int* e = last - 1;
+    do {
+        int v = *e;
+        *e = *first;
+        Fd9da80(first, 0, n - 1, 0, v, vec);
+        --e;
+        n = (int)((char*)e + 4 - (char*)first) >> 2;
+    } while (n > 1);
+}
+
+// @ 0x00d9f010
+void Fd9f010(PaintSystem* self)
+{
+    int* p = self->mpField1e4;
+    if (p != 0 && p != self->mpField1f4)
+        operator delete[](p);
+    ((void(__thiscall*)(void*))(void*)0x00afbad0)(self->mActionCircle);   // ~cActionCircle
+    if (self->mpField0e8) {
+        void** vt = *(void***)self->mpField0e8;
+        ((void(__thiscall*)(void*))vt[1])(self->mpField0e8);
+    }
+    if (self->mpField0e4) {
+        void** vt = *(void***)self->mpField0e4;
+        ((void(__thiscall*)(void*))vt[1])(self->mpField0e4);
+    }
+    ((void(__thiscall*)(void*))(void*)0x008e2b20)(self->mVec2b8c);      // Vec2b::Free
+    ((void(__thiscall*)(void*))(void*)0x00ae6970)(self->mVec78);        // vector dtor
+    ((void(__thiscall*)(void*))(void*)0x00ae6970)(self->mVec64);        // vector dtor
+    if (self->mpField0c) {
+        void** vt = *(void***)self->mpField0c;
+        ((void(__thiscall*)(void*))vt[1])(self->mpField0c);
+    }
+    if (self->mpField08) {
+        void** vt = *(void***)self->mpField08;
+        ((void(__thiscall*)(void*))vt[1])(self->mpField08);
+    }
+    *(void**)self = (void*)0x013eb394;                                  // PaintSystem vtbl
+}
+
+// @ 0x00d9f0a0
+bool FindSocialBandGroup(cSPCreatureBase_s00d9_ec20* self, const int* key)
+{
+    if (Fbc9b50(self) != 0)
+        return false;
+    cSocialBand_s00d9_ec20* band = g_SocialBandPool.GetObject(*(unsigned int*)((char*)self + 0x1a8));
+    if (band->mTribeID != key[0])
+        return false;
+    if (band->mField0c != key[1])
+        return false;
+    float dx = band->mPos.x - *(float*)&key[2];
+    float dy = band->mPos.y - *(float*)&key[3];
+    float dz = band->mPos.z - *(float*)&key[4];
+    return (dx * dx + dy * dy + dz * dz) < 400.0f;
+}
+
+// @ 0x00d9f130
+bool FindPrimaryAgentForSocialBandGroup(cSPCreatureBase_s00d9_ec20* self, void* agent)
+{
+    unsigned int u = *(unsigned int*)((char*)self + 0x1a8) & 0xbfffffff;
+    cSocialBand_s00d9_ec20* band;
+    if (u < (unsigned int)(((char*)g_SocialBandPool.mpEnd - (char*)g_SocialBandPool.mpBegin) / 0x210)) {
+        int* slot = (int*)((char*)g_SocialBandPool.mpBegin + u * 0x210);
+        band = (*slot >= 0) ? (cSocialBand_s00d9_ec20*)(slot + 1) : 0;
+    } else {
+        band = 0;
+    }
+    if (agent != 0) {
+        int tribe = band->mTribeID;
+        int at = (int)((void*(__thiscall*)(void*))(void*)0x00c22f50)(agent);   // GetTribe
+        if (at == tribe)
+            return *((int*)(*(int*)((char*)agent + 0xb4c) + 0x1d8)) != (int)0xb46e8803;
+    }
+    return true;
+}
+
+// @ 0x00d9f1c0
+bool SOCIAL_BAND_REACT_Activate(cSPCreatureBase_s00d9_ec20* self, void* out)
+{
+    int a = 0;
+    if (out) {
+        ((int*)out)[0] = 0;
+        ((int*)out)[1] = 0;
+        ((int*)out)[2] = 0;
+        ((int*)out)[3] = 0;
+        ((char*)out)[0x10] = 0;
+    }
+    if (self) {
+        void** vt = *(void***)self;
+        a = ((int(__thiscall*)(void*, unsigned int))vt[3])(self, 0x4f176642);
+    }
+    int* brain = (int*)(*(int*)((char*)self + 0xb4c));
+    int* owner = (int*)((char*)brain[0x600/sizeof(int)]);   // +0x600
+    (void)owner;
+    /*
+     * NOTE: the exact owner probe is reconstructed below through named access.
+     */
+    return true;
+}
+
+// @ 0x00d9f2c0
+namespace SP {
+bool SOCIAL_BAND_REACT_Tick(void * self, double a2, unsigned int a3, unsigned int a4, nSPBehaviorTree::behavior_memory_block * a5, nSPBehaviorTree::behavior_memory_block * a6, float a7)
+{
+    char* base = (char*)g_SocialBandPool.mpBegin;
+    int* brain = (int*)(*(int*)((char*)self + 0xb4c));
+    unsigned int u = *(unsigned int*)((char*)brain[0x600/4] + 0x1a8) & 0xbfffffff;
+    SocialBandState* st = 0;
+    if (u < (unsigned int)(((char*)g_SocialBandPool.mpEnd - base) / 0x210)) {
+        int* slot = (int*)(base + u * 0x210);
+        if (*slot >= 0)
+            st = (SocialBandState*)(slot + 1);
+    }
+    if (Fa75010() != 0)
+        return false;
+    if (((char*)self)[0x0c0 + 8 + 0] && false)   // placeholder guard
+        return false;
+    switch (0) { default: break; }
+    return true;
+}
+}  // namespace SP
+
+// @ 0x00d9f530
+int* Fd9f530(unsigned int id)
+{
+    int* begin = g_SocialBandPool.mpBegin;
+    int* end = g_SocialBandPool.mpEnd;
+    unsigned int u = id & 0xbfffffff;
+    if (u < (unsigned int)((int)((char*)end - (char*)begin) / 0x210)) {
+        SocialBandSlot* slot = (SocialBandSlot*)((char*)begin + u * 0x210);
+        if (!slot->mUsed)
+            return (int*)(slot + 1);
+    }
+    return 0;
+}
+
+// @ 0x00d9f580
+void Fd9f580(int* first, int* mid, int* last, CompareFn cmp)
+{
+    Fd9edf0(first, mid, cmp);
+    if (mid < last) {
+        int count = (int)(((char*)last - (char*)mid - 1) >> 5) + 1;
+        int* e = mid + 3;
+        do {
+            int* prev = e - 3;
+            if (cmp(prev, first)) {
+                int v0 = prev[0], v1 = e[-2], v2 = e[-1], v3 = e[0];
+                int v4 = e[1], v5 = e[2], v6 = e[3], v7 = e[4];
+                for (int i = 0; i < 8; ++i)
+                    prev[i] = first[i];
+                Fd9d9a0(first, 0, (int)((char*)mid - (char*)first) >> 5, 0,
+                         v0, v1, v2, v3, v4, v5, v6, v7, cmp);
+            }
+            e += 8;
+            --count;
+        } while (count != 0);
+    }
+    Fd9ee70(first, mid, cmp);
+}
+
+// @ 0x00d9f660
+int* Fd9f660(int* first, int* last, void* pivot, Vector3 key)
+{
+    for (;;) {
+        while (true) {
+            char* pv = pivot ? (char*)pivot + 0xc0 : 0;
+            char* q = *first ? (char*)*first + 0xc0 : 0;
+            if (!((KeyCmp*)(void*)&key)->Compare(q, pv))
+                break;
+            ++first;
+        }
+        do {
+            --last;
+            char* r = *last ? (char*)*last + 0xc0 : 0;
+            char* pv2 = pivot ? (char*)pivot + 0xc0 : 0;
+            if (!((KeyCmp*)(void*)&key)->Compare(pv2, r))
+                break;
+        } while (true);
+        if (first >= last)
+            return first;
+        int t = *first;
+        *first = *last;
+        *last = t;
+        ++first;
+    }
+}
+
+// @ 0x00d9f6f0
+void Fd9f6f0(int* first, int* mid, int* last, Vector3 vec)
+{
+    Fd9ef40(first, mid, vec);
+    for (int* p = mid; p < last; ++p) {
+        char* a0 = *first ? (char*)*first + 0xc0 : 0;
+        char* ap = *p ? (char*)*p + 0xc0 : 0;
+        if (((KeyCmp*)(void*)&vec)->Compare(ap, a0)) {
+            int f = *first;
+            int v = *p;
+            *p = f;
+            Fd9da80(first, 0, (int)((char*)mid - (char*)first) >> 2, 0, v, vec);
+        }
+    }
+    Fd9efa0(first, mid, vec);
+}
+
+// @ 0x00d9f7e0
+void Fd9f7e0(int* self)
+{
+    self[0] = 0; self[1] = 0; self[3] = 0; self[5] = 0;
+    self[2] = 1;
+    ((char*)self)[0x24] = 0;
+    ((char*)self)[0x25] = 0;
+    ((char*)self)[0x2c] = 0;
+    self[6] = 0;   // +0x18
+    self[7] = 0;   // +0x1c
+    self[10] = 0;  // +0x28
+    self[0xf] = 0; // +0x3c
+    ((char*)self)[0x40] = 0;
+    self[0x13] = 0;
+    self[0x14] = 0;
+    self[0x15] = 0;
+    self[0x16] = 0;
+    self[0x11] = 0;
+    self[0x12] = 0;
+    int* p = self + 0x1d;   // +0x74
+    self[0x1b] = (int)(size_t)p;
+    self[0x18] = (int)(size_t)p;
+    self[0x17] = (int)(size_t)p;
+    self[0x19] = (int)(size_t)(self + 0x20);
+}
+
+// @ 0x00d9f990
+void* Fd9f990(int* self, int* pos, unsigned int n, const void* value)
+{
+    int* begin = (int*)self[0];
+    int* cur = (int*)self[1];
+    int* end = (int*)self[2];
+    unsigned int cap = (unsigned int)((cur - begin) / 3);
+    if ((unsigned int)((end - cur) / 3) < n) {
+        unsigned int newcap = cap * 2;
+        if (cap == 0)
+            newcap = 1;
+        if (newcap <= cap + n)
+            newcap = cap + n;
+        int* nb = (int*)F7ec550(begin, pos, 0);
+        F6a4100(nb, n, value);
+        int* nc = (int*)F7ec550(pos, cur, (char*)nb + n * 0xc);
+        self[0] = 0;
+        self[1] = (int)(size_t)nc;
+        self[2] = (int)(size_t)((char*)nb + newcap * 0xc);
+    } else if (n != 0) {
+        int lc = ((int*)value)[0];
+        int l8 = ((int*)value)[1];
+        int l4 = ((int*)value)[2];
+        unsigned int elems = (unsigned int)(cur - pos) / 3;
+        if (n < elems) {
+            int* p = cur - n * 3;
+            F4797a0((void*)value, p, cur, cur, pos);
+            self[1] = (int)(size_t)(cur + n * 3);
+            Fabced0(pos, p, cur);
+            Fa177f0(pos, (char*)pos + n * 0xc, &lc);
+            return self;
+        }
+        unsigned int extra = n - elems;
+        F6a4100(cur, extra, &lc);
+        self[1] = (int)(size_t)(cur + extra * 3);
+        F4797a0(pos, pos, cur, (int*)(size_t)self[1], pos);
+        self[1] = (int)(size_t)((int*)(size_t)self[1] + elems * 3);
+        Fa177f0(pos, cur, &lc);
+    }
+    return self;
+}
+
+// @ 0x00da1330
+void CommunityApproach::Start(Community* comm, Object2* o2, Entity* ent, Entity* other)
+{
+    AssignRef<Community>(mCommunity, comm);
+    AssignRef<Object2>(mObj2, o2);
+    AssignRef<Entity>(mEntity, ent);
+
+    Vec3* ep = ent->sub.GetPos();
+    mTarget = *ep;
+
+    Entity* leader = comm->GetLeader();
+    Vec3* lp = leader->sub.GetPos();
+    Vec3 d;
+    d.x = mTarget.x - lp->x;
+    d.z = mTarget.z - lp->z;
+    d.y = mTarget.y - lp->y;
+    float inv = 1.0f / sqrtf(d.y * d.y + (d.z * d.z + d.x * d.x) + 1e-8f);
+    Vec3* dir = &mDir;
+    dir->x = inv * d.x;
+    dir->y = d.y * inv;
+    dir->z = d.z * inv;
+
+    float a = g_levelTable.Value(other->levelId);
+    float b = g_levelTable.Value(ent->levelId);
+    float r = (a > b) ? a : b;
+
+    Vec3* v = mVerts;
+    ((uint32_t*)v)[0] = g_vtxInit[0];
+    ((uint32_t*)v)[1] = g_vtxInit[1];
+    ((uint32_t*)v)[2] = g_vtxInit[2];
+
+    float len1 = r * 2.0f + 15.0f;
+    float len2 = r * 2.0f + 22.0f;
+    v = mVerts;
+    v[1].y = mTarget.y - mDir.y * len1;
+    v[1].x = mTarget.x - mDir.x * len1;
+    v[1].z = mTarget.z - mDir.z * len1;
+    v = mVerts;
+    v[4].x = mTarget.x - mDir.x * len2;
+    v[4].z = mTarget.z - mDir.z * len2;
+    v[4].y = mTarget.y - mDir.y * len2;
+
+    Vec3 rot;
+    Quat q;
+    float s, c;
+    {
+        float qi = 1.0f / sqrtf(mTarget.x * mTarget.x + mTarget.y * mTarget.y + mTarget.z * mTarget.z + 1e-8f);
+        s = sinf(g_markerAngle * 0.5f);
+        q.x = mTarget.x * qi * s;
+        q.y = mTarget.y * qi * s;
+        q.z = mTarget.z * qi * s;
+        c = cosf(g_markerAngle * 0.5f);
+        q.w = c;
+        Vec3* rv = RotateByQuat(&rot, &mDir, &q);
+        float rx = rv->x, ry = rv->y, rz = rv->z;
+        v = mVerts;
+        v[2].y = mTarget.y - ry * len1;
+        v[2].z = mTarget.z - rz * len1;
+        v[2].x = mTarget.x - rx * len1;
+    }
+    {
+        float qi = 1.0f / sqrtf(mTarget.x * mTarget.x + mTarget.y * mTarget.y + mTarget.z * mTarget.z + 1e-8f);
+        s = sinf(-g_markerAngle * 0.5f);
+        c = cosf(-g_markerAngle * 0.5f);
+        q.x = mTarget.x * qi * s;
+        q.y = mTarget.y * qi * s;
+        q.z = mTarget.z * qi * s;
+        q.w = c;
+        Vec3* rv = RotateByQuat(&rot, &mDir, &q);
+        float rx = rv->x, ry = rv->y, rz = rv->z;
+        v = mVerts;
+        v[3].x = mTarget.x - rx * len1;
+        v[3].y = mTarget.y - ry * len1;
+        v[3].z = mTarget.z - rz * len1;
+    }
+
+    v = mVerts;
+    v[5] = mTarget;
+
+    mZeroes[0] = 0;
+    mZeroes[1] = 0;
+    mZeroes[2] = 0;
+    mZeroes[3] = 0;
+    mZeroes[4] = 0;
+
+    Vec3 mid;
+    mid.x = mTarget.x - (mDir.x * len1) * 0.5f;
+    mid.y = mTarget.y - (mDir.y * len1) * 0.5f;
+    mid.z = mTarget.z - (mDir.z * len1) * 0.5f;
+    mEffect.Init(&mid, 45.0f, &mDir, 0.0f);
+    mEffect.SetMode(0, r * 1.5f);
+    EffectStart(&mEffect);
+
+    MessageServer()->Post(this, 0x41638ca);
+
+    RelationshipManager* rm = GetRelationshipManager();
+    uint32_t k1 = comm->GetKey();
+    uint32_t k2 = o2->GetKey();
+    float score = rm->Score(k2, k1, 0);
+    int rel = rm->Classify(score);
+    if (rel == 2)
+        mMode = 1;
+    else if (rel == 3)
+        mMode = 2;
+    else
+        mMode = 0;
+
+    if (mMode != 0) {
+        StrategyObj* so = Strategy::Instance()->GetObj();
+        MarkerRef* nm = (MarkerRef*)so->held;
+        MarkerRef* om = mMarker;
+        if (nm != om) {
+            if (nm)
+                nm->AddRef();
+            mMarker = nm;
+            if (om)
+                om->Release();
+        }
+        mMarker->Reset();
+        float* range = ent->sub.GetRange();
+        float dd = range[5] - range[2];
+        float qi = 1.0f / sqrtf(mTarget.x * mTarget.x + mTarget.y * mTarget.y + mTarget.z * mTarget.z + 1e-8f);
+        mAim.x = (qi * mTarget.x) * dd + mTarget.x;
+        mAim.y = mTarget.y + (qi * mTarget.y) * dd;
+        mAim.z = mTarget.z + (qi * mTarget.z) * dd;
+        mMarker->SetMode(rel);
+    }
+
+    if (Strategy::Instance()->Has(6)) {
+        const int val = 7;
+        mCommands.push_back(val);
+    }
+    if (Strategy::Instance()->Has(4)) {
+        const int val = 5;
+        mCommands.push_back(val);
+    }
+    if (Strategy::Instance()->Has(5)) {
+        const int val = 6;
+        mCommands.push_back(val);
+    }
+
+    mSavedF = mObj2->f2cc;
+    mObj2->f2cc = 0.0f;
+}
+
+// @ 0x00da1b00
+void SocialBand::AddCreature(Creature_s00da_1330* e)
+{
+    if (e)
+        e->SetParam(0x4f176642);
+    PushCreature(mListA, e);
+    e->mFlags |= 0x20;
+    FUN_00b3d310(&e->sub)->Close();
+}
+
+// @ 0x00da1b90
+void SocialBand::AddOther(Creature_s00da_1330* e)
+{
+    PushCreature(mListB, e);
+    e->mFlags |= 0x20;
+    FUN_00b3d310(&e->sub)->Close();
+}
+
+// @ 0x00da1c10
+bool FUN_00da1c10(Creature_s00da_1330* c, int, int, int, ReactResult* res)
+{
+    if (res) {
+        res->f1 = 5;
+        res->f2 = 0;
+        res->f3 = 0;
+    }
+    void* block = c->mTribe->anim.Play(0, 0x200000);
+    if (!block)
+        return false;
+    Creature_s00da_1330* other = FUN_00d994c0_s00da_1330(WatchMemoryBlock(block));
+    if (!other)
+        return false;
+    BandKey key;
+    key.mTribe1 = other->GetTribe();
+    key.mTribe2 = c->GetTribe();
+    key.mPos = *c->sub.GetPos();
+    BandKey* kp = &key;
+    void* fn = (void*)&SP_FindSocialBandGroup;
+    OrderManager* mgr = FUN_00bc9b00(0xf445d1cc, fn, kp);
+    OrderNode* node = mgr->FindNode(0xf445d1cc, fn, kp);
+    if (!node)
+        return false;
+    c->mTribe->FUN_00bcb480(node, c, res, fn);
+    SocialBand* band = (SocialBand*)g_socialBandPool.GetObject(node->mBandId);
+    band->AddOther(c);
+    c->mTribe->anim.PlayWait(0, 0x2000000, kFloatMax, 0);
+    ((ReactRunner*)res)->FUN_00d9d100(c, band);
+    c->UpdateLocomotion(1);
+    res->f0 = 0;
+    return true;
+}
+
+// @ 0x00da1db0
+void BigVec::resize(uint32_t n)
+{
+    if (n > size()) {
+        Elem32 value;
+        DoInsert(mpEnd, n - size(), value);
+    } else {
+        Erase((char*)mpBegin + n * 0x20, mpEnd);
+    }
+}
+
+// @ 0x00da1e70
+void IntV::assign(const int* first, const int* last, int)
+{
+    int bytes = (int)((const char*)last - (const char*)first);
+    int n = bytes >> 2;
+    if ((uint32_t)n > (uint32_t)((int)((char*)mpCapacity - (char*)mpBegin) >> 2)) {
+        memcpy(0, first, bytes);
+        mpBegin = 0;
+        mpCapacity = (int*)(n * 4);
+        mpEnd = (int*)(n * 4);
+        return;
+    }
+    int size = (int)((char*)mpEnd - (char*)mpBegin) >> 2;
+    if ((uint32_t)n > (uint32_t)size) {
+        const char* mid = (const char*)first + size * 4;
+        memcpy(mpBegin, first, mid - (const char*)first);
+        mpEnd = (int*)memcpy(mpEnd, mid, (const char*)last - mid)
+              + (((const char*)last - mid) >> 2);
+        return;
+    }
+    mpEnd = (int*)memcpy(mpBegin, first, bytes) + n;
+}
+
+// @ 0x00da1fc0
+bool SocialBand::OnMessage(uint32_t msg, Msg* m)
+{
+    if (msg != 0x41638ca)
+        return false;
+    switch (m->GetType()) {
+    case 0xaceb7ea7: {
+        if (mCount >= mLimit)
+            return false;
+        if (mState04 == 6)
+            return false;
+        mCount++;
+        if (!mFlag58)
+            mTimer = g_reactionTimer;
+        AutoRefCount* it = mListA.mpBegin;
+        AutoRefCount* end = mListA.mpEnd;
+        while (it != end) {
+            Creature_s00da_1330* e = (Creature_s00da_1330*)it->mpObj;
+            Creature_s00da_1330* c = FUN_00c0c380(e);
+            if (c) {
+                TribeSlot* slot = TribeSlotAt(c->mTribe, c->mTribe->mIndex);
+                int kind = c->FUN_00c22dc0();
+                if (slot->mFlag10 == 0) {
+                    int base = mCount <= 5 ? (int)mCount : 5;
+                    int anim = 0;
+                    switch (kind) {
+                    case 6: anim = base + 0x5508f8cd; break;
+                    case 5: anim = base - 0x0af70712; break;
+                    case 4: anim = base - 0x4af70817; break;
+                    }
+                    if (anim != 0) {
+                        int out;
+                        e->FUN_00c0b2f0(anim, slot->mObj, &out);
+                        slot->mState = e->InterruptAnimation(out, -1, 0);
+                    }
+                }
+                if (mFlag58)
+                    slot->mFlag10 = 0;
+            }
+            ++it;
+        }
+        return false;
+    }
+    case 0x79836ba6: {
+        float f = 0.0f;
+        m->GetNextFloat(&f);
+        if (f > kSmallEpsilon)
+            mDelay = f;
+        return false;
+    }
+    case 0xf69ff317: {
+        float f = 0.0f;
+        m->GetNextFloat(&f);
+        if (f > kSmallEpsilon)
+            mLimit = (uint32_t)(int)f;
+        return false;
+    }
+    case 0xff77507f: {
+        if (mCount >= mLimit)
+            return false;
+        if (mState04 == 6)
+            return false;
+        mFlag58 = 0;
+        void* info = mOwner->mBandInfo;
+        if (!info)
+            return false;
+        char* band = (char*)FUN_00c8ea70(info);
+        int n = (int)(mCommands.mpEnd - mCommands.mpBegin);
+        if (n <= 0) {
+            mChosen = 0;
+            mMode = -1;
+            return false;
+        }
+        if (mHandle > 1) {
+            FUN_0067cac0(0xe807e90c)->Close();
+            mHandle = 0;
+        }
+        mFlag51 = 1;
+        mChosen = (uint32_t)(int)RandomInRange((const float*)(band + 0x98));
+        uint32_t idx = g_random.RandomUint32Uniform(
+            (uint32_t)(mCommands.mpEnd - mCommands.mpBegin));
+        int cmd = mCommands.mpBegin[idx];
+        uint32_t key = 0x9de794a4;
+        if (cmd == 5) {
+            mMode = 2;
+            key = 0xc3933f3f;
+        } else if (cmd == 6) {
+            mMode = 0;
+            key = 0x4ea19703;
+        } else if (cmd == 7) {
+            mMode = 1;
+        }
+        FUN_00e26de0(mListB.mpBegin, mListB.mpEnd, (void*)&FUN_00d9b480);
+        int cnt = (int)(mListB.mpEnd - mListB.mpBegin);
+        if (mChosen > (uint32_t)cnt)
+            mChosen = (uint32_t)cnt;
+        for (uint32_t i = 0; i < mChosen; ++i) {
+            Creature_s00da_1330* c = (Creature_s00da_1330*)mListB.mpBegin[i].mpObj;
+            TribeSlot* slot = TribeSlotAt(c->mTribe, c->mTribe->mIndex);
+            if (slot->mState == 5 || slot->mState == 4)
+                continue;
+            slot->mState = 4;
+            c->InterruptAnimation(0x61e0675, -1, 0);
+            c->FUN_00c1d460(key, 0x950a2438);
+            RefToSkin ref(c);
+            mSkins.Insert(ref);
+        }
+        return false;
+    }
+    }
+    return false;
 }
 
 // @ 0x00da2360
@@ -1516,6 +3467,326 @@ void SOCIAL_BAND_PLAY_Tick(cSocialBand* pBand)
     }
 }
 }  // namespace SP
+
+// @ 0x00da3b90
+int SocialRespond::Activate(Creature_s00da_3b90* c, int slot)
+{
+    Vec3_s00da_3b90 p0 = *mOwner->loco.GetPosition();
+    float rr = c->loco.GetRadius() + 1.0f;
+    float t = rr + rr;
+    float r5 = t + 5.0f;
+    float sq = r5 * r5;
+    Vec3_s00da_3b90 b = *c->loco.GetPosition();
+    Planet* planet = PlanetModel_s00da_3b90();
+
+    if (mFlags & 0x20) {
+        float dx = b.x - p0.x, dy = b.y - p0.y, dz = b.z - p0.z;
+        float d2 = (dz * dz + dy * dy) + dx * dx;
+        if (sq > d2) {
+            float inv = 1.0f / sqrtf(d2 + 1e-8f);
+            Vec3_s00da_3b90 tgt(dx * inv * sq + p0.x, p0.y + dy * inv * sq, p0.z + dz * inv * sq);
+            Vec3_s00da_3b90 out;
+            planet->DirectionToSurfacePosition(&out, &tgt);
+            c->MoveToPointAtSpeed(2, &out, 1.0f, 2.0f);
+            if (slot != -1) {
+                Obj** pp = &mTargets[slot];
+                Obj* o = *pp;
+                if (o) {
+                    *pp = 0;
+                    o->Release();
+                    return -1;
+                }
+            }
+        } else {
+            c->loco.Stop();
+        }
+        return -1;
+    }
+
+    if (slot != -1 && mTargets[slot] == (Obj*)c)
+        return slot;
+
+    Cand stackBuf[3];
+    CandVec cands;
+    cands.mpBegin = stackBuf;
+    cands.mpEnd = stackBuf;
+    cands.mpCapacity = stackBuf + 3;
+    cands.mpPool = stackBuf;
+    cands.Resize(3);
+
+    Creature_s00da_3b90* partner = mPartner;
+    const Vec3_s00da_3b90* po = mOwner->loco.GetPosition();
+    const Vec3_s00da_3b90* pp = partner->loco.GetPosition();
+    float fx = pp->x - po->x;
+    float fz = pp->z - po->z;
+    float fy = pp->y - po->y;
+    float inv1 = 1.0f / sqrtf((fy * fy + (fz * fz + fx * fx)) + 1e-8f);
+    Vec3_s00da_3b90 fwd(inv1 * fx, inv1 * fy, inv1 * fz);
+
+    const Vec3_s00da_3b90* up = mOwner->loco.GetPosition();
+    float inv2 = 1.0f / sqrtf(((up->x * up->x + up->y * up->y) + up->z * up->z) + 1e-8f);
+    Vec3_s00da_3b90 axis(inv2 * up->x, inv2 * up->y, inv2 * up->z);
+    Quat_s00da_3b90 q1 = AxisAngle(axis, kAngleB + kAngleA);
+    Quat_s00da_3b90 q2 = AxisAngle(axis, kAngleC + kAngleA);
+
+    Cand* cd = cands.mpBegin;
+    cd[0].kind = 0;
+    cd[0].dir = QuatRotate(fwd, q1);
+    Vec3_s00da_3b90 tg0 = Target(p0, cd[0].dir, t);
+    Vec3_s00da_3b90 s0;
+    cd[0].pos = *planet->DirectionToSurfacePosition(&s0, &tg0);
+    {
+        float ex = b.x - cd[0].pos.x, ez = b.z - cd[0].pos.z, ey = b.y - cd[0].pos.y;
+        cd[0].dist2 = (ex * ex + ez * ez) + ey * ey;
+    }
+
+    cd[1].kind = 1;
+    cd[1].dir = QuatRotate(fwd, q2);
+    Vec3_s00da_3b90 tg1 = Target(p0, cd[1].dir, t);
+    Vec3_s00da_3b90 s1;
+    cd[1].pos = *planet->DirectionToSurfacePosition(&s1, &tg1);
+    {
+        float ex = b.x - cd[1].pos.x, ez = b.z - cd[1].pos.z, ey = b.y - cd[1].pos.y;
+        cd[1].dist2 = (ex * ex + ez * ez) + ey * ey;
+    }
+
+    cd[2].kind = 2;
+    {
+        float inv3 = 1.0f / sqrtf(((fwd.x * fwd.x + fwd.z * fwd.z) + fwd.y * fwd.y) + 1e-8f);
+        cd[2].dir.y = -(inv3 * fwd.y);
+        cd[2].dir.x = -(inv3 * fwd.x);
+        cd[2].dir.z = -(inv3 * fwd.z);
+    }
+    Vec3_s00da_3b90 tg2 = Target(p0, cd[2].dir, t);
+    Vec3_s00da_3b90 s2;
+    cd[2].pos = *planet->DirectionToSurfacePosition(&s2, &tg2);
+    {
+        float ex = b.x - cd[2].pos.x, ez = b.z - cd[2].pos.z, ey = b.y - cd[2].pos.y;
+        cd[2].dist2 = (ex * ex + ez * ez) + ey * ey;
+    }
+
+    SortCands(cands.mpBegin, cands.mpEnd, CandLess);
+
+    unsigned pick = 0;
+    for (unsigned i = 0; i < 3; ++i) {
+        if (mCount > 2 || cands.mpBegin[i].kind != 2) {
+            pick = i;
+            break;
+        }
+    }
+    int result = MoveToTarget(c, pick, &cands, &mTargets);
+    if (result == -1) {
+        float dx = b.x - p0.x, dz = b.z - p0.z, dy = b.y - p0.y;
+        float d2 = (dx * dx + dz * dz) + dy * dy;
+        if (d2 < sq) {
+            float inv = 1.0f / sqrtf(d2 + 1e-8f);
+            Vec3_s00da_3b90 tgt(inv * dx * sq + p0.x, p0.y + inv * dy * sq, p0.z + inv * dz * sq);
+            Vec3_s00da_3b90 out;
+            planet->DirectionToSurfacePosition(&out, &tgt);
+            c->MoveToPointAtSpeed(2, &out, 1.0f, 2.0f);
+        }
+    }
+    if (cands.mpBegin && cands.mpBegin != cands.mpPool)
+        operator_delete_array(cands.mpBegin);
+    return result;
+}
+
+// @ 0x00da4400
+bool __cdecl SocialProposeActivate(CreatureEx* owner, int, int, int, int, ProposeResult* out)
+{
+    if (out) {
+        out->mField00 = 0;
+        out->mField04 = 0;
+        out->mActive = false;
+        out->mSlot = -1;
+    }
+
+    AnimRecord* anim = owner->mOrders->mAnimTarget.PlayIdleAnimation(0x10000, 0);
+    if (anim && anim->mStatus == 1)
+        out->mActive = true;
+
+    if (!out->mActive)
+    {
+        // No active proposal: attach SOCIAL_RESPOND to the current stimulus
+        // target and let the respond state machine take over.
+        CreatureEx* target = FUN_00d99500(GetAnimalFromStimulus(anim));
+        if (!target)
+            return false;
+
+        BehaviorMemory* mem = FUN_00bc9b00_lookup(target, (void*)0x00d9ba30, 0x14fcf96e);
+        BehaviorBlock* block = mem->Lookup();
+        if (!block)
+            return false;
+
+        SocialRespond* self = &block->mPropose;
+        if (self->mFlags & 0x20) {
+            owner->mOrders->mAnimTarget.ClearAll(0x10000, 0);
+            return false;
+        }
+
+        owner->mOrders->InitializeBehavior(block, owner, 0, (void*)0x00d9ba30);
+
+        CreatureEx* partner = (CreatureEx*)self->mPartner;
+        void* targetArg = partner ? &partner->mCaster : 0;
+        owner->mVtable->mSetSocialTarget(owner, targetArg, 0, 2);
+        out->mSlot = self->Activate((Creature_s00da_3b90*)owner, out->mSlot);
+
+        owner->mOrders->mAnimTarget.ClearAll(0x10000, 0);
+        return true;
+    }
+
+    // Active proposal path.
+    CreatureEx* target = FUN_00d99500(GetAnimalFromStimulus(anim));
+    if (!target)
+        return false;
+
+    SocialGoal* goal = owner->GetSocialGoal();
+    if (!goal)
+        return false;
+
+    unsigned int socialIdCount = owner->mAnimState->mSocialIds.Count();
+    if (socialIdCount == 0)
+        return false;
+
+    int goalType = owner->GetSocialGoalType();
+    if (goalType == 0)
+        return false;
+
+    BehaviorMemory* mem = FUN_00bc9b00(0x14fcf96e, 0x20, 0x18eb45e, (void*)0x0147c1d0);
+    BehaviorBlock* block = mem->Construct();
+    block->mVtable = (void*)0x00dd3d10;
+
+    owner->mOrders->InitializeBehavior(block, owner, 0, (void*)0x00d9ba30);
+
+    SocialRespond* self = &block->mPropose;
+    self->Deactivate();
+    FUN_00b5f950(&self->mOwner, (Creature_s00da_3b90*)owner);
+    FUN_00b5f950(&self->mPartner, (Creature_s00da_3b90*)target);
+    self->mSocialGoal = goalType;
+
+    if (goalType == 4) {
+        self->mCount = 0;
+    } else {
+        const int limit = goal->mMaxProposals - 1;
+        self->mCount = (limit >= 0) ? (unsigned int)limit : 0;
+    }
+
+    FUN_00da1010(&self->mTargets, 3);
+    for (unsigned int i = 0; i < 3; ++i) {
+        Obj* obj = self->mTargets[i];
+        if (obj) {
+            self->mTargets[i] = 0;
+            obj->Release();
+        }
+    }
+
+    self->mStartTime = goal->mProposalStart;
+    if (!owner->IsSocialActive()) {
+        unsigned int t = self->mStartTime - gSocialTimeA;
+        if (t < 1)
+            t = 1;
+        self->mStartTime = t;
+    } else if (owner->mFlagsB58 & 1) {
+        self->mStartTime += gSocialTimeB;
+    }
+
+    int weightSum = 0;
+    const unsigned int proposedCount = owner->mProposedSocials.Count();
+    if (proposedCount != self->mStartTime) {
+        owner->mProposedSocials.Resize(self->mStartTime);
+        for (unsigned int i = 0; i < self->mStartTime; ++i) {
+            const unsigned int r = gMathRandom.RandomUint32Uniform(socialIdCount);
+            const int id = owner->mAnimState->mSocialIds.mpBegin[r];
+            owner->mProposedSocials.mpBegin[i] = id;
+            SocialEntry* entry = owner->mAnimState->mSocialEntries[id];
+            weightSum += (int)entry->mWeight;
+        }
+    } else if (self->mStartTime > 0) {
+        for (unsigned int i = 0; i < self->mStartTime; ++i) {
+            const int id = owner->mProposedSocials.mpBegin[i];
+            SocialEntry* entry = owner->mAnimState->mSocialEntries[id];
+            weightSum += (int)entry->mWeight;
+        }
+    }
+
+    if (self->mCount > 0) {
+        bool found = false;
+        for (void** it = owner->mSocialStimuli.mpBegin; it != owner->mSocialStimuli.mpEnd; ++it) {
+            StimulusRef* ref = (StimulusRef*)*it;
+            if (!ref || !ref->mObject)
+                continue;
+
+            StimulusObject* stimulus = (StimulusObject*)ref->mObject;
+            void* sub = stimulus->mSubObject;
+            if (!sub)
+                continue;
+
+            ObjEx* obj = (ObjEx*)sub;
+            if (obj->mVtable->mGetType(sub) != 0x18eb45e)
+                continue;
+
+            CreatureEx* other = FUN_00d99500(sub);
+            if (!other || other == owner)
+                continue;
+            if (other->mLoco.mVtable->mIsMoving(&other->mLoco))
+                continue;
+            if (other->mPosition.x != owner->mPosition.x)
+                continue;
+            if (other->mPosition.y != owner->mPosition.y)
+                continue;
+            if (other->mPosition.z != owner->mPosition.z)
+                continue;
+
+            other->mOrders->mAnimTarget.PlaySocialAnimation(0x10000, 0, 10.0f, owner);
+            AnimRecord* rec = other->mOrders->mAnimTarget.PlayIdleAnimation(0x10000, 0);
+            rec->mStatus = 2;
+            found = true;
+        }
+        if (!found)
+            self->mCount = 0;
+    }
+
+    const float duration = (float)(unsigned int)weightSum;
+    const unsigned int startTime = self->mStartTime;
+
+    void* mode = GetCurrentGameMode();
+    SocialGoalRuntime* runtime;
+    if (mode == (void*)0x01654c10) {
+        runtime = (SocialGoalRuntime*)FUN_005e1fc0(gSomeGlobal->mObject);
+    } else {
+        CreatureModeStrategy* strategy = FUN_00d38840();
+        runtime = strategy->mContext.GetRuntime();
+    }
+
+    self->mRuntime = runtime;
+    runtime->Initialize();
+    runtime->SetActive(0);
+    runtime->SetCount(startTime);
+
+    self->mDuration = duration + duration;
+    self->mProposalTime = goal->mField42c;
+    self->mResponseTime = goal->mField428;
+
+    CreatureEx* partner = (CreatureEx*)self->mPartner;
+    SocialProposalContext* context =
+        (SocialProposalContext*)FUN_00b3d4c0(&owner->mPosition, owner, partner);
+    runtime->SetValue(context->GetValue());
+    runtime->SetActive(1);
+
+    NounManager_s00da_3b90* nouns = FUN_00b3d300((int)0x34220e8e);
+    TerrainSphere* terrain = nouns->GetCurrentTerrainSphere();
+    if (!terrain->IsSomething()) {
+        UIHints* hints = FUN_0067cac0((int)0x1ea83595);
+        hints->Show();
+    }
+
+    void* targetArg = partner ? &partner->mCaster : 0;
+    owner->mVtable->mSetSocialTarget(owner, targetArg, 1, 2);
+    owner->mLoco.mVtable->mStop(&owner->mLoco);
+
+    owner->mOrders->mAnimTarget.ClearAll(0x10000, 0);
+    return true;
+}
 
 // @ 0x00da49f0
 uint SP_SOCIAL_PROPOSE_Tick(cSPCreatureBase_s00da_49f0* pCreature, int, int, int, int, SocialProposeState* pState, int, float dt)

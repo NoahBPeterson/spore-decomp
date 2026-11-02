@@ -1,2 +1,8 @@
 # source  symbol  va  flags
+../src/game/SPGonzago/SPCreatureBehaviorTrees.cpp  ?AnyActive@SocialValues@@QAE_NXZ  00d9b010  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCreatureBehaviorTrees.cpp  ?SetDrainDelay@SocialValues@@QAEX_N@Z  00d9b040  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCreatureBehaviorTrees.cpp  ?StartFillRight@SocialValues@@QAEXMM@Z  00d9b090  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCreatureBehaviorTrees.cpp  ?FUN_00d9ba30@@YA_NPAUBehaviorMgr@@I@Z  00d9ba30  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPCreatureBehaviorTrees.cpp  ?Fd9ef40@@YAXPAH0UVector3@@@Z  00d9ef40  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCreatureBehaviorTrees.cpp  ?Fd9f660@@YAPAHPAH0PAXUVector3@@@Z  00d9f660  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCreatureBehaviorTrees.cpp  ?resize@BigVec@@QAEXI@Z  00da1db0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
