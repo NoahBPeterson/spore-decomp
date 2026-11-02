@@ -1,4 +1,3 @@
-; slice s00a61f50 = 0x00a61f50..0x00a62ec0 (SPAudio un-named object: modmap gap 00a61c20..00a623f0)
 00a61f50 fx_array_set_range(FXTableBase*, int start, int end, const void* src, float v)
 00a62080 fx_array_resize_and_set(FXTableBase*, float nf, const void* src)
 00a620b0 fx_array_dump(FXTableBase*)
@@ -20,6 +19,5 @@
 00a62ba0 fx_register_sound()
 00a62c50 fx_meta_particles_cb(void* a, uint32 b, const char* c, uint32 d, float v)
 00a62cc0 fx_register_core()
-00a62e90 fx_register_all()
-; class family: EAPd reflected FX components (kFXCmptSequence / kFXCmptSound /
+00a62e90 ?fx_register_all@@YA_NXZ  # fx_register_all migrated from s00a61f50 (verbatim, slice spelling)
 ; kFXCmptDecal / kFXCmptShake / kFXCmptMetaParticles)
