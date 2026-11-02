@@ -1,0 +1,7 @@
+# source  symbol  va  flags
+../src/game/SPAudio/eapdbinbuf.cpp  ?binbuf_new@Eapd@Audio@EA@@YAPAUt_binbuf@123@XZ  00a46c20  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdbinbuf.cpp  ?binbuf_free@Eapd@Audio@EA@@YAXPAUt_binbuf@123@@Z  00a46c50  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdbinbuf.cpp  ?binbuf_clear@Eapd@Audio@EA@@YAXPAUt_binbuf@123@@Z  00a46c80  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdbinbuf.cpp  ?binbuf_addsemi@Eapd@Audio@EA@@YAXPAUt_binbuf@123@@Z  00a47540  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdbinbuf.cpp  ?binbuf_gettextbuf@Eapd@Audio@EA@@YAXPAUt_binbuf@123@PADH@Z  00a47780  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdbinbuf.cpp  ?glob_evaltext@Eapd@Audio@EA@@YAPAXPBDH@Z  00a47c00  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
