@@ -1,0 +1,2 @@
+010ccd60 ?internalRegisterCollisionAgent@hkCollisionDispatcher_s010c_ca60@@QAEXPAY0CA@EHHHHHPAY1CA@CA@UDebugEntry@@H@Z  # hkCollisionDispatcher_s010c_ca60::internalRegisterCollisionAgent migrated from s010cca60 (verbatim, slice spelling)
+010cd700 ?init@hkCollisionDispatcher_s010c_ca60@@QAEPAV1@PAVhkpContactMgrFactory@@@Z  # hkCollisionDispatcher_s010c_ca60::init migrated from s010cca60 (verbatim, slice spelling)

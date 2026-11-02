@@ -1,0 +1,2 @@
+# source  symbol  va  flags
+../src/game/Havok/_at_010c0000.cpp  ?FUN_010cec10@@YGXHHHH@Z  010cec10  /O2 /MD /Gy /EHsc /TP /Isrc/game/include

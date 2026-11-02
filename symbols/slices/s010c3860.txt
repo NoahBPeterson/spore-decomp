@@ -1,0 +1,7 @@
+010c3880 ?castRay@hkSphereShape_s010c_3860@@UBE?AVhkBool_s010c_3860@@ABUhkShapeRayCastInput_s010c_3860@@AAUhkShapeRayCastOutput_s010c_3860@@@Z  # hkSphereShape_s010c_3860::castRay migrated from s010c3860 (verbatim, slice spelling)
+010c3bf0 ?testAgainstBody@hkGroupFilter@@QAE?AVhkBool_s010c_3860@@PAV2@PAVhkCdBody_s010c_3860@@PAXI@Z  # hkGroupFilter::testAgainstBody migrated from s010c3860 (verbatim, slice spelling)
+010c3df0 ?isCollisionEnabled@hkGroupFilter@@UBE?AVhkBool_s010c_3860@@ABUhkCollisionInput_s010c_3860@@ABVhkCdBody_s010c_3860@@1ABUhkShapeCollection@@I@Z  # hkGroupFilter::isCollisionEnabled migrated from s010c3860 (verbatim, slice spelling)
+010c3ef0 ?destroy@hkGroupFilter@@QAEPAV1@D@Z  # hkGroupFilter::destroy migrated from s010c3860 (verbatim, slice spelling)
+010c4000 ?hkShape__expandIndices@@YAXPBGPADIPAX@Z  # hkShape__expandIndices migrated from s010c3860 (verbatim, slice spelling)
+010c4140 ?getAabb@hkTriangleShape@@UBEXABVhkTransform_s010c_3860@@MAAVhkAabb_s010c_3860@@@Z  # hkTriangleShape::getAabb migrated from s010c3860 (verbatim, slice spelling)
+010c4400 ?getSupportingVertex@hkTriangleShape@@UBEXABVhkVector4_s010c_3860@@PAX@Z  # hkTriangleShape::getSupportingVertex migrated from s010c3860 (verbatim, slice spelling)

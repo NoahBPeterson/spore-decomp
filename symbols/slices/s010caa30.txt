@@ -1,0 +1,7 @@
+010caa30 ?convertVertexIdsToVertices@hkConvexTransformShape@@QAEXPBXHPAVhkVector4_s010c_aa30@@@Z  # hkConvexTransformShape::convertVertexIdsToVertices migrated from s010caa30 (verbatim, slice spelling)
+010cadb0 ?getFirstVertex@hkConvexTransformShape@@QAEXAAVhkVector4_s010c_aa30@@@Z  # hkConvexTransformShape::getFirstVertex migrated from s010caa30 (verbatim, slice spelling)
+010cae40 ?getCollisionSpheres@hkConvexTransformShape@@QAEHPAX@Z  # hkConvexTransformShape::getCollisionSpheres migrated from s010caa30 (verbatim, slice spelling)
+010cb250 ?getChildShape@hkConvexPieceMeshShape@@QAEPAXIAAY0MA@D@Z  # hkConvexPieceMeshShape::getChildShape migrated from s010caa30 (verbatim, slice spelling)
+010cb490 ?getCollisionFilterInfo@hkConvexPieceMeshShape@@QAEII@Z  # hkConvexPieceMeshShape::getCollisionFilterInfo migrated from s010caa30 (verbatim, slice spelling)
+010cb4d0 ?getAabb@hkConvexPieceMeshShape@@QAEXABVhkTransform_s010c_aa30@@MAAVhkAabb_s010c_aa30@@@Z  # hkConvexPieceMeshShape::getAabb migrated from s010caa30 (verbatim, slice spelling)
+010cb9a0 ?dtor@hkCollisionFilterList@@QAEXXZ  # hkCollisionFilterList::dtor migrated from s010caa30 (verbatim, slice spelling)
