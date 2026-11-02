@@ -1,4 +1,2 @@
 # va  diff-bytes  reason
-0075ac40  316 Fac40: stub
-0075b2c0  324 Fb2c0: stub
-0075b4d0  74  Fb4d0: GetResourceDescriptor wrapper stubbed
+0075cf20  0  huge (0x11d4 frame, 1307 B per card) per-node blend rebuild: first-blend/weight>=1 fast path, rest-pose vs pose-key memcpy, weight-normalised accumulation (0x11fed20) and the per-node quat/translation/scale fold; retail's SSE schedule not reproduced -> stub kept; uncompiled candidate in work/match/scratch_s0075cf20_impl.cpp flags: /O2 /MD /Gy /EHsc /TP /arch:SSE2

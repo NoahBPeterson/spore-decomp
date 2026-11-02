@@ -1,6 +1,7 @@
 0075b520 ?GetBlendState@cMultiBlender_s0075_b520@SP@@QAEHXZ  # cMultiBlender_s0075_b520::GetBlendState migrated from s0075b520 (verbatim, slice spelling)
-0075b540 ?StartAnim@cMultiBlender_s0075_b520@SP@@QAEXPAUInterpolator_s0075_b520@oldanimation@rw@@PAUKeyframeAnimation_s0075_b520@45@@Z  # cMultiBlender_s0075_b520::StartAnim migrated from s0075b520 (verbatim, slice spelling)
-0075b5d0 ?SetAnimTime@cMultiBlender_s0075_b520@SP@@QAEXPAUKeyframeAnimation_s0075_b520@oldanimation@rw@@M@Z  # cMultiBlender_s0075_b520::SetAnimTime migrated from s0075b520 (verbatim, slice spelling)
-0075b630 ?SetWeight@cMultiBlender_s0075_b520@SP@@QAEXPAUKeyframeAnimation_s0075_b520@oldanimation@rw@@M@Z  # cMultiBlender_s0075_b520::SetWeight migrated from s0075b520 (verbatim, slice spelling)
-0075b6e0 SP::cMultiBlender::SetAnimating  # inferred: same find, writes mAnimating[]
-0075b790 SP::cMultiBlender::SetBlending  # inferred: same find, writes mBlending[]
+0075b540 ?StartAnim@cMultiBlender_s0075_b520@SP@@QAEXPAVInterpolator_s0075_b520@oldanimation@rw@@PAVKeyframeAnimation_s0075_b520@45@@Z  # cMultiBlender_s0075_b520::StartAnim migrated from s0075b520 (verbatim, slice spelling)
+0075b5d0 ?SetAnimTime@cMultiBlender_s0075_b520@SP@@QAEXPAVKeyframeAnimation_s0075_b520@oldanimation@rw@@M@Z  # cMultiBlender_s0075_b520::SetAnimTime migrated from s0075b520 (verbatim, slice spelling)
+0075b630 ?SetWeight@cMultiBlender_s0075_b520@SP@@QAEXPAVKeyframeAnimation_s0075_b520@oldanimation@rw@@M@Z  # cMultiBlender_s0075_b520::SetWeight migrated from s0075b520 (verbatim, slice spelling)
+0075b6e0 ?SetAnimating@cMultiBlender_s0075_b520@SP@@QAEXPAVKeyframeAnimation_s0075_b520@oldanimation@rw@@_N@Z  # cMultiBlender_s0075_b520::SetAnimating migrated from s0075b520 (verbatim, slice spelling)
+0075b790 ?SetBlending@cMultiBlender_s0075_b520@SP@@QAEXPAVKeyframeAnimation_s0075_b520@oldanimation@rw@@_N@Z  # cMultiBlender_s0075_b520::SetBlending migrated from s0075b520 (verbatim, slice spelling)
+0075b830 ?InterpolateKeyframes@@YAXPAMPAPADHMPAUKeyInfo@@PAUKeyFlags@@@Z  # InterpolateKeyframes migrated from s0075b520 (verbatim, slice spelling)
