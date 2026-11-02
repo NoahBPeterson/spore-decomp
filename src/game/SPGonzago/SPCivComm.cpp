@@ -18,6 +18,70 @@ extern float gField169d390;                              // 0x0169d390
 #pragma warning(disable : 4100)
 
 // ---- items of slice s00cfe160 begin (TODO(rewrite): local stubs, replace by canonical classes)
+namespace SP {
+class cCivilization_s00cf_e160 {
+public:
+virtual void v000();
+virtual void v004();
+virtual void v008();
+    virtual void* GetMember(uint32_t key);               // +0x0c
+virtual void v010();
+virtual void v014();
+virtual void v018();
+virtual void v01c();
+virtual void v020();
+virtual void v024();
+virtual void v028();
+virtual void v02c();
+virtual void v030();
+virtual void v034();
+virtual void v038();
+virtual void v03c();
+virtual void v040();
+virtual void v044();
+virtual void v048();
+    virtual int32_t GetOwnerId();                        // +0x4c
+
+    cCivilization_s00cf_e160* GetCivilization();                    // 0x00bd9bf0
+};
+}
+namespace SP {
+struct tCivilizationList {
+    cCivilization_s00cf_e160** mpBegin;                             // +0x00
+    cCivilization_s00cf_e160** mpEnd;                               // +0x04
+    cCivilization_s00cf_e160** mpCapacity;                          // +0x08
+};
+}
+namespace SP {
+class cGameNounManager_s00cf_e160 {
+public:
+    tCivilizationList* GetCivilizationList();            // 0x00b25ca0
+    cCivilization_s00cf_e160* GetPlayerCivilization();              // 0x00b25fb0
+};
+}
+namespace SP {
+class cRelationshipManager_s00cf_e160 {
+public:
+    int32_t GetAttitude(int32_t ownerA, int32_t ownerB, int32_t mode); // 0x00d00a70
+};
+}
+namespace SP {
+extern cGameNounManager_s00cf_e160*      __cdecl NounManager_s00cf_e160();       // 0x00b3d300
+}
+namespace SP {
+extern cRelationshipManager_s00cf_e160*  __cdecl RelationshipManager_s00cf_e160(); // 0x00b3d2c0
+}
+class cCivRefTable {
+public:
+    SP::cCivilization_s00cf_e160* SetField0C(SP::cCivilization_s00cf_e160* pValue);
+    SP::cCivilization_s00cf_e160* SetField10(SP::cCivilization_s00cf_e160* pValue);
+    SP::cCivilization_s00cf_e160* SetEntry(int32_t index, SP::cCivilization_s00cf_e160* pValue);
+
+    uint8_t         pad000[0x0c];                        // +0x000 .. +0x00b
+    SP::cCivilization_s00cf_e160*  mpField0C;                           // +0x00c
+    SP::cCivilization_s00cf_e160*  mpField10;                           // +0x010
+    SP::cCivilization_s00cf_e160*  mpEntries[1];                        // +0x014
+};
 class cSummarizerBase {
 public:
     virtual void v000();                                 // +0x00
@@ -26,9 +90,6 @@ class ContentValidationSummarizer {
 public:
     virtual void v000();                                 // +0x00
 };
-extern float gField169d388;                              // 0x0169d388
-extern float gField169d38c;                              // 0x0169d38c
-extern float gField169d390;                              // 0x0169d390
 class cSummarizer : public cSummarizerBase, public ContentValidationSummarizer {
 public:
     cSummarizer();
@@ -43,9 +104,9 @@ public:
     float    mField24;                                   // +0x24
     int32_t  mField28;                                   // +0x28
 };
-class cGonzagoSubsystem {
+class cGonzagoSubsystem_s00cf_e160 {
 public:
-    cGonzagoSubsystem();                                 // 0x00b5b960
+    cGonzagoSubsystem_s00cf_e160();                                 // 0x00b5b960
     virtual void v000();                                 // +0x00
 };
 class cSecondBase {
@@ -53,7 +114,7 @@ public:
     virtual void v000();                                 // +0x00
     uint8_t mPayload[0x14];                              // +0x04 .. +0x17
 };
-class cGonzagoChild : public cGonzagoSubsystem, public cSecondBase {
+class cGonzagoChild : public cGonzagoSubsystem_s00cf_e160, public cSecondBase {
 public:
     cGonzagoChild();
 
@@ -232,6 +293,74 @@ struct T {
 };
 extern T g_01581d40, g_01581d7c, g_01581db8, g_01581df4, g_01581e30;
 // ---- items of slice s0135d100 end
+
+// @ 0x00cfe780
+SP::cCivilization_s00cf_e160* __thiscall cCivRefTable::SetField0C(SP::cCivilization_s00cf_e160* pValue)
+{
+    SP::cCivilization_s00cf_e160* pOld = mpField0C;
+    mpField0C = pValue;
+    return pOld;
+}
+
+// @ 0x00cfe790
+SP::cCivilization_s00cf_e160* __thiscall cCivRefTable::SetField10(SP::cCivilization_s00cf_e160* pValue)
+{
+    SP::cCivilization_s00cf_e160* pOld = mpField10;
+    mpField10 = pValue;
+    return pOld;
+}
+
+// @ 0x00cfe7a0
+SP::cCivilization_s00cf_e160* __thiscall cCivRefTable::SetEntry(int32_t index, SP::cCivilization_s00cf_e160* pValue)
+{
+    SP::cCivilization_s00cf_e160* pOld = mpEntries[index];
+    mpEntries[index] = pValue;
+    return pOld;
+}
+
+// @ 0x00cfe820
+void __cdecl GetTributeAmount()
+{
+}
+
+// @ 0x00cfe930
+bool __cdecl IsAllied(SP::cCivilization_s00cf_e160* pCiv)
+{
+    SP::tCivilizationList* pList = SP::NounManager_s00cf_e160()->GetCivilizationList();
+    int32_t count = (int32_t)(pList->mpEnd - pList->mpBegin);
+    for (int32_t i = 0; i < count; ++i) {
+        SP::cCivilization_s00cf_e160* pOther = pList->mpBegin[i];
+        if (pOther == SP::NounManager_s00cf_e160()->GetPlayerCivilization())
+            continue;
+        if (pOther == pCiv)
+            continue;
+        int32_t playerOwner = SP::NounManager_s00cf_e160()->GetPlayerCivilization()->GetOwnerId();
+        if (SP::RelationshipManager_s00cf_e160()->GetAttitude(pOther->GetOwnerId(), playerOwner, 1) >= 4)
+            return true;
+    }
+    return false;
+}
+
+// @ 0x00cfe9c0
+void __cdecl FUN_00cfe9c0(SP::cCivilization_s00cf_e160* pObject, SP::cCivilization_s00cf_e160** ppCity, SP::cCivilization_s00cf_e160** ppOwner)
+{
+    SP::cCivilization_s00cf_e160* pCity = pObject ? (SP::cCivilization_s00cf_e160*)pObject->GetMember(0x901f1362) : 0;
+    *ppCity = pCity;
+    SP::cCivilization_s00cf_e160* pOwner = pObject ? (SP::cCivilization_s00cf_e160*)pObject->GetMember(0xee9b2232) : 0;
+    *ppOwner = pOwner;
+    if (!*ppCity && pOwner)
+        *ppCity = pOwner->GetCivilization();
+}
+
+// @ 0x00cfea20
+void __cdecl FUN_00cfea20()
+{
+}
+
+// @ 0x00cfeac0
+void __cdecl FUN_00cfeac0()
+{
+}
 
 // @ 0x00cfeb40
 void __cdecl FUN_00cfeb40()
