@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+00900800 183 XmlReader::ReadString: complete; cl assigns this to ebp and the text pointer to ebx (swapped from the original), re-encoding the whole body; difftest PASS flags: /O2 /MD /Gy /EHsc /TP

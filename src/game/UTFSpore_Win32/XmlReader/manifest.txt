@@ -1,0 +1,2 @@
+# source  symbol  va  flags
+../src/game/UTFSpore_Win32/XmlReader.cpp  ?FUN_009008f0@XmlReader@@QAEXXZ  009008f0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
