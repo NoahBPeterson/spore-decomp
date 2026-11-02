@@ -16,9 +16,9 @@
 00a5ecb0 random_seed  # SetSeed on sSystemRandom
 00a5ecc0 random_seed_method  # PD random "seed" method (SetSeed on x+0x2c); merged into the 0xa5ecb0 slice row by the analyser
 00a5ece0 random_new  # class_new("random") allocator; seeds from the global stream
-00a5ed40 frandom_new  # class_new("frandom") allocator; identical body to random_new
-00a5eda0 random_bang  # PD random_bang (RandomUint32UniformN, then float out)
-00a5ee30 frandom_bang  # PD frandom_bang (value * NextFloat)
+00a5ed40 ?frandom_new@Eapd@Audio@EA@@YAPAXM@Z  # frandom_new migrated from s00a5e0f0 (verbatim, slice spelling)
+00a5eda0 ?random_bang@Eapd@Audio@EA@@YAXPAD@Z  # random_bang migrated from s00a5e0f0 (verbatim, slice spelling)
+00a5ee30 ?frandom_bang@Eapd@Audio@EA@@YAXPAD@Z  # frandom_bang migrated from s00a5e0f0 (verbatim, slice spelling)
 00a5eea0 x_random_setup  # registers "random"/"frandom" classes and the shared "seed" method; seeds from GetThreadTime
 00a5efd0 ?spin_bang@Eapd@Audio@EA@@YAXPAD@Z  # spin_bang migrated from s00a5e0f0 (verbatim, slice spelling)
 00a5f000 ?spin_stop@Eapd@Audio@EA@@YAXPAD@Z  # spin_stop migrated from s00a5e0f0 (verbatim, slice spelling)
