@@ -1,12 +1,12 @@
 005a6e60 ??0cSPEditorComplexityMeter_s005a_6e60@SP@@QAE@XZ  # cSPEditorComplexityMeter_s005a_6e60::cSPEditorComplexityMeter migrated from s005a6e60 (verbatim, slice spelling)
-005a6ee0 ?FUN_005a6ee0@@YAXXZ  # FUN_005a6ee0 migrated from s005a6e60 (verbatim, slice spelling)
-005a6fc0 ?FUN_005a6fc0@@YAXXZ  # FUN_005a6fc0 migrated from s005a6e60 (verbatim, slice spelling)
-005a7220 editor helper  # unnamed
-005a7380 ?FUN_005a7380@@YAXXZ  # FUN_005a7380 migrated from s005a6e60 (verbatim, slice spelling)
-005a7410 editor helper  # unnamed
-005a74a0 UI element ctor  # shorts at 0x10/0x12, calls 0x0093dd80
-005a74d0 ?FUN_005a7840@@YAXXZ  # FUN_005a7840 migrated from s005a6e60 (verbatim, slice spelling)
-005a7810 dual-cString data ctor  # two cString members at 0/0x14
+005a6ee0 ??1cSPEditorComplexityMeter_s005a_6e60@SP@@UAE@XZ  # cSPEditorComplexityMeter_s005a_6e60::~cSPEditorComplexityMeter migrated from s005a6e60 (verbatim, slice spelling)
+005a6fc0 ?Init@cSPEditorComplexityMeter_s005a_6e60@SP@@QAEXPAX0@Z  # cSPEditorComplexityMeter_s005a_6e60::Init migrated from s005a6e60 (verbatim, slice spelling)
+005a7220 ?Update@cSPEditorComplexityMeter_s005a_6e60@SP@@QAEXH@Z  # cSPEditorComplexityMeter_s005a_6e60::Update migrated from s005a6e60 (verbatim, slice spelling)
+005a7380 ?HandleMessage@cEditorPanel@@QAE_NHPAPAX@Z  # cEditorPanel::HandleMessage migrated from s005a6e60 (verbatim, slice spelling)
+005a7410 ?SetComplexityPercent@cSPEditorComplexityMeter_s005a_6e60@SP@@QAEXM@Z  # cSPEditorComplexityMeter_s005a_6e60::SetComplexityPercent migrated from s005a6e60 (verbatim, slice spelling)
+005a74a0 ??0cUIThing@@QAE@PAX@Z  # cUIThing::cUIThing migrated from s005a6e60 (verbatim, slice spelling)
+005a74d0 ?SetValueTextForRollover@cSPEditorComplexityMeter_s005a_6e60@SP@@QAE_NPAXPAH@Z  # cSPEditorComplexityMeter_s005a_6e60::SetValueTextForRollover migrated from s005a6e60 (verbatim, slice spelling)
+005a7810 ??0cDualString@@QAE@XZ  # cDualString::cDualString migrated from s005a6e60 (verbatim, slice spelling)
 005a7840 ?SendChangedMessage@cSPEditorEconomy@SP@@QAEXXZ  # SP::cSPEditorEconomy::SendChangedMessage migrated from s005a6e60
 005a7900 ??0cSPEditorGeneralBadnessCalculator@SP@@QAE@XZ  # cSPEditorGeneralBadnessCalculator::cSPEditorGeneralBadnessCalculator migrated from s005a6e60 (verbatim, slice spelling)
 005a7920 ??1cSPEditorGeneralBadnessCalculator@SP@@UAE@XZ  # cSPEditorGeneralBadnessCalculator::~cSPEditorGeneralBadnessCalculator migrated from s005a6e60 (verbatim, slice spelling)
