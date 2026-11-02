@@ -1,2 +1,20 @@
 # source  symbol  va  flags
+../src/game/SPAudio/eapdclass.cpp  ?clearallclasses@Eapd@Audio@EA@@YA_NXZ  00a47e30  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPAudio/eapdclass.cpp  ?class_setpropertiesfn@Eapd@Audio@EA@@YAXPAUt_class@123@PAX@Z  00a47fb0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPAudio/eapdclass.cpp  ?class_sethelpsymbol@Eapd@Audio@EA@@YAXPAUt_class@123@Ut_symbol@123@@Z  00a47fc0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPAudio/eapdclass.cpp  ?class_setsavefn@Eapd@Audio@EA@@YAXPAUt_class@123@PAX@Z  00a48030  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPAudio/eapdclass.cpp  ?class_setdrawfunction@Eapd@Audio@EA@@YAXPAUt_class@123@PAX@Z  00a48040  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdclass.cpp  ?sys_close@Eapd@Audio@EA@@YA_NXZ  00a480b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPAudio/eapdclass.cpp  ?pd_typedmess@Eapd@Audio@EA@@YAXPAPAUt_class@123@Ut_symbol@123@HPAUt_atom@123@@Z  00a48100  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdclass.cpp  ?class_getmethod@Eapd@Audio@EA@@YAPAXPAPAUt_class@123@Ut_symbol@123@@Z  00a48890  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPAudio/eapdclass.cpp  ?zgetfn@Eapd@Audio@EA@@YAPAXPAPAUt_class_s00a4_88d0@123@PAX@Z  00a488d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdclass.cpp  ?class_addmethod0@Eapd@Audio@EA@@YA_NPAUt_class_s00a4_88d0@123@PAXUt_symbol_s00a4_88d0@123@1@Z  00a48a30  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdclass.cpp  ?class_addmethod1@Eapd@Audio@EA@@YA_NPAUt_class_s00a4_88d0@123@PAXUt_symbol_s00a4_88d0@123@11@Z  00a48a80  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdclass.cpp  ?class_addmethod2@Eapd@Audio@EA@@YA_NPAUt_class_s00a4_88d0@123@PAXUt_symbol_s00a4_88d0@123@111@Z  00a48ad0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdclass.cpp  ?class_addmethod4@Eapd@Audio@EA@@YA_NPAUt_class_s00a4_88d0@123@PAXUt_symbol_s00a4_88d0@123@11111@Z  00a48b30  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdclass.cpp  ?class_addmethod5@Eapd@Audio@EA@@YA_NPAUt_class_s00a4_88d0@123@PAXUt_symbol_s00a4_88d0@123@111111@Z  00a48b90  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdclass.cpp  ?class_addcreator_m@Eapd@Audio@EA@@YA_NPAX0000@Z  00a48db0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdclass.cpp  ?class_addcreator_m2@Eapd@Audio@EA@@YA_NPAX0000@Z  00a48e00  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdclass.cpp  ?class_new_m1@Eapd@Audio@EA@@YAPAUt_class_s00a4_88d0@123@Ut_symbol_s00a4_88d0@123@PAX1HH1@Z  00a48e50  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdclass.cpp  ?class_new_m2@Eapd@Audio@EA@@YAPAUt_class_s00a4_88d0@123@Ut_symbol_s00a4_88d0@123@PAX1HH11@Z  00a48ea0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdclass.cpp  ?class_new_m3@Eapd@Audio@EA@@YAPAUt_class_s00a4_88d0@123@Ut_symbol_s00a4_88d0@123@PAX1HH111@Z  00a48f00  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

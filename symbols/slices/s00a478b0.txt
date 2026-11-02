@@ -3,4 +3,13 @@
 00a47cb0 ?pd_defaultbang@Eapd@Audio@EA@@YAXPAPAUt_class@123@@Z  # pd_defaultbang migrated from s00a478b0 (verbatim, slice spelling)
 00a47d00 ?pd_defaultsymbol@Eapd@Audio@EA@@YAXPAPAUt_class@123@Ut_symbol@123@@Z  # pd_defaultsymbol migrated from s00a478b0 (verbatim, slice spelling)
 00a47d70 ?pd_defaultlist@Eapd@Audio@EA@@YAXPAPAUt_class@123@Ut_symbol@123@HPAUt_atom_s00a4_78b0@123@@Z  # pd_defaultlist migrated from s00a478b0 (verbatim, slice spelling)
+00a47e30 ?clearallclasses@Eapd@Audio@EA@@YA_NXZ  # EA::Audio::Eapd::clearallclasses migrated from s00a478b0
+00a47e70 ?class_addmethod@Eapd@Audio@EA@@YA_NPAUt_class@123@PAXUt_symbol@123@PBH@Z  # class_addmethod migrated from s00a478b0 (verbatim, slice spelling)
+00a47fb0 ?class_setpropertiesfn@Eapd@Audio@EA@@YAXPAUt_class@123@PAX@Z  # class_setpropertiesfn migrated from s00a478b0 (verbatim, slice spelling)
+00a47fc0 ?class_sethelpsymbol@Eapd@Audio@EA@@YAXPAUt_class@123@Ut_symbol@123@@Z  # class_sethelpsymbol migrated from s00a478b0 (verbatim, slice spelling)
+00a48030 ?class_setsavefn@Eapd@Audio@EA@@YAXPAUt_class@123@PAX@Z  # class_setsavefn migrated from s00a478b0 (verbatim, slice spelling)
+00a48040 ?class_setdrawfunction@Eapd@Audio@EA@@YAXPAUt_class@123@PAX@Z  # class_setdrawfunction migrated from s00a478b0 (verbatim, slice spelling)
+00a480b0 ?sys_close@Eapd@Audio@EA@@YA_NXZ  # sys_close migrated from s00a478b0 (verbatim, slice spelling)
 00a48100 ?pd_typedmess@Eapd@Audio@EA@@YAXPAPAUt_class@123@Ut_symbol@123@HPAUt_atom@123@@Z  # pd_typedmess migrated from s00a478b0 (verbatim, slice spelling)
+00a487f0 ?pd_vmess@Eapd@Audio@EA@@YAXPAPAUt_class@123@Ut_symbol@123@PBDZZ  # pd_vmess migrated from s00a478b0 (verbatim, slice spelling)
+00a48890 ?class_getmethod@Eapd@Audio@EA@@YAPAXPAPAUt_class@123@Ut_symbol@123@@Z  # class_getmethod migrated from s00a478b0 (verbatim, slice spelling)
