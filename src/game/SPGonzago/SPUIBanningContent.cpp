@@ -1,4 +1,4 @@
-// src/game/SPGonzago/SPUIBanningContent.cpp -- migrated from slice(s) s00dd1280, s00dd0230 by tools/migrate/rewrite.py
+// src/game/SPGonzago/SPUIBanningContent.cpp -- migrated from slice(s) s00e094f0, s00dd1280, s00dd0230 by tools/migrate/rewrite.py
 // Object file: SPGonzago/SPUIBanningContent.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -18,6 +18,8 @@
 #include "SP/cSPCreatureBase.h"
 #include "cSPUILayout.h"
 #include "SP/cSpeciesProfile.h"
+#include "EA/ResourceMan/Key.h"
+#include "SP/cGrid.h"
 
 // ---- items of slice s00dd0230 begin (TODO(rewrite): local stubs, replace by canonical classes)
 void* __cdecl GetMessageServer67dcc0();                 // 0x0067dcc0 (SP::MessageServer)
@@ -432,6 +434,18 @@ struct cPlayerProfile {
 };
 }
 namespace SP {
+bool __cdecl FUN_00b5ca70();                            // 0x00b5ca70
+}
+namespace SP {
+class cObjectTemplateDB {
+public:
+    void AddKey(tUiKey* pKey, int mode);                // +0x78
+};
+}
+namespace SP {
+cObjectTemplateDB* __cdecl ObjectTemplateDB();          // 0x0067cb40
+}
+namespace SP {
 struct cTextSetter {
 virtual void t00();
 virtual void t04();
@@ -518,6 +532,161 @@ struct cBanUiObject {
 };
 }
 // ---- items of slice s00dd1280 end
+
+// ---- items of slice s00e094f0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern bool         g_bSpyglassCursors;                      // 0x015a4bbc
+extern bool         g_bSpyglassActive;                       // 0x015a4bd5
+extern uint32_t     g_SpyglassMode;                          // 0x015a4bd0
+extern uint32_t     g_SpyglassTextTarget;                    // 0x015a4bac
+#define PV(n) virtual void pv##n();
+namespace SP {
+    void* GameTimeManager_s00e0_94f0();                                // 0x00b3d380
+}
+namespace SP {
+    void* App();                                            // 0x0067dd10
+}
+void* __cdecl FUN_0067cab0();                               // 0x0067cab0  cursor table singleton
+void* __cdecl FUN_006abeb0(uint32_t size);                   // 0x006abeb0  operator new
+void* __cdecl FUN_00bcc330();                                // 0x00bcc330  (callers pass this in ecx)
+void  __cdecl FUN_00806e40(void* window, int32_t a, int32_t b); // 0x00806e40 AutoSizeWindowForText
+struct cAssetLaunchParams;
+void  __cdecl FUN_0064a990(cAssetLaunchParams* params);      // 0x0064a990
+struct cSPUIWindow;
+struct cSPUILayout_s00e0_94f0;
+extern cSPUILayout_s00e0_94f0* g_pSpyglassLayout;                       // 0x015a4bc0
+extern cSPUIWindow* g_pSpyglassTopWindow;                    // 0x015a4bc4
+extern cSPUIWindow* g_pSpyglassTextWindow;                   // 0x015a4bc8
+struct cRefObject {                                          // refcounted object, release at +0x04
+    PV(0)
+    virtual void Release();                                  // +0x04
+};
+struct cRefObject2 {                                         // refcounted object, addref +0x04/release +0x08
+    PV(0)
+    virtual void AddRef();                                   // +0x04
+    virtual void Release();                                  // +0x08
+};
+struct cResourceKey {                                        // EA::ResourceMan::Key
+    uint32_t mId;                                            // +0x00
+    uint32_t mType;                                          // +0x04
+    uint32_t mGroup;                                         // +0x08
+};
+struct cSPUIWindow {
+    virtual void AddRef();                                   // +0x00
+    virtual void Release();                                  // +0x04
+    PV(2) PV(3) PV(4) PV(5) PV(6) PV(7) PV(8) PV(9) PV(10) PV(11)
+    PV(12) PV(13) PV(14) PV(15) PV(16) PV(17) PV(18) PV(19) PV(20) PV(21)
+    PV(22) PV(23) PV(24) PV(25) PV(26) PV(27) PV(28) PV(29) PV(30)
+    virtual void v31(int32_t value, int32_t animate);         // +0x7c
+    PV(32) PV(33) PV(34) PV(35) PV(36) PV(37) PV(38) PV(39) PV(40) PV(41)
+    PV(42) PV(43) PV(44) PV(45) PV(46) PV(47) PV(48) PV(49) PV(50) PV(51)
+    PV(52) PV(53) PV(54) PV(55) PV(56) PV(57) PV(58) PV(59) PV(60) PV(61)
+    PV(62) PV(63) PV(64)
+    virtual void v65(void* target);                          // +0x104
+};
+struct cSPUILayout_s00e0_94f0 {
+    PV(0)
+    virtual void AddRef();                                   // +0x04
+    virtual void Release();                                  // +0x08
+    bool Init(const cResourceKey& key, bool b, uint32_t value);   // 0x008120d0
+    void SetVisibility(int32_t visible);                     // 0x00810590
+    cSPUIWindow* FindWindowByID(uint32_t id, bool searchChildren); // 0x008105b0
+    void Shutdown(uint32_t mode);                            // 0x00811ad0
+    void* FUN_00810000();                                    // 0x00810000  ctor, returns this
+};
+struct CursorTable {
+    uint32_t AddCursor(uint32_t id, const wchar_t* name, int32_t a, int32_t b, int32_t c); // 0x00802050
+    bool FindLocal(uint32_t id);                             // 0x00801bb0
+};
+struct cAppObject {                                          // SP::App() result
+    PV(0) PV(1) PV(2) PV(3) PV(4) PV(5) PV(6) PV(7) PV(8) PV(9)
+    PV(10) PV(11) PV(12) PV(13)
+    virtual void* v14();                                      // +0x38
+};
+struct MessageServer_s00e0_94f0 {
+    PV(0) PV(1) PV(2) PV(3) PV(4)
+    virtual void v5(uint32_t id, void* a, void* b);           // +0x14
+    virtual void v6(uint32_t id, void* a, void* b, void* c);  // +0x18
+    PV(7) PV(8) PV(9) PV(10)
+    virtual void v11(void* value, uint32_t id, int32_t code); // +0x2c
+};
+struct MessageServer_s00e0_94f0* GetMessageServer();                    // 0x0067dcc0
+struct cGameTimeManager_s00e0_94f0 {
+    void IncPauseGate(uint32_t gate);                         // 0x00b32220
+    void DecPauseGate(uint32_t gate);                         // 0x00b32250
+};
+struct cGameObject {                                          // the caller's object (slot +0x0c query)
+    PV(0) PV(1) PV(2)
+    virtual void* v3(uint32_t kind);                          // +0x0c
+};
+struct cSPCreatureBase_s00e0_94f0 {
+    void* GetSpeciesProfile();                                // 0x00c0bbd0
+};
+struct cCreatureOrWhatever {                                  // second kind queried by 0x00e09910
+    void* FUN_00bcc330();                                     // 0x00bcc330 (thiscall, returns pointer)
+};
+struct cThirdKindBase {
+    PV(0) PV(1) PV(2) PV(3) PV(4) PV(5) PV(6) PV(7) PV(8) PV(9)
+    PV(10) PV(11) PV(12) PV(13) PV(14) PV(15) PV(16) PV(17) PV(18) PV(19)
+    PV(20) PV(21) PV(22) PV(23) PV(24) PV(25) PV(26) PV(27) PV(28) PV(29)
+    PV(30) PV(31) PV(32) PV(33) PV(34) PV(35) PV(36) PV(37)
+    virtual void* v38();                                      // +0x98
+};
+struct cStaticOwner {                                         // 12-byte function-local static in 0x00e09910
+    void* mField00;                                           // +0x00
+    void* mField04;                                           // +0x04
+    void* mField08;                                           // +0x08
+    cStaticOwner() : mField00(0), mField04(0), mField08(0) {}
+};
+struct cAssetLaunchParams {                                   // 0x48-byte launch descriptor
+    uint32_t mId;                                             // +0x00
+    void*    mApp;                                            // +0x04
+    uint8_t  mPad08[0x0b];                                    // +0x08
+    uint8_t  mFlag13;                                         // +0x13
+    uint32_t mPad14;                                          // +0x14
+    void*    mOwner0;                                         // +0x18
+    void*    mOwner1;                                         // +0x1c
+    void*    mOwner2;                                         // +0x20
+    uint8_t  mFlag24;                                         // +0x24
+    uint8_t  mPad25[0x23];                                    // +0x25
+    void Construct();                                         // 0x00644b10
+    void Destroy();                                           // 0x00644b60
+};
+template <class T>
+inline void AssignRef(T*& dst, T* src)
+{
+    if (src != dst) {
+        T* old = dst;
+        if (src != 0) {
+            src->AddRef();
+        }
+        dst = src;
+        if (old != 0) {
+            old->Release();
+        }
+    }
+}
+struct cSpyglassMsgFilter {
+    uint32_t mPad00;
+    uint32_t mPad04;
+    uint32_t mPad08;
+    uint32_t mType;                                           // +0x0c
+};
+struct cFourBaseObject {
+    void* mField00;                                           // +0x00
+    void* mField04;                                           // +0x04
+    void* mField08;                                           // +0x08
+    void* mField0C;                                           // +0x0c
+    uint32_t mPad10[2];                                       // +0x10
+    void* mField18;                                           // +0x18
+    void* mField1C;                                           // +0x1c
+    void* mField20;                                           // +0x20
+    void* mField24;                                           // +0x24
+    void Destroy();                                           // 0x00e09830
+};
+// ---- items of slice s00e094f0 end
+
+// callees this slice defines outside this object (rewrite.py held_callee_protos)
+const wchar_t* __cdecl FUN_00e09b10(cGameObject* obj);  // 0x00e09b10 (stays in the slice: not this object's)
 
 // @ 0x00dd1250
 bool __stdcall SomeObj_DoMessage(void* pUnused, SomeMessage* pMsg)
@@ -771,6 +940,27 @@ int cUIBanningContent::GetBanMode(int* pKey)
 }
 }  // namespace SP
 
+// @ 0x00dd1910
+namespace SP {
+void __stdcall FUN_00dd1910(IQueryable* pObject)
+{
+    int* pKey = cUIBanningContent::GetKey(pObject);
+    tUiKey key;
+    key.mId = (uint32_t)pKey[0];
+    key.mGroup = (uint32_t)pKey[1];
+    key.mName = (uint32_t)pKey[2];
+    if (key.mId) {
+        cObjectTemplateDB* pTemplateDB = ObjectTemplateDB();
+        pTemplateDB->AddKey(&key, 1);
+        if (FUN_00b5ca70()) {
+            MessageServer()->Send(0x4715068, 0, 0);
+            return;
+        }
+        MessageServer()->Send(0x452e0ca, 0, 0);
+    }
+}
+}  // namespace SP
+
 // @ 0x00dd19c0
 namespace SP {
 const wchar_t* cUIBanningContent::GetName(IQueryable* pObject)
@@ -843,3 +1033,214 @@ void cUIBanningContent::ShowConfirmationDialog(IQueryable* pObject)
     MessageServer()->Broadcast(0x44dae7f, 0, 0, 0);
 }
 }  // namespace SP
+
+// @ 0x00e09560
+bool __stdcall FUN_00e09560(void* unused, cSpyglassMsgFilter* msg)
+{
+    if (msg->mType != 0x452c168) {
+        return false;
+    }
+    GetMessageServer()->v5(0x0620271c, 0, 0);
+    return true;
+}
+
+// @ 0x00e09590
+bool __fastcall FUN_00e09590(void* modeValue, void* unused, uint32_t msgType, int32_t code)
+{
+    if (msgType == 0x044dae7f) {
+        if (g_SpyglassMode == 0x01510d07) {
+            GetMessageServer()->v6(0x044dae7f, 0, 0, 0);
+            return true;
+        }
+        GetMessageServer()->v11(modeValue == (void*)8 ? modeValue : 0, 0x044dae7f, 0xffffd8f1);
+        return true;
+    }
+    return false;
+}
+
+// @ 0x00e09600
+void __cdecl FUN_00e09600()
+{
+    if (!g_bSpyglassCursors) {
+        g_bSpyglassCursors = true;
+        ((CursorTable*)FUN_0067cab0())->AddCursor(0x5ecbdffd, L"cursor-ban-mode", 1, 0, 0);
+        ((CursorTable*)FUN_0067cab0())->AddCursor(0xf6879190, L"cursor_spyglass", 1, 0, 0);
+    }
+    if (g_pSpyglassLayout == 0) {
+        void* mem = FUN_006abeb0(0x18);
+        cSPUILayout_s00e0_94f0* created = (mem != 0)
+                                   ? (cSPUILayout_s00e0_94f0*)((cSPUILayout_s00e0_94f0*)mem)->FUN_00810000()
+                                   : 0;
+        AssignRef(g_pSpyglassLayout, created);
+        if (g_pSpyglassLayout == 0) {
+            return;
+        }
+    }
+    cResourceKey key;
+    key.mId = 0x7edb17fd;
+    key.mType = 0x0510a95b;
+    key.mGroup = 0x40464100;
+    g_pSpyglassLayout->Init(key, true, 0x5f1bfc10);
+    g_pSpyglassLayout->SetVisibility(0);
+
+    cSPUIWindow* top = g_pSpyglassLayout->FindWindowByID(0x0452bd20, true);
+    AssignRef(g_pSpyglassTopWindow, top);
+    if (g_pSpyglassTopWindow != 0) {
+        g_pSpyglassTopWindow->v65(&g_SpyglassTextTarget);
+    }
+
+    cSPUIWindow* text = g_pSpyglassLayout->FindWindowByID(0xffffffff, true);
+    AssignRef(g_pSpyglassTextWindow, text);
+    if (g_pSpyglassTextWindow != 0) {
+        g_pSpyglassTextWindow->v31(0x10, 1);
+    }
+
+    cSPUIWindow* label = g_pSpyglassLayout->FindWindowByID(0x0452c168, true);
+    if (label != 0) {
+        FUN_00806e40(label, 1, 0);
+    }
+}
+
+// @ 0x00e097c0
+void __cdecl FUN_00e097c0()
+{
+    cSPUIWindow* top = g_pSpyglassTopWindow;
+    if (top != 0) {
+        g_pSpyglassTopWindow = 0;
+        top->Release();
+    }
+    cSPUIWindow* text = g_pSpyglassTextWindow;
+    if (text != 0) {
+        g_pSpyglassTextWindow = 0;
+        text->Release();
+    }
+    if (g_pSpyglassLayout != 0) {
+        g_pSpyglassLayout->Shutdown(1);
+        if (g_pSpyglassLayout != 0) {
+            cSPUILayout_s00e0_94f0* layout = g_pSpyglassLayout;
+            g_pSpyglassLayout = 0;
+            layout->Release();
+        }
+    }
+}
+
+// @ 0x00e09830
+void cFourBaseObject::Destroy()
+{
+    mField00 = (void*)0x0147f5f4;
+    mField04 = (void*)0x0147f5d8;
+    mField08 = (void*)0x0147f5c8;
+    mField0C = (void*)0x0147f5c4;
+    if (mField18 != 0) {
+        mField18 = 0;
+        mField1C = 0;
+        mField20 = 0;
+    }
+    if (mField24 != 0) {
+        ((cRefObject*)mField24)->Release();
+    }
+    if (mField20 != 0) {
+        ((cRefObject*)mField20)->Release();
+    }
+    if (mField1C != 0) {
+        ((cRefObject*)mField1C)->Release();
+    }
+    if (mField18 != 0) {
+        ((cRefObject2*)mField18)->Release();
+    }
+    mField0C = (void*)0x013ef094;
+    mField08 = (void*)0x013eb394;
+    mField04 = (void*)0x013eb938;
+}
+
+// @ 0x00e09910
+cStaticOwner* __cdecl FUN_00e09910(cGameObject* obj)
+{
+    if (obj != 0) {
+        void* creature = obj->v3(0xce9f6639);
+        if (creature != 0) {
+            void* profile = ((cSPCreatureBase_s00e0_94f0*)creature)->GetSpeciesProfile();
+            if (profile != 0) {
+                return (cStaticOwner*)((char*)profile + 0x504);
+            }
+        }
+        void* plain = obj->v3(0xe9cb8ba);
+        if (plain != 0) {
+            return (cStaticOwner*)((cCreatureOrWhatever*)plain)->FUN_00bcc330();
+        }
+        void* third = obj->v3(0x137e8e0);
+        if (third != 0) {
+            return (cStaticOwner*)((cThirdKindBase*)((char*)third + 0x34))->v38();
+        }
+        void* fourth = obj->v3(0xb033b403);
+        if (fourth != 0) {
+            return (cStaticOwner*)((char*)fourth + 0x780);
+        }
+    }
+    static cStaticOwner s_Default;
+    return &s_Default;
+}
+
+// @ 0x00e099d0
+void __cdecl FUN_00e099d0(int8_t refreshCursor)
+{
+    g_bSpyglassActive = true;
+    if (refreshCursor != 0) {
+        ((CursorTable*)FUN_0067cab0())->FindLocal(0x5ecbdffd);
+    }
+    if (g_pSpyglassTopWindow != 0) {
+        g_pSpyglassTopWindow->v31(1, 1);
+    }
+    if (g_pSpyglassTextWindow != 0) {
+        g_pSpyglassTextWindow->v31(1, 1);
+    }
+    cGameTimeManager_s00e0_94f0* timeManager = (cGameTimeManager_s00e0_94f0*)SP::GameTimeManager_s00e0_94f0();
+    timeManager->IncPauseGate(0x04bf38a7);
+    GetMessageServer()->v5(0x0691a1c3, 0, 0);
+}
+
+// @ 0x00e09a50
+void __cdecl FUN_00e09a50(int8_t refreshCursor)
+{
+    if (refreshCursor != 0) {
+        ((CursorTable*)FUN_0067cab0())->FindLocal(0x1002);
+    }
+    if (g_pSpyglassTopWindow != 0) {
+        g_pSpyglassTopWindow->v31(1, 0);
+    }
+    if (g_pSpyglassTextWindow != 0) {
+        g_pSpyglassTextWindow->v31(1, 0);
+    }
+    cGameTimeManager_s00e0_94f0* timeManager = (cGameTimeManager_s00e0_94f0*)SP::GameTimeManager_s00e0_94f0();
+    timeManager->DecPauseGate(0x04bf38a7);
+    g_bSpyglassActive = false;
+    GetMessageServer()->v5(0x06202731, 0, 0);
+}
+
+// @ 0x00e09ad0
+bool __cdecl FUN_00e09ad0(cGameObject* obj)
+{
+    cStaticOwner* owner = FUN_00e09910(obj);
+    return owner->mField00 != 0;
+}
+
+// @ 0x00e09bf0
+void __cdecl FUN_00e09bf0(cGameObject* obj)
+{
+    const wchar_t* name = FUN_00e09b10(obj);
+    cStaticOwner* owner = FUN_00e09910(obj);
+    if (name != 0 && owner->mField00 != 0) {
+        cAssetLaunchParams params;
+        params.Construct();
+        void* app = ((cAppObject*)SP::App())->v14();
+        params.mOwner0 = owner->mField00;
+        params.mApp = app;
+        params.mId = 0x578c04fa;
+        params.mOwner1 = owner->mField04;
+        params.mOwner2 = owner->mField08;
+        params.mFlag24 = 1;
+        params.mFlag13 = 0;
+        FUN_0064a990(&params);
+        params.Destroy();
+    }
+}

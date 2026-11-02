@@ -10,6 +10,7 @@
 00dd1840 ?EndBanMode@cUIBanningContent@SP@@SAX_N@Z  # cUIBanningContent::EndBanMode migrated from s00dd1280 (verbatim, slice spelling)
 00dd18b0 ?GetBannability@cUIBanningContent@SP@@SA_NPAUIQueryable@2@@Z  # cUIBanningContent::GetBannability migrated from s00dd1280 (verbatim, slice spelling)
 00dd18d0 ?GetBanMode@cUIBanningContent@SP@@SAHPAH@Z  # cUIBanningContent::GetBanMode migrated from s00dd1280 (verbatim, slice spelling)
+00dd1910 ?FUN_00dd1910@SP@@YGXPAUIQueryable@1@@Z  # FUN_00dd1910 migrated from s00dd1280 (verbatim, slice spelling)
 00dd19c0 ?GetName@cUIBanningContent@SP@@SAPB_WPAUIQueryable@2@@Z  # cUIBanningContent::GetName migrated from s00dd1280 (verbatim, slice spelling)
 00dd1aa0 ?ShowConfirmationDialog@cUIBanningContent@SP@@QAEXPAUIQueryable@2@@Z  # cUIBanningContent::ShowConfirmationDialog migrated from s00dd1280 (verbatim, slice spelling)
 00dd1ce0 ?FUN_00dd1ce0@SP@@YGPAUtUiKey@1@HH@Z  # FUN_00dd1ce0 migrated from s00dd1280 (verbatim, slice spelling)

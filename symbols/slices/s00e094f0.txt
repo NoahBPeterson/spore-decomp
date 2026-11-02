@@ -1,16 +1,16 @@
 008120d0 ?Init@cSPUILayout@@QAE_NABVKey@ResourceMan@EA@@_NI@Z  # cSPUILayout::Init (callee of s00e094f0, named from the dev publics; slice address comment)
 00e094f0 ?FUN_00e094f0@@YGHH@Z  # FUN_00e094f0 migrated from s00e094f0 (verbatim, slice spelling)
-00e09560 FUN_00e09560  # Ghidra FUN; message filter: accept the "spyglass entered" message when the payload type is 0x452c168 and post the mode message; byte-exact
-00e09590 FUN_00e09590  # Ghidra FUN; mode entry/leave: mode value 8 takes the plain notify path, everything else posts the mode-change message with the value clamped to 8-or-0; not byte-exact
-00e09600 FUN_00e09600  # Ghidra FUN; create (once) the spyglass UI: register the two cursors, build the layout, hook up the two child windows and autosize the text window; byte-exact
-00e097c0 FUN_00e097c0  # Ghidra FUN; tear the spyglass UI down: drop both child windows, shut the layout down and drop it too; byte-exact
-00e09830 Destroy  # PDB name SP::cFourBaseObject::Destroy; cFourBaseObject member: reset the four vtable pointers, clear the three-pointer range at +0x18 and release the four refcounted members in reverse order; byte-exact
-00e09910 FUN_00e09910  # Ghidra FUN; resolve the "identity" object of the caller's object (species identity, creature object, third kind's embedded base or fourth kind's record) with the shared zero object as fallback; byte-exact
-00e099d0 FUN_00e099d0  # Ghidra FUN; enter the spyglass mode overlay: switch the local cursor, show both windows, hold the pause gate and post the mode message; byte-exact
-00e09a50 FUN_00e09a50  # Ghidra FUN; leave the spyglass mode overlay: restore the cursor, hide both windows, release the pause gate and post the completion message; byte-exact
-00e09ad0 FUN_00e09ad0  # Ghidra FUN; true when the resolved identity object of the caller's object carries a record; byte-exact
+00e09560 ?FUN_00e09560@@YG_NPAXPAUcSpyglassMsgFilter@@@Z  # FUN_00e09560 migrated from s00e094f0 (verbatim, slice spelling)
+00e09590 ?FUN_00e09590@@YI_NPAX0IH@Z  # FUN_00e09590 migrated from s00e094f0 (verbatim, slice spelling)
+00e09600 ?FUN_00e09600@@YAXXZ  # FUN_00e09600 migrated from s00e094f0 (verbatim, slice spelling)
+00e097c0 ?FUN_00e097c0@@YAXXZ  # FUN_00e097c0 migrated from s00e094f0 (verbatim, slice spelling)
+00e09830 ?Destroy@cFourBaseObject@@QAEXXZ  # cFourBaseObject::Destroy migrated from s00e094f0 (verbatim, slice spelling)
+00e09910 ?FUN_00e09910@@YAPAUcStaticOwner@@PAUcGameObject@@@Z  # FUN_00e09910 migrated from s00e094f0 (verbatim, slice spelling)
+00e099d0 ?FUN_00e099d0@@YAXC@Z  # FUN_00e099d0 migrated from s00e094f0 (verbatim, slice spelling)
+00e09a50 ?FUN_00e09a50@@YAXC@Z  # FUN_00e09a50 migrated from s00e094f0 (verbatim, slice spelling)
+00e09ad0 ?FUN_00e09ad0@@YA_NPAUcGameObject@@@Z  # FUN_00e09ad0 migrated from s00e094f0 (verbatim, slice spelling)
 00e09b10 ?FUN_00e09b10@@YAPB_WPAUcGameObject@@@Z  # FUN_00e09b10 migrated from s00e094f0 (verbatim, slice spelling)
-00e09bf0 FUN_00e09bf0  # Ghidra FUN; launch the asset browser on the caller's object when both its name and its record exist; byte-exact
+00e09bf0 ?FUN_00e09bf0@@YAXPAUcGameObject@@@Z  # FUN_00e09bf0 migrated from s00e094f0 (verbatim, slice spelling)
 00e09ca0 ?CellStart@cGrid@@QAEHHH@Z  # cGrid::CellStart migrated from s00e094f0 (verbatim, slice spelling)
 00e09d10 FUN_00e09d10  # Ghidra FUN; cGrid member: rebuild the spyglass property grid (recompute the stride, cell metrics and centred origin from the child window rectangles, refill the element vector, re-init the layout); not reconstructed
 00e0a270 ?LayoutCells@cGrid@@QAEXXZ  # cGrid::LayoutCells migrated from s00e094f0 (verbatim, slice spelling)

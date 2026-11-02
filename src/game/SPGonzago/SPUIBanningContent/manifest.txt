@@ -9,3 +9,12 @@
 ../src/game/SPGonzago/SPUIBanningContent.cpp  ?EndBanMode@cUIBanningContent@SP@@SAX_N@Z  00dd1840  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPUIBanningContent.cpp  ?GetBannability@cUIBanningContent@SP@@SA_NPAUIQueryable@2@@Z  00dd18b0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPUIBanningContent.cpp  ?GetBanMode@cUIBanningContent@SP@@SAHPAH@Z  00dd18d0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPUIBanningContent.cpp  ?FUN_00e09560@@YG_NPAXPAUcSpyglassMsgFilter@@@Z  00e09560  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPUIBanningContent.cpp  ?FUN_00e09600@@YAXXZ  00e09600  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPUIBanningContent.cpp  ?FUN_00e097c0@@YAXXZ  00e097c0  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPUIBanningContent.cpp  ?Destroy@cFourBaseObject@@QAEXXZ  00e09830  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPUIBanningContent.cpp  ?FUN_00e09910@@YAPAUcStaticOwner@@PAUcGameObject@@@Z  00e09910  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPUIBanningContent.cpp  ?FUN_00e099d0@@YAXC@Z  00e099d0  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPUIBanningContent.cpp  ?FUN_00e09a50@@YAXC@Z  00e09a50  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPUIBanningContent.cpp  ?FUN_00e09ad0@@YA_NPAUcGameObject@@@Z  00e09ad0  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPUIBanningContent.cpp  ?FUN_00e09bf0@@YAXPAUcGameObject@@@Z  00e09bf0  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
