@@ -7,6 +7,7 @@
 ../src/game/Spui/SPUIBehavior.cpp  ?Clear@AnimMgr@@QAEXXZ  007f9530  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/Spui/SPUIBehavior.cpp  ?Sub10@Ev@@QAEPAXXZ  007f9860  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/Spui/SPUIBehavior.cpp  ?Set14@Ev@@QAE_NH@Z  007f99c0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Spui/SPUIBehavior.cpp  ?Sub0C@Ev@@QAEPAXXZ  007f9b50  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/Spui/SPUIBehavior.cpp  ?Test1@Ev@@QAE_NXZ  007f9b90  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/Spui/SPUIBehavior.cpp  ?RemoveB@Cont@@QAE_NPAX@Z  007f9c90  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/Spui/SPUIBehavior.cpp  ?AddPredicate@CB@@UAE_NPAUPredO@@@Z  007f9d90  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

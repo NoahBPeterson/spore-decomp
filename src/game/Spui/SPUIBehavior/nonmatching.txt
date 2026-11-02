@@ -1,25 +1,30 @@
 # va diff reason
-007f9550 466 complete Eval clamp/scale routine; float branch scheduling differs
-007f97a0 59 complete interface query; cl switch-tree lowering differs (shared vs per-case case bodies)
-007f9800 68 complete interface query; cl switch-tree lowering differs
-007f9890 134 complete interface query (this/this+4 cases); cl switch-tree lowering differs
-007f99e0 68 complete interface query; cl switch-tree lowering differs
-007f9a40 80 complete slot refresh loop; /Od local slot order and call schedule differ
-007f9ae0 35 complete slot setter loop; /Od local slot order differs
-007f9bb0 68 complete interface query; cl switch-tree lowering differs
-007f9c10 46 complete slot add loop; /Od local slot order differs
-007f9d00 11 complete slot remove-all loop; /Od local slot order (this at ebp-8 vs ebp-0x10) differs
-007f9fe0 63 complete remove-all-predicates loop; /Od local slot order / repeated getter calls differ
-007fa060 63 complete remove-all-actions loop; /Od local slot order / repeated getter calls differ
-007fa150 41 complete flags query; extra local for the external-call result differs
-007fa180 59 complete AsInterface; cl hoists the id compare before the branch vs original local-temp form
-007fa390 272 complete message broadcast; the id filter/conditional relay reconstruction differs
-007fab80 279 C_TF::SetNegated — complete; the finite-difference ease search (vcall 0x18/0x60, fabsf loop, 0.001f epsilon, -0.47f step) has a different branch/float schedule than the original /Od code
-007fb440 6 C_7fb440::f — complete; `(char*)this - 4` base store makes cl reload `this` via a scratch reg for the vcall instead of reusing ecx/edx like the sibling binds at 007faa30/007fb250/007fb2e0
-007fb480 378 C_TF-subobject "set active" — complete behaviour (MI subobject method at real+0x18; predicate combine, per-action vcalls 0x18/0x1c, event release, callback) but 406 bytes vs original 473; equiv: FAIL (5/5 mismatched, ecx fixed via member)
+007f9550 466 complete Eval clamp/scale routine; float branch scheduling differs flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+007f97a0 59 complete interface query; cl switch-tree lowering differs (shared vs per-case case bodies) flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+007f9800 68 complete interface query; cl switch-tree lowering differs flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+007f9890 134 complete interface query (this/this+4 cases); cl switch-tree lowering differs flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+007f99e0 68 complete interface query; cl switch-tree lowering differs flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+007f9a40 80 complete slot refresh loop; /Od local slot order and call schedule differ flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+007f9ae0 35 complete slot setter loop; /Od local slot order differs flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+007f9bb0 68 complete interface query; cl switch-tree lowering differs flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+007f9c10 46 complete slot add loop; /Od local slot order differs flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+007f9d00 11 complete slot remove-all loop; /Od local slot order (this at ebp-8 vs ebp-0x10) differs flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+007f9fe0 63 complete remove-all-predicates loop; /Od local slot order / repeated getter calls differ flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+007fa060 63 complete remove-all-actions loop; /Od local slot order / repeated getter calls differ flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+007fa150 41 complete flags query; extra local for the external-call result differs flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+007fa180 59 complete AsInterface; cl hoists the id compare before the branch vs original local-temp form flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+007fa390 272 complete message broadcast; the id filter/conditional relay reconstruction differs flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+007fab80 275 C_TF::SetNegated — complete; the finite-difference ease search (vcall 0x18/0x60, fabsf loop, 0.001f epsilon, -0.47f step) has a different branch/float schedule than the original /Od code (size 352 vs 359). `negated` is now `unsigned char` so the raw argument byte is stored (retail does `mov [this+0x39], dl`; the old bool normalised 0xe9 to 1 and changed the object state); equiv: PASS (317/500 valid slice and src, 100% coverage) flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+007fb440 6 C_7fb440::f — complete; writes the .rdata class descriptor literal 0x01415598 to p->type (the old g_sc_7fb440 extern resolved to the function's own VA 0x007fb440 via the hex-name fallback), base = (char*)this - 4, count = 1, extra = vtable+0x14; only the `(char*)this - 4` base store still makes cl reload `this` via a scratch reg for the vcall instead of reusing ecx/edx like the sibling binds at 007faa30/007fb250/007fb2e0 (chk diff 6); equiv: PASS (1495/1500 slice, 999/1000 src, 100% coverage) flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+007fb480 397 C_TF-subobject "set active" — complete behaviour (MI subobject method at real+0x18; predicate combine, per-action vcalls 0x18/0x1c, event release, callback); the action lookup at 0x007f93d0 is a thiscall member (ecx = real object, arg i) and the 0x0065c480 stack temp is a thiscall on a 0xc-byte local with args (0xc, 0), both now declared as stub-class members; 435 bytes vs original 473 (chk diff 435); equiv: PASS (885/1500 slice, 584/1000 src, 81.4% coverage) flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
 007fbbc0 8 initialiser — complete; local-name slot assignment for the two sub-object pointers and the 4-iteration slot loop differs
 007fbdb0 13 uninitialized_copy of 8-byte pairs — complete (placement-new copy loop + trivial destroy loop); /Od slot order of the new-expression temp differs [equiv: PASS]
 007fc2a0 10 UI::BehaviorMessage ctor — complete; one reserved frame slot (inlined base ctor) missing
 007fc600 86 BehaviorMessage dispatch — complete; the local message buffer and vtable dispatch schedule differ; equiv: FAIL (5/5 mismatched on eax, ecx fixed via member)
 007fc690 196 cSPUIBehaviorEventBase::SetStateString — complete; eastl string temporaries / inlined helper frames differ
 007fc790 156 cSPUIBehaviorEventBase::SetStateInt — complete; action slot vcalls and message temporaries differ
+007fcca0 461 complete; eastl vector insert (stride 8) reconstruction; call/register schedule differs; equiv: UNSUPPORTED (no valid inputs: pool-limit/read faults) flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+007fcf00 5 complete; /Od `this` and GetServer() temp stack slots are swapped (ebp-4 vs ebp-8) flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+007fd2d0 119 complete; element-by-element vector copy in the original's three-argument form (VecOwner* owner, VecSrc* src, VecElemList* list): the span comes from the thiscall slot accessor 0x007f53c0 (ecx = arg1, one pushed arg, `ret $4`), the loop bound is list->[0x14], the per-element vtable slot +0xc takes the class id $0x2439c2f on the stack, and *src->begin is probed through a local before the call; size now matches exactly (183 bytes), residual is cl's eax/edx choice per statement; equiv PASS (255 valid, 78.1% coverage) flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+007fd890 136 complete; DampedPeriodic eval (slot24); now calls Ev::Eval (0x7f9550) / C_TF::IsValid (0x7facf0) thiscall; logf still inlined as x87 fyl2x, frame/schedule differs; equiv PASS flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
+007fdab0 4 complete; Interp ctor; Stopwatch/QPC reset; 64-bit elapsed reset stores its halves high-then-low (retail low-then-high); equiv: PASS (400 valid, 80.0% coverage) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast

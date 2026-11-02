@@ -1,4 +1,4 @@
-// src/game/Spui/SPUIBehavior.cpp -- migrated from slice(s) s012f64e0, s007fc880, s007fb7b0, s007fa520, s007f9550, s007f8540 by tools/migrate/rewrite.py
+// src/game/Spui/SPUIBehavior.cpp -- migrated from slice(s) s007fd840, s012f64e0, s007fc880, s007fb7b0, s007fa520, s007f9550, s007f8540 by tools/migrate/rewrite.py
 // Object file: Spui/SPUIBehavior.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -8,6 +8,8 @@
 #include <cstddef>
 #include <math.h>
 #include "EA/Messaging/Server.h"
+#include "EA/Stopwatch.h"
+#include <intrin.h>
 
 // ---- items of slice s007f8540_od begin (TODO(rewrite): local stubs, replace by canonical classes)
 struct AnimMgr {
@@ -113,7 +115,6 @@ extern char g_serconst_7fa8e0[];
 extern char g_sc_7faa30[];
 extern char g_sc_7fb250[];
 extern char g_sc_7fb2e0[];
-extern char g_sc_7fb440[];
 extern char g_7faa70_a[], g_7faa70_b[], g_7faa70_c[];
 extern char g_7fb000_a[], g_7fb000_b[], g_7fb000_c[];
 extern char g_7fb290_a[], g_7fb290_b[], g_7fb290_c[];
@@ -128,7 +129,11 @@ struct RCObj {
   virtual void Release();  // +4
 };
 struct Pred {
-  virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3(); virtual void v4();
+virtual void v0();
+virtual void v1();
+virtual void v2();
+virtual void v3();
+virtual void v4();
   virtual void v5();
   virtual bool v6();               // +0x18
   virtual void v7();
@@ -146,7 +151,9 @@ struct C_7fa690 {
   bool SetAt(int i, RCObj* p);
 };
 struct Creator {
-  virtual void v0(); virtual void v1(); virtual void v2();
+virtual void v0();
+virtual void v1();
+virtual void v2();
   virtual RCObj* Create(int tag);   // +0x0c
 };
 struct P2 { char pad0[4]; RCObj** c; };                     // +0x04
@@ -154,15 +161,36 @@ struct P3 { char pad0[0x10]; int off; unsigned count; };    // +0x14 = count
 struct IAlloc { virtual void* alloc(int n, int align); };
 struct Y { char pad0[0x14]; unsigned count; };
 struct VC22 {
-  virtual void v00(); virtual void v01(); virtual void v02(); virtual void v03(); virtual void v04();
-  virtual void v05(); virtual void v06(); virtual void v07(); virtual void v08(); virtual void v09();
-  virtual void v10(); virtual void v11(); virtual void v12(); virtual void v13(); virtual void v14();
-  virtual void v15(); virtual void v16(); virtual void v17(); virtual void v18(); virtual void v19();
-  virtual void v20(); virtual void v21();
+virtual void v00();
+virtual void v01();
+virtual void v02();
+virtual void v03();
+virtual void v04();
+virtual void v05();
+virtual void v06();
+virtual void v07();
+virtual void v08();
+virtual void v09();
+virtual void v10();
+virtual void v11();
+virtual void v12();
+virtual void v13();
+virtual void v14();
+virtual void v15();
+virtual void v16();
+virtual void v17();
+virtual void v18();
+virtual void v19();
+virtual void v20();
+virtual void v21();
 };
 struct SerItem { void* type; void* base; unsigned count; void* extra; };
 struct VSer {
-  virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3(); virtual void v4();
+virtual void v0();
+virtual void v1();
+virtual void v2();
+virtual void v3();
+virtual void v4();
   virtual void* vf();   // +0x14
 };
 struct C_7faa30 : VSer { void f(SerItem* p); };
@@ -183,12 +211,28 @@ struct C_7fb110 {
   void Dtor();
 };
 struct VT_TF {
-  virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3(); virtual void v4(); virtual void v5();
+virtual void v0();
+virtual void v1();
+virtual void v2();
+virtual void v3();
+virtual void v4();
+virtual void v5();
   virtual float v6();                     // +0x18
-  virtual void v7(); virtual void v8(); virtual void v9(); virtual void v10();
-  virtual void v11(); virtual void v12(); virtual void v13(); virtual void v14();
-  virtual void v15(); virtual void v16(); virtual void v17(); virtual void v18();
-  virtual void v19(); virtual void v20(); virtual void v21();
+virtual void v7();
+virtual void v8();
+virtual void v9();
+virtual void v10();
+virtual void v11();
+virtual void v12();
+virtual void v13();
+virtual void v14();
+virtual void v15();
+virtual void v16();
+virtual void v17();
+virtual void v18();
+virtual void v19();
+virtual void v20();
+virtual void v21();
   virtual float v22(float f);             // +0x58
   virtual void v23();
   virtual void v24();                     // +0x60
@@ -217,10 +261,21 @@ struct C_TF : VT_TF {
   void SetNegated(unsigned char b);
 };
 struct VT16 {
-  virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3(); virtual void v4();
-  virtual void v5(); virtual unsigned char v6();   // +0x18
-  virtual void v7(); virtual void v8(); virtual void v9(); virtual void v10(); virtual void v11();
-  virtual void v12(); virtual void v13(); virtual void v14();
+virtual void v0();
+virtual void v1();
+virtual void v2();
+virtual void v3();
+virtual void v4();
+virtual void v5();
+virtual unsigned char v6();
+virtual void v7();
+virtual void v8();
+virtual void v9();
+virtual void v10();
+virtual void v11();
+virtual void v12();
+virtual void v13();
+virtual void v14();
   virtual bool v15(int a, int b);                  // +0x3c
 };
 struct C_7fb3b0 : VT16 { bool f(unsigned char b); };
@@ -234,8 +289,13 @@ struct C_7fb6a0 {
 };
 template<int N> inline void ScratchSlots(){ unsigned int s[N]; }
 struct EvtAction {
-  virtual void a0(); virtual void a1(); virtual void a2(); virtual void a3();
-  virtual void a4(); virtual void a5(); virtual unsigned char a6();   // +0x18
+virtual void a0();
+virtual void a1();
+virtual void a2();
+virtual void a3();
+virtual void a4();
+virtual void a5();
+virtual unsigned char a6();
   virtual void a7(unsigned char);                                     // +0x1c
 };
 struct EvtBase {
@@ -436,8 +496,71 @@ struct Obj7fc600 { bool f_7fc600(int a, int b); };
 // ---- items of slice s007fb7b0 end
 
 // ---- items of slice s007fc880 begin (TODO(rewrite): local stubs, replace by canonical classes)
+inline void VCallV(void* o, int off) {
+    ((void(__thiscall*)(void*))(*(void**)((char*)*(void**)o + off)))(o);
+}
+inline void* VCallR1(void* o, int off, int id) {
+    return ((void*(__thiscall*)(void*, int))(*(void**)((char*)*(void**)o + off)))(o, id);
+}
+struct Ev_s007f_c880 {
+    char pad0[8];
+    void* iface;                    // +0x8  (Iface at Cont+0x18)
+    char pad1[0x40];                // +0xc .. +0x4b
+    bool mbActive;                  // +0x4c (Cont+0x5c)
+    char pad2[0x1b];                // +0x4d .. +0x67
+    void* handle;                   // +0x68 (AutoRefCount window)
+    unsigned BaseHandle(void* msg, void* arg);   // @ 0x007fc4b0
+    bool HandleBase(int msg, void* arg);          // @ 0x007fcf00
+    bool Dispatch(int msg, void* arg);            // @ 0x007fc880
+    void** SlotB(int i);                          // 0x007f93b0
+    void** SlotC(int i);                          // 0x007f93c0
+    void** SlotD(int i);                          // 0x007f93d0
+};
+struct Server {
+    virtual void s0();
+    virtual void s1();
+    virtual void s2();
+    virtual void s3();
+    virtual void s4();
+    virtual void s5();
+    virtual void s6();
+    virtual void s7();
+    virtual void s8();
+    virtual void s9();
+    virtual void s10();
+    virtual void s11();
+    virtual void s12();
+    virtual void s13();
+    virtual void s14();
+    virtual void s15();
+};
+Server* GetServer();                                  // @ 0x00883860
+void  f_571d10(void* p, int n);                       // deallocate
+void* f_42dee0(void* alloc, int n, int align, int flag); // allocate
+void* f_8ac360(int n, void* p);                       // allocate raw
+void* f_7fbdb0(void* begin, void* end, void* out);    // uninitialized copy
 struct BehaviorMessage { char pad[0x48]; BehaviorMessage(); };
 void* operator new(size_t, const char*, int, int, int, int);
+struct Vec8 {
+    void* b; void* e; void* c; void* alloc;
+    void* Insert(void* pos, void* value);
+    void* Emplace(void* pos, void* value);
+};
+struct VecSrc {
+    char pad0[4];
+    void** begin;   // +4
+    void** end;     // +8
+};
+struct VecElemList {
+    char pad0[0x10];
+    void*    mpBase;    // +0x10
+    unsigned mCount;    // +0x14
+};
+struct VecOwner {
+    char pad0[4];
+    void** mpBegin;     // +4
+    void** Elements(VecElemList* list);   // 0x007f53c0
+};
 struct DispIface;
 struct DispReceiver {
     virtual void v0();
@@ -513,6 +636,84 @@ struct EvD {
     bool Dispatch(int msg, void* arg);         // @ 0x007fc880
 };
 // ---- items of slice s007fc880 end
+
+// ---- items of slice s007fd840 begin (TODO(rewrite): local stubs, replace by canonical classes)
+struct IObj {
+    virtual void AddRef();
+    virtual void Release();
+virtual void s2();
+virtual void s3();
+virtual void s4();
+virtual void s5();
+virtual void s6();
+virtual void s7();
+};
+struct AB {                       // cSPUIBehaviorActionBase
+    void Ctor();                  // 0x7fbbc0
+    bool HandleMessageBase(int, void*); // 0x7f9b80  (really 8-byte thiscall wrapper)
+    void SetEnabled(int);         // 0x7fb3b0
+    bool SetEnabled2(int);        // 0x7fb3b0 variant used by 7fdd10
+    void BaseDtor();              // 0x7fb320
+};
+struct Stopwatch {
+    unsigned __int64 mnStartTime;         // +0x00
+    unsigned __int64 mnTotalElapsedTime;  // +0x08
+    int   mnUnits;                        // +0x10
+    float mfCoefficient;                  // +0x14
+    void Init(int a, int b);              // 0x93a560 (ctor; args units, start)
+    long long GetElapsed();               // 0x93a3a0 (tick count in edx:eax)
+};
+union Li { int Parts[2]; unsigned __int64 Quad; };
+extern "C" __declspec(dllimport) int __stdcall QueryPerformanceCounter(Li*);
+struct TC_7fd200 { void FUN_007fd200(unsigned f, int on); };  // 0x007fd200 flag setter
+struct Damped {
+    char  pad0[0xc];
+    float mParamDuration;        // +0x0c
+    float mParamFrequency;       // +0x10
+    float mParamDamping;         // +0x14
+    char  pad18[8];
+    float mParamPreDelayFactor;  // +0x20
+    float mParamPostDelayFactor; // +0x24
+    char  pad28[0x18];
+    float mWorkTimeFrom;         // +0x40
+    float mWorkTimeTo;           // +0x44
+    char  mbCeilingMode;         // +0x48
+    char  pad49[3];
+    unsigned mPeriodicType;      // +0x4c
+    float v25(float t);          // @ 0x007fd840
+    bool  v24();                 // @ 0x007fd890
+};
+struct Ev_s007f_d840   { bool Eval(); };    // 0x007f9550 base Eval
+struct C_TF_s007f_d840 { bool IsValid(); }; // 0x007facf0 readiness check
+struct Interp {
+    char  pad0[0xc];
+    void* mpEvent;           // +0x0c
+    char  pad10[0x20];
+    void* mpTimeFunction;    // +0x30  (primary + 0x3c)
+    void* mpValueInterp;     // +0x34  (primary + 0x40)
+    float mLastTime;         // +0x38  (primary + 0x44)
+    Stopwatch mStopwatch;    // +0x3c  (primary + 0x48)
+    int   pad54[4];          // +0x54..0x63
+    Interp();
+    void* DeletingDtor(unsigned char flags);
+    bool HandleMessage(int msg, void* arg);   // @ 0x007fdbc0
+    char SetEnabled(int v);                   // @ 0x007fdd10
+    void SetTimeFunction(IObj* p);            // @ 0x007fdb60
+    void SetValueInterp(IObj* p);             // @ 0x007fdb90
+};
+struct Interp0 {
+    void*    mVtbl0;         // 0x00
+    void*    mVtbl4;         // 0x04
+    unsigned m08;            // 0x08
+    void*    mVtblC;         // 0x0c
+    unsigned m10, m14, m18, m1c, m20, m24, m28, m2c, m30, m34;  // 0x10..0x37
+    void*    mpOwnerWin;     // 0x38  borrowed owner/window (queried through vt[0x44])
+    void*    mpTimeFunction; // 0x3c
+    void*    mpValueInterp;  // 0x40
+    float    mLastTime;      // 0x44
+    Stopwatch mStopwatch;    // 0x48  (0x18 bytes, coefficient at 0x5c)
+};
+// ---- items of slice s007fd840 end
 
 // @ 0x007f93f0
 void AnimMgr::Reset()
@@ -675,6 +876,12 @@ bool Cont::SetValue(int v)
         }
     }
     return true;
+}
+
+// @ 0x007f9b50
+void* Ev::Sub0C()
+{
+    return this ? (void*)((char*)this + 0x0c) : 0;
 }
 
 // @ 0x007f9b90
@@ -966,6 +1173,7 @@ bool f_7fa520(Pred*** arr, int n, int* counter)
 }
 
 // @ 0x007fa690
+#pragma pack(pop)
 RCObj* C_7fa690::GetAt(int i)
 {
   if (i >= 0 && i < 4 && flags[i]) return elems[i].p;
@@ -1509,6 +1717,7 @@ struct ISub7fc600 {
   virtual void s0();
   virtual void Notify(void* a, void* b);          // +0x04
 };
+
 // @ 0x007fc600
 bool Obj7fc600::f_7fc600(int a, int b)
 {
@@ -1628,6 +1837,131 @@ void Factory(BehaviorMessage** out, int arg)
 {
     *out = new ("UI/BehaviorMessage", 0, 0, 0, 0) BehaviorMessage();
     f_7fa4c0(*out, arg);
+}
+
+// @ 0x007fcca0
+void* Vec8::Insert(void* pos, void* value)
+{
+    void** self = (void**)this;
+    if (self[1] == self[2]) {
+        int cap = (int)(((char*)self[1] - (char*)*self) >> 3);
+        int ncap = cap > 0 ? cap << 1 : 1;
+        void* nd = ncap ? f_42dee0(self + 3, ncap << 3, 4, 0) : 0;
+        void* at = f_7fbdb0(*self, pos, nd);
+        void* m = f_8ac360(8, at);
+        if (m) {
+            *(void**)m = *(void**)value;
+            *((void**)m + 1) = *((void**)value + 1);
+        }
+        at = f_7fbdb0(pos, self[1], (char*)at + 8);
+        if (*self)
+            f_571d10(*self, (int)(((char*)self[2] - (char*)*self) >> 3) << 3);
+        *self = nd;
+        self[1] = at;
+        self[2] = (char*)nd + (ncap << 3);
+        return at;
+    }
+    void* at = value;
+    if (pos <= value && value < self[1])
+        at = (char*)value + 8;
+    void* m = f_8ac360(8, self[1]);
+    if (m) {
+        *(void**)m = *((void**)self[1] - 2);
+        *((void**)m + 1) = *((void**)self[1] - 1);
+    }
+    void* cur = self[1];
+    void* prev = (char*)self[1] - 8;
+    while (prev != pos) {
+        *((void**)cur - 2) = *((void**)prev - 2);
+        *((void**)cur - 1) = *((void**)prev - 1);
+        cur = (char*)cur - 8;
+        prev = (char*)prev - 8;
+    }
+    *(void**)pos = *(void**)at;
+    *((void**)pos + 1) = *((void**)at + 1);
+    self[1] = (char*)self[1] + 8;
+    return 0;
+}
+
+// @ 0x007fcf00
+bool Ev_s007f_c880::HandleBase(int msg, void* arg)
+{
+    BaseHandle((void*)msg, arg);
+    if (msg == 0xc) {
+        Server* from = GetServer();
+        VCallV(from, 0x38);
+    }
+    return false;
+}
+
+// @ 0x007fd2d0
+bool __cdecl Vec8CopyFrom(VecOwner* owner, VecSrc* src, VecElemList* list)
+{
+    void** d = src->begin;
+    void** s = owner->Elements(list);
+    for (unsigned i = 0; i < list->mCount; ++i) {
+        void* created = 0;
+        void* old = *s;
+        if (old)
+            VCallV(old, 4);
+        void* slot = *d;
+        if (slot) {
+            created = VCallR1(slot, 0xc, 0x2439c2f);
+            if (created)
+                VCallV(created, 0);
+        }
+        *s = created;
+        ++s;
+        ++d;
+    }
+    return true;
+}
+
+// @ 0x007fd890
+bool Damped::v24()
+{
+    if (mParamFrequency <= 0.0f && mParamFrequency != 0.0f)
+        mParamFrequency = 0.0f;
+    ((Ev_s007f_d840*)this)->Eval();
+    float f = mParamDamping;
+    float delta = mWorkTimeTo - mWorkTimeFrom;
+    if (f == 0.0f) {
+        if (0.0f < delta && ((C_TF_s007f_d840*)this)->IsValid()) {
+            mParamDamping = -(logf(0.001f) / delta);
+            ((Ev_s007f_d840*)this)->Eval();
+        }
+    } else if (0.0f < f) {
+        mParamDuration = ((-1.0f / f) * logf(0.001f)) /
+                         ((1.0f - mParamPreDelayFactor) - mParamPostDelayFactor);
+        ((Ev_s007f_d840*)this)->Eval();
+    }
+    return true;
+}
+
+// @ 0x007fdab0
+Interp::Interp()
+{
+    Interp0* o = (Interp0*)this;
+    ((AB*)this)->Ctor();
+    Stopwatch* sw = &o->mStopwatch;
+    o->mVtbl0 = (void*)0x1415f18;
+    o->mVtbl4 = (void*)0x1415f08;
+    o->mVtblC = (void*)0x1415ef8;
+    o->mpTimeFunction = 0;
+    o->mpValueInterp = 0;
+    o->mLastTime = 0.0f;
+    sw->Init(5, 0);
+    ((TC_7fd200*)this)->FUN_007fd200(0x80, 1);
+    ((TC_7fd200*)this)->FUN_007fd200(0x100, 1);
+    if (sw->mnUnits == 1) {
+        sw->mnStartTime = __rdtsc();
+        sw->mnTotalElapsedTime = 0;
+    } else {
+        Li li;
+        QueryPerformanceCounter(&li);
+        sw->mnTotalElapsedTime = 0;
+        sw->mnStartTime = li.Quad;
+    }
 }
 
 // @ 0x012f6e50

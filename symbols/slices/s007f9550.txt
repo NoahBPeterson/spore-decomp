@@ -7,6 +7,7 @@
 007f99e0 ?AsD@Ev@@QAEPAXH@Z  # Ev::AsD migrated from s007f9550 (verbatim, slice spelling)
 007f9a40 ?Refresh@Cont@@QAEXXZ  # Cont::Refresh migrated from s007f9550 (verbatim, slice spelling)
 007f9ae0 ?SetValue@Cont@@QAE_NH@Z  # Cont::SetValue migrated from s007f9550 (verbatim, slice spelling)
+007f9b50 ?Sub0C@Ev@@QAEPAXXZ  # Ev::Sub0C migrated from s007f9550 (verbatim, slice spelling)
 007f9b90 ?Test1@Ev@@QAE_NXZ  # Ev::Test1 migrated from s007f9550 (verbatim, slice spelling)
 007f9bb0 ?AsE@Ev@@QAEPAXH@Z  # Ev::AsE migrated from s007f9550 (verbatim, slice spelling)
 007f9c10 ?AddB@Cont@@QAE_NPAX@Z  # Cont::AddB migrated from s007f9550 (verbatim, slice spelling)

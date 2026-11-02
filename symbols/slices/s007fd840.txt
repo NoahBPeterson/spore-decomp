@@ -1,8 +1,9 @@
 007f9550 ?Eval@Ev@@QAE_NXZ  # base Eval reached from Damped::v24 (ECX = this)
 007facf0 ?IsValid@C_TF@@QAE_NXZ  # readiness check reached from Damped::v24 (ECX = this)
 007fd840 ?v25@Damped@@QAEMM@Z  # Damped::v25 migrated from s007fd840 (verbatim, slice spelling)
+007fd890 ?v24@Damped@@QAE_NXZ  # Damped::v24 migrated from s007fd840 (verbatim, slice spelling)
 007fda80 ?SerReadA@@YA_NPAUSerItem@@PAX@Z  # SerReadA migrated from s007fd840 (verbatim, slice spelling)
-007fdab0 UTFWin::cSPUIBehaviorActionWinInterpolator::cSPUIBehaviorActionWinInterpolator  # vtable ctor 0x1415f18
+007fdab0 ??0Interp@@QAE@XZ  # Interp::Interp migrated from s007fd840 (verbatim, slice spelling)
 007fdb60 ?SetTimeFunction@Interp@@QAEXPAUIObj@@@Z  # Interp::SetTimeFunction migrated from s007fd840 (verbatim, slice spelling)
 007fdb90 ?SetValueInterp@Interp@@QAEXPAUIObj@@@Z  # Interp::SetValueInterp migrated from s007fd840 (verbatim, slice spelling)
 007fdbc0 ?HandleMessage@Interp@@QAE_NHPAX@Z  # Interp::HandleMessage migrated from s007fd840 (verbatim, slice spelling)
