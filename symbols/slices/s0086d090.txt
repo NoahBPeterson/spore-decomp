@@ -2,4 +2,4 @@
 0086d3c0 ?png_create_write_struct_2@@YAPAUpng_struct_def@@PBDPAXP6AXPAU1@0@Z31P6APAX2I@ZP6AX21@Z@Z  # png_create_write_struct_2 migrated from s0086d090 (verbatim, slice spelling)
 0086d690 ?png_create_struct_2@@YAPAXHP6APAXPAUpng_struct_def@@I@ZPAX@Z  # png_create_struct_2 migrated from s0086d090 (verbatim, slice spelling)
 0086d710 ?png_destroy_struct_2@@YAXPAXP6AXPAUpng_struct_def@@0@Z0@Z  # png_destroy_struct_2 migrated from s0086d090 (verbatim, slice spelling)
-00870860 png_build_gamma_table  # libpng 1.2.25 pngrtran.c; builds gamma tables (8-bit and 16-bit)
+00870860 ?png_build_gamma_table@@YAXPAUpng_struct_def@@@Z  # png_build_gamma_table migrated from s0086d090 (verbatim, slice spelling)
