@@ -12,3 +12,6 @@
 ../src/game/SPGonzago/SPGameEditInputStrategy.cpp  ?Activate@cGameEditInputStrategy_s00d1_6f40@@QAEXXZ  00d17250  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPGameEditInputStrategy.cpp  ?AdjustHeapHole@@YAXPAIHHHIUcPropertyListNameSort_s00d1_78a0@@@Z  00d180c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPGameEditInputStrategy.cpp  ?AdjustHeap@@YAXPAI0UcPropertyListNameSort_s00d1_78a0@@@Z  00d18180  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPGameEditInputStrategy.cpp  ?Copy@cGameEditInputStrategy_s00d1_8df0__b@SP@@QAEXXZ  00d19460  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPGameEditInputStrategy.cpp  ?PopulateLoadPlanetDialogGrid@cGameEditInputStrategy_s00d1_8df0__b@SP@@QAEXXZ  00d194c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPGameEditInputStrategy.cpp  ?partial_sort@eastl@@YAXPAI00UcPropertyListNameSort_s00d1_8df0__b@SP@@@Z  00d19610  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

@@ -1981,7 +1981,7 @@ public:
     uint32_t padb8;
     IWindow* mTemplateOptionsList;                // +0xbc
 
-    virtual bool HandleUIMessage(IWindow* pWindow, const UIMessage& msg);
+    virtual bool HandleUIMessage(IWindow* pWindow, const UIMessage& msg);  // 0x00d197a0 (cGameEditInputStrategy::HandleUIMessage)
 
     void SetButtonHighlight(SourceRef arg);                           // 0x00d18860
     uint32_t GetGameplayMarkerTypeFromUI();                           // 0x00d15fb0
@@ -2229,6 +2229,170 @@ public:
     static cCommandGameplayMarker_s00d1_afe0* RotateObject(SelectedRef_s00d1_afe0* pSelected);                // 0x00d15330
 };
 // ---- items of slice s00d1afe0 end
+
+// ---- items of slice s00d18df0_b begin (TODO(rewrite): local stubs, replace by canonical classes)
+template <class T> inline const T& EastlMax(const T& a, const T& b) { return (a < b) ? b : a; }
+namespace eastl {
+extern wchar_t gEmptyString16[];                         // 0x01667bac
+}
+namespace eastl {
+class allocator_s00d1_8df0__b {
+public:
+    void deallocate(void* p, unsigned int) { operator delete(p); }
+};
+}
+namespace eastl {
+template <class T> struct basic_string_s00d1_8df0__b {
+    T* mpBegin;                                          // +0x0
+    T* mpEnd;                                            // +0x4
+    T* mpCapacity;                                       // +0x8
+    allocator_s00d1_8df0__b mAllocator;                                // +0xc
+
+    basic_string_s00d1_8df0__b() { AllocateSelf(); }
+    basic_string_s00d1_8df0__b(const T* p) : mpBegin(0), mpEnd(0), mpCapacity(0) { RangeInitialize(p); }
+    ~basic_string_s00d1_8df0__b() { DeallocateSelf(); }
+
+    void AllocateSelf() {
+        mpBegin = (T*)gEmptyString16;
+        mpEnd = (T*)gEmptyString16;
+        mpCapacity = (T*)gEmptyString16 + 1;
+    }
+    void RangeInitialize(const T* p);                    // 0x00579a90
+    void SetCapacity(unsigned int n);                    // 0x0042f360
+    void reserve(unsigned int n) {
+        unsigned int size = (unsigned int)(mpEnd - mpBegin);
+        n = EastlMax(n, size) + 1;
+        if (n > (unsigned int)(mpCapacity - mpBegin))
+            SetCapacity(n);
+    }
+    void DeallocateSelf() {
+        if ((mpCapacity - mpBegin) > 1)
+            DoFree(mpBegin, (unsigned int)(mpCapacity - mpBegin));
+    }
+    void DoFree(T* p, unsigned int n) {
+        if (p)
+            mAllocator.deallocate(p, n * sizeof(T));
+    }
+    const T* c_str() const { return mpBegin; }
+    int size() const { return (int)(mpEnd - mpBegin); }
+};
+}
+namespace eastl {
+typedef basic_string_s00d1_8df0__b<wchar_t> string16_s00d1_8df0__b;
+}
+namespace EA {
+namespace ResourceMan {
+class Manager_s00d1_8df0__b;
+}
+}
+namespace EA {
+namespace ResourceMan {
+struct Key_s00d1_8df0__b {
+    uint32_t instance;                                   // +0x00
+    uint32_t type;                                       // +0x04
+    uint32_t group;                                      // +0x08
+};
+}
+}
+namespace EA {
+namespace ResourceMan {
+struct KeyVector {
+    Key_s00d1_8df0__b* mpBegin;                                        // +0x00
+    Key_s00d1_8df0__b* mpEnd;                                          // +0x04
+    Key_s00d1_8df0__b* mpCapacity;                                     // +0x08
+    uint32_t mAllocator;                                 // +0x0c
+
+    void erase(Key_s00d1_8df0__b* first, Key_s00d1_8df0__b* last);                   // 0x0050f740
+    void clear() { erase(mpBegin, mpEnd); }
+};
+}
+}
+namespace EA {
+namespace ResourceMan {
+struct IResourceFilter {                                 // vtable 0x013eb898
+    PV
+};
+}
+}
+namespace EA {
+namespace ResourceMan {
+struct PlanetKeyFilter : IResourceFilter {
+    uint32_t mInstanceID;                                // +0x04
+    uint32_t mGroupID;                                   // +0x08
+    uint32_t mTypeID;                                    // +0x0c
+    uint32_t mFlags;                                     // +0x10
+    PlanetKeyFilter()
+    {
+        mInstanceID = 0xffffffff;
+        mTypeID = 0xb1b104;
+        mGroupID = 0x40840000;
+        mFlags = 0xdfff0000;
+    }
+};
+}
+}
+namespace EA {
+namespace ResourceMan {
+struct IResourceManager_s00d1_8df0__b {
+    PV8 PV4 PV2
+    virtual int GetResourceKeyList(KeyVector* pKeys, IResourceFilter* pFilter, int flags);  // +0x38
+    PV16
+    virtual bool GetFileName(const Key_s00d1_8df0__b* pKey, eastl::string16_s00d1_8df0__b* pName);                     // +0x7c
+};
+}
+}
+EA::ResourceMan::IResourceManager_s00d1_8df0__b* GetManager_s00d1_8df0__b();         // 0x008de1a0
+namespace EA {
+namespace UTFWinControls {
+class IWinGrid_s00d1_8df0__b {
+public:
+    PV16 PV16 PV2                                        // +0x00..+0x84
+    virtual void v88(int a);                             // +0x88
+    virtual void v8c(int a);                             // +0x8c
+    PV4 PV2                                              // +0x90..+0xa4
+    virtual void va8(int a, int b);                      // +0xa8
+    PV16 PV16 PV16                                       // +0xac..+0x168
+    virtual void v16c();                                 // +0x16c
+    PV8 PV4 PV                                           // +0x170..+0x1a0
+    virtual void v1a4(int a, int row, const wchar_t* pName, int b, int c, int d);  // +0x1a4
+};
+}
+}
+namespace SP {
+class cGameEditInputStrategy_s00d1_8df0__b {
+public:
+    void Copy();                                                         // 0x00d19460
+    void PopulateLoadPlanetDialogGrid();                                 // 0x00d194c0
+    void DoSaveSelectedFile(eastl::string16_s00d1_8df0__b* pName);                     // 0x00d18df0
+
+    char pad00[0x8c];
+    EA::UTFWinControls::IWinGrid_s00d1_8df0__b* mPlanetGridFileList;                   // +0x8c
+    EA::ResourceMan::KeyVector mPlanetKeys;                              // +0x90
+};
+}
+namespace SP {
+struct cPropertyListNameSort_s00d1_8df0__b {
+    uint32_t mGroupId;                                   // +0x00
+    EA::ResourceMan::Manager_s00d1_8df0__b* mpResourceManager;         // +0x04
+    eastl::string16_s00d1_8df0__b aName;                               // +0x08
+    eastl::string16_s00d1_8df0__b bName;                               // +0x18
+
+    cPropertyListNameSort_s00d1_8df0__b(uint32_t groupID);             // 0x00d196f0
+    cPropertyListNameSort_s00d1_8df0__b(const cPropertyListNameSort_s00d1_8df0__b& x);  // 0x00d18000
+    bool operator()(uint32_t a, uint32_t b) const;       // 0x00d16760
+};
+}
+namespace eastl {
+void make_heap(uint32_t* first, uint32_t* last, SP::cPropertyListNameSort_s00d1_8df0__b compare);            // 0x00d18cd0
+}
+namespace eastl {
+void adjust_heap(uint32_t* first, int top, int count, int hole, uint32_t value,
+                 SP::cPropertyListNameSort_s00d1_8df0__b compare);                                            // 0x00d180c0
+}
+namespace eastl {
+void sort_heap(uint32_t* first, uint32_t* last, SP::cPropertyListNameSort_s00d1_8df0__b compare);            // 0x00d18d60
+}
+// ---- items of slice s00d18df0_b end
 
 // @ 0x00cd1750
 void* Simulator::cScenarioEditModeInputStrategy::Destroy(uint8_t flags)
@@ -3355,6 +3519,58 @@ void SP::cGameEditInputStrategy_s00d1_8df0::DoSaveSelectedFile(eastl::string16_s
         }
     }
     pStream->Close();
+}
+
+// @ 0x00d19460
+void SP::cGameEditInputStrategy_s00d1_8df0__b::Copy()
+{
+    eastl::string16_s00d1_8df0__b name(L"Clipboard");
+    DoSaveSelectedFile(&name);
+}
+
+// @ 0x00d194c0
+void SP::cGameEditInputStrategy_s00d1_8df0__b::PopulateLoadPlanetDialogGrid()
+{
+    mPlanetGridFileList->v16c();
+    EA::ResourceMan::IResourceManager_s00d1_8df0__b* pMgr = GetManager_s00d1_8df0__b();
+    EA::ResourceMan::KeyVector* pKeys = &mPlanetKeys;
+    EA::ResourceMan::PlanetKeyFilter filter;
+    pKeys->clear();
+    pMgr->GetResourceKeyList(pKeys, &filter, 0);
+    int count = (int)(pKeys->mpEnd - pKeys->mpBegin);
+    for (int i = 0; i < count; i++) {
+        eastl::string16_s00d1_8df0__b name;
+        pMgr->GetFileName(&pKeys->mpBegin[i], &name);
+        mPlanetGridFileList->v1a4(0, i, name.c_str(), 0, 1, 0);
+    }
+    mPlanetGridFileList->v8c(0);
+    mPlanetGridFileList->v88(0);
+    mPlanetGridFileList->va8(0, 0);
+}
+
+// @ 0x00d19610
+namespace eastl {
+void partial_sort(uint32_t* first, uint32_t* middle, uint32_t* last, SP::cPropertyListNameSort_s00d1_8df0__b compare)
+{
+    make_heap(first, middle, compare);
+    for (uint32_t* i = middle; i < last; ++i) {
+        if (compare(*i, *first)) {
+            uint32_t value = *i;
+            *i = *first;
+            adjust_heap(first, 0, (int)(middle - first), 0, value, compare);
+        }
+    }
+    sort_heap(first, middle, compare);
+}
+}  // namespace eastl
+
+// @ 0x00d196f0
+SP::cPropertyListNameSort_s00d1_8df0__b::cPropertyListNameSort_s00d1_8df0__b(uint32_t groupID)
+{
+    mGroupId = groupID;
+    aName.reserve(0x104);
+    bName.reserve(0x104);
+    mpResourceManager = (EA::ResourceMan::Manager_s00d1_8df0__b*)GetManager_s00d1_8df0__b();
 }
 
 // @ 0x00d197a0
