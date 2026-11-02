@@ -1,0 +1,2 @@
+# source  symbol  va  flags
+../src/game/SPGonzago/SPPlantSpeciesManager.cpp  ?InitModelAttributes@Simulator@@YAXXZ  01324260  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
