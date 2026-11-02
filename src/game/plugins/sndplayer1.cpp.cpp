@@ -94,6 +94,160 @@ struct PlugInDescRunTime_s0112_ce20
 }
 }
 }
+namespace rw {
+namespace audio {
+namespace core {
+PlugInDescRunTime_s0112_ce20* GetPlugInDesc_1136c30(); // 0x01136c30
+}
+}
+}
+namespace rw {
+namespace audio {
+namespace core {
+PlugInDescRunTime_s0112_ce20* GetPlugInDesc_1136c40(); // 0x01136c40
+}
+}
+}
+namespace rw {
+namespace audio {
+namespace core {
+PlugInDescRunTime_s0112_ce20* GetPlugInDesc_1136c50(); // 0x01136c50
+}
+}
+}
+namespace rw {
+namespace audio {
+namespace core {
+PlugInDescRunTime_s0112_ce20* GetPlugInDesc_1136af0(); // 0x01136af0
+}
+}
+}
+namespace rw {
+namespace audio {
+namespace core {
+PlugInDescRunTime_s0112_ce20* GetPlugInDesc_1134ad0(); // 0x01134ad0
+}
+}
+}
+namespace rw {
+namespace audio {
+namespace core {
+PlugInDescRunTime_s0112_ce20* GetPlugInDesc_1134730(); // 0x01134730
+}
+}
+}
+namespace rw {
+namespace audio {
+namespace core {
+PlugInDescRunTime_s0112_ce20* GetPlugInDesc_1134720(); // 0x01134720
+}
+}
+}
+namespace rw {
+namespace audio {
+namespace core {
+PlugInDescRunTime_s0112_ce20* GetPlugInDesc_1134710(); // 0x01134710
+}
+}
+}
+namespace rw {
+namespace audio {
+namespace core {
+PlugInDescRunTime_s0112_ce20* GetPlugInDesc_11346f0(); // 0x011346f0
+}
+}
+}
+namespace rw {
+namespace audio {
+namespace core {
+PlugInDescRunTime_s0112_ce20* GetPlugInDesc_11346d0(); // 0x011346d0
+}
+}
+}
+namespace rw {
+namespace audio {
+namespace core {
+PlugInDescRunTime_s0112_ce20* GetPlugInDesc_11346c0(); // 0x011346c0
+}
+}
+}
+namespace rw {
+namespace audio {
+namespace core {
+PlugInDescRunTime_s0112_ce20* GetPlugInDesc_11343a0(); // 0x011343a0
+}
+}
+}
+namespace rw {
+namespace audio {
+namespace core {
+PlugInDescRunTime_s0112_ce20* GetPlugInDesc_1134370(); // 0x01134370
+}
+}
+}
+namespace rw {
+namespace audio {
+namespace core {
+class PlugInRegistry_s0112_ce20
+{
+public:
+    void* mpHead;                 // +0x0  mPlugInDescRunTimeList.phead
+    void* mppTail;                // +0x4  mPlugInDescRunTimeList.ptail
+    int   muCount;                // +0x8  mPlugInDescRunTimeList.entries
+    void* mpEnumerator;           // +0xc
+    void* mpSystem;               // +0x10
+    unsigned char mCurrentRegistryIndex; // +0x14
+
+    PlugInDescRunTime_s0112_ce20* RegisterPlugInRunTime(PlugInDescRunTime_s0112_ce20* info); // 0x01133f00
+    void RegisterBuiltInPlugIns();           // 0x0112dbd0
+};
+}
+}
+}
+namespace rw {
+namespace audio {
+namespace core {
+class System_s0112_ce20;
+}
+}
+}
+namespace rw {
+namespace audio {
+namespace core {
+class DecoderRegistry_s0112_ce20;
+}
+}
+}
+namespace rw {
+namespace audio {
+namespace core {
+DecoderRegistry_s0112_ce20* CreateDecoderRegistry(System_s0112_ce20* system); // 0x01133f80
+}
+}
+}
+namespace rw {
+namespace audio {
+namespace core {
+class System_s0112_ce20
+{
+public:
+    void* mpStackAllocator;        // +0x0
+    void* mpAssertImplementation;  // +0x4
+    double mSystemTime;            // +0x8
+    void* mExpelledVoiceList;      // +0x10
+    void* mpAllocator;             // +0x14
+    void* mpPhysicalAlloc;         // +0x18
+    void* mpPhysicalFree;          // +0x1c
+    char* mpCommandBuffer;         // +0x20
+    void* mpMasteringSubMix;       // +0x24
+    PlugInRegistry_s0112_ce20* mpPlugInRegistry; // +0x28
+    DecoderRegistry_s0112_ce20* mpDecoderRegistry; // +0x2c
+
+    DecoderRegistry_s0112_ce20* GetDecoderRegistry(); // 0x0112dc80
+};
+}
+}
+}
 // ---- items of slice s0112ce20 end
 
 // ---- items of slice s0112dca0 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -104,21 +258,21 @@ typedef unsigned int   u32;
 namespace rw {
 namespace audio {
 namespace core {
-struct ListDNode_s0112_dca0 { ListDNode_s0112_dca0* pnext; ListDNode_s0112_dca0* pprev; };
+class ListDNode_s0112_dca0 { public: ListDNode_s0112_dca0* pnext; ListDNode_s0112_dca0* pprev; };
 }
 }
 }
 namespace rw {
 namespace audio {
 namespace core {
-struct System_s0112_dca0;
+class System_s0112_dca0;
 }
 }
 }
 namespace rw {
 namespace audio {
 namespace core {
-struct StreamPool_s0112_dca0;
+class StreamPool_s0112_dca0;
 }
 }
 }
@@ -149,8 +303,8 @@ struct StreamDesc_s0112_dca0
 namespace rw {
 namespace audio {
 namespace core {
-struct StreamPool_s0112_dca0
-{
+class StreamPool_s0112_dca0
+{ public:
     System_s0112_dca0*      mpSystem;       // +0x0
     StreamDesc_s0112_dca0*  mpStreamDesc;   // +0x4
     u8           mTimerHandle[0x18]; // +0x8
@@ -169,8 +323,8 @@ struct StreamPool_s0112_dca0
 namespace rw {
 namespace audio {
 namespace core {
-struct System_s0112_dca0
-{
+class System_s0112_dca0
+{ public:
     void*  mpStackAllocator;     // +0x0
     void*  mpAssertImplementation;// +0x4
     double mSystemTime;          // +0x8
@@ -222,6 +376,340 @@ struct System_s0112_dca0
 }
 }
 }
+extern "C" void  FUN_0113ec60(); // 0x0113ec60
+extern "C" void  FUN_0113e730(); // 0x0113e730
+extern "C" void  FUN_0113e630(); // 0x0113e630
+extern "C" void  FUN_0113e590(); // 0x0113e590
+extern "C" void  FUN_0113e4a0(); // 0x0113e4a0
+extern "C" void  FUN_0113ccc0(); // 0x0113ccc0
+extern "C" void  FUN_0113cae0(); // 0x0113cae0
+extern "C" void  FUN_0113ca60(); // 0x0113ca60
+extern "C" void  FUN_0113c900(); // 0x0113c900
+extern "C" void  FUN_0113c830(); // 0x0113c830
+extern "C" void  FUN_0113c760(); // 0x0113c760
+extern "C" void  FUN_0113c6d0(); // 0x0113c6d0
+extern "C" void  FUN_0113c5d0(); // 0x0113c5d0
+extern "C" void  FUN_0113c510(); // 0x0113c510
+extern "C" void  FUN_0113c420(); // 0x0113c420
+extern "C" void  FUN_0113c320(); // 0x0113c320
+extern "C" void  FUN_0113c240(); // 0x0113c240
+extern "C" void  FUN_0113c190(); // 0x0113c190
+extern "C" void  FUN_0113c0e0(); // 0x0113c0e0
+extern "C" void  FUN_0113c010(); // 0x0113c010
+extern "C" void  FUN_0113b990(); // 0x0113b990
+extern "C" void  FUN_0113b700(); // 0x0113b700
+extern "C" void  FUN_0113b2e0(); // 0x0113b2e0
+extern "C" void  FUN_0113af30(); // 0x0113af30
+extern "C" void  FUN_0113add0(); // 0x0113add0
+extern "C" void  FUN_0113acc0(); // 0x0113acc0
+extern "C" void  FUN_0113abb0(); // 0x0113abb0
+extern "C" void  FUN_0113ab60(); // 0x0113ab60
+extern "C" void  FUN_0113aaa0(); // 0x0113aaa0
+extern "C" void  FUN_0113a720(); // 0x0113a720
+extern "C" void  FUN_01139860(); // 0x01139860
+extern "C" void  FUN_011396e0(); // 0x011396e0
+extern "C" void  FUN_01139350(); // 0x01139350
+extern "C" void  FUN_01139060(); // 0x01139060
+extern "C" void  FUN_01138f70(); // 0x01138f70
+extern "C" void  FUN_01138cb0(); // 0x01138cb0
+extern "C" void  FUN_01137660(); // 0x01137660
+extern "C" void  FUN_01137370(); // 0x01137370
+extern "C" void  FUN_011370f0(); // 0x011370f0
+extern "C" void  FUN_01137090(); // 0x01137090
+namespace rw {
+namespace audio {
+namespace core {
+void* FUN_0113e7e0();
+}
+}
+}
+namespace rw {
+namespace audio {
+namespace core {
+void* FUN_0113e660();
+}
+}
+}
+namespace rw {
+namespace audio {
+namespace core {
+void* FUN_0113e5c0();
+}
+}
+}
+namespace rw {
+namespace audio {
+namespace core {
+void* FUN_0113e4d0();
+}
+}
+}
+namespace rw {
+namespace audio {
+namespace core {
+void* FUN_0113cdc0();
+}
+}
+}
+namespace rw {
+namespace audio {
+namespace core {
+void* FUN_0113cb10();
+}
+}
+}
+namespace rw {
+namespace audio {
+namespace core {
+void* FUN_0113caa0();
+}
+}
+}
+namespace rw {
+namespace audio {
+namespace core {
+void* FUN_0113c940();
+}
+}
+}
+namespace rw {
+namespace audio {
+namespace core {
+void* FUN_0113c860();
+}
+}
+}
+namespace rw {
+namespace audio {
+namespace core {
+void* FUN_0113c790();
+}
+}
+}
+namespace rw {
+namespace audio {
+namespace core {
+void* FUN_0113c700();
+}
+}
+}
+namespace rw {
+namespace audio {
+namespace core {
+void* FUN_0113c610();
+}
+}
+}
+namespace rw {
+namespace audio {
+namespace core {
+void* FUN_0113c540();
+}
+}
+}
+namespace rw {
+namespace audio {
+namespace core {
+void* FUN_0113c450();
+}
+}
+}
+namespace rw {
+namespace audio {
+namespace core {
+void* FUN_0113c350();
+}
+}
+}
+namespace rw {
+namespace audio {
+namespace core {
+void* FUN_0113c280();
+}
+}
+}
+namespace rw {
+namespace audio {
+namespace core {
+void* FUN_0113c1c0();
+}
+}
+}
+namespace rw {
+namespace audio {
+namespace core {
+void* FUN_0113c110();
+}
+}
+}
+namespace rw {
+namespace audio {
+namespace core {
+void* FUN_0113c050();
+}
+}
+}
+namespace rw {
+namespace audio {
+namespace core {
+void* FUN_0113b9c0();
+}
+}
+}
+namespace rw {
+namespace audio {
+namespace core {
+void* FUN_0113b740();
+}
+}
+}
+namespace rw {
+namespace audio {
+namespace core {
+void* FUN_0113b320();
+}
+}
+}
+namespace rw {
+namespace audio {
+namespace core {
+void* FUN_0113af60();
+}
+}
+}
+namespace rw {
+namespace audio {
+namespace core {
+void* FUN_0113ae20();
+}
+}
+}
+namespace rw {
+namespace audio {
+namespace core {
+void* FUN_0113ad00();
+}
+}
+}
+namespace rw {
+namespace audio {
+namespace core {
+void* FUN_0113abc0();
+}
+}
+}
+namespace rw {
+namespace audio {
+namespace core {
+void* FUN_0113aba0();
+}
+}
+}
+namespace rw {
+namespace audio {
+namespace core {
+void* FUN_0113aad0();
+}
+}
+}
+namespace rw {
+namespace audio {
+namespace core {
+void* FUN_0113a760();
+}
+}
+}
+namespace rw {
+namespace audio {
+namespace core {
+void* FUN_01139890();
+}
+}
+}
+namespace rw {
+namespace audio {
+namespace core {
+void* FUN_01139720();
+}
+}
+}
+namespace rw {
+namespace audio {
+namespace core {
+void* FUN_01139380();
+}
+}
+}
+namespace rw {
+namespace audio {
+namespace core {
+void* FUN_011390a0();
+}
+}
+}
+namespace rw {
+namespace audio {
+namespace core {
+void* FUN_01138f80();
+}
+}
+}
+namespace rw {
+namespace audio {
+namespace core {
+void* FUN_01138cf0();
+}
+}
+}
+namespace rw {
+namespace audio {
+namespace core {
+void* FUN_011376c0();
+}
+}
+}
+namespace rw {
+namespace audio {
+namespace core {
+void* FUN_011373b0();
+}
+}
+}
+namespace rw {
+namespace audio {
+namespace core {
+void* FUN_01137120();
+}
+}
+}
+namespace rw {
+namespace audio {
+namespace core {
+void* FUN_011370c0();
+}
+}
+}
+namespace rw {
+namespace audio {
+namespace core {
+void* FUN_01136e00();
+}
+}
+}
+namespace rw {
+namespace audio {
+namespace core {
+class DecoderRegistry_s0112_dca0 { public: void* Register(void* desc); };                        // 0x0112cd60
+}
+}
+}
+namespace rw {
+namespace audio {
+namespace core {
+void __fastcall FUN_011e7b70(void* p);                                         // 0x011e7b70
+}
+}
+}
 // ---- items of slice s0112dca0 end
 
 // ---- items of slice s01137aa0 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -234,14 +722,14 @@ extern "C" int FUN_01137d60(char* data, unsigned int size, int, int, int, int, u
 namespace rw {
 namespace audio {
 namespace core {
-struct System_s0113_7aa0;
+class System_s0113_7aa0;
 }
 }
 }
 namespace rw {
 namespace audio {
 namespace core {
-struct Voice_s0113_7aa0;
+class Voice_s0113_7aa0;
 }
 }
 }
@@ -255,14 +743,14 @@ class Decoder;
 namespace rw {
 namespace audio {
 namespace core {
-struct DecoderRegistry_s0113_7aa0;
+class DecoderRegistry_s0113_7aa0;
 }
 }
 }
 namespace rw {
 namespace audio {
 namespace core {
-struct StreamPool_s0113_7aa0;
+class StreamPool_s0113_7aa0;
 }
 }
 }
@@ -290,7 +778,7 @@ struct Attribute_t_s0113_7aa0 { union { double f64; float f32; }; };
 namespace rw {
 namespace audio {
 namespace core {
-struct PlugIn_s0113_7aa0 {
+class PlugIn_s0113_7aa0 { public:
     void** vftable;                          // +0x00
     System_s0113_7aa0* mpSystem;                        // +0x04
     Voice_s0113_7aa0* mpVoice;                          // +0x08
@@ -309,7 +797,7 @@ struct PlugIn_s0113_7aa0 {
 namespace rw {
 namespace audio {
 namespace core {
-struct TimerHandle_s0113_7aa0 {
+class TimerHandle_s0113_7aa0 { public:
     void* mItemHandle;              // +0x00
     void* mpCallback;               // +0x04
     void* mpContext;                // +0x08
@@ -352,7 +840,7 @@ struct Stream {
 namespace rw {
 namespace audio {
 namespace core {
-struct StreamPool_s0113_7aa0 {
+class StreamPool_s0113_7aa0 { public:
     void* CreateStream(float rate, void* cb, void* ctx);         // 0x0112dfa0
     void  ReleaseStream(void* handle);                           // 0x0112e1e0
 };
@@ -362,7 +850,7 @@ struct StreamPool_s0113_7aa0 {
 namespace rw {
 namespace audio {
 namespace core {
-struct System_s0113_7aa0 {
+class System_s0113_7aa0 { public:
     char pad00[0x20];
     char* mpCommandBuffer;       // +0x20
     char pad24[0x90];
@@ -381,7 +869,7 @@ struct System_s0113_7aa0 {
 namespace rw {
 namespace audio {
 namespace core {
-struct Voice_s0113_7aa0 {
+class Voice_s0113_7aa0 { public:
     char pad00[0x38];
     float mPriority;             // +0x38
     void  FUN_0112e450();        // 0x0112e450
@@ -405,7 +893,7 @@ class Decoder { public:
 namespace rw {
 namespace audio {
 namespace core {
-struct DecoderRegistry_s0113_7aa0 {
+class DecoderRegistry_s0113_7aa0 { public:
     int  FUN_01133ed0(int key);                                  // 0x01133ed0
     Decoder* DecoderFactory(int codecObj, int codec, int a, System_s0113_7aa0* sys); // 0x01133fc0
 };
@@ -584,6 +1072,7 @@ struct CmdParam {
 }
 }
 }
+extern rw::audio::core::System_s0113_7aa0* g_pSystem;      // 0x016e61a8
 rw::audio::core::StreamPool_s0113_7aa0* __cdecl FUN_0112df80(int id);   // 0x0112df80
 char __cdecl FUN_011e0744(void* dst, const void* src, unsigned int n); // 0x011e0744
 namespace rw {
@@ -792,6 +1281,27 @@ struct TimerMgr {
 }
 // ---- items of slice s011388f0 end
 
+// @ 0x0112dae0
+namespace rw { namespace audio { namespace core {
+void PlugInDescFixup(PlugInDescRunTime_s0112_ce20* desc, char* pDefaults, char* pEventDefaults)
+{
+    unsigned index = 0;
+
+    for (unsigned i = 0; i < desc->numConstructorParameters; ++i, ++index)
+        desc->pParameterDescRunTime[index].pParameterDescToolSide = pDefaults + index * 0x30;
+
+    for (unsigned i = 0; i < desc->numAttributes; ++i, ++index)
+        desc->pParameterDescRunTime[index].pParameterDescToolSide = pDefaults + index * 0x30;
+
+    for (unsigned i = 0; i < desc->numEvents; ++i)
+    {
+        desc->pEventDescRunTime[i].pEventDescToolSide = pEventDefaults + i * 0x10;
+        for (int j = 0; j < desc->pEventDescRunTime[i].numParameters; ++j, ++index)
+            desc->pParameterDescRunTime[index].pParameterDescToolSide = pDefaults + index * 0x30;
+    }
+}
+}}}  // namespace rw::audio::core
+
 // @ 0x0112dbb0
 namespace rw { namespace audio { namespace core {
 PlugIn_s0112_ce20* PlugIn_s0112_ce20::Initialize_SndPlayer1()
@@ -801,6 +1311,85 @@ PlugIn_s0112_ce20* PlugIn_s0112_ce20::Initialize_SndPlayer1()
     mpPlugInDescRunTime = 0;
     *(unsigned char*)&mLatencyInSamples = 3;
     return this;
+}
+}}}  // namespace rw::audio::core
+
+// @ 0x0112dbd0
+namespace rw { namespace audio { namespace core {
+void PlugInRegistry_s0112_ce20::RegisterBuiltInPlugIns()
+{
+    RegisterPlugInRunTime(GetPlugInDesc_1136c30());
+    RegisterPlugInRunTime(GetPlugInDesc_1136c40());
+    RegisterPlugInRunTime(GetPlugInDesc_1136c50());
+    RegisterPlugInRunTime(GetPlugInDesc_1136af0());
+    RegisterPlugInRunTime(GetPlugInDesc_1134ad0());
+    RegisterPlugInRunTime(GetPlugInDesc_1134730());
+    RegisterPlugInRunTime(GetPlugInDesc_1134720());
+    RegisterPlugInRunTime(GetPlugInDesc_1134710());
+    RegisterPlugInRunTime(GetPlugInDesc_11346f0());
+    RegisterPlugInRunTime(GetPlugInDesc_11346d0());
+    RegisterPlugInRunTime(GetPlugInDesc_11346c0());
+    RegisterPlugInRunTime(GetPlugInDesc_11343a0());
+    RegisterPlugInRunTime(GetPlugInDesc_1134370());
+}
+}}}  // namespace rw::audio::core
+
+// @ 0x0112dc80
+namespace rw { namespace audio { namespace core {
+DecoderRegistry_s0112_ce20* System_s0112_ce20::GetDecoderRegistry()
+{
+    extern System_s0112_ce20* g_pAudioSystem; // 0x016e61a8
+    if (mpDecoderRegistry == 0)
+        mpDecoderRegistry = CreateDecoderRegistry(g_pAudioSystem);
+    return mpDecoderRegistry;
+}
+}}}  // namespace rw::audio::core
+
+// @ 0x0112dca0
+namespace rw { namespace audio { namespace core {
+void __fastcall RegisterBuiltInDecoders(DecoderRegistry_s0112_dca0* self)
+{
+    FUN_0113ec60();
+    self->Register(FUN_0113e7e0());
+    FUN_0113e730(); self->Register(FUN_0113e660());
+    FUN_0113e630(); self->Register(FUN_0113e5c0());
+    FUN_0113e590(); self->Register(FUN_0113e4d0());
+    FUN_0113e4a0(); self->Register(FUN_0113cdc0());
+    FUN_0113ccc0(); self->Register(FUN_0113cb10());
+    FUN_0113cae0(); self->Register(FUN_0113caa0());
+    FUN_0113ca60(); self->Register(FUN_0113c940());
+    FUN_0113c900(); self->Register(FUN_0113c860());
+    FUN_0113c830(); self->Register(FUN_0113c790());
+    FUN_0113c760(); self->Register(FUN_0113c700());
+    FUN_0113c6d0(); self->Register(FUN_0113c610());
+    FUN_0113c5d0(); self->Register(FUN_0113c540());
+    FUN_0113c510(); self->Register(FUN_0113c450());
+    FUN_0113c420(); self->Register(FUN_0113c350());
+    FUN_0113c320(); self->Register(FUN_0113c280());
+    FUN_0113c240(); self->Register(FUN_0113c1c0());
+    FUN_0113c190(); self->Register(FUN_0113c110());
+    FUN_0113c0e0(); self->Register(FUN_0113c050());
+    FUN_0113c010(); self->Register(FUN_0113b9c0());
+    FUN_0113b990(); self->Register(FUN_0113b740());
+    FUN_0113b700(); self->Register(FUN_0113b320());
+    FUN_0113b2e0(); self->Register(FUN_0113af60());
+    FUN_0113af30(); self->Register(FUN_0113ae20());
+    FUN_0113add0(); self->Register(FUN_0113ad00());
+    FUN_0113acc0(); self->Register(FUN_0113abc0());
+    FUN_0113abb0(); self->Register(FUN_0113aba0());
+    FUN_0113ab60(); self->Register(FUN_0113aad0());
+    FUN_0113aaa0(); self->Register(FUN_0113a760());
+    FUN_0113a720(); self->Register(FUN_01139890());
+    FUN_01139860(); self->Register(FUN_01139720());
+    FUN_011396e0(); self->Register(FUN_01139380());
+    FUN_01139350(); self->Register(FUN_011390a0());
+    FUN_01139060(); self->Register(FUN_01138f80());
+    FUN_01138f70(); self->Register(FUN_01138cf0());
+    FUN_01138cb0(); self->Register(FUN_011376c0());
+    FUN_01137660(); self->Register(FUN_011373b0());
+    FUN_01137370(); self->Register(FUN_01137120());
+    FUN_011370f0(); self->Register(FUN_011370c0());
+    FUN_01137090(); self->Register(FUN_01136e00());
 }
 }}}  // namespace rw::audio::core
 
@@ -896,6 +1485,66 @@ StreamDesc_s0112_dca0* StreamPool_s0112_dca0::AcquireStream(float priority, void
 }
 }}}  // namespace rw::audio::core
 
+// @ 0x0112e1e0
+namespace rw { namespace audio { namespace core {
+void __stdcall StreamPool_ReleaseStream(StreamDesc_s0112_dca0* desc)
+{
+    if (--desc->refCount == 0)
+    {
+        FUN_011e7b70(desc->pStream);
+        desc->allocated = 0;
+    }
+}
+}}}  // namespace rw::audio::core
+
+// @ 0x01137aa0
+namespace rw { namespace audio { namespace core {
+void SndPlayer1::FreeRequest(int index)
+{
+    System_s0113_7aa0* sys = mpSystem;
+    RequestInternal* ri = internal(index);
+    RequestExternal* re = &mpRequestExternal[index];
+    Decoder* dec = ri->pDecoder;
+    if (dec) {
+        // The original invokes this callback with the player still in ecx (its register-ABI
+        // "this"), so model it as a fastcall taking the player in ecx and the decoder on the stack.
+        void (__fastcall *cb)(SndPlayer1*, int, Decoder*) =
+            *(void (__fastcall **)(SndPlayer1*, int, Decoder*))((char*)dec + 0xc);
+        if (cb)
+            cb(this, 0, dec);
+        void* buf = *(void**)((char*)dec + 0x10);
+        if (buf)
+            g_pSystem->Free(buf, 0);
+        g_pSystem->Free(dec, 0);
+        ri->pDecoder = 0;
+    }
+
+    FeedDesc* fd = mFeedDesc;
+    for (int i = 0; i < 0x14; i++, fd++) {
+        if (fd->requestIndex == index) {
+            fd->feedState = 0;
+            ChunkInfo* ci = fd->pChunkInfo;
+            if (ci) {
+                re->numBytesFed -= ci->size;
+                if (re->streamHandle)
+                    re->pRwCoreStream->FUN_011e7c70(ci);
+                fd->pChunkInfo = 0;
+            }
+        }
+    }
+    if (re->streamHandle) {
+        sys->Lock();
+        re->pStreamPool->ReleaseStream(re->streamHandle);
+        sys->Unlock();
+    }
+    if (re->pStreamLoopFileName)
+        sys->Free(re->pStreamLoopFileName, 0);
+    ri->state = 0;
+    if (re->expelMode == 1)
+        mpVoice->FUN_0112e450();
+}
+}}}  // namespace rw::audio::core
+
 // @ 0x01137bc0
 namespace rw { namespace audio { namespace core {
 void SndPlayer1::FreeFinishedRequests()
@@ -934,6 +1583,51 @@ void SndPlayer1::Shutdown()
         mpSystem->Free(mpRequestHandle, 0);
 }
 }}}  // namespace rw::audio::core
+
+// @ 0x01137cd0
+extern "C" int FUN_01137cd0(void* recv)
+{
+    using namespace rw::audio::core;
+    rw::audio::core::SndPlayer1* self = *(rw::audio::core::SndPlayer1**)((char*)recv + 4);
+    for (unsigned int i = 0; i < self->mMaxRequests; i++)
+        if (self->internal(i)->state != 0)
+            self->FreeRequest(i);
+    self->mCurrentRequest = 0;
+    self->mNextFreeRequest = 0;
+    self->mNextRequestToFree = 0;
+    self->mCurrentRequestSamplesPlayed = 0;
+    self->mCurrentRequestNumSamples = 0;
+    self->mNextFeedSlotToFill = 0;
+    self->mNextFeedSlotToFree = 0;
+    self->mNumDeclickSamples = 0x10;
+    return 8;
+}
+
+// @ 0x01137d60
+extern "C" int FUN_01137d60(char* data, unsigned int size, int, int, int, int, unsigned int* out)
+{
+    if (size < 8)
+        return 0;
+    union U { unsigned int u; unsigned char b[4]; } u;
+    u.b[0] = (unsigned char)data[3];
+    u.b[1] = (unsigned char)data[2];
+    u.b[2] = (unsigned char)data[1];
+    u.b[3] = (unsigned char)data[0];
+    unsigned int v = u.u;
+    unsigned int sig = v >> 31;
+    v &= 0x7fffffff;
+    if (v > size)
+        return 0;
+    *out = v;
+    if (sig == 1) {
+        data[0] = (char)(v >> 24);
+        data[1] = (char)(v >> 16);
+        data[2] = (char)(v >> 8);
+        data[3] = (char)v;
+        return 2;
+    }
+    return 1;
+}
 
 // @ 0x01137de0
 namespace rw { namespace audio { namespace core {
@@ -1320,9 +2014,9 @@ bool SndPlayer1::HandleSampleEnd(int index, unsigned char* out)
         if (mFeedDesc[slot].feedState == 0)
             mNextFeedSlotToFill = (unsigned char)((slot + 1 == 0x14) ? 0 : slot + 1);
         else
-            slot = (unsigned char)index;
+            slot = (unsigned char)(uint32_t)out;   // original loads the low byte of out at [esp+0x18]
         re->feedSlotLatest = slot;
-        ri->samplesFed = ri->f18;
+        re->numSamplesFed = ri->f18;
         re->pNextChunk = FeedChunk(re->pLoopStartChunk, index, 1, 0);
         return 1;
     }
@@ -1331,11 +2025,11 @@ bool SndPlayer1::HandleSampleEnd(int index, unsigned char* out)
         re->pRwCoreStream->QueueFile((int)re->pStreamLoopFileName, (int)(unsigned int)off,
                                      (int)((unsigned __int64)off >> 32),
                                      (void*)&FUN_01137d60, (int)this);
-        ri->samplesFed = ri->f18;
+        re->numSamplesFed = ri->f18;
         if (StreamNextChunk(index, 1, 0) == 0)
             return 0;
     } else {
-        ri->samplesFed = ri->f18;
+        re->numSamplesFed = ri->f18;
         if (ri->f18 < re->gigaSamplesInRam) {
             if (ri->f18 == 0)
                 re->pLoopStartChunk = re->pSampleData;

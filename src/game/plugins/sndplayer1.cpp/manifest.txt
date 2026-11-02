@@ -1,2 +1,4 @@
 # source  symbol  va  flags
 ../src/game/plugins/sndplayer1.cpp.cpp  ?Initialize_SndPlayer1@PlugIn_s0112_ce20@core@audio@rw@@QAEPAV1234@XZ  0112dbb0  /vc71 /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/plugins/sndplayer1.cpp.cpp  ?RegisterBuiltInPlugIns@PlugInRegistry_s0112_ce20@core@audio@rw@@QAEXXZ  0112dbd0  /vc71 /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/plugins/sndplayer1.cpp.cpp  ?RegisterBuiltInDecoders@core@audio@rw@@YIXPAVDecoderRegistry_s0112_dca0@123@@Z  0112dca0  /vc71 /O2 /MD /Gy /TP /Isrc/game/include

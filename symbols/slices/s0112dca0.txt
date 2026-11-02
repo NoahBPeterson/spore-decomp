@@ -1,7 +1,7 @@
-0112dca0 rw::audio::core::System built-in decoder registration  # registers ~40 descriptor getters into a registry (0x0112cd60)
-0112df80 ?StreamPool_GetInstance@core@audio@rw@@YAPAUStreamPool_s0112_dca0@123@I@Z  # StreamPool_GetInstance migrated from s0112dca0 (verbatim, slice spelling)
+0112dca0 ?RegisterBuiltInDecoders@core@audio@rw@@YIXPAVDecoderRegistry_s0112_dca0@123@@Z  # RegisterBuiltInDecoders migrated from s0112dca0 (verbatim, slice spelling)
+0112df80 ?StreamPool_GetInstance@core@audio@rw@@YAPAVStreamPool_s0112_dca0@123@I@Z  # StreamPool_GetInstance migrated from s0112dca0 (verbatim, slice spelling)
 0112dfa0 ?AcquireStream@StreamPool_s0112_dca0@core@audio@rw@@QAEPAUStreamDesc_s0112_dca0@234@MPAXH@Z  # StreamPool_s0112_dca0::AcquireStream migrated from s0112dca0 (verbatim, slice spelling)
-0112e1e0 ?ReleaseStream@StreamPool@core@audio@rw@@...  # 16-bit refcount release
+0112e1e0 ?StreamPool_ReleaseStream@core@audio@rw@@YGXPAUStreamDesc_s0112_dca0@123@@Z  # StreamPool_ReleaseStream migrated from s0112dca0 (verbatim, slice spelling)
 0112e210 StreamPool::ReleaseHandler  # clears streams and frees the pool
 0112e290 ?StreamPool_Create@core@audio@rw@@YAPAXHHHHPAVSystem_s0112_dca0@123@H@Z  # StreamPool_Create migrated from s0112dca0 (verbatim, slice spelling)
 0112e410 StreamPool::QueueRelease  # queues the deferred release command (byte-exact)

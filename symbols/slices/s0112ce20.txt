@@ -20,7 +20,7 @@
 0112da30 TimerManager::Defragment  # rwaudio; 2x Collection::Defragment
 0112da60 TimerManager::Release  # rwaudio; 2x Collection Clear+Release
 0112da90 TimerManager::TimerManager (ctor)  # rwaudio; zeroes 2 Collections, mfCallbackTime=-1
-0112dae0 PlugInDescFixup  # rwaudio; wires PlugInDescRunTime parameter/event tool-side pointers
+0112dae0 ?PlugInDescFixup@core@audio@rw@@YAXPAUPlugInDescRunTime_s0112_ce20@123@PAD1@Z  # PlugInDescFixup migrated from s0112ce20 (verbatim, slice spelling)
 0112dbb0 ?Initialize_SndPlayer1@PlugIn_s0112_ce20@core@audio@rw@@QAEPAV1234@XZ  # PlugIn_s0112_ce20::Initialize_SndPlayer1 migrated from s0112ce20 (verbatim, slice spelling)
-0112dbd0 PlugInRegistry::RegisterBuiltInPlugIns  # rwaudio; registers 13 built-in descriptors (byte-exact)
-0112dc80 System::GetDecoderRegistry  # rwaudio; lazy System+0x2c DecoderRegistry
+0112dbd0 ?RegisterBuiltInPlugIns@PlugInRegistry_s0112_ce20@core@audio@rw@@QAEXXZ  # PlugInRegistry_s0112_ce20::RegisterBuiltInPlugIns migrated from s0112ce20 (verbatim, slice spelling)
+0112dc80 ?GetDecoderRegistry@System_s0112_ce20@core@audio@rw@@QAEPAVDecoderRegistry_s0112_ce20@234@XZ  # System_s0112_ce20::GetDecoderRegistry migrated from s0112ce20 (verbatim, slice spelling)
