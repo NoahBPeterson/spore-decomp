@@ -1,2 +1,7 @@
+00c349e0 ?UpdateStarGraph@cEmpire_s00c3_49e0@@QAEHXZ  # cEmpire_s00c3_49e0::UpdateStarGraph migrated from s00c349e0 (verbatim, slice spelling)
 00c34e70 ?FUN_00c34e70@cEmpire_s00c3_49e0@@QAEXPAUObj_s00c3_49e0@@@Z  # cEmpire_s00c3_49e0::FUN_00c34e70 migrated from s00c349e0 (verbatim, slice spelling)
+00c34ee0 ?RemoveStar@cEmpire_s00c3_49e0@@QAEHPAUcStarRecord@@D@Z  # cEmpire_s00c3_49e0::RemoveStar migrated from s00c349e0 (verbatim, slice spelling)
+00c35240 ?ChangeStarEmpireOwnership@@YAXPAUcEmpire_s00c3_49e0@@PAX@Z  # ChangeStarEmpireOwnership migrated from s00c349e0 (verbatim, slice spelling)
 00c352f0 ?FUN_00c352f0@cEmpire_s00c3_49e0@@QAEPAXPAX@Z  # cEmpire_s00c3_49e0::FUN_00c352f0 migrated from s00c349e0 (verbatim, slice spelling)
+00c35320 ?PickRandomPersonality@cEmpire_s00c3_49e0@@QAEXXZ  # cEmpire_s00c3_49e0::PickRandomPersonality migrated from s00c349e0 (verbatim, slice spelling)
+00c35740 ?SetUFOKey@cEmpire_s00c3_49e0@@QAEXPAH@Z  # cEmpire_s00c3_49e0::SetUFOKey migrated from s00c349e0 (verbatim, slice spelling)

@@ -1,10 +1,10 @@
-00c308b0 cEmpire::IsPlayerCurrentStar  # byte-exact
-00c308e0 cEmpire::FUN_00c308e0  # byte-exact
-00c30910 FUN_00c30910  # byte-exact
-00c30930 FUN_00c30930  # byte-exact
-00c30970 FUN_00c30970  # byte-exact
-00c30990 FUN_00c30990  # byte-exact
-00c309b0 cEmpire::FUN_00c309b0  # byte-exact
+00c308b0 ?cEmpireIsPlayerCurrentStar@@YI_NPAUcEmpire@@@Z  # cEmpireIsPlayerCurrentStar migrated from s00c308b0 (verbatim, slice spelling)
+00c308e0 ?FUN_00c308e0@cEmpire@@QAEHPAUObj@@@Z  # cEmpire::FUN_00c308e0 migrated from s00c308b0 (verbatim, slice spelling)
+00c30910 ?cEmpireFUN_00c30910@@YIXPAUcEmpire@@@Z  # cEmpireFUN_00c30910 migrated from s00c308b0 (verbatim, slice spelling)
+00c30930 ?cEmpireFUN_00c30930@@YIXPAUcEmpire@@@Z  # cEmpireFUN_00c30930 migrated from s00c308b0 (verbatim, slice spelling)
+00c30970 ?cEmpireFUN_00c30970@@YIXPAUcEmpire@@@Z  # cEmpireFUN_00c30970 migrated from s00c308b0 (verbatim, slice spelling)
+00c30990 ?cEmpireFUN_00c30990@@YIXPAUcEmpire@@@Z  # cEmpireFUN_00c30990 migrated from s00c308b0 (verbatim, slice spelling)
+00c309b0 ?FUN_00c309b0@cEmpire@@QAEXI@Z  # cEmpire::FUN_00c309b0 migrated from s00c308b0 (verbatim, slice spelling)
 00c309e0 ?cEmpireIsHostileToPlayer@@YI_NPAUcEmpire@@@Z  # cEmpireIsHostileToPlayer migrated from s00c308b0 (verbatim, slice spelling)
 00c30b40 ?cEmpireHasDemandForTributeExpired@@YI_NPAUcEmpire@@@Z  # cEmpireHasDemandForTributeExpired migrated from s00c308b0 (verbatim, slice spelling)
 00c30bb0 ?cEmpireFUN_00c30bb0@@YIXPAUcEmpire@@@Z  # cEmpireFUN_00c30bb0 migrated from s00c308b0 (verbatim, slice spelling)

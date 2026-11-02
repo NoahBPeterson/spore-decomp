@@ -1,1 +1,2 @@
+01336df0 ?InitEmpireAttributes@Simulator@@YAXXZ  # InitEmpireAttributes migrated from s01336df0 (verbatim, slice spelling)
 01337610 ?InitItemAttributes@Simulator@@YAXXZ  # InitItemAttributes migrated from s01336df0 (verbatim, slice spelling)

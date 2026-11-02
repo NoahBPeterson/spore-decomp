@@ -1,3 +1,4 @@
+00c33ab0 ?eastl_partial_sort_stars@@YAXPAPAX00UDistanceToHome@@@Z  # eastl_partial_sort_stars migrated from s00c33ab0 (verbatim, slice spelling)
 00c33cc0 ?AddAdventure_33cc0@cEmpire_s00c3_3ab0@SP@@QAEHPAXH@Z  # cEmpire_s00c3_3ab0::AddAdventure_33cc0 migrated from s00c33ab0 (verbatim, slice spelling)
 00c33da0 ?Insert_33da0@EVec@@QAEXPAXI0@Z  # EVec::Insert_33da0 migrated from s00c33ab0 (verbatim, slice spelling)
 00c34140 ?Reset_34140@cEmpire_s00c3_3ab0@SP@@QAEXXZ  # cEmpire_s00c3_3ab0::Reset_34140 migrated from s00c33ab0 (verbatim, slice spelling)

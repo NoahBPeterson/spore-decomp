@@ -1,5 +1,12 @@
 # source  symbol  va  flags
 ../src/game/SPGonzago/SPEmpire.cpp  ?FUN_00c30820@Mission@@QAEPAHH@Z  00c30820  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPEmpire.cpp  ?cEmpireIsPlayerCurrentStar@@YI_NPAUcEmpire@@@Z  00c308b0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPEmpire.cpp  ?FUN_00c308e0@cEmpire@@QAEHPAUObj@@@Z  00c308e0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPEmpire.cpp  ?cEmpireFUN_00c30910@@YIXPAUcEmpire@@@Z  00c30910  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPEmpire.cpp  ?cEmpireFUN_00c30930@@YIXPAUcEmpire@@@Z  00c30930  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPEmpire.cpp  ?cEmpireFUN_00c30970@@YIXPAUcEmpire@@@Z  00c30970  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPEmpire.cpp  ?cEmpireFUN_00c30990@@YIXPAUcEmpire@@@Z  00c30990  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPEmpire.cpp  ?FUN_00c309b0@cEmpire@@QAEXI@Z  00c309b0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
 ../src/game/SPGonzago/SPEmpire.cpp  ?cEmpireFUN_00c30bb0@@YIXPAUcEmpire@@@Z  00c30bb0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
 ../src/game/SPGonzago/SPEmpire.cpp  ?cEmpireFUN_00c30bd0@@YIPAXPAUcEmpire@@@Z  00c30bd0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
 ../src/game/SPGonzago/SPEmpire.cpp  ?FUN_00c30c10@cEmpire@@QAEXPAUObj@@@Z  00c30c10  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
@@ -19,7 +26,10 @@
 ../src/game/SPGonzago/SPEmpire.cpp  ?FUN_00c31a60@@YIXPAX0H@Z  00c31a60  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPEmpire.cpp  ?FUN_00c31bc0@@YI_NPAX00@Z  00c31bc0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPEmpire.cpp  ?FUN_00c31ca0@@YAEIPAX@Z  00c31ca0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPEmpire.cpp  ?RebindPropertyKey@cEmpire_s00c3_2980@SP@@QAEXXZ  00c32980  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPEmpire.cpp  ?Destroy_33410@cEmpire_s00c3_2980@SP@@QAEXXZ  00c33410  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPEmpire.cpp  ?Reset_34140@cEmpire_s00c3_3ab0@SP@@QAEXXZ  00c34140  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPEmpire.cpp  ?Resize_34710@EVec@@QAEXIPAX@Z  00c34710  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPEmpire.cpp  ?FUN_00c34e70@cEmpire_s00c3_49e0@@QAEXPAUObj_s00c3_49e0@@@Z  00c34e70  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPEmpire.cpp  ?FUN_00c352f0@cEmpire_s00c3_49e0@@QAEPAXPAX@Z  00c352f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPEmpire.cpp  ?Ret_01065360@cEmpireC@@QAE_NHPAX@Z  01065360  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include

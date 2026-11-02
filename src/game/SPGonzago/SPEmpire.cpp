@@ -1,4 +1,4 @@
-// src/game/SPGonzago/SPEmpire.cpp -- migrated from slice(s) s01064990, s00c349e0, s00c33ab0, s00c31960, s00c308b0, s00c2f830 by tools/migrate/rewrite.py
+// src/game/SPGonzago/SPEmpire.cpp -- migrated from slice(s) s01336df0, s00c32980, s01064990, s00c349e0, s00c33ab0, s00c31960, s00c308b0, s00c2f830 by tools/migrate/rewrite.py
 // Object file: SPGonzago/SPEmpire.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -12,8 +12,28 @@
 #include "SP/cSPIdentity.h"
 #include <string.h>
 #include "EA/Random/RandomLinearCongruential.h"
+#include "EA/ResourceMan/Key.h"
 
 // ---- items of slice s00c2f830 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C" void* __stdcall FUN_00401090(void*);  // species profile lookup (setting)
+extern "C" void* FUN_004df550(void*);            // species profile lookup
+extern "C" void* __fastcall GetCurrentTerrainSphere(void*); // 0x00f67d90 ecx=obj, returns [ecx+0x74]
+struct ThiscallStub {
+    void FUN_00c2ed20(int*, int*);      // 0x00c2ed20 load two AutoRefCount slots
+    void FUN_00c2fd20(int);             // 0x00c2fd20 tutorial mission Init
+    void FUN_00d00a10(int, int);
+    int  FUN_00d00780();
+    void FUN_00c8f3a0();
+    char FUN_00c905a0();
+    void FUN_00c7bbc0(int member, int param);
+    void FUN_00c7a7d0(int member);
+    void FUN_00ac9480(int* src);
+    void* FUN_004df550();
+    void FUN_00401090();
+    void FUN_00ac9480();
+    int  FUN_00d2e490();
+};
+extern "C" void* SP_NounManager_s00c2_f830();
 struct Mission {
     char FUN_00c2fc00(int param);
     void FUN_00c2fc10();
@@ -68,6 +88,7 @@ void* __cdecl EA_Allocate(uint size, const char* owner, int a, int b, int c, int
 bool  __cdecl IO_WriteUint32(void* stream, const uint* p, int n, int mode);            // 0x0093aa70
 bool  __cdecl IO_ReadInt32(void* stream, uint* p, int n, int mode);                    // 0x0093a780
 void  __cdecl FUN_0102c7f0(void* p, int v);                                            // 0x0102c7f0
+char  __cdecl FUN_00c70150(Obj* p, Obj* self, int b);                                  // 0x00c70150
 Obj*  __cdecl SP_FUN_01021300();                                                       // 0x01021300
 Obj*  __cdecl SP_FUN_01021240();                                                       // 0x01021240
 int   __cdecl SP_GetCurrentGameMode();                                                 // 0x00b5b800
@@ -400,17 +421,58 @@ struct cEmpire_s00c3_3ab0 {
     void* f_00bb9b90(void* a);                             // 0x00bb9b90 (member form)
 };  // namespace SP
 }
+struct DistanceToHome { float x, y, z; };
+void __cdecl make_heap_stars(void** first, void** middle, DistanceToHome home);   // 0x00c33330
+void __cdecl sort_heap_stars(void** first, void** middle, DistanceToHome home);   // 0x00c333a0
+void __cdecl adjust_heap_stars(void** first, int a, int b, int c,
+                               void* value, DistanceToHome home);                 // 0x00c32a60
 // ---- items of slice s00c33ab0 end
 
 // ---- items of slice s00c349e0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+typedef unsigned short u16;
 typedef signed   int   i32;
+#define VTSLOT(obj, off) ((*(void***)(obj))[(off) / 4])
+#define ADDREF_s00c3_49e0(o)  (((Fn_v_p)VTSLOT((o), 0))((void*)(o)))
+#define RELEASE_s00c3_49e0(o) (((Fn_v_p)VTSLOT((o), 4))((void*)(o)))
+typedef void  (__thiscall *Fn_v_p)(void*);
+typedef void  (__thiscall *Fn_v_ppi)(void*, void*, int);
+typedef void  (__thiscall *Fn_v_piii)(void*, int, int, void**);
+typedef bool  (__thiscall *Fn_b_pi)(void*, int, void**);
+typedef int   (__thiscall *Fn_i_p)(void*);
 struct Obj_s00c3_49e0;
 struct MsgObj_s00c3_49e0;
 struct cEmpire_s00c3_49e0;
 struct cStarRecord;
 extern "C" void* DAT_016dda8c = 0;                 // 0x016dda8c  cSPBackgroundSimManager*
 extern "C" u8    DAT_015b7436 = 0;                 // 0x015b7436  debug "always pick" flag
+extern "C" float DAT_01485548 = 1.5f;              // 0x01485548  0x3FC00000
+extern "C" float DAT_0146b79c = 0.70710678f;       // 0x0146b79c  0x3F34FDF4  cos(45 deg)
+extern "C" float DAT_0140f330 = 45.0f;             // 0x0140f330  45.0f
+extern "C" float DAT_01485720 = 1.0f;              // 0x01485720  HK_REAL_ONE
+extern "C" float DAT_0146b688 = 0.017453292f;      // 0x0146b688  0x3C8EFA35  pi/180
+extern "C" float DAT_0146b68c = 3.402823466e38f;   // 0x0146b68c  FLT_MAX (0x7F7FFFFF)
+Obj_s00c3_49e0*    __cdecl SP_StarManager_s00c3_49e0();          // 0x00b3d2a0
+Obj_s00c3_49e0*    __cdecl SP_NounManager_s00c3_49e0();          // 0x00b3d300
+Obj_s00c3_49e0*    __cdecl SP_CommManager_s00c3_49e0();          // 0x00b3d4a0
+Obj_s00c3_49e0*    __cdecl SP_PropertyManager();      // 0x0067de30
 MsgObj_s00c3_49e0* __cdecl SP_MessageServer_s00c3_49e0();        // 0x0067dcc0
+Obj_s00c3_49e0*    __cdecl SP_ObjectTemplateDB();     // 0x0067cb40
+void __cdecl ChangeStarEmpireOwnership(cEmpire_s00c3_49e0* self, void* newOwnerAvatar);  // 0x00c35240
+void __cdecl UpdatePosseMembers(void* p);                                     // 0x0102c1a0
+char __cdecl FUN_00c70150(void* city, void* empire, int flag);                // 0x00c70150
+void __cdecl FUN_00ba5bc0(void* empire, int mode);                            // 0x00ba5bc0
+int  __cdecl FUN_00ba7320(void* arr);                                         // 0x00ba7320
+void __cdecl FUN_00c34060(cStarRecord** begin, cStarRecord** end,
+                          float x, float y, float z);                         // 0x00c34060
+struct HashMap {
+    void* m0;
+    void* mBegin;
+    void* mEnd;
+    void  Build(void* out, int n, void* key);                                 // 0x00c33da0 (ret 0xc)
+};
+struct RefVector {
+    void  Resize(int count, void* out);                                       // 0x00c34710 (ret 8)
+};
 struct Obj_s00c3_49e0 {
     Vec3*  m_5c65e0();                        // 0x005c65e0  cCivData::GetCities
     int*   m_41e990();                        // 0x0041e990  Property::GetInt
@@ -445,6 +507,9 @@ virtual void v10();
     virtual void slot14(int a, int b, int c);         // vtable[0x14]
     virtual void slot18(int a, int b, int c, int d);  // vtable[0x18]
 };
+struct RandomLCG {
+    float RandomDoubleUniform();              // 0x009360d0  (this in ecx, returns float in st0)
+};
 struct cEmpire_s00c3_49e0 {
     u8   pad00[0x50];
     u32  mFlags;                              // +0x50
@@ -476,8 +541,31 @@ struct cEmpire_s00c3_49e0 {
 
 // ---- items of slice s01064990 begin (TODO(rewrite): local stubs, replace by canonical classes)
 typedef void  (__thiscall *Tc2ii)(void*, int, int);
+typedef void  (__thiscall *Tc2pi)(void*, void*, int);
 #define VTS(o, off) (*(void**)((char*)*(void**)(o) + (off)))
+class RefObj
+{
+public:
+    virtual void AddRef();       // +0x00
+    virtual void Release();      // +0x04
+    virtual void v08();          // +0x08
+    virtual void v0c();          // +0x0c
+};
 void*  FUN_00b3d3d0();
+void*  FUN_00b3d3f0();
+void*  MessageServer_67dcc0();
+class cString12;
+class SimSlot
+{
+public:
+    char  mPad00[0x5c];
+    void* mpE30;        // +0x5c
+};
+class E30Obj
+{
+public:
+    void Method_e30a60(int v);
+};
 class CLayout
 {
 public:
@@ -502,6 +590,23 @@ public:
     void  FUN_00663350(int a);
     unsigned FUN_00664600();
     void* FUN_00664610(unsigned idx);
+};
+class cString12
+{
+public:
+    void* mpBegin;        // +0x00
+    void* mpEnd;          // +0x04
+    void* mpCap;          // +0x08
+    int   mFlag0c;        // +0x0c
+
+    void  Assign_01064d80(const void* begin, const void* end);
+    cString12* InsertRange_01064df0(const void* begin, const void* end);
+    void  Swap_01065510(cString12* other);
+    void  Resize_01065860(uint32_t n);
+    void  Assign2_010652d0(const void* begin, const void* end);
+    void  Reserve_01065270(uint32_t n);
+    void  Init_6b5770(uint32_t a, int b, int c);
+    const wchar_t* GetText_6b55c0();
 };
 class cEmpire_s0106_4990;
 struct Sub48
@@ -557,11 +662,383 @@ public:
     void Destroy_01064990();
     void OnWinProcAdd_01064a00(int arg);
     void PopulateLeft_01064b60();
-    void Init_01064fd0();
-    void PopulateFeed_010655a0();
+    void Init_01064fd0();  // 0x01064fd0 (cEmpire::Init_01064fd0)
+    void PopulateFeed_010655a0();  // 0x010655a0 (cEmpire::PopulateFeed_010655a0)
     void Show_01065900(int arg);
 };
+class cEmpireC
+{
+public:
+    void* mpVtblC;        // this+0x00 = outer+0x0c
+    char  mPad04[0x34];   // this+0x04 .. this+0x37
+    void* m44;            // this+0x38 = outer+0x44
+    char  mPad3c[0x8c];   // this+0x3c .. this+0xc7
+    CFeedItem* mpSelected;// this+0xc8 = outer+0xd4
+    bool Ret_01065360(int id, void* ev);
+    bool BaseHandler_00e18600(int a, void* b);
+};
+static inline cEmpire_s0106_4990* empireFromC(void* p) { return (cEmpire_s0106_4990*)((char*)p - 0x0c); }
 // ---- items of slice s01064990 end
+
+// ---- items of slice s00c32980 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern float g_146b68c;    // 0x0146b68c  FLT_MAX
+extern float g_13f1cac;    // 0x013f1cac
+extern float g_1572b54;    // 0x01572b54
+extern float g_1572b58;    // 0x01572b58
+extern float g_1572b5c;    // 0x01572b5c
+extern float g_168de78;    // 0x0168de78
+extern float g_168de7c;    // 0x0168de7c
+extern float g_168de80;    // 0x0168de80
+extern void* g_1667bac;    // 0x01667bac  eastl::gEmptyString16 begin
+extern void* g_1667bae;    // 0x01667bae  eastl::gEmptyString16 end
+extern char  g_13ef094[];  // 0x013ef094  base vtable
+extern char  g_13eb938[];  // 0x013eb938  base vtable
+extern char  g_146b768[];  // 0x0146b768
+extern char  g_146b764[];  // 0x0146b764
+extern char  g_146b748[];  // 0x0146b748
+void* __cdecl FUN_00b6f0c0(u32 id);                            // 0x00b6f0c0  cSPColorRGB::ColorFromID
+bool  __cdecl FUN_005bf0e0(void* key, void** out);             // 0x005bf0e0  GetEditorPropertyList
+bool  __cdecl FUN_006a1250_s00c3_2980(void* prop, u32 hash, void* out);   // 0x006a1250  SP::GetPropertyAsKey
+void* __cdecl FUN_00f473a0(unsigned size, const char* name,
+                           int a, int b, void* c, int d);      // 0x00f473a0  operator new
+void  __cdecl FUN_00f47380(void* p);                           // 0x00f47380  operator delete
+bool  __cdecl FUN_004232c0(void* a, void* b);                  // 0x004232c0  Vector3Equal
+void  __cdecl FUN_00b2af00(void* a, void* b);                  // 0x00b2af00  swap
+void  __cdecl FUN_0093aa70(void* io, const void* p, int n, int f);  // 0x0093aa70  EA::IO::WriteUint32
+void  __cdecl FUN_0093a780(void* io, void* p, int n, int f);   // 0x0093a780  EA::IO::ReadInt32
+struct P {
+    void* p;
+    P(void* o = 0) : p(o) { if (p) ADDREF(p); }
+    P(const P& o) : p(o.p) { if (p) ADDREF(p); }
+    ~P() { if (p) RELEASE(p); }
+    P& operator=(const P& o) {
+        void* n = o.p; void* const t = p;
+        if (n != t) { if (n) ADDREF(n); p = n; if (t) RELEASE(t); }
+        return *this;
+    }
+    operator void*() const { return p; }
+};
+struct EVec_s00c3_2980 {                       // eastl vector header (0x14 bytes in retail)
+    void*    mBegin;                // +0x00
+    void*    mEnd;                  // +0x04
+    void*    mCapacity;             // +0x08
+    uintptr_t mPad0c;               // +0x0c
+    uintptr_t mPad10;               // +0x10
+
+    uint32_t Size() const { return (uint32_t)(((char*)mEnd - (char*)mBegin) >> 2); }
+};
+struct cSPColorRGB_s00c3_2980 { float r, g, b; };
+struct cSPIdentity_s00c3_2980 {
+    void*       mpVtbl;             // +0x00
+    uint32_t    mIDColorID;         // +0x04
+    uint8_t     mIDNameMap[0x1c];   // +0x08
+    cSPColorRGB_s00c3_2980 mColor;             // +0x24  cached colour
+};
+namespace SP {
+struct cEmpire_s00c3_2980 {
+    void*       mpVtbl;                 // +0x00
+    void*       mpVtbl2;                // +0x04
+    uint32_t    mnRefCount;             // +0x08
+    cSPIdentity_s00c3_2980 mIdentity;              // +0x0c
+    uint8_t     mEmpireName[0x14];      // +0x3c  eastl::wstring
+    uint32_t    mFlags;                 // +0x50
+    uint32_t    mTrait;                 // +0x54
+    uint32_t    mArchetype;             // +0x58
+    EVec_s00c3_2980        mEnemies;               // +0x5c
+    EVec_s00c3_2980        mAllies;                // +0x70
+    uint32_t    mPoliticalID;           // +0x84
+    EVec_s00c3_2980        mStars;                 // +0x88
+    EVec_s00c3_2980        mNextStarTowardsHome;   // +0x9c
+    uint32_t    mHomeStar;              // +0xb0
+    uint32_t    mHomePlanet;            // +0xb4
+    Key         mUFOKey;                // +0xb8
+    Key         mCaptainKey;            // +0xc4
+    uint32_t    mEmpireMoney;           // +0xd0
+    uint32_t    mTravelDistance;        // +0xd4
+    uint32_t    mFieldD8;               // +0xd8
+    float       mFieldDC;               // +0xdc
+    float       mFieldE0;               // +0xe0
+    float       mFieldE4;               // +0xe4
+    float       mFieldE8;               // +0xe8
+    float       mTurretHealth;          // +0xec
+    EVec_s00c3_2980        mUFOHealth;             // +0xf0
+    void*       mpCityMusic;            // +0x104
+    uint8_t     mCultureSet[0x20];      // +0x108
+    uint8_t     mDemandForTribute[0x20];// +0x128
+    ListAnchor  mAdventureList;         // +0x148
+
+    void RebindPropertyKey();                    // 0x00c32980
+    cSPColorRGB_s00c3_2980 GetColor();                      // 0x00c32cd0
+    void  Destroy_33410();                       // 0x00c33410
+    void  RefreshName_33580();                   // 0x00c33580
+    void  SetSpecies(void* species);             // 0x00c33690
+};  // namespace SP
+}
+struct MC_s00c3_2980 {
+    void* f_00ba6d80(u32 id);                   // 0x00ba6d80
+    void* f_00bba500();                         // 0x00bba500
+    void* f_00bb9b80();                         // 0x00bb9b80
+    void* f_00bb9b90(void* a);                  // 0x00bb9b90
+    int   f_00bb9ae0();                         // 0x00bb9ae0
+    int   f_00885c90();                         // 0x00885c90
+    void  f_00bb1080(void* a);                  // 0x00bb1080
+    int   f_00b1fdb0();                         // 0x00b1fdb0  GetAvatar
+    void* f_00ba9370(u32 id);                   // 0x00ba9370  GetEmpireByID
+    void* f_005c65e0();                         // 0x005c65e0  GetCities
+    void  f_00b6f380(void* s);                  // 0x00b6f380  cSPIdentity::SetName
+    void  f_00bb9b90_(void* a);                 // 0x00bb9b90
+    void  f_00bb5b50(void* s);                  // 0x00bb5b50
+    void* f_00c30c80(float a, float b);         // 0x00c30c80
+    void  f_00f67d90();                         // 0x00f67d90
+    void* f_00f67d90v();                        // 0x00f67d90 (returns value)
+    void  f_00c759a0();                         // 0x00c759a0
+    void  f_00b638b0();                         // 0x00b638b0  ~cGonzagoTimer
+    void  f_00ae6970();                         // 0x00ae6970  ~eastl::vector
+    void  f_00b6edf0();                         // 0x00b6edf0  ~cSPIdentity
+    void  f_009a9600(void* child);              // 0x009a9600  DoNukeSubtree
+    float*f_00b6e4b0(void* out, float r, float g, float b);  // 0x00b6e4b0
+};
+float* __cdecl FUN_00b6e4b0(void* out, float r, float g, float b);  // 0x00b6e4b0
+void   __cdecl FUN_00b6f140(float r, float g, float b);             // 0x00b6f140
+void   __cdecl FUN_00b6f180(void);                                  // 0x00b6f180
+bool   __cdecl FUN_00b6e1e0(u32 idx);                               // 0x00b6e1e0
+void*  __cdecl FUN_00e5c780(void* self, void* key);                 // 0x00e5c780  rbtree::find
+void   __cdecl FUN_005c3d90(void* str, const wchar_t* s);           // 0x005c3d90  eastl::wstring::append
+void   __cdecl FUN_00423650(void* str, const wchar_t* f, const wchar_t* l); // 0x00423650 assign
+void   __cdecl FUN_004da330(void* species, void* out);              // 0x004da330  GetUiName
+struct RBNode {
+    RBNode* mpLeft;      // +0x00
+    RBNode* mpRight;     // +0x04
+    RBNode* mpParent;    // +0x08
+    uint8_t pad0c[0x4];  // +0x0c
+    u32     mKey;        // +0x10
+    void*   mpValue;     // +0x14
+};
+
+void __cdecl promote_heap_stars(P* first, int top, int pos, P value, DistanceToHome home); // 0x00c32160
+struct ListNode_s00c3_2980 { ListNode_s00c3_2980* mpNext; ListNode_s00c3_2980* mpPrev; u32 mValue; };
+// ---- items of slice s00c32980 end
+
+// ---- items of slice s01336df0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+namespace eastl {
+ struct string8_s0133_6df0; 
+}
+typedef eastl::string8_s0133_6df0 string8_s0133_6df0;
+namespace Simulator {
+class ISerializerReadStream;
+}
+namespace Simulator {
+class ISerializerWriteStream;
+}
+namespace Simulator {
+struct Attribute;
+}
+namespace Simulator {
+typedef bool  (*ReadFunction_t)(ISerializerReadStream*, void*);
+}
+namespace Simulator {
+typedef bool  (*WriteFunction_t)(ISerializerWriteStream*, void*);
+}
+namespace Simulator {
+typedef void  (*ReadTextFunction_t)(const string8_s0133_6df0&, void*);
+}
+namespace Simulator {
+typedef void  (*WriteTextFunction_t)(char*, void*);
+}
+namespace Simulator {
+typedef bool  (*ValidateFunction_t)();
+}
+namespace Simulator {
+typedef bool  (*ToXmlFunction_t)(void*, const char*, int);
+}
+namespace Simulator {
+typedef void* (*OffsetFunction_t)(Attribute*);
+}
+namespace Simulator {
+typedef void  (*SetDefaultFunction_t)(Attribute*);
+}
+namespace Simulator {
+void* DefaultOffset(Attribute* pAttr);   // 0x00692ca0: pAttr->pCurrentObject + pAttr->offset
+}
+namespace Simulator {
+struct Attribute
+{
+    Attribute(const char* pName, uint32_t nID, uint32_t nOffset,
+              ReadFunction_t pRead, WriteFunction_t pWrite,
+              ReadTextFunction_t pReadText, WriteTextFunction_t pWriteText,
+              ValidateFunction_t pValidate, ToXmlFunction_t pToXml,
+              SetDefaultFunction_t pSetDefault = 0)
+    {
+        name = pName;
+        id = nID;
+        pCurrentObject = 0;
+        setDefaultFunction = pSetDefault;
+        offsetFunction = DefaultOffset;
+        readFunction = pRead;
+        writeFunction = pWrite;
+        readTextFunction = pReadText;
+        writeTextFunction = pWriteText;
+        validateFunction = pValidate;
+        toXmlFunction = pToXml;
+        offset = nOffset;
+    }
+
+    /* 00h */ const char* name;
+    /* 04h */ uint32_t id;
+    /* 08h */ uint32_t offset;
+    /* 0Ch */ int field_0C;   // not initialized
+    /* 10h */ int field_10;   // not initialized
+    /* 14h */ int field_14;   // not initialized
+    /* 18h */ void* pCurrentObject;
+    /* 1Ch */ SetDefaultFunction_t setDefaultFunction;
+    /* 20h */ OffsetFunction_t offsetFunction;
+    /* 24h */ ReadFunction_t readFunction;
+    /* 28h */ WriteFunction_t writeFunction;
+    /* 2Ch */ ReadTextFunction_t readTextFunction;
+    /* 30h */ WriteTextFunction_t writeTextFunction;
+    /* 34h */ ValidateFunction_t validateFunction;
+    /* 38h */ ToXmlFunction_t toXmlFunction;
+};
+}
+namespace Simulator {
+bool Read_00572810(ISerializerReadStream* pStream, void* pData);  // 0x00572810
+}
+namespace Simulator {
+bool Read_00ac87c0(ISerializerReadStream* pStream, void* pData);  // 0x00ac87c0
+}
+namespace Simulator {
+bool Read_00ae3430(ISerializerReadStream* pStream, void* pData);  // 0x00ae3430
+}
+namespace Simulator {
+bool Write_00572840(ISerializerWriteStream* pStream, void* pData);  // 0x00572840
+}
+namespace Simulator {
+bool Write_00ac87f0(ISerializerWriteStream* pStream, void* pData);  // 0x00ac87f0
+}
+namespace Simulator {
+bool Write_00ae3450(ISerializerWriteStream* pStream, void* pData);  // 0x00ae3450
+}
+namespace Simulator {
+bool Write_00bca960(ISerializerWriteStream* pStream, void* pData);  // 0x00bca960
+}
+namespace Simulator {
+void ReadText_00692ff0(const string8_s0133_6df0& text, void* pData);  // 0x00692ff0
+}
+namespace Simulator {
+void ReadText_00693090(const string8_s0133_6df0& text, void* pData);  // 0x00693090
+}
+namespace Simulator {
+void ReadText_00693150(const string8_s0133_6df0& text, void* pData);  // 0x00693150
+}
+namespace Simulator {
+void ReadText_00694c80(const string8_s0133_6df0& text, void* pData);  // 0x00694c80
+}
+namespace Simulator {
+void ReadText_00c2e4e0(const string8_s0133_6df0& text, void* pData);  // 0x00c2e4e0
+}
+namespace Simulator {
+void WriteText_00692fb0(char* pBuffer, void* pData);  // 0x00692fb0
+}
+namespace Simulator {
+void WriteText_00694c10(char* pBuffer, void* pData);  // 0x00694c10
+}
+namespace Simulator {
+void WriteText_00694ee0(char* pBuffer, void* pData);  // 0x00694ee0
+}
+namespace Simulator {
+void WriteText_00694f00(char* pBuffer, void* pData);  // 0x00694f00
+}
+namespace Simulator {
+void WriteText_00695080(char* pBuffer, void* pData);  // 0x00695080
+}
+namespace Simulator {
+bool Validate_00b1fbf0();  // 0x00b1fbf0
+}
+namespace Simulator {
+bool Validate_00b6f550();  // 0x00b6f550
+}
+namespace Simulator {
+bool ToXml_0057cde0(void* pData, const char* pName, int depth);  // 0x0057cde0
+}
+namespace Simulator {
+bool ToXml_00675ca0(void* pData, const char* pName, int depth);  // 0x00675ca0
+}
+namespace Simulator {
+bool ToXml_00ac8050(void* pData, const char* pName, int depth);  // 0x00ac8050
+}
+namespace Simulator {
+bool ToXml_00acbbc0(void* pData, const char* pName, int depth);  // 0x00acbbc0
+}
+namespace Simulator {
+bool ToXml_00ae5720(void* pData, const char* pName, int depth);  // 0x00ae5720
+}
+namespace Simulator {
+bool Read_00bb9cd0(ISerializerReadStream* pStream, void* pData);
+}
+namespace Simulator {
+bool Read_00bf26b0(ISerializerReadStream* pStream, void* pData);
+}
+namespace Simulator {
+bool Read_00c31c80(ISerializerReadStream* pStream, void* pData);
+}
+namespace Simulator {
+bool Read_00bf1c70(ISerializerReadStream* pStream, void* pData);
+}
+namespace Simulator {
+bool Read_00c34750(ISerializerReadStream* pStream, void* pData);
+}
+namespace Simulator {
+bool Read_00badf20(ISerializerReadStream* pStream, void* pData);
+}
+namespace Simulator {
+bool Read_00c33820(ISerializerReadStream* pStream, void* pData);
+}
+namespace Simulator {
+bool Write_00bb9d00(ISerializerWriteStream* pStream, void* pData);
+}
+namespace Simulator {
+bool Write_00c32a40(ISerializerWriteStream* pStream, void* pData);
+}
+namespace Simulator {
+bool Write_00bf1cb0(ISerializerWriteStream* pStream, void* pData);
+}
+namespace Simulator {
+bool Write_00aca730(ISerializerWriteStream* pStream, void* pData);
+}
+namespace Simulator {
+bool Write_00c332a0(ISerializerWriteStream* pStream, void* pData);
+}
+namespace Simulator {
+void ReadText_00693070(const string8_s0133_6df0& text, void* pData);
+}
+namespace Simulator {
+void WriteText_00694f80(char* pBuffer, void* pData);
+}
+namespace Simulator {
+bool Validate_00b6f860();
+}
+namespace Simulator {
+bool Validate_00befb00();
+}
+namespace Simulator {
+bool Validate_00c31ca0();
+}
+namespace Simulator {
+bool ToXml_00c6c390(void* pData, const char* pName, int depth);
+}
+namespace Simulator {
+bool ToXml_00eafcf0(void* pData, const char* pName, int depth);
+}
+namespace Simulator {
+bool ToXml_00595a50(void* pData, const char* pName, int depth);
+}
+namespace Simulator {
+struct AttrStorage { char data[sizeof(Attribute)]; };
+}
+namespace Simulator {
+AttrStorage cEmpire_sAttributes[19];   // 0x01572b60
+}
+// ---- items of slice s01336df0 end
 
 // @ 0x00c30820
 int* Mission::FUN_00c30820(int key)
@@ -572,6 +1049,74 @@ int* Mission::FUN_00c30820(int key)
     if (key == 0x5593a1a && self != 0)
         return (int*)((char*)self + 0xc);
     return 0;
+}
+
+// @ 0x00c30860
+void Mission::FUN_00c30860(int param)
+{
+    int member = ((int*)this)[0x21];
+    void* sphere = GetCurrentTerrainSphere(SP_NounManager_s00c2_f830());
+    ((ThiscallStub*)sphere)->FUN_00c7bbc0(member, param);
+}
+
+// @ 0x00c30890
+void Mission::FUN_00c30890()
+{
+    int member = ((int*)this)[0x21];
+    void* sphere = GetCurrentTerrainSphere(SP_NounManager_s00c2_f830());
+    ((ThiscallStub*)sphere)->FUN_00c7a7d0(member);
+}
+
+// @ 0x00c308b0
+bool __fastcall cEmpireIsPlayerCurrentStar(cEmpire* self)
+{
+    return SP_StarManager()->m_885c90() == (int)self->mEmpireID;
+}
+
+// @ 0x00c308e0
+int cEmpire::FUN_00c308e0(Obj* p)
+{
+    if (p != 0)
+        if (FUN_00c70150(p, (Obj*)this, 0))
+            return 1;
+    return 0;
+}
+
+// @ 0x00c30910
+void __fastcall cEmpireFUN_00c30910(cEmpire* self)
+{
+    uint id = self->mEmpireID;
+    SP_NounManager()->m_f67d90()->m_c7a710(id);
+}
+
+// @ 0x00c30930
+void __fastcall cEmpireFUN_00c30930(cEmpire* self)
+{
+    uint id = self->mEmpireID;
+    SP_NounManager()->m_f67d90()->m_c7bb80(id);
+    id = self->mEmpireID;
+    SP_NounManager()->m_f67d90()->m_c7bba0(id);
+}
+
+// @ 0x00c30970
+void __fastcall cEmpireFUN_00c30970(cEmpire* self)
+{
+    uint id = self->mEmpireID;
+    SP_NounManager()->m_f67d90()->m_c7a770(id);
+}
+
+// @ 0x00c30990
+void __fastcall cEmpireFUN_00c30990(cEmpire* self)
+{
+    uint id = self->mEmpireID;
+    SP_NounManager()->m_f67d90()->m_c7a830(id);
+}
+
+// @ 0x00c309b0
+void cEmpire::FUN_00c309b0(uint arg)
+{
+    uint id = this->mEmpireID;
+    SP_NounManager()->m_f67d90()->m_c7bbf0(id, arg);
 }
 
 // @ 0x00c309e0
@@ -1562,6 +2107,402 @@ u8 __fastcall FUN_00c328c0(void* self, void* dummy, u32* key)
   return 0;
 }
 
+// @ 0x00c32980
+void SP::cEmpire_s00c3_2980::RebindPropertyKey()
+{
+    Key key = mCaptainKey;
+    void* prop = 0;
+    for (;;) {
+        if (prop) {
+            void* old = prop;
+            prop = 0;
+            RELEASE(old);
+        }
+        if (!FUN_005bf0e0(&key, &prop)) break;
+        mCaptainKey = key;
+        if (!FUN_006a1250_s00c3_2980(prop, 0xd8a4bc9, &key)) break;
+    }
+    MC_s00c3_2980* nm = (MC_s00c3_2980*)FUN_00b3d300();
+    MC_s00c3_2980* te = (MC_s00c3_2980*)nm->f_00f67d90v();
+    te->f_00c759a0();
+    if (prop) RELEASE(prop);
+}
+
+// @ 0x00c32a60
+void __cdecl FUN_00c32a60(P* first, int top, int heap, int position, P value, DistanceToHome home)
+{
+    int child = 2 * position + 2;
+    while (child < heap) {
+        float* a = (float*)((MC_s00c3_2980*)first[child].p)->f_005c65e0();
+        float ax = a[0] - home.x, ay = a[1] - home.y, az = a[2] - home.z;
+        float* b = (float*)((MC_s00c3_2980*)first[child - 1].p)->f_005c65e0();
+        float bx = b[0] - home.x, by = b[1] - home.y, bz = b[2] - home.z;
+        if (ax * ax + ay * ay + az * az < bx * bx + by * by + bz * bz) --child;
+        first[position] = first[child];
+        position = child;
+        child = 2 * child + 2;
+    }
+    if (child == heap) {
+        first[position] = first[child - 1];
+        position = child - 1;
+    }
+    promote_heap_stars(first, top, position, value, home);
+}
+
+// @ 0x00c32cd0
+cSPColorRGB_s00c3_2980 SP::cEmpire_s00c3_2980::GetColor()
+{
+    u32 id = mIdentity.mIDColorID;
+    if (id - 0x53dbcf3 <= 0xb) {
+        float* c = (float*)FUN_00b6f0c0(id);
+        cSPColorRGB_s00c3_2980 r; r.r = c[0]; r.g = c[1]; r.b = c[2];
+        return r;
+    }
+    SP::cEmpire_s00c3_2980* pe = (SP::cEmpire_s00c3_2980*)FUN_01021300();
+    if (pe != this) {
+        if (((mFlags >> 6) & 1) != 0) {
+            MC_s00c3_2980* banner = 0;
+            if (mUFOKey.groupID != 0xffffffff) {
+                banner = (MC_s00c3_2980*)((MC_s00c3_2980*)FUN_00b3d2a0())->f_00ba6d80(mUFOKey.groupID);
+            }
+            if (banner && banner->f_00bb9ae0() == 5 && mIdentity.mIDColorID == 0x53dbcf1) {
+                if (FUN_004232c0(&mIdentity.mColor, &g_168de78)) {
+                    MC_s00c3_2980* sph = (MC_s00c3_2980*)((MC_s00c3_2980*)this)->f_00c30c80(0.5f, 0.5f);
+                    float* src = (float*)((char*)sph + 0x4ec);
+                    float* res = FUN_00b6e4b0(&mIdentity.mColor, src[0], src[1], src[2]);
+                    mIdentity.mColor.r = res[0];
+                    mIdentity.mColor.g = res[1];
+                    mIdentity.mColor.b = res[2];
+                }
+                return mIdentity.mColor;
+            }
+        }
+        MC_s00c3_2980* sm = (MC_s00c3_2980*)FUN_00b3d2a0();
+        if (sm->f_00885c90() == (int)mPoliticalID) {
+            cSPColorRGB_s00c3_2980 r;
+            r.r = g_1572b54; r.g = g_1572b58; r.b = g_1572b5c;
+            return r;
+        }
+        float slots[12];
+        for (u32 i = 0; i < 12; ++i)
+            slots[i] = FUN_00b6e1e0(i) ? 0.0f : g_146b68c;
+        {
+            Key key = mUFOKey;
+            u32 pad34 = 0, pad38 = 0, pad3c = 0;
+            int arr0 = 0, arr1 = 0, arr2 = 0;
+            int f48 = 0x1fff;
+            int f4c = 0x20;
+            float f50 = 0.0f;
+            float f54 = g_13eb1bc;
+            float f58 = g_13f1cac;
+            float f5c = g_13eb1bc;
+            int f60 = 0;
+            (void)pad34; (void)pad38; (void)pad3c;
+            void* banner = 0;
+            if (key.groupID != 0xffffffff) {
+                banner = ((MC_s00c3_2980*)FUN_00b3d2a0())->f_00ba6d80(key.groupID);
+            }
+            ((MC_s00c3_2980*)banner)->f_005c65e0();
+            // the array header passed to GetCities is an eastl vector header
+            struct { int* b; int* e; int* c; int pad; } list;
+            list.b = &arr0; list.e = &arr0; list.c = &arr0;
+            (void)f48; (void)f4c; (void)f50; (void)f54; (void)f58; (void)f5c; (void)f60;
+            MC_s00c3_2980* sm2 = (MC_s00c3_2980*)FUN_00b3d2a0();
+            sm2->f_00bb1080(&list);
+            for (int* it = list.b; it != list.e; ++it) {
+                MC_s00c3_2980* star = (MC_s00c3_2980*)*it;
+                int av = star->f_00b1fdb0();
+                if (av == -1) continue;
+                int av2 = star->f_00b1fdb0();
+                MC_s00c3_2980* sm3 = (MC_s00c3_2980*)FUN_00b3d2a0();
+                MC_s00c3_2980* emp = (MC_s00c3_2980*)sm3->f_00ba9370(av2);
+                if (!emp) continue;
+                u32 ci = (u32)(*(u32*)((char*)emp + 0x10) - 0x53dbcf3);
+                if (ci > 0xb) continue;
+                void* b1 = 0;
+                if (*(u32*)((char*)emp + 0xb0) != 0xffffffff) {
+                    b1 = ((MC_s00c3_2980*)FUN_00b3d2a0())->f_00ba6d80(*(u32*)((char*)emp + 0xb0));
+                }
+                void* b2 = 0;
+                if (mUFOKey.groupID != 0xffffffff) {
+                    b2 = ((MC_s00c3_2980*)FUN_00b3d2a0())->f_00ba6d80(mUFOKey.groupID);
+                }
+                float* p1 = (float*)((MC_s00c3_2980*)b2)->f_005c65e0();
+                float* p2 = (float*)((MC_s00c3_2980*)b1)->f_005c65e0();
+                float dx = p1[0] - p2[0], dy = p1[1] - p2[1], dz = p1[2] - p2[2];
+                float d = dx * dx + dy * dy + dz * dz;
+                if (d < slots[ci] || d == slots[ci]) slots[ci] = d;
+            }
+        }
+        float best = 0.0f;
+        int bestIdx = 0;
+        for (u32 i = 0; i < 12; ++i) {
+            if (slots[i] > best) { bestIdx = (int)i; best = slots[i]; }
+        }
+        u32 newID = (u32)bestIdx + 0x53dbcf3;
+        if ((u32)bestIdx >= 0xc) newID = 0x53dbcf3;
+        mIdentity.mIDColorID = newID;
+        float* c = (float*)FUN_00b6f0c0(newID);
+        cSPColorRGB_s00c3_2980 r; r.r = c[0]; r.g = c[1]; r.b = c[2];
+        return r;
+    }
+    if (mIdentity.mIDColorID != 0x53dbcf1) {
+        int hs = (int)((SP::cEmpire_s00c3_2980*)FUN_01021300())->mHomeStar;
+        MC_s00c3_2980* spec = 0;
+        if (hs != -1) {
+            MC_s00c3_2980* b = (MC_s00c3_2980*)((MC_s00c3_2980*)FUN_00b3d2a0())->f_00ba6d80((u32)hs);
+            if (b) spec = (MC_s00c3_2980*)b->f_00bba500();
+        }
+        float* src = (float*)((char*)spec + 0x4ec);
+        float* res = FUN_00b6e4b0(&mIdentity.mColor, src[0], src[1], src[2]);
+        FUN_00b6f140(res[0], res[1], res[2]);
+        FUN_00b6f180();
+        mIdentity.mColor.r = res[0];
+        mIdentity.mColor.g = res[1];
+        mIdentity.mColor.b = res[2];
+        mIdentity.mIDColorID = 0x53dbcf1;
+    }
+    if (mIdentity.mColor.r == g_168de78 && mIdentity.mColor.g == g_168de7c && mIdentity.mColor.b == g_168de80) {
+        float* c = (float*)FUN_00b6f0c0(mIdentity.mIDColorID);
+        mIdentity.mColor.r = c[0];
+        mIdentity.mColor.g = c[1];
+        mIdentity.mColor.b = c[2];
+    }
+    float* c = (float*)FUN_00b6f0c0(mIdentity.mIDColorID);
+    cSPColorRGB_s00c3_2980 r; r.r = c[0]; r.g = c[1]; r.b = c[2];
+    return r;
+}
+
+// @ 0x00c332a0
+void __cdecl FUN_00c332a0(void* stream, ListAnchor* list)
+{
+    int count = 0;
+    for (void* n = list->mpNext; n != (void*)list; n = *(void**)n) ++count;
+    int c = count;
+    void* io = ((TFVP)((*(void***)stream)[8]))(stream);
+    void* w = ((TFVP)((*(void***)io)[6]))(io);
+    FUN_0093aa70(w, &c, 1, 0);
+    for (void* n = list->mpNext; n != (void*)list; n = *(void**)n) {
+        void* io2 = ((TFVP)((*(void***)stream)[8]))(stream);
+        int v = (int)((ListNode_s00c3_2980*)n)->mValue;
+        void* w2 = ((TFVP)((*(void***)io2)[6]))(io2);
+        FUN_0093aa70(w2, &v, 1, 0);
+    }
+    ((TFVP)((*(void***)stream)[7]))(stream);
+}
+
+// @ 0x00c33410
+void SP::cEmpire_s00c3_2980::Destroy_33410()
+{
+    mpVtbl = g_146b768;
+    mpVtbl2 = g_146b764;
+    mIdentity.mpVtbl = g_146b748;
+    ListAnchor* anchor = &mAdventureList;
+    void* n = anchor->mpNext;
+    while (n != (void*)anchor) {
+        void* cur = n;
+        n = *(void**)n;
+        FUN_00f47380(cur);
+    }
+    ((MC_s00c3_2980*)mDemandForTribute)->f_00b638b0();
+    MC_s00c3_2980* culture = (MC_s00c3_2980*)mCultureSet;
+    culture->f_009a9600(*(void**)((char*)culture + 0x0c));
+    if (mpCityMusic) RELEASE(mpCityMusic);
+    void* ufoHealth = mUFOHealth.mBegin;
+    if (ufoHealth && *(int*)((char*)ufoHealth - 4) != 0) FUN_00f47380(ufoHealth);
+    ((MC_s00c3_2980*)&mNextStarTowardsHome)->f_00ae6970();
+    ((MC_s00c3_2980*)&mStars)->f_00ae6970();
+    ((MC_s00c3_2980*)&mAllies)->f_00ae6970();
+    ((MC_s00c3_2980*)&mEnemies)->f_00ae6970();
+    void* nameBegin = *(void**)(mEmpireName + 0);
+    void* nameCap = *(void**)(mEmpireName + 8);
+    if ((int)(((char*)nameCap - (char*)nameBegin) & 0xfffffffe) > 2 && nameBegin) FUN_00f47380(nameBegin);
+    ((MC_s00c3_2980*)&mIdentity)->f_00b6edf0();
+    mpVtbl2 = g_13ef094;
+    mpVtbl = g_13eb938;
+}
+
+// @ 0x00c33580
+void SP::cEmpire_s00c3_2980::RefreshName_33580()
+{
+    if ((int)mHomeStar == -1) return;
+    MC_s00c3_2980* banner = (MC_s00c3_2980*)((MC_s00c3_2980*)FUN_00b3d2a0())->f_00ba6d80(mHomeStar);
+    if (!banner) return;
+    int* p = (int*)banner->f_00bb9b80();
+    Key kk = *(Key*)p;
+    if (kk.instanceID == 0) return;
+    if ((int)mHomeStar == -1) return;
+    MC_s00c3_2980* b2 = (MC_s00c3_2980*)((MC_s00c3_2980*)FUN_00b3d2a0())->f_00ba6d80(mHomeStar);
+    if (!b2) return;
+    MC_s00c3_2980* spec = (MC_s00c3_2980*)b2->f_00bba500();
+    if (!spec) return;
+    cSPColorRGB_s00c3_2980 col = GetColor();
+    (void)col;
+    wchar_t* nameBuf[3];
+    nameBuf[0] = (wchar_t*)g_1667bac;
+    nameBuf[1] = (wchar_t*)g_1667bac;
+    nameBuf[2] = (wchar_t*)g_1667bae;
+    FUN_004da330(spec, nameBuf);
+    ((MC_s00c3_2980*)&mIdentity)->f_00b6f380(nameBuf);
+    int key = 2;
+    RBNode** pp = (RBNode**)FUN_00e5c780(&mIdentity.mIDNameMap, &key);
+    RBNode* node = *pp;
+    FUN_005c3d90(mEmpireName, (const wchar_t*)node->mpValue);
+    wchar_t* nb = nameBuf[0];
+    wchar_t* ne = nameBuf[2];
+    if ((int)(((char*)ne - (char*)nb) & 0xfffffffe) > 2 && nb) FUN_00f47380(nb);
+}
+
+// @ 0x00c33690
+void SP::cEmpire_s00c3_2980::SetSpecies(void* speciesp)
+{
+    void* pe = FUN_01021300();
+    if (pe == (void*)this && speciesp) {
+        wchar_t* nameBuf[3];
+        void* g = g_1667bac;
+        nameBuf[0] = (wchar_t*)g;
+        nameBuf[1] = (wchar_t*)g;
+        nameBuf[2] = (wchar_t*)g_1667bae;
+        FUN_004da330(speciesp, nameBuf);
+        ((MC_s00c3_2980*)FUN_00b3d2a0())->f_00bb5b50(nameBuf);
+        wchar_t* nb = nameBuf[0];
+        wchar_t* ne = nameBuf[2];
+        if ((int)(((char*)ne - (char*)nb) & 0xfffffffe) > 2 && nb) FUN_00f47380(nb);
+    }
+    Key speciesKey = {0, 0, 0};
+    if (speciesp) {
+        speciesKey.instanceID = *(u32*)((char*)speciesp + 0x504);
+        speciesKey.typeID     = *(u32*)((char*)speciesp + 0x508);
+        speciesKey.groupID    = *(u32*)((char*)speciesp + 0x50c);
+    }
+    int n = (int)mStars.Size();
+    for (int i = 0; i < n; ++i) {
+        void* star = ((void**)mStars.mBegin)[i];
+        ((MC_s00c3_2980*)star)->f_00bb9b90(&speciesKey);
+    }
+    if (speciesp) {
+        cSPColorRGB_s00c3_2980 col = GetColor();
+        (void)col;
+        wchar_t* nameBuf[3];
+        void* g = g_1667bac;
+        nameBuf[0] = (wchar_t*)g;
+        nameBuf[1] = (wchar_t*)g;
+        nameBuf[2] = (wchar_t*)g_1667bae;
+        FUN_004da330(speciesp, nameBuf);
+        ((MC_s00c3_2980*)&mIdentity)->f_00b6f380(nameBuf);
+        RBNode* root = (RBNode*)mIdentity.mIDNameMap;
+        RBNode* cur = root->mpParent;
+        while (cur) {
+            if (cur->mKey < 2u) cur = cur->mpRight;
+            else { cur = cur->mpLeft; root = cur; }
+        }
+        // find() inlined rbtree lookup for key == 2
+        RBNode* found = (RBNode*)FUN_00e5c780(mIdentity.mIDNameMap, (void*)2);
+        const wchar_t* s = (const wchar_t*)found->mpValue;
+        const wchar_t* e = s;
+        while (*e) ++e;
+        FUN_00423650(mEmpireName, s, e);
+        (void)cur;
+        wchar_t* nb = nameBuf[0];
+        wchar_t* ne = nameBuf[2];
+        if ((int)(((char*)ne - (char*)nb) & 0xfffffffe) > 2 && nb) FUN_00f47380(nb);
+    }
+}
+
+// @ 0x00c33820
+void __cdecl FUN_00c33820(void* stream, ListAnchor* list)
+{
+    void* n = list->mpNext;
+    while (n != (void*)list) {
+        void* cur = n;
+        n = *(void**)n;
+        FUN_00f47380(cur);
+    }
+    list->mpNext = list;
+    list->mpPrev = list;
+    int count = 0;
+    void* io = ((TFVP)((*(void***)stream)[8]))(stream);
+    void* w = ((TFVP)((*(void***)io)[6]))(io);
+    FUN_0093a780(w, &count, 1, 0);
+    u32 i = 0;
+    while (i < (u32)count) {
+        int v;
+        void* io2 = ((TFVP)((*(void***)stream)[8]))(stream);
+        void* w2 = ((TFVP)((*(void***)io2)[6]))(io2);
+        FUN_0093a780(w2, &v, 1, 0);
+        ListNode_s00c3_2980* node = (ListNode_s00c3_2980*)FUN_00f473a0(0xc, "Simulator", 0, 0, g_13ebb38, 0xd1);
+        if ((char*)node + 8) node->mValue = (u32)v;
+        node->mpNext = (ListNode_s00c3_2980*)list;
+        node->mpPrev = (ListNode_s00c3_2980*)list->mpPrev;
+        ((ListNode_s00c3_2980*)list->mpPrev)->mpNext = node;
+        ++i;
+        ((ListNode_s00c3_2980*)list)->mpPrev = node;
+    }
+    ((TFVP)((*(void***)stream)[7]))(stream);
+}
+
+// @ 0x00c338f0
+void** __cdecl FUN_00c338f0(void** first_, void** last_, void* pivotp, float px, float py, float pz)
+{
+    void** first = first_;
+    void** last = last_;
+    for (;;) {
+        for (;;) {
+            float* a = (float*)((MC_s00c3_2980*)*first)->f_005c65e0();
+            float ax = a[0] - px, ay = a[1] - py, az = a[2] - pz;
+            float* b = (float*)((MC_s00c3_2980*)pivotp)->f_005c65e0();
+            float bx = b[0] - px, by = b[1] - py, bz = b[2] - pz;
+            if (bx * bx + by * by + bz * bz <= ax * ax + ay * ay + az * az) break;
+            ++first;
+        }
+        void* p;
+        do {
+            p = *(last - 1);
+            --last;
+            float* c = (float*)((MC_s00c3_2980*)pivotp)->f_005c65e0();
+            float cx = c[0] - px, cy = c[1] - py, cz = c[2] - pz;
+            float* d = (float*)((MC_s00c3_2980*)p)->f_005c65e0();
+            float dx = d[0] - px, dy = d[1] - py, dz = d[2] - pz;
+            if (!(cx * cx + cy * cy + cz * cz < dx * dx + dy * dy + dz * dz)) break;
+        } while (true);
+        if (last <= first) break;
+        FUN_00b2af00(first, last);
+        ++first;
+    }
+    if (pivotp) RELEASE(pivotp);
+    return first;
+}
+
+// @ 0x00c33ab0
+void eastl_partial_sort_stars(void** first, void** middle, void** last, DistanceToHome home)
+{
+    make_heap_stars(first, middle, home);
+    for (void** it = middle; it < last; ++it) {
+        void* pfirst = *first;
+        float* a = (float*)((MC*)*it)->f_005c65e0();
+        float ax = a[0] - home.x, ay = a[1] - home.y, az = a[2] - home.z;
+        float* b = (float*)((MC*)pfirst)->f_005c65e0();
+        float bx = b[0] - home.x, by = b[1] - home.y, bz = b[2] - home.z;
+        float da = ax * ax + ay * ay + az * az;
+        float db = bx * bx + by * by + bz * bz;
+        if (da < db) {
+            void* tmp = *it;
+            if (tmp) ADDREF(tmp);
+            void* f = *first;
+            void* i = *it;
+            if (f != i) {
+                if (f) ADDREF(f);
+                *it = f;
+                if (i) RELEASE(i);
+            }
+            int n = (int)(((char*)middle - (char*)first) >> 2);
+            adjust_heap_stars(first, 0, n, 0, tmp, home);
+            if (tmp) RELEASE(tmp);
+        }
+    }
+    sort_heap_stars(first, middle, home);
+}
+
 // @ 0x00c33cc0
 int SP::cEmpire_s00c3_3ab0::AddAdventure_33cc0(void* key, int)
 {
@@ -1929,6 +2870,98 @@ SP::cEmpire_s00c3_3ab0::cEmpire_s00c3_3ab0()
     mIdentity.mIDColorID = 0x53dbcf2;
 }
 
+// @ 0x00c349e0
+int cEmpire_s00c3_49e0::UpdateStarGraph()
+{
+    if ((this->mFlags & 0x10) == 0)
+        return 0;
+
+    float cosThreshold = DAT_0146b79c;
+    float scaleLimit = DAT_01485548;
+
+    Obj_s00c3_49e0* prop = 0;
+    Obj_s00c3_49e0* pm = SP_PropertyManager();
+    if (prop != 0) {
+        RELEASE_s00c3_49e0(prop);
+        prop = 0;
+    }
+    ((Fn_v_piii)VTSLOT(pm, 0x2c))(pm, 0xcdf8d12f, 0x2ae0c7e, (void**)&prop);
+
+    if (prop != 0) {
+        Obj_s00c3_49e0* out = 0;
+        float angle = DAT_0140f330;                       // 45 degrees
+        if (((Fn_b_pi)VTSLOT(prop, 0x24))(prop, 0x4bf0dac, (void**)&out)
+            && *(u16*)((char*)out + 0x12) == 0xd)
+            angle = ((Obj_s00c3_49e0*)out)->m_41ea70()[0];
+        cosThreshold = cosf(angle * DAT_0146b688);
+
+        if (((Fn_b_pi)VTSLOT(prop, 0x24))(prop, 0x4bf0dbd, (void**)&out)
+            && *(u16*)((char*)out + 0x12) == 0xd) {
+            scaleLimit = ((Obj_s00c3_49e0*)out)->m_41ea70()[0];
+            if (scaleLimit < DAT_01485720)
+                scaleLimit = DAT_01485720;
+        }
+    }
+
+    cStarRecord* home = (cStarRecord*)((Obj_s00c3_49e0*)SP_StarManager_s00c3_49e0())->m_ba6d80((u32)this->mUFOKey);
+    if (home == 0) {
+        if (prop != 0)
+            RELEASE_s00c3_49e0(prop);
+        return 0;
+    }
+
+    Vec3* hc = ((Obj_s00c3_49e0*)home)->m_5c65e0();
+    float hx = hc->x, hy = hc->y, hz = hc->z;
+    FUN_00c34060(this->mStarsBegin, this->mStarsEnd, hx, hy, hz);
+
+    i32 n = (i32)(this->mStarsEnd - this->mStarsBegin);
+    i32 sel = 0;
+    ((RefVector*)&this->mNextStar)->Resize(n, &sel);
+
+    for (i32 i = 0; i < n; ++i) {
+        cStarRecord* si = this->mStarsBegin[i];
+        if (si == home)
+            continue;
+
+        Vec3* a = ((Obj_s00c3_49e0*)si)->m_5c65e0();
+        float dx = a->x - hx, dy = a->y - hy, dz = a->z - hz;
+        float bestDist = sqrtf(dx * dx + dy * dy + dz * dz);
+        i32 bestIdx = 0;
+
+        for (i32 j = 1; j < i; ++j) {
+            Vec3* b = ((Obj_s00c3_49e0*)this->mStarsBegin[j])->m_5c65e0();
+            float ex = b->x - hx, ey = b->y - hy, ez = b->z - hz;
+            float dist = sqrtf(ex * ex + ey * ey + ez * ez);
+            float ux = dx - ex, uy = dy - ey, uz = dz - ez;
+            float ulen = sqrtf(ux * ux + uy * uy + uz * uz);
+            if (ulen > 0.0f && dist < bestDist && dist > 0.0f) {
+                float dot = (dx * ex + dy * ey + dz * ez) / (bestDist * dist);
+                if (dot >= cosThreshold * scaleLimit) {
+                    bestDist = dist;
+                    bestIdx = j;
+                    dx = ex; dy = ey; dz = ez;
+                }
+            }
+        }
+
+        cStarRecord** slot = &this->mNextStar[i];
+        cStarRecord* chosen = this->mStarsBegin[bestIdx];
+        cStarRecord* old = *slot;
+        if (chosen != old) {
+            if (chosen)
+                ADDREF_s00c3_49e0(chosen);
+            *slot = chosen;
+            if (old)
+                RELEASE_s00c3_49e0(old);
+        }
+    }
+
+    this->mFlags &= ~0x10u;
+    if (prop != 0)
+        RELEASE_s00c3_49e0(prop);
+    return 1;
+}
+
 // @ 0x00c34e70
 void cEmpire_s00c3_49e0::FUN_00c34e70(Obj_s00c3_49e0* p)
 {
@@ -1943,11 +2976,260 @@ void cEmpire_s00c3_49e0::FUN_00c34e70(Obj_s00c3_49e0* p)
     }
 }
 
+// @ 0x00c34ee0
+int cEmpire_s00c3_49e0::RemoveStar(cStarRecord* star, char flag)
+{
+    i32 count = (i32)(this->mStarsEnd - this->mStarsBegin);
+    i32 index = 0;
+    char changed = 0;
+
+    if (count <= 0)
+        return 0;
+    cStarRecord** p = this->mStarsBegin;
+    for (;;) {
+        if (*p == star)
+            break;
+        ++index;
+        ++p;
+        if (index >= count)
+            return 0;
+    }
+
+    if (flag != 0) {
+        FUN_00c8c2a0(star);
+    } else if (this->mEmpireID == (u32)SP_PlayerEmpireID()) {
+        void* v = ((Obj_s00c3_49e0*)star)->m_bba790();
+        void** begin = *(void***)v;
+        void** end = *(void***)((char*)v + 4);
+        for (void** it = begin; it != end; ++it) {
+            void* colony = *it;
+            if (((Obj_s00c3_49e0*)colony)->m_b8dab0() == 5)
+                ((Obj_s00c3_49e0*)DAT_016dda8c)->m_1021ab0(colony);
+        }
+    }
+
+    // erase at <index>: move the tail element over it, then release the vacated slot.
+    if (index != count - 1) {
+        cStarRecord** b = this->mStarsBegin;
+        cStarRecord* cur = b[index];
+        cStarRecord* tail = b[count - 1];
+        if (tail != cur) {
+            if (tail)
+                ADDREF_s00c3_49e0(tail);
+            b[index] = tail;
+            if (cur)
+                RELEASE_s00c3_49e0(cur);
+        }
+    }
+    this->mStarsEnd -= 1;
+    {
+        cStarRecord* stale = *this->mStarsEnd;
+        if (stale)
+            RELEASE_s00c3_49e0(stale);
+    }
+
+    {
+        MsgObj_s00c3_49e0* msg = SP_MessageServer_s00c3_49e0();
+        msg->slot14(0x55bd8f7, 0, 0);
+    }
+    this->mFlags |= 0x10;
+
+    if (*(i32*)((char*)star + 0x70) == this->mUFOKey || this->mUFOKey == -1)
+        changed = 1;
+
+    if (((Obj_s00c3_49e0*)SP_StarManager_s00c3_49e0())->m_885c90() == (i32)this->mEmpireID)
+        ((Obj_s00c3_49e0*)star)->m_bb9c10(0);
+
+    if (changed) {
+        i32 n = (i32)(this->mStarsEnd - this->mStarsBegin);
+        float bestDist = DAT_0146b68c;
+        cStarRecord* bestStar = 0;
+        Vec3* sc = ((Obj_s00c3_49e0*)star)->m_5c65e0();
+        for (i32 i = 0; i < n; ++i) {
+            cStarRecord* s = this->mStarsBegin[i];
+            Vec3* c = ((Obj_s00c3_49e0*)s)->m_5c65e0();
+            float dx = c->x - sc->x;
+            float dy = c->y - sc->y;
+            float dz = c->z - sc->z;
+            float d = dx * dx + dy * dy + dz * dz;
+            if (bestDist > d) {
+                bestDist = d;
+                bestStar = s;
+            }
+        }
+        if (bestStar != 0) {
+            ((Obj_s00c3_49e0*)SP_StarManager_s00c3_49e0())->m_bb4af0(bestStar, 0);
+            void* v = ((Obj_s00c3_49e0*)bestStar)->m_bba790();
+            void** begin = *(void***)v;
+            void** end = *(void***)((char*)v + 4);
+            for (void** it = begin; it != end; ++it) {
+                void* city = *it;
+                if (city != 0 && FUN_00c70150(city, this, 0)) {
+                    this->SetHomePlanet((Obj_s00c3_49e0*)city);
+                    return 1;
+                }
+            }
+        }
+    }
+
+    {
+        i32 planet = ((Obj_s00c3_49e0*)SP_StarManager_s00c3_49e0())->m_ba6d80((u32)this->mUFOKey);
+        if (this->mEmpireMoney == -1 && planet != 0) {
+            ((Obj_s00c3_49e0*)SP_StarManager_s00c3_49e0())->m_bb4af0((void*)planet, 0);
+            void* v = ((Obj_s00c3_49e0*)planet)->m_bba790();
+            void* home = *(void**)*(void**)v;
+            this->SetHomePlanet((Obj_s00c3_49e0*)home);
+        }
+    }
+    if (this->mEmpireMoney != -1) {
+        if (((Obj_s00c3_49e0*)SP_StarManager_s00c3_49e0())->m_ba6dc0((u32)this->mEmpireMoney) != 0)
+            FUN_00ba5bc0(this, 6);
+    }
+
+    {
+        i32 id = (i32)this->mEmpireID;
+        this->mEmpireMoney = -1;
+        this->mUFOKey = -1;
+        ((Obj_s00c3_49e0*)SP_StarManager_s00c3_49e0())->m_baf630(id, 0);
+        MsgObj_s00c3_49e0* msg = SP_MessageServer_s00c3_49e0();
+        msg->slot18(0x43f2586, 0, 0, 0);
+    }
+
+    if (this->mStarsBegin == this->mStarsEnd)
+        this->Destroy();
+    return 1;
+}
+
+// @ 0x00c35240
+void __cdecl ChangeStarEmpireOwnership(cEmpire_s00c3_49e0* self, void* newOwnerAvatar)
+{
+    void* av = ((Obj_s00c3_49e0*)self)->m_b1fdb0();
+    cEmpire_s00c3_49e0* oldEmpire = (cEmpire_s00c3_49e0*)((Obj_s00c3_49e0*)SP_StarManager_s00c3_49e0())->m_ba9370(av);
+    cEmpire_s00c3_49e0* newEmpire = (cEmpire_s00c3_49e0*)((Obj_s00c3_49e0*)SP_StarManager_s00c3_49e0())->m_ba9370(newOwnerAvatar);
+
+    oldEmpire->RemoveStar((cStarRecord*)self, 0);
+    newEmpire->AddStar(self);
+    UpdatePosseMembers(self);
+
+    void* v = ((Obj_s00c3_49e0*)self)->m_bba790();
+    void** begin = *(void***)v;
+    void** end = *(void***)((char*)v + 4);
+    for (void** it = begin; it != end; ++it) {
+        void* ctx = ((Obj_s00c3_49e0*)*it)->m_ce6950();
+        ((Obj_s00c3_49e0*)SP_CommManager_s00c3_49e0())->m_aeab40(ctx);
+        ((Obj_s00c3_49e0*)SP_CommManager_s00c3_49e0())->m_aea720((int)oldEmpire->mEmpireID, ctx, 0);
+    }
+}
+
 // @ 0x00c352f0
 void* cEmpire_s00c3_49e0::FUN_00c352f0(void* p)
 {
     ((Obj_s00c3_49e0*)p)->m_af0d40((char*)this + 0x108);
     return p;
+}
+
+// @ 0x00c35320
+void cEmpire_s00c3_49e0::PickRandomPersonality()
+{
+    if (((Obj_s00c3_49e0*)SP_StarManager_s00c3_49e0())->m_885c90() == (i32)this->mEmpireID) {
+        this->mArchetype = 8;
+        this->mTrait = 0;
+        this->mFlags &= ~4u;
+        return;
+    }
+
+    Obj_s00c3_49e0* prop = 0;
+    Obj_s00c3_49e0* pm = SP_PropertyManager();
+    if (prop != 0) {
+        RELEASE_s00c3_49e0(prop);
+        prop = 0;
+    }
+    ((Fn_v_piii)VTSLOT(pm, 0x2c))(pm, 0x40020b6f, 0x2ae0c7e, (void**)&prop);
+    if (prop == 0)
+        return;
+
+    {
+        HashMap map;
+        u32 arche[9];
+        static const int kArch[8] = {
+            0x55500bf, 0x55500cd, 0x55500d5, 0x55500dc,
+            0x55500e2, 0x55500e9, 0x55500ee, 0x55500f6
+        };
+        map.Build(arche, 9, &prop);
+        for (int k = 0; k < 8; ++k) {
+            Obj_s00c3_49e0* out = 0;
+            if (prop != 0
+                && ((Fn_b_pi)VTSLOT(prop, 0x24))(prop, kArch[k], (void**)&out)
+                && *(u16*)((char*)out + 0x12) == 9) {
+                arche[k] = (u32)((Obj_s00c3_49e0*)out)->m_41e990()[0];
+            }
+        }
+        this->mArchetype = FUN_00ba7320(arche);
+    }
+
+    {
+        HashMap map;
+        u32 trait[4];
+        static const int kTrait[4] = { 0x2f98dae, 0x2f98db1, 0x2f98db3, 0x2f98db5 };
+        map.Build(trait, 4, &prop);
+        for (int k = 0; k < 4; ++k) {
+            Obj_s00c3_49e0* out = 0;
+            if (prop != 0
+                && ((Fn_b_pi)VTSLOT(prop, 0x24))(prop, kTrait[k], (void**)&out)
+                && *(u16*)((char*)out + 0x12) == 9) {
+                trait[k] = (u32)((Obj_s00c3_49e0*)out)->m_41e990()[0];
+            }
+        }
+        this->mTrait = FUN_00ba7320(trait);
+    }
+
+    {
+        float v = 0.0f;
+        Obj_s00c3_49e0* p2 = (Obj_s00c3_49e0*)((Obj_s00c3_49e0*)SP_StarManager_s00c3_49e0())->m_baf700(this);
+        Obj_s00c3_49e0* out = 0;
+        if (p2 != 0
+            && ((Fn_b_pi)VTSLOT(p2, 0x24))(p2, 0x576373a, (void**)&out)
+            && *(u16*)((char*)out + 0x12) == 0xd)
+            v = ((Obj_s00c3_49e0*)out)->m_41ea70()[0];
+
+        float r = ((RandomLCG*)0x1601760)->RandomDoubleUniform();
+        if (v > r || DAT_015b7436 != 0)
+            this->mFlags |= 4;
+        else
+            this->mFlags &= ~4u;
+    }
+
+    if (prop != 0)
+        RELEASE_s00c3_49e0(prop);
+}
+
+// @ 0x00c35740
+void cEmpire_s00c3_49e0::SetUFOKey(int* key)
+{
+    if (this->mUFOKey3[0] == key[0]
+        && this->mUFOKey3[1] == key[1]
+        && this->mUFOKey3[2] == key[2])
+        return;
+    this->mUFOKey3[0] = key[0];
+    this->mUFOKey3[1] = key[1];
+    this->mUFOKey3[2] = key[2];
+
+    {
+        Obj_s00c3_49e0* db = SP_ObjectTemplateDB();
+        ((Fn_v_ppi)VTSLOT(db, 0x58))(db, key, 1);
+    }
+
+    {
+        void** vec = ((Obj_s00c3_49e0*)SP_NounManager_s00c3_49e0())->m_b21340(0xcd7d10, 0xd3d420, 0xad48b0,
+                                                        0xb1e500, 0x18ebadc);
+        void** begin = (void**)((void**)vec)[1];
+        void** end = (void**)((void**)vec)[2];
+        for (void** p = begin; p != end; ++p) {
+            void* item = *p;
+            if (((Fn_i_p)VTSLOT(item, 0x4c))(item) == (int)this->mEmpireID)
+                ((Obj_s00c3_49e0*)item)->m_c37180(key, 1);
+        }
+    }
 }
 
 // @ 0x01064fd0
@@ -1976,3 +3258,177 @@ void cEmpire_s0106_4990::Init_01064fd0()
 
     PopulateLeft_01064b60();
 }
+
+// @ 0x01065360
+bool cEmpireC::Ret_01065360(int id, void* ev)
+{
+    if (id == (int)0xb3d53f95)
+    {
+        int v = *(int*)((char*)mpSelected + 0x17c);
+        void* sim = FUN_00b3d3f0();
+        ((E30Obj*)((SimSlot*)sim)->mpE30)->Method_e30a60(v);
+
+        void* nw = *(void**)((char*)ev + 0x10);
+        void* old = mpSelected;
+        if (nw != old)
+        {
+            if (nw != 0)
+                ((RefObj*)nw)->AddRef();
+            mpSelected = (CFeedItem*)nw;
+            if (old != 0)
+                ((RefObj*)old)->Release();
+        }
+        m44 = 0;
+        empireFromC(this)->Init_01064fd0();
+        return true;
+    }
+    return BaseHandler_00e18600(id, ev);
+}
+
+// @ 0x01065900
+void cEmpire_s0106_4990::Show_01065900(int arg)
+{
+    if (mb40 != 0)
+        return;
+
+    Show_00e18860(arg);
+
+    cString12 s;
+    s.Init_6b5770(0xf5e156f8, 0x6038566, 0);
+    SetText_00e18890((void*)s.GetText_6b55c0());
+
+    mb40 = 1;
+    PopulateFeed_010655a0();
+    Init_01064fd0();
+    mpFeedList->FUN_00662920(1);
+
+    void* srv = MessageServer_67dcc0();
+    mpMsgServer = srv;
+    mpIdentity = (void*)((char*)this + 0x0c);
+    mMsgId = 0x1400244;
+    mC8 = 1;
+    mCC = 0;
+    if (srv != 0 && mpIdentity != 0)
+        ((Tc2pi)VTS(srv, 0x24))(srv, mpIdentity, 0xb3d53f95);
+}
+
+// @ 0x01336df0
+namespace Simulator {
+void InitEmpireAttributes()
+{
+    {
+        Attribute a("mEmpireName", 0x03477139, 0x3c,
+                  Read_00ac87c0, Write_00ac87f0, ReadText_00694c80, WriteText_00694c10,
+                  Validate_00b1fbf0, ToXml_00acbbc0);
+        *(Attribute*)&cEmpire_sAttributes[0] = a;
+    }
+    {
+        Attribute a("mEmpireMoney", 0x021e6db7, 0xd0,
+                  Read_00572810, Write_00572840, ReadText_00692ff0, WriteText_00694ee0,
+                  Validate_00b1fbf0, ToXml_0057cde0);
+        *(Attribute*)&cEmpire_sAttributes[1] = a;
+    }
+    {
+        Attribute a("mTravelDistance", 0x051e6db7, 0xd4,
+                  Read_00bb9cd0, Write_00bb9d00, ReadText_00693070, WriteText_00694f80,
+                  Validate_00b1fbf0, ToXml_00595a50);
+        *(Attribute*)&cEmpire_sAttributes[2] = a;
+    }
+    {
+        Attribute a("mTrait", 0x03477338, 0x54,
+                  Read_00572810, Write_00572840, ReadText_00692ff0, WriteText_00694ee0,
+                  Validate_00b1fbf0, ToXml_0057cde0);
+        *(Attribute*)&cEmpire_sAttributes[3] = a;
+    }
+    {
+        Attribute a("mArchetype", 0x0554279e, 0x58,
+                  Read_00572810, Write_00572840, ReadText_00692ff0, WriteText_00694ee0,
+                  Validate_00b1fbf0, ToXml_0057cde0);
+        *(Attribute*)&cEmpire_sAttributes[4] = a;
+    }
+    {
+        Attribute a("mCurrentGameMode", 0x0362ab2e, 0x4c,
+                  Read_00572810, Write_00572840, ReadText_00693090, WriteText_00694f00,
+                  Validate_00b1fbf0, ToXml_00675ca0);
+        *(Attribute*)&cEmpire_sAttributes[5] = a;
+    }
+    {
+        Attribute a("mUFOKey", 0x03ab8a62, 0xb8,
+                  Read_00ae3430, Write_00ae3450, ReadText_00693150, WriteText_00695080,
+                  Validate_00b1fbf0, ToXml_00ae5720);
+        *(Attribute*)&cEmpire_sAttributes[6] = a;
+    }
+    {
+        Attribute a("mCaptainKey", 0x07f55dbf, 0xc4,
+                  Read_00ae3430, Write_00ae3450, ReadText_00693150, WriteText_00695080,
+                  Validate_00b1fbf0, ToXml_00ae5720);
+        *(Attribute*)&cEmpire_sAttributes[7] = a;
+    }
+    {
+        Attribute a("mHomePlanet", 0x021e6dbb, 0xb4,
+                  Read_00572810, Write_00572840, ReadText_00693090, WriteText_00694f00,
+                  Validate_00b1fbf0, ToXml_00675ca0);
+        *(Attribute*)&cEmpire_sAttributes[8] = a;
+    }
+    {
+        Attribute a("mHomeStar", 0x021e6dba, 0xb0,
+                  Read_00572810, Write_00572840, ReadText_00693090, WriteText_00694f00,
+                  Validate_00b1fbf0, ToXml_00675ca0);
+        *(Attribute*)&cEmpire_sAttributes[9] = a;
+    }
+    {
+        Attribute a("mPoliticalID", 0x021e6dbc, 0x84,
+                  Read_00572810, Write_00572840, ReadText_00693090, WriteText_00694f00,
+                  Validate_00b1fbf0, ToXml_00675ca0);
+        *(Attribute*)&cEmpire_sAttributes[10] = a;
+    }
+    {
+        Attribute a("mCityMusic", 0x042a0f35, 0x104,
+                  Read_00bf26b0, Write_00bca960, ReadText_00c2e4e0, WriteText_00692fb0,
+                  Validate_00b6f550, ToXml_00ac8050);
+        *(Attribute*)&cEmpire_sAttributes[11] = a;
+    }
+    {
+        Attribute a("mFlags", 0x035d5a51, 0x50,
+                  Read_00c31c80, Write_00c32a40, ReadText_00c2e4e0, WriteText_00692fb0,
+                  Validate_00b1fbf0, ToXml_00ac8050);
+        *(Attribute*)&cEmpire_sAttributes[12] = a;
+    }
+    {
+        Attribute a("mCultureSet", 0x05624e2e, 0x108,
+                  Read_00bf1c70, Write_00bf1cb0, ReadText_00c2e4e0, WriteText_00692fb0,
+                  Validate_00befb00, ToXml_00ac8050);
+        *(Attribute*)&cEmpire_sAttributes[13] = a;
+    }
+    {
+        Attribute a("mEnemies", 0x03477390, 0x5c,
+                  Read_00c34750, Write_00aca730, ReadText_00c2e4e0, WriteText_00692fb0,
+                  Validate_00b6f860, ToXml_00c6c390);
+        *(Attribute*)&cEmpire_sAttributes[14] = a;
+    }
+    {
+        Attribute a("mAllies", 0x03868491, 0x70,
+                  Read_00c34750, Write_00aca730, ReadText_00c2e4e0, WriteText_00692fb0,
+                  Validate_00b6f860, ToXml_00c6c390);
+        *(Attribute*)&cEmpire_sAttributes[15] = a;
+    }
+    {
+        Attribute a("mStars", 0x03868492, 0x88,
+                  Read_00badf20, Write_00aca730, ReadText_00c2e4e0, WriteText_00692fb0,
+                  Validate_00b6f860, ToXml_00c6c390);
+        *(Attribute*)&cEmpire_sAttributes[16] = a;
+    }
+    {
+        Attribute a("mNextStarTowardsHome", 0x03868493, 0x9c,
+                  Read_00badf20, Write_00aca730, ReadText_00c2e4e0, WriteText_00692fb0,
+                  Validate_00b6f860, ToXml_00c6c390);
+        *(Attribute*)&cEmpire_sAttributes[17] = a;
+    }
+    {
+        Attribute a("mAdventureList", 0x07995682, 0x148,
+                  Read_00c33820, Write_00c332a0, ReadText_00c2e4e0, WriteText_00692fb0,
+                  Validate_00c31ca0, ToXml_00eafcf0);
+        *(Attribute*)&cEmpire_sAttributes[18] = a;
+    }
+}
+}  // namespace Simulator
