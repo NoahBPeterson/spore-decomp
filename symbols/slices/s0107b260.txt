@@ -1,4 +1,8 @@
+0107b260 ?PopulateSelected@cSPUITools_s0107_b260@@QAE_NPAVcUIObject@@@Z  # cSPUITools_s0107_b260::PopulateSelected migrated from s0107b260 (verbatim, slice spelling)
 0107b6f0 ?PopulateLeft@cToolsPanelLeft@@QAE_NIPAVcToolsEvent@@@Z  # cToolsPanelLeft::PopulateLeft migrated from s0107b260 (verbatim, slice spelling)
+0107b760 ?PopulateRight@cSPUITools_s0107_b260@@QAEXXZ  # cSPUITools_s0107_b260::PopulateRight migrated from s0107b260 (verbatim, slice spelling)
+0107bb00 ?Open@cSPUITools_s0107_b260@@QAEXI@Z  # cSPUITools_s0107_b260::Open migrated from s0107b260 (verbatim, slice spelling)
+0107bc30 ?OnMessage@cToolsMessage@@UAE_NIPAVcToolsEvent@@@Z  # cToolsMessage::OnMessage migrated from s0107b260 (verbatim, slice spelling)
 0107bd40 ?UpdateTuning@cUniverseSimulatorTuning@@QAEXXZ  # cUniverseSimulatorTuning::UpdateTuning migrated from s0107b260 (verbatim, slice spelling)
 0107bea0 ?HandleMessage@cUniverseSimulatorTuning@@UAE_NIPAVcUniverseTuningMessage@@@Z  # cUniverseSimulatorTuning::HandleMessage migrated from s0107b260 (verbatim, slice spelling)
 0107c0b0 ??0cWalkAroundInputStrategy_s0107_b260@@QAE@XZ  # cWalkAroundInputStrategy_s0107_b260::cWalkAroundInputStrategy migrated from s0107b260 (verbatim, slice spelling)

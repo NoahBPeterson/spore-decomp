@@ -583,9 +583,17 @@ template void NukeTree::DoNuke(NukeTree::node_type*);
 
 // ---- items of slice s00e17c10 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern "C" void   FUN_00810590(void *layout, int v, int f); // 0x00810590 cSPUILayout::SetVisibility
+extern "C" void   FUN_00811ad0(void *layout, int f);        // 0x00811ad0 cSPUILayout::Shutdown
+extern "C" bool   FUN_00810070(void *layout);               // 0x00810070 cSPUILayout::IsVisible
 extern "C" void  *FUN_00921580(void *node);                 // 0x00921580 RBTreeIncrement
+extern "C" bool   FUN_008120d0(void *layout, void *key, bool b, int c); // 0x008120d0 cSPUILayout::Init
+extern "C" void  *FUN_008105b0(void *layout, int id, bool b); // 0x008105b0 FindWindowByID
+extern "C" void   FUN_00810570(void *o);                     // 0x00810570
+extern "C" void  *FUN_00810000(void *o);                     // 0x00810000 cConnectionDialog ctor
 typedef unsigned int   u32;
 typedef unsigned char  u8;
+extern "C" void  *operator_new(u32 size, u32 file, u32 line, u32 a, u32 b, u32 c); // 0x00f473a0
+extern "C" bool   FUN_008121b0(void *layout, void *parent, bool b, u32 id); // 0x008121b0 SetParentWin
 extern "C" void   FUN_00e30990(void *o, u32 arg);           // 0x00e30990
 struct cPanelHead0c {               // +0x00
     void **m_vtbl00;                // +0x00
@@ -722,6 +730,37 @@ public:
 
 // ---- items of slice s0107b260 begin (TODO(rewrite): local stubs, replace by canonical classes)
 #define VSLOT(n) virtual void _v##n();
+class cSPMission {
+public:
+    uint8_t mnPad00[0x17c];       // +0x000
+    cSPMission* mpParentMission;  // +0x17c
+};
+class cPropertyValue {
+public:
+    VSLOT(0) VSLOT(1) VSLOT(2) VSLOT(3) VSLOT(4) VSLOT(5) VSLOT(6) VSLOT(7)
+    VSLOT(8)
+    uint8_t mnPad04[0x0e];       // +0x004
+    uint16_t mnType;             // +0x012
+    float* GetFloat();           // 0x0041ea70
+    int32_t* GetInt();           // 0x0041e990
+};
+class cPropertyList {
+public:
+    VSLOT(0)
+    virtual void Release();                                            // +0x04
+    VSLOT(2) VSLOT(3) VSLOT(4) VSLOT(5) VSLOT(6) VSLOT(7) VSLOT(8)
+    virtual bool FindProperty(uint32_t nKey, cPropertyValue** ppValue); // +0x24
+};
+class cPropertyManager {
+public:
+    VSLOT(0) VSLOT(1) VSLOT(2) VSLOT(3) VSLOT(4) VSLOT(5) VSLOT(6) VSLOT(7)
+    VSLOT(8) VSLOT(9) VSLOT(10)
+    virtual void GetProperty(uint32_t nKey, uint32_t nId,
+                             cPropertyList** ppProperty); // +0x2c
+};
+cPropertyManager* PropertyManager(); // 0x0067de30
+void GetToolAvailability(cPropertyList* pProperty, uint32_t* pnTool,
+                         uint32_t* pnAvailability); // 0x0107b120
 class cUIObject {
 public:
     VSLOT(0) VSLOT(1) VSLOT(2) VSLOT(3) VSLOT(4) VSLOT(5) VSLOT(6)
@@ -750,6 +789,13 @@ public:
     cSelectionManager* mpSelection; // +0x05c
 };
 cNounManager* NounManager();        // 0x00b3d3f0
+class cMissionCard {
+public:
+    virtual void AddRef();          // +0x00
+    virtual void Release();         // +0x04
+    uint8_t mnPad04[0x178];         // +0x004
+    cSPMission* mpParentMission;    // +0x17c
+};
 class cSPUITools_s0107_b260 {
 public:
     __declspec(noinline) bool PopulateSelected(cUIObject* pObject); // 0x0107b260
@@ -762,11 +808,135 @@ public:
     cLeftPanel mLeftPanel;       // +0x0b0
     bool PopulateLeft(uint32_t nMessage, cToolsEvent* pEvent); // 0x0107b6f0
 };
+class cUIMissionCardPanel_s0107_b260 {
+public:
+    virtual bool OnMessage(uint32_t nMessage, cToolsEvent* pEvent); // 0x00e18600
+    uint8_t mnPad04[0x138];      // +0x004
+    cMissionCard* mpSelectedMission; // +0x13c
+};
+class cToolsMessage : public cUIMissionCardPanel_s0107_b260 {
+public:
+    bool OnMessage(uint32_t nMessage, cToolsEvent* pEvent); // 0x0107bc30
+};
 // ---- items of slice s0107b260 end
 
 // @ 0x004b6000
 template void eastl::vector_s004b_5690<EA::AutoRefCount_s004b_5690<SP::cPropertyList_s004b_5690>, eastl::sp_vector_allocator_s004b_5690>::DoInsertValue(EA::AutoRefCount_s004b_5690<SP::cPropertyList_s004b_5690>*, const EA::AutoRefCount_s004b_5690<SP::cPropertyList_s004b_5690>&)
 ;
+
+// @ 0x00e18600
+char cPanelMsg0c::OnMessage(u32 msg, void *arg)
+{
+    cUIMissionCardPanel *self = static_cast<cUIMissionCardPanel *>(this);
+    char visible = 0;
+    if (msg != 0x65ff54a || m_layout == 0) {
+        return visible;
+    }
+    if (*(u32 *)((u8 *)arg + 0x10) != 0x40464100) {
+        return visible;
+    }
+    void *mission = *(void **)((u8 *)arg + 0x18);
+    u32 key = m_field10;
+    void *cur = ((void *(__thiscall *)(void *, u32))self->m_vtbl00[0x30 / 4])(self, key);
+    if (mission != cur) {
+        return visible;
+    }
+    u32 saved14 = (u32)(unsigned long)m_field14;
+    void *layout = m_layout;
+    u32 savedCard = (u32)(unsigned long)m_card;
+    u32 r570 = (u32)(unsigned long)((void *(__thiscall *)(void *))FUN_00810570)(layout);
+    visible = ((bool (__thiscall *)(void *))FUN_00810070)(layout) ? 1 : 0;
+    if (visible) {
+        ((void (__thiscall *)(void *))self->m_vtbl00[0x20 / 4])(self);
+    }
+    ((void (__thiscall *)(void *))self->m_vtbl00[0x14 / 4])(self);
+    ((void (__thiscall *)(void *, u32, u32, u32, u32))self->m_vtbl00[0x10 / 4])(
+        self, key, saved14, r570, savedCard);
+    if (visible) {
+        ((void (__thiscall *)(void *, u32))self->m_vtbl00[0x1c / 4])(self, 0);
+    }
+    return 1;
+}
+
+// @ 0x00e186d0
+void cUIMissionCardPanel::OnNotify(u32 a, u32 b, u32 c, u32 d)
+{
+    (void)c;
+    (void)d;
+    ((void (__thiscall *)(void *))m_vtbl00[0x14 / 4])(this);
+    u32 r = ((u32 (__thiscall *)(void *, u32))m_vtbl00[0x30 / 4])(this, a);
+    u32 key0 = a;
+    u32 key1 = 0x510a95b;
+    u32 key2 = 0x40464100;
+    (void)key0;
+    (void)key1;
+    (void)key2;
+    void *raw = operator_new(0x18, 0x13f6b3c, 0, 0, 0, 0);
+    void *obj = 0;
+    if (raw != 0) {
+        obj = ((void *(__thiscall *)(void *))FUN_00810000)(raw);
+    }
+    m_field10 = a;
+    m_field14 = (void *)(unsigned long)b;
+    void *old = m_layout;
+    if (obj != old) {
+        if (obj != 0) {
+            ((void (__thiscall *)(void *))(*(void ***)obj)[1])(obj);
+        }
+        m_layout = obj;
+        if (old != 0) {
+            ((void (__thiscall *)(void *))(*(void ***)old)[2])(old);
+        }
+    }
+    u32 k[3];
+    k[0] = a;
+    k[1] = 0x510a95b;
+    k[2] = 0x40464100;
+    if (!((bool (__thiscall *)(void *, u32 *, bool, u32))FUN_008120d0)(m_layout, k, false, 0x5b598fa)) {
+        ((void (__thiscall *)(void *, u32))FUN_00811ad0)(m_layout, 1);
+        if (m_layout != 0) {
+            m_layout = 0;
+            ((void (__thiscall *)(void *))(*(void ***)obj)[2])(obj);
+        }
+    }
+    ((bool (__thiscall *)(void *, void *, bool, u32))FUN_008121b0)(m_layout, (void *)r, true, 0x5b598fa);
+    ((void (__thiscall *)(void *, int))FUN_00810590)(m_layout, 0);
+    void *w = ((void *(__thiscall *)(void *, int, bool))FUN_008105b0)(
+        m_layout, (int)((u32 (__thiscall *)(void *, u32))m_vtbl00[0x34 / 4])(this, a), true);
+    if (w != 0) {
+        ((void (__thiscall *)(void *, void *))(*(void ***)w)[0x104 / 4])(w, (u8 *)this + 8);
+    }
+    void *oldCard = m_card;
+    if ((void *)r != oldCard) {
+        if (r != 0) {
+            ((void (__thiscall *)(void *))(*(void ***)r)[0])((void *)r);
+        }
+        m_card = (void *)r;
+        if (oldCard != 0) {
+            ((void (__thiscall *)(void *))(*(void ***)oldCard)[1])(oldCard);
+        }
+    }
+}
+
+// @ 0x00e18810
+void cUIMissionCardPanel::ShutdownCard()
+{
+    void *card = m_card;
+    if (card != 0) {
+        m_card = 0;
+        ((void (__thiscall *)(void *))(*(void ***)card)[1])(card);
+    }
+    void *lay = m_layout;
+    if (lay != 0) {
+        ((void (__thiscall *)(void *, int))FUN_00811ad0)(lay, 1);
+        lay = m_layout;
+        if (lay != 0) {
+            m_layout = 0;
+            ((void (__thiscall *)(void *))(*(void ***)lay)[2])(lay);
+        }
+    }
+    m_field10 = 0xffffffff;
+}
 
 // @ 0x00e18860
 void cUIMissionCardPanel::SetVisibleSlot(int v)
@@ -832,6 +1002,28 @@ void __thiscall SP::cSPUITools::GetToolAvailability()
 {
 }
 
+// @ 0x0107b260
+bool cSPUITools_s0107_b260::PopulateSelected(cUIObject* pObject)
+{
+    cPropertyList* pProperty = 0;
+    uint32_t nTool = 0;
+    uint32_t nAvailability = 0;
+
+    cPropertyManager* pManager = PropertyManager();
+    if (pProperty != 0) {
+        pProperty->Release();
+        pProperty = 0;
+    }
+    nTool = pObject->GetTypeId();
+    pManager->GetProperty(0x30608f0b, nTool, &pProperty);
+    GetToolAvailability(pProperty, &nTool, &nAvailability);
+    if (pProperty != 0) {
+        pProperty->Release();
+        pProperty = 0;
+    }
+    return nAvailability != 0;
+}
+
 // @ 0x0107b6f0
 bool cToolsPanelLeft::PopulateLeft(uint32_t nMessage, cToolsEvent* pEvent)
 {
@@ -852,4 +1044,51 @@ bool cToolsPanelLeft::PopulateLeft(uint32_t nMessage, cToolsEvent* pEvent)
         break;
     }
     return false;
+}
+
+// @ 0x0107b760
+void cSPUITools_s0107_b260::PopulateRight()
+{
+    cPropertyList* pProperty = 0;
+    uint32_t nTool = 0;
+    uint32_t nAvailability = 0;
+
+    cPropertyManager* pManager = PropertyManager();
+    if (pProperty != 0) {
+        pProperty->Release();
+        pProperty = 0;
+    }
+    pManager->GetProperty(0x30608f0b, nTool, &pProperty);
+    GetToolAvailability(pProperty, &nTool, &nAvailability);
+    if (pProperty != 0) {
+        pProperty->Release();
+        pProperty = 0;
+    }
+}
+
+// @ 0x0107bb00
+void cSPUITools_s0107_b260::Open(uint32_t nSlot)
+{
+    (void)nSlot;
+}
+
+// @ 0x0107bc30
+bool cToolsMessage::OnMessage(uint32_t nMessage, cToolsEvent* pEvent)
+{
+    if (nMessage == 0xb3d53f95) {
+        NounManager()->mpSelection->Select(mpSelectedMission->mpParentMission);
+
+        cMissionCard* pNewCard = (cMissionCard*)pEvent->mpCard;
+        cMissionCard* pOldCard = mpSelectedMission;
+        if (pNewCard != pOldCard) {
+            if (pNewCard != 0)
+                pNewCard->AddRef();
+            mpSelectedMission = pNewCard;
+            if (pOldCard != 0)
+                pOldCard->Release();
+        }
+        ((cSPUITools_s0107_b260*)((char*)this - 0xc))->PopulateRight();
+        return true;
+    }
+    return cUIMissionCardPanel_s0107_b260::OnMessage(nMessage, pEvent);
 }

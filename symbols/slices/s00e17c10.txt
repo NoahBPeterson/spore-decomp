@@ -12,9 +12,9 @@
 00e18340 ?RemoveHandlerAndRelease@cUIMissionCardList@@QAEXXZ  # cUIMissionCardList::RemoveHandlerAndRelease migrated from s00e17c10 (verbatim, slice spelling)
 00e18380 ?HandleMessage@cPanelHandler24@@QAEDIPAX@Z  # cPanelHandler24::HandleMessage migrated from s00e17c10 (verbatim, slice spelling)
 00e184d0 ?RefreshFromMissionList@cUIMissionCardPanel_s00e1_7c10@@QAEXXZ  # cUIMissionCardPanel_s00e1_7c10::RefreshFromMissionList migrated from s00e17c10 (verbatim, slice spelling)
-00e18600  cPanelMsg0c::OnMessage(msg, arg) -> char  # this=panel+0x0c; handler sub-object message 0x65ff54a path (NOT byte-exact; see nonmatching.txt)
-00e186d0  cUIMissionCardPanel::OnNotify(a, b) -> void  # rebuild layout via cConnectionDialog, Init/SetParentWin/FindWindowByID, vtbl[0x104] (NOT byte-exact; see nonmatching.txt)
-00e18810  cUIMissionCardPanel::ShutdownCard() -> void  # release card, shutdown layout, reset field
+00e18600 ?OnMessage@cPanelMsg0c@@QAEDIPAX@Z  # cPanelMsg0c::OnMessage migrated from s00e17c10 (verbatim, slice spelling)
+00e186d0 ?OnNotify@cUIMissionCardPanel@@QAEXIIII@Z  # cUIMissionCardPanel::OnNotify migrated from s00e17c10 (verbatim, slice spelling)
+00e18810 ?ShutdownCard@cUIMissionCardPanel@@QAEXXZ  # cUIMissionCardPanel::ShutdownCard migrated from s00e17c10 (verbatim, slice spelling)
 00e18860 ?SetVisibleSlot@cUIMissionCardPanel@@QAEXH@Z  # cUIMissionCardPanel::SetVisibleSlot migrated from s00e17c10 (verbatim, slice spelling)
 00e188b0 ?InitHints@cUIMissionCardPanel@@QAEPAXPAX@Z  # cUIMissionCardPanel::InitHints migrated from s00e17c10 (verbatim, slice spelling)
 00e18980 ?DestroyMembers@cUIMissionCardPanel@@QAEXXZ  # cUIMissionCardPanel::DestroyMembers migrated from s00e17c10 (verbatim, slice spelling)
