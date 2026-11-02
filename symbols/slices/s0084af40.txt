@@ -6,8 +6,8 @@
 0084b2e0 ?IMEServerWin32Ctor@@YAPAXPAX@Z  # IMEServerWin32Ctor migrated from s0084af40 (verbatim, slice spelling)
 0084b390 ?SetIMECandidateListData@IMEServerWin32_s0084_af40@@QAEXPAXIII@Z  # IMEServerWin32_s0084_af40::SetIMECandidateListData migrated from s0084af40 (verbatim, slice spelling)
 0084b600 ?WinProc@IMEServerWin32_s0084_af40@@QAEJPAXIIJ@Z  # IMEServerWin32_s0084_af40::WinProc migrated from s0084af40 (verbatim, slice spelling)
-0084bc80 ?DGifGetCodeNext@@YAHPAUGifFileType@@PAPAE@Z  # giflib DGifGetCodeNext
-0084bce0 ?DGifCloseFile@@YAHPAUGifFileType@@@Z  # giflib DGifCloseFile
-0084bd20 ?DGifSetupDecompress@@YAHPAUGifFileType@@@Z  # giflib DGifSetupDecompress
-0084bd90 ?DGifGetPrefixChar@@YAHPAHHH@Z  # giflib DGifGetPrefixChar
-0084bdb0 ?DGifDecompressInput@@YAHPAUGifFileType@@PAH@Z  # giflib DGifDecompressInput
+0084bc80 ?DGifGetCodeNext@@YAHPAUGifFileType_s0084_af40@@PAPAE@Z  # DGifGetCodeNext migrated from s0084af40 (verbatim, slice spelling)
+0084bce0 ?DGifCloseFile@@YAHPAUGifFileType_s0084_af40@@@Z  # DGifCloseFile migrated from s0084af40 (verbatim, slice spelling)
+0084bd20 ?DGifSetupDecompress@@YAHPAUGifFileType_s0084_af40@@@Z  # DGifSetupDecompress migrated from s0084af40 (verbatim, slice spelling)
+0084bd90 ?DGifGetPrefixChar@@YAHPAHHH@Z  # DGifGetPrefixChar migrated from s0084af40 (verbatim, slice spelling)
+0084bdb0 ?DGifDecompressInput@@YAHPAUGifFileType_s0084_af40@@PAH@Z  # DGifDecompressInput migrated from s0084af40 (verbatim, slice spelling)

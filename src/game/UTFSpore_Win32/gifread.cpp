@@ -1,4 +1,4 @@
-// src/game/UTFSpore_Win32/gifread.cpp -- migrated from slice(s) s0084be00 by tools/migrate/rewrite.py
+// src/game/UTFSpore_Win32/gifread.cpp -- migrated from slice(s) s0084cd70, s0084af40, s0084be00 by tools/migrate/rewrite.py
 // Object file: UTFSpore_Win32/gifread.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -65,6 +65,177 @@ int  DGifDecompressLine(GifFileType* f, int line, int len);   // 0x0084c400
 int  DGifGetLine(GifFileType* f, unsigned char* line, int len); // 0x0084c680
 int  LoadImage(GifFileType* f, int dest, int stride);         // 0x0084c710
 // ---- items of slice s0084be00 end
+
+// ---- items of slice s0084af40 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C" int  __stdcall GifReadFile(void* hFile, void* pBuf, int nBytes);   // 0x0087d4e0 gread
+extern "C" bool __stdcall GifFree(void* p);                                   // 0x0087d4c0 gfree
+extern "C" void __stdcall GifSeek(void* hFile, int lo, int hi);               // 0x0087d540 gseek
+typedef unsigned char  uint8;
+typedef uint8          GifByteType;
+typedef __int64        int64;
+extern "C" int64 __stdcall GifTell(void* hFile);                              // 0x0087d570 gtell
+struct GifFilePrivateType {
+    void*   mFileHandle;      // +0x00
+    unsigned char mPad[0x08 - 0x04];
+    int     mRunningCode;     // +0x08
+    int     mRunningBits;     // +0x0c
+    int     mMaxCode1;        // +0x10
+    int     mMaxCode;         // +0x14
+    int     mLastCode;        // +0x18
+    int     mStackPtr;        // +0x1c
+    int     mCrntShiftDWord;  // +0x20
+    int     mCrntShiftState;  // +0x24
+    int     mEOFCode;         // +0x28
+    int     mBadCode;         // +0x2c
+    int     mLastCode2;       // +0x30
+    void*   mUserData0;       // +0x34
+    void*   mUserData1;       // +0x38
+    void*   mpReadFn;         // +0x3c
+    void*   mpWriteFn;        // +0x40
+    void*   mBuffer;          // +0x48? (the +0x38 file handle the DGif helpers read through)
+};
+struct GifFileType_s0084_af40 {
+    int        mUserData;     // +0x00
+    int        mPad04;
+    int        mPad08;
+    int        mPad0c;
+    int        mPad10;
+    int        mPad14;
+    int        mPad18;
+    int        mPad1c;
+    int        mPad20;
+    int        mPad24;
+    int        mPad28;
+    int        mPad2c;
+    int        mPad30;
+    int        mPad34;
+    int        mPad38;
+    int        mPad3c;
+    void*      mpPrivate;     // +0x40
+    int        mPad44;
+    void*      mpSaved;       // +0x48
+    int        mError;        // +0x4c
+    // ... image/colour-map fields follow
+};
+struct GifPrivateHandle {
+    unsigned char mPad[0x38];
+    void*         mpFile;     // +0x38
+};
+// ---- items of slice s0084af40 end
+
+// ---- items of slice s0084cd70 begin (TODO(rewrite): local stubs, replace by canonical classes)
+void* __cdecl GIFgetinfo(void* name, int want, void* out, int stride);    // 0x0084c7d0
+struct GifFileType_s0084_cd70 {
+    int  SWidth;                 // 0x00
+    int  SHeight;                // 0x04
+    int  SColorResolution;       // 0x08
+    int  SBackGroundColor;       // 0x0c
+    int  AspectByte;             // 0x10
+    int  ImageLeft;              // 0x14
+    int  ImageTop;               // 0x18
+    int  ImageWidth;             // 0x1c
+    int  ImageHeight;            // 0x20
+    int  ImageInterlace;         // 0x24
+    int  ImageColorRes;          // 0x28
+    int  ImageTransparent;       // 0x2c
+    int  ImageReserved30;        // 0x30
+    int  ImageReserved34;        // 0x34
+    int  Reserved38;             // 0x38
+    void* ImageColorMap;         // 0x3c
+    void* SavedImageColorMap;    // 0x40
+    int  ImageCount;             // 0x44
+    void* Private;               // 0x48
+};
+// ---- items of slice s0084cd70 end
+
+// @ 0x0084bc80
+int DGifGetCodeNext(GifFileType_s0084_af40* pGifFile, GifByteType** ppCodeBlock)
+{
+    GifFilePrivateType* pPriv = (GifFilePrivateType*)pGifFile->mpPrivate;
+    void* pFile = ((GifPrivateHandle*)((char*)pPriv + 0x38))->mpFile;
+
+    uint8 nSize;
+    if (GifReadFile(pFile, &nSize, 1) == 0)
+        return 0;
+    if (nSize == 0) {
+        *ppCodeBlock = 0;
+    } else {
+        *ppCodeBlock = (GifByteType*)((char*)pPriv + 0x70);
+        *(uint8*)*ppCodeBlock = nSize;
+        if (GifReadFile(pFile, (char*)*ppCodeBlock + 1, nSize) == 0)
+            return 0;
+    }
+    return 1;
+}
+
+// @ 0x0084bce0
+int DGifCloseFile(GifFileType_s0084_af40* pGifFile)
+{
+    if (pGifFile == 0)
+        return 0;
+    GifFilePrivateType* pPriv = (GifFilePrivateType*)pGifFile->mpPrivate;
+    GifFilePrivateType* pSaved = (GifFilePrivateType*)pGifFile->mpSaved;
+    if (pPriv->mpWriteFn) GifFree(pPriv->mpWriteFn);
+    if (pPriv->mpReadFn) GifFree(pPriv->mpReadFn);
+    if (pSaved) GifFree(pSaved);
+    GifFree(pPriv);
+    return 1;
+}
+
+// @ 0x0084bd20
+int DGifSetupDecompress(GifFileType_s0084_af40* pGifFile)
+{
+    GifFilePrivateType* pPriv = (GifFilePrivateType*)pGifFile->mpPrivate;
+    void* pFile = ((GifPrivateHandle*)((char*)pPriv + 0x38))->mpFile;
+
+    uint8 nCodeSize;
+    GifReadFile(pFile, &nCodeSize, 1);
+
+    pPriv->mRunningCode = nCodeSize;
+    pPriv->mRunningBits = 1 << nCodeSize;
+    pPriv->mMaxCode1 = 1 + (1 << nCodeSize);
+    pPriv->mMaxCode = 1 + (1 << nCodeSize);
+    pPriv->mLastCode = (nCodeSize + 1);
+    pPriv->mStackPtr = 0;
+    int nBits = (1 << (nCodeSize + 1));
+    pPriv->mCrntShiftDWord = 0;
+    pPriv->mCrntShiftState = 0;
+    pPriv->mEOFCode = nBits;
+    pPriv->mBadCode = nBits + 1;
+    for (int i = 0; i < 0x1002; ++i)
+        ((int*)((char*)pPriv + 0x2170))[i] = 0x1002;
+    return 1;
+}
+
+// @ 0x0084bd90
+int DGifGetPrefixChar(int* pPrefix, int nCode, int nClearCode)
+{
+    int i = 0;
+    while (nCode > nClearCode) {
+        if (i >= 0x1000) break;
+        nCode = pPrefix[nCode];
+        ++i;
+    }
+    return nCode;
+}
+
+// @ 0x0084bdb0
+int DGifDecompressInput(GifFileType_s0084_af40* pGifFile, int* pCode)
+{
+    GifFilePrivateType* pPriv = (GifFilePrivateType*)pGifFile->mpPrivate;
+    for (;;) {
+        uint8 nByte;
+        if (GifReadFile(pPriv, &nByte, 1) == 0) {
+            // skip: the real loop reads through the file handle
+        }
+        if (nByte == 0)
+            break;
+        int64 nPos = GifTell(pPriv);
+        GifSeek(pPriv, (int)(nPos + nByte), (int)((nPos + nByte) >> 32));
+    }
+    *pCode = 0;
+    return 1;
+}
 
 // @ 0x0084be00
 void* __cdecl GIF_about(void)
@@ -454,4 +625,24 @@ int LoadImage(GifFileType* f, int dest, int stride)
         } while (local_8 < f->ImageHeight);
     }
     return 1;
+}
+
+// @ 0x0084cd70
+int __stdcall GIF_read(void* info, void* desc, int p3, int p4)
+{
+    int r = 0;
+    GifFileType_s0084_cd70* g = (GifFileType_s0084_cd70*)GIFgetinfo(*(void**)((char*)info + 0x10),
+                                              *(int*)((char*)desc + 0xc), (void*)p3, p4);
+    if (g) {
+        void* p = g->Private;
+        if (g->SavedImageColorMap)
+            gfree(g->SavedImageColorMap);
+        if (g->ImageColorMap)
+            gfree(g->ImageColorMap);
+        if (p)
+            gfree(p);
+        gfree(g);
+        r = 1;
+    }
+    return r;
 }

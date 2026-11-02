@@ -1,4 +1,4 @@
-0084cd70 GIF_read
+0084cd70 ?GIF_read@@YGHPAX0HH@Z  # GIF_read migrated from s0084cd70 (verbatim, slice spelling)
 0084cde0 ?GifPutNetscapeBlock@@YAHPAX@Z  # GifPutNetscapeBlock migrated from s0084cd70 (verbatim, slice spelling)
 0084ce40 ?EGifPutExtension@@YAHPAUGifFileType@@EHPAX@Z  # EGifPutExtension migrated from s0084cd70 (verbatim, slice spelling)
 0084ceb0 ?EGifCloseFile@@YAHPAX@Z  # EGifCloseFile migrated from s0084cd70 (verbatim, slice spelling)
