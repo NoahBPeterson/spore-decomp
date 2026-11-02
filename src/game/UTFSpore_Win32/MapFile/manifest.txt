@@ -1,1 +1,7 @@
 # source  symbol  va  flags
+../src/game/UTFSpore_Win32/MapFile.cpp  ?Reset@MapFile@@QAEEXZ  0091beb0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/MapFile.cpp  ?CtorEmpty@MapFile@@QAEPAXXZ  0091c0a0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/MapFile.cpp  ?FreeStringsA@MapFile@@QAEXXZ  0091c0c0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/MapFile.cpp  ?FreeStringsB@MapFile@@QAEXXZ  0091c100  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/MapFile.cpp  ?RbtreeValCtor@MapFile@@QAEPAXPAIPBX@Z  0091c310  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/MapFile.cpp  ?Push@Vec12@@QAEXPBI@Z  0091c490  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
