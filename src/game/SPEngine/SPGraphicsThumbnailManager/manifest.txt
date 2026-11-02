@@ -30,3 +30,4 @@
 ../src/game/SPEngine/SPGraphicsThumbnailManager.cpp  ?Shutdown@cGameThumbnailJob@@QAEXXZ  007bdd70  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsThumbnailManager.cpp  ?FUN_007bdde0@@YIXPAX@Z  007bdde0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsThumbnailManager.cpp  ?HandleMessage@IHandlerRC@@UAE_NIPAX@Z  007c1170  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPEngine/SPGraphicsThumbnailManager.cpp  ??1ContentValidationSummarizer@@UAE@XZ  007c1330  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

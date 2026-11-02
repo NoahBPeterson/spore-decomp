@@ -37,8 +37,5 @@
 007b9b00  884  large-image helper; skeleton only
 007b9f30  375  cJobPostFilter factory; skeleton only
 007ba0b0  663  helper; skeleton only
-007bedb0  0  skeleton: 1360-byte SP::cThumbnailManager::CaptureCSAPhotos; photo capture pipeline omitted
-007bf300  0  skeleton: 772-byte helper; job/rect setup omitted
-007bfeb0  0  skeleton: 37-byte function that is only a C++ EH frame around an empty body; source construct that produces the bare frame not identified
 007c13f0  0  skeleton: 1881-byte capture/render routine; render-target setup and capture omitted
 007c1b70  0  skeleton: 152-byte 9-argument setter block; vector/refcount member assignments omitted

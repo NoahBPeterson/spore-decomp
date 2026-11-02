@@ -2737,19 +2737,34 @@ struct DoneMsg {
     char pad2[4];
     void* mJob;                                                // +0x18
 };
+extern wchar_t g_emptyString16[];                                // 0x01667bac
+extern const wchar_t g_thumbNameFmt[];                           // 0x013f5c04
 struct RectID_s007b_edb0 { int mPageID; int mAllocID; bool IsValid() const { return mAllocID != -1; } };
+struct cRTTManager_s007b_edb0;
+struct cFilterChainJob_s007b_edb0;
+struct cThumbEffect_s007b_edb0;
+struct Ref1;
+struct CSARequest;
+struct CaptureDoneMsg;
 struct cPaletteThumbnailJob_s007b_edb0 { void Shutdown(); };
 struct cEditorThumbnailJob_s007b_edb0  { void Shutdown(); };
 struct cCSAThumbnailJob_s007b_edb0     { void Shutdown(); };
 struct cGameThumbnailJob_s007b_edb0    { void Shutdown(); };
 struct MessageServer_s007b_edb0 {
-    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
+virtual void v00();
+virtual void v04();
+virtual void v08();
+virtual void v0c();
     virtual void v10();
     virtual void Call14(int a, int b, int c);                 // +0x14
+    virtual void Post(int a, int b, int c, int d);              // +0x18
 };
 MessageServer_s007b_edb0* __cdecl SP_MessageServer_s007b_edb0();          // 0x0067dcc0
 struct RTTFree {
-    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
+virtual void v00();
+virtual void v04();
+virtual void v08();
+virtual void v0c();
     virtual void v10();
     virtual void Free(int page, int alloc);                   // +0x14
 };
@@ -2771,7 +2786,20 @@ struct cThumbnailManager_s007b_edb0 {
     RectID_s007b_edb0 mCSALargeRectID;                                    // +0x34
     RectID_s007b_edb0 mCSASmallRectID;                                    // +0x3c
     RectID_s007b_edb0 mCSAAntiAliasRectID;                                // +0x44
+    char pad4c[0x10b4 - 0x4c];
+    cRTTManager_s007b_edb0* mRTTMgr;                                      // +0x10b4
+    char pad10b8[0x10e4 - 0x10b8];
+    cFilterChainJob_s007b_edb0* mPostFilter0;                             // +0x10e4
+    cFilterChainJob_s007b_edb0* mPostFilter1;                             // +0x10e8
+    cFilterChainJob_s007b_edb0* mPostFilter2;                             // +0x10ec
+
     void ThumbnailDone(DoneMsg_s007b_edb0* msg);  // 0x007bf610 (cThumbnailManager::ThumbnailDone)
+    void CaptureCSAPhotos(CSARequest* req);                    // 0x007bedb0
+    void SetupCSARTTs(CSARequest* req);                        // 0x007bf300
+    void DispatchCaptureDone(CaptureDoneMsg* msg);             // 0x007bf720
+    void SetupThumbnailRTTs(int a, char b);                    // 0x007b26a0
+    void InitPostProcessEffect(int type, cThumbEffect_s007b_edb0* chain, bool enable, bool alt,
+                               struct Vec2f v, float f);       // 0x007ba350
 };
 struct RefLike {
     virtual int AddRef();                                      // +0x00
@@ -2798,9 +2826,267 @@ struct SetterBlock {
 
     void Set(void* a1, int a2, int a3, int a4, Pair* a5, Pair* a6, int a7, char a8);
 };
+struct Vec2f { float x, y; Vec2f(float a, float b) : x(a), y(b) {} };
+struct Vec4f { float x, y, z, w; Vec4f(float a, float b, float c, float d) : x(a), y(b), z(c), w(d) {} };
+struct ScreenDims { int width, height; };
+struct cPropertyList_s007b_edb0 {
+    bool GetDescription(unsigned id);  // 0x006a25a0 (cPropertyList::GetDescription)
+};
+extern cPropertyList_s007b_edb0* gAppProperties;                            // 0x015fd918
+struct cRTTManager_s007b_edb0 {
+virtual void r0();
+virtual void r1();
+virtual void r2();
+virtual void r3();
+    virtual RectID_s007b_edb0 AllocateRTT(int w, int h, int fmt, int a, int b, int c);   // +0x10
+    virtual void r5();                                                        // +0x14
+    virtual void* GetRaster(int page, int alloc);                             // +0x18
+virtual void r7();
+virtual void r8();
+virtual void r9();
+virtual void r10();
+virtual void r11();
+virtual void r12();
+virtual void r13();
+virtual void r14();
+virtual void r15();
+virtual void r16();
+virtual void r17();
+    virtual void RegisterRTT(int page, int alloc, const char* name);          // +0x48
+};
+struct cSporeManager2_s007b_edb0 {
+virtual void s0();
+virtual void s1();
+virtual void s2();
+virtual void s3();
+virtual void s4();
+virtual void s5();
+virtual void s6();
+    virtual ScreenDims* GetDims();                                  // +0x1c, slot 7
+virtual void s8();
+virtual void s9();
+virtual void s10();
+virtual void s11();
+virtual void s12();
+virtual void s13();
+virtual void s14();
+virtual void s15();
+virtual void s16();
+virtual void s17();
+virtual void s18();
+virtual void s19();
+virtual void s20();
+virtual void s21();
+virtual void s22();
+virtual void s23();
+virtual void s24();
+virtual void s25();
+virtual void s26();
+virtual void s27();
+virtual void s28();
+virtual void s29();
+    virtual void Dispatch(void* handle);                            // +0x78, slot 30
+};
+struct cRenderer {
+#define PV(n) virtual void pv##n();
+    PV(0) PV(1) PV(2) PV(3) PV(4) PV(5) PV(6) PV(7) PV(8) PV(9)
+    PV(10) PV(11) PV(12) PV(13) PV(14) PV(15) PV(16) PV(17) PV(18) PV(19)
+    PV(20) PV(21) PV(22) PV(23) PV(24) PV(25) PV(26) PV(27) PV(28) PV(29)
+    PV(30) PV(31) PV(32) PV(33) PV(34) PV(35) PV(36) PV(37) PV(38) PV(39)
+    PV(40) PV(41) PV(42) PV(43) PV(44) PV(45) PV(46) PV(47) PV(48) PV(49)
+    PV(50) PV(51) PV(52) PV(53) PV(54) PV(55) PV(56)
+    virtual void GetCurrentRenderTarget(RectID_s007b_edb0* out);               // +0xe4, slot 57
+#undef PV
+};
+cSporeManager2_s007b_edb0* GetSporeManager2();     // 0x0067dd50
+cRenderer*      GetRenderer_s007b_edb0();          // 0x0067dd40
+struct Ref0 { virtual int AddRef(); virtual int Release(); };
+struct Ref1 { virtual void rDummy(); virtual int AddRef(); virtual int Release(); };
+struct Base2 { virtual void bDummy(); };    // secondary vptr at +4
+struct WString16 { void* begin; void* end; void* capEnd; };
+struct cFilterChainJob_s007b_edb0 : Ref1 {
+    char pad04[0x60 - 4];
+    cFilterChainJob_s007b_edb0* mChain;                      // +0x60
+    char pad64[0x78 - 0x64];
+    bool mInitialized;                            // +0x78
+    char pad79[0x90 - 0x79];
+    Ref1* mEffect;                                // +0x90
+    virtual void f3();                            // +0x0c
+    virtual void* BuildHandle(int zero, cThumbJobMsgEvent* ev);   // +0x10
+    void Shutdown();                              // 0x007b96d0
+    void Reset();                                 // 0x007bdde0
+};
+struct cThumbJob : Ref1 {
+    int m04;                                      // +0x04
+    int m08, m0c, m10, m14, m18, m1c;             // +0x08 rect ids
+    int m20, m24, m28;                            // +0x20
+    int m2c, m30, m34, m38;                       // +0x2c
+    bool m3c;                                     // +0x3c
+    char pad3d[3];
+    Ref0* m40;                                    // +0x40
+    WString16 mName;                              // +0x44
+    int m50;                                      // +0x50
+    void* m54;                                    // +0x54
+    cThumbJob() : m04(0), m08(-1), m0c(-1), m10(-1), m14(-1), m18(-1), m1c(-1),
+                  m20(0), m24(0), m28(0), m2c(0), m30(0), m34(0), m38(0), m3c(false),
+                  m40(0), m50(0), m54(0)
+    { mName.begin = g_emptyString16; mName.end = g_emptyString16; mName.capEnd = g_emptyString16 + 2; }
+};
+struct cThumbEffect_s007b_edb0 : Ref0, Base2 {
+virtual void e2();
+virtual void e3();
+    virtual void* Queue(int zero, cThumbJobMsgEvent* ev);         // +0x10, slot 4
+    int m08;                                      // +0x08
+    int m0c, m10, m14;                            // +0x0c
+    bool m20;                                     // +0x20
+    char pad21[3];
+    int m24, m28, m2c, m30;                       // +0x24
+    cThumbEffect_s007b_edb0() : m08(0), m0c(0), m10(0), m14(0), m20(false), m24(0), m28(0), m2c(0), m30(0) {}
+    void Run(void* req, int w, cThumbJob* job);   // 0x007b2f40
+    void Run2(void* req, cThumbJob* job);         // 0x007b31f0
+};
+struct cPostJob : Ref0, Base2 {
+virtual void p2();
+virtual void p3();
+    virtual void* Queue(int zero, cThumbJobMsgEvent* ev);         // +0x10, slot 4
+    int m08;                                      // +0x08
+    bool m0c;                                     // +0x0c
+    char pad0d[3];
+    int m10, m14;                                 // +0x10
+    int m18, m1c;                                 // +0x18
+    int m20;                                      // +0x20
+    cPostJob() : m08(0), m0c(false), m10(0), m14(0), m18(0), m1c(0), m20(0) {}
+    void Run(void* req, int w, cThumbJob* job);   // 0x007b2f40
+};
+struct cStage1c : Ref0, Base2 {
+    int m08;                                      // +0x08
+    bool m0c;                                     // +0x0c
+    char pad0d[3];
+    int m10, m14, m18;                            // +0x10
+    cStage1c() : m08(0), m0c(false), m10(0), m14(0), m18(0) {}
+};
+struct cThumbJob28 : Ref1 {
+    int m04, m08, m0c, m10;                       // +0x04
+    int m14, m18;                                 // +0x14
+    int m1c, m20, m24;                            // +0x1c
+    cThumbJob28() : m04(0), m08(0), m0c(0), m10(0), m14(-1), m18(-1), m1c(0), m20(0), m24(0) {}
+};
+struct cMsg28 : Ref1 {
+    volatile long mRef;                           // +0x04
+    int m08, m0c, m10, m14;                       // +0x08
+    void* m18;                                    // +0x18
+    int m1c, m20, m24;                            // +0x1c
+    cMsg28() : mRef(0), m08(0), m0c(0), m10(0), m14(0), m18(0), m1c(0), m20(0), m24(0) {}
+};
+struct cMsg30 : Ref1 {
+    volatile long mRef;                           // +0x04
+    int m08, m0c, m10, m14, m18, m1c, m20, m24, m28;   // +0x08..+0x28
+    cMsg30() : mRef(0), m08(0), m0c(0), m10(0), m14(0), m18(0), m1c(0), m20(0), m24(0), m28(0) {}
+};
+struct cRefList {
+    void* Pop(void** out);
+};
+void __cdecl WStr_Format(void* dst, const wchar_t* fmt, Vec4f v);   // 0x0041e050
+struct CSARequest {
+    int m00, m04;
+    unsigned m08;        // +0x08 (long dimension, clamped to 1024)
+    int m0c;             // +0x0c
+    int m10;             // +0x10 notify id
+    int m14;             // +0x14 create the post-process chain / takes the next dimension
+    int m18, m1c, m20, m24;
+    int m28, m2c, m30, m34;   // +0x28 name arguments
+};
+struct CaptureDoneMsg {
+    int m00, m04;
+    int m08;             // +0x08 notify id
+    int m0c, m10, m14;
+    int m18;             // +0x18 status (1 = success, 2 = ...)
+    int m1c;
+    int m20;             // +0x20 job type (0/1/2)
+};
 // ---- items of slice s007bedb0 end
 
 // ---- items of slice s007bfaa0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern uint32_t g_16f9528;                             // softStateDirty
+extern int32_t  g_16f96a0;                             // transformType
+extern void*    g_16fa380;                             // current transform pointer
+extern __declspec(align(16)) float g_16fa4f0[16];      // transformLocalCopy
+extern uint32_t g_16fa38c;                             // renderStateDirty
+extern int32_t  g_16f9218;
+extern int32_t  g_16f923c;
+extern "C" int  FUN_011f13a0();                        // 0x011f13a0 GetBlendMode
+extern "C" void FUN_011f1340(int);                     // 0x011f1340 SetBlendMode
+extern "C" void FUN_00777bf0();                        // 0x00777bf0
+extern "C" void FUN_00777c10();                        // 0x00777c10
+extern "C" void __fastcall FUN_007789d0(void* state);  // 0x007789d0
+extern "C" void FUN_0072ace0(void*, void*, void*, void*, int, void*);  // 0x0072ace0
+extern "C" void* FUN_0067dd50();                       // 0x0067dd50
+namespace SP {
+struct IntMap {                                        // 0x18 bytes
+    int m00, m04, m08, m0C, m10, m14;
+    int& operator[](const int* key);                   // 0x004210f0
+};
+}
+namespace SP {
+struct RenderViewer {
+    void SetRaster(RectID* rect, bool flag);           // 0x007c4be0
+    bool Update();                                     // 0x007c4fd0
+    void Clear(int flags);                             // 0x007c3c50
+    void FlushEnd();                                   // 0x007c3c10
+};
+}
+namespace SP {
+struct MeshStreamEntry {                               // 0x38 bytes
+    int   mField00;                                    // +0x00
+    float mTranslation[3];                             // +0x04
+    float mScale;                                      // +0x10
+    float mMatrix[9];                                  // +0x14
+};
+}
+namespace SP {
+struct ItemList_s007b_faa0 {
+    void Fn(int, int, int, int);                       // 0x007b49f0
+};
+}
+namespace SP {
+struct LayerDesc {                                     // 0x2c bytes
+    int      mFlags;                                   // +0x00
+    int      mField04;                                 // +0x04
+    bool     mbField08;                                // +0x08
+    int      mField0C;                                 // +0x0c
+    int      mField10;                                 // +0x10
+    uint32_t mDoneMessageID;                           // +0x14
+    void*    mpDoneMessage;                            // +0x18
+    int      mField1C;                                 // +0x1c
+    int      mField20;                                 // +0x20
+    int      mField24;                                 // +0x24
+    int      mField28;                                 // +0x28
+};
+}
+namespace SP {
+struct cTestScript {
+    char              pad00[0x0c];
+    void**            mMeshBegin;                      // +0x0c
+    void**            mMeshEnd;                        // +0x10
+    char              pad14[0x0c];
+    void**            mpShaderStates;                  // +0x20
+    char              pad24[0x10];
+    IntMap            mMap34;                          // +0x34
+    void*             mpMapsBegin;                     // +0x4c
+    void*             mpMapsEnd;                       // +0x50
+    char              pad54[0x0c];
+    ItemList_s007b_faa0*         mpItemList;                      // +0x60
+    RectID            mRect64;                         // +0x64
+    RenderViewer*     mpViewer;                        // +0x6c
+    int               mIndex70;                        // +0x70
+    int               mCount74;                        // +0x74
+    char              pad78[4];
+    MeshStreamEntry*  mpEntries;                       // +0x7c
+    char              pad80[0x10];
+    void*             mpMessage;                       // +0x90
+    void HandleMessage(void* a, void* b, void* c, void* stats);
+};
+}
 namespace AO {
 struct Vector3_s007b_faa0 {
     float x, y, z;
@@ -2836,23 +3122,66 @@ struct cViewer_s007b_faa0 {
 }
 namespace AO {
 struct IRenderTargetManager {
-    virtual void r00(); virtual void r01(); virtual void r02(); virtual void r03(); virtual void r04();
-    virtual void r05(); virtual void r06(); virtual void r07(); virtual void r08();
+virtual void r00();
+virtual void r01();
+virtual void r02();
+virtual void r03();
+virtual void r04();
+virtual void r05();
+virtual void r06();
+virtual void r07();
+virtual void r08();
     virtual void SetFlag(int on);                               // +0x24
-    virtual void r10(); virtual void r11(); virtual void r12(); virtual void r13(); virtual void r14();
-    virtual void r15(); virtual void r16(); virtual void r17(); virtual void r18(); virtual void r19();
-    virtual void r20(); virtual void r21(); virtual void r22(); virtual void r23(); virtual void r24();
-    virtual void r25(); virtual void r26(); virtual void r27(); virtual void r28(); virtual void r29();
-    virtual void r30(); virtual void r31(); virtual void r32(); virtual void r33(); virtual void r34();
-    virtual void r35(); virtual void r36(); virtual void r37(); virtual void r38(); virtual void r39();
-    virtual void r40(); virtual void r41(); virtual void r42(); virtual void r43();
+virtual void r10();
+virtual void r11();
+virtual void r12();
+virtual void r13();
+virtual void r14();
+virtual void r15();
+virtual void r16();
+virtual void r17();
+virtual void r18();
+virtual void r19();
+virtual void r20();
+virtual void r21();
+virtual void r22();
+virtual void r23();
+virtual void r24();
+virtual void r25();
+virtual void r26();
+virtual void r27();
+virtual void r28();
+virtual void r29();
+virtual void r30();
+virtual void r31();
+virtual void r32();
+virtual void r33();
+virtual void r34();
+virtual void r35();
+virtual void r36();
+virtual void r37();
+virtual void r38();
+virtual void r39();
+virtual void r40();
+virtual void r41();
+virtual void r42();
+virtual void r43();
     virtual void AllocRect(RectID* rect);                       // +0xB0
-    virtual void r45(); virtual void r46(); virtual void r47(); virtual void r48(); virtual void r49();
-    virtual void r50(); virtual void r51();
+virtual void r45();
+virtual void r46();
+virtual void r47();
+virtual void r48();
+virtual void r49();
+virtual void r50();
+virtual void r51();
     virtual void SelectRect(RectID* rect);                      // +0xD0
-    virtual void r53(); virtual void r54(); virtual void r55();
+virtual void r53();
+virtual void r54();
+virtual void r55();
     virtual void FreeRect(RectID* rect, bool b);                // +0xE0
-    virtual void r57(); virtual void r58(); virtual void r59();
+virtual void r57();
+virtual void r58();
+virtual void r59();
     virtual void SetTarget(int a);                              // +0xF0
 };
 }
@@ -2861,12 +3190,36 @@ IRenderTargetManager* RenderTargetManager();                    // 0x0067DD40
 }
 namespace AO {
 struct ILayerManager {
-    virtual void l00(); virtual void l01(); virtual void l02(); virtual void l03(); virtual void l04();
-    virtual void l05(); virtual void l06(); virtual void l07(); virtual void l08(); virtual void l09();
-    virtual void l10(); virtual void l11(); virtual void l12(); virtual void l13(); virtual void l14();
-    virtual void l15(); virtual void l16(); virtual void l17(); virtual void l18(); virtual void l19();
-    virtual void l20(); virtual void l21(); virtual void l22(); virtual void l23(); virtual void l24();
-    virtual void l25(); virtual void l26(); virtual void l27(); virtual void l28(); virtual void l29();
+virtual void l00();
+virtual void l01();
+virtual void l02();
+virtual void l03();
+virtual void l04();
+virtual void l05();
+virtual void l06();
+virtual void l07();
+virtual void l08();
+virtual void l09();
+virtual void l10();
+virtual void l11();
+virtual void l12();
+virtual void l13();
+virtual void l14();
+virtual void l15();
+virtual void l16();
+virtual void l17();
+virtual void l18();
+virtual void l19();
+virtual void l20();
+virtual void l21();
+virtual void l22();
+virtual void l23();
+virtual void l24();
+virtual void l25();
+virtual void l26();
+virtual void l27();
+virtual void l28();
+virtual void l29();
     virtual void AddLayer(void* layer);                         // +0x78
 };
 }
@@ -2883,9 +3236,14 @@ namespace AO {
 struct PropertyList {
     virtual void p00();
     virtual int Release();                                      // +0x04
-    virtual void p02(); virtual void p03(); virtual void p04(); virtual void p05(); virtual void p06();
+virtual void p02();
+virtual void p03();
+virtual void p04();
+virtual void p05();
+virtual void p06();
     virtual bool HasProperty(uint32_t id);                      // +0x1C
-    virtual void p08(); virtual void p09();
+virtual void p08();
+virtual void p09();
     virtual Property_s007b_faa0* GetProperty(uint32_t id);                 // +0x28
 };
 }
@@ -2908,8 +3266,16 @@ struct PropertyListPtr {
 }
 namespace AO {
 struct IPropManager {
-    virtual void m00(); virtual void m01(); virtual void m02(); virtual void m03(); virtual void m04();
-    virtual void m05(); virtual void m06(); virtual void m07(); virtual void m08(); virtual void m09();
+virtual void m00();
+virtual void m01();
+virtual void m02();
+virtual void m03();
+virtual void m04();
+virtual void m05();
+virtual void m06();
+virtual void m07();
+virtual void m08();
+virtual void m09();
     virtual void m10();
     virtual bool GetPropertyList(uint32_t instanceID, uint32_t groupID, PropertyListPtr& dst);   // +0x2C
 };
@@ -2929,7 +3295,9 @@ struct IModel;
 }
 namespace AO {
 struct IModelWorld_s007b_faa0 {
-    virtual void w00(); virtual void w01(); virtual void w02();
+virtual void w00();
+virtual void w01();
+virtual void w02();
     virtual IModel* CreateModel(uint32_t instanceID, uint32_t groupID, int flags);   // +0x0C
 };
 }
@@ -3026,7 +3394,10 @@ struct MeshVector {                                             // eastl::vector
 }
 namespace AO {
 struct cAmbOccJob_s007b_faa0 {
-    virtual void j00(); virtual void j01(); virtual void j02(); virtual void j03();
+virtual void j00();
+virtual void j01();
+virtual void j02();
+virtual void j03();
     virtual void* GetLayer(int a, LayerInfo* info);             // +0x10
     void Init(IModelWorld_s007b_faa0* world, const MeshVector& meshes, cViewer_s007b_faa0* shadowViewer, cViewer_s007b_faa0* splatterViewer,
               RectID* shadowRect, RectID* gatherRect, int passIndex, bool flag);   // 0x007BF9C0
@@ -3075,6 +3446,61 @@ struct cThumbnailManager_s007c_0780 : cThumbnailManagerBase, IHandlerRC {
     void FUN_007b29a0();
     void FUN_007b2970(void* arg);
     void FUN_007b77a0(void* arg);
+};
+struct EditorResBase {
+    virtual void v0();
+    virtual void v1();
+    virtual ~EditorResBase() {}
+};
+struct RefCountVBase {
+    virtual int AddRef();
+    virtual int Release();
+    int mnRefCount;
+    RefCountVBase() : mnRefCount(0) {}
+    virtual ~RefCountVBase() {}
+};
+void __cdecl SpFree(void* p) throw();                               // 0xf47380
+struct RefVec_s007c_0780 {                     // dtor out of line (0x41eb80)
+    void* mpBegin; void* mpEnd; void* mpCapacity; unsigned mA0, mA1;
+    RefVec_s007c_0780() : mpBegin(0), mpEnd(0), mpCapacity(0) {}
+    ~RefVec_s007c_0780();
+};
+struct Elem24Vec {                  // dtor out of line (0x421230)
+    void* mpBegin; void* mpEnd; void* mpCapacity; unsigned mA0, mA1;
+    Elem24Vec() : mpBegin(0), mpEnd(0), mpCapacity(0) {}
+    ~Elem24Vec();
+};
+struct FreeVec {                    // inlined dtor: free the buffer
+    void* mpBegin; void* mpEnd; void* mpCapacity; unsigned mA0, mA1;
+    FreeVec() : mpBegin(0), mpEnd(0), mpCapacity(0) {}
+    ~FreeVec() throw() { if (mpBegin) SpFree(mpBegin); }
+};
+struct PoolVec {                    // inlined dtor: free non-pool blocks only
+    void* mpBegin; void* mpEnd; void* mpCapacity; unsigned mA0, mA1;
+    PoolVec() : mpBegin(0), mpEnd(0), mpCapacity(0) {}
+    ~PoolVec() throw() { if (mpBegin && ((int*)mpBegin)[-1] != 0) SpFree(mpBegin); }
+};
+struct IPtr60 { virtual void s0(); virtual void s1(); };
+struct IPtr90 { virtual void s0(); virtual void s1(); virtual void s2(); };
+struct AutoPtr60 { IPtr60* p; AutoPtr60() : p(0) {} ~AutoPtr60() { if (p) p->s1(); } };
+struct AutoPtr90 { IPtr90* p; AutoPtr90() : p(0) {} ~AutoPtr90() { if (p) p->s2(); } };
+struct ContentValidationSummarizer : EditorResBase, RefCountVBase {
+    RefVec_s007c_0780 mRefs1;      // +0x0c
+    RefVec_s007c_0780 mRefs2;      // +0x20
+    FreeVec mFree34;    // +0x34
+    int m48;            // +0x48
+    Elem24Vec mElems;   // +0x4c
+    AutoPtr60 m60;      // +0x60
+    int m64;
+    int m68;
+    int m6c;
+    int m70;
+    int m74;
+    char m78;
+    PoolVec m7c;        // +0x7c
+    AutoPtr90 m90;      // +0x90
+    ContentValidationSummarizer();
+    virtual ~ContentValidationSummarizer();
 };
 namespace AO {
 struct Vector3_s007c_0780 {
@@ -3125,9 +3551,14 @@ namespace AO {
 struct PropertyList_s007c_0780 {
     virtual void p00();
     virtual int Release();                                      // +0x04
-    virtual void p02(); virtual void p03(); virtual void p04(); virtual void p05(); virtual void p06();
+virtual void p02();
+virtual void p03();
+virtual void p04();
+virtual void p05();
+virtual void p06();
     virtual bool HasProperty(uint32_t id);                      // +0x1C
-    virtual void p08(); virtual void p09();
+virtual void p08();
+virtual void p09();
     virtual Property_s007c_0780* GetProperty(uint32_t id);                 // +0x28
 };
 }
@@ -3150,8 +3581,16 @@ struct PropertyListPtr_s007c_0780 {
 }
 namespace AO {
 struct IPropManager_s007c_0780 {
-    virtual void m00(); virtual void m01(); virtual void m02(); virtual void m03(); virtual void m04();
-    virtual void m05(); virtual void m06(); virtual void m07(); virtual void m08(); virtual void m09();
+virtual void m00();
+virtual void m01();
+virtual void m02();
+virtual void m03();
+virtual void m04();
+virtual void m05();
+virtual void m06();
+virtual void m07();
+virtual void m08();
+virtual void m09();
     virtual void m10();
     virtual bool GetPropertyList(uint32_t instanceID, uint32_t groupID, PropertyListPtr_s007c_0780& dst);   // +0x2C
 };
@@ -3173,7 +3612,9 @@ inline void GetPropInt(PropertyList_s007c_0780* pl, uint32_t id, int& dst)
 }
 namespace AO {
 struct IModelWorld_s007c_0780 {
-    virtual void w00(); virtual void w01(); virtual void w02();
+virtual void w00();
+virtual void w01();
+virtual void w02();
     virtual IModel* CreateModel(uint32_t instanceID, uint32_t groupID, int flags);   // +0x0C
 };
 }
@@ -3208,7 +3649,10 @@ struct cFilterChainJob_s007c_0780 {
 }
 namespace AO {
 struct cAmbOccJob_s007c_0780 {
-    virtual void j00(); virtual void j01(); virtual void j02(); virtual void j03();
+virtual void j00();
+virtual void j01();
+virtual void j02();
+virtual void j03();
     virtual void* GetLayer(int a, LayerInfo* info);             // +0x10
     void Init(IModelWorld_s007c_0780* world, const MeshVector& meshes, cViewer_s007c_0780* shadowViewer, cViewer_s007c_0780* splatterViewer,
               RectID* shadowRect, RectID* gatherRect, int passIndex, int flags);   // 0x007BF9C0
@@ -6387,12 +6831,161 @@ void cThumbnailManager_s007b_de20::CapturePaletteImageThumbnail(cCaptureCtx* ctx
 }
 
 // @ 0x007bedb0
-void FUN_007bedb0(void* a, void* b, void* c)
-{ (void)a; (void)b; (void)c; }
+void cThumbnailManager_s007b_edb0::CaptureCSAPhotos(CSARequest* req)
+{
+    unsigned w = req->m08;
+    if (w > 0x400u) {
+        // clamp: round w up to a multiple of ceil(w / 1024), then divide
+        float f = (float)w * 0.0009765625f;
+        unsigned step = (unsigned)(int)f;
+        if ((float)step < f)
+            step++;
+        w = (w % step + w) / step;
+    }
+
+    ScreenDims* dims = GetSporeManager2()->GetDims();
+    float ratio = (float)dims->height / (float)dims->width;
+    int h  = (int)((float)w * ratio);
+    int w2 = (int)((float)req->m0c * ratio);
+    int h2 = req->m0c;
+
+    RectID_s007b_edb0 id = mRTTMgr->AllocateRTT((int)w, h, 0x15, 0, -1, 0);
+    mCSALargeRectID = id;
+    mRTTMgr->RegisterRTT(id.mPageID, id.mAllocID, "CSALargeRTT");
+
+    id = mRTTMgr->AllocateRTT(w2, h2, 0x15, 0, -1, 0);
+    mCSASmallRectID = id;
+    mRTTMgr->RegisterRTT(id.mPageID, id.mAllocID, "CSASmallRTT");
+
+    if (gAppProperties->GetDescription(0x5c8af84)) {
+        id = mRTTMgr->AllocateRTT(800, 600, 0x15, 0, -1, 0);
+        mCSAAntiAliasRectID = id;
+        mRTTMgr->RegisterRTT(id.mPageID, id.mAllocID, "CSAAntiAliasRTT");
+    }
+
+    cThumbEffect_s007b_edb0* effect = 0;
+    if (req->m14) {
+        effect = new ("Graphics", 0, 0, 0, 0) cThumbEffect_s007b_edb0;
+        effect->AddRef();
+        if (!effect->m20) {
+            effect->m20 = true;
+            effect->m28 = 0;
+        }
+        InitPostProcessEffect(req->m14, effect, false, false,
+                              Vec2f(g_fVecX, g_fVecY), 0.0f);
+    }
+
+    cPostJob* post = new ("Graphics", 0, 0, 0, 0) cPostJob;
+    post->AddRef();
+
+    cThumbJob* job = new ("Graphics", 0, 0, 0, 0) cThumbJob;
+    job->AddRef();
+    job->m08 = mCSALargeRectID.mPageID;
+    job->m0c = mCSALargeRectID.mAllocID;
+    job->m10 = mCSASmallRectID.mPageID;
+    job->m14 = mCSASmallRectID.mAllocID;
+    job->m18 = mCSAAntiAliasRectID.mPageID;
+    job->m1c = mCSAAntiAliasRectID.mAllocID;
+
+    if (job->m40 != (Ref0*)post) {
+        post->AddRef();
+        Ref0* old = job->m40;
+        job->m40 = post;
+        if (old)
+            old->Release();
+    }
+    job->m20 = (int)w;
+    job->m24 = req->m0c;
+    job->m28 = 1;
+    job->m3c = false;
+    job->m2c = req->m18;
+    job->m30 = req->m1c;
+    job->m38 = req->m24;
+    job->m34 = req->m20;
+
+    WStr_Format(&job->mName, g_thumbNameFmt,
+                Vec4f((float)req->m28, (float)req->m2c, (float)req->m30, (float)req->m34));
+
+    post->Run(req, (int)w, job);
+
+    cMsg28* msg = new ("Graphics", 0, 0, 0, 0) cMsg28;
+    msg->AddRef();
+    msg->m08 = req->m10;
+    msg->m10 = 2;
+    msg->m18 = post;
+
+    cThumbJobMsgEvent ev;
+    ev.a = 1; ev.b = 6; ev.c = false; ev.d = 0; ev.e = 0;
+    ev.id = 0x1c913db; ev.data = msg;
+    ev.f = ev.g = ev.h = ev.i = 0;
+    void* handle = post->Queue(0, &ev);
+    GetSporeManager2()->Dispatch(handle);
+
+    msg->Release();
+    job->Release();
+    post->Release();
+    if (effect)
+        effect->Release();
+}
 
 // @ 0x007bf300
-void FUN_007bf300(void* a)
-{ (void)a; }
+void cThumbnailManager_s007b_edb0::SetupCSARTTs(CSARequest* req)
+{
+    SetupThumbnailRTTs(req->m08, 1);
+
+    cThumbEffect_s007b_edb0* effect = new ("Graphics", 0, 0, 0, 0) cThumbEffect_s007b_edb0;
+    effect->AddRef();
+    if (!effect->m20) {
+        effect->m20 = true;
+        effect->m28 = 0;
+    }
+    InitPostProcessEffect(6, effect, true, true, Vec2f(g_fVecX, g_fVecY), 0.0f);
+
+    cStage1c* stage = new ("Graphics", 0, 0, 0, 0) cStage1c;
+    stage->AddRef();
+
+    cThumbJob28* job = new ("Graphics", 0, 0, 0, 0) cThumbJob28;
+    job->AddRef();
+
+    RectID_s007b_edb0 cur;
+    cur.mPageID = -1;
+    cur.mAllocID = -1;
+    GetRenderer_s007b_edb0()->GetCurrentRenderTarget(&cur);
+    job->m14 = cur.mPageID;
+    job->m18 = cur.mAllocID;
+
+    if (job->m24 != (int)(size_t)effect) {
+        effect->AddRef();
+        int old = job->m24;
+        job->m24 = (int)(size_t)effect;
+        if (old)
+            ((Ref0*)(size_t)old)->Release();
+    }
+    job->m1c = req->m08;
+    job->m20 = req->m08;
+    job->m10 = req->m10;
+    job->m0c = req->m0c;
+
+    effect->Run2(req, (cThumbJob*)job);
+
+    cMsg28* msg = new ("Graphics", 0, 0, 0, 0) cMsg28;
+    msg->AddRef();
+    msg->m08 = req->m14;
+    msg->m10 = 3;
+    msg->m18 = stage;
+
+    cThumbJobMsgEvent ev;
+    ev.a = 1; ev.b = req->m18; ev.c = false; ev.d = 0; ev.e = 0;
+    ev.id = 0x1c913db; ev.data = msg;
+    ev.f = ev.g = ev.h = ev.i = 0;
+    void* handle = effect->Queue(0, &ev);
+    GetSporeManager2()->Dispatch(handle);
+
+    msg->Release();
+    job->Release();
+    stage->Release();
+    effect->Release();
+}
 
 // @ 0x007bf610
 void cThumbnailManager_s007b_edb0::ThumbnailDone(DoneMsg_s007b_edb0* msg)
@@ -6422,6 +7015,85 @@ void cThumbnailManager_s007b_edb0::ThumbnailDone(DoneMsg_s007b_edb0* msg)
         r->Free(mCSAAntiAliasRectID.mPageID, mCSAAntiAliasRectID.mAllocID);
 }
 
+// @ 0x007bf720
+void cThumbnailManager_s007b_edb0::DispatchCaptureDone(CaptureDoneMsg* msg)
+{
+    int status   = msg->m18;
+    int jobType  = msg->m20;
+    int notifyId = msg->m08;
+
+    cFilterChainJob_s007b_edb0* chain = 0;
+    if (jobType == 0)
+        chain = mPostFilter0;
+    else if (jobType == 1)
+        chain = mPostFilter1;
+    else if (jobType == 2)
+        mPostFilter2->Reset();
+
+    if (chain && chain->mInitialized) {
+        if (chain->mChain)
+            chain->mChain->Shutdown();
+        Ref1* effect = chain->mEffect;
+        if (effect) {
+            chain->mEffect = 0;
+            effect->Release();
+        }
+        chain->mInitialized = false;
+    }
+
+    cMsg30* out = new ("Graphics", 0, 0, 0, 0) cMsg30;
+    out->AddRef();
+    out->m08 = notifyId;
+    out->m10 = 0;
+    out->m18 = status;
+    out->m28 = 0;
+
+    cThumbJobMsgEvent ev;
+    ev.a = 4; ev.b = 0; ev.c = true; ev.d = 0; ev.e = 0;
+    ev.id = 0; ev.data = 0;
+    ev.f = ev.g = ev.h = ev.i = 0;
+
+    bool posted = false;
+    if (status == 1 && jobType == 0) {
+        out->m20 = 1;
+        chain = mPostFilter1;
+        Ref1* old = chain->mEffect;
+        if ((Ref1*)out != old) {
+            out->AddRef();
+            chain->mEffect = out;
+            if (old)
+                old->Release();
+        }
+        GetSporeManager2()->Dispatch(chain->BuildHandle(0, &ev));
+        posted = true;
+    } else if (status == 2) {
+        if (jobType == 0) {
+            out->m20 = 1;
+            chain = mPostFilter1;
+            Ref1* old = chain->mEffect;
+            if ((Ref1*)out != old) {
+                out->AddRef();
+                chain->mEffect = out;
+                if (old)
+                    old->Release();
+            }
+            GetSporeManager2()->Dispatch(chain->BuildHandle(0, &ev));
+            posted = true;
+        } else if (jobType == 1) {
+            out->m20 = 2;
+            cRefList* list = (cRefList*)((char*)mPostFilter2 + 0x90);
+            list->Pop((void**)&out);
+            GetSporeManager2()->Dispatch(mPostFilter2->BuildHandle(0, &ev));
+            posted = true;
+        }
+    }
+
+    if (!posted)
+        SP_MessageServer_s007b_edb0()->Post(notifyId, 0, 0, 0);
+
+    out->Release();
+}
+
 // @ 0x007bf9c0
 void SetterBlock::Set(void* a1, int a2, int a3, int a4, Pair* a5, Pair* a6, int a7, char a8)
 {
@@ -6445,9 +7117,141 @@ void SetterBlock::Set(void* a1, int a2, int a3, int a4, Pair* a5, Pair* a6, int 
     }
 }
 
+// @ 0x007bfaa0
+void SP::cTestScript::HandleMessage(void* a, void* b, void* c, void* stats)
+{
+    bool reachedEnd = false;
+
+    if (mMeshBegin == mMeshEnd)
+        goto tail;
+
+    g_16f9528 |= 1;
+    g_16f96a0 = 4;
+    g_16fa380 = g_16fa4f0;
+
+    {
+        __m128 r0 = _mm_setr_ps(1.0f, 0.0f, 0.0f, 0.0f);
+        __m128 r1 = _mm_setr_ps(0.0f, 1.0f, 0.0f, 0.0f);
+        __m128 r2 = _mm_setr_ps(0.0f, 0.0f, 1.0f, 0.0f);
+        __m128 r3 = _mm_setzero_ps();
+        __declspec(align(16)) float ident[16];
+        _mm_store_ps(&ident[0], r0);
+        _mm_store_ps(&ident[4], r1);
+        _mm_store_ps(&ident[8], r2);
+        _mm_store_ps(&ident[12], r3);
+        _mm_store_ps(&g_16fa4f0[0], r0);
+        _mm_store_ps(&g_16fa4f0[4], r1);
+        _mm_store_ps(&g_16fa4f0[8], r2);
+        _mm_store_ps(&g_16fa4f0[12], r3);
+
+        int savedBlend = FUN_011f13a0();
+        FUN_011f1340(0x10002);
+        int saved9218 = g_16f9218;
+        bool was4 = (g_16f923c == 4);
+        g_16f923c = 8;
+        g_16fa38c |= 0x10080;
+        g_16f9218 = 0;
+
+        int count = (int)(mMeshEnd - mMeshBegin);
+        int start = mIndex70;
+        int end = count;
+        if (count - start > mCount74) {
+            end = start + mCount74;
+            reachedEnd = true;
+        }
+
+        FUN_00777bf0();
+        mpViewer->SetRaster(&mRect64, true);
+        if (mpViewer->Update()) {
+            if (mIndex70 == 0)
+                mpViewer->Clear(7);
+            for (int i = mIndex70; i < end; ++i) {
+                MeshStreamEntry* e = &mpEntries[i];
+                float s = e->mScale;
+                __declspec(align(16)) float m[16];
+                m[0]  = e->mMatrix[0] * s;
+                m[1]  = e->mMatrix[1] * s;
+                m[2]  = e->mMatrix[2] * s;
+                m[4]  = e->mMatrix[3] * s;
+                m[5]  = e->mMatrix[4] * s;
+                m[6]  = e->mMatrix[5] * s;
+                m[8]  = e->mMatrix[6] * s;
+                m[9]  = e->mMatrix[7] * s;
+                m[10] = e->mMatrix[8] * s;
+                m[12] = e->mTranslation[0];
+                m[13] = e->mTranslation[1];
+                m[14] = e->mTranslation[2];
+                _mm_store_ps(&g_16fa4f0[0],  _mm_load_ps(&m[0]));
+                _mm_store_ps(&g_16fa4f0[4],  _mm_load_ps(&m[4]));
+                _mm_store_ps(&g_16fa4f0[8],  _mm_load_ps(&m[8]));
+                _mm_store_ps(&g_16fa4f0[12], _mm_load_ps(&m[12]));
+                g_16f96a0 = 2;
+                g_16fa380 = g_16fa4f0;
+                FUN_00777bf0();
+                int key = i;
+                int meshId = mMap34[&key];
+                void* state = mpShaderStates[meshId];
+                if (state)
+                    FUN_007789d0(state);
+                void* mapPtr = (mpMapsBegin == mpMapsEnd) ? 0
+                              : (char*)mpMapsBegin + i * 0x18;
+                FUN_0072ace0(mMeshBegin[i], stats, 0, mapPtr, 0, 0);
+                FUN_00777c10();
+            }
+            mpViewer->FlushEnd();
+        }
+        FUN_00777c10();
+        FUN_011f1340(savedBlend);
+        g_16fa38c |= 0x10000;
+        _mm_store_ps(&g_16fa4f0[0],  _mm_load_ps(&ident[0]));
+        _mm_store_ps(&g_16fa4f0[4],  _mm_load_ps(&ident[4]));
+        _mm_store_ps(&g_16fa4f0[8],  _mm_load_ps(&ident[8]));
+        _mm_store_ps(&g_16fa4f0[12], _mm_load_ps(&ident[12]));
+        g_16f923c = was4 ? 4 : 8;
+        g_16f9218 = saved9218;
+        g_16f96a0 = 4;
+        g_16fa380 = g_16fa4f0;
+        mIndex70 = end;
+        if (reachedEnd) {
+            LayerDesc info;
+            info.mFlags = 1;
+            info.mField04 = 0;
+            info.mbField08 = true;
+            info.mField0C = 0;
+            info.mField10 = 0;
+            info.mDoneMessageID = 0;
+            info.mpDoneMessage = 0;
+            info.mField1C = 0;
+            info.mField20 = 0;
+            info.mField24 = 0;
+            info.mField28 = 0;
+            void* mgr = FUN_0067dd50();
+            typedef void (__thiscall *AddWorkFn)(void*, void*, int, LayerDesc*);
+            AddWorkFn fn = (AddWorkFn)(*(void***)mgr)[0x78 / 4];
+            fn(mgr, this, 0, &info);
+            return;
+        }
+    }
+
+tail:
+    if (mpItemList)
+        mpItemList->Fn((int)(size_t)a, (int)(size_t)b, (int)(size_t)c, (int)(size_t)stats);
+    if (mpMessage) {
+        void* server = FUN_0067dcc0();
+        typedef void (__thiscall *MsgFn)(void*, int, void*, int, int);
+        MsgFn fn = (MsgFn)(*(void***)server)[0x18 / 4];
+        fn(server, 0x1c91270, mpMessage, 0, 0);
+    }
+}
+
 // @ 0x007bfeb0
 void __stdcall FUN_007bfeb0(int a, int b, int c, int d, int e)
-{ (void)a; (void)b; (void)c; (void)d; (void)e; }
+{
+    (void)a; (void)b; (void)c; (void)d; (void)e;
+    try {
+    } catch (...) {
+    }
+}
 
 // @ 0x007bfee0
 namespace AO {
@@ -6764,6 +7568,11 @@ bool IHandlerRC::HandleMessage(unsigned int msgId, void* arg)
     case 0x7b240a0: ((cThumbnailManager_s007c_0780*)((char*)this - 4))->FUN_007b77a0(arg); return true;
     }
     return false;
+}
+
+// @ 0x007c1330
+ContentValidationSummarizer::~ContentValidationSummarizer()
+{
 }
 
 // @ 0x007c13f0
