@@ -5,6 +5,8 @@
 005f8170 ?DoInsertValue@?$hashtable_s005f_7da0@U?$kv_pair@VKey_s005f_7da0@ResourceMan@EA@@V123@@eastl@@UKeyGroupHash@2@@eastl@@QAE?AUinsert_return_type@12@ABU?$kv_pair@VKey_s005f_7da0@ResourceMan@EA@@V123@@2@Utrue_type@2@@Z  # DoInsertValue migrated from s005f7da0 (verbatim, slice spelling)
 005f8400 ?replace@?$basic_string_s005f_7da0@_W@eastl@@QAEAAV12@PA_W0PB_W1@Z  # replace migrated from s005f7da0 (verbatim, slice spelling)
 005f8840 eastl::DequeBase::DoInit  # EASTL deque init shape (ptr array min 8, subarray 4 x 0x30)
+005f8910 ??1cStringBlock9@@QAE@XZ  # cStringBlock9::~cStringBlock9 migrated from s005f7da0 (verbatim, slice spelling)
+005f8a10 ?GetRemappedKey@cKeyMappingTable@@QAE_NABVKey_s005f_7da0@ResourceMan@EA@@PAV234@@Z  # cKeyMappingTable::GetRemappedKey migrated from s005f7da0 (verbatim, slice spelling)
 005f8a70 ?GetMappedKey@cKeyMappingTable@@QAE_NABVKey_s005f_7da0@ResourceMan@EA@@PAV234@@Z  # cKeyMappingTable::GetMappedKey migrated from s005f7da0 (verbatim, slice spelling)
 005f8e40 ??1cKeyNameRecord@@QAE@XZ  # cKeyNameRecord::~cKeyNameRecord migrated from s005f7da0 (verbatim, slice spelling)
 005f8f30 eastl::basic_string<char>::basic_string  # (size_type n, char c, const allocator&) fill ctor
