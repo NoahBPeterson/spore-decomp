@@ -373,13 +373,39 @@ struct cSPSkinPaintDistributeEffect_s0053_1510 {
 // ---- items of slice s00531510 end
 
 // ---- items of slice s00532f80 begin (TODO(rewrite): local stubs, replace by canonical classes)
+typedef int ptrdiff_t;
+template<int N> inline void ScratchSlots() { uint32_t s[N]; }
+inline void* operator new(size_t, void* p) { return p; }
+void* operator new[](size_t size, const char* name, int flags, unsigned debugFlags, const char* file, int line); // 0xf473a0
+inline void* operator new(size_t size, const char* name, int flags, unsigned debugFlags, const char* file, int line)
+{ return operator new[](size, name, flags, debugFlags, file, line); }
+void* EASTL_Allocate(void* pAllocator, size_t n, size_t alignment, size_t offset); // 0x42dee0
 struct Vector3T {                               // rw::math::fpu::Vector3Template<float,0>
     float x, y, z;
     Vector3T() {}
     Vector3T(const Vector3T& v);                                // @ 0x4098a0 (out of line)
     const float& operator[](int i) const { return (&x)[i]; }
 };
+struct cSPVector3_s0053_2f80 : Vector3T {
+    cSPVector3_s0053_2f80() {}
+    cSPVector3_s0053_2f80(const Vector3T& v) { x = v.x; y = v.y; z = v.z; }
+    float Dot(const Vector3T& v) const { return x * v.x + y * v.y + z * v.z; }
+};
+struct Vector2T {
+    float x, y;
+    Vector2T(float x_, float y_);                               // @ 0x508780
+    Vector2T(const Vector2T& v);                                // @ 0x51fb60
+    static const Vector2T ZERO;                                 // @ 0x15e1394
+};
+struct cSPVector3Copy : Vector3T {
+    cSPVector3Copy(const Vector3T& v) : Vector3T(v) {}
+};
+struct cSPVector2_s0053_2f80 : Vector2T {
+    cSPVector2_s0053_2f80(const Vector2T& v) : Vector2T(v) {}
+};
 Vector3T operator-(const Vector3T& a, const Vector3T& b);      // @ 0x41db10
+Vector3T Cross(const Vector3T& a, const Vector3T& b);          // @ 0x44e460
+float Dot(const Vector3T& a, const Vector3T& b);               // @ 0x455cc0
 struct cElement8C { uint32_t pad[0x8c / 4]; };
 struct cElementTable { char pad[0x98]; cElement8C* mpElements; };
 struct cElementOwner {
@@ -388,6 +414,220 @@ struct cElementOwner {
     char pad1[0x14];
     uint8_t* mpIndexRemap;          // +0x20
 };
+namespace eastl {
+template<typename T1, typename T2> struct pair_s0053_2f80 {
+    T1 first;
+    T2 second;
+    pair_s0053_2f80(const T1& x, const T2& y) : first(x), second(y) {}
+};
+}
+namespace eastl {
+template<typename T> struct less_s0053_2f80 {
+    bool operator()(const T& a, const T& b) const { return a < b; }
+};
+}
+namespace eastl {
+template<typename Pair> struct greater_second_s0053_2f80 {
+    bool operator()(const Pair& a, const Pair& b) const { return a.second > b.second; }
+};
+}
+namespace eastl {
+class allocator_s0053_2f80 { public:
+    uint32_t mFlags;
+    void deallocate(void* p, size_t) { delete[] (char*)p; }
+};
+}
+namespace eastl {
+class fixed_vector_allocator { public:
+    allocator_s0053_2f80 mOverflowAllocator;
+    void* mpPoolBegin;
+    void deallocate(void* p, size_t n) { if (p != mpPoolBegin) mOverflowAllocator.deallocate(p, n); }
+};
+}
+namespace eastl {
+template<typename T> class fixed_vector_s0053_2f80 { public:
+    T* mpBegin;
+    T* mpEnd;
+    T* mpCapacity;
+    fixed_vector_allocator mAllocator;
+    uint32_t mBuffer[0x44 / 4];
+
+    fixed_vector_s0053_2f80();                                             // @ 0x41cfe0
+    T* begin() { return mpBegin; }
+    T* end() { return mpEnd; }
+    T* insert(T* position, const T& value);
+    void DoInsertValue(T* position, const T& value);
+    size_t GetNewCapacity(size_t currentCapacity) { return (currentCapacity > 0) ? (2 * currentCapacity) : 1; }
+    T* DoAllocate(size_t n) { return n ? (T*)EASTL_Allocate(&mAllocator, n * sizeof(T), 4, 0) : 0; }
+    void DoFree(T* p, size_t n) { if (p) mAllocator.deallocate(p, n); }
+};
+}
+namespace eastl {
+template<typename T> T* uninitialized_copy_ptr(T* first, T* last, T* result);   // @ 0x4554f0
+}
+namespace eastl {
+template<typename T>
+inline T* copy_backward_impl(T* first, T* last, T* resultEnd)
+{
+    while (last != first)
+        *--resultEnd = *--last;
+    return resultEnd;
+}
+}
+namespace eastl {
+template<typename T>
+inline T* copy_backward(T* first, T* last, T* resultEnd)
+{
+    const bool t38 = false, n12 = false, n21 = false;
+    return copy_backward_impl(first, last, resultEnd);
+}
+}
+namespace eastl {
+template<typename T>
+T* fixed_vector_s0053_2f80<T>::insert(T* position, const T& value)
+{
+    const ptrdiff_t n = position - mpBegin;
+    if ((position != mpEnd) || (mpEnd == mpCapacity))
+        DoInsertValue(position, value);
+    else
+        ::new(mpEnd++) T(value);
+    return mpBegin + n;
+}
+}
+namespace eastl {
+template<typename T>
+void fixed_vector_s0053_2f80<T>::DoInsertValue(T* position, const T& value)
+{
+    if (mpEnd != mpCapacity) {
+        const T* pValue = &value;
+        if ((pValue >= position) && (pValue < mpEnd))
+            ++pValue;
+        ::new(mpEnd) T(*(mpEnd - 1));
+        copy_backward(position, mpEnd - 1, mpEnd);
+        *position = *pValue;
+        ++mpEnd;
+    } else {
+        const size_t nPrevSize = size_t(mpEnd - mpBegin);
+        const size_t nNewSize = GetNewCapacity(nPrevSize);
+        T* const pNewData = DoAllocate(nNewSize);
+        T* pNewEnd = uninitialized_copy_ptr(mpBegin, position, pNewData);
+        ::new(pNewEnd) T(value);
+        pNewEnd = uninitialized_copy_ptr(position, mpEnd, ++pNewEnd);
+        ScratchSlots<16>();
+        DoFree(mpBegin, (size_t)(mpCapacity - mpBegin));
+        mpBegin = pNewData;
+        mpEnd = pNewEnd;
+        mpCapacity = pNewData + nNewSize;
+    }
+}
+}
+namespace eastl {
+template<typename It, typename T, typename Compare>
+It lower_bound(It first, It last, const T& value, Compare compare);              // @ 0x5701b0
+}
+namespace eastl {
+template<typename Key, typename T, typename Compare = less_s0053_2f80<Key> >
+class vector_map_s0053_2f80 : public fixed_vector_s0053_2f80<pair_s0053_2f80<Key, T> > { public:
+    typedef fixed_vector_s0053_2f80<pair_s0053_2f80<Key, T> > base_type;
+    typedef pair_s0053_2f80<Key, T> value_type;
+    typedef value_type* iterator;
+    struct value_compare {
+        bool operator()(const value_type& a, const value_type& b) const { return a.first < b.first; }
+        bool operator()(const Key& a, const value_type& b) const { return a < b.first; }
+    };
+    value_compare mValueCompare;    // +0x58
+
+    vector_map_s0053_2f80() { ScratchSlots<4>(); }
+    T& operator[](const Key& k);
+    iterator insert(iterator position, const value_type& value);
+};
+}
+namespace eastl {
+template<typename Key, typename T, typename Compare>
+T& vector_map_s0053_2f80<Key, T, Compare>::operator[](const Key& k)
+{
+    iterator itLB = lower_bound(this->begin(), this->end(), k, mValueCompare);
+    uint32_t unused;
+    if ((itLB == this->end()) || mValueCompare(k, *itLB)) {
+        itLB = insert(itLB, value_type(k, T()));
+    }
+    return itLB->second;
+}
+}
+namespace eastl {
+template<typename Key, typename T, typename Compare>
+typename vector_map_s0053_2f80<Key, T, Compare>::iterator
+vector_map_s0053_2f80<Key, T, Compare>::insert(iterator position, const value_type& value)
+{
+    iterator itLB;
+    if ((position != this->end()) && mValueCompare(value, *position))
+        itLB = lower_bound(this->begin(), position, value, mValueCompare);
+    else
+        itLB = lower_bound(position, this->end(), value, mValueCompare);
+    if ((itLB == this->end()) || mValueCompare(value, *itLB))
+        itLB = base_type::insert(itLB, value);
+    ScratchSlots<3>();
+    return itLB;
+}
+}
+namespace eastl {
+template<typename Size> inline Size Log2(Size n)
+{
+    int i;
+    for (i = 0; n; ++i)
+        n >>= 1;
+    return i;
+}
+}
+namespace eastl {
+template<typename It, typename Size, typename Compare>
+void quick_sort_impl(It first, It last, Size kRecursionCount, Compare compare);  // @ 0x52c950
+}
+namespace eastl {
+template<typename It, typename Compare>
+inline void insertion_sort(It first, It last, Compare compare)
+{
+    if (first != last) {
+        It iCurrent, iNext, iSorted = first;
+        for (++iSorted; iSorted != last; ++iSorted) {
+            const pair_s0053_2f80<uint32_t, float> temp(*iSorted);
+            iNext = iCurrent = iSorted;
+            for (--iCurrent; (iNext != first) && compare(temp, *iCurrent); --iNext, --iCurrent)
+                *iNext = *iCurrent;
+            *iNext = temp;
+        }
+    }
+}
+}
+namespace eastl {
+template<typename It, typename Compare>
+inline void insertion_sort_simple(It first, It last, Compare compare)
+{
+    for (It current = first; current != last; ++current) {
+        It end(current), prev(current);
+        const pair_s0053_2f80<uint32_t, float> value(*current);
+        for (--prev; compare(value, *prev); --end, --prev)
+            *end = *prev;
+        *end = value;
+    }
+}
+}
+namespace eastl {
+template<typename It, typename Compare>
+inline void sort_s0053_2f80(It first, It last, Compare compare)
+{
+    if (first != last) {
+        quick_sort_impl(first, last, 2 * Log2(last - first) - 2, compare);
+        if ((last - first) > 28) {
+            insertion_sort(first, first + 28, compare);
+            insertion_sort_simple(first + 28, last, compare);
+        } else
+            insertion_sort(first, last, compare);
+    }
+}
+}
+typedef eastl::pair_s0053_2f80<uint32_t, float> WeightPair;
+typedef eastl::greater_second_s0053_2f80<WeightPair> WeightCompare;
 // ---- items of slice s00532f80 end
 
 // @ 0x00531360
@@ -678,6 +918,17 @@ float LengthSquared(const Vector3T& v)
     return v[0] * v[0] + v[1] * v[1] + v[2] * v[2];
 }
 
+// @ 0x00532fe0
+cSPVector2_s0053_2f80 BarycentricCoords(cSPVector3_s0053_2f80 a, cSPVector3_s0053_2f80 b, cSPVector3_s0053_2f80 c, cSPVector3_s0053_2f80 normal, cSPVector3_s0053_2f80 point)
+{
+    float areaC, areaA, areaB, sum;
+    areaA = normal.Dot(Cross(cSPVector3_s0053_2f80(b - point), cSPVector3_s0053_2f80(c - point)));
+    areaB = normal.Dot(Cross(cSPVector3_s0053_2f80(c - point), cSPVector3_s0053_2f80(a - point)));
+    areaC = Dot(normal, Cross(cSPVector3Copy(a - point), cSPVector3_s0053_2f80(b - point)));
+    sum = areaA + areaB + areaC;
+    return (sum != 0.0f) ? Vector2T(areaB / sum, areaC / sum) : Vector2T::ZERO;
+}
+
 // @ 0x005332f0
 cElement8C* GetElement(cElementOwner* owner, uint32_t index)
 {
@@ -690,3 +941,15 @@ cElement8C* GetElement(cElementOwner* owner, uint32_t index)
         return &table->mpElements[index];
     }
 }
+
+// @ 0x00533680
+template void eastl::sort_s0053_2f80(WeightPair*, WeightPair*, WeightCompare)
+;
+
+// @ 0x005337e0
+template void eastl::insertion_sort(WeightPair*, WeightPair*, WeightCompare)
+;
+
+// @ 0x005338b0
+template void eastl::insertion_sort_simple(WeightPair*, WeightPair*, WeightCompare)
+;

@@ -3,3 +3,4 @@
 005313e0 82 Stop: loop/deref temp slots and GetPaintSystem path differ
 00531470 96 IsRunning: iterator/temp slots differ
 00531510 4227 complete /Od source (all paths/calls); /Od stack-slot layout and inline-accessor temps (frame 0x7a0 vs ~0x430) not reproduced
+00532fe0 155 barycentric: code identical; float named-slot order + cSPVector3Copy param slot shift frame (copy of (a-point) via out-of-line Vector3 copy ctor not reproduced without extra slot) flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
