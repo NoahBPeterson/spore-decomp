@@ -17,6 +17,8 @@ typedef unsigned int uintptr_t;
 void*  __cdecl FUN_01021300(void);                               // 0x01021300
 void*  __cdecl FUN_01021230(void);                               // 0x01021230
 void*  __cdecl FUN_00b3d2a0(void);                               // 0x00b3d2a0
+void*  __cdecl FUN_0067dcc0(void);                               // 0x0067dcc0
+void*  __cdecl FUN_00921580(void* node);                         // 0x00921580
 void   __cdecl FUN_00571db0(void*, void*, void*, void*, void*);  // 0x00571db0
 void   __cdecl FUN_00fe3b90(void* a);                            // 0x00fe3b90
 struct MC {
@@ -107,6 +109,69 @@ struct cCachedEventData {
     void Shutdown();                                     // 0x00fe71c0
 };
 // ---- items of slice s00fe68a0 end
+
+// @ 0x00fe6a00
+cCachedEventData::~cCachedEventData()
+{
+    ((MC*)&mInactivePlayers)->f_009a9600(mInactivePlayers.mRoot);
+    ((MC*)&mActiveEmpires)->f_009a9600(mActiveEmpires.mRoot);
+    ((MC*)&mLocalEmpires)->f_009a9600(mLocalEmpires.mRoot);
+    ((MC*)&mNearbyEmpires)->f_009a9600(mNearbyEmpires.mRoot);
+
+    ((MC*)&mNearbyKnownEmpireStars)->f_00ae6970();
+    ((MC*)&mNearbyEmpireStars)->f_00ae6970();
+    ((MC*)&mHomeworldStarsList)->f_00ae6970();
+    ((MC*)&mGrobPlanetList)->f_00ae6970();
+    ((MC*)&mColonizedPlanetList)->f_00ae6970();
+    ((MC*)&mPlayerAllyColonyPlanets)->f_00ae6970();
+
+    if (mHandler != 0) {
+        void* h = mHandler;
+        mHandler = 0;
+        FUN_00571db0(h, (void*)(uintptr_t)mArg08, (void*)(uintptr_t)mArg0c,
+                     (void*)(uintptr_t)mArg10, (void*)(uintptr_t)mArg14);
+    }
+    mpVtbl = (void*)0x13eb394;
+}
+
+// @ 0x00fe6ad0
+void cCachedEventData::InsertRange(void* first, void* last)
+{
+    while (first != last) {
+        void* local = 0;
+        ((MC*)this)->f_00a17a70(&local, (char*)first + 0x10, 0);
+        first = FUN_00921580(first);
+    }
+}
+
+// @ 0x00fe6b20
+void cCachedEventData::RebuildInactivePlayersCache()
+{
+    Rbtree* s = &mInactivePlayers;
+    ((MC*)s)->f_009a9600(s->mRoot);
+    s->mNode  = &s->mNode;
+    s->mNode2 = &s->mNode;
+    s->mRoot  = 0;
+    s->mSizeByte = 0;
+    s->mField14 = 0;
+
+    void* cur = FUN_01021300();
+    void* sm  = FUN_00b3d2a0();
+    void* all = ((MC*)sm)->f_00ba6430();
+
+    char* it  = *(char**)((char*)all + 8);
+    char* end = (char*)all + 4;
+    while (it != end) {
+        void* rec = *(void**)(it + 0x14);
+        void* id  = *(void**)(it + 0x10);
+        if (rec != cur) {
+            uint32_t flags = *(uint32_t*)((char*)rec + 0x50);
+            if ((flags >> 6) & 1)
+                ((MC*)s)->f_00a17a70(&id, &id, 0);
+        }
+        it = (char*)FUN_00921580(it);
+    }
+}
 
 // @ 0x00fe6bc0
 void cCachedEventData::RebuildNearbyEmpireStarsCache()
@@ -358,6 +423,29 @@ void cCachedEventData::Prime()
 
     RebuildNearbyEmpireStarsCache();
     RebuildInactivePlayersCache();
+}
+
+// @ 0x00fe7160
+void cCachedEventData::Init()
+{
+    Flush();
+    Prime();
+
+    void* server = FUN_0067dcc0();
+    cCachedEventData* p = this;
+    p->mHandler = server;
+    p->mArg08 = (void*)p;
+    p->mArg0c = 0x1494378;
+    p->mArg10 = 5;
+    p->mArg14 = 0;
+
+    typedef void (__thiscall* Fn)(void*, void*, uint32_t);
+    if (server != 0 && p != 0) {
+        for (int i = 0; i < 0x14; i += 4) {
+            uint32_t fn = *(uint32_t*)(0x1494378 + i);
+            ((Fn)VF(server, 0x24))(server, p, fn);
+        }
+    }
 }
 
 // @ 0x00fe71c0
