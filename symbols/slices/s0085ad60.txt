@@ -1,0 +1,3 @@
+0085b0b0 ?FUN_0085b0b0@@YAIPAUReader@@@Z  # FUN_0085b0b0 migrated from s0085ad60 (verbatim, slice spelling)
+0085b150 ?FUN_0085b150@@YAHPAUReader@@HH@Z  # FUN_0085b150 migrated from s0085ad60 (verbatim, slice spelling)
+0085b460 ?FUN_0085b460@@YAHPAUReader@@@Z  # FUN_0085b460 migrated from s0085ad60 (verbatim, slice spelling)
