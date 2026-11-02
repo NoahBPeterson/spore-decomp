@@ -1,1 +1,6 @@
 # source  symbol  va  flags
+../src/game/SPEngine/SPGraphicsMeshData.cpp  ?func_dc90@Obj13@@QAE_NH@Z  0071dc90  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/SPGraphicsMeshData.cpp  ?MatchingIndices@@YA_NPBUIntVec@@HPBHPAH@Z  0071e230  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/SPGraphicsMeshData.cpp  ?Obj13_e290@@YADPAX0@Z  0071e290  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/SPGraphicsMeshData.cpp  ?Obj13_e320@@YADPAX0@Z  0071e320  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/SPGraphicsMeshData.cpp  ?FillInt@@YAXPAH0PBH@Z  0071e5e0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
