@@ -12,6 +12,8 @@
 ../src/game/SPGonzago/SPMissionManager.cpp  ?FUN_00fec010@@YAHPAH@Z  00fec010  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPMissionManager.cpp  ?FUN_00fec8a0@cSPMissionManager_s00fe_c590@@QAE_NPAX@Z  00fec8a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPMissionManager.cpp  ?FUN_00fec900@cSPMissionManager_s00fe_c590@@QAE_NPAX@Z  00fec900  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPMissionManager.cpp  ?FUN_00feca20@cSPMissionManager_s00fe_c590@@QAEXPAVcSPMission@@@Z  00feca20  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPMissionManager.cpp  ?FUN_00fecc40@tRecVec@@QAEXPAUtRec38@@0@Z  00fecc40  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPMissionManager.cpp  ?FUN_00fecfc0@cTimerList@@QAEXABUtTimerValue@@@Z  00fecfc0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPMissionManager.cpp  ?RemoveMission@cSPMissionManager_s00fe_d430@@QAE_NPAUcSPMission_s00fe_d430@@@Z  00fedca0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPMissionManager.cpp  ?GetMissionList@cSPMissionManager_s00fe_d430@@QAEPAXXZ  00fedd50  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include

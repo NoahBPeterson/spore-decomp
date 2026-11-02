@@ -124,11 +124,28 @@ public:
 // ---- items of slice s00feb120 end
 
 // ---- items of slice s00fec590 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern float g_k1000;                 // 0x013ec5b4 1000.0f
+extern void* g_vtbl_013eb384;         // 0x013eb384 ??_7cListenerBase@@6B@
+extern void* g_vtbl_01494964;         // 0x01494964 cSPMissionManager vtable (+0x00)
+extern void* g_vtbl_01494940;         // 0x01494940 cSPMissionManager vtable (+0x08)
+extern void* g_vtbl_01494930;         // 0x01494930 cSPMissionManager vtable (+0x10)
+extern void* g_vtbl_013eb394;         // 0x013eb394 ??_7PaintSystem@@6B@
+extern void* g_vtbl_013eb938;         // 0x013eb938 ??_7ITracerBase@Trace@EA@@6B@
+extern void* g_vtbl_013ec458;         // 0x013ec458 ??_7ContentValidationSummarizer@@6B@
+extern void* g_vtbl_01465d54;         // 0x01465d54 cGonzagoTimer vtable (+0x00)
+extern void* g_vtbl_01464450;         // 0x01464450 cGonzagoTimer vtable (set later in the copy)
+extern uint32_t g_missionMgrInstance; // 0x016dac64 _sInstance_cSPMissionManager_SP__2PAV12_A
+extern uint32_t g_cachedUintArray[];  // 0x016dac54 mission-manager scratch uint array
 extern char g_szSimulator[];          // 0x013f09b4 "Simulator"
 extern char g_szAllocatorH[];         // 0x013ebb38 "...EASTL/allocator.h"
 void*  __cdecl NounManager();                                   // 0x00b3d300
 void*  __cdecl PropertyManager();                               // 0x0067de30
 bool   __cdecl GetPropertyAsKey(void* pProp, uint32_t nKey, void* pOut);   // 0x006a1250
+bool   __cdecl GetPropertyAsUint32Array(void* pProp, uint32_t nKey, int32_t* pnCount, uint32_t** ppArray);  // 0x006a0840
+bool   __cdecl GetPropertyAsKeyArray(void* pProp, uint32_t nKey, int32_t* pnCount, void** ppArray);         // 0x006a0ae0
+bool   __cdecl WriteUint32(void* pStream, const uint32_t* pValue, uint32_t nCount, int32_t nFlag);          // 0x0093aa70
+bool   __cdecl IsWorldLayoutFlagSet(uint32_t nFlag);            // 0x00685520
+void   __cdecl operator_delete_array(void* pBlock);             // 0x00f47380
 void*  __cdecl operator_new(uint32_t nSize, const char* pName, int32_t nA, int32_t nB,
                             const char* pFile, int32_t nLine);  // 0x00f473a0
 uint32_t* __fastcall FUN_00b8d8e0(void* pArg);                  // 0x00b8d8e0
@@ -215,6 +232,10 @@ public:
     bool IsVisibleInUI();                   // 0x00c45340
     void TriggerUIUpdate();                 // 0x00c47d80
 };
+class cGonzagoSimulator {
+public:
+    void ConstructSelf();                   // 0x00b5b6c0
+};
 class cGonzagoTimer {
 public:
     void Destroy();                         // 0x00b638b0
@@ -285,6 +306,14 @@ public:
     }
     uint32_t* DoInsertValue(uint32_t* pPos, const uint32_t& nValue);  // 0x004558a0
 };
+struct tMapNode {
+    void*    mp00;              // +0x00
+    void*    mp04;              // +0x04
+    void*    mp08;              // +0x08
+    uint32_t mn0c;              // +0x0c
+    uint32_t mn10;              // +0x10
+    uint32_t mn14;              // +0x14
+};
 struct cMapIter {
     void* mpNode;               // +0x00
     cMapIter(const cMapIter& rOther);
@@ -307,6 +336,29 @@ struct tMissionSlotVec {
     cSPMission** mpCap;         // +0x08
     uint32_t     mAlloc;        // +0x0c
     void Destroy();             // 0x00ae6970
+};
+class cOutStream {
+public:
+    virtual void* v00();            // +0x00
+    virtual void* v04();
+    virtual void* v08();
+    virtual void* v0c();
+    virtual void* v10();
+    virtual void* v14();
+    virtual void* v18();            // +0x18 write handle
+    virtual void  v1c();            // +0x1c
+    virtual cOutStream* v20();      // +0x20
+};
+class cVarListSerializer_s00fe_c590 {
+public:
+    void* Construct(const void* pSrc, uint32_t nA, uint32_t nB);   // 0x00692f90
+    bool  Serialize(cOutStream* pOut);                             // 0x00692900
+    uint8_t mPad[0xa14];
+};
+struct tSerializeNode {
+    tSerializeNode* mpNext;         // +0x00
+    tSerializeNode* mpPrev;         // +0x04
+    uint8_t         mPayload[0x40]; // +0x08
 };
 class cGameNounManager {
 public:
@@ -1047,7 +1099,12 @@ struct cSPMissionManager_s00fe_e3d0 {
 
 // ---- items of slice s00fef140 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern "C" void* __cdecl FUN_00b3d300();                            // SP::NounManager
+extern "C" void* __cdecl FUN_00b3d4a0();                            // SP::CommManager
+extern "C" void* __cdecl FUN_01021260();                            // cSPLivingUniverse::GetActivePlanet
+extern "C" void* __cdecl FUN_010212a0();                            // ...GetActivePlanetRecord
+extern "C" void* __cdecl FUN_01021370();                            // ...GetPlayerHomePlanet
 extern "C" void* __cdecl FUN_00b3d330();                            // SP::SimTicker
+extern "C" void* __cdecl FUN_01075500();
 extern "C" void* __cdecl FUN_00cd7d10();
 extern "C" void* __cdecl FUN_00d3d420();
 extern "C" void* __cdecl FUN_00fed010();
@@ -1066,7 +1123,9 @@ struct IHTTPRequest {
 };
 void* __cdecl FUN_00fef670();
 void  __cdecl FUN_00fef6b0();
+extern "C" void* __cdecl FUN_00b3d3e0(u32, u32, u32, u32, u32, u32); // SP::EventLog
 IHTTPRequest* g_16dacb8;                                 // 0x016dacb8  HTTPRequest singleton
+void*         g_16dac64;                                 // 0x016dac64
 struct spVecF {
     float* mpBegin;                                      // +0x00
     float* mpEnd;                                        // +0x04
@@ -1105,6 +1164,12 @@ struct cSourcePlanet {
     u8  pad000[0x13c];
     u32 mField_13c;                                      // +0x13c
 };
+struct cEmpire_s00fe_f140 {
+    u8  pad000[0x84];
+    void* mpField_84;                                    // +0x84
+
+    void* GetHomePlanet();                               // 0x00c31730
+};
 struct cGameNounManager_s00fe_f140 {
     void* GetGameDataVector(void*, void*, void*, void*, u32);  // 0x00b21340 (ret 0x14)
     void  RemoveNounsWithInterface(u32);                       // 0x00b227c0 (ret 4)
@@ -1114,11 +1179,26 @@ struct cMissionVec {                                     // vector<cSPMission*> 
     cSPMission_s00fe_f140**  mpBegin;                               // +0x04
     cSPMission_s00fe_f140**  mpEnd;                                 // +0x08
 };
+struct cStarRecordRef {
+    void* GetCommContext(u32, int, u32);                 // 0x00ce6950 (ret 0x0c)
+};
+struct cCommScreen {
+    void* FindEntry(void*, void*);                       // 0x00ae93f0 (ret 8)
+    void  RemoveMatching(void*, void*);                  // 0x00aea720 (ret 8)
+    void  FUN_00aeb7a0(void*, void*);                    // 0x00aeb7a0 (ret 8)
+    bool  IsActive();                                    // 0x00ae9390
+};
 struct cSerializerUser {
     void SetSerializer();                                // 0x00c2e4e0
 };
 struct cSimTicker_s00fe_f140 : VPad<21, IEmpty> {
     virtual void FUN_54(void*);                          // +0x54 (slot 21)
+};
+struct cFeedHelper {                                     // g_16dac64
+    void* FUN_00feed30(void*, void*);                    // 0x00feed30 (ret 8)
+};
+struct cSpaceGame {                                      // SpaceGameGet() result
+    bool FUN_01075500();                                 // 0x01075500
 };
 struct cSPMissionManager_s00fe_f140 {
     u8    pad000[0x16];
@@ -1715,6 +1795,258 @@ bool cSPMissionManager_s00fe_c590::FUN_00fec900(void* pArg)
     return HasTimerForKey(&mListD4, pArg);
 }
 
+// @ 0x00fec960
+bool cSPMissionManager_s00fe_c590::FUN_00fec960(cSPMission* pMission)
+{
+    cSPMission** pSlots = mSlotVec.mpBegin;
+    uint32_t i = 0;
+
+    for (;;) {
+        if (pSlots[i] == pMission)
+            return true;
+        if (pSlots[i] == 0)
+            break;
+        ++i;
+        if (i >= 3)
+            return false;
+    }
+
+    cSPMission* pOld = pSlots[i];
+    if (pMission != pOld) {
+        if (pMission != 0)
+            pMission->AddRef();
+        pSlots[i] = pMission;
+        if (pOld != 0)
+            pOld->Release();
+    }
+    pMission->FUN_00c47b10(1);
+
+    cSPMission* pCur = mpC0;
+    if (pMission == pCur && pCur != 0) {
+        if (pCur != 0) {
+            mpC0 = 0;
+            pCur->Release();
+            pCur->TriggerUIUpdate();
+        }
+        if (mpC0 != 0)
+            mpC0->TriggerUIUpdate();
+        mnBC = 0;
+    }
+    return true;
+}
+
+// @ 0x00feca20
+void cSPMissionManager_s00fe_c590::FUN_00feca20(cSPMission* pMission)
+{
+    if (pMission->mn17c == 0) {
+        if (pMission->IsVisibleInUI()) {
+            if (!this->FUN_00fec960(pMission))
+                this->FUN_00febeb0(pMission);
+        }
+    }
+}
+
+// @ 0x00feca80
+void __cdecl FUN_00feca80(cOutStream* pOut, tSerializeNode* pList)
+{
+    uint32_t nCount = 0;
+    for (tSerializeNode* p = pList->mpNext; p != pList; p = p->mpNext)
+        ++nCount;
+
+    cOutStream* pStream = pOut->v20();
+    void* pHandle = pStream->v18();
+    uint32_t nValue = nCount;
+    WriteUint32(pHandle, &nValue, 1, 0);
+
+    for (tSerializeNode* p = pList->mpNext; p != pList; p = p->mpNext) {
+        cVarListSerializer_s00fe_c590 ser;
+        ser.Construct(&p->mPayload, 0x15b49b0, 0x1a80d26);
+        ser.Serialize(pOut);
+    }
+    return pOut->v1c();
+}
+
+// @ 0x00fecb20
+void cTimerList::DestroyAll()
+{
+    for (tTimerNode* p = mpNext; p != (tTimerNode*)this; ) {
+        tTimerNode* pNext = p->mpNext;
+        p->mValue.mTimer.Destroy();
+        operator_delete_array(p);
+        p = pNext;
+    }
+}
+
+// @ 0x00fecb50
+tTimerValue* tTimerValue::CopyFrom(const tTimerValue* pSrc)
+{
+    m00 = pSrc->m00;
+    mTimer.mpVtbl00 = (void*)&g_vtbl_01465d54;
+    mTimer.m04 = 0;
+    mTimer.m08 = pSrc->mTimer.m08;
+    mTimer.m0c = pSrc->mTimer.m0c;
+    mTimer.m10 = pSrc->mTimer.m10;
+    mTimer.m14 = pSrc->mTimer.m14;
+    mTimer.m18 = pSrc->mTimer.m18;
+    mTimer.m1c = pSrc->mTimer.m1c;
+    mTimer.mpVtbl00 = (void*)&g_vtbl_01464450;
+    mTimer.m20 = pSrc->mTimer.m20;
+    mTimer.m24 = pSrc->mTimer.m24;
+    mTimer.m28 = pSrc->mTimer.m28;
+    return this;
+}
+
+// @ 0x00fecbb0
+void cSPMissionManager_s00fe_c590::FUN_00fecbb0(uint32_t nKey)
+{
+    uint32_t key = nKey;
+    cMapIter it = mFeedbackMap.Find(key);
+    if (it.mpNode != (void*)&mFeedbackMap.mpEndNode)
+        mFeedbackMap.Erase(key);
+}
+
+// @ 0x00fecbf0
+uint32_t cSPMissionManager_s00fe_c590::FUN_00fecbf0()
+{
+    if (IsWorldLayoutFlagSet(2)) {
+        uint32_t nKey = 0x2ab57fac;
+        cMapIter it = mFeedbackMap.Find(nKey);
+        if (it.mpNode == (void*)&mFeedbackMap.mpEndNode)
+            return 1;
+        if (((tMapNode*)it.mpNode)->mn14 == 1)
+            return 0;
+        return 1;
+    }
+    return 0;
+}
+
+// @ 0x00fecc40
+void tRecVec::FUN_00fecc40(tRec38* pBegin, tRec38* pEnd)
+{
+    while (pBegin < pEnd) {
+        tRec38* p = pBegin;
+        if (p->mpArr1c != 0 && *((int32_t*)p->mpArr1c - 1) != 0)
+            operator_delete_array(p->mpArr1c);
+        if (p->mpArr08 != 0 && *((int32_t*)p->mpArr08 - 1) != 0)
+            operator_delete_array(p->mpArr08);
+        ++pBegin;
+    }
+}
+
+// @ 0x00fecc90
+cSPMissionManager_s00fe_c590* cSPMissionManager_s00fe_c590::FUN_00fecc90()
+{
+    ((cGonzagoSimulator*)this)->ConstructSelf();
+
+    mpVtbl10 = (void*)&g_vtbl_013eb384;
+    mb14 = 0;
+    mb15 = 0;
+    mb17 = 0;
+    mb18 = 0;
+    mpUnk1c = 0;
+    mpVtbl00 = (void*)&g_vtbl_01494964;
+    mpVtbl08 = (void*)&g_vtbl_01494940;
+    mpVtbl10 = (void*)&g_vtbl_01494930;
+    mb16 = 1;
+
+    mRecVec20.mpBegin = 0; mRecVec20.mpEnd = 0; mRecVec20.mpCap = 0;
+    mRecVec34.mpBegin = 0; mRecVec34.mpEnd = 0; mRecVec34.mpCap = 0;
+    mRecVec48.mpBegin = 0; mRecVec48.mpEnd = 0; mRecVec48.mpCap = 0;
+
+    mFeedbackMap.mpEndNodeSelf = 0;
+    mFeedbackMap.mpRoot = 0;
+    mFeedbackMap.mb10 = 0;
+    mFeedbackMap.mpRoot = 0;
+    mFeedbackMap.mb10 = 0;
+    mFeedbackMap.mn14 = 0;
+    mFeedbackMap.mpEndNodeSelf = (void*)&mFeedbackMap.mpEndNode;
+    mFeedbackMap.mpEndNode = (void*)&mFeedbackMap.mpEndNode;
+
+    mpProp78 = 0;
+    mpProp7c = 0;
+    mpArr80 = 0;
+    mUnk84 = 0;
+    mUnk88 = 0;
+    mpArr94 = 0;
+    mUnk98 = 0;
+    mUnk9c = 0;
+    mSlotVec.mpBegin = 0;
+    mSlotVec.mpEnd = 0;
+    mSlotVec.mpCap = 0;
+    mnBC = 0;
+    mpC0 = 0;
+    mpC4 = 0;
+
+    mListC8.mpNext = (tTimerNode*)&mListC8;
+    mListC8.mpPrev = (tTimerNode*)&mListC8;
+    mListD4.mpNext = (tTimerNode*)&mListD4;
+    mListD4.mpPrev = (tTimerNode*)&mListD4;
+
+    mnE0 = 0;
+    mnE4 = 0;
+    mnE8 = 0;
+    mnEC = 0;
+    mKeyF0.mType = 0; mKeyF0.mInstance = 0; mKeyF0.mGroup = 0;
+    mKeyFC.mType = 0; mKeyFC.mInstance = 0; mKeyFC.mGroup = 0;
+    mVec108.mpBegin = 0;
+    mVec108.mpEnd = 0;
+    mVec108.mpCap = 0;
+    mVec11c.mpBegin = 0;
+    mVec11c.mpEnd = 0;
+    mVec11c.mpCap = 0;
+    mVec130.mpBegin = 0;
+    mVec130.mpEnd = 0;
+    mVec130.mpCap = 0;
+
+    g_missionMgrInstance = (uint32_t)this;
+    return this;
+}
+
+// @ 0x00fece20
+void cSPMissionManager_s00fe_c590::FUN_00fece20()
+{
+    mpVtbl00 = (void*)&g_vtbl_01494964;
+    mpVtbl08 = (void*)&g_vtbl_01494940;
+    mpVtbl10 = (void*)&g_vtbl_01494930;
+    g_missionMgrInstance = 0;
+
+    if (mVec130.mpBegin != 0 && *((int32_t*)mVec130.mpBegin - 1) != 0)
+        operator_delete_array(mVec130.mpBegin);
+    if (mVec11c.mpBegin != 0 && *((int32_t*)mVec11c.mpBegin - 1) != 0)
+        operator_delete_array(mVec11c.mpBegin);
+    if (mVec108.mpBegin != 0 && *((int32_t*)mVec108.mpBegin - 1) != 0)
+        operator_delete_array(mVec108.mpBegin);
+    mListD4.DestroyAll();
+    mListC8.DestroyAll();
+    if (mpC4 != 0)
+        mpC4->Release();
+    if (mpC0 != 0)
+        mpC0->Release();
+    mSlotVec.Destroy();
+    if (mpArr94 != 0 && *((int32_t*)mpArr94 - 1) != 0)
+        operator_delete_array(mpArr94);
+    if (mpArr80 != 0 && *((int32_t*)mpArr80 - 1) != 0)
+        operator_delete_array(mpArr80);
+    if (mpProp7c != 0)
+        mpProp7c->Release();
+    if (mpProp78 != 0)
+        mpProp78->Release();
+    mFeedbackMap.NukeSubtree(mFeedbackMap.mpRoot);
+    mRecVec48.FUN_00fecc40(mRecVec48.mpBegin, mRecVec48.mpEnd);
+    if (mRecVec48.mpBegin != 0 && *((int32_t*)mRecVec48.mpBegin - 1) != 0)
+        operator_delete_array(mRecVec48.mpBegin);
+    mRecVec34.FUN_00fecc40(mRecVec34.mpBegin, mRecVec34.mpEnd);
+    if (mRecVec34.mpBegin != 0 && *((int32_t*)mRecVec34.mpBegin - 1) != 0)
+        operator_delete_array(mRecVec34.mpBegin);
+    mRecVec20.FUN_00fecc40(mRecVec20.mpBegin, mRecVec20.mpEnd);
+    if (mRecVec20.mpBegin != 0 && *((int32_t*)mRecVec20.mpBegin - 1) != 0)
+        operator_delete_array(mRecVec20.mpBegin);
+
+    mpVtbl10 = (void*)&g_vtbl_013eb394;
+    mpVtbl08 = (void*)&g_vtbl_013eb938;
+    mpVtbl00 = (void*)&g_vtbl_013ec458;
+}
+
 // @ 0x00fecfc0
 void cTimerList::FUN_00fecfc0(const tTimerValue& rValue)
 {
@@ -1728,6 +2060,84 @@ void cTimerList::FUN_00fecfc0(const tTimerValue& rValue)
     pNode->mpPrev = pFirst->mpPrev;
     pFirst->mpPrev->mpNext = pNode;
     pFirst->mpPrev = pNode;
+}
+
+// @ 0x00fed0b0
+void cSPMissionManager_s00fe_c590::CacheProperties()
+{
+    cIPropertyManager* pPM = (cIPropertyManager*)PropertyManager();
+    if (mpProp78 != 0) {
+        cProperty* pOld = mpProp78;
+        mpProp78 = 0;
+        pOld->Release();
+    }
+    pPM->v2c(0x1254b050, 0x2ae1a8e, (void**)&mpProp78);
+
+    cIPropertyManager* pPM2 = (cIPropertyManager*)PropertyManager();
+    if (mpProp7c != 0) {
+        cProperty* pOld = mpProp7c;
+        mpProp7c = 0;
+        pOld->Release();
+    }
+    pPM2->v2c(0xe8e2f4b2, 0x2ae1a8e, (void**)&mpProp7c);
+
+    if (mpProp7c != 0) {
+        cProperty* pOut;
+        if (mpProp7c->v24(0x14d805b0, (void**)&pOut) && pOut->mnType12 == 0xa)
+            mnE0 = *pOut->GetUInt();
+    }
+
+    float fValue = 0.0f;
+    if (mpProp7c != 0) {
+        cProperty* pOut;
+        if (mpProp7c->v24(0x14d805b1, (void**)&pOut) && pOut->mnType12 == 0xd)
+            fValue = *pOut->GetFloat();
+    }
+    mnE4 = (uint32_t)(fValue * g_k1000);
+
+    if (mpProp7c != 0) {
+        cProperty* pOut;
+        if (mpProp7c->v24(0x14d805b2, (void**)&pOut) && pOut->mnType12 == 0xd)
+            fValue = *pOut->GetFloat();
+    }
+    mnE8 = (uint32_t)(fValue * g_k1000);
+
+    if (mpProp7c != 0) {
+        cProperty* pOut;
+        if (mpProp7c->v24(0x14d805b5, (void**)&pOut) && pOut->mnType12 == 0xa)
+            mnEC = *pOut->GetUInt();
+    }
+
+    GetPropertyAsKey(mpProp7c, 0x14d805b6, &mKeyF0);
+    GetPropertyAsKey(mpProp7c, 0x14d805b7, &mKeyFC);
+
+    int32_t nCount = 0;
+    uint32_t* pArray = 0;
+    GetPropertyAsUint32Array(mpProp7c, 0x14d805b4, &nCount, &pArray);
+    for (int32_t i = 0; i < nCount; ++i)
+        g_cachedUintArray[i] = pArray[i];
+
+    {
+        int32_t nRecCount = 0;
+        void* pRecs = 0;
+        GetPropertyAsKeyArray(mpProp7c, 0x14d805b8, &nRecCount, &pRecs);
+        for (int32_t i = 0; i < nRecCount; ++i)
+            mVec130.push_back(((tKey*)pRecs)[i].mType);
+    }
+    {
+        int32_t nRecCount = 0;
+        void* pRecs = 0;
+        GetPropertyAsKeyArray(mpProp7c, 0x14d805b9, &nRecCount, &pRecs);
+        for (int32_t i = 0; i < nRecCount; ++i)
+            mVec11c.push_back(((tKey*)pRecs)[i].mType);
+    }
+    {
+        int32_t nRecCount = 0;
+        void* pRecs = 0;
+        GetPropertyAsKeyArray(mpProp7c, 0x14d805ba, &nRecCount, &pRecs);
+        for (int32_t i = 0; i < nRecCount; ++i)
+            mVec108.push_back(((tKey*)pRecs)[i].mType);
+    }
 }
 
 // @ 0x00fed430
@@ -2900,6 +3310,103 @@ cleanup:
         operator_delete_array(weights.mpBegin);
     }
     return result;
+}
+
+// @ 0x00fef140
+void cSPMissionManager_s00fe_f140::CleanupArchive(void* param2)
+{
+    cEmpire_s00fe_f140* empire = (cEmpire_s00fe_f140*)FUN_01021300();
+    if (empire == 0)
+        return;
+    void* homePlanet = empire->GetHomePlanet();
+    if (homePlanet == 0)
+        return;
+    void* hp = empire->GetHomePlanet();
+
+    cGameNounManager_s00fe_f140* nm = (cGameNounManager_s00fe_f140*)FUN_00b3d300();
+    cMissionVec* v = (cMissionVec*)nm->GetGameDataVector(
+        FUN_00cd7d10, FUN_00d3d420, FUN_00fed010, FUN_00b1e520, 0x2aa5ada);
+    cSPMission_s00fe_f140** hi = v->mpEnd;
+    for (cSPMission_s00fe_f140** it = v->mpBegin; it != hi; ++it) {
+        cSPMission_s00fe_f140* m = *it;
+        if (((m->mField_130 >> 3) & 1) != 0 && m->FUN_60() == 3
+            && m->GetSourcePlanet()->mField_13c == (u32)hp)
+            return;
+    }
+
+    void* stars = *(void**)((u8*)empire + 0x84);
+    cStarRecordRef* rec = (cStarRecordRef*)hp;
+    void* ctx = rec->GetCommContext(0x8b756f4b, -1, 0);
+    cCommScreen* cs = (cCommScreen*)FUN_00b3d4a0();
+    void* entry = cs->FindEntry(stars, ctx);
+    if (entry != 0 && *(void**)((u8*)entry + 0x40) != 0) {
+        u32 id = ((cSPMission_s00fe_f140*)*(void**)((u8*)entry + 0x40))->GetMissionID();
+        if (FUN_00fee930(id)) {
+            void* obj = *(void**)((u8*)entry + 0x40);
+            void* stars2 = *(void**)((u8*)empire + 0x84);
+            void* ctx2 = rec->GetCommContext(0x8b756f4b, -1, 0);
+            cCommScreen* cs2 = (cCommScreen*)FUN_00b3d4a0();
+            cs2->RemoveMatching(stars2, ctx2);
+        }
+    }
+
+    void* stars3 = *(void**)((u8*)empire + 0x84);
+    void* ctx3 = rec->GetCommContext(0x8b756f4b, -1, 0);
+    cCommScreen* cs3 = (cCommScreen*)FUN_00b3d4a0();
+    if (cs3->FindEntry(stars3, ctx3) != 0)
+        return;
+
+    if (GetNextAvailableTutorialMission() == -1)
+        return;
+
+    if (mFlag_16 != 0) {
+        cFeedHelper* fh = (cFeedHelper*)g_16dac64;
+        void* obj = fh->FUN_00feed30(empire, hp);
+        if (obj != 0) {
+            void* r = ((IVM10*)obj)->FUN_a4((void*)0x8b756f4b, obj, 0, 0);
+            void* stars4 = *(void**)((u8*)empire + 0x84);
+            void* ctx4 = rec->GetCommContext(0x8b756f4b, -1, 0);
+            cCommScreen* cs4 = (cCommScreen*)FUN_00b3d4a0();
+            cs4->FUN_00aeb7a0(stars4, ctx4);
+        }
+        mFlag_16 = 0;
+        return;
+    }
+
+    cCommScreen* cs5 = (cCommScreen*)FUN_00b3d4a0();
+    if (!cs5->IsActive()) {
+        cSpaceGame* sg = (cSpaceGame*)FUN_01075500();
+        if (!sg->FUN_01075500())
+            goto LAB_32a;
+    }
+    {
+        void* ap = FUN_01021260();
+        void* a1 = ((cStarRecordRef*)*(void**)((u8*)ap + 0x13c))->GetCommContext(0, 0, 0);
+        void* a2 = rec->GetCommContext(0, 0, 0);
+        if (a2 == a1)
+            return;
+    }
+LAB_32a:
+    {
+        cFeedHelper* fh = (cFeedHelper*)g_16dac64;
+        void* obj = fh->FUN_00feed30(empire, hp);
+        if (obj != 0) {
+            ((IVM10*)obj)->FUN_a4((void*)0x8b756f4b, obj, 0, 0);
+            void* stars6 = *(void**)((u8*)empire + 0x84);
+            void* ctx6 = rec->GetCommContext(0x8b756f4b, -1, 0);
+            cCommScreen* cs6 = (cCommScreen*)FUN_00b3d4a0();
+            cs6->FUN_00aeb7a0(stars6, ctx6);
+        }
+    }
+    {
+        void* a = FUN_010212a0();
+        void* b = FUN_01021370();
+        if (a != b) {
+            cSerializerUser* u =
+                (cSerializerUser*)FUN_00b3d3e0(0xe737105a, 0x131a9f54, 0, 0, 1, 0);
+            u->SetSerializer();
+        }
+    }
 }
 
 // @ 0x00fef3b0
