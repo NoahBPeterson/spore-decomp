@@ -1,1 +1,3 @@
 00d56c30 SP::cBehaviorSpaceTurret::Action  # card PDB name (caller-scored); retail layout from disassembly
+00d576b0 ?GetEntry@CTribe@@QAEPAUCEntry@@H@Z  # CTribe::GetEntry migrated from s00d56c30 (verbatim, slice spelling)
+00d576d0 ?SeedCitizenTool@@YAXPAUCCitizen@@@Z  # SeedCitizenTool migrated from s00d56c30 (verbatim, slice spelling)
