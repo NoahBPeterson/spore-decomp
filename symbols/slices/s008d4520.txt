@@ -3,7 +3,7 @@
 008d47b0 ?lookupFlags@SortedTable@@QAEHPAHPAI0@Z  # SortedTable::lookupFlags migrated from s008d4520 (verbatim, slice spelling)
 008d4850 ?lookup400@SortedTable@@QAEHPAHPAI@Z  # SortedTable::lookup400 migrated from s008d4520 (verbatim, slice spelling)
 008d48d0 ?push@SmallVec@@QAEXPAX@Z  # SmallVec::push - bump end/cap at +8/+0xc or grow via 0x008d4400 # no (PASS)
-008d4920 ?push@BigObj@@QAEXHPAHI@Z  # BigObj::push - grow-or-append into the vector at +0x18 # no (PASS)
+008d4920 ?push@BigObj@@QAEXHPAHI@Z  # BigObj::push migrated from s008d4520 (verbatim, slice spelling)
 008d49b0 ?clear@ClearTwo@@QAEXXZ  # ClearTwo::clear - erase-all over the Quad16 [abase,aend) and Rec20 [bbase,bend) spans # no (diff 14, PASS)
 008d4a10 FUN_008d4a10  # platform-name abbreviation (argument arrives in esi) # no (UNSUPPORTED)
 008d4aa0 ?toLower@ByteRange@@QAEXXZ  # ByteRange::toLower - in-place tolower over [begin,end) # byte-exact
@@ -18,7 +18,7 @@
 008d4df0 ?MatchWhileIdent@TokenReader@@QAEXPAX@Z  # TokenReader::MatchWhile<Identifier> # byte-exact
 008d4e40 ?MatchCStr@TokenReader@@QAEEPBD@Z  # TokenReader::MatchCStr - match a literal, recording it # byte-exact
 008d4ea0 ?MatchWhileHex@TokenReader@@QAEXPAX@Z  # TokenReader::MatchWhile<HexDigit> # byte-exact
-008d4ef0 ?Advance@TokenReader@@QAEEXZ  # TokenReader::Advance - main lexer step # no (UNSUPPORTED)
+008d4ef0 ?Advance@TokenReader@@QAEEXZ  # TokenReader::Advance migrated from s008d4520 (verbatim, slice spelling)
 008d5160 ?MatchPunc@TokenReader@@QAEEC@Z  # TokenReader::MatchPunc - consume one punctuation char # byte-exact
 008d5180 FUN_008d5180  # scan a quoted string into matchText with escape decoding # no (FAIL, benign arg upper bits)
 008d52f0 ?MatchString@TokenReader@@QAEEXZ  # TokenReader::MatchString - FNV-1 the matched quoted string into mTokenValue # no (WEAK)

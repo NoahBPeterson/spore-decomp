@@ -1,4 +1,4 @@
-// src/game/UTFSpore_Win32/TriggerConfig.cpp -- migrated from slice(s) s008d5340 by tools/migrate/rewrite.py
+// src/game/UTFSpore_Win32/TriggerConfig.cpp -- migrated from slice(s) s008d4520, s008d5340 by tools/migrate/rewrite.py
 // Object file: UTFSpore_Win32/TriggerConfig.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -10,243 +10,315 @@ extern "C" __declspec(dllimport) int __cdecl toupper(int);
 extern "C" __declspec(dllimport) int __cdecl _stricmp(const char*, const char*);
 #include <new>
 #include <string.h>
+#include <intrin.h>
 
-// ---- items of slice s008d5340 begin (TODO(rewrite): local stubs, replace by canonical classes)
-extern "C" __declspec(dllimport) int __cdecl isalnum(int);
-extern "C" __declspec(dllimport) int __cdecl toupper(int);
-extern "C" __declspec(dllimport) int __cdecl _stricmp(const char*, const char*);
-typedef unsigned int uint;
-void EASTL_allocator_deallocate(void* p);                             // 0x00f47380 (operator delete[])
-namespace eastl {
-struct allocator_s008d_5340 {};
-}
-namespace eastl {
-int CompareI(const char* a, const char* b, unsigned n);               // 0x00606ea0 (cdecl)
-}
-namespace eastl {
-template <class T> inline const T& min_alt(const T& a, const T& b) { return (b < a) ? b : a; }
-}
-namespace eastl {
-extern char gEmptyString[];                                           // 0x01667bac
-}
-namespace eastl {
-inline int CharStrlen(const char* p) { return (int)strlen(p); }
-}
-namespace eastl {
-struct string {                                                       // eastl::basic_string<char>, 16 bytes
-    typedef char T;
-    T* mpBegin;
-    T* mpEnd;
-    T* mpCapacity;
-    allocator_s008d_5340 mAllocator;
 
-    string()
-    {
-        mpBegin = gEmptyString;
-        mpEnd = gEmptyString;
-        mpCapacity = gEmptyString + 1;
-    }
-    ~string()
-    {
-        if (mpCapacity - mpBegin > 1 && mpBegin)
-            EASTL_allocator_deallocate(mpBegin);
-    }
-    __forceinline int comparei(const T* p) const
-    {
-        const T* pBegin2 = p;
-        const T* pEnd2 = p + CharStrlen(p);
-        const int n1 = (int)(mpEnd - mpBegin);
-        const int n2 = (int)(pEnd2 - pBegin2);
-        const int nMin = min_alt(n1, n2);
-        const int cmp = CompareI(mpBegin, pBegin2, (unsigned)nMin);
-        return (cmp != 0 ? cmp : (n1 < n2 ? -1 : (n1 > n2 ? 1 : 0)));
-    }
-    string& insert(int position, const T* p);                       // 0x0068cd40 (thiscall)
+// ---- items of slice s008d4520 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C" __declspec(dllimport) int  tolower(int c);
+extern "C" __declspec(dllimport) int  isprint(int c);
+extern "C" __declspec(dllimport) unsigned long strtoul(const char* s, char** end, int base);
+extern char g_142ef10[];
+extern char g_142ef0c[];
+extern char g_142ef08[];
+extern char g_14365d8[];
+extern char g_14365d4[];
+extern char g_1667a80[];
+typedef unsigned char uint8;
+typedef signed char int8;
+typedef unsigned int uint32;
+typedef int int32;
+struct VAlloc {
+    virtual void* slot0();                                   // vtable +0x00
+    virtual void* slot4();                                   // vtable +0x04
+    virtual void* allocate(unsigned n, int a, void* name);   // vtable +0x08
+    virtual void  deallocate(void* p, unsigned n);           // vtable +0x0c
 };
-}
-namespace eastl {
-bool operator==(const string& a, const char* b);                      // 0x00555020 (cdecl)
-}
-struct UIntVector {
-    uint* mpBegin;
-    uint* mpEnd;
-    uint* mpCapacity;
-    eastl::allocator_s008d_5340 mAllocator;
+struct EaString {
+    char* mpBegin;      // +0x00
+    char* mpEnd;        // +0x04
+    char* mpCapacity;   // +0x08
+    char  mBuffer[8];   // +0x0c
 
-    UIntVector() : mpBegin(0), mpEnd(0), mpCapacity(0) {}
-    ~UIntVector()
-    {
-        if (mpBegin) {
-            if (((int*)mpBegin)[-1] != 0)
-                EASTL_allocator_deallocate(mpBegin);
+    void push_back(char c);   // 0x005306c0 (__thiscall)
+};
+struct TokenReader {
+    char*     scanPos;      // 0x00
+    char*     scanEnd;      // 0x04
+    char*     lineBegin;    // 0x08
+    uint32    currentLine;  // 0x0c
+    EaString  matchText;    // 0x10
+    uint32    mToken;       // 0x24
+    int32     mTokenValue;  // 0x28
+    uint32    mTokenLine;   // 0x2c
+
+    uint8 SkipSpace(void* pred);                 // 0x008d4c80
+    void  MatchWhileIdent(void* pred);           // 0x008d4df0
+    uint8 MatchCStr(const char* lit);            // 0x008d4e40
+    void  MatchWhileHex(void* pred);             // 0x008d4ea0
+    uint8 Advance();                             // 0x008d4ef0
+    uint8 MatchPunc(int8 c);                     // 0x008d5160
+    uint8 MatchString();                         // 0x008d52f0
+};
+struct Rect20Vec {
+    int*   begin;   // 0x00
+    int*   end;     // 0x04
+    int*   cap;     // 0x08
+    VAlloc* alloc;  // 0x0c
+    void*  name;    // 0x10
+
+    void  push_back(int* out, int* value);       // 0x008d4520
+};
+struct BigObj {
+    char       pad00[0x18];
+    Rect20Vec  vec;   // 0x18
+
+    void push(int key, int* src, uint cnt);   // 0x008d4920
+};
+extern "C" uint FUN_00894e30(TokenReader* t, const char* s);    // 0x00894e30  Skip<char>
+extern "C" void FUN_008950b0(TokenReader* t);                   // 0x008950b0  SkipToEoL
+extern "C" uint FUN_008951c0(TokenReader* t, const char* s);    // 0x008951c0  SkipUntil<n>
+extern "C" void FUN_00895770(TokenReader* t, const char* s);    // 0x00895770  Match<Alternative>
+extern "C" uint32 g_1667a78;
+// ---- items of slice s008d4520 end
+
+// callees this slice defines outside this object (rewrite.py held_callee_protos)
+extern "C" char* FUN_008d4ad0(char* a, char* b, char** key);  // 0x008d4ad0 (stays in the slice: not this object's)
+extern "C" char* FUN_008d4b30(char* a, char* b, char** key);  // 0x008d4b30 (stays in the slice: not this object's)
+
+// @ 0x008d4920
+void BigObj::push(int key, int* src, uint cnt)
+{
+    if (cnt >= 4)
+        cnt = 4;
+    int rec[5];
+    rec[1] = 0; rec[2] = 0; rec[3] = 0; rec[4] = 0;
+    rec[0] = key;
+    for (uint i = 0; i < cnt; i++)
+        rec[1 + i] = src[i];
+
+    int* p = vec.end;
+    if (p < vec.cap) {
+        vec.end = p + 5;
+        if (p != 0) {
+            p[0] = rec[0]; p[1] = rec[1]; p[2] = rec[2];
+            p[3] = rec[3]; p[4] = rec[4];
+            return;
+        }
+    } else {
+        vec.push_back(p, rec);
+    }
+}
+
+// @ 0x008d4a10
+extern "C" char* FUN_008d4a10(const char* name)
+{
+    if (_stricmp(name, "XBox") == 0)     return "xb";
+    if (_stricmp(name, "Xenon") == 0)    return "xe";
+    if (_stricmp(name, "PS2") == 0)      return "ps2";
+    if (_stricmp(name, "PS3") == 0)      return "ps3";
+    if (_stricmp(name, "GameCube") == 0) return "gc";
+    if (_stricmp(name, "Windows") == 0)  return "win32";
+    return "";
+}
+
+// @ 0x008d4b90
+extern "C" char** FUN_008d4b90(char** out, char* a, char* b, char** key)
+{
+    int n = (int)(b - a) >> 3;
+    while (n > 0) {
+        int half = n >> 1;
+        char** slot = (char**)(a + half * 8);
+        char* s = *slot;
+        char* t = *key;
+        char  c = *s;
+        while (c != 0 && c == *t) {
+            c = s[1]; s++; t++;
+        }
+        if (*s < *t) {
+            a = (char*)slot + 8;
+            n = n + (-1 - half);
+        } else {
+            char* s2 = *slot;
+            char* t2 = *key;
+            c = *t2;
+            while (c != 0 && c == *s2) {
+                c = t2[1]; t2++; s2++;
+            }
+            if (*s2 <= *t2) {
+                out[1] = FUN_008d4b30((char*)slot + 8, b, key);
+                out[0] = FUN_008d4ad0(a, (char*)slot, key);
+                return out;
+            }
+            b = (char*)slot;
+            n = half;
         }
     }
-    unsigned size() const { return (unsigned)(mpEnd - mpBegin); }
-    void DoInsertValue(uint* position, const uint& value);           // 0x004558a0
-    void push_back(const uint& value)
-    {
-        if (mpEnd < mpCapacity)
-            ::new (mpEnd++) uint(value);
-        else
-            DoInsertValue(mpEnd, value);
-    }
-    __forceinline uint* erase(uint* first, uint* last)
-    {
-        memcpy(first, last, (unsigned)((char*)mpEnd - (char*)last));
-        mpEnd -= (last - first);
-        return first;
-    }
-    __forceinline void clear() { erase(mpBegin, mpEnd); }
-};
-namespace EA {
-namespace Input {
-enum Token { TokenNone = 0, TokenLineBreak = 1, TokenIdent = 2, TokenInteger = 3, TokenPunc = 4 };
+    out[0] = a;
+    out[1] = a;
+    return out;
 }
-}
-namespace EA {
-namespace Input {
-struct CharStream {                                                   // 0x20 bytes
-    const char* mScanPos;
-    const char* mScanEnd;
-    const char* mLineBegin;
-    int mCurrentLine;
-    eastl::string mMatchText;                                         // +0x10
 
-    CharStream(const char* pBegin, const char* pEnd)
-    {
-        if (pEnd == 0)
-            pEnd = pBegin + eastl::CharStrlen(pBegin);
-        mScanEnd = pEnd;
-        mScanPos = pBegin;
-        mLineBegin = pBegin;
-        mCurrentLine = 1;
-    }
-    void SkipLine();                                                  // 0x008950b0
-};
-}
-}
-namespace EA {
-namespace Input {
-class TriggerTokenReader : public CharStream { public:                              // 0x30 bytes
-    int mResult;                                                      // +0x20
-    int mToken;                                                       // +0x24
-    uint mTokenValue;                                                 // +0x28
-    int mTokenLine;                                                   // +0x2c
-
-    TriggerTokenReader(const char* pBegin, const char* pEnd) : CharStream(pBegin, pEnd) { mResult = 0; }
-    void Advance();                                                   // 0x008d4ef0
-    bool MatchPunc(char c);                                           // 0x008d5160
-    bool MatchString();                                               // 0x008d52f0
-};
-}
-}
-namespace EA {
-namespace Input {
-struct KeyDef {
-    const char* name;
-    uint value;
-};
-}
-}
-namespace EA {
-namespace Input {
-struct KeyRange {
-    const KeyDef* first;
-    const KeyDef* second;
-    KeyRange() {}
-};
-}
-}
-namespace EA {
-namespace Input {
-extern KeyDef gNumpadNames[18];                                       // 0x0154c360
-}
-}
-namespace EA {
-namespace Input {
-extern KeyDef gModifierNames[10];                                     // 0x0154c3f0
-}
-}
-namespace EA {
-namespace Input {
-extern KeyDef gKeyNames[235];                                         // 0x0154bc08
-}
-}
-namespace EA {
-namespace Input {
-KeyRange FindKeyDefs(const KeyDef* first, const KeyDef* last, const char* const& name);  // 0x008d4b90
-}
-}
-namespace EA {
-namespace Input {
-bool LookupNumpadName(const KeyDef* table, const char* name, uint* pOut);                // 0x008d4cd0
-}
-}
-namespace EA {
-namespace Input {
-bool LookupKeyName(const KeyDef* table, const char* name, uint* pOut);                   // 0x008d4d20
-}
-}
-namespace EA {
-namespace Input {
-struct Binding {                                                      // 16 bytes
-    uint key;
-    uint value;
-    uint16_t modLo;
-    uint16_t modHi;
-    uint link;
-};
-}
-}
-namespace EA {
-namespace Input {
-class TriggerMap { public:
-    void AddCombo(uint value, const uint* keys, uint count);          // 0x008d4920
-    void AddBinding(const Binding& b);                                // 0x008d48d0
-    Binding* FindByValue(uint value);                                 // 0x008d3ae0
-};
-}
-}
-namespace EA {
-namespace Input {
-struct SymbolMap {
-    char mData[0x20];
-    uint& operator[](const eastl::string& key);                       // 0x006a8340
-};
-}
-}
-namespace EA {
-namespace Input {
-static const char* GetAbbreviatedPlatformName(const char* platform)  // 0x008d4a10
+// @ 0x008d4ef0
+uint8 TokenReader::Advance()
 {
-    if (_stricmp(platform, "XBox") == 0) return "xb";
-    if (_stricmp(platform, "Xenon") == 0) return "xe";
-    if (_stricmp(platform, "PS2") == 0) return "ps2";
-    if (_stricmp(platform, "PS3") == 0) return "ps3";
-    if (_stricmp(platform, "GameCube") == 0) return "gc";
-    return _stricmp(platform, "Windows") == 0 ? "win32" : "";
-}
-}
-}
-namespace EA {
-namespace Input {
-class TriggerConfigParser { public:                                          // 0x40 bytes
-    TriggerMap* mpTriggerMap;     // +0x0
-    TriggerConfigParser* mpParent;// +0x4
-    char* mpPlatformName;         // +0x8
-    int mLineCount;               // +0xc
-    int mEntryCount;              // +0x10
-    uint mToken;                  // +0x14
-    uint mTokenValue;             // +0x18
-    SymbolMap mSymbols;           // +0x1c (hash_map, 0x20 bytes)
-    bool mSkip;                   // +0x3c
+    if ((g_1667a78 & 1) == 0) g_1667a78 |= 1;
+    if ((g_1667a78 & 2) == 0) g_1667a78 |= 2;
+    if ((g_1667a78 & 4) == 0) g_1667a78 |= 4;
 
-    bool LookupSymbol(const eastl::string& name, uint* pOut);         // 0x008d4d70
-    bool Parse(const char* pBegin, const char* pEnd);                 // 0x008d5340
-};
+    mTokenLine = currentLine;
+
+    for (;;) {
+        if (scanEnd <= scanPos)
+            return 0;
+        if (!SkipSpace(0))
+            break;
+    }
+
+    if (FUN_00894e30(this, g_142ef10)) {
+        FUN_008950b0(this);
+        mToken = 1;
+        return 1;
+    }
+    if (FUN_00894e30(this, g_142ef0c)) {
+        FUN_008951c0(this, g_142ef08);
+        mToken = 1;
+        return 1;
+    }
+
+    {
+        char* p = scanPos;
+        char* e = scanEnd;
+        if (p < e) {
+            if (*p == '\r') {
+                p++;
+                scanPos = p;
+                if (p < e && *p == '\n') {
+                    p++;
+                    scanPos = p;
+                }
+                currentLine++;
+                lineBegin = scanPos;
+                mToken = 1;
+                return 1;
+            }
+            if (*p == '\n') {
+                p++;
+                currentLine++;
+                scanPos = p;
+                lineBegin = p;
+                mToken = 1;
+                return 1;
+            }
+        }
+    }
+
+    if (matchText.mpBegin != matchText.mpEnd) {
+        *matchText.mpBegin = '\0';
+        matchText.mpEnd = matchText.mpBegin;
+    }
+
+    {
+        char* p = scanPos;
+        if (p < scanEnd) {
+            int  c = (int)*p;
+            uint u = (uint)c;
+            if (u - 0x61 < 0x1a || u - 0x41 < 0x1a || c == 0x5f) {
+                matchText.push_back(*p);
+                scanPos = scanPos + 1;
+                MatchWhileIdent(0);
+                for (char* q = matchText.mpBegin; q < matchText.mpEnd; q++)
+                    *q = (char)tolower((uint8)*q);
+                mToken = 2;
+                return 1;
+            }
+        }
+    }
+
+    if (MatchCStr(g_14365d8) || MatchCStr(g_14365d4)) {
+        if (matchText.mpBegin != matchText.mpEnd) {
+            *matchText.mpBegin = '\0';
+            matchText.mpEnd = matchText.mpBegin;
+        }
+        MatchWhileHex(0);
+        mTokenValue = (int)strtoul(matchText.mpBegin, 0, 16);
+        mToken = 3;
+        return 1;
+    }
+
+    {
+        char* p = scanPos;
+        char* e = scanEnd;
+        int8  b;
+        if (p < e) {
+            int8 c = *p;
+            if ((uint)((int)c - 0x30) < 10) {
+                matchText.push_back(*p);
+                scanPos = scanPos + 1;
+                FUN_00895770(this, g_1667a80);
+                mTokenValue = (int)strtoul(matchText.mpBegin, 0, 10);
+                mToken = 3;
+                return 1;
+            }
+            if (p < e) {
+                b = *p;
+                scanPos = p + 1;
+                goto have_char;
+            }
+        }
+        b = 0;
+have_char:
+        if (isprint((uint8)b) == 0) {
+            mToken = 0xfffffc19;
+            return 0;
+        }
+        matchText.push_back((char)b);
+        mToken = 4;
+        mTokenValue = (int8)b;
+        return 1;
+    }
 }
+
+// @ 0x008d5180
+extern "C" uint8 FUN_008d5180(TokenReader* t, int8 term)
+{
+    uint8 c;
+    for (;;) {
+        char* p = t->scanPos;
+        char* e = t->scanEnd;
+        if (e <= p) return 0;
+        if ((int8)*p == term) {
+            t->scanPos = p + 1;
+            return 1;
+        }
+        if (e <= p) return 0;
+        if (*p == '\\') {
+            t->scanPos = p + 1;
+            if (p + 1 < e) {
+                c = (uint8)p[1];
+                t->scanPos = p + 2;
+            } else {
+                c = 0;
+            }
+            switch (c) {
+            case '0':  t->matchText.push_back(0);     break;
+            case 'b':  t->matchText.push_back(8);     break;
+            case 'f':  t->matchText.push_back(0xc);   break;
+            case 'n':  t->matchText.push_back(0xa);   break;
+            case 'r':  t->matchText.push_back(0xd);   break;
+            case 'v':  t->matchText.push_back(0xb);   break;
+            default:
+                t->matchText.push_back('\\');
+                t->matchText.push_back((char)c);
+                break;
+            }
+        } else {
+            if (e <= p) return 0;
+            c = (uint8)*p;
+            t->matchText.push_back((char)c);
+            t->scanPos = t->scanPos + 1;
+        }
+    }
 }
-// ---- items of slice s008d5340 end
 
 // @ 0x008d5340
 namespace EA { namespace Input {
