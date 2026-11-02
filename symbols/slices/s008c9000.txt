@@ -2,3 +2,5 @@
 008c8f00 IsStub  # dev-PDB name; static, y in eax, maxIndex in ecx
 008c9000 ?MakeBits@@YAXPAUtsiScanConv@@DDP6APAXPAXJ@Z1HPAEH@Z  # MakeBits migrated from s008c9000 (verbatim, slice spelling)
 008c9a70 ?tsi_DeleteScanConv@@YAXPAUtsiScanConv@@@Z  # tsi_DeleteScanConv migrated from s008c9000 (verbatim, slice spelling)
+008c9b10 ?addPointA@@YAXPAUStrokeState@@FFF@Z  # addPointA migrated from s008c9000 (verbatim, slice spelling)
+008c9be0 ?addPointB@@YAXPAUStrokeState@@FFF@Z  # addPointB migrated from s008c9000 (verbatim, slice spelling)

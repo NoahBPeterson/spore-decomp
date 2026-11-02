@@ -1,0 +1,5 @@
+008caba0 ?FUN_008caba0@@YAXHPAUGlyphClass@@HHHH0@Z  # FUN_008caba0 migrated from s008caba0 (verbatim, slice spelling)
+008cae30 ?ApplyHintsToStrokeGlyph@@YAXPAUGlyphClass@@HHHH@Z  # ApplyHintsToStrokeGlyph migrated from s008caba0 (verbatim, slice spelling)
+008cb070 ?ff_glyph_StrokeGlyph@@YAPAUGlyphClass@@PAU1@HHHH@Z  # ff_glyph_StrokeGlyph migrated from s008caba0 (verbatim, slice spelling)
+008cb450 ?ReadLowUnsignedNumber@@YAIPAUInputStream@@@Z  # ReadLowUnsignedNumber migrated from s008caba0 (verbatim, slice spelling)
+008cb5e0 ?GetGlyphStream@@YAPAUInputStream@@PAUT2KSFont@@HPAH@Z  # GetGlyphStream migrated from s008caba0 (verbatim, slice spelling)
