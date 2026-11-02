@@ -1,9 +1,16 @@
-00bc4900 Reg::tryMove  # move the creature found in the registry to its destination pose (planet branch vs direct MoveToPointAndFacingAtSpeed, mBusy decrement) -- PARTIAL tail
-00bc4bf0 Reg::resetEntry  # release an entry: sound commands, mFx erase, mDisabled = 1, mCreatures copy+release
-00bc4d60 Reg::resetAll  # walk the sentinel list and reset every entry
-00bc5040 Reg::resetByKey  # find the node with the key and reset that entry
-00bc5070 ElemVec::assign  # fixed_vector<Elem98,8> operator= with the capacity/in-place branches
-00bc51c0 Reg::newNode  # pop a node block from the free list (AddCore on empty), construct its Entry and append it to the root list
+00bc4730 ?destroy@PropRecord@@QAEXXZ  # PropRecord::destroy migrated from s00bc4730 (verbatim, slice spelling)
+00bc4820 ?init@Entry_s00bc_4730@@QAEPAU1@XZ  # Entry_s00bc_4730::init migrated from s00bc4730 (verbatim, slice spelling)
+00bc4900 ?tryMove@Reg_s00bc_4730@@QAE_NPAUCreature@@0H@Z  # Reg_s00bc_4730::tryMove migrated from s00bc4730 (verbatim, slice spelling)
+00bc4bf0 ?resetEntry@Reg_s00bc_4730@@QAEXPAUEntry_s00bc_4730@@@Z  # Reg_s00bc_4730::resetEntry migrated from s00bc4730 (verbatim, slice spelling)
+00bc4d60 ?resetAll@Reg_s00bc_4730@@QAEXXZ  # Reg_s00bc_4730::resetAll migrated from s00bc4730 (verbatim, slice spelling)
+00bc4df0 ?insert@ElemVec@@QAEXPAUElem98_s00bc_4730@@IPBU2@@Z  # ElemVec::insert migrated from s00bc4730 (verbatim, slice spelling)
+00bc5040 ?resetByKey@Reg_s00bc_4730@@QAEXI@Z  # Reg_s00bc_4730::resetByKey migrated from s00bc4730 (verbatim, slice spelling)
+00bc5070 ?assign@ElemVec@@QAEPAU1@ABU1@@Z  # ElemVec::assign migrated from s00bc4730 (verbatim, slice spelling)
+00bc51c0 ?newNode@Reg_s00bc_4730@@QAEPAUNode@@XZ  # Reg_s00bc_4730::newNode migrated from s00bc4730 (verbatim, slice spelling)
+00bc5210 ?destroy@PropVecA@@QAEXXZ  # PropVecA::destroy migrated from s00bc4730 (verbatim, slice spelling)
 00bc5250 ElemVec::erase  # erase [first,last) by copy-back and shrink
-00bc5340 ElemVec::resize  # grow via insert(end, n-size, default Elem98), shrink via erase
-00bc4df0 ElemVec::insert  # insert n copies of val at pos (grow + in-place shift paths)
+00bc52a0 ?enable@Reg_s00bc_4730@@QAEXIPAUCreature@@@Z  # Reg_s00bc_4730::enable migrated from s00bc4730 (verbatim, slice spelling)
+00bc5300 ?destroy@PropVecB@@QAEXXZ  # PropVecB::destroy migrated from s00bc4730 (verbatim, slice spelling)
+00bc5340 ?resize@ElemVec@@QAEXI@Z  # ElemVec::resize migrated from s00bc4730 (verbatim, slice spelling)
+00bc53f0 ?teardown@Reg_s00bc_4730@@QAEXXZ  # Reg_s00bc_4730::teardown migrated from s00bc4730 (verbatim, slice spelling)
+00bc54f0 ?copyFrom@PropRecord@@QAEXABU1@@Z  # PropRecord::copyFrom migrated from s00bc4730 (verbatim, slice spelling)

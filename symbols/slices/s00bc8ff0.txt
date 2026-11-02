@@ -1,26 +1,26 @@
-00bc8ff0 WalkTree  # iterative tree walk with per-depth 0xAC-byte frames in the caller's cursor (card: no PDB name); callbacks at node+0x70
+00bc8ff0 ?WalkTree@@YA_NMNPAUNode_s00bc_8ff0@@HPAUCursor@@HHH@Z  # WalkTree migrated from s00bc8ff0 (verbatim, slice spelling)
 00bc9700 ?SetStimulus@Stimuli@@QAEXPAUStimulus@@IIMPAUIRefCounted@@@Z  # Stimuli::SetStimulus migrated from s00bc8ff0 (verbatim, slice spelling)
 00bc9770 ?ClearStimulus@Stimuli@@QAEXPAUStimulus@@@Z  # Stimuli::ClearStimulus migrated from s00bc8ff0 (verbatim, slice spelling)
 00bc97b0 ?ResetStimuli@Stimuli@@QAEXXZ  # Stimuli::ResetStimuli migrated from s00bc8ff0 (verbatim, slice spelling)
 00bc98f0 ?ClearAll@Stimuli@@QAEXII@Z  # Stimuli::ClearAll migrated from s00bc8ff0 (verbatim, slice spelling)
-00bc9980 Stimuli::UpdateStimuli  # Claude-coined: decrements durations, expires slots by mask and returns &mMask0
-00bc9a00 State1c::Has  # Claude-coined: true if any live record has the given mask bit
-00bc9a30 IntArray::Set  # Claude-coined: writes one dword at index in the +0x220 array
-00bc9a50 State44::Find  # Claude-coined: linear search of the eight action records by state id
-00bc9b10 EntryState::CurrentId  # Claude-coined: returns the current entry's id
-00bc9b20 EntryState::SetCurrent  # Claude-coined: selects an entry by id and sets the current index
-00bc9b70 FloatArray::At  # Claude-coined: pointer to the float at index in the +0x1a4 array
-00bc9b80 FloatArray::Set3  # Claude-coined: copies three floats as raw bits
-00bc9bb0 FloatArray::Get  # Claude-coined: loads one float from the array
-00bc9bc0 FloatArray::Set  # Claude-coined: stores one float
-00bc9bf0 FloatArray::SetWord  # Claude-coined: stores one raw dword into the float array
-00bc9c10 State1c::Reset  # Claude-coined: clears the mask and all eight id/time/object records
-00bc9c90 State1c::ReleaseObjects  # Claude-coined: releases every record's object in reverse order
-00bc9cc0 State1c::Update  # Claude-coined: ages live records, releases expired ones and rebuilds the mask
-00bc9d40 State1c::Add  # Claude-coined: finds a free/same-key record, or steals the shortest remaining one; addrefs the new object
-00bc9de0 State1c::ClearMask  # Claude-coined: clears matching records and clears the mask bits
-00bc9e30 State44::SetupAction  # Claude-coined: initialises record 0 as an action and returns it
-00bc9e70 State44::ReleaseAction  # Claude-coined: releases record 0's action resources
-00bc9ea0 State44::Reset  # Claude-coined: reinitialises all eight action records and stores vals[0]
-00bc9fa0 State44::ReleaseAll  # Claude-coined: releases both objects of all eight records in reverse order
-00bc9fe0 State44::ClearAll  # Claude-coined: invokes callbacks, releases objects and clears all action records
+00bc9980 ?UpdateStimuli@Stimuli@@QAEPAIM@Z  # Stimuli::UpdateStimuli migrated from s00bc8ff0 (verbatim, slice spelling)
+00bc9a00 ?Has@State1c@@QAE_NI@Z  # State1c::Has migrated from s00bc8ff0 (verbatim, slice spelling)
+00bc9a30 ?Set@IntArray@@QAEXHI@Z  # IntArray::Set migrated from s00bc8ff0 (verbatim, slice spelling)
+00bc9a50 ?Find@State44@@QAEPAURec44@@I@Z  # State44::Find migrated from s00bc8ff0 (verbatim, slice spelling)
+00bc9b10 ?CurrentId@EntryState@@QAEIXZ  # EntryState::CurrentId migrated from s00bc8ff0 (verbatim, slice spelling)
+00bc9b20 ?SetCurrent@EntryState@@QAE_NI@Z  # EntryState::SetCurrent migrated from s00bc8ff0 (verbatim, slice spelling)
+00bc9b70 ?At@FloatArray@@QAEPAMH@Z  # FloatArray::At migrated from s00bc8ff0 (verbatim, slice spelling)
+00bc9b80 ?Set3@FloatArray@@QAEXHPBM@Z  # FloatArray::Set3 migrated from s00bc8ff0 (verbatim, slice spelling)
+00bc9bb0 ?Get@FloatArray@@QAEMH@Z  # FloatArray::Get migrated from s00bc8ff0 (verbatim, slice spelling)
+00bc9bc0 ?Set@FloatArray@@QAEXHM@Z  # FloatArray::Set migrated from s00bc8ff0 (verbatim, slice spelling)
+00bc9bf0 ?SetWord@FloatArray@@QAEXHI@Z  # FloatArray::SetWord migrated from s00bc8ff0 (verbatim, slice spelling)
+00bc9c10 ?Reset@State1c@@QAEPAU1@XZ  # State1c::Reset migrated from s00bc8ff0 (verbatim, slice spelling)
+00bc9c90 ?ReleaseObjects@State1c@@QAEXXZ  # State1c::ReleaseObjects migrated from s00bc8ff0 (verbatim, slice spelling)
+00bc9cc0 ?Update@State1c@@QAEXM@Z  # State1c::Update migrated from s00bc8ff0 (verbatim, slice spelling)
+00bc9d40 ?Add@State1c@@QAEPAURec1c@@IMPAUIRefCounted@@I@Z  # State1c::Add migrated from s00bc8ff0 (verbatim, slice spelling)
+00bc9de0 ?ClearMask@State1c@@QAEXI@Z  # State1c::ClearMask migrated from s00bc8ff0 (verbatim, slice spelling)
+00bc9e30 ?SetupAction@State44@@QAEPAURec44@@MIP6AXPAX@ZII@Z  # State44::SetupAction migrated from s00bc8ff0 (verbatim, slice spelling)
+00bc9e70 ?ReleaseAction@State44@@QAEXXZ  # State44::ReleaseAction migrated from s00bc8ff0 (verbatim, slice spelling)
+00bc9ea0 ?Reset@State44@@QAEPAU1@I@Z  # State44::Reset migrated from s00bc8ff0 (verbatim, slice spelling)
+00bc9fa0 ?ReleaseAll@State44@@QAEXXZ  # State44::ReleaseAll migrated from s00bc8ff0 (verbatim, slice spelling)
+00bc9fe0 ?ClearAll@State44@@QAEXXZ  # State44::ClearAll migrated from s00bc8ff0 (verbatim, slice spelling)

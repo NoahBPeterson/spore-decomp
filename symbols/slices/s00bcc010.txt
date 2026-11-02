@@ -1,3 +1,5 @@
+00bcc010 ?bcc010@cTribeTool@@QAEXXZ  # cTribeTool::bcc010 migrated from s00bcc010 (verbatim, slice spelling)
+00bcc230 ?bcc230@cTribeTool@@QAEXH@Z  # cTribeTool::bcc230 migrated from s00bcc010 (verbatim, slice spelling)
 00bcc350 ?WriteBase@cSerializableNoun@@QAEDPAX@Z  # cSerializableNoun::WriteBase migrated from s00bcc010 (verbatim, slice spelling)
 00bcc400 ?ReadBase@cSerializableNoun@@QAEDPAX@Z  # cSerializableNoun::ReadBase migrated from s00bcc010 (verbatim, slice spelling)
 00bcc500 ?bcc500@cTribeTool@@QAEPAXH@Z  # cTribeTool::bcc500 migrated from s00bcc010 (verbatim, slice spelling)

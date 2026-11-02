@@ -10,3 +10,5 @@
 00bbfe80 ?FUN_00bbfe80@SimSelf_s00bb_f630@@QAEXXZ  # SimSelf_s00bb_f630::FUN_00bbfe80 migrated from s00bbf630 (verbatim, slice spelling)
 00bbfeb0 ?FUN_00bbfeb0@@YAXPAX@Z  # FUN_00bbfeb0 migrated from s00bbf630 (verbatim, slice spelling)
 00bbff40 ?FUN_00bbff40@@YAXPAX@Z  # FUN_00bbff40 migrated from s00bbf630 (verbatim, slice spelling)
+00bc0000 ?FUN_00bc0000@@YAXPAX@Z  # FUN_00bc0000 migrated from s00bbf630 (verbatim, slice spelling)
+00bc0180 ?FUN_00bc0180@SimSelf@@QAEXE@Z  # SimSelf::FUN_00bc0180 migrated from s00bbf630 (verbatim, slice spelling)
