@@ -1,0 +1,4 @@
+# source  symbol  va  flags
+../src/game/SPGonzago/SPTerraformTuning.cpp  ?GetMaxBuildingsForT1Colony@cTerraformTuning@@QAEHXZ  01049e70  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPTerraformTuning.cpp  ?GetMaxBuildingsForT2Colony@cTerraformTuning@@QAEHXZ  01049eb0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPTerraformTuning.cpp  ?GetMaxBuildingsForT3Colony@cTerraformTuning@@QAEHXZ  01049ef0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
