@@ -1,4 +1,4 @@
-// src/game/SPGonzago/SPCellSlowCompile.cpp -- migrated from slice(s) s00e84850, s00e83910, s00e829c0, s00e819b0 by tools/migrate/rewrite.py
+// src/game/SPGonzago/SPCellSlowCompile.cpp -- migrated from slice(s) s004e12c0, s00e84850, s00e83910, s00e829c0, s00e819b0 by tools/migrate/rewrite.py
 // Object file: SPGonzago/SPCellSlowCompile.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -7,13 +7,21 @@
 #include <intrin.h>
 
 // ---- items of slice s00e819b0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern char gFieldL_01654c01;             // 0x01654c01
 int   FUN_00e932e80(int a, int b, int c);   // 0x00e932e80
 int*  FUN_00a206f0();                        // 0x00a206f0
 void  Start3dSoundByName(int a, int b, int c, int d, int e);   // 0x00571f80
 void  KillSetiEffects();                     // 0x00435ed0
 void* GameInputManager();                 // 0x00b3d250
+void* NounManager();                      // 0x00b3d300
+int   GetCurrentTerrainSphere(void* ed);  // 0x00f67d90
 int*  FUN_0067dd00();                     // 0x0067dd00
 int*  FUN_006eea10();                     // 0x006eea10
+int*  FUN_00401010();                     // 0x00401010
+int*  FUN_00401090(void* p);              // 0x00401090
+void  SetAvatarSpecies(int* p);           // 0x004df310
+int   FUN_00b3d320(void* p);              // 0x00b3d320
+void  __fastcall FUN_00b1e410(int x);     // 0x00b1e410
 struct IVtbl17 {
 virtual void v00();
 virtual void v01();
@@ -71,6 +79,7 @@ int   SetGlobalProperty(int a, float b);  // 0x005ca880
 void  PlayEditorSound(int a, int b, float c, int d);  // 0x00435f40
 void  FUN_00572020(int a, int b);         // 0x00572020
 void  FUN_009fbc50(int a, float x, float y, float z);  // 0x009fbc50
+int   FUN_00c75420();                     // 0x00c75420
 // ---- items of slice s00e819b0 end
 
 // ---- items of slice s00e829c0 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -393,6 +402,19 @@ public:
 };
 // ---- items of slice s00e84850 end
 
+// @ 0x004e1780
+void ConstraintVectorDestroy(void* self)
+{
+    (void)self;
+}
+
+// @ 0x00e82520
+unsigned FUN_00e82520(float a, float b)
+{
+    // custom xmm-register convention in the original; logic only
+    return 0;
+}
+
 // @ 0x00e82620
 int FUN_00e82620(int param_1, int* param_2)
 {
@@ -454,11 +476,74 @@ void FUN_00e82760()
     (*(void(__fastcall*)(void*))vt[0x54 / 4])(p);
 }
 
+// @ 0x00e82770
+char FUN_00e82770(int param_1)
+{
+    int* piVar2 = (int*)FUN_00401010();
+    piVar2 = (int*)(*(int(**)(int,int))(*piVar2 + 0x58))(*(int*)(param_1 + 0x88), *(int*)(param_1 + 0x84));
+    if (piVar2 == 0)
+        return 1;
+    if ((*(bool(**)(int))(*piVar2 + 0x1c))(0x100f0f5a)) return 12;
+    if ((*(bool(**)(int))(*piVar2 + 0x1c))(0x11b79a74)) return 2;
+    if ((*(bool(**)(int))(*piVar2 + 0x1c))(0x11b79a70)) return 3;
+    if ((*(bool(**)(int))(*piVar2 + 0x1c))(0x32f92e6)) return 9;
+    if ((*(bool(**)(int))(*piVar2 + 0x1c))(0x11b79a72)) return 10;
+    if ((*(bool(**)(int))(*piVar2 + 0x1c))(0x11b79a71)) return 7;
+    if ((*(bool(**)(int))(*piVar2 + 0x1c))(0x11b79a78)) return 4;
+    if ((*(bool(**)(int))(*piVar2 + 0x1c))(0x11b79a75)) return 6;
+    if ((*(bool(**)(int))(*piVar2 + 0x1c))(0x11b79a76)) return 5;
+    if ((*(bool(**)(int))(*piVar2 + 0x1c))(0x11b79a77)) return 8;
+    bool c = (*(bool(**)(int))(*piVar2 + 0x1c))(0x11b79a73);
+    return (-(c != 0) & 10U) + 1;
+}
+
+// @ 0x00e828c0
+void FUN_00e828c0()
+{
+    FUN_00b1e410(FUN_00b3d320(&gFieldL_01654c01));
+}
+
 // @ 0x00e82900
 bool FUN_00e82900(int a, int b)
 {
     int* p = (int*)GameInputManager();
     return ((IVtbl17*)p)->m(a, b) != 0;
+}
+
+// @ 0x00e82920
+int* FUN_00e82920(int* param_1)
+{
+    int* ed = (int*)NounManager();
+    int iVar3 = GetCurrentTerrainSphere(ed);
+    if (iVar3 == 0) {
+        param_1[0] = 0; param_1[1] = 0; param_1[2] = 0;
+        return param_1;
+    }
+    ed = (int*)NounManager();
+    iVar3 = GetCurrentTerrainSphere(ed);
+    param_1[0] = *(int*)(iVar3 + 0x68c);
+    param_1[1] = *(int*)(iVar3 + 0x690);
+    param_1[2] = *(int*)(iVar3 + 0x694);
+    return param_1;
+}
+
+// @ 0x00e82970
+int FUN_00e82970()
+{
+    int* ed = (int*)NounManager();
+    int iVar2 = GetCurrentTerrainSphere(ed);
+    if (iVar2 == 0)
+        return 1;
+    ed = (int*)NounManager();
+    GetCurrentTerrainSphere(ed);
+    return FUN_00c75420();
+}
+
+// @ 0x00e829a0
+void FUN_00e829a0()
+{
+    int* pcVar1 = (int*)FUN_00401090(&pcVar1);
+    SetAvatarSpecies(pcVar1);
 }
 
 // @ 0x00e829c0
