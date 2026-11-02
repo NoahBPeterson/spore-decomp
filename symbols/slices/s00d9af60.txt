@@ -1,3 +1,4 @@
+00d9af60 ?FUN_00d9af60@@YA_NPAUCreature_s00d9_af60@@PAXPAI@Z  # FUN_00d9af60 migrated from s00d9af60 (verbatim, slice spelling)
 00d9afe0 ?FUN_00d9afe0@@YAXPAUCreature@@@Z  # FUN_00d9afe0 migrated from s00d9af60 (verbatim, slice spelling)
 00d9b010 ?AnyActive@SocialValues@@QAE_NXZ  # SocialValues::AnyActive migrated from s00d9af60 (verbatim, slice spelling)
 00d9b040 ?SetDrainDelay@SocialValues@@QAEX_N@Z  # SocialValues::SetDrainDelay migrated from s00d9af60 (verbatim, slice spelling)

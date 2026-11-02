@@ -7,3 +7,5 @@
 00d9a9c0 ?FUN_00d9a9c0@@YA_NPAX0@Z  # FUN_00d9a9c0 migrated from s00d99ff0 (verbatim, slice spelling)
 00d9aa20 ?FUN_00d9aa20@@YAXPAX@Z  # FUN_00d9aa20 migrated from s00d99ff0 (verbatim, slice spelling)
 00d9ae60 ?FUN_00d9ae60@@YAMPAD@Z  # FUN_00d9ae60 migrated from s00d99ff0 (verbatim, slice spelling)
+00d9aea0 ?FUN_00d9aea0@@YAMPADPAX1I@Z  # FUN_00d9aea0 migrated from s00d99ff0 (verbatim, slice spelling)
+00d9af20 ?FUN_00d9af20@@YAMPAD@Z  # FUN_00d9af20 migrated from s00d99ff0 (verbatim, slice spelling)

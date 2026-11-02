@@ -1,1 +1,3 @@
 # va  diff-bytes  reason
+00d99830    53  (flags /O2 /MD /Gy /TP /arch:SSE /fp:fast) AssignDefaultStimulus: the 0x60-byte body is byte-identical (plain pointer stores, member-wise default vector, ReleaseStimulusAttributes call) but the VA's extent in the image also covers the trailing 0x00d99890 attribute-release helper, so the measured 96 vs 149 can never reconcile under per-COMDAT sizing
+00d998f0    49  (flags /O2 /MD /Gy /TP /arch:SSE /fp:fast) GetExtinguishAnchor: 125 vs 130 bytes; both return-creature sites share a block in the original (placed after the mB5a8 return) while cl keeps the first occurrence inline, all other code identical

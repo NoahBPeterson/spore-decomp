@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+00d9af60 65 creature social-animation tick: Play(0x10000)+InterruptAnim/SetTarget chain; the whole body is reconstructed but the register schedule and the two-goal branch shape differ (size 117 vs 106); difftest WEAK (256/400 valid, 43.9% coverage) flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
