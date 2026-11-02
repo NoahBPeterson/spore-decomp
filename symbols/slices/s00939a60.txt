@@ -11,7 +11,7 @@
 0093a560 ??0Stopwatch@EA@@QAE@H_N@Z  # EA::Stopwatch::Stopwatch migrated from s00939a60
 0093a5e0 ?GetElapsedTime@Stopwatch@@QAE_JXZ  # Stopwatch::GetElapsedTime migrated from s00939a60 (verbatim, slice spelling)
 0093a610 ?StreamCopy@@YAHPAVIOStream@@0I@Z  # StreamCopy migrated from s00939a60 (verbatim, slice spelling)
-0093a6c0 WriteExact  # v14 guard, then v30 exact-length write
+0093a6c0 ?WriteExact@@YA_NPAVIOStream@@PAXH@Z  # WriteExact migrated from s00939a60 (verbatim, slice spelling)
 0093a700 ?ReadUInt16@@YA_NPAVIOStream@@PAGHH@Z  # ReadUInt16 migrated from s00939a60 (verbatim, slice spelling)
 0093a780 ?ReadInt32@@YA_NPAVIOStream@@PAIHH@Z  # ReadInt32 migrated from s00939a60 (verbatim, slice spelling)
 0093a800 ?ReadUInt64@@YA_NPAVIOStream@@PA_KHH@Z  # ReadUInt64 migrated from s00939a60 (verbatim, slice spelling)

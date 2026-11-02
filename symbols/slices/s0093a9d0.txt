@@ -1,10 +1,10 @@
 0093a9d0 ?WriteUint16@IO@EA@@YA_NPAVIStream_s0093_a9d0@12@PBGIH@Z  # WriteUint16 migrated from s0093a9d0 (verbatim, slice spelling)
 0093aa70 ?WriteUint32@IO@EA@@YA_NPAVIStream_s0093_a9d0@12@PBIIH@Z  # WriteUint32 migrated from s0093a9d0 (verbatim, slice spelling)
-0093ab10 WriteUint64  # no PDB name; 8-byte sibling of WriteUint32
-0093abd0 WriteString  # no PDB name
-0093ac80 ReadBool  # no PDB name
+0093ab10 ?WriteUint64@IO@EA@@YA_NPAVIStream_s0093_a9d0@12@PB_KIH@Z  # WriteUint64 migrated from s0093a9d0 (verbatim, slice spelling)
+0093abd0 ?WriteString@IO@EA@@YA_NPAVIStream_s0093_a9d0@12@PBDHH@Z  # WriteString migrated from s0093a9d0 (verbatim, slice spelling)
+0093ac80 ?ReadBool@IO@EA@@YA_NPAVIStream_s0093_a9d0@12@PA_N@Z  # ReadBool migrated from s0093a9d0 (verbatim, slice spelling)
 0093acd0 ?ReadString@IO@EA@@YAHPAVIStream_s0093_a9d0@12@PADHH@Z  # ReadString migrated from s0093a9d0 (verbatim, slice spelling)
-0093adb0 WriteCString  # no PDB name
+0093adb0 ?WriteCString@IO@EA@@YA_NPAVIStream_s0093_a9d0@12@PBDHH@Z  # WriteCString migrated from s0093a9d0 (verbatim, slice spelling)
 0093ae40 ?GetAccessFlags@StreamBuffer@IO@EA@@UBEHXZ  # StreamBuffer::GetAccessFlags migrated from s0093a9d0 (verbatim, slice spelling)
 0093ae60 ?GetState@StreamBuffer@IO@EA@@UBEHXZ  # StreamBuffer::GetState migrated from s0093a9d0 (verbatim, slice spelling)
 0093ae80 ?GetSize@StreamBuffer@IO@EA@@UBEIXZ  # StreamBuffer::GetSize migrated from s0093a9d0 (verbatim, slice spelling)

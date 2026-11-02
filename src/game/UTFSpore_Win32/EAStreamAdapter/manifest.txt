@@ -1,5 +1,11 @@
 # source  symbol  va  flags
+../src/game/UTFSpore_Win32/EAStreamAdapter.cpp  ?WriteExact@@YA_NPAVIOStream@@PAXH@Z  0093a6c0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
 ../src/game/UTFSpore_Win32/EAStreamAdapter.cpp  ?ReadInt32@@YA_NPAVIOStream@@PAIHH@Z  0093a780  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
 ../src/game/UTFSpore_Win32/EAStreamAdapter.cpp  ?ReadUInt64@@YA_NPAVIOStream@@PA_KHH@Z  0093a800  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
 ../src/game/UTFSpore_Win32/EAStreamAdapter.cpp  ?HasRoom@@YA_NPAVIOStream@@HH@Z  0093a890  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
 ../src/game/UTFSpore_Win32/EAStreamAdapter.cpp  ?StreamWrite@@YA_NPAVIOStream@@HH@Z  0093a9a0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/UTFSpore_Win32/EAStreamAdapter.cpp  ?WriteUint16@IO@EA@@YA_NPAVIStream_s0093_a9d0@12@PBGIH@Z  0093a9d0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/EAStreamAdapter.cpp  ?WriteUint64@IO@EA@@YA_NPAVIStream_s0093_a9d0@12@PB_KIH@Z  0093ab10  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/EAStreamAdapter.cpp  ?WriteString@IO@EA@@YA_NPAVIStream_s0093_a9d0@12@PBDHH@Z  0093abd0  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/EAStreamAdapter.cpp  ?ReadString@IO@EA@@YAHPAVIStream_s0093_a9d0@12@PADHH@Z  0093acd0  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/EAStreamAdapter.cpp  ?WriteCString@IO@EA@@YA_NPAVIStream_s0093_a9d0@12@PBDHH@Z  0093adb0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
