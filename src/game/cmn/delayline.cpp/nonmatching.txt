@@ -1,0 +1,5 @@
+# va  diff-bytes  reason
+0114d7b0 69 DelayLine::Init: complete (reference DelayLine::Init; System::Alloc of the 32-aligned ring). Flags /vc71 /O2 /MD /Gy /TP /arch:SSE. difftest PASS (391 valid, 100% coverage).
+0114d840 324 DelayLine::Resize: complete (reference DelayLine::Resize; re-allocates and migrates the live samples). Flags /vc71 /O2 /MD /Gy /TP /arch:SSE. difftest WEAK (366 valid, 52.2% coverage - memcpy import path).
+0114d9f0 50 DelayLine::CalcChannelPointers: complete; near-miss in register allocation (cl keeps the out-pointer in edi vs the original's esi) and shl-vs-add scale. Flags /vc71 /O2 /MD /Gy /TP /arch:SSE. difftest PASS (345 valid, 100% coverage).
+0114da40 19 DelayLine::WrapCursor: complete; near-miss in esi liveness (the original pops esi before the range check). Flags /vc71 /O2 /MD /Gy /TP /arch:SSE. difftest PASS (400 valid, 100% coverage).
