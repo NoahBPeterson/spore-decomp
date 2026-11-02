@@ -1,3 +1,4 @@
+008fb7e0 ?BlendColor@Style@@YAIII@Z  # BlendColor migrated from s008fb7e0 (verbatim, slice spelling)
 008fb8a0 ?SetFontSizeKeyword@StyleState@Style@@QAEXI@Z  # StyleState::SetFontSizeKeyword migrated from s008fb7e0 (verbatim, slice spelling)
 008fb9c0 ?FUN_008fb9c0@StyleState@Style@@QAEXXZ  # StyleState::FUN_008fb9c0 migrated from s008fb7e0 (verbatim, slice spelling)
 008fb9e0 ?FUN_008fb9e0@StyleState@Style@@QAE_NXZ  # StyleState::FUN_008fb9e0 migrated from s008fb7e0 (verbatim, slice spelling)

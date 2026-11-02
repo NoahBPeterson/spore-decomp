@@ -1,2 +1,5 @@
 # source  symbol  va  flags
+../src/game/UTFSpore_Win32/Form.cpp  ?Dtor2@Element@@QAEXXZ  008e4ba0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/Form.cpp  ?GatherValues@Element@@QAEXPAX0@Z  008e4f00  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/Form.cpp  ?Reset@Form@@QAEXXZ  008e5130  /O2 /MD /Gy /TP /arch:SSE /GR- /fp:fast /Isrc/game/include
 ../src/game/UTFSpore_Win32/Form.cpp  ?ClearCounterReset@StyleState@Style@@QAEXXZ  008fbbc0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

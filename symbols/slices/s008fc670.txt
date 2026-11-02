@@ -1,4 +1,4 @@
-008fc670 TextStyle::Update  # resolves font sizes vs parent, GetFontServer metrics, merges string tables into parent
+008fc670 ?Update@TextStyle_s008f_c670@@QAEXXZ  # TextStyle_s008f_c670::Update migrated from s008fc670 (verbatim, slice spelling)
 008fcab0 ?DocumentFactory_CreateResource@@YGHPAPAUDomDoc@@PAHPAUDocRequest@@@Z  # DocumentFactory_CreateResource migrated from s008fc670 (verbatim, slice spelling)
 008fcbd0 ?StripLeadingDotComponents@@YAXPAUWStr@@@Z  # StripLeadingDotComponents migrated from s008fc670 (verbatim, slice spelling)
 008fce50 ?ProcessRequest@FileHandler@@QAE_NPAUFileReq@@H@Z  # FileHandler::ProcessRequest migrated from s008fc670 (verbatim, slice spelling)
