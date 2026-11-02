@@ -1,0 +1,22 @@
+# va  diff-bytes  reason
+005266f0 15 /Od frame-slot order differs (frame size matches; named-local hash offsets off by a few bytes) flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+005267c0 451 Elem38 vector DoInsertValue; complete; VectorBase::DoAllocate now passes alignment 0 (matching the original's EASTL_Allocate allocator,size,0,0 call), remaining /Od frame (0xcc) and helper spill slots differ. [equiv: WEAK 360 valid (--layout 0 --inputs 1600), 55.6% cov, 0 mismatches; replay PASS] flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+00526b30 402 0x1c-byte vector operator=; complete but /Od frame/spill slots differ; equiv WEAK (442 valid, 45.5% coverage) flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+00526e70 402 0x18-byte vector operator=; complete but /Od frame/spill slots differ; equiv WEAK (402 valid, 45.5% coverage) flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+00527570 915 Elem38 vector DoInsertValues (fill); complete but byte layout differs flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+00527a70 57 eastl::uninitialized_copy<Elem1c*>; complete, but gi-wrapper frame (0x44) not reproduced flags: /O2 /MD /Gy /EHsc /TP
+00527b70 48 eastl::uninitialized_copy<Elem18*>; complete, but gi-wrapper frame (0x44) not reproduced flags: /O2 /MD /Gy /EHsc /TP
+00527c70 331 VectorElem40::operator=; complete but /Od frame/spill slots differ; equiv WEAK (433 valid, 38.3% coverage) flags: /Od /MD /Gy /EHsc /TP
+00527f30 522 VectorElem40::DoInsertValues; complete but byte layout differs flags: /O2 /MD /Gy /EHsc /TP
+005283d0 413 fixed_vector<8-byte>::assign; complete; retail pops three stack dwords (the third is unused) and the grow helper 0x56a0e0 is a thiscall on the vector (ecx = this); our /Od body is 450B with a 0x34 frame vs retail's 566B/0x9c, so every frame slot differs; equiv PASS 221 valid 67.3% cov flags: /Od /MD /Gy /EHsc /TP
+00528610 81 Elem40 copy ctor; only the inlined Matrix33 ctor 'this' spill slot differs (-0xc vs -0x38) flags: /O2 /MD /Gy /EHsc /TP
+00529d30 358 RGB->HSV; complete but /Od layout differs flags: /Od /MD /Gy /EHsc /TP
+0052a030 623 HSV->RGB; complete; scratch output plus (float*)&param_3+1 input reproduces the original Vector3_Scale call; flags /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast; equiv WEAK (400 valid, 59.3% coverage, no mismatch), replay PASS
+0052a400 664 nSPSkinner::CreatePlaceholderTextures; complete but /Od layout differs flags: /Od /MD /Gy /EHsc /TP
+0052a700 1512 LoadSkinnerMesh; complete; /Od layout/helper inlining differs; equiv: WEAK (268 valid, 0 mismatched, 19.7% cov — deeper path behind a faked external call) flags: /Od /MD /Gy /EHsc /TP
+0052ae30 65 vector<pair<int,float>>::resize; complete; /Od frame differs; equiv: PASS (278 valid, 100% cov) flags: /Od /MD /Gy /EHsc /TP
+0052aeb0 342 SkinBoneWeights; complete but /Od layout differs flags: /Od /MD /Gy /EHsc /TP
+0052b060 188 AccumBoneWeight; complete; /Od layout differs; equiv: PASS (394 valid, 100% cov) flags: /Od /MD /Gy /EHsc /TP
+0052b170 120 NormalizeBoneWeights; complete; /Od layout differs (this slot -0x14 vs -0x10); equiv: PASS (310 valid, 100% cov) flags: /Od /MD /Gy /EHsc /TP
+0052b220 195 CopyTopBoneWeights; complete but /Od layout differs; equiv: WEAK (ecx fixed; 56.1% coverage) flags: /Od /MD /Gy /EHsc /TP
+0052b340 3042 complete (all paths/calls); /Od temp-slot layout differs (original frame 0x4a8 vs ours smaller), flags /Od /Ob1 /MD /Gy /TP /arch:SSE /GS-; difftest WEAK after fixing the two local fixed_vectors (float x65, pair x32) to carry their inline buffers (they were bare 16-byte vectors, so Init pointed begin at unrelated stack and Free deleted it)

@@ -1,6 +1,9 @@
-00526a40 eastl::fixed_vector<8-byte>::Free  # card disasm: free unless inline buffer (param_1[4]=+0x10)
-00527110 eastl::deque<0x48>::DoPopFront  # card decompile; frees node + map, resets mItBegin.mpCurrent
-00527150 eastl::vector<0x40-byte>::vector(const&)  # card decompile; allocate + uninitialized_copy
-00527440 Elem38::Elem38(const&)  # card decompile; typed float subobjects (fld/fstp) + ObjPtr/PoolPtr AddRef
-00526b30 ?4VectorElem1c  # 0x1c-byte vector operator=
-00526e70 ?4VectorElem18  # 0x18-byte vector operator=
+005266f0 ?erase@VectorElem38@@QAEPAUElem38_s0052_66f0@@PAU2@0@Z  # VectorElem38::erase migrated from s005266f0 (verbatim, slice spelling)
+005267c0 ?DoInsertValue@VectorElem38@@QAEXPAUElem38_s0052_66f0@@ABU2@@Z  # VectorElem38::DoInsertValue migrated from s005266f0 (verbatim, slice spelling)
+00526a40 ?Free@FixedVec8@@QAEXXZ  # FixedVec8::Free migrated from s005266f0 (verbatim, slice spelling)
+00526b30 ??4VectorElem1c@@QAEAAU0@ABU0@@Z  # VectorElem1c::operator= migrated from s005266f0 (verbatim, slice spelling)
+00526e70 ??4VectorElem18@@QAEAAU0@ABU0@@Z  # VectorElem18::operator= migrated from s005266f0 (verbatim, slice spelling)
+00527110 ?DoPopFront@DequeElem48@@QAEXXZ  # DequeElem48::DoPopFront migrated from s005266f0 (verbatim, slice spelling)
+00527150 ??0VectorElem40_s0052_66f0@@QAE@ABU0@@Z  # VectorElem40_s0052_66f0::VectorElem40 migrated from s005266f0 (verbatim, slice spelling)
+00527440 ??0Elem38_s0052_66f0@@QAE@ABU0@@Z  # Elem38_s0052_66f0::Elem38 migrated from s005266f0 (verbatim, slice spelling)
+00527570 ?DoInsertValues@VectorElem38@@QAEXPAUElem38_s0052_66f0@@IABU2@@Z  # VectorElem38::DoInsertValues migrated from s005266f0 (verbatim, slice spelling)

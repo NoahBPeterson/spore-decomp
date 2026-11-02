@@ -1,0 +1,16 @@
+# source  symbol  va  flags
+../src/game/SPBake/_at_00520000.cpp  ?resize@VectorElem40@@QAEXI@Z  00526450  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/_at_00520000.cpp  ?set_capacity@VectorElem40@@QAEXI@Z  005264d0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/_at_00520000.cpp  ??1Elem38@@QAE@XZ  00526660  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/_at_00520000.cpp  ??1PoolPtr@@QAE@XZ  005266a0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/_at_00520000.cpp  ?Free@FixedVec8@@QAEXXZ  00526a40  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/_at_00520000.cpp  ?DoPopFront@DequeElem48@@QAEXXZ  00527110  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/_at_00520000.cpp  ??0VectorElem40_s0052_66f0@@QAE@ABU0@@Z  00527150  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/_at_00520000.cpp  ??0Elem38_s0052_66f0@@QAE@ABU0@@Z  00527440  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/_at_00520000.cpp  ?insert@?$vector_s0052_c230@U?$pair_s0052_c230@HM@eastl@@@eastl@@QAEPAU?$pair_s0052_c230@HM@2@PAU32@ABU32@@Z  0052c2e0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/_at_00520000.cpp  ?DoAssignValues@?$vector_s0052_c230@U?$pair_s0052_c230@HM@eastl@@@eastl@@QAEXIABU?$pair_s0052_c230@HM@2@@Z  0052c570  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/_at_00520000.cpp  ?quick_sort_impl_helper@eastl@@YAXPAU?$pair_s0052_c230@HM@1@0HUSecondGreater@1@@Z  0052c950  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/_at_00520000.cpp  ?get_partition@eastl@@YAPAU?$pair_s0052_c230@HM@1@PAU21@0U21@USecondGreater@1@@Z  0052cc10  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/_at_00520000.cpp  ?partial_sort@eastl@@YAXPAU?$pair_s0052_c230@HM@1@00USecondGreater@1@@Z  0052ccd0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/_at_00520000.cpp  ?make_heap@eastl@@YAXPAU?$pair_s0052_c230@HM@1@0USecondGreater@1@@Z  0052cf00  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/_at_00520000.cpp  ?adjust_heap@eastl@@YAXPAU?$pair_s0052_c230@HM@1@HHHU21@USecondGreater@1@@Z  0052cf80  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
