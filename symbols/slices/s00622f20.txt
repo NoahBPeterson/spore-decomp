@@ -13,6 +13,7 @@
 00623570 ?FindSubmitChild@Pollen@SP@@YAPAUDomElement@@PAU3@@Z  # FindSubmitChild migrated from s00622f20 (verbatim, slice spelling)
 00623610 ?FindFormChild@Pollen@SP@@YAPAUDomElement@@PAU3@@Z  # FindFormChild migrated from s00622f20 (verbatim, slice spelling)
 00623660 ?SubmitForm@cXHTMLWin@Pollen@SP@@QAE_NXZ  # cXHTMLWin::SubmitForm migrated from s00622f20 (verbatim, slice spelling)
+006237a0 ?GetModificationCount@cPropertyList@SP@@QBEIXZ  # SP::cPropertyList::GetModificationCount migrated from s00622f20
 00623830 ?Layout@cSPHoverTitle@Pollen@SP@@QAEXXZ  # cSPHoverTitle::Layout migrated from s00622f20 (verbatim, slice spelling)
 006239c0 SP::cSPHoverTitle::Load  # byte-exact: hover layout and property list
 00623c90 ?SetFormControlValue@cXHTMLWin@Pollen@SP@@QAEXPAUDomElement@@PB_W@Z  # cXHTMLWin::SetFormControlValue migrated from s00622f20 (verbatim, slice spelling)
