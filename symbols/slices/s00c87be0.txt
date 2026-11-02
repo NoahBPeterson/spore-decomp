@@ -1,11 +1,11 @@
-00c87be0 SP::WriteSTLSequenceT<eastl::vector<EA::AutoRefCount<SP::cSPSpaceInventoryItem>>>  # PDB name
+00c87be0 ??1cSpaceInventory_s00c8_7be0@@UAE@XZ  # cSpaceInventory_s00c8_7be0::~cSpaceInventory migrated from s00c87be0 (verbatim, slice spelling)
 00c87c80 Object::_virtual_dtor  # PDB name
-00c87cc0 Simulator::cGameData::cGameData_func40h  # PDB name
-00c87d80 Simulator::cSpaceInventory::RemoveItem  # PDB name
-00c87df0 Simulator::cSpaceInventory::func7Ch  # PDB name
-00c88060 Simulator::cSpaceInventory::AddItem  # PDB name
-00c88310 Simulator::cSpaceInventory::AddCargoSlots  # PDB name
-00c883d0 Simulator::ISimulatorSerializable::Read  # PDB name
+00c87cc0 ?func40h@cSpaceInventory_s00c8_7be0@@QAE_NXZ  # cSpaceInventory_s00c8_7be0::func40h migrated from s00c87be0 (verbatim, slice spelling)
+00c87d80 ?RemoveItem@cSpaceInventory_s00c8_7be0@@UAE_NPAVcSpaceInventoryItem_s00c8_7be0@@@Z  # cSpaceInventory_s00c8_7be0::RemoveItem migrated from s00c87be0 (verbatim, slice spelling)
+00c87df0 ?TakeFromInventory@cSpaceInventory_s00c8_7be0@@QAE_NIPAU?$AutoRefCount@UcSpaceInventoryItem_s00c8_7be0@@@@H@Z  # cSpaceInventory_s00c8_7be0::TakeFromInventory migrated from s00c87be0 (verbatim, slice spelling)
+00c88060 ?AddItem@cSpaceInventory_s00c8_7be0@@UAE_NPAVcSpaceInventoryItem_s00c8_7be0@@PAUcResource@@_N@Z  # cSpaceInventory_s00c8_7be0::AddItem migrated from s00c87be0 (verbatim, slice spelling)
+00c88310 ?AddCargoSlots@cSpaceInventory_s00c8_7be0@@UAEXH@Z  # cSpaceInventory_s00c8_7be0::AddCargoSlots migrated from s00c87be0 (verbatim, slice spelling)
+00c883d0 ?Read@cSpaceInventory_s00c8_7be0@@QAE_NPAX@Z  # cSpaceInventory_s00c8_7be0::Read migrated from s00c87be0 (verbatim, slice spelling)
 00c88480 ?Inc@Ser@@QAEXH@Z  # Ser::Inc migrated from s00c87be0 (verbatim, slice spelling)
 00c88490 ?Dec@Ser@@QAEXH@Z  # Ser::Dec migrated from s00c87be0 (verbatim, slice spelling)
 00c884a0 ?func5Ch@cCommunity@@QAEXM@Z  # cCommunity::func5Ch migrated from s00c87be0 (verbatim, slice spelling)

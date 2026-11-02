@@ -6,7 +6,7 @@
 0104bfa0 SP::cSPSpaceToolData::FUN_0104bfa0  # mField1f0 scaled by 1000, truncated to int
 0104bff0 ?FUN_0104bff0@cSPSpaceToolData_s0104_bcc0@SP@@QAEEXZ  # cSPSpaceToolData_s0104_bcc0::FUN_0104bff0 migrated from s0104bcc0 (verbatim, slice spelling)
 0104c010 ?FUN_0104c010@cSPSpaceToolData_s0104_bcc0@SP@@QAEEXZ  # cSPSpaceToolData_s0104_bcc0::FUN_0104c010 migrated from s0104bcc0 (verbatim, slice spelling)
-0104c120 SP::cSPSpaceInventoryItem::UpdateTuning  # decode a tuning int-array into the ability bitmask
+0104c120 ?UpdateTuning@cSPSpaceInventoryItem_s0104_bcc0@SP@@SAXIPAI@Z  # cSPSpaceInventoryItem_s0104_bcc0::UpdateTuning migrated from s0104bcc0 (verbatim, slice spelling)
 0104c220 SP::cSPEditorVerbIconTray::Register  # register verb events with the messaging server and load 26 label strings
 0104c4f0 SP::cSPEditorVerbIconTray::GetTextAt  # label string for one verb index
 0104c510 SP::cSPEditorVerbIconTray::Dispatch  # per-event verb-icon dispatch
