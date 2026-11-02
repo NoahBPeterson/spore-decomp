@@ -1,0 +1,9 @@
+# source  symbol  va  flags
+../src/game/UTFSpore_Win32/tsimem.cpp  ?tsi_Error@@YAXHH@Z  008d10c0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/UTFSpore_Win32/tsimem.cpp  _tsi_EmergencyShutDown  008d1210  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/tsimem.cpp  _tsi_AllocMem  008d1260  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/UTFSpore_Win32/tsimem.cpp  ?tsi_ReAllocMem@@YAPAXHPADH@Z  008d1330  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/UTFSpore_Win32/tsimem.cpp  _tsi_DeAllocMem  008d1440  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/UTFSpore_Win32/tsimem.cpp  ?tsi_FastAllocN@@YAPAXHIH@Z  008d14d0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/tsimem.cpp  ?tsi_FreeFastMemBlocks@@YAXH@Z  008d1530  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/tsimem.cpp  ?tsi_DeleteMemhandler@@YAXH@Z  008d1570  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
