@@ -1,15 +1,15 @@
 005709b0 cTraitQuery::Compute  # switch on +0x54, bool +0x50, vector +0x38 (name inferred)
-00570c40 cTraitQuery::Op1  # this+0x1c feature vector; global map 0x15e4a1c
+00570c40 ?Op1@cTraitQuery@@QAEMPAUcFeatureVector@@0@Z  # cTraitQuery::Op1 migrated from s005709b0 (verbatim, slice spelling)
+00570e50 ?Op2@cTraitQuery@@QAEMPAUcFeatureVector@@0@Z  # cTraitQuery::Op2 migrated from s005709b0 (verbatim, slice spelling)
+00571100 ?Op3@cTraitQuery@@QAEMPAUcFeatureVector@@0@Z  # cTraitQuery::Op3 migrated from s005709b0 (verbatim, slice spelling)
 00571530 IntersectWeights  # merge-join cFeatureVector (12-byte Key12) against a {u32 key,float weight} vector; multiplies mC by the matched weight, false on an unmatched key
-00570e50 cTraitQuery::Op2  # merge-join similarity
-00571100 cTraitQuery::Op3  # merge-join squared-magnitude similarity
-005715d0 Key12::operator<  # 12-byte {u32,u32,float} key compare; matches s005718f0's Key12
-00571610 Key12::operator==  # same key type
-00571640 cFeatureVector::cFeatureVector  # zeroes begin/end/cap and mfLen(=0) at +0x18
-00571680 cFeatureVector::clear  # erase(begin,end) then mfLen=0
-005716c0 cFeatureVector::begin  # returns this+0
-005716e0 cFeatureVector::end  # returns this+4
-00571700 cFeatureVector::ResetResourceType  # forwards to SP::GetResourceTypeFromModelType (0x526430)
+005715d0 ??MKey12@@QBE_NABU0@@Z  # Key12::operator< migrated from s005709b0 (verbatim, slice spelling)
+00571610 ??8Key12@@QBE_NABU0@@Z  # Key12::operator== migrated from s005709b0 (verbatim, slice spelling)
+00571640 ??0cFeatureVector@@QAE@XZ  # cFeatureVector::cFeatureVector migrated from s005709b0 (verbatim, slice spelling)
+00571680 ?clear@cFeatureVector@@QAEXXZ  # cFeatureVector::clear migrated from s005709b0 (verbatim, slice spelling)
+005716c0 ?begin@cFeatureVector@@QAEPAUKey12@@XZ  # cFeatureVector::begin migrated from s005709b0 (verbatim, slice spelling)
+005716e0 ?end@cFeatureVector@@QAEPAUKey12@@XZ  # cFeatureVector::end migrated from s005709b0 (verbatim, slice spelling)
+00571700 ?ResetResourceType@cFeatureVector@@QAEXXZ  # cFeatureVector::ResetResourceType migrated from s005709b0 (verbatim, slice spelling)
 00571720 cFeatureVector::assign  # erase + range insert + mfLen copy
 00571790 ?add@cFeatureVector@@QAEMABUKey12@@M@Z  # cFeatureVector::add migrated from s005709b0 (verbatim, slice spelling)
 00571840 ?insertValue@cFeatureVector@@QAE?AUInsertResult@@ABUKey12@@@Z  # cFeatureVector::insertValue migrated from s005709b0 (verbatim, slice spelling)

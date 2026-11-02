@@ -1,0 +1,7 @@
+# source  symbol  va  flags
+../src/game/SPEditors/_at_00570000.cpp  ?Init@Big@@QAEPAU1@XZ  00570870  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/_at_00570000.cpp  ??MKey12@@QBE_NABU0@@Z  005715d0  /Od /Ob1 /Oi /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPEditors/_at_00570000.cpp  ??8Key12@@QBE_NABU0@@Z  00571610  /Od /Ob1 /Oi /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPEditors/_at_00570000.cpp  ?begin@cFeatureVector@@QAEPAUKey12@@XZ  005716c0  /Od /Ob1 /Oi /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPEditors/_at_00570000.cpp  ?end@cFeatureVector@@QAEPAUKey12@@XZ  005716e0  /Od /Ob1 /Oi /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPEditors/_at_00570000.cpp  ?ResetResourceType@cFeatureVector@@QAEXXZ  00571700  /Od /Ob1 /Oi /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
