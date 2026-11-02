@@ -16,3 +16,6 @@
 ../src/game/SPEngine/SPAppSystem.cpp  ?InitPlugins@cAppSystem_s007e_8ba0@@QAE_NPAX@Z  007e9300  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /Isrc/game/include
 ../src/game/SPEngine/SPAppSystem.cpp  ?SetUserDirNames@cAppSystem_s007e_8ba0@@QAEXPA_W0@Z  007e93d0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /Isrc/game/include
 ../src/game/SPEngine/SPAppSystem.cpp  ?OpenURL@cAppSystem@@QAEXPB_W@Z  007e9d00  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /Isrc/game/include
+../src/game/SPEngine/SPAppSystem.cpp  ?x509_ext_info_new@@YAPAUX509_EXT_INFO@@XZ  011ce070  /O2 /MD /Gy /TP /GS- /fp:fast /Isrc/game/include
+../src/game/SPEngine/SPAppSystem.cpp  ?ui_method_openssl@@YAHPAUUI_METHOD_s011c_d0f0@@@Z  011ced70  /O2 /MD /Gy /TP /GS- /fp:fast /Isrc/game/include
+../src/game/SPEngine/SPAppSystem.cpp  ?ui_method_win32@@YAHPAUUI_METHOD_s011c_d0f0@@@Z  011ceda0  /O2 /MD /Gy /TP /GS- /fp:fast /Isrc/game/include

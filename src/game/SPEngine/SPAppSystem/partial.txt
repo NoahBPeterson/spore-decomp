@@ -11,3 +11,5 @@
 007ea2f0  294  cheat constructor registering cArgumentSpec entries not reconstructed
 007ea440  1480  large serialization routine not reconstructed
 007eaa10  1233  cAppSystem::InitGraphics not reconstructed
+011ce130 1369 INCOMPLETE: PEM block decoder keeps only the skeleton (default BIO when none is given with the 0x41 error, the extension info allocation, the name comparison against "CERTIFICATE" and the hand-off); the original also contains the full name table walk, the per-name decode call, the AUX handling and the whole error/cleanup path (1415 vs 230 bytes); equiv UNSUPPORTED (unresolved BIO_*/CRYPTO_malloc/ERR_put_error) flags: /O2 /MD /Gy /TP /GS- /fp:fast
+011cedf0 863 INCOMPLETE: PEM header measurement keeps the BUF_MEM allocation/growth, the NUL scan and the character class table walk with the 0x40/0x20/0x08 flag handling; the original continues with the remaining escape/quote classes and the return-value bookkeeping (879 vs 204 bytes); equiv UNSUPPORTED (unresolved BUF_MEM_*) flags: /O2 /MD /Gy /TP /GS- /fp:fast
