@@ -1,0 +1,5 @@
+00c5d640 ?FUN_00c5d640@SP@@YAXPAXPAURecVec@1@PAH22@Z  # FUN_00c5d640 migrated from s00c5d640 (verbatim, slice spelling)
+00c5da10 ?FUN_00c5da10@SP@@YA_NPAUMission@1@PAH@Z  # FUN_00c5da10 migrated from s00c5d640 (verbatim, slice spelling)
+00c5dae0 ?Update@RaidPlunderEvent@SP@@QAEHH@Z  # RaidPlunderEvent::Update migrated from s00c5d640 (verbatim, slice spelling)
+00c5df50 ?HandleMessage_F50@RaidHandler@SP@@QAE_NIPAX@Z  # RaidHandler::HandleMessage_F50 migrated from s00c5d640 (verbatim, slice spelling)
+00c5e020 ?HandleMessage_020@RaidHandler@SP@@QAE_NIPAX@Z  # RaidHandler::HandleMessage_020 migrated from s00c5d640 (verbatim, slice spelling)

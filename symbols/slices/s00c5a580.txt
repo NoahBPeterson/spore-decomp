@@ -14,10 +14,10 @@
 00c5b150 ?RefreshTargetPlanetConditional@@YAXPAVcSPMission@@@Z  # RefreshTargetPlanetConditional migrated from s00c5a580 (verbatim, slice spelling)
 00c5b210 ?Read@cPlanetMission@@QAE_NPAX@Z  # cPlanetMission::Read migrated from s00c5a580 (verbatim, slice spelling)
 00c5b280 ?UpdateFromPlanet@cPlanetMission@@QAEXXZ  # cPlanetMission::UpdateFromPlanet migrated from s00c5a580 (verbatim, slice spelling)
-00c5b340 ?GetOwnerEmpireId@cPlanetMission@@QAEIXZ  # uint32_t cPlanetMission::GetOwnerEmpireId
-00c5b370 ?SetTarget@cPlanetMission@@QAEXH@Z  # void cPlanetMission::SetTarget
-00c5b3a0 ?SetPlanetPosition@cPlanetMission@@QAEXHHH@Z  # void cPlanetMission::SetPlanetPosition
-00c5b3d0 ?WriteMissionElementList@@YAXPAVISerializer@@PAPAUMissionElement@@@Z  # void WriteMissionElementList
+00c5b340 ?GetOwnerEmpireId@cPlanetMission@@QAEIXZ  # cPlanetMission::GetOwnerEmpireId migrated from s00c5a580 (verbatim, slice spelling)
+00c5b370 ?SetTarget@cPlanetMission@@QAEXH@Z  # cPlanetMission::SetTarget migrated from s00c5a580 (verbatim, slice spelling)
+00c5b3a0 ?SetPlanetPosition@cPlanetMission@@QAEXHHH@Z  # cPlanetMission::SetPlanetPosition migrated from s00c5a580 (verbatim, slice spelling)
+00c5b3d0 ?WriteMissionElementList@@YAXPAVISerializer@@PAPAUMissionElement@@@Z  # WriteMissionElementList migrated from s00c5a580 (verbatim, slice spelling)
 00c5b450 ?CopyMissionElementsForward@@YAPAUMissionElement@@PAU1@00@Z  # CopyMissionElementsForward migrated from s00c5a580 (verbatim, slice spelling)
 00c5b4b0 ?CopyMissionElementsBackward@@YAPAUMissionElement@@PAU1@00@Z  # CopyMissionElementsBackward migrated from s00c5a580 (verbatim, slice spelling)
 00c5b510 ?GeneratePirateCount@cSPRaidPlunderEvent@@QAEXXZ  # cSPRaidPlunderEvent::GeneratePirateCount migrated from s00c5a580 (verbatim, slice spelling)
