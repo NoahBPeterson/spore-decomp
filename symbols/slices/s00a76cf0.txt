@@ -1,3 +1,4 @@
+00a76cf0 ??0MapInfo@@QAE@XZ  # MapInfo::MapInfo migrated from s00a76cf0 (verbatim, slice spelling)
 00a76df0 ?Update@MapInfo@@QAEXXZ  # MapInfo::Update migrated from s00a76cf0 (verbatim, slice spelling)
 00a76ef0 ?ReleaseTemps@MapInfo@@QAEXXZ  # MapInfo::ReleaseTemps migrated from s00a76cf0 (verbatim, slice spelling)
 00a76f70 ?SumCounts@MapInfo@@QAEHXZ  # MapInfo::SumCounts migrated from s00a76cf0 (verbatim, slice spelling)
@@ -8,5 +9,6 @@
 00a77250 ?EvalVec3@MapInfo@@QAEPAMPAMH@Z  # MapInfo::EvalVec3 migrated from s00a76cf0 (verbatim, slice spelling)
 00a775a0 ?EvalVec4@MapInfo@@QAEPAMPAMH@Z  # MapInfo::EvalVec4 migrated from s00a76cf0 (verbatim, slice spelling)
 00a77830 ?EvalVec4b@MapInfo@@QAEPAMPAMH@Z  # MapInfo::EvalVec4b migrated from s00a76cf0 (verbatim, slice spelling)
+00a77b70 ?Set@MapInfo@@QAEXHPAMPAUIPxSource@@@Z  # MapInfo::Set migrated from s00a76cf0 (verbatim, slice spelling)
 00a77bd0 ?MapInfo_DefaultRect44@@YGXPAM@Z  # MapInfo_DefaultRect44 migrated from s00a76cf0 (verbatim, slice spelling)
 00a77c40 ?MapInfo_TileContains@@YG_NPAM@Z  # MapInfo_TileContains migrated from s00a76cf0 (verbatim, slice spelling)

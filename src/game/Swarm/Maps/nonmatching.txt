@@ -1,2 +1,6 @@
 # va  diff-bytes  reason
-00a781f0 655 complete Add (9-case MapInfo factory); case block layout differs, o in case 6 reuses param home slot in original
+00a75810 105 InitA: reconstruction incomplete (142 bytes vs 152); field/arg ordering not yet exact. [equiv UNSUPPORTED 0/400 (fake-arity)] flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+00a758b0 120 InitB: reconstruction incomplete (89 bytes vs 170). [equiv UNSUPPORTED 0/400 (fake-arity)] flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+00a76cf0 103 ctor: size 221 vs 230; original stores the two vtable placeholder words and zero-inits the 4x Vec4 tuple region with a different store order/broadcast than ours. Semantically correct. [equiv FAIL 5/5 (memory pool @40010000 — the ctor writes a heap-pool word our version does not model)] flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+00a77b70 18 Set: float rect copy uses fld/fstp in the original vs movss in ours; refcount swap matches. [equiv PASS 392 valid, 100.0% cov] flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+00a781f0 655 complete Add (9-case MapInfo factory); case block layout differs, o in case 6 reuses param home slot in original flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-

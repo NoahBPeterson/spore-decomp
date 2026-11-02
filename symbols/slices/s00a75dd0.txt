@@ -1,17 +1,17 @@
 00a75560  ?ClassifyOrientation@Swarm@EA@@YAHPBMPAHPAM2@Z          int __cdecl ClassifyOrientation(const float*, int*, float*, float*)  [nonmatching]  # free fn (declared in s00a75000 as a member; wrong there), bare ret
 00a75dd0 ?SampleColorClamp@cMapInfo_s00a7_5dd0@Swarm@EA@@QAEXPAMPBM@Z  # cMapInfo_s00a7_5dd0::SampleColorClamp migrated from s00a75dd0 (verbatim, slice spelling)
-00a76070  ?Init11@cMapInfo@Swarm@EA@@QAEXPBMHHEPAUIcOwner@23@E@Z  void Init11(const float*,int,int,uint8_t,IcOwner*,uint8_t) [MATCH]  # palette 0xb, fallback table 0x014575d8
+00a76070 ?Init11@cMapInfo_s00a7_5dd0@Swarm@EA@@QAEXPBMHHEPAUIcOwner_s00a7_5dd0@23@E@Z  # cMapInfo_s00a7_5dd0::Init11 migrated from s00a75dd0 (verbatim, slice spelling)
 00a76110 ?SampleAlpha@cMapInfo_s00a7_5dd0@Swarm@EA@@QAEMPBM@Z  # cMapInfo_s00a7_5dd0::SampleAlpha migrated from s00a75dd0 (verbatim, slice spelling)
 00a761d0 ?SampleDir@cMapInfo_s00a7_5dd0@Swarm@EA@@QAEXPAMI@Z  # cMapInfo_s00a7_5dd0::SampleDir migrated from s00a75dd0 (verbatim, slice spelling)
 00a76240 ?SampleColor@cMapInfo_s00a7_5dd0@Swarm@EA@@QAEXPAMPBM@Z  # cMapInfo_s00a7_5dd0::SampleColor migrated from s00a75dd0 (verbatim, slice spelling)
-00a76420  ?Init9@cMapInfo@Swarm@EA@@QAEXPBMHHEPAUIcOwner@23@E@Z    void Init9(const float*,int,int,uint8_t,IcOwner*,uint8_t)  [MATCH]  # palette 9, fallback table 0x014575d4
+00a76420 ?Init9@cMapInfo_s00a7_5dd0@Swarm@EA@@QAEXPBMHHEPAUIcOwner_s00a7_5dd0@23@E@Z  # cMapInfo_s00a7_5dd0::Init9 migrated from s00a75dd0 (verbatim, slice spelling)
 00a764c0 ?SampleBit@cMapInfo_s00a7_5dd0@Swarm@EA@@QAEMPBM@Z  # cMapInfo_s00a7_5dd0::SampleBit migrated from s00a75dd0 (verbatim, slice spelling)
 00a765f0 ?SampleNormal@cMapInfo_s00a7_5dd0@Swarm@EA@@QAEXPAMPBM@Z  # cMapInfo_s00a7_5dd0::SampleNormal migrated from s00a75dd0 (verbatim, slice spelling)
 00a76970 ?SampleTangent@cMapInfo_s00a7_5dd0@Swarm@EA@@QAEPAMPAMI@Z  # cMapInfo_s00a7_5dd0::SampleTangent migrated from s00a75dd0 (verbatim, slice spelling)
 00a76990 ?SampleScalar4@cMapInfo_s00a7_5dd0@Swarm@EA@@QAEXPAMI@Z  # cMapInfo_s00a7_5dd0::SampleScalar4 migrated from s00a75dd0 (verbatim, slice spelling)
-00a769b0  ?Init12@cMapInfo@Swarm@EA@@QAEXPBMHHEPAUIcOwner@23@@Z   void Init12(const float*,int,int,uint8_t,IcOwner*)         [MATCH]  # palette 0xc
+00a769b0 ?Init12@cMapInfo_s00a7_5dd0@Swarm@EA@@QAEXPBMHHEPAUIcOwner_s00a7_5dd0@23@@Z  # cMapInfo_s00a7_5dd0::Init12 migrated from s00a75dd0 (verbatim, slice spelling)
 00a76a50 ?SampleBitOriented@cMapInfo_s00a7_5dd0@Swarm@EA@@QAEMPBM@Z  # cMapInfo_s00a7_5dd0::SampleBitOriented migrated from s00a75dd0 (verbatim, slice spelling)
 00a76b30 ?NormalizeVec3@cMapInfo_s00a7_5dd0@Swarm@EA@@QAEXPAMPBM@Z  # cMapInfo_s00a7_5dd0::NormalizeVec3 migrated from s00a75dd0 (verbatim, slice spelling)
-00a76b80  ?Init13@cMapInfo@Swarm@EA@@QAEXPBMHHEPAUIcOwner@23@@Z   void Init13(const float*,int,int,uint8_t,IcOwner*)         [MATCH]  # palette 0xd
+00a76b80 ?Init13@cMapInfo_s00a7_5dd0@Swarm@EA@@QAEXPBMHHEPAUIcOwner_s00a7_5dd0@23@@Z  # cMapInfo_s00a7_5dd0::Init13 migrated from s00a75dd0 (verbatim, slice spelling)
 00a76c20 ?SampleByteOriented@cMapInfo_s00a7_5dd0@Swarm@EA@@QAEMPBM@Z  # cMapInfo_s00a7_5dd0::SampleByteOriented migrated from s00a75dd0 (verbatim, slice spelling)
 00a76cd0 ?SampleVec3@cMapInfo_s00a7_5dd0@Swarm@EA@@QAEPAMPAMI@Z  # cMapInfo_s00a7_5dd0::SampleVec3 migrated from s00a75dd0 (verbatim, slice spelling)

@@ -4,8 +4,8 @@
 00a751a0 ?NormalizeNoWrap@cMapInfo@Swarm@EA@@QAEXXZ  # cMapInfo::NormalizeNoWrap migrated from s00a75000 (verbatim, slice spelling)
 00a75200 ?NormalizeFloor@cMapInfo@Swarm@EA@@QAEXXZ  # cMapInfo::NormalizeFloor migrated from s00a75000 (verbatim, slice spelling)
 00a75270 ?NormalizeRound@cMapInfo@Swarm@EA@@QAEXXZ  # cMapInfo::NormalizeRound migrated from s00a75000 (verbatim, slice spelling)
-00a752d0  ?SetColor@cMapInfo@Swarm@EA@@QAEXHPBUVec4@23@@Z         void SetColor(int, const Vec4*)                     [MATCH]
-00a75340  ?SetPoint@cMapInfo@Swarm@EA@@QAEXHII@Z                   void SetPoint(int, uint32_t, uint32_t)              [MATCH]
+00a752d0 ?SetColor@cMapInfo@Swarm@EA@@QAEXHPBUVec4@23@@Z  # cMapInfo::SetColor migrated from s00a75000 (verbatim, slice spelling)
+00a75340 ?SetPoint@cMapInfo@Swarm@EA@@QAEXHII@Z  # cMapInfo::SetPoint migrated from s00a75000 (verbatim, slice spelling)
 00a75390 ?cMapInfo_ResetGrid@Swarm@EA@@YAXPAXPAI@Z  # cMapInfo_ResetGrid migrated from s00a75000 (verbatim, slice spelling)
 00a753b0 ?cMapInfo_SortRect2@Swarm@EA@@YAXPAMPBM1@Z  # cMapInfo_SortRect2 migrated from s00a75000 (verbatim, slice spelling)
 00a75410 ?cMapInfo_SortRect3@Swarm@EA@@YAXPAMPBM1@Z  # cMapInfo_SortRect3 migrated from s00a75000 (verbatim, slice spelling)
@@ -16,8 +16,8 @@
 00a75720 ?Fill@cMapInfo@Swarm@EA@@QAEXPAMI@Z  # cMapInfo::Fill migrated from s00a75000 (verbatim, slice spelling)
 00a75750 ?GetBounds@cMapInfo@Swarm@EA@@QAEXPAM@Z  # cMapInfo::GetBounds migrated from s00a75000 (verbatim, slice spelling)
 00a757c0 ?Contains@cMapInfo@Swarm@EA@@QAE_NPBM@Z  # cMapInfo::Contains migrated from s00a75000 (verbatim, slice spelling)
-00a75810  ?InitA@cMapInfo@Swarm@EA@@QAEXPBMEPAXHE@Z               void InitA(const float*, uint8_t, void*, int, uint8_t) [nonmatching]
-00a758b0  ?InitB@cMapInfo@Swarm@EA@@QAEXPBMEPAXHEH@Z              void InitB(const float*, uint8_t, void*, int, uint8_t, int) [nonmatching]
+00a75810 ?InitA@cMapInfo@Swarm@EA@@QAEXPBMEPAXHE@Z  # cMapInfo::InitA migrated from s00a75000 (verbatim, slice spelling)
+00a758b0 ?InitB@cMapInfo@Swarm@EA@@QAEXPBMEPAXHEH@Z  # cMapInfo::InitB migrated from s00a75000 (verbatim, slice spelling)
 00a75960 ?SampleBilinear@cMapInfo@Swarm@EA@@QAEMPBM@Z  # cMapInfo::SampleBilinear migrated from s00a75000 (verbatim, slice spelling)
 00a75a30 ?SampleBicubic@cMapInfo@Swarm@EA@@QAEXPAMPBM@Z  # cMapInfo::SampleBicubic migrated from s00a75000 (verbatim, slice spelling)
 00a75d00 ?NormalizeVec@cMapInfo@Swarm@EA@@QAEXPAMI@Z  # cMapInfo::NormalizeVec migrated from s00a75000 (verbatim, slice spelling)

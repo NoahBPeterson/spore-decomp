@@ -1,1 +1,15 @@
 # source  symbol  va  flags
+../src/game/Swarm/Maps.cpp  ?SetColor@cMapInfo@Swarm@EA@@QAEXHPBUVec4@23@@Z  00a752d0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Swarm/Maps.cpp  ?SetPoint@cMapInfo@Swarm@EA@@QAEXHII@Z  00a75340  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Swarm/Maps.cpp  ?Init11@cMapInfo_s00a7_5dd0@Swarm@EA@@QAEXPBMHHEPAUIcOwner_s00a7_5dd0@23@E@Z  00a76070  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Swarm/Maps.cpp  ?Init9@cMapInfo_s00a7_5dd0@Swarm@EA@@QAEXPBMHHEPAUIcOwner_s00a7_5dd0@23@E@Z  00a76420  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Swarm/Maps.cpp  ?Init12@cMapInfo_s00a7_5dd0@Swarm@EA@@QAEXPBMHHEPAUIcOwner_s00a7_5dd0@23@@Z  00a769b0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Swarm/Maps.cpp  ?Init13@cMapInfo_s00a7_5dd0@Swarm@EA@@QAEXPBMHHEPAUIcOwner_s00a7_5dd0@23@@Z  00a76b80  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Swarm/Maps.cpp  ??0MapInfoBase@@QAE@XZ  00a77e00  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/Swarm/Maps.cpp  ?ReadMapDescription@@YAXPAUIStream@@HPAUMapDescription@@@Z  00a77e20  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/Swarm/Maps.cpp  ??0MapInfoD0@@QAE@XZ  00a77ef0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/Swarm/Maps.cpp  ??0MapInfoD2@@QAE@XZ  00a77fa0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/Swarm/Maps.cpp  ??0MapInfoD3@@QAE@XZ  00a78000  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/Swarm/Maps.cpp  ??0MapInfoD4@@QAE@XZ  00a78050  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/Swarm/Maps.cpp  ??0MapInfoD5@@QAE@XZ  00a780a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/Swarm/Maps.cpp  ??0MapInfoD6@@QAE@XZ  00a781a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
