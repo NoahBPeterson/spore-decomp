@@ -1,4 +1,10 @@
-00729de0 FUN_00729de0  # centre partition of index list into child boxes (SAH kd split)
-0072a080 FUN_0072a080  # resets both child boxes of a split node to inverted-infinite
-0072a200 FUN_0072a200  # SAH split search
-0072aa80 ?FUN_0072aa80@@YAPAXPAXHHH@Z  # FUN_0072aa80 migrated from s00729bd0 (verbatim, slice spelling)
+00729bd0 ?FUN_00729bd0@@YAPAXPAUIBuf@@PAXPAPAX@Z  # FUN_00729bd0 migrated from s00729bd0 (verbatim, slice spelling)
+00729c60 ?FUN_00729c60@@YAXPAUMeshModel@@PAUBox6@@PAM@Z  # FUN_00729c60 migrated from s00729bd0 (verbatim, slice spelling)
+00729de0 ?FUN_00729de0@@YAXPAUSplitNode@@PBUBox@@PBQAU2@PAIH@Z  # FUN_00729de0 migrated from s00729bd0 (verbatim, slice spelling)
+0072a080 ?FUN_0072a080@@YIPAUSplitNode@@PAU1@@Z  # FUN_0072a080 migrated from s00729bd0 (verbatim, slice spelling)
+0072a130 ?MakeIter@SpanOwner@@QAEPAUSpanIter@@PAU2@@Z  # SpanOwner::MakeIter migrated from s00729bd0 (verbatim, slice spelling)
+0072a180 ?FUN_0072a180@@YIXPAH@Z  # FUN_0072a180 migrated from s00729bd0 (verbatim, slice spelling)
+0072a1a0 ?Init@SpanAlloc@@QAEPAU1@HPAH@Z  # SpanAlloc::Init migrated from s00729bd0 (verbatim, slice spelling)
+0072a200 ?FUN_0072a200@@YA_NPAUSplitNode@@PBUBox@@PBQAU2@PAII@Z  # FUN_0072a200 migrated from s00729bd0 (verbatim, slice spelling)
+0072a8c0 ?Build@BspNode@@QAEHPBQAUBox@@PAIIH@Z  # BspNode::Build migrated from s00729bd0 (verbatim, slice spelling)
+0072aa80 ?Init@EAArray@@QAEPAU1@HH@Z  # EAArray::Init migrated from s00729bd0 (verbatim, slice spelling)

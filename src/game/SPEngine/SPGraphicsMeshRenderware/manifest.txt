@@ -1,1 +1,8 @@
 # source  symbol  va  flags
+../src/game/SPEngine/SPGraphicsMeshRenderware.cpp  ?FUN_007294d0@@YAHH@Z  007294d0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/SPGraphicsMeshRenderware.cpp  ?FUN_00729560@@YAHH@Z  00729560  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/SPGraphicsMeshRenderware.cpp  ?FUN_007295f0@@YAHHH@Z  007295f0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/SPGraphicsMeshRenderware.cpp  ?Free@C29a70@@QAEXXZ  00729870  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/SPGraphicsMeshRenderware.cpp  ?FUN_00729bd0@@YAPAXPAUIBuf@@PAXPAPAX@Z  00729bd0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/SPGraphicsMeshRenderware.cpp  ?FUN_0072a180@@YIXPAH@Z  0072a180  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/SPGraphicsMeshRenderware.cpp  ?FUN_0072c040@@YAXPAHPAX1111111@Z  0072c040  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
