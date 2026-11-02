@@ -1,12 +1,12 @@
 # va  diff-bytes  reason
 008dd1c0 31 complete: EA::SharedLibrary::Release; interlocked refcount + virtual destroy; register/scheduling differs
-00936330 5 SharedLibrary::CanUnload: complete; branch layout around the IsLoaded/ExecuteCommand short-circuit differs
+00936330 5 SharedLibrary::CanUnload: complete; branch layout around the IsLoaded/ExecuteCommand short-circuit differs flags: /O2 /MD /Gy /TP /GS-
 00936380 19 SharedLibrary::Reload: complete; tail merge of the false path differs
 00936440 88 SharedLibrary::generic_command_function: complete; inlined strcmp differs from cl's byte-pair compare loop
 009364f0 61 SharedLibraryRegistry::RemoveAllLibraries: complete; eastl vector erase/locking schedule differs
 00936550 21 SharedLibraryRegistry::ExecuteCommandAll: complete; loop counter and vtable arg reload schedule differ
-009365e0 159 SharedLibrary::Load: complete; registry vtable call, startup callback and command-dispatch sequence differ
-009366d0 67 SharedLibrary::Unregister: complete; pair erase tail moves differ
-00936b70 71 SharedLibrary::Unload: complete; eastl pair-vector erase schedule differs
-00936c00 80 SharedLibrary::Register: complete; eastl pair push_back shape differs
-00936ce0 14 SharedLibrary::~SharedLibrary: complete; eastl string/vector teardown schedule differs
+009365e0 159 SharedLibrary::Load: complete; registry vtable call, startup callback and command-dispatch sequence differ flags: /O2 /MD /Gy /TP /GS-
+009366d0 67 SharedLibrary::Unregister: complete; pair erase tail moves differ flags: /O2 /MD /Gy /TP /GS-
+00936b70 71 SharedLibrary::Unload: complete; eastl pair-vector erase schedule differs flags: /O2 /MD /Gy /TP /GS-
+00936c00 90 SharedLibrary::Register: complete. The grow path was calling a 1-arg push_back_impl while the retail helper 0x009a0c50 is __thiscall with 2 stack args (position, value) over 8-byte elements and `ret 8` -- the unbalanced stack corrupted the caller frame. It now builds a local {fn, user} pair and calls insert_pair(mHandlerEnd, &pair) -- equiv PASS 280 valid inputs, 100% coverage flags: /O2 /MD /Gy /TP /GS-
+00936ce0 14 SharedLibrary::~SharedLibrary: complete; eastl string/vector teardown schedule differs flags: /O2 /MD /Gy /TP /GS-
