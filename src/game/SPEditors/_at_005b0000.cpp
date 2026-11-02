@@ -22,6 +22,8 @@ extern float g_1488874;                                  // 0x1488874
 extern float g_15e9874, g_15e9878, g_15e987c;            // 0x15e9874.. (direction)
 
 // ---- items of slice s005b0f80 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern float g_13f5c90;                                  // 0x13f5c90 (0.45f)
+extern float g_1485378;                                  // 0x1485378 (0.0f)
 struct cSPEditorBlock;
 struct cSPEditorModel;
 struct BBox {
@@ -71,16 +73,11 @@ struct SPVectorU {
 };
 bool __cdecl IntersectRaySphere(const float* origin, const float* dir, const float* point,
                                 float t, float* tOut);                     // 0x5a9c40
+int  __cdecl FUN_011e0810(void);                                          // 0x11e0810
 void* __cdecl SP_EditorUtils_FindRootSpine(cSPEditorModel* model);        // 0x4a5a70
 void* __cdecl FUN_004a5970(void* block);                                  // 0x4a5970
 float __cdecl SP_EditorUtils_GetSkinRadius(void* block);                  // 0x4a5c40
 void __cdecl FUN_00f47380(void* p);                                       // 0xf47380 (operator delete)
-extern float g_1477fbc;                                  // 0x1477fbc (~200.0f)
-extern float g_14853e0;                                  // 0x14853e0 (4.0f)
-extern float g_13f6a28;                                  // 0x13f6a28 (-4.0f)
-extern float g_15e97f8, g_15e97fc, g_15e9800;            // 0x15e97f8.. (direction)
-extern float g_1488874;                                  // 0x1488874
-extern float g_15e9874, g_15e9878, g_15e987c;            // 0x15e9874.. (direction)
 struct S80 {
   float m0, m1, m2, m3, m4, m5;   // +0x0..+0x14
   bool  m18;                      // +0x18
@@ -678,6 +675,25 @@ struct CSpEditorManip {
 S80::S80(float a, float b, float c, float d, float e, float f)
 : m0(a), m1(b), m2(c), m3(d), m4(e), m5(f), m18(false) {}
 
+// @ 0x005b10d0
+void Sd0::Consider(float x, float y, float z)
+{
+  float dx = mOriginX - x;
+  float dy = mOriginY - y;
+  float dz = mOriginZ - z;
+  float d = sqrtf(dx * dx + dy * dy + dz * dz);
+  if (!mHasBest || d < mBestDist) {
+    // The retail code copies the arguments with integer loads/stores (it leaves
+    // eax = the z bits on return), so store the argument bit patterns instead
+    // of using float moves.
+    mBestXBits = *(uint32_t*)&x;
+    mBestYBits = *(uint32_t*)&y;
+    mHasBest = true;
+    mBestDist = d;
+    mBestZBits = *(uint32_t*)&z;
+  }
+}
+
 // @ 0x005b1130
 void Sd0::FUN_005b1130(float a, float b, float c, float t)
 {
@@ -690,6 +706,125 @@ void Sd0::FUN_005b1130(float a, float b, float c, float t)
     float py = mOriginY + mDirY * t;
     float pz = mOriginZ + mDirZ * t;
     Consider(px, py, pz);
+  }
+}
+
+// @ 0x005b11e0
+void Sd0::FUN_005b11e0(float px, float py, float pz, float dx, float dy, float dz, bool b)
+{
+  if (!b || g_13f5c90 < fabsf(mDirZ * dz + mDirY * dy + mDirX * dx)) {
+    float denom = mDirZ * dz + mDirY * dy + mDirX * dx;
+    if (denom != g_1485378) {
+      // Keep the retail association: inner = (py*dy + pz*dz) + px*dx and
+      // outer = (mOriginZ*dz + mOriginY*dy) + mOriginX*dx; reassociating the
+      // sums changes the last bit of the resulting t.
+      float inner = (py * dy + pz * dz) + px * dx;
+      float outer = (mOriginZ * dz + mOriginY * dy) + mOriginX * dx;
+      float t = -((outer - inner) / denom);
+      if (t >= g_1485378) {
+        Consider(mOriginX + t * mDirX, mOriginY + t * mDirY, mOriginZ + t * mDirZ);
+      }
+    }
+  }
+}
+
+// @ 0x005b1310
+void Sd0::FUN_005b1310(float p2, float p3, float p4, float p5, float p6, float p7, float p8, float p9)
+{
+  int n = FUN_011e0810();
+  if (n > 0) {
+    float ox = mOriginX;
+    float oy = mOriginY;
+    float oz = mOriginZ;
+    for (int i = 1; i <= n; i++) {
+      float f = (float)i / (float)n;
+      float f13 = oy - ((p7 - p3) * f + p3);
+      float f12 = ox - ((p6 - p2) * f + p2);
+      float f10 = oz - ((p8 - p4) * f + p4);
+      float f11 = (p9 - p5) * f + p5;
+      float f7 = mDirY * f13 + mDirZ * f10 + mDirX * f12;
+      float f9 = mDirX * mDirX + mDirY * mDirY + mDirZ * mDirZ;
+      float disc = f7 * f7 - (((f10 * f10 + f13 * f13) + f12 * f12) - f11 * f11) * f9;
+      if (disc >= 0.0f) {
+        float s = sqrtf(disc);
+        float t0 = -f7 - s;
+        if (0.0f <= s - f7) {
+          float t = (t0 > 0.0f) ? t0 / f9 : 0.0f;
+          float cx = ox + mDirX * t;
+          float cy = oy + mDirY * t;
+          float cz = oz + mDirZ * t;
+          float e1 = ox - cx;
+          float e2 = oy - cy;
+          float e3 = oz - cz;
+          float dist = sqrtf(e1 * e1 + (e2 * e2 + e3 * e3));
+          if (mHasBest == false || dist < mBestDist) {
+            mBestX = cx;
+            mBestY = cy;
+            mBestZ = cz;
+            mHasBest = true;
+            mBestDist = dist;
+          }
+        }
+      }
+    }
+  }
+}
+
+// @ 0x005b15e0
+void Sd0::FUN_005b15e0(cSPEditorBlock* block, cSPEditorBlock* other)
+{
+  if (((block->mFlagsDC8 >> 0xb) & 1) == 0) {
+    if (block != other) {
+      BBox bb = block->GetBBox(1, 0, 0);
+      float cx = block->mPosX + (bb.mxx + bb.mnx) * 0.5f;
+      float cy = block->mPosY + (bb.mxy + bb.mny) * 0.5f;
+      float cz = block->mPosZ + (bb.mxz + bb.mnz) * 0.5f;
+      BBox bb2 = block->GetBBox(1, 0, 0);
+      float rad = sqrtf(bb2.mnx * bb2.mnx + (bb2.mny * bb2.mny + bb2.mnz * bb2.mnz)) * 0.5f;
+      FUN_005b1130(cx, cy, cz, rad);
+    }
+  } else if (block != other) {
+    cSPEditorBlock* ob3e0 = (cSPEditorBlock*)other->mField3E0;
+    if (block != ob3e0) {
+      int count = (int)(block->mChildEnd - block->mChildBegin) >> 2;
+      int i = 0;
+      bool found = false;
+      if (0 < count) {
+        do {
+          cSPEditorBlock* ch = (cSPEditorBlock*)block->mChildBegin[i];
+          if (ch == other || ch == ob3e0) {
+            found = true;
+            break;
+          }
+          i = i + 1;
+        } while (i < count);
+      }
+      float L[3];
+      if (found) {
+        block->mField3EC->v24(L);
+        float f = block->F_43f250();
+        FUN_005b1130(L[0], L[1], L[2], f);
+      } else {
+        block->mField3EC->v24(L);
+        float E[3];
+        E[0] = block->mField3F0[3];
+        E[1] = block->mField3F0[4];
+        E[2] = block->mField3F0[5];
+        float f6 = block->F_43f250();
+        float f7 = block->F4d0();
+        FUN_005b1310(L[0], L[1], L[2], f6, E[0], E[1], E[2], f7);
+      }
+    }
+  }
+  {
+    int count = (int)(block->mChildEnd - block->mChildBegin) >> 2;
+    int i = 0;
+    if (0 < count) {
+      do {
+        FUN_005b15e0((cSPEditorBlock*)block->mChildBegin[i], other);
+        i = i + 1;
+      } while (i < count);
+    }
   }
 }
 
