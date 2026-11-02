@@ -16,4 +16,6 @@
 00a99240 ?Elem1C_fill_off14@@YAPAUElem1C@@PAU1@IPBU1@@Z  # Elem1C_fill_off14 migrated from s00a987c0 (verbatim, slice spelling)
 00a99290 ?Elem1C_write_vector@@YAPAXPAXPAUElem1CVec@@@Z  # Elem1C_write_vector migrated from s00a987c0 (verbatim, slice spelling)
 00a992f0 ?Elem1C_write_vector2@@YAPAXPAXPAUElem1CVec@@@Z  # Elem1C_write_vector2 migrated from s00a987c0 (verbatim, slice spelling)
+00a99350 ?Elem1C_ctor_range@@YAPAUElem1C@@PAPAU1@PAU1@11@Z  # Elem1C_ctor_range migrated from s00a987c0 (verbatim, slice spelling)
+00a993b0 ?Elem1C_ctor_range_off14@@YAPAUElem1C@@PAPAU1@PAU1@11@Z  # Elem1C_ctor_range_off14 migrated from s00a987c0 (verbatim, slice spelling)
 00a99410 ?Elem1C_insert@@YAXPAUElem1CVec@@PAUElem1C@@IPBU2@@Z  # Elem1C_insert migrated from s00a987c0 (verbatim, slice spelling)

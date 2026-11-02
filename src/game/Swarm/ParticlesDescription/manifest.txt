@@ -1,2 +1,4 @@
 # source  symbol  va  flags
+../src/game/Swarm/ParticlesDescription.cpp  ?push_back@cElemVec@@QAEXPBUcElem@@@Z  00a9a7a0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Swarm/ParticlesDescription.cpp  ?Execute@cParticleModelCommand@?A0x4e6163f2@@UAEXAAUcArguments_s00aa_4a10@ArgScript@EA@@@Z  00aa4a10  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/Swarm/ParticlesDescription.cpp	?OnRegister@cParticleEffectCommand@	00aa4e50	/O2 /MD /Gy /TP /GS- /Isrc/game/include

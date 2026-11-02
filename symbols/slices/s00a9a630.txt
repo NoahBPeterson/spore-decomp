@@ -1,3 +1,5 @@
+00a9a7a0 ?push_back@cElemVec@@QAEXPBUcElem@@@Z  # cElemVec::push_back migrated from s00a9a630 (verbatim, slice spelling)
+00a9a7f0 ??4cElemVector@@QAEPAU0@PBU0@@Z  # cElemVector::operator= migrated from s00a9a630 (verbatim, slice spelling)
 00a9a930 ?FUN_00a9a930@@YAXPAUcStream@@HPAX@Z  # FUN_00a9a930 migrated from s00a9a630 (verbatim, slice spelling)
 00a9ae00 ?Advance@cTimedState@@QAEXM@Z  # cTimedState::Advance migrated from s00a9a630 (verbatim, slice spelling)
 00a9ae50 ?FUN_00a9ae50@@YAXPBMPAM@Z  # FUN_00a9ae50 migrated from s00a9a630 (verbatim, slice spelling)
