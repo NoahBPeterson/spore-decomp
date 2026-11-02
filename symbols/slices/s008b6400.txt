@@ -1,9 +1,9 @@
-008b6400 ?IsPFR@@YAHPAUInputStream@@@Z  # PFR sniffer: header 'PFR'
-008b6460 ?IsOTF@@YAHPAUInputStream@@@Z  # OpenType/CFF sniffer: sfnt version or 'OTTO' + DSIG/CFF table
-008b6570 ?IsTT@@YAHPAUInputStream@@@Z  # TrueType sniffer: sfnt version/'OTTO' + acol/cols/TDBE/colb, else ttcf/true
-008b6710 ?IsT1@@YAHPAUInputStream@@@Z  # Type 1 sniffer: '%!' within the first 13 bytes
-008b6780 ?IsCFF@@YAHPAUInputStream@@@Z  # bare CFF sniffer (header byte 0 == 1)
-008b6800 ?ff_FontTypeFromStream@@YAHPAUInputStream@@@Z  # sniffer dispatcher: 7/2/3/0x16/1/-1
+008b6400 ?IsPFR@@YAHPAUInputStream@@@Z  # IsPFR migrated from s008b6400 (verbatim, slice spelling)
+008b6460 ?IsOTF@@YAHPAUInputStream@@@Z  # IsOTF migrated from s008b6400 (verbatim, slice spelling)
+008b6570 ?IsTT@@YAHPAUInputStream@@@Z  # IsTT migrated from s008b6400 (verbatim, slice spelling)
+008b6710 ?IsT1@@YAHPAUInputStream@@@Z  # IsT1 migrated from s008b6400 (verbatim, slice spelling)
+008b6780 ?IsCFF@@YAHPAUInputStream@@@Z  # IsCFF migrated from s008b6400 (verbatim, slice spelling)
+008b6800 ?ff_FontTypeFromStream@@YAHPAUInputStream@@@Z  # ff_FontTypeFromStream migrated from s008b6400 (verbatim, slice spelling)
 008b6870 _FF_FontTypeFromStream  # setjmp wrapper around ff_FontTypeFromStream (out param)
 008b68c0 GetGlyphYMax  # max int16 in the point array at +0x48 (count at +0x38); object in eax
 008b68f0 GetGlyphYMin  # min int16 in the point array at +0x48 (count at +0x38); object in eax
