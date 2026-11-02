@@ -1,4 +1,4 @@
-// src/game/SPGonzago/SPCellData.cpp -- migrated from slice(s) s0137b550, s013792c0, s013774e0, s01376850, s01374720, s01373120 by tools/migrate/rewrite.py
+// src/game/SPGonzago/SPCellData.cpp -- migrated from slice(s) s0137a490, s00e4c9e0, s0137b550, s013792c0, s013774e0, s01376850, s01374720, s01373120 by tools/migrate/rewrite.py
 // Object file: SPGonzago/SPCellData.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -27,13 +27,11 @@ struct cPropRecord
 };
 extern cPropRecord gPropTable_16b2c40[];  // 0x016b2c40
 extern cPropRecord gPropTable_16b1430[];  // 0x016b1430
+extern cPropRecord gPropTable_16b2f10[];  // 0x016b2f10
 extern cPropRecord gPropTable_15a7948[];  // 0x015a7948
 // ---- items of slice s01373120 end
 
 // unnamed retail callees and globals that name local stubs (address in the comment)
-extern cPropRecord gPropTable_16b2c40[];  // 0x016b2c40
-extern cPropRecord gPropTable_16b1430[];  // 0x016b1430
-extern cPropRecord gPropTable_15a7948[];  // 0x015a7948
 
 // ---- items of slice s01374720 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern "C" int FUN_00e4a9c0(...);   // builds a property type descriptor
@@ -49,6 +47,8 @@ extern char _DT_CELL_SP__3VcTypeDef_1_B;
 extern "C" int Conv(int);              // 0x00e4a9c0
 extern "C" int ConvF(float);           // 0x00e4a9c0
 extern int  g_ctPopulation;  // 0x016b0a80  _DT_CELL_POPULATION_SP__3VcTypeDef_1_B
+extern int  g_type1;         // 0x01482b28  PTR_s_type1_01482b28
+extern char g_strSize[];     // 0x013f293c  "size"
 typedef unsigned int u32;
 extern "C" u32 SP_sHash(const char*);  // 0x00e4a9d0 (SP::sHash)
 namespace SP {
@@ -66,7 +66,9 @@ struct cFieldDef {
 };  // namespace SP
 }
 using SP::cFieldDef;
+extern cFieldDef g_16b1584[11];  // 0x016b1584
 extern cFieldDef g_16b277c[9];   // 0x016b277c
+extern cFieldDef g_16b119c[11];  // 0x016b119c
 // ---- items of slice s01376850 end
 
 // ---- items of slice s013774e0 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -104,8 +106,13 @@ struct PropDesc
 extern "C" u32 PropValI(u32 v);
 extern "C" u32 PropValF(float v);
 extern "C" extern PropDesc g_15a68b4[13];  // 0x015a68b4  12 rows + terminator
+extern "C" extern PropDesc g_16b2434[4];   // 0x016b2434   3 rows + terminator
 extern "C" extern PropDesc g_16b1a0c[7];   // 0x016b1a0c   6 rows + terminator
 extern "C" extern PropDesc g_15a78e4[3];   // 0x015a78e4   2 rows + terminator
+extern "C" extern PropDesc g_16b25ec[4];   // 0x016b25ec   3 rows + terminator
+extern "C" extern PropDesc g_16b1e1c[4];   // 0x016b1e1c   3 rows + terminator
+extern "C" extern PropDesc g_16b2d6c[4];   // 0x016b2d6c   3 rows + terminator
+extern "C" extern PropDesc g_15a63dc[4];   // 0x015a63dc   3 rows + terminator
 // ---- items of slice s013792c0 end
 
 // ---- items of slice s0137b550 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -126,6 +133,505 @@ extern const u8 g_kTilingsEnumParseInfo;         // 0x01482a78
 extern u32 g_e311Table[79];    // 0x016b28e4 .. 0x016b2a1c  ($E311, tiling tool)
 extern u32 g_e315Table[69];    // 0x015a679c .. 0x015a68ac  ($E315, effect map)
 // ---- items of slice s0137b550 end
+
+// ---- items of slice s00e4c9e0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern char  g_layerCatalog[];      // 0x015a7584
+extern char  g_15a758c[];           // 0x015a758c
+extern char  g_15a774c[];           // 0x015a774c
+extern int   g_16b39a4;             // 0x016b39a4
+extern char  g_16b3998[];           // 0x016b3998
+extern char  g_16b399c[];           // 0x016b399c
+extern char  g_16b39a0[];           // 0x016b39a0 ResourceKey
+extern void* g_lightCtx;            // 0x016c8b44 (cLocalLightInfo allocator/context pointer)
+extern char vtbl_1482de8[], vtbl_13ebcdc[], vtbl_13eb938[], vtbl_1482d38[], vtbl_1482d24[];
+static inline void** Vt(void* p) { return *(void***)p; }
+void* operator new(unsigned size, const char* name, int flags, int line, const char* file, int line2); // 0xf473a0
+void  operator_delete__(void* p);                       // 0x00f47380
+void* ZoneObject_operator_new(unsigned size, const char* name, int a, int b, int c, int d); // 0x00926020
+void  FUN_00e4b910(const wchar_t* s);                   // 0x00e4b910
+void  FUN_00e82280();                                   // 0x00e82280
+void  FUN_00e823a0(void* a, void* b);                   // 0x00e823a0
+void* FUN_00e82420(void* a, void* b);                   // 0x00e82420
+void* FUN_00e4cad0(const wchar_t* s, int n);            // 0x00e4cad0
+void  FUN_00e84e40(const char* fmt, ...);               // 0x00e84e40
+void  FUN_00e85a60(unsigned n, int a, void* b, int c, int d, int e); // 0x00e85a60
+void  SP_SetCachingType(int a, void* b);                // 0x006ac040
+void  FUN_00e4d1d0(float* in, float* out);              // 0x00e4d1d0 (defined later in this file)
+#define NOINLINE __declspec(noinline)
+struct cLightCtx {                                       // ecx = g_lightCtx (0x016c8b44)
+    void Dtor(void* p);                                 // 0x009276c0
+    void* LockedAlloc(int n, int a, int b, int c, int d, int e); // 0x009289f0
+};
+void* EA_ResourceMan_GetManager();                      // 0x0067dcd0
+void* SP_CheatManager();                                // 0x0067de20
+void* SP_GetDataDir(const wchar_t* s);                  // 0x00688cb0
+unsigned WStr_Format(wchar_t* out, const wchar_t* fmt, ...); // 0x0041e050
+void  EA_ResourceMan_DatabaseDirectoryFiles_ctor(void* self, void* s, int z); // 0x008d7400
+struct cCellDataObj {                // object at *g_pCellCellData
+    char pad00[8];
+    int  mKeyType[3];                // +0x08 key type ids copied from the caller
+    char pad14[4];
+    void* mp18;                     // +0x18 payload buffer
+    void* mp1c;                     // +0x1c payload size
+};
+struct cLayerRes {
+    virtual void v0();
+    virtual void v1();
+    virtual void v2();
+    virtual int GetLayerType();                                       // +0xc
+};
+struct cLightObj { void* pad00[6]; void* mp18; void* FUN_00e4ce80(unsigned flags); };
+static void ReleaseObject(void* p)
+{
+    (*(void(__thiscall**)(void*))((char*)Vt(p) + 4))(p);
+}
+struct cCellFactoryBinary {
+    bool ReadResource(void* stream, void* p3, void* p4, void* p5);      // 0x00e4cf80
+    unsigned char ReadResourceFromStream(void* s, void* a, void* b, void* unused); // 0x00e4d000
+};
+struct cProcObj { bool FUN_00e4d120(void* p2, void** out, int p4, int p5); };
+extern void* g_pCellCellData;       // 0x016ad1f0  (cell-data globals block)
+// ---- items of slice s00e4c9e0 end
+
+// ---- items of slice s0137a490 begin (TODO(rewrite): local stubs, replace by canonical classes)
+struct PropDesc_s0137_a490
+{
+    u32 name;    // +0x00  sHash of the property name
+    u32 type;    // +0x04
+    u32 unk08;   // +0x08
+    u32 val0;    // +0x0c
+    u32 val1;    // +0x10
+    u32 index;   // +0x14
+    u32 defVal;  // +0x18
+    u32 unk1C;   // +0x1c
+    u32 unk20;   // +0x20
+    u32 unk24;   // +0x24
+};
+extern "C" extern PropDesc_s0137_a490 g_15a674c[2];   // 0x015a674c  "color" style descriptor
+extern "C" extern PropDesc_s0137_a490 g_16b17b4[3];   // 0x016b17b4
+extern "C" extern PropDesc_s0137_a490 g_16b1d04[7];   // 0x016b1d04
+extern "C" extern PropDesc_s0137_a490 g_16b3014[7];   // 0x016b3014
+extern "C" extern PropDesc_s0137_a490 g_16b2b3c[7];   // 0x016b2b3c
+extern "C" extern PropDesc_s0137_a490 g_16b2a24[7];   // 0x016b2a24
+extern "C" extern PropDesc_s0137_a490 g_16b24d4[7];   // 0x016b24d4
+// ---- items of slice s0137a490 end
+
+// @ 0x00e4cc50
+void SP_LoadAdvectMap(void* key, void* p2)
+{
+    struct { void* k; unsigned h; unsigned z; } k1, k2;
+    k2.z = 0; k2.h = 0x4805684; k1.k = key; k1.h = 0; k1.z = 0;
+    (void)k1;
+    void* out;
+    void* rm = EA_ResourceMan_GetManager();
+    bool ok = (*(bool(__thiscall**)(void*, void*, void*, int, int, int))((char*)Vt(rm) + 0xc))(rm, key, p2, 0, 0, 0);
+    (void)ok; (void)out;
+    {
+        int outbuf[3];
+        outbuf[0] = 0; outbuf[1] = 0x4805684; outbuf[2] = 0;
+        int keyb[3]; keyb[0] = 0; keyb[1] = 0x4805684; keyb[2] = 0;
+        (void)outbuf;
+        char* rmgr = (char*)EA_ResourceMan_GetManager();
+        char local[12]; *(void**)local = key; *(unsigned*)(local+4) = 0x4805684; *(unsigned*)(local+8) = 0;
+        bool ok2 = (*(bool(__thiscall**)(void*, void*, void*, int, int, int))((char*)Vt(rmgr) + 0xc))(rmgr, local, p2, 0, 0, 0);
+        if (!ok2) {
+            FUN_00e84e40("invalid advection map (key:%X) using empty.advect instead", key);
+            unsigned local2[3]; local2[0] = 0xc7ee8594; local2[1] = 0x4805684; local2[2] = 0;
+            char* rmgr2 = (char*)EA_ResourceMan_GetManager();
+            (*(bool(__thiscall**)(void*, unsigned*, void*, int, int, int))((char*)Vt(rmgr2) + 0xc))(rmgr2, local2, p2, 0, 0, 0);
+        }
+    }
+}
+
+// @ 0x00e4cce0
+void* FUN_00e4cce0(int idx)
+{
+    return *(void**)(g_15a758c + (idx << 4));
+}
+
+// @ 0x00e4ccf0
+bool SP_sIsLayerDataPacked()
+{
+    void* rm = EA_ResourceMan_GetManager();
+    if ((g_16b39a4 & 1) == 0) {
+        g_16b39a4 |= 1;
+        *(unsigned*)g_16b3998 = 0xc7ee8594;
+        *(unsigned*)g_16b399c = 0x4805684;
+        *(unsigned*)g_16b39a0 = 0;
+    }
+    void* o = (*(void*(__thiscall**)(void*, void*))((char*)Vt(rm) + 0x58))(rm, g_16b3998);
+    int r = ((cLayerRes*)o)->GetLayerType();
+    bool b = (r != 0x34728492);
+    return b;
+}
+
+// @ 0x00e4cd50
+namespace SP {
+void CellDataShutdownForApp()
+{
+    void* rm = EA_ResourceMan_GetManager();
+    void* g = g_pCellCellData;
+    (*(void(__thiscall**)(void*, int, void*, int))((char*)Vt(rm) + 0x44))(rm, 0, *(void**)((char*)g + 4), 0);
+    if (*(void**)g_pCellCellData != 0) {
+        void* cd = *(void**)g_pCellCellData;
+        (*(void(__thiscall**)(void*))((char*)Vt(cd) + 0x1c))(cd);
+        void* rm2 = EA_ResourceMan_GetManager();
+        void* cd2 = *(void**)g_pCellCellData;
+        (*(void(__thiscall**)(void*, int, void*, int))((char*)Vt(rm2) + 0x50))(rm2, 0, cd2, 100);
+    }
+    if (!SP_sIsLayerDataPacked()) {
+        void* cm = SP_CheatManager();
+        (*(void(__thiscall**)(void*, void*))((char*)Vt(cm) + 0x1c))(cm, *(void**)0x015a5dd4);
+        void* cm2 = SP_CheatManager();
+        (*(void(__thiscall**)(void*, void*))((char*)Vt(cm2) + 0x1c))(cm2, *(void**)0x015a5dd8);
+    }
+    operator_delete__(g_pCellCellData);
+}
+}  // namespace SP
+
+// @ 0x00e4cde0
+void FUN_00e4cde0()
+{
+    FUN_00e4cad0(L"CellGame/", 0x96c);
+    char* p = g_layerCatalog;
+    do {
+        *(void**)(p + 8) = FUN_00e82420(*(void**)p, *(void**)(p + 4));
+        p += 0x10;
+    } while ((int)p < (int)0x015a7754);
+}
+
+// @ 0x00e4ce20
+void FUN_00e4ce20()
+{
+    FUN_00e4b910(L"CellGame/");
+    FUN_00e82280();
+}
+
+// @ 0x00e4ce40
+void FUN_00e4ce40(void* a)
+{
+    FUN_00e823a0(*(void**)g_15a758c, a);
+}
+
+// @ 0x00e4ce60
+void FUN_00e4ce60(void* a)
+{
+    FUN_00e823a0(*(void**)g_15a774c, a);
+}
+
+// @ 0x00e4ce80
+void* cLightObj::FUN_00e4ce80(unsigned flags)
+{
+    *(void**)this = vtbl_1482de8;
+    if (mp18) ((cLightCtx*)g_lightCtx)->Dtor(mp18);
+    *(void**)this = vtbl_13eb938;
+    if (flags & 1) operator_delete__(this);
+    return this;
+}
+
+// @ 0x00e4ced0
+namespace SP {
+void PreloadAdvectMap(int key)
+{
+    int key3[3];
+    key3[2] = 0;
+    key3[1] = 0x4805684;
+    key3[0] = (int)key;
+    void* local10 = 0;
+    void* local1c = 0;
+    void* rm = EA_ResourceMan_GetManager();
+    if (local1c) { void* p = local1c; local1c = 0; ReleaseObject(p); }
+    if (local10) { void* p = local10; local10 = 0; ReleaseObject(p); }
+    (*(void(__thiscall**)(void*, int*, void**, void**, int, int, int, int, int))((char*)Vt(rm) + 0x10))
+        (rm, key3, &local10, &local1c, 0, 0, 0, 0, 0);
+    if (local1c) ReleaseObject(local1c);
+    if (local10) ReleaseObject(local10);
+}
+}  // namespace SP
+
+// @ 0x00e4cf80
+bool cCellFactoryBinary::ReadResource(void* stream, void* p3, void* p4, void* p5)
+{
+    void* vt = *(void**)this;
+    void* a = (*(void*(__thiscall**)(void*, void*))((char*)Vt(stream) + 0x10))(stream, p5);
+    void* b = (*(void*(__thiscall**)(void*, void*, void*))((char*)Vt(stream) + 0x18))(stream, p3, a);
+    char r = (*(char(__thiscall**)(void*, void*))((char*)vt + 0x34))(this, b);
+    (void)p4;
+    return r != 0;
+}
+
+// @ 0x00e4cfc0
+int __stdcall CellFactory_GetSupportedTypes(unsigned* out, unsigned n)
+{
+    if (out) {
+        if (n > 0) {
+            out[0] = 0x5c74d18b;
+            if (n > 1) { out[1] = 0x4805684; return 2; }
+            return 1;
+        }
+        return 0;
+    }
+    return 2;
+}
+
+// @ 0x00e4d000
+unsigned char cCellFactoryBinary::ReadResourceFromStream(void* self, void* s, void* k, void* unused)
+{
+    unsigned char ok = 0;
+    void* obj;
+    if (s) obj = (*(void*(__thiscall**)(void*, int))((char*)Vt(s) + 0xc))(s, 0x355d6f5);
+    else obj = 0;
+    unsigned n = (*(unsigned(__thiscall**)(void*))((char*)Vt(self) + 0x1c))(self);
+    cCellDataObj* c = (cCellDataObj*)obj;
+    c->mKeyType[0] = *(int*)k;
+    c->mKeyType[1] = *((int*)k + 1);
+    c->mKeyType[2] = *((int*)k + 2);
+    if (c->mp18) ((cLightCtx*)g_lightCtx)->Dtor(c->mp18);
+    void* mem = ((cLightCtx*)g_lightCtx)->LockedAlloc(n, 0, 0, 0, 0, 0);
+    c->mp18 = mem;
+    if (mem) {
+        unsigned got = (*(unsigned(__thiscall**)(void*, void*, unsigned))((char*)Vt(self) + 0x30))(self, mem, n);
+        if (got == n) {
+            c->mp1c = (void*)got;
+            ok = 1;
+        } else {
+            ((cLightCtx*)g_lightCtx)->Dtor(c->mp18);
+            c->mp18 = 0;
+        }
+    }
+    c->mp1c = (void*)(((int)c->mp18 != 0) ? (int)n : 0);
+    SP_SetCachingType(7, c);
+    return ok;
+}
+
+// @ 0x00e4d0d0
+unsigned FactoryBinary_WriteResource(void* self, void* a, void* s)
+{
+    void* obj = (*(void*(__thiscall**)(void*, void*))((char*)Vt(s) + 0x18))(s, a);
+    unsigned r = 0;
+    if (obj) {
+        void* kv = a ? (*(void*(__thiscall**)(void*, int))((char*)Vt(a) + 0xc))(a, 0x355d6f5) : 0;
+        if (*(int*)((char*)kv + 0x18)) {
+            r = (*(unsigned(__thiscall**)(void*, void*, void*))((char*)Vt(obj) + 0x38))(obj, *(void**)((char*)kv + 0x18), *(void**)((char*)kv + 0x1c));
+        }
+    }
+    return r & 0xffffff00u;
+}
+
+// @ 0x00e4d120
+bool cProcObj::FUN_00e4d120(void* p2, void** out, int p4, int p5)
+{
+    bool ok = false;
+    if (out) {
+        char* obj = (char*)operator new(0x20, "Simulator", 0, 0, 0, 0);
+        if (!obj) obj = 0;
+        else {
+            *(void**)obj = vtbl_13ebcdc;
+            *(int*)(obj + 4) = 0;
+            *(int*)(obj + 8) = 0;
+            *(int*)(obj + 0xc) = 0;
+            *(int*)(obj + 0x10) = 0;
+            *(int*)(obj + 0x14) = 0;
+            *(void**)obj = vtbl_1482de8;
+            *(int*)(obj + 0x18) = 0;
+            *(int*)(obj + 0x1c) = 0;
+        }
+        *out = obj;
+        if (obj) {
+            (*(void(__thiscall**)(void*))((char*)Vt(obj) + 0))(obj);
+            if (p2) {
+                char c = (*(char(__thiscall**)(void*, void*, void*, int, int))((char*)Vt(this) + 0x24))(this, p2, *out, p4, p5);
+                if (!c) {
+                    if (*out) (*(void(__thiscall**)(void*, int))((char*)Vt(*out) + 8))(*out, 1);
+                    return false;
+                }
+            }
+            ok = true;
+        }
+    }
+    return ok;
+}
+
+// @ 0x00e4d1d0
+NOINLINE void FUN_00e4d1d0(float* in, float* out)
+{
+    int* iout = (int*)out;
+    int* iin = (int*)in;
+    float f1 = in[3], f5 = in[4], f6 = in[5], f2 = in[2], f4 = in[0], f3 = in[1];
+    iout[0] = iin[0]; iout[1] = iin[1]; iout[2] = iin[2];
+    f4 = (f1 + f4) * 0.5f;
+    f5 = (f5 + f3) * 0.5f;
+    out[6] = f4;
+    f6 = (f6 + f2) * 0.5f;
+    out[3] = f4; out[4] = f5; out[5] = f6;
+    iout[7] = iin[1]; iout[8] = 0;
+    f1 = in[3];
+    out[10] = f5; out[9] = f1; iout[0xb] = 0;
+    f1 = in[0];
+    out[0xd] = f5; out[0xc] = f1; iout[0xe] = 0; out[0xf] = f4;
+    f1 = in[4];
+    out[0x12] = f4; out[0x10] = f1; out[0x13] = f5; out[0x14] = f6; iout[0x11] = 0;
+    iout[0x15] = iin[3]; iout[0x16] = iin[4]; iout[0x17] = iin[5];
+}
+
+// @ 0x00e4d2b0
+void FUN_00e4d2b0(int** cursor, int* parent, void* geo, void* factory, float* box, int depth)
+{
+    float local[24];
+    // Four AABBs in (minX,minY,minZ,maxX,maxY,maxZ) order; the first pass starts
+    // inverted so FUN_00e4d1d0's transform accumulates the source bounds.
+    local[3]  = -3.402823466e38f;
+    local[4]  = -3.402823466e38f;
+    local[5]  = -3.402823466e38f;
+    local[9]  = -3.402823466e38f;
+    local[10] = -3.402823466e38f;
+    local[11] = -3.402823466e38f;
+    local[15] = -3.402823466e38f;
+    local[16] = -3.402823466e38f;
+    local[17] = -3.402823466e38f;
+    local[21] = -3.402823466e38f;
+    local[22] = -3.402823466e38f;
+    local[23] = -3.402823466e38f;
+    local[0]  = 3.402823466e38f;
+    local[1]  = 3.402823466e38f;
+    local[2]  = 3.402823466e38f;
+    local[6]  = 3.402823466e38f;
+    local[7]  = 3.402823466e38f;
+    local[8]  = 3.402823466e38f;
+    local[12] = 3.402823466e38f;
+    local[13] = 3.402823466e38f;
+    local[14] = 3.402823466e38f;
+    local[18] = 3.402823466e38f;
+    local[19] = 3.402823466e38f;
+    local[20] = 3.402823466e38f;
+    FUN_00e4d1d0(box, local);
+    float* p = local + 1;      // p[-1] is the first component of each 6-float AABB
+    int n = 4;
+    int* out = parent;
+    do {
+        ++out;
+        if (geo == 0) {
+        emit:
+            if (depth == 3) { *out = 0; goto next; }
+            {
+                int* node = *cursor;
+                *cursor = (int*)((char*)node + 0x2c);
+                *out = (int)node;
+                *(int**)node = parent;
+                node[8] = *(int*)(p + 2);
+                node[9] = *(int*)(p + 3);
+                node[10] = *(int*)(p + 4);
+                node[5] = *(int*)(p - 1);
+                node[6] = *(int*)p;
+                node[7] = *(int*)(p + 1);
+                FUN_00e4d2b0(cursor, node, geo, factory, p - 1, depth + 1);
+            }
+        } else {
+            float* b = (float*)(*(void*(__thiscall**)(void*, void*))((char*)Vt(factory) + 0x60))(factory, geo);
+            if (b[0] <= p[2] && p[-1] <= b[3] && b[1] <= p[3] &&
+                *p <= b[4] && b[2] <= p[4] && p[1] <= b[5])
+                goto emit;
+            *out = 0;
+        }
+    next:
+        p += 6;
+        --n;
+    } while (n != 0);
+}
+
+// @ 0x00e4d550
+unsigned FUN_00e4d550(void* self, void* geo, void* factory)
+{
+    float box[6];                        // local_18 .. local_4
+    box[3] = 1.0f;                       // local_c
+    *(float*)((char*)self + 0x20) = 1.0f;      // param_1[8]
+    box[0] = -1.0f;                      // local_18
+    box[1] = -1.0f;                      // local_14
+    box[4] = 1.0f;                       // local_8
+    *(float*)((char*)self + 0x24) = 1.0f;      // param_1[9]
+    *(float*)((char*)self + 0x14) = -1.0f;     // param_1[5]
+    box[5] = 0.0f;                       // local_4
+    *(float*)((char*)self + 0x28) = 0.0f;      // param_1[10]
+    *(float*)((char*)self + 0x18) = -1.0f;     // param_1[6]
+    box[2] = 0.0f;                       // local_10
+    *(float*)((char*)self + 0x1c) = 0.0f;      // param_1[7]
+    *(int*)self = 0;
+
+    int* cursor = (int*)((char*)self + 0xb * 4);
+    FUN_00e4d2b0(&cursor, (int*)self, geo, factory, box, 0);
+    return (unsigned)((char*)cursor - (char*)self) / 0x2c;
+}
+
+// @ 0x00e4d600
+void FUN_00e4d600(int* node, float** out, int depth, int maxDepth)
+{
+    if (depth == maxDepth) {
+        float* p = *out;
+        float s0 = (*(float*)((char*)node + 0x14) + *(float*)((char*)node + 0x20)) * 0.5f;
+        float s1 = (*(float*)((char*)node + 0x24) + *(float*)((char*)node + 0x18)) * 0.5f;
+        float s2 = (*(float*)((char*)node + 0x28) + *(float*)((char*)node + 0x1c)) * 0.5f;
+        p[0] = s0;
+        p[1] = s1;
+        p[2] = s2;
+        *out = p + 3;
+        return;
+    }
+    int n = 4;
+    do {
+        ++node;
+        if (*node) FUN_00e4d600((int*)*node, out, depth, maxDepth + 1);
+        --n;
+    } while (n != 0);
+}
+
+// @ 0x00e4d6c0
+void FUN_00e4d6c0(void* a, void* b, int base)
+{
+    FUN_00e4d550((char*)base + 0x1168, a, b);
+    int* root = (int*)((char*)base + 0x1168);
+    int* cnt = (int*)((char*)base + 0x18);
+    int* grid = (int*)((char*)base + 0x28);
+    int* extra = (int*)((char*)base + 0xc28);
+    int* dst = (int*)((char*)base + 0x1138);
+    int i = 0;
+    do {
+        float* local8 = (float*)grid;
+        FUN_00e4d600(root, &local8, i, 0);
+        unsigned n = (unsigned)((char*)local8 - (char*)grid) / 0xc;
+        *cnt = n;
+        FUN_00e85a60(n, (int)grid, (void*)0x01482c20, (int)grid, (int)dst, (int)extra);
+        dst = (int*)((char*)dst + 0xc);
+        ++i;
+        ++cnt;
+        extra = (int*)((char*)extra + 0x144);
+        grid = (int*)((char*)grid + 0x300);
+    } while (i < 4);
+}
+
+// @ 0x00e4d840
+namespace SP {
+void LayerLoaderInit()
+{
+    wchar_t buf[6];
+    buf[0] = 0x67bac & 0xffff; buf[1] = 0x67bac & 0xffff; buf[2] = 0x67bae & 0xffff;
+    void* dd = SP_GetDataDir(L"CellGame/Layers/");
+    WStr_Format(buf, L"%s%s", dd);
+    void* obj = ZoneObject_operator_new(0x168, "Simulator/Cell/Data", 0, 0, 0, 0);
+    if (!obj) obj = 0;
+    else {
+        EA_ResourceMan_DatabaseDirectoryFiles_ctor(obj, buf, 0);
+        *(void**)obj = vtbl_1482d38;
+        *(void**)((char*)obj + 4) = vtbl_1482d24;
+    }
+    *(void**)g_pCellCellData = obj;
+    void* cd = *(void**)g_pCellCellData;
+    (*(void(__thiscall**)(void*))((char*)Vt(cd) + 4))(cd);
+    void* rm = EA_ResourceMan_GetManager();
+    (*(void(__thiscall**)(void*, int, void*, int))((char*)Vt(rm) + 0x50))(rm, 1, *(void**)g_pCellCellData, 100);
+    void* cd2 = *(void**)g_pCellCellData;
+    (*(void(__thiscall**)(void*, int, int, int))((char*)Vt(cd2) + 0x18))(cd2, 3, 4, 0);
+}
+}  // namespace SP
 
 // @ 0x01373c20
 void __declspec(noinline) InitPropTable_16b2c40()
@@ -280,6 +786,45 @@ void __declspec(noinline) InitPropTable_16b1430()
     p[6].mDefault = SP::PropValF(0);
     p[6].mType = 0;
     p[6].mPad0c = 0;
+}
+
+// @ 0x01374160
+void __declspec(noinline) InitPropTable_16b2f10()
+{
+    cPropRecord* p = gPropTable_16b2f10;
+
+    p[0].mHash = SP::sHash(0);
+    p[0].mOffset = 0;
+    p[0].mPad1c = 0;
+    p[0].mValue1 = SP::PropValF(1);
+    p[0].mValue2 = SP::PropValF(0);
+
+    p[1].mPad00 = 0;
+    p[1].mDefault = SP::PropValF(0);
+    p[1].mType = 8;
+    p[1].mPad0c = 0;
+    p[1].mpName = "weight";
+    p[1].mHash = SP::sHash("weight");
+    p[1].mOffset = 0xc;
+    p[1].mPad1c = 0;
+    p[1].mValue1 = SP::PropValF(2);
+    p[1].mValue2 = SP::PropValF(0);
+
+    p[2].mPad00 = 0;
+    p[2].mDefault = SP::PropValF(1.0f);
+    p[2].mType = 2;
+    p[2].mPad0c = 0;
+    p[2].mpName = 0;
+    p[2].mHash = SP::sHash(0);
+    p[2].mOffset = -1;
+    p[2].mPad1c = 0;
+    p[2].mValue1 = SP::PropValF(0);
+    p[2].mValue2 = SP::PropValF(0);
+
+    p[3].mPad00 = 0;
+    p[3].mDefault = SP::PropValF(0);
+    p[3].mType = 0;
+    p[3].mPad0c = 0;
 }
 
 // @ 0x013742c0
@@ -924,6 +1469,72 @@ void FUN_01374720(void)
   G[0x1fc] = 0;
 }
 
+// @ 0x01376850
+void InitPropTable_16b1584(void)
+{
+    g_16b1584[0].hash = SP_sHash(0);          g_16b1584[0].offset = 0x14;  g_16b1584[0].auxOffset = 0;
+    g_16b1584[0].type = Conv(1);              g_16b1584[0].typeDesc = Conv(0);
+    g_16b1584[0].argIndex = 0;                g_16b1584[0].defaultValue = Conv(0);
+    g_16b1584[0].flags = 8;                   g_16b1584[0].enumTable = 0;  g_16b1584[0].name = 0;
+
+    g_16b1584[1].hash = SP_sHash(0);          g_16b1584[1].offset = 0x28;  g_16b1584[1].auxOffset = 0;
+    g_16b1584[1].type = Conv(1);              g_16b1584[1].typeDesc = Conv(0);
+    g_16b1584[1].argIndex = 0;                g_16b1584[1].defaultValue = Conv(2);
+    g_16b1584[1].flags = 8;                   g_16b1584[1].enumTable = 0;  g_16b1584[1].name = 0;
+
+    g_16b1584[2].hash = SP_sHash(0);          g_16b1584[2].offset = 0x24;  g_16b1584[2].auxOffset = 0;
+    g_16b1584[2].type = Conv(5);              g_16b1584[2].typeDesc = Conv(0);
+    g_16b1584[2].argIndex = 0;                g_16b1584[2].defaultValue = Conv(0);
+    g_16b1584[2].flags = 0;                   g_16b1584[2].enumTable = (int)&g_type1;
+    g_16b1584[2].name = "count";
+
+    g_16b1584[3].hash = SP_sHash("count");    g_16b1584[3].offset = 0x2c;  g_16b1584[3].auxOffset = 0;
+    g_16b1584[3].type = Conv(2);              g_16b1584[3].typeDesc = Conv(0);
+    g_16b1584[3].argIndex = 0;                g_16b1584[3].defaultValue = ConvF(-1.0f);
+    g_16b1584[3].flags = 2;                   g_16b1584[3].enumTable = 0;
+    g_16b1584[3].name = "count_med";
+
+    g_16b1584[4].hash = SP_sHash("count_med"); g_16b1584[4].offset = 0x34; g_16b1584[4].auxOffset = 0;
+    g_16b1584[4].type = Conv(2);              g_16b1584[4].typeDesc = Conv(0);
+    g_16b1584[4].argIndex = 0;                g_16b1584[4].defaultValue = ConvF(-1.0f);
+    g_16b1584[4].flags = 2;                   g_16b1584[4].enumTable = 0;
+    g_16b1584[4].name = "count_easy";
+
+    g_16b1584[5].hash = SP_sHash("count_easy"); g_16b1584[5].offset = 0x30; g_16b1584[5].auxOffset = 0;
+    g_16b1584[5].type = Conv(2);              g_16b1584[5].typeDesc = Conv(0);
+    g_16b1584[5].argIndex = 0;                g_16b1584[5].defaultValue = ConvF(-1.0f);
+    g_16b1584[5].flags = 2;                   g_16b1584[5].enumTable = 0;
+    g_16b1584[5].name = "count_hard";
+
+    g_16b1584[6].hash = SP_sHash("count_hard"); g_16b1584[6].offset = 0x38; g_16b1584[6].auxOffset = 0;
+    g_16b1584[6].type = Conv(2);              g_16b1584[6].typeDesc = Conv(0);
+    g_16b1584[6].argIndex = 0;                g_16b1584[6].defaultValue = ConvF(-1.0f);
+    g_16b1584[6].flags = 2;                   g_16b1584[6].enumTable = 0;
+    g_16b1584[6].name = g_strSize;
+
+    g_16b1584[7].hash = SP_sHash(g_strSize);  g_16b1584[7].offset = 0x3c;  g_16b1584[7].auxOffset = 0;
+    g_16b1584[7].type = Conv(5);              g_16b1584[7].typeDesc = Conv(0);
+    g_16b1584[7].argIndex = 0;                g_16b1584[7].defaultValue = Conv(1);
+    g_16b1584[7].flags = 2;                   g_16b1584[7].enumTable = (int)&g_kTilings;
+    g_16b1584[7].name = "zOffset";
+
+    g_16b1584[8].hash = SP_sHash("zOffset");  g_16b1584[8].offset = 0xc;   g_16b1584[8].auxOffset = 0;
+    g_16b1584[8].type = Conv(2);              g_16b1584[8].typeDesc = Conv(0);
+    g_16b1584[8].argIndex = 0;                g_16b1584[8].defaultValue = ConvF(0.0f);
+    g_16b1584[8].flags = 2;                   g_16b1584[8].enumTable = 0;
+    g_16b1584[8].name = "zOffsetMax";
+
+    g_16b1584[9].hash = SP_sHash("zOffsetMax"); g_16b1584[9].offset = 0x10; g_16b1584[9].auxOffset = 0;
+    g_16b1584[9].type = Conv(2);              g_16b1584[9].typeDesc = Conv(0);
+    g_16b1584[9].argIndex = 0;                g_16b1584[9].defaultValue = ConvF(0.0f);
+    g_16b1584[9].flags = 2;                   g_16b1584[9].enumTable = 0;  g_16b1584[9].name = 0;
+
+    g_16b1584[10].hash = SP_sHash(0);         g_16b1584[10].offset = -1;   g_16b1584[10].auxOffset = 0;
+    g_16b1584[10].type = Conv(0);             g_16b1584[10].typeDesc = Conv(0);
+    g_16b1584[10].argIndex = 0;               g_16b1584[10].defaultValue = Conv(0);
+    g_16b1584[10].flags = 0;                  g_16b1584[10].enumTable = 0;
+}
+
 // @ 0x01376cc0
 void InitPropTable_16b277c(void)
 {
@@ -976,6 +1587,72 @@ void InitPropTable_16b277c(void)
     g_16b277c[8].type = Conv(0);              g_16b277c[8].typeDesc = Conv(0);
     g_16b277c[8].argIndex = 0;                g_16b277c[8].defaultValue = Conv(0);
     g_16b277c[8].flags = 0;                   g_16b277c[8].enumTable = 0;
+}
+
+// @ 0x01377070
+void InitPropTable_16b119c(void)
+{
+    g_16b119c[0].hash = SP_sHash(0);          g_16b119c[0].offset = 0x14;  g_16b119c[0].auxOffset = 0;
+    g_16b119c[0].type = Conv(1);              g_16b119c[0].typeDesc = Conv(0);
+    g_16b119c[0].argIndex = 0;                g_16b119c[0].defaultValue = Conv(0);
+    g_16b119c[0].flags = 8;                   g_16b119c[0].enumTable = 0;  g_16b119c[0].name = 0;
+
+    g_16b119c[1].hash = SP_sHash(0);          g_16b119c[1].offset = 0x28;  g_16b119c[1].auxOffset = 0;
+    g_16b119c[1].type = Conv(1);              g_16b119c[1].typeDesc = Conv(0);
+    g_16b119c[1].argIndex = 0;                g_16b119c[1].defaultValue = Conv(0);
+    g_16b119c[1].flags = 8;                   g_16b119c[1].enumTable = 0;  g_16b119c[1].name = 0;
+
+    g_16b119c[2].hash = SP_sHash(0);          g_16b119c[2].offset = 0x18;  g_16b119c[2].auxOffset = 0;
+    g_16b119c[2].type = Conv(3);              g_16b119c[2].typeDesc = Conv((int)&g_dtCell);
+    g_16b119c[2].argIndex = 0;                g_16b119c[2].defaultValue = Conv(0);
+    g_16b119c[2].flags = 0;                   g_16b119c[2].enumTable = 0;
+    g_16b119c[2].name = "count";
+
+    g_16b119c[3].hash = SP_sHash("count");    g_16b119c[3].offset = 0x2c;  g_16b119c[3].auxOffset = 0;
+    g_16b119c[3].type = Conv(2);              g_16b119c[3].typeDesc = Conv(0);
+    g_16b119c[3].argIndex = 0;                g_16b119c[3].defaultValue = ConvF(-1.0f);
+    g_16b119c[3].flags = 2;                   g_16b119c[3].enumTable = 0;
+    g_16b119c[3].name = "count_med";
+
+    g_16b119c[4].hash = SP_sHash("count_med"); g_16b119c[4].offset = 0x34; g_16b119c[4].auxOffset = 0;
+    g_16b119c[4].type = Conv(2);              g_16b119c[4].typeDesc = Conv(0);
+    g_16b119c[4].argIndex = 0;                g_16b119c[4].defaultValue = ConvF(-1.0f);
+    g_16b119c[4].flags = 2;                   g_16b119c[4].enumTable = 0;
+    g_16b119c[4].name = "count_easy";
+
+    g_16b119c[5].hash = SP_sHash("count_easy"); g_16b119c[5].offset = 0x30; g_16b119c[5].auxOffset = 0;
+    g_16b119c[5].type = Conv(2);              g_16b119c[5].typeDesc = Conv(0);
+    g_16b119c[5].argIndex = 0;                g_16b119c[5].defaultValue = ConvF(-1.0f);
+    g_16b119c[5].flags = 2;                   g_16b119c[5].enumTable = 0;
+    g_16b119c[5].name = "count_hard";
+
+    g_16b119c[6].hash = SP_sHash("count_hard"); g_16b119c[6].offset = 0x38; g_16b119c[6].auxOffset = 0;
+    g_16b119c[6].type = Conv(2);              g_16b119c[6].typeDesc = Conv(0);
+    g_16b119c[6].argIndex = 0;                g_16b119c[6].defaultValue = ConvF(-1.0f);
+    g_16b119c[6].flags = 2;                   g_16b119c[6].enumTable = 0;
+    g_16b119c[6].name = g_strSize;
+
+    g_16b119c[7].hash = SP_sHash(g_strSize);  g_16b119c[7].offset = 0x3c;  g_16b119c[7].auxOffset = 0;
+    g_16b119c[7].type = Conv(5);              g_16b119c[7].typeDesc = Conv(0);
+    g_16b119c[7].argIndex = 0;                g_16b119c[7].defaultValue = Conv(1);
+    g_16b119c[7].flags = 2;                   g_16b119c[7].enumTable = (int)&g_kTilings;
+    g_16b119c[7].name = "zOffset";
+
+    g_16b119c[8].hash = SP_sHash("zOffset");  g_16b119c[8].offset = 0xc;   g_16b119c[8].auxOffset = 0;
+    g_16b119c[8].type = Conv(2);              g_16b119c[8].typeDesc = Conv(0);
+    g_16b119c[8].argIndex = 0;                g_16b119c[8].defaultValue = ConvF(0.0f);
+    g_16b119c[8].flags = 2;                   g_16b119c[8].enumTable = 0;
+    g_16b119c[8].name = "zOffsetMax";
+
+    g_16b119c[9].hash = SP_sHash("zOffsetMax"); g_16b119c[9].offset = 0x10; g_16b119c[9].auxOffset = 0;
+    g_16b119c[9].type = Conv(2);              g_16b119c[9].typeDesc = Conv(0);
+    g_16b119c[9].argIndex = 0;                g_16b119c[9].defaultValue = ConvF(0.0f);
+    g_16b119c[9].flags = 2;                   g_16b119c[9].enumTable = 0;  g_16b119c[9].name = 0;
+
+    g_16b119c[10].hash = SP_sHash(0);         g_16b119c[10].offset = -1;   g_16b119c[10].auxOffset = 0;
+    g_16b119c[10].type = Conv(0);             g_16b119c[10].typeDesc = Conv(0);
+    g_16b119c[10].argIndex = 0;               g_16b119c[10].defaultValue = Conv(0);
+    g_16b119c[10].flags = 0;                  g_16b119c[10].enumTable = 0;
 }
 
 // @ 0x013774e0
@@ -1338,6 +2015,53 @@ void InitPropTable_15a68b4(void)
     g_15a68b4[12].f20 = 0;
 }
 
+// @ 0x013797c0
+void InitPropTable_16b2434(void)
+{
+    g_16b2434[0].hash = SP_sHash(0);
+    g_16b2434[0].f04 = 0;
+    g_16b2434[0].f08 = 0;
+    g_16b2434[0].f0c = PropValI(5);
+    g_16b2434[0].f10 = PropValI(0);
+    g_16b2434[0].f14 = 0;
+    g_16b2434[0].f18 = PropValI(0);
+    g_16b2434[0].f1c = 8;
+    g_16b2434[0].f20 = 0;
+    g_16b2434[0].f24 = 0;
+
+    g_16b2434[1].hash = SP_sHash(0);
+    g_16b2434[1].f04 = 4;
+    g_16b2434[1].f08 = 4;
+    g_16b2434[1].f0c = PropValI(7);
+    g_16b2434[1].f10 = PropValI(0);
+    g_16b2434[1].f14 = 0;
+    g_16b2434[1].f18 = PropValI(0);
+    g_16b2434[1].f1c = 0;
+    g_16b2434[1].f20 = 0;
+    g_16b2434[1].f24 = 0x01482f10;
+
+    g_16b2434[2].hash = SP_sHash((const char*)0x01482f10);
+    g_16b2434[2].f04 = 8;
+    g_16b2434[2].f08 = 0;
+    g_16b2434[2].f0c = PropValI(2);
+    g_16b2434[2].f10 = PropValI(0);
+    g_16b2434[2].f14 = 0;
+    g_16b2434[2].f18 = PropValF(1.0f);
+    g_16b2434[2].f1c = 2;
+    g_16b2434[2].f20 = 0;
+    g_16b2434[2].f24 = 0;
+
+    g_16b2434[3].hash = SP_sHash(0);
+    g_16b2434[3].f04 = 0xffffffff;
+    g_16b2434[3].f08 = 0;
+    g_16b2434[3].f0c = PropValI(0);
+    g_16b2434[3].f10 = PropValI(0);
+    g_16b2434[3].f14 = 0;
+    g_16b2434[3].f18 = PropValI(0);
+    g_16b2434[3].f1c = 0;
+    g_16b2434[3].f20 = 0;
+}
+
 // @ 0x01379970
 void InitPropTable_16b1a0c(void)
 {
@@ -1452,6 +2176,655 @@ void InitPropTable_15a78e4(void)
     g_15a78e4[2].f18 = PropValI(0);
     g_15a78e4[2].f1c = 0;
     g_15a78e4[2].f20 = 0;
+}
+
+// @ 0x01379da0
+void InitPropTable_16b25ec(void)
+{
+    g_16b25ec[0].hash = SP_sHash(0);
+    g_16b25ec[0].f04 = 0;
+    g_16b25ec[0].f08 = 0;
+    g_16b25ec[0].f0c = PropValI(1);
+    g_16b25ec[0].f10 = PropValI(0);
+    g_16b25ec[0].f14 = 0;
+    g_16b25ec[0].f18 = PropValI(1);
+    g_16b25ec[0].f1c = 8;
+    g_16b25ec[0].f20 = 0;
+    g_16b25ec[0].f24 = 0;
+
+    g_16b25ec[1].hash = SP_sHash(0);
+    g_16b25ec[1].f04 = 4;
+    g_16b25ec[1].f08 = 0;
+    g_16b25ec[1].f0c = PropValI(5);
+    g_16b25ec[1].f10 = PropValI(0);
+    g_16b25ec[1].f14 = 0;
+    g_16b25ec[1].f18 = PropValI(0);
+    g_16b25ec[1].f1c = 0;
+    g_16b25ec[1].f20 = 0x01482b60;
+    g_16b25ec[1].f24 = 0;
+
+    g_16b25ec[2].hash = SP_sHash(0);
+    g_16b25ec[2].f04 = 0xc;
+    g_16b25ec[2].f08 = 0;
+    g_16b25ec[2].f0c = PropValI(3);
+    g_16b25ec[2].f10 = PropValI(0x016ad3a4);
+    g_16b25ec[2].f14 = 1;
+    g_16b25ec[2].f18 = PropValI(0);
+    g_16b25ec[2].f1c = 0;
+    g_16b25ec[2].f20 = 0;
+    g_16b25ec[2].f24 = 0;
+
+    g_16b25ec[3].hash = SP_sHash(0);
+    g_16b25ec[3].f04 = 0xffffffff;
+    g_16b25ec[3].f08 = 0;
+    g_16b25ec[3].f0c = PropValI(0);
+    g_16b25ec[3].f10 = PropValI(0);
+    g_16b25ec[3].f14 = 0;
+    g_16b25ec[3].f18 = PropValI(0);
+    g_16b25ec[3].f1c = 0;
+    g_16b25ec[3].f20 = 0;
+}
+
+// @ 0x01379f80
+void InitPropTable_16b1e1c(void)
+{
+    g_16b1e1c[0].hash = SP_sHash(0);
+    g_16b1e1c[0].f04 = 0;
+    g_16b1e1c[0].f08 = 0;
+    g_16b1e1c[0].f0c = PropValI(1);
+    g_16b1e1c[0].f10 = PropValI(0);
+    g_16b1e1c[0].f14 = 0;
+    g_16b1e1c[0].f18 = PropValI(0);
+    g_16b1e1c[0].f1c = 8;
+    g_16b1e1c[0].f20 = 0;
+    g_16b1e1c[0].f24 = 0;
+
+    g_16b1e1c[1].hash = SP_sHash(0);
+    g_16b1e1c[1].f04 = 4;
+    g_16b1e1c[1].f08 = 0;
+    g_16b1e1c[1].f0c = PropValI(5);
+    g_16b1e1c[1].f10 = PropValI(0);
+    g_16b1e1c[1].f14 = 0;
+    g_16b1e1c[1].f18 = PropValI(0);
+    g_16b1e1c[1].f1c = 0;
+    g_16b1e1c[1].f20 = 0x01482b60;
+    g_16b1e1c[1].f24 = 0;
+
+    g_16b1e1c[2].hash = SP_sHash(0);
+    g_16b1e1c[2].f04 = 8;
+    g_16b1e1c[2].f08 = 0;
+    g_16b1e1c[2].f0c = PropValI(3);
+    g_16b1e1c[2].f10 = PropValI(0x016ad3a4);
+    g_16b1e1c[2].f14 = 1;
+    g_16b1e1c[2].f18 = PropValI(0);
+    g_16b1e1c[2].f1c = 0;
+    g_16b1e1c[2].f20 = 0;
+    g_16b1e1c[2].f24 = 0;
+
+    g_16b1e1c[3].hash = SP_sHash(0);
+    g_16b1e1c[3].f04 = 0xffffffff;
+    g_16b1e1c[3].f08 = 0;
+    g_16b1e1c[3].f0c = PropValI(0);
+    g_16b1e1c[3].f10 = PropValI(0);
+    g_16b1e1c[3].f14 = 0;
+    g_16b1e1c[3].f18 = PropValI(0);
+    g_16b1e1c[3].f1c = 0;
+    g_16b1e1c[3].f20 = 0;
+}
+
+// @ 0x0137a130
+void InitPropTable_16b2d6c(void)
+{
+    g_16b2d6c[0].hash = SP_sHash(0);
+    g_16b2d6c[0].f04 = 0;
+    g_16b2d6c[0].f08 = 0;
+    g_16b2d6c[0].f0c = PropValI(1);
+    g_16b2d6c[0].f10 = PropValI(0);
+    g_16b2d6c[0].f14 = 0;
+    g_16b2d6c[0].f18 = PropValI(2);
+    g_16b2d6c[0].f1c = 8;
+    g_16b2d6c[0].f20 = 0;
+    g_16b2d6c[0].f24 = 0;
+
+    g_16b2d6c[1].hash = SP_sHash(0);
+    g_16b2d6c[1].f04 = 4;
+    g_16b2d6c[1].f08 = 0;
+    g_16b2d6c[1].f0c = PropValI(5);
+    g_16b2d6c[1].f10 = PropValI(0);
+    g_16b2d6c[1].f14 = 0;
+    g_16b2d6c[1].f18 = PropValI(0);
+    g_16b2d6c[1].f1c = 0;
+    g_16b2d6c[1].f20 = 0x01482b60;
+    g_16b2d6c[1].f24 = 0;
+
+    g_16b2d6c[2].hash = SP_sHash(0);
+    g_16b2d6c[2].f04 = 0x10;
+    g_16b2d6c[2].f08 = 0;
+    g_16b2d6c[2].f0c = PropValI(3);
+    g_16b2d6c[2].f10 = PropValI(0x016ad3a4);
+    g_16b2d6c[2].f14 = 1;
+    g_16b2d6c[2].f18 = PropValI(0);
+    g_16b2d6c[2].f1c = 0;
+    g_16b2d6c[2].f20 = 0;
+    g_16b2d6c[2].f24 = 0;
+
+    g_16b2d6c[3].hash = SP_sHash(0);
+    g_16b2d6c[3].f04 = 0xffffffff;
+    g_16b2d6c[3].f08 = 0;
+    g_16b2d6c[3].f0c = PropValI(0);
+    g_16b2d6c[3].f10 = PropValI(0);
+    g_16b2d6c[3].f14 = 0;
+    g_16b2d6c[3].f18 = PropValI(0);
+    g_16b2d6c[3].f1c = 0;
+    g_16b2d6c[3].f20 = 0;
+}
+
+// @ 0x0137a2e0
+void InitPropTable_15a63dc(void)
+{
+    g_15a63dc[0].hash = SP_sHash((const char*)0x01482758);
+    g_15a63dc[0].f04 = 0;
+    g_15a63dc[0].f08 = 4;
+    g_15a63dc[0].f0c = PropValI(0x016b0cfc);
+    g_15a63dc[0].f10 = PropValI(4);
+    g_15a63dc[0].f14 = 0;
+    g_15a63dc[0].f18 = PropValI(0);
+    g_15a63dc[0].f1c = 4;
+    g_15a63dc[0].f20 = 0;
+    g_15a63dc[0].f24 = 0x0145a51c;
+
+    g_15a63dc[1].hash = SP_sHash((const char*)0x0145a51c);
+    g_15a63dc[1].f04 = 0;
+    g_15a63dc[1].f08 = 4;
+    g_15a63dc[1].f0c = PropValI(0x016b0fe8);
+    g_15a63dc[1].f10 = PropValI(4);
+    g_15a63dc[1].f14 = 0;
+    g_15a63dc[1].f18 = PropValI(0);
+    g_15a63dc[1].f1c = 4;
+    g_15a63dc[1].f20 = 0;
+    g_15a63dc[1].f24 = 0x01453710;
+
+    g_15a63dc[2].hash = SP_sHash((const char*)0x01453710);
+    g_15a63dc[2].f04 = 0;
+    g_15a63dc[2].f08 = 4;
+    g_15a63dc[2].f0c = PropValI(0x016b10d0);
+    g_15a63dc[2].f10 = PropValI(4);
+    g_15a63dc[2].f14 = 0;
+    g_15a63dc[2].f18 = PropValI(0);
+    g_15a63dc[2].f1c = 4;
+    g_15a63dc[2].f20 = 0;
+    g_15a63dc[2].f24 = 0;
+
+    g_15a63dc[3].hash = SP_sHash(0);
+    g_15a63dc[3].f04 = 0xffffffff;
+    g_15a63dc[3].f08 = 0;
+    g_15a63dc[3].f0c = PropValI(0);
+    g_15a63dc[3].f10 = PropValI(0);
+    g_15a63dc[3].f14 = 0;
+    g_15a63dc[3].f18 = PropValI(0);
+    g_15a63dc[3].f1c = 0;
+    g_15a63dc[3].f20 = 0;
+}
+
+// @ 0x0137a490
+void InitPropTable_16b17b4(void)
+{
+    g_16b17b4[0].name  = SP_sHash(0);
+    g_16b17b4[0].type  = 0;
+    g_16b17b4[0].unk08 = 0;
+    g_16b17b4[0].val0  = PropValI(8);
+    g_16b17b4[0].val1  = PropValI(0);
+    g_16b17b4[0].index = 0;
+    g_16b17b4[0].defVal = PropValI(0x015a5dfc);
+    g_16b17b4[0].unk1C = 0;
+    g_16b17b4[0].unk20 = 0;
+    g_16b17b4[0].unk24 = 0;
+
+    g_16b17b4[1].name  = SP_sHash(0);
+    g_16b17b4[1].type  = 0xc;
+    g_16b17b4[1].unk08 = 0;
+    g_16b17b4[1].val0  = PropValI(2);
+    g_16b17b4[1].val1  = PropValI(0);
+    g_16b17b4[1].index = 1;
+    g_16b17b4[1].defVal = PropValF(1.0f);
+    g_16b17b4[1].unk1C = 0;
+    g_16b17b4[1].unk20 = 0;
+    g_16b17b4[1].unk24 = 0;
+
+    g_16b17b4[2].name  = SP_sHash(0);
+    g_16b17b4[2].type  = 0xffffffff;
+    g_16b17b4[2].unk08 = 0;
+    g_16b17b4[2].val0  = PropValI(0);
+    g_16b17b4[2].val1  = PropValI(0);
+    g_16b17b4[2].index = 0;
+    g_16b17b4[2].defVal = PropValI(0);
+    g_16b17b4[2].unk1C = 0;
+    g_16b17b4[2].unk20 = 0;
+}
+
+// @ 0x0137a5e0
+void InitPropTable_15a674c(void)
+{
+    g_15a674c[0].name  = SP_sHash("color");
+    g_15a674c[0].type  = 4;
+    g_15a674c[0].unk08 = 0;
+    g_15a674c[0].val0  = PropValI(0x016ad66c);
+    g_15a674c[0].val1  = PropValI(4);
+    g_15a674c[0].index = 0;
+    g_15a674c[0].defVal = PropValI(0);
+    g_15a674c[0].unk1C = 4;
+    g_15a674c[0].unk20 = 0;
+    g_15a674c[0].unk24 = 0;
+
+    g_15a674c[1].name  = SP_sHash(0);
+    g_15a674c[1].type  = 0xffffffff;
+    g_15a674c[1].unk08 = 0;
+    g_15a674c[1].val0  = PropValI(0);
+    g_15a674c[1].val1  = PropValI(0);
+    g_15a674c[1].index = 0;
+    g_15a674c[1].defVal = PropValI(0);
+    g_15a674c[1].unk1C = 0;
+    g_15a674c[1].unk20 = 0;
+}
+
+// @ 0x0137a6e0
+void InitPropTable_16b1d04(void)
+{
+    g_16b1d04[0].name  = SP_sHash(0);
+    g_16b1d04[0].type  = 4;
+    g_16b1d04[0].unk08 = 0;
+    g_16b1d04[0].val0  = PropValI(1);
+    g_16b1d04[0].val1  = PropValI(0);
+    g_16b1d04[0].index = 0;
+    g_16b1d04[0].defVal = PropValI(1);
+    g_16b1d04[0].unk1C = 8;
+    g_16b1d04[0].unk20 = 0;
+    g_16b1d04[0].unk24 = 0;
+
+    g_16b1d04[1].name  = SP_sHash(0);
+    g_16b1d04[1].type  = 0;
+    g_16b1d04[1].unk08 = 0;
+    g_16b1d04[1].val0  = PropValI(7);
+    g_16b1d04[1].val1  = PropValI(0);
+    g_16b1d04[1].index = 0;
+    g_16b1d04[1].defVal = PropValI(0);
+    g_16b1d04[1].unk1C = 0;
+    g_16b1d04[1].unk20 = 0;
+    g_16b1d04[1].unk24 = 0;
+
+    g_16b1d04[2].name  = SP_sHash(0);
+    g_16b1d04[2].type  = 8;
+    g_16b1d04[2].unk08 = 0;
+    g_16b1d04[2].val0  = PropValI(2);
+    g_16b1d04[2].val1  = PropValI(0);
+    g_16b1d04[2].index = 1;
+    g_16b1d04[2].defVal = PropValF(-1.0f);
+    g_16b1d04[2].unk1C = 0;
+    g_16b1d04[2].unk20 = 0;
+    g_16b1d04[2].unk24 = 0;
+
+    g_16b1d04[3].name  = SP_sHash(0);
+    g_16b1d04[3].type  = 0xc;
+    g_16b1d04[3].unk08 = 0;
+    g_16b1d04[3].val0  = PropValI(2);
+    g_16b1d04[3].val1  = PropValI(0);
+    g_16b1d04[3].index = 2;
+    g_16b1d04[3].defVal = PropValF(-1.0f);
+    g_16b1d04[3].unk1C = 0;
+    g_16b1d04[3].unk20 = 0;
+    g_16b1d04[3].unk24 = 0;
+
+    g_16b1d04[4].name  = SP_sHash(0);
+    g_16b1d04[4].type  = 0x10;
+    g_16b1d04[4].unk08 = 0;
+    g_16b1d04[4].val0  = PropValI(2);
+    g_16b1d04[4].val1  = PropValI(0);
+    g_16b1d04[4].index = 3;
+    g_16b1d04[4].defVal = PropValF(-1.0f);
+    g_16b1d04[4].unk1C = 0;
+    g_16b1d04[4].unk20 = 0;
+    g_16b1d04[4].unk24 = 0;
+
+    g_16b1d04[5].name  = SP_sHash(0);
+    g_16b1d04[5].type  = 0x14;
+    g_16b1d04[5].unk08 = 0;
+    g_16b1d04[5].val0  = PropValI(2);
+    g_16b1d04[5].val1  = PropValI(0);
+    g_16b1d04[5].index = 4;
+    g_16b1d04[5].defVal = PropValF(-1.0f);
+    g_16b1d04[5].unk1C = 0;
+    g_16b1d04[5].unk20 = 0;
+    g_16b1d04[5].unk24 = 0;
+
+    g_16b1d04[6].name  = SP_sHash(0);
+    g_16b1d04[6].type  = 0xffffffff;
+    g_16b1d04[6].unk08 = 0;
+    g_16b1d04[6].val0  = PropValI(0);
+    g_16b1d04[6].val1  = PropValI(0);
+    g_16b1d04[6].index = 0;
+    g_16b1d04[6].defVal = PropValI(0);
+    g_16b1d04[6].unk1C = 0;
+    g_16b1d04[6].unk20 = 0;
+}
+
+// @ 0x0137a9c0
+void InitPropTable_16b3014(void)
+{
+    g_16b3014[0].name  = SP_sHash(0);
+    g_16b3014[0].type  = 4;
+    g_16b3014[0].unk08 = 0;
+    g_16b3014[0].val0  = PropValI(1);
+    g_16b3014[0].val1  = PropValI(0);
+    g_16b3014[0].index = 0;
+    g_16b3014[0].defVal = PropValI(0);
+    g_16b3014[0].unk1C = 8;
+    g_16b3014[0].unk20 = 0;
+    g_16b3014[0].unk24 = 0;
+
+    g_16b3014[1].name  = SP_sHash(0);
+    g_16b3014[1].type  = 0;
+    g_16b3014[1].unk08 = 0;
+    g_16b3014[1].val0  = PropValI(7);
+    g_16b3014[1].val1  = PropValI(0);
+    g_16b3014[1].index = 0;
+    g_16b3014[1].defVal = PropValI(0);
+    g_16b3014[1].unk1C = 0;
+    g_16b3014[1].unk20 = 0;
+    g_16b3014[1].unk24 = 0;
+
+    g_16b3014[2].name  = SP_sHash(0);
+    g_16b3014[2].type  = 8;
+    g_16b3014[2].unk08 = 0;
+    g_16b3014[2].val0  = PropValI(2);
+    g_16b3014[2].val1  = PropValI(0);
+    g_16b3014[2].index = 1;
+    g_16b3014[2].defVal = PropValF(-1.0f);
+    g_16b3014[2].unk1C = 0;
+    g_16b3014[2].unk20 = 0;
+    g_16b3014[2].unk24 = 0;
+
+    g_16b3014[3].name  = SP_sHash(0);
+    g_16b3014[3].type  = 0xc;
+    g_16b3014[3].unk08 = 0;
+    g_16b3014[3].val0  = PropValI(2);
+    g_16b3014[3].val1  = PropValI(0);
+    g_16b3014[3].index = 2;
+    g_16b3014[3].defVal = PropValF(-1.0f);
+    g_16b3014[3].unk1C = 0;
+    g_16b3014[3].unk20 = 0;
+    g_16b3014[3].unk24 = 0;
+
+    g_16b3014[4].name  = SP_sHash(0);
+    g_16b3014[4].type  = 0x10;
+    g_16b3014[4].unk08 = 0;
+    g_16b3014[4].val0  = PropValI(2);
+    g_16b3014[4].val1  = PropValI(0);
+    g_16b3014[4].index = 3;
+    g_16b3014[4].defVal = PropValF(-1.0f);
+    g_16b3014[4].unk1C = 0;
+    g_16b3014[4].unk20 = 0;
+    g_16b3014[4].unk24 = 0;
+
+    g_16b3014[5].name  = SP_sHash(0);
+    g_16b3014[5].type  = 0x14;
+    g_16b3014[5].unk08 = 0;
+    g_16b3014[5].val0  = PropValI(2);
+    g_16b3014[5].val1  = PropValI(0);
+    g_16b3014[5].index = 4;
+    g_16b3014[5].defVal = PropValF(-1.0f);
+    g_16b3014[5].unk1C = 0;
+    g_16b3014[5].unk20 = 0;
+    g_16b3014[5].unk24 = 0;
+
+    g_16b3014[6].name  = SP_sHash(0);
+    g_16b3014[6].type  = 0xffffffff;
+    g_16b3014[6].unk08 = 0;
+    g_16b3014[6].val0  = PropValI(0);
+    g_16b3014[6].val1  = PropValI(0);
+    g_16b3014[6].index = 0;
+    g_16b3014[6].defVal = PropValI(0);
+    g_16b3014[6].unk1C = 0;
+    g_16b3014[6].unk20 = 0;
+}
+
+// @ 0x0137ac90
+void InitPropTable_16b2b3c(void)
+{
+    g_16b2b3c[0].name  = SP_sHash(0);
+    g_16b2b3c[0].type  = 4;
+    g_16b2b3c[0].unk08 = 0;
+    g_16b2b3c[0].val0  = PropValI(1);
+    g_16b2b3c[0].val1  = PropValI(0);
+    g_16b2b3c[0].index = 0;
+    g_16b2b3c[0].defVal = PropValI(2);
+    g_16b2b3c[0].unk1C = 8;
+    g_16b2b3c[0].unk20 = 0;
+    g_16b2b3c[0].unk24 = 0;
+
+    g_16b2b3c[1].name  = SP_sHash(0);
+    g_16b2b3c[1].type  = 0;
+    g_16b2b3c[1].unk08 = 0;
+    g_16b2b3c[1].val0  = PropValI(7);
+    g_16b2b3c[1].val1  = PropValI(0);
+    g_16b2b3c[1].index = 0;
+    g_16b2b3c[1].defVal = PropValI(0);
+    g_16b2b3c[1].unk1C = 0;
+    g_16b2b3c[1].unk20 = 0;
+    g_16b2b3c[1].unk24 = 0;
+
+    g_16b2b3c[2].name  = SP_sHash(0);
+    g_16b2b3c[2].type  = 8;
+    g_16b2b3c[2].unk08 = 0;
+    g_16b2b3c[2].val0  = PropValI(2);
+    g_16b2b3c[2].val1  = PropValI(0);
+    g_16b2b3c[2].index = 1;
+    g_16b2b3c[2].defVal = PropValF(-1.0f);
+    g_16b2b3c[2].unk1C = 0;
+    g_16b2b3c[2].unk20 = 0;
+    g_16b2b3c[2].unk24 = 0;
+
+    g_16b2b3c[3].name  = SP_sHash(0);
+    g_16b2b3c[3].type  = 0xc;
+    g_16b2b3c[3].unk08 = 0;
+    g_16b2b3c[3].val0  = PropValI(2);
+    g_16b2b3c[3].val1  = PropValI(0);
+    g_16b2b3c[3].index = 2;
+    g_16b2b3c[3].defVal = PropValF(-1.0f);
+    g_16b2b3c[3].unk1C = 0;
+    g_16b2b3c[3].unk20 = 0;
+    g_16b2b3c[3].unk24 = 0;
+
+    g_16b2b3c[4].name  = SP_sHash(0);
+    g_16b2b3c[4].type  = 0x10;
+    g_16b2b3c[4].unk08 = 0;
+    g_16b2b3c[4].val0  = PropValI(2);
+    g_16b2b3c[4].val1  = PropValI(0);
+    g_16b2b3c[4].index = 3;
+    g_16b2b3c[4].defVal = PropValF(-1.0f);
+    g_16b2b3c[4].unk1C = 0;
+    g_16b2b3c[4].unk20 = 0;
+    g_16b2b3c[4].unk24 = 0;
+
+    g_16b2b3c[5].name  = SP_sHash(0);
+    g_16b2b3c[5].type  = 0x14;
+    g_16b2b3c[5].unk08 = 0;
+    g_16b2b3c[5].val0  = PropValI(2);
+    g_16b2b3c[5].val1  = PropValI(0);
+    g_16b2b3c[5].index = 4;
+    g_16b2b3c[5].defVal = PropValF(-1.0f);
+    g_16b2b3c[5].unk1C = 0;
+    g_16b2b3c[5].unk20 = 0;
+    g_16b2b3c[5].unk24 = 0;
+
+    g_16b2b3c[6].name  = SP_sHash(0);
+    g_16b2b3c[6].type  = 0xffffffff;
+    g_16b2b3c[6].unk08 = 0;
+    g_16b2b3c[6].val0  = PropValI(0);
+    g_16b2b3c[6].val1  = PropValI(0);
+    g_16b2b3c[6].index = 0;
+    g_16b2b3c[6].defVal = PropValI(0);
+    g_16b2b3c[6].unk1C = 0;
+    g_16b2b3c[6].unk20 = 0;
+}
+
+// @ 0x0137af90
+void InitPropTable_16b2a24(void)
+{
+    g_16b2a24[0].name  = SP_sHash(0);
+    g_16b2a24[0].type  = 4;
+    g_16b2a24[0].unk08 = 0;
+    g_16b2a24[0].val0  = PropValI(1);
+    g_16b2a24[0].val1  = PropValI(0);
+    g_16b2a24[0].index = 0;
+    g_16b2a24[0].defVal = PropValI(3);
+    g_16b2a24[0].unk1C = 8;
+    g_16b2a24[0].unk20 = 0;
+    g_16b2a24[0].unk24 = 0;
+
+    g_16b2a24[1].name  = SP_sHash(0);
+    g_16b2a24[1].type  = 0;
+    g_16b2a24[1].unk08 = 0;
+    g_16b2a24[1].val0  = PropValI(7);
+    g_16b2a24[1].val1  = PropValI(0);
+    g_16b2a24[1].index = 0;
+    g_16b2a24[1].defVal = PropValI(0);
+    g_16b2a24[1].unk1C = 0;
+    g_16b2a24[1].unk20 = 0;
+    g_16b2a24[1].unk24 = 0;
+
+    g_16b2a24[2].name  = SP_sHash(0);
+    g_16b2a24[2].type  = 8;
+    g_16b2a24[2].unk08 = 0;
+    g_16b2a24[2].val0  = PropValI(2);
+    g_16b2a24[2].val1  = PropValI(0);
+    g_16b2a24[2].index = 1;
+    g_16b2a24[2].defVal = PropValF(-1.0f);
+    g_16b2a24[2].unk1C = 0;
+    g_16b2a24[2].unk20 = 0;
+    g_16b2a24[2].unk24 = 0;
+
+    g_16b2a24[3].name  = SP_sHash(0);
+    g_16b2a24[3].type  = 0xc;
+    g_16b2a24[3].unk08 = 0;
+    g_16b2a24[3].val0  = PropValI(2);
+    g_16b2a24[3].val1  = PropValI(0);
+    g_16b2a24[3].index = 2;
+    g_16b2a24[3].defVal = PropValF(-1.0f);
+    g_16b2a24[3].unk1C = 0;
+    g_16b2a24[3].unk20 = 0;
+    g_16b2a24[3].unk24 = 0;
+
+    g_16b2a24[4].name  = SP_sHash(0);
+    g_16b2a24[4].type  = 0x10;
+    g_16b2a24[4].unk08 = 0;
+    g_16b2a24[4].val0  = PropValI(2);
+    g_16b2a24[4].val1  = PropValI(0);
+    g_16b2a24[4].index = 3;
+    g_16b2a24[4].defVal = PropValF(-1.0f);
+    g_16b2a24[4].unk1C = 0;
+    g_16b2a24[4].unk20 = 0;
+    g_16b2a24[4].unk24 = 0;
+
+    g_16b2a24[5].name  = SP_sHash(0);
+    g_16b2a24[5].type  = 0x14;
+    g_16b2a24[5].unk08 = 0;
+    g_16b2a24[5].val0  = PropValI(2);
+    g_16b2a24[5].val1  = PropValI(0);
+    g_16b2a24[5].index = 4;
+    g_16b2a24[5].defVal = PropValF(-1.0f);
+    g_16b2a24[5].unk1C = 0;
+    g_16b2a24[5].unk20 = 0;
+    g_16b2a24[5].unk24 = 0;
+
+    g_16b2a24[6].name  = SP_sHash(0);
+    g_16b2a24[6].type  = 0xffffffff;
+    g_16b2a24[6].unk08 = 0;
+    g_16b2a24[6].val0  = PropValI(0);
+    g_16b2a24[6].val1  = PropValI(0);
+    g_16b2a24[6].index = 0;
+    g_16b2a24[6].defVal = PropValI(0);
+    g_16b2a24[6].unk1C = 0;
+    g_16b2a24[6].unk20 = 0;
+}
+
+// @ 0x0137b270
+void InitPropTable_16b24d4(void)
+{
+    g_16b24d4[0].name  = SP_sHash(0);
+    g_16b24d4[0].type  = 4;
+    g_16b24d4[0].unk08 = 0;
+    g_16b24d4[0].val0  = PropValI(1);
+    g_16b24d4[0].val1  = PropValI(0);
+    g_16b24d4[0].index = 0;
+    g_16b24d4[0].defVal = PropValI(4);
+    g_16b24d4[0].unk1C = 8;
+    g_16b24d4[0].unk20 = 0;
+    g_16b24d4[0].unk24 = 0;
+
+    g_16b24d4[1].name  = SP_sHash(0);
+    g_16b24d4[1].type  = 0;
+    g_16b24d4[1].unk08 = 0;
+    g_16b24d4[1].val0  = PropValI(7);
+    g_16b24d4[1].val1  = PropValI(0);
+    g_16b24d4[1].index = 0;
+    g_16b24d4[1].defVal = PropValI(0);
+    g_16b24d4[1].unk1C = 0;
+    g_16b24d4[1].unk20 = 0;
+    g_16b24d4[1].unk24 = 0;
+
+    g_16b24d4[2].name  = SP_sHash(0);
+    g_16b24d4[2].type  = 8;
+    g_16b24d4[2].unk08 = 0;
+    g_16b24d4[2].val0  = PropValI(2);
+    g_16b24d4[2].val1  = PropValI(0);
+    g_16b24d4[2].index = 1;
+    g_16b24d4[2].defVal = PropValF(-1.0f);
+    g_16b24d4[2].unk1C = 0;
+    g_16b24d4[2].unk20 = 0;
+    g_16b24d4[2].unk24 = 0;
+
+    g_16b24d4[3].name  = SP_sHash(0);
+    g_16b24d4[3].type  = 0xc;
+    g_16b24d4[3].unk08 = 0;
+    g_16b24d4[3].val0  = PropValI(2);
+    g_16b24d4[3].val1  = PropValI(0);
+    g_16b24d4[3].index = 2;
+    g_16b24d4[3].defVal = PropValF(-1.0f);
+    g_16b24d4[3].unk1C = 0;
+    g_16b24d4[3].unk20 = 0;
+    g_16b24d4[3].unk24 = 0;
+
+    g_16b24d4[4].name  = SP_sHash(0);
+    g_16b24d4[4].type  = 0x10;
+    g_16b24d4[4].unk08 = 0;
+    g_16b24d4[4].val0  = PropValI(2);
+    g_16b24d4[4].val1  = PropValI(0);
+    g_16b24d4[4].index = 3;
+    g_16b24d4[4].defVal = PropValF(-1.0f);
+    g_16b24d4[4].unk1C = 0;
+    g_16b24d4[4].unk20 = 0;
+    g_16b24d4[4].unk24 = 0;
+
+    g_16b24d4[5].name  = SP_sHash(0);
+    g_16b24d4[5].type  = 0x14;
+    g_16b24d4[5].unk08 = 0;
+    g_16b24d4[5].val0  = PropValI(2);
+    g_16b24d4[5].val1  = PropValI(0);
+    g_16b24d4[5].index = 4;
+    g_16b24d4[5].defVal = PropValF(-1.0f);
+    g_16b24d4[5].unk1C = 0;
+    g_16b24d4[5].unk20 = 0;
+    g_16b24d4[5].unk24 = 0;
+
+    g_16b24d4[6].name  = SP_sHash(0);
+    g_16b24d4[6].type  = 0xffffffff;
+    g_16b24d4[6].unk08 = 0;
+    g_16b24d4[6].val0  = PropValI(0);
+    g_16b24d4[6].val1  = PropValI(0);
+    g_16b24d4[6].index = 0;
+    g_16b24d4[6].defVal = PropValI(0);
+    g_16b24d4[6].unk1C = 0;
+    g_16b24d4[6].unk20 = 0;
 }
 
 // @ 0x0137b550

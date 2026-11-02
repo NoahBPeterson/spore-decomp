@@ -1,8 +1,20 @@
 # source  symbol  va  flags
+../src/game/SPGonzago/SPCellData.cpp  ?FUN_00e4cce0@@YAPAXH@Z  00e4cce0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPGonzago/SPCellData.cpp  ?SP_sIsLayerDataPacked@@YA_NXZ  00e4ccf0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPGonzago/SPCellData.cpp  ?CellDataShutdownForApp@SP@@YAXXZ  00e4cd50  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCellData.cpp  ?FUN_00e4cde0@@YAXXZ  00e4cde0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPGonzago/SPCellData.cpp  ?FUN_00e4ce20@@YAXXZ  00e4ce20  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPGonzago/SPCellData.cpp  ?FUN_00e4ce40@@YAXPAX@Z  00e4ce40  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPGonzago/SPCellData.cpp  ?FUN_00e4ce60@@YAXPAX@Z  00e4ce60  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPGonzago/SPCellData.cpp  ?FUN_00e4ce80@cLightObj@@QAEPAXI@Z  00e4ce80  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPGonzago/SPCellData.cpp  ?PreloadAdvectMap@SP@@YAXH@Z  00e4ced0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPCellData.cpp  ?InitPropTable_16b2c40@@YAXXZ  01373c20  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPCellData.cpp  ?InitPropTable_16b1430@@YAXXZ  01373ef0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPCellData.cpp  ?InitPropTable_16b2f10@@YAXXZ  01374160  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPCellData.cpp  ?InitPropTable_15a7948@@YAXXZ  013742c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPCellData.cpp  ?InitPropTable_16b1584@@YAXXZ  01376850  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPGonzago/SPCellData.cpp  ?InitPropTable_16b277c@@YAXXZ  01376cc0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPGonzago/SPCellData.cpp  ?InitPropTable_16b119c@@YAXXZ  01377070  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPGonzago/SPCellData.cpp  ?InitPropTable_16b222c@@YAXXZ  013774e0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPGonzago/SPCellData.cpp  ?InitPropTable_15a77cc@@YAXXZ  01377a10  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPGonzago/SPCellData.cpp  ?InitPropTable_16b2e0c@@YAXXZ  01377cf0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
@@ -10,7 +22,19 @@
 ../src/game/SPGonzago/SPCellData.cpp  ?InitPropTable_15a7754@@YAXXZ  013781a0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPGonzago/SPCellData.cpp  ?InitPropTable_16b1bc4@@YAXXZ  01378300  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPGonzago/SPCellData.cpp  ?InitPropTable_15a68b4@@YAXXZ  013792c0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCellData.cpp  ?InitPropTable_16b2434@@YAXXZ  013797c0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPCellData.cpp  ?InitPropTable_16b1a0c@@YAXXZ  01379970  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPCellData.cpp  ?InitPropTable_15a78e4@@YAXXZ  01379c40  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCellData.cpp  ?InitPropTable_16b25ec@@YAXXZ  01379da0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCellData.cpp  ?InitPropTable_16b1e1c@@YAXXZ  01379f80  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCellData.cpp  ?InitPropTable_16b2d6c@@YAXXZ  0137a130  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCellData.cpp  ?InitPropTable_15a63dc@@YAXXZ  0137a2e0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCellData.cpp  ?InitPropTable_16b17b4@@YAXXZ  0137a490  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCellData.cpp  ?InitPropTable_15a674c@@YAXXZ  0137a5e0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCellData.cpp  ?InitPropTable_16b1d04@@YAXXZ  0137a6e0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCellData.cpp  ?InitPropTable_16b3014@@YAXXZ  0137a9c0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCellData.cpp  ?InitPropTable_16b2b3c@@YAXXZ  0137ac90  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCellData.cpp  ?InitPropTable_16b2a24@@YAXXZ  0137af90  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCellData.cpp  ?InitPropTable_16b24d4@@YAXXZ  0137b270  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPCellData.cpp  ?E311_InitTilingTable@@YAXXZ  0137b550  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPCellData.cpp  ?E315_InitEffectMapTable@@YAXXZ  0137b890  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

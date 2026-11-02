@@ -1,3 +1,8 @@
 013792c0 ?InitPropTable_15a68b4@@YAXXZ  # InitPropTable_15a68b4 migrated from s013792c0 (verbatim, slice spelling)
+013797c0 ?InitPropTable_16b2434@@YAXXZ  # InitPropTable_16b2434 migrated from s013792c0 (verbatim, slice spelling)
 01379970 ?InitPropTable_16b1a0c@@YAXXZ  # InitPropTable_16b1a0c migrated from s013792c0 (verbatim, slice spelling)
 01379c40 ?InitPropTable_15a78e4@@YAXXZ  # InitPropTable_15a78e4 migrated from s013792c0 (verbatim, slice spelling)
+01379da0 ?InitPropTable_16b25ec@@YAXXZ  # InitPropTable_16b25ec migrated from s013792c0 (verbatim, slice spelling)
+01379f80 ?InitPropTable_16b1e1c@@YAXXZ  # InitPropTable_16b1e1c migrated from s013792c0 (verbatim, slice spelling)
+0137a130 ?InitPropTable_16b2d6c@@YAXXZ  # InitPropTable_16b2d6c migrated from s013792c0 (verbatim, slice spelling)
+0137a2e0 ?InitPropTable_15a63dc@@YAXXZ  # InitPropTable_15a63dc migrated from s013792c0 (verbatim, slice spelling)
