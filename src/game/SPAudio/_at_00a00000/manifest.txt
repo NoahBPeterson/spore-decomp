@@ -1,0 +1,7 @@
+# source  symbol  va  flags
+../src/game/SPAudio/_at_00a00000.cpp  ?RewindRead@CmdQueue@@QAEXXZ  00a0fdc0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPAudio/_at_00a00000.cpp  ?Clear@CmdQueue@@QAEXXZ  00a0fdd0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPAudio/_at_00a00000.cpp  ??0CmdQueue@@QAE@XZ  00a0fdf0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPAudio/_at_00a00000.cpp  ?Swap@CmdQueue@@QAEXPAU1@@Z  00a0fee0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPAudio/_at_00a00000.cpp  ?Grow@CmdQueue@@QAEXI@Z  00a0ff50  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPAudio/_at_00a00000.cpp  ?Append@CmdQueue@@QAEXPBXI@Z  00a0fff0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
