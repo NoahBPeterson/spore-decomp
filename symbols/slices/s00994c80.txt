@@ -1,1 +1,1 @@
-00994c80 EA::UTFWinExtras::WinXHTML::CreateFormControl  # card/PDB name; byte-exact
+00994c80 ?CreateFormControl@WinXHTML_s0099_4c80@@QAEXPAUFormControl@XHTML@@@Z  # WinXHTML_s0099_4c80::CreateFormControl migrated from s00994c80 (verbatim, slice spelling)

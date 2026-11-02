@@ -1,12 +1,12 @@
-00993520  EA::UTFWinExtras::WinXHTML::CreateScrollbar  # this=WinXHTML, arg=tScrollbar (ret 4); build/tear down the scrollbar+drawable for that slot
-00993720  EA::UTFWinExtras::WinXHTML::DestroyFormControl  # this=WinXHTML (IFormControlMgr), arg=FormControl* (ret 4); unregister style + control
-009937a0  EA::UTFWinExtras::WinXHTML::SetFormControlStyle  # this=WinXHTML, args=FormControl*, StyleState& (ret 8); adds a text style
+00993520 ?CreateScrollbar@WinXHTML@UTFWinExtras@EA@@QAEXW4tScrollbar@123@@Z  # EA::UTFWinExtras::WinXHTML::CreateScrollbar migrated from s00993520
+00993720 ?DestroyFormControl@WinXHTML@UTFWinExtras@EA@@UAEXPAVFormControl@DOM@XHTML@3@@Z  # EA::UTFWinExtras::WinXHTML::DestroyFormControl migrated from s00993520
+009937a0 ?SetFormControlStyle@WinXHTML@@QAEXPAX0@Z  # WinXHTML::SetFormControlStyle migrated from s00993520 (verbatim, slice spelling)
 00993900  EA::UTFWinExtras::WinXHTML::GetFormControlSize  # this=WinXHTML, args=FormControl*, Point2DT<float>& (ret 8); compute control size from attrs
-00993b70  EA::UTFWinExtras::WinXHTML::SetFormControlArea  # this=WinXHTML, args=FormControl*, RectT<float> const& (ret 8)
-00993ba0  EA::UTFWinExtras::WinXHTML::SetFormControlDrawable  # this=WinXHTML, args=int, IDrawable* (ret 8); AutoRefCount swap into mFormCtrlDrawable
-00993bf0  EA::UTFWinExtras::WinXHTML::SerUpdate  # this=WinXHTML; recreate both scrollbars then tail-call Window::SerUpdate
-00993c10  EA::UTFWinExtras::WinXHTML::WinXHTML  # ctor: Window base + vtables + mPage + drawables + Stopwatch
-00993fa0  EA::UTFWinExtras::WinXHTML::Init  # set flag 0x400, attach content window, create scrollbars, tail-call Window::Initialize
-00993ff0  EA::UTFWinExtras::WinXHTML::Shutdown  # drop doc children/images, release drawables/scrollbars, tail-call Window::Shutdown
-009940f0  EA::UTFWinExtras::WinXHTML::CalculateVisibleArea  # this=WinXHTML; mVisibleArea from window rect minus visible scrollbars
-009941e0  EA::UTFWinExtras::WinXHTML::SetScrollbarDrawable  # this=WinXHTML, args=tScrollbar, IScrollbarDrawable* (ret 8); then recreate both scrollbars
+00993b70 ?SetFormControlArea@WinXHTML@@QAEXPAX0@Z  # WinXHTML::SetFormControlArea migrated from s00993520 (verbatim, slice spelling)
+00993ba0 ?SetFormControlDrawable@WinXHTML@UTFWinExtras@EA@@QAEXHPAVIDrawable@UTFWin@3@@Z  # EA::UTFWinExtras::WinXHTML::SetFormControlDrawable migrated from s00993520
+00993bf0 ?SerUpdate@WinXHTML@UTFWinExtras@EA@@UAEXXZ  # EA::UTFWinExtras::WinXHTML::SerUpdate migrated from s00993520
+00993c10 ??0WinXHTML@@QAE@XZ  # WinXHTML::WinXHTML migrated from s00993520 (verbatim, slice spelling)
+00993fa0 ?Init@WinXHTML@UTFWinExtras@EA@@UAE_NXZ  # EA::UTFWinExtras::WinXHTML::Init migrated from s00993520
+00993ff0 ?Shutdown@WinXHTML@UTFWinExtras@EA@@UAE_NXZ  # EA::UTFWinExtras::WinXHTML::Shutdown migrated from s00993520
+009940f0 ?CalculateVisibleArea@WinXHTML@UTFWinExtras@EA@@QAEXXZ  # EA::UTFWinExtras::WinXHTML::CalculateVisibleArea migrated from s00993520
+009941e0 ?SetScrollbarDrawable@WinXHTML@UTFWinExtras@EA@@QAEXW4tScrollbar@123@PAVIScrollbarDrawable@UTFWinControls@3@@Z  # EA::UTFWinExtras::WinXHTML::SetScrollbarDrawable migrated from s00993520

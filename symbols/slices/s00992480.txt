@@ -6,16 +6,16 @@
 009928c0 ?WatchWindow_UpdateSize@@YIXPAD@Z  # WatchWindow_UpdateSize migrated from s00992480 (verbatim, slice spelling)
 00992aa0 ?FUN_00992aa0@@YIEPADH0@Z  # FUN_00992aa0 migrated from s00992480 (verbatim, slice spelling)
 00992d10 ?WatchWindow_OnTick@@YIEPADH@Z  # WatchWindow_OnTick migrated from s00992480 (verbatim, slice spelling)
-00992dc0 WinXHTML set/clear a bit in flags word +0xa84c
-00992e00 WinXHTML set selection range +0xa858/+0xa85c and repaint  # Page::SetSelectionRange + vt+0x90
-00992e60 WinXHTML set horizontal scroll value +0xa8dc via IWindow vt+0x24/0x78
-00992ea0 WinXHTML set vertical scroll value +0xa8e0 via IWindow vt+0x24/0x78
-00992ee0 WinXHTML show/hide helper  # dispatch message tag 0x051a1a2e through IWindow vt+0x114, update byte +0xa8e4
-00993000 EA::UTFWinExtras::WinXHTML::~WinXHTML  # vptr reset, DestroyFormControls, release lists below +0xa8b4/+0xa888/+0xa878, Page::~Page, GmeEditorResBase vptr, base dtor
-00993130 EA::UTFWinExtras::WinXHTML::DoMessage  # tag 0x8ef0c8dd, two vt+0x28 queries, update +0xa8b4/+0xa8b8, negated-float vt+0x64, repaint
-00993200 WinXHTML vertical-scroll helper  # vt+0x28 range minus lineOffset/4 into vt+0x24 (ret 0x10)
-00993240 EA::UTFWinExtras::WinXHTML::OnCtrlValueChanged  # id 0x344a712 / 0xcf454afa..b -> resolved control vt+0x24
-009932c0 WinXHTML control-click handler  # resolve via vt+0xb4/0xc, 0x344a710/0x344a711 debounce (+0xa84c/+0xa8d8/+0xa8c0), forward vt+0x24
-00993390 WinXHTML drop all children + abandon images  # Document::RemoveAllChildren + Page::NotifyImagesAbandoned
-009933b0 EA::UTFWinExtras::WinXHTML::OnRebuild  # Begin2D, two rects from local xform and -scroll, Page::Render, End2D
-00993490 EA::UTFWinExtras::WinXHTML::SetScrollPosition  # compare/update +0xa8b4/+0xa8b8, push ints to scrollbar vt+0x24, repaint
+00992dc0 ?FUN_00992dc0@@YIXPADHIE@Z  # FUN_00992dc0 migrated from s00992480 (verbatim, slice spelling)
+00992e00 ?FUN_00992e00@@YIXPADHHH@Z  # FUN_00992e00 migrated from s00992480 (verbatim, slice spelling)
+00992e60 ?FUN_00992e60@@YIXPADHH@Z  # FUN_00992e60 migrated from s00992480 (verbatim, slice spelling)
+00992ea0 ?FUN_00992ea0@@YIXPADHH@Z  # FUN_00992ea0 migrated from s00992480 (verbatim, slice spelling)
+00992ee0 ?FUN_00992ee0@@YIXPADHH@Z  # FUN_00992ee0 migrated from s00992480 (verbatim, slice spelling)
+00993000 ?WinXHTML_dtor@@YIXPADH@Z  # WinXHTML_dtor migrated from s00992480 (verbatim, slice spelling)
+00993130 ?WinXHTML_DoMessage@@YIEPADH0@Z  # WinXHTML_DoMessage migrated from s00992480 (verbatim, slice spelling)
+00993200 ?FUN_00993200@@YIEPADHHHHH@Z  # FUN_00993200 migrated from s00992480 (verbatim, slice spelling)
+00993240 ?WinXHTML_OnCtrlValueChanged@@YIEPADHI0@Z  # WinXHTML_OnCtrlValueChanged migrated from s00992480 (verbatim, slice spelling)
+009932c0 ?FUN_009932c0@@YIEPADH0I@Z  # FUN_009932c0 migrated from s00992480 (verbatim, slice spelling)
+00993390 ?FUN_00993390@@YIXPADH@Z  # FUN_00993390 migrated from s00992480 (verbatim, slice spelling)
+009933b0 ?WinXHTML_OnRebuild@@YIEPADH0@Z  # WinXHTML_OnRebuild migrated from s00992480 (verbatim, slice spelling)
+00993490 ?WinXHTML_SetScrollPosition@@YIXPADHPAM@Z  # WinXHTML_SetScrollPosition migrated from s00992480 (verbatim, slice spelling)

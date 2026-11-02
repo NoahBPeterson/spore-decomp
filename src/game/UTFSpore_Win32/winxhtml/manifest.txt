@@ -1,0 +1,13 @@
+# source  symbol  va  flags
+../src/game/UTFSpore_Win32/winxhtml.cpp  ?FUN_00992dc0@@YIXPADHIE@Z  00992dc0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/winxhtml.cpp  ?FUN_00992e00@@YIXPADHHH@Z  00992e00  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/winxhtml.cpp  ?FUN_00993390@@YIXPADH@Z  00993390  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/winxhtml.cpp  ?DestroyFormControl@WinXHTML@UTFWinExtras@EA@@UAEXPAVFormControl@DOM@XHTML@3@@Z  00993720  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/winxhtml.cpp  ?SetFormControlArea@WinXHTML@@QAEXPAX0@Z  00993b70  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/winxhtml.cpp  ?SetFormControlDrawable@WinXHTML@UTFWinExtras@EA@@QAEXHPAVIDrawable@UTFWin@3@@Z  00993ba0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/winxhtml.cpp  ?SerUpdate@WinXHTML@UTFWinExtras@EA@@UAEXXZ  00993bf0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/winxhtml.cpp  ?Init@WinXHTML@UTFWinExtras@EA@@UAE_NXZ  00993fa0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/winxhtml.cpp  ?SetScrollbarDrawable@WinXHTML@UTFWinExtras@EA@@QAEXW4tScrollbar@123@PAVIScrollbarDrawable@UTFWinControls@3@@Z  009941e0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/winxhtml.cpp  ?OnMouseDown@WinXHTML_s0099_4240@@QAE_NMMHH@Z  00994a40  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/winxhtml.cpp  ?FUN_00994c30@WinXHTML_s0099_4240@@QAEXH@Z  00994c30  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/winxhtml.cpp  ?CreateFormControl@WinXHTML_s0099_4c80@@QAEXPAUFormControl@XHTML@@@Z  00994c80  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include

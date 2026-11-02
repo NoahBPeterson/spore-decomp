@@ -1,0 +1,8 @@
+009940f0 ?CalculateVisibleArea@WinXHTML@UTFWinExtras@EA@@IAEXXZ  # EA::UTFWinExtras::WinXHTML::CalculateVisibleArea (callee of s00994240, named from the dev publics; slice address comment)
+00994240 ?FUN_00994240@WinXHTML_s0099_4240@@QAEXXZ  # WinXHTML_s0099_4240::FUN_00994240 migrated from s00994240 (verbatim, slice spelling)
+009946b0 ?OnDOMEvent@WinXHTMLCmd@@QAEXPAX@Z  # WinXHTMLCmd::OnDOMEvent migrated from s00994240 (verbatim, slice spelling)
+009947f0 ?OnFocusChange@WinXHTML_s0099_4240@@QAE_NHPAX@Z  # WinXHTML_s0099_4240::OnFocusChange migrated from s00994240 (verbatim, slice spelling)
+009948a0 ?FUN_009948a0@WinXHTML_s0099_4240@@QAE_NMMH@Z  # WinXHTML_s0099_4240::FUN_009948a0 migrated from s00994240 (verbatim, slice spelling)
+00994a40 ?OnMouseDown@WinXHTML_s0099_4240@@QAE_NMMHH@Z  # WinXHTML_s0099_4240::OnMouseDown migrated from s00994240 (verbatim, slice spelling)
+00994b00 ?SetDocument@WinXHTML_s0099_4240@@QAEXPAX@Z  # WinXHTML_s0099_4240::SetDocument migrated from s00994240 (verbatim, slice spelling)
+00994c30 ?FUN_00994c30@WinXHTML_s0099_4240@@QAEXH@Z  # WinXHTML_s0099_4240::FUN_00994c30 migrated from s00994240 (verbatim, slice spelling)

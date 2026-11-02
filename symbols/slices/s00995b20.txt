@@ -1,3 +1,6 @@
+00995b20 ?FUN_00995b20@WinXHTML_@@QAEXPAUXDomElement@@PBG@Z  # WinXHTML_::FUN_00995b20 migrated from s00995b20 (verbatim, slice spelling)
+00995ea0 ?FUN_00995ea0@WinXHTML_@@QAEXPAUXDomElement@@PAX@Z  # WinXHTML_::FUN_00995ea0 migrated from s00995b20 (verbatim, slice spelling)
+009960b0 ?OnMouseUp@WinXHTML@UTFWinExtras@EA@@UAE_NMMII@Z  # EA::UTFWinExtras::WinXHTML::OnMouseUp migrated from s00995b20
 00996280 ?FUN_00996280@cXHTMLFrameSet_s0099_5b20@@QAEXIIII@Z  # cXHTMLFrameSet_s0099_5b20::FUN_00996280 migrated from s00995b20 (verbatim, slice spelling)
 009962a0 ?FUN_009962a0@@YA?AUDqIt@@U1@00@Z  # FUN_009962a0 migrated from s00995b20 (verbatim, slice spelling)
 00996360 ?FUN_00996360@@YA?AUDqIt@@U1@00@Z  # FUN_00996360 migrated from s00995b20 (verbatim, slice spelling)
