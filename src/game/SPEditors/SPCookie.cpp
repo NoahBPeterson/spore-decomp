@@ -35,7 +35,7 @@ void* operator new(unsigned int size, const char* name, int flags, unsigned debu
 void operator delete(void*);
 inline void* operator new(unsigned int, void* p) { return p; }
 namespace eastl {
-struct allocator_s0060_a720 {
+class allocator_s0060_a720 { public:
   allocator_s0060_a720() {}
 };
 }
@@ -93,7 +93,7 @@ typedef eastl::basic_string_s0060_a720<char> string8;
 namespace EA {
 namespace Thread {
 template <typename T>
-struct AtomicInt_s0060_a720 {
+class AtomicInt_s0060_a720 { public:
   AtomicInt_s0060_a720() { _InterlockedExchange((volatile long*)&mValue, 0); }
   volatile T mValue;
 };
@@ -101,7 +101,7 @@ struct AtomicInt_s0060_a720 {
 }
 namespace EA {
 namespace Thread {
-struct Futex_s0060_a720 {
+class Futex_s0060_a720 { public:
   uint32_t mCS[6];  // CRITICAL_SECTION
 };
 }
@@ -168,9 +168,9 @@ struct cURLParts {
 };
 }
 }
-struct ListNodeBase {
-  ListNodeBase* mpNext;
-  ListNodeBase* mpPrev;
+struct ListNodeBase_s0060_a720 {
+  ListNodeBase_s0060_a720* mpNext;
+  ListNodeBase_s0060_a720* mpPrev;
 };
 namespace EA {
 namespace Thread {
@@ -183,7 +183,7 @@ class AutoFutex { public:
 }
 namespace EA {
 namespace Internet {
-struct HTTPHeaders_s0060_a720 {
+class HTTPHeaders_s0060_a720 { public:
   void RemoveHeaderEntry(int fieldID, int index);                        // 0x00944ac0
   bool SetHeaderEntry(int fieldID, const char* pValue);                  // 0x00944db0
   bool GetHeaderEntry(int fieldID, const char** ppValue, int index);     // 0x009420e0
@@ -218,7 +218,7 @@ typedef EA::COM::AutoRefCount_s0060_a720<cCookie_s0060_a720> CookiePtr;
 }
 namespace SP {
 namespace Pollen {
-struct CookieNode : public ListNodeBase {
+struct CookieNode : public ListNodeBase_s0060_a720 {
   CookiePtr mValue;
 };
 }
@@ -239,7 +239,7 @@ struct CookieIterator {
 namespace SP {
 namespace Pollen {
 struct CookieList {
-  ListNodeBase mNode;
+  ListNodeBase_s0060_a720 mNode;
   uint32_t mAllocator;
   CookieIterator erase(CookieIterator position);  // 0x0060a5a0
   void DoClear();                                 // 0x0060a270
@@ -605,7 +605,7 @@ void CookieHandler_s0060_a720::AddCookie(const char* pHeader, const char* pURL)
           return;
         }
       }
-      ListNodeBase* const pFirst = mCookies.mNode.mpNext;
+      ListNodeBase_s0060_a720* const pFirst = mCookies.mNode.mpNext;
       CookieNode* const pNode = (CookieNode*)EASTL_allocator_allocate(sizeof(CookieNode), "Editor", 0, 0, "EASTL/allocator.h", 0xd1);
       if (&pNode->mValue) {
         pNode->mValue.mpObject = pNew;
