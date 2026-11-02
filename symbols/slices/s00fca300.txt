@@ -6,15 +6,15 @@
 00fca640 MovieEncoder_Avi::Init  # store allocator, AllocateBuffer, numIndexEntriesPerBlock = 60000000/frameUs, allocate + construct the Stopwatch
 00fca6a0 MovieEncoder_Avi::SetAudioEncoder  # store mAudioEncoder; on non-null set its output-buffer callback (vtable+0x1c) to the AVI audio writer
 00fca6c0 MovieEncoder_Avi::SetVideoEncoder  # store mVideoEncoder; on non-null set its output-buffer callback to the AVI video writer and read back the frame rate
-00fca720 MoviePlayer::MoviePlayer  # construct the streaming contexts, null every field, then allocate+construct MovieDecoder/MovieRenderer/MovieTimer (state 0) or set state 7 when the allocator is null
-00fca9b0 MoviePlayer::SetDataCallback  # state <= 1: store the data callback at +0x40
-00fca9d0 MoviePlayer::SetVideoFilter  # state <= 1: store the streamer video callback at +0x44
-00fca9f0 MoviePlayer::SetAudioCallback  # state <= 1: store the streamer subtitle callback at +0x4c
-00fcaa10 MoviePlayer::SetStreamerSubtitleFilter  # state <= 1: store the data-preload callback at +0x50 and forward it to the MovieTimer
-00fcaa40 MoviePlayer::SetAudioStreamFilter  # state <= 1: store the audio-preload callback at +0x58 and forward it to the MovieDecoder
-00fcaa70 MoviePlayer::ConfigureVideo  # state==0 guard: validate the path, store path/size/offset, resolve the data size via FUN_011ea850 when (c|d)==0, set the ".avi" suffix flag at +0x15c
-00fcab70 MoviePlayer::OpenFiles  # state==0: for audio/video/subtitle paths allocate stream buffers, build Streams, set filters, queue file or preload memory, then mState = FILESOPENED
-00fcb150 MoviePlayer::SetVideoPositionX  # state <= 4: store the float and forward to the MovieRenderer
-00fcb180 MoviePlayer::SetVideoPositionY  # state <= 4: store the float and forward to the MovieRenderer
-00fcb1b0 MoviePlayer::SetVideoScaleX  # state <= 4: store the float and forward to the MovieRenderer
-00fcb1e0 MoviePlayer::SetVideoScaleY  # state <= 4: store the float and forward to the MovieRenderer
+00fca720 ?Ctor@MoviePlayer@movie@rw@@QAEPAV123@PAUICoreAllocator@23@@Z  # MoviePlayer::Ctor migrated from s00fca300 (verbatim, slice spelling)
+00fca9b0 ?SetDataCallback@MoviePlayer@movie@rw@@QAEXPAX@Z  # MoviePlayer::SetDataCallback migrated from s00fca300 (verbatim, slice spelling)
+00fca9d0 ?SetVideoFilter@MoviePlayer@movie@rw@@QAEXPAX@Z  # MoviePlayer::SetVideoFilter migrated from s00fca300 (verbatim, slice spelling)
+00fca9f0 ?SetAudioCallback@MoviePlayer@movie@rw@@QAEXPAX@Z  # MoviePlayer::SetAudioCallback migrated from s00fca300 (verbatim, slice spelling)
+00fcaa10 ?SetStreamerSubtitleFilter@MoviePlayer@movie@rw@@QAEXPAX@Z  # MoviePlayer::SetStreamerSubtitleFilter migrated from s00fca300 (verbatim, slice spelling)
+00fcaa40 ?SetAudioStreamFilter@MoviePlayer@movie@rw@@QAEXPAX@Z  # MoviePlayer::SetAudioStreamFilter migrated from s00fca300 (verbatim, slice spelling)
+00fcaa70 ?ConfigureVideo@MoviePlayer@movie@rw@@QAEHPBDIIII@Z  # MoviePlayer::ConfigureVideo migrated from s00fca300 (verbatim, slice spelling)
+00fcab70 ?OpenFiles@MoviePlayer@movie@rw@@QAEXIH@Z  # MoviePlayer::OpenFiles migrated from s00fca300 (verbatim, slice spelling)
+00fcb150 ?SetVideoPositionX@MoviePlayer@movie@rw@@QAEXM@Z  # MoviePlayer::SetVideoPositionX migrated from s00fca300 (verbatim, slice spelling)
+00fcb180 ?SetVideoPositionY@MoviePlayer@movie@rw@@QAEXM@Z  # MoviePlayer::SetVideoPositionY migrated from s00fca300 (verbatim, slice spelling)
+00fcb1b0 ?SetVideoScaleX@MoviePlayer@movie@rw@@QAEXM@Z  # MoviePlayer::SetVideoScaleX migrated from s00fca300 (verbatim, slice spelling)
+00fcb1e0 ?SetVideoScaleY@MoviePlayer@movie@rw@@QAEXM@Z  # MoviePlayer::SetVideoScaleY migrated from s00fca300 (verbatim, slice spelling)

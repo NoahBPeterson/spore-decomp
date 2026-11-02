@@ -1,0 +1,18 @@
+# source  symbol  va  flags
+../src/game/SPMovie/movieplayer.cpp  ?Ctor@MoviePlayer@movie@rw@@QAEPAV123@PAUICoreAllocator@23@@Z  00fca720  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPMovie/movieplayer.cpp  ?SetDataCallback@MoviePlayer@movie@rw@@QAEXPAX@Z  00fca9b0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPMovie/movieplayer.cpp  ?SetVideoFilter@MoviePlayer@movie@rw@@QAEXPAX@Z  00fca9d0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPMovie/movieplayer.cpp  ?SetAudioCallback@MoviePlayer@movie@rw@@QAEXPAX@Z  00fca9f0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPMovie/movieplayer.cpp  ?SetStreamerSubtitleFilter@MoviePlayer@movie@rw@@QAEXPAX@Z  00fcaa10  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPMovie/movieplayer.cpp  ?SetAudioStreamFilter@MoviePlayer@movie@rw@@QAEXPAX@Z  00fcaa40  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPMovie/movieplayer.cpp  ?SetVideoPositionX@MoviePlayer@movie@rw@@QAEXM@Z  00fcb150  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPMovie/movieplayer.cpp  ?SetVideoPositionY@MoviePlayer@movie@rw@@QAEXM@Z  00fcb180  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPMovie/movieplayer.cpp  ?SetVideoScaleX@MoviePlayer@movie@rw@@QAEXM@Z  00fcb1b0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPMovie/movieplayer.cpp  ?SetVideoScaleY@MoviePlayer@movie@rw@@QAEXM@Z  00fcb1e0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPMovie/movieplayer.cpp  ?Ctor@MovieRenderer_s00fc_b210@movie@rw@@QAEPAV123@PAUICoreAllocator_s00fc_b210@@@Z  00fcbc70  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPMovie/movieplayer.cpp  ?Configure@MovieRenderer_s00fc_b210@movie@rw@@QAEXPAX0@Z  00fcbcf0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPMovie/movieplayer.cpp  ?ConfigureAudio@MovieRenderer_s00fc_b210@movie@rw@@QAEXPAX0@Z  00fcbd10  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPMovie/movieplayer.cpp  ?GetVideoDelay@MovieRenderer_s00fc_b210@movie@rw@@QAEMXZ  00fcbe60  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPMovie/movieplayer.cpp  ?ResumeVideo@MovieRenderer_s00fc_b210@movie@rw@@QAEXXZ  00fcbef0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPMovie/movieplayer.cpp  ?SetRenderCallback@MovieRenderer_s00fc_b210@movie@rw@@QAEXPAX0@Z  00fcc010  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPMovie/movieplayer.cpp  ?Stop@MovieRenderer_s00fc_b210@movie@rw@@QAEXXZ  00fcc060  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
