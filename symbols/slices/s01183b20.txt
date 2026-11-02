@@ -1,0 +1,8 @@
+01184320 ?FUN_01184320@@YAHPAHHH@Z  # FUN_01184320 migrated from s01183b20 (verbatim, slice spelling)
+011843b0 ?FUN_011843b0@@YAHHHPAH@Z  # FUN_011843b0 migrated from s01183b20 (verbatim, slice spelling)
+011844e0 ?FUN_011844e0@@YAHHHPAH@Z  # FUN_011844e0 migrated from s01183b20 (verbatim, slice spelling)
+01184640 ?FUN_01184640@@YAXHHPAH@Z  # FUN_01184640 migrated from s01183b20 (verbatim, slice spelling)
+01184770 ?FUN_01184770@@YAPAIXZ  # FUN_01184770 migrated from s01183b20 (verbatim, slice spelling)
+011847f0 ?FUN_011847f0@@YAHPAHH@Z  # FUN_011847f0 migrated from s01183b20 (verbatim, slice spelling)
+011848a0 ?FUN_011848a0@@YAHPAHH@Z  # FUN_011848a0 migrated from s01183b20 (verbatim, slice spelling)
+01184a20 ?FUN_01184a20@@YAHHH@Z  # FUN_01184a20 migrated from s01183b20 (verbatim, slice spelling)

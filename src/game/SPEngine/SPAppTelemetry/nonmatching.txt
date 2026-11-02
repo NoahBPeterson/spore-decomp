@@ -1,12 +1,31 @@
-# va diff reason
-007eb360 38 vector assign-from-other complete; FUN_007eb000 call arg/register schedule differs
-007eb3b0 47 copyDown complete; register allocation (edi/esi/eax) differs
-007eb720 55 eastl list-node allocate+copy - inlined ctor/AutoRefCount schedule differs
-007eb7d0 109 eastl list range transfer - register/loop schedule differs
-007eb820 63 eastl::vector<int>::resize - tail erase call shape differs
-007eb870 27 eastl list copy-ctor - inlined range copy schedule differs
-007eb8d0 96 eastl hash-node allocate - placement-new/list ctor inlining differs
-007eb950 69 eastl hashtable::DoFreeNodes - inlined list dtor differs
-007eb9e0 107 eastl hashtable::erase - inlined list dtor/loop differs
-007ebe70 106 SP::cTelemetry::~cTelemetry - EH frame + vtable store schedule differs
-007ebf20 12 RefCountTemplate Release - `add r,-N` vs `sub r,N` encoding + load/store order
+# slice s01190840 nonmatching functions (complete semantics, not byte-exact)
+007eb060 24 int-range copy complete (first!=last guard, null-dst check and relative-index loop); equiv WEAK on inputs only: 403/1200 valid, 35% coverage because every loop-entering input faults retail on the generated first/dst ints (only first==last runs validate; all match); chk no MATCH, scheduling differs (cl folds off+dst) flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE
+007eb090 93 rbtree node-count complete; bucket-walk register/schedule differs; equiv: WEAK (51% coverage, member/ecx receiver fixed) flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE
+007eb100 17 hashtable find wrapper complete; out is the 8-byte {node,bucket} iterator (the old 4-byte local let find overwrite the return address) and the key is passed by address; bucket-array register scheduling differs; equiv PASS 363/600, 100% coverage flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE
+007eb140 390 complete serializer write (cTelemetry::Write: magic + per-key item dumps + session); EASTL iterator/loop-tail scheduling differs; flags /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE; difftest UNSUPPORTED (original faults 391/400 random inputs, 0 valid)
+007eb360 38 vector assign-from-other complete; FUN_007eb000 call arg/register schedule differs flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE
+007eb3b0 59 copyDown complete; end moves by the ORIGINAL src/dst span (cursor kept in a local, long shift keeps retail's round-down-to-4) and the original dst is returned; register allocation (retail edi destination pointer vs our folded [ebx+edx]) differs; equiv PASS 268/800, 100% coverage; hybrid copy in src/game/SPEngine/SPAppTelemetry.cpp also fixed (PASS 268/800) flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE
+007eb3f0 27 freeNodes complete; node/next register swap (edi/esi) flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE
+007eb430 373 eastl::vector<int>::DoInsertValues - codegen differs (move/fill loops, register schedule) flags: /O2 /MD /Gy /EHsc /TP /arch:SSE2
+007eb600 221 SP::cTelemetry::FileDump: complete source, telemetry path build (WString16 RangeInitialize/GetBasePath/WstrFormat) plus FileStream open/setpos/write/close against annotated EA::IO callees; SEH frame and inline schedule differs; equiv WEAK 21.7% cov (316 valid) [/O2 /MD /Gy /EHsc /TP /arch:SSE2] flags: /O2 /MD /Gy /EHsc /TP /arch:SSE2
+007eb720 55 eastl list-node allocate+copy - inlined ctor/AutoRefCount schedule differs flags: /O2 /MD /Gy /EHsc /TP /arch:SSE2
+007eb7d0 55 eastl list range transfer - register/loop schedule differs; equiv: PASS (407 valid inputs) flags: /O2 /MD /Gy /EHsc /TP /arch:SSE2
+007eb820 60 eastl::vector<int>::resize - tail erase call shape differs; equiv: PASS (1049 valid inputs) flags: /O2 /MD /Gy /EHsc /TP /arch:SSE2
+007eb870 29 eastl list copy-ctor - inlined range copy schedule differs flags: /O2 /MD /Gy /EHsc /TP /arch:SSE2
+007eb8d0 96 eastl hash-node allocate - placement-new/list ctor inlining differs flags: /O2 /MD /Gy /EHsc /TP /arch:SSE2
+007eb950 69 eastl hashtable::DoFreeNodes - inlined list dtor differs flags: /O2 /MD /Gy /EHsc /TP /arch:SSE2
+007eb9e0 107 eastl hashtable::erase - inlined list dtor/loop differs flags: /O2 /MD /Gy /EHsc /TP /arch:SSE2
+007ebba0 238 SP::cTelemetry::PrepareFlush: complete source, bucket walk plus per-item WriteUint64(system time) / WriteUint32(key, type, element count) serialization then erase()/DoFreeNodes(); loop schedule differs; equiv WEAK 50.4% cov (362 valid) [/O2 /MD /Gy /EHsc /TP /arch:SSE2] flags: /O2 /MD /Gy /EHsc /TP /arch:SSE2
+007ebce0 190 SP::cTelemetry::Flush: complete source, MemoryStream alloc/Init/AutoRefCount swap/SetOption, PrepareFlush + FileDump, MessageBasicRC5 server dispatch, release plus msg dtor; EH/register schedule differs; equiv PASS 99.1% cov (324 valid) [/O2 /MD /Gy /EHsc /TP /arch:SSE2] flags: /O2 /MD /Gy /EHsc /TP /arch:SSE2
+007ebe70 106 SP::cTelemetry::~cTelemetry - EH frame + vtable store schedule differs flags: /O2 /MD /Gy /EHsc /TP /arch:SSE2
+007ebf20 12 RefCountTemplate Release - `add r,-N` vs `sub r,N` encoding + load/store order flags: /O2 /MD /Gy /EHsc /TP /arch:SSE2
+007ebfd0 154 eastl hashtable operator[] - find/insert inlining differs; equiv: PASS (514 valid inputs) flags: /O2 /MD /Gy /EHsc /TP /arch:SSE2
+007ec0a0 44 SP::cTelemetry::cTelemetry - base vtable/EH schedule differs flags: /O2 /MD /Gy /EHsc /TP /arch:SSE2
+007ec160 146 SP::cTelemetry::Add: complete source, item-count cap check/Flush, hashtable insert (list link order, no mnSize bump), item dtor free-check, mType store; equiv UNSUPPORTED 0/400 valid (discards: fault(read)=305, fault=59, budget=20 - the original itself faults under the harness) [/O2 /MD /Gy /EHsc /TP /arch:SSE2] flags: /O2 /MD /Gy /EHsc /TP /arch:SSE2
+0117ca60 352 /O2 /MD /Gy /TP; difftest PASS (210 valid, 61.5% cov): ours 600 vs 609 bytes, shared error/tail block layout and cold-block placement differ, semantics agree flags: /O2 /MD /Gy /TP
+011847f0 129 BUF_MEM_grow: complete (realloc-vs-malloc selection, 4/3 growth rounding, operator_new__ zero-fill of the new region, *param_1 write-back). cl chose a different basic-block order (in-place grow block placed before the realloc path) than the original; conditions are identical. difftest: UNSUPPORTED (unresolved CRYPTO_malloc/CRYPTO_realloc/ERR_put_error/operator_new__). flags /O2 /MD /Gy /TP
+011848a0 60 BUF_MEM_grow_clean: complete (shrink zero-fill, in-place grow zero-fill, CRYPTO_realloc_clean realloc path, growth rounding, write-back). Same block-order / EDI-vs-ESI register difference as FUN_011847f0. difftest: UNSUPPORTED (unresolved CRYPTO_*/operator_new__). flags /O2 /MD /Gy /TP
+01187840 76 BN_mod_mul wrapper: load m=param_3[3] lazily in the BN_mod_mul argument list so cl keeps param_2 in ecx instead of edx; callerdeps DEPENDS edx now satisfied. difftest PASS (389 valid, 100% cov) flags: /O2 /MD /Gy /TP
+01190db0 321 PEM header test ("Proc-Type: 4,ENCRYPTED" / "DEK-Info: "). Semantics complete. The original keeps | difftest: UNSUPPORTED - 1 unresolved reference(s): ?OBJ_sn2nid@@YAHPBD@Z the walking pointer in esi and the out-param in ebp, and hoists the dllimport strncmp through the IAT into edi; this build assigns the out-param to edi, hoists strncmp into esi and spills the walking pointer to the frame, so every offset and the whole prologue differ. Load order (param_2 materialised before the pointer copy) was tried both ways with no change. flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
+01191620 262 EVP_PKEY/EC_KEY copy-by-type (0x74 DSA / 0x198 EC): the BIGNUM triple is duplicated and the old | difftest: WEAK - 400 valid inputs (need 200), 24.8% coverage (need 60%) ones freed, then the group is dup'ed and set. Semantics complete. Diffs are register allocation and block placement only: the original keeps the key-type word in ecx across the whole check sequence (this build uses eax and re-materialises it), pushes edi in the prologue instead of at first use, and places the second ERR_put_error block inline where this build sinks it. flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
+011918c0 450 X509_PUBKEY_get: cached-pkey fast path (CRYPTO_add_lock + return), else EVP_PKEY_new + | difftest: FAIL - 5/19 valid inputs mismatched; first: memory heap @50000004 (see note below) EVP_PKEY_type, then the DSA (d2i_DSAPublicKey), EC-NamedCurve or EC-SEQUENCE branch, then the outer d2i and the pkey cache store. Semantics complete. The original keeps *algor in esi and the nid in ebp live across the calls and allocates two frame temporaries; this build re-materialises both from the pointer argument and needs fewer callee-saved registers, so the prologue, the frame size and most operand choices differ throughout. flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast

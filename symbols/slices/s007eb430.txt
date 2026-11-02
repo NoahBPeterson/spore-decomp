@@ -1,6 +1,7 @@
-007eb600 ?FileDump@cTelemetry@SP@@QAEXXZ  # SP::cTelemetry::FileDump migrated from s007eb430
-007eb720 ?AllocNode@TItemList@SP@@QAEPAUTItemListNode@2@ABUcTelemetryItem_s007e_b430@2@@Z  # TItemList::AllocNode migrated from s007eb430 (verbatim, slice spelling)
-007eb7d0 ?CopyRange@TItemList@SP@@QAEXPAUTItemListNode@2@0PAU12@@Z  # TItemList::CopyRange migrated from s007eb430 (verbatim, slice spelling)
+007eb430 ?DoInsertValues@IntVecBase@SP@@QAEXPAHIABH@Z  # IntVecBase::DoInsertValues migrated from s007eb430 (verbatim, slice spelling)
+007eb600 ?FileDump@cTelemetry_s007e_b430@SP@@QAEXXZ  # cTelemetry_s007e_b430::FileDump migrated from s007eb430 (verbatim, slice spelling)
+007eb720 ?AllocNode@TItemList@SP@@QAEPAUTItemListNode@2@ABVcTelemetryItem_s007e_b430@2@@Z  # TItemList::AllocNode migrated from s007eb430 (verbatim, slice spelling)
+007eb7d0 ?CopyRange@TItemList@SP@@QAEXPAUTItemListNode@2@0PAU12@I@Z  # TItemList::CopyRange migrated from s007eb430 (verbatim, slice spelling)
 007eb820 ?resize@IntVector@SP@@QAEXI@Z  # IntVector::resize migrated from s007eb430 (verbatim, slice spelling)
 007eb870 ??0TItemList@SP@@QAE@ABU01@@Z  # TItemList::TItemList migrated from s007eb430 (verbatim, slice spelling)
 007eb950 ?DoFreeNodes@TItemMap@SP@@QAEXPAPAUTItemMapNode@2@I@Z  # TItemMap::DoFreeNodes migrated from s007eb430 (verbatim, slice spelling)
@@ -11,5 +12,10 @@
 007ebe70 ??1cTelemetry_s007e_b430@SP@@UAE@XZ  # cTelemetry_s007e_b430::~cTelemetry migrated from s007eb430 (verbatim, slice spelling)
 007ebf20 ?TelemetryRelease@@YIHPAH@Z  # TelemetryRelease migrated from s007eb430 (verbatim, slice spelling)
 007ebf90 ?Shutdown@cTelemetry_s007e_b430@SP@@QAE_NXZ  # cTelemetry_s007e_b430::Shutdown migrated from s007eb430 (verbatim, slice spelling)
-007ebfd0 ?ATItemMap  # SP::TItemMap::operator[]
-007ec0a0 SP::cTelemetry::cTelemetry  # writes cTelemetry vtables + mStats/mSession
+007ebfd0 ??ATItemMap@SP@@QAEPAUTItemList@1@ABI@Z  # TItemMap::operator[] migrated from s007eb430 (verbatim, slice spelling)
+007ec0a0 ??0cTelemetry_s007e_b430@SP@@QAE@XZ  # cTelemetry_s007e_b430::cTelemetry migrated from s007eb430 (verbatim, slice spelling)
+007ec160 ?Add@cTelemetry_s007e_b430@SP@@QAEXABI0@Z  # cTelemetry_s007e_b430::Add migrated from s007eb430 (verbatim, slice spelling)
+00931c70 ?SetPosition@FileStream@IO@EA@@UAE_NJW4PositionType@23@@Z  # EA::IO::FileStream::SetPosition (callee of s007eb430, named from the dev publics; slice address comment)
+0093ba70 ?GetData@MemoryStream@IO@EA@@QBEPAXXZ  # EA::IO::MemoryStream::GetData (callee of s007eb430, named from the dev publics; slice address comment)
+0093bb40 ?SetOption@MemoryStream@IO@EA@@QAEXW4Options@123@M@Z  # EA::IO::MemoryStream::SetOption (callee of s007eb430, named from the dev publics; slice address comment)
+0093bd50 ??0MemoryStream@IO@EA@@QAE@ABV012@@Z  # EA::IO::MemoryStream::MemoryStream (callee of s007eb430, named from the dev publics; slice address comment)

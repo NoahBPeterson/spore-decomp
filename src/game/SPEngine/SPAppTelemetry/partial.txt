@@ -1,6 +1,9 @@
-# va diff reason
-007eb140  526  large serialization routine not reconstructed
-007eb600 243 SP::cTelemetry::FileDump - SP::string path building / FileStream EH not reproduced
-007ebba0 318 SP::cTelemetry::PrepareFlush - bucket lookup + serialization details approximated
-007ebce0 340 SP::cTelemetry::Flush - stream swap + messaging details approximated
+# va  size (ours/orig)  reason
 007ec220 300 telemetry deserialize - accessor-chain / per-item reader sequence approximated
+011843b0  CRYPTO_new_ex_data: callback-array walk is present (lock, per-index sk_value snapshot, CRYPTO_malloc, first-appearance callback dispatch with the param_3-dependent sk lookup), but it depends on FUN_01183f70 whose hash key is supplied in EBX and is 0 in this translation, so the ex-data item identity differs; difftest FAILs 5/5 valid inputs. flags /O2 /MD /Gy /TP
+011844e0  CRYPTO_free_ex_data: same structure (min(sk_num) bound, snapshot, free-callback dispatch at item[4], FUN_01184320 re-set of the value); behaviour not guaranteed for the same FUN_01183f70 EBX-key reason; difftest FAILs 5/6. flags /O2 /MD /Gy /TP
+01184640  CRYPTO_free_ex_data cleanup: same structure (free callback at item[3], then sk_free + *param_3=0); behaviour not guaranteed for the same FUN_01183f70 EBX-key reason; difftest FAILs 5/5. flags /O2 /MD /Gy /TP
+011869d0  -  large BN routine: skeleton (body not reconstructed) flags: /O2 /MD /Gy /TP
+01186d30  -  large BN routine: skeleton (body not reconstructed) flags: /O2 /MD /Gy /TP
+011875c0  -  large BN routine: skeleton (body not reconstructed) flags: /O2 /MD /Gy /TP
+01187be0  -  large BN routine: skeleton (body not reconstructed) flags: /O2 /MD /Gy /TP

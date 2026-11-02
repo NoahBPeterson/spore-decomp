@@ -2,3 +2,17 @@
 ../src/game/SPEngine/SPAppTelemetry.cpp  ?Cast@ObjAF@@QAEPAXH@Z  007eaf30  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /Isrc/game/include
 ../src/game/SPEngine/SPAppTelemetry.cpp  ?Reset@cTelemetry_s007e_b430@SP@@QAEXH@Z  007ebb60  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include
 ../src/game/SPEngine/SPAppTelemetry.cpp  ?Shutdown@cTelemetry_s007e_b430@SP@@QAE_NXZ  007ebf90  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include
+../src/game/SPEngine/SPAppTelemetry.cpp  ?SSL_accept@@YAHPAUssl_st_s0117_c560@@@Z  0117c8f0  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/SPEngine/SPAppTelemetry.cpp  ?sk_new_null@@YAPAXXZ  0117df20  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/SPEngine/SPAppTelemetry.cpp  ?FUN_01184320@@YAHPAHHH@Z  01184320  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/SPEngine/SPAppTelemetry.cpp  ?FUN_01184770@@YAPAIXZ  01184770  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/SPEngine/SPAppTelemetry.cpp  ?FUN_01184a20@@YAHHH@Z  01184a20  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/SPEngine/SPAppTelemetry.cpp  ?lib_cblock_BN_mod_mul_wrap@@YAHHHPAHH@Z  01187540  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/SPEngine/SPAppTelemetry.cpp  ?lib_cblock_BN_mod_mul_wrap2@@YAHPAHH@Z  011877a0  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/SPEngine/SPAppTelemetry.cpp  ?lib_cblock_BN_CTX_new@@YAPAHXZ  01187a80  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/SPEngine/SPAppTelemetry.cpp  ?lib_cblock_BN_STACK_push@@YAXH@Z  01187b00  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/SPEngine/SPAppTelemetry.cpp  ?lib_cblock_BN_POOL_get@@YAHH@Z  01187b90  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/SPEngine/SPAppTelemetry.cpp  ?FUN_01191470@@YAPAIXZ  01191470  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/SPAppTelemetry.cpp  ?FUN_01191b20@@YAPAIH@Z  01191b20  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/SPAppTelemetry.cpp  ?FUN_01191f10@@YAPAIXZ  01191f10  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/SPAppTelemetry.cpp  ?FUN_01192190@@YAIH@Z  01192190  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
