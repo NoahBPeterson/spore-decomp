@@ -1,4 +1,4 @@
-// src/game/SPEngine/SPGraphicsViewer.cpp -- migrated from slice(s) s004b8af0, s007c4be0, s007c3ba0 by tools/migrate/rewrite.py
+// src/game/SPEngine/SPGraphicsViewer.cpp -- migrated from slice(s) s004b9960, s004b8af0, s007c4be0, s007c3ba0 by tools/migrate/rewrite.py
 // Object file: SPEngine/SPGraphicsViewer.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -259,7 +259,14 @@ public:
 class hkCollisionDispatcher_s004b_8af0;
 class hkAgentRegisterUtil { public: static void registerAllAgents(hkCollisionDispatcher_s004b_8af0* dis); };  // 0x010C25A0
 class hkShape_s004b_8af0 : public hkReferencedObject_s004b_8af0 { public: int m_userData; };
-struct hkTypedBroadPhaseHandle_s004b_8af0 { int m_id; char m_type, m_ownerOffset; unsigned short m_objectQualityType; unsigned int m_collisionFilterInfo; };
+class hkConvexShape : public hkShape_s004b_8af0 { public: hkReal m_radius; };           // +0xc
+class hkBoxShape : public hkConvexShape {
+public:
+    HK_DECLARE_CLASS_ALLOCATOR(0x24)
+    hkVector4_s004b_8af0 m_halfExtents;                    // +0x10
+    hkBoxShape(const hkVector4_s004b_8af0& halfExtents, hkReal radius);        // 0x010C05D0
+};
+class hkTypedBroadPhaseHandle_s004b_8af0 { public: int m_id; char m_type, m_ownerOffset; unsigned short m_objectQualityType; unsigned int m_collisionFilterInfo; };
 class hkCollidable_s004b_8af0 {
 public:
     char pad00[0x14];
@@ -267,7 +274,7 @@ public:
     hkReal m_allowedPenetrationDepth;           // +0x20
     void setCollisionFilterInfo(unsigned int info) { m_broadPhaseHandle.m_collisionFilterInfo = info; }
 };
-struct hkMaterial_s004b_8af0 { signed char m_responseType; hkReal m_friction; hkReal m_restitution; };
+class hkMaterial_s004b_8af0 { public: signed char m_responseType; hkReal m_friction; hkReal m_restitution; };
 class hkWorld_s004b_8af0;
 class hkWorldObject_s004b_8af0 : public hkReferencedObject_s004b_8af0 {
 public:
@@ -398,6 +405,39 @@ public:
 }
 // ---- items of slice s004b8af0 end
 
+// ---- items of slice s004b9960 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C" void* memcpy(void*, const void*, uint32_t);   // @ 0x11e0744
+extern "C" void* EASTL_Allocate(void* pAllocator, uint32_t size, uint32_t alignment, int flags); // @ 0x42dee0
+extern "C" void  FreeRawBlock(void* p);                                                          // @ 0xf47380
+struct EditorRefCount {
+    void*    mpVtbl;      // +0x00
+    int32_t  mCount;      // +0x04
+    void AddRef() { ++mCount; }
+};
+struct cSPEditorModel {
+    void*          mpVtbl;        // +0x00
+    EditorRefCount mRefCount;     // +0x04 (mCount at +0x08)
+};
+struct EditorModelRef {
+    cSPEditorModel* mpObject;                                    // +0x00
+    EditorModelRef() : mpObject(0) {}
+    EditorModelRef(const EditorModelRef& r) : mpObject(r.mpObject) { if (mpObject) mpObject->mRefCount.AddRef(); }
+    EditorModelRef& operator=(cSPEditorModel* p);                // @ 0x41d980
+    EditorModelRef& operator=(const EditorModelRef& r) { return operator=(r.mpObject); }
+};
+struct EastlBlockHeader {
+    int32_t mPad;         // -0x08
+    int32_t mOwner;       // -0x04
+};
+struct EditorModelVector {
+    EditorModelRef* mpBegin;      // +0x00
+    EditorModelRef* mpEnd;        // +0x04
+    EditorModelRef* mpCapacity;   // +0x08
+    char            mAllocator[4];// +0x0c
+    void DoInsertValue(EditorModelRef* position, const EditorModelRef* value);  // @ 0x4b9960
+};
+// ---- items of slice s004b9960 end
+
 // @ 0x004b8c10
 namespace SP {
 void cSPEditorPhysicsWorld_s004b_8af0::Init()
@@ -417,6 +457,84 @@ void cSPEditorPhysicsWorld_s004b_8af0::Init()
     CreateFloor(15.0f);
 }
 }  // namespace SP
+
+// @ 0x004b9140
+namespace SP {
+void cSPEditorPhysicsWorld_s004b_8af0::Clear()
+{
+    if (mPhysicsWorld)
+        mPhysicsWorld->removeReference();
+    mPhysicsWorld = 0;
+}
+}  // namespace SP
+
+// @ 0x004b91e0
+namespace SP {
+void cSPEditorPhysicsWorld_s004b_8af0::CreateFloor(float size)
+{
+    hkRigidBodyCinfo info;
+    hkVector4_s004b_8af0 halfExtents(size, size, 0.5f);
+    hkBoxShape* shape = new hkBoxShape(halfExtents, 0.0f);
+    shape->m_radius = 0.01f;
+    info.m_shape = shape;
+    info.m_motionType = 7;
+    info.m_position.set(0.0f, 0.0f, -0.5f);
+    info.m_restitution = 0.0f;
+    hkRigidBody_s004b_8af0* body = new hkRigidBody_s004b_8af0(info);
+    shape->removeReference();
+    body->m_material.m_friction = 1.0f;
+    body->m_collidable.m_broadPhaseHandle.m_collisionFilterInfo = 0;
+    mPhysicsWorld->addEntity(body, 1);
+    mFloor = body;
+    body->removeReference();
+}
+}  // namespace SP
+
+// @ 0x004b9960
+void EditorModelVector::DoInsertValue(EditorModelRef* position, const EditorModelRef* value)
+{
+    if (mpEnd == mpCapacity) {
+        // grow: copy head and tail around the inserted element, then swap the buffer
+        const int count = (int)(mpEnd - mpBegin);
+        const int capacity = (count > 0) ? count * 2 : 1;
+        EditorModelRef* pNew = capacity
+            ? (EditorModelRef*)EASTL_Allocate(mAllocator, (uint32_t)(capacity * 4), 4, 0)
+            : 0;
+        const EditorModelRef* pOld = mpBegin;
+        const int headCount = (int)(position - mpBegin);
+        EditorModelRef* pMid = (EditorModelRef*)memcpy(pNew, pOld, (uint32_t)((const char*)position - (const char*)pOld)) + headCount;
+        if (pMid)
+            new (pMid) EditorModelRef(*value);
+        const int tailCount = (int)(mpEnd - position);
+        EditorModelRef* pNewEnd = (EditorModelRef*)memcpy(pMid + 1, position,
+                            (uint32_t)((const char*)mpEnd - (const char*)position)) + tailCount;
+        if (mpBegin) {
+            EastlBlockHeader* pHeader = ((EastlBlockHeader*)mpBegin) - 1;
+            if (pHeader->mOwner)
+                FreeRawBlock(mpBegin);
+        }
+        mpBegin = pNew;
+        mpEnd = pNewEnd;
+        mpCapacity = pNew + capacity;
+    } else {
+        // in place: keep a pointer to the value if it aliases the vector itself
+        const EditorModelRef* pValue = value;
+        if (!(pValue < position) && pValue < mpEnd)
+            pValue = value + 1;
+        EditorModelRef* pLast = mpEnd;
+        if (pLast)
+            new (pLast) EditorModelRef(mpEnd[-1]);
+        EditorModelRef* pDest = mpEnd;
+        EditorModelRef* pSrc = mpEnd - 1;
+        while (pSrc != position) {
+            --pSrc;
+            --pDest;
+            pDest->operator=(pSrc->mpObject);
+        }
+        position->operator=(pValue->mpObject);
+        ++mpEnd;
+    }
+}
 
 // @ 0x007c3d30
 void SP::cViewer::GetCameraLocationInfo(cSPVector3 * w, cSPVector3 * y, cSPVector3 * z, cSPVector3 * x) const

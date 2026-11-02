@@ -8,9 +8,9 @@
 004b8f50 hkWorldCinfo::`scalar deleting destructor'  # byte-exact
 004b9010 hkCollisionFilter::hkCollisionFilter  # 5 vptrs; byte-exact
 004b90c0 hkCollisionFilter::`scalar deleting destructor'  # byte-exact
-004b9140 SP::cSPEditorPhysicsWorld::Clear  # byte-exact
+004b9140 ?Clear@cSPEditorPhysicsWorld_s004b_8af0@SP@@QAEXXZ  # cSPEditorPhysicsWorld_s004b_8af0::Clear migrated from s004b8af0 (verbatim, slice spelling)
 004b91c0 SP::cSPEditorPhysicsWorld::World  # returns mPhysicsWorld (+8)
-004b91e0 SP::cSPEditorPhysicsWorld::CreateFloor  # byte-exact
+004b91e0 ?CreateFloor@cSPEditorPhysicsWorld_s004b_8af0@SP@@QAEXM@Z  # cSPEditorPhysicsWorld_s004b_8af0::CreateFloor migrated from s004b8af0 (verbatim, slice spelling)
 004b9420 SP::cSPEditorPhysicsWorld::UpdateCollisionFilters  # byte-exact
 004b9440 SP::cSPEditorPhysicsWorld::SetFloorFilter  # byte-exact
 004b9470 SP::cSPEditorPhysicsWorld::SetDefaultFloorFilter  # byte-exact

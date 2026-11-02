@@ -1,4 +1,4 @@
-004b9960  FUN_004b9960  # eastl::vector DoInsertValue (0x4c-byte element)
+004b9960 ?DoInsertValue@EditorModelVector@@QAEXPAUEditorModelRef@@PBU2@@Z  # EditorModelVector::DoInsertValue migrated from s004b9960 (verbatim, slice spelling)
 004b9c70  FUN_004b9c70  # cPropertyList ctor
 004b9d40  FUN_004b9d40  # cPropertyList dtor
 004b9da0  FUN_004b9da0  # cEditorResource ctor
