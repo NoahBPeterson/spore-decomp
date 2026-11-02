@@ -1,0 +1,1 @@
+00fadc20 ?Update@cViewFaceCover@@QAEXABUcViewRect@@M@Z  # cViewFaceCover::Update migrated from s00fadc20 (verbatim, slice spelling)

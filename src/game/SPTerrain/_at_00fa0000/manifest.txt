@@ -1,0 +1,8 @@
+# source  symbol  va  flags
+../src/game/SPTerrain/_at_00fa0000.cpp  ?DoGrow@DecalEntryVector@@QAEXPAUDecalEntry@@PBU2@@Z  00fad930  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPTerrain/_at_00fa0000.cpp  ?push_back@DecalEntryVector@@QAEXABUDecalEntry@@@Z  00fada70  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPTerrain/_at_00fa0000.cpp  ??0cTerrainMeshListHolder@SP@@QAE@XZ  00faed90  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPTerrain/_at_00fa0000.cpp  ?Destroy@cTerrainMeshListHolder@SP@@QAEXXZ  00faeec0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPTerrain/_at_00fa0000.cpp  ?FUN_00faf890@cTerrainSphereQuad@@QAEXXZ  00faf890  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPTerrain/_at_00fa0000.cpp  ?FUN_00fafda0@cRibbonFacePoly@@QAEXXZ  00fafda0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPTerrain/_at_00fa0000.cpp  ?FUN_00faff10@cRibbonFacePoly@@QAEXXZ  00faff10  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
