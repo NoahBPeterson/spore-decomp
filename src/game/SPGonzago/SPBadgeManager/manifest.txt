@@ -1,4 +1,5 @@
 # source  symbol  va  flags
+../src/game/SPGonzago/SPBadgeManager.cpp  ?FUN_00fe3cc0@cSPBadgeManager@@QAEXPAX@Z  00fe3cc0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPBadgeManager.cpp  ?FUN_00fe3df0@@YGHI@Z  00fe3df0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPBadgeManager.cpp  ?FUN_00fe3e50@@YGHI@Z  00fe3e50  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPBadgeManager.cpp  ?FUN_00fe3f50@cSPBadgeManager@@QBEHI@Z  00fe3f50  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
