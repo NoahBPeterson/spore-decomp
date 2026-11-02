@@ -1,0 +1,17 @@
+# source  symbol  va  flags
+../src/game/SPGonzago/_at_00b80000.cpp  ?Shutdown@cPlanetModel@@QAEXXZ  00b8c0f0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/_at_00b80000.cpp  ?FUN_00b8d8a0@cPlanetModel_s00b8_d190@@QAE_NI_NI@Z  00b8d8a0  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_00b80000.cpp  ?FUN_00b8d910@cPlanetModel_s00b8_d190@@QAEXXZ  00b8d910  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_00b80000.cpp  ?FUN_00b8d920@cPlanetModel_s00b8_d190@@QAEX_N@Z  00b8d920  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_00b80000.cpp  ?FUN_00b8d950@cPlanetModel_s00b8_d190@@QAEX_N@Z  00b8d950  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_00b80000.cpp  ?FUN_00b8d980@cPlanetModel_s00b8_d190@@QAEX_N@Z  00b8d980  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_00b80000.cpp  ?FUN_00b8da70@cPlanetModel_s00b8_d190@@QAEHXZ  00b8da70  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_00b80000.cpp  ?FUN_00b8e090@cPlanetModel_s00b8_d190@@QAEPAUcKey3@@XZ  00b8e090  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_00b80000.cpp  ?AssignRange@cPropertyList@@QAEXABUVec4@@@Z  00b8e3f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00b80000.cpp  ?EraseAllRules@cPropertyList@@QAEXXZ  00b8e830  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00b80000.cpp  ?FUN_00b8f860@S@@QAEHXZ  00b8f860  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPGonzago/_at_00b80000.cpp  ?FUN_00b8fb70@S@@QAEDXZ  00b8fb70  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPGonzago/_at_00b80000.cpp  ?FUN_00b8fbb0@S@@QAEHPAX@Z  00b8fbb0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPGonzago/_at_00b80000.cpp  ?FUN_00b8ff60@S@@QAEXXZ  00b8ff60  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPGonzago/_at_00b80000.cpp  ?FUN_00b8ff90@S@@QAEPAXXZ  00b8ff90  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPGonzago/_at_00b80000.cpp  ?FUN_00b8ffd0@S@@QAEPAXD@Z  00b8ffd0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include

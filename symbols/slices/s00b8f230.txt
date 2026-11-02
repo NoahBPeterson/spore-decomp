@@ -1,6 +1,14 @@
+00b8f690 ?FUN_00b8f690@S@@QAEPAUcPlantCargoInfo@@XZ  # S::FUN_00b8f690 migrated from s00b8f230 (verbatim, slice spelling)
+00b8f730 ?FUN_00b8f730@S@@QAEPAUcPlantCargoInfo@@PAU2@@Z  # S::FUN_00b8f730 migrated from s00b8f230 (verbatim, slice spelling)
+00b8f7f0 ?FUN_00b8f7f0@S@@QAEXPAPAX@Z  # S::FUN_00b8f7f0 migrated from s00b8f230 (verbatim, slice spelling)
+00b8f860 ?FUN_00b8f860@S@@QAEHXZ  # S::FUN_00b8f860 migrated from s00b8f230 (verbatim, slice spelling)
+00b8f9b0 ?FUN_00b8f9b0@S@@QAEXPAH@Z  # S::FUN_00b8f9b0 migrated from s00b8f230 (verbatim, slice spelling)
+00b8fa40 ?FUN_00b8fa40@S@@QAEDPAX@Z  # S::FUN_00b8fa40 migrated from s00b8f230 (verbatim, slice spelling)
+00b8fad0 ?FUN_00b8fad0@S@@QAEDPAX@Z  # S::FUN_00b8fad0 migrated from s00b8f230 (verbatim, slice spelling)
+00b8fb70 ?FUN_00b8fb70@S@@QAEDXZ  # S::FUN_00b8fb70 migrated from s00b8f230 (verbatim, slice spelling)
+00b8fbb0 ?FUN_00b8fbb0@S@@QAEHPAX@Z  # S::FUN_00b8fbb0 migrated from s00b8f230 (verbatim, slice spelling)
+00b8fdd0 ?FUN_00b8fdd0@S@@QAEPAXPAPAXPAUTreeNode@@PAH@Z  # S::FUN_00b8fdd0 migrated from s00b8f230 (verbatim, slice spelling)
+00b8ff60 ?FUN_00b8ff60@S@@QAEXXZ  # S::FUN_00b8ff60 migrated from s00b8f230 (verbatim, slice spelling)
+00b8ff90 ?FUN_00b8ff90@S@@QAEPAXXZ  # S::FUN_00b8ff90 migrated from s00b8f230 (verbatim, slice spelling)
+00b8ffd0 ?FUN_00b8ffd0@S@@QAEPAXD@Z  # S::FUN_00b8ffd0 migrated from s00b8f230 (verbatim, slice spelling)
 00b90410 SP::cPlantSpeciesManager::GetSpeciesFromID  # rbtree find with lazy load through GetPlantProfile + FUN_00b900a0 when the +0x38 flag is set
-00b8f690 Simulator::cPlantCargoInfo::cPlantCargoInfo  # vtable comments (0x01465798/0x01465790/0x0146576c)
-00b8f730 Simulator::cPlantCargoInfo::operator=  # 0xa4 memberwise copy after 0x00c870b0
-00b8f7f0 Simulator::cSpaceInventoryItem::Duplicate
-00b8f9b0 Simulator::cSpaceInventoryItem::GetImageID
-00b8fb70 Simulator::cSpaceInventoryItem::IsAvailableInCurrentPlanet
