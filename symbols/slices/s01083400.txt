@@ -1,0 +1,6 @@
+01083400 ?removePhantom@hkWorld_s0108_3400@@QAEXPAUhkPhantom_s0108_3400@@@Z  # hkWorld_s0108_3400::removePhantom migrated from s01083400 (verbatim, slice spelling)
+010834f0 ?addCollisionListener@hkWorld_s0108_3400@@QAEXPAX@Z  # hkWorld_s0108_3400::addCollisionListener migrated from s01083400 (verbatim, slice spelling)
+01083530 ?addWorldDeletionListener@hkWorld_s0108_3400@@QAEXPAX@Z  # hkWorld_s0108_3400::addWorldDeletionListener migrated from s01083400 (verbatim, slice spelling)
+01083570 ?calcStatistics@hkWorld_s0108_3400@@UBEXPAUhkStatisticsCollector_s0108_3400@@@Z  # hkWorld_s0108_3400::calcStatistics migrated from s01083400 (verbatim, slice spelling)
+010839e0 ??1hkWorld_s0108_3400@@UAE@XZ  # hkWorld_s0108_3400::~hkWorld migrated from s01083400 (verbatim, slice spelling)
+01083ff0 ?activateRegion@hkWorld_s0108_3400@@QAEXABUhkAabb_s0108_3400@@@Z  # hkWorld_s0108_3400::activateRegion migrated from s01083400 (verbatim, slice spelling)

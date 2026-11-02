@@ -1,0 +1,3 @@
+01084cf0 ?updateCollisionFilterOnPhantom@hkWorld_s0108_4cf0@@QAEXPAVhkPhantom_s0108_4cf0@@W4hkUpdateCollectionFilterMode@@@Z  # hkWorld_s0108_4cf0::updateCollisionFilterOnPhantom migrated from s01084cf0 (verbatim, slice spelling)
+01084fa0 ?updateCollisionFilterOnEntity@@YAXPAVhkWorld_s0108_4cf0@@PAVhkEntity_s0108_4cf0@@W4hkEntityActivation_s0108_4cf0@@E@Z  # updateCollisionFilterOnEntity migrated from s01084cf0 (verbatim, slice spelling)
+01085490 ?addEntityBatch@hkWorld_s0108_4cf0@@QAEXPBQBVhkEntity_s0108_4cf0@@HW4hkEntityActivation_s0108_4cf0@@@Z  # hkWorld_s0108_4cf0::addEntityBatch migrated from s01084cf0 (verbatim, slice spelling)

@@ -1,18 +1,28 @@
-01082350 hkRotation::toQuat  # fsqrt largest-diagonal rotation->quaternion, called by hkQuaternion::set
+01082350 ?toQuat@hkRotation_s0108_2350@@QBEIXZ  # hkRotation_s0108_2350::toQuat migrated from s01082350 (verbatim, slice spelling)
+01082490 ?set@hkQuaternion_s0108_2350@@QAEIABVhkRotation_s0108_2350@@@Z  # hkQuaternion_s0108_2350::set migrated from s01082350 (verbatim, slice spelling)
+010824a0 ?set@hkRotation_s0108_2350@@QAEXABVhkQuaternion_s0108_2350@@@Z  # hkRotation_s0108_2350::set migrated from s01082350 (verbatim, slice spelling)
 01082590 hkReferencedObject::addReference  # if memSize!=0 ++refcount (word at +6)
-010825a0 hkWorldObject::addProperty  # +0x4c property array, 0x10-byte entries
-01082660 hkWorldObject::calcStatistics  # "Shape" "CollAgtPtr" "Properties"
-010826e0 hkWorldObject::hkWorldObject_finishLoaded  # hkFinishLoadedObjectFlag ctor
-01082770 hkWorldObject::~hkWorldObject  # releases shape, frees property and collision-entry arrays
-01082800 hkWorldObject::hkWorldObject  # (shape, broadPhaseType)
-01082910 hkWorld_updatePhantomOverlap  # custom regs this=EDI(phantom) other=ESI(collidable), filter on stack; isOverlappingCollidableAdded (slot 7) + filter slot 1 decide add (slot 6) / remove (slot 8), mirrored on a phantom partner (handle type 2); called from hkWorld::updateCollisionFilterOnPhantom
-01082990 hkWorld::castRay  # hkWorldRayCaster::castRay args match mangled signature
-010829e0 hkNullContactMgr::addContactPoint  # returns 0, vtable 0x149da94 slot 2
-01082a00 hkNullContactMgr::processRequest  # returns 1, ret 0x1c
-01082a40 hkWorld::removeWorldDeletionListener  # +0x108 array, null-assign
-01082a90 hkWorld::stepDeltaTime  # simulation vtbl+8(world,dt,dt) then watchdog "TtWatchDog:FreeMem"
-01082b90 hkWorld::linearCast  # hkWorldLinearCaster::linearCast args match mangled signature
-01082bf0 hkWorld::executePendingOperations  # "TtPendingOps"
-01082ca0 hkWorld::calcMaxIslandSizeEstimate  # max over +0x38 islands
-01082ce0 hkNullContactMgrFactory::createContactMgr  # returns this+8
-01082df0 hkWorld_registerContactMgrFactories  # simple(1), reactive(2), null(3) factories
+010825a0 ?addProperty@hkWorldObject_s0108_2350@@QAEXIUhkPropertyValue_s0108_2350@@@Z  # hkWorldObject_s0108_2350::addProperty migrated from s01082350 (verbatim, slice spelling)
+01082600 ?editProperty@hkWorldObject_s0108_2350@@QAE?AUhkPropertyValue_s0108_2350@@IU2@@Z  # hkWorldObject_s0108_2350::editProperty migrated from s01082350 (verbatim, slice spelling)
+01082660 ?calcStatistics@hkWorldObject_s0108_2350@@UBEXPAVhkStatisticsCollector@@@Z  # hkWorldObject_s0108_2350::calcStatistics migrated from s01082350 (verbatim, slice spelling)
+010826e0 ??0hkWorldObject_s0108_2350@@QAE@H@Z  # hkWorldObject_s0108_2350::hkWorldObject migrated from s01082350 (verbatim, slice spelling)
+01082770 ??1hkWorldObject_s0108_2350@@UAE@XZ  # hkWorldObject_s0108_2350::~hkWorldObject migrated from s01082350 (verbatim, slice spelling)
+01082800 ??0hkWorldObject_s0108_2350@@QAE@PBVhkShape_s0108_2350@@H@Z  # hkWorldObject_s0108_2350::hkWorldObject migrated from s01082350 (verbatim, slice spelling)
+01082890 ?setTauAndDamping@hkSolverInfo_s0108_2350@@QAEXMM@Z  # hkSolverInfo_s0108_2350::setTauAndDamping migrated from s01082350 (verbatim, slice spelling)
+01082900 ??0hkMultithreadConfig@@QAE@XZ  # hkMultithreadConfig::hkMultithreadConfig migrated from s01082350 (verbatim, slice spelling)
+01082910 ?hkWorld_updatePhantomOverlap@@YAXPAVhkPhantom_s0108_2350@@PAVhkLinkedCollidable_s0108_2350@@PBVhkCollisionFilter_s0108_2350@@@Z  # hkWorld_updatePhantomOverlap migrated from s01082350 (verbatim, slice spelling)
+01082990 ?castRay@hkWorld_s0108_2350@@QBEXABUhkWorldRayCastInput@@AAUhkRayHitCollector@@@Z  # hkWorld_s0108_2350::castRay migrated from s01082350 (verbatim, slice spelling)
+010829e0 ?addContactPoint@hkNullContactMgr@@UAEGHHHH@Z  # hkNullContactMgr::addContactPoint migrated from s01082350 (verbatim, slice spelling)
+01082a00 ?processRequest@hkNullContactMgr@@UAEIHHHHHHH@Z  # hkNullContactMgr::processRequest migrated from s01082350 (verbatim, slice spelling)
+01082a40 ?removeWorldDeletionListener@hkWorld_s0108_2350@@QAEXPAUhkWorldDeletionListener_s0108_2350@@@Z  # hkWorld_s0108_2350::removeWorldDeletionListener migrated from s01082350 (verbatim, slice spelling)
+01082a90 ?stepDeltaTime@hkWorld_s0108_2350@@QAEHM@Z  # hkWorld_s0108_2350::stepDeltaTime migrated from s01082350 (verbatim, slice spelling)
+01082b90 ?linearCast@hkWorld_s0108_2350@@QBEXPBUhkCollidable@@ABUhkLinearCastInput_s0108_2350@@AAUhkCdPointCollector@@PAU4@@Z  # hkWorld_s0108_2350::linearCast migrated from s01082350 (verbatim, slice spelling)
+01082bf0 ?executePendingOperations@hkWorld_s0108_2350@@QAEXXZ  # hkWorld_s0108_2350::executePendingOperations migrated from s01082350 (verbatim, slice spelling)
+01082ca0 ?calcMaxIslandSizeEstimate@hkWorld_s0108_2350@@QBEHXZ  # hkWorld_s0108_2350::calcMaxIslandSizeEstimate migrated from s01082350 (verbatim, slice spelling)
+01082ce0 ?createContactMgr@hkNullContactMgrFactory@@UAEPAUhkNullContactMgr@@HHH@Z  # hkNullContactMgrFactory::createContactMgr migrated from s01082350 (verbatim, slice spelling)
+01082cf0 ?deletingDtor@hkNullContactMgrFactory@@QAEPAXI@Z  # hkNullContactMgrFactory::deletingDtor migrated from s01082350 (verbatim, slice spelling)
+01082d20 ??0hkNullCollisionFilter@@QAE@XZ  # hkNullCollisionFilter::hkNullCollisionFilter migrated from s01082350 (verbatim, slice spelling)
+01082df0 ?hkWorld_registerContactMgrFactories@@YAXPAVhkWorld_s0108_2350@@PAVhkCollisionDispatcher_s0108_2350@@@Z  # hkWorld_registerContactMgrFactories migrated from s01082350 (verbatim, slice spelling)
+01082ee0 ?addEntity@hkWorld_s0108_2350@@QAEPAVhkEntity_s0108_2350@@PAV2@W4hkEntityActivation@@@Z  # hkWorld_s0108_2350::addEntity migrated from s01082350 (verbatim, slice spelling)
+01083110 ?removeEntity@hkWorld_s0108_2350@@QAEEPAVhkEntity_s0108_2350@@@Z  # hkWorld_s0108_2350::removeEntity migrated from s01082350 (verbatim, slice spelling)
+01083320 ?addPhantom@hkWorld_s0108_2350@@QAEPAVhkPhantom_s0108_2350@@PAV2@@Z  # hkWorld_s0108_2350::addPhantom migrated from s01082350 (verbatim, slice spelling)

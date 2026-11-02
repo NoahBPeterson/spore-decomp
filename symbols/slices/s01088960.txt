@@ -1,14 +1,31 @@
-010889e0 hkEntity::setDeactivator  # addref new, release old at +0x6c
-01088a70 hkEntity::removeCollisionListener  # +0x9c array, null-assign
-01088ae0 hkEntity::activate  # island inactive and not fixed -> markIslandActive
-01088b10 hkEntity::deactivate  # island active -> markIslandInactive
-01088c20 hkEntity::addEntityListener  # +0xb4 array, reuse empty slot else append
-01088c90 hkEntity::addCollisionListener  # +0x9c array, reuse empty slot else append
-01088d00 hkEntity_delete  # null-checked scalar deleting dtor call
-01088d20 hkEntity::hkEntity  # hkWorldObject(shape,1); friction .5 restitution .4
-01089700 hkGenericConstraint_buildLinearBasisWorld  # three build-jacobian calls on unit axes, count+=3
-010897d0 hkGenericConstraint_buildLinearDof  # one build-jacobian from DOF vector param[cmd+2], count+=1
-01089870 hkGenericConstraint_calcAngle  # two dot3 products then hkMath::atan2fApproximation
-010888c0 hkMotionState::operator=  # 0xb0-byte copy, used by getMotionStateAndVelocities
-010a0130 hkWorldOperationUtil::markIslandActive  # called by hkEntity::activate
 008dc790 hkGenericConstraintData::getScheme  # lea eax,[ecx+0xc]
+010888c0 hkMotionState::operator=  # 0xb0-byte copy, used by getMotionStateAndVelocities
+01088960 ?getMotionStateAndVelocities@hkRigidMotion@@UAEXPAVhkMotion_s0108_8960@@@Z  # hkRigidMotion::getMotionStateAndVelocities migrated from s01088960 (verbatim, slice spelling)
+010889e0 ?setDeactivator@hkEntity_s0108_8960@@QAEXPAVhkEntityDeactivator_s0108_8960@@@Z  # hkEntity_s0108_8960::setDeactivator migrated from s01088960 (verbatim, slice spelling)
+01088a20 ?removeEntityListener@hkEntity_s0108_8960@@QAEXPAUhkEntityListener@@@Z  # hkEntity_s0108_8960::removeEntityListener migrated from s01088960 (verbatim, slice spelling)
+01088a70 ?removeCollisionListener@hkEntity_s0108_8960@@QAEXPAUhkCollisionListener@@@Z  # hkEntity_s0108_8960::removeCollisionListener migrated from s01088960 (verbatim, slice spelling)
+01088ac0 ?isActive@hkEntity_s0108_8960@@QBE?AVhkBool_s0108_8960@@XZ  # hkEntity_s0108_8960::isActive migrated from s01088960 (verbatim, slice spelling)
+01088ae0 ?activate@hkEntity_s0108_8960@@QAEXXZ  # hkEntity_s0108_8960::activate migrated from s01088960 (verbatim, slice spelling)
+01088b10 ?deactivate@hkEntity_s0108_8960@@QAEXXZ  # hkEntity_s0108_8960::deactivate migrated from s01088960 (verbatim, slice spelling)
+01088b30 ?calcStatistics@hkEntity_s0108_8960@@UBEXPAVhkStatisticsCollector_s0108_8960@@@Z  # hkEntity_s0108_8960::calcStatistics migrated from s01088960 (verbatim, slice spelling)
+01088c20 ?addEntityListener@hkEntity_s0108_8960@@QAEXPAUhkEntityListener@@@Z  # hkEntity_s0108_8960::addEntityListener migrated from s01088960 (verbatim, slice spelling)
+01088c90 ?addCollisionListener@hkEntity_s0108_8960@@QAEXPAUhkCollisionListener@@@Z  # hkEntity_s0108_8960::addCollisionListener migrated from s01088960 (verbatim, slice spelling)
+01088d00 ?hkEntity_delete@@YAPAVhkEntity_s0108_8960@@PAV1@@Z  # hkEntity_delete migrated from s01088960 (verbatim, slice spelling)
+01088d20 ??0hkEntity_s0108_8960@@QAE@PBUhkShape_s0108_8960@@@Z  # hkEntity_s0108_8960::hkEntity migrated from s01088960 (verbatim, slice spelling)
+01088de0 ??1hkEntity_s0108_8960@@UAE@XZ  # hkEntity_s0108_8960::~hkEntity migrated from s01088960 (verbatim, slice spelling)
+01088f70 ?deallocateInternalArrays@hkEntity_s0108_8960@@UAEXXZ  # hkEntity_s0108_8960::deallocateInternalArrays migrated from s01088960 (verbatim, slice spelling)
+01089280 ?begin@hkConstraintConstructionKit@@QAEXPAVhkGenericConstraintData@@@Z  # hkConstraintConstructionKit::begin migrated from s01088960 (verbatim, slice spelling)
+010892c0 ?setLinearDofWorld@hkConstraintConstructionKit@@QAEHABVhkVector4_s0108_8960@@H@Z  # hkConstraintConstructionKit::setLinearDofWorld migrated from s01088960 (verbatim, slice spelling)
+01089390 ?constrainLinearDof@hkConstraintConstructionKit@@QAEXH@Z  # hkConstraintConstructionKit::constrainLinearDof migrated from s01088960 (verbatim, slice spelling)
+01089420 ?setAngularBasisABodyFrame@hkConstraintConstructionKit@@QAEXXZ  # hkConstraintConstructionKit::setAngularBasisABodyFrame migrated from s01088960 (verbatim, slice spelling)
+01089460 ?setAngularBasisBBodyFrame@hkConstraintConstructionKit@@QAEXXZ  # hkConstraintConstructionKit::setAngularBasisBBodyFrame migrated from s01088960 (verbatim, slice spelling)
+010894a0 ?constrainToAngularDof@hkConstraintConstructionKit@@QAEXH@Z  # hkConstraintConstructionKit::constrainToAngularDof migrated from s01088960 (verbatim, slice spelling)
+01089550 ?setPivotA@hkConstraintConstructionKit@@QAEHABVhkVector4_s0108_8960@@@Z  # hkConstraintConstructionKit::setPivotA migrated from s01088960 (verbatim, slice spelling)
+010895e0 ?setPivotB@hkConstraintConstructionKit@@QAEHABVhkVector4_s0108_8960@@@Z  # hkConstraintConstructionKit::setPivotB migrated from s01088960 (verbatim, slice spelling)
+01089670 ?end@hkConstraintConstructionKit@@QAEXXZ  # hkConstraintConstructionKit::end migrated from s01088960 (verbatim, slice spelling)
+010896b0 ?getConstraintInfo@hkGenericConstraintData@@UBEXAAUhkConstraintInfo@@@Z  # hkGenericConstraintData::getConstraintInfo migrated from s01088960 (verbatim, slice spelling)
+010896e0 ?getRuntimeInfo@hkGenericConstraintData@@UBEXVhkBool_s0108_8960@@AAURuntimeInfo@1@@Z  # hkGenericConstraintData::getRuntimeInfo migrated from s01088960 (verbatim, slice spelling)
+01089700 ?hkGenericConstraint_buildLinearBasisWorld@@YGXHHHPAUhkGenericConstraintParameters@@PBUhkConstraintQueryIn@@PAUhkConstraintQueryOut@@@Z  # hkGenericConstraint_buildLinearBasisWorld migrated from s01088960 (verbatim, slice spelling)
+010897d0 ?hkGenericConstraint_buildLinearDof@@YGXPAPAHHHPAUhkGenericConstraintParameters@@PBUhkConstraintQueryIn@@PAUhkConstraintQueryOut@@@Z  # hkGenericConstraint_buildLinearDof migrated from s01088960 (verbatim, slice spelling)
+01089870 ?hkGenericConstraint_calcAngle@@YAMHPBVhkVector4_s0108_8960@@@Z  # hkGenericConstraint_calcAngle migrated from s01088960 (verbatim, slice spelling)
+010a0130 hkWorldOperationUtil::markIslandActive  # called by hkEntity::activate

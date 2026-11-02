@@ -1,12 +1,12 @@
-0108a3f0 hkGenericConstraintData::buildJacobianInternal  # 26-case scheme command walker, six-arg handler calls, modifier vtbl dispatch
+0108a3f0 ?buildJacobianInternal@hkGenericConstraintData_s0108_a3f0@@AAEXABVhkGenericConstraintDataScheme_s0108_a3f0@@ABVhkConstraintQueryIn_s0108_a3f0@@AAVhkConstraintQueryOut_s0108_a3f0@@@Z  # hkGenericConstraintData_s0108_a3f0::buildJacobianInternal migrated from s0108a3f0 (verbatim, slice spelling)
 0108a980 hkGenericConstraintDataScheme::~hkGenericConstraintDataScheme  # four hkArray frees (deallocateChunk per array)
-0108aa40 hkGenericConstraintData::hkGenericConstraintData  # zero-init then m_scheme.m_info.m_sizeOfSchemas = 0x18
-0108aaa0 hkGenericConstraintData::~hkGenericConstraintData  # motor reference release loop then scheme dtor
-0108aaf0 hkGenericConstraintData::buildJacobian  # copies query, hkBeginConstraints(in,out,results,8), calls walker
-0108aba0 hkConstraintChainInstance::entityRemovedCallback  # drops an entity from m_chainedEntities
-0108ac30 hkConstraintChainInstance::addEntity  # append + addReference on the chained entity
-0108acb0 hkConstraintChainInstance::hkConstraintChainInstance  # base ctor(1), addReference, hkMemory allocate of the action
-0108ad30 hkConstraintChainInstance::~hkConstraintChainInstance  # release chained entities, release m_action, base dtor
+0108aa40 ??0hkGenericConstraintData_s0108_a3f0@@QAE@XZ  # hkGenericConstraintData_s0108_a3f0::hkGenericConstraintData migrated from s0108a3f0 (verbatim, slice spelling)
+0108aaa0 ??1hkGenericConstraintData_s0108_a3f0@@UAE@XZ  # hkGenericConstraintData_s0108_a3f0::~hkGenericConstraintData migrated from s0108a3f0 (verbatim, slice spelling)
+0108aaf0 ?buildJacobian@hkGenericConstraintData_s0108_a3f0@@UAEXABVhkConstraintQueryIn_s0108_a3f0@@AAVhkConstraintQueryOut_s0108_a3f0@@@Z  # hkGenericConstraintData_s0108_a3f0::buildJacobian migrated from s0108a3f0 (verbatim, slice spelling)
+0108aba0 ?entityRemovedCallback@hkConstraintChainInstance@@UAEXPAVhkEntity_s0108_a3f0@@@Z  # hkConstraintChainInstance::entityRemovedCallback migrated from s0108a3f0 (verbatim, slice spelling)
+0108ac30 ?addEntity@hkConstraintChainInstance@@QAEXPAX@Z  # hkConstraintChainInstance::addEntity migrated from s0108a3f0 (verbatim, slice spelling)
+0108acb0 ??0hkConstraintChainInstance@@QAE@PAX@Z  # hkConstraintChainInstance::hkConstraintChainInstance migrated from s0108a3f0 (verbatim, slice spelling)
+0108ad30 ??1hkConstraintChainInstance@@UAE@XZ  # hkConstraintChainInstance::~hkConstraintChainInstance migrated from s0108a3f0 (verbatim, slice spelling)
 0108ae30 hkLimitedHingeConstraintData::hkLimitedHingeConstraintData  # -pi/+pi, zeroed A/B basis
-0108aec0 hkLimitedHingeConstraintData::setInBodySpace  # pivots/axles, normalize, referenceA cross, referenceB
-0108b150 hkLimitedHingeConstraintData::isValid  # six dot/length tests then pivot-span check
+0108aec0 ?setInBodySpace@hkLimitedHingeConstraintData@@QAEXABVhkVector4_s0108_a3f0@@00000@Z  # hkLimitedHingeConstraintData::setInBodySpace migrated from s0108a3f0 (verbatim, slice spelling)
+0108b150 ?isValid@hkLimitedHingeConstraintData@@UBE?AVhkBool_s0108_a3f0@@XZ  # hkLimitedHingeConstraintData::isValid migrated from s0108a3f0 (verbatim, slice spelling)
