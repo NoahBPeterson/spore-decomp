@@ -1,0 +1,2 @@
+011549c0 ?ProcessInputPlugIns@Mixer@@QAEHPAUVoiceStageData@@PAXPAUVoice@@@Z  # Mixer::ProcessInputPlugIns migrated from s011549c0 (verbatim, slice spelling)
+01154ca0 ?Execute@Mixer@@QAEHPAUMixerExecuteParams@@@Z  # Mixer::Execute migrated from s011549c0 (verbatim, slice spelling)
