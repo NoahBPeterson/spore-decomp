@@ -1,6 +1,6 @@
 00c88e30 SP::cSpatialObject::funcE30  # PDB name (card); ray/sphere visibility test
-00c89020 SP::cSpatialObject::func78h  # PDB name (card); transform key by owner rotation
-00c890c0 SP::cSpatialObject::GetCommunityName  # PDB name (card)
+00c89020 ?func78h@cSO@@QAEXPAUcSPVector3_s00c8_8e30@@@Z  # cSO::func78h migrated from s00c88e30 (verbatim, slice spelling)
+00c890c0 ?GetCommunityName@cSO@@QAEXPAUcSPVector3_s00c8_8e30@@@Z  # cSO::GetCommunityName migrated from s00c88e30 (verbatim, slice spelling)
 00c89160 SP::cSpatialObject::SetLocalExtents  # PDB name (callee-single)
 00c893b0 SP::cSpatialObject::func9Ch  # PDB name (card)
 00c893f0 SP::cSpatialObject::func93F0  # PDB name (card); scale-to-fit
