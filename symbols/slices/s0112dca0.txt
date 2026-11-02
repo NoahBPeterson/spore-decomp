@@ -3,7 +3,7 @@
 0112dfa0 ?AcquireStream@StreamPool_s0112_dca0@core@audio@rw@@QAEPAUStreamDesc_s0112_dca0@234@MPAXH@Z  # StreamPool_s0112_dca0::AcquireStream migrated from s0112dca0 (verbatim, slice spelling)
 0112e1e0 ?ReleaseStream@StreamPool@core@audio@rw@@...  # 16-bit refcount release
 0112e210 StreamPool::ReleaseHandler  # clears streams and frees the pool
-0112e290 StreamPool::Create  # allocates pool + stream descriptors
+0112e290 ?StreamPool_Create@core@audio@rw@@YAPAXHHHHPAVSystem_s0112_dca0@123@H@Z  # StreamPool_Create migrated from s0112dca0 (verbatim, slice spelling)
 0112e410 StreamPool::QueueRelease  # queues the deferred release command (byte-exact)
 0112e440 Voice::GetDecayProgress  # mDecaySamples / System->mSampleRate
 0112e450 Voice::StartDecay  # state 1, latch decay countdown

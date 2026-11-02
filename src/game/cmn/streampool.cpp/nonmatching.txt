@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+0112e290 186 StreamPool::Create: complete; Alloc + PlugIn::Initialize (thiscall) + descriptor loop; /LTCG scheduling; flags /vc71 /O2 /MD /Gy /TP; equiv PASS (217 valid, 67.8% cov)
