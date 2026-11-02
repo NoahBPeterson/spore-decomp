@@ -1,1 +1,3 @@
 # source  symbol  va  flags
+../src/game/UTFSpore_Win32/EAAddressRep.cpp  ?PushBack@cAddressRepLookupSet@@QAEXPAX@Z  0091a680  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/EAAddressRep.cpp  ?GetAddressRep@cAddressRepLookupSet@@QAEIIPBXPAUcAddressRepEntry@@PAH@Z  0091ae20  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
