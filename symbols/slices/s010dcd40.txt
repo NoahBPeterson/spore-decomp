@@ -1,25 +1,11 @@
-010dcd40 ?processCollision@hkSymmetricAgentLinearCast_hkHeightFieldAgent@@UAEXABVhkCdBody_s010d_cd40@@0ABUhkProcessCollisionInput_s010d_cd40@@AAUhkProcessCollisionOutput_s010d_cd40@@@Z  # hkSymmetricAgentLinearCast_hkHeightFieldAgent::processCollision migrated from s010dcd40 (verbatim, slice spelling)
-010dce00 ?staticGetClosestPoints@hkSymmetricAgentLinearCast_hkHeightFieldAgent@@SGXABVhkCdBody_s010d_cd40@@0ABUhkCollisionInput_s010d_cd40@@AAVhkCdPointCollector_s010d_cd40@@@Z  # hkSymmetricAgentLinearCast_hkHeightFieldAgent::staticGetClosestPoints migrated from s010dcd40 (verbatim, slice spelling)
-010dce40 ?staticLinearCast@hkSymmetricAgentLinearCast_hkHeightFieldAgent@@SGXABVhkCdBody_s010d_cd40@@0ABUhkLinearCastCollisionInput@@AAVhkCdPointCollector_s010d_cd40@@PAV4@@Z  # hkSymmetricAgentLinearCast_hkHeightFieldAgent::staticLinearCast migrated from s010dcd40 (verbatim, slice spelling)
-010dcf80 ?createHeightFieldAAgent@hkHeightFieldAgentCreator@@SAPAVhkCollisionAgent_s010d_cd40@@ABVhkCdBody_s010d_cd40@@0ABUhkCollisionInput_s010d_cd40@@PAVhkContactMgr@@@Z  # hkHeightFieldAgentCreator::createHeightFieldAAgent migrated from s010dcd40 (verbatim, slice spelling)
-010dd050 ?getFirstVertex@hkConvexListConvexShape@@UBEXAAVhkVector4_s010d_cd40@@@Z  # hkConvexListConvexShape::getFirstVertex migrated from s010dcd40 (verbatim, slice spelling)
-010dd060 ?getCollisionSpheres@hkConvexListConvexShape@@UBEPBVhkSphere@@PAV2@@Z  # hkConvexListConvexShape::getCollisionSpheres migrated from s010dcd40 (verbatim, slice spelling)
-010dd0c0 ?invalidateTim@hkConvexListAgent@@UAEXAAUhkCollisionInput_s010d_cd40@@@Z  # hkConvexListAgent::invalidateTim migrated from s010dcd40 (verbatim, slice spelling)
-010dd0f0 ?warpTime@hkConvexListAgent@@UAEXMMAAUhkCollisionInput_s010d_cd40@@@Z  # hkConvexListAgent::warpTime migrated from s010dcd40 (verbatim, slice spelling)
-010dd120 ?removePoint@hkConvexListAgent@@UAEXG@Z  # hkConvexListAgent::removePoint migrated from s010dcd40 (verbatim, slice spelling)
-010dd140 ?commitPotential@hkConvexListAgent@@UAEXG@Z  # hkConvexListAgent::commitPotential migrated from s010dcd40 (verbatim, slice spelling)
-010dd160 ?createZombie@hkConvexListAgent@@UAEXG@Z  # hkConvexListAgent::createZombie migrated from s010dcd40 (verbatim, slice spelling)
-010dd180 ?cleanup@hkConvexListAgent@@UAEXXZ  # hkConvexListAgent::cleanup migrated from s010dcd40 (verbatim, slice spelling)
-010dd1d0 ??0hkProcessCollisionOutputBackup@@QAE@ABUhkProcessCollisionOutput_s010d_cd40@@@Z  # hkProcessCollisionOutputBackup::hkProcessCollisionOutputBackup migrated from s010dcd40 (verbatim, slice spelling)
-010dd260 ?restore@hkProcessCollisionOutputBackup@@QAEPAU1@AAUhkProcessCollisionOutput_s010d_cd40@@@Z  # hkProcessCollisionOutputBackup::restore migrated from s010dcd40 (verbatim, slice spelling)
-010dd300 ?convertVertexIdsToVertices@hkConvexListConvexShape@@UBEXPBGHPAVhkCdVertex@@@Z  # hkConvexListConvexShape::convertVertexIdsToVertices migrated from s010dcd40 (verbatim, slice spelling)
-010dd380 ?getCollisionSpheresInfo@hkConvexListConvexShape@@UBEXAAUhkCollisionSpheresInfo@@@Z  # hkConvexListConvexShape::getCollisionSpheresInfo migrated from s010dcd40 (verbatim, slice spelling)
-010dd580 ?getSupportingVertex@hkConvexListConvexShape@@UBEXABVhkVector4_s010d_cd40@@AAVhkCdVertex@@@Z  # hkConvexListConvexShape::getSupportingVertex migrated from s010dcd40 (verbatim, slice spelling)
-010dd640 ??0hkConvexListAgent@@QAE@ABVhkCdBody_s010d_cd40@@0ABUhkCollisionInput_s010d_cd40@@PAVhkContactMgr@@@Z  # hkConvexListAgent::hkConvexListAgent migrated from s010dcd40 (verbatim, slice spelling)
-010dd750 ?createConvexListAgent@hkConvexListAgent@@SAPAVhkCollisionAgent_s010d_cd40@@ABVhkCdBody_s010d_cd40@@0ABUhkCollisionInput_s010d_cd40@@PAVhkContactMgr@@@Z  # hkConvexListAgent::createConvexListAgent migrated from s010dcd40 (verbatim, slice spelling)
-010dd7b0 ?staticGetClosestPoints@hkConvexListAgent@@SAXABVhkCdBody_s010d_cd40@@0ABUhkCollisionInput_s010d_cd40@@AAVhkCdPointCollector_s010d_cd40@@@Z  # hkConvexListAgent::staticGetClosestPoints migrated from s010dcd40 (verbatim, slice spelling)
-010dda70 ?staticGetPenetrations@hkConvexListAgent@@SAXABVhkCdBody_s010d_cd40@@0ABUhkCollisionInput_s010d_cd40@@AAVhkCdBodyPairCollector_s010d_cd40@@@Z  # hkConvexListAgent::staticGetPenetrations migrated from s010dcd40 (verbatim, slice spelling)
-010ddc30 ?staticLinearCast@hkConvexListAgent@@SAXABVhkCdBody_s010d_cd40@@0ABUhkLinearCastCollisionInput@@AAVhkCdPointCollector_s010d_cd40@@PAV4@@Z  # hkConvexListAgent::staticLinearCast migrated from s010dcd40 (verbatim, slice spelling)
-010ddde0 ?hkConvexListAgent_staticLinearCastForwarder@@YGXABVhkCdBody_s010d_cd40@@0ABUhkLinearCastCollisionInput@@AAVhkCdPointCollector_s010d_cd40@@PAV3@@Z  # hkConvexListAgent_staticLinearCastForwarder migrated from s010dcd40 (verbatim, slice spelling)
-010dde90 ?hkSymmetricAgent_hkConvexListAgent_staticGetClosestPoints@@YGXABVhkCdBody_s010d_cd40@@0ABUhkCollisionInput_s010d_cd40@@AAVhkCdPointCollector_s010d_cd40@@@Z  # hkSymmetricAgent_hkConvexListAgent_staticGetClosestPoints migrated from s010dcd40 (verbatim, slice spelling)
-010de010 ?createListConvexAgent@hkConvexListAgent@@SAPAVhkCollisionAgent_s010d_cd40@@ABVhkCdBody_s010d_cd40@@0ABUhkCollisionInput_s010d_cd40@@PAVhkContactMgr@@@Z  # hkConvexListAgent::createListConvexAgent migrated from s010dcd40 (verbatim, slice spelling)
+010dcd40 hkSymmetricAgentLinearCast<hkHeightFieldAgent>::processCollision  # flips contact points and toi normal around AGENT::processCollision(B,A)
+010dce00 hkSymmetricAgentLinearCast<hkHeightFieldAgent>::staticGetClosestPoints  # hkSymmetricAgentFlipCollector (vtable 14a43a4) + swapped bodies
+010dce40 hkSymmetricAgentLinearCast<hkHeightFieldAgent>::staticLinearCast  # negated path, FlipCastCollector (14a43ac)
+010dd120 hkConvexListAgent::removePoint  # tail-jumps hkGskfAgent::removePoint when in gsk mode
+010dd140 hkConvexListAgent::commitPotential  # tail-jumps hkGskfAgent::commitPotential
+010dd160 hkConvexListAgent::createZombie  # tail-jumps hkGskfAgent::createZombie
+010dd260 hkProcessCollisionOutputBackup::restore  # inverse of the backup ctor at 10dd1d0
+010dd640 hkConvexListAgent::hkConvexListAgent  # calls hkPredGskfAgent ctor, hkGskCache::init, sets vtable 14a4b00
+010ddc30 hkConvexListAgent::staticLinearCast  # timers LtCvsListAgent/checkHull
+010ddde0 hkConvexListAgent::staticLinearCast_forwarder  # identical stdcall forwarder
+010dde90 hkSymmetricAgent<hkConvexListAgent>::getClosestPoints  # flip collector + swapped bodies into staticGetClosestPoints@hkConvexListAgent

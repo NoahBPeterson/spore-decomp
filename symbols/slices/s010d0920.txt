@@ -1,2 +1,0 @@
-010d0920 ?getClosestPoints@hkMultiSphereTriangleAgent_s010d_0920@@UAEXABVhkCdBody_s010d_0920@@0ABUhkCollisionInput_s010d_0920@@AAVhkCdPointCollector_s010d_0920@@@Z  # hkMultiSphereTriangleAgent_s010d_0920::getClosestPoints migrated from s010d0920 (verbatim, slice spelling)
-010d1100 ?staticGetClosestPoints@hkMultiSphereTriangleAgent_s010d_0920@@SAXABVhkCdBody_s010d_0920@@0ABUhkCollisionInput_s010d_0920@@AAVhkCdPointCollector_s010d_0920@@@Z  # hkMultiSphereTriangleAgent_s010d_0920::staticGetClosestPoints migrated from s010d0920 (verbatim, slice spelling)
