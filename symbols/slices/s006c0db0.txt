@@ -1,1 +1,6 @@
 006c12a0 ?RegisterArenaReadCallbacks@@YAXXZ  # RegisterArenaReadCallbacks migrated from s006c0db0 (verbatim, slice spelling)
+006c12e0 ?VecDtorRange@@YAIIII@Z  # VecDtorRange migrated from s006c0db0 (verbatim, slice spelling)
+006c13f0 ?VecInsert38@@YAXPAHII@Z  # VecInsert38 migrated from s006c0db0 (verbatim, slice spelling)
+006c1570 ?VecInsert4@@YAXPAHII@Z  # VecInsert4 migrated from s006c0db0 (verbatim, slice spelling)
+006c1680 ?CollectArenaObjects@@YAXHPAII@Z  # CollectArenaObjects migrated from s006c0db0 (verbatim, slice spelling)
+006c1ae0 ?GetBakedAnimations@cAnimationBaker@@QAEXXZ  # cAnimationBaker::GetBakedAnimations migrated from s006c0db0 (verbatim, slice spelling)
