@@ -6,3 +6,4 @@
 ../src/game/Spui/SPUIPropertyLayout.cpp  ?SetPositionAndOffset@CPL@@QAEXMMMM@Z  008283a0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/Spui/SPUIPropertyLayout.cpp  ??1CPL@@QAE@XZ  00828670  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/Spui/SPUIPropertyLayout.cpp  ??0CPL@@QAE@XZ  008286d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Spui/SPUIPropertyLayout.cpp  ?func24h@CPL@@UAE_NXZ  00828be0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include

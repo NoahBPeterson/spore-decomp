@@ -1,4 +1,4 @@
-// src/game/Spui/SPUIPropertyLayout.cpp -- migrated from slice(s) s00827bf0 by tools/migrate/rewrite.py
+// src/game/Spui/SPUIPropertyLayout.cpp -- migrated from slice(s) s00828c30, s00827bf0 by tools/migrate/rewrite.py
 // Object file: Spui/SPUIPropertyLayout.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -7,10 +7,15 @@
 #include "SP/cString.h"
 #include "EA/Stopwatch.h"
 #include "EA/Variant.h"
-#include "SP/cPropertyUI.h"
-#include "cSPUILayout.h"
+
+// unnamed retail callees and globals (address in the comment)
+extern float g_PropDefaultValue;                 // 0x015d1168 (default "value" variant)
+extern unsigned* GetDefaultPropValue();                          // 0x0068a2e0
+extern void FormatFloat(double v, char* dst, unsigned size, const wchar_t* fmt); // 0x00881ea0
 #include <new>
 #include <intrin.h>
+#include "cSPUILayout.h"
+#include "EA/UTFWin/RenderContext.h"
 
 // ---- items of slice s00827bf0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 struct Key { unsigned int a, b, c; };
@@ -206,7 +211,7 @@ struct WinProcBase {
 WinMgr* WindowManager();                         // 0x0067caa0
 Rect2* FUN_00808370(Rect2* out, UIObj* w, int flag);   // 0x00808370 (cdecl)
 typedef UIObj IWindow;
-struct cSPUILayout_s0082_7bf0 {
+class cSPUILayout_s0082_7bf0 { public:
   cSPUILayout_s0082_7bf0();                              // 0x00810000
   ~cSPUILayout_s0082_7bf0();                             // 0x00811fe0
   void Shutdown(int);                         // 0x00811ad0 (callee pops)
@@ -220,6 +225,7 @@ struct cSPUILayout_s0082_7bf0 {
   void* mpObject;             // +0x8
 };
 extern void (*g_TimerFunc)(unsigned __int64*);   // 0x013cc2b8 (QueryPerformanceCounter)
+extern float g_PropDefaultValue;                 // 0x015d1168 (default "value" variant)
 struct Stopwatch {
   unsigned mStartLo;          // +0x0
   unsigned mStartHi;          // +0x4
@@ -253,6 +259,23 @@ struct Variant {
   Variant& operator=(const Variant&);   // 0x00542b80
   void Destruct(int);
 };
+static void* VarData(const Variant* v) {
+  if (v->mFlags & 0x30) return *(void**)(void*)v;
+  return v->mTypeId ? (void*)v : 0;
+}
+struct EStringView { const char* mpBegin; const char* mpEnd; };
+struct EString {
+  void* mpBegin;   // +0x0
+  void* mpEnd;     // +0x4
+  void* mpCap;     // +0x8
+  EString();                       // 0x006b5060
+  ~EString();                      // 0x006b5240
+  const char* c_str();             // 0x006b55c0
+};
+extern void StringAssign(const EStringView* src, EString* dst);  // 0x006b56d0
+extern const EStringView* GetEmptyStringView();                  // 0x006bb660
+extern unsigned* GetDefaultPropValue();                          // 0x0068a2e0
+extern void FormatFloat(double v, char* dst, unsigned size, const wchar_t* fmt); // 0x00881ea0
 struct IRefThing { virtual int AddRef(); virtual int Release(); };
 struct Elem {
   unsigned int first;      // +0x00
@@ -335,6 +358,79 @@ void ElemVec::clear() {
   mpEnd -= (last - first);
 }
 // ---- items of slice s00827bf0 end
+
+// unnamed retail callees and globals that name local stubs (address in the comment)
+extern void StringAssign(const EStringView* src, EString* dst);  // 0x006b56d0
+extern const EStringView* GetEmptyStringView();                  // 0x006bb660
+
+// callees this slice defines outside this object (rewrite.py held_callee_protos)
+Elem* ElemDestroyRange(Elem* first, Elem* last, Elem* dst);  // 0x00828350 (stays in the slice: not this object's)
+
+// ---- items of slice s00828c30 begin (TODO(rewrite): local stubs, replace by canonical classes)
+class IRef {
+public:
+    virtual void AddRef();  // slot 0 +0x0
+    virtual void Release();  // slot 1 +0x4
+};
+template <class T> class AutoRef {
+ public:
+  T* p;
+  AutoRef() : p(0) {}
+  AutoRef(T* n) : p(n) { if (n) n->AddRef(); }
+  ~AutoRef() { if (p) p->Release(); }
+  AutoRef& operator=(T* n) {
+    T* old = p;
+    if (n != old) {
+      if (n) n->AddRef();
+      p = n;
+      if (old) old->Release();
+    }
+    return *this;
+  }
+};
+struct Variant_s0082_8c30 {
+  char data[0x10];
+  unsigned short mFlags;
+  unsigned short mTypeId;
+  Variant_s0082_8c30() : mFlags(0) {}               // the original leaves mTypeId unset
+  ~Variant_s0082_8c30() { if (mFlags & 4) Destruct(0); }
+  Variant_s0082_8c30& operator=(const Variant_s0082_8c30& o);   // 0x00542b80
+  void Destruct(int);                     // 0x0093db80
+};
+struct VarSlot {
+  AutoRef<IRef> p;
+  Variant_s0082_8c30 v;
+  union {
+    unsigned extra;
+    struct { unsigned short extraLo, extraHi; };
+  };
+  VarSlot() { extraHi = 0; }             // only the high half is cleared
+};
+struct MapNode {
+  unsigned key;
+  IRef* p;
+  Variant_s0082_8c30 v;
+  unsigned flags;
+};
+struct MapPair {      // value_type passed to Insert (copied into the vector)
+  unsigned key;
+  VarSlot s;
+};
+struct MapVec {       // sorted vector of MapNode values
+  MapNode* mBegin;    // +0x2c
+  MapNode* mEnd;      // +0x30
+  MapNode* Insert(MapNode* pos, const MapPair* value);   // 0x00828b80
+};
+class cEntryMap {
+ public:
+  char pad0[0x2c];
+  MapVec mVec;        // +0x2c
+  char pad34[0x40 - 0x34];
+  bool mFlag;         // +0x40
+  bool Set(unsigned key, const Variant_s0082_8c30* value, unsigned flags, IRef* ref);
+};
+MapNode* LowerBound(MapNode* first, MapNode* last, unsigned* key, bool flag);   // 0x00d01210
+// ---- items of slice s00828c30 end
 
 // @ 0x00828070
 unsigned int CPL::GetEventMask()
@@ -481,4 +577,132 @@ CPL::CPL()
 : mKey24(-1), mKey28(-1), mbInitialized(false), mRootWinId(0), mInterval(1.0f), mStopwatch(5, false) {
   mTime = 1.0e30f;
   mbFlag = true;
+}
+
+// @ 0x00828740
+void CPL::func20h()
+{
+  for (Elem* it = mProperties.mpBegin; it != mProperties.mpEnd; ++it) {
+    if ((it->mLast & 5) == 0) continue;
+    it->mLast &= ~4;
+    Variant tmp;
+    Variant* src = &it->mVariant;
+    if (it->mVariant.mTypeId == 0x1d00) {
+      void* obj = VarData(&it->mVariant);
+      bool (*fn)(Variant*, void*) = obj ? *(bool (**)(Variant*, void*))obj : 0;
+      if (!fn) continue;
+      if (!fn(&tmp, *(void**)((char*)obj + 4))) continue;
+      src = &tmp;
+    }
+    IWindow* w = (IWindow*)mLayout.FindWindowByID((int)it->first, 1);
+    if (!w) continue;
+    if (src->mTypeId > 5 && src->mTypeId < 0xf) {
+      Variant conv;
+      conv.mFlags = 2;
+      conv.mTypeId = 0xd;
+      conv = *src;
+      const void* pv = (conv.mTypeId == 0xd || conv.mTypeId == 0x10)
+                           ? VarData(&conv)
+                           : (const void*)&g_PropDefaultValue;
+      float val = *(const float*)pv;
+      if (conv.mFlags & 4) conv.Destruct(0);
+      IWindow* bar = (IWindow*)w->Cast(0x10edf11);
+      if ((it->mLast & 2) && bar) {
+        float c = val;
+        if (c > 100.0f) c = 100.0f;
+        else if (c < 0.0f) c = 0.0f;
+        ((void(__thiscall*)(IWindow*, float))((*(void***)bar)[1]))(bar, c);
+      } else {
+        char buf[0x20];
+        FormatFloat((double)val, buf, 0x20, L"%-F%-p");
+        w->Set80((unsigned)(size_t)buf);
+      }
+    } else if (src->mTypeId == 0x22) {
+      EString s;
+      const void* pv = (src->mTypeId == 0x22 || src->mTypeId == 0x10)
+                           ? VarData(src)
+                           : (const void*)GetEmptyStringView();
+      StringAssign((const EStringView*)pv, &s);
+      w->Set80((unsigned)(size_t)s.c_str());
+      s.~EString();
+    } else {
+      const void* pv = (src->mTypeId == 0x13 || src->mTypeId == 0x10)
+                           ? VarData(src)
+                           : (const void*)GetDefaultPropValue();
+      w->Set80(*(const unsigned*)pv);
+    }
+  }
+  Stopwatch& sw = mStopwatch;
+  sw.Reset();
+  mTime = (float)sw.GetElapsedTime() * sw.mUnitsPerSecond;
+}
+
+// @ 0x00828a50
+Elem* ElemVec::insert(Elem* position, const Elem& value)
+{
+  if (mpEnd != mpCapacity) {
+    Elem* pv = (Elem*)&value;
+    if (pv >= position && pv < mpEnd) pv = pv + 1;
+    if (mpEnd) ::new ((void*)mpEnd) Elem(*(mpEnd - 1));
+    ElemCopyBackward(position, mpEnd - 1, mpEnd);
+    *position = *pv;
+    ++mpEnd;
+  } else {
+    unsigned n = (unsigned)(mpEnd - mpBegin);
+    unsigned newCap = (n == 0) ? 1u : n * 2;
+    Elem* pNew = 0;
+    if (newCap) {
+      pNew = (Elem*)((void* (*)(unsigned, void*, int, int, void*, int))0xf473a0)(
+          newCap * 0x20, (void*)0x13f6b3c, 0, 0, (void*)0x13ebb38, 0xd1);
+    }
+    Elem* pEnd = ElemMoveStart(mpBegin, position, pNew);
+    ElemDestroyRange(mpBegin, position, pNew);
+    if (pEnd) ::new ((void*)pEnd) Elem(value);
+    Elem* q = ElemMoveStart(position, mpEnd, pEnd + 1);
+    ElemDestroyRange(position, mpEnd, pEnd + 1);
+    if (mpBegin) ((void (*)(void*))0xf47380)(mpBegin);
+    mpBegin = pNew;
+    mpEnd = q;
+    mpCapacity = pNew + newCap;
+  }
+  return position;
+}
+
+// @ 0x00828be0
+bool CPL::func24h()
+{
+  if (mbInitialized) {
+    mLayout.Shutdown(1);
+    mProperties.clear();
+  }
+  mbInitialized = false;
+  return true;
+}
+
+// @ 0x00828c30
+bool cEntryMap::Set(unsigned key, const Variant_s0082_8c30* value, unsigned flags, IRef* ref)
+{
+  MapNode* it;
+  {
+    VarSlot a;
+    MapPair b;
+    b.key = key;
+    b.s.v = a.v;
+    b.s.extra = a.extra;
+    MapVec& vec = mVec;
+    MapNode* end = vec.mEnd;
+    it = LowerBound(vec.mBegin, end, &b.key, mFlag);
+    if (it == end || b.key < it->key)
+      it = vec.Insert(it, &b);
+  }
+  MapNode* n = it;
+  n->v = *value;
+  n->flags = flags | 4;
+  IRef* old = n->p;
+  if (ref != old) {
+    if (ref) ref->AddRef();
+    n->p = ref;
+    if (old) old->Release();
+  }
+  return true;
 }

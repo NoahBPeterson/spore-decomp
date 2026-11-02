@@ -1,3 +1,4 @@
+00828c30 ?Set@cEntryMap@@QAE_NIPBUVariant_s0082_8c30@@IPAVIRef@@@Z  # cEntryMap::Set migrated from s00828c30 (verbatim, slice spelling)
 00828d40 ??0cWrap@@QAE@PAVIProv@@PAVIRef@@@Z  # cWrap::cWrap migrated from s00828c30 (verbatim, slice spelling)
 00828df0 ?Do@C25b@@QAEXH@Z  # C25b::Do migrated from s00828c30 (verbatim, slice spelling)
 00828e30 ?BeginRender@@YAPAVcRender2D@@PAVRenderContext@@PAVIProv@@PAPAVcWrap@@@Z  # BeginRender migrated from s00828c30 (verbatim, slice spelling)
