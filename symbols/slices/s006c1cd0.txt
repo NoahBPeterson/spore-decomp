@@ -1,4 +1,9 @@
-006c2240 ??0PropertyList@@QAE@PAX@Z  # PropertyList::PropertyList
-006c22b0 ?BakeResourceCtor@@YAPAXPAX0H0HPBD@Z  # anonymous namespace cBakedArenaResource ctor
 006c1cd0 ?AnimationBakeDriver@@YAXPAUBakeContext@@PAUBakeFrameCtl@@PBM@Z  # animation-bake driver (inverse bind matrices + transform stack)
-006c24b0 ?sub_6c24b0@@YAIPAX00HHHPBD@Z  # assemble/register baked arena resource
+006c2060 ?CreateRenderObjects@@YAXPAI0@Z  # CreateRenderObjects migrated from s006c1cd0 (verbatim, slice spelling)
+006c20b0 ?DestroyRenderObjects@@YAXPAI@Z  # DestroyRenderObjects migrated from s006c1cd0 (verbatim, slice spelling)
+006c20e0 ?DestroySomeRenderObjects@@YAXPAI@Z  # DestroySomeRenderObjects migrated from s006c1cd0 (verbatim, slice spelling)
+006c2120 ?Cleanup@EditorResource@@QAEXXZ  # EditorResource::Cleanup migrated from s006c1cd0 (verbatim, slice spelling)
+006c2170 ?Destroy@EditorResource2@@QAEXXZ  # EditorResource2::Destroy migrated from s006c1cd0 (verbatim, slice spelling)
+006c2240 ??0PropertyList@@QAE@PAX@Z  # PropertyList::PropertyList migrated from s006c1cd0 (verbatim, slice spelling)
+006c22b0 ?BakeResourceCtor@@YAPAXPAX0H0HPBD@Z  # BakeResourceCtor migrated from s006c1cd0 (verbatim, slice spelling)
+006c24b0 ?sub_6c24b0@@YAIPAX00HHHPBD@Z  # sub_6c24b0 migrated from s006c1cd0 (verbatim, slice spelling)

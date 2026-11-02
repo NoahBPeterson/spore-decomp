@@ -1,5 +1,5 @@
 00812160 ?Init@cSPUILayout@@QAE_NPB_WH_NI@Z  # cSPUILayout::Init (callee of s00e043c0, named from the dev publics; slice address comment)
-00e043c0 CivComm_GetStateIconName  # state 0..11 -> icon id (jump-table getter); equiv PASS (manifest)
+00e043c0 ?CivComm_GetStateIconName@@YAHH@Z  # CivComm_GetStateIconName migrated from s00e043c0 (verbatim, slice spelling)
 00e04450 CivComm_GetStateIconIndex  # state 0..11 -> 0x70..0x73 via byte map + 4-way jump table; equiv PASS
 00e044b0 CivComm_GetStateIconName2  # state 0..11 -> second-row icon id; equiv PASS (manifest)
 00e04540 cSPUIGlobalUICiv_SetProgress  # forwards (float value, int mode) to the owned cSPUINewProgressBar; equiv PASS (manifest)

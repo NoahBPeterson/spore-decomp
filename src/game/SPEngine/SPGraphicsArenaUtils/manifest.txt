@@ -1,1 +1,4 @@
 # source  symbol  va  flags
+../src/game/SPEngine/SPGraphicsArenaUtils.cpp  ?DestroyRenderObjects@@YAXPAI@Z  006c20b0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/SPGraphicsArenaUtils.cpp  ?DestroySomeRenderObjects@@YAXPAI@Z  006c20e0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/SPGraphicsArenaUtils.cpp  ?CivComm_GetStateIconName@@YAHH@Z  00e043c0  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
