@@ -1,3 +1,11 @@
 # va  diff-bytes  reason
-005462f0 535 complete; /Od hash-dispatch schedule/frame differs
-00548910 116 complete; /Od lower_bound/find comparison schedule differs
+00543c10 469 SP::Feed::AtomParser::StartImage (shared helper for StartImage1..4) - complete; rel/term walk, gLinkMap find with mpEnd fallback, type==0x2f7d0004 guard, then String8_CtorSprintf/op_index(mode)/assign/EA_Free on entry->mLinkMap; 555 vs 742 bytes because retail's /Od frame is 0xe0 vs our 0x70 and keeps more unnamed slots; instruction stream otherwise identical; flags /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast; equiv WEAK (400 valid, 48.3% coverage)
+005459a0 172 HandshakeParser::StartDoc: complete and equivalent (equiv PASS 288 valid, 100% coverage). The old declaration took a `const wchar_t**` param, so cl emitted thiscall `ret 4` while the original is `ret` (it never reads the stack argument: only the three FeedList::clear() expansions and the field stores); fixed to `void StartDoc()`. Remaining diff is slot allocation only: retail spills each list pointer into a distinct clear()/erase(first,last) (0x00548a30) temp slot (frame 0x28/0x40/0x68 nested slots), ours reuses slots, so every frame offset shifts (198 vs 249 bytes) flags: /Od /Ob1 /MD /Gy /TP
+00546160 303 complete; /Od hash-dispatch schedule/frame differs flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+005462f0 535 complete; /Od hash-dispatch schedule/frame differs flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+00546630 346 complete; /Od multi-string ctor slot layout differs flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+00548910 116 complete; /Od lower_bound/find comparison schedule differs flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+00548a30 141 complete; erase-range had two defects: the 0x70-byte element move (0x005496a0) is __thiscall (ecx = destination, one stack arg = source) and the element dtor (0x00547840) is __thiscall with the element in ecx, but both were called through cdecl one-arg/no-arg helpers; and the destroy loop's bound test must be unsigned (retail `cmp/jae`), so with dst > stop (e.g. dst = 0xa3af314c, stop = 2) the signed loop entered and destroyed an unmapped element (fault at eip=0x547858). The moves/destroys are now annotated thiscall members (FeedElemMove::MoveFrom, FeedElemDtor::Destroy) and the loop counter/bound are unsigned.  [equiv: PASS (334/1200 valid, 64.7% cov)] flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+00548b10 383 complete; /Od vector<0x70>::insert grow/shift schedule differs flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+005497e0 77 complete; /Od find_first_of loop schedule differs flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+00549840 80 complete; /Od find_last_of loop schedule differs flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast

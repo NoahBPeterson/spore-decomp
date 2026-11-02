@@ -1,6 +1,9 @@
+00547640 ?push_back@?$vector_s0054_6f80@UFeedDescription_s0054_6f80@Feed@SP@@Usp_vector_allocator_s0054_6f80@eastl@@@eastl@@QAEXXZ  # push_back migrated from s00546f80 (verbatim, slice spelling)
+00547900 ?find_first_not_of@?$basic_string_s0054_6f80@_WVallocator_s0054_6f80@eastl@@@eastl@@QBEIPB_WII@Z  # None migrated from s00546f80 (verbatim, slice spelling)
+00547970 ?find_last_not_of@?$basic_string_s0054_6f80@_WVallocator_s0054_6f80@eastl@@@eastl@@QBEIPB_WII@Z  # None migrated from s00546f80 (verbatim, slice spelling)
 0x00546f80 SP::Feed::AtomEntry::~AtomEntry  # member dtors in reverse layout order; mpAuthor = NULL first
+0x005471e0 eastl::vector<SP::Feed::Link,eastl::sp_vector_allocator>::~vector  # dtor loop + base dtor
 0x005476e0 SP::Feed::Link::Link  # implicit ctor: 2x string16 + Variant
 0x005477a0 SP::Feed::Link::~Link  # implicit dtor
 0x00547840 SP::Feed::FeedDescription::~FeedDescription  # implicit dtor
 0x00547a10 eastl::vector<SP::Feed::Link,eastl::sp_vector_allocator>::DoInsertValue  # EASTL body, 0x34-byte elements
-0x005471e0 eastl::vector<SP::Feed::Link,eastl::sp_vector_allocator>::~vector  # dtor loop + base dtor

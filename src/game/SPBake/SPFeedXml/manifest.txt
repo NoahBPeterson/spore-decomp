@@ -1,3 +1,27 @@
 # source  symbol  va  flags
+../src/game/SPBake/SPFeedXml.cpp  ?FUN_00543b90@Ctx40@@QAEXPAH@Z  00543b90  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/SPFeedXml.cpp  ?FUN_00543bb0@Ctx40@@QAEXPAH@Z  00543bb0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/SPFeedXml.cpp  ?FUN_00543bd0@Ctx40@@QAEXPAH@Z  00543bd0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/SPFeedXml.cpp  ?FUN_00543bf0@Ctx40@@QAEXPAH@Z  00543bf0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/SPFeedXml.cpp  ?EndDoc@HandshakeParser_s0054_5220@Feed@SP@@QAEXXZ  00545aa0  /Od /Ob1 /MD /Gy /TP /Isrc/game/include
+../src/game/SPBake/SPFeedXml.cpp  ?StartFeed@HandshakeParser_s0054_5220@Feed@SP@@QAEXXZ  00545ad0  /Od /Ob1 /MD /Gy /TP /Isrc/game/include
+../src/game/SPBake/SPFeedXml.cpp  ?EndFeed@HandshakeParser_s0054_5220@Feed@SP@@QAEXXZ  00545b20  /Od /Ob1 /MD /Gy /TP /Isrc/game/include
+../src/game/SPBake/SPFeedXml.cpp  ?StartAuthor@HandshakeParser_s0054_5220@Feed@SP@@QAEXXZ  00545bd0  /Od /Ob1 /MD /Gy /TP /Isrc/game/include
+../src/game/SPBake/SPFeedXml.cpp  ?EndAuthor@HandshakeParser_s0054_5220@Feed@SP@@QAEXXZ  00545bf0  /Od /Ob1 /MD /Gy /TP /Isrc/game/include
+../src/game/SPBake/SPFeedXml.cpp  ?EndName@HandshakeParser_s0054_5220@Feed@SP@@QAEXXZ  00545c10  /Od /Ob1 /MD /Gy /TP /Isrc/game/include
+../src/game/SPBake/SPFeedXml.cpp  ?EndAuthorID@HandshakeParser_s0054_5220@Feed@SP@@QAEXXZ  00545c60  /Od /Ob1 /MD /Gy /TP /Isrc/game/include
+../src/game/SPBake/SPFeedXml.cpp  ?BeginList@HandshakeParser_s0054_5220@Feed@SP@@QAEXPAUFeedList@23@I@Z  00545ca0  /Od /Ob1 /MD /Gy /TP /Isrc/game/include
+../src/game/SPBake/SPFeedXml.cpp  ?EndList@HandshakeParser_s0054_5220@Feed@SP@@QAEXXZ  00545cc0  /Od /Ob1 /MD /Gy /TP /Isrc/game/include
+../src/game/SPBake/SPFeedXml.cpp  ?EndTitle@HandshakeParser_s0054_5220@Feed@SP@@QAEXXZ  00545ce0  /Od /Ob1 /MD /Gy /TP /Isrc/game/include
+../src/game/SPBake/SPFeedXml.cpp  ?EndSubtitle@HandshakeParser_s0054_5220@Feed@SP@@QAEXXZ  00545d30  /Od /Ob1 /MD /Gy /TP /Isrc/game/include
+../src/game/SPBake/SPFeedXml.cpp  ?EndSubcount@HandshakeParser_s0054_5220@Feed@SP@@QAEXXZ  00545d80  /Od /Ob1 /MD /Gy /TP /Isrc/game/include
+../src/game/SPBake/SPFeedXml.cpp  ?StartLink@HandshakeParser_s0054_5220@Feed@SP@@QAEXPAPB_W@Z  00545dc0  /Od /Ob1 /MD /Gy /TP /Isrc/game/include
+../src/game/SPBake/SPFeedXml.cpp  ?EndId@HandshakeParser_s0054_5220@Feed@SP@@QAEXXZ  00545fa0  /Od /Ob1 /MD /Gy /TP /Isrc/game/include
+../src/game/SPBake/SPFeedXml.cpp  ?EndUpdated@HandshakeParser_s0054_5220@Feed@SP@@QAEXXZ  00546020  /Od /Ob1 /MD /Gy /TP /Isrc/game/include
+../src/game/SPBake/SPFeedXml.cpp  ?EndNextID@HandshakeParser_s0054_5220@Feed@SP@@QAEXXZ  00546050  /Od /Ob1 /MD /Gy /TP /Isrc/game/include
+../src/game/SPBake/SPFeedXml.cpp  ?EndUserID@HandshakeParser_s0054_5220@Feed@SP@@QAEXXZ  00546090  /Od /Ob1 /MD /Gy /TP /Isrc/game/include
 ../src/game/SPBake/SPFeedXml.cpp  ?EndField20@HandshakeParser_s0054_5220@Feed@SP@@QAEXXZ  005460d0  /Od /Ob1 /MD /Gy /TP /Isrc/game/include
 ../src/game/SPBake/SPFeedXml.cpp  ?EndScreenName@HandshakeParser_s0054_5220@Feed@SP@@QAEXXZ  00546110  /Od /Ob1 /MD /Gy /TP /Isrc/game/include
+../src/game/SPBake/SPFeedXml.cpp  ?push_back@?$vector_s0054_6f80@UFeedDescription_s0054_6f80@Feed@SP@@Usp_vector_allocator_s0054_6f80@eastl@@@eastl@@QAEXXZ  00547640  /Od /Ob1 /MD /Gy /TP /Isrc/game/include
+../src/game/SPBake/SPFeedXml.cpp  ?find_first_not_of@?$basic_string_s0054_6f80@_WVallocator_s0054_6f80@eastl@@@eastl@@QBEIPB_WII@Z  00547900  /Od /Ob1 /MD /Gy /TP /Isrc/game/include
+../src/game/SPBake/SPFeedXml.cpp  ?find_last_not_of@?$basic_string_s0054_6f80@_WVallocator_s0054_6f80@eastl@@@eastl@@QBEIPB_WII@Z  00547970  /Od /Ob1 /MD /Gy /TP /Isrc/game/include

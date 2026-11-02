@@ -1,1 +1,3 @@
+005497e0 ?FUN_005497e0@@YAPAFPAF000@Z  # FUN_005497e0 migrated from s00548d90 (verbatim, slice spelling)
+00549840 ?FUN_00549840@@YAHHHPAF0@Z  # FUN_00549840 migrated from s00548d90 (verbatim, slice spelling)
 00549dc0 ?FUN_00549dc0@@YAPAIPAIH0@Z  # FUN_00549dc0 migrated from s00548d90 (verbatim, slice spelling)

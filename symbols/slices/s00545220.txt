@@ -11,20 +11,23 @@
 005458e0 SP::Feed::HandshakeParser::GetAccessFlags
 00545910 SP::Feed::HandshakeParser::GetState
 00545950 SP::Feed::HandshakeParser::GetPosition
-005459a0 SP::Feed::HandshakeParser::StartDoc
-00545aa0 SP::Feed::HandshakeParser::EndDoc
-00545ad0 SP::Feed::HandshakeParser::StartFeed
-00545b20 SP::Feed::HandshakeParser::EndFeed
-00545bd0 SP::Feed::HandshakeParser::StartAuthor
-00545bf0 SP::Feed::HandshakeParser::EndAuthor
-00545c10 SP::Feed::HandshakeParser::EndName
-00545ce0 SP::Feed::HandshakeParser::EndTitle
-00545d30 SP::Feed::HandshakeParser::EndSubtitle
-00545d80 SP::Feed::HandshakeParser::EndSubcount
-00545dc0 SP::Feed::HandshakeParser::StartLink
-00545fa0 SP::Feed::HandshakeParser::EndId
-00546020 SP::Feed::HandshakeParser::EndUpdated
-00546050 SP::Feed::HandshakeParser::EndNextID  # HandshakeData::mnNextID
-00546090 SP::Feed::HandshakeParser::EndUserID  # HandshakeData::mnUserID
+005459a0 ?StartDoc@HandshakeParser_s0054_5220@Feed@SP@@QAEXXZ  # HandshakeParser_s0054_5220::StartDoc migrated from s00545220 (verbatim, slice spelling)
+00545aa0 ?EndDoc@HandshakeParser_s0054_5220@Feed@SP@@QAEXXZ  # HandshakeParser_s0054_5220::EndDoc migrated from s00545220 (verbatim, slice spelling)
+00545ad0 ?StartFeed@HandshakeParser_s0054_5220@Feed@SP@@QAEXXZ  # HandshakeParser_s0054_5220::StartFeed migrated from s00545220 (verbatim, slice spelling)
+00545b20 ?EndFeed@HandshakeParser_s0054_5220@Feed@SP@@QAEXXZ  # HandshakeParser_s0054_5220::EndFeed migrated from s00545220 (verbatim, slice spelling)
+00545bd0 ?StartAuthor@HandshakeParser_s0054_5220@Feed@SP@@QAEXXZ  # HandshakeParser_s0054_5220::StartAuthor migrated from s00545220 (verbatim, slice spelling)
+00545bf0 ?EndAuthor@HandshakeParser_s0054_5220@Feed@SP@@QAEXXZ  # HandshakeParser_s0054_5220::EndAuthor migrated from s00545220 (verbatim, slice spelling)
+00545c10 ?EndName@HandshakeParser_s0054_5220@Feed@SP@@QAEXXZ  # HandshakeParser_s0054_5220::EndName migrated from s00545220 (verbatim, slice spelling)
+00545c60 ?EndAuthorID@HandshakeParser_s0054_5220@Feed@SP@@QAEXXZ  # HandshakeParser_s0054_5220::EndAuthorID migrated from s00545220 (verbatim, slice spelling)
+00545ca0 ?BeginList@HandshakeParser_s0054_5220@Feed@SP@@QAEXPAUFeedList@23@I@Z  # HandshakeParser_s0054_5220::BeginList migrated from s00545220 (verbatim, slice spelling)
+00545cc0 ?EndList@HandshakeParser_s0054_5220@Feed@SP@@QAEXXZ  # HandshakeParser_s0054_5220::EndList migrated from s00545220 (verbatim, slice spelling)
+00545ce0 ?EndTitle@HandshakeParser_s0054_5220@Feed@SP@@QAEXXZ  # HandshakeParser_s0054_5220::EndTitle migrated from s00545220 (verbatim, slice spelling)
+00545d30 ?EndSubtitle@HandshakeParser_s0054_5220@Feed@SP@@QAEXXZ  # HandshakeParser_s0054_5220::EndSubtitle migrated from s00545220 (verbatim, slice spelling)
+00545d80 ?EndSubcount@HandshakeParser_s0054_5220@Feed@SP@@QAEXXZ  # HandshakeParser_s0054_5220::EndSubcount migrated from s00545220 (verbatim, slice spelling)
+00545dc0 ?StartLink@HandshakeParser_s0054_5220@Feed@SP@@QAEXPAPB_W@Z  # HandshakeParser_s0054_5220::StartLink migrated from s00545220 (verbatim, slice spelling)
+00545fa0 ?EndId@HandshakeParser_s0054_5220@Feed@SP@@QAEXXZ  # HandshakeParser_s0054_5220::EndId migrated from s00545220 (verbatim, slice spelling)
+00546020 ?EndUpdated@HandshakeParser_s0054_5220@Feed@SP@@QAEXXZ  # HandshakeParser_s0054_5220::EndUpdated migrated from s00545220 (verbatim, slice spelling)
+00546050 ?EndNextID@HandshakeParser_s0054_5220@Feed@SP@@QAEXXZ  # HandshakeParser_s0054_5220::EndNextID migrated from s00545220 (verbatim, slice spelling)
+00546090 ?EndUserID@HandshakeParser_s0054_5220@Feed@SP@@QAEXXZ  # HandshakeParser_s0054_5220::EndUserID migrated from s00545220 (verbatim, slice spelling)
 005460d0 ?EndField20@HandshakeParser_s0054_5220@Feed@SP@@QAEXXZ  # HandshakeParser_s0054_5220::EndField20 migrated from s00545220 (verbatim, slice spelling)
 00546110 ?EndScreenName@HandshakeParser_s0054_5220@Feed@SP@@QAEXXZ  # HandshakeParser_s0054_5220::EndScreenName migrated from s00545220 (verbatim, slice spelling)
