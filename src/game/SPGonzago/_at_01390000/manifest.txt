@@ -1,0 +1,5 @@
+# source  symbol  va  flags
+../src/game/SPGonzago/_at_01390000.cpp  ?init_16ca3d4@@YAXXZ  01391740  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPGonzago/_at_01390000.cpp  ?PosseRingTableInit@@YAXXZ  0139bfe0  /O2 /MD /Gy /TP /arch:IA32 /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_01390000.cpp  ?PosseRingAngleInit@@YAXXZ  0139c070  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_01390000.cpp  ?PropTableInit_e870@@YAXXZ  0139e870  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
