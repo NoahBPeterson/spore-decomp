@@ -1,0 +1,3 @@
+# va  diff-bytes  reason
+00560d20 52 complete asset key equality; /Od frame differs; equiv PASS (ecx receiver fixed) flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+005611b0 91 complete cEditorResource destructor; frame schedule differs; equiv PASS 399 valid, 100% coverage flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
