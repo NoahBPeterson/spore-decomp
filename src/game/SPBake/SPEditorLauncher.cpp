@@ -105,7 +105,7 @@ public:
 }
 }
 namespace eastl {
-struct allocator_s005a_8d20 {};
+class allocator_s005a_8d20 { public:};
 }
 namespace eastl {
 struct sp_vector_allocator_s005a_8d20 {
@@ -329,16 +329,82 @@ public:
     virtual int Release();
 };
 }
+namespace SP {
+class cResource {
+public:
+    virtual int AddRef();
+    virtual int Release();
+    char pad_4[0x18 - 0x4];
+    uint32_t mTypeID;   // +0x18
+};
+}
+namespace SP {
+class cResourceManager {
+public:
+virtual void Unk0();
+virtual void Unk1();
+virtual void Unk2();
+    virtual bool GetResource(const ResourceKey& key, cResource** ppResource, int a, int b, int c, int d);   // slot 3
+};
+}
+namespace SP {
+cResourceManager* ResourceManager();   // 0x0067DCD0
+}
+namespace SP {
+class cPropertyManager_s005a_8d20 {
+public:
+virtual void Unk0();
+virtual void Unk1();
+virtual void Unk2();
+virtual void Unk3();
+virtual void Unk4();
+virtual void Unk5();
+virtual void Unk6();
+virtual void Unk7();
+virtual void Unk8();
+virtual void Unk9();
+virtual void Unk10();
+    virtual bool GetPropertyList(uint32_t instanceID, uint32_t groupID, cPropertyList_s005a_8d20** ppList);   // slot 11
+};
+}
+namespace SP {
+cPropertyManager_s005a_8d20* PropertyManager();   // 0x0067DE30
+}
+namespace SP {
+uint32_t RemapTypeId(uint32_t typeID);   // 0x00432F10
+}
+namespace SP {
+extern uint32_t kEditorPropertyGroup;    // 0x01510F44
+}
+class cResourceProperties {
+public:
+virtual int AddRef();
+virtual int Release();
+virtual void Unk2();
+    virtual struct cPropertyEntry* GetProperty(uint32_t propID);   // slot 3
+};
+struct cPropertyEntry { char pad_0[0x18]; uint32_t mValue; };
 typedef eastl::vector_s005a_8d20<EA::AutoRefCount_s005a_8d20<SP::cPropertyList_s005a_8d20> > PropertyListVector;
 typedef eastl::map_s005a_8d20<uint32_t, PropertyListVector> EditorPropListMap;
+extern EditorPropListMap sEditorPropLists;   // 0x0151102C
 namespace SP {
 namespace Editor {
 class cAppMode {
 public:
-    virtual void Unk0(); virtual void Unk1(); virtual void Unk2(); virtual void Unk3();
-    virtual void Unk4(); virtual void Unk5(); virtual void Unk6(); virtual void Unk7();
-    virtual void Unk8(); virtual void Unk9(); virtual void Unk10(); virtual void Unk11();
-    virtual void Unk12(); virtual void Unk13();
+virtual void Unk0();
+virtual void Unk1();
+virtual void Unk2();
+virtual void Unk3();
+virtual void Unk4();
+virtual void Unk5();
+virtual void Unk6();
+virtual void Unk7();
+virtual void Unk8();
+virtual void Unk9();
+virtual void Unk10();
+virtual void Unk11();
+virtual void Unk12();
+virtual void Unk13();
     virtual uint32_t GetModeID();   // slot 14
 };
 }
@@ -350,7 +416,7 @@ cAppMode* App();   // 0x0067DD10
 }
 namespace SP {
 namespace Editor {
-class cEditorLaunchData_s005a_8d20 : public EA::Messaging::IMessageRC_s005a_8d20, public EA::RefCountTemplate_s005a_8d20<int> {
+struct cEditorLaunchData_s005a_8d20 : public EA::Messaging::IMessageRC_s005a_8d20, public EA::RefCountTemplate_s005a_8d20<int> { private:
 public:
     cEditorLaunchData_s005a_8d20();
     virtual int AddRef();
@@ -410,8 +476,12 @@ bool Launch(uint32_t config, const ResourceKey& modelKey, uint32_t callerID,
 }
 class cMessageServer {
 public:
-    virtual void Unk0(); virtual void Unk1(); virtual void Unk2(); virtual void Unk3();
-    virtual void Unk4(); virtual void Unk5();
+virtual void Unk0();
+virtual void Unk1();
+virtual void Unk2();
+virtual void Unk3();
+virtual void Unk4();
+virtual void Unk5();
     virtual void PostMessage(uint32_t messageID, void* pMessage, int a, int b);   // slot 6
 };
 cMessageServer* MessageServer();   // 0x0067DCC0
@@ -445,6 +515,36 @@ struct cAppSettings { char pad_0[0x118]; int mbDisableTutorials; };
 struct cAppPropertiesHolder { char pad_0[0x3c]; cAppSettings* mpSettings; };
 extern cAppPropertiesHolder* sAppProperties;   // 0x015FD918
 template class eastl::map_s005a_8d20<uint32_t, PropertyListVector>;
+class cPropertyListEx : public SP::cPropertyList_s005a_8d20 {
+public:
+virtual void Unk2();
+virtual void Unk3();
+virtual void Unk4();
+virtual void Unk5();
+virtual void Unk6();
+    virtual bool HasProperty(uint32_t propID);                  // slot 7
+virtual void Unk8();
+virtual void Unk9();
+    virtual struct cKeyArrayProperty* GetProperty(uint32_t propID);   // slot 10
+};
+struct cKeyArrayProperty {
+    ResourceKey* mpKeys;     // +0x0 (or inline value)
+    uint32_t     pad_4;
+    int          mnCount;    // +0x8
+    uint32_t     pad_c;
+    uint16_t     mnFlags;    // +0x10
+    uint16_t     mnType;     // +0x12
+};
+class cPropertyManagerEx : public SP::cPropertyManager_s005a_8d20 {
+public:
+virtual void Unk12();
+virtual void Unk13();
+virtual void Unk14();
+virtual void Unk15();
+virtual void Unk16();
+    virtual void Unk17();
+    virtual void GetPropertyListIDs(uint32_t groupID, eastl::vector_s005a_8d20<uint32_t>* pIDs);   // slot 18
+};
 // ---- items of slice s005a8d20 end
 
 // callees this slice defines outside this object (rewrite.py held_callee_protos)
@@ -488,6 +588,38 @@ int RemapTypeId(int id)
     case 0x37148141: return 0x1c7eca95;
     }
     return -1;
+}
+
+// @ 0x005a8ed0
+bool GetPropertyListForResource(ResourceKey key, SP::cPropertyList_s005a_8d20** ppList)
+{
+    EA::AutoRefCount_s005a_8d20<SP::cResource> resource;
+    if (SP::ResourceManager()->GetResource(key, resource.AsPPTypeParam(), 0, 0, 0, 0) && resource &&
+        SP::PropertyManager()->GetPropertyList(SP::RemapTypeId(resource->mTypeID), SP::kEditorPropertyGroup, ppList))
+        return true;
+    return false;
+}
+
+// @ 0x005a8f80
+static uint32_t GetEditorConfigForModel(const ResourceKey* key)
+{
+    uint32_t config;
+    SP::cResourceManager* manager = SP::ResourceManager();
+    EA::AutoRefCount_s005a_8d20<cResourceProperties> resource;
+    cPropertyEntry* entry;
+    if (manager->GetResource(*key, (SP::cResource**)&resource.mpObject, 0, 0, 0, 0) && resource &&
+        (entry = resource->GetProperty(0x3c609f8)) != 0)
+        return SP::RemapTypeId(entry->mValue);
+    switch (key->typeID) {
+    case 0x2b978c46: config = 0x465c50ba; break;
+    case 0x24682294: config = 0x99f87089; break;
+    case 0x2399be55: config = 0xd817cd63; break;
+    case 0x3d97a8e4: config = 0x3615a30b; break;
+    case 0x476a98c7: config = 0x96b24187; break;
+    case 0x438f6347: config = 0x1c7eca95; break;
+    default: config = (uint32_t)(cResourceProperties*)resource; break;
+    }
+    return config;
 }
 
 // @ 0x005a9200
@@ -557,4 +689,40 @@ bool SP::Editor::Launch(uint32_t config, const ResourceKey& modelKey, uint32_t c
 void CopyConstructEditorPropListEntry(void* p, const EditorPropListMap::value_type& x)
 {
     new (p) EditorPropListMap::value_type(x);
+}
+
+// @ 0x005a9930
+template <typename Key, typename T> T& eastl::map_s005a_8d20<Key, T>::operator[](const Key& key)
+{
+    iterator itLower(lower_bound(key));
+    if ((itLower == end()) || mCompare(key, itLower->first))
+        itLower = insert(itLower, value_type(key, T()));
+    return itLower->second;
+}
+
+// @ 0x005a9a00
+static void RegisterEditorPropertyLists(uint32_t groupID)
+{
+    eastl::vector_s005a_8d20<uint32_t> ids;
+    ((cPropertyManagerEx*)SP::PropertyManager())->GetPropertyListIDs(groupID, &ids);
+    for (uint32_t* it = ids.begin(); it != ids.end(); ++it) {
+        EA::AutoRefCount_s005a_8d20<SP::cPropertyList_s005a_8d20> propList;
+        SP::PropertyManager()->GetPropertyList(*it, groupID, propList.AsPPTypeParam());
+        if (propList && ((cPropertyListEx*)propList.mpObject)->HasProperty(0x1b7dd74)) {
+            cKeyArrayProperty* prop = ((cPropertyListEx*)propList.mpObject)->GetProperty(0x1b7dd74);
+            if (prop->mnType == 0x20) {
+                ResourceKey* keys = (prop->mnFlags & 0x30) ? prop->mpKeys : (ResourceKey*)prop;
+                int count = (prop->mnFlags & 0x30) ? prop->mnCount : 1;
+                for (int i = 0; i < count; i++, keys++)
+                    sEditorPropLists[keys->instanceID].push_back(propList);
+            }
+        }
+    }
+}
+
+// @ 0x005a9b60
+void RegisterAllEditorPropertyLists()
+{
+    RegisterEditorPropertyLists(0xdd91ac58);
+    RegisterEditorPropertyLists(0x1b68db4);
 }

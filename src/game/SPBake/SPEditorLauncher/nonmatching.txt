@@ -1,3 +1,6 @@
 # va  diff-bytes  reason
-005a9200 536 Editor::Launch(cEditorLaunchData*): message ID is reloaded from the message before PostMessage in the original; register choices; switch block layout shifts
-005a9610 15 pair<const uint, vector<AutoRefCount<cPropertyList>>> copy ctor: register assignment of the uninitialized_copy arguments differs
+005a8ed0 84 GetPropertyListForResource: original caches the resource pointer in esi across PropertyManager(); mine re-reads the AutoRefCount flags: /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+005a8f80 40 GetEditorConfigForModel (static, key pointer passed in eax by cl's register convention): default case reloads the AutoRefCount slot in the original flags: /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+005a9200 423 Editor::Launch(cEditorLaunchData*): message ID is reloaded from the message before PostMessage in the original; register choices; switch block layout shifts flags: /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+005a9610 15 pair<const uint, vector<AutoRefCount<cPropertyList>>> copy ctor: register assignment of the uninitialized_copy arguments differs flags: /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+005a9930 93 map::operator[]: original knows the T() temporary's begin/end stay 0 across VectorBase(n, alloc) (pushes constants); mine reloads, frame +8; equiv: PASS (979 valid inputs, 100% coverage) flags: /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
