@@ -1,5 +1,9 @@
-# va  diff-bytes  reason
-00a16b80 44 RemoveElement: complete, vector swap-remove register schedule differs
-00a16d00 85 PrimitiveAggregate ctor: complete; original reloads vector begin/end for the inlined clear() instead of forwarding stores; difftest PASS (vtables mapped in symbols/slices)
-00a16da0 100 UpdatePrimitives: complete, clear() inlined loop vs DoInsertValue differs
-00a16e20 64 PushBack: complete, growth/call schedule differs
+# va  diff-bytes  reason   flags /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+00a16b80 44 RemoveElement: complete, vector swap-remove register schedule differs flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+00a16d00 84 FIXED: volatile re-reads of mpEnd/mpBegin and moving the m68 store last keep edx untouched (the original never writes edx); default PASS (400 valid, 100% coverage), replay and hybrid AudioPrimitiveAggregate.cpp first-difference None; size 146 vs 145 flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+00a16da0 100 UpdatePrimitives: complete, clear() inlined loop vs DoInsertValue differs flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+00a16e20 64 PushBack: complete, growth/call schedule differs flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+00a367a0 401 EA::Audio::PrimitiveAggregate::CalculateAggregate: complete aggregation (min/max/product/average/last/first selected by mode key); mode dispatch and frame differ (428 vs 492 bytes, raw masked diff 465); difftest WEAK (400 valid, 21.8% coverage) flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+00a36a10 13 S106::~S106: complete destructor (three vtable stores, member AutoRefVec destroy via 0x7c80c0, base vtable restores); original carries an MSVC EH3 unwind frame (state 2) our plain body omits (53 vs 101 bytes, raw masked diff 49); difftest PASS (267 valid, 100.0% coverage) flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+00a36ad0 285 S106::vecInsert: complete EASTL vector insert (in-place move vs grow via 0xf473a0/0x11e0744); grow path and thiscall-vs-dummy shapes differ (330 vs 422 bytes, raw masked diff 377); difftest WEAK (95 valid, 57.0% coverage) flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+00a36c80 91 S106::vecRemove: complete erase-by-key (linear scan, 0x6782c0 shift, element release); pointer arithmetic and frame differ (96 vs 84 bytes, raw masked diff 91); difftest PASS (255 valid, 86.1% coverage) flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
