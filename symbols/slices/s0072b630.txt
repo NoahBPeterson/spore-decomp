@@ -1,4 +1,5 @@
 0072b630 ?FUN_0072b630@@YAXPAX00000000@Z  # FUN_0072b630 migrated from s0072b630 (verbatim, slice spelling)
 0072c040 ?FUN_0072c040@@YAXPAHPAX1111111@Z  # FUN_0072c040 migrated from s0072b630 (verbatim, slice spelling)
+0072c1e0 ?FUN_0072c1e0@FixedBoolVector@@QAEPAU1@IH@Z  # FixedBoolVector::FUN_0072c1e0 migrated from s0072b630 (verbatim, slice spelling)
 011f4f20 ?Lock@IndexBuffer@graphics@rw@@QAEPAV123@IAAULocked@123@@Z  # rw::graphics::IndexBuffer::Lock (callee of s0072b630, named from the dev publics; slice address comment)
 011f4fd0 ?Unlock@IndexBuffer@graphics@rw@@QAEPAV123@AAULocked@123@@Z  # rw::graphics::IndexBuffer::Unlock (callee of s0072b630, named from the dev publics; slice address comment)

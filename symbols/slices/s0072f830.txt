@@ -1,2 +1,5 @@
-0072f9b0 FUN_0072f9b0  # bone-matrix palette stream builder (0x7000c skin objects) over the meshes built from an RW4 arena
+0072f830 ?FUN_0072f830@@YAXIPAX000@Z  # FUN_0072f830 migrated from s0072f830 (verbatim, slice spelling)
+0072f8d0 ?Fn0072f8d0_impl@palette@@YAXPAUPtrVector@1@0PAX1@Z  # Fn0072f8d0_impl migrated from s0072f830 (verbatim, slice spelling)
+0072f9b0 ?FUN_0072f9b0@@YAXPAURWResource@palette@@PAU?$vector@U?$intrusive_ptr@UMesh@palette@@@palette@@@2@@Z  # FUN_0072f9b0 migrated from s0072f830 (verbatim, slice spelling)
+0072fff0 ?FUN_0072fff0@@YAXPAUResDesc@resfac@@PAU?$RV@U?$intrusive_ptr@UPartHolder@resfac@@@palette@@@2@@Z  # FUN_0072fff0 migrated from s0072f830 (verbatim, slice spelling)
 00730210 ?FUN_00730210@@YAXPAHH@Z  # FUN_00730210 migrated from s0072f830 (verbatim, slice spelling)
