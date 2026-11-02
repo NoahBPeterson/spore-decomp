@@ -1,0 +1,5 @@
+# source  symbol  va  flags
+../src/game/SPGonzago/_at_00d40000.cpp  ??0cCreatureTokenTranslator@@QAE@XZ  00d486f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00d40000.cpp  ?InitButtonTable@@YAXXZ  00d48a00  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00d40000.cpp  ?FreeButtonTable@@YAXXZ  00d48ae0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00d40000.cpp  ?SelectAbility@@YAXH@Z  00d48b00  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
