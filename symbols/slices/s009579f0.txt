@@ -1,7 +1,7 @@
-009579f0 UI::Image::Image  # ctor: store vtable, interlocked +0x28=0, p1=obj, if obj->v00, store 4 floats + 4 ints
-00957a60 Fn00957a60  # one-shot lazy init of global table at 0x154edf0 (guard flag 0x166b138)
-00957aa0 Fn00957aa0  # return element 0 of a UIImage array (indexer)
-00957ac0 Fn00957ac0  # indexer helper (a,b) -> pointer
+009579f0 ?Image@UIImage@@QAEPAU1@PAXHHMMMMH@Z  # UIImage::Image migrated from s009579f0 (verbatim, slice spelling)
+00957a60 ?Fn00957a60@@YAPAPAXHH@Z  # Fn00957a60 migrated from s009579f0 (verbatim, slice spelling)
+00957aa0 ?Fn00957aa0@@YIPAUUIImage@@PAU1@@Z  # Fn00957aa0 migrated from s009579f0 (verbatim, slice spelling)
+00957ac0 ?Fn00957ac0@@YGPAXHH@Z  # Fn00957ac0 migrated from s009579f0 (verbatim, slice spelling)
 00957b00 ?GetGlobalImageTable@@YAPAXXZ  # GetGlobalImageTable migrated from s009579f0 (verbatim, slice spelling)
 00957bb0 ?Add@ImageTable@@QAEXPAXE@Z  # ImageTable::Add migrated from s009579f0 (verbatim, slice spelling)
 00957c20 ?Fn00957c20@@YAXHH@Z  # Fn00957c20 migrated from s009579f0 (verbatim, slice spelling)

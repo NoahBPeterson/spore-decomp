@@ -10,4 +10,6 @@
 0095bb20 ?End2D@RenderCtx@@QAEXXZ  # RenderCtx::End2D migrated from s0095b310 (verbatim, slice spelling)
 0095bbc0 ?AddRenderable@RenderCtx@@QAEXPAUIRenderable@@@Z  # RenderCtx::AddRenderable migrated from s0095b310 (verbatim, slice spelling)
 0095bc10 ?Begin2D@RenderCtx@@QAEPAUBatch2D@@PAUIRenderMode@@@Z  # RenderCtx::Begin2D migrated from s0095b310 (verbatim, slice spelling)
+0095bc40 ?RenderBatch@RenderCtx@@QAEPAPAUNode@@PAPAU2@PAUDispEntry@@H@Z  # RenderCtx::RenderBatch migrated from s0095b310 (verbatim, slice spelling)
+0095bd60 ?RenderList@RenderCtx@@QAEXPAUNode@@PBURectF@@@Z  # RenderCtx::RenderList migrated from s0095b310 (verbatim, slice spelling)
 0095c0d0 ?DrawClippedRect@@YAXPAUIRenderer@@PBURectF@@11@Z  # DrawClippedRect migrated from s0095b310 (verbatim, slice spelling)

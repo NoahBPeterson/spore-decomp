@@ -3,6 +3,7 @@
 00956af0 ?FUN_00956af0@@YIHPAX@Z  # FUN_00956af0 migrated from s009568c0 (verbatim, slice spelling)
 00956b30 EA::UTFWin::GlyphRenderer::DrawText  # LayoutTextLine into a fixed_vector<GlyphDisplayEntry,256>, then vslot 13 draws the glyphs
 00956c40 EA::UTFWin::GlyphRenderer::DrawText  # 4-float overload (FUN_00890830 layout variant)
+00956d90 ?FUN_00956d90@@YAXXZ  # FUN_00956d90 migrated from s009568c0 (verbatim, slice spelling)
 00956e30 ?FreeRenderableListChunks@@YAXPAURLChunk@@0@Z  # FreeRenderableListChunks migrated from s009568c0 (verbatim, slice spelling)
 00956e90 ?FreeDisplayListEntry@@YAXPAH@Z  # FreeDisplayListEntry migrated from s009568c0 (verbatim, slice spelling)
 00956ed0 ?AllocRenderableListChunk@@YAPAURLChunk@@XZ  # AllocRenderableListChunk migrated from s009568c0 (verbatim, slice spelling)
@@ -17,3 +18,17 @@
 00957300 EA::UTFWin::HitMask::BuildFromAlpha  # alpha>0x7f -> run table
 009573e0 eastl::vector<unsigned short>::swap  # copy-swap unless both own heap storage
 009574c0 EA::UTFWin::HitMask::BuildAssign  # swap runs + width/height
+00957530 ?FUN_00957530@@YIXPAH@Z  # FUN_00957530 migrated from s009568c0 (verbatim, slice spelling)
+00957550 ?Release@Image@UTFWin@EA@@UAEHXZ  # EA::UTFWin::Image::Release migrated from s009568c0
+00957570 ?Cast@UIObj@@QAEPAXI@Z  # UIObj::Cast migrated from s009568c0 (verbatim, slice spelling)
+009575f0 ?FUN_009575f0@@YA_NPAUSerObj@@0PAUSerDesc@@@Z  # FUN_009575f0 migrated from s009568c0 (verbatim, slice spelling)
+009576f0 ?FUN_009576f0@@YA_NPAUSerObj@@0PAUSerDesc@@@Z  # FUN_009576f0 migrated from s009568c0 (verbatim, slice spelling)
+00957710 ?FUN_00957710@@YA_NPAUSerObj@@0PAUSerDesc@@PAUSerValue@@@Z  # FUN_00957710 migrated from s009568c0 (verbatim, slice spelling)
+00957790 ?SetPos@UIObj@@QAEXPAH@Z  # UIObj::SetPos migrated from s009568c0 (verbatim, slice spelling)
+009577b0 ?GetRect@UIObj@@QAEXPAM@Z  # UIObj::GetRect migrated from s009568c0 (verbatim, slice spelling)
+009577f0 ?SetRect@UIObj@@QAEXPAM@Z  # UIObj::SetRect migrated from s009568c0 (verbatim, slice spelling)
+00957850 ?FUN_00957850@@YIXPAH@Z  # FUN_00957850 migrated from s009568c0 (verbatim, slice spelling)
+00957880 ?FUN_00957880@@YAPAPAXHH@Z  # FUN_00957880 migrated from s009568c0 (verbatim, slice spelling)
+009578c0 ?FUN_009578c0@@YA_NPAUSerObj@@0PAUSerDesc@@PAUSerValue@@@Z  # FUN_009578c0 migrated from s009568c0 (verbatim, slice spelling)
+00957940 ?VirtualDtor@UIObj@@QAEPAXE@Z  # UIObj::VirtualDtor migrated from s009568c0 (verbatim, slice spelling)
+00957980 ?Ctor@UIObj@@QAEPAHPAH0PAMH@Z  # UIObj::Ctor migrated from s009568c0 (verbatim, slice spelling)
