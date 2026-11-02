@@ -7,12 +7,12 @@
 00aeef00 ?CountBehaviorSubRecords@@YAHPAX@Z  # CountBehaviorSubRecords migrated from s00aee680 (verbatim, slice spelling)
 00aeefc0 ?GetBehaviorSubRecordValues@@YAPAIPAIPAXHH@Z  # GetBehaviorSubRecordValues migrated from s00aee680 (verbatim, slice spelling)
 00aef0e0 ?DEBUG_BEHAVIOR_Tick@@YAXPAXIPAI1@Z  # DEBUG_BEHAVIOR_Tick migrated from s00aee680 (verbatim, slice spelling)
-00aef2c0 ?DEBUG_BEHAVIOR_Init@@YAXXZ  # void DEBUG_BEHAVIOR_Init
-00aef2d0 ?DEBUG_BEHAVIOR_Shutdown@@YAXXZ  # void DEBUG_BEHAVIOR_Shutdown
-00aef2e0 ?GetOwner@cDebugBehavior@@QAEPAXXZ  # void* cDebugBehavior::GetOwner
-00aef2f0 ?ReleaseOwner@cDebugBehavior@@QAEXXZ  # void cDebugBehavior::ReleaseOwner
-00aef330 ?UpdateTransform@cDebugBehavior@@QAEXXZ  # void cDebugBehavior::UpdateTransform
-00aef390 ?SetEnabled@cDebugBehavior@@QAEXEM@Z  # void cDebugBehavior::SetEnabled
-00aef410 ?Update@cDebugBehavior@@QAEXM@Z  # void cDebugBehavior::Update
-00aef530 ?SetTransform@cDebugBehavior@@QAEXPBUVec4@@_N@Z  # void cDebugBehavior::SetTransform
-00aef570 ?AddVelocity@cDebugBehavior@@QAEXPBUVec4@@@Z  # void cDebugBehavior::AddVelocity
+00aef2c0 ?DEBUG_BEHAVIOR_Init@@YAXXZ  # DEBUG_BEHAVIOR_Init migrated from s00aee680 (verbatim, slice spelling)
+00aef2d0 ?DEBUG_BEHAVIOR_Shutdown@@YAXXZ  # DEBUG_BEHAVIOR_Shutdown migrated from s00aee680 (verbatim, slice spelling)
+00aef2e0 ?GetOwner@cDebugBehavior@@QAEPAXXZ  # cDebugBehavior::GetOwner migrated from s00aee680 (verbatim, slice spelling)
+00aef2f0 ?ReleaseOwner@cDebugBehavior@@QAEXXZ  # cDebugBehavior::ReleaseOwner migrated from s00aee680 (verbatim, slice spelling)
+00aef330 ?UpdateTransform@cDebugBehavior@@QAEXXZ  # cDebugBehavior::UpdateTransform migrated from s00aee680 (verbatim, slice spelling)
+00aef390 ?SetEnabled@cDebugBehavior@@QAEXEM@Z  # cDebugBehavior::SetEnabled migrated from s00aee680 (verbatim, slice spelling)
+00aef410 ?Update@cDebugBehavior@@QAEXM@Z  # cDebugBehavior::Update migrated from s00aee680 (verbatim, slice spelling)
+00aef530 ?SetTransform@cDebugBehavior@@QAEXPBUVec4@@_N@Z  # cDebugBehavior::SetTransform migrated from s00aee680 (verbatim, slice spelling)
+00aef570 ?AddVelocity@cDebugBehavior@@QAEXPBUVec4@@@Z  # cDebugBehavior::AddVelocity migrated from s00aee680 (verbatim, slice spelling)

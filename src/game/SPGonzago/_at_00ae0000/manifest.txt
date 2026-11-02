@@ -1,0 +1,8 @@
+# source  symbol  va  flags
+../src/game/SPGonzago/_at_00ae0000.cpp  ?GetOwner@cDebugBehavior@@QAEPAXXZ  00aef2e0  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_00ae0000.cpp  ?SetEnabled@cDebugBehavior@@QAEXEM@Z  00aef390  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_00ae0000.cpp  ?SetTransform@cDebugBehavior@@QAEXPBUVec4@@_N@Z  00aef530  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_00ae0000.cpp  ?AddToWorld@cHavokLocomotiveController@SP@@QAEXXZ  00aef6e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00ae0000.cpp  ?SetPosition@cHavokLocomotiveController@SP@@QAEXABVhkVector4_s00ae_f610@@@Z  00aef7e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00ae0000.cpp  ?FUN_00aefae0@cHavokLocomotiveController@SP@@QAEXXZ  00aefae0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00ae0000.cpp  ?FUN_00aefb30@cHavokLocomotiveCollisionListener@SP@@QAEPAXI@Z  00aefb30  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
