@@ -1,4 +1,6 @@
-00fdeac0 SP::cAppModeSpace::TransitionFromSolarToPlanet  # preserved from s00fdeac0; nonmatching
-00fdf5b0 SP::cAppModeSpace::OnPlanetRecordReady  # newly claimed; nonmatching (tail-call form differs)
-00fdf5f0 SP::cAppModeSpace::EnterPlanetTransition  # newly claimed; partial
-00fdf8e0 SP::cAppModeSpace::ExitPlanetTransition  # newly claimed; partial
+00ba9370 ?GetEmpireByID@cStarManager@SP@@QBEPAVcEmpire@2@I@Z  # SP::cStarManager::GetEmpireByID (callee of s00fdeac0, named from the dev publics; slice address comment)
+00c70e00 ?GetPlanetType@cPlanet@SP@@QBE?AW4ePlanetType@2@XZ  # SP::cPlanet::GetPlanetType (callee of s00fdeac0, named from the dev publics; slice address comment)
+00fdeac0 ?TransitionFromSolarToPlanet@cAppModeSpace_s00fd_eac0@SP@@QAEXXZ  # TransitionFromSolarToPlanet migrated from s00fdeac0 (verbatim, slice spelling)
+00fdf5b0 ?OnPlanetRecordReady@cAppModeSpace_s00fd_eac0@SP@@QAEXXZ  # OnPlanetRecordReady migrated from s00fdeac0 (verbatim, slice spelling)
+00fdf5f0 ?EnterPlanetTransition@cAppModeSpace_s00fd_eac0@SP@@QAEXXZ  # EnterPlanetTransition migrated from s00fdeac0 (verbatim, slice spelling)
+00fdf8e0 ?ExitPlanetTransition@cAppModeSpace_s00fd_eac0@SP@@QAEXXZ  # ExitPlanetTransition migrated from s00fdeac0 (verbatim, slice spelling)

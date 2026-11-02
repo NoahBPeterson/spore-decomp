@@ -1,4 +1,7 @@
-# Slice s00fddba0 names.
-00fde3e0 SP::cAppModeSpace::TransitionFromPlanetToSolar  # guess: inverse of TransitionFromSolarToPlanet (0x00fdeac0); the PDB candidate cSPSimulatorWalkAround::UpdateBeaming is a single-caller guess
 00c3bfe0 ?SetDestination@cSPGameDataUFO@@QAEXPBUVector3@@@Z  # overload taking a position (slice s01003df0 uses it)
 00c3c190 ?SetDestination@cSPGameDataUFO@@QAEXPAVcPlanet@@@Z  # overload taking an object to follow (this slice, from the call sites)
+00fddba0 ?SetDefaultPickPriority@cAppModeSpace_s00fd_dba0@@SAXXZ  # cAppModeSpace_s00fd_dba0::SetDefaultPickPriority migrated from s00fddba0 (verbatim, slice spelling)
+00fddfa0 ?FUN_00fddfa0@@YAXXZ  # FUN_00fddfa0 migrated from s00fddba0 (verbatim, slice spelling)
+00fde180 ?Shutdown@cAppModeSpace_s00fd_dba0@@QAE_NXZ  # cAppModeSpace_s00fd_dba0::Shutdown migrated from s00fddba0 (verbatim, slice spelling)
+00fde230 ?NotifyActivePlanetRecord@@YAXPAX@Z  # NotifyActivePlanetRecord migrated from s00fddba0 (verbatim, slice spelling)
+00fde3e0 ?TransitionFromPlanetToSolar@cAppModeSpace_s00fd_dba0@@QAEX_N@Z  # cAppModeSpace_s00fd_dba0::TransitionFromPlanetToSolar migrated from s00fddba0 (verbatim, slice spelling)

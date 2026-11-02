@@ -1,4 +1,4 @@
-// src/game/SPGonzago/SPAppModeSpace.cpp -- migrated from slice(s) s00fe2ec0, s00fe1a20, s00fdf9f0, s00fdcd40, s00fdbd60, s00fdade0, s00fd9f70, s00fd90c0 by tools/migrate/rewrite.py
+// src/game/SPGonzago/SPAppModeSpace.cpp -- migrated from slice(s) s010414c0, s00fe2ab0, s00fe0570, s00fdeac0, s00fddba0, s00fe2ec0, s00fe1a20, s00fdf9f0, s00fdcd40, s00fdbd60, s00fdade0, s00fd9f70, s00fd90c0 by tools/migrate/rewrite.py
 // Object file: SPGonzago/SPAppModeSpace.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -17,24 +17,45 @@
 #include "SP/cPlanetRecord.h"
 #include "SP/cRelationshipManager.h"
 #include "SP/cTerrainSphere.h"
+#include <string.h>
+#include "SP/cIModelWorld.h"
+#include "EA/ResourceMan/Key.h"
+#include "SP/cCivData.h"
+#include "SP/cMWModel.h"
+#include "SP/cSolarSystem.h"
+#include "SP/cStar.h"
+#include "SP/cStarManager.h"
+#include "SP/cTribeTool.h"
+#include <intrin.h>
+#include "SP/cSPGameDataUFO.h"
+#define __PLACEMENT_NEW_INLINE   // the slices' own placement new/delete win over <new>'s (rewrite.py)
+#include <new>
+#include "SP/cSPEditorSpeciesManager.h"
+#include "SP/cCity.h"
+#include "SP/cPropertyManager.h"
+inline void operator delete(void*, void*) {}   // placement delete (<new>'s is skipped, rewrite.py)
 
 // unnamed retail callees and globals (address in the comment)
 extern void* DAT_01654c05;
 
 // ---- items of slice s00fd90c0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 typedef unsigned char  u8;
-extern void* DAT_01654c05;
 void* __cdecl  FUN_0067caa0();                       // SP::WindowManager
 void* __cdecl  FUN_00b2f740();                       // returns char
 void* __cdecl  FUN_00805180();                       // returns char
 void* __cdecl  FUN_00b3d250();                       // SP::GameInputManager
 void* __cdecl  FUN_00b3d2c0();                       // SP::RelationshipManager
+void* __cdecl  FUN_00b3d4a0();                       // CommManager
+void* __stdcall FUN_00b3d3f0(int);                   // 0x00b3d3f0 -> void*
 void* __stdcall FUN_00b3d470(void*);                 // 0x00b3d470 -> void*
 void* __cdecl  FUN_00b5b800();                       // SP::GetCurrentGameMode
 int   __stdcall FUN_01021230(int);                   // 0x01021230
 int   __stdcall FUN_01021230_0();                    // 0x01021230 (no-arg call site)
 void  __cdecl  FUN_010213b0(int);                    // 0x010213b0
 int   __cdecl  FUN_01021080();                       // GetUniverseContext
+void* __cdecl  FUN_01021240();                       // SP::cSPMission::IsArchived
+int   __cdecl  FUN_01021090();                       // GetPlayerEmpireID
+void* __cdecl  FUN_010666a0();                       // 0x010666a0
 void* __cdecl  FUN_00d06400();                       // 0x00d06400
 struct Ext {
     void* FUN_00fcd940(int);                  // 0x00fcd940 ctor helper
@@ -253,10 +274,8 @@ void* FUN_00feb9f0();                                          // 0x00feb9f0  Ge
 void* FUN_00ffbe50();                                          // 0x00ffbe50  GetUFOSimulator
 void* FUN_01002bd0();                                          // 0x01002bd0  GetSimulator (no arg)
 void* FUN_01002bd0s(void* who);                                // 0x01002bd0  GetSimulator (task arg)
-void* FUN_01021240();                                          // 0x01021240  active-noun manager
 void* FUN_01021260();                                          // 0x01021260  GetActivePlanet
 void* FUN_01021300();                                          // 0x01021300  GetPlayerEmpire
-int   FUN_01021090();                                          // 0x01021090  GetPlayerEmpireID
 void* FUN_00b3d300(int id);                                    // 0x00b3d300  NounManager(id)
 void* FUN_00b3d2a0(void* avatar);                              // 0x00b3d2a0
 void* FUN_00b3d2c0(void* a, void* b, ...);                     // 0x00b3d2c0  (2 or 3 args)
@@ -537,16 +556,16 @@ public:
     cAppModeSpace_s00fd_bd60();
     ~cAppModeSpace_s00fd_bd60();
 
-    void InitSpaceGame();
-    void EnterSpaceGame();
-    void ShutdownSPG();
+    void InitSpaceGame();  // 0x00fdbd60 (cAppModeSpace::InitSpaceGame)
+    void EnterSpaceGame();  // 0x00fdbee0 (cAppModeSpace::EnterSpaceGame)
+    void ShutdownSPG();  // 0x00fdc150 (cAppModeSpace::ShutdownSPG)
     void LoadNewGamePlanet();  // 0x00fdc240 (cAppModeSpace::LoadNewGamePlanet)
     void TransitionFromLoadToPlanet();
     void TransitionFromEditorToPlanet();
     void TransitionToEntry();
     void PlanetOnMouseDown();
     void StopEditorPlay();
-    bool OnMouseDown(int nButton, int nX, int nY, int nFlags);
+    bool OnMouseDown(int nButton, int nX, int nY, int nFlags);  // 0x00fdc520 (cAppModeSpace::OnMouseDown)
 
     void* mpStarMap;                    // 0x68
     void* mpUniverse;                   // 0x6c
@@ -704,6 +723,9 @@ void ClearSpaceUI();
 void UnregisterGameHandler();
 void SetCursorMode(int nMode);
 void ResetGridHighlight();
+void UpdateGridCells(void* pCells, int nCount, float fRadius);
+void UpdateGridOverlay(float fRadius, int nCount, void* pCells);
+void DrawGridRing(int a);
 bool HandleMouseDown(int nButton, int nX, int nY, int nFlags);
 void RefreshInputState();
 bool IsDraggingNoun();
@@ -714,6 +736,8 @@ void AttachCamera(void* pCamera, void* pController);
 bool IsCameraAttached(void* pCamera, void* pController);
 void AttachSelection(void* pCamera, void* pController);
 void ShowPlanetPanel(void* pRecord);
+void SetLoadedPlanet();
+void InitPlanetView();
 void* GetActivePlanet();
 void* PlanetModel();
 void* CreatePlanetView(int a, int b);
@@ -721,6 +745,11 @@ void SetPlanetViewPlanet(void* pView, int a, int b);
 void SetPlanetModelView(int nView);
 void EnablePlanetFeatures();
 void RefreshPlanetUI();
+void* CreateTransitionMessage();
+void PostMessage(void* pMessage);
+void RefreshModeUI();
+void ResetTransitionTuning();
+void ShowMissionLog();
 void EnterPlanetMode();
 void SelectSpaceUI();
 void InitializePlanetContext();
@@ -1775,6 +1804,1671 @@ public:
 }
 // ---- items of slice s00fe2ec0 end
 
+// ---- items of slice s00fddba0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern bool gViewFlagA;             // 0x016dd441
+extern uint32_t g_cheatFlag;                                               // 0x015b732c
+void operator delete[](void* p);                                                                                       // 0x00f47380
+#define EASTL_ALLOCATOR_FILE "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h"
+#define VIRT4(n) virtual void n##0(); virtual void n##1(); virtual void n##2(); virtual void n##3();
+struct Quaternion { float x, y, z, w; };
+extern const Vector3 kUpAxisY;      // 0x015b4028 (0, 1, 0)
+extern const Vector3 kUpAxisZ;      // 0x015b4034 (0, 0, 1)
+extern const Vector3 kFlyOutScale;  // 0x015b4204 (x = 10.0)
+class cSpatialObject
+{
+public:
+virtual void v00();
+virtual void v04();
+virtual void v08();
+virtual void v0c();
+virtual void v10();
+virtual void v14();
+virtual void v18();
+virtual void v1c();
+virtual void v20();
+virtual void v24();
+virtual void v28();
+    virtual const Vector3* GetPosition();                  // +0x2c
+    virtual const Quaternion* GetOrientation();            // +0x30
+};
+class cPlanetInfo
+{
+public:
+    bool IsHidden();                                       // 0x00b8d970 ((flags >> 8) & 1)
+};
+class cPlanet : public cSpatialObject
+{
+public:
+    int GetKind();                                         // 0x00c70880 (0 and 1 are skipped)
+    uint32_t pad04[(0x13c - 0x04) / 4];
+    cPlanetInfo* mpInfo;                                   // +0x13c
+};
+class cSolarSystem
+{
+public:
+    uint32_t pad00[0x10 / 4];
+    cPlanet** mPlanetsBegin;                               // +0x10
+    cPlanet** mPlanetsEnd;                                 // +0x14
+};
+class cStar
+{
+public:
+    cSolarSystem* GetSolarSystem();                        // 0x00c8b770
+    virtual int AddRef();
+    virtual int Release();
+};
+class cSPGameDataUFO
+{
+public:
+    void SetDestination(const Vector3* p);                 // 0x00c3bfe0
+    void SetDestination(cPlanet* planet);                  // 0x00c3c190
+    void PopToDestination();                               // 0x00c37e60
+
+    uint32_t       pad00[0x34 / 4];
+    cSpatialObject mSpatial;                               // +0x34
+    uint32_t       pad38[(0x730 - 0x38) / 4];
+    Quaternion     mOrientation;                           // +0x730
+};
+class cEffect
+{
+public:
+    void Stop(int fast);                                   // 0x0106ab20 (ret 4)
+};
+class cSPSpaceGameState_s00fd_dba0                                    // object at cAppModeSpace +0x15c
+{
+public:
+    void Reset();                                          // 0x0100a960
+    void Update();                                         // 0x01003a50
+    void ChaseFromPlanetToSolar();                         // 0x01007ed0
+    uint32_t pad00[0x14 / 4];
+    cEffect* mpActiveEffect;                               // +0x14
+    uint32_t pad18[(0x50 - 0x18) / 4];
+    uint32_t mFlags;                                       // +0x50
+};
+class cStarList { public: uint32_t pad00[0x2c / 4]; cStar** mBegin; cStar** mEnd; };   // vector at +0x2c
+class cSpaceGame { public: uint32_t pad00[0x30 / 4]; cStarList* mpStars; };            // +0x30
+class cSPSimulatorSpaceGame_s00fd_dba0
+{
+public:
+    cSPGameDataUFO* GetPlayerInventory();                  // 0x00a1ad60
+};
+cStar* GetActiveStar();                                    // 0x01021230
+cPlanet* GetActivePlanet_s00fd_dba0();                                // 0x01021260
+void* GetActivePlanetRecord_s00fd_dba0();                             // 0x010212a0
+cSPSimulatorSpaceGame_s00fd_dba0* GetUFOSimulator_s00fd_dba0();                  // 0x00ffbe50
+cSpaceGame* SpaceGameGet_s00fd_dba0();                                // 0x01002bd0
+class cHud
+{
+public:
+    bool IsActive();                                       // 0x00a98020
+    int GetMode();                                         // 0x00985e40
+    void Show();                                           // 0x01016950
+};
+cHud* GetHud();                                            // 0x01015df0
+class cCameraView
+{
+public:
+    char pad00[0xb4];
+    Vector3 mTarget;                                       // +0xb4
+    char padc0[0x13d - 0xc0];
+    bool mbFlag;                                           // +0x13d
+};
+class cHudCtl
+{
+public:
+    void Apply(const Vector3* target, bool flag);          // 0x0101bb90 (ret 8)
+};
+class cModeObject
+{
+public:
+virtual void m0();
+virtual void m1();
+virtual void m2();
+    virtual void* Query(uint32_t typeID);                  // +0xc
+};
+class cModeManager
+{
+public:
+VIRT4(a) VIRT4(b) VIRT4(c) virtual void c4();
+virtual void c5();
+    virtual cModeObject* GetCurrentMode();                 // +0x38
+};
+class cApp
+{
+public:
+    VIRT4(a) VIRT4(b) VIRT4(c) VIRT4(d) VIRT4(e)
+    virtual cModeManager* GetModeManager();                // +0x50
+};
+cApp* App_s00fd_dba0();                                               // 0x0067dd10
+class cMessageServer
+{
+public:
+VIRT4(a) virtual void v10();
+virtual void v14();
+    virtual void PostMessage(uint32_t id, int a, int b, int c);   // +0x18
+virtual void v1c();
+virtual void v20();
+virtual void v24();
+virtual void v28();
+    virtual void Notify(void* target, uint32_t id, int param);    // +0x2c (ret 0xc)
+};
+cMessageServer* MessageServer_s00fd_dba0();                           // 0x0067dcc0
+class cPlanetModel_s00fd_dba0
+{
+public:
+    void Refresh();                                        // 0x00b8c0f0
+};
+cPlanetModel_s00fd_dba0* PlanetModel_s00fd_dba0();                               // 0x00b3d350
+class cTerrainSphere
+{
+public:
+    void SetModel(uint32_t id);                            // 0x00c77bf0 (ret 4)
+};
+class cNounManager_s00fd_dba0
+{
+public:
+    cTerrainSphere* GetCurrentTerrainSphere();             // 0x00f67d90
+};
+cNounManager_s00fd_dba0* NounManager_s00fd_dba0();                               // 0x00b3d300
+class cEffectsMgr
+{
+public:
+    void Play(uint32_t id);                                // 0x00b5cde0 (ret 4)
+};
+cEffectsMgr* GetEffectsMgr();                              // 0x00b3d230
+class cPlanetRegistry
+{
+public:
+    void Show(cPlanet* p);                                 // 0x00b7daf0 (ret 4)
+};
+cPlanetRegistry* GetPlanetRegistry();                      // 0x00b3d360
+class cSPTimer
+{
+public:
+    unsigned __int64 GetElapsedTime();                     // 0x00bc3190
+};
+class cAchievementsController
+{
+public:
+    void AwardAchievement(uint32_t id);                    // 0x00676710 (ret 4)
+};
+cAchievementsController* GetAchievements();                // 0x00675250
+struct cTuning
+{
+    int GetMaxBuildingsForT3Colony();                      // 0x01049ef0
+};
+cTuning* GetTerraformTuning();                             // 0x01049a10 (returns &global 0x016e0d04)
+void GetTurretAndBuildingCounts(cStar* star, int* turrets, int* buildings);   // 0x00c70380 (cdecl)
+struct cTutorialStep { uint32_t pad00[2]; uint32_t mID; };   // +8
+class cTutorial
+{
+public:
+    uint32_t pad00[0x4c / 4];
+    cTutorialStep* mpCurrent;                              // +0x4c
+    void Close(uint32_t id, int flag);                     // 0x0067c8c0 (ret 8)
+};
+cTutorial* GetTutorial();                                  // 0x0067cac0
+class cPopup
+{
+public:
+    void Refresh();                                        // 0x01065d20
+};
+cPopup* GetPopup();                                        // 0x010666a0
+class cEmpire
+{
+public:
+    int GetID();                                           // 0x00c30c80
+    void* GetUFOKey();                                     // 0x00c326b0
+};
+cEmpire* GetPlayerEmpire_s00fd_dba0();                                // 0x01021300
+class cHudEmpire
+{
+public:
+    void Update(int id);                                   // 0x004df3e0 (ret 4)
+};
+cHudEmpire* GetHudEmpire();                                // 0x00401090
+void NotifyActivePlanetRecord(void* record);               // 0x00fde230 (cdecl)
+Vector3* RotateByQuaternion(Vector3* out, const Vector3* v, const Quaternion* q);   // 0x0059aed0 (cdecl)
+Vector3* OrthogonalVector(Vector3* out, const Vector3* v);                          // 0x006985b0 (cdecl)
+Quaternion* QuaternionFromFacingAndUp(Quaternion* out, const Vector3* facing, const Vector3* up);   // 0x0069b600 (cdecl)
+class cMWModel;
+struct cModelRef { cMWModel* p; };
+cModelRef* copy_impl(cModelRef* first, cModelRef* last, cModelRef* dest);            // 0x005f4e10 (cdecl)
+cStar*** uninitialized_copy_stars(cStar*** out, cStar** first, cStar** last, cStar** dest, int tag);   // 0x00829110 (cdecl)
+struct ModelVector
+{
+    cModelRef* mpBegin;                                    // +0x144 in cAppModeSpace
+    cModelRef* mpEnd;
+    cModelRef* mpCapacity;
+    void DoDestroyValues(cModelRef* first, cModelRef* last);   // 0x005f3680 (ret 8)
+    cModelRef* erase(cModelRef* first, cModelRef* last)
+    {
+        cModelRef* itDest = copy_impl(last, mpEnd, first);
+        DoDestroyValues(itDest, mpEnd);
+        mpEnd -= (last - first);
+        return first;
+    }
+    void clear() { erase(mpBegin, mpEnd); }
+};
+inline Quaternion QuatMul(const Quaternion& a, const Quaternion& b)
+{
+    float c0 = a.z * b.y - a.y * b.z;
+    float c1 = b.z * a.x - a.z * b.x;
+    float c2 = a.y * b.x - b.y * a.x;
+    Quaternion r;
+    r.x = (a.x * b.w + b.x * a.w) + c0;
+    r.y = (a.y * b.w + b.y * a.w) + c1;
+    r.z = (a.z * b.w + b.z * a.w) + c2;
+    r.w = a.w * b.w - ((a.z * b.z + a.y * b.y) + a.x * b.x);
+    return r;
+}
+class cModeBase { public: void* mpVtbl; };                         // interface sub-object at +0x04
+class cAppModeSpace_s00fd_dba0
+{
+public:
+    void TransitionFromPlanetToSolar(bool bUpdateEmpire);          // 0x00fde3e0
+    bool Shutdown();                                               // 0x00fde180
+    void ShutdownSPG();                                            // 0x00fdc150
+    static void SetDefaultPickPriority();                          // 0x00fddba0
+
+    char pad00[0x04];
+    cModeBase mBase;                                               // +0x04 message-server target
+    char pad08[0x144 - 0x08];
+    ModelVector mModels;                                           // +0x144
+    char pad150[0x15c - 0x150];
+    cSPSpaceGameState_s00fd_dba0* mpSpaceGame;                                // +0x15c
+    static cAppModeSpace_s00fd_dba0* sInstance;                               // 0x016d9938
+};
+struct PickPriority
+{
+    uint32_t mKey;          // interface id the picker looks for
+    uint32_t mMode;         // pick mode it applies to
+    int32_t  mPriority;     // lower runs first
+    PickPriority(uint32_t key, uint32_t mode, int32_t priority)
+        : mKey(key), mMode(mode), mPriority(priority) {}
+};
+struct PickPriorityVec
+{
+    PickPriority* mpBegin;
+    PickPriority* mpEnd;
+    PickPriority* mpCapacity;
+
+    PickPriorityVec() : mpBegin(0), mpEnd(0), mpCapacity(0) {}
+
+    void DoInsertValue(PickPriority* pos, const PickPriority& value);       // 0x00b535d0 (ret 8)
+
+    void push_back(const PickPriority& value)
+    {
+        PickPriority* end = mpEnd;
+        if (end < mpCapacity)
+        {
+            mpEnd = end + 1;
+            if (end != 0)
+                *end = value;
+        }
+        else
+        {
+            DoInsertValue(end, value);
+        }
+    }
+
+    ~PickPriorityVec()
+    {
+        if (mpBegin != 0 && ((int*)mpBegin)[-1] != 0)
+            operator delete[](mpBegin);
+    }
+};
+class cPickPriorityMgr
+{
+public:
+VIRT4(a) VIRT4(b) virtual void v20();
+virtual void v24();
+virtual void v28();
+    virtual void SetList(PickPriorityVec* list, int mode);                 // +0x2c (ret 8)
+};
+cPickPriorityMgr* PickPriorityMgr();                                       // 0x00b3d240
+void FUN_00e1dbd0();                                                       // 0x00e1dbd0
+class cCheatManager
+{
+public:
+VIRT4(a) virtual void v10();
+virtual void v14();
+virtual void v18();
+    virtual void SetFlag(uint32_t flag);                                   // +0x1c (ret 4)
+};
+cCheatManager* CheatManager();                                             // 0x0067de20
+inline cModeBase* GetModeBase(cAppModeSpace_s00fd_dba0* mode)
+{
+    return (mode != 0) ? &mode->mBase : 0;
+}
+class cObjectTemplateDB
+{
+public:
+    VIRT4(a) VIRT4(b) VIRT4(c) VIRT4(d) VIRT4(e) VIRT4(f)
+    virtual void Unregister(void* entry);                                  // +0x60 (ret 4)
+};
+cObjectTemplateDB* ObjectTemplateDB();                                     // 0x0067cb40
+class cBioElemSort
+{
+public:
+    void* Func_bb9b80();                                                   // 0x00bb9b80
+    int   Func_bb9ae0();                                                   // 0x00bb9ae0
+    int   GetAvatar();                                                     // 0x00b1fdb0
+};
+class cStarManager
+{
+public:
+    cEmpire* GetEmpireByID(int id);                                        // 0x00ba9370 (ret 4)
+};
+cStarManager* StarManager();                                               // 0x00b3d2a0
+struct PlanetTemplateRef { uint32_t mKey; uint32_t mField04; uint32_t mField08; };
+struct PlanetTemplateVec { PlanetTemplateRef* mpBegin; PlanetTemplateRef* mpEnd; };
+struct cPlanetRecord
+{
+    char pad00[0xd0];
+    PlanetTemplateRef* mTemplatesBegin;                                    // +0xd0
+    PlanetTemplateRef* mTemplatesEnd;                                      // +0xd4
+    char padD8[0x15c - 0xd8];
+    PlanetTemplateVec** mExtraBegin;                                       // +0x15c
+    PlanetTemplateVec** mExtraEnd;                                         // +0x160
+    cBioElemSort* SortBanners();                                           // 0x00b8de30
+};
+// ---- items of slice s00fddba0 end
+
+// ---- items of slice s00fdeac0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern uint32_t DAT_015b4050;                   // 0x015b4050
+extern "C" void* FUN_0067de00();                // 0x0067de00
+extern "C" void* FUN_0067dd40();                // 0x0067dd40
+extern "C" void* MessageServerGet();            // 0x00883860 (EA::Messaging::GetServer)
+typedef unsigned int size_t_;
+void* operator new[](size_t_ n, const char* pName, int flags, unsigned debugFlags, const char* file, int line);  // 0x00f473a0
+inline void* operator new(size_t_, void* p) { return p; }
+struct ResourceKey {
+    uint32_t instanceID;
+    uint32_t typeID;
+    uint32_t groupID;
+    bool operator==(const ResourceKey& b) const
+    {
+        return instanceID == b.instanceID && typeID == b.typeID && groupID == b.groupID;
+    }
+    bool operator!=(const ResourceKey& b) const { return !(*this == b); }
+};
+namespace eastl {
+class allocator_s00fd_eac0 { public:
+    void* allocate(size_t_ n) { return operator new[](n, "Simulator", 0, 0, EASTL_ALLOCATOR_FILE, 0xd1); }
+    void deallocate(void* p) { operator delete[](p); }
+};
+}
+namespace eastl {
+struct ListNodeBase_s00fd_eac0 {
+    ListNodeBase_s00fd_eac0* mpNext;
+    ListNodeBase_s00fd_eac0* mpPrev;
+    void insert(ListNodeBase_s00fd_eac0* pNext)
+    {
+        mpNext = pNext;
+        mpPrev = pNext->mpPrev;
+        pNext->mpPrev->mpNext = this;
+        pNext->mpPrev = this;
+    }
+};
+}
+namespace eastl {
+template <typename T>
+struct ListNode_s00fd_eac0 : public ListNodeBase_s00fd_eac0 {
+    T mValue;
+};
+}
+namespace eastl {
+template <typename T>
+struct ListIterator {
+    ListNode_s00fd_eac0<T>* mpNode;
+    ListIterator(ListNode_s00fd_eac0<T>* p) : mpNode(p) {}
+    T& operator*() const { return mpNode->mValue; }
+    ListIterator& operator++() { mpNode = (ListNode_s00fd_eac0<T>*)mpNode->mpNext; return *this; }
+    bool operator==(const ListIterator& b) const { return mpNode == b.mpNode; }
+    bool operator!=(const ListIterator& b) const { return mpNode != b.mpNode; }
+};
+}
+namespace eastl {
+template <typename T>
+class list_s00fd_eac0 {
+public:
+    typedef ListNode_s00fd_eac0<T> node_type;
+    typedef ListIterator<T> iterator;
+    ListNodeBase_s00fd_eac0 mNode;
+    allocator_s00fd_eac0 mAllocator;
+
+    iterator begin() { return iterator((node_type*)mNode.mpNext); }
+    iterator end() { return iterator((node_type*)&mNode); }
+
+    void push_back(const T& value)
+    {
+        node_type* const pNode = DoCreateNode(value);
+        pNode->insert(&mNode);
+    }
+    void clear()
+    {
+        DoClear();
+        mNode.mpNext = &mNode;
+        mNode.mpPrev = &mNode;
+    }
+
+    node_type* DoCreateNode(const T& value)
+    {
+        node_type* const pNode = (node_type*)mAllocator.allocate(sizeof(node_type));
+        ::new(&pNode->mValue) T(value);
+        return pNode;
+    }
+    void DoClear()
+    {
+        node_type* p = (node_type*)mNode.mpNext;
+        while (p != (node_type*)&mNode) {
+            node_type* const pTemp = p;
+            p = (node_type*)p->mpNext;
+            mAllocator.deallocate(pTemp);
+        }
+    }
+};
+}
+namespace eastl {
+template <typename InputIterator, typename T>
+inline InputIterator find(InputIterator first, InputIterator last, const T& value)
+{
+    while ((first != last) && !(*first == value))
+        ++first;
+    return first;
+}
+}
+namespace eastl {
+struct rbtree_node_base_s00fd_eac0 {
+    rbtree_node_base_s00fd_eac0* mpNodeRight;
+    rbtree_node_base_s00fd_eac0* mpNodeLeft;
+    rbtree_node_base_s00fd_eac0* mpNodeParent;
+    char mColor;
+};
+}
+struct cKeyMap {
+    uint32_t mCompare;
+    eastl::rbtree_node_base_s00fd_eac0 mAnchor;            // +0x04
+    uint32_t mnSize;                            // +0x14
+    cKeyMap();                                  // 0x00bf2c60
+    ~cKeyMap() { DoNukeSubtree(mAnchor.mpNodeParent); }
+    void DoNukeSubtree(eastl::rbtree_node_base_s00fd_eac0* pNode)   // out of line at 0x009a9600
+    {
+        while (pNode) {
+            DoNukeSubtree(pNode->mpNodeRight);
+            eastl::rbtree_node_base_s00fd_eac0* const pNodeLeft = pNode->mpNodeLeft;
+            operator delete[](pNode);
+            pNode = pNodeLeft;
+        }
+    }
+    uint32_t Find(uint32_t key);                // 0x00bf9700
+    void Insert(uint32_t key, uint32_t value);  // 0x00bf4a60
+};
+struct cMWModel_s00fd_eac0;
+struct IModelWorldOwner {
+virtual void v000();
+virtual void v004();
+virtual void v008();
+virtual void v00c();
+virtual void v010();
+virtual void v014();
+virtual void v018();
+virtual void v01c();
+virtual void v020();
+virtual void v024();
+virtual void v028();
+virtual void v02c();
+virtual void v030();
+virtual void v034();
+virtual void v038();
+virtual void v03c();
+virtual void v040();
+virtual void v044();
+virtual void v048();
+virtual void v04c();
+virtual void v050();
+virtual void v054();
+virtual void v058();
+virtual void v05c();
+virtual void v060();
+virtual void v064();
+virtual void v068();
+virtual void v06c();
+virtual void v070();
+virtual void v074();
+virtual void v078();
+virtual void v07c();
+virtual void v080();
+virtual void v084();
+virtual void v088();
+virtual void v08c();
+virtual void v090();
+virtual void v094();
+virtual void v098();
+virtual void v09c();
+virtual void v0a0();
+virtual void v0a4();
+virtual void v0a8();
+virtual void v0ac();
+virtual void v0b0();
+virtual void v0b4();
+virtual void v0b8();
+virtual void v0bc();
+virtual void v0c0();
+virtual void v0c4();
+virtual void v0c8();
+virtual void v0cc();
+virtual void v0d0();
+virtual void v0d4();
+virtual void v0d8();
+virtual void v0dc();
+virtual void v0e0();
+virtual void v0e4();
+virtual void v0e8();
+virtual void v0ec();
+virtual void v0f0();
+virtual void v0f4();
+virtual void v0f8();
+virtual void v0fc();
+virtual void v100();
+virtual void v104();
+virtual void v108();
+virtual void v10c();
+virtual void v110();
+virtual void v114();
+virtual void v118();
+virtual void v11c();
+virtual void v120();
+virtual void v124();
+virtual void v128();
+virtual void v12c();
+virtual void v130();
+virtual void v134();
+virtual void v138();
+virtual void v13c();
+virtual void v140();
+virtual void v144();
+virtual void v148();
+virtual void v14c();
+virtual void v150();
+virtual void v154();
+virtual void v158();
+virtual void v15c();
+virtual void v160();
+virtual void v164();
+virtual void v168();
+    virtual void SetModelVisible(cMWModel_s00fd_eac0* model, bool visible);   // +0x16c
+    virtual void DestroyModel(cMWModel_s00fd_eac0* model, bool owned);        // +0x170
+};
+struct cMWModel_s00fd_eac0 {
+    IModelWorldOwner* mpWorld;                  // +0x00
+    uint32_t mFlagBits : 31;                    // +0x04
+    uint32_t mbOwned : 1;
+    uint32_t pad08[14];
+    int mnRefCount;                             // +0x40
+    void AddRef() { mnRefCount++; }
+    void Release()
+    {
+        if (mnRefCount > 1)
+            --mnRefCount;
+        else
+            mpWorld->DestroyModel(this, mbOwned);
+    }
+};
+template <class T>
+struct AutoRefCount_s00fd_eac0 {
+    T* mpObject;
+    AutoRefCount_s00fd_eac0(T* p) : mpObject(p) { if (mpObject) mpObject->AddRef(); }
+    AutoRefCount_s00fd_eac0(const AutoRefCount_s00fd_eac0& x) : mpObject(x.mpObject) { if (mpObject) mpObject->AddRef(); }
+    ~AutoRefCount_s00fd_eac0() { if (mpObject) mpObject->Release(); }
+    T* operator->() const { return mpObject; }
+    operator T*() const { return mpObject; }
+};
+typedef AutoRefCount_s00fd_eac0<cMWModel_s00fd_eac0> ModelPtr;
+struct copy_impl_ModelPtr {
+    static ModelPtr* do_copy(ModelPtr* first, ModelPtr* last, ModelPtr* result);   // 0x005f4e10
+};
+struct ModelVector_s00fd_eac0 {
+    ModelPtr* mpBegin;
+    ModelPtr* mpEnd;
+    ModelPtr* mpCapacity;
+    uint32_t mAllocator;
+
+    void DoDestroyValues(ModelPtr* first, ModelPtr* last);       // 0x005f3680
+    void DoInsertValue(ModelPtr* position, const ModelPtr& value);   // 0x00423c40
+
+    ModelPtr* erase(ModelPtr* first, ModelPtr* last)
+    {
+        ModelPtr* const position = copy_impl_ModelPtr::do_copy(last, mpEnd, first);
+        DoDestroyValues(position, mpEnd);
+        mpEnd -= (last - first);
+        return first;
+    }
+    void clear() { erase(mpBegin, mpEnd); }
+    void push_back(const ModelPtr& value)
+    {
+        if (mpEnd < mpCapacity)
+            ::new(mpEnd++) ModelPtr(value);
+        else
+            DoInsertValue(mpEnd, value);
+    }
+};
+struct IModelWorld {
+virtual void v00();
+virtual void v04();
+virtual void v08();
+    virtual cMWModel_s00fd_eac0* LoadModel(uint32_t instanceID, uint32_t groupID, int flags);   // +0x0c
+};
+IModelWorld* GonzagoModelWorld_s00fd_eac0();               // 0x00b3d520
+struct cPlantSpecies {
+virtual void v00();
+virtual void v04();
+virtual void v08();
+virtual void v0c();
+virtual void v10();
+virtual void v14();
+    virtual const ResourceKey* GetModelKey();   // +0x18
+};
+struct cPlantSpeciesManager {
+    cPlantSpecies* GetSpeciesFromID(const ResourceKey& id);   // 0x00b90410
+};
+cPlantSpeciesManager* PlantSpeciesManager();    // 0x00b3d420
+struct BakeParameters {
+    uint32_t mTag;
+    int16_t mFlag;
+    int16_t mPriority;
+    BakeParameters(int16_t flag, int16_t priority, uint32_t tag)
+    {
+        mFlag = flag;
+        mPriority = priority;
+        mTag = tag;
+    }
+};
+struct IBakeManager {
+virtual void v00();
+virtual void v04();
+virtual void v08();
+virtual void v0c();
+virtual void v10();
+virtual void v14();
+virtual void v18();
+    virtual bool IsBaked(const ResourceKey& nameKey, bool param);          // +0x1c
+virtual void v20();
+virtual void v24();
+virtual void v28();
+virtual void v2c();
+virtual void v30();
+virtual void v34();
+virtual void v38();
+virtual void v3c();
+    virtual bool Cancel(uint32_t tag);                                      // +0x40
+virtual void v44();
+virtual void v48();
+    virtual bool BakeModel(const ResourceKey& nameKey, const BakeParameters& params);   // +0x4c
+};
+IBakeManager* BakeManager();                    // 0x00401010
+struct cCivData_s00fd_eac0;
+struct cPlanetRecord_s00fd_eac0 {
+    uint32_t pad00[0xbc / 4];
+    ResourceKey* mPlantsBegin;                  // +0xbc  vector<ResourceKey>
+    ResourceKey* mPlantsEnd;                    // +0xc0
+    uint32_t size() const { return (uint32_t)(mPlantsEnd - mPlantsBegin); }
+    void* GetTransitionData();                  // 0x00b8d9b0
+    cCivData_s00fd_eac0* GetOwnerCiv();                    // 0x00b8de30
+};
+struct ITransitionTarget {
+    void Enter();                               // 0x010727e0
+};
+ITransitionTarget* GetTransitionTarget(int a, int b);   // 0x010666a0
+struct cBioProtector { const ResourceKey* GetKey(); };   // 0x00bb9b80
+struct cStarRecordRef {
+    uint32_t GetCommContext();                  // 0x00ce6950
+    cBioProtector* GetBioProtector();           // 0x00b8de30
+};
+struct cPlanetItem {
+    ResourceKey* mKeysBegin;                    // +0x00 vector<ResourceKey>
+    ResourceKey* mKeysEnd;                      // +0x04
+    int GetOwnerID();                           // 0x00ff0420
+    void ApplyKeyMap(const cKeyMap& map);       // 0x00ff3190
+    void SetActive(bool active);                // 0x00c37130
+    char pad08[0x508 - 0x08];
+    void* mpInterface508;                       // +0x508
+};
+struct PlanetItemVector {
+    cPlanetItem** mpBegin;
+    cPlanetItem** mpEnd;
+    bool empty() const { return mpBegin == mpEnd; }
+    int size() const { return (int)(mpEnd - mpBegin); }
+};
+struct cPlanet_s00fd_eac0 {
+    uint32_t pad00[0x13c / 4];
+    cStarRecordRef* mpStarRecord;               // +0x13c
+    int GetPlanetType();                        // 0x00c70e00
+    int GetPlanetKind();                        // 0x00c70880
+    PlanetItemVector& GetItems();               // 0x00c71000
+    cPlanetItem* GetItem(int index);            // 0x00c71030
+    const ResourceKey* GetPlanetKey();          // 0x00c713e0
+    void SetPlanetKey(const ResourceKey* key);  // 0x00c713c0
+    bool IsHomePlanet();                        // 0x00c73250
+};
+struct cEmpire_s00fd_eac0;
+namespace cSPLivingUniverse {
+cPlanet_s00fd_eac0* GetActivePlanet_s00fd_eac0();                     // 0x01021260
+}
+namespace cSPLivingUniverse {
+cPlanetRecord_s00fd_eac0* GetActivePlanetRecord();         // 0x010212a0
+}
+namespace cSPLivingUniverse {
+cEmpire_s00fd_eac0* GetPlayerEmpire();                     // 0x01021300
+}
+void UniverseUpdateActive();                    // 0x01021230
+struct cMission {
+    cPlanetRecord_s00fd_eac0* GetTargetRecord(int which);  // 0x00bbaa60
+    int GetState();                             // 0x00bb9ae0
+    uint32_t GetEmpireID();                     // 0x00b1fdb0
+};
+cMission* ActiveMission();                      // 0x01021240
+struct cHomePlanet {
+    const ResourceKey* GetBannerKey();          // 0x00b8e090
+};
+struct cEmpire_s00fd_eac0 {
+    cKeyMap GetKeyMap();                        // 0x00c352f0
+    const ResourceKey* GetUFOKey();             // 0x00c326b0
+    const ResourceKey* GetCityKey();            // 0x00c30f90
+    cHomePlanet* GetHomePlanet();               // 0x00c31730
+};
+struct cStarManager_s00fd_eac0 {
+    cMission* GetCurrentMission();              // 0x00ba70a0
+    cEmpire_s00fd_eac0* GetEmpireByID(uint32_t id);        // 0x00ba9370
+};
+cStarManager_s00fd_eac0* StarManager_s00fd_eac0();                    // 0x00b3d2a0
+struct cGameNounManager_s00fd_eac0 {
+    int GetPlayerEmpireID();                    // 0x00b1f9d0
+    void* GetGameDataVector(void*, void*, void*, void*, uint32_t);   // 0x00b21340 (ret 0x14)
+};   // 0x00b3d300
+cGameNounManager_s00fd_eac0* NounManager_s00fd_eac0();                // 0x00b3d300
+struct AchievementsCtl { void AutoTest(uint32_t id, int value); };   // 0x00676e90
+AchievementsCtl* AchievementsController();      // 0x00675250
+struct cSPSimulatorSpaceGame_s00fd_eac0 { void FillKeyMap(cKeyMap& map); };   // 0x0102f5a0
+struct cSPUISpace_s00fd_eac0 { void ShowBakeTimeSplash(); };   // 0x01065ab0
+struct cSpaceUI {
+    uint32_t pad00[5];
+    cSPUISpace_s00fd_eac0* mpUISpace;                      // +0x14
+    uint32_t pad18[14];
+    uint32_t mFlags;                            // +0x50
+    void DestroyNPC_UFOs(char, char, int);      // 0x01009470
+    void FUN_01003230();                        // 0x01003230
+    void FUN_010039c0(void* star);              // 0x010039c0
+};
+struct cPropertyList_s00fd_eac0 {
+    virtual void v00();
+    virtual void Release();                     // +0x04
+    bool GetBool(uint32_t id);                  // 0x006a25a0
+};
+extern cPropertyList_s00fd_eac0* sAppProperties;           // 0x015fd918
+bool GetPropertyAsKey(cPropertyList_s00fd_eac0* list_s00fd_eac0, uint32_t id, ResourceKey* dst);   // 0x006a1250
+struct PropertyListPtr {
+    cPropertyList_s00fd_eac0* mpObject;
+    PropertyListPtr() : mpObject(0) {}
+    ~PropertyListPtr() { if (mpObject) mpObject->Release(); }
+    // COM-style out-parameter access: releases the current object first.
+    cPropertyList_s00fd_eac0** operator&()
+    {
+        if (mpObject) {
+            cPropertyList_s00fd_eac0* const p = mpObject;
+            mpObject = 0;
+            p->Release();
+        }
+        return &mpObject;
+    }
+    operator cPropertyList_s00fd_eac0*() const { return mpObject; }
+};
+struct IPropertyManager {
+virtual void v00();
+virtual void v04();
+virtual void v08();
+virtual void v0c();
+virtual void v10();
+virtual void v14();
+virtual void v18();
+virtual void v1c();
+virtual void v20();
+virtual void v24();
+virtual void v28();
+    virtual bool GetPropertyList(uint32_t instanceID, uint32_t groupID, cPropertyList_s00fd_eac0** dst);   // +0x2c
+};
+IPropertyManager* PropertyManager();            // 0x0067de30
+struct cPlanetModel_s00fd_eac0 {
+    uint32_t pad00[9];
+    void* mpISphere;                            // +0x24
+    void Generate(const ResourceKey* key, int flags);   // 0x00b8d750
+    const ResourceKey* GetPlanetKey();          // 0x00b7e380
+};
+cPlanetModel_s00fd_eac0* PlanetModel_s00fd_eac0();                    // 0x00b3d350
+struct IMessageServer_s00fd_eac0 {
+virtual void v00();
+virtual void v04();
+virtual void v08();
+virtual void v0c();
+virtual void v10();
+    virtual void PostMSG(uint32_t id, void* data, void* sender);   // +0x14
+};
+IMessageServer_s00fd_eac0* MessageServer_s00fd_eac0();                // 0x0067dcc0
+struct cPlanetVisits {
+    int GetVisitCount(const ResourceKey* key);  // 0x0103ac40
+    void SetVisitCount(const ResourceKey* key, int count);   // 0x0103fba0
+};
+cPlanetVisits* PlanetVisits();                  // 0x00b3d3d0
+struct cSPUIEventLog {
+    void PostFeedbackEvent(uint32_t a, uint32_t b, int c, int d, int e, int f);   // 0x00dd8640
+};
+cSPUIEventLog* EventLog_s00fd_eac0();                      // 0x00b3d3e0
+struct cGameTimeManager_s00fd_eac0 { void IncPauseGate(uint32_t id); };   // 0x00b32220
+cGameTimeManager_s00fd_eac0* GameTimeManager_s00fd_eac0();            // 0x00b3d380
+struct cSPUILayoutCollection { void Show(); };  // 0x00801360
+cSPUILayoutCollection* LayoutCollection();      // 0x0067cab0
+struct cGameInputManager { uint32_t pad[0x110 / 4]; int mInputLock; };   // +0x110
+cGameInputManager* GameInputManager_s00fd_eac0();          // 0x00b3d250
+struct cTribeTool_s00fd_eac0 { void Refresh(uint32_t a, int b); };   // 0x00fe5430
+struct cSpaceGameData { cTribeTool_s00fd_eac0* GetTool(); };   // 0x00bfc5f0
+cSpaceGameData* SpaceGameGet_s00fd_eac0();                 // 0x01002bd0
+struct cGonzagoTransition { void Begin(); };    // 0x00b7dec0
+cGonzagoTransition* GonzagoTransition();        // 0x00b3d360
+struct IRenderer {
+virtual void v00();
+virtual void v04();
+virtual void v08();
+virtual void v0c();
+virtual void v10();
+virtual void v14();
+virtual void v18();
+virtual void v1c();
+virtual void v20();
+virtual void v24();
+virtual void v28();
+virtual void v2c();
+virtual void v30();
+virtual void v34();
+virtual void v38();
+virtual void v3c();
+virtual void v40();
+virtual void v44();
+virtual void v48();
+virtual void v4c();
+virtual void v50();
+virtual void v54();
+virtual void v58();
+virtual void v5c();
+    virtual bool IsLayerEnabled(int layer, bool flag);   // +0x60
+};
+IRenderer* Renderer();                          // 0x0067dd50
+extern const ResourceKey kDefaultKey;           // 0x016d9950
+struct KeyVector {
+    ResourceKey* mpBegin;                       // +0x00
+    ResourceKey* mpEnd;                         // +0x04
+    ResourceKey* mpCapacity;                    // +0x08
+    void DoInsertValue(ResourceKey* position, const ResourceKey& value);   // 0x004e3e10 (ret 8)
+    void push_back(const ResourceKey& value)
+    {
+        if (mpEnd < mpCapacity)
+            *mpEnd++ = value;
+        else
+            DoInsertValue(mpEnd, value);
+    }
+};
+struct TransitionParams {
+    void*       mpTargetData;                   // +0x00
+    uint32_t    mTypeHash;                      // +0x04
+    uint32_t    mField08;                       // +0x08
+    uint32_t    pad0c[3];                       // +0x0c
+    ResourceKey mEmpireKey;                     // +0x18
+    uint32_t    mField24;                       // +0x24
+    uint32_t    mField28;                       // +0x28
+    uint32_t    mField2c;                       // +0x2c
+    KeyVector   mKeys;                          // +0x30
+};
+TransitionParams* ResetTransitionParams();      // 0x00ef19f0
+template <class T> struct PtrVec {
+    T** mpBegin;
+    T** mpEnd;
+    T** mpCapacity;
+};
+template <class T> struct VecOut {
+    uint32_t mPad00;
+    PtrVec<T> mVec;                             // +0x04
+};
+struct cSolarSystem_s00fd_eac0 {
+    void ActivateGraphics(int on);              // 0x00c86c70
+};
+struct cStar_s00fd_eac0 {
+    cSolarSystem_s00fd_eac0* GetSolarSystem();             // 0x00c8b770
+};
+struct cCivData_s00fd_eac0 {
+    const Vector3* GetCities();                 // 0x005c65e0
+};
+struct RenderMgr {
+    char  pad00[0x6c];
+    void* mpInterface6c;                        // +0x6c
+    void FUN_01034810();                        // 0x01034810
+    void Setup(int a, int kind);                // 0x01034950
+    void FUN_01036590(void* planet);            // 0x01036590
+    void UpdateSpaceColor(Vector3 color);       // 0x01036940
+};
+RenderMgr* GetRenderMgr();                      // 0x00b3d470
+struct IdVector {
+    uint32_t* mpBegin;
+    uint32_t* mpEnd;
+    uint32_t* mpCapacity;
+};
+struct cTutorialManager {
+    IdVector* GetTargetEmpires();               // 0x010662c0
+};
+cTutorialManager* TutorialManager();            // 0x010666a0
+struct cTutorialSystem {
+    void StartModeTutorial(int a, uint32_t mode, int b);   // 0x00e3e350 (ret 0xc)
+};
+cTutorialSystem* TutorialSystem();              // 0x00b3d410
+cStar_s00fd_eac0* FUN_01021230_s00fd_eac0();                          // 0x01021230 (active star)
+void  FUN_01021740(void* planet);               // 0x01021740
+void  FUN_01021960(int mode);                   // 0x01021960
+extern "C" void* App_s00fd_eac0();                         // 0x0067dd10
+#define VTP_s00fd_eac0(p)          (*(void***)(p))
+#define VCP0(p,off)     (((void*(__thiscall*)(void*))             VTP_s00fd_eac0(p)[(off)/4])((void*)(p)))
+#define VCB0(p,off)     (((bool(__thiscall*)(void*))             VTP_s00fd_eac0(p)[(off)/4])((void*)(p)))
+#define VC1(p,off,a)    (((int (__thiscall*)(void*,int))          VTP_s00fd_eac0(p)[(off)/4])((void*)(p),(int)(a)))
+#define VC2(p,off,a,b)  (((int (__thiscall*)(void*,int,int))      VTP_s00fd_eac0(p)[(off)/4])((void*)(p),(int)(a),(int)(b)))
+struct PlanetLeaveMessage {
+    void*    mpVtbl;                            // +0x00
+    long     mRef;                              // +0x04
+    void*    mpRecord;                          // +0x08
+    uint32_t mField0c;                          // +0x0c
+    uint32_t mField10;                          // +0x10
+    uint32_t mField14;                          // +0x14
+    uint32_t mField18;                          // +0x18
+    uint32_t pad1c[5];                          // +0x1c
+    uint32_t mField30;                          // +0x30
+    uint32_t pad34;                             // +0x34
+    uint32_t mField38;                          // +0x38
+    uint32_t pad3c;                             // +0x3c
+    void Destruct();                            // 0x00421cf0
+};
+struct Editor {
+    char     pad00[0x74];
+    void*    mpMgr;                             // +0x74
+    char     pad78[0xb8 - 0x78];
+    uint32_t mFieldB8;                          // +0xb8
+    char     padBC[0xc4 - 0xbc];
+    uint32_t mFieldC4;                          // +0xc4
+    char     padC8[0xd4 - 0xc8];
+    void*    mpCtl;                             // +0xd4
+};
+extern Editor* DAT_016c7aa4_s00fd_eac0;                    // 0x016c7aa4
+namespace SP {
+class cAppModeSpace_s00fd_eac0 { public:
+    uint32_t pad000[0x144 / 4];
+    ModelVector_s00fd_eac0 mPlantModels;                   // +0x144
+    uint32_t pad154[2];
+    cSpaceUI* mpSpaceUI;                        // +0x15c
+    cSPSimulatorSpaceGame_s00fd_eac0* mSimulatorSpaceGame; // +0x160
+    uint32_t mElapsedBakeTimeForTransitionMS;   // +0x164
+    bool mBackgroundMapGenerationEnded;         // +0x168
+    bool mBakingForPlanetEntryEnded;            // +0x169
+    bool mDisabledRenderLayersForBaking;        // +0x16a
+    uint32_t mLastBakedTag;                     // +0x16c
+    eastl::list_s00fd_eac0<ResourceKey> mNeedsBakingForTransition;   // +0x170
+    eastl::list_s00fd_eac0<bool> mOldRenderLayerStates;    // +0x17c
+    char pad188[0x194 - 0x188];
+    uint32_t mField194;                         // +0x194
+
+    void TransitionFromSolarToPlanet();  // 0x00fdeac0 (SP::cAppModeSpace::TransitionFromSolarToPlanet)
+    void OnPlanetRecordReady();                 // 0x00fdf5b0
+    void EnterPlanetTransition();               // 0x00fdf5f0
+    void ExitPlanetTransition();                // 0x00fdf8e0
+    void TransitionFromPlanetToSolar(bool);     // 0x00fde3e0
+    void AwardSpaceAchievements();              // 0x00fdbf90
+};  // namespace SP
+}
+// ---- items of slice s00fdeac0 end
+
+// ---- items of slice s00fe0570 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern void* g_slotMsgVtbl0;                                  // 0x013eb90c
+extern void* g_slotMsgVtbl1;                                  // 0x013eb844
+extern char kInterstellarDrive[];                             // 0x016d99a0
+#define PVCAT2(a, b) a##b
+#define PVCAT(a, b) PVCAT2(a, b)
+#define PV virtual void PVCAT(pv_, __COUNTER__)();
+#define PV2 PV PV
+#define PV4 PV2 PV2
+#define PV8 PV4 PV4
+struct ResourceKey_s00fe_0570 {
+    uint32_t instanceID;
+    uint32_t typeID;
+    uint32_t groupID;
+};
+struct ZeroKey : public ResourceKey_s00fe_0570 {
+    ZeroKey() { instanceID = 0; typeID = 0; groupID = 0; }
+};
+void* operator new[](unsigned int n, const char* pName, int flags, unsigned int debugFlags, const char* pFile, int line);  // 0x00f473a0
+namespace eastl {
+struct ListNodeBase_s00fe_0570 {
+    ListNodeBase_s00fe_0570* mpNext;
+    ListNodeBase_s00fe_0570* mpPrev;
+};
+}
+namespace eastl {
+template <typename T>
+struct ListNode_s00fe_0570 : public ListNodeBase_s00fe_0570 {
+    T mValue;
+};
+}
+namespace eastl {
+template <typename T>
+class list_s00fe_0570 { public:
+    typedef ListNode_s00fe_0570<T> node_type;
+    ListNodeBase_s00fe_0570 mNode;
+    uint32_t mAllocator;
+
+    void push_back(const T& value)
+    {
+        node_type* pNode = (node_type*)(new ("Simulator", 0, 0,
+            "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h", 209) char[sizeof(node_type)]);
+        ::new ((void*)&pNode->mValue) T(value);
+        pNode->mpNext = &mNode;
+        pNode->mpPrev = mNode.mpPrev;
+        mNode.mpPrev->mpNext = pNode;
+        mNode.mpPrev = pNode;
+    }
+};
+}
+struct KeyNode {
+    KeyNode* mpRight;
+    KeyNode* mpLeft;
+    KeyNode* mpParent;
+    uint32_t mColor;
+    uint32_t mKey;
+    ResourceKey_s00fe_0570 mValue;
+};
+struct KeyMap {
+    uint32_t mAllocator;     // +0x00
+    KeyNode* mpAnchorRight;  // +0x04
+    KeyNode* mpAnchorLeft;   // +0x08
+    KeyNode* mpRoot;         // +0x0c
+    uint8_t mColor;          // +0x10
+    uint32_t mnSize;         // +0x14
+
+    KeyMap();                                               // 0x00bf2c60
+    void Set(uint32_t key, const ResourceKey_s00fe_0570& value);       // 0x00bf4a60  map[key] = value
+    void Insert(uint32_t key);                              // 0x00bf9300  default-insert
+    ResourceKey_s00fe_0570* Get(uint32_t key);                         // 0x00bf9700  find-or-insert, returns &value
+
+    void DoNukeSubtree(KeyNode* pNode)
+    {
+        while (pNode) {
+            DoNukeSubtree(pNode->mpRight);
+            KeyNode* pLeft = pNode->mpLeft;
+            operator delete[](pNode);
+            pNode = pLeft;
+        }
+    }
+    ~KeyMap() { DoNukeSubtree(mpRoot); }
+};
+struct cObjectTemplateDB_s00fe_0570 {
+    PV8 PV8 PV4 PV2
+    virtual void Register(const ResourceKey_s00fe_0570* key, int flag);  // +0x58
+};
+cObjectTemplateDB_s00fe_0570* ObjectTemplateDB_s00fe_0570();                        // 0x0067cb40
+struct cTerrainSphere_s00fe_0570 {
+    uint32_t pad00[0x1150 / 4];
+    ResourceKey_s00fe_0570 mKey1150;                                     // +0x1150
+    uint32_t pad115c[3];
+    ResourceKey_s00fe_0570 mKey1168;                                     // +0x1168
+};
+struct cGameNounManager_s00fe_0570 {
+    cTerrainSphere_s00fe_0570* GetCurrentTerrainSphere();                // 0x00f67d90
+    void ProcessPending();                                    // 0x00b22960
+};
+cGameNounManager_s00fe_0570* NounManager_s00fe_0570();                              // 0x00b3d300
+struct cModelEntity {
+    void StoreModelKeys(const KeyMap* keys);                  // 0x00ff3190
+};
+struct cPlanetRecord_s00fe_0570 {
+    uint32_t pad00[0x15c / 4];
+    cModelEntity** mpEntitiesBegin;                           // +0x15c
+    cModelEntity** mpEntitiesEnd;                             // +0x160
+    uint32_t GetCommContext();                                // 0x00ce6950
+    int GetEntry();                                           // 0x00b8dab0
+    cModelEntity* GetEntity(int index);                       // 0x00b8dec0
+};
+cPlanetRecord_s00fe_0570* GetPlayerHomePlanet_s00fe_0570();                         // 0x01021370
+void RegisterHomePlanet(cPlanetRecord_s00fe_0570* home, int entry);      // 0x00b96f40 (cdecl)
+struct cEmpire_s00fe_0570 {
+    char* GetData();                                          // 0x00c30c80
+};
+cEmpire_s00fe_0570* GetPlayerEmpire_s00fe_0570();                                   // 0x01021300
+void* Unused_b3d460();                                        // 0x00b3d460
+struct IBox {
+    PV8 PV8 PV8 PV8 PV8 PV8 PV8 PV8 PV8 PV8 PV4
+    virtual void SetWorldBounds(const Vector3* box, float a, float b);  // +0x150
+};
+IBox* GonzagoModelWorld_s00fe_0570();                                    // 0x00b3d520
+struct BakeParam {
+    uint32_t mContext;
+    uint16_t mA;
+    uint16_t mB;
+};
+struct cPropertyList_s00fe_0570 {
+    int GetIntProperty(uint32_t id);                          // 0x006a2660
+};
+extern cPropertyList_s00fe_0570* sAppProperties_s00fe_0570;                         // 0x015fd918
+struct cPlanetModel_s00fe_0570 {
+    float GetMinAltitude();                                   // 0x00b7e4d0
+};
+cPlanetModel_s00fe_0570* PlanetModel_s00fe_0570();                                  // 0x00b3d350
+struct cCameraSettings {
+    float GetRadiusFactor();                                  // 0x00a0ab60
+};
+cCameraSettings* CameraSettings();                            // 0x00c37360
+struct cTimeOfDay {
+    void GetSunPosition(Vector3* out);                        // 0x00bc2c00
+};
+cTimeOfDay* TimeOfDayInstance();                              // 0x00bc30b0
+struct cPlayerUFO {
+    void SetAltitude(float altitude);                         // 0x00c3daa0
+    void PopToDestination();                                  // 0x00c37e60
+    float GetFloat();                                         // 0x00c3ae70
+    void ApplyKey(const ResourceKey_s00fe_0570* key);                    // 0x00c381e0
+};
+struct cSimThing {
+    void Notify(uint32_t id);                                 // 0x00b5cde0
+};
+cSimThing* SimSystem();                                       // 0x00b3d230
+struct cSPUISpace_s00fe_0570 {
+    void ShowBakeTimeSplash();                                // 0x01065ab0
+};
+struct cNamed40 {
+    void SetName(const void* name);                           // 0x00ff4840
+};
+struct cSPSimulatorSpaceGame_s00fe_0570 {
+    uint32_t pad00[0x14 / 4];
+    cSPUISpace_s00fe_0570* mpUI;                                         // +0x14
+    uint32_t pad18[(0x40 - 0x18) / 4];
+    cNamed40* mpField40;                                      // +0x40
+    uint32_t pad44[(0x50 - 0x44) / 4];
+    uint32_t mFlags;                                          // +0x50
+    void StepA();                                             // 0x01003490
+    void StepB();                                             // 0x01003a50
+    void StepC();                                             // 0x01003690
+};
+struct cSPSimulatorPlayerUFO_s00fe_0570 {
+    cPlayerUFO* GetPlayerUFO();                               // 0x00a1ad60
+    void InitForPlanet();                                     // 0x00ffd390
+    void SetPlanetDestination(Vector3* pos, bool a, bool b, bool c, bool d);  // 0x00ffc350
+};
+cSPSimulatorPlayerUFO_s00fe_0570* SpaceGame();                           // 0x00ffbe50
+struct cPlanet_s00fe_0570 {
+    void Refresh1();    // 0x00c73ff0
+    void Refresh2();    // 0x00c74280
+    void Refresh3(int a);  // 0x00c73cf0
+    void Restart();     // 0x00c6ffa0
+};
+cPlanet_s00fe_0570* GetActivePlanet_s00fe_0570();                                   // 0x01021260
+struct SlotMessage {
+    void* vptr;           // +0x00
+    long mRef;            // +0x04
+    uint32_t pad08[2];
+    uint32_t mTarget;     // +0x10
+    uint32_t pad14[7];
+    uint32_t mData30;     // +0x30
+    uint32_t pad34;
+    uint32_t mData38;     // +0x38
+    uint32_t pad3c;
+
+    SlotMessage()
+    {
+        mData30 = 0;
+        vptr = &g_slotMsgVtbl0;
+        _InterlockedExchange(&mRef, 0);
+        vptr = &g_slotMsgVtbl1;
+        mData38 = 0;
+    }
+    void Destruct();                                          // 0x00421cf0
+    ~SlotMessage() { Destruct(); }
+};
+struct IMessageServer_s00fe_0570 {
+    PV4 PV
+    virtual void Post(uint32_t id, SlotMessage* msg, int flag);  // +0x14
+};
+IMessageServer_s00fe_0570* MessageServer_s00fe_0570();                              // 0x0067dcc0
+struct IInputManager {
+    PV8 PV8 PV8
+    virtual bool IsControlActive(int control, int flag);      // +0x60
+};
+IInputManager* InputManager();                                // 0x0067dd50
+struct cGameTimeManager_s00fe_0570 {
+    void IncPauseGate(uint32_t id);                           // 0x00b32220
+};
+cGameTimeManager_s00fe_0570* GameTimeManager_s00fe_0570();                          // 0x00b3d380
+int MissionIndexFromFloat(float f);                           // 0x01021240 (cdecl)
+void MakeKeyFromIndex(ResourceKey_s00fe_0570* out, int index);           // 0x0105c5d0 (cdecl)
+class cAppModeSpace_s00fe_0570 {
+public:
+    uint32_t pad000[0x7c / 4];
+    ResourceKey_s00fe_0570 mUFOKey;                                      // +0x7c
+    uint32_t pad88[(0x15c - 0x88) / 4];
+    cSPSimulatorSpaceGame_s00fe_0570* mpSimulatorSpaceGame;              // +0x15c
+    uint32_t pad160;
+    uint32_t mElapsedBakeTimeForTransitionMS;                 // +0x164
+    uint8_t pad168;
+    bool mbBakeStarted;                                       // +0x169
+    bool mBakingForPlanetEntryEnded;                          // +0x16a
+    uint8_t pad16b;
+    uint32_t mCommContext;                                    // +0x16c
+    eastl::list_s00fe_0570<ResourceKey_s00fe_0570> mNeedsBakingForTransition;       // +0x170
+    eastl::list_s00fe_0570<bool> mInputFlags;                            // +0x17c
+    uint8_t pad188[0x18e - 0x188];
+    bool mbTutorial;                                          // +0x18e
+
+    void LoadNewGamePlanet();                                 // 0x00fdc240
+    void AddBakeKey(const BakeParam* p, const ResourceKey_s00fe_0570* key);  // 0x00fdd320
+    void SetPlanetTimeOnFirstEntry();                         // 0x00fda530
+    void Func_fda750();                                       // 0x00fda750
+    void Func_fdf9f0();                                       // 0x00fdf9f0
+
+    void InitSpaceMode();
+};
+// ---- items of slice s00fe0570 end
+
+// ---- items of slice s00fe2ab0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+enum eGameModeTag {
+    kModeCiv     = 0x1654c04,   // civilization
+    kModeSpace   = 0x1654c05,   // space
+    kModeTribe   = 0x1654c06,   // tribe
+    kModeColony  = 0x1654c08,   // colony
+    kModeEditor  = 0xdbdba1,    // editor
+    kModePlanetView = 0x1654c10,  // planet/space view (no pre-entry hook)
+    kModeUnknown = 0x2ccd1d2,   // unknown / cancelled transition (-1 shares this arm)
+};
+enum eRecordType {
+    kTypeCreature = 0x66787bc,  // creature/species record
+    kTypePlanetA  = 0x7ce1750,  // planet record
+    kTypePlanetB  = 0x7ce3cb0,  // planet record (alternate class)
+};
+struct Key {
+    uint32_t mTypeID;           // +0x00
+    uint32_t mGroupID;          // +0x04
+    uint32_t mInstanceID;       // +0x08
+    Key() : mTypeID(0), mGroupID(0), mInstanceID(0) {}
+};
+struct ISubsystem;                                   // cAppModeSpace +4 (cGonzagoSubsystem)
+struct IMessageServer_s00fe_2ab0 {
+virtual void s00();
+virtual void s04();
+virtual void s08();
+virtual void s0c();
+    virtual void s10();
+    virtual void PostMSG(uint32_t id, int32_t a, int32_t b);                   // +0x14
+virtual void s18();
+virtual void s1c();
+    virtual void s20();
+    virtual void AddListener(ISubsystem* handler, uint32_t id);                // +0x24
+};
+class AutoHandler {
+ public:
+    __forceinline void AddHandler(IMessageServer_s00fe_2ab0* server, ISubsystem* handler, const uint32_t* ids, uint32_t count)
+    {
+        mpServer = server;
+        mpHandler = handler;
+        mpIdArray = ids;
+        mnIdArrayCount = count;
+        mnPriority = 0;
+        if (mpServer && mpHandler) {
+            for (uint32_t i = 0; i < count; ++i)
+                mpServer->AddListener(mpHandler, mpIdArray[i]);
+        }
+    }
+
+    IMessageServer_s00fe_2ab0* mpServer;          // +0x00
+    ISubsystem* mpHandler;             // +0x04
+    const uint32_t* mpIdArray;         // +0x08
+    uint32_t mnIdArrayCount;           // +0x0c
+    int32_t mnPriority;                // +0x10
+};
+struct ISubsystem {
+    virtual int AddRef();                                                      // +0x00
+    virtual bool HandleMessage(uint32_t messageID, void* pMsg);                // +0x04
+    virtual int Release();                                                     // +0x08
+virtual void s0c();
+virtual void s10();
+virtual void s14();
+    virtual void PostGameModeTransition(int32_t oldMode, int32_t newMode);     // +0x18
+    void Fn_00ac8cd0(void* p, int32_t a);                                      // 0xac8cd0
+};
+struct IEffectsManager_s00fe_2ab0 {
+virtual void e00();
+virtual void e04();
+virtual void e08();
+virtual void e0c();
+virtual void e10();
+virtual void e14();
+virtual void e18();
+virtual void e1c();
+virtual void e20();
+virtual void e24();
+virtual void e28();
+virtual void e2c();
+virtual void e30();
+virtual void e34();
+virtual void e38();
+virtual void e3c();
+virtual void e40();
+virtual void e44();
+virtual void e48();
+virtual void e4c();
+virtual void e50();
+virtual void e54();
+virtual void e58();
+virtual void e5c();
+virtual void e60();
+virtual void e64();
+virtual void e68();
+virtual void e6c();
+virtual void e70();
+virtual void e74();
+virtual void e78();
+virtual void e7c();
+virtual void e80();
+virtual void e84();
+virtual void e88();
+virtual void e8c();
+virtual void e90();
+virtual void e94();
+    virtual void Preload(uint32_t id, bool bWarm);                             // +0x98
+};
+struct IConfigManager_s00fe_2ab0 {
+virtual void c00();
+virtual void c04();
+virtual void c08();
+virtual void c0c();
+virtual void c10();
+virtual void c14();
+virtual void c18();
+virtual void c1c();
+virtual void c20();
+virtual void c24();
+virtual void c28();
+virtual void c2c();
+    virtual void* GetPropertyList(uint32_t id);                                // +0x30
+};
+struct IGameInputManager_s00fe_2ab0 {
+virtual void g00();
+virtual void g04();
+virtual void g08();
+virtual void g0c();
+virtual void g10();
+virtual void g14();
+virtual void g18();
+virtual void g1c();
+virtual void g20();
+virtual void g24();
+virtual void g28();
+virtual void g2c();
+virtual void g30();
+virtual void g34();
+    virtual void SetMode(int32_t mode);                                        // +0x38
+};
+struct ICurMgr {
+    bool FindLocal(uint32_t id);                                               // 0x801bb0
+};
+struct IEventLog {
+    void ClearEvents();                                                        // 0xdd6d70
+};
+struct ISpaceModeManager {
+    bool IsReady();                                                            // 0xe36fa0
+    void SetPendingMode(int32_t a, int32_t b);                                 // 0xe3e350
+};
+struct IMgr230 {
+    void Fn_00b5cde0(uint32_t id);                                             // 0xb5cde0
+};
+struct IMgr320 {
+    void Fn_00b1dfc0();                                                        // 0xb1dfc0
+};
+struct cSpaceEffect {
+    void Fn_010727e0(int32_t a, int32_t b);                                    // 0x10727e0
+};
+struct cSpaceUI_s00fe_2ab0 {
+    char pad00[0x204];
+    int32_t mnState;                           // +0x204
+};
+struct cSelection {
+    virtual void v00();                        // +0x00
+    virtual void v04();                        // +0x04
+    virtual int Release();                     // +0x08
+    char pad04[0x0c - 0x04];
+    uint32_t mnType;                           // +0x0c
+    char pad10[0x18 - 0x10];
+    Key mKey;                                  // +0x18
+    char pad24[0x44 - 0x24];
+    bool mbHandled;                            // +0x44
+};
+struct cSpaceGameState {
+    char pad00[0x14];
+    cSpaceEffect* mpEffect;                    // +0x14
+    char pad18[0x20 - 0x18];
+    cSpaceUI_s00fe_2ab0* mpUI;                            // +0x20
+    cSelection* mpSelection;                   // +0x24
+    void Fn_010030c0();                        // 0x10030c0
+};
+struct PtrVector {
+    void** mpBegin;                            // +0x00
+    void** mpEnd;                              // +0x04
+};
+struct ICivilization {
+    void Fn_00bebdd0(const Key& key);                                          // 0xbebdd0
+};
+struct cGameNounManager_s00fe_2ab0 {
+    ICivilization* GetPlayerCivilization();                                    // 0xb25fb0
+    PtrVector* Fn_00ace2c0();                                                  // 0xace2c0
+};
+struct IEmpire {
+    void Fn_00c30fa0();                                                        // 0xc30fa0
+};
+struct ISpeciesManager {
+    void SetAvatarSpecies(const Key& key);                                     // 0x4df310
+};
+namespace SP {
+struct cTestSystem {
+    struct ListNode { ListNode* mpNext; ListNode* mpPrev; };
+    char pad00[0x70];
+    ListNode mTests;                           // +0x70
+    bool IsTestingInProgress() const { return mTests.mpNext != &mTests; }
+};
+}
+namespace SP {
+struct cAppProperties {
+    char pad00[0x00];
+    void SetBoolProperty(uint32_t id, bool bValue);                            // 0x6a17e0
+};
+}
+namespace SP {
+extern cTestSystem* sTestSystem;               // 0x15fd928
+}
+namespace SP {
+extern cAppProperties* sAppProperties_s00fe_2ab0;         // 0x15fd918
+}
+namespace SP {
+extern const uint32_t kHandlerIDs[];           // 0x1494170 20 message ids
+}
+namespace SP {
+ISubsystem* __cdecl Subsystem1();              // 0xb3d460
+}
+namespace SP {
+ISubsystem* __cdecl Subsystem2();              // 0xb3d480
+}
+namespace SP {
+ISubsystem* __cdecl StarManager_s00fe_2ab0();             // 0xb3d2a0
+}
+namespace SP {
+ISpaceModeManager* __cdecl SpaceModeManager(); // 0xb3d410
+}
+namespace SP {
+IMgr230* __cdecl Fn_00b3d230();                // 0xb3d230
+}
+namespace SP {
+IMgr320* __cdecl Fn_00b3d320();                // 0xb3d320
+}
+namespace SP {
+cGameNounManager_s00fe_2ab0* __cdecl NounManager_s00fe_2ab0();       // 0xb3d300
+}
+namespace SP {
+IEventLog* __cdecl EventLog_s00fe_2ab0();                 // 0xb3d3e0
+}
+namespace SP {
+IGameInputManager_s00fe_2ab0* __cdecl GameInputManager_s00fe_2ab0(); // 0xb3d250
+}
+namespace SP {
+IEffectsManager_s00fe_2ab0* __cdecl EffectsManager_s00fe_2ab0();     // 0x67ddd0
+}
+namespace SP {
+IMessageServer_s00fe_2ab0* __cdecl MessageServer_s00fe_2ab0();       // 0x67dcc0
+}
+namespace SP {
+IConfigManager_s00fe_2ab0* __cdecl ConfigManager_s00fe_2ab0();       // 0x67dd30
+}
+namespace SP {
+ICurMgr* __cdecl CurMgr();                     // 0x67cab0
+}
+namespace SP {
+bool __cdecl IsWorldLayoutFlagSet(int32_t flag);          // 0x685520
+}
+namespace SP {
+void __cdecl Fn_00bf55d0();                    // 0xbf55d0
+}
+namespace SP {
+void __cdecl Fn_00ba5650(const Key* key, int32_t a);       // 0xba5650
+}
+namespace SP {
+void __cdecl Fn_00ba5bc0(void* p);             // 0xba5bc0
+}
+namespace SP {
+IEmpire* __cdecl GetPlayerEmpire(int32_t index);           // 0x1021300
+}
+namespace SP {
+IEmpire* __cdecl GetPlayerEmpire(const Key& key);          // 0x1021300
+}
+namespace SP {
+ISpeciesManager* __cdecl SpeciesManager_s00fe_2ab0();     // 0x401090
+}
+namespace SP {
+void __cdecl CommEvent(uint32_t id, void* p, const Key& a, const Key& b,
+                       void* ctx, int32_t c, const Key& d, const Key& f); // 0xe39ab0
+}
+class cModeTransition {
+ public:
+virtual void t00();
+virtual void t04();
+virtual void t08();
+virtual void t0c();
+virtual void t10();
+virtual void t14();
+virtual void t18();
+virtual void t1c();
+    virtual int32_t GetPostModeTransitionState();                              // +0x20
+virtual void t24();
+virtual void t28();
+virtual void t2c();
+virtual void t30();
+virtual void t34();
+virtual void t38();
+virtual void t3c();
+    virtual void t40();
+    virtual void BeginPostGameModeTransition(int32_t newMode);                 // +0x44
+    virtual void t48();
+    virtual void EndPostGameModeTransition();                                  // +0x4c
+
+    void PostGameModeTransition(int32_t oldMode, int32_t newMode);             // 0xfe2ab0
+};
+struct IModeStrategy {
+    virtual void m00();                        // +0x00
+};
+class cAppModeSpace_s00fe_2ab0 : public IModeStrategy, public ISubsystem, public cModeTransition {
+ public:
+    void TransitionFromEditorToPlanet();       // 0xfdc800
+    void Fn_00fdb9a0();                        // 0xfdb9a0
+    void SetDefaultPickPriority();             // 0xfddba0
+    void LoadStateMachine(void* pProperties);   // 0xfe1a20
+
+    char pad0c[0x8c - 0x0c];
+    AutoHandler mAutoHandler;                  // +0x8c
+    char pad_a0[0x131 - 0xa0];
+    bool mbFlag131;                            // +0x131
+    char pad132[0x15c - 0x132];
+    cSpaceGameState* mpSpaceState;             // +0x15c
+    char pad160[0x18e - 0x160];
+    bool mbFlag18e;                            // +0x18e
+    bool mbFlag18f;                            // +0x18f
+    bool mbFlag190;                            // +0x190
+    bool mbFlag191;                            // +0x191
+    bool mbFlag192;                            // +0x192
+};
+// ---- items of slice s00fe2ab0 end
+
+// ---- items of slice s010414c0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+struct VtblTable { void* mSlots[0x100]; };
+typedef void* (__thiscall *VfnP)(void*);
+void* __cdecl App_s0104_14c0();                                                                  // 0x0067dd10
+void* __cdecl GetUFOSimulator_s0104_14c0();                                                      // 0x00ffbe50
+void* __cdecl CommManager();                                                           // 0x00b3d4a0
+void* __cdecl GameTimeManager_s0104_14c0();                                                       // 0x00b3d380
+void* __stdcall NounManagerArg(uint32_t id);                                           // 0x00b3d300 (callee pops)
+bool  __cdecl FUN_01068350(void* self);                                                // 0x01068350
+bool  __cdecl FUN_00ff3bf0(void* self);                                                // 0x00ff3bf0
+struct TerrainSphere {
+    bool IsInTerrainSphere(void* arg);   // 0x00c772c0 (callee pops the argument)
+    bool HasFlagOrInsert(void* arg);     // 0x00c77bf0
+};
+struct TerrainEditor {
+    void* GetCurrentTerrainSphere();
+};
+struct CommScreen {
+    bool IsActive();
+};
+struct GameTimeMgr {
+    uint8_t mPad00[0x48];
+    uint8_t mFlags48;
+};
+struct GameObj74 {
+    void* mPad00;
+    VtblTable* mpVtbl;             // not used: methods called directly
+    bool FUN_01068350();
+    bool FUN_00ff3bf0();
+};
+struct UFOSim {
+    void* GetPlayerInventory();
+};
+struct UFOData {
+    int AddRef();
+};
+struct Inventory {
+    uint8_t mPad00[0x74c];
+    uint8_t mFlag74C;              // +0x74c
+    bool CanEnterPlanetContext();
+    bool FUN_00ff3bf0();
+};
+typedef bool (__thiscall *VfnBUI)(void* self, uint32_t arg);
+inline bool InvHasWormhole(Inventory* inv)
+{
+    return ((VfnBUI)(*(void***)inv)[0x74 / 4])(inv, 0x16dfbc4);
+}
+typedef int (__thiscall *VfnIUI)(void* self, uint32_t arg);
+inline bool InTerrainSphere(uint32_t id)
+{
+    TerrainSphere* sphere =
+        (TerrainSphere*)((TerrainEditor*)NounManagerArg(id))->GetCurrentTerrainSphere();
+    return sphere->IsInTerrainSphere((void*)id);
+}
+// ---- items of slice s010414c0 end
+
 // @ 0x00fd9c90
 void AppMode::f9c90(int a)
 {
@@ -1852,6 +3546,23 @@ void AppMode::f9d90()
     if (u == 2) FUN_010213b0(2);
 }
 
+// @ 0x00fd9de0
+void AppMode::f9de0()
+{
+    void* m = FUN_01021240();
+    char* es = (char*)m;
+    int t = E(es)->FUN_00bb9ae0();
+    if (t != 5) return;
+    void* av = E(es)->FUN_00b1fdb0();
+    int eid = FUN_01021090();
+    if (av == (void*)eid) return;
+    int eid2 = FUN_01021090();
+    void* av2 = E(es)->FUN_00b1fdb0();
+    void* rm = FUN_00b3d2c0();
+    float f = ((float(__thiscall*)(void*, void*, int))VTP(rm)[0x00 + 0]) (rm, av2, eid2);
+    (void)f;
+}
+
 // @ 0x00fd9e80
 char f9e80(int a, int* p)
 {
@@ -1860,6 +3571,47 @@ char f9e80(int a, int* p)
         ((void(__thiscall*)(void*, int))VTP((char*)q + 8)[0x1c / 4])((char*)q + 8, a);
     }
     return 1;
+}
+
+// @ 0x00fd9ea0
+void AppMode::f9ea0(int key, int param3)
+{
+    char* s = (char*)this;
+    if (*(int*)(s + 0x15c) != 0 && *(int*)(*(int*)(s + 0x15c) + 0x20) != 0) {
+        char c = (char)(int)E((void*)*(int*)(*(int*)(s + 0x15c) + 0x20))->FUN_00d09660();
+        if (c) goto done;
+    }
+    if (key == 0x4c) {
+        if (param3 != 0) goto done;
+        void* cm = FUN_00b3d4a0();
+        char c = (char)(int)E(cm)->FUN_00ae9390();
+        if (c) goto done;
+        void* t = FUN_00b3d3f0(-0xe);
+        E(t)->FUN_00e190c0(-0xe);
+    } else if (key == 0x52) {
+        if (param3 != 0) goto done;
+        void* cm = FUN_00b3d4a0();
+        char c = (char)(int)E(cm)->FUN_00ae9390();
+        if (c) goto done;
+        void* t = FUN_00b3d3f0(-0xd);
+        E(t)->FUN_00e190c0(-0xd);
+    } else if (key == 0x59) {
+        void* x = FUN_010666a0();
+        char c = (char)(int)E(x)->FUN_01065e20();
+        if (!c) {
+            void* y = FUN_010666a0();
+            E(y)->FUN_01067b60();
+        }
+    }
+done:
+    void* t2 = FUN_00b3d3f0(0);
+    char c2 = (char)(int)E(t2)->FUN_00e18c70(0);
+    if (c2) return;
+    void* gi = FUN_00b3d250();
+    char c3 = ((char(__thiscall*)(void*, int, int))VTP(gi)[0x44 / 4])(gi, key, param3);
+    if (c3) return;
+    gi = FUN_00b3d250();
+    ((void(__thiscall*)(void*, int, int))VTP(gi)[0x4c / 4])(gi, key, param3);
 }
 
 // @ 0x00fd9f70
@@ -2573,6 +4325,61 @@ void cAppModeSpace_s00fd_bd60::LoadNewGamePlanet()
     (void)pPlanet;
 }
 
+// @ 0x00fdc340
+void UpdateSpaceGrid(cAppModeSpace_s00fd_bd60* pMode, float fRadius, const Vec3* pCenter)
+{
+    void* pGrid = GetTerrainSphere();
+    UpdateGridCells(pGrid, 0, fRadius);
+
+    int nCount = 0;
+    void* pCells = nullptr;
+    if (nCount > 0) {
+        for (int i = 0; i < nCount; ++i) {
+            void* pCell = ((void**)pCells)[i];
+            (void)pCell;
+            bool bInside = true;
+            float fDx = pCenter->mX - 0.0f;
+            float fDy = pCenter->mY - 0.0f;
+            float fDz = pCenter->mZ - 0.0f;
+            if (bInside) {
+                ResetGridHighlight();
+                if (fDx * fDx + fDy * fDy + fDz * fDz < fRadius * fRadius)
+                    DrawGridRing(0);
+            }
+        }
+    }
+
+    void* pOverlay = nullptr;
+    UpdateGridOverlay(fRadius, 0, pOverlay);
+    int nRings = 0;
+    for (int i = 0; i < nRings; ++i)
+        DrawGridRing(1);
+    if (pOverlay != nullptr)
+        operator_delete__(pOverlay);
+    (void)pMode;
+}
+
+// @ 0x00fdc490
+void cAppModeSpace_s00fd_bd60::StopEditorPlay()
+{
+    if (mbEditorPlaying != 0) {
+        mbEditorPlaying = 0;
+        RefreshModeUI();
+    }
+}
+
+// @ 0x00fdc4b0
+int* UnlinkListNode(int* pOut, int** ppNode)
+{
+    int* pNode = *ppNode;
+    int* pNext = *(int**)((uint8_t*)pNode + 4);
+    *(int*)pNext[1] = *pNext;
+    *(int*)(*pNext + 4) = pNext[1];
+    operator_delete__(pNext);
+    *pOut = (int)(intptr_t)pNode;
+    return pOut;
+}
+
 // @ 0x00fdc520
 bool cAppModeSpace_s00fd_bd60::OnMouseDown(int nButton, int nX, int nY, int nFlags)
 {
@@ -2629,6 +4436,165 @@ bool cAppModeSpace_s00fd_bd60::OnMouseDown(int nButton, int nX, int nY, int nFla
         EnterPlanetMode();
     }
     return true;
+}
+
+// @ 0x00fdc710
+void cAppModeSpace_s00fd_bd60::TransitionFromLoadToPlanet()
+{
+    InitSpaceGame();
+    void* pPlanet = GetActivePlanet();
+    InitializePlanetContext();
+
+    cPlanetModel* pModel = (cPlanetModel*)PlanetModel();
+    if (pModel != nullptr) {
+        uint32_t nKey = pModel->GetPlanetKey();
+        (void)nKey;
+        SetLoadedPlanet();
+    }
+    (void)pPlanet;
+
+    SetPlanetModelView(0);
+    RefreshPlanetUI();
+    InitPlanetView();
+
+    cSPSimulatorPlayerUFO* pUFO = (cSPSimulatorPlayerUFO*)SpaceGameGet();
+    pUFO->InitForPlanet();
+
+    void* pMessage = CreateTransitionMessage();
+    PostMessage(pMessage);
+    RefreshModeUI();
+    ResetTransitionTuning();
+
+    ResetUIState();
+    ClearSelection(-1);
+    NounManager();
+    ApplyNounChanges();
+}
+
+// @ 0x00fdc800
+void cAppModeSpace_s00fd_bd60::TransitionFromEditorToPlanet()
+{
+    InitSelectionState();
+    void* pContext = GetActivePlanet();
+    if (pContext == nullptr) {
+        InitializePlanetContext();
+
+        cPlanetModel* pModel = (cPlanetModel*)PlanetModel();
+        if (pModel == nullptr) {
+            void* pView = CreatePlanetView(1, 1);
+            SetPlanetViewPlanet(pView, 1, 0);
+        } else {
+            uint32_t nKey = pModel->GetPlanetKey();
+            (void)nKey;
+            SetLoadedPlanet();
+        }
+
+        SetPlanetModelView(0);
+        RefreshPlanetUI();
+        InitPlanetView();
+
+        void* pMessage = CreateTransitionMessage();
+        PostMessage(pMessage);
+        RefreshModeUI();
+        ResetTransitionTuning();
+
+        ResetUIState();
+        ClearSelection(-1);
+        NounManager();
+        ApplyNounChanges();
+
+        uint32_t nSlot = gSpaceModeSlot;
+        void* pGameMode = mpGameMode->mpPlanetView;
+        if (*(int*)((uint8_t*)pGameMode + 0x204) == 1)
+            nSlot = 0xebb801;
+        else
+            nSlot = 0x1103193;
+        (void)nSlot;
+        SetGameSpeed(0xebb801);
+        UnloadMissionTuning();
+    } else {
+        SetPaused(false);
+        UnloadMissionTuning();
+        SetUniverseView(0);
+
+        if (mnPlanetContext == 1) {
+            ShowMissionLog();
+            return;
+        }
+        if (mnPlanetContext == 2) {
+            mpGameMode->mpUISpace->ToggleStarmapFilters(true);
+            StarMapManager();
+            return;
+        }
+    }
+}
+
+// @ 0x00fdc980
+void cAppModeSpace_s00fd_bd60::TransitionToEntry()
+{
+    if (mpGameMode != nullptr) {
+        ShutdownSpaceGame();
+        PlanetModel();
+        RefreshPlanetUI();
+        ShutdownSPG();
+    }
+
+    cEffectsManager* pEffects = EffectsManager();
+    pEffects->v54();
+    void* pEntry = nullptr;
+    if (pEntry != nullptr) {
+        (void)pEntry;
+        cPropertyList* pList = (cPropertyList*)pEntry;
+        (void)pList;
+        operator_delete__(pEntry);
+    }
+}
+
+// @ 0x00fdc9e0
+void cAppModeSpace_s00fd_bd60::PlanetOnMouseDown()
+{
+    ShutdownSpaceGame();
+    PlanetModel();
+    RefreshPlanetUI();
+    ShutdownSPG();
+}
+
+// @ 0x00fdca00
+cAppModeSpace_s00fd_bd60::cAppModeSpace_s00fd_bd60()
+{
+    mpStarMap = nullptr;
+    mpUniverse = nullptr;
+    mpTerrain = nullptr;
+    mpPlanetKeyData = nullptr;
+    mnPlanetContext = 0;
+    mpGonzagoWorld = nullptr;
+    mpPlanetView = nullptr;
+    mpStrategy = nullptr;
+    mbInitialized = 0;
+    mnDragStartX = 0;
+    mnDragStartY = 0;
+    mnDragKind = 0;
+    mpEmpire = nullptr;
+    mpPlayer = nullptr;
+    mnPlayerId = 0;
+    mpGonzagoAsset = nullptr;
+    mbSpaceGameActive = 0;
+    mpGameMode = nullptr;
+    mpHandler = nullptr;
+    mpUISpace = nullptr;
+    mnOldGameMode = 0;
+    mpEditor = nullptr;
+    mbEditorPlaying = 0;
+    mbFlag18d = 0;
+    mbFlag18e = 0;
+    mbFlag18f = 0;
+    mbFlag190 = 0;
+    mbFlag191 = 0;
+    mbFlag192 = 0;
+    mpListHead = nullptr;
+
+    mpListHead = this;
+    gSpaceAppMode = this;
 }
 
 // @ 0x00fdcba0
@@ -3076,6 +5042,562 @@ void cAppModeSpace_s00fd_cd40::TransitionFromGalaxyToSolar()
     ((cSelf_s00fd_cd40*)&v0)->FUN_00ad92d0();
 }
 
+// @ 0x00fddba0
+void cAppModeSpace_s00fd_dba0::SetDefaultPickPriority()
+{
+    PickPriorityVec list;
+    list.push_back(PickPriority(0xb033b403, 1, 10));
+    list.push_back(PickPriority(0x137e8e0, 1, 10));
+    list.push_back(PickPriority(0xb033b403, 2, 20));
+    list.push_back(PickPriority(0x137e8e0, 2, 20));
+    list.push_back(PickPriority(0xe9cb8ba, 2, 40));
+    list.push_back(PickPriority(0x436f315, 0, 30));
+    list.push_back(PickPriority(0xe9cb8ba, 0, 30));
+    list.push_back(PickPriority(0x175cdc9, 0, 30));
+    list.push_back(PickPriority(0xce9f6639, 0, 30));
+    list.push_back(PickPriority(0x3275872, 1, 100));
+    list.push_back(PickPriority(0x44462a6, 1, 100));
+    list.push_back(PickPriority(0x38cfb68, 0, 100));
+    list.push_back(PickPriority(0x3275872, 2, 110));
+    list.push_back(PickPriority(0x44462a6, 2, 110));
+    PickPriorityMgr()->SetList(&list, 0);
+}
+
+// @ 0x00fddfa0
+void FUN_00fddfa0()
+{
+    PickPriorityVec list;
+    list.push_back(PickPriority(0xb033b403, 1, 10));
+    list.push_back(PickPriority(0x137e8e0, 1, 10));
+    list.push_back(PickPriority(0xb033b403, 2, 20));
+    list.push_back(PickPriority(0x137e8e0, 2, 20));
+    list.push_back(PickPriority(0xe9cb8ba, 1, 30));
+    list.push_back(PickPriority(0xce9f6639, 0, 30));
+    PickPriorityMgr()->SetList(&list, 0);
+}
+
+// @ 0x00fde180
+bool cAppModeSpace_s00fd_dba0::Shutdown()
+{
+    FUN_00e1dbd0();
+    mModels.clear();
+
+    cMessageServer* server = MessageServer_s00fd_dba0();
+    if (server != 0)
+    {
+        server->Notify(GetModeBase(this), 0x1a0219e, 0xffffd8f1);
+        server->Notify(GetModeBase(this), 0x3795725, 0xffffd8f1);
+    }
+    CheatManager()->SetFlag(g_cheatFlag);
+    ShutdownSPG();
+    return true;
+}
+
+// @ 0x00fde230
+void NotifyActivePlanetRecord(void* record_)
+{
+    cPlanetRecord* record = (cPlanetRecord*)record_;
+
+    int count = (int)(record->mTemplatesEnd - record->mTemplatesBegin);
+    for (int i = 0; i < count; i++)
+        ObjectTemplateDB()->Unregister(&record->mTemplatesBegin[i]);
+
+    cBioElemSort* sort = record->SortBanners();
+
+    void* key = sort->Func_bb9b80();
+    if (*(int*)key != 0)
+        ObjectTemplateDB()->Unregister(key);
+
+    if (sort->Func_bb9ae0() == 5)
+    {
+        cEmpire* empire = StarManager()->GetEmpireByID(sort->GetAvatar());
+        if (empire != 0)
+            ObjectTemplateDB()->Unregister(empire->GetUFOKey());
+    }
+
+    int n = (int)(record->mExtraEnd - record->mExtraBegin);
+    PlanetTemplateVec** buf = 0;
+    if (n != 0)
+        buf = (PlanetTemplateVec**)operator new[](n * 4, "Simulator", 0, 0, EASTL_ALLOCATOR_FILE, 0xd1);
+    memcpy(buf, record->mExtraBegin, n * 4);
+
+    int copied = n;
+    for (int i = 0; i < copied; i++)
+    {
+        PlanetTemplateVec* v = buf[i];
+        int m = (int)(v->mpEnd - v->mpBegin);
+        for (int j = 0; j < m; j++)
+        {
+            PlanetTemplateRef* e = &v->mpBegin[j];
+            if (e->mKey != 0 && e->mKey != 0xffffffff)
+                ObjectTemplateDB()->Unregister(e);
+        }
+    }
+
+    if (buf != 0 && ((int*)buf)[-1] != 0)
+        operator delete[](buf);
+}
+
+// @ 0x00fde3e0
+void cAppModeSpace_s00fd_dba0::TransitionFromPlanetToSolar(bool bUpdateEmpire)
+{
+    mpSpaceGame->mFlags |= 1;
+    mModels.clear();
+
+    cStar* star = GetActiveStar();
+    cPlanet* planet = GetActivePlanet_s00fd_dba0();
+    cSPGameDataUFO* ufo = GetUFOSimulator_s00fd_dba0()->GetPlayerInventory();
+
+    cHud* hud = GetHud();
+    if (hud && (hud->IsActive() || hud->GetMode() == 2))
+        hud->Show();
+
+    cModeObject* mode = App_s00fd_dba0()->GetModeManager()->GetCurrentMode();
+    cCameraView* view = 0;
+    bool viewFlagA;
+    bool viewFlagB;
+    if (mode && (view = (cCameraView*)mode->Query(0x303154cd)) != 0)
+    {
+        viewFlagA = gViewFlagA;
+        viewFlagB = view->mbFlag;
+    }
+    else
+    {
+        view = 0;
+        viewFlagA = false;
+        viewFlagB = false;
+    }
+
+    const Vector3* src;
+    Vector3 viewTarget;
+    if (view == 0)
+        src = &kUpAxisY;
+    else
+    {
+        viewTarget.x = view->mTarget.x;
+        viewTarget.y = view->mTarget.y;
+        viewTarget.z = view->mTarget.z;
+        src = &viewTarget;
+    }
+    Vector3 camTarget;
+    camTarget.x = src->x; camTarget.y = src->y; camTarget.z = src->z;
+
+    const Vector3* ufoSrc = ufo->mSpatial.GetPosition();
+    Vector3 ufoPos;
+    ufoPos.x = ufoSrc->x; ufoPos.y = ufoSrc->y; ufoPos.z = ufoSrc->z;
+
+    mpSpaceGame->Reset();
+    PlanetModel_s00fd_dba0()->Refresh();
+    NounManager_s00fd_dba0()->GetCurrentTerrainSphere()->SetModel(0x574ac66);
+    GetEffectsMgr()->Play(0x1103192);
+
+    if (viewFlagA)
+    {
+        const Quaternion* planetOri = planet->GetOrientation();
+        Vector3 rotated;
+        Vector3* p = RotateByQuaternion(&rotated, &ufoPos, planetOri);
+        float x = p->x, y = p->y, z = p->z;
+        float inv = 1.0f / (float)sqrt(x * x + z * z + y * y);
+        float offX = (inv * x) * kFlyOutScale.x;
+        float offY = (y * inv) * kFlyOutScale.x;
+        float offZ = (z * inv) * kFlyOutScale.x;
+        const Vector3* pos = planet->GetPosition();
+        Vector3 dest;
+        dest.x = pos->x + offX;
+        dest.y = pos->y + offY;
+        dest.z = pos->z + offZ;
+        ufo->SetDestination(&dest);
+
+        const Quaternion* a = planet->GetOrientation();
+        const Quaternion* b = ufo->mSpatial.GetOrientation();
+        ufo->mOrientation = QuatMul(*a, *b);
+        ufo->PopToDestination();
+        ufo->SetDestination(planet);
+    }
+    else
+    {
+        ufo->SetDestination(planet);
+        Vector3 facing;
+        Quaternion q;
+        Quaternion* r = QuaternionFromFacingAndUp(&q, OrthogonalVector(&facing, &kUpAxisZ), &kUpAxisZ);
+        ufo->mOrientation = *r;
+        ufo->PopToDestination();
+    }
+
+    mpSpaceGame->Update();
+    mpSpaceGame->ChaseFromPlanetToSolar();
+
+    cModeObject* mode2 = App_s00fd_dba0()->GetModeManager()->GetCurrentMode();
+    if (mode2)
+    {
+        cHudCtl* ctl = (cHudCtl*)mode2->Query(0x303154cc);
+        if (ctl)
+            ctl->Apply(&camTarget, viewFlagB);
+    }
+
+    if (mpSpaceGame->mpActiveEffect)
+        mpSpaceGame->mpActiveEffect->Stop(0);
+
+    cSolarSystem* ss = star->GetSolarSystem();
+    if (ss)
+    {
+        int n = (int)(ss->mPlanetsEnd - ss->mPlanetsBegin);
+        for (int i = 0; i < n; i++)
+        {
+            cPlanet* p = ss->mPlanetsBegin[i];
+            int kind = p->GetKind();
+            if (kind != 0 && kind != 1 && p != GetActivePlanet_s00fd_dba0() && !p->mpInfo->IsHidden())
+                GetPlanetRegistry()->Show(p);
+        }
+    }
+
+    unsigned __int64 elapsed = ((cSPTimer*)((char*)sInstance + 0xa8))->GetElapsedTime();
+    if (elapsed > 144000000)
+        GetAchievements()->AwardAchievement(0x256184b1);
+
+    cStarList* list = SpaceGameGet_s00fd_dba0()->mpStars;
+    int count = (int)(list->mEnd - list->mBegin);
+    cStar** buf;
+    if (count != 0)
+        buf = (cStar**)operator new[](count * 4, "Simulator", 0, 0, EASTL_ALLOCATOR_FILE, 0xd1);
+    else
+        buf = 0;
+    cStar** bufEnd;
+    uninitialized_copy_stars(&bufEnd, list->mBegin, list->mEnd, buf, bUpdateEmpire);
+
+    if ((unsigned)(bufEnd - buf) >= 10)
+    {
+        int full = 0;
+        for (cStar** it = buf; it != bufEnd; ++it)
+        {
+            int turrets = 0, buildings = 0;
+            GetTurretAndBuildingCounts(*it, &turrets, &buildings);
+            if (turrets + buildings >= GetTerraformTuning()->GetMaxBuildingsForT3Colony() * 3)
+                full++;
+        }
+        if (full >= 10)
+            GetAchievements()->AwardAchievement(0xfbe4dc0d);
+    }
+
+    cTutorial* tut = GetTutorial();
+    if (tut->mpCurrent && tut->mpCurrent->mID == 0xf98be0b8)
+    {
+        tut->Close(0xf98be0b8, 1);
+        GetPopup()->Refresh();
+    }
+
+    if (bUpdateEmpire)
+        GetHudEmpire()->Update(GetPlayerEmpire_s00fd_dba0()->GetID());
+
+    NotifyActivePlanetRecord(GetActivePlanetRecord_s00fd_dba0());
+    mpSpaceGame->mFlags &= 0xfffffffe;
+    MessageServer_s00fd_dba0()->PostMessage(0x5e37a2c, 0, 0, 0);
+
+    for (cStar** it = buf; it < bufEnd; ++it)
+        if (*it)
+            (*it)->Release();
+    if (buf && ((int*)buf)[-1] != 0)
+        operator delete[](buf);
+}
+
+// @ 0x00fdeac0
+namespace SP {
+void cAppModeSpace_s00fd_eac0::TransitionFromSolarToPlanet()
+{
+    cPlanet_s00fd_eac0* planet = cSPLivingUniverse::GetActivePlanet_s00fd_eac0();
+    cPlanetRecord_s00fd_eac0* record = cSPLivingUniverse::GetActivePlanetRecord();
+    GonzagoTransition()->Begin();
+    mDisabledRenderLayersForBaking = true;
+    mBakingForPlanetEntryEnded = false;
+    mElapsedBakeTimeForTransitionMS = 0;
+
+    mPlantModels.clear();
+    for (uint32_t i = 0; i < record->size(); i++) {
+        cPlantSpecies* species = PlantSpeciesManager()->GetSpeciesFromID(record->mPlantsBegin[i]);
+        IModelWorld* world = GonzagoModelWorld_s00fd_eac0();
+        ModelPtr model = world->LoadModel(species->GetModelKey()->instanceID,
+                                          (species->GetModelKey()->groupID & 0xffff62ff) | 0x6200, 0);
+        if (model) {
+            mPlantModels.push_back(model);
+            model->mpWorld->SetModelVisible(model, false);
+        }
+    }
+
+    uint32_t tag = planet->mpStarRecord->GetCommContext();
+    if (tag != mLastBakedTag)
+        BakeManager()->Cancel(mLastBakedTag);
+    BakeManager()->Cancel(0x609b763);
+    if (planet->GetPlanetType() > 1) {
+        const ResourceKey* key = planet->mpStarRecord->GetBioProtector()->GetKey();
+        if (!BakeManager()->IsBaked(*key, false)) {
+            BakeParameters params(0, 4, tag);
+            BakeManager()->BakeModel(*key, params);
+        }
+    }
+    mLastBakedTag = tag;
+
+    if (ActiveMission() == StarManager_s00fd_eac0()->GetCurrentMission()) {
+        if (ActiveMission()->GetTargetRecord(0) == cSPLivingUniverse::GetActivePlanetRecord())
+            AchievementsController()->AutoTest(0x7d4eb7d3, 1);
+    }
+
+    {
+    cKeyMap keyMap;
+    cPlanet_s00fd_eac0* activePlanet = cSPLivingUniverse::GetActivePlanet_s00fd_eac0();
+    if (activePlanet && !activePlanet->GetItems().empty()) {
+        int count = activePlanet->GetItems().size();
+        for (int i = 0; i < count; i++) {
+            cPlanetItem* item = activePlanet->GetItem(i);
+            int ownerID = item->GetOwnerID();
+            if (ownerID < 0 && ownerID != NounManager_s00fd_eac0()->GetPlayerEmpireID())
+                item->ApplyKeyMap(StarManager_s00fd_eac0()->GetEmpireByID(ownerID)->GetKeyMap());
+
+            if (item->mKeysBegin[0].instanceID == 0 || item->mKeysBegin[0].instanceID == 0xffffffff) {
+                mSimulatorSpaceGame->FillKeyMap(keyMap);
+                if (activePlanet->GetPlanetType() == 4) {
+                    uint32_t v = keyMap.Find(0x2090a11b);
+                    keyMap.Insert(0x441cd3e6, v);
+                    keyMap.Insert(0x449c040f, v);
+                    keyMap.Insert(0x1a4e0708, v);
+                    v = keyMap.Find(0xbc1041e6);
+                    keyMap.Insert(0x7d433fad, v);
+                    keyMap.Insert(0x9ad7d4aa, v);
+                    keyMap.Insert(0xf670aa43, v);
+                    v = keyMap.Find(0xc15695da);
+                    keyMap.Insert(0x8f963dcb, v);
+                    keyMap.Insert(0x1f2a25b6, v);
+                    keyMap.Insert(0x2a5147a9, v);
+                }
+                for (int j = 0; j < count; j++)
+                    activePlanet->GetItem(j)->ApplyKeyMap(keyMap);
+            }
+
+            BakeParameters params(0, 1, tag);
+            if (ActiveMission()->GetState() == 5) {
+                const ResourceKey* ufoKey = StarManager_s00fd_eac0()->GetEmpireByID(ActiveMission()->GetEmpireID())->GetUFOKey();
+                if (!BakeManager()->IsBaked(*ufoKey, false)) {
+                    mNeedsBakingForTransition.push_back(*ufoKey);
+                    BakeManager()->BakeModel(*ufoKey, params);
+                }
+            }
+
+            params.mPriority = 2;
+            int numKeys = (int)(item->mKeysEnd - item->mKeysBegin);
+            for (int k = 0; k < numKeys; k++) {
+                const ResourceKey& key = item->mKeysBegin[k];
+                if (key.instanceID != 0 && key.instanceID != 0xffffffff) {
+                    if (!BakeManager()->IsBaked(key, false)) {
+                        if (eastl::find(mNeedsBakingForTransition.begin(), mNeedsBakingForTransition.end(), key) ==
+                            mNeedsBakingForTransition.end()) {
+                            mNeedsBakingForTransition.push_back(key);
+                            mDisabledRenderLayersForBaking = false;
+                            BakeManager()->BakeModel(key, params);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    if (!sAppProperties->GetBool(0x7ae23adf)) {
+        mNeedsBakingForTransition.clear();
+        mDisabledRenderLayersForBaking = true;
+    } else if (!mDisabledRenderLayersForBaking) {
+        if (mpSpaceUI->mpUISpace)
+            mpSpaceUI->mpUISpace->ShowBakeTimeSplash();
+        for (int layer = 0; layer < 28; layer++)
+            mOldRenderLayerStates.push_back(Renderer()->IsLayerEnabled(layer, true));
+        mBakingForPlanetEntryEnded = true;
+    }
+    }
+
+    cPlanet_s00fd_eac0* targetPlanet = cSPLivingUniverse::GetActivePlanet_s00fd_eac0();
+    UniverseUpdateActive();
+    cPlanetModel_s00fd_eac0* planetModel = PlanetModel_s00fd_eac0();
+    if (planetModel->mpISphere == 0)
+        planetModel->Generate(targetPlanet->GetPlanetKey(), 0);
+    else
+        targetPlanet->SetPlanetKey(planetModel->GetPlanetKey());
+    MessageServer_s00fd_eac0()->PostMSG(0x279a5da, 0, 0);
+    mpSpaceUI->mFlags |= 2;
+
+    cPlanetVisits* visits = PlanetVisits();
+    ResourceKey visitKey = kDefaultKey;
+    PropertyListPtr propList;
+    ResourceKey planetType = {0, 0, 0};
+    PropertyManager()->GetPropertyList(planet->GetPlanetKey()->instanceID, planet->GetPlanetKey()->groupID, &propList);
+    if (propList)
+        GetPropertyAsKey(propList, 0xb2cccb, &planetType);
+    switch (planetType.instanceID) {
+    case 0x0d019b5b: case 0x5c80e783: case 0xa1867950: case 0xaa61bc5b:
+        visitKey.instanceID = 0xae15a0ca; break;
+    case 0x1e5569aa: case 0x80f548aa:
+        visitKey.instanceID = 0xdb0c25ed; break;
+    case 0x34bf26cf: case 0x1c901fcf: case 0x2f88ce28: case 0x332eab13: case 0x4c0e0747:
+        visitKey.instanceID = 0xae15a0cc; break;
+    case 0x51f60469: case 0x60e56c7a: case 0xf1c64be5: case 0xff0cf57a:
+        visitKey.instanceID = 0xae15a0cb; break;
+    case 0x06be74d1: case 0xa4e5fdd1:
+        visitKey.instanceID = 0xae15a0c7; break;
+    case 0x329977f9: case 0x49668fda: case 0x98eeb4f9: case 0xafbbccda:
+        visitKey.instanceID = 0xae15a0c8; break;
+    case 0x3c5bdade: case 0x73f48a76: case 0xead9ff1a:
+        visitKey.instanceID = 0xae15a0cd; break;
+    case 0x655cf1e1: case 0xbdf0e303: case 0x7d8bf8e1: case 0xd61fea03:
+        visitKey.instanceID = 0xae15a0cf; break;
+    case 0x2f860299: case 0xcce62399:
+        visitKey.instanceID = 0xae15a0c9; break;
+    case 0x532534be: case 0xf08555be: case 0xfbec2af8:
+        visitKey.instanceID = 0xae15a0c6; break;
+    }
+    if (visitKey != kDefaultKey) {
+        if (!planet->IsHomePlanet())
+            SpaceGameGet_s00fd_eac0()->GetTool()->Refresh(0x18, 1);
+        if (visits->GetVisitCount(&visitKey) != 1) {
+            visits->SetVisitCount(&visitKey, 1);
+            EventLog_s00fd_eac0()->PostFeedbackEvent(0xd7775835, 0x131a9f54, 0, 0, 1, 0);
+        }
+    }
+
+    GameTimeManager_s00fd_eac0()->IncPauseGate(0x4bf38a7);
+    LayoutCollection()->Show();
+    GameInputManager_s00fd_eac0()->mInputLock++;
+}
+}  // namespace SP
+
+// @ 0x00fdf5b0
+namespace SP {
+void cAppModeSpace_s00fd_eac0::OnPlanetRecordReady()
+{
+    cSPLivingUniverse::GetActivePlanet_s00fd_eac0();
+    cPlanetRecord_s00fd_eac0* record = cSPLivingUniverse::GetActivePlanetRecord();
+    if (record->GetTransitionData()) {
+        ITransitionTarget* target = GetTransitionTarget(0, 0);
+        void (ITransitionTarget::*enter)() = &ITransitionTarget::Enter;
+        (target->*enter)();
+    } else {
+        TransitionFromSolarToPlanet();
+    }
+}
+}  // namespace SP
+
+// @ 0x00fdf5f0
+namespace SP {
+void cAppModeSpace_s00fd_eac0::EnterPlanetTransition()
+{
+    cPlanet_s00fd_eac0* planet = cSPLivingUniverse::GetActivePlanet_s00fd_eac0();
+    cPlanetRecord_s00fd_eac0* record = cSPLivingUniverse::GetActivePlanetRecord();
+    GonzagoTransition()->Begin();
+
+    void* transitionData = record->GetTransitionData();
+    if (!transitionData) {
+        TransitionFromSolarToPlanet();
+        return;
+    }
+
+    void* app = App_s00fd_eac0();
+    void* appObject = VCP0(app, 0x50);
+    VC1(appObject, 0x34, 0);
+
+    TransitionParams* params = ResetTransitionParams();
+    params->mpTargetData = transitionData;
+    params->mTypeHash = 0x366a930d;
+    params->mField08 = DAT_015b4050;
+    params->mEmpireKey = *cSPLivingUniverse::GetPlayerEmpire()->GetCityKey();
+    params->mField24 = 2;
+    params->mField28 = 2;
+
+    IdVector* targets = TutorialManager()->GetTargetEmpires();
+    int numTargets = (int)(targets->mpEnd - targets->mpBegin);
+    for (int i = 0; i < numTargets; i++) {
+        cEmpire_s00fd_eac0* empire = StarManager_s00fd_eac0()->GetEmpireByID(targets->mpBegin[i]);
+        if (empire) {
+            cHomePlanet* home = empire->GetHomePlanet();
+            if (home)
+                params->mKeys.push_back(*home->GetBannerKey());
+        }
+    }
+
+    mpSpaceUI->DestroyNPC_UFOs(1, 1, 0);
+    mpSpaceUI->FUN_010039c0(FUN_01021230_s00fd_eac0());
+
+    VecOut<cPlanetItem>* items = (VecOut<cPlanetItem>*)NounManager_s00fd_eac0()->GetGameDataVector(
+        (void*)0xcd7d10, (void*)0xd3d420, (void*)0xad48b0, (void*)0xb1e500, 0x18ebadc);
+    int numItems = (int)(items->mVec.mpEnd - items->mVec.mpBegin);
+    for (int i = 0; i < numItems; i++) {
+        cPlanetItem* item = items->mVec.mpBegin[i];
+        item->SetActive(false);
+        VC1(&item->mpInterface508, 0x50, 0);
+    }
+
+    void* obj = FUN_0067de00();
+    VC1(obj, 0xe0, 0);
+    obj = FUN_0067ddd0();
+    VC2(obj, 0x98, 0x14, 1);
+    obj = FUN_0067dd40();
+    VC1(obj, 0x100, 1);
+    obj = FUN_0067dd40();
+    VC1(obj, 0x108, 0);
+
+    RenderMgr* renderMgr = GetRenderMgr();
+    void* iface = renderMgr->mpInterface6c;
+    if (iface && !VCB0(iface, 0x10))
+        VC1(iface, 0x08, 0);
+
+    FUN_01021960(0);
+    renderMgr->FUN_01034810();
+    renderMgr->Setup(1, planet->GetPlanetKind());
+
+    cSolarSystem_s00fd_eac0* solar = FUN_01021230_s00fd_eac0()->GetSolarSystem();
+    if (solar)
+        solar->ActivateGraphics(1);
+
+    renderMgr->FUN_01036590(planet);
+    GetRenderMgr()->UpdateSpaceColor(*record->GetOwnerCiv()->GetCities());
+    FUN_01021740(planet);
+
+    mField194 = 0xa;
+    TutorialSystem()->StartModeTutorial(1, 0x1654c10, 1);
+}
+}  // namespace SP
+
+// @ 0x00fdf8e0
+namespace SP {
+void cAppModeSpace_s00fd_eac0::ExitPlanetTransition()
+{
+    void* transitionMgr = FUN_00b3d310();
+    VC1(transitionMgr, 0x14, 0x1654c05);
+    mpSpaceUI->FUN_01003230();
+    TransitionFromPlanetToSolar(true);
+
+    Editor* editor = DAT_016c7aa4_s00fd_eac0;
+    if (editor) {
+        uint32_t* pField = &editor->mFieldB8;
+        if (pField) {
+            PlanetLeaveMessage msg;
+            msg.mField30 = 0;
+            msg.mpVtbl = (void*)0x013eb90c;
+            _InterlockedExchange(&msg.mRef, 0);
+            msg.mpVtbl = (void*)0x013eb844;
+            msg.mField38 = 0;
+            msg.mpRecord = cSPLivingUniverse::GetActivePlanetRecord();
+            msg.mField10 = editor->mFieldB8;
+            msg.mField18 = (editor->mFieldC4 == 5) ? 1 : 0;
+            IMessageServer_s00fd_eac0* server = (IMessageServer_s00fd_eac0*)MessageServerGet();
+            server->PostMSG(0x43f2592, &msg, 0);
+            msg.Destruct();
+        }
+        AwardSpaceAchievements();
+    }
+
+    VecOut<cPlanetItem>* items = (VecOut<cPlanetItem>*)NounManager_s00fd_eac0()->GetGameDataVector(
+        (void*)0xcd7d10, (void*)0xd3d420, (void*)0xad48b0, (void*)0xb1e500, 0x18ebadc);
+    int numItems = (int)(items->mVec.mpEnd - items->mVec.mpBegin);
+    for (int i = 0; i < numItems; i++)
+        items->mVec.mpBegin[i]->SetActive(true);
+}
+}  // namespace SP
+
 // @ 0x00fdf9f0
 void cAppModeSpace_s00fd_f9f0::FUN_00fdf9f0()
 {
@@ -3195,6 +5717,139 @@ void cAppModeSpace_s00fd_f9f0::FUN_00fe0160()
     FUN_00c75770_hook();
     FUN_00fdba50(this, 1, 1);
     FUN_00401010();
+}
+
+// @ 0x00fe0570
+void cAppModeSpace_s00fe_0570::InitSpaceMode()
+{
+    cObjectTemplateDB_s00fe_0570* db = ObjectTemplateDB_s00fe_0570();
+    cTerrainSphere_s00fe_0570* s1 = NounManager_s00fe_0570()->GetCurrentTerrainSphere();
+    db->Register(&s1->mKey1168, 1);
+    db = ObjectTemplateDB_s00fe_0570();
+    cTerrainSphere_s00fe_0570* s2 = NounManager_s00fe_0570()->GetCurrentTerrainSphere();
+    db->Register(&s2->mKey1150, 1);
+
+    cPlanetRecord_s00fe_0570* home = GetPlayerHomePlanet_s00fe_0570();
+    mBakingForPlanetEntryEnded = true;
+    mbBakeStarted = false;
+    mElapsedBakeTimeForTransitionMS = 0;
+    uint32_t context = home->GetCommContext();
+    mCommContext = context;
+    RegisterHomePlanet(home, home->GetEntry());
+
+    KeyMap keys;
+    keys.Set(0x99e92f05, NounManager_s00fe_0570()->GetCurrentTerrainSphere()->mKey1150);
+    keys.Insert(0x4e3f7777);
+    keys.Insert(0x47c10953);
+    keys.Insert(0x72c49181);
+    keys.Insert(0x2090a11b);
+    keys.Insert(0xbc1041e6);
+    keys.Insert(0xc15695da);
+    keys.Set(0x7d433fad, ZeroKey());
+    keys.Set(0xf670aa43, ZeroKey());
+    keys.Set(0x9ad7d4aa, ZeroKey());
+    keys.Set(0x8f963dcb, ZeroKey());
+    keys.Set(0x2a5147a9, ZeroKey());
+    keys.Set(0x1f2a25b6, ZeroKey());
+    keys.Set(0x441cd3e6, ZeroKey());
+    keys.Set(0x1a4e0708, ZeroKey());
+    keys.Set(0x449c040f, ZeroKey());
+
+    if (home && home->mpEntitiesBegin != home->mpEntitiesEnd) {
+        int n = (int)(home->mpEntitiesEnd - home->mpEntitiesBegin);
+        for (int i = 0; i < n; i++) {
+            cModelEntity* entity = home->GetEntity(i);
+            entity->StoreModelKeys(&keys);
+        }
+    }
+
+    BakeParam param;
+    param.mA = 0;
+    param.mB = 2;
+    param.mContext = context;
+    AddBakeKey(&param, keys.Get(0x99e92f05));
+    AddBakeKey(&param, keys.Get(0x4e3f7777));
+    AddBakeKey(&param, keys.Get(0x47c10953));
+    AddBakeKey(&param, keys.Get(0x72c49181));
+    AddBakeKey(&param, keys.Get(0x2090a11b));
+    AddBakeKey(&param, keys.Get(0xbc1041e6));
+    AddBakeKey(&param, keys.Get(0xc15695da));
+    AddBakeKey(&param, &NounManager_s00fe_0570()->GetCurrentTerrainSphere()->mKey1168);
+    Unused_b3d460();
+    AddBakeKey(&param, (const ResourceKey_s00fe_0570*)(GetPlayerEmpire_s00fe_0570()->GetData() + 0x504));
+
+    Vector3 box[2];
+    box[0].x = -1500.0f;
+    box[0].y = -1500.0f;
+    box[0].z = -500.0f;
+    box[1].x = 1500.0f;
+    box[1].y = 1500.0f;
+    box[1].z = 500.0f;
+    GonzagoModelWorld_s00fe_0570()->SetWorldBounds(box, 0.0f, 1.0e10f);
+
+    cTerrainSphere_s00fe_0570* sphere = NounManager_s00fe_0570()->GetCurrentTerrainSphere();
+    const ResourceKey_s00fe_0570* ufoKey = &sphere->mKey1168;
+    mUFOKey.instanceID = ufoKey->instanceID;
+    mUFOKey.typeID = ufoKey->typeID;
+    mUFOKey.groupID = ufoKey->groupID;
+    Func_fda750();
+
+    int startMode = sAppProperties_s00fe_0570->GetIntProperty(0x1c29572);
+    cPlayerUFO* ufo = SpaceGame()->GetPlayerUFO();
+    switch (startMode) {
+    case 0: {
+        LoadNewGamePlanet();
+        MessageServer_s00fe_0570()->Post(0x279a5da, 0, 0);
+        mpSimulatorSpaceGame->StepC();
+        cSPSimulatorPlayerUFO_s00fe_0570* game = SpaceGame();
+        game->InitForPlanet();
+        ufo = game->GetPlayerUFO();
+        float half = CameraSettings()->GetRadiusFactor() * 0.5f;
+        ufo->SetAltitude(PlanetModel_s00fe_0570()->GetMinAltitude() + half);
+        Vector3 pos;
+        TimeOfDayInstance()->GetSunPosition(&pos);
+        game->SetPlanetDestination(&pos, false, true, false, false);
+        game->GetPlayerUFO()->PopToDestination();
+        SetPlanetTimeOnFirstEntry();
+        Func_fdf9f0();
+        SlotMessage msg;
+        msg.mTarget = (uint32_t)GetActivePlanet_s00fe_0570();
+        MessageServer_s00fe_0570()->Post(0x248975f, &msg, 0);
+        break;
+    }
+    case 1:
+        SimSystem()->Notify(0x1103192);
+        mpSimulatorSpaceGame->StepB();
+        break;
+    case 2: {
+        mpSimulatorSpaceGame->mpField40->SetName(kInterstellarDrive);
+        SimSystem()->Notify(0x1103192);
+        mpSimulatorSpaceGame->StepA();
+        ResourceKey_s00fe_0570 key;
+        MakeKeyFromIndex(&key, MissionIndexFromFloat(ufo->GetFloat()));
+        ufo->ApplyKey(&key);
+        break;
+    }
+    }
+
+    NounManager_s00fe_0570()->ProcessPending();
+    cPlanet_s00fe_0570* planet = GetActivePlanet_s00fe_0570();
+    planet->Refresh1();
+    planet->Refresh2();
+    planet->Refresh3(0);
+    planet->Restart();
+
+    if (!mBakingForPlanetEntryEnded) {
+        if (!mbTutorial && mpSimulatorSpaceGame->mpUI)
+            mpSimulatorSpaceGame->mpUI->ShowBakeTimeSplash();
+        GameTimeManager_s00fe_0570()->IncPauseGate(0x4bf38a7);
+        for (int i = 0; i <= 0x1b; i++) {
+            bool value = InputManager()->IsControlActive(i, 1) & 1;
+            mInputFlags.push_back(value);
+        }
+        mbBakeStarted = true;
+    }
+    mpSimulatorSpaceGame->mFlags |= 0x10;
 }
 
 // @ 0x00fe1a20
@@ -3442,6 +6097,109 @@ void __stdcall cAppModeSpace_LoadStateMachine(int mode)
     ((CommandBase*)&f[0x14 / 4])->Destroy();
     ((NodeTree*)&f[0x44 / 4])->Destroy(f[0x50 / 4]);
     ((BuilderCleanup*)&f[0x28 / 4])->Destroy(f[0x34 / 4]);
+}
+
+// @ 0x00fe2ab0
+void cModeTransition::PostGameModeTransition(int32_t oldMode, int32_t newMode)
+{
+    if (GetPostModeTransitionState() == newMode)
+        return;
+
+    BeginPostGameModeTransition(newMode);
+
+    cAppModeSpace_s00fe_2ab0* space = static_cast<cAppModeSpace_s00fe_2ab0*>(this);
+
+    if (!(SP::sTestSystem && SP::sTestSystem->IsTestingInProgress())) {
+        if (newMode == kModeSpace && oldMode != kModeEditor && oldMode != kModePlanetView) {
+            if (space->mbFlag18e) {
+                if (SP::SpaceModeManager()->IsReady()) {
+                    space->mbFlag18f = true;
+                    space->mbFlag190 = false;
+                    space->mbFlag191 = false;
+                    space->mbFlag192 = false;
+                    goto transitioned;
+                }
+            }
+            SP::SpaceModeManager()->SetPendingMode(0, kModeSpace);
+        }
+    }
+transitioned:
+    SP::Subsystem1()->PostGameModeTransition(oldMode, newMode);
+    SP::Subsystem2()->PostGameModeTransition(oldMode, newMode);
+
+    if (newMode == kModeSpace) {
+        SP::EffectsManager_s00fe_2ab0()->Preload(0xc, true);
+        space->mAutoHandler.AddHandler(SP::MessageServer_s00fe_2ab0(), static_cast<ISubsystem*>(space),
+                                       SP::kHandlerIDs, 20);
+        space->LoadStateMachine(SP::ConfigManager_s00fe_2ab0()->GetPropertyList(0x679b880));
+
+        switch (oldMode) {
+        case kModeTribe:
+            SP::Fn_00b3d230()->Fn_00b5cde0(0x1103193);
+            space->mpSpaceState->Fn_010030c0();
+            break;
+
+        case -1:
+        case kModeUnknown:
+            SP::Fn_00bf55d0();
+            break;
+
+        case kModeEditor: {
+            space->TransitionFromEditorToPlanet();
+            cSelection* selection = space->mpSpaceState->mpSelection;
+            if (selection) {
+                switch (selection->mnType) {
+                case kTypeCreature:
+                    if (!selection->mbHandled) {
+                        SP::SpeciesManager_s00fe_2ab0()->SetAvatarSpecies(selection->mKey);
+                        ICivilization* civ = SP::NounManager_s00fe_2ab0()->GetPlayerCivilization();
+                        if (civ)
+                            civ->Fn_00bebdd0(selection->mKey);
+                        space->Fn_00fdb9a0();
+                        PtrVector* list = SP::NounManager_s00fe_2ab0()->Fn_00ace2c0();
+                        for (void** it = list->mpBegin; it != list->mpEnd; ++it)
+                            SP::Subsystem2()->Fn_00ac8cd0(*it, 0);
+                        Key key1, key2, key3, key4;
+                        SP::CommEvent(0x9fd41912, 0, key4, key3, 0, 0, key2, key1);
+                        SP::Fn_00ba5bc0(SP::GetPlayerEmpire(7));
+                    }
+                    break;
+
+                case kTypePlanetA:
+                case kTypePlanetB:
+                    if (!selection->mbHandled) {
+                        SP::GetPlayerEmpire(selection->mKey)->Fn_00c30fa0();
+                        SP::Fn_00ba5650(&selection->mKey, 8);
+                    }
+                    space->mpSpaceState->mpEffect->Fn_010727e0(1, selection->mnType);
+                    break;
+                }
+                space->mpSpaceState->mpSelection = 0;
+                selection->Release();
+            }
+            SP::Fn_00b3d320()->Fn_00b1dfc0();
+            if (space->mpSpaceState->mpUI->mnState == 1) {
+                SP::MessageServer_s00fe_2ab0()->PostMSG(0x71d4dfc9, 0, 0);
+                SP::GameInputManager_s00fe_2ab0()->SetMode(3);
+            }
+            break;
+        }
+
+        case kModeColony:
+            SP::StarManager_s00fe_2ab0()->PostGameModeTransition(kModeColony, kModeSpace);
+            break;
+        }
+
+        SP::CurMgr()->FindLocal(0x1002);
+        SP::sAppProperties_s00fe_2ab0->SetBoolProperty(0x28, true);
+        space->Fn_00fdb9a0();
+        if (oldMode == kModeCiv || oldMode == kModeUnknown)
+            SP::EventLog_s00fe_2ab0()->ClearEvents();
+        space->SetDefaultPickPriority();
+        space->mbFlag131 = SP::IsWorldLayoutFlagSet(2);
+    }
+
+    EndPostGameModeTransition();
 }
 
 // @ 0x00fe2ec0
@@ -3722,3 +6480,25 @@ bool cAppModeSpace_s00fe_2ec0::HandleMessage(uint32 messageID, void* pMsg)
     return false;
 }
 }  // namespace SP
+
+// @ 0x010422e0
+bool __cdecl TransitionFromSolarToGalaxy()
+{
+    void* app = App_s0104_14c0();
+    void* mode = ((VfnP)(*(void***)app)[0x50 / 4])(app);
+    void* obj = ((VfnP)(*(void***)mode)[0x38 / 4])(mode);
+    int advanceID = obj != 0 ? ((VfnIUI)(*(void***)obj)[0xc / 4])(obj, 0x303154cc) : 0;
+
+    Inventory* inv = (Inventory*)((UFOSim*)GetUFOSimulator_s0104_14c0())->GetPlayerInventory();
+    bool canEnter = (inv->mFlag74C != 0 && inv->CanEnterPlanetContext()) ||
+                    (((UFOData*)FUN_01021240())->AddRef() == 2 &&
+                     InvHasWormhole((Inventory*)((UFOSim*)SpaceGameGet())->GetPlayerInventory())) ||
+                    (((UFOData*)FUN_01021240())->AddRef() == 1 && !InTerrainSphere(0x681c28e));
+
+    if (advanceID != 0 && canEnter &&
+        !((CommScreen*)CommManager())->IsActive() &&
+        (((GameTimeMgr*)GameTimeManager_s0104_14c0())->mFlags48 & 1) == 0 &&
+        !((GameObj74*)FUN_010666a0())->FUN_01068350())
+        return true;
+    return false;
+}

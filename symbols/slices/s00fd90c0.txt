@@ -12,6 +12,6 @@
 00fd9d00 ?f9d00@AppMode@@QAEHXZ  # AppMode::f9d00 migrated from s00fd90c0 (verbatim, slice spelling)
 00fd9d30 ?f9d30@AppMode@@QAEXXZ  # AppMode::f9d30 migrated from s00fd90c0 (verbatim, slice spelling)
 00fd9d90 ?f9d90@AppMode@@QAEXXZ  # AppMode::f9d90 migrated from s00fd90c0 (verbatim, slice spelling)
-00fd9de0 ?f9de0@AppMode@@QAEXXZ        # first-alliance-possible test
+00fd9de0 ?f9de0@AppMode@@QAEXXZ  # AppMode::f9de0 migrated from s00fd90c0 (verbatim, slice spelling)
 00fd9e80 ?f9e80@@YADHPAH@Z  # f9e80 migrated from s00fd90c0 (verbatim, slice spelling)
-00fd9ea0 ?f9ea0@AppMode@@QAEXHH@Z      # key dispatch
+00fd9ea0 ?f9ea0@AppMode@@QAEXHH@Z  # AppMode::f9ea0 migrated from s00fd90c0 (verbatim, slice spelling)

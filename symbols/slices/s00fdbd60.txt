@@ -3,13 +3,13 @@
 00fdbf90 ?AwardSpaceAchievements@@YAXXZ  # AwardSpaceAchievements migrated from s00fdbd60 (verbatim, slice spelling)
 00fdc150 ?ShutdownSPG@cAppModeSpace_s00fd_bd60@@QAEXXZ  # cAppModeSpace_s00fd_bd60::ShutdownSPG migrated from s00fdbd60 (verbatim, slice spelling)
 00fdc240 ?LoadNewGamePlanet@cAppModeSpace_s00fd_bd60@@QAEXXZ  # cAppModeSpace_s00fd_bd60::LoadNewGamePlanet migrated from s00fdbd60 (verbatim, slice spelling)
-00fdc340 ?UpdateSpaceGrid@@YAXPAVcAppModeSpace@@MPBUVec3@@@Z  # void UpdateSpaceGrid
-00fdc490 ?StopEditorPlay@cAppModeSpace@@QAEXXZ  # void cAppModeSpace::StopEditorPlay
-00fdc4b0 ?UnlinkListNode@@YAPAHPAHPAPAH@Z  # int* UnlinkListNode
+00fdc340 ?UpdateSpaceGrid@@YAXPAVcAppModeSpace_s00fd_bd60@@MPBUVec3@@@Z  # UpdateSpaceGrid migrated from s00fdbd60 (verbatim, slice spelling)
+00fdc490 ?StopEditorPlay@cAppModeSpace_s00fd_bd60@@QAEXXZ  # cAppModeSpace_s00fd_bd60::StopEditorPlay migrated from s00fdbd60 (verbatim, slice spelling)
+00fdc4b0 ?UnlinkListNode@@YAPAHPAHPAPAH@Z  # UnlinkListNode migrated from s00fdbd60 (verbatim, slice spelling)
 00fdc520 ?OnMouseDown@cAppModeSpace_s00fd_bd60@@QAE_NHHHH@Z  # cAppModeSpace_s00fd_bd60::OnMouseDown migrated from s00fdbd60 (verbatim, slice spelling)
-00fdc710 ?TransitionFromLoadToPlanet@cAppModeSpace@@QAEXXZ  # void cAppModeSpace::TransitionFromLoadToPlanet
-00fdc800 ?TransitionFromEditorToPlanet@cAppModeSpace@@QAEXXZ  # void cAppModeSpace::TransitionFromEditorToPlanet
-00fdc980 ?TransitionToEntry@cAppModeSpace@@QAEXXZ  # void cAppModeSpace::TransitionToEntry
-00fdc9e0 ?PlanetOnMouseDown@cAppModeSpace@@QAEXXZ  # void cAppModeSpace::PlanetOnMouseDown
-00fdca00 ??0cAppModeSpace@@QAE@XZ  # cAppModeSpace::cAppModeSpace
+00fdc710 ?TransitionFromLoadToPlanet@cAppModeSpace_s00fd_bd60@@QAEXXZ  # cAppModeSpace_s00fd_bd60::TransitionFromLoadToPlanet migrated from s00fdbd60 (verbatim, slice spelling)
+00fdc800 ?TransitionFromEditorToPlanet@cAppModeSpace_s00fd_bd60@@QAEXXZ  # cAppModeSpace_s00fd_bd60::TransitionFromEditorToPlanet migrated from s00fdbd60 (verbatim, slice spelling)
+00fdc980 ?TransitionToEntry@cAppModeSpace_s00fd_bd60@@QAEXXZ  # cAppModeSpace_s00fd_bd60::TransitionToEntry migrated from s00fdbd60 (verbatim, slice spelling)
+00fdc9e0 ?PlanetOnMouseDown@cAppModeSpace_s00fd_bd60@@QAEXXZ  # cAppModeSpace_s00fd_bd60::PlanetOnMouseDown migrated from s00fdbd60 (verbatim, slice spelling)
+00fdca00 ??0cAppModeSpace_s00fd_bd60@@QAE@XZ  # cAppModeSpace_s00fd_bd60::cAppModeSpace migrated from s00fdbd60 (verbatim, slice spelling)
 00fdcba0 ??1cAppModeSpace_s00fd_bd60@@QAE@XZ  # cAppModeSpace_s00fd_bd60::~cAppModeSpace migrated from s00fdbd60 (verbatim, slice spelling)
