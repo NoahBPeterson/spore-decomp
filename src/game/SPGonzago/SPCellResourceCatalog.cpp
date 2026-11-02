@@ -11,11 +11,54 @@ extern int* gListSentinel;        // 0x016b44f0
 extern int* gListSentinel;        // 0x016b44f0
 int   DebugNameFromSPID(int a, int b, int c);  // 0x00e4bf30
 void  FUN_00e84e40(const char* fmt, ...); // 0x00e84e40
+int   EA_ResourceMan_GetManager();        // 0x0067dcd0 (returns ptr)
+int   FUN_00e823e0();                     // 0x00e823e0
+void  FUN_00f47380(void* p);              // operator delete
 // ---- items of slice s00e819b0 end
 
-// callees this slice defines outside this object (rewrite.py held_callee_protos)
-bool SP_sCellResourceLoadFailure(int param_1, int* param_2);  // 0x00e82140 (stays in the slice: not this object's)
-bool FUN_00e821d0(unsigned id, int param_2, int* param_3);  // 0x00e821d0 (stays in the slice: not this object's)
+// @ 0x00e82140
+bool SP_sCellResourceLoadFailure(int param_1, int* param_2)
+{
+    struct { int a; int b; int c; } k;
+    k.b = *(int*)(param_1 + 8);
+    k.a = 0x7a638526;
+    k.c = 0;
+    int* mgr = (int*)EA_ResourceMan_GetManager();
+    if (((bool(*)(void*,int*,int,int,int,int))mgr[7])(&k, param_2, 0, 0, 0, 0) == 0)
+        return false;
+    if (*(int*)(param_1 + 0x20) != 0) {
+        if (*param_2 != 0) {
+            int* o = (int*)(*(int(**)(int))(*(int*)*param_2 + 0xc))(0x2269ed1);
+            ((void(*)(int))*(int*)(param_1 + 0x20))(*(int*)((char*)o + 0x14));
+            return true;
+        }
+        ((void(*)(int))*(int*)(param_1 + 0x20))(*(int*)0x14);
+    }
+    return true;
+}
+
+// @ 0x00e821d0
+bool FUN_00e821d0(unsigned id, int param_2, int* param_3)
+{
+    if (id == 0 || id == 0xffffffff)
+        return false;
+    struct { unsigned a; int b; int c; } k;
+    k.a = id;
+    k.b = *(int*)(param_2 + 8);
+    k.c = 0;
+    int* mgr = (int*)EA_ResourceMan_GetManager();
+    if (!((bool(*)(void*,int*))mgr[5])(&k, param_3)) {
+        int* mgr2 = (int*)EA_ResourceMan_GetManager();
+        if (!((bool(*)(void*,int*,int,int,int,int))mgr2[3])(&k, param_3, 0, 0, 0, 0))
+            return false;
+        int iVar3 = 0;
+        if (*param_3 != 0)
+            iVar3 = (*(int(**)(int))(*(int*)*param_3 + 0xc))(0x2269ed1);
+        if (*(void(**)(int))(param_2 + 0x20) != 0)
+            (*(void(**)(int))(param_2 + 0x20))(*(int*)(iVar3 + 0x14));
+    }
+    return true;
+}
 
 // @ 0x00e82280
 void FUN_00e82280()
@@ -56,3 +99,28 @@ void LoadResource(int* param_1)
     }
 }
 }  // namespace SP
+
+// @ 0x00e823a0
+int FUN_00e823a0(int param_1, int* param_2)
+{
+    *param_2 = param_1;
+    (*(int*)(param_1 + 0xc))++;
+    if (*(int*)(param_1 + 8) == 0)
+        SP::LoadResource((int*)param_1);
+    if (*(int*)(param_1 + 8) != 0) {
+        int iVar1 = (*(int(**)(int))(**(int**)(param_1 + 8) + 0xc))(0x2269ed1);
+        return *(int*)(iVar1 + 0x14);
+    }
+    return *(int*)0x14;
+}
+
+// @ 0x00e824d0
+void FUN_00e824d0()
+{
+    FUN_00e82280();
+    int iVar1 = (int)gListSentinel;
+    if (gListSentinel != 0) {
+        FUN_00e823e0();
+        FUN_00f47380((void*)iVar1);
+    }
+}

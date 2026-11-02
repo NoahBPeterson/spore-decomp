@@ -1,3 +1,4 @@
 # va  diff-bytes  reason
 00e82280 8 complete linked-list clear loop; instruction scheduling of the load/test differs. difftest WEAK (no mismatch, 100% coverage). flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00e822c0 36 complete SP::LoadResource; vtable-call argument/register shapes differ. difftest WEAK (no mismatch, 49% coverage). flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00e824d0 14 complete list teardown; operator_delete__ call shape differs. difftest UNSUPPORTED (0/400 valid). flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
