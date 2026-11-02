@@ -3,6 +3,8 @@
 00663040 ?Ctor@cSPUIFeedList@@QAEPAXXZ  # cSPUIFeedList::Ctor migrated from s00662d70 (verbatim, slice spelling)
 006630e0 SP::cSPUIFeedList::~cSPUIFeedList  # PDB dtor name (dev 006630e0)
 006631c0 ?cSPUIFeedList_UpdateScrolling@@YAXPAUcSPUIFeedList@@I@Z  # cSPUIFeedList_UpdateScrolling migrated from s00662d70 (verbatim, slice spelling)
+006634d0 ?FUN_006634d0@cSPUIFeedList@@QAEXXZ  # cSPUIFeedList::FUN_006634d0 migrated from s00662d70 (verbatim, slice spelling)
 00663860 ?FUN_00663860@@YAXPADPAXHH1@Z  # FUN_00663860 migrated from s00662d70 (verbatim, slice spelling)
 00663a90 ?FUN_00663a90@@YADPADIPAH@Z  # FUN_00663a90 migrated from s00662d70 (verbatim, slice spelling)
 00663b80 ?FUN_00663b80@@YADHH@Z  # FUN_00663b80 migrated from s00662d70 (verbatim, slice spelling)
+008120d0 ?Init@cSPUILayout@@QAE_NABVKey@ResourceMan@EA@@_NI@Z  # cSPUILayout::Init (callee of s00662d70, named from the dev publics; slice address comment)

@@ -1,4 +1,7 @@
-0066b480 RegisterSporepediaHandlers  # 16 'Sporepedia'-tagged refcounted handlers pushed onto the global vector 0x015fb120
+0066afd0 ?FUN_0066afd0@@YAHPAUObjA@@PAUObjB@@@Z  # FUN_0066afd0 migrated from s0066afd0 (verbatim, slice spelling)
+0066b050 ?FUN_0066b050@@YAXPAX@Z  # FUN_0066b050 migrated from s0066afd0 (verbatim, slice spelling)
+0066b0c0 ?FUN_0066b0c0@@YAXPAH@Z  # FUN_0066b0c0 migrated from s0066afd0 (verbatim, slice spelling)
+0066b480 ?FUN_0066b480@@YAXXZ  # FUN_0066b480 migrated from s0066afd0 (verbatim, slice spelling)
 0066bd40 ?FUN_0066bd40@@YIPAXPAX@Z  # FUN_0066bd40 migrated from s0066afd0 (verbatim, slice spelling)
 0066bd80 ?FUN_0066bd80@ColourCfg@@QAEXPAUcSPUILayout_s0066_afd0@@@Z  # ColourCfg::FUN_0066bd80 migrated from s0066afd0 (verbatim, slice spelling)
 0066bf20 ?FUN_0066bf20@@YIXPAX@Z  # FUN_0066bf20 migrated from s0066afd0 (verbatim, slice spelling)
