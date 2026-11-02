@@ -3,12 +3,12 @@
 00a4e520 EA::Audio::Eapd::graph_delete  # graph widget delete: delegate to g_text_widgetbehavior[4], then delete every child
 00a4e560 EA::Audio::Eapd::glist_redraw  # redraw a canvas: gobj_vis(0)/gobj_vis(1) per child, re-coordinate every linetraverser segment, redraw the red rect, then re-vis the graph inside its owner
 00a4e660 EA::Audio::Eapd::graph_displace  # graph widget displace: non-graph delegates to g_text_widgetbehavior[1]; graph adds dx/dy to te_xpix/te_ypix, redraws itself and fixes connected lines
-00a4e6c0 EA::Audio::Eapd::guiconnect_new  # find-or-create a guiconnect for (target, signoff symbol): pd_findbyclass, else pd_new + target/symbol stores + pd_bind + link at the head of guiconnectlist
-00a4e750 guiconnect_listunlink  # class free method: unlink the guiconnect from guiconnectlist (head/prev/next)
-00a4e780 EA::Audio::Eapd::guiconnect_notarget  # drop a guiconnect target and free it when its symbol is already the empty symbol
-00a4e7a0 EA::Audio::Eapd::guiconnect_signoff  # tell Tk the target is gone, reset the symbol to gEmptySymbol and free the guiconnect
-00a4e7e0 guiconnect_anything  # forward any message to the guiconnect target via pd_typedmess while a target exists
-00a4e810 EA::Audio::Eapd::g_guiconnect_setup  # create the guiconnect class (size 0x3c) and register the anything method plus the "signoff" method
+00a4e6c0 ?guiconnect_new@Eapd@Audio@EA@@YAPAXPAUt_glist@123@Ut_symbol@123@@Z  # guiconnect_new migrated from s00a4e2e0 (verbatim, slice spelling)
+00a4e750 ?guiconnect_unlink@Eapd@Audio@EA@@YAXPAX@Z  # guiconnect_unlink migrated from s00a4e2e0 (verbatim, slice spelling)
+00a4e780 ?guiconnect_notarget@Eapd@Audio@EA@@YAXPAUt_guiconnect@123@@Z  # guiconnect_notarget migrated from s00a4e2e0 (verbatim, slice spelling)
+00a4e7a0 ?guiconnect_signoff@Eapd@Audio@EA@@YAXPAUt_guiconnect@123@@Z  # guiconnect_signoff migrated from s00a4e2e0 (verbatim, slice spelling)
+00a4e7e0 ?guiconnect_anything@Eapd@Audio@EA@@YAXPAUt_guiconnect@123@Ut_symbol@123@HPAUt_atom@123@@Z  # guiconnect_anything migrated from s00a4e2e0 (verbatim, slice spelling)
+00a4e810 ?g_guiconnect_setup@Eapd@Audio@EA@@YA_NXZ  # EA::Audio::Eapd::g_guiconnect_setup migrated from s00a4e2e0
 00a4e8a0 ?rtext_new@Eapd@Audio@EA@@YAPAUt_rtext@123@PAUt_glist@123@PAUt_text@123@@Z  # rtext_new migrated from s00a4e2e0 (verbatim, slice spelling)
 00a4e920 ?rtext_free@Eapd@Audio@EA@@YAXPAUt_rtext@123@@Z  # rtext_free migrated from s00a4e2e0 (verbatim, slice spelling)
 00a4e990 ?rtext_gettag@Eapd@Audio@EA@@YAPBDPAUt_rtext@123@@Z  # rtext_gettag migrated from s00a4e2e0 (verbatim, slice spelling)

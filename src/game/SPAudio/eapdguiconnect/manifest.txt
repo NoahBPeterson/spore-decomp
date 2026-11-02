@@ -1,0 +1,4 @@
+# source  symbol  va  flags
+../src/game/SPAudio/eapdguiconnect.cpp  ?guiconnect_unlink@Eapd@Audio@EA@@YAXPAX@Z  00a4e750  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdguiconnect.cpp  ?guiconnect_signoff@Eapd@Audio@EA@@YAXPAUt_guiconnect@123@@Z  00a4e7a0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdguiconnect.cpp  ?guiconnect_anything@Eapd@Audio@EA@@YAXPAUt_guiconnect@123@Ut_symbol@123@HPAUt_atom@123@@Z  00a4e7e0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
