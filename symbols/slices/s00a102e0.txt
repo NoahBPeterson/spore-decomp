@@ -18,6 +18,7 @@
 00a10da0 ?q48@Ability@@QAE_NHHH@Z  # Ability::q48 migrated from s00a102e0 (verbatim, slice spelling)
 00a10e00 ?q4c@Ability@@QAE_NHHH@Z  # Ability::q4c migrated from s00a102e0 (verbatim, slice spelling)
 00a10e90 ?q0c@Ability@@QAEXPAXD@Z  # Ability::q0c migrated from s00a102e0 (verbatim, slice spelling)
+00a10ef0 ?GetBits@BitGetter@@QAEII@Z  # BitGetter::GetBits migrated from s00a102e0 (verbatim, slice spelling)
 00a10fe0 ?SetFlag@EmitterSndPlayer@@QAEIID@Z  # EmitterSndPlayer::SetFlag migrated from s00a102e0 (verbatim, slice spelling)
 00a11010 ?Init@EmitterSndPlayer@@QAE_NXZ  # EmitterSndPlayer::Init migrated from s00a102e0 (verbatim, slice spelling)
 00a11050 ?q11050@EmitterSndPlayer@@QAE_NXZ  # EmitterSndPlayer::q11050 migrated from s00a102e0 (verbatim, slice spelling)

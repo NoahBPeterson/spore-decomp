@@ -1,5 +1,5 @@
-00a12f90 ?ConstructVoice@ResourceVoiceTemplate@Audio@EA@@QAE_NHPAX@Z  # EA::Audio::ResourceVoiceTemplate::ConstructVoice
-00a13300 ?CreateVoice@EmitterSndPlayer@Audio@EA@@QAE_NXZ  # EA::Audio::EmitterSndPlayer::CreateVoice
+00a12f90 ?ConstructVoice@ResourceVoiceTemplate_s00a1_2f90@Audio@EA@@QAE_NHPAX@Z  # ResourceVoiceTemplate_s00a1_2f90::ConstructVoice migrated from s00a12f90 (verbatim, slice spelling)
+00a13300 ?CreateVoice@EmitterSndPlayer_s00a1_2f90@Audio@EA@@QAE_NXZ  # EmitterSndPlayer_s00a1_2f90::CreateVoice migrated from s00a12f90 (verbatim, slice spelling)
 00a135c0 ?AllocNode@PHTable@@QAEPAUPHNode@@PBUNodePair@@@Z  # PHTable::AllocNode migrated from s00a12f90 (verbatim, slice spelling)
 00a13650 ?Pause@Group@@QAEX_N@Z  # Group::Pause migrated from s00a12f90 (verbatim, slice spelling)
 00a137b0 ?GetProperty@Group@@QAE_NIAAM@Z  # Group::GetProperty migrated from s00a12f90 (verbatim, slice spelling)
