@@ -21,6 +21,11 @@ extern "C" void* memcpy(void* dst, const void* src, unsigned int n);
 #include "SP/cImageDataRaw.h"
 #include <new>
 #include <mmintrin.h>
+#include "EA/COM/IUnknown32.h"
+#include "SP/cIRTTManager.h"
+#include "SP/cRenderTargetRectID.h"
+#include <math.h>
+#include <string.h>
 
 // ---- items of slice s004e01d0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 template <int N> inline void ScratchSlots() { uint32_t s[N]; }
@@ -591,19 +596,46 @@ public:
 // ---- items of slice s007af8b0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 #pragma intrinsic(_InterlockedExchangeAdd)
 void  __cdecl EAFree(void* p);                                   // 0x00F47380
+void* __cdecl EAAlloc(unsigned n, const char* name, int a, int b, const char* f, int l); // 0x00F473A0
 void  __cdecl eadxt(void* dst, void* src, int stride, int count, int mode, int quality); // 0x007AF490
 void  __cdecl FUN_007ad0c0(void* a, void* b);                    // 0x007AD0C0
+void  __cdecl FUN_007acfe0(void* a, void* b);                    // 0x007ACFE0
 bool  __cdecl FUN_007ae910();                                    // 0x007AE910
 bool  __cdecl FUN_007b0030();                                    // 0x007B0030
 void* __cdecl FUN_0067dcc0();                                    // 0x0067DCC0  MessageServer()
 void* __cdecl FUN_0067dd60();                                    // 0x0067DD60
+struct IEditorResource;
 struct CJob {
-    int pad0[7];
-    int   mSlot;              // +0x1c
-    void* mpReturn;           // +0x20
-    void* mpCleanup;          // +0x24
-    bool Continuation(void* fn, void* arg);   // 0x0068F9F0 __thiscall
+    void* mpCallback;                 // +0x00
+    void* mpCallbackData;             // +0x04
+    IEditorResource* mpExtraObject;   // +0x08
+    void* mpDebugName;                // +0x0c
+    int   mPriority;                  // +0x10
+    int   mStatus;                    // +0x14
+    unsigned mThreadAffinity;         // +0x18
+    int   mSlot;                      // +0x1c
+    void* mpReturn;                   // +0x20
+    void* mpCleanup;                  // +0x24
+    int   Release();                          // 0x00690120 __thiscall
+    void  Attach(IEditorResource* d);         // 0x0068F9B0 __thiscall
+    void  GetStatus();                        // 0x006909B0 __thiscall
+    void  Wait();                             // 0x006926B0 __thiscall
+    bool  Continuation(void* fn, void* arg);  // 0x0068F9F0 __thiscall
 };
+struct AutoJob_s007a_f8b0 {
+    CJob* p;
+    AutoJob_s007a_f8b0() : p(0) {}
+    ~AutoJob_s007a_f8b0() { if (p) p->Release(); }
+    void Reset() { CJob* t = p; if (t) { p = 0; t->Release(); } }
+};
+struct Sched_s007a_f8b0 {                                     // job scheduler singleton
+virtual void s0();
+virtual void s1();
+virtual void s2();
+virtual void s3();
+    virtual bool Acquire(AutoJob_s007a_f8b0* out);            // vtable +0x10
+};
+Sched_s007a_f8b0* __cdecl GetSched_s007a_f8b0();                         // 0x0068F4D0
 struct VecCore  { void DestroyRange(void* b, void* e); };        // 0x0070F520 __thiscall
 struct VecReserve { void Reserve(int n); };                      // 0x004E0880 __thiscall
 struct VecAssignOp { void Assign(void*, void*, void*, void*, void*); }; // 0x004E8EE0
@@ -625,14 +657,19 @@ virtual void v13(void*);
               virtual void v16(); };
 struct IMsg { virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3();
               virtual void v4(); virtual void v5(); virtual void v6(void*,void*,int,int); };
+struct AutoVec { void* b; void* e; void* c; AutoVec() { b=0; e=0; c=0; } ~AutoVec() throw(); };
+struct IEditorResource { virtual int AddRef(); virtual int Release(); };
+struct IRefCounted { virtual int AddRef(); virtual int Release(); int mRef; }; // +0x8
 struct Elem { char pad[0x28]; unsigned char* data; };           // pixel element at +0x28
 struct VecObj { char pad[0xc]; Elem** begin; Elem** end; };     // vector at +0xc
-struct cImageDataRaw {
-    char pad0[0x1c];
+class cImageDataRaw : public IEditorResource {   // ctor 0x00704B30, 0x2c bytes
+public:
+    char pad4[0x18];          // +0x04
     int mWidth;               // +0x1c
     int mHeight;              // +0x20
     int mFormat;              // +0x24
     unsigned char* mData;     // +0x28
+    cImageDataRaw();
 };
 struct cDXTCompressJobData {
     char pad0[0xc];
@@ -655,6 +692,7 @@ struct cRowJobData {
     bool StepDown(CJob* job);
     bool StepUp(CJob* job);
 };
+struct C00d0 { int f0,f1,f2,f3,f4,f5,f6,f7; C00d0(); };
 struct ImgTex {
     int mFormat;              // +0x0
     char pad4[8];
@@ -681,6 +719,67 @@ struct ImgRef {
     ~ImgRef() { if (p) p->Release(); }
 };
 IFac* __cdecl GetTexFactory();   // 0x0067DD60
+struct IUnknown32 { virtual int Query(); virtual int AddRef(); virtual int Release(); };
+struct IDxtBase2 { virtual void v0(); virtual void v1(); };
+struct DxtRefCount_s007a_f8b0 { long mCount; };
+template<class T> struct RcPtr_s007a_f8b0 {
+    T* p;
+    RcPtr_s007a_f8b0() : p(0) {}
+    RcPtr_s007a_f8b0& operator=(T* q) {
+        T* old = p;
+        if (q != old) {
+            if (q) q->AddRef();
+            p = q;
+            if (old) old->Release();
+        }
+        return *this;
+    }
+    void Reset() { T* t = p; if (t) { p = 0; t->Release(); } }
+};
+template<class T> struct AutoRC {
+    T* p;
+    AutoRC(T* q) : p(q) { if (p) p->AddRef(); }
+    ~AutoRC() { if (p) p->Release(); }
+};
+class DxtJobData : public IEditorResource, public IDxtBase2, public DxtRefCount_s007a_f8b0 {
+public:
+    RcPtr_s007a_f8b0<cImageDataRaw> mSource;     // +0x0c
+    RcPtr_s007a_f8b0<cImageDataRaw> mOutput;     // +0x10
+    int      mMode;                   // +0x14
+    int      mQuality;                // +0x18
+    int      mBlockSize;              // +0x1c
+    unsigned mMessageID;              // +0x20
+    RcPtr_s007a_f8b0<IUnknown32> mMessage;       // +0x24
+    DxtJobData();                     // 0x007AE9F0
+};
+class C0130 : public IEditorResource, public IRefCounted {
+public:
+    AutoVec mVec;
+    virtual ~C0130();
+};
+struct DObj : IEditorResource, IRefCounted { };
+class C0160 : public IEditorResource, public IRefCounted {
+public:
+    AutoVec mVec;
+    char    pad18[8];
+    IEditorResource* mObj;
+    virtual ~C0160();
+};
+class C03e0 : public IEditorResource, public IRefCounted {
+public:
+    AutoVec mVec;
+    virtual ~C03e0();
+};
+struct B0 { virtual int AddRef(); virtual int Release(); virtual int Query(); };
+struct B1 { virtual int AddRef(); virtual int Release(); };
+class BakeSprites : public B0, public B1 {
+public:
+    int     mRef;             // +0x8
+    AutoVec mVec;             // +0xc
+    BakeSprites();
+    virtual ~BakeSprites();
+};
+BakeSprites::~BakeSprites() {}
 namespace __equiv_ann1 {
 struct VecReserve {
     void Reserve();   // 0x004e0880 (equiv t2)
@@ -690,7 +789,7 @@ struct VecReserve {
 
 // ---- items of slice s007b0a70 begin (TODO(rewrite): local stubs, replace by canonical classes)
 #pragma intrinsic(_InterlockedExchange)
-void* __cdecl EAAlloc(unsigned n, const char* name, int a, int b, const char* f, int l); // 0x00F473A0
+
 void  __cdecl DestroyElems(void* first, void* last);              // 0x00B007F0
 void** __cdecl CopyIntrusive(void** first, void** last, void** dest); // 0x006F43E0
 void  __cdecl RemoveIf(void* a, void* b, void* c);                // 0x0076DE80
@@ -766,11 +865,7 @@ template<class T> struct RcPtr {
         }
     }
 };
-template<class T> struct AutoRC {
-    T* p;
-    AutoRC(T* q) : p(q) { if (p) p->AddRef(); }
-    ~AutoRC() { if (p) p->Release(); }
-};
+
 struct Img : IRc { uint32_t pad[6]; int mWidth; int mHeight; int mFormat; void* mData; };   // +0x1c/+0x20/+0x24/+0x28
 struct ImgA : Img { ImgA(int w, int h); };                              // 0x007A9E10 (format 1 chain)
 struct ImgB : Img { ImgB(int w, int h); };                              // 0x004328D0
@@ -843,6 +938,8 @@ virtual int Release();
 // ---- items of slice s007b0a70 end
 
 // ---- items of slice s007b19c0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+#pragma pack(push,1)
+#pragma pack(pop)
 struct S3 { int a, b, c; };
 struct IFac_s007b_19c0 {
 virtual void v0();
@@ -863,7 +960,11 @@ struct W1da0 {
     void Handler(void* r);                          // 0x007B1AF0 __thiscall
     void f(S3* p);
 };
-long AtomicAdd(volatile long* p, long v);  // 0x007b26a0 (defined below; used by a stub's inline body)
+void __cdecl DoInsertValue(void* dst, void* src, unsigned size);   // 0x011e0744 (memcpy-like)
+static __forceinline long AtomicAdd(volatile long* p, long v)
+{
+    return _InterlockedExchangeAdd(p, v);
+}
 struct cTexInst {
     void* vt; unsigned flags; volatile long refCount;
     void AddRef() { AtomicAdd(&refCount, 1); }
@@ -1974,6 +2075,153 @@ bool WriteImageDataAsTexture(void* ppData, int a, int b, void** out)
     for (int i = 0; i < n; ++i)
         ((RasterOps*)*(void**)tex)->GetMipSize(*(void**)(*(int*)(*(int*)ppData + i*4) + 0x28), i);
     *out = tex;
+    return true;
+}
+
+// @ 0x007b0040
+void** CopyRefRange(void*** dstRef, void** first, void** last, void* fillValue)
+{
+    *dstRef = (void**)fillValue;
+    for (; first != last; ++first) {
+        void* dst = *dstRef;
+        if (dst) {
+            void* p = *first;
+            *(void**)dst = p;
+            if (p)
+                (*(void (__thiscall**)(void*))*(void**)p)(p);
+        }
+        *dstRef = (void**)((char*)dst + 4);
+    }
+    return (void**)dstRef;
+}
+
+// @ 0x007b00d0
+C00d0::C00d0()
+{ f0=0; f1=0; f2=0; f5=0; f6=0; f7=0; }
+
+// @ 0x007b00f0
+BakeSprites::BakeSprites()
+: mVec()
+{
+    _InterlockedExchange((volatile long*)&mRef, 0);
+}
+
+// @ 0x007b0130
+C0130::~C0130()
+{}
+
+// @ 0x007b0160
+C0160::~C0160()
+{
+    if (mObj)
+        static_cast<IRefCounted*>(static_cast<DObj*>(mObj))->Release();
+}
+
+// @ 0x007b01d0
+bool cRowJobData::StepUp(CJob* job)
+{
+    Elem** v = mP->begin;
+    int slot = job->mSlot;
+    FUN_007acfe0((void*)v[slot-1], (void*)v[slot]);
+    if (++slot >= (int)(mP->end - mP->begin)) {
+        if (mFlag18) {
+            unsigned char* p = v[slot-1]->data;
+            int f = 0xff - p[3];
+            int t;
+            t = p[0]*f + 0x80; p[0] = (unsigned char)((((t>>8)+t)>>8) + p[0]);
+            t = p[1]*f + 0x80; p[1] = (unsigned char)((((t>>8)+t)>>8) + p[1]);
+            t = p[2]*f + 0x80; p[2] = (unsigned char)((((t>>8)+t)>>8) + p[2]);
+            return job->Continuation((void*)&FUN_007ae910, this);
+        }
+        void* oldCln = job->mpCleanup;
+        void* oldRet = job->mpReturn;
+        job->mpReturn = mP;
+        job->mpCleanup = 0;
+        if (oldCln)
+            ((void (__cdecl*)(void*))oldCln)(oldRet);
+        if (mMsgId) {
+            IMsg* s = (IMsg*)FUN_0067dcc0();
+            s->v6((void*)mMsgId, (void*)mMsgArg, 0, 0);
+        }
+        return true;
+    }
+    job->mSlot = slot;
+    return job->Continuation((void*)&FUN_007b03d0, this);
+}
+
+// @ 0x007b02f0
+SP::cTexturePreload::~cTexturePreload()
+{}
+
+// @ 0x007b03e0
+C03e0::~C03e0()
+{}
+
+// @ 0x007b0430
+bool FUN_007b0430(cImageDataRaw* src, int mode, int quality, CJob** out)
+{
+    if (src->mFormat != 2)
+        return false;
+    int blockBytes;
+    int extra;
+    switch (mode) {
+    case 4:  extra = 0;     blockBytes = 8;    break;
+    case 5:  extra = 0x100; blockBytes = 0x10; break;
+    case 6:  extra = 0x200; blockBytes = 0x10; break;
+    default: return false;
+    }
+
+    AutoJob_s007a_f8b0 job;
+    Sched_s007a_f8b0* s = GetSched_s007a_f8b0();
+    job.Reset();
+    if (s->Acquire(&job)) {
+        cImageDataRaw* outData = new("Graphics", 0, 0, 0, 0) cImageDataRaw;
+        AutoRC<cImageDataRaw> d(outData);
+        outData->mWidth  = src->mWidth;
+        outData->mHeight = src->mHeight;
+        outData->mFormat = mode;
+        outData->mData = (unsigned char*)EAAlloc(
+            ((src->mHeight + 3) >> 2) * ((src->mWidth + 3) >> 2) * blockBytes,
+            "Graphics", 0, 0, 0, 0);
+        {
+            DxtJobData* rec = new("Graphics", 0, 0, 0, 0) DxtJobData;
+            AutoRC<DxtJobData> r(rec);
+            rec->mSource = src;
+            rec->mOutput = outData;
+            rec->mMode = extra;
+            rec->mQuality = quality;
+            rec->mBlockSize = blockBytes;
+            rec->mMessageID = 0;
+            rec->mMessage.Reset();
+            job.p->Attach(rec);
+            job.p->mSlot = 0;
+            job.p->mpCallback = (void*)&FUN_007b0030;
+            job.p->mpCallbackData = rec;
+            *out = job.p;
+            job.p = 0;
+        }
+        return true;
+    }
+    return false;
+}
+
+// @ 0x007b06c0
+bool FUN_007b06c0(cImageDataRaw* src, cImageDataRaw** out, int mode, int quality, unsigned msgId, IUnknown32* handler)
+{
+    AutoJob_s007a_f8b0 job;
+    if (!FUN_007b0430(src, mode, quality, &job.p))
+        return false;
+    DxtJobData* rec = static_cast<DxtJobData*>(job.p->mpExtraObject);
+    rec->mMessageID = msgId;
+    rec->mMessage = handler;
+    cImageDataRaw* img = rec->mOutput.p;
+    *out = img;
+    img->AddRef();
+    job.p->GetStatus();
+    if (msgId == 0) {
+        job.p->Wait();
+        return job.p->mpReturn == rec->mOutput.p;
+    }
     return true;
 }
 

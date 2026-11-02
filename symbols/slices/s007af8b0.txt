@@ -1,10 +1,18 @@
+006909b0 ?GetStatus@cJob@SP@@QBE?AW4tJobStatus@2@XZ  # SP::cJob::GetStatus (callee of s007af8b0, named from the dev publics; slice address comment)
 006926b0 ?Wait@cJob@SP@@QAEXXZ  # SP::cJob::Wait (callee of s007af8b0, named from the dev publics; slice address comment)
 007af8b0 ?FUN_007af8b0@@YA_NUImgRef@@0@Z  # FUN_007af8b0 migrated from s007af8b0 (verbatim, slice spelling)
 007afae0 ?StepDown@cRowJobData@@QAE_NPAUCJob@@@Z  # cRowJobData::StepDown migrated from s007af8b0 (verbatim, slice spelling)
 007afb70 ?DXTCompressRow@cDXTCompressJobData@@QAEHH@Z  # cDXTCompressJobData::DXTCompressRow migrated from s007af8b0 (verbatim, slice spelling)
 007afe10 ?RunJob@cDXTCompressJobData@@QAE_NPAUCJob@@@Z  # cDXTCompressJobData::RunJob migrated from s007af8b0 (verbatim, slice spelling)
 007aff00 ?WriteImageDataAsTexture@@YA_NPAXHHPAPAX@Z  # WriteImageDataAsTexture migrated from s007af8b0 (verbatim, slice spelling)
-007b00f0 Graphics::BakeSprites::BakeSprites  # vtable_names.txt vt
+007b0040 ?CopyRefRange@@YAPAPAXPAPAPAXPAPAX1PAX@Z  # CopyRefRange migrated from s007af8b0 (verbatim, slice spelling)
+007b00d0 ??0C00d0@@QAE@XZ  # C00d0::C00d0 migrated from s007af8b0 (verbatim, slice spelling)
+007b00f0 ??0BakeSprites@@QAE@XZ  # BakeSprites::BakeSprites migrated from s007af8b0 (verbatim, slice spelling)
+007b0130 ??1C0130@@UAE@XZ  # C0130::~C0130 migrated from s007af8b0 (verbatim, slice spelling)
+007b0160 ??1C0160@@UAE@XZ  # C0160::~C0160 migrated from s007af8b0 (verbatim, slice spelling)
+007b01d0 ?StepUp@cRowJobData@@QAE_NPAUCJob@@@Z  # cRowJobData::StepUp migrated from s007af8b0 (verbatim, slice spelling)
+007b02f0 ??1cTexturePreload@SP@@UAE@XZ  # SP::cTexturePreload::~cTexturePreload migrated from s007af8b0
+007b03e0 ??1C03e0@@UAE@XZ  # C03e0::~C03e0 migrated from s007af8b0 (verbatim, slice spelling)
 007b0430 ?FUN_007b0430@@YA_NPAVcImageDataRaw@@HHPAPAUCJob@@@Z  # FUN_007b0430 migrated from s007af8b0 (verbatim, slice spelling)
 007b06c0 ?FUN_007b06c0@@YA_NPAVcImageDataRaw@@PAPAV1@HHIPAUIUnknown32@@@Z  # FUN_007b06c0 migrated from s007af8b0 (verbatim, slice spelling)
 007b07e0 ??0cTexturePreload@SP@@QAE@H@Z  # SP::cTexturePreload::cTexturePreload migrated from s007af8b0
