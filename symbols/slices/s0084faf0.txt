@@ -2,8 +2,8 @@
 0084feb0 ?CheckUniformRun@@YAHHPAE0@Z  # CheckUniformRun migrated from s0084faf0 (verbatim, slice spelling)
 0084ff00 ?EncodeMcuHuff@@YAXPAH0@Z  # EncodeMcuHuff migrated from s0084faf0 (verbatim, slice spelling)
 008502a0    jinit_huff_encoder          libjpeg Huffman-encoder init
-00850380    SetTableNext                set next back-pointer on colour/quant tables
+00850380 ?SetTableNext@@YAXPAHH@Z  # SetTableNext migrated from s0084faf0 (verbatim, slice spelling)
 008503f0    finish_pass_huff            libjpeg finish_pass_huff
 00850510    write_raw_dispatch          raw-data write dispatch / state check
-00850570    jpeg_finish_compress2       jpeg_finish_compress (partial)
+00850570 ?jpeg_finish_compress2@@YAXPAHH@Z  # jpeg_finish_compress2 migrated from s0084faf0 (verbatim, slice spelling)
 008505f0    output_pass_setup           empty_output_buffer / iMCU row accounting

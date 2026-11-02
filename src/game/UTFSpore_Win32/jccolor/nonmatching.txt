@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+00854db0 137 diff; complete; slot-table installer; cdecl form gains a `push ebx/mov ebx,[esp+8]` prologue the original does not have (its object arrives in EBX), and the literal function-pointer stores plus the following __thiscall call are scheduled differently (size 188 vs 178); equiv UNSUPPORTED (0/400 valid; fault(write)/fault(read) on synthetic objects) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
