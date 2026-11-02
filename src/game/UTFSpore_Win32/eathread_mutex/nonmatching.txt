@@ -1,4 +1,5 @@
 # va  diff-bytes  reason
-00922150 61 Mutex::Init: CreateMutexA name-pointer select and field init ordering differ
-009221b0 119 Mutex::Lock: timeout/TryEnterCriticalSection loop shape differs
-009222a0 69 Mutex::Mutex: member zero-init ordering differs
+00922050 168 Condition::Signal: algorithm 8a broadcast/normal paths; equiv: PASS flags: /O2 /MD /Gy /EHsc /TP
+009221b0 119 Mutex::Lock: timeout/TryEnterCriticalSection loop shape differs flags: /O2 /MD /Gy /EHsc /TP
+009222a0 94 Mutex::Mutex: member zero-init ordering differs flags: /O2 /MD /Gy /EHsc /TP
+009223a0 90 RWMutex::Lock: LockType/unsigned const& timeout signature, read/write paths; equiv: WEAK 43% coverage flags: /O2 /MD /Gy /EHsc /TP

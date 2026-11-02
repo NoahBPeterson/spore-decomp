@@ -4,3 +4,10 @@
 009216a0 ?RBTreeInsert@eastl@@YAXPAUrbtree_node_base@@00W4RBTreeSide@1@@Z  # RBTreeInsert migrated from s009215c0 (verbatim, slice spelling)
 00921880 ?RBTreeErase@eastl@@YAXPAUrbtree_node_base@@0@Z  # RBTreeErase migrated from s009215c0 (verbatim, slice spelling)
 00921f80 ?Wait@Condition@Thread@EA@@QAE?AW4Result@123@PAVMutex@23@ABI@Z  # EA::Thread::Condition::Wait migrated from s009215c0
+00922050 ?Signal@Condition_s0092_15c0@Thread@EA@@QAE_N_N@Z  # Condition_s0092_15c0::Signal migrated from s009215c0 (verbatim, slice spelling)
+00922130 ??1Mutex@Thread@EA@@QAE@XZ  # EA::Thread::Mutex::~Mutex migrated from s009215c0
+00922150 ?Init@Mutex_s0092_15c0@Thread@EA@@QAE_NPBUMutexParameters@23@@Z  # Mutex_s0092_15c0::Init migrated from s009215c0 (verbatim, slice spelling)
+009221b0 ?Lock@Mutex@Thread@EA@@QAEHABI@Z  # EA::Thread::Mutex::Lock migrated from s009215c0
+00922270 ?Unlock@Mutex@Thread@EA@@QAEHXZ  # EA::Thread::Mutex::Unlock migrated from s009215c0
+009222a0 ??0Mutex_s0092_15c0@Thread@EA@@QAE@PBUMutexParameters@12@_N@Z  # Mutex_s0092_15c0::Mutex migrated from s009215c0 (verbatim, slice spelling)
+009223a0 ?Lock@RWMutex@Thread@EA@@QAEHW4LockType@123@ABI@Z  # RWMutex::Lock migrated from s009215c0 (verbatim, slice spelling)
