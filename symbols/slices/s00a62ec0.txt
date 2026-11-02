@@ -1,13 +1,13 @@
-00a62ec0  EA::Audio::Eapd::x_input_new
-00a62f30  EA::Audio::Eapd::input_bang
+00a62ec0 ?x_input_new_reg@Eapd@Audio@EA@@YGPAXPAXUPgSymbol@123@100@Z  # x_input_new_reg migrated from s00a62ec0 (verbatim, slice spelling)
+00a62f30 ?input_bang@Eapd@Audio@EA@@YAXPAUXInput@123@@Z  # input_bang migrated from s00a62ec0 (verbatim, slice spelling)
 00a62f40  EA::Audio::Eapd::input_new_float_local
-00a62f80  EA::Audio::Eapd::input_new_symbol
-00a62fc0  EA::Audio::Eapd::input_new_bang_local
-00a63000  EA::Audio::Eapd::input_new_globalfloat
-00a63030  EA::Audio::Eapd::input_new_globalsymbol
-00a63060  EA::Audio::Eapd::input_new_globalevent
-00a63090  EA::Audio::Eapd::pause_float
-00a630c0  EA::Audio::Eapd::x_input_setup
+00a62f80 ?input_new_symbol@Eapd@Audio@EA@@YAPAXPAX0@Z  # input_new_symbol migrated from s00a62ec0 (verbatim, slice spelling)
+00a62fc0 ?input_new_bang_local@Eapd@Audio@EA@@YAPAXPAX0@Z  # input_new_bang_local migrated from s00a62ec0 (verbatim, slice spelling)
+00a63000 ?input_new_globalfloat@Eapd@Audio@EA@@YAPAXPAX0@Z  # input_new_globalfloat migrated from s00a62ec0 (verbatim, slice spelling)
+00a63030 ?input_new_globalsymbol@Eapd@Audio@EA@@YAPAXPAX0@Z  # input_new_globalsymbol migrated from s00a62ec0 (verbatim, slice spelling)
+00a63060 ?input_new_globalevent@Eapd@Audio@EA@@YAPAXPAX0@Z  # input_new_globalevent migrated from s00a62ec0 (verbatim, slice spelling)
+00a63090 ?pause_float@Eapd@Audio@EA@@YAXPAUXInput@123@M@Z  # pause_float migrated from s00a62ec0 (verbatim, slice spelling)
+00a630c0 ?x_input_setup@Eapd@Audio@EA@@YA_NXZ  # EA::Audio::Eapd::x_input_setup migrated from s00a62ec0
 00a632e0  EA::Audio::Eapd::instance_new
 00a63310 ?busy_float@Eapd@Audio@EA@@YAXPAUXThisInstance@123@M@Z  # busy_float migrated from s00a62ec0 (verbatim, slice spelling)
 00a63350  EA::Audio::Eapd::x_thisinstance_setup

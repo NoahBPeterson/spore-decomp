@@ -1,0 +1,8 @@
+# va  diff  reason
+00a62ec0 76 custom-register ABI: `iface` arrives in edi, sym/sym2/p4/p5 on the stack; cannot be expressed in plain C++ without naked asm [equiv UNSUPPORTED 0/400 valid, fault(read)] flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+00a62f80 46 local creator: custom edi-ABI tail-call into x_input_new after InstanceCreate; only reloc/reg-allocation differs [equiv UNSUPPORTED 0/400 valid, fault(read)] flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+00a62fc0 46 local creator (bang): custom edi-ABI tail-call into x_input_new; register allocation differs [equiv UNSUPPORTED 0/400 valid, fault(read)] flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+00a63000 37 global creator: custom edi-ABI tail-call into x_input_new after InputCreate; arg load order differs [equiv UNSUPPORTED 0/400 valid, fault(read)] flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+00a63030 37 global creator (symbol): custom edi-ABI tail-call into x_input_new after InputCreate [equiv UNSUPPORTED 0/400 valid, fault(read)] flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+00a63060 37 global creator (bang): custom edi-ABI tail-call into x_input_new after InputCreate [equiv UNSUPPORTED 0/400 valid, fault(read)] flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+00a630c0 234 x_input_setup: many gensym/class_new/class_addcreator calls; register allocation and call-argument materialisation differ [equiv UNSUPPORTED 0/400 valid, fault(read)] flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
