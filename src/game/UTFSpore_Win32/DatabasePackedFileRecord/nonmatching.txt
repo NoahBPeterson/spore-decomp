@@ -1,0 +1,7 @@
+# va  diff-bytes  reason
+008dc380 57 PFRecordReadIstream::GetSize switch(mode) compare-chain; branch/regalloc differs (equiv WEAK) flags: /O2 /MD /Gy /TP /GS- /arch:SSE
+008dc3c0 29 PFRecordReadIstream::GetSize0; branch layout + `mov al`/`test al` vs `cmp byte` differs (equiv PASS) flags: /O2 /MD /Gy /TP /GS- /arch:SSE
+008dcab0 158 PFRecordReadIstream::SetPosition seek arithmetic; branch/regalloc differs (equiv PASS) flags: /O2 /MD /Gy /TP /GS- /arch:SSE
+008dcb70 104 PFRecordReadIstream::Read; clamp/ReadSpan codegen differs (equiv PASS) flags: /O2 /MD /Gy /TP /GS- /arch:SSE
+008dcc80 143 PFRecordRead ctor (copy); InitReadStream inlining + Attach path codegen differs (equiv PASS) flags: /O2 /MD /Gy /TP /GS- /arch:SSE
+008dcdc0 174 PFRecordRead ctor (info); InitReadStream inlining codegen differs (equiv PASS) flags: /O2 /MD /Gy /TP /GS- /arch:SSE
