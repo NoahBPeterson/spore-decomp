@@ -25,6 +25,12 @@
 #include "SP/cIGonzagoSubsystem.h"
 #include "SP/cISerializableObject.h"
 #include "SP/cStarManager.h"
+#include "SP/cCelestialBody.h"
+#include "SP/cPlanet.h"
+#include "SP/cSolarSystem.h"
+#include "SP/cTribePlanner.h"
+#include "SP/cVisiblePlanet.h"
+#include "EA/Messaging/AutoHandler.h"
 
 // unnamed retail callees and globals (address in the comment)
 extern void* gVtblPressureA;
@@ -36,20 +42,143 @@ void* operator new(unsigned int size, const char* name, int a, int b, const char
 int GetCurrentGameMode();   // 0x00b5b800
 int GetPlayerEmpireID();    // 0x1021090
 struct cGenericPressureEvent { void ctor(); };
-extern void* gVtblPressureA;
-extern void* gVtblPressureB;
-extern void* gVtblPressureC;
 namespace UTFWin {
 struct Window { bool Initialize(); };
 }
+bool __stdcall CheckGonzagoSubsystemInitState(int mode);   // 0x00b5b840 (ecx = the listener)
+struct ListNode2_s00b1_d870 {
+    ListNode2_s00b1_d870* mpNext;   // +0x00
+    ListNode2_s00b1_d870* mpPrev;   // +0x04
+
+    // links this node in front of pWhere
+    void LinkBefore(ListNode2_s00b1_d870* pWhere) {
+        mpNext = pWhere;
+        mpPrev = pWhere->mpPrev;
+        pWhere->mpPrev = this;
+        mpPrev->mpNext = this;
+    }
+};
+struct InitStateOwner {
+    char      pad00[0x74];
+    ListNode2_s00b1_d870 mLoading;                            // +0x74
+    bool SubsystemReady(int mode);
+    void Load(struct IReader* pReader);
+};
+struct RCObj {
+    virtual int  AddRef();
+    virtual void Release();
+    virtual void Destroy();
+};
+struct IFat {
+    virtual void   s00();
+    virtual IFat*  s01();                                    // window manager: active manager
+virtual void   s02();
+virtual void s03();
+    virtual IFat*  s04();                                    // window face: scene
+    virtual void   s05();
+    virtual void*  s06();                                    // reader: underlying stream
+    virtual void   s07();
+    virtual IFat*  s08();                                    // reader: stream owner
+    virtual void   s09(void* pHandler, uint32_t id);         // message server: add handler
+    virtual void   s10(int code);                            // play-mode facade: change environment
+    virtual void   s11(uint32_t key, uint32_t tag, void* pOut);
+virtual void   s12();
+virtual void s13();
+    virtual int    s14(const char* pName);                   // play-mode facade: post mode name
+virtual void   s15();
+virtual void s16();
+virtual void s17();
+    virtual void   s18(int id);
+    virtual RCObj* s19(uint32_t id, const char* pName);      // effects manager: find effect
+virtual void   s20();
+virtual void s21();
+virtual void s22();
+virtual void s23();
+    virtual void   s24(float* pVector);                      // window face: set position
+virtual void   s25();
+virtual void s26();
+virtual void s27();
+virtual void   s28();
+virtual void s29();
+virtual void s30();
+    virtual void   s31(int a, int b);                        // window face: set flags
+virtual void   s32();
+virtual void s33();
+virtual void s34();
+virtual void s35();
+virtual void   s36();
+virtual void s37();
+virtual void s38();
+virtual void s39();
+virtual void   s40();
+virtual void s41();
+virtual void s42();
+virtual void s43();
+virtual void   s44();
+virtual void s45();
+virtual void s46();
+virtual void s47();
+virtual void   s48();
+virtual void s49();
+virtual void s50();
+virtual void s51();
+virtual void   s52();
+virtual void s53();
+    virtual void   s54(void* pArg);                          // window manager: set active window
+    virtual void   s55(void* pArg);                          // window face: release scene
+virtual void   s56();
+virtual void s57();
+virtual void s58();
+virtual void s59();
+virtual void   s60();
+virtual void s61();
+virtual void s62();
+virtual void s63();
+};
+struct IReader {
+virtual void  r00();
+virtual void r01();
+virtual void r02();
+virtual void r03();
+virtual void  r04();
+virtual void r05();
+virtual void r06();
+virtual void r07();
+    virtual IFat* r08();
+    virtual void  r09();
+    virtual void  r10(uint32_t key, void** ppOut, int flags);
+};
+void  ReadInt32(void* pStream, int* pValues, int nCount, int flags);          // 0x0093a780
+class WindowSerializable : public RCObj {
+};
+class WindowFace : public IFat {
+};
+class Window : public WindowSerializable, public WindowFace {
+public:
+    Window();                                   // 0x00962a10
+};
+struct ListEntry {
+    virtual int  AddRef();     // +0x00
+    virtual void Release();    // +0x04
+    uint32_t mTag04;           // +0x04
+    uint32_t mMagic08;         // +0x08
+    ListNode2_s00b1_d870 mNode;           // +0x0c
+};
+struct cVarListSerializer {
+    cVarListSerializer(const void* pOwner, void* pGeneric, unsigned int id);   // 0x00692f90
+    void Read(IReader* pReader);                                              // 0x00693e10
+    char mData[0xa14];
+};
+inline const void* SerializerOwner(const void* pSelf) { return (const uint32_t*)pSelf - 1; }
 // ---- items of slice s00b1d870 end
 
 // ---- items of slice s00b1fd50 begin (TODO(rewrite): local stubs, replace by canonical classes)
-#define _VA_LIST_DEFINED   // the slices' own va_list typedef wins over <vadefs.h> (rewrite.py)
 extern "C" void* __cdecl memset(void*, int, unsigned);
 extern "C" void* __cdecl memmove(void*, const void*, unsigned);
 extern "C" void* __cdecl memcpy(void*, const void*, unsigned);
 extern char gEmptyChar;  // 0x01667bac
+extern char gSigInfo;    // 0x015685a8
+extern void  __cdecl WriteUint32(void* stream, const void* src, int count, int endian);  // 0x0093aa70
 extern void* gArtilleryVtbl;                      // 0x0145dca8
 extern void* gArtVtbl0; extern void* gArtVtbl1; extern void* gArtVtbl2;
 extern void* gArtVtbl3; extern void* gArtVtbl4;
@@ -58,6 +187,8 @@ extern bool __cdecl StringLess(const void*, const void*);               // 0x008
 extern void __cdecl RangeInitialize(void* self, unsigned n);           // 0x00475ab0
 extern void __cdecl DoInsertValueC(void* dst, const void* src, unsigned n);  // 0x011e0744
 extern void __cdecl FormatResize(void* self, unsigned n);  // 0xb20610
+extern void* __cdecl FUN_00920090();               // 0x00920090
+extern unsigned g_InstanceIDGen;                   // 0x0167be28
 #pragma intrinsic(memset, memmove, memcpy)
 typedef unsigned int  uint;
 typedef char          va_list;
@@ -72,20 +203,43 @@ struct cGameData {
     virtual int  Release();                // +0x04
     virtual void gv08();                   // +0x08
     virtual int  Match(unsigned id);       // +0x0c
-    virtual void gv10(); virtual void gv14(); virtual void gv18();
+virtual void gv10();
+virtual void gv14();
+virtual void gv18();
     virtual cGameData* gv1c();             // +0x1c
     virtual cGameData* gv20();             // +0x20
-    virtual void gv24(); virtual void gv28();
+virtual void gv24();
+virtual void gv28();
     virtual bool gv2c();                   // +0x2c
-    virtual void gv30(); virtual void gv34(); virtual void gv38(); virtual void gv3c();
+virtual void gv30();
+virtual void gv34();
+virtual void gv38();
+virtual void gv3c();
     virtual void gv40();
     virtual void gv44();                   // +0x44
-    virtual void gv48(); virtual void gv4c(); virtual void gv50(); virtual void gv54();
-    virtual void gv58(); virtual void gv5c(); virtual void gv60(); virtual void gv64();   // gv64 = +0x64
-    virtual void gv68(); virtual void gv6c(); virtual void gv70(); virtual void gv74();
-    virtual void gv78(); virtual void gv7c(); virtual void gv80(); virtual void gv84();
-    virtual void gv88(); virtual void gv8c(); virtual void gv90(); virtual void gv94();
-    virtual void gv98(); virtual void gv9c(); virtual void gva0();
+virtual void gv48();
+virtual void gv4c();
+virtual void gv50();
+virtual void gv54();
+virtual void gv58();
+virtual void gv5c();
+virtual void gv60();
+virtual void gv64();
+virtual void gv68();
+virtual void gv6c();
+virtual void gv70();
+virtual void gv74();
+virtual void gv78();
+virtual void gv7c();
+virtual void gv80();
+virtual void gv84();
+virtual void gv88();
+virtual void gv8c();
+virtual void gv90();
+virtual void gv94();
+virtual void gv98();
+virtual void gv9c();
+virtual void gva0();
     virtual void gva4();                   // +0xa4
     char      pad_b58[0xb58 - 4];
     unsigned  mFlags;                      // +0xb58
@@ -140,13 +294,28 @@ struct RBTreeHeader {
     uint    mnSize;    // +0x0c
     void** Find(void** out, const void* key);  // 0x00e5c780, returns `out`
 };
+struct cVarListSerializer_s00b1_fd50 {
+    char data[0xa14];
+    cVarListSerializer_s00b1_fd50(void* obj, void* info, unsigned sig);  // 0x00692f90
+    void Serialize(void* ser);                                 // 0x00692900
+};
 struct ISerializer {
-    virtual void s0(); virtual void s1(); virtual void s2(); virtual void s3();
-    virtual void s4(); virtual void s5(); virtual void s6(); virtual void s7();
-    virtual void s8(); virtual void s9(); virtual void s10();
+virtual void s0();
+virtual void s1();
+virtual void s2();
+virtual void s3();
+virtual void s4();
+virtual void s5();
+virtual void s6();
+virtual void s7();
+virtual void s8();
+virtual void s9();
+virtual void s10();
     virtual void* GetStream();          // +0x18
     virtual void* Slot1c();
-    virtual void s20(); virtual void s24(); virtual void s28();
+virtual void s20();
+virtual void s24();
+virtual void s28();
     virtual void SerializeObj(cGameData* o);  // +0x2c
 };
 struct GameDataBig {
@@ -170,8 +339,13 @@ struct GameDataBig {
 };
 struct ListNode2 { ListNode2* next; ListNode2* prev; };
 struct ListObj {
-    virtual void n0(); virtual void n1(); virtual void n2(); virtual void n3();
-    virtual void n4(); virtual void n5(); virtual void n6();
+virtual void n0();
+virtual void n1();
+virtual void n2();
+virtual void n3();
+virtual void n4();
+virtual void n5();
+virtual void n6();
     virtual void n1c(void* arg);       // +0x1c
     char pad08[8];
     ListNode2 node;                    // +0x0c
@@ -195,7 +369,8 @@ struct SmallObj {
 };
 struct ArtCtorObj;
 struct cArtilleryProjectile {
-    virtual void a0(); virtual void a4();
+virtual void a0();
+virtual void a4();
     char pad[0x540 - 8];
     static cArtilleryProjectile* Create();   // 0xb20660
 };
@@ -233,15 +408,35 @@ struct StringC {
 struct StringAlloc {
     void* ctor(void* a);   // 0xb20c00
 };
+struct cDamageDisplay;
+struct cGameNounManager_s00b1_fd50 {
+    char pad[0x10c];
+    cDamageDisplay* mDamageDisplay;  // +0x10c
+    char* mListHead;                 // +0x110
+    void* CreateNoun(unsigned id);   // 0xb20c60
+    void  PostRemove(void* n);       // 0xb20d30
+    void* CreateDebugNoun(unsigned a, void* b);  // 0xb20e40
+};
+struct MgrHook { void Mark(void* p); };            // 0x00b201a0
 // ---- items of slice s00b1fd50 end
 
 // ---- items of slice s00b21e60 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern void* __cdecl SporeNew(unsigned size, const char* name, int a, int b, const char* file, int line);
 extern void __cdecl operator_delete__(void* p);   // 0x00f47380
+extern void* vtbl_cVehicleGroupOrder[];    // 0x0145ee58
+extern void* vtbl_cVehicleGroupOrder_1[];  // 0x0145ee44
 extern const float kFloat1, kFloat2;
 extern bool __cdecl GetBoolProperty(void* p, unsigned id, bool* out);   // 0x00407190
 extern bool __cdecl GetPropertyAsUint32(void* p, unsigned id, unsigned* out);   // 0x004af210
 extern bool __cdecl GetFloatProperty(void* p, unsigned id, float* out);   // 0x0040cf10
 extern const float kFloat1;
+extern char g_Logger[];              // 0x01568584
+extern void __cdecl LogError(void* logger, const char* fmt, ...);   // 0x00b21060
+extern void* vtbl_PaintSystemA[];   // 0x0145ef10
+extern void* vtbl_PaintSystemB[];   // 0x0145eec0
+extern void* vtbl_PaintSystemC[];   // 0x0145eeb8
+extern void* vtbl_PaintSystem[];   // 0x013eb394
+extern void __cdecl RemoveHandler(int h, int a, int b, int c, int d);   // 0x00571db0
 extern void* vtbl_UIMessageBase[];   // 0x013eb90c
 extern void* vtbl_UIMessage[];   // 0x013eb844
 struct IRefCount {
@@ -258,13 +453,98 @@ template <class T> struct ARC {
     bool operator==(T* o) const { return p == o; }
     ARC& operator=(T* np) { T* old = p; if (old != np) { if (np) np->AddRef(); p = np; if (old) old->Release(); } return *this; }
 };
+struct RBNode_s00b2_1e60 { RBNode_s00b2_1e60* right; RBNode_s00b2_1e60* left; RBNode_s00b2_1e60* parent; char color; };
+struct IFile;
+struct IStream {
+virtual void v0();
+virtual void v1();
+virtual void v2();
+virtual void v3();
+virtual void v4();
+virtual void v5();
+    virtual IFile* GetFile();
+};
+struct ISerializer_s00b2_1e60 {
+virtual void v0();
+virtual void v1();
+virtual void v2();
+virtual void v3();
+virtual void v4();
+virtual void v5();
+virtual void v6();
+    virtual void Pop();
+    virtual IStream* GetStream();
+    virtual void v9();
+    virtual void ReadObject(unsigned id, IRefCount** out, int flag);
+};
+extern int __cdecl ReadInt32(IFile* f, void* dst, int count, int endian);   // 0x0093a780
+struct ClsKV {
+    int key; IRefCount* val;
+    ClsKV(unsigned k, IRefCount* v) : key(k), val(v) { if (val) val->AddRef(); }
+    ~ClsKV() { if (val) val->Release(); }
+};
+struct ClsNode : RBNode_s00b2_1e60 { int key; IRefCount* val; };
+struct ClsInsRes { ClsNode* node; bool inserted; };
+struct ClsMap {
+    int pad0;
+    RBNode_s00b2_1e60 anchor;
+    uint size;
+    void __thiscall DoNuke(RBNode_s00b2_1e60* root);   // 0x00d0c930
+    void __thiscall Insert(ClsInsRes* out, ClsKV* kv, bool bUnique);   // 0x00dd6740
+};
+struct ClsKVCopy { int key; IRefCount* val; ClsKVCopy(const ClsKV& o); };
+struct ClsIter { void* node; ClsIter(void* n) : node(n) {} };
+struct ClsMap2 {
+    int pad0;
+    RBNode_s00b2_1e60 anchor;
+    uint size;
+    ClsIter __thiscall InsertValue(RBNode_s00b2_1e60* pos, ClsKV* v, bool bForceLeft);
+};
+extern void __cdecl RBTreeInsert(RBNode_s00b2_1e60* node, RBNode_s00b2_1e60* parent, RBNode_s00b2_1e60* anchor, int bLeft);
+struct ClsNodeAlloc : RBNode_s00b2_1e60 {
+    ClsKVCopy value;
+};
+inline void* operator new(size_t, ClsKVCopy* p) { return p; }
+struct SPVecP {
+    void** begin; void** end; void** cap; int alloc; void** inlineBuf;
+    SPVecP(const SPVecP& o);   // 0x00b20c00
+    ~SPVecP() { if ((int)((char*)cap - (char*)begin) > 1 && begin && begin != inlineBuf) operator_delete__(begin); }
+    void __thiscall AssignRange(void** b, void** e);   // 0x009199c0
+    void __thiscall swap(SPVecP& x);
+};
+struct RBNodeI { RBNodeI* right; RBNodeI* left; RBNodeI* parent; int color; };
+struct VGOTree {
+    int alloc; RBNodeI anchor; uint size;
+    VGOTree() : anchor() { anchor.left = &anchor; anchor.right = &anchor; anchor.parent = 0; *(char*)&anchor.color = 0; size = 0; }
+};
+struct VecP3 { int* a; int* b; int* c; VecP3() : a(0), b(0), c(0) {} };
+struct cGameDataNV {
+    void* vp0; void* vp1; char pad[0x2c];
+    cGameDataNV();   // 0x00b18660
+};
+struct VGOBase : cGameDataNV {
+    VGOBase() { vp0 = vtbl_cVehicleGroupOrder; vp1 = vtbl_cVehicleGroupOrder_1; }
+};
+struct cVehicleGroupOrder : VGOBase {
+    VGOTree tree;       // +0x34
+    int f4c;
+    VecP3 stars;        // +0x50 vector of ARC<cStarRecord>
+    int f5c, f60;
+    int arc64;          // +0x64
+    char pad68[0x14];
+    int f7c, f80, f84;  // vector of 0x178-byte elements
+    cVehicleGroupOrder();
+};
 struct ListNode { ListNode* next; ListNode* prev; };
 struct cNoun {                       // cGameData seen through its refcount base
     virtual int AddRef();            // 0
     virtual int Release();           // 1
     virtual int Slot2();             // 2
     virtual void* Cast(unsigned id); // 3
-    virtual void v4(); virtual void v5(); virtual void v6(); virtual void v7();
+virtual void v4();
+virtual void v5();
+virtual void v6();
+virtual void v7();
     virtual int GetType();           // 8  (+0x20)
     virtual bool Init(void* desc, void* a, void* b); // 9 (+0x24)
     char pad04[8];
@@ -332,10 +612,20 @@ struct RawVec {
 struct IProps;
 struct NounDesc { unsigned id; int pad[2]; IProps* props; };
 struct cNounData {                    // result of Cast(0x1186577)
-    virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3();
-    virtual void v4(); virtual void v5(); virtual void v6(); virtual void v7();
-    virtual void v8(); virtual void v9(); virtual void v10(); virtual void v11();
-    virtual void v12(); virtual void v13();
+virtual void v0();
+virtual void v1();
+virtual void v2();
+virtual void v3();
+virtual void v4();
+virtual void v5();
+virtual void v6();
+virtual void v7();
+virtual void v8();
+virtual void v9();
+virtual void v10();
+virtual void v11();
+virtual void v12();
+virtual void v13();
     virtual void SetA(void* a);       // 14 (0x38)
     virtual void SetB(void* b);       // 15 (0x3c)
     char pad04[0x54];
@@ -352,39 +642,134 @@ struct SPVecARC { void** begin; void** end; void** cap; void __thiscall erase(vo
 struct VecHolder { int pad; SPVecARC vec; };
 #define V4(n) virtual void n##a(); virtual void n##b(); virtual void n##c(); virtual void n##d();
 struct IObj47 {
-    virtual void s0(); virtual void s1(); virtual void s2();
+virtual void s0();
+virtual void s1();
+virtual void s2();
     virtual IObj47* Cast(unsigned id);   // 3
     V4(a) V4(b) V4(c) V4(d) V4(e) V4(f) V4(g) V4(h) V4(i) V4(j)   // 4..43
-    virtual void p44(); virtual void p45(); virtual void p46();
+virtual void p44();
+virtual void p45();
+virtual void p46();
     virtual void AddRefX();              // 47 (+0xbc)
     virtual void ReleaseX();             // 48 (+0xc0)
 };
 struct VecHolder2 { int pad; struct { IObj47** begin; IObj47** end; IObj47** cap;
     void __thiscall DoInsertValue(IObj47** pos, IObj47** v); } vec; };
+struct SetNode : RBNode_s00b2_1e60 { int key; };
+struct SetMap {
+    int pad;
+    RBNode_s00b2_1e60 anchor;
+    uint size;
+    int pad2;
+    SetMap() : anchor() { anchor.right = &anchor; anchor.left = &anchor; anchor.parent = 0; anchor.color = 0; size = 0; }
+    ~SetMap() { Free(anchor.parent); }
+    void Free(RBNode_s00b2_1e60* p)
+    {
+        while (p) {
+            DoNuke(p->right);
+            RBNode_s00b2_1e60* l = p->left;
+            operator_delete__(p);
+            p = l;
+        }
+    }
+    void __thiscall DoNuke(RBNode_s00b2_1e60* p);   // 0x009a9600
+};
+extern RBNode_s00b2_1e60 g_ClassRegistry;       // 0x01568550 (anchor of the registry map)
+extern RBNode_s00b2_1e60* __cdecl RBTreeIncrement_s00b2_1e60(RBNode_s00b2_1e60* n);   // 0x00921580
+extern void __stdcall BuildClassSets(SetMap* a, SetMap* b);   // 0x00b211e0
+static __forceinline void CheckRegistered(SetMap& m)
+{
+    for (RBNode_s00b2_1e60* it = m.anchor.left; it != &m.anchor; it = RBTreeIncrement_s00b2_1e60(it)) {
+        int key = ((SetNode*)it)->key;
+        RBNode_s00b2_1e60* best = &g_ClassRegistry;
+        RBNode_s00b2_1e60* cur = g_ClassRegistry.parent;
+        while (cur) {
+            if (!(((SetNode*)cur)->key < key)) { best = cur; cur = cur->left; }
+            else cur = cur->right;
+        }
+        if (best == &g_ClassRegistry || key < ((SetNode*)best)->key)
+            LogError(g_Logger, "clsid 0x%08x", key);
+    }
+}
+struct PS_Tree {
+    void __thiscall Nuke(RBNode_s00b2_1e60* root);   // 0x00d0c930
+};
+struct PS_Tree2 {
+    void __thiscall Nuke(RBNode_s00b2_1e60* root);   // 0x009a9600
+};
+struct PS_Vec {
+    void __thiscall Dtor();   // 0x00ae6970
+};
+struct PS_ListBase {
+    void __thiscall Dtor();   // 0x00620230
+};
+struct PS_RenderJobs {
+    void __thiscall Clear();   // 0x0075f3f0
+};
+struct PS_Hash {
+    void __thiscall Clear(int a, int b);   // 0x00b20a50
+};
+struct PS_Gonzago {
+    void __thiscall Dtor();   // 0x00b5b9a0
+};
+template <class T> static inline T* At(void* base, int off) { return (T*)((char*)base + off); }
+template <class T> static inline T& Fld(void* base, int off) { return *(T*)((char*)base + off); }
 struct SysGui { void __thiscall SetSerializer(); };   // 0x00c2e4e0
 struct ModelMgr {
-    virtual void m0(); virtual void m1(); virtual void m2(); virtual void m3();
-    virtual void m4(); virtual void m5(); virtual void m6();
+virtual void m0();
+virtual void m1();
+virtual void m2();
+virtual void m3();
+virtual void m4();
+virtual void m5();
+virtual void m6();
     virtual IRefCount* Lookup(unsigned id);   // 7 (+0x1c)
 };
 extern ModelMgr* __cdecl GetModelManager();   // 0x0067dd80
 struct IPending {                       // result of Cast(0x1186577)
-    virtual void s0(); virtual void s1(); virtual void s2(); virtual void s3();
-    virtual void s4(); virtual void s5(); virtual void s6(); virtual void s7();
-    virtual void s8(); virtual void s9(); virtual void s10(); virtual void s11();
+virtual void s0();
+virtual void s1();
+virtual void s2();
+virtual void s3();
+virtual void s4();
+virtual void s5();
+virtual void s6();
+virtual void s7();
+virtual void s8();
+virtual void s9();
+virtual void s10();
+virtual void s11();
     virtual void s12();
     virtual float f13();                // +0x34
-    virtual void s14(); virtual void s15(); virtual void s16(); virtual void s17();
-    virtual void s18(); virtual void s19(); virtual void s20(); virtual void s21();
-    virtual void s22(); virtual void s23(); virtual void s24();
+virtual void s14();
+virtual void s15();
+virtual void s16();
+virtual void s17();
+virtual void s18();
+virtual void s19();
+virtual void s20();
+virtual void s21();
+virtual void s22();
+virtual void s23();
+virtual void s24();
     virtual void Apply(void* data, float f); // 25 (+0x64)
-    virtual void s26(); virtual void s27(); virtual void s28(); virtual void s29();
-    virtual void s30(); virtual void s31(); virtual void s32(); virtual void s33();
-    virtual void s34(); virtual void s35();
+virtual void s26();
+virtual void s27();
+virtual void s28();
+virtual void s29();
+virtual void s30();
+virtual void s31();
+virtual void s32();
+virtual void s33();
+virtual void s34();
+virtual void s35();
     virtual bool HasCtx();              // 36 (+0x90)
-    virtual void s37(); virtual void s38(); virtual void s39();
+virtual void s37();
+virtual void s38();
+virtual void s39();
     virtual bool BindCtx(IRefCount* ctx); // 40 (+0xa0)
-    virtual void s41(); virtual void s42();
+virtual void s41();
+virtual void s42();
     virtual struct PInfo* GetInfo();    // 43 (+0xac)
     char pad04[0x4c];
     unsigned flags;                     // +0x50
@@ -396,7 +781,11 @@ struct UIMessage {
     void** vptr; int rc; int d0; int padc; void* d1; char pad14[0x1c]; int id; char pad34[4]; int flags;
 };
 struct MsgServer {
-    virtual void s0(); virtual void s1(); virtual void s2(); virtual void s3(); virtual void s4();
+virtual void s0();
+virtual void s1();
+virtual void s2();
+virtual void s3();
+virtual void s4();
     virtual void Post(unsigned type, UIMessage* m, int flag);   // 5 (+0x14)
 };
 extern MsgServer* __cdecl GetMessageServer();   // 0x0067dcc0
@@ -770,6 +1159,23 @@ protected:
 // ---- items of slice s00b24740 end
 
 // ---- items of slice s00b20fb0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern void*     g_clsidNameSlot;                         // 0x01568584
+struct MapNode {
+  uint8_t mUnused00[0x14];
+  void*   mValue;                                         // +0x14
+};
+struct MapIterator {
+  MapNode* mpNode;                                        // +0x00
+  MapIterator();
+  MapIterator(const MapIterator&);
+};
+struct cClsidMap {
+  uint32_t  mUnused00;                                    // +0x00
+  MapNode   mEnd;                                         // +0x04
+  MapIterator find(const int& key);                       // 0x00e39fb0
+};
+extern cClsidMap g_clsidMap;                              // 0x0156854c
+void FUN_00b21060(char* dst, const char* fmt, int value); // 0x00b21060
 struct ListNode_s00b2_0fb0 {
   void* mField00;                                         // +0x00
   void* mField04;                                         // +0x04
@@ -803,6 +1209,7 @@ uint8_t g_vtableListenerPrimary;        // 0x0145ef10 cListenerBase
 uint8_t g_vtableListenerGonzago;        // 0x0145eec0 SP::cGonzagoSubsystem
 uint8_t g_vtableListenerTail;           // 0x0145eeb8 cListenerBase
 uint32_t g_listenerNameTable;           // 0x0154df28 the listener's event-name table
+uint8_t  g_emptyString[];               // 0x01667bac ?gEmptyString16@eastl@@3PA_WA
 uint8_t  g_funB21080;                   // 0x00b21080 game-data vector callback
 uint8_t  g_funB22E80;                   // 0x00b22e80 ClearHolderVec
 uint8_t  g_funB22EA0;                   // 0x00b22ea0 PushBackCast
@@ -1290,6 +1697,24 @@ public:
     void swap(cEAString& pOther);               // 0x00b22060
     void FUN_00b230b0(uint32_t nSize);          // 0x00b230b0
 };
+class cNamedString {
+public:
+    uint8_t* mpBegin;                           // +0x00
+    uint8_t* mpEnd;                             // +0x04
+    uint8_t* mpEndAlloc;                        // +0x08
+    uint32_t mPad0c;                            // +0x0c
+    uint8_t* mpInline;                          // +0x10
+
+    void* ctor(void* pSrc, void* pEnd);         // 0x00b209f0
+};
+class cOrderRegistry {
+public:
+    void FUN_00b1aba0(void* pName, const void* pValue, uint32_t nId);   // 0x00b1aba0
+    void FUN_00b23020(void* pName, void* pValue, uint32_t nId);         // 0x00b23020
+    void FUN_00b23c60(uint32_t nId, const char* pName);                 // 0x00b23c60
+};
+cOrderRegistry g_orderRegistryA;                // 0x01568530
+cOrderRegistry g_orderRegistryB;                // 0x01568568
 class cGNMThunk {
 public:
     uint32_t mPad00;                            // +0x00
@@ -1362,6 +1787,10 @@ public:
 };
 extern cNounTypeRegistry gNounTypeRegistry;                       // 0x01568514
 extern cNounTypeTable gNounTypeTable;                             // 0x0156851c
+class cGameNounManager_s00b2_3e60 {
+public:
+    void BeginRemovalPass();                                    // 0x00b206d0
+};
 // ---- items of slice s00b23e60 end
 
 // ---- items of slice s00b25c30 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -1581,11 +2010,11 @@ public:
     cGameData_s00b2_5c30* FindNounByEmpireID(uint32_t civID);               // 0x00b25f40
     class cCivilization* GetPlayerCivilization();                // 0x00b25fb0
     class cCity* GetPlayerCityAtPosition(const cSPVector3_s00b2_5c30& position); // 0x00b262c0
-    cGameData_s00b2_5c30* FUN_00b25c30();
-    void FUN_00b25ee0();
-    void FUN_00b25fe0();
+    cGameData_s00b2_5c30* FUN_00b25c30();  // 0x00b25c30 (cGameNounManager::FUN_00b25c30)
+    void FUN_00b25ee0();  // 0x00b25ee0 (cGameNounManager::FUN_00b25ee0)
+    void FUN_00b25fe0();  // 0x00b25fe0 (cGameNounManager::FUN_00b25fe0)
     void FUN_00b26320();
-    void FUN_00b26600();
+    void FUN_00b26600();  // 0x00b26600 (cGameNounManager::FUN_00b26600)
 };
 cGameNounManager_s00b2_5c30* GetStaticObj();                                // 0x00b22210
 void RegisterDramaEventsFactories();                             // 0x00d4b5a0
@@ -1702,6 +2131,21 @@ int GetPlayerEmpireOrMinus1()
     return id;
 }
 
+// @ 0x00b1fbb0
+bool InitStateOwner::SubsystemReady(int mode)
+{
+    const bool bReady = CheckGonzagoSubsystemInitState(mode);
+    if (mode == 0x01654c08 || mode == 0x02ccd1d2) {
+        if (bReady) {
+            ListNode2_s00b1_d870* pHead = &mLoading;
+            if (pHead->mpPrev == pHead)
+                return true;
+        }
+        return false;
+    }
+    return bReady;
+}
+
 // @ 0x00b1fbf0
 bool UTFWin::Window::Initialize()
 { return true; }
@@ -1718,6 +2162,30 @@ void* New_cMissionHappinessEvent()
         return p;
     }
     return 0;
+}
+
+// @ 0x00b1fc80
+void InitStateOwner::Load(IReader* pReader)
+{
+    int nCount;
+    ReadInt32(pReader->r08()->s06(), &nCount, 1, 0);
+    for (int i = 0; i < nCount; ++i) {
+        ListEntry* pEntry = 0;
+        pReader->r10(0x017f243b, (void**)&pEntry, 0);
+        if (pEntry != 0) {
+            ListNode2_s00b1_d870* pNode = &pEntry->mNode;
+            ListNode2_s00b1_d870* pPrev = mLoading.mpPrev;
+            pNode->mpNext = &mLoading;
+            pNode->mpPrev = pPrev;
+            mLoading.mpPrev = pNode;
+            pPrev->mpNext = pNode;
+            pEntry->AddRef();
+            if (pEntry != 0)
+                pEntry->Release();
+        }
+    }
+    cVarListSerializer serializer(SerializerOwner(this), (void*)0x015685a8, 0x1a80d26);
+    serializer.Read(pReader);
 }
 
 // @ 0x00b1fd50
@@ -1810,6 +2278,46 @@ bool __cdecl IterateList(void* arg, ListNode2* anchor)
         it = it->node.next ? (ListObj*)((char*)it->node.next - 0xc) : 0;
     }
     return true;
+}
+
+// @ 0x00b20280
+void __thiscall GameDataBig::Write(ISerializer* ser)
+{
+    int n = -1;
+    RBNode* it = &mList;
+    do { it = it->mpNodeRight; n++; } while (it != &mList);
+
+    RBNode* first = mList.mpNodeRight;
+    cGameData* last = (cGameData*)(first ? (char*)first - 0xc : 0);
+
+    void* stream = ser->GetStream();
+    WriteUint32(stream, &n, 1, 0);
+
+    cGameData* node = last;
+    while (node != (cGameData*)((char*)&mList - 0xc)) {
+        ser->SerializeObj(node);
+        cGameData* nx = node->gv20();
+        node = nx ? (cGameData*)((char*)nx - 0xc) : 0;
+    }
+
+    for (uint i = 0; i < (uint)(mVecEnd - mVecBegin); ) {
+        if (mVecBegin[i]->gv2c()) {
+            cGameData* old = mVecBegin[i];
+            cGameData* src = mVecEnd[-1];
+            if (src != old) {
+                if (src) src->AddRef();
+                mVecBegin[i] = src;
+                if (old) old->Release();
+            }
+            mVecEnd--;
+            if (*mVecEnd) (*mVecEnd)->Release();
+        } else {
+            i++;
+        }
+    }
+
+    cVarListSerializer_s00b1_fd50 ser2((char*)this - 4, &gSigInfo, 0x1a80d26);
+    ser2.Serialize(ser);
 }
 
 // @ 0x00b203e0
@@ -2097,6 +2605,56 @@ void* __thiscall StringAlloc::ctor(void* a)
     return self;
 }
 
+// @ 0x00b20c60
+void* __thiscall cGameNounManager_s00b1_fd50::CreateNoun(unsigned id)
+{
+    ((SerObj*)0x167c988)->Set();
+    void* mgr = FUN_00920090();
+    IRefObject* obj = (IRefObject*)(*(void*(**)(void*, unsigned, unsigned, unsigned, unsigned))
+                                     (*(void***)mgr + 0x20/4))(mgr, id, 0x17f243b, 0, 0);
+    if (obj) obj->AddRef();
+    char* n = (char*)SPORE_NEW(0xc);
+    char* at8 = n + 8;
+    if (at8) { *(IRefObject**)at8 = obj; if (obj) obj->AddRef(); }
+    *(char**)(n + 0) = (char*)this + 0x10c;
+    *(void**)(n + 4) = *(void**)((char*)this + 0x110);
+    *(void**)this->mListHead = n;
+    if (obj) obj->Release();
+    unsigned v = ++g_InstanceIDGen;
+    *(unsigned*)((char*)obj + 0x24) = v;
+    *(void**)((char*)obj + 0x10) = *(void**)((char*)this + 0x7c);
+    void* node = (char*)obj + 0xc;
+    *(void**)node = (char*)this + 0x78;
+    *(void**)((char*)this + 0x7c) = node;
+    *(void**)(*(void**)((char*)obj + 0x10)) = node;
+    obj->AddRef();
+    ((MgrHook*)this)->Mark(obj);
+    return obj;
+}
+
+// @ 0x00b20d30
+void __thiscall cGameNounManager_s00b1_fd50::PostRemove(void* p)
+{
+    (void)p;
+}
+
+// @ 0x00b20e40
+void* __thiscall cGameNounManager_s00b1_fd50::CreateDebugNoun(unsigned a, void* b)
+{
+    (void)a; (void)b;
+    return 0;
+}
+
+// @ 0x00b21490
+char* FUN_00b21490(int clsid)
+{
+  MapIterator it = g_clsidMap.find(clsid);
+  if (it.mpNode != &g_clsidMap.mEnd)
+    return (char*)it.mpNode->mValue;
+  FUN_00b21060((char*)&g_clsidNameSlot, "clsid 0x%08x", clsid);
+  return (char*)g_clsidNameSlot;
+}
+
 // @ 0x00b21da0
 void ListSeg::FUN_00b21da0(ListSeg* other)
 {
@@ -2134,6 +2692,122 @@ void ListSeg::FUN_00b21da0(ListSeg* other)
     other->mField0c = 0;
     other->mField08 = &other->mField04;
   }
+}
+
+// @ 0x00b21e60
+void __cdecl ReadClassMap(ISerializer_s00b2_1e60* ser, ClsMap* m)
+{
+    m->DoNuke(m->anchor.parent);
+    m->anchor.right = &m->anchor;
+    m->anchor.left = &m->anchor;
+    m->anchor.parent = 0;
+    m->anchor.color = 0;
+    m->size = 0;
+
+    uint count = 0;
+    IFile* f0 = ser->GetStream()->GetFile();
+    ReadInt32(f0, &count, 1, 0);
+    for (uint i = 0; i < count; i++) {
+        IRefCount* obj = 0;
+        uint key;
+        IFile* f1 = ser->GetStream()->GetFile();
+        ReadInt32(f1, &key, 1, 0);
+        ser->Pop();
+        if (obj) { IRefCount* t = obj; obj = 0; t->Release(); }
+        ser->ReadObject(0x17f243b, &obj, 0);
+        ser->Pop();
+        ClsInsRes res;
+        {
+            ClsKV kv(key, obj);
+            m->Insert(&res, &kv, false);
+        }
+        if (!res.inserted) {
+            IRefCount* old = res.node->val;
+            if (obj != old) {
+                if (obj) obj->AddRef();
+                res.node->val = obj;
+                if (old) old->Release();
+            }
+        }
+        if (obj) obj->Release();
+    }
+    ser->Pop();
+}
+
+// @ 0x00b21fe0
+ClsIter __thiscall ClsMap2::InsertValue(RBNode_s00b2_1e60* pos, ClsKV* v, bool bForceLeft)
+{
+    int bLeft;
+    if (!bForceLeft && pos != &anchor && !(v->key < ((ClsNode*)pos)->key)) bLeft = 1; else bLeft = 0;
+    ClsNodeAlloc* n = (ClsNodeAlloc*)SporeNew(0x24, "Simulator", 0, 0,
+        "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h", 0xd1);
+    ::new (&n->value) ClsKVCopy(*v);
+    RBTreeInsert(n, pos, &anchor, bLeft);
+    size++;
+    return ClsIter(n);
+}
+
+// @ 0x00b22060
+void __thiscall SPVecP::swap(SPVecP& x)
+{
+    if (&x.alloc == &alloc) {
+        void** t;
+        t = begin; begin = x.begin; x.begin = t;
+        t = end;   end = x.end;     x.end = t;
+        t = cap;   cap = x.cap;     x.cap = t;
+    } else {
+        SPVecP temp(*this);
+        if (&x != this) AssignRange(x.begin, x.end);
+        if (&temp != &x) x.AssignRange(temp.begin, temp.end);
+    }
+}
+
+// @ 0x00b22100
+cVehicleGroupOrder::cVehicleGroupOrder()
+{
+    arc64 = 0;
+    f7c = 0; f80 = 0; f84 = 0;
+}
+
+// @ 0x00b222a0
+void ValidateClassSets()
+{
+    SetMap x;
+    SetMap y;
+    BuildClassSets(&x, &y);
+    CheckRegistered(x);
+    CheckRegistered(y);
+}
+
+// @ 0x00b22440
+void __fastcall PaintSystem_DtorBody(void* self)
+{
+    Fld<void**>(self, 0) = vtbl_PaintSystemA;
+    Fld<void**>(self, 4) = vtbl_PaintSystemB;
+    Fld<void**>(self, 8) = vtbl_PaintSystemC;
+    At<PS_RenderJobs>(self, 0x10c)->Clear();
+    At<PS_Tree>(self, 0xec)->Nuke(Fld<RBNode_s00b2_1e60*>(self, 0xf8));
+    At<PS_Tree>(self, 0xd0)->Nuke(Fld<RBNode_s00b2_1e60*>(self, 0xdc));
+    At<PS_Tree2>(self, 0xb4)->Nuke(Fld<RBNode_s00b2_1e60*>(self, 0xc0));
+    At<PS_Tree2>(self, 0x98)->Nuke(Fld<RBNode_s00b2_1e60*>(self, 0xa4));
+    At<PS_Vec>(self, 0x80)->Dtor();
+    At<PS_ListBase>(self, 0x78)->Dtor();
+    if (Fld<IRefCount*>(self, 0x74)) Fld<IRefCount*>(self, 0x74)->Release();
+    if (Fld<IRefCount*>(self, 0x70)) Fld<IRefCount*>(self, 0x70)->Release();
+    At<PS_Vec>(self, 0x5c)->Dtor();
+    if (Fld<IRefCount*>(self, 0x58)) Fld<IRefCount*>(self, 0x58)->Release();
+    if (Fld<IRefCount*>(self, 0x54)) Fld<IRefCount*>(self, 0x54)->Release();
+    int h = Fld<int>(self, 0x40);
+    if (h) {
+        Fld<int>(self, 0x40) = 0;
+        RemoveHandler(h, Fld<int>(self, 0x44), Fld<int>(self, 0x48), Fld<int>(self, 0x4c), Fld<int>(self, 0x50));
+    }
+    PS_Hash* hash = At<PS_Hash>(self, 0x20);
+    hash->Clear(Fld<int>(self, 0x24), Fld<int>(self, 0x28));
+    Fld<uint>(self, 0x2c) = 0;
+    if (Fld<uint>(self, 0x28) > 1) operator_delete__(Fld<void*>(self, 0x24));
+    At<PS_Gonzago>(self, 4)->Dtor();
+    Fld<void**>(self, 0) = vtbl_PaintSystem;
 }
 
 // @ 0x00b225b0
@@ -2723,6 +3397,88 @@ uint8_t cGameNounManager_s00b2_30b0::FUN_00b23ab0(uint32_t nMsgId, tPlanetEventM
     return 0;
 }
 
+// @ 0x00b23c60
+void cOrderRegistry::FUN_00b23c60(uint32_t nId, const char* pName)
+{
+    cNamedString nameA;
+    nameA.mpBegin = 0;
+    nameA.mpEnd = 0;
+    nameA.mpEndAlloc = 0;
+    nameA.mpInline = (uint8_t*)&nameA.mPad0c;
+
+    uint32_t nLen = 0;
+    while (pName[nLen] != 0)
+        ++nLen;
+    uint8_t* pEndAlloc;
+    if (nLen + 1 > 1)
+    {
+        nameA.mpBegin = (uint8_t*)EASTL_allocate(nLen + 1, "Simulator", 0, 0,
+                                                 "EASTL/allocator.h", 0xd1);
+        pEndAlloc = nameA.mpBegin + nLen + 1;
+    }
+    else
+    {
+        nameA.mpBegin = g_emptyString;
+        pEndAlloc = g_emptyString + 1;
+    }
+    SP_memcpy(nameA.mpBegin, pName, nLen);
+    nameA.mpEnd = nameA.mpBegin + nLen;
+    *nameA.mpEnd = 0;
+    nameA.mpEndAlloc = pEndAlloc;
+
+    cNamedString nameB;
+    nameB.mpBegin = 0;
+    nameB.mpEnd = 0;
+    nameB.mpEndAlloc = 0;
+    nameB.mpInline = (uint8_t*)&nameB.mPad0c;
+    uint32_t nCopyLen = (uint32_t)(nameA.mpEnd - nameA.mpBegin);
+    if (nCopyLen + 1 > 1)
+    {
+        nameB.mpBegin = (uint8_t*)EASTL_allocate(nCopyLen + 1, "Simulator", 0, 0,
+                                                 "EASTL/allocator.h", 0xd1);
+        nameB.mpEndAlloc = nameB.mpBegin + nCopyLen + 1;
+    }
+    else
+    {
+        nameB.mpBegin = g_emptyString;
+        nameB.mpEndAlloc = g_emptyString + 1;
+    }
+    SP_memcpy(nameB.mpBegin, nameA.mpBegin, nCopyLen);
+    nameB.mpEnd = nameB.mpBegin + nCopyLen;
+    *nameB.mpEnd = 0;
+
+    g_orderRegistryA.FUN_00b1aba0(&nameB, nameB.mpEnd, nId);
+    if ((uint32_t)(nameB.mpEndAlloc - nameB.mpBegin) > 1 && nameB.mpBegin != g_emptyString)
+        operator_delete(nameB.mpBegin);
+    if ((uint32_t)(nameA.mpEndAlloc - nameA.mpBegin) > 1 && nameA.mpBegin != g_emptyString)
+        operator_delete(nameA.mpBegin);
+
+    cNamedString nameC;
+    nameC.mpBegin = 0;
+    nameC.mpEnd = 0;
+    nameC.mpEndAlloc = 0;
+    nameC.mpInline = (uint8_t*)&nameC.mPad0c;
+    if (nLen + 1 > 1)
+    {
+        nameC.mpBegin = (uint8_t*)EASTL_allocate(nLen + 1, "Simulator", 0, 0,
+                                                 "EASTL/allocator.h", 0xd1);
+        nameC.mpEndAlloc = nameC.mpBegin + nLen + 1;
+    }
+    else
+    {
+        nameC.mpBegin = g_emptyString;
+        nameC.mpEndAlloc = g_emptyString + 1;
+    }
+    SP_memcpy(nameC.mpBegin, pName, nLen);
+    nameC.mpEnd = nameC.mpBegin + nLen;
+    *nameC.mpEnd = 0;
+
+    void* pValue = nameC.ctor(&nameC, &nameA);
+    g_orderRegistryB.FUN_00b23020(&nameC, pValue, nId);
+    if ((uint32_t)(nameC.mpEndAlloc - nameC.mpBegin) > 1 && nameC.mpBegin != g_emptyString)
+        operator_delete(nameC.mpBegin);
+}
+
 // @ 0x00b23e60
 void RegisterNounType(uint32_t nId, uint32_t nFlags, const char* pName)
 {
@@ -2741,6 +3497,14 @@ void RegisterNounType(uint32_t nId, uint32_t nFlags, const char* pName)
     cEAString8 name4(pName);
     uint32_t nFound2 = gNounTypeTable.FindNounType(&name4);
     gNounTypeTable.SetNounTypeName(&name4, nFound2, nFlags);
+}
+
+// @ 0x00b24260
+void RemoveObjectFromCommunity(uint32_t nEditorObject)
+{
+    cGameNounManager_s00b2_3e60* pNounManager =
+        (cGameNounManager_s00b2_3e60*)(nEditorObject - sizeof(uint32_t));
+    pNounManager->BeginRemovalPass();
 }
 
 // @ 0x00b24740
@@ -3117,6 +3881,32 @@ cCity* cGameNounManager_s00b2_5c30::GetPlayerCityAtPosition(const cSPVector3_s00
         }
     }
     return 0;
+}
+
+// @ 0x00b26320
+void cGameNounManager_s00b2_5c30::FUN_00b26320()
+{
+    if (mpPlayer.mpObject != 0) {
+        RemoveNoun((cGameData_s00b2_5c30*)mpPlayer.mpObject);
+        ProcessPending();
+        mpPlayer.Reset();
+    }
+    FUN_00b25fe0();
+    Flush();
+    mGameDataVectorMap.mTree.swap(mGameDataVectorMapDeleted.mTree);
+    ValidateClassSets();
+    mPlanetaryContextPoliticalMap.mTree.clear();
+    mAvatar.Reset();
+    mAvatarHerd.Reset();
+    for (cGameData_s00b2_5c30** pp = mPosseMembers.mpBegin; pp != mPosseMembers.mpEnd; ++pp)
+        (*pp)->ClearPosseMemberFlag();                       // clears bit 0x100 at +0xb58
+    mPosseMembers.mpEnd = mPosseMembers.mpBegin;
+    mPlayerTribe.Reset();
+    mpPlayer.Reset();
+    Flush();
+    mGameDataVectorMap.mTree.swap(mGameDataVectorMapDeleted.mTree);
+    Flush();
+    mGameDataVectorMap.mTree.swap(mGameDataVectorMapDeleted.mTree);
 }
 
 // @ 0x00b26600

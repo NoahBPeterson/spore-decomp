@@ -6,7 +6,7 @@
 00b20120 ?Dtor@ArtilleryBase@@QAEXXZ  # ArtilleryBase::Dtor migrated from s00b1fd50 (verbatim, slice spelling)
 00b201a0 ?MarkFeedback@GameDataBig@@QAEXPAUcGameData@@@Z  # GameDataBig::MarkFeedback migrated from s00b1fd50 (verbatim, slice spelling)
 00b20230 ?IterateList@@YA_NPAXPAUListNode2@@@Z  # IterateList migrated from s00b1fd50 (verbatim, slice spelling)
-00b20280 cGameData::Write  # dc: count list, WriteUint32, per-node serialize, compact vector, cVarListSerializer
+00b20280 ?Write@GameDataBig@@QAEXPAUISerializer@@@Z  # GameDataBig::Write migrated from s00b1fd50 (verbatim, slice spelling)
 00b203e0 ?RemoveVecItem@GameDataBig@@QAEXPAUcGameData@@@Z  # GameDataBig::RemoveVecItem migrated from s00b1fd50 (verbatim, slice spelling)
 00b20470 ?CountList@GameDataBig@@QAEHPAUcGameData@@@Z  # GameDataBig::CountList migrated from s00b1fd50 (verbatim, slice spelling)
 00b204d0 ?FindList@GameDataBig@@QAEPAUcGameData@@I@Z  # GameDataBig::FindList migrated from s00b1fd50 (verbatim, slice spelling)
@@ -23,7 +23,7 @@
 00b20aa0 ?FormatAppend@@YAPAXPAXPBDZZ  # FormatAppend migrated from s00b1fd50 (verbatim, slice spelling)
 00b20b90 ?ctor@StringC@@QAEPAXPAX@Z  # StringC::ctor migrated from s00b1fd50 (verbatim, slice spelling)
 00b20c00 ?ctor@StringAlloc@@QAEPAXPAX@Z  # StringAlloc::ctor migrated from s00b1fd50 (verbatim, slice spelling)
-00b20c60 SP::cGameNounManager::CreateNoun  # PDB
-00b20d30 cGameNounManager::PostRemove  # dc: message 0x1a0219e, unlink node
-00b20e40 cGameNounManager::CreateDebugNoun  # dc: CreateNoun(0x52aa6122), PlanetModel helpers
+00b20c60 ?CreateNoun@cGameNounManager_s00b1_fd50@@QAEPAXI@Z  # cGameNounManager_s00b1_fd50::CreateNoun migrated from s00b1fd50 (verbatim, slice spelling)
+00b20d30 ?PostRemove@cGameNounManager_s00b1_fd50@@QAEXPAX@Z  # cGameNounManager_s00b1_fd50::PostRemove migrated from s00b1fd50 (verbatim, slice spelling)
+00b20e40 ?CreateDebugNoun@cGameNounManager_s00b1_fd50@@QAEPAXIPAX@Z  # cGameNounManager_s00b1_fd50::CreateDebugNoun migrated from s00b1fd50 (verbatim, slice spelling)
 00b20ee0 ?UpdateDebugUI@@YGPAUByteString@@PAU1@I@Z  # UpdateDebugUI migrated from s00b1fd50 (verbatim, slice spelling)

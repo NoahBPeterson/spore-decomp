@@ -23,7 +23,7 @@
 00b1f790 New_cTribePlanner  # operator new 0x7c "Simulator/cTribePlanner"
 00b1f960 FUN_00b1f960  # layout/effect toggle
 00b1f9d0 ?GetPlayerEmpireOrMinus1@@YAHXZ  # GetPlayerEmpireOrMinus1 migrated from s00b1d870 (verbatim, slice spelling)
-00b1fbb0 FUN_00b1fbb0  # subsystem init-state query
+00b1fbb0 ?SubsystemReady@InitStateOwner@@QAE_NH@Z  # InitStateOwner::SubsystemReady migrated from s00b1d870 (verbatim, slice spelling)
 00b1fbf0 ?Initialize@Window@UTFWin@@QAE_NXZ  # Window::Initialize migrated from s00b1d870 (verbatim, slice spelling)
 00b1fc30 ?New_cMissionHappinessEvent@@YAPAXXZ  # New_cMissionHappinessEvent migrated from s00b1d870 (verbatim, slice spelling)
-00b1fc80 FUN_00b1fc80  # cVarListSerializer round-trip
+00b1fc80 ?Load@InitStateOwner@@QAEXPAUIReader@@@Z  # InitStateOwner::Load migrated from s00b1d870 (verbatim, slice spelling)

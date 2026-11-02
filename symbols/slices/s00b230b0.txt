@@ -15,3 +15,4 @@
 00b23940 ?FUN_00b23940@cGameNounManager_s00b2_30b0@@QAEPAVcNoun_s00b2_30b0@@PAMIIEME@Z  # cGameNounManager_s00b2_30b0::FUN_00b23940 migrated from s00b230b0 (verbatim, slice spelling)
 00b23a40 ?FUN_00b23a40@cGameNounManager_s00b2_30b0@@QAEPAVcNoun_s00b2_30b0@@I@Z  # cGameNounManager_s00b2_30b0::FUN_00b23a40 migrated from s00b230b0 (verbatim, slice spelling)
 00b23ab0 ?FUN_00b23ab0@cGameNounManager_s00b2_30b0@@QAEEIPAUtPlanetEventMsg@@@Z  # cGameNounManager_s00b2_30b0::FUN_00b23ab0 migrated from s00b230b0 (verbatim, slice spelling)
+00b23c60 ?FUN_00b23c60@cOrderRegistry@@QAEXIPBD@Z  # cOrderRegistry::FUN_00b23c60 migrated from s00b230b0 (verbatim, slice spelling)
