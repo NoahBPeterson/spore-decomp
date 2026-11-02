@@ -14,7 +14,7 @@
 00ff07a0 ?GetBuilding@cCityData_s00fe_ff80@SP@@QAEPAVcBuildingData_s00fe_ff80@2@H@Z  # cCityData_s00fe_ff80::GetBuilding migrated from s00feff80 (verbatim, slice spelling)
 00ff07e0 ?RemoveTurret@cCityData_s00fe_ff80@SP@@QAEXXZ  # cCityData_s00fe_ff80::RemoveTurret migrated from s00feff80 (verbatim, slice spelling)
 00ff0870 ?GetNumBuildings@cCityData_s00fe_ff80@SP@@QBEHXZ  # cCityData_s00fe_ff80::GetNumBuildings migrated from s00feff80 (verbatim, slice spelling)
-00ff08b0 cCityData::SetThreatLevel  # PDB name; threat level plus the district alert check
+00ff08b0 ?SetThreatLevel@cCityData_s00fe_ff80@SP@@QAEXMPAV12@@Z  # cCityData_s00fe_ff80::SetThreatLevel migrated from s00feff80 (verbatim, slice spelling)
 00ff0940 cCivData::CopyTerrainKeys  # descriptive name; copies the terrain-sphere specific model keys
 00ff0cd0 ?GetResourceKey@cCivData_s00fe_ff80@SP@@QAEPAUcResourceKey@2@PAVcResourceNoun@2@@Z  # cCivData_s00fe_ff80::GetResourceKey migrated from s00feff80 (verbatim, slice spelling)
 00ff0db0 ?Init@cSpatialSnapshot@SP@@QAEPAV12@PAVcNoun@2@@Z  # cSpatialSnapshot::Init migrated from s00feff80 (verbatim, slice spelling)

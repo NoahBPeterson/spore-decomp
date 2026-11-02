@@ -27,3 +27,7 @@
 ../src/game/SPGonzago/SPPlanetSim.cpp  ?ResetForward@cCitySummary@@QAEXXZ  00ff2d80  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPPlanetSim.cpp  ?InitE231@Simulator@@YAXXZ  01397130  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPPlanetSim.cpp  ?InitE235@Simulator@@YAXXZ  01397520  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPPlanetSim.cpp  ?FUN_01397890@@YAXXZ  01397890  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPPlanetSim.cpp  ?FUN_01397ff0@@YAXXZ  01397ff0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPPlanetSim.cpp  ?FUN_01398270@@YAXXZ  01398270  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPPlanetSim.cpp  ?FUN_01398420@@YAXXZ  01398420  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
