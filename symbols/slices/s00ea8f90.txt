@@ -4,13 +4,13 @@
 00ea93c0 ??1cMixMode_s00ea_8f90@Audio@SP@@QAE@XZ  # cMixMode_s00ea_8f90::~cMixMode migrated from s00ea8f90 (verbatim, slice spelling)
 00ea9440 ?VectorInsert@SoundVector@Audio@SP@@QAEXPAIPBI@Z  # SoundVector::VectorInsert migrated from s00ea8f90 (verbatim, slice spelling)
 00ea9550 ?ConfigureVector@Audio@SP@@YAXPAUSoundVector@12@PAXI@Z  # ConfigureVector migrated from s00ea8f90 (verbatim, slice spelling)
-00ea9790 SP::Audio::IsMixableKey(unsigned int)  # PDB FUN_00ea9790 (__stdcall)
-00ea9880 SP::Audio::cMixModeManager::UpdateSounds(float)  # PDB FUN_00ea9880
+00ea9790 ?IsMixableKey@Audio@SP@@YG_NI@Z  # IsMixableKey migrated from s00ea8f90 (verbatim, slice spelling)
+00ea9880 ?UpdateSounds@cMixModeManager_s00ea_8f90@Audio@SP@@QAEXM@Z  # cMixModeManager_s00ea_8f90::UpdateSounds migrated from s00ea8f90 (verbatim, slice spelling)
 00ea99a0 ?RemoveSound@cMixModeManager_s00ea_8f90@Audio@SP@@QAEXI_N@Z  # cMixModeManager_s00ea_8f90::RemoveSound migrated from s00ea8f90 (verbatim, slice spelling)
 00ea9a40 SP::Audio::cMixModeManager::StartMode(unsigned int)  # PDB FUN_00ea9a40
 00ea9a80 SP::Audio::cMixModeManager::StopMode(unsigned int, bool)  # PDB FUN_00ea9a80
 00ea9ac0 SP::Audio::cMixModeManager::IsModeActive(unsigned int)  # PDB FUN_00ea9ac0
-00ea9b00 SP::Audio::cMixModeManager::RegisterSound(unsigned int)  # PDB FUN_00ea9b00
+00ea9b00 ?RegisterSound@cMixModeManager_s00ea_8f90@Audio@SP@@QAEXI@Z  # cMixModeManager_s00ea_8f90::RegisterSound migrated from s00ea8f90 (verbatim, slice spelling)
 00ea9bb0 SP::Audio::MessageModeMap::find(unsigned int) const  # PDB FUN_00ea9bb0
 00ea9c20 SP::Audio::`anonymous namespace'::cFactoryMixMode::scalar_deleting_destructor  # PDB FUN_00ea9c20
 00ea9c70 SP::Audio::cMixModeManager::Shutdown  # PDB FUN_00ea9c70

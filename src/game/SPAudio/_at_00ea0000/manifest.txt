@@ -1,0 +1,2 @@
+# source  symbol  va  flags
+../src/game/SPAudio/_at_00ea0000.cpp  ?IsMixableKey@Audio@SP@@YG_NI@Z  00ea9790  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

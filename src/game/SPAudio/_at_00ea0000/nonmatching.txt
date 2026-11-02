@@ -1,0 +1,3 @@
+# va  diff-bytes  reason
+00ea9880 226 SP::Audio::cMixModeManager::UpdateSounds(float): complete (bucket-walk of mSounds, expiry via GetSystemAT dispatch and mSounds.erase); 287 vs 287 bytes; diff 252/287 -- register allocation of node/bucket across the erase sret differs; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast; equiv PASS (232 valid, 74.8% coverage)
+00ea9b00 109 SP::Audio::cMixModeManager::RegisterSound(unsigned int): complete (find/inc-refCount/PauseSound, else GetSystemAT handle, KillSetiEffects, mSounds.insert); 172 vs 172 bytes; diff 116/172 -- register allocation of iterator node and value build differ; equiv PASS (226 valid, 90.6% coverage; note insert flag arg = id&0xffffff00 matching original's stack-slot bool) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
