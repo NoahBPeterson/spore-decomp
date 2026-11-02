@@ -1,4 +1,4 @@
-008df050 ?AutoRefMoveBackward@@YAPAUAutoRefFactory@ResourceMan@EA@@PAU123@00@Z  # EA::ResourceMan::AutoRefMoveBackward
+008df050 ?AutoRefMoveBackward@@YAPAUAutoRefFactory@ResourceMan@EA@@PAU123@00@Z  # AutoRefMoveBackward migrated from s008df050 (verbatim, slice spelling)
 008df0b0 ?GetResourceInternal@Manager@ResourceMan@EA@@QAEDDPAUKey@23@PAXH1PAPAX0@Z  # Manager::GetResourceInternal
 008df430 ?GetResource@Manager@ResourceMan@EA@@QAEDHHHHHH@Z  # Manager::GetResource
 008df460 ?GetResourceAsync@Manager@ResourceMan@EA@@QAEDPAUKey@23@PAPAXPAXH2220@Z  # Manager::GetResourceAsync
@@ -11,4 +11,4 @@
 008dfc60 ?GetTypenameFromType@Manager@ResourceMan@EA@@QAEPB_WI@Z  # Manager::GetTypenameFromType
 008dfcd0 ?insertNode3@HashTable@ResourceMan@EA@@QAEPAXPAX00@Z  # HashTable::insertNode3
 008dfde0 ?DoInsertValue@ChangeSet@eastl_shim@ResourceMan@EA@@QAEPAXPAXPBX0@Z  # Manager::DoInsertValue
-008dfed0 ?AssignRange@VecOwner@@QAEPAU1@PAU1@@Z  # VecOwner::AssignRange
+008dfed0 ?AssignRange@VecOwner@@QAEPAU1@PAU1@@Z  # VecOwner::AssignRange migrated from s008df050 (verbatim, slice spelling)

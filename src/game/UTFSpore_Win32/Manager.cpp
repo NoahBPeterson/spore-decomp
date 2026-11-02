@@ -1,4 +1,4 @@
-// src/game/UTFSpore_Win32/Manager.cpp -- migrated from slice(s) s008e1d50, s008de020 by tools/migrate/rewrite.py
+// src/game/UTFSpore_Win32/Manager.cpp -- migrated from slice(s) s008e0eb0, s008dff30, s008df050, s008e1d50, s008de020 by tools/migrate/rewrite.py
 // Object file: UTFSpore_Win32/Manager.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -463,6 +463,285 @@ struct ManagerX : ZBase1 {
     void ResetAll();
 };
 // ---- items of slice s008e1d50 end
+
+// ---- items of slice s008df050 begin (TODO(rewrite): local stubs, replace by canonical classes)
+namespace EA {
+namespace ResourceMan {
+class Key_s008d_f050 { public:
+    uint32 mInstance;   // +0x00
+    uint32 mType;       // +0x04
+    uint32 mGroup;      // +0x08
+};
+}
+}
+namespace EA {
+namespace ResourceMan {
+class Factory_s008d_f050 { public:
+    virtual void Slot00();                                                        // +0x00
+    virtual void AddRef();                                                        // +0x04
+    virtual void Release();                                                       // +0x08
+    virtual void Slot0C();
+    virtual void Slot10();
+    virtual void Slot14();
+    virtual void Slot18();
+    virtual void Slot1C(void* a, void* b, void* c, void* d);                      // +0x1c
+    virtual void Slot20();
+    virtual void Slot24();                                                        // +0x24
+    virtual void Slot28();
+    virtual void Slot2C();
+    virtual void Slot30();
+    virtual char Init(Key_s008d_f050* pKey, void* pTypeParam, int a, int b, int c, int d);   // +0x34
+};
+}
+}
+namespace EA {
+namespace ResourceMan {
+struct AutoRefFactory {
+    Factory_s008d_f050* mpObject;  // +0x00
+    int      mField;    // +0x04
+};
+}
+}
+namespace EA {
+namespace ResourceMan {
+struct AutoRefObj_s008d_f050 {
+    void* mpObject;     // +0x00
+    int   mField;       // +0x04
+};
+}
+}
+namespace EA {
+namespace ResourceMan {
+struct AutoRefVec_s008d_f050 {
+    AutoRefObj_s008d_f050* mpBegin;      // +0x00
+    AutoRefObj_s008d_f050* mpEnd;        // +0x04
+    AutoRefObj_s008d_f050* mpCapacity;   // +0x08
+    void* mpAllocator;        // +0x0c
+    void* mpName;             // +0x10
+
+    void* allocateStorage(int n, void* pAllocPair);   // 0x008DEF20
+};
+}
+}
+namespace EA {
+namespace ResourceMan {
+void* __cdecl Fn8de840(void** ppOut, AutoRefObj_s008d_f050* first, AutoRefObj_s008d_f050* last, AutoRefObj_s008d_f050* dest,
+                       void* pAlloc);   // 0x008DE840 (5-arg call site; allocator unused)
+}
+}
+struct VecOwner {
+    void*      mpUnk0;   // +0x00
+    EA::ResourceMan::AutoRefVec_s008d_f050 vec;      // +0x04
+    VecOwner*  AssignRange(VecOwner* pSrc);   // 0x008DFED0
+};
+// ---- items of slice s008df050 end
+
+// ---- items of slice s008dff30 begin (TODO(rewrite): local stubs, replace by canonical classes)
+namespace EA {
+namespace Thread {
+class Mutex_s008d_ff30 { public:
+    char mData[0x30];
+    void Lock(const char* pName);   // 0x009221B0
+    int  Unlock();                  // 0x00922270
+};  // namespace Thread
+}
+}
+namespace EA {
+namespace ResourceMan {
+struct AutoRefObj_s008d_ff30 {
+    void* mpObject;     // +0x00
+    int   mField;       // +0x04
+};
+}
+}
+namespace EA {
+namespace ResourceMan {
+struct AutoRefVec_s008d_ff30 {
+    AutoRefObj_s008d_ff30* mpBegin;      // +0x00
+    AutoRefObj_s008d_ff30* mpEnd;        // +0x04
+    AutoRefObj_s008d_ff30* mpCap;        // +0x08
+    void*       mpAllocator;  // +0x0c
+    const char* mpName;       // +0x10
+
+    void* allocateStorage(int n, void* pAllocPair);   // 0x008DEF20
+};
+}
+}
+namespace EA {
+namespace ResourceMan {
+struct DBNode {
+    DBNode* mpNext;      // +0x00
+    void*   mpDatabase;  // +0x04
+};
+}
+}
+namespace EA {
+namespace ResourceMan {
+struct DBList {
+    DBNode* mpHead;             // +0x00
+    char    _pad04[0x0c];
+    Thread::Mutex_s008d_ff30 mMutex;       // +0x10
+    void*   mDeletedBegin;      // +0x40
+    void*   mDeletedEnd;        // +0x44
+    void*   mDeletedCap;        // +0x48
+
+    void Add(void* pDatabase, int a);   // 0x008DE940
+    void Erase(DBNode** ppNode);        // 0x008E07B0
+    void Flush();                       // 0x008E0840
+};
+}
+}
+namespace EA {
+namespace ResourceMan {
+struct Vec8_s008d_ff30 {
+    void** mpBegin;  // +0x00
+    void** mpEnd;    // +0x04
+    void** mpCap;    // +0x08
+    void DoInsertValue(void** pPos, void* const* pSrc);   // 0x008891F0
+};
+}
+}
+namespace EA {
+namespace ResourceMan {
+struct VecOwner_s008d_ff30 {
+    void*      mpUnk0;   // +0x00
+    AutoRefVec_s008d_ff30 vec;      // +0x04
+    VecOwner_s008d_ff30*  AssignRange(VecOwner_s008d_ff30* pSrc);          // 0x008DFED0
+    VecOwner_s008d_ff30*  CopyFrom(void* p1, AutoRefVec_s008d_ff30* pSrc); // 0x008E0250
+};
+}
+}
+extern "C" void* __cdecl Fn8de840_s008d_ff30(void** ppOut, EA::ResourceMan::AutoRefObj_s008d_ff30* first, EA::ResourceMan::AutoRefObj_s008d_ff30* last,
+                                  EA::ResourceMan::AutoRefObj_s008d_ff30* dest, void* pAlloc);        // 0x008DE840
+// ---- items of slice s008dff30 end
+
+// ---- items of slice s008e0eb0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C" void  __cdecl EAOperatorDelete(void* p);                        // 0x00F47380
+extern "C" void  __cdecl Fn5f8700(void* pOut, void* pKey, void* pStr);      // 0x005F8700
+extern const wchar_t gEmptyString16[];   // 0x01667BAC
+typedef unsigned char  uint8;
+namespace EA {
+namespace Thread {
+class Mutex_s008e_0eb0 { public:
+    char mData[0x30];
+    void Lock(const char* pName);   // 0x009221B0
+    int  Unlock();                  // 0x00922270
+};  // namespace Thread
+}
+}
+namespace EA {
+struct Alloc {
+    virtual void* s0();
+    virtual void* s1();
+    virtual void* Allocate(uint32 nSize, int a, const char* pName);   // +0x08
+    virtual void  Free(void* p, uint32 nSize);                        // +0x0c
+};
+}
+namespace EA {
+namespace ResourceMan {
+class Key_s008e_0eb0 { public:
+    uint32 mInstance;   // +0x00
+    uint32 mType;       // +0x04
+    uint32 mGroup;      // +0x08
+};
+}
+}
+namespace EA {
+namespace ResourceMan {
+struct WString {
+    void* mpBegin;  // +0x00
+    void* mpEnd;    // +0x04
+    void* mpCap;    // +0x08
+
+    WString* assign(const void* pBegin, const void* pEnd);   // 0x00423650
+};
+}
+}
+namespace EA {
+namespace ResourceMan {
+struct AutoRefObj_s008e_0eb0 {
+    void* mpObject;     // +0x00
+    int   mField;       // +0x04
+};
+}
+}
+namespace EA {
+namespace ResourceMan {
+struct AutoRefVec_s008e_0eb0 {
+    AutoRefObj_s008e_0eb0* mpBegin;      // +0x00
+    AutoRefObj_s008e_0eb0* mpEnd;        // +0x04
+    AutoRefObj_s008e_0eb0* mpCap;        // +0x08
+    void*       mpAllocator;  // +0x0c
+    const char* mpName;       // +0x10
+
+    void*       allocateStorage(int n, void* pAllocPair);                  // 0x008DEF20
+    AutoRefObj_s008e_0eb0* insertGrow(AutoRefObj_s008e_0eb0* pPos, const AutoRefObj_s008e_0eb0* pSrc);      // 0x008E1070
+    AutoRefObj_s008e_0eb0* insertAt(AutoRefObj_s008e_0eb0* pPos, const AutoRefObj_s008e_0eb0* pSrc);        // 0x008E12C0
+    AutoRefObj_s008e_0eb0* pushBack(AutoRefObj_s008e_0eb0* pPos, const AutoRefObj_s008e_0eb0* pSrc);        // 0x008E1690
+    void        clearRange(AutoRefObj_s008e_0eb0* pFirst, AutoRefObj_s008e_0eb0* pLast);         // 0x008E1200
+};
+}
+}
+namespace EA {
+namespace ResourceMan {
+struct HashTable {
+    uint32 mUnk0;               // +0x00
+    void** mpBucketArray;       // +0x04
+    uint32 mnBucketCount;       // +0x08
+    uint32 mnElementCount;      // +0x0c
+    uint32 mRehash[3];          // +0x10
+    Alloc* mpAllocator;         // +0x1c
+    const char* mpName;         // +0x20
+
+    void** findKey(void** ppOut, const void* pKey);        // 0x008DB3D0
+    void** findU32(void** ppOut, const uint32* pKey);      // 0x00A3B2C0
+    int    eraseKey(const uint32* pKey);                    // 0x008E0630
+    void*  refKey(uint32 nKey);                             // 0x008E0E10
+    void*  insertNode20(void* pOut, void* pKey, void* p3);  // 0x008E0390
+    void   eraseNode20(void* pOut, const void* pKey);       // 0x008E0FE0
+    void   eraseNode1c(void* pOut, const void* pKey);       // 0x008E0F50
+    WString* KeyNameOperatorIndex(Key_s008e_0eb0* pKey);               // 0x008E0EB0 (hash_map::operator[])
+
+    void** endIterator() { return mpBucketArray + mnBucketCount; }
+};
+}
+}
+namespace EA {
+namespace ResourceMan {
+struct InternalDatabaseList_s008e_0eb0 {
+    uint8       _pad00[0x10];
+    Thread::Mutex_s008e_0eb0 mMutex;        // +0x10
+    uint8       _pad40[0x30];
+    void**      mpVecBegin;      // +0x40
+    void**      mpVecEnd;        // +0x44
+    void**      mpVecCap;        // +0x48
+    void*       mpVecAllocator;  // +0x4c
+    uint8       _pad50[4];
+    uint8       mHashBase[0x24]; // +0x54
+
+    void Flush();               // 0x008E0840
+    ~InternalDatabaseList_s008e_0eb0();    // 0x008E1420
+};
+}
+}
+extern "C" void __cdecl Fn926640(void* p);   // 0x00926640 (hashtable dtor thunk)
+extern "C" void __cdecl Fn922130(void* p);   // 0x00922130 (Thread::Mutex::~Mutex)
+static void FreeWStringBuffer(void* pBegin, void* pEnd)
+{
+    uint32 nBytes = (reinterpret_cast<uint32>(pEnd) - reinterpret_cast<uint32>(pBegin)) & 0xfffffffeu;
+    if (nBytes > 2 && pBegin != 0)
+        EAOperatorDelete(pBegin);
+}
+static void FreeAutoRefVectorNode(uint8* pNode)
+{
+    uint8* pBegin = *reinterpret_cast<uint8**>(pNode + 4);
+    if (pBegin != 0)
+        (*(void (__thiscall**)(uint8*, uint32))((reinterpret_cast<uint8*>(*reinterpret_cast<void**>(pNode + 0xc)) + 0xc)))(
+            pBegin, static_cast<uint32>(
+                (*reinterpret_cast<uint8**>(pNode + 0xc) - pBegin) >> 3) * 8);
+    (*(void (__thiscall**)(uint8*, uint32))((reinterpret_cast<uint8*>(*reinterpret_cast<void**>(pNode + 0x1c)) + 0xc)))(pNode, 0x1c);
+}
+// ---- items of slice s008e0eb0 end
 
 // @ 0x008de1e0
 bool EA::ResourceMan::ChangeNotificationInfoCompare_s008d_e020::operator()( const EA::ResourceMan::ChangeNotificationInfo_s008d_e020& a, const EA::ResourceMan::ChangeNotificationInfo_s008d_e020& b) const
@@ -1126,6 +1405,272 @@ AutoRefObj* Fn8defe0(AutoRefObj* first, AutoRefObj* last, AutoRefObj* dest)
         ++dest;
     } while (first != last);
     return dest;
+}
+
+// @ 0x008df050
+EA::ResourceMan::AutoRefFactory* AutoRefMoveBackward(EA::ResourceMan::AutoRefFactory* first, EA::ResourceMan::AutoRefFactory* last, EA::ResourceMan::AutoRefFactory* dest)
+{
+    if (last == first) return dest;
+    do {
+        EA::ResourceMan::Factory_s008d_f050* pSrc = last[-1].mpObject;
+        EA::ResourceMan::Factory_s008d_f050* pOld = dest[-1].mpObject;
+        --last;
+        --dest;
+        if (pSrc != pOld) {
+            if (pSrc) pSrc->AddRef();
+            dest->mpObject = pSrc;
+            if (pOld) pOld->Release();
+        }
+        dest->mField = last->mField;
+    } while (last != first);
+    return dest;
+}
+
+// @ 0x008dfed0
+VecOwner* VecOwner::AssignRange(VecOwner* pSrc)
+{
+    mpUnk0 = pSrc->mpUnk0;
+    vec.allocateStorage(((char*)pSrc->vec.mpEnd - (char*)pSrc->vec.mpBegin) >> 3,
+                        (char*)pSrc + 0x10);
+    EA::ResourceMan::Fn8de840((void**)&pSrc, pSrc->vec.mpBegin, pSrc->vec.mpEnd, vec.mpBegin, pSrc);
+    vec.mpEnd = (EA::ResourceMan::AutoRefObj_s008d_f050*)pSrc;
+    return this;
+}
+
+// @ 0x008e0250
+EA::ResourceMan::VecOwner_s008d_ff30* EA::ResourceMan::VecOwner_s008d_ff30::CopyFrom(void* p1, EA::ResourceMan::AutoRefVec_s008d_ff30* pSrc)
+{
+    mpUnk0 = *(void**)p1;
+    vec.allocateStorage((int)(pSrc->mpEnd - pSrc->mpBegin), (char*)pSrc + 0xc);
+    Fn8de840_s008d_ff30((void**)&p1, pSrc->mpBegin, pSrc->mpEnd, vec.mpBegin, p1);
+    vec.mpEnd = (EA::ResourceMan::AutoRefObj_s008d_ff30*)p1;
+    return this;
+}
+
+// @ 0x008e07b0
+void EA::ResourceMan::DBList::Erase(EA::ResourceMan::DBNode** ppNode)
+{
+    Thread::Mutex_s008d_ff30* pMutex = &mMutex;
+    pMutex->Lock((const char*)0x1436AB8);
+    EA::ResourceMan::DBNode* pNode = mpHead;
+    EA::ResourceMan::DBNode** ppPrev = &mpHead;
+    if (pNode) {
+        while (pNode != *ppNode) {
+            ppPrev = &pNode->mpNext;
+            pNode = pNode->mpNext;
+            if (!pNode) { pMutex->Unlock(); return; }
+        }
+        *ppPrev = pNode->mpNext;
+        void** pEnd = (void**)mDeletedEnd;
+        if (pEnd < (void**)mDeletedCap) {
+            mDeletedEnd = pEnd + 1;
+            if (pEnd) *pEnd = pNode;
+        } else {
+            void* pItem = pNode;
+            ((EA::ResourceMan::Vec8_s008d_ff30*)&mDeletedBegin)->DoInsertValue(pEnd, &pItem);
+        }
+        void* pDB = pNode->mpDatabase;
+        void** pVt = *(void***)((char*)pDB + 4);
+        ((void (__thiscall*)(void*))pVt[1])((char*)pDB + 4);
+    }
+    pMutex->Unlock();
+}
+
+// @ 0x008e0840
+void EA::ResourceMan::DBList::Flush()
+{
+    Thread::Mutex_s008d_ff30* pMutex = &mMutex;
+    pMutex->Lock((const char*)0x1436AB8);
+    EA::ResourceMan::DBNode* pNode = mpHead;
+    EA::ResourceMan::DBNode** ppPrev = &mpHead;
+    if (pNode) {
+        do {
+            EA::ResourceMan::DBNode* pNext = pNode->mpNext;
+            *ppPrev = 0;
+            void** pEnd = (void**)mDeletedEnd;
+            if (pEnd < (void**)mDeletedCap) {
+                mDeletedEnd = pEnd + 1;
+                if (pEnd) *pEnd = pNode;
+            } else {
+                void* pItem = pNode;
+                ((EA::ResourceMan::Vec8_s008d_ff30*)&mDeletedBegin)->DoInsertValue(pEnd, &pItem);
+            }
+            void* pDB = pNode->mpDatabase;
+            void** pVt = *(void***)((char*)pDB + 4);
+            ((void (__thiscall*)(void*))pVt[1])((char*)pDB + 4);
+            ppPrev = &pNode->mpNext;
+            pNode = pNext;
+        } while (pNode);
+    }
+    pMutex->Unlock();
+}
+
+// @ 0x008e0eb0
+EA::ResourceMan::WString* EA::ResourceMan::HashTable::KeyNameOperatorIndex(EA::ResourceMan::Key_s008e_0eb0* pKey)
+{
+    void* pFound = 0;
+    findKey(&pFound, pKey);
+
+    if (pFound != *endIterator())
+        return reinterpret_cast<EA::ResourceMan::WString*>(reinterpret_cast<uint8*>(pFound) + 0xc);
+
+    // Not present: build the node's pair from an empty string and insert it.
+    uint8 pair[0x14];
+    EA::ResourceMan::WString empty;
+    empty.mpBegin = const_cast<wchar_t*>(gEmptyString16);
+    empty.mpEnd   = const_cast<wchar_t*>(gEmptyString16);
+    empty.mpCap   = const_cast<wchar_t*>(gEmptyString16 + 1);
+    Fn5f8700(pair, pKey, &empty);
+
+    uint8 out[0xc];
+    insertNode20(out, pair, 0);
+
+    void* pBegin = *reinterpret_cast<void**>(&pair[0x00]);
+    void* pEnd   = *reinterpret_cast<void**>(&pair[0x08]);
+    FreeWStringBuffer(pBegin, pEnd);
+
+    return reinterpret_cast<EA::ResourceMan::WString*>(reinterpret_cast<uint8*>(*reinterpret_cast<void**>(out)) + 0xc);
+}
+
+// @ 0x008e0f50
+void EA::ResourceMan::HashTable::eraseNode1c(void* pOut, const void* pKey)
+{
+    uint8* pNode = *reinterpret_cast<uint8**>(const_cast<void*>(pKey));
+    uint8* pNext = *reinterpret_cast<uint8**>(pNode + 0x14);
+
+    *reinterpret_cast<void**>(pOut) = pNext;
+    *reinterpret_cast<uint8**>(reinterpret_cast<uint8*>(pOut) + 4) =
+        *reinterpret_cast<uint8**>(const_cast<void*>(pKey));
+
+    if (pNext == 0)
+    {
+        uint8** pSlot = reinterpret_cast<uint8**>(reinterpret_cast<uint8*>(pOut) + 4);
+        do
+        {
+            *pSlot = *pSlot + 4;
+            pNext = **reinterpret_cast<uint8***>(pSlot);
+        }
+        while (pNext == 0);
+        *reinterpret_cast<void**>(pOut) = pNext;
+    }
+
+    // Unlink pNode from its bucket chain (single-link, +0x14 next).
+    uint8* pBucket = *reinterpret_cast<uint8**>(*reinterpret_cast<uint8**>(const_cast<void*>(pKey)));
+    if (pBucket == pNode)
+    {
+        *reinterpret_cast<uint8**>(*reinterpret_cast<uint8**>(const_cast<void*>(pKey))) =
+            *reinterpret_cast<uint8**>(pNode + 0x14);
+    }
+    else
+    {
+        uint8* pPrev = pBucket;
+        uint8* pCur = *reinterpret_cast<uint8**>(pPrev + 0x14);
+        while (pCur != pNode)
+        {
+            pPrev = pCur;
+            pCur = *reinterpret_cast<uint8**>(pPrev + 0x14);
+        }
+        *reinterpret_cast<uint8**>(pPrev + 0x14) = *reinterpret_cast<uint8**>(pCur + 0x14);
+    }
+
+    // Free the node's string, then the node.
+    void* pStrBegin = *reinterpret_cast<void**>(pNode + 4);
+    void* pStrEnd   = *reinterpret_cast<void**>(pNode + 0xc);
+    FreeWStringBuffer(pStrBegin, pStrEnd);
+    --mnElementCount;
+    mpAllocator->Free(pNode, 0x1c);
+}
+
+// @ 0x008e0fe0
+void EA::ResourceMan::HashTable::eraseNode20(void* pOut, const void* pKey)
+{
+    uint8* pNode = *reinterpret_cast<uint8**>(const_cast<void*>(pKey));
+    uint8* pNext = *reinterpret_cast<uint8**>(pNode + 0x18);
+
+    *reinterpret_cast<void**>(pOut) = pNext;
+    *reinterpret_cast<uint8**>(reinterpret_cast<uint8*>(pOut) + 4) =
+        *reinterpret_cast<uint8**>(const_cast<void*>(pKey));
+
+    if (pNext == 0)
+    {
+        uint8** pSlot = reinterpret_cast<uint8**>(reinterpret_cast<uint8*>(pOut) + 4);
+        do
+        {
+            *pSlot = *pSlot + 4;
+            pNext = **reinterpret_cast<uint8***>(pSlot);
+        }
+        while (pNext == 0);
+        *reinterpret_cast<void**>(pOut) = pNext;
+    }
+
+    uint8* pBucket = *reinterpret_cast<uint8**>(*reinterpret_cast<uint8**>(const_cast<void*>(pKey)));
+    if (pBucket == pNode)
+    {
+        *reinterpret_cast<uint8**>(*reinterpret_cast<uint8**>(const_cast<void*>(pKey))) =
+            *reinterpret_cast<uint8**>(pNode + 0x18);
+    }
+    else
+    {
+        uint8* pPrev = pBucket;
+        uint8* pCur = *reinterpret_cast<uint8**>(pPrev + 0x18);
+        while (pCur != pNode)
+        {
+            pPrev = pCur;
+            pCur = *reinterpret_cast<uint8**>(pPrev + 0x18);
+        }
+        *reinterpret_cast<uint8**>(pPrev + 0x18) = *reinterpret_cast<uint8**>(pCur + 0x18);
+    }
+
+    void* pStrBegin = *reinterpret_cast<void**>(pNode + 8);
+    void* pStrEnd   = *reinterpret_cast<void**>(pNode + 0x10);
+    FreeWStringBuffer(pStrBegin, pStrEnd);
+    --mnElementCount;
+    mpAllocator->Free(pNode, 0x20);
+}
+
+// @ 0x008e1200
+void EA::ResourceMan::AutoRefVec_s008e_0eb0::clearRange(EA::ResourceMan::AutoRefObj_s008e_0eb0* pFirst, EA::ResourceMan::AutoRefObj_s008e_0eb0* pLast)
+{
+    uint32 n = static_cast<uint32>(pLast - pFirst);
+    for (uint32 i = 0; i < n; ++i)
+    {
+        void* pEntry = pFirst[i].mpObject;
+        if (pEntry == 0)
+            continue;
+        // Each entry heads an intrusive list of vector-holding nodes.
+        uint8* pNode = reinterpret_cast<uint8*>(pEntry);
+        while (pNode != 0)
+        {
+            uint8* pBegin = *reinterpret_cast<uint8**>(pNode + 4);
+            uint8* pEnd   = *reinterpret_cast<uint8**>(pNode + 8);
+            uint8* pNext  = *reinterpret_cast<uint8**>(pNode + 0x18);
+            for (uint8* p = pBegin; p < pEnd; p += 8)
+            {
+                void* pObj = *reinterpret_cast<void**>(p);
+                if (pObj != 0)
+                    (*(void (__thiscall**)(void*))((reinterpret_cast<uint8*>(*reinterpret_cast<void**>(pObj)) + 8)))(pObj);
+            }
+            FreeAutoRefVectorNode(pNode);
+            pNode = pNext;
+        }
+    }
+}
+
+// @ 0x008e1420
+EA::ResourceMan::InternalDatabaseList_s008e_0eb0::~InternalDatabaseList_s008e_0eb0()
+{
+    Flush();
+
+    while (mpVecBegin != mpVecEnd)
+        mpVecEnd = reinterpret_cast<void**>(reinterpret_cast<uint8*>(mpVecEnd) - 4);
+
+    Fn926640(mHashBase);
+
+    if (mpVecBegin != 0)
+        (*(void (__thiscall**)(void*, uint32))((reinterpret_cast<uint8*>(*reinterpret_cast<void**>(mpVecAllocator)) + 0xc)))(
+            mpVecBegin, static_cast<uint32>(reinterpret_cast<uint8*>(mpVecCap) - reinterpret_cast<uint8*>(mpVecBegin)));
+
+    Fn922130(&mMutex);
 }
 
 // @ 0x008e1d50

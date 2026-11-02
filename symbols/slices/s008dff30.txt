@@ -2,7 +2,7 @@
 008e00b0 ?GetDatabaseList@Manager@ResourceMan@EA@@QAEHPAUAllocList@23@H@Z  # Manager::GetDatabaseList
 008e0140 ?Fn8e0140@Manager@ResourceMan@EA@@QAEHPAUCNode@23@@Z  # Manager::Fn8e0140
 008e01c0 ?GetNameFromKey@Manager@ResourceMan@EA@@QAEXPAUKey@23@PAX@Z  # Manager::GetNameFromKey
-008e0250 ?CopyFrom@VecOwner@ResourceMan@EA@@QAEPAU123@PAXPAUAutoRefVec@23@@Z  # VecOwner::CopyFrom
+008e0250 ?CopyFrom@VecOwner_s008d_ff30@ResourceMan@EA@@QAEPAU123@PAXPAUAutoRefVec_s008d_ff30@23@@Z  # VecOwner_s008d_ff30::CopyFrom migrated from s008dff30 (verbatim, slice spelling)
 008e02b0 ?insertNode18@HashTable@ResourceMan@EA@@QAEPAXPAX00@Z  # HashTable::insertNode18
 008e0390 ?insertNode20@HashTable@ResourceMan@EA@@QAEPAXPAX00@Z  # HashTable::insertNode20
 008e04a0 ?RegisterChangeNotification@Manager@ResourceMan@EA@@QAEDPAXUKey@23@H@Z  # Manager::RegisterChangeNotification
@@ -10,8 +10,8 @@
 008e0630 ?eraseKey@HashTable@ResourceMan@EA@@QAEHPAI@Z  # HashTable::eraseKey
 008e06d0 ?DoFreeNodes18@HashTable@ResourceMan@EA@@QAEXPAPAXI@Z  # HashTable::DoFreeNodes18
 008e0740 ?DoFreeNodes20@HashTable@ResourceMan@EA@@QAEXPAPAXI@Z  # HashTable::DoFreeNodes20
-008e07b0 ?Erase@DBList@ResourceMan@EA@@QAEXPAPAUDBNode@23@@Z  # DBList::Erase
-008e0840 ?Flush@DBList@ResourceMan@EA@@QAEXXZ  # DBList::Flush
+008e07b0 ?Erase@DBList@ResourceMan@EA@@QAEXPAPAUDBNode@23@@Z  # DBList::Erase migrated from s008dff30 (verbatim, slice spelling)
+008e0840 ?Flush@DBList@ResourceMan@EA@@QAEXXZ  # DBList::Flush migrated from s008dff30 (verbatim, slice spelling)
 008e08c0 ?Fn8e08c0@Manager@ResourceMan@EA@@QAEHPAUU32Vec@23@I@Z  # Manager::Fn8e08c0
 008e0950 ?Fn8e0950@Manager@ResourceMan@EA@@QAEHPAUKeyVec@23@I@Z  # Manager::Fn8e0950
 008e0a30 ?Fn8e0a30@Manager@ResourceMan@EA@@QAEHPAUKeyVec@23@PAXPAUPtrVec@23@@Z  # Manager::Fn8e0a30
