@@ -1,0 +1,4 @@
+# source  symbol  va  flags
+../src/game/UTFSpore_Win32/CascadeEffect.cpp  ?m@S_967300@@QAEXM@Z  00967300  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/UTFSpore_Win32/CascadeEffect.cpp  ?m@S_967320@@QAEXM@Z  00967320  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/UTFSpore_Win32/CascadeEffect.cpp  ?Destroy@CascadeEffect@UTFWinControls@EA@@QAEPAU123@E@Z  00980490  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
