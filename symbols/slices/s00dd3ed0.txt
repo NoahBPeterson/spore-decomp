@@ -1,1 +1,5 @@
-00dd4260 SP::cSPUICommScreen::Init  # PDB name; thiscall ret 4 (layout key), byte-exact
+00dd3ed0 ?SetResponseCount@cSPUICommScreen_s00dd_3ed0@@QAEXH@Z  # cSPUICommScreen_s00dd_3ed0::SetResponseCount migrated from s00dd3ed0 (verbatim, slice spelling)
+00dd4150 ?ConstructCommScreen@@YIPAVcSPUICommScreen_s00dd_3ed0@@PAV1@@Z  # ConstructCommScreen migrated from s00dd3ed0 (verbatim, slice spelling)
+00dd4260 ?Init@cSPUICommScreen_s00dd_3ed0@@QAEXPBX@Z  # cSPUICommScreen_s00dd_3ed0::Init migrated from s00dd3ed0 (verbatim, slice spelling)
+00dd4880 ?HandleMessage@CommScreenProcView@@QAE_NIPAX@Z  # CommScreenProcView::HandleMessage migrated from s00dd3ed0 (verbatim, slice spelling)
+00dd4950 ?GetResponseText@cSPUICommScreen_s00dd_3ed0@@QAE_NPAXPAI@Z  # cSPUICommScreen_s00dd_3ed0::GetResponseText migrated from s00dd3ed0 (verbatim, slice spelling)

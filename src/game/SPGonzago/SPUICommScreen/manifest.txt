@@ -11,3 +11,6 @@
 ../src/game/SPGonzago/SPUICommScreen.cpp  ?Hide@cSPUICommScreen_s00dd_30d0@@QAEXXZ  00dd30d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPUICommScreen.cpp  ??1cSPUICommScreen_s00dd_30d0@@UAE@XZ  00dd3b60  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPUICommScreen.cpp  ?Shutdown@cSPUICommScreen_s00dd_30d0@@QAEXXZ  00dd3d30  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPUICommScreen.cpp  ?ConstructCommScreen@@YIPAVcSPUICommScreen_s00dd_3ed0@@PAV1@@Z  00dd4150  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPUICommScreen.cpp  ?Init@cSPUICommScreen_s00dd_3ed0@@QAEXPBX@Z  00dd4260  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPUICommScreen.cpp  ?HandleMessage@CommScreenProcView@@QAE_NIPAX@Z  00dd4880  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
