@@ -1,0 +1,2 @@
+# va  diff-bytes  reason   (flags: /vc71 /O2 /MD /Gy /TP /arch:SSE)
+01149f70 26 complete EALayer3Core::EALayer3Core (install vtable 0x14ce590, InitCoeffs, inherited CMpegBase::AllocateSynth). Not byte-exact (/GL, base-ctor sequence). difftest UNSUPPORTED: the AllocateSynth callee is declared as an unresolved free symbol. flags /vc71 /O2 /MD /Gy /TP /arch:SSE

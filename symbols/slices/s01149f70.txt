@@ -1,4 +1,4 @@
-01149f70 rw::audio::core::EALayer3Core::EALayer3Core  # PDB callee-single name (ctor)
+01149f70 ??0EALayer3Core@core@audio@rw@@QAE@H@Z  # EALayer3Core::EALayer3Core migrated from s01149f70 (verbatim, slice spelling)
 01149fd0 rw::audio::core::EALayer3Core::SetMode  # coefficient-set mode switch on +0x21
 0114a160 rw::audio::core::EALayer3Core::AnalyzeStatistics  # packed SSE per-channel statistics
 0114a470 rw::audio::core::EALayer3Core::OnInterface  # AnalyzeStatistics + SetMode + mark +0x14c
