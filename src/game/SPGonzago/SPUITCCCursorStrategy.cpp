@@ -1,4 +1,4 @@
-// src/game/SPGonzago/SPUITCCCursorStrategy.cpp -- migrated from slice(s) s00e35370 by tools/migrate/rewrite.py
+// src/game/SPGonzago/SPUITCCCursorStrategy.cpp -- migrated from slice(s) s00e352c0, s00e34290, s00ccdd70, s00e35370 by tools/migrate/rewrite.py
 // Object file: SPGonzago/SPUITCCCursorStrategy.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -11,6 +11,9 @@
 #include "cSPUIPropertyLayout.h"
 #include "SP/cTurret.h"
 #include "SP/cVehicle.h"
+#include "SP/cPlanet.h"
+#include "SP/cSPSwatch.h"
+#include "cSPUILayout.h"
 
 // ---- items of slice s00e35370 begin (TODO(rewrite): local stubs, replace by canonical classes)
 #define PAD_VIRT(n) virtual void _v##n()
@@ -454,6 +457,248 @@ static __declspec(noinline) void ShowObjectRollover(cGameObject* obj)
 // unnamed retail callees and globals that name local stubs (address in the comment)
 extern Vector3 gInvalidScreenPos;                                 // 0x016AC67C
 extern Vector3 gEffectDirection;                                  // 0x016ACC38
+
+// ---- items of slice s00ccdd70 begin (TODO(rewrite): local stubs, replace by canonical classes)
+typedef unsigned int u32;
+struct CursorTable                                                   // SP::CursorTable
+{
+    u32 AddCursor(u32 id, const wchar_t* name, int a, int b, int c);  // 0x00802050 (ret 0x14)
+};
+CursorTable* __cdecl GetCursorTable();                               // 0x0067cab0
+struct TcRefObj                                                      // refcounted helper (+0x5c, +0xc0)
+{
+    virtual void AddRef();                                           // +0x00
+    virtual void Release();                                          // +0x04
+    virtual void Slot8();                                            // +0x08
+    virtual void Release3();                                         // +0x0c
+    void Reset();                                                    // 0x00d12fc0
+};
+struct Stopwatch                                                     // EA::Stopwatch at +0xa8
+{
+    u32 mStart;                                                      // +0x00
+    u32 mStop;                                                       // +0x04
+    u32 mDelta;                                                      // +0x08
+    u32 mPad;                                                        // +0x0c
+    void Restart();                                                  // 0x00571e80
+};
+struct TcTerrain                                                     // the planet view at +0x40
+{
+    bool TerrainHasKey(u32 key);                                     // 0x00cd4460 (ret 4)
+};
+class cSPUITCCCursorStrategy_s00cc_dd70
+{
+public:
+    void RegisterCursors();                                          // 0x00cce610 (PDB candidate: ctor)
+    void FUN_00cce5b0();                                             // 0x00cce5b0
+    void FUN_00cce5e0();                                             // 0x00cce5e0
+    void FUN_00cce940();                                             // 0x00cce940
+    void FUN_00ccea10(void* obj, bool flag);                         // 0x00ccea10 (ret 8)
+    u32  FUN_00cceae0(void* obj, u32 mode, void* arg3);              // 0x00cceae0 (ret 0xc)
+    u32  FUN_00ccebd0(void* obj, int flag, void* arg3);              // 0x00ccebd0 (ret 0xc)
+    void FUN_00ccec20(u32 flag);                                     // 0x00ccec20 (ret 4)
+    u32  FUN_00cceca0(void* a, void* b);                             // 0x00cceca0 (ret 8)
+
+    char       pad00[0x40];
+    TcTerrain* mpTerrain;                                            // +0x40
+    void*      mpHandler;                                            // +0x44
+    u32        mH48;                                                 // +0x48
+    u32        mH4c;                                                 // +0x4c
+    u32        mH50;                                                 // +0x50
+    u32        mH54;                                                 // +0x54
+    u32        mPad58;                                               // +0x58
+    TcRefObj*  mpRef5c;                                              // +0x5c
+    char       pad60[0xa0 - 0x60];
+    u32        mMode;                                                // +0xa0
+    char       padA4[0xa8 - 0xa4];
+    Stopwatch  mStop;                                                // +0xa8
+    char       padB8[0xc0 - 0xb8];
+    TcRefObj*  mpRefC0;                                              // +0xc0
+};
+// ---- items of slice s00ccdd70 end
+
+// ---- items of slice s00e34290 begin (TODO(rewrite): local stubs, replace by canonical classes)
+struct IRefCounted {
+    virtual void     v00();                                 // +0x00
+    virtual uint32_t Release();                             // +0x04
+    virtual uint32_t v08();                                 // +0x08
+    virtual void     v0c();
+    virtual void     v10();
+    virtual void     v14();
+    virtual void     v18();                                  // +0x18
+    virtual void     v1c();
+    virtual void     v20();                                  // +0x20
+    virtual void     v24();                                  // +0x24
+};
+struct MessageServerT {
+    virtual void     v00();                                 // +0x00
+    virtual void     v04();
+    virtual void     v08();
+    virtual void     v0c();
+    virtual void     v10();
+    virtual void     v14();
+    virtual void     v18();
+    virtual void     v1c();
+    virtual void     v20();
+    virtual void     v24();
+    virtual void     v28();
+    virtual void     v2c(void* pHandler, uint32_t msgId, uint32_t unused);  // +0x2c
+};
+MessageServerT* MessageServer();                            // 0x0067dcc0
+struct cSPUIMeter {
+    virtual void v00();                                     // +0x00
+    virtual void v04();
+    void Shutdown(bool a);                                  // 0x00e06940
+};
+struct cSwatchStripBase {
+    virtual ~cSwatchStripBase();                            // +0x00
+    uint32_t mFlags;                                        // +0x04
+};
+struct PaintSystem {
+    virtual ~PaintSystem() {}                               // +0x00 (this+0x08)
+};
+struct cSwatchStripService : cSwatchStripBase, PaintSystem {
+    uint32_t     mPad0c;                                    // +0x0c
+    IRefCounted* mpWindow;                                  // +0x10
+    IRefCounted* mp10Ref;                                   // +0x14
+    IRefCounted* mpSwatch;                                  // +0x18
+    cSPUIMeter*  mpMeter;                                   // +0x1c
+
+    ~cSwatchStripService();                                 // 0x00e351b0
+};
+// ---- items of slice s00e34290 end
+
+// ---- items of slice s00e352c0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C" void* __fastcall FUN_00b25c30(void* self);         // 0x00b25c30 cast helper
+extern "C" void* __cdecl    FUN_00b3d300();                   // 0x00b3d300 object getter
+extern "C" char  __fastcall FUN_00cf0e10(void* self);         // 0x00cf0e10 paused query
+extern "C" void* __cdecl    FUN_00cf74c0();                   // 0x00cf74c0 selector getter
+extern "C" void* __fastcall FUN_00cf74f0(void* self);         // 0x00cf74f0 +0xe8 handle
+static inline void* vfn(void* obj, unsigned off) { return ((void**)*(void***)obj)[off / 4]; }
+struct PauseState {
+    char    pad00[0x44];
+    char    mbWakeNeeded;  // +0x44  non-zero: the state has work pending
+    char    pad45[0x48 - 0x45];
+    int32_t mHandle48;     // +0x48  pending flush handle (0x00828100 reads it)
+};
+struct CastTarget {
+    void FUN_00bdc4a0(int enable);   // 0x00bdc4a0 resume the cast object
+};
+struct PauseOwner {
+    char        pad00[0x10];
+    PauseState* mpState;        // +0x10  state woken by 0x00e352c0
+    char        pad14[0x18 - 0x14];
+    PauseState* mpState18;      // +0x18  state forwarded by 0x00e35350
+    char        pad1c[0x20 - 0x1c];
+    char        mbUnpaused;     // +0x20  set to 0 once the object has resumed
+};
+extern "C" void* __fastcall FUN_00828100(PauseState* self);   // 0x00828100 flush pending handle
+extern "C" void  __fastcall FUN_00e2a6c0(PauseState* self);   // 0x00e2a6c0 sibling wake
+extern "C" void  __fastcall FUN_00e352c0(PauseOwner* self);   // this function
+// ---- items of slice s00e352c0 end
+
+// @ 0x00cce610
+void cSPUITCCCursorStrategy_s00cc_dd70::RegisterCursors()
+{
+    CursorTable* t = GetCursorTable();
+    t->AddCursor(0x3febe37, L"cursor-trg-tool-pickup-fish", 1, 0, 0);
+    t->AddCursor(0x3febe38, L"cursor-trg-tool-pickup-gather", 1, 0, 0);
+    t->AddCursor(0x63fe8d4, L"cursor_pickup-maracas", 1, 0, 0);
+    t->AddCursor(0x63fe8d5, L"cursor_pickup-horn", 1, 0, 0);
+    t->AddCursor(0x63fe8d6, L"cursor_pickup-didgeridoo", 1, 0, 0);
+    t->AddCursor(0x63fe8d7, L"cursor_pickup-axe", 1, 0, 0);
+    t->AddCursor(0x63fe8d8, L"cursor_pickup-spears", 1, 0, 0);
+    t->AddCursor(0x63fe8d9, L"cursor_pickup-torch", 1, 0, 0);
+    t->AddCursor(0x3febe3b, L"cursor_pickup-heal", 1, 0, 0);
+    t->AddCursor(0x3febe3d, L"cursor-dance", 1, 0, 0);
+    t->AddCursor(0x3febe33, L"cursor-heal", 1, 0, 0);
+    t->AddCursor(0x3febe50, L"cursor-eat-carcass", 1, 0, 0);
+    t->AddCursor(0x3febe51, L"cursor-eat-fruit", 1, 0, 0);
+    t->AddCursor(0x3febe52, L"cursor-eat-omni", 1, 0, 0);
+    t->AddCursor(0x3febe3f, L"cursor-fish", 1, 0, 0);
+    t->AddCursor(0x3febe40, L"cursor-gather", 1, 0, 0);
+    t->AddCursor(0x3febe42, L"cursor-steal", 1, 0, 0);
+    t->AddCursor(0x3febe43, L"cursor_atk", 1, 0, 0);
+    t->AddCursor(0x525ff0f, L"cursor_repair", 1, 0, 0);
+    t->AddCursor(0x5498863, L"cursor-mate", 1, 0, 0);
+    t->AddCursor(0x8b875bdc, L"cursor-crg-give-grn", 1, 0, 0);
+    t->AddCursor(0xf59ce677, L"cursor-crg-give-grn-no", 1, 0, 0);
+    t->AddCursor(0x57801b0, L"cur-planner", 1, 0, 0);
+    t->AddCursor(0x3570021, L"cursor_atk", 1, 0, 0);
+    t->AddCursor(0x3a204b0, L"cursor-no-opt", 1, 0, 0);
+    t->AddCursor(0x3febe36, L"cursor-trg-tool-pickup-gather", 1, 0, 0);
+    t->AddCursor(0x3febe41, L"cursor-more", 1, 0, 0);
+    t->AddCursor(0x525ff7d, L"cursor_social", 1, 0, 0);
+    t->AddCursor(0xe382f00e, L"cursor-trg-domesticate", 1, 0, 0);
+    t->AddCursor(0x600cd69, L"cursor-camera-translate", 1, 0, 0);
+}
+
+// @ 0x00e34e00
+void HandleAssetSwatchObject(void* pObject)
+{
+    if (!pObject)
+        return;
+}
+
+// @ 0x00e351b0
+cSwatchStripService::~cSwatchStripService()
+{
+    MessageServerT* pServer = MessageServer();
+    if (pServer) {
+        pServer->v2c((PaintSystem*)this, 0x03e9a620, 0xffffd8f1);
+        pServer->v2c((PaintSystem*)this, 0x03e9a625, 0xffffd8f1);
+    }
+    mpSwatch->v24();
+    if (mpSwatch) {
+        IRefCounted* pSwatch = mpSwatch;
+        mpSwatch = 0;
+        pSwatch->Release();
+    }
+    if (mpMeter)
+        mpMeter->Shutdown(true);
+    if (mpMeter) {
+        cSPUIMeter* pMeter = mpMeter;
+        mpMeter = 0;
+        pMeter->v04();
+    }
+    if (mpMeter)
+        mpMeter->v04();
+    if (mpSwatch)
+        mpSwatch->Release();
+    if (mp10Ref)
+        mp10Ref->Release();
+    if (mpWindow)
+        mpWindow->Release();
+}
+
+// @ 0x00e352c0
+void __fastcall FUN_00e352c0(PauseOwner* self)
+{
+    if (self->mpState->mbWakeNeeded != 0) {
+        void* flushed = FUN_00828100(self->mpState);
+        ((void (__thiscall*)(void*, int, int))vfn(flushed, 0x7c))(flushed, 1, 0);
+        ((void (__thiscall*)(PauseState*))vfn(self->mpState, 0x24))(self->mpState);
+
+        if (self->mbUnpaused != 0) {
+            void* selector = FUN_00cf74c0();
+            void* handle = FUN_00cf74f0(selector);
+            if (FUN_00cf0e10(handle) == 0) {
+                self->mbUnpaused = 0;
+
+                void* object = FUN_00b3d300();
+                void* cast = FUN_00b25c30(object);
+                if (cast != 0)
+                    ((CastTarget*)cast)->FUN_00bdc4a0(1);
+            }
+        }
+    }
+}
+
+// @ 0x00e35350
+void __fastcall FUN_00e35350(PauseOwner* self)
+{
+    FUN_00e352c0(self);
+    FUN_00e2a6c0(self->mpState18);
+}
 
 // @ 0x00e35370
 bool cSPUITCCCursorStrategy::UpdateCursorStrategy(uint32_t flags)

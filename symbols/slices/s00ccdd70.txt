@@ -3,7 +3,7 @@
 00cce590 ?FUN_00cce590@@YA_NXZ  # FUN_00cce590 migrated from s00ccdd70 (verbatim, slice spelling)
 00cce5b0 ?FUN_00cce5b0@cSPUITCCCursorStrategy@@QAEXXZ  # cSPUITCCCursorStrategy::FUN_00cce5b0 migrated from s00ccdd70 (verbatim, slice spelling)
 00cce5e0 ?FUN_00cce5e0@cSPUITCCCursorStrategy@@QAEXXZ  # cSPUITCCCursorStrategy::FUN_00cce5e0 migrated from s00ccdd70 (verbatim, slice spelling)
-00cce610 ?RegisterCursors@cSPUITCCCursorStrategy@@QAEXXZ  # MATCH - retail symbol is ??0cSPUITCCCursorStrategy@@QAE@XZ (PDB candidate); 30 AddCursor registrations
+00cce610 ?RegisterCursors@cSPUITCCCursorStrategy_s00cc_dd70@@QAEXXZ  # cSPUITCCCursorStrategy_s00cc_dd70::RegisterCursors migrated from s00ccdd70 (verbatim, slice spelling)
 00cce940 ?FUN_00cce940@cSPUITCCCursorStrategy@@QAEXXZ  # cSPUITCCCursorStrategy::FUN_00cce940 migrated from s00ccdd70 (verbatim, slice spelling)
 00cce9b0 ?FUN_00cce9b0@@YGIPAPAXPAX11@Z  # FUN_00cce9b0 migrated from s00ccdd70 (verbatim, slice spelling)
 00ccea10 ?FUN_00ccea10@cSPUITCCCursorStrategy@@QAEXPAX_N@Z  # cSPUITCCCursorStrategy::FUN_00ccea10 migrated from s00ccdd70 (verbatim, slice spelling)

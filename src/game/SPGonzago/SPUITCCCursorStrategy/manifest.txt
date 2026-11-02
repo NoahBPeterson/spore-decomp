@@ -1,1 +1,5 @@
 # source  symbol  va  flags
+../src/game/SPGonzago/SPUITCCCursorStrategy.cpp  ?RegisterCursors@cSPUITCCCursorStrategy_s00cc_dd70@@QAEXXZ  00cce610  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPGonzago/SPUITCCCursorStrategy.cpp  ??1cSwatchStripService@@UAE@XZ  00e351b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPUITCCCursorStrategy.cpp  @FUN_00e352c0@4  00e352c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPUITCCCursorStrategy.cpp  ?FUN_00e35350@@YIXPAUPauseOwner@@@Z  00e35350  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
