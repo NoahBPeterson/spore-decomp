@@ -1,4 +1,4 @@
-# va  diff-bytes  reason
+# va  diff-bytes  reason   (compile with /O2 /MD /Gy /TP /arch:SSE /fp:fast)
 00a86590 572 Update: large per-frame update reconstructed functionally but approximate; retail uses LTCG inlining/scheduling; equivalence-only, equiv FAIL flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00a86b30 879 simulation curve update; SampleCurve/SampleVec3 and transform/notify path recreated with helper calls, size 993 vs 1351 (inlined curve samplers); equiv FAIL (5/6 valid inputs mismatched) flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
 00a88220 6 cDistributeEffect::FUN_00a88220: complete; returns the 8-byte (edx:eax) pair of mOverrideID fields (or the world's +0x138 pair); only residual is the load order of [ecx+0xf0] vs [ecx+0xf4] and the and-operand order that cl's register allocator picks; flags /O2 /MD /Gy /EHsc /TP /GS- /fp:fast /arch:SSE; difftest PASS (400 valid, 75% cov)
