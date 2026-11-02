@@ -1,4 +1,4 @@
-005a1920 SP::cSPEditorBlockAbilities::LayoutAbilitiesCompact  # icon-only ability row layout; falls back to LayoutAbilities (0x5a0510) when count <= mMaxFullRows
+005a1920 ?LayoutAbilitiesCompact@cSPEditorBlockAbilities_s005a_1920@SP@@QAEXPAUIWindow_s005a_1920@@_NPAH@Z  # LayoutAbilitiesCompact migrated from s005a1920 (verbatim, slice spelling)
 005a2010 ?SetSomething@Cam@@QAEXUVec3@@_N@Z  # Cam::SetSomething migrated from s005a1920 (verbatim, slice spelling)
 005a2080 ?OnKeyDown@Cam@@QAE_NHH@Z  # Cam::OnKeyDown migrated from s005a1920 (verbatim, slice spelling)
 005a2120 ?OnKeyUp@Cam@@QAE_NHH@Z  # Cam::OnKeyUp migrated from s005a1920 (verbatim, slice spelling)

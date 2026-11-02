@@ -1,9 +1,10 @@
 # va  diff-bytes  reason
-0059f030 36 cSPEditorVehicleAbilities ctor: register permutation only (orig zero in eax, map ptr in edx)
-0059f510 324 UILayoutVector::insert: complete; grow + no-grow paths present; register allocation and 4-byte frame size differ (474 vs 489); equiv WEAK (13.8% cov)
-0059f7c0 259 cSPEditorBlockAbilities::SortAbilities: complete; byte-offset bubble sort; register allocation differs (base ptr folded vs reloaded); equiv WEAK (18.9% cov)
-0059f900 58 cSPEditorBlockAbilities::ShutdownLayouts: complete; callee-saved register assignment (esi vs edi) differs
-0059f950 90 UILayoutVector::resize: complete; temp cSPUILayout construction/erase schedule differs
-0059f9e0 35 cSPEditorVehicleAbilities ctor: complete-ish; base ctor (0x59f030) and vtable stores not reproduced
-0059faa0 74 AbilityVector::EraseRange: complete; FindAbilitySlot arg schedule + loop register allocation differ
+0059f030 36 cSPEditorVehicleAbilities ctor: register permutation only (orig zero in eax, map ptr in edx) flags: /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+0059f510 324 UILayoutVector::insert: complete; grow + no-grow paths present; register allocation and 4-byte frame size differ (474 vs 489); equiv WEAK flags: /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+0059f7c0 259 cSPEditorBlockAbilities::SortAbilities: complete; byte-offset bubble sort; register allocation differs (base ptr folded vs reloaded); equiv WEAK flags: /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+0059f900 58 cSPEditorBlockAbilities::ShutdownLayouts: complete; callee-saved register assignment (esi vs edi) differs flags: /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+0059f950 67 UILayoutVector::resize: complete; temporary cSPUILayout ctor (0x810000) + insert + dtor now reproduced; only the missing mpEnd reload after the ctor call and a count register pick differ; equiv PASS (239 inputs, 100% cov) flags: /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+0059f9e0 67 VehicleAbilities ctor: base ctor (0x59f030) + both vtable stores now reproduced; zero materialisation (edi/ecx/edx vs eax) and the int-param load/push registers differ; equiv PASS (400 inputs, 100% cov) flags: /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+0059faa0 33 AbilityVector::EraseRange: FindAbilitySlot arg order, record-`this` teardown slot and first-last tail now match; arg push order and count register differ; equiv WEAK (84 valid inputs, 80.5% cov) flags: /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
 005a0510 4091 SP::cSPEditorBlockAbilities::LayoutAbilities: complete (same 58 direct + 82 virtual calls in order, frame 0x1a10 matches); register/stack-slot allocation differs; flags /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+005a1920 872 SP::cSPEditorBlockAbilities::LayoutAbilitiesCompact: complete (same 50 calls and vtable-slot sequence); stack-slot/spill layout (frame 0x6cc vs 0x6d0), esi/ebp roles and block order differ; (int)level is cvttss2si in mine vs the original's inlined fnstcw/fistp flags: /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast

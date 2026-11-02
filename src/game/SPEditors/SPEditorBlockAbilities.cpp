@@ -1,4 +1,4 @@
-// src/game/SPEditors/SPEditorBlockAbilities.cpp -- migrated from slice(s) s005a0510, s0059f510, s0059e360 by tools/migrate/rewrite.py
+// src/game/SPEditors/SPEditorBlockAbilities.cpp -- migrated from slice(s) s005a1920, s005a0510, s0059f510, s0059e360 by tools/migrate/rewrite.py
 // Object file: SPEditors/SPEditorBlockAbilities.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -17,6 +17,8 @@
 #include "EA/Variant.h"
 #include "SP/cSPEditorBlockAbilities.h"
 #include "cSPUILayout.h"
+#include "SP/cLocalInputState.h"
+#include <math.h>
 
 // ---- items of slice s0059e360 begin (TODO(rewrite): local stubs, replace by canonical classes)
 void* operator new[](size_t size, const char* pName, int flags, unsigned debugFlags, const char* file, int line);
@@ -364,7 +366,7 @@ extern char vtbl_BlockAbilitiesBase0[];  // 0x013f68c4
 extern char vtbl_BlockAbilitiesBase1[];  // 0x013ef094
 void* operator new(size_t size, const char* pName, int flags, unsigned debugFlags, const char* file, int line);
 void  EASTL_deallocate(void* p);   // 0x00f47380
-struct cSPUILayout_s0059_f510 {
+class cSPUILayout_s0059_f510 { public:
     char pad[0x18];
     cSPUILayout_s0059_f510();                          // 0x00810000
     cSPUILayout_s0059_f510(const cSPUILayout_s0059_f510& x);      // 0x00810020
@@ -418,7 +420,6 @@ struct AbilityVector {
     uint32_t    mAlloc[2];
     int EraseRange(AbilityRec* first, AbilityRec* last);   // 0x0059faa0
 };
-cSPUILayout_s0059_f510* ConstructLayout(cSPUILayout_s0059_f510* p, int arg);   // 0x00810020
 cSPUILayout_s0059_f510* UninitCopy(cSPUILayout_s0059_f510* first, cSPUILayout_s0059_f510* last, cSPUILayout_s0059_f510* dest);       // 0x0059ed60
 cSPUILayout_s0059_f510* RelocateCommit(cSPUILayout_s0059_f510* first, cSPUILayout_s0059_f510* last, cSPUILayout_s0059_f510* dest);   // 0x0059eda0
 cSPUILayout_s0059_f510* CopyBackward(cSPUILayout_s0059_f510* first, cSPUILayout_s0059_f510* last, cSPUILayout_s0059_f510* dLast);    // 0x0059ee20
@@ -427,9 +428,15 @@ cSPUILayout_s0059_f510* UninitMove(cSPUILayout_s0059_f510** out, cSPUILayout_s00
                         cSPUILayout_s0059_f510* dest, const cSPUILayout_s0059_f510* tag);                      // 0x0059ef30
 cSPUILayout_s0059_f510* UninitFillN(cSPUILayout_s0059_f510* first, uint32_t n, const cSPUILayout_s0059_f510* value);      // 0x0059ef70
 AbilityRec* FindAbilitySlot(AbilityRec* a, AbilityRec* b, AbilityRec* c);  // 0x0059f740
-// 0x70-byte vehicle ability record: the 0x64-byte cSPEditorVehicleAbilities base plus three
-// dwords of its own
-struct VehicleAbilities : SP::cSPEditorVehicleAbilities {
+struct Key3 { uint32_t instanceID, typeID, groupID; };
+struct AbilityBase {
+    void* vptr0;      // +0x0
+    void* vptr1;      // +0x4
+    char  pad[0x60 - 0x8];
+    AbilityBase(Key3 key, int ability, int flag0, int flag1, int flag2);   // 0x0059f030
+};
+struct VehicleAbilities : AbilityBase {
+    unsigned char b60, b61, b62, b63;   // +0x60..+0x63
     int   m64;        // +0x64
     int   m68;        // +0x68
     int   m6c;        // +0x6c
@@ -874,6 +881,253 @@ struct cSPEditorBlockAbilities_s005a_0510 {
 }
 // ---- items of slice s005a0510 end
 
+// ---- items of slice s005a1920 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C" double __cdecl fabs(double);
+#pragma intrinsic(fabs)
+namespace EA {
+namespace ResourceMan {
+class Key_s005a_1920 { public:
+    uint32_t instanceID;
+    uint32_t typeID;
+    uint32_t groupID;
+};
+}
+}
+namespace Math {
+struct Rectangle_s005a_1920 {
+    float x1, y1, x2, y2;
+    Rectangle_s005a_1920() {}
+    Rectangle_s005a_1920(const Rectangle_s005a_1920& o) : x1(o.x1), y1(o.y1), x2(o.x2), y2(o.y2) {}
+};
+}
+struct Image;
+struct ITextCaption_s005a_1920 {
+virtual void v00();
+virtual void v04();
+virtual void v08();
+virtual void v0c();
+virtual void v10();
+virtual void v14();
+virtual void v18();
+    virtual void SetNoWrap(bool b);                                      // +0x1c
+};
+struct IWindow_s005a_1920 {
+    virtual int AddRef();                                                // +0x00
+    virtual int Release();                                               // +0x04
+    virtual void v08();
+    virtual ITextCaption_s005a_1920* Cast(uint32_t type);                           // +0x0c
+virtual void v10();
+virtual void v14();
+virtual void v18();
+virtual void v1c();
+virtual void v20();
+virtual void v24();
+virtual void v28();
+virtual void v2c();
+virtual void v30();
+virtual void v34();
+    virtual const Math::Rectangle_s005a_1920& GetRealArea();                        // +0x38
+virtual void v3c();
+virtual void v40();
+virtual void v44();
+virtual void v48();
+virtual void v4c();
+virtual void v50();
+virtual void v54();
+virtual void v58();
+virtual void v5c();
+virtual void v60();
+virtual void v64();
+virtual void v68();
+    virtual void SetLayoutArea(const Math::Rectangle_s005a_1920& area);             // +0x6c
+virtual void v70();
+virtual void v74();
+virtual void v78();
+    virtual void SetFlag(int flag, bool value);                          // +0x7c
+    virtual void SetCaption(const wchar_t* caption);                     // +0x80
+virtual void v84();
+virtual void v88();
+virtual void v8c();
+virtual void v90();
+virtual void v94();
+virtual void v98();
+virtual void v9c();
+virtual void va0();
+virtual void va4();
+virtual void va8();
+virtual void vac();
+virtual void vb0();
+virtual void vb4();
+virtual void vb8();
+virtual void vbc();
+virtual void vc0();
+virtual void vc4();
+virtual void vc8();
+virtual void vcc();
+virtual void vd0();
+    virtual void vd4();
+    virtual void AddWindow(IWindow_s005a_1920* w);                                  // +0xd8
+virtual void vdc();
+virtual void ve0();
+virtual void ve4();
+virtual void ve8();
+    virtual void vec();
+    virtual IWindow_s005a_1920* FindWindowByID(uint32_t id, bool recursive);        // +0xf0
+};
+template <class T> struct intrusive_ptr_s005a_1920 {
+    T* mpObject;
+    intrusive_ptr_s005a_1920(T* p) : mpObject(p) { if (p) p->AddRef(); }
+    intrusive_ptr_s005a_1920() : mpObject(0) {}
+    ~intrusive_ptr_s005a_1920() { if (mpObject) mpObject->Release(); }
+    intrusive_ptr_s005a_1920& operator=(T* p) {
+        if (p) p->AddRef();
+        T* old = mpObject;
+        mpObject = p;
+        if (old) old->Release();
+        return *this;
+    }
+    T* operator->() const { return mpObject; }
+    operator T*() const { return mpObject; }
+};
+struct VariantBytes {
+    uint32_t mData[4];       // +0x00
+    uint16_t mFlags;         // +0x10
+    uint16_t mTypeId;        // +0x12
+};
+namespace SP {
+class cPropertyList_s005a_1920 { public:
+    virtual int AddRef();                                                // +0x00
+    virtual int Release();                                               // +0x04
+virtual void v08();
+virtual void v0c();
+virtual void v10();
+virtual void v14();
+    virtual void v18();
+    virtual bool HasProperty(uint32_t id);                               // +0x1c 0x006a2470
+    virtual void v20();                                                  // +0x20
+    virtual void v24();                                                  // +0x24
+    virtual VariantBytes* GetProperty(uint32_t id);                      // +0x28
+};
+}
+namespace SP {
+bool GetPropertyAsKeyInstance(cPropertyList_s005a_1920* p, uint32_t id, uint32_t* out);       // 0x006a12a0
+}
+namespace SP {
+class cSPEditorVerbIconData_s005a_1920 { public:
+    virtual int AddRef();                                                // +0x00
+    virtual int Release();                                               // +0x04
+    virtual ~cSPEditorVerbIconData_s005a_1920();                                    // +0x08
+    virtual void* Cast(uint32_t type);                                   // +0x0c
+    virtual void Init(cPropertyList_s005a_1920* p);                                 // +0x10 0x005e5470
+    virtual void Shutdown();                                             // +0x14
+    virtual void SetArrayIndex(int i);                                   // +0x18
+    virtual void SetHotKey(int key);                                     // +0x1c 0x005e5c00
+    virtual string16 GetName(bool includeLevel);                         // +0x20
+    virtual string16 GetDescription();                                   // +0x24
+
+    cSPEditorVerbIconData_s005a_1920& operator=(const cSPEditorVerbIconData_s005a_1920& o);    // 0x0059f0e0
+
+    uint32_t pad04[2];
+    bool mVerbIconUseDescription;          // +0x0c
+    bool mVerbIconShowLevel;               // +0x0d
+    bool mPaletteItemRolloverShowLevel;    // +0x0e
+    bool mVerbIconRolloverShowLevel;       // +0x0f
+    uint32_t pad10[2];
+    float mVerbIconLevel;                  // +0x18
+    float mVerbIconMaxLevel;               // +0x1c
+    int field_20;                          // +0x20
+    int mVerbIconCategory;                 // +0x24 (eVerbIconCategory)
+    uint32_t pad28[0x90 - 0x28 > 0 ? (0x90 - 0x28) / 4 : 1];
+    uint32_t mVerbIconImageID;             // +0x90
+    uint32_t pad94[(0xb4 - 0x94) / 4];
+    EA::ResourceMan::Key_s005a_1920 mVerbIconStaticLayout;  // +0xb4
+    cPropertyList_s005a_1920* mpPropList;             // +0xc0
+};
+}
+namespace SP {
+struct cSPEditorVerbIconArray8 {
+    cSPEditorVerbIconData_s005a_1920* mpBegin;
+    cSPEditorVerbIconData_s005a_1920* mpEnd;
+    cSPEditorVerbIconData_s005a_1920* mpCapacity;
+    uint32_t mAllocator[2];
+    uint32_t mBufferHeader;
+    uint32_t mBuffer[8 * 0xc4 / 4];
+
+    cSPEditorVerbIconArray8() {
+        mpBegin = (cSPEditorVerbIconData_s005a_1920*)mBuffer;
+        mpEnd = (cSPEditorVerbIconData_s005a_1920*)mBuffer;
+        mpCapacity = (cSPEditorVerbIconData_s005a_1920*)mBuffer + 8;
+        mBufferHeader = 0;
+    }
+    ~cSPEditorVerbIconArray8() {
+        for (cSPEditorVerbIconData_s005a_1920* p = mpBegin; p < mpEnd; ++p)
+            p->~cSPEditorVerbIconData_s005a_1920();
+        if (mpBegin && ((uint32_t*)mpBegin)[-1] != 0)
+            operator delete[](mpBegin);
+    }
+    unsigned size() const { return (unsigned)(mpEnd - mpBegin); }
+    cSPEditorVerbIconData_s005a_1920& operator[](int i) { return mpBegin[i]; }
+    cSPEditorVerbIconData_s005a_1920& back() { return *(mpEnd - 1); }
+    void pop_back() { --mpEnd; mpEnd->~cSPEditorVerbIconData_s005a_1920(); }
+};
+}
+namespace SP {
+void BlockGetAbilities(cSPEditorVerbIconArray8* out, const EA::ResourceMan::Key_s005a_1920* blockKey,
+                       uint32_t imageGroup);                             // 0x0059fc60
+}
+class cSPUILayout_s005a_1920 { public:
+    uint32_t pad[6];
+    cSPUILayout_s005a_1920();                                                       // 0x00810000
+    ~cSPUILayout_s005a_1920();                                                      // 0x00811fe0
+    bool Init(const EA::ResourceMan::Key_s005a_1920* key, bool b, uint32_t group);  // 0x008120d0
+    IWindow_s005a_1920* FindWindowByID(uint32_t id, bool recursive);                // 0x008105b0
+    void SetParentWin(IWindow_s005a_1920* parent, bool b, uint32_t group);          // 0x008121b0
+};
+struct cSPUILayoutVector_s005a_1920 {   // eastl::vector<cSPUILayout, sp_vector_allocator>
+    cSPUILayout_s005a_1920* mpBegin;
+    cSPUILayout_s005a_1920* mpEnd;
+    cSPUILayout_s005a_1920* mpCapacity;
+    cSPUILayout_s005a_1920* erase(cSPUILayout_s005a_1920* first, cSPUILayout_s005a_1920* last);           // 0x0059f4a0
+    void resize(unsigned n);                                             // 0x0059f950
+    cSPUILayout_s005a_1920& operator[](int i) { return mpBegin[i]; }
+};
+namespace SPUIHelpers {
+char SetDrawableImage(IWindow_s005a_1920* w, Image* img, int index);                       // 0x008068d0
+}
+namespace SPUIHelpers {
+char SetImageIcon(IWindow_s005a_1920* w, Image* img, int index);                           // 0x00806aa0
+}
+namespace SPUIHelpers {
+void CenterWindowInArea(IWindow_s005a_1920* w, const Math::Rectangle_s005a_1920* r);                  // 0x00806d10
+}
+namespace SPUIHelpers {
+void SetTooltipText(IWindow_s005a_1920* w, const wchar_t* text, int a, bool b);            // 0x00806de0
+}
+namespace SP {
+class cSPEditorBlockAbilities_s005a_1920 { public:
+    void* vptr;
+    uint32_t pad04[2];
+    EA::ResourceMan::Key_s005a_1920 mBlockKey;              // +0x0c
+    EA::ResourceMan::Key_s005a_1920 mAbilityLayoutKey;      // +0x18
+    cSPUILayoutVector_s005a_1920 mAbilityLines;             // +0x24
+    uint32_t pad30[2];
+    VerbCategoryMap mVerbCategoryMap;            // +0x38
+    uint32_t pad4c[3];
+    bool mbFilterByCategory;                     // +0x58
+    uint32_t mIconImageGroup;                    // +0x5c
+    bool mbCheckCategories;                      // +0x60
+    uint8_t pad61[3];
+    unsigned mMaxFullRows;                       // +0x64
+    uint32_t mFullLayoutId;                      // +0x68
+    uint32_t mCompactLayoutId;                   // +0x6c
+
+    void SortAbilities(cSPEditorVerbIconArray8* abilities, VerbCategoryMap* categories);  // 0x0059f7c0
+    void LayoutAbilities(IWindow_s005a_1920* pParent, bool bUseAltProperties);                       // 0x005a0510
+    void LayoutAbilitiesCompact(IWindow_s005a_1920* pParent, bool bUseAltProperties, int* pCount);  // 0x005a1920
+};
+}
+// ---- items of slice s005a1920 end
+
 // @ 0x0059ed20
 template SP::cSPEditorVerbIconData_s0059_e360__b* eastl::uninitialized_relocate_commit<SP::cSPEditorVerbIconData_s0059_e360__b>( SP::cSPEditorVerbIconData_s0059_e360__b*, SP::cSPEditorVerbIconData_s0059_e360__b*, SP::cSPEditorVerbIconData_s0059_e360__b*)
 ;
@@ -1009,8 +1263,7 @@ void UILayoutVector::resize(uint32_t newSize)
     if (newSize > (uint32_t)(((char*)mpEnd - (char*)mpBegin) / 0x18)) {
         // the default-constructed temporary lives in the caller's frame and is destroyed
         // right after the insert
-        insert(mpEnd, newSize - (uint32_t)(((char*)mpEnd - (char*)mpBegin) / 0x18),
-               cSPUILayout_s0059_f510());
+        insert(mpEnd, newSize - (uint32_t)(((char*)mpEnd - (char*)mpBegin) / 0x18), cSPUILayout_s0059_f510());
         return;
     }
     erase(mpBegin + newSize, mpEnd);
@@ -1018,14 +1271,14 @@ void UILayoutVector::resize(uint32_t newSize)
 
 // @ 0x0059f9e0
 VehicleAbilities::VehicleAbilities(int ability)
-    : SP::cSPEditorVehicleAbilities(ResourceKey(), (uint32_t)ability, 0, 0, true)
+: AbilityBase(Key3(), ability, 0, 0, 1)
 {
     *(void**)this = vtbl_BlockAbilities0;
     *(void**)((char*)this + 4) = vtbl_BlockAbilities1;
     m64 = 2;
-    mb61 = true;
-    mb62 = false;
-    mb63 = true;
+    b61 = 1;
+    b62 = 0;
+    b63 = 1;
     m68 = 0xf56d252d;
     m6c = 0x3c02fae0;
 }
@@ -1383,6 +1636,116 @@ void cSPEditorBlockAbilities_s005a_0510::LayoutAbilities(IWindow* pParent, bool 
     Math::Rectangle area = pParent->GetRealArea();
     area.x2 = area.x1 + width;
     area.y2 = area.y1 + totalHeight;
+    pParent->SetLayoutArea(area);
+}
+}  // namespace SP
+
+// @ 0x005a1920
+namespace SP {
+void cSPEditorBlockAbilities_s005a_1920::LayoutAbilitiesCompact(IWindow_s005a_1920* pParent, bool bUseAltProperties, int* pCount)
+{
+    cSPEditorVerbIconArray8 abilities;
+    BlockGetAbilities(&abilities, &mBlockKey, mIconImageGroup);
+
+    if (mbCheckCategories && mbFilterByCategory) {
+        for (int i = (int)abilities.size() - 1; i >= 0; --i) {
+            cSPEditorVerbIconData_s005a_1920& a = abilities[i];
+            if (mVerbCategoryMap.find(a.mVerbIconCategory) == mVerbCategoryMap.end()) {
+                a = abilities.back();
+                abilities.pop_back();
+            }
+        }
+        SortAbilities(&abilities, &mVerbCategoryMap);
+    }
+
+    unsigned count = abilities.size();
+    *pCount = (int)count;
+    if (count <= mMaxFullRows) {
+        mAbilityLayoutKey.instanceID = mFullLayoutId;
+        LayoutAbilities(pParent, bUseAltProperties);
+        return;
+    }
+
+    EA::ResourceMan::Key_s005a_1920* pKey = &mAbilityLayoutKey;
+    pKey->instanceID = mCompactLayoutId;
+    float totalWidth = 0.0f;
+    float xPos = 0.0f;
+    cSPUILayoutVector_s005a_1920& lines = mAbilityLines;
+    lines.erase(lines.mpBegin, lines.mpEnd);
+    lines.resize(count);
+
+    for (unsigned i = 0; i < count; ++i) {
+        lines[i].Init(pKey, false, 0x5b598fa);
+        IWindow_s005a_1920* rowWin = lines[i].FindWindowByID(0x4c01bd5, true);
+        lines[i].SetParentWin(pParent, true, 0x5b598fa);
+        Math::Rectangle_s005a_1920 rowArea = rowWin->GetRealArea();
+        float rowWidth = rowArea.x2 - rowArea.x1;
+
+        Image* img = 0;
+        if (abilities[i].mpPropList->HasProperty(0x668b0a0)) {
+            uint32_t imageID = 0;
+            GetPropertyAsKeyInstance(abilities[i].mpPropList, 0x668b0a0, &imageID);
+            img = SPUIHelpers::GetImageByID(imageID != 0 ? imageID : abilities[i].mVerbIconImageID);
+        } else if (abilities[i].mVerbIconImageID != 0) {
+            img = SPUIHelpers::GetImageByID(abilities[i].mVerbIconImageID);
+        }
+
+        intrusive_ptr_s005a_1920<IWindow_s005a_1920> iconWin = lines[i].FindWindowByID(0x4c01bbe, true);
+        if (img && iconWin) {
+            iconWin->SetFlag(1, true);
+            intrusive_ptr_s005a_1920<IWindow_s005a_1920> iconLayoutWin;
+            if (abilities[i].mVerbIconStaticLayout.instanceID != 0) {
+                cSPUILayout_s005a_1920 layout;
+                layout.Init(&abilities[i].mVerbIconStaticLayout, true, 0x5b598fa);
+                iconLayoutWin = layout.FindWindowByID(0x902d3163, true);
+            }
+            if (iconLayoutWin) {
+                iconWin->AddWindow(iconLayoutWin);
+                Math::Rectangle_s005a_1920 r = iconWin->GetRealArea();
+                float w = r.x2 - r.x1;
+                float h = r.y2 - r.y1;
+                r.x1 = 0.0f;
+                r.y1 = 0.0f;
+                r.x2 = w;
+                r.y2 = h;
+                SPUIHelpers::CenterWindowInArea(iconLayoutWin, &r);
+                IWindow_s005a_1920* iconImageWin = iconLayoutWin->FindWindowByID(0x6283c92, false);
+                if (iconImageWin || (iconImageWin = iconLayoutWin->FindWindowByID(0x4976e19, false)) != 0) {
+                    iconImageWin->SetFlag(0x10, true);
+                    SPUIHelpers::SetImageIcon(iconImageWin, img, 0);
+                }
+            } else {
+                SPUIHelpers::SetDrawableImage(iconWin, img, 0);
+            }
+            string16 tip = abilities[i].GetName(false);
+            SPUIHelpers::SetTooltipText(iconWin, tip.c_str(), -1, true);
+        }
+
+        IWindow_s005a_1920* levelWin = lines[i].FindWindowByID(0x4c01bca, true);
+        if (levelWin) {
+            if (abilities[i].mVerbIconLevel > 0.0f && abilities[i].mPaletteItemRolloverShowLevel) {
+                string16 s;
+                s.sprintf(L"%d", (int)abilities[i].mVerbIconLevel);
+                levelWin->SetCaption(s.c_str());
+                levelWin->Cast(0xf15f4bd)->SetNoWrap(false);
+            } else {
+                levelWin->SetCaption(gEmptyString16);
+            }
+        }
+
+        totalWidth = rowWidth + totalWidth;
+        rowArea.x1 = xPos;
+        // (the original passes the whole rectangle; only x1 changes)
+        rowWin->SetLayoutArea(rowArea);
+        xPos = rowWidth + xPos;
+    }
+
+    const Math::Rectangle_s005a_1920& pr = pParent->GetRealArea();
+    float parentWidth = pr.x2 - pr.x1;
+    if (parentWidth > totalWidth)
+        totalWidth = parentWidth;
+    Math::Rectangle_s005a_1920 area = pParent->GetRealArea();
+    area.x2 = area.x1 + totalWidth;
     pParent->SetLayoutArea(area);
 }
 }  // namespace SP
