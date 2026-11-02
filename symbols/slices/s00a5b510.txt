@@ -1,91 +1,56 @@
-00a5b510 ?trigger_symbol@Eapd@Audio@EA@@YAXPADUt_symbol_s00a5_b510@123@@Z  # trigger_symbol migrated from s00a5b510 (verbatim, slice spelling)
-00a5b550 ?trigger_setup@Eapd@Audio@EA@@YA_NXZ  # trigger_setup migrated from s00a5b510 (verbatim, slice spelling)
-00a5b620 ?spigot_new@Eapd@Audio@EA@@YAPADM@Z  # spigot_new migrated from s00a5b510 (verbatim, slice spelling)
-00a5b670 ?spigot_bang@Eapd@Audio@EA@@YAXPAD@Z  # spigot_bang migrated from s00a5b510 (verbatim, slice spelling)
-00a5b6a0 ?spigot_float@Eapd@Audio@EA@@YAXPADM@Z  # spigot_float migrated from s00a5b510 (verbatim, slice spelling)
-00a5b700 ?spigot_symbol@Eapd@Audio@EA@@YAXPADUt_symbol_s00a5_b510@123@@Z  # spigot_symbol migrated from s00a5b510 (verbatim, slice spelling)
-00a5b730 ?spigot_list@Eapd@Audio@EA@@YAXPADUt_symbol_s00a5_b510@123@HPAX@Z  # spigot_list migrated from s00a5b510 (verbatim, slice spelling)
-00a5b770 ?spigot_anything@Eapd@Audio@EA@@YAXPADUt_symbol_s00a5_b510@123@HPAX@Z  # spigot_anything migrated from s00a5b510 (verbatim, slice spelling)
-00a5b7b0 ?spigot_setup@Eapd@Audio@EA@@YA_NXZ  # spigot_setup migrated from s00a5b510 (verbatim, slice spelling)
-00a5b850 ?gate_new@Eapd@Audio@EA@@YAPADMM@Z  # gate_new migrated from s00a5b510 (verbatim, slice spelling)
-00a5b920 ?gate_free@Eapd@Audio@EA@@YAXPAD@Z  # gate_free migrated from s00a5b510 (verbatim, slice spelling)
-00a5b940 ?gate_bang@Eapd@Audio@EA@@YAXPAD@Z  # gate_bang migrated from s00a5b510 (verbatim, slice spelling)
-00a5b970 ?gate_float@Eapd@Audio@EA@@YAXPADM@Z  # gate_float migrated from s00a5b510 (verbatim, slice spelling)
-00a5b9e0 ?gate_symbol@Eapd@Audio@EA@@YAXPADUt_symbol_s00a5_b510@123@@Z  # gate_symbol migrated from s00a5b510 (verbatim, slice spelling)
-00a5ba20 ?gate_list@Eapd@Audio@EA@@YAXPADUt_symbol_s00a5_b510@123@HPAX@Z  # gate_list migrated from s00a5b510 (verbatim, slice spelling)
-00a5ba60 ?gate_anything@Eapd@Audio@EA@@YAXPADUt_symbol_s00a5_b510@123@HPAX@Z  # gate_anything migrated from s00a5b510 (verbatim, slice spelling)
-00a5baa0 ?gate_setup@Eapd@Audio@EA@@YA_NXZ  # gate_setup migrated from s00a5b510 (verbatim, slice spelling)
-00a5bb50 ?switch_new@Eapd@Audio@EA@@YAPADMM@Z  # switch_new migrated from s00a5b510 (verbatim, slice spelling)
-00a5bc70 ?switch_free@Eapd@Audio@EA@@YAXPAD@Z  # switch_free migrated from s00a5b510 (verbatim, slice spelling)
-00a5bc90 ?switch_float@Eapd@Audio@EA@@YAXPADM@Z  # switch_float migrated from s00a5b510 (verbatim, slice spelling)
-00a5bcf0 ?switch_setup@Eapd@Audio@EA@@YA_NXZ  # switch_setup migrated from s00a5b510 (verbatim, slice spelling)
-00a5bd50 ?moses_new@Eapd@Audio@EA@@YAPADM@Z  # moses_new migrated from s00a5b510 (verbatim, slice spelling)
-00a5bdb0 ?moses_float@Eapd@Audio@EA@@YAXPADM@Z  # moses_float migrated from s00a5b510 (verbatim, slice spelling)
-00a5be50 ?moses_setup@Eapd@Audio@EA@@YA_NXZ  # moses_setup migrated from s00a5b510 (verbatim, slice spelling)
-00a5bf20 ?until_bang@Eapd@Audio@EA@@YAXPAD@Z  # until_bang migrated from s00a5b510 (verbatim, slice spelling)
-00a5bf60 ?until_float@Eapd@Audio@EA@@YAXPADM@Z  # until_float migrated from s00a5b510 (verbatim, slice spelling)
-00a5bfa0 ?until_bang2@Eapd@Audio@EA@@YAXPAD@Z  # until_bang2 migrated from s00a5b510 (verbatim, slice spelling)
-00a5bfb0 ?until_setup@Eapd@Audio@EA@@YA_NXZ  # until_setup migrated from s00a5b510 (verbatim, slice spelling)
-00a5c040 ?makefilename_new@Eapd@Audio@EA@@YAPADUt_symbol_s00a5_b510@123@H@Z  # makefilename_new migrated from s00a5b510 (verbatim, slice spelling)
-00a5c0b0 ?makefilename_float@Eapd@Audio@EA@@YAXPADM@Z  # makefilename_float migrated from s00a5b510 (verbatim, slice spelling)
-00a5c100 ?makefilename_symbol@Eapd@Audio@EA@@YAXPADUt_symbol_s00a5_b510@123@@Z  # makefilename_symbol migrated from s00a5b510 (verbatim, slice spelling)
-00a5c150 ?makefilename_setup@Eapd@Audio@EA@@YA_NXZ  # makefilename_setup migrated from s00a5b510 (verbatim, slice spelling)
-00a5c1f0 ?swap_new@Eapd@Audio@EA@@YAPADM@Z  # swap_new migrated from s00a5b510 (verbatim, slice spelling)
-00a5c260 ?swap_bang@Eapd@Audio@EA@@YAXPAD@Z  # swap_bang migrated from s00a5b510 (verbatim, slice spelling)
-00a5c300 ?swap_float@Eapd@Audio@EA@@YAXPADM@Z  # swap_float migrated from s00a5b510 (verbatim, slice spelling)
-00a5c320 ?swap_setup@Eapd@Audio@EA@@YA_NXZ  # EA::Audio::Eapd::swap_setup migrated from s00a5b510
-00a5c3c0 ?change_new@Eapd@Audio@EA@@YAPADM@Z  # change_new migrated from s00a5b510 (verbatim, slice spelling)
-00a5c400 ?change_float@Eapd@Audio@EA@@YAXPADM@Z  # change_float migrated from s00a5b510 (verbatim, slice spelling)
-0x167545c ?gOutletCount@@3HA
-0x1675628 ?spMakefilenameClass@Eapd@Audio@EA@@3PAUt_class@@A
-0x1675638 ?spTriggerClass@Eapd@Audio@EA@@3PAUt_class@@A
-0x1675644 ?spUntilClass@Eapd@Audio@EA@@3PAUt_class@@A
-0x167564c ?spMosesClass@Eapd@Audio@EA@@3PAUt_class@@A
-0x1675650 ?spChangeClass@Eapd@Audio@EA@@3PAUt_class@@A
-0x1675658 ?spSwitchClass@Eapd@Audio@EA@@3PAUt_class@@A
-0x1675670 ?spSpigotClass@Eapd@Audio@EA@@3PAUt_class@@A
-0x1675674 ?spSwapClass@Eapd@Audio@EA@@3PAUt_class@@A
-0x167567c ?spGateClass@Eapd@Audio@EA@@3PAUt_class@@A
-0x1675894 ?gSymbolSymbol@Eapd@Audio@EA@@3Ut_symbol@123@A
-0x167589c ?gEmptySymbol@Eapd@Audio@EA@@3Ut_symbol@123@A
-0x16758ac ?gListSymbol@Eapd@Audio@EA@@3Ut_symbol@123@A
-0x16758b0 ?gListSender@Eapd@Audio@EA@@3Ut_symbol@123@A
-0x16758c4 ?gFloatSymbol@Eapd@Audio@EA@@3Ut_symbol@123@A
-?change_float@Eapd@Audio@EA@@YAXPADM@Z 00a5c400
-?change_new@Eapd@Audio@EA@@YAPADM@Z 00a5c3c0
-?gate_anything@Eapd@Audio@EA@@YAXPADUt_symbol@123@HPAX@Z 00a5ba60
-?gate_bang@Eapd@Audio@EA@@YAXPAD@Z 00a5b940
-?gate_float@Eapd@Audio@EA@@YAXPADM@Z 00a5b970
-?gate_free@Eapd@Audio@EA@@YAXPAD@Z 00a5b920
-?gate_list@Eapd@Audio@EA@@YAXPADUt_symbol@123@HPAX@Z 00a5ba20
-?gate_new@Eapd@Audio@EA@@YAPADMM@Z 00a5b850
-?gate_setup@Eapd@Audio@EA@@YA_NXZ 00a5baa0
-?gate_symbol@Eapd@Audio@EA@@YAXPADUt_symbol@123@@Z 00a5b9e0
-?makefilename_float@Eapd@Audio@EA@@YAXPADM@Z 00a5c0b0
-?makefilename_new@Eapd@Audio@EA@@YAPADUt_symbol@123@H@Z 00a5c040
-?makefilename_setup@Eapd@Audio@EA@@YA_NXZ 00a5c150
-?makefilename_symbol@Eapd@Audio@EA@@YAXPADUt_symbol@123@@Z 00a5c100
-?moses_float@Eapd@Audio@EA@@YAXPADM@Z 00a5bdb0
-?moses_new@Eapd@Audio@EA@@YAPADM@Z 00a5bd50
-?moses_setup@Eapd@Audio@EA@@YA_NXZ 00a5be50
-?spigot_anything@Eapd@Audio@EA@@YAXPADUt_symbol@123@HPAX@Z 00a5b770
+# Slice s00a5b510 (EA::Audio::Eapd) - mangled names -> VAs plus the unresolved globals
+# the equivalence harness needs.
+?trigger_symbol@Eapd@Audio@EA@@YAXPADUt_symbol@123@@Z 00a5b510
+?trigger_setup@Eapd@Audio@EA@@YA_NXZ 00a5b550
+?spigot_new@Eapd@Audio@EA@@YAPADM@Z 00a5b620
 ?spigot_bang@Eapd@Audio@EA@@YAXPAD@Z 00a5b670
 ?spigot_float@Eapd@Audio@EA@@YAXPADM@Z 00a5b6a0
-?spigot_list@Eapd@Audio@EA@@YAXPADUt_symbol@123@HPAX@Z 00a5b730
-?spigot_new@Eapd@Audio@EA@@YAPADM@Z 00a5b620
-?spigot_setup@Eapd@Audio@EA@@YA_NXZ 00a5b7b0
 ?spigot_symbol@Eapd@Audio@EA@@YAXPADUt_symbol@123@@Z 00a5b700
-?swap_bang@Eapd@Audio@EA@@YAXPAD@Z 00a5c260
-?swap_float@Eapd@Audio@EA@@YAXPADM@Z 00a5c300
-?swap_new@Eapd@Audio@EA@@YAPADM@Z 00a5c1f0
-?swap_setup@Eapd@Audio@EA@@YA_NXZ 00a5c320
-?switch_float@Eapd@Audio@EA@@YAXPADM@Z 00a5bc90
-?switch_free@Eapd@Audio@EA@@YAXPAD@Z 00a5bc70
+?spigot_list@Eapd@Audio@EA@@YAXPADUt_symbol@123@HPAX@Z 00a5b730
+?spigot_anything@Eapd@Audio@EA@@YAXPADUt_symbol@123@HPAX@Z 00a5b770
+?spigot_setup@Eapd@Audio@EA@@YA_NXZ 00a5b7b0
+?gate_new@Eapd@Audio@EA@@YAPADMM@Z 00a5b850
+?gate_free@Eapd@Audio@EA@@YAXPAD@Z 00a5b920
+?gate_bang@Eapd@Audio@EA@@YAXPAD@Z 00a5b940
+?gate_float@Eapd@Audio@EA@@YAXPADM@Z 00a5b970
+?gate_symbol@Eapd@Audio@EA@@YAXPADUt_symbol@123@@Z 00a5b9e0
+?gate_list@Eapd@Audio@EA@@YAXPADUt_symbol@123@HPAX@Z 00a5ba20
+?gate_anything@Eapd@Audio@EA@@YAXPADUt_symbol@123@HPAX@Z 00a5ba60
+?gate_setup@Eapd@Audio@EA@@YA_NXZ 00a5baa0
 ?switch_new@Eapd@Audio@EA@@YAPADMM@Z 00a5bb50
+?switch_free@Eapd@Audio@EA@@YAXPAD@Z 00a5bc70
+?switch_float@Eapd@Audio@EA@@YAXPADM@Z 00a5bc90
 ?switch_setup@Eapd@Audio@EA@@YA_NXZ 00a5bcf0
-?trigger_setup@Eapd@Audio@EA@@YA_NXZ 00a5b550
-?trigger_symbol@Eapd@Audio@EA@@YAXPADUt_symbol@123@@Z 00a5b510
-?until_bang2@Eapd@Audio@EA@@YAXPAD@Z 00a5bfa0
+?moses_new@Eapd@Audio@EA@@YAPADM@Z 00a5bd50
+?moses_float@Eapd@Audio@EA@@YAXPADM@Z 00a5bdb0
+?moses_setup@Eapd@Audio@EA@@YA_NXZ 00a5be50
 ?until_bang@Eapd@Audio@EA@@YAXPAD@Z 00a5bf20
 ?until_float@Eapd@Audio@EA@@YAXPADM@Z 00a5bf60
+?until_bang2@Eapd@Audio@EA@@YAXPAD@Z 00a5bfa0
 ?until_setup@Eapd@Audio@EA@@YA_NXZ 00a5bfb0
+?makefilename_new@Eapd@Audio@EA@@YAPADUt_symbol@123@H@Z 00a5c040
+?makefilename_float@Eapd@Audio@EA@@YAXPADM@Z 00a5c0b0
+?makefilename_symbol@Eapd@Audio@EA@@YAXPADUt_symbol@123@@Z 00a5c100
+?makefilename_setup@Eapd@Audio@EA@@YA_NXZ 00a5c150
+?swap_new@Eapd@Audio@EA@@YAPADM@Z 00a5c1f0
+?swap_bang@Eapd@Audio@EA@@YAXPAD@Z 00a5c260
+?swap_float@Eapd@Audio@EA@@YAXPADM@Z 00a5c300
+?swap_setup@Eapd@Audio@EA@@YA_NXZ 00a5c320
+?change_new@Eapd@Audio@EA@@YAPADM@Z 00a5c3c0
+?change_float@Eapd@Audio@EA@@YAXPADM@Z 00a5c400
+# unresolved globals / callees the harness must resolve
+0x167545c ?gOutletCount@@3HA
+0x167589c ?gEmptySymbol@Eapd@Audio@EA@@3Ut_symbol@123@A
+0x16758c4 ?gFloatSymbol@Eapd@Audio@EA@@3Ut_symbol@123@A
+0x1675894 ?gSymbolSymbol@Eapd@Audio@EA@@3Ut_symbol@123@A
+0x16758ac ?gListSymbol@Eapd@Audio@EA@@3Ut_symbol@123@A
+0x16758b0 ?gListSender@Eapd@Audio@EA@@3Ut_symbol@123@A
+0x1675638 ?spTriggerClass@Eapd@Audio@EA@@3PAUt_class@@A
+0x1675670 ?spSpigotClass@Eapd@Audio@EA@@3PAUt_class@@A
+0x167567c ?spGateClass@Eapd@Audio@EA@@3PAUt_class@@A
+0x1675658 ?spSwitchClass@Eapd@Audio@EA@@3PAUt_class@@A
+0x167564c ?spMosesClass@Eapd@Audio@EA@@3PAUt_class@@A
+0x1675644 ?spUntilClass@Eapd@Audio@EA@@3PAUt_class@@A
+0x1675628 ?spMakefilenameClass@Eapd@Audio@EA@@3PAUt_class@@A
+0x1675674 ?spSwapClass@Eapd@Audio@EA@@3PAUt_class@@A
+0x1675650 ?spChangeClass@Eapd@Audio@EA@@3PAUt_class@@A
