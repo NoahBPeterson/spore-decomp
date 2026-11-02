@@ -1,4 +1,5 @@
 # source  symbol  va  flags
+../src/game/UTFSpore_Win32/ArgumentSpec.cpp  ?FUN_00838740@@YAXH@Z  00838740  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/UTFSpore_Win32/ArgumentSpec.cpp  ?StrEqualI@@YA_NPBD0@Z  00838760  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/UTFSpore_Win32/ArgumentSpec.cpp  ?StrNEqualI@@YA_NPBD0I@Z  00838780  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/UTFSpore_Win32/ArgumentSpec.cpp  ?DestroyEnts@@YAPAUEnt@@PAU1@00@Z  00838e80  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

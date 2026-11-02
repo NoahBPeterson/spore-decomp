@@ -1,8 +1,9 @@
+00839540 ?FindNameAndTypeFromOption@cArgumentSpec@ArgScript@EA@@IBEXABV?$basic_string@DVallocator@eastl@@@eastl@@PAW4tArgType@23@PAV45@@Z  # EA::ArgScript::cArgumentSpec::FindNameAndTypeFromOption (callee of s0083b810, named from the dev publics; slice address comment)
 0083b810 ?Parse@cArgumentSpec_s0083_b810@@QAEHHPAPBDPAUArgParser@@@Z  # cArgumentSpec_s0083_b810::Parse migrated from s0083b810 (verbatim, slice spelling)
 0083b9d0 ?ParseThrowing@cArgumentSpec_s0083_b810@@QAEXHPAPBDPAUArgParser@@@Z  # cArgumentSpec_s0083_b810::ParseThrowing migrated from s0083b810 (verbatim, slice spelling)
 0083ba40 ?erase@VecOptions@@QAEPAUcOptionsSpec_s0083_b810@@PAU2@0@Z  # VecOptions::erase migrated from s0083b810 (verbatim, slice spelling)
-0083baa0 eastl::vector<EA::ArgScript::cOptionsSpec,eastl::sp_vector_allocator>::DoInsertValue  # inferred
-0083bcd0 EA::ArgScript::cArgumentSpec::ConstructSpec  # PDB candidate
+0083baa0 ?DoInsertValue@VecOptions@@QAEXPAUcOptionsSpec_s0083_b810@@ABU2@@Z  # VecOptions::DoInsertValue migrated from s0083b810 (verbatim, slice spelling)
+0083bcd0 ?ConstructSpec@cArgumentSpec_s0083_b810@@QAAHPBD0ZZ  # cArgumentSpec_s0083_b810::ConstructSpec migrated from s0083b810 (verbatim, slice spelling)
 0083c760 ?Release@cCommandBase@@QAEHXZ  # cCommandBase::Release migrated from s0083b810 (verbatim, slice spelling)
 0083c7a0 ?Release@cBlockCommandBase@@QAEHXZ  # cBlockCommandBase::Release migrated from s0083b810 (verbatim, slice spelling)
 0083c7d0 ?Release@cMetaCommandBase@@QAEHXZ  # cMetaCommandBase::Release migrated from s0083b810 (verbatim, slice spelling)

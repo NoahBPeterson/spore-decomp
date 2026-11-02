@@ -4,7 +4,7 @@
 00839c00 ?AddArgDocs@cArgumentSpec@@QAEXPAUstring8_s0083_9950@eastl@@PAUVecArgInfo@@H@Z  # cArgumentSpec::AddArgDocs migrated from s00839950 (verbatim, slice spelling)
 00839d80 ?push_back@V8@@QAEXABUE8@@@Z  # V8::push_back migrated from s00839950 (verbatim, slice spelling)
 00839dc0 ?push_back@V16@@QAEXABUE16@@@Z  # V16::push_back migrated from s00839950 (verbatim, slice spelling)
-00839e00 ?CopyCtor@cOptionsSpecInit  # inferred (copy ctor)
+00839e00 ?CopyCtor@cOptionsSpecInit@@QAEXPBUcOptionsSpec@@@Z  # cOptionsSpecInit::CopyCtor migrated from s00839950 (verbatim, slice spelling)
 00839f90 ?CreateHelpString@cArgumentSpec@@QAEXPBDPAUstring8_s0083_9950@eastl@@H@Z  # cArgumentSpec::CreateHelpString migrated from s00839950 (verbatim, slice spelling)
 0083a2f0 ?HelpString@cArgumentSpec@@QAEPBDPBDH@Z  # cArgumentSpec::HelpString migrated from s00839950 (verbatim, slice spelling)
 0083a310 ?DestroyOptionsRange@@YAPAUcOptionsSpec@@PAU1@00@Z  # DestroyOptionsRange migrated from s00839950 (verbatim, slice spelling)

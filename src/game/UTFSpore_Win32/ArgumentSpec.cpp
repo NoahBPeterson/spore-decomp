@@ -2,6 +2,7 @@
 // Object file: UTFSpore_Win32/ArgumentSpec.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+#define _VA_LIST_DEFINED   // the slices' own va_list typedef wins over <vadefs.h> (rewrite.py)
 #include "game/types.h"
 #include "EA/ArgScript/cArguments.h"
 #include "eastl/allocator.h"
@@ -15,8 +16,10 @@
 #include <string.h>
 
 // ---- items of slice s00837820 begin (TODO(rewrite): local stubs, replace by canonical classes)
+#pragma intrinsic(strlen_s0083_7820)
 __declspec(dllimport) int __cdecl _stricmp(const char*, const char*);
 __declspec(dllimport) int __cdecl _strnicmp(const char*, const char*, unsigned int);
+void  __cdecl FUN_0092dc50(int, void*);
 // ---- items of slice s00837820 end
 
 // ---- items of slice s008387c0 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -86,12 +89,14 @@ struct EnumVec { EnumSpec* mpBegin; EnumSpec* mpEnd; };
 // ---- items of slice s00839950 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern "C" void* __cdecl EASTL_allocator_allocate(unsigned n, const char* name, int, int, const char* file, int line);
 extern "C" void  __cdecl EASTL_allocator_deallocate(void* p); // 0x00f47380
+extern "C" void* __cdecl memcpy(void* dst, const void* src, unsigned n);
+extern "C" const char g_newline_1401b70[];   // original "\n" literal at 0x1401b70
 inline void* operator new(unsigned, void* p) { return p; }
 static const char g_allocFile[] =
     "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h";
 static const char g_allocName[] = "ArgScript";
 namespace eastl {
-struct allocator_s0083_9950 { unsigned char pad[4]; };
+class allocator_s0083_9950 { public: unsigned char pad[4]; };
 }
 namespace eastl {
 struct sp_vector_allocator_s0083_9950 : allocator_s0083_9950 {};
@@ -188,6 +193,7 @@ struct cOptionsSpec {
 
     cOptionsSpec& operator=(const cOptionsSpec& x);
 };
+struct cOptionsSpecInit { void CopyCtor(const cOptionsSpec* x); };
 typedef eastl::vec<cOptionsSpec> VecOptionsSpec;
 struct cArgumentSpec {
     char pad00[0x10];
@@ -353,16 +359,19 @@ __forceinline void*  PVec3(ArgParser* p, void* out, const char* s) { return ((vo
 __forceinline void*  PVec4(ArgParser* p, void* out, const char* s) { return ((void*(__thiscall*)(ArgParser*, void*, const char*))((void**)p->vtbl)[0xac / 4])(p, out, s); }
 __forceinline void*  PColor3(ArgParser* p, void* out, const char* s) { return ((void*(__thiscall*)(ArgParser*, void*, const char*))((void**)p->vtbl)[0xb0 / 4])(p, out, s); }
 __forceinline void*  PColor4(ArgParser* p, void* out, const char* s) { return ((void*(__thiscall*)(ArgParser*, void*, const char*))((void**)p->vtbl)[0xb4 / 4])(p, out, s); }
-// ---- items of slice s0083a9f0 end
 
 // ---- items of slice s0083b810 begin (TODO(rewrite): local stubs, replace by canonical classes)
-extern "C" void* __cdecl memcpy(void* dst, const void* src, unsigned n);
+#define _VA_LIST_DEFINED   // the slices' own va_list typedef wins over <vadefs.h> (rewrite.py)
 extern "C" __declspec(dllimport) void* __cdecl memmove(void* dst, const void* src, unsigned n);
 extern "C" unsigned __cdecl strlen(const char*);
 extern void* __TI1_cError[];
 #pragma intrinsic(strlen)
+typedef char* va_list;
+#define _INTSIZEOF(n)   ((sizeof(n) + sizeof(int) - 1) & ~(sizeof(int) - 1))
+#define va_start(ap, v) (ap = (va_list)&(v) + _INTSIZEOF(v))
+#define va_arg(ap, t)   (*(t*)((ap += _INTSIZEOF(t)) - _INTSIZEOF(t)))
 namespace eastl {
-struct allocator_s0083_b810 { unsigned char pad[4]; };
+class allocator_s0083_b810 { public: unsigned char pad[4]; };
 }
 namespace eastl {
 struct sp_vector_allocator_s0083_b810 : allocator_s0083_b810 {};
@@ -381,7 +390,7 @@ struct string8_s0083_b810 {
     void assign(const char* first, const char* last);   // 0x00454cb0
     void assign(const char* p);                         // 0x006a4380
     void assign(const string8_s0083_b810& x, unsigned position, unsigned n) {
-        assign(x.mpBegin + position, x.mpBegin + position + min_alt_s0083_b810(n, x.size() - position));
+        assign(x.mpBegin + position, x.mpBegin + position + min_alt_s0083_b810(n, x.size() - position));  // 0x0060bcd0 (eastl::string8::assign)
     }
     void append(const char* first, const char* last);   // 0x00455d60
     string8_s0083_b810& operator=(const string8_s0083_b810& x) { if (&x != this) assign(x.mpBegin, x.mpEnd); return *this; }
@@ -408,7 +417,7 @@ struct string8_s0083_b810 {
     void AllocateSelf() { mpBegin = gEmptyString; mpEnd = mpBegin; mpCapacity = mpBegin + 1; }
     void AllocateSelf(unsigned n) {
         if (n > 1) { mpBegin = DoAllocate(n); mpEnd = mpBegin; mpCapacity = mpBegin + n; }
-        else AllocateSelf();
+        else AllocateSelf();  // 0x00616aa0 (eastl::string8::AllocateSelf)
     }
     char* DoAllocate(unsigned n) {
         return (char*)EASTL_allocator_allocate(n, g_allocName, 0, 0, g_allocFile, 0xd1);
@@ -424,7 +433,7 @@ struct string8_s0083_b810 {
     }
     __forceinline void RangeInitialize(const char* pBegin, const char* pEnd) {
         const unsigned n = (unsigned)(pEnd - pBegin);
-        AllocateSelf(n + 1);
+        AllocateSelf(n + 1);  // 0x00616aa0 (eastl::string8::AllocateSelf)
         mpEnd = CharStringUninitializedCopy(pBegin, pEnd, mpBegin);
         *mpEnd = 0;
     }
@@ -462,6 +471,7 @@ struct cArgInfo_s0083_b810 {
     cArgInfo_s0083_b810() {}
     cArgInfo_s0083_b810(const cArgInfo_s0083_b810& x);   // 0x00838ab0
 };
+eastl::string8_s0083_b810 __cdecl SplitFirstToken(eastl::string8_s0083_b810& line, const char* delims);
 struct cEnumSpec_s0083_b810 {
     eastl::string8_s0083_b810 mName; cEnumParseInfo* mEnumInfo; int mPad14;
     __forceinline cEnumSpec_s0083_b810(const char* name, cEnumParseInfo* info, int x) : mName(name), mEnumInfo(info), mPad14(x) {}
@@ -534,10 +544,22 @@ struct cArgumentSpec_s0083_b810 {
 void __cdecl Sprintf(eastl::string8_s0083_b810* out, const char* fmt, ...);   // 0x00840c20
 void __cdecl FUN_00837f80(int* out, const void* p);                // 0x00837f80
 void __cdecl FUN_00837f60();                                       // 0x00837f60
+cOptionsSpec_s0083_b810* __cdecl UninitCopySpec(cOptionsSpec_s0083_b810* first, cOptionsSpec_s0083_b810* last, cOptionsSpec_s0083_b810* dest);  // 0x00839ef0
+cOptionsSpec_s0083_b810* __cdecl DestroyOptionsRange(cOptionsSpec_s0083_b810* first, cOptionsSpec_s0083_b810* last, cOptionsSpec_s0083_b810* result);  // 0x0083a310
 cOptionsSpec_s0083_b810* __cdecl CopyOptionsRange(cOptionsSpec_s0083_b810* first, cOptionsSpec_s0083_b810* last, cOptionsSpec_s0083_b810* result);     // 0x0083a900
+cOptionsSpec_s0083_b810* __cdecl CopyBackwardOptionsRange(cOptionsSpec_s0083_b810* first, cOptionsSpec_s0083_b810* last, cOptionsSpec_s0083_b810* destEnd); // 0x0083a970
 struct cError { cError(const char* s); };
 template <> void eastl::vec_s0083_b810<cEnumSpec_s0083_b810>::push_back(const cEnumSpec_s0083_b810& value);   // 0x0083a830
+static const char kTokenDelims[] = " \t\n";
 // ---- items of slice s0083b810 end
+// ---- items of slice s0083a9f0 end
+
+// @ 0x00838740
+void FUN_00838740(int arg)
+{
+    int local;
+    FUN_0092dc50(arg, &local);
+}
 
 // @ 0x00838760
 bool StrEqualI(const char* a, const char* b)
@@ -845,8 +867,6 @@ void V16::DoInsertValue(E16* pos, const E16& v)
     }
 }
 
-extern "C" const char g_newline_1401b70[];   // original "\n" literal at 0x1401b70
-
 // @ 0x00839c00
 void cArgumentSpec::AddArgDocs(eastl::string8_s0083_9950* out, VecArgInfo* args, int style)
 {
@@ -902,6 +922,32 @@ void V16::push_back(const E16& v)
     } else {
         DoInsertValue(mpEnd, v);
     }
+}
+
+// @ 0x00839e00
+void cOptionsSpecInit::CopyCtor(const cOptionsSpec* x)
+{
+    cOptionsSpec* self = (cOptionsSpec*)this;
+    self->mName.mpBegin = 0;
+    self->mName.mpEnd = 0;
+    self->mName.mpCapacity = 0;
+    int len = (int)(x->mName.mpEnd - x->mName.mpBegin);
+    self->mName.RangeInitialize((unsigned)(len + 1));
+    memcpy(self->mName.mpBegin, x->mName.mpBegin, (unsigned)len);
+    self->mName.mpEnd = self->mName.mpBegin + len;
+    *self->mName.mpEnd = 0;
+
+    self->mDescription.mpBegin = 0;
+    self->mDescription.mpEnd = 0;
+    self->mDescription.mpCapacity = 0;
+    int len2 = (int)(x->mDescription.mpEnd - x->mDescription.mpBegin);
+    self->mDescription.RangeInitialize((unsigned)(len2 + 1));
+    memcpy(self->mDescription.mpBegin, x->mDescription.mpBegin, (unsigned)len2);
+    self->mDescription.mpEnd = self->mDescription.mpBegin + len2;
+    *self->mDescription.mpEnd = 0;
+
+    new (&self->mArguments) VecArgInfo(x->mArguments);
+    self->mFlagToSet = x->mFlagToSet;
 }
 
 // @ 0x00839f90
@@ -1524,4 +1570,127 @@ cOptionsSpec_s0083_b810* VecOptions::erase(cOptionsSpec_s0083_b810* first, cOpti
     DestroyRangeA(newEnd, mpEnd);
     mpEnd -= (last - first);
     return first;
+}
+
+// @ 0x0083baa0
+void VecOptions::DoInsertValue(cOptionsSpec_s0083_b810* pos, const cOptionsSpec_s0083_b810& v)
+{
+    if (mpEnd != mpCapacity) {
+        const cOptionsSpec_s0083_b810* pv = &v;
+        if (pv >= pos && pv < mpEnd) ++pv;
+        if (mpEnd) ::new((void*)mpEnd) cOptionsSpec_s0083_b810(*(mpEnd - 1));
+        CopyBackwardOptionsRange(pos, mpEnd - 1, mpEnd);
+        *pos = *pv;
+        ++mpEnd;
+    } else {
+        unsigned cnt = (unsigned)(mpEnd - mpBegin);
+        unsigned n = cnt > 0 ? 2 * cnt : 1;
+        cOptionsSpec_s0083_b810* nb = n ? (cOptionsSpec_s0083_b810*)EASTL_allocator_allocate(n * 0x38, g_allocName, 0, 0, g_allocFile, 0xd1) : 0;
+        cOptionsSpec_s0083_b810* np = UninitCopySpec(mpBegin, pos, nb);
+        DestroyOptionsRange(mpBegin, pos, nb);
+        if (np) ::new((void*)np) cOptionsSpec_s0083_b810(v);
+        cOptionsSpec_s0083_b810* ne = UninitCopySpec(pos, mpEnd, np + 1);
+        DestroyOptionsRange(pos, mpEnd, np + 1);
+        if (mpBegin && ((int*)mpBegin)[-1]) EASTL_allocator_deallocate(mpBegin);
+        mpBegin = nb; mpEnd = ne; mpCapacity = nb + n;
+    }
+}
+
+// @ 0x0083bcd0
+int cArgumentSpec_s0083_b810::ConstructSpec(const char* name, const char* spec, ...)
+{
+    mBriefDescription = name;
+    mFullDescription = "";
+    mDefaultArguments.clear();
+    mOptions.clear();
+    mEnumSpecs.clear();
+    mErrorString = "no error";
+
+    va_list args;
+    va_start(args, spec);
+    int result = 0;
+
+    while (spec) {
+        eastl::string8_s0083_b810 line(spec);
+        eastl::string8_s0083_b810 word;
+
+        if (!line.empty() && line[0] == ':') {
+            mEnumSpecs.push_back(cEnumSpec_s0083_b810(line.c_str() + 1, va_arg(args, cEnumParseInfo*), 0));
+        } else if (!line.empty() && line[0] == '*') {
+            mEnumSpecs.push_back(cEnumSpec_s0083_b810(line.c_str() + 1, 0, va_arg(args, int)));
+        } else {
+            word = SplitFirstToken(line, kTokenDelims);
+
+            cOptionsSpec_s0083_b810 option;
+            VecArgInfo_s0083_b810* pArgs;
+            bool isOption;
+
+            if (!word.empty() && word[0] == '-' && isalpha((unsigned char)word[1])) {
+                isOption = true;
+                if (word.back() == '^') {
+                    word.erase(word.size() - 1, 1);
+                    option.mFlagToSet = va_arg(args, int);
+                } else {
+                    option.mFlagToSet = -1;
+                }
+                option.mName.assign(word, 1, eastl::string8_s0083_b810::npos);
+                word = SplitFirstToken(line, kTokenDelims);
+                pArgs = &option.mArguments;
+            } else {
+                pArgs = &mDefaultArguments;
+                isOption = false;
+            }
+
+            int optionalDepth = 0;
+            int lastDepth = 0;
+            while (!word.empty()) {
+                if (_stricmp(word.c_str(), "...") == 0) {
+                    // "..." must be the last token and follow an argument
+                    if (!line.empty())
+                        return 2;
+                    if (pArgs->empty())
+                        return 2;
+                    pArgs->back().mType |= 0xc000;
+                    word = SplitFirstToken(line, kTokenDelims);
+                    continue;
+                }
+
+                cArgInfo_s0083_b810 argInfo;
+                if (word[0] == '[') {
+                    ++optionalDepth;
+                    word.erase(0, 1);
+                }
+                argInfo.mIsDependent = (optionalDepth == lastDepth);
+                while (!word.empty() && word.back() == ']') {
+                    --optionalDepth;
+                    word.erase(word.size() - 1, 1);
+                }
+                argInfo.mLocation = va_arg(args, void*);
+                if (word.back() == '^') {
+                    word.erase(word.size() - 1, 1);
+                    argInfo.mFlagToSet = va_arg(args, int);
+                } else {
+                    argInfo.mFlagToSet = -1;
+                }
+                FindNameAndTypeFromOption(word, argInfo.mType, argInfo.mName);
+                if (argInfo.mType == 0)
+                    result = 3;
+                pArgs->push_back(argInfo);
+                lastDepth = optionalDepth;
+                word = SplitFirstToken(line, kTokenDelims);
+            }
+            if (optionalDepth != 0)
+                return 1;
+
+            eastl::string8_s0083_b810 description(va_arg(args, const char*));
+            if (isOption) {
+                option.mDescription = description;
+                mOptions.push_back(option);
+            } else {
+                mFullDescription += description;
+            }
+        }
+        spec = va_arg(args, const char*);
+    }
+    return result;
 }
