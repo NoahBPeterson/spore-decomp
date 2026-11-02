@@ -1,13 +1,13 @@
 01004bb0 ?f4bb0@SimGame@@QAEPAXH@Z  # SimGame::f4bb0 migrated from s01004bb0 (verbatim, slice spelling)
 01004c00 ?f4c00@SimGame@@QAEHXZ  # SimGame::f4c00 migrated from s01004bb0 (verbatim, slice spelling)
 01004c30 ?f4c30@SimGame@@QAEDXZ  # SimGame::f4c30 migrated from s01004bb0 (verbatim, slice spelling)
-01004c80 ?f4c80@SimGame@@QAEXPAM@Z   # PDB candidate SP::cSPSimulatorSpaceGame::FaceCameraTowards
-01004e50 ?f4e50@@YAXXZ               # PDB SP::BlowUpPlanet (caller-single)
-01004fc0 ?f4fc0@@YGXPAH@Z            # embassy/species lookup
+01004c80 ?f4c80@SimGame@@QAEXPAM@Z  # SimGame::f4c80 migrated from s01004bb0 (verbatim, slice spelling)
+01004e50 ?BlowUpPlanet@SP@@YAXXZ  # SP::BlowUpPlanet migrated from s01004bb0
+01004fc0 ?f4fc0@@YAXPAH@Z  # f4fc0 migrated from s01004bb0 (verbatim, slice spelling)
 010050d0 ?f50d0@@YGXH@Z  # f50d0 migrated from s01004bb0 (verbatim, slice spelling)
 01005130 ?f5130@SimGame@@QAEXXZ  # SimGame::f5130 migrated from s01004bb0 (verbatim, slice spelling)
-01005180 ?f5180@SimGame@@QAEPAXH@Z   # create HUD info object
+01005180 ?f5180@SimGame@@QAEPAXH@Z  # SimGame::f5180 migrated from s01004bb0 (verbatim, slice spelling)
 010052d0 ?f52d0@SimGame@@QAEDH@Z  # SimGame::f52d0 migrated from s01004bb0 (verbatim, slice spelling)
 01005320 ?f5320@SimGame@@QAEXXZ  # SimGame::f5320 migrated from s01004bb0 (verbatim, slice spelling)
 010053a0 ?f53a0@@YA_NXZ  # f53a0 migrated from s01004bb0 (verbatim, slice spelling)
-010053c0 ?f53c0@SimGame@@QAE_NHPAH@Z # PDB candidate SP::cSPSimulatorSpaceGame::HandleInputControllerMessage
+010053c0 ?f53c0@SimGame@@QAE_NHPAH@Z  # SimGame::f53c0 migrated from s01004bb0 (verbatim, slice spelling)

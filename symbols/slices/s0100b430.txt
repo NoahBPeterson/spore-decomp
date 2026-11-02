@@ -1,0 +1,1 @@
+0100b430 ?GalaxyUpdateNPC_UFOs@cSPSimulatorSpaceGame_s0100_b430@@QAEXI@Z  # cSPSimulatorSpaceGame_s0100_b430::GalaxyUpdateNPC_UFOs migrated from s0100b430 (verbatim, slice spelling)

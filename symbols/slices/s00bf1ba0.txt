@@ -1,0 +1,1 @@
+00bf2100 ?SpaceTelemetry_Add@cSPSimulatorSpaceGame_s00bf_1ba0@@QAEHI@Z  # cSPSimulatorSpaceGame_s00bf_1ba0::SpaceTelemetry_Add migrated from s00bf1ba0 (verbatim, slice spelling)

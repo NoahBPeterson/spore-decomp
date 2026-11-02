@@ -1,4 +1,4 @@
-// src/game/SPGonzago/SPSimulatorSpaceGame.cpp -- migrated from slice(s) s01399700, s01009820, s010077e0, s01006880, s01005800, s01004bb0, s01003230, s00bb9950 by tools/migrate/rewrite.py
+// src/game/SPGonzago/SPSimulatorSpaceGame.cpp -- migrated from slice(s) s0100b430, s0100a7c0, s00bf1ba0, s01399700, s01009820, s010077e0, s01006880, s01005800, s01004bb0, s01003230, s00bb9950 by tools/migrate/rewrite.py
 // Object file: SPGonzago/SPSimulatorSpaceGame.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -16,6 +16,8 @@
 #include <math.h>
 #include "SP/cSpatialObject.h"
 #include <string.h>
+#include "SP/cSPMission.h"
+#include "SP/cGameNounManager.h"
 #pragma warning(disable: 4100)
 
 // ---- items of slice s00bb9950 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -317,17 +319,44 @@ struct cSPSimulatorSpaceGame {
 
 // ---- items of slice s01004bb0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern void* DAT_016dc0fc;    // cSPSimulatorSpaceGame singleton
+extern float DAT_015b64c0;
 typedef unsigned char  u8;
+typedef unsigned short u16;
 typedef unsigned int   u32;
 typedef unsigned int   uintptr_t;
 typedef int            intptr_t;
 extern u32   DAT_016dc1e0;    // k_wormhole key
 void* __cdecl FUN_00ffbe50();                        // SP::GetUFOSimulator
+void* __cdecl FUN_0067dd10();                        // SP::App
+int   __cdecl FUN_01021080();                        // GetUniverseContext
+void* __cdecl FUN_010212a0();                        // GetActivePlanetRecord
+int   __stdcall FUN_01021230(int);                   // 0x01021230
+void* __cdecl FUN_00b3d2a0();                        // StarManager
 void* __cdecl FUN_00b3d300();                        // NounManager
+void* __cdecl FUN_00b3d380();                        // GameTimeManager
+void* __cdecl FUN_00b3d450();                        // 0x00b3d450
+void* __cdecl FUN_00675250(u32, int);                // AchievementsController
+void* __cdecl FUN_00ba70a0();                        // 0x00ba70a0
+void  __cdecl FUN_00e39ab0(u32, int, void*, void*, void*);
+void* __cdecl FUN_00fd9c60(int);                     // 0x00fd9c60
+void  __cdecl FUN_00fde3e0(void*);                   // TransitionFromPlanetToSolar
+void* __cdecl FUN_00401090(int*);                    // GetSetting9
+void* __cdecl FUN_004df550(void*);                   // GetProfile
+void* __cdecl FUN_01041d30(void*);                   // 0x01041d30
+void* __cdecl FUN_00ac10a0(void*);                   // 0x00ac10a0
+void* __cdecl FUN_008414c0(void);                    // 0x008414c0
+void* __cdecl FUN_00c74730(void*, void*);            // 0x00c74730
+void* __cdecl FUN_00c7ed00(void*, void*);            // 0x00c7ed00
+void* __cdecl FUN_00ac0d80(void*, void*, void*, void*); // eastl::find
+void* __cdecl FUN_0067de90(int, void*);              // 0x0067de90
+void* __cdecl FUN_007ec160(int, void*);              // 0x007ec160
 void* __cdecl FUN_00b67740(void*);                   // 0x00b67740
+void* __cdecl FUN_00b18720(void*);                   // interface_cast turret
 void* __cdecl FUN_00c8b770();                        // cStar::GetSolarSystem
+int   __cdecl FUN_01042480(float*, float*);          // 0x01042480
 void  __cdecl FUN_0106ab20(int);                     // 0x0106ab20
 void  __cdecl FUN_0106200(void*, int);               // ToggleStarmapFilters
+void  __cdecl FUN_00c706d0(void*, int);              // SetPlanetTechLevel
 void  __cdecl FUN_00b22960();                        // cGameNounManager_ProcessPending
 void* __cdecl FUN_00ffd710(void*);                   // 0x00ffd710
 unsigned __int64 __cdecl FUN_00b316c0();             // returns u64
@@ -376,13 +405,14 @@ struct SimGame {
     bool  f53c0(int msg, int* p);
 };
 void  __stdcall f50d0(int param);
+void  f4fc0(int* key);
 bool  f53a0();
 // ---- items of slice s01004bb0 end
 
 // ---- items of slice s01005800 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern float DAT_01485720;    // _HK_REAL_ONE = 1.0f
 extern float DAT_01495378;    // degrees->radians
-typedef unsigned short u16;
+
 typedef          int   s32;
 void* __cdecl operator_new(u32 size, const char* file, int, int, int, int); // 0xf473a0
 void  __cdecl operator_delete_(void*);                                      // 0xf47380
@@ -700,8 +730,23 @@ struct UFOArray {
 // ---- items of slice s010077e0 end
 
 // ---- items of slice s01009820 begin (TODO(rewrite): local stubs, replace by canonical classes)
+struct cRefCounted {
+    void AddRef();
+    void Release();
+};
+static inline void VT_00_0(void* p) { ((void (__thiscall*)(void*))(*(void***)p)[0])(p); }
+static inline void VT_04_0(void* p) { ((void (__thiscall*)(void*))(*(void***)p)[1])(p); }
 static inline void VT_08_1(void* p, int a) { ((void (__thiscall*)(void*, int))(*(void***)p)[2])(p, a); }
+void __cdecl FUN_00aea5d0(void* end, cRefCounted** value);   // 0x00aea5d0 DoInsertPtr
 void __cdecl FUN_01008820(void* dst, void* src, void* arg);  // 0x01008820
+struct cAutoRefVector {
+    u8             mPad0000[0x78];
+    cRefCounted**  mpBegin;                        // 0x78
+    cRefCounted**  mpEnd;                          // 0x7c
+    cRefCounted**  mpCapacity;                     // 0x80
+
+    void  Push(cRefCounted* p);                    // 0x01009a40
+};
 struct cObjectList {
     u8*   mpBegin;                                 // 0x00
     u8*   mpEnd;                                   // 0x04
@@ -753,6 +798,414 @@ void FUN_01006600();
 void FUN_01008680();
 void FUN_0100a640();
 // ---- items of slice s01399700 end
+
+// ---- items of slice s00bf1ba0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+typedef unsigned char byte;
+struct IntVec { int* begin; int* end; int* cap; };
+class Noun
+{
+public:
+    void**  mvptr;                         // +0x00
+    byte    pad04[0x89 - 0x04];            // +0x04..0x88
+    bool    mField89;                      // +0x89
+    bool    mField8a;                      // +0x8a
+    byte    pad8b[0x98 - 0x8b];            // +0x8b..0x97
+    float   mField98;                      // +0x98
+    Noun**  mListBegin;                    // +0x9c  (mCities / mMembers)
+    Noun**  mListEnd;                      // +0xa0
+    uint    mListCap;                      // +0xa4
+
+    int   GetVehicleSpecialty();           // 0x00bd81d0
+    int   GetHousingAmount();              // 0x00bd8960
+    int   GetMemberCount();                // 0x00c8e810 inline: (mListEnd - mListBegin) >> 2
+    Noun* GetMember(int i);                // inline: mListBegin[i]
+};
+class cSimulatorPlayerUFO
+{
+public:
+    uint  pad00[0xb1c / 4];                // +0x00..0xb1b
+    int   mFieldB1c;                       // +0xb1c
+    int   mFieldB20;                       // +0xb20
+};
+class cSPSimulatorSpaceGame_s00bf_1ba0 : public Noun
+{
+public:
+    uint  padA8[(0xb0 - 0xa8) / 4];        // +0xa8..0xaf
+    Noun** mNPCUFOBegin;                   // +0xb0
+    Noun** mNPCUFOEnd;                     // +0xb4
+    uint  padB8[(0x274 - 0xb8) / 4];       // +0xb8..0x273
+    void* mpCityMusic;                     // +0x274
+    uint  pad278[(0x454 - 0x278) / 4];     // +0x278..0x453
+    void* mp454;                           // +0x454
+    uint  pad458[(0x4ac - 0x458) / 4];     // +0x458..0x4ab
+    float mField4ac;                       // +0x4ac
+    float mField4b0;                       // +0x4b0
+    int   GetPoliticalID();                // vtable slot 0x4c
+
+    int   SpaceTelemetry_Add(uint species);   // 0x00bf2100
+    float FUN_00bf2ae0();                     // 0x00bf2ae0
+};
+class cCivilization : public Noun
+{
+public:
+    uint   padA8[(0xb0 - 0xa8) / 4];       // +0xa8..0xaf
+    Noun** mVehicleBegin;                  // +0xb0
+    Noun** mVehicleEnd;                    // +0xb4
+    uint   padB8[(0x274 - 0xb8) / 4];      // +0xb8..0x273
+    void*  mpCityMusic;                    // +0x274
+    uint   pad278[(0x454 - 0x278) / 4];    // +0x278..0x453
+    void*  mp454;                          // +0x454
+    uint   pad458[(0x4ac - 0x458) / 4];    // +0x458..0x4ab
+    float  mField4ac;                      // +0x4ac
+    float  mField4b0;                      // +0x4b0
+    uint   pad4b4[(0x4c4 - 0x4b4) / 4];    // +0x4b4..0x4c3
+    uint   pad4c4[(0x4fc - 0x4c4) / 4];    // +0x4c4..0x4fb
+    int    GetPoliticalID();               // vtable slot 0x4c
+
+    int   FUN_00bf1ba0();                                 // 0x00bf1ba0
+    void  FUN_00bf1cf0(IntVec* timers);                   // 0x00bf1cf0
+    int   FUN_00bf1e20();                                 // 0x00bf1e20
+    void  FUN_00bf1f40(void* music);                      // 0x00bf1f40 (ret 4)
+    int   FUN_00bf1fd0(int specialty);                    // 0x00bf1fd0 (ret 4)
+    float FUN_00bf2170(int a, int b);                     // 0x00bf2170 (ret 8)
+};
+// ---- items of slice s00bf1ba0 end
+
+// ---- items of slice s0100a7c0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern float         g_13ec5b4;     // 0x013ec5b4
+extern float         g_1495390;     // 0x01495390
+extern void*         g_16dc0fc;     // 0x016dc0fc
+extern float         g_16dc100;     // 0x016dc100
+extern float         g_16dc104;     // 0x016dc104
+extern float         g_16dc108;     // 0x016dc108
+extern float         g_1485720;     // 0x01485720
+extern float         g_16dc6f0[9];  // 0x016dc6f0
+extern const uint8_t g_16dc714[16]; // 0x016dc714
+extern char          g_1667bac;     // 0x01667bac (shared empty string)
+extern char          g_1667bad;     // 0x01667bad
+struct Str3 { char* mpBegin; char* mpEnd; char* mpCapacity; };
+struct MissionElem {
+    char*   mpBegin;    // +0x00
+    char*   mpEnd;      // +0x04
+    char*   mpCapacity; // +0x08
+    int32_t m0C;        // +0x0c (owned by the string assign)
+    int32_t m10;        // +0x10
+    float   f14;        // +0x14
+    int32_t m18;        // +0x18
+    void AssignStr(char* first, char* last);            // 0x00454cb0
+    void CopyFrom(const MissionElem* src);              // 0x01006630
+};
+struct EmbElem {
+    void*   m00;        // 0x01495400
+    void*   m04;        // 0x0149bad8
+    int32_t m08;
+    int32_t m0C;        // key
+    int32_t m10;        // scaled value
+};
+struct MissionVec {
+    MissionElem* mpBegin; MissionElem* mpEnd; MissionElem* mpCapacity;
+    void PushSlow(MissionElem* end, const MissionElem* value);   // 0x01009af0
+};
+struct EmbVec {
+    EmbElem* mpBegin; EmbElem* mpEnd; EmbElem* mpCapacity;
+    void PushSlow(EmbElem* end, const EmbElem* value);           // 0x01009c60
+};
+struct Prop {
+    char     pad00[0x12];
+    uint16_t m12;
+    float*   GetFloat();   // 0x0041ea70
+    int32_t* GetInt();     // 0x0041e990
+};
+struct TriggerMgr {
+    char    pad00[0x2c];
+    int32_t m2C;
+    void    Notify();      // 0x00addd90
+};
+struct NounMgr {
+    void* GetCurrentTerrainSphere();   // 0x00f67d90
+};
+struct TerrainSphere {
+    bool Contains(void* p);            // 0x00c772c0
+};
+struct ToolMgr {
+    void* GetActiveTool();             // 0x00b1de80
+};
+struct EmbMap {
+    void* Find();                      // 0x00ce6950
+};
+struct Mission {
+    char    pad000[0x1f0];
+    void*   mp1F0;                     // +0x1f0
+    char    pad1F4[0x200 - 0x1f4];
+    char    m200;                      // +0x200 (address taken)
+    bool    IsActive();                // 0x00c5b6c0
+    void*   GetOwner();                // 0x00c5b340
+    void*   GetStarData();             // 0x00970b30
+    void*   GetEmpire();               // 0x00c451e0
+    float   GetSpeed();                // 0x00c5b860
+};
+struct MissionOwner {
+    char  pad000[0x13c];
+    void* mp13C;                       // +0x13c
+    int32_t GetKind();                 // 0x00c70e00
+};
+struct EmbHolder {
+    char  pad000[0x13c];
+    void* mp13C;                       // +0x13c
+};
+struct Ufo {
+    float* GetPosition();              // 0x005c65e0
+    void   SetOwner(void* e);          // 0x00c3c360
+    void   Refresh();                  // 0x00c37e60
+    void   SetModel(void* p, int32_t a);          // 0x00c37180
+    void   SetDestination(const float* p);        // 0x00c3bfe0
+};
+struct NounListEntry { char pad00[4]; void** mpBegin; void** mpEnd; };
+struct NounMgr2 {
+    NounListEntry* Query(int32_t a, int32_t b, int32_t c, int32_t d, int32_t e);   // 0x00b21340
+};
+struct StarRec {
+    int32_t GetID();                   // 0x00ff0420
+    void    SetEmpire(void* p);        // 0x00ff3190
+};
+struct StarRecHolder {
+    char  pad000[0x13c];
+    void* mp13C;                       // +0x13c
+};
+struct Empire {
+    void SetHome(void* p);             // 0x00c35310
+};
+struct StarMgrObj {
+    void* GetEmpireByID();             // 0x00ba9370
+};
+struct SimSingleton_s0100_a7c0 {
+    void* Ctor();                      // 0x00ae5c30
+    void  ShutdownEntries();           // 0x00ae5930
+    void  Rebuild();                   // 0x00c2e4e0
+};
+struct SortObj {
+    void* SortGroups();                          // 0x00b8de30
+    void  SortBanners(int32_t a, int32_t b);     // 0x00bb9b00
+};
+struct BannerRoot {
+    void* GetSort();                   // 0x00ba6dc0
+};
+struct SpaceTool {
+    void* GetData();                   // 0x00ff3f00
+    void  Apply(void* data);           // 0x00ff4540
+};
+struct SpaceToolData {
+    bool IsValid();                    // 0x0104cc90
+};
+struct Raw {
+    void* FB8DEC0(int32_t i);          // 0x00b8dec0
+    void* FB25F40(int32_t id);         // 0x00b25f40
+    void  F1034840();                  // 0x01034840
+    void  Fb5a390();                   // 0x00b5a390
+    void  Fbbf860();                   // 0x00bbf860
+    void  Fb2ed10();                   // 0x00b2ed10
+    void  Fb0c190(int32_t v);          // 0x00b0c190
+    void  Fb781d0();                   // 0x00b781d0
+    void  F104f250();                  // 0x0104f250
+    void  Ffa2c0();                    // 0x00ffa2c0
+    void  Fac4fe0();                   // 0x00ac4fe0
+    void  Facc770();                   // 0x00acc770
+    void  F106e270();                  // 0x0106e270
+    void  F1034950(int32_t a, int32_t b);   // 0x01034950
+    void  F421cf0();                   // 0x00421cf0
+    void  Fc86c70(int32_t v);          // 0x00c86c70
+    void* Fc8b770();                   // 0x00c8b770
+    void* Fffc230();                   // 0x00ffc230
+};
+void*   __cdecl FUN_00f473a0(size_t n, const char* name, int32_t a, int32_t b, int32_t c, int32_t d);   // 0x00f473a0
+TriggerMgr* __cdecl FUN_00b3d4d0(void);                                   // 0x00b3d4d0
+NounMgr*    __cdecl FUN_00b3d300_s0100_a7c0(void);                                   // 0x00b3d300
+ToolMgr*    __cdecl FUN_00b3d320(void);                                   // 0x00b3d320
+void*       __cdecl FUN_00b3d2a0(int32_t key);                            // 0x00b3d2a0
+void*       __cdecl FUN_0067de30(void);                                   // 0x0067de30
+void*       __cdecl FUN_0067ddd0(void);                                   // 0x0067ddd0
+void*       __cdecl FUN_0067dcc0(void);                                   // 0x0067dcc0
+void*       __cdecl FUN_00b3d350(void);                                   // 0x00b3d350
+void*       __cdecl FUN_00b3d390(void);                                   // 0x00b3d390
+void*       __cdecl FUN_00b3d3b0(void);                                   // 0x00b3d3b0
+void*       __cdecl FUN_00b3d3c0_s0100_a7c0(void);                                   // 0x00b3d3c0
+void*       __cdecl FUN_00b3d430(void);                                   // 0x00b3d430
+void*       __cdecl FUN_00b3d440_s0100_a7c0(void);                                   // 0x00b3d440
+void*       __cdecl FUN_00b3d470_s0100_a7c0(void);                                   // 0x00b3d470
+void*       __cdecl FUN_00b3d480_s0100_a7c0(void);                                   // 0x00b3d480
+void*       __cdecl FUN_00b3d290(void);                                   // 0x00b3d290
+void*       __cdecl FUN_00b3d310(void);                                   // 0x00b3d310
+void        __cdecl FUN_0106e270(void* p);                                // 0x0106e270
+void        __cdecl FUN_01021960(int32_t v);                              // 0x01021960
+void        __cdecl FUN_00b6c280();                                       // 0x00b6c280
+void        __cdecl FUN_00cfeac0();                                       // 0x00cfeac0
+void*       __cdecl FUN_0069b600(void* out, void* facing, void* up);      // 0x0069b600
+void*       __cdecl FUN_0102ac50(int32_t kind, void* owner);              // 0x0102ac50
+void        __cdecl FUN_0102c340(void* p, int32_t v);                     // 0x0102c340
+void        __cdecl FUN_006782c0(void** first, void** last, void** dest); // 0x006782c0
+void*       __cdecl FUN_01006280(void* first, void* last, void* dest);    // 0x01006280
+void        __cdecl FUN_00aea5d0(void** end, void** value);               // 0x00aea5d0
+extern void*         g_167a60c_s0100_a7c0;     // 0x0167a60c
+static void freeStr(Str3& s)
+{
+    if (s.mpCapacity - s.mpBegin > 1 && s.mpBegin != 0)
+        FUN_00f47380(s.mpBegin);
+}
+static void freeElemStr(char* begin, char* capacity)
+{
+    if (capacity - begin > 1 && begin != 0)
+        FUN_00f47380(begin);
+}
+static void* vcall(void* p, int byteOff)
+{
+    return ((void*(__thiscall*)(void*))(*((char**)*(void**)p + byteOff / 4)))(p);
+}
+static void vcall0(void* p, int byteOff)
+{
+    ((void(__thiscall*)(void*))(*((char**)*(void**)p + byteOff / 4)))(p);
+}
+static void vcall1(void* p, int byteOff, int32_t a)
+{
+    ((void(__thiscall*)(void*, int32_t))(*((char**)*(void**)p + byteOff / 4)))(p, a);
+}
+static void vcall2(void* p, int byteOff, int32_t a, int32_t b)
+{
+    ((void(__thiscall*)(void*, int32_t, int32_t))(*((char**)*(void**)p + byteOff / 4)))(p, a, b);
+}
+static bool vcallProp(void* p, int byteOff, int32_t id, void** out)
+{
+    return ((bool(__thiscall*)(void*, int32_t, void**))(*((char**)*(void**)p + byteOff / 4)))(p, id, out);
+}
+static void vrelease(void* p)
+{
+    if (p != 0)
+        ((void(__thiscall*)(void*))(*((char**)*(void**)p + 1)))(p);
+}
+static void vaddref(void* p)
+{
+    if (p != 0)
+        ((void(__thiscall*)(void*))(*((char**)*(void**)p + 0)))(p);
+}
+struct CSporeSim {
+    char    pad0000[0x14];
+    void*   mp14;                       // +0x14
+    char    pad0018[0x54 - 0x18];
+    void*   mp54;                       // +0x54
+    char    pad0058[0x6c - 0x58];
+    uint8_t m6C;                        // +0x6c
+    char    pad006D[0x78 - 0x6d];
+    char*   mp78;                       // +0x78  vector<void*> begin
+    char*   mp7C;                       // +0x7c  vector<void*> end
+    char*   mp80;                       // +0x80  vector<void*> capacity
+    char    pad0084[0xc8 - 0x84];
+    char*   mpC8;                       // +0xc8  vector<MissionElem> begin
+    char*   mpCC;                       // +0xcc  vector<MissionElem> end
+    char*   mpD0;                       // +0xd0  vector<MissionElem> capacity
+    char    pad00D4[0xdc - 0xd4];
+    char*   mpDC;                       // +0xdc  vector<EmbElem> begin
+    char*   mpE0;                       // +0xe0  vector<EmbElem> end
+    char*   mpE4;                       // +0xe4  vector<EmbElem> capacity
+
+    bool AddMission(Str3 str, int32_t a4, int32_t a5, int32_t a6);   // 0x0100a7c0
+    void ActivateSim();                                             // 0x0100a960
+    void SyncEmbassy(void* mission);                                // 0x0100aec0
+    void UpdateMissions();                                          // 0x0100b0a0
+};
+// ---- items of slice s0100a7c0 end
+
+// ---- items of slice s0100b430 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern void* gSimulatorUniverse;                                        // 0x015b????
+extern float gUFOBlend;                                                 // 0x015b68c4
+extern float gUFORange;                                                 // 0x015b68c0
+extern float gUFOGlide;                                                 // 0x015b68bc
+extern float gUFOPlaneA;                                                // 0x015b64d0
+extern float gUFOPlaneB;                                                // 0x015b64d4
+extern float gUFOPlaneC;                                                // 0x015b64d8
+struct cVector3 {
+    float x;                                                            // 0x00
+    float y;                                                            // 0x04
+    float z;                                                            // 0x08
+};
+struct cUpdateContext {
+    uint32_t mUnk000[0x1a];                                             // 0x00
+    void** mpBegin;                                                     // 0x68
+    void** mpEnd;                                                       // 0x6c
+};
+class cSPSimPlanetUFO {
+public:
+    uint32_t mUnk000[0x1ac];                                            // 0x000
+    uint32_t mnListIndex;                                               // 0x6b0
+    uint32_t mUnk6b4[0x18];                                             // 0x6b4
+    uint32_t mnKind;                                                    // 0x714
+    cVector3 mStart;                                                    // 0x718
+    uint32_t mUnk724[7];                                                // 0x724
+    cVector3 mEnd;                                                      // 0x740
+    uint32_t mnActive;                                                  // 0x74c
+    cVector3 mCurrent;                                                  // 0x750
+    uint32_t mUnk75c[8];                                                // 0x75c
+    uint8_t mbUpdateFlag;                                               // 0x77e
+    uint8_t mUnk77f[0x31];                                              // 0x77f
+    void* mpOwnerRecord;                                                // 0x7b0
+};
+class cGameNounManager;
+class cSPSimulatorSpaceGame_s0100_b430;
+class cPlayerInventory;
+class cSPSimulatorSpaceGame_s0100_b430 {
+public:
+    uint32_t mUnk000[0xc];                                              // 0x000
+    cUpdateContext* mpUpdateContext;                                    // 0x030
+    uint32_t mUnk034[0x11];                                             // 0x034
+    cSPSimPlanetUFO** mpPlanetBegin;                                    // 0x078
+    cSPSimPlanetUFO** mpPlanetEnd;                                      // 0x07c
+    cSPSimPlanetUFO** mpPlanetCapacity;                                 // 0x080
+
+public:
+    void GalaxyUpdateNPC_UFOs(uint32_t nDeltaTicks);  // 0x0100b430 (cSPSimulatorSpaceGame::GalaxyUpdateNPC_UFOs)
+    cPlayerInventory* GetPlayerInventory();                             // 0x00a1ad60
+};
+void GalaxyUpdateNPC_Prepass();                                         // 0x0100b0a0
+cGameNounManager* GetNounManager();                                     // 0x01021240
+void StarManager();                                                     // 0x00b3d2a0
+int  StarManager_GetEmpireByID();                                       // 0x00ba9370
+int  SimulatorUniverse_IsPaused();                                      // 0x00c31640
+float Property_GetFloat();                                              // 0x0041ea70
+void RelationshipManager();                                             // 0x00b3d2c0
+int  LivingUniverse_GetPlayerEmpireID();                                // 0x01021090
+cSPSimulatorSpaceGame_s0100_b430* GetUFOSimulator_s0100_b430();                               // 0x00ffbe50
+int  IsAllied(int nEmpireA, int nEmpireB);                              // 0x00d01fb0
+void SimUniverse_UpdatePosition(cVector3* pPosition);                   // 0x00c381e0
+int  SimUniverse_IsObjectVisible(cSPSimPlanetUFO* pUFO, uint32_t nFlags);  // 0x01003df0
+void* StarMap_Find(void* pRecord, uint32_t nFlags, int nArg2, int nArg3);  // 0x01046fc0
+void StarMap_RemoveVisual(void* pStarMap, void* pRecord, uint32_t nFlags,
+                          int nArg2, int nArg3);                        // 0x01045ae0
+int  SimUniverse_CanDestroy();                                          // 0x00c370e0
+void DestroyCreature(cSPSimPlanetUFO* pUFO, uint32_t nFlags);           // 0x0102c340
+void PlanetList_CopyOver(cSPSimPlanetUFO** pSrc, cSPSimPlanetUFO** pEnd,
+                         cSPSimPlanetUFO** pDst);                       // 0x006782c0
+class cGameNounManager {
+public:
+    int GetAvatar();                                                    // 0x00b1fdb0
+};
+class cCivData_s0100_b430 {
+public:
+    cVector3* GetCities();                                              // 0x005c65e0
+};
+class cPlayerInventory {
+public:
+    uint32_t mUnk000[0xd];                                              // 0x00
+    cVector3* mpOrigin;                                                 // 0x34
+};
+float sqrtf_c(float fValue);                                            // 0x00ce6930
+void UpdatePosseUFO(cSPSimulatorSpaceGame_s0100_b430* pGame, cSPSimPlanetUFO* pUFO,
+                    uint32_t nDeltaTicks, float fArg1, float fArg2, float fArg3);
+inline uint32_t* VTableOf(void* pObject) { return *(uint32_t**)pObject; }
+// ---- items of slice s0100b430 end
+
+// @ 0x00bb9c40
+void cStarRecord::SetBlownUp(bool on)
+{
+    mFlags = (mFlags & 0xffffffbf) | ((on ? 0x40u : 0u));
+}
 
 // @ 0x00bba2a0
 void cStarRecord::OnBan()
@@ -855,6 +1308,26 @@ void cStarRecord::OnBan()
     (void)tech5; (void)key;
     if (tech5 && empire != 0)
         ((void(__thiscall*)(void*, void*))0xc33690)(empire, node);
+}
+
+// @ 0x00bf2100
+int cSPSimulatorSpaceGame_s00bf_1ba0::SpaceTelemetry_Add(uint species)
+{
+    if ((int)((uint)((char*)mNPCUFOEnd - (char*)mNPCUFOBegin) & 0xfffffffc) >= 0x90)
+        return 0;
+
+    int already = 0;
+    for (Noun** p = mNPCUFOBegin; p != mNPCUFOEnd; ++p)
+    {
+        cSimulatorPlayerUFO* ufo = (cSimulatorPlayerUFO*)*p;
+        if (ufo->mFieldB20 == (int)species)
+            ++already;
+    }
+
+    int want = ((cCivilization*)this)->FUN_00bf1fd0((int)species) - already;
+    if (want < 1)
+        return 0;
+    return want;
 }
 
 // @ 0x01003230
@@ -1286,6 +1759,107 @@ char SimGame::f4c30()
     return 0;
 }
 
+// @ 0x01004c80
+void SimGame::f4c80(float* dir)
+{
+    char* s = (char*)raw;
+    void* app = FUN_0067dd10();
+    void* a1 = ((void*(__thiscall*)(void*))VTP(app)[0x50 / 4])(app);
+    void* a2 = ((void*(__thiscall*)(void*))VTP(a1)[0x38 / 4])(a1);
+    if (!a2) return;
+    void* esi = ((void*(__thiscall*)(void*, u32))VTP(a2)[0x0c / 4])(a2, 0x303154cc);
+    if (!esi) return;
+    void* sim = FUN_00ffbe50();
+    void* inv = E(sim)->FUN_00a1ad60();
+    float x = dir[0] - *(float*)((char*)inv + 0x718);
+    float y = dir[1] - *(float*)((char*)inv + 0x71c);
+    float z = dir[2] - *(float*)((char*)inv + 0x720);
+    float len2 = x * x + y * y + z * z;
+    if (len2 <= 0.0f) return;
+    float inv2 = 1.0f / len2;
+    x *= inv2; y *= inv2; z *= inv2;
+    *(float*)((char*)esi + 0xc8) = *(float*)((char*)esi + 0x6c);
+    *(float*)((char*)esi + 0xc0) = *(float*)((char*)esi + 0x70);
+    int ctx = FUN_01021080();
+    float timer;
+    if (ctx == 1) timer = *(float*)(s + 0x38);
+    else if (ctx == 2) timer = *(float*)(s + 0x34);
+    else return;
+    float f = timer * DAT_015b64c0;
+    x = -x; y = -y; z = -z;
+    float out[3];
+    FUN_01042480(out, &x);
+    *(float*)((char*)esi + 0xcc) = out[2];
+    *(float*)((char*)esi + 0xc4) = out[1];
+    *(float*)((char*)esi + 0xc4) = out[1] - f;
+    *(float*)((char*)esi + 0xd0) = 0.0f;
+    *(u8*)((char*)esi + 0xd4) = 1;
+}
+
+// @ 0x01004e50
+namespace SP {
+void BlowUpPlanet()
+{
+    if (FUN_01021080() != 0) return;
+    void* rec = FUN_010212a0();
+    void* planet = FUN_01021260();
+    int sortv = (int)(intptr_t)E(rec)->FUN_00b8de30();
+    E(rec)->FUN_00b8d950(1);
+    FUN_00c706d0(rec, 0);
+    void* ach = FUN_00675250(0x5c54d48f, 1);
+    ((void(__thiscall*)(void*, u32, int))VTP(ach)[0])(ach, 0x5c54d48f, 1);
+    void* sm = FUN_00b3d2a0();
+    int m = (int)(intptr_t)FUN_00ba70a0();
+    if (sortv == m) {
+        if (E((void*)sortv)->FUN_00bbaa60(0) == (int)(intptr_t)rec) {
+            void* ach2 = FUN_00675250(0xc280a311, 1);
+            ((void(__thiscall*)(void*, u32, int))VTP(ach2)[0])(ach2, 0xc280a311, 1);
+        }
+    }
+    void* star = (void*)FUN_01021230(0);
+    void* ss = (void*)E(star)->FUN_00c8b770();
+    (void)ss;
+    E(rec)->FUN_00bb9c40(1);
+    u32 locals[16] = {0};
+    FUN_00e39ab0(0x57779cbb, 0, 0, 0, 0);
+    void* t = FUN_00fd9c60(0);
+    FUN_00fde3e0(t);
+    (void)sm; (void)planet; (void)locals;
+}
+}  // namespace SP
+
+// @ 0x01004fc0
+void f4fc0(int* key)
+{
+    void* rec = FUN_010212a0();
+    if (!rec) return;
+    int begin = *(int*)((char*)rec + 0xd0);
+    int end = *(int*)((char*)rec + 0xd4);
+    if (FUN_00ac0d80((void*)begin, (void*)end, key, 0) == (void*)end) return;
+    void* prof = FUN_004df550(FUN_00401090(key));
+    if (!prof) return;
+    if (*(int*)((char*)prof + 0x57c) != (int)0x9ea3031a) return;
+    void* h = FUN_01041d30(prof);
+    int lc = 0, l8 = 0, l4 = 0;
+    void* unused = FUN_00b3d450();
+    (void)unused;
+    for (;;) {
+        if (lc != 0 && (lc != key[0] || l8 != key[1] || l4 != key[2])) break;
+        void* n = FUN_00ac10a0(h);
+        if (!n) return;
+        lc = *(int*)((char*)n + 0x504);
+        l8 = *(int*)((char*)n + 0x508);
+        l4 = *(int*)((char*)n + 0x50c);
+    }
+    void* planet = FUN_01021260();
+    if (!planet) return;
+    FUN_00c74730(planet, key);
+    void* x = FUN_008414c0();
+    if (!x) return;
+    FUN_00c7ed00(x, key);
+    (void)begin; (void)end;
+}
+
 // @ 0x010050d0
 void __stdcall f50d0(int param)
 {
@@ -1319,6 +1893,20 @@ void SimGame::f5130()
     FUN_0106200(*(void**)(s + 0x14), 0);
     void* nouns = FUN_00b3d300();
     E(nouns)->FUN_00b22960();
+}
+
+// @ 0x01005180
+void* SimGame::f5180(int param)
+{
+    char* s = (char*)this;
+    FUN_0067de90(4, (void*)param);
+    void* esi = (void*)FUN_007ec160(4, (void*)param);
+    if (!esi) return 0;
+    ((void(__thiscall*)(void*, int))VTP(esi)[0])(esi, 7);
+    void* tm = FUN_00b3d380();
+    unsigned __int64 t = FUN_00b316c0();
+    (void)t;
+    return esi;
 }
 
 // @ 0x010052d0
@@ -1356,6 +1944,51 @@ bool f53a0()
     void* s = DAT_016dc0fc;
     void* o = *(void**)((char*)s + 0x40);
     return ((char(__thiscall*)(void*, u32))VTP(o)[0x74 / 4])(o, (u32)(uintptr_t)&DAT_016dc1e0) != 0;
+}
+
+// @ 0x010053c0
+bool SimGame::f53c0(int msg, int* p)
+{
+    void* piVar2 = ((void*(__thiscall*)(void*))VTP(p)[0x10 / 4])(p);
+    void* piVar3 = ((void*(__thiscall*)(void*, int))VTP(piVar2)[0x1c / 4])(piVar2, 0);
+    void* ppuVar4;
+    if ((*(u8*)((char*)piVar3 + 0x10) & 0x30) != 0) {
+        piVar3 = *(void**)piVar3;
+        ppuVar4 = piVar3 ? ((void*(__thiscall*)(void*, u32))VTP(piVar3)[0x0c / 4])(piVar3, 0x17f243b) : 0;
+    } else {
+        ppuVar4 = (*(u16*)((char*)piVar3 + 0x12) == 0) ? 0
+                  : ((void*(__thiscall*)(void*, u32))VTP(piVar3)[0x0c / 4])(piVar3, 0x17f243b);
+    }
+    void* tm = FUN_00b3d380();
+    if (*(u8*)((char*)tm + 0x48) & 1) return true;
+    ((void(__thiscall*)(void*, int))VTP(piVar2)[0x1c / 4])(piVar2, 1);
+    E(*(void**)(raw + 0x40))->FUN_00ff3f00();
+
+    if (msg == 0x5417b45) {
+        if (!ppuVar4) return true;
+        ((void(__thiscall*)(void*, u32))VTP(ppuVar4)[0x0c / 4])(ppuVar4, 0x13f94d4);
+        return true;
+    } else if (msg == 0x4dd13d1) {
+        void* t = FUN_00b18720(ppuVar4);
+        if (!t) return true;
+        FUN_00ffbe50();
+        return true;
+    } else if (msg == 0x22d38ee) {
+        void* planet = (void*)FUN_00ffbe50();
+        if (planet) { }
+        return true;
+    } else if (msg == 0x2e81d88) {
+        return true;
+    } else if (msg == 0x3056566) {
+        return true;
+    } else if (msg == 0x589c84b) {
+        return true;
+    } else if (msg == 0x54a7806) {
+        return true;
+    } else if (msg == 0x57df7e0) {
+        return true;
+    }
+    return true;
 }
 
 // @ 0x01005800
@@ -2793,6 +3426,26 @@ void TCopyBackward(UFOElem* first, UFOElem* last, UFOElem* dst)
     }
 }
 
+// @ 0x01009a40
+void cAutoRefVector::Push(cRefCounted* p)
+{
+    if (p != 0)
+        VT_00_0(p);                                // AddRef
+    if (mpEnd < mpCapacity) {
+        cRefCounted** slot = mpEnd;
+        mpEnd = slot + 1;
+        if (slot != 0) {
+            *slot = p;
+            if (p != 0)
+                VT_00_0(p);                        // AddRef
+        }
+    } else {
+        FUN_00aea5d0(mpEnd, (cRefCounted**)&p);
+    }
+    if (p != 0)
+        VT_04_0(p);                                // Release
+}
+
 // @ 0x01009ab0
 void* cObjectList::EraseFront(u8* p)
 {
@@ -2802,6 +3455,627 @@ void* cObjectList::EraseFront(u8* p)
     void* obj = *(void**)mpEnd;
     VT_08_1(obj, 0);
     return p;
+}
+
+// @ 0x0100a7c0
+bool CSporeSim::AddMission(Str3 str, int32_t a4, int32_t a5, int32_t a6)
+{
+    if (a6 == 0) {
+        TriggerMgr* tm = FUN_00b3d4d0();
+        if (tm->m2C == 1 || tm->m2C == 2) {
+            freeStr(str);
+            return false;
+        }
+    }
+
+    NounMgr* nm = FUN_00b3d300_s0100_a7c0();
+    void* sphere = nm->GetCurrentTerrainSphere();
+    if (sphere != 0) {
+        if (((TerrainSphere*)sphere)->Contains((void*)(size_t)a5)) {
+            FUN_00b3d4d0()->Notify();
+            freeStr(str);
+            return false;
+        }
+    }
+
+    MissionElem elem;
+    elem.mpBegin    = &g_1667bac;
+    elem.mpEnd      = &g_1667bac;
+    elem.mpCapacity = &g_1667bad;
+    elem.AssignStr(str.mpBegin, str.mpEnd);
+    elem.m10 = a5;
+    elem.m18 = a6;
+
+    void* tool = FUN_00b3d320()->GetActiveTool();
+    bool  got  = false;
+    void* prop = 0;
+    if (tool != 0)
+        got = vcallProp(tool, 0x24, 0x80acc889, &prop);
+
+    float value;
+    if (got && ((Prop*)prop)->m12 == 0x0d)
+        value = *((Prop*)prop)->GetFloat();
+    else
+        value = elem.f14;
+    elem.f14 = value * g_13ec5b4;
+
+    MissionVec* v = (MissionVec*)((char*)this + 0xc8);
+    if (v->mpEnd < v->mpCapacity) {
+        MissionElem* slot = v->mpEnd++;
+        if (slot != 0)
+            slot->CopyFrom(&elem);
+    } else {
+        v->PushSlow(v->mpEnd, &elem);
+    }
+
+    freeElemStr(elem.mpBegin, elem.mpCapacity);
+    freeStr(str);
+    return true;
+}
+
+// @ 0x0100a960
+void CSporeSim::ActivateSim()
+{
+    if (g_167a60c_s0100_a7c0 == 0) {
+        SimSingleton_s0100_a7c0* s = (SimSingleton_s0100_a7c0*)FUN_00f473a0(
+            0xc8, (const char*)0x145f924, 0, 0, 0, 0);
+        if (s != 0)
+            s = (SimSingleton_s0100_a7c0*)s->Ctor();
+        g_167a60c_s0100_a7c0 = s;
+    }
+    ((SimSingleton_s0100_a7c0*)g_167a60c_s0100_a7c0)->ShutdownEntries();
+
+    EmbHolder* rec = (EmbHolder*)FUN_01021260();
+
+    void* em = FUN_0067ddd0();
+    vcall2(em, 0x98, 0x14, 0);
+    em = FUN_0067ddd0();
+    vcall0(vcall(em, 0x5c), 0x38);
+
+    // space-tool data refresh
+    if (g_16dc0fc != 0) {
+        void* tool = *(void**)((char*)g_16dc0fc + 0x40);
+        if (tool != 0) {
+            SpaceToolData* data = (SpaceToolData*)((SpaceTool*)tool)->GetData();
+            if (data != 0 && data->IsValid())
+                ((SpaceTool*)tool)->Apply(data);
+        }
+    }
+
+    // walk the +0x13c record's +0x15c vector and re-home each star
+    if (rec->mp13C != 0) {
+        int32_t count = (*(int32_t*)((char*)rec->mp13C + 0x160) -
+                         *(int32_t*)((char*)rec->mp13C + 0x15c)) / 4;
+        for (int32_t i = 0; i < count; ++i) {
+            StarRec* sr = (StarRec*)((Raw*)rec->mp13C)->FB8DEC0(0);
+            int32_t id = sr->GetID();
+            void* empire = ((Raw*)FUN_00b3d300_s0100_a7c0())->FB25F40(id);
+            if (empire != 0) {
+                void* home = (char*)empire + 0x6c;
+                sr->SetEmpire(home);
+                int32_t sid = sr->GetID();
+                if (sid < 0) {
+                    StarMgrObj* sm = (StarMgrObj*)FUN_00b3d2a0(sr->GetID());
+                    Empire* e = (Empire*)sm->GetEmpireByID();
+                    e->SetHome(home);
+                }
+            }
+        }
+    }
+
+    // SlotMessage broadcast
+    {
+        struct SlotMsg {
+            void*   mpVtbl;   // +0x00
+            int32_t m04;      // +0x04
+            void*   m08;      // +0x08
+            char    pad[0x38 - 0x0c];
+        } msg;
+        msg.mpVtbl = (void*)0x13eb90c;
+        msg.m04    = 0;
+        msg.m08    = 0;
+        msg.mpVtbl = (void*)0x13eb844;
+        msg.m08    = FUN_01021260();
+        void* srv = FUN_0067dcc0();
+        ((void(__thiscall*)(void*, void*, int32_t, int32_t))(
+            *((char**)*(void**)srv + 5)))(srv, &msg, 0x2489760, 0);
+        ((Raw*)&msg)->F421cf0();
+    }
+
+    void* pm = FUN_00b3d350();
+    void* pmObj = *(void**)((char*)pm + 0x24);
+    if (pmObj != 0) {
+        vcall0(pmObj, 0xac);
+        vcall0(pmObj, 0x84);
+    }
+
+    if (mp14 != 0)
+        FUN_0106e270(mp14);
+    FUN_01021960(-1);
+
+    {
+        float tbl[16];
+        tbl[0]  = g_16dc100;
+        tbl[1]  = g_16dc104;
+        tbl[2]  = g_16dc108;
+        tbl[3]  = g_1485720;
+        tbl[4]  = g_16dc6f0[0];
+        tbl[5]  = g_16dc6f0[1];
+        tbl[6]  = g_16dc6f0[2];
+        tbl[7]  = g_16dc6f0[3];
+        tbl[8]  = g_16dc6f0[4];
+        tbl[9]  = g_16dc6f0[5];
+        tbl[10] = g_16dc6f0[6];
+        tbl[11] = g_16dc6f0[7];
+        tbl[12] = 0.0f;
+        tbl[13] = 0.0f;
+        void* em2 = FUN_0067de00();
+        ((void(__thiscall*)(void*, float*))(*((char**)*(void**)em2 + 0xdc / 4)))(em2, tbl);
+    }
+
+    ((Raw*)FUN_00b3d470_s0100_a7c0())->F1034840();
+    ((Raw*)FUN_00b3d310())->Fb5a390();
+
+    if (m6C != 0 && pmObj != 0) {
+        m6C = 0;
+        vcall0(pmObj, 0x84);
+    }
+
+    if (mp54 != 0) {
+        ((Raw*)mp54)->Ffa2c0();
+        if (mp54 != 0) {
+            void* old = mp54;
+            mp54 = 0;
+            vrelease(old);
+        }
+    }
+
+    {
+        void* x = FUN_01021230();
+        if (x != 0) {
+            void* y = ((Raw*)x)->Fc8b770();
+            if (y != 0)
+                ((Raw*)y)->Fc86c70(0);
+        }
+    }
+
+    ((Raw*)FUN_00b3d430())->Fbbf860();
+    ((Raw*)FUN_00b3d3b0())->Fb2ed10();
+    ((Raw*)FUN_00b3d440_s0100_a7c0())->Fb0c190(1);
+    ((Raw*)FUN_00b3d3c0_s0100_a7c0())->Fb781d0();
+    ((Raw*)FUN_00b3d390())->F104f250();
+
+    {
+        void* em3 = FUN_0067ddd0();
+        void* q = ((void*(__thiscall*)(void*, int32_t))(
+            *((char**)*(void**)em3 + 0x54 / 4)))(em3, 0x3701a5c);
+        vcall0(q, 0x34);
+    }
+
+    ((Raw*)FUN_00ffbe50())->Fffc230();
+    ((Raw*)FUN_00b3d470_s0100_a7c0())->F1034950(0, -1);
+
+    {
+        void* srv = FUN_0067dcd0();
+        struct Pair { void* mpVtbl; int32_t m04; } p1, p2;
+        p1.mpVtbl = (void*)0x13eb428; p1.m04 = 0x1c135da;
+        ((void(__thiscall*)(void*, int32_t, void*))(
+            *((char**)*(void**)srv + 0x70 / 4)))(srv, 0, &p1);
+        p2.mpVtbl = (void*)0x13eb428; p2.m04 = 0xe6bce5;
+        ((void(__thiscall*)(void*, int32_t, void*))(
+            *((char**)*(void**)srv + 0x70 / 4)))(srv, 0, &p2);
+    }
+
+    ((Raw*)FUN_00b3d290())->Fac4fe0();
+
+    if (g_167a60c_s0100_a7c0 == 0) {
+        SimSingleton_s0100_a7c0* s = (SimSingleton_s0100_a7c0*)FUN_00f473a0(
+            0xc8, (const char*)0x145f924, 0, 0, 0, 0);
+        if (s != 0)
+            s = (SimSingleton_s0100_a7c0*)s->Ctor();
+        g_167a60c_s0100_a7c0 = s;
+    }
+    ((SimSingleton_s0100_a7c0*)g_167a60c_s0100_a7c0)->Rebuild();
+
+    {
+        void* ticker = FUN_00b3d330();
+        if (g_167a60c_s0100_a7c0 == 0) {
+            SimSingleton_s0100_a7c0* s = (SimSingleton_s0100_a7c0*)FUN_00f473a0(
+                0xc8, (const char*)0x145f924, 0, 0, 0, 0);
+            if (s != 0)
+                s = (SimSingleton_s0100_a7c0*)s->Ctor();
+            g_167a60c_s0100_a7c0 = s;
+        }
+        ((void(__thiscall*)(void*, void*))(
+            *((char**)*(void**)ticker + 0x54 / 4)))(ticker, g_167a60c_s0100_a7c0);
+    }
+
+    ((Raw*)FUN_00b3d480_s0100_a7c0())->Facc770();
+    FUN_00b6c280();
+
+    {
+        void* o = FUN_0067ddc0();
+        if (o != 0) {
+            vcall1(o, 0x28, 0);
+            vcall0(o, 0x24);
+        }
+    }
+
+    FUN_00cfeac0();
+
+    // drain the mission element vector, freeing each inlined eastl string
+    {
+        MissionElem* first = (MissionElem*)(void*)mpC8;
+        MissionElem* last  = (MissionElem*)(void*)mpCC;
+        MissionElem* it = (MissionElem*)FUN_01006280(first, last, last);
+        for (MissionElem* p = it; p < last; ++p)
+            freeElemStr(p->mpBegin, p->mpCapacity);
+        mpCC = (char*)(mpCC - ((char*)last - (char*)first));
+    }
+
+    FUN_00b3d4d0()->Notify();
+}
+
+// @ 0x0100aec0
+void CSporeSim::SyncEmbassy(void* mission)
+{
+    EmbHolder* m = (EmbHolder*)mission;
+
+    void* found = ((EmbMap*)m->mp13C)->Find();
+
+    EmbElem elem;
+    elem.m00 = (void*)0x1495400;
+    elem.m04 = (void*)0x149bad8;
+    elem.m08 = 0;
+    elem.m0C = (int32_t)(size_t)found;
+    elem.m10 = 1000;
+
+    void* propMgr = FUN_0067de30();
+    void* propObj = 0;
+    ((void(__thiscall*)(void*, int32_t, int32_t, void**))(
+        *((char**)*(void**)propMgr + 0x2c / 4)))(propMgr, 0x249e8357, 0x2ae0c7e, &propObj);
+
+    int32_t kind = ((MissionOwner*)mission)->GetKind();
+    int32_t value = 1000;
+    void*   prop = 0;
+    bool    got = false;
+
+    switch (kind) {
+    case 1:
+        if (propObj != 0)
+            got = vcallProp(propObj, 0x24, 0xa9856bd1, &prop);
+        break;
+    case 2:
+        if (propObj != 0)
+            got = vcallProp(propObj, 0x24, 0x897907de, &prop);
+        break;
+    case 4:
+        if (propObj != 0)
+            got = vcallProp(propObj, 0x24, 0xcf99dc04, &prop);
+        break;
+    default:
+        break;
+    }
+
+    if (got && prop != 0 && ((Prop*)prop)->m12 == 9)
+        value = *((Prop*)prop)->GetInt();
+
+    elem.m10 = value * 1000;
+
+    EmbVec* v = (EmbVec*)((char*)this + 0xdc);
+    int32_t count = (int32_t)((v->mpEnd - v->mpBegin) / 0x14);
+    for (int32_t i = 0; i < count; ++i) {
+        if (v->mpBegin[i].m0C == elem.m0C) {
+            vrelease(propObj);
+            return;
+        }
+    }
+
+    {
+        BannerRoot* br = (BannerRoot*)FUN_00b3d2a0(elem.m0C);
+        SortObj* sort = (SortObj*)br->GetSort();
+        if (sort != 0) {
+            void* s2 = sort->SortGroups();
+            if (s2 != 0)
+                ((SortObj*)s2)->SortBanners(8, 1);
+        }
+    }
+
+    if (v->mpEnd < v->mpCapacity) {
+        EmbElem* slot = v->mpEnd++;
+        if (slot != 0) {
+            slot->m04 = (void*)0x13ec458;
+            slot->m08 = 0;
+            slot->m00 = (void*)0x1495400;
+            slot->m04 = (void*)0x149bad8;
+            slot->m0C = elem.m0C;
+            slot->m10 = elem.m10;
+        }
+    } else {
+        v->PushSlow(v->mpEnd, &elem);
+    }
+
+    vrelease(propObj);
+}
+
+// @ 0x0100b0a0
+void CSporeSim::UpdateMissions()
+{
+    NounMgr* nm = FUN_00b3d300_s0100_a7c0();
+    NounListEntry* list = ((NounMgr2*)nm)->Query(0xcd7d10, 0xd3d420, 0x100a740, 0xb1e500, 0x3960c0e);
+    void** it  = list->mpBegin;
+    void** end = list->mpEnd;
+    if (it == end)
+        return;
+
+    for (; it != end; ++it) {
+        Mission* m = (Mission*)*it;
+
+        // drop a stale UFO handle
+        if (m->mp1F0 != 0) {
+            if (vcall(m->mp1F0, 0x2c) != 0) {
+                if (m->mp1F0 != 0) {
+                    void* old = m->mp1F0;
+                    m->mp1F0 = 0;
+                    vrelease(old);
+                }
+            }
+        }
+
+        if (!m->IsActive()) {
+            if (m->mp1F0 != 0) {
+                FUN_0102c340(m->mp1F0, 0);
+
+                // erase m->mp1F0 from the vector at this+0x78
+                void** b = (void**)mp78;
+                void** e = (void**)mp7C;
+                void** p = b;
+                while (p != e && *p != m->mp1F0)
+                    ++p;
+                if (p + 1 < e)
+                    FUN_006782c0(p + 1, e, p);
+                mp7C = mp7C - 4;
+                {
+                    void* tail = *(void**)mp7C;
+                    if (tail != 0)
+                        vrelease(tail);
+                }
+                if (m->mp1F0 != 0) {
+                    void* old = m->mp1F0;
+                    m->mp1F0 = 0;
+                    vrelease(old);
+                }
+            }
+            continue;
+        }
+
+        void* owner = m->GetOwner();
+        void* starData = m->GetStarData();
+        void* sortObj = 0;
+        if (starData != 0)
+            sortObj = ((SortObj*)((StarRecHolder*)starData)->mp13C)->SortGroups();
+
+        if (m->mp1F0 == 0) {
+            Ufo* ufo = (Ufo*)FUN_0102ac50(4, m->GetEmpire());
+            if (m->GetEmpire() == 0)
+                ufo->SetModel(&m->m200, 0);
+            ufo->SetOwner(owner);
+            ufo->Refresh();
+            {
+                // field vcall: (ufo+0x34)->vtable[0x40](float)
+                void* sub = (char*)ufo + 0x34;
+                void* vt  = *(void**)sub;
+                ((void(__thiscall*)(void*, float))(*((char**)vt + 0x40 / 4)))(sub, g_1495390);
+            }
+            vaddref(ufo);
+
+            {
+                void** e = (void**)mp7C;
+                if (e < (void**)mp80) {
+                    mp7C = (char*)(e + 1);
+                    if (e != 0) {
+                        *e = ufo;
+                        vaddref(ufo);
+                    }
+                } else {
+                    FUN_00aea5d0(e, (void**)&ufo);
+                }
+            }
+            vrelease(ufo);
+
+            {
+                void* old = m->mp1F0;
+                if (ufo != old) {
+                    vaddref(ufo);
+                    m->mp1F0 = ufo;
+                    if (old != 0)
+                        vrelease(old);
+                }
+            }
+        }
+
+        if (m->mp1F0 == 0)
+            continue;
+
+        {
+            Ufo* ufo = (Ufo*)m->mp1F0;
+            float* from = ufo->GetPosition();
+            float* to   = ((Ufo*)sortObj)->GetPosition();
+            float  dt   = m->GetSpeed();
+
+            float delta[3];
+            delta[0] = (to[0] - from[0]) * dt;
+            delta[1] = (to[1] - from[1]) * dt;
+            delta[2] = (to[2] - from[2]) * dt;
+
+            float* pos = ufo->GetPosition();
+            float dest[3];
+            dest[0] = pos[0] + delta[0];
+            dest[1] = pos[1] + delta[1];
+            dest[2] = pos[2] + delta[2];
+            ufo->SetDestination(dest);
+
+            float len = delta[0] * delta[0] + delta[1] * delta[1] + delta[2] * delta[2];
+            float inv = 1.0f / len;
+            float dir[3];
+            dir[0] = delta[0] * inv;
+            dir[1] = delta[1] * inv;
+            dir[2] = delta[2] * inv;
+
+            Ufo* target = (Ufo*)m->mp1F0;
+            float quat[4];
+            FUN_0069b600(quat, dir, (void*)g_16dc714);
+            float* dst = (float*)((char*)target + 0x730);
+            dst[0] = quat[0];
+            dst[1] = quat[1];
+            dst[2] = quat[2];
+            dst[3] = quat[3];
+            target->Refresh();
+        }
+    }
+}
+
+// @ 0x0100b430
+void cSPSimulatorSpaceGame_s0100_b430::GalaxyUpdateNPC_UFOs(uint32_t nDeltaTicks)
+{
+    GalaxyUpdateNPC_Prepass();
+    uint32_t nFlags = 0;
+    int nAvatar = 0;
+    cGameNounManager* pNounManager = GetNounManager();
+    if (pNounManager != 0) {
+        nAvatar = pNounManager->GetAvatar();
+        StarManager();
+        int nEmpire = StarManager_GetEmpireByID();
+        if (nEmpire != 0 && SimulatorUniverse_IsPaused())
+            goto PlanetLoop;
+    }
+    {
+        float fProximity = 10.0f;
+        cUpdateContext* pUniverse = *(cUpdateContext**)gSimulatorUniverse;
+        if (pUniverse != 0) {
+            uint32_t nProperty = 0;
+            const void* pDescriptor = (const void*)0x055e7dad;
+            if (!((bool (__thiscall*)(cUpdateContext*, const void*,
+                                      uint32_t*))VTableOf(pUniverse)[0x24 / 4])(
+                    pUniverse, pDescriptor, &nProperty))
+                fProximity = 10.0f;
+            else if (*(short*)(nProperty + 0x12) != 0x0d)
+                fProximity = 10.0f;
+            else
+                fProximity = Property_GetFloat();
+        }
+        fProximity = fProximity * fProximity;
+        RelationshipManager();
+        int nPlayerEmpire = LivingUniverse_GetPlayerEmpireID();
+        cSPSimulatorSpaceGame_s0100_b430* pSimulator = GetUFOSimulator_s0100_b430();
+        cPlayerInventory* pInventory = pSimulator->GetPlayerInventory();
+        cVector3* pOrigin = pInventory->mpOrigin;
+        cUpdateContext* pContext = mpUpdateContext;
+        for (void** ppEntry = pContext->mpBegin; ppEntry != pContext->mpEnd;
+             ++ppEntry) {
+            cGameNounManager* pEntryManager = (cGameNounManager*)*ppEntry;
+            int nEntryEmpire = pEntryManager->GetAvatar();
+            if (nEntryEmpire != nPlayerEmpire &&
+                !IsAllied(nEntryEmpire, nPlayerEmpire))
+                continue;
+            cVector3* pCity = ((cCivData_s0100_b430*)pEntryManager)->GetCities();
+            float fDX = pCity->x - pOrigin->x;
+            float fDY = pCity->y - pOrigin->y;
+            float fDZ = pCity->z - pOrigin->z;
+            if (fDY * fDY + fDX * fDX + fDZ * fDZ < fProximity) {
+                nFlags |= 1;
+                break;
+            }
+        }
+    }
+
+PlanetLoop:
+    cSPSimPlanetUFO** ppPlanet = mpPlanetBegin;
+    int nKind3Count = 0;
+    int nKind8Count = 0;
+    if (ppPlanet == mpPlanetEnd)
+        return;
+    cSPSimPlanetUFO** ppSlot = ppPlanet;
+    do {
+        cSPSimPlanetUFO* pUFO = *ppSlot;
+        bool bKeep = false;
+        switch (pUFO->mnKind) {
+        case 3:
+            pUFO->mnListIndex = (uint32_t)nKind3Count;
+            ++nKind3Count;
+            UpdatePosseUFO(this, pUFO, nDeltaTicks, 10.0f, 0.0079999999f, 10.0f);
+            bKeep = ((char)pUFO->mnActive) != 0;
+            break;
+        case 4:
+            bKeep = ((char)pUFO->mnActive) != 0;
+            break;
+        case 8: {
+            pUFO->mnListIndex = (uint32_t)nKind8Count;
+            ++nKind8Count;
+            if (!SimUniverse_IsObjectVisible(pUFO, nFlags)) {
+                bKeep = ((char)pUFO->mnActive) != 0;
+                break;
+            }
+            void* pRecord = *(void**)((char*)pUFO->mpOwnerRecord + 0x70);
+            void* pStarMap = StarMap_Find(pRecord, 0x0b7735c3, 0, 0);
+            StarMap_RemoveVisual(pStarMap, pRecord, 0x0b7735c3, 0, 0);
+            bKeep = ((char)pUFO->mnActive) != 0;
+            break;
+        }
+        case 9: {
+            cVector3 vDelta;
+            vDelta.x = (float)pUFO->mEnd.x - (float)pUFO->mStart.x;
+            vDelta.y = (float)pUFO->mEnd.y - (float)pUFO->mStart.y;
+            vDelta.z = (float)pUFO->mEnd.z - (float)pUFO->mStart.z;
+            float fLength = sqrtf_c(vDelta.y * vDelta.y +
+                                           vDelta.z * vDelta.z +
+                                           vDelta.x * vDelta.x) * gUFOBlend;
+            float fRange = gUFORange <= fLength ? gUFORange : fLength;
+            float fSlide = 0.0f;
+            if ((float)nDeltaTicks * gUFOGlide < 1.0f)
+                fSlide = (float)nDeltaTicks * gUFOGlide;
+            else
+                fSlide = 1.0f;
+            cVector3 vDirection;
+            vDirection.x = vDelta.y * gUFOPlaneC - vDelta.z * gUFOPlaneB;
+            vDirection.y = vDelta.z * gUFOPlaneA - vDelta.x * gUFOPlaneC;
+            vDirection.z = vDelta.x * gUFOPlaneB - vDelta.y * gUFOPlaneA;
+            float fNorm = 1.0f / sqrtf_c(
+                                    vDirection.z * vDirection.z +
+                                    vDirection.y * vDirection.y +
+                                    vDirection.x * vDirection.x + 1e-08f);
+            cVector3 vTarget;
+            vTarget.x = (vDirection.x * fNorm * fRange - (float)pUFO->mCurrent.x) *
+                            fSlide + (float)pUFO->mCurrent.x;
+            vTarget.y = (vDirection.y * fNorm * fRange - (float)pUFO->mCurrent.y) *
+                            fSlide + (float)pUFO->mCurrent.y;
+            vTarget.z = (vDirection.z * fNorm * fRange - (float)pUFO->mCurrent.z) *
+                            fSlide + (float)pUFO->mCurrent.z;
+            SimUniverse_UpdatePosition(&vTarget);
+            bKeep = ((char)pUFO->mnActive) != 0;
+            break;
+        }
+        default:
+            bKeep = ((char)pUFO->mnActive) != 0;
+            break;
+        }
+        if (bKeep) {
+            pUFO->mbUpdateFlag = 1;
+            if (SimUniverse_CanDestroy()) {
+                if (((bool (__thiscall*)(cSPSimPlanetUFO*))VTableOf(pUFO)[0x2c / 4])(pUFO)) {
+                    DestroyCreature(pUFO, 0);
+                    if (ppSlot < mpPlanetEnd)
+                        PlanetList_CopyOver(ppSlot + 1, mpPlanetEnd, ppSlot);
+                    --mpPlanetEnd;
+                    if (*mpPlanetEnd != 0)
+                        ((void (__thiscall*)(cSPSimPlanetUFO*))VTableOf(
+                            *mpPlanetEnd)[1])(*mpPlanetEnd);
+                    continue;
+                }
+            }
+        }
+        ++ppSlot;
+    } while (ppSlot != mpPlanetEnd);
 }
 
 // @ 0x0139d420

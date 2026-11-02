@@ -1,4 +1,5 @@
-0100a7c0  ?AddMission@CSporeSim@@QAE_NUStr3@@HHH@Z  # __thiscall (ret 0x18): trigger/terrain gate, then build a 0x1c-byte eastl-string element and push_back into the this+0xc8 vector
-0100a960  ?ActivateSim@CSporeSim@@QAEXXZ  # SimSingleton bring-up / planet activation (1364-byte engine teardown+setup chain)
-0100aec0  ?SyncEmbassy@CSporeSim@@QAEXPAX@Z  # __thiscall (ret 4): embassy rbtree find + PropertyManager switch + this+0xdc banner-vector push_back
-0100b0a0  ?UpdateMissions@CSporeSim@@QAEXXZ  # mission / UFO activation (CreateUFOForSolarOrGalaxy, SetDestination, AutoRefCount)
+00c5b6c0 ?IsActive@cSPMission@SP@@QBE_NXZ  # SP::cSPMission::IsActive (callee of s0100a7c0, named from the dev publics; slice address comment)
+0100a7c0 ?AddMission@CSporeSim@@QAE_NUStr3@@HHH@Z  # CSporeSim::AddMission migrated from s0100a7c0 (verbatim, slice spelling)
+0100a960 ?ActivateSim@CSporeSim@@QAEXXZ  # CSporeSim::ActivateSim migrated from s0100a7c0 (verbatim, slice spelling)
+0100aec0 ?SyncEmbassy@CSporeSim@@QAEXPAX@Z  # CSporeSim::SyncEmbassy migrated from s0100a7c0 (verbatim, slice spelling)
+0100b0a0 ?UpdateMissions@CSporeSim@@QAEXXZ  # CSporeSim::UpdateMissions migrated from s0100a7c0 (verbatim, slice spelling)

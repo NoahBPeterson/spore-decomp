@@ -1,4 +1,5 @@
 # source  symbol  va  flags
+../src/game/SPGonzago/SPSimulatorSpaceGame.cpp  ?SetBlownUp@cStarRecord@@QAEX_N@Z  00bb9c40  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPSimulatorSpaceGame.cpp  ?FUN_01003230@cSPSimulatorSpaceGame@@QAEXXZ  01003230  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPSimulatorSpaceGame.cpp  ?GalaxyContextActivate@cSPSimulatorSpaceGame@@QAEXXZ  01003490  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPSimulatorSpaceGame.cpp  ?FUN_01003620@cSPSimulatorSpaceGame@@QAEXXZ  01003620  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
