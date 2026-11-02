@@ -9,3 +9,4 @@
 00959230 ?FindWindowAt@WM@@QAEPAUIWin@@PBUV2@@@Z  # WM::FindWindowAt migrated from s00958a70 (verbatim, slice spelling)
 009594b0 ?PopFocus@WM@@QAE_NPAUIWin@@0@Z  # WM::PopFocus migrated from s00958a70 (verbatim, slice spelling)
 009595e0 ?InsertRange@MsgList@@QAEXPAUNode@@UIter@@1H@Z  # MsgList::InsertRange migrated from s00958a70 (verbatim, slice spelling)
+00959640 ?SendMsgFull@WM@@QAE_NPAUIWin@@0PAUMsg@@_N2@Z  # WM::SendMsgFull migrated from s00958a70 (verbatim, slice spelling)

@@ -1,0 +1,7 @@
+# va  diff-bytes  reason
+00959640 254 SendMsgFull complete; original reuses param home slot for result byte, regs differ flags: /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+00b3d2c0 44 SP::RelationshipManager; complete behavior, original tail-jumps (jmp FUN_010212f0 / jmp FUN_00c4f030) where ours emits call+ret; equiv=UNSUPPORTED (unresolved C4F::f virtual target) flags: /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+00b3d550 97 FUN_00b3d550 fixup-vector validity test; complete behavior; equiv=PASS 400/400 flags: /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+00b3d5f0 30 FUN_00b3d5f0 mode predicate; complete behavior (dispatch uses goto-shared body); equiv=PASS 400/400 flags: /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+00b3d630 29 FUN_00b3d630 f10-local float path; complete behavior, only remaining diff is x87 fmul operand order / pop-esi scheduling (size 101 vs 102); equiv=PASS 399/400 flags: /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+00b3d6a0 46 FUN_00b3d6a0 mode dispatch; complete behavior, register allocation for p40 differs (original keeps p40 in esi); equiv=WEAK (326 valid, 34.3% coverage - indirect-call paths not exercised) flags: /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast

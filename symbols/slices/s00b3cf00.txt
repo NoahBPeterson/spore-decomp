@@ -1,11 +1,11 @@
 00b3cf00 ?M_cf00@C101@@QAEMXZ  # C101::M_cf00 migrated from s00b3cf00 (verbatim, slice spelling)
 00b3cf40 ?M_cf40@C101@@QAEXXZ  # C101::M_cf40 migrated from s00b3cf00 (verbatim, slice spelling)
-00b3d2c0  SP::RelationshipManager  # PDB name on the card
-00b3d520  SP::GonzagoModelWorld  # PDB name on the card
-00b3d550  FUN_00b3d550  # PDB name on the card
-00b3d5f0  FUN_00b3d5f0  # PDB name on the card
-00b3d630  FUN_00b3d630  # PDB name on the card
-00b3d6a0  FUN_00b3d6a0  # PDB name on the card
+00b3d2c0 ?SP_RelationshipManager@@YAPAXXZ  # SP_RelationshipManager migrated from s00b3cf00 (verbatim, slice spelling)
+00b3d520 ?SP_GonzagoModelWorld@@YAPAXXZ  # SP_GonzagoModelWorld migrated from s00b3cf00 (verbatim, slice spelling)
+00b3d550 ?FUN_00b3d550@@YA_NPAM@Z  # FUN_00b3d550 migrated from s00b3cf00 (verbatim, slice spelling)
+00b3d5f0 ?M_d5f0@C101@@QAE_NXZ  # C101::M_d5f0 migrated from s00b3cf00 (verbatim, slice spelling)
+00b3d630 ?M_d630@C101@@QAEMXZ  # C101::M_d630 migrated from s00b3cf00 (verbatim, slice spelling)
+00b3d6a0 ?M_d6a0@C101@@QAEPAXXZ  # C101::M_d6a0 migrated from s00b3cf00 (verbatim, slice spelling)
 00b3d700 ?FUN_00b3d700@@YA?AUS16@@II@Z  # FUN_00b3d700 migrated from s00b3cf00 (verbatim, slice spelling)
 00b3d730 ?M_d730@C101@@QAEXXZ  # C101::M_d730 migrated from s00b3cf00 (verbatim, slice spelling)
 00b3d7a0 ?M_d7a0@C101@@QAEXXZ  # C101::M_d7a0 migrated from s00b3cf00 (verbatim, slice spelling)

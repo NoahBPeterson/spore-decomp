@@ -1,0 +1,2 @@
+# source  symbol  va  flags
+../src/game/SPGonzago/SPGonzagoAccessor.cpp  ?SP_GonzagoModelWorld@@YAPAXXZ  00b3d520  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
