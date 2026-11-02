@@ -9,6 +9,6 @@
 00a7cfb0  ClampToShell  # cdecl (float* p, float* dir, float radius, void* unused) -> bool; push a point onto a spherical shell, writing the outward direction
 00a7d1a0  RandomSpawnSeed  # stdcall (void* arg, float* outv, void* target); draw a random uniform plus a 0/1 pair and hand a colour to the target
 00a7d210  BuildOrthonormalFrame  # stdcall (const Vector3* n, Vector3* out, Vector3* basis, float, float, const float* z) -> bool; build an orthonormal frame
-00a7d280  EA::Swarm::ParseSurfaceOptions  # cdecl (void* a, void* b, uint32* opts, int* owner); parse surface-emitter options from an ArgScript argument block
+00a7d280 ?ParseSurfaceOptions@@YAXPAX0PAIPAH@Z  # ParseSurfaceOptions migrated from s00a7c630 (verbatim, slice spelling)
 00a7d540  SurfaceSpec::Assign  # thiscall (const SurfaceSpec&) -> SurfaceSpec*; ref-count the incoming handle at +0 then copy the remaining fields
 00a7d580  SurfaceSpec::SwapAssign  # thiscall (const SurfaceSpec&) -> SurfaceSpec*; release the old handle and adopt the incoming one
