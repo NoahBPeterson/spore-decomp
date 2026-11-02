@@ -1,4 +1,4 @@
-0092f220 EA::IO::DirectoryIterator::ReadRecursive  # pdb_candidates caller-scored + DirectoryIterator layout (mnListSize/mnRecursionIndex/mpBaseDirectory/mBaseDirectoryLength)
+0092f220 ?ReadRecursive@DirectoryIterator@IO@EA@@QAEIPBGPAX0IDDI1@Z  # ReadRecursive migrated from s0092f220 (verbatim, slice spelling)
 0092f650 ?Worker@FileWatcher@@QAEXI@Z  # FileWatcher::Worker migrated from s0092f220 (verbatim, slice spelling)
 0092f8b0 ?Watch@FileWatcher@@QAEXIPBG@Z  # FileWatcher::Watch migrated from s0092f220 (verbatim, slice spelling)
 0092f960 ?Construct@FileWatcher@@QAEPAU1@XZ  # FileWatcher::Construct migrated from s0092f220 (verbatim, slice spelling)

@@ -12,4 +12,5 @@
 0092ec60 ?DoReallocPtrArray@Deque@@QAEXIH@Z  # Deque::DoReallocPtrArray migrated from s0092e3d0 (verbatim, slice spelling)
 0092ed90 ??0Entry@@QAE@ABU0@@Z  # Entry::Entry migrated from s0092e3d0 (verbatim, slice spelling)
 0092ee20 ?DoPushBack@Deque@@QAEXABUEntry@@@Z  # Deque::DoPushBack migrated from s0092e3d0 (verbatim, slice spelling)
-0092ef40 EA::IO::DirectoryIterator::Read  # PDB candidate
+0092eec0 ?push_back@Deque@@QAEXXZ  # Deque::push_back migrated from s0092e3d0 (verbatim, slice spelling)
+0092ef40 ?DirectoryIteratorRead@@YGIPB_WPAUDeque@@0EI_N@Z  # DirectoryIteratorRead migrated from s0092e3d0 (verbatim, slice spelling)

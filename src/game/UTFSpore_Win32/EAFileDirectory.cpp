@@ -1,4 +1,4 @@
-// src/game/UTFSpore_Win32/EAFileDirectory.cpp -- migrated from slice(s) s0092e3d0 by tools/migrate/rewrite.py
+// src/game/UTFSpore_Win32/EAFileDirectory.cpp -- migrated from slice(s) s0092f220, s0092e3d0 by tools/migrate/rewrite.py
 // Object file: UTFSpore_Win32/EAFileDirectory.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -7,14 +7,18 @@
 #include "EA/Allocator/ICoreAllocator.h"
 
 // unnamed retail callees and globals (address in the comment)
+extern "C" int64_t __stdcall _alldiv(int, int, int, int);
 extern wchar_t gEmptyStr;        // 0x01667bac: shared empty-string storage of eastl::basic_string<wchar_t>
 extern wchar_t gEmptyStrEnd;     // 0x01667bae: one past it
+extern const wchar_t kDot[];     // 0x01436614  L"."
+extern const wchar_t kDotDot[];  // 0x0143660c  L".."
 #include <time.h>
 #include <string.h>
 #include <new>
 #include <windows.h>
 
 // ---- items of slice s0092e3d0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C" int64_t __stdcall _alldiv(int, int, int, int);
 struct EntryFindData {
     wchar_t  mName[260];        // +0x000
     char     mIsDirectory;      // +0x208
@@ -33,6 +37,8 @@ void* operator new(unsigned, const char*, int, int, int, int);
 void  operator delete[](void*);   // 0x00f47380
 extern wchar_t gEmptyStr;        // 0x01667bac: shared empty-string storage of eastl::basic_string<wchar_t>
 extern wchar_t gEmptyStrEnd;     // 0x01667bae: one past it
+extern const wchar_t kDot[];     // 0x01436614  L"."
+extern const wchar_t kDotDot[];  // 0x0143660c  L".."
 struct WString {
     wchar_t* mpBegin;      // +0x00
     wchar_t* mpEnd;        // +0x04
@@ -116,8 +122,71 @@ struct Deque {
     void DoReallocPtrArray(unsigned nAdditional, int side);
 };
 static inline const unsigned& max_alt(const unsigned& a, const unsigned& b) { return a < b ? b : a; }
+static __forceinline unsigned StrLen16(const wchar_t* s) {
+    const wchar_t* p = s;
+    while (*p)
+        ++p;
+    return (unsigned)(p - s);
+}
     void operator delete[](void*); // 0x00f47380
 // ---- items of slice s0092e3d0 end
+
+// callees this slice defines outside this object (rewrite.py held_callee_protos)
+EntryFindData* EntryFindFirst(const wchar_t* dir, const wchar_t* pattern, EntryFindData* data, bool wantTimes);  // 0x0092e730 (stays in the slice: not this object's)
+EntryFindData* EntryFindNext(EntryFindData* data, bool wantTimes);  // 0x0092e8e0 (stays in the slice: not this object's)
+
+// ---- items of slice s0092f220 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C" void FUN_004228e0(void*, unsigned);
+extern "C" void FUN_005f8840(void*);
+extern "C" void FUN_005f96c0(void*);
+extern "C" void FUN_0092e9f0(void* self, int);
+extern "C" void WString_Assign(void* self, const unsigned short*, const unsigned short*); // 0x00423650
+extern "C" void WString_insert(void*, const unsigned short*, const unsigned short*);       // 0x005f7da0
+extern "C" void WString_append(void*, const unsigned short*, int, unsigned short);         // 0x0092ea90
+extern "C" int  EA_Text_WildcardMatch(const unsigned short*, const unsigned short*, int);
+extern "C" void* Deque_Push(void*);                                                       // 0x0092eec0
+extern "C" int* Deque_Last(void*);                                                        // 0x0092ea70
+int  ConcatenatePathComponents(unsigned short* dst, const unsigned short* c1, const unsigned short* c2);
+namespace EA {
+namespace IO {
+class DirectoryIterator { public:
+    uint32_t mnListSize;            // +0
+    int      mnRecursionIndex;      // +4
+    unsigned short* mpBaseDirectory;// +8
+    uint32_t mBaseDirectoryLength;  // +0xc
+
+    uint32_t ReadRecursive(const unsigned short* pDir, void* pList, const unsigned short* pFilter,
+                           uint32_t flags, char c6, char c7, uint32_t maxDepth, void* p9);
+    int FillEntries(const unsigned short*, void*, int, int, int, void*);
+};  // namespace EA::IO
+}
+}
+using EA::IO::DirectoryIterator;
+// ---- items of slice s0092f220 end
+
+// @ 0x0092e680
+__declspec(noinline) static int64_t GetFileTimeEpoch()
+{
+    SYSTEMTIME st;
+    FILETIME ft;
+    memset(&st, 0, sizeof(st));
+    st.wYear = 1970;
+    st.wMonth = 1;
+    st.wDayOfWeek = 0;
+    st.wDay = 1;
+    SystemTimeToFileTime(&st, &ft);
+    return _alldiv(ft.dwLowDateTime, ft.dwHighDateTime, 10000000, 0);
+}
+
+// @ 0x0092e6e0
+static int64_t FileTimeToUnix(const FILETIME* ft)
+{
+    DWORD lo = ft->dwLowDateTime;
+    DWORD hi = ft->dwHighDateTime;
+    int64_t secs = _alldiv(lo, hi, 10000000, 0);
+    static int64_t sEpoch = GetFileTimeEpoch();
+    return secs - sEpoch;
+}
 
 // @ 0x0092e9b0
 void EntryFindFinish(EntryFindData* data)
@@ -249,4 +318,171 @@ __declspec(noinline) void Deque::DoPushBack(const Entry& value)
         new (mItEnd.mpCurrent) Entry(valueSaved);
     mItEnd.SetSubarray(mItEnd.mpCurrentArrayPtr + 1);
     mItEnd.mpCurrent = mItEnd.mpBegin;
+}
+
+// @ 0x0092eec0
+__declspec(noinline) void Deque::push_back()
+{
+    if (mItEnd.mpCurrent + 1 != mItEnd.mpEnd) {
+        Entry* p = mItEnd.mpCurrent++;
+        if (p)
+            new (p) Entry();
+    } else {
+        Entry tmp;
+        DoPushBack(tmp);
+    }
+}
+
+// @ 0x0092ef40
+unsigned __stdcall DirectoryIteratorRead(const wchar_t* dir, Deque* list, const wchar_t* pattern, unsigned char flags, unsigned maxCount, bool wantTimes)
+{
+    EntryFindData scratch;
+    unsigned n = 0;
+    EntryFindData* e = EntryFindFirst(dir, pattern, &scratch, wantTimes);
+    if (!e)
+        return 0;
+    do {
+        if (n >= maxCount)
+            goto done;
+        if (wcscmp(e->mName, kDot) != 0 && wcscmp(e->mName, kDotDot) != 0) {
+            if (e->mIsDirectory) {
+                if (flags & 1) {
+                    n++;
+                    list->push_back();
+                    list->back().mType = 1;
+                    list->back().mName.assign(e->mName, e->mName + StrLen16(e->mName));
+                    list->back().mTimes64[0] = e->mCreateTime;
+                    list->back().mTimes64[1] = e->mWriteTime;
+                    list->back().mTimes64[2] = e->mAccessTime;
+                }
+            } else if (flags & 2) {
+                n++;
+                list->push_back();
+                list->back().mType = 2;
+                list->back().mName.assign(e->mName, e->mName + StrLen16(e->mName));
+                list->back().mTimes64[0] = e->mCreateTime;
+                list->back().mTimes64[1] = e->mWriteTime;
+                list->back().mTimes64[2] = e->mAccessTime;
+            }
+        }
+    } while (EntryFindNext(e, wantTimes));
+    EntryFindFinish(e);
+done:
+    if ((flags & 4) && n < maxCount) {
+        n++;
+        list->push_back();
+        list->mItBegin.mpCurrent->mType = 1;
+        list->mItBegin.mpCurrent->mName.append(kDot);
+    }
+    if ((flags & 8) && n < maxCount) {
+        n++;
+        list->push_back();
+        list->mItBegin.mpCurrent->mType = 1;
+        list->mItBegin.mpCurrent->mName.append(kDotDot);
+    }
+    return n;
+}
+
+// @ 0x0092f220
+uint32_t DirectoryIterator::ReadRecursive(const unsigned short* pDir, void* pList, const unsigned short* pFilter, uint32_t flags, char c6, char c7, uint32_t maxDepth, void* p9)
+{
+    uint32_t oldIndex = mnRecursionIndex;
+    int newIndex = oldIndex + 1;
+    mnRecursionIndex = newIndex;
+    if (oldIndex == 0) {
+        mnListSize = 0;
+        mpBaseDirectory = (unsigned short*)pDir;
+        unsigned short* p = (unsigned short*)pDir;
+        while (*p++) {}
+        uint32_t len = (uint32_t)((char*)p - (char*)(pDir + 1)) >> 1;
+        mBaseDirectoryLength = len;
+        if (len == 0 || (pDir[len - 1] != '\\' && pDir[len - 1] != '/' && pDir[len - 1] != ':')) {
+            mBaseDirectoryLength = len + 1;
+        }
+    }
+    if ((flags & 2) != 0 && (c6 != 0 || newIndex > 1)) {
+        if (mnListSize >= maxDepth) goto done;
+        int n = FillEntries(pDir, 0, 0, 2, maxDepth - mnListSize, p9);
+        // iterate a deque<Entry> whose live range is pList[0x18] .. pList[0x20]
+        int* pFirst = *(int**)((char*)pList + 0x18);
+        int* pLast  = *(int**)((char*)pList + 0x20);
+        FUN_0092e9f0((char*)&n /*placeholder self*/, -n);
+        if (pFirst != *(int**)((char*)pList + 0x18)) {
+            do {
+                mnListSize++;
+                int* pEntry = pFirst;
+                int elemCount = (*(int*)((char*)pEntry + 8) - *(int*)((char*)pEntry + 4));
+                unsigned short* dst = (unsigned short*)*(int*)((char*)pEntry + 4);
+                const unsigned short* q = pDir;
+                while (*q) ++q;
+                // string insert at dst with [pDir, q)
+                extern void WString_insert(void*, const unsigned short*, const unsigned short*);
+                WString_insert(&dst, pDir, q);
+                int added = ((*(int*)((char*)pEntry + 8) - *(int*)((char*)pEntry + 4)) >> 1) - (elemCount >> 1);
+                if (added != 0) {
+                    unsigned short last = dst[added - 1];
+                    if (last != '\\' && last != '/' && last != ':') {
+                        extern void WString_append(void*, const unsigned short*, int, unsigned short);
+                        WString_append(&dst, dst + added, 1, '\\');
+                    }
+                }
+                if (c7 == 0) FUN_004228e0(0, mBaseDirectoryLength);
+                pFirst += 0x30 / 4;
+                if ((char*)pFirst == (char*)pLast) {
+                    pLast = (int*)((char*)pLast + 4);
+                    pFirst = (int*)*pLast;
+                    pLast = (int*)((char*)pFirst + 0xc0);
+                }
+            } while ((char*)pFirst != (char*)*(int**)((char*)pList + 0x18));
+        }
+    }
+    if (mnListSize < maxDepth) {
+        // recursive scan built on a local deque
+        char localDeque[0x18];
+        int loc0 = *(int*)((char*)pList + 0x28);
+        int loc1 = *(int*)((char*)pList + 0x2c);
+        (void)loc0; (void)loc1;
+        FUN_005f8840(localDeque);
+        FillEntries(pDir, localDeque, 0, 1, 0x100000, p9);
+        unsigned short buf[0x100];
+        int* it = *(int**)(localDeque + 0x10);
+        int* end = *(int**)(localDeque + 0x14);
+        if (it != end) {
+            do {
+                if (mnListSize >= maxDepth) break;
+                ConcatenatePathComponents(buf, pDir, *(const unsigned short**)((char*)it + 4));
+                if ((flags & 1) != 0 &&
+                    (pFilter == 0 || EA_Text_WildcardMatch(*(const unsigned short**)((char*)it + 4), pFilter, 1))) {
+                    mnListSize++;
+                    void* e = Deque_Push(localDeque);
+                    (void)e;
+                    int* out = Deque_Last(localDeque);
+                    out[0] = 1;
+                    unsigned short* q = buf;
+                    while (*q) ++q;
+                    void* s = (char*)out + 4;
+                    WString_Assign(s, buf, q);
+                    out[6] = *(int*)((char*)it + 0x18);
+                    out[7] = *(int*)((char*)it + 0x1c);
+                    out[8] = *(int*)((char*)it + 0x20);
+                    out[9] = *(int*)((char*)it + 0x24);
+                    out[10] = *(int*)((char*)it + 0x28);
+                    out[11] = *(int*)((char*)it + 0x2c);
+                    if (c7 == 0) FUN_004228e0(0, mBaseDirectoryLength);
+                }
+                ReadRecursive(buf, pList, pFilter, flags, 1, c7, maxDepth, p9);
+                it = (int*)((char*)it + 0x30);
+                if (it == end) {
+                    int* nx = (int*)((char*)end + 4);
+                    it = (int*)*nx;
+                    end = (int*)((char*)it + 0xc0);
+                }
+            } while (it != *(int**)(localDeque + 0x14));
+        }
+        FUN_005f96c0(localDeque);
+    }
+done:
+    uint32_t r = mnListSize;
+    mnRecursionIndex--;
+    return r;
 }
