@@ -1,9 +1,9 @@
-007df780 ?CreateRandomKernel@cSafeDynamicKernelStorage@@QAEPAXXZ  # cSafeDynamicKernelStorage::CreateRandomKernel migrated from s007df780 (verbatim, slice spelling)
-007dfac0 ?Serialize@cSafeDynamicKernelStorage@@QAEXPAX@Z  # cSafeDynamicKernelStorage::Serialize migrated from s007df780 (verbatim, slice spelling)
-007dfbd0 ?FUN_007dfbd0@@YAXPAX0@Z  # FUN_007dfbd0 migrated from s007df780 (verbatim, slice spelling)
-007dfbf0 ?FUN_007dfbf0@@YAPAXXZ  # FUN_007dfbf0 migrated from s007df780 (verbatim, slice spelling)
+007df780  SplitModelKernelEffect kernel parse helper
+007dfac0  FUN_007dfac0
+007dfbd0  FUN_007dfbd0
+007dfbf0  MapDescription allocation helper
 007dfc20  FUN_007dfc20
-007dfd90 ?FUN_007dfd90@cDescCtx@@QAEXPAVcArguments_s007d_f780@ArgScript@EA@@@Z  # cDescCtx::FUN_007dfd90 migrated from s007df780 (verbatim, slice spelling)
+007dfd90  FUN_007dfd90
 007dfe80  ArgScript::SplitModelKernelEffect::SplitModelKernelEffect  # PDB name
 007dfed0 ?FUN_007dfed0@@YAXXZ  # FUN_007dfed0 migrated from s007df780 (verbatim, slice spelling)
 007e0110 ??0cMapDescription@@QAE@H@Z  # MapDescription constructor (was FUN_007e0110)

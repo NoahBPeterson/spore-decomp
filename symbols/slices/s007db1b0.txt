@@ -1,7 +1,7 @@
-007db1b0 ?ListCommands@AutomateRunner@@QAEXXZ  # AutomateRunner::ListCommands migrated from s007db1b0 (verbatim, slice spelling)
+007db1b0  AutomateRunner::ListCommands
 007db2a0  AutomateRunner::ListCommands2
-007db3a0 ?Run@CommandRunner@@QAE_NPBDPAD@Z  # CommandRunner::Run migrated from s007db1b0 (verbatim, slice spelling)
-007db570 ?SP_AutomateEntry@@YAXHH@Z  # SP_AutomateEntry migrated from s007db1b0 (verbatim, slice spelling)
+007db3a0  CommandRunner::Run  # parses -openautomate
+007db570  SP_AutomateEntry  # atexit registration + run
 007db5b0 ?Contains@PtrVec@@QAE_NH@Z  # PtrVec::Contains migrated from s007db1b0 (verbatim, slice spelling)
 007db5e0  PtrVec::Find
 007db620 ?At@PtrVec@@QAEPAXH@Z  # PtrVec::At migrated from s007db1b0 (verbatim, slice spelling)
