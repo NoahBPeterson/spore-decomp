@@ -7,12 +7,12 @@
 0064e460 ?LoadAssetComments@cSPUIAssetComments@SP@@QAE_N_K@Z  # SP::cSPUIAssetComments::LoadAssetComments migrated from s0064dbd0
 0064e5b0 ?Do@Outer168@@QAEXXZ  # Outer168::Do migrated from s0064dbd0 (verbatim, slice spelling)
 0064e5d0 ?Compute@CellCalc@@QAEXHPAM@Z  # CellCalc::Compute migrated from s0064dbd0 (verbatim, slice spelling)
-0064e680 ?HandleMessage@cSPUIAssetGrid_s0064_dbd0@SP@@QAE_NII@Z  # cSPUIAssetGrid_s0064_dbd0::HandleMessage migrated from s0064dbd0 (verbatim, slice spelling)
-0064e6b0 float pair-equality helper  # compares [ecx]/[ecx+4] against [ecx+8]/[ecx+0xc]
-0064e6e0 value constructor  # copies 12-byte key, two refcounted references, two bools
-0064e740 value constructor  # two vptrs, IUnknown-style ref at +0xc, byte/int payload
-0064e7a0 release/reset helper  # member ptr +0xfc, flag +0x100
+0064e680 ?HandleMessage@cSPUIAssetGrid_s0064_dbd0@SP@@QAE_NII@Z  # HandleMessage migrated from s0064dbd0 (verbatim, slice spelling)
+0064e6b0 ?Equal@RectF@@QBE_NXZ  # RectF::Equal migrated from s0064dbd0 (verbatim, slice spelling)
+0064e6e0 ??0C_e6e0@@QAE@PBUKey3@@PAX1_N2@Z  # C_e6e0::C_e6e0 migrated from s0064dbd0 (verbatim, slice spelling)
+0064e740 ??0C_e740@@QAE@PAX_NH11@Z  # C_e740::C_e740 migrated from s0064dbd0 (verbatim, slice spelling)
+0064e7a0 ?Reset@R7a0@@QAEXXZ  # R7a0::Reset migrated from s0064dbd0 (verbatim, slice spelling)
 0064e7d0 ?Test@R7d0@@QAE_NI@Z  # R7d0::Test migrated from s0064dbd0 (verbatim, slice spelling)
-0064e880 loading-indicator window updater  # windows +0x2c..+0x38, elapsed-seconds animation
-0064e980 scroll-bar layout helper  # windows +0x3c,+0x40,+0x44
-0064eaf0 child-window visibility setter  # windows +0x1c/+0x20/+0x24, AppSystem flag +0x10c
+0064e880 ?Update@R880@@QAEXII@Z  # R880::Update migrated from s0064dbd0 (verbatim, slice spelling)
+0064e980 ?Layout@R980@@QAEXPAX00_N@Z  # R980::Layout migrated from s0064dbd0 (verbatim, slice spelling)
+0064eaf0 ?SetVisible@Eaf0@@QAEX_N@Z  # Eaf0::SetVisible migrated from s0064dbd0 (verbatim, slice spelling)

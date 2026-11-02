@@ -1,14 +1,14 @@
-006535b0  eastl::vector<SP::cSPAssetGridEntry,eastl::sp_vector_allocator>::DoInsertValue  # ret 8; aliasing + realloc paths
-006536e0  filter/remove over 0x10-byte records (SetAssetData + lower_bound)  # 10-byte stride 0x10
-00653780  copy_if over 0x10-byte records  # same helpers as 006536e0
-00653820  eastl::quick_sort_impl<SP::cSPAssetGridEntry*,int,SP::TypeGridEntrySort>  # recursive median/get_partition/partial_sort, limit 0x380
-00653960  eastl::partial_sort<SP::cSPAssetGridEntry*,CompareA>  # make_heap 6533d0 + adjust_heap 6525d0 + compare 64ff90
-00653b80  SP::cSPUIAssetGrid::FindFirstVisibleEntry (forward scan)  # forward scan, returns index or -1
-00653c40  SP::cSPUIAssetGrid::FindLastVisibleEntry (reverse scan)  # reverse scan
-00653cf0 ?VerbCollect@cSPUIAssetView@@QAEPAXI@Z  # cSPUIAssetView::VerbCollect (this = view, 1 stack arg, ret 4)
-00653e40  eastl::vector<SP::cSPAssetGridEntry,eastl::sp_vector_allocator>::resize  # ret 4
-00653f50  eastl::quick_sort_impl<SP::cSPAssetGridEntry*,int,CompareA>  # median A 0x6515a0 + get_partition A 0x652e70
-00654100 ?HandleMessage@cSPUIAssetGrid@@QAEDHI@Z  # cSPUIAssetGrid::HandleMessage (this = grid, wparam, lparam, ret 8)
-006543a0  SP::cSPUIAssetGrid::Clear  # release 0xfc, destroy entries, reset fields
-00654490  eastl::vector<SP::cSPAssetGridEntry,eastl::sp_vector_allocator>::reserve  # ret 4; realloc + swap fallback
-00654650  SP::cSPUIAssetGrid::Shutdown  # PDB candidate; releases layout/feed/search/handler
+006535b0 ?DoInsertValue@GridVec_s0065_35b0@@QAEXPAUGridEntry_s0065_35b0@@ABU2@@Z  # GridVec_s0065_35b0::DoInsertValue migrated from s006535b0 (verbatim, slice spelling)
+006536e0 ?Filter16@@YAPAHPAH00000PAD@Z  # Filter16 migrated from s006535b0 (verbatim, slice spelling)
+00653780 ?Filter16Copy@@YAPAXPAH0000PAD@Z  # Filter16Copy migrated from s006535b0 (verbatim, slice spelling)
+00653820 ?QuickSortImplB@@YAXPAUGridEntry_s0065_35b0@@0H@Z  # QuickSortImplB migrated from s006535b0 (verbatim, slice spelling)
+00653960 ?PartialSortA@@YAXPAUGridEntry_s0065_35b0@@00@Z  # PartialSortA migrated from s006535b0 (verbatim, slice spelling)
+00653b80 ?GridScanFwd@cSPUIAssetGrid_s0065_35b0@@QAEHXZ  # cSPUIAssetGrid_s0065_35b0::GridScanFwd migrated from s006535b0 (verbatim, slice spelling)
+00653c40 ?GridScanRev@cSPUIAssetGrid_s0065_35b0@@QAEHXZ  # cSPUIAssetGrid_s0065_35b0::GridScanRev migrated from s006535b0 (verbatim, slice spelling)
+00653cf0 ?VerbCollect@cSPUIAssetView@@QAEPAXI@Z  # cSPUIAssetView::VerbCollect migrated from s006535b0 (verbatim, slice spelling)
+00653e40 ?resize@GridVec_s0065_35b0@@QAEXI@Z  # GridVec_s0065_35b0::resize migrated from s006535b0 (verbatim, slice spelling)
+00653f50 ?QuickSortImplA@@YAXPAUGridEntry_s0065_35b0@@0H@Z  # QuickSortImplA migrated from s006535b0 (verbatim, slice spelling)
+00654100 ?HandleMessage@cSPUIAssetGrid_s0065_35b0@@QAEDHI@Z  # cSPUIAssetGrid_s0065_35b0::HandleMessage migrated from s006535b0 (verbatim, slice spelling)
+006543a0 ?GridClear@cSPUIAssetGrid_s0065_35b0@@QAEXXZ  # cSPUIAssetGrid_s0065_35b0::GridClear migrated from s006535b0 (verbatim, slice spelling)
+00654490 ?reserve@GridVec_s0065_35b0@@QAEXI@Z  # GridVec_s0065_35b0::reserve migrated from s006535b0 (verbatim, slice spelling)
+00654650 ?GridShutdown@cSPUIAssetGrid_s0065_35b0@@QAEXXZ  # cSPUIAssetGrid_s0065_35b0::GridShutdown migrated from s006535b0 (verbatim, slice spelling)

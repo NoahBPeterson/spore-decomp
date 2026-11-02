@@ -1,3 +1,4 @@
+00656310 ?m56310@cSPUIAssetView_s0065_6310@@QAEXPAX@Z  # cSPUIAssetView_s0065_6310::m56310 migrated from s00656310 (verbatim, slice spelling)
 006563c0  C563c0::C563c0  # retail helper object ctor; disasm stores f0=0,f4..f6=0,f8=1,fc=0
 00656410 ?cSPUIAssetVerbs_dtor@@YIXPAUcSPUIAssetVerbs@@@Z  # cSPUIAssetVerbs_dtor migrated from s00656310 (verbatim, slice spelling)
 00656510 ?UpdatePos@cSPUIAssetVerbs@@QAEXPAX@Z  # cSPUIAssetVerbs::UpdatePos migrated from s00656310 (verbatim, slice spelling)
@@ -9,7 +10,6 @@
 00656b00 ?cSPUIAssetVerbs_ctor@@YIPAUcSPUIAssetVerbs@@PAU1@@Z  # cSPUIAssetVerbs_ctor migrated from s00656310 (verbatim, slice spelling)
 00656b80 ?Init@cSPUIAssetVerbs@@QAEXPAX@Z  # cSPUIAssetVerbs::Init migrated from s00656310 (verbatim, slice spelling)
 00657460 ?m57460@cSPUIAssetView@@QAEX_N@Z  # cSPUIAssetView::m57460 migrated from s00656310 (verbatim, slice spelling)
-00656310 ?m56310@cSPUIAssetView@@QAEXPAX@Z  # cSPUIAssetView::m56310; key-vector fold + range erase helper
 00657640 ?m57640@cSPUIAssetView@@QAEXPAX000000PAPAX0@Z  # cSPUIAssetView::m57640
 006577a0 ?IsAnimTargetDifferent@cSPUIAssetView@@QAEHXZ  # cSPUIAssetView::IsAnimTargetDifferent migrated from s00656310 (verbatim, slice spelling)
 00657810 ?Show@cSPUIAssetView@@QAEXXZ  # cSPUIAssetView::Show migrated from s00656310 (verbatim, slice spelling)

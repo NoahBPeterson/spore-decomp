@@ -3,5 +3,15 @@
 ../src/game/SPEditors/SPUIAssetGrid.cpp  ?Insert@GridVec@@QAEPAUEntry14@@PAU2@ABU2@@Z  00648b40  /O2 /MD /Gy /TP /Isrc/game/include
 ../src/game/SPEditors/SPUIAssetGrid.cpp  ?Do@Outer168@@QAEXXZ  0064e5b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEditors/SPUIAssetGrid.cpp  ?HandleMessage@cSPUIAssetGrid_s0064_dbd0@SP@@QAE_NII@Z  0064e680  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPUIAssetGrid.cpp  ?Equal@RectF@@QBE_NXZ  0064e6b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPUIAssetGrid.cpp  ??0C_e6e0@@QAE@PBUKey3@@PAX1_N2@Z  0064e6e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPUIAssetGrid.cpp  ?Reset@R7a0@@QAEXXZ  0064e7a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPUIAssetGrid.cpp  ?SetVisible@Eaf0@@QAEX_N@Z  0064eaf0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPUIAssetGrid.cpp  ?GetEntry@cSPUIAssetGrid_s0064_eb60@SP@@QAEPAUcSPAssetGridEntry_s0064_eb60@2@H@Z  0064f2c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPUIAssetGrid.cpp  ?CheckFlag@cSPUIAssetGrid_s0064_eb60@SP@@QAE_NXZ  0064f320  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPUIAssetGrid.cpp  ?InsertionSortEntries@@YAXPAUcSPAssetGridEntry_s0064_eb60@SP@@0PAUTypeGridEntrySort@2@@Z  0064f540  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPUIAssetGrid.cpp  ?DestroyEntries@@YAPAUcSPAssetGridEntry_s0064_eb60@SP@@PAU12@00@Z  0064f840  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEditors/SPUIAssetGrid.cpp  ?PromoteHeapEntries@@YAXPAUcSPAssetGridEntry_s0064_eb60@SP@@HHU12@PAUTypeGridEntrySort@2@@Z  0064f990  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEditors/SPUIAssetGrid.cpp  ??1cSPUIAssetGrid_s0065_15a0@@UAE@XZ  00651c80  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPUIAssetGrid.cpp  ?erase@GridVec_s0065_25d0@@QAEPAUGridEntry_s0065_25d0@@PAU2@@Z  006534c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPUIAssetGrid.cpp  ?GridShutdown@cSPUIAssetGrid_s0065_35b0@@QAEXXZ  00654650  /O2 /MD /Gy /TP /arch=SSE /fp:fast /Isrc/game/include

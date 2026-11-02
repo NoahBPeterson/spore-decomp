@@ -1,4 +1,4 @@
-// src/game/SPEditors/SPUIAssetGrid.cpp -- migrated from slice(s) s0064eb60, s006553b0, s006525d0, s006515a0, s00650630, s0064fa20, s0064dbd0, s00647f40 by tools/migrate/rewrite.py
+// src/game/SPEditors/SPUIAssetGrid.cpp -- migrated from slice(s) s00656310, s00654730, s006535b0, s0064eb60, s006553b0, s006525d0, s006515a0, s00650630, s0064fa20, s0064dbd0, s00647f40 by tools/migrate/rewrite.py
 // Object file: SPEditors/SPUIAssetGrid.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -92,7 +92,27 @@ extern "C" Entry14* __cdecl f646140(Entry14* a, Entry14* b, Entry14* c);   // mo
 extern "C" Entry14* __cdecl f646030(Entry14* first, Entry14* last, const Key12* key, uint8_t flag);
 
 // ---- items of slice s0064dbd0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C" float __cdecl GetElapsedSeconds();       // FUN_00805080
+extern "C" void  __cdecl FUN_808230(void*, void*);  // FUN_00808230
+extern void* g_data15ee298;            // 0x015ee298 (object, field +0x3c)
+extern "C" void          cString_ctor(void*);
+extern "C" bool          cString_Load(void*, uint32_t, uint32_t, const wchar_t*);
+extern "C" const wchar_t* cString_GetText(void*);
+extern "C" void          cString_dtor(void*);
+extern float g_fNegTwo;                                // 0x013ef61c
+extern float g_fOne;                                   // 0x01485720
 static inline void** VT(void* p) { return *(void***)p; }
+struct PBase1 {
+    virtual void pv();
+};
+struct PBase2 {
+    virtual void pv();
+    int mRef;
+    PBase2() : mRef(0) {}
+};
+extern "C" void* __cdecl AppSystem_s0064_dbd0();               // FUN_0067dd00
+struct X659340 { void Release(); };
+struct CStr14 { uint32_t mData[5]; };
 struct Sub168 {
     void method(uint32_t a, uint32_t b);
 };
@@ -115,17 +135,76 @@ struct CellCalc {
     void Compute(int index, float* out);
 };
 namespace SP {
-struct cSPUIAssetGrid_s0064_dbd0 {
+class cSPUIAssetGrid_s0064_dbd0 { public:
     char pad0[0x1e2];
     bool f1e2;
     bool f1e3;
     bool HandleMessage(unsigned msg, unsigned arg);  // 0x0064e680 (SP::cSPUIAssetGrid::HandleMessage)
 };
 }
+struct RectF {
+    float a, b, c, d;
+    bool Equal() const;
+};
+struct Key3 { int x, y, z; };
+struct C_e6e0 {
+    Key3 key;          // +0x00
+    void* p2;          // +0x0c
+    void* p3;          // +0x10
+    uint32_t pad[2];   // +0x14
+    bool b1;           // +0x1c
+    bool b2;           // +0x1d
+    C_e6e0(const Key3* src, void* p2, void* p3, bool b1, bool b2);
+};
+struct C_e740 : PBase1, PBase2 {
+    void* p;           // +0x0c
+    bool b1;           // +0x10
+    char pad1[3];
+    int  n;            // +0x14
+    bool b2;           // +0x18
+    bool b3;           // +0x19
+    C_e740(void* p, bool b1, int n, bool b2, bool b3);
+};
+struct Node7a0 {
+    char pad0[0x10];
+    void* child;       // +0x10
+};
+struct R7a0 {
+    char pad0[0xfc];
+    Node7a0* p;        // +0xfc
+    bool b100;         // +0x100
+    void Reset();
+};
 struct R7d0 {
     char pad0[0x18c];
     void* obj18c;      // +0x18c
     bool Test(uint32_t idx);
+};
+struct R880 {
+    char pad0[0x2c];
+    void* w2c;   // +0x2c
+    void* w30;   // +0x30
+    void* w34;   // +0x34
+    void* w38;   // +0x38
+    void Update(uint32_t visible, uint32_t arg);
+};
+struct R980 {
+    char pad0[0x3c];
+    void* a3c;   // +0x3c
+    void* a40;   // +0x40
+    void* a44;   // +0x44
+    void Layout(void* s1, void* s2, void* s3, bool flag);
+};
+struct Eaf0 {
+    char pad0[0x14];
+    bool m14;          // +0x14
+    char pad1[7];
+    void* m1c;         // +0x1c
+    void* m20;         // +0x20
+    void* m24;         // +0x24
+    char pad2[0x10c - 0x28];
+    bool m10c;         // +0x10c
+    void SetVisible(bool b);
 };
 // ---- items of slice s0064dbd0 end
 
@@ -657,6 +736,52 @@ struct GridSub8 {
 extern void* g_uiCtx;                                    // 0x015ee298
 extern "C" void* AssetBrowser();                         // 0x00401030
 extern "C" void* FUN_00644a70(void*);                    // 0x00644a70
+struct EntryView_s0065_25d0 : EntryPrimary, IRefCount {};   // IRefCount at +0x10
+struct EntryData_s0065_25d0 : IRefCount {};                  // IRefCount at +0x0
+template <typename T>
+struct AutoRefCount_s0065_25d0 {
+    T* mpObject;
+    AutoRefCount_s0065_25d0() : mpObject(0) {}
+    AutoRefCount_s0065_25d0(const AutoRefCount_s0065_25d0& x) : mpObject(x.mpObject) {
+        if (mpObject)
+            mpObject->AddRef();
+    }
+    ~AutoRefCount_s0065_25d0() {
+        if (mpObject)
+            mpObject->Release();
+    }
+    AutoRefCount_s0065_25d0& operator=(const AutoRefCount_s0065_25d0&);
+};
+struct GridEntry_s0065_25d0 {
+    void* m00;                       // +0x00
+    void* m04;                       // +0x04
+    void* m08;                       // +0x08
+    AutoRefCount_s0065_25d0<EntryView_s0065_25d0> m0c;     // +0x0c  (refcount base at +0x10)
+    AutoRefCount_s0065_25d0<EntryData_s0065_25d0> m10;     // +0x10
+    float m14;                       // +0x14
+    float m18;                       // +0x18
+    bool  m1c;                       // +0x1c
+    bool  m1d;                       // +0x1d
+    GridEntry_s0065_25d0() {}
+    GridEntry_s0065_25d0& operator=(const GridEntry_s0065_25d0&);   // 0x0064f450
+};
+GridEntry_s0065_25d0* CopyRange(GridEntry_s0065_25d0* first, GridEntry_s0065_25d0* last, GridEntry_s0065_25d0* dest);               // 0x64f890
+GridEntry_s0065_25d0* UninitializedCopy(GridEntry_s0065_25d0* first, GridEntry_s0065_25d0* last, GridEntry_s0065_25d0* dest);       // 0x64f7c0
+GridEntry_s0065_25d0* UninitializedFillN(GridEntry_s0065_25d0* dest, unsigned n, const GridEntry_s0065_25d0& value, GridEntry_s0065_25d0*);  // 0x64f8d0
+void       CopyBackward(GridEntry_s0065_25d0* first, GridEntry_s0065_25d0* last, GridEntry_s0065_25d0* destEnd);         // 0x64f950
+void       FillRange(GridEntry_s0065_25d0* first, GridEntry_s0065_25d0* last, const GridEntry_s0065_25d0& value);        // 0x651670
+struct GridVec_s0065_25d0 {
+    GridEntry_s0065_25d0* mpBegin;     // +0
+    GridEntry_s0065_25d0* mpEnd;       // +4
+    GridEntry_s0065_25d0* mpCapacity;  // +8
+
+    void DoDestroyValues(GridEntry_s0065_25d0* first, GridEntry_s0065_25d0* last);                     // 0x0064f410
+    GridEntry_s0065_25d0* ReallocateAndCopy(unsigned n, GridEntry_s0065_25d0* first, GridEntry_s0065_25d0* last); // 0x00651540
+    GridVec_s0065_25d0& operator=(const GridVec_s0065_25d0& x);                                        // 0x00652ba0
+    void DoInsertValues(GridEntry_s0065_25d0* position, unsigned n, const GridEntry_s0065_25d0& value); // 0x00652c90
+    GridEntry_s0065_25d0* erase(GridEntry_s0065_25d0* position);                                       // 0x006534c0
+    void swap(GridVec_s0065_25d0& other);                                                    // 0x00653510
+};
 struct cString {
     wchar_t* mpBegin;      // +0
     wchar_t* mpEnd;        // +4
@@ -926,9 +1051,16 @@ struct cSPUIAssetGrid_s0065_53b0 : GB0, GB1, GB2, GB3 {
 // ---- items of slice s006553b0 end
 
 // ---- items of slice s0064eb60 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C" void* __cdecl FUN_0066a800(int);  // AssetViewAt(index)
+extern uint32_t g_140042c;
+extern "C" void FUN_0066a5e0();
+extern "C" int FUN_0066a5c0(uint32_t value);
+extern "C" char FUN_00661b10();
+extern "C" void* FUN_0065f810();
+extern "C" unsigned int FUN_004bb860(unsigned int key);
 namespace EA {
 template <typename T>
-struct AutoRefCount_s0064_eb60 {
+class AutoRefCount_s0064_eb60 { public:
     T* mpObject;
     AutoRefCount_s0064_eb60() : mpObject(0) {}
     AutoRefCount_s0064_eb60(T* p) : mpObject(p) { if (mpObject) mpObject->AddRef(); }
@@ -962,7 +1094,7 @@ struct AssetDataRef {
 };
 }
 namespace SP {
-struct cSPAssetData_s0064_eb60 : AssetPrimary, AssetDataRef {};
+class cSPAssetData_s0064_eb60 : public AssetPrimary, public AssetDataRef { public:};
 }
 namespace SP {
 struct cSPAssetView {
@@ -994,7 +1126,378 @@ struct TypeGridEntrySort {
     bool operator()(const cSPAssetGridEntry_s0064_eb60& a, const cSPAssetGridEntry_s0064_eb60& b);
 };
 }
+namespace SP {
+class cSPUIAssetGrid_s0064_eb60 { public:
+    char pad0[0x74];
+    void* m74;                                          // +0x74
+    void* m78;                                          // +0x78
+    void* m7c;                                          // +0x7c
+    void* mWinArray[24];                                // +0x80 .. +0xdf
+    void* me0;                                          // +0xe0
+    char padE4[4];                                      // +0xe4
+    cSPAssetGridEntry_s0064_eb60* mpEntries;                       // +0xe8
+    cSPAssetGridEntry_s0064_eb60* mpEntriesEnd;                    // +0xec
+    char pad1[0x12c - 0xf0];
+    float m12c;                                         // +0x12c
+    float m130;                                         // +0x130
+    float m134;                                         // +0x134
+    char pad2[0x19c - 0x138];
+    void* m19c;                                         // +0x19c
+    int m1a0;                                           // +0x1a0
+    int m1a4;                                           // +0x1a4
+    char pad3[0x1b8 - 0x1a8];
+    bool m1b8;                                          // +0x1b8
+    char pad4[0x1e8 - 0x1b9];
+    bool m1e8;                                          // +0x1e8
+
+    cSPAssetGridEntry_s0064_eb60* GetEntry(int i);                 // 0x0064f2c0
+    int IndexOfView(cSPAssetView* v);                   // 0x0064f280
+    bool CheckFlag();                                   // 0x0064f320
+    void SetEntryState(int idx, bool force);            // 0x0064eb60
+    void UpdateAll();                                   // 0x0064ecc0
+};
+}
+namespace SP {
+struct ViewState {
+    // object whose +0x16 is a bool; pointer stored in m19c
+    char pad0[0x16];
+    bool f16;
+};
+}
+struct FlagKey {
+    bool mFlags[0x18];                                // +0x00
+    uint32_t mValue;                                  // +0x18
+    bool mExtra;                                      // +0x1c
+};
+namespace SP {
+void* AssetBrowser();                                 // 0x00401030
+}
+namespace SP {
+struct cSPUIAnimator {
+    void RemoveAnimation(void* win, int id);                              // 0x007f6210
+    void AddAnimation(void* target, void* win, unsigned int id);          // 0x007f8d10
+};
+}
+float GetElapsedSeconds(float seconds, int type, void* win, uint32_t id);  // 0x00805080
+struct AnimRawTmp {
+    void* mVt0;                                       // +0x00
+    char pad04[4];
+    void* mVt1;                                       // +0x08
+    void* mpRef;                                      // +0x0c
+};
+AnimRawTmp* SPUICreateWindowAnimationTargetPosition(AnimRawTmp* out, void* win,  // 0x007f80d0
+                                                    float x, float y, float elapsed);
+AnimRawTmp* SPUICreateWindowAnimationTargetScale(AnimRawTmp* out, void* win,     // 0x007f81d0
+                                                 float scale, float elapsed);
+struct AnimRef {
+    virtual void AddRef();
+    virtual void Release();                           // +0x04
+};
+struct AssetBrowserObj {
+    char pad0[0x14];
+    void* m14;                                        // +0x14 animator
+    char pad18[0x1cc - 0x18];
+    uint32_t m1cc;                                    // +0x1cc
+    char pad1d0[0x1f0 - 0x1d0];
+    FlagKey m1f0;                                     // +0x1f0
+};
 // ---- items of slice s0064eb60 end
+
+// ---- items of slice s006535b0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C" int   FUN_00646030(void*, void*, void*, char);  // 0x00646030
+extern "C" char  SetAssetData(void*, int);             // 0x004bbe20
+extern "C" int*  FUN_00555a20(int*, int*, int*, char); // 0x00555a20
+extern "C" uint32_t cSPUIAssetView_InitVerbCollection(uint32_t);  // 0x004bb860
+extern "C" void  fixed_vector_DoInsertValue(void*, void*, void*);  // 0x0060a600
+extern "C" void  FUN_0065aeb0();                       // 0x0065aeb0
+extern "C" void  Messaging_RemoveHandler(void*, void*, void*, void*, void*);  // 0x00571db0
+extern "C" void  cSPUIAssetView_SelectAsset(void*, int, int, int, int, int);  // 0x00657a30
+extern "C" void  SPUIHelpers_UpdateMouseFocus(int);    // 0x00804f50
+struct EntryView_s0065_35b0 : EntryPrimary, IRefCount {};
+struct EntryData_s0065_35b0 : IRefCount {};
+template <typename T>
+struct AutoRefCount_s0065_35b0 {
+    T* mpObject;
+    AutoRefCount_s0065_35b0() : mpObject(0) {}
+    AutoRefCount_s0065_35b0(const AutoRefCount_s0065_35b0& x) : mpObject(x.mpObject) {
+        if (mpObject)
+            mpObject->AddRef();
+    }
+    ~AutoRefCount_s0065_35b0() {
+        if (mpObject)
+            mpObject->Release();
+    }
+    AutoRefCount_s0065_35b0& operator=(const AutoRefCount_s0065_35b0&);
+};
+struct GridEntry_s0065_35b0 {
+    void* m00;
+    void* m04;
+    void* m08;
+    AutoRefCount_s0065_35b0<EntryView_s0065_35b0> m0c;
+    AutoRefCount_s0065_35b0<EntryData_s0065_35b0> m10;
+    float m14;
+    float m18;
+    bool  m1c;
+    bool  m1d;
+    GridEntry_s0065_35b0() : m00(0), m04(0), m08(0) {}
+    GridEntry_s0065_35b0& operator=(const GridEntry_s0065_35b0&);   // 0x0064f450
+};
+struct CompareA {                 // 0x0064ff90: by value
+    bool operator()(GridEntry_s0065_35b0 a, GridEntry_s0065_35b0 b) const;
+};
+struct TypeGridEntrySort_s0065_35b0 {        // 0x0066a830: by reference
+    bool operator()(const GridEntry_s0065_35b0& a, const GridEntry_s0065_35b0& b) const;
+};
+GridEntry_s0065_35b0* CopyRange(GridEntry_s0065_35b0* first, GridEntry_s0065_35b0* last, GridEntry_s0065_35b0* dest);              // 0x64f890
+GridEntry_s0065_35b0* UninitializedCopy(GridEntry_s0065_35b0* first, GridEntry_s0065_35b0* last, GridEntry_s0065_35b0* dest);      // 0x64f7c0
+GridEntry_s0065_35b0* DestroyRange(GridEntry_s0065_35b0* first, GridEntry_s0065_35b0* last, GridEntry_s0065_35b0* dest);           // 0x64f840
+void       CopyBackward(GridEntry_s0065_35b0* first, GridEntry_s0065_35b0* last, GridEntry_s0065_35b0* destEnd);        // 0x64f950
+GridEntry_s0065_35b0* GetPartitionA(GridEntry_s0065_35b0* first, GridEntry_s0065_35b0* last, GridEntry_s0065_35b0 pivot);          // 0x652e70
+GridEntry_s0065_35b0* GetPartitionB(GridEntry_s0065_35b0* first, GridEntry_s0065_35b0* last, GridEntry_s0065_35b0 pivot);          // 0x653110
+void       MakeHeapA(GridEntry_s0065_35b0* first, GridEntry_s0065_35b0* last);                               // 0x6533d0
+void       AdjustHeapA(GridEntry_s0065_35b0* first, int top, int heapSize, int pos, GridEntry_s0065_35b0 value);  // 0x6525d0
+void       SortHeapA(GridEntry_s0065_35b0* first, GridEntry_s0065_35b0* last);                               // 0x653470
+void       PartialSortB(GridEntry_s0065_35b0* first, GridEntry_s0065_35b0* middle, GridEntry_s0065_35b0* last);         // 0x653230
+GridEntry_s0065_35b0  MedianA(GridEntry_s0065_35b0 a, GridEntry_s0065_35b0 b, GridEntry_s0065_35b0 c);                             // 0x6515a0
+GridEntry_s0065_35b0** FUN_0064f730(GridEntry_s0065_35b0** pOut, GridEntry_s0065_35b0* first, GridEntry_s0065_35b0* last,
+                         GridEntry_s0065_35b0* initial, unsigned count);                           // 0x0064f730
+struct GridVec_s0065_35b0 {
+    GridEntry_s0065_35b0* mpBegin;
+    GridEntry_s0065_35b0* mpEnd;
+    GridEntry_s0065_35b0* mpCapacity;
+
+    void DoDestroyValues(GridEntry_s0065_35b0* first, GridEntry_s0065_35b0* last);                      // 0x0064f410
+    GridEntry_s0065_35b0* ReallocateAndCopy(unsigned n, GridEntry_s0065_35b0* first, GridEntry_s0065_35b0* last);  // 0x00651540
+    void DoInsertValue(GridEntry_s0065_35b0* position, const GridEntry_s0065_35b0& value);              // 0x006535b0
+    void f_00652c90(GridEntry_s0065_35b0* position, unsigned n, const GridEntry_s0065_35b0& value);     // 0x00652c90
+    void f_0064f4e0(unsigned n, void* alloc);                                     // 0x0064f4e0 (ecx = the vector)
+    void resize(unsigned n);                                                      // 0x00653e40
+    void reserve(unsigned n);                                                     // 0x00654490
+    void swap(GridVec_s0065_35b0& other);                                                    // 0x00653510
+
+    void* mpAllocator;   // +0xc: allocator identity the rebuild helpers take by address
+};
+struct LayoutStub {
+    void f_00811ad0(unsigned flags);      // 0x00811ad0 (ecx = layout)
+};
+struct AssetObjStub {
+    void f_00659340();                    // 0x00659340 (ecx = object)
+    void f_0065fa20();                    // 0x0065fa20 (ecx = object)
+};
+struct SearchBoxStub {
+    void f_00671c00();                    // 0x00671c00 (ecx = search box)
+    void OnSearchChanged();               // 0x00671c50 (ecx = search box)
+};
+static const int kQuickSortLimit = 28;
+inline const GridEntry_s0065_35b0& medianRef(const GridEntry_s0065_35b0& a, const GridEntry_s0065_35b0& b, const GridEntry_s0065_35b0& c) {
+    TypeGridEntrySort_s0065_35b0 cmp;
+    if (cmp(a, b)) {
+        if (cmp(b, c)) return b;
+        else if (cmp(a, c)) return c;
+        else return a;
+    } else if (cmp(a, c)) {
+        return a;
+    } else if (cmp(b, c)) {
+        return c;
+    }
+    return b;
+}
+void PartialSortA(GridEntry_s0065_35b0* first, GridEntry_s0065_35b0* middle, GridEntry_s0065_35b0* last);
+extern "C" void* FUN_0065f810_s0065_35b0(int);                    // 0x0065f810
+extern "C" void* AppSystem_s0065_35b0();                          // 0x0067dd00
+struct cSPUIAssetGrid_s0065_35b0 {
+    int GridScanFwd();
+    int GridScanRev();
+    void GridClear();
+    void GridShutdown();
+    bool CheckFlag();                     // 0x0064f320 (this = the grid)
+    char HandleMessage(int wparam, unsigned lparam);  // 0x0064e680 (cSPUIAssetGrid::HandleMessage)
+};
+struct cSPUIAssetView {
+    void* VerbCollect(unsigned enabled);
+};
+// ---- items of slice s006535b0 end
+
+// ---- items of slice s00654730 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C" void  FUN_00659340(void*);                  // 0x00659340
+extern "C" void  FUN_0066b0c0(void*);                  // 0x0066b0c0
+extern "C" void  FUN_00653ee0(void*, void*, void*);    // 0x00653ee0
+extern "C" void  FUN_00650470(void*);                  // 0x00650470
+extern "C" int   cTribeTool_GetTutorialToolPrice(void*, int, int);  // 0x004e1c30
+extern "C" void* RBTreeIncrement(void* node);          // 0x00921580
+extern "C" void  FUN_00652b00(void* vecEnd, char* node);  // 0x00652b00 (cdecl)
+extern "C" bool  FUN_00668be0(void* item, void* str);     // 0x00668be0 (cdecl)
+extern "C" void  FUN_00654490(int n);                     // 0x00654490 (cdecl)
+extern "C" void  FUN_0064f3b0(void* out, void* src);      // 0x0064f3b0 (cdecl, ctor-into-slot)
+extern "C" void  FUN_006535b0(void* vecEnd, void* src);   // 0x006535b0 (cdecl)
+extern "C" void* FUN_006462b0(void* browser, void* item); // 0x006462b0 (thiscall)
+void* operator new(unsigned int size);   // 0x00f47380
+extern "C" void* FUN_0065f810_s0065_4730(int);                    // 0x0065f810  (vector<0x34-byte item>)
+struct AssetGridTail {
+    void UpdateScrolling(int flag);   // 0x0064fa20
+    void UpdateAll();                 // 0x0064ecc0
+    void UpdateScrollRegion();        // 0x006524a0
+};
+struct U8Vec;
+struct GridHelper {
+    void Reset0x644040(void* arg);   // 0x00644040
+    bool IsEmpty(void);              // 0x00642910
+    void Release0x64e7a0();          // 0x0064e7a0
+    void Clear();                    // 0x006543a0
+    void MergeEntries(void* begin, void* end, void* src);  // 0x006545d0 (cdecl)
+    void Update0x650470();           // 0x00650470
+    void Collect0x659340();          // 0x00659340
+    void* FeedItems(void* flag);     // 0x0065f810
+    bool IsKnownID();                // 0x00666420
+};
+struct EntryVec {
+    void* mpBegin;                   // +0
+    void* mpEnd;                     // +4
+    void  InsertAt(void* pos, void* value, void* out);   // 0x00653de0 (thiscall)
+    void* Erase(void* it);                                // 0x006534c0 (thiscall)
+};
+struct GridEntries {
+    void* mpBegin;                   // +0
+    void* mpEnd;                     // +4
+    void* mpCapacity;                // +8
+    void* ConstructInto(void* slot, void* src);   // 0x0064f3b0
+    void* DoInsertValue(void* slot, void* src);   // 0x006535b0
+    void  InsertEntry(void* pos, int count);      // 0x00652b00
+    void  Reserve(int n);                         // 0x00654490
+};
+struct StopwatchHelper {
+    long long GetElapsedTime();      // 0x0093a5e0
+    void Restart();                  // 0x00571e80
+};
+struct U8Vec {
+    unsigned* mpBegin;
+    unsigned* mpEnd;
+    unsigned* mpCapacity;
+};
+struct AssetGrid {
+    void UpdateAssets(void* filter, void* feedItem);  // 0x00654730
+    void OnSelectCommit(void* item, void* filter);  // 0x00654f50
+};
+struct GridEntry_s0065_4730 {
+    char pad[0x18];
+    float mPosition;   // +0x18
+};
+struct ItemSizeProvider {
+    virtual void V00();
+    virtual void V04();
+    virtual void V08();
+    virtual void V0c();
+    virtual void V10();
+    virtual void V14();
+    virtual void V18();
+    virtual void V1c();
+    virtual void V20();
+    virtual void V24();
+    virtual void V28();
+    virtual void V2c();
+    virtual void V30();
+    virtual void V34();
+    virtual void V38();
+    virtual void V3c();
+    virtual int GetSize();   // +0x40
+};
+struct GridSource {
+    char pad[0x20];
+    ItemSizeProvider* mSizeProvider;   // +0x20
+};
+struct cSPUIAssetGrid_s0065_4730 {
+    char pad108[0x108];
+    float mItemWidth;         // +0x108
+    char pad10c[0x1c];
+    float mViewWidth;         // +0x128
+    char pad12c[0x54];
+    float mScroll;            // +0x180
+    char pad184[4];
+    float mMaxScroll;         // +0x188
+    GridSource* mGridSource;  // +0x18c
+    bool mFocusFlag;          // +0x190
+    char pad191[0x55];
+    bool mNeedsRebuild;       // +0x1e6
+    char pad1e7[1];
+    bool mNeedsReset;         // +0x1e8
+    void* Find(uint32_t id);  // 0x006505d0
+    void Rebuild();           // 0x006553b0
+    void Refresh();           // 0x00654d00
+    void ScrollTo(void* item); // 0x00654e20
+};
+// ---- items of slice s00654730 end
+
+// ---- items of slice s00656310 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C" void  __cdecl operator_delete_0(void* p);                           // 0x00f47380
+extern "C" void* __cdecl copy_705250(const void* first, const void* last, void* dst);  // 0x00705250
+struct cSPUIAssetView_s0065_6310 {
+    char  b0[0xc];        // 0x00..0x0b
+    float mTargetX;       // 0x0c
+    float mTargetY;       // 0x10
+    char  b14[0x1];       // 0x14
+    char  mFirstUpdate;   // 0x15
+    char  b16[0x1];       // 0x16
+    bool  mResponds;      // 0x17
+    char  b18[0x10];      // 0x18..0x27
+    void* mWinShine;      // 0x28
+    char  b2c[0x4];       // 0x2c..0x2f
+    void* mThumb;         // 0x30
+    void* mThumbBack;     // 0x34
+    void* mName;          // 0x38
+    char  b3c[0xc];       // 0x3c..0x47
+    void* mPublished;     // 0x48
+    void* mLocked;        // 0x4c
+    void* mGameplayCont;  // 0x50
+    void* mGameplayName;  // 0x54
+    char  b58[0x30];      // 0x58..0x87
+    void* mP88;           // 0x88
+    void* mP8c;           // 0x8c
+    void* mP90;           // 0x90
+    char  b94[0x4c];      // 0x94..0xdf
+    void* mE0;            // 0xe0
+    char  bE4[0x10];      // 0xe4..0xf3
+    bool  mBf4;           // 0xf4
+    bool  mBf5;           // 0xf5
+    bool  mBf6;           // 0xf6
+    bool  mBf7;           // 0xf7
+
+    int   IsAnimTargetDifferent();  // 0x006577a0 (cSPUIAssetView::IsAnimTargetDifferent)
+    void  Show();  // 0x00657810 (cSPUIAssetView::Show)
+    void  Hide();  // 0x00657870 (cSPUIAssetView::Hide)
+    float GetHeight();  // 0x006578d0 (cSPUIAssetView::GetHeight)
+    float GetWidth();  // 0x006578f0 (cSPUIAssetView::GetWidth)
+    void  SetFirstUpdate(int b);  // 0x00657930 (cSPUIAssetView::SetFirstUpdate)
+    void  SelectAsset(int a, char b, int c, char d, char e);  // 0x00657a30 (cSPUIAssetView::SelectAsset)
+    void  m57460(bool b);  // 0x00657460 (cSPUIAssetView::m57460)
+    void  m57640(void* a, void* b, void* c, void* d, void* e, void* f, void* res, void** dst, void* arg9);  // 0x00657640 (cSPUIAssetView::m57640)
+    void  m56310(void* range);
+};
+struct KeyVecBase { void* mpBegin; KeyVecBase() : mpBegin(0) {} };
+struct KeyVec_s0065_6310 : KeyVecBase {          // eastl::fixed_vector<unsigned int,30,1>
+    void*         mpEnd;              // +0x04
+    void*         mpCapacityEnd;      // +0x08
+    void*         mAlloc;             // +0x0c
+    void*         mAllocBuf;          // +0x10 (allocator's copy of the buffer)
+    void*         mAllocSize;         // +0x14
+    unsigned int  mStore[30];         // +0x18..0x8f
+    unsigned char mFlag;              // +0x90
+    KeyVec_s0065_6310();                         // default (inline)
+    void Init(void* coll);            // 0x00653cf0 (out-of-line member)
+    void Op654050(void* a, void* b, void* c);   // 0x00654050 (thiscall, 3 stack args)
+};
+inline KeyVec_s0065_6310::KeyVec_s0065_6310() {
+    mAllocBuf = mStore;
+    mpEnd = mStore;
+    mpBegin = mStore;
+    mpCapacityEnd = (char*)mStore + sizeof(mStore);
+}
+__forceinline KeyVec_s0065_6310 MakeKeys(void* first, void* last, void* extra) {
+    KeyVec_s0065_6310 k;
+    k.Op654050(first, last, extra);
+    return k;
+}
+extern "C" void* __cdecl FUN_00656240(void* first, void* last, KeyVec_s0065_6310 v);
+// ---- items of slice s00656310 end
 
 // @ 0x00648aa0
 void __cdecl sub_648b40()
@@ -1068,23 +1571,441 @@ bool SP::cSPUIAssetGrid_s0064_dbd0::HandleMessage(unsigned msg, unsigned)
     return true;
 }
 
+// @ 0x0064e6b0
+bool RectF::Equal() const
+{
+    return a == c || b == d;
+}
+
+// @ 0x0064e6e0
+C_e6e0::C_e6e0(const Key3* src, void* p2, void* p3, bool b1, bool b2)
+{
+    key = *src;
+    this->p2 = p2;
+    if (p2)
+        ((void(__thiscall*)(void*))VT((char*)p2 + 0x10)[0])((char*)p2 + 0x10);
+    this->p3 = p3;
+    if (p3)
+        ((void(__thiscall*)(void*))VT(p3)[0])(p3);
+    this->b1 = b1;
+    this->b2 = b2;
+}
+
+// @ 0x0064e740
+C_e740::C_e740(void* p, bool b1, int n, bool b2, bool b3)
+{
+    this->p = p;
+    if (p)
+        ((void(__thiscall*)(void*))VT(p)[0])(p);
+    this->b1 = b1;
+    this->b3 = b3;
+    this->n = n;
+    this->b2 = b2;
+}
+
+// @ 0x0064e7a0
+void R7a0::Reset()
+{
+    if (p) {
+        if (p->child)
+            ((X659340*)p->child)->Release();
+        p = 0;
+    }
+    b100 = false;
+}
+
 // @ 0x0064e7d0
 bool R7d0::Test(uint32_t idx)
 {
-    if (idx < (uint32_t)((*(int*)((char*)this + 0xec) - *(int*)((char*)this + 0xe8)) >> 5)
-        && *(int*)((char*)this + 0x2c) != 0) {
-        float f1 = *(float*)((char*)this + 0x108);
-        float f2 = *(float*)(*(int*)((char*)this + 0xe8) + idx * 0x20 + 0x18);
-        float f3 = *(float*)((char*)this + 0x184);
-        void* o = *(void**)((char*)obj18c + 0x10);
-        void* r = ((void*(__thiscall*)(void*, float, float))VT(o)[0x38 / 4])(o, f1 + f2, f2);
-        if (f3 <= f1 + f2) {
-            float hi = *(float*)((char*)r + 0xc) - *(float*)((char*)r + 4) + f3;
-            if (f2 <= hi)
-                return true;
+    bool ok = false;
+    uint32_t count = (uint32_t)((*(int*)((char*)this + 0xec) - *(int*)((char*)this + 0xe8)) >> 5);
+    if (idx < count) {
+        if (*(int*)((char*)this + 0x2c) != 0) {
+            float f1 = *(float*)((char*)this + 0x108);
+            float f2 = *(float*)(*(int*)((char*)this + 0xe8) + idx * 0x20 + 0x18);
+            float f3 = *(float*)((char*)this + 0x184);
+            void* o = *(void**)((char*)obj18c + 0x10);
+            void* r = ((void*(__thiscall*)(void*, float, float))VT(o)[0x38 / 4])(o, f1 + f2, f2);
+            if (!(f3 > f1 + f2)) {
+                float hi = *(float*)((char*)r + 0xc) - *(float*)((char*)r + 4) + f3;
+                if (!(f2 > hi))
+                    ok = true;
+            }
         }
     }
-    return false;
+    return ok;
+}
+
+// @ 0x0064e880
+void R880::Update(uint32_t visible, uint32_t arg)
+{
+    void* w1 = w30;
+    if (w1) {
+        ((void(__thiscall*)(void*, int, uint32_t))VT(w1)[0x7c / 4])(w1, 1, visible);
+        if ((visible & 0xff) != 0) {
+            if (w38) {
+                *(uint32_t*)((char*)g_data15ee298 + 0x3c) = arg;
+                void* p = w38;
+                CStr14 s;
+                ((void(__thiscall*)(void*))cString_ctor)(&s);
+                ((void(__thiscall*)(void*, uint32_t, uint32_t, const wchar_t*))cString_Load)
+                    (&s, 0x21671745, 0x30006, (const wchar_t*)0x13ffa78);
+                ((void(__thiscall*)(void*, const wchar_t*))VT(p)[0x80 / 4])
+                    (p, ((const wchar_t*(__thiscall*)(void*))cString_GetText)(&s));
+                ((void(__thiscall*)(void*))cString_dtor)(&s);
+            }
+            void* w2 = w34;
+            if (w2) {
+                float v[4];
+                v[3] = GetElapsedSeconds() * g_fNegTwo;
+                v[0] = 0.0f;
+                v[1] = 0.0f;
+                v[2] = g_fOne;
+                FUN_808230(w2, v);
+            }
+        }
+    }
+    void* w4 = w2c;
+    if (w4)
+        ((void(__thiscall*)(void*, int, int))VT(w4)[0x7c / 4])(w4, 1, ((visible & 0xff) == 0) ? 1 : 0);
+}
+
+// @ 0x0064e980
+void R980::Layout(void* s1, void* s2, void* s3, bool flag)
+{
+    if (a3c) {
+        if (!s1) s1 = (void*)0x13ec468;
+        ((void(__thiscall*)(void*, void*))VT(a3c)[0x80 / 4])(a3c, s1);
+    }
+    if (a40) {
+        if (!s2) s2 = (void*)0x13ec468;
+        ((void(__thiscall*)(void*, void*))VT(a40)[0x80 / 4])(a40, s2);
+    }
+    if (a44) {
+        if (!s3) s3 = (void*)0x13ec468;
+        ((void(__thiscall*)(void*, void*))VT(a44)[0x80 / 4])(a44, s3);
+    }
+    void* p3c = a3c ? ((void*(__thiscall*)(void*, uint32_t))VT(a3c)[0xc / 4])(a3c, 0xf15f4bd) : 0;
+    void* p40 = a40 ? ((void*(__thiscall*)(void*, uint32_t))VT(a40)[0xc / 4])(a40, 0xf15f4bd) : 0;
+    void* p44 = a44 ? ((void*(__thiscall*)(void*, uint32_t))VT(a44)[0xc / 4])(a44, 0xf15f4bd) : 0;
+    float tmp[4];
+    ((void(__thiscall*)(void*, float*, int, int))VT(p3c)[0x20 / 4])(p3c, tmp, 0, 1);
+    ((void(__thiscall*)(void*, float, float))VT(a44)[0x70 / 4])(a44, tmp[2] + 30.0f, tmp[1]);
+    ((void(__thiscall*)(void*, float*, int, int))VT(p44)[0x20 / 4])(p44, tmp, 0, 1);
+    ((void(__thiscall*)(void*, float, float))VT(a40)[0x70 / 4])(a40, tmp[2] + 30.0f, tmp[1]);
+    ((void(__thiscall*)(void*, void*))VT(p44)[0x28 / 4])(p44,
+        flag ? ((void*(__thiscall*)(void*))VT(p40)[0x24 / 4])(p40)
+             : ((void*(__thiscall*)(void*))VT(p3c)[0x24 / 4])(p3c));
+}
+
+// @ 0x0064eaf0
+void Eaf0::SetVisible(bool b)
+{
+    m14 = b;
+    if (m1c)
+        ((void(__thiscall*)(void*, int, bool))VT(m1c)[0x7c / 4])(m1c, 1, b);
+    if (m20)
+        ((void(__thiscall*)(void*, int, bool))VT(m20)[0x7c / 4])(m20, 1, b);
+    if (m24)
+        ((void(__thiscall*)(void*, int, bool))VT(m24)[0x7c / 4])(m24, 1, b);
+    if (!b && m10c) {
+        void* a = AppSystem_s0064_dbd0();
+        ((void(__thiscall*)(void*, int))VT(a)[0x40 / 4])(a, 0);
+        m10c = false;
+    }
+}
+
+// @ 0x0064eb60
+void SP::cSPUIAssetGrid_s0064_eb60::SetEntryState(int idx, bool force)
+{
+    cSPAssetView* v = (cSPAssetView*)FUN_0066a800(idx);
+    if (v)
+        ((void(__thiscall*)(void*))VT(v)[1])(v);
+
+    bool b = false;
+    if (m1a0 == idx) {
+        if (v)
+            b = *(char*)((char*)v + 0x20) == 0;
+        else
+            b = false;
+    } else {
+        m1a0 = idx;
+        b = false;
+    }
+    if (force)
+        b = true;
+    if (!v)
+        return;
+
+    *(char*)((char*)v + 0x20) = b;
+    m1e8 = true;
+
+    if (idx != 0x18) {
+        void* p = mWinArray[idx];
+        if (p) {
+            void* q = ((void*(__thiscall*)(void*, uint32_t))VT(p)[0x0c / 4])(p, 0x8ed27e7a);
+            if (q) {
+                ((void(__thiscall*)(void*, int, int))VT(q)[0x28 / 4])(q, 4, 1);
+                ((void(__thiscall*)(void*, int, int))VT(q)[0x28 / 4])(q, 0x20, 1);
+            }
+        }
+    }
+
+    bool flag = true;
+    if (*(void**)((char*)v + 0x0c) != *(void**)((char*)v + 0x10)) {
+        // v+0x0c holds a wrapper whose first dword is the real object; the virtual
+        // call is made on that inner object (retail dereferences one more level).
+        void* w = *(void**)((char*)v + 0x0c);
+        void* o = *(void**)w;
+        bool c = ((bool(__thiscall*)(void*))VT(o)[0x1c / 4])(o);
+        if (c == b)
+            flag = false;
+    }
+
+    if (idx != 0x18 && mWinArray[idx] && m78 && m7c && m74) {
+        // Retail homes the flag in the low byte of the caller-pushed `force` slot and
+        // passes that whole dword: the byte is overwritten, the upper 24 bits are stale.
+        unsigned int forcedw = *(unsigned int*)&force;
+        ((void(__thiscall*)(void*, int, int))VT(m78)[0x7c / 4])(
+            m78, 1, (int)((forcedw & 0xffffff00u) | (unsigned int)flag));
+        ((void(__thiscall*)(void*, int, int))VT(m7c)[0x7c / 4])(m7c, 1, !flag);
+        void* q = ((void*(__thiscall*)(void*))VT(m74)[0x10 / 4])(m74);
+        ((void(__thiscall*)(void*, void*))VT(q)[0xdc / 4])(q, m74);
+        ((void(__thiscall*)(void*, void*))VT(mWinArray[idx])[0xd8 / 4])(mWinArray[idx], m74);
+    }
+    ((void(__thiscall*)(void*))VT(v)[2])(v);
+}
+
+// @ 0x0064ecc0
+void SP::cSPUIAssetGrid_s0064_eb60::UpdateAll()
+{
+    FlagKey f1, f2, f3, f4;
+
+    ((void(__thiscall*)(void*, int, uint32_t))FUN_0066a5e0)(&f1, 1, g_140042c);
+    ((void(__thiscall*)(void*, int, uint32_t))FUN_0066a5e0)(&f2, 1, g_140042c);
+    ((void(__thiscall*)(void*, int, uint32_t))FUN_0066a5e0)(&f3, 1, g_140042c);
+    ((void(__thiscall*)(void*, int, uint32_t))FUN_0066a5e0)(&f4, 1, g_140042c);
+
+    bool extra = false;
+
+    if (m19c && me0) {
+        f2 = *(FlagKey*)((char*)m19c + 0x158);
+        f3 = *(FlagKey*)((char*)me0 + 0x44);
+        f4 = ((AssetBrowserObj*)SP::AssetBrowser())->m1f0;
+
+        for (int i = 0; i < 0x18; i += 6) {
+            f1.mFlags[i + 0] = f2.mFlags[i + 0] && f3.mFlags[i + 0] && f4.mFlags[i + 0];
+            f1.mFlags[i + 1] = f2.mFlags[i + 1] && f3.mFlags[i + 1] && f4.mFlags[i + 1];
+            f1.mFlags[i + 2] = f2.mFlags[i + 2] && f3.mFlags[i + 2] && f4.mFlags[i + 2];
+            f1.mFlags[i + 3] = f2.mFlags[i + 3] && f3.mFlags[i + 3] && f4.mFlags[i + 3];
+            f1.mFlags[i + 4] = f2.mFlags[i + 4] && f3.mFlags[i + 4] && f4.mFlags[i + 4];
+            f1.mFlags[i + 5] = f2.mFlags[i + 5] && f3.mFlags[i + 5] && f4.mFlags[i + 5];
+        }
+
+        if (f4.mValue != 0) {
+            f1.mValue = f4.mValue;
+            extra = f4.mExtra;
+        } else {
+            f1.mValue = f2.mValue;
+            extra = f2.mExtra;
+        }
+    }
+
+    if (me0) {
+        char ok = ((char(__thiscall*)(void*, uint32_t))FUN_00661b10)(
+            me0, *(uint32_t*)((char*)me0 + 0x18));
+        if (!ok)
+            f1.mFlags[5] = 0;
+    }
+
+    if (me0) {
+        AssetBrowserObj* ab = (AssetBrowserObj*)SP::AssetBrowser();
+        if (ab && ab->m1cc != 0 &&
+            (ab->m1cc == 0x9ea3031au || ab->m1cc == 0x4178b8e8u)) {
+            void* pv = ((void*(__thiscall*)(void*, int))FUN_0065f810)(me0, 0);
+            char* pBegin = *(char**)pv;
+            char* pEnd = *((char**)pv + 1);
+            if (pBegin != pEnd) {
+                bool all = true;
+                int n = (int)(pEnd - pBegin) / 0x34;
+                for (int i = 0; i < n; ++i) {
+                    if (FUN_004bb860(*(uint32_t*)(pBegin + i * 0x34)) != 0x2b978c46u)
+                        all = false;
+                }
+                if (!all)
+                    goto AFTER;
+            }
+            f1.mFlags[13] = 1;
+            f1.mFlags[14] = 1;
+            f1.mFlags[15] = 1;
+            f1.mFlags[16] = 1;
+            f1.mFlags[17] = 1;
+        }
+    }
+
+AFTER:
+    int idx = FUN_0066a5c0(f1.mValue);
+    if (idx == 0x18 || !f1.mFlags[idx]) {
+        idx = FUN_0066a5c0(f2.mValue);
+        extra = f2.mExtra;
+    }
+    if (idx == 0x18 || !f1.mFlags[idx]) {
+        idx = FUN_0066a5c0(f3.mValue);
+        extra = f3.mExtra;
+    }
+    if (m1a4 != idx || m1a0 == 0x18 || !f1.mFlags[m1a0])
+        SetEntryState(idx, extra);
+    m1a4 = idx;
+
+    AssetBrowserObj* ab2 = (AssetBrowserObj*)SP::AssetBrowser();
+    SP::cSPUIAnimator* animator = ab2 ? (SP::cSPUIAnimator*)ab2->m14 : 0;
+
+    int position = 0;
+    for (int i = 0; i < 0x18; ++i) {
+        void* p = mWinArray[i];
+        if (!p)
+            continue;
+
+        unsigned int uVar9;
+
+        if (!f1.mFlags[i]) {
+            // hide the window
+            if (!animator) {
+                ((void(__thiscall*)(void*, float, float))VT(p)[0x68 / 4])(p, 0.0f, 0.0f);
+            } else {
+                animator->RemoveAnimation(p, -1);
+                AnimRawTmp tmp;
+                float elapsed = GetElapsedSeconds(0.2f, 1, p, 0x9c1cab90u);
+                AnimRawTmp* r = SPUICreateWindowAnimationTargetScale(
+                    &tmp, p, 1.52587890625e-05f, elapsed);
+                animator->AddAnimation(r, p, 0x9c1cab90u);
+                if (tmp.mpRef)
+                    ((AnimRef*)tmp.mpRef)->Release();
+            }
+            uVar9 = 1;
+        } else {
+            float fPos = (float)position * m134;
+            ++position;
+            if (!animator) {
+                ((void(__thiscall*)(void*, float, float))VT(p)[0x64 / 4])(p, fPos, 0.0f);
+                ((void(__thiscall*)(void*, float, float))VT(p)[0x68 / 4])(p, m12c, m130);
+            } else {
+                animator->RemoveAnimation(p, -1);
+                if (!(((unsigned int(__thiscall*)(void*))VT(p)[0x28 / 4])(p) & 0x10)) {
+                    AnimRawTmp tmp;
+                    float elapsed = GetElapsedSeconds(0.2f, 2, p, 0x4b0531a7u);
+                    AnimRawTmp* r = SPUICreateWindowAnimationTargetPosition(
+                        &tmp, p, fPos, 0.0f, elapsed);
+                    animator->AddAnimation(r, p, 0x4b0531a7u);
+                    if (tmp.mpRef)
+                        ((AnimRef*)tmp.mpRef)->Release();
+                } else {
+                    ((void(__thiscall*)(void*, float, float))VT(p)[0x64 / 4])(p, fPos, 0.0f);
+                }
+                AnimRawTmp tmp2;
+                float elapsed2 = GetElapsedSeconds(0.2f, 2, p, 0x9c1cab90u);
+                AnimRawTmp* r2 = SPUICreateWindowAnimationTargetScale(
+                    &tmp2, p, 1.0f, elapsed2);
+                animator->AddAnimation(r2, p, 0x9c1cab90u);
+                if (tmp2.mpRef)
+                    ((AnimRef*)tmp2.mpRef)->Release();
+            }
+            uVar9 = 0;
+        }
+
+        ((void(__thiscall*)(void*, int, unsigned int))VT(p)[0x7c / 4])(p, 0x10, uVar9);
+    }
+}
+
+// @ 0x0064f280
+int SP::cSPUIAssetGrid_s0064_eb60::IndexOfView(cSPAssetView* v)
+{
+    int i = 0;
+    if (v) {
+        int n = (int)(mpEntriesEnd - mpEntries);
+        if (n > 0) {
+            cSPAssetView** pv = (cSPAssetView**)((char*)mpEntries + 0x10);
+            for (; i < n; ++i) {
+                if (pv[0] == v)
+                    return i;
+                pv = (cSPAssetView**)((char*)pv + 0x20);
+            }
+        }
+        i = -1;
+    }
+    return i;
+}
+
+// @ 0x0064f2c0
+SP::cSPAssetGridEntry_s0064_eb60* SP::cSPUIAssetGrid_s0064_eb60::GetEntry(int i)
+{
+    return &mpEntries[i];
+}
+
+// @ 0x0064f320
+bool SP::cSPUIAssetGrid_s0064_eb60::CheckFlag()
+{
+    if (!m19c)
+        return m1b8;
+    return m1b8 && ((ViewState*)m19c)->f16;
+}
+
+// @ 0x0064f350
+unsigned char ParseHelper(void* obj, int a, unsigned char def)
+{
+    if (obj) {
+        bool ok = ((bool(__thiscall*)(void*, int, void**))VT(obj)[0x24 / 4])(obj, a, &obj);
+        if (ok) {
+            unsigned short w = *(unsigned short*)((char*)obj + 0x12);
+            if (w == 1 || w == 0x10) {
+                // Retail's byte return keeps the high bits of the pointer it read through
+                // in eax (the caller-visible return value is 16-bit compared by the
+                // harness), so each arm reproduces that leftover explicitly.
+                if (*(unsigned char*)((char*)obj + 0x10) & 0x30) {
+                    unsigned int p = *(unsigned int*)obj;
+                    return (unsigned char)((p & 0xffffff00u) | *(unsigned char*)p);
+                }
+                unsigned int q = w ? (unsigned int)obj : 0;
+                return (unsigned char)((q & 0xffffff00u) | *(unsigned char*)q);
+            }
+            return (unsigned char)(0x15d9c00u | *(unsigned char*)0x15d9c70);
+        }
+    }
+    return def;
+}
+
+// @ 0x0064f540
+void InsertionSortEntries(SP::cSPAssetGridEntry_s0064_eb60* first, SP::cSPAssetGridEntry_s0064_eb60* last, SP::TypeGridEntrySort* compare)
+{
+    if (first != last) {
+        SP::cSPAssetGridEntry_s0064_eb60* iSorted = first;
+        for (++iSorted; iSorted != last; ++iSorted) {
+            const SP::cSPAssetGridEntry_s0064_eb60 temp(*iSorted);
+            SP::cSPAssetGridEntry_s0064_eb60* iNext = iSorted;
+            SP::cSPAssetGridEntry_s0064_eb60* iCurrent = iSorted;
+            for (--iCurrent; (iNext != first) && (*compare)(temp, *iCurrent); --iNext, --iCurrent)
+                *iNext = *iCurrent;
+            *iNext = temp;
+        }
+    }
+}
+
+// @ 0x0064f630
+void InsertionSortSimpleEntries(SP::cSPAssetGridEntry_s0064_eb60* first, SP::cSPAssetGridEntry_s0064_eb60* last, SP::TypeGridEntrySort* compare)
+{
+    if (first == last)
+        return;
+    for (SP::cSPAssetGridEntry_s0064_eb60* p = first; p != last; ++p) {
+        const SP::cSPAssetGridEntry_s0064_eb60 temp(*p);
+        SP::cSPAssetGridEntry_s0064_eb60* dest = p;
+        SP::cSPAssetGridEntry_s0064_eb60* prev = p - 1;
+        while ((*compare)(temp, *prev)) {
+            *dest = *prev;
+            --dest;
+            --prev;
+        }
+        *dest = temp;
+    }
 }
 
 // @ 0x0064f730
@@ -1101,6 +2022,43 @@ SP::cSPAssetGridEntry_s0064_eb60** UninitCopyOut(SP::cSPAssetGridEntry_s0064_eb6
         } while (first != last);
     }
     return pOut;
+}
+
+// @ 0x0064f7c0
+SP::cSPAssetGridEntry_s0064_eb60* UninitCopyEntries(SP::cSPAssetGridEntry_s0064_eb60* first, SP::cSPAssetGridEntry_s0064_eb60* last, SP::cSPAssetGridEntry_s0064_eb60* result)
+{
+    if (first != last) {
+        do {
+            if (result)
+                ::new (result) SP::cSPAssetGridEntry_s0064_eb60(*first);
+            ++first;
+            ++result;
+        } while (first != last);
+    }
+    return result;
+}
+
+// @ 0x0064f840
+SP::cSPAssetGridEntry_s0064_eb60* DestroyEntries(SP::cSPAssetGridEntry_s0064_eb60* first, SP::cSPAssetGridEntry_s0064_eb60* last, SP::cSPAssetGridEntry_s0064_eb60* result)
+{
+    if (first != last) {
+        do {
+            first->~cSPAssetGridEntry_s0064_eb60();
+            ++first;
+            ++result;
+        } while (first != last);
+    }
+    return result;
+}
+
+// @ 0x0064f8d0
+void UninitFillNEntries(SP::cSPAssetGridEntry_s0064_eb60* dest, unsigned int n, const SP::cSPAssetGridEntry_s0064_eb60* value)
+{
+    while (n--) {
+        if (dest)
+            ::new (dest) SP::cSPAssetGridEntry_s0064_eb60(*value);
+        ++dest;
+    }
 }
 
 // @ 0x0064f990
@@ -1635,6 +2593,952 @@ void StatsGrid::UpdateStatsText()
     msg.c_str();
 }
 
+// @ 0x00652ba0
+GridVec_s0065_25d0& GridVec_s0065_25d0::operator=(const GridVec_s0065_25d0& x)
+{
+    if (this != &x) {
+        const unsigned n = (unsigned)(x.mpEnd - x.mpBegin);
+        if (n > (unsigned)(mpCapacity - mpBegin)) {
+            GridEntry_s0065_25d0* pNewData = ReallocateAndCopy(n, x.mpBegin, x.mpEnd);
+            DoDestroyValues(mpBegin, mpEnd);
+            if (mpBegin && ((unsigned*)mpBegin)[-1])
+                EASTL_allocator_deallocate(mpBegin);
+            mpBegin = pNewData;
+            mpEnd = pNewData + n;
+            mpCapacity = pNewData + n;
+        } else if ((unsigned)(mpEnd - mpBegin) < n) {
+            CopyRange(x.mpBegin, x.mpBegin + (mpEnd - mpBegin), mpBegin);
+            UninitializedCopy(x.mpBegin + (mpEnd - mpBegin), x.mpEnd, mpEnd);
+            mpEnd = mpBegin + n;
+        } else {
+            CopyRange(x.mpBegin, x.mpEnd, mpBegin);
+            DoDestroyValues(mpBegin + n, mpEnd);
+            mpEnd = mpBegin + n;
+        }
+    }
+    return *this;
+}
+
+// @ 0x00652c90
+void GridVec_s0065_25d0::DoInsertValues(GridEntry_s0065_25d0* position, unsigned n, const GridEntry_s0065_25d0& value)
+{
+    if (n == 0)
+        return;
+    if ((unsigned)(mpCapacity - mpEnd) < n) {
+        const unsigned nSize = (unsigned)(mpEnd - mpBegin);
+        unsigned nNew = nSize + n;
+        unsigned grow = nSize * 2;
+        if (nSize == 0)
+            grow = 1;
+        if (nNew < grow)
+            nNew = grow;
+        GridEntry_s0065_25d0* pNewData =
+            (GridEntry_s0065_25d0*)EASTL_allocator_allocate(nNew * sizeof(GridEntry_s0065_25d0), "Editor", 0, 0,
+                                                 "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\"
+                                                 "SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\"
+                                                 "EASTL/allocator.h",
+                                                 0xd1);
+        GridEntry_s0065_25d0* pNewEnd = UninitializedCopy(mpBegin, position, pNewData);
+        UninitializedFillN(pNewEnd, n, value, 0);
+        pNewEnd += n;
+        UninitializedCopy(position, mpEnd, pNewEnd);
+        if (mpBegin && ((unsigned*)mpBegin)[-1])
+            EASTL_allocator_deallocate(mpBegin);
+        mpBegin = pNewData;
+        mpEnd = pNewData + nSize + n;
+        mpCapacity = pNewData + nNew;
+    } else {
+        GridEntry_s0065_25d0 temp(value);
+        const unsigned nEnd = (unsigned)(mpEnd - position);
+        if (n < nEnd) {
+            UninitializedCopy(mpEnd - n, mpEnd, mpEnd);
+            CopyBackward(position, mpEnd - n, mpEnd);
+            mpEnd += n;
+            FillRange(position, position + n, temp);
+        } else {
+            UninitializedFillN(mpEnd, n - nEnd, temp, 0);
+            mpEnd += n - nEnd;
+            UninitializedCopy(position, mpEnd - n, mpEnd);
+            mpEnd += nEnd;
+            FillRange(position, mpEnd - n, temp);
+        }
+    }
+}
+
+// @ 0x006534c0
+GridEntry_s0065_25d0* GridVec_s0065_25d0::erase(GridEntry_s0065_25d0* position)
+{
+    if ((position + 1) < mpEnd)
+        CopyRange(position + 1, mpEnd, position);
+    mpEnd -= 1;
+    mpEnd->~GridEntry_s0065_25d0();
+    return position;
+}
+
+// @ 0x00653510
+void GridVec_s0065_25d0::swap(GridVec_s0065_25d0& other)
+{
+    if (mpBegin == 0 || ((unsigned*)mpBegin)[-1] != 0 ||
+        other.mpBegin == 0 || ((unsigned*)other.mpBegin)[-1] != 0) {
+        GridEntry_s0065_25d0* t0 = mpBegin; mpBegin = other.mpBegin; other.mpBegin = t0;
+        GridEntry_s0065_25d0* t1 = mpEnd; mpEnd = other.mpEnd; other.mpEnd = t1;
+        GridEntry_s0065_25d0* t2 = mpCapacity; mpCapacity = other.mpCapacity; other.mpCapacity = t2;
+    } else {
+        GridVec_s0065_25d0 temp;
+        temp = *this;
+        *this = other;
+        other = temp;
+        temp.DoDestroyValues(temp.mpBegin, temp.mpEnd);
+        if (temp.mpBegin && ((unsigned*)temp.mpBegin)[-1])
+            EASTL_allocator_deallocate(temp.mpBegin);
+    }
+}
+
+// @ 0x006535b0
+void GridVec_s0065_35b0::DoInsertValue(GridEntry_s0065_35b0* position, const GridEntry_s0065_35b0& value)
+{
+    if (mpEnd != mpCapacity) {
+        const GridEntry_s0065_35b0* pValue = &value;
+        if ((pValue >= position) && (pValue < mpEnd))
+            ++pValue;
+        ::new ((void*)mpEnd) GridEntry_s0065_35b0(*(mpEnd - 1));
+        CopyBackward(position, mpEnd - 1, mpEnd);
+        *position = *pValue;
+        ++mpEnd;
+    } else {
+        const unsigned nPrevSize = (unsigned)(mpEnd - mpBegin);
+        unsigned nNewSize = (nPrevSize == 0) ? 1 : nPrevSize * 2;
+        GridEntry_s0065_35b0* pNewData = nNewSize
+            ? (GridEntry_s0065_35b0*)EASTL_allocator_allocate(nNewSize * sizeof(GridEntry_s0065_35b0), "Editor", 0, 0,
+                                                   "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\"
+                                                   "SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\"
+                                                   "EASTL/allocator.h",
+                                                   0xd1)
+            : 0;
+        GridEntry_s0065_35b0* pNewEnd = UninitializedCopy(mpBegin, position, pNewData);
+        DestroyRange(mpBegin, position, pNewData);
+        if (pNewEnd)
+            ::new ((void*)pNewEnd) GridEntry_s0065_35b0(value);
+        pNewEnd += 1;
+        GridEntry_s0065_35b0* pEnd = UninitializedCopy(position, mpEnd, pNewEnd);
+        DestroyRange(position, mpEnd, pNewEnd);
+        if (mpBegin && ((unsigned*)mpBegin)[-1])
+            EASTL_allocator_deallocate(mpBegin);
+        mpBegin = pNewData;
+        mpEnd = pEnd;
+        mpCapacity = pNewData + nNewSize;
+    }
+}
+
+// @ 0x006536e0
+int* Filter16(int* p, int* end, int* keysBegin, int* keysEnd, int* unused5, int* unused6, char* attr)
+{
+    for (; p != end; p += 4) {
+        if (SetAssetData((void*)p[1], 0)) {
+            int* lo = keysBegin;
+            int n = (int)(keysEnd - keysBegin);
+            while (n > 0) {
+                int half = n >> 1;
+                if (lo[half] < (unsigned)p[1]) {
+                    lo = lo + half + 1;
+                    n = n - 1 - half;
+                } else {
+                    n = half;
+                }
+            }
+            if ((lo == keysEnd) || ((unsigned)p[1] < (unsigned)*lo) || (lo == lo + 1))
+                break;
+        }
+    }
+    if (keysBegin && keysBegin != (int*)attr)
+        EASTL_allocator_deallocate(keysBegin);
+    return p;
+}
+
+// @ 0x00653780
+void* Filter16Copy(int* p, int* end, int* out, int* keysBegin, int* keysEnd, char* attr)
+{
+    for (; p != end; p += 4) {
+        if (!SetAssetData((void*)p[1], 0)) {
+            // keep predicate false -> skip
+        } else {
+            int* lo = FUN_00555a20(keysBegin, keysEnd, p + 1, *attr);
+            if (!((lo != keysEnd && *lo <= (unsigned)p[1]) && (lo != lo + 1)))
+                continue;
+        }
+        out[0] = p[0]; out[1] = p[1]; out[2] = p[2]; out[3] = p[3];
+        out += 4;
+    }
+    if (keysBegin && (char*)keysBegin != attr)
+        EASTL_allocator_deallocate(keysBegin);
+    return out;
+}
+
+// @ 0x00653820
+void QuickSortImplB(GridEntry_s0065_35b0* first, GridEntry_s0065_35b0* last, int kRecursionCount)
+{
+    while (((last - first) > kQuickSortLimit) && (kRecursionCount > 0)) {
+        GridEntry_s0065_35b0* mid = first + (last - first) / 2;
+        const GridEntry_s0065_35b0* p = &medianRef(*first, *mid, *(last - 1));
+        GridEntry_s0065_35b0* position = GetPartitionB(first, last, *p);
+        QuickSortImplB(position, last, --kRecursionCount);
+        last = position;
+    }
+    if (kRecursionCount == 0)
+        PartialSortB(first, last, last);
+}
+
+// @ 0x00653960
+void PartialSortA(GridEntry_s0065_35b0* first, GridEntry_s0065_35b0* middle, GridEntry_s0065_35b0* last)
+{
+    MakeHeapA(first, middle);
+    for (GridEntry_s0065_35b0* i = middle; i < last; ++i) {
+        if (CompareA()(*i, *first)) {
+            GridEntry_s0065_35b0 temp(*i);
+            *i = *first;
+            AdjustHeapA(first, 0, (int)(middle - first), 0, temp);
+        }
+    }
+    SortHeapA(first, middle);
+}
+
+// @ 0x00653b80
+int cSPUIAssetGrid_s0065_35b0::GridScanFwd()
+{
+    void* self = this;
+    AssetBrowser();
+    int* info = (int*)FUN_00644a70(0);
+    int* b = (int*)info[0];
+    int* e = (int*)info[1];
+    if (b == e)
+        return -1;
+    char* gridBegin = (char*)*(void**)((char*)self + 0xe8);
+    char* gridEnd = (char*)*(void**)((char*)self + 0xec);
+    unsigned count = (unsigned)((gridEnd - gridBegin) >> 5);
+    for (unsigned i = 0; i < count; ++i) {
+        int* found = (int*)FUN_00646030(b, e, gridBegin + i * 0x20, (char)info[5]);
+        if (found != e) {
+            int* g = (int*)(gridBegin + i * 0x20);
+            bool lt;
+            if (*g != *found) lt = *g < (unsigned)*found;
+            else if (g[2] != found[2]) lt = g[2] < (unsigned)found[2];
+            else lt = g[1] < (unsigned)found[1];
+            if (!lt && found != found + 5)
+                return (int)i;
+        }
+    }
+    return -1;
+}
+
+// @ 0x00653c40
+int cSPUIAssetGrid_s0065_35b0::GridScanRev()
+{
+    void* self = this;
+    AssetBrowser();
+    int* info = (int*)FUN_00644a70(0);
+    int* b = (int*)info[0];
+    int* e = (int*)info[1];
+    if (b == e)
+        return -1;
+    char* gridBegin = (char*)*(void**)((char*)self + 0xe8);
+    char* gridEnd = (char*)*(void**)((char*)self + 0xec);
+    int i = (int)((gridEnd - gridBegin) >> 5) - 1;
+    for (;;) {
+        int* g = (int*)(gridBegin + i * 0x20);
+        int* found = (int*)FUN_00646030(b, e, g, (char)info[5]);
+        if (found != e) {
+            bool lt;
+            if (*g != *found) lt = *g < (unsigned)*found;
+            else if (g[2] != found[2]) lt = g[2] < (unsigned)found[2];
+            else lt = g[1] < (unsigned)found[1];
+            if (!lt && found != found + 5)
+                return i;
+        }
+        --i;
+    }
+}
+
+// @ 0x00653cf0
+void* cSPUIAssetView::VerbCollect(unsigned enabled)
+{
+    void* self = this;
+    char* s = (char*)self;
+    *(void**)(s + 0x10) = s + 0x18;
+    *(void**)(s + 4) = s + 0x18;
+    *(void**)(s + 0) = s + 0x18;
+    *(void**)(s + 8) = s + 0x18 + 0x78;
+    if (!enabled)
+        return self;
+    void* v = FUN_0065f810_s0065_35b0(1);
+    char* begin = *(char**)v;
+    for (unsigned i = 0; i < (unsigned)((*(char**)((char*)v + 4) - begin) / 0x34); ++i) {
+        uint32_t verb = cSPUIAssetView_InitVerbCollection(*(uint32_t*)(begin + i * 0x34));
+        if (verb) {
+            char* end = *(char**)(s + 4);
+            int* lo = FUN_00555a20((int*)*(void**)s, (int*)end, (int*)&verb, s[0x90]);
+            if (lo == (int*)end) {
+                if (end == *(char**)(s + 8)) {
+                    fixed_vector_DoInsertValue((void*)s, lo, &verb);
+                } else {
+                    *(char**)(s + 4) = end + 4;
+                    if (end)
+                        *(uint32_t*)end = verb;
+                }
+            } else if (verb < (uint32_t)*lo) {
+                fixed_vector_DoInsertValue((void*)s, lo, &verb);
+            }
+        }
+    }
+    return self;
+}
+
+// @ 0x00653e40
+void GridVec_s0065_35b0::resize(unsigned n)
+{
+    const unsigned cur = (unsigned)(mpEnd - mpBegin);
+    if (cur < n) {
+        GridEntry_s0065_35b0 empty;
+        f_00652c90(mpEnd, n - cur, empty);
+    } else {
+        GridEntry_s0065_35b0* pos = mpBegin + n;
+        DoDestroyValues(CopyRange(mpEnd, mpEnd, pos), mpEnd);
+        mpEnd -= (unsigned)(mpEnd - pos);
+    }
+}
+
+// @ 0x00653f50
+void QuickSortImplA(GridEntry_s0065_35b0* first, GridEntry_s0065_35b0* last, int kRecursionCount)
+{
+    while (((last - first) > kQuickSortLimit) && (kRecursionCount > 0)) {
+        GridEntry_s0065_35b0 pivot = MedianA(*first, *(first + (last - first) / 2), *(last - 1));
+        GridEntry_s0065_35b0* position = GetPartitionA(first, last, pivot);
+        QuickSortImplA(position, last, --kRecursionCount);
+        last = position;
+    }
+    if (kRecursionCount == 0)
+        PartialSortA(first, last, last);
+}
+
+// @ 0x00654100
+char cSPUIAssetGrid_s0065_35b0::HandleMessage(int wparam, unsigned lparam)
+{
+    char* s = (char*)this;
+    if (s[0x1e4] != 0)
+        return 0;
+    if (lparam == 2 && wparam == 0x46) {
+        if (*(void**)(s + 0xe4) != 0)
+            ((SearchBoxStub*)*(void**)(s + 0xe4))->OnSearchChanged();
+        return 1;
+    }
+
+    if ((lparam & 0xffffffbf) == 0) {
+        if (wparam == 0x21 || wparam == 0x22) {
+            void* window = *(void**)((char*)*(void**)(s + 0x18c) + 0x20);
+            int visible = (*(int(__thiscall**)(void*))((char*)*(void**)window + 0x40))(window);
+            int total = (*(int(__thiscall**)(void*))((char*)*(void**)window + 0x48))(window);
+            int step;
+            if (total < visible)
+                step = visible - total;
+            else
+                step = 1;
+            if (wparam == 0x21)
+                step = -step;
+            float offset = (float)step + *(float*)(s + 0x180);
+            if (!(offset > 0.0f))
+                offset = 0.0f;
+            if (*(float*)(s + 0x188) <= offset)
+                offset = *(float*)(s + 0x188);
+            *(float*)(s + 0x180) = offset;
+            s[0x190] = 1;
+            SPUIHelpers_UpdateMouseFocus(1);
+            return 1;
+        }
+        if (wparam == 0x25 || wparam == 0x26 || wparam == 0x27 || wparam == 0x28) {
+            int index = (wparam == 0x25 || wparam == 0x26) ? GridScanFwd() : GridScanRev();
+            char* grid = *(char**)(s + 0xe8);
+            if (index != -1 && *(void**)(grid + index * 0x20 + 0x10) != 0) {
+                const int columns = *(int*)(s + 0x110);
+                const int count = (int)((*(char**)(s + 0xec) - grid) >> 5);
+                int next = index;
+                switch (wparam) {
+                case 0x25:
+                    if (index % columns != 0)
+                        next = index - 1;
+                    break;
+                case 0x26:
+                    if (columns <= index)
+                        next = index - columns;
+                    break;
+                case 0x27:
+                    if (index != count - 1 && index % columns != columns - 1)
+                        next = index + 1;
+                    break;
+                case 0x28:
+                    if (index < count - columns)
+                        next = columns + index;
+                    break;
+                }
+                void* entry = *(void**)(grid + next * 0x20 + 0x10);
+                if (next != index && entry != 0 && *(char*)((char*)entry + 0xf4) != 0)
+                    cSPUIAssetView_SelectAsset(entry, 0, 1, 0, 0, 0);
+            }
+            return 1;
+        }
+    }
+
+    if (lparam != 0)
+        return 0;
+    int index;
+    if (wparam == 0x24) {
+        if (*(int*)(s + 0x1b0) <= 0)
+            return 0;
+        index = CheckFlag() ? 1 : 0;
+    } else if (wparam == 0x23) {
+        const int count = *(int*)(s + 0x1b0);
+        if (count <= 0)
+            return 0;
+        index = CheckFlag() ? count : count - 1;
+    } else {
+        return 0;
+    }
+    if (index < 0)
+        return 0;
+    void* entry = *(void**)(*(char**)(s + 0xe8) + index * 0x20 + 0x10);
+
+    if (entry == 0)
+        return 1;
+    if (*(char*)((char*)entry + 0xf4) == 0)
+        return 1;
+    cSPUIAssetView_SelectAsset(entry, 0, 1, 0, 0, 0);
+    return 1;
+}
+
+// @ 0x006543a0
+void cSPUIAssetGrid_s0065_35b0::GridClear()
+{
+    void* self = this;
+    char* s = (char*)self;
+    void* p = *(void**)(s + 0xfc);
+    if (p) {
+        void* q = *(void**)((char*)p + 0x10);
+        if (q)
+            ((AssetObjStub*)q)->f_00659340();
+        *(void**)(s + 0xfc) = 0;
+    }
+    s[0x100] = 0;
+    GridVec_s0065_35b0* v = (GridVec_s0065_35b0*)(s + 0xe8);
+    int count = (int)(v->mpEnd - v->mpBegin);
+    for (int i = 0; i < count; ++i) {
+        void* obj = *(void**)((char*)v->mpBegin + i * 0x20 + 0x10);
+        if (obj)
+            (*(void(__thiscall**)(void*))((char*)*(void**)obj + 0x20))(obj);
+    }
+    const unsigned n = (unsigned)(v->mpEnd - v->mpBegin);
+    v->DoDestroyValues(v->mpBegin, v->mpEnd);
+    v->mpEnd -= n;
+    *(float*)(s + 0x180) = 0.0f;
+    *(float*)(s + 0x184) = 0.0f;
+    *(int*)(s + 0x198) = 1;
+    void* mgr = *(void**)(s + 0x18c);
+    if (mgr) {
+        void* w = *(void**)((char*)mgr + 0x20);
+        (*(void(__thiscall**)(void*, int, int))((char*)*(void**)w + 0x24))(w, 0, 1);
+    }
+}
+
+// @ 0x00654490
+void GridVec_s0065_35b0::reserve(unsigned n)
+{
+    if (n == (unsigned)-1)
+        return;
+    const unsigned cur = (unsigned)(mpEnd - mpBegin);
+    if (n > cur) {
+        GridEntry_s0065_35b0* pNewData = n
+            ? (GridEntry_s0065_35b0*)EASTL_allocator_allocate(n * sizeof(GridEntry_s0065_35b0), "Editor", 0, 0,
+                                                   "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\"
+                                                   "SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\"
+                                                   "EASTL/allocator.h",
+                                                   0xd1)
+            : 0;
+        UninitializedCopy(mpBegin, mpEnd, pNewData);
+        DestroyRange(mpBegin, mpEnd, pNewData);
+        if (mpBegin && ((unsigned*)mpBegin)[-1])
+            EASTL_allocator_deallocate(mpBegin);
+        GridEntry_s0065_35b0* pEnd = pNewData + (unsigned)(mpEnd - mpBegin);
+        mpBegin = pNewData;
+        mpCapacity = pNewData + n;
+        mpEnd = pEnd;
+    } else {
+        if (n < cur)
+            resize(n);
+        GridVec_s0065_35b0 temp;
+        temp.f_0064f4e0((unsigned)(mpEnd - mpBegin), &mpAllocator);
+        GridEntry_s0065_35b0* pWritten;
+        FUN_0064f730(&pWritten, mpBegin, mpEnd, temp.mpBegin, n);
+        temp.mpEnd = pWritten;
+        swap(temp);
+        temp.DoDestroyValues(temp.mpBegin, temp.mpEnd);
+        if (temp.mpBegin && ((unsigned*)temp.mpBegin)[-1])
+            EASTL_allocator_deallocate(temp.mpBegin);
+    }
+}
+
+// @ 0x00654650
+void cSPUIAssetGrid_s0065_35b0::GridShutdown()
+{
+    void* self = this;
+    char* s = (char*)self;
+    if (s[0x10c]) {
+        void* app = AppSystem_s0065_35b0();
+        (*(void(__thiscall**)(void*, int))((char*)*(void**)app + 0x40))(app, 0);
+        s[0x10c] = 0;
+    }
+    GridClear();
+    FUN_0065aeb0();
+    void* layout = *(void**)(s + 0x18);
+    if (layout) {
+        ((LayoutStub*)layout)->f_00811ad0(1);
+        void* p = *(void**)(s + 0x18);
+        if (p) {
+            *(void**)(s + 0x18) = 0;
+            (*(void(__thiscall**)(void*))((char*)*(void**)p + 8))(p);
+        }
+    }
+    void* e0 = *(void**)(s + 0xe0);
+    if (e0) {
+        ((AssetObjStub*)e0)->f_0065fa20();
+        void* p = *(void**)(s + 0xe0);
+        if (p) {
+            *(void**)(s + 0xe0) = 0;
+            (*(void(__thiscall**)(void*))((char*)*(void**)p + 4))(p);
+        }
+    }
+    void* e4 = *(void**)(s + 0xe4);
+    if (e4) {
+        ((SearchBoxStub*)e4)->f_00671c00();
+        void* p = *(void**)(s + 0xe4);
+        if (p) {
+            *(void**)(s + 0xe4) = 0;
+            (*(void(__thiscall**)(void*))((char*)*(void**)p + 4))(p);
+        }
+    }
+    void* h = *(void**)(s + 0x138);
+    if (h) {
+        *(void**)(s + 0x138) = 0;
+        Messaging_RemoveHandler(h, *(void**)(s + 0x13c), *(void**)(s + 0x140),
+                                *(void**)(s + 0x144), *(void**)(s + 0x148));
+    }
+}
+
+// @ 0x00654730
+void AssetGrid::UpdateAssets(void* filter, void* feedItem)
+{
+    void* self = this;
+    char* s = (char*)self;
+
+    // 0x1b4 = load counter
+    *(int*)(s + 0x1b4) = 0;
+
+    // --- swap the active filter (+0x19c) with AddRef/Release ---
+    void* old = *(void**)(s + 0x19c);
+    if (filter != old) {
+        if (filter)
+            (*(void(__thiscall**)(void*))((char*)*(void**)filter))(filter);
+        *(void**)(s + 0x19c) = filter;
+        if (old)
+            (*(void(__thiscall**)(void*))((char*)*(void**)old + 4))(old);
+    }
+
+    // --- clear pending-selection state ---
+    s[0x1e4] = 0;
+    s[0x1e5] = 0;
+    void* pend = *(void**)(s + 0x1c0);
+    if (pend) {
+        *(void**)(s + 0x1c0) = 0;
+        (*(void(__thiscall**)(void*))((char*)*(void**)pend + 4))(pend);
+    }
+    *(int*)(s + 0x1c4) = 0;
+    *(int*)(s + 0x1c8) = 0;
+    *(int*)(s + 0x1cc) = 0;
+
+    // --- primary widget (+0x28) and secondary (+0x48) visibility; header bar (+0x4c) ---
+    void* curFilter = *(void**)(s + 0x19c);
+    bool known = curFilter != 0 && ((GridHelper*)curFilter)->IsKnownID();
+    if (known) {
+        void* w0 = *(void**)(s + 0x28);
+        (*(void(__thiscall**)(void*, int, int))((char*)*(void**)w0 + 0x7c))(w0, 1, 1);
+        void* w1 = *(void**)(s + 0x48);
+        (*(void(__thiscall**)(void*, int, int))((char*)*(void**)w1 + 0x7c))(w1, 1, 1);
+    } else {
+        void* w0 = *(void**)(s + 0x28);
+        (*(void(__thiscall**)(void*, int, int))((char*)*(void**)w0 + 0x7c))(w0, 1, 0);
+        void* w1 = *(void**)(s + 0x48);
+        (*(void(__thiscall**)(void*, int, int))((char*)*(void**)w1 + 0x7c))(w1, 1, 0);
+    }
+    {
+        void* w2 = *(void**)(s + 0x4c);
+        (*(void(__thiscall**)(void*, int, int))((char*)*(void**)w2 + 0x7c))(w2, 1, known ? 1 : 0);
+    }
+
+    // --- feed-header widget (+0x5c): visible only when the stored filter + item are both live ---
+    {
+        void* w3 = *(void**)(s + 0x5c);
+        if (w3) {
+            int vis;
+            if (curFilter == 0)
+                vis = s[0x1b8];
+            else
+                vis = (s[0x1b8] && *((char*)curFilter + 0x16)) ? 1 : 0;
+            (*(void(__thiscall**)(void*, int, int))((char*)*(void**)w3 + 0x7c))(w3, 1, vis);
+        }
+    }
+
+    // --- release the previous feed item (+0xfc) and its sub-object at +0x10 ---
+    {
+        void* it = *(void**)(s + 0xfc);
+        if (it) {
+            void* sub = *(void**)((char*)it + 0x10);
+            if (sub)
+                ((GridHelper*)sub)->Collect0x659340();
+            *(void**)(s + 0xfc) = 0;
+        }
+    }
+    s[0x100] = 0;
+
+    // --- if the header widget (+0x2c) and feedItem are both live, rebuild the entry vector ---
+    if (*(void**)(s + 0x2c) != 0 && feedItem != 0) {
+        ((GridHelper*)self)->Clear();
+        void* f2 = *(void**)(s + 0x19c);
+        bool want = (f2 == 0) ? (s[0x1b8] != 0)
+                              : (s[0x1b8] != 0 && *((char*)f2 + 0x16) != 0);
+        if (want) {
+            GridEntries* vec = (GridEntries*)(s + 0xe8);
+            if (vec->mpEnd < vec->mpCapacity) {
+                void* slot = vec->mpEnd;
+                vec->mpEnd = (char*)slot + 0x20;
+                FUN_0064f3b0(slot, /*placeholder entry*/ 0);
+            } else {
+                FUN_006535b0(vec->mpEnd, 0);
+            }
+        }
+        // second (empty) placeholder entry
+        {
+            GridEntries* vec = (GridEntries*)(s + 0xe8);
+            if (vec->mpEnd < vec->mpCapacity) {
+                void* slot = vec->mpEnd;
+                vec->mpEnd = (char*)slot + 0x20;
+                FUN_0064f3b0(slot, 0);
+            } else {
+                FUN_006535b0(vec->mpEnd, 0);
+            }
+        }
+        {
+            GridEntries* vec = (GridEntries*)(s + 0xe8);
+            int count = (int)(((char*)vec->mpEnd - (char*)vec->mpBegin) >> 5);
+            FUN_00652b00(vec->mpEnd, (char*)feedItem + 0x5c + count);
+        }
+
+        // --- merge the feed item's sorted sub-item list (+0x4c) into the entry vector ---
+        char* subEnd = (char*)feedItem + 0x4c;
+        char* node = *(char**)((char*)feedItem + 0x50);
+        if (node != subEnd) {
+            do {
+                char* sub = *(char**)(node + 0x1c);   // the sub-object
+                if ((*(char(__thiscall**)(char*))((char*)*(void**)sub + 0x2c))(sub)) {
+                    void* browser = AssetBrowser();
+                    void* entry = FUN_006462b0(browser, sub);
+                    (*(void(__thiscall**)(void*))((char*)*(void**)entry))(entry);   // AddRef
+                    {
+                        // build a cSPAssetGridEntry from {sub keys, sub, entry} then insert
+                        GridEntries* vec = (GridEntries*)(s + 0xe8);
+                        if (vec->mpEnd < vec->mpCapacity) {
+                            void* slot = vec->mpEnd;
+                            vec->mpEnd = (char*)slot + 0x20;
+                            FUN_0064f3b0(slot, 0);
+                        } else {
+                            FUN_006535b0(vec->mpEnd, 0);
+                        }
+                    }
+                } else {
+                    *(int*)(s + 0x1b4) += 1;
+                }
+                {
+                    char* next = (char*)RBTreeIncrement(node);
+                    char* stop = (char*)feedItem + 0x4c + 0x4c;
+                    node = next;
+                    if (node == stop) break;
+                }
+            } while (true);
+        }
+
+        // --- after the walk: reserve or arm the pending selection ---
+        if (((GridHelper*)feedItem)->IsEmpty()) {
+            FUN_00654490(-1);
+        } else {
+            s[0x1e4] = 1;
+            void* oldPend = *(void**)(s + 0x1c0);
+            if (feedItem != oldPend) {
+                (*(void(__thiscall**)(void*))((char*)*(void**)feedItem))(feedItem);
+                *(void**)(s + 0x1c0) = feedItem;
+                if (oldPend)
+                    (*(void(__thiscall**)(void*))((char*)*(void**)oldPend + 4))(oldPend);
+            }
+        }
+    }
+
+    // --- header message string (eastl::gEmptyString16 ...) then show on the feed-header sub-widget
+    {
+        void* headerWidget = *(void**)(s + 0x50);
+        if (headerWidget && *(void**)(s + 0x19c) != 0) {
+            if (FUN_00668be0(headerWidget, (void*)/*16-byte key*/ 0)) {
+                void* w = *(void**)(s + 0x50);
+                (*(void(__thiscall**)(void*, void*))((char*)*(void**)w + 0x80))(w, 0);
+            }
+        }
+    }
+
+    // --- tail updates ---
+    s[0x1e6] = 1;
+    s[0x1e7] = 1;
+    ((AssetGridTail*)self)->UpdateScrolling(0);
+    ((AssetGridTail*)self)->UpdateAll();
+    ((GridHelper*)self)->Update0x650470();
+    ((AssetGridTail*)self)->UpdateScrollRegion();
+
+    *(int*)(s + 0x194) = 1;
+    void* f = *(void**)(s + 0x19c);
+    bool render;
+    if (f == 0)
+        render = (s[0x1b8] != 0) && (*(void**)(s + 0xe8) != *(void**)(s + 0xec));
+    else
+        render = (s[0x1b8] != 0) && (*((char*)f + 0x16) != 0);
+    if (render && *(void**)(s + 0xe8) != *(void**)(s + 0xec) &&
+        *(char*)(*(char**)(s + 0xe8) + 0x1c) != 0) {
+        int pad = 5;
+        void* ab = AssetBrowser();
+        if (ab && ((int*)AssetBrowser())[6] != 0) {
+            void* ab2 = AssetBrowser();
+            pad = cTribeTool_GetTutorialToolPrice((void*)((int*)ab2)[6], 0x86cf5fc5, 5);
+        }
+        void* w = *(void**)(s + 0x5c);
+        if (w) {
+            char* e0 = *(char**)(s + 0xe8);
+            (*(void(__thiscall**)(void*, float, float))((char*)*(void**)w + 0x64))(
+                w, *(float*)(e0 + 0x14) + (float)pad, *(float*)(e0 + 0x18) + (float)pad);
+            (*(void(__thiscall**)(void*, float, float))((char*)*(void**)w + 0x68))(
+                w, *(float*)(s + 0x104) - (float)(pad * 2),
+                   *(float*)(s + 0x108) - (float)(pad * 2));
+        }
+    }
+
+    // --- frame timer stamp (+0x160 gate) ---
+    {
+        unsigned long long stamp;
+        if (*(int*)(s + 0x160) == 1) {
+            stamp = __rdtsc();
+        } else {
+            long long pc = 0;
+            QueryPerformanceCounter(&pc);
+            stamp = (unsigned long long)pc;
+        }
+        *(int*)(s + 0x150) = (int)(stamp & 0xffffffffu);
+        *(int*)(s + 0x154) = (int)(stamp >> 32);
+    }
+    *(int*)(s + 0x158) = 0;
+    *(int*)(s + 0x15c) = 0;
+}
+
+// @ 0x00654d00
+void FUN_00654d00(void* self)
+{
+    char* s = (char*)self;
+    s[0x1e8] = 0;
+    void* p = *(void**)(s + 0xfc);
+    if (p) {
+        void* q = *(void**)((char*)p + 0x10);
+        if (q)
+            FUN_00659340(q);
+        *(void**)(s + 0xfc) = 0;
+    }
+    void* item = FUN_0066a800(*(int*)(s + 0x1a0));
+    s[0x100] = 0;
+    if (item) {
+        (*(void(__thiscall**)(void*))((char*)*(void**)item + 4))(item);
+        U8Vec vec;
+        vec.mpBegin = 0; vec.mpEnd = 0; vec.mpCapacity = 0;
+        if (*(void**)(s + 0xe0)) {
+            void* list = FUN_0065f810_s0065_4730(0);
+            char* begin = *(char**)list;
+            char* end = *(char**)((char*)list + 4);
+            while (begin != end) {
+                unsigned v = *(unsigned*)begin;
+                if (vec.mpEnd < vec.mpCapacity) {
+                    *vec.mpEnd++ = v;
+                } else {
+                    // vector<unsigned>::DoInsertValue(&vec, &v): grow
+                    unsigned n = (unsigned)(vec.mpEnd - vec.mpBegin);
+                    unsigned cap = n ? n * 2 : 1;
+                    unsigned* nd = (unsigned*)::operator new(cap * 4);
+                    for (unsigned i = 0; i < n; ++i) nd[i] = vec.mpBegin[i];
+                    nd[n] = v;
+                    if (vec.mpBegin) ::operator delete(vec.mpBegin);
+                    vec.mpBegin = nd;
+                    vec.mpEnd = nd + n + 1;
+                    vec.mpCapacity = nd + cap;
+                }
+                begin += 0x34;
+            }
+        }
+        FUN_0066b0c0(&vec);
+        FUN_00653ee0(*(void**)(s + 0xe8), *(void**)(s + 0xec), item);
+        if (vec.mpBegin && ((unsigned*)vec.mpBegin)[-1])
+            ::operator delete(vec.mpBegin);
+    }
+    FUN_00650470(self);
+    *(int*)(s + 0x198) = 1;
+    if (item)
+        (*(void(__thiscall**)(void*))((char*)*(void**)item + 8))(item);
+}
+
+// @ 0x00654e20
+void cSPUIAssetGrid_s0065_4730::ScrollTo(void* item)
+{
+    if (!item)
+        return;
+    if (mNeedsRebuild)
+        Rebuild();
+    if (mNeedsReset)
+        Refresh();
+    GridEntry_s0065_4730* found = (GridEntry_s0065_4730*)Find((uint32_t)(uintptr_t)item);
+    if (!found)
+        return;
+    float itemPos = found->mPosition;
+    float cur = mScroll;
+    int size = mGridSource->mSizeProvider->GetSize();
+    float limit = ((float)size + cur) - mViewWidth;
+    if (limit < cur)
+        limit = cur;
+    if (cur <= itemPos) {
+        if (limit < mItemWidth + itemPos)
+            mScroll = (mItemWidth + itemPos - (float)size) + mViewWidth;
+    } else {
+        mScroll = itemPos;
+    }
+    float v = mScroll;
+    if (v <= 0.0f)
+        v = 0.0f;
+    if (mMaxScroll <= v)
+        v = mMaxScroll;
+    mScroll = v;
+    mFocusFlag = true;
+    SPUIHelpers_UpdateMouseFocus(1);
+}
+
+// @ 0x00654f50
+void AssetGrid::OnSelectCommit(void* item, void* filter)
+{
+    void* self = this;
+    char* s = (char*)self;
+
+    if (s[0x1e4]) {
+        s[0x1e5] = 0;
+        void* old = *(void**)(s + 0x1c0);
+        if (item != old) {
+            if (item)
+                (*(void(__thiscall**)(void*))((char*)*(void**)item))(item);
+            *(void**)(s + 0x1c0) = item;
+            if (old)
+                (*(void(__thiscall**)(void*))((char*)*(void**)old + 4))(old);
+        }
+        return;
+    }
+
+    long long price = 2000;
+    void* ab = AssetBrowser();
+    if (ab && ((int*)AssetBrowser())[6] != 0) {
+        void* ab2 = AssetBrowser();
+        price = (long long)(int)(uintptr_t)cTribeTool_GetTutorialToolPrice((void*)((int*)ab2)[6], 0x1df98401, 2000);
+    }
+    unsigned long long elapsed = (unsigned long long)((StopwatchHelper*)(s + 0x168))->GetElapsedTime();
+    if ((unsigned long long)price >= elapsed) {
+        // stopwatch has NOT out-run the price: arm the pending swap and leave.
+        s[0x1e5] = 1;
+        void* old = *(void**)(s + 0x1c0);
+        if (item != old) {
+            if (item)
+                (*(void(__thiscall**)(void*))((char*)*(void**)item))(item);
+            *(void**)(s + 0x1c0) = item;
+            if (old)
+                (*(void(__thiscall**)(void*))((char*)*(void**)old + 4))(old);
+        }
+        return;
+    }
+
+    // Commit body.
+    s[0x1e5] = 0;
+    ((GridHelper*)self)->Release0x64e7a0();
+    ((GridHelper*)item)->Reset0x644040(0);
+    if (!((GridHelper*)item)->IsEmpty()) {
+        s[0x1e5] = 1;
+        *(void**)(s + 0x1c0) = item;   // AutoRefCount<IWinText>::operator=
+    }
+    if (filter == *(void**)(s + 0x19c) && item) {
+        ((GridHelper*)self)->Release0x64e7a0();
+        ((GridHelper*)self)->MergeEntries(*(void**)(s + 0xe8), *(void**)(s + 0xec), item);
+        // Merge the item's sorted list (rbtree anchored at item+0x4c) into the grid's
+        // entry vector at +0xe8. Each entry is 0x20 bytes; ordering compares the
+        // 64-bit pair {[+0x10],[+0x14]} (then a third key at the tail).
+        char* itemEnd = (char*)item + 0x4c;
+        void* node = *(void**)((char*)item + 0x50);   // first node
+        char* out = *(char**)(s + 0xe8);
+        while (node != itemEnd) {
+            void* cur = node;
+            if (out == *(char**)(s + 0xec)) {
+                // append: build a temporary entry then insert at end
+                EntryVec* vec = (EntryVec*)(s + 0xe8);
+                vec->InsertAt(out, cur, &out);
+                node = RBTreeIncrement(node);
+                continue;
+            }
+            // compare {cur[0x10],cur[0x14],cur[0x18]} against the queued out entry
+            unsigned k0 = *(unsigned*)((char*)cur + 0x10);
+            unsigned k1 = *(unsigned*)((char*)cur + 0x14);
+            unsigned k2 = *(unsigned*)((char*)cur + 0x18);
+            unsigned c0 = *(unsigned*)(out + 0);
+            unsigned c1 = *(unsigned*)(out + 4);
+            unsigned c2 = *(unsigned*)(out + 8);
+            bool curLess = (k0 < c0) || (k0 == c0 && (k2 < c2 || (k2 == c2 && k1 < c1)));
+            if (!curLess) {
+                bool curMore = (k0 > c0) || (k0 == c0 && (k2 > c2 || (k2 == c2 && k1 > c1)));
+                if (curMore) {
+                    out += 0x20;
+                    node = RBTreeIncrement(node);
+                }
+            } else {
+                out += 0x20;
+                node = RBTreeIncrement(node);
+            }
+        }
+        // Drop trailing grid entries that no longer sort before the item's end.
+        while (out != *(char**)(s + 0xec)) {
+            EntryVec* vec = (EntryVec*)(s + 0xe8);
+            out = (char*)vec->Erase(out);
+            *(int*)(s + 0x198) = 1;
+        }
+    }
+
+    s[0x1e6] = 1;
+    s[0x1e7] = 0;
+    ((GridHelper*)self)->Update0x650470();
+    {
+        float v = *(float*)(s + 0x180);
+        if (v < 0.0f) v = 0.0f;
+        if (*(float*)(s + 0x188) < v) v = *(float*)(s + 0x188);
+        *(float*)(s + 0x180) = v;
+    }
+    ((StopwatchHelper*)(s + 0x168))->Restart();
+}
+
 // @ 0x00655ed0
 void cSPUIAssetGrid_s0065_53b0::Update(int arg)
 {
@@ -1718,4 +3622,20 @@ void cSPUIAssetGrid_s0065_53b0::Update(int arg)
             mSearchBox->Update(arg);
         UpdateScrolling(arg);
     }
+}
+
+// @ 0x00656310
+void cSPUIAssetView_s0065_6310::m56310(void* range)
+{
+    KeyVec_s0065_6310 keys;
+    unsigned int extra;
+    char* base = (char*)range;
+    char* oldEnd = *(char**)(base + 4);
+    keys.Init(mE0);
+    char* p = (char*)FUN_00656240(*(void**)base, *(char**)(base + 4),
+                                  MakeKeys(keys.mpBegin, keys.mpEnd, (void*)extra));
+    copy_705250(oldEnd, *(void**)(base + 4), p);
+    int n = (int)((oldEnd - p) >> 4);
+    *(char**)(base + 4) += -(n << 4);
+    if (keys.mpBegin && keys.mpBegin != keys.mAllocBuf) operator_delete_0(keys.mpBegin);
 }

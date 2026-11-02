@@ -1,4 +1,4 @@
-00654730  SP::cSPUIAssetGrid feed-filter/update  # sets +0x1b4=0, swaps +0x19c filter, resets +0x1e4/e5
-00654d00  SP::cSPUIAssetGrid Reset/Refresh  # releases +0xfc, collects feed items, FUN_00653ee0, +0x198=1
-00654e20  SP::cSPUIAssetGrid ScrollTo(item)  # scroll offset clamp + UpdateMouseFocus(+0x190=1)
-00654f50  SP::cSPUIAssetGrid OnSelect/commit  # 1117-byte selection + tutorial timer body
+00654730 ?UpdateAssets@AssetGrid@@QAEXPAX0@Z  # AssetGrid::UpdateAssets migrated from s00654730 (verbatim, slice spelling)
+00654d00 ?FUN_00654d00@@YAXPAX@Z  # FUN_00654d00 migrated from s00654730 (verbatim, slice spelling)
+00654e20 ?ScrollTo@cSPUIAssetGrid_s0065_4730@@QAEXPAX@Z  # cSPUIAssetGrid_s0065_4730::ScrollTo migrated from s00654730 (verbatim, slice spelling)
+00654f50 ?OnSelectCommit@AssetGrid@@QAEXPAX0@Z  # AssetGrid::OnSelectCommit migrated from s00654730 (verbatim, slice spelling)
