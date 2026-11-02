@@ -13,5 +13,5 @@
 00a79710 ?WriteRec@@YAXPAUIStream_s00a7_8ce0@@PAUKeyRec@@@Z  # WriteRec migrated from s00a78ce0 (verbatim, slice spelling)
 00a79760 ?ReadRecB@@YAXPAUIStream_s00a7_8ce0@@PAUKeyRecB@@@Z  # ReadRecB migrated from s00a78ce0 (verbatim, slice spelling)
 00a797a0 ?WriteRecB@@YAXPAUIStream_s00a7_8ce0@@PAUKeyRecB@@@Z  # WriteRecB migrated from s00a78ce0 (verbatim, slice spelling)
-00a797f0 ?TransformDir@Xform@@QBEXPAUVec3@@@Z  # Xform::TransformDir(Vec3*) const - rotate + scale
+00a797f0 ?TransformDir@Xform@@QBEXPAUVec3@@@Z  # Xform::TransformDir migrated from s00a78ce0 (verbatim, slice spelling)
 ; slice s00a78ce0 = 0x00a78ce0..0x00a798cb (EA::Swarm steering math, slice spelling)

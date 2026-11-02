@@ -1,0 +1,6 @@
+00a798d0 ?HermiteStep@@YAXPAUHState@@MPAUHKeyVec@@MPAUHXform@@@Z  # HermiteStep migrated from s00a798d0 (verbatim, slice spelling)
+00a79f60 ?SnapParticleToPath@@YA_NPAUHState@@MPAUHKeyVec@@PAUV3@@2PAUHXform@@@Z  # SnapParticleToPath migrated from s00a798d0 (verbatim, slice spelling)
+00a7a3b0 ?FUN_00a7a3b0@@YAXPAXPAUPathCmdStream@@@Z  # FUN_00a7a3b0 migrated from s00a798d0 (verbatim, slice spelling)
+00a7a450 ?FUN_00a7a450@@YAXPAXPAUPathCmdTail@@@Z  # FUN_00a7a450 migrated from s00a798d0 (verbatim, slice spelling)
+00a7a4a0 ?FUN_00a7a4a0@@YIXPAUPathCommandObj@@PAX@Z  # FUN_00a7a4a0 migrated from s00a798d0 (verbatim, slice spelling)
+00a7a500 ?FUN_00a7a500@@YIPAUPathObj@@PAU1@PAXIII@Z  # FUN_00a7a500 migrated from s00a798d0 (verbatim, slice spelling)
