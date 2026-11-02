@@ -1,0 +1,5 @@
+# source  symbol  va  flags
+../src/game/SPEditors/_at_005f0000.cpp  ??1cSPSwatchManager@SP@@UAE@XZ  005f07e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/_at_005f0000.cpp  ?Shutdown@cSPSwatchManager@SP@@QAEXXZ  005f0850  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/_at_005f0000.cpp  ?Update@cSPSwatchManager@SP@@QAEXI@Z  005f0940  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/_at_005f0000.cpp  ??0cSPSwatchManager@SP@@QAE@XZ  005f0ac0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

@@ -1,0 +1,3 @@
+# va  diff-bytes  reason
+005f0a60 51 ReleaseSwatch: same instructions, register assignment permuted (ebx/ebp/edi) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
+005f0b40 57 SwatchIDMap::operator[]: retail keeps the result iterator in the dead key slot and folds the null temp dtor; mine reloads the temp flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
