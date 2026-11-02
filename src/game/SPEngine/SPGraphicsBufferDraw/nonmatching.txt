@@ -1,2 +1,6 @@
 # va  diff-bytes  reason
-006dd540 607 SP::cBufferDrawImpl::IssueDraw (D3D9 draw switch); vtable dispatch and switch shape differ; equiv: UNSUPPORTED (unresolved refs g_d3d9Device, g_shader, g_softStateUpdated)
+006dd540 607 SP::cBufferDrawImpl::IssueDraw (D3D9 draw switch); vtable dispatch and switch shape differ; equiv: UNSUPPORTED (unresolved refs g_d3d9Device, g_shader, g_softStateUpdated) flags: /O2 /MD /Gy /EHsc /TP
+006dd8b0 183 channel flush/unlock with eastl vector<bool> helpers; template schedule differs; equiv: UNSUPPORTED (unresolved refs VecBool_DoInsertValue, VertexBuffer_Unlock) flags: /O2 /MD /Gy /EHsc /TP
+006dd9b0 334 channel lock/roll helper; equivalent (PASS, 364 valid / 71.7% coverage); VBi::FUN_011f3620 now called as a thiscall member so ECX is the channel buffer; /O2 register allocation/schedule differ (361 vs 387 bytes) flags: /O2 /MD /Gy /EHsc /TP
+006ddb40 299 rectangle lock helper; equivalent (PASS, 381 valid / 63.1% coverage); VertexBuffer::Lock/Unlock are thiscall members and the function returns bool; /O2 register allocation/schedule differ (328 vs 333 bytes) flags: /O2 /MD /Gy /EHsc /TP
+006de020 377 image-quad draw (D3D9 state + vertex fill); register allocation and vtable call shape differ; equiv UNSUPPORTED (unresolved refs CompiledState_Dispatch, GlobalState_D3D9Sync) flags: /O2 /MD /Gy /EHsc /TP

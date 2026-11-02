@@ -1,5 +1,8 @@
 006dd2a0 ?FUN_006dd2a0@@YAXPAX@Z  # None migrated from s006dd250 (verbatim, slice spelling)
 006dd540 ?IssueDraw@CBufferDraw@@QAEXH@Z  # CBufferDraw::IssueDraw migrated from s006dd250 (verbatim, slice spelling)
+006dd8b0 ?FUN_006dd8b0@@YIXPAX@Z  # FUN_006dd8b0 migrated from s006dd250 (verbatim, slice spelling)
+006dd9b0 ?Lock@CBufferDraw@@QAEHHPAXPAIH@Z  # CBufferDraw::Lock migrated from s006dd250 (verbatim, slice spelling)
+006ddb40 ?FUN_006ddb40@CBufferDraw@@QAE_NHPAXPAIHPAHH@Z  # CBufferDraw::FUN_006ddb40 migrated from s006dd250 (verbatim, slice spelling)
 006ddcc0 ?FUN_006ddcc0@@YA_NHHHH@Z  # None migrated from s006dd250 (verbatim, slice spelling)
 006ddde0 ?FUN_006ddde0@@YAXHH@Z  # None migrated from s006dd250 (verbatim, slice spelling)
 006dde30 ?FUN_006dde30@@YAXHHH@Z  # None migrated from s006dd250 (verbatim, slice spelling)
