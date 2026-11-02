@@ -1,9 +1,14 @@
 # source  symbol  va  flags
 ../src/game/SPEngine/SPGraphicsModelUtilities.cpp  ??0BakeJob@@QAE@II@Z  00410cc0  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsModelUtilities.cpp  ?LowerBound@@YAPAUKeyPair@@PAU1@0ABU1@@Z  0042dd00  /Od /Ob1 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/SPGraphicsModelUtilities.cpp  ?EASTL_Allocate@@YAPAXPAXIII@Z  0042dee0  /Od /Ob1 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPEngine/SPGraphicsModelUtilities.cpp  ?AllocateNode@Elem12List@@QAEPAUNode@1@ABUElem12@@@Z  0042e290  /Od /Ob1 /MD /Gy /TP /arch:SSE /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsModelUtilities.cpp  ?PostEditorEvent@@YAXIIIE@Z  004303e0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsModelUtilities.cpp  ??0SimpleAbility@@QAE@XZ  00430c20  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/SPGraphicsModelUtilities.cpp  ?FUN_00753dc0@@YAXHE@Z  00753dc0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2 /Isrc/game/include
+../src/game/SPEngine/SPGraphicsModelUtilities.cpp  ?FUN_00754110@Stub_754110@@QAE_NH@Z  00754110  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2 /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsModelUtilities.cpp  ?FUN_007542b0@@YA_NHH@Z  007542b0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2 /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsModelUtilities.cpp  ?FUN_007544e0@@YAXPAXII@Z  007544e0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2 /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsModelUtilities.cpp  ?CreateModelInstance@SP@@YA_NIIPAPAVcModelInstance@1@I@Z  00754ba0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2 /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsModelUtilities.cpp  ?FUN_00755520@X_755520@@QAE_NPAUcJob_755520@@@Z  00755520  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2 /Isrc/game/include
+../src/game/SPEngine/SPGraphicsModelUtilities.cpp  ?FUN_00755fe0@S_755fe0@@QAEXPAX@Z  00755fe0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2 /Isrc/game/include

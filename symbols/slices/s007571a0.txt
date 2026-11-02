@@ -1,7 +1,7 @@
 0068f950 ?AddRef@cJob@SP@@QAEHXZ  # SP::cJob::AddRef (callee of s007571a0, named from the dev publics; slice address comment)
-007573a0 SP::GetModelAsGameMeshes  # dev-PDB caller-scored; large async job setup
+007573a0 ?FUN_007573a0@@YA_NPAPAUcJob_s0075_71a0@@PAUVecA@@IIPAURCObj@@1PAUPropList@@PAUVecB@@PAUVecC@@PAUSub4@@PAUKey12@@PAU1@@Z  # FUN_007573a0 migrated from s007571a0 (verbatim, slice spelling)
 00757d10 FUN_00757d10  # stores vtable 0x13ef094 at this+4
-00757d20 SP::GetRwModelAsGameMeshesNoCache  # dev-PDB caller-scored; Arena exported-object scan
+00757d20 ?FUN_00757d20@@YAHPAUArenaHolder@@@Z  # FUN_00757d20 migrated from s007571a0 (verbatim, slice spelling)
 00757e20 ?Ctor@Val7e20@@QAEPAU1@PAU1@PAURCObj@@1@Z  # Val7e20::Ctor migrated from s007571a0 (verbatim, slice spelling)
 00757ff0 ?Ctor@Val7ff0@@QAEPAU1@PAURCObj@@PAH@Z  # Val7ff0::Ctor migrated from s007571a0 (verbatim, slice spelling)
 007580a0 ?FUN_007580a0@@YAPAUC0755b@@PAU1@@Z  # FUN_007580a0 migrated from s007571a0 (verbatim, slice spelling)
