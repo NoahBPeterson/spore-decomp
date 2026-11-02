@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+0083f580 29 complete: FileMessageCallback (5-arg cdecl: ctx, msg, a, b, payload; server path posts to the messaging vtable slot 6, fallback calls the handler vtable at arg+4 slot 1); call-shape/register diff only - [equiv: WEAK, 399 valid inputs, 43.3% cov (13/30), no mismatch; the server!=0 path is unreachable because the harness leaves the 0x16514cc messaging-server global null] flags: /O2 /MD /Gy /EHsc /TP /GS-

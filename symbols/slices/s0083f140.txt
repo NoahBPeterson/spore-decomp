@@ -2,7 +2,7 @@
 0083f2e0 EA::ArgScript::cExpression::EvalBoolExpression  # dev 0x10c0c20 ("or")
 0083f480 ?EvalChar@cExpression_s0083_f140@ArgScript@EA@@QAEHPAPBD@Z  # cExpression_s0083_f140::EvalChar migrated from s0083f140 (verbatim, slice spelling)
 0083f510 ?ParseBool@@YA_NPBD@Z  # ParseBool migrated from s0083f140 (verbatim, slice spelling)
-0083f580 `anonymous namespace'::FileMessageCallback  # PDB candidate
+0083f580 ?FileMessageCallback@@YAHPAX0000@Z  # FileMessageCallback migrated from s0083f140 (verbatim, slice spelling)
 0083f5e0 ?FileParser_Release@@YIHPAH@Z  # FileParser_Release migrated from s0083f140 (verbatim, slice spelling)
 0083f600 ?FileParser_HandleMessage@@YIEPAHHHH@Z  # FileParser_HandleMessage migrated from s0083f140 (verbatim, slice spelling)
 0083f630 ?FileParser_Init@@YIHPAH@Z  # FileParser_Init migrated from s0083f140 (verbatim, slice spelling)
