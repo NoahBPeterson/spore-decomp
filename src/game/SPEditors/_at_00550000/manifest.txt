@@ -1,0 +1,2 @@
+# source  symbol  va  flags
+../src/game/SPEditors/_at_00550000.cpp  ??0Constraint_s0055_80e0@FunctionalMatch@SP@@QAE@XZ  005587f0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
