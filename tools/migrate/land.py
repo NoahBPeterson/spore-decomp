@@ -122,11 +122,23 @@ def main():
             continue
         sids = [e["id"] for e in ents if e["module"] == m]
         t0 = time.time()
+        failed = []
         for sid in sids:
             rc, out = run([PY, "tools/migrate/rewrite.py", sid, "--module", m, "--batch", a.batch,
                            "--scratch", os.path.join(SCRATCH, "rw"), "--apply", "--quiet"])
             if rc:
                 log("  %s %s: rewrite exit %d: %s" % (m, sid, rc, out.strip().splitlines()[-1][:200] if out.strip() else ""))
+            elif "COMPILE FAILED" in out:
+                # rewrite.py restores the TU and exits 0: the gate then passes the unchanged TU and commit_obj.sh finds nothing
+                # to commit (mig27: 20 modules logged as "nothing added to commit")
+                err = next((l.strip() for l in out.splitlines() if re.search(r"error C\d+", l)), "?")
+                failed.append(sid)
+                log("  %s %s: rewrite COMPILE FAILED: %s" % (m, sid, re.sub(r"^.*\\src\\game\\", "", err)[:200]))
+        if failed and len(failed) == len(sids):
+            rollback(m, sids)
+            log("%s: ROLLED BACK (%d slices, %.0fs) rewrite compile failed in every slice (%s)" % (
+                m, len(sids), time.time() - t0, " ".join(failed)))
+            continue
         ok, why = gate(m, log)
         if ok:
             # the gate just ran run_all and the asm audit on these files: commit_obj.sh need not repeat them
