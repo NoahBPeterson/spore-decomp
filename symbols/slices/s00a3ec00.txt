@@ -1,5 +1,5 @@
-00a3ec00 pixie_use  # EAPd pixie "use" method: converts a name to 16-bit, resolves a key via ObjectError()->Slot78, stores key[3] into Pixie@+0x28, then Pixie::Read
-00a3ed00 pixie_new  # EAPd pixie_new: pd_new(spPixieClass), getbytes(0x34,"EAPd/Pixie"), inits Pixie fields, two outlet_new, optional pixie_use(argc==1)
+00a3ec00 ?pixie_use@@YAXHPAXPBD@Z  # pixie_use migrated from s00a3ec00 (verbatim, slice spelling)
+00a3ed00 ?pixie_new@@YAHPAX0H0@Z  # pixie_new migrated from s00a3ec00 (verbatim, slice spelling)
 00a3edb0 Pixie_Register  # SP::Audio::Pixie::Register: gensym "list"/"pixie"/"read"/"use"/"bang", class_new(spPixieClass), class_addmethod
 00a3eef0 ?sendgame_new@@YAHHH@Z  # sendgame_new migrated from s00a3ec00 (verbatim, slice spelling)
 00a3ef30 ?sendgame_anything@@YAXHHHHPAH@Z  # sendgame_anything migrated from s00a3ec00 (verbatim, slice spelling)

@@ -1,0 +1,5 @@
+# source  symbol  va  flags
+../src/game/SPAudio/SPAudioObjectPixie.cpp  ?FUN_00a3d8a0@@YAHPAI0H@Z  00a3d8a0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/SPAudioObjectPixie.cpp  ?FUN_00a3da70@@YGXPAI0@Z  00a3da70  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/SPAudioObjectPixie.cpp  ?FUN_00a3e0d0@@YAXH@Z  00a3e0d0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPAudio/SPAudioObjectPixie.cpp  ?FUN_00a3e220@@YAPAUPixieSlot@@PAU1@00@Z  00a3e220  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
