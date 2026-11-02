@@ -1,0 +1,5 @@
+005107d0 ?insert@Vec8I@@QAEXPAUP2@@00@Z  # Vec8I::insert migrated from s005107d0 (verbatim, slice spelling)
+00510bc0 ?insert@Vec24I@@QAEXPAUT24_s0051_07d0@@00@Z  # Vec24I::insert migrated from s005107d0 (verbatim, slice spelling)
+00511140 ??0T24_s0051_07d0@@QAE@ABU0@@Z  # T24_s0051_07d0::T24 migrated from s005107d0 (verbatim, slice spelling)
+005111b0 ?MedianCmp@@YAPAPAUKeyed@@PAPAU1@00E@Z  # MedianCmp migrated from s005107d0 (verbatim, slice spelling)
+005114f0 ?GetPartitionCmp@@YAPAPAUKeyed@@PAPAU1@0PAU1@E@Z  # GetPartitionCmp migrated from s005107d0 (verbatim, slice spelling)

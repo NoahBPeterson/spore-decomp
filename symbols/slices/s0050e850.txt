@@ -1,3 +1,6 @@
 0050ebe0 ?SortCmp@@YAXPAH0E@Z  # SortCmp migrated from s0050e850 (verbatim, slice spelling)
 0050f0d0 ?SortDefault@@YAXPAH0@Z  # SortDefault migrated from s0050e850 (verbatim, slice spelling)
-0050f210 ?4Elem100  # Elem100::operator= (mangled ??4Elem100@@...; written as its base identifier so the checker's name matcher finds it)
+0050f210 ??4Elem100@@QAEAAU0@ABU0@@Z  # Elem100::operator= migrated from s0050e850 (verbatim, slice spelling)
+0050f290 ?DoInsertValues@Vec24Full@@QAEXPAUT24@@IABU2@@Z  # Vec24Full::DoInsertValues migrated from s0050e850 (verbatim, slice spelling)
+0050f740 ?erase@Vec12@@QAEPAUT12@@PAU2@0@Z  # Vec12::erase migrated from s0050e850 (verbatim, slice spelling)
+0050f7f0 ?UninitCopy20@@YAXPAPAXPAUT20@@11E@Z  # UninitCopy20 migrated from s0050e850 (verbatim, slice spelling)

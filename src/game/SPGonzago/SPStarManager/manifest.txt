@@ -1,1 +1,10 @@
 # source  symbol  va  flags
+../src/game/SPGonzago/SPStarManager.cpp  ?erase@Vec12@@QAEPAUT12@@PAU2@0@Z  0050f740  /Od /Ob1 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPStarManager.cpp  ?RelocateCommit@@YAPAXPAX00@Z  00510080  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPStarManager.cpp  ?InsertionSortU32@@YAXPAI0@Z  00510240  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPStarManager.cpp  ?InsertionSortSimpleU32@@YAXPAI0@Z  005102d0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPStarManager.cpp  ??0T24_s0051_07d0@@QAE@ABU0@@Z  00511140  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPStarManager.cpp  ??0Owner@@QAE@XZ  005122c0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPStarManager.cpp  ??1Owner@@QAE@XZ  00512330  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPStarManager.cpp  ?Clear@Owner@@QAEXXZ  005123b0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPStarManager.cpp  ?InitStarManagerAttributes@Simulator@@YAXXZ  01326120  /O2 /MD /Gy /EHsc /TP /Isrc/game/include

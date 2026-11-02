@@ -1,0 +1,1 @@
+00512400 ?InitRenderJob@RenderJobSink@@QAEXPAURenderCfg@@PAIIPAM2II@Z  # RenderJobSink::InitRenderJob migrated from s00512400 (verbatim, slice spelling)
