@@ -1,4 +1,4 @@
-// src/game/Spui/SPUIMessageBox.cpp -- migrated from slice(s) s00816d40 by tools/migrate/rewrite.py
+// src/game/Spui/SPUIMessageBox.cpp -- migrated from slice(s) s00815dd0, s00816d40 by tools/migrate/rewrite.py
 // Object file: Spui/SPUIMessageBox.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -6,6 +6,7 @@
 #include "cSPUIMessageBox.h"
 #include "cSPUILayout.h"
 #include "SP/cString.h"
+#include <intrin.h>
 
 // unnamed retail callees and globals (address in the comment)
 extern "C" void Dealloc(void*);
@@ -237,6 +238,123 @@ struct cSPUIMessageBoxW {
     void SetButtonTextFromProperty(int id, PropList* pl);   // 0x00816b20 (thiscall, ret 8)
 };
 // ---- items of slice s00816d40 end
+
+// ---- items of slice s00815dd0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C" void* SP_WindowManager();
+extern "C" void  cSPUILayout_ctor(void*);
+extern "C" void  SPUIHelpers_EndModal(void*, void*, int);
+extern "C" void  SPUIHelpers_UpdateMouseFocus(int);
+extern "C" int   SP_GetPropertyAsText(int id, int owner, void* out);
+extern "C" const wchar_t* cString_GetText(void*);
+extern "C" void  cString_ctor(void*);
+extern "C" void  cString_dtor(void*);
+extern "C" void  EA_Stopwatch_ctor(void*, int);
+extern "C" void  EA_LimitStopwatch_SetTimeLimit(void*, int, int);
+struct Helper815310 { void Fn(void* arg); };
+static inline void  Vv1(void* p, int off, int a) {
+    ((void(__thiscall*)(void*, int))(*(void***)p)[off / 4])(p, a);
+}
+static inline void  Vv2(void* p, int off, int a, int b) {
+    ((void(__thiscall*)(void*, int, int))(*(void***)p)[off / 4])(p, a, b);
+}
+static inline int   Vi0(void* p, int off) {
+    return ((int(__thiscall*)(void*))(*(void***)p)[off / 4])(p);
+}
+static inline char  Vb1(void* p, int off, int a) {
+    return ((char(__thiscall*)(void*, int))(*(void***)p)[off / 4])(p, a);
+}
+class cSPUILayout_s0081_5dd0 { public:
+    char pad_00[0x0c];
+    void* FindWindowByID(u32 id, int arg);     // 0x8105b0
+    void  Init(u32 a, int b, int c, const wchar_t* s); // 0x812160
+    void  Shutdown(int arg);                   // 0x811ad0
+};
+struct CalloutMessageBox {
+    char        pad_00[0x0c];
+    cSPUILayout_s0081_5dd0 layout;    // +0x0c
+    char        pad_18[0x24 - 0x18];
+    int         mEnterBtn; // +0x24
+    int         mEscBtn;   // +0x28
+    u8          b2c;       // +0x2c
+    int         mResult;   // +0x30
+    u8          b34;       // +0x34
+    char        pad_35[0x38 - 0x35];
+    char        stopwatch[0x20]; // +0x38
+    void*       mpCallback;      // +0x58
+    u8          b5c;             // +0x5c
+    char        pad_5d[0x60 - 0x5d];
+    u32         f60, f64, f68, f6c;
+    u8          b70;
+
+    bool  sub816990();
+    void  sub816a20(int, int, int, int);
+    void  sub816b20(int id, int owner);
+    bool  sub816b90(int id, void* msg);
+    void* sub816ca0();
+    void  ctor816cb0(int cb);
+};
+// ---- items of slice s00815dd0 end
+
+// @ 0x00816990
+bool CalloutMessageBox::sub816990()
+{
+    void* win = layout.FindWindowByID(0x6318e78, 1);
+    if (win) {
+        void* wm = SP_WindowManager();
+        if (Vb1(wm, 0x80, (int)win)) {
+            Vv2(win, 0x7c, 1, 0);
+            SPUIHelpers_EndModal(win, (void*)mResult, 0);
+        }
+        wm = SP_WindowManager();
+        int eax = Vi0(wm, 0x04);
+        void* ecx = eax ? (void*)(eax - 4) : 0;
+        ((Helper815310*)ecx)->Fn(this);
+    }
+    layout.Shutdown(0);
+    SPUIHelpers_UpdateMouseFocus(1);
+    return true;
+}
+
+// @ 0x00816b20
+void CalloutMessageBox::sub816b20(int id, int owner)
+{
+    char str[0x14];
+    cString_ctor(str);
+    if (SP_GetPropertyAsText(id, owner, str)) {
+        void* win = layout.FindWindowByID(id, 1);
+        if (win) {
+            Vv2(win, 0x7c, 1, 1);
+            const wchar_t* txt = cString_GetText(str);
+            Vv1(win, 0x80, (int)txt);
+        }
+    }
+    cString_dtor(str);
+}
+
+// @ 0x00816ca0
+void* CalloutMessageBox::sub816ca0()
+{
+    return layout.FindWindowByID(0x6318e78, 0);
+}
+
+// @ 0x00816cb0
+void CalloutMessageBox::ctor816cb0(int cb)
+{
+    *(void**)((char*)this + 0x00) = (void*)0x1418dd4;
+    *(void**)((char*)this + 0x04) = (void*)0x1418dc4;
+    cSPUILayout_ctor(&layout);
+    mEnterBtn = -1;
+    mEscBtn = -1;
+    b2c = 0;
+    mResult = 0x1510d07;
+    b34 = 0;
+    EA_Stopwatch_ctor(stopwatch, 4);
+    EA_LimitStopwatch_SetTimeLimit(stopwatch, 0, 0);
+    mpCallback = (void*)cb;
+    b5c = 1;
+    f60 = f64 = f68 = f6c = 0;
+    b70 = 0;
+}
 
 // @ 0x00816d40
 float cSPUIMessageBoxW::AutoSizeButtons()

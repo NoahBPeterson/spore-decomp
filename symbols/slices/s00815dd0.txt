@@ -4,9 +4,9 @@
 008167d0 ?sub8167d0@MatEffect@@QAEXPAUIObj@@M@Z  # MatEffect::sub8167d0 migrated from s00815dd0 (verbatim, slice spelling)
 00816860 ?ctor816860@MatEffect@@QAEPAU1@XZ  # MatEffect::ctor816860 migrated from s00815dd0 (verbatim, slice spelling)
 00816910 ?dtor816910@MatEffect@@QAEXXZ  # MatEffect::dtor816910 migrated from s00815dd0 (verbatim, slice spelling)
-00816990 UI::CalloutMessageBox::OnWindowClosed  # closes the callout window, EndModal, Shutdown layout
+00816990 ?sub816990@CalloutMessageBox@@QAE_NXZ  # CalloutMessageBox::sub816990 migrated from s00815dd0 (verbatim, slice spelling)
 00816a20 ?sub816a20@CalloutMessageBox@@QAEXHHHH@Z  # CalloutMessageBox::sub816a20 migrated from s00815dd0 (verbatim, slice spelling)
-00816b20 UI::CalloutMessageBox::SetButtonTextFromProperty  # cString + GetPropertyAsText
+00816b20 ?sub816b20@CalloutMessageBox@@QAEXHH@Z  # CalloutMessageBox::sub816b20 migrated from s00815dd0 (verbatim, slice spelling)
 00816b90 ?sub816b90@CalloutMessageBox@@QAE_NHPAX@Z  # CalloutMessageBox::sub816b90 -- returns bool (retail exits write only al: mov $1,%al / xor %al,%al)
-00816ca0 UI::CalloutMessageBox::GetWindow  # FindWindowByID(0x6318e78,0)
-00816cb0 UI::CalloutMessageBox::CalloutMessageBox  # ctor, vtable 0x1418dd4
+00816ca0 ?sub816ca0@CalloutMessageBox@@QAEPAXXZ  # CalloutMessageBox::sub816ca0 migrated from s00815dd0 (verbatim, slice spelling)
+00816cb0 ?ctor816cb0@CalloutMessageBox@@QAEXH@Z  # CalloutMessageBox::ctor816cb0 migrated from s00815dd0 (verbatim, slice spelling)

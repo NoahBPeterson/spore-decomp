@@ -1,1 +1,3 @@
 # va  diff-bytes  reason
+00816b20 112 cString local + GetPropertyAsText/FindWindowByID schedule not byte-exact flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
+00816cb0 77 CalloutMessageBox ctor MI vtable/secondary stores not byte-exact flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
