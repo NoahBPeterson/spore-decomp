@@ -19,13 +19,10 @@ extern void*  g_summarizerVtable[];     // 0x013ec458 Simulator::cContentValidat
 extern uint32_t g_uiImageKey;           // 0x00ef3c47cf
 
 // ---- items of slice s00e2e6e0 begin (TODO(rewrite): local stubs, replace by canonical classes)
-extern "C" void* __cdecl operator_new(uint32_t nSize, const char* pTag, int nA, int nB, const char* pFile, int nLine); // 0x00f473a0
-extern char   g_szStripLayout[];        // 0x01481838 "UI/cSPUIRelationshipStripLayout"
-extern wchar_t g_szStripName[];         // 0x01481814 L"RelationshipStrip"
-extern void*  g_stripDtorVtable[];      // 0x01481858 the panel's vtable while it tears itself down
-extern void*  g_summarizerVtable[];     // 0x013ec458 Simulator::cContentValidationSummarizer
-extern uint32_t g_uiImageKey;           // 0x00ef3c47cf
+extern void*  g_stripListenerVtable[];  // 0x014817a8 the message listener the strip registers
 uint32_t __cdecl GetCurrentGameMode();                                 // 0x00b5b800
+void*    __cdecl WindowManager();                                      // 0x0067caa0
+void*    __cdecl MessageServer();                                      // 0x0067dcc0
 void*    __cdecl FUN_00810000(void* pThis);                            // 0x00810000
 class tIWindow;
 class tIWindowEx;
@@ -101,6 +98,14 @@ public:
     virtual void* v04();                        // +0x04 Release
     virtual void* v08();                        // +0x08
 };
+class tChildHolder {
+public:
+    virtual void* v00();                        // +0x00
+    virtual void* v04();                        // +0x04
+    virtual void* v08();                        // +0x08
+    uint32_t   mPad04[0x03];                    // +0x004
+    tIWindow*  mp10;                            // +0x010
+};
 class tChildOwner {
 public:
     virtual void* v00();                        // +0x00
@@ -121,7 +126,51 @@ public:
     bool      SetParentWin(tIWindow* pParent, int32_t nA, int32_t nB);      // 0x008121b0
     void      Shutdown(uint32_t nFlag);                                     // 0x00811ad0
 };
+class cRelationshipManager {
+public:
+    bool  FUN_00d01b50(uint32_t nEmpireA, uint32_t nEmpireB);   // 0x00d01b50
+    float FUN_00d00d00(uint32_t nEmpireA, uint32_t nEmpireB);   // 0x00d00d00
+    int32_t FUN_00d00780(float fValue);                         // 0x00d00780
+};
+cRelationshipManager* __cdecl RelationshipManager();    // 0x00b3d2c0
+class cMessageServer {
+public:
+    virtual void* v00();                        // +0x00
+    virtual void* v04();                        // +0x04
+    virtual void* v08();                        // +0x08
+    virtual void* v0c();                        // +0x0c
+    virtual void* v10();                        // +0x10
+    virtual void* v14();                        // +0x14
+    virtual void* v18();                        // +0x18
+    virtual void* v1c();                        // +0x1c
+    virtual void* v20();                        // +0x20
+    virtual void  v24(void* pListener, uint32_t nTag);      // +0x24
+};
+class cWindowManager {
+public:
+    virtual void*    v00();                     // +0x00
+    virtual tIWindow* v04();                    // +0x04 main window
+};
+struct tVisitMsg {
+    uint32_t mn00;                  // +0x00
+    void*    mp04;                  // +0x04 value pushed into the window
+    bool     mb08;                  // +0x08 result the visitor returns
+};
 char   __cdecl FUN_00806230(tIWindow* pWindow, void** ppImage, char cA, int nB, int nC); // 0x00806230
+bool   __cdecl VisitWindowTreeDepthFirst(tIWindow* pWindow, bool (*pFn)(tIWindow*, tVisitMsg*), void* pContext); // 0x00807d30
+struct tWindowSpec {
+    uint32_t  mn00;                 // +0x00 window id
+    void*     mp04;                 // +0x04 parent window id
+    uint8_t   mPad08[0x0c];         // +0x008
+    bool      mb14;                 // +0x014 visible
+    uint8_t   mPad15[0x03];         // +0x015
+    void*     mp18;                 // +0x018 visit context
+};
+struct tListRec {
+    uint32_t mn00;                  // +0x00
+    uint32_t mn04;                  // +0x04
+    uint32_t mPad08[0x05];          // +0x008
+};
 class cSPUIRelationshipStrip {
 public:
     uint32_t     mpVtable;          // +0x00 (0x01481804)
@@ -147,6 +196,34 @@ public:
     void FUN_00e2f160();            // 0x00e2f160
     void FUN_00e2f1c0();            // 0x00e2f1c0
     void FUN_00e2f250();            // 0x00e2f250
+};
+class cRelationsStrip {
+public:
+    uint32_t      mPad00[0x14];     // +0x000
+    tChildHolder* mp50;             // +0x050
+    int32_t       mn54;             // +0x054
+
+    void FUN_00e2f270(bool bSelected);     // 0x00e2f270
+};
+class tRecordList {
+public:
+    uint32_t   mPad00[0x04];        // +0x000
+    tListRec*  mpBegin;             // +0x010
+    tListRec*  mpEnd;               // +0x014
+
+    bool FUN_00e2f3c0(uint32_t nKey);       // 0x00e2f3c0
+};
+class cStripListener {
+public:
+    uint32_t     mpVtable;          // +0x00
+    uint32_t     mPad04[0x10];      // +0x004
+    cMessageServer* mp44;           // +0x044
+    void*        mp48;              // +0x048
+    void*        mp4c;              // +0x04c
+    uint32_t     mn50;              // +0x050
+    uint32_t     mn54;              // +0x054
+
+    bool Init();                    // 0x00e2f370
 };
 // ---- items of slice s00e2e6e0 end
 
@@ -273,6 +350,10 @@ public:
     int64_t mTimeRotateMS;              // 0xd4
     int64_t mTimeMS;                    // 0xdc
 };
+void* PropertyManager();
+bool QueryTuningFloat(void* pDefinition, uint32_t nKey, float* pOut);
+bool QueryTuningInt(void* pDefinition, uint32_t nKey, int* pOut);
+bool QueryDefinition(void* pPropertyManager, uint32_t nKey, void** ppOut);
 void* CenterWindowInRect(void* pLayout, void* pArea);
 void GetMainWindowArea(Rect* pOut);
 void* CreateAssetData(int nKind);
@@ -321,6 +402,133 @@ void cSPUIRelationshipStrip::Init(tIWindow* pParent)
     }
 }
 
+// @ 0x00e2ed40
+void cSPUIRelationshipStrip::FUN_00e2ed40()
+{
+    if (mp08 == 0)
+        return;
+    mp08->Shutdown(1);
+    cSPUILayout_s00e2_e6e0* pOld = mp08;
+    if (pOld != 0)
+    {
+        mp08 = 0;
+        pOld->v08();
+    }
+}
+
+// @ 0x00e2ed70
+void cSPUIRelationshipStrip::FUN_00e2ed70(int32_t nState)
+{
+    for (uint32_t i = 0; i < 6; ++i)
+    {
+        tIWindowEx* pSlot = (tIWindowEx*)mp08->FindWindowByID(0x4b47d01 + i, 1);
+        tIWindowEx* pIcon = (tIWindowEx*)pSlot->v0c(0x0105a93d);
+        if (pIcon != 0)
+            pIcon->v14((void*)1);
+    }
+
+    switch (nState)
+    {
+    case 1:
+    {
+        tIWindowEx* pSlot = (tIWindowEx*)mp08->FindWindowByID(0x4b47d05, 1);
+        pSlot->v7c(1, 1);
+        ((tIWindowEx*)pSlot->v0c(0x0105a93d))->v14((void*)0);
+        ((tIWindowEx*)mp08->FindWindowByID(0x4b47d01, 1))->v7c(1, 0);
+        break;
+    }
+    case 2:
+    {
+        tIWindowEx* pSlot = (tIWindowEx*)mp08->FindWindowByID(0x4b47d01, 1);
+        pSlot->v7c(1, 1);
+        ((tIWindowEx*)pSlot->v0c(0x0105a93d))->v14((void*)0);
+        ((tIWindowEx*)mp08->FindWindowByID(0x4b47d05, 1))->v7c(1, 0);
+        break;
+    }
+    case 3:
+    {
+        tIWindowEx* pSlot = (tIWindowEx*)mp08->FindWindowByID(0x4b47d02, 1);
+        pSlot->v7c(1, 1);
+        ((tIWindowEx*)pSlot->v0c(0x0105a93d))->v14((void*)0);
+        break;
+    }
+    case 4:
+    {
+        tIWindowEx* pSlot = (tIWindowEx*)mp08->FindWindowByID(0x4b47d03, 1);
+        pSlot->v7c(1, 1);
+        ((tIWindowEx*)pSlot->v0c(0x0105a93d))->v14((void*)0);
+        break;
+    }
+    case 5:
+    {
+        tIWindowEx* pSlot = (tIWindowEx*)mp08->FindWindowByID(0x4b47d06, 1);
+        pSlot->v7c(1, 1);
+        ((tIWindowEx*)pSlot->v0c(0x0105a93d))->v14((void*)0);
+        break;
+    }
+    case 6:
+    {
+        tIWindowEx* pSlot = (tIWindowEx*)mp08->FindWindowByID(0x4b47d04, 1);
+        pSlot->v7c(1, 1);
+        ((tIWindowEx*)pSlot->v0c(0x0105a93d))->v14((void*)0);
+        break;
+    }
+    }
+}
+
+// @ 0x00e2ef80
+void cSPUIRelationshipStrip::FUN_00e2ef80(float fAmount)
+{
+    for (uint32_t i = 0; i < 6; ++i)
+    {
+        tIWindowEx* pSlot = (tIWindowEx*)mp08->FindWindowByID(0x4b47d01 + i, 1);
+        tIWindowEx* pIcon = (tIWindowEx*)pSlot->v0c(0x0105a93d);
+        if (pIcon != 0)
+            pIcon->v14((void*)1);
+    }
+
+    ((tIWindowEx*)mp08->FindWindowByID(0x4b47d05, 1))->v7c(1, 0);
+
+    switch (RelationshipManager()->FUN_00d00780(fAmount))
+    {
+    case 0:
+    {
+        tIWindowEx* pSlot = (tIWindowEx*)mp08->FindWindowByID(0x4b47d06, 1);
+        pSlot->v7c(1, 1);
+        ((tIWindowEx*)pSlot->v0c(0x0105a93d))->v14((void*)0);
+        break;
+    }
+    case 1:
+    {
+        tIWindowEx* pSlot = (tIWindowEx*)mp08->FindWindowByID(0x4b47d01, 1);
+        pSlot->v7c(1, 1);
+        ((tIWindowEx*)pSlot->v0c(0x0105a93d))->v14((void*)0);
+        break;
+    }
+    case 2:
+    {
+        tIWindowEx* pSlot = (tIWindowEx*)mp08->FindWindowByID(0x4b47d02, 1);
+        pSlot->v7c(1, 1);
+        ((tIWindowEx*)pSlot->v0c(0x0105a93d))->v14((void*)0);
+        break;
+    }
+    case 3:
+    {
+        tIWindowEx* pSlot = (tIWindowEx*)mp08->FindWindowByID(0x4b47d03, 1);
+        pSlot->v7c(1, 1);
+        ((tIWindowEx*)pSlot->v0c(0x0105a93d))->v14((void*)0);
+        break;
+    }
+    case 4:
+    {
+        tIWindowEx* pSlot = (tIWindowEx*)mp08->FindWindowByID(0x4b47d04, 1);
+        pSlot->v7c(1, 1);
+        ((tIWindowEx*)pSlot->v0c(0x0105a93d))->v14((void*)0);
+        break;
+    }
+    }
+}
+
 // @ 0x00e2f160
 void cRelationshipPanel::FUN_00e2f160()
 {
@@ -336,6 +544,181 @@ void cRelationshipPanel::FUN_00e2f160()
     if (mp08 != 0)
         ((cSPUILayout_s00e2_e6e0*)mp08)->v08();
     mpVtable = (uint32_t)g_summarizerVtable;
+}
+
+// @ 0x00e2f1c0
+void cRelationshipPanel::FUN_00e2f1c0()
+{
+    if (mp0c != 0)
+    {
+        mp0c->v08();
+        tChildOwner* pOld = mp0c;
+        if (pOld != 0)
+        {
+            mp0c = 0;
+            pOld->mWindow.v04();
+        }
+    }
+    if (mp10 != 0)
+    {
+        mp10->v20();
+        tIWindow* pOld = mp10;
+        if (pOld != 0)
+        {
+            mp10 = 0;
+            pOld->v04();
+        }
+    }
+    if (mp08 != 0)
+    {
+        ((cSPUILayout_s00e2_e6e0*)mp08)->Shutdown(1);
+        cSPUILayout_s00e2_e6e0* pOld = (cSPUILayout_s00e2_e6e0*)mp08;
+        if (pOld != 0)
+        {
+            mp08 = 0;
+            pOld->v08();
+        }
+    }
+    if (mp14 != 0)
+    {
+        tRefObj* pOld = mp14;
+        mp14 = 0;
+        pOld->v04();
+    }
+    if (mp18 != 0)
+    {
+        tRefObj* pOld = mp18;
+        mp18 = 0;
+        pOld->v04();
+    }
+}
+
+// @ 0x00e2f250
+void cRelationshipPanel::FUN_00e2f250()
+{
+    mp10->v30(0, 1);
+    mp10->v2c();
+}
+
+// @ 0x00e2f270
+void cRelationsStrip::FUN_00e2f270(bool bSelected)
+{
+    if (mp50 != 0)
+        mp50->mp10->v28(bSelected == false);
+    if (bSelected)
+        ++mn54;
+    else
+        --mn54;
+}
+
+// @ 0x00e2f2b0
+bool __cdecl FUN_00e2f2b0(tIWindow* pWindow, tVisitMsg* pMsg)
+{
+    if (pWindow->v4c() == 0)
+    {
+        pWindow->v8c(pMsg->mp04);
+        pWindow->v90();
+    }
+    return pMsg->mb08;
+}
+
+// @ 0x00e2f300
+bool __cdecl FUN_00e2f300(tIWindow* pWindow, tVisitMsg* pMsg)
+{
+    uint32_t nState = (uint32_t)pMsg->mp04;
+    if (pWindow->v4c() == (int32_t)nState)
+    {
+        pWindow->v8c((void*)0);
+        pWindow->v90();
+    }
+    return pMsg->mb08;
+}
+
+// @ 0x00e2f340
+void __cdecl FUN_00e2f340(tIWindow* pWindow, tVisitMsg* pMsg)
+{
+    uint32_t nState = (uint32_t)pMsg->mp04;
+    if (pWindow->v4c() == (int32_t)nState)
+        VisitWindowTreeDepthFirst(pWindow, FUN_00e2f300, pMsg);
+}
+
+// @ 0x00e2f370
+bool cStripListener::Init()
+{
+    void* pListener = this != 0 ? (void*)((uint8_t*)this + 8) : 0;
+    cMessageServer* pServer = (cMessageServer*)MessageServer();
+    mp44 = pServer;
+    mp48 = pListener;
+    mp4c = g_stripListenerVtable;
+    mn50 = 1;
+    mn54 = 0;
+    if (pServer != 0 && pListener != 0)
+        pServer->v24(pListener, 0xf62def);
+    return true;
+}
+
+// @ 0x00e2f3c0
+bool tRecordList::FUN_00e2f3c0(uint32_t nKey)
+{
+    tListRec* p = mpBegin;
+    while (p != mpEnd)
+    {
+        if (nKey == p->mn00)
+            return true;
+        p = (tListRec*)((uint8_t*)p + 0x1c);
+    }
+    return false;
+}
+
+// @ 0x00e2f3f0
+void __stdcall FUN_00e2f3f0(tWindowSpec* pSpec, int32_t nState)
+{
+    tIWindow* pWindow = ((cWindowManager*)WindowManager())->v04();
+    if (pWindow == 0)
+        return;
+    pWindow = (tIWindow*)((tIWindowEx*)pWindow)->vf0(pSpec->mn00, 1);
+    if (pWindow == 0)
+        return;
+    if (pSpec->mp04 != 0)
+        pWindow = (tIWindow*)((tIWindowEx*)pWindow)->vf0((uint32_t)pSpec->mp04, 0);
+    if (pWindow == 0)
+        return;
+
+    ((tIWindowEx*)pWindow)->v7c(1, 1);
+    void* pContext = pSpec->mp18;
+    if (pContext != 0)
+    {
+        if (((tIWindowEx*)pWindow)->v4c() != 0)
+            return;
+        VisitWindowTreeDepthFirst(pWindow, FUN_00e2f2b0, pContext);
+    }
+    else
+    {
+        ((tIWindowEx*)pWindow)->v5c(nState);
+    }
+}
+
+// @ 0x00e2f480
+void __stdcall FUN_00e2f480(tWindowSpec* pSpec)
+{
+    tIWindow* pWindow = ((cWindowManager*)WindowManager())->v04();
+    if (pWindow == 0)
+        return;
+    pWindow = (tIWindow*)((tIWindowEx*)pWindow)->vf0(pSpec->mn00, 1);
+    if (pWindow == 0)
+        return;
+    if (pSpec->mp04 != 0)
+        pWindow = (tIWindow*)((tIWindowEx*)pWindow)->vf0((uint32_t)pSpec->mp04, 0);
+    if (pWindow == 0)
+        return;
+
+    ((tIWindowEx*)pWindow)->v7c(1, !pSpec->mb14);
+    if (pSpec->mp18 != 0)
+    {
+        FUN_00e2f340(pWindow, (tVisitMsg*)pSpec->mp18);
+        return;
+    }
+    ((tIWindowEx*)pWindow)->v5c(0xffffffff);
 }
 
 // @ 0x00e2f5c0
@@ -463,6 +846,40 @@ void cSPUIAssetDiscoveryCard::Init()
     mpAssetView->Bind(mpParentWin, mpAssetData, 0, 0);
     ResetCardState();
     mpAssetView->v28(0);
+}
+
+// @ 0x00e2f980
+void cSPUIAssetDiscoveryManager::ReloadTuning()
+{
+    void* pPropertyManager = PropertyManager();
+    void* pDefinition = nullptr;
+
+    if (QueryDefinition(pPropertyManager, 0x5c770db7u, &pDefinition)) {
+        uint32_t nFlags = 0;
+        int nValue = 0;
+
+        if (QueryTuningFloat(pDefinition, 0x2b12f9ecu, &mTimeStart))
+            nFlags = 1;
+        if (QueryTuningFloat(pDefinition, 0xa6f83fb3u, &mTimeScaleBack))
+            nFlags = 1;
+        if (QueryTuningFloat(pDefinition, 0x907d189du, &mTimeRotate))
+            nFlags = 1;
+        if (QueryTuningInt(pDefinition, 0xfd338528u, &nValue))
+            mCount = nValue;
+        if (QueryTuningFloat(pDefinition, 0x56e50a98u, &mTime))
+            nFlags = 1;
+        if (QueryTuningInt(pDefinition, 0x74cff359u, &nValue))
+            mCount = nValue;
+        if (QueryTuningInt(pDefinition, 0x7a927f57u, &nValue))
+            mCount = nValue;
+
+        mTimeStopMS = (int64_t)(mTimeStart * 1000.0f + 0.5f);
+        mTimeStartMS = (int64_t)(mTimeScaleBack * 1000.0f + 0.5f);
+        mTimeScaleBackMS = (int64_t)(mTimeRotate * 1000.0f + 0.5f);
+        mTimeRotateMS = (int64_t)((float)nValue * 1000.0f + 0.5f);
+        mTimeMS = (int64_t)(mTime * 1000.0f + 0.5f);
+        (void)nFlags;
+    }
 }
 
 // @ 0x00e2fc40

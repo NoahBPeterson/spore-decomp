@@ -1,3 +1,13 @@
 # source  symbol  va  flags
 ../src/game/SPGonzago/SPUIShared.cpp  ?Init@cSPUIRelationshipStrip@@QAEXPAVtIWindow@@@Z  00e2ec60  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPUIShared.cpp  ?FUN_00e2ed40@cSPUIRelationshipStrip@@QAEXXZ  00e2ed40  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPUIShared.cpp  ?FUN_00e2ef80@cSPUIRelationshipStrip@@QAEXM@Z  00e2ef80  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPUIShared.cpp  ?FUN_00e2f1c0@cRelationshipPanel@@QAEXXZ  00e2f1c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPUIShared.cpp  ?FUN_00e2f250@cRelationshipPanel@@QAEXXZ  00e2f250  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPUIShared.cpp  ?FUN_00e2f2b0@@YA_NPAVtIWindow@@PAUtVisitMsg@@@Z  00e2f2b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPUIShared.cpp  ?FUN_00e2f300@@YA_NPAVtIWindow@@PAUtVisitMsg@@@Z  00e2f300  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPUIShared.cpp  ?FUN_00e2f340@@YAXPAVtIWindow@@PAUtVisitMsg@@@Z  00e2f340  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPUIShared.cpp  ?Init@cStripListener@@QAE_NXZ  00e2f370  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPUIShared.cpp  ?FUN_00e2f3c0@tRecordList@@QAE_NI@Z  00e2f3c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPUIShared.cpp  ?FUN_00e2f3f0@@YGXPAUtWindowSpec@@H@Z  00e2f3f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPUIShared.cpp  ?FUN_00ec6a00@@YAHH@Z  00ec6a00  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include

@@ -1,5 +1,5 @@
 00e2f6e0 ?Init@cSPUIAssetDiscoveryCard@@QAEXXZ  # cSPUIAssetDiscoveryCard::Init migrated from s00e2f6e0 (verbatim, slice spelling)
-00e2f980 ?ReloadTuning@cSPUIAssetDiscoveryManager@@QAEXXZ  # void cSPUIAssetDiscoveryManager::ReloadTuning
+00e2f980 ?ReloadTuning@cSPUIAssetDiscoveryManager@@QAEXXZ  # cSPUIAssetDiscoveryManager::ReloadTuning migrated from s00e2f6e0 (verbatim, slice spelling)
 00e2fc40 ?HandleCardMessage@cSPUIAssetDiscoveryManager@@QAEHHHH@Z  # cSPUIAssetDiscoveryManager::HandleCardMessage migrated from s00e2f6e0 (verbatim, slice spelling)
 00e2fcb0 ?ApplyFrame@cSPUIAssetDiscoveryCard@@QAEXPAH@Z  # cSPUIAssetDiscoveryCard::ApplyFrame migrated from s00e2f6e0 (verbatim, slice spelling)
 00e2fd40 ?ReleaseCurrentCard@cSPUIAssetDiscoveryManager@@QAEXXZ  # cSPUIAssetDiscoveryManager::ReleaseCurrentCard migrated from s00e2f6e0 (verbatim, slice spelling)
