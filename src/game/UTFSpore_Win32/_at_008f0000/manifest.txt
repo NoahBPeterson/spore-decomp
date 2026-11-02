@@ -1,0 +1,13 @@
+# source  symbol  va  flags
+../src/game/UTFSpore_Win32/_at_008f0000.cpp  ?F_8f2350@TextItemX@Layout@XHTML@EA@@QAEXPAX0@Z  008f2350  /O2 /MD /Gy /TP /GS- /arch=SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/_at_008f0000.cpp  ?F_8f2380@TextItemX@Layout@XHTML@EA@@QAEXPAX0@Z  008f2380  /O2 /MD /Gy /TP /GS- /arch=SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/_at_008f0000.cpp  ?F_8f23b0@TextItemX@Layout@XHTML@EA@@QAEXPAX@Z  008f23b0  /O2 /MD /Gy /TP /GS- /arch=SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/_at_008f0000.cpp  ?F_8f23d0@TextItemX@Layout@XHTML@EA@@QAE_NPAX0@Z  008f23d0  /O2 /MD /Gy /TP /GS- /arch=SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/_at_008f0000.cpp  ?ToPixels@Length@Style@XHTML@EA@@QBEMMPBULengthContext@234@@Z  008f95c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/_at_008f0000.cpp  ?AppendNode@Stylesheet_s008f_9220@Style@XHTML@EA@@QAEXPAX@Z  008f9bf0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/_at_008f0000.cpp  ?SetFontSizeKeyword@StyleState@Style@@QAEXI@Z  008fb8a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/_at_008f0000.cpp  ?FUN_008fb9c0@StyleState@Style@@QAEXXZ  008fb9c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/_at_008f0000.cpp  ?FUN_008fb9e0@StyleState@Style@@QAE_NXZ  008fb9e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/_at_008f0000.cpp  ?FUN_008fba80@StyleState@Style@@QAE_NXZ  008fba80  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/_at_008f0000.cpp  ?SetFlagBool@HTTPx@@QAEX_NM@Z  008fd050  /O2 /MD /Gy /TP /GS- /arch:SSE2 /Isrc/game/include
+../src/game/UTFSpore_Win32/_at_008f0000.cpp  ?GetOrInsert@UMap@@QAEPAPAUResourceRequest@@PAI@Z  008ffdf0  /O2 /MD /Gy /TP /GS- /arch:SSE2 /Isrc/game/include

@@ -7,6 +7,7 @@
 008fdca0 ?erase@JobMap@@QAE_NABI@Z  # JobMap::erase migrated from s008fd6c0 (verbatim, slice spelling)
 008fdd10 ?ProcessRequest@HttpHandler2@@QAE_NPAUResourceRequest@@_N@Z  # HttpHandler2::ProcessRequest migrated from s008fd6c0 (verbatim, slice spelling)
 008fe0c0 ?HandleMessage@IMsgSub@@QAE_NIPAUJobMsg@@@Z  # IMsgSub::HandleMessage migrated from s008fd6c0 (verbatim, slice spelling)
+008fe380 ?Set@Ratio@@QAEXHG@Z  # Ratio::Set migrated from s008fd6c0 (verbatim, slice spelling)
 008fe430 ?DoFindNode@IHTableW@@QBEPAHPAHPAPBG@Z  # IHTableW::DoFindNode migrated from s008fd6c0 (verbatim, slice spelling)
 008fe490 ?find@IHTableW@@QAE?AUIHTableWIter@@PAPBG@Z  # IHTableW::find migrated from s008fd6c0 (verbatim, slice spelling)
 008fe510 ?erase@IHTable@@QAEIABQB_W@Z  # IHTable::erase migrated from s008fd6c0 (verbatim, slice spelling)

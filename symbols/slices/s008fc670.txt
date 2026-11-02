@@ -2,6 +2,7 @@
 008fcab0 ?DocumentFactory_CreateResource@@YGHPAPAUDomDoc@@PAHPAUDocRequest@@@Z  # DocumentFactory_CreateResource migrated from s008fc670 (verbatim, slice spelling)
 008fcbd0 ?StripLeadingDotComponents@@YAXPAUWStr@@@Z  # StripLeadingDotComponents migrated from s008fc670 (verbatim, slice spelling)
 008fce50 ?ProcessRequest@FileHandler@@QAE_NPAUFileReq@@H@Z  # FileHandler::ProcessRequest migrated from s008fc670 (verbatim, slice spelling)
+008fd050 ?SetFlagBool@HTTPx@@QAEX_NM@Z  # HTTPx::SetFlagBool migrated from s008fc670 (verbatim, slice spelling)
 008fd080 ?GetProtocolName@@YGPB_WH@Z  # GetProtocolName migrated from s008fc670 (verbatim, slice spelling)
 008fd0a0 ?EncodingFromName@Resource@XHTML@EA@@YAIPBD@Z  # EA::XHTML::Resource::EncodingFromName migrated from s008fc670
 008fd1a0 ?SetFilter@HTTPz@@QAEXPAULogFilter@@I@Z  # HTTPz::SetFilter migrated from s008fc670 (verbatim, slice spelling)

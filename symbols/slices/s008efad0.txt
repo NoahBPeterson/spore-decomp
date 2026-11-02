@@ -12,3 +12,5 @@
 008efde0 ?AddFloats@StackingContext@@QAEXPAULineLayout_s008e_fad0@@@Z  # StackingContext::AddFloats migrated from s008efad0 (verbatim, slice spelling)
 008efe80 ?FlushLines@StackingContext@@QAEXH@Z  # flushes up to N lines through the Typesetter, then advances NextLine
 008f0010 ?FlushAllLines@StackingContext@@QAEXXZ  # flushes every line until Typesetter::GetType()==2, then Reset(1)
+008f01b0 ?CollapseMargin@StackingContext@@QAEXM@Z  # StackingContext::CollapseMargin migrated from s008efad0 (verbatim, slice spelling)
+008f0240 ?ClampWidth@StackingContext@@QAEMM@Z  # StackingContext::ClampWidth migrated from s008efad0 (verbatim, slice spelling)
