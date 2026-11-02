@@ -73,6 +73,7 @@ struct cSPPlayModeSubModePhoto {
 extern "C" __declspec(dllimport) int __stdcall QueryPerformanceCounter(int64_t* p);
 extern "C" unsigned __int64 __rdtsc();
 extern char gMsgA[];   // 0x01524C60
+extern char gDialogText[];   // 0x013EC468
 extern char gMsgB[], gMsgC[], gMsgD[];   // 0x01524C24, 0x01524C30, 0x01524C3C
 extern uint32_t gPhotoGlobal;          // 0x01524A10
 extern const wchar_t gFmtW[];          // 0x013F5C04
@@ -97,7 +98,7 @@ namespace eastl {
 template <> struct EmptyStr<char>    { static char*    Get() { return (char*)gEmptyString16; } };
 }
 namespace eastl {
-struct allocator_s0063_e880 {
+class allocator_s0063_e880 { public:
     void deallocate(void* p) { operator delete[](p); }
 };
 }
@@ -338,6 +339,15 @@ virtual void s9();
 virtual void s10();
     virtual void s11(); virtual bool IsRecording(); };    // +0x30
 IMovieSystemObj* GetMovieSystem();                         // 0x0067CB10
+struct ISaveArea { virtual void s0(); virtual void s1(); virtual void s2(); virtual uint32_t GetTypeID();   // +0xC
+virtual void s4();
+virtual void s5();
+virtual void s6();
+virtual void s7();
+virtual void s8();
+virtual void s9();
+                   virtual const wchar_t* GetPath(); };   // +0x28
+ISaveArea* GetSaveArea(uint32_t id);                       // 0x006B1F90 (cdecl)
 void ShowMessageBoxEx(const void* a, const void* b);       // 0x00809DB0 (cdecl)
 struct cAutoHandler_s0063_e880 {
     uint32_t a, b, c, d, e;
@@ -440,6 +450,8 @@ virtual void s21();
     virtual void Commit();                                                               // +0x58
 };
 IAudioSystemAT* GetSystemAT();   // 0x00A206F0
+void FUN_009322b0(const wchar_t* p);   // 0x009322B0 (cdecl)
+void FUN_00932960(const wchar_t* p);   // 0x00932960 (cdecl)
 namespace eastl {
 template <typename ForwardIterator, typename T>
 void replace(ForwardIterator first, ForwardIterator last, const T& old_value, const T& new_value)
@@ -455,6 +467,12 @@ template void replace<wchar_t*, wchar_t>(wchar_t*, wchar_t*, const wchar_t&, con
 }
 IRefCounted* __stdcall FUN_00401050(uint32_t id, int a);   // 0x00401050
 struct cEffectFactory { IRefCounted* Create(); };          // 0x0045AE10
+struct cUIParamMessageBase { virtual ~cUIParamMessageBase() {} };
+struct cUIParamMessage : cUIParamMessageBase {
+    uint32_t pad04;
+    struct Slot { IRefCounted* p; uint32_t aux; } slots[32];
+    ~cUIParamMessage();
+};
 struct cFourStrings {
     uint32_t pad[3];
     eastl::string s0, s1, s2, s3;
@@ -908,6 +926,30 @@ void cSPPlayModeSubModePhoto_s0063_e880::CloseSendPhotoWindow()
     mDialogInProgress = 0;
 }
 
+// @ 0x0063ecf0
+bool cSPPlayModeSubModePhoto_s0063_e880::IsFlashAIdle()
+{ return !mbFlashA; }
+
+// @ 0x0063ed00
+void cSPPlayModeSubModePhoto_s0063_e880::DefaultPathA()
+{
+    const wchar_t* path = (const wchar_t*)gDialogText;
+    ISaveArea* sa = GetSaveArea(0x11ac196);
+    if (sa && sa->GetTypeID() == 0x34728492)
+        path = sa->GetPath();
+    FUN_009322b0(path);
+}
+
+// @ 0x0063ed50
+void cSPPlayModeSubModePhoto_s0063_e880::DefaultPathB()
+{
+    const wchar_t* path = (const wchar_t*)gDialogText;
+    ISaveArea* sa = GetSaveArea(0x11ac196);
+    if (sa && sa->GetTypeID() == 0x34728492)
+        path = sa->GetPath();
+    FUN_00932960(path);
+}
+
 // @ 0x0063ee30
 void cSPPlayModeSubModePhoto_s0063_e880::Init(void* arg)
 {
@@ -993,6 +1035,29 @@ void cSPPlayModeSubModePhoto_s0063_e880::FUN_0063f060()
     val[0] = p[5] | p[1];
     val[1] = p[6] | p[2];
     ((IRangeTarget*)(*(void**)(*(char**)&pad[0] + 0x8c)))->SetRange((uint64_t*)val, (uint64_t*)zero, 6);
+}
+
+// @ 0x0063f0e0
+cUIParamMessage::~cUIParamMessage()
+{
+    uint32_t bit = 1;
+    Slot* s = slots;
+    for (int i = 32; i; --i, ++s) {
+        if (*(uint32_t*)((char*)this + 0x18) & bit) {
+            if (s->p)
+                s->p->Release();
+        }
+        bit = _rotl(bit, 1);
+    }
+}
+
+// @ 0x0063f1c0
+cSPPlayModeSubModePhoto_s0063_e880::cSPPlayModeSubModePhoto_s0063_e880()
+: mTimerA(5, false), mFlashEffect(), mbFlashA(false), mbFlashB(false),
+      mTimerB(5, false), mUnusedF50(0), mWriteJobCount(0), mbFlashC(false),
+      mTimerC(5, false), mbFlashD(false), mTimerD(5, false),
+      mDialogInProgress(0), mb0f9c(false), mb0f9d(false)
+{
 }
 
 // @ 0x0063f2b0

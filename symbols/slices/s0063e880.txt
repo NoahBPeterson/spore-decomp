@@ -3,12 +3,16 @@
 0063eb30 ?ShowErrorDialog@cSPPlayModeSubModePhoto@SP@@QAEXIPB_W@Z  # SP::cSPPlayModeSubModePhoto::ShowErrorDialog migrated from s0063e880
 0063eb90 ?IsPhotosWriting@cSPPlayModeSubModePhoto_s0063_e880@@QAE_N_N@Z  # cSPPlayModeSubModePhoto_s0063_e880::IsPhotosWriting migrated from s0063e880 (verbatim, slice spelling)
 0063ec10 ?CloseSendPhotoWindow@cSPPlayModeSubModePhoto_s0063_e880@@QAEXXZ  # cSPPlayModeSubModePhoto_s0063_e880::CloseSendPhotoWindow migrated from s0063e880 (verbatim, slice spelling)
+0063ecf0 ?IsFlashAIdle@cSPPlayModeSubModePhoto_s0063_e880@@QAE_NXZ  # cSPPlayModeSubModePhoto_s0063_e880::IsFlashAIdle migrated from s0063e880 (verbatim, slice spelling)
+0063ed00 ?DefaultPathA@cSPPlayModeSubModePhoto_s0063_e880@@SAXXZ  # cSPPlayModeSubModePhoto_s0063_e880::DefaultPathA migrated from s0063e880 (verbatim, slice spelling)
+0063ed50 ?DefaultPathB@cSPPlayModeSubModePhoto_s0063_e880@@SAXXZ  # cSPPlayModeSubModePhoto_s0063_e880::DefaultPathB migrated from s0063e880 (verbatim, slice spelling)
 0063ee30 ?Init@cSPPlayModeSubModePhoto_s0063_e880@@QAEXPAX@Z  # cSPPlayModeSubModePhoto_s0063_e880::Init migrated from s0063e880 (verbatim, slice spelling)
 0063eef0 ?Shutdown@cSPPlayModeSubModePhoto_s0063_e880@@QAEXXZ  # cSPPlayModeSubModePhoto_s0063_e880::Shutdown migrated from s0063e880 (verbatim, slice spelling)
 0063ef30 ?HandleKey@cSPPlayModeSubModePhoto_s0063_e880@@QAE_NIH@Z  # cSPPlayModeSubModePhoto_s0063_e880::HandleKey migrated from s0063e880 (verbatim, slice spelling)
 0063ef70 ?StartCameraFlash@cSPPlayModeSubModePhoto_s0063_e880@@QAEXXZ  # cSPPlayModeSubModePhoto_s0063_e880::StartCameraFlash migrated from s0063e880 (verbatim, slice spelling)
 0063f060 ?FUN_0063f060@cSPPlayModeSubModePhoto_s0063_e880@@QAEXXZ  # cSPPlayModeSubModePhoto_s0063_e880::FUN_0063f060 migrated from s0063e880 (verbatim, slice spelling)
-0063f1c0 SP::cSPPlayModeSubModePhoto::cSPPlayModeSubModePhoto  # vptr stores + stopwatch ctors
+0063f0e0 ??1cUIParamMessage@@UAE@XZ  # cUIParamMessage::~cUIParamMessage migrated from s0063e880 (verbatim, slice spelling)
+0063f1c0 ??0cSPPlayModeSubModePhoto_s0063_e880@@QAE@XZ  # cSPPlayModeSubModePhoto_s0063_e880::cSPPlayModeSubModePhoto migrated from s0063e880 (verbatim, slice spelling)
 0063f2b0 ??1cSPPlayModeSubModePhoto_s0063_e880@@UAE@XZ  # cSPPlayModeSubModePhoto_s0063_e880::~cSPPlayModeSubModePhoto migrated from s0063e880 (verbatim, slice spelling)
 0063f350 ??1cFourStrings@@QAE@XZ  # cFourStrings::~cFourStrings migrated from s0063e880 (verbatim, slice spelling)
 0063f420 ?SavePhoto@cSPPlayModeSubModePhoto_s0063_e880@@QAEXG@Z  # cSPPlayModeSubModePhoto_s0063_e880::SavePhoto migrated from s0063e880 (verbatim, slice spelling)

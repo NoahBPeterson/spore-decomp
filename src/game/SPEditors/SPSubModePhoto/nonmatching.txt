@@ -1,6 +1,7 @@
 # va  diff-bytes  reason
-0063ef70 6 StartCameraFlash: complete; only scheduling differs (original stores mbFlashD before popping EDI, mine pops first)
-0063f060 119 FUN_0063f060 (two SetRange calls): complete; the original keeps the 0 range at the lowest stack slots and loads the object vtable before computing the value, mine orders locals differently
-0063f420 33 SavePhoto: complete; original calls the photo-name function with caller cleanup (add esp,0x18) which a plain thiscall cannot reproduce; small ordering differences otherwise
-0063f5c0 13 SavePhotoSimple: complete; lock xadd operand registers (eax/ecx swapped) and the same photo-name call cleanup difference
+0063ef70 6 StartCameraFlash: complete; only scheduling differs (original stores mbFlashD before popping EDI, mine pops first) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+0063f060 119 FUN_0063f060 (two SetRange calls): complete; the original keeps the 0 range at the lowest stack slots and loads the object vtable before computing the value, mine orders locals differently flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+0063f0e0 34 cUIParamMessage dtor (32 optional ref-counted slots): complete; original keeps this in EBX / slot ptr in EDI / counter via sub, with cmp [edi],0 then reload, mine tests ECX flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+0063f420 33 SavePhoto: complete; original calls the photo-name function with caller cleanup (add esp,0x18) which a plain thiscall cannot reproduce; small ordering differences otherwise flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+0063f5c0 13 SavePhotoSimple: complete; lock xadd operand registers (eax/ecx swapped) and the same photo-name call cleanup difference flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
 006404f0 1506 HandleButton complete (all 33 cases, same call/vslot sequence); layout differs: cl places the shared return block last and tail-merges callout epilogues, original puts it after pose case 0
