@@ -1,4 +1,4 @@
-// src/game/UTFSpore_Win32/t1.cpp -- migrated from slice(s) s008b8f30, s008b71c0 by tools/migrate/rewrite.py
+// src/game/UTFSpore_Win32/t1.cpp -- migrated from slice(s) s008bad10, s008b9e10, s008b81a0, s008b6400, s008b8f30, s008b71c0 by tools/migrate/rewrite.py
 // Object file: UTFSpore_Win32/t1.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -91,13 +91,41 @@ extern "C" void*  T1GetGlyphByIndex(T1Class* t, int idx, void* a, void* b, int c
 // ---- items of slice s008b8f30 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern "C" void  FUN_008cfac0(void* pairs, int n);                                                  // 0x008cfac0
 typedef uint16_t uint16;
+struct T1Class_s008b_8f30;
+struct T1CharStrings;
 extern "C" uint32 tsi_PSNameToAppleCode(uint8* name, uint16* code, uint16* a, uint16* b);           // 0x008b6f90
+extern "C" void  T1Error(tsiMemObject* mem, int code);                                              // 0x008d10c0
+extern "C" T1CharStrings* T1NewCharStrings(tsiMemObject* mem, int count, void* callback, T1Class_s008b_8f30* owner); // 0x008d1a00
+extern "C" void  T1AddCharString(T1CharStrings* table, uint32 name, uint16 code, uint16 length);     // 0x008d1c50
+struct T1CharStringEntry {
+    uint32 name;                 // 0x00
+    uint16 code;                 // 0x04
+    uint16 length;               // 0x06
+};
+struct T1CharStrings {
+    char   pad00[0x24];
+    T1CharStringEntry* entries;  // 0x24
+    uint32 capacity;             // 0x28
+    uint32 count;                // 0x2c
+};
 struct T1Class_s008b_8f30 {
     tsiMemObject* mem;           // 0x00
-    char   pad04[0x30 - 4];
+    char   pad04[4];
+    uint8* base;                 // 0x08
+    uint32 size;                 // 0x0c
+    uint32 field10;              // 0x10
+    uint32 field14;              // 0x14
+    char   pad18[0x14];
+    uint8* encoding;             // 0x2c
     int16  numGlyphs;            // 0x30
-    char   pad32[6];
+    int16* glyphMap;             // 0x34
     int16* adobeCodes;           // 0x38
+    uint32* charStringOffsets;   // 0x3c
+    char   pad40[0x214 - 0x40];
+    uint32 field214;             // 0x214
+    uint16 field218;             // 0x218
+    uint16 field21a;             // 0x21a
+    T1CharStrings* charStrings;  // 0x21c
 };
 struct KernPair {
     uint32 key;                  // left << 16 | right glyph index
@@ -136,25 +164,6 @@ static int ATOI(const uint8* p)
         r = -r;
     return r;
 }
-static uint8* FindString(uint8* hay, const char* needle, int n, int start)
-{
-    int len = 0;
-    while (needle[len])
-        ++len;
-    for (int i = start; i < n; ++i) {
-        if (hay[i] != (uint8)needle[0])
-            continue;
-        int k = 1;
-        while (k < len) {
-            if (hay[i + k] != (uint8)needle[k])
-                break;
-            ++k;
-        }
-        if (k >= len)
-            return hay + i + k;
-    }
-    return 0;
-}
 static inline unsigned HexDigitValue(uint8 c, unsigned dflt)
 {
     if ((uint8)(c - '0') <= 9)
@@ -191,7 +200,514 @@ static inline unsigned HexDigitValue(uint8 c, unsigned dflt)
         result->pairs[i].key = ((uint32)(uint16)(hi) << 16) | (uint16)(lo); \
         result->pairs[i].value = (val);                               \
     }
+struct kernSubTable0 {
+    tsiMemObject* mem;           // 0x00
+    uint16 flags4;               // 0x04
+    uint16 pad6;                 // 0x06
+    uint32 length;               // 0x08
+    uint16 format;               // 0x0c
+    uint16 padE;                 // 0x0e
+    kernSubTable0Data* data;     // 0x10
+};
+struct kernSubTable {
+    tsiMemObject* mem;           // 0x00
+    uint16 flags4;               // 0x04
+    uint16 pad6;                 // 0x06
+    uint32 numTables;            // 0x08
+    kernSubTable0** tables;      // 0x0c
+};
 // ---- items of slice s008b8f30 end
+
+// ---- items of slice s008b6400 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C" int __cdecl strcmp(const char*, const char*);
+#pragma intrinsic(strcmp)
+extern "C" void  tsi_DeAllocMem(tsiMemObject*, void*);                         // 0x008d1440
+struct GlyphPoints {
+    char   pad00[0x38];
+    int16  count;                 // 0x38
+    char   pad3a[0x48 - 0x3a];
+    int16* pts;                   // 0x48
+};
+struct ContourData {
+    char   pad00[0x36];
+    int16  numContours;           // 0x36
+    char   pad38[0x3c - 0x38];
+    int16* starts;                // 0x3c
+    int16* ends;                  // 0x40
+    int16* xPts;                  // 0x44
+    int16* yPts;                  // 0x48
+    uint8* flags;                 // 0x4c
+};
+static inline int ff_ishex(uint8 c)
+{
+    return (c >= '0' && c <= '9') || (c >= 'A' && c <= 'F') || (uint8)(c - 'a') < 6;
+}
+static inline uint8 ff_nib(uint8 c)
+{
+    return c <= '9' ? (uint8)(c - '0') : (c <= 'F' ? (uint8)(c - 0x37) : (uint8)(c - 0x57));
+}
+struct T1Blob {
+    tsiMemObject* mem;            // 0x00
+    int   f4;                     // 0x04
+    int   base;                   // 0x08
+    int   limit;                  // 0x0c
+    int   off;                    // 0x10
+    char  pad14[0x2c - 0x14];
+    char* str;                    // 0x2c
+};
+// ---- items of slice s008b6400 end
+
+// ---- items of slice s008b81a0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C" __declspec(dllimport) int __cdecl strncmp(const char*, const char*, unsigned int);
+extern "C" char* GetNthNameFromEncodingVector(void*, int);            // 0x008b7130 (object in ebx)
+extern "C" int   get_using_uint16_hashClass(void*, int, void*);       // 0x008d1ac0
+typedef int32_t int32;
+extern "C" int16 backwardsATOI_s008b_81a0(const uint8*);                         // 0x008b6b50
+extern "C" int16 ATOI_s008b_81a0(const uint8*);                                  // 0x008b6a20
+extern "C" int   ATOFixed(const uint8*, int);                         // 0x008b6a70
+extern "C" char* tsi_T1Find_s008b_81a0(void*, const char*, int, int);            // 0x008b6e90
+struct GlyphBuilder_s008b_81a0 {
+    char   pad00[0x34];
+    int16  f34;                  // 0x34
+    int16  compFlag;             // 0x36
+    int16  contour;              // 0x38
+    char   pad3a[0x44 - 0x3a];
+    int16* xPts;                 // 0x44
+    int16* yPts;                 // 0x48
+};
+struct T1HashEntry {
+    int32  pad;                  // 0x00
+    int16  code;                 // 0x04
+    int16  value;                // 0x06
+};
+struct T1Hash {
+    char          pad00[0x24];
+    T1HashEntry*  table;         // 0x24
+    int32         pad28;         // 0x28
+    int32         count;         // 0x2c
+};
+struct T1Class_s008b_81a0 {
+    tsiMemObject* mem;           // 0x00
+    int32   f04;                 // 0x04
+    int32   base;                // 0x08
+    int32   len;                 // 0x0c
+    int32   off;                 // 0x10
+    int32   limit;               // 0x14
+    int32   curX;                // 0x18
+    int32   curY;                // 0x1c
+    int32   inFlex;              // 0x20
+    int32   flexCount;           // 0x24
+    int16   charBase;            // 0x28
+    int16   pad2a;               // 0x2a
+    char*   str;                 // 0x2c
+    int16   numGlyphs;           // 0x30
+    int16   pad32;               // 0x32
+    int16*  codes;               // 0x34
+    int16*  adobeCodes;          // 0x38
+    void**  charStrings;         // 0x3c
+    int16   numSubrs;            // 0x40
+    int16   pad42;               // 0x42
+    void**  subrs;               // 0x44
+    int16   sp;                  // 0x48
+    int16   pad4a;               // 0x4a
+    int32   stack[0x20];         // 0x4c
+    int32   numMasters;          // 0xcc
+    int32   m_d0;                // 0xd0
+    int32   weights[16];         // 0xd4
+    int32   blueValues[14];      // 0x114
+    int32   m_14c;               // 0x14c
+    int32   m_150;               // 0x150
+    int32   m_154;               // 0x154
+    int32   m_158;               // 0x158
+    int32   stemSnapH[12];       // 0x15c
+    int32   m_18c;               // 0x18c
+    int32   stemSnapV[12];       // 0x190
+    int32   m_1c0;               // 0x1c0
+    int32   m_1c4;               // 0x1c4
+    int32   m_1c8;               // 0x1c8
+    GlyphBuilder_s008b_81a0* glyph;         // 0x1cc
+    int32   sbx;                 // 0x1d0
+    int32   sby;                 // 0x1d4
+    int32   wx;                  // 0x1d8
+    int32   wy;                  // 0x1dc
+    int32   m_1e0;               // 0x1e0
+    int32   m_1e4;               // 0x1e4
+    int32   m_1e8;               // 0x1e8
+    int32   m_1ec;               // 0x1ec
+    int32   m_1f0;               // 0x1f0
+    int32   m_1f4;               // 0x1f4
+    int32   m_1f8;               // 0x1f8
+    int32   m_1fc;               // 0x1fc
+    int32   m_200;               // 0x200
+    int32   m_204;               // 0x204
+    int32   m_208;               // 0x208
+    int32   m_20c;               // 0x20c
+    int32   m_210;               // 0x210
+    int32   m_214;               // 0x214
+    char    pad218[0x21c - 0x218];
+    T1Hash* hashClass;           // 0x21c
+    int32   found;               // 0x220
+};
+struct T1NameEntry {
+    const char* name;            // 0x00
+    char        pad04[12];
+};
+extern "C" T1NameEntry g_t1NameTable[];   // 0x014338d4
+// ---- items of slice s008b81a0 end
+
+// callees this slice defines outside this object (rewrite.py held_callee_protos)
+extern "C" void* tsi_T1GetGlyphByIndex(T1Class_s008b_81a0* t, uint16 idx, int16* outX, int16* outW, int p5, int p6);  // 0x008b8230 (stays in the slice: not this object's)
+
+// forward declarations: helpers defined later in VA order (rewrite.py forward_protos)
+static uint8* FindString(uint8* hay, const char* needle, int n, int start);   // defined at 0x008b9390, called earlier in the TU
+
+// ---- items of slice s008b9e10 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C" void  Delete_hashClass(void*);                              // 0x008d1cb0
+extern "C" void  PrimeT2KInputStream(void*);                           // 0x008cc0b0
+extern "C" void  tsi_Error(void*, int);                                // 0x008d10c0
+struct TsiStream {
+    uint8*  ptr;                 // 0x000 current window (0 => pull through fn)
+    int   (*fn)(int, uint8*, int, int);  // 0x004 refill callback (arg, dst, pos, n)
+    int     arg;                 // 0x008 callback argument
+    uint8   byte;                // 0x00c one-byte landing pad
+    char    pad00d[0x214 - 0x00d];
+    uint32  size;                // 0x214 primed window size
+    int     primeBase;           // 0x218 window base
+    int     curpos;              // 0x21c read cursor
+    char    pad220[0x22c - 0x220];
+    tsiMemObject* errctx;        // 0x22c error/memory context
+    char    pad230[0x238 - 0x230];
+    uint8   flag;                // 0x238 raw-mode flag
+};
+struct T1Class_s008b_9e10 {
+    tsiMemObject* mem;           // 0x00
+    int32   f04;                 // 0x04
+    int32   base;                // 0x08
+    int32   len;                 // 0x0c
+    int32   off;                 // 0x10
+    int32   limit;               // 0x14
+    char    pad18[0x28 - 0x18];
+    int16   charBase;            // 0x28
+    char    pad2a[0x34 - 0x2a];
+    int16*  codes;               // 0x34
+    int16*  adobeCodes;          // 0x38
+    void**  charStrings;         // 0x3c
+    char    pad40[0x44 - 0x40];
+    void**  subrs;               // 0x44
+    char    pad48[0x1cc - 0x48];
+    void*   glyph;               // 0x1cc
+    char    pad1d0[0x21c - 0x1d0];
+    void*   hashClass;           // 0x21c
+};
+static uint8 ts_readByte(TsiStream* s)
+{
+    if (s->ptr == 0) {
+        int pos = s->curpos;
+        s->curpos = pos + 1;
+        if (s->fn(s->arg, &s->byte, pos, 1) < 0) {
+            tsi_Error(s->errctx, 0x2728);
+            return 0;
+        }
+        return s->byte;
+    }
+    if (s->fn == 0)
+        return s->ptr[s->curpos++];
+    if ((uint32)(s->curpos - s->primeBase + 1) > s->size)
+        PrimeT2KInputStream(s);
+    return s->ptr[s->curpos++ - s->primeBase];
+}
+// ---- items of slice s008b9e10 end
+
+// ---- items of slice s008bad10 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C" int   Tell_InputStream(void*);                              // 0x008cc5b0
+extern "C" void  Seek_InputStream(void*, int);                         // 0x008cc580
+extern "C" int   PeekInt16(void*, void*, int);                         // 0x008cc220
+extern "C" int16 ReadInt16(void*);                                     // 0x008cc190
+extern "C" uint8  ReadOfffset1_s008b_ad10(void*);                                 // 0x008b9fa0
+extern "C" int16  ReadOfffset2_s008b_ad10(void*);                                 // 0x008ba050
+extern "C" uint32 ReadOfffset3_s008b_ad10(void*);                                 // 0x008ba1c0
+extern "C" int32  ReadOfffset4_s008b_ad10(void*);                                 // 0x008ba3d0
+extern "C" int    READ_REAL_s008b_ad10(void*);                                    // 0x008ba680
+extern "C" uint32 READ_INTEGER_s008b_ad10(void*, int);                            // 0x008ba7c0
+struct TsiStream_s008b_ad10 {
+    uint8*  ptr;                 // 0x000
+    int   (*fn)(int, uint8*, int, int);  // 0x004
+    int     arg;                 // 0x008
+    uint8   byte;                // 0x00c
+    char    pad00d[0x214 - 0x00d];
+    uint32  size;                // 0x214
+    int     primeBase;           // 0x218
+    int     curpos;              // 0x21c
+    char    pad220[0x22c - 0x220];
+    tsiMemObject* errctx;        // 0x22c
+};
+struct CFFIndex {
+    tsiMemObject* mem;           // 0x00
+    int     f04;                 // 0x04 absolute data base
+    uint8   offSize;             // 0x08 offset width
+    char    pad09[0x0c - 0x09];
+    int*    offsets;             // 0x0c decoded offsets (count+1 entries)
+    int16   count;               // 0x10
+};
+struct CFFTopDict {
+    int16   f00, f02, f04, f06, f08;                    // 0x00
+    int32   f0c;                                        // 0x0c
+    int32   f10, f14, f18, f1c;                         // 0x10
+    int32   f20, f24;                                   // 0x20
+    int32   f28, f2c;                                   // 0x28
+    uint8   f30;                                        // 0x30
+    char    pad31[0x34 - 0x31];
+    int32   f34, f38, f3c;                              // 0x34
+    int32   f40, f44;                                   // 0x40
+    int32   f48, f4c, f50, f54;                         // 0x48
+    union {                                             // 0x58
+        int32 copy[65];                                 //   operand copy (0x58..0x15c)
+        struct { char _p[0x40]; int16 lo, hi; } v;      //   0x98/0x9a view of the copy
+    } bbox;
+    char    pad9c[0x15c - 0x9c];
+    int32   f15c, f160, f164, f168;                     // 0x15c
+    uint8   f16c;                                       // 0x16c
+};
+struct CFFClass {
+    char    pad00[4];
+    TsiStream_s008b_ad10* stream;           // 0x004
+    char    pad08[0x238 - 0x08];
+    int     nameIndex;           // 0x238
+    char    pad23c[0x374 - 0x23c];
+    CFFIndex* nameIdx;           // 0x374
+};
+static uint8 ts_readByte_s008b_ad10(TsiStream_s008b_ad10* s)
+{
+    if (s->ptr == 0) {
+        int pos = s->curpos;
+        s->curpos = pos + 1;
+        if (s->fn(s->arg, &s->byte, pos, 1) < 0) {
+            tsi_Error(s->errctx, 0x2728);
+            return 0;
+        }
+        return s->byte;
+    }
+    if (s->fn == 0)
+        return s->ptr[s->curpos++];
+    if ((uint32)(s->curpos - s->primeBase + 1) > s->size)
+        PrimeT2KInputStream(s);
+    return s->ptr[s->curpos++ - s->primeBase];
+}
+// ---- items of slice s008bad10 end
+
+// @ 0x008b68c0
+static int16 GetGlyphYMax(GlyphPoints* g)
+{
+    int16* p = g->pts;
+    int n = g->count;
+    int16 m = p[0];
+    int i = 1;
+    if (n > 1) {
+        do {
+            int16 v = p[i];
+            if (m < v)
+                m = v;
+            ++i;
+        } while (i < n);
+    }
+    return m;
+}
+
+// @ 0x008b68f0
+static int16 GetGlyphYMin(GlyphPoints* g)
+{
+    int16* p = g->pts;
+    int n = g->count;
+    int16 m = p[0];
+    int i = 1;
+    if (n > 1) {
+        do {
+            int16 v = p[i];
+            if (v < m)
+                m = v;
+            ++i;
+        } while (i < n);
+    }
+    return m;
+}
+
+// @ 0x008b6920
+extern "C" void FlipContourDirection(ContourData* d)
+{
+    uint8* flags = d->flags;
+    int16* xPts = d->xPts;
+    int16* yPts = d->yPts;
+    int c = 0;
+    while (c < d->numContours) {
+        int16 start = d->starts[c];
+        int16 end = d->ends[c];
+        int n = (int16)((end - start) / 2);
+        int i = 0;
+        while (i < n) {
+            int16 lo = (int16)(start + 1 + i);
+            int16 hi = (int16)(end - i);
+            int16 sx = xPts[lo];
+            int16 sy = yPts[lo];
+            uint8 sf = flags[lo];
+            xPts[lo] = xPts[hi];
+            yPts[lo] = yPts[hi];
+            flags[lo] = flags[hi];
+            xPts[hi] = sx;
+            yPts[hi] = sy;
+            flags[hi] = sf;
+            ++i;
+        }
+        ++c;
+    }
+}
+
+// @ 0x008b6bb0
+static int DecryptData(uint8* data, int len)
+{
+    uint16 r = 0xd971;
+    uint16 r2 = 0;
+    int16 count = 0;
+    int i;
+    uint8 X = 0, Y = 0, Z = 0;
+
+    if (!ff_ishex(data[0]) || !ff_ishex(data[1]) || !ff_ishex(data[2]) || !ff_ishex(data[3])) {
+        if (len <= 0)
+            return len;
+        for (i = 0; i < len; ++i) {
+            uint8 Xp = X, Yp = Y, Zp = Z;
+            uint8 b = data[i];
+            uint8 dec = (uint8)(r >> 8) ^ b;
+            uint16 sum = (uint16)(b + r);
+            X = Yp;
+            Z = Xp;
+            r = (uint16)(0x58bf - sum * (uint16)0x3193);
+            if (count == 0) {
+                Y = dec;
+                data[i] = dec;
+                if (Zp == ' ' && dec == ' ') {
+                    if ((Xp == 'R' && Yp == 'D') || (Xp == '-' && Yp == '|')) {
+                        count = (int16)backwardsATOI(data + i - 4);
+                        r2 = 0x10ea;
+                    }
+                }
+            } else {
+                uint8 dec2 = (uint8)(r2 >> 8) ^ dec;
+                --count;
+                r2 = (uint16)(0x58bf - (uint16)(dec + r2) * (uint16)0x3193);
+                Y = dec2;
+                data[i] = dec2;
+            }
+        }
+        return len;
+    }
+
+    {
+        int out = 0;
+        i = 0;
+        while (i < len) {
+            uint8 c1;
+            do { c1 = data[i++]; } while (c1 == ' ' || c1 == '\n' || c1 == '\r' || c1 == '\t');
+            uint8 c2;
+            do { c2 = data[i++]; } while (c2 == ' ' || c2 == '\n' || c2 == '\r' || c2 == '\t');
+            uint8 b = (uint8)((ff_nib(c1) << 4) | ff_nib(c2));
+            uint8 Xp = X, Yp = Y, Zp = Z;
+            uint8 dec = (uint8)(r >> 8) ^ b;
+            uint16 sum = (uint16)(b + r);
+            X = Yp;
+            Z = Xp;
+            r = (uint16)(0x58bf - sum * (uint16)0x3193);
+            if (count == 0) {
+                Y = dec;
+                data[out] = dec;
+                if (Zp == ' ' && dec == ' ') {
+                    if ((Xp == 'R' && Yp == 'D') || (Xp == '-' && Yp == '|')) {
+                        count = (int16)backwardsATOI(data + out - 4);
+                        r2 = 0x10ea;
+                    }
+                }
+            } else {
+                uint8 dec2 = (uint8)(r2 >> 8) ^ dec;
+                --count;
+                r2 = (uint16)(0x58bf - (uint16)(dec + r2) * (uint16)0x3193);
+                Y = dec2;
+                data[out] = dec2;
+            }
+            ++out;
+        }
+        return i;
+    }
+}
+
+// @ 0x008b6e90
+extern "C" char* tsi_T1Find(T1Blob* blob, const char* needle, int start, int limit)
+{
+    char* p = (char*)needle;
+    while (*p++)
+        ;
+    int len = (int)(p - (char*)needle) - 1;
+    if (limit <= start)
+        return 0;
+    char* base = (char*)blob->base;
+    do {
+        char* hay = base + start;
+        if (*needle == *hay) {
+            int k = 1;
+            if (len <= 1)
+                return base + start + k;
+            while (hay[k] == needle[k]) {
+                ++k;
+                if (len <= k)
+                    return base + start + k;
+            }
+        }
+        ++start;
+        if (limit <= start)
+            return 0;
+    } while (1);
+}
+
+// @ 0x008b6f00
+static int TransformData(T1Blob* ctx, uint8* base, int length, int which)
+{
+    ctx->f4 = (int)base;
+    ctx->base = (int)base;
+    ctx->limit = length;
+    ctx->off = length;
+    char* p = tsi_T1Find(ctx, "ntfile eexec", 0, length);
+    if (p == 0) {
+        if (base != 0) {
+            tsi_DeAllocMem(ctx->mem, base);
+            ctx->base = 0;
+        }
+        return 0xffff;
+    }
+    ctx->off = 0;
+    while (*p == '\r' || *p == '\n')
+        ++p;
+    int skip = (int)p - (int)base;
+    ctx->off = skip;
+    if (which == 0x14 && skip > 0) {
+        int n = DecryptData((uint8*)p, length - skip);
+        ctx->limit = n + skip;
+    }
+    return 0;
+}
+
+// @ 0x008b71a0
+extern "C" int tsi_T1GetGlyphIndexFromAdobeCode(int* t, int16 code)
+{
+    int n = *(int16*)((char*)t + 0x30);
+    int16* codes = *(int16**)((char*)t + 0x38);
+    int i = 0;
+    if (n > 0) {
+        do {
+            if (codes[i] == code)
+                return i;
+            ++i;
+        } while (i < n);
+    }
+    return i;
+}
 
 // @ 0x008b71c0
 void Type1BuildChar(T1Class* t, uint8* data, int len, int depth, T1Outline* out, int flexLimit)
@@ -643,6 +1159,570 @@ void Type1BuildChar(T1Class* t, uint8* data, int len, int depth, T1Outline* out,
     t->curX = x;
 }
 
+// @ 0x008b81a0
+extern "C" int tsi_T1CodeToGlyphIndex(T1Class_s008b_81a0* t, int16 code)
+{
+    int16* codes = t->codes;
+    int n = t->numGlyphs;
+    int i = 0;
+    if (n > 0) {
+        do {
+            if (codes[i] == code)
+                break;
+            ++i;
+        } while (i < n);
+    }
+    t->found = (i < n);
+    if (i < n)
+        return i;
+
+    T1Hash* h = t->hashClass;
+    int cnt = h->count;
+    i = 0;
+    if (cnt != 0) {
+        if (cnt > 0) {
+            T1HashEntry* e = h->table;
+            do {
+                if (e->code == code)
+                    break;
+                ++i;
+                e = (T1HashEntry*)((char*)e + 8);
+            } while (i < h->count);
+        }
+        t->found = (i < cnt);
+        if (i < cnt)
+            return h->table[i].value;
+    }
+    return 0;
+}
+
+// @ 0x008b83d0
+extern "C" int tsi_T1GetArray(T1Class_s008b_81a0* t, const char* name, int maxcount, int* out)
+{
+    char* s = tsi_T1Find_s008b_81a0(t, name, t->off, t->limit);
+    if (s == 0)
+        return 0;
+    int i = 0;
+    while (*s != '[' && i < 0x20) {
+        ++s;
+        ++i;
+    }
+    ++s;
+    int n = 0;
+    if (maxcount < 1)
+        return 0;
+    char c = *s;
+    for (;;) {
+        while (c == ' ' && i < 0x200) {
+            ++s;
+            ++i;
+            c = *s;
+        }
+        if (*s == ']')
+            return n;
+        char* q = s;
+        uint16 v = 0;
+        char d = *q;
+        while (d < '0' || d > '9') {
+            if (d == '-')
+                break;
+            ++q;
+            d = *q;
+        }
+        if (d == '-')
+            ++q;
+        char e = *q;
+        while (e >= '0' && e <= '9') {
+            v = (uint16)(v * 10 + e - '0');
+            e = *++q;
+        }
+        int16 val = (int16)v;
+        if (d == '-')
+            val = (int16)-val;
+        out[n] = val;
+        ++n;
+        c = *s;
+        for (;;) {
+            if (c == ' ')
+                break;
+            if (i >= 0x200)
+                break;
+            ++i;
+            if (c == ']')
+                break;
+            c = s[1];
+            ++s;
+        }
+        if (n >= maxcount)
+            return n;
+    }
+}
+
+// @ 0x008b84d0
+extern "C" int tsi_T1GetArray_2(T1Class_s008b_81a0* t, const char* name, int maxcount, int* out)
+{
+    char* s = tsi_T1Find_s008b_81a0(t, name, t->off, t->limit);
+    if (s == 0)
+        return 0;
+    int i = 0;
+    char c = *s;
+    while (c != '{' && c != '[' && i < 0x20) {
+        c = s[1];
+        ++s;
+        ++i;
+    }
+    ++s;
+    int n = 0;
+    if (maxcount < 1)
+        return 0;
+    c = *s;
+    for (;;) {
+        while (c == ' ' && i < 0x200) {
+            ++s;
+            ++i;
+            c = *s;
+        }
+        if (*s == '}' || *s == ']')
+            return n;
+        char* q = s;
+        uint16 v = 0;
+        char d = *q;
+        while (d < '0' || d > '9') {
+            if (d == '-')
+                break;
+            ++q;
+            d = *q;
+        }
+        if (d == '-')
+            ++q;
+        char e = *q;
+        while (e >= '0' && e <= '9') {
+            v = (uint16)(v * 10 + e - '0');
+            e = *++q;
+        }
+        int16 val = (int16)v;
+        if (d == '-')
+            val = (int16)-val;
+        out[n] = val;
+        ++n;
+        c = *s;
+        for (;;) {
+            if (c == ' ')
+                break;
+            if (i >= 0x200)
+                break;
+            ++i;
+            if (c == ']' || c == '}')
+                break;
+            c = s[1];
+            ++s;
+        }
+        if (n >= maxcount)
+            return n;
+    }
+}
+
+// @ 0x008b85e0
+extern "C" int tsi_T1GetFixedArray(T1Class_s008b_81a0* t, const char* name, int maxcount, int* out)
+{
+    char* s = tsi_T1Find_s008b_81a0(t, name, t->off, t->limit);
+    if (s == 0)
+        return 0;
+    int i = 0;
+    while (*s != '[' && i < 0x20) {
+        ++s;
+        ++i;
+    }
+    ++s;
+    int n = 0;
+    if (maxcount > 0) {
+        char c = *s;
+        for (;;) {
+            while (c == ' ' && i < 0x200) {
+                ++s;
+                ++i;
+                c = *s;
+            }
+            if (*s == ']')
+                return n;
+            out[n] = ATOFixed((const uint8*)s, 0);
+            c = *s;
+            ++n;
+            while (c != ' ' && i < 0x200) {
+                c = s[1];
+                ++s;
+                ++i;
+            }
+            if (n >= maxcount)
+                return n;
+        }
+    }
+    return n;
+}
+
+// @ 0x008b8680
+extern "C" void GetT1FontMatrix(T1Class_s008b_81a0* t)
+{
+    t->m_204 = 0x10000;
+    t->m_210 = 0x10000;
+    t->m_208 = 0;
+    t->m_20c = 0;
+    int i = 0;
+    char* s = tsi_T1Find_s008b_81a0(t, "/FontMatrix ", t->off, t->limit);
+    if (s == 0)
+        return;
+    while (*s != '[' && i < 0x100) {
+        ++s;
+        ++i;
+    }
+    ++s;
+    while (*s == ' ' && i < 0x100) {
+        ++s;
+        ++i;
+    }
+    if (i < 0x100)
+        t->m_204 = ATOFixed((const uint8*)s, 3);
+    while (*s != ' ' && i < 0x100) {
+        ++s;
+        ++i;
+    }
+    while (*s == ' ' && i < 0x100) {
+        ++s;
+        ++i;
+    }
+    if (i < 0x100)
+        t->m_20c = ATOFixed((const uint8*)s, 3);
+    while (*s != ' ' && i < 0x100) {
+        ++s;
+        ++i;
+    }
+    while (*s == ' ' && i < 0x100) {
+        ++s;
+        ++i;
+    }
+    if (i < 0x100)
+        t->m_208 = ATOFixed((const uint8*)s, 3);
+    while (*s != ' ' && i < 0x100) {
+        ++s;
+        ++i;
+    }
+    while (*s == ' ' && i < 0x100) {
+        ++s;
+        ++i;
+    }
+    if (i < 0x100)
+        t->m_210 = ATOFixed((const uint8*)s, 3);
+}
+
+// @ 0x008b87e0
+extern "C" char* GetT1NameProperty(T1Class_s008b_81a0* t, int unused, int16 kind)
+{
+    const char* name;
+    if (kind == 3)
+        name = "/FamilyName";
+    else if (kind == 4)
+        name = "/FullName";
+    else
+        return 0;
+    char* s = tsi_T1Find_s008b_81a0(t, name, 0, t->limit);
+    if (s == 0)
+        return 0;
+    if (*s != '(') {
+        ++s;
+        if (*s != '(') {
+            ++s;
+            if (*s != '(') {
+                ++s;
+                if (*s != '(')
+                    return 0;
+            }
+        }
+    }
+    ++s;
+    int n = 0;
+    while (*s != ')' && n < 0x50) {
+        ++n;
+        if (s[n] == ')')
+            break;
+    }
+    char* out = (char*)tsi_AllocMem(t->mem, n + 1);
+    int k = 0;
+    if (n > 0) {
+        char* dst = out;
+        char* src = s;
+        k = n;
+        do {
+            *dst = *src;
+            ++dst;
+            --n;
+        } while (n != 0);
+    }
+    out[k] = 0;
+    return out;
+}
+
+// @ 0x008b8c80
+extern "C" short FF_GetAW_T1Class(T1Class_s008b_81a0* t, int16 idx)
+{
+    int16 outX = 0;
+    int16 outW;
+    void* g = tsi_T1GetGlyphByIndex(t, (uint16)idx, &outX, &outW, 0, -1);
+    short result = 0;
+    if (g != 0) {
+        result = outX;
+        Delete_GlyphClass(g);
+    }
+    return result;
+}
+
+// @ 0x008b8cc0
+extern "C" void BuildSubrs(T1Class_s008b_81a0* t)
+{
+    t->numSubrs = 0;
+    t->subrs = 0;
+    char* p = tsi_T1Find_s008b_81a0(t, "/Subrs ", t->off, t->len);
+    if (p == 0)
+        return;
+
+    int16 n = ATOI_s008b_81a0((const uint8*)p);
+    t->numSubrs = n;
+    t->subrs = (void**)tsi_AllocMem(t->mem, (uint32)((int)n * 4));
+
+    int i = 0;
+    if (n > 0) {
+        do {
+            t->subrs[i] = 0;
+            ++i;
+        } while (i < t->numSubrs);
+    }
+    if (t->numSubrs <= 0)
+        return;
+
+    int count = 0;
+    char* cur = p;
+    do {
+        char* base = (char*)t->base;
+        char* q = tsi_T1Find_s008b_81a0(t, "dup ", (int)(cur - base), t->len);
+        uint16 v = 0;
+        char b = *q;
+        while (b < '0' || b > '9') {
+            if (b == '-')
+                break;
+            ++q;
+            b = *q;
+        }
+        if (b == '-')
+            ++q;
+        char c = *q;
+        while (c >= '0' && c <= '9') {
+            v = (uint16)(v * 10 + c - '0');
+            c = *++q;
+        }
+        int16 idx = (int16)v;
+        if (b == '-')
+            idx = (int16)-idx;
+
+        int off = (int)(cur - base);
+        char* r = tsi_T1Find_s008b_81a0(t, "RD ", off, off + 0x10);
+        if (r == 0)
+            r = tsi_T1Find_s008b_81a0(t, "-| ", off, off + 0x10);
+        int16 len = backwardsATOI_s008b_81a0((const uint8*)r - 5);
+        t->subrs[idx] = r;
+        ++count;
+        cur = r + len;
+    } while (count < t->numSubrs);
+}
+
+// @ 0x008b8e20
+extern "C" int T1stringsAreEqual(T1Class_s008b_81a0* t, const char* name, int16 code)
+{
+    uint8 len = 0;
+    if ((uint16)code == 0xfffe)
+        return 0;
+
+    char* candidate = 0;
+    char first = *t->str;
+    if (first >= '0' && first <= '9') {
+        if ((int)(uint16)code < (int)ATOI_s008b_81a0((const uint8*)t->str)) {
+            candidate = GetNthNameFromEncodingVector(t, (uint16)code);
+            if (candidate != 0) {
+                if (candidate[0] >= 0x21) {
+                    len = 0;
+                    do {
+                        ++len;
+                    } while ((uint8)candidate[len] >= 0x21);
+                }
+                goto compare;
+            }
+        }
+    } else if ((uint16)code < 0x120) {
+        candidate = (char*)g_t1NameTable[code].name;
+        if (candidate != 0) {
+            const char* q = candidate + 1;
+            const char* r = candidate;
+            do {
+                ++r;
+            } while (*r != 0);
+            len = (uint8)(r - q);
+            goto compare;
+        }
+    }
+
+    if (t->hashClass->table != 0) {
+        int out;
+        return get_using_uint16_hashClass(t->hashClass, code, &out);
+    }
+
+compare:
+    {
+        int nl = 0;
+        while (name[nl] != 0)
+            ++nl;
+        if (nl == (int)len && strncmp(name, candidate, len) == 0)
+            return 1;
+    }
+    return 0;
+}
+
+// @ 0x008b8f30
+void ParseT1CharStrings(T1Class_s008b_8f30* t)
+{
+    uint8* base = t->base;
+    uint32 size = t->size;
+    uint8* encoding = FindString(base, "/Encoding ", (int)size, 0);
+    if (!encoding)
+        return;
+    t->encoding = encoding;
+
+    uint8 first = *encoding;
+    uint8 decimal = (first >= '0' && first <= '9') ? 1 : 0;
+    uint8 encodingKind = 0;
+    if (!decimal) {
+        if (first == 'S')
+            encodingKind = 0;
+        else if (first == 'I')
+            encodingKind = 1;
+    }
+
+    uint8* charStrings = FindString(base, "/CharStrings ", (int)size, (int)t->field10);
+    if (!charStrings) {
+        T1Error(t->mem, 0x2729);
+        return;
+    }
+    t->field14 = (uint32)(charStrings - base);
+
+    int16 count = (int16)ATOI(charStrings);
+    t->numGlyphs = count;
+    int glyphCount = (uint16)count;
+    uint32 encodingCount = decimal ? (uint16)ATOI(t->encoding) : 0x100;
+
+    t->glyphMap = (int16*)tsi_AllocMem(t->mem, (uint32)glyphCount * 2);
+    t->adobeCodes = (int16*)tsi_AllocMem(t->mem, (uint32)glyphCount * 2);
+    t->charStringOffsets = (uint32*)tsi_AllocMem(t->mem, (uint32)glyphCount * 4);
+    t->charStrings = T1NewCharStrings(t->mem, glyphCount, (void*)0x8b8e20, t);
+
+    for (int i = 0; i < glyphCount; ++i) {
+        t->glyphMap[i] = -1;
+        t->adobeCodes[i] = -1;
+        t->charStringOffsets[i] = 0;
+    }
+
+    t->field218 = 0;
+    t->field21a = 0x00ff;
+    t->field214 = 0;
+    if (t->charStrings) {
+        t->charStrings->capacity = encodingCount;
+        t->charStrings->count = 0;
+    }
+
+    uint8* limit = base + size;
+    uint8* p = charStrings;
+    int glyph = 0;
+    while (p < limit && glyph < glyphCount) {
+        uint8* slash = p;
+        while (slash < limit && *slash != '/')
+            ++slash;
+        if (slash >= limit)
+            break;
+
+        uint8* name = slash + 1;
+        uint8* q = name;
+        int nameLen = 0;
+        while (q < limit && *q > ' ' && nameLen < 0x3f) {
+            ++q;
+            ++nameLen;
+        }
+
+        uint8 nameBuf[64];
+        for (int i = 0; i < nameLen; ++i)
+            nameBuf[i] = name[i];
+        nameBuf[nameLen] = 0;
+
+        uint8* num = q;
+        while (num < limit && (*num == ' ' || *num == '\t' || *num == '\r' || *num == '\n'))
+            ++num;
+        int dataLen = ATOI(num);
+
+        uint8* rd = num;
+        while (rd + 1 < limit &&
+               !(rd[0] == 'R' && rd[1] == 'D') &&
+               !(rd[0] == '-' && rd[1] == '|'))
+            ++rd;
+        if (rd + 1 >= limit)
+            break;
+
+        uint8* data = rd + 2;
+        while (data < limit && (*data == ' ' || *data == '\r' || *data == '\n'))
+            ++data;
+
+        t->charStringOffsets[glyph] = (uint32)(data - base);
+
+        uint16 code = 0xffff;
+        uint16 codeA = 0;
+        uint16 codeB = 0;
+        tsi_PSNameToAppleCode(nameBuf, &code, &codeA, &codeB);
+        t->adobeCodes[glyph] = (int16)code;
+        t->glyphMap[glyph] = (int16)glyph;
+
+        if (t->charStrings)
+            T1AddCharString(t->charStrings, (uint32)(name - base), (uint16)glyph, (uint16)dataLen);
+
+        data += (uint16)dataLen;
+        p = data;
+        while (p + 1 < limit &&
+               !(p[0] == 'N' && p[1] == 'D') &&
+               !(p[0] == '|' && p[1] == '-'))
+            ++p;
+        if (p + 1 >= limit)
+            break;
+        p += 2;
+        ++glyph;
+    }
+
+    (void)encodingKind;
+}
+
+// @ 0x008b9390
+static uint8* FindString(uint8* hay, const char* needle, int n, int start)
+{
+    int len = 0;
+    while (needle[len])
+        ++len;
+    for (int i = start; i < n; ++i) {
+        if (hay[i] != (uint8)needle[0])
+            continue;
+        int k = 1;
+        while (k < len) {
+            if (hay[i + k] != (uint8)needle[k])
+                break;
+            ++k;
+        }
+        if (k >= len)
+            return hay + i + k;
+    }
+    return 0;
+}
+
 // @ 0x008b9400
 kernSubTable0Data* New_T1kernSubTable0Data(T1Class_s008b_8f30* t, tsiMemObject* mem, uint8* p, int length)
 {
@@ -840,4 +1920,320 @@ kernSubTable0Data* New_T1kernSubTable0Data(T1Class_s008b_8f30* t, tsiMemObject* 
         }
     }
     return result;
+}
+
+// @ 0x008b9d90
+kernSubTable* New_T1kernSubTable(T1Class_s008b_8f30* t, tsiMemObject* mem, uint8* p, int length)
+{
+    kernSubTable0* table;
+    kernSubTable* result = (kernSubTable*)tsi_AllocMem(mem, 0x10);
+    result->mem = mem;
+    result->flags4 = 0;
+    result->numTables = 1;
+    result->tables = (kernSubTable0**)tsi_AllocMem(mem, 4);
+
+    table = (kernSubTable0*)tsi_AllocMem(mem, 0x14);
+    table->mem = mem;
+    table->flags4 = 0;
+    table->length = 0x14;
+    table->format = 1;
+    table->data = New_T1kernSubTable0Data(t, mem, p, length);
+    result->tables[0] = table;
+    return result;
+}
+
+// @ 0x008b9f20
+extern "C" void tsi_DeleteT1Class(T1Class_s008b_9e10* t)
+{
+    if (t != 0) {
+        Delete_GlyphClass(t->glyph);
+        if (t->base != t->f04)
+            tsi_DeAllocMem(t->mem, (void*)t->base);
+        tsi_DeAllocMem(t->mem, t->codes);
+        tsi_DeAllocMem(t->mem, t->adobeCodes);
+        tsi_DeAllocMem(t->mem, t->charStrings);
+        tsi_DeAllocMem(t->mem, t->subrs);
+        Delete_hashClass(t->hashClass);
+        tsi_DeAllocMem(t->mem, t);
+    }
+}
+
+// @ 0x008b9fa0
+extern "C" uint8 ReadOfffset1(TsiStream* s)
+{
+    return ts_readByte(s);
+}
+
+// @ 0x008ba050
+extern "C" int16 ReadOfffset2(TsiStream* s)
+{
+    uint8 hi = ts_readByte(s);
+    uint8 lo = ts_readByte(s);
+    return (int16)((hi << 8) | lo);
+}
+
+// @ 0x008ba1c0
+extern "C" uint32 ReadOfffset3(TsiStream* s)
+{
+    uint32 v = ts_readByte(s);
+    v = (v << 8) | ts_readByte(s);
+    v = (v << 8) | ts_readByte(s);
+    return v;
+}
+
+// @ 0x008ba3d0
+extern "C" int32 ReadOfffset4(TsiStream* s)
+{
+    uint32 v = ts_readByte(s);
+    v = (v << 8) | ts_readByte(s);
+    v = (v << 8) | ts_readByte(s);
+    v = (v << 8) | ts_readByte(s);
+    return (int32)v;
+}
+
+// @ 0x008ba680
+extern "C" int READ_REAL(TsiStream* s)
+{
+    uint8 nib[4];
+    char  out[68];
+    int   n = 0;
+
+    for (;;) {
+        uint8 b = ts_readByte(s);
+        nib[1] = b & 0xf;
+        nib[0] = b >> 4;
+        for (int k = 0; k < 2; ++k) {
+            switch (nib[k]) {
+            case 10: out[n] = '.';  break;               // nibble 0xa: decimal point
+            case 11: out[n] = 'E';  break;               // nibble 0xb: exponent
+            case 12: out[n] = 'E';  out[++n] = '-'; break; // 0xc: negative exponent
+            case 14: out[n] = '-';  break;               // 0xe: minus sign
+            case 13: continue;                           // 0xd: no character
+            case 15:                                     // 0xf: end of number
+                out[n] = 0;
+                return ATOFixed((const uint8*)out, 0);
+            default:
+                out[n] = (char)(nib[k] + 0x30);
+                break;
+            }
+            ++n;
+        }
+    }
+}
+
+// @ 0x008ba7c0
+extern "C" uint32 READ_INTEGER(TsiStream* s, int tag)
+{
+    uint32 v = 0;
+
+    if (tag == 0x1c) {                     // shortint: 2 bytes
+        v = ts_readByte(s);
+    } else if (tag == 0x1d) {              // longint: 4 bytes
+        v = ts_readByte(s);
+        v = (v << 8) | ts_readByte(s);
+        v = (v << 8) | ts_readByte(s);
+    } else if (tag <= 0xf6) {              // single-byte integer, bias 0x8b
+        return (uint32)(tag - 0x8b);
+    } else if (tag <= 0xfa) {              // positive 2-byte, bias 0xf694
+        return (uint32)(tag * 0x100 - 0xf694 + ts_readByte(s));
+    } else if (tag <= 0xfe) {              // negative 2-byte
+        return (uint32)(0xfa94 - tag * 0x100 - ts_readByte(s));
+    } else {                               // 0xff: reserved
+        return 0;
+    }
+    return (v << 8) | ts_readByte(s);
+}
+
+// @ 0x008bad10
+extern "C" CFFIndex* tsi_NewCFFIndexClass(tsiMemObject* mem, TsiStream_s008b_ad10* s)
+{
+    CFFIndex* ix = (CFFIndex*)tsi_AllocMem(mem, 0x14);
+    ix->mem = mem;
+    ix->f04 = 0;
+
+    int16 count = ReadInt16(s);
+    ix->count = count;
+    if (count != 0) {
+        ix->offSize = ts_readByte_s008b_ad10(s);
+        ix->offsets = (int*)tsi_AllocMem(mem, (uint32)(uint16)count * 4 + 4);
+
+        uint32 (*read)(TsiStream_s008b_ad10*);
+        if (ix->offSize == 1)
+            read = (uint32 (*)(TsiStream_s008b_ad10*))ReadOfffset1_s008b_ad10;
+        else if (ix->offSize == 2)
+            read = (uint32 (*)(TsiStream_s008b_ad10*))ReadOfffset2_s008b_ad10;
+        else if (ix->offSize == 3)
+            read = (uint32 (*)(TsiStream_s008b_ad10*))ReadOfffset3_s008b_ad10;
+        else
+            read = (uint32 (*)(TsiStream_s008b_ad10*))ReadOfffset4_s008b_ad10;
+
+        int i = 0;
+        do {
+            ix->offsets[i] = (int)read(s);
+            ++i;
+        } while (i <= (int)(uint16)count);
+
+        int t = Tell_InputStream(s);
+        ix->f04 = t - 1;
+        Seek_InputStream(s, ix->offsets[(uint16)count] + (t - 1));
+    }
+    return ix;
+}
+
+// @ 0x008bae70
+extern "C" int tsi_GetCFFData(int index, CFFIndex* ix, TsiStream_s008b_ad10* s)
+{
+    int buf = 0;
+    if (index >= 0 && index < (int)(uint16)ix->count) {
+        int pos = Tell_InputStream(s);
+        Seek_InputStream(s, ix->offsets[index] + ix->f04);
+
+        int len = ix->offsets[index + 1] - ix->offsets[index];
+        int p = (int)tsi_AllocMem(ix->mem, (uint32)(len + 2));
+        buf = p;
+        PeekInt16(s, (void*)p, len);
+        *(uint8*)(p + len) = 0;
+        *(uint8*)(p + len + 1) = 0;
+        Seek_InputStream(s, pos);
+    }
+    return buf;
+}
+
+// @ 0x008baee0
+extern "C" int GetT2NameProperty(CFFClass* t, int unused, int16 kind)
+{
+    if (kind == 4 && t->nameIdx != 0)
+        return tsi_GetCFFData(t->nameIndex, t->nameIdx, t->stream);
+    return 0;
+}
+
+// @ 0x008baf10
+extern "C" void tsi_ParsePrivateDictData(void* p)
+{
+    char*   base = (char*)p;
+    TsiStream_s008b_ad10* s = *(TsiStream_s008b_ad10**)(base + 4);
+    int st[64];
+    int n = 0;
+
+    int savepos = Tell_InputStream(s);
+    *(int*)(base + 0x4fc) = 0;
+    *(int*)(base + 0x500) = 0;
+    *(int*)(base + 0x504) = 0;
+    *(int*)(base + 0x508) = 0;
+
+    Seek_InputStream(s, *(int*)(base + 0x3c0) + *(int*)(base + 8));
+    int end = *(int*)(base + 0x3bc) + *(int*)(base + 0x3c0) + *(int*)(base + 8);
+
+    while ((uint32)Tell_InputStream(s) < (uint32)end) {
+        uint8 b = ts_readByte_s008b_ad10(s);
+        if (b <= 0x1b || b == 0x1f) {
+            if (b == 0x13)
+                *(int*)(base + 0x4fc) = st[0];
+            else if (b == 0x14)
+                *(int*)(base + 0x504) = st[0];
+            else if (b == 0x15)
+                *(int*)(base + 0x508) = st[0];
+            n = 0;
+        } else if (b == 0x1e) {
+            st[n++] = READ_REAL_s008b_ad10(s);
+        } else {
+            st[n++] = (int)READ_INTEGER_s008b_ad10(s, b);
+        }
+    }
+
+    if (*(int*)(base + 0x4fc) != 0)
+        *(int*)(base + 0x500) = *(int*)(base + 0x3c0) + *(int*)(base + 0x4fc) + *(int*)(base + 8);
+    Seek_InputStream(s, savepos);
+}
+
+// @ 0x008bb0d0
+extern "C" void tsi_ParseCFFTopDict(TsiStream_s008b_ad10* s, CFFIndex* ix, CFFTopDict* d, int index)
+{
+    int st[64];
+    int n = 0;
+
+    int start = Tell_InputStream(s);
+
+    d->f18 = 0; d->f10 = 0; d->f1c = 0; d->f14 = 0;
+    d->f24 = 0;
+    d->f160 = 0; d->f164 = 0;
+    d->f34 = 0; d->f38 = 0; d->f40 = 0; d->f44 = 0;
+    d->f48 = 0; d->f50 = 0; d->f54 = 0;
+    d->f20 = 0;
+    d->f16c = 0;
+    d->f28 = -100;
+    d->f2c = 50;
+    d->f15c = 0x10000;
+    d->f168 = 0x10000;
+    d->f4c = 1;
+    d->f30 = 2;
+
+    Seek_InputStream(s, ix->offsets[index] + ix->f04);
+    int end = ix->offsets[index + 1] + ix->f04;
+
+    while ((uint32)Tell_InputStream(s) < (uint32)end) {
+        uint8 b = ts_readByte_s008b_ad10(s);
+        int   v0 = st[0];
+
+        if (b <= 0x1b || b == 0x1f) {
+            if (b == 0x0c) {
+                uint8 op2 = ts_readByte_s008b_ad10(s);
+                switch (op2) {
+                case 1:  d->f20 = v0; break;
+                case 2:  d->f24 = v0; break;
+                case 3:  d->f28 = v0; break;
+                case 4:  d->f2c = v0; break;
+                case 6:  d->f30 = (uint8)v0; break;
+                case 7:
+                    d->f15c = util_FixMul(v0, 0x3e80000);
+                    d->f164 = util_FixMul(st[1], 0x3e80000);
+                    d->f160 = util_FixMul(st[2], 0x3e80000);
+                    d->f168 = util_FixMul(st[3], 0x3e80000);
+                    break;
+                case 0x1c:
+                    d->f48 = n - 4;
+                    d->f4c = v0;
+                    for (int k = 0; k < n - 4; ++k)
+                        d->bbox.copy[k] = st[k + 1];
+                    d->f50 = st[d->f48 + 1];
+                    d->f54 = (int)tsi_AllocMem(ix->mem, (uint32)d->f50 * 4);
+                    d->bbox.v.lo = (int16)st[d->f48 + 2];
+                    d->bbox.v.hi = (int16)st[d->f48 + 3];
+                    /* falls through into the FontMatrix case */
+                    d->f15c = util_FixMul(v0, 0x3e80000);
+                    d->f164 = util_FixMul(st[1], 0x3e80000);
+                    d->f160 = util_FixMul(st[2], 0x3e80000);
+                    d->f168 = util_FixMul(st[3], 0x3e80000);
+                    break;
+                case 0x1e:
+                    d->f16c = 1;
+                    break;
+                default:
+                    break;
+                }
+            } else {
+                switch (b) {
+                case 0:  d->f00 = (int16)v0; break;
+                case 1:  d->f02 = (int16)v0; break;
+                case 2:  d->f04 = (int16)v0; break;
+                case 3:  d->f06 = (int16)v0; break;
+                case 4:  d->f08 = (int16)v0; break;
+                case 5:  d->f10 = v0; d->f14 = st[1]; d->f18 = st[2]; d->f1c = st[3]; break;
+                case 13: d->f0c = v0; break;
+                case 15: d->f34 = v0; break;
+                case 16: d->f38 = v0; break;
+                case 17: d->f3c = v0; break;
+                case 18: d->f40 = v0; d->f44 = st[1]; break;
+                default: break;
+                }
+            }
+            n = 0;
+        } else if (b == 0x1e) {
+            st[n++] = READ_REAL_s008b_ad10(s);
+        } else {
+            st[n++] = (int)READ_INTEGER_s008b_ad10(s, b);
+        }
+    }
+
+    Seek_InputStream(s, start);
 }

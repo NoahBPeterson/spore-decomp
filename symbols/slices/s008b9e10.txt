@@ -1,5 +1,5 @@
 008b9e10 _tsi_NewT1Class  # construct the T1Class (read the sfnt/T1 header, build cmap/hash)
-008b9f20 _tsi_DeleteT1Class  # free the T1Class sub-objects + the class
+008b9f20 _tsi_DeleteT1Class  # tsi_DeleteT1Class migrated from s008b9e10 (verbatim, slice spelling)
 008b9fa0 _ReadOfffset1  # read a 1-byte CFF INDEX offset
 008ba050 _ReadOfffset2  # read a 2-byte big-endian CFF INDEX offset
 008ba1c0 _ReadOfffset3  # read a 3-byte big-endian CFF INDEX offset

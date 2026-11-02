@@ -1,1 +1,2 @@
 # source  symbol  va  flags
+../src/game/UTFSpore_Win32/t1.cpp  _tsi_DeleteT1Class  008b9f20  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
