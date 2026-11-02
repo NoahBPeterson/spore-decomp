@@ -9,3 +9,4 @@
 00ccbc90 ?Insert@Vec3D@@QAEPAUVertex3D@@PAU2@0@Z  # Vec3D::Insert migrated from s00ccaff0 (verbatim, slice spelling)
 00ccbd10 ?FUN_00ccbd10@cTDS@@QAEXPAXPAUVector3@@MH_N@Z  # cTDS::FUN_00ccbd10 migrated from s00ccaff0 (verbatim, slice spelling)
 00ccc070 ?FindOrInsert@EffectTree@@QAEPAEPAI@Z  # EffectTree::FindOrInsert migrated from s00ccaff0 (verbatim, slice spelling)
+00ccc120 ?InsertHint2@EffectTree@@QAEPAEPAURBNode@@PAI@Z  # EffectTree::InsertHint2 migrated from s00ccaff0 (verbatim, slice spelling)

@@ -1,0 +1,6 @@
+00ccc190 ??1cTribeDisplayStrategy_s00cc_c190@@QAE@XZ  # cTribeDisplayStrategy_s00cc_c190::~cTribeDisplayStrategy migrated from s00ccc190 (verbatim, slice spelling)
+00ccc400 ?NoteTribeMemberAdded@cTribeDisplayStrategy_s00cc_c190@@QAEXPAX@Z  # cTribeDisplayStrategy_s00cc_c190::NoteTribeMemberAdded migrated from s00ccc190 (verbatim, slice spelling)
+00ccc640 ?Update@cTribeDisplayStrategy_s00cc_c190@@QAEXXZ  # cTribeDisplayStrategy_s00cc_c190::Update migrated from s00ccc190 (verbatim, slice spelling)
+00cccb00 ?FUN_00cccb00@OrnamentPool@@QAEPAXII@Z  # OrnamentPool::FUN_00cccb00 migrated from s00ccc190 (verbatim, slice spelling)
+00cccbd0 ?DoInsertValue@CitizenTree@@QAEPAXPAX@Z  # CitizenTree::DoInsertValue migrated from s00ccc190 (verbatim, slice spelling)
+00cccc50 ??0cTribeDisplayStrategy_s00cc_c190@@QAE@I@Z  # cTribeDisplayStrategy_s00cc_c190::cTribeDisplayStrategy migrated from s00ccc190 (verbatim, slice spelling)

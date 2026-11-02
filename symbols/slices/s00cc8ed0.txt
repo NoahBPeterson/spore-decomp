@@ -1,12 +1,12 @@
-00cc8ed0 FUN_00cc8ed0  # Ghidra FUN; TribeStrategy member: build the posse item for one tribe member (allocate the tribe or baby flavour, register it with the display strategy, push the item's tribe state back); not byte-exact
-00cc9040 FUN_00cc9040  # Ghidra FUN; TribeStrategy member: look up the entity's posse slot (the 0x00c0b770 gate picks the derived slot or slot 5) and add the item back to the posse; byte-exact
-00cc90a0 FUN_00cc90a0  # Ghidra FUN; TribeStrategy member: same slot lookup but returns the item found in the posse; byte-exact
-00cc90f0 FUN_00cc90f0  # Ghidra FUN; TribeStrategy member: re-home the item when the entity's slot and the given index's slot differ; byte-exact
-00cc91b0 FUN_00cc91b0  # Ghidra FUN; TribeStrategy member: broadcast the value to the six child slots that are present; byte-exact
-00cc91e0 FUN_00cc91e0  # Ghidra FUN; TribeStrategy member: compare the summed audio-item system value with the summed range size and broadcast the matching tick; byte-exact
-00cc9270 FUN_00cc9270  # Ghidra FUN; TribeStrategy member: union every non-empty posse slot's bounds into *out (x/y minimised, z/w maximised); byte-exact
-00cc9360 FUN_00cc9360  # Ghidra FUN; TribeStrategy member: true when every present child slot has enough spare audio items for its range; byte-exact
-00cc93b0 FUN_00cc93b0  # Ghidra FUN; TribeStrategy member: show/hide the strategy UI (global UI, nested items, icon sub-object, extra interface, HUD entry, event log); byte-exact
+00cc8ed0 ?FUN_00cc8ed0@TribeStrategy_s00cc_8ed0@@QAEXPAUEntityRef@@@Z  # TribeStrategy_s00cc_8ed0::FUN_00cc8ed0 migrated from s00cc8ed0 (verbatim, slice spelling)
+00cc9040 ?FUN_00cc9040@TribeStrategy_s00cc_8ed0@@QAEXPAUEntityRef@@@Z  # TribeStrategy_s00cc_8ed0::FUN_00cc9040 migrated from s00cc8ed0 (verbatim, slice spelling)
+00cc90a0 ?FUN_00cc90a0@TribeStrategy_s00cc_8ed0@@QAEPAXPAUEntityRef@@@Z  # TribeStrategy_s00cc_8ed0::FUN_00cc90a0 migrated from s00cc8ed0 (verbatim, slice spelling)
+00cc90f0 ?FUN_00cc90f0@TribeStrategy_s00cc_8ed0@@QAEXPAUEntityRef@@H@Z  # TribeStrategy_s00cc_8ed0::FUN_00cc90f0 migrated from s00cc8ed0 (verbatim, slice spelling)
+00cc91b0 ?FUN_00cc91b0@TribeStrategy_s00cc_8ed0@@QAEXH@Z  # TribeStrategy_s00cc_8ed0::FUN_00cc91b0 migrated from s00cc8ed0 (verbatim, slice spelling)
+00cc91e0 ?FUN_00cc91e0@TribeStrategy_s00cc_8ed0@@QAEXH@Z  # TribeStrategy_s00cc_8ed0::FUN_00cc91e0 migrated from s00cc8ed0 (verbatim, slice spelling)
+00cc9270 ?FUN_00cc9270@TribeStrategy_s00cc_8ed0@@QAEXPAUVector4@@@Z  # TribeStrategy_s00cc_8ed0::FUN_00cc9270 migrated from s00cc8ed0 (verbatim, slice spelling)
+00cc9360 ?FUN_00cc9360@TribeStrategy_s00cc_8ed0@@QAE_NXZ  # TribeStrategy_s00cc_8ed0::FUN_00cc9360 migrated from s00cc8ed0 (verbatim, slice spelling)
+00cc93b0 ?FUN_00cc93b0@TribeStrategy_s00cc_8ed0@@QAEXH@Z  # TribeStrategy_s00cc_8ed0::FUN_00cc93b0 migrated from s00cc8ed0 (verbatim, slice spelling)
 00cc9430 ?FUN_00cc9430@TribeStrategy_s00cc_8ed0@@QAEXXZ  # TribeStrategy_s00cc_8ed0::FUN_00cc9430 migrated from s00cc8ed0 (verbatim, slice spelling)
 00cc9460 ?FUN_00cc9460@TribeStrategy_s00cc_8ed0@@QAEXPAUTribeObj@@@Z  # TribeStrategy_s00cc_8ed0::FUN_00cc9460 migrated from s00cc8ed0 (verbatim, slice spelling)
 00cc9640 ?FUN_00cc9640@TribeStrategy_s00cc_8ed0@@QAEXPAUIWinText@@C@Z  # TribeStrategy_s00cc_8ed0::FUN_00cc9640 migrated from s00cc8ed0 (verbatim, slice spelling)

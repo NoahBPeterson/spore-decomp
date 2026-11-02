@@ -1,4 +1,4 @@
-// src/game/SPGonzago/SPTribeDisplayStrategy.cpp -- migrated from slice(s) s00ccd050, s00ccaff0, s00cc9e20, s00cc8ed0, s00cc7fa0 by tools/migrate/rewrite.py
+// src/game/SPGonzago/SPTribeDisplayStrategy.cpp -- migrated from slice(s) s00ccc190, s00572580, s00ccd050, s00ccaff0, s00cc9e20, s00cc8ed0, s00cc7fa0 by tools/migrate/rewrite.py
 // Object file: SPGonzago/SPTribeDisplayStrategy.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -10,10 +10,15 @@
 #include "cSPUILayout.h"
 #include <math.h>
 #include "SP/cTribe.h"
+#include <new>
+#include <string.h>
+#include <ctype.h>
+#include <intrin.h>
 
 // ---- items of slice s00cc7fa0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 typedef unsigned int u32;
 typedef unsigned char u8;
+void* FUN_0067de00(); // 0x0067de00
 struct ModelInstanceSet {
     u8 mData[0x60];
     void AddToRenderer(void* p); // 0x006f3df0
@@ -29,8 +34,34 @@ struct CameraCtl {
     bool FUN_00cc87f0();
     bool FUN_00cc8810();
 };
+struct EntityRef_s00cc_7fa0 {
+    u32 FUN_00c22dc0(); // 0x00c22dc0
+};
+struct Profile8a30 {
+    u8 mPad00[0x504];
+    u32 m504; // +0x504
+    u32 m508; // +0x508
+    u32 m50c; // +0x50c
+};
 struct Citizen8a30 {
     void* GetTribe(int zero); // 0x00c22f50
+};
+struct Tribe8a30 {
+    Profile8a30* GetSlot0(); // 0x00c8e820
+};
+struct Setting8a30 {
+    Profile8a30* GetAvatarProfile(); // 0x004df420
+};
+Setting8a30* GetSetting9(); // 0x00401090
+struct BuffWriter {
+    void* GetBuffer(); // 0x0093b6c0
+};
+struct ModeView_s00cc_7fa0 {
+    u8 mPad00[0x4c];
+    BuffWriter* m4C; // +0x04c
+};
+struct ModeStrategy_s00cc_7fa0 {
+    static ModeStrategy_s00cc_7fa0* Instance(); // 0x00cd40b0
 };
 struct GlobalUI8aa0 {
     void* FindWindowByID(u32 id); // 0x00e012b0
@@ -59,6 +90,14 @@ struct TribeStrategy {
     void FUN_00cc8aa0(bool show);             // 0x00cc8aa0
     void FUN_00cc8ba0();                      // 0x00cc8ba0
 };
+template <class R>
+inline R V0(void* o, int off) {
+    return ((R(__thiscall*)(void*))(*(void***)o)[off / 4])(o);
+}
+template <class R, class A, class B>
+inline R V2(void* o, int off, A a, B b) {
+    return ((R(__thiscall*)(void*, A, B))(*(void***)o)[off / 4])(o, a, b);
+}
 // ---- items of slice s00cc7fa0 end
 
 // ---- items of slice s00cc8ed0 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -81,6 +120,8 @@ struct Vector3 {
 struct Vector4 {
     float x, y, z, w;
 };
+inline float MinF(float a, float b) { return b > a ? a : b; }
+inline float MaxF(float a, float b) { return a > b ? a : b; }
 struct PosseItem;                               // SP::cSPUIPosseItem (what FindItem returns)
 struct Posse {                                  // SP::cSPUIPosse (UI item container)
     PV(0) PV(1) PV(2) PV(3) PV(4) PV(5) PV(6) PV(7) PV(8) PV(9)
@@ -197,6 +238,16 @@ struct Iface2B8 {                               // object stored at strategy+0x2
     PV(12) PV(13) PV(14)
     virtual void* pv15();                       // +0x3c  animation target handle
 };
+struct cSPUIEventLog {                          // SP::cSPUIEventLog
+    void SetVisibility(int visible);            // 0x00dd8da0
+};
+namespace SP {
+ cSPUIEventLog* EventLog();   // 0x00b3d3e0
+}
+struct CurMgr {                                 // CurMgr
+    char FindLocal(unsigned id);                // 0x00801bb0
+};
+void* FUN_0067cab0();                           // 0x0067cab0
 struct Ornament {                               // SP::cInteractiveOrnament
     uint8_t mPad00[0x34];
     IWinTextSub mSub34;                         // +0x34  embedded sub-object (slot +0xac)
@@ -255,13 +306,13 @@ struct TribeStrategy_s00cc_8ed0 {                          // the UI strategy ob
     void  FUN_00cc91e0(int unused);
     bool  FUN_00cc9360();
     void  FUN_00cc93b0(int visible);
-    void  FUN_00cc9430();
-    void  FUN_00cc9460(TribeObj* obj);
-    void  FUN_00cc9740(IWinText* entity, Vector3 pos, int32_t kind, int8_t show);
-    void  FUN_00cc9640(IWinText* entity, int8_t show);
-    void  FUN_00cc9cd0(int value);
-    void  FUN_00cc9d50(EntityRef* ref);
-    void  FUN_00cc99b0(uint32_t param_2);
+    void  FUN_00cc9430();  // 0x00cc9430 (TribeStrategy::FUN_00cc9430)
+    void  FUN_00cc9460(TribeObj* obj);  // 0x00cc9460 (TribeStrategy::FUN_00cc9460)
+    void  FUN_00cc9740(IWinText* entity, Vector3 pos, int32_t kind, int8_t show);  // 0x00cc9740 (TribeStrategy::FUN_00cc9740)
+    void  FUN_00cc9640(IWinText* entity, int8_t show);  // 0x00cc9640 (TribeStrategy::FUN_00cc9640)
+    void  FUN_00cc9cd0(int value);  // 0x00cc9cd0 (TribeStrategy::FUN_00cc9cd0)
+    void  FUN_00cc9d50(EntityRef* ref);  // 0x00cc9d50 (TribeStrategy::FUN_00cc9d50)
+    void  FUN_00cc99b0(uint32_t param_2);  // 0x00cc99b0 (TribeStrategy::FUN_00cc99b0)
 
     int   FUN_00cc88e0(int arg);                // 0x00cc88e0
     void  FUN_00cc8be0();                       // 0x00cc8be0
@@ -297,8 +348,11 @@ struct WinIface {                               // window handle returned by cSP
     PV(9)
     virtual void pv10(int mode, int value);     // +0x28
 };
+#define G_STR_UI_POSSEITEM ((const char*)0x01476a7c)   // "UI/PosseItem"
 #define G_WIN_ID_A         ((int)0x04c61b50)
 #define G_WIN_ID_B         ((int)0x04c61dd9)
+#define G_TAG_ITEM_OWNER   ((uint32_t)0xee3f516e)      // owner tag queried before building an item
+#define G_TAG_ITEM_STATE   ((int)0x03deb129)           // state tag queried before updating an item
 namespace Simulator {
  struct cGameData; 
 }
@@ -330,6 +384,15 @@ namespace Simulator {
     char FUN_00c8e850();                            // 0x00c8e850
 }; 
 }
+void* FUN_009512c0();                                  // 0x009512c0
+void* FUN_009512d0(int size, int align, const char* name, void* arg);   // 0x009512d0
+struct cSPUIPosseItemTribe {                        // SP::cSPUIPosseItemTribe
+    PosseItem* ctor(void* owner);                   // 0x00e25840  declared only; returns the live item
+};
+struct cSPUIPosseItemTribeBaby {                    // SP::cSPUIPosseItemTribeBaby
+    PosseItem* ctor(void* owner);                   // 0x00e258d0
+};
+void* FUN_00cc8830(EntityRef* ref);                    // 0x00cc8830
 struct CameraCtl_s00cc_8ed0 {                              // camera controller returned by 0x00b3d280
     uint8_t mPad00[0x14];
     uint8_t m14;                                // +0x14  first icon window's state
@@ -392,7 +455,6 @@ void  KillSetiEffects(uint32_t id, void* recorder);   // 0x00435ed0
 
 // ---- items of slice s00cc9e20 begin (TODO(rewrite): local stubs, replace by canonical classes)
 #pragma warning(disable: 4100)
-void* __cdecl FUN_009512c0();                                        // 0x009512c0
 void* __cdecl FUN_009512d0(u32 size, u32 align, const char* what);   // 0x009512d0
 void* __cdecl op_new(u32 size, const char* file, int a, int b, const char* what, int line); // 0xf473a0
 struct CCitizenOps {
@@ -528,7 +590,6 @@ inline void ReleaseOf(void* o) { if (o) ((IObj*)o)->Release(); }
 void* __cdecl FUN_0067dcc0();                                     // MessageServer
 void* __cdecl FUN_0067ddd0();                                     // EffectsManager
 void* __cdecl FUN_00b30d70();                                     // GetGameTerrainCursor
-void* __cdecl FUN_009512d0(int a, int b, const char* n, void* p);
 void* __cdecl FUN_00f473a0(uint32_t size, uint32_t alloc, int a, int b, int c, int d); // operator_new
 void  __cdecl FUN_00f47380(void* p);                              // operator_delete_array
 void* __cdecl FUN_00ac8730(void* p);
@@ -561,6 +622,7 @@ void __cdecl FUN_00720250(Vertex3D* first, Vertex3D* last, Vertex3D* dst); // Co
 void __cdecl FUN_00cc8b50(Vertex3D* d, Vertex3D* f, Vertex3D* l); // CopyBackwardVertex3D
 Vertex3D* __cdecl FUN_00cca1d0(Vertex3D* f, Vertex3D* l, Vertex3D* d); // UninitCopyVertex3D
 void __cdecl FUN_00cca110(void** out, Vertex3D* first, Vertex3D* lastEq, Vertex3D* dst, Vertex3D* last); // FillVertex3D
+void* __cdecl FUN_00ccad80(void* a, void* b, void* c, void* d);   // tree insert (hint)
 struct RBNode {
     RBNode*  mpLeft;    // +0x00
     RBNode*  mpRight;   // +0x04
@@ -658,11 +720,410 @@ struct cTDS {
 };
 // ---- items of slice s00ccaff0 end
 
+// ---- items of slice s00572580 begin (TODO(rewrite): local stubs, replace by canonical classes)
+#pragma intrinsic(sqrt)
+struct IRefCount {
+    virtual int AddRef();     // +0x00
+    virtual int Release();    // +0x04
+};
+struct IRefCountPtr {
+    IRefCount* mp;
+    IRefCountPtr(IRefCount* p);
+};
+namespace EA {
+template <typename T>
+class RectT_s0057_2580 { public:
+    T mLeft, mTop, mRight, mBottom;
+    RectT_s0057_2580& operator=(const RectT_s0057_2580& r);
+};
+}
+namespace EA {
+template class RectT_s0057_2580<float>;
+}
+// ---- items of slice s00572580 end
+
+// ---- items of slice s00ccc190 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C" void  operator_delete(void* p);            // 0x00f47360
+extern "C" void  operator_delete_array(void* p);      // 0x00f47380
+extern "C" void* g_SimSingleton;      // 0x0169b054  Simulator::SimSingleton*
+extern "C" void* g_TribeUIInstance;   // 0x0169b41c  global tribe-UI singleton
+extern "C" float g_xfPosX;            // 0x0169b0f0
+extern "C" float g_xfPosY;            // 0x0169b0f4
+extern "C" float g_xfPosZ;            // 0x0169b0f8
+extern "C" float g_animScale;         // 0x013ec4d0
+extern "C" char  g_simName[];         // 0x0145f924  "Simulator/SimSingleton"
+extern "C" char  g_simTag[];          // 0x013f09b4  "Simulator"
+extern "C" char  g_streamerTag[];     // 0x01476b30  "Simulator/cSelectionEffectStreamer"
+extern "C" float g_iconTint;          // 0x013eb1bc
+extern "C" float g_iconChanScale;     // 0x013f2100  255.0f
+extern "C" void* g_vtblDispBase;      // 0x01476b28  vtbl_Simulator::cTribeDisplayStrategy
+extern "C" void* g_vtblMix00;         // 0x013eb394
+extern "C" void* g_vtblMix04;         // 0x014426a0
+extern "C" void* g_vtblMix08;         // 0x013ec458
+extern "C" void* g_vtblB20;           // 0x01476b20
+extern "C" void* g_vtblB04;           // 0x01476b04
+extern "C" void* g_vtblAf4;           // 0x01476af4
+extern "C" void* g_vtblModelSet;      // 0x0140b6f4  cModelInstanceSet base vtable
+extern "C" void* g_vtblMixDisp;       // 0x013eb394  base dtor vtable 1
+extern "C" void* g_vtblMixRes;        // 0x014426a0  base dtor vtable 2
+extern "C" void* g_vtblMixContent;    // 0x013ec458  base dtor vtable 3
+typedef signed   int   i32;
+struct Vec3 { float x, y, z; };
+#define VTSLOT(obj, off) ((*(void***)(obj))[(off) / 4])
+typedef char     (__thiscall *Fn_c_v)(void*);
+typedef void     (__thiscall *Fn_void_v)(void*);
+typedef void     (__thiscall *Fn_void_i)(void*, i32);
+typedef void     (__thiscall *Fn_void_p)(void*, void*);
+typedef void*    (__thiscall *Fn_p_v)(void*);
+typedef float    (__thiscall *Fn_f_v)(void*);
+typedef float*   (__thiscall *Fn_fp_v)(void*);
+typedef Vec3*    (__thiscall *Fn_v3_v)(void*);
+static inline void* At(void* p, int o)        { return (char*)p + o; }
+static inline u32   Ld32(const void* p, int o) { return *(const u32*)((const char*)p + o); }
+static inline u8    Ld8 (const void* p, int o) { return *(const u8*)((const char*)p + o); }
+void* op_new(u32 size, const char* name, int a, int b, int c, int d);  // 0x00f473a0
+void  TimerOwner_Ctor(void* self);                                     // 0x00af14b0
+void  TimerOwner_Dtor(void* self);                                     // 0x00af1430
+void  EaRemoveHandler(void* a, void* b, void* c, void* d, void* e);    // EA::Messaging::RemoveHandler
+void  FUN_00b759b0(void* p, u32 count);                                // 0x00b759b0
+void* FUN_00b75910(void* container, void* pair);                       // 0x00b75910
+void  FUN_00eb6280(void* p);                                           // 0x00eb6280
+void* FUN_0067de40();                                                  // 0x0067de40
+void* FUN_00ce6610(void* self);                                        // 0x00ce6610
+void* FUN_00ce97b0(void* self);                                        // 0x00ce97b0 cSelectionEffectStreamer
+void* FUN_00b3d3e0(u32 a, u32 b);                                      // 0x00b3d3e0 SP::EventLog
+void  FUN_00dd5a10(void* self, u32 a);                                 // 0x00dd5a10
+void* FUN_00cc5a70(void* self);                                        // 0x00cc5a70 SimSingleton ctor
+void* FUN_006f3d00(void* self);                                        // 0x006f3d00 cModelInstanceSet ctor
+void  FUN_00921260(void* pool, void* arena, u32 a, u32 b, u32 c, u32 d); // 0x00921260 fixed_pool_base::init
+u32   FUN_00921340(u32 size);                                          // 0x00921340
+u32   FUN_009213c0(void* p);                                           // 0x009213c0
+void  FUN_00ccac60(u32 a1, u32 a2, void* a3, void* a4, u32 a5, void* a6, void* pool); // 0x00ccac60
+void  FUN_00daee00(void* self, u32 v);                                 // 0x00daee00
+void* FUN_00ccad80(u32 header, void* end, void* value, u8 flags);     // 0x00ccad80
+void* FUN_00ccc120(void* self, void* node, void* value);               // 0x00ccc120
+void* FUN_00ccc070(void* self, void* value);                           // 0x00ccc070
+void* FUN_00e5c780_s00cc_c190(void* self, void* out, void* key);                  // 0x00e5c780 rbtree::find
+void* FUN_00572660(void* self, void* obj);                             // 0x00572660 AutoRefCount ctor
+void  FUN_00e0f9c0(void* minimap, void* citizen, i32 a, i32 b);        // 0x00e0f9c0 RemoveIcon
+void  FUN_00e10580(void* minimap, void* citizen, void* icon, i32 a, i32 b); // 0x00e10580 AddIcon
+void* GetTribe(void* citizen);                                         // 0x00c22f50
+u32   FUN_00c22dc0(void* citizen);                                     // 0x00c22dc0
+char  FUN_00c0b770(void* creature);                                    // 0x00c0b770
+char  FUN_00c0b760(void* creature);                                    // 0x00c0b760
+void* FUN_00c0ee60(void* creature);                                    // 0x00c0ee60
+float FUN_00c0c1b0(void* creature);                                    // 0x00c0c1b0
+float FUN_00c0b9c0(void* creature, i32 a, i32 b);                      // 0x00c0b9c0
+float FUN_00bfc490(void* contact, i32 a, i32 b);                       // 0x00bfc490
+void* FUN_00cc8ed0(void* posseSet, void* citizen);                     // 0x00cc8ed0
+u32   FUN_00cc88e0(void* posseSet, u32 key);                           // 0x00cc88e0
+void* FUN_00e24c90(void* child, void* citizen);                        // 0x00e24c90 FindItem
+void  FUN_00ccb0f0(void* self, void* citizen);                         // 0x00ccb0f0
+void  FUN_00cc9460(void* self, void* tribe);                           // 0x00cc9460 MakeTribeIcon
+void  FUN_00cca880(void* self, void* citizen, u32 a);                  // 0x00cca880
+u32   FUN_00cca3d0(void* self, void* citizen);                         // 0x00cca3d0
+void  FUN_00cca5b0(void* self, void* key, u32 activity);               // 0x00cca5b0 SetPosseActivity
+void* FUN_00ccbd10(void* self, float a, u8 b, float c, void* d, void* e); // 0x00ccbd10
+void* FUN_00cc5100(void* self, void* citizen);                         // 0x00cc5100
+void* FUN_00bca2c0(void* self);                                        // 0x00bca2c0 FirstPending
+void* FUN_00b3d230();                                                  // 0x00b3d230
+char  FUN_00b5ca60(void* self);                                        // 0x00b5ca60
+void  FUN_00b69990(void* self);                                        // 0x00b69990
+void* FUN_00b199a0(void* self);                                        // 0x00b199a0
+void* FUN_00ad7360(void* self);                                        // 0x00ad7360
+void* FUN_00d9f530(void* obj);                                         // 0x00d9f530
+struct ModelSet {                          // SP::cModelInstanceSet (stride 0x60)
+    void* m_vtable;                        // +0x00
+    u8    m_pad04[0x0c - 0x04];
+    void* m_bufA;                          // +0x0c  sp_vector buffer ([-4] = refcount)
+    u8    m_pad10[0x20 - 0x10];
+    void* m_bufB;                          // +0x20
+    u8    m_pad24[0x34 - 0x24];
+    void* m_slot34;                        // +0x34  object released through its vtable slot 1
+    u8    m_pad38[0x60 - 0x38];
+
+    void* Ctor() { return FUN_006f3d00(this); }   // 0x006f3d00
+};
+struct OrnamentPool {                      // strategy +0x2c0, 0x218 bytes
+    u8 raw[0x218];
+
+    void* FUN_00cccb00(u32 arg1, u32 arg2);    // 0x00cccb00
+};
+struct CitizenTree {                       // strategy +0x94  eastl::rbtree<...>
+    u32   mCount;                          // +0x00  (= strategy +0x94)
+    void* mAnchor;                         // +0x04  (= strategy +0x98)  end sentinel
+    void* mEnd;                            // +0x08  (= strategy +0x9c)
+    void* mP0c;                            // +0x0c  (= strategy +0xa0)
+    u8    mB10;                            // +0x10  (= strategy +0xa4)
+    u8    mPad11[3];
+    u32   mFlags;                          // +0x14  (= strategy +0xa8)  (read as a byte)
+
+    void* DoInsertValue(void* value);      // 0x00cccbd0
+};
+struct IconDef_s00cc_c190 {                           // 0x24-byte icon description handed to AddIcon
+    u32   mColor;                          // +0x00
+    Vec3  mPos;                            // +0x04
+    u32   mKind;                           // +0x10
+    void* mRef;                            // +0x14  AutoRefCount<cSPCreatureCitizen>
+    float mScale;                          // +0x18
+    u32   mPad1c;                          // +0x1c
+    u32   mPad20;                          // +0x20
+};
+struct cTribeDisplayStrategy_s00cc_c190 {
+    void*  m_vtable;                       // +0x000
+    u8     m_pad004[0x038 - 0x004];
+    void*  m_vt38;                         // +0x038
+    void*  m_vt3c;                         // +0x03c
+    void*  m_vt40;                         // +0x040
+    void*  m_p44;                          // +0x044
+    void*  m_p48;                          // +0x048
+    void*  m_ui;                           // +0x04c
+    void*  m_mode;                         // +0x050
+    u8     m_b54;                          // +0x054
+    u8     m_pad055[0x058 - 0x055];
+    void*  m_server;                       // +0x058
+    void*  m_handler;                      // +0x05c
+    void*  m_idTable;                      // +0x060
+    u32    m_idCount;                      // +0x064
+    u32    m_p68;                          // +0x068
+    void*  m_p6c;                          // +0x06c
+    void*  m_minimap;                      // +0x070
+    void*  m_layout;                       // +0x074
+    void*  m_posse;                        // +0x078
+    u32    m_ownerId;                      // +0x07c
+    u8     m_pad080[0x084 - 0x080];
+    u8     m_b84;                          // +0x084
+    u8     m_b85;                          // +0x085
+    u8     m_pad086[0x088 - 0x086];
+    void*  m_p88;                          // +0x088
+    void*  m_p8c;                          // +0x08c
+    void*  m_p90;                          // +0x090
+    CitizenTree m_tree;                    // +0x094
+    void*  m_ornament;                     // +0x0b0
+    void*  m_swatchMgr;                    // +0x0b4
+    ModelSet m_sets[2];                    // +0x0b8
+    u32    m_ornInit[2 * 0xa0 / 4];        // +0x178  two 0xA0-byte tables, all -1
+    void*  m_swatch;                       // +0x2b8
+    void*  m_swatchWin;                    // +0x2bc
+    OrnamentPool m_pool;                   // +0x2c0
+    void*  m_p4d8;                         // +0x4d8
+    void*  m_p4dc;                         // +0x4dc
+    void*  m_p4e0;                         // +0x4e0
+    u8     m_pad4e4[0x4f0 - 0x4e4];
+    void*  m_helperA;                      // +0x4f0
+    void*  m_helperB;                      // +0x4f4
+
+    void  NoteTribeMemberAdded(void* citizen);   // 0x00ccc400
+    void  Update();                              // 0x00ccc640
+
+    cTribeDisplayStrategy_s00cc_c190(u32 ownerId);          // 0x00cccc50
+    ~cTribeDisplayStrategy_s00cc_c190();                    // 0x00ccc190
+};
+// ---- items of slice s00ccc190 end
+
+// ---- items of slice s00ccd050 begin (TODO(rewrite): local stubs, replace by canonical classes)
+void* NounManager_s00cc_d050();                     // 0x00b3d300
+void* TribeModeInstance();               // 0x00cd40b0  SP::cTribeModeStrategy::Instance
+void* FindWindowByID(u32 id);            // 0x00e012b0  cSPUIGlobalUI::FindWindowByID
+void* FUN_00401020(void* swatch);        // 0x00401020  SwatchManager::GetOrCreate
+struct GlobalUI_s00cc_d050 { void* FindWindowByID(u32 id); };   // 0x00e012b0 thiscall
+struct Svc28a80 { void Call(); };                    // 0x00e28a80
+struct Svc8ba0  { void Call(); };                    // 0x00cc8ba0
+struct SvcE31130{ void Call(); };                    // 0x00e31130
+struct SvcEB6280{ void Call(void* node); };          // 0x00eb6280
+struct SvcB225d0{ void Call(void* noun); };          // 0x00b225d0
+struct Svc81ad0 { void Shutdown(u32 flag); };        // 0x00811ad0
+struct Svc5f0a60{ void RemoveContent(); };           // 0x005f0a60
+struct SvcReleaseIf { void Call(); };                // 0x006f33d0
+struct SvcAssign  { void* Call(const void* src); };  // 0x00537dc0 cSPTransformOps::Assign
+struct Svc759b0   { void Free(void* buckets, u32 count); };  // 0x00b759b0
+struct Svc8d80    { void Call(); };                  // 0x00ce8d80
+void  EA_RemoveHandler(void* server, void* handler, void* table, u32 count, u32 zero);  // 0x00571db0
+struct RefObj {                                  // intrusive refcount object, slot 1 release
+    virtual void Destroy(int flag);              // +0x00
+    virtual void Unbind();                       // +0x04
+    i32 mRef;                                    // +0x04
+};
+template <class T> inline void DecRef(T* p, int mode)
+{
+    i32 r = --p->mRef;
+    if (r == 0) {
+        p->mRef = 1;
+        p->Destroy(mode);
+    }
+}
+struct UiWindow {                                // window handle (unknown vtable)
+    char pad[0x108];
+    void v108(void* arg);                        // width-only dispatch below
+};
+struct Swatch {                                  // swatch object at +0x2b8
+    virtual void Destroy(int flag);              // +0x00
+    virtual void Unbind();                       // +0x04
+virtual void v008();
+virtual void v00c();
+virtual void v010();
+virtual void v014();
+virtual void v018();
+    virtual void v01c();                         // +0x1c  called before the manager drop
+    i32 mRef;                                    // +0x04
+};
+struct c70Obj {
+    virtual void v000();
+    virtual void v004();                         // +0x04  release
+    void FUN_00e0c490(float* b, void* a);        // 0x00e0c490
+};
+struct c50Obj {
+    virtual void v000();
+    virtual void v004();                         // +0x04  release
+    void FUN_00e313c0(float f);                  // 0x00e313c0
+};
+struct c74Obj {
+    virtual void v000();
+    virtual void v004();
+    virtual void v008();                         // +0x08  release
+};
+struct c78Obj {
+    virtual void v000();
+    void FUN_00ccb2c0(float f);                  // 0x00ccb2c0
+};
+struct cProgressBar {
+    virtual void Destroy(int flag);              // +0x00
+    virtual void v004();
+    void Update(float progress, void* amount);   // 0x00e29da0
+    i32 mRef;                                    // +0x04
+};
+struct XVec {                                    // model set transform vector at +0xc
+    u8* mpBegin;                                 // +0x0c
+    u8* mpEnd;                                   // +0x10
+    u8* mpCapacity;                              // +0x14
+};
+struct DisplayBlock {                            // cModelInstanceSet, stride 0x60
+    u8   pad00[0x0c];
+    XVec mVec;                                   // +0x0c
+    u8   pad18[0x60 - 0x18];
+};
+struct TreeNode {                                // open-hash node of the +0x2c0 container
+    u8   pad00[0x08];
+    RefObj* mpValue;                             // +0x08
+    u8   pad0c[0x04];
+    TreeNode* mpNext;                            // +0x10
+};
+struct TreeHeader {                              // eastl rbtree header at +0x94
+    u32   mCount;                                // +0x00
+    void* mpAnchor;                              // +0x04
+    void* mpEnd;                                 // +0x08
+    void* mpNode;                                // +0x0c
+    u8    mB10;                                  // +0x10
+    u8    pad11[3];
+    u32   mFlags;                                // +0x14
+};
+struct Pool {                                    // ornament open-hash container at +0x2c0
+    u8       pad00[0x04];
+    TreeNode** mpBuckets;                        // +0x04
+    u32      mBucketCount;                       // +0x08
+    u32      mSize;                              // +0x0c
+    u8       pad10[0x218 - 0x10];
+};
+struct cTribeDisplayStrategy_s00cc_d050 {
+    void*   m_vtable;                            // +0x000
+    u8      pad004[0x038 - 0x004];
+    void*   m_vt38;                              // +0x038
+    void*   m_vt3c;                              // +0x03c
+    void*   m_vt40;                              // +0x040
+    u8      pad044[0x04c - 0x044];
+    void*   m_ui;                                // +0x04c
+    c50Obj* m50;                                 // +0x050
+    u8      m_b54;                               // +0x054
+    u8      pad055[0x058 - 0x055];
+    void*   m_server;                            // +0x058
+    void*   m_handler;                           // +0x05c
+    void*   m_idTable;                           // +0x060
+    u32     m_idCount;                           // +0x064
+    u32     m_p68;                               // +0x068
+    u8      pad06c[4];
+    c70Obj* m70;                                 // +0x070
+    c74Obj* m74;                                 // +0x074
+    c78Obj* m78;                                 // +0x078
+    u8      pad07c[0x094 - 0x07c];
+    TreeHeader m_tree;                           // +0x094
+    u8      pad0ac[0x0b0 - 0x0ac];
+    cProgressBar* mb0;                           // +0x0b0
+    u8      pad0b4[4];
+    DisplayBlock m_blocks[2];                    // +0x0b8  stride 0x60
+    // +0x178: two 0x60-stride transform-vector blocks (vector at block+4)
+    u8      m_vecs[2 * 0xa0];                    // +0x178
+    Swatch* m_swatch;                            // +0x2b8
+    RefObj* m_swatchWin;                         // +0x2bc
+    Pool    m_pool;                              // +0x2c0
+    u8      pad4d8[0x4dc - 0x4d8];
+    void*   m_p4dc;                              // +0x4dc
+    u8      pad4e0[0x4f0 - 0x4e0];
+    void*   m_helperA;                           // +0x4f0
+    void*   m_helperB;                           // +0x4f4
+
+    void Deactivate();                           // 0x00ccd050
+    void UpdateTargetedTreeEffects();            // 0x00ccd3a0
+    void MakeTribeIcons();                       // 0x00ccd8a0
+    void DrawLayer(void* p2, unsigned p3, unsigned p4);   // 0x00ccdc30
+    void FUN_00ccc640();                         // 0x00ccc640
+    void FUN_00ccd3a0();                         // 0x00ccd3a0
+    void OnWinProcAdd(void* p2);                 // 0x010829f0
+};
+// ---- items of slice s00ccd050 end
+
+// @ 0x00572600
+namespace EA {
+template <typename T> RectT_s0057_2580<T>& RectT_s0057_2580<T>::operator=(const RectT_s0057_2580<T>& r)
+{
+    mLeft = r.mLeft;
+    mTop = r.mTop;
+    mRight = r.mRight;
+    mBottom = r.mBottom;
+    return *this;
+}
+}  // namespace EA
+
+// @ 0x00572660
+IRefCountPtr::IRefCountPtr(IRefCount* p)
+: mp(p)
+{
+    if (mp)
+        mp->AddRef();
+}
+
+// @ 0x00cc87f0
+bool CameraCtl::FUN_00cc87f0()
+{
+    return m14 || m15;
+}
 
 // @ 0x00cc8810
 bool CameraCtl::FUN_00cc8810()
 {
     return m17 || m16;
+}
+
+// @ 0x00cc8830
+void* FUN_00cc8830(EntityRef_s00cc_7fa0* ref)
+{
+    void* result = (void*)0xb;
+    if (ref) {
+        switch (ref->FUN_00c22dc0()) {
+        case 0: result = (void*)10; break;
+        case 1: result = (void*)3; break;
+        case 2: result = (void*)2; break;
+        case 3: result = (void*)4; break;
+        case 4: result = (void*)5; break;
+        case 5: result = (void*)6; break;
+        case 6: result = (void*)7; break;
+        case 7: result = (void*)8; break;
+        case 8: result = (void*)9; break;
+        case 9: result = (void*)1; break;
+        case 11: result = (void*)0; break;
+        default: break;
+        }
+    }
+    return result;
 }
 
 // @ 0x00cc88e0
@@ -681,6 +1142,301 @@ u32 TribeStrategy::FUN_00cc88e0(u32 key)
     case 8: return 3;
     default: return 4;
     }
+}
+
+// @ 0x00cc8940
+void TribeStrategy::FUN_00cc8940(bool add)
+{
+    ModelInstanceSet* p = mInst;
+    if (add) {
+        for (int n = 2; n != 0; ++p, --n)
+            p->AddToRenderer(FUN_0067de00());
+    } else {
+        for (int n = 2; n != 0; ++p, --n)
+            p->ReleaseIf();
+    }
+}
+
+// @ 0x00cc8990
+void* FUN_00cc8990()
+{
+    ModeStrategy_s00cc_7fa0* inst = ModeStrategy_s00cc_7fa0::Instance();
+    ModeView_s00cc_7fa0* view = (ModeView_s00cc_7fa0*)V0<void*>(inst, 0x6c);
+    return view->m4C->GetBuffer();
+}
+
+// @ 0x00cc89f0
+u32 TribeStrategy::FUN_00cc89f0(bool first)
+{
+    u32 best = 0xffffffff;
+    int bestValue = 0x7fffffff;
+    u32* p = first ? mArray178 : mArray218;
+    for (u32 i = 0; i < 0x28; ++i) {
+        int v = (int)p[i];
+        if (v <= 0)
+            return i;
+        if (v < bestValue) {
+            bestValue = v;
+            best = i;
+        }
+    }
+    return best;
+}
+
+// @ 0x00cc8a30
+void TribeStrategy::FUN_00cc8a30(void* pose, Citizen8a30* citizen)
+{
+    Tribe8a30* tribe = (Tribe8a30*)citizen->GetTribe(0);
+    Profile8a30* profile = tribe->GetSlot0();
+    if (!profile)
+        profile = GetSetting9()->GetAvatarProfile();
+    mVec.x = profile->m504;
+    mVec.y = profile->m508;
+    mVec.z = profile->m50c;
+    mVec.y = 0x2f7d0004;
+    V2<void, Vec3u*, int>(pose, 0x90, &mVec, 0);
+}
+
+// @ 0x00cc8aa0
+void TribeStrategy::FUN_00cc8aa0(bool show)
+{
+    if (!m4C)
+        return;
+    void* w = m4C->FindWindowByID(0x6454b47);
+    if (w) V2<void, int, bool>(w, 0x7c, 1, show);
+    w = m4C->FindWindowByID(0x652a628);
+    if (w) V2<void, int, bool>(w, 0x7c, 1, show);
+    w = m4C->FindWindowByID(0x44827b8);
+    if (w) V2<void, int, bool>(w, 0x7c, 1, !show);
+}
+
+// @ 0x00cc8ba0
+void TribeStrategy::FUN_00cc8ba0()
+{
+    void** p = mChild;
+    for (int i = 0; i < 6; ++i, ++p) {
+        if (*p) {
+            V0<void>(*p, 0x88);
+            if (*p) {
+                void* old = *p;
+                *p = 0;
+                V0<void>(old, 0x04);
+            }
+        }
+    }
+}
+
+// @ 0x00cc8ed0
+void TribeStrategy_s00cc_8ed0::FUN_00cc8ed0(EntityRef* ref)
+{
+    PosseItem* item = 0;
+    PosseItem* created;
+    if (ref->FUN_00c0b770() != 0) {
+        created = (PosseItem*)FUN_009512d0(0x150, 4, G_STR_UI_POSSEITEM, FUN_009512c0());
+        if (created != 0) {
+            created = (ref != 0)
+                ? ((cSPUIPosseItemTribe*)created)->ctor(ref->pv3(G_TAG_ITEM_OWNER))
+                : ((cSPUIPosseItemTribe*)created)->ctor(0);
+        }
+    } else {
+        created = (PosseItem*)FUN_009512d0(0x150, 4, G_STR_UI_POSSEITEM, FUN_009512c0());
+        if (created != 0) {
+            created = ((cSPUIPosseItemTribeBaby*)created)->ctor(
+                ref != 0 ? ref->pv3(G_TAG_ITEM_OWNER) : 0);
+        }
+    }
+    if (created != 0) {
+        created->pv0();
+        item = created;
+    }
+
+    item->pv34(FUN_00cc8830(ref));
+
+    int slot;
+    if (ref->FUN_00c0b770() != 0) {
+        slot = FUN_00cc88e0(ref->FUN_00c22dc0());
+    } else {
+        slot = 5;
+    }
+    mChild[slot]->pv41(item);
+
+    PosseItem* state = item->pv3(G_TAG_ITEM_STATE);
+    if (state != 0) {
+        int value;
+        Simulator::cGameData* tribe = SP::NounManager()->GetPlayerTribe();
+        if (tribe->FUN_00c8e870() != 0) {
+            value = (tribe->FUN_00c8e850() == 0) ? 1 : 0;
+        } else {
+            value = tribe->FUN_00c8e850() ? 2 : -1;
+        }
+        state->FUN_00e235e0(value);
+    }
+
+    FUN_00cc8be0();
+    item->pv1();
+}
+
+// @ 0x00cc9040
+void TribeStrategy_s00cc_8ed0::FUN_00cc9040(EntityRef* ref)
+{
+    int slot;
+    if (ref->FUN_00c0b770() != 0) {
+        slot = FUN_00cc88e0(ref->FUN_00c22dc0());
+    } else {
+        slot = 5;
+    }
+    void* item = mChild[slot]->FindItem(ref);
+    mChild[slot]->pv42(item, 1);
+    FUN_00cc8be0();
+}
+
+// @ 0x00cc90a0
+void* TribeStrategy_s00cc_8ed0::FUN_00cc90a0(EntityRef* ref)
+{
+    int slot;
+    if (ref->FUN_00c0b770() != 0) {
+        slot = FUN_00cc88e0(ref->FUN_00c22dc0());
+    } else {
+        slot = 5;
+    }
+    return mChild[slot]->FindItem(ref);
+}
+
+// @ 0x00cc90f0
+void TribeStrategy_s00cc_8ed0::FUN_00cc90f0(EntityRef* ref, int index)
+{
+    int currentSlot;
+    if (ref->FUN_00c0b770() != 0) {
+        currentSlot = FUN_00cc88e0(index);
+    } else {
+        currentSlot = 5;
+    }
+
+    int wantedSlot;
+    if (ref->FUN_00c0b770() != 0) {
+        wantedSlot = FUN_00cc88e0(ref->FUN_00c22dc0());
+    } else {
+        wantedSlot = 5;
+    }
+
+    if (currentSlot == wantedSlot) {
+        return;
+    }
+
+    PosseItem* item = (PosseItem*)mChild[currentSlot]->FindItem(ref);
+    bool wasTwo = (item->pv47() == 2);
+    mChild[currentSlot]->pv42(item, 1);
+    FUN_00cc8ed0(ref);
+    if (wasTwo) {
+        PosseItem* moved = (PosseItem*)mChild[wantedSlot]->FindItem(ref);
+        moved->pv46(2);
+    }
+}
+
+// @ 0x00cc91b0
+void TribeStrategy_s00cc_8ed0::FUN_00cc91b0(int value)
+{
+    for (int i = 0; i < 6; i++) {
+        Posse* child = mChild[i];
+        if (child != 0) {
+            child->pv48(value);
+        }
+    }
+}
+
+// @ 0x00cc91e0
+void TribeStrategy_s00cc_8ed0::FUN_00cc91e0(int unused)
+{
+    int systemTotal = 0;
+    int rangeTotal = 0;
+    for (int i = 0; i < 6; i++) {
+        if (i != 5 && mChild[i] != 0) {
+            systemTotal += mChild[i]->GetSystem();
+            rangeTotal += mChild[i]->mVec.Size();
+        }
+    }
+    if (systemTotal == rangeTotal) {
+        for (int i = 0; i < 6; i++) {
+            Posse* child = mChild[i];
+            if (child != 0) {
+                child->FUN_00e21960();
+            }
+        }
+    } else {
+        for (int i = 0; i < 6; i++) {
+            Posse* child = mChild[i];
+            if (child != 0) {
+                child->FUN_00e21980();
+            }
+        }
+    }
+}
+
+// @ 0x00cc9270
+void TribeStrategy_s00cc_8ed0::FUN_00cc9270(Vector4* out)
+{
+    bool seeded = false;
+    for (int i = 0; i < 6; i++) {
+        Posse* child = mChild[i];
+        if (child != 0 && child->mVec.Size() > 0) {
+            if (seeded) {
+                Vector4 bounds;
+                Vector4* other = child->pv39(&bounds);
+                out->x = MinF(out->x, other->x);
+                out->y = MinF(out->y, other->y);
+                out->z = MaxF(out->z, other->z);
+                out->w = MaxF(out->w, other->w);
+            } else {
+                Vector4 bounds;
+                Vector4* other = child->pv39(&bounds);
+                out->x = other->x;
+                seeded = true;
+                out->y = other->y;
+                out->z = other->z;
+                out->w = other->w;
+            }
+        }
+    }
+}
+
+// @ 0x00cc9360
+bool TribeStrategy_s00cc_8ed0::FUN_00cc9360()
+{
+    for (int i = 0; i < 6; i++) {
+        if (i != 5 && mChild[i] != 0) {
+            int count = (mChild[i]->mVec.mEnd - mChild[i]->mVec.mBegin) >> 3;
+            if (mChild[i]->GetSystem() < (uint32_t)count) {
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
+// @ 0x00cc93b0
+void TribeStrategy_s00cc_8ed0::FUN_00cc93b0(int visible)
+{
+    if (m4C != 0) {
+        m4C->SetVisibility(visible);
+    }
+    if (m78 != 0) {
+        m78->FUN_00cc91b0(visible);
+    }
+    Gfx70* gfx = m70;
+    if (gfx != 0) {
+        gfx->mSub04.pv31(1, visible);
+    }
+    Iface2B8* extra = m2B8;
+    if (extra != 0) {
+        extra->pv11(visible);
+    }
+    if ((char)visible == 0) {
+        CurMgr* mgr = (CurMgr*)FUN_0067cab0();
+        if (mgr != 0) {
+            mgr->FindLocal(0x1002);
+        }
+    }
+    SP::EventLog()->SetVisibility(visible);
 }
 
 // @ 0x00cc9430
@@ -1083,6 +1839,24 @@ void cTribeDisplayStrategy::FUN_00cc9e20(void* citizen)
     void* item = POSSE(pose)->FUN_00e24c90(citizen);
     if (citizen != 0 && item != 0) {
         (*(void(__thiscall**)(void*, u32, float, int, int))((char*)vtbl(item) + 0x80))(item, 0x3dea7f0, 0.0f, 1, 1);
+    }
+}
+
+// @ 0x00cca000
+void FUN_00cca000_impl(void* self, void* a, float f)
+{
+    u8* p = (u8*)self;
+    void* ps = *(void**)((char*)p + 0x78);
+    u32 kind;
+    if (CIT(a)->FUN_00c0b770() != 0) {
+        kind = (u32)POSSE(ps)->FUN_00cc88e0(CIT(a)->FUN_00c22dc0());
+    } else {
+        kind = 5;
+    }
+    void* pose = *(void**)((char*)ps + 8 + kind * 4);
+    void* item = POSSE(pose)->FUN_00e24c90(a);
+    if (a != 0 && item != 0) {
+        (*(void(__thiscall**)(void*, u32, float, int, int))((char*)vtbl(item) + 0x80))(item, 0x3dea7f0, f, 1, 1);
     }
 }
 
@@ -2154,3 +2928,755 @@ uint8_t* EffectTree::FindOrInsert(uint32_t* key)
     return (uint8_t*)(uintptr_t)key + 0x14;
 }
 
+// @ 0x00ccc120
+uint8_t* EffectTree::InsertHint2(RBNode* hint, uint32_t* val)
+{
+    RBNode* end = (RBNode*)mpEnd04;
+    uint8_t* r;
+    if (hint == end || val[1] > ((uint32_t*)hint)[1] ||
+        (val[1] == ((uint32_t*)hint)[1] && val[0] >= ((uint32_t*)hint)[0]))
+        r = (uint8_t*)FUN_00ccad80(hint, end, val, (void*)(uint32_t)mFlag14);
+    else
+        r = (uint8_t*)FUN_00ccad80(mpNode00, hint, val, (void*)(uint32_t)mFlag14);
+    if ((RBNode*)r == end ||
+        ((uint32_t*)val)[1] < ((uint32_t*)r)[1] ||
+        (((uint32_t*)val)[1] == ((uint32_t*)r)[1] && ((uint32_t*)val)[0] < ((uint32_t*)r)[0]))
+        r = (uint8_t*)((Vec3D*)this)->Insert((Vertex3D*)r, (Vertex3D*)val);
+    return r;
+}
+
+// @ 0x00ccc190
+cTribeDisplayStrategy_s00cc_c190::~cTribeDisplayStrategy_s00cc_c190()
+{
+    // Reset the derived vtables.
+    m_vtable = g_vtblDispBase;
+    m_vt38   = g_vtblB20;
+    m_vt3c   = g_vtblB04;
+    m_vt40   = g_vtblAf4;
+
+    // The mode-strategy object tears itself down first (its vtable slot 3 takes 0).
+    if (m_swatchMgr != 0)
+        ((Fn_void_i)VTSLOT(m_swatchMgr, 0x0c))(m_swatchMgr, 0);
+
+    // Unregister the global tribe-UI singleton from the messaging server.
+    {
+        void* mgr = FUN_0067de40();
+        mgr = ((Fn_p_v)VTSLOT(mgr, 0x20))(mgr);
+        ((Fn_void_p)VTSLOT(mgr, 0x20))(mgr, g_TribeUIInstance);
+        ((Fn_void_v)VTSLOT(g_TribeUIInstance, 0x08))(g_TribeUIInstance);
+        g_TribeUIInstance = 0;
+    }
+
+    // The two selection-effect streamers drop their references.
+    if (m_helperA != 0)
+        ((Fn_void_i)VTSLOT(m_helperA, 0x04))(m_helperA, 1);
+    if (m_helperB != 0)
+        ((Fn_void_i)VTSLOT(m_helperB, 0x04))(m_helperB, 1);
+
+    // +0x4d8 owns a plain heap array.
+    if (m_p4d8 != 0)
+        operator_delete(m_p4d8);
+
+    // The ornament pool releases its backing store, then recycles the free-list node.
+    FUN_00b759b0(*(void**)(m_pool.raw + 0x04), *(u32*)(m_pool.raw + 0x08));
+    {
+        void* nodes = *(void**)(m_pool.raw + 0x04);
+        *(u32*)(m_pool.raw + 0x0c) = 0;
+        if (*(u32*)(m_pool.raw + 0x08) > 1 && nodes != *(void**)(m_pool.raw + 0x30)) {
+            if (nodes < *(void**)(m_pool.raw + 0x24) ||
+                *(void**)(m_pool.raw + 0x28) <= nodes)
+                operator_delete(nodes);
+            else {
+                *(void**)nodes = *(void**)(m_pool.raw + 0x1c);
+                *(void**)(m_pool.raw + 0x1c) = nodes;
+            }
+        }
+    }
+
+    // The swatch window and the swatch object.
+    if (m_swatchWin != 0)
+        ((Fn_void_v)VTSLOT(m_swatchWin, 0x04))(m_swatchWin);
+    if (m_swatch != 0)
+        ((Fn_void_v)VTSLOT(m_swatch, 0x04))(m_swatch);
+
+    // The two cModelInstanceSets: reset the base vtable and drop their buffers.
+    for (int i = 1; i >= 0; --i) {
+        ModelSet* set = &m_sets[i];
+        set->m_vtable = g_vtblModelSet;
+        if (set->m_slot34 != 0)
+            ((Fn_void_v)VTSLOT(set->m_slot34, 0x04))(set->m_slot34);
+        if (set->m_bufB != 0 && *(i32*)((char*)set->m_bufB - 4) != 0)
+            operator_delete_array(set->m_bufB);
+        if (set->m_bufA != 0 && *(i32*)((char*)set->m_bufA - 4) != 0)
+            operator_delete_array(set->m_bufA);
+    }
+
+    if (m_swatchMgr != 0)
+        ((Fn_void_v)VTSLOT(m_swatchMgr, 0x04))(m_swatchMgr);
+
+    // The ornament at +0xb0 is an intrusive ref-counted object.
+    {
+        void* p = m_ornament;
+        if (p != 0) {
+            i32 n = (i32)((*(u32*)((char*)p + 4)) - 1);
+            *(u32*)((char*)p + 4) = (u32)n;
+            if (n == 0) {
+                *(u32*)((char*)p + 4) = 1;
+                ((Fn_void_i)VTSLOT(p, 0x00))(p, 1);
+            }
+        }
+    }
+
+    FUN_00eb6280(m_tree.mP0c);
+
+    // The posse set is intrusive as well.
+    {
+        void* p = m_posse;
+        if (p != 0) {
+            i32 n = (i32)((*(u32*)((char*)p + 4)) - 1);
+            *(u32*)((char*)p + 4) = (u32)n;
+            if (n == 0) {
+                *(u32*)((char*)p + 4) = 1;
+                ((Fn_void_i)VTSLOT(p, 0x00))(p, 1);
+            }
+        }
+    }
+    if (m_layout != 0)
+        ((Fn_void_v)VTSLOT(m_layout, 0x08))(m_layout);
+    if (m_minimap != 0)
+        ((Fn_void_v)VTSLOT(m_minimap, 0x04))(m_minimap);
+
+    // Deregister the message handlers.
+    if (m_server != 0) {
+        void* srv = m_server;
+        m_server = 0;
+        EaRemoveHandler(srv, m_handler, m_idTable, (void*)m_idCount, (void*)m_p68);
+    }
+
+    if (m_mode != 0)
+        ((Fn_void_v)VTSLOT(m_mode, 0x04))(m_mode);
+
+    // Reset the MixIn base vtables, then run the shared base destructor.
+    m_vt40 = g_vtblMixContent;
+    m_vt3c = g_vtblMixRes;
+    m_vt38 = g_vtblMixDisp;
+    TimerOwner_Dtor(this);
+}
+
+// @ 0x00ccc400
+void cTribeDisplayStrategy_s00cc_c190::NoteTribeMemberAdded(void* citizen)
+{
+    if (m_minimap == 0)
+        return;
+    if (GetTribe(citizen) == 0)
+        return;
+
+    FUN_00e0f9c0(m_minimap, citizen, 1, 0);
+
+    // Build the icon description on the stack.
+    IconDef_s00cc_c190 icon;
+    icon.mColor = 0;
+    icon.mPos.x = 0.0f;
+    icon.mPos.y = 0.0f;
+    icon.mPos.z = g_iconTint;
+    icon.mKind  = 0x2000;
+    icon.mRef   = 0;
+    icon.mScale = 0.0f;
+    icon.mPad1c = 0;
+    icon.mPad20 = 0;
+
+    // Pack the citizen's normalised tint into a packed RGB colour.
+    {
+        float* rgb = ((Fn_fp_v)VTSLOT(citizen, 0xe0))(citizen);
+        u32 r = (u32)(rgb[0] * g_iconChanScale);
+        u32 g = (u32)(rgb[1] * g_iconChanScale);
+        u32 b = (u32)(rgb[2] * g_iconChanScale);
+        icon.mColor = ((((r | 0xffffff00u) << 8) | (g & 0xff)) << 8) | (b & 0xff);
+    }
+
+    // Position from the citizen's embedded spatial object.
+    {
+        Vec3* pos = ((Fn_v3_v)VTSLOT(At(citizen, 0xc0), 0x2c))(At(citizen, 0xc0));
+        icon.mPos = *pos;
+    }
+
+    // Track the citizen in the local auto-refcount slot.
+    if (citizen != icon.mRef) {
+        ((Fn_void_v)VTSLOT(citizen, 0x00))(citizen);       // add ref
+        void* old = icon.mRef;
+        icon.mRef = citizen;
+        if (old != 0)
+            ((Fn_void_v)VTSLOT(old, 0x04))(old);           // release old
+    }
+
+    // Register the citizen in the tribe tree when its placement is valid.
+    if (((Fn_c_v)VTSLOT(At(citizen, 0xc0), 0x58))(At(citizen, 0xc0)) != 0) {
+        if (m_posse != 0) {
+            ((Fn_void_v)VTSLOT(citizen, 0x00))(citizen);
+            void* found = 0;
+            FUN_00e5c780_s00cc_c190(&m_tree, &found, citizen);
+            ((Fn_void_v)VTSLOT(citizen, 0x04))(citizen);
+            if (found == m_tree.mAnchor) {
+                FUN_00cc8ed0(m_posse, citizen);
+
+                void* ref = 0;
+                FUN_00572660(&ref, citizen);
+
+                void* node = FUN_00ccc070(&m_tree, citizen);
+                *(void**)node = citizen;
+                *(u32*)((char*)node + 4) = 0;
+                *(u32*)((char*)node + 8) = 0;
+                if (citizen != 0)
+                    ((Fn_void_v)VTSLOT(citizen, 0x04))(citizen);
+
+                FUN_00cca880(this, citizen, FUN_00c22dc0(citizen));
+            }
+        }
+        icon.mKind |= 8;
+    }
+
+    FUN_00e10580(m_minimap, citizen, &icon, 0, 0);
+    FUN_00cc9460(this, GetTribe(citizen));
+
+    if (icon.mRef != 0)
+        ((Fn_void_v)VTSLOT(icon.mRef, 0x04))(icon.mRef);
+}
+
+// @ 0x00ccc640
+void cTribeDisplayStrategy_s00cc_c190::Update()
+{
+    if (m_posse == 0)
+        return;
+
+    void* end  = m_tree.mEnd;
+    void* node = m_tree.mAnchor;
+    if (node == end)
+        goto sweep;
+
+    for (;;) {
+        {
+            void* observer = *(void**)((char*)node + 0x10);
+            void* posseSet = m_posse;
+
+            u32 slot = 5;
+            if (FUN_00c0b770(observer) != 0)
+                slot = FUN_00cc88e0(posseSet, FUN_00c22dc0(observer));
+
+            void* child = *(void**)((char*)posseSet + slot * 4 + 8);
+            void* item  = FUN_00e24c90(child, observer);
+
+            if (observer != 0 && item != 0) {
+                // Refresh the selected item's parameter read-outs.
+                if (*(u8*)((char*)observer + 0xb5e) == 0) {
+                    void* state = *(void**)item;
+                    float v1 = FUN_00c0b9c0(observer, 1, 1);
+                    ((Fn_void_i)VTSLOT(state, 0x80))(state, (i32)0x3d99184u);
+                    (void)v1;
+                    float v2 = FUN_00bfc490(At(observer, 0x5a8), 1, 1) * g_animScale;
+                    (void)v2;
+                    ((Fn_void_i)VTSLOT(state, 0x80))(state, (i32)0x3d99162u);
+                }
+
+                // Make sure the Simulator singleton exists, then drive it.
+                if (FUN_00c0b760(observer) == 0) {
+                    if (g_SimSingleton == 0) {
+                        void* mem = op_new(0x100, g_simName, 0, 0, 0, 0);
+                        g_SimSingleton = mem ? FUN_00cc5a70(mem) : 0;
+                    }
+                    if (g_SimSingleton != 0) {
+                        (void)FUN_00cc5100(g_SimSingleton, observer);
+                        void* state = *(void**)item;
+                        (void)state;
+                    }
+                }
+
+                FUN_00ccb0f0(this, observer);
+
+                if ((*(u8*)((char*)node + 0x18) & 2) != 0) {
+                    void* nm = FUN_00b3d230();
+                    if (FUN_00b5ca60(nm) != 0)
+                        FUN_00b69990(observer);
+                }
+
+                FUN_00cca5b0(this, observer, FUN_00cca3d0(this, observer));
+            }
+
+            // Only live, visible citizens are advanced.
+            if (((Fn_c_v)VTSLOT(At(observer, 0xc0), 0x50))(At(observer, 0xc0)) == 0)
+                goto next;
+
+            bool wanted = false;
+            {
+                void* orderMgr = *(void**)At(observer, 0xb4c);
+                void* pending = FUN_00bca2c0(orderMgr);
+                if (pending != 0) {
+                    u32 id = Ld32(pending, 0);
+                    if (id != 0) {
+                        if (id == 0x1a)
+                            wanted = true;
+                    } else if (Ld32(pending, 0x28) != 0) {
+                        wanted = true;
+                    }
+                }
+            }
+
+            void* target = FUN_00c0ee60(observer);
+            void* actor = 0;
+            if (target != 0) {
+                void* a = ((Fn_p_v)VTSLOT(target, 0x08))(target);
+                void* b = ((Fn_p_v)VTSLOT(target, 0x0c))(target);
+                if (a != 0 && Ld8(a, 0x75) != 0 && b != 0) {
+                    if (((Fn_c_v)VTSLOT(b, 0x2c))(b) != 0)
+                        actor = 0;
+                }
+            }
+            (void)actor;
+
+            if (!wanted)
+                goto next;
+
+            // Swept-vocal marker: world position plus the actor's transform.
+            {
+                Vec3 pos;
+                pos.x = g_xfPosX;
+                pos.y = g_xfPosY;
+                pos.z = g_xfPosZ;
+
+                if (target != 0) {
+                    void* s = ((Fn_p_v)VTSLOT(target, 0x08))(target);
+                    Vec3* p = ((Fn_v3_v)VTSLOT(s, 0x2c))(s);
+                    pos = *p;
+                    void* s2 = ((Fn_p_v)VTSLOT(target, 0x08))(target);
+                    float radius = ((Fn_f_v)VTSLOT(s2, 0x74))(s2);
+                    u8 flag = *(u8*)((char*)s2 + 0x77);
+                    FUN_00ccbd10(this,
+                                 FUN_00c0c1b0(observer),
+                                 flag,
+                                 radius,
+                                 &pos,
+                                 ((Fn_p_v)VTSLOT(target, 0x0c))(target));
+                }
+            }
+
+            // Second pass: resolve the pending order's owner and mark its effects.
+            {
+                void* orderMgr = *(void**)At(observer, 0xb4c);
+                void* pending = FUN_00bca2c0(orderMgr);
+                u32 id = Ld32(pending, 0);
+                if (id != 0) {
+                    if (id == 0x1a) {
+                        void* nbt = (void*)Ld32(observer, 0xb4c);
+                        if (Ld32(nbt, 0x1d8) == 0xb46e8803u) {
+                            void* tbl = (void*)Ld32(nbt, 0x600);
+                            void* obj = FUN_00d9f530((void*)Ld32(tbl, 0x1a8));
+                            if (obj != 0) {
+                                void** it = *(void***)((char*)obj + 0x78);
+                                void** en = *(void***)((char*)obj + 0x7c);
+                                if (it != en) {
+                                    do {
+                                        void* ent = (void*)*it;
+                                        void* self2 = *(void**)ent;
+                                        void* s = ((Fn_p_v)VTSLOT(At(self2, 0xc0), 0x2c))(At(self2, 0xc0));
+                                        (void)s;
+                                        ++it;
+                                    } while (it != en);
+                                }
+                            }
+                        }
+                    }
+                } else {
+                    void* slot = At(pending, 0x28);
+                    if (Ld32(pending, 0x28) != 0) {
+                        void* a = FUN_00b199a0(slot);
+                        void* b = FUN_00ad7360(slot);
+                        if (a != 0 && b != 0) {
+                            void* s = ((Fn_p_v)VTSLOT(b, 0x2c))(b);
+                            (void)s;
+                            (void)Ld32(a, 0x24);
+                        }
+                    }
+                }
+            }
+        }
+
+    next:
+        node = FUN_00921580(node);
+        if (node == end)
+            break;
+    }
+
+sweep:
+    // Sweep the ornament pool's open-hash free list.
+    {
+        u8* pool = m_pool.raw;
+        void* bucketArr = *(void**)(pool + 0x04);
+        u32   bucketCnt = *(u32*)(pool + 0x08);
+        void* edi = bucketArr;
+        void* esi = *(void**)edi;
+        if (esi == 0) {
+            do { edi = (char*)edi + 4; } while (*(void**)edi == 0);
+            esi = *(void**)edi;
+        }
+        void* stop = *(void**)((char*)bucketArr + bucketCnt * 4);
+        while (esi != stop) {
+            void* ref = *(void**)((char*)esi + 8);
+            if (ref != 0 && *(u8*)((char*)esi + 0xc) == 0) {
+                ((Fn_void_i)VTSLOT(ref, 0x0c))(ref, 1);
+                void* r2 = *(void**)((char*)esi + 8);
+                if (r2 != 0) {
+                    *(void**)((char*)esi + 8) = 0;
+                    ((Fn_void_v)VTSLOT(r2, 0x04))(r2);
+                }
+                *(void**)((char*)esi + 4) = 0;
+            }
+            *(u8*)((char*)esi + 0xc) = 0;
+
+            if (*(void**)((char*)esi + 8) == 0) {
+                void* pair[2];
+                pair[0] = esi;
+                pair[1] = edi;
+                void* r = FUN_00b75910(&m_pool, pair);
+                esi = *(void**)r;
+                edi = *(void**)((char*)r + 4);
+            } else {
+                esi = *(void**)((char*)esi + 0x10);
+                while (esi == 0) {
+                    edi = (char*)edi + 4;
+                    esi = *(void**)((char*)edi + 4);
+                }
+            }
+            stop = *(void**)((char*)bucketArr + bucketCnt * 4);
+        }
+    }
+}
+
+// @ 0x00cccb00
+void* OrnamentPool::FUN_00cccb00(u32 arg1, u32 arg2)
+{
+    u8* self = raw;
+
+    // eastl::fixed_pool_base::init(&local, self + 0x7c, 0x140, 0x14, 4, 0)
+    u8 poolBase[0x18];
+    *(void**)poolBase = 0;
+    FUN_00921260(poolBase, self + 0x7c, 0x140, 0x14, 4, 0);
+
+    // Build the container from the pool.
+    u32 ctx = FUN_00921340(0x11);
+    FUN_00ccac60(ctx, arg1, self + 0x34, self + 0x1bc, 0x14, self + 0x7c, poolBase);
+
+    // Retail float constants: 9900.0 and 2.0.
+    *(float*)(self + 0x10) = 9900.0f;      // 0x461c4000
+    *(float*)(self + 0x14) = 2.0f;         // 0x40000000
+    *(void**)(self + 0x18) = 0;
+
+    u32 v = FUN_009213c0(*(void**)(self + 0x0c));
+    if (*(u32*)(self + 0x08) < v)
+        FUN_00daee00(this, v);
+
+    return this;
+}
+
+// @ 0x00cccbd0
+void* CitizenTree::DoInsertValue(void* value)
+{
+    u32* v = (u32*)value;
+    void* end = mAnchor;
+    void* p = FUN_00ccad80(mCount, end, value, (u8)mFlags);
+
+    if (p == end ||
+        (v[1] <= Ld32(p, 4) && (v[1] < Ld32(p, 4) || v[0] < Ld32(p, 0)))) {
+        u32 local[5];
+        local[0] = v[0];
+        local[1] = v[1];
+        local[2] = local[0];
+        local[3] = local[1];
+        local[4] = local[0];
+        p = FUN_00ccc120(this, p, local);
+    }
+    return (char*)p + 8;
+}
+
+// @ 0x00cccc50
+cTribeDisplayStrategy_s00cc_c190::cTribeDisplayStrategy_s00cc_c190(u32 ownerId)
+{
+    TimerOwner_Ctor(this);
+
+    // Placeholder MixIn vtables (immediately replaced by the real ones below).
+    m_vt38 = g_vtblMix00;
+    m_vt3c = g_vtblMix04;
+    m_vt40 = g_vtblMix08;
+    m_p44  = 0;
+
+    // Real vtables.
+    m_vtable = g_vtblDispBase;
+    m_vt38   = g_vtblB20;
+    m_vt3c   = g_vtblB04;
+    m_vt40   = g_vtblAf4;
+
+    m_p48     = 0;
+    m_ui      = 0;
+    m_mode    = 0;
+    m_b54     = 0;
+    m_server  = 0;
+    m_handler = 0;
+    m_idTable = 0;
+    m_idCount = 0;
+    m_p68     = 0;
+    m_p6c     = 0;
+    m_minimap = 0;
+    m_layout  = 0;
+    m_posse   = 0;
+    m_ownerId = ownerId;
+    m_b84     = 0;
+    m_b85     = 0;
+    m_p88     = 0;
+    m_p8c     = 0;
+    m_p90     = 0;
+
+    // Self-linked eastl rbtree header (anchor points at itself).
+    m_tree.mCount  = 0;
+    m_tree.mAnchor = &m_tree;
+    m_tree.mEnd    = 0;
+    m_tree.mP0c    = 0;
+    m_tree.mB10    = 0;
+    m_tree.mFlags  = 0;
+
+    m_ornament  = 0;
+    m_swatchMgr = 0;
+
+    // Two cModelInstanceSet sub-objects.
+    for (int i = 0; i < 2; ++i)
+        m_sets[i].Ctor();
+
+    // Two 0xA0-byte ornament tables, every dword initialised to -1.
+    for (u32 i = 0; i < (2 * 0xa0) / 4; ++i)
+        m_ornInit[i] = 0xffffffffu;
+
+    m_swatch    = 0;
+    m_swatchWin = 0;
+
+    {
+        u32 dummy1 = 0;
+        u32 dummy2 = 0;
+        m_pool.FUN_00cccb00((u32)&dummy1, (u32)&dummy2);
+    }
+
+    m_p4d8    = 0;
+    m_p4dc    = 0;
+    m_p4e0    = 0;
+    m_helperA = 0;
+    m_helperB = 0;
+
+    // Global tribe-UI singleton.
+    if (g_TribeUIInstance == 0) {
+        void* mem = op_new(0x20, g_simTag, 0, 0, 0, 0);
+        void* made = mem ? FUN_00ce6610(mem) : 0;
+        g_TribeUIInstance = made;
+        if (made != 0)
+            ((Fn_void_v)VTSLOT(made, 0x04))(made);
+    }
+
+    {
+        void* reg = FUN_0067de40();
+        reg = ((Fn_p_v)VTSLOT(reg, 0x20))(reg);
+        ((Fn_void_p)VTSLOT(reg, 0x1c))(reg, g_TribeUIInstance);
+    }
+
+    FUN_00b3d3e0(0, 0xc3480000u);
+    FUN_00dd5a10(this, 0xc3480000u);
+
+    // Two cSelectionEffectStreamer helpers.
+    {
+        void* mem = op_new(0x18, g_streamerTag, 0, 0, 0, 0);
+        m_helperA = mem ? FUN_00ce97b0(mem) : 0;
+    }
+    {
+        void* mem = op_new(0x18, g_streamerTag, 0, 0, 0, 0);
+        m_helperB = mem ? FUN_00ce97b0(mem) : 0;
+    }
+
+    // Ensure the Simulator singleton exists for later frames.
+    if (g_SimSingleton == 0) {
+        void* mem = op_new(0x100, g_simName, 0, 0, 0, 0);
+        g_SimSingleton = mem ? FUN_00cc5a70(mem) : 0;
+    }
+}
+
+// @ 0x00ccd050
+void cTribeDisplayStrategy_s00cc_d050::Deactivate()
+{
+    if (m_server != 0) {
+        void* srv = m_server;
+        m_server = 0;
+        EA_RemoveHandler(srv, m_handler, m_idTable, m_idCount, m_p68);
+    }
+
+    if (m_ui != 0) {
+        UiWindow* w = (UiWindow*)((GlobalUI_s00cc_d050*)m_ui)->FindWindowByID(0x6454b47);
+        if (w != 0) {
+            void* inst = TribeModeInstance();
+            void* arg = inst ? (void*)((char*)inst + 4) : 0;
+            ((void(__thiscall*)(void*, void*))(*(void***)w)[0x108 / 4])(w, arg);
+        }
+        ((void(__thiscall*)(void*))(*(void***)m_ui)[0x0c / 4])(m_ui);
+        if (m_ui != 0)
+            ((void(__thiscall*)(void*, int))(*(void***)m_ui)[0])(m_ui, 1);
+        m_ui = 0;
+
+        if (m70 != 0) {
+            c70Obj* p = m70;
+            m70 = 0;
+            p->v004();
+        }
+    }
+
+    if (mb0 != 0) {
+        ((Svc28a80*)mb0)->Call();
+        cProgressBar* p = mb0;
+        if (p != 0) {
+            mb0 = 0;
+            DecRef(p, 1);
+        }
+    }
+
+    if (m74 != 0) {
+        ((Svc81ad0*)m74)->Shutdown(1);
+        c74Obj* p = m74;
+        if (p != 0) {
+            m74 = 0;
+            p->v008();
+        }
+    }
+
+    if (m78 != 0) {
+        ((Svc8ba0*)m78)->Call();
+        c78Obj* p = m78;
+        if (p != 0) {
+            m78 = 0;
+            ((void(__thiscall*)(void*, int))(*(void***)p)[0])(p, 1);
+        }
+        ((SvcEB6280*)&m_tree)->Call(m_tree.mpNode);
+        m_tree.mpAnchor = &m_tree.mpAnchor;
+        m_tree.mpEnd = &m_tree.mpAnchor;
+        m_tree.mpNode = 0;
+        m_tree.mB10 = 0;
+        m_tree.mFlags = 0;
+    }
+
+    if (m50 != 0) {
+        ((SvcE31130*)m50)->Call();
+        c50Obj* p = m50;
+        if (p != 0) {
+            m50 = 0;
+            p->v004();
+        }
+    }
+
+    if (m_swatch != 0) {
+        Swatch* p = m_swatch;
+        ((void(__thiscall*)(void*))(*(void***)p)[0x1c / 4])(p);
+        void* mgr = FUN_00401020(p);
+        ((Svc5f0a60*)mgr)->RemoveContent();
+        if (p != 0) {
+            m_swatch = 0;
+            p->Unbind();
+        }
+    }
+    if (m_swatchWin != 0) {
+        RefObj* p = m_swatchWin;
+        m_swatchWin = 0;
+        p->Unbind();
+    }
+
+    {
+        u8* inst = (u8*)TribeModeInstance();
+        void* nm = NounManager_s00cc_d050();
+        RefObj** pp = (RefObj**)(inst + 0x258);
+        for (int n = 0x14; n != 0; --n, ++pp) {
+            RefObj* o = *pp;
+            if (o != 0) {
+                ((SvcB225d0*)nm)->Call(o);
+                o = *pp;
+                if (o != 0) {
+                    *pp = 0;
+                    o->Unbind();
+                }
+            }
+        }
+        pp = (RefObj**)(inst + 0x2a8);
+        for (int n = 0x14; n != 0; --n, ++pp) {
+            RefObj* o = *pp;
+            if (o != 0) {
+                ((SvcB225d0*)nm)->Call(o);
+                o = *pp;
+                if (o != 0) {
+                    *pp = 0;
+                    o->Unbind();
+                }
+            }
+        }
+    }
+
+    {
+        u8* p = (u8*)&m_blocks[0];
+        for (int n = 2; n != 0; --n, p += 0x60)
+            ((SvcReleaseIf*)p)->Call();
+    }
+
+    {
+        XVec* v = (XVec*)(m_vecs + 4);
+        for (int n = 2; n != 0; --n, v += 0x60 / sizeof(XVec)) {
+            u8* b = v->mpBegin;
+            u8* e = v->mpEnd;
+            while (b != e) {
+                ((SvcAssign*)b)->Call(e);
+                b += 0x38;
+                e += 0x38;
+            }
+            int cnt = (int)(e - b) / 0x38;
+            v->mpEnd = v->mpEnd + cnt * 0x38;
+        }
+    }
+
+    {
+        Pool& p = m_pool;
+        TreeNode** bucket = p.mpBuckets;
+        TreeNode* n = *bucket;
+        if (n == 0) {
+            ++bucket;
+            while (*bucket == 0)
+                ++bucket;
+            n = *bucket;
+        }
+        TreeNode* end = p.mpBuckets[p.mBucketCount];
+        while (n != end) {
+            if (n->mpValue != 0)
+                ((void(__thiscall*)(void*, int))(*(void***)n->mpValue)[0x0c / 4])(n->mpValue, 1);
+            n = n->mpNext;
+            if (n == 0) {
+                ++bucket;
+                do { n = *bucket; } while (n == 0);
+            }
+        }
+        ((Svc759b0*)&p)->Free(p.mpBuckets, p.mBucketCount);
+        p.mSize = 0;
+    }
+
+    ((Svc8d80*)m_helperA)->Call();
+    ((Svc8d80*)m_helperB)->Call();
+}
+
+// @ 0x00ccd3a0
+void cTribeDisplayStrategy_s00cc_d050::UpdateTargetedTreeEffects()
+{
+    // Rebuild the shared 0x18-byte vertex scratch from this object's +0x4d8 array and
+    // mark the player tribe's rideable-tree markers.  Not reconstructed (eastl
+    // fixed-vector / rbtree template bodies, atexit-guarded statics, _ftol2 packing).
+}
+
+// @ 0x00ccd8a0
+void cTribeDisplayStrategy_s00cc_d050::MakeTribeIcons()
+{
+    // Minimap icon pass (RemoveAllIcons, the citizen/tribe icon filters and the final
+    // MakeTribeIcon loop).  Not reconstructed (eastl vector sweeps at 0x902 bytes).
+}

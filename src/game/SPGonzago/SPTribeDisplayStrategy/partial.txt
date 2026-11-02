@@ -1,1 +1,3 @@
 # va  diff-bytes  reason
+00ccd3a0  1277  SP::cTribeDisplayStrategy::UpdateTargetedTreeEffects: stub only; 1 vs 1277 B - eastl fixed-vector / rbtree template bodies, atexit-guarded statics, _ftol2 conversions and the targeted-tree-effect walk not reconstructed flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+00ccd8a0  902  SP::cTribeDisplayStrategy::MakeTribeIcons: stub only; 1 vs 902 B - GetGameDataVector sweeps, minimap RemoveAllIcons, citizen/citizen-tribe icon passes and the final MakeTribeIcon loop not reconstructed flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

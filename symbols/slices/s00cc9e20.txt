@@ -1,4 +1,5 @@
 00cc9e20 ?FUN_00cc9e20@cTribeDisplayStrategy@@QAEXPAX@Z  # cTribeDisplayStrategy::FUN_00cc9e20 migrated from s00cc9e20 (verbatim, slice spelling)
+00cca000 ?FUN_00cca000_impl@@YAXPAX0M@Z  # FUN_00cca000_impl migrated from s00cc9e20 (verbatim, slice spelling)
 00cca060 ?FUN_00cca060@cTribeDisplayStrategy@@QAEXXZ  # cTribeDisplayStrategy::FUN_00cca060 migrated from s00cc9e20 (verbatim, slice spelling)
 00cca090 ?FUN_00cca090@cTribeDisplayStrategy@@QAEDXZ  # cTribeDisplayStrategy::FUN_00cca090 migrated from s00cc9e20 (verbatim, slice spelling)
 00cca0a0 ?FUN_00cca0a0@cTribeDisplayStrategy@@QAEXXZ  # cTribeDisplayStrategy::FUN_00cca0a0 migrated from s00cc9e20 (verbatim, slice spelling)

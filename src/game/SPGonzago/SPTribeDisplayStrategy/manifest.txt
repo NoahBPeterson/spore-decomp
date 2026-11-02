@@ -1,6 +1,23 @@
 # source  symbol  va  flags
+../src/game/SPGonzago/SPTribeDisplayStrategy.cpp  ??4?$RectT_s0057_2580@M@EA@@QAEAAV01@ABV01@@Z  00572600  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPGonzago/SPTribeDisplayStrategy.cpp  ??0IRefCountPtr@@QAE@PAUIRefCount@@@Z  00572660  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPGonzago/SPTribeDisplayStrategy.cpp  ?FUN_00cc87f0@CameraCtl@@QAE_NXZ  00cc87f0  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPTribeDisplayStrategy.cpp  ?FUN_00cc8810@CameraCtl@@QAE_NXZ  00cc8810  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPTribeDisplayStrategy.cpp  ?FUN_00cc8830@@YAPAXPAUEntityRef_s00cc_7fa0@@@Z  00cc8830  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPTribeDisplayStrategy.cpp  ?FUN_00cc88e0@TribeStrategy@@QAEII@Z  00cc88e0  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPTribeDisplayStrategy.cpp  ?FUN_00cc8940@TribeStrategy@@QAEX_N@Z  00cc8940  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPTribeDisplayStrategy.cpp  ?FUN_00cc8990@@YAPAXXZ  00cc8990  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPTribeDisplayStrategy.cpp  ?FUN_00cc89f0@TribeStrategy@@QAEI_N@Z  00cc89f0  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPTribeDisplayStrategy.cpp  ?FUN_00cc8aa0@TribeStrategy@@QAEX_N@Z  00cc8aa0  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPTribeDisplayStrategy.cpp  ?FUN_00cc8ba0@TribeStrategy@@QAEXXZ  00cc8ba0  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPTribeDisplayStrategy.cpp  ?FUN_00cc9040@TribeStrategy_s00cc_8ed0@@QAEXPAUEntityRef@@@Z  00cc9040  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPTribeDisplayStrategy.cpp  ?FUN_00cc90a0@TribeStrategy_s00cc_8ed0@@QAEPAXPAUEntityRef@@@Z  00cc90a0  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPTribeDisplayStrategy.cpp  ?FUN_00cc90f0@TribeStrategy_s00cc_8ed0@@QAEXPAUEntityRef@@H@Z  00cc90f0  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPTribeDisplayStrategy.cpp  ?FUN_00cc91b0@TribeStrategy_s00cc_8ed0@@QAEXH@Z  00cc91b0  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPTribeDisplayStrategy.cpp  ?FUN_00cc91e0@TribeStrategy_s00cc_8ed0@@QAEXH@Z  00cc91e0  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPTribeDisplayStrategy.cpp  ?FUN_00cc9270@TribeStrategy_s00cc_8ed0@@QAEXPAUVector4@@@Z  00cc9270  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPTribeDisplayStrategy.cpp  ?FUN_00cc9360@TribeStrategy_s00cc_8ed0@@QAE_NXZ  00cc9360  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPTribeDisplayStrategy.cpp  ?FUN_00cc93b0@TribeStrategy_s00cc_8ed0@@QAEXH@Z  00cc93b0  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPTribeDisplayStrategy.cpp  ?FUN_00cc9430@TribeStrategy_s00cc_8ed0@@QAEXXZ  00cc9430  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPTribeDisplayStrategy.cpp  ?FUN_00cc9640@TribeStrategy_s00cc_8ed0@@QAEXPAUIWinText@@C@Z  00cc9640  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPTribeDisplayStrategy.cpp  ?FUN_00cc9740@TribeStrategy_s00cc_8ed0@@QAEXPAUIWinText@@UVector3@@HC@Z  00cc9740  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
