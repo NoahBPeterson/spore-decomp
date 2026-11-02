@@ -1,3 +1,4 @@
+00472f50 ??0Str8@@QAA@HPBDZZ  # Str8::Str8 migrated from s00472b80 (verbatim, slice spelling)
 00473140 ??0CharVec@@QAE@ABU0@@Z  # CharVec::CharVec migrated from s00472b80 (verbatim, slice spelling)
 00473270 ?resize@?$vector_s0047_2b80@UAutoRefCount_s0047_2b80@@$03@@QAEXI@Z  # resize migrated from s00472b80 (verbatim, slice spelling)
 00473300 ??1Vec29@@QAE@XZ  # Vec29::~Vec29 migrated from s00472b80 (verbatim, slice spelling)

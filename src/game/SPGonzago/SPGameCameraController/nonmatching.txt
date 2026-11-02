@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+00472f50 78 complete source; inlined strlen intrinsic loop shape / local order differ; equiv PASS (1115 inputs) flags: /Od /Ob1 /MD /Gy /TP
