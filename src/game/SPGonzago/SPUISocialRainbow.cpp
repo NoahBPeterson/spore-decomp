@@ -41,6 +41,7 @@ static inline int VT_A8_0(void* p)
 // ---- items of slice s00e22860 end
 
 // ---- items of slice s00e31670 begin (TODO(rewrite): local stubs, replace by canonical classes)
+volatile int g_helperSink;
 struct cSPUIWindow;
 struct cSPUIAnimator_s00e3_1670;
 struct RainbowInstance {
@@ -214,6 +215,8 @@ void* __cdecl FUN_00805ea0(void*);                 // 0x00805ea0 GetMainWindowAr
 // ---- items of slice s00e32580 end
 
 // ---- items of slice s00e33270 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern const char gSimulatorName[];      // 0x013f3f09 "Simulator"
+extern const char gEastlAllocatorName[]; // 0x013ebb38
 typedef unsigned int uint;
 struct IUnknown32 {
     virtual int AddRef();                    // +0x00
@@ -444,12 +447,18 @@ class RenderCtx {
     void AddRenderable(IRenderable* pRenderable);        // 0x0095bbc0
     void* Begin2D(void* pRenderMode);                    // 0x0095bc10
 };
+void* operator new(size_t size, const char* pName, int flags, unsigned debugFlags,
+                   const char* file, int line);
 void  operator delete[](void* p);
+inline void* operator new(size_t, void* p) throw() { return p; }
 inline void  operator delete(void*, void*) throw() {}
 extern "C" IRenderable* __cdecl FUN_00828e30(RenderCtx* pCtx, IWindow* pWindow, void** ppOut);  // 0x00828e30
 extern "C" void       __cdecl FUN_00828ef0(RenderCtx* pCtx, void* pRenderable);                 // 0x00828ef0
 extern "C" void       __cdecl FUN_00e31d60(void* pBatch, float x, float y, float radius, int a, int b,
 float angleFrom, float angleTo, Image* pImage, float step);
+extern "C" void       __cdecl FUN_00c50ad0(cRound* first, cRound* last, cRound* result);   // 0x00c50ad0
+extern "C" cRound*    __cdecl FUN_00951bb0(cRound* first, cRound* last, cRound* dest);     // 0x00951bb0
+extern "C" cRound*    __cdecl copy_Rec20(const cRound* first, const cRound* last, cRound* dest);  // 0x00951bf0
 struct Message {
     void* mpVftable;          // +0x00
     int   mPad04;
@@ -491,6 +500,56 @@ void* sGetWindowImage(void* window)
     return 0;
 }
 
+// @ 0x00e31aa0
+bool cSPUISocialRainbow::HasAnim(int i, char flag)
+{
+    void* ref = mpAnimRef;
+    if (ref == 0)
+        return false;
+    if (mInstances[i].mActive != 0)
+        return true;
+    bool r = mAnimator.HasAnimation(ref, (unsigned int)(i + 0x567c0de));
+    if (flag == 0) {
+        if (!r) {
+            if (!mAnimator.HasAnimation(mpAnimRef, (unsigned int)(i + 0x567c0c2)))
+                return false;
+        }
+        return true;
+    }
+    return r;
+}
+
+// @ 0x00e31bb0
+void cSPUISocialRainbow::GetRoundBounds(int a, int b, float* o1, float* o2)
+{
+    if (b >= 0) {
+        int n = (int)(((char*)mInstances[a].mpEnd - (char*)mInstances[a].mpBegin) / 20);
+        if (b < n) {
+            if (b > 0) {
+                float* p = (float*)mInstances[a].mpBegin;
+                *o1 = p[(b - 1) * 5];
+                *o2 = p[b * 5];
+                return;
+            }
+            if (a == 1) {
+                *o1 = mF40;
+                *o2 = ((float*)mInstances[a].mpBegin)[0];
+                return;
+            }
+            *o1 = mF3c;
+            *o2 = ((float*)mInstances[a].mpBegin)[0];
+            return;
+        }
+    }
+    if (a == 1) {
+        *o1 = mF40;
+        *o2 = mF40;
+        return;
+    }
+    *o1 = mF3c;
+    *o2 = mF3c;
+}
+
 // @ 0x00e31c90
 void cSPUISocialRainbow::Fwd(void)
 {
@@ -510,6 +569,12 @@ void cSPUISocialRainbow::Mode(int p)
     case 5: mpF1f8->SetMode(0); break;
     case 6: mpF1f8->SetMode(5); break;
     }
+}
+
+// @ 0x00e31d60
+void cSPUISocialRainbow::F0e31d60(void)
+{
+    /* large secondary update; not reconstructed */
 }
 
 // @ 0x00e320c0
@@ -542,6 +607,56 @@ void F0e320c0(void* unused, unsigned int* a, unsigned int* b, unsigned int* c, f
         p3 = (float*)0x015d1168;
 
     *(float*)(dst + 0x94) = (*p3 - *p2) * t + *p2;
+}
+
+// @ 0x00e32160
+void cSPUISocialRainbow::Helper160(int i)
+{
+    g_helperSink = i;
+}
+
+// @ 0x00e32250
+void cSPUISocialRainbow::Helper250(int i, int x, int y)
+{
+    g_helperSink = i + x + y;
+}
+
+// @ 0x00e32460
+void cSPUISocialRainbow::StartDrain(int i, float t, float v)
+{
+    mFlag24 = 1;
+    Helper160(i);
+    int off = (i + 1) * 0xa4;
+    unsigned int* p = (unsigned int*)((char*)this + off);
+    unsigned int end = p[1];
+    if (*p != end) {
+        if (t <= 0.01f)
+            t = 0.01f;
+        *(float*)(end - 4) = t;
+        *(float*)(end - 8) = v;
+        *(float*)((char*)this + off + 0x98) = 0.0f;
+        Helper250(i, 0, 0);
+    }
+}
+
+// @ 0x00e324f0
+void cSPUISocialRainbow::Stop(int i)
+{
+    mFlag24 = 1;
+    RainbowInstance* r = (RainbowInstance*)((char*)this + (i + 1) * 0xa4);
+    r->mTarget = r->mCurrent;
+    Helper160(i);
+    if (r->mTarget != 0.0f)
+        return;
+    void* w = 0;
+    if (i == 1)
+        w = mLayout.FindWindowByID(0x562c170, i);
+    else if (i == 0)
+        w = mLayout.FindWindowByID(0x562c1b8, 1);
+    typedef bool (__thiscall *FnBool)(void*);
+    typedef void (__thiscall *FnVoid2)(void*, int, int);
+    if (((FnBool)((void**)*(void**)w)[0x28 / 4])(w) & 1)
+        ((FnVoid2)((void**)*(void**)w)[0x7c / 4])(w, 1, 0);
 }
 
 // @ 0x00e32580
@@ -1066,4 +1181,181 @@ bool cSPUISocialRainbow_s00e3_3270::DoMessage(IWindow* pWindow, void* pMessageRa
     }
     // IWinProc::DoMessage (0x00950ef0): the base message handler.
     return IWinProc::DoMessage(pWindow, pMessageRaw);
+}
+
+// @ 0x00e33850
+void cRoundVector::DoInsertValue(cRound* position, const cRound& value)
+{
+    if (mpEnd != mpCapacity) {
+        const cRound* pValue = &value;
+        if (pValue >= position && pValue < mpEnd)
+            ++pValue;
+        cRound* pLast = mpEnd;
+        if (pLast) {
+            const cRound* pPrev = pLast - 1;
+            pLast->mArcTo = pPrev->mArcTo;
+            pLast->mNumSegments = pPrev->mNumSegments;
+            pLast->mColor = pPrev->mColor;
+            pLast->mRate = pPrev->mRate;
+            pLast->mMinRate = pPrev->mMinRate;
+        }
+        FUN_00c50ad0(position, pLast - 1, pLast);
+        position->mArcTo = pValue->mArcTo;
+        position->mNumSegments = pValue->mNumSegments;
+        position->mColor = pValue->mColor;
+        position->mRate = pValue->mRate;
+        position->mMinRate = pValue->mMinRate;
+        ++mpEnd;
+    } else {
+        int nSize = (int)(mpEnd - mpBegin);
+        int nNewCapacity;
+        cRound* pNewData;
+        if (nSize == 0) {
+            nNewCapacity = 1;
+        } else {
+            nNewCapacity = nSize * 2;
+            if (nNewCapacity == 0) {
+                pNewData = 0;
+                goto copy;
+            }
+        }
+        pNewData = (cRound*)operator new(nNewCapacity * sizeof(cRound), gSimulatorName, 0, 0,
+                                         gEastlAllocatorName, 0xd1);
+    copy:
+        {
+            cRound* pSlot = FUN_00951bb0(mpBegin, position, pNewData);
+            if (pSlot) {
+                pSlot->mArcTo = value.mArcTo;
+                pSlot->mNumSegments = value.mNumSegments;
+                pSlot->mColor = value.mColor;
+                pSlot->mRate = value.mRate;
+                pSlot->mMinRate = value.mMinRate;
+            }
+            cRound* pNewEnd = FUN_00951bb0(position, mpEnd, pSlot + 1);
+            if (mpBegin && mpBegin != mpInlineStorage)
+                operator delete[](mpBegin);
+            mpBegin = pNewData;
+            mpEnd = pNewEnd;
+            mpCapacity = pNewData + nNewCapacity;
+        }
+    }
+}
+
+// @ 0x00e33990
+void cSideInfo::Clear()
+{
+    cRound* pBegin = mRounds.mpBegin;
+    cRound* pEnd = mRounds.mpEnd;
+    copy_Rec20(pBegin, pEnd, pEnd);
+    // equivalent to "mpEnd = mpBegin"; the retail build updates the end pointer by the signed
+    // byte count -((pEnd - pBegin) / sizeof(cRound)) * sizeof(cRound).
+    int nBytes = (int)(pEnd - pBegin) / -(int)sizeof(cRound) * (int)sizeof(cRound);
+    mRounds.mpEnd = (cRound*)((char*)pEnd + nBytes);
+    mArcSize = 0.0f;
+    mArcSizeTarget = 0.0f;
+    mbStopBarAnimation = false;
+    if (mpDraw) {
+        IViewEffect* pOld = mpDraw;
+        mpDraw = 0;
+        pOld->Release();
+    }
+}
+
+// @ 0x00e33a00
+bool cSPUISocialRainbow_s00e3_3270::ReleaseResources()
+{
+    if (mpBackgroundRenderable) {
+        IRenderable* pOld = mpBackgroundRenderable;
+        mpBackgroundRenderable = 0;
+        pOld->Release();
+    }
+    if (mpFullBarRenderable) {
+        IRenderable* pOld = mpFullBarRenderable;
+        mpFullBarRenderable = 0;
+        pOld->Release();
+    }
+    if (mpArcRenderable) {
+        IRenderable* pOld = mpArcRenderable;
+        mpArcRenderable = 0;
+        pOld->Release();
+    }
+    mSideInfos[1].Clear();
+    mSideInfos[0].Clear();
+    if (mpRelationshipIcon) {
+        IRenderable* pOld = mpRelationshipIcon;
+        mpRelationshipIcon = 0;
+        pOld->Release();
+    }
+    if (mpStarburst) {
+        IRenderable* pOld = mpStarburst;
+        mpStarburst = 0;
+        pOld->Release();
+    }
+    mLayout.SetReloadCallback(0, 0);
+    mLayout.Shutdown(1);
+    return true;
+}
+
+// @ 0x00e33ab0
+void cSPUISocialRainbow_s00e3_3270::StartFill(int nSide, int nSegments, float fMinRate, float fRate, float fFraction, uint color, void* pParam)
+{
+    mbRebuild = true;
+    UpdateSide(nSide);
+
+    cSideInfo& side = mSideInfos[nSide];
+    float fRoundFrom = 0.0f;
+    float fRoundTo = 0.0f;
+    int nRounds = (int)(side.mRounds.mpEnd - side.mRounds.mpBegin) - 1;
+    get_round_bounds(nSide, nRounds, &fRoundFrom, &fRoundTo);
+
+    cRound round;
+    round.mArcTo = 0.0f;
+    round.mNumSegments = 0.0f;
+    round.mColor = 0;
+    round.mRate = 0.0f;
+    round.mMinRate = 0.0f;
+    if (side.mRounds.mpEnd < side.mRounds.mpCapacity)
+        *side.mRounds.mpEnd++ = round;
+    else
+        side.mRounds.DoInsertValue(side.mRounds.mpEnd, round);
+
+    cRound& newRound = side.mRounds.mpEnd[-1];
+    newRound.mNumSegments = (float)nSegments;
+    newRound.mColor = color;
+    newRound.mMinRate = fMinRate > 0.01f ? fMinRate : 0.01f;
+    newRound.mRate = fRate;
+
+    float fBounded = fFraction > 0.01f ? fFraction : 0.01f;
+    if (fBounded > 1.0f)
+        fBounded = 1.0f;
+    float fAmount = (mArcAngleTo - mArcAngleFrom) * fBounded;
+
+    float fPos = nSide == 1 ? fRoundTo - fAmount : fRoundTo + fAmount;
+    if (fPos < mArcAngleFrom)
+        fPos = mArcAngleFrom;
+    else if (fPos > mArcAngleTo)
+        fPos = mArcAngleTo;
+    newRound.mArcTo = fPos;
+
+    IWindow* pBarWindow = 0;
+    if (nSide == 1)
+        pBarWindow = mLayout.FindWindowByID(0x562c170, true);
+    else if (nSide == 0)
+        pBarWindow = mLayout.FindWindowByID(0x562c1b8, true);
+    if (!pBarWindow->IsVisible())
+        pBarWindow->SetFlag(1, true);
+
+    side.mArcSizeTarget = side.mArcSize + fAmount;
+    UpdateSideDisplay(nSide, 1, pParam);
+}
+
+// @ 0x00e33ce0
+void cSPUISocialRainbow_s00e3_3270::Reset()
+{
+    mAnimator.ClearAll();
+    mbInitialized = false;
+    mbRebuild = true;
+    mbFull = false;
+    ReleaseResources();
+    Init();
 }

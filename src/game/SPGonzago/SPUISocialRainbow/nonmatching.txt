@@ -1,8 +1,12 @@
 # va  diff-bytes  reason
-00e320c0 130 3-variant float lerp setter: complete reconstruction - equiv PASS (310/400 valid, 0 mismatch, 66.7% coverage); 149 vs 147 B, the variant type-check/address-constant idiom is scheduled differently
+00e31aa0 15 instance has-animation probe: complete reconstruction - equiv PASS (219/400 valid, 0 mismatch, 66.0% coverage); 112 vs 117 B, only the bool return-register encoding differs (cl emits mov al,1 / drops the zeroing where the original emits mov eax,1 / xor eax,eax) flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+00e320c0 130 3-variant float lerp setter: complete reconstruction - equiv PASS (310/400 valid, 0 mismatch, 66.7% coverage); 149 vs 147 B, the variant type-check/address-constant idiom is scheduled differently flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 00e32580 1177 huge reload callback; transformed image/window/trig math and register/scheduling layout diverge
 00e32b20 303 transform matrix builder; stack array layout and x87/sincos scheduling diverge
 00e32c80 18 destructor loop; compiler hoists callee-saved push ebx/push edi above the m1ec release
 00e32f00 7 second loop register allocation swaps index/vtable (ebx/ebp) versus original
 00e330c0 300 constructor; dead-store elimination removes first vtable store and zero/float init scheduling diverges
-00e33270 1195 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: update/render path differs in block layout and register allocation around the animator and per-side loops (1299 bytes differ); equiv UNSUPPORTED (unresolved IWinProc::DoMessage tail call)
+00e33270 1195 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: update/render path differs in block layout and register allocation around the animator and per-side loops (1299 bytes differ); equiv UNSUPPORTED (unresolved IWinProc::DoMessage tail call) flags: /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+00e33850 220 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: in-place branch differs in register allocation, the growth branch keeps nNewCapacity in ebx instead of ebp (222 bytes differ); equiv FAIL call #0 (operator new name tag: ours "Simulator" 0x013f3f09, original 0x013f09b4) flags: /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+00e33990 118 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: end-pointer adjustment is computed before the copy_Rec20 call and with a different add/sub form, so block order and registers differ; equiv FAIL execution (faults inside copy_Rec20 on the zeroish input) flags: /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+00e33ab0 362 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: round insert, bounds clamps and window-ID selection compile to a different structure (463 bytes differ); equiv UNSUPPORTED (no valid inputs: pool-limit/read faults) flags: /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
