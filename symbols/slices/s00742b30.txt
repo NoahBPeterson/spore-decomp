@@ -7,6 +7,8 @@
 00743150 ?Sub3150@cMI2@@QAEXHPAURefCounted_s0074_2b30@@@Z  # cMI2::Sub3150 migrated from s00742b30 (verbatim, slice spelling)
 00743270 ?Sub3270@cMI3@@QAE_NPAUXf_s0074_2b30@@PAURefVecL@@@Z  # cMI3::Sub3270 migrated from s00742b30 (verbatim, slice spelling)
 007434b0 ?Sub34b0@cMI3@@QAE_NPAM@Z  # cMI3::Sub34b0 migrated from s00742b30 (verbatim, slice spelling)
+00743910 ?FlagsNotBit0@@YAEH@Z  # FlagsNotBit0 migrated from s00742b30 (verbatim, slice spelling)
+00743920 ?CompareFloatAt10@@YAHHH@Z  # CompareFloatAt10 migrated from s00742b30 (verbatim, slice spelling)
 00743940 ?Adjustor@cModelWorld56@@QAEHH@Z  # cModelWorld56::Adjustor migrated from s00742b30 (verbatim, slice spelling)
 00743950 ?SetTimeScale@@YGXHM@Z  # SetTimeScale migrated from s00742b30 (verbatim, slice spelling)
 007439b0 ?OffsetOrE4@@YGHH@Z  # OffsetOrE4 migrated from s00742b30 (verbatim, slice spelling)
