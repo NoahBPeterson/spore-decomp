@@ -1,0 +1,2 @@
+# source  symbol  va  flags
+../src/game/SPAudio/SPAudioEventModifierPrimitiveSurfaceType.cpp  ?ModifyEvent@cEventModifierPrimitiveSurfaceType@Audio@SP@@QAEXPAUCommand_s00a3_af80@2EA@@IPADH@Z  00a3b9a0  /O2 /MD /Gy /GS- /EHsc /TP /arch:SSE /Isrc/game/include
