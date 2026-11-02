@@ -1,20 +1,20 @@
-0090b310  attlist8
+0090b310 ?attlist8@@YAHPAHHHPAX0@Z  # attlist8 migrated from s0090b310 (verbatim, slice spelling)
 0090b400  element5
-0090b460  element7
-0090b610  entity5
-0090b720  attlist4
-0090b780  attlist7
-0090b7e0  element4
-0090b830  element6
-0090b940  entity7
-0090ba00  notation1
-0090baa0  attlist3
-0090bb60  element3
-0090bc90  notation0
-0090bce0  attlist5
-0090bd20  element2
-0090bf00  attlist2
-0090bfd0  element1
-0090c0a0  entity0
-0090c100  attlist1
-0090c1f0  attlist0
+0090b460 ?element7@@YAHPAHH@Z  # element7 migrated from s0090b310 (verbatim, slice spelling)
+0090b610 ?entity5@@YAHPAHHPAX10@Z  # entity5 migrated from s0090b310 (verbatim, slice spelling)
+0090b720 ?attlist4@@YAHPAHH@Z  # attlist4 migrated from s0090b310 (verbatim, slice spelling)
+0090b780 ?attlist7@@YAHPAHH@Z  # attlist7 migrated from s0090b310 (verbatim, slice spelling)
+0090b7e0 ?element4@@YAHPAHH@Z  # element4 migrated from s0090b310 (verbatim, slice spelling)
+0090b830 ?element6@@YAHPAHH@Z  # element6 migrated from s0090b310 (verbatim, slice spelling)
+0090b940 ?entity7@@YAHPAHHPAX10@Z  # entity7 migrated from s0090b310 (verbatim, slice spelling)
+0090ba00 ?notation1@@YAHPAHHPAX10@Z  # notation1 migrated from s0090b310 (verbatim, slice spelling)
+0090baa0 ?attlist3@@YAHPAHH@Z  # attlist3 migrated from s0090b310 (verbatim, slice spelling)
+0090bb60 ?element3@@YAHPAHH@Z  # element3 migrated from s0090b310 (verbatim, slice spelling)
+0090bc90 ?notation0@@YAHPAHH@Z  # notation0 migrated from s0090b310 (verbatim, slice spelling)
+0090bce0 ?attlist5@@YAHPAHH@Z  # attlist5 migrated from s0090b310 (verbatim, slice spelling)
+0090bd20 ?element2@@YAHPAHHHPAX0@Z  # element2 migrated from s0090b310 (verbatim, slice spelling)
+0090bf00 ?attlist2@@YAHPAHHPAX10@Z  # attlist2 migrated from s0090b310 (verbatim, slice spelling)
+0090bfd0 ?element1@@YAHPAHHPAX10@Z  # element1 migrated from s0090b310 (verbatim, slice spelling)
+0090c0a0 ?entity0@@YAHPAHH@Z  # entity0 migrated from s0090b310 (verbatim, slice spelling)
+0090c100 ?attlist1@@YAHPAHH@Z  # attlist1 migrated from s0090b310 (verbatim, slice spelling)
+0090c1f0 ?attlist0@@YAHPAHH@Z  # attlist0 migrated from s0090b310 (verbatim, slice spelling)
