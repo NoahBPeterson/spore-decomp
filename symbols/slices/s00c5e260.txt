@@ -1,5 +1,6 @@
 00c5e740 ??0MissionScan@@QAE@XZ  # MissionScan::MissionScan migrated from s00c5e260 (verbatim, slice spelling)
 00c5ea60 ?FUN_00c5ea60@Mission@@QAEDXZ  # Mission::FUN_00c5ea60 migrated from s00c5e260 (verbatim, slice spelling)
+00c5ed90 ?FUN_00c5ed90@Mission@@QAEXH@Z  # Mission::FUN_00c5ed90 migrated from s00c5e260 (verbatim, slice spelling)
 00c5edb0 ?FUN_00c5edb0@Mission@@QAEXXZ  # Mission::FUN_00c5edb0 migrated from s00c5e260 (verbatim, slice spelling)
 00c5ee40 ?FUN_00c5ee40@Mission@@QAEXXZ  # Mission::FUN_00c5ee40 migrated from s00c5e260 (verbatim, slice spelling)
 00c5eed0 ?FUN_00c5eed0@Mission@@QAEXH@Z  # Mission::FUN_00c5eed0 migrated from s00c5e260 (verbatim, slice spelling)
