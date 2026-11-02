@@ -1,3 +1,7 @@
+005718f0 ?insert@KeyVector_s0057_18f0@@QAEPAUKey12_s0057_18f0@@PAU2@ABU2@@Z  # KeyVector_s0057_18f0::insert migrated from s005718f0 (verbatim, slice spelling)
+005719a0 ??1KeyVector_s0057_18f0@@QAE@XZ  # KeyVector_s0057_18f0::~KeyVector migrated from s005718f0 (verbatim, slice spelling)
+005719f0 ?DoInsertValue@KeyVector_s0057_18f0@@QAEXPAUKey12_s0057_18f0@@ABU2@@Z  # KeyVector_s0057_18f0::DoInsertValue migrated from s005718f0 (verbatim, slice spelling)
+00571c40 ?lower_bound@@YAPAUKey12_s0057_18f0@@PAU1@0ABU1@@Z  # lower_bound migrated from s005718f0 (verbatim, slice spelling)
 00571cf0 ?SPIDFromName@@YAIPBD@Z  # SPIDFromName migrated from s005718f0
 00571d40 ?SetKey@DirtyState@@QAEXABUKey12@@@Z  # DirtyState::SetKey migrated from s005718f0 (verbatim, slice spelling)
 00571d60 ??4VecPair@@QAEAAU0@ABU0@@Z  # VecPair::operator= migrated from s005718f0 (verbatim, slice spelling)

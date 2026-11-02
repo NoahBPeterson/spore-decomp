@@ -1,1 +1,6 @@
 # source  symbol  va  flags
+../src/game/SPEditors/TraitVector.cpp  ?Blend@TraitData@@QAEX_NPAUFeatureVector@@I@Z  005708d0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/TraitVector.cpp  ?insert@KeyVector_s0057_18f0@@QAEPAUKey12_s0057_18f0@@PAU2@ABU2@@Z  005718f0  /Od /Ob1 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEditors/TraitVector.cpp  ??1KeyVector_s0057_18f0@@QAE@XZ  005719a0  /Od /Ob1 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEditors/TraitVector.cpp  ?DoInsertValue@KeyVector_s0057_18f0@@QAEXPAUKey12_s0057_18f0@@ABU2@@Z  005719f0  /Od /Ob1 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEditors/TraitVector.cpp  ?lower_bound@@YAPAUKey12_s0057_18f0@@PAU1@0ABU1@@Z  00571c40  /Od /Ob1 /MD /Gy /EHsc /TP /Isrc/game/include

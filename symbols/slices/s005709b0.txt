@@ -1,4 +1,4 @@
-005709b0 cTraitQuery::Compute  # switch on +0x54, bool +0x50, vector +0x38 (name inferred)
+005709b0 ?Compute@cTraitQuery@@QAEMPAUcFeatureVector@@0@Z  # cTraitQuery::Compute migrated from s005709b0 (verbatim, slice spelling)
 00570c40 ?Op1@cTraitQuery@@QAEMPAUcFeatureVector@@0@Z  # cTraitQuery::Op1 migrated from s005709b0 (verbatim, slice spelling)
 00570e50 ?Op2@cTraitQuery@@QAEMPAUcFeatureVector@@0@Z  # cTraitQuery::Op2 migrated from s005709b0 (verbatim, slice spelling)
 00571100 ?Op3@cTraitQuery@@QAEMPAUcFeatureVector@@0@Z  # cTraitQuery::Op3 migrated from s005709b0 (verbatim, slice spelling)
@@ -10,6 +10,6 @@
 005716c0 ?begin@cFeatureVector@@QAEPAUKey12@@XZ  # cFeatureVector::begin migrated from s005709b0 (verbatim, slice spelling)
 005716e0 ?end@cFeatureVector@@QAEPAUKey12@@XZ  # cFeatureVector::end migrated from s005709b0 (verbatim, slice spelling)
 00571700 ?ResetResourceType@cFeatureVector@@QAEXXZ  # cFeatureVector::ResetResourceType migrated from s005709b0 (verbatim, slice spelling)
-00571720 cFeatureVector::assign  # erase + range insert + mfLen copy
+00571720 ?assign@cFeatureVector@@QAEXABU1@@Z  # cFeatureVector::assign migrated from s005709b0 (verbatim, slice spelling)
 00571790 ?add@cFeatureVector@@QAEMABUKey12@@M@Z  # cFeatureVector::add migrated from s005709b0 (verbatim, slice spelling)
 00571840 ?insertValue@cFeatureVector@@QAE?AUInsertResult@@ABUKey12@@@Z  # cFeatureVector::insertValue migrated from s005709b0 (verbatim, slice spelling)
