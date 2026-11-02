@@ -26,15 +26,15 @@
 00a49260 ?clock_free@Eapd@Audio@EA@@YAXPAUt_clock@123@@Z  # clock_free migrated from s00a488d0 (verbatim, slice spelling)
 00a492c0 ?clock_setftime@Eapd@Audio@EA@@YAXN@Z  # clock_setftime migrated from s00a488d0 (verbatim, slice spelling)
 00a492e0 ?sched_tick@Eapd@Audio@EA@@YAXM@Z  # sched_tick migrated from s00a488d0 (verbatim, slice spelling)
-00a49390  EA::Audio::Eapd::pd_new  # getbytes(c_size); g_pd=c; if c_patchable init save/gop/anything fields
-00a493d0  EA::Audio::Eapd::pd_free  # freemethod; drain save/gop/binbuf when patchable; freebytes
-00a49450  EA::Audio::Eapd::sys_register_loader  # register a loader node against s_stack key globals
-00a49490  EA::Audio::Eapd::pd_pushsym  # alloc 0x10 sys stack node, link, sys_gui acquire/release
-00a49500  EA::Audio::Eapd::pd_popsym  # pop s_stack node, free it, sys_gui acquire/release
-00a49560  EA::Audio::Eapd::pd_bang  # dispatch bang method
-00a49570  EA::Audio::Eapd::outlet_float  # dispatch float method
-00a49590  EA::Audio::Eapd::pd_symbol  # dispatch symbol method
-00a495b0  EA::Audio::Eapd::pd_list  # dispatch list method with the "list" t_symbol
+00a49390 ?pd_new@Eapd@Audio@EA@@YAPAXPAUt_class@123@@Z  # pd_new migrated from s00a488d0 (verbatim, slice spelling)
+00a493d0 ?pd_free@Eapd@Audio@EA@@YAXPAUt_gobj@123@@Z  # pd_free migrated from s00a488d0 (verbatim, slice spelling)
+00a49450 ?sys_register_loader@Eapd@Audio@EA@@YA_NPAX0@Z  # sys_register_loader migrated from s00a488d0 (verbatim, slice spelling)
+00a49490 ?pd_pushsym@Eapd@Audio@EA@@YAXPAUt_gobj@123@@Z  # pd_pushsym migrated from s00a488d0 (verbatim, slice spelling)
+00a49500 ?pd_popsym@Eapd@Audio@EA@@YAXPAPAV_class@123@@Z  # EA::Audio::Eapd::pd_popsym migrated from s00a488d0
+00a49560 ?pd_bang@Eapd@Audio@EA@@YAXPAPAV_class@123@@Z  # EA::Audio::Eapd::pd_bang migrated from s00a488d0
+00a49570 ?outlet_float@Eapd@Audio@EA@@YAXPAV_outlet@123@M@Z  # EA::Audio::Eapd::outlet_float migrated from s00a488d0
+00a49590 ?pd_symbol@Eapd@Audio@EA@@YAXPAUt_gobj@123@Ut_symbol@123@@Z  # pd_symbol migrated from s00a488d0 (verbatim, slice spelling)
+00a495b0 ?pd_list@Eapd@Audio@EA@@YAXPAUt_gobj@123@HHHPAX@Z  # pd_list migrated from s00a488d0 (verbatim, slice spelling)
 00a495e0 ?conf_init@Eapd@Audio@EA@@YA_NXZ  # conf_init migrated from s00a488d0 (verbatim, slice spelling)
 00a49610  EA::Audio::Eapd::getbytes  # pdinstance()->alloc(n,tag) then memfill
 00a49650  EA::Audio::Eapd::freebytes  # pdinstance()->freemem(p)
