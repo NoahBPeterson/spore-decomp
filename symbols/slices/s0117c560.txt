@@ -1,4 +1,4 @@
-0117c560 ?SSL_new@@YAPAUssl_st@@PAUssl_ctx_st@@@Z  # SSL_new (OpenSSL 0.9.8 ssl_lib.c)
+0117c560 ?SSL_new@@YAPAUssl_st_s0117_c560@@PAUssl_ctx_st_s0117_c560@@@Z  # SSL_new migrated from s0117c560 (verbatim, slice spelling)
 0117c8f0 ?SSL_accept@@YAHPAUssl_st_s0117_c560@@@Z  # SSL_accept migrated from s0117c560 (verbatim, slice spelling)
 0117c940 ?SSL_ctrl@@YAJPAUssl_st@@HJPAX@Z  # SSL_ctrl
 0117ca60 ?SSL_CTX_new@@YAPAUssl_ctx_st_s0117_c560@@PAUssl_method_st_s0117_c560@@@Z  # SSL_CTX_new migrated from s0117c560 (verbatim, slice spelling)

@@ -14,3 +14,8 @@
 ../src/game/UTFSpore_Win32/SSLManager.cpp  ?Fn0094f260@@YIHPAUStreamRef94@@@Z  0094f260  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/UTFSpore_Win32/SSLManager.cpp  ?Fn0094f850@@YAXPAUMutexNew94@@@Z  0094f850  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/UTFSpore_Win32/SSLManager.cpp  ?SSLManager_Shutdown@@YIDPAX@Z  0094fcc0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/SSLManager.cpp  ?BIO_ctrl@@YAJPAUbio_st_s0117_6210@@HJPAX@Z  01177260  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/SSLManager.cpp  ?FUN_0117b210@@YAXHHHH@Z  0117b210  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/SSLManager.cpp  ?FUN_0117b780@@YAHPAHH@Z  0117b780  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/SSLManager.cpp  ?FUN_0117c300@@YAHHH@Z  0117c300  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/SSLManager.cpp  ?SSL_new@@YAPAUssl_st_s0117_c560@@PAUssl_ctx_st_s0117_c560@@@Z  0117c560  /O2 /MD /Gy /TP /Isrc/game/include

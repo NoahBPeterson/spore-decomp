@@ -1,4 +1,4 @@
-// src/game/UTFSpore_Win32/SSLManager.cpp -- migrated from slice(s) s0094fb80, s0094ea80 by tools/migrate/rewrite.py
+// src/game/UTFSpore_Win32/SSLManager.cpp -- migrated from slice(s) s0117c560, s01179f60, s01176210, s0094fb80, s0094ea80 by tools/migrate/rewrite.py
 // Object file: UTFSpore_Win32/SSLManager.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -55,6 +55,7 @@ extern "C" char  g_szEmpty[];                      // 0x013ec47c
 #include <intrin.h>
 #include "EA/Thread/Mutex.h"
 #include "EA/Sockets/Socket.h"
+#include <string.h>
 #pragma intrinsic(_InterlockedIncrement, _InterlockedExchangeAdd, _InterlockedExchange)
 #pragma intrinsic(strcmp)
 
@@ -273,6 +274,237 @@ struct SSLManager_s0094_fb80 {
     void* FindAndRelease(const char* name, char remove);      // 0x0094F870
 };
 // ---- items of slice s0094fb80 end
+
+// ---- items of slice s01176210 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C" void* CRYPTO_malloc(int num, const char* file, int line);
+extern "C" void CRYPTO_free(void* p);
+typedef unsigned long ulong;
+struct bio_st_s0117_6210;
+struct bio_method_st;
+typedef long (*bio_info_cb)(bio_st_s0117_6210*, int, const char*, int, long, long);
+struct bio_method_st {
+    int type;                                         // 0x00
+    const char* name;                                 // 0x04
+    int (*bwrite)(bio_st_s0117_6210*, const char*, int);         // 0x08
+    int (*bread)(bio_st_s0117_6210*, char*, int);                // 0x0c
+    int (*bputs)(bio_st_s0117_6210*, const char*);               // 0x10
+    int (*bgets)(bio_st_s0117_6210*, char*, int);                // 0x14
+    long (*ctrl)(bio_st_s0117_6210*, int, long, void*);          // 0x18
+    int (*create)(bio_st_s0117_6210*);                           // 0x1c
+    int (*destroy)(bio_st_s0117_6210*);                          // 0x20
+    long (*callback_ctrl)(bio_st_s0117_6210*, int, bio_info_cb*); // 0x24
+};
+struct bio_st_s0117_6210 {
+    bio_method_st* method;      // 0x00
+    bio_info_cb callback;       // 0x04
+    char* cb_arg;               // 0x08
+    int init;                   // 0x0c
+    int shutdown;               // 0x10
+    int flags;                  // 0x14
+    int retry_reason;           // 0x18
+    int num;                    // 0x1c
+    void* ptr;                  // 0x20
+    bio_st_s0117_6210* next_bio;           // 0x24
+    bio_st_s0117_6210* prev_bio;           // 0x28
+    int references;             // 0x2c
+    ulong num_read;             // 0x30
+    ulong num_write;            // 0x34
+    void* ex_data;              // 0x38
+    int ex_data_dummy;          // 0x3c
+};
+extern "C" int BIO_set(bio_st_s0117_6210* b, bio_method_st* type);
+bio_st_s0117_6210* __cdecl BIO_new_s0117_6210(bio_method_st* type);
+// ---- items of slice s01176210 end
+
+// ---- items of slice s01179f60 begin (TODO(rewrite): local stubs, replace by canonical classes)
+int   __cdecl FUN_01190020(void* fn, const char* name, int a, int b, int c, int d);
+int   __cdecl FUN_01193a90(int a, void* b, void* c, void* d);
+int   __cdecl FUN_01196970(void);
+void* __cdecl FUN_01177470(int a);
+void  __cdecl FUN_01177260(void* a, int b, int c, int d);
+void* __cdecl BIO_pop(void* b);
+void* __cdecl BIO_push(void* a, void* b);
+int   __cdecl BIO_int_ctrl(void* b, int cmd, long larg, int iarg);
+// ---- items of slice s01179f60 end
+
+// ---- items of slice s0117c560 begin (TODO(rewrite): local stubs, replace by canonical classes)
+struct ssl_st_s0117_c560;
+struct ssl_ctx_st_s0117_c560;
+struct ssl_method_st_s0117_c560;
+struct X509_NAME_ENTRY;
+struct ASN1_OBJECT;
+struct ASN1_STRING;
+struct ssl_method_st_s0117_c560
+{
+	void* v00;                                        // 0x000
+	int (*ssl_new)(ssl_st_s0117_c560*);                          // 0x004
+	void* v08;                                        // 0x008
+	void* v0c;                                        // 0x00c
+	void* func_10;                                    // 0x010
+	void* v14[4];                                     // 0x014
+	int (*ssl_accept)(ssl_st_s0117_c560*);                       // 0x024
+	void* v28[6];                                     // 0x028
+	long (*ctrl)(ssl_st_s0117_c560*, int, long, void*);          // 0x040
+	void* v44[7];                                     // 0x044
+	int (*get_timeout)(void);                         // 0x060
+};
+struct ssl_ctx_st_s0117_c560
+{
+	ssl_method_st_s0117_c560* method;                            // 0x000
+	void* cipher_list;                                // 0x004
+	void* cipher_list_by_id;                          // 0x008
+	void* cert_store;                                 // 0x00c
+	void* sessions;                                   // 0x010
+	int session_cache_size;                           // 0x014
+	void* session_cache_head;                         // 0x018
+	void* session_cache_tail;                         // 0x01c
+	int session_cache_mode;                           // 0x020
+	int session_timeout;                              // 0x024
+	void* new_session_cb;                             // 0x028
+	void* remove_session_cb;                          // 0x02c
+	void* get_session_cb;                             // 0x030
+	char pad34[0x2c];                                 // 0x034
+	int references;                                   // 0x060
+	int pad64;                                        // 0x064
+	int pad68;                                        // 0x068
+	int pad6c[5];                                     // 0x06c
+	void* ex_data;                                    // 0x080
+	int ex_data_dummy;                                // 0x084
+	void* md5;                                        // 0x088
+	void* sha1;                                       // 0x08c
+	void* sha256;                                     // 0x090
+	int z94;                                          // 0x094
+	int z98;                                          // 0x098
+	int z9c;                                          // 0x09c
+	int za0;                                          // 0x0a0
+	int a4;                                           // 0x0a4
+	int a8;                                           // 0x0a8
+	int ac;                                           // 0x0ac
+	void* cache;                                      // 0x0b0
+	int b4, b8, bc, c0, c4;                           // 0x0b4
+	int c8, cc, d0, d4, d8, dc, e0, e4, e8, ec;       // 0x0c8
+	void* verify_param;                               // 0x0f0
+	int f4;                                           // 0x0f4
+};
+struct ssl_st_s0117_c560
+{
+	int version;                                      // 0x000
+	int type;                                         // 0x004
+	ssl_method_st_s0117_c560* method;                            // 0x008
+	void* rbio;                                       // 0x00c
+	void* wbio;                                       // 0x010
+	int in_handshake;                                 // 0x014
+	int rwstate;                                      // 0x018
+	int pad1c;                                        // 0x01c
+	void* handshake_func;                             // 0x020
+	int server;                                       // 0x024
+	void* new_session;                                // 0x028
+	int quiet_shutdown;                               // 0x02c
+	int flags30;                                      // 0x030
+	int state;                                        // 0x034
+	int rstate;                                       // 0x038
+	void* init_buf;                                   // 0x03c
+	int pad40[6];                                     // 0x040
+	void* s3;                                         // 0x058
+	void* p5c;                                        // 0x05c
+	int f60;                                          // 0x060
+	int f64;                                          // 0x064
+	int f68;                                          // 0x068
+	int pad6c;                                        // 0x06c
+	void* verify_param;                               // 0x070
+	int pad74[8];                                     // 0x074
+	void* cert;                                       // 0x094
+	unsigned int sid_ctx_length;                      // 0x098
+	unsigned char sid_ctx[32];                        // 0x09c
+	int fbc;                                          // 0x0bc
+	int fc0;                                          // 0x0c0
+	int fc4;                                          // 0x0c4
+	int fc8;                                          // 0x0c8
+	int padcc[3];                                     // 0x0cc
+	ssl_ctx_st_s0117_c560* ctx;                                  // 0x0d8
+	int pad_dc;                                       // 0x0dc
+	int fe0;                                          // 0x0e0
+	void* ex_data;                                    // 0x0e4
+	int ex_data_dummy;                                // 0x0e8
+	int pad_ec;                                       // 0x0ec
+	int ff0;                                          // 0x0f0
+	unsigned long options;                            // 0x0f4
+	unsigned long f_f8;                               // 0x0f8
+	unsigned long f_fc;                               // 0x0fc
+};
+struct ASN1_OBJECT { int dummy; };
+struct ASN1_STRING { int length; int type; unsigned char* data; };
+struct X509_NAME_ENTRY
+{
+	ASN1_OBJECT* object;                              // 0x000
+	ASN1_STRING* value;                               // 0x004
+	int set;                                          // 0x008
+};
+extern "C"
+{
+	void ERR_put_error(int lib, int func, int reason, const char* file, int line);   // 0x01180d50
+	void ERR_add_error_data(int num, ...);                          // 0x01180a70
+	unsigned long ERR_peek_error(void);                             // 0x01181100
+	void* CRYPTO_malloc(int num, const char* file, int line);       // 0x01183410
+	void CRYPTO_free(void* addr);                                   // 0x011835c0
+	int CRYPTO_add_lock_s0117_c560(int* pointer, int amount, int type, const char* file, int line); // 0x011815d0
+	int CRYPTO_new_ex_data(int class_id, void* obj, void* ad);      // 0x01184260
+	void OpenSSLDie(const char* file, int line, const char* msg);   // 0x01181510
+	void operator_new_arr(void* dst, int val, int size);            // 0x011e073e
+
+	int SSL_get_ex_data_X509_STORE_CTX_idx(void);                   // 0x01194840
+	void SSL_CTX_free_s0117_c560(ssl_ctx_st_s0117_c560*);                                 // 0x0117ba10
+	void ssl_cert_free(void*);                                      // 0x01194b70
+	void* ssl_cert_dup(void*);                                      // 0x01194940
+	void* X509_VERIFY_PARAM_new(void);                              // 0x01194290
+	void X509_VERIFY_PARAM_inherit(void* param, void* src);         // 0x011944b0
+	void* X509_STORE_new(void);                                     // 0x01195420
+	void* lh_new(unsigned long (*hash)(void*), int (*cmp)(void*, void*)); // 0x01194090
+	unsigned long SSL_SESSION_hash(void*);                          // 0x0117b9d0
+	int SSL_SESSION_cmp(void*, void*);                              // 0x0117ba00
+	void* EVP_get_digestbyname(const char* name);                   // 0x011973b0
+	void* FUN_011948f0(void);                                       // 0x011948f0
+	void FUN_01193a90(void*, void**, void**, const char*);          // 0x01193a90
+	void* FUN_01193d20(void);                                       // 0x01193d20
+	void FUN_0117c200(void);                                        // 0x0117c200
+	void FUN_0117c440(ssl_st_s0117_c560*);                                     // 0x0117c440
+
+	int sk_num_s0117_c560(const void* sk);                                     // 0x0117dde0
+	void* sk_value_s0117_c560(const void* sk, int i);                          // 0x0117ddf0
+	int sk_insert(void* sk, void* p, int where);                    // 0x0117dc00
+	typedef int (*sk_cmp_fn)(void*, void*);
+	void* sk_new(sk_cmp_fn cmp);                                    // 0x0117db90
+
+	void* FUN_01194ee0(void);                                       // 0x01194ee0
+	void FUN_01194ef0(void*);                                       // 0x01194ef0
+	void* FUN_01194f10(void*);                                      // 0x01194f10
+	void ASN1_OBJECT_free(void*);                                   // 0x011998c0
+	void* FUN_011991b0(void*);                                      // 0x011991b0
+	int X509_NAME_ENTRY_set_data(X509_NAME_ENTRY*, int, const unsigned char*, int); // 0x0117d2a0
+	void* OBJ_txt2obj(const char* txt, int no_name);                // 0x0117ffe0
+
+	void* FUN_011918c0(void*);                                      // 0x011918c0
+	int EVP_PKEY_cmp(void*, void*);                                 // 0x011913a0
+	void EVP_PKEY_free(void*);                                      // 0x01191780
+
+	int BIO_test_flags(void* b, int flags);                         // 0x01176fa0
+	int BIO_get_retry_reason(void* b);                              // 0x011cac20
+
+	int FUN_01199e70(const unsigned char** pp, long* plength, int* ptag, int* pclass, long omax); // 0x01199e70
+	void* FUN_011974f0(void);                                       // 0x011974f0
+	void FUN_01197500(void*);                                       // 0x01197500
+	void ASN1_TYPE_set(void*, int, void*);                          // 0x01189610
+	void* FUN_01199d70(int type);                                   // 0x01199d70
+	int FUN_01199cb0(void*, const unsigned char*, int);             // 0x01199cb0
+	void ASN1_STRING_free(void*);                                   // 0x01199db0
+	int FUN_01199930(void*, const unsigned char**, int);            // 0x01199930
+	int FUN_0119acf0(void*, const unsigned char**, int);            // 0x0119acf0
+	int FUN_0119a850(void*, const unsigned char**, int);            // 0x0119a850
+	int FUN_0117f2a0(void*, const unsigned char**, int);            // 0x0117f2a0
+	void FUN_01198850(void*);                                       // 0x01198850
+	int asn1_check_eoc(const unsigned char**);                      // 0x0117e310
+}
+// ---- items of slice s0117c560 end
 
 // @ 0x0094eb70
 void* __cdecl tmp_dh_callback(int a, int b, int bits)
@@ -891,4 +1123,166 @@ char __fastcall SSLManager_Init(void* self)
 done:
     I8(self, 8) = 1;
     return 1;
+}
+
+// @ 0x01177260
+long __cdecl BIO_ctrl(bio_st_s0117_6210* b, int cmd, long larg, void* parg)
+{
+    long ret;
+    bio_info_cb cb;
+
+    if (b == 0)
+        return 0;
+    if (b->method == 0 || b->method->ctrl == 0) {
+        ERR_put_error(0x20, 0x67, 0x79, 0, 0);
+        return -2;
+    }
+    cb = b->callback;
+    if (cb != 0 && (ret = cb(b, 6, (const char*)parg, cmd, larg, 1)) <= 0)
+        return ret;
+    ret = b->method->ctrl(b, cmd, larg, parg);
+    if (cb != 0)
+        ret = cb(b, 0x86, (const char*)parg, cmd, larg, ret);
+    return ret;
+}
+
+// @ 0x01177470
+bio_st_s0117_6210* __cdecl BIO_new_s0117_6210(bio_method_st* type)
+{
+    bio_st_s0117_6210* ret;
+
+    ret = (bio_st_s0117_6210*)CRYPTO_malloc(sizeof(bio_st_s0117_6210), ".\\crypto\\bio\\bio_lib.c", 0x46);
+    if (ret == 0) {
+        ERR_put_error(0x20, 0x6c, 0x41, 0, 0);
+        return 0;
+    }
+    if (BIO_set(ret, type) == 0) {
+        CRYPTO_free(ret);
+        ret = 0;
+    }
+    return ret;
+}
+
+// @ 0x0117b210
+void __cdecl FUN_0117b210(int param_1, int param_2, int param_3, int param_4)
+{
+    FUN_01190020((void*)0x01192e50, "DH PARAMETERS", param_1, param_2, param_3, param_4);
+}
+
+// @ 0x0117b780
+int __cdecl FUN_0117b780(int* param_1, int param_2)
+{
+    int iVar1 = FUN_01193a90(*param_1, param_1 + 1, param_1 + 2, (void*)param_2);
+    if (iVar1 != 0) {
+        iVar1 = sk_num((void*)iVar1);
+        if (iVar1 == 0) {
+            ERR_put_error(0x14, 0x10d, 0xb9, 0, 0);
+            return 0;
+        }
+        return 1;
+    }
+    return 0;
+}
+
+// @ 0x0117c300
+int __cdecl FUN_0117c300(int param_1, int param_2)
+{
+    int iVar2 = *(int*)(param_1 + 0x14);
+    if (iVar2 == 0) {
+        int uVar1 = FUN_01196970();
+        iVar2 = (int)FUN_01177470(uVar1);
+        if (iVar2 == 0)
+            return 0;
+        *(int*)(param_1 + 0x14) = iVar2;
+    } else if (iVar2 == *(int*)(param_1 + 0x10)) {
+        int uVar1 = (int)BIO_pop(*(void**)(param_1 + 0x10));
+        *(int*)(param_1 + 0x10) = uVar1;
+    }
+    FUN_01177260((void*)iVar2, 1, 0, 0);
+    int iVar3 = BIO_int_ctrl((void*)iVar2, 0x75, 1, 0);
+    if (iVar3 == 0) {
+        ERR_put_error(0x14, 0xb8, 7, 0, 0);
+        return 0;
+    }
+    if (param_2 != 0) {
+        if (*(int*)(param_1 + 0x10) != iVar2) {
+            int uVar1 = (int)BIO_push((void*)iVar2, *(void**)(param_1 + 0x10));
+            *(int*)(param_1 + 0x10) = uVar1;
+            return 1;
+        }
+    } else if (*(int*)(param_1 + 0x10) == iVar2) {
+        int uVar1 = (int)BIO_pop((void*)iVar2);
+        *(int*)(param_1 + 0x10) = uVar1;
+    }
+    return 1;
+}
+
+// @ 0x0117c560
+ssl_st_s0117_c560* SSL_new(ssl_ctx_st_s0117_c560* ctx)
+{
+	ssl_st_s0117_c560* s;
+
+	if (ctx == 0)
+	{
+		ERR_put_error(0x14, 0xba, 0xc3, 0, 0);
+		return 0;
+	}
+	if (ctx->method == 0)
+	{
+		ERR_put_error(0x14, 0xba, 0xe4, 0, 0);
+		return 0;
+	}
+	s = (ssl_st_s0117_c560*)CRYPTO_malloc(0x108, ".\\ssl\\ssl_lib.c", 0xfe);
+	if (s == 0)
+		goto err;
+	operator_new_arr(s, 0, 0x108);
+	s->options = (unsigned long)ctx->a4;
+	s->f_f8 = (unsigned long)ctx->a8;
+	s->f_fc = (unsigned long)ctx->ac;
+	if (ctx->cache != 0)
+	{
+		s->cert = ssl_cert_dup(ctx->cache);
+		if (s->cert == 0)
+			goto err_free;
+	}
+	else
+	{
+		s->cert = 0;
+	}
+	s->f60 = ctx->b4;
+	s->f64 = ctx->b8;
+	s->f68 = ctx->bc;
+	s->fc4 = ctx->c0;
+	s->sid_ctx_length = (unsigned int)ctx->c4;
+	if (s->sid_ctx_length > 0x20)
+		OpenSSLDie(".\\ssl\\ssl_lib.c", 0x125, "s->sid_ctx_length <= sizeof s->sid_ctx");
+	memcpy(s->sid_ctx, &ctx->c8, 0x20);
+	s->fc8 = ctx->e8;
+	s->fc0 = ctx->ec;
+	s->verify_param = X509_VERIFY_PARAM_new();
+	if (s->verify_param == 0)
+		goto err_free;
+	X509_VERIFY_PARAM_inherit(s->verify_param, ctx->verify_param);
+	s->quiet_shutdown = ctx->f4;
+	CRYPTO_add_lock_s0117_c560(&ctx->references, 1, 0xc, ".\\ssl\\ssl_lib.c", 0x134);
+	s->ctx = ctx;
+	s->fe0 = 0;
+	s->method = ctx->method;
+	if (!s->method->ssl_new(s))
+		goto err_free;
+	s->ff0 = 1;
+	s->server = (ctx->method->func_10 != (void*)&FUN_0117c200);
+	FUN_0117c440(s);
+	CRYPTO_new_ex_data(1, s, &s->ex_data);
+	return s;
+
+err_free:
+	if (s->cert != 0)
+		ssl_cert_free(s->cert);
+	if (s->ctx != 0)
+		SSL_CTX_free_s0117_c560(s->ctx);
+	CRYPTO_free(s);
+err:
+	ERR_put_error(0x14, 0xba, 0x41, 0, 0);
+	return 0;
 }

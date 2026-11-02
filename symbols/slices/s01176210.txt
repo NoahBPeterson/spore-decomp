@@ -11,7 +11,7 @@
 01177070 BIO_write             # OpenSSL 0.9.8 BIO method dispatch write
 01177120 BIO_puts
 011771c0 BIO_gets
-01177260 BIO_ctrl               # BIO ctrl dispatch + callback helper
+01177260 ?BIO_ctrl@@YAJPAUbio_st_s0117_6210@@HJPAX@Z  # BIO_ctrl migrated from s01176210 (verbatim, slice spelling)
 011772f0 BIO_callback_ctrl
 01177470 BIO_new                # BIO allocation
 01177500 BIO_new_mem_buf        # memory BIO over caller buffer

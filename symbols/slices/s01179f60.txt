@@ -1,0 +1,3 @@
+0117b210 ?FUN_0117b210@@YAXHHHH@Z  # FUN_0117b210 migrated from s01179f60 (verbatim, slice spelling)
+0117b780 ?FUN_0117b780@@YAHPAHH@Z  # FUN_0117b780 migrated from s01179f60 (verbatim, slice spelling)
+0117c300 ?FUN_0117c300@@YAHHH@Z  # FUN_0117c300 migrated from s01179f60 (verbatim, slice spelling)
