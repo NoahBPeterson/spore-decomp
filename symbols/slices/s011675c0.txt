@@ -1,5 +1,5 @@
-011675c0 NegateRows  # 8x9 cell table, negates floats +0x14/+0x1c per 0x20 cell
-01167cf0 ?PackHeightBlock@@YAXPBMPAF@Z  # PackHeightBlock(src, dst): 8x8x4 float source cells -> int16 fixed-14 words
+011675c0 ?NegateRows@@YAXPAURow@@@Z  # NegateRows migrated from s011675c0 (verbatim, slice spelling)
+01167cf0 ?PackHeightBlock@@YAXPBMPAF@Z  # PackHeightBlock migrated from s011675c0 (verbatim, slice spelling)
 011680b0 ??_GcHeightBlock@@UAEPAXI@Z  # cHeightBlock scalar deleting destructor: free mpLinked then call the base destructor
 011680f0 ?SetHandle@cHeightCodec@@QAEXI@Z  # cHeightCodec::SetHandle(handle): store the packed id as the source pointer and reset the cursor
 01168110 ??0cHeightCodec@@QAE@XZ  # cHeightCodec::cHeightCodec: clear the inited flag and the fallback id
@@ -10,4 +10,4 @@
 01168400 ??1cHeightCodec@@UAE@XZ  # cHeightCodec::~cHeightCodec: release the allocated block data
 01168420 ??_GcHeightCodec@@UAEPAXI@Z  # cHeightCodec scalar deleting destructor
 01168460 ?Init@cHeightCodec@@QAEHII@Z  # cHeightCodec::Init(handle, unused): release any old source, resolve, allocate and let the derived class bind
-011684c0 ?ReadBigEndian@@YAHPBEH@Z  # ReadBigEndian(data, count): assemble count big-endian bytes and sign-extend 1/2/3-byte results
+011684c0 ?ReadBigEndian@@YAHPBEH@Z  # ReadBigEndian migrated from s011675c0 (verbatim, slice spelling)
