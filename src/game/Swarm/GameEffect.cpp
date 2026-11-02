@@ -1,4 +1,4 @@
-// src/game/Swarm/GameEffect.cpp -- migrated from slice(s) s004ad550 by tools/migrate/rewrite.py
+// src/game/Swarm/GameEffect.cpp -- migrated from slice(s) s00a978d0, s004ad550 by tools/migrate/rewrite.py
 // Object file: Swarm/GameEffect.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -196,9 +196,288 @@ struct cSPEditorModel_s004a_d550 {
 }
 // ---- items of slice s004ad550 end
 
+// ---- items of slice s00a978d0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern void* EA_Messaging_GetServer();                                    // (0x883860)
+extern void Matrix3_Assign();                                             // (0x41cb40)
+extern void cTransform_PreTransformBy();                                  // (0x537f40)
+extern void cSPTransformOps_Assign();                                     // (0x537dc0)
+extern float   g_realZero;            // (0x1485378)
+extern float   g_realOne;             // (0x1485720)
+extern char    g_mat1678b78[];        // (0x1678b78) identity Matrix3
+extern char vtable_Eff0[];            // (0x1458788)
+extern char vtable_Eff1[];            // (0x14599e8)
+extern char vtable_IEvent[];          // (0x13ef094) SP::Audio::IEventModifier
+typedef unsigned short u16;
+typedef unsigned char  u8;
+typedef unsigned int   u32;
+struct Vector3_t { float x, y, z; };   // 0xc
+struct Matrix3   { float m[9]; };      // 0x24
+extern Vector3_t g_vec1678ad0;        // (0x1678ad0)
+struct cSPTransform_s00a9_78d0                    // 0x38 bytes
+{
+	u16     mFlags;                    // +0x00
+	u16     mModCount;                 // +0x02
+	float   mOffsetX;                  // +0x04
+	float   mOffsetY;                  // +0x08
+	float   mOffsetZ;                  // +0x0c
+	float   mScale;                    // +0x10
+	Matrix3 mRotation;                 // +0x14
+};
+struct cGameDescription
+{
+	char  pad00[8];                    // +0x00
+	u32   mFlags;                      // +0x08
+	u32   mMessageID;                  // +0x0c
+	u32   mData1;                      // +0x10
+	u32   mData2;                      // +0x14
+	u32   mData3;                      // +0x18
+	u32   mData4;                      // +0x1c
+	const void* mString;               // +0x20
+	char  pad24[0x0c];                 // +0x24
+	float mLife;                       // +0x30
+};
+namespace EA {
+namespace Swarm {
+struct IUnknown32;
+}
+}
+namespace EA {
+namespace Swarm {
+struct cGameEffect                     // layout from the (0x00a98340) constructor
+{
+	void*  mpVtbl0;                    // +0x00  (0x1458788)
+	void*  mpVtbl1;                    // +0x04  (0x14599e8)
+	u32    mn08;                       // +0x08
+	cGameDescription* mpDesc;          // +0x0c
+	u8     mActive;                    // +0x10
+	char   pad11[3];                   // +0x11
+	float  mAge;                       // +0x14
+	cSPTransform_s00a9_78d0 mTransform;           // +0x18
+	IUnknown32*  mOwner;               // +0x50
+
+	char SetUnknownParam(int which, IUnknown32* value);   // (0xa98030)
+	void ApplyEffect(float dt, int, int);                 // (0xa98050)
+	void Init(int, int, void* owner);                     // (0xa98090)
+	void Start(int);                                      // (0xa980b0)
+	void Stop(int);                                       // (0xa98200)
+	void SetTransform(void* xform, const cSPTransform_s00a9_78d0* src);  // (0xa98400)
+	cGameEffect* Construct(cGameDescription* desc);       // (0xa98340)
+};
+}
+}
+namespace EA {
+namespace Swarm {
+struct InitSource
+{
+	char pad00[0xb8];                  // +0x00
+	IUnknown32* mpOwner;               // +0xb8
+};
+}
+}
+using EA::Swarm::cGameEffect;
+using EA::Swarm::IUnknown32;
+struct EffectMsg
+{
+	u32 mData1;                        // +0x00
+	u32 mPad04;                        // +0x04
+	u32 mData2;                        // +0x08
+	u32 mPad0c;                        // +0x0c
+	u32 mData3;                        // +0x10
+	u32 mPad14;                        // +0x14
+	u32 mData4;                        // +0x18
+	u32 mPad1c;                        // +0x1c
+	const void* mString;               // +0x20
+	u32 mPad24;                        // +0x24
+	void* mTransform;                  // +0x28
+	u32 mPad2c;                        // +0x2c
+	void* mOwner;                      // +0x30
+	u32 mPad34;                        // +0x34
+	u32 mType;                         // +0x38
+	u32 mPad3c;                        // +0x3c
+};
+// ---- items of slice s00a978d0 end
+
 // @ 0x004ae250
 namespace SP {
 void cSPEditorModel_s004a_d550::Update()
 {
 }
 }  // namespace SP
+
+// @ 0x00a98030
+char EA::Swarm::cGameEffect::SetUnknownParam(int which, IUnknown32* value)
+{
+	char result = 1;
+	if (which == 1)
+		mOwner = value;
+	else
+		result = 0;
+	return result;
+}
+
+// @ 0x00a98050
+void EA::Swarm::cGameEffect::ApplyEffect(float dt, int, int)
+{
+	mAge = dt + mAge;
+	float life = mpDesc->mLife;
+	if (life > g_realZero && mAge > life)
+		(*(void(__thiscall**)(void*, int))(*(char**)this + 0x0c))(this, 0);
+}
+
+// @ 0x00a98090
+void EA::Swarm::cGameEffect::Init(int, int, void* owner)
+{
+	if (owner != 0)
+		mOwner = ((InitSource*)owner)->mpOwner;
+}
+
+// @ 0x00a980b0
+void EA::Swarm::cGameEffect::Start(int)
+{
+	if (mActive != 0)
+		return;
+
+	mActive = 1;
+	mAge = 0.0f;
+
+	void* server = EA_Messaging_GetServer();
+	if (server == 0)
+		return;
+
+	cGameDescription* desc = mpDesc;
+
+	if (((desc->mFlags >> 3) & 1) != 0) {
+		EffectMsg msg;
+		msg.mType = 0;
+		if (((desc->mFlags >> 5) & 1) != 0)
+			msg.mData1 = desc->mData1;
+		if (((desc->mFlags >> 6) & 1) != 0)
+			msg.mData2 = desc->mData2;
+		if (((desc->mFlags >> 7) & 1) != 0)
+			msg.mData3 = desc->mData3;
+		if (((desc->mFlags >> 8) & 1) != 0)
+			msg.mData4 = desc->mData4;
+		if (((desc->mFlags >> 9) & 1) != 0)
+			msg.mString = desc->mString;
+		msg.mOwner = mOwner;
+		msg.mTransform = &mTransform;
+		(*(void(__thiscall**)(void*, u32, EffectMsg*, int))(*(char**)server + 0x14))(server, desc->mMessageID, &msg, 0);
+	}
+
+	cGameDescription* desc0 = mpDesc;
+	if ((desc0->mFlags & 1) != 0) {
+		EffectMsg msg;
+		msg.mData1 = 0;
+		msg.mData2 = 0;
+		(*(void(__thiscall**)(void*, u32, EffectMsg*, int))(*(char**)server + 0x14))(server, 0x0e7a8471, &msg, 0);
+	}
+
+	cGameDescription* desc1 = mpDesc;
+	if (((desc1->mFlags >> 1) & 1) != 0) {
+		EffectMsg msg;
+		msg.mData1 = 1;
+		msg.mData2 = 0;
+		(*(void(__thiscall**)(void*, u32, EffectMsg*, int))(*(char**)server + 0x14))(server, 0x0e7a8471, &msg, 0);
+	}
+
+	cGameDescription* desc2 = mpDesc;
+	if (((desc2->mFlags >> 2) & 1) != 0) {
+		EffectMsg msg;
+		msg.mData1 = 2;
+		msg.mData2 = 0;
+		(*(void(__thiscall**)(void*, u32, EffectMsg*, int))(*(char**)server + 0x14))(server, 0x0e7a8473, &msg, 0);
+	}
+}
+
+// @ 0x00a98200
+void EA::Swarm::cGameEffect::Stop(int)
+{
+	if (mActive == 0)
+		return;
+
+	mActive = 0;
+
+	void* server = EA_Messaging_GetServer();
+	if (server == 0)
+		return;
+
+	cGameDescription* desc = mpDesc;
+
+	if ((desc->mFlags & 1) != 0) {
+		EffectMsg msg;
+		msg.mData1 = 0;
+		msg.mData2 = 0;
+		(*(void(__thiscall**)(void*, u32, EffectMsg*, int))(*(char**)server + 0x14))(server, 0x0e7a8472, &msg, 0);
+	}
+
+	cGameDescription* desc1 = mpDesc;
+	if (((desc1->mFlags >> 1) & 1) != 0) {
+		EffectMsg msg;
+		msg.mData1 = 1;
+		msg.mData2 = 0;
+		(*(void(__thiscall**)(void*, u32, EffectMsg*, int))(*(char**)server + 0x14))(server, 0x0e7a8472, &msg, 0);
+	}
+
+	cGameDescription* desc2 = mpDesc;
+	if (((desc2->mFlags >> 2) & 1) != 0) {
+		EffectMsg msg;
+		msg.mData1 = 0;
+		msg.mData2 = 0;
+		(*(void(__thiscall**)(void*, u32, EffectMsg*, int))(*(char**)server + 0x14))(server, 0x0e7a8474, &msg, 0);
+	}
+
+	cGameDescription* desc3 = mpDesc;
+	if (((desc3->mFlags >> 4) & 1) != 0) {
+		EffectMsg msg;
+		msg.mType = 0;
+		if (((desc3->mFlags >> 5) & 1) != 0)
+			msg.mData1 = desc3->mData1;
+		if (((desc3->mFlags >> 6) & 1) != 0)
+			msg.mData2 = desc3->mData2;
+		if (((desc3->mFlags >> 7) & 1) != 0)
+			msg.mData3 = desc3->mData3;
+		if (((desc3->mFlags >> 8) & 1) != 0)
+			msg.mData4 = desc3->mData4;
+		if (((desc3->mFlags >> 9) & 1) != 0)
+			msg.mString = desc3->mString;
+		msg.mOwner = mOwner;
+		msg.mTransform = &mTransform;
+		(*(void(__thiscall**)(void*, u32, EffectMsg*, int))(*(char**)server + 0x14))(server, desc3->mMessageID, &msg, 0);
+	}
+}
+
+// @ 0x00a98340
+EA::Swarm::cGameEffect* EA::Swarm::cGameEffect::Construct(cGameDescription* desc)
+{
+	*(volatile void**)&mpVtbl1 = (void*)vtable_IEvent;
+	mn08 = 0;
+	mAge = 0.0f;
+	mpVtbl0 = (void*)vtable_Eff0;
+	mpVtbl1 = (void*)vtable_Eff1;
+	mpDesc = desc;
+	mActive = 0;
+	mTransform.mFlags = 0;
+	mTransform.mModCount = 0;
+	mTransform.mOffsetX = g_vec1678ad0.x;
+	mTransform.mOffsetY = g_vec1678ad0.y;
+	mTransform.mOffsetZ = g_vec1678ad0.z;
+	mTransform.mScale = g_realOne;
+	((void(__thiscall*)(void*, const void*))Matrix3_Assign)(&mTransform.mRotation, g_mat1678b78);
+	mOwner = 0;
+	return this;
+}
+
+// @ 0x00a98400
+void EA::Swarm::cGameEffect::SetTransform(void* xform, const cSPTransform_s00a9_78d0* src)
+{
+	cSPTransform_s00a9_78d0 tmp;
+	tmp.mFlags = src->mFlags;
+	tmp.mModCount = src->mModCount;
+	tmp.mOffsetX = src->mOffsetX;
+	tmp.mOffsetY = src->mOffsetY;
+	tmp.mOffsetZ = src->mOffsetZ;
+	tmp.mScale = src->mScale;
+	((void(__thiscall*)(void*, const void*))Matrix3_Assign)(&tmp.mRotation, &src->mRotation);
+	((void(__thiscall*)(void*, void*))cTransform_PreTransformBy)(&tmp, xform);
+	((void(__thiscall*)(void*, const void*))cSPTransformOps_Assign)(&mTransform, &tmp);
+}

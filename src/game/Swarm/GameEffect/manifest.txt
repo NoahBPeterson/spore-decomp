@@ -1,2 +1,6 @@
 # source  symbol  va  flags
 ../src/game/Swarm/GameEffect.cpp  ?Update@cSPEditorModel_s004a_d550@SP@@QAEXXZ  004ae250  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/Swarm/GameEffect.cpp  ?SetUnknownParam@cGameEffect@Swarm@EA@@QAEDHPAUIUnknown32@23@@Z  00a98030  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Swarm/GameEffect.cpp  ?ApplyEffect@cGameEffect@Swarm@EA@@QAEXMHH@Z  00a98050  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Swarm/GameEffect.cpp  ?Init@cGameEffect@Swarm@EA@@QAEXHHPAX@Z  00a98090  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Swarm/GameEffect.cpp  ?SetTransform@cGameEffect@Swarm@EA@@QAEXPAXPBUcSPTransform_s00a9_78d0@@@Z  00a98400  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
