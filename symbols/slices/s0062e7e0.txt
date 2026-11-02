@@ -4,7 +4,7 @@
 0062ec30 ?PreviousAnimWindowSet@cSPPlayModeAnimation@SP@@QAEXXZ  # SP::cSPPlayModeAnimation::PreviousAnimWindowSet migrated from s0062e7e0
 0062ec90 ?LoadAnimInfo@cSPPlayModeAnimation_s0062_e7e0@@QAEXPAVcSPPlayModeAnimPanelInfo@@PAUResourceKey@@@Z  # cSPPlayModeAnimation_s0062_e7e0::LoadAnimInfo migrated from s0062e7e0 (verbatim, slice spelling)
 0062efb0 ?LoadPanelInfo@cSPPlayModeAnimation_s0062_e7e0@@QAEXABUResourceKey@@@Z  # cSPPlayModeAnimation_s0062_e7e0::LoadPanelInfo migrated from s0062e7e0 (verbatim, slice spelling)
-0062f1e0 SP::cSPPlayModeAnimation::LoadAllAnimInfoFromGroup  # PDB candidate
+0062f1e0 ?LoadAllAnimInfo@cSPPlayModeAnimation@@QAEXXZ  # cSPPlayModeAnimation::LoadAllAnimInfo migrated from s0062e7e0 (verbatim, slice spelling)
 0062f2a0 ?Init@cSPPlayModeAnimation_s0062_e7e0@@QAEXPAXPAUcSPPlayModeUI_s0062_e7e0@@@Z  # cSPPlayModeAnimation_s0062_e7e0::Init migrated from s0062e7e0 (verbatim, slice spelling)
 0062f340 ?SetBGHilite@cSPPlayModeBGMgr@SP@@QAEXI@Z  # SP::cSPPlayModeBGMgr::SetBGHilite migrated from s0062e7e0
 0062f480 ?UpdateBGHilite@cSPPlayModeBGMgr@SP@@QAEXXZ  # SP::cSPPlayModeBGMgr::UpdateBGHilite migrated from s0062e7e0

@@ -1,6 +1,6 @@
 00621830 SP::Pollen::InitURLs  # PDB-resolved; registers base URLs + 43 id->path entries
-00621bf0 SP::cXHTMLControlAppearance::Apply  # PDB caller-single; applies drawables to a WinXHTML
-00621c80 SetGlobalAppearance  # AutoRefCount assignment into global 0x15f5f9c
+00621bf0 ?Apply@cXHTMLControlAppearance@@QAEXPAUWinXHTML@@@Z  # cXHTMLControlAppearance::Apply migrated from s00621830 (verbatim, slice spelling)
+00621c80 ?SetGlobalAppearance@@YAXPAUDrawable@@@Z  # SetGlobalAppearance migrated from s00621830 (verbatim, slice spelling)
 00621cc0 ?UninitCopy@@YAPAUControlDrawable@@PAU1@00@Z  # UninitCopy migrated from s00621830 (verbatim, slice spelling)
 00621d50 eastl::uninitialized_copy_backward<ControlDrawable>  # AddRef/Release on copy-backward
 00621db0 ?CreateHitMaskFromResource@cXHTMLControlAppearance@@QAE_NPAH0PAPAX@Z  # cXHTMLControlAppearance::CreateHitMaskFromResource migrated from s00621830 (verbatim, slice spelling)

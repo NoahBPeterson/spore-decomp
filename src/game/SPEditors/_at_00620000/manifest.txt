@@ -1,0 +1,23 @@
+# source  symbol  va  flags
+../src/game/SPEditors/_at_00620000.cpp  ?SetGlobalAppearance@@YAXPAUDrawable@@@Z  00621c80  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/_at_00620000.cpp  ?ToDouble@Pollen@SP@@YANPB_W@Z  00622f20  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/_at_00620000.cpp  ??0RandomOwner@@QAE@XZ  006249b0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/_at_00620000.cpp  ?w_6249d0@@YGPAUQuaternion@@PAU1@PBUVector3@@1@Z  006249d0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/_at_00620000.cpp  ?w_6249f0@@YGPAXPAXPAUT9f0@@@Z  006249f0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/_at_00620000.cpp  ?w_624a10@@YGPAUVector3@@PAU1@PBU1@1M@Z  00624a10  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/_at_00620000.cpp  ?w_624a40@@YGXMMM@Z  00624a40  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/_at_00620000.cpp  ?w_624a70@@YGXHHH@Z  00624a70  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/_at_00620000.cpp  ?w_624ab0@@YGXMM@Z  00624ab0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/_at_00620000.cpp  ?w_624b80@@YGMM@Z  00624b80  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/_at_00620000.cpp  ?w_624bc0@@YGMMM@Z  00624bc0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/_at_00620000.cpp  ?w_624c10@@YGMPBM@Z  00624c10  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/_at_00620000.cpp  ?w_624c60@@YGMM@Z  00624c60  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/_at_00620000.cpp  ?w_624cb0@@YGMMM@Z  00624cb0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/_at_00620000.cpp  ?w_624d10@@YGMM@Z  00624d10  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/_at_00620000.cpp  ?w_624d50@@YGMMM@Z  00624d50  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/_at_00620000.cpp  ?w_624da0@@YGMPBM@Z  00624da0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/_at_00620000.cpp  ?w_624df0@@YGPAUQuaternion@@PAU1@PBUVector3@@M@Z  00624df0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/_at_00620000.cpp  ?w_624e40@@YGPAUQuaternion@@PAU1@PBUVector3@@1M@Z  00624e40  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/_at_00620000.cpp  ?StartPath@cSPCasual_Path@@QAE_NXZ  0062dbf0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/_at_00620000.cpp  ?IsSendPhotoWinVisible@cSPPlayModePhotoBrowser@@QAEEXZ  0062fd60  /O2 /MD /Gy /TP /GS- /Isrc/game/include
+../src/game/SPEditors/_at_00620000.cpp  ?RFindFirstOf@@YAPBDPBD000@Z  0062ff90  /O2 /MD /Gy /TP /GS- /Isrc/game/include

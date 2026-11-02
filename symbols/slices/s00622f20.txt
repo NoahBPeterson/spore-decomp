@@ -1,4 +1,5 @@
-00622f20 SP::Pollen::ToDouble  # wcstod wrapper, byte-exact
+00622f20 ?ToDouble@Pollen@SP@@YANPB_W@Z  # ToDouble migrated from s00622f20 (verbatim, slice spelling)
+00622f40 ?HandleLinkMessage@Pollen@SP@@YG_NPAXPBULinkMessage@12@@Z  # HandleLinkMessage migrated from s00622f20 (verbatim, slice spelling)
 00622fe0 ?OnKeyUp@cXHTMLWin@Pollen@SP@@QAE_NHHH@Z  # cXHTMLWin::OnKeyUp migrated from s00622f20 (verbatim, slice spelling)
 00623000 SP::Pollen::IsSubmittableControl  # byte-exact: not disabled, not hidden input
 006230b0 ?CreateXHTMLButton@Pollen@SP@@YA_NPAPAVIWindow_s0062_2f20@UTFWin@EA@@@Z  # CreateXHTMLButton migrated from s00622f20 (verbatim, slice spelling)

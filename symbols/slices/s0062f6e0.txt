@@ -6,10 +6,11 @@
 0062f9f0 ?LoadBackground@cSPPlayModeBGMgr_s0062_f6e0@@QAEXPBUResourceKey@@@Z  # cSPPlayModeBGMgr_s0062_f6e0::LoadBackground migrated from s0062f6e0 (verbatim, slice spelling)
 0062fbc0 ?LoadAllBGInfoFromGroup@cSPPlayModeBGMgr_s0062_f6e0@@QAEXE@Z  # cSPPlayModeBGMgr_s0062_f6e0::LoadAllBGInfoFromGroup migrated from s0062f6e0 (verbatim, slice spelling)
 0062fc90 ?Init@cSPPlayModeBGMgr_s0062_f6e0@@QAEXIIIIE@Z  # cSPPlayModeBGMgr_s0062_f6e0::Init migrated from s0062f6e0 (verbatim, slice spelling)
-0062fd60 SP::cSPPlayModePhotoBrowser::IsSendPhotoWinVisible  # card: PDB candidate (caller-single); tests visibility of editor window 0x3f67620
+0062fd60 ?IsSendPhotoWinVisible@cSPPlayModePhotoBrowser@@QAEEXZ  # cSPPlayModePhotoBrowser::IsSendPhotoWinVisible migrated from s0062f6e0 (verbatim, slice spelling)
 0062fda0 ?EnterMoveMode@cSPPlayModePhotoBrowser@SP@@QAEXXZ  # SP::cSPPlayModePhotoBrowser::EnterMoveMode migrated from s0062f6e0
 0062fe40 ?EnterDeleteMode@cSPPlayModePhotoBrowser@SP@@QAEXXZ  # SP::cSPPlayModePhotoBrowser::EnterDeleteMode migrated from s0062f6e0
 0062fee0 ?GetHeaderInfo@@YGHPAXH@Z  # GetHeaderInfo migrated from s0062f6e0 (verbatim, slice spelling)
+0062ff90 ?RFindFirstOf@@YAPBDPBD000@Z  # RFindFirstOf migrated from s0062f6e0 (verbatim, slice spelling)
 00630090 ?SelectAll@cSPPlayModePhotoBrowser@SP@@QAEX_N@Z  # SP::cSPPlayModePhotoBrowser::SelectAll migrated from s0062f6e0
 006300d0 ?GetImageFromRaster@cSPPlayModePhotoBrowser@@SGPAUUIImageView@@PAX@Z  # cSPPlayModePhotoBrowser::GetImageFromRaster migrated from s0062f6e0 (verbatim, slice spelling)
 006301a0 ?ExitDeleteMode@cSPPlayModePhotoBrowser@SP@@QAEXXZ  # SP::cSPPlayModePhotoBrowser::ExitDeleteMode migrated from s0062f6e0

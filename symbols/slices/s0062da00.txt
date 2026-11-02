@@ -1,10 +1,10 @@
 0062da00 SP::cSPCasual_Path::SetPositionOffset  # clears grid flags, snaps (x,y) to nearest node; PDB layout match
 0062db30 SP::cSPCasual_Path::FindPassableNeighbor  # 3-ring neighbour search for a passable node
-0062dbf0 SP::cSPCasual_Path::StartPath  # returns mPathFound; current node = start
+0062dbf0 ?StartPath@cSPCasual_Path@@QAE_NXZ  # cSPCasual_Path::StartPath migrated from s0062da00 (verbatim, slice spelling)
 0062dc10 SP::cSPCasual_Path::RemoveFromOpenList  # vector erase of one node
 0062dc70 SP::cSPCasual_Path::GetBestOpenNode  # min mTotalDistance over open list
-0062dce0 SP::cSPCasual_Path::BlockCircle  # marks grid nodes within radius
-0062de30 SP::cSPCasual_Path::GetNextPathPoint  # returns point, advances along mChild
+0062dce0 ?BlockCircle@cSPCasual_Path@@QAEXMMM_N@Z  # cSPCasual_Path::BlockCircle migrated from s0062da00 (verbatim, slice spelling)
+0062de30 ?GetNextPathPoint@cSPCasual_Path@@QAE_NPAUVec2@@@Z  # cSPCasual_Path::GetNextPathPoint migrated from s0062da00 (verbatim, slice spelling)
 0062de70 ??0cSPCasual_Path@@QAE@XZ  # cSPCasual_Path::cSPCasual_Path migrated from s0062da00 (verbatim, slice spelling)
 0062dea0 ??_GcSPCasual_Path@@UAEPAXI@Z  # cSPCasual_Path::~cSPCasual_Path migrated from s0062da00 (verbatim, slice spelling)
 0062df10 SP::cSPCasual_Path::ExpandNode  # A* expansion step

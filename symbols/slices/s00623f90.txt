@@ -1,6 +1,23 @@
 00623f90 ?OnMessage@cPopupTimer@@QAE_NPAXPAUSMessage@@@Z  # cPopupTimer::OnMessage migrated from s00623f90 (verbatim, slice spelling)
 00624080 ?CreateFormControl@cXHTMLWin_s0062_3f90@@QAEXPAUFormControl@@@Z  # cXHTMLWin_s0062_3f90::CreateFormControl migrated from s00623f90 (verbatim, slice spelling)
 006248d0 ?GetFormControlValue@cXHTMLWin_s0062_3f90@@QAEXPAUFormControl@@PAUWString@@@Z  # cXHTMLWin_s0062_3f90::GetFormControlValue migrated from s00623f90 (verbatim, slice spelling)
+006249b0 ??0RandomOwner@@QAE@XZ  # RandomOwner::RandomOwner migrated from s00623f90 (verbatim, slice spelling)
+006249d0 ?w_6249d0@@YGPAUQuaternion@@PAU1@PBUVector3@@1@Z  # w_6249d0 migrated from s00623f90 (verbatim, slice spelling)
+006249f0 ?w_6249f0@@YGPAXPAXPAUT9f0@@@Z  # w_6249f0 migrated from s00623f90 (verbatim, slice spelling)
+00624a10 ?w_624a10@@YGPAUVector3@@PAU1@PBU1@1M@Z  # w_624a10 migrated from s00623f90 (verbatim, slice spelling)
+00624a40 ?w_624a40@@YGXMMM@Z  # w_624a40 migrated from s00623f90 (verbatim, slice spelling)
+00624a70 ?w_624a70@@YGXHHH@Z  # w_624a70 migrated from s00623f90 (verbatim, slice spelling)
+00624ab0 ?w_624ab0@@YGXMM@Z  # w_624ab0 migrated from s00623f90 (verbatim, slice spelling)
+00624b80 ?w_624b80@@YGMM@Z  # w_624b80 migrated from s00623f90 (verbatim, slice spelling)
+00624bc0 ?w_624bc0@@YGMMM@Z  # w_624bc0 migrated from s00623f90 (verbatim, slice spelling)
+00624c10 ?w_624c10@@YGMPBM@Z  # w_624c10 migrated from s00623f90 (verbatim, slice spelling)
+00624c60 ?w_624c60@@YGMM@Z  # w_624c60 migrated from s00623f90 (verbatim, slice spelling)
+00624cb0 ?w_624cb0@@YGMMM@Z  # w_624cb0 migrated from s00623f90 (verbatim, slice spelling)
+00624d10 ?w_624d10@@YGMM@Z  # w_624d10 migrated from s00623f90 (verbatim, slice spelling)
+00624d50 ?w_624d50@@YGMMM@Z  # w_624d50 migrated from s00623f90 (verbatim, slice spelling)
+00624da0 ?w_624da0@@YGMPBM@Z  # w_624da0 migrated from s00623f90 (verbatim, slice spelling)
+00624df0 ?w_624df0@@YGPAUQuaternion@@PAU1@PBUVector3@@M@Z  # w_624df0 migrated from s00623f90 (verbatim, slice spelling)
+00624e40 ?w_624e40@@YGPAUQuaternion@@PAU1@PBUVector3@@1M@Z  # w_624e40 migrated from s00623f90 (verbatim, slice spelling)
 00624eb0 ?Shutdown@cCreatureCameraBase@SP@@UAE_NXZ  # SP::cCreatureCameraBase::Shutdown migrated from s00623f90
 00624ec0 ?Deactivate@cCreatureCameraBase@SP@@UAEXXZ  # SP::cCreatureCameraBase::Deactivate migrated from s00623f90
 00624f20 ?OnKeyDown@cCreatureCameraBase@SP@@UAE_NII@Z  # SP::cCreatureCameraBase::OnKeyDown migrated from s00623f90

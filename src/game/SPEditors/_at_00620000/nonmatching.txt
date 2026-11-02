@@ -1,0 +1,12 @@
+# va  diff-bytes  reason
+00621bf0 44 cXHTMLControlAppearance::Apply: complete; this/param callee-saved register assignment (ebx/ebp vs ebp/edi) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00622f40 4 HandleLinkMessage: complete; register choice for the inline wcslen loop (ecx/edx swapped) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
+0062ca80 97 FUN_0062ca80: complete; void-returning thiscall codegen/size differs (loop + BlockCircle arg setup) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
+0062cb90 43 FUN_0062cb90: complete; loop counter kept in edi from the prologue vs ebx pushed inside the if flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
+0062cbc0 46 FUN_0062cbc0 (PlayModeCreature::AtFirstTarget): complete; thiscall (ecx=this, 1 stack arg, ret 4), dereferences mPathList.mpBegin[0].p and compares mTarget.x/.y with the point within 1.52587890625e-05f; the two deltas are materialised in a local float[2] so the original's shape (dx in x87, dy in SSE, point in ecx, edx untouched) is reproduced; frame 8 vs 0xc; equiv PASS 1173 valid / 100% cov at --inputs 1200 flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
+0062cd30 59 FUN_0062cd30: complete; ctor ref/release dead branches (fields zeroed then tested) not reproduced flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
+0062cdb0 52 FUN_0062cdb0: complete; vector dtor call + release order and delete-flag epilogue flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
+0062d8a0 215 SP::cSPPlayMode_Creature grid-table builder (GridTable::Build): complete; stores width/height (+8/+0xc), 1/63 grid steps (+0x10/+0x14, const 0x13fe21c) and -0.5 origins (+0x18/+0x1c, const 0x13ec488), then fills the 64x64 cells at +0x38 (x,y, eight neighbour slots at +8 with left/down/right/up and null diagonals, flag at +0x30); 231 bytes differ (SSE register allocation in the six-field prologue, cell pointer based on +0x38 vs the original's +0x3c, pointer-based neighbour addressing vs the original's running index); equiv PASS 400 valid / 100% cov flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
+0062dce0 252 BlockCircle: complete; orig mixes SSE subtract with x87 sqrt via stack temps, schedule differs flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+0062de30 18 GetNextPathPoint: complete; load/add order of x,y differs flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+0062f1e0 134 LoadAllAnimInfo: complete; key filter object / vector locals laid out differently flags: /O2 /MD /Gy /TP /arch:SSE
