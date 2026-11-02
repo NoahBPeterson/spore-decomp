@@ -1,3 +1,7 @@
+007f9550 ?Eval@Ev@@QAE_NXZ  # base Eval reached from Damped::v24 (ECX = this)
+007facf0 ?IsValid@C_TF@@QAE_NXZ  # readiness check reached from Damped::v24 (ECX = this)
+007fd840 ?v25@Damped@@QAEMM@Z  # Damped::v25 migrated from s007fd840 (verbatim, slice spelling)
+007fda80 ?SerReadA@@YA_NPAUSerItem@@PAX@Z  # SerReadA migrated from s007fd840 (verbatim, slice spelling)
 007fdab0 UTFWin::cSPUIBehaviorActionWinInterpolator::cSPUIBehaviorActionWinInterpolator  # vtable ctor 0x1415f18
 007fdb60 ?SetTimeFunction@Interp@@QAEXPAUIObj@@@Z  # Interp::SetTimeFunction migrated from s007fd840 (verbatim, slice spelling)
 007fdb90 ?SetValueInterp@Interp@@QAEXPAUIObj@@@Z  # Interp::SetValueInterp migrated from s007fd840 (verbatim, slice spelling)
@@ -7,6 +11,7 @@
 007fdfe0 ?InitWith@State@@QAE_NH@Z  # State::InitWith migrated from s007fd840 (verbatim, slice spelling)
 007fe070 UTFWin::cSPUIBehaviorActionWinState::cSPUIBehaviorActionWinState  # vtable ctor 0x1415fe8
 007fe330 ?DeletingDtor@Interp@@QAEPAXE@Z  # Interp::DeletingDtor migrated from s007fd840 (verbatim, slice spelling)
+007fe690 ?SerLoadVector2@@YA_NPAUSerBuffer@@PAXPAUSerItem14@@@Z  # SerLoadVector2 migrated from s007fd840 (verbatim, slice spelling)
 007fe7a0 ?IsThisType@WinEvent@@QAE_NXZ  # WinEvent::IsThisType migrated from s007fd840 (verbatim, slice spelling)
 007fe7d0 ?Pred@BoolEvent@@QAE_NDD@Z  # BoolEvent::Pred migrated from s007fd840 (verbatim, slice spelling)
 007fe8c0 ?BoolActivate@@YAXPAXH@Z  # BoolActivate migrated from s007fd840 (verbatim, slice spelling)
@@ -16,5 +21,4 @@
 007feb70 ?SerUpdateWin@@YAXPAX@Z  # SerUpdateWin migrated from s007fd840 (verbatim, slice spelling)
 007fec00 ?SetWinMessageType@WinEvent@@QAEXI@Z  # WinEvent::SetWinMessageType migrated from s007fd840 (verbatim, slice spelling)
 007fec90 ?SetMessageWinId@WinEvent@@QAEXI@Z  # WinEvent::SetMessageWinId migrated from s007fd840 (verbatim, slice spelling)
-007f9550 ?Eval@Ev@@QAE_NXZ  # base Eval reached from Damped::v24 (ECX = this)
-007facf0 ?IsValid@C_TF@@QAE_NXZ  # readiness check reached from Damped::v24 (ECX = this)
+0093a560 ??0Stopwatch@EA@@QAE@H_N@Z  # EA::Stopwatch::Stopwatch (callee of s007fd840, named from the dev publics; slice address comment)

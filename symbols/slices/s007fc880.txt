@@ -1,5 +1,12 @@
 007fc880 ?Dispatch@EvD@@QAE_NHPAX@Z  # EvD::Dispatch migrated from s007fc880 (verbatim, slice spelling)
 007fcc40 ?Factory@@YAXPAPAUBehaviorMessage@@H@Z  # Factory migrated from s007fc880 (verbatim, slice spelling)
+007fcf40 ?Emplace@Vec8@@QAEPAXPAX0@Z  # Vec8::Emplace migrated from s007fc880 (verbatim, slice spelling)
+007fcff0 ?RefCountRelease@@YAXPAX@Z  # RefCountRelease migrated from s007fc880 (verbatim, slice spelling)
+007fd090 ?MapFindInsert@@YAPAPAXPAPAX0PAI@Z  # MapFindInsert migrated from s007fc880 (verbatim, slice spelling)
+007fd140 ?RefCountAdd@@YAXPAX@Z  # RefCountAdd migrated from s007fc880 (verbatim, slice spelling)
+007fd200 ?SetFlag@FlagObj@@QAEXI_N@Z  # FlagObj::SetFlag migrated from s007fc880 (verbatim, slice spelling)
+007fd390 ?WriteSerItem@@YA_NPAUSerBuffer@@PAUC53@@PAUSerItem14@@PAX@Z  # WriteSerItem migrated from s007fc880 (verbatim, slice spelling)
+007fd430 ?ReadSerItem@@YA_NPAUSerBuffer@@PAUC53@@PAUSerItem14@@@Z  # ReadSerItem migrated from s007fc880 (verbatim, slice spelling)
 007fd460 UTFWin::cSPUIBehaviorTimeFunctionRamp::cSPUIBehaviorTimeFunctionRamp  # vtable ctors 0x1415c80
 007fd570 UTFWin::cSPUIBehaviorTimeFunctionSmoothRamp::cSPUIBehaviorTimeFunctionSmoothRamp  # vtable ctor 0x1415cf8
 007fd610 UTFWin::cSPUIBehaviorTimeFunctionDampedPeriodic::cSPUIBehaviorTimeFunctionDampedPeriodic  # vtable ctor 0x1415d60

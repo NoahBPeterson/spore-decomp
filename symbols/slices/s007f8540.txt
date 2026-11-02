@@ -9,7 +9,7 @@
 007f8fd0 ?Append@AnimHolder@@QAEXHPAUIRef@@H@Z  # AnimHolder::Append(anim,obj,type) reconstructed (slice spelling)
 007f90f0 ?reserve@Vec8c@@QAEXI@Z  # Vec8c::reserve reconstructed (slice spelling)
 007f9230 ?AnimatorAdvance@@YA_NHHHH@Z  # AnimatorAdvance migrated from s007f8540 (verbatim, slice spelling)
-007f9340 ?FUN_007f9340@@YAPAXPAPAX0@Z  # FUN_007f9340 animation-sequence factory reconstructed (slice spelling)
+007f9340 ?FUN_007f9340@@YAPAXPAPAX0@Z  # FUN_007f9340 migrated from s007f8540 (verbatim, slice spelling)
 007f93f0 ?Reset@AnimMgr@@QAEXXZ  # AnimMgr::Reset migrated from s007f8540 (verbatim, slice spelling)
 007f9430 ?AddTime@AnimMgr@@QAEXM@Z  # AnimMgr::AddTime migrated from s007f8540 (verbatim, slice spelling)
 007f9460 ?Set@AnimMgr@@QAE_NHM@Z  # AnimMgr::Set migrated from s007f8540 (verbatim, slice spelling)

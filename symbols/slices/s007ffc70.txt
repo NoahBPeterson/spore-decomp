@@ -1,4 +1,4 @@
-007ffc70 cSPUIBehaviorPredicateWinState::Evaluate  # vtable 0x14165B0 slot 6; switch on cSPUIBehaviorPredicateWinState::mWinStateQuery (+0x18)
+007ffc70 ?Evaluate@cSPUIBehaviorPredicateWinState@@QAEEXZ  # cSPUIBehaviorPredicateWinState::Evaluate migrated from s007ffc70 (verbatim, slice spelling)
 00800060 ?ScalarDtor@C_800060@@QAEPAXE@Z  # C_800060::ScalarDtor migrated from s007ffc70 (verbatim, slice spelling)
 008005f0 UTFWin::RegisterUIBehaviors  # one-time init guarded by g_164BBD9; registers 29 handler globals with the messaging server
 008008b0 UTFWin::CreateFrameSequencer  # factory: alloc 0x60 "UTFWin/cSPUIFrameSequencer", construct, set resource id 0x105A94B

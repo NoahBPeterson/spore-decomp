@@ -1,0 +1,7 @@
+# source  symbol  va  flags
+../src/game/Spui/_at_007f0000.cpp  ?ReadSerItem@@YA_NPAUSerBuffer@@PAUC53@@PAUSerItem14@@@Z  007fd430  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Spui/_at_007f0000.cpp  ?SerReadA@@YA_NPAUSerItem@@PAX@Z  007fda80  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Spui/_at_007f0000.cpp  ?SerLoadVector2@@YA_NPAUSerBuffer@@PAXPAUSerItem14@@@Z  007fe690  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Spui/_at_007f0000.cpp  ?Ctor@ShadeColorFull@@QAEPAU1@XZ  007ff510  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Spui/_at_007f0000.cpp  ?SerReadC@@YA_NPAUSerItem3@@PAX@Z  007ff8c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Spui/_at_007f0000.cpp  ?CopyThing@@YA_NPAUSerItem3@@PAX@Z  007ff940  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
