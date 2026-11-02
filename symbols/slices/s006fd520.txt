@@ -10,7 +10,7 @@
 006fdef0 ?GenerateOutputStruct@@YAXPADIIPBE@Z  # GenerateOutputStruct migrated from s006fd520 (verbatim, slice spelling)
 006fdfc0 ?GenerateFillCurrentStruct@@YAPADPADIH@Z  # GenerateFillCurrentStruct migrated from s006fd520 (verbatim, slice spelling)
 006fe170 ?GenerateFillOutputStruct@@YAPADPADII@Z  # GenerateFillOutputStruct migrated from s006fd520 (verbatim, slice spelling)
-006fe230  FUN_006fe230  # shader-state dispatcher via 0x1624568 manager and 0x16fa604 function table
-006fe310  FUN_006fe310  # eastl::copy_backward of 0x130-byte blocks (returns dest)
+006fe230 ?FUN_006fe230@@YAXID@Z  # FUN_006fe230 migrated from s006fd520 (verbatim, slice spelling)
+006fe310 ?FUN_006fe310@@YAPAUBlock130@@PAU1@00@Z  # FUN_006fe310 migrated from s006fd520 (verbatim, slice spelling)
 006fe350 ?FUN_006fe350@@YA_NPAX@Z  # FUN_006fe350 migrated from s006fd520 (verbatim, slice spelling)
 006fe3c0 ?FUN_006fe3c0@@YAXHH@Z  # FUN_006fe3c0 migrated from s006fd520 (verbatim, slice spelling)
