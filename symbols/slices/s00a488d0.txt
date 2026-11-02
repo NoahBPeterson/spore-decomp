@@ -36,5 +36,5 @@
 00a49590 ?pd_symbol@Eapd@Audio@EA@@YAXPAUt_gobj@123@Ut_symbol@123@@Z  # pd_symbol migrated from s00a488d0 (verbatim, slice spelling)
 00a495b0 ?pd_list@Eapd@Audio@EA@@YAXPAUt_gobj@123@HHHPAX@Z  # pd_list migrated from s00a488d0 (verbatim, slice spelling)
 00a495e0 ?conf_init@Eapd@Audio@EA@@YA_NXZ  # conf_init migrated from s00a488d0 (verbatim, slice spelling)
-00a49610  EA::Audio::Eapd::getbytes  # pdinstance()->alloc(n,tag) then memfill
-00a49650  EA::Audio::Eapd::freebytes  # pdinstance()->freemem(p)
+00a49610 ?getbytes@Eapd@Audio@EA@@YAPAXHPBD@Z  # getbytes migrated from s00a488d0 (verbatim, slice spelling)
+00a49650 ?freebytes@Eapd@Audio@EA@@YAXPAXI@Z  # EA::Audio::Eapd::freebytes migrated from s00a488d0

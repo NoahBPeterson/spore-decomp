@@ -1,4 +1,4 @@
-00a49670 resizebytes  # (ptr, oldsize, newsize, tag): clamp both sizes to >=1, alloc via System::GetAllocator()->Alloc, zero-fill, grow/shrink copy split, Free(ptr)
+00a49670 ?resizebytes@Eapd@Audio@EA@@YAPAXPAXIII@Z  # resizebytes migrated from s00a49670 (verbatim, slice spelling)
 00a49720 ?FUN_00a49720@Eapd@Audio@EA@@YAXPAUt_inlet@123@Ut_symbol@123@@Z  # FUN_00a49720 migrated from s00a49670 (verbatim, slice spelling)
 00a49740 ?inlet_new@Eapd@Audio@EA@@YAPAUt_inlet@123@PAUt_object@123@PAPAUt_class@123@Ut_symbol@123@2@Z  # inlet_new migrated from s00a49670 (verbatim, slice spelling)
 00a497d0 ?inlet_bang@Eapd@Audio@EA@@YAXPAUt_inlet@123@@Z  # inlet_bang migrated from s00a49670 (verbatim, slice spelling)

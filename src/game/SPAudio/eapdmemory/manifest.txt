@@ -1,0 +1,3 @@
+# source  symbol  va  flags
+../src/game/SPAudio/eapdmemory.cpp  ?getbytes@Eapd@Audio@EA@@YAPAXHPBD@Z  00a49610  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdmemory.cpp  ?freebytes@Eapd@Audio@EA@@YAXPAXI@Z  00a49650  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

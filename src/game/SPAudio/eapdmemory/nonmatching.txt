@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+00a49670 78 resizebytes: MSVC 15.00 register allocation differs (original keeps newsize in edi, newptr in esi, ptr in ebp, oldsize in ebx; cl picks esi for newsize and edi for newptr) and the allocator/model-tag call sequence is laid out differently.  The clamp order, the two `if (!newp)` tests, memset(newp,0,n), the grow/shrink memcpy split and the final Free(ptr) are all faithful.  difftest WEAK (150 valid, 19.4% cov). flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
