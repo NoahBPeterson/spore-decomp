@@ -1,0 +1,6 @@
+# source  symbol  va  flags
+../src/game/SPGonzago/SPSpaceGameBehaviorAbducted.cpp  ?GetAbductionScale@@YAMI@Z  01030d50  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPSpaceGameBehaviorAbducted.cpp  ?SetState@Abducted@@QAEXH@Z  01030dd0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPSpaceGameBehaviorAbducted.cpp  ?CanJoin@Abducted@@QAEHHH@Z  01030df0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPSpaceGameBehaviorAbducted.cpp  ??0cAbductionBeamLocomotion@Simulator@@QAE@PAUIRefCounted@1@_N@Z  01030e80  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPSpaceGameBehaviorAbducted.cpp  ?AdjustRelationship@Abducted@@QAEXXZ  01030ef0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include

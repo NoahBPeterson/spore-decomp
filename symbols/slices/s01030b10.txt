@@ -24,9 +24,9 @@
 0102f820 FUN_0102f820  # float argument, int result (index selector for the property array)
 01030b10 SP::cSPSpaceEconomyTuning::Init  # property manager fetch, property-block hand-off, SPVector<unsigned>::reserve(3), 0xd-element conversion
 01030b70 ?ComputeAmount@EconomyTuning@@QAEHMPAM@Z  # EconomyTuning::ComputeAmount migrated from s01030b10 (verbatim, slice spelling)
-01030d50 SP::GetAbductionScale  # coined name: abductee-kind id -> beam scale factor (1.0/1.5/2.0)
-01030dd0 SP::cSPSpaceGameBehaviorAbducted::SetState  # state setter: mode flag at +0x74, state at +0x7c
-01030df0 SP::cSPSpaceGameBehaviorAbducted::CanJoin  # vtable slot; false when either state field is 2
-01030e80 Simulator::cAbductionBeamLocomotion::cAbductionBeamLocomotion  # two bases: beam base at +0, cContentValidationSummarizer at +8
-01030ef0 SP::cSPSpaceGameBehaviorAbducted::AdjustRelationship  # agent interface 0x4f176642 -> city -> empire compare -> relationship event + community reaction
-01030fd0 SP::cSPSpaceGameBehaviorAbducted::OnAgentHitsGround  # existing function, see nonmatching.txt
+01030d50 ?GetAbductionScale@@YAMI@Z  # GetAbductionScale migrated from s01030b10 (verbatim, slice spelling)
+01030dd0 ?SetState@Abducted@@QAEXH@Z  # Abducted::SetState migrated from s01030b10 (verbatim, slice spelling)
+01030df0 ?CanJoin@Abducted@@QAEHHH@Z  # Abducted::CanJoin migrated from s01030b10 (verbatim, slice spelling)
+01030e80 ??0cAbductionBeamLocomotion@Simulator@@QAE@PAUIRefCounted@1@_N@Z  # cAbductionBeamLocomotion::cAbductionBeamLocomotion migrated from s01030b10 (verbatim, slice spelling)
+01030ef0 ?AdjustRelationship@Abducted@@QAEXXZ  # Abducted::AdjustRelationship migrated from s01030b10 (verbatim, slice spelling)
+01030fd0 ?OnAgentHitsGround@Abducted@@QAE_NPAUAgent@@_N1@Z  # Abducted::OnAgentHitsGround migrated from s01030b10 (verbatim, slice spelling)
