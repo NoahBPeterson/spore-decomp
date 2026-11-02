@@ -1,1 +1,2 @@
 # source  symbol  va  flags
+../src/game/SPGonzago/SPGonzagoDebug.cpp  ?CopyVec3Range@@YAPAUVec3@@PAU1@00@Z  007ec550  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
