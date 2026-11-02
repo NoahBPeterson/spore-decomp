@@ -1,7 +1,7 @@
-00fd1c60 vp6_setup_tables  # selects the VP6 decode kernel set (SSE2/MMX/scalar) from the CPU feature triple returned by 0xfd1ba0; writes the 0x41-entry filter table at 0x16d9588 and six single slots (0x16d9584, 0x16d9690, 0x16d9580, 0x16d9418, 0x16d941c, 0x16d968c).  Scalar path installs EA::Audio::Eapd::sys_gui (0xc2e4e0).
-00fd1e00 vp6_emms  # _mm_empty(): bare `emms; ret`
-00fd1e10 vp6_expand_row_16  # MMX: 8 rows of movq + punpcklbw/punpckhbw against a zero register -> 16 bytes/row
-00fd1e50 vp6_add_rows_16  # MMX: 8 rows of two paddw then packuswb -> one byte row
+00fd1c60 ?vp6_setup_tables@@YAXXZ  # vp6_setup_tables migrated from s00fd1c60 (verbatim, slice spelling)
+00fd1e00 ?vp6_emms@@YAXXZ  # vp6_emms migrated from s00fd1c60 (verbatim, slice spelling)
+00fd1e10 ?vp6_expand_row_16@@YAXPAE0H@Z  # vp6_expand_row_16 migrated from s00fd1c60 (verbatim, slice spelling)
+00fd1e50 ?vp6_add_rows_16@@YAXPAE00H@Z  # vp6_add_rows_16 migrated from s00fd1c60 (verbatim, slice spelling)
 00fd1ea0 WillametteNewInstructionHWSupport  # CPUID vendor string ("GenuineIntel"/"AuthenticAMD") + SSE2 EDX bit 26 probe under __try/__except; the analyser already named this symbol
 00fd1f70 vp6_filter_row_sse2_a  # VP6 6-tap row filter, SSE2 (pmullw pre-stage then pmulhw butterfly, 8 rows); 1272 bytes
 00fd2470 vp6_filter_row_sse2_b  # VP6 6-tap row filter, second SSE2 variant; 1122 bytes

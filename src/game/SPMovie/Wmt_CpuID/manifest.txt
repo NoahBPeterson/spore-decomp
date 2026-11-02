@@ -1,0 +1,3 @@
+# source  symbol  va  flags
+../src/game/SPMovie/Wmt_CpuID.cpp  ?FUN_00fd03c0@@YAXXZ  00fd03c0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPMovie/Wmt_CpuID.cpp  ?vp6_emms@@YAXXZ  00fd1e00  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
