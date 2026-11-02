@@ -1,4 +1,10 @@
 # source  symbol  va  flags
+../src/game/SPGonzago/SPCreatureCamera.cpp  ?Init@Cam@@QAEEH@Z  00d203d0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCreatureCamera.cpp  ?Deactivate@Cam@@QAEXXZ  00d203e0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCreatureCamera.cpp  ?SetCameraUI@Cam@@QAEXD@Z  00d20430  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCreatureCamera.cpp  ?OnKeyDown@Cam@@QAEEHH@Z  00d204c0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCreatureCamera.cpp  ?OnKeyUp@Cam@@QAEEHH@Z  00d204e0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCreatureCamera.cpp  ?OnMouseUp@Cam@@QAEEHMMH@Z  00d20500  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPCreatureCamera.cpp  ?FUN_00d20880@tCamCtrl@@QAEXABUtVec3@@ABUtVec4@@@Z  00d20880  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPCreatureCamera.cpp  ?FUN_00d20910@tCamCtrl@@QAEXM@Z  00d20910  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPCreatureCamera.cpp  ?FUN_00d20950@tCamCtrl@@QAEXI@Z  00d20950  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
@@ -7,4 +13,8 @@
 ../src/game/SPGonzago/SPCreatureCamera.cpp  ?GetAudioAnchorPosition@cCreatureCamera@@QAEPAUVec3@@PAU2@@Z  00d21c50  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPCreatureCamera.cpp  ?FUN_00d21ca0@@YAHPBUVec3@@0M@Z  00d21ca0  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPCreatureCamera.cpp  ?FUN_00d21d10@@YAPAUVec3@@PAU1@PBU1@1M@Z  00d21d10  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPCreatureCamera.cpp  ?FUN_00d25e00@cCreatureCamera_s00d2_5ac0@SP@@QAEXXZ  00d25e00  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCreatureCamera.cpp  ?rotateTransform@@YAXPAUcSPTransformOps@@HM@Z  00d265c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCreatureCamera.cpp  ?BuildTransformFromTranslation@@YAXPAUcSPTransformOps@@PBUVec3@@@Z  00d266c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPCreatureCamera.cpp  ?FUN_00d272e0@cCamView@@QAEXXZ  00d272e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPCreatureCamera.cpp  ??1cCreatureCamera_s00d2_8900@@QAE@XZ  00d29570  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

@@ -1,1 +1,8 @@
-00d266c0 BuildTransformFromTranslation  # Claude-coined name: builds a cSPTransform from a translation and accumulates it onto the target
+00d25ac0 ?OnMouseMove@cCreatureCamera_s00d2_5ac0@SP@@QAEXMMH@Z  # cCreatureCamera_s00d2_5ac0::OnMouseMove migrated from s00d25ac0 (verbatim, slice spelling)
+00d25ca0 ?UpdateCamera@cCreatureCamera_s00d2_5ac0@SP@@QAEXM@Z  # cCreatureCamera_s00d2_5ac0::UpdateCamera migrated from s00d25ac0 (verbatim, slice spelling)
+00d25e00 ?FUN_00d25e00@cCreatureCamera_s00d2_5ac0@SP@@QAEXXZ  # cCreatureCamera_s00d2_5ac0::FUN_00d25e00 migrated from s00d25ac0 (verbatim, slice spelling)
+00d25e10 ?UpdateAvatarAlpha@cCreatureCamera_s00d2_5ac0@SP@@QAEXXZ  # cCreatureCamera_s00d2_5ac0::UpdateAvatarAlpha migrated from s00d25ac0 (verbatim, slice spelling)
+00d26030 ?FUN_00d26030@cCreatureCamera_s00d2_5ac0@SP@@QAEXXZ  # cCreatureCamera_s00d2_5ac0::FUN_00d26030 migrated from s00d25ac0 (verbatim, slice spelling)
+00d263d0 ?SetCameraMode@cCreatureCamera_s00d2_5ac0@SP@@QAEXH@Z  # cCreatureCamera_s00d2_5ac0::SetCameraMode migrated from s00d25ac0 (verbatim, slice spelling)
+00d265c0 ?rotateTransform@@YAXPAUcSPTransformOps@@HM@Z  # rotateTransform migrated from s00d25ac0 (verbatim, slice spelling)
+00d266c0 ?BuildTransformFromTranslation@@YAXPAUcSPTransformOps@@PBUVec3@@@Z  # BuildTransformFromTranslation migrated from s00d25ac0 (verbatim, slice spelling)

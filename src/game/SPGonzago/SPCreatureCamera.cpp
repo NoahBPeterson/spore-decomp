@@ -1,4 +1,4 @@
-// src/game/SPGonzago/SPCreatureCamera.cpp -- migrated from slice(s) s00d27a70, s00d26790, s00d247f0, s00d22f30, s00d213b0, s00d20620 by tools/migrate/rewrite.py
+// src/game/SPGonzago/SPCreatureCamera.cpp -- migrated from slice(s) s00d28900, s00d25ac0, s00d1f650, s00d27a70, s00d26790, s00d247f0, s00d22f30, s00d213b0, s00d20620 by tools/migrate/rewrite.py
 // Object file: SPGonzago/SPCreatureCamera.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -11,6 +11,12 @@
 #include "EA/Variant.h"
 #include "SP/cPropertyList.h"
 #include "SP/cPropertyManager.h"
+#include "SP/cSPCreatureBase.h"
+#include "SP/cCommunity.h"
+#include "SP/cTribe.h"
+#include "cSPTransform.h"
+#include <float.h>
+#include <new>
 
 // ---- items of slice s00d20620 begin (TODO(rewrite): local stubs, replace by canonical classes)
 struct tVec3 { float x, y, z; };
@@ -357,8 +363,34 @@ typedef float          f32;
 typedef double         f64;
 struct SP_Vector3 { f32 x, y, z; };
 struct SP_Vector4 { f32 x, y, z, w; };
+extern u8  DAT_01582784;      // 0x01582784  master enable gate
+extern u8  DAT_01582785;      // 0x01582785  "accumulate into local anchor" gate
+extern f32 DAT_01582788;      // 0x01582788  distance clamp lo
+extern f32 DAT_0158278c;      // 0x0158278c  distance clamp hi
+extern f32 DAT_01582790;      // 0x01582790  smoothstep amplitude lo
+extern f32 DAT_01582794;      // 0x01582794  smoothstep amplitude hi
+extern f32 DAT_01582798;      // 0x01582798  secondary amplitude lo
+extern f32 DAT_0158279c;      // 0x0158279c  secondary amplitude hi
+extern f32 DAT_015827a0;      // 0x015827a0  pitch limit scale
+extern f32 DAT_015827f0;      // 0x015827f0  ground clearance
+extern f32 DAT_0169deb0;      // 0x0169deb0  terrain basis row 0
+extern f32 DAT_0169deb4;      // 0x0169deb4  terrain basis row 1
+extern f32 DAT_0169deb8;      // 0x0169deb8  terrain basis row 2
 extern f32 DAT_0169df44;      // 0x0169df44  forward basis x
+extern f32 DAT_0169df48;      // 0x0169df48  forward basis y
+extern f32 DAT_0169df4c;      // 0x0169df4c  forward basis z
+extern f32 DAT_0169df50;      // 0x0169df50  right basis x
+extern f32 DAT_0169df54;      // 0x0169df54  right basis y
+extern f32 DAT_0169df58;      // 0x0169df58  right basis z
 extern f32 _HK_REAL_ZERO;     // 0x01485378  Havok 0.0f
+class SP_cPlanetModel {
+public:
+    u8   mPad_000[0x24];      // 0x00
+    void* mpISphere;          // 0x24  terrain sphere interface
+
+    f32  GetRadiusAt(f32* p); // 0xb7ef70
+    f32  GetWaterHeight();    // 0xb7e390
+};
 class cCreatureCamera_s00d2_2f30 {
 public:
     void FUN_00d22f30();                                  // 0x00d22f30
@@ -441,6 +473,12 @@ public:
     f32 m290;                 // 0x290  basis y row 2
     f32 m294;                 // 0x294  basis z row 2
 };
+namespace SP {
+    SP_cPlanetModel* PlanetModel_s00d2_2f30();                       // 0xb3d350
+}
+namespace SP {
+    f32* normalized_safe(f32* a, f32* b);                 // 0x449c20
+}
 extern "C" f32* FUN_0059aed0_s00d2_2f30(void* out, void* basis, void* orient);  // 0x0059aed0
 // ---- items of slice s00d22f30 end
 
@@ -837,6 +875,621 @@ public:
 };
 // ---- items of slice s00d27a70 end
 
+// ---- items of slice s00d1f650 begin (TODO(rewrite): local stubs, replace by canonical classes)
+void   RemoveHandler(void* a, int b, void* c, void* d, void* e); // 0x00571db0 cdecl
+struct InputState {
+    void Reset();                              // 0x00697980
+    void OnKeyDown(int a, int b);              // 0x00697a50
+    void OnKeyUp(int a, int b);                // 0x00697a80
+    void OnMouseUp(int a, float b, float c, int d); // 0x00697af0
+    void OnMouseWheel(int a, float b, float c, int d); // 0x00697b40
+    void GetSpatialObjects(int* v);            // 0x00b30d70? no
+};
+void FUN_008d2f30(int a, int b);               // 0x008d2f30 cdecl
+struct CanvasObj { char SetVisibility(bool v); };                       // 0x008013d0 thiscall, ret 4 (bool arg)
+struct CursorLayout { char IsThing(int v); char SetEnabled(bool v); };  // 0x00801950/80 thiscall, ret 4 (1 dword arg)
+struct Cam {
+    unsigned char Init(int a);
+    void Deactivate();
+    void SetCameraUI(char on);
+    unsigned char OnKeyDown(int a, int b);
+    unsigned char OnKeyUp(int a, int b);
+    unsigned char OnMouseUp(int a, float b, float c, int d);
+    unsigned char OnMouseWheel(int a, float b, float c, int d);
+};
+// ---- items of slice s00d1f650 end
+
+// ---- items of slice s00d25ac0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern float g_169deb0;   extern float g_169deb4;   extern float g_169deb8;
+extern float g_169de90;   extern float g_169de94;   extern float g_169de98_s00d2_5ac0;
+extern float g_169df44;   extern float g_169df48;   extern float g_169df4c;
+extern float g_169df50;   extern float g_169df54;   extern float g_169df58;
+extern float g_147a304;
+extern float g_147a334;
+extern float g_13eb8c8;
+extern float g_1485720;
+extern uint8_t g_169defc;
+#ifndef nullptr
+#endif
+#pragma intrinsic(fabs)
+#define nullptr 0
+struct Matrix3 { float m[9]; void Assign(const Matrix3& src); };
+struct cTransform_s00d2_5ac0 {
+    uint16_t mFlags;              // +0x00
+    uint16_t mModificationCount;  // +0x02
+    Vec3     mTranslation;        // +0x04
+    float    mScale;              // +0x10
+    Matrix3  mRotation;           // +0x14
+};
+struct cLocalInputState_s00d2_5ac0 {
+    uint8_t pad00[0x2c];
+    float   mKeys7;               // +0x2c
+    float   mModifiers;           // +0x30
+    uint8_t pad34[0x50 - 0x34];
+    int     mMouseDownModifiers;  // +0x50
+    int     mMouseWheelDelta;     // +0x54
+    void OnMouseWheel(float, float, int);   // 0x00697b20
+};
+class cGameNounManager_s00d2_5ac0;
+cGameNounManager_s00d2_5ac0* __cdecl NounManager_s00d2_5ac0();                    // 0x00b3d300
+struct cGameNounManager_s00d2_5ac0 {
+    void* GetAvatar();                                       // 0x00b1fdb0
+};
+struct IPlanetTerrain;
+struct cPlanetModel_s00d2_5ac0;
+cPlanetModel_s00d2_5ac0* __cdecl PlanetModel_s00d2_5ac0();                        // 0x00b3d350
+struct cPlanetModel_s00d2_5ac0 {
+    uint8_t pad00[0x24];
+    IPlanetTerrain* mpISphere;                               // +0x24
+    float GetRadiusAt(const Vec3* v);                        // 0x00b7ef70
+    float GetWaterHeight();                                  // 0x00b7e390
+    float SurfaceDistance(const Vec3* a, const Vec3* b);     // 0x00b82e80
+    void* FUN_00b82060(const void* a, const void* b, const void* c); // 0x00b82060
+};
+struct cCreatureModeState {
+    uint8_t pad00[0x54];
+    uint8_t mb54;                    // +0x54
+    uint8_t pad55[0xc0 - 0x55];
+    uint8_t mbC0;                    // +0xc0
+};
+struct cCreatureModeStrategy_s00d2_5ac0 {
+    uint8_t pad00[0x64];
+    cCreatureModeState* mpState;     // +0x64
+    static cCreatureModeStrategy_s00d2_5ac0* Instance();                // 0x00d38840
+};
+struct IAvatarSub {
+virtual void v00();
+virtual void v01();
+virtual void v02();
+virtual void v03();
+virtual void v04();
+virtual void v05();
+virtual void v06();
+virtual void v07();
+virtual void v08();
+virtual void v09();
+virtual void v10();
+virtual void v11();
+virtual void v12();
+virtual void v13();
+virtual void v14();
+virtual void v15();
+virtual void v16();
+virtual void v17();
+virtual void v18();
+virtual void v19();
+virtual void v20();
+virtual void v21();
+virtual void v22();
+virtual void v23();
+virtual void v24();
+virtual void v25();
+virtual void v26();
+virtual void v27();
+    virtual void v28();
+    virtual float GetRadius();                               // +0x74
+};
+struct cAvatarVisual {
+    uint8_t pad00[0x80];
+    float   mAlpha;                                          // +0x80
+};
+struct cGameAvatar {
+    uint8_t pad00[0xc0];
+    IAvatarSub*   mpSub;                                     // +0xc0
+    uint8_t padC4[0x135 - 0xc4];
+    uint8_t mb135;                                            // +0x135
+    uint8_t pad136[0xb54 - 0x136];
+    cAvatarVisual* mpVisual;                                  // +0xb54
+    uint32_t mFlagsB58;                                       // +0xb58
+};
+struct cSPTransformOps {
+    void* Assign(const void* src);                           // 0x00537dc0
+};
+struct cXform      { void PreRotateX(float angle); };                       // 0x005a2d90
+namespace EA {
+namespace Swarm {
+ struct cTransform_s00d2_5ac0 { void PreRotateY(float angle); };   // 0x004099b0
+}
+}
+struct cTransformCompose { void ComposeTransforms(const void* src); };       // 0x0040ccb0
+void* FUN_008d3110();                                        // 0x008d3110
+void* FUN_0067cab0(int v);                                   // 0x0067cab0
+void  FUN_00801930(void* obj);                               // 0x00801930
+void  FUN_00b7f1f0(void* dst, const void* a, const void* b); // 0x00b7f1f0
+void  FUN_00d20880_f(void* self, void* a, void* b);          // 0x00d20880
+void  GetCursorPosition(int* x, int* y);                     // 0x008d2f30
+extern Matrix3 g_169df20;
+extern uint8_t g_1582786_s00d2_5ac0;
+namespace SP {
+class cCreatureCamera_s00d2_5ac0 {
+public:
+    void UpdateCamera(float dt);                    // 0x00d25ca0
+    void OnMouseMove(float f1, float f2, int i3);   // 0x00d25ac0
+    void FUN_00d25e00();                            // 0x00d25e00
+    void UpdateAvatarAlpha();                       // 0x00d25e10
+    void FUN_00d26030();                            // 0x00d26030
+    void SetCameraMode(int mode);                   // 0x00d263d0
+    void FUN_00d21bc0(float, float, float);         // 0x00d21bc0
+    void UpdateCamera_Free();                       // 0x00d21d90
+
+    uint8_t pad00[0x10];
+    bool    mbEnableInput;              // +0x10
+    Vec2    mInputConst;               // +0x14
+    uint8_t pad1c[0x38 - 0x1c];
+    Vec3    mReferenceHeading;         // +0x38
+    uint8_t pad44[0x48 - 0x44];
+    Vec3    mV48;                      // +0x48
+    Vec3    mV54;                      // +0x54
+    Vec4    mV60;                      // +0x60
+    Vec3    mV70;                      // +0x70
+    Vec3    mV7c;                      // +0x7c
+    Vec3    mV88;                      // +0x88
+    Vec3    mV94;                      // +0x94
+    Vec3    mVa0;                      // +0xa0
+    Vec3    mVac;                      // +0xac
+    Vec3    mVb8;                      // +0xb8
+    Vec3    mVc4;                      // +0xc4
+    uint8_t padD0[0xec - 0xd0];
+    float   mFieldEC;                  // +0xec
+    uint8_t padF0[0xf8 - 0xf0];
+    float   mFieldF8;                  // +0xf8
+    float   mFieldFC;                  // +0xfc
+    float   mField100;                 // +0x100
+    uint8_t pad104[0x108 - 0x104];
+    Vec3    mV108;                     // +0x108
+    Vec3    mV114;                     // +0x114
+    Vec3    mV120;                     // +0x120
+    uint8_t pad12c[0x13c - 0x12c];
+    Vec3    mV13C;                     // +0x13c
+    Vec3    mV148;                     // +0x148
+    Vec4    mV154;                     // +0x154
+    uint8_t pad164[0x174 - 0x164];
+    float   mF174;                     // +0x174
+    float   mF178;                     // +0x178
+    float   mF17C;                     // +0x17c
+    float   mF180;                     // +0x180
+    float   mF184;                     // +0x184
+    float   mF188;                     // +0x188
+    uint8_t pad18c[0x19c - 0x18c];
+    bool    mb19C;                     // +0x19c
+    uint8_t pad19d[0x1c8 - 0x19d];
+    Vec3    mV1C8;                     // +0x1c8
+    Vec4    mV1D4;                     // +0x1d4
+    float   mF1E4;                     // +0x1e4
+    int     mI1E8;                     // +0x1e8
+    int     mI1EC;                     // +0x1ec
+    uint8_t pad1f0[0x1f8 - 0x1f0];
+    float   mMouseSensitivityX;        // +0x1f8
+    float   mMouseSensitivityY;        // +0x1fc
+    uint8_t pad200[0x208 - 0x200];
+    Vec2    mPitchLimits;             // +0x208
+    float   mMinCameraPhi;             // +0x210
+    uint8_t pad214[0x220 - 0x214];
+    float   mInitialDistance;          // +0x220
+    uint8_t pad224[0x258 - 0x224];
+    float   mInterpolateAnchorMultiplier; // +0x258
+    float   mField25C;                 // +0x25c
+    cTransform_s00d2_5ac0 mCameraToWorld;         // +0x260
+    uint8_t pad298[0x2b8 - 0x298];
+    float   mLftMouseDownDuration;     // +0x2b8
+    cLocalInputState_s00d2_5ac0 mLocalInputState; // +0x2bc
+    bool    mb314;                     // +0x314
+};  // namespace SP
+}
+// ---- items of slice s00d25ac0 end
+
+// ---- items of slice s00d28900 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern void* g_vtblGB1;                  // 0x013eb384
+extern void* g_vtblRefCount;             // 0x013ec458
+extern void* g_vtblCam0;                 // 0x0147a3a8
+extern void* g_vtblCam1;                 // 0x0147a398
+extern void* g_vtblCam2;                 // 0x0147a388
+extern uint8_t g_vtblBase0[];            // 0x013eb938 (destructor base vptr, this+0x00)
+extern uint8_t g_vtblBase1[];            // 0x013eb394 (destructor base vptr, this+0x04)
+extern uint8_t g_vtblBase2[];            // 0x013ec458 (destructor base vptr, this+0x08)
+struct Vector2 {
+    float x, y;
+    Vector2() {}
+    Vector2(const Vector2& o) : x(o.x), y(o.y) {}
+};
+struct Vector3 {                         // user copy ctor: float copies go through movss
+    float x, y, z;
+    Vector3() {}
+    Vector3(const Vector3& o) : x(o.x), y(o.y), z(o.z) {}
+};
+struct SPVector3 { float x, y, z; };     // POD: copies are dword moves
+struct SPQuaternion { float x, y, z, w; };
+struct Matrix3_s00d2_8900 {
+    float m[9];
+    Matrix3_s00d2_8900() {}
+    Matrix3_s00d2_8900(const Matrix3_s00d2_8900& other);       // 0x0041cb40
+};
+struct Transform {
+    uint16_t mFlags;
+    uint16_t mChangeCount;
+    Vector3 mOffset;
+    float mScale;
+    Matrix3_s00d2_8900 mRotation;
+};
+extern const Vector3 kZero3;             // 0x0169deb0
+extern const Matrix3_s00d2_8900 kIdentity3;         // 0x0169df20
+extern const Vector2 kInputConst_s00d2_8900;        // 0x0169dea8
+extern const Vector2 kPitchLimits;       // 0x01582868
+extern const SPVector3 kZeroVec_s00d2_8900;         // 0x0169deb0
+extern const SPQuaternion kIdentityQuat; // 0x01582838
+struct IRefObject {
+    virtual int AddRef();
+    virtual int Release();
+};
+struct RbNode {
+    RbNode* mpLeft;                      // +0x00
+    RbNode* mpRight;                     // +0x04
+    RbNode* mpParent;                    // +0x08
+    uint32_t mColor;                     // +0x0c
+    uint32_t mKey;                       // +0x10
+    void* mpValue;                       // +0x14
+};
+RbNode* __cdecl RBTreeIncrement(RbNode* node);            // 0x00921580
+void RemoveHandler(void* a, void* b, void* c, void* d, void* e); // 0x00571db0
+void __cdecl OpDelete(void* p);                                  // 0x00f47380
+struct cLocalInputState_s00d2_8900 {
+    char data[0x48];
+    cLocalInputState_s00d2_8900();                  // 0x00697960
+};
+struct RbTreeAnchor_s00d2_8900 {
+    RbTreeAnchor_s00d2_8900* mpRight;               // +0x00
+    RbTreeAnchor_s00d2_8900* mpLeft;                // +0x04
+    RbTreeAnchor_s00d2_8900* mpParent;              // +0x08
+    union {
+        uint32_t mColor;                 // +0x0c (constructor init)
+        RbNode* mpRoot;                  // +0x0c (tree root)
+    };
+    uint32_t mnSize;                     // +0x10
+
+    void Insert(void* out, const void* key, int color);  // 0x00cbae70 (thiscall, ret 0xc)
+    void DestroyAll(void* node);                         // 0x00cbae20 (thiscall, ret 4)
+    void MapIterateErase(RbNode* first, RbNode* last);   // 0x00d28e10
+};
+inline SPVector3 MakeVec(float x, float y, float z)
+{
+    SPVector3 v;
+    v.x = x;
+    v.y = y;
+    v.z = z;
+    return v;
+}
+inline void* VTC(void* p, int offset)
+{
+    return *(void**)((char*)*(void**)p + offset);
+}
+void* __cdecl SP_App();                  // 0x0067dd10 (SP::App)
+struct AimQuery {
+    SPVector3 mAim;                      // +0x00 current aim (in/out)
+    SPVector3 mDirection;                // +0x0c normalised look direction
+    float     mDeltaX;                   // +0x18 normalised x
+    float     mPitch;                    // +0x1c camera pitch
+    float     mYaw;                      // +0x20 camera yaw
+    SPVector3 mOffset;                   // +0x24 camera offset
+    SPVector3 mField30;                  // +0x30 target offset
+    SPVector3 mDesired;                  // +0x3c desired aim
+    void**    mpHandlerBegin;            // +0x48 handler list begin
+    void**    mpHandlerEnd;              // +0x4c handler list end
+    void**    mpHandlerCap;              // +0x50 handler list capacity
+    uint32_t  mField54;                  // +0x54
+    uint32_t  mField58;                  // +0x58
+    uint32_t  mField5C;                  // +0x5c
+    void*     mHandlerInline[3];         // +0x60 inline handler slots
+    uint32_t  mField6C[0x18];            // +0x6c
+    float     mFieldCC;                  // +0xcc
+    void*     mpFieldD0;                 // +0xd0
+    void*     mpContext;                 // +0xd4 object owning the query
+
+    void Init(void* pContext);                             // 0x00b16dc0 (thiscall, ret 4)
+    void SetMode(int mode);                                // 0x00b17790 (thiscall, ret 4)
+};
+struct AimSpatialList {
+    void**   mpBegin;                    // +0x00
+    void**   mpEnd;                      // +0x04
+    void**   mpCap;                      // +0x08
+    void*    mpBuffer;                   // +0x0c
+    uint32_t mnCapacity;                 // +0x10
+    uint32_t mField14;                   // +0x14
+    void*    mInline[8];                 // +0x18 inline element buffer
+    float    mResultX;                   // +0x38
+    float    mResultY;                   // +0x3c
+    float    mResultZ;                   // +0x40
+
+    void Destroy();                                        // 0x00ad92d0 (thiscall)
+};
+bool __cdecl CameraQueryHandlers(AimQuery* q, AimSpatialList* list);   // 0x00b17c10
+bool __cdecl CameraQueryValue(AimQuery* q, float* value);              // 0x00b17810
+void __cdecl CameraQueryCollect(SPVector3* aim, AimSpatialList* list); // 0x00b16450
+void __cdecl CameraQueryApply(AimQuery* q, float* value);              // 0x00b16e50
+struct SpVecAllocHeader {
+    int32_t mnCapacity;                  // [[mpBegin - 1]]
+};
+struct AutoRefVec {                      // eastl::vector<EA::AutoRefCount<...> >
+    void** mpBegin;                      // +0x00
+    void** mpEnd;                        // +0x04
+    void** mpCap;                        // +0x08
+};
+struct HandlerObj {
+virtual void h000();
+virtual void h001();
+virtual void h002();
+virtual void h003();
+virtual void h004();
+virtual void h005();
+virtual void h006();
+virtual void h007();
+virtual void h008();
+virtual void h009();
+virtual void h010();
+virtual void h011();
+virtual void h012();
+virtual void h013();
+virtual void h014();
+virtual void h015();
+virtual void h016();
+virtual void h017();
+virtual void h018();
+virtual void h019();
+virtual void h020();
+virtual void h021();
+virtual void h022();
+virtual void h023();
+virtual void h024();
+virtual void h025();
+virtual void h026();
+virtual void h027();
+virtual void h028();
+virtual void h029();
+virtual void h030();
+virtual void h031();
+virtual void h032();
+virtual void h033();
+virtual void h034();
+virtual void h035();
+virtual void h036();
+virtual void h037();
+virtual void h038();
+virtual void h039();
+virtual void h040();
+virtual void h041();
+virtual void h042();
+virtual void h043();
+virtual void h044();
+virtual void h045();
+virtual void h046();
+    virtual void AddRefHandler();        // +0xbc
+    virtual void ReleaseHandler();       // +0xc0
+};
+struct HandlerProvider {
+virtual void g00();
+virtual void g01();
+virtual void g02();
+virtual void g03();
+virtual void g04();
+virtual void g05();
+virtual void g06();
+virtual void g07();
+virtual void g08();
+virtual void g09();
+virtual void g10();
+virtual void g11();
+virtual void g12();
+virtual void g13();
+virtual void g14();
+virtual void g15();
+virtual void g16();
+virtual void g17();
+virtual void g18();
+    virtual bool GetHandlers(void* src, void* list, AutoRefVec* out, int count); // +0x4c
+};
+struct MsgSource {
+    void SetHandlers(int mode);          // 0x00b17790 (thiscall, 1 stack arg)
+    char pad0[0x48];
+    char* mHandlerTable;                 // +0x48
+};
+struct MsgMap {
+    char pad0[0x14];
+    int32_t mSize;                       // +0x14
+    void Insert(void* out, const void* key, int color);  // 0x00cbae70
+};
+bool IsLiveHandler(void* h);                       // 0x00d20e70
+HandlerProvider* GetHandlerProvider();             // 0x00b3d240
+struct IGB1_s00d2_8900 {                                         // vptr +0x04
+    void* mVptr;
+    IGB1_s00d2_8900() { mVptr = &g_vtblGB1; }
+};
+struct RefCountV_s00d2_8900 {                                    // vptr +0x08, count +0x0c
+    void* mVptr;
+    int mRefCount;
+    RefCountV_s00d2_8900() { mVptr = &g_vtblRefCount; mRefCount = 0; }
+};
+class cCreatureCamera_s00d2_8900 : public ICamBase, public IGB1_s00d2_8900, public RefCountV_s00d2_8900 {
+public:
+    void SetVptrs()
+    {
+        ICamBase::mVptr = &g_vtblCam0;
+        IGB1_s00d2_8900::mVptr = &g_vtblCam1;
+        RefCountV_s00d2_8900::mVptr = &g_vtblCam2;
+    }
+    static bool Prepare(cCreatureCamera_s00d2_8900* self) { self->SetVptrs(); return true; }
+    bool mbEnableInput;                  // +0x10
+    bool mbSkipInit;                     // +0x11
+    Vector2 mInputConst;                 // +0x14
+    // per-frame camera data block (+0x1c .. +0x1ec)
+    float mDt, mOscillationTime, mBreathOffset;                 // +0x1c
+    SPVector3 mShakeOffset;                                     // +0x28
+    float mRoll;                                                // +0x34
+    SPVector3 mReferenceHeading;                                // +0x38
+    float mWantInterpolationTimer;                              // +0x44
+    SPVector3 mV48;                                             // +0x48
+    SPVector3 mV54;                                             // +0x54
+    SPQuaternion mQ60;                                          // +0x60
+    SPVector3 mV70, mV7c, mV88, mV94, mVa0, mVac, mVb8, mVc4;   // +0x70 ..
+    SPVector3 mBoundsMin;                                       // +0xd0
+    SPVector3 mBoundsMax;                                       // +0xdc
+    bool mbE8, mbE9;                                            // +0xe8
+    float mFieldEC, mFieldF0, mFieldF4, mFieldF8, mFieldFC;     // +0xec
+    float mField100;                                            // +0x100
+    bool mb104, mb105;                                          // +0x104
+    SPVector3 mV108, mV114, mV120;                              // +0x108
+    float mF12C, mF130, mF134, mF138;                           // +0x12c
+    SPVector3 mV13C, mV148;                                     // +0x13c
+    SPQuaternion mQ154;                                         // +0x154
+    bool mb164;                                                 // +0x164
+    SPVector3 mV168;                                            // +0x168
+    float mF174, mF178, mF17C, mF180, mF184, mF188, mF18C, mF190;  // +0x174
+    float mF194, mF198;                                         // +0x194
+    bool mb19C, mb19D;                                          // +0x19c
+    float mF1A0, mF1A4, mF1A8;                                  // +0x1a0
+    float mPad1AC[(0x1e4 - 0x1ac) / 4];
+    float mF1E4;                                                // +0x1e4
+    uint32_t mI1E8, mI1EC, mI1F0;                               // +0x1e8
+    bool mb1F4;                                                 // +0x1f4
+    float mMouseSensitivityX, mMouseSensitivityY;               // +0x1f8
+    float mMouseSensitivityZ;                                   // +0x200
+    float mMaxAnchorDistance;                                   // +0x204
+    Vector2 mPitchLimits;                                       // +0x208
+    float mMinCameraPhi;                                        // +0x210
+    float mMaxCameraPhi;                                        // +0x214
+    float mMinCameraDistance;                                   // +0x218
+    float mMaxCameraDistance;                                   // +0x21c
+    float mInitialDistance;                                     // +0x220
+    float mInitialRotation;                                     // +0x224
+    float mNearClip, mFarClip, mInterpolateAnchorTime;          // +0x228
+    float mInterpolateOrientationTime;                          // +0x234
+    float mInterpolateThetaTime;                                // +0x238
+    bool mbAutoPitchActive;                                     // +0x23c
+    float mInterpolatePitchTime;                                // +0x240
+    float mInterpolateDistanceTime;                             // +0x244
+    float mAutoPitch248;                                        // +0x248
+    float mAutoPitch24C;                                        // +0x24c
+    float mAutoPitch250;                                        // +0x250
+    float mAutoPitch254;                                        // +0x254
+    float mInterpolateAnchorMultiplier;                         // +0x258
+    float mField25C;                                            // +0x25c
+    Transform mCameraToWorld;                                   // +0x260
+    bool mTransformNeedsUpdating;                               // +0x298
+    bool mCameraReverse;                                        // +0x299
+    uint32_t mMsgReg[5];                                        // +0x29c
+    bool mbCanToggleFirstPersonView;                            // +0x2b0
+    bool mbLockOutPlayerDeltas, mbAllowRealignment, mbRealignAvatar, mbB4;  // +0x2b1
+    float mLftMouseDownDuration;                                // +0x2b8
+    char mLocalInputState[0x48];                                // +0x2bc (cLocalInputState)
+    bool mbActive;                                              // +0x304
+    IRefObject* mConfig;                                        // +0x308
+    char pad30c[0x314 - 0x30c];
+    bool mb314, mb315;                                          // +0x314
+    RbTreeAnchor_s00d2_8900 mTree;                                         // +0x318
+
+    cCreatureCamera_s00d2_8900(IRefObject* pConfig);
+    void UpdateDesiredLookAt();  // 0x00d28900 (cCreatureCamera::UpdateDesiredLookAt)
+    ~cCreatureCamera_s00d2_8900();
+};
+// ---- items of slice s00d28900 end
+
+// @ 0x00d203d0
+unsigned char Cam::Init(int a)
+{
+    (void)a;
+    ((InputState*)((char*)this + 0x2bc))->Reset();
+    return 1;
+}
+
+// @ 0x00d203e0
+void Cam::Deactivate()
+{
+    if (*(unsigned char*)((char*)this + 0x304) != 0) {
+        int p0 = *(int*)((char*)this + 0x29c);
+        if (p0 != 0) {
+            int p1 = *(int*)((char*)this + 0x2a0);
+            int p2 = *(int*)((char*)this + 0x2a4);
+            int p3 = *(int*)((char*)this + 0x2a8);
+            int p4 = *(int*)((char*)this + 0x2ac);
+            *(int*)((char*)this + 0x29c) = 0;
+            RemoveHandler((void*)p0, p1, (void*)p2, (void*)p3, (void*)p4);
+        }
+        *(unsigned char*)((char*)this + 0x304) = 0;
+    }
+}
+
+// @ 0x00d20430
+void Cam::SetCameraUI(char on)
+{
+    if (on != 0) {
+        FUN_008d2f30((int)((char*)this + 0x30c), (int)((char*)this + 0x310));
+        ((CanvasObj*)FUN_0067cab0())->SetVisibility(0);
+        ((CursorLayout*)FUN_0067cab0())->IsThing(0x67f5c34);
+        ((CursorLayout*)FUN_0067cab0())->SetEnabled(1);
+        *(unsigned char*)((char*)this + 0x314) = 1;
+    } else {
+        ((CanvasObj*)FUN_0067cab0())->SetVisibility(1);
+        ((CursorLayout*)FUN_0067cab0())->SetEnabled(0);
+        *(unsigned char*)((char*)this + 0x314) = 0;
+    }
+}
+
+// @ 0x00d204c0
+unsigned char Cam::OnKeyDown(int a, int b)
+{
+    ((InputState*)((char*)this + 0x2bc))->OnKeyDown(a, b);
+    return 0;
+}
+
+// @ 0x00d204e0
+unsigned char Cam::OnKeyUp(int a, int b)
+{
+    ((InputState*)((char*)this + 0x2bc))->OnKeyUp(a, b);
+    return 0;
+}
+
+// @ 0x00d20500
+unsigned char Cam::OnMouseUp(int a, float b, float c, int d)
+{
+    ((InputState*)((char*)this + 0x2bc))->OnMouseUp(a, b, c, d);
+    return 0;
+}
+
+// @ 0x00d20530
+unsigned char Cam::OnMouseWheel(int a, float b, float c, int d)
+{
+    ((InputState*)((char*)this + 0x2bc))->OnMouseWheel(a, b, c, d);
+    float f = 1.0f - (float)a * *(float*)((char*)this + 0x200);
+    if (*(int*)((char*)this + 0x1ec) == 2) {
+        float v = f * *(float*)((char*)this + 0x188);
+        float lo = *(float*)((char*)this + 0x210);
+        v = (v > lo) ? v : lo;                   // maxss v, lo  (returns lo when v <= lo, incl. -0.0 vs 0.0)
+        v = (v < 1500.0f) ? v : 1500.0f;         // minss v, 1500 (returns 1500 when v >= 1500 / v is NaN)
+        *(float*)((char*)this + 0x188) = v;
+    } else {
+        *(float*)((char*)this + 0x17c) = f * *(float*)((char*)this + 0x17c);
+    }
+    return 0;
+}
+
 // @ 0x00d20620
 float10 tCamCtrl::FUN_00d20620(float p)
 {
@@ -855,6 +1508,10 @@ float10 tCamCtrl::FUN_00d20620(float p)
               + *(float*)0x01582854;
     return r;
 }
+
+// @ 0x00d20700
+void FUN_00d20700(void)
+{}
 
 // @ 0x00d20880
 void tCamCtrl::FUN_00d20880(const tVec3& a, const tVec4& b)
@@ -896,6 +1553,22 @@ unsigned char FUN_00d20970(void)
         return r;
     return t->m54;
 }
+
+// @ 0x00d209b0
+void FUN_00d209b0(void)
+{}
+
+// @ 0x00d20c70
+void FUN_00d20c70(void)
+{}
+
+// @ 0x00d20e70
+void FUN_00d20e70(void)
+{}
+
+// @ 0x00d20f00
+void FUN_00d20f00(void)
+{}
 
 // @ 0x00d213b0
 bool cCreatureCameraIGB1::HandleMessage(unsigned int id, void* msg)
@@ -1276,6 +1949,178 @@ void cCreatureCamera::UpdateCamera_Free()
     mbSkipInit = false;
 }
 
+// @ 0x00d22f30
+void cCreatureCamera_s00d2_2f30::FUN_00d22f30()
+{
+    if (DAT_01582784 == 0) {
+        m034 = 0.0f;
+        return;
+    }
+
+    f32 m1 = sqrt((f64)m054 * (f64)m054 + (f64)m058 * (f64)m058 + (f64)m05c * (f64)m05c);
+    f32 m2 = sqrt((f64)m0ac * (f64)m0ac + (f64)m0b0 * (f64)m0b0 + (f64)m0b4 * (f64)m0b4);
+    f32* pf = &m1;
+    if (m2 <= m1)
+        pf = &m2;
+    f32 v = *pf;
+    if (v <= DAT_01582788)
+        v = DAT_01582788;
+    if (DAT_0158278c <= v)
+        v = DAT_0158278c;
+
+    f32 a = m020;
+    f32 b = m01c;
+    v = (v - DAT_01582788) / (DAT_0158278c - DAT_01582788);
+    v = ((3.0f - v * 2.0f) * v) * v;
+    f32 s1 = (DAT_01582794 - DAT_01582790) * v + DAT_01582790;
+    f32 s2 = (DAT_0158279c - DAT_01582798) * v + DAT_01582798;
+
+    f32 c4 = cos((f64)a * (s1 * 1.9f) + 1.0);
+    f32 c7 = cos((f64)a * s1);
+    f32 e1 = ((c7 * b) * s2) * s1 + (((c4 * b) * (s1 * 1.9f)) * s2) * 0.5f;
+
+    f32 c4b = cos((f64)a * (s1 * 1.3f) + 0.3);
+    f32 c2 = cos((f64)a * (s1 * 2.1f) + 1.2);
+    f32 e2 = (((c2 * b) * (s1 * 2.1f)) * s2) * 0.35f
+           + (((c4b * b) * (s1 * 1.3f)) * s2) * 0.7f;
+
+    m02c = m02c + m08c * e1;
+    m028 = m028 + m088 * e1;
+    m030 = m030 + m090 * e1;
+
+    f32 pz = m084 * e2 + m030;
+    f32 px = e2 * m07c + m028;
+    m028 = px;
+    m02c = m080 * e2 + m02c;
+    m030 = pz;
+
+    f32 py = m02c;
+    f32 lim = s2 * 2.0f;
+    f32 len = (px * px + py * py) + pz * pz;
+    if (lim * lim < len) {
+        lim = lim / sqrt((f64)len);
+        m028 = px * lim;
+        m02c = py * lim;
+        m030 = lim * pz;
+    }
+
+    s2 = DAT_015827a0 * s2;
+    f32 c2b = cos((f64)m020 * (s1 * 1.7f) + 0.8);
+    f32 val = ((c2b * (s1 * 1.7f)) * s2) * m01c + m034;
+    m034 = val;
+    if (val <= -s2)
+        val = -s2;
+    if (s2 <= val)
+        val = s2;
+    m034 = val;
+
+    if (DAT_01582785 != 0) {
+        m048 = m028 + m048;
+        m04c = m02c + m04c;
+        m050 = m030 + m050;
+        return;
+    }
+    m13c = m13c + m028;
+    m140 = m02c + m140;
+    m144 = m030 + m144;
+    m048 = m13c;
+    m04c = m140;
+    m050 = m144;
+}
+
+// @ 0x00d23320
+void cCreatureCamera_s00d2_2f30::FUN_00d23320()
+{
+    SP_cPlanetModel* pm = SP::PlanetModel_s00d2_2f30();
+    if (pm == 0 || pm->mpISphere == 0)
+        return;
+
+    f32 b0 = DAT_0169deb0;
+    f32 b1 = DAT_0169deb4;
+    f32 b2 = DAT_0169deb8;
+    if ((m260 & 2) != 0) {
+        b0 = (m274 * DAT_0169deb0 + m280 * DAT_0169deb4) + m28c * DAT_0169deb8;
+        b1 = (m278 * DAT_0169deb0 + m284 * DAT_0169deb4) + m290 * DAT_0169deb8;
+        b2 = (m27c * DAT_0169deb0 + m288 * DAT_0169deb4) + m294 * DAT_0169deb8;
+    }
+    f32 rad0 = m270;
+    f32 p0x = m264 + rad0 * b0;
+    f32 p0y = m268 + rad0 * b1;
+    f32 p0z = m26c + rad0 * b2;
+    f32 ang = m25c;
+
+    f32 fx = DAT_0169df44;
+    f32 fy = DAT_0169df48;
+    f32 fz = DAT_0169df4c;
+    if ((m260 & 2) != 0) {
+        fx = (m274 * DAT_0169df44 + m280 * DAT_0169df48) + m28c * DAT_0169df4c;
+        fy = (m278 * DAT_0169df44 + m284 * DAT_0169df48) + m290 * DAT_0169df4c;
+        fz = (m27c * DAT_0169df44 + m288 * DAT_0169df48) + m294 * DAT_0169df4c;
+    }
+    f32 rad1 = m270;
+
+    f32 rx = DAT_0169df50;
+    f32 ry = DAT_0169df54;
+    f32 rz = DAT_0169df58;
+    if ((m260 & 2) != 0) {
+        rx = (m274 * DAT_0169df50 + m280 * DAT_0169df54) + m28c * DAT_0169df58;
+        ry = (m278 * DAT_0169df50 + m284 * DAT_0169df54) + m290 * DAT_0169df58;
+        f32 t = m27c * DAT_0169df50 + m288 * DAT_0169df54;
+        rz = t + m294 * DAT_0169df58;
+    }
+    f32 rad2 = m270;
+
+    f32 unit = m220;
+    f32 tanf = tan((f64)m258);
+    f32 scale = (f32)((f64)tanf * (f64)unit);
+
+    f32 ax = (rad0 * fx) * unit + p0x;
+    f32 ay = (rad0 * fy) * unit + p0y;
+    f32 az = (rad0 * fz) * unit + p0z;
+
+    f32 cx = (rx * rad1) * scale;
+    f32 cy = (ry * rad2) * scale;
+    f32 cz = (rz * rad2) * scale;
+
+    f32 bx = cx + ax;
+    f32 by = cy + ay;
+    f32 bz = cz + az;
+    cx = ax - cx;
+    cy = ay - cy;
+    cz = az - cz;
+
+    f32 h0 = pm->GetRadiusAt(&p0x);
+    f32 h1 = pm->GetRadiusAt(&ax);
+    f32 w  = pm->GetWaterHeight();
+    if (h1 < w)
+        h1 = w;
+    f32 h2 = pm->GetRadiusAt(&bx);
+    if (h2 < w)
+        h2 = w;
+    f32 h3 = pm->GetRadiusAt(&cx);
+    if (h3 < w)
+        h3 = w;
+
+    f32* pa = (h3 > h2) ? &h3 : &h2;
+    f32* pb = (h1 > h0) ? &h1 : &h0;
+    if (*pb <= *pa && *pa != *pb)
+        pb = pa;
+
+    ang = tan((f64)ang) * (f64)m220 + (f64)*pb + DAT_015827f0;
+
+    if ((f64)p0z * (f64)p0z + ((f64)p0y * (f64)p0y + (f64)p0x * (f64)p0x) < (f64)ang * (f64)ang) {
+        f32* n = SP::normalized_safe(&cx, &p0x);
+        f32 nx = n[0];
+        f32 ny = n[1];
+        f32 nz = n[2];
+        m260 = (u16)(m260 | 4);
+        m264 = nx * ang;
+        m262 = (i16)(m262 + 1);
+        m268 = ny * ang;
+        m26c = nz * ang;
+    }
+}
+
 // @ 0x00d23840
 void cCreatureCamera_s00d2_2f30::FUN_00d23840()
 {
@@ -1426,6 +2271,335 @@ void cCreatureCamera_s00d2_47f0::ReloadTuning()
     if (p) p->Release();
 }
 }  // namespace SP
+
+// @ 0x00d25ac0
+void SP::cCreatureCamera_s00d2_5ac0::OnMouseMove(float f1, float f2, int i3)
+{
+    float savedKeys = mLocalInputState.mKeys7;
+    float savedMods = mLocalInputState.mModifiers;
+
+    mLocalInputState.OnMouseWheel(f1, f2, i3);
+
+    if (mb314) {
+        mInputConst.x += (float)fabs(mLocalInputState.mKeys7 - savedKeys);
+        mInputConst.y += (float)fabs(mLocalInputState.mModifiers - savedMods);
+    }
+
+    if (mbEnableInput && mb314) {
+        int cx, cy;
+        GetCursorPosition(&cx, &cy);
+
+        float dx = -((float)(cx - mLocalInputState.mMouseDownModifiers) * mMouseSensitivityX);
+        float dy =  ((float)(cy - mLocalInputState.mMouseWheelDelta)  * mMouseSensitivityY);
+
+        void* obj = FUN_008d3110();
+        void* sub = ((void*(__fastcall*)(void*, int, int))(*(void***)obj)[5])(obj, 2, 0);
+        ((void(__fastcall*)(void*, int, int, int))(*(void***)sub)[6])(
+            sub, mLocalInputState.mMouseDownModifiers, mLocalInputState.mMouseWheelDelta, 0);
+
+        if (mI1EC == 2) {
+            float ny = mF184 + dy;
+            FUN_00d21bc0(mF180 + dx, ny, mF188);
+            mF184 = ny;
+            return;
+        }
+
+        mF174 += dx;
+        float v = mF178 + dy;
+        if (v < mPitchLimits.x)
+            v = mPitchLimits.x;
+        if (v > mPitchLimits.y)
+            v = mPitchLimits.y;
+        mF178 = v;
+    }
+}
+
+// @ 0x00d25ca0
+void SP::cCreatureCamera_s00d2_5ac0::UpdateCamera(float dt)
+{
+    UpdateCamera_Free();
+    g_1582786_s00d2_5ac0 = g_169defc;
+
+    float zero = 0.0f;
+    mFieldF8  = zero;
+    mF174     = zero;
+    mFieldEC  = zero;
+
+    mV48.x = mVa0.x - mVb8.x;
+    mV48.y = mVa0.y - mVb8.y;
+    mV48.z = mVa0.z - mVb8.z;
+
+    mV13C = mV48;
+    mReferenceHeading = mVb8;
+    mV60 = mV1D4;
+    mV154 = mV1D4;
+
+    mFieldFC = dt * g_147a304;
+    mF178    = mFieldFC;
+
+    mFieldF8 = g_169de94 * g_147a304;
+    mF174    = mFieldF8;
+
+    mField100 = g_169de98_s00d2_5ac0;
+    mF17C     = mField100;
+}
+
+// @ 0x00d25e00
+void SP::cCreatureCamera_s00d2_5ac0::FUN_00d25e00()
+{
+    UpdateCamera(mFieldFC);
+}
+
+// @ 0x00d25e10
+void SP::cCreatureCamera_s00d2_5ac0::UpdateAvatarAlpha()
+{
+    float k0 = g_169deb0;
+    float k1 = g_169deb4;
+    float k2 = g_169deb8;
+
+    if (mCameraToWorld.mFlags & 2) {
+        const Matrix3& r = mCameraToWorld.mRotation;
+        k0 = r.m[6] * g_169deb8 + r.m[3] * g_169deb4 + r.m[0] * g_169deb0;
+        k1 = r.m[7] * g_169deb8 + r.m[4] * g_169deb4 + r.m[1] * g_169deb0;
+        k2 = r.m[8] * g_169deb8 + r.m[5] * g_169deb4 + r.m[2] * g_169deb0;
+    }
+
+    float px = mCameraToWorld.mTranslation.x + mCameraToWorld.mScale * k0;
+    float py = mCameraToWorld.mTranslation.y + mCameraToWorld.mScale * k1;
+    float pz = mCameraToWorld.mTranslation.z + mCameraToWorld.mScale * k2;
+
+    cGameAvatar* avatar = (cGameAvatar*)NounManager_s00d2_5ac0()->GetAvatar();
+    if (avatar == nullptr || avatar->mb135 == 0)
+        return;
+
+    float dx = px - mVa0.x;
+    float dy = py - mVa0.y;
+    float dz = pz - mVa0.z;
+
+    float r1 = avatar->mpSub->GetRadius();
+    float dist = (float)sqrt((dz * dz + dy * dy) + dx * dx) - r1;
+
+    float r2 = avatar->mpSub->GetRadius();
+    float denom = mMinCameraPhi - r2;
+    float t = dist / denom;
+
+    if (t < 0.0f) t = 0.0f;
+    if (t > 1.0f) t = 1.0f;
+
+    float out = (t <= g_147a334) ? 0.0f : g_1485720;
+    avatar->mpVisual->mAlpha = out;
+
+    if (out < g_1485720)
+        avatar->mFlagsB58 |= 0x800;
+    else
+        avatar->mFlagsB58 &= ~0x800u;
+}
+
+// @ 0x00d26030
+void SP::cCreatureCamera_s00d2_5ac0::FUN_00d26030()
+{
+    cPlanetModel_s00d2_5ac0* planet = PlanetModel_s00d2_5ac0();
+    if (planet == 0 || planet->mpISphere == 0)
+        return;
+
+    float yv  = mV108.y;
+    float xv  = mV108.x;
+    float zv  = mV108.z;
+    float kx  = g_169df54;
+    float ky  = g_169df50;
+    float kz  = g_169df58;
+
+    float d = mInitialDistance;
+
+    Vec3 a;
+    a.x = d * g_169df44 + xv;
+    a.y = d * g_169df48 + yv;
+    a.z = d * g_169df4c + zv;
+
+    float t = (float)tanf(mInterpolateAnchorMultiplier) * d;
+
+    Vec3 b;
+    b.x = kx * t + a.x;
+    b.y = ky * t + a.y;
+    b.z = kz * t + a.z;
+
+    Vec3 c;
+    c.x = a.x - kx * t;
+    c.y = a.y - ky * t;
+    c.z = a.z - kz * t;
+
+    float rOrig = planet->GetRadiusAt(&mV108);
+    float rA    = planet->GetRadiusAt(&a);
+    float water = planet->GetWaterHeight();
+    if (water > rA) rA = water;
+    float rB = planet->GetRadiusAt(&b);
+    if (water > rB) rB = water;
+    float rC = planet->GetRadiusAt(&c);
+    if (water > rC) rC = water;
+
+    float* p2;
+    float* p3;
+    if (rC > rB) { p2 = &rC; p3 = &rB; }
+    else         { p2 = &rB; p3 = &rC; }
+    if (*p2 <= rOrig) { float* tmp = p2; p2 = &rOrig; p3 = tmp; }
+    if (*p2 > *p3) p3 = p2;
+
+    float t2 = (float)tanf(mField25C) * d + *p3 + g_15827f0;
+
+    Vec3 delta;
+    delta.x = xv - mV114.x;
+    delta.y = yv - mV114.y;
+    delta.z = zv - mV114.z;
+
+    float mag2 = zv * zv + yv * yv + xv * xv;
+
+    Vec3 res;
+    planet->FUN_00b82060(&res, &mV114, &delta);
+
+    if (mag2 < t2 * t2)
+        goto clear;
+    if (res.x == g_169deb0 && res.y == g_169deb4 && res.z == g_169deb8)
+        return;
+
+    {
+        float ex = res.x - mV114.x;
+        float ey = res.y - mV114.y;
+        float ez = res.z - mV114.z;
+        float emag = ez * ez + ey * ey + ex * ex;
+        if (emag <= (delta.z * delta.z + delta.y * delta.y + delta.x * delta.x)) {
+            if (planet->SurfaceDistance(&res, &delta) > g_13eb8c8 || mb19C) {
+                mV108.x = res.x;
+                mV108.y = res.y;
+                mV108.z = res.z;
+                mb19C = true;
+                return;
+            }
+        }
+    }
+clear:
+    mb19C = false;
+}
+
+// @ 0x00d263d0
+void SP::cCreatureCamera_s00d2_5ac0::SetCameraMode(int mode)
+{
+    mI1EC = mode;
+
+    if (mode == 2) {
+        uint8_t b = g_1582786_s00d2_5ac0;
+        void* local[4];
+        cPlanetModel_s00d2_5ac0* planet;
+        g_169defc = b;
+        g_1582786_s00d2_5ac0 = 0;
+        planet = PlanetModel_s00d2_5ac0();
+        FUN_00b7f1f0(local, &mV1C8, &mV1D4);
+        FUN_00d20880_f(this, &mV1C8, local);
+    } else {
+        void* obj = FUN_0067cab0(1);
+        FUN_00801930(obj);
+        UpdateCamera_Free();
+        g_1582786_s00d2_5ac0 = g_169defc;
+
+        float zero = 0.0f;
+        mFieldF8 = zero;
+        mF174    = zero;
+        mFieldEC = zero;
+
+        mV48.x = mVa0.x - mVb8.x;
+        mV48.y = mVa0.y - mVb8.y;
+        mV48.z = mVa0.z - mVb8.z;
+
+        mV13C.x = mV48.x;
+        mV13C.y = mV48.y;
+        mV13C.z = mV48.z;
+
+        mReferenceHeading.x = mVb8.x;
+        mReferenceHeading.y = mVb8.y;
+        mReferenceHeading.z = mVb8.z;
+
+        mV60.x = mV1D4.x;
+        mV60.y = mV1D4.y;
+        mV60.z = mV1D4.z;
+        mV60.w = mV1D4.w;
+
+        mV154.x = mV1D4.x;
+        mV154.y = mV1D4.y;
+        mV154.z = mV1D4.z;
+        mV154.w = mV1D4.w;
+
+        mFieldFC = g_169de90 * g_147a304;
+        mF178    = g_169de90 * g_147a304;
+
+        mFieldF8 = g_169de94 * g_147a304;
+        mF174    = g_169de94 * g_147a304;
+
+        mField100 = g_169de98_s00d2_5ac0;
+        mF17C     = mField100;
+    }
+
+    cCreatureModeStrategy_s00d2_5ac0* s = cCreatureModeStrategy_s00d2_5ac0::Instance();
+    cCreatureModeState* p = s->mpState;
+    if (p != nullptr) {
+        if (p->mb54 != 0)
+            p->mbC0 = (uint8_t)(mI1EC != 2);
+    }
+}
+
+// @ 0x00d265c0
+void rotateTransform(cSPTransformOps* out, int axis, float angle)
+{
+    cTransform_s00d2_5ac0 xf;
+    xf.mFlags = 0;
+    xf.mModificationCount = 0;
+    xf.mTranslation.x = g_169deb0;
+    xf.mTranslation.y = g_169deb4;
+    xf.mTranslation.z = g_169deb8;
+    xf.mScale = 1.0f;
+    xf.mRotation.Assign(g_169df20);
+
+    if (axis == 0)
+        ((cXform*)&xf)->PreRotateX(-angle);
+    else
+        ((EA::Swarm::cTransform_s00d2_5ac0*)&xf)->PreRotateY(angle);
+
+    cTransform_s00d2_5ac0 copy;
+    copy.mFlags = xf.mFlags;
+    copy.mModificationCount = xf.mModificationCount;
+    copy.mTranslation.x = xf.mTranslation.x;
+    copy.mTranslation.y = xf.mTranslation.y;
+    copy.mTranslation.z = xf.mTranslation.z;
+    copy.mScale = xf.mScale;
+    copy.mRotation.Assign(xf.mRotation);
+
+    ((cTransformCompose*)&copy)->ComposeTransforms(out);
+    out->Assign(&copy);
+}
+
+// @ 0x00d266c0
+void BuildTransformFromTranslation(cSPTransformOps* out, const Vec3* translation)
+{
+    cTransform_s00d2_5ac0 xf;
+    xf.mFlags = 0;
+    xf.mModificationCount = 0;
+    xf.mScale = 1.0f;
+    xf.mRotation.Assign(g_169df20);
+    xf.mTranslation = *translation;
+
+    xf.mFlags |= 4;
+    xf.mModificationCount++;
+
+    cTransform_s00d2_5ac0 copy;
+    copy.mFlags = xf.mFlags;
+    copy.mModificationCount = xf.mModificationCount;
+    copy.mTranslation.x = xf.mTranslation.x;
+    copy.mTranslation.y = xf.mTranslation.y;
+    copy.mTranslation.z = xf.mTranslation.z;
+    copy.mScale = xf.mScale;
+    copy.mRotation.Assign(xf.mRotation);
+
+    ((cTransformCompose*)&copy)->ComposeTransforms(out);
+    out->Assign(&copy);
+}
 
 // @ 0x00d270a0
 void cCamView::FUN_00d270a0(Vec3* pOut)
@@ -1687,4 +2861,319 @@ void cFreeCamera::Update(float dt)
         Quat* qo = pm->SurfaceOrientation(&tmpq, &mPos, &mOrient);
         mOrient = *qo;
     }
+}
+
+// @ 0x00d28900
+void cCreatureCamera_s00d2_8900::UpdateDesiredLookAt()
+{
+    // Query object: constructed with the simulator's camera-data context obtained through
+    // App()->vtbl[0x50]->vtbl[0x1c].
+    void* app = SP_App();
+    void* appSub = ((void* (__thiscall*)(void*))VTC(app, 0x50))(app);
+    void* context = ((void* (__thiscall*)(void*))VTC(appSub, 0x1c))(appSub);
+
+    AimQuery q;
+    q.Init(context);
+
+    // Normalised delta from the current aim to the desired one.
+    const float dx = mV114.x - mV13C.x;
+    const float dy = mV114.y - mV13C.y;
+    const float dz = mV114.z - mV13C.z;
+    const float invDelta = 1.0f / sqrtf(dx * dx + dy * dy + dz * dz + 1e-08f);
+    const float nx = dx * invDelta;
+    const float ny = dy * invDelta;
+    const float nz = dz * invDelta;
+
+    q.mDirection = MakeVec(nx, ny, nz);
+    q.mDeltaX = nx;
+    q.mPitch = mV88.y;
+    q.mYaw = mV88.z;
+    q.mOffset = mV7c;
+    q.mDesired = mV114;
+
+    const bool wasSet = mb164;
+    mb164 = false;
+
+    if (CameraQueryHandlers(&q, 0))          // 0x00b17c10
+        mb164 = true;
+    if (!mb164) {
+        if (CameraQueryValue(&q, 0))         // 0x00b17810
+            mb164 = true;
+    }
+
+    const float curLen = sqrtf(mV13C.x * mV13C.x + mV13C.y * mV13C.y + mV13C.z * mV13C.z);
+    const float desLen = sqrtf(mV168.x * mV168.x + mV168.y * mV168.y + mV168.z * mV168.z);
+
+    if (!mb164) {
+        // Not flagged: only grow the aim when the desired aim is meaningfully longer.
+        if (desLen - curLen > 1.52587890625e-05f) {
+            mb164 = true;
+            const float head = desLen - mDt * 20.0f;
+            const float target = (head > curLen) ? head : curLen;
+            const float invCur = 1.0f / sqrtf(mV13C.x * mV13C.x + mV13C.y * mV13C.y +
+                                              mV13C.z * mV13C.z + 1e-08f);
+            mV168 = MakeVec(mV13C.x * invCur * target, mV13C.y * invCur * target,
+                            mV13C.z * invCur * target);
+            if (wasSet)
+                mb164 = true;
+        }
+    } else {
+        // Already flagged: pull the query aim onto the largest of the two lengths first.
+        if (wasSet) {
+            const float target = (desLen > curLen) ? desLen : curLen;
+            const float invCur = 1.0f / sqrtf(mV13C.x * mV13C.x + mV13C.y * mV13C.y +
+                                              mV13C.z * mV13C.z + 1e-08f);
+            q.mAim = MakeVec(mV13C.x * invCur * target, mV13C.y * invCur * target,
+                             mV13C.z * invCur * target);
+            q.SetMode(1);                    // 0x00b17790
+        }
+
+        AimSpatialList list;
+        list.mpBegin = &list.mInline[0];
+        list.mpEnd = &list.mInline[0];
+        list.mpCap = &list.mInline[8];
+        list.mField14 = 0;
+
+        const bool found = CameraQueryHandlers(&q, &list);          // 0x00b17c10
+        if (found) {
+            CameraQueryCollect(&q.mAim, &list);                     // 0x00b16450
+            q.SetMode(1);                                           // 0x00b17790
+        }
+
+        float value = 0.0f;
+        int32_t reserved = 0;                // the original zeroes a stack slot here as well
+        const bool haveValue = CameraQueryValue(&q, &value);        // 0x00b17810
+        if (haveValue)
+            CameraQueryApply(&q, &value);                           // 0x00b16e50
+
+        if (found || haveValue) {
+            // Advance the query aim along its own direction by one frame step.
+            const float step = mDt * 20.0f;
+            const float invAim = 1.0f / sqrtf(q.mAim.x * q.mAim.x + q.mAim.y * q.mAim.y +
+                                              q.mAim.z * q.mAim.z + 1e-08f);
+            q.mAim.x = (invAim * q.mAim.x) * step + q.mAim.x;
+            q.mAim.y = (invAim * q.mAim.y) * step + q.mAim.y;
+            q.mAim.z = (invAim * q.mAim.z) * step + q.mAim.z;
+        }
+
+        mV168 = q.mAim;
+        list.Destroy();                      // 0x00ad92d0
+    }
+
+    // Release the query's heap-allocated handler buffer if one was allocated.
+    if (q.mpHandlerBegin != 0 && ((int32_t*)q.mpHandlerBegin)[-1] != 0)
+        OpDelete(q.mpHandlerBegin);
+}
+
+// @ 0x00d28e10
+void RbTreeAnchor_s00d2_8900::MapIterateErase(RbNode* first, RbNode* last)
+{
+    while (first != last) {
+        uint32_t color = 0;
+        void* out[2];
+        Insert(out, &first->mKey, color);
+        first = RBTreeIncrement(first);
+    }
+}
+
+// @ 0x00d28e60
+cCreatureCamera_s00d2_8900::cCreatureCamera_s00d2_8900(IRefObject* pConfig)
+: mbEnableInput(Prepare(this)), mbSkipInit(false), mInputConst(kInputConst_s00d2_8900),
+      mBoundsMin(MakeVec(FLT_MAX, FLT_MAX, FLT_MAX)),
+      mBoundsMax(MakeVec(-FLT_MAX, -FLT_MAX, -FLT_MAX))
+{
+    mMouseSensitivityX = 0.017453292f;
+    mMouseSensitivityY = 0.0043633231f;
+    mMouseSensitivityZ = 0.001f;
+    mMaxAnchorDistance = 30.0f;
+    mPitchLimits = kPitchLimits;
+    mMinCameraPhi = 5.0f;
+    mMaxCameraPhi = 25.0f;
+    mMinCameraDistance = 10.0f;
+    mMaxCameraDistance = 0.39269909f;
+    mInitialDistance = 1.0f;
+    mInitialRotation = 10000.0f;
+    mNearClip = 0.5f;
+    mFarClip = 0.5f;
+    mInterpolateAnchorTime = 0.5f;
+    mI1E8 = 0;
+    mI1EC = 0;
+    mI1F0 = 0;
+    mb1F4 = false;
+    mInterpolateOrientationTime = 1.0f;
+    mInterpolateThetaTime = 1.0f;
+    mbAutoPitchActive = false;
+    mInterpolatePitchTime = -5.0f;
+    mInterpolateDistanceTime = 10.0f;
+    mAutoPitch248 = 0.0f;
+    mAutoPitch24C = 5.0f;
+    mAutoPitch250 = 0.01f;
+    mAutoPitch254 = 0.1f;
+    mInterpolateAnchorMultiplier = 30.0f;
+    mField25C = 30.0f;
+
+    mCameraToWorld.mChangeCount = 0;
+    mCameraToWorld.mFlags = 0;
+    ::new ((void*)&mCameraToWorld.mOffset) Vector3(kZero3);
+    mCameraToWorld.mScale = 1.0f;
+    ::new ((void*)&mCameraToWorld.mRotation) Matrix3_s00d2_8900(kIdentity3);
+    mTransformNeedsUpdating = true;
+    mCameraReverse = false;
+    mMsgReg[0] = 0;
+    mMsgReg[1] = 0;
+    mMsgReg[2] = 0;
+    mMsgReg[3] = 0;
+    mMsgReg[4] = 0;
+    mbCanToggleFirstPersonView = true;
+    mbLockOutPlayerDeltas = false;
+    mbAllowRealignment = false;
+    mbRealignAvatar = false;
+    mbB4 = false;
+    mLftMouseDownDuration = 0.0f;
+
+    ::new ((void*)mLocalInputState) cLocalInputState_s00d2_8900();
+    mbActive = false;
+    mConfig = pConfig;
+    if (pConfig)
+        pConfig->AddRef();
+    mb314 = false;
+    mb315 = false;
+
+    mTree.mpLeft = 0;
+    mTree.mpParent = 0;
+    mTree.mColor = 0;
+    mTree.mpParent = 0;
+    *(uint8_t*)&mTree.mColor = 0;
+    mTree.mnSize = 0;
+    mTree.mpRight = &mTree;
+    mTree.mpLeft = &mTree;
+
+    mDt = 0.0f;
+    mOscillationTime = 0.0f;
+    mBreathOffset = 0.0f;
+    mShakeOffset = kZeroVec_s00d2_8900;
+    mRoll = 0.0f;
+    mReferenceHeading = kZeroVec_s00d2_8900;
+    mWantInterpolationTimer = 0.0f;
+    mV48 = kZeroVec_s00d2_8900;
+    mV54 = kZeroVec_s00d2_8900;
+    mQ60 = kIdentityQuat;
+    mV70 = kZeroVec_s00d2_8900;
+    mV7c = kZeroVec_s00d2_8900;
+    mV88 = kZeroVec_s00d2_8900;
+    mV94 = kZeroVec_s00d2_8900;
+    mVa0 = kZeroVec_s00d2_8900;
+    mVac = kZeroVec_s00d2_8900;
+    mVb8 = kZeroVec_s00d2_8900;
+    mVc4 = kZeroVec_s00d2_8900;
+    mbE8 = false;
+    mbE9 = false;
+    mFieldEC = 0.0f;
+    mFieldF0 = 0.0f;
+    mFieldF4 = 0.0f;
+    mFieldF8 = 0.0f;
+    mFieldFC = 0.0f;
+    mField100 = mMinCameraPhi;
+    mb104 = false;
+    mb105 = false;
+    mV108 = kZeroVec_s00d2_8900;
+    mV114 = kZeroVec_s00d2_8900;
+    mV120 = kZeroVec_s00d2_8900;
+    mF12C = 0.0f;
+    mF130 = 0.0f;
+    mF134 = 0.0f;
+    mF138 = 0.0f;
+    mV13C = kZeroVec_s00d2_8900;
+    mV148 = kZeroVec_s00d2_8900;
+    mQ154 = kIdentityQuat;
+    mb164 = false;
+    mV168 = kZeroVec_s00d2_8900;
+    mF174 = 0.0f;
+    mF178 = 0.0f;
+    mF17C = 0.0f;
+    mF180 = 0.0f;
+    mb19C = false;
+    mb19D = false;
+    mF184 = 0.0f;
+    mF188 = 0.0f;
+    mF18C = 0.0f;
+    mF190 = 0.0f;
+    mF194 = mMinCameraPhi;
+    mF198 = 0.0f;
+    mF1A0 = 0.0f;
+    mF1A4 = 0.0f;
+    mF1A8 = 0.0f;
+    mF1E4 = 0.0f;
+}
+
+// @ 0x00d29570
+cCreatureCamera_s00d2_8900::~cCreatureCamera_s00d2_8900()
+{
+    RbTreeAnchor_s00d2_8900* t = &mTree;
+    t->DestroyAll(t->mpRoot);
+    if (mConfig)
+        mConfig->Release();
+    if (mMsgReg[0]) {
+        uint32_t e = mMsgReg[4];
+        uint32_t d = mMsgReg[3];
+        uint32_t c = mMsgReg[2];
+        uint32_t b = mMsgReg[1];
+        uint32_t a = mMsgReg[0];
+        mMsgReg[0] = 0;
+        RemoveHandler((void*)a, (void*)b, (void*)c, (void*)d, (void*)e);
+    }
+    RefCountV_s00d2_8900::mVptr = g_vtblBase2;
+    IGB1_s00d2_8900::mVptr = g_vtblBase1;
+    ICamBase::mVptr = g_vtblBase0;
+}
+
+// @ 0x00d29610
+bool CollectMessageHandlers(MsgSource* src, MsgMap* map)
+{
+    src->SetHandlers(0);
+    HandlerProvider* provider = GetHandlerProvider();
+    AutoRefVec vec;
+    vec.mpBegin = 0;
+    vec.mpEnd = 0;
+    vec.mpCap = 0;
+    int offset = 0x60;
+    do {
+        bool got = provider->GetHandlers(src, src->mHandlerTable + offset, &vec, 4);
+        if (got && vec.mpBegin != vec.mpEnd) {
+            for (void** it = vec.mpBegin; it != vec.mpEnd; ++it) {
+                HandlerObj* h = (HandlerObj*)*it;
+                if (!IsLiveHandler(h))
+                    continue;
+                if (map == 0) {
+                    for (void** r = vec.mpBegin; r < vec.mpEnd; ++r) {
+                        if (*r)
+                            (*(HandlerObj**)r)->ReleaseHandler();
+                    }
+                    if (vec.mpBegin && ((SpVecAllocHeader*)vec.mpBegin - 1)->mnCapacity != 0)
+                        OpDelete(vec.mpBegin);
+                    return true;
+                }
+                void* key = h;
+                if (h)
+                    h->AddRefHandler();
+                void* out[2];
+                int32_t color = 0;
+                map->Insert(out, &key, color);
+                if (h)
+                    h->ReleaseHandler();
+            }
+        }
+        offset -= 0xc;
+    } while (offset >= 0);
+
+    bool result = false;
+    if (map != 0)
+        result = map->mSize != 0;
+    for (void** r = vec.mpBegin; r < vec.mpEnd; ++r) {
+        if (*r)
+            (*(HandlerObj**)r)->ReleaseHandler();
+    }
+    if (vec.mpBegin && ((SpVecAllocHeader*)vec.mpBegin - 1)->mnCapacity != 0)
+        OpDelete(vec.mpBegin);
+    return result;
 }

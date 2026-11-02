@@ -1,5 +1,5 @@
-00d28e60 SP_cCreatureCamera_ctor  # PDB cCreatureCamera; retail offsets = PDB-8 from +0x200, -0x10 from +0x2cc
-00d28900 UpdateDesiredLookAt      # SP::cCreatureCamera::UpdateDesiredLookAt (aim interpolation toward mV114)
-00d28e10 MapIterateErase          # RbTreeAnchor::MapIterateErase ([first,last) erase walk)
-00d29570 SP_cCreatureCamera_dtor  # PDB cCreatureCamera::~cCreatureCamera; equiv PASS (manifest)
-00d29610 CollectMessageHandlers   # collect registered message handlers into the map
+00d28900 ?UpdateDesiredLookAt@cCreatureCamera_s00d2_8900@@QAEXXZ  # cCreatureCamera_s00d2_8900::UpdateDesiredLookAt migrated from s00d28900 (verbatim, slice spelling)
+00d28e10 ?MapIterateErase@RbTreeAnchor_s00d2_8900@@QAEXPAURbNode@@0@Z  # RbTreeAnchor_s00d2_8900::MapIterateErase migrated from s00d28900 (verbatim, slice spelling)
+00d28e60 ??0cCreatureCamera_s00d2_8900@@QAE@PAUIRefObject@@@Z  # cCreatureCamera_s00d2_8900::cCreatureCamera migrated from s00d28900 (verbatim, slice spelling)
+00d29570 ??1cCreatureCamera_s00d2_8900@@QAE@XZ  # cCreatureCamera_s00d2_8900::~cCreatureCamera migrated from s00d28900 (verbatim, slice spelling)
+00d29610 ?CollectMessageHandlers@@YA_NPAUMsgSource@@PAUMsgMap@@@Z  # CollectMessageHandlers migrated from s00d28900 (verbatim, slice spelling)
