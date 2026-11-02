@@ -1,12 +1,12 @@
 00eaa9a0 ?Init@cMixModeManager_s00ea_a9a0@Audio@SP@@QAE_NXZ  # cMixModeManager_s00ea_a9a0::Init migrated from s00eaa9a0 (verbatim, slice spelling)
-00eab2e0 SP::Audio::cNPCCityMusic::Load  # bool(const char*); 0xa14-byte name scratch, parse then AddChannelRef; diff 105
-00eab340 SP::Audio::cNPCCityMusic::SetPosition  # void(const Vector3*); create audio object + set position through 0x571f80; diff 13
-00eab390 SP::Audio::cNPCCityMusic::ClearPosition  # void(); release mpAudioObject and zero it; byte-exact
-00eab3b0 SP::Audio::cNPCCityMusic::SetEnabled  # void(uint8_t); audio-object enabled flag; diff 20
-00eab3e0 SP::Audio::cNPCCityMusic::SetVector  # void(const Vector3*); forwards xyz to 0x9fbc50; byte-exact
-00eab410 SP::Audio::cNPCCityMusic::cNPCCityMusic  # ctor(uint32_t id); two vtables + manager AcquireChannel; diff 8
-00eab4a0 SP::Audio::cNPCCityMusic::cNPCCityMusic  # default ctor; id 0xffffffff, no channel; diff 5
-00eab4d0 SP::Audio::cNPCCityMusic::Destroy  # scalar deleting destructor body(int flags); releases channel; diff 36
+00eab2e0 ?Load@cNPCCityMusic@Audio@SP@@QAE_NPBD@Z  # cNPCCityMusic::Load migrated from s00eaa9a0 (verbatim, slice spelling)
+00eab340 ?SetPosition@cNPCCityMusic@Audio@SP@@QAEXPBUVector3@23@@Z  # cNPCCityMusic::SetPosition migrated from s00eaa9a0 (verbatim, slice spelling)
+00eab390 ?ClearPosition@cNPCCityMusic@Audio@SP@@QAEXXZ  # cNPCCityMusic::ClearPosition migrated from s00eaa9a0 (verbatim, slice spelling)
+00eab3b0 ?SetEnabled@cNPCCityMusic@Audio@SP@@QAEXE@Z  # cNPCCityMusic::SetEnabled migrated from s00eaa9a0 (verbatim, slice spelling)
+00eab3e0 ?SetVector@cNPCCityMusic@Audio@SP@@QAEXPBUVector3@23@@Z  # cNPCCityMusic::SetVector migrated from s00eaa9a0 (verbatim, slice spelling)
+00eab410 ??0cNPCCityMusic@Audio@SP@@QAE@I@Z  # cNPCCityMusic::cNPCCityMusic migrated from s00eaa9a0 (verbatim, slice spelling)
+00eab4a0 ??0cNPCCityMusic@Audio@SP@@QAE@XZ  # cNPCCityMusic::cNPCCityMusic migrated from s00eaa9a0 (verbatim, slice spelling)
+00eab4d0 ?Destroy@cNPCCityMusic@Audio@SP@@QAEPAV123@H@Z  # cNPCCityMusic::Destroy migrated from s00eaa9a0 (verbatim, slice spelling)
 00eab520 SP::Audio::cNPCCityMusicManager::ClearChannelMaps  # void(); frees bucket nodes in all five channel maps; byte-exact
 00eab560 SP::Audio::cNPCCityMusicManager::AcquireChannel  # ChannelNode*(uint32_t id); min-refcount/random tie pick; diff 229
 00eab650 SP::Audio::cNPCCityMusicManager::AddChannelRef  # void(uint32_t id, void* key); find/insert + increment; diff 99
