@@ -2,33 +2,33 @@
 00a64280 ?ReleaseEntryNode@EapdAssetManager_s00a6_3dd0@Eapd@Audio@EA@@QAEXPAUAssetEntry@234@@Z  # EapdAssetManager_s00a6_3dd0::ReleaseEntryNode migrated from s00a63dd0 (verbatim, slice spelling)
 00a642f0 ?ReleaseNodeAt34@EapdAssetManager_s00a6_3dd0@Eapd@Audio@EA@@QAE_NI@Z  # EapdAssetManager_s00a6_3dd0::ReleaseNodeAt34 migrated from s00a63dd0 (verbatim, slice spelling)
 00a64390 ?FreeSlot@EapdAssetManager_s00a6_3dd0@Eapd@Audio@EA@@QAEPAXPAX00@Z  # EapdAssetManager_s00a6_3dd0::FreeSlot migrated from s00a63dd0 (verbatim, slice spelling)
-00a643b0  EA::Audio::Eapd::EapdAssetManager::NewEntryNode  # allocate a 0x1c AssetEntry and link it into the +0x4c list
+00a643b0 ?NewEntryNode@EapdAssetManager@Eapd@Audio@EA@@QAEPAUAssetEntry@234@PAX0@Z  # EapdAssetManager::NewEntryNode migrated from s00a63dd0 (verbatim, slice spelling)
 00a64400 ?AllocFromPool@EapdAssetManager_s00a6_3dd0@Eapd@Audio@EA@@QAEPAXPAX@Z  # EapdAssetManager_s00a6_3dd0::AllocFromPool migrated from s00a63dd0 (verbatim, slice spelling)
 00a64470 ?Ctor@AssetSlot@Eapd@Audio@EA@@QAEPAU1234@XZ  # AssetSlot::Ctor migrated from s00a63dd0 (verbatim, slice spelling)
 00a644e0 ?Free@AssetSlot@Eapd@Audio@EA@@QAEXPAX@Z  # AssetSlot::Free migrated from s00a63dd0 (verbatim, slice spelling)
-00a64510  EA::Audio::Eapd::EapdAssetManager::DetachList  # walk a circular list and free every node whose field +0xc == key
+00a64510 ?DetachList@EapdAssetManager@Eapd@Audio@EA@@QAEXPAX0@Z  # EapdAssetManager::DetachList migrated from s00a63dd0 (verbatim, slice spelling)
 00a64560 ?FreeAll@EapdAssetManager_s00a6_3dd0@Eapd@Audio@EA@@QAE_NXZ  # EapdAssetManager_s00a6_3dd0::FreeAll migrated from s00a63dd0 (verbatim, slice spelling)
 00a645c0 ?RearrangeLists@EapdAssetManager_s00a6_3dd0@Eapd@Audio@EA@@QAEXXZ  # EapdAssetManager_s00a6_3dd0::RearrangeLists migrated from s00a63dd0 (verbatim, slice spelling)
-00a646a0  EA::Audio::Eapd::EapdAssetManager::ClearLists  # DetachList on both +0x44 and +0x4c lists
+00a646a0 ?ClearLists@EapdAssetManager@Eapd@Audio@EA@@QAEXPAX@Z  # EapdAssetManager::ClearLists migrated from s00a63dd0 (verbatim, slice spelling)
 00a646d0 ?ThrowHelper@Eapd@Audio@EA@@YAXPAX@Z  # ThrowHelper migrated from s00a63dd0 (verbatim, slice spelling)
-00a646f0  EA::Audio::Eapd::IterHelper::MakeEntryIter  # write a 2-word iterator payload into out
-00a64710  EA::Audio::Eapd::EapdAssetManager::ResetAndClear  # ClearLists(this) via the global asset manager
-00a64730  EA::Audio::Eapd::EapdAssetManager::PushNode  # link a node at the head of the +0x4 list if its tag matches
-00a64750  EA::Audio::Eapd::EapdAssetManager::RemoveNode  # unlink a node from the +0x4 list
+00a646f0 ?MakeEntryIter@IterHelper@Eapd@Audio@EA@@QAEPAXPAX@Z  # IterHelper::MakeEntryIter migrated from s00a63dd0 (verbatim, slice spelling)
+00a64710 ?ResetAndClear@EapdAssetManager@Eapd@Audio@EA@@QAEXXZ  # EapdAssetManager::ResetAndClear migrated from s00a63dd0 (verbatim, slice spelling)
+00a64730 ?PushNode@EapdAssetManager@Eapd@Audio@EA@@QAE_NPAX@Z  # EapdAssetManager::PushNode migrated from s00a63dd0 (verbatim, slice spelling)
+00a64750 ?RemoveNode@EapdAssetManager@Eapd@Audio@EA@@QAE_NPAX@Z  # EapdAssetManager::RemoveNode migrated from s00a63dd0 (verbatim, slice spelling)
 00a647b0 ?SendFloatToAll@Eapd@Audio@EA@@YAHPAX@Z  # SendFloatToAll migrated from s00a63dd0 (verbatim, slice spelling)
 00a64820 ?SendSymbolToAll@Eapd@Audio@EA@@YAHPAX@Z  # SendSymbolToAll migrated from s00a63dd0 (verbatim, slice spelling)
 00a64870 ?SendSymbolList@Eapd@Audio@EA@@YAHPAX@Z  # SendSymbolList migrated from s00a63dd0 (verbatim, slice spelling)
-00a648a0  EA::Audio::Eapd::EapdAssetManager::MakeFloatHandler  # register a float-handler entry (kind 0)
-00a648f0  EA::Audio::Eapd::EapdAssetManager::MakeSymbolHandler  # register a symbol-handler entry (kind 1)
-00a64950  EA::Audio::Eapd::EapdAssetManager::MakeListHandler  # register a list-handler entry (kind 2)
+00a648a0 ?MakeFloatHandler@EapdAssetManager@Eapd@Audio@EA@@QAE_NM@Z  # EapdAssetManager::MakeFloatHandler migrated from s00a63dd0 (verbatim, slice spelling)
+00a648f0 ?MakeSymbolHandler@EapdAssetManager@Eapd@Audio@EA@@QAE_NPBD@Z  # EapdAssetManager::MakeSymbolHandler migrated from s00a63dd0 (verbatim, slice spelling)
+00a64950 ?MakeListHandler@EapdAssetManager@Eapd@Audio@EA@@QAE_NXZ  # EapdAssetManager::MakeListHandler migrated from s00a63dd0 (verbatim, slice spelling)
 00a649b0 ?GetTwoWords@EapdAssetManager_s00a6_3dd0@Eapd@Audio@EA@@QAEPAXPAX@Z  # EapdAssetManager_s00a6_3dd0::GetTwoWords migrated from s00a63dd0 (verbatim, slice spelling)
 00a649d0 ?RealizeDollar@EapdAssetManager_s00a6_3dd0@Eapd@Audio@EA@@QAEPAXPAX@Z  # EapdAssetManager_s00a6_3dd0::RealizeDollar migrated from s00a63dd0 (verbatim, slice spelling)
 00a64a10 ?PauseCanvas@Eapd@Audio@EA@@YAHPAX@Z  # PauseCanvas migrated from s00a63dd0 (verbatim, slice spelling)
-00a64a50  EA::Audio::Eapd::EapdAssetManager::DisposeArray  # free every node of an array of bucket chains
+00a64a50 ?DisposeArray@EapdAssetManager@Eapd@Audio@EA@@QAEXPAPAXI@Z  # EapdAssetManager::DisposeArray migrated from s00a63dd0 (verbatim, slice spelling)
 00a64aa0 ?MakeFloatHandler2@EapdAssetManager_s00a6_3dd0@Eapd@Audio@EA@@QAEXE@Z  # EapdAssetManager_s00a6_3dd0::MakeFloatHandler2 migrated from s00a63dd0 (verbatim, slice spelling)
-00a64ad0  EA::Audio::Eapd::ObjectHashMap::Resize  # rehash into a new bucket array
-00a64b70  EA::Audio::Eapd::ObjectHashMap::Dtor  # SEH-framed destructor: dispose buckets, free old array, reset allocator
-00a64be0  EA::Audio::Eapd::ObjectHashMap::Erase  # unlink+free every node matching a key; returns the number removed
-00a64c50  EA::Audio::Eapd::ObjectHashMap::DisposeArray2  # per-node ResetAndClear + allocator free over an array
-00a64cb0  EA::Audio::Eapd::ObjectHashMap::GetGroup  # hash-lookup a PgSymbol in the +0xc sub-container; return the group at node+8 (0 if the bucket sentinel matched)
-00a64cf0  EA::Audio::Eapd::ObjectHashMap::Insert  # insert a node into its bucket chain
+00a64ad0 ?Resize@ObjectHashMap@Eapd@Audio@EA@@QAEXI@Z  # ObjectHashMap::Resize migrated from s00a63dd0 (verbatim, slice spelling)
+00a64b70 ?Dtor@ObjectHashMap@Eapd@Audio@EA@@QAEXXZ  # ObjectHashMap::Dtor migrated from s00a63dd0 (verbatim, slice spelling)
+00a64be0 ?Erase@ObjectHashMap@Eapd@Audio@EA@@QAEIPAI@Z  # ObjectHashMap::Erase migrated from s00a63dd0 (verbatim, slice spelling)
+00a64c50 ?DisposeArray2@ObjectHashMap@Eapd@Audio@EA@@QAEXPAPAXI@Z  # ObjectHashMap::DisposeArray2 migrated from s00a63dd0 (verbatim, slice spelling)
+00a64cb0 ?GetGroup@ObjectHashMap@Eapd@Audio@EA@@QAEPAXUPgSymbol@234@@Z  # ObjectHashMap::GetGroup migrated from s00a63dd0 (verbatim, slice spelling)
+00a64cf0 ?Insert@ObjectHashMap@Eapd@Audio@EA@@QAEPAXPAX00@Z  # ObjectHashMap::Insert migrated from s00a63dd0 (verbatim, slice spelling)

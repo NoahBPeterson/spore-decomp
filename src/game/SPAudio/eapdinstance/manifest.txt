@@ -1,1 +1,14 @@
 # source  symbol  va  flags
+../src/game/SPAudio/eapdinstance.cpp  ?DetachList@EapdAssetManager@Eapd@Audio@EA@@QAEXPAX0@Z  00a64510  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdinstance.cpp  ?ClearLists@EapdAssetManager@Eapd@Audio@EA@@QAEXPAX@Z  00a646a0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdinstance.cpp  ?MakeEntryIter@IterHelper@Eapd@Audio@EA@@QAEPAXPAX@Z  00a646f0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdinstance.cpp  ?ResetAndClear@EapdAssetManager@Eapd@Audio@EA@@QAEXXZ  00a64710  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdinstance.cpp  ?PushNode@EapdAssetManager@Eapd@Audio@EA@@QAE_NPAX@Z  00a64730  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdinstance.cpp  ?RemoveNode@EapdAssetManager@Eapd@Audio@EA@@QAE_NPAX@Z  00a64750  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdinstance.cpp  ?MakeFloatHandler@EapdAssetManager@Eapd@Audio@EA@@QAE_NM@Z  00a648a0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdinstance.cpp  ?MakeSymbolHandler@EapdAssetManager@Eapd@Audio@EA@@QAE_NPBD@Z  00a648f0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdinstance.cpp  ?MakeListHandler@EapdAssetManager@Eapd@Audio@EA@@QAE_NXZ  00a64950  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdinstance.cpp  ?DisposeArray@EapdAssetManager@Eapd@Audio@EA@@QAEXPAPAXI@Z  00a64a50  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdinstance.cpp  ?DisposeArray2@ObjectHashMap@Eapd@Audio@EA@@QAEXPAPAXI@Z  00a64c50  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdinstance.cpp  ?GetGroup@ObjectHashMap@Eapd@Audio@EA@@QAEPAXUPgSymbol@234@@Z  00a64cb0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdinstance.cpp  ?RemoveAllFor@CursorRegistry@@QAEXPAXH@Z  00a663e0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include

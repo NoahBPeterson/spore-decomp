@@ -2,6 +2,8 @@
 00685520 world layout entry accessor (byte flag)  # same table
 00685540 world layout entry table clear  # zeroes first byte of each 0x28 entry
 00685570 layout-callback field setter (this+0x20c/this+0x210)  # tag 0x7104c38
+006859b0 ?FUN_006859b0@S2@@QAEPAHPAH0PAPAH@Z  # S2::FUN_006859b0 migrated from s00684ee0 (verbatim, slice spelling)
 00685a30 eastl::vector<EA::Variant>::_Destroy  # calls EA::Variant::Destruct (0x0093db80)
 00685cd0 destroy+free range over 0x28-byte wstring pairs
 00686080 destroy+free range over 0x28-byte wstring pairs (void)
+00931b70 ?GetSize@FileStream@IO@EA@@UBEIXZ  # EA::IO::FileStream::GetSize (callee of s00684ee0, named from the dev publics; slice address comment)

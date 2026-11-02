@@ -13,7 +13,7 @@
 00a63350  EA::Audio::Eapd::x_thisinstance_setup
 00a633e0 ?StoreFlag@XThisInstance@Eapd@Audio@EA@@QAE_NE@Z  # XThisInstance::StoreFlag migrated from s00a62ec0 (verbatim, slice spelling)
 00a634a0 ?InputParseSymbols@Eapd@Audio@EA@@YI_NHPAPADPAD0PAUPgSymbol@123@PAH3@Z  # InputParseSymbols migrated from s00a62ec0 (verbatim, slice spelling)
-00a635d0  EA::Audio::Eapd::GetGroupSymbol
+00a635d0 ?GetGroupSymbol@Eapd@Audio@EA@@YAPAUPgSymbol@123@PAU4123@@Z  # GetGroupSymbol migrated from s00a62ec0 (verbatim, slice spelling)
 00a63640 ?DestroyAll@EapdMapBase@Eapd@Audio@EA@@QAEXPAX@Z  # EapdMapBase::DestroyAll migrated from s00a62ec0 (verbatim, slice spelling)
 00a63680 ?HasKeyEvent@EapdMapBase@Eapd@Audio@EA@@QAE_NI@Z  # EapdMapBase::HasKeyEvent migrated from s00a62ec0 (verbatim, slice spelling)
 00a636b0 ?HasKeyField@EapdMapBase@Eapd@Audio@EA@@QAE_NIH@Z  # EapdMapBase::HasKeyField migrated from s00a62ec0 (verbatim, slice spelling)
