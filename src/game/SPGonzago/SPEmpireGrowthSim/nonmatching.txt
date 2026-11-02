@@ -1,3 +1,8 @@
 # va  diff-bytes  reason
+00fe8f70 1571 complete; stack slot layout and float temp order differ; flags /O2 /MD /Gy /TP /arch:SSE2 /fp:fast
 00fea240 82 RuleVector::erase: flags /O2 /MD /Gy /EHsc /TP /arch:SSE; difftest FAIL (5/5 valid inputs mismatched; memory pool @40010004); size 94 vs 96, compiler folds dst into src+delta instead of keeping the retail dst register; tail uses add (vector grows)
+00fea2a0 353 RuleVector::insert: flags /O2 /MD /Gy /EHsc /TP /arch:SSE; difftest FAIL (5/105 valid, execution fault at 00fe8dbd); size 428 vs 433, reallocation/copy helper call sequence incomplete
 00fea510 629 cEmpireGrowthSim::OnTick: flags /O2 /MD /Gy /EHsc /TP /arch:SSE; difftest WEAK (400 valid, 3.5% cov); size 779 vs 808, timer/threshold and star-pass bodies reduced
+00feab10 244 cEmpireGrowthSim::FillOutBehaviorRules: flags /O2 /MD /Gy /EHsc /TP /arch:SSE; difftest UNSUPPORTED (0/400 valid; write faults); size 304 vs 442, parser vtable slots and string-list iteration incomplete
+00feacd0 613 cEmpireGrowthSim::cEmpireGrowthSim: flags /O2 /MD /Gy /EHsc /TP /arch:SSE; difftest UNSUPPORTED (0/400 valid; read faults); size 727 vs 894, property/rule-set construction incomplete
+01396440 57 init_15b47b8: complete; 6 records at 0x15b47b8..0x15b48e4 (names 0x1494838/81c/808/7f8/7ec/7d8, hashes 0x42a2fbd/5a5bc48/54ffe6e/54ffe6d/57e1d98/66b6169, sizes 0x38/0x40/0x58/0x5c/0x48/0x49); same .rdata template + copy loop shape (107 vs 604 B); equiv FAIL (5/5 inputs, uninitialised +0x0c..+0x14 dwords only) flags: /O2 /MD /Gy /EHsc /TP

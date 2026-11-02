@@ -5,3 +5,9 @@
 00fe8880 ?ReadBrush@Brush_s00fe_8630@@QAEDPAX@Z  # Brush_s00fe_8630::ReadBrush migrated from s00fe8630 (verbatim, slice spelling)
 00fe88d0 ?Brush_f88d0@@YAXPAUBrush_s00fe_8630@@PAUSpVectorV3@@H@Z  # Brush_f88d0 migrated from s00fe8630 (verbatim, slice spelling)
 00fe8990 ?ShouldGrow@GrowthState@@QAE_NXZ  # GrowthState::ShouldGrow migrated from s00fe8630 (verbatim, slice spelling)
+00fe8aa0 ?sIndexFromAction@SP@@YAHQBD@Z  # SP::sIndexFromAction migrated from s00fe8630
+00fe8b00 ?SetWeightsForAction@cEmpireGrowthSim_s00fe_8630@@QAEXHHHPBUBrush@@@Z  # cEmpireGrowthSim_s00fe_8630::SetWeightsForAction migrated from s00fe8630 (verbatim, slice spelling)
+00fe8c50 ?FUN_00fe8c50@@YAXPAXHH@Z  # FUN_00fe8c50 migrated from s00fe8630 (verbatim, slice spelling)
+00fe8cb0 ?Contribute@Scorer@@QAEXHHHPAM0PAH@Z  # Scorer::Contribute migrated from s00fe8630 (verbatim, slice spelling)
+00fe8e20 ??1cEmpireGrowthSim_s00fe_8630@@QAE@XZ  # cEmpireGrowthSim_s00fe_8630::~cEmpireGrowthSim migrated from s00fe8630 (verbatim, slice spelling)
+00fe8f70 ?Evaluate@Scorer@@QAEMPAUNoun@@PAUPlanet@@PAHHH@Z  # Scorer::Evaluate migrated from s00fe8630 (verbatim, slice spelling)

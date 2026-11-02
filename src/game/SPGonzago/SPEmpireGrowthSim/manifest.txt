@@ -1,4 +1,10 @@
 # source  symbol  va  flags
+../src/game/SPGonzago/SPEmpireGrowthSim.cpp  ?FUN_00ad6f10@CArgCmd2@@QAEPAXE@Z  00ad6f10  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPEmpireGrowthSim.cpp  ?sIndexFromAction@SP@@YAHQBD@Z  00fe8aa0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPEmpireGrowthSim.cpp  ?SetWeightsForAction@cEmpireGrowthSim_s00fe_8630@@QAEXHHHPBUBrush@@@Z  00fe8b00  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPEmpireGrowthSim.cpp  ?FUN_00fe8c50@@YAXPAXHH@Z  00fe8c50  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPEmpireGrowthSim.cpp  ?Contribute@Scorer@@QAEXHHHPAM0PAH@Z  00fe8cb0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPEmpireGrowthSim.cpp  ??1cEmpireGrowthSim_s00fe_8630@@QAE@XZ  00fe8e20  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPEmpireGrowthSim.cpp  ?resize@RuleVector@@QAEXI@Z  00fea460  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
 ../src/game/SPGonzago/SPEmpireGrowthSim.cpp  ?FUN_00fea840@@YA_NPAUcPropertyList@@IGPAUVec@@@Z  00fea840  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
 ../src/game/SPGonzago/SPEmpireGrowthSim.cpp  ?FUN_00fea8d0@@YA_NPAUcPropertyList@@IGPAUStringVector@@@Z  00fea8d0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
