@@ -1,5 +1,4 @@
 # <va>  <diff-bytes>  <reason>
-007d1910  -   cGameModelSizeCommand::Execute: skeleton only
 007d2a30  -  eastl::vector<cAnimationCurve> reserve/DoInsertValue(n,value): allocation/capacity-growth and the uninitialised_copy/move schedule are approximated
 007d2c70  -  eastl::vector<cSplitController> reserve/DoInsertValue(n,value): allocation/capacity-growth and the uninitialised_copy/move schedule are approximated
 007d3210  -  eastl::vector<cAnimationCurve> insert(position,value): fast/slow paths present but the grow branch uses simplified element copies

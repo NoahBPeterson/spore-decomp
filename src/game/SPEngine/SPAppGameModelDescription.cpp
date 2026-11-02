@@ -21,56 +21,8 @@ extern char g_empty1[];   // 0x01667bac (equiv t3)
 extern char g_empty2[];   // 0x01667bad (equiv t3)
 
 // ---- items of slice s007d03f0 begin (TODO(rewrite): local stubs, replace by canonical classes)
-struct V3 { int a, b, c; };
-struct cArguments { void** MainArguments(int); };   // 0x00838320 thiscall
-struct ObjV {
-virtual void s0();
-virtual void s1();
-virtual void s2();
-virtual void s3();
-virtual void s4();
-virtual void s5();
-virtual void s6();
-virtual void s7();
-virtual void s8();
-virtual void s9();
-virtual void s10();
-virtual void s11();
-virtual void s12();
-virtual void s13();
-virtual void s14();
-virtual void s15();
-virtual void s16();
-virtual void s17();
-virtual void s18();
-virtual void s19();
-virtual void s20();
-virtual void s21();
-virtual void s22();
-virtual void s23();
-virtual void s24();
-virtual void s25();
-virtual void s26();
-virtual void s27();
-virtual void s28();
-virtual void s29();
-virtual void s30();
-virtual void s31();
-virtual void s32();
-virtual void s33();
-virtual void s34();
-virtual void s35();
-virtual void s36();
-virtual void s37();
-virtual void s38();
-virtual void s39();
-virtual void s40();
-virtual void s41();
-virtual void s42();
-virtual void s43();
-    virtual V3 Get(const void* in);   // slot 44
-};
-struct CmdBase { void Execute(cArguments* args); };
+extern "C" void  __cdecl RBTreeInsert(void* node, void* parent, void* anchor, int f); // 0x009216a0
+void* __cdecl EAlloc(uint32_t, const char*, int, int, const char*, int);   // 0x00f473a0
 inline void* operator new(unsigned int, void* p) { return p; }
 struct Matrix3 {
     float m[9];
@@ -89,6 +41,30 @@ struct cSPTransform_s007d_03f0 {
 };
 struct TreeThing {
     TreeThing& operator=(const TreeThing& o);   // external 0x007d0b80
+};
+struct RBTreeW {
+    void* Insert(void* out, void* parent, int* value, char flag);
+};
+bool RI32(void* stream, void* dst, int count, int flag);   // 0x0093a780
+bool RU16(void* stream, void* dst, int count, int flag);   // 0x0093a700
+bool RBytes(void* stream, void* dst, int count);           // 0x0093a6c0
+struct IByteStream {
+virtual void s0();
+virtual void s1();
+virtual void s2();
+virtual void s3();
+virtual void s4();
+virtual void s5();
+virtual void s6();
+virtual void s7();
+virtual void s8();
+virtual void s9();
+virtual void s10();
+virtual void s11();
+    virtual int ReadAt(void* dst, int n);                  // slot 12 (offset 0x30)
+};
+struct RBTreeFind {
+    void* DoInsert(void* out, const int* key, int value);  // 0x007d0850 (ret 0xc)
 };
 struct S0D60 {
     uint8_t b0;
@@ -190,7 +166,7 @@ struct EAString16 {
 };
 struct NameKey { unsigned int a, b, c; };
 struct Vec3 { float x, y, z; };
-struct cArguments_s007d_03f0;
+struct cArguments;
 struct ModelObjV {
 virtual void s0();
 virtual void s1();
@@ -239,11 +215,11 @@ virtual void s43();
     virtual void GetVec(Vec3* out, const void* in); // slot 44 (0xb0)
 };
 struct cEffectsParser {
-    void AddAnonDescription(cArguments_s007d_03f0* args, int type, cGameModelDescription* d, int flag);  // 0x00a6fd40
-    void AddDescription(cArguments_s007d_03f0* args, const void* key, int type, int flag);               // 0x00a6fc30
+    void AddAnonDescription(cArguments* args, int type, cGameModelDescription* d, int flag);  // 0x00a6fd40
+    void AddDescription(cArguments* args, const void* key, int type, int flag);               // 0x00a6fc30
 };
 struct EAError { EAError(const char* msg); };
-struct cArguments_s007d_03f0 {
+struct cArguments {
     char** MainArguments(int* count, int a, int b);  // 0x00838020
     void** MainArguments(int);                       // 0x00838320
     bool   HasFlag(const char*);                     // 0x008380b0
@@ -253,7 +229,7 @@ EAString16* EAConvertToString16(EAString16* out, const char* in, int len);   // 
 void        SPKeyFromName(NameKey* out, const void* name, int a, int b);     // 0x0068d840
 void*       EANew(int size, const char* name, int a, int b, int c, int d);   // 0x00f473a0
 typedef void (__thiscall *ReleaseFn)(void* self, int flag);
-struct cGroupGameModelCommand { void Execute(cArguments_s007d_03f0* args); };
+struct cGroupGameModelCommand { void Execute(cArguments* args); };
 struct AppProps { AppProps(); };   // 0x0083cdd0
 struct GameModelEffect : AppProps {
     GameModelEffect();
@@ -265,21 +241,57 @@ struct GameModelEffect : AppProps {
     void* pcc;
     void* pd0;
 };
-struct GameModelSizeCommand { void Execute(cArguments_s007d_03f0* args); };
+struct GameModelSizeCommand { void Execute(cArguments* args); };
 typedef float (__thiscall *ModelGetFFn)(void* self, const void* in);
-void GameModelSizeCommand::Execute(cArguments_s007d_03f0* args)
-{
-    int self = (int)this;
-    int vtbl = **(int**)(self + 4);
-    void** a = args->MainArguments(1);
-    *(float*)(*(int*)(self + 0xc) + 0x14) = ((ModelGetFFn)*(void**)(vtbl + 0x98))(*(void**)(self + 4), *a);
-    bool fixed = args->HasFlag("fixed");
-    unsigned int* pf = (unsigned int*)(*(int*)(self + 0xc) + 0x10);
-    if (fixed)
-        *pf |= 0x10;
-    else
-        *pf &= ~0x10;
-}
+struct V3 { int a, b, c; };
+struct ObjV {
+virtual void s0();
+virtual void s1();
+virtual void s2();
+virtual void s3();
+virtual void s4();
+virtual void s5();
+virtual void s6();
+virtual void s7();
+virtual void s8();
+virtual void s9();
+virtual void s10();
+virtual void s11();
+virtual void s12();
+virtual void s13();
+virtual void s14();
+virtual void s15();
+virtual void s16();
+virtual void s17();
+virtual void s18();
+virtual void s19();
+virtual void s20();
+virtual void s21();
+virtual void s22();
+virtual void s23();
+virtual void s24();
+virtual void s25();
+virtual void s26();
+virtual void s27();
+virtual void s28();
+virtual void s29();
+virtual void s30();
+virtual void s31();
+virtual void s32();
+virtual void s33();
+virtual void s34();
+virtual void s35();
+virtual void s36();
+virtual void s37();
+virtual void s38();
+virtual void s39();
+virtual void s40();
+virtual void s41();
+virtual void s42();
+virtual void s43();
+    virtual V3 Get(const void* in);   // slot 44
+};
+struct CmdBase { void Execute(cArguments* args); };
 namespace __equiv_ann1 {
 struct AppProps {
     AppProps();   // 0x0083cdd0 (equiv t2)
@@ -310,7 +322,7 @@ namespace eastl {
 template <> struct EmptyStr<wchar_t> { static wchar_t* Get() { return gEmptyString16; } };
 }
 namespace eastl {
-struct allocator_s007d_19c0 { void deallocate(void* p) { operator delete[](p); } };
+class allocator_s007d_19c0 { public: void deallocate(void* p) { operator delete[](p); } };
 }
 namespace eastl {
 template <typename T, typename Allocator = allocator_s007d_19c0>
@@ -326,21 +338,21 @@ public:
 }
 namespace eastl {
 typedef basic_string_s007d_19c0<wchar_t> string16_s007d_19c0;
-// Stored/member strings use a byte-distance threshold in their dtor (retail
-// 0x7d2490: `sub; cmp 1; jle`), while the temporaries returned by
-// ConvertToString16 compare in element units (retail 0x7d1e40/0x7d1cc0:
-// `sub; and ~1; cmp 2; jle`). Keep both so each site matches retail.
+}
+namespace eastl {
 template <typename T, typename Allocator = allocator_s007d_19c0>
-class basic_string_member_s007d_19c0 {
+class basic_string_member {
 public:
     T* mpBegin; T* mpEnd; T* mpCapacity; Allocator mAllocator;
-    basic_string_member_s007d_19c0() : mpBegin(EmptyStr<T>::Get()), mpEnd(EmptyStr<T>::Get()), mpCapacity(EmptyStr<T>::Get() + 1) {}
-    ~basic_string_member_s007d_19c0() { DeallocateSelf(); }
+    basic_string_member() : mpBegin(EmptyStr<T>::Get()), mpEnd(EmptyStr<T>::Get()), mpCapacity(EmptyStr<T>::Get() + 1) {}
+    ~basic_string_member() { DeallocateSelf(); }
     const T* c_str() const { return mpBegin; }
     void DeallocateSelf() { if ((char*)mpCapacity - (char*)mpBegin > 1) DoFree(mpBegin); }
     void DoFree(T* p) { if (p) mAllocator.deallocate(p); }
 };
-typedef basic_string_member_s007d_19c0<wchar_t> string16_member_s007d_19c0;
+}
+namespace eastl {
+typedef basic_string_member<wchar_t> string16_member;
 }
 namespace EA {
 eastl::string16_s007d_19c0 ConvertToString16(const char* p, int length = -1);          // 0x93c5a0
@@ -364,7 +376,7 @@ public:
 }
 namespace EA {
 namespace ArgScript {
-struct cIParser_s007d_19c0 {
+class cIParser_s007d_19c0 { public:
 virtual void v00();
 virtual void v01();
 virtual void v02();
@@ -416,7 +428,7 @@ uint32_t ParseEnum(const char* value, const char** table);                  // 0
 }
 namespace EA {
 namespace ArgScript {
-struct cCommandBase_s007d_19c0 {
+class cCommandBase_s007d_19c0 { public:
 virtual void c0();
 virtual void c1();
 virtual void c2();
@@ -576,7 +588,7 @@ struct cGameModelSplitterCommand : EA::ArgScript::cCommandBase_s007d_19c0 {
 struct cGameModelEffectCommand : EA::ArgScript::cBlockCommandBase {
     uint32_t             field30;          // +0x30
     SP::cGameModelState  mGameModelState;  // +0x34
-    eastl::string16_member_s007d_19c0 mDescName;        // +0xc8
+    eastl::string16_member mDescName;     // +0xc8
     void OnRegister(void* parser, void* childState);
     ~cGameModelEffectCommand();
 };
@@ -687,6 +699,7 @@ public:
 }
 }
 bool ReadBytes(void* s, void* p, unsigned n);                  // 0x93a6c0
+void* ReadIntVector(void* stream, void* vec);                  // 0x7d27d0
 uint32_t FNVHash(const char* s, uint32_t seed, int a);         // 0x932e80
 void* sub_7d10d0(void* stream, void* vec);                     // 0x7d10d0
 void* sub_7d4190(void* stream, void* vec);                     // 0x7d4190
@@ -752,6 +765,101 @@ struct AnimVec {
     void* mpBegin; void* mpEnd; void* mpCapacity; void* a1; void* a2;
     void resize(unsigned n);   // 0x7d3770
 };
+struct Comp {
+virtual void v0();
+virtual void v1();
+virtual void v2();
+virtual void v3();
+virtual void v4();
+virtual void v5();
+virtual void v6();
+virtual void v7();
+virtual void v8();
+virtual void v9();
+virtual void v10();
+virtual void v11();
+virtual void v12();
+virtual void v13();
+virtual void v14();
+virtual void v15();
+virtual void v16();
+virtual void v17();
+virtual void v18();
+virtual void v19();
+virtual void v20();
+virtual void v21();
+virtual void v22();
+virtual void v23();
+virtual void v24();
+virtual void v25();
+virtual void v26();
+virtual void v27();
+virtual void v28();
+virtual void v29();
+virtual void v30();
+virtual void v31();
+virtual void v32();
+virtual void v33();
+virtual void v34();
+virtual void v35();
+virtual void v36();
+virtual void v37();
+virtual void v38();
+virtual void v39();
+virtual void v40();
+virtual void v41();
+virtual void v42();
+virtual void v43();
+virtual void v44();
+virtual void v45();
+virtual void v46();
+virtual void v47();
+virtual void v48();
+virtual void v49();
+virtual void v50();
+virtual void v51();
+virtual void v52();
+virtual void v53();
+virtual void v54();
+virtual void v55();
+virtual void v56();
+virtual void v57();
+virtual void v58();
+virtual void v59();
+virtual void v60();
+virtual void v61();
+virtual void v62();
+virtual void v63();
+virtual void v64();
+virtual void v65();
+virtual void v66();
+virtual void v67();
+virtual void v68();
+virtual void v69();
+virtual void v70();
+virtual void v71();
+virtual void v72();
+virtual void v73();
+virtual void v74();
+virtual void v75();
+virtual void v76();
+virtual void v77();
+virtual void v78();
+virtual void v79();
+virtual void v80();
+virtual void v81();
+virtual void v82();
+virtual void v83();
+virtual void v84();
+virtual void v85();
+virtual void v86();
+virtual void v87();
+virtual void v88();
+virtual void v89();
+virtual void v90();
+    virtual void SetOwner(void* owner, int flag);   // +0x16c
+};
+struct Wrapper { void* mpComp; void Func(); };
 struct cGameModelState_s007d_3930 { void* vtbl; SP::cGameModelDescription_s007d_3930 mDesc; };
 struct cGameModelAnimateCommand {
     void* mParser;         // +0x4
@@ -769,9 +877,15 @@ struct cXform {                       // SP::cTransform, at cSplitTxf+8
     void PreRotateX(float a);         // 0x5a2d90
 };
 struct MapEntry { void* node; uint8_t inserted; };
+struct RbAnchorNode {   // eastl::rbtree_node_base (a slice does not include src/game/include)
+    RbAnchorNode* mpNodeRight;
+    RbAnchorNode* mpNodeLeft;
+    RbAnchorNode* mpNodeParent;
+    char mColor;
+};
 struct cRBT {                         // eastl::rbtree<uint32,...> at cSplitTxf+0x4c
     uint32_t mCompare;                 // +0x00  (the comparator)
-    eastl::rbtree_node_base mAnchor;   // +0x04  {right, left = begin, parent = root, color}
+    RbAnchorNode mAnchor;   // +0x04  {right, left = begin, parent = root, color}
     uint32_t mnSize;                   // +0x14
     uint32_t mAllocator;               // +0x18
     void Insert(MapEntry* out, const int* key, uint8_t flag);   // 0x7d0850
@@ -799,12 +913,48 @@ struct cGameModelEffectCommand_s007d_3930 {
     void* mDesc;                // +0x38  owned cGameModelDescription
     void* mFieldC4;             // +0xc4
     void* mName;                // +0xc8  eastl::string
-    void  Execute(EA::ArgScript::cArguments_s007d_3930& args);
+    void  Execute(EA::ArgScript::cArguments_s007d_3930& args);  // 0x007d41f0 (cGameModelEffectCommand::Execute)
 };
 // ---- items of slice s007d3930 end
 
 // callees this slice defines outside this object (rewrite.py held_callee_protos)
 IStream_s007d_3930* ReadAnimationCurves(IStream_s007d_3930* stream, AnimVec* vec);  // 0x007d40f0 (stays in the slice: not this object's)
+
+// callees this slice defines outside this object (rewrite.py held_callee_protos)
+void ReadC10(void* stream, RBTreeFind* tree);  // 0x007d0c10 (stays in the slice: not this object's)
+
+// @ 0x007d05b0
+void* RBTreeW::Insert(void* out, void* parent, int* value, char flag)
+{
+    int insertLeft;
+    if (flag == 0 && parent != (char*)this + 4 && *value >= *(int*)((char*)parent + 0x10))
+        insertLeft = 1;
+    else
+        insertLeft = 0;
+    int* node = (int*)EAlloc(0x14, "App", 0, 0,
+        "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h", 0xd1);
+    if ((int*)((char*)node + 0x10) != 0)
+        *(int*)((char*)node + 0x10) = *value;
+    RBTreeInsert(node, parent, (char*)this + 4, insertLeft);
+    void* o = out;
+    ((int*)this)[5] = ((int*)this)[5] + 1;
+    *(void**)o = node;
+    return o;
+}
+
+// @ 0x007d0c80
+void ReadC80(void* stream, char* p)
+{
+    RBytes(stream, p, 1);
+    RI32(stream, p + 4, 1, 0);
+    char* q = p + 8;
+    RU16(stream, q, 1, 0);
+    RI32(stream, q + 0x10, 1, 0);
+    ((IByteStream*)stream)->ReadAt(q + 0x14, 0x24);
+    ((IByteStream*)stream)->ReadAt(q + 4, 0xc);
+    ReadC10(stream, (RBTreeFind*)(p + 0x4c));
+    ((IByteStream*)stream)->ReadAt(p + 0x40, 0xc);
+}
 
 // @ 0x007d1010
 cGameModelDescription::cGameModelDescription()
@@ -963,7 +1113,7 @@ char* CopyBack1510(char* first, char* last, char* dst)
 }
 
 // @ 0x007d1570
-void cGroupGameModelCommand::Execute(cArguments_s007d_03f0* args)
+void cGroupGameModelCommand::Execute(cArguments* args)
 {
     int self = (int)this;
     int count = 0;
@@ -1062,9 +1212,18 @@ GameModelEffect::GameModelEffect()
 }
 
 // @ 0x007d1910
-void FUN_007d1910(int self, void* args)
+void GameModelSizeCommand::Execute(cArguments* args)
 {
-    (void)self; (void)args;
+    int self = (int)this;
+    int vtbl = **(int**)(self + 4);
+    void** a = args->MainArguments(1);
+    *(float*)(*(int*)(self + 0xc) + 0x14) = ((ModelGetFFn)*(void**)(vtbl + 0x98))(*(void**)(self + 4), *a);
+    bool fixed = args->HasFlag("fixed");
+    unsigned int* pf = (unsigned int*)(*(int*)(self + 0xc) + 0x10);
+    if (fixed)
+        *pf |= 0x10;
+    else
+        *pf &= ~0x10;
 }
 
 // @ 0x007d1970
@@ -1672,6 +1831,24 @@ void cGameModelSplitCommand::Execute(EA::ArgScript::cArguments_s007d_3930& args)
     }
 }
 
+// @ 0x007d40f0
+IStream_s007d_3930* ReadAnimationCurves(IStream_s007d_3930* stream, AnimVec* vec)
+{
+    int count;
+    EA::IO::ReadInt32(stream, &count, 1, 0);
+    vec->resize((unsigned)count);
+    for (unsigned i = 0; i < (unsigned)count; ++i) {
+        char* e = (char*)vec->mpBegin + i * 0x2c;
+        stream->Read(e, 8);
+        ReadIntVector(stream, e + 8);
+        EA::IO::ReadInt32(stream, (int32_t*)(e + 0x1c), 1, 0);
+        EA::IO::ReadInt32(stream, (int32_t*)(e + 0x20), 1, 0);
+        EA::IO::ReadInt32(stream, (int32_t*)(e + 0x24), 1, 0);
+        ReadBytes(stream, e + 0x28, 1);
+    }
+    return stream;
+}
+
 // @ 0x007d41f0
 void cGameModelEffectCommand_s007d_3930::Execute(EA::ArgScript::cArguments_s007d_3930& args)
 {
@@ -1728,6 +1905,10 @@ void __cdecl ReadDescription(void* stream, int version, SP::cGameModelDescriptio
         desc->field88 = 0;
     }
 }
+
+// @ 0x007d44a0
+void Wrapper::Func()
+{ ((Comp*)mpComp)->SetOwner(this, 1); }
 
 // @ 0x007d44c0
 void* MakeState(void* a, int b)
