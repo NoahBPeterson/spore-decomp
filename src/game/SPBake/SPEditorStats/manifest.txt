@@ -1,3 +1,7 @@
 # source  symbol  va  flags
 ../src/game/SPBake/SPEditorStats.cpp  ?GetVerbCategory@@YAHPAUVerbObject@@@Z  004e58c0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPBake/SPEditorStats.cpp  ?IsDietCategory@EditorUtils@SP@@YA_NW4eVerbIconCategory@2@@Z  004e5910  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/SPEditorStats.cpp  ?FillRefVec18@@YAXPAURefVec_s004e_7990@@I@Z  004e7990  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/SPEditorStats.cpp  ?BuildAndDispatch3@@YAXPAXPAUVerbSink_s004e_7990@@0M@Z  004e87f0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/SPEditorStats.cpp  ?Reset@TreeHead@@QAEXXZ  004e8850  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/SPEditorStats.cpp  ?FreeNodes@FreeCtx@@QAEXPAX@Z  004e8a30  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

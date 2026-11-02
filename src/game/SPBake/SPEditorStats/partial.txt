@@ -1,5 +1,2 @@
 # va  reason
-004e5050 293-byte /Od verb-icon key builder skeleton
-004e5180 646-byte /Od body skeleton
-004e5410 991-byte /Od body skeleton
-004e57f0 207-byte /Od bitset predicate skeleton (inlined EA::Bitset::test not reconstructed)
+004e8da0 309-byte /Od body skeleton flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast

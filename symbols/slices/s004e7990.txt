@@ -1,2 +1,6 @@
+004e7990 ?FillRefVec18@@YAXPAURefVec_s004e_7990@@I@Z  # FillRefVec18 migrated from s004e7990 (verbatim, slice spelling)
+004e7da0 ?ConvertOwnerEntries@@YAXPAUEntryOwner@@PAUVerbSink_s004e_7990@@@Z  # ConvertOwnerEntries migrated from s004e7990 (verbatim, slice spelling)
 004e7e50 ?BuildAndDispatch18@@YAXPAXPAUVerbSink_s004e_7990@@@Z  # BuildAndDispatch18 migrated from s004e7990 (verbatim, slice spelling)
-004e8850 rbtree anchor reset  # frees root chain then self-initialises anchor
+004e7eb0 ?BigBuilder2368@@YAXPAUEditorRig@@PAURefVec_s004e_7990@@PAXM@Z  # BigBuilder2368 migrated from s004e7990 (verbatim, slice spelling)
+004e87f0 ?BuildAndDispatch3@@YAXPAXPAUVerbSink_s004e_7990@@0M@Z  # BuildAndDispatch3 migrated from s004e7990 (verbatim, slice spelling)
+004e8850 ?Reset@TreeHead@@QAEXXZ  # TreeHead::Reset migrated from s004e7990 (verbatim, slice spelling)

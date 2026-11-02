@@ -1,4 +1,6 @@
 004e5d00 ?BuildVerbCapabilities@@YAXPAUIconVec@@PAUVerbFlags@@@Z  # BuildVerbCapabilities migrated from s004e5d00 (verbatim, slice spelling)
+004e6720 ?Collect6720@@YAXPAUVerbOwner@@PAUIconVec@@@Z  # Collect6720 migrated from s004e5d00 (verbatim, slice spelling)
 004e6920 ?GetPropIDForAbilityHash@@YAII@Z  # GetPropIDForAbilityHash migrated from s004e5d00 (verbatim, slice spelling)
 004e6a10 ?UpdateEntry6a10@@YAXPAUEntryOwner@@PAUIconVec@@@Z  # UpdateEntry6a10 migrated from s004e5d00 (verbatim, slice spelling)
 004e6bc0 ?BuildDispatch6bc0@@YAXPAXPAUVerbSink@@@Z  # BuildDispatch6bc0 migrated from s004e5d00 (verbatim, slice spelling)
+004e6c10 ?BuildDispatch6c10@@YAXPAXPAUVerbSink@@@Z  # BuildDispatch6c10 migrated from s004e5d00 (verbatim, slice spelling)
