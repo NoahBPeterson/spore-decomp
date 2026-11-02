@@ -1,5 +1,8 @@
-00423250 Matrix3Equal  # compares three Vector3 rows via 004232c0
-004232c0 Vector3Equal  # float x/y/z equality
+00423110 ??0LocaleMessage@@QAE@H@Z  # LocaleMessage::LocaleMessage migrated from s00423110 (verbatim, slice spelling)
+00423160 ?TransformVector3@@YAPAUVector3_s0042_3110@@PAU1@PBU1@PBM@Z  # TransformVector3 migrated from s00423110 (verbatim, slice spelling)
+00423250 ?Matrix3Equal@@YAEPBUMatrix3@@0@Z  # Matrix3Equal migrated from s00423110 (verbatim, slice spelling)
+004232c0 ?Vector3Equal@@YAEPBUVector3_s0042_3110@@0@Z  # Vector3Equal migrated from s00423110 (verbatim, slice spelling)
+00423320 ?Matrix3Multiply@@YAPAUMatrix3@@PAU1@PBU1@1@Z  # Matrix3Multiply migrated from s00423110 (verbatim, slice spelling)
 00423650 ?Assign@WString@@QAEAAU1@PB_W0@Z  # WString::Assign migrated from s00423110 (verbatim, slice spelling)
 00423700 WString_Find  # eastl basic_string<wchar_t>::find(p,pos,n)
 004237d0 WString_FreeBuffer  # deallocates when capacity>1

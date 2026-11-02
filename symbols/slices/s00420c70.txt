@@ -1,7 +1,7 @@
-00420c70 FieldSetHashTable_DoInsertValue  # calls FieldSetHash/FieldSetEqualTo, rehash policy, node alloc
-00420e30 ByteVec_assign  # vector<uint8_t>::operator=, memcpy
-00421080 ByteVec_push_back  # end<cap placement-new else realloc
-004210f0 ?AIntMap  # lower_bound then insert default
-00421190 IdPtrVec_dtor  # releases ThreadedObject at +4 of 8-byte elements
-00421230 Elem24Vec_dtor  # destroys 24-byte elements
-00421290 Elem24Vec_assign  # vector<24-byte>::operator=
+00420c70 ?DoInsertValue@FieldSetHashTable@@QAE?AUInsertResult@@PBUHashNode_s0042_0c70@@ABUTrueTag@@@Z  # FieldSetHashTable::DoInsertValue migrated from s00420c70 (verbatim, slice spelling)
+00420e30 ?assign@ByteVec@@QAEAAU1@ABU1@@Z  # ByteVec::assign migrated from s00420c70 (verbatim, slice spelling)
+00421080 ?push_back@ByteVec@@QAEXABE@Z  # ByteVec::push_back migrated from s00420c70 (verbatim, slice spelling)
+004210f0 ??AIntMap@@QAEAAHABH@Z  # IntMap::operator[] migrated from s00420c70 (verbatim, slice spelling)
+00421190 ??1IdPtrVec@@QAE@XZ  # IdPtrVec::~IdPtrVec migrated from s00420c70 (verbatim, slice spelling)
+00421230 ??1Elem24Vec@@QAE@XZ  # Elem24Vec::~Elem24Vec migrated from s00420c70 (verbatim, slice spelling)
+00421290 ?assign@Elem24Vec@@QAEAAU1@ABU1@@Z  # Elem24Vec::assign migrated from s00420c70 (verbatim, slice spelling)

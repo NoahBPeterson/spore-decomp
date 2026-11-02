@@ -1,0 +1,7 @@
+00420050 ??0SubIter@@QAE@ABU0@@Z  # SubIter::SubIter migrated from s0041f940 (verbatim, slice spelling)
+00420090 ??0Wrapper@@QAE@H@Z  # Wrapper::Wrapper migrated from s0041f940 (verbatim, slice spelling)
+004200b0 ?Destroy@IterOwner@@QAEXXZ  # IterOwner::Destroy migrated from s0041f940 (verbatim, slice spelling)
+00420120 ?IterAt@Ring@@QAE?AUIter@@H@Z  # Ring::IterAt migrated from s0041f940 (verbatim, slice spelling)
+004201a0 ?IterFirst@Ring@@QAE?AUConstIter@@XZ  # Ring::IterFirst migrated from s0041f940 (verbatim, slice spelling)
+00420200 ?IterBegin@Ring@@QAE?AUIter@@XZ  # Ring::IterBegin migrated from s0041f940 (verbatim, slice spelling)
+00420270 ?IterAtEnd@Ring@@QAE?AUIter@@H@Z  # Ring::IterAtEnd migrated from s0041f940 (verbatim, slice spelling)

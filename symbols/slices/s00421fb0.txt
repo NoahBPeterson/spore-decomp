@@ -1,5 +1,19 @@
-00422020 Vector3_Negate  # unary minus: xorps sign mask on three floats
-004224b0 CatmullRom  # constants 3,4,5,2,0.5 and t,t^2,t^3 polynomial over four control points
-00422430 LowerBound12  # binary search over 12-byte records keyed by first dword
-004221f0 RecMatcher_Match  # compares 20-byte record id/tag and 3-dword key
-00422140 FindIf_RecIter  # find_if loop over iterator with predicate
+00421fb0 ?push_back@Item24Vec_s0042_1fb0@@QAEXABUItem24_s0042_1fb0@@@Z  # Item24Vec_s0042_1fb0::push_back migrated from s00421fb0 (verbatim, slice spelling)
+00422020 ??G@YA?AUVector3@@ABU0@@Z  # None migrated from s00421fb0 (verbatim, slice spelling)
+004220b0 ?push_back@Item12Vec@@QAEXABUItem12@@@Z  # Item12Vec::push_back migrated from s00421fb0 (verbatim, slice spelling)
+00422140 ?FindIf@@YA?AURecIter@@U1@0URecMatcher@@@Z  # FindIf migrated from s00421fb0 (verbatim, slice spelling)
+004221f0 ??RRecMatcher@@QBE_NPBURec@@@Z  # RecMatcher::operator() migrated from s00421fb0 (verbatim, slice spelling)
+00422280 ?AddA@Registry@@QAEXH@Z  # Registry::AddA migrated from s00421fb0 (verbatim, slice spelling)
+004222a0 ?DestroyRange@Item48Vec@@QAEXXZ  # Item48Vec::DestroyRange migrated from s00421fb0 (verbatim, slice spelling)
+004222e0 ?resize@Item48Vec@@QAEXI@Z  # Item48Vec::resize migrated from s00421fb0 (verbatim, slice spelling)
+00422360 ?AddB@Registry@@QAEXH@Z  # Registry::AddB migrated from s00421fb0 (verbatim, slice spelling)
+00422380 ?push_back@IntVec@@QAEXABI@Z  # IntVec::push_back migrated from s00421fb0 (verbatim, slice spelling)
+004223f0 ?Init@HolderA@@QAEXH@Z  # HolderA::Init migrated from s00421fb0 (verbatim, slice spelling)
+00422410 ?Init@HolderB@@QAEXH@Z  # HolderB::Init migrated from s00421fb0 (verbatim, slice spelling)
+00422430 ?LowerBound@@YAPAUKeyRec@@PAU1@0ABU1@@Z  # LowerBound migrated from s00421fb0 (verbatim, slice spelling)
+004224b0 ?CatmullRom@@YA?AUVector3@@ABU1@000M@Z  # CatmullRom migrated from s00421fb0 (verbatim, slice spelling)
+00422740 ??0FixedVec64@@QAE@IH@Z  # FixedVec64::FixedVec64 migrated from s00421fb0 (verbatim, slice spelling)
+004227d0 ?Init@HolderC@@QAEXH@Z  # HolderC::Init migrated from s00421fb0 (verbatim, slice spelling)
+004227f0 ?push_back@Item20Vec@@QAEXABUItem20@@@Z  # Item20Vec::push_back migrated from s00421fb0 (verbatim, slice spelling)
+00422880 ?Replace@WString@@QAEAAU1@IPB_W@Z  # WString::Replace migrated from s00421fb0 (verbatim, slice spelling)
+004228e0 ?Erase@WString@@QAEAAU1@II@Z  # WString::Erase migrated from s00421fb0 (verbatim, slice spelling)

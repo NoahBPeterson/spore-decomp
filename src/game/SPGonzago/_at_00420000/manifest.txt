@@ -1,0 +1,82 @@
+# source  symbol  va  flags
+../src/game/SPGonzago/_at_00420000.cpp  ??0SubIter@@QAE@ABU0@@Z  00420050  /Od /Ob1 /MD /Gy /TP /Isrc/game/include
+../src/game/SPGonzago/_at_00420000.cpp  ??0Wrapper@@QAE@H@Z  00420090  /Od /Ob1 /MD /Gy /TP /Isrc/game/include
+../src/game/SPGonzago/_at_00420000.cpp  ?Destroy@IterOwner@@QAEXXZ  004200b0  /Od /Ob1 /MD /Gy /TP /Isrc/game/include
+../src/game/SPGonzago/_at_00420000.cpp  ?IterAt@Ring@@QAE?AUIter@@H@Z  00420120  /Od /Ob1 /MD /Gy /TP /Isrc/game/include
+../src/game/SPGonzago/_at_00420000.cpp  ?IterFirst@Ring@@QAE?AUConstIter@@XZ  004201a0  /Od /Ob1 /MD /Gy /TP /Isrc/game/include
+../src/game/SPGonzago/_at_00420000.cpp  ?IterBegin@Ring@@QAE?AUIter@@XZ  00420200  /Od /Ob1 /MD /Gy /TP /Isrc/game/include
+../src/game/SPGonzago/_at_00420000.cpp  ?IterAtEnd@Ring@@QAE?AUIter@@H@Z  00420270  /Od /Ob1 /MD /Gy /TP /Isrc/game/include
+../src/game/SPGonzago/_at_00420000.cpp  ?MakeIter@HashSet@@QAE?AURangeIter@@XZ  004202f0  /Od /Ob1 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/_at_00420000.cpp  ?MakeEnd@HashSet@@QAE?AURangeIter@@XZ  00420350  /Od /Ob1 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/_at_00420000.cpp  ?ResetAll@Pool@@QAEXXZ  00420440  /Od /Ob1 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/_at_00420000.cpp  ?TotalSize@Pool@@QAEHXZ  00420480  /Od /Ob1 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/_at_00420000.cpp  ?SetA@Pool@@QAEXHH@Z  004204d0  /Od /Ob1 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/_at_00420000.cpp  ?SetB@Pool@@QAEXHH@Z  004204f0  /Od /Ob1 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/_at_00420000.cpp  ?AllEmpty@Pool@@QAE_NXZ  00420510  /Od /Ob1 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/_at_00420000.cpp  ?ActivateFirstNonEmpty@Pool@@QAEXXZ  00420560  /Od /Ob1 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/_at_00420000.cpp  ?ProcessFirstNonEmpty@Pool@@QAEHXZ  004205b0  /Od /Ob1 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/_at_00420000.cpp  ??1RefVector@@QAE@XZ  00420600  /Od /Ob1 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/_at_00420000.cpp  ?push_back@RefVector@@QAEXABU?$intrusive_ptr@UAtomicRefCounted@@@@@Z  00420660  /Od /Ob1 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/_at_00420000.cpp  ?push_back@TripleVector@@QAEXABUTriple@@@Z  004206f0  /Od /Ob1 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/_at_00420000.cpp  ?emplace_back@BigVector@@QAEXH@Z  00420770  /Od /Ob1 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/_at_00420000.cpp  ?FreeRange@RangeFreeVector@@QAEXXZ  004208f0  /Od /Ob1 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/_at_00420000.cpp  ?Run@RangeOpVector@@QAEXXZ  00420980  /Od /Ob1 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/_at_00420000.cpp  ??1TrivialVector@@QAE@XZ  004209b0  /Od /Ob1 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/_at_00420000.cpp  ??0SmallBuffer@@QAE@IUPad24@@@Z  004209f0  /Od /Ob1 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/_at_00420000.cpp  ??1SmallBuffer@@QAE@XZ  00420ab0  /Od /Ob1 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/_at_00420000.cpp  ??4SmallBuffer@@QAEAAU0@ABU0@@Z  00420b10  /Od /Ob1 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/_at_00420000.cpp  ?find@FieldHashSet@@QAE?AUHashIter@@ABH@Z  00420b50  /Od /Ob1 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/_at_00420000.cpp  ?assign@ByteVec@@QAEAAU1@ABU1@@Z  00420e30  /Od /Ob1 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_00420000.cpp  ?push_back@ByteVec@@QAEXABE@Z  00421080  /Od /Ob1 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_00420000.cpp  ??1IdPtrVec@@QAE@XZ  00421190  /Od /Ob1 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_00420000.cpp  ??1Elem24Vec@@QAE@XZ  00421230  /Od /Ob1 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_00420000.cpp  ?push_back@Item24Vec@@QAEXABUItem24@@@Z  004215f0  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_00420000.cpp  ?assign@QuadVec@@QAEAAU1@ABU1@@Z  00421670  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_00420000.cpp  ?find@HashTable@@QAE?AUHashIter_s0042_15f0@@PBI@Z  00421950  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_00420000.cpp  ?insert@HashTable@@QAE?AUHashInsertResult@@PBII@Z  00421a50  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_00420000.cpp  ?resize@IPtrVec@@QAEXI@Z  00421bf0  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_00420000.cpp  ?Reset@Resetter@@QAEPAU1@XZ  00421f00  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_00420000.cpp  ?Init@Thunk@@QAEXI@Z  00421f40  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_00420000.cpp  ?QueryB@@YAPAXPAPAUUnknown@@@Z  00421f60  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_00420000.cpp  ?push_back@Item24Vec_s0042_1fb0@@QAEXABUItem24_s0042_1fb0@@@Z  00421fb0  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/_at_00420000.cpp  ??G@YA?AUVector3@@ABU0@@Z  00422020  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/_at_00420000.cpp  ?push_back@Item12Vec@@QAEXABUItem12@@@Z  004220b0  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/_at_00420000.cpp  ?FindIf@@YA?AURecIter@@U1@0URecMatcher@@@Z  00422140  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/_at_00420000.cpp  ??RRecMatcher@@QBE_NPBURec@@@Z  004221f0  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/_at_00420000.cpp  ?AddA@Registry@@QAEXH@Z  00422280  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/_at_00420000.cpp  ?DestroyRange@Item48Vec@@QAEXXZ  004222a0  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/_at_00420000.cpp  ?resize@Item48Vec@@QAEXI@Z  004222e0  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/_at_00420000.cpp  ?AddB@Registry@@QAEXH@Z  00422360  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/_at_00420000.cpp  ?push_back@IntVec@@QAEXABI@Z  00422380  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/_at_00420000.cpp  ?Init@HolderA@@QAEXH@Z  004223f0  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/_at_00420000.cpp  ?Init@HolderB@@QAEXH@Z  00422410  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/_at_00420000.cpp  ?LowerBound@@YAPAUKeyRec@@PAU1@0ABU1@@Z  00422430  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/_at_00420000.cpp  ?CatmullRom@@YA?AUVector3@@ABU1@000M@Z  004224b0  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/_at_00420000.cpp  ??0FixedVec64@@QAE@IH@Z  00422740  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/_at_00420000.cpp  ?Init@HolderC@@QAEXH@Z  004227d0  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/_at_00420000.cpp  ?push_back@Item20Vec@@QAEXABUItem20@@@Z  004227f0  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/_at_00420000.cpp  ?Replace@WString@@QAEAAU1@IPB_W@Z  00422880  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/_at_00420000.cpp  ?Erase@WString@@QAEAAU1@II@Z  004228e0  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/_at_00420000.cpp  ?QueryByHolder@@YAHPAUQueryHolder@@@Z  00422950  /Od /Ob1 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/_at_00420000.cpp  ?Init@FunctorA@@QAEXI@Z  00422990  /Od /Ob1 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/_at_00420000.cpp  ?Init@FunctorB@@QAEXI@Z  004229b0  /Od /Ob1 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/_at_00420000.cpp  ?Init@FunctorC@@QAEXI@Z  004229d0  /Od /Ob1 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/_at_00420000.cpp  ?RegisterA@CallbackRegistry@@QAEXI@Z  004229f0  /Od /Ob1 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/_at_00420000.cpp  ?RegisterB@CallbackRegistry@@QAEXI@Z  00422a10  /Od /Ob1 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/_at_00420000.cpp  ?RegisterC@CallbackRegistry@@QAEXI@Z  00422a30  /Od /Ob1 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/_at_00420000.cpp  ?RegisterD@CallbackRegistry@@QAEXI@Z  00422a50  /Od /Ob1 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/_at_00420000.cpp  ?RegisterE@CallbackRegistry@@QAEXI@Z  00422a70  /Od /Ob1 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/_at_00420000.cpp  ?RegisterF@CallbackRegistry@@QAEXI@Z  00422a90  /Od /Ob1 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/_at_00420000.cpp  ?QueryByHolderPtr@@YAHPAPAUIQueryable@@@Z  00422ab0  /Od /Ob1 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/_at_00420000.cpp  ?Find@KeyTree@@QAE?AUTreeIterator@@PBUTreeKey@@@Z  00422b00  /Od /Ob1 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/_at_00420000.cpp  ?Advance@NodeCursor@@QAEPAU1@XZ  00422c50  /Od /Ob1 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/_at_00420000.cpp  ??0EmptyString2@@QAE@ABUAllocator@@@Z  00422c80  /Od /Ob1 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/_at_00420000.cpp  ??0EmptyString1@@QAE@ABUAllocator@@@Z  00422cf0  /Od /Ob1 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/_at_00420000.cpp  ?Fwd1@Forwarder@@QAEXII@Z  00422d60  /Od /Ob1 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/_at_00420000.cpp  ?Fwd2@Forwarder@@QAEXII@Z  00422d90  /Od /Ob1 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/_at_00420000.cpp  ?Fwd3@Forwarder@@QAEXII@Z  00422dc0  /Od /Ob1 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/_at_00420000.cpp  ?Fwd4@Forwarder@@QAEXII@Z  00422df0  /Od /Ob1 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/_at_00420000.cpp  ??0RecordEntry@@QAE@ABU0@@Z  00423080  /Od /Ob1 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/_at_00420000.cpp  ?Destroy@Deletable@@QAEPAU1@I@Z  004230e0  /Od /Ob1 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/_at_00420000.cpp  ?Matrix3Equal@@YAEPBUMatrix3@@0@Z  00423250  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00420000.cpp  ?Vector3Equal@@YAEPBUVector3_s0042_3110@@0@Z  004232c0  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include

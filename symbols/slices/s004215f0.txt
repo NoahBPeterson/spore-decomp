@@ -1,8 +1,8 @@
-004215f0 Item24Vec::push_back  # vector push_back: placement-new copy of 0x18-byte element, else DoInsertValue
-00421670 QuadVec::assign  # vector<16-byte POD>::operator=
-00421950 HashTable::find  # hashtable find by uint32 key, returns iterator (node, bucket)
-00421a50 HashTable::insert  # hashtable insert with rehash policy, returns pair<iterator,bool>
-00421bf0 IPtrVec::resize  # vector<intrusive_ptr>::resize (InsertFill / erase)
+004215f0 ?push_back@Item24Vec@@QAEXABUItem24@@@Z  # Item24Vec::push_back migrated from s004215f0 (verbatim, slice spelling)
+00421670 ?assign@QuadVec@@QAEAAU1@ABU1@@Z  # QuadVec::assign migrated from s004215f0 (verbatim, slice spelling)
+00421950 ?find@HashTable@@QAE?AUHashIter_s0042_15f0@@PBI@Z  # HashTable::find migrated from s004215f0 (verbatim, slice spelling)
+00421a50 ?insert@HashTable@@QAE?AUHashInsertResult@@PBII@Z  # HashTable::insert migrated from s004215f0 (verbatim, slice spelling)
+00421bf0 ?resize@IPtrVec@@QAEXI@Z  # IPtrVec::resize migrated from s004215f0 (verbatim, slice spelling)
 00421c80 ?Construct@SlotMessage@@QAEPAU1@I@Z  # SlotMessage::Construct migrated from s004215f0 (verbatim, slice spelling)
 00421cf0 ?Destruct@SlotMessage@@QAEXXZ  # SlotMessage::Destruct migrated from s004215f0 (verbatim, slice spelling)
 00421d70 Elem32Vec::~Elem32Vec  # destroys 0x20-byte elements, frees storage
@@ -10,3 +10,6 @@
 00421e30 ??1Elem24Vec2@@QAE@XZ  # Elem24Vec2::~Elem24Vec2 migrated from s004215f0 (verbatim, slice spelling)
 00421e80 ?Set@Holder@@QAEXII@Z  # Holder::Set migrated from s004215f0 (verbatim, slice spelling)
 00421eb0 ?QueryA@@YAPAXPAPAUUnknown@@@Z  # QueryA migrated from s004215f0 (verbatim, slice spelling)
+00421f00 ?Reset@Resetter@@QAEPAU1@XZ  # Resetter::Reset migrated from s004215f0 (verbatim, slice spelling)
+00421f40 ?Init@Thunk@@QAEXI@Z  # Thunk::Init migrated from s004215f0 (verbatim, slice spelling)
+00421f60 ?QueryB@@YAPAXPAPAUUnknown@@@Z  # QueryB migrated from s004215f0 (verbatim, slice spelling)
