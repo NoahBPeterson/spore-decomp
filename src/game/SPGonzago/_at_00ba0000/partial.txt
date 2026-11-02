@@ -1,0 +1,3 @@
+# va  diff-bytes  reason
+00ba3350   138  erase-if over hash set: stubbed; predicate/erase loop omitted flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00ba33e0   353  read relationships: only the header ReadInt32 is present; per-record deserialisation omitted flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast

@@ -1,1 +1,3 @@
-00ba0770 SetupPlanetSpots  # cdecl(planetType 0x1654c01..05, bool); callers at 0xba1c81.. pass planet-type IDs; clears spot vector 0x16888ec + multimap 0x156c040, feeds grid 0x156c060
+00b88590 ?GetContinent@cPlanetModel@SP@@QBEHABUcSPVector3@@@Z  # SP::cPlanetModel::GetContinent (callee of s00ba0770, named from the dev publics; slice address comment)
+00ba0770 ?SetupPlanetSpots@@YAXI_N@Z  # SetupPlanetSpots migrated from s00ba0770 (verbatim, slice spelling)
+00ba1280 ?FUN_00ba1280@@YAXXZ  # FUN_00ba1280 migrated from s00ba0770 (verbatim, slice spelling)
