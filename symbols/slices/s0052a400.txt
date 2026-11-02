@@ -1,7 +1,7 @@
-0052a400 ?CreatePlaceholderTextures@@YAHHHHPAH0PAM@Z  # CreatePlaceholderTextures migrated from s0052a400 (verbatim, slice spelling)
-0052a700 ?LoadSkinnerMesh@@YAHHH@Z  # LoadSkinnerMesh migrated from s0052a400 (verbatim, slice spelling)
-0052ae30 ?resize@PairVec@@QAEXIPBX@Z  # PairVec::resize migrated from s0052a400 (verbatim, slice spelling)
-0052aeb0 ?SkinBoneWeights@@YAXHHHHM@Z  # SkinBoneWeights migrated from s0052a400 (verbatim, slice spelling)
-0052b060 ?Accum@BoneWeightList@@QAEXHM@Z  # BoneWeightList::Accum migrated from s0052a400 (verbatim, slice spelling)
-0052b170 ?Normalize@BoneWeightList@@QAEXM@Z  # BoneWeightList::Normalize migrated from s0052a400 (verbatim, slice spelling)
-0052b220 ?CopyTop@BoneWeightList@@QAEXH@Z  # BoneWeightList::CopyTop migrated from s0052a400 (verbatim, slice spelling)
+0052a400 nSPSkinner::CreatePlaceholderTextures  # PDB caller-scored; 2x2 RGBA rasters
+0052a700 LoadSkinnerMesh  # card; cMeshClusterer + normalized_safe; caller of 0x524a50
+0052ae30 vector<pair<int,float>>::resize  # card decompile
+0052aeb0 SkinBoneWeights  # card decompile
+0052b060 AccumBoneWeight  # card decompile
+0052b170 NormalizeBoneWeights  # card decompile
+0052b220 CopyTopBoneWeights  # card decompile

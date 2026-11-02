@@ -1,6 +1,6 @@
-00527a70 ?UninitCopy1c@@YAPAXPAX00@Z  # UninitCopy1c migrated from s00527a70 (verbatim, slice spelling)
-00527b70 ?UninitCopy18@@YAPAXPAX00@Z  # UninitCopy18 migrated from s00527a70 (verbatim, slice spelling)
-00527c70 ??4VectorElem40_s0052_7a70@@QAEAAU0@ABU0@@Z  # VectorElem40_s0052_7a70::operator= migrated from s00527a70 (verbatim, slice spelling)
-00527f30 ?DoInsertValues@VectorElem40_s0052_7a70@@QAEXPAUElem40_s0052_7a70@@IABU2@@Z  # VectorElem40_s0052_7a70::DoInsertValues migrated from s00527a70 (verbatim, slice spelling)
-005283d0 ?assign@FixedVec8_s0052_7a70@@QAEXPAX00@Z  # FixedVec8_s0052_7a70::assign migrated from s00527a70 (verbatim, slice spelling)
-00528610 ??0Elem40_s0052_7a70@@QAE@ABU0@@Z  # Elem40_s0052_7a70::Elem40 migrated from s00527a70 (verbatim, slice spelling)
+00527a70 eastl::uninitialized_copy<0x1c-byte>  # card: memcpy thunk 0x11e0744 + gi dispatch
+00527b70 eastl::uninitialized_copy<0x18-byte>  # card: memcpy thunk + gi dispatch
+00527c70 ?4VectorElem40  # card decompile: assign from another vector
+00527f30 VectorElem40::DoInsertValues (fill)  # card decompile
+005283d0 eastl::fixed_vector<8-byte>::assign  # card decompile; inline buffer at +0x10
+00528610 Elem40 copy ctor  # card decompile; B4 + Vec3f + Matrix33 + 3 floats

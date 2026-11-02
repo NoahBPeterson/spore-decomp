@@ -1,1 +1,1 @@
-0052b340 ?SkinPaintBuild@@YAXPAPAURow@@PAUJointVec@@PAUSegVec@@HPAURemapTable@@PAUWeightSource@@PAUPointSet@@PAUSkeletonObj@@HM@Z  # SkinPaintBuild migrated from s0052b340 (verbatim, slice spelling)
+0052b340 SkinPaintBuildBoneWeights  # per-point bone-weight builder: 4 strongest influences, 20-byte rows, SkinBoneWeights smoothing passes
