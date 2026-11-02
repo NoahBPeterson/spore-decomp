@@ -1,0 +1,2 @@
+# source  symbol  va  flags
+../src/game/mix/smixfilt.cpp.cpp  ?MpegList_Insert@core@audio@rw@@YAXPAPAXPAUMpegListNode@123@@Z  011596d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

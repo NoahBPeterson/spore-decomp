@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+01156b40   73  MIX_filteradd: Alloc(desc[1], "User Provided Filter State") then call desc[3](block, desc[0], param_2), copy the 0x18/0x00/0x04 header words out of desc and link via FUN_011596d0. Complete. equiv UNSUPPORTED 0/400 valid (fault(write)=275, fault(read)=51, fake-arity=74) -- desc is a caller-supplied function-pointer block the emulator cannot fake. flags /vc71 /O2 /MD /Gy /TP /arch:SSE
