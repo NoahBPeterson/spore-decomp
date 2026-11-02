@@ -1,1 +1,4 @@
 0089e5e0 ?GetCharCategory@Text@EA@@YA?AW4CharCategory@12@_W@Z  # GetCharCategory migrated from s0089e350 (verbatim, slice spelling)
+0089e740 ?BidiResolveExplicitImpl@Text@EA@@YAIIPAUBidiRecord@12@IHH@Z  # BidiResolveExplicitImpl migrated from s0089e350 (verbatim, slice spelling)
+0089e8e0 ?BidiResolveWeak@Text@EA@@YAXIPAUBidiRecord@12@I@Z  # BidiResolveWeak migrated from s0089e350 (verbatim, slice spelling)
+0089eb00 ?BidiResolveNeutral@Text@EA@@YAXIPAUBidiRecord@12@I@Z  # BidiResolveNeutral migrated from s0089e350 (verbatim, slice spelling)
