@@ -15,3 +15,4 @@
 00b6f280 ??0cColorSet@@QAE@XZ  # cColorSet::cColorSet migrated from s00b6e3d0 (verbatim, slice spelling)
 00b6f310 ?GetARGB@cColorSet@@QAEIXZ  # cColorSet::GetARGB migrated from s00b6e3d0 (verbatim, slice spelling)
 00b6f380 ?LoadNames@cColorSet@@QAEXPAUwstr@@@Z  # cColorSet::LoadNames migrated from s00b6e3d0 (verbatim, slice spelling)
+00b6f4c0 ?NotifyTicker@cColorSet@@QAEXXZ  # cColorSet::NotifyTicker migrated from s00b6e3d0 (verbatim, slice spelling)

@@ -1,4 +1,5 @@
 01320f20 ?InitIDColorAttributes@Simulator@@YAXXZ  # InitIDColorAttributes migrated from s01320f20 (verbatim, slice spelling)
+01321080 ?InitMissionAttributes@Simulator@@YAXXZ  # InitMissionAttributes migrated from s01320f20 (verbatim, slice spelling)
 01322a30 Simulator::InitPlanetAttributes ($E489)  # 23 Attribute records at 0x0156b758 (mKey,name,type,techLevel..mTerrainStampsToRemove), byte-exact
 01324260 ?InitModelAttributes@Simulator@@YAXXZ  # InitModelAttributes migrated from s01320f20 (verbatim, slice spelling)
 0156b758 Simulator::sPlanetAttributes  # 23 x 0x3c, written by 0x01322a30

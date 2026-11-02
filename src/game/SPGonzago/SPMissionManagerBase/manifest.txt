@@ -1,1 +1,12 @@
 # source  symbol  va  flags
+../src/game/SPGonzago/SPMissionManagerBase.cpp  ?NotifyTicker@cColorSet@@QAEXXZ  00b6f4c0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPMissionManagerBase.cpp  ?FUN_00b6f4f0@@YAPAUARCObj@@PAU1@00PAPAUIRefLite@@@Z  00b6f4f0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPMissionManagerBase.cpp  ?FUN_00b6f550@@YA_NIPAPAUIRefLite@@@Z  00b6f550  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPMissionManagerBase.cpp  ?RefreshCards@MissionMgr@@QAEXXZ  00b6f760  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPMissionManagerBase.cpp  ?NotifyAll@MMgr@@QAEXXZ  00b6f7d0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPMissionManagerBase.cpp  ?IsTracked@MMgr@@QAE_NPAX@Z  00b6f800  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPMissionManagerBase.cpp  ?FUN_00b6f860@@YA_NIPAPAUARCObj@@@Z  00b6f860  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPMissionManagerBase.cpp  ?Create@SmallC@@SGPAU1@PAU1@@Z  00b6f890  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPMissionManagerBase.cpp  ?FUN_00b6f8e0@@YGPAUSmallE@@PAU1@@Z  00b6f8e0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPMissionManagerBase.cpp  ?LookupStrategy@MissionMgr@@QAEPAUIRefLite@@I@Z  00b6fa60  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPMissionManagerBase.cpp  ?InitMissionAttributes@Simulator@@YAXXZ  01321080  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
