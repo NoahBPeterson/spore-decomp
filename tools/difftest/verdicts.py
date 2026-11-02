@@ -177,6 +177,14 @@ def main():
     if a.src:
         from sweep_nonmatching import rows
         res, src_dirs = {}, [os.path.abspath(d) for d in a.src]
+        # a --from dir without results (work/sweep is gone since the pod sweep, whose results are in work/sweep_pod) read
+        # every row as "not run" and then crashed on max() of nothing; refuse before anything is written
+        empty = [d for d in src_dirs if not glob.glob(os.path.join(d, "*.json"))]
+        if empty:
+            have = sorted(os.path.relpath(d, ROOT) for d in glob.glob(os.path.join(ROOT, "work", "sweep*"))
+                          if glob.glob(os.path.join(d, "*.json")))
+            sys.exit("no sweep results (*.json) in %s; directories with results: %s" % (
+                ", ".join(os.path.relpath(d, ROOT) for d in empty), ", ".join(have) or "none"))
         # A re-run (rerun_rows.py) keeps the rows' previous results in work/sweep_stale/<stamp>; with work/sweep alone,
         # every row still queued read as "not run" (spikes of 117-633 in the history). Search those too: the newest
         # result per row still wins, so a finished re-run's result always replaces the stale one.
