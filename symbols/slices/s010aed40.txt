@@ -1,10 +1,3 @@
-# va  name  # evidence
-#
-# Slice s010aed40 -- Havok 3.1.0 powered-chain solver internals.
-# Names 010aed40 and 010af330 are the dev-build PDB publics recorded in
-# symbols/havok_names.txt (lines 534-535).  010aef10 is anonymous there (it sits
-# between those two); the name below is inferred from its data flow and is not a
-# PDB name.
-010aed40  _hkPoweredChain_RestoreVelocityValue  # havok_names.txt:534 (havok identical-code)
-010aef10  _hkPoweredChain_AccumulateConstraintVelocities  # inferred (not in havok_names.txt); one loop over the chain's constraints accumulating transformed pivot velocities
-010af330  _hkPoweredChain_ScanAndDisableMotors  # havok_names.txt:535 (havok identical-code)
+010aed40 ?_hkPoweredChain_RestoreVelocityValue@@YAXHHPBEPAM@Z  # _hkPoweredChain_RestoreVelocityValue migrated from s010aed40 (verbatim, slice spelling)
+010aef10 ?_hkPoweredChain_AccumulateConstraintVelocities@@YAXPBEPAUhkVector4_s010a_ed40@@@Z  # _hkPoweredChain_AccumulateConstraintVelocities migrated from s010aed40 (verbatim, slice spelling)
+010af330 ?_hkPoweredChain_ScanAndDisableMotors@@YAXPBEPAH1PAM@Z  # _hkPoweredChain_ScanAndDisableMotors migrated from s010aed40 (verbatim, slice spelling)

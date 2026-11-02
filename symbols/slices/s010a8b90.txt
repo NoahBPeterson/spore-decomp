@@ -1,5 +1,5 @@
-010a8b90 ?FUN_010a8b90@@YAXXZ  # collision-record swell sort (key @+0x30, tiebreak squared len @+0x10); naked asm, byte-exact
-010a8cb0 ?FUN_010a8cb0@@YAXXZ  # plane-side predicate dot(point-origin,normal) < -0.001; naked asm, byte-exact
-010a8cf0 ?FUN_010a8cf0@@YAXXZ  # x87 contact/closest-point kernel; naked asm, byte-exact
-010a90b0 ?FUN_010a90b0@@YAXXZ  # x87 contact kernel B (4 calls to 010a8cf0); naked asm, byte-exact
-010a9580 ?FUN_010a9580@@YAXXZ  # ray/SAT kernel (calls 010a8b90, 010a90b0); naked asm, byte-exact
+010a8b90 ?FUN_010a8b90@@YAHPAUCtx@@@Z  # FUN_010a8b90 migrated from s010a8b90 (verbatim, slice spelling)
+010a8cb0 ?FUN_010a8cb0@@YAPA_NPBUFeature@@0PA_N@Z  # FUN_010a8cb0 migrated from s010a8b90 (verbatim, slice spelling)
+010a8cf0 ?FUN_010a8cf0@@YAXPAUFeature@@PAUCtx@@0PAUVec4@@@Z  # FUN_010a8cf0 migrated from s010a8b90 (verbatim, slice spelling)
+010a90b0 ?FUN_010a90b0@@YAXPAUCtx@@PAUFeature@@1PAUVec4@@1@Z  # FUN_010a90b0 migrated from s010a8b90 (verbatim, slice spelling)
+010a9580 ?FUN_010a9580@@YAXPAUFeature@@PAUCtx@@0H0PAUVec4@@0@Z  # FUN_010a9580 migrated from s010a8b90 (verbatim, slice spelling)

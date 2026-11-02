@@ -1,6 +1,19 @@
-010a4290 hkIdMgrA::newUid  # reuse highest 0xff slot of an hkArray<hkUint8> else append; called with this=m_idMgrA (+0xc) from allocateContactPoint
-010a49e0 hkConstraintSolverSetup_resetSolverBuffers  # zeroes res[7]..res[0x13] dwords, then re-zeroes via 0x010b48b0 from the 0xc/0x10 cursors
-010a4a70 hkConstraintSolverSetup_layoutBuffer  # computes 6 buffer pointers/sizes into a 0x20-byte struct, writes fixed accumulator + end marker (type 2)
-010a4b30 hkConstraintSolverSetup_calcBufferSize  # layoutBuffer(info, 0, 0, &tmp): size query
-010a4c60 hkConstraintSolverSetup_integrateBatch  # per entity motion->vtbl[6](step, base+accOffset), no pre-copy (cf. oneStepIntegrate)
-010a45b0 ??0hkSimpleContactConstraintData@@QAE@PAVhkConstraintInstance@@@Z  # exact overload (1-arg ctor); the 0-arg ctor shares the demangled name
+010a3ed0 ?buildJacobian@hkSimpleContactConstraintData@@UAEXABVhkConstraintQueryIn_s010a_3ed0@@AAUhkConstraintQueryOut_s010a_3ed0@@@Z  # hkSimpleContactConstraintData::buildJacobian migrated from s010a3ed0 (verbatim, slice spelling)
+010a4290 ?newUid@hkIdMgrA@@QAEHE@Z  # hkIdMgrA::newUid migrated from s010a3ed0 (verbatim, slice spelling)
+010a42f0 ?allocateContactPoint@hkSimpleContactConstraintData@@QAEGPAPAVhkContactPoint_s010a_3ed0@@PAPAVhkContactPointProperties@@@Z  # hkSimpleContactConstraintData::allocateContactPoint migrated from s010a3ed0 (verbatim, slice spelling)
+010a4420 ?freeContactPoint@hkSimpleContactConstraintData@@QAEXG@Z  # hkSimpleContactConstraintData::freeContactPoint migrated from s010a3ed0 (verbatim, slice spelling)
+010a45b0 ??0hkSimpleContactConstraintData@@QAE@PAVhkConstraintInstance_s010a_3ed0@@@Z  # hkSimpleContactConstraintData::hkSimpleContactConstraintData migrated from s010a3ed0 (verbatim, slice spelling)
+010a4620 ??0hkSimpleContactConstraintData@@QAE@XZ  # hkSimpleContactConstraintData::hkSimpleContactConstraintData migrated from s010a3ed0 (verbatim, slice spelling)
+010a4680 ?buildJacobian@hkSoftContactConstraintData@@UAEXABVhkConstraintQueryIn_s010a_3ed0@@AAUhkConstraintQueryOut_s010a_3ed0@@@Z  # hkSoftContactConstraintData::buildJacobian migrated from s010a3ed0 (verbatim, slice spelling)
+010a46f0 ?toiCollisionResponseEndCallback@hkSoftContactConstraintData@@UAEXABVhkContactPoint_s010a_3ed0@@MAAUhkSimpleConstraintInfoInitInput@@AAUhkBodyVelocity_s010a_3ed0@@12@Z  # hkSoftContactConstraintData::toiCollisionResponseEndCallback migrated from s010a3ed0 (verbatim, slice spelling)
+010a4850 ?toiCollisionResponseBeginCallback@hkSoftContactConstraintData@@UAEPAUhkBodyVelocity_s010a_3ed0@@ABVhkContactPoint_s010a_3ed0@@AAUhkSimpleConstraintInfoInitInput@@AAU2@12@Z  # hkSoftContactConstraintData::toiCollisionResponseBeginCallback migrated from s010a3ed0 (verbatim, slice spelling)
+010a48f0 ?hkConstraintSolverSetup_initializeSolverState@@YAXAAUhkStepInfo_s010a_3ed0@@AAUhkSolverInfo_s010a_3ed0@@AAVhkConstraintQueryIn_s010a_3ed0@@PADHAAUhkConstraintSolverResources@@@Z  # hkConstraintSolverSetup_initializeSolverState migrated from s010a3ed0 (verbatim, slice spelling)
+010a49e0 ?hkConstraintSolverSetup_resetSolverBuffers@@YAXAAUhkConstraintSolverResources@@H@Z  # hkConstraintSolverSetup_resetSolverBuffers migrated from s010a3ed0 (verbatim, slice spelling)
+010a4a70 ?hkConstraintSolverSetup_layoutBuffer@@YA_KPBUhkSolverInfo_s010a_3ed0@@IPAXPAUhkSolverBufferLayout@@@Z  # hkConstraintSolverSetup_layoutBuffer migrated from s010a3ed0 (verbatim, slice spelling)
+010a4b30 ?hkConstraintSolverSetup_calcBufferSize@@YAXPBUhkSolverInfo_s010a_3ed0@@@Z  # hkConstraintSolverSetup_calcBufferSize migrated from s010a3ed0 (verbatim, slice spelling)
+010a4b50 ?buildAccumulatorBatch@hkConstraintSolverSetup@@SAXABUhkStepInfo_s010a_3ed0@@PBQAUhkEntityStub@@HHPAVhkVelocityAccumulator@@@Z  # hkConstraintSolverSetup::buildAccumulatorBatch migrated from s010a3ed0 (verbatim, slice spelling)
+010a4bb0 ?buildJacobianElementBatch@hkConstraintSolverSetup@@SAXAAVhkConstraintQueryIn_s010a_3ed0@@PAPAUhkConstraintInternal_s010a_3ed0@@HPAVhkVelocityAccumulator@@PAUhkJacobianSchema@@PAUhkJacobianElement@@3@Z  # hkConstraintSolverSetup::buildJacobianElementBatch migrated from s010a3ed0 (verbatim, slice spelling)
+010a4c60 ?hkConstraintSolverSetup_integrateBatch@@YAXABUhkStepInfo_s010a_3ed0@@PAPAUhkEntityStub@@HPAVhkVelocityAccumulator@@@Z  # hkConstraintSolverSetup_integrateBatch migrated from s010a3ed0 (verbatim, slice spelling)
+010a4ca0 ?oneStepIntegrate@hkConstraintSolverSetup@@SAXABUhkStepInfo_s010a_3ed0@@PAPAUhkEntityStub@@HPAVhkVelocityAccumulator@@@Z  # hkConstraintSolverSetup::oneStepIntegrate migrated from s010a3ed0 (verbatim, slice spelling)
+010a4d10 ?internalAddAccumulators@hkConstraintSolverSetup@@SAXAAUhkConstraintSolverResources@@PAPAUhkEntityStub@@H@Z  # hkConstraintSolverSetup::internalAddAccumulators migrated from s010a3ed0 (verbatim, slice spelling)
+010a4de0 ?internalIsMemoryOkForNewAccumulators@hkConstraintSolverSetup@@SA?AVhkBool_s010a_3ed0@@AAUhkConstraintSolverResources@@PAPAUhkEntityStub@@H@Z  # hkConstraintSolverSetup::internalIsMemoryOkForNewAccumulators migrated from s010a3ed0 (verbatim, slice spelling)

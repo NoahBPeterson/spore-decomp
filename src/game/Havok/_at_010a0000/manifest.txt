@@ -1,0 +1,6 @@
+# source  symbol  va  flags
+../src/game/Havok/_at_010a0000.cpp  ?hkConstraintSolverSetup_calcBufferSize@@YAXPBUhkSolverInfo_s010a_3ed0@@@Z  010a4b30  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/Havok/_at_010a0000.cpp  ?next@hk1Lin2AngJacobian@@QAEPAUhkJacobianElement@@H@Z  010aa040  /O2 /MD /Gy /TP /GS- /Isrc/game/include
+../src/game/Havok/_at_010a0000.cpp  ?f010aa0d0@@YAXPAM0PAH@Z  010aa0d0  /O2 /MD /Gy /TP /GS- /Isrc/game/include
+../src/game/Havok/_at_010a0000.cpp  ?f010aa130@@YAXPAM0PAH0@Z  010aa130  /O2 /MD /Gy /TP /GS- /Isrc/game/include
+../src/game/Havok/_at_010a0000.cpp  ?f010aa180@@YAXPAM0PAH@Z  010aa180  /O2 /MD /Gy /TP /GS- /Isrc/game/include

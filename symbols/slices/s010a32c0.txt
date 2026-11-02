@@ -1,0 +1,8 @@
+010a32c0 ?stepDeltaTime@hkHalfstepSimulation@@UAE?AW4hkStepResult@@PAVhkWorld_s010a_32c0@@MM@Z  # hkHalfstepSimulation::stepDeltaTime migrated from s010a32c0 (verbatim, slice spelling)
+010a3780 ?addCollisionPair@hkEntityEntityBroadPhaseListener@@UAEXABUhkBroadPhasePair@@@Z  # hkEntityEntityBroadPhaseListener::addCollisionPair migrated from s010a32c0 (verbatim, slice spelling)
+010a3810 ?hkWorldAgentUtil_getIslandFromAgentEntry@@YAPAVhkSimulationIsland_s010a_32c0@@PAXPAV1@1@Z  # hkWorldAgentUtil_getIslandFromAgentEntry migrated from s010a32c0 (verbatim, slice spelling)
+010a3920 ?hkWorldAgentUtil_addAgent@@YAXPAUhkAgentNnEntry_s010a_32c0@@0PAVhkCollisionDispatcher_s010a_32c0@@@Z  # hkWorldAgentUtil_addAgent migrated from s010a32c0 (verbatim, slice spelling)
+010a39f0 ?hkWorldAgentUtil_removeAgent@@YAXPAUhkAgentNnEntry_s010a_32c0@@@Z  # hkWorldAgentUtil_removeAgent migrated from s010a32c0 (verbatim, slice spelling)
+010a3a90 ?hkInternalConstraintUtils_calcRelativeAngle@@YAXABUhkVector4_s010a_32c0@@000AAU1@AAM@Z  # hkInternalConstraintUtils_calcRelativeAngle migrated from s010a32c0 (verbatim, slice spelling)
+010a3c40 ?toiCollisionResponseBeginCallback@hkMassChangerConstraintData@@UAEXPBXAAUhkSimpleConstraintInfoInitInput@@1AAUhkBodyVelocity@@2@Z  # hkMassChangerConstraintData::toiCollisionResponseBeginCallback migrated from s010a32c0 (verbatim, slice spelling)
+010a3c90 ?buildJacobian@hkMassChangerConstraintData@@UAEXABVhkConstraintQueryIn@@AAUhkConstraintQueryOut@@@Z  # hkMassChangerConstraintData::buildJacobian migrated from s010a32c0 (verbatim, slice spelling)
