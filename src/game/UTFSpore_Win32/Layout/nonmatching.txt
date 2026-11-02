@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+0097e8a0 91 complete; area transform helper (window slot4 -> GetArea -> sink slot5, then expand rect). Same calls/arguments and clamp; the original hoists the sink vtable load (`mov edx,[esi+0xc]; mov edx,[edx+0x14]`) above the area-float copies while ours schedules it after. equiv UNSUPPORTED (0/400 valid inputs - the helper needs real sink/window vtables that random pointer soup never satisfies). flags /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
