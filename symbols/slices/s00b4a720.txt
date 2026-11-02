@@ -1,0 +1,8 @@
+00b4a720 ?FUN_00b4a720@@YAXPAULoco@@IDD@Z  # FUN_00b4a720 migrated from s00b4a720 (verbatim, slice spelling)
+00b4b060 ?run@B4B060@@QAE_NPAX0PAM1MM0@Z  # B4B060::run migrated from s00b4a720 (verbatim, slice spelling)
+00b4b1d0 ?init@B4B1D0@@QAEHPAX0@Z  # B4B1D0::init migrated from s00b4a720 (verbatim, slice spelling)
+00b4b2b0 ?remove@PairVec@@QAEHPAH@Z  # PairVec::remove migrated from s00b4a720 (verbatim, slice spelling)
+00b4b320 ?FUN_00b4b320@@YAXPAX00M@Z  # FUN_00b4b320 migrated from s00b4a720 (verbatim, slice spelling)
+00b4b4a0 ?FUN_00b4b4a0@@YAXXZ  # FUN_00b4b4a0 migrated from s00b4a720 (verbatim, slice spelling)
+00c41d60 ?SetVelocity@cLocomotiveObject@SP@@QAEXABUcSPVector3@@@Z  # SP::cLocomotiveObject::SetVelocity (callee of s00b4a720, named from the dev publics; slice address comment)
+00c41d90 ?SetAngularVelocity@cLocomotiveObject@SP@@QAEXABUcSPVector3@@@Z  # SP::cLocomotiveObject::SetAngularVelocity (callee of s00b4a720, named from the dev publics; slice address comment)

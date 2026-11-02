@@ -1,1 +1,10 @@
-00b46660 cSurfaceMover::Update  # per-frame surface mover: vel/angVel integration, orientation quaternion, DirectionToSurfacePosition on mode 1
+00b46660 ?Update@cSurfaceMover@@QAEXM@Z  # cSurfaceMover::Update migrated from s00b46660 (verbatim, slice spelling)
+00b46d10 ?Fn_00b46d10@@YAXM@Z  # Fn_00b46d10 migrated from s00b46660 (verbatim, slice spelling)
+00b46d90 ?Assign@cCurve@@QAEPAU1@PAU1@@Z  # cCurve::Assign migrated from s00b46660 (verbatim, slice spelling)
+00b46df0 ?Fn_00b46df0@@YGMPAVcAimObject@@MMMM@Z  # Fn_00b46df0 migrated from s00b46660 (verbatim, slice spelling)
+00b46ff0 ?Init@cHolder@@QAEPAU1@XZ  # cHolder::Init migrated from s00b46660 (verbatim, slice spelling)
+00b47060 ?Cleanup@cSwitchHolder@@QAEXXZ  # cSwitchHolder::Cleanup migrated from s00b46660 (verbatim, slice spelling)
+00b470b0 ?Register@cMoverOwner@@QAEXPAVcRegistrarObject@@@Z  # cMoverOwner::Register migrated from s00b46660 (verbatim, slice spelling)
+00b47200 ?Clip@cSlabTester@@QAE_NPAX0PAM1M1PAE1111@Z  # cSlabTester::Clip migrated from s00b46660 (verbatim, slice spelling)
+00b47570 ?Find@cRange@@QAEPAHPAH@Z  # cRange::Find migrated from s00b46660 (verbatim, slice spelling)
+00b475b0 ?Fn_00b475b0@@YAXPAH0PAVcRandomLCG@@@Z  # Fn_00b475b0 migrated from s00b46660 (verbatim, slice spelling)

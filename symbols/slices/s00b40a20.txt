@@ -1,3 +1,3 @@
-00b40a20 CollideSphereShape_00b40a20  # nonmatching: sphere-vs-shape contact generation (hull edge search + sphere fallback), SSE operand order / register allocation differ
-00b41020 FUN_00b41020  # refresh 13 global tuning floats from the "gold" property list (0x93e8e9b7) via PropertyManager::GetPropertyList + Property::GetFloat
-00b41390 CapsuleShape::LoadSphereTuning  # LoadPlanetTuning(0x00b51460) + CapsuleConstant(0x00b4d930), then 13 property reads into the shared tuning block (0x0167eb70 +0xa8..+0xb8) and globals
+00b40a20 ?CollideSphereShape_00b40a20@@YAXPAVGeom@@0PAUContact@@@Z  # CollideSphereShape_00b40a20 migrated from s00b40a20 (verbatim, slice spelling)
+00b41020 ?FUN_00b41020@@YAXXZ  # FUN_00b41020 migrated from s00b40a20 (verbatim, slice spelling)
+00b41390 ?LoadSphereTuning@CapsuleShape@@QAEXPAUIPropertyList@@@Z  # CapsuleShape::LoadSphereTuning migrated from s00b40a20 (verbatim, slice spelling)

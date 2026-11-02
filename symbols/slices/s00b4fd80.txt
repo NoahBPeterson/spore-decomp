@@ -1,0 +1,2 @@
+00b4fd80 ?FUN_00b4fd80@@YAXPAUIVarHost@@@Z  # FUN_00b4fd80 migrated from s00b4fd80 (verbatim, slice spelling)
+00b4ffb0 ?ctor@ObjFFB0@@QAEPAXPAURC@@@Z  # ObjFFB0::ctor migrated from s00b4fd80 (verbatim, slice spelling)

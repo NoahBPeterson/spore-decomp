@@ -1,0 +1,5 @@
+00b43290 ?FUN_00b43290@X@@QAEXXZ  # X::FUN_00b43290 migrated from s00b43290 (verbatim, slice spelling)
+00b43710 ?FUN_00b43710@@YAXI@Z  # FUN_00b43710 migrated from s00b43290 (verbatim, slice spelling)
+00b43790 ?FUN_00b43790@@YAXPAX0PAM@Z  # FUN_00b43790 migrated from s00b43290 (verbatim, slice spelling)
+00b43990 ?FUN_00b43990@@YAXPAX0PAM@Z  # FUN_00b43990 migrated from s00b43290 (verbatim, slice spelling)
+00b43bc0 ?FUN_00b43bc0@@YAXPAX00@Z  # FUN_00b43bc0 migrated from s00b43290 (verbatim, slice spelling)

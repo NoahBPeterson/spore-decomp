@@ -1,11 +1,11 @@
-00b45170 ?FUN_00b45170@@YAXXZ  # destructor cleanup (delete this+0x90/+0x78, hashtable DoAllocateBuckets); naked asm, byte-exact
-00b451f0 ?FUN_00b451f0@@YAXXZ  # MessageServer notification helper; naked asm, byte-exact
-00b452b0 ?FUN_00b452b0@@YAXXZ  # reset + EASTL DoFreeNodes; naked asm, byte-exact
-00b452f0 ?FUN_00b452f0@@YAXXZ  # __thiscall mode dispatcher (this+0x20); naked asm, byte-exact
-00b453a0 ?FUN_00b453a0@@YAXXZ  # __thiscall mode dispatcher; naked asm, byte-exact
-00b45410 ?FUN_00b45410@@YAXXZ  # __thiscall mode dispatcher (twin of 00b453a0); naked asm, byte-exact
-00b45480 ?FUN_00b45480@@YAXXZ  # __thiscall mode dispatcher returning uint; naked asm, byte-exact
-00b45540 ?FUN_00b45540@@YAXXZ  # large float/vector kernel (x87); naked asm, byte-exact
-00b45ab0 ?FUN_00b45ab0@@YAXXZ  # EASTL hashtable find; naked asm, byte-exact
-00b45b50 ?FUN_00b45b50@@YAXXZ  # EASTL hashtable insert/rehash; naked asm, byte-exact
-00b45c10 ?FUN_00b45c10@@YAXXZ  # growable-array (stride 0x3c) copy; naked asm, byte-exact
+00b45170 ?Destroy@cObj45170@@QAEXXZ  # cObj45170::Destroy migrated from s00b45170 (verbatim, slice spelling)
+00b451f0 ?OnEvent@cObj451f0@@QAEXXZ  # cObj451f0::OnEvent migrated from s00b45170 (verbatim, slice spelling)
+00b452b0 ?F@cObj452b0@@QAEXXZ  # cObj452b0::F migrated from s00b45170 (verbatim, slice spelling)
+00b452f0 ?Dispatch@cObj452xx@@QAEXPAX00@Z  # cObj452xx::Dispatch migrated from s00b45170 (verbatim, slice spelling)
+00b453a0 ?Mode0A@cObj452xx@@QAEXPAX@Z  # cObj452xx::Mode0A migrated from s00b45170 (verbatim, slice spelling)
+00b45410 ?Mode0B@cObj452xx@@QAEXPAX@Z  # cObj452xx::Mode0B migrated from s00b45170 (verbatim, slice spelling)
+00b45480 ?GetFlag@cObj452xx@@QAEIPAX@Z  # cObj452xx::GetFlag migrated from s00b45170 (verbatim, slice spelling)
+00b45540 ?Build@cObj45540@@QAE_NPAX0PAM1PAUcFOut@@@Z  # cObj45540::Build migrated from s00b45170 (verbatim, slice spelling)
+00b45ab0 ?Remove@cHash30@@QAEHPAX@Z  # cHash30::Remove migrated from s00b45170 (verbatim, slice spelling)
+00b45b50 ?Insert@cHash30@@QAE?AUcIter@@PAX0@Z  # cHash30::Insert migrated from s00b45170 (verbatim, slice spelling)
+00b45c10 ?InitCopy@cVec3c@@QAEPAXPBU1@@Z  # cVec3c::InitCopy migrated from s00b45170 (verbatim, slice spelling)

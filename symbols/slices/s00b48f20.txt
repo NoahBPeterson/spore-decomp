@@ -1,0 +1,3 @@
+00b48f20 ?FUN_00b48f20@@YAXPAMM0M@Z  # FUN_00b48f20 migrated from s00b48f20 (verbatim, slice spelling)
+00b493e0 ?FUN_00b493e0@@YAXPAX@Z  # FUN_00b493e0 migrated from s00b48f20 (verbatim, slice spelling)
+00b49730 ?FUN_00b49730@@YAXPAX@Z  # FUN_00b49730 migrated from s00b48f20 (verbatim, slice spelling)
