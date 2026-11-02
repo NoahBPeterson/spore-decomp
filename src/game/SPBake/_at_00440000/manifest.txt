@@ -1,0 +1,2 @@
+# source  symbol  va  flags
+../src/game/SPBake/_at_00440000.cpp  ?ClearSymmetryRecursive@cSPEditorBlock_s0044_8380@SP@@QAEXXZ  00448dd0  /Od /Ob1 /Oi /MD /EHsc /TP /arch:SSE /fp:fast /Gy /GS- /Isrc/game/include

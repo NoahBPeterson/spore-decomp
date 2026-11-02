@@ -1,0 +1,5 @@
+# va  diff-bytes  reason
+004488c0 385 UpdateEffectsMask - complete; /Od temp slots and call-argument load order differ; equiv WEAK (263 valid inputs, 40.3% coverage) flags: /Od /Ob1 /Oi /MD /EHsc /TP /arch:SSE /fp:fast /Gy /GS-
+00448b10 10 InitDeformAnimationsA - complete; only the /Od slot order of the by-value Key3 temp (retail keeps key at -0xc..-4, model temp at -0x10) differs; equiv PASS flags: /Od /Ob1 /Oi /MD /EHsc /TP /arch:SSE /fp:fast /Gy /GS-
+00448c10 277 HasChildWithFlag - complete; retail materialises the empty()==false comparison (neg/sbb/add) and re-indexes mChildBlockList[i] for the second flag test, growing the /Od frame to 0x30; equiv PASS flags: /Od /Ob1 /Oi /MD /EHsc /TP /arch:SSE /fp:fast /Gy /GS-
+00448d60 10 ResetSymmetryBlocks - complete; only the /Od register-load order around the virtual AddRef/Release dispatch differs; equiv PASS flags: /Od /Ob1 /Oi /MD /EHsc /TP /arch:SSE /fp:fast /Gy /GS-
