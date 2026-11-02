@@ -1,0 +1,3 @@
+# source  symbol  va  flags
+../src/game/SPMovie/audiodecoder_snd9.cpp  ?Shutdown@StreamA@@QAEXXZ  00fc7ce0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPMovie/audiodecoder_snd9.cpp  ?SetStreamTapHandle@StreamA@@QAEXPAXH@Z  00fc7d20  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
