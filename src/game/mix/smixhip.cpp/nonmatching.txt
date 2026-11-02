@@ -1,0 +1,2 @@
+# s01156960: complete, behaviour-equivalent source that is not byte-exact.
+01156a60  142  MIX_sethighpass: same shape for the "Highpass Filter State" block at voice+0x58 with the FUN_01168580/FUN_011685b0 pair (0x58-byte block, {cutoff<<8, rate<<8} params). Complete. equiv FAIL 5/5 valid (execution: our Alloc call faults where the original's fake-arity path returns) -- out-of-slice callees 0x112c820/0x1168580/0x11685b0/0x11596d0. flags /vc71 /O2 /MD /Gy /TP /arch:SSE
