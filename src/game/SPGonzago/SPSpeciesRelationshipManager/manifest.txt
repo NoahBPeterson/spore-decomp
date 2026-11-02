@@ -1,0 +1,2 @@
+# source  symbol  va  flags
+../src/game/SPGonzago/SPSpeciesRelationshipManager.cpp  ?InitRelationshipManagerAttributes@Simulator@@YAXXZ  013249a0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
