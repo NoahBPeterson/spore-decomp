@@ -19,7 +19,7 @@
 00a61ad0 ?menu_list@Eapd@@YA_NPAUTX@1@Ut_symbol@1@HPAUt_atom@1@@Z  # menu_list migrated from s00a60ef0 (verbatim, slice spelling)
 00a61b10 ?menu_append@Eapd@@YA_NPAUTX@1@Ut_symbol@1@HPAUt_atom@1@@Z  # menu_append migrated from s00a60ef0 (verbatim, slice spelling)
 00a61b50 ?menu_clear@Eapd@@YAXPAUTX@1@@Z  # menu_clear migrated from s00a60ef0 (verbatim, slice spelling)
-00a61b60 ?x_menu_setup@Eapd@@YAEXZ  # byte-exact
+00a61b60 ?x_menu_setup@Eapd@@YAEXZ  # x_menu_setup migrated from s00a60ef0 (verbatim, slice spelling)
 00a61c20 ?table_new@Eapd@@YAPAXPAX0HPAUt_atom@1@@Z  # table_new migrated from s00a60ef0 (verbatim, slice spelling)
 00a61e50 ?table_free@Eapd@@YAXPAUTX@1@@Z  # table_free migrated from s00a60ef0 (verbatim, slice spelling)
 00a61ec0 ?table_select@Eapd@@YAXPAUTX@1@M@Z  # table_select migrated from s00a60ef0 (verbatim, slice spelling)

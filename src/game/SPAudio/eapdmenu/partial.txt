@@ -1,0 +1,1 @@
+# slice s00a60ef0 (EA::Audio::Eapd externals) -- PARTIAL functions.

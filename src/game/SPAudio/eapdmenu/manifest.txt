@@ -1,0 +1,2 @@
+# source  symbol  va  flags
+../src/game/SPAudio/eapdmenu.cpp  ?x_menu_setup@Eapd@@YAEXZ  00a61b60  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
