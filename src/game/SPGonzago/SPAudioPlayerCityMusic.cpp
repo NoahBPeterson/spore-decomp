@@ -1,4 +1,4 @@
-// src/game/SPGonzago/SPAudioPlayerCityMusic.cpp -- migrated from slice(s) s00eb0ea0, s00eaefa0, s00ead1a0, s00eac530 by tools/migrate/rewrite.py
+// src/game/SPGonzago/SPAudioPlayerCityMusic.cpp -- migrated from slice(s) s0137ef90, s00eaffc0, s00eae0f0, s00eb0ea0, s00eaefa0, s00ead1a0, s00eac530 by tools/migrate/rewrite.py
 // Object file: SPGonzago/SPAudioPlayerCityMusic.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -9,6 +9,8 @@
 extern int32_t g_1488414[];                      // 0x01488414  global property id table
 #include <math.h>
 #include "EA/Random/RandomLinearCongruential.h"
+#include "SP/cVarListSerializer.h"
+#include "EA/LimitStopwatch.h"
 #pragma warning(disable : 4035)
 
 // ---- items of slice s00eac530 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -141,6 +143,8 @@ struct Elem6c {
 // ---- items of slice s00eac530 end
 
 // ---- items of slice s00ead1a0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C" void* __cdecl memcpy_(void* d, const void* s, unsigned n);                          // 0x011e0744
+extern "C" __declspec(dllimport) void* __cdecl memmove_imp(void* d, const void* s, unsigned n); // 0x013cc480
 extern void* g_tab_1488420[3];     // 0x01488420
 extern char PTR_01488444;          // 0x01488444 (vftable)
 extern char PTR_0148843c;          // 0x0148843c
@@ -159,6 +163,7 @@ void* MessageServer();                                          // 0x0067dcc0
 void  __cdecl RemoveHandler(void* h, void* a, void* b, void* c, void* d); // 0x00571db0
 void  __cdecl FUN_00572020(void* a, void* b);                   // 0x00572020
 void  __cdecl KillSetiEffects(void* a, void* b);                // 0x00435ed0
+void* __stdcall ListErase(void* out, void* a, void* b);         // 0x00973d10
 extern u32  g_tab_1488414[3];      // 0x01488414
 typedef void  (__thiscall *vfn0)(void*);
 typedef void  (__thiscall *vfn1)(void*, int);
@@ -180,6 +185,18 @@ struct cMusicVec {
     void* mpBegin_00;   // +0x00
     void* mpEnd_04;     // +0x04
     void FUN_00ead660();
+};
+struct cIntVec {
+    int* mpBegin_00;   // +0x00
+    int* mpEnd_04;     // +0x04
+    int* mpCap_08;     // +0x08
+    void FUN_00eade60(unsigned newCap);
+};
+struct cFloatVec {
+    float* mpBegin_00;   // +0x00
+    float* mpEnd_04;     // +0x04
+    float* mpCap_08;     // +0x08
+    void FUN_00eadf40(float* pos, float* value);
 };
 namespace SP {
 namespace Audio {
@@ -278,7 +295,7 @@ struct cEditorResource_s00ea_d1a0 {
     void* mp_44;
     u8    mPad_48[0x58 - 0x48];
     void* mp_58;
-    void FUN_00ead6a0();
+    void FUN_00ead6a0();  // 0x00ead6a0 (cEditorResource::FUN_00ead6a0)
 };
 struct cQuery840 {
     u8    mPad_00[0xd8];
@@ -632,6 +649,544 @@ public:
     uint8_t  mPad208[0x14];                                     // 0x208
 };
 // ---- items of slice s00eb0ea0 end
+
+// ---- items of slice s00eae0f0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C" void* __cdecl FUN_11e0744_memcpy(void*, const void*, unsigned int);  // 0x011e0744
+static int* VecGrowN(int* v, int* pos, unsigned n, int val)
+{
+    int* begin = (int*)v[0];
+    int* end = (int*)v[1];
+    unsigned cap = (unsigned)(v[2] - (int)end) >> 2;
+    if (cap < n) {
+        unsigned oldLen = (unsigned)(end - begin);
+        unsigned newCap = oldLen * 2;
+        if (oldLen == 0)
+            newCap = 1;
+        unsigned want = oldLen + n;
+        if (newCap < want)
+            newCap = want;
+        int* dst = newCap ? new int[newCap] : 0;
+        int* p = begin;
+        int* out = dst;
+        while (p != pos)
+            *out++ = *p++;
+        int* fillEnd = out + n;
+        int* q = out;
+        while (q != fillEnd)
+            *q++ = val;
+        while (p != end)
+            *out++ = *p++;
+        delete[] begin;
+        v[0] = (int)dst;
+        v[1] = (int)out;
+        v[2] = (int)(dst + newCap);
+        return out;
+    }
+    if (n != 0) {
+        unsigned tail = (unsigned)(end - pos);
+        if (n < tail) {
+            unsigned cnt = (unsigned)(end - (pos + n));
+            int* d = end;
+            int* s = end - n;
+            while (cnt--)
+                *--d = *--s;
+            v[1] = (int)(end + n);
+            int* s2 = pos;
+            while (s2 != pos + n)
+                *s2++ = val;
+            return pos;
+        } else {
+            unsigned copyFirst = tail;
+            int* w = end;
+            for (unsigned i = 0; i < n - tail; ++i)
+                *w++ = val;
+            v[1] = (int)w;
+            int* s = pos;
+            int* d = end;
+            while (copyFirst--)
+                *d++ = *s++;
+            v[1] = (int)d;
+            int* s2 = pos;
+            while (s2 != pos + n)
+                *s2++ = val;
+            return pos;
+        }
+    }
+    return pos;
+}
+struct AT {
+virtual void v00();
+virtual void v04();
+virtual void v08();
+virtual void v0c();
+virtual void v10();
+virtual void v14();
+virtual void v18();
+virtual void v1c();
+virtual void v20();
+virtual void v24();
+virtual void v28();
+virtual void v2c();
+virtual void v30();
+virtual void v34();
+virtual void v38(int);
+virtual void v3c(int, float);
+virtual void v40(int, int);
+virtual void v44();
+virtual void v48();
+virtual void v4c();
+virtual void v50();
+virtual void v54();
+    virtual void v58();
+};
+AT* __cdecl GetSystemAT_s00ea_e0f0();   // 0x00a206f0
+static void NoteEvent(int which, int val, int tagB)
+{
+    AT* at = GetSystemAT_s00ea_e0f0();
+    if (at) {
+        at->v38(0x3cdd1a9);
+        at->v40(0x34753a7, which);
+        float f = (float)val;
+        if (val < 0)
+            f += 4294967296.0f;
+        at->v3c(0x34753aa, f);
+        at->v58();
+    }
+    at = GetSystemAT_s00ea_e0f0();
+    if (at) {
+        at->v38(0x3cdd1a9);
+        at->v40(0x34753a7, tagB);
+        at->v3c(0x34753aa, (float)val);
+        at->v58();
+    }
+}
+struct cPlayerCityMusic_s00ea_e0f0 {
+    char   pad0[0x110];
+    unsigned mNoteStateIdx;   // +0x110
+    float* mNoteStatesBegin;  // +0x114
+    float* mNoteStatesEnd;    // +0x118
+    char   pad11c[0x128 - 0x11c];
+    float* mVec128B;          // +0x128
+    float* mVec128E;          // +0x12c
+    char   pad130[0x13c - 0x130];
+    float* mVec13cB;          // +0x13c
+    float* mVec13cE;          // +0x140
+    char   pad144[0x150 - 0x144];
+    float  mDownbeat;         // +0x150
+    char   pad154[0x1b8 - 0x154];
+    int*   mList1b8;          // +0x1b8
+    char   pad1bc[0x1cc - 0x1bc];
+    int*   mNoteDegB;         // +0x1cc
+    int*   mNoteDegE;         // +0x1d0
+    char   pad1d4[0x1e0 - 0x1d4];
+    float* mVec1e0B;          // +0x1e0
+    float* mVec1e0E;          // +0x1e4
+    void DeselectAmbience(float value, unsigned* idx, float* out);  // 0x00eae0f0 (cPlayerCityMusic::DeselectAmbience)
+    void RemoveNote(unsigned idx);  // 0x00eae610 (cPlayerCityMusic::RemoveNote)
+};
+struct IStream;
+struct IReader {
+virtual void v00();
+virtual void v04();
+virtual void v08();
+virtual void v0c();
+virtual void v10();
+virtual void v14();
+virtual void v18();
+virtual void v1c();
+    virtual IStream* v20();
+};
+struct IStream {
+virtual void s00();
+virtual void s04();
+virtual void s08();
+virtual void s0c();
+virtual void s10();
+virtual void s14();
+virtual IStream* s18();
+};
+void __cdecl ReadInt32(void* stream, int* out, int a, int b);   // 0x0093a780
+void __cdecl FUN_00eade60(int a);
+void __cdecl FUN_00eadf40(int* at, int* val);
+// ---- items of slice s00eae0f0 end
+
+// ---- items of slice s00eaffc0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+#pragma warning(disable : 4100)
+void  __cdecl operator_delete(void* p);                                  // 0xf47380
+struct CVarListSerializer {
+    void ctor(void* owner, void* sig, int flags);   // 0x692f90
+    bool Serialize(void* stream);                   // 0x693e10
+};
+static void* move_range(void** dst, void** first, void** last)
+{
+    memcpy_(dst, first, (unsigned int)((char*)last - (char*)first));
+    return dst;
+}
+struct PtrRange {
+    void** mpBegin;      // +0x00
+    void** mpEnd;        // +0x04
+    void** mpCapacity;   // +0x08
+    void clear() {
+        void** end = mpEnd;
+        void** begin = mpBegin;
+        move_range(begin, end, end);
+        mpEnd += begin - end;
+    }
+};
+struct EventNode {
+    EventNode* mpNext;   // +0x00
+    EventNode* mpPrev;   // +0x04
+};
+struct EventList {
+    EventNode mSentinel; // +0x00  mpNext / mpPrev
+    void clear() {
+        EventNode* sentinel = &mSentinel;
+        EventNode* p = sentinel->mpNext;
+        while (p != sentinel) {
+            EventNode* next = p->mpNext;
+            operator_delete(p);
+            p = next;
+        }
+        sentinel->mpNext = sentinel;
+        sentinel->mpPrev = sentinel;
+    }
+};
+void __fastcall FUN_00eb05a0(void* self_);  // 0x00eb05a0 (defined below; used by a stub's inline body)
+struct cPlayerCityMusic_s00ea_ffc0 {
+    char       pad0[0x10c];
+    int        m10c;         // +0x10c  "loaded" flag gating Reset
+    char       pad1[0x198 - 0x110];
+    PtrRange   m198;         // +0x198  layer note range  (begin/end/cap)
+    char       pad2[0x1b8 - 0x1a4];
+    EventList  m1b8;         // +0x1b8  event list sentinel
+    char       pad3[0x1cc - 0x1c0];
+    PtrRange   m1cc;         // +0x1cc  layer id range
+    char       pad4[0x1e0 - 0x1d8];
+    PtrRange   m1e0;         // +0x1e0  layer aux range
+
+    void Reset(char full);                                   // 0xead1a0
+    void FUN_00eb05a0();                                     // 0xeb05a0
+    bool Read(int stream);                                   // 0xeb0a60
+};
+typedef          int   s32;
+void  __fastcall FUN_00eae540(void* self, int, void* src);                                   // 0xeae540
+void  __fastcall FUN_00eaeef0(void* self, int, void* first, void* last, void* owner);        // 0xeaeef0
+void  __fastcall FUN_00eaefa0(void* self, int, void* a, void* b, void* c, void* d);          // 0xeaefa0
+void* __cdecl    FUN_00eaf410(void* first, void* last, void* dest);                          // 0xeaf410
+void  __fastcall FUN_00eaf510(void* self, int, void* out);                                   // 0xeaf510 AddNote
+void  __fastcall FUN_00eae610(void* self, int, u32 idx);                                     // 0xeae610 RemoveNote
+void  __fastcall FUN_00ead1a0(void* self, int, u8 flag);                                     // 0xead1a0 Reset
+void  __fastcall FUN_00eb0230(void* self, int, u32 n);                                       // 0xeb0230
+void  __fastcall FUN_00eb1460(void* self, int, u32 count, void* tmp);                        // 0xeb1460
+void  __fastcall FUN_00eb1d70(void* self);                                                   // 0xeb1d70 cResourceCityMusic ctor
+void  __fastcall FUN_00ead6a0(void* self);                                                   // 0xead6a0 cResourceCityMusic dtor
+void  __fastcall FUN_00ead660(void* self);                                                   // 0xead660 cResourceCityMusic vector dtor
+void  __fastcall FUN_00b93c60(void* out, int, u32 n, void* allocator);                       // 0xb93c60
+u32   __fastcall FUN_00a68fb0(void* self, int, u32 n);                                       // 0xa68fb0 RandomUint32Uniform
+u32   __cdecl    FUN_005e8ec0(void* rng, u32 count, u32 hi);                                 // 0x5e8ec0 WeightedChoice
+void* __cdecl    FUN_00f473a0(u32 size, const char* name, u32 a, u32 b, const char* alloc, u32 line); // operator new
+void  __cdecl    FUN_00f47380(void* p);                                                      // operator delete
+void  __fastcall FUN_00eadee0(void* self, int, void* first, void* last, void* owner);        // 0xeadee0 cList assign
+void  __cdecl    FUN_00da1e70(void* first, void* last, void* owner);                         // 0xda1e70
+void* __fastcall FUN_00973d10(void* head, int, void* a, void* b);                            // 0x973d10 ListErase
+void  __fastcall FUN_00eadab0(void* self, int, u32 count, void* tmp);                        // 0xeadab0
+void* __cdecl    FUN_0067dcc0(void);                                                         // 0x67dcc0 MessageServer
+void  __cdecl    FUN_00eaf310(void* a, void* b, void* c, void* d, void* e);                  // 0xeaf310
+void  __cdecl    FUN_00eaf350(void* first, void* last, void* value);                         // 0xeaf350 fill
+void* __cdecl    FUN_00eaf3d0(void* first, void* last, void* dest);                          // 0xeaf3d0
+void  __cdecl    FUN_00eacfb0(void* first, void* last, void* dest);                          // 0xeacfb0
+void  __cdecl    FUN_00eaf490(void* first, void* last, void* dest);                          // 0xeaf490
+void  __cdecl    FUN_00eaff90(void* dest, u32 count, void* value);                           // 0xeaff90 fill
+void  __fastcall FUN_00eaf190(void* self, int, void* src);                                   // 0xeaf190 cResourceCityMusic copy ctor
+void* __cdecl    FUN_00eaffc0(void* cont, char* cur, void* cont2, char* last, char* dest);
+void  __cdecl    FUN_00eb0050(void** out, void* sCont, char* sCur, void* sCont2, char* sLast, void* dCont, char* dCur);
+void  __fastcall FUN_00eb0120(void* self);
+void  __fastcall FUN_00eb0290(void* self, int, u32 n, u32* value);
+u8    __fastcall FUN_00eb0390(void* self, int, void* out);
+void  __fastcall FUN_00eb0460(void* self);
+void  __fastcall FUN_00eb05a0(void* self);
+void* __fastcall FUN_00eb0810(void* vec, int, char* first, char* last);
+void  __fastcall FUN_00eb0870(void* vec, int, void* pos, u32 count, void* value);
+u8    __fastcall FUN_00eb0b70(void* self, int, void* in);
+void  __fastcall FUN_00eb0c30(void* self);
+void  __fastcall FUN_00eb0c70(void* self);
+void  __fastcall FUN_00eb0cb0(void* self, int, void* out, void* dCont, char* dCur, void* sCont, char* sCur);
+void  __fastcall FUN_00eb0d60(void* vec, int, u32 n);
+void  __fastcall FUN_00eb0df0(void* self, int, u32 n);
+struct CityMusic
+{
+    u8     pad_000[0x10];
+    u32    mNumAmbiences;    // 0x10  bound passed to RandomUint32Uniform
+    u32    mNumRhythms;      // 0x14
+    u32    mNumInstruments;  // 0x18
+    u32    mNumLayers;       // 0x1c
+    u32    mMinNotes;        // 0x20
+    u32    mMaxNotes;        // 0x24
+    u32    mWeightHi;        // 0x28
+    u8     pad_02c[0x54 - 0x2c];
+    u32*   mVec54Begin;      // 0x54
+    u32*   mVec54End;        // 0x58
+    u8     pad_05c[0x68 - 0x5c];
+    u32    mDegreeBase;      // 0x68
+    u8     pad_06c[0x74 - 0x6c];
+    u32*   mDegreeTable;     // 0x74  degree lookup (7 entries)
+    u8     pad_078[0x94 - 0x78];
+    void** mppSuggestions;   // 0x94  array indexed by the previous note's degree
+    u8     pad_098[0x104 - 0x98];
+    u8     mRng[0xc];        // 0x104 RandomLinearCongruential (0x104..0x10f)
+    u32    mNumActive;       // 0x110
+    u32*   mActiveBegin;     // 0x114
+    u8     pad_118[0x128 - 0x118];
+    u32*   mVecABegin;       // 0x128
+    u32*   mVecAEnd;         // 0x12c
+    u8     pad_130[0x13c - 0x130];
+    u32*   mVecBBegin;       // 0x13c
+    u32*   mVecBEnd;         // 0x140
+    u8     pad_144[0x150 - 0x144];
+    float  mTotalDuration;   // 0x150
+    u32    mSomeValue;       // 0x154
+    u8     pad_158[0x198 - 0x158];
+    u32*   mVecCBegin;       // 0x198
+    u32*   mVecCEnd;         // 0x19c
+    u8     pad_1a0[0x1b8 - 0x1a0];
+    void*  mListHead;        // 0x1b8  list sentinel: [0]=prev, [1]=next
+    void*  mListTail;        // 0x1bc
+    u8     pad_1c0[0x1c4 - 0x1c0];
+    u32    mRandomA;         // 0x1c4
+    u32    mRandomB;         // 0x1c8
+    u32*   mVecDBegin;       // 0x1cc
+    u32*   mVecDEnd;         // 0x1d0
+    u8     pad_1d4[0x1e0 - 0x1d4];
+    u32*   mVecEBegin;       // 0x1e0
+    u32*   mVecEEnd;         // 0x1e4
+};
+static void ClearBoolVec(void** pBegin, void** pEnd)
+{
+    char* begin = (char*)*pBegin;
+    char* end   = (char*)*pEnd;
+    memcpy_(begin, end, 0);
+    s32 d = (s32)((end - begin) >> 2);
+    *pEnd = end + (-d) * 4;
+}
+// ---- items of slice s00eaffc0 end
+
+// ---- items of slice s0137ef90 begin (TODO(rewrite): local stubs, replace by canonical classes)
+namespace eastl {
+ struct string8_s0137_ef90; 
+}
+typedef eastl::string8_s0137_ef90 string8_s0137_ef90;
+namespace Simulator {
+class ISerializerReadStream;
+}
+namespace Simulator {
+class ISerializerWriteStream;
+}
+namespace Simulator {
+struct Attribute;
+}
+namespace Simulator {
+typedef bool  (*ReadFunction_t)(ISerializerReadStream*, void*);
+}
+namespace Simulator {
+typedef bool  (*WriteFunction_t)(ISerializerWriteStream*, void*);
+}
+namespace Simulator {
+typedef void  (*ReadTextFunction_t)(const string8_s0137_ef90&, void*);
+}
+namespace Simulator {
+typedef void  (*WriteTextFunction_t)(char*, void*);
+}
+namespace Simulator {
+typedef bool  (*ValidateFunction_t)();
+}
+namespace Simulator {
+typedef bool  (*ToXmlFunction_t)(void*, const char*, int);
+}
+namespace Simulator {
+typedef void* (*OffsetFunction_t)(Attribute*);
+}
+namespace Simulator {
+typedef void  (*SetDefaultFunction_t)(Attribute*);
+}
+namespace Simulator {
+void* DefaultOffset(Attribute* pAttr);   // 0x00692ca0: pAttr->pCurrentObject + pAttr->offset
+}
+namespace Simulator {
+void* StaticOffset(Attribute* pAttr);    // 0x011874d0: (void*)pAttr->offset (class statics)
+}
+namespace Simulator {
+struct Attribute
+{
+    // Member attribute: offset is relative to the current object.
+    Attribute(const char* pName, uint32_t nID, uint32_t nOffset,
+              ReadFunction_t pRead, WriteFunction_t pWrite,
+              ReadTextFunction_t pReadText, WriteTextFunction_t pWriteText,
+              ValidateFunction_t pValidate, ToXmlFunction_t pToXml,
+              SetDefaultFunction_t pSetDefault = 0)
+    {
+        name = pName;
+        id = nID;
+        pCurrentObject = 0;
+        setDefaultFunction = pSetDefault;
+        offsetFunction = DefaultOffset;
+        readFunction = pRead;
+        writeFunction = pWrite;
+        readTextFunction = pReadText;
+        writeTextFunction = pWriteText;
+        validateFunction = pValidate;
+        toXmlFunction = pToXml;
+        offset = nOffset;
+    }
+
+    // Static attribute: the offset field holds the static's address; no ToXml callback.
+    Attribute(const char* pName, uint32_t nID, void* pStatic,
+              ReadFunction_t pRead, WriteFunction_t pWrite,
+              ReadTextFunction_t pReadText, WriteTextFunction_t pWriteText,
+              ValidateFunction_t pValidate)
+    {
+        name = pName;
+        id = nID;
+        pCurrentObject = 0;
+        setDefaultFunction = 0;
+        offsetFunction = StaticOffset;
+        readFunction = pRead;
+        writeFunction = pWrite;
+        readTextFunction = pReadText;
+        writeTextFunction = pWriteText;
+        validateFunction = pValidate;
+        toXmlFunction = 0;
+        offset = (uint32_t)pStatic;
+    }
+
+    /* 00h */ const char* name;
+    /* 04h */ uint32_t id;
+    /* 08h */ uint32_t offset;
+    /* 0Ch */ int field_0C;   // not initialized
+    /* 10h */ int field_10;   // not initialized
+    /* 14h */ int field_14;   // not initialized
+    /* 18h */ void* pCurrentObject;
+    /* 1Ch */ SetDefaultFunction_t setDefaultFunction;
+    /* 20h */ OffsetFunction_t offsetFunction;
+    /* 24h */ ReadFunction_t readFunction;
+    /* 28h */ WriteFunction_t writeFunction;
+    /* 2Ch */ ReadTextFunction_t readTextFunction;
+    /* 30h */ WriteTextFunction_t writeTextFunction;
+    /* 34h */ ValidateFunction_t validateFunction;
+    /* 38h */ ToXmlFunction_t toXmlFunction;
+};
+}
+namespace Simulator {
+template<typename T> bool Read4(ISerializerReadStream* pStream, void* pData);     // 0x00572810
+}
+namespace Simulator {
+template<typename T> bool Write4(ISerializerWriteStream* pStream, void* pData);   // 0x00572840
+}
+namespace Simulator {
+template<typename T> void ReadTextInt(const string8_s0137_ef90& text, void* pData);          // 0x00693090
+}
+namespace Simulator {
+template<typename T> bool AlwaysValid();                                          // 0x00b1fbf0
+}
+namespace Simulator {
+bool Read_00ac8750(ISerializerReadStream* pStream, void* pData);
+}
+namespace Simulator {
+bool Read_00ac87c0(ISerializerReadStream* pStream, void* pData);
+}
+namespace Simulator {
+bool Read_00eae8a0(ISerializerReadStream* pStream, void* pData);
+}
+namespace Simulator {
+bool Read_00eae9b0(ISerializerReadStream* pStream, void* pData);
+}
+namespace Simulator {
+bool Read_00eaea80(ISerializerReadStream* pStream, void* pData);
+}
+namespace Simulator {
+bool Read_00c33820(ISerializerReadStream* pStream, void* pData);
+}
+namespace Simulator {
+bool Write_00ac8780(ISerializerWriteStream* pStream, void* pData);
+}
+namespace Simulator {
+bool Write_00ac87f0(ISerializerWriteStream* pStream, void* pData);
+}
+namespace Simulator {
+bool Write_00f26ca0(ISerializerWriteStream* pStream, void* pData);
+}
+namespace Simulator {
+bool Write_00c761c0(ISerializerWriteStream* pStream, void* pData);
+}
+namespace Simulator {
+bool Write_00c332a0(ISerializerWriteStream* pStream, void* pData);
+}
+namespace Simulator {
+void ReadText_00692ff0(const string8_s0137_ef90& text, void* pData);
+}
+namespace Simulator {
+void ReadText_00c2e4e0(const string8_s0137_ef90& text, void* pData);
+}
+namespace Simulator {
+void ReadText_00694c80(const string8_s0137_ef90& text, void* pData);
+}
+namespace Simulator {
+void WriteText_00692fb0(char* pBuffer, void* pData);
+}
+namespace Simulator {
+void WriteText_00694ee0(char* pBuffer, void* pData);
+}
+namespace Simulator {
+void WriteText_00694f00(char* pBuffer, void* pData);
+}
+namespace Simulator {
+void WriteText_00694fa0(char* pBuffer, void* pData);
+}
+namespace Simulator {
+void WriteText_00694c10(char* pBuffer, void* pData);
+}
+namespace Simulator {
+bool ToXml_0057cde0(void* pData, const char* pName, int depth);
+}
+namespace Simulator {
+bool ToXml_0057ce00(void* pData, const char* pName, int depth);
+}
+namespace Simulator {
+bool ToXml_00675ca0(void* pData, const char* pName, int depth);
+}
+namespace Simulator {
+bool ToXml_00acbbc0(void* pData, const char* pName, int depth);
+}
+namespace Simulator {
+bool ToXml_0103c3a0(void* pData, const char* pName, int depth);
+}
+namespace Simulator {
+bool ToXml_00eafcf0(void* pData, const char* pName, int depth);
+}
+namespace Simulator {
+bool ToXml_00eafe40(void* pData, const char* pName, int depth);
+}
+namespace Simulator {
+bool Validate_00c31ca0();
+}
+namespace Simulator {
+struct AttrSlot { uint32_t d[15]; };
+}
+namespace Simulator {
+extern AttrSlot cMusicData_sAttributes[8];                // 0x015a9198
+}
+namespace Simulator {
+#define INT_ATTR   Read4<int>, Write4<int>, ReadText_00692ff0, WriteText_00694ee0, AlwaysValid<int>, ToXml_0057cde0
+}
+namespace Simulator {
+#define BOOL_ATTR  Read_00ac8750, Write_00ac8780, ReadTextInt<bool>, WriteText_00694fa0, AlwaysValid<bool>, ToXml_0057ce00
+}
+namespace Simulator {
+#define SHORT_ATTR Read4<short>, Write4<short>, ReadTextInt<short>, WriteText_00694f00, AlwaysValid<short>, ToXml_00675ca0
+}
+namespace Simulator {
+#define ADD_MUSIC(IDX, ...) { Attribute a(__VA_ARGS__); *(Attribute*)&cMusicData_sAttributes[IDX] = a; }
+}
+// ---- items of slice s0137ef90 end
 
 // @ 0x00eacd50
 void SP::Audio::cPlayerCityMusic::SetPosition(float* p)
@@ -1178,6 +1733,67 @@ void cPlayerCityMusic_s00ea_d1a0::SelectAmbience(int state, u32* outIndex)
 }
 }}  // namespace SP::Audio
 
+// @ 0x00eade60
+void cIntVec::FUN_00eade60(unsigned newCap)
+{
+    if (newCap <= (unsigned)(mpCap_08 - mpBegin_00)) return;
+    int* p = newCap ? (int*)EAAllocate(newCap * 4, "Simulator", 0, 0, "allocator.h", 0xd1) : 0;
+    memcpy_(p, mpBegin_00, (char*)mpEnd_04 - (char*)mpBegin_00);
+    if (mpBegin_00)
+        operator_delete_array(mpBegin_00);
+    int n = (int)((char*)mpEnd_04 - (char*)mpBegin_00) >> 2;
+    mpBegin_00 = p;
+    mpEnd_04 = p + n;
+    mpCap_08 = p + newCap;
+}
+
+// @ 0x00eadee0
+void cList::FUN_00eadee0(int* begin, int* end, int dummy)
+{
+    cListNode* n = mHead_00.mpNext_00;
+    while (n != &mHead_00) {
+        if (begin == end) break;
+        n->mKey_08 = *begin;
+        n = n->mpNext_00;
+        ++begin;
+    }
+    if (begin == end) {
+        ListErase(&begin, n, &mHead_00);
+        return;
+    }
+    FUN_00eada50(&mHead_00, begin, end, dummy);
+}
+
+// @ 0x00eadf40
+void cFloatVec::FUN_00eadf40(float* pos, float* value)
+{
+    if (mpEnd_04 != mpCap_08) {
+        float* src = value;
+        if (pos <= value && value < mpEnd_04) src = value + 1;
+        if (mpEnd_04 != 0)
+            *mpEnd_04 = *(mpEnd_04 - 1);
+        int sz = (int)((char*)(mpEnd_04 - 1) - (char*)pos);
+        memmove_imp((char*)mpEnd_04 + ((sz >> 2) * -4), pos, (unsigned)sz);
+        *pos = *src;
+        mpEnd_04 += 1;
+        return;
+    }
+    float* begin = mpBegin_00;
+    float* oldEnd = mpEnd_04;
+    int n = (int)(oldEnd - begin);
+    int newCap = n * 2;
+    if (n == 0) newCap = 1;
+    int off = (int)((char*)value - (char*)begin);
+    float* slot = (float*)((char*)memcpy_(0, begin, (unsigned)off) + ((off >> 2) * 4));
+    if (slot)
+        *slot = *value;
+    int tail = (int)((char*)oldEnd - (char*)value);
+    void* r = memcpy_(slot + 1, value, (unsigned)tail);
+    mpBegin_00 = 0;
+    mpEnd_04 = (float*)((char*)r + ((tail >> 2) * 4));
+    mpCap_08 = (float*)(newCap * 4);
+}
+
 // @ 0x00eae010
 int* __cdecl FUN_00eae010(void* first, void* last, int* out)
 {
@@ -1196,6 +1812,289 @@ int* __cdecl FUN_00eae040(void* first, void* last, int* out)
         *--out = ((int*)last)[2];
     }
     return out;
+}
+
+// @ 0x00eae0f0
+void cPlayerCityMusic_s00ea_e0f0::DeselectAmbience(float value, unsigned* idx, float* out)
+{
+    unsigned count = (unsigned)(this->mNoteStatesEnd - this->mNoteStatesBegin);
+    if (this->mNoteStateIdx < count) {
+        *idx = 0;
+        if (count != 0) {
+            do {
+                unsigned i = *idx;
+                if ((unsigned)this->mNoteStatesBegin[i] == 0) {
+                    this->mNoteStatesBegin[i] = value;
+                    NoteEvent(0x330df985, (int)value, 0x3fbc0a67);
+                    this->mNoteStateIdx++;
+                    break;
+                }
+                *idx = i + 1;
+            } while (*idx < count);
+        }
+    } else {
+        int* node = this->mList1b8;
+        *out = *(float*)(node[2]);
+        *(int*)node[1] = node[0];
+        *(int*)(node[0] + 4) = node[1];
+        delete node;
+        *idx = 0;
+        if (count != 0) {
+            do {
+                unsigned i = *idx;
+                if (*out == this->mNoteStatesBegin[i]) {
+                    this->mNoteStatesBegin[i] = value;
+                    NoteEvent(0xaa1b3b8d, (int)value, 0x330df985);
+                    break;
+                }
+                *idx = i + 1;
+            } while (*idx < count);
+        }
+    }
+    float* n = new float[3];
+    if (n + 2 != 0)
+        n[2] = value;
+    *(int*)n = (int)&this->mNoteStatesBegin;
+    *(int*)(n + 1) = (int)this->mNoteStatesEnd;
+    this->mNoteStatesEnd = n;
+}
+
+// @ 0x00eae430
+void FUN_00eae430(int* v, int* pos, int* val)
+{
+    int* end = (int*)v[1];
+    if (end != (int*)v[2]) {
+        if (pos <= val && val < end)
+            val = (int*)((char*)val + 4);
+        if (end != 0)
+            *end = end[-1];
+        int* p = pos;
+        int* e = (int*)v[1];
+        unsigned n = (unsigned)((e - 1) - pos) + 1;
+        int* q = e - n;
+        for (unsigned i = 0; i < n; ++i)
+            q[i] = p[i];
+        *pos = *val;
+        v[1] = v[1] + 4;
+        return;
+    }
+    int* begin = (int*)v[0];
+    int* end2 = (int*)v[1];
+    int oldLen = (int)(end2 - begin);
+    int newCap = oldLen ? oldLen * 2 : 1;
+    int* dst = newCap ? new int[newCap] : 0;
+    int before = (int)(pos - begin);
+    for (int i = 0; i < before; ++i)
+        dst[i] = begin[i];
+    dst[before] = *val;
+    for (int i = before; i < oldLen; ++i)
+        dst[i + 1] = begin[i];
+    if (v[0])
+        delete[] begin;
+    v[0] = (int)dst;
+    v[1] = (int)(dst + oldLen + 1);
+    v[2] = (int)(dst + newCap);
+}
+
+// @ 0x00eae540
+int* FUN_00eae540(int* v, int* other)
+{
+    if (other == v)
+        return v;
+    float* src = (float*)other[0];
+    float* dst = (float*)v[0];
+    float* srcEnd = (float*)other[1];
+    unsigned n = (unsigned)(srcEnd - src);
+    unsigned cap = (unsigned)((float*)v[2] - dst);
+    if (cap < n) {
+        float* nw = new float[n];
+        float* p = src; float* q = nw;
+        while (p != srcEnd) *q++ = *p++;
+        if (v[0]) delete[] (float*)v[0];
+        v[0] = (int)nw; v[1] = (int)(nw + n); v[2] = (int)(nw + n);
+        return v;
+    }
+    unsigned have = (unsigned)((float*)v[1] - dst);
+    if (have < n) {
+        float* p = src; float* q = dst;
+        while (q != (float*)v[1]) *q++ = *p++;
+        float* q2 = (float*)v[1]; float* p2 = (float*)other[0] + have;
+        while (p2 != srcEnd) *q2++ = *p2++;
+        v[1] = (int)((float*)v[0] + n);
+        return v;
+    }
+    float* p = src; float* q = dst; float* e = (float*)other[1];
+    while (p != e) *q++ = *p++;
+    v[1] = (int)((float*)v[0] + n);
+    return v;
+}
+
+// @ 0x00eae8a0
+void FUN_00eae8a0(IReader* reader, int* v)
+{
+    FUN_11e0744_memcpy((void*)v[0], (void*)v[1], 0);
+    v[1] += -((int)(v[1] - v[0]) >> 2) * 4;
+    int count = 0;
+    IStream* s = reader->v20()->s18();
+    ReadInt32(s, &count, 1, 0);
+    unsigned n = (unsigned)count;
+    if ((unsigned)(v[2] - v[0]) >> 2 < n) {
+        FUN_11e0744_memcpy((void*)0, (void*)v[0], (unsigned)(v[1] - v[0]));
+        int old = v[0];
+        v[0] = 0;
+        v[1] = ((v[1] - old) >> 2) * 4;
+        v[2] = (int)n * 4;
+    }
+    for (unsigned i = 0; i < n; ++i) {
+        IStream* s2 = reader->v20()->s18();
+        int val = 0;
+        ReadInt32(s2, &val, 1, 0);
+        if ((int*)v[1] < (int*)v[2])
+            *(int*)v[1] = val, v[1] += 4;
+        else
+            FUN_00eadf40((int*)v[1], &val);
+    }
+    reader->v1c();
+}
+
+// @ 0x00eaea80
+void FUN_00eaea80(IReader* reader, int* v)
+{
+    FUN_11e0744_memcpy((void*)v[0], (void*)v[1], 0);
+    v[1] += -((int)(v[1] - v[0]) >> 2) * 4;
+    int count = 0;
+    IStream* s = reader->v20()->s18();
+    ReadInt32(s, &count, 1, 0);
+    FUN_00eade60(count);
+    for (unsigned i = 0; i < (unsigned)count; ++i) {
+        IStream* s2 = reader->v20()->s18();
+        float val = 0.0f;
+        ReadInt32(s2, (int*)&val, 1, 0);
+        if ((float*)v[1] < (float*)v[2])
+            *(float*)v[1] = val, v[1] += 4;
+        else
+            FUN_00eae430((int*)v, (int*)v[1], (int*)&val);
+    }
+    reader->v1c();
+}
+
+// @ 0x00eaeb60
+void FUN_00eaeb60(int* v, int* pos, unsigned n, int* val)
+{
+    int* end = (int*)v[1];
+    unsigned have = (unsigned)(v[2] - (int)end) >> 2;
+    if (have < n) {
+        VecGrowN(v, pos, n, *val);
+        return;
+    }
+    if (n == 0)
+        return;
+    int value = *val;
+    unsigned tail = (unsigned)(end - pos);
+    if (n < tail) {
+        int* d = end;
+        int* s = end - n;
+        while (s != end) *--d = *--s;
+        v[1] = v[1] + n * 4;
+        int* w = pos;
+        unsigned k = n;
+        while (k--) *w++ = value;
+        return;
+    }
+    unsigned extra = n - tail;
+    int* w = end;
+    for (unsigned i = 0; i < extra; ++i)
+        *w++ = value;
+    v[1] += extra * 4;
+    int* s = pos;
+    int* d = end;
+    while (s != end) *d++ = *s++;
+    v[1] += tail * 4;
+    int* w2 = pos;
+    unsigned k = n;
+    while (k--) *w2++ = value;
+}
+
+// @ 0x00eaed40
+void FUN_00eaed40(int* v, int* pos, unsigned n, float* val)
+{
+    int* end = (int*)v[1];
+    unsigned have = (unsigned)(v[2] - (int)end) >> 2;
+    if (have < n) {
+        int* begin = (int*)v[0];
+        unsigned oldLen = (unsigned)(end - begin) >> 2;
+        unsigned newCap = oldLen * 2;
+        if (oldLen == 0)
+            newCap = 1;
+        if (newCap <= oldLen + n)
+            newCap = oldLen + n;
+        float* dst = newCap ? new float[newCap] : 0;
+        unsigned before = (unsigned)(pos - begin) >> 2;
+        float* out = dst;
+        float* p = (float*)begin;
+        for (unsigned i = 0; i < before; ++i) *out++ = *p++;
+        float value = *val;
+        for (unsigned i = 0; i < n; ++i) *out++ = value;
+        while (p != (float*)end) *out++ = *p++;
+        if (v[0]) delete[] (float*)v[0];
+        v[0] = (int)dst;
+        v[1] = (int)out;
+        v[2] = (int)(dst + newCap);
+        return;
+    }
+    if (n == 0)
+        return;
+    float value = *val;
+    unsigned tail = (unsigned)(end - pos);
+    if (n < tail) {
+        int* d = end;
+        int* s = end - n;
+        while (s != end) *--d = *--s;
+        v[1] = v[1] + n * 4;
+        float* w = (float*)pos;
+        unsigned k = n;
+        while (k--) *w++ = value;
+        return;
+    }
+    unsigned extra = n - tail;
+    float* w = (float*)end;
+    for (unsigned i = 0; i < extra; ++i) *w++ = value;
+    v[1] += extra * 4;
+    float* s = (float*)pos;
+    float* d = (float*)end;
+    while (s != (float*)end) *d++ = *s++;
+    v[1] += tail * 4;
+    float* w2 = (float*)pos;
+    unsigned k = n;
+    while (k--) *w2++ = value;
+}
+
+// @ 0x00eaeef0
+void FUN_00eaeef0(int* v, float* first, float* last)
+{
+    float* begin = (float*)v[0];
+    unsigned n = (unsigned)(last - first);
+    if ((unsigned)((float*)v[2] - begin) < n) {
+        float* nw = new float[n];
+        float* p = first; float* q = nw;
+        while (p != last) *q++ = *p++;
+        if (v[0]) delete[] (float*)v[0];
+        v[0] = (int)nw; v[1] = (int)(nw + n); v[2] = (int)(nw + n);
+        return;
+    }
+    unsigned have = (unsigned)((float*)v[1] - begin);
+    if (n <= have) {
+        float* p = first; float* q = begin;
+        while (p != last) *q++ = *p++;
+        v[1] = (int)(begin + n);
+        return;
+    }
+    float* mid = first + have;
+    float* p = first; float* q = begin;
+    while (p != mid) *q++ = *p++;
+    float* q2 = (float*)v[1];
+    while (mid != last) *q2++ = *mid++;
+    v[1] = (int)q2;
 }
 
 // @ 0x00eaefa0
@@ -1645,6 +2544,528 @@ char PlayerMusic_FromString(PtrVec *pVec, u16 *pName, void *pWriter)
     return ok;
 }
 
+// @ 0x00eaffc0
+void* __cdecl FUN_00eaffc0(void* cont, char* cur, void* cont2, char* last, char* dest)
+{
+    if (cur == last)
+        return dest;
+    do
+    {
+        *(u32*)(dest + 8)    = *(u32*)(cur + 8);
+        *(u32*)(dest + 0xc)  = *(u32*)(cur + 0xc);
+        *(u32*)(dest + 0x10) = *(u32*)(cur + 0x10);
+        *(u32*)(dest + 0x14) = *(u32*)(cur + 0x14);
+        *(u32*)(dest + 0x18) = *(u32*)(cur + 0x18);
+        FUN_00eae540(dest + 0x1c, 0, cur + 0x1c);
+        FUN_00eae540(dest + 0x30, 0, cur + 0x30);
+        FUN_00eae540(dest + 0x44, 0, cur + 0x44);
+        FUN_00eae540(dest + 0x58, 0, cur + 0x58);
+        cur  += 0x6c;
+        dest += 0x6c;
+        if (cur == *(char**)((char*)cont + 4))
+            cur = *(char**)cont;
+    } while (cur != last);
+    return dest;
+}
+
+// @ 0x00eb0050
+void __cdecl FUN_00eb0050(void** out, void* sCont, char* sCur, void* sCont2, char* sLast, void* dCont, char* dCur)
+{
+    if (sCur != sLast)
+    {
+        do
+        {
+            *(u32*)(dCur + 8)    = *(u32*)(sCur + 8);
+            *(u32*)(dCur + 0xc)  = *(u32*)(sCur + 0xc);
+            *(u32*)(dCur + 0x10) = *(u32*)(sCur + 0x10);
+            *(u32*)(dCur + 0x14) = *(u32*)(sCur + 0x14);
+            *(u32*)(dCur + 0x18) = *(u32*)(sCur + 0x18);
+            FUN_00eae540(dCur + 0x1c, 0, sCur + 0x1c);
+            FUN_00eae540(dCur + 0x30, 0, sCur + 0x30);
+            FUN_00eae540(dCur + 0x44, 0, sCur + 0x44);
+            FUN_00eae540(dCur + 0x58, 0, sCur + 0x58);
+            dCur += 0x6c;
+            if (dCur == *(char**)((char*)dCont + 4))
+                dCur = *(char**)dCont;
+            sCur += 0x6c;
+            if (sCur == *(char**)((char*)sCont + 4))
+                sCur = *(char**)sCont;
+        } while (sCur != sLast);
+    }
+    out[1] = dCur;
+    out[0] = dCont;
+}
+
+// @ 0x00eb0120
+void __fastcall FUN_00eb0120(void* self_)
+{
+    CityMusic* self = (CityMusic*)self_;
+    u32 choice = FUN_005e8ec0(self->mRng, (self->mMaxNotes - self->mMinNotes) + 1, self->mWeightHi);
+    u32 n      = choice + self->mMinNotes;
+    self->mSomeValue = FUN_00a68fb0(self->mRng, 0, (u32)(self->mVec54End - self->mVec54Begin));
+    ClearBoolVec((void**)&self->mVecDBegin, (void**)&self->mVecDEnd);
+    ClearBoolVec((void**)&self->mVecBBegin, (void**)&self->mVecBEnd);
+    ClearBoolVec((void**)&self->mVecEBegin, (void**)&self->mVecEEnd);
+    ClearBoolVec((void**)&self->mVecABegin, (void**)&self->mVecAEnd);
+    self->mTotalDuration = 0.0f;
+    u32 local[3];
+    for (u32 k = n; k != 0; --k)
+        FUN_00eaf510(self, 0, local);
+}
+
+// @ 0x00eb0290
+void __fastcall FUN_00eb0290(void* self_, int, u32 n, u32* value)
+{
+    u32** self = (u32**)self_;
+    u32*  begin = self[0];
+    if ((u32)(self[2] - begin) >> 2 < n)
+    {
+        u32 tmp[3];
+        FUN_00b93c60(tmp, 0, n, (char*)self_ + 0xc);
+        u32 fill = *value;
+        u32* nb  = (u32*)tmp[0];
+        for (u32 k = n; k != 0; --k)
+            *nb++ = fill;
+        u32* old = self[0];
+        self[0] = (u32*)tmp[0];
+        self[1] = (u32*)tmp[0] + n;
+        self[2] = (u32*)tmp[2];
+        if (old)
+            FUN_00f47380(old);
+        return;
+    }
+    u32* end = self[1];
+    if ((u32)((char*)end - (char*)begin) >> 2 < n)
+    {
+        u32 fill = *value;
+        for (u32* p = begin; p != end; ++p)
+            *p = fill;
+        u32 extra = n - (u32)(self[1] - self[0]);
+        u32* e = self[1];
+        for (u32 k = extra; k != 0; --k)
+            *e++ = fill;
+        self[1] = self[1] + (n - (u32)(self[1] - self[0]));
+        return;
+    }
+    u32 fill = *value;
+    for (u32 k = n; k != 0; --k)
+        *begin++ = fill;
+    u32* _Src = self[1];
+    u32* _Dst = self[0] + n;
+    memcpy_(_Dst, _Src, 0);
+    s32 delta = -((s32)((char*)_Src - (char*)_Dst) >> 2) * 4;
+    self[1] = (u32*)((char*)self[1] + delta);
+}
+
+// @ 0x00eb0390
+u8 __fastcall FUN_00eb0390(void* self_, int, void* out_)
+{
+    CityMusic* self = (CityMusic*)self_;
+    char*      out  = (char*)out_;
+    *(u32*)(out + 0x14) = self->mRandomA;
+    *(u32*)(out + 0x18) = self->mRandomB;
+    FUN_00eaeef0(out + 0x1c, 0, self->mVecDBegin, self->mVecDEnd, out);
+    FUN_00eaeef0(out + 0x30, 0, self->mVecEBegin, self->mVecEEnd, out);
+    ClearBoolVec((void**)(out + 0x44), (void**)(out + 0x48));
+    char* head  = (char*)self + 0x1b8;
+    void* head0 = *(void**)head;
+    FUN_00eaefa0(out + 0x44, 0, out + 0x44, head0, head, out);
+    FUN_00eaeef0(out + 0x58, 0, self->mVecCBegin, self->mVecCEnd, out);
+    return 1;
+}
+
+// @ 0x00eb0460
+void __fastcall FUN_00eb0460(void* self_)
+{
+    CityMusic* self = (CityMusic*)self_;
+    FUN_00ead1a0(self, 0, 0);
+    char* head = (char*)self + 0x1b8;
+    for (char* p = *(char**)head; p != head; )
+    {
+        char* nxt = *(char**)p;
+        FUN_00f47380(p);
+        p = nxt;
+    }
+    *(char**)head = head;
+    *(char**)(head + 4) = head;
+    u32 tmp = 0;
+    FUN_00eb1460(&self->mActiveBegin, 0, self->mNumLayers, &tmp);
+    self->mNumActive = 0;
+    for (u32 i = 0; i < self->mNumLayers; ++i)
+    {
+        u32 v;
+        if (i == 0)
+            v = FUN_00a68fb0(self->mRng, 0, self->mNumAmbiences) + 1;
+        else
+            v = FUN_00a68fb0(self->mRng, 0, self->mNumAmbiences + 1);
+        if (v != 0)
+        {
+            char* e = *(char**)head;
+            while (e != head && *(u32*)(e + 8) != v)
+                e = *(char**)e;
+            if (e == head)
+            {
+                self->mActiveBegin[i] = v;
+                char* node = (char*)FUN_00f473a0(0xc, "Simulator", 0, 0, (const char*)0x13ebb38, 0xd1);
+                if (node + 8)
+                    *(u32*)(node + 8) = v;
+                *(void**)node = head;
+                *(void**)(node + 4) = *(void**)(head + 4);
+                *(void**)(*(void**)(head + 4)) = node;
+                *(void**)(head + 4) = node;
+                ++self->mNumActive;
+            }
+            else
+                self->mActiveBegin[i] = 0;
+        }
+        else
+            self->mActiveBegin[i] = 0;
+    }
+    self->mRandomA = FUN_00a68fb0(self->mRng, 0, self->mNumRhythms) + 1;
+    self->mRandomB = FUN_00a68fb0(self->mRng, 0, self->mNumInstruments) + 1;
+    FUN_00eb0120(self);
+    FUN_00ead1a0(self, 0, 1);
+}
+
+// @ 0x00eb05a0
+void __fastcall FUN_00eb05a0(void* self_)
+{
+    CityMusic* self = (CityMusic*)self_;
+    if (self->mRandomA > self->mNumRhythms)
+        self->mRandomA = FUN_00a68fb0(self->mRng, 0, self->mNumRhythms) + 1;
+    if (self->mRandomB > self->mNumInstruments)
+        self->mRandomB = FUN_00a68fb0(self->mRng, 0, self->mNumInstruments) + 1;
+
+    u32*   vecB = (u32*)((char*)self + 0x13c);
+    u32*   vecA = (u32*)((char*)self + 0x128);
+    float* vecE = (float*)((char*)self + 0x1e0);
+
+    u32 dCount = (u32)(self->mVecDEnd - self->mVecDBegin);
+    u32 eCount = (u32)(self->mVecEEnd - self->mVecEBegin);
+    if (eCount == dCount && dCount != 0)
+    {
+        FUN_00eb0230(vecB, 0, dCount);
+        FUN_00eb0230(vecA, 0, dCount);
+        self->mTotalDuration = 0.0f;
+        for (u32 i = 0; i < dCount; ++i)
+        {
+            u32  rem = (self->mVecDBegin[i] - self->mDegreeBase) % 12;
+            s32  idx = -1;
+            u32* tbl = self->mDegreeTable;
+            for (u32 k = 0; k < 7; ++k)
+            {
+                if (tbl[k] == rem)
+                {
+                    idx = (s32)k;
+                    break;
+                }
+            }
+            vecB[i] = (u32)idx;
+            u32 deg = vecB[i];
+            u32 v;
+            if (deg == 0xffffffffU)
+                v = 2;
+            else if (i == 0)
+                v = 0;
+            else
+            {
+                u32  prev = vecB[i - 1];
+                u32* sug  = (u32*)self->mppSuggestions[prev];
+                v = (sug[deg] == 0) ? 1 : 0;
+            }
+            vecA[i] = v;
+            self->mTotalDuration += vecE[i];
+        }
+        if (dCount < self->mMinNotes)
+        {
+            u32 tmp[3];
+            do
+            {
+                FUN_00eaf510(self, 0, tmp);
+                ++dCount;
+            } while (dCount < self->mMinNotes);
+        }
+        if (dCount > self->mMaxNotes)
+        {
+            do
+            {
+                --dCount;
+                FUN_00eae610(self, 0, dCount);
+            } while (dCount > self->mMaxNotes);
+        }
+    }
+    else
+        FUN_00eb0120(self);
+
+    char* sent  = (char*)self + 0x1b8;
+    u32   count = 0;
+    for (char* p = *(char**)sent; p != sent; p = *(char**)p)
+        ++count;
+    u32 lim = count;
+    if (count > self->mNumLayers)
+        lim = self->mNumLayers;
+    char* cur    = *(char**)sent;
+    u32   walked = 0;
+    while (cur != sent && walked < lim)
+    {
+        cur = *(char**)cur;
+        ++walked;
+    }
+    u32 local = 0;
+    if (walked == lim)
+        FUN_00973d10(sent, 0, cur, &local);
+    else
+        FUN_00eadab0(sent, 0, lim - walked, &local);
+
+    FUN_00eb0290((char*)self + 0x114, 0, self->mNumLayers, &local);
+
+    self->mNumActive = 0;
+    for (char* p = *(char**)sent; p != sent; )
+    {
+        u32 val = *(u32*)(p + 8);
+        if (val > self->mNumAmbiences)
+        {
+            char* nxt = *(char**)p;
+            char* x   = *(char**)(nxt + 4);
+            char* xn  = *(char**)(x + 4);
+            char* xp  = *(char**)x;
+            *(char**)xn = xp;
+            *(char**)(xp + 4) = xn;
+            FUN_00f47380(x);
+            p = nxt;
+        }
+        else
+        {
+            u32 i = self->mNumActive;
+            self->mNumActive = i + 1;
+            (*(u32**)((char*)self + 0x114))[i] = val;
+            p = *(char**)p;
+        }
+    }
+    void* ms = FUN_0067dcc0();
+    (*(void (__thiscall**)(void*, u32, void*, int))(*(char**)ms + 0x14))(ms, 0x510b72f, self, 0);
+}
+
+// @ 0x00eb0810
+void* __fastcall FUN_00eb0810(void* vec, int, char* first, char* last)
+{
+    char* end    = *(char**)((char*)vec + 4);
+    char* newEnd = (char*)FUN_00eaf410(last, end, first);
+    for (char* p = newEnd; p < end; p += 0x6c)
+        (*(void (__thiscall**)(char*, int))(*(char**)p + 8))(p, 0);
+    s32 delta = (s32)((first - last) / 0x6c) * 0x6c;
+    *(char**)((char*)vec + 4) = end + delta;
+    return first;
+}
+
+// @ 0x00eb0870
+void __fastcall FUN_00eb0870(void* vec_, int, char* pos, u32 count, void* value)
+{
+    u32** vec   = (u32**)vec_;
+    char* begin = (char*)vec[0];
+    char* end   = (char*)vec[1];
+    char* cap   = (char*)vec[2];
+    if (count > (u32)((cap - end) / 0x6c))
+    {
+        u32   size   = (u32)((end - begin) / 0x6c);
+        u32   newCap = size * 2;
+        if (size == 0)
+            newCap = 1;
+        u32 need = size + count;
+        if (need < newCap)
+            need = newCap;
+        char* mem;
+        if (need == 0)
+            mem = 0;
+        else
+            mem = (char*)FUN_00f473a0(need * 0x6c, "Simulator", 0, 0, (const char*)0x13ebb38, 0xd1);
+        char* a = (char*)FUN_00eaf3d0(begin, pos, mem);
+        FUN_00eacfb0(begin, pos, mem);
+        FUN_00eaff90(a, count, value);
+        a += count * 0x6c;
+        char* b = (char*)FUN_00eaf3d0(pos, end, a);
+        FUN_00eacfb0(pos, end, a);
+        if (begin)
+            FUN_00f47380(begin);
+        vec[0] = (u32*)mem;
+        vec[1] = (u32*)b;
+        vec[2] = (u32*)(mem + need * 0x6c);
+        return;
+    }
+    if (count == 0)
+        return;
+    char local[0x6c];
+    FUN_00eaf190(local, 0, value);
+    u32 avail = (u32)((end - pos) / 0x6c);
+    if (count < avail)
+    {
+        char  scratch = 0;
+        char* m       = end - count * 0x6c;
+        FUN_00eaf310(&scratch, m, end, end, &scratch);
+        vec[1] = (u32*)(end + count * 0x6c);
+        FUN_00eaf490(pos, m, end);
+        FUN_00eaf350(pos, m, local);
+    }
+    else
+    {
+        FUN_00eaff90(end, count - avail, local);
+        vec[1] = (u32*)(end + (count - avail) * 0x6c);
+        FUN_00eaf310(local, pos, end, vec[1], local);
+        vec[1] = (u32*)((char*)vec[1] + avail * 0x6c);
+        FUN_00eaf350(pos, end, local);
+    }
+    FUN_00ead6a0(local);
+}
+
+// @ 0x00eb0a60
+bool cPlayerCityMusic_s00ea_ffc0::Read(int stream)
+{
+    if (m10c != 0)
+        Reset(0);
+
+    m198.clear();
+    m1b8.clear();
+    m1cc.clear();
+    m1e0.clear();
+
+    char buf[0xa14];
+    CVarListSerializer* ser = (CVarListSerializer*)buf;
+    ser->ctor(this, (void*)0x15a9198, 0x1a80d26);
+    bool ok = ser->Serialize((void*)stream);
+    FUN_00eb05a0();
+    if (m10c != 0)
+        Reset(1);
+    return ok;
+}
+
+// @ 0x00eb0b70
+u8 __fastcall FUN_00eb0b70(void* self_, int, void* in_)
+{
+    CityMusic* self = (CityMusic*)self_;
+    char*      in   = (char*)in_;
+    FUN_00ead1a0(self, 0, 0);
+    self->mRandomA = *(u32*)(in + 0x14);
+    self->mRandomB = *(u32*)(in + 0x18);
+    FUN_00eaeef0((char*)self + 0x1cc, 0, *(void**)(in + 0x1c), *(void**)(in + 0x20), in);
+    FUN_00eaeef0((char*)self + 0x1e0, 0, *(void**)(in + 0x30), *(void**)(in + 0x34), in);
+    FUN_00eadee0((char*)self + 0x1b8, 0, *(void**)(in + 0x44), *(void**)(in + 0x48), in);
+    if ((((*(u32*)(in + 0x5c) - *(u32*)(in + 0x58)) ^
+          (*(u32*)((char*)self + 0x19c) - *(u32*)((char*)self + 0x198))) & 0xfffffffcU) == 0)
+        FUN_00da1e70(*(void**)(in + 0x58), *(void**)(in + 0x5c), in);
+    FUN_00eb05a0(self);
+    FUN_00ead1a0(self, 0, 1);
+    return 1;
+}
+
+// @ 0x00eb0c30
+void __fastcall FUN_00eb0c30(void* self_)
+{
+    CityMusic* self = (CityMusic*)self_;
+    if (*(u32*)((char*)self + 0xec) == *(u32*)((char*)self + 0xfc))
+        return;
+    u32* p = *(u32**)((char*)self + 0xf8);
+    if (*(u32*)((char*)self + 0xfc) == p[0])
+        *(u32*)((char*)self + 0xfc) = p[1];
+    *(u32*)((char*)self + 0xfc) -= 0x6c;
+    FUN_00eb0b70(self, 0, *(void**)((char*)self + 0xfc));
+}
+
+// @ 0x00eb0c70
+void __fastcall FUN_00eb0c70(void* self_)
+{
+    CityMusic* self = (CityMusic*)self_;
+    if (*(u32*)((char*)self + 0xf0) == *(u32*)((char*)self + 0xfc))
+        return;
+    u32* p = *(u32**)((char*)self + 0xf8);
+    *(u32*)((char*)self + 0xfc) += 0x6c;
+    if (*(u32*)((char*)self + 0xfc) == p[1])
+        *(u32*)((char*)self + 0xfc) = p[0];
+    FUN_00eb0b70(self, 0, *(void**)((char*)self + 0xfc));
+}
+
+// @ 0x00eb0cb0
+void __fastcall FUN_00eb0cb0(void* self_, int, void** out, void* dCont, char* dCur, void* sCont, char* sCur)
+{
+    u32** self = (u32**)self_;
+    u32   count = 0;
+    if (dCur != sCur)
+    {
+        char* p = dCur;
+        do
+        {
+            p += 0x6c;
+            ++count;
+            if (p == *(char**)((char*)dCont + 4))
+                p = *(char**)dCont;
+        } while (p != sCur);
+    }
+    char local[8];
+    FUN_00eb0050((void**)local, sCont, sCur, self, (char*)self[6], dCont, dCur);
+    if (count != 0)
+    {
+        char* p = (char*)self[6];
+        u32   n = (u32)self[7];
+        do
+        {
+            --count;
+            if (p == (char*)self[0])
+                p = (char*)self[1];
+            p -= 0x6c;
+            --n;
+        } while (count != 0);
+        self[6] = (u32*)p;
+        self[7] = (u32*)n;
+    }
+    out[0] = dCont;
+    out[1] = dCur;
+}
+
+// @ 0x00eb0d60
+void __fastcall FUN_00eb0d60(void* vec_, int, u32 n)
+{
+    u32** vec   = (u32**)vec_;
+    char* begin = (char*)vec[0];
+    char* end   = (char*)vec[1];
+    if (n > (u32)((end - begin) / 0x6c))
+    {
+        char local[0x6c];
+        FUN_00eb1d70(local);
+        u32 size = (u32)(((char*)vec[1] - (char*)vec[0]) / 0x6c);
+        FUN_00eb0870(vec, 0, (char*)vec[1], n - size, local);
+        FUN_00ead6a0(local);
+        return;
+    }
+    FUN_00eb0810(vec, 0, begin + n * 0x6c, end);
+}
+
+// @ 0x00eb0df0
+void __fastcall FUN_00eb0df0(void* self_, int, u32 n)
+{
+    u32** self = (u32**)self_;
+    u32   cap  = (u32)(((char*)self[1] - (char*)self[0]) / 0x6c);
+    if (cap - 1 < n)
+    {
+        u32* local[3] = {0, 0, 0};
+        FUN_00eb0d60(local, 0, n + 1);
+        FUN_00eaffc0(self, (char*)self[5], self, (char*)self[6], (char*)local[0]);
+        u32* n0 = local[0];
+        u32* n1 = local[1];
+        u32* n2 = local[2];
+        u32* o0 = self[0];
+        u32* o1 = self[1];
+        u32* o2 = self[2];
+        self[0] = n0;
+        self[1] = n1;
+        self[2] = n2;
+        self[5] = self[0];
+        self[6] = (u32*)((char*)self[0] + (u32)self[7] * 0x6c);
+        local[0] = o0;
+        local[1] = o1;
+        local[2] = o2;
+        FUN_00ead660(local);
+    }
+}
+
 // @ 0x00eb0ea0
 cPlayerCityMusic_s00eb_0ea0::cPlayerCityMusic_s00eb_0ea0()
 {
@@ -1874,3 +3295,18 @@ bool cPlayerCityMusic_s00eb_0ea0::HandleMessage(int32_t nType, cEapdMessage* pMe
 
     return false;
 }
+
+// @ 0x01387660
+namespace Simulator {
+void InitMusicDataAttributes()
+{
+    ADD_MUSIC(0, "mName", 0x511dfb9, 0x178, Read_00ac87c0, Write_00ac87f0, ReadText_00694c80, WriteText_00694c10, AlwaysValid<int>, ToXml_00acbbc0)
+    ADD_MUSIC(1, "mDescription", 0x511dfc3, 0x188, Read_00ac87c0, Write_00ac87f0, ReadText_00694c80, WriteText_00694c10, AlwaysValid<int>, ToXml_00acbbc0)
+    ADD_MUSIC(2, "mVolumes", 0x4d81cfe, 0x198, Read_00eae8a0, Write_00f26ca0, ReadText_00c2e4e0, WriteText_00692fb0, AlwaysValid<int>, ToXml_0103c3a0)
+    ADD_MUSIC(3, "mAmbienceHistory", 0x4226180, 0x1b8, Read_00c33820, Write_00c332a0, ReadText_00c2e4e0, WriteText_00692fb0, Validate_00c31ca0, ToXml_00eafcf0)
+    ADD_MUSIC(4, "mRhythm", 0x4226186, 0x1c4, INT_ATTR)
+    ADD_MUSIC(5, "mInstrument", 0x4226189, 0x1c8, INT_ATTR)
+    ADD_MUSIC(6, "mNotePitches", 0x4e551ee, 0x1cc, Read_00eae9b0, Write_00c761c0, ReadText_00c2e4e0, WriteText_00692fb0, AlwaysValid<int>, ToXml_00eafe40)
+    ADD_MUSIC(7, "mNoteDurations", 0x4f7c02d, 0x1e0, Read_00eaea80, Write_00f26ca0, ReadText_00c2e4e0, WriteText_00692fb0, AlwaysValid<int>, ToXml_0103c3a0)
+}
+}  // namespace Simulator

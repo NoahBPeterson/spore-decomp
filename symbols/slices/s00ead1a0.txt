@@ -11,9 +11,9 @@
 00eadb10 ?FUN_00eadb10@@YAXPAPAXH@Z  # FUN_00eadb10 migrated from s00ead1a0 (verbatim, slice spelling)
 00eadb30 ??1cPlayerCityMusic_s00ea_d1a0@Audio@SP@@QAE@XZ  # cPlayerCityMusic_s00ea_d1a0::~cPlayerCityMusic migrated from s00ead1a0 (verbatim, slice spelling)
 00eadd60 ?SelectAmbience@cPlayerCityMusic_s00ea_d1a0@Audio@SP@@QAEXHPAI@Z  # cPlayerCityMusic_s00ea_d1a0::SelectAmbience migrated from s00ead1a0 (verbatim, slice spelling)
-00eade60 cIntVec::FUN_00eade60(unsigned)                          ; 0x00eade60  thiscall: grow-back-to(newCap) -- reallocate, copy, free the old buffer, fix begin/end/cap  byte-exact (MATCH)
-00eadee0 cList::FUN_00eadee0(int*,int*,int)                       ; 0x00eadee0  thiscall: overwrite existing keys from [begin,end), splice the rest on, or erase the tail
-00eadf40 cFloatVec::FUN_00eadf40(float*,float*)                    ; 0x00eadf40  thiscall: grow-or-insert one float (in-place memmove, or double-capacity rebuild)
+00eade60 ?FUN_00eade60@cIntVec@@QAEXI@Z  # cIntVec::FUN_00eade60 migrated from s00ead1a0 (verbatim, slice spelling)
+00eadee0 ?FUN_00eadee0@cList@@QAEXPAH0H@Z  # cList::FUN_00eadee0 migrated from s00ead1a0 (verbatim, slice spelling)
+00eadf40 ?FUN_00eadf40@cFloatVec@@QAEXPAM0@Z  # cFloatVec::FUN_00eadf40 migrated from s00ead1a0 (verbatim, slice spelling)
 00eae010 ?FUN_00eae010@@YAPAHPAX0PAH@Z  # FUN_00eae010 migrated from s00ead1a0 (verbatim, slice spelling)
 00eae040 ?FUN_00eae040@@YAPAHPAX0PAH@Z  # FUN_00eae040 migrated from s00ead1a0 (verbatim, slice spelling)
 ;          globals g_tab_1488414 0x01488414, g_tab_1488420 0x01488420, vftables 0x01488444/0x0148843c/0x0148842c/0x013ec458/0x013eb394/0x013eb938; "Simulator" 0x013f09b4

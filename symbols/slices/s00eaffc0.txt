@@ -1,2 +1,16 @@
-# SP::Audio::cPlayerCityMusic (city music track) -- Read path (names inferred).
-00eb0a60  ?Read@cPlayerCityMusic@@QAE_NH@Z  # cPlayerCityMusic::Read: clears 3 PtrRange + event list, then a cVarListSerializer read
+00eaffc0 ?FUN_00eaffc0@@YAPAXPAXPAD011@Z  # FUN_00eaffc0 migrated from s00eaffc0 (verbatim, slice spelling)
+00eb0050 ?FUN_00eb0050@@YAXPAPAXPAXPAD1212@Z  # FUN_00eb0050 migrated from s00eaffc0 (verbatim, slice spelling)
+00eb0120 ?FUN_00eb0120@@YIXPAX@Z  # FUN_00eb0120 migrated from s00eaffc0 (verbatim, slice spelling)
+00eb0290 ?FUN_00eb0290@@YIXPAXHIPAI@Z  # FUN_00eb0290 migrated from s00eaffc0 (verbatim, slice spelling)
+00eb0390 ?FUN_00eb0390@@YIEPAXH0@Z  # FUN_00eb0390 migrated from s00eaffc0 (verbatim, slice spelling)
+00eb0460 ?FUN_00eb0460@@YIXPAX@Z  # FUN_00eb0460 migrated from s00eaffc0 (verbatim, slice spelling)
+00eb05a0 ?FUN_00eb05a0@@YIXPAX@Z  # FUN_00eb05a0 migrated from s00eaffc0 (verbatim, slice spelling)
+00eb0810 ?FUN_00eb0810@@YIPAXPAXHPAD1@Z  # FUN_00eb0810 migrated from s00eaffc0 (verbatim, slice spelling)
+00eb0870 ?FUN_00eb0870@@YIXPAXHPADI0@Z  # FUN_00eb0870 migrated from s00eaffc0 (verbatim, slice spelling)
+00eb0a60 ?Read@cPlayerCityMusic_s00ea_ffc0@@QAE_NH@Z  # cPlayerCityMusic_s00ea_ffc0::Read migrated from s00eaffc0 (verbatim, slice spelling)
+00eb0b70 ?FUN_00eb0b70@@YIEPAXH0@Z  # FUN_00eb0b70 migrated from s00eaffc0 (verbatim, slice spelling)
+00eb0c30 ?FUN_00eb0c30@@YIXPAX@Z  # FUN_00eb0c30 migrated from s00eaffc0 (verbatim, slice spelling)
+00eb0c70 ?FUN_00eb0c70@@YIXPAX@Z  # FUN_00eb0c70 migrated from s00eaffc0 (verbatim, slice spelling)
+00eb0cb0 ?FUN_00eb0cb0@@YIXPAXHPAPAX0PAD02@Z  # FUN_00eb0cb0 migrated from s00eaffc0 (verbatim, slice spelling)
+00eb0d60 ?FUN_00eb0d60@@YIXPAXHI@Z  # FUN_00eb0d60 migrated from s00eaffc0 (verbatim, slice spelling)
+00eb0df0 ?FUN_00eb0df0@@YIXPAXHI@Z  # FUN_00eb0df0 migrated from s00eaffc0 (verbatim, slice spelling)

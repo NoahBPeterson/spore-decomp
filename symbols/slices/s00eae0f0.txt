@@ -1,5 +1,9 @@
-00eae0f0 SP::Audio::cPlayerCityMusic::DeselectAmbience  # PDB caller-scored name
-00eae540 FUN_00eae540  # our object defines a free function
+00eae0f0 ?DeselectAmbience@cPlayerCityMusic_s00ea_e0f0@@QAEXMPAIPAM@Z  # cPlayerCityMusic_s00ea_e0f0::DeselectAmbience migrated from s00eae0f0 (verbatim, slice spelling)
+00eae430 ?FUN_00eae430@@YAXPAH00@Z  # FUN_00eae430 migrated from s00eae0f0 (verbatim, slice spelling)
+00eae540 ?FUN_00eae540@@YAPAHPAH0@Z  # FUN_00eae540 migrated from s00eae0f0 (verbatim, slice spelling)
 00eae610 SP::Audio::cPlayerCityMusic::RemoveNote  # PDB caller-scored name
-00eae8a0 SP::ReadSTLSequenceT<eastl::fixed_vector<float,3,0> >  # card previous name
-00eaea80 SP::ReadSTLSequenceT<eastl::vector<float,SP::SP_STL_Sound> >  # card previous name
+00eae8a0 ?FUN_00eae8a0@@YAXPAUIReader@@PAH@Z  # FUN_00eae8a0 migrated from s00eae0f0 (verbatim, slice spelling)
+00eaea80 ?FUN_00eaea80@@YAXPAUIReader@@PAH@Z  # FUN_00eaea80 migrated from s00eae0f0 (verbatim, slice spelling)
+00eaeb60 ?FUN_00eaeb60@@YAXPAH0I0@Z  # FUN_00eaeb60 migrated from s00eae0f0 (verbatim, slice spelling)
+00eaed40 ?FUN_00eaed40@@YAXPAH0IPAM@Z  # FUN_00eaed40 migrated from s00eae0f0 (verbatim, slice spelling)
+00eaeef0 ?FUN_00eaeef0@@YAXPAHPAM1@Z  # FUN_00eaeef0 migrated from s00eae0f0 (verbatim, slice spelling)
