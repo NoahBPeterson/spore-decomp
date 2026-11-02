@@ -1,5 +1,6 @@
-# va  diff-bytes  reason
+# va  reason (flags /O2 /MD /Gy /TP /arch:SSE /GS-)
 005db150  -  feedback-event registration (rbtree find + vector push, inlined); not reconstructed
 005db270  -  editor settings-tab registration (variant); not reconstructed
 005db390  -  editor subsystem registration (485-byte inlined rbtree/vector); not reconstructed
 005db650  -  editor subsystem registration (1276-byte inlined rbtree/vector/Eastl); not reconstructed
+0066b130  840  layout/animation builder: only the entry stub is present; the window/animation graph construction (layout lookups, animation bindings and handler wiring) is not reconstructed yet. See work/match/scratch_s0066afd0_fixlog.txt. flags: /O2 /MD /Gy /TP /arch:SSE /GS-

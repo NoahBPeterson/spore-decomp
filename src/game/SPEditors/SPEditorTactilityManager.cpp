@@ -1,4 +1,4 @@
-// src/game/SPEditors/SPEditorTactilityManager.cpp -- migrated from slice(s) s005dae60, s005d87a0 by tools/migrate/rewrite.py
+// src/game/SPEditors/SPEditorTactilityManager.cpp -- migrated from slice(s) s0066afd0, s00669f50, s005dae60, s005d87a0 by tools/migrate/rewrite.py
 // Object file: SPEditors/SPEditorTactilityManager.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -6,6 +6,10 @@
 #include "SP/cIModelWorld.h"
 #include "SP/cMWModel.h"
 #include "SP/cSPEditorBlock.h"
+#include "SP/cString.h"
+#include "SP/cSPUIFeedListItem.h"
+#include "cSPUILayout.h"
+#include <string.h>
 
 // unnamed retail callees and globals (address in the comment)
 extern "C" void* __cdecl memcpy(void* dst, const void* src, unsigned int n);
@@ -68,14 +72,14 @@ struct cSPTransform_s005d_87a0 {
 };
 namespace EA {
 namespace UTFWin {
-struct IWindow_s005d_87a0 {
+class IWindow_s005d_87a0 { public:
     virtual int AddRef();
     virtual int Release();
 };
 }
 }
 namespace EA {
-template <class T> struct AutoRefCount_s005d_87a0 {
+template <class T> class AutoRefCount_s005d_87a0 { public:
     T* mpObject;
     AutoRefCount_s005d_87a0() : mpObject(0) {}
     AutoRefCount_s005d_87a0(const AutoRefCount_s005d_87a0& x) : mpObject(x.mpObject) {
@@ -89,7 +93,7 @@ template <class T> struct AutoRefCount_s005d_87a0 {
 };
 }
 namespace SP {
-struct cIModelWorld_s005d_87a0;
+class cIModelWorld_s005d_87a0;
 }
 namespace SP {
 struct cMWModel_s005d_87a0 {
@@ -102,7 +106,7 @@ struct cMWModel_s005d_87a0 {
 };
 }
 namespace SP {
-struct cIModelWorld_s005d_87a0 {
+class cIModelWorld_s005d_87a0 { public:
     virtual int AddRef();
     virtual int Release();
 #define PH(n) virtual void ph##n();
@@ -127,7 +131,7 @@ inline void cMWModel_s005d_87a0::Release()
 }
 }
 namespace SP {
-struct cSPEditorBlock_s005d_87a0 {
+class cSPEditorBlock_s005d_87a0 { public:
     virtual void v0();
     virtual int AddRef();
     virtual int Release();
@@ -139,7 +143,7 @@ template <> inline EA::AutoRefCount_s005d_87a0<SP::cMWModel_s005d_87a0>::~AutoRe
         mpObject->Release();
 }
 namespace eastl {
-struct allocator_s005d_87a0 {
+class allocator_s005d_87a0 { public:
     allocator_s005d_87a0() {}
     void* allocate(uint32_t n, int flags = 0) {
         return new ("Editor", flags, 0, "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h", 209) char[n];
@@ -176,7 +180,7 @@ template <class T, class A> struct VectorBase_s005d_87a0 {
 };
 }
 namespace eastl {
-template <class T, class A> struct vector_s005d_87a0 : public VectorBase_s005d_87a0<T, A> {
+template <class T, class A> class vector_s005d_87a0 : public VectorBase_s005d_87a0<T, A> { public:
     typedef VectorBase_s005d_87a0<T, A> base_type;
     vector_s005d_87a0();
     ~vector_s005d_87a0() {}
@@ -427,6 +431,22 @@ namespace eastl {
 
 // unnamed retail callees and globals that name local stubs (address in the comment)
 
+// ---- items of slice s00669f50 begin (TODO(rewrite): local stubs, replace by canonical classes)
+struct Vec3 { int* begin; int* end; int* cap; void m0066aec0(int count, void* src); };
+void FUN_01022c60(void*, void*, void*, void*, int);
+struct CtorAf {
+  void* vt;              // +0
+  int m4;                // +4
+  int m8;                // +8
+  Vec3 mC;               // +0xc
+  char pad18[8];
+  bool m20;              // +0x20
+  bool m21;              // +0x21
+  int m24, m28, m2c, m30;
+  CtorAf(int p2, Vec3* p3);
+};
+// ---- items of slice s00669f50 end
+
 // @ 0x005d87a0
 bool SP::cSPEditorTactilityManager::Init()
 {
@@ -615,3 +635,30 @@ void FUN_005db390(void* self)
 // @ 0x005db650
 void FUN_005db650(void* self)
 { (void)self; }
+
+// @ 0x0066af20
+CtorAf::CtorAf(int p2, Vec3* p3)
+{
+  m4 = 0;
+  vt = (void*)0x1400620;
+  m8 = p2;
+  mC.m0066aec0((int)(p3->end - p3->begin), (void*)((char*)p3 + 0xc));
+  // uninitialized_copy_impl returns the new end through its hidden first argument; the trailing tag
+  // argument is a by-value empty false_type, so retail pushes whatever was left in the register
+  // (p2, which is dead by then) and never reads it.
+  void* out;
+  FUN_01022c60(&out, p3->begin, p3->end, mC.begin, p2);
+  mC.end = (int*)out;
+  m20 = false;
+  m24 = 0;
+  m21 = true;
+  m28 = 0;
+  m2c = 0;
+  m30 = 0;
+}
+
+// @ 0x0066b130
+void __fastcall FUN_0066b130(void* self)
+{
+    (void)self;   // large layout/animation builder omitted
+}

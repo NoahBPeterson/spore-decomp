@@ -14,4 +14,5 @@
 0066ad10 ??RCmp38@@QAEIAAUCItem@@0@Z  # Cmp38::operator() migrated from s00669f50 (verbatim, slice spelling)
 0066ad70 ?Get@Switcher2@@QAEIXZ  # Switcher2::Get migrated from s00669f50 (verbatim, slice spelling)
 0066ada0 ??RCmpAd@@QAEIHH@Z  # CmpAd::operator() migrated from s00669f50 (verbatim, slice spelling)
+0066af20 ??0CtorAf@@QAE@HPAUVec3@@@Z  # CtorAf::CtorAf migrated from s00669f50 (verbatim, slice spelling)
 008120d0 ?Init@cSPUILayout@@QAE_NABVKey@ResourceMan@EA@@_NI@Z  # cSPUILayout::Init (callee of s00669f50, named from the dev publics; slice address comment)

@@ -1,4 +1,4 @@
-# va  diff-bytes  reason
-005d87b0 45 UpdateComponent(float): spring/overshoot/linear switch; original tail-merges cases 0/1/default into one block, cl keeps two copies
-005d88b0 301 LerpCursor: switch index computed in a scratch register (lea) instead of in-place add on eax; rest is a 2-byte shift
-005d8f10 16 UpdateComponent(transform): the two quaternion locals land in swapped stack slots
+# va  diff-bytes  reason (flags /O2 /MD /Gy /TP /arch:SSE /GS-)
+005d87b0 45 UpdateComponent(float): spring/overshoot/linear switch; original tail-merges cases 0/1/default into one block, cl keeps two copies flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+005d8f10 16 UpdateComponent(transform): the two quaternion locals land in swapped stack slots flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+0066af20 42 CtorAf: complete behaviour; 0x66aec0 is the eastl vector range ctor as a __thiscall member (m0066aec0, `ret 8`) instead of a cdecl vec_cctor that resolved to this ctor itself; the eastl uninitialized_copy_impl call takes its result through a hidden first argument and passes p2 as the trailing empty false_type tag (retail pushes the dead p2 register), and mC.end takes that result [equiv: PASS 664 valid, 100% coverage] flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
