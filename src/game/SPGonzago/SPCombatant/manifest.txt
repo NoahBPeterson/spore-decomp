@@ -1,0 +1,13 @@
+# source  symbol  va  flags
+../src/game/SPGonzago/SPCombatant.cpp  ?NodePresent@VtObj@@QAE_NXZ  00bfc3a0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCombatant.cpp  ?NodePresentArg@VtObj@@QAE_NH@Z  00bfc3d0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCombatant.cpp  ?NodeValue@VtObj@@QAEMXZ  00bfc400  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCombatant.cpp  ?NodeRatio@Sim@@QAEMXZ  00bfc490  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCombatant.cpp  ?TimedExpired@Sim@@QAEHXZ  00bfc600  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCombatant.cpp  ?TimedAdd@Sim@@QAEXI@Z  00bfc640  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCombatant.cpp  ?TimedStop@Sim@@QAEXXZ  00bfc6a0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCombatant.cpp  ?ReleaseSlots@Sim@@QAEXXZ  00bfc720  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCombatant.cpp  ?DetachOther@Sim@@QAEXXZ  00bfcae0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCombatant.cpp  ?TickSlotArray@Sim@@QAEXXZ  00bfcc00  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCombatant.cpp  ?EntryAvailable@Sim@@QAE_NH@Z  00bfcc40  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCombatant.cpp  ?FUN_00bfd3e0@@YIPAUHostileEntry@@PAU1@HPBU1@@Z  00bfd3e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
