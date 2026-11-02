@@ -6,7 +6,7 @@
 00b7c480 ?sub_b7c480@cSPPieMenu@@QAEPAXPAX@Z  # cSPPieMenu::sub_b7c480 migrated from s00b7bd50 (verbatim, slice spelling)
 00b7c750 ?PieMenuAcceptCallback@@YAXHHD@Z  # PieMenuAcceptCallback migrated from s00b7bd50 (verbatim, slice spelling)
 00b7c790 ?cSPPieMenu_ReleaseAndInput@@YAXH@Z  # cSPPieMenu_ReleaseAndInput migrated from s00b7bd50 (verbatim, slice spelling)
-00b7c810 SP::cSPPieMenu::HideUTFMenu  # dev PDB 0x5ebc40 callee-single
+00b7c810 ?cSPPieMenu_HideUTFMenu@@YAXD@Z  # cSPPieMenu_HideUTFMenu migrated from s00b7bd50 (verbatim, slice spelling)
 00b7c870 ?cSPPieMenu_ContainsWindow@@YA_NPAX@Z  # cSPPieMenu_ContainsWindow migrated from s00b7bd50 (verbatim, slice spelling)
 00b7c890 ?SetItemTextColor@ButtonVec@@QAEXHH@Z  # ButtonVec::SetItemTextColor migrated from s00b7bd50 (verbatim, slice spelling)
 00b7c8e0 PieMenu_ScreenPosition_GetPosition  # screen-space position of a spatial object

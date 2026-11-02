@@ -1,0 +1,2 @@
+# source  symbol  va  flags
+../src/game/SPGonzago/SPPieMenu.cpp  ?cSPPieMenu_HideUTFMenu@@YAXD@Z  00b7c810  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
