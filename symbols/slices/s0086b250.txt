@@ -2,6 +2,6 @@
 0086b300 png_warning          # libpng warning handler
 0086b360 png_chunk_error      # libpng chunk error (png_format_buffer + png_error)
 0086b3b0 png_chunk_warning    # libpng chunk warning (png_format_buffer + png_warning)
-0086b500 png_create_read_struct_2 # libpng 1.2.3 reader constructor with mem/error fn args (byte-exact)
-0086b750 png_read_info        # libpng chunk loop up to first IDAT
-0086bd90 png_read_row         # libpng row inflate + filter pipeline
+0086b500 ?png_create_read_struct_2@@YAPAUpng_struct_def@@PBDPAXP6AXPAU1@0@Z31P6APAX2I@ZP6AX21@Z@Z  # png_create_read_struct_2 migrated from s0086b250 (verbatim, slice spelling)
+0086b750 ?png_read_info@@YAXPAUpng_struct_def@@PAUpng_info_def@@@Z  # png_read_info migrated from s0086b250 (verbatim, slice spelling)
+0086bd90 ?png_read_row@@YAXPAUpng_struct_def@@PAE1@Z  # png_read_row migrated from s0086b250 (verbatim, slice spelling)

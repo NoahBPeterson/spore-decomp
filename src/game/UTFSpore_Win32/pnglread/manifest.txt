@@ -1,0 +1,2 @@
+# source  symbol  va  flags
+../src/game/UTFSpore_Win32/pnglread.cpp  ?png_create_read_struct_2@@YAPAUpng_struct_def@@PBDPAXP6AXPAU1@0@Z31P6APAX2I@ZP6AX21@Z@Z  0086b500  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

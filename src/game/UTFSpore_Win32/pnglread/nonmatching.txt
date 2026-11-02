@@ -1,0 +1,3 @@
+# va  diff-bytes  reason
+0086b750 1372 png_read_info complete; the 20 eight-byte chunk-name tables reproduce, but cl orders/dedups the byte stores differently (retail keeps 's' in bl) so the frame is 0xa8 vs 0xa4 and every branch offset shifts; sig_bytes is also kept in a copy local. equiv WEAK 3.3% cov. flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+0086bd90 395 png_read_row complete; one extra 4-byte zero store (`mov dword [esp+0x10],0` next to the 14-entry mask table) shifts the whole frame and all branch offsets. Body logic, call order and row_info store order now match. equiv WEAK 22.5% cov. flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
