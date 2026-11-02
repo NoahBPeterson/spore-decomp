@@ -1,0 +1,5 @@
+# source  symbol  va  flags
+../src/game/SPGonzago/_at_00d30000.cpp  ?SetupNestMissionCard@cSPCreatureMissionManager@@QAEXXZ  00d37ea0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/_at_00d30000.cpp  ?ReleaseNestMission@cSPCreatureMissionManager@@QAEXXZ  00d37ed0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/_at_00d30000.cpp  ?IsTracked@cSPCreatureMissionManager@@QAE_NPAX@Z  00d37ef0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/_at_00d30000.cpp  ?ScalarDeletingDtor@cSPCreatureMissionManager@@QAEPAXI@Z  00d37f50  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include

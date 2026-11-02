@@ -1,0 +1,7 @@
+# va  diff-bytes  reason
+00d37fe0 108 HashTable::Erase (/O2 /MD /Gy /TP /arch:SSE): complete reconstruction, but the eastl hash_map erase (bucket unlink + rehash) is inlined with different codegen; ours is 157 bytes vs 159 flags: /O2 /MD /Gy /TP /arch:SSE
+00d38080 5 X_FUN_00d38080 (/O2 /MD /Gy /TP /arch:SSE): instruction stream identical; only the prologue `push esi` is shrink-wrapped past the `first==last` guard in ours (and one branch displacement) so the exact bytes differ flags: /O2 /MD /Gy /TP /arch:SSE
+00d380c0 61 HashTable::FUN_d380c0 (/O2 /MD /Gy /TP /arch:SSE): reconstruction of find-or-insert (Find + insert-on-miss); our simplified insert path is 91 bytes vs 135 and diverges on some inputs flags: /O2 /MD /Gy /TP /arch:SSE
+00d38530 303 cSPCreatureMissionManager::SweepDeadMissions (/O2 /MD /Gy /TP /arch:SSE): complete reconstruction of the list sweep (multi-key erase + list compaction via inlined eastl ops); structural codegen divergence; ours is 361 bytes vs 380 flags: /O2 /MD /Gy /TP /arch:SSE
+00d386a0 93 FUN_00d386a0 (/O2 /MD /Gy /TP /arch:SSE): complete reconstruction; the original does the species-fraction average and clamp with SSE scalar ops (movss/addss/comiss/maxss/minss) while ours keeps the sum in x87 flags: /O2 /MD /Gy /TP /arch:SSE
+00d38780 34 FUN_00d38780 (/O2 /MD /Gy /TP /arch:SSE): complete reconstruction of the three-way sign classification; x87 constant load (`fst`/`fxch` vs `fstp`/`fld`) and comparison operand order differ; ours is 57 bytes vs 56 flags: /O2 /MD /Gy /TP /arch:SSE
