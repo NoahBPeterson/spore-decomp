@@ -26,5 +26,5 @@
 00a53b90 Play::Init  # descriptive (no PDB name for this VA; source def in s00a52ff0.cpp)
 00a53c20 ParamTable::LocateOrInsert  # descriptive (no PDB name for this VA; source def in s00a52ff0.cpp)
 00a53c90 VoiceList_InitFromName  # descriptive (no PDB name for this VA; source def in s00a52ff0.cpp)
-00a53d20 Play::StartVoice  # descriptive (no PDB name for this VA; source def in s00a52ff0.cpp)
+00a53d20 ?StartVoice@Play@Eapd@Audio@EA@@QAEXPAX0M@Z  # StartVoice migrated from s00a52ff0 (verbatim, slice spelling)
 00a53e60 Play::ParamEvent  # descriptive (no PDB name for this VA; source def in s00a52ff0.cpp)
