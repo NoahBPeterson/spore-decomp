@@ -1,4 +1,6 @@
 0082f9a0 ?SetFromArgScript@ShaderProxy@@QAE_NPB_W@Z  # ShaderProxy::SetFromArgScript migrated from s0082f9a0 (verbatim, slice spelling)
+00830080 ?FUN_00830080@@YAXPAH@Z  # FUN_00830080 migrated from s0082f9a0 (verbatim, slice spelling)
+008300e0 ?SetThing@W20@@QAE_NPAX@Z  # W20::SetThing migrated from s0082f9a0 (verbatim, slice spelling)
 00830150 cDropShadowDescriptor::SetMode2  # sets +4 and floats +0x1c/+0x20 by enum
 00830280 cDropShadowDescriptor::SetMode1  # sets +0 and floats +0x14/+0x18 by enum
 00830380 ?FillDefaults@@YAXPAUShadowDesc@@PBU1@@Z  # FillDefaults migrated from s0082f9a0 (verbatim, slice spelling)

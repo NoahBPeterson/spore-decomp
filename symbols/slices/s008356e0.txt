@@ -5,9 +5,9 @@
 00835d90 ??1cSPUITooltipWinProc@@UAE@XZ  # cSPUITooltipWinProc::~cSPUITooltipWinProc migrated from s008356e0
 00835e30 ??0cSPUITooltipWinProc_s0083_56e0@@QAE@PB_WI0PAMI0I@Z  # cSPUITooltipWinProc_s0083_56e0::cSPUITooltipWinProc migrated from s008356e0 (verbatim, slice spelling)
 00835ed0 ?SetText@cSPUITooltipWinProc_s0083_56e0@@QAEXPB_WPAXD@Z  # cSPUITooltipWinProc_s0083_56e0::SetText migrated from s008356e0 (verbatim, slice spelling)
-00835fa0  TooltipHelper::Attach  # /Od; FUN_00835f80 init + slot-0x14 vcall store at +0xc
-00835fe0  cSPUIVariableWidthDrawable::Draw  # this->mpImage(+0xc)/mFillColor(+0x10), RenderContext Begin2D/End2D
-00836420  cSPUIVariableWidthDrawable::cSPUIVariableWidthDrawable  # vtable + mpImage/mFillColor ctor
+00835fa0 ?Attach@TooltipHelper@@QAEXPAX@Z  # TooltipHelper::Attach migrated from s008356e0 (verbatim, slice spelling)
+00835fe0 ?Draw@cSPUIVariableWidthDrawable@@QAEXPAURenderContext@@PAMH@Z  # cSPUIVariableWidthDrawable::Draw migrated from s008356e0 (verbatim, slice spelling)
+00836420 ??0cSPUIVariableWidthDrawable@@QAE@XZ  # cSPUIVariableWidthDrawable::cSPUIVariableWidthDrawable migrated from s008356e0 (verbatim, slice spelling)
 008364c0  eastl::basic_string<wchar16>::find  # position<size then forward scan (EASTL source)
 00836500  eastl::basic_string<wchar16>::rfind  # min_alt(nLength-1,position)+1 then CharTypeStringRFind
 00836620  eastl::basic_string::reserve/allocate  # n>1 alloc else empty-string sentinel
