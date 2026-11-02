@@ -1,5 +1,7 @@
+0041dd90 ?NotEqual@@YA_NPBX0@Z  # NotEqual migrated from s0041dd90 (verbatim, slice spelling)
 0041ddb0 Vector3_Add  # a+=b via temp, per-field movss
 0041de40 Vector3_Scale  # v*s into out
+0041ded0 ?Matrix3_Transposed@@YAPAUMat3Target@@PAU1@PBUMatrix3@@@Z  # Matrix3_Transposed migrated from s0041dd90 (verbatim, slice spelling)
 0041df50 WStr_Ctor  # strlen then Assign(begin,end)
 0041dfc0 WStr_rfind  # returns -1 when not found
 0041e050 ?WStr_Format@@YAPAUWStr@@PAU1@PB_WZZ  # WStr_Format migrated from s0041dd90 (verbatim, slice spelling)

@@ -1,0 +1,3 @@
+# va  diff-bytes  reason
+0041d980 4 RcHolderRef::Assign: only stack slot layout differs (inline AddRef temp at -0x14 vs -8; 12-byte pad ordering) flags: /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+00537dc0 267 cSPTransformOps::Assign(source): the retail marker is ?Assign@cSPTransformOps@@QAEPAU1@PBX@Z (Ghidra guesses operator=); condition tree = flags equal, VectorNotEqual false, scale equal (NaN treated as unequal), then only when flags&2 RotationNotEqual false; otherwise bump modCount and copy flags/translation/scale/rotation. flags /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS-; equiv PASS (400 valid, 72.5% cov; exercises the operator= symbol, identical body)
