@@ -1,1 +1,4 @@
-0103eff0 SP::cSPSpaceTrading::PerformTrade  # card PDB name
+00ba9370 ?GetEmpireByID@cStarManager@SP@@QBEPAVcEmpire@2@I@Z  # SP::cStarManager::GetEmpireByID (callee of s0103eff0, named from the dev publics; slice address comment)
+0103eff0 ?PerformTrade@cSPSpaceTrading_s0103_eff0@SP@@QAEXXZ  # cSPSpaceTrading_s0103_eff0::PerformTrade migrated from s0103eff0 (verbatim, slice spelling)
+0103fba0 ?FUN_0103fba0@cSPSpaceTrading_s0103_eff0@SP@@QAEXPBUResourceKey@@H@Z  # cSPSpaceTrading_s0103_eff0::FUN_0103fba0 migrated from s0103eff0 (verbatim, slice spelling)
+0103fc10 ?AddCommodityToInventory@cSPSpaceTrading_s0103_eff0@SP@@QAEXPBUResourceKey@@H@Z  # cSPSpaceTrading_s0103_eff0::AddCommodityToInventory migrated from s0103eff0 (verbatim, slice spelling)

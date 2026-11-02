@@ -1,0 +1,3 @@
+00bc2e50 ?GetElapsedTime@cSPTimer@SP@@QBE_KXZ  # SP::cSPTimer::GetElapsedTime (callee of s0103dee0, named from the dev publics; slice address comment)
+0103dee0 ?ConsiderSellingTool@cSPSpaceTrading_s0103_dee0@@QAE_NHPAUToolInfo@@IHPAX@Z  # cSPSpaceTrading_s0103_dee0::ConsiderSellingTool migrated from s0103dee0 (verbatim, slice spelling)
+0103e6e0 ?ConsiderSellingSpice@cSPSpaceTrading_s0103_dee0@@QAE_NHHHH@Z  # cSPSpaceTrading_s0103_dee0::ConsiderSellingSpice migrated from s0103dee0 (verbatim, slice spelling)
