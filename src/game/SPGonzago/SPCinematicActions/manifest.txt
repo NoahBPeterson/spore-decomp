@@ -1,3 +1,6 @@
 # source  symbol  va  flags
 ../src/game/SPGonzago/SPCinematicActions.cpp  ?Destruct@SlotMessage@@QAEXXZ  00421cf0  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPCinematicActions.cpp  ??1Elem32Vec@@QAE@XZ  00421d70  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPCinematicActions.cpp  ??1Elem56Vec@@QAE@XZ  00421dd0  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPCinematicActions.cpp  ??1Elem24Vec2@@QAE@XZ  00421e30  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPCinematicActions.cpp  ?SetIRefCount@?$MessageBasicRC_s0057_2580@$04@SP@@QAEXHPAUIRefCount@@@Z  005726e0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
