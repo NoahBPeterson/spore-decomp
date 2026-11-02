@@ -1,3 +1,4 @@
 00dc2720 ?UFO_FOLLOW_AVATAR_Tick@SP@@YA_NPAVcSpatialObject_s00dc_2720@1@0PAXHHPAUUFO_FOLLOW_AVATAR_memory_block@1@HM@Z  # UFO_FOLLOW_AVATAR_Tick migrated from s00dc2720 (verbatim, slice spelling)
 00dc2e40 ?FUN_00dc2e40@@YAPAPAVcSpatialObject_s00dc_2720@SP@@PAPAV12@0PAV12@UAgentDistanceCompare@eastl@@@Z  # FUN_00dc2e40 migrated from s00dc2720 (verbatim, slice spelling)
 00dc2ee0 ?FUN_00dc2ee0@@YAXPAPAVcSpatialObject_s00dc_2720@SP@@00UAgentDistanceCompare@eastl@@@Z  # FUN_00dc2ee0 migrated from s00dc2720 (verbatim, slice spelling)
+00dc32d0 ?FUN_00dc32d0@@YA_NPAVcSpatialObject_s00dc_2720@SP@@PAX111PAURingStateOut@@@Z  # FUN_00dc32d0 migrated from s00dc2720 (verbatim, slice spelling)

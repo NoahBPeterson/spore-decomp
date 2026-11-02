@@ -1,2 +1,2 @@
-00dc18e0 ?UpdateTarget@cSpace@SP@@QAA_NHIHHPAMMM@Z  # SP::cSpace::UpdateTarget (newly claimed; partial, disassembly-derived target/steering update)
-00dc1d70 ?Update@cSpace@SP@@QAA_NHIHHPAMMM@Z  # SP::cSpace::Update (preserved from s00dc18e0; partial, Ghidra-derived control flow)
+00dc18e0 ?UpdateTarget@cSpace@SP@@QAA_NHIHHPAMMM@Z  # cSpace::UpdateTarget migrated from s00dc18e0 (verbatim, slice spelling)
+00dc1d70 ?Update@cSpace@SP@@QAA_NHIHHPAMMM@Z  # cSpace::Update migrated from s00dc18e0 (verbatim, slice spelling)
