@@ -1,0 +1,3 @@
+# va  diff-bytes  reason  (complete behaviourally-equivalent source, not byte-exact)
+00b5b840 34 CheckGonzagoSubsystemInitState; virtual call schedule differs flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+00b5b960 18 cGonzagoSubsystem ctor; base-ctor vtable store order differs flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

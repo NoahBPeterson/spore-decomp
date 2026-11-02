@@ -1,0 +1,10 @@
+# source  symbol  va  flags
+../src/game/SPGonzago/SPGonzagoSubsystem.cpp  ?GetCurrentGameMode@SP@@YA?AW4eGameMode@1@XZ  00b5b800  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPGonzagoSubsystem.cpp  _FUN_00b5b820  00b5b820  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPGonzagoSubsystem.cpp  ?SetTransitionState1@cGonzagoSubsystem@@QAEXH@Z  00b5b880  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPGonzagoSubsystem.cpp  ?SetTransitionState2@cGonzagoSubsystem@@QAEXH@Z  00b5b8a0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPGonzagoSubsystem.cpp  ?EndTransitionPre@cGonzagoSubsystem@@QAEXXZ  00b5b8c0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPGonzagoSubsystem.cpp  ?EndTransitionPost@cGonzagoSubsystem@@QAEXXZ  00b5b8e0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPGonzagoSubsystem.cpp  ?PostGameModeTransition@cGonzagoSubsystem@@QAEXHH@Z  00b5b900  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPGonzagoSubsystem.cpp  ?PreGameModeTransition@cGonzagoSubsystem@@QAEXHH@Z  00b5b930  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPGonzagoSubsystem.cpp  ??1cGonzagoSubsystem@@QAE@XZ  00b5b9a0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include

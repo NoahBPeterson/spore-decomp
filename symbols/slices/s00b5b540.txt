@@ -1,13 +1,12 @@
-# va  Name  # evidence
 00b5b6c0  SP::cGonzagoSimulator::cGonzagoSimulator  # PDB symbol name shown on card.py
-00b5b840  SP::cGonzagoSubsystem::CheckGonzagoSubsystemInitState  # PDB symbol name shown on card.py
-00b5b900  SP::cGonzagoSubsystem::PostGameModeTransition  # PDB symbol name shown on card.py
-00b5b930  SP::cGonzagoSubsystem::PreGameModeTransition  # PDB symbol name shown on card.py
-00b5b960  SP::cGonzagoSubsystem::cGonzagoSubsystem  # PDB symbol name shown on card.py
-00b5b9a0  SP::cGonzagoSubsystem::~cGonzagoSubsystem  # PDB symbol name shown on card.py
-00b5b800  SP::GetCurrentGameMode  # PDB symbol name shown on card.py
-00b5b820  SP::GetCurrentGameModeAlt  # same shape as GetCurrentGameMode, other query fn
-00b5b880  SP::cGonzagoSubsystem::SetTransitionState1  # mPhase=1, arms mCurrent if -1
-00b5b8a0  SP::cGonzagoSubsystem::SetTransitionState2  # mPhase=2
-00b5b8c0  SP::cGonzagoSubsystem::EndTransitionPre  # mPreMode=mCurrent; reset
-00b5b8e0  SP::cGonzagoSubsystem::EndTransitionPost  # mPostMode=mCurrent; reset
+00b5b800 ?GetCurrentGameMode@SP@@YA?AW4eGameMode@1@XZ  # SP::GetCurrentGameMode migrated from s00b5b540
+00b5b820 _FUN_00b5b820  # FUN_00b5b820 migrated from s00b5b540 (verbatim, slice spelling)
+00b5b840 ?CheckGonzagoSubsystemInitState@cGonzagoSubsystem@@QAE_NH@Z  # cGonzagoSubsystem::CheckGonzagoSubsystemInitState migrated from s00b5b540 (verbatim, slice spelling)
+00b5b880 ?SetTransitionState1@cGonzagoSubsystem@@QAEXH@Z  # cGonzagoSubsystem::SetTransitionState1 migrated from s00b5b540 (verbatim, slice spelling)
+00b5b8a0 ?SetTransitionState2@cGonzagoSubsystem@@QAEXH@Z  # cGonzagoSubsystem::SetTransitionState2 migrated from s00b5b540 (verbatim, slice spelling)
+00b5b8c0 ?EndTransitionPre@cGonzagoSubsystem@@QAEXXZ  # cGonzagoSubsystem::EndTransitionPre migrated from s00b5b540 (verbatim, slice spelling)
+00b5b8e0 ?EndTransitionPost@cGonzagoSubsystem@@QAEXXZ  # cGonzagoSubsystem::EndTransitionPost migrated from s00b5b540 (verbatim, slice spelling)
+00b5b900 ?PostGameModeTransition@cGonzagoSubsystem@@QAEXHH@Z  # cGonzagoSubsystem::PostGameModeTransition migrated from s00b5b540 (verbatim, slice spelling)
+00b5b930 ?PreGameModeTransition@cGonzagoSubsystem@@QAEXHH@Z  # cGonzagoSubsystem::PreGameModeTransition migrated from s00b5b540 (verbatim, slice spelling)
+00b5b960 ??0cGonzagoSubsystem@@QAE@XZ  # cGonzagoSubsystem::cGonzagoSubsystem migrated from s00b5b540 (verbatim, slice spelling)
+00b5b9a0 ??1cGonzagoSubsystem@@QAE@XZ  # cGonzagoSubsystem::~cGonzagoSubsystem migrated from s00b5b540 (verbatim, slice spelling)
