@@ -6,7 +6,6 @@
 #include "EA/UTFWinControls/IWinButton.h"
 #include "EA/UTFWin/IWinProc.h"
 #include "EA/UTFWin/IWindow.h"
-#include "EA/UTFWin/Message.h"
 #include "SP/cSPPalette.h"
 #include "SP/cSPPaletteCategory.h"
 #include "SP/cSPPaletteCategoryUI.h"
@@ -143,6 +142,23 @@ int cBufferedStream::Matches(int value, int which)
   return 0;
 }
 
+// @ 0x005cbd30
+bool cBufferedStream::Open(EA::COM::IUnknown32_s005c_b060* target)
+{
+  if (!mbOpen && !mpTarget) {
+    mpTarget = target;
+    target->AddRef();
+    mBuffer.Open(mpTarget);
+    mPosition = 0;
+    mbOpen = true;
+    mbOK = true;
+    return true;
+  }
+  mbOK = false;
+  Flush();
+  return mbOK;
+}
+
 // @ 0x005cbd90
 bool cBufferedStream::Write(const void* data, int size)
 {
@@ -168,4 +184,34 @@ bool cBufferedStream::Close()
   }
   mBuffer.Reset();
   return mbOK;
+}
+
+// @ 0x005cbe40
+cStreamBuffer::cStreamBuffer()
+{
+  mpHeap = (HeapHeader*)mBuffer;
+  if (mpHeap) {
+    mpHeap->mMagic = 0x86421357;
+    mpHeap->mCapacity = 0x3a88;
+    HeapBlock* block = (HeapBlock*)((char*)mpHeap + 0x10);
+    block->mSize = 8;
+    block->mFlags = 0;
+    HeapFreeNode* node = (HeapFreeNode*)(block + 1);
+    node->mSize = mpHeap->mCapacity - 8;
+    node->mpBlock = block;
+    mpHeap->mFreeSize = mpHeap->mCapacity - 8;
+    mpHeap->mpFirstFree = node;
+  } else {
+    mpHeap = 0;
+  }
+}
+
+// @ 0x005cbec0
+cBufferedStream::cBufferedStream()
+: mbOpen(false), mbOK(false), mPosition(0), mpTarget(0) {}
+
+// @ 0x005cbf00
+cBufferedStream::~cBufferedStream()
+{
+  cBufferedStream::Close();
 }
