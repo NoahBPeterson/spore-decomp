@@ -14,11 +14,12 @@ extern "C" int   __cdecl FUN_00e31100d();                       // 0x00e31100 UT
 #pragma warning(disable : 4100)
 
 // ---- items of slice s00c4fe60 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C" void  __cdecl FUN_0093ac80(void* stream, void* p);   // 0x0093ac80 ReadBool
+extern "C" void  __cdecl FUN_0093a780(void* stream, void* p, int n, int f);   // 0x0093a780
+extern "C" char  __cdecl FUN_0093a9a0v(void* s, void* p, int n);          // 0x0093a9a0 WriteBool-ish
+extern "C" void  __cdecl FUN_0093aa70v(void* s, void* p, int n, int f);    // 0x0093aa70 WriteUint32
 typedef unsigned int u32;
 typedef unsigned char u8;
-extern "C" void* __cdecl FUN_010666a0();                        // get minimap provider
-extern "C" void  __cdecl FUN_006a1250(void* a, int key, void* out);           // 0x006a1250 SP::GetPropertyAsKey
-extern "C" int   __cdecl FUN_00e31100d();                       // 0x00e31100 UTFWin::IWinProc::GetPriority
 class Mob
 {
   public:
@@ -68,9 +69,41 @@ class Ref
   public:
     void* Assign(void* p);                // 0x00b5f950 AutoRefCount<IWinText>::operator=
 };
+class IOutStream
+{
+  public:
+virtual void* s0();
+virtual void* s1();
+virtual void* s2();
+virtual void* s3();
+virtual void* s4();
+virtual void* s5();
+virtual void* s6();
+    virtual void  Finish_1c();      // slot 7 (0x1c)
+    virtual void* GetWriter_20();   // slot 8 (0x20)
+virtual void* s9();
+virtual void* s10();
+virtual void* s11();
+virtual void* s12();
+virtual void* s13();
+virtual void* s14();
+    virtual u32   GetVersion_3c();  // slot 15 (0x3c)
+};
+class IWriter
+{
+  public:
+virtual void* w0();
+virtual void* w1();
+virtual void* w2();
+virtual void* w3();
+virtual void* w4();
+virtual void* w5();
+    virtual void* GetStream_18();   // slot 6 (0x18)
+};
 static inline int  ld32(void* p, int off) { return *(int*)((char*)p + off); }
 static inline u8   ldb(void* p, int off) { return *(u8*)((char*)p + off); }
 static inline void** vtbl(void* p) { return *(void***)p; }
+struct Rec20 { u32 a, b, c, d, e; };
 struct Rec20f { float x, y, z; u8 b; float w; };
 // ---- items of slice s00c4fe60 end
 
@@ -179,6 +212,46 @@ bool __fastcall FUN_00c50ac0(void* ecx_this, void* edx)
     return false;
 }
 
+// @ 0x00c50ad0
+void __cdecl FUN_00c50ad0(Rec20* first, Rec20* last, Rec20* dstEnd)
+{
+    while (last != first) {
+        --last;
+        --dstEnd;
+        *dstEnd = *last;
+    }
+}
+
+// @ 0x00c50b10
+void* __cdecl FUN_00c50b10(IOutStream* stream, char* rec)
+{
+    IWriter* w = (IWriter*)stream->GetWriter_20();
+    FUN_0093ac80(w->GetStream_18(), rec + 0xc);
+    IWriter* w2 = (IWriter*)stream->GetWriter_20();
+    void* s2 = w2->GetStream_18();
+    FUN_0093a780(s2, rec + 0x10, 1, 0);
+    if (stream->GetVersion_3c() >= 0x21000eu) {
+        IWriter* w3 = (IWriter*)stream->GetWriter_20();
+        void* s3 = w3->GetStream_18();
+        FUN_0093a780(s3, rec, 3, 0);
+    }
+    return stream;
+}
+
+// @ 0x00c50ba0
+void* __cdecl FUN_00c50ba0(IOutStream* self, char* rec)
+{
+    bool b = rec[0xc] != 0;
+    IWriter* w = (IWriter*)self->GetWriter_20();
+    FUN_0093a9a0v(w->GetStream_18(), &b, 1);
+    IWriter* w2 = (IWriter*)self->GetWriter_20();
+    float f = *(float*)(rec + 0x10);
+    FUN_0093aa70v(w2->GetStream_18(), &f, 1, 0);
+    IWriter* w3 = (IWriter*)self->GetWriter_20();
+    FUN_0093aa70v(w3->GetStream_18(), rec, 3, 0);
+    return self;
+}
+
 // @ 0x00c50c30
 void __fastcall FUN_00c50c30(void* ecx_this, void* edx, void* city)
 {
@@ -224,6 +297,28 @@ void __fastcall FUN_00c50c30(void* ecx_this, void* edx, void* city)
         (*(void (__thiscall**)(void*))((char*)vtbl(d.mpText) + 4))(d.mpText);
 }
 
+// @ 0x00c50d20
+float* __fastcall FUN_00c50d20(void* ecx_this, void* edx, void* city)
+{
+    (void)edx;
+    float* pos = (float*)(*(void* (__thiscall**)(void*))((char*)vtbl((char*)city + 0x120) + 0x2c))((char*)city + 0x120);
+    struct CityRec { float x, y, z; unsigned char b; float w; };  // 0x14 bytes
+    char* begin = (char*)ld32(ecx_this, 0x214);
+    int count = (ld32(ecx_this, 0x218) - (int)begin) / 0x14;
+    if (count <= 0)
+        return 0;
+    CityRec* rec = (CityRec*)begin;
+    for (int i = 0; i < count; i++, rec++) {
+        float dx = rec->x - pos[0];
+        float dz = rec->z - pos[2];
+        float dy = rec->y - pos[1];
+        float dist = dx * dx + dz * dz + dy * dy;
+        if (100.0f > dist)
+            return (float*)rec;
+    }
+    return 0;
+}
+
 // @ 0x00c50dd0
 void __fastcall FUN_00c50dd0(void* ecx_this, void* edx, void* out)
 {
@@ -233,6 +328,21 @@ void __fastcall FUN_00c50dd0(void* ecx_this, void* edx, void* out)
         return;
     }
     ((Mob*)ecx_this)->BaseGetProp(out);
+}
+
+// @ 0x00c50e00
+void __cdecl FUN_00c50e00(IOutStream* self, void* vec)
+{
+    int n = (ld32(vec, 4) - ld32(vec, 0)) / 0x14;
+    IWriter* w = (IWriter*)self->GetWriter_20();
+    FUN_0093aa70v(w->GetStream_18(), &n, 1, 0);
+    char* p = (char*)ld32(vec, 0);
+    char* e = (char*)ld32(vec, 4);
+    while (p != e) {
+        FUN_00c50ba0(self, p);
+        p += 0x14;
+    }
+    self->Finish_1c();
 }
 
 // @ 0x00c50e70
