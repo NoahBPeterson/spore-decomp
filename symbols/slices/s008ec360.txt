@@ -1,0 +1,2 @@
+008ec6b0 ??0TextStyleHashtable_s008e_c360@Layout@XHTML@EA@@QAE@ABUHashTag@0123@ABUEqTag@0123@@Z  # TextStyleHashtable_s008e_c360::TextStyleHashtable migrated from s008ec360 (verbatim, slice spelling)
+008ec8c0 ?SetViewportSize@Page_s008e_c360@Layout@XHTML@EA@@QAEXMM@Z  # Page_s008e_c360::SetViewportSize migrated from s008ec360 (verbatim, slice spelling)
