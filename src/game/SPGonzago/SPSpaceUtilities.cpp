@@ -1,4 +1,4 @@
-// src/game/SPGonzago/SPSpaceUtilities.cpp -- migrated from slice(s) s010433e0 by tools/migrate/rewrite.py
+// src/game/SPGonzago/SPSpaceUtilities.cpp -- migrated from slice(s) s010414c0, s004575d0, s010433e0 by tools/migrate/rewrite.py
 // Object file: SPGonzago/SPSpaceUtilities.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -15,8 +15,14 @@ extern const float   kHalf;             // 0x01471064  0.5f
 extern const float   kOne;              // 0x01485720  1.0f
 #include <math.h>
 #include <string.h>
+#include "SP/cSPEditorBudget.h"
+#include "SP/cSPEditorEconomy.h"
+#include <xmmintrin.h>
+#include "SP/cCity.h"
+#include "SP/cPropertyManager.h"
 
 // ---- items of slice s010433e0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern const float   kEps;              // 0x013ec4b8  1e-8f
 #define PV(n) virtual void pv##n();
 struct Vec3 { float x, y, z; };
 struct Quat { float x, y, z, w; };
@@ -26,8 +32,6 @@ struct Matrix3 {
     Matrix3(const Matrix3& src);                       // 0x0041cb40
 };
 Matrix3& Matrix3FromQuaternion(Matrix3& result, const Quat& q);   // 0x0059c190
-extern const float   kHalf;             // 0x01471064  0.5f
-extern const float   kOne;              // 0x01485720  1.0f
 extern const Matrix3 kIdentityMatrix;   // 0x016e00a4  identity basis
 extern const Vec3    kZeroPosition;     // 0x016e00c8  (0,0,0)
 struct PathData {
@@ -302,8 +306,215 @@ struct MinimapIcon {
 // ---- items of slice s010433e0 end
 
 // unnamed retail callees and globals that name local stubs (address in the comment)
-extern const Matrix3 kIdentityMatrix;   // 0x016e00a4  identity basis
-extern const Vec3    kZeroPosition;     // 0x016e00c8  (0,0,0)
+
+// ---- items of slice s010414c0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern const float g_minusOne;      // 0x013eb1bc  -1.0f
+extern const float g_one;           // 0x01485720  1.0f
+struct VtblTable { void* mSlots[0x100]; };
+typedef void* (__thiscall *VfnP)(void*);
+typedef int   (__thiscall *VfnI)(void*);
+typedef void  (__thiscall *VfnV)(void*);
+struct Vec3f { float x, y, z; };
+struct Color4f { float r, g, b, a; };
+struct Civilization;
+struct MinimapWin {
+    void RemoveIcon(void* icon, int a, int b);
+    void AddIcon(void* owner, void* data, int a, int b);
+};
+struct MinimapIconData {
+    uint32_t mColor;      // +0x00
+    Vec3f    mPos;        // +0x04
+    uint32_t mType;       // +0x10
+    void*    mpRef;       // +0x14
+    float    mF18;        // +0x18
+    uint32_t mField1C;    // +0x1c
+    uint32_t mField20;    // +0x20
+};
+struct SpatialSub { VtblTable* mpVtbl; };
+inline const Vec3f* GetSpatialPosition(SpatialSub* s)
+{
+    return (const Vec3f*)((VfnP)s->mpVtbl->mSlots[0x2c / 4])(s);
+}
+inline void RefAdd(void* o) { ((VfnV)(*(void***)o)[0])(o); }
+inline void RefRelease(void* o) { ((VfnV)(*(void***)o)[1])(o); }
+struct MinimapSource {
+    uint8_t  mPad00[0x34];
+    SpatialSub mSpatial34;          // +0x034 (CreateMinimapIcon)
+    uint8_t  mPad38[0x120 - 0x38];
+    SpatialSub mSpatial120;         // +0x120 (city / planet icon)
+    uint8_t  mPad124[0x234 - 0x124];
+    void*    mpField234;            // +0x234 (colour holder)
+    uint8_t  mPad238[0x608 - 0x238];
+    uint32_t mField608;             // +0x608
+
+    Civilization* GetCivilization();   // 0x00bd9bf0 (cCity)
+};
+void* __cdecl App();                                                                  // 0x0067dd10
+void* __cdecl GetUFOSimulator_s0104_14c0();                                                      // 0x00ffbe50
+void* __cdecl SpaceGameGet_s0104_14c0();                                                          // 0x01002bd0
+void* __stdcall FUN_01021300(void* out);                                               // 0x01021300
+void* __cdecl CommManager();                                                           // 0x00b3d4a0
+void* __cdecl GameTimeManager();                                                       // 0x00b3d380
+void* __stdcall StarManagerArg(int id);                                                // 0x00b3d2a0 (callee pops)
+uint32_t __cdecl ColorRGBAToU32(const Color4f* c);                                     // 0x004580c0
+bool  __cdecl FUN_00ff3bf0(void* self);                                                // 0x00ff3bf0
+struct CommScreen {
+    bool IsActive();
+};
+struct GameTimeMgr {
+    uint8_t mPad00[0x48];
+    uint8_t mFlags48;
+};
+struct Empire {
+    Color4f GetColor();                // returned by value through a hidden buffer
+};
+struct StarMgr {
+    int FUN_00885c90();
+    Empire* GetEmpireByID();          // id already consumed by StarManagerArg
+};
+struct Civilization {
+    VtblTable* mpVtbl;
+};
+inline int GetCivilizationID(Civilization* civ)
+{
+    return ((VfnI)civ->mpVtbl->mSlots[0x4c / 4])(civ);
+}
+struct UFOSim {
+    void* GetPlayerInventory();
+};
+struct Inventory {
+    uint8_t mPad00[0x74c];
+    uint8_t mFlag74C;              // +0x74c
+    bool CanEnterPlanetContext();
+    bool FUN_00ff3bf0();
+};
+typedef int (__thiscall *VfnIUI)(void* self, uint32_t arg);
+static void AssignIconRef(MinimapIconData& data, void* src)
+{
+    void* old = data.mpRef;
+    if (src != old) {
+        RefAdd(src);
+        data.mpRef = src;
+        if (old != 0)
+            RefRelease(old);
+    }
+}
+// ---- items of slice s010414c0 end
+
+// @ 0x004580c0
+unsigned int ColorRGBAToU32(const float* c)
+{
+    // The retail tail keeps everything in xmm0: xorps/maxss with the sample as the memory
+    // operand, then mulss/minss against the 255 constant.  Building max(r, 0) the other way
+    // round needs a second vector register and the original never writes one.
+    __m128 v;
+    unsigned char r, g, b, a;
+    v = _mm_load_ss(&c[0]);
+    v = _mm_max_ss(_mm_setzero_ps(), v);
+    v = _mm_mul_ss(v, _mm_set_ss(255.0f));
+    v = _mm_min_ss(v, _mm_set_ss(255.0f));
+    r = (unsigned char)_mm_cvtss_si32(v);
+    v = _mm_load_ss(&c[1]);
+    v = _mm_max_ss(_mm_setzero_ps(), v);
+    v = _mm_mul_ss(v, _mm_set_ss(255.0f));
+    v = _mm_min_ss(v, _mm_set_ss(255.0f));
+    g = (unsigned char)_mm_cvtss_si32(v);
+    v = _mm_load_ss(&c[2]);
+    v = _mm_max_ss(_mm_setzero_ps(), v);
+    v = _mm_mul_ss(v, _mm_set_ss(255.0f));
+    v = _mm_min_ss(v, _mm_set_ss(255.0f));
+    b = (unsigned char)_mm_cvtss_si32(v);
+    v = _mm_load_ss(&c[3]);
+    v = _mm_max_ss(_mm_setzero_ps(), v);
+    v = _mm_mul_ss(v, _mm_set_ss(255.0f));
+    v = _mm_min_ss(v, _mm_set_ss(255.0f));
+    a = (unsigned char)_mm_cvtss_si32(v);
+    return ((unsigned int)r << 0x10) | ((unsigned int)g << 8) | (unsigned int)b | ((unsigned int)a << 0x18);
+}
+
+// @ 0x01042080
+void __cdecl CreateMinimapIcon(MinimapSource* src, MinimapWin* win)
+{
+    if (src == 0 || win == 0)
+        return;
+
+    MinimapIconData data;
+    data.mColor = 0;
+    data.mPos.x = 0.0f;
+    data.mPos.y = 0.0f;
+    data.mPos.z = g_minusOne;
+    data.mpRef = 0;
+    data.mF18 = 0.0f;
+    data.mField1C = 0;
+    data.mField20 = 0;
+    data.mType = 0x10;
+
+    data.mPos = *GetSpatialPosition(&src->mSpatial34);
+
+    Empire* empire = ((StarMgr*)StarManagerArg(GetCivilizationID((Civilization*)src)))->GetEmpireByID();
+    if (empire != 0) {
+        Color4f color;
+        color = empire->GetColor();
+        color.a = g_one;
+        data.mColor = ColorRGBAToU32(&color);
+    } else {
+        data.mColor = 0xffcecece;
+    }
+
+    AssignIconRef(data, src);
+    win->RemoveIcon(src, 1, 0);
+    win->AddIcon(src, &data, 0, 0);
+    if (data.mpRef != 0)
+        RefRelease(data.mpRef);
+}
+
+// @ 0x010421c0
+void __cdecl FUN_010421c0(MinimapSource* src, MinimapWin* win)
+{
+    if (src == 0 || win == 0)
+        return;
+
+    MinimapIconData data;
+    data.mColor = 0;
+    data.mPos.x = 0.0f;
+    data.mPos.y = 0.0f;
+    data.mPos.z = g_minusOne;
+    data.mpRef = 0;
+    data.mF18 = 0.0f;
+    data.mField1C = 0;
+    data.mField20 = 0;
+    data.mType = 0x40000;
+
+    data.mPos = *GetSpatialPosition(&src->mSpatial34);
+
+    Color4f buffer;
+    Empire* empire = (Empire*)FUN_01021300(&buffer);
+    Color4f color;
+    color = empire->GetColor();
+    color.a = g_one;
+    data.mColor = ColorRGBAToU32(&color);
+
+    AssignIconRef(data, src);
+    win->RemoveIcon(src, 1, 0);
+    win->AddIcon(src, &data, 0, 0);
+    if (data.mpRef != 0)
+        RefRelease(data.mpRef);
+}
+
+// @ 0x010423d0
+bool __cdecl FUN_010423d0()
+{
+    void* app = App();
+    void* mode = ((VfnP)(*(void***)app)[0x50 / 4])(app);
+    void* obj = ((VfnP)(*(void***)mode)[0x38 / 4])(mode);
+    if (obj != 0 && ((VfnIUI)(*(void***)obj)[0xc / 4])(obj, 0x303154cc) != 0 &&
+        !((CommScreen*)CommManager())->IsActive() &&
+        (((GameTimeMgr*)GameTimeManager())->mFlags48 & 1) == 0 &&
+        ((Inventory*)((UFOSim*)SpaceGameGet_s0104_14c0())->GetPlayerInventory())->FUN_00ff3bf0() &&
+        ((Inventory*)((UFOSim*)GetUFOSimulator_s0104_14c0())->GetPlayerInventory())->mFlag74C != 0)
+        return true;
+    return false;
+}
 
 // @ 0x010433e0
 long double FUN_010433e0(cPathSource* pSource, float fT, int iColumn)
@@ -381,6 +592,43 @@ bool FUN_01043500(uint32_t uEffectId, int iParam)
     if (pEffect)
         pEffect->Release();
     return false;
+}
+
+// @ 0x01043580
+void FUN_01043580(float* pFrom, float* pTo, float* pAxis, float* pOut)
+{
+    float fDx = pTo[0] - pFrom[0];
+    float fDy = pTo[1] - pFrom[1];
+    float fDz = pTo[2] - pFrom[2];
+    float fInvLen = (float)(1.0 / sqrt((long double)fDz * fDz + (long double)fDx * fDx +
+                                       (long double)fDy * fDy + kEps));
+    float fNz = fDz * fInvLen;
+    float fNx = fInvLen * fDx;
+    float fNy = fInvLen * fDy;
+    float f7 = pAxis[2] * fNy - pAxis[1] * fNz;
+    float f8 = pAxis[1] * fNx - pAxis[0] * fNy;
+    float f6 = pAxis[0] * fNz - pAxis[2] * fNx;
+    float fInvSide = (float)(1.0 / sqrt((long double)f8 * f8 + (long double)f6 * f6 +
+                                        (long double)f7 * f7 + kEps));
+    float f8n = f8 * fInvSide;
+    float f6n = f6 * fInvSide;
+    float f7n = fInvSide * f7;
+    pOut[0] = f7n;
+    pOut[1] = f6n;
+    pOut[2] = f8n;
+    pOut[3] = 0.0f;
+    pOut[4] = fNx;
+    pOut[5] = fNy;
+    pOut[6] = fNz;
+    pOut[7] = 0.0f;
+    pOut[8] = f6n * fNz - f8n * fNy;
+    pOut[9] = f8n * fNx - f7n * fNz;
+    pOut[10] = f7n * fNy - f6n * fNx;
+    pOut[11] = 0.0f;
+    pOut[12] = pFrom[0];
+    pOut[13] = pFrom[1];
+    pOut[14] = pFrom[2];
+    pOut[15] = 1.0f;
 }
 
 // @ 0x01043770

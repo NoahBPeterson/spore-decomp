@@ -2,7 +2,7 @@
 010434c0 ?FUN_010434c0@@YAOPAM0@Z  # FUN_010434c0 migrated from s010433e0 (verbatim, slice spelling)
 010434e0 ?FUN_010434e0@@YAOPAM0@Z  # FUN_010434e0 migrated from s010433e0 (verbatim, slice spelling)
 01043500 ?FUN_01043500@@YA_NIH@Z  # FUN_01043500 migrated from s010433e0 (verbatim, slice spelling)
-01043580 ?FUN_01043580@@YAXPAM000@Z  # orthonormal basis + 4x4 matrix from two points and an up axis
+01043580 ?FUN_01043580@@YAXPAM000@Z  # FUN_01043580 migrated from s010433e0 (verbatim, slice spelling)
 01043770 ?FUN_01043770@@YAXPAVcTargetObject@@PAU?$AutoRefCount@VIEffect@@@@@Z  # FUN_01043770 migrated from s010433e0 (verbatim, slice spelling)
 01043860 ?FUN_01043860@@YAXPAVcTargetObject@@PAU?$AutoRefCount@VIEffect@@@@_N@Z  # FUN_01043860 migrated from s010433e0 (verbatim, slice spelling)
 01043a50 ?FUN_01043a50@@YAXPAVcTargetObject@@PAU?$AutoRefCount@VIEffect@@@@_N@Z  # FUN_01043a50 migrated from s010433e0 (verbatim, slice spelling)

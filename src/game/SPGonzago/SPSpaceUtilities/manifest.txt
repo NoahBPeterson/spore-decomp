@@ -1,1 +1,2 @@
 # source  symbol  va  flags
+../src/game/SPGonzago/SPSpaceUtilities.cpp  ?FUN_010423d0@@YA_NXZ  010423d0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include

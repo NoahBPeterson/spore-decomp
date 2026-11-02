@@ -1,2 +1,5 @@
 010414c0 {anon}::RegisterShaderDataInfo  # rebuilds the 0x54-byte shader data info vector at mgr+0x18 from the shader property-list group
+01042080 ?CreateMinimapIcon@@YAXPAUMinimapSource@@PAUMinimapWin@@@Z  # CreateMinimapIcon migrated from s010414c0 (verbatim, slice spelling)
+010421c0 ?FUN_010421c0@@YAXPAUMinimapSource@@PAUMinimapWin@@@Z  # FUN_010421c0 migrated from s010414c0 (verbatim, slice spelling)
 010422e0 ?TransitionFromSolarToGalaxy@@YA_NXZ  # TransitionFromSolarToGalaxy migrated from s010414c0 (verbatim, slice spelling)
+010423d0 ?FUN_010423d0@@YA_NXZ  # FUN_010423d0 migrated from s010414c0 (verbatim, slice spelling)
