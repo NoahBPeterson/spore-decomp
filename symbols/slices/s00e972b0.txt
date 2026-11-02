@@ -1,5 +1,5 @@
-00e972b0 ?IsIdInRange@@YA_N_K@Z  # 64-bit id range check: (hi:lo) - 0x5b02bb3 <= 5; byte-exact
-00e972e0 ??0cCreatureCameraEffects@@QAE@XZ  # ctor: base ctor 0x00e92af0, vtable 0x01486f04; byte-exact
+00e972b0 ?IsIdInRange@@YA_N_K@Z  # IsIdInRange migrated from s00e972b0 (verbatim, slice spelling)
+00e972e0 ??0cCreatureCameraEffects@@QAE@XZ  # cCreatureCameraEffects::cCreatureCameraEffects migrated from s00e972b0 (verbatim, slice spelling)
 00e97310 ?ClearEffects@cCreatureCameraEffects@@QAEXPAUEffectList@@@Z  # cCreatureCameraEffects::ClearEffects migrated from s00e972b0 (verbatim, slice spelling)
 00e97350 ?AddModelGroupImpostors@cCreatureCameraEffects@@QAEXXZ  # cCreatureCameraEffects::AddModelGroupImpostors migrated from s00e972b0 (verbatim, slice spelling)
 00e978e0 ?UpdateSelectionEffect@cCreatureCameraEffects@@QAEXXZ  # cCreatureCameraEffects::UpdateSelectionEffect migrated from s00e972b0 (verbatim, slice spelling)

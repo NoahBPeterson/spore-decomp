@@ -1,0 +1,4 @@
+# va  diff-bytes  reason  (complete source, not byte-exact) -- flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+00e90b50 26 complete; placeholder ctor body (emitted as Construct), only temp/register scheduling differs; ours 95 / orig 95; equiv UNSUPPORTED (equivalence harness could not select the alias); flags /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+00e90c40 13 complete; placeholder update, only one color-store scheduling difference; ours 179 / orig 179; equiv WEAK (359 valid, 29.4% coverage); flags /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+00e90d00 5 complete; cToolObject ctor, vtable store scheduled one slot earlier; ours 71 / orig 71; equiv PASS (400 valid, 100%); flags /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast

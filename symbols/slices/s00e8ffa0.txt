@@ -1,7 +1,8 @@
+00b88590 ?GetContinent@cPlanetModel@SP@@QBEHABUcSPVector3@@@Z  # SP::cPlanetModel::GetContinent (callee of s00e8ffa0, named from the dev publics; slice address comment)
 00e8ffa0 SP::cMineralView::HandleSimulationUpdate  # card name; geyser icon/effect + loyalty meters + mine-state effects; QI 0x403df5f = cCommodityNode
 00e90820 ?HandleSimulationUpdate_90820@cTotemPoleView@SP@@QAEXHH@Z  # SP::cTotemPoleView::HandleSimulationUpdate; complete structurally, transform/effect setup differs
-00e90b50 ?Construct@cPlaceholderColonyEditorCursorAttachment@SP@@QAEPAXXZ  # constructor body (retail ctor 0xe90b50), complete; one temp/register scheduling difference
-00e90be0 ?MakeView@cPlaceholderColonyEditorCursorAttachment@SP@@QAEPAV12@PAX@Z  # byte-exact MATCH
-00e90c40 ?HandleSimulationUpdate_c40@cPlaceholderColonyEditorCursorAttachment@SP@@QAEXHH@Z  # complete; one color-store scheduling difference
-00e90d00 ??0cToolObject@SP@@QAE@XZ  # complete; vtable store scheduled one slot earlier
+00e90b50 ?Construct@cPlaceholderColonyEditorCursorAttachment@SP@@QAEPAXXZ  # cPlaceholderColonyEditorCursorAttachment::Construct migrated from s00e8ffa0 (verbatim, slice spelling)
+00e90be0 ?MakeView@cPlaceholderColonyEditorCursorAttachment@SP@@QAEPAV12@PAX@Z  # cPlaceholderColonyEditorCursorAttachment::MakeView migrated from s00e8ffa0 (verbatim, slice spelling)
+00e90c40 ?HandleSimulationUpdate_c40@cPlaceholderColonyEditorCursorAttachment@SP@@QAEXHH@Z  # cPlaceholderColonyEditorCursorAttachment::HandleSimulationUpdate_c40 migrated from s00e8ffa0 (verbatim, slice spelling)
+00e90d00 ??0cToolObject@SP@@QAE@XZ  # cToolObject::cToolObject migrated from s00e8ffa0 (verbatim, slice spelling)
 00e90d80 ??0cPlanetaryArtifact@SP@@QAE@XZ  # complete; vtable store scheduled one slot earlier
