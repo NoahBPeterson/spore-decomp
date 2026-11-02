@@ -13,4 +13,4 @@
 005a9930 ??A?$map_s005a_8d20@IV?$vector_s005a_8d20@V?$AutoRefCount_s005a_8d20@VcPropertyList_s005a_8d20@SP@@@EA@@@eastl@@@eastl@@QAEAAV?$vector_s005a_8d20@V?$AutoRefCount_s005a_8d20@VcPropertyList_s005a_8d20@SP@@@EA@@@1@ABI@Z  # None migrated from s005a8d20 (verbatim, slice spelling)
 005a9a00 ?RegisterEditorPropertyLists@@YAXI@Z  # RegisterEditorPropertyLists migrated from s005a8d20 (verbatim, slice spelling)
 005a9b60 ?RegisterAllEditorPropertyLists@@YAXXZ  # RegisterAllEditorPropertyLists migrated from s005a8d20 (verbatim, slice spelling)
-005a9c40 IntersectRaySphere  # origin/dir/center/radius/out distance; byte-exact (name descriptive)
+005a9c40 ?IntersectRaySphere@@YA_NABUVector3_s005a_8d20@@00MPAM@Z  # IntersectRaySphere migrated from s005a8d20 (verbatim, slice spelling)

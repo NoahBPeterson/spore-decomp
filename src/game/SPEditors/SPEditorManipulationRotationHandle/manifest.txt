@@ -1,2 +1,6 @@
 # source  symbol  va  flags
+../src/game/SPEditors/SPEditorManipulationRotationHandle.cpp  ?IntersectRaySphere@@YA_NABUVector3_s005a_8d20@@00MPAM@Z  005a9c40  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEditors/SPEditorManipulationRotationHandle.cpp  ?DoOnMouseMove@SPin50@@QAE_NMMH@Z  005b50a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPEditorManipulationRotationHandle.cpp  ?SetInput@RotationHandle_s005b_5110@@QAEXPAVHandle@@UVector3_s005b_5110@@1@Z  005b5110  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPEditorManipulationRotationHandle.cpp  ?DoOnMouseDown@RotationHandle_s005b_5110@@QAE_NMMMI@Z  005b5900  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPEditorManipulationRotationHandle.cpp  ?Destroy@RotationHandle_s005b_5110@@QAEPAU1@I@Z  005b59d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

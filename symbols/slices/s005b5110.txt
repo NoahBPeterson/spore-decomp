@@ -1,3 +1,7 @@
-005b5110 SP editor manipulation pinning ctor/setters  # vtable 013f7634
-005b5900 ?Stub_005b5900@@YAXXZ  # Stub_005b5900 migrated from s005b5110 (verbatim, slice spelling)
-005b59d0 ?Stub_005b59d0@@YAXXZ  # Stub_005b59d0 migrated from s005b5110 (verbatim, slice spelling)
+005b5110 ?SetInput@RotationHandle_s005b_5110@@QAEXPAVHandle@@UVector3_s005b_5110@@1@Z  # RotationHandle_s005b_5110::SetInput migrated from s005b5110 (verbatim, slice spelling)
+005b51b0 ?PreRotate@cTransform@@QAEXABUMatrix3_s005b_5110@@@Z  # cTransform::PreRotate migrated from s005b5110 (verbatim, slice spelling)
+005b53c0 ?Init@RotationHandle_s005b_5110@@QAEPAU1@XZ  # RotationHandle_s005b_5110::Init migrated from s005b5110 (verbatim, slice spelling)
+005b5470 ?Update@RotationHandle_s005b_5110@@QAEXMM@Z  # RotationHandle_s005b_5110::Update migrated from s005b5110 (verbatim, slice spelling)
+005b5900 ?DoOnMouseDown@RotationHandle_s005b_5110@@QAE_NMMMI@Z  # RotationHandle_s005b_5110::DoOnMouseDown migrated from s005b5110 (verbatim, slice spelling)
+005b5980 ?GetPileCopy@RotationHandle_s005b_5110@@QBEPAUPileList_s005b_5110@@PAU2@@Z  # RotationHandle_s005b_5110::GetPileCopy migrated from s005b5110 (verbatim, slice spelling)
+005b59d0 ?Destroy@RotationHandle_s005b_5110@@QAEPAU1@I@Z  # RotationHandle_s005b_5110::Destroy migrated from s005b5110 (verbatim, slice spelling)
