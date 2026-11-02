@@ -1,3 +1,5 @@
 # source  symbol  va  flags
+../src/game/SPEngine/SPGraphicsMorphModel.cpp  ?Get@C591f0@@QAE_NPAUAt6@@@Z  007591f0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/SPGraphicsMorphModel.cpp  ?CopyTo@C59210@@QAE_NPAURCArray_s0075_8240@@@Z  00759210  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsMorphModel.cpp  ?Sum@C59e80@@QAEHXZ  00759e80  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsMorphModel.cpp  ?CopyTo@C59e80@@QAE_NPAURCArray@@@Z  0075a4e0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
