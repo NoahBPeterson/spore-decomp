@@ -443,8 +443,6 @@ public:
 
 // ---- items of slice s010d37d0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern const char hkTtrcCapsCaps[];                 // 0x014a4688 ("TtCapsCaps")
-extern "C" void* hkCapsuleCapsuleAgent__create(const void* bodyA, const void* bodyB,
-                                               const void* input, void* contactMgr);  // 0x010d4280
 class hkBool_s010d_37d0
 {
 public:

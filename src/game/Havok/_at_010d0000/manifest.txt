@@ -3,7 +3,7 @@
 ../src/game/Havok/_at_010d0000.cpp  ?FUN_010d0040@hkContactPoint_s010c_fcf0@@QAEXABVhkVector4_s010c_fcf0@@M@Z  010d0040  /vc71 /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/Havok/_at_010d0000.cpp  ?getPenetrationsWrapper@hkCapsuleTriangleAgent_s010d_37d0@@QAEXPBX00PAX@Z  010d4070  /vc71 /O2 /MD /Gy /TP /Isrc/game/include
 ../src/game/Havok/_at_010d0000.cpp  ?getClosestPointsWrapper@hkCapsuleTriangleAgent_s010d_37d0@@QAEXPBX00PAX@Z  010d40f0  /vc71 /O2 /MD /Gy /TP /Isrc/game/include
-../src/game/Havok/_at_010d0000.cpp  _hkCapsuleCapsuleAgent__create  010d4280  /vc71 /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/Havok/_at_010d0000.cpp  ?hkCapsuleCapsuleAgent__create@@YAPAXPBX00PAX@Z  010d4280  /vc71 /O2 /MD /Gy /TP /Isrc/game/include
 ../src/game/Havok/_at_010d0000.cpp  ?hkCapsuleCapsuleAgent__registerAgent@@YAXAAVhkCollisionDispatcher_s010d_4730@@@Z  010d5320  /vc71 /O2 /MD /Gy /TP /Isrc/game/include
 ../src/game/Havok/_at_010d0000.cpp  _hkSphereBoxAgent__create  010d5370  /vc71 /O2 /MD /Gy /TP /Isrc/game/include
 ../src/game/Havok/_at_010d0000.cpp  _hkSymmetricSphereBoxAgent__create  010d53a0  /vc71 /O2 /MD /Gy /TP /Isrc/game/include
