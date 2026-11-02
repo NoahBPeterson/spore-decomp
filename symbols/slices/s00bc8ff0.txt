@@ -1,8 +1,8 @@
 00bc8ff0 WalkTree  # iterative tree walk with per-depth 0xAC-byte frames in the caller's cursor (card: no PDB name); callbacks at node+0x70
-00bc9700 Stimuli::SetStimulus  # Claude-coined: sets slot id/mask/duration, addrefs/releases the object, updates both class masks, notifies g_0168B54C
-00bc9770 Stimuli::ClearStimulus  # Claude-coined: clears one slot and removes its id/mask bits from the class masks
-00bc97b0 Stimuli::ResetStimuli  # Claude-coined: zeroes both class masks and releases all eight slot objects
-00bc98f0 Stimuli::ClearAll  # Claude-coined: clears every slot matching the (idMask, valueMask) pair
+00bc9700 ?SetStimulus@Stimuli@@QAEXPAUStimulus@@IIMPAUIRefCounted@@@Z  # Stimuli::SetStimulus migrated from s00bc8ff0 (verbatim, slice spelling)
+00bc9770 ?ClearStimulus@Stimuli@@QAEXPAUStimulus@@@Z  # Stimuli::ClearStimulus migrated from s00bc8ff0 (verbatim, slice spelling)
+00bc97b0 ?ResetStimuli@Stimuli@@QAEXXZ  # Stimuli::ResetStimuli migrated from s00bc8ff0 (verbatim, slice spelling)
+00bc98f0 ?ClearAll@Stimuli@@QAEXII@Z  # Stimuli::ClearAll migrated from s00bc8ff0 (verbatim, slice spelling)
 00bc9980 Stimuli::UpdateStimuli  # Claude-coined: decrements durations, expires slots by mask and returns &mMask0
 00bc9a00 State1c::Has  # Claude-coined: true if any live record has the given mask bit
 00bc9a30 IntArray::Set  # Claude-coined: writes one dword at index in the +0x220 array

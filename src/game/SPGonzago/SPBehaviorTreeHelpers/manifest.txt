@@ -1,2 +1,3 @@
 # source  symbol  va  flags
+../src/game/SPGonzago/SPBehaviorTreeHelpers.cpp  ?ResetStimuli@Stimuli@@QAEXXZ  00bc97b0  /O2 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPBehaviorTreeHelpers.cpp  ?GetAny@behavior_stimuli@@QAEAAU1@XZ  00d997e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
