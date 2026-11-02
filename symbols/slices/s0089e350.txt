@@ -1,1 +1,1 @@
-0089e5e0  EA::Text::GetCharCategory  # MATCH; Unicode general-category lookup: builds an 8-byte CharCategoryInfo key, calls EA::Text::upper_bound over gCharCategoryTable (0x0154a1a0, 779 entries) and consults the entry's bitmask. Char is wchar_t (16-bit).
+0089e5e0 ?GetCharCategory@Text@EA@@YA?AW4CharCategory@12@_W@Z  # GetCharCategory migrated from s0089e350 (verbatim, slice spelling)

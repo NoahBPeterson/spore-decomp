@@ -1,0 +1,4 @@
+# source  symbol  va  flags
+../src/game/UTFSpore_Win32/_at_00890000.cpp  ??0Layout@Text@EA@@QAE@XZ  00890f50  /O2 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/_at_00890000.cpp  ?CompareFontCallback@@YAHPAUIFontCompareTarget@Text@EA@@HHH@Z  00890f60  /O2 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/_at_00890000.cpp  ?GetCharCategory@Text@EA@@YA?AW4CharCategory@12@_W@Z  0089e5e0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
