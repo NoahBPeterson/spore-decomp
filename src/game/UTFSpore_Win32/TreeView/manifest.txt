@@ -1,3 +1,23 @@
 # source  symbol  va  flags
 ../src/game/UTFSpore_Win32/TreeView.cpp  ?RegisterWinTextEditTypes@UTFWinControls@EA@@YAXXZ  0098f330  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/UTFSpore_Win32/TreeView.cpp  ?Init@WinTreeView@UTFWinControls@EA@@QAE_NXZ  0098f3d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/TreeView.cpp  ?GetColor@WinTreeView_s0098_f400@UTFWinControls@EA@@QAEII@Z  0098f400  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/TreeView.cpp  ?SetColor@WinTreeView_s0098_f400@UTFWinControls@EA@@QAEXII@Z  0098f420  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/TreeView.cpp  ?SetTreeViewFlag@WinTreeView_s0098_f400@UTFWinControls@EA@@QAEXID@Z  0098f460  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/TreeView.cpp  ?SetItemHeight@WinTreeView_s0098_f400@UTFWinControls@EA@@QAEXI@Z  0098f490  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/TreeView.cpp  ?SetLayoutVar@WinTreeView_s0098_f400@UTFWinControls@EA@@QAEXII@Z  0098f4d0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/TreeView.cpp  ?GetLayoutVar@WinTreeView_s0098_f400@UTFWinControls@EA@@QAEII@Z  0098f550  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/TreeView.cpp  ?OnFocusChange@WinTreeView_s0098_f400@UTFWinControls@EA@@QAEDHPAX@Z  0098f5b0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/TreeView.cpp  ?GetScrollbarEnabled@WinTreeView_s0098_f400@UTFWinControls@EA@@QAEIH@Z  0098f610  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/TreeView.cpp  ?CalculateRowHeight@WinTreeView_s0098_f400@UTFWinControls@EA@@QAEXXZ  0098f620  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/TreeView.cpp  ?FUN_0098f720@UTFWinControls@EA@@YIDPAIPAX@Z  0098f720  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/TreeView.cpp  ?FUN_0098f750@UTFWinControls@EA@@YGDPAMPAX1@Z  0098f750  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/TreeView.cpp  ?Shutdown@WinTreeView_s0098_f400@UTFWinControls@EA@@QAEXXZ  0098f7d0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/TreeView.cpp  ?SetDefaultIconDrawable@WinTreeView_s0098_f400@UTFWinControls@EA@@QAEXPAX@Z  0098f850  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/TreeView.cpp  ?SetExpanderDrawable@WinTreeView_s0098_f400@UTFWinControls@EA@@QAEXPAX@Z  0098f8b0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/TreeView.cpp  ?GetScrollbarDrawable@WinTreeView_s0098_f400@UTFWinControls@EA@@QAEPAXH@Z  0098fb80  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/TreeView.cpp  ?IsScrollbarVisible@WinTreeView_s0098_f400@UTFWinControls@EA@@QAEHH@Z  0098fba0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/TreeView.cpp  ?InnerChildRemoveAllRecursive@TreeNode@UTFWinControls@EA@@QAEXXZ  00990040  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/TreeView.cpp  ?FUN_00990350@UTFWinControls@EA@@YAXPAVWinTreeView_s0098_f400@12@@Z  00990350  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/TreeView.cpp  ?Refresh@WinTreeView_s0099_0450@UTFWinControls@EA@@QAEXXZ  00990f80  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/TreeView.cpp  ?CalcVisibleLines@TreeNode_s0099_0450@UTFWinControls@EA@@QAEXXZ  00991280  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

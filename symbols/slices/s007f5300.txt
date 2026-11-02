@@ -7,6 +7,7 @@
 007f58e0 cSPUIAnimatedIconWin destructor
 007f5a60 drawable render (RenderContext Begin2D/End2D)
 007f5c20 UTFWin::cSPUIAnimatedIconWin::cSPUIAnimatedIconWin constructor
+007f5d00 ?M5D00@Obj@@QAEXXZ  # Obj::M5D00 migrated from s007f5300 (verbatim, slice spelling)
 007f5eb0 EA::UTFWin::Color::Lerp
 007f5f70 array destroy loop, stride 0x8c
 007f6040 SPUICreateAnimationTimerRamp
