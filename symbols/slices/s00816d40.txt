@@ -3,9 +3,13 @@
 00816d40 ?AutoSizeButtons@cSPUIMessageBoxW@@QAEMXZ  # cSPUIMessageBoxW::AutoSizeButtons migrated from s00816d40 (verbatim, slice spelling)
 00817000 ?scalarDtor@MsgBoxA@@QAEPAXE@Z  # MsgBoxA::scalarDtor migrated from s00816d40 (verbatim, slice spelling)
 00817040 ?Init@cSPUIMessageBoxW@@QAE_NPBUResourceKeyW@@_N@Z  # cSPUIMessageBoxW::Init migrated from s00816d40 (verbatim, slice spelling)
-008175a0 FUN_008175a0  # cString::Load wrapper (Movie Name PLACEHOLDER)
-008175c0 UI::CalloutMessageBox::Shutdown  # tears down windows, layout, message handler
-00817670 UI::CalloutMessageBox::SetVisible  # toggles three windows + app-property query
-00817720 UI::CalloutMessageBox::OnShow  # rebinds root/child windows from layout (ids 0xffffffff,0x62ef978,0x642d110)
-00817840 UI::CalloutMessageBox::OnMovieCommand  # movie-system enable/disable dispatch
-00817c40 FUN_00817c40  # hash-based named-string getter (FNV1_String16)
+008175a0 ?FUN_008175a0@@YGXPAUEString@@@Z  # FUN_008175a0 migrated from s00816d40 (verbatim, slice spelling)
+008175c0 ?teardown@MsgBoxB@@QAEXXZ  # MsgBoxB::teardown migrated from s00816d40 (verbatim, slice spelling)
+00817670 ?setVisible@MsgBoxC@@QAEXH@Z  # MsgBoxC::setVisible migrated from s00816d40 (verbatim, slice spelling)
+00817720 ?rebind@MsgBoxD@@QAEXXZ  # MsgBoxD::rebind migrated from s00816d40 (verbatim, slice spelling)
+008177e0 ?FUN_008177e0@@YAXPAUMsgBoxE@@PAX_N@Z  # FUN_008177e0 migrated from s00816d40 (verbatim, slice spelling)
+00817840 ?setMovieState@MsgBoxF@@QAE_NI@Z  # MsgBoxF::setMovieState migrated from s00816d40 (verbatim, slice spelling)
+008178b0 ?reload@cSPUIMovieRecordUI@@QAEXH@Z  # cSPUIMovieRecordUI::reload migrated from s00816d40 (verbatim, slice spelling)
+00817a40 ?FUN_00817a40raw@@YIPAUcSPUIMovieRecordUI@@PAU1@@Z  # FUN_00817a40raw migrated from s00816d40 (verbatim, slice spelling)
+00817b00 ?FUN_00817b00raw@@YIXPAUcSPUIMovieRecordUI@@@Z  # FUN_00817b00raw migrated from s00816d40 (verbatim, slice spelling)
+00817c40 ?getName@CellNameSrc@@QAE_NPB_WPAUEString@@@Z  # CellNameSrc::getName migrated from s00816d40 (verbatim, slice spelling)

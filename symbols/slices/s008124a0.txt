@@ -1,21 +1,21 @@
 008124a0 ?Execute@cSPUILayoutCheat_s0081_24a0@@QAEXPAUcArguments_s0081_24a0@ArgScript@EA@@@Z  # cSPUILayoutCheat_s0081_24a0::Execute migrated from s008124a0 (verbatim, slice spelling)
 00812990 cSPUILayoutCheat::`scalar_deleting_destructor'  # card
-008129c0 RegisterLayoutCheat  # allocates cSPUILayoutCheat then tail-calls SP::CheatManager
-00812a10 UTFWin::cSPUILayoutZoom::SetWindow  # card (PDB class cSPUILayoutZoom)
-00812a20 UTFWin::cSPUILayoutZoom::Transform  # scales an EA::RectT<float>
-00812aa0 UTFWin::cSPUILayoutZoom::Init  # card, takes owning window
-00812b70 UTFWin::cSPUILayoutZoom::cSPUILayoutZoom  # card
+008129c0 ?RegisterLayoutCheat@@YAXXZ  # RegisterLayoutCheat migrated from s008124a0 (verbatim, slice spelling)
+00812a10 ?SetWindow@Zoom@@QAEXPAX@Z  # Zoom::SetWindow migrated from s008124a0 (verbatim, slice spelling)
+00812a20 ?Transform@Zoom@@QAEXPBMPAM@Z  # Zoom::Transform migrated from s008124a0 (verbatim, slice spelling)
+00812aa0 ?Init@Zoom@@QAE_NPAUZoomWin@@@Z  # Zoom::Init migrated from s008124a0 (verbatim, slice spelling)
+00812b70 ??0Zoom@@QAE@XZ  # Zoom::Zoom migrated from s008124a0 (verbatim, slice spelling)
 00812c30 cSPUIMainWin::GetMouseFlags  # reads bytes at +0x284..+0x286
 00812c60 MapMouseFlags  # free helper (card shows FUN)
-00812c90 PostMouseEdgeMsg  # SP::Canvas + SP::MessageServer envelope
-00812d00 DispatchMouseMsg  # card FUN, __cdecl 3 args
-00812d30 cSPUIMainWin::Teardown  # calls FUN_007f48c0 then releases +0x260
+00812c90 ?PostMouseEdgeMsg@@YAXPAX@Z  # PostMouseEdgeMsg migrated from s008124a0 (verbatim, slice spelling)
+00812d00 ?DispatchMouseMsg@@YA_NPAX0PAUQ12@@@Z  # DispatchMouseMsg migrated from s008124a0 (verbatim, slice spelling)
+00812d30 ?Teardown@MainWin@@QAEXH@Z  # MainWin::Teardown migrated from s008124a0 (verbatim, slice spelling)
 00812db0 cSPUIMainWin::BuildMouseMsg  # switch over mouse message type
-00812f70 GetScaledMouse  # card FUN, 2 out params
-00812ff0 ScreenToClient  # divides by mouse scales, tails Canvas vf+0x7c
-00813040 ScaleXY  # multiplies by mouse scales
-00813070 cSPUIMainWin::GetScaledElapsed  # Stopwatch + scale at +0x23c
-008130a0 cSPUIMainWin::GetMouseRefs  # returns 8 bytes from +0x250
+00812f70 ?GetScaledMouse@@YGXPAM0@Z  # GetScaledMouse migrated from s008124a0 (verbatim, slice spelling)
+00812ff0 ?ScreenToClient@@YGXMM@Z  # ScreenToClient migrated from s008124a0 (verbatim, slice spelling)
+00813040 ?ScaleXY@@YGXMMPAM0@Z  # ScaleXY migrated from s008124a0 (verbatim, slice spelling)
+00813070 ?GetScaledElapsed@MainWinTimer@@QAEMXZ  # MainWinTimer::GetScaledElapsed migrated from s008124a0 (verbatim, slice spelling)
+008130a0 ?Get@AutoRefPair@@QAE_KXZ  # AutoRefPair::Get migrated from s008124a0 (verbatim, slice spelling)
 008130c0 ?OnMouse@MainWin@@QAEX_N@Z  # MainWin::OnMouse migrated from s008124a0 (verbatim, slice spelling)
 00813120 ?sInitDropShadowQuality@@YAXXZ  # sInitDropShadowQuality migrated from s008124a0 (verbatim, slice spelling)
 008131b0 ?UpdateMouseScale@MainWin@@QAEXXZ  # MainWin::UpdateMouseScale migrated from s008124a0 (verbatim, slice spelling)

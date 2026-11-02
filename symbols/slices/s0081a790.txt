@@ -1,5 +1,6 @@
 0081a790 ?get_unused_item@cSPUIPieMenu_s0081_a790@@QAEPAUcSPUIPieMenuItem_s0081_a790@@XZ  # cSPUIPieMenu_s0081_a790::get_unused_item migrated from s0081a790 (verbatim, slice spelling)
 0081a940 ?AddItem@cSPUIPieMenu_s0081_a790@@QAEHHHHH@Z  # cSPUIPieMenu_s0081_a790::AddItem migrated from s0081a790 (verbatim, slice spelling)
+0081aa00 ?Ctor@ItemWinCtor@@QAEXXZ  # ItemWinCtor::Ctor migrated from s0081a790 (verbatim, slice spelling)
 0081aa80 ?OnFocusLost@cSPUIPopupMenuScrollButton@@QAEXHH@Z  # cSPUIPopupMenuScrollButton::OnFocusLost migrated from s0081a790 (verbatim, slice spelling)
 0081aad0 ?Reset@cSPUIPopupMenuWin@@QAEXXZ  # cSPUIPopupMenuWin::Reset migrated from s0081a790 (verbatim, slice spelling)
 0081ad50 ?OnAttach@cSPUIPopupMenuItemWin@@QAEXXZ  # cSPUIPopupMenuItemWin::OnAttach migrated from s0081a790 (verbatim, slice spelling)

@@ -1,0 +1,16 @@
+# source  symbol  va  flags
+../src/game/Spui/_at_00810000.cpp  ?SetWindow@Zoom@@QAEXPAX@Z  00812a10  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Spui/_at_00810000.cpp  ?Transform@Zoom@@QAEXPBMPAM@Z  00812a20  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Spui/_at_00810000.cpp  ?DispatchMouseMsg@@YA_NPAX0PAUQ12@@@Z  00812d00  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Spui/_at_00810000.cpp  ?Teardown@MainWin@@QAEXH@Z  00812d30  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Spui/_at_00810000.cpp  ?ScreenToClient@@YGXMM@Z  00812ff0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Spui/_at_00810000.cpp  ?ScaleXY@@YGXMMPAM0@Z  00813040  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Spui/_at_00810000.cpp  ?GetScaledElapsed@MainWinTimer@@QAEMXZ  00813070  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Spui/_at_00810000.cpp  ?Get@AutoRefPair@@QAE_KXZ  008130a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Spui/_at_00810000.cpp  _FUN_00816790  00816790  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/Spui/_at_00810000.cpp  ?FUN_008175a0@@YGXPAUEString@@@Z  008175a0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/Spui/_at_00810000.cpp  ?teardown@MsgBoxB@@QAEXXZ  008175c0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/Spui/_at_00810000.cpp  ?rebind@MsgBoxD@@QAEXXZ  00817720  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/Spui/_at_00810000.cpp  ?FUN_008177e0@@YAXPAUMsgBoxE@@PAX_N@Z  008177e0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/Spui/_at_00810000.cpp  ?UpdateTimeText@PieMenuTimeText@@QAEXXZ  00817cb0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/Spui/_at_00810000.cpp  ??0cSPUIProgressBarWin@UTFWin@@QAE@XZ  0081d510  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
