@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+01133fc0 465 complete DecoderRegistry::DecoderFactory: query size, spacing, Alloc, init vtable + callbacks, optional block storage; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv UNSUPPORTED 0/400 valid (fault(fetch)) - object/vtable heavy.

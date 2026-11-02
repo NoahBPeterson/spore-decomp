@@ -11,7 +11,7 @@
 01133f00 FUN_01133f00  # find-or-insert node
 01133f40 FUN_01133f40  # notify + free storage + free self
 01133f80 FUN_01133f80  # allocate 0x10-byte owned object
-01133fc0 rw::audio::core::DecoderRegistry::DecoderFactory  # PDB name
+01133fc0 ?FUN_01133fc0@@YAPAXPAHHHPAVSystem@@@Z  # FUN_01133fc0 migrated from s01133a80 (verbatim, slice spelling)
 011341c0 FUN_011341c0  # decoder ctor
 01134200 FUN_01134200  # dst = src * scale
 01134260 FUN_01134260  # aligned/scalar scale
