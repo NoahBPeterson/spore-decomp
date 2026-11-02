@@ -1,0 +1,8 @@
+# source  symbol  va  flags
+../src/game/UTFSpore_Win32/t2kstrm.cpp  _New_T2KMemHeader  008cbf10  /O2 /MD /Gy /TP /GS- /arch:SSE /Isrc/game/include
+../src/game/UTFSpore_Win32/t2kstrm.cpp  _ReadInt16  008cc190  /O2 /MD /Gy /TP /GS- /arch:SSE /Isrc/game/include
+../src/game/UTFSpore_Win32/t2kstrm.cpp  _PeekInt16  008cc220  /O2 /MD /Gy /TP /GS- /arch:SSE /Isrc/game/include
+../src/game/UTFSpore_Win32/t2kstrm.cpp  _GetStreamLength  008cc2a0  /O2 /MD /Gy /TP /GS- /arch:SSE /Isrc/game/include
+../src/game/UTFSpore_Win32/t2kstrm.cpp  _GetEntireStreamIntoMemory  008cc2c0  /O2 /MD /Gy /TP /GS- /arch:SSE /Isrc/game/include
+../src/game/UTFSpore_Win32/t2kstrm.cpp  _Rewind_InputStream  008cc550  /O2 /MD /Gy /TP /GS- /arch:SSE /Isrc/game/include
+../src/game/UTFSpore_Win32/t2kstrm.cpp  _Tell_InputStream  008cc5b0  /O2 /MD /Gy /TP /GS- /arch:SSE /Isrc/game/include
