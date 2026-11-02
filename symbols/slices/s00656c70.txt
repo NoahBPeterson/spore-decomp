@@ -1,3 +1,6 @@
+00657240 ?LogEvent_3475331@@YAXIII@Z  # LogEvent_3475331 migrated from s00656c70 (verbatim, slice spelling)
+006572b0 ?LogEvent_3475365@@YAXI@Z  # LogEvent_3475365 migrated from s00656c70 (verbatim, slice spelling)
+006572f0 ?LogEvent_673a567@@YAXII@Z  # LogEvent_673a567 migrated from s00656c70 (verbatim, slice spelling)
 00657340 ?AsInterface@cSPUIAssetView@SP@@UAEPAXW4InterfaceId@COM@EA@@@Z  # SP::cSPUIAssetView::AsInterface migrated from s00656c70
 00657370 ?LogEvent_4e79d7d1@@YA_NXZ  # LogEvent_4e79d7d1 migrated from s00656c70 (verbatim, slice spelling)
 006573e0 ?GetGlobal_15f9f40@@YAHXZ  # GetGlobal_15f9f40 migrated from s00656c70 (verbatim, slice spelling)

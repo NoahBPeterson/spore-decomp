@@ -1,5 +1,8 @@
 # source  symbol  va  flags
 ../src/game/SPEditors/SPUIAssetView.cpp  ?FUN_004bb860@@YAII@Z  004bb860  /Od /Ob1 /MD /Gy /TP /Isrc/game/include
+../src/game/SPEditors/SPUIAssetView.cpp  ?LogEvent_3475331@@YAXIII@Z  00657240  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEditors/SPUIAssetView.cpp  ?LogEvent_3475365@@YAXI@Z  006572b0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEditors/SPUIAssetView.cpp  ?LogEvent_673a567@@YAXII@Z  006572f0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPEditors/SPUIAssetView.cpp  ?AsInterface@cSPUIAssetView@SP@@UAEPAXW4InterfaceId@COM@EA@@@Z  00657340  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPEditors/SPUIAssetView.cpp  ?LogEvent_4e79d7d1@@YA_NXZ  00657370  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPEditors/SPUIAssetView.cpp  ?GetGlobal_15f9f40@@YAHXZ  006573e0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
@@ -14,3 +17,4 @@
 ../src/game/SPEditors/SPUIAssetView.cpp  ?IsReady@AssetView@@QAEDXZ  00657dd0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEditors/SPUIAssetView.cpp  ?OnDetach@AssetView@@QAEXXZ  00657e00  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEditors/SPUIAssetView.cpp  ?FUN_00657e20@@YAXPAXH@Z  00657e20  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPUIAssetView.cpp  ?SporepediaVecClear@@YAXXZ  0065aeb0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

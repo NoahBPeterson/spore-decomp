@@ -1,2 +1,4 @@
 0065a070 ?LoadLayout@cSPUIAssetView_s0065_a070@@QAEXXZ  # cSPUIAssetView_s0065_a070::LoadLayout migrated from s0065a070 (verbatim, slice spelling)
 0065a990 ?Update@cSPUIAssetView_s0065_a070@@QAEXI_N@Z  # cSPUIAssetView_s0065_a070::Update migrated from s0065a070 (verbatim, slice spelling)
+0065aeb0 ?SporepediaVecClear@@YAXXZ  # SporepediaVecClear migrated from s0065a070 (verbatim, slice spelling)
+0065aed0 ?SporepediaVecSetSize@@YAXH@Z  # SporepediaVecSetSize migrated from s0065a070 (verbatim, slice spelling)
