@@ -23,7 +23,7 @@
 00adca90  eastl vector grow(end, value)            ; thiscall on the vector
 00addb50  cConfigManager::ParseConfigFile          ; this = ecx (config manager)
 00addc60  eastl hashtable erase-for-predicate
-00addd20  eastl hashtable reset                    ; BYTE-EXACT
+00addd20 ?FUN_00addd20@@YIXPAXH@Z  # FUN_00addd20 migrated from s00addb50 (verbatim, slice spelling)
 00addd90  eastl hashtable reset (variant)
 00adde00  erase entries matching an id
 00adde90  cStringContext map setter

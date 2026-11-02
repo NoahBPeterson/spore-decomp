@@ -1,4 +1,4 @@
-# va  diff-bytes  reason
+# s00addb50 -- EA Simulator ArgScript / config-manager cluster (11 functions).
 00541680 429 complete; /Od wide-string date/time parse schedule differs
 007c7ac0 77 loop/count register allocation and compare shape (indexed-for vs pointer loop)
 007c7b30 132 64-byte-aligned stack buffer / float-format call scheduling differs
@@ -19,6 +19,7 @@
 007c9830 33 AutoRef fill loop: missing EH frame, register allocation differs
 007c9910 35 AutoRef uninitialized_copy: missing compiler EH frame / state slots
 007c9fa0 153 eastl vector DoAssignFromIterator: allocator-grow + relocate call schedule differs
+007ca060 257 eastl vector<pair> operator=: relocate/uninit-copy call schedule differs [equiv: FAIL, 5/5 valid inputs mismatched (fake-arity: ours failed where original succeeded); symbol lookup fixed via ?4PairVec]
 007ca150 82 GetOptionIDs: prologue register allocation (this/out) and push_back load order differ
 007ca1c0 1448 cConfigManager::Initialize complete (parser setup, Options.txt, per-option property lists); block layout, register allocation and frame slots differ
 007ca950 93 eastl::vector<pair<u64,AutoRefCount<cPropertyList>>>::insert(iterator,const value_type&): complete; retail wraps the placement-new fast path in a /EHsc frame (cl only emits EH for object construction here with extra state stores), so all offsets and the merged epilogue differ.
@@ -41,4 +42,5 @@
 007cc9a0 36 eastl::vector<SP::cOption,eastl::sp_vector_allocator>::push_back(): complete; in-place default ctor vs retail's temp/value handling differs.
 007ccc30 71 cConfigScriptState option reset (PDB candidate vector<cOption,sp_vector_allocator>::erase): complete; reset ids, vector erase + 3 string clears; cl schedules the erase result differently.; equiv: PASS (923 valid, 100% coverage; now cConfigScriptState::Reset member)
 007cef60 48 VVec dtor 58 bytes vs 102; original carries an EH frame the source does not reproduce; equiv: WEAK (779 valid, 76.3% coverage)
-007ca060 257 eastl vector<pair> operator=: relocate/uninit-copy call schedule differs [equiv: FAIL, 5/5 valid inputs mismatched (fake-arity: ours failed where original succeeded); symbol lookup fixed via ?4PairVec]
+007cf4e0 56 Big2::~Big2: store set reproduced, EH frame and unwind funclet (catch-all around the two vector destroys) not reproduced; equiv: FAIL 5/5 valid inputs (first execution fault) flags: /O2 /MD /Gy /EHsc /TP /arch:SSE2
+007cfc70 77 MapV::findOrInsert2: complete find-or-insert; helper split differs by 2 bytes; equiv: PASS (240 valid inputs, 100% coverage) flags: /O2 /MD /Gy /EHsc /TP /arch:SSE2

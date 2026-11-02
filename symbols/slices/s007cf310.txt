@@ -1,3 +1,5 @@
+007cf4e0 ?dtor@Big2@@QAEXXZ  # Big2::dtor migrated from s007cf310 (verbatim, slice spelling)
+007cfc70 ?findOrInsert2@MapV@@QAEPAUPair8@@PADPAU2@@Z  # MapV::findOrInsert2 migrated from s007cf310 (verbatim, slice spelling)
 007cfcd0 SP::CompileToPropertyModel  # PDB candidate (caller-scored)
 007d00e0 SP::cCityVisualizer::AllegianceUpdate  # PDB candidate (caller-scored)
 007d01f0 ?Ser1F0@@YAPAXPAUIStream@@PAD@Z  # Ser1F0 migrated from s007cf310 (verbatim, slice spelling)

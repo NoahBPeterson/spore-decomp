@@ -1,4 +1,4 @@
-// src/game/SPEngine/SPAppConfigManager.cpp -- migrated from slice(s) s007cd6d0, s007ce500, s007cc5f0, s007cb590, s007ca950, s007c9910, s007c8940, s007c77e0, s005409d0 by tools/migrate/rewrite.py
+// src/game/SPEngine/SPAppConfigManager.cpp -- migrated from slice(s) s00addb50, s007cf310, s007cd6d0, s007ce500, s007cc5f0, s007cb590, s007ca950, s007c9910, s007c8940, s007c77e0, s005409d0 by tools/migrate/rewrite.py
 // Object file: SPEngine/SPAppConfigManager.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -2095,6 +2095,56 @@ struct VVec {
 };
 // ---- items of slice s007ce500 end
 
+// ---- items of slice s007cf310 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C" void __cdecl FUN_004b5440();
+extern "C" void* __cdecl FUN_007c8160(void*, void*, void*, int);   // lower_bound (map B)
+struct VecCommon {
+    void* mpBegin;   // +0
+    void* mpEnd;     // +4
+    void* mpCap;     // +8
+    void destructRange(void* first, void* last);   // 0x007cefd0  (thiscall, ret 8)
+    void destroy();                                // 0x007cef60  (~vector)
+};
+struct Pair8   { uint32_t key, sub; };                 // 8-byte key view of a map element
+struct V16 {
+    void* mBegin;    // +0
+    void* mEnd;      // +4
+    void* mCap;      // +8
+    void* mMid;      // +0xc  (object whose dtor is FUN_007cef60)
+    void* mInline;   // +0x10
+    void clear();
+};
+struct Big2 {
+    char   pad00[4];
+    void*  m04;          // +0x04
+    char   pad08[0x1c - 0x08];
+    V16    m1c;          // +0x1c
+    char   pad28[0x34 - 0x28];
+    void*  m34;          // +0x34
+    void*  m38;          // +0x38
+    char   pad3c[0x4c - 0x3c];
+    void*  m4c;          // +0x4c
+    void dtor();
+};
+struct MapV {
+    void*  mpTree;    // +0
+    void*  mpBegin;   // +4
+    char   pad8[0x14 - 8];
+    bool   mb14;      // +0x14
+    char   pad15[0x18 - 0x15];
+    void*  mpRoot;    // +0x18
+    void*  tryInsert(void* pos, Pair8* kv);
+    Pair8* findOrInsert2(char* out, Pair8* kv);
+};
+// ---- items of slice s007cf310 end
+
+// ---- items of slice s00addb50 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern bool  __cdecl FUN_00685520(int n);                                               // 0x685520
+typedef void  (__thiscall *TC_v4)(void*, unsigned int, unsigned int, void*, int);
+#define VFN(obj, off, T) ((T)(*(void***)(obj))[((off) >> 2)])
+struct CmdLineB { char pad[0x38]; void ctor(); void fini(); };   // 0x92b690 / 0x5d7450
+// ---- items of slice s00addb50 end
+
 // @ 0x00541680
 char SP_ConfigManager_Init(void* param_1, int* param_2)
 {
@@ -3444,4 +3494,53 @@ VVec::~VVec()
         p->~VPair();
     if (mpBegin)
         EFree(mpBegin);
+}
+
+// @ 0x007cf4e0
+void Big2::dtor()
+{
+    FUN_004b5440();
+    if (m4c)
+        EFree(m4c);
+    ((VecCommon*)((char*)this + 0x34))->destructRange(m34, m38);
+    if (m34)
+        EFree(m34);
+    ((VecCommon*)((char*)this + 0x1c))->destroy();
+    if (m04)
+        EFree(m04);
+}
+
+// @ 0x007cfc70
+Pair8* MapV::findOrInsert2(char* out, Pair8* kv)
+{
+    void* end = mpBegin;
+    Pair8* r = (Pair8*)FUN_007c8160(mpTree, end, kv, mb14);
+    if ((void*)r != end) {
+        if (r->sub <= kv->sub && (kv->sub != r->sub || r->key <= kv->key)) {
+            *(Pair8**)out = r;
+            out[4] = 0;
+            return (Pair8*)out;
+        }
+    }
+    Pair8* ins = (Pair8*)tryInsert(r, kv);
+    *(Pair8**)out = ins;
+    out[4] = 1;
+    return (Pair8*)out;
+}
+
+// @ 0x00addd20
+void __fastcall FUN_00addd20(void* self, int /*edx*/)
+{
+    char* s = (char*)self;
+    char local[0x38];
+    ((CmdLineB*)local)->ctor();
+
+    VFN(*(void**)(s + 0x140), 0x1c, TC_v4)(*(void**)(s + 0x140),
+        0xcecf5fdf, 0x40890200, local, 1);
+
+    if (FUN_00685520(2)) {
+        VFN(*(void**)(s + 0x140), 0x1c, TC_v4)(*(void**)(s + 0x140),
+            0x4e059fe9, 0x40890200, local, 1);
+    }
+    ((CmdLineB*)local)->fini();
 }

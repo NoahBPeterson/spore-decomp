@@ -1,4 +1,4 @@
-# va  diff-bytes  reason
+# s00addb50 -- two functions were complete reconstructions but could not be
 007c7ec0  451  cSetResolutionCommand::Execute: resolution scoring float math approximated, property-getter return values (test al,al + tagged-pointer unwrap) not modelled, so not behaviorally complete yet.
 007c8940  -   cConfigManager::ApplyOption skeleton: property-apply loop / BehaviorMessage emission omitted
 007c8af0  86  AutoRef insert helper skeleton: 0x7c7a40 resize and 0x7c7d70 copy-construct calls omitted
