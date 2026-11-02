@@ -1,7 +1,7 @@
 00d522c0  SP::cSPDramaManager::Update  # asm: mode gate 0x1654c01/02, stalker search, mate timer 0x3c, herd placement; Ghidra agrees
 00d52c90 _F52c90  # F52c90 migrated from s00d522c0 (verbatim, slice spelling)
 00d52cb0 ?F52cb0@@YAXPAHHHHP6ADHH@Z@Z  # F52cb0 migrated from s00d522c0 (verbatim, slice spelling)
-00d52d80  SP::cPosseSimulator::Write  # PDB candidate; cVarListSerializer
+00d52d80 ?F52d80@@YIXPAXHPAH@Z  # F52d80 migrated from s00d522c0 (verbatim, slice spelling)
 00d52df0 ?F52df0@@YIHPAX@Z  # F52df0 migrated from s00d522c0 (verbatim, slice spelling)
 00d52e10 ?F52e10@@YIHPAX@Z  # F52e10 migrated from s00d522c0 (verbatim, slice spelling)
-00d52e40  FUN_00d52e40  # notify all inventory items
+00d52e40 ?F52e40@@YIXPAXHH@Z  # F52e40 migrated from s00d522c0 (verbatim, slice spelling)

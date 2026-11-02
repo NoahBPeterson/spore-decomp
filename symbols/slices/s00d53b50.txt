@@ -1,5 +1,5 @@
-00d53b50 EA::Swarm::cRingPlacer::Place  # pick/place a noun from the ring slots: score by |1-dot|, sort, window+radius checks, project onto the planet; original duplicates the found->noun release tail (names Claude-coined)
-00d54330 SP::cPosseSimulator::AddPosseMember  # posse membership insert (cap three): avatar/enemy/duplicate checks, sound, herd removal, achievements; heavily global-entangled
+00d53b50 ?Place@cRingPlacer@@QAEPAUEntry@@PAUNoun@@PAUVec3@@@Z  # cRingPlacer::Place migrated from s00d53b50 (verbatim, slice spelling)
+00d54330 ?AddPosseMember@SP@@YAHPAUcBehaviorSpaceTurret@1@PAX@Z  # AddPosseMember migrated from s00d53b50 (verbatim, slice spelling)
 00d54730 ?CanJoin@SP@@YG_NPAXH@Z  # CanJoin migrated from s00d53b50 (verbatim, slice spelling)
 00d54760 ?StopAirRaidEffect@SP@@YAXXZ  # StopAirRaidEffect migrated from s00d53b50 (verbatim, slice spelling)
 00d54780 ??0WeaponData@SP@@QAE@ABU01@@Z  # WeaponData::WeaponData migrated from s00d53b50 (verbatim, slice spelling)
