@@ -9,4 +9,4 @@
 00f66cb0 SP::cTerrainDistributeEffect::ApplyEffect  # byte-exact
 00f66d20 SP::cDistCellMesh::Init  # free old buffer, store mesh/geometry, grow index buffer
 00f66e70 SP::cDistCellMesh::~cDistCellMesh  # byte-exact
-00f66ef0 SP::cDistCellMesh::LockItems  # ring offset/type selection, lock, commit counts
+00f66ef0 ?LockItems@cDistCellMesh@SP@@QAE_NPAHPAXHH@Z  # cDistCellMesh::LockItems migrated from s00f66050 (verbatim, slice spelling)

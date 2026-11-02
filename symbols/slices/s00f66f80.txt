@@ -1,0 +1,7 @@
+00f66f80 ?BuildIndexed@TerrainDraw@@QAEDPAIPAXHPAHH1@Z  # TerrainDraw::BuildIndexed migrated from s00f66f80 (verbatim, slice spelling)
+00f67070 ?Draw@TerrainDraw@@QAEHPAX0@Z  # TerrainDraw::Draw migrated from s00f66f80 (verbatim, slice spelling)
+00f67290 ?Advance@TerrainDraw@@QAEXXZ  # TerrainDraw::Advance migrated from s00f66f80 (verbatim, slice spelling)
+00f67540 ?SetDepth@TerrainFace@@QAEXM@Z  # TerrainFace::SetDepth migrated from s00f66f80 (verbatim, slice spelling)
+00f67560 ?ClearDepth@TerrainFace@@QAEXXZ  # TerrainFace::ClearDepth migrated from s00f66f80 (verbatim, slice spelling)
+00f67580 ?SetLodByte@TerrainFace@@QAEXHE@Z  # TerrainFace::SetLodByte migrated from s00f66f80 (verbatim, slice spelling)
+00f676f0 ?SelectLod@@YAHPAM@Z  # SelectLod migrated from s00f66f80 (verbatim, slice spelling)

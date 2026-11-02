@@ -1,0 +1,6 @@
+# source  symbol  va  flags
+../src/game/SPTerrain/_at_00f60000.cpp  ?Advance@TerrainDraw@@QAEXXZ  00f67290  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPTerrain/_at_00f60000.cpp  ?SetDepth@TerrainFace@@QAEXM@Z  00f67540  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPTerrain/_at_00f60000.cpp  ?ClearDepth@TerrainFace@@QAEXXZ  00f67560  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPTerrain/_at_00f60000.cpp  ?SetLodByte@TerrainFace@@QAEXHE@Z  00f67580  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPTerrain/_at_00f60000.cpp  ?SelectLod@@YAHPAM@Z  00f676f0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
