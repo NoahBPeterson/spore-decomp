@@ -1,2 +1,6 @@
 004e8a30 eastl node-chain free (DoNuke)  # post-order free
+004e8c80 ?Body8c80@@YAPAPAXPAPAX00@Z  # Body8c80 migrated from s004e88a0 (verbatim, slice spelling)
+004e8d30 ?Allocate@NodeAlloc@@QAEPAUKey5@@PBU2@@Z  # NodeAlloc::Allocate migrated from s004e88a0 (verbatim, slice spelling)
+004e8ee0 ?ApplyCopyLoop8ee0@@YAPAPAXPAPAX000@Z  # ApplyCopyLoop8ee0 migrated from s004e88a0 (verbatim, slice spelling)
+004e8f70 ??0RWXform@@QAE@XZ  # RWXform::RWXform migrated from s004e88a0 (verbatim, slice spelling)
 004e9500 ?Body9500@@YAXPAX00@Z  # Body9500 migrated from s004e88a0 (verbatim, slice spelling)

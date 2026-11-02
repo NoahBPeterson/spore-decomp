@@ -1,1 +1,3 @@
 004e6c60 NormalizePercents  # three amounts -> integer percents summing to 100 (largest-remainder), byte-exact
+004e7460 ?ScaleColorForKind@@YAXHMMMPAM00@Z  # ScaleColorForKind migrated from s004e6c60 (verbatim, slice spelling)
+004e7610 ?BuildVerbIcons@@YAXPAUEntryVec_s004e_6c60@@PAURefVec_s004e_6c60@@H@Z  # BuildVerbIcons migrated from s004e6c60 (verbatim, slice spelling)

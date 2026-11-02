@@ -1,1 +1,2 @@
+004e7e50 ?BuildAndDispatch18@@YAXPAXPAUVerbSink_s004e_7990@@@Z  # BuildAndDispatch18 migrated from s004e7990 (verbatim, slice spelling)
 004e8850 rbtree anchor reset  # frees root chain then self-initialises anchor

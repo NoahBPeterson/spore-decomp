@@ -1,0 +1,5 @@
+# source  symbol  va  flags
+../src/game/SPBake/_at_004e0000.cpp  ?GetPropIDForAbilityHash@@YAII@Z  004e6920  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/_at_004e0000.cpp  ?ScaleColorForKind@@YAXHMMMPAM00@Z  004e7460  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/_at_004e0000.cpp  ?BuildAndDispatch18@@YAXPAXPAUVerbSink_s004e_7990@@@Z  004e7e50  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/_at_004e0000.cpp  ?Allocate@NodeAlloc@@QAEPAUKey5@@PBU2@@Z  004e8d30  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

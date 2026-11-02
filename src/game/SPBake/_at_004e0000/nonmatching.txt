@@ -1,0 +1,8 @@
+# va  diff-bytes  reason
+004e5d00 2221 BuildVerbCapabilities: complete (both verb icons, 8-way modifier-flag capability chain); only /Od frame slot order/holes differ flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+004e6a10 245 UpdateEntry6a10: complete (0x1d8-byte entry loop, dedup vector, alt index); /Od slot order and holes differ flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+004e6bc0 7 RefVec build+dispatch: complete; only /Od vec slot (-0xc vs -0x14) and reserved frame holes differ flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+004e7610 737 complete (per-entry icon records via PropertyManager, value clamp, kind split by property hash, NormalizePercents, ScaleColorForKind, FillRefVec18); only /Od name-hash slot permutation differs (frame 0x50 vs 0x58) - instruction stream and switch tree match, size 889 vs 887; difftest UNSUPPORTED (0/400 valid: random entries->mBegin faults in the loop) flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+004e8c80 76 Body8c80 (refcounted pointer range copy w/ AddRef): equiv UNSUPPORTED (0/400 valid, fault(read)=376) - body only dereferences raw caller pointers, so no valid input can be synthesized flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+004e8ee0 87 ApplyCopyLoop8ee0 (same range copy, writes end through out): equiv UNSUPPORTED (0/400 valid, fault(read)=383) - same raw-pointer dereference limitation flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+004e8f70 122 RWXform::RWXform (null pointers, default basis/matrix, reset sentinels): equiv PASS (400 valid, 88.1% coverage); /Od frame shape flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
