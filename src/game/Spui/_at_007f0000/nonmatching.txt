@@ -1,8 +1,9 @@
-# va  diff-bytes  reason
+# va diff reason
 007f9340 7 FUN_007f9340: complete real C++ (__cdecl, 2 args; writes p[0]=0x013f6400, p[2]=0x013f63fc, p[3]=0, allocates the 0x1c-byte sequence object with operator new(0x1c,"UI/cSPUIAnimationSequence",0,0,0,0), stores vtable 0x0141542c and four zero dwords, p[4]=obj, *out=obj, p[1]=0x007f9230); emitted 94 vs 94 bytes, the original interleaves the three field stores with the operator-new argument pushes whereas the compiler hoists both pushes  flags /O2 /MD /Gy /TP /arch:SSE /fp:fast  [equiv: PASS 347 valid inputs, 97.1% coverage]
 007fcf40 133 complete; eastl vector emplace reconstruction; argument/register schedule differs; equiv: WEAK (84.5% coverage) flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
 007fd200 162 complete; flag setter reconstruction; virtual-call and local frame schedule differs flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
 007fd390 133 complete; SerItem writer reconstruction; allocator/register schedule differs flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+007fd790 196 complete; damping exp multiplier/local frame layout differs; equiv: UNSUPPORTED (unresolved _exp; defined in s007fc880_o2.cpp, run with --src) flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
 007fd840 55 complete; DampedPeriodic periodic-time (slot25); fcos/x87 schedule differs flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 007ff8f0 27 complete [WEAK 266/34.3%, out of scope]; predicate null-check helper; vcall/temp schedule differs flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 007ffc70 755 cSPUIBehaviorPredicateWinState::Evaluate complete (20-case switch: window-state bits 0x28/0x2c, parent/child window queries 0x48, geometry compare, id matches 0x30/0xa4, hex-param search 0xf0/iterator, rect compare 0xc4/0x38, 0x10-0x12 window geometry 0xf8). [equiv: WEAK, 348 valid, 4.5% coverage] flags: /O2 /MD /Gy /TP /arch:SSE2

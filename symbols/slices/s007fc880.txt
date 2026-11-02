@@ -11,5 +11,11 @@
 007fd390 ?WriteSerItem@@YA_NPAUSerBuffer@@PAUC53@@PAUSerItem14@@PAX@Z  # WriteSerItem migrated from s007fc880 (verbatim, slice spelling)
 007fd430 ?ReadSerItem@@YA_NPAUSerBuffer@@PAUC53@@PAUSerItem14@@@Z  # ReadSerItem migrated from s007fc880 (verbatim, slice spelling)
 007fd460 UTFWin::cSPUIBehaviorTimeFunctionRamp::cSPUIBehaviorTimeFunctionRamp  # vtable ctors 0x1415c80
+007fd4a0 ?SetParams@cSPUIBehaviorTimeFunctionRamp@@QAEXMMM@Z  # cSPUIBehaviorTimeFunctionRamp::SetParams migrated from s007fc880 (verbatim, slice spelling)
+007fd4e0 ?v22@cSPUIBehaviorTimeFunctionRamp@@UAEMM@Z  # cSPUIBehaviorTimeFunctionRamp::v22 migrated from s007fc880 (verbatim, slice spelling)
+007fd540 ?v24@cSPUIBehaviorTimeFunctionRamp@@UAE_NXZ  # cSPUIBehaviorTimeFunctionRamp::v24 migrated from s007fc880 (verbatim, slice spelling)
 007fd570 UTFWin::cSPUIBehaviorTimeFunctionSmoothRamp::cSPUIBehaviorTimeFunctionSmoothRamp  # vtable ctor 0x1415cf8
 007fd610 UTFWin::cSPUIBehaviorTimeFunctionDampedPeriodic::cSPUIBehaviorTimeFunctionDampedPeriodic  # vtable ctor 0x1415d60
+007fd650 ?SetParams@cSPUIBehaviorTimeFunctionDampedPeriodic@@QAEXMMMMMH@Z  # cSPUIBehaviorTimeFunctionDampedPeriodic::SetParams migrated from s007fc880 (verbatim, slice spelling)
+007fd700 ?v15@cSPUIBehaviorTimeFunctionDampedPeriodic@@UAE_NXZ  # cSPUIBehaviorTimeFunctionDampedPeriodic::v15 migrated from s007fc880 (verbatim, slice spelling)
+007fd790 ?v22@cSPUIBehaviorTimeFunctionDampedPeriodic@@UAEMM@Z  # cSPUIBehaviorTimeFunctionDampedPeriodic::v22 migrated from s007fc880 (verbatim, slice spelling)

@@ -1,5 +1,10 @@
 # source  symbol  va  flags
 ../src/game/Spui/_at_007f0000.cpp  ?ReadSerItem@@YA_NPAUSerBuffer@@PAUC53@@PAUSerItem14@@@Z  007fd430  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Spui/_at_007f0000.cpp  ?SetParams@cSPUIBehaviorTimeFunctionRamp@@QAEXMMM@Z  007fd4a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Spui/_at_007f0000.cpp  ?v22@cSPUIBehaviorTimeFunctionRamp@@UAEMM@Z  007fd4e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Spui/_at_007f0000.cpp  ?v24@cSPUIBehaviorTimeFunctionRamp@@UAE_NXZ  007fd540  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Spui/_at_007f0000.cpp  ?SetParams@cSPUIBehaviorTimeFunctionDampedPeriodic@@QAEXMMMMMH@Z  007fd650  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Spui/_at_007f0000.cpp  ?v15@cSPUIBehaviorTimeFunctionDampedPeriodic@@UAE_NXZ  007fd700  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/Spui/_at_007f0000.cpp  ?SerReadA@@YA_NPAUSerItem@@PAX@Z  007fda80  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/Spui/_at_007f0000.cpp  ?SerLoadVector2@@YA_NPAUSerBuffer@@PAXPAUSerItem14@@@Z  007fe690  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/Spui/_at_007f0000.cpp  ?Ctor@ShadeColorFull@@QAEPAU1@XZ  007ff510  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
