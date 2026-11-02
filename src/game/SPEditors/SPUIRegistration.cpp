@@ -1,4 +1,4 @@
-// src/game/SPEditors/SPUIRegistration.cpp -- migrated from slice(s) s00620bd0, s0061fbd0 by tools/migrate/rewrite.py
+// src/game/SPEditors/SPUIRegistration.cpp -- migrated from slice(s) s008e4310, s00620bd0, s0061fbd0 by tools/migrate/rewrite.py
 // Object file: SPEditors/SPUIRegistration.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -16,6 +16,10 @@
 #include "SP/cString.h"
 #include "SP/cStringTokenTranslator.h"
 #include "EA/UTFWinExtras/cXHTMLFrameSet.h"
+#include <ctype.h>
+#include <string.h>
+#include "EA/XHTML/DOM/Document.h"
+#include "EA/XHTML/DOM/IFormControlMgr.h"
 
 // unnamed retail callees and globals (address in the comment)
 extern "C" void EASTL_allocator_deallocate(void* p); // 0x00f47380
@@ -39,7 +43,7 @@ void* operator new(unsigned int size, const char* name, int flags, unsigned debu
 struct ICoreAllocator;
 void* operator new(unsigned int size, int alignment, const char* name, ICoreAllocator* pAllocator);
 namespace eastl {
-struct allocator_s0061_fbd0 {
+class allocator_s0061_fbd0 { public:
   allocator_s0061_fbd0() {}
 };
 }
@@ -259,7 +263,7 @@ class IWindow_s0061_fbd0;
 }
 namespace EA {
 namespace UTFWin {
-struct Message_s0061_fbd0 {
+class Message_s0061_fbd0 { public:
   IWindow_s0061_fbd0* mpSource;  // +0x0
   uint32_t pad4;
   uint32_t mEventType;  // +0x8
@@ -511,7 +515,7 @@ struct intrusive_list_node_s0061_fbd0 {
 };
 }
 namespace eastl {
-struct intrusive_list_base_s0061_fbd0 {
+class intrusive_list_base_s0061_fbd0 { public:
   intrusive_list_node_s0061_fbd0 mAnchor;
   ~intrusive_list_base_s0061_fbd0();
 };
@@ -599,14 +603,57 @@ class cXHTMLRegistrationHandler : public XHTMLHandlerBase {
 
 // ---- items of slice s00620bd0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 void  __cdecl FUN_00620050(int b);                                                  // 0x620050
+extern char gEmptyString16[];                 // 0x01667bac
+extern const wchar_t* gMainFrameName;         // 0x01520a0c
+extern const wchar_t* gRegistrationCodeName;  // 0x01520a1c
+extern const wchar_t* gRegKeyDefault;         // 0x01520a04
+extern const wchar_t* gRegKeyModal;           // 0x01520a08
+extern const wchar_t* gTypeAttr;              // 0x013f36bc L"type"
+extern const wchar_t* gNameAttr;              // 0x013f3868 L"name"
+extern const wchar_t* gLineBreakSeq;          // 0x013faf54
+extern const wchar_t* gSpaceSeq;              // 0x013ec468
+extern uint8_t   gFlag1520a24;      // 0x1520a24
+void* __cdecl EA_Allocate(unsigned size, const char* name, int a, int b,
+                          const char* file, int line);                              // 0xf473a0
+void  __cdecl FUN_008e4f00(void* cb, void* ctx);                                    // 0x8e4f00
+void* __cdecl FUN_009512c0();                                                       // 0x9512c0
+void* __cdecl FUN_009512d0(unsigned size, int align, const char* name, void* alloc); // 0x9512d0
+void* __cdecl FUN_00620690(void* p);                                                // 0x620690
+bool  __cdecl FUN_00809db0(void* a, const void* b);                                 // 0x809db0
+struct cPropertySubList {
+  uint32_t mPad00[0x46];        // +0x00..0x117
+  uint32_t mModalActive;        // +0x118
+};
+struct cDirectPropertyList {
+  uint32_t mPad00[0xf];         // +0x00..0x3b
+  cPropertySubList* mpModalSub; // +0x3c
+};
+extern cDirectPropertyList* sAppProperties;   // 0x015fd918
+struct WString {
+  wchar_t* mpBegin;      // +0x00
+  wchar_t* mpEnd;        // +0x04
+  wchar_t* mpCapacity;   // +0x08
+};
+void* __cdecl WinXHTML_GetDocument(void* pFrame);                            // 0xcd8000
+bool  __cdecl RegistryReadString(const wchar_t* pKey, WString* pOut);        // 0x6aba80
+uint32_t __cdecl WString_Find(WString* pStr, const wchar_t* pFind, uint32_t pos);  // 0x608340
+void __cdecl WString_Replace(WString* pStr, uint32_t pos, uint32_t n, const wchar_t* pText);  // 0x5f8f80
+void __cdecl WString_MakeUpper(WString* pStr);                               // 0x606e60
+void* __cdecl cXHTMLRegistrationHandler_Ctor(void* pSelf, void* pDoc, int kind,
+                                             const wchar_t* pName);          // 0x6206f0
+void  __cdecl FUN_008e45d0(const wchar_t* pAttr, const wchar_t* pValue, int add);  // 0x8e45d0
+void  __cdecl FUN_008e4350(void* pControl);                                  // 0x8e4350
+void* __cdecl Window_Construct(void* pObject);                               // 0x962a10
+void  __cdecl FormControl_SetControl(void* pControl, void* pWindow);         // 0x8e4b60
+void  __cdecl FUN_006201a0(bool enabled);                                    // 0x6201a0
 static inline void** Vt(void* p) { return *(void***)p; }
-struct cSPUILayout_s0062_0bd0 {
+class cSPUILayout_s0062_0bd0 { public:
   void* FindWindowByID(uint32_t id, bool recursive);   // 0x8105b0
 };
 struct cXHTMLFrameSet {
   void* GetFrame(const void* name);
   bool  HandleLocationChange(int a, const void* url, const void* p, int b);
-  bool  HandleFormSubmit(void* frame, int a);
+  bool  HandleFormSubmit(void* frame, void* pForm);
   int   AddRef();
   int   Release();
 };
@@ -616,14 +663,21 @@ struct cRegDialog {
   char pad18[0x14];
   cXHTMLFrameSet* mpFrameSet;      // +0x2c
   bool  mbFlag30;                  // +0x30
-  char pad31[0x34];
-  char  mbFlag65;                  // +0x65
-  int   mState;                    // +0x68
+  char pad31[3];                   // +0x31..
+  const char* mpGroupName;         // +0x34
+  char pad38[0x18];                // +0x38..0x4f
+  char pad50[4];                   // +0x50
+  WString mCode;                   // +0x54 (begin/end/capacity)
+  char pad60[4];                   // +0x60..0x63
   char  mbKey64;                   // +0x64
+  char  mbFlag65;                  // +0x65
+  char pad66[2];                   // +0x66..0x67
+  int   mState;                    // +0x68
   void SubmitRegistrationForm();   // 0x620bd0
   void ConfirmLogin();             // 0x6205f0
   void DialogUiNotify();           // 0x620e50
 };
+void FormParamCallback();
 struct DialogSub {                 // this = cRegDialog + 8
   char pad0[0xc];
   cSPUILayout_s0062_0bd0 mLayout;             // +0xc (embedded; FindWindowByID gets this = &mLayout)
@@ -631,7 +685,121 @@ struct DialogSub {                 // this = cRegDialog + 8
   int  mState;                     // +0x60
   void OnModalEnd(void* pWindow, int id);  // 0x620dc0
 };
+static inline unsigned WndFlags28(void* w) { return ((unsigned(__thiscall*)(void*))Vt(w)[10])(w); }  // +0x28
+static inline unsigned WndFlags2c(void* w) { return ((unsigned(__thiscall*)(void*))Vt(w)[11])(w); }  // +0x2c
+void  operator delete[](void* p);                                      // 0xf47380
 // ---- items of slice s00620bd0 end
+
+// ---- items of slice s008e4310 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C" int __cdecl wcscmp(const wchar_t*, const wchar_t*);
+#pragma intrinsic(wcscmp)
+#pragma pack(push, 4)
+#pragma pack(pop)
+typedef unsigned char  u8;
+typedef unsigned short u16;
+typedef unsigned int   u32;
+struct Node;
+struct Element;
+struct Attr;
+struct Node {                 // sizeof 0x18
+    void* vftable;            // 0x00
+    void* link0;              // 0x04
+    void* link1;              // 0x08
+    u32   mnType;             // 0x0c
+    void* mpDocument;         // 0x10  Document*
+    void* mpParent;           // 0x14  Element*
+    int      Type();                                // 0x00fc7e50
+    Element* AsElement();                           // 0x008e52f0
+    void*    Init(void* doc, int type);             // 0x008e52b0
+};
+struct IntList {
+    void* link0;              // this+0 : first link
+    void* link1;              // this+4 : last link
+};
+struct Link {                 // 0x14, Element::mpLink
+    const u16* mpURI;         // 0x00
+    const u16* mpName;        // 0x04
+    u32        mLinkType;     // 0x08
+    u32        mState;        // 0x0c
+    u8         mbVisited;     // 0x10
+    u8         _pad11[3];     // 0x11
+};
+struct Element : Node {       // sizeof 0x44
+    IntList mChildNodes;      // 0x18
+    IntList mAttributes;      // 0x20
+    union {
+        u32        mElementType;    // 0x28
+        const u16* mpTagName;       // legacy alias used by the ctor bodies
+    };
+    union {
+        u32 mResourceIndex;         // 0x2c
+        int mnAttrId;
+    };
+    union {
+        u32 mElementState;          // 0x30
+        u32 mFlags30;
+    };
+    union {
+        const u16* mpName;          // 0x34
+        const u16* mpClassName;
+    };
+    union {
+        const u16* mpId;            // 0x38
+        const u16* mpIdValue;
+    };
+    union {
+        const u16* mpClass;         // 0x3c
+        const u16* mpNameValue;
+    };
+    union {
+        Link* mpLink;               // 0x40
+        void* mpExtra40;
+    };
+
+    __declspec(noinline) void HandleEvent(void* ev, int phase); // 0x008e4310
+    void    AppendChild(Element* child);               // 0x008e4350
+    void*   AppendAttr(Attr* attr);                    // 0x008e4380
+    void*   ScalarDeletingDtor(u8 flags);              // 0x008e4450
+    Element* FindChildNodeByName(const u16* name);     // 0x008e4480
+    Attr*   GetAttr(const u16* name);                  // 0x008e4530
+    __declspec(noinline) u16* GetAttrValue(const u16* name); // 0x008e45b0
+    int     SetAttrValue(const u16*, const u16*, u8);  // 0x008e45d0
+    void    SetAttrChecked(const u16*, const u16*);    // 0x008e46e0
+    void    ReleaseChildren();                         // 0x008e48a0
+    void    ReleaseChildren2();                        // 0x008e48f0
+    void    CollectText(void* wstr);                   // 0x008e49e0
+    void    OnAdded();                                 // 0x008e4a70
+    void    OnRemoved();                               // 0x008e4a90
+    void    DispatchA(void* a);                        // 0x008e4ab0
+    u8      DispatchB(void* a);                        // 0x008e4ad0
+    void    DispatchC(void* a);                        // 0x008e4af0
+    u8      AddSubElement(const u16* name);            // 0x008e4b10
+    void    Dtor2();                                   // 0x008e4ba0
+    void    Dtor1();                                   // 0x008e4bd0
+    void    GatherValues(void* a, void* b);            // 0x008e4f00
+    Element* Ctor1(void* doc, const u16* tag);         // 0x008e4940
+    Element* Ctor2(void* doc, void* tag);              // 0x008e4400
+};
+struct Attr {                 // sizeof 0x20
+    void* vftable;            // 0x00
+    void* link0;              // 0x04
+    void* link1;              // 0x08
+    u32   mnType;             // 0x0c
+    void* mpDocument;         // 0x10
+    void* mpOwner;            // 0x14
+    u16*  mpName;             // 0x18
+    u16*  mpValue;            // 0x1c
+};
+// ---- items of slice s008e4310 end
+
+// @ 0x00620020
+namespace SP { namespace Pollen {
+void cCancelConfirmationDialog::ShowModal(IModalWindowCallback_s0061_fbd0* pCallback)
+{
+  IWindow_s0061_fbd0* w = mLayout.FindWindowByID(0x65cf488, true);
+  if (w) SPUIHelpers::BeginModal(w, pCallback, true);
+}
+}}  // namespace SP::Pollen
 
 // @ 0x006200c0
 namespace SP { namespace Pollen {
@@ -916,6 +1084,54 @@ void cRegistrationDialog_s0061_fbd0::FormParamCallback(const wchar_t* name, cons
 }
 }}  // namespace SP::Pollen
 
+// @ 0x00620bd0
+void cRegDialog::SubmitRegistrationForm()
+{
+  void* pFrame = mpFrameSet->GetFrame(gMainFrameName);
+  if (pFrame == 0) return;
+  void* pDoc = WinXHTML_GetDocument(pFrame);
+  if (pDoc == 0) return;
+  void* pTagged = FUN_00620690(*(void**)((char*)pDoc + 0x40));
+  if (pTagged == 0) return;
+
+  WString code;
+  code.mpBegin = (wchar_t*)gEmptyString16;
+  code.mpEnd = code.mpBegin;
+  code.mpCapacity = code.mpBegin + 1;
+
+  const wchar_t* pKey = sAppProperties->mpModalSub->mModalActive ? gRegKeyModal : gRegKeyDefault;
+  if (RegistryReadString(pKey, &code)) {
+    uint32_t pos = WString_Find(&code, gLineBreakSeq, 0);
+    while (pos != 0xffffffffu) {
+      WString_Replace(&code, pos, 1, gSpaceSeq);
+      pos = WString_Find(&code, gLineBreakSeq, 0);
+    }
+    WString_MakeUpper(&code);
+    void* pHandler = EA_Allocate(0x50, "Pollinator/Registration/FormControl", 0, 0, 0, 0);
+    void* pControl = pHandler ? cXHTMLRegistrationHandler_Ctor(pHandler, pDoc, 0x17,
+                                                              gRegistrationCodeName) : 0;
+    FUN_008e45d0(gTypeAttr, L"hidden", 1);
+    FUN_008e45d0(gNameAttr, gRegistrationCodeName, 1);
+    void* pWindow = FUN_009512d0(0x20c, 4, "UI/Registration/Window", FUN_009512c0());
+    void* pIface = 0;
+    if (pWindow) {
+      void* pObj = Window_Construct(pWindow);
+      if (pObj) pIface = (char*)pObj + 4;
+    }
+    ((void(__thiscall*)(void*, int, int))Vt(pIface)[0x7c / 4])(pIface, 1, 0);
+    ((void(__thiscall*)(void*, const wchar_t*))Vt(pIface)[0x80 / 4])(pIface, code.mpBegin);
+    FormControl_SetControl(pControl, pIface);
+    FUN_008e4350(pControl);
+  }
+
+  FUN_008e4f00((void*)&FormParamCallback, this);
+  void* pFrame2 = mpFrameSet->GetFrame(gMainFrameName);
+  void* pFrameBody = pFrame2 ? (char*)pFrame2 + 4 : 0;
+  if (mpFrameSet->HandleFormSubmit(pFrameBody, pTagged)) FUN_006201a0(false);
+  if ((((char*)code.mpCapacity - (char*)code.mpBegin) & ~1) > 2 && code.mpBegin)
+    operator delete[](code.mpBegin);
+}
+
 // @ 0x00620dc0
 void DialogSub::OnModalEnd(void* pWindow, int id)
 {
@@ -940,6 +1156,26 @@ void DialogSub::OnModalEnd(void* pWindow, int id)
     self->mState = 0;
   }
   (void)pWindow;
+}
+
+// @ 0x00620e50
+void cRegDialog::DialogUiNotify()
+{
+  cRegDialog* self = this;
+  void* w = self->mLayout.FindWindowByID(0x519d9b8, true);
+  if (w == 0) return;
+  if ((WndFlags28(w) & 2) == 0) return;
+  if ((WndFlags28(w) & 1) == 0) return;
+  void* w2 = self->mLayout.FindWindowByID(0x6555770, true);
+  if (gFlag1520a24 != 0 && w2 != 0 && (WndFlags2c(w2) & 4) != 0) {
+    gFlag1520a24 = 0;
+    void* p = (char*)self + 8;
+    if (FUN_00809db0(p, (const void*)0x1520ce4)) {
+      self->mState = 2;
+      return;
+    }
+  }
+  self->SubmitRegistrationForm();
 }
 
 // @ 0x00620ef0
@@ -970,4 +1206,47 @@ int TOSDialog_DoMessage(int param_1, void* param_2, int* msg)
   }
   (void)param_2;
   return 0;
+}
+
+// @ 0x008e4a70
+void Element::OnAdded()
+{
+    Element* self = this;
+    self->ReleaseChildren();
+    void* l = *(void**)((char*)self->mpDocument + 0x38);
+    ((void (__thiscall*)(void*, Element*))(*(void***)l)[0x10 / 4])(l, self);
+}
+
+// @ 0x008e4a90
+void Element::OnRemoved()
+{
+    Element* self = this;
+    self->ReleaseChildren2();
+    void* l = *(void**)((char*)self->mpDocument + 0x38);
+    ((void (__thiscall*)(void*, Element*))(*(void***)l)[0x14 / 4])(l, self);
+}
+
+// @ 0x008e4ab0
+void Element::DispatchA(void* a)
+{
+    Element* self = this;
+    void* l = *(void**)((char*)self->mpDocument + 0x38);
+    ((void (__thiscall*)(void*, Element*, void*))(*(void***)l)[0x20 / 4])(l, self, a);
+}
+
+// @ 0x008e4ad0
+u8 Element::DispatchB(void* a)
+{
+    Element* self = this;
+    void* l = *(void**)((char*)self->mpDocument + 0x38);
+    ((void (__thiscall*)(void*, Element*, void*))(*(void***)l)[0x24 / 4])(l, self, a);
+    return 1;
+}
+
+// @ 0x008e4af0
+void Element::DispatchC(void* a)
+{
+    Element* self = this;
+    void* l = *(void**)((char*)self->mpDocument + 0x38);
+    ((void (__thiscall*)(void*, Element*, void*))(*(void***)l)[0x28 / 4])(l, self, a);
 }

@@ -1,5 +1,6 @@
 0061fdb0 ?QueueEvent@cPollinatorJobHost@Pollen@SP@@QAE_NPAXPAUPollEvent@23@@Z  # cPollinatorJobHost::QueueEvent migrated from s0061fbd0 (verbatim, slice spelling)
 0061fee0 ?QueueEvent4@cPollinatorJobHost@Pollen@SP@@QAE_NPAX00PAUPollEvent@23@@Z  # cPollinatorJobHost::QueueEvent4 migrated from s0061fbd0 (verbatim, slice spelling)
+00620020 ?ShowModal@cCancelConfirmationDialog@Pollen@SP@@QAEXPAVIModalWindowCallback_s0061_fbd0@UTFWin@EA@@@Z  # cCancelConfirmationDialog::ShowModal migrated from s0061fbd0 (verbatim, slice spelling)
 00620050 SP::Pollen::cRegistrationDialog::Show  # byte-exact: SetFlag(1,b) on the root window then Begin/EndModal
 006200c0 ?AutoSizeButtons@cRegistrationDialog_s0061_fbd0@Pollen@SP@@QAEXXZ  # cRegistrationDialog_s0061_fbd0::AutoSizeButtons migrated from s0061fbd0 (verbatim, slice spelling)
 00620110 ?SetControlsEnabled@cRegistrationDialog_s0061_fbd0@Pollen@SP@@QAEX_N@Z  # cRegistrationDialog_s0061_fbd0::SetControlsEnabled migrated from s0061fbd0 (verbatim, slice spelling)
@@ -9,7 +10,7 @@
 00620380 ?End@cRegistrationDialog_s0061_fbd0@Pollen@SP@@QAEXXZ  # cRegistrationDialog_s0061_fbd0::End migrated from s0061fbd0 (verbatim, slice spelling)
 00620470 ?HandleMessage@cRegistrationDialog_s0061_fbd0@Pollen@SP@@UAE_NIPAX@Z  # cRegistrationDialog_s0061_fbd0::HandleMessage migrated from s0061fbd0 (verbatim, slice spelling)
 006204b0 ??0cCancelConfirmationDialog@Pollen@SP@@QAE@XZ  # cCancelConfirmationDialog::cCancelConfirmationDialog migrated from s0061fbd0 (verbatim, slice spelling)
-006204e0 ?HandleUIMessage@cCancelConfirmationDialog@Pollen@SP@@UAE_NPAVIWindow_s0061_fbd0@UTFWin@EA@@ABUMessage_s0061_fbd0@56@@Z  # cCancelConfirmationDialog::HandleUIMessage migrated from s0061fbd0 (verbatim, slice spelling)
+006204e0 ?HandleUIMessage@cCancelConfirmationDialog@Pollen@SP@@UAE_NPAVIWindow_s0061_fbd0@UTFWin@EA@@ABVMessage_s0061_fbd0@56@@Z  # cCancelConfirmationDialog::HandleUIMessage migrated from s0061fbd0 (verbatim, slice spelling)
 006205f0 ?ConfirmLogin@cRegistrationDialog_s0061_fbd0@Pollen@SP@@QAEXXZ  # cRegistrationDialog_s0061_fbd0::ConfirmLogin migrated from s0061fbd0 (verbatim, slice spelling)
 00620690 ?FindFirstTaggedElement@cXHTMLRegistrationHandler@Pollen@SP@@QAEPAUDomElement@23@PAU423@@Z  # cXHTMLRegistrationHandler::FindFirstTaggedElement migrated from s0061fbd0 (verbatim, slice spelling)
 006206f0 ??0cXHTMLRegistrationHandler@Pollen@SP@@QAE@PAX00@Z  # cXHTMLRegistrationHandler::cXHTMLRegistrationHandler migrated from s0061fbd0 (verbatim, slice spelling)

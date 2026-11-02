@@ -1,6 +1,6 @@
-00620bd0 ?SubmitRegistrationForm@cRegDialog@@QAEXXZ  # SP::Pollen::cRegistrationDialog::SubmitRegistrationForm
+00620bd0 ?SubmitRegistrationForm@cRegDialog@@QAEXXZ  # cRegDialog::SubmitRegistrationForm migrated from s00620bd0 (verbatim, slice spelling)
 00620dc0 ?OnModalEnd@DialogSub@@QAEXPAXH@Z  # DialogSub::OnModalEnd migrated from s00620bd0 (verbatim, slice spelling)
-00620e50 ?DialogUiNotify@cRegDialog@@QAEXXZ  # SP::Pollen::cRegistrationDialog::DialogUiNotify (this = dialog)
+00620e50 ?DialogUiNotify@cRegDialog@@QAEXXZ  # cRegDialog::DialogUiNotify migrated from s00620bd0 (verbatim, slice spelling)
 00620ef0 ?DoMessage@cTOSDialog@@QAEHPAXPAH@Z  # SP::Pollen::cTOSDialog::DoMessage (this = dialog, 2 stack args, ret 8)
 00621460 ?MapLookup@@YA_NIPAUString8@@@Z  # id -> URL map lookup, optional string out
 006214c0 ?GetURL@@YA_NIPAUString8@@@Z  # GetURL migrated from s00620bd0 (verbatim, slice spelling)
