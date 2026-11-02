@@ -1023,6 +1023,10 @@ void BoolVec_DoInsertValue(void* dst, void* src, int count);
 // ---- items of slice s006a9470 end
 
 // ---- items of slice s006aa3f0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C" void  Fun_011e0912(void* obj, const void* throwInfo);    // 0x11e0912  _CxxThrowException
+extern "C" void* Fun_011e0744(void* d, const void* s, unsigned n);  // 0x11e0744  memcpy thunk
+extern "C" void  Fun_00f47380(void* p);                             // 0x0f47380  operator delete
+#undef VFN
 struct StrKey {
     void* mpBegin;      // +0
     void* mpEnd;        // +4
@@ -1054,8 +1058,132 @@ struct Vec32 {
     void DoInsertValue(uint32_t* pos, const uint32_t* value);  // 0x004558a0
 };
 void EA_MakeCaseInsensitive(const char* src, StrKey* dst);   // 0x00840cc0
+#define VFN(p, off) ((*(void***)(p))[(off) / 4])
+struct Variant_s006a_a3f0 {
+    uint32_t raw0, raw1, raw2, raw3;   // +0x00
+    uint16_t mFlags;                   // +0x10  bit2 = "owns", bit7 = "unsigned"
+    uint16_t mTypeId;                  // +0x12
+
+    void Assign(const Variant_s006a_a3f0* src);       // 0x0542b80 (thiscall)
+    void AssignInt(const int* v);          // 0x0422eb0 (thiscall)
+    void Destruct(int b);                  // 0x093db80 (thiscall)
+};
+struct PairUV { uint32_t key; Variant_s006a_a3f0 val; };
+struct VMapNode {
+    VMapNode* mpNodeRight;   // +0x00
+    VMapNode* mpNodeLeft;    // +0x04
+    VMapNode* mpNodeParent;  // +0x08
+    uint8_t   mColor;        // +0x0c
+    uint8_t   padD[3];
+    uint32_t  mKey;          // +0x10
+    Variant_s006a_a3f0   mValue;        // +0x14
+};
+struct VIter { VMapNode* mpNode; };
+struct RBInsertResult { void* mpNode; uint8_t mInserted; char pad[3]; };
+struct VMap {
+    uint32_t  pad0;          // +0x00
+    VMapNode* aRight;        // +0x04  (anchor node, also end())
+    VMapNode* aLeft;         // +0x08
+    VMapNode* aParent;       // +0x0c
+    uint8_t   aColor;        // +0x10
+    uint8_t   pad1[3];
+    uint32_t  mnSize;        // +0x14
+    uint32_t  mAlloc;        // +0x18
+
+    VMapNode* endNode() { return (VMapNode*)&aRight; }
+    VIter find(const uint32_t& k);                             // 0x0e5c780 (thiscall)
+    RBInsertResult DoInsertValue(const PairUV& value, uint32_t b); // 0x068a600 (thiscall)
+    void DoNukeSubtree(VMapNode* p);                           // 0x068a0f0 (thiscall)
+};
+struct HMap {
+    uint32_t pad0;            // +0x00
+    void**   mpBuckets;       // +0x04
+    uint32_t mnBucketCount;   // +0x08
+    uint32_t mnElementCount;  // +0x0c
+    uint32_t mAlloc;          // +0x10
+
+    void DoFreeNodesH(void** b, uint32_t n);       // 0x06a85b0 (thiscall)
+    void DoFreeNodesSound(void** b, uint32_t n);   // 0x0a39c20 (thiscall)
+    void ClearBuckets(void** b, uint32_t n);       // 0x042a7b0 (thiscall)
+};
+struct EStr {
+    char*  mpBegin;      // +0x00
+    char*  mpEnd;        // +0x04
+    char*  mpCapacity;   // +0x08
+    void*  mAllocator;   // +0x0c
+
+    void push_back(char c);                       // 0x05306c0 (thiscall)
+    void append(const char* b, const char* e);    // 0x0455d60 (thiscall)
+    void assign(const char* s);                   // 0x06a4380 (thiscall)
+    void Dtor();                                  // 0x0530670 (thiscall)
+    bool Fun_0047d570(void* b);                   // 0x0047d570 (thiscall)
+};
+struct WStr {
+    wchar_t* mpBegin;      // +0x00
+    wchar_t* mpEnd;        // +0x04
+    wchar_t* mpCapacity;   // +0x08
+    void*    mAllocator;   // +0x0c
+
+    void RangeInitialize(const wchar_t* s);            // 0x0579a90 (thiscall)
+    void Append(const wchar_t* b, const wchar_t* e);   // 0x0429580 (thiscall)
+};
+struct VecU32_s006a_a3f0 {
+    uint32_t* mpBegin;     // +0x00
+    uint32_t* mpEnd;       // +0x04
+    uint32_t* mpCapacity;  // +0x08
+
+    void Resize(uint32_t n);          // 0x004cd3c0 (thiscall)
+};
+struct cArguments {
+    char data[0x44];
+    void Dtor();                                                  // 0x0837fa0 (thiscall)
+    void SplitIntoArguments(const char* s);                       // 0x08383c0 (thiscall)
+    const char** MainArguments(size_t* pCount, int mn, int mx);   // 0x0838020 (thiscall)
+};
+struct cParser8 {
+    void SubstituteVariables(void* s, int b);   // 0x0843650 (thiscall)
+};
+struct cPropertyList_s006a_a3f0 {
+    char data[0x38];
+    void Dtor();                       // 0x0686320 (thiscall)
+};
+struct SPcError {
+    SPcError(const char* fmt, ...);    // 0x052df30 (thiscall)
+};
+struct StreamBuffer {
+    char data[0x30];
+    void Ctor(uint32_t size, uint32_t b, void* file);   // 0x093b530 (thiscall)
+    void Dtor();                                        // 0x093b5a0 (thiscall)
+};
+int  ParseEnum(const char* s, int* table);                                             // 0x0840bb0
+bool ParseVariantValue(unsigned type, void* obj, int n, const char** argv, Variant_s006a_a3f0* v); // 0x06a6340
+bool SetDefaultVariantValue(unsigned type, Variant_s006a_a3f0* v);                                // 0x06a4990
+bool StripCommentsAndWhiteSpace(char* src, void* a, void* b);                          // 0x0840ec0
+int  Fun_008409f0(void* out, void* s, char* fmt);                                      // 0x08409f0
+bool Fun_006a6240(const char* name, int* out);                                         // 0x06a6240
+bool Fun_006a3f00(int* p);                                                             // 0x06a3f00
+int  Fun_006a32c0(const char* s);                                                      // 0x06a32c0
+void* ConvertToString8(void* out, const void* wstr);                                   // 0x093c570
+uint32_t ReadLine(void* stream, char* buf, size_t n);                                  // 0x093a8b0
+bool StrEq(const void* s, const char* lit);                                            // 0x0555020
+void* MessageServer_s006a_a3f0();                                                                 // 0x067dcc0
+void* GetManager();                                                                    // 0x067dcd0
+void* CheatManager_s006a_a3f0();                                                                  // 0x067de20
 struct cPropertyManager_s006a_a3f0 {
-    char pad00[0x94];
+    void*    mvf00;                        // +0x00
+    void*    mBaseFactory;                 // +0x04
+    void*    mu08;                         // +0x08
+    void*    mBaseIface;                   // +0x0c
+    uint32_t mu10;                         // +0x10
+    uint8_t  mInitialized;                 // +0x14
+    char     pad15[3];                     // +0x15
+    void*    mResourceManager;             // +0x18
+    uint8_t  mFlag1c;                      // +0x1c
+    char     pad1d[3];                     // +0x1d
+    VMap     mPropertyMap;                 // +0x20  rbtree<u32, Variant>
+    cPropertyList_s006a_a3f0 mPropertyList;           // +0x3c
+    HMap     mPropertyLists;               // +0x74
+    char     pad88[0xc];                   // +0x88
     MapNameToID mPropertyNameToIDMap;      // +0x94
     char pad01[0x14];
     MapIDToName mPropertyIDToNameMap;      // +0xb4
@@ -1071,12 +1199,23 @@ struct cPropertyManager_s006a_a3f0 {
     MapIDToName mLocalPropertyIDToNameMap; // +0x148
     char pad07[0x14];
     StrKey mLCName;                        // +0x168
+    void*    mp178;                        // +0x178
+    void*    mp17c;                        // +0x17c
+    EStr     mLine;                        // +0x180
+    cArguments mArguments;                 // +0x190
+    uint32_t mu1d4;                        // +0x1d4
+    EStr     mArgsB;                       // +0x1d8
+    uint8_t  mFlag1e8;                     // +0x1e8
 
-    void RegisterPropertyName(const char* name, uint32_t id);
-    void RegisterPropertyNameLocal(const char* name, uint32_t id);
-    void Fun_006aa450(const char* name, uint32_t id);
-    uint32_t Shutdown();
-    void ParseAndAddProperty(uint32_t id, uint32_t arg2, uint32_t arg3);
+    void RegisterPropertyName(const char* name, uint32_t id);  // 0x006aa3f0 (cPropertyManager::RegisterPropertyName)
+    void RegisterPropertyNameLocal(const char* name, uint32_t id);  // 0x006aa5e0 (cPropertyManager::RegisterPropertyNameLocal)
+    void Fun_006aa450(const char* name, uint32_t id);  // 0x006aa450 (cPropertyManager::Fun_006aa450)
+    bool Shutdown();  // 0x006aa7c0 (cPropertyManager::Shutdown)
+    void ParseAndAddProperty(uint32_t id, uint32_t arg2, uint32_t arg3);  // 0x006aaa10 (cPropertyManager::ParseAndAddProperty)
+    void InsertPropertyEntry(uint32_t key, Variant_s006a_a3f0* value);
+    uint8_t AppendBoolVector(uint32_t arg, int* vec);
+    char ReadResource(void* obj, int* res);
+    void DestroySelf();
 };
 struct cPropertyCommand {
     char pad0[4];
@@ -1088,23 +1227,127 @@ struct cPropertyCommand {
     bool Parse(void** param_2);
 };
 struct cPropertyCommandExec {
+    char pad0[4];
+    void* mIface;                 // +0x04
+    char pad8[4];
+    cPropertyManager_s006a_a3f0* mManager;   // +0x0c
+
     void Execute(void* args);
+    void ExecuteGroupName(void* args);
 };
 // ---- items of slice s006aa3f0 end
+
+// ---- items of slice s006a7e40 begin (TODO(rewrite): local stubs, replace by canonical classes)
+void  EASTL_allocator_deallocate(void* p);   // 0x00f47380
+struct RecQuery;                 // resource-record query object returned by FUN_006abf00
+struct Key128 {                  // 0x14-byte record key used by the walk
+    void*  mVtbl;                // +0x00  0x013eb898
+    int    mField4;              // +0x04  -1
+    int    mField8;              // +0x08  -1
+    int    mFieldC;              // +0x0c  0x00b1b104
+    int    mField10;             // +0x10  -1
+};
+struct Manager;                  // EA::ResourceMan::Manager
+Manager* GetResManager();                                   // 0x0067dcd0
+RecQuery* QueryResourceRecords();                           // 0x006abf00
+void*     GetAllocator();                                   // 0x00925cb0 (default allocator)
+void*     operator_newx(uint32_t, const char*, int, int, int, int); // 0x00f473a0
+void      operator_deletex(void*);                          // 0x00f47380
+void*     PropertyListCtor(void* self, const char* name);   // 0x006a1b90
+void      RegisterPropertyList(void* list);                 // 0x006ad010
+void*     MapFindKey(void* map, const Key128* key);         // 0x0041cd60
+void      MapInsertValue(void* vec, void* pos, const void* val); // 0x00690c90
+void*     MapFindRef(void* map, const void* ref, void* out); // 0x0041fb20
+void*     VariantToSubItem();                               // 0x006bb640
+void      SetPropertyListParent(void* list, void* parent);// 0x006a1710
+typedef char (__thiscall *Fn_vt_ret_char)(void*);
+typedef char (__thiscall *Fn_vt_char_i)(void*, int);
+typedef void (__thiscall *Fn_vt_vec_key)(void*, void* vec, void* key);
+typedef char (__thiscall *Fn_vt_char_pp)(void*, void* a, void* b, void* out);
+typedef void (__thiscall *Fn_vt_void_void)(void*, void*);
+static char VtCall_c_i(void* obj, int slot, int arg)
+{
+    return (*(Fn_vt_char_i*)(*(char***)obj + slot / 4))(obj, arg);
+}
+static void VtCall_vec_key(void* obj, int slot, void* vec, void* key)
+{
+    (*(Fn_vt_vec_key*)(*(char***)obj + slot / 4))(obj, vec, key);
+}
+static char VtCall_c_pp(void* obj, int slot, void* a, void* b, void* out)
+{
+    return (*(Fn_vt_char_pp*)(*(char***)obj + slot / 4))(obj, a, b, out);
+}
+static void VtCall_v(void* obj, int slot)
+{
+    (*(Fn_vt_void_void*)(*(char***)obj + slot / 4))(obj, 0);
+}
+static char VtCall_c(void* obj, int slot)
+{
+    return (*(Fn_vt_ret_char)(*(char***)obj + slot / 4))(obj);
+}
+struct ScratchVec {
+    void* mpBegin;      // +0x00
+    void* mpEnd;        // +0x04
+    void* mpCapacity;   // +0x08
+    void* mpInline;     // +0x0c
+    void* mBuf[4096];   // +0x10 inline storage
+};
+struct Key1;
+struct Iter1 {
+    void* mpNode;   // +0
+    Iter1() {}
+    Iter1(const Iter1&) {}
+};
+struct StrTmpC {
+    void* mpBegin; void* mpEnd; void* mpCap;
+    void* mPad1; void* mPad2;
+    ~StrTmpC() {
+        if ((char*)mpCap - (char*)mpBegin > 1 && mpBegin)
+            EASTL_allocator_deallocate(mpBegin);
+    }
+};
+struct ValueMap1 {
+    char     pad0[4];
+    void**   mpBucketArray;    // +4
+    uint32_t mnBucketCount;    // +8
+
+    Iter1 find(const Key1* key);                 // out-of-line template instantiation
+    void* makeDefault(const Key1* key, void* out, int flag);   // 0x006a3f40
+    void  insertDefault(Iter1* out, const void* value, int flag); // 0x006a5c50
+
+    int& operator[](const Key1* key);
+};
+struct Iter2 {
+    void* mpNode;   // +0
+    Iter2() {}
+    Iter2(const Iter2&) {}
+};
+struct StrTmpW {
+    void* mpBegin; void* mpEnd; void* mpCap;
+    void* mPad1; void* mPad2;
+    ~StrTmpW() {
+        if ((char*)mpCap - (char*)mpBegin > 1 && mpBegin)
+            EASTL_allocator_deallocate(mpBegin);
+    }
+};
+struct ValueMap2 {
+    char     pad0[4];
+    void**   mpBucketArray;    // +4
+    uint32_t mnBucketCount;    // +8
+
+    Iter2 find(uint32_t key);                        // 0x00a3b2c0
+    void* makeDefault(uint32_t key, void* out);      // 0x00b209f0
+    void  insertDefault(Iter2* out, const void* value, uint32_t key); // 0x006a5d50
+
+    uint16_t* operator[](uint32_t key);
+};
+// ---- items of slice s006a7e40 end
 
 // @ 0x006a3310
 void cCommandStub::Forward(int a, int b)
 {
     ((void (__thiscall*)(cCommandStub*, int, int, int))(*(void***)this)[0xb])(this, a, 0, b);
 }
-
-
-
-
-
-
-
-
 
 // @ 0x006a3330
 bool cPropertyManager2::CreateResource(int* info, int a, int b, int* out)
@@ -1128,14 +1371,6 @@ bool cPropertyManager2::CreateResource(int* info, int a, int b, int* out)
     return false;
 }
 
-
-
-
-
-
-
-
-
 // @ 0x006a3400
 unsigned int SP::cPropertyManager::GetSupportedTypes(unsigned int * p, unsigned int n)
 {
@@ -1146,14 +1381,6 @@ unsigned int SP::cPropertyManager::GetSupportedTypes(unsigned int * p, unsigned 
     }
     return 1;
 }
-
-
-
-
-
-
-
-
 
 // @ 0x006a3430
 float* EulerFromMatrix(float* out, const float* m)
@@ -1171,14 +1398,6 @@ float* EulerFromMatrix(float* out, const float* m)
     return out;
 }
 
-
-
-
-
-
-
-
-
 // @ 0x006a34a0
 Variant& Variant::SetVec21(const void* p)
 {
@@ -1195,14 +1414,6 @@ Variant& Variant::SetVec21(const void* p)
     return *this;
 }
 
-
-
-
-
-
-
-
-
 // @ 0x006a3510
 Variant& Variant::SetVec30(const void* p)
 {
@@ -1217,14 +1428,6 @@ Variant& Variant::SetVec30(const void* p)
     mFlags = mFlags & 2;
     return *this;
 }
-
-
-
-
-
-
-
-
 
 // @ 0x006a3570
 Variant& Variant::SetVec31(const void* p)
@@ -1242,14 +1445,6 @@ Variant& Variant::SetVec31(const void* p)
     return *this;
 }
 
-
-
-
-
-
-
-
-
 // @ 0x006a3610
 Variant& Variant::SetVec32(const void* p)
 {
@@ -1266,14 +1461,6 @@ Variant& Variant::SetVec32(const void* p)
     return *this;
 }
 
-
-
-
-
-
-
-
-
 // @ 0x006a38c0
 void cCommandStateA::OnRegister(void* parser, int b)
 {
@@ -1285,14 +1472,6 @@ void cCommandStateA::OnRegister(void* parser, int b)
         ((EA::ArgScript::cIMetaCommand*)this)->OnRegister(parser, b);
     }
 }
-
-
-
-
-
-
-
-
 
 // @ 0x006a38f0
 void cCommandStateB::OnRegister(void* parser, int b)
@@ -1306,14 +1485,6 @@ void cCommandStateB::OnRegister(void* parser, int b)
     }
 }
 
-
-
-
-
-
-
-
-
 // @ 0x006a3920
 Float3* FUN_006a3920(Float3* out, const float* m)
 {
@@ -1325,14 +1496,6 @@ Float3* FUN_006a3920(Float3* out, const float* m)
     return out;
 }
 
-
-
-
-
-
-
-
-
 // @ 0x006a3980
 const char* __stdcall FUN_006a3980(int index)
 {
@@ -1340,14 +1503,6 @@ const char* __stdcall FUN_006a3980(int index)
         return "Displays or modifies properties";
     return index == 1 ? "[<propName:string>]                Displays value of given app property" : 0;
 }
-
-
-
-
-
-
-
-
 
 // @ 0x006a39a0
 int SP::cPropertyManager::GetPropertyGroupCount()
@@ -1360,14 +1515,6 @@ int SP::cPropertyManager::GetPropertyGroupCount()
     return 0;
 }
 
-
-
-
-
-
-
-
-
 // @ 0x006a39d0
 bool SP::cPropertyManager::GetPropertyGroupID(int idx, unsigned int * out)
 {
@@ -1378,41 +1525,17 @@ bool SP::cPropertyManager::GetPropertyGroupID(int idx, unsigned int * out)
     return false;
 }
 
-
-
-
-
-
-
-
-
 // @ 0x006a3ac0
 void FUN_006a3ac0(void* args)
 {
     (void)args;
 }
 
-
-
-
-
-
-
-
-
 // @ 0x006a3c30
 void FUN_006a3c30(int b)
 {
     (void)b;
 }
-
-
-
-
-
-
-
-
 
 // @ 0x006a3ce0
 void cAppPropsCommand::Execute(void* args)
@@ -1422,14 +1545,6 @@ void cAppPropsCommand::Execute(void* args)
     ((void (__thiscall*)(void*, void*))(*(void***)mOwner)[0x8c / 4])(mOwner, this);
 }
 
-
-
-
-
-
-
-
-
 // @ 0x006a3d10
 void cAppPropsCommand::OnEndParse(int b)
 {
@@ -1437,14 +1552,6 @@ void cAppPropsCommand::OnEndParse(int b)
     *(uint8_t*)(*(int*)((char*)this + 0x30) + 0x1e8) = 0;
     ++*(uint32_t*)((char*)g_sAppProperties + 0x34);
 }
-
-
-
-
-
-
-
-
 
 // @ 0x006a3d50
 void* FUN_006a3d50(FeedbackCmd* self)
@@ -1456,27 +1563,11 @@ void* FUN_006a3d50(FeedbackCmd* self)
     return g_feedbackFallback;
 }
 
-
-
-
-
-
-
-
-
 // @ 0x006a3dd0
 void FUN_006a3dd0(int* p)
 {
     (void)p;
 }
-
-
-
-
-
-
-
-
 
 // @ 0x006a3f00
 bool FUN_006a3f00(FeedbackCmd* self)
@@ -1485,14 +1576,6 @@ bool FUN_006a3f00(FeedbackCmd* self)
         return true;    // replaced by real rbtree test in matching version
     return ((bool (__thiscall*)(void*))((void**)*(void**)((char*)self + 0x3c))[0x1c / 4])((char*)self + 0x3c);
 }
-
-
-
-
-
-
-
-
 
 // @ 0x006a3f40
 void FUN_006a3f40(String* self, const char** range, const void* tag)
@@ -1511,14 +1594,6 @@ void FUN_006a3f40(String* self, const char** range, const void* tag)
     *(const void**)((char*)self + 0x10) = tag;
 }
 
-
-
-
-
-
-
-
-
 // @ 0x006a4100
 void* CopyVec12(void* dst, unsigned n, const void* src)
 {
@@ -1536,14 +1611,6 @@ void* CopyVec12(void* dst, unsigned n, const void* src)
     return dst;
 }
 
-
-
-
-
-
-
-
-
 // @ 0x006a4130
 Vec38* Vec38::Init(int n, const void* alloc)
 {
@@ -1555,14 +1622,6 @@ Vec38* Vec38::Init(int n, const void* alloc)
     return this;
 }
 
-
-
-
-
-
-
-
-
 // @ 0x006a4190
 uint32_t FUN_006a4190(void* parser)
 {
@@ -1573,14 +1632,6 @@ uint32_t FUN_006a4190(void* parser)
     return FNVHash(s, 0x811c9dc5u, 1);
 }
 
-
-
-
-
-
-
-
-
 // @ 0x006a4240
 bool FUN_006a4240(cPropertyManager* self, int a, int b)
 {
@@ -1588,28 +1639,12 @@ bool FUN_006a4240(cPropertyManager* self, int a, int b)
     return false;
 }
 
-
-
-
-
-
-
-
-
 // @ 0x006a42d0
 bool FUN_006a42d0(cPropertyManager* self, int n, const void* values)
 {
     (void)self; (void)n; (void)values;
     return false;
 }
-
-
-
-
-
-
-
-
 
 // @ 0x006a4360
 void cDealloc::Release()
@@ -1620,27 +1655,11 @@ void cDealloc::Release()
     }
 }
 
-
-
-
-
-
-
-
-
 // @ 0x006a4380
 String& String::assign(const char* p)
 {
     return assign(p, p + strlen(p));
 }
-
-
-
-
-
-
-
-
 
 // @ 0x006a43b0
 int FUN_006a43b0(char* self, const uint32_t* key)
@@ -1666,28 +1685,12 @@ int FUN_006a43b0(char* self, const uint32_t* key)
     return (int)(before - *(uint32_t*)(self + 0xc));
 }
 
-
-
-
-
-
-
-
-
 // @ 0x006a4450
 void* FUN_006a4450(char* tree, void** it, int node, void** root)
 {
     (void)tree; (void)it; (void)node; (void)root;
     return it;
 }
-
-
-
-
-
-
-
-
 
 // @ 0x006a44d0
 Vec208* Vec208::Init(unsigned n, const void* alloc)
@@ -1714,14 +1717,6 @@ Vec208* Vec208::Init(unsigned n, const void* alloc)
     return this;
 }
 
-
-
-
-
-
-
-
-
 // @ 0x006a4580
 VecC* VecC::Init(unsigned n, const void* alloc)
 {
@@ -1745,14 +1740,6 @@ VecC* VecC::Init(unsigned n, const void* alloc)
     return this;
 }
 
-
-
-
-
-
-
-
-
 // @ 0x006a4600
 Vec8* Vec8::Init(unsigned n, const float* value)
 {
@@ -1772,14 +1759,6 @@ Vec8* Vec8::Init(unsigned n, const float* value)
     return this;
 }
 
-
-
-
-
-
-
-
-
 // @ 0x006a4660
 Vec10* Vec10::Init(int n, const void* value)
 {
@@ -1789,14 +1768,6 @@ Vec10* Vec10::Init(int n, const void* value)
     end = (char*)begin + n * 0x10;
     return this;
 }
-
-
-
-
-
-
-
-
 
 // @ 0x006a46a0
 VecC* VecC::InitValue(unsigned n, const float* value)
@@ -1821,14 +1792,6 @@ VecC* VecC::InitValue(unsigned n, const float* value)
     return this;
 }
 
-
-
-
-
-
-
-
-
 // @ 0x006a4730
 Vec10b* Vec10b::Init(int n, const void* value)
 {
@@ -1838,14 +1801,6 @@ Vec10b* Vec10b::Init(int n, const void* value)
     end = (char*)begin + n * 0x10;
     return this;
 }
-
-
-
-
-
-
-
-
 
 // @ 0x006a4770
 Vec18* Vec18::Init(unsigned n, const void* alloc)
@@ -1866,13 +1821,6 @@ Vec18* Vec18::Init(unsigned n, const void* alloc)
     end = (char*)begin + n * 0x18;
     return this;
 }
-
-
-
-
-
-
-
 
 // @ 0x006a4990
 bool SetDefaultVariantValue(uint32_t type, Variant_s006a_4990* out)
@@ -1951,12 +1899,6 @@ bool SetDefaultVariantValue(uint32_t type, Variant_s006a_4990* out)
     }
 }
 
-
-
-
-
-
-
 // @ 0x006a5690
 void GetVariantTypeDescription(const Variant_s006a_5690& v, String_s006a_5690& out)
 {
@@ -2000,11 +1942,6 @@ append_array:
         out.append(" array", "");
 }
 
-
-
-
-
-
 // @ 0x006a58a0
 bool ArgMgr::FUN_006a58a0(int msg, int* v)
 {
@@ -2027,11 +1964,6 @@ bool ArgMgr::FUN_006a58a0(int msg, int* v)
     return true;
 }
 
-
-
-
-
-
 // @ 0x006a59f0
 void ArgMgr::FUN_006a59f0(int* v)
 {
@@ -2046,11 +1978,6 @@ void ArgMgr::FUN_006a59f0(int* v)
     ((HashTable*)((char*)this + 0x74))->Find2(&key[0], key);
     VariantRelease(&tmp);
 }
-
-
-
-
-
 
 // @ 0x006a5a90
 void ArgMgr::FUN_006a5a90(int a, int count, int* p)
@@ -2081,11 +2008,6 @@ void ArgMgr::FUN_006a5a90(int a, int count, int* p)
     }
 }
 
-
-
-
-
-
 // @ 0x006a5b80
 void ArgMgr::FUN_006a5b80(int count, int* p)
 {
@@ -2114,11 +2036,6 @@ void ArgMgr::FUN_006a5b80(int count, int* p)
     }
 }
 
-
-
-
-
-
 // @ 0x006a5c50
 void ArgMgr::FUN_006a5c50(int* out, void* key)
 {
@@ -2127,11 +2044,6 @@ void ArgMgr::FUN_006a5c50(int* out, void* key)
     out[1] = 0;
     *((uint8_t*)(out + 2)) = 0;
 }
-
-
-
-
-
 
 // @ 0x006a5e10
 Vec10s* Vec10s::Init(unsigned n, const void* value)
@@ -2146,11 +2058,6 @@ Vec10s* Vec10s::Init(unsigned n, const void* value)
     *(void**)((char*)this + 4) = (char*)begin + n * 0x10;
     return this;
 }
-
-
-
-
-
 
 // @ 0x006a5ea0
 struct Fill38 {
@@ -2174,11 +2081,6 @@ Vec38b* Vec38b::Init(unsigned n, const void* value)
     return this;
 }
 
-
-
-
-
-
 // @ 0x006a5f70
 bool ArgMgr::FUN_006a5f70(const char* name, uint32_t* out)
 {
@@ -2191,11 +2093,6 @@ bool ArgMgr::FUN_006a5f70(const char* name, uint32_t* out)
     }
     return false;
 }
-
-
-
-
-
 
 // @ 0x006a5fd0
 bool ArgMgr::FUN_006a5fd0(const char* name, uint32_t* out)
@@ -2225,11 +2122,6 @@ bool ArgMgr::FUN_006a5fd0(const char* name, uint32_t* out)
     return false;
 }
 
-
-
-
-
-
 // @ 0x006a60b0
 bool ArgMgr::FUN_006a60b0(int a, int b, int* out)
 {
@@ -2247,11 +2139,6 @@ bool ArgMgr::FUN_006a60b0(int a, int b, int* out)
     *out = *(int*)(*(int*)&iter + 8);
     return true;
 }
-
-
-
-
-
 
 // @ 0x006a61c0
 void ArgMgr::FUN_006a61c0(int a, int b)
@@ -2273,11 +2160,6 @@ void ArgMgr::FUN_006a61c0(int a, int b)
             (*(void (__thiscall**)(void*))(*(int*)old + 4))(old);
     }
 }
-
-
-
-
-
 
 // @ 0x006a6240
 bool ArgMgr::FUN_006a6240(const char* name, uint32_t* out)
@@ -2302,11 +2184,6 @@ bool ArgMgr::FUN_006a6240(const char* name, uint32_t* out)
     return false;
 }
 
-
-
-
-
-
 // @ 0x006a6310
 VecU32* VecU32::Init(unsigned n, const void* alloc)
 {
@@ -2317,11 +2194,6 @@ VecU32* VecU32::Init(unsigned n, const void* alloc)
     *(uint32_t*)((char*)this + 4) = (uint32_t)begin + n * 4;
     return this;
 }
-
-
-
-
-
 
 // @ 0x006a6340
 bool ParseVariantValue(uint32_t type, cFormatParser* parser, int count, const char** args, Variant_s006a_6340* out)
@@ -2578,22 +2450,165 @@ bool ParseVariantValue(uint32_t type, cFormatParser* parser, int count, const ch
     }
 }
 
-
-
-
-
 // @ 0x006a7e40
 void SP::cPropertyManager::PreloadPropertyLists()
 {
-    // TODO(partial): walks the resource manager's property-list resources, instantiates a
-    // cPropertyList per instance, feeds it through cPropertyList::cPropertyList("Preloaded")
-    // and cPropertyList::Load, then registers every resulting list via
-    // FUN_006a1710/GetPropertyList.  The 4096-entry scratch vector and the EH/FUN_* cleanup
-    // layout are not reproduced yet.
+    Manager* mgr = GetResManager();
+    RecQuery* query = QueryResourceRecords();
+
+    Key128 key;
+    key.mVtbl   = (void*)0x013eb898;
+    key.mField4 = -1;
+    key.mField8 = -1;
+    key.mFieldC = 0x00b1b104;
+    key.mField10 = -1;
+
+    GetAllocator();
+    // A hash set with an inline sentinel; the resource manager enumerates every record into it.
+    char  set[0x10];                       // +0x00 head/self links (sentinel list)
+    *(void**)(set + 0) = set;
+    *(void**)(set + 4) = 0;
+    *(void**)(set + 8) = set;
+    VtCall_v(mgr, 0x5c);                   // mgr->EnumerateRecords(&set, 0)
+
+    ScratchVec scratch;
+    scratch.mpBegin    = scratch.mBuf;
+    scratch.mpEnd      = scratch.mBuf;
+    scratch.mpCapacity = (char*)set;       // approximate upper bound slot
+    scratch.mpInline   = scratch.mBuf;
+
+    // ---- first pass: build cPropertyList objects for every matching sub-item ----
+    for (void** node = *(void***)set; node != (void**)set; node = (void**)*node) {
+        void* rec = node[2];
+        if (rec != 0 && VtCall_c_i(rec, 0x0c, 0x226a1de) != 0)
+            continue;
+
+        // sub-item vector {begin,end,cap} of 0xc-byte entries
+        void* sub[3] = { 0, 0, 0 };
+        VtCall_vec_key(rec, 0x0c, sub, set + 0x28);
+        int count = (int)(((char*)sub[1] - (char*)sub[0]) / 0xc);
+
+        for (int i = 0; i < count; ++i) {
+            char* item = (char*)sub[0] + i * 0xc;
+            char* p0 = *(char**)(item + 0);
+            char* p1 = *(char**)(item + 4);
+            char* p2 = *(char**)(item + 8);
+
+            void* list = 0;
+            if (VtCall_c_pp(rec, 0x18, &p0, 0, 0) == 0) {
+                void* subItem = 0;
+                if (VtCall_c_pp(rec, 0x1c, &p0, 0, 0) != 0) {   // slot 0x1c: create variant
+                    list = operator_newx(0x38, "App/PropertyList/Preload", 0, 0, 0, 0);
+                    if (list != 0)
+                        list = PropertyListCtor(list, "Preloaded");
+                    if (list != 0)
+                        VtCall_v(list, 0x00);                       // list->vtable[0]() : AddRef
+                    ((void**)list)[2] = p0;
+                    ((void**)list)[3] = p1;
+                    ((void**)list)[4] = p2;
+                    subItem = p2;
+                    if (VtCall_c(list, 0x3c) != 0) {                // list->AddProperty(...)
+                        RegisterPropertyList(list);
+                        void* slot = MapFindKey(set + 0x28, &key);
+                        void* old = *(void**)slot;
+                        if (list != old) {
+                            VtCall_v(list, 0x00);                   // AddRef new
+                            *(void**)slot = list;
+                            if (old != 0)
+                                VtCall_v(old, 0x04);                // Release old
+                        }
+                        if (VtCall_c_i(list, 0x1c, 0x00b2cccb) != 0) {
+                            if (scratch.mpEnd < (void*)scratch.mpCapacity)
+                                *(void**)scratch.mpEnd = list, scratch.mpEnd = (char*)scratch.mpEnd + 4;
+                            else
+                                MapInsertValue(scratch.mpBegin, scratch.mpEnd, &list);
+                        }
+                    }
+                }
+                if (list != 0)
+                    VtCall_v(list, 0x04);                           // Release
+            }
+        }
+
+        if (sub[0] != 0 && *(int*)((char*)sub[0] - 4) != 0)
+            operator_deletex(sub[0]);
+    }
+
+    // ---- second pass: attach the parent property list for every collected list ----
+    int ncollected = (int)(((char*)scratch.mpEnd - (char*)scratch.mpBegin) >> 2);
+    for (int i = 0; i < ncollected; ++i) {
+        void* list = ((void**)scratch.mpBegin)[i];
+        char* subItem = (char*)VtCall_c_i(list, 0x28, 0x00b2cccb);
+
+        // Decode the sub-item's key: a short type tag at +0x12 selects the representation.
+        short tag = *(short*)(subItem + 0x12);
+        char* keyPtr;
+        if (tag == 0x20 || tag == 0x10) {
+            if ((subItem[0x10] & 0x30) == 0)
+                keyPtr = (tag != 0) ? subItem : 0;
+            else
+                keyPtr = *(char**)subItem;
+        } else {
+            keyPtr = (char*)VariantToSubItem();
+        }
+
+        Key128 ref;
+        ref.mVtbl   = *(void**)(keyPtr + 0);
+        ref.mField4 = *(int*)(keyPtr + 4);
+        ref.mField8 = *(int*)(keyPtr + 8);
+        if (ref.mField8 == 0)
+            ref.mField8 = *(int*)((char*)list + 0x10);
+        ref.mFieldC = 0;
+        ref.mField10 = 0;
+
+        void* found = 0;
+        MapFindRef(set + 0x28, &ref, &found);
+        if (found == 0) {
+            void* parent = 0;
+            if (VtCall_c_pp(list, 0x2c, ref.mVtbl, (void*)ref.mField4, &parent) != 0)
+                SetPropertyListParent(list, 0);
+        } else {
+            SetPropertyListParent(list, *(void**)((char*)found + 8));
+        }
+    }
+
+    if (scratch.mpBegin != 0 && scratch.mpBegin != (void*)scratch.mBuf)
+        operator_deletex(scratch.mpBegin);
+
+    // ---- release the enumerated record set ----
+    for (void** node = *(void***)set; node != (void**)set; ) {
+        void** next = (void**)*node;
+        VtCall_v((void*)node, 0x0c);
+        *(void**)set = next;
+        node = next;
+    }
 }
 
+// @ 0x006a8340
+int& ValueMap1::operator[](const Key1* key)
+{
+    Iter1 it = find(key);
+    if (it.mpNode != mpBucketArray[mnBucketCount])
+        return *(int*)((char*)it.mpNode + 0x10);
 
+    StrTmpC temp;
+    void* v = makeDefault(key, &temp, 0);
+    insertDefault(&it, v, 0);
+    return *(int*)((char*)it.mpNode + 0x10);
+}
 
+// @ 0x006a8410
+uint16_t* ValueMap2::operator[](uint32_t key)
+{
+    Iter2 it = find(key);
+    if (it.mpNode != mpBucketArray[mnBucketCount])
+        return (uint16_t*)((char*)it.mpNode + 4);
+
+    StrTmpW temp;
+    void* v = makeDefault(key, &temp);
+    insertDefault(&it, v, key & 0xffffff00);
+    return (uint16_t*)((char*)it.mpNode + 4);
+}
 
 // @ 0x006a8610
 void GetVariantValueDescription(Property* prop, eastl::string* out)
@@ -2863,8 +2878,6 @@ void GetVariantValueDescription(Property* prop, eastl::string* out)
     out->append("\nend");
 }
 
-
-
 // @ 0x006a9470
 void cListPropsCheat::Execute(cArguments_s006a_9470* args)
 {
@@ -2927,7 +2940,6 @@ void cListPropsCheat::Execute(cArguments_s006a_9470* args)
     }
 }
 
-
 // @ 0x006a9790
 void cPropCheat::Execute(cArguments_s006a_9470* args)
 {
@@ -2980,7 +2992,6 @@ void cPropCheat::Execute(cArguments_s006a_9470* args)
         Output(mOut, "%s = %s (%s) %s \n", argv[0], valueDesc.c_str(), typeDesc.c_str(), suffix.c_str());
     }
 }
-
 
 // @ 0x006a9b60
 bool cPropertyManager_s006a_9470::Init()
@@ -3070,7 +3081,6 @@ bool cPropertyManager_s006a_9470::Init()
     return true;
 }
 
-
 // @ 0x006aa0d0
 bool BoolVecOwner::Append(int arg1, BoolVec* v)
 {
@@ -3085,7 +3095,6 @@ bool BoolVecOwner::Append(int arg1, BoolVec* v)
     v->mpEnd = (char*)v->mpEnd - (((char*)src - (char*)dst) >> 2) * 4;
     return v->mpBegin != v->mpEnd;
 }
-
 
 // @ 0x006aa130
 bool cPropertyFactory::WriteResource(PropList* list, IResEntry* entry, int a3, int a4)
@@ -3142,7 +3151,6 @@ bool cPropertyFactory::WriteResource(PropList* list, IResEntry* entry, int a3, i
     return ok;
 }
 
-
 // @ 0x006aa3f0
 void cPropertyManager_s006a_a3f0::RegisterPropertyName(const char* name, uint32_t id)
 {
@@ -3169,10 +3177,35 @@ void cPropertyManager_s006a_a3f0::Fun_006aa450(const char* name, uint32_t id)
 }
 
 // @ 0x006aa4c0
-void FUN_006aa4c0(void* self, uint32_t key, int value)
+void cPropertyManager_s006a_a3f0::InsertPropertyEntry(uint32_t key, Variant_s006a_a3f0* value)
 {
-    // TODO(partial): rbtree insert (find/yrotate/alloc node, copy EA::Variant).
-    (void)self; (void)key; (void)value;
+    Variant_s006a_a3f0 v;
+    v.raw0 = 0; v.raw1 = 0; v.raw2 = 0; v.raw3 = 0;
+    v.mTypeId = 0;
+    v.mFlags = 0;
+    v.Assign(value);
+    v.mFlags = (uint16_t)(v.mFlags | 2);
+
+    if (mFlag1c == 0) {
+        cPropertyList_s006a_a3f0* pl = &mPropertyList;
+        ((void(__thiscall*)(cPropertyList_s006a_a3f0*, uint32_t, Variant_s006a_a3f0*))VFN(pl, 0x14))(pl, key, &v);
+    } else {
+        VIter it = mPropertyMap.find(key);
+        if (it.mpNode == mPropertyMap.endNode()) {
+            PairUV p;
+            p.key = key;
+            p.val.raw0 = 0; p.val.raw1 = 0; p.val.raw2 = 0; p.val.raw3 = 0;
+            p.val.mFlags = 0; p.val.mTypeId = 0;
+            p.val.Assign(&v);
+            mPropertyMap.DoInsertValue(p, key & 0xffffff00u);
+            if (p.val.mFlags & 4)
+                p.val.Destruct(0);
+        } else {
+            it.mpNode->mValue.Assign(&v);
+        }
+    }
+    if (v.mFlags & 4)
+        v.Destruct(0);
 }
 
 // @ 0x006aa5e0
@@ -3187,38 +3220,260 @@ void cPropertyManager_s006a_a3f0::RegisterPropertyNameLocal(const char* name, ui
 // @ 0x006aa640
 void cPropertyCommandExec::Execute(void* args)
 {
-    // TODO(partial): parse the command line, look the property up and print/set it.
-    (void)args;
+    size_t n = 0;
+    const char** av = ((cArguments*)args)->MainArguments(&n, 3, 0x7fffffff);
+
+    void* iface = mIface;
+    uint32_t id = ((uint32_t(__thiscall*)(void*, const char*))VFN(iface, 0xa0))(iface, av[1]);
+    mManager->RegisterPropertyName(av[0], id);
+
+    Variant_s006a_a3f0 v;
+    v.raw0 = 0; v.raw1 = 0; v.raw2 = 0; v.raw3 = 0;
+    v.mFlags = 0; v.mTypeId = 0;
+    int zero = 0;
+    v.AssignInt(&zero);
+
+    int type = ParseEnum(av[2], (int*)0x152ee58);
+    bool ok;
+    if ((int)(n - 3) < 1)
+        ok = SetDefaultVariantValue((unsigned)type, &v);
+    else
+        ok = ParseVariantValue((unsigned)type, iface, (int)(n - 3), av + 3, &v);
+    if (!ok) {
+        SPcError err("couldn't handle type");
+        Fun_011e0912(&err, (const void*)0x14f9174);
+    }
+
+    mManager->InsertPropertyEntry(id, &v);
+    if (mManager->mFlag1e8) {
+        void* app = *(void**)0x15fd918;
+        ((void(__thiscall*)(void*, uint32_t, Variant_s006a_a3f0*))VFN(app, 0x14))(app, id, &v);
+    }
+    if (v.mFlags & 4)
+        v.Destruct(0);
 }
 
 // @ 0x006aa780
-void FUN_006aa780(void* self, void* args)
+void cPropertyCommandExec::ExecuteGroupName(void* args)
 {
-    // TODO(partial): group-name command handler (MainArguments + manager id/name maps).
-    (void)self; (void)args;
+    size_t n = 0;
+    const char** av = ((cArguments*)args)->MainArguments(&n, 2, 0x7fffffff);
+
+    void* iface = mIface;
+    uint32_t id = ((uint32_t(__thiscall*)(void*, const char*))VFN(iface, 0xa0))(iface, av[1]);
+    mManager->Fun_006aa450(av[0], id);
 }
 
 // @ 0x006aa7c0
-bool SP::cPropertyManager::Shutdown()
+bool cPropertyManager_s006a_a3f0::Shutdown()
 {
-    // TODO(partial): unregister from the message server/resource manager, unregister the
-    // listProps/prop cheats, release mLine and tear down all property maps/vectors.
-    return 1;
+    if (!mInitialized)
+        return true;
+    mInitialized = false;
+    mResourceManager = 0;
+
+    void* ms = MessageServer_s006a_a3f0();
+    if (ms)
+        ((void(__thiscall*)(void*, void*, uint32_t, int))VFN(ms, 0x2c))(
+            ms, (void*)((char*)this + 0xc), 0xf62ade, -0x270f);
+
+    void* mgr = GetManager();
+    if (mgr) {
+        void* mgr2 = GetManager();
+        ((void(__thiscall*)(void*, uint32_t, void*, uint32_t))VFN(mgr2, 0x44))(
+            mgr2, 0, (void*)((char*)this + 4), 0);
+    }
+
+    void* ch = CheatManager_s006a_a3f0();
+    if (ch) {
+        ((void(__thiscall*)(void*, const char*))VFN(ch, 0x1c))(ch, "listProps");
+        ((void(__thiscall*)(void*, const char*))VFN(ch, 0x1c))(ch, "prop");
+    }
+
+    if (mp178 != 0) {
+        void* p = mp178;
+        ((void(__thiscall*)(void*))VFN(p, 0xc))(p);
+        if (mp178 != 0) {
+            void* q = mp178;
+            mp178 = 0;
+            ((void(__thiscall*)(void*))VFN(q, 4))(q);
+        }
+    } else {
+        void* p = mp17c;
+        ((void(__thiscall*)(void*))VFN(p, 0xc))(p);
+    }
+    if (mp17c != 0) {
+        void* q = mp17c;
+        mp17c = 0;
+        ((void(__thiscall*)(void*))VFN(q, 4))(q);
+    }
+
+    HMap* h;
+    h = (HMap*)&mPropertyLists;
+    h->ClearBuckets(h->mpBuckets, h->mnBucketCount);
+    h->mnElementCount = 0;
+
+    h = (HMap*)&mGroupNameToIDMap;
+    h->DoFreeNodesH(h->mpBuckets, h->mnBucketCount);
+    h->mnElementCount = 0;
+
+    h = (HMap*)&mGroupIDToNameMap;
+    h->DoFreeNodesSound(h->mpBuckets, h->mnBucketCount);
+    h->mnElementCount = 0;
+
+    Fun_011e0744(mGroupIDs.mpBegin, mGroupIDs.mpEnd, 0);
+    mGroupIDs.mpEnd = mGroupIDs.mpBegin;
+    return true;
 }
 
 // @ 0x006aa910
-uint8_t FUN_006aa910(void* self, uint32_t arg2, int* arg3)
+uint8_t cPropertyManager_s006a_a3f0::AppendBoolVector(uint32_t arg, int* vec)
 {
-    // TODO(partial): append 0xc-stride entries into the bool vector and return non-empty.
-    (void)self; (void)arg2; (void)arg3;
-    return 0;
+    VecU32_s006a_a3f0* v = (VecU32_s006a_a3f0*)vec;
+    // Inlined SimpleVector::erase(begin(), end()): a zero-length memcpy, then the end pointer
+    // is shrunk by (int32_t)(end - begin) >> 2 elements, exactly as the original computes it
+    // (arithmetic shift, so a bogus end pointer wraps rather than collapsing onto begin).
+    Fun_011e0744(v->mpBegin, v->mpEnd, 0);
+    {
+        uint32_t ep = (uint32_t)(size_t)v->mpEnd;
+        uint32_t bp = (uint32_t)(size_t)v->mpBegin;
+        int32_t  dropped = (int32_t)(ep - bp) >> 2;
+        v->mpEnd = (uint32_t*)(size_t)(ep - (uint32_t)dropped * 4u);
+    }
+
+    struct FillRequest {
+        void*    vtbl;    // +0x00  0x13f662c
+        uint32_t f4;      // +0x04  0xb1b104
+        uint32_t arg;     // +0x08
+    };
+    FillRequest req;
+    req.vtbl = (void*)0x13f662c;
+    req.f4 = 0xb1b104;
+    req.arg = arg;
+
+    VecU32_s006a_a3f0 local;
+    local.mpBegin = 0; local.mpEnd = 0; local.mpCapacity = 0;
+
+    void* obj = mResourceManager;
+    uint32_t count = ((uint32_t(__thiscall*)(void*, void*, void*, uint32_t))VFN(obj, 0x38))(
+        obj, &local, &req, 0);
+
+    v->Resize(count);
+    for (uint32_t i = 0; i < count; i++)
+        ((uint32_t*)v->mpBegin)[i] = *(uint32_t*)((char*)local.mpBegin + i * 0xc);
+
+    req.vtbl = (void*)0x13eb394;
+
+    if (local.mpBegin != 0 && ((uint32_t*)local.mpBegin)[-1] != 0)
+        Fun_00f47380(local.mpBegin);
+
+    return (uint8_t)(v->mpBegin != v->mpEnd);
 }
 
 // @ 0x006aaa10
-void FUN_006aaa10(void* self, uint32_t id, uint32_t arg2, uint32_t arg3)
+void cPropertyManager_s006a_a3f0::ParseAndAddProperty(uint32_t a1, uint32_t a2, uint32_t a3)
 {
-    // TODO(partial): parse a property line and add it to the base property list.
-    (void)self; (void)id; (void)arg2; (void)arg3;
+    char*   line   = (char*)a1;
+    void*   parser = (void*)a2;
+    void*   out    = (void*)a3;
+
+    if (!StripCommentsAndWhiteSpace(line, &mLine, (void*)((char*)this + 0x1d4)))
+        return;
+
+    if (mArgsB.mpBegin != mArgsB.mpEnd) {
+        if (mLine.mpBegin != 0 && *mLine.mpBegin == 'e' && StrEq(&mLine, "end")) {
+            mLine.Fun_0047d570(&mArgsB);
+            if (mArgsB.mpBegin != mArgsB.mpEnd) {
+                *mArgsB.mpBegin = 0;
+                mArgsB.mpEnd = mArgsB.mpBegin;
+            }
+        } else {
+            mArgsB.push_back(' ');
+            mArgsB.append(mLine.mpBegin, mLine.mpEnd);
+            return;
+        }
+    }
+
+    EStr tmp;
+    tmp.mpBegin = 0; tmp.mpEnd = 0; tmp.mpCapacity = 0; tmp.mAllocator = 0;
+    Fun_008409f0(&tmp, &mLine, (char*)0x1401864);
+    ((cParser8*)parser)->SubstituteVariables(&mLine, 1);
+    mArguments.SplitIntoArguments(mLine.mpBegin);
+
+    size_t n = 0;
+    const char** av = mArguments.MainArguments(&n, 0, 0x7fffffff);
+
+    if (StrEq(&tmp, "array") && mArgsB.mpBegin == mArgsB.mpEnd && (int)n > 0) {
+        mArgsB.assign(av[0]);
+        tmp.Dtor();
+        return;
+    }
+
+    Variant_s006a_a3f0 v;
+    v.raw0 = 0; v.raw1 = 0; v.raw2 = 0; v.raw3 = 0;
+    v.mFlags = 0; v.mTypeId = 0;
+
+    uint32_t id = 0;
+    int count = (int)n;
+    const char** args = av;
+    unsigned typeBits = 0;
+
+    if (StrEq(&tmp, "property") && count > 2) {
+        id = ((uint32_t(__thiscall*)(void*, const char*))VFN(parser, 0xa0))(parser, args[1]);
+        this->RegisterPropertyNameLocal(args[0], id);
+        typeBits = (unsigned)ParseEnum(args[2], (int*)0x152ee58);
+        v.mTypeId = (uint16_t)typeBits;
+        if ((int)typeBits < 0)
+            v.mFlags = (uint16_t)(v.mFlags | 0x80);
+        args += 3;
+        count -= 3;
+    } else if (StrEq(&tmp, "prop") && count > 1) {
+        typeBits = (unsigned)ParseEnum(args[0], (int*)0x152ee58);
+        v.mTypeId = (uint16_t)typeBits;
+        if ((int)typeBits < 0)
+            v.mFlags = (uint16_t)(v.mFlags | 0x80);
+        id = (uint32_t)Fun_006a32c0(args[1]);
+        this->RegisterPropertyNameLocal(args[1], id);
+        args += 2;
+        count -= 2;
+    } else {
+        int propId = 0;
+        if (!Fun_006a6240(args[0], &propId)) {
+            SPcError err("unknown property: '%s'", args[0]);
+            Fun_011e0912(&err, (const void*)0x14f9174);
+            return;
+        }
+        if (Fun_006a3f00(&propId)) {
+            Variant_s006a_a3f0* src = (Variant_s006a_a3f0*)((void*(__thiscall*)(void*))VFN(this, 0x50))(this);
+            v.Assign(src);
+        } else {
+            if (!((char(__thiscall*)(void*, int))VFN(out, 0x1c))(out, propId)) {
+                if (v.mFlags & 4) v.Destruct(0);
+                if (((char*)tmp.mpCapacity - (char*)tmp.mpBegin) > 1 && tmp.mpBegin)
+                    Fun_00f47380(tmp.mpBegin);
+                return;
+            }
+            Variant_s006a_a3f0* src = (Variant_s006a_a3f0*)((void*(__thiscall*)(void*, int))VFN(out, 0x28))(out, propId);
+            v.Assign(src);
+        }
+        id = (uint32_t)propId;
+        typeBits = v.mTypeId;
+        if (v.mFlags & 0x80)
+            typeBits |= 0x80000000u;
+    }
+
+    v.mFlags = (uint16_t)(v.mFlags | 2);
+    if (count > 0 || (v.mFlags & 0x80)) {
+        if (!ParseVariantValue(typeBits, parser, count, args, &v)) {
+            SPcError err("couldn't handle type");
+            Fun_011e0912(&err, (const void*)0x14f9174);
+        }
+    }
+    ((void(__thiscall*)(void*, uint32_t, Variant_s006a_a3f0*))VFN(out, 0x14))(out, id, &v);
+    if (v.mFlags & 4)
+        v.Destruct(0);
+    if (((char*)tmp.mpCapacity - (char*)tmp.mpBegin) > 1 && tmp.mpBegin)
+        Fun_00f47380(tmp.mpBegin);
 }
 
 // @ 0x006aadb0
@@ -3228,10 +3483,143 @@ bool cPropertyCommand::Parse(void** param_2)
     return true;
 }
 
-// @ 0x006ab120
-char FUN_006ab120(void* self, int* arg2, int* arg3)
+// @ 0x006aae30
+void cPropertyManager_s006a_a3f0::DestroySelf()
 {
-    // TODO(partial): SP::cPropertyManager::ReadResource.
-    (void)self; (void)arg2; (void)arg3;
+    mvf00 = (void*)0x14091e8;
+    mBaseFactory = (void*)0x14091b0;
+    mBaseIface = (void*)0x14091a0;
+
+    if (mArgsB.mpBegin != 0 && ((char*)mArgsB.mpCapacity - (char*)mArgsB.mpBegin) > 1)
+        Fun_00f47380(mArgsB.mpBegin);
+    mArguments.Dtor();
+    if (mLine.mpBegin != 0 && ((char*)mLine.mpCapacity - (char*)mLine.mpBegin) > 1)
+        Fun_00f47380(mLine.mpBegin);
+    if (mp17c != 0) {
+        void* p = mp17c;
+        ((void(__thiscall*)(void*))VFN(p, 4))(p);
+    }
+    if (mp178 != 0) {
+        void* p = mp178;
+        ((void(__thiscall*)(void*))VFN(p, 4))(p);
+    }
+    if (mLCName.mpBegin != 0 && ((char*)mLCName.mpCapacity - (char*)mLCName.mpBegin) > 1)
+        Fun_00f47380(mLCName.mpBegin);
+
+    HMap* h;
+    h = (HMap*)&mLocalPropertyIDToNameMap;
+    h->DoFreeNodesSound(h->mpBuckets, h->mnBucketCount);
+    h->mnElementCount = 0;
+    h = (HMap*)&mLocalPropertyNameToIDMap;
+    h->DoFreeNodesH(h->mpBuckets, h->mnBucketCount);
+    h->mnElementCount = 0;
+
+    if (mGroupIDs.mpBegin != 0 && ((char*)mGroupIDs.mpCapacity - (char*)mGroupIDs.mpBegin) > 1)
+        Fun_00f47380(mGroupIDs.mpBegin);
+
+    h = (HMap*)&mGroupIDToNameMap;
+    h->DoFreeNodesSound(h->mpBuckets, h->mnBucketCount);
+    h->mnElementCount = 0;
+    h = (HMap*)&mGroupNameToIDMap;
+    h->DoFreeNodesH(h->mpBuckets, h->mnBucketCount);
+    h->mnElementCount = 0;
+    h = (HMap*)&mPropertyIDToNameMap;
+    h->DoFreeNodesSound(h->mpBuckets, h->mnBucketCount);
+    h->mnElementCount = 0;
+    h = (HMap*)&mPropertyNameToIDMap;
+    h->DoFreeNodesH(h->mpBuckets, h->mnBucketCount);
+    h->mnElementCount = 0;
+    h = (HMap*)&mPropertyLists;
+    h->ClearBuckets(h->mpBuckets, h->mnBucketCount);
+    h->mnElementCount = 0;
+
+    mPropertyList.Dtor();
+    mPropertyMap.DoNukeSubtree(mPropertyMap.aParent);
+
+    mBaseIface = (void*)0x13eb394;
+    mBaseFactory = (void*)0x13effb8;
+}
+
+// @ 0x006ab120
+char cPropertyManager_s006a_a3f0::ReadResource(void* obj, int* res)
+{
+    void* v = ((void*(__thiscall*)(void*))VFN(obj, 0x1c))(obj);
+    if (v == 0) {
+        void* a = *(void**)res;
+        void* r = ((void*(__thiscall*)(void*))VFN(obj, 0x18))(obj);
+        return ((char(__thiscall*)(void*, void*))VFN(a, 0x3c))(a, r);
+    }
+
+    void* sub = *(void**)((char*)v + 4);
+    void* node = ((void*(__thiscall*)(void*, uint32_t))VFN(sub, 0xc))(sub, 0x226a1de);
+    if (node == 0) {
+        void* a = *(void**)res;
+        void* r = ((void*(__thiscall*)(void*))VFN(obj, 0x18))(obj);
+        return ((char(__thiscall*)(void*, void*))VFN(a, 0x3c))(a, r);
+    }
+
+    void* local18 = *(void**)node;
+    wchar_t wbuf[256];
+    void* w0 = ((void*(__thiscall*)(void*, void*))VFN(obj, 0x10))(obj, wbuf);
+    if (!((char(__thiscall*)(void*, void*))VFN(local18, 0x64))(local18, w0))
+        return 0;
+
+    void* sw = ((void*(__thiscall*)(void*))VFN(node, 0x28))(node);
+    WStr w;
+    w.mpBegin = 0; w.mpEnd = 0; w.mpCapacity = 0; w.mAllocator = 0;
+    w.RangeInitialize((const wchar_t*)sw);
+    wchar_t* we = wbuf;
+    while (*we)
+        we++;
+    w.Append(wbuf, we);
+
+    EStr c;
+    c.mpBegin = 0; c.mpEnd = 0; c.mpCapacity = 0; c.mAllocator = 0;
+    ConvertToString8(&c, &w);
+
+    void* file = ((void*(__thiscall*)(void*))VFN(obj, 0x18))(obj);
+    local18 = file;
+    if (file != 0)
+        ((void(__thiscall*)(void*))VFN(file, 4))(file);
+
+    uint32_t u4 = (uint32_t)mp178;
+    if (mArgsB.mpBegin != mArgsB.mpEnd) {
+        *mArgsB.mpBegin = 0;
+        mArgsB.mpEnd = mArgsB.mpBegin;
+    }
+
+    if (file != 0) {
+        ((void(__thiscall*)(int*, uint32_t, void*))VFN(res, 0x48))(res, u4, file);
+        mu1d4 = 0;
+
+        StreamBuffer sb;
+        sb.Ctor(0x2000, 0, file);
+        char buf[0x2000];
+        for (;;) {
+            uint32_t got = ReadLine(&sb, buf, 0x2000);
+            if (got >= 0xfffffffe)
+                break;
+            ((cPropertyManager_s006a_a3f0*)((char*)this - 4))->ParseAndAddProperty((uint32_t)buf, u4, (uint32_t)res);
+        }
+        sb.Dtor();
+    }
+
+    HMap* h = (HMap*)&mLocalPropertyNameToIDMap;
+    h->DoFreeNodesH(h->mpBuckets, h->mnBucketCount);
+    h->mnElementCount = 0;
+
+    if (file != 0) {
+        ((void(__thiscall*)(void*, uint32_t))VFN(file, 8))(file, 0);
+        ((void(__thiscall*)(void*))VFN(file, 4))(file);
+    }
+
+    if (c.mpBegin != 0 && ((char*)c.mpCapacity - (char*)c.mpBegin) > 1)
+        Fun_00f47380(c.mpBegin);
+
+    if (w.mpBegin != 0) {
+        if ((((char*)w.mpCapacity - (char*)w.mpBegin) & 0xfffffffe) > 2)
+            Fun_00f47380(w.mpBegin);
+        res[0xd] = res[0xd] + 1;
+    }
     return 0;
 }
