@@ -15,6 +15,6 @@
 00e19830 ?FUN_00e19830@cPanel@@QAEXHH@Z  # cPanel::FUN_00e19830 migrated from s00e18d40 (verbatim, slice spelling)
 00e19850 ?FUN_00e19850@cPanel@@QAE_NH@Z  # cPanel::FUN_00e19850 migrated from s00e18d40 (verbatim, slice spelling)
 00e19c40 ?FUN_00e19c40@cPanel@@QAEXHH@Z  # cPanel::FUN_00e19c40 migrated from s00e18d40 (verbatim, slice spelling)
-00e19c70  cMissionLog::FUN_00e19c70          # game-mode -> hash constant
-00e19d10  cMissionLog::FUN_00e19d10          # tail-call 0x663350 when layout visible
-00e19d30  SP::SortMissionsByAssignmentOrder::operator()
+00e19c70 ?FUN_00e19c70@cMissionLog_s00e1_8d40@@QAEIH@Z  # cMissionLog_s00e1_8d40::FUN_00e19c70 migrated from s00e18d40 (verbatim, slice spelling)
+00e19d10 ?FUN_00e19d10@cMissionLog_s00e1_8d40@@QAEXH@Z  # cMissionLog_s00e1_8d40::FUN_00e19d10 migrated from s00e18d40 (verbatim, slice spelling)
+00e19d30 ??RcSortMissions@@QAE_NPAH0@Z  # cSortMissions::operator() migrated from s00e18d40 (verbatim, slice spelling)

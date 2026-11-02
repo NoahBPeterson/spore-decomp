@@ -8,9 +8,9 @@
 00e14e60 ?InsertionSort@cUIMissionCardPanel@@SAXPAU?$AutoRefCount@VcUICard@@@@0@Z  # cUIMissionCardPanel::InsertionSort migrated from s00e14a30 (verbatim, slice spelling)
 00e15060 ?Init@cUICard@@QAE_N_N@Z  # cUICard::Init migrated from s00e14a30 (verbatim, slice spelling)
 00e154d0 ?UpdateProgressWindows@cUIMissionCardPanel@@QAEXXZ  # cUIMissionCardPanel::UpdateProgressWindows migrated from s00e14a30 (verbatim, slice spelling)
-00e15620 ?UpdateScenarioWindows@cUIMissionCardPanel@@QAEXXZ  # void cUIMissionCardPanel::UpdateScenarioWindows
+00e15620 ?UpdateScenarioWindows@cUIMissionCardPanel@@QAEXXZ  # cUIMissionCardPanel::UpdateScenarioWindows migrated from s00e14a30 (verbatim, slice spelling)
 00e15780 ?InitCard@cUICardMissionCard@@QAE_N_N@Z  # cUICardMissionCard::InitCard migrated from s00e14a30 (verbatim, slice spelling)
-00e15910 ??1cUICardMissionCard@@QAE@XZ  # cUICardMissionCard::~cUICardMissionCard
-00e15a10 ??0cUIMissionCardPanel@@QAE@XZ  # cUIMissionCardPanel::cUIMissionCardPanel
+00e15910 ??1cUICardMissionCard@@QAE@XZ  # cUICardMissionCard::~cUICardMissionCard migrated from s00e14a30 (verbatim, slice spelling)
+00e15a10 ??0cUIMissionCardPanel@@QAE@XZ  # cUIMissionCardPanel::cUIMissionCardPanel migrated from s00e14a30 (verbatim, slice spelling)
 00e15b70 ?ShowAllCards@cUIMissionCardPanel@@QAEXXZ  # cUIMissionCardPanel::ShowAllCards migrated from s00e14a30 (verbatim, slice spelling)
 00e15b90 ?ExpandMissionCard@cUIMissionCardPanel@@QAEXH@Z  # cUIMissionCardPanel::ExpandMissionCard migrated from s00e14a30 (verbatim, slice spelling)
