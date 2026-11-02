@@ -1,4 +1,4 @@
-004b2320  ConstructArray  # template construct/AddRef-over-array helper
+004b2320 ?ConstructArray@@YAXPAPAURefCounted@@I0@Z  # ConstructArray migrated from s004b2320 (verbatim, slice spelling)
 004b24c0  SP::cSPEditorPaintTheme::cSPEditorPaintTheme  # constructor; writes both vtables
 004b25e0  SP::cSPEditorPaintTheme::~cSPEditorPaintTheme  # destructor
 004b26a0 ?AsInterface@cSPEditorPaintTheme_s004b_2320@SP@@QAEPAXH@Z  # cSPEditorPaintTheme_s004b_2320::AsInterface migrated from s004b2320 (verbatim, slice spelling)
