@@ -1,0 +1,33 @@
+# source  symbol  va  flags
+../src/game/SPGonzago/_at_00be0000.cpp  ?ctor@cCityTerritory@@QAEPAU1@XZ  00beb950  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00be0000.cpp  ?InitFromDefinition@cCityTerritory@@QAE_NPAX@Z  00beb9f0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00be0000.cpp  ?UpdateRadius@cCityTerritory@@QAEXXZ  00beba70  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00be0000.cpp  ?Write@cCityTerritory@@QAE_NPAX@Z  00beba90  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00be0000.cpp  ?Read@cCityTerritory@@QAE_NPAX@Z  00bebad0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00be0000.cpp  ?Shutdown@cCityTerritory@@QAEXXZ  00bebbd0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00be0000.cpp  ?Overlaps@cCityTerritory@@QAEIPAU1@@Z  00bebc10  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00be0000.cpp  ?SetPoliticalID@cCityTerritory@@QAEII@Z  00bebd70  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00be0000.cpp  ?SetRadius@cCityTerritory@@QAEXXZ  00bebd90  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00be0000.cpp  ?FUN_00bec060@cCityWalls@@QAEXXZ  00bec060  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00be0000.cpp  ?GetCenter@cCityWalls@@QAE?AUVector3@@XZ  00bec190  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00be0000.cpp  ?FUN_00becac0@S@@QAEXH@Z  00becac0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPGonzago/_at_00be0000.cpp  ?FUN_00becc80@S@@QAEXXZ  00becc80  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPGonzago/_at_00be0000.cpp  ?FUN_00bed1c0@S@@QAEPAXPAX@Z  00bed1c0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPGonzago/_at_00be0000.cpp  ?FUN_00bed3c0@S@@QAEXPAX@Z  00bed3c0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPGonzago/_at_00be0000.cpp  ?SetPositionIfChanged@Locator@@QAEXPBUVector3_s00be_eb70@@@Z  00bef540  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00be0000.cpp  ?SetOrientationIfChanged@Locator@@QAEXPBUQuaternion@@@Z  00bef590  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00be0000.cpp  ?ResetValues@cCivilization_s00be_eb70@SP@@QAEXXZ  00bef5f0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00be0000.cpp  ?ClassifyIsHigh@cRelationshipManager_s00be_eb70@@QAE_NPAX0@Z  00bef620  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00be0000.cpp  ?FUN_00bef640@@YAHH@Z  00bef640  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00be0000.cpp  ?GetMoney@cCivilization_s00be_eb70@SP@@QAEMXZ  00bef6d0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00be0000.cpp  ?SpendMoney@cCivilization_s00be_eb70@SP@@QAEXM@Z  00bef710  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00be0000.cpp  ?SetState@cCivilization_s00be_eb70@SP@@QAEXHH@Z  00bef800  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00be0000.cpp  ?RestartTimer378@cCivilization_s00be_eb70@SP@@QAEXXZ  00bef830  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00be0000.cpp  ?RestartTimer3c8@cCivilization_s00be_eb70@SP@@QAEXXZ  00bef850  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00be0000.cpp  ?FUN_00bef920@@YAHH@Z  00bef920  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00be0000.cpp  ?GetFlag484@cCivilization_s00be_eb70@SP@@QAEEH@Z  00bef970  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00be0000.cpp  ?FUN_00bef980@@YGHH@Z  00bef980  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00be0000.cpp  ?FUN_00befbc0@@YAPAXPAX0@Z  00befbc0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_00be0000.cpp  ?FUN_00befc00@@YAPAXPAX0@Z  00befc00  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_00be0000.cpp  ?SimSingletonAccessor_00befd30@@YAPAXXZ  00befd30  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_00be0000.cpp  ?FUN_00beff90@CStub@@QAEEPAMH@Z  00beff90  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

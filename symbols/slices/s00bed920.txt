@@ -1,0 +1,6 @@
+0093dd80 ?Construct@Variant@EA@@IAE_NGGPBXII@Z  # EA::Variant::Construct (callee of s00bed920, named from the dev publics; slice address comment)
+00bed920 ?FUN_00bed920@SP@@YAXII@Z  # FUN_00bed920 migrated from s00bed920 (verbatim, slice spelling)
+00bedb70 ?ctor@CityWalls@SP@@QAEPAU12@XZ  # CityWalls::ctor migrated from s00bed920 (verbatim, slice spelling)
+00bede60 ?FUN_00bede60@CityWalls@SP@@QAEXH@Z  # CityWalls::FUN_00bede60 migrated from s00bed920 (verbatim, slice spelling)
+00bee150 ?FUN_00bee150@CityWalls@SP@@QAEXXZ  # CityWalls::FUN_00bee150 migrated from s00bed920 (verbatim, slice spelling)
+00bee200 ?FUN_00bee200@CityWalls@SP@@QAEXXZ  # CityWalls::FUN_00bee200 migrated from s00bed920 (verbatim, slice spelling)

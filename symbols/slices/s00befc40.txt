@@ -1,8 +1,8 @@
-00befc40 city_assign_civ  # point each city's civ pointer at `src` and reset the per-city tracked state
-00befd30 sim_singleton  # lazily EAAllocate + construct the 0xc8 SimSingleton, return its +0xac field
-00befd80 civic_radius_accum  # accumulate the building radius over time, scaled by terrain mode and the two flags
-00befee0 city_nearest_to  # nearest non-skipped city to `pos` by Euclidean distance over the [0x9c,0xa0) vector
-00beff90 city_has_continent_specialty  # any city whose position matches `pos`'s continent (and specialty) exists
+00befc40 ?FUN_00befc40@CStub@@QAEXPAUCivObject@@@Z  # CStub::FUN_00befc40 migrated from s00befc40 (verbatim, slice spelling)
+00befd30 ?SimSingletonAccessor_00befd30@@YAPAXXZ  # SimSingletonAccessor_00befd30 migrated from s00befc40 (verbatim, slice spelling)
+00befd80 ?FUN_00befd80@CStub@@QAEXME@Z  # CStub::FUN_00befd80 migrated from s00befc40 (verbatim, slice spelling)
+00befee0 ?FUN_00befee0@CStub@@QAEPAXPAMH@Z  # CStub::FUN_00befee0 migrated from s00befc40 (verbatim, slice spelling)
+00beff90 ?FUN_00beff90@CStub@@QAEEPAMH@Z  # CStub::FUN_00beff90 migrated from s00befc40 (verbatim, slice spelling)
 00bf00a0 city_on_continent  # is there a city on `continent` with the given vehicle specialty
 00bf0110 city_continent_has_specialty  # look up `city`'s continent then search for the specialty
 00bf0130 cities_share_continent  # do `this` and `other` share any city continent (nested city walk)
