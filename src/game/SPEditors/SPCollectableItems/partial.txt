@@ -1,2 +1,1 @@
-# va  - PARTIAL: reason (skeleton/stub, not a complete reconstruction)
-00599040 - PARTIAL: cCollectableItems::LoadConfiguration 1015B; skeleton only
+# va  reason

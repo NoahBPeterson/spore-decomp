@@ -1,5 +1,5 @@
-00599040 ?LoadConfiguration@cSpaceInventory@SP@@QAEXHH@Z  # cSpaceInventory::LoadConfiguration migrated from s00599040 (verbatim, slice spelling)
-00599440 SP::cSpaceInventory::Configure  # stores field+0x6d74 then LoadConfiguration
+00599040 ?LoadConfiguration@cSpaceInventory@SP@@QAE_NHH@Z  # cSpaceInventory::LoadConfiguration migrated from s00599040 (verbatim, slice spelling)
+00599440 ?FUN_00599440@cSpaceInventory@SP@@QAE_NHHH@Z  # cSpaceInventory::FUN_00599440 migrated from s00599040 (verbatim, slice spelling)
 00599460 SP::cSpaceInventory::Refresh  # FindWindowByID(0,1) on layout at +0xc
 005994d0 Simulator::cSpaceInventory::cSpaceInventory  # ctor; cSPUIPropertyLayout base, vtables at +0/+4, field +0xa8
 00599530 SP::cSpaceInventory::SetActive  # FUN_00828020(1) + vcall +0x7c
@@ -9,3 +9,4 @@
 005997f0 TraitSuperPowerRollover layout refresh  # cSPUILayout::FindWindowByID at +0xc
 00599be0 TraitSuperPowerRollover wrapper  # forwards to FUN_005997f0 with constants
 00599c10 TraitSuperPowerRollover wrapper  # forwards to FUN_005997f0 with constants
+005c5c20 ?Shutdown@cSPPalette@SP@@QAEXXZ  # SP::cSPPalette::Shutdown (callee of s00599040, named from the dev publics; slice address comment)

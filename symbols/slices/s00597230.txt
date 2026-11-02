@@ -1,2 +1,7 @@
+00597530 ?resize@fixed_vector_u64@SP@@QAEXIAB_K@Z  # fixed_vector_u64::resize migrated from s00597230 (verbatim, slice spelling)
+00597b30 ?DoFreeNodes@SummaryMap@SP@@QAEXPAPAUSummaryNode@2@I@Z  # SummaryMap::DoFreeNodes migrated from s00597230 (verbatim, slice spelling)
 00597d00 ?ASummaryMap  # SummaryMap::operator[]
 00597e00 ??0cCollectableItems@SP@@QAE@XZ  # SP::cCollectableItems::cCollectableItems
+00597f00 ?BuildSetSummary@cCollectableItems_s0059_7230@SP@@QAEXAAUSummaryMap@2@HPBX@Z  # cCollectableItems_s0059_7230::BuildSetSummary migrated from s00597230 (verbatim, slice spelling)
+00598260 ?DoCreateNode@cItemSetRBTree@SP@@QAEPAUcItemSetTreeNode@2@ABUcItemSetValue@2@@Z  # cItemSetRBTree::DoCreateNode migrated from s00597230 (verbatim, slice spelling)
+005982e0 ?DoInsertValueImpl@cItemSetRBTree@SP@@QAE?AUcItemSetIterator@2@PAUcItemSetTreeNode@2@ABUcItemSetValue@2@_N@Z  # cItemSetRBTree::DoInsertValueImpl migrated from s00597230 (verbatim, slice spelling)

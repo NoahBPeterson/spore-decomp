@@ -1,6 +1,11 @@
-# va  diff-bytes  reason (compiled with /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /EHsc)
-00598540 1298 EnsureBaseUnlocksForEditor: complete; register allocation/stack slots and inlined hashtable-find/ctz shapes differ
-00598b50 307 insert_hint: complete; ours 282B vs 342B (block ordering + register allocation differ); equivalence UNSUPPORTED (unresolved DoInsertValueImpl/DoCreateNode)
-00598cb0 129 find_or_insert: complete; ours 197B vs 252B (RowValue temp copy + register allocation differ); equivalence FAIL (faked DoAssignFromIterator memcpy dest differs)
-00598db0 38 FUN_00598db0: complete; ours 220B == 220B (only register assignment encoding differs); equivalence UNSUPPORTED (stores address of own row-vector tag copy)
-00598e90 354 AddCollectableItemInfo: complete; ours 476B vs 418B (EH unwind funclets + call scheduling differ); equivalence PASS (272 inputs)
+# va  diff-bytes  reason
+00597f00 601 summary loop: duplicate find calls and 64-bit shifts schedule differently flags: /O2 /MD /Gy /TP /GS-
+00598260 33 pool-pop and value copy-construction scheduling differ flags: /O2 /MD /Gy /TP /GS-
+00598340 220 DoInsertUnique: complete; ours 236B vs 292B (block ordering + inline KeyLess materialization differ); equivalence UNSUPPORTED (unresolved DoCreateNode) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00598470 85 CatMap::CatMap: complete; ours 175B vs 206B (pool/allocator locals and register allocation differ); equivalence FAIL (map-ctor stack-arg shapes differ) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00598540 1298 EnsureBaseUnlocksForEditor: complete; register allocation/stack slots and inlined hashtable-find/ctz shapes differ flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00598b50 307 insert_hint: complete; ours 282B vs 342B (block ordering + register allocation differ); equivalence UNSUPPORTED (unresolved DoInsertValueImpl/DoCreateNode) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00598cb0 129 find_or_insert: complete; ours 197B vs 252B (RowValue temp copy + register allocation differ); equivalence FAIL (faked DoAssignFromIterator memcpy dest differs) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00598db0 38 FUN_00598db0: complete; ours 220B == 220B (only register assignment encoding differs); equivalence UNSUPPORTED (stores address of own row-vector tag copy) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00598e90 354 AddCollectableItemInfo: complete; ours 476B vs 418B (EH unwind funclets + call scheduling differ); equivalence PASS (272 inputs) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00599040 417 complete LoadConfiguration(int,int): property-list reads (status vector via GetPropertyAsIntArray + Resize, float/uint properties, palette/type/filter keys), palette+cursor creation through the debug allocator, First/Next iteration with filter and AddCollectableItemInfo, ReadText/Shutdown/Release, and the 4x5 default branch when the list is missing; returns true in eax as the original does (declared bool). Size 1036 vs 1015; diffs are /O2 scheduling of AutoRefCount assignments and repeated null tests. [equiv: WEAK 334/400 valid (need 200), 21.7% cov (need 60%), 0 mismatches] flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
