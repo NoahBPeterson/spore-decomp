@@ -1,1 +1,1 @@
-# va  diff-bytes  reason
+# <va>  <dl>  <reason>   (incomplete / not equivalent)

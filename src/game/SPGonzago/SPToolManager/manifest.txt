@@ -1,7 +1,11 @@
 # source  symbol  va  flags
+../src/game/SPGonzago/SPToolManager.cpp  ?FUN_0104bd50@cSPSpaceToolData_s0104_bcc0@SP@@QAEIXZ  0104bd50  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPToolManager.cpp  ?FUN_0104bde0@cSPSpaceToolData_s0104_bcc0@SP@@QAEHXZ  0104bde0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPToolManager.cpp  ?FUN_0104be00@cSPSpaceToolData_s0104_bcc0@SP@@QAEHXZ  0104be00  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPToolManager.cpp  ?FUN_0104be30@cSPSpaceToolData_s0104_bcc0@SP@@QAENXZ  0104be30  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPToolManager.cpp  ?Register@cSPEditorVerbIconTray_s0104_bcc0@SP@@QAEXXZ  0104c220  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPToolManager.cpp  ?GetTextAt@cSPEditorVerbIconTray_s0104_bcc0@SP@@QAEXI@Z  0104c4f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPToolManager.cpp  ?Dispatch@cSPEditorVerbIconTray_s0104_bcc0@SP@@QAEPAXIIPAPAXI@Z  0104c510  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPToolManager.cpp  ??1cSPSpaceToolData_s0104_bcc0@SP@@QAE@XZ  0104c910  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPToolManager.cpp  ?FUN_0104cbd0@cSPSpaceToolData_s0104_bcc0@SP@@QAEXH@Z  0104cbd0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPToolManager.cpp  ?FUN_0104cc00@cSPSpaceToolData_s0104_bcc0@SP@@QAEXH@Z  0104cc00  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

@@ -1,4 +1,4 @@
-0104e060 ?ComputeToolEffectPosition@@YAXPAUVec3@@MMMM@Z  # void ComputeToolEffectPosition
+0104e060 ?ComputeToolEffectPosition@@YAXPAUVec3@@MMMM@Z  # ComputeToolEffectPosition migrated from s0104e060 (verbatim, slice spelling)
 0104e260 ?TryDeselectAfterUse@cSPSpaceToolData_s0104_e060@@QAEXXZ  # cSPSpaceToolData_s0104_e060::TryDeselectAfterUse migrated from s0104e060 (verbatim, slice spelling)
 0104e290 ?SetEffectConfig@@YAXPAUcEffectConfig@@IPBUVec3@@@Z  # SetEffectConfig migrated from s0104e060 (verbatim, slice spelling)
 0104e2f0 ?cSpaceInventoryItem_GetItemCount@@YAIPAUcSpaceInventoryItemData@@PAI@Z  # cSpaceInventoryItem_GetItemCount migrated from s0104e060 (verbatim, slice spelling)

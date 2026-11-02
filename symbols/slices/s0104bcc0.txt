@@ -1,5 +1,5 @@
 0104bcc0 ?Write@cSPSpaceToolData_s0104_bcc0@SP@@QAEEPAUcIface@@@Z  # cSPSpaceToolData_s0104_bcc0::Write migrated from s0104bcc0 (verbatim, slice spelling)
-0104bd50 SP::cSPSpaceToolData::FUN_0104bd50  # true unless the auto-handler flag is clear and the auto-fire timer is stopped
+0104bd50 ?FUN_0104bd50@cSPSpaceToolData_s0104_bcc0@SP@@QAEIXZ  # cSPSpaceToolData_s0104_bcc0::FUN_0104bd50 migrated from s0104bcc0 (verbatim, slice spelling)
 0104bde0 ?FUN_0104bde0@cSPSpaceToolData_s0104_bcc0@SP@@QAEHXZ  # cSPSpaceToolData_s0104_bcc0::FUN_0104bde0 migrated from s0104bcc0 (verbatim, slice spelling)
 0104be00 ?FUN_0104be00@cSPSpaceToolData_s0104_bcc0@SP@@QAEHXZ  # cSPSpaceToolData_s0104_bcc0::FUN_0104be00 migrated from s0104bcc0 (verbatim, slice spelling)
 0104be30 ?FUN_0104be30@cSPSpaceToolData_s0104_bcc0@SP@@QAENXZ  # cSPSpaceToolData_s0104_bcc0::FUN_0104be30 migrated from s0104bcc0 (verbatim, slice spelling)
@@ -7,9 +7,9 @@
 0104bff0 ?FUN_0104bff0@cSPSpaceToolData_s0104_bcc0@SP@@QAEEXZ  # cSPSpaceToolData_s0104_bcc0::FUN_0104bff0 migrated from s0104bcc0 (verbatim, slice spelling)
 0104c010 ?FUN_0104c010@cSPSpaceToolData_s0104_bcc0@SP@@QAEEXZ  # cSPSpaceToolData_s0104_bcc0::FUN_0104c010 migrated from s0104bcc0 (verbatim, slice spelling)
 0104c120 ?UpdateTuning@cSPSpaceInventoryItem_s0104_bcc0@SP@@SAXIPAI@Z  # cSPSpaceInventoryItem_s0104_bcc0::UpdateTuning migrated from s0104bcc0 (verbatim, slice spelling)
-0104c220 SP::cSPEditorVerbIconTray::Register  # register verb events with the messaging server and load 26 label strings
-0104c4f0 SP::cSPEditorVerbIconTray::GetTextAt  # label string for one verb index
-0104c510 SP::cSPEditorVerbIconTray::Dispatch  # per-event verb-icon dispatch
+0104c220 ?Register@cSPEditorVerbIconTray_s0104_bcc0@SP@@QAEXXZ  # cSPEditorVerbIconTray_s0104_bcc0::Register migrated from s0104bcc0 (verbatim, slice spelling)
+0104c4f0 ?GetTextAt@cSPEditorVerbIconTray_s0104_bcc0@SP@@QAEXI@Z  # cSPEditorVerbIconTray_s0104_bcc0::GetTextAt migrated from s0104bcc0 (verbatim, slice spelling)
+0104c510 ?Dispatch@cSPEditorVerbIconTray_s0104_bcc0@SP@@QAEPAXIIPAPAXI@Z  # cSPEditorVerbIconTray_s0104_bcc0::Dispatch migrated from s0104bcc0 (verbatim, slice spelling)
 0104c570 SP::cSPSpaceToolData::cSPSpaceToolData  # constructor: three vtables, four timers, tuning defaults
 0104c910 ??1cSPSpaceToolData_s0104_bcc0@SP@@QAE@XZ  # cSPSpaceToolData_s0104_bcc0::~cSPSpaceToolData migrated from s0104bcc0 (verbatim, slice spelling)
 0104ca20 SP::cSPSpaceToolData::func48h  # item-id dispatch: shield / cloak / rally-call / soothing-song behaviours

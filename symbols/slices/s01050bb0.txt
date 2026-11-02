@@ -1,2 +1,3 @@
 01050bb0 ?PlayerUseToolStart@cSPToolManager_s0105_0bb0@@QAEIPAVcSPToolData@@PAMI@Z  # cSPToolManager_s0105_0bb0::PlayerUseToolStart migrated from s01050bb0 (verbatim, slice spelling)
 01051090 ?PlayerUseToolUpdate@cSPToolManager_s0105_0bb0@@QAEEPAVcSPToolData@@PAMI@Z  # cSPToolManager_s0105_0bb0::PlayerUseToolUpdate migrated from s01050bb0 (verbatim, slice spelling)
+010513a0 ?GetRandomDiscoverableTool@cSPToolManager_s0105_0bb0@@QAEPAUKey3@@PAU2@@Z  # cSPToolManager_s0105_0bb0::GetRandomDiscoverableTool migrated from s01050bb0 (verbatim, slice spelling)
