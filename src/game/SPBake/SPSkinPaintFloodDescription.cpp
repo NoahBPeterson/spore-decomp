@@ -1,4 +1,4 @@
-// src/game/SPBake/SPSkinPaintFloodDescription.cpp -- migrated from slice(s) s00535d00, s00534cf0 by tools/migrate/rewrite.py
+// src/game/SPBake/SPSkinPaintFloodDescription.cpp -- migrated from slice(s) s00536d40, s00535d00, s00534cf0 by tools/migrate/rewrite.py
 // Object file: SPBake/SPSkinPaintFloodDescription.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -10,6 +10,7 @@
 #include "EA/ArgScript/cIBlockCommand.h"
 #include "EA/ArgScript/cIParser.h"
 #include "EA/ArgScript/cState.h"
+#include "cSPTransform.h"
 #pragma intrinsic(strlen)
 
 // ---- items of slice s00534cf0 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -91,6 +92,54 @@ struct Vec16 {
 void* uninitialized_copy16(Elem16* first, Elem16* last, Elem16* dest);   // 0x005371a0
 // ---- items of slice s00535d00 end
 
+// ---- items of slice s00536d40 begin (TODO(rewrite): local stubs, replace by canonical classes)
+struct cSPTransform_s0053_6d40 {
+    uint16_t mFlags;        // +0x00
+    uint16_t mModCount;     // +0x02
+    float mTranslation[3];  // +0x04
+    float mScale;           // +0x10
+    float mRotation[9];     // +0x14
+    cSPTransform_s0053_6d40();                                                            // 0x00434040
+    cSPTransform_s0053_6d40(const cSPTransform_s0053_6d40& x);                                       // @ 0x00538000
+    cSPTransform_s0053_6d40& operator=(const cSPTransform_s0053_6d40& x);                            // @ 0x00537dc0
+    void Compound(const cSPTransform_s0053_6d40& x);                                      // @ 0x00537f40
+};
+int VectorNotEqual(const float* a, const float* b);   // 0x0041dd30
+int RotationNotEqual(const float* a, const float* b);// 0x0041dd90
+cSPTransform_s0053_6d40& cSPTransform_s0053_6d40::operator=(const cSPTransform_s0053_6d40& x)
+{
+    bool bCopy = false;
+    if (mFlags != x.mFlags)
+        bCopy = true;
+    else if (VectorNotEqual(mTranslation, x.mTranslation))
+        bCopy = true;
+    else if (!(mScale == x.mScale))
+        bCopy = true;
+    else if ((mFlags & 2) != 0 && RotationNotEqual(mRotation, x.mRotation))
+        bCopy = true;
+    if (bCopy) {
+        mModCount = mModCount + 1;
+        mFlags = x.mFlags;
+        mTranslation[0] = x.mTranslation[0];
+        mTranslation[1] = x.mTranslation[1];
+        mTranslation[2] = x.mTranslation[2];
+        mScale = x.mScale;
+        for (int i = 0; i < 9; ++i)
+            mRotation[i] = x.mRotation[i];
+    }
+    return *this;
+}
+struct T16 {
+    float a, b, c;
+    uint8_t d, e;
+    uint16_t f;
+    T16& operator=(const T16& x);   // @ 0x00537330
+};
+struct Elem20 {
+    uint32_t d[5];
+};
+// ---- items of slice s00536d40 end
+
 // @ 0x00535c60
 namespace nSPSkinner {
 cPaintVarEvalList_s0053_4cf0::cPaintVarEvalList_s0053_4cf0(const cPaintVarEvalList_s0053_4cf0& x)
@@ -109,4 +158,27 @@ Vec16::Vec16(const Vec16& x)
     mpEnd = p;
     mpCapacity = p + n;
     mpEnd = (Elem16*)uninitialized_copy16(x.mpBegin, x.mpEnd, mpBegin);
+}
+
+// @ 0x00537240
+Elem20* uninitialized_copy20(Elem20* first, Elem20* last, Elem20* dest)
+{
+    Elem20* p = dest;
+    for (; first != last; ++first, ++p) {
+        if (p != 0)
+            *p = *first;
+    }
+    return p;
+}
+
+// @ 0x00537330
+T16& T16::operator=(const T16& x)
+{
+    a = x.a;
+    b = x.b;
+    c = x.c;
+    d = x.d;
+    e = x.e;
+    f = x.f;
+    return *this;
 }
