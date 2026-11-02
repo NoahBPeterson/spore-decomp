@@ -2,3 +2,4 @@
 0079fef0 eastl::vector<SP::cSplitManager::cSplitInstanceList::cElement,eastl::sp_vector_allocator>::push_back  # PDB dev name
 0079ff40 SP::cSplitManager::cSplitInstanceList::insert  # PDB caller-scored candidate
 007a0360 SP::anonymous_namespace::CompileSplitModels  # PDB caller-single candidate
+007a0460 ?m_007a0460@Tc@@QAEPAXPAX@Z  # Tc::m_007a0460 migrated from s0079f8d0 (verbatim, slice spelling)

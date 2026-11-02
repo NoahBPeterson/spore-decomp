@@ -1,4 +1,11 @@
-007a0f90 SP::cIModelSplitter::Split  # PDB caller-single candidate
-007a11c0 SP::anonymous_namespace::cSplitDrawImpl::Dispatch  # PDB caller-single candidate
-0140f58c ??_7SplitDrawBase@@6BBaseA@@@  # split-draw object primary vtable (AddRef, Release, 0x402ab0, Dispatch 0x7a11c0); stored by dtor 0x7a09f0
+007a09f0 ??1SplitDrawBase@@UAE@XZ  # SplitDrawBase::~SplitDrawBase migrated from s007a07b0 (verbatim, slice spelling)
+007a0ae0 ?Resize@VecPod20@@QAEXI@Z  # VecPod20::Resize migrated from s007a07b0 (verbatim, slice spelling)
+007a0b90 ?Swap@V12@@QAEXAAU1@@Z  # V12::Swap migrated from s007a07b0 (verbatim, slice spelling)
+007a0cd0 ?Reset@SplitState@@QAEXHH@Z  # SplitState::Reset migrated from s007a07b0 (verbatim, slice spelling)
+007a0de0 ?Reset@SplitState2@@QAEXHH@Z  # SplitState2::Reset migrated from s007a07b0 (verbatim, slice spelling)
+007a0f90 ?Split@IModelSplitter@@QAEXHPAUV12@@@Z  # IModelSplitter::Split migrated from s007a07b0 (verbatim, slice spelling)
+007a1000 ?Apply@ApplyHost@@QAEXPAUV12@@@Z  # ApplyHost::Apply migrated from s007a07b0 (verbatim, slice spelling)
+007a1100 ?Resize@VecV20@@QAEXI@Z  # VecV20::Resize migrated from s007a07b0 (verbatim, slice spelling)
+007a11c0 ?Dispatch@SplitDrawImpl@@QAEXPAUModelInstance@@HH@Z  # SplitDrawImpl::Dispatch migrated from s007a07b0 (verbatim, slice spelling)
 0140f588 ??_7SplitDrawBase@@6BGmeRefCount@@@  # its GmeRefCount-base vtable (slot 0: this-4 thunk 0x79ab80 to deleting dtor 0x7a0ac0)
+0140f58c ??_7SplitDrawBase@@6BBaseA@@@  # split-draw object primary vtable (AddRef, Release, 0x402ab0, Dispatch 0x7a11c0); stored by dtor 0x7a09f0

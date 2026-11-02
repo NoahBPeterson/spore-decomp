@@ -1,3 +1,4 @@
+007a41c0 ?FUN_007a41c0@@YAPAXPAX@Z  # FUN_007a41c0 migrated from s007a41c0 (verbatim, slice spelling)
 007a4220 SP::cStaticBuffer::~cStaticBuffer  # PDB name
 007a4710 SP::cStaticBuffer::Flush  # PDB name
 007a47c0 SP::cStaticBuffer::GetVertexBuffer  # PDB name

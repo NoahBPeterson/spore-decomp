@@ -1,0 +1,10 @@
+# source  symbol  va  flags
+../src/game/SPEngine/_at_007a0000.cpp  ?Resize@VecPod20@@QAEXI@Z  007a0ae0  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPEngine/_at_007a0000.cpp  ?Swap@V12@@QAEXAAU1@@Z  007a0b90  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPEngine/_at_007a0000.cpp  ?Reset@SplitState@@QAEXHH@Z  007a0cd0  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPEngine/_at_007a0000.cpp  ?Reset@SplitState2@@QAEXHH@Z  007a0de0  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPEngine/_at_007a0000.cpp  ?Split@IModelSplitter@@QAEXHPAUV12@@@Z  007a0f90  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPEngine/_at_007a0000.cpp  ?sInstanceReset@cStaticBufferDraw@@SAXXZ  007a3de0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/_at_007a0000.cpp  ??0cStaticBufferDraw@@QAE@XZ  007a3df0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/_at_007a0000.cpp  ?FreeArrayBlock@@YIXPAPAX@Z  007a41a0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/_at_007a0000.cpp  ?ScalarDelete@TextRenderWare@@QAEPAXE@Z  007a88b0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include

@@ -1,3 +1,4 @@
+00780ab0 ?Update@cShadowWorld@SP@@QAEXXZ  # SP::cShadowWorld::Update (callee of s007a7d50, named from the dev publics; slice address comment)
 007a7d50 SP::cTextRenderer::InitRenderer  # nearby caller-single; large renderer init
 007a82a0 SP::cTextRenderer::SetStyle  # calls EA::Text::GetStyleManager(1)/GetStyle
 007a82d0 SP::cTextRenderer::SetStyleScale  # writes style +0x227/+0x224
@@ -13,5 +14,5 @@
 007a8700 SP::cTextRenderer::DestroyDevice  # LeaveCriticalSection +0x168
 007a8790 SP::cTextRenderer::~cTextRenderer  # frees buffers/layout/style
 007a8810 SP::CreateTextRenderWareObject  # allocates 0x1a8 object, sets vtable
-007a88b0 SP::cTextRendererRenderWare::ScalarDeletingDtor
+007a88b0 ?ScalarDelete@TextRenderWare@@QAEPAXE@Z  # TextRenderWare::ScalarDelete migrated from s007a7d50 (verbatim, slice spelling)
 007a8910 eastl::vector<Glyph,stride 0x14>::insert
