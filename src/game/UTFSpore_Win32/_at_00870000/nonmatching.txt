@@ -1,0 +1,7 @@
+# va  diff-bytes  reason
+0087bdc0 173 register-ABI (deflate_state arrives in EAX, no stack arg); equiv UNSUPPORTED; flags /O2 /MD /Gy /EHsc /TP /GS-
+0087c470 144 register-ABI (max_code arrives in EDX); equiv UNSUPPORTED; flags /O2 /MD /Gy /EHsc /TP /GS-
+0087c6f0 168 register-ABI (deflate_state arrives in EAX); equiv UNSUPPORTED; flags /O2 /MD /Gy /EHsc /TP /GS-
+0087d0b0 129 register-allocation difference (this=ebx/found=ebp/best=edi vs swapping this<->best); equiv PASS 399/399; flags /O2 /MD /Gy /EHsc /TP /GS-
+0087d1c0 87 register-allocation difference (this=edi/ptr=esi vs this=esi); equiv PASS 400/400; flags /O2 /MD /Gy /EHsc /TP /GS-
+0087d360 87 register-allocation difference (this=edi/ptr=esi vs this=esi); equiv PASS 400/400; flags /O2 /MD /Gy /EHsc /TP /GS-
