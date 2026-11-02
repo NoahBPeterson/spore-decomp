@@ -1,4 +1,4 @@
-# va  reason
+# va  diff-bytes  reason
 0070e480  46    fixed-array wrapper; element ctor/dtor passed as null
 0070ec80  999   SP::cMaterialManager::Init; timer branch simplified
 0070f0d0  500   SP::cMaterialManager::WriteShaders; in-place path omitted

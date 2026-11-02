@@ -25,6 +25,28 @@ extern "C" void ShaderStateUnlockHook();
 #pragma function(memcpy)
 
 // ---- items of slice s006e51b0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+struct Stream {
+    void** vtbl;
+    int Read(void* dst, int n) { return ((int(__fastcall*)(Stream*, int, void*, int))vtbl[12])(this, 0, dst, n); }
+};
+extern "C" void* __cdecl memmove(void*, const void*, unsigned int);
+extern "C" __declspec(nothrow) void* __cdecl memset(void*, int, unsigned int);
+extern void* __cdecl AllocatorAllocate(unsigned int n, const char* name, int flags, int dflags,
+                                       const char* file, int line);              // 0xf473a0
+extern int          g_softState;       // 0x16f9110
+extern unsigned int g_shaderDirty[64]; // 0x16f89f8
+extern unsigned int g_rasterDelta;     // 0x16f8b00
+extern void __cdecl ActiveState_SetTexture(int slot, int tex);   // 0x11f1280
+extern void __cdecl FUN_011f7850();
+extern void __cdecl FUN_011f6920();
+struct Float3 {
+    float x, y, z;
+};
+typedef void(__cdecl* SpriteDispatchFn)(unsigned short, unsigned short, int);
+struct SpriteDispatchSlot {
+    SpriteDispatchFn fn;
+    char pad[28];
+};
 struct SpriteRef {
     unsigned short type;   // +0
     unsigned short f1;     // +2
@@ -33,10 +55,13 @@ struct SpriteRef {
     unsigned short f4;     // +8
     unsigned short f5;     // +10
 };
+extern SpriteDispatchSlot g_spriteDispatch[];   // 0x016fa604
 struct ShaderState;
-extern "C" void ShaderStateUnlockHook();
 __declspec(noinline) void __fastcall ShaderState_Destroy(ShaderState* self);
 void operator_delete(void*);
+void __cdecl operator delete[](void*);   // 0xf47380
+static const char kAllocFile[] =
+    "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h";
 struct SprVec {
     SpriteRef *b, *e, *c;     // begin / end / capacity
     int al[2];                // allocator
@@ -64,10 +89,55 @@ struct Res {
     void** vtbl;
     void Release() { ((void(__stdcall*)(Res*))vtbl[2])(this); }
 };
-struct Stream {
+struct Stream_s006e_51b0 {
     void** vtbl;
-    int Read(void* dst, int n) { return ((int(__fastcall*)(Stream*, int, void*, int))vtbl[12])(this, 0, dst, n); }
+    int Read(void* dst, int n) { return ((int(__fastcall*)(Stream_s006e_51b0*, int, void*, int))vtbl[12])(this, 0, dst, n); }
 };
+struct Dev {
+    void** vtbl;
+    void SetVertexShader(Res* s) { ((long(__stdcall*)(Dev*, Res*))vtbl[0x170 / 4])(this, s); }
+    void SetPixelShader(Res* s) { ((long(__stdcall*)(Dev*, Res*))vtbl[0x1ac / 4])(this, s); }
+    void CreateVertexShader(const void* fn, Res** out) { ((long(__stdcall*)(Dev*, const void*, Res**))vtbl[0x16c / 4])(this, fn, out); }
+    void CreatePixelShader(const void* fn, Res** out) { ((long(__stdcall*)(Dev*, const void*, Res**))vtbl[0x1a8 / 4])(this, fn, out); }
+};
+struct ByteVec {
+    unsigned char *b, *e, *c;     // +0 / +4 / +8
+    int al;                       // +0xc
+    unsigned char* buf;           // +0x10 inline storage start
+    int pad;
+    unsigned char data[256];      // +0x18
+    ByteVec() { b = data; e = data; c = data + 256; buf = data; }
+    ~ByteVec()
+    {
+        if (b && b != buf) {
+            operator delete[](b);
+        }
+    }
+    void __thiscall FillInsert(unsigned char* pos, unsigned int n, const unsigned char* val);   // 0x6e5a30
+    void Resize(unsigned int len)
+    {
+        unsigned char zero;
+        unsigned int size = e - b;
+        if (len > size) {
+            zero = 0;
+            FillInsert(e, len - size, &zero);
+        } else {
+            unsigned char* first = b + len;
+            unsigned char* last = e;
+            memcpy(first, last, e - last);
+            e += first - last;
+        }
+    }
+};
+struct Float3Vec {
+    Float3 *b, *e, *c;
+    int al[2];
+    void __thiscall FillInsert(Float3* pos, unsigned int n, const Float3* val);   // 0x6e5870
+};
+extern Float3* __cdecl CopyRange(Float3* first, Float3* last, Float3* dest);                           // 0xa11310
+extern void __cdecl UninitCopyImpl(Float3** result, Float3* a, Float3* b, Float3* c, Float3* d);     // 0x898b80
+extern void __cdecl CopyBackward(Float3* first, Float3* last, Float3* destEnd);                        // 0xabced0
+extern void __cdecl FillRange(Float3* first, Float3* last, const Float3* val);                         // 0xa177f0
 struct ShaderState {
     char    pad0[0x14];
     void*   dispatchCb;       // +0x14  SP::DirectShaderDispatchCallback
@@ -83,9 +153,29 @@ struct ShaderState {
     ShaderState();                // 0x6e57d0
     ~ShaderState();               // 0x6e56b0
     void Reset();                 // 0x6e5bd0
-    bool __thiscall BaseRead(Stream* s, int a, int b);   // 0x777840 SP::cShaderBase::Read
-    bool Read(Stream* s, int a, int b);                  // 0x6e5d50
+    bool __thiscall BaseRead(Stream_s006e_51b0* s, int a, int b);   // 0x777840 SP::cShaderBase::Read
+    bool Read(Stream_s006e_51b0* s, int a, int b);                  // 0x6e5d50
 };
+int SP_DirectShaderDispatchCallback();
+extern Dev* g_d3dDevice;   // 0x16f89d0
+struct TexBind {
+    int   slot;     // +0
+    int** tex;      // +4: pointer to a texture handle, or null
+    int   pad[2];
+};
+struct TexBindList {
+    int     count;
+    TexBind items[1];   // +4
+};
+struct CurShader {
+    int pad;
+    int index;      // +4
+};
+extern CurShader*   g_curShader;       // 0x16f6dac
+extern ShaderState* g_activeShader;    // 0x16f6568
+extern Res*         g_curVS;           // 0x16f6564
+extern Res*         g_curPS;           // 0x16f89cc
+extern TexBindList* g_texBinds;        // 0x16f6ddc
 // ---- items of slice s006e51b0 end
 
 // ---- items of slice s0070de90 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -1006,6 +1096,92 @@ struct MatMap2 {
 };
 // ---- items of slice s00711de0_map end
 
+// @ 0x006e54d0
+void ShaderDispatch(int count, SpriteRef* refs, bool flag, int softState, bool dirty)
+{
+    for (int i = 0; i < count; ++i) {
+        g_spriteDispatch[refs[i].type].fn(refs[i].f3, refs[i].f2, flag);
+    }
+}
+
+// @ 0x006e5520
+int SP_DirectShaderDispatchCallback()
+{
+    int idx = 0;
+    if (g_curShader) {
+        idx = g_curShader->index;
+    }
+    ShaderState* ss = g_activeShader;
+    if (!ss->vs[idx] || !ss->ps[idx]) {
+        idx = 0;
+    }
+    Res* v = ss->vs[idx];
+    bool vsChanged = g_curVS != v;
+    if (g_curVS != v) {
+        g_d3dDevice->SetVertexShader(v);
+        g_curVS = v;
+    }
+    Res* p = ss->ps[idx];
+    bool psChanged = g_curPS != p;
+    if (g_curPS != p) {
+        g_d3dDevice->SetPixelShader(p);
+        g_curPS = p;
+    }
+    SprVec* ta = &ss->tabA[idx];
+    ShaderDispatch(ta->e - ta->b, ta->b, true, g_softState, vsChanged);
+    SprVec* tb2 = &ss->tabB[idx];
+    ShaderDispatch(tb2->e - tb2->b, tb2->b, false, g_softState, psChanged);
+    for (int k = 0; k < 64; ++k) {
+        g_shaderDirty[k] = 0;
+    }
+    FUN_011f7850();
+    FUN_011f6920();
+    TexBindList* tb = g_texBinds;
+    if (tb) {
+        for (int i = 0; i < tb->count; ++i) {
+            int slot = tb->items[i].slot;
+            if (tb->items[i].tex) {
+                ActiveState_SetTexture(slot, **tb->items[i].tex);
+                g_rasterDelta |= 1 << slot;
+            } else {
+                ActiveState_SetTexture(slot, 0);
+                g_rasterDelta |= 1 << slot;
+            }
+        }
+    }
+    return 1;
+}
+
+// @ 0x006e56b0
+ShaderState::~ShaderState()
+{
+    for (int i = 0; i < 16; ++i) {
+        if (GetVS(i)) GetVS(i)->Release();
+        if (GetPS(i)) GetPS(i)->Release();
+    }
+}
+
+// @ 0x006e5760
+void FillFloat3N(Float3* dst, unsigned int count, const Float3* value)
+{
+    Float3* p = dst;
+    while (count > 0) {
+        if (p) {
+            *p = *value;
+        }
+        --count;
+        ++p;
+    }
+}
+
+// @ 0x006e5790
+void __fastcall ZeroTriple(uint32_t* p)
+{
+    p[0] = 0;
+    p[1] = 0;
+    p[2] = 0;
+}
+
 // @ 0x006e57a0
 int __fastcall ShaderState_Release(ShaderState* self)
 {
@@ -1016,6 +1192,111 @@ int __fastcall ShaderState_Release(ShaderState* self)
         operator_delete(self);
     }
     return n;
+}
+
+// @ 0x006e57d0
+ShaderState::ShaderState()
+: f38(0), f3c(0), f40(0), f44(0)
+{
+    memset(vs, 0, sizeof(vs));
+    memset(ps, 0, sizeof(ps));
+}
+
+// @ 0x006e5870
+void __thiscall Float3Vec::FillInsert(Float3* pos, unsigned int n, const Float3* val)
+{
+    if ((unsigned int)(c - e) >= n) {
+        if (n) {
+            Float3 tmp = *val;
+            Float3* oldEnd = e;
+            unsigned int after = oldEnd - pos;
+            if (n < after) {
+                Float3* mid = oldEnd - n;
+                UninitCopyImpl(&pos, mid, oldEnd, oldEnd, pos);
+                e += n;
+                CopyBackward(pos, mid, oldEnd);
+                FillRange(pos, pos + n, &tmp);
+            } else {
+                unsigned int extra = n - after;
+                FillFloat3N(oldEnd, extra, &tmp);
+                e += extra;
+                Float3* start = pos;
+                UninitCopyImpl(&pos, start, oldEnd, e, start);
+                e += after;
+                FillRange(start, oldEnd, &tmp);
+            }
+        }
+    } else {
+        unsigned int size = e - b;
+        unsigned int cap = size * 2;
+        if (size == 0) cap = 1;
+        unsigned int need = size + n;
+        if (need < cap) need = cap;
+        Float3* nb = 0;
+        if (need) {
+            nb = (Float3*)AllocatorAllocate(need * 12, "Graphics", 0, 0, kAllocFile, 0xd1);
+        }
+        Float3* p = CopyRange(b, pos, nb);
+        FillFloat3N(p, n, val);
+        Float3* q = CopyRange(pos, e, p + n);
+        if (b && ((int*)b)[-1] != 0) {
+            operator delete[](b);
+        }
+        b = nb;
+        e = q;
+        c = nb + need;
+    }
+}
+
+// @ 0x006e5a30
+void __thiscall ByteVec::FillInsert(unsigned char* pos, unsigned int n, const unsigned char* val)
+{
+    if ((unsigned int)(c - e) >= n) {
+        if (n) {
+            unsigned char v = *val;
+            unsigned char* oldEnd = e;
+            unsigned int after = oldEnd - pos;
+            if (n < after) {
+                unsigned char* mid = oldEnd - n;
+                memcpy(oldEnd, mid, oldEnd - mid);
+                e += n;
+                memmove(pos + n, pos, mid - pos);
+                memset(pos, v, n);
+            } else {
+                unsigned int extra = n - after;
+                if (extra) memset(oldEnd, v, extra);
+                e += extra;
+                memcpy(e, pos, after);
+                e += after;
+                memset(pos, v, after);
+            }
+        }
+    } else {
+        unsigned int size = e - b;
+        unsigned int cap = size * 2;
+        if (size == 0) cap = 1;
+        unsigned int need = size + n;
+        if (need < cap) need = cap;
+        unsigned char* nb = 0;
+        if (need) {
+            nb = (unsigned char*)AllocatorAllocate(need, "Graphics", 0, 0, kAllocFile, 0xd1);
+        }
+        unsigned int before = pos - b;
+        memcpy(nb, b, before);
+        unsigned char* p = nb + before;
+        unsigned char v = *val;
+        if (n) memset(p, v, n);
+        p += n;
+        unsigned int after = e - pos;
+        memcpy(p, pos, after);
+        p += after;
+        if (b && b != buf) {
+            operator delete[](b);
+        }
+        b = nb;
+        e = p;
+        c = nb + need;
+    }
 }
 
 // @ 0x006e5bd0

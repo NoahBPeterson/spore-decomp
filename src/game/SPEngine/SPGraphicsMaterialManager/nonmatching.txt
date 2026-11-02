@@ -1,5 +1,9 @@
-# va  diff-bytes  reason (compiled with /O2 /MD /Gy /EHsc /TP /GS-)
-006e5bd0 156 ShaderState::Reset complete; erase loop is strength-reduced in mine, original keeps separate src/dst increments
+# va  diff-bytes  reason
+006e5520 97 SP::DirectShaderDispatchCallback complete; register allocation and if/else branch order of the texture-bind loop differ; difftest PASS (g_spriteDispatch mapped to 0x16fa604) flags: /O2 /MD /Gy /EHsc /TP /arch:SSE2
+006e56b0 126 ShaderState dtor complete; original reloads vs[i]/ps[i] after the null test (cmp mem,0) where mine keeps it in a register flags: /O2 /MD /Gy /EHsc /TP /arch:SSE2
+006e5870 359 Float3 vector fill-insert complete (EASTL DoInsertValues); copy-helper arg scheduling differs flags: /O2 /MD /Gy /EHsc /TP /arch:SSE2
+006e5a30 273 flags /O2 /MD /Gy /EHsc /TP /arch:SSE2 /GS-; uint8 fixed_vector fill-insert complete; only ecx differs (original preserves the incoming ecx via an extra push/pop stack slot, ours clobbers it); difftest FAIL-KEPT register ecx, all calls/memory match; chk size 339 vs 408 with remaining branch/spill layout differences
+006e5bd0 156 ShaderState::Reset complete; erase loop is strength-reduced in mine, original keeps separate src/dst increments flags: /O2 /MD /Gy /EHsc /TP /arch:SSE2
 0070e3e0 19 eastl::copy_backward<AutoRefCount>; register assignment differs
 0070e430 19 eastl::copy_backward<AutoRefCount>; register assignment differs
 0070e4e0 123 graphics resource rebuild; vector/call shape differs; equiv WEAK (712 valid, 18.2% cov)
