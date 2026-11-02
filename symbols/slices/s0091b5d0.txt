@@ -1,3 +1,7 @@
+0091b5d0 ?Ctor2@DisassemblerX86@@QAEPAXXZ  # DisassemblerX86::Ctor2 migrated from s0091b5d0 (verbatim, slice spelling)
+0091b6b0 ?Dtor@DisassemblerX86@@QAEXXZ  # DisassemblerX86::Dtor migrated from s0091b5d0 (verbatim, slice spelling)
+0091b6d0 ?Dasm@DisassemblerX86@@QAEPAXPBE0II@Z  # DisassemblerX86::Dasm migrated from s0091b5d0 (verbatim, slice spelling)
+0091b810 ?ScalarDtor@DisassemblerX86@@QAEPAEE@Z  # DisassemblerX86::ScalarDtor migrated from s0091b5d0 (verbatim, slice spelling)
 0091b840 ?Undecorate@DisassemblerX86@@QAEHPADPBDII@Z  # DisassemblerX86::Undecorate migrated from s0091b5d0 (verbatim, slice spelling)
 0091ba90 ?StrConcat3@@YAPAUEStr@@PAU1@PBD01@Z  # StrConcat3 migrated from s0091b5d0 (verbatim, slice spelling)
 0091bb00 ?Parse@MapFile@@QAEEPAE@Z  # MapFile::Parse migrated from s0091b5d0 (verbatim, slice spelling)
