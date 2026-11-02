@@ -1,6 +1,6 @@
-00a5d3c0 list_message_setup  # registers the "list message" class, adds the list method and sets the list help symbol
-00a5d430 list_new  # class creator: dispatches "append"/"prepend"/"split"/"trim"/"message", else plain append
-00a5d5a0 x_list_setup  # installs the five list classes and the "list" creator; also holds the unnamed loadbang ctor at 0x00a5d5f0
+00a5d3c0 ?list_message_setup@@YAEXZ  # list_message_setup migrated from s00a5d3c0 (verbatim, slice spelling)
+00a5d430 ?list_new@@YAPAXPAXHHH0@Z  # list_new migrated from s00a5d3c0 (verbatim, slice spelling)
+00a5d5a0 ?x_list_setup@Eapd@Audio@EA@@YA_NXZ  # EA::Audio::Eapd::x_list_setup migrated from s00a5d3c0
 00a5d620 loadbang_setup  # registers "loadbang" (size 0x28, flags 8) and adds the bang method
 00a5d690 namcanvas_new  # namecanvas ctor: remembers the canvas, symbol and bind name, and pd_bind's the name
 00a5d6e0 namcanvas_free  # namecanvas free method: sys_vgui a redraw when the bind name is non-empty (range also covers 0x00a5d700)

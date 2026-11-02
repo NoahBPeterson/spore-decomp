@@ -1,3 +1,22 @@
+00a5c860 ?alist_list@Eapd@Audio@EA@@YAXPAUt_alist@123@Ut_symbol@123@HPAUt_atom@123@@Z  # alist_list migrated from s00a5c460 (verbatim, slice spelling)
+00a5c980 ?alist_setup@Eapd@Audio@EA@@YAEXZ  # alist_setup migrated from s00a5c460 (verbatim, slice spelling)
+00a5c9e0 ?list_append_new@Eapd@Audio@EA@@YAPAUt_alist_obj@123@PAX0HPAUt_atom@123@@Z  # list_append_new migrated from s00a5c460 (verbatim, slice spelling)
+00a5ca60 ?list_append_list@Eapd@Audio@EA@@YAXPAUt_alist_obj@123@Ut_symbol@123@HPAUt_atom@123@@Z  # list_append_list migrated from s00a5c460 (verbatim, slice spelling)
+00a5cb40 ?list_append_anything@Eapd@Audio@EA@@YAXPAUt_alist_obj@123@Ut_symbol@123@HPAUt_atom@123@@Z  # list_append_anything migrated from s00a5c460 (verbatim, slice spelling)
+00a5cc30 ?list_append_setup@Eapd@Audio@EA@@YAEXZ  # list_append_setup migrated from s00a5c460 (verbatim, slice spelling)
+00a5ccb0 ?list_prepend_new@Eapd@Audio@EA@@YAPAUt_alist_obj@123@PAX0HPAUt_atom@123@@Z  # list_prepend_new migrated from s00a5c460 (verbatim, slice spelling)
+00a5cd30 ?list_prepend_list@Eapd@Audio@EA@@YAXPAUt_alist_obj@123@Ut_symbol@123@HPAUt_atom@123@@Z  # list_prepend_list migrated from s00a5c460 (verbatim, slice spelling)
+00a5ce20 ?list_prepend_anything@Eapd@Audio@EA@@YAXPAUt_alist_obj@123@Ut_symbol@123@HPAUt_atom@123@@Z  # list_prepend_anything migrated from s00a5c460 (verbatim, slice spelling)
+00a5cf20 ?list_prepend_free@Eapd@Audio@EA@@YAXPAUt_alist_obj@123@@Z  # list_prepend_free migrated from s00a5c460 (verbatim, slice spelling)
+00a5cf40 ?list_prepend_setup@Eapd@Audio@EA@@YAEXZ  # list_prepend_setup migrated from s00a5c460 (verbatim, slice spelling)
+00a5cfc0 ?list_split_new@Eapd@Audio@EA@@YAPAUt_list_split@123@M@Z  # list_split_new migrated from s00a5c460 (verbatim, slice spelling)
+00a5d040 ?list_split_list@Eapd@Audio@EA@@YAXPAUt_list_split@123@Ut_symbol@123@HPAUt_atom@123@@Z  # list_split_list migrated from s00a5c460 (verbatim, slice spelling)
+00a5d0d0 ?list_split_anything@Eapd@Audio@EA@@YAXPAUt_list_split@123@Ut_symbol@123@HPAUt_atom@123@@Z  # list_split_anything migrated from s00a5c460 (verbatim, slice spelling)
+00a5d180 ?list_split_setup@Eapd@Audio@EA@@YAEXZ  # list_split_setup migrated from s00a5c460 (verbatim, slice spelling)
+00a5d200 ?list_trim_new@Eapd@Audio@EA@@YAPAUt_list_trim@123@XZ  # list_trim_new migrated from s00a5c460 (verbatim, slice spelling)
+00a5d290 ?list_trim_setup@Eapd@Audio@EA@@YAEXZ  # list_trim_setup migrated from s00a5c460 (verbatim, slice spelling)
+00a5d310 ?list_message_new@Eapd@Audio@EA@@YAPAUt_list_message@123@Ut_symbol@123@@Z  # list_message_new migrated from s00a5c460 (verbatim, slice spelling)
+00a5d360 ?list_message_list@Eapd@Audio@EA@@YAXPAUt_list_message@123@Ut_symbol@123@HPAUt_atom@123@@Z  # list_message_list migrated from s00a5c460 (verbatim, slice spelling)
 0x00a5c460  change_float  # float handler: store and forward to all outlets with recursion guard
 0x00a5c4c0  change_set  # unconditional value store
 0x00a5c4d0  change_setup  # class_new(change) + bang/float/set methods
@@ -25,7 +44,7 @@
 0x00a5d0d0  list_split_anything  # wrap selector+args as a list and split
 0x00a5d180  list_split_setup  # list split class
 0x00a5d200  list_trim_new  # list trim constructor
+0x00a5d230  list_trim_list  # trim handler, referenced by list_trim_setup; boundary helper just past this slice
 0x00a5d290  list_trim_setup  # list trim class
 0x00a5d310  list_message_new  # list message constructor: symbol inlet + anything outlet
 0x00a5d360  list_message_list  # forward with selector, or promote stored selector
-0x00a5d230  list_trim_list  # trim handler, referenced by list_trim_setup; boundary helper just past this slice

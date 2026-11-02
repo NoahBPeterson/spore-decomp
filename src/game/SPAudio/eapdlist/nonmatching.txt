@@ -1,0 +1,11 @@
+# va  diff-bytes  reason
+00a5c9e0 16 argument push order in the inlet_new tail differs by one load slot flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+00a5ca60 155 alloca/grow copy loops keep different induction registers than the original flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+00a5cb40 194 alloca/grow copy loops keep different induction registers than the original flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+00a5ccb0 16 argument push order in the inlet_new tail differs by one load slot flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+00a5cd30 168 alloca/grow copy loops keep different induction registers than the original flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+00a5ce20 206 alloca/grow copy loops keep different induction registers than the original flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+00a5d0d0 125 alloca/grow copy loops keep different induction registers than the original flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+00a5d3c0 29 /O2 /MD /Gy /TP /arch:SSE2 UNSUPPORTED - complete; /O2 spills the class_addlist flag across class_sethelpsymbol and drops the `and bl,1` normalisation (size 114 vs 107); Pd externals unresolved so the harness cannot link flags: /O2 /MD /Gy /EHsc /TP /arch:SSE2
+00a5d430 193 /O2 /MD /Gy /TP /arch:SSE2 UNSUPPORTED - complete; per-branch global store and selector tests match, gensym call scheduling and the cold default block differ (size 360 vs 367); Pd externals unresolved flags: /O2 /MD /Gy /EHsc /TP /arch:SSE2
+00a5d5a0 77 /O2 /MD /Gy /TP /arch:SSE2 UNSUPPORTED - complete; the 128-byte range also covers the unnamed loadbang constructor at 0x00a5d5f0, so one symbol can never fill it (size 134 vs 128) flags: /O2 /MD /Gy /EHsc /TP /arch:SSE2
