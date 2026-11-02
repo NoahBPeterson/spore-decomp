@@ -1,5 +1,5 @@
-008e6340 EA::XHTML::Layout::BltTiled  # tiles an image over a rect per BackgroundRepeat; Image/BltTiled.cpp
-008e6710 EA::XHTML::Layout::Background::Draw  # positions + blits a background image for a box; Background.cpp
+008e6340 ?BltTiled@Layout@XHTML@EA@@YAXAAVRenderingContext@123@V?$RectT_s008e_6340@M@3@PAVIUnknown32_s008e_6340@COM@3@V?$Point2DT@M@3@3W4BackgroundRepeat@Style@23@@Z  # BltTiled migrated from s008e6340 (verbatim, slice spelling)
+008e6710 ?Draw@Background@Layout@XHTML@EA@@QAE_NAAVRenderingContext@234@ABV?$RectT_s008e_6340@M@4@1@Z  # Background::Draw migrated from s008e6340 (verbatim, slice spelling)
 008e68f0 ?SetStyle@Background@Layout@XHTML@EA@@QAEXAAVStyleState_s008e_6340@Style@34@@Z  # Background::SetStyle migrated from s008e6340 (verbatim, slice spelling)
 008e69b0 ?Fn8e69b0@Fn8e69b0Target@Layout@XHTML@EA@@QAEXPAVElement@DOM@34@IPAXPAV?$Point2DT@M@4@@Z  # Fn8e69b0Target::Fn8e69b0 migrated from s008e6340 (verbatim, slice spelling)
 008e6a20 ?DrawContent@Block_s008e_6340@Layout@XHTML@EA@@QAEXAAVRenderingContext@234@@Z  # Block_s008e_6340::DrawContent migrated from s008e6340 (verbatim, slice spelling)

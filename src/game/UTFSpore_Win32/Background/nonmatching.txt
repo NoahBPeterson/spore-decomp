@@ -1,0 +1,4 @@
+# va  diff-bytes  reason
+008e61b0 369 GUI rect scatter; complete; SSE scalar codegen not reproduced (x87 at /arch:SSE; /arch:SSE2 /fp:fast gives 226 diff); difftest WEAK (382 valid, 51% coverage) flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
+008e6340 733 BltTiled: complete + equivalence-checked (200 inputs, no FAIL); diff is /O2 scheduling and xmm register choice in the tile-origin adjust (ceil/floor with #include <math.h>, double args), the point/rect temps and the repeat switch. flags /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+008e6710 374 Background::Draw: complete + equivalence-checked; same scheduling/register artifacts (float Min/Max item layout, two separate empty-rect tests) plus the by-value ImageRequester calls. flags /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast

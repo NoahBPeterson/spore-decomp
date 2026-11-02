@@ -24,4 +24,4 @@
 008e60a0 ?Fn8e60a0@XmlParser@@QAEHPAX@Z  # XmlParser::Fn8e60a0 migrated from s008e5320 (verbatim, slice spelling)
 008e6130 ?Fn8e6130@GuiThing3@@QAEPAXPAX@Z  # GuiThing3::Fn8e6130 migrated from s008e5320 (verbatim, slice spelling)
 008e6180 ?Fn8e6180@Q18@@QAEXPAX@Z  # Q18::Fn8e6180 migrated from s008e5320 (verbatim, slice spelling)
-008e61b0 ?Fn8e61b0@@YAXPAPAXURectF@@PAXPAU1@@Z  # GUI rect scatter
+008e61b0 ?Fn8e61b0@@YAXPAPAXURectF@@PAXPAU1@@Z  # Fn8e61b0 migrated from s008e5320 (verbatim, slice spelling)
