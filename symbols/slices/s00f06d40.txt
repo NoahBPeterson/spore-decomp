@@ -1,0 +1,2 @@
+00f06d40 ?F_00f06d40@Movie_s00f0_6d40@@QAE_NHPAUMsg@@@Z  # Movie_s00f0_6d40::F_00f06d40 migrated from s00f06d40 (verbatim, slice spelling)
+00f072b0 ?F_00f072b0@PhotoHandler@@QAE_NHPAUMsg@@@Z  # PhotoHandler::F_00f072b0 migrated from s00f06d40 (verbatim, slice spelling)

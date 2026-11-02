@@ -1,0 +1,5 @@
+008120d0 ?Init@cSPUILayout@@QAE_NABVKey@ResourceMan@EA@@_NI@Z  # cSPUILayout::Init (callee of s00f04140, named from the dev publics; slice address comment)
+00f04910 ?FUN_00f04910@cScenarioYouTube@Simulator@@QAEXXZ  # cScenarioYouTube::FUN_00f04910 migrated from s00f04140 (verbatim, slice spelling)
+00f04ad0 ?FUN_00f04ad0@cScenarioYouTube@Simulator@@QAEXXZ  # cScenarioYouTube::FUN_00f04ad0 migrated from s00f04140 (verbatim, slice spelling)
+00f04bd0 ?FUN_00f04bd0@cScenarioYouTube@Simulator@@QAEXXZ  # cScenarioYouTube::FUN_00f04bd0 migrated from s00f04140 (verbatim, slice spelling)
+00f04d10 ?FUN_00f04d10@cScenarioYouTube@Simulator@@QAEXH@Z  # cScenarioYouTube::FUN_00f04d10 migrated from s00f04140 (verbatim, slice spelling)

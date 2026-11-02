@@ -1,4 +1,4 @@
-// src/game/SPEditors/SPSubModeMovie.cpp -- migrated from slice(s) s0063d9e0, s0063caf0, s0063ba50, s0063aa90 by tools/migrate/rewrite.py
+// src/game/SPEditors/SPSubModeMovie.cpp -- migrated from slice(s) s00f06d40, s00f05ee0, s00f05110, s00f04140, s00df5670, s00df47b0, s0063d9e0, s0063caf0, s0063ba50, s0063aa90 by tools/migrate/rewrite.py
 // Object file: SPEditors/SPSubModeMovie.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -26,6 +26,18 @@
 #include "SP/cIMovieSystem.h"
 #include "SP/cSPPlayModeSubModePhoto.h"
 #include "SP/cPropertyList.h"
+#include "cSPVector3.h"
+#include "SP/cGameInfo.h"
+#include "SP/cStarManager.h"
+#include "SP/cStarRecord.h"
+#define __PLACEMENT_NEW_INLINE   // the slices' own placement new/delete win over <new>'s (rewrite.py)
+#include <new>
+#include <math.h>
+#include "SP/cPlayModeTokenTranslator.h"
+#include "EA/LimitStopwatch.h"
+#include <xmmintrin.h>
+#include <intrin.h>
+inline void operator delete(void*, void*) {}   // placement delete (<new>'s is skipped, rewrite.py)
 
 // unnamed retail callees and globals (address in the comment)
 extern char g15247b0[], g15247bc[], g15247c8[], g15247d4[], g15247f8[], g1524804[], g152481c[];
@@ -129,23 +141,39 @@ public:
     void FUN_006353e0(bool v);                                          // 0x006353E0
     void FUN_00635380();                                                // 0x00635380
 };
-extern char g15247b0[], g15247bc[], g15247c8[], g15247d4[], g15247f8[], g1524804[], g152481c[];
 void FUN_00809db0(const void* a, const void* b);                        // 0x00809DB0 (cdecl)
 struct cConfigMgr { virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3();
-    virtual void v4(); virtual void v5(); virtual void v6(); virtual void v7(); virtual void v8();
+virtual void v4();
+virtual void v5();
+virtual void v6();
+virtual void v7();
+virtual void v8();
     virtual void v9(); virtual void v10(); virtual void v11(); virtual int GetValue(uint32_t id); };   // +0x30
 cConfigMgr* GetConfigManager();                                         // 0x0067DD30
 struct cSaveArea { virtual void v0(); virtual void v1(); virtual void v2(); virtual int GetType();   // +0xc
-    virtual void v4(); virtual void v5(); virtual void v6(); virtual void v7(); virtual void v8(); virtual void v9();
+virtual void v4();
+virtual void v5();
+virtual void v6();
+virtual void v7();
+virtual void v8();
+virtual void v9();
     virtual void* GetData(); };                                         // +0x28
 cSaveArea* GetSaveArea(uint32_t id);                                    // 0x006B1F90
-extern char gDefaultSaveData[];                                         // 0x013EC468
 void FUN_009322b0(const void* p);                                       // 0x009322B0 (cdecl)
 void FUN_00932960(const void* p);                                       // 0x00932960 (cdecl)
 class cSPPlayModeSubModeMovie {
 public:
-    virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3(); virtual void v4(); virtual void v5();
-    virtual void v6(); virtual void v7(); virtual void v8(); virtual void v9(); virtual void v10();
+virtual void v0();
+virtual void v1();
+virtual void v2();
+virtual void v3();
+virtual void v4();
+virtual void v5();
+virtual void v6();
+virtual void v7();
+virtual void v8();
+virtual void v9();
+virtual void v10();
     virtual void v11(uint32_t id);                                      // +0x2c
     bool OnKeyDown(int key, int mods);
     void FUN_0063b760();
@@ -164,6 +192,11 @@ public:
     bool mFlag22c1;                                                     // +0x22c1
     char pad22c2[0x22e4 - 0x22c2];
     int mState;                                                         // +0x22e4
+};
+struct cDialog2 {
+    bool Init();
+    char pad[0x2c];
+    cSPUILayout_s0063_aa90 mLayout;                                                // +0x2c
 };
 namespace {
 struct cConnectingDialog {
@@ -979,7 +1012,8 @@ static __forceinline bool GetTyped(IPropList_s0063_caf0* pl, uint32_t id, short 
 // ---- items of slice s0063caf0 end
 
 // ---- items of slice s0063d9e0 begin (TODO(rewrite): local stubs, replace by canonical classes)
-
+extern void* g_1524440;   // 0x01524440
+extern void* g_1524444;   // 0x01524444
 struct IWindow_s0063_d9e0;
 struct IOther_s0063_d9e0;
 struct cSPEditorUI_s0063_d9e0;
@@ -994,7 +1028,7 @@ template <> struct EmptyStr_s0063_d9e0<char>    { static char*    Get() { return
 }
 namespace eastl {
 template <typename T>
-struct allocator_s0063_d9e0 {
+class allocator_s0063_d9e0 { public:
     void deallocate(void* p) { operator delete(p); }
 };
 }
@@ -1039,7 +1073,7 @@ struct cSPEditorUI_s0063_d9e0 {
     void EnableUIButton(uint32_t id, bool b);     // 0x005DC610
     IWindow_s0063_d9e0* FindWindowByID(uint32_t id);         // 0x005DC310
 };
-struct cSPUILayout_s0063_d9e0 {
+class cSPUILayout_s0063_d9e0 { public:
     char pad[0x18];
     bool IsVisible();                                         // 0x00810070
     IWindow_s0063_d9e0* FindWindowByID(uint32_t id, bool recurse);       // 0x008105B0
@@ -1275,17 +1309,15 @@ virtual void s20();
     virtual void SetName(const wchar_t* name, int a, int b);         // +0x54 (index 21)
 };
 ISaveArea_s0063_d9e0* __cdecl GetSaveArea_s0063_d9e0(uint32_t id);                         // 0x006B1F90
-
 void __cdecl Utf16ToUtf8(char* dst, unsigned n, const wchar_t* src, int len);   // 0x0093CF10
 struct IPropList;
 bool __cdecl TryGetUIntProperty(IPropList* pl, uint32_t id, uint32_t* out);   // 0x00410370
 bool __cdecl GetBoolProperty(IPropList* pl, uint32_t id, bool* out);          // 0x00407190
 void __cdecl CalloutMessageBox(void* where, const Key12* key);       // 0x00809DB0
-
 extern Key12 gKey15247e0, gKey15247ec, gKey1524810;
 namespace EA {
 namespace DateTime {
-struct DateTime_s0063_d9e0 {
+class DateTime_s0063_d9e0 { public:
     int64_t mnSeconds;
     DateTime_s0063_d9e0(int timeFrame);                                         // 0x0092E3D0
     uint32_t GetParameter(int which);                                // 0x0092DF80
@@ -1333,7 +1365,8 @@ struct cSPPlayModeSubModeMovie_s0063_d9e0 {
     int mIndicatorTimer;            // +0x22C4
     char pad22c8[0x22e4 - 0x22c8];
     int mDialogInProgress;          // +0x22E4
-    char pad22e8[0x22fc - 0x22e8];
+    char pad22e8[0x22ec - 0x22e8];
+    eastl::string_s0063_d9e0 mYTAuthToken;     // +0x22EC
     eastl::string_s0063_d9e0 mYTUsername;      // +0x22FC
     char pad230c[0x231c - 0x230c];
     bool mRegisterSuccess;          // +0x231C
@@ -1356,7 +1389,7 @@ struct cSPPlayModeSubModeMovie_s0063_d9e0 {
     void CheckYouTubeRegistration();                 // 0x0063CED0
     void FUN_0063cd30();
     void FUN_0063de20(int dt);                       // 0x0063DE20
-    void FUN_0063dc40();
+    __declspec(nothrow) void FUN_0063dc40();
     void FUN_0063d9e0();
     void FUN_0063cf90();  // 0x0063cf90 (cSPPlayModeSubModeMovie::FUN_0063cf90)
     void SetState2();                                // 0x0063B7B0
@@ -1375,6 +1408,54 @@ struct cSPPlayModeSubModeMovie_s0063_d9e0 {
     static bool GetYTPrompt();                       // 0x0063B890
     static bool IsLocaleEnglish();                   // 0x0063C0A0
 };
+struct NoThrowStr {
+    void* mpBegin;
+    void* mpEnd;
+    void* mpCapacity;
+    NoThrowStr() : mpBegin((void*)eastl::gEmptyString16), mpEnd((void*)eastl::gEmptyString16),
+                   mpCapacity((char*)eastl::gEmptyString16 + 1) {}
+    __declspec(nothrow) ~NoThrowStr() {
+        if (((char*)mpCapacity - (char*)mpBegin) > 1 && mpBegin)
+            operator delete(mpBegin);
+    }
+};
+struct cEditorYouTubeVideoUploadMessage_s0063_d9e0 {
+    NoThrowStr mUsername;               // +0x00
+    NoThrowStr mClientID;               // +0x10
+    NoThrowStr mAuthenticationToken;    // +0x20
+    NoThrowStr mDeveloperKey;           // +0x30
+    NoThrowStr mVideoFilename;          // +0x40
+    uint32_t   mVideoKey[3];            // +0x50
+    NoThrowStr mXMLRequest;             // +0x5C
+    ~cEditorYouTubeVideoUploadMessage_s0063_d9e0();          // 0x63c750
+};
+void ConstructYouTubeVideoUploadXMLRequest(eastl::string16_s0063_d9e0* out);            // 0x63d050 (this in ecx)
+void __cdecl CString_Sprintf(eastl::string_s0063_d9e0* str, const char* fmt, ...);      // 0x472fe0
+int  __cdecl FNV1_String16A(uint32_t seed, const void* s, int n);            // 0x932f30
+void* __cdecl GetPropertyManager_s0063_d9e0();                                          // 0x67de30
+void __cdecl SaveNamedResource(eastl::string_s0063_d9e0* dst, void* a, void* b);        // 0x6b4010
+void* __cdecl operator_new_ea(unsigned int size, const char* tag, int, int, int, int);  // 0x0F473A0
+struct IReleasable { virtual void r0(); virtual void Release(); virtual void r2(); };
+void* __fastcall PropertyList_Ctor(void* self, int edx);
+struct IPropertyList_s0063_d9e0 {
+virtual void p0();
+virtual void p1();
+virtual uint32_t p2();
+virtual void p3();
+virtual void p4();
+virtual uint32_t v14(uint32_t id, void* variant);
+virtual void p6();
+virtual void p7();
+virtual void p8();
+virtual void p9();
+virtual void p10();
+    virtual void* v2c(uint32_t key, uint32_t id, void* out);   // +0x2c
+};
+struct Variant_s0063_d9e0 { uint32_t w[4]; uint32_t flags; uint32_t pad[2]; };
+void __fastcall Variant_FromString16(Variant_s0063_d9e0* self, int edx, const void* src, int a, int b, int c,
+                                     int d);                                       // 0x93dd80
+void __cdecl Variant_Destruct(Variant_s0063_d9e0* v, int a);                                  // 0x93db80
+void __cdecl Encrypt(void* dst, const void* src);                                  // 0x60bcf0
 void CreateConnectingDialog();                       // 0x0063BC70
 void __cdecl DestroyConnectingDialog(bool b);        // 0x0063C060
 struct cSPPlayModeUIExt {
@@ -1384,6 +1465,1118 @@ struct cSPPlayModeUIExt {
     void ShowEditor();                               // 0x00635380
 };
 // ---- items of slice s0063d9e0 end
+
+// ---- items of slice s00df47b0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C" unsigned __int64 __rdtsc(void);
+extern "C" __declspec(dllimport) int __stdcall QueryPerformanceCounter(int64_t* pCount);
+#pragma intrinsic(__rdtsc)
+#define PVCAT2(a, b) a##b
+#define PVCAT(a, b) PVCAT2(a, b)
+#define PV virtual void PVCAT(pv_, __COUNTER__)();
+#define PV2 PV PV
+#define PV4 PV2 PV2
+#define PV8 PV4 PV4
+namespace eastl {
+class allocator_s00df_47b0 { public:
+    allocator_s00df_47b0() {}
+};
+}
+namespace eastl {
+template <typename T> struct basic_string_s00df_47b0 {
+    T* mpBegin;
+    T* mpEnd;
+    T* mpCapacity;
+    allocator_s00df_47b0 mAllocator;
+
+    basic_string_s00df_47b0(const T* p) : mpBegin(0), mpEnd(0), mpCapacity(0) { RangeInitialize(p); }
+    ~basic_string_s00df_47b0() { DeallocateSelf(); }
+
+    void RangeInitialize(const T* pBegin);   // 0x00579a90
+    void DoFree(T* p, size_t n)
+    {
+        if (p)
+            delete[] (char*)p;
+    }
+    void DeallocateSelf()
+    {
+        if ((mpCapacity - mpBegin) > 1)
+            DoFree(mpBegin, mpCapacity - mpBegin);
+    }
+    void clear()
+    {
+        if (mpBegin != mpEnd) {
+            *mpBegin = 0;
+            mpEnd = mpBegin;
+        }
+    }
+};
+}
+namespace eastl {
+typedef basic_string_s00df_47b0<wchar_t> string16_s00df_47b0;
+}
+namespace eastl {
+template <typename T> class vector_s00df_47b0 { public:
+    T* mpBegin;
+    T* mpEnd;
+    T* mpCapacity;
+    allocator_s00df_47b0 mAllocator;
+
+    void DoInsertValue(T* position, const T& value);   // 0x00b96600
+    T* erase(T* first, T* last)
+    {
+        memcpy(first, last, (size_t)((char*)mpEnd - (char*)last));
+        mpEnd -= (last - first);
+        return first;
+    }
+    void clear() { erase(mpBegin, mpEnd); }
+    void push_back(const T& value)
+    {
+        if (mpEnd < mpCapacity)
+            ::new (mpEnd++) T(value);
+        else
+            DoInsertValue(mpEnd, value);  // 0x00621fc0 (eastl::vector::DoInsertValue)
+    }
+};
+}
+using eastl::string16_s00df_47b0;
+struct ResourceKey {
+    uint32_t instanceID, typeID, groupID;
+    ResourceKey(uint32_t i, uint32_t t, uint32_t g) : instanceID(i), typeID(t), groupID(g) {}
+};
+struct Rect {
+    float left, top, right, bottom;
+    Rect(const Rect& r) : left(r.left), top(r.top), right(r.right), bottom(r.bottom) {}
+};
+struct IWindow_s00df_47b0 {
+    PV2 PV
+    virtual IWindow_s00df_47b0* FindWindowByID(uint32_t id);   // +0x0c
+    PV8 PV2
+    virtual const Rect& GetArea();                  // +0x38
+    PV8 PV2
+    virtual void SetLocation(float x, float y);     // +0x64
+    PV4 PV
+    virtual void SetFlag(int flag, bool value);     // +0x7c
+    virtual void SetText(const wchar_t* text);      // +0x80
+};
+class cSPUILayout_s00df_47b0 { public:
+    uint32_t pad[3];
+    IWindow_s00df_47b0* FindWindowByID(uint32_t id, bool recursive);   // 0x008105b0
+};
+struct cStarRecord {
+    uint32_t pad[0x16];
+    uint32_t m58;
+    uint32_t Get58();                  // 0x00989360 (returns m58)
+    void Reset(int flags);             // 0x00bbaa80
+};
+struct cGameInfo {
+    uint32_t pad00[8];
+    string16_s00df_47b0 mName;          // +0x20
+    uint32_t pad30[7];
+    ResourceKey mKey4C;      // +0x4c
+    uint32_t pad58[3];
+    ResourceKey mKey64;      // +0x64
+    ResourceKey mKey70;      // +0x70
+    uint32_t mStarID;        // +0x7c
+    uint32_t pad80[5];
+    ResourceKey mKey94;      // +0x94
+    int mA0;                 // +0xa0
+    int mA4;                 // +0xa4
+    int mA8;                 // +0xa8
+    uint32_t padac;
+    int mB0;                 // +0xb0
+    cStarRecord* GetStarRecord();   // 0x00de4610
+};
+struct Stopwatch {
+    uint64_t mnStartTime;      // +0x00
+    uint64_t mnTotalElapsed;   // +0x08
+    int mnUnits;               // +0x10 (1 = CPU cycles)
+    float mfCyclesToUnits;     // +0x14
+    uint64_t GetStopwatchCycle()
+    {
+        if (mnUnits == 1)
+            return __rdtsc();
+        int64_t t;
+        QueryPerformanceCounter(&t);
+        return (uint64_t)t;
+    }
+    void Restart()
+    {
+        mnStartTime = GetStopwatchCycle();
+        mnTotalElapsed = 0;
+    }
+};
+struct cGalaxyGameEntryUIStateMachine {
+    uint32_t pad00[0xa];
+    cSPUILayout_s00df_47b0 mLayout;                       // +0x28
+    uint32_t pad34[0xa];
+    eastl::vector_s00df_47b0<uint32_t> mNewGameFlow;      // +0x5c
+    uint32_t pad6c;
+    bool mb70;                                 // +0x70
+    uint8_t pad71[0x4a3];
+    ResourceKey mKey514;                       // +0x514
+    uint32_t pad520[0x34];
+    Stopwatch mZoomTimer;                      // +0x5f0
+    uint32_t pad608[8];
+    cGameInfo* mpGameInfo;                     // +0x628
+
+    void ResetGameUI();                                  // 0x00dec460
+    void MakeRandomName();                               // 0x00defc80
+    void SetupPanelA(uint32_t id);                       // 0x00df2920
+    void SetupPanelB(uint32_t id);                       // 0x00df2770
+    void SetCurrentState(int state);                     // 0x00df0670
+    void RefreshUI();                                    // 0x00ded7d0
+    void FillStarterWorldCombo(IWindow_s00df_47b0* combo);          // 0x00df1ba0
+    void SelectStarterWorld(IWindow_s00df_47b0* combo, uint32_t v); // 0x00decf20
+    void UpdateNavigationControls();                     // 0x00def8c0
+
+    void SetupForGame(cGameInfo* gameInfo);
+
+    void FUN_00df5330();
+    void FUN_00df53d0(bool show);
+    void FUN_00df5430(int mode);
+    long double FUN_00df54f0(float offset);
+    void FUN_00df5540();
+    void FUN_00df55b0(int mode);
+    void FUN_00df5610(float t);
+};
+#define VTFN(obj, slot) (*(void***)(obj))[slot]
+struct GalaxyLayoutState
+{
+    void SetLayout(const wchar_t* layout);      // 0x00dedda0
+};
+struct GalaxyView
+{
+    uint8_t       m_pad0[8];                    // +0x00
+    GalaxyLayoutState* m_state8;                // +0x08
+    cGameInfo*    m_game0c;                     // +0x0c
+    uint8_t       m_pad10[0x20];                // +0x10
+    void*         m_effect30;                   // +0x30
+    float         m_x34;                        // +0x34
+    float         m_y38;                        // +0x38
+    float         m_z3c;                        // +0x3c
+    float         m_w40;                        // +0x40
+    uint8_t       m_pad44[8];                   // +0x44
+    uint32_t      m_count4c;                    // +0x4c
+    uint32_t      m_value50;                    // +0x50
+    cSPUILayout_s00df_47b0   mLayout54;                    // +0x54
+};
+struct GalaxyView0c
+{
+    uint8_t     m_pad0[0xc];                   // +0x00
+    cSPUILayout_s00df_47b0 mLayout0c;                     // +0x0c
+};
+class cMessageServer
+{
+public:
+    PV4 PV
+    virtual void post(uint32_t message, uint32_t param, int flags);   // +0x14
+};
+cMessageServer* MessageServer();                // 0x0067dcc0
+void __cdecl FUN_008099a0(IWindow_s00df_47b0* window, int a, int b);   // BeginModal
+class cString_s00df_47b0
+{
+public:
+    uint32_t m_data[5];
+    cString_s00df_47b0();                                  // 0x006b5060
+    ~cString_s00df_47b0();                                 // 0x006b5240
+    void Load(uint32_t id, uint32_t group, const wchar_t* text);   // 0x006b54b0
+    const wchar_t* GetText();                   // 0x006b55c0
+};
+struct Effect
+{
+    PV8 PV8 PV8
+    virtual void SetValue(const float* value);  // +0x60
+};
+// ---- items of slice s00df47b0 end
+
+// ---- items of slice s00df5670 begin (TODO(rewrite): local stubs, replace by canonical classes)
+typedef unsigned int uint;
+struct Vec4 { float x, y, z, w; };
+struct Obj;
+struct cSPUILayout_s00df_5670;
+struct cSPUILayout_s00df_5670 {
+    void* FindWindowByID(uint id, int b);              // 0x008105b0 (ret 8) -> IWinNode*
+    void* FindWindowByIDB(uint id, int b);             // 0x008105b0 (ret 8)
+    bool  Init(const void* key, bool b, uint id);      // 0x008120d0 (ret 0xc)
+    void  Shutdown(uint b);                            // 0x00811ad0 (ret 4)
+    void  dtor();                                      // 0x00811fe0
+    void  ctor();                                      // 0x00810000
+};
+struct IRefCount { virtual void r00(); virtual void r04(); };
+struct IWinNode : IRefCount {
+virtual void  v08();
+virtual void  v0c(int b);
+virtual void  v10();
+virtual void  v14();
+virtual void  v18();
+virtual int   v1c();
+virtual void  v20();
+virtual void  v24();
+virtual void  v28();
+virtual void  v2c();
+virtual void  v30();
+virtual Vec4* v34();
+    virtual Vec4* v38();
+virtual void  v3c();
+virtual void  v40();
+virtual void  v44();
+virtual void  v48();
+virtual void  v4c();
+virtual void  v50();
+    virtual void  v54();
+    virtual void* v58();
+    virtual void  v5c(void* p);
+    virtual void  v60(const float* rect);
+    virtual void  v64(float a, float b);
+virtual void  v68();
+virtual void  v6c();
+virtual void  v70();
+virtual void  v74();
+    virtual void  v78();
+    virtual void  v7c(int a, int b);
+virtual bool  v80(const wchar_t* s);
+virtual void  v84();
+virtual void  v88();
+virtual void  v8c();
+virtual void  v90();
+virtual void  v94();
+virtual void  v98();
+virtual void  v9c();
+virtual void  va0();
+virtual void  va4();
+virtual void  va8();
+virtual void  vac();
+virtual void  vb0();
+virtual void  vb4();
+virtual void  vb8();
+virtual void  vbc();
+virtual void  vc0();
+virtual void  vc4();
+virtual void  vc8();
+virtual void  vcc();
+virtual void  vd0();
+virtual void  vd4();
+virtual void  vd8();
+virtual void  vdc();
+virtual void  ve0();
+virtual void  ve4();
+virtual void  ve8();
+    virtual void  vec();
+    virtual void* vf0(int a, int b, float* p);
+virtual void  vf4();
+virtual void  vf8();
+    virtual void  vfc();
+    virtual void  v100();
+    virtual void  v104(void* p);
+    virtual void  v108(void* p);
+};
+struct cString_s00df_5670 {
+    char  m_storage[0x0c];
+    cString_s00df_5670();                                          // 0x006b5060
+    ~cString_s00df_5670();                                         // 0x006b5240
+    bool Load(uint a, uint b, const wchar_t* s);        // 0x006b54b0 (ret 0xc)
+    const wchar_t* GetText();                           // 0x006b55c0
+};
+void  __cdecl FUN_00df5430(int b);                                      // 0x00df5430 (ret 4)
+struct cDownloadDialog;
+struct cDownloadDialog {
+    void* mpVtbl_00;        // +0x00
+    void* mpVtbl_04;        // +0x04  Resource::Async
+    void* mpVal_08;         // +0x08  (vector begin for the +0x08/+0x0c vector view)
+    union { void* mpNode_0c; void* m_entryEnd; cSPUILayout_s00df_5670* mpLayout_0c; }; // +0x0c
+    float m_timerBase;      // +0x10
+    float m_timerPeriod;    // +0x14
+    char  m_active;         // +0x18
+    char  m_latch;          // +0x19
+    char pad1[0x1c - 0x1a];
+    float m_p1c;            // +0x1c
+    float m_p20;            // +0x20
+    union { float m_p24; void* mpNode_24; }; // +0x24
+    float m_p28;            // +0x28
+    char  m_paused;         // +0x2c
+    char pad2[0x30 - 0x2d];
+    void* m_label;          // +0x30 AutoRefCount<IWinText>
+    float m_r34;            // +0x34
+    float m_r38;            // +0x38
+    float m_r3c;            // +0x3c
+    float m_r40;            // +0x40
+    float m_progress;       // +0x44
+    void* m_entry;          // +0x48
+    int   m_count;          // +0x4c
+    int   m_index;          // +0x50
+    char  m_layout[0x08];   // +0x54 cSPUILayout
+
+    cSPUILayout_s00df_5670* Layout() { return (cSPUILayout_s00df_5670*)((char*)this + 0x54); }
+    cSPUILayout_s00df_5670* LayoutB() { return (cSPUILayout_s00df_5670*)((char*)this + 0x0c); }
+
+    void   FUN_00df5670(char b);        // 0x00df5670 (ret 4)
+    void   FUN_00df57d0(int b);         // 0x00df57d0 (ret 4)
+    bool   FUN_00df5830(void* retaddr); // 0x00df5830 (ret 4)
+    void   FUN_00df58f0();              // 0x00df58f0
+    bool   FUN_00df59c0(void* p);       // 0x00df59c0 (ret 4)
+    void   FUN_00df5aa0(char b);        // 0x00df5aa0 (ret 4)
+    bool   FUN_00df5ac0(int b);         // 0x00df5ac0 (ret 4)
+    void   FUN_00df5cd0();              // 0x00df5cd0
+    void*  FUN_00df5d30(int b);         // 0x00df5d30 (ret 4)
+    bool   FUN_00df5d90(void* a, void* b); // 0x00df5d90 (ret 8)
+    void   FUN_00df6040();              // 0x00df6040
+    bool   FUN_00df6140(Obj* a, float x, float y); // 0x00df6140 (ret 0xc)
+    void   FUN_00df6330(uint id, void* p, uint b); // 0x00df6330 (ret 8)
+    int    FUN_00df64c0(float a, float b, float c); // 0x00df64c0 (ret 0xc)
+    void   FUN_00df65e0(void* a, void* b, float c); // 0x00df65e0 (ret 0xc)
+};
+// ---- items of slice s00df5670 end
+
+// ---- items of slice s00f04140 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C" long _InterlockedExchangeAdd(volatile long*, long);
+extern "C" long _InterlockedIncrement(volatile long*);
+extern "C" long _InterlockedDecrement(volatile long*);
+extern "C" void _ReadWriteBarrier(void);
+extern uint32_t*      gField_016c7aa4;            // 0x016C7AA4
+#pragma intrinsic(_InterlockedExchangeAdd, _InterlockedIncrement, _InterlockedDecrement)
+#pragma intrinsic(_ReadWriteBarrier)
+void* __cdecl EAAllocate(uint32_t size, const char* tag, int a, int b, int c, int d);  // 0x00F473A0
+namespace eastl {
+template <typename T> struct EmptyStr_s00f0_4140;
+}
+namespace eastl {
+template <> struct EmptyStr_s00f0_4140<wchar_t> { static wchar_t* Get() { return gEmptyString16; } };
+}
+namespace eastl {
+template <> struct EmptyStr_s00f0_4140<char>    { static char*    Get() { return (char*)gEmptyString16; } };
+}
+namespace eastl {
+template <typename T>
+struct basic_string_s00f0_4140 {
+    T* mpBegin;
+    T* mpEnd;
+    T* mpCapacity;
+    uint32_t mPad;                                            // sizeof == 0x10
+    basic_string_s00f0_4140() : mpBegin(EmptyStr_s00f0_4140<T>::Get()), mpEnd(EmptyStr_s00f0_4140<T>::Get()),
+                     mpCapacity(EmptyStr_s00f0_4140<T>::Get() + 1) {}
+    basic_string_s00f0_4140& operator=(const basic_string_s00f0_4140& o) {
+        mpBegin = o.mpBegin; mpEnd = o.mpEnd; mpCapacity = o.mpCapacity;
+        return *this;
+    }
+    ~basic_string_s00f0_4140() { DeallocateSelf(); }
+    void DeallocateSelf() {
+        if ((mpCapacity - mpBegin) > 1) {
+            if (mpBegin) operator delete(mpBegin);
+        }
+    }
+    const T* c_str() const { return mpBegin; }
+    basic_string_s00f0_4140& Assign(const T* pBegin, const T* pEnd);   // wchar: 0x00423650
+};
+}
+namespace eastl {
+typedef basic_string_s00f0_4140<char> string_s00f0_4140;
+}
+namespace eastl {
+typedef basic_string_s00f0_4140<wchar_t> string16_s00f0_4140;
+}
+namespace eastl {
+template <typename T>
+inline unsigned int CharStrlen(const T* p) {
+    const T* pCurrent = p;
+    while (*pCurrent) ++pCurrent;
+    return (unsigned int)(pCurrent - p);
+}
+}
+namespace EA {
+namespace ResourceMan {
+ struct Key_s00f0_4140 { uint32_t mType, mName, mInstance; }; 
+}
+}
+struct RefAVtbl {
+    void* f00;
+    void (__thiscall* Release)(void*);                          // +0x04
+    void (__thiscall* v08)(void*);                              // +0x08
+};
+struct RefA {
+    RefAVtbl* mpVtbl;
+    void Release() { mpVtbl->Release(this); }
+    void v08() { mpVtbl->v08(this); }
+};
+struct RefBVtbl {
+    void* f00;
+    void (__thiscall* AddRef)(void*);                           // +0x04
+    void (__thiscall* Release)(void*);                          // +0x08
+};
+struct RefB {
+    RefBVtbl* mpVtbl;
+    void AddRef() { mpVtbl->AddRef(this); }
+    void Release() { mpVtbl->Release(this); }
+};
+struct AtomicRefCounted {
+    void* mpVtbl;
+    uint32_t mField4;
+    volatile long mnRefCount;                                   // +0x08
+    void AddRef() { _InterlockedIncrement(&mnRefCount); }
+    void Release() {
+        _InterlockedDecrement(&mnRefCount);
+        if (_InterlockedExchangeAdd(&mnRefCount, 0) < 1)
+            _InterlockedIncrement(&mnRefCount);
+        else
+            _InterlockedExchangeAdd(&mnRefCount, 0);
+    }
+};
+template <typename T>
+class AutoRefCount {
+public:
+    T* mpObject;
+    AutoRefCount() : mpObject(0) {}
+    ~AutoRefCount() { if (mpObject) mpObject->Release(); }
+    AutoRefCount& operator=(T* pObject) {
+        if (pObject != mpObject) {
+            T* const pOld = mpObject;
+            if (pObject) pObject->AddRef();
+            mpObject = pObject;
+            if (pOld) pOld->Release();
+        }
+        return *this;
+    }
+    T*& AsOutParam() {
+        if (mpObject) {
+            T* const pObject = mpObject;
+            mpObject = 0;
+            pObject->Release();
+        }
+        return mpObject;
+    }
+    operator T*() const { return mpObject; }
+};
+struct IWindow_s00f0_4140;
+struct IWindowVtbl {
+    void  (__thiscall* AddRef)(void*);                          // +0x00
+    void  (__thiscall* Release)(void*);                         // +0x04
+    void* f08;
+    void* (__thiscall* GetControl)(void*, uint32_t);            // +0x0c
+    void* f10; void* f14; void* f18; void* f1c;
+    void* f20; void* f24; void* f28; void* f2c;
+    void* f30; void* f34; void* f38; void* f3c;
+    void* f40; void* f44; void* f48; void* f4c;
+    void* f50; void* f54; void* f58; void* f5c;
+    void* f60; void* f64; void* f68; void* f6c;
+    void* f70; void* f74; void* f78;
+    void  (__thiscall* SetFlag)(void*, int, bool);              // +0x7c
+    void  (__thiscall* SetCaption)(void*, const wchar_t*);      // +0x80
+    void* f84; void* f88; void* f8c; void* f90; void* f94; void* f98; void* f9c;
+    void* fa0; void* fa4; void* fa8; void* fac; void* fb0; void* fb4; void* fb8;
+    void* fbc; void* fc0; void* fc4; void* fc8; void* fcc; void* fd0; void* fd4;
+    void* fd8; void* fdc; void* fe0; void* fe4; void* fe8; void* fec;
+    void* (__thiscall* FindChild)(void*, uint32_t, int);        // +0xf0
+    void* f_f4; void* f_f8; void* f_fc; void* f_100;
+    void  (__thiscall* AddProc)(void*, void*);                  // +0x104
+    void  (__thiscall* RemoveProc)(void*, void*);               // +0x108
+};
+struct IWindow_s00f0_4140 {
+    IWindowVtbl* mpVtbl;
+    void AddRef() { mpVtbl->AddRef(this); }
+    void Release() { mpVtbl->Release(this); }
+    void* GetControl(uint32_t id) { return mpVtbl->GetControl(this, id); }
+    void SetFlag(int a, bool b) { mpVtbl->SetFlag(this, a, b); }
+    void SetCaption(const wchar_t* p) { mpVtbl->SetCaption(this, p); }
+    void* FindChild(uint32_t id, int b) { return mpVtbl->FindChild(this, id, b); }
+    void AddProc(void* p) { mpVtbl->AddProc(this, p); }
+    void RemoveProc(void* p) { mpVtbl->RemoveProc(this, p); }
+};
+struct IControlVtbl {
+    void* f00; void* f04; void* f08; void* f0c; void* f10; void* f14; void* f18; void* f1c;
+    void* f20; void* f24; void* f28; void* f2c; void* f30;
+    void  (__thiscall* SetFlag)(void*, int, bool);               // +0x34
+};
+struct IControl_s00f0_4140 {
+    IControlVtbl* mpVtbl;
+    void SetFlag(int a, bool b) { mpVtbl->SetFlag(this, a, b); }
+};
+struct cSPUILayout_s00f0_4140 {
+    RefBVtbl* mpVtbl;                                           // +0x00
+    void AddRef() { mpVtbl->AddRef(this); }
+    void Release() { mpVtbl->Release(this); }
+    IWindow_s00f0_4140* FindWindowByID(uint32_t id, bool recurse);                        // 0x008105B0
+    void     Shutdown(uint32_t a);                                            // 0x00811AD0
+    bool     Init(const EA::ResourceMan::Key_s00f0_4140& key, bool b, uint32_t c);       // 0x008120D0
+    bool     SetParentWin(IWindow_s00f0_4140* w, bool b, uint32_t c);                    // 0x008121B0
+};
+struct Property;
+struct PropertyVtbl {
+    void* f00;
+    void (__thiscall* Release)(void*);                          // +0x04
+};
+struct Property {
+    PropertyVtbl* mpVtbl;                                       // +0x00
+    uint32_t mData[3];
+    uint16_t mnFlags;                                           // +0x10
+    uint16_t mnType;                                            // +0x12
+    void AddRef() {}
+    void Release() { mpVtbl->Release(this); }
+    const float*    GetValueFloat();                            // 0x0041EA70
+    const uint32_t* GetValueUInt();                             // 0x0041EA00
+    const bool*     GetValueBool();                             // 0x0041E920
+};
+struct IAppPropsVtbl {
+    void* f00; void* f04; void* f08; void* f0c; void* f10; void* f14; void* f18; void* f1c;
+    void* f20;
+    bool (__thiscall* GetProperty)(void*, uint32_t, Property**);             // +0x24
+};
+struct IAppProps {
+    IAppPropsVtbl* mpVtbl;
+    bool GetProperty(uint32_t id, Property** out) { return mpVtbl->GetProperty(this, id, out); }
+};
+struct IUISubVtbl {
+    void* f00; void* f04; void* f08; void* f0c; void* f10; void* f14; void* f18;
+    void (__thiscall* v1c)(void*, void*);                                    // +0x1c
+    void (__thiscall* v20)(void*, void*);                                    // +0x20
+};
+struct IUISub {
+    IUISubVtbl* mpVtbl;
+    void v1c(void* p) { mpVtbl->v1c(this, p); }
+    void v20(void* p) { mpVtbl->v20(this, p); }
+};
+struct IUISystemVtbl {
+    void* f00; void* f04; void* f08; void* f0c; void* f10; void* f14; void* f18; void* f1c;
+    IUISub* (__thiscall* GetSub)(void*);                                     // +0x20
+};
+struct IUISystem {
+    IUISystemVtbl* mpVtbl;
+    IUISub* GetSub() { return mpVtbl->GetSub(this); }
+};
+struct IMovieSystemVtbl {
+    void* f00; void* f04; void* f08; void* f0c; void* f10; void* f14; void* f18; void* f1c;
+    void* f20; void* f24; void* f28; void* f2c;
+    bool (__thiscall* IsPlaying)(void*);                                     // +0x30
+    const wchar_t* (__thiscall* GetTitle)(void*);                            // +0x34
+};
+struct IMovieSystem_s00f0_4140 {
+    IMovieSystemVtbl* mpVtbl;
+    bool IsPlaying() { return mpVtbl->IsPlaying(this); }
+    const wchar_t* GetTitle() { return mpVtbl->GetTitle(this); }
+};
+struct ISaveAreaVtbl {
+    void* f00; void* f04; void* f08; void* f0c; void* f10; void* f14; void* f18; void* f1c;
+    void* f20; void* f24;
+    const wchar_t* (__thiscall* GetName)(void*);                             // +0x28
+};
+struct ISaveArea_s00f0_4140 {
+    ISaveAreaVtbl* mpVtbl;
+    const wchar_t* GetName() { return mpVtbl->GetName(this); }
+};
+struct IAudioSystemVtbl {
+    void* f00; void* f04; void* f08; void* f0c; void* f10; void* f14; void* f18; void* f1c;
+    void* (__thiscall* v20)(void*);                                          // +0x20
+    void* f24; void* f28; void* f2c; void* f30; void* f34;
+    void  (__thiscall* v38)(void*, uint32_t);                                // +0x38
+    void* f3c;
+    void  (__thiscall* v40)(void*, uint32_t, uint32_t);                      // +0x40
+    void* f44; void* f48; void* f4c; void* f50; void* f54;
+    void  (__thiscall* v58)(void*);                                          // +0x58
+};
+struct IAudioSystem_s00f0_4140 {
+    IAudioSystemVtbl* mpVtbl;
+    void* v20() { return mpVtbl->v20(this); }
+    void v38(uint32_t a) { mpVtbl->v38(this, a); }
+    void v40(uint32_t a, uint32_t b) { mpVtbl->v40(this, a, b); }
+    void v58() { mpVtbl->v58(this); }
+};
+extern IAppProps*     gAppProps;                  // 0x015FD918
+extern AutoRefCount<RefB> gTokenTranslator;       // 0x015F7CF4
+IUISystem*             UISystem();                // 0x0067DE40
+IMovieSystem_s00f0_4140*          MovieSystem_s00f0_4140();             // 0x0067CB10
+ISaveArea_s00f0_4140*             GetSaveArea_s00f0_4140(uint32_t id);  // 0x006B1F90
+IAudioSystem_s00f0_4140*          AudioGetSystemAT();        // 0x00A206F0
+bool                   GetYTPrompt();             // 0x0063B890
+void SP_UpdateMouseFocus(int a);                                               // 0x00804F50
+struct CEdObj { void Method(bool a); };                                        // 0x00ED4F00
+void FUN_00F040E0(eastl::string_s00f0_4140* s);                                           // 0x00F040E0
+struct cPlayModeTokenTranslator { cPlayModeTokenTranslator* ctor(); };         // 0x006345B0
+struct CSPUILayoutCtor { CSPUILayoutCtor* ctor(); };                           // 0x00810000
+struct Vec20 {
+    uint32_t* mpBegin;                                              // +0x00
+    uint32_t* mpEnd;                                                // +0x04
+    uint32_t* mpCap;                                                // +0x08
+    uint32_t  mPad[2];
+    void DestroyRange(void* pBegin, void* pEnd);                    // 0x0070F520
+};
+void RemoveHandler(void* h, void* a, void* b, void* c, void* d);   // 0x00571DB0
+namespace Simulator {
+struct cScenarioYouTube {
+    void* mpVtbl0;             // +0x00
+    void* mpVtbl4;             // +0x04
+    void* mpVtbl8;             // +0x08
+    void* mpVtblc;             // +0x0c
+    RefA* mpRef10;             // +0x10
+    AtomicRefCounted* mpMsgHandler;  // +0x14
+    void* mpMsgA;              // +0x18
+    void* mpMsgB;              // +0x1c
+    void* mpMsgC;              // +0x20
+    void* mpMsgD;              // +0x24
+    uint32_t mField28;         // +0x28
+    cSPUILayout_s00f0_4140* mLayout;      // +0x2c
+    IWindow_s00f0_4140* mpWin30;          // +0x30
+    IWindow_s00f0_4140* mpWin34;          // +0x34
+    IWindow_s00f0_4140* mpWin38;          // +0x38
+    uint32_t mWidth;           // +0x3c
+    uint32_t mHeight;          // +0x40
+    float mFloat44;            // +0x44
+    float mFloat48;            // +0x48
+    float mFloat4c;            // +0x4c
+    bool mBool50;              // +0x50
+    bool mBool51;              // +0x51
+    bool mBool52;              // +0x52
+    char mPad53;
+    eastl::string16_s00f0_4140 mStr54;    // +0x54
+    eastl::string16_s00f0_4140 mStr64;    // +0x64
+    uint32_t mField74;         // +0x74
+    bool mBool78;              // +0x78
+    bool mBool79;              // +0x79
+    char mPad7a[2];
+    eastl::string_s00f0_4140 mStr7c;      // +0x7c
+    eastl::string_s00f0_4140 mStr8c;      // +0x8c
+    eastl::string_s00f0_4140 mStr9c;      // +0x9c
+    eastl::string16_s00f0_4140 mStrAc;    // +0xac
+    bool mBoolBc; bool mBoolBd; bool mBoolBe; bool mBoolBf;
+    bool mBoolC0; bool mBoolC1; bool mBoolC2; bool mBoolC3;
+    bool mBoolC4; bool mBoolC5; bool mBoolC6;
+    char mPadC7;
+    uint32_t mFieldC8;         // +0xc8
+    RefA* mpRefCc;             // +0xcc
+    Vec20 mVec0;               // +0xd0
+    Vec20 mVec1;               // +0xe4
+    bool mBoolF8;              // +0xf8
+    bool mBoolF9;              // +0xf9
+    char mPadFa[6];
+    char mStopwatch[0x28];     // +0x100 EA::LimitStopwatch
+
+    void  FUN_00f04140(const eastl::string_s00f0_4140* s);
+    void  FUN_00f041a0();
+    void  FUN_00f043d0();
+    void  FUN_00f044d0();
+    void* FUN_00f046e0(unsigned flags);
+    void* FUN_00f04740();
+    void  FUN_00f04910();
+    void  FUN_00f04ad0();
+    void  FUN_00f04bd0();
+    void  FUN_00f04d10(int arg);
+};
+}
+using Simulator::cScenarioYouTube;
+// ---- items of slice s00f04140 end
+
+// ---- items of slice s00f05110 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C" const char gEmptyString16[];              // 0x1667bac
+extern "C" void __cdecl operator_delete(void* p);    // 0xf47380
+extern "C" void* __cdecl Audio_GetSystemAT();                      // 0xa206f0
+extern "C" void __cdecl ScenarioTutorials_CloseWindow();           // 0xefcae0
+extern "C" void* __cdecl GetTriggerMgr();                          // 0xb3d4d0
+extern "C" void __cdecl UpdateMouseFocus(int on);                  // 0x804f50
+extern "C" void* __cdecl SP_GetSaveArea(int id);                   // 0x6b1f90
+extern "C" void* __cdecl UIHints_Get();                // 0x67cac0
+extern "C" void* __cdecl WindowManager();              // 0x67caa0
+extern "C" void* __cdecl GameTimeManager();            // 0xb3d380
+extern "C" void __cdecl SPUIHelpers_BeginModal(void*, int, int);      // 0x8099a0
+extern "C" void __cdecl AutoSizeWindowForText(void* win, int a, int b); // 0x806e40
+extern "C" void* __cdecl PropertyManager();                       // 0x67de30
+extern "C" void* g_ytLoginKey;                                     // 0x15ad36c
+typedef unsigned char  uchar;
+typedef unsigned short ushort;
+template<class T> inline T& at(void* p, int off) { return *(T*)((char*)p + off); }
+template<class T> inline T& at(int p, int off) { return *(T*)((char*)(long)p + off); }
+struct EaStr
+{
+    char* mpBegin;      // 0x00
+    char* mpEnd;        // 0x04
+    char* mpCap;        // 0x08
+    char* mpSpare;      // 0x0c
+    EaStr();
+    int    sprintf(const char* fmt, ...);            // 0x472fe0
+    EaStr& append_sprintf(const char* fmt, ...);     // 0x5f9450
+};
+inline EaStr::EaStr()
+{
+    mpBegin = (char*)gEmptyString16;
+    mpEnd   = (char*)gEmptyString16;
+    mpCap   = (char*)gEmptyString16 + 1;
+}
+struct YtAuthMsg
+{
+    EaStr mToken;       // 0x00
+    EaStr mUser;        // 0x10
+    EaStr mExtra;       // 0x20
+    uchar mPrivate;     // 0x30
+    ~YtAuthMsg();       // ??1cEditorYouTubeAuthenticationMessage@@QAE@XZ
+};
+struct Movie
+{
+    void SendPublicAuth();      // 00f05c40
+    void LoginToYouTube();      // 00f05d00
+    void CloseUpload();         // 00f05b00
+    void RefreshPanel();        // 00f05790
+    void LayoutYouTube();       // 00f05110
+    void SaveUploadSettings();  // 00f055c0
+};
+extern "C" void* gAppProperties_s00f0_5110;                     // 0x15fd918
+struct Prop { uchar* GetBool(); };                   // 0x41e920
+struct PropList { uchar GetDescription(uint id); };   // 0x6a25a0
+struct EaStr16
+{
+    char* mpBegin;      // 0x00
+    char* mpEnd;        // 0x04
+    char* mpCap;        // 0x08
+    int   mSpare;       // 0x0c
+    EaStr16();
+    EaStr16(const wchar_t* text);
+    ~EaStr16();
+    void Format(const char* fmt, ...);                  // 0x41e050
+    void assign(const wchar_t* first, const wchar_t* last);   // 0x423650
+    void RangeInitialize(const wchar_t* text);          // 0x579a90
+    int  find(const wchar_t* needle, int pos);          // 0x608340
+    void erase(int pos, int count);                     // 0x4228e0
+};
+inline EaStr16::EaStr16(const wchar_t* text)
+{
+    mpBegin = 0;
+    mpEnd   = 0;
+    mpCap   = 0;
+    RangeInitialize(text);
+}
+inline EaStr16::EaStr16()
+{
+    mpBegin = (char*)gEmptyString16;
+    mpEnd   = (char*)gEmptyString16;
+    mpCap   = (char*)gEmptyString16 + 2;
+}
+inline EaStr16::~EaStr16()
+{
+    if (((int)(mpCap - mpBegin) & ~1) > 2 && mpBegin != 0)
+        operator_delete(mpBegin);
+}
+struct RectF
+{
+    float left, top, right, bottom;
+    uchar Intersect(const RectF& a, const RectF& b);   // 0x634b60
+};
+struct cString_s00f0_5110
+{
+    char pad[0x10];
+    cString_s00f0_5110(uint id, uint key, const void* text);      // 0x6b5770
+    ~cString_s00f0_5110();                                        // 0x6b5240
+    const void* GetText();                             // 0x6b55c0
+};
+struct UIHints { int SetFlag(char flag, int value); }; // 0x67c420
+struct SpGameTime { void IncPauseGate(int tag); };     // 0xb32220
+struct Layout
+{
+    void* FindWindowByID(uint id, char recurse);       // 0x8105b0
+};
+extern "C" uchar __cdecl SP_SaveNamedResource(void* key, const void* name, void* area); // 0x6b4010
+struct Variant
+{
+    int mFlags;             // type flags (bit 2 = destructible)
+    int mPad[0x0b];
+    void Construct(int type, int sub, const void* data, int size, int count);  // 0x93dd80
+    void Destruct(bool free);                                                  // 0x93db80
+};
+struct CPropList { CPropList* init(); };      // 0x6a1c40
+// ---- items of slice s00f05110 end
+
+// ---- items of slice s00f05ee0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+#pragma warning(disable: 4100)
+typedef unsigned int   u32;
+typedef unsigned char  u8;
+struct MovieHandler { void* mVtbl; u32 mSrv;                   // IHandler subobject at +0x04
+    void HandleMessage(u32 unused, u32 msgId);                 // 0x00f063c0
+};
+struct VtblPart { void* mVtbl0; };                            // primary vtable at +0x00
+void  __cdecl FUN_00809db0(MovieHandler* obj, u32 msg);       // 0x00809db0 UI::CalloutMessageBox
+void* __cdecl FUN_00607a60();                                 // 0x00607a60 AuthManager
+void  __cdecl FUN_0063bc70();                                 // 0x0063bc70 CreateConnectingDialog
+u8    __cdecl OpenBrowser_s00f0_5ee0(const wchar_t* url, int flag);      // 0x00935fb0
+static inline void* VT(void* o, int off) { return ((void**) (*(void**) o))[off / 4]; }
+typedef void  (__thiscall *FnU0)(void*);
+typedef char  (__thiscall *FnC0)(void*);
+namespace SP {
+struct RefVec {
+    void** mpBegin;   // +0
+    void** mpEnd;     // +4
+    void** mpCap;     // +8
+    void  Release(void* elem);                     // 0x00760c40
+    void  DoInsertValue(void* where, void* val);   // 0x00425a80
+    void  DestroyRange(void* a, void* b);          // 0x0070f520
+};
+}
+namespace SP {
+class cDirectPropertyList_s00f0_5ee0 { public: char m[0x18];           // +0x100
+    void SetBoolProperty();                          // 0x0093a2e0
+};
+}
+namespace SP {
+class cSPPlayModeSubModeMovie_s00f0_5ee0 : public VtblPart, public MovieHandler { public:
+    char   m08[8];        // +0x0c
+    void*  mServer;       // +0x14
+    void*  mHandlerObj;   // +0x18
+    void*  mMsgTable;     // +0x1c
+    u32    mMsgCount;     // +0x20
+    u32    m24;           // +0x24
+    u32    mDialog;       // +0x28
+    void*  mUI;           // +0x2c  cSPUILayout*
+    char   m30[8];        // +0x30
+    void*  m38;           // +0x38
+    char   m3c[0x18];     // +0x3c
+    void*  m54;           // +0x54  wchar_t*
+    char   m58[0x1c];     // +0x58
+    u32    m74;           // +0x74
+    bool   m78;           // +0x78
+    char   m79[3];        // +0x79
+    void*  m7c;           // +0x7c  char*
+    char   m80[0x0c];     // +0x80
+    void*  m8c;           // +0x8c  char*
+    char   m90[0x0c];     // +0x90
+    void*  m9c;           // +0x9c  char*
+    char   ma0[0x1c];     // +0xa0
+    bool   mbc;           // +0xbc
+    bool   mbd;           // +0xbd
+    bool   mbe;           // +0xbe
+    bool   mbf;           // +0xbf
+    bool   mc0;           // +0xc0
+    bool   mc1;           // +0xc1
+    bool   mc2;           // +0xc2
+    bool   mc3;           // +0xc3
+    bool   mc4;           // +0xc4
+    char   mc5[3];        // +0xc5
+    u32    mc8;           // +0xc8
+    char   mcc[4];        // +0xcc
+    RefVec mVecA;         // +0xd0
+    char   mdc[8];        // +0xdc
+    RefVec mVecB;         // +0xe4
+    char   mf0[8];        // +0xf0
+    bool   mf8;           // +0xf8
+    bool   mf9;           // +0xf9
+    char   mfa[6];        // +0xfa
+    cDirectPropertyList_s00f0_5ee0 mPropList;  // +0x100
+    long long mDeadline;  // +0x118
+
+    void  PostRecordingDone();                        // 0x00f05ee0
+    bool  CheckRecordingPreconditions();              // 0x00f06150
+    void  ShowUploadProgressDialog();                 // 0x00f065d0
+    void  ShowSendVideoURLDialog();                   // 0x00f06660
+    bool  SelectRecording(int* pIndex, void* pOut);   // 0x00f066c0
+    void  Update(u32 dt);                             // 0x00f067b0
+    bool  BeginRecording(u8 flag);                    // 0x00f069a0
+    void  ClearIndicatorTextures();                   // 0x00f06ac0
+    void  RegisterMessageHandlers();                  // 0x00f06ce0
+
+    // callees in this module (declared only)
+    void FUN_00f05c40();                              // 0x00f05c40
+    void FUN_00f05dc0(void* msg);                     // 0x00f05dc0
+    void FUN_00f05d00();                              // 0x00f05d00 LoginToYouTube
+    void FUN_00f055c0();                              // 0x00f055c0
+    void FUN_00f05790();                              // 0x00f05790
+    void FUN_00f03de0();                              // 0x00f03de0
+    void FUN_00f03e40();                              // 0x00f03e40
+    void FUN_00f03e90();                              // 0x00f03e90
+    void FUN_00f03d20();                              // 0x00f03d20
+    void FUN_00f03d50();                              // 0x00f03d50
+    void FUN_00f041a0();                              // 0x00f041a0
+    void FUN_00f044d0();                              // 0x00f044d0
+    void FUN_00f03fc0(int);                           // 0x00f03fc0
+    void FUN_00f04070(int);                           // 0x00f04070
+
+    MovieHandler* GetHandlerSub() { return static_cast<MovieHandler*>(this); }
+};
+}
+// ---- items of slice s00f05ee0 end
+
+// ---- items of slice s00f06d40 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern void*        F_0067dd30();               // 0x0067dd30 ConfigManager
+extern void*        F_00607a60();               // 0x00607a60 Pollen::AuthManager
+extern int          F_00435e90();               // 0x00435e90 GetRecorderState
+extern void         F_00435ed0(unsigned int id, unsigned int state); // 0x00435ed0 RecordEvent2
+extern void         F_00809db0(void* ctx, const wchar_t* text);      // 0x00809db0 CalloutMessageBox
+extern unsigned char F_0063b890();              // 0x0063b890 GetYTPrompt
+extern unsigned char F_0063c0a0();              // 0x0063c0a0 IsLocaleEnglish
+extern void         F_0063bc70();               // 0x0063bc70 CreateConnectingDialog
+extern void         F_0063c060(bool b);         // 0x0063c060 DestroyConnectingDialog
+extern void*        F_00a206f0();               // 0x00a206f0 EA::Audio::GetSystemAT
+extern void*        F_0067cb10();               // 0x0067cb10 MovieSystem
+extern void*        F_006b1f90(int area);       // 0x006b1f90 SP_GetSaveArea
+extern void         F_004af210(void* props, int key, unsigned int* out); // 0x004af210
+extern void         F_00935fb0(const wchar_t* url, bool b);          // 0x00935fb0 OpenBrowser
+extern void         F_00472fe0(void* dest, const char* fmt, ...);    // 0x00472fe0 string::sprintf
+extern void*        F_00f04530(bool b);         // 0x00f04530
+extern void*        F_0067ddd0();               // 0x0067ddd0 EffectsManager
+extern void*        F_0067caa0();               // 0x0067caa0 WindowManager
+extern void*        F_0067dcc0();               // 0x0067dcc0 MessageServer
+extern void*        F_00b3d380();               // 0x00b3d380 GameTimeManager
+extern const wchar_t g_01667bac[];              // 0x01667bac eastl::gEmptyString16
+extern void*         g_015fd918;                // 0x015fd918 app properties
+struct Msg;
+union PtrInt {
+    void* p;
+    int   i;
+};
+struct Msg {                    // message handed to the dispatchers
+    char   m00[8];
+    int    m08;                 // +0x08 message kind (1 / 0x287259f6)
+    int    m0c;                 // +0x0c message id
+    PtrInt m10;                 // +0x10 payload
+    void*  m14;                 // +0x14
+    void*  m18;                 // +0x18 payload
+    void*  m1c;                 // +0x1c
+    void*  m20;                 // +0x20 payload
+};
+struct SubMsg {                 // object pointed at by Msg::m18 / Msg::m20
+    char m00[0x0c];
+    int  m0c;                   // +0x0c
+};
+struct WStr {                   // SP::WString, 16 bytes (eastl string + allocator tag)
+    const wchar_t* mBegin;      // +0x00
+    const wchar_t* mEnd;        // +0x04
+    const wchar_t* mCap;        // +0x08
+    unsigned int   mAllocator;  // +0x0c
+    void append(const wchar_t* s);              // 0x005c3d90
+    void DeallocateSelf();                      // 0x00933960
+    void F_0057cb60(const WStr& src);           // 0x0057cb60  operator=
+};
+struct CharStr {                // eastl::basic_string<char>, 12 bytes
+    char* mBegin;
+    char* mEnd;
+    char* mCap;
+};
+struct DateTime_s00f0_6d40 {               // 8 bytes on the original frame
+    int mData[2];
+    void Set(int param);                        // 0x0092e3d0
+    int  GetParameter(int param);               // 0x0092df80
+};
+struct CStringStub {            // SP::cString
+    char mData[0x14];
+    void Ctor(unsigned int a, unsigned int b, const wchar_t* c);  // 0x006b5770
+    const wchar_t* GetText();                                     // 0x006b55c0
+    void Dtor();                                                  // 0x006b5240
+};
+struct TextSlots {              // pointed at by g_015f7cf4
+    char           m00[0x30];
+    const wchar_t* m30;         // +0x30
+    char           m34[0x10];
+    const wchar_t* m44;         // +0x44
+    const wchar_t* m48;         // +0x48
+    const wchar_t* m4c;         // +0x4c
+    const wchar_t* m50;         // +0x50
+    const wchar_t* m54;         // +0x54
+};
+struct PtrVector {              // vector of smart pointers
+    void* mBegin;
+    void* mEnd;
+    void* mCap;
+    void F_00420660(void** value);              // 0x00420660
+};
+struct TempRef {                // smart-pointer wrapper (one pointer)
+    void* mPtr;
+    void F_00576620();                          // 0x00576620
+};
+struct AutoRef_s00f0_6d40 {                // wrapper around PhotoHandler::m_c4
+    void* F_00a16f40();                         // 0x00a16f40
+};
+struct LimitStopwatch {
+    char mData[0x10];
+    void F_0093a480(unsigned int ms, bool b);   // 0x0093a480
+};
+struct Layout_s00f0_6d40 {
+    void* F_008105b0(int id, int flag);         // 0x008105b0
+};
+struct GameTime {
+    void F_00b32250(unsigned int id);           // 0x00b32250
+};
+struct MainWin {
+    void F_008143a0();                          // 0x008143a0
+};
+struct Movie_s00f0_6d40 {                  // SP::cSPPlayModeSubModeMovie
+    char      m00[0x04];
+    char      m04[0x24];        // +0x04 callout-message-box context
+    int       m28;              // +0x28 dialog state
+    Layout_s00f0_6d40*   m2c;              // +0x2c UI layout
+    char      m30[0x0c];
+    uint32_t  m3c;              // +0x3c
+    uint32_t  m40;              // +0x40
+    char      m44[0x10];
+    WStr      m54;              // +0x54
+    WStr      m64;              // +0x64
+    int       m74;              // +0x74
+    bool      m78;              // +0x78
+    bool      m79;              // +0x79
+
+    void F_00f065d0();                          // 0x00f065d0 ShowUploadProgressDialog
+    void F_00f06660();                          // 0x00f06660 ShowSendVideoURLDialog
+    void F_00f069a0(int a);                     // 0x00f069a0 BeginRecording
+    void F_00f06ac0();                          // 0x00f06ac0 ClearIndicatorTextures
+    void F_00f03fc0(int a);                     // 0x00f03fc0
+    void F_00f044d0();                          // 0x00f044d0
+    void F_00f03e20();                          // 0x00f03e20
+    void F_00f03e40();                          // 0x00f03e40
+    void F_00f03e90();                          // 0x00f03e90
+    void F_00f03fa0();                          // 0x00f03fa0
+    void F_00f05790();                          // 0x00f05790
+    void F_00f05c40();                          // 0x00f05c40 SendPublicAuth
+    void F_00f04bd0();                          // 0x00f04bd0
+    void F_00f05b00();                          // 0x00f05b00 CloseUpload
+    void F_00f04070(int a);                     // 0x00f04070
+    bool F_00f06d40(int msgId, Msg* msg);       // 0x00f06d40
+};
+struct PhotoHandler {           // handler subobject embedded at Movie+8
+    char      m00[0x20];
+    int       m20;              // +0x20 = Movie+0x28 dialog state
+    Layout_s00f0_6d40*   m24;              // +0x24 = Movie+0x2c UI layout
+    char      m28[0x4c];
+    CharStr   m74;              // +0x74
+    char      m80[0x04];
+    CharStr   m84;              // +0x84
+    char      m90[0x14];
+    WStr      m_a4;             // +0xa4
+    bool      m_b4;             // +0xb4
+    bool      m_b5;             // +0xb5
+    char      m_b6[0x01];
+    bool      m_b7;             // +0xb7
+    bool      m_b8;             // +0xb8
+    char      m_b9[0x01];
+    bool      m_ba;             // +0xba
+    char      m_bb[0x01];
+    bool      m_bc;             // +0xbc
+    bool      m_bd;             // +0xbd
+    bool      m_be;             // +0xbe
+    char      m_bf[0x01];
+    uint32_t  m_c0;             // +0xc0
+    void*     m_c4;             // +0xc4
+    char      m_c8[0x14];
+    PtrVector m_dc;             // +0xdc
+    char      m_e8[0x08];
+    bool      m_f0;             // +0xf0
+    bool      m_f1;             // +0xf1
+    char      m_f2[0x06];
+    LimitStopwatch m_f8;        // +0xf8
+
+    bool F_00f072b0(int msgId, Msg* msg);       // 0x00f072b0
+};
+extern WStr*        F_0041e050(WStr* dest, const wchar_t* fmt, ...); // 0x0041e050 WStr_Format
+extern unsigned char F_0063d170(WStr* a, WStr* b); // 0x0063d170 ConstructVideoURL
+extern TextSlots*    g_015f7cf4;                // 0x015f7cf4
+// ---- items of slice s00f06d40 end
+
+// @ 0x0063b5c0
+bool cDialog2::Init()
+{
+    uint32_t key[3];
+    key[0] = 0x834b03af;
+    key[1] = 0x510a95b;
+    key[2] = 0x40464100;
+    if (mLayout.Init(key, true, 0x5b598fa)) {
+        IWindow* w = mLayout.FindWindowByID(0x431e538, true);
+        if (w) {
+            w->AddWinProc(this);
+            return true;
+        }
+        mLayout.Shutdown(true);
+    }
+    return false;
+}
 
 // @ 0x0063b640
 void cConnectingDialog::SetDialogText(int state)
@@ -2191,6 +3384,101 @@ void cSPPlayModeSubModeMovie_s0063_caf0::ToggleRecordingIndicator(char b)
         FUN_0063b760();
 }
 
+// @ 0x0063d9e0
+void cSPPlayModeSubModeMovie_s0063_d9e0::FUN_0063d9e0()
+{
+    mDoVideoUpload = true;
+    mVideoUploadComplete = false;
+    mVideoUploadSuccess = false;
+
+    eastl::string16_s0063_d9e0 req;                       // constructed by 0x63d050, then reformatted
+    ConstructYouTubeVideoUploadXMLRequest(&req);              // 0x63d050
+
+    // Convert the current filename to UTF-16 and format it (e.g. "name.avi") into req.
+    eastl::string16_s0063_d9e0 fnW = EA::ConvertToString16_s0063_d9e0(mCurrFilename, -1);   // 0x93c5a0
+    WStr_Format(&req, L"%s.avi", fnW.c_str());                // 0x41e050
+
+    // Ask the save area for a suitable resource name/slot.
+    ISaveArea_s0063_d9e0* sa = GetSaveArea_s0063_d9e0(0x11ac197);                   // 0x6b1f90
+    eastl::string16_s0063_d9e0 extra;
+    sa->SetName(extra.mpBegin, 0, 2);                         // vtbl[0x68] (arg plumbing)
+
+    // Build the upload payload (five char strings + a 3-dword key + the XML request).
+    cEditorYouTubeVideoUploadMessage_s0063_d9e0 msg;
+    CString_Sprintf((eastl::string_s0063_d9e0*)&msg.mUsername, "%s", mYTUsername.mpBegin);   // 0x472fe0
+    CString_Sprintf((eastl::string_s0063_d9e0*)&msg.mClientID, "%s", mYTAuthToken.mpBegin);
+    CString_Sprintf((eastl::string_s0063_d9e0*)&msg.mAuthenticationToken, "%s", (const char*)g_1524444);
+    CString_Sprintf((eastl::string_s0063_d9e0*)&msg.mDeveloperKey, "%s", fnW.mpBegin);
+    CString_Sprintf((eastl::string_s0063_d9e0*)&msg.mVideoFilename, "%s", mYTUsername.mpBegin);
+    CString_Sprintf((eastl::string_s0063_d9e0*)&msg.mXMLRequest, "%s", req.mpBegin);
+
+    IMessageServer* ms = GetMessageServer();                  // 0x67dcc0
+    ms->PostMessage(0x55e8bc8, &msg, 0);                      // vtbl[0x14]
+
+    msg.~cEditorYouTubeVideoUploadMessage_s0063_d9e0();                  // 0x63c750
+    (void)extra;
+}
+
+// @ 0x0063dc40
+void cSPPlayModeSubModeMovie_s0063_d9e0::FUN_0063dc40()
+{
+    // 1. Look up / create the property list that carries the YouTube credentials.
+    uint32_t key = FNV1_String16A(0x811c9dc5, g_1524440, 1);  // 0x932f30
+    IPropertyList_s0063_d9e0* pm = (IPropertyList_s0063_d9e0*)GetPropertyManager_s0063_d9e0(); // 0x67de30
+
+    void* pl = 0;                                             // [esp+0x10]
+    if (pl)
+        ((IReleasable*)pl)->Release();                        // stale-slot release
+    pm->v2c(key, 0x11ac192, &pl);                             // vtbl[0x2c] GetProperty
+
+    if (!pl) {
+        void* p = operator_new_ea(0x38, (const char*)0x13eb430, 0, 0, 0, 0);  // 0x0F473A0
+        if (p)
+            p = PropertyList_Ctor(p, 0);                      // 0x6a1c40 (this in ecx)
+        else
+            p = 0;
+        if (p != pl) {
+            void* old = pl;
+            if (p)
+                ((IReleasable*)p)->r0();                      // vtbl[0]
+            pl = p;
+            if (old)
+                ((IReleasable*)old)->Release();               // vtbl[4]
+        }
+        char* q = (char*)pl + 8;
+        *(uint32_t*)(q + 0) = key;                            // +8
+        *(uint32_t*)(q + 4) = 0xb1b104;                       // +0xc
+        *(uint32_t*)(q + 8) = 0x11ac192;                      // +0x10
+    }
+
+    // 2. Publish the username as a property (0x93dd80 builds the Variant from a string16).
+    Variant_s0063_d9e0 v1;
+    Variant_FromString16(&v1, 0, &mYTUsername, 1, 0x10, 9, 0x12);   // 0x93dd80
+    ((IPropertyList_s0063_d9e0*)pl)->v14(0x5664bf5, &v1);                   // vtbl[0x14]
+    if (v1.flags & 4)
+        Variant_Destruct(&v1, 0);                                // 0x93db80
+
+    // 3. Encrypt the password, then publish it as a property.
+    NoThrowStr enc;                                              // [esp+0x14] (wstring-shaped temp)
+    Encrypt(&enc, &mYTPassword);                                 // 0x60bcf0
+    Variant_s0063_d9e0 v2;
+    Variant_FromString16(&v2, 0, &enc, 1, 0x10, 9, 0x12);        // 0x93dd80
+    ((IPropertyList_s0063_d9e0*)pl)->v14(0x5664bf6, &v2);                   // vtbl[0x14]
+    if (v2.flags & 4)
+        Variant_Destruct(&v2, 0);                                // 0x93db80
+
+    // 4. Save the credentials through the named save area.
+    ISaveArea_s0063_d9e0* sa = GetSaveArea_s0063_d9e0(0x11ac192);                      // 0x6b1f90
+    if (sa) {
+        NoThrowStr name;                                         // [esp]
+        SaveNamedResource((eastl::string_s0063_d9e0*)&name, g_1524440, sa); // 0x6b4010
+    }
+
+    // 5. Release the property list.
+    if (pl)
+        ((IReleasable*)pl)->Release();                           // vtbl[4]
+}
+
 // @ 0x0063de20
 void cSPPlayModeSubModeMovie_s0063_d9e0::FUN_0063de20(int dt)
 {
@@ -2403,4 +3691,1079 @@ bool cSPPlayModeSubModeMovie_s0063_d9e0::HandleButton(int id)
 callout:
     BeginProfScope(0, 1)->End();
     return true;
+}
+
+// @ 0x00df5430
+void cGalaxyGameEntryUIStateMachine::FUN_00df5430(int mode)
+{
+    GalaxyView* view = (GalaxyView*)this;
+    IWindow_s00df_47b0* window = view->mLayout54.FindWindowByID(0x5d2bdf8, true);
+    window->SetFlag(1, true);
+    window->SetFlag(2, true);
+
+    IWindow_s00df_47b0* textWindow = view->mLayout54.FindWindowByID(0x5006000, true);
+    if (!textWindow)
+        return;
+
+    cString_s00df_47b0 text;
+    switch (mode) {
+    case 0:
+        text.Load(0xd7f9d626, 0x5d65f2c, L"Patch Downloading...(PLACEHOLDER)");
+        break;
+    case 1:
+        text.Load(0xd7f9d626, 0x5ee1440, L"Download Paused (PLACEHOLDER)");
+        break;
+    }
+
+    textWindow->SetText(text.GetText());
+}
+
+// @ 0x00df54f0
+long double cGalaxyGameEntryUIStateMachine::FUN_00df54f0(float offset)
+{
+    GalaxyView* view = (GalaxyView*)this;
+    if (view->m_count4c == 0)
+        return 0.0f;
+    const float count = (float)view->m_count4c;
+    const float value = (float)view->m_value50;
+    return ((long double)1.0 / (long double)count) *
+           ((long double)value + (long double)offset);
+}
+
+// @ 0x00df5540
+void cGalaxyGameEntryUIStateMachine::FUN_00df5540()
+{
+    GalaxyView0c* view = (GalaxyView0c*)this;
+    IWindow_s00df_47b0* window = view->mLayout0c.FindWindowByID(0x6383590, true);
+    if (window)
+        FUN_008099a0(window, 0, 1);
+}
+
+// @ 0x00df5570
+bool __stdcall FUN_00df5570(void* unused, void* event)
+{
+    (void)unused;
+    if (*(uint32_t*)((char*)event + 8) == 0x287259f6) {
+        void* object = *(void**)event;
+        int result = ((int (__fastcall*)(void*))VTFN(object, 0x1c / 4))(object);
+        if (result == 0x6383360) {
+            cMessageServer* server = MessageServer();
+            server->post(0x6382db7, 0, 0);
+            return true;
+        }
+    }
+    return false;
+}
+
+// @ 0x00df55b0
+void cGalaxyGameEntryUIStateMachine::FUN_00df55b0(int mode)
+{
+    FUN_00df5430(mode);
+    GalaxyView* view = (GalaxyView*)this;
+
+    IWindow_s00df_47b0* window = view->mLayout54.FindWindowByID(0x42e2e38, true);
+    if (window)
+        window->SetText((const wchar_t*)0x013ec468);
+
+    window = view->mLayout54.FindWindowByID(0x431e538, true);
+    if (window)
+        FUN_008099a0(window, 0, 1);
+}
+
+// @ 0x00df5610
+void cGalaxyGameEntryUIStateMachine::FUN_00df5610(float t)
+{
+    GalaxyView* view = (GalaxyView*)this;
+    void* effect = view->m_effect30;
+    if (effect == 0)
+        return;
+
+    float value[4];
+    const float x = view->m_x34;
+    const float y = view->m_y38;
+    value[1] = y;
+    value[0] = x;
+    value[3] = view->m_w40;
+    value[2] = (view->m_z3c - x) * t + x;
+    ((Effect*)effect)->SetValue(value);
+}
+
+// @ 0x00df5670
+void cDownloadDialog::FUN_00df5670(char b)
+{
+    m_paused = b;
+    find_window:
+    if (b != 0) {
+        // one cString on every path through this branch -> fold all FindWindowByID calls
+        cString_s00df_5670 storage;
+        cSPUILayout_s00df_5670* lay = Layout();
+        IWinNode* w = (IWinNode*)lay->FindWindowByID(0x5d2bdf8, 1);
+        w->v7c(1, 1);
+        w->v7c(2, 1);
+        IWinNode* w2 = (IWinNode*)lay->FindWindowByID(0x5006000, 1);
+        if (w2) {
+            storage.Load(0xd7f9d626, 0x5ee1440, L"Download Paused (PLACEHOLDER)");
+            w2->v80(storage.GetText());
+        }
+        IWinNode* w3 = (IWinNode*)lay->FindWindowByID(0x5d66f78, 1);
+        if (w3) {
+            storage.Load(0xd7f9d626, 0x64bf9e1, L"Resume (PLACEHOLDER)");
+            w3->v80(storage.GetText());
+        }
+        return;
+    }
+    FUN_00df5430(0);
+    {
+        cString_s00df_5670 storage;
+        IWinNode* w = (IWinNode*)Layout()->FindWindowByID(0x5d66f78, 1);
+        if (w) {
+            storage.Load(0xd7f9d626, 0x61f1d7f, L"Pause (PLACEHOLDER)");
+            w->v80(storage.GetText());
+        }
+    }
+    (void)0;
+    goto find_window;
+}
+
+// @ 0x00f04910
+void Simulator::cScenarioYouTube::FUN_00f04910()
+{
+    Vec20& v1 = mVec1;
+    mpVtbl0 = (void*)0x148b864;
+    mpVtbl4 = (void*)0x148b858;
+    mpVtbl8 = (void*)0x148b850;
+    mpVtblc = (void*)0x148b840;
+    _ReadWriteBarrier();
+
+    v1.DestroyRange(v1.mpBegin, v1.mpEnd);
+    if (v1.mpBegin && *((int*)v1.mpBegin - 1) != 0)
+        operator delete(v1.mpBegin);
+
+    mVec0.DestroyRange(mVec0.mpBegin, mVec0.mpEnd);
+    if (mVec0.mpBegin && *((int*)mVec0.mpBegin - 1) != 0)
+        operator delete(mVec0.mpBegin);
+
+    if (mpRefCc)
+        mpRefCc->Release();
+
+    mStrAc.DeallocateSelf();
+    mStr9c.DeallocateSelf();
+    mStr8c.DeallocateSelf();
+    mStr7c.DeallocateSelf();
+    mStr64.DeallocateSelf();
+    mStr54.DeallocateSelf();
+
+    if (mpWin38)
+        mpWin38->Release();
+    if (mpWin34)
+        mpWin34->Release();
+    if (mpWin30)
+        mpWin30->Release();
+    if (mLayout)
+        mLayout->Release();
+
+    if (mpMsgHandler) {
+        void* h = mpMsgHandler;
+        mpMsgHandler = 0;
+        RemoveHandler(h, mpMsgA, mpMsgB, mpMsgC, mpMsgD);
+    }
+    mpVtblc = (void*)0x13ec458;
+    mpVtbl8 = (void*)0x13eb394;
+    mpVtbl0 = (void*)0x13eb938;
+}
+
+// @ 0x00f04ad0
+void Simulator::cScenarioYouTube::FUN_00f04ad0()
+{
+    FUN_00f044d0();
+    UISystem()->GetSub()->v20(gTokenTranslator.mpObject);
+    gTokenTranslator = (RefB*)0;
+
+    mpWin38->RemoveProc(this);
+    if (mpWin38) {
+        IWindow_s00f0_4140* w = mpWin38;
+        mpWin38 = 0;
+        w->Release();
+    }
+
+    mLayout->FindWindowByID(0xffffffff, true)->RemoveProc(this);
+    mLayout->Shutdown(1);
+    if (mLayout) {
+        cSPUILayout_s00f0_4140* l = mLayout;
+        mLayout = 0;
+        l->Release();
+    }
+
+    bool b = (uint32_t)(mVec0.mpEnd - mVec0.mpBegin) < 0x32;
+    if (mpWin38) {
+        IWindow_s00f0_4140* child = (IWindow_s00f0_4140*)mpWin38->FindChild(0x78d57d8, 1);
+        if (child)
+            child->SetFlag(2, b);
+    }
+    void* h = *(void**)((char*)gField_016c7aa4 + 0x14);
+    if (h)
+        ((CEdObj*)h)->Method(b);
+}
+
+// @ 0x00f04bd0
+void Simulator::cScenarioYouTube::FUN_00f04bd0()
+{
+    IAudioSystem_s00f0_4140* au = AudioGetSystemAT();
+    uint32_t u;
+    if (au)
+        u = (uint32_t)au->v20();
+    else
+        u = 0;
+
+    au = AudioGetSystemAT();
+    if (au) {
+        au->v38(0x3475365);
+        au->v40(0x3475381, 0x6f89c68e);
+        au->v40(0x3475385, u);
+        au->v58();
+    }
+
+    IMovieSystem_s00f0_4140* ms = MovieSystem_s00f0_4140();
+    const wchar_t* p1 = ms->GetTitle();
+    mStr54.Assign(p1, p1 + eastl::CharStrlen(p1));
+
+    ISaveArea_s00f0_4140* sa = GetSaveArea_s00f0_4140(0x11ac197);
+    const wchar_t* p2 = sa->GetName();
+    mStr64.Assign(p2, p2 + eastl::CharStrlen(p2));
+
+    mBool78 = true;
+    mBool79 = true;
+    mpWin30->SetFlag(1, 1);
+    mpWin34->SetFlag(1, 0);
+    SP_UpdateMouseFocus(1);
+    mField74 = 0;
+}
+
+// @ 0x00f04d10
+void Simulator::cScenarioYouTube::FUN_00f04d10(int arg)
+{
+    void* mem = EAAllocate(0x60, "Simulator/cPlayModeTokenTranslator", 0, 0, 0, 0);
+    cPlayModeTokenTranslator* tt = mem ? ((cPlayModeTokenTranslator*)mem)->ctor() : 0;
+
+    gTokenTranslator = (RefB*)tt;
+
+    UISystem()->GetSub()->v1c(gTokenTranslator.mpObject);
+
+    void* lmem = EAAllocate(0x18, "UI/cSPUILayout", 0, 0, 0, 0);
+    cSPUILayout_s00f0_4140* layout = lmem ? (cSPUILayout_s00f0_4140*)((CSPUILayoutCtor*)lmem)->ctor() : 0;
+    cSPUILayout_s00f0_4140* oldLayout = mLayout;
+    if (layout != oldLayout) {
+        if (layout) layout->AddRef();
+        mLayout = layout;
+        if (oldLayout) oldLayout->Release();
+    }
+
+    EA::ResourceMan::Key_s00f0_4140 key;
+    key.mType = 0x784e37b4;
+    key.mName = 0x510a95b;
+    key.mInstance = 0x40464100;
+    mLayout->Init(key, false, 0x5b598fa);
+
+    cSPUILayout_s00f0_4140* lay = layout;
+    lay->SetParentWin(lay->FindWindowByID(0xffffffff, true), true, 0x5b598fa);
+
+    IWindow_s00f0_4140* w = lay->FindWindowByID(0x7916468, true);
+    IWindow_s00f0_4140* old38 = mpWin38;
+    if (w != old38) {
+        if (w) w->AddRef();
+        mpWin38 = w;
+        if (old38) old38->Release();
+    }
+    mpWin38->AddProc(this);
+    mLayout->FindWindowByID(0xffffffff, true)->AddProc(this);
+
+    w = mLayout->FindWindowByID(0x78ec978, true);
+    IWindow_s00f0_4140* old30 = mpWin30;
+    if (w != old30) {
+        if (w) w->AddRef();
+        mpWin30 = w;
+        if (old30) old30->Release();
+    }
+
+    w = mLayout->FindWindowByID(0x78d57d0, true);
+    IWindow_s00f0_4140* old34 = mpWin34;
+    if (w != old34) {
+        if (w) w->AddRef();
+        mpWin34 = w;
+        if (old34) old34->Release();
+    }
+
+    IAppProps* props = gAppProps;
+    if (props) {
+        Property* prop;
+        if (props->GetProperty(0x456f974, &prop) && prop->mnType == 0xd)
+            mFloat48 = *prop->GetValueFloat();
+        if (props->GetProperty(0x456f975, &prop) && prop->mnType == 10)
+            mWidth = *prop->GetValueUInt();
+        if (props->GetProperty(0x456f976, &prop) && prop->mnType == 10)
+            mHeight = *prop->GetValueUInt();
+        if (props->GetProperty(0x456f977, &prop) && prop->mnType == 0xd)
+            mFloat44 = *prop->GetValueFloat();
+        if (props->GetProperty(0x456f978, &prop) && prop->mnType == 0xd)
+            mFloat4c = *prop->GetValueFloat();
+        if (props->GetProperty(0x456f979, &prop) && prop->mnType == 1)
+            mBool50 = *prop->GetValueBool();
+        if (props->GetProperty(0x456f97a, &prop) && prop->mnType == 1)
+            mBool51 = *prop->GetValueBool();
+    }
+
+    FUN_00f043d0();
+    FUN_00F040E0(&mStr8c);
+    FUN_00f04140(&mStr9c);
+
+    bool bPrompt = GetYTPrompt();
+    IWindow_s00f0_4140* hint = mLayout->FindWindowByID(0x5665f58, true);
+    IControl_s00f0_4140* ctl = hint ? (IControl_s00f0_4140*)hint->GetControl(0x8ed27e7a) : 0;
+    if (ctl)
+        ctl->SetFlag(4, !bPrompt);
+
+    if (MovieSystem_s00f0_4140()->IsPlaying())
+        FUN_00f04bd0();
+
+    bool b = (uint32_t)(mVec0.mpEnd - mVec0.mpBegin) < 0x32;
+    if (mpWin38) {
+        IWindow_s00f0_4140* child = (IWindow_s00f0_4140*)mpWin38->FindChild(0x78d57d8, 1);
+        if (child)
+            child->SetFlag(2, b);
+    }
+    void* h = *(void**)((char*)gField_016c7aa4 + 0x14);
+    if (h)
+        ((CEdObj*)h)->Method(b);
+}
+
+// @ 0x00f05110
+void Movie::LayoutYouTube()
+{
+    cString_s00f0_5110 title(0x7518573e, 0x5e501eb, 0);
+    EaStr16 text;
+    EaStr16 before;
+    EaStr16 after;
+    bool iconFirst = true;
+
+    const wchar_t* p = (const wchar_t*)title.GetText();
+    const wchar_t* e = p;
+    while (*e != 0)
+        e++;
+    text.assign(p, p + (e - p));
+
+    void* icon  = ((Layout*)at<void*>(this, 0x2c))->FindWindowByID(0x5e51108, 1);
+    void* label = ((Layout*)at<void*>(this, 0x2c))->FindWindowByID(0x5daa660, 1);
+
+    EaStr16 marker(L"<youtubeicon>");
+
+    int pos = text.find((const wchar_t*)marker.mpBegin, 0);
+    if (pos != -1) {
+        before.assign((const wchar_t*)text.mpBegin, (const wchar_t*)text.mpEnd);
+        text.erase(pos, (int)(before.mpEnd - before.mpBegin) >> 1);
+        before.erase(0, pos + ((int)(marker.mpEnd - marker.mpBegin) >> 1));
+        if (((int)(text.mpEnd - text.mpBegin) & ~1) == 0) {
+            after.assign((const wchar_t*)before.mpBegin, (const wchar_t*)before.mpEnd);
+        } else {
+            after.assign((const wchar_t*)text.mpBegin, (const wchar_t*)text.mpEnd);
+            iconFirst = false;
+        }
+    }
+
+    if (label != 0) {
+        ((void (__thiscall*)(void*, const void*))((void**)*(void**)label)[0x80 / 4])(label, after.mpBegin);
+        AutoSizeWindowForText(label, 0, 0);
+    }
+
+    float baseX;
+    void* spanWin;
+    if (!iconFirst) {
+        RectF aR = *(RectF*)((RectF* (__thiscall*)(void*))((void**)*(void**)icon)[0x38 / 4])(icon);
+        RectF* rb = (RectF*)((RectF* (__thiscall*)(void*))((void**)*(void**)label)[0x38 / 4])(label);
+        RectF nb = *rb;
+        nb.left   = aR.left;
+        nb.right  = (rb->right - rb->left) + aR.left;
+        nb.bottom = (rb->bottom - rb->top) + rb->top;
+        ((void (__thiscall*)(void*, const RectF*))((void**)*(void**)label)[0x6c / 4])(label, &nb);
+
+        float right = ((RectF*)((RectF* (__thiscall*)(void*))((void**)*(void**)label)[0x38 / 4])(label))->right + 3.0f;
+        aR.right  = (aR.right - aR.left) + right;
+        aR.left   = right;
+        aR.bottom = (aR.bottom - aR.top) + aR.top;
+        ((void (__thiscall*)(void*, const RectF*))((void**)*(void**)icon)[0x6c / 4])(icon, &aR);
+
+        baseX = ((RectF*)((RectF* (__thiscall*)(void*))((void**)*(void**)label)[0x38 / 4])(label))->left;
+        spanWin = icon;
+    } else {
+        baseX = ((RectF*)((RectF* (__thiscall*)(void*))((void**)*(void**)icon)[0x38 / 4])(icon))->left;
+        spanWin = label;
+    }
+    float spanRight = ((RectF*)((RectF* (__thiscall*)(void*))((void**)*(void**)spanWin)[0x38 / 4])(spanWin))->right;
+
+    void* panel = ((Layout*)at<void*>(this, 0x2c))->FindWindowByID(0x5b5ef50, 1);
+    RectF* pr = (RectF*)((RectF* (__thiscall*)(void*))((void**)*(void**)panel)[0x38 / 4])(panel);
+    float shift = (spanRight + baseX) * 0.5f - (pr->right - pr->left) * 0.5f;
+
+    RectF ia = *(RectF*)((RectF* (__thiscall*)(void*))((void**)*(void**)icon)[0x38 / 4])(icon);
+    ia.left   = ia.left - shift;
+    ia.right  = (ia.right - (ia.left + shift)) + ia.left;
+    ia.bottom = (ia.bottom - ia.top) + ia.top;
+    ((void (__thiscall*)(void*, const RectF*))
+     ((void**)*(void**)icon)[0x6c / 4])(icon, &ia);
+
+    RectF la = *(RectF*)((RectF* (__thiscall*)(void*))((void**)*(void**)label)[0x38 / 4])(label);
+    la.left   = la.left - shift;
+    la.right  = (la.right - (la.left + shift)) + la.left;
+    la.bottom = (la.bottom - la.top) + la.top;
+    ((void (__thiscall*)(void*, const RectF*))
+     ((void**)*(void**)label)[0x6c / 4])(label, &la);
+}
+
+// @ 0x00f055c0
+void Movie::SaveUploadSettings()
+{
+    void* pm = PropertyManager();
+    void* pl = 0;
+    ((void (__thiscall*)(void*, int, int, void**))
+     ((void**)*(void**)pm)[0x2c / 4])(pm, 0x3a39cb0d, 0x11ac192, &pl);
+
+    if (pl == 0) {
+        void* mem = EAAllocate(0x38, (const char*)0x148b8a4, 0, 0, 0, 0);
+        pl = mem != 0 ? ((CPropList*)mem)->init() : 0;
+        at<int>(pl, 8)  = 0x3a39cb0d;
+        at<int>(pl, 0xc) = 0xb1b104;
+        at<int>(pl, 0x10) = 0x11ac192;
+    }
+
+    Variant v;
+    v.Construct(0x12, 9, (char*)this + 0x8c, 0x10, 1);
+    ((void (__thiscall*)(void*, int, Variant*))
+     ((void**)*(void**)pl)[0x14 / 4])(pl, 0x5664bf5, &v);
+    if (v.mFlags & 4)
+        v.Destruct(0);
+
+    EaStr enc;
+    Encrypt(&enc, (char*)this + 0x9c);
+
+    Variant v2;
+    v2.Construct(0x12, 9, &enc, 0x10, 1);
+    ((void (__thiscall*)(void*, int, Variant*))
+     ((void**)*(void**)pl)[0x14 / 4])(pl, 0x5664bf6, &v2);
+    if (v2.mFlags & 4)
+        v2.Destruct(0);
+
+    void* area = SP_GetSaveArea(0x11ac192);
+    if (area != 0)
+        SP_SaveNamedResource(g_ytLoginKey, enc.mpBegin, area);
+}
+
+// @ 0x00f05790
+void Movie::RefreshPanel()
+{
+    void* ui = *(void**)0x15f7cf4;
+    at<int>(ui, 0x18) = at<int>(this, 0x54);
+    if (!((PropList*)gAppProperties_s00f0_5110)->GetDescription(0x61b67b6)) {
+        at<int>(*(void**)0x15f7cf4, 0x1c) = at<int>(this, 0x64);
+        at<void*>(*(void**)0x15f7cf4, 0x58) = (void*)0x13ec468;
+    } else {
+        EaStr16 name, desc;
+        cString_s00f0_5110 cfg1(0x19f76d11, 0x5ca8d97, 0);
+        cString_s00f0_5110 cfg2(0x19f76d11, 0x5ca8d98, 0);
+        name.Format((const char*)0x13ff0cc, cfg1.GetText(), cfg2.GetText());
+        at<void*>(*(void**)0x15f7cf4, 0x1c) = name.mpBegin;
+        cString_s00f0_5110 cfg3(0x19f76d11, 0x61b68c1, 0);
+        desc.Format((const char*)0x13fe12c, cfg3.GetText());
+        at<void*>(*(void**)0x15f7cf4, 0x58) = desc.mpBegin;
+    }
+
+    void* hints = UIHints_Get();
+    ((UIHints*)hints)->SetFlag(0, 1);
+
+    cString_s00f0_5110 caption(0x7518573e, 0x54c1e63, (const void*)0x13febb4);
+    Layout* lay = (Layout*)at<void*>(this, 0x2c);
+    void* win1 = lay->FindWindowByID(0x5b5f5c8, 1);
+    ((void (__thiscall*)(void*, const void*))((void**)*(void**)win1)[0x80 / 4])(win1, caption.GetText());
+
+    float h = 0.0f;
+    void* win2 = lay->FindWindowByID(0x5b5ef51, 1);
+    if (win2 != 0) {
+        AutoSizeWindowForText(win2, 1, 0);
+        void* win3 = lay->FindWindowByID(0x5b5ef52, 1);
+        if (win3 != 0) {
+            AutoSizeWindowForText(win3, 0, 0);
+            RectF* r3 = ((RectF* (__thiscall*)(void*))((void**)*(void**)win3)[0x38 / 4])(win3);
+            float w = r3->right - r3->left;
+            RectF* r2 = ((RectF* (__thiscall*)(void*))((void**)*(void**)win2)[0x38 / 4])(win2);
+            ((void (__thiscall*)(void*, float, float))
+             ((void**)*(void**)win3)[0x70 / 4])(win3, r2->left - w, r3->top);
+            void* win4 = lay->FindWindowByID(0x5b5ef53, 1);
+            if (win4 != 0) {
+                AutoSizeWindowForText(win4, 0, 0);
+                RectF* r4 = ((RectF* (__thiscall*)(void*))((void**)*(void**)win4)[0x38 / 4])(win4);
+                RectF* r3b = ((RectF* (__thiscall*)(void*))((void**)*(void**)win3)[0x38 / 4])(win3);
+                RectF res;
+                res.Intersect(*r4, *r3b);
+                h = res.right - res.left;
+            }
+        }
+    }
+
+    this->LayoutYouTube();
+
+    void* panel = lay->FindWindowByID(0x5b5ef50, 1);
+    ((void (__thiscall*)(void*, int, int))((void**)*(void**)panel)[0x7c / 4])(panel, 1, 1);
+    if (h > 0.0f) {
+        RectF* rp = ((RectF* (__thiscall*)(void*))((void**)*(void**)panel)[0x38 / 4])(panel);
+        ((void (__thiscall*)(void*, float, float))((void**)*(void**)panel)[0x74 / 4])(
+            panel, (rp->right - rp->left) + h, rp->bottom - rp->top);
+    }
+
+    void* dialog = lay->FindWindowByID(0xffffffff, 1);
+    void* wm = WindowManager();
+    if (!((uchar (__thiscall*)(void*, void*))((void**)*(void**)wm)[0x80 / 4])(wm, dialog)) {
+        SPUIHelpers_BeginModal(dialog, 0, 0);
+        void* gt = GameTimeManager();
+        ((SpGameTime*)gt)->IncPauseGate(0x4bf38a4);
+    }
+    at<int>(this, 0x28) = 1;
+}
+
+// @ 0x00f05b00
+void Movie::CloseUpload()
+{
+    void* sys = Audio_GetSystemAT();
+    int   vol = sys != 0
+              ? ((int (__thiscall*)(void*))((void**)*(void**)sys)[0x20 / 4])(sys)
+              : 0;
+
+    sys = Audio_GetSystemAT();
+    if (sys != 0) {
+        ((void (__thiscall*)(void*, int))((void**)*(void**)sys)[0x38 / 4])(sys, 0x3475365);
+        ((void (__thiscall*)(void*, int, int))((void**)*(void**)sys)[0x40 / 4])(sys, 0x3475381, 0xcb4ad069);
+        ((void (__thiscall*)(void*, int, int))((void**)*(void**)sys)[0x40 / 4])(sys, 0x3475385, vol);
+        ((void (__thiscall*)(void*))((void**)*(void**)sys)[0x58 / 4])(sys);
+    }
+
+    ScenarioTutorials_CloseWindow();
+    void* trig = GetTriggerMgr();
+    int   mode = at<int>(trig, 0x2c);
+    if (mode != 1 && mode != 2)
+        this->RefreshPanel();
+
+    at<uchar>(this, 0x78) = 0;
+    void* btn1 = at<void*>(this, 0x30);
+    ((void (__thiscall*)(void*, int, int))((void**)*(void**)btn1)[0x7c / 4])(btn1, 1, 0);
+    void* btn2 = at<void*>(this, 0x34);
+    ((void (__thiscall*)(void*, int, int))((void**)*(void**)btn2)[0x7c / 4])(btn2, 1, 1);
+
+    UpdateMouseFocus(1);
+    void* area = SP_GetSaveArea(0x11ac197);
+    int   panel = area != 0
+                ? ((int (__thiscall*)(void*, int))
+                   ((void**)*(void**)((char*)area + 4))[0xc / 4])((char*)area + 4, 0x226a1de)
+                : 0;
+
+    EaStr16 name;
+    name.Format((const char*)0x13ff3dc, at<int>(this, 0x54));
+    ((void (__thiscall*)(void*, char*, int, int))
+     ((void**)*(void**)panel)[0x54 / 4])((void*)panel, name.mpBegin, 0, 2);
+}
+
+// @ 0x00f05c40
+void Movie::SendPublicAuth()
+{
+    YtAuthMsg msg;
+
+    at<uchar>(this, 0xbe) = 1;
+    at<uchar>(this, 0xbd) = 0;
+    at<uchar>(this, 0xbc) = 0;
+    msg.mToken.sprintf((const char*)0x13f5b98, at<int>(this, 0x8c));
+    msg.mUser.sprintf((const char*)0x13f5b98, at<int>(this, 0x9c));
+    msg.mExtra.sprintf((const char*)0x13f5b98, (const char*)0x13ff0d8);
+    msg.mPrivate = 1;
+    void* srv = MessageServer();
+    ((void (__thiscall*)(void*, int, YtAuthMsg*, int))
+     ((void**)*(void**)srv)[0x14 / 4])(srv, 0x55be439, &msg, 0);
+}
+
+// @ 0x00f05d00
+void SP::cSPPlayModeSubModeMovie::LoginToYouTube()
+{
+    YtAuthMsg msg;
+
+    at<uchar>(this, 0xc1) = 1;
+    at<uchar>(this, 0xc0) = 0;
+    at<uchar>(this, 0xbf) = 0;
+    msg.mToken.sprintf((const char*)0x13f5b98, at<int>(this, 0x8c));
+    msg.mUser.sprintf((const char*)0x13f5b98, at<int>(this, 0x9c));
+    msg.mExtra.sprintf((const char*)0x13f5b98, (const char*)0x13ff0d8);
+    msg.mPrivate = 0;
+    void* srv = MessageServer();
+    ((void (__thiscall*)(void*, int, YtAuthMsg*, int))
+     ((void**)*(void**)srv)[0x14 / 4])(srv, 0x55be439, &msg, 0);
+}
+
+// @ 0x00f05dc0
+void __stdcall BuildYtFeed(EaStr* out)
+{
+    char priv = 0;
+
+    if (gAppProperties_s00f0_5110 != 0) {
+        void* pl = gAppProperties_s00f0_5110;
+        int prop;
+        if (((uchar (__thiscall*)(void*, int, int*))
+             ((void**)*(void**)pl)[0x24 / 4])(pl, 0x8608be4, &prop) &&
+            at<ushort>(prop, 0x12) == 1)
+            priv = *((Prop*)prop)->GetBool();
+    }
+    if (out->mpBegin != out->mpEnd) {
+        *out->mpBegin = 0;
+        out->mpEnd = out->mpBegin;
+    }
+    out->append_sprintf((const char*)0x13f5b98, (const char*)0x13ff2f0);
+    out->append_sprintf((const char*)0x13f5b98, (const char*)0x13ff2c4);
+    out->append_sprintf((const char*)0x13f5b98, (const char*)0x13ff294);
+    out->append_sprintf((const char*)0x13f5b98, (const char*)0x13ff260);
+    out->append_sprintf((const char*)0x13f5b98, (const char*)0x13ff250);
+    out->append_sprintf((const char*)0x13f5b98, (const char*)0x148b964);
+    out->append_sprintf((const char*)0x13f5b98, (const char*)0x148b900);
+    out->append_sprintf((const char*)0x13f5b98, (const char*)0x13ff140);
+    out->append_sprintf((const char*)0x13f5b98, (const char*)0x148b8bc);
+    if (!priv)
+        out->append_sprintf((const char*)0x13f5b98, (const char*)0x13ff0fc);
+    out->append_sprintf((const char*)0x13f5b98, (const char*)0x13ff0e8);
+    out->append_sprintf((const char*)0x13f5b98, (const char*)0x13ff0dc);
+}
+
+// @ 0x00f063c0
+void MovieHandler::HandleMessage(u32 unused, u32 msgId)
+{
+    SP::cSPPlayModeSubModeMovie_s00f0_5ee0* o = static_cast<SP::cSPPlayModeSubModeMovie_s00f0_5ee0*>(this);
+    switch (o->mDialog) {
+    case 1:
+        if (msgId == 0x5107b17) {
+            o->FUN_00f03de0();
+            OpenBrowser_s00f0_5ee0(L"http://youtube.com/t/terms", 1);
+            return;
+        }
+        if (msgId == 0x5107b19)
+            goto L_5107b19;
+        if (msgId == 0x5107b1a) {
+            void* am = FUN_00607a60();
+            if (!((FnC0) VT(am, 0x58))(am)) {
+                o->mDialog = 8;
+                FUN_00809db0(this, 0x15ad498);
+                return;
+            }
+            am = FUN_00607a60();
+            if (((FnC0) VT(am, 0x24))(am)) {
+                o->mDialog = 7;
+                FUN_00809db0(this, 0x15ad48c);
+                return;
+            }
+            if (!GetYTPrompt()) {
+                FUN_0063bc70();
+                o->FUN_00f05c40();
+                return;
+            }
+            goto L_5107b1a;
+        }
+        break;
+    case 2:
+        if (msgId == 0x5107b19) goto L_5107b19;
+        if (msgId == 0x5107b1a) goto L_5107b1a;
+        break;
+    case 3:
+        o->mDialog = 0;
+        return;
+    case 4:
+    case 6:
+    L_5107b19:
+        o->FUN_00f044d0();
+        return;
+    case 5:
+        if (msgId == 0x5107b19) goto L_5107b19;
+        if (msgId == 0x5107b1a) {
+            o->FUN_00f041a0();
+            return;
+        }
+        break;
+    case 7:
+    case 8:
+        if (msgId == 0x5107b19) goto L_5107b19;
+        if (msgId == 0x5107b1a) {
+            void* am = FUN_00607a60();
+            ((FnU0) VT(am, 0x44))(am);
+            return;
+        }
+        break;
+    case 10:
+    case 0xb:
+        if (msgId == (u32) -0xf) goto L_5107b19;
+        break;
+    case 0xc:
+        if (msgId == 0x5107b19) {
+        L_5107b1a:
+            o->FUN_00f03e90();
+            return;
+        }
+        if (msgId == 0x5107b1a) {
+            o->FUN_00f03e90();
+            OpenBrowser_s00f0_5ee0(L"http://www.youtube.com/signup", 1);
+            return;
+        }
+        break;
+    case 0xd:
+        if (msgId == 0x5107b19) {
+            o->FUN_00f05790();
+            return;
+        }
+        if (msgId == 0x5107b1a) {
+            o->FUN_00f05790();
+            OpenBrowser_s00f0_5ee0(L"http://youtube.com/t/terms", 1);
+            return;
+        }
+        break;
+    case 0xe:
+        if (msgId == (u32) -0xf)
+            o->FUN_00f03fc0(1);
+        break;
+    }
+}
+
+// @ 0x00f06d40
+bool Movie_s00f0_6d40::F_00f06d40(int msgId, Msg* msg)
+{
+    (void)msgId;
+    switch (msg->m08) {
+    case 0x287259f6:
+        switch (msg->m0c) {
+        case 0x56be960:                                 // ShowSendVideoURLDialog
+            F_00f06660();
+            return true;
+        case 0x5665f58: {                               // toggle a config value
+            void* cm = F_0067dd30();
+            bool on = ((int (__thiscall*)(void*, int))((*(void***)cm)[0x30 / 4]))(cm, 0x5664a8b) != 0;
+            void* cm2 = F_0067dd30();
+            ((void (__thiscall*)(void*, int, int))((*(void***)cm2)[0x2c / 4]))(cm2, 0x5664a8b, on ? 0 : 1);
+            return true;
+        }
+        case 0x5652348:                                 // ShowUploadProgressDialog
+            F_00f065d0();
+            return true;
+        case 0x5adbea8:
+            F_00f03fc0(0);
+            F_00f044d0();
+            return true;
+        case 0x5b5ef51: {                               // begin the YouTube auth flow
+            F_00435ed0(0xe76c9b4f, F_00435e90());
+            F_00f03e20();
+            void* auth = F_00607a60();
+            if (!((unsigned char (__thiscall*)(void*))((*(void***)auth)[0x58 / 4]))(auth)) {
+                m28 = 8;                                // YouTube login check
+                F_00809db0(m04, (const wchar_t*)0x15ad498);
+                return true;
+            }
+            if (((unsigned char (__thiscall*)(void*))((*(void***)auth)[0x24 / 4]))(auth)) {
+                m28 = 7;                                // YouTube register check
+                F_00809db0(m04, (const wchar_t*)0x15ad48c);
+                return true;
+            }
+            if (F_0063b890()) {
+                F_00f03e90();
+                return true;
+            }
+            F_0063bc70();
+            F_00f05c40();
+            return true;
+        }
+        case 0x5b5bd80:
+            F_00f03fa0();
+            m28 = 0;
+            F_00f05790();
+            return true;
+        case 0x5b5ef52: {                               // reset the auth UI
+            void* at = F_00a206f0();
+            unsigned int v = 0;
+            if (at)
+                v = ((unsigned int (__thiscall*)(void*))((*(void***)at)[0x20 / 4]))(at);
+            F_00435ed0(0xe76c9b4f, v);
+            void* win = m2c->F_008105b0(0x5b5ef50, 1);
+            ((void (__thiscall*)(void*, int, int))((*(void***)win)[0x7c / 4]))(win, 1, 0);
+            F_00f044d0();
+            return true;
+        }
+        case 0x5baefc8:                                 // open the signup page
+            if (!F_0063c0a0()) {
+                F_00f03fa0();
+                m28 = 0xc;                              // English signup warning
+                F_00809db0(m04, (const wchar_t*)0x15ad4bc);
+                return true;
+            }
+            F_00935fb0((const wchar_t*)0x13ff35c, true);
+            return true;
+        case 0x5b5ef53:                                 // open the terms page
+            F_00435ed0(0xe76c9b4f, F_00435e90());
+            if (F_0063c0a0()) {
+                F_00935fb0((const wchar_t*)0x13ff398, true);
+                return true;
+            }
+            F_00f03e20();
+            m28 = 0xd;                                  // English TOS warning
+            F_00809db0(m04, (const wchar_t*)0x15ad4bc);
+            return true;
+        case 0x78d57d0:
+        case 0x78ec978: {
+            // ---- media capture / YouTube metadata ---------------------------
+            void* msys = F_0067cb10();
+            if (((unsigned char (__thiscall*)(void*))((*(void***)msys)[0x30 / 4]))(msys)) {
+                ((void (__thiscall*)(void*))((*(void***)msys)[0x38 / 4]))(msys);
+                return true;
+            }
+
+            WStr s1, s2, s3, s4, s5;
+            DateTime_s00f0_6d40 dt;
+            CStringStub cs;
+
+            s1.mBegin = s1.mEnd = g_01667bac; s1.mCap = g_01667bac + 1;
+            s2.mBegin = s2.mEnd = g_01667bac; s2.mCap = g_01667bac + 1;
+            s3.mBegin = s3.mEnd = g_01667bac; s3.mCap = g_01667bac + 1;
+            s4.mBegin = s4.mEnd = g_01667bac; s4.mCap = g_01667bac + 1;
+            s5.mBegin = s5.mEnd = g_01667bac; s5.mCap = g_01667bac + 1;
+
+            F_0041e050(&s1, (const wchar_t*)0x13f5c04, (const wchar_t*)0x13ff420);
+            g_015f7cf4->m54 = s1.mBegin;
+
+            dt.Set(2);
+            F_0041e050(&s5, (const wchar_t*)0x13f5bf8, dt.GetParameter(1));
+            g_015f7cf4->m44 = s5.mBegin;
+            F_0041e050(&s4, (const wchar_t*)0x13f5bec, dt.GetParameter(2));
+            g_015f7cf4->m48 = s4.mBegin;
+            F_0041e050(&s3, (const wchar_t*)0x13f5bec, dt.GetParameter(6));
+            g_015f7cf4->m4c = s3.mBegin;
+            F_0041e050(&s2, (const wchar_t*)0x13f5bcc,
+                       dt.GetParameter(0xa), dt.GetParameter(9), dt.GetParameter(8));
+            g_015f7cf4->m50 = s2.mBegin;
+
+            cs.Ctor(0x7518573e, 0x5dbc9ee, 0);
+            m54.append(cs.GetText());
+            void* area = F_006b1f90(0x11ac197);
+            const wchar_t* name =
+                (const wchar_t*)((unsigned int (__thiscall*)(void*))((*(void***)area)[0x28 / 4]))(area);
+            m64.append(name);
+
+            F_004af210(g_015fd918, 0x456f975, &m3c);
+            F_004af210(g_015fd918, 0x456f976, &m40);
+            ((void (__thiscall*)(void*, const wchar_t*, uint32_t*))((*(void***)msys)[0x2c / 4]))
+                (msys, m54.mBegin, &m3c);
+
+            m78 = true;
+            m79 = false;
+            F_00f03e40();
+            m74 = 0;
+            cs.Dtor();
+            s1.DeallocateSelf();
+            s2.DeallocateSelf();
+            s3.DeallocateSelf();
+            s4.DeallocateSelf();
+            s5.DeallocateSelf();
+            return true;
+        }
+        case 0x78d57d8:
+            F_00f069a0(0);                              // BeginRecording
+            return true;
+        default:
+            break;
+        }
+        return false;
+    case 1:
+        if (msg->m10.i == 0xd && m28 == 3) {
+            F_00f065d0();
+            return true;
+        }
+        break;
+    default:
+        break;
+    }
+    return false;
+}
+
+// @ 0x00f072b0
+bool PhotoHandler::F_00f072b0(int msgId, Msg* msg)
+{
+    TempRef tmp;
+
+    switch (msgId) {
+    case 0x7c651b1: {
+        void* gtm = F_00b3d380();
+        ((GameTime*)gtm)->F_00b32250(0x4bf38a7);
+
+        void* q = m_c4;
+        if (q) {
+            ((void (__thiscall*)(void*, int))((*(void***)q)[0x0c / 4]))(q, 0);
+            q = m_c4;
+            if (q) {
+                m_c4 = 0;
+                ((void (__thiscall*)(void*))((*(void***)q)[0x04 / 4]))(q);
+            }
+        }
+
+        if (!m_f1) {
+            void* em = F_0067ddd0();
+            unsigned char (__thiscall* play)(void*, int, int, void*) =
+                (unsigned char (__thiscall*)(void*, int, int, void*))((*(void***)em)[0x2c / 4]);
+            void* param = ((AutoRef_s00f0_6d40*)&m_c4)->F_00a16f40();
+            unsigned char ok = play(em, 0x44ed103, 0, param);
+            if (ok) {
+                void* r = m_c4;
+                ((void (__thiscall*)(void*, int))((*(void***)r)[0x08 / 4]))(r, 0);
+            }
+        }
+
+        if (m_f1) {
+            void* wm = F_0067caa0();
+            void* w = ((void* (__thiscall*)(void*))((*(void***)wm)[0x04 / 4]))(wm);
+            if (w)
+                ((MainWin*)((char*)w - 4))->F_008143a0();
+            else
+                ((MainWin*)0)->F_008143a0();
+        } else {
+            m_f8.F_0093a480(0x1f4, true);
+        }
+        return false;
+    }
+    case 0x7c651b0: {
+        void* p = F_00f04530(1);
+        tmp.mPtr = p;
+        if (p)
+            _InterlockedIncrement((volatile long*)((char*)p + 8));
+        m_dc.F_00420660(&tmp.mPtr);
+        tmp.F_00576620();
+        return false;
+    }
+    case 0x7d62123:
+        m_f0 = false;
+        ((Movie_s00f0_6d40*)((char*)this - 8))->F_00f04070(1);
+        return false;
+    case 0x7e1e46d: {
+        Movie_s00f0_6d40* movie = (Movie_s00f0_6d40*)((char*)this - 8);
+        movie->F_00f06ac0();                            // ClearIndicatorTextures
+        movie->F_00f04070(1);
+        return false;
+    }
+    }
+
+    if (m24 == 0)
+        return false;
+
+    switch (msgId) {
+    case 0x55e5212: {
+        int a = msg->m10.i;
+        int b = msg->m08;
+        if (a)
+            m_b5 = true;
+        else
+            m_b8 = true;
+        if (b) {
+            if (a) {
+                m_b4 = true;
+                return false;
+            }
+            F_00472fe0(&m74, (const char*)0x13f5b98, ((SubMsg*)msg->m18)->m0c);
+            F_00472fe0(&m84, (const char*)0x13f5b98, ((SubMsg*)msg->m20)->m0c);
+            m_b7 = true;
+            return false;
+        }
+        m_b4 = false;
+        m_b7 = false;
+        m_c0 = (uint32_t)msg->m18;
+        return false;
+    }
+    case 0x44db12e: {
+        if (msg == 0)
+            return false;
+        int st = m20;
+        if (st != 7 && st != 8)
+            return false;
+        if (m_bd) {
+            m_be = true;
+            return false;
+        }
+        if (F_0063b890()) {
+            ((Movie_s00f0_6d40*)((char*)this - 8))->F_00f03e90();
+            return false;
+        }
+        F_0063bc70();
+        ((Movie_s00f0_6d40*)((char*)this - 8))->F_00f05c40();
+        return false;
+    }
+    case 0x55e8be4: {
+        if (msg->m08)
+            m_ba = true;
+        if (!m_ba) {
+            m_c0 = (uint32_t)msg->m10.p;
+            m_bc = true;
+            return false;
+        }
+        WStr url;
+        url.mBegin = url.mEnd = g_01667bac; url.mCap = g_01667bac + 1;
+        F_0041e050(&url, (const wchar_t*)0x13f5c04,
+                   (const wchar_t*)((SubMsg*)msg->m10.p)->m0c);
+        if (!F_0063d170(&url, &m_a4))
+            m_a4.F_0057cb60(url);
+        g_015f7cf4->m30 = m_a4.mBegin;
+        url.DeallocateSelf();
+        m_bc = true;
+        return false;
+    }
+    case 0x5b98f52: {
+        int st = m20;
+        if (st != 7 && st != 8)
+            return false;
+        ((Movie_s00f0_6d40*)((char*)this - 8))->F_00f05790();
+        return false;
+    }
+    case 0x5b96086: {
+        void* auth = F_00607a60();
+        if (!((unsigned char (__thiscall*)(void*))((*(void***)auth)[0x58 / 4]))(auth))
+            return false;
+        ((Movie_s00f0_6d40*)((char*)this - 8))->F_00f044d0();
+        return false;
+    }
+    case 0x5bd6378:
+        m_bd = true;
+        return false;
+    case 0x5dd52c7:
+        m_bd = false;
+        if (!m_be)
+            return false;
+        m_be = false;
+        if (F_0063b890()) {
+            ((Movie_s00f0_6d40*)((char*)this - 8))->F_00f03e90();
+            return false;
+        }
+        F_0063bc70();
+        ((Movie_s00f0_6d40*)((char*)this - 8))->F_00f05c40();
+        return false;
+    case 0x5d2c5c0: {
+        F_0063c060(false);
+        void* ctx = (void*)((char*)this - 4);
+        F_00809db0(ctx, (const wchar_t*)0x15ad4b0);
+        m20 = 0xb;
+        tmp.mPtr = (void*)0x55e7aed;
+        void* ms = F_0067dcc0();
+        ((void (__thiscall*)(void*, int, void**, int))((*(void***)ms)[0x14 / 4]))
+            (ms, 0x5d313c7, &tmp.mPtr, 0);
+        return true;
+    }
+    case 0x62ff413:
+        ((Movie_s00f0_6d40*)((char*)this - 8))->F_00f04bd0();
+        return false;
+    case 0x62ff414:
+    case 0x62ff415:
+        ((Movie_s00f0_6d40*)((char*)this - 8))->F_00f05b00();
+        return false;
+    default:
+        break;
+    }
+    return false;
 }

@@ -1,5 +1,5 @@
 008120d0 ?Init@cSPUILayout@@QAE_NABVKey@ResourceMan@EA@@_NI@Z  # cSPUILayout::Init (callee of s00df5670, named from the dev publics; slice address comment)
-00df5670 UI::cDownloadDialog::SetPaused  # sets +0x2c byte, swaps Pause/Resume label text
+00df5670 ?FUN_00df5670@cDownloadDialog@@QAEXD@Z  # cDownloadDialog::FUN_00df5670 migrated from s00df5670 (verbatim, slice spelling)
 00df57d0 UI::cDownloadDialog::Shutdown  # EndModal + v108 detach + release +0xc/+0x30, layout Shutdown
 00df58f0 UI::cDownloadDialog::Shutdown2  # EndModal + v108 detach + release +0x24, layoutB Shutdown
 00df5940 UI::cDownloadDialog::cDownloadDialog  # ctor, vtable 0x147e9d0

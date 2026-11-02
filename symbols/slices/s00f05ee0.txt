@@ -1,6 +1,6 @@
 00f05ee0 SP::cSPPlayModeSubModeMovie::PostRecordingDone  # PDB FUN_00f05ee0
 00f06150 SP::cSPPlayModeSubModeMovie::CheckRecordingPreconditions  # PDB FUN_00f06150
-00f063c0 SP::MovieHandler::HandleMessage  # PDB FUN_00f063c0 (IHandler subobject, void return)
+00f063c0 ?HandleMessage@MovieHandler@@QAEXII@Z  # HandleMessage migrated from s00f05ee0 (verbatim, slice spelling)
 00f065d0 SP::cSPPlayModeSubModeMovie::ShowUploadProgressDialog  # PDB FUN_00f065d0
 00f06660 SP::cSPPlayModeSubModeMovie::ShowSendVideoURLDialog  # PDB FUN_00f06660
 00f066c0 SP::cSPPlayModeSubModeMovie::SelectRecording  # PDB FUN_00f066c0

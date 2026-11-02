@@ -1,5 +1,6 @@
 # source  symbol  va  flags
-../src/game/SPEditors/SPSubModeMovie.cpp  ?SetDialogText@cConnectingDialog@?A0x879eca64@@QAEXH@Z  0063b640  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPSubModeMovie.cpp  ?Init@cDialog2@@QAE_NXZ  0063b5c0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPSubModeMovie.cpp  ?SetDialogText@cConnectingDialog@?A0x8f66d592@@QAEXH@Z  0063b640  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEditors/SPSubModeMovie.cpp  ?OnKeyDown@cSPPlayModeSubModeMovie@SP@@UAE_NII@Z  0063b730  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEditors/SPSubModeMovie.cpp  ?FUN_0063b760@cSPPlayModeSubModeMovie@@QAEXXZ  0063b760  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEditors/SPSubModeMovie.cpp  ?SetState2@cSPPlayModeSubModeMovie@@QAEXXZ  0063b7b0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
@@ -39,3 +40,16 @@
 ../src/game/SPEditors/SPSubModeMovie.cpp  ?ToggleRecordingIndicator@cSPPlayModeSubModeMovie_s0063_caf0@@QAEXD@Z  0063d910  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
 ../src/game/SPEditors/SPSubModeMovie.cpp  ?FUN_0063de20@cSPPlayModeSubModeMovie_s0063_d9e0@@QAEXH@Z  0063de20  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
 ../src/game/SPEditors/SPSubModeMovie.cpp  ?HandleButton@cSPPlayModeSubModeMovie_s0063_d9e0@@QAE_NH@Z  0063e100  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPEditors/SPSubModeMovie.cpp  ?FUN_00df5430@cGalaxyGameEntryUIStateMachine@@QAEXH@Z  00df5430  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPSubModeMovie.cpp  ?FUN_00df54f0@cGalaxyGameEntryUIStateMachine@@QAEOM@Z  00df54f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPSubModeMovie.cpp  ?FUN_00df5540@cGalaxyGameEntryUIStateMachine@@QAEXXZ  00df5540  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPSubModeMovie.cpp  ?FUN_00df5570@@YG_NPAX0@Z  00df5570  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPSubModeMovie.cpp  ?FUN_00df55b0@cGalaxyGameEntryUIStateMachine@@QAEXH@Z  00df55b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPSubModeMovie.cpp  ?FUN_00df5610@cGalaxyGameEntryUIStateMachine@@QAEXM@Z  00df5610  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPSubModeMovie.cpp  ?FUN_00f04910@cScenarioYouTube@Simulator@@QAEXXZ  00f04910  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPSubModeMovie.cpp  ?FUN_00f04ad0@cScenarioYouTube@Simulator@@QAEXXZ  00f04ad0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPSubModeMovie.cpp  ?FUN_00f04bd0@cScenarioYouTube@Simulator@@QAEXXZ  00f04bd0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPSubModeMovie.cpp  ?CloseUpload@Movie@@QAEXXZ  00f05b00  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPSubModeMovie.cpp  ?SendPublicAuth@Movie@@QAEXXZ  00f05c40  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPSubModeMovie.cpp  ?LoginToYouTube@cSPPlayModeSubModeMovie@SP@@QAEXXZ  00f05d00  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPSubModeMovie.cpp  ?BuildYtFeed@@YGXPAUEaStr@@@Z  00f05dc0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
