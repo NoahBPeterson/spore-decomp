@@ -1,6 +1,15 @@
 005fe340 ?LoadNamesFromProp@cSPUICredits_s005f_e1d0@SP@@QAEXXZ  # cSPUICredits_s005f_e1d0::LoadNamesFromProp migrated from s005fe1d0 (verbatim, slice spelling)
-005fe4f0 SP::cSPUICredits::SetPropertyID  # stores +0x20 then calls LoadNamesFromProp
-005fe500 SP::cSPUICredits::GetCreditName  # returns mReturnString.c_str() after localizing entry [index]
+005fe4b0 ??1cSPUICredits_s005f_e1d0@SP@@QAE@XZ  # cSPUICredits_s005f_e1d0::~cSPUICredits migrated from s005fe1d0 (verbatim, slice spelling)
+005fe4f0 ?SetPropertyID@cSPUICredits_s005f_e1d0@SP@@QAEXI@Z  # cSPUICredits_s005f_e1d0::SetPropertyID migrated from s005fe1d0 (verbatim, slice spelling)
+005fe500 ?GetCreditName@cSPUICredits_s005f_e1d0@SP@@QAEPB_WG@Z  # cSPUICredits_s005f_e1d0::GetCreditName migrated from s005fe1d0 (verbatim, slice spelling)
+005fe600 ??0cSPUIChoiceDialog@@QAE@PAX@Z  # cSPUIChoiceDialog::cSPUIChoiceDialog migrated from s005fe1d0 (verbatim, slice spelling)
+005fe650 ?Close@cSPUIChoiceDialog@@QAEXXZ  # cSPUIChoiceDialog::Close migrated from s005fe1d0 (verbatim, slice spelling)
+005fe6c0 ?Show@cSPUIChoiceDialog@@QAEXXZ  # cSPUIChoiceDialog::Show migrated from s005fe1d0 (verbatim, slice spelling)
+005fe760 ?IsButtonChecked@cSPUIChoiceDialog@@QAE_NI@Z  # cSPUIChoiceDialog::IsButtonChecked migrated from s005fe1d0 (verbatim, slice spelling)
+005fe7a0 ?Accept@cSPUIChoiceDialog@@QAEXXZ  # cSPUIChoiceDialog::Accept migrated from s005fe1d0 (verbatim, slice spelling)
+005fe8e0 ?HandleUIMessage@cSPUIChoiceDialog@@UAE_NPAVIWindow_s005f_e1d0@UTFWin@EA@@ABVMessage_s005f_e1d0@34@@Z  # cSPUIChoiceDialog::HandleUIMessage migrated from s005fe1d0 (verbatim, slice spelling)
+005fe970 ?OnLayoutReload@cSPUIChoiceDialog@@SAXPAXI_N@Z  # cSPUIChoiceDialog::OnLayoutReload migrated from s005fe1d0 (verbatim, slice spelling)
+005fea60 ?Init@cSPUIChoiceDialog@@QAEXI_N@Z  # cSPUIChoiceDialog::Init migrated from s005fe1d0 (verbatim, slice spelling)
 005ff1a0 EA::Stopwatch::GetElapsedTimeFloat  # (float)cycles * mfStopwatchCyclesToUnitsCoefficient (+0x14)
 005ff1c0 EA::LimitStopwatch::IsTimeUp  # QPC vs mnEndTime (+0x18), PDB layout
 008120d0 ?Init@cSPUILayout@@QAE_NABVKey@ResourceMan@EA@@_NI@Z  # cSPUILayout::Init (callee of s005fe1d0, named from the dev publics; slice address comment)

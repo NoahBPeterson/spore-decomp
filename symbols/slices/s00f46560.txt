@@ -1,16 +1,17 @@
 00f46560 SP::cSPUIAssetComments::DoMessage_candidate  # caller-scored PDB candidate
 00f468c0 SP::cSPUIAssetComments::DoMessage  # caller-scored PDB candidate
 00f46920 SP::cOnlineTab::Shutdown  # caller-scored PDB candidate
-00f47380 operator_delete__  # debug operator delete (dispatches to cLocalLightInfo dtor)
-00f473a0 operator_new  # 6-arg rebill/forwarding thunk to FUN_009289f0 (thiscall on g_16c8b44)
-00f473d0 operator_new  # 8-arg forwarding thunk to FUN_00928a30 (thiscall on g_16c8b44)
-00f47410 operator_delete__  # unconditional debug operator delete
-00f47430 EA::Allocator::ShutdownSharedAllocator  # PDB name
-00f47480 operator_new  # shared-allocator OS-global factory (HeapAlloc 0x530)
+00f46c00 ?FUN_00f46c00@cOnlineTab@@QAEXXZ  # cOnlineTab::FUN_00f46c00 migrated from s00f46560 (verbatim, slice spelling)
+00f46cf0 cOnlineTab::FUN_00f46cf0  # thiscall (int,int,int,int); tab URL/name builder
+00f47080 cScreen::FUN_00f47080  # thiscall (int visible); shows/hides 4 named child windows
+00f47170 cScreen::FUN_00f47170  # thiscall (int,int); screen show/hide + child refresh
+00f47380 ?f_47380@@YAXH@Z  # f_47380 migrated from s00f46560 (verbatim, slice spelling)
+00f473a0 ?f_473a0@@YAXHHHHHH@Z  # f_473a0 migrated from s00f46560 (verbatim, slice spelling)
+00f473d0 ?f_473d0@@YAXHHHHHHHH@Z  # f_473d0 migrated from s00f46560 (verbatim, slice spelling)
+00f47410 ?f_47410@@YAXH@Z  # f_47410 migrated from s00f46560 (verbatim, slice spelling)
+00f47430 ?ShutdownSharedAllocator@Allocator@EA@@YAXXZ  # EA::Allocator::ShutdownSharedAllocator migrated from s00f46560
+00f47480 ?f_47480@@YAPAXXZ  # f_47480 migrated from s00f46560 (verbatim, slice spelling)
 00f474d0 EA::Allocator::InitSharedAllocator  # PDB name
 00f47550 app-wide frame resync / teardown fan-out
 00f47580 CanvasProc::Run  # while flag: Canvas()->vfunc(0x84) loop
 00f475b0 ?Elapsed@Timer@@QAEHXZ  # Timer::Elapsed migrated from s00f46560 (verbatim, slice spelling)
-00f46cf0 cOnlineTab::FUN_00f46cf0  # thiscall (int,int,int,int); tab URL/name builder
-00f47080 cScreen::FUN_00f47080  # thiscall (int visible); shows/hides 4 named child windows
-00f47170 cScreen::FUN_00f47170  # thiscall (int,int); screen show/hide + child refresh

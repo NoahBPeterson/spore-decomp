@@ -1,18 +1,23 @@
 00900410 ?CreateResource@@YAHPAXHPAH0@Z  # CreateResource migrated from s00900410 (verbatim, slice spelling)
 00900800 ?ReadString@XmlReader@@QAEPAXPAVStackAllocator_s0090_0410@Allocator@EA@@PAI@Z  # XmlReader::ReadString migrated from s00900410 (verbatim, slice spelling)
 009008f0 ?FUN_009008f0@XmlReader@@QAEXXZ  # XmlReader::FUN_009008f0 migrated from s00900410 (verbatim, slice spelling)
-00900990 EA::XML::XmlReader::XmlReader  # class layout + base-ctor call from XmlTextReader ctor
-009009e0 EA::XML::XmlReader::~XmlReader  # matching dtor body / vtable
-00900b30 EA::XML::XmlTextReader::XmlTextReader  # vtable 0x0143a0b0 + fields 0x6c..0x84
-00900b70 EA::XML::XmlTextReader::~XmlTextReader  # vtable + XML_ParserFree
-00900ba0 EA::XML::XmlTextReader::MapError  # expat error -> ResultCode map
-00900db0 EA::XML::XmlTextReader callback (start element w/ mnFlags&8)  # expat XML_SetElementHandler arg pushed in 0x00901220
-00900e60 EA::XML::XmlTextReader callback (start element)  # expat XML_SetElementHandler arg
-00900f70 EA::XML::XmlTextReader callback (end element)  # expat handler arg
-00900ff0 EA::XML::XmlTextReader callback (character data)  # expat XML_SetCharacterDataHandler arg
-009010c0 EA::XML::XmlTextReader callback (comment)  # expat handler arg
-00901150 EA::XML::XmlTextReader callback (processing instruction)  # expat handler arg
+00900900 ?FUN_00900900@@YAPAXPAFPAVStackAllocator_s0090_0410@Allocator@EA@@@Z  # FUN_00900900 migrated from s00900410 (verbatim, slice spelling)
+00900990 ??0XmlReader@@QAE@PAX@Z  # XmlReader::XmlReader migrated from s00900410 (verbatim, slice spelling)
+009009e0 ??1XmlReader@@QAE@XZ  # XmlReader::~XmlReader migrated from s00900410 (verbatim, slice spelling)
+00900ab0 ?DeletingDtor@XmlReader@@QAEPAXD@Z  # XmlReader::DeletingDtor migrated from s00900410 (verbatim, slice spelling)
+00900b10 ?FUN_00900b10@@YAXPAXI@Z  # FUN_00900b10 migrated from s00900410 (verbatim, slice spelling)
+00900b30 ??0XmlTextReader@@QAE@PAX@Z  # XmlTextReader::XmlTextReader migrated from s00900410 (verbatim, slice spelling)
+00900b70 ??1XmlTextReader@@QAE@XZ  # XmlTextReader::~XmlTextReader migrated from s00900410 (verbatim, slice spelling)
+00900ba0 ?MapError@XmlTextReader@@QAEHH@Z  # XmlTextReader::MapError migrated from s00900410 (verbatim, slice spelling)
+00900d90 ?IsAtEnd@XmlReader@@QAEHXZ  # XmlReader::IsAtEnd migrated from s00900410 (verbatim, slice spelling)
+00900db0 ?OnStartElement2@@YAXPAVXmlTextReader@@PAX11@Z  # OnStartElement2 migrated from s00900410 (verbatim, slice spelling)
+00900e60 ?OnStartElement@@YAXPAVXmlTextReader@@PAXPAH@Z  # OnStartElement migrated from s00900410 (verbatim, slice spelling)
+00900f70 ?OnEndElement@@YAXPAVXmlTextReader@@PAX@Z  # OnEndElement migrated from s00900410 (verbatim, slice spelling)
+00900ff0 ?OnCharacterData@@YAXPAVXmlTextReader@@PAXH@Z  # OnCharacterData migrated from s00900410 (verbatim, slice spelling)
+009010c0 ?OnComment@@YAXPAVXmlTextReader@@PAX@Z  # OnComment migrated from s00900410 (verbatim, slice spelling)
+00901150 ?OnPI@@YAXPAVXmlTextReader@@PAX1@Z  # OnPI migrated from s00900410 (verbatim, slice spelling)
+009011e0 ?DeletingDtor@XmlTextReader@@QAEPAV1@D@Z  # XmlTextReader::DeletingDtor migrated from s00900410 (verbatim, slice spelling)
 00901220 EA::XML::XmlTextReader::InitParser  # registers all expat handlers, allocates 0x2000 token buffer
-00901340 EA::XML::XmlTextReader::Read  # XML_Parse driver loop
+00901340 ?Read@XmlTextReader@@QAEDXZ  # XmlTextReader::Read migrated from s00900410 (verbatim, slice spelling)
 00928b00 ?Init@StackAllocator@Allocator@EA@@QAEXPAXIP6APAXIPAI0@ZP6AX00@Z0@Z  # EA::Allocator::StackAllocator::Init (callee of s00900410, named from the dev publics; slice address comment)
 00928dc0 ?Reset@StackAllocator@Allocator@EA@@QAEXXZ  # EA::Allocator::StackAllocator::Reset (callee of s00900410, named from the dev publics; slice address comment)

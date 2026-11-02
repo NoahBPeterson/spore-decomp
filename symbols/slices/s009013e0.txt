@@ -1,3 +1,4 @@
+009013e0 ?FUN_009013e0@XmlTextReader_s0090_13e0@XML@EA@@QAE_NXZ  # XmlTextReader_s0090_13e0::FUN_009013e0 migrated from s009013e0 (verbatim, slice spelling)
 009014c0 ?WriteEscapedString@XmlTextWriter@XML@EA@@QAE_NPB_W@Z  # EA::XML::XmlTextWriter::WriteEscapedString migrated from s009013e0
 00901630 ?CloseCurrentElement@XmlTextWriter@XML@EA@@QAE_NXZ  # EA::XML::XmlTextWriter::CloseCurrentElement migrated from s009013e0
 00901690 ?BeginProcessingInstruction@XmlTextWriter@XML@EA@@UAE_NPB_W@Z  # EA::XML::XmlTextWriter::BeginProcessingInstruction migrated from s009013e0

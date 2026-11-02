@@ -1,0 +1,15 @@
+# va  diff-bytes  reason
+005fe8e0 2 cSPUIChoiceDialog::HandleUIMessage: complete; case 2/5 "return true" jumps to a different (equivalent) return block flags: /O2 /MD /Gy /TP /GS- /fp:fast
+00900900 79 wstring->stack-allocator append: complete; signed allocator-space check + return value; difftest PASS flags: /O2 /MD /Gy /EHsc /TP
+00900990 128 XmlReader ctor: complete; cl interleaves member construction / adds an EH frame vs the original flags: /O2 /MD /Gy /EHsc /TP
+00900b70 122 XmlTextReader dtor: complete; cl inline-expands the base dtor + EH frame vs the original's plain tail call; difftest PASS flags: /O2 /MD /Gy /EHsc /TP
+00900db0 123 expat start-element callback (flags&8): complete; cdecl free fn with explicit reader; register/frame schedule differs; difftest PASS flags: /O2 /MD /Gy /EHsc /TP
+00900e60 227 expat start-element callback: complete; cdecl free fn with explicit reader; token/entry allocation and loop layout differ; difftest PASS flags: /O2 /MD /Gy /EHsc /TP
+00900f70 96 expat end-element callback: complete; cdecl free fn with explicit reader; allocation schedule differs; difftest PASS flags: /O2 /MD /Gy /EHsc /TP
+00900ff0 152 expat character-data callback: complete; cdecl free fn with explicit reader; buffer-copy/allocation schedule differs; difftest WEAK flags: /O2 /MD /Gy /EHsc /TP
+009010c0 80 expat comment callback: complete; cdecl free fn with explicit reader; allocation schedule differs; difftest PASS flags: /O2 /MD /Gy /EHsc /TP
+00901150 93 expat processing-instruction callback: complete; cdecl free fn with explicit reader; allocation schedule differs; difftest PASS flags: /O2 /MD /Gy /EHsc /TP
+009011e0 67 XmlTextReader deleting dtor: complete; EH frame/ordering differs flags: /O2 /MD /Gy /EHsc /TP
+00901340 26 XmlTextReader::Read: complete; only cold-block ordering (read-error block vs parse-error block) differs; difftest PASS flags: /O2 /MD /Gy /EHsc /TP
+00f47430 27 complete behaviourally-equivalent shared-allocator teardown; register lifetime of the singleton pointer across the HeapFree call differs from cl flags: /O2 /MD /Gy /EHsc /TP
+00f47480 15 complete behaviourally-equivalent shared-allocator allocation; store/call scheduling and stack-cleanup shape differ flags: /O2 /MD /Gy /EHsc /TP
