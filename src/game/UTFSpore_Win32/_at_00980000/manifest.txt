@@ -1,0 +1,4 @@
+# source  symbol  va  flags
+../src/game/UTFSpore_Win32/_at_00980000.cpp  ?Process2@IOwner@UTFWinControls@EA@@QAE_NPAUIObj@23@PAUArg2@23@@Z  00980520  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/_at_00980000.cpp  ?Apply@FloatHolder@UTFWinControls@EA@@QAEXPAUFloatSink@23@@Z  00980580  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/_at_00980000.cpp  ?FUN_00987900@StdDrawable@@QAEXXZ  00987900  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
