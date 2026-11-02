@@ -1,4 +1,4 @@
-// src/game/SPGonzago/SPUIPosse.cpp -- migrated from slice(s) s00fc7430, s00e27310, s00e26680, s00e24700, s00e23710, s00e22860, s00e21880, s00e20860 by tools/migrate/rewrite.py
+// src/game/SPGonzago/SPUIPosse.cpp -- migrated from slice(s) s00e25710, s00fc7430, s00e27310, s00e26680, s00e24700, s00e23710, s00e22860, s00e21880, s00e20860 by tools/migrate/rewrite.py
 // Object file: SPGonzago/SPUIPosse.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -9,11 +9,13 @@
 #include <intrin.h>
 
 // ---- items of slice s00e20860 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern float DAT_013ec4d0;                               // 1.0f clamp
 typedef unsigned int   u32;
 typedef unsigned char  u8;
 typedef          int   s32;
 void* __cdecl FUN_00b3d350();        // 0x00b3d350 SP::PlanetModel()
 void* __cdecl FUN_00b88590(void*);   // 0x00b88590 SP::cPlanetModel::GetContinent
+void  __cdecl FUN_00881ea0(double, void*, int, const wchar_t*); // 0x00881ea0 SetNumberString
 void* __cdecl FUN_008061c0(void*, int); // 0x008061c0 SPUIHelpers::GetImageFromLayout
 u32   __cdecl FUN_007f5eb0(u32, u32, float); // 0x007f5eb0 Color::Lerp
 void  __cdecl FUN_00808210(void*, float);    // 0x00808210 SetWindowScale
@@ -35,6 +37,10 @@ public:
 // ---- items of slice s00e20860 end
 
 // ---- items of slice s00e21880 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern const float kOne;                                   // 0x01485720
+extern const double kTwo;                                  // 0x013f1298
+extern const double kHalf;                                 // 0x0140c4f0
+extern const float kNegOne;                                // 0x013eb1bc
 struct ResourceKey {
     uint32_t mInstanceID;                                   // +0x00
     uint32_t mGroupID;                                      // +0x04
@@ -109,6 +115,55 @@ struct IWindow {
     virtual void      v100();
     virtual void      v104();
     virtual void      v108(void* pArg);                     // +0x108
+};
+struct cHitWindow {
+    virtual void         v000();
+    virtual void         v004();
+    virtual void         v008();
+    virtual cHitWindow*  Cast(uint32_t nType);              // +0x0c
+    virtual void         v010();
+    virtual void         v014();
+    virtual void         v018();
+    virtual uint32_t     GetTypeID();                       // +0x1c
+    virtual void         v020();
+    virtual void         v024();
+    virtual void         v028();
+    virtual void         v02c();
+    virtual void         v030();
+    virtual void         v034();
+    virtual void         v038();
+    virtual void         v03c();
+    virtual void         v040();
+    virtual void         v044();
+    virtual void         v048();
+    virtual void         v04c();
+    virtual void         v050();
+    virtual void         v054();
+    virtual void         v058();
+    virtual void         v05c();
+    virtual void         v060();
+    virtual void         v064();
+    virtual void         v068();
+    virtual void         v06c();
+    virtual void         v070();
+    virtual void         v074();
+    virtual void         v078();
+    virtual void         v07c();
+    virtual void         v080();
+    virtual void         v084();
+    virtual void         v088();
+    virtual void         v08c();
+    virtual void         v090();
+    virtual void         v094();
+    virtual void         v098();
+    virtual void         v09c();
+    virtual void         v0a0();
+    virtual void         v0a4();
+    virtual void         v0a8();
+    virtual void         v0ac();
+    virtual void         v0b0();
+    virtual cHitWindow*  GetNamedWindow(uint32_t nID);      // +0xb4
+    virtual void         SetMotive(int32_t nMotive);        // +0xb8
 };
 struct cSPUILayout_s00e2_1880 {
     IWindow* FindWindowByID(uint32_t nID, bool bRecursive) const;   // 0x008105b0
@@ -353,6 +408,20 @@ virtual void v050();
     virtual IWindow* v054(bool bArg);                       // +0x54
     virtual void v058(bool bArg1, bool bArg2);              // +0x58
 };
+struct cMessageServer {
+virtual void v000();
+virtual void v004();
+virtual void v008();
+virtual void v00c();
+virtual void v010();
+virtual void v014();
+virtual void v018();
+virtual void v01c();
+virtual void v020();
+virtual void v024();
+virtual void v028();
+    virtual void PostMessage(void* pTarget, uint32_t nMessageID, int32_t nValue);   // +0x2c
+};
 namespace SPUIHelpers {
     char __cdecl SetWindowImage(IWindow* pWindow, const void* pImage, int32_t nFlags);   // 0x00807bb0
 }
@@ -367,8 +436,11 @@ namespace Locale {
 namespace SP {
     cWindowManager* __cdecl WindowManager();                // 0x0067caa0
 }
+cMessageServer* __cdecl MessageServer_s00e2_1880();                   // 0x0067dcc0
 uint32_t        __cdecl GetModifierState();                // 0x008d2db0
 bool            __cdecl Contains(const uint32_t* pContainer, const uint32_t* pValue);   // 0x00805150
+float*          __cdecl GetBoundingScreenRect(float* pOut, IWindow* pWindow, char bArg);   // 0x00808d20
+void            __cdecl AnchorWindowToWindow(IWindow* pParent, IWindow* pChild, int32_t nFlags, int32_t nArg);  // 0x00807340
 void            __cdecl SPUIFrameCallbackA();              // 0x00e21700
 bool            __cdecl FUN_00e217c0(cNamedItem* pA, cNamedItem* pB);           // 0x00e217c0
 // ---- items of slice s00e21880 end
@@ -424,6 +496,14 @@ static inline int VT_1C_0(void* p)
 static inline cVec4* VT_38_0(void* p)
 {
     return ((cVec4* (__thiscall*)(void*))(*(void***)p)[0x0e])(p);
+}
+static inline void* VT_0C_1(void* p, int a)
+{
+    return ((void* (__thiscall*)(void*, int))(*(void***)p)[0x03])(p, a);
+}
+static inline void VT_14_1(void* p, int a)
+{
+    ((void (__thiscall*)(void*, int))(*(void***)p)[0x05])(p, a);
 }
 static inline void* VT_F0_2(void* p, int a, int b)
 {
@@ -650,6 +730,7 @@ struct EaVec8 {
     void* grow(size_t n, void* first, void* last);            // 0x00e25ee0
 };
 char     g_1654c02;              // 0x01654c02  game-mode tag compared by pointer
+float    g_016ac288;             // 0x016ac288  minimum window height
 void* SP_GetCurrentGameMode();               // 0x00b5b800
 void* SP_cTribeModeStrategy_Instance();      // 0x00cd40b0
 void  FUN_00cca0a0();                        // 0x00cca0a0  thiscall
@@ -673,6 +754,9 @@ struct cSPUISpace {
     void ToggleSelectedButton(bool flag);       // 0x00e26a90
     void UpdateCaption();                       // 0x00e26680
 };
+void  FUN_004c0530(void*, const wchar_t*, ...);   // 0x004c0530  swprintf-style helper
+void  FUN_0057cb80(void*);                        // 0x0057cb80  eastl::fixed_string<wchar_t,16,1> dtor
+void  SPUIHelpers_AnchorWindowToWindow(void*, void*);  // 0x00807340
 EaPair* FUN_00e264b0(EaPair*, EaPair*);       // 0x00e264b0  partition
 void  FUN_00e26530(EaPair*, EaPair*, EaPair*, void*);   // 0x00e26530  insertion sort
 void* FUN_00e23ee0(void*, void*, void*, int); // 0x00e23ee0  lower_bound on cControlValue map
@@ -900,6 +984,99 @@ struct cBuilding {
 }
 // ---- items of slice s00fc7430 end
 
+// ---- items of slice s00e25710 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C" void  __cdecl FUN_00e25240(void*, int, int, int);
+extern "C" void  __cdecl FUN_00e253c0(void*, void*, void*);
+extern "C" void  __cdecl FUN_00e25df0(void*, void*, void*, void*);
+extern "C" void  __cdecl FUN_00e25f40(void*, void*, void*);
+extern "C" void  __cdecl FUN_00e26410(void*, void*, int, void*);
+extern "C" void  __cdecl FUN_00bbf1a0(void*, void*, void*);
+extern "C" void  __cdecl FUN_00bbea40(void*, int, int, int);
+extern "C" void* __cdecl FUN_00bbc7c0(void*, void*, void*, void*, void*);
+extern "C" void* __cdecl FUN_00b95480(void*, void*);
+extern "C" void* __cdecl FUN_00829110(void*, void*, void*, void*);
+extern "C" void* __cdecl FUN_006782c0(void*, void*, void*);
+extern "C" void* __cdecl operator_new(unsigned, const char*, int, int, const char*, int);
+extern "C" void  __cdecl operator_delete__(void*);
+extern "C" void  __cdecl FUN_00e255c0_dlg(void*);
+extern "C" void* __cdecl FUN_007f83e0(void*);
+struct cSPUIPosseItemBase {
+  char pad0[0x98];
+  int  mState;            // +0x98
+  char pad9c[0x14c - 0x9c];
+  float f14c;             // +0x14c
+  void ctor(int a, const wchar_t* name, unsigned flags);   // 0x00e255c0
+};
+class cSPUIPosseItemTribe_s00e2_5710 : public cSPUIPosseItemBase { public: void* ctor(int a2); };
+class cSPUIPosseItemTribeBaby_s00e2_5710 : public cSPUIPosseItemBase { public: void* ctor(int a2); };
+class cSPUIPosseItemCiv : public cSPUIPosseItemBase { public: void* ctor(int a2); };
+class cSPUIPosseItemSpace_s00e2_5710 : public cSPUIPosseItemBase { public: void* ctor(int a2); };
+struct cSPUIPosseItemTribeGhostShell : cSPUIPosseItemBase { void* ctor(); };
+struct cScenarioEditPosseItemBase {
+  char pad0[0x148];
+  void ctor(int a, int b);   // 0x00e25460
+};
+struct cSPUIPosseItem2_s00e2_5710 : cScenarioEditPosseItemBase { void* ctor(int a2, int a3); };
+struct cSPUIPosseItem3 : cScenarioEditPosseItemBase { void* ctor(int a2); };
+typedef void (__thiscall *ReleaseFn)(void*);
+static inline void RefRelease(void* p) {
+  if (p) ((ReleaseFn*)*(void**)p)[1](p);
+}
+struct cUIPosse15 { char pad[0x210]; void* ctor(); };
+struct cVec15 { void* f(void** First, void** Last); };
+struct cVec15b { int f(void* pos, unsigned n, void* src); };
+struct cPosseItem15 {
+  char pad0[0xb4];
+  int  mDistress;              // +0xb4
+  char padb8[0xd0 - 0xb8];
+  float mBlinkerFrequency;     // +0xd0
+  char padd4[0x124 - 0xd4];
+  char* mControlValuesBegin;   // +0x124
+  char* mControlValuesEnd;     // +0x128
+  char pad12c[0x138 - 0x12c];
+  unsigned char f138;          // +0x138
+  void update_control_value(unsigned key);
+  void update_control_values(char force);
+  bool OnTick(void* msg);
+};
+// ---- items of slice s00e25710 end
+
+// @ 0x00e213f0
+bool __cdecl FUN_00e213f0(void* obj, float value, char flag)
+{
+  if (!obj)
+    return false;
+  wchar_t buf[42];
+
+  if (flag) {
+    if (value < 0.0f) value = 0.0f;
+    float cap = DAT_013ec4d0;
+    if (value > cap) value = cap;
+    void* lbl = ((void*(__thiscall*)(void*, u32))(*(void***)obj)[0xc / 4])(obj, 0x10edf11);
+    if (lbl) {
+      ((void(__thiscall*)(void*, float))(*(void***)lbl)[4 / 4])(lbl, 0.0f);
+      return true;
+    }
+    lbl = ((void*(__thiscall*)(void*, u32))(*(void***)obj)[0xc / 4])(obj, 0xeeee8218);
+    if (!lbl)
+      return false;
+    FUN_00881ea0((double)value, buf, 0x20, L"%-F%-p");
+    wchar_t* p = buf;
+    while (p[0]) p++;
+    *(u32*)p  = 0x00250020;   // append L" %"
+    p[2] = 0;
+    ((void(__thiscall*)(void*, wchar_t*))(*(void***)lbl)[0x80 / 4])(lbl, buf);
+    return true;
+  }
+
+  void* lbl = ((void*(__thiscall*)(void*, u32))(*(void***)obj)[0xc / 4])(obj, 0xeeee8218);
+  if (!lbl)
+    return false;
+  FUN_00881ea0((double)value, buf, 0x20, L"%-F%-p");
+  ((void(__thiscall*)(void*, wchar_t*))(*(void***)lbl)[0x80 / 4])(lbl, buf);
+  return true;
+}
+
 // @ 0x00e21530
 void __fastcall FUN_00e21530(void* self_, void*, int id, void* layout, void* extra)
 {
@@ -1042,6 +1219,41 @@ void cSPUIPosse::SetPosseMemberCount(float fCount)
     }
 }
 
+// @ 0x00e219a0
+void SPUIComputeCirclePoint(float fAngle, float* pSin, float* pCos)
+{
+    static const float kSqrtTwo  = (float)sqrt(kTwo);
+    static const float kSqrtHalf = (float)sqrt(kHalf);
+
+    float fScale = kSqrtTwo;
+    *pSin = (float)sin(fAngle);
+    *pCos = (float)cos(fAngle);
+    *pSin = *pSin * fScale;
+
+    float fCos = *pCos * fScale;
+    *pCos = fCos;
+    if (fCos >= kOne) {
+        *pCos = kOne;
+        *pSin = *pSin / (fCos * kSqrtHalf);
+        return;
+    }
+    if (fCos <= kNegOne) {
+        *pCos = kNegOne;
+        *pSin = *pSin / -(fCos * kSqrtHalf);
+        return;
+    }
+    float fSin = *pSin;
+    if (fSin >= kOne) {
+        *pSin = kOne;
+        *pCos = *pCos / (fSin * kSqrtHalf);
+        return;
+    }
+    if (fSin <= kNegOne) {
+        *pSin = kNegOne;
+        *pCos = *pCos / -(fSin * kSqrtHalf);
+    }
+}
+
 // @ 0x00e21ae0
 void __stdcall SPUIInitPairA(uint32_t* pPair)
 {
@@ -1100,12 +1312,68 @@ void cSPUIPosseItem_s00e2_1880::SetBlinkerMotiveVisible(bool bShow)
     pWindow->v07c(true, bShow);
 }
 
+// @ 0x00e21cf0
+void cSPUIPosseItem_s00e2_1880::SetBlinkerMotive(int32_t nMotive, char bForce)
+{
+    do {
+        if (bForce || mFieldA0) {
+            IWindow* aWindows[2];
+            for (int32_t i = 0; i < 2; ++i) {
+                if (i != 1 || v0b4()) {
+                    uint32_t nWindowID = v0d4(i);
+                    aWindows[i * 2] = mLayout.FindWindowByID(nWindowID, true);
+                    aWindows[i * 2 + 1] = mLayout.FindWindowByID(nWindowID + 1, true);
+                    if (aWindows[i * 2 + 1])
+                        aWindows[i * 2 + 1]->v07c(true, false);
+                }
+            }
+            if (bForce) {
+                if (mField94 != 1 && mField94 != 2)
+                    return;
+                IWindow* pMotive = aWindows[nMotive * 2 + 1];
+                mFieldA0 = 1;
+                if (!pMotive)
+                    return;
+                pMotive->v000();
+                IWindow* pContainer = mpFieldD4->mpWindow10->FindWindowByID(0x3d99151, true);
+                if (pMotive->GetParent() != pContainer) {
+                    IWindow* pOldParent = pMotive->GetParent();
+                    if (pOldParent)
+                        pOldParent->v0dc(pMotive);
+                    pContainer->v0dc(pMotive);
+                }
+                AnchorWindowToWindow(pContainer, pMotive, 0x300, 0);
+                pMotive->v07c(true, true);
+                pMotive->v004();
+                return;
+            }
+            mFieldA0 = 0;
+        }
+        int32_t nIndex = v0d8();
+        if (mFieldA8[nIndex] != 2)
+            return;
+        bForce = 1;
+        nMotive = nIndex;
+    } while (true);
+}
+
 // @ 0x00e21e50
 void cSPUIPosseItem_s00e2_1880::SetItemKeyIcon(const ResourceKey* pKey, int32_t nUnused)
 {
     mItemKey = *pKey;
     IWindow* pWindow = mpFieldD4->mpWindow10->FindWindowByID(0x3d99151, true);
     SPUIHelpers::SetWindowImage(pWindow, &mItemKey, 0);
+}
+
+// @ 0x00e21ea0
+void cSPUIPosseItem_s00e2_1880::SetItemIcon(void* pImage, int32_t nUnused)
+{
+    uint32_t nNone = 0;
+    mItemKey.mInstanceID = nNone;
+    mItemKey.mGroupID = nNone;
+    mItemKey.mTypeID = nNone;
+    IWindow* pWindow = mpFieldD4->mpWindow10->FindWindowByID(0x3d99151, true);
+    UI::SetWindowImage(pWindow, pImage, nNone);
 }
 
 // @ 0x00e21ee0
@@ -1116,6 +1384,79 @@ void cSPUIPosseItem_s00e2_1880::AttachToParent()
     pWindow->v07c(true, true);
     pParent->v0e8(pWindow);
     pParent->GetParent()->v0e8(pParent);
+}
+
+// @ 0x00e21f30
+void cSPUIPosseItem_s00e2_1880::MotiveBarsAndBackgroundReposition(bool bShow)
+{
+    IWindow* pBars = mLayout.FindWindowByID(0x56cec38, true);
+    IWindow* pBackground = mLayout.FindWindowByID(0x56bd170, true);
+    IWindow* aMotives[2];
+    aMotives[0] = mLayout.FindWindowByID(0x3d99162, true);
+    aMotives[1] = v0b4() ? mLayout.FindWindowByID(0x3d99184, true) : 0;
+    pBackground->GetRect();
+
+    int32_t aIndices[2];
+    v0dc(aIndices);
+    if (aIndices[0] == -1)
+        return;
+
+    if (bShow) {
+        IWindow* pMotive = aMotives[aIndices[0]];
+        if (pMotive->v0b4())
+            return;
+        pMotive->v0b8(pMotive, pMotive);
+        IWindow* pMotiveBg = pMotive->FindWindowByID(0x56bd1b8, true);
+        float* pBgRect = pMotiveBg->GetRect();
+        float fWidth = pBgRect[2] - pBgRect[0];
+
+        float aBehind[2];
+        float aBars[2];
+        GetBoundingScreenRect(aBehind, pMotiveBg, 0);
+        GetBoundingScreenRect(aBars, pBackground, 0);
+
+        for (int32_t i = 0; i < 2; ++i) {
+            int32_t nIndex = aIndices[i];
+            if (nIndex == -1)
+                continue;
+            IWindow* pMotiveWindow = aMotives[nIndex];
+            float* pRect = &mRect30[nIndex * 4];
+            if (!pMotiveWindow)
+                continue;
+            pMotiveWindow->v070(pRect[0] + aBars[1], pRect[1]);
+            pMotiveWindow->v074(pRect[2] - aBars[1], pRect[3]);
+            IWindow* pSub = pMotiveWindow->FindWindowByID(0x56bd1b8, true);
+            float* pSubRect = pSub->GetRect();
+            pSub->v070(pSubRect[0] - aBars[1], pSubRect[1]);
+        }
+        pBars->v070(mRect10[0], mRect10[1]);
+        pBars->v074(mRect10[2], mRect10[3]);
+        return;
+    }
+
+    IWindow* pMotive = aMotives[aIndices[0]];
+    if (!pMotive->v0b4())
+        return;
+    pMotive->v0b8(0, pMotive);
+    IWindow* pMotiveBg = aMotives[aIndices[0]]->FindWindowByID(0x56bd1b8, true);
+    float* pBgRect = pMotiveBg->GetRect();
+    float fWidth = pBgRect[2] - pBgRect[0];
+    pBars->v070(mRect10[0], mRect10[1]);
+    pBars->v074(mRect10[2], mRect10[3]);
+    pBackground->GetRect();
+
+    for (int32_t i = 0; i < 2; ++i) {
+        int32_t nIndex = aIndices[i];
+        if (nIndex == -1)
+            continue;
+        IWindow* pMotiveWindow = aMotives[nIndex];
+        float* pRect = &mRect30[nIndex * 4];
+        pMotiveWindow->v070(pRect[0], pRect[1]);
+        pMotiveWindow->v074(pRect[2], pRect[3]);
+        IWindow* pSub = pMotiveWindow->FindWindowByID(0x56bd1b8, true);
+        float* pSubRect = pSub->GetRect();
+        pSub->v070(pSubRect[0] + fWidth, pSubRect[1]);
+    }
 }
 
 // @ 0x00e22270
@@ -1157,6 +1498,33 @@ void cSPUIPosseItem_s00e2_1880::MotiveBarsAndBackgroundCollectInitialMetrics()
     }
 }
 
+// @ 0x00e22370
+char cSPUIPosseItem_s00e2_1880::Shutdown()
+{
+    if (mpField13c && MessageServer_s00e2_1880())
+        MessageServer_s00e2_1880()->PostMessage(&mHandler, 0x3e41916, -0x270f);
+    if (mpField9c) {
+        IWindow* pWindow = mpField9c;
+        mpField9c = 0;
+        pWindow->v004();
+    }
+    if (mpField50) {
+        IWindow* pWindow = mpField50;
+        mpField50 = 0;
+        pWindow->v004();
+    }
+    if (mpField13c) {
+        mpField13c->v108(this);
+        if (mpField13c) {
+            IWindow* pWindow = mpField13c;
+            mpField13c = 0;
+            pWindow->v004();
+        }
+    }
+    mLayout.Shutdown(1);
+    return 1;
+}
+
 // @ 0x00e22420
 bool cSPUIPosseItem_s00e2_1880::OnMouseUp(IWindow* pWindow, uint32_t a, uint32_t b, uint32_t c, uint32_t d)
 {
@@ -1165,6 +1533,34 @@ bool cSPUIPosseItem_s00e2_1880::OnMouseUp(IWindow* pWindow, uint32_t a, uint32_t
     if (mpField13c == pWindow) {
         if (pWindow == SP::WindowManager()->v054(true))
             SP::WindowManager()->v058(true, false);
+    }
+    return false;
+}
+
+// @ 0x00e22470
+bool cSPUIPosseItem_s00e2_1880::OnMouseMove(IWindow* pWindow, float fX, float fY, uint32_t nFlags)
+{
+    if (mFieldA2) {
+        float aPoint[2];
+        aPoint[0] = fX;
+        aPoint[1] = fY;
+        float* pScreen = pWindow->v0c0(aPoint);
+        float aLocal[2];
+        aLocal[0] = pScreen[0];
+        aLocal[1] = pScreen[1];
+        cHitWindow* pWindowHit = (cHitWindow*)SP::WindowManager()->v044(aLocal);
+        if (pWindowHit) {
+            if (pWindowHit->GetTypeID() == 0x3d98299) {
+                cHitWindow* pNamed = pWindowHit->GetNamedWindow(0x3e43b66);
+                if (pNamed) {
+                    cHitWindow* pMotive = pNamed->Cast(0x3deb129);
+                    if (pMotive) {
+                        if (mFieldA4 == 1 || mFieldA4 == 2)
+                            pMotive->SetMotive(mFieldA4);
+                    }
+                }
+            }
+        }
     }
     return false;
 }
@@ -1339,6 +1735,26 @@ void cSPUIPosse_s00e2_2860::SetScale(int scale)
         if ((u8)scale != 0) {
             mFlag1d4 = 1;
             UpdateLayout(0);
+        }
+    }
+}
+
+// @ 0x00e235e0
+void cSPUIPosse_s00e2_2860::SetWindowImages(void* image)
+{
+    cSPUIWindow* window = mLayout7c.FindWindowByID(0x3d99184, 1);
+    if (window != 0) {
+        void* holder = VT_F0_2(window, 0x56bd1b8, 1);
+        if (holder != 0) {
+            void* obj = VT_0C_1(holder, 0x105a93d);
+            if (obj != 0)
+                VT_14_1(obj, (int)image);
+        }
+        cSPUIWindow* window2 = mLayout7c.FindWindowByID(0x3d99185, 1);
+        if (window2 != 0) {
+            void* obj = VT_0C_1(window2, 0x105a93d);
+            if (obj != 0)
+                VT_14_1(obj, (int)image);
         }
     }
 }
@@ -2111,6 +2527,392 @@ char __stdcall FUN_00e251c0(void* p2, void* p3, void* p4, void* p5, void* p6)
   MessageServer()->MessageSend(msg->mId, msg, 0, 0);
   msg->Release();
   return 1;
+}
+
+// @ 0x00e25710
+void* cUIPosse15::ctor()
+{
+  char* s = (char*)this;
+  *(void**)(s + 4) = (void*)0x13fa72c;
+  *(void**)s = (void*)0x14806b8;
+  *(void**)(s + 4) = (void*)0x148069c;
+  char* p24 = s + 0x24;
+  *(void**)(s + 8) = 0;
+  *(void**)(s + 0x1c) = p24;
+  *(void**)(s + 0x10) = p24;
+  *(void**)(s + 0xc) = p24;
+  *(void**)(s + 0x14) = p24 + 0x80;
+  char* pbc = s + 0xbc;
+  *(void**)(s + 0xb4) = pbc;
+  *(void**)(s + 0xa8) = pbc;
+  *(void**)(s + 0xa4) = pbc;
+  *(void**)(s + 0xac) = pbc + 0x100;
+  FUN_00e255c0_dlg(s + 0x1bc);
+  *(unsigned char*)(s + 0x1d4) = 1;
+  *(float*)(s + 0x1d8) = 0.0f;
+  *(float*)(s + 0x1dc) = 1.0f;
+  *(unsigned char*)(s + 0x1e4) = 1;
+  *(unsigned char*)(s + 0x1ec) = 1;
+  *(int*)(s + 0x1e0) = -1;
+  *(unsigned char*)(s + 0x1e5) = 0;
+  *(float*)(s + 0x1e8) = 1.0f;
+  *(int*)(s + 0x1f0) = 0;
+  *(int*)(s + 0x1f4) = 0;
+  *(int*)(s + 0x1f8) = 0x1667bac;
+  *(int*)(s + 0x1fc) = 0x1667bac;
+  *(int*)(s + 0x200) = 0x1667bae;
+  void* a = operator_new(0x20, (const char*)0x13f6b3c, 0, 0, 0, 0);
+  *(void**)(s + 0x208) = a ? FUN_007f83e0(a) : 0;
+  return this;
+}
+
+// @ 0x00e25840
+void* cSPUIPosseItemTribe_s00e2_5710::ctor(int a2)
+{
+  cSPUIPosseItemBase::ctor(a2, L"PosseItemTribe", 0x40464100);
+  *(void**)this = (void*)0x14807b0;
+  *(void**)((char*)this + 4) = (void*)0x1480798;
+  *(void**)((char*)this + 0xc) = (void*)0x1480788;
+  this->f14c = 1.0f;
+  return this;
+}
+
+// @ 0x00e258d0
+void* cSPUIPosseItemTribeBaby_s00e2_5710::ctor(int a2)
+{
+  cSPUIPosseItemBase::ctor(a2, L"PosseItemTribeBaby", 0x40464100);
+  *(void**)this = (void*)0x14808c0;
+  *(void**)((char*)this + 4) = (void*)0x14808a4;
+  *(void**)((char*)this + 0xc) = (void*)0x1480894;
+  this->f14c = 0.0f;
+  return this;
+}
+
+// @ 0x00e25950
+void* cSPUIPosseItemCiv::ctor(int a2)
+{
+  cSPUIPosseItemBase::ctor(a2, L"PosseItemCiv", 0x40464100);
+  *(void**)this = (void*)0x14809d0;
+  *(void**)((char*)this + 4) = (void*)0x14809b4;
+  *(void**)((char*)this + 0xc) = (void*)0x14809a4;
+  return this;
+}
+
+// @ 0x00e259d0
+void* cSPUIPosseItemSpace_s00e2_5710::ctor(int a2)
+{
+  cSPUIPosseItemBase::ctor(a2, a2 ? L"PosseItemSpace" : L"PosseItemSpaceGhostShell", 0x40464100);
+  *(void**)this = (void*)0x1480ae0;
+  *(void**)((char*)this + 4) = (void*)0x1480ac4;
+  *(void**)((char*)this + 0xc) = (void*)0x1480ab4;
+  if (a2 == 0) this->mState = 0x7fffffff;
+  return this;
+}
+
+// @ 0x00e25a60
+void* cSPUIPosseItem2_s00e2_5710::ctor(int a2, int a3)
+{
+  cScenarioEditPosseItemBase::ctor(a2, a3);
+  *(void**)this = (void*)0x1480bf0;
+  *(void**)((char*)this + 4) = (void*)0x1480bd4;
+  *(void**)((char*)this + 0xc) = (void*)0x1480bc4;
+  return this;
+}
+
+// @ 0x00e25ad0
+void* cSPUIPosseItem3::ctor(int a2)
+{
+  cScenarioEditPosseItemBase::ctor(0, a2);
+  *(void**)this = (void*)0x1480d00;
+  *(void**)((char*)this + 4) = (void*)0x1480ce4;
+  *(void**)((char*)this + 0xc) = (void*)0x1480cd4;
+  *(int*)((char*)this + 0x98) = 0x7fffffff;
+  return this;
+}
+
+// @ 0x00e25b50
+void* cSPUIPosseItemTribeGhostShell::ctor()
+{
+  cSPUIPosseItemBase::ctor(0, L"PosseItemTribeGhostShell", 0x40464100);
+  *(void**)this = (void*)0x1480e10;
+  *(void**)((char*)this + 4) = (void*)0x1480df4;
+  *(void**)((char*)this + 0xc) = (void*)0x1480de4;
+  this->mState = 0x7fffffff;
+  return this;
+}
+
+// @ 0x00e25bd0
+void* cVec15::f(void** First, void** Last)
+{
+  char* s = (char*)this;
+  void** end = *(void***)(s + 4);
+  void* newEnd = FUN_006782c0(Last, end, First);
+  for (void** it = (void**)newEnd; it < end; ++it) RefRelease(*it);
+  int n = (int)(((char*)Last - (char*)First) >> 2);
+  *(void***)(s + 4) = (void**)((char*)end - n * 4);
+  return First;
+}
+
+// @ 0x00e25c30
+int cVec15b::f(void* pos, unsigned n, void* src)
+{
+  char* s = (char*)this;
+  char* begin = *(char**)s;
+  char* end   = *(char**)(s + 4);
+  unsigned cap = (unsigned)(*(char**)(s + 8) - begin) >> 2;
+  if (cap < n) {
+    unsigned oldN = (unsigned)(end - begin) >> 2;
+    unsigned newCap = oldN * 2; if (oldN == 0) newCap = 1;
+    unsigned want = oldN + n; if (want > newCap) newCap = want;
+    char* nb = newCap ? (char*)operator_new(newCap * 4, "Simulator", 0, 0,
+        "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h", 0xd1) : 0;
+    unsigned pre = (unsigned)((char*)pos - begin);
+    char* p1 = (char*)FUN_00829110(nb, begin, (void*)pre, 0);
+    char* mid = p1 + pre;
+    FUN_00829110(mid, pos, (void*)n, 0);
+    FUN_00829110(mid + n * 4, end, (void*)((char*)end - (char*)pos), 0);
+    if (begin && begin != *(char**)(s + 0x10)) operator_delete__(begin);
+    *(char**)s = nb; *(char**)(s + 4) = mid; *(char**)(s + 8) = nb + newCap * 4;
+    return 0;
+  }
+  (void)src;
+  return 0;
+}
+
+// @ 0x00e25df0
+void __cdecl FUN_00e25df0(void* first, void* last, void* end, void* pred)
+{
+  unsigned char (*fn)(void*, void*) = (unsigned char (*)(void*, void*))pred;
+  char* f = (char*)first; char* l = (char*)last;
+  FUN_00bbf1a0(first, last, pred);
+  for (; l < (char*)end; l += 4) {
+    if (fn(*(void**)f, *(void**)l)) {
+      char* a = *(char**)l;
+      if (a) { void* o = *(void**)a; ((void(__thiscall*)(void*))o)(a); }
+      char* fa = *(char**)f;
+      RefRelease(*(void**)l);
+      *(void**)l = fa;
+      FUN_00bbea40(first, 0, (int)((char*)last - (char*)first) >> 2, 0);
+      RefRelease(a);
+    }
+  }
+}
+
+// @ 0x00e25f40
+void __cdecl FUN_00e25f40(char* begin, char* end, void* ctx)
+{
+  int n = (int)((end - begin) >> 3);
+  if (1 < n) {
+    int i = ((n - 2) >> 1) + 1;
+    do {
+      void* a = *(void**)(begin + i * 8 - 8);
+      --i;
+      if (a) { void* o = *(void**)a; ((void(__thiscall*)(void*))o)(a); }
+      void* b = *(void**)(begin + 4 + i * 8);
+      if (b) { void* o = *(void**)b; ((void(__thiscall*)(void*))o)(b); }
+      FUN_00e25240(begin, i, n, i);
+    } while (i != 0);
+  }
+}
+
+// @ 0x00e25fa0
+void cPosseItem15::update_control_value(unsigned key)
+{
+  char* s = (char*)this;
+  char* end = mControlValuesEnd;
+  char* found = (char*)FUN_00e23ee0(mControlValuesBegin, end, &key, f138);
+  char* match = end;
+  if (found != end && *(unsigned*)found <= key && found != found + 0x10) match = found;
+  if (match == end) return;
+  if (key == 0x3d99184) {
+    bool (*vf)(void*) = (bool (*)(void*))(*(void***)s)[0xb4 / 4];
+    if (!vf(this)) return;
+  }
+  char* blinker = *(char**)(s + 0xd4);
+  void* w = (*(void*(__thiscall**)(void*, unsigned, int))(**(void***)(blinker + 0x10)))(*(void**)(blinker + 0x10), key, 1);
+  if (w) FUN_00e213f0(w, *(float*)(match + 4), *(unsigned char*)(match + 8));
+  if (*(unsigned char*)(match + 8) && *(unsigned char*)(match + 9)) {
+    float v = *(float*)(match + 4);
+    unsigned lvl = 0;
+    if (v >= 30.0f) { if (v < 60.0f) lvl = 1; } else lvl = 2;
+    void* fn = (*(void***)s)[0x84 / 4];
+    if (key == 0x3d99184) ((void(__thiscall*)(void*, int, unsigned))fn)(this, 1, lvl);
+    else if (key == 0x3d99162) ((void(__thiscall*)(void*, int, unsigned))fn)(this, 0, lvl);
+  }
+  *(int*)(match + 0xc) = 0;
+}
+
+// @ 0x00e260a0
+void cPosseItem15::update_control_values(char force)
+{
+  char* p = mControlValuesBegin;
+  char* end = mControlValuesEnd;
+  while (p != end) {
+    int key = *(int*)p;
+    int tick = *(int*)(p + 0xc);
+    if (force != 0 || (tick != 0 && mDistress > tick))
+      update_control_value(key);
+    p += 0x10;
+  }
+}
+
+// @ 0x00e260f0
+bool cPosseItem15::OnTick(void* msg)
+{
+  unsigned id = (*(unsigned(__thiscall**)(void*))(**(void***)msg))(msg);
+  if (id != 0x3d98299) return false;
+  ++mDistress;
+  update_control_values(0);
+  if (mBlinkerFrequency > 0.0f) {
+    // TODO: fcos blink computation and blink_for_a_motive loop
+    return false;
+  }
+  return false;
+}
+
+// @ 0x00e26410
+void __cdecl FUN_00e26410(char* first, char* last, int depth, void* ctx)
+{
+  while ((int)(((last - first) & 0xfffffffc)) > 0x70 && depth > 0) {
+    char* pivot = (char*)FUN_00bbc7c0(first, first + (((last - first) >> 2) >> 1) * 4, last - 4, ctx, ctx);
+    void* a = *(void**)pivot;
+    if (a) { void* o = *(void**)a; ((void(__thiscall*)(void*))o)(a); }
+    char* mid = (char*)FUN_00b95480(first, last);
+    FUN_00e26410(mid, last, depth - 1, ctx);
+    last = mid;
+  }
+  if (depth == 0) FUN_00e25df0(first, last, last, ctx);
+}
+
+// @ 0x00e264b0
+void* __cdecl FUN_00e264b0(char* first, char* last, char** out1, char** out2, void* pred)
+{
+  unsigned char (*fn)(void*, void*) = (unsigned char (*)(void*, void*))pred;
+  while (true) {
+    while (fn(first, out1)) first += 8;
+    last -= 8;
+    while (fn(out1, last)) last -= 8;
+    if (last <= first) break;
+    FUN_00e245c0(first, last);
+    first += 8;
+  }
+  RefRelease((void*)*out2);
+  RefRelease((void*)*out1);
+  return first;
+}
+
+// @ 0x00e26530
+void __cdecl FUN_00e26530(char* first, char* last, char* end, void* pred)
+{
+  unsigned char (*fn)(void*, void*) = (unsigned char (*)(void*, void*))pred;
+  FUN_00e25f40(first, last, pred);
+  char* i = last;
+  for (; i < end; i += 8) {
+    if (!fn(i, first)) continue;
+    char* a = *(char**)i;
+    char* b = *(char**)(i + 4);
+    RefRelease(a); RefRelease(b);
+    char* fa = *(char**)first;
+    char* fb = *(char**)(first + 4);
+    if (fa != a) { RefRelease(a); *(char**)i = fa; }
+    if (fb != b) { RefRelease(b); *(char**)(i + 4) = fb; }
+    FUN_00e25240(first, 0, (int)((char*)last - (char*)first) >> 3, 0);
+    RefRelease(b); RefRelease(a);
+  }
+  for (; (int)((last - first) & 0xfffffff8) > 8; last -= 8)
+    FUN_00e253c0(first, last, pred);
+}
+
+// @ 0x00e26680
+void cSPUISpace::UpdateCaption()
+{
+    void* w1 = mLayout.FindWindowByID(0x064a90a0, 1);
+    if (w1 != 0)
+        w1 = (void*)((uint32_t(__thiscall*)(void*, uint32_t)) (*(void***)w1)[0xc / 4])(w1, 0x0f15f4bd);
+    else
+        w1 = 0;
+
+    void* w2 = mLayout.FindWindowByID(0x0649a840, 1);
+    if (w2 != 0)
+        w2 = (void*)((uint32_t(__thiscall*)(void*, uint32_t)) (*(void***)w2)[0xc / 4])(w2, 0x0f15f4bd);
+    else
+        w2 = 0;
+
+    if (w1 == 0 || w2 == 0)
+        return;
+
+    float textH = g_016ac288;
+    if ((int)(((char*)mp1fc - (char*)mp1f8) >> 1) != 0) {
+        void* o = (void*)((uint32_t(__thiscall*)(void*)) (*(void***)w1)[0x10 / 4])(w1);
+        ((void(__thiscall*)(void*, void*)) (*(void***)o)[0x80 / 4])(o, mp1f8);
+        ((void(__thiscall*)(void*, int)) (*(void***)w1)[0x14 / 4])(w1, 0);
+        o = (void*)((uint32_t(__thiscall*)(void*)) (*(void***)w1)[0x10 / 4])(w1);
+        float* r = (float*)((uint32_t(__thiscall*)(void*)) (*(void***)o)[0x38 / 4])(o);
+        textH = r[2] - r[0];
+    }
+
+    int cur = m1f4;
+    int tot = m1f0;
+    if (tot > 0 && cur >= 0) {
+        wchar_t buf[128];
+        buf[0] = 0;
+        FUN_004c0530(buf, L"%i/%i", cur, tot);
+
+        void* o = (void*)((uint32_t(__thiscall*)(void*)) (*(void***)w2)[0x10 / 4])(w2);
+        ((void(__thiscall*)(void*, void*)) (*(void***)o)[0x80 / 4])(o, buf);
+        ((void(__thiscall*)(void*, int)) (*(void***)w2)[0x14 / 4])(w2, 0);
+
+        void* o3 = (void*)((uint32_t(__thiscall*)(void*)) (*(void***)w1)[0x10 / 4])(w1);
+        ((void(__thiscall*)(void*)) (*(void***)o3)[0x38 / 4])(o3);
+        FUN_0057cb80(buf);      // scratch eastl::fixed_string<wchar_t,16,1> destroyed
+    }
+
+    float on  = (textH <= 0.0f) ? 0.0f : 1.0f;
+    void* o4 = (void*)((uint32_t(__thiscall*)(void*)) (*(void***)w1)[0x10 / 4])(w1);
+    ((void(__thiscall*)(void*, int, float)) (*(void***)o4)[0x7c / 4])(o4, 1, on);
+
+    float on2 = (textH <= 0.0f) ? 0.0f : 1.0f;
+    void* o5 = (void*)((uint32_t(__thiscall*)(void*)) (*(void***)w2)[0x10 / 4])(w2);
+    ((void(__thiscall*)(void*, int, float)) (*(void***)o5)[0x7c / 4])(o5, 1, on2);
+
+    // Vertical stacking: when the total height of the two label rows exceeds the
+    // available height the counter row is folded away and re-anchored above the
+    // caption row.
+    float rowH = m1f4 >= 0 ? textH : textH;
+    if (0.0f < rowH + textH) {
+        void* w3 = mLayout.FindWindowByID(0x03dae412, 1);
+        void* b3 = (w3 == 0) ? 0
+                 : (void*)((uint32_t(__thiscall*)(void*, uint32_t)) (*(void***)w3)[0xc / 4])(w3, 0x8ed27e7a);
+        float* pr = (float*)((uint32_t(__thiscall*)(void*)) (*(void***)w3)[0x38 / 4])(w3);
+        float f12 = pr[1];
+
+        float qa, qb, qc, qd;
+        ((void(__thiscall*)(void*, float*, float*, float*, void*)) (*(void***)b3)[0x50 / 4])(b3, &qa, &qb, &qc, &qd);
+        ((void(__thiscall*)(void*, float*, float*)) (*(void***)b3)[0x58 / 4])(b3, &qa, &qb);
+
+        f12 = ((f12 + rowH) + on) + qc;
+        if (f12 < g_016ac288)
+            f12 = g_016ac288;
+
+        float hh = textH - (f12 - (on2 - textH));
+        ((void(__thiscall*)(void*, float, float)) (*(void***)w3)[0x70 / 4])(w3, hh, on2);
+        ((void(__thiscall*)(void*, float*, float)) (*(void***)w3)[0x74 / 4])(w3, &qa, on2 - on);
+
+        if (0.0f < qa) {
+            void* o = (void*)((uint32_t(__thiscall*)(void*)) (*(void***)w1)[0x10 / 4])(w1);
+            ((void(__thiscall*)(void*, void*)) (*(void***)o)[0x28 / 4])(o, w3);
+            void* o2 = (void*)((uint32_t(__thiscall*)(void*)) (*(void***)w1)[0x10 / 4])(w1);
+            ((void(__thiscall*)(void*, void*, int)) (*(void***)o2)[0x70 / 4])(o2, w3, 0);
+            SPUIHelpers_AnchorWindowToWindow(w3, w1);
+        }
+        if (0.0f < qb) {
+            void* o = (void*)((uint32_t(__thiscall*)(void*)) (*(void***)w2)[0x10 / 4])(w2);
+            ((void(__thiscall*)(void*, void*)) (*(void***)o)[0x28 / 4])(o, w3);
+            void* o2 = (void*)((uint32_t(__thiscall*)(void*)) (*(void***)w2)[0x10 / 4])(w2);
+            ((void(__thiscall*)(void*, void*, int)) (*(void***)o2)[0x70 / 4])(o2, w3, 0);
+            SPUIHelpers_AnchorWindowToWindow(w3, w2);
+        }
+    }
 }
 
 // @ 0x00e26a90

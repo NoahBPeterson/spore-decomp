@@ -1,3 +1,4 @@
+00e26680 ?UpdateCaption@cSPUISpace@@QAEXXZ  # cSPUISpace::UpdateCaption migrated from s00e26680 (verbatim, slice spelling)
 00e26a90 ?ToggleSelectedButton@cSPUISpace@@QAEX_N@Z  # cSPUISpace::ToggleSelectedButton migrated from s00e26680 (verbatim, slice spelling)
 00e26ba0 ?resize@EaVec@@QAEXI@Z  # EaVec::resize migrated from s00e26680 (verbatim, slice spelling)
 00e26bf0 ?eraseAt@EaVec8@@QAEPAXPAX@Z  # EaVec8::eraseAt migrated from s00e26680 (verbatim, slice spelling)

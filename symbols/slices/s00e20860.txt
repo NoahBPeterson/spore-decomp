@@ -7,6 +7,7 @@
 00e21040 ?FUN_00e21040@@YIXPAUSwModelPair@@HH@Z  # FUN_00e21040 migrated from s00e20860 (verbatim, slice spelling)
 00e210b0 ?FUN_00e210b0@@YAXPAX@Z  # FUN_00e210b0 migrated from s00e20860 (verbatim, slice spelling)
 00e21260 ?FUN_00e21260@@YIXPAULayeredTriple@@HPAX1PAULayeredLocal@@@Z  # FUN_00e21260 migrated from s00e20860 (verbatim, slice spelling)
+00e213f0 ?FUN_00e213f0@@YA_NPAXMD@Z  # FUN_00e213f0 migrated from s00e20860 (verbatim, slice spelling)
 00e21530 ?FUN_00e21530@@YIXPAX0H00@Z  # FUN_00e21530 migrated from s00e20860 (verbatim, slice spelling)
 00e21590 ?FUN_00e21590@@YGPB_WH@Z  # FUN_00e21590 migrated from s00e20860 (verbatim, slice spelling)
 00e215b0 ?FUN_00e215b0@@YIHPAVcSPUIPosseItem@@@Z  # FUN_00e215b0 migrated from s00e20860 (verbatim, slice spelling)

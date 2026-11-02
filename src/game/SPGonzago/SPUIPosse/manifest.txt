@@ -27,6 +27,7 @@
 ../src/game/SPGonzago/SPUIPosse.cpp  ?SetPlacement@cSPUIPosse@@QAEXMMH_N@Z  00e22830  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPUIPosse.cpp  ?SetVisibility@cSPUIPosse_s00e2_2860@@QAE_NPAX@Z  00e231a0  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPUIPosse.cpp  ?SetScale@cSPUIPosse_s00e2_2860@@QAEXH@Z  00e23200  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPUIPosse.cpp  ?SetWindowImages@cSPUIPosse_s00e2_2860@@QAEXPAX@Z  00e235e0  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPUIPosse.cpp  ?GetWindowImageCount@cSPUIPosse_s00e2_2860@@QAEHXZ  00e23670  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPUIPosse.cpp  ?GetWindowImageRange@cSPUIPosse_s00e2_2860@@QAEXPAH@Z  00e23680  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPUIPosse.cpp  ?ClearToolWindow@cSPUIPosse_s00e2_2860@@QAEXHH@Z  00e236a0  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
@@ -46,6 +47,13 @@
 ../src/game/SPGonzago/SPUIPosse.cpp  ?FUN_00e250a0@cSPUIPosse_s00e2_4700@@QAEDHMMHH@Z  00e250a0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
 ../src/game/SPGonzago/SPUIPosse.cpp  ?FUN_00e25120@cSPUIPosse_s00e2_4700@@QAEDHMMHH@Z  00e25120  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
 ../src/game/SPGonzago/SPUIPosse.cpp  ?FUN_00e251c0@@YGDPAX0000@Z  00e251c0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPUIPosse.cpp  ?ctor@cSPUIPosseItemTribe_s00e2_5710@@QAEPAXH@Z  00e25840  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPUIPosse.cpp  ?ctor@cSPUIPosseItemTribeBaby_s00e2_5710@@QAEPAXH@Z  00e258d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPUIPosse.cpp  ?ctor@cSPUIPosseItemCiv@@QAEPAXH@Z  00e25950  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPUIPosse.cpp  ?ctor@cSPUIPosseItemSpace_s00e2_5710@@QAEPAXH@Z  00e259d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPUIPosse.cpp  ?ctor@cSPUIPosseItem2_s00e2_5710@@QAEPAXHH@Z  00e25a60  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPUIPosse.cpp  ?ctor@cSPUIPosseItem3@@QAEPAXH@Z  00e25ad0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPUIPosse.cpp  ?ctor@cSPUIPosseItemTribeGhostShell@@QAEPAXXZ  00e25b50  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPUIPosse.cpp  ?ToggleSelectedButton@cSPUISpace@@QAEX_N@Z  00e26a90  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPUIPosse.cpp  ?resize@EaVec@@QAEXI@Z  00e26ba0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPUIPosse.cpp  ?eraseAt@EaVec8@@QAEPAXPAX@Z  00e26bf0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include

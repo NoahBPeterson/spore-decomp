@@ -1,18 +1,18 @@
-00e25710 UI::Posse::Posse  # PDB/Ghidra previous name; large window ctor, vtables 0x14806b8/0x148069c
-00e25840 cSPUIPosseItemTribe::cSPUIPosseItemTribe  # PDB name; base ctor 0xe255c0 + L"PosseItemTribe"
-00e258d0 cSPUIPosseItemTribeBaby::cSPUIPosseItemTribeBaby  # L"PosseItemTribeBaby"
-00e25950 cSPUIPosseItemCiv::cSPUIPosseItemCiv  # L"PosseItemCiv"
-00e259d0 cSPUIPosseItemSpace::cSPUIPosseItemSpace  # L"PosseItemSpace"/"PosseItemSpaceGhostShell"
-00e25a60 UI::PosseItem::PosseItem  # PDB name; base ctor 0xe25460
-00e25ad0 UI::PosseItem helper ctor  # base ctor 0xe25460 with (0,param)
-00e25b50 cSPUIPosseItemTribeGhostShell::cSPUIPosseItemTribeGhostShell  # L"PosseItemTribeGhostShell"
-00e25bd0 eastl::vector<EA::AutoRefCount<EA::Trace::ILogReporter>,eastl::sp_vector_allocator>::erase  # Ghidra type; copy_impl 0x6782c0
-00e25c30 eastl::vector<AutoRefCount<...>>::insert  # DoInsertValue 0x11e0744 + FUN_00829110
+00e25710 ?ctor@cUIPosse15@@QAEPAXXZ  # cUIPosse15::ctor migrated from s00e25710 (verbatim, slice spelling)
+00e25840 ?ctor@cSPUIPosseItemTribe_s00e2_5710@@QAEPAXH@Z  # cSPUIPosseItemTribe_s00e2_5710::ctor migrated from s00e25710 (verbatim, slice spelling)
+00e258d0 ?ctor@cSPUIPosseItemTribeBaby_s00e2_5710@@QAEPAXH@Z  # cSPUIPosseItemTribeBaby_s00e2_5710::ctor migrated from s00e25710 (verbatim, slice spelling)
+00e25950 ?ctor@cSPUIPosseItemCiv@@QAEPAXH@Z  # cSPUIPosseItemCiv::ctor migrated from s00e25710 (verbatim, slice spelling)
+00e259d0 ?ctor@cSPUIPosseItemSpace_s00e2_5710@@QAEPAXH@Z  # cSPUIPosseItemSpace_s00e2_5710::ctor migrated from s00e25710 (verbatim, slice spelling)
+00e25a60 ?ctor@cSPUIPosseItem2_s00e2_5710@@QAEPAXHH@Z  # cSPUIPosseItem2_s00e2_5710::ctor migrated from s00e25710 (verbatim, slice spelling)
+00e25ad0 ?ctor@cSPUIPosseItem3@@QAEPAXH@Z  # cSPUIPosseItem3::ctor migrated from s00e25710 (verbatim, slice spelling)
+00e25b50 ?ctor@cSPUIPosseItemTribeGhostShell@@QAEPAXXZ  # cSPUIPosseItemTribeGhostShell::ctor migrated from s00e25710 (verbatim, slice spelling)
+00e25bd0 ?f@cVec15@@QAEPAXPAPAX0@Z  # cVec15::f migrated from s00e25710 (verbatim, slice spelling)
+00e25c30 ?f@cVec15b@@QAEHPAXI0@Z  # cVec15b::f migrated from s00e25710 (verbatim, slice spelling)
 00e25df0 partition over AutoRefCount vector  # calls FUN_00bbf1a0/FUN_00bbea40/FUN_00e24530
-00e25f40 make_heap/sift over AutoRefCount pairs  # FUN_00e25240 sift
-00e25fa0 cSPUIPosseItem::update_control_value  # PDB name; map lookup 0xe23ee0
-00e260a0 cSPUIPosseItem::update_control_values  # PDB caller-single candidate
-00e260f0 cSPUIPosseItem::OnTick  # PDB name; id gate 0x3d98299
-00e26410 introselect driver  # recurses 0xe26410, fallback 0xe25df0
-00e264b0 partition over 8-byte pairs  # FUN_00e245c0 swap
-00e26530 insertion pass for pair sort  # FUN_00e25f40/0xe25240/0xe253c0
+00e25f40 ?FUN_00e25f40@@YAXPAD0PAX@Z  # FUN_00e25f40 migrated from s00e25710 (verbatim, slice spelling)
+00e25fa0 ?update_control_value@cPosseItem15@@QAEXI@Z  # cPosseItem15::update_control_value migrated from s00e25710 (verbatim, slice spelling)
+00e260a0 ?update_control_values@cPosseItem15@@QAEXD@Z  # cPosseItem15::update_control_values migrated from s00e25710 (verbatim, slice spelling)
+00e260f0 ?OnTick@cPosseItem15@@QAE_NPAX@Z  # cPosseItem15::OnTick migrated from s00e25710 (verbatim, slice spelling)
+00e26410 ?FUN_00e26410@@YAXPAD0HPAX@Z  # FUN_00e26410 migrated from s00e25710 (verbatim, slice spelling)
+00e264b0 ?FUN_00e264b0@@YAPAXPAD0PAPAD1PAX@Z  # FUN_00e264b0 migrated from s00e25710 (verbatim, slice spelling)
+00e26530 ?FUN_00e26530@@YAXPAD00PAX@Z  # FUN_00e26530 migrated from s00e25710 (verbatim, slice spelling)
