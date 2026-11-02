@@ -1,0 +1,8 @@
+# source  symbol  va  flags
+../src/game/SPEngine/_at_00670000.cpp  ?FUN_0067cca0@@YAXPAX0H@Z  0067cca0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPEngine/_at_00670000.cpp  ?FUN_0067cce0@@YAXPAX0H@Z  0067cce0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPEngine/_at_00670000.cpp  ?FUN_0067cd20@@YAXPAX0H@Z  0067cd20  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPEngine/_at_00670000.cpp  ?FUN_0067cd90@@YAXPAX0H@Z  0067cd90  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPEngine/_at_00670000.cpp  ?FUN_0067d0c0@@YAXXZ  0067d0c0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPEngine/_at_00670000.cpp  _FUN_0067d230  0067d230  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPEngine/_at_00670000.cpp  _FUN_0067d260  0067d260  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include

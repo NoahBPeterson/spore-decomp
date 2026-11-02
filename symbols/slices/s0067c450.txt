@@ -1,9 +1,17 @@
 0067ad00 cUIHints::UpdateVisibleHint  # PDB name, called from UpdateHintTimers
 0067bc30 cUIHints::SetVisibility  # PDB name, called from this slice
 0067c960 cUIHints::Update  # PDB name (symbols/pdb_names.json)
+0067cc70 ?FUN_0067cc70@@YAXPAX0H@Z  # FUN_0067cc70 migrated from s0067c450 (verbatim, slice spelling)
+0067cca0 ?FUN_0067cca0@@YAXPAX0H@Z  # FUN_0067cca0 migrated from s0067c450 (verbatim, slice spelling)
+0067cce0 ?FUN_0067cce0@@YAXPAX0H@Z  # FUN_0067cce0 migrated from s0067c450 (verbatim, slice spelling)
+0067cd20 ?FUN_0067cd20@@YAXPAX0H@Z  # FUN_0067cd20 migrated from s0067c450 (verbatim, slice spelling)
+0067cd90 ?FUN_0067cd90@@YAXPAX0H@Z  # FUN_0067cd90 migrated from s0067c450 (verbatim, slice spelling)
+0067ce00 ?FUN_0067ce00@@YAXPAX0H@Z  # FUN_0067ce00 migrated from s0067c450 (verbatim, slice spelling)
 0067cf20 FUN_0067cf20  # D3D9 register-table callback used by FUN_0067d0c0 at key 0x241
-0067d230 zlib zalloc shim  # stored into z_stream_s::zalloc at 0x0067d390
-0067d260 zlib zfree shim  # stored into z_stream_s::zfree at 0x0067d39a
+0067d020 ?FUN_0067d020@@YAXPAX0H@Z  # FUN_0067d020 migrated from s0067c450 (verbatim, slice spelling)
+0067d0c0 ?FUN_0067d0c0@@YAXXZ  # FUN_0067d0c0 migrated from s0067c450 (verbatim, slice spelling)
+0067d230 _FUN_0067d230  # FUN_0067d230 migrated from s0067c450 (verbatim, slice spelling)
+0067d260 _FUN_0067d260  # FUN_0067d260 migrated from s0067c450 (verbatim, slice spelling)
 0067d280 ?SetCompressedFormat@StreamCompressionZLib@IO@EA@@QAE_NW4eCompressedFormat@23@@Z  # StreamCompressionZLib::SetCompressedFormat migrated from s0067c450 (verbatim, slice spelling)
 0067d2a0 ?SetBufferSize@StreamCompressionZLib@IO@EA@@QAE_NI@Z  # StreamCompressionZLib::SetBufferSize migrated from s0067c450 (verbatim, slice spelling)
 0067d2e0 ?SetCompressionHint@StreamCompressionZLib@IO@EA@@QAE_NH@Z  # StreamCompressionZLib::SetCompressionHint migrated from s0067c450 (verbatim, slice spelling)

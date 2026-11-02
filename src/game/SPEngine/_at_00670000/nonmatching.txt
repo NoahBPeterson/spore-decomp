@@ -1,0 +1,4 @@
+# va  diff-bytes  reason
+0067cc70 11 D3D9 register helper (unguarded variant); complete, 11-byte register-allocation diff (device/vtable in eax/ecx vs ecx/edx). flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
+0067ce00 215 D3D9 constant-upload helper; complete for this VA (first of two merged blocks), 12-float copy loop shape differs. flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
+0067d020 67 D3D9 float4 upload helper; complete, aggregate/temporary copy shape differs. flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
