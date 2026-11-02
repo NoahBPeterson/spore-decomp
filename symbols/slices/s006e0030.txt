@@ -3,4 +3,4 @@
 006e09d0 ?SP_RectPackCharts@@YAXPAH0MH@Z  # SP_RectPackCharts migrated from s006e0030 (verbatim, slice spelling)
 006e0e00 ?Resize@Elem16VecMem@@QAEXI@Z  # Resize migrated from s006e0030 (verbatim, slice spelling)
 006e0ea0 ?FillVertices@ChartSet@@QAEXPAH@Z  # FillVertices migrated from s006e0030 (verbatim, slice spelling)
-006e0f90 visit all charts, virtual call at +0x34  # global list 0x170a6b4
+006e0f90 ?VisitCharts@@YAXXZ  # VisitCharts migrated from s006e0030 (verbatim, slice spelling)

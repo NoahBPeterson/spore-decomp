@@ -1,8 +1,8 @@
-006e0fd0 VisitIndexBuffers  # global list 0x170a798, virtual +0x34(obj,out)
-006e1010 RegisterBufferCheats  # registers 0x1532db0 and 0x1532dac cheats
-006e1040 CommandDumpVertex  # cArguments::HasFlag(0x140a944) -> 0x6e0f90
-006e1070 CommandDumpIndex  # cArguments::HasFlag(0x140a944) -> 0x6e0fd0
-006e10a0 CreateBufferCheats  # operator_new VertexBufferCheat/IndexBufferCheat
+006e0fd0 ?VisitIndexBuffers@@YAXXZ  # VisitIndexBuffers migrated from s006e0fd0 (verbatim, slice spelling)
+006e1010 ?RegisterBufferCheats@@YAXXZ  # RegisterBufferCheats migrated from s006e0fd0 (verbatim, slice spelling)
+006e1040 ?CommandDumpVertex@@YGXPAUcArguments@@@Z  # CommandDumpVertex migrated from s006e0fd0 (verbatim, slice spelling)
+006e1070 ?CommandDumpIndex@@YGXPAUcArguments@@@Z  # CommandDumpIndex migrated from s006e0fd0 (verbatim, slice spelling)
+006e10a0 ?CreateBufferCheats@@YAXXZ  # CreateBufferCheats migrated from s006e0fd0 (verbatim, slice spelling)
 006e1150 ?Hist3d@@YAXPAUWuData@@PAH111PAM@Z  # Hist3d migrated from s006e0fd0 (verbatim, slice spelling)
 006e1260 ?MomentPass@@YAXHHHHH@Z  # MomentPass migrated from s006e0fd0 (verbatim, slice spelling)
 006e1480 ?BoxMoments@@YAHPAHH@Z  # BoxMoments migrated from s006e0fd0 (verbatim, slice spelling)

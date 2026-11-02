@@ -1,0 +1,6 @@
+# source  symbol  va  flags
+../src/game/SPEngine/_at_006e0000.cpp  ?VisitCharts@@YAXXZ  006e0f90  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/_at_006e0000.cpp  ?VisitIndexBuffers@@YAXXZ  006e0fd0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/_at_006e0000.cpp  ?RegisterBufferCheats@@YAXXZ  006e1010  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/_at_006e0000.cpp  ?CommandDumpVertex@@YGXPAUcArguments@@@Z  006e1040  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/_at_006e0000.cpp  ?CommandDumpIndex@@YGXPAUcArguments@@@Z  006e1070  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
