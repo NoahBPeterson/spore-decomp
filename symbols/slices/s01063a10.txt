@@ -1,3 +1,5 @@
 01063dc0 ?FUN_01063dc0@@YIIPAX000@Z  # FUN_01063dc0 migrated from s01063a10 (verbatim, slice spelling)
 01064000 ?FUN_01064000@@YIEPAX0H0@Z  # FUN_01064000 migrated from s01063a10 (verbatim, slice spelling)
 01064080 ?FUN_01064080@@YIXPAX0@Z  # FUN_01064080 migrated from s01063a10 (verbatim, slice spelling)
+010646f0 ?FUN_010646f0@@YIXPAX0@Z  # FUN_010646f0 migrated from s01063a10 (verbatim, slice spelling)
+01064760 ?FUN_01064760@@YIXPAX00000@Z  # FUN_01064760 migrated from s01063a10 (verbatim, slice spelling)

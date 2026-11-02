@@ -1,2 +1,5 @@
 # va  diff-bytes  reason
-01064f00
+01064760 412 0/400 inputs valid (fault(write)/fault(read)); OnCreate; frame size + FindWindowByID overload + wiring differs (551 vs 497 bytes) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
+01064b60 251 flags: /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE
+01064df0 167 flags: /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE
+01064f00 142 flags: /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE

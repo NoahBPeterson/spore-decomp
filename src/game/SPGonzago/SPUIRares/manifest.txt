@@ -1,1 +1,7 @@
 # source  symbol  va  flags
+../src/game/SPGonzago/SPUIRares.cpp  ?FUN_010646f0@@YIXPAX0@Z  010646f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPUIRares.cpp  ?Destroy_01064990@cEmpire@@QAEXXZ  01064990  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPUIRares.cpp  ?OnWinProcAdd_01064a00@cEmpire@@QAEXH@Z  01064a00  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPUIRares.cpp  ??0cEmpire@@QAE@XZ  01064a30  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPUIRares.cpp  ??1cEmpire@@QAE@XZ  01064ac0  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPUIRares.cpp  ?Assign_01064d80@cString12@@QAEXPBX0@Z  01064d80  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
