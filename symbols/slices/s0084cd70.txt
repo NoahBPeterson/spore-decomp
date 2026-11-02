@@ -14,4 +14,4 @@
 0084d570 ?EGifCompressLine@@YAHPAUGifFileType@@PAEH@Z  # EGifCompressLine migrated from s0084cd70 (verbatim, slice spelling)
 0084d6e0 EGifPutImageDesc
 0084d8d0 GIF_write
-0084dc90 PNG_read_data
+0084dc90 ?PNG_read_data@@YAXPAX0H@Z  # PNG_read_data migrated from s0084cd70 (verbatim, slice spelling)

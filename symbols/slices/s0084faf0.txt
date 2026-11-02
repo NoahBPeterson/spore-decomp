@@ -1,8 +1,6 @@
-# slice s0084faf0 (libjpeg entropy encoder / master control) - confident names
-# VA        name                        note
-0084faf0    EmitSamples                 pack samples into output buffer (register ABI)
-0084feb0    CheckUniformRun             verify 4-byte RGBX run is uniform (register ABI)
-0084ff00    EncodeMcuHuff               encode one MCU with Huffman encoder
+0084faf0 ?EmitSamples@@YAHPAXHHHHHPAE@Z  # EmitSamples migrated from s0084faf0 (verbatim, slice spelling)
+0084feb0 ?CheckUniformRun@@YAHHPAE0@Z  # CheckUniformRun migrated from s0084faf0 (verbatim, slice spelling)
+0084ff00 ?EncodeMcuHuff@@YAXPAH0@Z  # EncodeMcuHuff migrated from s0084faf0 (verbatim, slice spelling)
 008502a0    jinit_huff_encoder          libjpeg Huffman-encoder init
 00850380    SetTableNext                set next back-pointer on colour/quant tables
 008503f0    finish_pass_huff            libjpeg finish_pass_huff

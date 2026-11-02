@@ -1,17 +1,21 @@
+00404430 ??_GIHandler@@UAEPAXI@Z  # IHandler scalar deleting dtor (slot 0 of the IHandler vtable)
 00849f70 ?Canvas_FlushInput@@YAHXZ  # Canvas_FlushInput migrated from s00849f70 (verbatim, slice spelling)
-0084a360 EA::App::IMEServer::IsOpen  # ImmGetOpenStatus wrapper
+0084a230 ?SetEnabled@IMEServerWin32@@QAEX_N@Z  # IMEServerWin32::SetEnabled migrated from s00849f70 (verbatim, slice spelling)
+0084a360 ?IsOpen@IMEServerWin32@@QAE_NXZ  # IMEServerWin32::IsOpen migrated from s00849f70 (verbatim, slice spelling)
+0084a3a0 ?SetOpenEnabled@IMEServerWin32@@QAE_N_N@Z  # IMEServerWin32::SetOpenEnabled migrated from s00849f70 (verbatim, slice spelling)
+0084a470 ?NotifyClosed@IMEServerWin32@@QAE_N_N@Z  # IMEServerWin32::NotifyClosed migrated from s00849f70 (verbatim, slice spelling)
+0084a4d0 ?SetConversion@IMEServerWin32@@QAE_N_N@Z  # IMEServerWin32::SetConversion migrated from s00849f70 (verbatim, slice spelling)
 0084a540 ?SetCompositionWindow@IMEServerWin32@@QAEXGGH@Z  # IMEServerWin32::SetCompositionWindow migrated from s00849f70 (verbatim, slice spelling)
 0084a590 ?EnsureInitialized@IMEServer@@QAE_NXZ  # IMEServer::EnsureInitialized migrated from s00849f70 (verbatim, slice spelling)
 0084a5d0 ?Shutdown@IMEServer@@QAE_NXZ  # IMEServer::Shutdown migrated from s00849f70 (verbatim, slice spelling)
 0084a700 ??0IMECompositionStringDataEx@@QAE@XZ  # IMECompositionStringDataEx::IMECompositionStringDataEx migrated from s00849f70 (verbatim, slice spelling)
-0084aad0 eastl::vector<eastl::basic_string<wchar_t,eastl::allocator>,eastl::sp_vector_allocator>::DoDestroyValues  # ghidra symbol
-0084ab40 ?CopyWStrings@@YAPAUWString@@PBU1@0PAU1@@Z  # CopyWStrings migrated from s00849f70 (verbatim, slice spelling)
-0084ad40 ?WriteCompositionString@IMEServer@@QAEXPAXHHI@Z  # IMEServer::WriteCompositionString migrated from s00849f70 (verbatim, slice spelling)
 0084a7e0 ??0WString@@QAE@ABU0@@Z  # WString copy ctor (disambiguates the overload set for equiv/chk)
 0084a8f0 ?ConstructWStringsN@@YAXPAUWString@@IPBU1@@Z  # ConstructWStringsN
+0084aad0 eastl::vector<eastl::basic_string<wchar_t,eastl::allocator>,eastl::sp_vector_allocator>::DoDestroyValues  # ghidra symbol
+0084ab40 ?CopyWStrings@@YAPAUWString@@PBU1@0PAU1@@Z  # CopyWStrings migrated from s00849f70 (verbatim, slice spelling)
 0084abd0 ??1IMEServer@@UAE@XZ  # IMEServer base dtor
 0084acf0 ??_GIMEServerWin32@@UAEPAXI@Z  # IMEServerWin32 scalar deleting dtor
-00404430 ??_GIHandler@@UAEPAXI@Z  # IHandler scalar deleting dtor (slot 0 of the IHandler vtable)
+0084ad40 ?WriteCompositionString@IMEServer@@QAEXPAXHHI@Z  # IMEServer::WriteCompositionString migrated from s00849f70 (verbatim, slice spelling)
 013eb394 ??_7IHandler@@6B@  # IHandler vtable (the second-base subobject vptr)
 0141cb28 ??_7IMEServer@@6B@  # IMEServer vtable
 0141cb78 ??_7IMEServerWin32@@6B@  # IMEServerWin32 vtable

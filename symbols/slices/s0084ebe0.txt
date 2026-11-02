@@ -5,5 +5,5 @@
 0084f3f0 ?TGA_open@@YGHPAPAXPAXHH@Z  # TGA_open migrated from s0084ebe0 (verbatim, slice spelling)
 0084f440 ?TGA_info@@YGPAXPAXH@Z  # TGA_info migrated from s0084ebe0 (verbatim, slice spelling)
 0084f900 ?TGA_read@@YGIPAX0PAEH@Z  # TGA_read migrated from s0084ebe0 (verbatim, slice spelling)
-0084fa40 TGA_free        # gfree wrapper; byte-exact
-0084fa60 FUN_0084fa60    # compare first N elements of two pixel runs (1/2/3/4-byte elems); custom register ABI
+0084fa40 ?TGA_free@@YGHPAX@Z  # TGA_free migrated from s0084ebe0 (verbatim, slice spelling)
+0084fa60 ?TGA_display_check@@YAHPAEHH@Z  # TGA_display_check migrated from s0084ebe0 (verbatim, slice spelling)

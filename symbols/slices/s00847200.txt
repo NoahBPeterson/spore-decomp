@@ -1,0 +1,3 @@
+008476b0 ?FUN_008476b0@@YADPAX0@Z  # FUN_008476b0 migrated from s00847200 (verbatim, slice spelling)
+00847810 ?FUN_00847810@@YIXPAX0PAVcArguments_s0084_7200@ArgScript@EA@@@Z  # FUN_00847810 migrated from s00847200 (verbatim, slice spelling)
+00847950 ?FUN_00847950@@YGHPAX0PBDPAUWNDCLASSEXA@@@Z  # FUN_00847950 migrated from s00847200 (verbatim, slice spelling)
