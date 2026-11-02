@@ -4,9 +4,9 @@
 0113ef00 SNDSYS_restore  # PDB
 0113ef90 SNDSYSI_chanpubinit  # PDB
 0113f060 SNDSYSI_init  # PDB
-0113f1c0 F_0113f1c0  # dc: packet size helper (n*0x20 + 0x98)
-0113f1d0 F_0113f1d0  # dc: register a play slot in 0x16e7fcc[]
-0113f250 SNDPKTPLAY_start  # PDB candidate (caller-scored)
+0113f1c0 ?F_0113f1c0@@YAHH@Z  # F_0113f1c0 migrated from s0113ec90 (verbatim, slice spelling)
+0113f1d0 ?F_0113f1d0@@YAHHHHPAHH@Z  # F_0113f1d0 migrated from s0113ec90 (verbatim, slice spelling)
+0113f250 ?F_0113f250@@YAHHPAHPAFPAD@Z  # F_0113f250 migrated from s0113ec90 (verbatim, slice spelling)
 0113f5c0 ?SNDPKTPLAY_submit@@YAHHH@Z  # SNDPKTPLAY_submit migrated from s0113ec90 (verbatim, slice spelling)
 0113f6c0 ?F_0113f6c0@@YAHH@Z  # F_0113f6c0 migrated from s0113ec90 (verbatim, slice spelling)
 0113f720 ?F_0113f720@@YAHH@Z  # F_0113f720 migrated from s0113ec90 (verbatim, slice spelling)
@@ -15,6 +15,6 @@
 0113f8f0 ?F_0113f8f0@@YAXHHH@Z  # F_0113f8f0 migrated from s0113ec90 (verbatim, slice spelling)
 0113f940 ?F_0113f940@@YAXXZ  # F_0113f940 migrated from s0113ec90 (verbatim, slice spelling)
 0113f9b0 ?F_0113f9b0@@YAHH@Z  # F_0113f9b0 migrated from s0113ec90 (verbatim, slice spelling)
-0113fa70 PktCursor::Decode3  # dc: packed 3-byte sample decode
-0113fb20 PktCursor2::Decode2  # dc: packed 2-byte sample decode
-0113fba0 F_0113fba0  # dc: apply a sample-rate change across voices
+0113fa70 ?Decode3@PktCursor@@QAEXHH@Z  # PktCursor::Decode3 migrated from s0113ec90 (verbatim, slice spelling)
+0113fb20 ?Decode2@PktCursor2@@QAEXHH@Z  # PktCursor2::Decode2 migrated from s0113ec90 (verbatim, slice spelling)
+0113fba0 ?F_0113fba0@@YAHHI@Z  # F_0113fba0 migrated from s0113ec90 (verbatim, slice spelling)

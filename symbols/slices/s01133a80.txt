@@ -1,4 +1,4 @@
-01133a80 rw::audio::core::Collection::FUN_01133a80  # move used node to free list
+01133a80 ?FUN_01133a80@Collection@@QAEXPAUCollNode@@@Z  # Collection::FUN_01133a80 migrated from s01133a80 (verbatim, slice spelling)
 01133ad0 rw::audio::core::Collection::AddCapacity  # PDB name
 01133b60 FUN_01133b60  # get first used node
 01133b70 FUN_01133b70  # free node blocks

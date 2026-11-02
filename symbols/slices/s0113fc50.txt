@@ -1,9 +1,9 @@
-0113fc50 F_0113fc50  # dc: per-voice format init from table 0x14cafd2
-0113fca0 F_0113fca0  # dc: decoder object init
-0113fd00 F_0113fd00  # dc: set per-voice format byte across a play
-0113fdd0 F_0113fdd0  # dc: set per-voice channel volume
-0113fec0 F_0113fec0  # dc: recompute voice gains (8-bit /127)
-0113ff00 F_0113ff00  # dc: set per-voice pitch
+0113fc50 ?F_0113fc50@@YAXPAX@Z  # F_0113fc50 migrated from s0113fc50 (verbatim, slice spelling)
+0113fca0 ?F_0113fca0@@YAHPAX@Z  # F_0113fca0 migrated from s0113fc50 (verbatim, slice spelling)
+0113fd00 ?F_0113fd00@@YAHHE@Z  # F_0113fd00 migrated from s0113fc50 (verbatim, slice spelling)
+0113fdd0 ?F_0113fdd0@@YAHHHH@Z  # F_0113fdd0 migrated from s0113fc50 (verbatim, slice spelling)
+0113fec0 ?F_0113fec0@@YAXH@Z  # F_0113fec0 migrated from s0113fc50 (verbatim, slice spelling)
+0113ff00 ?F_0113ff00@@YAHHH@Z  # F_0113ff00 migrated from s0113fc50 (verbatim, slice spelling)
 01140030 F_01140030  # dc: apply lowpass to a play
 011400a0 F_011400a0  # dc: apply highpass to a play
 01140110 F_01140110  # dc: scan buffer for a 4-byte tag ("data" special)
