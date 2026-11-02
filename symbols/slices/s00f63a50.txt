@@ -1,1 +1,6 @@
+00f63a50 ??4cTerrainDistributeDescription_s00f6_3a50@SP@@QAEAAU01@ABU01@@Z  # cTerrainDistributeDescription_s00f6_3a50::operator= migrated from s00f63a50 (verbatim, slice spelling)
+00f63ab0 ?resize@EffectVector@SP@@QAEXI@Z  # EffectVector::resize migrated from s00f63a50 (verbatim, slice spelling)
+00f63b40 ?Execute@cEffectCommand@@QAEXPAUcArgScriptArgs@@@Z  # cEffectCommand::Execute migrated from s00f63a50 (verbatim, slice spelling)
+00f63bf0 ?SP_ReadLevel@@YAXPAXHPAUcLevelInfo_s00f6_3a50@SP@@@Z  # SP_ReadLevel migrated from s00f63a50 (verbatim, slice spelling)
+00f63d00 ?SP_ReadDescription@@YAXPAXHPAUcTerrainDistributeDescription_s00f6_3a50@SP@@@Z  # SP_ReadDescription migrated from s00f63a50 (verbatim, slice spelling)
 00f63da0 ?CellIndex@cDistGrid@SP@@QAEPAHHHEE@Z  # CellIndex migrated from s00f63a50 (verbatim, slice spelling)

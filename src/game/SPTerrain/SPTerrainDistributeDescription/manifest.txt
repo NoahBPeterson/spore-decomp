@@ -1,2 +1,6 @@
 # source  symbol  va  flags
 ../src/game/SPTerrain/SPTerrainDistributeDescription.cpp  ?FUN_00f63120@@YAXHH@Z  00f63120  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/SPTerrain/SPTerrainDistributeDescription.cpp  ?OnRegister@cTerrainDistributeCommand@@QAEXHH@Z  00f633a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPTerrain/SPTerrainDistributeDescription.cpp  ??4cTerrainDistributeDescription_s00f6_3a50@SP@@QAEAAU01@ABU01@@Z  00f63a50  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPTerrain/SPTerrainDistributeDescription.cpp  ?resize@EffectVector@SP@@QAEXI@Z  00f63ab0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPTerrain/SPTerrainDistributeDescription.cpp  ?SP_ReadDescription@@YAXPAXHPAUcTerrainDistributeDescription_s00f6_3a50@SP@@@Z  00f63d00  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
