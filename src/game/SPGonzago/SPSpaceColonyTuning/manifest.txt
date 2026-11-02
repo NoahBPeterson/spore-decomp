@@ -1,0 +1,2 @@
+# source  symbol  va  flags
+../src/game/SPGonzago/SPSpaceColonyTuning.cpp  ?f@C010297e0@@QAEXXZ  010297e0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include

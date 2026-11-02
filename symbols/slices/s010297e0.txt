@@ -1,5 +1,6 @@
-# <va> <Name>  # evidence
-010297e0 C010297e0::f  # thiscall dtor/thunk releasing mProp and calling PropertyManager()->Unregister
+00ba9370 ?GetEmpireByID@cStarManager@SP@@QBEPAVcEmpire@2@I@Z  # SP::cStarManager::GetEmpireByID (callee of s010297e0, named from the dev publics; slice address comment)
+00c3e0b0 ?Init@cSPGameDataUFO@SP@@QAEXW4eUFOType@2@PAVcEmpire@2@@Z  # SP::cSPGameDataUFO::Init (callee of s010297e0, named from the dev publics; slice address comment)
+010297e0 ?f@C010297e0@@QAEXXZ  # C010297e0::f migrated from s010297e0 (verbatim, slice spelling)
 01029950 SP::IsPlanetAttackableByPlayer  # empire != player && distance/priority checks
 010299c0 SP::PlayerHasAnyAutoblaster  # inventory HasItem on the three autoblaster keys
 01029a10 SP::IsValidSpaceCommTarget  # game-mode + star/empire/planet checks
