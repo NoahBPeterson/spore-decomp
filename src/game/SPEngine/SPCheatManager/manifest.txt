@@ -1,4 +1,16 @@
 # source  symbol  va  flags
+../src/game/SPEngine/SPCheatManager.cpp  ?CheckFlagA@@YGHPAX@Z  0067e160  /O2 /MD /Gy /GS- /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/SPCheatManager.cpp  ?Description@HistoryCommand@@UAEPBDH@Z  0067e370  /O2 /MD /Gy /GS- /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/SPCheatManager.cpp  ?Description@ClearConsoleCommand@@UAEPBDH@Z  0067e450  /O2 /MD /Gy /GS- /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/SPCheatManager.cpp  ?BroadcastVisible@cCheatManager@@QAEXI@Z  0067e6f0  /O2 /MD /Gy /GS- /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/SPCheatManager.cpp  ?BroadcastHidden@cCheatManager@@QAEXI@Z  0067e730  /O2 /MD /Gy /GS- /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/SPCheatManager.cpp  ?BroadcastUpdate@cCheatManager@@QAEXI@Z  0067e770  /O2 /MD /Gy /GS- /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/SPCheatManager.cpp  ?BroadcastWrite@cCheatManager@@QAEXI@Z  0067e7b0  /O2 /MD /Gy /GS- /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/SPCheatManager.cpp  ?ActivateConsole@cCheatManager@@QAEXI@Z  0067e7f0  /O2 /MD /Gy /GS- /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/SPCheatManager.cpp  ?Handle@ConsoleDispatch@@QAEHPAX@Z  0067eab0  /O2 /MD /Gy /GS- /EHsc /TP /Isrc/game/include
 ../src/game/SPEngine/SPCheatManager.cpp  ?Execute@Cmd_ecb0@@QAEXPAX@Z  0067ecb0  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
 ../src/game/SPEngine/SPCheatManager.cpp  ?NewNodeFromPair@StrTree@@QAEPAUNode@@PBUPairB@@@Z  0067eef0  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
 ../src/game/SPEngine/SPCheatManager.cpp  ?Execute@Cmd_ef60@@QAE_NPBDH@Z  0067ef60  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPEngine/SPCheatManager.cpp  ?push_back@Cmd_f640@@QAEXPAPAX@Z  0067f640  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPEngine/SPCheatManager.cpp  ?NukeSub@StrTree@@QAEXPAUNode@@@Z  0067f670  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPEngine/SPCheatManager.cpp  ??1CheatMgr@@UAE@XZ  0067f910  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include

@@ -2,20 +2,20 @@
 0067ec70 ?Execute@Cmd_ec70@@QAEXPAX@Z  # Cmd_ec70::Execute migrated from s0067eae0 (verbatim, slice spelling)
 0067ecb0 ?Execute@Cmd_ecb0@@QAEXPAX@Z  # Cmd_ecb0::Execute migrated from s0067eae0 (verbatim, slice spelling)
 0067ed00 ?Init@CheatMgr@@QAE_NXZ  # CheatMgr::Init migrated from s0067eae0 (verbatim, slice spelling)
-0067ee60 SP::cCheatManager::cStrMap node ctor  # string + AutoRefCount pair constructor
+0067ee60 ??0PairB@@QAE@ABUEStr@@ABQAUICmdRef@@@Z  # PairB::PairB migrated from s0067eae0 (verbatim, slice spelling)
 0067eef0 ?NewNodeFromPair@StrTree@@QAEPAUNode@@PBUPairB@@@Z  # StrTree::NewNodeFromPair migrated from s0067eae0 (verbatim, slice spelling)
 0067ef60 ?Execute@Cmd_ef60@@QAE_NPBDH@Z  # Cmd_ef60::Execute migrated from s0067eae0 (verbatim, slice spelling)
 0067efc0 ?RunCheat@CheatMgr@@QAE_NPBD@Z  # CheatMgr::RunCheat migrated from s0067eae0 (verbatim, slice spelling)
-0067f0c0 eastl rbtree find-or-insert (FUN_0067e890 node alloc)
-0067f1f0 eastl rbtree insert wrapper
-0067f260 eastl rbtree find-or-insert (FUN_0067eef0 node alloc)
+0067f0c0 ?InsertKey@StrTree@@QAEXPAUInsResult@@PBUEStr@@D@Z  # StrTree::InsertKey migrated from s0067eae0 (verbatim, slice spelling)
+0067f1f0 ?InsertAt@StrTree@@QAEPAPAUNodeHdr@@PAPAU2@PAU2@PBUPairB@@D@Z  # StrTree::InsertAt migrated from s0067eae0 (verbatim, slice spelling)
+0067f260 ?InsertPair@StrTree@@QAEXPAUInsResult@@PBUPairB@@D@Z  # StrTree::InsertPair migrated from s0067eae0 (verbatim, slice spelling)
 0067f390 ?Shutdown@CheatMgr@@QAE_NXZ  # CheatMgr::Shutdown migrated from s0067eae0 (verbatim, slice spelling)
 0067f470 ?FindCommand@CheatMgr@@QAEPAXPBD@Z  # CheatMgr::FindCommand migrated from s0067eae0 (verbatim, slice spelling)
 0067f540 ?InsertConsole@CheatMgr@@QAEXPAUIRef@@@Z  # CheatMgr::InsertConsole migrated from s0067eae0 (verbatim, slice spelling)
 0067f5c0 ?RemoveConsole@CheatMgr@@QAEXPAUIRef@@@Z  # CheatMgr::RemoveConsole migrated from s0067eae0 (verbatim, slice spelling)
-0067f640 vector push_back (this+4/+8)
-0067f670 rbtree recursive subtree delete
+0067f640 ?push_back@Cmd_f640@@QAEXPAPAX@Z  # Cmd_f640::push_back migrated from s0067eae0 (verbatim, slice spelling)
+0067f670 ?NukeSub@StrTree@@QAEXPAUNode@@@Z  # StrTree::NukeSub migrated from s0067eae0 (verbatim, slice spelling)
 0067f710 ?FindMatches@CheatMgr@@QAEHPBDPAUPtrVec@@@Z  # CheatMgr::FindMatches migrated from s0067eae0 (verbatim, slice spelling)
-0067f790 rbtree insert-or-assign
-0067f910 App::CheatManager::~CheatManager  # vtable App::CheatManager
+0067f790 ?InsertHint@StrTree@@QAEPAPAUNodeHdr@@PAPAU2@PAU2@PBUPairB@@H@Z  # StrTree::InsertHint migrated from s0067eae0 (verbatim, slice spelling)
+0067f910 ??1CheatMgr@@UAE@XZ  # CheatMgr::~CheatMgr migrated from s0067eae0 (verbatim, slice spelling)
 0067f9b0 ?RemoveCommand@CheatMgr@@QAEXPBD@Z  # CheatMgr::RemoveCommand migrated from s0067eae0 (verbatim, slice spelling)

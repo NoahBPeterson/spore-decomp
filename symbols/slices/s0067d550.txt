@@ -11,25 +11,25 @@
 0067da60 ??0StreamCompressionZLib_s0067_d550@IO@EA@@QAE@PAVIStream_s0067_d550@12@H@Z  # StreamCompressionZLib_s0067_d550::StreamCompressionZLib migrated from s0067d550 (verbatim, slice spelling)
 0067db10 EA::IO::StreamCompressionZLib::~StreamCompressionZLib  # Close if open, deflateEnd + free stream/output buffer
 0067dbc0 EA::IO::StreamDecompressionZLib::~StreamDecompressionZLib  # release input if open, inflateEnd + free stream/input buffer
-0067e100 CheatReporter::CheatReporter  # LogReporter base ctor + AutoRef target
-0067e160 CheckFlagA  # stdcall thunk: test pObj+8 bit0 -> FlagCheckA, else return 1
-0067e190 CheckFlagB  # stdcall thunk: test (*(pObj+0xc)+8) bit0 -> FlagCheckB, else return 1
-0067e220 HelpCommand::HelpCommand  # cCommandBase base + manager + AutoRef related command
-0067e310 HistoryCommand::HistoryCommand  # cCommandBase base + owning cheat-manager AutoRef
-0067e370 HistoryCommand::Description  # idx 0/1 -> history help text, else 0
-0067e3f0 ClearConsoleCommand::ClearConsoleCommand  # cCommandBase base + owning cheat-manager AutoRef
-0067e450 ClearConsoleCommand::Description  # idx 0/1 -> "Clears the debug console", else 0
-0067e480 SP::cCheatManager::AddBuiltInCheats  # register help/history/clear cheat commands
-0067e5c0 StrNameMap::LowerBound  # eastl map<basic_string> lower_bound by stricmp
-0067e610 NewPairA  # stdcall factory: operator new (EASTL "App") + PairA(Arc01)
-0067e6f0 SP::cCheatManager::BroadcastVisible  # if logging, SetVisible(1,param) over the console set
-0067e730 SP::cCheatManager::BroadcastHidden  # SetVisible(0,param) over the console set
-0067e770 SP::cCheatManager::BroadcastUpdate  # if logging, Update(param) over the console set
-0067e7b0 SP::cCheatManager::BroadcastWrite  # Write(param) over the console set
-0067e7f0 SP::cCheatManager::ActivateConsole  # Activate(param) over the console set
-0067e830 PairB::~PairB  # release command, free string buffer when capacity-begin>1
-0067e890 NewKeyNode  # stdcall factory: operator new (EASTL "App") + KeyNode(basic_string)
-0067e900 PairB::PairB  # copy ctor: RangeInitialize(len+1), memcpy, NUL, AutoRef command
-0067e9a0 ConsoleStream::ConsoleStream  # base ctors, empty inline string buffer, target
-0067ea40 ConsoleStream::~ConsoleStream  # free inline buffer when capacity-begin>1
-0067eab0 ConsoleDispatch::Handle  # service->Process(arg), cheat manager BroadcastWrite(result)
+0067e100 ??0CheatReporter@@QAE@HPAUIU01@EA@@@Z  # CheatReporter::CheatReporter migrated from s0067d550 (verbatim, slice spelling)
+0067e160 ?CheckFlagA@@YGHPAX@Z  # CheckFlagA migrated from s0067d550 (verbatim, slice spelling)
+0067e190 ?CheckFlagB@@YGHPAX@Z  # CheckFlagB migrated from s0067d550 (verbatim, slice spelling)
+0067e220 ??0HelpCommand@@QAE@PAVcCheatManager@@PAUICmd@EA@@@Z  # HelpCommand::HelpCommand migrated from s0067d550 (verbatim, slice spelling)
+0067e310 ??0HistoryCommand@@QAE@PAVcCheatManager@@@Z  # HistoryCommand::HistoryCommand migrated from s0067d550 (verbatim, slice spelling)
+0067e370 ?Description@HistoryCommand@@UAEPBDH@Z  # HistoryCommand::Description migrated from s0067d550 (verbatim, slice spelling)
+0067e3f0 ??0ClearConsoleCommand@@QAE@PAVcCheatManager@@@Z  # ClearConsoleCommand::ClearConsoleCommand migrated from s0067d550 (verbatim, slice spelling)
+0067e450 ?Description@ClearConsoleCommand@@UAEPBDH@Z  # ClearConsoleCommand::Description migrated from s0067d550 (verbatim, slice spelling)
+0067e480 ?AddBuiltInCheats@cCheatManager@@QAEXXZ  # cCheatManager::AddBuiltInCheats migrated from s0067d550 (verbatim, slice spelling)
+0067e5c0 ?LowerBound@StrNameMap@@QAEXPAPAUSetNode_s0067_d550@@ABVKey@EA@@@Z  # StrNameMap::LowerBound migrated from s0067d550 (verbatim, slice spelling)
+0067e610 ?NewPairA@@YGPAVPairA@@ABUArc01@EA@@@Z  # NewPairA migrated from s0067d550 (verbatim, slice spelling)
+0067e6f0 ?BroadcastVisible@cCheatManager@@QAEXI@Z  # cCheatManager::BroadcastVisible migrated from s0067d550 (verbatim, slice spelling)
+0067e730 ?BroadcastHidden@cCheatManager@@QAEXI@Z  # cCheatManager::BroadcastHidden migrated from s0067d550 (verbatim, slice spelling)
+0067e770 ?BroadcastUpdate@cCheatManager@@QAEXI@Z  # cCheatManager::BroadcastUpdate migrated from s0067d550 (verbatim, slice spelling)
+0067e7b0 ?BroadcastWrite@cCheatManager@@QAEXI@Z  # cCheatManager::BroadcastWrite migrated from s0067d550 (verbatim, slice spelling)
+0067e7f0 ?ActivateConsole@cCheatManager@@QAEXI@Z  # cCheatManager::ActivateConsole migrated from s0067d550 (verbatim, slice spelling)
+0067e830 ??1PairB_s0067_d550@@QAE@XZ  # PairB_s0067_d550::~PairB migrated from s0067d550 (verbatim, slice spelling)
+0067e890 ?NewKeyNode@@YGPAVKeyNode@@PBD@Z  # NewKeyNode migrated from s0067d550 (verbatim, slice spelling)
+0067e900 ??0PairB_s0067_d550@@QAE@ABV0@@Z  # PairB_s0067_d550::PairB migrated from s0067d550 (verbatim, slice spelling)
+0067e9a0 ??0ConsoleStream@@QAE@PAUIU01@EA@@@Z  # ConsoleStream::ConsoleStream migrated from s0067d550 (verbatim, slice spelling)
+0067ea40 ??1ConsoleStream@@UAE@XZ  # ConsoleStream::~ConsoleStream migrated from s0067d550 (verbatim, slice spelling)
+0067eab0 ?Handle@ConsoleDispatch@@QAEHPAX@Z  # ConsoleDispatch::Handle migrated from s0067d550 (verbatim, slice spelling)

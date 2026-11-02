@@ -1,4 +1,4 @@
-// src/game/SPEngine/SPCheatManager.cpp -- migrated from slice(s) s0067eae0 by tools/migrate/rewrite.py
+// src/game/SPEngine/SPCheatManager.cpp -- migrated from slice(s) s0067d550, s0067eae0 by tools/migrate/rewrite.py
 // Object file: SPEngine/SPCheatManager.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -15,11 +15,12 @@ extern "C" const char* __cdecl Tokenize(const char* s, const char** end, const c
 extern "C" bool __cdecl WildcardMatch(const char*, const char*, int);   // EA::Text::WildcardMatch
 extern "C" void __cdecl Output(void*, const char*, ...);                // 0x00841000 EA::ArgScript::Output
 #include <intrin.h>
+#include "EA/IO/IStream.h"
 #pragma intrinsic(memcpy)
 
 // ---- items of slice s0067eae0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C" __declspec(dllimport) int __cdecl _stricmp(const char*, const char*);
 static inline void** VT(void* p) { return *(void***)p; }
-extern "C" void* __cdecl FUN_00921580(void*);      // eastl::RBTreeIncrement
 struct Arguments {
     void* MainArguments(void** out, int a, int b);   // 0x00838020 EA::ArgScript::cArguments::MainArguments
 };
@@ -55,6 +56,13 @@ struct Cmd_ef60 {
     EString str10;  // +0x10
     bool Execute(const char* s, int len);
 };
+struct Cmd_f640 {
+    char pad0[4];
+    void* begin;   // +0x04
+    void* end;     // +0x08
+    void push_back(void** v);
+    void grow(void* at, void* v);   // FUN_00690b80
+};
 #define TC0(R, p, off)            ((R(__thiscall*)(void*))VT(p)[(off) / 4])(p)
 #define TC1(R, p, off, A, a)      ((R(__thiscall*)(void*, A))VT(p)[(off) / 4])(p, a)
 #define TC2(R, p, off, A, a, B, b) ((R(__thiscall*)(void*, A, B))VT(p)[(off) / 4])(p, a, b)
@@ -63,17 +71,22 @@ void* __cdecl operator new(unsigned int, const char*, int, int, const char*, int
 inline void* __cdecl operator new(unsigned int, void* p) { return p; }
 inline void __cdecl operator delete(void*, void*) {}
 void __cdecl operator delete(void*) throw();   // 0x00f47380
-extern "C" void* __cdecl memcpy(void*, const void*, unsigned int);
 #define EA_ALLOC_H "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h"
 struct NodeHdr { NodeHdr* right; NodeHdr* left; NodeHdr* parent; char color; char pad[3]; };
 extern "C" NodeHdr* __cdecl RBTreeIncrement(NodeHdr*);                       // 0x921580
+extern "C" NodeHdr* __cdecl RBTreeDecrement(NodeHdr*);                       // 0x9215c0
+extern "C" void __cdecl RBTreeInsert(NodeHdr* node, NodeHdr* parent, NodeHdr* anchor, int left);  // 0x9216a0
 extern "C" void __cdecl RBTreeErase(NodeHdr* node, NodeHdr* anchor);         // 0x921880
 struct ICmdRef {   // EA::ArgScript::cICommand: slot 3 AddRef, slot 4 Release
-    virtual void s0(); virtual void s1(); virtual void s2();
-    virtual void AddRef(); virtual void Release();
+virtual void s0();
+virtual void s1();
+virtual void s2();
+virtual void AddRef();
+virtual void Release();
 };
 struct IRef {      // SP::cICheatConsole: slot 0 AddRef, slot 1 Release
-    virtual void AddRef(); virtual void Release();
+virtual void AddRef();
+virtual void Release();
 };
 struct EAlloc { EAlloc() {} };
 struct EStr {
@@ -108,6 +121,8 @@ struct PairB {
     PairB(const PairB& o);                            // 0x67e900
     ~PairB();                                         // 0x67e830
 };
+struct CmdRef { ICmdRef* p; ~CmdRef() { if (p) p->Release(); } };
+struct PairBInl { EStr k; CmdRef v; };   // same layout as PairB, with the dtor inline
 struct Node : NodeHdr { PairB v; };   // 36 bytes
 struct InsResult { NodeHdr* it; bool ok; };
 struct StrTree {
@@ -119,7 +134,7 @@ struct StrTree {
     Node* NewNodeFromPair(const PairB* v);      // 0x67eef0
     void InsertKey(InsResult* out, const EStr* key, char flag);     // 0x67f0c0
     void InsertPair(InsResult* out, const PairB* v, char flag);        // 0x67f260
-    void InsertAt(NodeHdr** out, NodeHdr* at, const PairB* v, char flag);  // 0x67f1f0
+    NodeHdr** InsertAt(NodeHdr** out, NodeHdr* at, const PairB* v, char flag);  // 0x67f1f0 (eax out on return, as retail)
     NodeHdr** InsertHint(NodeHdr** out, NodeHdr* pos, const PairB* v, int unused4);  // 0x67f790
     NodeHdr** find(NodeHdr** out, const EStr& key) throw();   // 0x923ac0
     void NukeSub(Node* n);                                // 0x67f670
@@ -154,12 +169,6 @@ struct RefSet {
     NodeHdr** Find(NodeHdr** out, const ConsoleRef* key);              // 0xe5c780
 };
 struct ScriptErr { const char* msg; };
-extern "C" void* __cdecl CreateParser();                 // 0x008408d0 EA::ArgScript::CreateParser
-extern "C" void* __cdecl EA_Trace_GetServer();           // 0x9234c0
-extern "C" void* __cdecl SP_MessageServer();             // 0x67dcc0
-extern "C" const char* __cdecl Tokenize(const char* s, const char** end, const char* delims);   // 0x840890
-extern "C" bool __cdecl WildcardMatch(const char*, const char*, int);   // EA::Text::WildcardMatch
-extern "C" void __cdecl Output(void*, const char*, ...);                // 0x00841000 EA::ArgScript::Output
 struct AppCheatHandler { char pad[0x20]; AppCheatHandler(struct CheatMgr*); };            // 0x67e9a0
 struct AppCheatConsole { char pad[0x28]; AppCheatConsole(const char*, struct CheatMgr*); };  // 0x67e100
 struct B0 { virtual ~B0() {} };
@@ -193,11 +202,478 @@ struct Cmd_eae0 {
     void* p10;       // +0x10 cheat manager (virtual interface)
     void Execute(HelpArgs* args);
 };
+extern "C" void __cdecl FUN_00690b80(void*, void*);
 // ---- items of slice s0067eae0 end
 
 // unnamed retail callees and globals that name local stubs (address in the comment)
-extern "C" NodeHdr* __cdecl RBTreeIncrement(NodeHdr*);                       // 0x921580
-extern "C" void __cdecl RBTreeErase(NodeHdr* node, NodeHdr* anchor);         // 0x921880
+
+// ---- items of slice s0067d550 begin (TODO(rewrite): local stubs, replace by canonical classes)
+
+extern "C" void __cdecl eaFree(void* p);
+extern bool __stdcall FlagCheckA(void* pObj);
+extern bool __stdcall FlagCheckB(void* pObj);
+#pragma intrinsic(_InterlockedExchange)
+#pragma intrinsic(_InterlockedExchangeAdd)
+#pragma intrinsic(_InterlockedDecrement)
+namespace EA {
+namespace IO {
+class IStream_s0067_d550 {
+ public:
+  IStream_s0067_d550() {}
+  virtual ~IStream_s0067_d550();
+  virtual int AddRef();
+  virtual int Release();
+  virtual uint32_t GetType() const;
+  virtual int GetAccessFlags() const;
+  virtual int GetState() const;
+  virtual bool Close();
+  virtual uint32_t GetSize() const;
+  virtual bool SetSize(uint32_t size);
+  virtual int GetPosition(int positionType) const;
+  virtual bool SetPosition(int position, int positionType);
+  virtual uint32_t GetAvailable() const;
+  virtual uint32_t Read(void* pData, uint32_t nSize);        // +0x30
+  virtual bool Flush();
+  virtual bool Write(const void* pData, uint32_t nSize);     // +0x38
+};
+}
+}
+void* __cdecl operator new(unsigned int size, const char* pName, int flags, unsigned debugFlags,
+                           const char* pFile, int nLine);
+struct SetNode_s0067_d550 {
+  SetNode_s0067_d550* mpNodeRight;
+  SetNode_s0067_d550* mpNodeLeft;
+  SetNode_s0067_d550* mpNodeParent;
+  char mColor;
+};
+extern "C" SetNode_s0067_d550* __cdecl RBTreeIncrement_s0067_d550(SetNode_s0067_d550* pNode);  // 0x00921580
+namespace EA {
+struct IU01 {
+  virtual int AddRef();   // +0x00
+  virtual int Release();  // +0x04
+};
+}
+namespace EA {
+struct Arc01 {
+  IU01* mpObject;
+  Arc01() : mpObject(0) {}
+  explicit Arc01(IU01* p) : mpObject(p) {
+    if (mpObject) mpObject->AddRef();
+  }
+  ~Arc01() {
+    if (mpObject) mpObject->Release();
+  }
+};
+}
+namespace EA {
+struct ICmd {
+  virtual void pad0();
+  virtual void pad1();
+  virtual void pad2();
+  virtual int AddRef();
+  virtual int Release();
+};
+}
+namespace EA {
+struct ArcICmd {
+  ICmd* mpObject;
+  ArcICmd() : mpObject(0) {}
+  explicit ArcICmd(ICmd* p) : mpObject(p) {
+    if (mpObject) mpObject->AddRef();
+  }
+};
+}
+namespace EA {
+class Key {
+ public:
+  Key(const char* pInit);                    // 0x0057cb10 (out of line)
+  void RangeInitialize(uint32_t nCapacity);  // 0x00475ab0 (out of line)
+
+  char* mpBegin;        // +0x00
+  char* mpEnd;          // +0x04
+  char* mpCapacity;     // +0x08
+  uint32_t mAllocator;  // +0x0c
+};
+}
+namespace EA {
+struct IU34 {
+  virtual void pad0();
+  virtual void pad1();
+  virtual void pad2();
+  virtual int AddRef();
+  virtual int Release();
+};
+}
+class PairA {
+ public:
+  explicit PairA(const EA::Arc01& src) : mpObject(src.mpObject) {
+    if (mpObject) mpObject->AddRef();
+  }
+
+  uint8_t pad[0x10];     // +0x00 (key string, uninitialized here)
+  EA::IU01* mpObject;    // +0x10
+};
+class KeyNode {
+ public:
+  explicit KeyNode(const char* pInit) : key(pInit) {}
+
+  uint8_t pad[0x10];  // +0x00 node header
+  EA::Key key;        // +0x10
+};
+class ICCheatMgr {
+ public:
+  virtual int AddRef();
+  virtual int Release();
+  virtual void pad2();
+  virtual void pad3();
+  virtual void pad4();
+  virtual void pad5();
+  virtual void AddCheat(const char* pName, void* pCommand, int flag);  // +0x18
+};
+class IArgParser {
+ public:
+  virtual void pad0();
+  virtual void pad1();
+  virtual void pad2();
+  virtual void pad3();
+  virtual void pad4();
+  virtual void pad5();
+  virtual void RegisterCommand(void* pCommand);            // +0x1c
+  virtual EA::ICmd* FindCommand(const char* pName);        // +0x20
+};
+class IConsole {
+ public:
+  virtual void pad0();
+  virtual void pad1();
+  virtual void pad2();
+  virtual void pad3();
+  virtual void pad4();
+  virtual void Write(uint32_t param);                 // +0x14
+  virtual void pad6();
+  virtual void SetVisible(int show, uint32_t param);  // +0x1c
+  virtual void Update(uint32_t param);                // +0x20
+  virtual void Activate(uint32_t param);              // +0x24
+};
+struct ConsoleSetNode : SetNode_s0067_d550 {
+  IConsole* mpConsole;  // +0x10
+};
+struct ConsoleSet {
+  SetNode_s0067_d550 mAnchor;    // +0x4c in cCheatManager
+  uint32_t mnSize;
+};
+class cCheatManager : public ICCheatMgr {
+ public:
+  uint8_t pad0[0x44 - 0x4];
+  IArgParser* mParser;         // +0x44 (AutoRefCount<cIParser>)
+  uint8_t pad1[0x4c - 0x48];
+  ConsoleSet mConsoles;        // +0x4c
+  uint8_t pad2[0x64 - 0x60];
+  bool mbLogEnabled;           // +0x64
+
+  void AddBuiltInCheats();              // @ 0x0067e480
+  void BroadcastVisible(uint32_t p);    // @ 0x0067e6f0
+  void BroadcastHidden(uint32_t p);     // @ 0x0067e730
+  void BroadcastUpdate(uint32_t p);     // @ 0x0067e770
+  void BroadcastWrite(uint32_t p);      // @ 0x0067e7b0
+  void ActivateConsole(uint32_t p);     // @ 0x0067e7f0
+};
+class CmdBase {
+ public:
+  CmdBase();
+  uint8_t pad[0x10 - 0x4];
+};
+class HelpCommand : public CmdBase {
+ public:
+  HelpCommand(cCheatManager* pManager, EA::ICmd* pRelated);
+  cCheatManager* mManager;  // +0x10
+  EA::ArcICmd mRelated;     // +0x14
+};
+class HistoryCommand : public CmdBase {
+ public:
+  struct ArcMgr {
+    ICCheatMgr* mpObject;
+    ArcMgr() : mpObject(0) {}
+    explicit ArcMgr(ICCheatMgr* p) : mpObject(p) {
+      if (mpObject) mpObject->AddRef();
+    }
+  };
+  HistoryCommand(cCheatManager* pManager);
+  virtual const char* Description(int idx);
+  ArcMgr mOwner;  // +0x10
+};
+class ClearConsoleCommand : public CmdBase {
+ public:
+  ClearConsoleCommand(cCheatManager* pManager);
+  virtual const char* Description(int idx);
+  HistoryCommand::ArcMgr mOwner;  // +0x10
+};
+class StrNameMap {
+ public:
+  void LowerBound(SetNode_s0067_d550** ppOut, const EA::Key& key);  // @ 0x0067e5c0
+
+  uint8_t pad[4];      // +0
+  SetNode_s0067_d550 mAnchor;     // +4 (mpNodeParent = root)
+};
+class PairB_s0067_d550 {
+ public:
+  PairB_s0067_d550(const PairB_s0067_d550& x);  // @ 0x0067e900
+  ~PairB_s0067_d550();               // @ 0x0067e830
+
+  char* mpBegin;         // +0x00
+  char* mpEnd;           // +0x04
+  char* mpCapacity;      // +0x08
+  uint32_t mAllocator;   // +0x0c
+  EA::IU34* mpCommand;   // +0x10
+};
+static char gEmptyStr[2];
+class RCPlainBlock {
+ public:
+  virtual ~RCPlainBlock() {}
+  int mRefCount;
+};
+class ConsoleStream : public EA::IO::IStream_s0067_d550, public RCPlainBlock {
+ public:
+  ConsoleStream(EA::IU01* pTarget);  // @ 0x0067e9a0
+  ~ConsoleStream();                  // @ 0x0067ea40
+
+  EA::IU01* mTarget;    // +0x0c
+  char* mpBegin;        // +0x10
+  char* mpEnd;          // +0x14
+  char* mpCapacity;     // +0x18
+};
+struct IDispatchSvc {
+  virtual void pad0();
+  virtual void pad1();
+  virtual void pad2();
+  virtual void pad3();
+  virtual int Process(void* pArg);  // +0x10
+};
+class ConsoleDispatch {
+ public:
+  int Handle(void* pArg);  // @ 0x0067eab0
+
+  uint8_t pad0[0x8];
+  IDispatchSvc* mpService;      // +0x08
+  uint8_t pad1[0x24 - 0xc];
+  cCheatManager* mManager;      // +0x24
+};
+class LogReporter {
+ public:
+  LogReporter(int nGroup);
+  uint8_t pad[0x24 - 0x4];
+};
+class CheatReporter : public LogReporter {
+ public:
+  CheatReporter(int nGroup, EA::IU01* pTarget);
+
+  EA::Arc01 mTarget;  // +0x24
+};
+// ---- items of slice s0067d550 end
+
+// @ 0x0067e100
+CheatReporter::CheatReporter(int nGroup, EA::IU01* pTarget)
+: LogReporter(nGroup), mTarget(pTarget) {}
+
+// @ 0x0067e160
+int __stdcall CheckFlagA(void* pObj)
+{
+  if (((uint8_t*)pObj)[8] & 1) {
+    if (!FlagCheckA(pObj)) return 0;
+  }
+  return 1;
+}
+
+// @ 0x0067e190
+int __stdcall CheckFlagB(void* pObj)
+{
+  if (((uint8_t*)*((void**)pObj + 3))[8] & 1) {
+    if (!FlagCheckB(pObj)) return 0;
+  }
+  return 1;
+}
+
+// @ 0x0067e220
+HelpCommand::HelpCommand(cCheatManager* pManager, EA::ICmd* pRelated)
+: mManager(pManager), mRelated(pRelated) {}
+
+// @ 0x0067e310
+HistoryCommand::HistoryCommand(cCheatManager* pManager)
+: mOwner(pManager) {}
+
+// @ 0x0067e370
+const char* HistoryCommand::Description(int idx)
+{
+  switch (idx) {
+    case 0:
+    case 1:
+      return "[<items:int>] Lists the last n commands in the command history";
+    default:
+      return 0;
+  }
+}
+
+// @ 0x0067e3f0
+ClearConsoleCommand::ClearConsoleCommand(cCheatManager* pManager)
+: mOwner(pManager) {}
+
+// @ 0x0067e450
+const char* ClearConsoleCommand::Description(int idx)
+{
+  switch (idx) {
+    case 0:
+    case 1:
+      return "Clears the debug console";
+    default:
+      return 0;
+  }
+}
+
+// @ 0x0067e480
+void cCheatManager::AddBuiltInCheats()
+{
+  EA::ICmd* pCmd = mParser->FindCommand("help");
+  if (pCmd) pCmd->AddRef();
+  if (pCmd) mParser->RegisterCommand(pCmd);
+  HelpCommand* pH = new ("App/CheatManager", 0, 0, 0, 0) HelpCommand(this, pCmd);
+  AddCheat("help", pH, 0);
+  HistoryCommand* pI = new ("App/CheatManager", 0, 0, 0, 0) HistoryCommand(this);
+  AddCheat("history", pI, 0);
+  ClearConsoleCommand* pC = new ("App/CheatManager", 0, 0, 0, 0) ClearConsoleCommand(this);
+  AddCheat("clear", pC, 0);
+  if (pCmd) pCmd->Release();
+}
+
+// @ 0x0067e5c0
+void StrNameMap::LowerBound(SetNode_s0067_d550** ppOut, const EA::Key& key)
+{
+  SetNode_s0067_d550* pCandidate = (SetNode_s0067_d550*)&mAnchor;
+  SetNode_s0067_d550* pNode = mAnchor.mpNodeParent;
+  while (pNode) {
+    if (_stricmp(*(const char**)((char*)pNode + 0x10), key.mpBegin) < 0) {
+      pNode = pNode->mpNodeRight;
+    } else {
+      pCandidate = pNode;
+      pNode = pNode->mpNodeLeft;
+    }
+  }
+  *ppOut = pCandidate;
+}
+
+// @ 0x0067e610
+PairA* __stdcall NewPairA(const EA::Arc01& src)
+{
+  return new ("App", 0, 0, "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\"
+                           "UTFKernel\\EASTL\\include\\EASTL/allocator.h",
+               0xd1) PairA(src);
+}
+
+// @ 0x0067e6f0
+void cCheatManager::BroadcastVisible(uint32_t param)
+{
+  if (mbLogEnabled) {
+    SetNode_s0067_d550* end = (SetNode_s0067_d550*)&mConsoles;
+    SetNode_s0067_d550* it = mConsoles.mAnchor.mpNodeLeft;
+    while (it != end) {
+      ((ConsoleSetNode*)it)->mpConsole->SetVisible(1, param);
+      it = RBTreeIncrement_s0067_d550(it);
+    }
+  }
+}
+
+// @ 0x0067e730
+void cCheatManager::BroadcastHidden(uint32_t param)
+{
+  SetNode_s0067_d550* end = (SetNode_s0067_d550*)&mConsoles;
+  SetNode_s0067_d550* it = mConsoles.mAnchor.mpNodeLeft;
+  while (it != end) {
+    ((ConsoleSetNode*)it)->mpConsole->SetVisible(0, param);
+    it = RBTreeIncrement_s0067_d550(it);
+  }
+}
+
+// @ 0x0067e770
+void cCheatManager::BroadcastUpdate(uint32_t param)
+{
+  if (mbLogEnabled) {
+    SetNode_s0067_d550* end = (SetNode_s0067_d550*)&mConsoles;
+    SetNode_s0067_d550* it = mConsoles.mAnchor.mpNodeLeft;
+    while (it != end) {
+      ((ConsoleSetNode*)it)->mpConsole->Update(param);
+      it = RBTreeIncrement_s0067_d550(it);
+    }
+  }
+}
+
+// @ 0x0067e7b0
+void cCheatManager::BroadcastWrite(uint32_t param)
+{
+  SetNode_s0067_d550* end = (SetNode_s0067_d550*)&mConsoles;
+  SetNode_s0067_d550* it = mConsoles.mAnchor.mpNodeLeft;
+  while (it != end) {
+    ((ConsoleSetNode*)it)->mpConsole->Write(param);
+    it = RBTreeIncrement_s0067_d550(it);
+  }
+}
+
+// @ 0x0067e7f0
+void cCheatManager::ActivateConsole(uint32_t param)
+{
+  SetNode_s0067_d550* end = (SetNode_s0067_d550*)&mConsoles;
+  SetNode_s0067_d550* it = mConsoles.mAnchor.mpNodeLeft;
+  while (it != end) {
+    ((ConsoleSetNode*)it)->mpConsole->Activate(param);
+    it = RBTreeIncrement_s0067_d550(it);
+  }
+}
+
+// @ 0x0067e830
+PairB_s0067_d550::~PairB_s0067_d550()
+{
+  if (mpCommand) mpCommand->Release();
+  if ((mpCapacity - mpBegin) > 1 && mpBegin) eaFree(mpBegin);
+}
+
+// @ 0x0067e890
+KeyNode* __stdcall NewKeyNode(const char* pString)
+{
+  return new ("App", 0, 0, "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\"
+                           "UTFKernel\\EASTL\\include\\EASTL/allocator.h",
+               0xd1) KeyNode(pString);
+}
+
+// @ 0x0067e900
+PairB_s0067_d550::PairB_s0067_d550(const PairB_s0067_d550& x)
+: mpBegin(0), mpEnd(0), mpCapacity(0) {
+  uint32_t n = x.mpEnd - x.mpBegin;
+  ((EA::Key*)this)->RangeInitialize(n + 1);
+  memcpy(mpBegin, x.mpBegin, n);
+  mpEnd = mpBegin + n;
+  *mpEnd = 0;
+  mpCommand = x.mpCommand;
+  if (mpCommand) mpCommand->AddRef();
+}
+
+// @ 0x0067e9a0
+ConsoleStream::ConsoleStream(EA::IU01* pTarget)
+: mTarget(pTarget) {
+  mpBegin = gEmptyStr;
+  mpEnd = gEmptyStr;
+  mpCapacity = gEmptyStr + 1;
+}
+
+// @ 0x0067ea40
+ConsoleStream::~ConsoleStream()
+{
+  if ((mpCapacity - mpBegin) > 1 && mpBegin) eaFree(mpBegin);
+}
+
+// @ 0x0067eab0
+int ConsoleDispatch::Handle(void* pArg)
+{
+  int v = mpService->Process(pArg);
+  mManager->BroadcastWrite(v);
+  return 0;
+}
 
 // @ 0x0067eae0
 void Cmd_eae0::Execute(HelpArgs* args)
@@ -284,6 +760,21 @@ bool CheatMgr::Init()
     return true;
 }
 
+// @ 0x0067ee60
+PairB::PairB(const EStr& key, ICmdRef* const& val)
+{
+    const char* s = key.b;
+    const char* e = key.e;
+    unsigned n = (unsigned)(e - s);
+    k.AllocateSelf(n + 1);
+    char* d = k.b;
+    memcpy(d, s, n);
+    k.e = d + n;
+    *k.e = 0;
+    v = val;
+    if (v) v->AddRef();
+}
+
 // @ 0x0067eef0
 Node* StrTree::NewNodeFromPair(const PairB* val)
 {
@@ -326,6 +817,96 @@ bool CheatMgr::RunCheat(const char* cmd)
         }
     }
     return ok;
+}
+
+// @ 0x0067f0c0
+void StrTree::InsertKey(InsResult* out, const EStr* key, char)
+{
+    NodeHdr* parent = &a;
+    NodeHdr* n = a.parent;
+    bool less = true;
+    while (n) {
+        less = _stricmp(key->b, ((Node*)n)->v.k.b) < 0;
+        parent = n;
+        n = less ? n->left : n->right;
+    }
+    NodeHdr* pos = parent;
+    if (less) {
+        if (parent == a.left) {
+            int left;
+            if (parent != &a && _stricmp(key->b, ((Node*)parent)->v.k.b) >= 0) left = 1; else left = 0;
+            Node* nn = NewNodeFromKey(key);
+            RBTreeInsert(nn, parent, &a, left);
+            count += 1;
+            out->it = nn;
+            out->ok = true;
+            return;
+        }
+        parent = RBTreeDecrement(parent);
+    }
+    if (_stricmp(((Node*)parent)->v.k.b, key->b) < 0) {
+        int left;
+        if (pos != &a && _stricmp(key->b, ((Node*)pos)->v.k.b) >= 0) left = 1; else left = 0;
+        Node* nn = NewNodeFromKey(key);
+        RBTreeInsert(nn, pos, &a, left);
+        count += 1;
+        out->it = nn;
+        out->ok = true;
+        return;
+    }
+    out->it = parent;
+    out->ok = false;
+}
+
+// @ 0x0067f1f0
+NodeHdr** StrTree::InsertAt(NodeHdr** out, NodeHdr* at, const PairB* val, char flag)
+{
+    int left;
+    if (!flag && at != &a && _stricmp(val->k.b, ((Node*)at)->v.k.b) >= 0) left = 1; else left = 0;
+    Node* nn = NewNodeFromPair(val);
+    RBTreeInsert(nn, at, &a, left);
+    count += 1;
+    *out = nn;
+    return out;
+}
+
+// @ 0x0067f260
+void StrTree::InsertPair(InsResult* out, const PairB* val, char)
+{
+    NodeHdr* parent = &a;
+    NodeHdr* n = a.parent;
+    bool less = true;
+    while (n) {
+        less = _stricmp(val->k.b, ((Node*)n)->v.k.b) < 0;
+        parent = n;
+        n = less ? n->left : n->right;
+    }
+    NodeHdr* pos = parent;
+    if (less) {
+        if (parent == a.left) {
+            int left;
+            if (parent != &a && _stricmp(val->k.b, ((Node*)parent)->v.k.b) >= 0) left = 1; else left = 0;
+            Node* nn = NewNodeFromPair(val);
+            RBTreeInsert(nn, parent, &a, left);
+            count += 1;
+            out->it = nn;
+            out->ok = true;
+            return;
+        }
+        parent = RBTreeDecrement(parent);
+    }
+    if (_stricmp(((Node*)parent)->v.k.b, val->k.b) < 0) {
+        int left;
+        if (pos != &a && _stricmp(val->k.b, ((Node*)pos)->v.k.b) >= 0) left = 1; else left = 0;
+        Node* nn = NewNodeFromPair(val);
+        RBTreeInsert(nn, pos, &a, left);
+        count += 1;
+        out->it = nn;
+        out->ok = true;
+        return;
+    }
+    out->it = parent;
+    out->ok = false;
 }
 
 // @ 0x0067f390
@@ -390,6 +971,33 @@ void CheatMgr::RemoveConsole(IRef* c)
     }
 }
 
+// @ 0x0067f640
+void Cmd_f640::push_back(void** v)
+{
+    void* p = begin;
+    if (p < end) {
+        begin = (char*)p + 4;
+        if (p) {
+            *(void**)p = *v;
+            return;
+        }
+    } else {
+        grow(p, v);
+    }
+}
+
+// @ 0x0067f670
+void StrTree::NukeSub(Node* n)
+{
+    while (n) {
+        NukeSub((Node*)n->right);
+        Node* next = (Node*)n->left;
+        ((PairBInl*)&n->v)->~PairBInl();
+        operator delete(n);
+        n = next;
+    }
+}
+
 // @ 0x0067f710
 int CheatMgr::FindMatches(const char* pat, PtrVec* out)
 {
@@ -409,6 +1017,50 @@ int CheatMgr::FindMatches(const char* pat, PtrVec* out)
         }
     }
     return n;
+}
+
+// @ 0x0067f790
+NodeHdr** StrTree::InsertHint(NodeHdr** out, NodeHdr* pos, const PairB* val, int)
+{
+    NodeHdr* anchor = &a;
+    if (pos != a.right && pos != anchor) {
+        NodeHdr* next = RBTreeIncrement(pos);
+        if (_stricmp(((Node*)pos)->v.k.b, val->k.b) < 0 &&
+            _stricmp(val->k.b, ((Node*)next)->v.k.b) < 0) {
+            if (pos->right == 0) {
+                InsertAt(out, pos, val, 0);
+                return out;
+            }
+            Node* nn = NewNodeFromPair(val);
+            RBTreeInsert(nn, next, anchor, 0);
+            count += 1;
+            *out = nn;
+            return out;
+        }
+        InsResult r;
+        InsertPair(&r, val, 0);
+        *out = r.it;
+        return out;
+    }
+    if (count != 0 && _stricmp(((Node*)a.right)->v.k.b, val->k.b) < 0) {
+        NodeHdr* last = a.right;
+        int left;
+        if (last != anchor && _stricmp(val->k.b, ((Node*)last)->v.k.b) >= 0) left = 1; else left = 0;
+        Node* nn = NewNodeFromPair(val);
+        RBTreeInsert(nn, last, anchor, left);
+        count += 1;
+        *out = nn;
+        return out;
+    }
+    InsResult r;
+    InsertPair(&r, val, 0);
+    *out = r.it;
+    return out;
+}
+
+// @ 0x0067f910
+CheatMgr::~CheatMgr()
+{
 }
 
 // @ 0x0067f9b0
