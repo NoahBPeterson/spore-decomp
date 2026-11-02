@@ -1,1 +1,15 @@
 # source  symbol  va  flags
+../src/game/SPMovie/movieencoder_avi.cpp  ?NextDataExpected@MovieEncoder_Avi@movie@rw@@QAEIXZ  00fc9950  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPMovie/movieencoder_avi.cpp  ?AddAudioSamples@MovieEncoder_Avi@movie@rw@@QAEXPAUAudioSamples@23@@Z  00fc9970  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPMovie/movieencoder_avi.cpp  ?AddVideoFrame@MovieEncoder_Avi@movie@rw@@QAEXPAX@Z  00fc9a10  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPMovie/movieencoder_avi.cpp  ?BeginEncoding@MovieEncoder_Avi@movie@rw@@QAEXXZ  00fca0e0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPMovie/movieencoder_avi.cpp  ?AddAVIIndexEntry@MovieEncoder_Avi@movie@rw@@QAEXPBUAviIndexEntry@23@@Z  00fca160  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPMovie/movieencoder_avi.cpp  ?FreeAVIIndexEntries@MovieEncoder_Avi@movie@rw@@QAEXXZ  00fca250  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPMovie/movieencoder_avi.cpp  ?Ctor@MovieEncoder_Avi@movie@rw@@QAEPAV123@I@Z  00fca2c0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPMovie/movieencoder_avi.cpp  ?Shutdown@MovieEncoder_Avi_s00fc_a300@movie@rw@@QAEXXZ  00fca300  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPMovie/movieencoder_avi.cpp  ?EncodeAudioData@movie@rw@@YAXPBXHPAVMovieEncoder_Avi_s00fc_a300@12@@Z  00fca460  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPMovie/movieencoder_avi.cpp  ?EncodeVideoData@movie@rw@@YAXPBXHHPAVMovieEncoder_Avi_s00fc_a300@12@@Z  00fca510  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPMovie/movieencoder_avi.cpp  ?AllocateBuffer@MovieEncoder_Avi_s00fc_a300@movie@rw@@QAEXXZ  00fca5c0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPMovie/movieencoder_avi.cpp  ?Init@MovieEncoder_Avi_s00fc_a300@movie@rw@@QAEXPAX@Z  00fca640  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPMovie/movieencoder_avi.cpp  ?SetAudioEncoder@MovieEncoder_Avi_s00fc_a300@movie@rw@@QAEXPAVIAudioEncoder_s00fc_a300@23@@Z  00fca6a0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPMovie/movieencoder_avi.cpp  ?SetVideoEncoder@MovieEncoder_Avi_s00fc_a300@movie@rw@@QAEXPAVIVideoEncoder_s00fc_a300@23@@Z  00fca6c0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include

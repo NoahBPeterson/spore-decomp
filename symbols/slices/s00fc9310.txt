@@ -1,4 +1,11 @@
 00fc8500 rw::movie::BufferedWriter::WriteFill  # memset-style fill of n bytes through the buffer
 00fc8550 rw::movie::BufferedWriter::Write16  # appends a word (flush when <2 bytes left)
 00fc8580 rw::movie::BufferedWriter::Write32  # appends a dword to the buffered writer (flush via 00fc83b0 when <4 bytes left)
+00fc9950 ?NextDataExpected@MovieEncoder_Avi@movie@rw@@QAEIXZ  # MovieEncoder_Avi::NextDataExpected migrated from s00fc9310 (verbatim, slice spelling)
+00fc9970 ?AddAudioSamples@MovieEncoder_Avi@movie@rw@@QAEXPAUAudioSamples@23@@Z  # MovieEncoder_Avi::AddAudioSamples migrated from s00fc9310 (verbatim, slice spelling)
+00fc9a10 ?AddVideoFrame@MovieEncoder_Avi@movie@rw@@QAEXPAX@Z  # MovieEncoder_Avi::AddVideoFrame migrated from s00fc9310 (verbatim, slice spelling)
 00fc9a60 ?WriteAVIHeaders@MovieEncoder_Avi@movie@rw@@QAEIXZ  # MovieEncoder_Avi::WriteAVIHeaders migrated from s00fc9310 (verbatim, slice spelling)
+00fca0e0 ?BeginEncoding@MovieEncoder_Avi@movie@rw@@QAEXXZ  # MovieEncoder_Avi::BeginEncoding migrated from s00fc9310 (verbatim, slice spelling)
+00fca160 ?AddAVIIndexEntry@MovieEncoder_Avi@movie@rw@@QAEXPBUAviIndexEntry@23@@Z  # MovieEncoder_Avi::AddAVIIndexEntry migrated from s00fc9310 (verbatim, slice spelling)
+00fca250 ?FreeAVIIndexEntries@MovieEncoder_Avi@movie@rw@@QAEXXZ  # MovieEncoder_Avi::FreeAVIIndexEntries migrated from s00fc9310 (verbatim, slice spelling)
+00fca2c0 ?Ctor@MovieEncoder_Avi@movie@rw@@QAEPAV123@I@Z  # MovieEncoder_Avi::Ctor migrated from s00fc9310 (verbatim, slice spelling)

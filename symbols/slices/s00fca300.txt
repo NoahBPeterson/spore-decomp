@@ -1,11 +1,11 @@
-00fca300 MovieEncoder_Avi::Shutdown  # free the compression buffer via mAllocator->Free and null it
-00fca360 MovieEncoder_Avi::EndEncoding  # capture stopwatch stop time, stop both encoders, flush idx1 index + count, walk AVI index blocks, FlushRemote/WriteAVIHeaders/Flush, FreeAVIIndexEntries, Stopwatch::Stop
-00fca460 EncodeAudioData  # (data, size, MovieEncoder_Avi*): write '00dd' fourcc + size + data + 0xff pad, add index entry, advance chunk offsets (4 args, self dead-last)
-00fca510 EncodeVideoData  # (data, size, type, MovieEncoder_Avi*): write video fourcc + size + data + pad, add index entry, advance chunk offsets
-00fca5c0 MovieEncoder_Avi::AllocateBuffer  # allocate mCompressionBuffer from the allocator, log + clear if it fails
-00fca640 MovieEncoder_Avi::Init  # store allocator, AllocateBuffer, numIndexEntriesPerBlock = 60000000/frameUs, allocate + construct the Stopwatch
-00fca6a0 MovieEncoder_Avi::SetAudioEncoder  # store mAudioEncoder; on non-null set its output-buffer callback (vtable+0x1c) to the AVI audio writer
-00fca6c0 MovieEncoder_Avi::SetVideoEncoder  # store mVideoEncoder; on non-null set its output-buffer callback to the AVI video writer and read back the frame rate
+00fca300 ?Shutdown@MovieEncoder_Avi_s00fc_a300@movie@rw@@QAEXXZ  # MovieEncoder_Avi_s00fc_a300::Shutdown migrated from s00fca300 (verbatim, slice spelling)
+00fca360 ?EndEncoding@MovieEncoder_Avi_s00fc_a300@movie@rw@@QAEXXZ  # MovieEncoder_Avi_s00fc_a300::EndEncoding migrated from s00fca300 (verbatim, slice spelling)
+00fca460 ?EncodeAudioData@movie@rw@@YAXPBXHPAVMovieEncoder_Avi_s00fc_a300@12@@Z  # EncodeAudioData migrated from s00fca300 (verbatim, slice spelling)
+00fca510 ?EncodeVideoData@movie@rw@@YAXPBXHHPAVMovieEncoder_Avi_s00fc_a300@12@@Z  # EncodeVideoData migrated from s00fca300 (verbatim, slice spelling)
+00fca5c0 ?AllocateBuffer@MovieEncoder_Avi_s00fc_a300@movie@rw@@QAEXXZ  # MovieEncoder_Avi_s00fc_a300::AllocateBuffer migrated from s00fca300 (verbatim, slice spelling)
+00fca640 ?Init@MovieEncoder_Avi_s00fc_a300@movie@rw@@QAEXPAX@Z  # MovieEncoder_Avi_s00fc_a300::Init migrated from s00fca300 (verbatim, slice spelling)
+00fca6a0 ?SetAudioEncoder@MovieEncoder_Avi_s00fc_a300@movie@rw@@QAEXPAVIAudioEncoder_s00fc_a300@23@@Z  # MovieEncoder_Avi_s00fc_a300::SetAudioEncoder migrated from s00fca300 (verbatim, slice spelling)
+00fca6c0 ?SetVideoEncoder@MovieEncoder_Avi_s00fc_a300@movie@rw@@QAEXPAVIVideoEncoder_s00fc_a300@23@@Z  # MovieEncoder_Avi_s00fc_a300::SetVideoEncoder migrated from s00fca300 (verbatim, slice spelling)
 00fca720 ?Ctor@MoviePlayer@movie@rw@@QAEPAV123@PAUICoreAllocator@23@@Z  # MoviePlayer::Ctor migrated from s00fca300 (verbatim, slice spelling)
 00fca9b0 ?SetDataCallback@MoviePlayer@movie@rw@@QAEXPAX@Z  # MoviePlayer::SetDataCallback migrated from s00fca300 (verbatim, slice spelling)
 00fca9d0 ?SetVideoFilter@MoviePlayer@movie@rw@@QAEXPAX@Z  # MoviePlayer::SetVideoFilter migrated from s00fca300 (verbatim, slice spelling)
