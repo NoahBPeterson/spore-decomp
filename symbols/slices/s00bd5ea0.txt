@@ -1,4 +1,6 @@
 00804830 ?GetPoliticalID@cGameData@SP@@UBEIXZ  # SP::cGameData::GetPoliticalID (callee of s00bd5ea0, named from the dev publics; slice address comment)
+00bd5ea0 ?FUN_00bd5ea0@@YI_NPAVcCheatObject@SP@@@Z  # FUN_00bd5ea0 migrated from s00bd5ea0 (verbatim, slice spelling)
+00bd6180 ?FUN_00bd6180@@YIPAXPAD@Z  # FUN_00bd6180 migrated from s00bd5ea0 (verbatim, slice spelling)
 00bd61c0 ?RemoveOwner@cCelestialBody_s00bd_5ea0@SP@@QAEXXZ  # cCelestialBody_s00bd_5ea0::RemoveOwner migrated from s00bd5ea0 (verbatim, slice spelling)
 00bd6230 ?WriteTagged@cGameData_s00bd_5ea0@SP@@QAEXPAX@Z  # cGameData_s00bd_5ea0::WriteTagged migrated from s00bd5ea0 (verbatim, slice spelling)
 00bd6300 ?UpdateOrbit@cCelestialBody_s00bd_5ea0@SP@@QAEXXZ  # cCelestialBody_s00bd_5ea0::UpdateOrbit migrated from s00bd5ea0 (verbatim, slice spelling)

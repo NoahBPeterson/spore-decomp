@@ -1,1 +1,11 @@
-00bd2af0 SP::cPlacedModel::UpdateWorldGeometry  # Claude-coined: rotates hull points/normals by locomotive orientation (vcalls 0x2c/0x30/0x34 on this+0x34), snaps to planet surface, composes part transforms
+00bd2840 ?FUN_00bd2840@@YAEPAHPBDPAUPropBlock@@@Z  # FUN_00bd2840 migrated from s00bd2840 (verbatim, slice spelling)
+00bd2a10 ?FUN_00bd2a10@@YAPAURecord@@PAU1@00@Z  # FUN_00bd2a10 migrated from s00bd2840 (verbatim, slice spelling)
+00bd2a80 ?FUN_00bd2a80@@YAPAURecord@@PAU1@00@Z  # FUN_00bd2a80 migrated from s00bd2840 (verbatim, slice spelling)
+00bd2af0 ?UpdateWorldGeometry@cPlacedModel@@QAEXXZ  # cPlacedModel::UpdateWorldGeometry migrated from s00bd2840 (verbatim, slice spelling)
+00bd3230 ?CallFunc58@cCommunity_s00bd_2840@@QAEXPAX@Z  # cCommunity_s00bd_2840::CallFunc58 migrated from s00bd2840 (verbatim, slice spelling)
+00bd3280 ?FindPeerA@cCommunity_s00bd_2840@@QAEEPAV1@@Z  # cCommunity_s00bd_2840::FindPeerA migrated from s00bd2840 (verbatim, slice spelling)
+00bd3380 ?SetDirection@cCommunity_s00bd_2840@@QAEXPAM@Z  # cCommunity_s00bd_2840::SetDirection migrated from s00bd2840 (verbatim, slice spelling)
+00bd3500 ?CallFunc54@cCommunity_s00bd_2840@@QAEXPAM@Z  # cCommunity_s00bd_2840::CallFunc54 migrated from s00bd2840 (verbatim, slice spelling)
+00bd3550 ?FindPeerB@cCommunity_s00bd_2840@@QAEEPAV1@@Z  # cCommunity_s00bd_2840::FindPeerB migrated from s00bd2840 (verbatim, slice spelling)
+00bd3640 ?SetPosition@cCommunity_s00bd_2840@@QAEXPAM@Z  # cCommunity_s00bd_2840::SetPosition migrated from s00bd2840 (verbatim, slice spelling)
+00bd36c0 ?SetOrientation@cCommunity_s00bd_2840@@QAEXPAM@Z  # cCommunity_s00bd_2840::SetOrientation migrated from s00bd2840 (verbatim, slice spelling)

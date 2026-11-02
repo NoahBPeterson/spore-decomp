@@ -1,6 +1,7 @@
 00449c20 SP::normalized_safe  # cdecl sret(Vec3 out, const Vec3* in)
 00576b00 AxisAngleMatrix  # cdecl sret(Matrix33 out, const Vec3* axis, float angle)
 0059ab10 IsFinite  # cdecl bool(float): exponent field check
+00bd1820 ??0cBuilding_s00bd_1820@@QAE@XZ  # cBuilding_s00bd_1820::cBuilding migrated from s00bd1820 (verbatim, slice spelling)
 00bd1ab0 ?PushCoord@cBuilding@@QAEXI@Z  # cBuilding::PushCoord migrated from s00bd1820 (verbatim, slice spelling)
 00bd1af0 ??0cBuildingCityHall@@QAE@XZ  # cBuildingCityHall::cBuildingCityHall migrated from s00bd1820 (verbatim, slice spelling)
 00bd1b70 ??0cBuildingIndustry@@QAE@XZ  # cBuildingIndustry::cBuildingIndustry migrated from s00bd1820 (verbatim, slice spelling)
@@ -12,3 +13,4 @@
 00bd2310 ?Init@cSPCreatureCitizen@@QAEXPAUcCitizenData@@@Z  # cSPCreatureCitizen::Init migrated from s00bd1820 (verbatim, slice spelling)
 00bd2560 ?Fn_00bd2560@@YIXPAUcFlattenOuter@@PAXPAUcStr8@@@Z  # Fn_00bd2560 migrated from s00bd1820 (verbatim, slice spelling)
 00bd2600 ??0cBuildingScenario@@QAE@XZ  # cBuildingScenario::cBuildingScenario migrated from s00bd1820 (verbatim, slice spelling)
+00bd27d0 ?Fn_00bd27d0@@YIXPAUcBuilding_s00bd_1820@@@Z  # Fn_00bd27d0 migrated from s00bd1820 (verbatim, slice spelling)

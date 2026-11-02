@@ -1,10 +1,32 @@
 # source  symbol  va  flags
+../src/game/SPGonzago/SPBuildings.cpp  ?bcc500@cTribeTool@@QAEPAXH@Z  00bcc500  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPBuildings.cpp  ?bcc570@cSpatialObject@@QAEDXZ  00bcc570  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPBuildings.cpp  ?bcc5e0@cSpatialObject@@QAEXHM@Z  00bcc5e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPBuildings.cpp  ?bcc640@cSpatialObject@@QAEMXZ  00bcc640  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPBuildings.cpp  ?bcc6e0@cSpatialObject@@QAEXD@Z  00bcc6e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPBuildings.cpp  ?bcc7e0@cTribeTool@@QAEXH@Z  00bcc7e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPBuildings.cpp  ?bcc800@cTribeTool@@QAEHXZ  00bcc800  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPBuildings.cpp  ?bcc820@cTribeTool@@QAEHXZ  00bcc820  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPBuildings.cpp  ?bcc860@cTribeTool@@QAEXH@Z  00bcc860  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPBuildings.cpp  ?Read1@cVehicle@@QAEXPAX@Z  00bcc920  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPBuildings.cpp  ?Read2@cVehicle@@QAEXPAX@Z  00bcca60  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPBuildings.cpp  ?Read3@cVehicle@@QAEXPAX@Z  00bccba0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPBuildings.cpp  ?Read4@cVehicle@@QAE_NPAX@Z  00bccd10  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPBuildings.cpp  ?bccdc0@cSpatialObject@@QAEDXZ  00bccdc0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPBuildings.cpp  ?GetProp@cVehicle@@QAEPAXH@Z  00bcce20  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPBuildings.cpp  ?bccf20@cVehicle@@QAEXXZ  00bccf20  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPBuildings.cpp  ?WriteAsText@cVehicle@@QAEXPAX@Z  00bcd030  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPBuildings.cpp  ?bcd250@cVehicle@@QAEHXZ  00bcd250  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPBuildings.cpp  ?SetFloat@cCommunityT@@QAEXM@Z  00bcd3f0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPBuildings.cpp  ?FUN_00bcd450@@YA_NIPAI@Z  00bcd450  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPBuildings.cpp  ?SetOwnerCity2@cOwnerT@@QAEXPAX@Z  00bcd5b0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPBuildings.cpp  ?RemoveOwner@cOwnerT@@QAEXXZ  00bcd5f0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPBuildings.cpp  ?RemoveOwnerFull@cOwnerT@@QAEXXZ  00bcddc0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPBuildings.cpp  ?FUN_00bcde40@@YAMI@Z  00bcde40  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPBuildings.cpp  ?FUN_00bcde70@@YAMI@Z  00bcde70  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPBuildings.cpp  ?FUN_00bcdea0@@YAMI@Z  00bcdea0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPBuildings.cpp  ??1cTurret@@QAE@XZ  00bce0a0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPBuildings.cpp  ?FUN_00bce400@@YAXPAX@Z  00bce400  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPBuildings.cpp  ?FUN_00bce5d0@cBuilding@@QAEHXZ  00bce5d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPBuildings.cpp  ?FUN_00bce5f0@cSpatialObject_s00bc_e1e0@@QAE_NI@Z  00bce5f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPBuildings.cpp  ?FUN_00bce660@cBuilding@@QAEXPAX@Z  00bce660  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
@@ -15,5 +37,15 @@
 ../src/game/SPGonzago/SPBuildings.cpp  ?FUN_00bce9b0@cBuilding@@QAEXXZ  00bce9b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPBuildings.cpp  ?FUN_00bcea10@cBuilding@@QAEXI@Z  00bcea10  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPBuildings.cpp  ?FUN_00bcea30@@YAMIIIM@Z  00bcea30  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPBuildings.cpp  ?FUN_00bcebc0@@YAPAUVector3@@XZ  00bcebc0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPBuildings.cpp  ?FUN_00bcec50@@YAPAUVector3@@XZ  00bcec50  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPBuildings.cpp  ?Fn_00bd27d0@@YIXPAUcBuilding_s00bd_1820@@@Z  00bd27d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPBuildings.cpp  ?FUN_00bd2a10@@YAPAURecord@@PAU1@00@Z  00bd2a10  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPBuildings.cpp  ?FUN_00bd2a80@@YAPAURecord@@PAU1@00@Z  00bd2a80  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPBuildings.cpp  ?CallFunc58@cCommunity_s00bd_2840@@QAEXPAX@Z  00bd3230  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPBuildings.cpp  ?CallFunc54@cCommunity_s00bd_2840@@QAEXPAM@Z  00bd3500  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPBuildings.cpp  ?SetPosition@cCommunity_s00bd_2840@@QAEXPAM@Z  00bd3640  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPBuildings.cpp  ?SetOrientation@cCommunity_s00bd_2840@@QAEXPAM@Z  00bd36c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPBuildings.cpp  ?FUN_00bd6180@@YIPAXPAD@Z  00bd6180  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPBuildings.cpp  ?FUN_0132abc0@@YAXXZ  0132abc0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPGonzago/SPBuildings.cpp  ?FUN_0132b1f0@@YAXXZ  0132b1f0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include

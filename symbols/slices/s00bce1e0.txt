@@ -1,4 +1,5 @@
 00bce1e0 ?FUN_00bce1e0@cBuilding@@QAEXXZ  # cBuilding::FUN_00bce1e0 migrated from s00bce1e0 (verbatim, slice spelling)
+00bce400 ?FUN_00bce400@@YAXPAX@Z  # FUN_00bce400 migrated from s00bce1e0 (verbatim, slice spelling)
 00bce5d0 ?FUN_00bce5d0@cBuilding@@QAEHXZ  # cBuilding::FUN_00bce5d0 migrated from s00bce1e0 (verbatim, slice spelling)
 00bce5f0 ?FUN_00bce5f0@cSpatialObject_s00bc_e1e0@@QAE_NI@Z  # cSpatialObject_s00bc_e1e0::FUN_00bce5f0 migrated from s00bce1e0 (verbatim, slice spelling)
 00bce660 ?FUN_00bce660@cBuilding@@QAEXPAX@Z  # cBuilding::FUN_00bce660 migrated from s00bce1e0 (verbatim, slice spelling)
@@ -10,3 +11,5 @@
 00bce9b0 ?FUN_00bce9b0@cBuilding@@QAEXXZ  # cBuilding::FUN_00bce9b0 migrated from s00bce1e0 (verbatim, slice spelling)
 00bcea10 ?FUN_00bcea10@cBuilding@@QAEXI@Z  # cBuilding::FUN_00bcea10 migrated from s00bce1e0 (verbatim, slice spelling)
 00bcea30 ?FUN_00bcea30@@YAMIIIM@Z  # FUN_00bcea30 migrated from s00bce1e0 (verbatim, slice spelling)
+00bcebc0 ?FUN_00bcebc0@@YAPAUVector3@@XZ  # FUN_00bcebc0 migrated from s00bce1e0 (verbatim, slice spelling)
+00bcec50 ?FUN_00bcec50@@YAPAUVector3@@XZ  # FUN_00bcec50 migrated from s00bce1e0 (verbatim, slice spelling)
