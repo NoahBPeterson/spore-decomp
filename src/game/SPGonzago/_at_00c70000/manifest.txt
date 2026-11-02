@@ -1,0 +1,18 @@
+# source  symbol  va  flags
+../src/game/SPGonzago/_at_00c70000.cpp  ?FUN_00c74210@PlanetCls@@QAEXPAX@Z  00c74210  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00c70000.cpp  ?FUN_00c74470@PlanetCls@@QAEXPAX@Z  00c74470  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00c70000.cpp  ?FUN_00c74650@PlanetCls@@QAEXXZ  00c74650  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00c70000.cpp  ?FUN_00c74880@SpatialDerived@@QAEXHPAM@Z  00c74880  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00c70000.cpp  ?InitFromDefinition@cRock@@QAE_NHHH@Z  00c7cce0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00c70000.cpp  ?FUN_00c7cfc0@cRock@@QAE_NPAX@Z  00c7cfc0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00c70000.cpp  ?SetLocalExtents@cSpatialObject@@QAEXHM@Z  00c7d020  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00c70000.cpp  ?FUN_00c7d090@@YA_NPAXPAH@Z  00c7d090  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00c70000.cpp  ?IsTargetable@@YA_NPAX@Z  00c7d200  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_00c70000.cpp  ??1cTargetList@@QAE@XZ  00c7d650  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_00c70000.cpp  ?FindTargetThunk@cTargetList@@QAEPAXXZ  00c7d930  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_00c70000.cpp  ?SortVec@@YAXPAPAX0UVec3_s00c7_d120@@@Z  00c7dc70  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_00c70000.cpp  ?Get@cTargetList@@QAEPAXPAH@Z  00c7e1a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_00c70000.cpp  ?FUN_00c7e280@CS@@QAEXPAX@Z  00c7e280  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00c70000.cpp  ?FUN_00c7e2f0@CS@@QAEXD@Z  00c7e2f0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00c70000.cpp  ?FUN_00c7e490@@YGXHHHHPAD@Z  00c7e490  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00c70000.cpp  ?FUN_00c7e530@@YGXHHHHPAH@Z  00c7e530  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include

@@ -1,1 +1,5 @@
+00c7e280 ?FUN_00c7e280@CS@@QAEXPAX@Z  # CS::FUN_00c7e280 migrated from s00c7e1c0 (verbatim, slice spelling)
+00c7e2f0 ?FUN_00c7e2f0@CS@@QAEXD@Z  # CS::FUN_00c7e2f0 migrated from s00c7e1c0 (verbatim, slice spelling)
+00c7e490 ?FUN_00c7e490@@YGXHHHHPAD@Z  # FUN_00c7e490 migrated from s00c7e1c0 (verbatim, slice spelling)
+00c7e530 ?FUN_00c7e530@@YGXHHHHPAH@Z  # FUN_00c7e530 migrated from s00c7e1c0 (verbatim, slice spelling)
 00c7ea70 SP::cCubeSim::cCubeSim  # PDB/vtable

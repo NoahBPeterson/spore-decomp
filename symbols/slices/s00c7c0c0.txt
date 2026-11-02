@@ -1,5 +1,10 @@
 00c7c220 ?RemoveOwner@cPlayer_s00c7_c0c0@@QAEXXZ  # cPlayer_s00c7_c0c0::RemoveOwner migrated from s00c7c0c0 (verbatim, slice spelling)
 00c7c6d0 ?SetGameDataOwner@cPlayer_s00c7_c0c0@@QAEXH@Z  # cPlayer_s00c7_c0c0::SetGameDataOwner migrated from s00c7c0c0 (verbatim, slice spelling)
 00c7c7c0 ?Read@cPlayer_s00c7_c0c0@@QAE_NPAX@Z  # cPlayer_s00c7_c0c0::Read migrated from s00c7c0c0 (verbatim, slice spelling)
-00c7cde0 Simulator::cRock::cRock  # vtable/PDB
-00c7d090 Simulator::cRock compare  # vtable candidate
+00c7cce0 ?InitFromDefinition@cRock@@QAE_NHHH@Z  # cRock::InitFromDefinition migrated from s00c7c0c0 (verbatim, slice spelling)
+00c7cde0 ??0cRock@@QAE@XZ  # cRock::cRock migrated from s00c7c0c0 (verbatim, slice spelling)
+00c7ce70 ?UpdateModel@cRock@@QAEXXZ  # cRock::UpdateModel migrated from s00c7c0c0 (verbatim, slice spelling)
+00c7cf50 ?FUN_00c7cf50@cRock@@QAEXPAX@Z  # cRock::FUN_00c7cf50 migrated from s00c7c0c0 (verbatim, slice spelling)
+00c7cfc0 ?FUN_00c7cfc0@cRock@@QAE_NPAX@Z  # cRock::FUN_00c7cfc0 migrated from s00c7c0c0 (verbatim, slice spelling)
+00c7d020 ?SetLocalExtents@cSpatialObject@@QAEXHM@Z  # cSpatialObject::SetLocalExtents migrated from s00c7c0c0 (verbatim, slice spelling)
+00c7d090 ?FUN_00c7d090@@YA_NPAXPAH@Z  # FUN_00c7d090 migrated from s00c7c0c0 (verbatim, slice spelling)
