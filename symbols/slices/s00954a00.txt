@@ -1,1 +1,4 @@
 00954a00 ?FillQuadGrad@Draw2D_s0095_4a00@UTFWin@EA@@QAEXABUPoint2D@23@I0I0I0I@Z  # Draw2D_s0095_4a00::FillQuadGrad migrated from s00954a00 (verbatim, slice spelling)
+009553e0 ?RectBlit@Draw2D_s0095_4a00@UTFWin@EA@@QAEXPBV?$RectT_s0095_4a00@M@3@0PAUFontMetrics@Text@23@@Z  # Draw2D_s0095_4a00::RectBlit migrated from s00954a00 (verbatim, slice spelling)
+009557c0 ?Flush@Draw2D_s0095_4a00@UTFWin@EA@@QAEPAUIRenderable_s0095_4a00@23@XZ  # Draw2D_s0095_4a00::Flush migrated from s00954a00 (verbatim, slice spelling)
+009558c0 ?FUN_009558c0@CellData_s0095_4a00@SP@EA@@QAEXXZ  # CellData_s0095_4a00::FUN_009558c0 migrated from s00954a00 (verbatim, slice spelling)

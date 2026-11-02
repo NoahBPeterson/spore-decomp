@@ -1,0 +1,1 @@
+00fb32b0 ?erase@Vec40@@QAEPAUE40@@PAU2@0@Z  # Vec40::erase migrated from s00fb2ac0 (verbatim, slice spelling)

@@ -1,0 +1,4 @@
+00953430 ??0Renderable2DMemoryManager@UTFWin@EA@@QAE@XZ  # Renderable2DMemoryManager::Renderable2DMemoryManager migrated from s00953430 (verbatim, slice spelling)
+00953600 ?DrawLine4@Draw2D_s0095_3430@UTFWin@EA@@QAEXMMMM@Z  # DrawLine4 migrated from s00953430 (verbatim, slice spelling)
+009537e0 ?DrawQuadUV@Draw2D_s0095_3430@UTFWin@EA@@QAEXMMMM@Z  # DrawQuadUV migrated from s00953430 (verbatim, slice spelling)
+00953eb0 ?FillGradH@Draw2D_s0095_3430@UTFWin@EA@@QAEXABURect@23@II@Z  # FillGradH migrated from s00953430 (verbatim, slice spelling)

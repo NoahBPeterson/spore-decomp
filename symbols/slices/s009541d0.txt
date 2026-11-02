@@ -1,0 +1,2 @@
+009541d0 ?FillGradV@Draw2D_s0095_41d0@UTFWin@EA@@QAEXABV?$RectT_s0095_41d0@M@3@II@Z  # Draw2D_s0095_41d0::FillGradV migrated from s009541d0 (verbatim, slice spelling)
+009544f0 ?FillTriGrad@Draw2D_s0095_41d0@UTFWin@EA@@QAEXABUPoint2D_s0095_41d0@23@I0I0I@Z  # Draw2D_s0095_41d0::FillTriGrad migrated from s009541d0 (verbatim, slice spelling)

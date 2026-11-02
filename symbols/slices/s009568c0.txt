@@ -1,8 +1,9 @@
 009568c0 ?InternalInit2DSystem@@YA_NPAUI2DSystem@@@Z  # InternalInit2DSystem migrated from s009568c0 (verbatim, slice spelling)
-00956a30 EA::UTFWin::InternalShutdown2DSystem  # mirror of Init: refcount dec, font mgr release, pool/memory manager delete
+00956a30 ?FUN_00956a30@@YAXXZ  # FUN_00956a30 migrated from s009568c0 (verbatim, slice spelling)
 00956af0 ?FUN_00956af0@@YIHPAX@Z  # FUN_00956af0 migrated from s009568c0 (verbatim, slice spelling)
-00956b30 EA::UTFWin::GlyphRenderer::DrawText  # LayoutTextLine into a fixed_vector<GlyphDisplayEntry,256>, then vslot 13 draws the glyphs
+00956b30 ?DrawText@GlyphRenderer@@QAEXMMPB_WHPBXPAUTextLayout@@PAX@Z  # GlyphRenderer::DrawText migrated from s009568c0 (verbatim, slice spelling)
 00956c40 EA::UTFWin::GlyphRenderer::DrawText  # 4-float overload (FUN_00890830 layout variant)
+00956d60 ?Dtor@UIRes@@QAEPAXE@Z  # UIRes::Dtor migrated from s009568c0 (verbatim, slice spelling)
 00956d90 ?FUN_00956d90@@YAXXZ  # FUN_00956d90 migrated from s009568c0 (verbatim, slice spelling)
 00956e30 ?FreeRenderableListChunks@@YAXPAURLChunk@@0@Z  # FreeRenderableListChunks migrated from s009568c0 (verbatim, slice spelling)
 00956e90 ?FreeDisplayListEntry@@YAXPAH@Z  # FreeDisplayListEntry migrated from s009568c0 (verbatim, slice spelling)
