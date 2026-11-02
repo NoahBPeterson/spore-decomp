@@ -1,1 +1,5 @@
-00dc7e00 cConvertCityOrder5::Init  # swap AutoRefCount +0x94 (vslot3 query on src, AddRef/Release), apply effect with +0x78, release +0x9c
+00dc77d0 ?Idle_Activate@VehicleTree@SP@@YA_NPAXNIIPAUbehavior_memory_block@nSPBehaviorTree@@1@Z  # SP::VehicleTree::Idle_Activate migrated from s00dc77d0
+00dc7cc0 ?Destroy@cVehicleTicker_s00dc_77d0@@QAEXXZ  # cVehicleTicker_s00dc_77d0::Destroy migrated from s00dc77d0 (verbatim, slice spelling)
+00dc7d70 ??0cVehicleTicker_s00dc_77d0@@QAE@XZ  # cVehicleTicker_s00dc_77d0::cVehicleTicker migrated from s00dc77d0 (verbatim, slice spelling)
+00dc7dd0 ?FUN_00dc7dd0@cConvertCityOrder5@@QAEXPAUcSrc5@@@Z  # cConvertCityOrder5::FUN_00dc7dd0 migrated from s00dc77d0 (verbatim, slice spelling)
+00dc7e00 ?Init@cConvertCityOrder5@@QAEXPAUcSrc5@@@Z  # cConvertCityOrder5::Init migrated from s00dc77d0 (verbatim, slice spelling)

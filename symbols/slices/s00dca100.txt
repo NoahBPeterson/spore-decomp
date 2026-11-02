@@ -1,1 +1,4 @@
-00dca100 SP::VehicleTree::EstablishTradeRouteOrder_Tick  # PDB/Ghidra name; trade-route behavior-tree tick (messages "(31)..(36) TR:")
+00d06240 ?RecordEvent@cRelationshipManager@SP@@QAEMIIW4eRelationshipEvents@2@M@Z  # SP::cRelationshipManager::RecordEvent (callee of s00dca100, named from the dev publics; slice address comment)
+00dca100 ?EstablishTradeRouteOrder_Tick@VehicleTree@SP@@YA_NPAUcVehicle_s00dc_a100@@HHHHPAUTradeMem@@HM@Z  # EstablishTradeRouteOrder_Tick migrated from s00dca100 (verbatim, slice spelling)
+00dca7b0 ?OfferToBuyCityOrder_Tick@VehicleTree@SP@@YA_NPAUcVehicle_s00dc_a100@@HHHHPAUTradeMem@@HM@Z  # OfferToBuyCityOrder_Tick migrated from s00dca100 (verbatim, slice spelling)
+00dcaad0 ?MoveToPointOrder_Tick@VehicleTree@SP@@YA_NPAUcVehicle_s00dc_a100@@@Z  # MoveToPointOrder_Tick migrated from s00dca100 (verbatim, slice spelling)

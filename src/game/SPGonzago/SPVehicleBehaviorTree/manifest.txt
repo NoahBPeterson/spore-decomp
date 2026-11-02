@@ -1,5 +1,12 @@
 # source  symbol  va  flags
+../src/game/SPGonzago/SPVehicleBehaviorTree.cpp  ?FUN_00b5b5d0_adjust@AdjustThunk_00b5b5d0@@QAEPAXI@Z  00b5b5d0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPVehicleBehaviorTree.cpp  ?FUN_00dc4560@@YAXPAXMMM@Z  00dc4560  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPVehicleBehaviorTree.cpp  ?FUN_00dc45a0@@YAXPAX@Z  00dc45a0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPVehicleBehaviorTree.cpp  ?FUN_00dc4610@@YAXPAX@Z  00dc4610  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPVehicleBehaviorTree.cpp  ?Reset@KeyLookup@@QAEXXZ  00dc4c60  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPVehicleBehaviorTree.cpp  ?IsValidFireTarget@@YADPAUObj@@0@Z  00dc4e20  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPVehicleBehaviorTree.cpp  ?FUN_00dc5030@@YADPAUObj@@PAX111PAPAU1@@Z  00dc5030  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPVehicleBehaviorTree.cpp  ?FUN_00dc5760@@YAXPAUObj@@@Z  00dc5760  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPVehicleBehaviorTree.cpp  ?RemoveVehicles@SP@@YAXXZ  00dc6a20  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPVehicleBehaviorTree.cpp  ?Node6ce0@@YAXPAUcVehicle@@HHHHPAUNodeState6ce0@@@Z  00dc6ce0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPVehicleBehaviorTree.cpp  ?Node7080@@YA_NPAUcVehicle@@HHHHPAUNodeState7080@@@Z  00dc7080  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
@@ -10,8 +17,14 @@
 ../src/game/SPGonzago/SPVehicleBehaviorTree.cpp  ?Node7510@@YAXPAUcVehicle@@HHHHPAPAUcRefObj@@@Z  00dc7510  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPVehicleBehaviorTree.cpp  ?Node76e0@@YAXPAURefHolder76e0@@@Z  00dc76e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPVehicleBehaviorTree.cpp  ?Node77a0@@YAXPAUcVehicle@@HHHHPAUBufHolder@@@Z  00dc77a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPVehicleBehaviorTree.cpp  ?FUN_00dc7dd0@cConvertCityOrder5@@QAEXPAUcSrc5@@@Z  00dc7dd0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPVehicleBehaviorTree.cpp  ?Init@cConvertCityOrder5@@QAEXPAUcSrc5@@@Z  00dc7e00  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPGonzago/SPVehicleBehaviorTree.cpp  ?Swap@CultureHash@@QAEXAAU1@@Z  00dc8ba0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPVehicleBehaviorTree.cpp  ?Remove@DecalRemover@@QAEXPAURemovable@@@Z  00dc8c00  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPVehicleBehaviorTree.cpp  ?StandardVehicleMoveTick@@YA_NPAUCVehicle@@@Z  00dc95b0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPGonzago/SPVehicleBehaviorTree.cpp  ?MoveToPointOrder_Tick@VehicleTree@SP@@YA_NPAUcVehicle_s00dc_a100@@@Z  00dcaad0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPVehicleBehaviorTree.cpp  ?FUN_00dcc6e0@@YA_NPAUBehaviorObj@@@Z  00dcc6e0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
 ../src/game/SPGonzago/SPVehicleBehaviorTree.cpp  ?FUN_00dcea90@TObj@@QAEPAXPAX@Z  00dcea90  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPVehicleBehaviorTree.cpp  ?FUN_00dced90@TObj@@QAEXXZ  00dced90  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPVehicleBehaviorTree.cpp  ?Clear@cVehicleGroupOrder_s00dc_f2e0@SP@@QAEXXZ  00dcfc40  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPVehicleBehaviorTree.cpp  ?VehicleTree_AttackCityOrder_Activate@@YA_NPAVcVehicle_s00dd_0230@@IIIIPAPAVcMilitaryAttackCityOrder@@@Z  00dd0230  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

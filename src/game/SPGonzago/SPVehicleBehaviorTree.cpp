@@ -1,4 +1,4 @@
-// src/game/SPGonzago/SPVehicleBehaviorTree.cpp -- migrated from slice(s) s00dd0230, s00dce4d0, s00dcc830, s00dcb8e0, s00dc8d10, s00dc67d0, s00dc48e0 by tools/migrate/rewrite.py
+// src/game/SPGonzago/SPVehicleBehaviorTree.cpp -- migrated from slice(s) s00dcf2e0, s00dcd720, s00dca100, s00dc7eb0, s00dc77d0, s00dc57a0, s00dc3940, s00dc2720, s00b5b540, s00dd0230, s00dce4d0, s00dcc830, s00dcb8e0, s00dc8d10, s00dc67d0, s00dc48e0 by tools/migrate/rewrite.py
 // Object file: SPGonzago/SPVehicleBehaviorTree.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -34,21 +34,44 @@ extern void* __stdcall SP_PlanetModel(void* a);  // 0xb3d350
 #include "SP/cMilitaryAttackCityOrder.h"
 #include "SP/cString.h"
 #include "SP/cVehicleGroupOrder.h"
+#include "SP/cBehaviorTreeData.h"
+#include "SP/cGonzagoSimulator.h"
+#include "cSPVector3.h"
+#include "SP/cEmpire.h"
+#include <intrin.h>
+#include "SP/cCivilization.h"
+#include "SP/cPlanet.h"
+#include "SP/cSPTimer.h"
+#include "SP/cStarRecord.h"
+#include "SP/cBuilding.h"
+#include "SP/cMovingFormation.h"
+#include <float.h>
+#include <string.h>
 #pragma pack(push,1)
 #pragma pack(pop)
 
 // ---- items of slice s00dc48e0 begin (TODO(rewrite): local stubs, replace by canonical classes)
-extern float   DAT_013ec4d0;   // 0x013ec4d0
-extern float   DAT_01473c70;   // 0x01473c70
-extern float   DAT_0169fa68;   // 0x0169fa68
-extern float   DAT_0169fa6c;   // 0x0169fa6c
-extern float   DAT_0169fa70;   // 0x0169fa70
+extern float   DAT_013eb1bc;   // 0x013eb1bc
+extern float   DAT_013ec4b8;   // 0x013ec4b8
+extern float   DAT_013eecd8;   // 0x013eecd8
+extern float   DAT_01470f1c;   // 0x01470f1c
+extern float   DAT_014763b0;   // 0x014763b0
+extern float   DAT_0147c368;   // 0x0147c368
+extern float   DAT_0147c36c;   // 0x0147c36c
+extern float   DAT_0147c390;   // 0x0147c390
+extern float   DAT_01485378;   // 0x01485378
+extern float   DAT_01485720;   // 0x01485720
 struct Obj;
 typedef void          (__thiscall *VfnRaw)(void);
+typedef void          (__thiscall *Vfn0)(void*);
 typedef void*         (__thiscall *VfnP)(void*);
 typedef unsigned int  (__thiscall *VfnR)(void*);
 typedef unsigned char (__thiscall *VfnB)(void*);
+typedef void          (__thiscall *VfnI)(void*, int);
 typedef void*         (__thiscall *VfnPI)(void*, int);
+typedef void          (__thiscall *VfnV)(void*, void*);
+typedef void*         (__thiscall *VfnVV)(void*, void*, void*);
+typedef void          (__thiscall *VfnF3)(void*, float*, float, float);
 enum VtSlot {
     kVt00 = 0x00 / 4, kVt04 = 0x04 / 4, kVt08 = 0x08 / 4, kVt0C = 0x0c / 4,
     kVt10 = 0x10 / 4, kVt2C = 0x2c / 4, kVt50 = 0x50 / 4, kVt5C = 0x5c / 4,
@@ -71,6 +94,8 @@ struct PlanetModel {
     float* DirectionToSurfacePosition(float* a, float* b);   // 0xb815a0
     char   Cb7e3e0(float* v);                                // 0xb7e3e0
 };
+struct CityVisualizer { void RequestPosition(float* v, uint32_t k); }; // 0xbec2d0
+struct Bec660         { void Run(float* v, void* o); };                // 0xbec660
 struct AnimCtx   { Obj* mpTarget; };                       // +0x00
 struct Obj {
     Vtbl*  mpVtbl;                          // +0x000
@@ -121,7 +146,6 @@ struct KeyLookup {
     void* Match3DF(int key);        // 0x00dc4c40
     void  Reset();                  // 0x00dc4c60
 };
-extern void* __stdcall SP_PlanetModel(void* a);  // 0xb3d350
 // ---- items of slice s00dc48e0 end
 
 // ---- items of slice s00dc67d0 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -443,6 +467,7 @@ SPVector<AutoRefCount> gLocomotiveList;         // 0x016a0058
 extern "C" float sqrtf(float);
 extern uint8_t  DAT_01654c10;              // current-game-mode marker
 extern void*    gVehicleTicker;            // 0x01699ab8
+extern uint32_t gVehicleServiceTable708;   // 0x0147c708
 extern uint32_t gVehicleServiceTable714;   // 0x0147c714
 typedef int    (__thiscall* FnI)(void*);
 typedef float* (__thiscall* FnFP)(void*);
@@ -451,6 +476,10 @@ struct VTable { void* p[64]; };
 static inline int CallV(void* obj, int slot)
 {
   return ((FnI)(*(VTable**)obj)->p[slot / 4])(obj);
+}
+static inline int CallVBool(void* obj, int slot)
+{
+  return ((FnI)(*(VTable**)obj)->p[slot / 4])(obj) & 1;
 }
 static inline float* CallVPos(void* obj, int slot)
 {
@@ -540,14 +569,28 @@ struct CombatCtx {
   float mPosZ;                // +0x0c
   float mTimer;               // +0x10
 };
+struct TimerCtx {
+  float   mTimer;             // +0x00
+  uint8_t mFlag;              // +0x04
+};
 struct StateCtx {
   uint8_t mPad00[0x20];       // +0x00
   uint8_t mFlag20;            // +0x20
   uint8_t mFlag21;            // +0x21
 };
+struct TradeCtx {
+  int     mField0;            // +0x00
+  int     mField4;            // +0x04
+  uint8_t mFlag8;             // +0x08
+};
 void*  AllocSimObject(uint32_t size, const char* name, int a, int b, int c, int d);
 void*  __stdcall VectorInsertU32(uint32_t* pos, uint32_t* value); // 0x004558a0
 void*  __fastcall SimSingleton_ctor(void* mem);         // 0x00dc7d70
+void*  FUN_00dc9680(BehaviorObj* self);                 // 0x00dc9680
+void*  FUN_00dc5050(BehaviorObj* self, void* city);     // 0x00dc5050
+void   FUN_00ca7250(BehaviorObj* self, const char* msg); // 0x00ca7250
+void   FUN_00caa900(BehaviorObj* self);                 // 0x00caa900
+void   FUN_00ca80e0(BehaviorObj* self, int value);      // 0x00ca80e0
 void   FUN_00cacbe0(BehaviorObj* self);                 // 0x00cacbe0
 void   AttemptRepark(BehaviorObj* self);                // 0x00dc9430
 void   FUN_00dc4ed0(float* a, float* b, BehaviorObj* self, void* obj); // 0x00dc4ed0
@@ -856,12 +899,1626 @@ public:
 uint32_t __cdecl GetPaletteItemPriority();                          // 0x00641770
 // ---- items of slice s00dd0230 end
 
+// ---- items of slice s00b5b540 begin (TODO(rewrite): local stubs, replace by canonical classes)
+struct AdjustThunk_00b5b5d0 {
+    void* FUN_00b5b5d0_adjust(unsigned id);
+};
+// ---- items of slice s00b5b540 end
+
+// ---- items of slice s00dc2720 begin (TODO(rewrite): local stubs, replace by canonical classes)
+#pragma warning(disable: 4100)
+namespace SP {
+struct Vec3 { float x, y, z; };
+}
+namespace SP {
+class cSpatialObject_s00dc_2720;
+}
+namespace SP {
+class cSpatialSub;
+}
+namespace SP {
+class cCombatant_s00dc_2720;
+}
+namespace SP {
+class RefCounted {
+public:
+    virtual void AddRef();                                    // +0x00
+    virtual void Release();                                   // +0x04
+};
+}
+namespace SP {
+class cCombatant_s00dc_2720 : public RefCounted {
+public:
+    virtual void v02();
+    virtual cSpatialObject_s00dc_2720* GetOwnerNoun();                   // +0x0c
+};
+}
+namespace SP {
+class cLocomotion {
+public:
+virtual void v00();
+virtual void v01();
+virtual void v02();
+virtual void v03();
+virtual void v04();
+virtual void v05();
+virtual void v06();
+virtual void v07();
+virtual void v08();
+virtual void v09();
+virtual void v0a();
+    virtual const Vec3* GetPosition();                        // +0x2c  0x00c0d6b0
+virtual void v0c();
+virtual void v0d();
+virtual void v0e();
+virtual void v0f();
+virtual void v10();
+virtual void v11();
+virtual void v12();
+virtual void v13();
+virtual void v14();
+virtual void v15();
+virtual void v16();
+    virtual const Vec3* GetFacing(Vec3* out);                 // +0x5c
+virtual void v18();
+virtual void v19();
+virtual void v1a();
+virtual void v1b();
+virtual void v1c();
+virtual void v1d();
+virtual void v1e();
+virtual void v1f();
+virtual void v20();
+virtual void v21();
+virtual void v22();
+virtual void v23();
+virtual void v24();
+virtual void v25();
+virtual void v26();
+virtual void v27();
+virtual void v28();
+virtual void v29();
+virtual void v2a();
+virtual void v2b();
+virtual void v2c();
+virtual void v2d();
+virtual void v2e();
+virtual void v2f();
+virtual void v30();
+virtual void v31();
+    virtual bool TestGround();                                // +0x48
+virtual void v33();
+virtual void v34();
+virtual void v35();
+    virtual bool IsFlying();                                  // +0x58
+};
+}
+namespace SP {
+struct cBehaviorTreeData_s00dc_2720 {
+    uint32_t pad00[0x1d8 / 4];
+    uint32_t mTreeId;                                         // +0x1d8  behaviour-tree fourcc
+};
+}
+namespace SP {
+class cSpatialSub {
+public:
+virtual void v00();
+virtual void v01();
+virtual void v02();
+virtual void v03();
+virtual void v04();
+virtual void v05();
+virtual void v06();
+virtual void v07();
+virtual void v08();
+virtual void v09();
+virtual void v0a();
+    virtual const Vec3* GetPosition();                        // +0x2c
+};
+}
+namespace SP {
+class cGroup {
+public:
+virtual void v00();
+virtual void v01();
+virtual void v02();
+    virtual cSpatialObject_s00dc_2720* FindMember(uint32_t key);         // +0x0c
+};
+}
+namespace SP {
+class cSpatialObject_s00dc_2720 : public RefCounted {
+public:
+virtual void v02();
+virtual void v03();
+virtual void v04();
+virtual void v05();
+virtual void v06();
+virtual void v07();
+    virtual int  GetTypeHash();                               // +0x20  0x00c0...
+virtual void v09();
+virtual void v0a();
+virtual void v0b();
+virtual void v0c();
+virtual void v0d();
+virtual void v0e();
+virtual void v0f();
+virtual void v10();
+virtual void v11();
+virtual void v12();
+virtual void v13();
+virtual void v14();
+virtual void v15();
+virtual void v16();
+virtual void v17();
+    virtual int  GetRingKey();                                // +0x60
+    virtual void v19();
+    uint8_t  pad04[0xc0 - 0x04];
+    cLocomotion mLoco;                                        // +0xc0 locomotion sub-object
+    uint8_t  padc4[0x120 - 0xc4];
+    cSpatialSub mSpatial120;                                  // +0x120 spatial sub-object
+    uint8_t  pad124[0x135 - 0x124];
+    bool     mbValid135;                                      // +0x135 the leader is usable
+    uint8_t  pad136[0x5a8 - 0x136];
+    cCombatant_s00dc_2720 mCombatant5a8;                                 // +0x5a8 combatant sub-object
+    uint8_t  pad5ac[0x624 - 0x5ac];
+    bool     mbDirty624;                                      // +0x624 behaviour state changed
+    uint8_t  pad625[0x68c - 0x625];
+    int      mFamily68c;                                      // +0x68c family / house id
+    bool     mbFlag690;                                       // +0x690
+    uint8_t  pad691[0x694 - 0x691];
+    Vec3     mBasis694;                                       // +0x694 ring direction
+    uint8_t  pad6a0[0x6b0 - 0x6a0];
+    int      mRingIndex6b0;                                   // +0x6b0 index within the ring
+    float    mField6b4;                                       // +0x6b4
+    float    mField6b8;                                       // +0x6b8
+    uint8_t  pad6bc[0x6c8 - 0x6bc];
+    void*    mpEnv;                                           // +0x6c8 behaviour environment / tree
+    uint8_t  pad6cc[0x714 - 0x6cc];
+    int      mState714;                                       // +0x714 tuning / model state
+    uint8_t  pad718[0x74c - 0x718];
+    bool     mbEnabled74c;                                    // +0x74c behaviour switched on
+    uint8_t  pad74d[0xb20 - 0x74d];
+    void*    mpSpecies;                                       // +0xb20 species profile
+    uint8_t  padb24[0xb34 - 0xb24];
+    int      mRankB34;                                        // +0xb34 (== 1 for a follower)
+    uint8_t  padb38[0xb4c - 0xb38];
+    cBehaviorTreeData_s00dc_2720* mpGameData;                            // +0xb4c behaviour-tree data
+    uint8_t  padb50[0xb5e - 0xb50];
+    bool     mbDeadB5e;                                       // +0xb5e dead / despawned
+    uint8_t  padb5f[4];
+    // ---- predicates / lookups (plain members, direct calls in the original) ----
+    bool          IsBaby();                                   // 0x00c0b770
+    bool          IsEpic();                                   // 0x00c0c0e0
+    cCombatant_s00dc_2720*   GetCombatantTarget();                       // 0x00c0ee60
+    cGroup*       GetTargetGroup();                           // 0x00c38b00
+    // ---- posse-member interface (0x00c3daa0 / 0x00c3be70) ----
+    void SetTargetDistance(float distance);                   // 0x00c3daa0
+    void SetTargetPosition(const Vec3& position);             // 0x00c3be70
+};
+}
+namespace EA {
+template <class T>
+class AutoRefCount_s00dc_2720 {
+public:
+    T* mpObj;                                                 // +0x00
+    AutoRefCount_s00dc_2720() : mpObj(0) {}
+    explicit AutoRefCount_s00dc_2720(T* p) : mpObj(p) { if (mpObj) mpObj->AddRef(); }
+    AutoRefCount_s00dc_2720(const AutoRefCount_s00dc_2720& o) : mpObj(o.mpObj) { if (mpObj) mpObj->AddRef(); }
+    ~AutoRefCount_s00dc_2720() { if (mpObj) mpObj->Release(); }
+    AutoRefCount_s00dc_2720& operator=(const AutoRefCount_s00dc_2720& o) {
+        if (mpObj != o.mpObj) {
+            T* p = o.mpObj;
+            if (p) p->AddRef();
+            T* old = mpObj;
+            mpObj = p;
+            if (old) old->Release();
+        }
+        return *this;
+    }
+    T* Get() const { return mpObj; }
+};  // namespace EA
+}
+namespace eastl {
+struct AgentDistanceCompare {
+    SP::Vec3 mOrigin;
+    bool FUN_00ac0730(const SP::cSpatialSub* a, const SP::cSpatialSub* b) const;
+};
+}
+using SP::Vec3;
+using SP::cSpatialObject_s00dc_2720;
+using SP::cSpatialSub;
+using SP::cLocomotion;
+using SP::cCombatant_s00dc_2720;
+using SP::cGroup;
+using eastl::AgentDistanceCompare;
+void FUN_00b2af00(cSpatialObject_s00dc_2720** a, cSpatialObject_s00dc_2720** b);                     // swap the two slots
+void FUN_00aca890(cSpatialObject_s00dc_2720** begin, cSpatialObject_s00dc_2720** first, AgentDistanceCompare pred);
+void FUN_00aca900(cSpatialObject_s00dc_2720** begin, cSpatialObject_s00dc_2720** first, AgentDistanceCompare pred);
+void FUN_00aca0c0(cSpatialObject_s00dc_2720** begin, int zero, int count, int start,
+                  EA::AutoRefCount_s00dc_2720<cSpatialObject_s00dc_2720> value, AgentDistanceCompare pred);
+static __forceinline cSpatialSub* ObjectSpatial(cSpatialObject_s00dc_2720* o)
+{
+    return o ? &o->mSpatial120 : 0;
+}
+// ---- items of slice s00dc2720 end
+
+// ---- items of slice s00dc3940 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern char  g_mode_1654c10;                      // 0x01654c10
+extern char* g_sounds_45a0[1];                    // 0x0147c3a8
+extern char* g_sounds_4610[1];                    // 0x0147c3b4
+#define VFN(p, off)     (((void**)*(void**)(p))[(off) / 4])
+#define VC0(p, off)     ((int(__thiscall*)(void*))VFN(p, off))(p)
+#define D(p, off) (*(int*)((char*)(p) + (off)))
+void*  EA_GetSystemAT();                                           // 0x00a206f0
+// ---- items of slice s00dc3940 end
+
+// ---- items of slice s00dc57a0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+typedef unsigned int uint32;
+struct Vec3f { float x, y, z; };
+struct Sub508 {
+    float Get();                // thiscall, x87 float return (FUN_00bfc400)
+};
+struct Obj_s00dc_57a0 {
+    char vtbl_pad[4];           // vtable pointer lives at +0; slots called via typed pointers below
+};
+struct Self {
+    char pad[0x508];
+    Sub508 mSub;                // +0x508
+    Obj_s00dc_57a0* GetObj();              // thiscall, no args (FUN_00c9fee0)
+    void Apply(Vec3f v);        // thiscall, Vec3f by value, callee pops 0xc (FUN_00c9fb40)
+    void Take(Vec3f* p);        // thiscall, one pointer arg, callee pops 4 (FUN_00ca97a0)
+};
+void Helper(float* a, float* b, Self* self, Obj_s00dc_57a0* obj);
+typedef Vec3f* (__thiscall *Vfn2)(Obj_s00dc_57a0* self, float a, float b); // vslot 11, two float args
+// ---- items of slice s00dc57a0 end
+
+// ---- items of slice s00dc77d0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C" void __cdecl FUN_00b5b6f0(void* pTicker);        // 0x00b5b6f0  ticker registration
+extern "C" void __cdecl FUN_00b5b690(void* pTicker);        // 0x00b5b690  ticker base teardown
+struct cSrc5 {                     // param_2: object pointer at +0, uint at +0x14
+  void*    mpObj;                  // +0x00 AutoRefCount<T> (raw pointer)
+  uint32_t pad0[4];                // +0x04..+0x13
+  uint32_t mVal;                   // +0x14
+};
+struct cSub5 {                     // sub-object at +0x64 (size 0x14)
+  uint8_t pad[0x14];
+  void SetFrom(cSrc5* src);        // 0x00ca0940 thiscall, ret 4
+};
+struct cMgr5 {                     // returned by FUN_00b3d290 (cdecl, no args)
+  uint32_t Get();                  // 0x00ac15e0 thiscall, returns eax
+};
+struct cEffect5 {                  // EA::Swarm::cIVisualEffect (AutoRefCount target at +0x94)
+  void Apply(uint32_t v);          // 0x00bdf6d0 thiscall, ret 4
+};
+struct cAnim5 {                    // SP::cAnimatingCreature (AutoRefCount target at +0x9c)
+  void Release();                  // 0x00a05270 thiscall
+};
+struct cConvertCityOrder5 {
+  uint8_t   pad0[0x64];
+  cSub5     mSub64;                // +0x64
+  uint32_t  m78;                   // +0x78
+  uint8_t   pad1[0x90 - 0x7c];
+  uint32_t  mGen90;                // +0x90
+  void*     mEffect94;             // +0x94 AutoRefCount<cIVisualEffect>
+  uint32_t  m98;                   // +0x98
+  void*     mAnim9c;               // +0x9c AutoRefCount<cAnimatingCreature>
+  uint8_t   pad2[0xac - 0xa0];
+  uint8_t   mbFlagAC;              // +0xac
+
+  void Init(cSrc5* src);           // 0x00dc7e00 thiscall, ret 4
+  void FUN_00dc7dd0(cSrc5* src);   // 0x00dc7dd0 thiscall, ret 4
+};
+class cTreeSub {
+public:
+virtual void v00();
+virtual void v04();
+virtual void v08();
+virtual void v0c();
+virtual void v10();
+virtual void v14();
+virtual void v18();
+virtual void v1c();
+virtual void v20();
+virtual void v24();
+virtual void v28();
+  virtual float* v2c();                                  // 0x2c  world position
+virtual void v30();
+virtual void v34();
+virtual void v38();
+virtual void v3c();
+virtual void v40();
+virtual void v44();
+virtual void v48();
+virtual void v4c();
+virtual void v50();
+virtual void v54();
+virtual void v58();
+virtual void v5c();
+virtual void v60();
+virtual void v64();
+virtual void v68();
+virtual void v6c();
+  virtual void v70();
+  virtual long double v74();                             // 0x74  radius (x87)
+virtual void v78();
+virtual void v7c();
+virtual void v80();
+virtual void v84();
+virtual void v88();
+virtual void v8c();
+virtual void v90();
+virtual void v94();
+virtual void v98();
+virtual void v9c();
+virtual void va0();
+virtual void va4();
+virtual void va8();
+virtual void vac();
+virtual void vb0();
+virtual void vb4();
+virtual void vb8();
+virtual void vbc();
+virtual void vc0();
+virtual void vc4();
+virtual void vc8();
+virtual void vcc();
+virtual void vd0();
+virtual void vd4();
+virtual void vd8();
+virtual void vdc();
+virtual void ve0();
+virtual void ve4();
+  virtual void ve8();
+  virtual void vec();                                    // 0xec  path-failure notify
+};
+class cStarEntry {
+public:
+  virtual void v00();
+  virtual void v04();                                    // 0x04  Release
+  virtual void v08();
+  virtual void* v0c(uint32_t id);                        // 0x0c
+virtual void v10();
+virtual void v14();
+virtual void v18();
+virtual void v1c();
+virtual void v20();
+virtual void v24();
+virtual void v28();
+  virtual float* v2c();                                  // 0x2c  world position
+};
+struct cStarRecordVector {
+  cStarEntry** mpBegin;      // +0x00
+  cStarEntry** mpEnd;        // +0x04
+  cStarEntry** mpCapacity;   // +0x08
+  void Destroy();            // 0x00ae6970
+};
+class cStarCollector {
+public:
+  void Collect(int32_t id, cStarRecordVector* pOut);     // 0x00f40d00 thiscall, ret 8
+};
+class cStarSource {
+public:
+  uint8_t pad00[0x74];
+  cStarCollector* mp74;      // 0x74
+};
+struct cVehicleTreeState {
+  uint8_t pad00[0x4b8];
+  int32_t m4b8;              // 0x4b8
+  uint8_t pad4bc[8];
+  int32_t m4c4;              // 0x4c4
+};
+class cVehicleTree_s00dc_77d0 {
+public:
+  cVehicleTreeState* GetState();                         // 0x00c9f1c0
+  uint8_t pad04[0x34];
+  cTreeSub mSub34;                                       // 0x34
+};
+class cSimBase {
+public:
+  cSimBase();                                            // 0x00b5b6c0
+};
+struct cGroupOrderVector {   // eastl::vector<AutoRefCount<cVehicleGroupOrder>>
+  void* mpBegin;             // +0x00
+  void* mpEnd;               // +0x04
+  void* mpCapacity;          // +0x08
+  void Destroy();            // 0x00ae6970
+};
+struct cSpatialVector {      // eastl::vector<AutoRefCount<cSpatialObject>>
+  void* mpBegin;             // +0x00
+  void* mpEnd;               // +0x04
+  void* mpCapacity;          // +0x08
+  void Destroy();            // 0x00ad92d0
+};
+class cVehicleTicker_s00dc_77d0 : public cSimBase {
+public:
+  cVehicleTicker_s00dc_77d0();                                      // 0x00dc7d70
+  void Destroy();                                        // 0x00dc7cc0
+
+  void* volatile mpVt00;     // 0x00
+  uint32_t pad04;            // 0x04
+  void* volatile mpVt08;     // 0x08
+  uint32_t pad0c;            // 0x0c
+  cGroupOrderVector mGroupOrders;   // 0x10
+  uint8_t pad1c[8];          // 0x1c
+  cSpatialVector mVoxSoundIds;      // 0x24
+  uint8_t pad30[8];          // 0x30
+  cSpatialVector m38;        // 0x38
+};
+extern cVehicleTicker_s00dc_77d0* g_1699ab8;    // 0x01699ab8
+extern cStarSource* g_16c7aa4;     // 0x016c7aa4
+// ---- items of slice s00dc77d0 end
+
+// ---- items of slice s00dc7eb0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C" void __cdecl CopyImpl_do_copy(void* src, void* end, void* dst);
+struct CultureHashPayload {
+    uint32_t mField00;              // +0x00
+    float mField04;                 // +0x04
+    float mField08;                 // +0x08
+    float mField0c;                 // +0x0c
+    float mField10;                 // +0x10
+    float mField14;                 // +0x14
+    float mField18;                 // +0x18
+    float mField1c;                 // +0x1c
+
+    CultureHashPayload& operator=(const CultureHashPayload& src)
+    {
+        mField04 = src.mField04;
+        mField00 = src.mField00;
+        mField08 = src.mField08;
+        mField0c = src.mField0c;
+        mField10 = src.mField10;
+        mField14 = src.mField14;
+        mField18 = src.mField18;
+        mField1c = src.mField1c;
+        return *this;
+    }
+};
+struct CultureHashNode {
+    CultureHashPayload mPayload;    // +0x00
+    CultureHashNode* mpNext;        // +0x20
+};
+struct CultureHashTail {
+    uint32_t a, b, c;               // +0x00..+0x0b
+};
+struct CultureHash {
+    uint32_t mField00;              // +0x00
+    CultureHashNode** mBuckets;     // +0x04
+    uint32_t mBucketCount;          // +0x08
+    uint32_t mElementCount;         // +0x0c
+    CultureHashTail mTail;          // +0x10..+0x1b
+
+    CultureHash(const CultureHash& src);
+    void Swap(CultureHash& other);
+};
+struct DecalMapTree {
+    uint32_t mPad[0x1c / 4];
+    void Find(void* out, const void* key, uint32_t hash);
+};
+struct Removable {
+    virtual void AddRef();
+    virtual void Release();
+};
+union TaggedPtr {
+    uint32_t mValue;                // +0x00
+    Removable* mPtr;                // +0x00
+    struct {
+        uint8_t mTag;               // +0x00
+        uint8_t mRest[3];           // +0x01
+    } mBytes;
+};
+struct DecalRemover {
+    uint32_t mPad[0x34 / 4];        // +0x00..0x33
+    DecalMapTree mMap;              // +0x34
+    void Remove(Removable* p);
+};
+struct RemoveLocals {
+    Removable* key;                 // +0x00
+    uint32_t it[2];                 // +0x04
+};
+struct RemoveArg : Removable {
+    uint32_t mPad04[(0x34 - 0x04) / 4]; // +0x04..0x33
+    uint32_t mField34;                  // +0x34
+    void Method(int);                   // 0x00ca0000
+};
+struct DecalEntry {
+    uint8_t mData[0x178];
+    void RemoveDecal(void* arg);        // 0x00afedf0
+};
+struct DecalManager {
+    virtual void pad00();
+    virtual void pad04();
+    virtual void pad08();
+    virtual void pad0c();
+    virtual void pad10();
+    virtual void pad14();
+    virtual void pad18();
+    virtual void pad1c();
+    virtual void pad20();
+    virtual void pad24();
+    virtual void pad28();
+    virtual bool Skip();                // +0x2c
+    uint32_t mPad04[(0x50 - 0x04) / 4]; // +0x04..0x4f
+    Removable** mVec50Begin;            // +0x50
+    Removable** mVec50End;              // +0x54
+    uint32_t mPad58[(0x7c - 0x58) / 4]; // +0x58..0x7b
+    DecalEntry* mDecalBegin;            // +0x7c
+    DecalEntry* mDecalEnd;              // +0x80
+    void Remove(RemoveArg* arg);
+};
+// ---- items of slice s00dc7eb0 end
+
+// ---- items of slice s00dca100 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern void*              __cdecl GetCurrentGameMode();            // 0x00b5b800
+struct Vector3_s00dc_a100 {
+    float x, y, z;
+    Vector3_s00dc_a100() {}
+    Vector3_s00dc_a100(const Vector3_s00dc_a100& v) : x(v.x), y(v.y), z(v.z) {}
+};
+struct Vector4 {
+    float x, y, z, w;
+};
+struct cSpatialObject_s00dc_a100 {
+    PV(00) PV(01) PV(02) PV(03) PV(04) PV(05) PV(06) PV(07) PV(08) PV(09) PV(0a)
+    virtual const Vector3_s00dc_a100& GetPosition();                          // +0x2c
+    PV(0c) PV(0d) PV(0e) PV(0f) PV(10) PV(11) PV(12) PV(13) PV(14) PV(15)
+    virtual bool IsPlayerControlled();                             // +0x58
+    virtual Vector3_s00dc_a100 GetVelocity();                                 // +0x5c
+
+    bool IsNearGoal();                                             // 0x00c42e20
+    bool Fc42210(float f);                                         // 0x00c42210
+};
+struct cSPTimer_s00dc_a100 {
+    void Restart();                                                // 0x00bc3130
+    uint64_t GetElapsedTime();                                     // 0x00bc3190
+};
+struct cCivilization_s00dc_a100 {
+    char    pad[0xc4];
+    Vector3_s00dc_a100 mPos;                                                  // +0xc4
+};
+struct cCity_s00dc_a100;
+struct cCivNoun {
+    PV(00) PV(01) PV(02) PV(03) PV(04) PV(05) PV(06) PV(07) PV(08) PV(09)
+    PV(0a) PV(0b) PV(0c) PV(0d) PV(0e) PV(0f) PV(10) PV(11) PV(12)
+    virtual int Vf4c();                                            // +0x4c
+    char     pad0[0x104];
+    cSPTimer_s00dc_a100 mTimer108;                                            // +0x108
+    char     pad10c[0x128 - 0x10c];
+    cSPTimer_s00dc_a100 mTimer128;                                            // +0x128
+    char     pad12c[0x434 - 0x129];
+    uint32_t mState434;                                            // +0x434
+    int      mField438;                                            // +0x438
+    cCivilization_s00dc_a100* GetPosHolder();                                 // placeholder
+    bool Fbef7e0();                                                // 0x00bef7e0 (mState434 <= 4)
+    void Fbf0330(cCity_s00dc_a100* city);                                     // 0x00bf0330
+    void Fbef8c0();                                                // 0x00bef8c0 (mTimer108.Restart)
+    Vector3_s00dc_a100 mPosC4();                                              // placeholder
+    float Fbf0640();                                               // 0x00bf0640
+    float Fbf06d0();                                               // 0x00bf06d0
+    float GetMoney();                                              // 0x00bef6d0
+    void  SpendMoney(float amount);                                // 0x00bef710
+    void  FcivicRadiusAccum(float f, int n);                       // 0x00befd80
+};
+struct cCivNounPos {            // the +0xc4 position of a noun
+    char    pad[0xc4];
+    Vector3_s00dc_a100 mPos;
+};
+struct cCity_s00dc_a100 {
+virtual void pad0();
+virtual void pad1();
+virtual void pad2();
+    virtual cCity_s00dc_a100* Cast(uint32_t typeID);                          // +0x0c
+    PV(04) PV(05) PV(06) PV(07) PV(08) PV(09) PV(0a)
+    virtual bool IsDestroyed();                                    // +0x2c
+    PV(0c) PV(0d) PV(0e) PV(0f) PV(10) PV(11) PV(12)
+    virtual int Vf4c();                                            // +0x4c
+    char           pad50[0x120 - 4];
+    cSpatialObject_s00dc_a100 mSpatial;                                       // +0x120
+    char           pad124[0x590 - 0x124];
+    cCivilization_s00dc_a100* mpCivilization;                                 // +0x590
+    char           pad594[0x728 - 0x594];
+    cSPTimer_s00dc_a100       mCommTimer;                                     // +0x728
+
+    bool Fbdb200(int nounID);                                      // 0x00bdb200
+    void Fbdb3b0(struct cVehicle_s00dc_a100* v, int n);                       // 0x00bdb3b0
+    void Fbe1820(int nounID);                                      // 0x00be1820
+    cCivilization_s00dc_a100* GetCivilization();                              // 0x00bd9bf0
+};
+struct cGameData_s00dc_a100 {      // embedded at +0x508 of the vehicle
+    PV(00) PV(01) PV(02) PV(03)
+    virtual int GetNounID();                                       // +0x10
+};
+struct CityRef {
+    cCity_s00dc_a100* mpCity;
+};
+struct cVehicle_s00dc_a100 {
+    PV(00) PV(01) PV(02) PV(03) PV(04) PV(05) PV(06) PV(07) PV(08) PV(09) PV(0a) PV(0b)
+    PV(0c) PV(0d) PV(0e) PV(0f) PV(10) PV(11) PV(12)
+    virtual int Vf4c();                                            // +0x4c
+    char           pad4[0x30];
+    cSpatialObject_s00dc_a100 mLoco;                                          // +0x34
+    char           pad38[0x2a4 - 0x38];
+    union {
+        uint8_t    mPathFlags;                                     // +0x2a4
+        uint32_t   mPathFlags32;
+    };
+    char           pad2a8[0x508 - 0x2a8];
+    cGameData_s00dc_a100      mGameData;                                      // +0x508
+
+    CityRef* Fca71d0();                                            // 0x00ca71d0
+    void Fca7250(const char* msg);                                 // 0x00ca7250
+    void Fcaa900();                                                // 0x00caa900
+    void Fcac000(cCity_s00dc_a100* city, int a, int b);                       // 0x00cac000
+    void Fcacbe0();                                                // 0x00cacbe0
+    void Fca80e0(int n);                                           // 0x00ca80e0
+};
+void __cdecl AttemptRepark(cVehicle_s00dc_a100* v);                            // 0x00dc9430
+struct cCommunitySpatial {
+    PV(00) PV(01) PV(02) PV(03) PV(04) PV(05) PV(06) PV(07) PV(08) PV(09) PV(0a)
+    virtual Vector3_s00dc_a100* GetPoint(float f, int n);                     // +0x2c
+    PV(0c) PV(0d)
+    virtual void SetPosition(const Vector3_s00dc_a100& pos);                  // +0x38
+    PV(0f) PV(10) PV(11) PV(12) PV(13) PV(14) PV(15)
+    virtual bool IsPlayerControlled();                             // +0x58
+};
+struct cCommunity_s00dc_a100 {
+    PV(00) PV(01) PV(02)
+    virtual cCommunity_s00dc_a100* Cast(uint32_t typeID);                     // +0x0c
+    PV(04) PV(05) PV(06) PV(07) PV(08) PV(09) PV(0a) PV(0b)
+    PV(0c) PV(0d) PV(0e) PV(0f) PV(10) PV(11) PV(12)
+    virtual int Vf4c();                                            // +0x4c
+    char pad4[0x30];
+    cCommunitySpatial mSpatial;                                    // +0x34
+    cCivNoun* GetNoun();                                           // 0x00bfdf80
+};
+struct cPathArcBuilder {
+    PV(00) PV(01) PV(02) PV(03) PV(04) PV(05) PV(06) PV(07) PV(08) PV(09)
+    PV(0a) PV(0b) PV(0c) PV(0d) PV(0e) PV(0f) PV(10) PV(11)
+    virtual void SetCiv(int civ);                                  // +0x48
+    char pad4[0x30];
+    cCommunitySpatial mSpatial;                                    // +0x34
+    void Start(cCivNoun* civ, cCommunity_s00dc_a100* city, const Vector3_s00dc_a100* pos, float speed, int flag);  // 0x00cbe640
+};
+struct cGameNounManager_s00dc_a100 {
+    cCivNoun* Fb25f40(int nounID);                                 // 0x00b25f40
+    cPathArcBuilder* Fbfe7a0();                                    // 0x00bfe7a0
+};
+struct cRelationshipManager_s00dc_a100 {
+    float Fd00d60(cCivilization_s00dc_a100* civ, cCivNoun* noun, int n);      // 0x00d00d60
+    float RecordEvent(int a, int b, int id, float value);          // 0x00d06240
+};
+struct cScoreTable {
+    float Fceee30(cCity_s00dc_a100* city, cCivNoun* noun);                    // 0x00ceee30
+};
+struct cStrategy {
+    void Fcf9040(cCity_s00dc_a100* city, uint32_t a, uint32_t b, const Vector3_s00dc_a100& pos, const Vector4* v, int c, int d);   // 0x00cf9040
+};
+struct cStarRecord_s00dc_a100 {
+    char pad[0x184];
+    int  mCommContext;                                             // +0x184
+    int  GetCommContext();                                         // 0x00ce6950
+    int  GetCommContext(uint32_t id, uint32_t group, int mode);    // 0x00ce6950
+};
+struct cPlanet_s00dc_a100 {
+    char         pad[0x13c];
+    cStarRecord_s00dc_a100* mpStarRecord;                                     // +0x13c
+};
+struct cCommManager {
+    void ShowCommEvent(cCity_s00dc_a100* a, cCity_s00dc_a100* b, int ctx, uint32_t id, uint32_t grp, int e);   // 0x00aeb760
+    void ShowCommEvent(cCivNoun* noun, int a, int ctx);                                  // 0x00aeb760
+};
+struct cSomething {
+    void Fae37c0(int n, Vector3_s00dc_a100 pos);                              // 0x00ae37c0
+};
+struct cAudioSystem {
+    PV(00) PV(01) PV(02) PV(03) PV(04) PV(05) PV(06) PV(07) PV(08) PV(09) PV(0a) PV(0b)
+    PV(0c) PV(0d) PV(0e) PV(0f) PV(10) PV(11) PV(12) PV(13) PV(14) PV(15) PV(16) PV(17)
+    virtual void PlaySoundAt(uint32_t id, const Vector3_s00dc_a100& pos, const Vector3_s00dc_a100& vel);   // +0x60
+};
+namespace EA {
+namespace Random {
+class RandomLinearCongruential_s00dc_a100 { public:
+    double RandomDoubleUniform();                                  // 0x009360d0
+};
+}
+}
+extern EA::Random::RandomLinearCongruential_s00dc_a100 sMathRandom;           // 0x01601760
+extern cScoreTable g_ScoreTable;                                   // 0x0169c254
+extern cGameNounManager_s00dc_a100*  __cdecl NounManager_s00dc_a100();                   // 0x00b3d300
+extern cRelationshipManager_s00dc_a100* __cdecl RelationshipManager();        // 0x00b3d2c0
+extern cAudioSystem*      __cdecl AudioSystem();                   // 0x00b3d240
+extern cCommManager*      __cdecl CommManager();                   // 0x00b3d4a0
+extern cStrategy*         __cdecl CivModeStrategy();               // 0x00cf74c0
+extern cSomething*        __cdecl Fb26930();                       // 0x00b26930
+extern cPlanet_s00dc_a100*           __cdecl GetActivePlanet();               // 0x01021260
+extern void __cdecl PlayEffectAt(uint32_t id, Vector3_s00dc_a100 pos);        // 0x00dc4560
+extern bool __cdecl StandardVehicleMoveTick(cVehicle_s00dc_a100* v);          // 0x00dc95b0
+struct TradeMem {
+    int     mState;        // 0 heading to city, 1 at city
+    float   mTime;
+    bool    mFlag8;
+    char    pad9[3];
+    int     mFieldC;       // selects the mineral / relationship branch at state 1
+};
+static __forceinline bool Fail(cVehicle_s00dc_a100* self, const char* msg)
+{
+    self->Fca7250(msg);
+    self->Fcaa900();
+    return false;
+}
+static __forceinline bool AlreadyExists(cVehicle_s00dc_a100* self, cCity_s00dc_a100* city, const char* msg)
+{
+    self->Fca7250(msg);
+    self->Fcac000(city, 5, 0);
+    return false;
+}
+// ---- items of slice s00dca100 end
+
+// ---- items of slice s00dcd720 begin (TODO(rewrite): local stubs, replace by canonical classes)
+struct cSpatialObject_s00dc_d720 {
+    PV(00) PV(01) PV(02) PV(03) PV(04) PV(05) PV(06) PV(07) PV(08) PV(09) PV(0a)
+    virtual const Vector3& GetPosition();                          // +0x2c
+    PV(0c) PV(0d) PV(0e) PV(0f) PV(10) PV(11) PV(12) PV(13) PV(14) PV(15)
+    virtual bool Vf58();                                           // +0x58
+    bool FUN_00c42210(float f);                                    // 0x00c42210
+    PV(17) PV(18) PV(19) PV(1a) PV(1b) PV(1c) PV(1d) PV(1e) PV(1f)
+    PV(20) PV(21) PV(22) PV(23) PV(24) PV(25) PV(26) PV(27) PV(28) PV(29) PV(2a) PV(2b) PV(2c) PV(2d)
+    virtual void* IsType(uint32_t typeID);                         // +0xb8
+};
+struct cGameData_s00dc_d720 {
+    PV(00) PV(01)
+    virtual cSpatialObject_s00dc_d720* GetSpatial();                          // +0x08
+    PV(03)
+    virtual uint32_t GetOwnerID();                                 // +0x10
+    PV(05) PV(06) PV(07) PV(08) PV(09) PV(0a) PV(0b) PV(0c) PV(0d) PV(0e) PV(0f) PV(10) PV(11) PV(12) PV(13)
+    virtual void SetAttackTarget(cGameData_s00dc_d720* target);               // +0x50
+    float GetRange();                                              // 0x00bfc400
+    bool FUN_00bfc600();                                           // 0x00bfc600
+};
+struct cEntityBase {
+    virtual void AddRef();
+    PV(01) PV(02) PV(03) PV(04) PV(05) PV(06) PV(07)
+    virtual uint32_t GetTypeID();                                  // +0x20
+    uint32_t dpad04[(0x120 - 4) / 4];
+};
+struct cEntity : cEntityBase, cGameData_s00dc_d720 {
+    uint32_t pad124[(0x290 - 0x120 - sizeof(cGameData_s00dc_d720)) / 4];
+    int mf290;                                                     // +0x290
+    uint32_t pad294;
+    int mf298;                                                     // +0x298
+    int mf29c;                                                     // +0x29c
+    bool FUN_00bd3280(void* vehicle);                              // 0x00bd3280
+};
+struct cBuildingBase {
+    virtual void AddRef();
+    uint32_t dpad04[(0x588 - 4) / 4];
+};
+struct cBuilding_s00dc_d720 : cBuildingBase, cGameData_s00dc_d720 {
+    bool FUN_00bd3550(void* vehicle);                              // 0x00bd3550
+};
+struct cCulturalConvertCityOrder_s00dc_d720 {
+    virtual void AddRef();
+    virtual void Release();                                        // +0x04
+    PV(02) PV(03) PV(04) PV(05) PV(06) PV(07) PV(08) PV(09) PV(0a)
+    virtual bool IsDone();                                         // +0x2c
+    void FUN_00dc8c50(void* vehicle);                              // 0x00dc8c50
+    void FUN_00dc8c00(void* vehicle);                              // 0x00dc8c00
+    void FUN_00dcc350(void* vehicle);                              // 0x00dcc350
+};
+struct OrderRef {                                                  // EA::AutoRefCount<cCulturalConvertCityOrder>
+    cCulturalConvertCityOrder_s00dc_d720* mpObject;
+    OrderRef& operator=(cCulturalConvertCityOrder_s00dc_d720* p);             // 0x00b5f950
+};
+struct cCity_s00dc_d720;
+struct cVehicle_s00dc_d720;
+struct BuildingVector;
+struct EntityVector_s00dc_d720;
+struct cCulturalTargetBase {
+    virtual void AddRef();
+    virtual void Release();                                        // +0x04
+    PV(02) PV(03) PV(04) PV(05) PV(06) PV(07) PV(08) PV(09) PV(0a)
+    virtual bool IsDestroyed();                                    // +0x2c
+    uint32_t dpad04[(0x38 - 4) / 4];
+};
+struct cCulturalTarget_s00dc_d720 : cCulturalTargetBase {
+    cGameData_s00dc_d720 mGameData;                                           // +0x38
+    uint32_t pad3c[(0x100 - 0x38 - sizeof(cGameData_s00dc_d720)) / 4];
+    cSpatialObject_s00dc_d720 mSpatial;                                       // +0x100
+    uint32_t pad104[(0x1d8 - 0x100 - sizeof(cSpatialObject_s00dc_d720)) / 4];
+    int mf1d8;                                                     // +0x1d8
+    uint32_t mf1dc;                                                // +0x1dc
+
+    cCity_s00dc_d720* FUN_00bd84e0();                                         // 0x00bd84e0 (the target's city)
+};
+cCulturalTarget_s00dc_d720* __cdecl FUN_00bd8420(void* info);                 // 0x00bd8420
+struct Civilization {
+    PV(00) PV(01) PV(02) PV(03) PV(04) PV(05) PV(06) PV(07) PV(08) PV(09) PV(0a) PV(0b) PV(0c) PV(0d) PV(0e) PV(0f)
+    PV(10) PV(11) PV(12)
+    virtual uint32_t GetPoliticalID();                             // +0x4c
+};
+struct cCity_s00dc_d720 {
+    PV(00) PV(01) PV(02) PV(03) PV(04) PV(05) PV(06) PV(07) PV(08) PV(09) PV(0a)
+    virtual bool IsDestroyed();                                    // +0x2c
+    Civilization* GetCivilization();                               // 0x00bd9bf0
+    bool FUN_00bd7e20();                                           // 0x00bd7e20
+    EntityVector_s00dc_d720* GetMembers();                                    // 0x00c8e810 (cTribe)
+    void FUN_00be5700(BuildingVector* out);                        // 0x00be5700
+    cCulturalTarget_s00dc_d720* FUN_00bd8d70(cVehicle_s00dc_d720* v);                    // 0x00bd8d70
+};
+struct EntityVector_s00dc_d720 { cEntity** mpBegin; cEntity** mpEnd; };
+struct BuildingVector {                                            // fixed eastl::vector<AutoRefCount<cBuilding>>
+    cBuilding_s00dc_d720** mpBegin;
+    cBuilding_s00dc_d720** mpEnd;
+    cBuilding_s00dc_d720** mpCapacity;
+    uint32_t mAllocPad;
+    cBuilding_s00dc_d720** mpFixedBuffer;                                     // +0x10
+    uint32_t mCookie;
+    cBuilding_s00dc_d720* mBuffer[32];
+    BuildingVector()
+    {
+        mpBegin = mBuffer;
+        mpEnd = mBuffer;
+        mpCapacity = mBuffer + 32;
+        mpFixedBuffer = mBuffer;
+    }
+    ~BuildingVector();                                             // 0x008e2b20
+};
+struct cEmpire_s00dc_d720 {
+    int FUN_00bf0d10(cEntity* e);                                  // 0x00bf0d10
+};
+struct Info_s00dc_d720 {                                                      // FUN_00ca71d0 result
+    cGameDataObj* mpObject;
+    uint32_t dpad04[3];
+    int mKind;                                                     // +0x10
+};
+struct cVehicleTicker_s00dc_d720 {
+    void* GetGroupOrder(Info_s00dc_d720* info);                               // 0x00dcd430
+};
+cVehicleTicker_s00dc_d720* __cdecl FUN_00c9efc0();                            // 0x00c9efc0 (ticker singleton)
+cCulturalConvertCityOrder_s00dc_d720* __cdecl FUN_00dc4c80(void* groupOrder); // 0x00dc4c80 (interface_cast)
+struct VehicleList { cVehicle_s00dc_d720** mpBegin; cVehicle_s00dc_d720** mpEnd; };
+struct cNounManager_s00dc_d720 {
+    cEmpire_s00dc_d720* GetEmpire(uint32_t politicalID);                      // 0x00b25f40
+    VehicleList* GetVehicles();                                    // 0x00ae73b0
+};
+cNounManager_s00dc_d720* __cdecl NounManager_s00dc_d720();                               // 0x00b3d300
+struct cVehicleBase_s00dc_d720 {
+    virtual void AddRef();
+    virtual void Release();                                        // +0x04
+    PV(02) PV(03) PV(04) PV(05) PV(06) PV(07) PV(08) PV(09) PV(0a) PV(0b) PV(0c) PV(0d) PV(0e) PV(0f)
+    PV(10) PV(11) PV(12)
+    virtual uint32_t GetPoliticalID();                             // +0x4c
+    uint32_t dpad04[(0x34 - 4) / 4];
+    cSpatialObject_s00dc_d720 mLoco;                                          // +0x34
+    uint32_t pad38[(0x508 - 0x38) / 4];
+};
+struct cVehicle_s00dc_d720 : cVehicleBase_s00dc_d720, cGameData_s00dc_d720 {                        // game data base at +0x508
+    uint32_t pad50c[(0xb20 - 0x508 - sizeof(cGameData_s00dc_d720)) / 4];
+    int mState;                                                    // +0xb20
+
+    void FUN_00caa900();                                           // 0x00caa900 (finish the order)
+    void FUN_00ca7250(const char* msg);                            // 0x00ca7250 (log)
+    Info_s00dc_d720* FUN_00ca71d0();                                          // 0x00ca71d0
+    cSpatialObject_s00dc_d720* GetTarget();                                   // 0x00c9fee0
+    cCity_s00dc_d720* FUN_00c9f3d0();                                         // 0x00c9f3d0
+    void FUN_00dc4d00(cSpatialObject_s00dc_d720* s);                          // 0x00dc4d00
+    void FUN_00c9fa30(cCulturalTarget_s00dc_d720* t);                         // 0x00c9fa30
+};
+cEntity* __cdecl FUN_00dc4ca0(cSpatialObject_s00dc_d720* target);             // 0x00dc4ca0
+bool __cdecl IsValidFireTarget(cGameData_s00dc_d720* mine, cGameData_s00dc_d720* theirs);   // 0x00dc4e20 (anonymous namespace)
+cGameData_s00dc_d720* __cdecl FUN_00dc69a0(cVehicle_s00dc_d720* v, Civilization* civ, int a, int b, int c);   // 0x00dc69a0
+struct State {
+    uint32_t mPoliticalID;
+    OrderRef mOrder;                                               // +4
+};
+// ---- items of slice s00dcd720 end
+
+// ---- items of slice s00dcf2e0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+void operator delete[](void* p);   // 0x00f47380
+namespace SP {
+struct cSPVector3 {
+    float x, y, z;
+    cSPVector3() {}
+    cSPVector3(float ax, float ay, float az) : x(ax), y(ay), z(az) {}
+    cSPVector3(const cSPVector3& v) { x = v.x; y = v.y; z = v.z; }
+    float LengthSquared() const { return x * x + y * y + z * z; }
+    cSPVector3 Normalized() const
+    {
+        float inv = 1.0f / sqrtf(x * x + y * y + z * z + 1e-8f);
+        return cSPVector3(x * inv, y * inv, z * inv);
+    }
+    bool operator==(const cSPVector3& v) const { return x == v.x && y == v.y && z == v.z; }
+};
+}
+namespace SP {
+inline cSPVector3 operator-(const cSPVector3& a, const cSPVector3& b) { return cSPVector3(a.x - b.x, a.y - b.y, a.z - b.z); }
+}
+namespace SP {
+class cSpatialObject_s00dc_f2e0 {
+public:
+virtual void v00();
+virtual void v04();
+virtual void v08();
+virtual void v0c();
+virtual void v10();
+virtual void v14();
+virtual void v18();
+virtual void v1c();
+virtual void v20();
+virtual void v24();
+virtual void v28();
+    virtual const cSPVector3& GetPosition();   // +0x2c
+virtual void v30();
+virtual void v34();
+virtual void v38();
+virtual void v3c();
+virtual void v40();
+virtual void v44();
+virtual void v48();
+virtual void v4c();
+virtual void v50();
+virtual void v54();
+virtual void v58();
+virtual void v5c();
+virtual void v60();
+virtual void v64();
+virtual void v68();
+virtual void v6c();
+    virtual void v70();
+    virtual float GetFootprintRadius();        // +0x74
+virtual void v78();
+virtual void v7c();
+virtual void v80();
+virtual void v84();
+virtual void v88();
+virtual void v8c();
+virtual void v90();
+virtual void v94();
+virtual void v98();
+virtual void v9c();
+virtual void va0();
+virtual void va4();
+virtual void va8();
+virtual void vac();
+virtual void vb0();
+virtual void vb4();
+    virtual void* Cast(uint32_t type);         // +0xb8
+    virtual void AddRef();                     // +0xbc
+    virtual void Release();                    // +0xc0
+};
+}
+namespace SP {
+class cTargetAt {
+public:
+virtual void v00();
+virtual void v04();
+virtual void v08();
+virtual void v0c();
+virtual void v10();
+virtual void v14();
+virtual void v18();
+virtual void v1c();
+virtual void v20();
+virtual void v24();
+virtual void v28();
+    virtual const cSPVector3& GetPositionAt(float a, float b);   // +0x2c
+};
+}
+namespace SP {
+struct cMoveRequest {
+    char pad0[0x14];
+    cSPVector3 mDst;                       // +0x14 (used when the waypoint list is empty)
+    char pad20[0x5c - 0x20];
+    int mField5C;                          // +0x5c
+    const cSPVector3* GetDestination();    // 0x00c423c0
+};
+}
+namespace SP {
+class cLocomotive_s00dc_f2e0 : public cSpatialObject_s00dc_f2e0 {
+public:
+    virtual void vc4();
+    virtual float GetDesiredSpeed();       // +0xc8
+virtual void vcc();
+virtual void vd0();
+virtual void vd4();
+virtual void vd8();
+virtual void vdc();
+    virtual void MoveTo(const cSPVector3& dst, float goalStopDistance, float acceptableStopDistance, bool relative);   // +0xe0
+    virtual void MoveAround(const cSPVector3& center, float radius);   // +0xe4
+    virtual void MoveTowards(const cSPVector3& dst);                    // +0xe8
+    char pad0[0x270 - 0x4];
+    uint32_t mFlags;                       // +0x2a4 in the vehicle
+    char pad1[0x4d4 - 0x274];
+    cMoveRequest* GetMoveRequest();        // 0x00c41ec0
+};
+}
+namespace SP {
+class cCity_s00dc_f2e0;
+}
+namespace SP {
+struct HostileVec;
+}
+namespace SP {
+class cCombatant_s00dc_f2e0 {
+public:
+virtual void v00();
+virtual void v04();
+    virtual cSpatialObject_s00dc_f2e0* GetSpatialObject();       // +0x08
+    virtual void v0c();
+virtual void v10();
+virtual float GetRadius();
+virtual void v18();
+virtual void v1c();
+virtual void v20();
+virtual void v24();
+virtual void v28();
+virtual void v2c();
+virtual void v30();
+virtual void v34();
+virtual void v38();
+virtual void v3c();
+virtual void v40();
+virtual void v44();
+virtual void v48();
+virtual void v4c();
+virtual void v50();
+virtual void v54();
+    virtual void v58();
+    virtual void* Cast(uint32_t type);                 // +0x5c
+    virtual void AddRef();                             // +0x60
+    virtual void Release();                            // +0x64
+    char pad[0xb1c - 0x508 - 4];
+    float GetStat();                       // 0x00bfc400 (returns 0 when the +0x14 virtual returns 0)
+};
+}
+namespace SP {
+class cVehicle_s00dc_f2e0 {
+public:
+    void* mpVtable;                        // +0x00
+    char pad04[0x30];
+    cLocomotive_s00dc_f2e0 mLoco;                     // +0x34
+    cCombatant_s00dc_f2e0 mCombatant;                 // +0x508
+    int mLocomotion;                       // +0xb1c
+    cSpatialObject_s00dc_f2e0* GetChaseTarget();      // 0x00c9fee0
+    void SetAcceptableCenter(cSPVector3 center);   // 0x00c9fb40
+    const cSPVector3* GetDestinationOut(cSPVector3* out);   // 0x00c9fdc0
+    void FUN_00cacbe0();
+    cCity_s00dc_f2e0* GetCurrentCity();               // 0x00c9f3d0
+    struct HostileVec* GetHostiles();      // 0x00c9e860
+
+    bool CanAttack(cCombatant_s00dc_f2e0* pTarget)
+    {
+        typedef bool (__thiscall *Fn)(cVehicle_s00dc_f2e0*, cCombatant_s00dc_f2e0*);
+        return ((Fn)((void**)mpVtable)[0x40 / 4])(this, pTarget);
+    }
+    void Release()
+    {
+        typedef void (__thiscall *Fn)(cVehicle_s00dc_f2e0*);
+        ((Fn)((void**)mpVtable)[4 / 4])(this);
+    }
+};
+}
+namespace SP {
+static const uint32_t kVehicleType = 0x137e8e0;
+}
+namespace SP {
+struct tSlot_s00dc_f2e0 {                   // cActionCircle::tSlot (0x18 bytes)
+    bool mbOccupied;             // +0x0
+    uint32_t pad04[2];
+    cSPVector3 mPosition;        // +0xc
+    void Occupy(cVehicle_s00dc_f2e0* pVehicle);   // 0x00afa030
+};
+}
+namespace SP {
+struct SlotVec {
+    tSlot_s00dc_f2e0* mpBegin;
+    tSlot_s00dc_f2e0* mpEnd;
+    tSlot_s00dc_f2e0* mpCapacity;
+    void erase(tSlot_s00dc_f2e0* first, tSlot_s00dc_f2e0* last);   // 0x00afc0d0
+};
+}
+namespace SP {
+float CircleRadius(float entityRadius, int count);   // 0x00af9e20 (cdecl)
+}
+namespace SP {
+class cActionCircle_s00dc_f2e0 {
+public:
+    cSPVector3 mFacing;          // +0x00
+    float mRadius;               // +0x0c
+    float mSlotRadius;           // +0x10
+    cSPVector3 mCenter;          // +0x14
+    char pad20[0x50 - 0x20];
+    SlotVec mSlots;              // +0x50
+    char pad5c[0x64 - 0x5c];
+    void Setup(const cSPVector3& center, float radius, const cSPVector3& facing, float altitude);   // 0x00af9cf0
+    void Layout(float entityRadius, int count);   // 0x00afd1c0
+    void RemoveAgent(cVehicle_s00dc_f2e0* pVehicle);         // 0x00afae50
+    void FUN_00c2e4e0();                          // empty
+};
+}
+namespace SP {
+struct Formation;
+}
+namespace SP {
+typedef void (__cdecl *SlotFunc)(Formation*, cActionCircle_s00dc_f2e0*, int);
+}
+namespace SP {
+void __cdecl FUN_00dc7590(Formation*, cActionCircle_s00dc_f2e0*, int);
+}
+namespace SP {
+void __cdecl FUN_00dc76e0();
+}
+namespace SP {
+void __cdecl FUN_00dc6430();
+}
+namespace SP {
+struct Formation {
+    cLocomotive_s00dc_f2e0** mpEntBegin;    // +0x00
+    cLocomotive_s00dc_f2e0** mpEntEnd;      // +0x04
+    char pad08[0x58 - 0x08];
+    cLocomotive_s00dc_f2e0* mpLeader;       // +0x58
+    char pad5c[4];
+    cSpatialObject_s00dc_f2e0* mpTarget;    // +0x60
+    char pad64[0x7c - 0x64];
+    float mMinDistance;          // +0x7c
+    float mMaxDistance;          // +0x80
+    float mEntityRadius;         // +0x84
+    char pad88[0x94 - 0x88];
+    float mTimerInterval;        // +0x94
+    bool mbWaitingForPath;       // +0x98
+    char pad99[0x104 - 0x99];
+    cActionCircle_s00dc_f2e0 mCircle;       // +0x104
+    SlotFunc mpSlotValidationFunc;   // +0x168
+    void* mpLeaderSelectFunc;    // +0x16c
+    void* mpMoveCommandFunc;     // +0x170
+    char pad174[4];
+
+    Formation();                 // 0x00afbaf0
+    ~Formation();                // 0x00afbde0
+    void AddEntity(cLocomotive_s00dc_f2e0* p);      // 0x00afed00
+    void RemoveEntity(cLocomotive_s00dc_f2e0* p);   // 0x00afedf0
+};
+}
+namespace SP {
+struct FormationVec {
+    Formation* mpBegin;
+    Formation* mpEnd;
+    Formation* mpCapacity;
+    void DoInsertValue(Formation* pos, const Formation& value);   // 0x00dcf180
+    void erase(Formation* first, Formation* last);                // 0x00dcf110
+
+    __forceinline int size() const { return (int)(mpEnd - mpBegin); }
+    __forceinline void push_back()
+    {
+        if (mpEnd < mpCapacity) {
+            ::new (mpEnd++) Formation();
+        } else {
+            Formation tmp;
+            DoInsertValue(mpEnd, tmp);
+        }
+    }
+};
+}
+namespace SP {
+template<class T, int N> struct SpFixedVec {
+    T*       mpBegin;
+    T*       mpEnd;
+    T*       mpCapacity;
+    uint32_t mAllocator;
+    T*       mpFixed;
+    uint32_t mPadding;
+    T        mBuffer[N];
+
+    __forceinline SpFixedVec() : mpBegin(mBuffer), mpFixed(mBuffer), mpEnd(mBuffer), mpCapacity(mBuffer + N) {}
+    __forceinline ~SpFixedVec() { if (mpBegin && mpBegin != mpFixed) operator delete[](mpBegin); }
+
+    void DoInsertValue(T* pos, const T& value);   // 0x00cd0550
+    __forceinline int size() const { return (int)(mpEnd - mpBegin); }
+    __forceinline void push_back(const T& value)
+    {
+        if (mpEnd < mpCapacity) {
+            T* p = mpEnd++;
+            if (p) *p = value;
+        } else {
+            DoInsertValue(mpEnd, value);
+        }
+    }
+    __forceinline void erase(T* position)
+    {
+        if (position + 1 < mpEnd)
+            memcpy(position, position + 1, (mpEnd - (position + 1)) * sizeof(T));
+        --mpEnd;
+    }
+};
+}
+namespace SP {
+typedef SpFixedVec<cVehicle_s00dc_f2e0*, 60> VehicleVec;
+}
+namespace SP {
+bool __cdecl IsFormationMember(Formation* pFormation, cVehicle_s00dc_f2e0** ppVehicle);
+}
+namespace SP {
+cVehicle_s00dc_f2e0* __cdecl FindClosestVehicle(VehicleVec* pList, const cSPVector3* pPosition, bool b);
+}
+namespace SP {
+void __cdecl AttemptRepark(cVehicle_s00dc_f2e0* pVehicle);   // anonymous namespace, 0x00dc9430
+}
+namespace SP {
+template<class T> inline void AssignRef(T*& slot, T* p)
+{
+    T* old = slot;
+    if (p != old) {
+        if (p) p->AddRef();
+        slot = p;
+        if (old) old->Release();
+    }
+}
+}
+namespace SP {
+inline cVehicle_s00dc_f2e0* AsVehicle(cSpatialObject_s00dc_f2e0* p) { return p ? (cVehicle_s00dc_f2e0*)p->Cast(kVehicleType) : 0; }
+}
+namespace SP {
+struct InvitedVehicles {
+    char pad00[4];               // +0x34
+    void* mpHead;                // +0x38
+    void* mpTail;                // +0x3c
+    uint32_t mAllocator;         // +0x40
+    uint32_t mSize;              // +0x44
+    uint32_t mFlags;             // +0x48
+    void Clear(uint32_t allocator);   // 0x00eb6280
+
+    void Reset()
+    {
+        mpHead = &mpHead;
+        mpTail = &mpHead;
+        mAllocator = 0;
+        mSize = 0;
+        mFlags = 0;
+    }
+};
+}
+namespace SP {
+struct VehiclePtrVec {
+    cVehicle_s00dc_f2e0** mpBegin;          // +0x50
+    cVehicle_s00dc_f2e0** mpEnd;            // +0x54
+    cVehicle_s00dc_f2e0** mpCapacity;       // +0x58
+    void erase(cVehicle_s00dc_f2e0** first, cVehicle_s00dc_f2e0** last);   // 0x00e25bd0
+};
+}
+namespace SP {
+class cVehicleGroupOrder_s00dc_f2e0 {
+public:
+    char pad0[0x34];
+    InvitedVehicles mInvitedVehicles;   // +0x34
+    char pad4c[0x50 - 0x4c];
+    cVehicle_s00dc_f2e0** mpVehiclesBegin;  // +0x50
+    cVehicle_s00dc_f2e0** mpVehiclesEnd;    // +0x54
+    cVehicle_s00dc_f2e0** mpVehiclesCapacity;   // +0x58
+    char pad5c[0x78 - 0x5c];
+    uint32_t mGroupMoveId;       // +0x78
+    FormationVec mFormations;    // +0x7c
+
+    void FormationMoveToTargets(int);   // 0x00dcf2e0
+    void Clear();                       // 0x00dcfc40
+
+    __forceinline void ClearBaseMembers()
+    {
+        cVehicle_s00dc_f2e0** pVehicleEnd = mpVehiclesEnd;
+        cVehicle_s00dc_f2e0** pVehicleBegin = mpVehiclesBegin;
+        ((VehiclePtrVec*)&mpVehiclesBegin)->erase(pVehicleBegin, pVehicleEnd);
+
+        InvitedVehicles* pInvited = &mInvitedVehicles;
+        pInvited->Clear(pInvited->mAllocator);
+        FormationVec* pFormations = &mFormations;
+        void** pHead = &pInvited->mpHead;
+        *pHead = pHead;
+        pInvited->mpTail = pHead;
+        pInvited->mAllocator = 0;
+        *(uint8_t*)&pInvited->mSize = 0;
+        pInvited->mFlags = 0;
+
+        Formation* pFormBegin = pFormations->mpBegin;
+        Formation* pFormEnd = pFormations->mpEnd;
+        pFormations->erase(pFormBegin, pFormEnd);
+    }
+};
+}
+namespace SP {
+static const uint32_t kBuildingType = 0xe9cb8ba;
+}
+namespace SP {
+static const uint32_t kProtectBuildingFlag = 0x1007ae63;
+}
+namespace SP {
+class cLocomotiveView {
+public:
+virtual void v00();
+virtual void v04();
+virtual void v08();
+virtual void v0c();
+virtual void v10();
+virtual void v14();
+virtual void v18();
+virtual void v1c();
+virtual void v20();
+virtual void v24();
+virtual void v28();
+    virtual const cSPVector3& GetPosition();      // +0x2c
+};
+}
+namespace SP {
+class cBuilding_s00dc_f2e0 {
+public:
+virtual void v00();
+virtual void v04();
+virtual void v08();
+    virtual int HasFlag(uint32_t flag);            // +0x0c
+    char pad04[0x120 - 0x04];
+    cCombatant_s00dc_f2e0 mCombatant;                         // +0x120
+};
+}
+namespace SP {
+class cCityMemberView {
+public:
+virtual void v00();
+virtual void v04();
+virtual void v08();
+    virtual int HasFlag(uint32_t flag);            // +0x0c
+    char pad04[0x34 - 0x04];
+    cLocomotiveView mLoco;                         // +0x34
+    char padLoco[0x120 - 0x34 - sizeof(cLocomotiveView)];
+    cCombatant_s00dc_f2e0 mCombatant;                         // +0x120
+};
+}
+namespace SP {
+struct cTargetProviderView {
+    char pad00[0x588];
+    cCombatant_s00dc_f2e0 mCombatant;                         // +0x588
+};
+}
+namespace SP {
+struct MemberVec {
+    cCityMemberView** mpBegin;
+    cCityMemberView** mpEnd;
+    cCityMemberView** mpCapacity;
+};
+}
+namespace SP {
+struct HostileVec {
+    cCombatant_s00dc_f2e0** mpBegin;
+    cCombatant_s00dc_f2e0** mpEnd;
+    cCombatant_s00dc_f2e0** mpCapacity;
+};
+}
+namespace SP {
+typedef SpFixedVec<cTargetProviderView*, 16> TargetVec;
+}
+namespace SP {
+class cCivilization_s00dc_f2e0 {
+public:
+virtual void v00();
+virtual void v04();
+virtual void v08();
+virtual void v0c();
+virtual void v10();
+virtual void v14();
+virtual void v18();
+virtual void v1c();
+virtual void v20();
+virtual void v24();
+virtual void v28();
+virtual void v2c();
+virtual void v30();
+virtual void v34();
+virtual void v38();
+virtual void v3c();
+virtual void v40();
+virtual void v44();
+virtual void v48();
+    virtual uint32_t GetOwnerId();                 // +0x4c
+};
+}
+namespace SP {
+class cCity_s00dc_f2e0 {
+public:
+virtual void v00();
+virtual void v04();
+virtual void v08();
+virtual void v0c();
+virtual void v10();
+virtual void v14();
+virtual void v18();
+virtual void v1c();
+virtual void v20();
+virtual void v24();
+virtual void v28();
+    virtual bool IsDestroyed();                    // +0x2c
+
+    cCivilization_s00dc_f2e0* GetCivilization();              // 0x00bd9bf0
+    cBuilding_s00dc_f2e0* GetCityHall();                      // 0x00bd9b40
+    int DefenseLevel();                            // 0x00bd9bb0
+    int Population();                              // 0x00bd9b70
+    MemberVec* GetMembers();                       // 0x00c8e810
+    void CollectTargets(TargetVec* out);           // 0x00be5700
+    cCombatant_s00dc_f2e0* GetBestOpportunityTarget(cVehicle_s00dc_f2e0* pVehicle, cCivilization_s00dc_f2e0* pCiv,
+                                         int a, int b, int c);   // 0x00dc69a0
+};
+}
+namespace SP {
+struct CombatantRef {
+    cCombatant_s00dc_f2e0* mpObject;                          // +0x00
+    void Release();                                // 0x00ae6670
+    void Set(cCombatant_s00dc_f2e0* pObject);                 // 0x00ae6690
+};
+}
+namespace SP {
+struct CombatantRefVec {
+    CombatantRef* mpBegin;
+    CombatantRef* mpEnd;
+    CombatantRef* mpCapacity;
+};
+}
+namespace SP {
+class cMilitaryAttackCityOrder_s00dc_f2e0 : public cVehicleGroupOrder_s00dc_f2e0 {
+public:
+    char pad88[0x94 - 0x88];
+    cCity_s00dc_f2e0* mpCity;                                 // +0x94
+    uint32_t mAttackerId;                          // +0x98
+    CombatantRefVec mCurrentBestTarget;            // +0x9c
+    char padA8[0xb0 - 0xa8];
+    CombatantRefVec mNextBuildingTarget;           // +0xb0
+
+    cCombatant_s00dc_f2e0* GetCurrentTarget(cVehicle_s00dc_f2e0* pVehicle);   // 0x00dcfc90
+};
+}
+namespace SP {
+class cCulturalTarget_s00dc_f2e0 {
+public:
+    virtual void v00();
+    virtual void Release();                        // +0x04
+virtual void v08();
+virtual void v0c();
+virtual void v10();
+virtual void v14();
+virtual void v18();
+virtual void v1c();
+virtual void v20();
+virtual void v24();
+    virtual void v28();
+    virtual bool IsDestroyed();                    // +0x2c
+
+    void RemoveVehicleGroup(uint32_t groupId);     // 0x00be3230
+};
+}
+namespace SP {
+class cCulturalConvertCityOrder_s00dc_f2e0 : public cVehicleGroupOrder_s00dc_f2e0 {
+public:
+    char pad88[0x94 - 0x88];
+    cCulturalTarget_s00dc_f2e0* mpCulturalTarget;             // +0x94
+    uint32_t mAttackerId;                          // +0x98
+    void* mpHologram;                              // +0x9c
+    cVehicle_s00dc_f2e0* mpHoloVehicle;                       // +0xa0
+    void* mpHoloEffect;                            // +0xa4
+
+    ~cCulturalConvertCityOrder_s00dc_f2e0();                  // 0x00dd0180
+    void ClearHologramEffects();                   // 0x00dc6530
+};
+}
+namespace SP {
+bool __cdecl IsValidFireTarget(cCombatant_s00dc_f2e0* pSelf, cCombatant_s00dc_f2e0* pTarget);   // 0x00dc4e20
+}
+namespace SP {
+cBuilding_s00dc_f2e0* __cdecl InterfaceCastBuilding(CombatantRef* pRef);             // 0x00cb4630
+}
+// ---- items of slice s00dcf2e0 end
+
+// @ 0x00b5b5d0
+void* AdjustThunk_00b5b5d0::FUN_00b5b5d0_adjust(unsigned id)
+{
+    char* self = (char*)this;
+    if (id == 0x11416b8) return self - 8;
+    if (id == 0x179c807) return (self - 8) ? self : 0;
+    return 0;
+}
+
+// @ 0x00dc2e40
+cSpatialObject_s00dc_2720** FUN_00dc2e40(cSpatialObject_s00dc_2720** first, cSpatialObject_s00dc_2720** last, cSpatialObject_s00dc_2720* cursor, AgentDistanceCompare pred)
+{
+    for (;;) {
+        while (pred.FUN_00ac0730(ObjectSpatial(*first), ObjectSpatial(cursor)))
+            ++first;
+        do {
+            --last;
+        } while (pred.FUN_00ac0730(ObjectSpatial(cursor), ObjectSpatial(*last)));
+
+        if (first >= last)
+            break;
+        FUN_00b2af00(first, last);
+        ++first;
+    }
+    if (cursor)
+        cursor->Release();
+    return first;
+}
+
+// @ 0x00dc2ee0
+void FUN_00dc2ee0(cSpatialObject_s00dc_2720** begin, cSpatialObject_s00dc_2720** first, cSpatialObject_s00dc_2720** last, AgentDistanceCompare pred)
+{
+    FUN_00aca890(begin, first, pred);
+    for (cSpatialObject_s00dc_2720** it = first; it < last; ++it) {
+        cSpatialObject_s00dc_2720* elem = *it;
+        if (!pred.FUN_00ac0730(ObjectSpatial(elem), ObjectSpatial(*begin)))
+            continue;
+
+        if (elem)
+            elem->AddRef();
+
+        cSpatialObject_s00dc_2720* head = *begin;
+        if (head != elem) {
+            if (head)
+                head->AddRef();
+            *it = head;
+            if (elem)
+                elem->Release();
+        }
+
+        FUN_00aca0c0(begin, 0, (int)(first - begin), 0, EA::AutoRefCount_s00dc_2720<cSpatialObject_s00dc_2720>(elem), pred);
+        if (elem)
+            elem->Release();
+    }
+    FUN_00aca900(begin, first, pred);
+}
+
+// @ 0x00dc4560
+void __cdecl FUN_00dc4560(void* name, float x, float y, float z)
+{
+    void* sys = EA_GetSystemAT();
+    void* h = sys != 0 ? (void*)VC0(sys, 0x20) : 0;
+    Start3dSoundByName(name, h, x, y, z);
+}
+
+// @ 0x00dc45a0
+void __cdecl FUN_00dc45a0(void* self)
+{
+    float* p = (float*)VC0((char*)self + 0x34, 0x2c);
+    if (SP_GetCurrentGameMode() == &g_mode_1654c10)
+        return;
+    void* sys = EA_GetSystemAT();
+    void* h = sys != 0 ? (void*)VC0(sys, 0x20) : 0;
+    Start3dSoundByName(g_sounds_45a0[D(self, 0xb20)], h, p[0], p[1], p[2]);
+}
+
+// @ 0x00dc4610
+void __cdecl FUN_00dc4610(void* self)
+{
+    float* p = (float*)VC0((char*)self + 0x34, 0x2c);
+    void* sys = EA_GetSystemAT();
+    void* h = sys != 0 ? (void*)VC0(sys, 0x20) : 0;
+    Start3dSoundByName(g_sounds_4610[D(self, 0xb20)], h, p[0], p[1], p[2]);
+}
+
+// @ 0x00dc4c20
+void* KeyLookup::Match2E9(int key)
+{
+    if (key == 0x2e9ae69 || key == 0x2e98ab4)
+        return this;
+    return Default(key);
+}
+
 // @ 0x00dc4c40
 void* KeyLookup::Match3DF(int key)
 {
     if (key == 0x3df2cb9 || key == 0x2e98ab4)
         return this;
     return Default(key);
+}
+
+// @ 0x00dc4c60
+void KeyLookup::Reset()
+{
+    Obj* p = mpObj;
+    mpObj = 0;
+    if (p)
+        ((Vfn0)p->mpVtbl->mSlots[kVt04])(p);
 }
 
 // @ 0x00dc4d40
@@ -973,6 +2630,198 @@ char FUN_00dc4f90(Obj* self)
     self->Ca7250((char*)"(1) No target.");
     self->Caa900();
     return 0;
+}
+
+// @ 0x00dc5030
+char FUN_00dc5030(Obj* self, void* a1, void* a2, void* a3, void* a4, Obj** a5)
+{
+    Obj* o = *a5;
+    if (((VfnB)o->mpVtbl->mSlots[kVt2C])(o)) {
+        self->Caa900();
+        return 0;
+    }
+    return 1;
+}
+
+// @ 0x00dc5050
+void FUN_00dc5050(Obj* self, Obj* ctx)
+{
+    float v[3];
+    int state = self->mStateB1c;
+    if (state == 1) {
+        float* p = ((City*)ctx)->GetPositionPtr();
+        v[0] = p[0];
+        v[1] = p[1];
+        v[2] = p[2];
+        if (v[0] == DAT_0169fa68 && v[1] == DAT_0169fa6c && v[2] == DAT_0169fa70)
+            return;
+        ((VfnF3)self->mSub34.mpVtbl->mSlots[kVtE8])(&self->mSub34, v, DAT_0147c368, DAT_0147c36c);
+    } else {
+        void* o = (void*)((VfnPI)self->mSub34.mpVtbl->mSlots[kVt2C])(&self->mSub34, state);
+        void* r = (void*)((VfnVV)ctx->mpVtbl->mSlots[kVt6C])(ctx, v, o);
+        ((Bec660*)r)->Run(v, o);
+        if (v[0] == DAT_0169fa68 && v[1] == DAT_0169fa6c && v[2] == DAT_0169fa70)
+            return;
+        ((VfnF3)self->mSub34.mpVtbl->mSlots[kVtE8])(&self->mSub34, v, DAT_0147c368, DAT_0147c36c);
+    }
+    self->C9fb40(v[0], v[1], v[2], DAT_0147c368, DAT_0147c36c);
+}
+
+// @ 0x00dc51c0
+void FUN_00dc51c0(Obj* self, Obj* ctx)
+{
+    float start[3];
+    float dir[3];
+    float tmp[3];
+    if (self->mStateB1c == 1) {
+        float* p = ((City*)ctx)->GetPositionPtr();
+        start[0] = p[0];
+        start[1] = p[1];
+        start[2] = p[2];
+        if (start[0] == DAT_0169fa68 && start[1] == DAT_0169fa6c && start[2] == DAT_0169fa70)
+            return;
+        float step = DAT_013eecd8;
+        for (;;) {
+            float* a = self->Cbd9480(tmp);
+            float dx = start[0] - a[0];
+            float dy = start[1] - a[1];
+            float dz = start[2] - a[2];
+            float len = sqrtf((dx * dx + dy * dy + dz * dz) + DAT_013ec4b8);
+            float inv = DAT_01485720 / len;
+            dir[0] = start[0] + inv * dx * step;
+            dir[1] = start[1] + inv * dy * step;
+            dir[2] = start[2] + inv * dz * step;
+            PlanetModel* pm = (PlanetModel*)SP_PlanetModel(dir);
+            float* q = pm->CalcSurface(dir, dir);
+            dir[0] = q[0];
+            dir[1] = q[1];
+            dir[2] = q[2];
+            step -= DAT_01470f1c;
+            pm = (PlanetModel*)SP_PlanetModel(dir);
+            if (pm->Cb7e3e0(dir))
+                break;
+            if (!(step > DAT_01485378))
+                break;
+        }
+    } else {
+        void* r = (void*)((VfnVV)ctx->mpVtbl->mSlots[kVt6C])(ctx, dir, (void*)5);
+        ((CityVisualizer*)r)->RequestPosition(dir, 5);
+        float* a = self->Cbd9480(tmp);
+        float dx = dir[0] - a[0];
+        float dy = dir[1] - a[1];
+        float dz = dir[2] - a[2];
+        float inv = DAT_01485720 / sqrtf(dx * dx + dy * dy + dz * dz);
+        dir[0] = dir[0] + inv * dx * DAT_013eecd8;
+        dir[1] = dir[1] + inv * dy * DAT_013eecd8;
+        dir[2] = dir[2] + inv * dz * DAT_013eecd8;
+        PlanetModel* pm = (PlanetModel*)SP_PlanetModel(dir);
+        float* q = pm->DirectionToSurfacePosition(dir, dir);
+        dir[0] = q[0];
+        dir[1] = q[1];
+        dir[2] = q[2];
+    }
+    ((VfnF3)self->mSub34.mpVtbl->mSlots[kVtE8])(&self->mSub34, dir, DAT_0147c368, DAT_0147c36c);
+    self->C9fb40(dir[0], dir[1], dir[2], DAT_0147c368, DAT_0147c36c);
+}
+
+// @ 0x00dc54e0
+float FUN_00dc54e0(Obj* self)
+{
+    Obj* o = (Obj*)self->C9fee0();
+    if (!o)
+        return 0.0f;
+    Obj* r = (Obj*)((VfnPI)o->mpVtbl->mSlots[kVtB8])(o, 0x17f243b);
+    if (r && ((VfnB)r->mpVtbl->mSlots[kVt2C])(r))
+        return 0.0f;
+    if ((self->mByte2a4 & 6) != 0)
+        return 0.0f;
+    float* p1 = (float*)((VfnP)o->mpVtbl->mSlots[kVt2C])(o);
+    float x1 = p1[0];
+    float y1 = p1[1];
+    float z1 = p1[2];
+    float* p2 = (float*)((VfnP)self->mSub34.mpVtbl->mSlots[kVt2C])(&self->mSub34);
+    float dx = p2[0] - x1;
+    float dy = p2[1] - y1;
+    float dz = p2[2] - z1;
+    float dist = sqrtf(dx * dx + (dy * dy + dz * dz));
+    float lim = ((Sub*)&self->mSub508)->Cbfc400();
+    Obj* h = (Obj*)self->mSub34.Cc41ec0();
+    float d;
+    if (h->mField5c == 0) {
+        d = DAT_013eb1bc;
+    } else {
+        float* c = (float*)self->mSub34.Cc421f0();
+        float ex = c[0] - x1;
+        float ey = c[1] - y1;
+        float ez = c[2] - z1;
+        d = sqrtf(ez * ez + ey * ey + ex * ex);
+    }
+    if ((lim < dist && (lim < d || d == DAT_013eb1bc)) ||
+        (dist < DAT_014763b0 && (d < DAT_014763b0 || d == DAT_013eb1bc)))
+        return 1.0f;
+    return 0.0f;
+}
+
+// @ 0x00dc5670
+char FUN_00dc5670(Obj* self, void* a1, void* a2, uint32_t flags)
+{
+    Obj* o = (Obj*)self->C9fee0();
+    if (!o)
+        return 0;
+    Obj* target = (Obj*)((VfnPI)o->mpVtbl->mSlots[kVtB8])(o, 0x13f94d4);
+    if (!target)
+        return 0;
+    Obj* ctx = self ? (Obj*)&self->mSub508 : 0;
+    if (!IsValidFireTarget(ctx, target))
+        return 0;
+    Obj* d = (Obj*)((VfnP)target->mpVtbl->mSlots[kVt08])(target);
+    float* p = (float*)((VfnP)d->mpVtbl->mSlots[kVt2C])(d);
+    float* q = self->C9e880();
+    float dx = q[0] - p[0];
+    float dy = q[1] - p[1];
+    float dz = q[2] - p[2];
+    float dist = sqrtf(dz * dz + (dy * dy + dx * dx));
+    float extra = (flags & 0x100) ? DAT_0147c390 : 0.0f;
+    float lim = ((Sub*)&self->mSub508)->Cbfc400() + extra;
+    if (lim <= dist)
+        return 0;
+    ((VfnV)self->mSub508.mpVtbl->mSlots[kVt50])(&self->mSub508, target);
+    return 1;
+}
+
+// @ 0x00dc5760
+void FUN_00dc5760(Obj* self)
+{
+    Obj* p = self->mpObjB7c;
+    if (p) {
+        self->mpObjB7c = 0;
+        ((Vfn0)p->mpVtbl->mSlots[kVtC0])(p);
+    }
+    ((VfnI)self->mSub508.mpVtbl->mSlots[kVt50])(&self->mSub508, 0);
+    self->Cabe70();
+}
+
+// @ 0x00dc59d0
+int ComputeAndApply(Self* self, uint32 a2, uint32 a3, uint32 a4, uint32 a5, float* out)
+{
+    if (out) {
+        *out = 0.0f;
+    }
+    Obj_s00dc_57a0* obj = self->GetObj();
+    if (!obj) {
+        return 0;
+    }
+    float f8 = 8.0f;
+    float f1 = self->mSub.Get() * 0.75f;
+    float fLo = self->mSub.Get() - 1.0f;
+    Helper(&f8, &f1, self, obj);
+    void** vt = *(void***)obj;
+    Vec3f* p1 = ((Vfn2)vt[11])(obj, f8, f1);
+    self->Take(p1);
+    vt = *(void***)obj;
+    Vec3f* p2 = ((Vfn2)vt[11])(obj, f8, fLo);
+    self->Apply(*p2);
+    return 1;
 }
 
 // @ 0x00dc67d0
@@ -1492,6 +3341,206 @@ void Node77a0(cVehicle* self, int, int, int, int, BufHolder* h)
     self->mLoco.Vec();
 }
 
+// @ 0x00dc77d0
+namespace SP {
+namespace VehicleTree {
+bool Idle_Activate(void * pTree, double a2, unsigned int a3, unsigned int a4, nSPBehaviorTree::behavior_memory_block * a5, nSPBehaviorTree::behavior_memory_block * a6)
+{
+  cVehicleTree_s00dc_77d0* pThis = (cVehicleTree_s00dc_77d0*)pTree;
+  int32_t id = pThis->GetState()->m4c4;
+  if (id == -1)
+    return 0;
+
+  cStarRecordVector vec;
+  vec.mpBegin = 0;
+  vec.mpEnd = 0;
+  vec.mpCapacity = 0;
+  g_16c7aa4->mp74->Collect(id, &vec);
+  if (vec.mpBegin == vec.mpEnd) {
+    vec.Destroy();
+    return 0;
+  }
+
+  float* pRef = pThis->mSub34.v2c();
+  float fRefX = pRef[0];
+  float fRefY = pRef[1];
+  float fRefZ = pRef[2];
+  int32_t nCount = (int32_t)(vec.mpEnd - vec.mpBegin);
+  cStarEntry* pBest = 0;
+  float fBest = 3.402823466e+38F;
+  for (int32_t i = 0; i < nCount; ++i) {
+    cStarEntry* pEntry = vec.mpBegin[i];
+    if (pEntry != 0) {
+      cStarEntry* pObj = (cStarEntry*)pEntry->v0c(0x1186577);
+      if (pObj != 0) {
+        float* pPos = pObj->v2c();
+        float fDist = (pPos[1] - fRefY) * (pPos[1] - fRefY)
+                    + (pPos[2] - fRefZ) * (pPos[2] - fRefZ)
+                    + (pPos[0] - fRefX) * (pPos[0] - fRefX);
+        if (fDist < fBest) {
+          fBest = fDist;
+          pBest = pObj;
+        }
+      }
+    }
+  }
+  for (cStarEntry** pp = vec.mpBegin; pp < vec.mpEnd; ++pp) {
+    if (*pp != 0)
+      (*pp)->v04();
+  }
+  if (vec.mpBegin != 0 && ((int32_t*)vec.mpBegin)[-1] != 0)
+    FUN_00f47380(vec.mpBegin);
+  return pBest;
+}
+}
+}  // namespace SP::VehicleTree
+
+// @ 0x00dc7cc0
+void cVehicleTicker_s00dc_77d0::Destroy()
+{
+  cSpatialVector* pVec38 = &m38;
+  mpVt00 = (void*)0x0147c4d8;
+  mpVt08 = (void*)0x0147c4b4;
+  pVec38->Destroy();
+  if (mVoxSoundIds.mpBegin != 0 && ((int32_t*)mVoxSoundIds.mpBegin)[-1] != 0)
+    FUN_00f47380(mVoxSoundIds.mpBegin);
+  mGroupOrders.Destroy();
+  mpVt00 = (void*)0x0147c468;
+  mpVt08 = (void*)0x0147c444;
+  FUN_00b5b690(this);
+  if (g_1699ab8 == this)
+    g_1699ab8 = 0;
+  mpVt00 = (void*)0x013ec458;
+  mpVt08 = (void*)0x013eb938;
+}
+
+// @ 0x00dc7d70
+cVehicleTicker_s00dc_77d0::cVehicleTicker_s00dc_77d0()
+{
+  mpVt00 = (void*)0x0147c468;
+  mpVt08 = (void*)0x0147c444;
+  g_1699ab8 = this;
+  FUN_00b5b6f0(this);
+  mpVt00 = (void*)0x0147c4d8;
+  mpVt08 = (void*)0x0147c4b4;
+  mGroupOrders.mpBegin = 0;
+  mGroupOrders.mpEnd = 0;
+  mGroupOrders.mpCapacity = 0;
+  mVoxSoundIds.mpBegin = 0;
+  mVoxSoundIds.mpEnd = 0;
+  mVoxSoundIds.mpCapacity = 0;
+  m38.mpBegin = 0;
+  m38.mpEnd = 0;
+  m38.mpCapacity = 0;
+}
+
+// @ 0x00dc7dd0
+void cConvertCityOrder5::FUN_00dc7dd0(cSrc5* src)
+{
+  mSub64.SetFrom(src);
+  cMgr5* mgr = (cMgr5*)FUN_00b3d290();
+  mGen90 = mgr->Get();
+}
+
+// @ 0x00dc7e00
+void cConvertCityOrder5::Init(cSrc5* src)
+{
+  mSub64.SetFrom(src);
+  cMgr5* mgr = (cMgr5*)FUN_00b3d290();
+  mGen90 = mgr->Get();
+
+  void* obj = src->mpObj;
+  void* nw;
+  if (obj) {
+    nw = ((void* (__thiscall*)(void*, uint32_t))((*(void***)obj)[3]))(obj, 0x3d5c477);
+  } else {
+    nw = 0;
+  }
+  void* old = mEffect94;
+  if (nw != old) {
+    if (nw) ((void (__thiscall*)(void*))((*(void***)nw)[0]))(nw);
+    mEffect94 = nw;
+    if (old) ((void (__thiscall*)(void*))((*(void***)old)[1]))(old);
+  }
+  m98 = src->mVal;
+  ((cEffect5*)mEffect94)->Apply(m78);
+  if (mAnim9c) {
+    cAnim5* a = (cAnim5*)mAnim9c;
+    mAnim9c = 0;
+    a->Release();
+  }
+  mbFlagAC = 0;
+}
+
+// @ 0x00dc8ba0
+void CultureHash::Swap(CultureHash& other)
+{
+    CultureHashTail t = mTail;
+    mTail = other.mTail;
+    other.mTail = t;
+    _ReadWriteBarrier();
+
+    CultureHashNode** bp = mBuckets;
+    mBuckets = other.mBuckets;
+    other.mBuckets = bp;
+    _ReadWriteBarrier();
+
+    uint32_t bc = mBucketCount;
+    mBucketCount = other.mBucketCount;
+    other.mBucketCount = bc;
+    _ReadWriteBarrier();
+
+    uint32_t ec = mElementCount;
+    mElementCount = other.mElementCount;
+    other.mElementCount = ec;
+}
+
+// @ 0x00dc8c00
+void DecalRemover::Remove(Removable* p)
+{
+    RemoveLocals locals;
+    locals.key = p;
+    if (p)
+        p->AddRef();
+    TaggedPtr key;
+    key.mBytes.mTag = 0;
+    mMap.Find(locals.it, &locals.key, key.mValue);
+    if (p)
+        p->Release();
+}
+
+// @ 0x00dc8c50
+void DecalManager::Remove(RemoveArg* arg)
+{
+    arg->Method(0);
+    if (!Skip()) {
+        Removable** it = mVec50Begin;
+        while (it != mVec50End && *it != arg)
+            ++it;
+        if (it != mVec50End) {
+            if (it + 1 < mVec50End)
+                CopyImpl_do_copy(it + 1, mVec50End, it);
+            --mVec50End;
+            Removable* last = *mVec50End;
+            if (last)
+                last->Release();
+        }
+
+        int count = (int)(mDecalEnd - mDecalBegin);
+        if (count > 0) {
+            uint32_t off = 0;
+            int n = count;
+            do {
+                DecalEntry* e = (DecalEntry*)((uint8_t*)mDecalBegin + off);
+                void* target = arg ? (void*)&arg->mField34 : 0;
+                e->RemoveDecal(target);
+                off += 0x178;
+                --n;
+            } while (n != 0);
+        }
+    }
+}
+
 // @ 0x00dc95b0
 bool StandardVehicleMoveTick(CVehicle* pVeh)
 {
@@ -1511,6 +3560,226 @@ void FUN_00dc9680(IRefCounted* pObject)
     AutoRefCount ref(pObject);
     gLocomotiveList.push_back(ref);
 }
+
+// @ 0x00dca100
+namespace SP { namespace VehicleTree {
+bool EstablishTradeRouteOrder_Tick(cVehicle_s00dc_a100* self, int, int, int, int, TradeMem* mem, int, float dt)
+{
+    if (self->mPathFlags & 8)
+        return Fail(self, "(31) TR: path failure");
+    {
+        CityRef* ref = self->Fca71d0();
+        cCity_s00dc_a100* c = ref->mpCity;
+        if (c) {
+            cCity_s00dc_a100* city = c->Cast(0xee9b2232);
+            int selfCiv;
+            if (city && !city->IsDestroyed() && ((selfCiv = self->Vf4c()), selfCiv != city->Vf4c())) {
+                if (mem->mState == 0) {
+                    if (self->mLoco.IsNearGoal()) {
+                        mem->mTime = 0.0f;
+                        mem->mState = 1;
+                        return true;
+                    }
+                    if (!mem->mFlag8 && self->mLoco.Fc42210(150.0f)) {
+                        mem->mFlag8 = true;
+                        city->Fbdb3b0(self, 1);
+                    }
+                    return StandardVehicleMoveTick(self);
+                }
+                if (mem->mState != 1) {
+                    return Fail(self, "(36) TR: unknown exit");
+                }
+
+                bool bSame = city->Vf4c() == self->Vf4c();
+                bool bA = city->mSpatial.IsPlayerControlled() && !bSame;
+                bool bB = !city->mSpatial.IsPlayerControlled() && !bSame;
+                bool bC = false;
+                int iState = -1;
+                cGameData_s00dc_a100* gd = &self->mGameData;
+                cCivNoun* civNoun = NounManager_s00dc_a100()->Fb25f40(gd->GetNounID());
+
+                if (0.0f < mem->mTime) {
+                    if (bA && civNoun->Fbef7e0()) {
+                        iState = civNoun->mState434;
+                        if (iState == 1 || iState == 2) {
+                            civNoun->mState434 = 0xffffffff;
+                            civNoun->mField438 = 0;
+                            bC = (iState == 1);
+                        }
+                    }
+                } else {
+                    PlayEffectAt(0x6b36f685, self->mLoco.GetPosition());
+                    if (city->Fbdb200(gd->GetNounID()) == 1) {
+                        return AlreadyExists(self, city, "(34) TR: already exists");
+                    }
+                    if (bA && !civNoun->Fbef7e0())
+                        civNoun->Fbf0330(city);
+                }
+
+                mem->mTime = mem->mTime + dt;
+                if (((bB || bSame) && mem->mTime > 3.0f) || iState == 1 || iState == 2) {
+                    mem->mTime = 0.0f;
+                    self->Fca80e0(0x13);
+                    civNoun->mTimer128.Restart();
+                    if (city->Fbdb200(gd->GetNounID()) == 1) {
+                        return AlreadyExists(self, city, "(35) TR: already exists");
+                    }
+                    cSpatialObject_s00dc_a100* loco = &self->mLoco;
+                    if (loco->IsPlayerControlled())
+                        Fb26930()->Fae37c0(2, city->mSpatial.GetPosition());
+
+                    cCivNoun* civNoun2 = NounManager_s00dc_a100()->Fb25f40(gd->GetNounID());
+                    RelationshipManager()->Fd00d60(city->GetCivilization(), civNoun2, 1);
+                    float score = g_ScoreTable.Fceee30(city, civNoun2);
+
+                    if ((bA && bC) || (bB && (double)score > sMathRandom.RandomDoubleUniform()) || bSame) {
+                        PlayEffectAt(0xd5475761, loco->GetPosition());
+                        city->Fbe1820(gd->GetNounID());
+                        AudioSystem()->PlaySoundAt(0x4288913, loco->GetPosition(), loco->GetVelocity());
+                        self->Fcac000(city, 5, 0);
+                        if (!bSame) {
+                            if (loco->IsPlayerControlled()) {
+                                cCivilization_s00dc_a100* civ = city->GetCivilization();
+                                Vector4 v;
+                                v.x = civ->mPos.x; v.y = civ->mPos.y; v.z = civ->mPos.z; v.w = 1.0f;
+                                CivModeStrategy()->Fcf9040(city, 0xb327dc63, 0xaa9a8ed7, loco->GetPosition(), &v, 0, 0);
+                                CommManager()->ShowCommEvent(city, city, GetActivePlanet()->mpStarRecord->GetCommContext(),
+                                                             0xdbf385bf, 0x9cecad2c, 0);
+                                return true;
+                            }
+                            if (city->mSpatial.IsPlayerControlled()) {
+                                cCivNounPos* n = (cCivNounPos*)NounManager_s00dc_a100()->Fb25f40(gd->GetNounID());
+                                Vector4 v;
+                                v.x = n->mPos.x; v.y = n->mPos.y; v.z = n->mPos.z; v.w = 1.0f;
+                                CivModeStrategy()->Fcf9040(city, 0xe1f6430a, 0xaa9a8ed7, loco->GetPosition(), &v, 0, 0);
+                            }
+                        }
+                        return true;
+                    }
+
+                    PlayEffectAt(0x5bc0bd48, loco->GetPosition());
+                    if (loco->IsPlayerControlled()) {
+                        cSPTimer_s00dc_a100* timer = &city->mCommTimer;
+                        uint64_t elapsed = timer->GetElapsedTime();
+                        if (elapsed > 40000) {
+                            cCivilization_s00dc_a100* civ = city->GetCivilization();
+                            Vector4 v;
+                            v.x = civ->mPos.x; v.y = civ->mPos.y; v.z = civ->mPos.z; v.w = 1.0f;
+                            CivModeStrategy()->Fcf9040(city, 0x8b24acc6, 0xaa9a8ed7, loco->GetPosition(), &v, 0, 0);
+                            CommManager()->ShowCommEvent(city, city, GetActivePlanet()->mpStarRecord->GetCommContext(),
+                                                         0xdbf385bf, 0x26546f31, 0);
+                            timer->Restart();
+                        }
+                    }
+                    self->Fcaa900();
+                    if (bA)
+                        civNoun->Fbef8c0();
+                    return true;
+                }
+                return true;
+
+            }
+        }
+    }
+    return Fail(self, "(32) TR: bad city");
+}
+}}  // namespace SP::VehicleTree
+
+// @ 0x00dca7b0
+namespace SP { namespace VehicleTree {
+bool OfferToBuyCityOrder_Tick(cVehicle_s00dc_a100* self, int, int, int, int, TradeMem* mem, int, float)
+{
+    bool bGameMode = (GetCurrentGameMode() == (void*)0x1654c04);
+
+    if (self->mPathFlags & 8)
+        return Fail(self, "(36) BC: path failure");
+
+    cGameData_s00dc_a100* gd = &self->mGameData;
+    cCivNoun* civNoun = NounManager_s00dc_a100()->Fb25f40(gd->GetNounID());
+    (void)gd->GetNounID();
+
+    CityRef* ref = self->Fca71d0();
+    cCity_s00dc_a100* city = ref->mpCity;
+    if (city) {
+        cCommunity_s00dc_a100* comm = (cCommunity_s00dc_a100*)city->Cast(0x403df5f);
+        if (comm) {
+            int selfVf4c = self->Vf4c();
+            if (comm->Vf4c() != selfVf4c && comm->Vf4c() != -1) {
+                (void)comm->mSpatial.IsPlayerControlled();
+                if (bGameMode)
+                    (void)self->mLoco.IsPlayerControlled();
+
+                switch (mem->mState) {
+                case 0:
+                    if (self->mLoco.IsNearGoal()) {
+                        mem->mTime = 0.0f;
+                        mem->mState = 1;
+                        return true;
+                    }
+                    if (!StandardVehicleMoveTick(self))
+                        return Fail(self, "(37) BC: move failure");
+                    return true;
+
+                case 1:
+                    if (mem->mFieldC == 0) {
+                        float cost = civNoun->Fbf0640();
+                        if (cost > civNoun->GetMoney())
+                            return Fail(self, "(39a) BC: not enough money");
+                        comm->GetNoun()->FcivicRadiusAccum(cost, 0);
+                        civNoun->SpendMoney(cost);
+
+                        cStarRecord_s00dc_a100* star = GetActivePlanet()->mpStarRecord;
+                        int ctx = star->GetCommContext(0xdbf385bf, 0x4ce5b975, 0);
+                        CommManager()->ShowCommEvent(comm->GetNoun(), 0, ctx);
+
+                        cPathArcBuilder* builder = NounManager_s00dc_a100()->Fbfe7a0();
+                        builder->SetCiv(civNoun->Vf4c());
+                        builder->mSpatial.SetPosition(self->mLoco.GetPosition());
+                        Vector3_s00dc_a100* p = comm->mSpatial.GetPoint(20.0f, 1);
+                        builder->Start(civNoun, comm, p, 20.0f, 1);
+                        return Fail(self, "(40a) BC: normal completion");
+                    } else {
+                        float cost = civNoun->Fbf06d0();
+                        if (cost > civNoun->GetMoney())
+                            return Fail(self, "(39b) BC: not enough money");
+                        civNoun->SpendMoney(cost);
+                        (void)RelationshipManager()->RecordEvent(comm->Vf4c(), civNoun->Vf4c(), 0x526e4fb, 1.0f);
+
+                        cPathArcBuilder* builder = NounManager_s00dc_a100()->Fbfe7a0();
+                        builder->SetCiv(civNoun->Vf4c());
+                        builder->mSpatial.SetPosition(self->mLoco.GetPosition());
+                        Vector3_s00dc_a100* p = comm->mSpatial.GetPoint(20.0f, 1);
+                        builder->Start(civNoun, comm, p, 20.0f, 1);
+                        return Fail(self, "(40b) BC: normal completion");
+                    }
+
+                default:
+                    return Fail(self, "(41) BC: unknown exit");
+                }
+            }
+        }
+    }
+    return Fail(self, "(38) BC: bad mineral");
+}
+}}  // namespace SP::VehicleTree
+
+// @ 0x00dcaad0
+namespace SP { namespace VehicleTree {
+bool MoveToPointOrder_Tick(cVehicle_s00dc_a100* self)
+{
+    if (self->mPathFlags32 & 2)
+        AttemptRepark(self);
+    else if (self->mPathFlags32 & 4)
+        self->Fcacbe0();
+
+    if (self->mLoco.IsNearGoal()) {
+        self->Fca7250("(43) MTP: normal completion");
+        self->Fcaa900();
+        return false;
+    }
+    return true;
+}
+}}  // namespace SP::VehicleTree
 
 // @ 0x00dcb8e0
 uint32_t FUN_00dcb8e0(BehaviorObj* self, CombatCtx* ctx, float dt)
@@ -1565,6 +3834,24 @@ uint32_t FUN_00dcb8e0(BehaviorObj* self, CombatCtx* ctx, float dt)
     FUN_00dc4ed0(&a, &b, self, obj);
     FUN_00ca97a0(&tx, a, b);
     FUN_00c9fb40(tx, ty, tz, a, b);
+  }
+  return 1;
+}
+
+// @ 0x00dcbe00
+uint32_t FUN_00dcbe00(BehaviorObj* self, TimerCtx* ctx, float dt)
+{
+  ctx->mTimer = ctx->mTimer + dt;
+
+  float threshold;
+  if (SP_GetCurrentGameMode() == &DAT_01654c10)
+    threshold = 0.0f;
+  else
+    threshold = 3.0f;
+
+  if (threshold < ctx->mTimer && ctx->mFlag == 0) {
+    ctx->mFlag = 1;
+    FUN_00dc9680(self);
   }
   return 1;
 }
@@ -1703,6 +3990,23 @@ void* FUN_00dcc440(BehaviorObj* self, int specialty, void* exclude)
   return first;
 }
 
+// @ 0x00dcc5c0
+void FUN_00dcc5c0(BehaviorObj* self)
+{
+  int index = self->mFieldB20;
+
+  if (gVehicleTicker == 0) {
+    void* mem = AllocSimObject(0x58, "Simulator/SimSingleton", 0, 0, 0, 0);
+    if (mem == 0)
+      gVehicleTicker = 0;
+    else
+      gVehicleTicker = SimSingleton_ctor(mem);
+  }
+
+  ((Vector24*)gVehicleTicker)->PushUnique(
+      (&gVehicleServiceTable708)[index]);
+}
+
 // @ 0x00dcc610
 void FUN_00dcc610(BehaviorObj* self)
 {
@@ -1763,6 +4067,43 @@ bool FUN_00dcc6e0(BehaviorObj* self)
 
   FUN_00dcc610(self);
   return true;
+}
+
+// @ 0x00dcc750
+uint32_t TradeWithCityOrder_Activate(BehaviorObj* self, int a2, int a3, int a4, int a5, TradeCtx* ctx)
+{
+  if (ctx != 0) {
+    ctx->mField0 = 0;
+    ctx->mFlag8 = 0;
+  }
+
+  if (self->mFieldB28 == 1 && self->mFieldB58 != 0.0f) {
+    ctx->mField0 = 3;
+    Brain* brain = self->GetBrain();
+    if (brain->mpObj0 != 0) {
+      void* city = CallVArgP(brain->mpObj0, 0x0c, 0xee9b2232);
+      if (city != 0) {
+        if (!CallVBool(city, 0x2c)) {
+          FUN_00dc5050(self, city);
+          FUN_00ca80e0(self, 0x14);
+          return 1;
+        }
+      }
+    }
+    FUN_00ca7250(self, "(20) trade: no city");
+    FUN_00caa900(self);
+    return 0;
+  }
+
+  ctx->mField0 = 0;
+  void* city = FUN_00dcc440(self, 2, 0);
+  if (city == 0) {
+    FUN_00ca7250(self, "(19) trade: no city");
+    FUN_00caa900(self);
+    return 0;
+  }
+  FUN_00dc5050(self, city);
+  return 1;
 }
 
 // @ 0x00dcc830
@@ -1843,6 +4184,189 @@ void __fastcall FUN_00dcd590(void* this_, int unused)
     (void)this_;
 }
 }  // namespace SP
+
+// @ 0x00dcdac0
+namespace SP { namespace VehicleTree {
+bool ConvertCityOrder_Tick(cVehicle_s00dc_d720* self, int, int, int, int, State* st)
+{
+    if (st->mOrder.mpObject->IsDone()) {
+        self->FUN_00caa900();
+        return false;
+    }
+    Info_s00dc_d720* info = self->FUN_00ca71d0();
+    if (info->mKind == 3) {
+        if (info->mpObject) {
+            cCulturalTarget_s00dc_d720* tgt = (cCulturalTarget_s00dc_d720*)info->mpObject->Cast(0x3d5c477);
+            if (tgt && !tgt->IsDestroyed()) {
+                cCity_s00dc_d720* city = tgt->FUN_00bd84e0();
+                if (city && !city->IsDestroyed()) {
+                    if (city->GetCivilization()->GetPoliticalID() != st->mPoliticalID) {
+                        self->FUN_00ca7250("(6.5) Convert city order complete");
+                        self->FUN_00caa900();
+                        return false;
+                    }
+                    int cntA = 0;
+                    int cntB = 0;
+                    VehicleList* list = NounManager_s00dc_d720()->GetVehicles();
+                    int n = (int)(list->mpEnd - list->mpBegin);
+                    for (int i = 0; i < n; ++i) {
+                        cVehicle_s00dc_d720* v = list->mpBegin[i];
+                        if (v != self) {
+                            uint32_t mine = self->GetPoliticalID();
+                            if (v->GetPoliticalID() == mine && v->mState == 1) {
+                                Info_s00dc_d720* vi = v->FUN_00ca71d0();
+                                if (vi->mKind == 3) {
+                                    cCulturalTarget_s00dc_d720* vt = FUN_00bd8420(vi);
+                                    if (vt && vt->FUN_00bd84e0() == city) {
+                                        if (v->GetTarget() == &vt->mSpatial)
+                                            ++cntA;
+                                        if (FUN_00dc4ca0(v->GetTarget()) == 0)
+                                            ++cntB;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    if (cntB > 0) {
+                        cEntity* e = FUN_00dc4ca0(self->GetTarget());
+                        if (e && e->mf290 <= 1 && !e->FUN_00bfc600())
+                            return true;
+                    }
+                    if (cntA < 1 && city->FUN_00bd7e20())
+                        goto phase2;
+
+                    {
+                        cBuilding_s00dc_d720* best = 0;
+                        float bestDist = 3.402823466e+38F;
+                        BuildingVector found;
+                        city->FUN_00be5700(&found);
+                        cBuilding_s00dc_d720** it = found.mpBegin;
+                        cBuilding_s00dc_d720** end = found.mpEnd;
+                        for (; it != end; ++it) {
+                            cBuilding_s00dc_d720* o = *it;
+                            if (IsValidFireTarget(self, o) && !o->FUN_00bd3550(self)) {
+                                VehicleList* list2 = NounManager_s00dc_d720()->GetVehicles();
+                                int n2 = (int)(list2->mpEnd - list2->mpBegin);
+                                for (int j = 0; j < n2; ++j) {
+                                    cVehicle_s00dc_d720* v = list2->mpBegin[j];
+                                    uint32_t mine = self->GetPoliticalID();
+                                    if (v->GetPoliticalID() == mine && v->mState == 1) {
+                                        Info_s00dc_d720* vi = v->FUN_00ca71d0();
+                                        if (vi->mKind == 3) {
+                                            cCulturalTarget_s00dc_d720* vt = FUN_00bd8420(vi);
+                                            if (vt && vt->FUN_00bd84e0() == city) {
+                                                cSpatialObject_s00dc_d720* os = o->GetSpatial();
+                                                const Vector3& vp = v->mLoco.GetPosition();
+                                                const Vector3& op = os->GetPosition();
+                                                float d = (op - vp).Length();
+                                                if (d < o->GetRange() + 10.0f) {
+                                                    cSpatialObject_s00dc_d720* os2 = o->GetSpatial();
+                                                    const Vector3& mp = self->mLoco.GetPosition();
+                                                    const Vector3& op2 = os2->GetPosition();
+                                                    float d2 = (op2 - mp).Length();
+                                                    if (d2 < bestDist) {
+                                                        best = o;
+                                                        bestDist = d2;
+                                                    }
+                                                    break;
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        if (best) {
+                            self->FUN_00dc4d00(best->GetSpatial());
+                            self->SetAttackTarget(best);
+                            return true;
+                        }
+                        if (self->FUN_00c9f3d0() == city) {
+                            cGameData_s00dc_d720* g = FUN_00dc69a0(self, city->GetCivilization(), 1, 1, 1);
+                            if (g) {
+                                int cnt = 0;
+                                bool ok = true;
+                                if (self->mLoco.Vf58()) {
+                                    VehicleList* list3 = NounManager_s00dc_d720()->GetVehicles();
+                                    int n3 = (int)(list3->mpEnd - list3->mpBegin);
+                                    for (int k = 0; k < n3; ++k) {
+                                        cVehicle_s00dc_d720* v = list3->mpBegin[k];
+                                        if (v != self) {
+                                            uint32_t mine = self->GetPoliticalID();
+                                            if (v->GetPoliticalID() == mine && v->mState == 1) {
+                                                int kind = v->FUN_00ca71d0()->mKind;
+                                                if (kind == 1 || kind == 3) {
+                                                    cSpatialObject_s00dc_d720* gs = g->GetSpatial();
+                                                    if (v->GetTarget() == gs)
+                                                        ++cnt;
+                                                }
+                                            }
+                                        }
+                                    }
+                                    if (cnt >= 2)
+                                        ok = false;
+                                }
+                                if (ok) {
+                                    self->FUN_00dc4d00(g->GetSpatial());
+                                    self->SetAttackTarget(g);
+                                    return true;
+                                }
+                            }
+                        }
+                    }
+                phase2:
+                    if (self->FUN_00c9f3d0() == city && !city->FUN_00bd7e20()) {
+                        EntityVector_s00dc_d720* members = city->GetMembers();
+                        for (unsigned i = 0; i < (unsigned)(members->mpEnd - members->mpBegin); ++i) {
+                            cEntity* m = members->mpBegin[i];
+                            if (IsValidFireTarget(self, m) && !m->FUN_00bd3280(self) && m->GetTypeID() == 0x1a56aba
+                                && ((m->mf298 - m->mf29c) > 0 || m->mf290 > 0)) {
+                                if (NounManager_s00dc_d720()->GetEmpire(self->GetPoliticalID())->FUN_00bf0d10(m) == 0) {
+                                    self->FUN_00dc4d00(m->GetSpatial());
+                                    self->SetAttackTarget(m);
+                                    return true;
+                                }
+                            }
+                        }
+                    }
+                    cSpatialObject_s00dc_d720* ts = self->GetTarget();
+                    cEntity* te = ts ? (cEntity*)ts->IsType(0x1a55e4d) : 0;
+                    if (!te || te->mf290 > 1 || te->FUN_00bfc600()) {
+                        if (self->mLoco.FUN_00c42210(90.0f) && tgt->mf1d8 == 2 && tgt->mf1dc != self->GetOwnerID()) {
+                            cCulturalTarget_s00dc_d720* nt = city->FUN_00bd8d70(self);
+                            if (!nt) {
+                                self->FUN_00ca7250("(7) No culture target when rescanning");
+                                self->FUN_00caa900();
+                                return false;
+                            }
+                            self->FUN_00c9fa30(nt);
+                            cCulturalConvertCityOrder_s00dc_d720* ord = FUN_00dc4c80(FUN_00c9efc0()->GetGroupOrder(self->FUN_00ca71d0()));
+                            if (ord && !ord->IsDone()) {
+                                st->mPoliticalID = nt->mGameData.GetOwnerID();
+                                st->mOrder.mpObject->FUN_00dc8c50(self);
+                                ord->FUN_00dc8c00(self);
+                                ord->FUN_00dcc350(self);
+                                st->mOrder = ord;
+                                self->FUN_00dc4d00(&nt->mSpatial);
+                                self->SetAttackTarget(&nt->mGameData);
+                                return true;
+                            }
+                        }
+                        self->FUN_00dc4d00(&tgt->mSpatial);
+                        self->SetAttackTarget(&tgt->mGameData);
+                    }
+                    return true;
+                }
+                self->FUN_00ca7250("(8) bad city");
+            }
+        }
+        self->FUN_00ca7250("(9) bad culture target");
+    }
+    self->FUN_00ca7250("(10) orders mismatch");
+    self->FUN_00caa900();
+    return false;
+}
+}}  // namespace SP::VehicleTree
 
 // @ 0x00dce970
 void TObj::FUN_00dce970(void* param_2)
@@ -2034,6 +4558,326 @@ have:
     v[2] = (uint32_t)(cap2 * 0x178 + (int)buf);
     return this;
 }
+
+// @ 0x00dcf2e0
+namespace SP {
+void cVehicleGroupOrder_s00dc_f2e0::FormationMoveToTargets(int)
+{
+    int numVehicles = (int)(mpVehiclesEnd - mpVehiclesBegin);
+    for (int i = 0; i < numVehicles; i++) {
+        cVehicle_s00dc_f2e0* pVehicle = mpVehiclesBegin[i];
+        cSpatialObject_s00dc_f2e0* pTarget = pVehicle->GetChaseTarget();
+        if (!pTarget)
+            continue;
+
+        int current = -1;
+        int best = -1;
+        int numFormations = mFormations.size();
+        for (int j = 0; j < numFormations; j++) {
+            Formation* pFormation = &mFormations.mpBegin[j];
+            if (pFormation->mpEntBegin == pFormation->mpEntEnd)
+                continue;
+            cVehicle_s00dc_f2e0* pOther = 0;
+            if (pFormation->mpLeader)
+                pOther = AsVehicle(pFormation->mpLeader);
+            if (!pOther)
+                pOther = AsVehicle(*pFormation->mpEntBegin);
+            if (pOther && pFormation->mpTarget == pTarget && pOther->mLocomotion == pVehicle->mLocomotion) {
+                const cSPVector3& a = pTarget->GetPosition();
+                const cSPVector3& b = pOther->mLoco.GetPosition();
+                cSPVector3 d = b - a;
+                if (d.LengthSquared() < FLT_MAX)
+                    best = j;
+                if (IsFormationMember(pFormation, &pVehicle))
+                    current = j;
+            }
+        }
+        if (current != best) {
+            if (current != -1) {
+                cLocomotive_s00dc_f2e0* pLoco = pVehicle ? &pVehicle->mLoco : 0;
+                mFormations.mpBegin[current].RemoveEntity(pLoco);
+                mFormations.mpBegin[current].mCircle.RemoveAgent(pVehicle);
+            }
+            if (best != -1) {
+                cLocomotive_s00dc_f2e0* pLoco = pVehicle ? &pVehicle->mLoco : 0;
+                Formation* pBest = &mFormations.mpBegin[best];
+                pBest->AddEntity(pLoco);
+                const cSPVector3& c = ((cTargetAt*)pTarget)->GetPositionAt(pBest->mMinDistance, pBest->mMaxDistance);
+                pVehicle->SetAcceptableCenter(c);
+            }
+            current = best;
+        }
+
+        if (current == -1) {
+            mFormations.push_back();
+            Formation* pNew = mFormations.mpEnd - 1;
+            pNew->mpSlotValidationFunc = FUN_00dc7590;
+            pNew->mpLeaderSelectFunc = (void*)FUN_00dc76e0;
+            pNew->mpMoveCommandFunc = (void*)FUN_00dc6430;
+            AssignRef(pNew->mpTarget, pTarget);
+            pNew->mMinDistance = 8.0f;
+            pNew->mMaxDistance = pVehicle->mCombatant.GetStat() * 0.75f;
+            cLocomotive_s00dc_f2e0* pLoco = &pVehicle->mLoco;
+            pNew->mEntityRadius = pLoco->GetFootprintRadius() + 2.0f;
+            pNew->mTimerInterval = 0.1f;
+            pNew->AddEntity(pLoco);
+            AssignRef(pNew->mpLeader, pLoco);
+            pNew->mbWaitingForPath = true;
+            pLoco->MoveTowards(((cTargetAt*)pTarget)->GetPositionAt(pNew->mMinDistance, pNew->mMaxDistance * 0.5f));
+            pVehicle->SetAcceptableCenter(((cTargetAt*)pTarget)->GetPositionAt(0.0f, 1.0f));
+            pNew->mCircle.mSlots.erase(pNew->mCircle.mSlots.mpBegin, pNew->mCircle.mSlots.mpEnd);
+        }
+        else {
+            Formation* pFormation = &mFormations.mpBegin[current];
+            cActionCircle_s00dc_f2e0* pCircle = &pFormation->mCircle;
+            cLocomotive_s00dc_f2e0* pLoco = pVehicle ? &pVehicle->mLoco : 0;
+            if (pLoco == pFormation->mpLeader) {
+                cMoveRequest* pRequest = pVehicle->mLoco.GetMoveRequest();
+                if (pRequest->mField5C) {
+                    cSPVector3 dst = *pRequest->GetDestination();
+                    if (pCircle->mSlots.mpBegin == pCircle->mSlots.mpEnd) {
+                        cSPVector3 d = pTarget->GetPosition() - dst;
+                        cSPVector3 dir = d.Normalized();
+                        float radius = CircleRadius(pFormation->mEntityRadius, (int)(pFormation->mpEntEnd - pFormation->mpEntBegin));
+                        pCircle->Setup(dst, radius, dir, 0.0f);
+                        pCircle->Layout(pFormation->mEntityRadius, (int)(pFormation->mpEntEnd - pFormation->mpEntBegin));
+                        pFormation->mpSlotValidationFunc(pFormation, pCircle, 1);
+                    }
+                }
+            } else {
+                cLocomotive_s00dc_f2e0* pSp = &pVehicle->mLoco;
+                if (pSp->GetDesiredSpeed() == 0.0f && !(pVehicle->mLoco.mFlags & 4) &&
+                    pCircle->mSlots.mpBegin != pCircle->mSlots.mpEnd) {
+                    const cSPVector3& p = pSp->GetPosition();
+                    cSPVector3 d = p - pCircle->mCenter;
+                    float r = pCircle->mRadius;
+                    if (r + r < sqrtf(d.x * d.x + d.y * d.y + d.z * d.z))
+                        pSp->MoveAround(pCircle->mCenter, r * 1.75f);
+                }
+            }
+        }
+    }
+
+    int numFormations = mFormations.size();
+    for (int j = 0; j < numFormations; j++) {
+        Formation* pFormation = &mFormations.mpBegin[j];
+        if (pFormation->mpEntBegin == pFormation->mpEntEnd || pFormation->mCircle.mSlots.mpBegin == pFormation->mCircle.mSlots.mpEnd)
+            continue;
+        VehicleVec list;
+        cActionCircle_s00dc_f2e0* pCircle = &pFormation->mCircle;
+        int count = (int)(pFormation->mpEntEnd - pFormation->mpEntBegin);
+        for (int k = 0; k < count; k++) {
+            cVehicle_s00dc_f2e0* pV = AsVehicle(pFormation->mpEntBegin[k]);
+            const cSPVector3& p = pV->mLoco.GetPosition();
+            cSPVector3 d = p - pCircle->mCenter;
+            float dist = sqrtf(d.x * d.x + d.y * d.y + d.z * d.z);
+            if (dist < pCircle->mRadius + pCircle->mRadius)
+                list.push_back(pV);
+        }
+        int remaining = list.size();
+        int numSlots = (int)(pCircle->mSlots.mpEnd - pCircle->mSlots.mpBegin);
+        if (numSlots > 0 && remaining > 0) {
+            pFormation->mpSlotValidationFunc(pFormation, pCircle, 1);
+            for (int s = 0; s < numSlots; s++) {
+                if (remaining <= 0)
+                    break;
+                tSlot_s00dc_f2e0* pSlot = &pCircle->mSlots.mpBegin[s];
+                if (!pSlot->mbOccupied) {
+                    bool flag = false;
+                    cVehicle_s00dc_f2e0* pClosest = FindClosestVehicle(&list, &pSlot->mPosition, flag);
+                    if (pClosest) {
+                        pSlot->Occupy(pClosest);
+                        cSPVector3 tmp;
+                        const cSPVector3* pCur = pClosest->GetDestinationOut(&tmp);
+                        if (!(*pCur == pSlot->mPosition))
+                            pClosest->mLoco.MoveTo(pSlot->mPosition, 1.0f, 2.0f, false);
+                        cVehicle_s00dc_f2e0** it = list.mpBegin;
+                        for (; it != list.mpEnd; ++it) {
+                            if (*it == pClosest) {
+                                list.erase(it);
+                                break;
+                            }
+                        }
+                        --remaining;
+                    }
+                }
+            }
+            for (int k = 0; k < list.size(); k++) {
+                cVehicle_s00dc_f2e0* pV = list.mpBegin[k];
+                uint32_t flags = pV->mLoco.mFlags;
+                if (flags & 2)
+                    AttemptRepark(pV);
+                else if (flags & 4)
+                    pV->FUN_00cacbe0();
+            }
+        }
+        pCircle->FUN_00c2e4e0();
+    }
+}
+}  // namespace SP
+
+// @ 0x00dcfc40
+namespace SP {
+void cVehicleGroupOrder_s00dc_f2e0::Clear()
+{
+    ClearBaseMembers();
+}
+}  // namespace SP
+
+// @ 0x00dcfc90
+namespace SP {
+cCombatant_s00dc_f2e0* cMilitaryAttackCityOrder_s00dc_f2e0::GetCurrentTarget(cVehicle_s00dc_f2e0* pVehicle)
+{
+    if (mpCity->IsDestroyed())
+        return 0;
+    if (mpVehiclesBegin == mpVehiclesEnd)
+        return 0;
+    if (mpCity->GetCivilization()->GetOwnerId() == mAttackerId)
+        return 0;
+
+    int locomotion = pVehicle->mLocomotion;
+    CombatantRef* pCurrent = &mCurrentBestTarget.mpBegin[locomotion];
+    CombatantRef* pNext = &mNextBuildingTarget.mpBegin[locomotion];
+
+    if (pCurrent->mpObject && IsValidFireTarget(&pVehicle->mCombatant, pCurrent->mpObject)) {
+        cBuilding_s00dc_f2e0* pBuilding = (cBuilding_s00dc_f2e0*)pCurrent->mpObject->Cast(kBuildingType);
+        cVehicle_s00dc_f2e0* pTargetVehicle = (cVehicle_s00dc_f2e0*)pCurrent->mpObject->Cast(kVehicleType);
+        if (pBuilding) {
+            if (pBuilding->HasFlag(kProtectBuildingFlag) && mpCity->DefenseLevel() > 1)
+                goto clear_current;
+            if (mpCity->Population() > 0)
+                goto clear_current;
+            {
+                HostileVec* pHostiles = pVehicle->GetHostiles();
+                if (pHostiles->mpBegin != pHostiles->mpEnd)
+                    goto clear_current;
+            }
+            return pCurrent->mpObject;
+        }
+        if (pTargetVehicle) {
+            if (pVehicle->CanAttack(&pTargetVehicle->mCombatant))
+                return pCurrent->mpObject;
+        }
+    }
+
+clear_current:
+    {
+        cCombatant_s00dc_f2e0* pOld = pCurrent->mpObject;
+        pCurrent->mpObject = 0;
+        if (pOld)
+            pOld->Release();
+    }
+    mFormations.erase(mFormations.mpBegin, mFormations.mpEnd);
+
+    if (pNext->mpObject && IsValidFireTarget(&pVehicle->mCombatant, pNext->mpObject)) {
+        cBuilding_s00dc_f2e0* pNextBuilding = InterfaceCastBuilding(pNext);
+        if (pNextBuilding) {
+            if (pNextBuilding->HasFlag(kProtectBuildingFlag) && mpCity->DefenseLevel() > 1) {
+                // protected building: fall through to the member scan
+            } else if (mpCity->Population() > 0) {
+                // city still has inhabitants: fall through to the member scan
+            } else {
+                goto choose_city_target;
+            }
+        } else {
+            goto choose_city_target;
+        }
+    }
+
+    pNext->Release();
+    {
+        float bestDist = FLT_MAX;
+        MemberVec* pMembers = mpCity->GetMembers();
+        for (cCityMemberView** ppMember = pMembers->mpBegin; ppMember != pMembers->mpEnd; ++ppMember) {
+            cCityMemberView* pMember = *ppMember;
+            if (pMember->HasFlag(kProtectBuildingFlag))
+                continue;
+            cCombatant_s00dc_f2e0* pTarget = &pMember->mCombatant;
+            if (!IsValidFireTarget(&pVehicle->mCombatant, pTarget))
+                continue;
+            const cSPVector3& a = pVehicle->mLoco.GetPosition();
+            const cSPVector3& b = pMember->mLoco.GetPosition();
+            cSPVector3 d = b - a;
+            float dist = sqrtf(d.x * d.x + d.y * d.y + d.z * d.z);
+            if (bestDist > dist) {
+                pNext->Set(pTarget);
+                bestDist = dist;
+            }
+        }
+        if (!pNext->mpObject) {
+            cBuilding_s00dc_f2e0* pHall = mpCity->GetCityHall();
+            pNext->Set(pHall ? &pHall->mCombatant : 0);
+        }
+    }
+
+choose_city_target:
+    {
+        float bestDist = FLT_MAX;
+        cTargetProviderView* pBest = 0;
+        TargetVec targets;
+        mpCity->CollectTargets(&targets);
+        for (int i = 0; i < targets.size(); ++i) {
+            cTargetProviderView* pCandidate = targets.mpBegin[i];
+            if (!pCandidate)
+                continue;
+            cCombatant_s00dc_f2e0* pTarget = &pCandidate->mCombatant;
+            if (!IsValidFireTarget(&pVehicle->mCombatant, pTarget))
+                continue;
+            const cSPVector3& a = pVehicle->mLoco.GetPosition();
+            cSpatialObject_s00dc_f2e0* pSpatial = pTarget->GetSpatialObject();
+            const cSPVector3& b = pSpatial->GetPosition();
+            cSPVector3 d = b - a;
+            float dist = sqrtf(d.x * d.x + d.y * d.y + d.z * d.z);
+            float reach = pTarget->GetStat() + 5.0f;
+            if (dist >= reach)
+                continue;
+            if (bestDist > dist) {
+                pBest = pCandidate;
+                bestDist = dist;
+            }
+        }
+        if (pBest)
+            pCurrent->Set(&pBest->mCombatant);
+    }
+
+    if (!pCurrent->mpObject) {
+        if (pVehicle->GetCurrentCity() == mpCity) {
+            cCombatant_s00dc_f2e0* pOpportunity =
+                mpCity->GetBestOpportunityTarget(pVehicle, mpCity->GetCivilization(), 1, 1, 1);
+            if (pOpportunity) {
+                cVehicle_s00dc_f2e0* pOpportunityVehicle = (cVehicle_s00dc_f2e0*)pOpportunity->Cast(kVehicleType);
+                if (pOpportunityVehicle)
+                    pCurrent->Set(&pOpportunityVehicle->mCombatant);
+            }
+        }
+    }
+    if (!pCurrent->mpObject && pNext->mpObject)
+        pCurrent->Set(pNext->mpObject);
+    return pCurrent->mpObject;
+}
+}  // namespace SP
+
+// @ 0x00dd0180
+namespace SP {
+cCulturalConvertCityOrder_s00dc_f2e0::~cCulturalConvertCityOrder_s00dc_f2e0()
+{
+    ClearBaseMembers();
+    if (mpCulturalTarget) {
+        if (!mpCulturalTarget->IsDestroyed())
+            mpCulturalTarget->RemoveVehicleGroup(mGroupMoveId);
+    }
+    if (mpCulturalTarget) {
+        cCulturalTarget_s00dc_f2e0* pOldTarget = mpCulturalTarget;
+        *(cCulturalTarget_s00dc_f2e0* volatile*)&mpCulturalTarget = 0;
+        pOldTarget->Release();
+    }
+    ClearHologramEffects();
+    cVehicle_s00dc_f2e0* pOldHolo = mpHoloVehicle;
+    *(cVehicle_s00dc_f2e0* volatile*)&mpHoloVehicle = 0;
+    if (pOldHolo)
+        pOldHolo->Release();
+}
+}  // namespace SP
 
 // @ 0x00dd0230
 bool __cdecl VehicleTree_AttackCityOrder_Activate(cVehicle_s00dd_0230* pVehicle, uint32_t, uint32_t, uint32_t, uint32_t, cMilitaryAttackCityOrder** ppOrder)

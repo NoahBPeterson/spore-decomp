@@ -1,3 +1,4 @@
+00b5b5d0 ?FUN_00b5b5d0_adjust@AdjustThunk_00b5b5d0@@QAEPAXI@Z  # AdjustThunk_00b5b5d0::FUN_00b5b5d0_adjust migrated from s00b5b540 (verbatim, slice spelling)
 00b5b6c0  SP::cGonzagoSimulator::cGonzagoSimulator  # PDB symbol name shown on card.py
 00b5b800 ?GetCurrentGameMode@SP@@YA?AW4eGameMode@1@XZ  # SP::GetCurrentGameMode migrated from s00b5b540
 00b5b820 _FUN_00b5b820  # FUN_00b5b820 migrated from s00b5b540 (verbatim, slice spelling)

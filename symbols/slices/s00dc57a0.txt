@@ -1,0 +1,1 @@
+00dc59d0 ?ComputeAndApply@@YAHPAUSelf@@IIIIPAM@Z  # ComputeAndApply migrated from s00dc57a0 (verbatim, slice spelling)

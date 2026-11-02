@@ -1,1 +1,4 @@
+00dc4560 ?FUN_00dc4560@@YAXPAXMMM@Z  # FUN_00dc4560 migrated from s00dc3940 (verbatim, slice spelling)
+00dc45a0 ?FUN_00dc45a0@@YAXPAX@Z  # FUN_00dc45a0 migrated from s00dc3940 (verbatim, slice spelling)
+00dc4610 ?FUN_00dc4610@@YAXPAX@Z  # FUN_00dc4610 migrated from s00dc3940 (verbatim, slice spelling)
 00dc4720 FUN_00dc4720  # orphan function start (absent from decomp index); bounds 00dc4710
