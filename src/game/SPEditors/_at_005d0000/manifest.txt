@@ -1,0 +1,6 @@
+# source  symbol  va  flags
+../src/game/SPEditors/_at_005d0000.cpp  ?SegmentLength@@YIMPAX@Z  005d51e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/_at_005d0000.cpp  ??0cEditorsTokenTranslator_s005d_53e0@SP@@QAE@XZ  005d5e40  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPEditors/_at_005d0000.cpp  ?LoadResource@@YAPAXPAX0@Z  005d60f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPEditors/_at_005d0000.cpp  ?SetSharedObject@@YAXPAVcSharedObject@@@Z  005d6120  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPEditors/_at_005d0000.cpp  ?GetDirectoryName@cDataDirectory@@QAEPB_WH@Z  005d6170  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
