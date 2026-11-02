@@ -1,7 +1,7 @@
-008eb250 EA::XHTML::Layout::ListItem::ListItem  # ctor: Block(pPage,pElement,5) then the ImageRequester base vtable at +0xc4, zero mpVf1/mnJobId/mListStyleType/mMarkerImageURI, kStr_None triple for the marker buffer (+0xd8/+0xdc/+0xe0 = kStr_None/kStr_None/kStr_None+2), mpTextStyle=0, mImageTableIndex=-1
-008eb2e0 EA::XHTML::Layout::ListItem::~ListItem  # free the marker buffer when its byte extent & ~1 > 2, then reset mMarkerImageURI and mMarkerTextBegin to kStr_None
-008eb350 EA::XHTML::Layout::ListItem::FormatMarkerText  # switch on mListStyleType: 0/1 kStr_None, 2 disc, 3 circle, 4 decimal format (index), 5/6 roman (lower/upper 13-entry size table + '.'), 7/8 alpha/ALPHA ('a'+index/'A'+index with '?' fallback)
-008eb520 EA::XHTML::Layout::ListItem::PlaceContent  # counter=list; copy style; image path (GetResource icon lookup, ImageRequest_Request on &this[0xc4], 16.0f marker width or the icon's +4 width) else text path (GetTextStyle, FormatMarkerText, Typesetter Reset/SetWidth/LayoutLine, mMarkerWidth = line+0x98); PlaceBlock either way
+008eb250 ??0ListItem_s008e_b250@Layout@XHTML@EA@@QAE@PAVPage_s008e_b250@123@PAX@Z  # ListItem_s008e_b250::ListItem migrated from s008eb250 (verbatim, slice spelling)
+008eb2e0 ??1ListItem_s008e_b250@Layout@XHTML@EA@@UAE@XZ  # ListItem_s008e_b250::~ListItem migrated from s008eb250 (verbatim, slice spelling)
+008eb350 ?FormatMarkerText@ListItem_s008e_b250@Layout@XHTML@EA@@QAEXI@Z  # ListItem_s008e_b250::FormatMarkerText migrated from s008eb250 (verbatim, slice spelling)
+008eb520 ?PlaceContent@ListItem_s008e_b250@Layout@XHTML@EA@@QAEXPAXABVStyleState_s008e_b250@Style@34@@Z  # ListItem_s008e_b250::PlaceContent migrated from s008eb250 (verbatim, slice spelling)
 008eb6f0 EA::XHTML::Layout::TextItem::TextItem  # Item(pPage,1) then mpCharData=pText, mLength=nLength, mpTextStyle=0
 008eb720 NodeSizeIter::Init  # store mValue=0/mpNode/mCount/mTotal then sum each node's vtable+8 size over the mpNext chain, return this
 008eb760 IsSpace  # true for 0x20, 0x09, 0x0c, 0x0d, 0x0a, 0x200b

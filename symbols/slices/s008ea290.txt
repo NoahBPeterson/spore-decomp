@@ -15,6 +15,6 @@
 008eae70 ?Dispose@Item@Layout@XHTML@EA@@QAEXXZ  # Item::Dispose migrated from s008ea290 (verbatim, slice spelling)
 008eae80 ?ComputeStyle@Style@XHTML@EA@@YAXPAXPAPAVRule@123@IPAVStyleState@123@@Z  # ComputeStyle migrated from s008ea290 (verbatim, slice spelling)
 008eaf30 ?IntersectSelection@Item@Layout@XHTML@EA@@QAE_NPAI0I@Z  # Item::IntersectSelection migrated from s008ea290 (verbatim, slice spelling)
-008eafa0 ?Place@ListItem@Layout@XHTML@EA@@QAEXAAVRenderingContext@234@AAVStyleState@Style@34@@Z  # ListItem::Place (partial)
-008eb000 ?DrawContent@ListItem@Layout@XHTML@EA@@QAEXAAVRenderingContext@234@@Z  # ListItem::DrawContent
+008eafa0 ?Place@ListItem@Layout@XHTML@EA@@QAEXAAVRenderingContext@234@AAVStyleState@Style@34@@Z  # ListItem::Place migrated from s008ea290 (verbatim, slice spelling)
+008eb000 ?DrawContent@ListItem@Layout@XHTML@EA@@QAEXAAVRenderingContext@234@@Z  # ListItem::DrawContent migrated from s008ea290 (verbatim, slice spelling)
 008eba20 ?SetSelectionRange@Page@Layout@XHTML@EA@@QAEXII@Z  # EA::XHTML::Layout::Page::SetSelectionRange (callee of s008ea290, named from the dev publics; slice address comment)
