@@ -1,0 +1,2 @@
+# source  symbol  va  flags
+../src/game/UTFSpore_Win32/Item.cpp  ?Dispose@Item@Layout@XHTML@EA@@QAEXXZ  008eae70  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
