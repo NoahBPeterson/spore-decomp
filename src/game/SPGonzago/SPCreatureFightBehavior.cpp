@@ -10,12 +10,51 @@
 #include "SP/cSPTimer.h"
 
 // ---- items of slice s00d65250 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern uint32_t gRandomMax;        // 0x01582ec8
+extern int      gRandomBase;       // 0x01582ec4
+struct Variant {
+  int mField[6];
+
+  void CopyFrom(const int* src);
+  void AssignFrom(const int* src);
+};
 struct RecordArray {
   uint32_t* mpData;           // +0x00
   int FindNext(int index);
 };
+struct RNG {
+  uint32_t Uniform(uint32_t max);
+};
+struct StrategyCtx {
+  int mField0;
+  int mField1;
+  int mField2;
+  int mPad0c[3];
+};
+struct CreatureStrategy {
+  void Invoke();
+};
+struct PlanetModel_s00d6_5250 {
+  void DirectionToSurfacePosition(int a, int b);
+};
+struct GameObject {
+  uint8_t mPad00[0xc0];
+  void** mpVtable;            // +0xc0
+  uint8_t mPadC4[0xf90 - 0xc4];
+  uint8_t mFlagF90;           // +0xf90
+};
+typedef int (__thiscall* FnI)(void*);
 typedef int (__thiscall* FnIi)(void*, int);
+void   FUN_00d99e20(int value);                        // 0x00d99e20
+void*  FUN_00d99500(uint32_t handle);                  // 0x00d99500
+void*  FUN_00c13c60(int a, int b, int c);              // 0x00c13c60
+int    FUN_00c0f8f0(int x);                            // 0x00c0f8f0
+int    FUN_00bc97f0(int a, int b, int c, void* d);     // 0x00bc97f0
 char   FUN_00c0c0e0();                                 // 0x00c0c0e0
+void*  SP_NounManager();                               // SP::NounManager
+void*  SP_PlanetModel(int a, int b);                   // 0xb3d350
+int    FUN_00c30c60(void* x);                          // 0x00c30c60
+CreatureStrategy* __stdcall CreatureStrategy_Instance(uint32_t id, StrategyCtx* ctx); // 0xd38840
 // ---- items of slice s00d65250 end
 
 // ---- items of slice s00d661a0 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -237,6 +276,15 @@ namespace SP {
 typedef cSPCreatureBase_s00d6_61a0 cSPCreatureCitizen;
 }
 namespace SP {
+class cTribeFightSlotInfo {
+public:
+    int   m00;      // +0x00
+    int   mSlot;    // +0x04
+    int   m08;      // +0x08
+    int   mCount;   // +0x0c
+};
+}
+namespace SP {
 class cCombatant_s00d6_61a0 {
 public:
 virtual void s00();
@@ -251,6 +299,38 @@ struct RBNode { RBNode* mpLeft; RBNode* mpRight; RBNode* mpParent; uint8_t mColo
 }
 namespace SP {
 struct CooldownMap { int mCompare; RBNode mAnchor; int mSize; };   // 0x18 bytes
+}
+namespace SP {
+struct PropValue {
+    union {
+        float        f;      // +0x00
+        const void*  p;      // +0x00
+    } mPayload;
+    uint32_t pad04[3];       // +0x04
+    uint8_t  mFlags;         // +0x10
+    uint8_t  pad11;
+    uint16_t mType;          // +0x12
+};
+}
+namespace SP {
+struct PropertyList_s00d6_61a0 {
+virtual void s0();
+virtual void s1();
+virtual void s2();
+virtual void s3();
+virtual void s4();
+virtual void s5();
+virtual void s6();
+virtual void s7();
+virtual void s8();
+    virtual bool GetProperty(uint32_t hash, PropValue** out);  // +0x24
+};
+}
+namespace SP {
+class cCreatureModeStrategy_s00d6_61a0 { public: char pad[0xb4]; PropertyList_s00d6_61a0* mpProps; };
+}
+namespace SP {
+extern cCreatureModeStrategy_s00d6_61a0* g_CreatureModeStrategy_s00d6_61a0;          // 0x169e294
 }
 namespace SP {
 struct SpeciesTraits { char pad[0x3f0]; int m3f0; short m3f4; };
@@ -297,10 +377,31 @@ namespace SP {
 extern unsigned char DAT_01582df5;  // byte passed to the range query
 }
 namespace SP {
+extern int   DAT_01582ee8;          // default behaviour flags
+}
+namespace SP {
+extern int   DAT_0147bc04;          // 31 (hard cap of slots)
+}
+namespace SP {
 extern float DAT_0147bc0c;          // FLT_MAX
 }
 namespace SP {
+extern float DAT_01473c70;          // 10.0f
+}
+namespace SP {
+extern float DAT_01470f1c;          // 2.0f
+}
+namespace SP {
+extern float DAT_015d9c6c;          // 0.0f
+}
+namespace SP {
 extern float DAT_01485544;          // 0.75f
+}
+namespace SP {
+extern float DAT_0169ed08;          // arc constant used by the slot estimate
+}
+namespace SP {
+extern PropertyList_s00d6_61a0* g_GamePropertyList;   // 0x1581288
 }
 namespace SP {
 void   FUN_00d65500(int arg);
@@ -316,6 +417,25 @@ void*  FUN_00ae3390(void* p);
 }
 namespace SP {
 float  DistanceBetweenBodies(const Vec3* a, float rA, const Vec3* b, float rB, bool clamp);
+}
+namespace SP {
+float  GetPropertyT_float(PropertyList_s00d6_61a0* props, uint32_t hash, float def);
+}
+namespace SP {
+uint32_t GetPropertyAsUint32(PropertyList_s00d6_61a0* props, uint32_t hash, uint32_t* out);
+}
+namespace SP {
+template <class T> static const T& MinRef_s00d6_61a0(const T& a, const T& b) { return (a < b) ? a : b; }
+}
+namespace SP {
+template <class T> static const T& MaxRef_s00d6_61a0(const T& a, const T& b) { return (a > b) ? a : b; }
+}
+namespace SP {
+static void CopySlotBody(SlotBody* dst, const SlotBody* src)
+{
+    if (dst)
+        *dst = *src;
+}
 }
 // ---- items of slice s00d661a0 end
 
@@ -973,9 +1093,7 @@ extern RandomLinearCongruential sMathRandom;          // 0x1601760
 namespace SP {
 extern char g_CreatureGameMode;                        // 0x1654c10
 }
-namespace SP {
-extern int  DAT_01582ee8;
-}
+
 namespace SP {
 extern char DAT_013f94d4[];
 }
@@ -1391,6 +1509,111 @@ static inline const float& MinRef(const float& a, const float& b) { return (a > 
 }
 // ---- items of slice s00d697a0 end
 
+// @ 0x00d65500
+void FUN_00d65500(int param)
+{
+  StrategyCtx ctx;
+  ctx.mField0 = 0;
+  ctx.mField1 = 0;
+  ctx.mField2 = param;
+
+  CreatureStrategy* s = CreatureStrategy_Instance(0xd3353637, &ctx);
+  s->Invoke();
+}
+
+// @ 0x00d65530
+long double FUN_00d65530(float base, char doubled)
+{
+  RNG* rng = (RNG*)0x1601760;
+  uint32_t r = rng->Uniform(gRandomMax);
+  float value = (float)(gRandomBase + (int)r) * 0.001f + base;
+  if (doubled)
+    value = value * 2.0f;
+  return value;
+}
+
+// @ 0x00d65580
+int FUN_00d65580(int param1, int param2, int param3)
+{
+  PlanetModel_s00d6_5250* pm = (PlanetModel_s00d6_5250*)SP_PlanetModel(param1, param3);
+  pm->DirectionToSurfacePosition(param1, param3);
+
+  GameObject* go = (GameObject*)param2;
+  if (go->mFlagF90 != 0) {
+    void** vt = go->mpVtable;
+    int r = ((FnIi)vt[0x2c / 4])(&go->mpVtable, param1);
+    FUN_00d99e20(r);
+  }
+  return param1;
+}
+
+// @ 0x00d655d0
+int FUN_00d655d0(int* self, void* target, uint32_t arg3, uint32_t arg4)
+{
+  if (target == 0)
+    return 0;
+
+  uint8_t* t = (uint8_t*)target;
+  void** tvt = *(void***)(t + 0xc0);
+  char usable = (char)((FnI)tvt[0x58 / 4])(t + 0xc0);
+  if (!usable)
+    return 0;
+
+  float* a = (float*)((FnI)(*(void***)((uint8_t*)self[0x30] + 0))[0x2c / 4])
+                 ((uint8_t*)self[0x30]);
+  float* b = (float*)((FnI)tvt[0x2c / 4])(t + 0xc0);
+  float dx = a[0] - b[0];
+  float dy = a[1] - b[1];
+  float dz = a[2] - b[2];
+  float best = dx * dx + dy * dy + dz * dz;
+
+  uint32_t flags = *(uint32_t*)(t + 0xb58);
+  if ((flags >> 9) & 1) {
+    int found = 0;
+    uint32_t* items = (uint32_t*)SP_NounManager();
+    (void)items;
+    (void)arg3; (void)arg4;
+    return found;
+  }
+
+  void* avatar = (void*)FUN_00c30c60(SP_NounManager());
+  void* rec = FUN_00d99500((uint32_t)avatar);
+  if (rec != 0) {
+    void** vt = *(void***)((uint8_t*)rec + 0xc0);
+    float* c = (float*)((FnI)vt[0x2c / 4])((uint8_t*)rec + 0xc0);
+    float ex = a[0] - c[0];
+    float ey = a[1] - c[1];
+    float ez = a[2] - c[2];
+    float d = ex * ex + ey * ey + ez * ez;
+    if (d < best)
+      return (int)rec;
+  }
+  return 0;
+}
+
+// @ 0x00d659e0
+uint32_t FUN_00d659e0(int self, void* creature, uint8_t flags, void* combatant, int* param5)
+{
+  if (combatant == 0)
+    return 1;
+
+  void** cvt = *(void***)combatant;
+  int data = ((FnI)cvt[8 / 4])(combatant);
+  if (*(char*)(data + 0x75) == 0)
+    return 1;
+
+  void* obj = (void*)((FnI)cvt[0xc / 4])(combatant);
+  void** ovt = *(void***)obj;
+  char c = (char)((FnI)ovt[0x2c / 4])(obj);
+  if (c != 0)
+    return 1;
+
+  if (param5 == 0)
+    return 0;
+  (void)creature; (void)flags; (void)self;
+  return 0;
+}
+
 // @ 0x00d65c40
 uint32_t FIGHT_Tick(int self, void* creature, int* param3)
 {
@@ -1430,6 +1653,32 @@ uint32_t FIGHT_Tick(int self, void* creature, int* param3)
   return 0;
 }
 
+// @ 0x00d65fe0
+uint32_t FUN_00d65fe0(int self, uint32_t arg2, int* actor, float lo, float hi)
+{
+  int data = ((FnI)(*(void***)actor)[8 / 4])(actor);
+  char ok = FUN_00c0c0e0();
+  if (ok != 0 && data != 0) {
+    void* obj = (void*)FUN_00c13c60(data, 0, 1);
+    if (obj != 0) {
+      int picked = FUN_00c0f8f0((int)obj);
+      if (picked < 0) {
+        float mid = *(float*)(self + 0x1c);
+        if (mid <= hi && lo <= mid) {
+          void* v = (void*)((FnI)(*(void***)actor)[0xc / 4])(actor);
+          int created = FUN_00bc97f0(0, 0x40000, 0x40a00000, v);
+          if (created != 0) {
+            *(int*)(created + 0xc) = 4;
+            return 1;
+          }
+        }
+      }
+    }
+    (void)arg2;
+  }
+  return 0;
+}
+
 // @ 0x00d660a0
 int RecordArray::FindNext(int index)
 {
@@ -1448,6 +1697,83 @@ int RecordArray::FindNext(int index)
       return 0x3fffffff;
   }
 }
+
+// @ 0x00d660e0
+void Variant::CopyFrom(const int* src)
+{
+  int* dst = (int*)this;
+  dst[0] = src[0];
+  if ((((uint32_t)src[0] >> 31) & 1) == 0 && dst + 1 != 0) {
+    dst[1] = src[1];
+    dst[2] = src[2];
+    dst[3] = src[3];
+    dst[4] = src[4];
+    dst[5] = src[5];
+  }
+}
+
+// @ 0x00d66120
+void Variant::AssignFrom(const int* src)
+{
+  if ((((uint32_t)src[0] >> 31) & 1) == 0) {
+    if ((((uint32_t)mField[0] >> 31) & 1) != 0) {
+      int* d = &mField[1];
+      if (d != 0) {
+        d[0] = src[1];
+        d[1] = src[2];
+        d[2] = src[3];
+        d[3] = src[4];
+        d[4] = src[5];
+        mField[0] = src[0];
+        return;
+      }
+    } else {
+      mField[1] = src[1];
+      mField[2] = src[2];
+      mField[3] = src[3];
+      mField[4] = src[4];
+      mField[5] = src[5];
+    }
+  }
+  mField[0] = src[0];
+}
+
+// @ 0x00d661a0
+namespace SP {
+cTribeFightSlots* CopyFightSlots(cTribeFightSlots* first, cTribeFightSlots* last, cTribeFightSlots* dst)
+{
+    for (; first != last; ++first, ++dst) {
+        if (dst) {
+            dst->mFlags = first->mFlags;
+            bool used = first->mUsed;
+            if (!used && &dst->mBody)
+                CopySlotBody(&dst->mBody, &first->mBody);
+        }
+    }
+    return dst;
+}
+}  // namespace SP
+
+// @ 0x00d66250
+namespace SP {
+void ComputeFightSlot(cTribeFightSlotInfo* out, cSPCreatureBase_s00d6_61a0* c, float dist)
+{
+    uint32_t maxSlots = 0x1f;
+    if (c) {
+        cSPCreatureBase_s00d6_61a0* sub = c->GetByTypeHash(0x4f176642);
+        if (sub && sub->IsTribal()) {
+            GetPropertyAsUint32(g_GamePropertyList, 0x816289e0, &maxSlots);
+            if (maxSlots > 0x1f)
+                maxSlots = (uint32_t)DAT_0147bc04;
+        }
+    }
+    float radius = c->GetRadius();
+    float t = DAT_0169ed08 / (2.0f * asin(dist / (radius + dist)));
+    int n = (int)floorf(t);
+    out->mSlot = MinRef_s00d6_61a0(n, (int)maxSlots);
+    out->mCount = n;
+}
+}  // namespace SP
 
 // @ 0x00d66320
 namespace SP {
@@ -1705,6 +2031,81 @@ void FUN_00d66e10(cSPCreatureBase_s00d6_61a0* c, uint32_t slot)
         ReleaseFightSlot(g->m1a4);
     }
     c->mpBehav->SetTargetFromGroup();
+}
+}  // namespace SP
+
+// @ 0x00d66e70
+namespace SP {
+FightMem* FightMem::Init(cSPCreatureBase_s00d6_61a0* c)
+{
+    m20 = 0;
+    mCooldowns.mAnchor.mpRight = 0;
+    mCooldowns.mAnchor.mpParent = 0;
+    mCooldowns.mAnchor.mColor = 0;
+    mCooldowns.mAnchor.mpLeft = &mCooldowns.mAnchor;
+    mCooldowns.mAnchor.mpRight = &mCooldowns.mAnchor;
+    mCooldowns.mSize = 0;
+    mStandardAttackCounter = 0;
+    m5c = 0.0f;
+    m60 = -1;
+    m58 = 0.0f;
+    mTarget = -1;
+    mEvalTimer = 0.0f;
+    mMoveTimer = 0.0f;
+    mNoActivityTimer = 0.0f;
+    mMaxRange = DAT_0147bc0c;
+    mState = 0;
+    mDistance = 0.0f;
+    mpCreature = c;
+    m2c = c->mStateFlags.mFlag8 ? 0x20 : DAT_01582ee8;
+    mAttackAnim = 0;
+    m34 = 0;
+    mFrustrationAnim = 0;
+    m4c = 1;
+    m4e = false;
+    m3c = 0;
+    m40 = 0.0f;
+    mp48 = c->GetTraits();
+    if (mp48) {
+        m4c = ((SpeciesTraits*)mp48)->m3f4;
+        m2c = ((SpeciesTraits*)mp48)->m3f0;
+    }
+    if (c->Flag388())
+        m4e = true;
+
+    mAbilityTimer = GetPropertyT_float(g_CreatureModeStrategy_s00d6_61a0->mpProps,
+                                      0x6848e35e + (c->Flag388() ? 0xe365473b : 0),
+                                      DAT_01473c70);
+
+    PropValue* pv;
+    float propA;
+    if (!g_CreatureModeStrategy_s00d6_61a0->mpProps ||
+        !g_CreatureModeStrategy_s00d6_61a0->mpProps->GetProperty(0x9224aa67, &pv))
+        propA = DAT_01470f1c;
+    else if (pv->mType == 0xd || pv->mType == 0x10) {
+        if (pv->mFlags & 0x30)
+            propA = *(const float*)pv->mPayload.p;
+        else
+            propA = pv->mPayload.f;
+    } else
+        propA = DAT_015d9c6c;
+
+    float propB;
+    if (!g_CreatureModeStrategy_s00d6_61a0->mpProps ||
+        !g_CreatureModeStrategy_s00d6_61a0->mpProps->GetProperty(0x8fc666ce, &pv))
+        propB = DAT_01470f1c;
+    else if (pv->mType == 0xd || pv->mType == 0x10) {
+        if (pv->mFlags & 0x30)
+            propB = *(const float*)pv->mPayload.p;
+        else
+            propB = pv->mPayload.f;
+    } else
+        propB = DAT_015d9c6c;
+
+    m50 = MaxRef_s00d6_61a0(FUN_00d38a30(1, c), propB);
+    m54 = MaxRef_s00d6_61a0(FUN_00d38a30(2, c), propA);
+    mbAttackOnSight = false;
+    return this;
 }
 }  // namespace SP
 

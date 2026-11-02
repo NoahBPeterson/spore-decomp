@@ -1,3 +1,5 @@
+00d661a0 ?CopyFightSlots@SP@@YAPAUcTribeFightSlots@1@PAU21@00@Z  # CopyFightSlots migrated from s00d661a0 (verbatim, slice spelling)
+00d66250 ?ComputeFightSlot@SP@@YAXPAVcTribeFightSlotInfo@1@PAVcSPCreatureBase_s00d6_61a0@1@M@Z  # ComputeFightSlot migrated from s00d661a0 (verbatim, slice spelling)
 00d66320 ?GetFightSlotBody@SP@@YAPAUSlotBody@1@I@Z  # GetFightSlotBody migrated from s00d661a0 (verbatim, slice spelling)
 00d66370 ?GetFightSlots@SP@@YA_NPAVcSPCreatureBase_s00d6_61a0@1@PAHI@Z  # GetFightSlots migrated from s00d661a0 (verbatim, slice spelling)
 00d66400 ?FindNeighbourEntry@SP@@YAPAUNeighbourEntry@1@PAVcSPCreatureBase_s00d6_61a0@1@0@Z  # FindNeighbourEntry migrated from s00d661a0 (verbatim, slice spelling)
@@ -6,4 +8,5 @@
 00d66d60 ?GetObject@cResizableObjectPoolT@SP@@QAEXI@Z  # cResizableObjectPoolT::GetObject migrated from s00d661a0 (verbatim, slice spelling)
 00d66db0 ?ReleaseFightSlot@SP@@YAXI@Z  # ReleaseFightSlot migrated from s00d661a0 (verbatim, slice spelling)
 00d66e10 ?FUN_00d66e10@SP@@YAXPAVcSPCreatureBase_s00d6_61a0@1@I@Z  # FUN_00d66e10 migrated from s00d661a0 (verbatim, slice spelling)
+00d66e70 ?Init@FightMem@SP@@QAEPAU12@PAVcSPCreatureBase_s00d6_61a0@2@@Z  # FightMem::Init migrated from s00d661a0 (verbatim, slice spelling)
 00d670e0 ?Release@FightMem@SP@@QAEXXZ  # FightMem::Release migrated from s00d661a0 (verbatim, slice spelling)

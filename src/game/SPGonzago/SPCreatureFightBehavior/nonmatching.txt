@@ -1,11 +1,20 @@
 # va  diff-bytes  reason
-00d65c40 134 FIGHT_Tick state machine abbreviated; 148 vs 913 bytes
-00d660a0 57 FindNext: bit tests folded to test/jns instead of shr/test; 61 bytes
+00d65530 41 random float: x87 return conversion differs; 68 vs 74 bytes flags: /O2 /MD /Gy /TP /arch:SSE
+00d65580 50 surface projection: PlanetModel call cleanup deferred in original; 70 vs 67 bytes flags: /O2 /MD /Gy /TP /arch:SSE
+00d655d0 274 nearest interactable scan abbreviated (inventory/avatar state opaque); 306 vs 625 bytes flags: /O2 /MD /Gy /TP /arch:SSE
+00d659e0 56 combatant decision tree abbreviated; 63 vs 603 bytes flags: /O2 /MD /Gy /TP /arch:SSE
+00d65c40 134 FIGHT_Tick state machine abbreviated; 148 vs 913 bytes flags: /O2 /MD /Gy /TP /arch:SSE
+00d65fe0 116 lounge vignette decision approximated; 151 vs 186 bytes flags: /O2 /MD /Gy /TP /arch:SSE
+00d660a0 57 FindNext: bit tests folded to test/jns instead of shr/test; 61 bytes flags: /O2 /MD /Gy /TP /arch:SSE
+00d660e0 57 CopyFrom: compiler shrink-wraps esi and folds the sign test; 57 vs 61 bytes flags: /O2 /MD /Gy /TP /arch:SSE
+00d66120 94 AssignFrom: compiler tail-merges the two payload copies; 102 vs 123 bytes flags: /O2 /MD /Gy /TP /arch:SSE
+00d66250 130 complete source; not byte-exact: floorf() cannot be produced as the original inline cvtss2si/cvtsi2ss/ucomiss/cmovb sequence by this compiler (only __ftol2_sse+_floor calls); size 180 vs 200; equiv: FAIL (only eax differs, void return debris); flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 00d66320 62 complete source (all paths); not byte-exact: register allocation - compiler keeps id in esi and mpData in edi (extra push/pop edi), original uses ecx/edx/esi; size 75 vs 72; equiv: UNSUPPORTED (unresolved global sTribeFightSlotsPool); flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 00d66400 347 complete source (all paths/calls); not byte-exact: stack-slot assignment and callee-saved-register choice for the exclude argument differ (frame 0x24 vs 0x28); size 496 vs 507; equiv: WEAK (392 valid inputs, 9.6% coverage); flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 00d66600 281 region in index covers two functions: bound is 946 bytes but 00d66600 itself is 272 (next function 00d66710 is not indexed); source covers 00d66600 only (336 bytes); equiv: FAIL (ours reads unmapped where original succeeds - the harness exercises both regions); flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 00d669c0 492 complete source (all paths/calls, call targets and vtable slots equal); not byte-exact: only stack-slot numbering differs (locals at +4 offset; frame 0x2c vs 0x2c, d reuses arg slot in original); size 917 vs 923; equiv: WEAK (202 valid inputs, 9.6% coverage); flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 00d66d60 59 complete source (all paths); not byte-exact: register allocation only - id lands in eax instead of ecx, shifting every modrm; size 72 vs 71; equiv: PASS (285 valid inputs, 100% coverage); flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+00d66e70 450 complete source (all paths/calls; ability/property hash, RB-tree anchor init, species-trait override, Max() pairs all present); not byte-exact: store ordering and stack-slot sharing differ; size 563 vs 609; equiv: FAIL (crashes inside the property-list virtual GetProperty with the harness fake props where the original returns); flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 00d67660 96 Acquire a fresh fight-slot payload: zero a payload, allocate it from the pool,
 00d67700 172 FindGroup(Creature*): look the "Fight" group up in the B4C object's stimulus
 00d678d0 211 FightAction group refresh (FightAction*, flag): reset the action, re-find the
