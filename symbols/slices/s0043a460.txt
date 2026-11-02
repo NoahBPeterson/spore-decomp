@@ -1,3 +1,7 @@
+0043a460 ?Length1@cSPEditorBlock_s0043_a460@SP@@QAEMXZ  # Length1 migrated from s0043a460 (verbatim, slice spelling)
+0043a490 ?GetVec1@cSPEditorBlock_s0043_a460@SP@@QAEPAUVec3@2@PAU32@@Z  # GetVec1 migrated from s0043a460 (verbatim, slice spelling)
+0043a500 ?Length2@cSPEditorBlock_s0043_a460@SP@@QAEMXZ  # Length2 migrated from s0043a460 (verbatim, slice spelling)
+0043a530 ?GetVec2@cSPEditorBlock_s0043_a460@SP@@QAEPAUVec3@2@PAU32@@Z  # GetVec2 migrated from s0043a460 (verbatim, slice spelling)
 0043a5e0 ?SetUIState@cSPEditorBlock_s0043_a460@SP@@QAE_NW4eBlockUIState_s0043_a460@2@_N11@Z  # SetUIState migrated from s0043a460 (verbatim, slice spelling)
 0043a830 ?F830@cSPEditorBlock_s0043_a460@SP@@QAEXE@Z  # F830 migrated from s0043a460 (verbatim, slice spelling)
 0043a870 ?GetSkinIdentifierForPicking@cSPEditorBlock_s0043_a460@SP@@QAEHXZ  # GetSkinIdentifierForPicking migrated from s0043a460 (verbatim, slice spelling)
