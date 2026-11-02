@@ -1,4 +1,4 @@
-// src/game/Havok/_at_01090000.cpp -- migrated from slice(s) s01090a70, s0109f870, s0109e8e0, s0109c3b0, s01098e50, s01098200, s010960e0, s01095320, s01094510, s01092e10, s01091a60 by tools/migrate/rewrite.py
+// src/game/Havok/_at_01090000.cpp -- migrated from slice(s) s010938e0, s01092360, s01090a70, s0109f870, s0109e8e0, s0109c3b0, s01098e50, s01098200, s010960e0, s01095320, s01094510, s01092e10, s01091a60 by tools/migrate/rewrite.py
 // Object file: Havok/_at_01090000.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -6,6 +6,7 @@
 #include <math.h>
 #include <new>
 #include <intrin.h>
+#include <stddef.h>
 
 // unnamed retail callees and globals (address in the comment)
 extern int vtbl_014a1aa8;
@@ -1475,6 +1476,184 @@ struct hkQuaternionOps
 };
 // ---- items of slice s01090a70 end
 
+// ---- items of slice s01092360_dtor begin (TODO(rewrite): local stubs, replace by canonical classes)
+class hkReferencedObject_s0109_2360__dtor
+{
+public:
+	virtual ~hkReferencedObject_s0109_2360__dtor() {}        // +0x00 (the deleting destructor is called on last ref)
+
+	uint16_t mLockCount;                    // +0x04
+	uint16_t mReferenceCount;               // +0x06
+};
+__forceinline void hkRemoveReference(hkReferencedObject_s0109_2360__dtor* obj)
+{
+	if (obj == 0 || obj->mLockCount == 0)
+		return;
+	obj->mReferenceCount--;
+	if (obj->mReferenceCount == 0)
+		delete obj;
+}
+class hkPoweredHingeConstraintData : public hkReferencedObject_s0109_2360__dtor
+{
+public:
+	virtual void buildJacobian(const void* in, void* out);   // gives the class its own vtable
+
+	uint32_t mPad008[(0x098 - 0x008) / 4];                  // +0x08 (hinge configuration / limits)
+
+	hkReferencedObject_s0109_2360__dtor* m_motor;                            // +0x98
+
+	~hkPoweredHingeConstraintData();
+};
+// ---- items of slice s01092360_dtor end
+
+// ---- items of slice s010938e0_motors begin (TODO(rewrite): local stubs, replace by canonical classes)
+class hkBool_s0109_38e0__motors
+{
+public:
+	hkBool_s0109_38e0__motors() {}
+	hkBool_s0109_38e0__motors(bool b) : m_bool(b) {}
+	operator bool() const { return m_bool != 0; }
+	bool m_bool;
+};
+class hkRotation_s0109_38e0__motors;
+class hkTransform_s0109_38e0__motors;
+__declspec(align(16)) class hkVector4
+{
+public:
+	float x, y, z, w;
+	void setTransformedPos(const hkTransform_s0109_38e0__motors& t, const hkVector4& p);    // 0x01081360
+	void setRotatedDir(const hkRotation_s0109_38e0__motors& r, const hkVector4& v);         // 0x010814a0
+	hkBool_s0109_38e0__motors isNormalized3(hkReal tolerance) const;                        // 0x010812f0
+};
+class hkMatrix3_s0109_38e0__motors
+{
+public:
+	hkVector4 m_col[3];
+};
+class hkRotation_s0109_38e0__motors : public hkMatrix3_s0109_38e0__motors
+{
+};
+class hkTransform_s0109_38e0__motors
+{
+public:
+	hkRotation_s0109_38e0__motors m_rotation;      // +0x00
+	hkVector4 m_translation;    // +0x30
+};
+class hkReferencedObject_s0109_38e0__motors
+{
+public:
+	virtual ~hkReferencedObject_s0109_38e0__motors() {}
+	void removeReference()
+	{
+		if (m_memSizeAndFlags != 0)
+		{
+			if (--m_referenceCount == 0)
+				delete this;
+		}
+	}
+	unsigned short m_memSizeAndFlags;   // +0x04
+	short m_referenceCount;             // +0x06
+};
+class hkSolverResults_s0109_38e0__motors
+{
+public:
+	hkReal m_impulseApplied;      // +0x00
+	hkReal m_internalSolverData;  // +0x04
+};
+class hkConstraintQueryIn_s0109_38e0__motors
+{
+public:
+	float m_substepDeltaTime;         // +0x00
+	float m_substepInvDeltaTime;      // +0x04
+	float m_frameDeltaTime;           // +0x08
+	float m_frameInvDeltaTime;        // +0x0c
+	float m_virtualMassFactor;        // +0x10
+	float m_rhsFactor;                // +0x14
+	float m_dampingFactor;            // +0x18
+	float m_frictionRhsFactor;        // +0x1c
+	void* m_accumulatorBufferRoot;    // +0x20
+	void* m_jacobianBufferRoot;       // +0x24
+	void* m_bodyA;                    // +0x28
+	void* m_bodyB;                    // +0x2c
+	hkTransform_s0109_38e0__motors* m_transformA;        // +0x30
+	hkTransform_s0109_38e0__motors* m_transformB;        // +0x34
+	float m_tau;                      // +0x38
+	float m_damping;                  // +0x3c
+	void* m_constraintInstance;       // +0x40
+	void* m_constraintRuntime;        // +0x44
+};
+class hkConstraintQueryOut_s0109_38e0__motors
+{
+public:
+	void* m_jacobians;          // +0x00
+	void* m_jacobianSchemas;    // +0x04
+};
+class hkConstraintMotorInput_s0109_38e0__motors
+{
+public:
+	float m_virtualMass;             // +0x00
+	hkConstraintQueryIn_s0109_38e0__motors* m_stepInfo; // +0x04
+	hkSolverResults_s0109_38e0__motors m_lastResults;   // +0x08
+	float m_deltaTarget;             // +0x10
+	float m_positionError;           // +0x14
+};
+class hkConstraintMotorOutput_s0109_38e0__motors
+{
+public:
+	float m_targetPosition;          // +0x00
+	float m_targetVelocity;          // +0x04
+	float m_minForce;                // +0x08
+	float m_maxForce;                // +0x0c
+	float m_tau;                     // +0x10
+	float m_damping;                 // +0x14
+};
+class hkConstraintMotor_s0109_38e0__motors
+{
+public:
+	virtual ~hkConstraintMotor_s0109_38e0__motors();
+	virtual hkConstraintMotor_s0109_38e0__motors* clone() const;
+	virtual void calcMotorData(const hkConstraintMotorInput_s0109_38e0__motors& in, hkConstraintMotorOutput_s0109_38e0__motors& out);
+	short m_memSizeAndFlags;         // +0x04
+	short m_referenceCount;          // +0x06
+};
+class hkLimitedForceConstraintMotor : public hkConstraintMotor_s0109_38e0__motors
+{
+public:
+	float m_minForce;                // +0x08
+	float m_maxForce;                // +0x0c
+};
+class hkPositionConstraintMotor : public hkLimitedForceConstraintMotor
+{
+public:
+	float m_tau;                              // +0x10
+	float m_damping;                          // +0x14
+	float m_proportionalRecoveryVelocity;     // +0x18
+	float m_constantRecoveryVelocity;         // +0x1c
+	virtual void calcMotorData(const hkConstraintMotorInput_s0109_38e0__motors& in, hkConstraintMotorOutput_s0109_38e0__motors& out);
+	virtual hkConstraintMotor_s0109_38e0__motors* clone() const;
+};
+class hkPointToPlaneConstraintData : public hkReferencedObject_s0109_38e0__motors
+{
+public:
+	virtual hkBool_s0109_38e0__motors isValid() const;
+	virtual void buildJacobian(const hkConstraintQueryIn_s0109_38e0__motors& in, hkConstraintQueryOut_s0109_38e0__motors& out);
+	void* mpUnk08;              // +0x08
+	void* mpUnk0c;              // +0x0c
+	hkVector4 m_pointA;         // +0x10  (in A's space)
+	hkVector4 m_pointB;         // +0x20  (in B's space)
+	hkVector4 m_planeNormal;    // +0x30  (in A's space)
+};
+class hkPointToPathConstraintData : public hkReferencedObject_s0109_38e0__motors
+{
+public:
+	virtual hkBool_s0109_38e0__motors isValid() const;
+	void* mpUnk08;                  // +0x08
+	hkReferencedObject_s0109_38e0__motors* m_path;     // +0x0c  (the path curve, reference counted)
+	int m_unk10;                    // +0x10
+	unsigned char m_validFlag;      // +0x14
+};
+// ---- items of slice s010938e0_motors end
+
 // @ 0x01091970
 void hkQuaternionOps::setMulInverse(const hkQuaternion& q0, const hkQuaternion& q1)
 {
@@ -1650,6 +1829,12 @@ hkBool_s0109_1a60 hkPrismaticConstraintData::isValid() const
     return hkBool_s0109_1a60(false);
 }
 
+// @ 0x01092d80
+hkPoweredHingeConstraintData::~hkPoweredHingeConstraintData()
+{
+	hkRemoveReference(m_motor);
+}
+
 // @ 0x01093660
 void hkPoweredChainData::getConstraintInfo(hkConstraintInfo& info) const
 {
@@ -1725,6 +1910,54 @@ hkPoweredChainData::~hkPoweredChainData()
 				motor->removeReference();
 		}
 	}
+}
+
+// @ 0x01094210
+void hkPositionConstraintMotor::calcMotorData(const hkConstraintMotorInput_s0109_38e0__motors& in, hkConstraintMotorOutput_s0109_38e0__motors& out)
+{
+	// The motor drives with a symmetric force window around m_maxForce (the sign convention of the
+	// impulse makes the lower limit the positive one).
+	const hkReal maxForce = m_maxForce;
+	out.m_minForce = maxForce;
+	out.m_maxForce = -maxForce;
+	out.m_tau = m_tau;
+	out.m_damping = m_damping;
+
+	const hkReal error = in.m_positionError;
+	// Proportional recovery: move at most m_proportionalRecoveryVelocity * error per frame.
+	const hkReal correction = error * m_proportionalRecoveryVelocity * in.m_stepInfo->m_frameDeltaTime;
+	const hkReal delta = error - correction;
+	const hkReal maxCorrection = m_constantRecoveryVelocity * in.m_stepInfo->m_frameDeltaTime;
+
+	// If the proportional correction still leaves more than one constant step of error, step from the
+	// correction by the constant recovery amount in the direction of the error; otherwise the target
+	// stays at the raw position error.
+	hkReal target = error;
+	if (fabsf(delta) > maxCorrection)
+		target = correction + (delta <= 0.0f ? -maxCorrection : maxCorrection);
+
+	// Clamp against the solver's own idea of where the body may go this step.
+	const hkReal upper = fabsf(error) - in.m_lastResults.m_internalSolverData;
+	const hkReal lower = -fabsf(error) - in.m_lastResults.m_internalSolverData;
+	if (target < lower)
+		target = lower;
+	else if (target > upper)
+		target = upper;
+
+	out.m_targetVelocity = (target + in.m_deltaTarget) * in.m_stepInfo->m_frameInvDeltaTime;
+	out.m_targetPosition = in.m_lastResults.m_internalSolverData;
+}
+
+// @ 0x01094360
+hkBool_s0109_38e0__motors hkPointToPlaneConstraintData::isValid() const
+{
+	return m_planeNormal.isNormalized3(0.0001f);
+}
+
+// @ 0x010944c0
+hkBool_s0109_38e0__motors hkPointToPathConstraintData::isValid() const
+{
+	return hkBool_s0109_38e0__motors(m_path != 0 && m_validFlag != 0);
 }
 
 // @ 0x01094bc0

@@ -1,10 +1,13 @@
 # source  symbol  va  flags
 ../src/game/Havok/_at_01090000.cpp  ?isValid@hkPulleyConstraintData@@QBE?AVhkBool_s0109_1a60@@XZ  01091ff0  /O2 /MD /Gy /TP /vc71 /Isrc/game/include
 ../src/game/Havok/_at_01090000.cpp  ?scalarDeletingDtor@hkConstraintAtomBase@@QAEPAXE@Z  010921f0  /O2 /MD /Gy /TP /vc71 /Isrc/game/include
+../src/game/Havok/_at_01090000.cpp  ??1hkPoweredHingeConstraintData@@UAE@XZ  01092d80  /vc71 /O2 /MD /Gy /TP /Isrc/game/include
 ../src/game/Havok/_at_01090000.cpp  ?getConstraintInfo@hkPoweredChainData@@UBEXAAUhkConstraintInfo@@@Z  01093660  /vc71 /O2 /MD /Gy /TP /Isrc/game/include
 ../src/game/Havok/_at_01090000.cpp  ?getRuntimeInfo@hkPoweredChainData@@UBEXVhkBool_s0109_2e10@@AAURuntimeInfo@hkConstraintData_s0109_2e10@@@Z  010936a0  /vc71 /O2 /MD /Gy /TP /Isrc/game/include
 ../src/game/Havok/_at_01090000.cpp  ?AdjustCost@cSPToolStrategy@SP@@QAEHH@Z  010937e0  /vc71 /O2 /MD /Gy /TP /Isrc/game/include
 ../src/game/Havok/_at_01090000.cpp  ??1hkPoweredChainData@@UAE@XZ  01093810  /vc71 /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/Havok/_at_01090000.cpp  ?isValid@hkPointToPlaneConstraintData@@UBE?AVhkBool_s0109_38e0__motors@@XZ  01094360  /vc71 /O2 /MD /Gy /TP /fp:fast /Isrc/game/include
+../src/game/Havok/_at_01090000.cpp  ?isValid@hkPointToPathConstraintData@@UBE?AVhkBool_s0109_38e0__motors@@XZ  010944c0  /vc71 /O2 /MD /Gy /TP /fp:fast /Isrc/game/include
 ../src/game/Havok/_at_01090000.cpp  ?Destroy@cCurveContainer@@QAEXXZ  01094bc0  /vc71 /O2 /MD /Gy /TP /fp:fast /Isrc/game/include
 ../src/game/Havok/_at_01090000.cpp  ?To20@cStreamProxy@@QAEXPAUcCmdState@@@Z  01094d50  /vc71 /O2 /MD /Gy /TP /fp:fast /Isrc/game/include
 ../src/game/Havok/_at_01090000.cpp  ?To1c@cStreamProxy@@QAEXPAUcBlob48@@PAX@Z  01094d90  /vc71 /O2 /MD /Gy /TP /fp:fast /Isrc/game/include
