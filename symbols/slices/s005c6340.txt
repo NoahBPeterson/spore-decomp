@@ -2,7 +2,8 @@
 005c6810 ?Init@cSPPaletteItem_s005c_6340@SP@@QAE_NABUKey_s005c_6340@ResourceMan@EA@@HI@Z  # cSPPaletteItem_s005c_6340::Init migrated from s005c6340 (verbatim, slice spelling)
 005c6a30 ?Cast@cSPPaletteItemUI_s005c_6340@SP@@UBEPAXI@Z  # cSPPaletteItemUI_s005c_6340::Cast migrated from s005c6340 (verbatim, slice spelling)
 005c6a70 SP::cSPPaletteItemUISelectable::Cast  # adds 0x47a9a1c then defers to cSPPaletteItemUI::Cast; byte-exact
-005c6ad0 SP::cSPPaletteItemUISelectable::SetIsSelected  # PDB caller-scored candidate; posts 0x47a9a20 / clears mSelected
+005c6ab0 ?Show@cPaletteWidget@SP@@QAEXXZ  # cPaletteWidget::Show migrated from s005c6340 (verbatim, slice spelling)
+005c6ad0 ?SetIsSelected@cSPPaletteItemUISelectable_s005c_6340@SP@@UAEX_N@Z  # cSPPaletteItemUISelectable_s005c_6340::SetIsSelected migrated from s005c6340 (verbatim, slice spelling)
 005c6b10 ?HandleMessage@cSPPaletteItemUISelectable_s005c_6340@SP@@UAE_NIPAX@Z  # cSPPaletteItemUISelectable_s005c_6340::HandleMessage migrated from s005c6340 (verbatim, slice spelling)
 005c6ba0 ?OffRollover@cSPPaletteItemRollover_s005c_6340@SP@@UAEXXZ  # cSPPaletteItemRollover_s005c_6340::OffRollover migrated from s005c6340 (verbatim, slice spelling)
 005c6bf0 ??0cSPPaletteItemUI_s005c_6340@SP@@QAE@XZ  # cSPPaletteItemUI_s005c_6340::cSPPaletteItemUI migrated from s005c6340 (verbatim, slice spelling)

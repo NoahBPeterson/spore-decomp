@@ -12,6 +12,7 @@
 005c22b0 ?AddSubCategory@cSPPaletteCategory@SP@@QAEXPAV12@@Z  # SP::cSPPaletteCategory::AddSubCategory (callee of s005c53c0, named from the dev publics; slice address comment)
 005c2390 ?AddPage@cSPPaletteCategory@SP@@QAEXPAVcSPPalettePage@2@@Z  # SP::cSPPaletteCategory::AddPage (callee of s005c53c0, named from the dev publics; slice address comment)
 005c53c0 ?Init@cSPPaletteCategoryUI_s005c_53c0@SP@@QAEXPAVcSPPaletteCategory_s005c_53c0@2@PAUIWindow@2@I@Z  # cSPPaletteCategoryUI_s005c_53c0::Init migrated from s005c53c0 (verbatim, slice spelling)
+005c5c20 ?ShutdownChildren@cSPPalette_s005c_53c0@SP@@QAEXXZ  # cSPPalette_s005c_53c0::ShutdownChildren migrated from s005c53c0 (verbatim, slice spelling)
 005c5e80 ??_EcSPPalette@SP@@W7AEPAXI@Z  # this-8 adjustor thunk to 0x005c5ee0 (vtable 0x013f7fc4 slot 2)
 005c5e90 ??1cSPPalette_s005c_53c0@SP@@UAE@XZ  # cSPPalette_s005c_53c0::~cSPPalette migrated from s005c53c0 (verbatim, slice spelling)
 005c5ee0 ??_EcSPPalette@SP@@UAEPAXI@Z  # cSPPalette deleting dtor (vtable 0x013f7fd4 slot 0)

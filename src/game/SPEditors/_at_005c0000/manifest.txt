@@ -1,0 +1,9 @@
+# source  symbol  va  flags
+../src/game/SPEditors/_at_005c0000.cpp  ?FindSubCategory@cSPPaletteCategory_s005c_1d70@SP@@QAEPAV12@I@Z  005c1d70  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/_at_005c0000.cpp  ?ShutdownChildren@cSPPalette_s005c_53c0@SP@@QAEXXZ  005c5c20  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/SPEditors/_at_005c0000.cpp  ?Show@cPaletteWidget@SP@@QAEXXZ  005c6ab0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/_at_005c0000.cpp  ?SetIsSelected@cSPPaletteItemUISelectable_s005c_6340@SP@@UAEX_N@Z  005c6ad0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/_at_005c0000.cpp  ?SetWindowFlag@cUIMissionCard@@QAEXH@Z  005c9810  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/_at_005c0000.cpp  ?GetCurrent@cUIMissionCard@@QAEPAVcFeedCategory@@XZ  005c9830  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/_at_005c0000.cpp  ??0cUIMissionCard@@QAE@XZ  005c9c70  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/_at_005c0000.cpp  ??1cUIMissionCard@@UAE@XZ  005c9d10  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

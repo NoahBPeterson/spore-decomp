@@ -1,4 +1,4 @@
-005c1d70 SP::cSPPaletteCategory::FindSubCategory  # recursive search over mSubCategories by mCategoryId
+005c1d70 ?FindSubCategory@cSPPaletteCategory_s005c_1d70@SP@@QAEPAV12@I@Z  # cSPPaletteCategory_s005c_1d70::FindSubCategory migrated from s005c1d70 (verbatim, slice spelling)
 005c1e20 ?Init@cSPPaletteCategory_s005c_1d70@SP@@QAE_NABUKey_s005c_1d70@ResourceMan@EA@@I@Z  # cSPPaletteCategory_s005c_1d70::Init migrated from s005c1d70 (verbatim, slice spelling)
 005c2020 ??0cSPPaletteCategory_s005c_1d70@SP@@QAE@XZ  # cSPPaletteCategory_s005c_1d70::cSPPaletteCategory migrated from s005c1d70 (verbatim, slice spelling)
 005c20b0 SP::cSPPaletteCategory::~cSPPaletteCategory  # destroys mCategoryName/vectors

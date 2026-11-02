@@ -1,0 +1,3 @@
+# va  diff-bytes  reason   (none: all reconstructed functions byte-exact)
+005c1d10 39 page count loop: begin/end load order and register roles differ flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
+005c98a0 687 cSPPaletteSubCategoryUI::Update(unsigned): full body reconstructed (delta clamp, pass1 slide/lerp entries, pass2 window stretch+fade, category UI refresh, icon refresh by state flags). Complete + compiles; not byte-exact (/O2 905->840; original uses x87 fild+fadd for unsigned->float, SSE codegen emits cvtsi2ss). Equiv: WEAK (275 valid, 20.0% cov, 0 mismatches). Flags /O2 /MD /Gy /TP /arch:SSE /fp:fast

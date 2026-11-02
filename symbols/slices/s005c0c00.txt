@@ -14,3 +14,4 @@
 005c14f0 ?SendPaintMessage@cSPEditorPaintLikeThis_s005c_0c00@SP@@QAEXXZ  # cSPEditorPaintLikeThis_s005c_0c00::SendPaintMessage migrated from s005c0c00 (verbatim, slice spelling)
 005c1570 SP::cSPEditorPaintLikeThis::SetModel  # dev PDB method
 005c1870 SP::cSPEditorPaintLikeThis::HandleMessage  # IHandlerRC override (this = +0x20)
+005c1d10 ?CountPagesInCategory@cSPPaletteCategory_s005c_0c00@SP@@QAEHI@Z  # CountPagesInCategory migrated from s005c0c00 (verbatim, slice spelling)
