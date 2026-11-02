@@ -1,2 +1,6 @@
 # source  symbol  va  flags
+../src/game/SPGonzago/SPTribeMissionManager.cpp  ?F_cd35c0@TM@@QAEXHH@Z  00cd35c0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPTribeMissionManager.cpp  ?F_cd3610@TM@@QAEXXZ  00cd3610  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPTribeMissionManager.cpp  ?F_cd3650@TM@@QAEXXZ  00cd3650  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPTribeMissionManager.cpp  ??1TM@@QAE@XZ  00cd3ab0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPTribeMissionManager.cpp  ?FUN_0135d720@@YAXXZ  0135d720  /O2 /MD /Gy /EHsc /TP /Isrc/game/include

@@ -1,14 +1,14 @@
-00cd3480 SP::cSPTribeMissionManager::Write  # PDB name (card)
-00cd3530 SP::cSPTribeMissionManager::Read  # PDB name (card, guessed pair)
-00cd35c0 Simulator::cTribeModeStrategy::cTribeModeStrategy_func??  # on-leave hook
-00cd3610 Simulator::cTribeModeStrategy::RefreshMissionCard  # Claude-coined
-00cd3650 Simulator::cTribeModeStrategy::ClearMissionCard  # Claude-coined
-00cd3670 Simulator::cTribeModeStrategy::SetMissionCard  # Claude-coined
-00cd36f0 SP::cTribeModeStrategy::ForEachStructure  # intrusive hashtable walk
-00cd3760 Simulator::cTribeModeStrategy::func??  # eastl hashtable find
-00cd37b0 SP::ReadSTLMapT  # PDB candidate
-00cd3920 SP::WriteSTLMapT  # Claude-coined
-00cd3ab0 Simulator::cTribeModeStrategy::~  # destructor
+00cd3480 ?WriteTribe@TM@@QAEEPAX@Z  # TM::WriteTribe migrated from s00cd3480 (verbatim, slice spelling)
+00cd3530 ?ReadTribe@TM@@QAEEPAX@Z  # TM::ReadTribe migrated from s00cd3480 (verbatim, slice spelling)
+00cd35c0 ?F_cd35c0@TM@@QAEXHH@Z  # TM::F_cd35c0 migrated from s00cd3480 (verbatim, slice spelling)
+00cd3610 ?F_cd3610@TM@@QAEXXZ  # TM::F_cd3610 migrated from s00cd3480 (verbatim, slice spelling)
+00cd3650 ?F_cd3650@TM@@QAEXXZ  # TM::F_cd3650 migrated from s00cd3480 (verbatim, slice spelling)
+00cd3670 ?F_cd3670@TM@@QAEXPAX@Z  # TM::F_cd3670 migrated from s00cd3480 (verbatim, slice spelling)
+00cd36f0 ?ForEachStructure@@YA_NPAXPAUHashTable@@@Z  # ForEachStructure migrated from s00cd3480 (verbatim, slice spelling)
+00cd3760 ?F_cd3760@TM@@QAEXH@Z  # TM::F_cd3760 migrated from s00cd3480 (verbatim, slice spelling)
+00cd37b0 ?ReadSTLMapT@@YAXPAXPAUHashTable@@@Z  # ReadSTLMapT migrated from s00cd3480 (verbatim, slice spelling)
+00cd3920 ?WriteSTLMapT@@YA_NPAXPBDPAUHashTable@@@Z  # WriteSTLMapT migrated from s00cd3480 (verbatim, slice spelling)
+00cd3ab0 ??1TM@@QAE@XZ  # TM::~TM migrated from s00cd3480 (verbatim, slice spelling)
 00cd3b60 Simulator::cTribeModeStrategy::  # constructor
 00cd3bf0 Simulator::cTribeModeStrategy::SetMission  # Claude-coined
 00cd3e60 SP::GetCamRotateTrigger  # Claude-coined; FNV hash of "TRG-CamRotate*"
