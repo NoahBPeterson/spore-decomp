@@ -1,0 +1,6 @@
+00866220 ?FUN_00866220@@YAXPAUObj@@HPAHH@Z  # FUN_00866220 migrated from s00866220 (verbatim, slice spelling)
+008664e0 ?FUN_008664e0@@YAXPAUObj@@@Z  # FUN_008664e0 migrated from s00866220 (verbatim, slice spelling)
+00866580 ?FUN_00866580@@YAXPAUObj@@@Z  # FUN_00866580 migrated from s00866220 (verbatim, slice spelling)
+008666e0 ?FUN_008666e0@@YAXPAUObj@@@Z  # FUN_008666e0 migrated from s00866220 (verbatim, slice spelling)
+00866700 ?FUN_00866700@@YAXPAUObj@@@Z  # FUN_00866700 migrated from s00866220 (verbatim, slice spelling)
+00866b80 ?crc32_little@@YAIIPBEI@Z  # crc32_little migrated from s00866220 (verbatim, slice spelling)
