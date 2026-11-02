@@ -33,11 +33,23 @@ def make_worktree(k):
         rc, out = git("worktree", "add", "-q", "--detach", wt, "main")
         if rc:
             sys.exit("worktree %s: %s" % (wt, out))
-    for name in ("work", ".venv"):
-        link = os.path.join(wt, name)
-        if not os.path.lexists(link):
-            os.symlink(os.path.join(ROOT, name), link)
+    link_missing(ROOT, wt, ".venv")
+    link_missing(ROOT, wt, "work")
     return wt
+
+
+def link_missing(src_root, wt, rel):
+    """Symlink src_root/rel into the worktree; where the checkout already made rel a directory (git tracks a few files
+    of work/batches, so the worktree has a real work/ holding only those: mig26 failed every module on a missing
+    work/batches/mig26.json), link its missing entries one by one instead.  git reset/checkout in the worktree leaves
+    the links alone (they are untracked)."""
+    dst = os.path.join(wt, rel)
+    if not os.path.lexists(dst):
+        os.symlink(os.path.join(src_root, rel), dst)
+    elif os.path.isdir(dst) and not os.path.islink(dst):
+        for name in os.listdir(os.path.join(src_root, rel)):
+            if not name.startswith("landwt_"):
+                link_missing(src_root, wt, os.path.join(rel, name))
 
 
 def reset_worktree(wt):
@@ -71,7 +83,7 @@ def main():
         sids[e["module"]].add(e["id"])
     queue = list(mods)
     running = {}            # module -> its slice ids
-    serial = []
+    serial, landed = [], []
     log("== %s %s: %d modules, %d workers" % (time.strftime("%Y-%m-%d %H:%M"), a.batch, len(mods), a.workers))
 
     def take():
@@ -127,6 +139,7 @@ def main():
                         serial.append(m)
                         continue
                     log(line.replace(mm.group(1), git("rev-parse", "--short", "HEAD")[1].strip()))
+                    landed.append(m)
             finally:
                 with qlock:
                     running.pop(m, None)
@@ -141,8 +154,10 @@ def main():
                            capture_output=True, text=True)
         print("\n".join(l for l in r.stdout.splitlines() if not l.startswith(("==", "    "))), flush=True)
     if a.check:
-        subprocess.run([PY, "tools/migrate/land.py", a.batch, "--check", "--log",
-                        os.path.join(ROOT, "work", "migrate", "check_%s.log" % a.batch)], cwd=ROOT)
+        # only what this run landed in parallel (the serial pass landed in main, gated there)
+        for m in landed:
+            subprocess.run([PY, "tools/migrate/land.py", a.batch, "--check", "--exact", m, "--log",
+                            os.path.join(ROOT, "work", "migrate", "check_%s.log" % a.batch)], cwd=ROOT)
     log("== %s %s: done" % (time.strftime("%Y-%m-%d %H:%M"), a.batch))
 
 
