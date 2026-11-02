@@ -14,3 +14,10 @@
 ../src/game/SPEditors/SPUIFeedEdit.cpp  ?push_back@AssetVec@@QAEXXZ  0065e6d0  /O2 /MD /Gy /TP /arch:SSE2 /Isrc/game/include
 ../src/game/SPEditors/SPUIFeedEdit.cpp  ?Handler@CallbackObj@@QAEXHH@Z  0065ef10  /O2 /MD /Gy /TP /arch:SSE2 /Isrc/game/include
 ../src/game/SPEditors/SPUIFeedEdit.cpp  ?Init@cSPUIFeedEdit@SP@@QAEXPAVIWindow@UTFWin@EA@@@Z  0065f700  /O2 /MD /Gy /TP /arch:SSE2 /Isrc/game/include
+../src/game/SPEditors/SPUIFeedEdit.cpp  ?FUN_00ed29b0@@YAPAHPAH00@Z  00ed29b0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPEditors/SPUIFeedEdit.cpp  ?FUN_00ed4930@@YAXXZ  00ed4930  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPEditors/SPUIFeedEdit.cpp  ?FUN_00ed57e0@@YIXPAXHPAI@Z  00ed57e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPUIFeedEdit.cpp  ?FUN_00ed5890@@YIXPAXHI@Z  00ed5890  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPUIFeedEdit.cpp  ?FUN_00ed5910@@YIXPAX@Z  00ed5910  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPUIFeedEdit.cpp  ?FUN_00ed63a0@@YIXPAX@Z  00ed63a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPUIFeedEdit.cpp  ?Dispatch@PanelCallout@@QAEXII@Z  00ed74f0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include

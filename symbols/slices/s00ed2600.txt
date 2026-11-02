@@ -1,1 +1,3 @@
-# no confident new names in this slice (callers are cSPPaletteUI/cSPPaletteCategoryUI but offsets unverified)
+00ed29b0 ?FUN_00ed29b0@@YAPAHPAH00@Z  # FUN_00ed29b0 migrated from s00ed2600 (verbatim, slice spelling)
+00ed2e40 ?Construct@SimPalette@@QAEPAU1@XZ  # SimPalette::Construct migrated from s00ed2600 (verbatim, slice spelling)
+00ed2f30 ?Shutdown@SimPalette@@QAEXXZ  # SimPalette::Shutdown migrated from s00ed2600 (verbatim, slice spelling)

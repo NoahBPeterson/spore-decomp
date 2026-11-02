@@ -1,2 +1,14 @@
-00ed5220 Obj5220::f  # was Simulator::cScenarioEditModeDisplayStrategy ctor; our object defines Obj5220::f
-00ed49a0 Obj49a0::f  # was Simulator::cScenarioEditModeDisplayStrategy dtor; our object defines Obj49a0::f
+00ed4930 ?FUN_00ed4930@@YAXXZ  # FUN_00ed4930 migrated from s00ed4730 (verbatim, slice spelling)
+00ed49a0 ?f@Obj49a0@@QAEXXZ  # Obj49a0::f migrated from s00ed4730 (verbatim, slice spelling)
+00ed4b70 ?f@Obj4b70@@QAEXXZ  # Obj4b70::f migrated from s00ed4730 (verbatim, slice spelling)
+00ed4c70 ?f@Obj4c70@@QAEXH@Z  # Obj4c70::f migrated from s00ed4730 (verbatim, slice spelling)
+00ed4e30 ?f@Obj4e30@@QAEHXZ  # Obj4e30::f migrated from s00ed4730 (verbatim, slice spelling)
+00ed4f90 ?f@Obj4f90@@QAEHHH@Z  # Obj4f90::f migrated from s00ed4730 (verbatim, slice spelling)
+00ed5020 ?f@Obj5020@@QAEDPAX0000@Z  # Obj5020::f migrated from s00ed4730 (verbatim, slice spelling)
+00ed5190 ?f@Obj5190@@QAEHH@Z  # Obj5190::f migrated from s00ed4730 (verbatim, slice spelling)
+00ed5220 ?f@Obj5220@@QAEPAXXZ  # Obj5220::f migrated from s00ed4730 (verbatim, slice spelling)
+00ed5330 ?f@Obj5330@@QAEHH@Z  # Obj5330::f migrated from s00ed4730 (verbatim, slice spelling)
+00ed5400 ?f@Obj5400@@QAEXH@Z  # Obj5400::f migrated from s00ed4730 (verbatim, slice spelling)
+00ed54b0 ?f@Obj54b0@@QAEXH@Z  # Obj54b0::f migrated from s00ed4730 (verbatim, slice spelling)
+00ed5580 ?Panel_Match@@YG_NHHH@Z  # Panel_Match migrated from s00ed4730 (verbatim, slice spelling)
+00ed5640 ?f@Obj5640@@QAEXXZ  # Obj5640::f migrated from s00ed4730 (verbatim, slice spelling)
