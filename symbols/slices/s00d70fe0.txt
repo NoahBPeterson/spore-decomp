@@ -1,0 +1,1 @@
+00d71780 ?EAT_EGG_Tick@@YA_NPAVcSPCreatureBase@@HHHHPAUEggCtx@@HM@Z  # EAT_EGG_Tick migrated from s00d70fe0 (verbatim, slice spelling)

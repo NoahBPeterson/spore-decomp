@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+00d71780 1085 complete; EAT_EGG_Tick state machine (timer expiry, stimulus animal check, state 3 rush-to-food vector math, states 0/1/2/3 eating, bite/attack branches, EatFood + achievement notify); 1356 vs 1830 bytes for the same two simplifications; flags /O2 /MD /Gy /TP /GS-; difftest UNSUPPORTED (1 unresolved reference: member MoveToPointAndFacingAtSpeed 0x00c1c5c0)
