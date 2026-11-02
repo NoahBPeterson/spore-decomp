@@ -1,1 +1,1 @@
-009a1ee0 nSPCreatureAnim::CreateAnimationBindRecords  # dev-PDB caller-single candidate; calls its local classes bind_record_helper::InitChannel (0x99c7b0) and variant_helper (ctor 0x99f8b0, dtor 0x99f050)
+009a1ee0 ?CreateAnimationBindRecords@nSPCreatureAnim@@YA_NPAUanimation_static_data@1@PAUcreature_static_data_s009a_1ee0@1@PAUanimation_bind_data_s009a_1ee0@1@@Z  # CreateAnimationBindRecords migrated from s009a1ee0 (verbatim, slice spelling)

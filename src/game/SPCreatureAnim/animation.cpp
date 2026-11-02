@@ -1,4 +1,4 @@
-// src/game/SPCreatureAnim/animation.cpp -- migrated from slice(s) s0099f970, s0099f0b0, s0099e110, s0099d460 by tools/migrate/rewrite.py
+// src/game/SPCreatureAnim/animation.cpp -- migrated from slice(s) s009a2c90, s009a1ee0, s0099cf50, s0099bf80, s0099f970, s0099f0b0, s0099e110, s0099d460 by tools/migrate/rewrite.py
 // Object file: SPCreatureAnim/animation.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -6,6 +6,7 @@
 #include "nSPCreatureAnim/creature_instance_data.h"
 #include "nSPCreatureAnim/latest_version/animation_static_data.h"
 #include <string.h>
+#include <intrin.h>
 
 // unnamed retail callees and globals (address in the comment)
 extern "C" void* __cdecl memset(void*, int, unsigned int);
@@ -203,9 +204,6 @@ extern const float kTwoPi;          // 0x01446dec (6.2831855f)
 // ---- items of slice s0099d460 end
 
 // ---- items of slice s0099e110 begin (TODO(rewrite): local stubs, replace by canonical classes)
-namespace nSPCreatureAnim {
- class stream_wrapper; 
-}
 extern void FUN_f47380(void*);                 // operator delete(void*) cdecl
 extern int FUN_00a088e0(int);
 extern void FUN_11e073e(void*, int, int);
@@ -215,12 +213,25 @@ extern int g_15504dc;
 extern "C" __declspec(dllimport) void* __cdecl fopen(const char*, const char*);
 extern "C" __declspec(dllimport) int   __cdecl fclose(void*);
 struct S99d060 { void f(); };                 // release a reference (0x99d060)
-struct S99ed90 { int f(void*, char*, int); }; // ReadAnimationStaticDataFromStreamWrapper (external)
 struct S99ecb0 {
   S99ecb0* f(int p);
 };
 struct S99ece0 {
   S99ece0* f();
+};
+void* EAAllocate(unsigned int size, const char* name, int a, int b, int c, int d);  // 0xf473a0
+void operator delete(void* p);                                                        // 0xf47380
+void EA_Log(const char* fmt, ...);                                                    // 0xc2e4e0
+unsigned int ComputeAnimationStaticDataSizeBytesForVersion(void* data);                // 0x9a8670
+char UpdateAnimationStaticDataVersion(void* data, unsigned int size);                   // 0x9a86b0
+void DisableUnusedDeforms(void* data);                                                  // 0x99d2e0
+void VecBoolInsert(void* dst, const void* src, unsigned int n);                         // 0x11e0744
+struct stream_wrapper {
+    virtual void vt0();                                      // 0x0099cf70
+    virtual void vt1();                                      // 0x0099cf90
+    virtual void vRead(char* buf, unsigned int n);           // 0x0099cfb0 (slot 2)
+    virtual void vt3();                                      // 0x0099cfe0
+    virtual int  vSize();                                    // 0x0099d010 (slot 4)
 };
 struct S99f050 { void f(); };
 struct S99f090 { S99f090* f(); };
@@ -288,6 +299,54 @@ struct AnimHeader_s0099_f0b0 {                             // 0x200 bytes
     uint32_t fixupCount;                        // +0x14c
     uint32_t fixupOffset;                       // +0x150
     char pad154[0xac];
+};
+struct FreedBlockHeader {
+    uint32_t mFlags;                  // at buffer[-1]
+};
+struct RefBlock {
+    char       pad00[0x1c];
+    void*      mpBuffer;              // +0x1c
+    char       pad20[0x10];
+    int        mRefCount;             // +0x30
+
+    int Release();                    // 0x0099f0b0
+};
+void __cdecl FreeRawBlock(void* p);   // 0x00f47380
+struct PaintSource {
+    struct PaintRec {
+        uint32_t mFlags;              // +0x00
+        uint32_t mPad04;              // +0x04
+        uint32_t mOffset;             // +0x08
+        uint32_t mStride;             // +0x0c
+        uint32_t mIndex;              // +0x10
+        char     pad14[0x0c];
+    } mRecs[1];                       // records start at +0x00, stride 0x20
+};
+struct ChunkEntry {
+    void*    mpData;                  // +0x00
+    char     pad04[0x1c];
+};
+extern ChunkEntry kAnimChunkTable[9]; // 0x01446cc0, stride 0x20
+struct AnimPaintDest {
+    char       pad000[0x208];
+    uint32_t   m208;                  // +0x208
+    char       pad20c[0x214 - 0x20c];
+    const PaintSource* mpSource;      // +0x214
+    char       pad218[0x22c - 0x218];
+    struct PaintSlot {
+        uint32_t mA;                  // +0x00
+        uint32_t mB;                  // +0x04
+        uint32_t mC;                  // +0x08
+        char     pad0c[0x1c];
+    };
+    union {
+        PaintSlot mSlots[0x40];       // +0x22c
+        struct {
+            char     padSlots[0xc1c - 0x22c];
+            uint32_t mC1c;            // +0xc1c
+            uint32_t mC20;            // +0xc20
+        } mTail;
+    };
 };
 // ---- items of slice s0099f0b0 end
 
@@ -379,6 +438,667 @@ static inline float Clamp01(float f)
 #define F(p, off) (*(float*)((char*)(p) + (off)))
 #define B(p, off) (*(u8*)((char*)(p) + (off)))
 // ---- items of slice s0099f970 end
+
+// ---- items of slice s0099bf80 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C" double sqrt(double);
+extern "C" double acos(double);
+extern const float g_eps;    // 0x013ebca0  0.0001f
+extern const float g_zero;   // 0x01485378  0.0f
+extern const float g_two;    // 0x01470f1c  2.0f
+extern const float g_negone; // 0x013eb1bc
+#pragma intrinsic(_InterlockedDecrement, _InterlockedExchange, _InterlockedExchangeAdd)
+#pragma intrinsic(sqrt)
+#pragma intrinsic(acos, sin)
+struct S99c4a0 {
+  uint mCount;   // +0x00
+  bool Add(uint key, uint val, float f0, float f1);
+};
+struct S99c540 {
+  uint mCount;   // +0x00
+  bool Add(uint key, uint val, float f0, float f1, float f2);
+};
+static inline int WrapIndex99(int v, int n) {
+  if (v < 0) {
+    int r = -v % n;
+    if (r != 0) r = n - r;
+    return r;
+  }
+  return v % n;
+}
+// ---- items of slice s0099bf80 end
+
+// ---- items of slice s0099cf50 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C" void   __cdecl FUN_00f47380(void*);                        // 0xf47380 operator delete
+typedef unsigned int   uintptr_t;
+#define F_s0099_cf50(o, off)  (*(uint32_t*)((uint8_t*)(o) + (off)))
+extern "C" void*  __cdecl FUN_009fc310(void*);                        // 0x9fc310 (BehaviorLookup)
+// ---- items of slice s0099cf50 end
+
+// ---- items of slice s009a1ee0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C" void* __cdecl memcpy(void*, const void*, unsigned int);
+extern "C" void* __cdecl _alloca(unsigned int);
+#pragma intrinsic(memset, memcpy)
+void operator_delete_array(void* p);                 // 0x00f47380 (operator delete[])
+namespace nSPCreatureAnim {
+struct animation_body_bind_record_s009a_1ee0                     // 0x10 bytes
+{
+    enum flags { CREATURE_STATE = 1, MIRROR_SAGITTAL = 2, ROOT_SCALE_HACK = 4, EVENTS_ONLY = 8,
+                 TARGET_UNRESOLVED = 0x10, TARGET_POS = 0x20 };
+
+    /* 00h */ uint64_t VariantMask;
+    /* 08h */ uint KeyDataMask : 24;
+              uint VariantGroup8 : 8;
+    /* 0Ch */ uint8_t BodyIndex8;
+    /* 0Dh */ uint8_t ChannelIndex8;
+    /* 0Eh */ uint8_t TargetBodyIndex8;
+    /* 0Fh */ uint8_t Flags;
+};
+}
+namespace nSPCreatureAnim {
+template <typename T> inline void swap(T& a, T& b)
+{
+    T temp(a);
+    a = b;
+    b = temp;
+}
+}
+namespace nSPCreatureAnim {
+template <typename T> inline const T& min(const T& a, const T& b)
+{
+    return (b < a) ? b : a;
+}
+}
+namespace nSPCreatureAnim {
+struct BindRecordVector
+{
+    typedef animation_body_bind_record_s009a_1ee0 value_type;
+
+    value_type* mpBegin;
+    value_type* mpEnd;
+    value_type* mpCapacity;
+    uint        mAllocator;
+
+    uint size() const { return (uint)(mpEnd - mpBegin); }
+    value_type& operator[](uint n) { return mpBegin[n]; }
+    value_type& back() { return *(mpEnd - 1); }
+
+    void resize(uint n);                                              // 0x00890490 (out of line)
+    void DoInsertValues(value_type* pos, uint n, const value_type& v); // 0x0088fe00
+    void DoInsertValue(value_type* pos, const value_type& v);          // 0x0092a100
+
+    value_type* erase(value_type* first, value_type* last)
+    {
+        value_type* result = first;
+        for (value_type* p = last; p != mpEnd; ++p, ++result)
+            *result = *p;
+        mpEnd -= (last - first);
+        return first;
+    }
+
+    // resize as inlined here (the out-of-line copy is the 0x00890490 one)
+    void resize_inline(uint n)
+    {
+        if (n > size())
+            DoInsertValues(mpEnd, n - size(), value_type());
+        else
+            erase(mpBegin + n, mpEnd);
+    }
+
+    void push_back(const value_type& v)
+    {
+        if (mpEnd < mpCapacity)
+        {
+            value_type* p = mpEnd++;
+            if (p)
+                *p = v;
+        }
+        else
+            DoInsertValue(mpEnd, v);
+    }
+};
+}
+namespace nSPCreatureAnim {
+struct ULongVector
+{
+    uint* mpBegin;
+    uint* mpEnd;
+    uint* mpCapacity;
+    uint  mAllocator;
+
+    ~ULongVector()
+    {
+        if (mpBegin && ((int*)mpBegin)[-1] != 0)
+            operator_delete_array(mpBegin);
+    }
+};
+}
+namespace nSPCreatureAnim {
+struct animation_channel_static_data
+{
+    char     pad0[0x8c];
+    uint     Context[8];        // +0x8c  context passed to the target lookups
+    uint16_t Flags;             // +0xac  1 = bindable, 4 = required
+    uint8_t  BodyIndex;         // +0xae
+    uint8_t  VariantGroup;      // +0xaf
+};
+}
+namespace nSPCreatureAnim {
+struct animation_static_data
+{
+    char  pad0[0x144];
+    uint  NumChannels;                                // +0x144
+    animation_channel_static_data** ChannelPointers;  // +0x148
+    uint  NumFixups;                                  // +0x14c
+    uint  FixupTableOffsetBytes;                      // +0x150
+    uint  BranchPredicatesMask;                       // +0x154
+    uint  BranchPredicatesMatch;                      // +0x158
+};
+}
+namespace nSPCreatureAnim {
+struct creature_body_static_data_s009a_1ee0 { uint8_t data[0x468]; };
+}
+namespace nSPCreatureAnim {
+struct creature_static_data_s009a_1ee0
+{
+    char pad0[0x384];
+    creature_body_static_data_s009a_1ee0* BodiesBegin;           // +0x384
+    creature_body_static_data_s009a_1ee0* BodiesEnd;             // +0x388
+};
+}
+namespace nSPCreatureAnim {
+struct animation_bind_data_s009a_1ee0
+{
+    /* 00h */ uint64_t ChannelMask;          // channels that produced at least one record
+    /* 08h */ uint64_t KeyedChannelMask;     // ... with key data
+    /* 10h */ uint     Flags;                // 1 = has secondary targets, 2 = needs smoothing
+    /* 14h */ uint     NumVariants;
+    /* 18h */ uint     NumVariantGroups;
+    /* 1Ch */ BindRecordVector Records;
+};
+}
+namespace nSPCreatureAnim {
+struct bind_record_helper
+{
+    /* 000h */ animation_static_data* animation;
+    /* 004h */ creature_static_data_s009a_1ee0*  creature;
+    /* 008h */ BindRecordVector*      records;
+    /* 00Ch */ uint    num_creature_state_records;
+    /* 010h */ uint    num_root_records;
+    /* 014h */ uint    num_targeted_records;
+    /* 018h */ uint8_t BodyGroups[255][9];
+    /* 910h */ animation_channel_static_data* channel;
+    /* 914h */ uint    target_selected_bidxs[255];
+    /* D10h */ uint    num_target_selected_bidxs;
+    /* D14h */ int     default_target;
+    /* D18h */ bool    target_symmetric;
+};
+}
+namespace nSPCreatureAnim {
+struct variant_helper
+{
+    struct group_channel_marker { uint first_channel_idx; uint required; };
+    struct variant_set
+    {
+        uint group, bidx, selection_idx, num_bound, required;
+        ULongVector bidxs;
+        uint pad;
+    };
+
+    /* 000h */ group_channel_marker group_channel_markers[64];
+    /* 200h */ uint variant_idx;
+    /* 204h */ uint num_groups;
+    /* 208h */ BindRecordVector* records;
+    /* 20Ch */ uint begin_base_bind_record;
+    /* 210h */ uint end_base_bind_record;
+    /* 214h */ bind_record_helper* BindHelper;
+    /* 218h */ variant_set variant_sets[64];
+    /* C18h */ uint num_variant_sets;
+    /* C1Ch */ animation_static_data* animation;
+    /* C20h */ creature_static_data_s009a_1ee0* creature;
+
+    variant_helper(bind_record_helper* helper);       // 0x0099f8b0 (EAX = this, EDI = helper)
+};
+}
+namespace nSPCreatureAnim {
+struct dependency_sort
+{
+    uint*    counts;        // per body: number of bodies it still waits for
+    uint8_t* ready;         // stack of bodies whose count dropped to zero
+    uint*    num_edges;
+    uint8_t* edges;         // numBodies x numBodies, 0xff-terminated rows
+    uint     stride;
+    uint*    num_ready;
+};
+}
+namespace nSPCreatureAnim {
+bool CheckBranchPredicates(creature_static_data_s009a_1ee0* creature, uint mask, uint match);   // 0x0099c710
+}
+namespace nSPCreatureAnim {
+void InitChannel(bind_record_helper* helper, uint channel, uint pass);               // 0x0099c7b0
+}
+namespace nSPCreatureAnim {
+uint FindTargetBodies(uint* out, uint max, creature_static_data_s009a_1ee0* creature, void* context,
+                      uint pass, uint symmetric);                                     // 0x009b2340
+}
+namespace nSPCreatureAnim {
+void AddBindRecord(bind_record_helper* helper, uint idx, uint bidx, uint channel, uint group,
+                   uint64_t variantMask, uint pass);                                  // 0x009a0f10
+}
+namespace nSPCreatureAnim {
+bool PrepareVariantSets(variant_helper* helper, uint pass);                          // 0x009a1c60
+}
+namespace nSPCreatureAnim {
+uint GenerateVariants(variant_helper* helper, uint pass);                            // 0x009a1a60
+}
+namespace nSPCreatureAnim {
+void RemoveEdges(dependency_sort* sort, uint8_t* row, uint8_t body);                 // 0x0099c910
+}
+namespace nSPCreatureAnim {
+void AnimWarning(const char* fmt, ...);                                              // 0x00c2e4e0
+}
+// ---- items of slice s009a1ee0 end
+
+// ---- items of slice s009a2c90 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern int  FUN_009a1c20(int, int, int);
+extern int g_15504e0;
+#pragma inline_depth(0)
+struct S9a1b00 {
+  int f(int, int);                                               // 0x9a1b00
+};
+struct S9a3c40 { void f(void*); };
+struct S9a1770 { void f(int); };
+struct S9a3080 { void f(char); };
+struct S99f0b0 {
+  void f();                                                      // 0x99f0b0
+};
+struct S9c4cc0 {
+  void f();                                                      // 0x9c4cc0
+};
+struct S9a35b0 { void f(); };
+struct SAnim {
+  void*         p00;        // +0x00
+  void*         p04;        // +0x04
+  void*         p08;        // +0x08
+  int           f0c;        // +0x0c
+  int           f10;        // +0x10
+  int           f14;        // +0x14
+  int           vBegin;     // +0x18
+  int           vEnd;       // +0x1c
+  int           vCap;       // +0x20
+  int           pad24[2];   // +0x24
+  float         fv[32];     // +0x2c..+0xab
+  unsigned char bAc;        // +0xac
+  unsigned char bAd;        // +0xad
+  unsigned char padAe[2];   // +0xae
+  double        dB0;        // +0xb0
+  double        dB8;        // +0xb8
+  int           c0;         // +0xc0
+  int           c4;         // +0xc4
+  unsigned char helper[0x14]; // +0xc8
+  int           fDc;        // +0xdc
+};
+// ---- items of slice s009a2c90 end
+
+// @ 0x0099c0b0
+float* FUN_0099c0b0(float* out, const float* a, const float* b)
+{
+  float b0 = b[0];
+  float b3 = b[3];
+  float a3 = a[3];
+  float a2 = a[2];
+  float b2 = b[2];
+  float a1 = a[1];
+  float b1 = b[1];
+  out[0] = ((b0 * a3 + a[0] * b3) - b[1] * a2) + b2 * a1;
+  float a0 = a[0];
+  out[1] = ((a2 * b0 + b1 * a3) + a1 * b3) - b2 * a0;
+  float c1 = b[1];
+  float c2 = a[2];
+  out[2] = ((a[2] * b3 - a1 * b0) + b2 * a3) + b[1] * a0;
+  out[3] = ((a3 * b3 - b0 * a0) - a1 * c1) - b2 * c2;
+  // The original leaves `out` in eax (the caller at 0x9a59e0 reads it back).
+  return out;
+}
+
+// @ 0x0099c1a0
+void FUN_0099c1a0(float* out, const float* q, const float* v)
+{
+  float qx = q[0], qy = q[1], qz = q[2], qw = q[3];
+  float vx = v[0], vy = v[1], vz = v[2];
+  out[0] = (((-(qz * qz) + -(qy * qy)) * vx + (qz * qx + qy * qw) * vz) +
+            (qy * qx - qz * qw) * vy) * g_two + vx;
+  out[1] = (((qy * qx + qz * qw) * vx + (qz * qy - qx * qw) * vz) +
+            (-(qz * qz) + -(qx * qx)) * vy) * g_two + vy;
+  out[2] = (((qz * qx - qy * qw) * vx + (-(qy * qy) + -(qx * qx)) * vz) +
+            (qz * qy + qx * qw) * vy) * g_two + vz;
+}
+
+// @ 0x0099c310
+void FUN_0099c310(float* out, const float* q, const float* v)
+{
+  float qx = q[0], qy = q[1], qz = q[2], qw = q[3];
+  float vx = v[0], vy = v[1], vz = v[2];
+  out[0] = (((-(qz * qz) + -(qy * qy)) * vx + (qz * qx + -(qy * qw)) * vz) +
+            (qy * qx - -(qz * qw)) * vy) * g_two + vx;
+  out[1] = (((qy * qx + -(qz * qw)) * vx + (qz * qy - -(qx * qw)) * vz) +
+            (-(qz * qz) + -(qx * qx)) * vy) * g_two + vy;
+  out[2] = (((qz * qx - -(qy * qw)) * vx + (-(qy * qy) + -(qx * qx)) * vz) +
+            (qz * qy + -(qx * qw)) * vy) * g_two + vz;
+}
+
+// @ 0x0099c4a0
+bool S99c4a0::Add(uint key, uint val, float f0, float f1)
+{
+  uint count = mCount;
+  uint i = 0;
+  if (count > 0) {
+    char* p = (char*)this + 4;
+    do {
+      if (*(uint*)p == key) goto found;
+      ++i;
+      p += 0x14;
+    } while (i < count);
+  }
+  i = 0xffffffff;
+found:
+  if (i < count) {
+    char* e = (char*)this + i * 0x14;
+    *(float*)(e + 0xc) = f0 + *(float*)(e + 0xc);
+    *(uint*)(e + 8) = val;
+    *(float*)(e + 0x14) = f1 + *(float*)(e + 0x14);
+    return true;
+  }
+  if (count < 8) {
+    mCount = count + 1;
+    char* e = (char*)this + count * 0x14;
+    *(uint*)(e + 4) = key;
+    *(float*)(e + 0xc) = f0;
+    *(uint*)(e + 8) = val;
+    *(float*)(e + 0x14) = f1;
+    return true;
+  }
+  return false;
+}
+
+// @ 0x0099c540
+bool S99c540::Add(uint key, uint val, float f0, float f1, float f2)
+{
+  uint count = mCount;
+  uint i = 0;
+  if (count > 0) {
+    char* p = (char*)this + 4;
+    do {
+      if (*(uint*)p == key) goto found;
+      ++i;
+      p += 0x14;
+    } while (i < count);
+  }
+  i = 0xffffffff;
+found:
+  if (i < count) {
+    char* e = (char*)this + i * 0x14;
+    *(float*)(e + 0xc) = f0 + *(float*)(e + 0xc);
+    *(float*)(e + 0x10) = f1 + *(float*)(e + 0x10);
+    *(uint*)(e + 8) = val;
+    *(float*)(e + 0x14) = f2 + *(float*)(e + 0x14);
+    return true;
+  }
+  if (count < 8) {
+    mCount = count + 1;
+    char* e = (char*)this + count * 0x14;
+    *(float*)(e + 0xc) = f0;
+    *(uint*)(e + 4) = key;
+    *(float*)(e + 0x10) = f1;
+    *(uint*)(e + 8) = val;
+    *(float*)(e + 0x14) = f2;
+    return true;
+  }
+  return false;
+}
+
+// @ 0x0099c9f0
+void FUN_0099c9f0(int self, int* cur, int* outPrev, int* outNext, int* outOther)
+{
+  int v = *cur;
+  int n = *(int*)(self + 0xd4);
+  if (v == n) {
+    v = n - 1;
+    *cur = v;
+    *outNext = v;
+  } else if (v != 0) {
+    v = v - 1;
+    *outNext = v;
+  } else {
+    *outNext = 0;
+    v = 0;
+  }
+  if (0 < v) {
+    v = v - 1;
+  } else if ((*(unsigned char*)(*(int*)(self + 4) + 0x118) & 8) == 0) {
+    v = *outNext;
+  } else {
+    v = WrapIndex99(*outNext - 2, n);
+  }
+  *outPrev = v;
+  v = *cur;
+  if (v < n - 1) {
+    v = v + 1;
+  } else if ((*(unsigned char*)(*(int*)(self + 4) + 0x118) & 8) != 0) {
+    *outOther = WrapIndex99(v + 2, n);
+    return;
+  }
+  *outOther = v;
+}
+
+// @ 0x0099cae0
+void FUN_0099cae0(float* out, const float* src, float* lenOut)
+{
+  float v[4];
+  v[0] = src[0]; v[1] = src[1]; v[2] = src[2]; v[3] = src[3];
+  // The original accumulates w^2+x^2+y^2+z^2 in x87 (each op rounds to the
+  // module's 24-bit precision). Naming each partial sum keeps the exact
+  // evaluation order (a flat `a+b+c+d` is reassociated to stack order).
+  double t0 = (double)v[3] * v[3];
+  double t1 = t0 + (double)v[0] * v[0];
+  double t2 = t1 + (double)v[1] * v[1];
+  double t3 = t2 + (double)v[2] * v[2];
+  float len = (float)sqrt(t3);
+  if (lenOut != 0) *lenOut = len;
+  if (len != 0.0f) {
+    float inv = 1.0f / len;
+    v[0] = inv * v[0]; v[1] = inv * v[1]; v[2] = inv * v[2]; v[3] = v[3] * inv;
+  }
+  out[0] = v[0]; out[1] = v[1]; out[2] = v[2]; out[3] = v[3];
+}
+
+// @ 0x0099cba0
+void FUN_0099cba0(float* out, float* a, float* b)
+{
+  float a0 = *a;
+  float b0 = *b;
+  float a1 = a[1];
+  float b1 = b[1];
+  float a2 = a[2];
+  float b2 = b[2];
+  float a3 = a[3];
+  float b3 = b[3];
+  if (((b0 * a0 + b1 * a1) + b2 * a2) + b3 * a3 < 0.0f) {
+    out[1] = a1 - b1;
+    out[2] = a2 - b2;
+    out[3] = a3 - b3;
+    *out = a0 - b0;
+    return;
+  }
+  out[1] = b1 + a1;
+  out[2] = b2 + a2;
+  out[3] = b3 + a3;
+  *out = b0 + a0;
+}
+
+// @ 0x0099cc70
+void FUN_0099cc70(float* out, float* a, float* b, float t)
+{
+  float b1 = b[1];
+  float a0 = *a;
+  float a1 = a[1];
+  float b2 = b[2];
+  float a2 = a[2];
+  float b3 = b[3];
+  float a3 = a[3];
+  float b0 = *b;
+  float d = ((b0 * a0 + b1 * a1) + b2 * a2) + b3 * a3;
+  float sign = g_one;
+  if (g_negone < d) {
+    if (g_one < d) {
+      d = g_one;
+      goto L42;
+    }
+  } else {
+    d = g_negone;
+  }
+  if (d < g_zero) {
+    d = -d;
+    sign = g_negone;
+  }
+L42:
+  float s0;
+  if (g_one - d <= g_eps) {
+    s0 = g_one - t;
+  } else {
+    double theta = acos((double)d);
+    double inv = 1.0 / sin(theta);
+    s0 = (float)(sin((1.0 - (double)t) * theta) * inv);
+    t = (float)(sin((double)t * theta) * inv);
+  }
+  s0 = s0 * sign;
+  out[0] = a0 * s0 + b0 * t;
+  out[1] = a1 * s0 + b1 * t;
+  out[2] = a2 * s0 + b2 * t;
+  out[3] = a3 * s0 + b3 * t;
+}
+
+// @ 0x0099ce40
+void __fastcall FUN_0099ce40(float* p)
+{
+  if (0.0f < p[3]) {
+    float inv = 1.0f / p[3];
+    p[0] = inv * p[0];
+    p[1] = p[1] * inv;
+    p[2] = p[2] * inv;
+    p[3] = 1.0f;
+  }
+  if (0.0f < p[8]) {
+    float w = p[7];
+    float z = p[6];
+    float y = p[5];
+    float x = p[4];
+    float len = (float)sqrt(((x * x + y * y) + z * z) + w * w);
+    if (len != 0.0f) {
+      float inv = 1.0f / len;
+      p[4] = x * inv;
+      p[5] = y * inv;
+      p[6] = z * inv;
+      p[7] = w * inv;
+    }
+    p[8] = 1.0f;
+    return;
+  }
+  p[4] = 0.0f;
+  p[5] = 0.0f;
+  p[6] = 0.0f;
+  p[7] = 1.0f;
+}
+
+// @ 0x0099d060
+extern "C" int __fastcall FUN_0099d060(uint32_t* self)
+{
+    int local[2];
+    int v = (int)F_s0099_cf50(self, 0x114) - 1;
+    local[1] = 0;
+    local[0] = v;
+    int* p = (v > 0) ? &local[0] : &local[1];
+    int r = *p;
+    F_s0099_cf50(self, 0x114) = (uint32_t)r;
+    if (r <= 0) {
+        F_s0099_cf50(self, 0x114) = 1;
+        FUN_00f47380(self);
+        r = 0;
+    }
+    return r;
+}
+
+// @ 0x0099d2e0
+namespace nSPCreatureAnim {
+void DisableUnusedDeforms(latest_version::animation_static_data * self)
+{
+    uint32_t self_v = (uint32_t)self;
+    uint32_t table[0x48 / 4];
+    {
+        const uint32_t* src = (const uint32_t*)0x1446cb8;
+        for (int k = 0; k < 0x48; k += 4) {
+            *(uint32_t*)((uint8_t*)table + k)     = src[k / 4];
+        }
+    }
+
+    uint32_t numAnim = F_s0099_cf50(self_v, 0x144);
+    for (uint32_t i = 0; i < numAnim; ++i) {
+        uint32_t obj = *(uint32_t*)(*(uint32_t*)(uintptr_t)(self_v + 0x148) + i * 4);
+        uint32_t* found = (uint32_t*)FUN_009fc310((void*)(uintptr_t)(obj + 0x8c));
+
+        uint32_t nfound = (found[1] - found[0]) >> 4;
+        if (nfound != 0) {
+            uint32_t src = 0;
+            uint32_t* dst = (uint32_t*)((uint8_t*)table + 0x64);
+            do {
+                *dst = *(uint32_t*)(uintptr_t)(src + found[0]);
+                src += 0x10;
+                dst += 8;
+            } while (--nfound != 0);
+        }
+
+        uint32_t ncents = F_s0099_cf50(obj, 0xdc);
+        for (uint32_t j = 0; j < ncents; ++j) {
+            uint8_t* cent = (uint8_t*)(uintptr_t)(F_s0099_cf50(obj, 0xe0) + j * 0x20);
+            uint32_t tag  = F_s0099_cf50(cent, 0);
+            uint32_t hi   = F_s0099_cf50(cent, 4);
+            uint32_t m = 0;
+            uint32_t* q = table + 1;
+            for (;;) {
+                if ((q[-1] & 0xf) == (tag & 0xf) && *q != 0
+                    && (*q == hi || hi == 0xffffffff)) {
+                    uint32_t* slot = table + m * 8;
+                    if (slot != 0) {
+                        uint32_t idx = slot - table;
+                        F_s0099_cf50(cent, 0x10) = idx;
+                        if ((tag & 0xf) == 3) {
+                            uint32_t k = (idx - 3) * 0x10;
+                            if ((*(uint8_t*)(uintptr_t)(found[0] + 0xc + k) & 2) == 0) {
+                                F_s0099_cf50(cent, 0) = tag & 0xffffffbf;
+                            } else {
+                                F_s0099_cf50(cent, 0) = tag | 0x40;
+                            }
+                            if ((*(uint8_t*)(uintptr_t)(found[0] + 0xc + k) & 1) == 0) {
+                                F_s0099_cf50(cent, 0) = F_s0099_cf50(cent, 0) & 0xffffff7f;
+                            } else {
+                                F_s0099_cf50(cent, 0) = F_s0099_cf50(cent, 0) | 0x80;
+                            }
+                        }
+                        goto next;
+                    }
+                    break;
+                }
+                ++m;
+                q += 8;
+                if (m >= 9) break;
+            }
+            F_s0099_cf50(cent, 0x10) = 0xffffffff;
+            F_s0099_cf50(cent, 0) = tag & 0xffffffef;
+        next:
+            ;
+        }
+    }
+}
+}  // namespace nSPCreatureAnim
 
 // @ 0x0099d460
 void __cdecl EvaluateAnimationBodyState(float weight, CreatureInstance* creature, AnimSet* set, float scaledFactor)
@@ -645,10 +1365,90 @@ S99ece0* S99ece0::f()
 }
 
 // @ 0x0099ed90
-namespace nSPCreatureAnim {
-latest_version::animation_static_data * ReadAnimationStaticDataFromStreamWrapper(stream_wrapper & a1, char const * a2, unsigned long a3)
-{ return 0; }
-}  // namespace nSPCreatureAnim
+void* __cdecl ReadAnimationStaticDataFromStreamWrapper(stream_wrapper* s, const char* name, unsigned int instanceId)
+{
+    void* data = 0;
+    int size = s->vSize();
+    if (size <= 0)
+        return 0;
+    void* src = EAAllocate((unsigned int)size, "Anim/Anim", 0, 0, 0, 0);
+    s->vRead((char*)src, (unsigned int)size);
+
+    unsigned int magic = *(unsigned int*)src;
+    if (magic != 0x4d494e41) {
+        if (magic == 0x67726f75 || magic == 0x756f7267) {
+            operator delete(src);
+            return data;
+        }
+        const char* who = name ? name : "";
+        EA_Log("Unknown magic value (0x%08x) in animation, instance id: 0x%08x (\"%s\")\n", magic,
+               instanceId, who);
+        operator delete(src);
+        return data;
+    }
+
+    unsigned int version = *(unsigned int*)((char*)src + 8);
+    if (version > 0x19)
+        goto badver;
+    if (version < 6)
+        goto badver;
+
+    data = src;
+    {
+        unsigned int need = ComputeAnimationStaticDataSizeBytesForVersion(src);
+        if ((unsigned int)size != need) {
+            data = EAAllocate(need, "Anim/Anim", 0, 0, 0, 0);
+            VecBoolInsert(data, src, (unsigned int)size);
+        } else {
+            src = 0;
+        }
+
+        if (data && *(unsigned int*)((char*)data + 4) &&
+            *(unsigned int*)((char*)data + 0x14c)) {
+            unsigned int n = *(unsigned int*)((char*)data + 0x14c);
+            int* tbl = (int*)((char*)data + *(unsigned int*)((char*)data + 0x150));
+            for (unsigned int i = 0; i < n; i++) {
+                int* p = (int*)((char*)data + tbl[i]);
+                int off = *p;
+                if (off > (int)*(unsigned int*)((char*)data + 4))
+                    goto corrupt;
+                *p = off + (int)data;
+            }
+            if (UpdateAnimationStaticDataVersion(data, need)) {
+                *(unsigned int*)((char*)data + 0x118) &= ~2u;
+                *(unsigned int*)((char*)data + 4) = need;
+                *(unsigned int*)((char*)data + 0x110) = instanceId;
+                *(unsigned int*)((char*)data + 0x114) = 0;
+                unsigned int tag = *(unsigned int*)0x166b260;
+                *(unsigned int*)((char*)data + 0x12c) = tag;
+                *(unsigned int*)0x166b260 = tag + 1;
+                *(unsigned int*)((char*)data + 0x130) = version;
+                DisableUnusedDeforms(data);
+                operator delete(src);
+                return data;
+            }
+        }
+
+    corrupt:
+        {
+            const char* who = name ? name : "";
+            EA_Log("reading corrupt animation, instance id: 0x%08x (\"%s\")\n", instanceId, who);
+        }
+        if (data)
+            operator delete(data);
+        operator delete(src);
+        return 0;
+
+    badver:
+        {
+            const char* who = name ? name : "";
+            EA_Log("Bad version (%d) in animation, instance id: 0x%08x (\"%s\")\n", version,
+                   instanceId, who);
+        }
+        operator delete(src);
+        return data;
+    }
+}
 
 // @ 0x0099efa0
 char* FUN_0099efa0(char* first, char* last, char* dst)
@@ -678,7 +1478,7 @@ int FUN_0099efd0(char* name, int arg)
   struct { void* vt; void* fp; } local;
   local.vt = (void*)0x1446dd8;
   local.fp = file;
-  int r = ((S99ed90*)&local)->f(&local, name, arg);
+  int r = (int)(size_t)ReadAnimationStaticDataFromStreamWrapper((stream_wrapper*)&local, name, arg);
   fclose(file);
   return r;
 }
@@ -702,6 +1502,32 @@ S99f090* S99f090::f()
   p[0] = 0; p[1] = 0; p[2] = 0; p[3] = 0; p[5] = 0;
   p[7] = 0; p[8] = 0; p[9] = 0; p[0xc] = 0;
   return self;
+}
+
+// @ 0x0099f0b0
+int RefBlock::Release()
+{
+    int local[2];
+    local[0] = mRefCount - 1;
+    local[1] = 0;
+
+    int* selected = &local[0];
+    if (local[0] > 0)
+        selected = &local[0];
+    else
+        selected = &local[1];
+
+    int count = *selected;
+    mRefCount = count;
+    if (count > 0)
+        return count;
+
+    mRefCount = 1;
+    _ReadWriteBarrier();
+    if (mpBuffer != 0 && ((FreedBlockHeader*)mpBuffer)[-1].mFlags != 0)
+        FreeRawBlock(mpBuffer);
+    FreeRawBlock(this);
+    return 0;
 }
 
 // @ 0x0099f110
@@ -924,6 +1750,38 @@ AnimHeader_s0099_f0b0* CloneAnim(AnimHeader_s0099_f0b0* src, bool filterOn)
     return dst;
 }
 
+// @ 0x0099f8b0
+void __cdecl FUN_0099f8b0(AnimPaintDest* dest, const PaintSource* source)
+{
+    dest->m208 = source->mRecs[0].mOffset;
+    dest->mpSource = source;
+
+    for (int i = 0; i < 0x40; i++) {
+        dest->mSlots[i].mA = 0;
+        dest->mSlots[i].mB = 0;
+        dest->mSlots[i].mC = 0;
+    }
+
+    dest->mTail.mC1c = source->mRecs[0].mFlags;
+    dest->mTail.mC20 = source->mRecs[0].mPad04;
+}
+
+// @ 0x0099f900
+void __cdecl FUN_0099f900(int arg1, int arg2, PaintSource* source, uint32_t count, int baseOffset)
+{
+    PaintSource::PaintRec* rec = source->mRecs;
+    while (count != 0) {
+        uint32_t index = rec->mIndex;
+        if (index < 9) {
+            void* dst = (char*)kAnimChunkTable[index].mpData + baseOffset;
+            void* src = (char*)(rec->mStride * arg1 + arg2 + rec->mOffset);
+            memcpy(dst, src, kAnimElemSize[rec->mFlags & 0xf]);
+        }
+        rec = (PaintSource::PaintRec*)((char*)rec + 0x20);
+        count--;
+    }
+}
+
 // @ 0x0099f970
 bool EvaluateTrack(float time, int upper, Track* trk, u32* out, int* outIndex)
 {
@@ -1130,4 +1988,508 @@ bool EvaluateTrack(float time, int upper, Track* trk, u32* out, int* outIndex)
         *outIndex = lower;
     }
     return true;
+}
+
+// @ 0x009a1ee0
+namespace nSPCreatureAnim {
+bool CreateAnimationBindRecords(animation_static_data* animation, creature_static_data_s009a_1ee0* creature, animation_bind_data_s009a_1ee0* bind)
+{
+    typedef animation_body_bind_record_s009a_1ee0 record;
+
+    bind->Flags = 0;
+    bind->Records.resize(0);
+    bind->NumVariants = 0;
+    bind->NumVariantGroups = 0;
+    bind->ChannelMask = 0;
+    bind->KeyedChannelMask = 0;
+
+    if (creature == 0 ||
+        !CheckBranchPredicates(creature, animation->BranchPredicatesMask, animation->BranchPredicatesMatch))
+        return false;
+
+    BindRecordVector& records = bind->Records;
+    uint bidxs[255];
+
+    bind_record_helper helper;
+    helper.animation = animation;
+    helper.creature = creature;
+    helper.records = &records;
+    helper.num_creature_state_records = 0;
+    helper.num_root_records = 0;
+    helper.num_targeted_records = 0;
+
+    variant_helper variants(&helper);
+    const char* msg;
+
+    uint variantIdx = 0;
+    bool passFailed[2];
+    passFailed[0] = false;
+    passFailed[1] = false;
+
+    for (uint pass = 0; pass < 2; ++pass)
+    {
+        uint beginIdx = records.size();
+        uint64_t requiredMask = 0;
+        uint savedVariantIdx = variantIdx;
+
+        memset(helper.BodyGroups, 0xff, sizeof(helper.BodyGroups));
+        variants.group_channel_markers[0].first_channel_idx = 0xffffffff;
+        variants.group_channel_markers[0].required = 0;
+        // spread marker 0 over the other 63 (forward overlapping copy: rep movsd)
+        memcpy(&variants.group_channel_markers[1], &variants.group_channel_markers[0],
+               sizeof(variants.group_channel_markers) - sizeof(variants.group_channel_markers[0]));
+        variants.num_groups = 0;
+        variants.num_variant_sets = 0;
+
+        uint numChannels = animation->NumChannels;
+        for (uint i = 0; i < numChannels; ++i)
+        {
+            animation_channel_static_data* channel = animation->ChannelPointers[i];
+            uint flags = channel->Flags;
+            if ((flags & 1) == 0)
+                continue;
+
+            uint required = flags & 4;
+            if (required)
+                requiredMask |= (uint64_t)1 << i;
+
+            uint8_t group = channel->VariantGroup;
+            if (group != 0)
+            {
+                uint g = group;
+                uint maxGroup = 63;
+                uint idx = min(g, maxGroup);
+                if (variants.group_channel_markers[idx].first_channel_idx == 0xffffffff)
+                {
+                    variants.num_variant_sets += 1;
+                    variants.num_groups += 1;
+                    variants.group_channel_markers[idx].first_channel_idx = i;
+                }
+                variants.group_channel_markers[idx].required |= required;
+            }
+            else
+            {
+                InitChannel(&helper, i, pass);
+                uint n = FindTargetBodies(bidxs, 0xff, creature, channel->Context, pass, 0);
+                if (n != 0)
+                {
+                    for (uint k = 0; k < n; ++k)
+                        AddBindRecord(&helper, k, bidxs[k], i, 0, ~(uint64_t)0, pass);
+                }
+            }
+        }
+
+        uint endIdx = records.size();
+        if (variants.num_groups != 0)
+        {
+            variants.begin_base_bind_record = beginIdx;
+            variants.end_base_bind_record = endIdx;
+            variants.variant_idx = variantIdx;
+            uint generated = 0;
+            if (PrepareVariantSets(&variants, pass))
+                generated = GenerateVariants(&variants, pass);
+            uint64_t keep = ~(((uint64_t)1 << variantIdx) - 1);
+            variantIdx += generated;
+            keep &= ((uint64_t)1 << variantIdx) - 1;
+            for (uint k = beginIdx; k < endIdx; ++k)
+                records[k].VariantMask &= keep;
+        }
+        else
+        {
+            uint64_t bit = (uint64_t)1 << variantIdx;
+            for (uint k = beginIdx; k < endIdx; ++k)
+                records[k].VariantMask = bit;
+            ++variantIdx;
+        }
+
+        // drop the records that lost every variant bit
+        uint n = records.size();
+        uint64_t usedMask = 0;
+        for (uint k = beginIdx; k < n; )
+        {
+            record& r = records[k];
+            if (r.VariantMask == 0)
+            {
+                if (r.Flags & record::CREATURE_STATE)
+                    helper.num_creature_state_records -= 1;
+                else if (r.BodyIndex8 == 0)
+                    helper.num_root_records -= 1;
+                if (r.TargetBodyIndex8 != 0xff)
+                    helper.num_targeted_records -= 1;
+                r = records[n - 1];
+                --n;
+            }
+            else
+            {
+                uint64_t bit = (uint64_t)1 << r.ChannelIndex8;
+                bind->ChannelMask |= bit;
+                usedMask |= bit;
+                if (records[k].KeyDataMask != 0)
+                    bind->KeyedChannelMask |= bit;
+                ++k;
+            }
+        }
+        records.resize_inline(n);
+
+        if ((usedMask & requiredMask) != requiredMask)
+        {
+            // a required channel could not be bound: roll this pass back
+            records.erase(records.mpBegin + beginIdx, records.mpBegin + n);
+            passFailed[pass] = true;
+            variantIdx = savedVariantIdx;
+        }
+    }
+
+    if (passFailed[0] && passFailed[1])
+    {
+        bind->Records.resize(0);
+        bind->NumVariants = 0;
+        bind->ChannelMask = 0;
+        bind->KeyedChannelMask = 0;
+        return false;
+    }
+
+    uint numRecords = records.size();
+    bind->NumVariants = numRecords ? variantIdx : 1;
+    bind->NumVariantGroups = variants.num_groups + 1;
+
+    // creature-state records first ...
+    uint numState = helper.num_creature_state_records;
+    uint j = numState;
+    for (uint k = 0; k < numState; ++k)
+    {
+        if ((records[k].Flags & record::CREATURE_STATE) == 0)
+        {
+            for (; j < numRecords; ++j)
+            {
+                if (records[j].Flags & record::CREATURE_STATE)
+                {
+                    swap(records[k], records[j]);
+                    break;
+                }
+            }
+        }
+    }
+
+    // ... then the root-body records ...
+    uint rootEnd = helper.num_root_records + numState;
+    j = rootEnd;
+    for (uint k = numState; k < rootEnd; ++k)
+    {
+        if (records[k].BodyIndex8 != 0)
+        {
+            for (; j < numRecords; ++j)
+            {
+                if (records[j].BodyIndex8 == 0)
+                {
+                    swap(records[k], records[j]);
+                    break;
+                }
+            }
+        }
+    }
+
+    if (helper.num_targeted_records != 0)
+    {
+        bind->Flags |= 1;
+        uint numBodies = (uint)(creature->BodiesEnd - creature->BodiesBegin);
+
+        // per body: 1 = has records, 2 = is a target, 4 = has POS keys, 8 = has a target
+        uint8_t* bodyFlags = (uint8_t*)_alloca(numBodies);
+        memset(bodyFlags, 0, numBodies);
+
+        for (uint k = rootEnd; k < numRecords; ++k)
+        {
+            record& r = records[k];
+            uint8_t& f = bodyFlags[r.BodyIndex8];
+            f |= 1;
+            if (r.Flags & record::TARGET_POS)
+                f |= 4;
+            uint8_t target = r.TargetBodyIndex8;
+            if (target < numBodies)
+            {
+                if (r.Flags & record::TARGET_UNRESOLVED)
+                {
+                    // resolve the target channel to the body bound to it in the same variant
+                    r.TargetBodyIndex8 = 0xff;
+                    for (uint m = 0; m < numRecords; ++m)
+                    {
+                        record& o = records[m];
+                        if (o.ChannelIndex8 == target && (r.VariantMask & o.VariantMask) == r.VariantMask)
+                        {
+                            r.TargetBodyIndex8 = o.BodyIndex8;
+                            break;
+                        }
+                    }
+                    r.Flags &= ~record::TARGET_UNRESOLVED;
+                }
+                if (r.TargetBodyIndex8 < numBodies)
+                {
+                    f |= 8;
+                    bodyFlags[r.TargetBodyIndex8] |= 2;
+                }
+            }
+        }
+
+        bool anyTargeting = false;
+        for (uint b = 0; b < numBodies; ++b)
+        {
+            uint8_t f = bodyFlags[b];
+            if (f == 2)
+            {
+                msg = "This animation has channels that target a secondary that isn't keyed, will use smoothing to decouple.\n";
+                goto warn;
+            }
+            if (f & 1)
+            {
+                if ((f & 6) == 2)
+                {
+                    msg = "This animation has channels that target a secondary that doesn't have POS key data, will use smoothing to decouple.\n";
+                    goto warn;
+                }
+                if ((f & 8) == 0)
+                    anyTargeting = true;
+            }
+        }
+        if (!anyTargeting)
+            goto cycle;
+
+        {
+            // records of targeting bodies go last
+            int lo = (int)rootEnd - 1;
+            int hi = (int)numRecords;
+            for (;;)
+            {
+                do { ++lo; } while ((bodyFlags[records[lo].BodyIndex8] & 8) == 0);
+                do { --hi; } while ((bodyFlags[records[hi].BodyIndex8] & 8) != 0);
+                if (lo >= hi)
+                    break;
+                swap(records[lo], records[hi]);
+            }
+            uint firstTargeting = hi + 1;
+
+            // split the targeting records per variant bit
+            uint64_t allVariants = 0;
+            for (uint k = firstTargeting; k < numRecords; ++k)
+            {
+                record* r = &records[k];
+                uint64_t v = r->VariantMask;
+                allVariants |= v;
+                uint64_t rest = v & (v - 1);
+                r->VariantMask = rest ^ v;
+                while (rest != 0)
+                {
+                    uint64_t next = rest & (rest - 1);
+                    uint64_t bit = next ^ rest;
+                    records.push_back(*r);
+                    records.back().VariantMask = bit;
+                    rest = next;
+                }
+            }
+
+            uint numSplit = records.size();
+            uint numBodies2 = numBodies * numBodies;
+            uint8_t* edges = (uint8_t*)_alloca(numBodies2);
+            uint* counts = (uint*)_alloca(numBodies * 4);
+            uint8_t* ready = (uint8_t*)_alloca(numBodies);
+            uint8_t* order = (uint8_t*)_alloca(numBodies);
+            uint first = firstTargeting;
+
+            while (allVariants != 0)
+            {
+                uint64_t restVariants = allVariants & (allVariants - 1);
+                uint64_t bit = restVariants ^ allVariants;
+
+                memset(edges, 0xff, numBodies2);
+                memset(counts, 0, numBodies * 4);
+                uint numReady = 0;
+                int numOrdered = 0;
+                uint numEdges = 0;
+
+                // edge target -> source for every targeting record of this variant
+                for (uint k = first; k < numSplit; ++k)
+                {
+                    record& r = records[k];
+                    if ((r.VariantMask & bit) != 0 && r.TargetBodyIndex8 != 0xff)
+                    {
+                        uint8_t* row = &edges[r.TargetBodyIndex8 * numBodies];
+                        uint8_t body = r.BodyIndex8;
+                        uint m = 0;
+                        do
+                        {
+                            uint8_t e = row[m];
+                            if (e == body)
+                                break;
+                            if (e == 0xff)
+                            {
+                                row[m] = r.BodyIndex8;
+                                counts[r.BodyIndex8] += 1;
+                                numEdges += 1;
+                                break;
+                            }
+                        } while (++m < numBodies);
+                    }
+                }
+
+                dependency_sort sort;
+                sort.counts = counts;
+                sort.ready = ready;
+                sort.num_edges = &numEdges;
+                sort.edges = edges;
+                sort.stride = numBodies;
+                sort.num_ready = &numReady;
+
+                // bodies that target nothing in this variant are ready
+                for (int k = (int)rootEnd; k < (int)firstTargeting; ++k)
+                {
+                    record& r = records[k];
+                    if ((r.VariantMask & bit) != 0)
+                    {
+                        uint8_t body = r.BodyIndex8;
+                        RemoveEdges(&sort, &edges[body * numBodies], body);
+                    }
+                }
+                while (numReady != 0)
+                {
+                    --numReady;
+                    uint8_t body = ready[numReady];
+                    order[numOrdered++] = body;
+                    RemoveEdges(&sort, &edges[body * numBodies], body);
+                }
+                if (numEdges != 0)
+                    goto cycle;
+
+                // this variant's records first
+                uint split;
+                if (restVariants != 0)
+                {
+                    int a = (int)first - 1;
+                    int b = (int)numSplit;
+                    for (;;)
+                    {
+                        do { ++a; } while ((records[a].VariantMask & bit) != 0);
+                        do { --b; } while ((records[b].VariantMask & bit) == 0);
+                        if (a >= b)
+                            break;
+                        swap(records[a], records[b]);
+                    }
+                    split = a;
+                }
+                else
+                    split = numSplit;
+
+                // and in dependency order
+                int a = (int)first;
+                for (int t = 0; t < numOrdered - 1; ++t)
+                {
+                    uint8_t body = order[t];
+                    --a;
+                    int b = (int)split;
+                    for (;;)
+                    {
+                        do { ++a; } while (records[a].BodyIndex8 == body);
+                        do { --b; } while (records[b].BodyIndex8 != body);
+                        if (a >= b)
+                            break;
+                        swap(records[a], records[b]);
+                    }
+                }
+
+                first = split;
+                allVariants = restVariants;
+            }
+        }
+    }
+    goto done;
+
+cycle:
+    msg = "This animation has a secondary depedency cycles, will use smoothing to decouple.\n";
+warn:
+    AnimWarning(msg);
+    bind->Flags |= 2;
+done:
+    return true;
+}
+}  // namespace nSPCreatureAnim
+
+// @ 0x009a3080
+__declspec(noinline) void S9a3080::f(char p2)
+{
+  SAnim* self = (SAnim*)this;
+  if (self->p00) {
+    void* p = self->p00;
+    self->p00 = 0;
+    ((S99d060*)p)->f();
+  }
+  if (self->p04) {
+    void* p = self->p04;
+    self->p04 = 0;
+    ((S9c4cc0*)p)->f();
+  }
+  if (self->p08) {
+    void* p = self->p08;
+    self->p08 = 0;
+    ((S99f0b0*)p)->f();
+  }
+  self->fv[0] = 0.0f;  self->fv[1] = 0.0f;  self->fv[2] = 0.0f;  self->fv[3] = 0.0f;
+  self->fv[4] = 0.0f;  self->fv[5] = 0.0f;  self->fv[6] = 0.0f;  self->fv[7] = 0.0f;
+  const float one = 1.0f;
+  self->fv[8] = 0.0f;  self->fv[9] = 0.0f;  self->fv[10] = 0.0f; self->fv[11] = 0.0f;
+  self->fv[12] = 0.0f; self->fv[13] = 0.0f; self->fv[14] = 0.0f; self->fv[15] = 0.0f;
+  self->fv[16] = 0.0f; self->fv[17] = 0.0f; self->fv[18] = 0.0f; self->fv[19] = 0.0f;
+  self->fv[20] = 0.0f; self->fv[21] = 0.0f; self->fv[22] = 0.0f; self->fv[23] = 0.0f;
+  self->fv[24] = one;
+  self->fv[25] = 0.0f; self->fv[26] = 0.0f; self->fv[27] = 0.0f;
+  self->fv[28] = 0.0f; self->fv[29] = 0.0f; self->fv[30] = 0.0f;
+  self->fv[31] = one;
+  self->f0c = -1;
+  self->f10 = g_15504e0;
+  g_15504e0 += 1;
+  self->f14 = 0;
+  if (p2) {
+    int* vec = &self->vBegin;
+    int b = vec[0];
+    int e = vec[1];
+    int r = FUN_009a1c20(e, e, b);
+    ((S9a1b00*)vec)->f(r, vec[1]);
+    vec[1] += ((e - b) / -0x1f0) * 0x1f0;
+  }
+  double z = 0.0;
+  self->dB0 = z;
+  self->dB8 = z;
+  self->bAc = 0;
+  self->bAd = 0;
+  self->c0 = 1;
+  self->c4 = 0;
+  ((S9a1770*)self->helper)->f(0);
+}
+
+// @ 0x009a35b0
+__declspec(noinline) void S9a35b0::f()
+{
+  char* self = (char*)this;
+  ((S9a3080*)self)->f(1);
+  int v = *(int*)(self + 0xc8);
+  if (v && *(int*)(v - 4)) FUN_f47380((void*)v);
+  char* sub = self + 0x18;
+  ((S9a1b00*)sub)->f(*(int*)sub, *(int*)(sub + 4));
+  int v2 = *(int*)sub;
+  if (v2 && *(int*)(v2 - 4)) FUN_f47380((void*)v2);
+  if (*(int*)(self + 8)) ((S99f0b0*)*(int*)(self + 8))->f();
+  if (*(int*)(self + 4)) ((S9c4cc0*)*(int*)(self + 4))->f();
+  if (*(int*)self) ((S99d060*)*(int*)self)->f();
+}
+
+// @ 0x009a3c40
+__declspec(noinline) void S9a3c40::f(void* node_)
+{
+  char* node = (char*)node_;
+  while (node) {
+    ((S9a3c40*)this)->f(*(void**)node);
+    char* next = *(char**)(node + 4);
+    int ref = *(int*)(node + 0x14);
+    if (ref) ((S99d060*)(size_t)ref)->f();
+    FUN_f47380(node);
+    node = next;
+  }
 }
