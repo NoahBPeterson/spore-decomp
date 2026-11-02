@@ -1,0 +1,2 @@
+00477930 ?Update@EditorHandles@@QAEXPAUHandleState@@@Z  # EditorHandles::Update migrated from s00477930 (verbatim, slice spelling)
+00478390 ?InsertP8@@YAPAUP8@@PAU1@AAPAU1@1PAH0ABU1@@Z  # InsertP8 migrated from s00477930 (verbatim, slice spelling)

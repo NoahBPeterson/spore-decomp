@@ -3,12 +3,12 @@
 004554f0 ?DoFreeNodes@@YAPAXPAX00@Z  # DoFreeNodes migrated from s004553b0 (verbatim, slice spelling)
 00455590  eastl::hashtable<SP::cString_*,...>::insert
 00455660 ?VectorPushBack3@@YAPAXPAHPAUVec3@@@Z  # VectorPushBack3 migrated from s004553b0 (verbatim, slice spelling)
-004558a0 ?VectorInsertU32@@YAPAXPAHPAXI@Z  # VectorInsertU32 migrated from s004553b0 (verbatim, slice spelling)
+004558a0 ?VectorInsertU32@SPVecU32_s004553b0@@QAEXPAIABI@Z  # SPVecU32_s004553b0::VectorInsertU32 migrated from s004553b0 (verbatim, slice spelling)
 00455ae0  eastl::vector<...0x14-stride...>::erase/move
 00455c00  string-to-Vector3 parser
 00455c50  ClampDot                               # clamped dot product
 00455cc0  Dot3                                   # free helper: a . b
-00455cf0  fixed-size container init
+00455cf0 ?InitFixed@FixedC@@QAEPAHPAX@Z  # FixedC::InitFixed migrated from s004553b0 (verbatim, slice spelling)
 00455d60  eastl::basic_string<char,eastl::allocator>::append
 00455f50  FindFirst                              # first matching element scan
 00455fa0  eastl::vector<...0x20-stride...>::insert

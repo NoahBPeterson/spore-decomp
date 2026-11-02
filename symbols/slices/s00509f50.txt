@@ -1,3 +1,4 @@
 00509f50 ?InsertEdge@SlotTable@@QAEXHHPAI@Z
+0050a0a0 ?BuildFaces@SlotTable@@QAEXXZ  # SlotTable::BuildFaces migrated from s00509f50 (verbatim, slice spelling)
 0050a730 ?FaceHelper@SlotTable@@QAEHH@Z
 0050a920 ?Adjacent@SlotTable@@QAEEHHHH@Z

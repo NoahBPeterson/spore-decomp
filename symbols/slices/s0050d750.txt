@@ -1,3 +1,8 @@
-0050d750 ?4Vec8
+0050d750 ??4Vec8_s0050_d750@@QAEAAU0@ABU0@@Z  # Vec8_s0050_d750::operator= migrated from s0050d750 (verbatim, slice spelling)
+0050da10 ?resize@Vec8_s0050_d750@@QAEXI@Z  # Vec8_s0050_d750::resize migrated from s0050d750 (verbatim, slice spelling)
 0050db60 ?4Vec20
-0050dea0 ?4Vec12
+0050dea0 ??4Vec12_s0050_d750@@QAEAAU0@ABU0@@Z  # Vec12_s0050_d750::operator= migrated from s0050d750 (verbatim, slice spelling)
+0050e290 ??1Vec100@@QAE@XZ  # Vec100::~Vec100 migrated from s0050d750 (verbatim, slice spelling)
+0050e410 ?push_back@Vec100@@QAEXABUElem100@@@Z  # Vec100::push_back migrated from s0050d750 (verbatim, slice spelling)
+0050e4b0 ?Unique@@YAPAHPAH0@Z  # Unique migrated from s0050d750 (verbatim, slice spelling)
+0050e570 ?AddTo2@@YAPAUV2@@PAU1@PBU1@@Z  # AddTo2 migrated from s0050d750 (verbatim, slice spelling)

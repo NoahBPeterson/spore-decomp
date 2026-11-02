@@ -1,1 +1,8 @@
 # source  symbol  va  flags
+../src/game/UTFSpore_Win32/instantiate.cpp  ?VectorInsertU32@SPVecU32_s004553b0@@QAEXPAIABI@Z  004558a0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/instantiate.cpp  ??0Skin@@QAE@ABU0@@Z  00507c70  /Od /Ob1 /MD /Gy /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/instantiate.cpp  ?BuildFaces@SlotTable@@QAEXXZ  0050a0a0  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/instantiate.cpp  ?push_back@Vec100@@QAEXABUElem100@@@Z  0050e410  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/instantiate.cpp  ?Unique@@YAPAHPAH0@Z  0050e4b0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/instantiate.cpp  ?AddTo2@@YAPAUV2@@PAU1@PBU1@@Z  0050e570  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/instantiate.cpp  ??0cSPUIStringConfig@@QAE@XZ  00b26d00  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

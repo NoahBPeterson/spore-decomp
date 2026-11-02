@@ -8,3 +8,4 @@
 00b262c0 ?GetPlayerCityAtPosition@cGameNounManager_s00b2_5c30@@QAEPAVcCity@@ABUcSPVector3_s00b2_5c30@@@Z  # cGameNounManager_s00b2_5c30::GetPlayerCityAtPosition migrated from s00b25c30 (verbatim, slice spelling)
 00b26600 ?FUN_00b26600@cGameNounManager_s00b2_5c30@@QAEXXZ  # cGameNounManager_s00b2_5c30::FUN_00b26600 migrated from s00b25c30 (verbatim, slice spelling)
 00b26710 ?FUN_00b26710@cTimelineModeStarter@@QAEXXZ  # cTimelineModeStarter::FUN_00b26710 migrated from s00b25c30 (verbatim, slice spelling)
+00b26d00 ??0cSPUIStringConfig@@QAE@XZ  # cSPUIStringConfig::cSPUIStringConfig migrated from s00b25c30 (verbatim, slice spelling)

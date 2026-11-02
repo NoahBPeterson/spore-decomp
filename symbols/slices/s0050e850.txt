@@ -1,1 +1,3 @@
+0050ebe0 ?SortCmp@@YAXPAH0E@Z  # SortCmp migrated from s0050e850 (verbatim, slice spelling)
+0050f0d0 ?SortDefault@@YAXPAH0@Z  # SortDefault migrated from s0050e850 (verbatim, slice spelling)
 0050f210 ?4Elem100  # Elem100::operator= (mangled ??4Elem100@@...; written as its base identifier so the checker's name matcher finds it)
