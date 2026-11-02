@@ -1,17 +1,21 @@
-# va  diff-bytes  reason
-00e0a9e0 122 palette ramp value: field reads and the x87 ratio formula match exactly, but the original converts float->int with the precise-mode cvtss2si + cmov correction while our /fp:fast build emits cvttss2si + branch, shifting the whole sequence (125 vs 154 B); equiv PASS
-00e0aa80 120 inverse palette ramp: complementary sign of the same x87 formula; only the float->int conversion idiom differs for the /fp:fast build (123 vs 150 B); equiv PASS
-00e0ab30 101 ramp range test: the two callee calls and the 0/vMax comparison are reconstructed, but x87 argument passing and the return ladder differ, and ours faults where the original returns under equiv (118 vs 108 B); equiv FAIL
-00e0ad10  558  UpdatePallete 256-step ramp: both output planes, the signed accumulator divisions, the unsigned step division and the fade branch are reconstructed; the accumulator schedule and the packed 16-bit expression differ (563 vs 593 B); equiv FAIL on eax
-00e0af90 498 bounding-screen rect placement: matrix copy, per-axis max/min clamps, the v4C/v0C lookup and all six Set calls are reconstructed, but the copied matrix lives at different frame offsets and codegen differs (591 vs 644 B); equiv UNSUPPORTED (0 valid inputs)
-00e0b2c0 98 camera-facing sprite basis: atan2/sqrt/sin/cos formula and the three output lanes match; x87 operand scheduling and one float/double promotion differ (127 vs 137 B); equiv PASS
-00e0b350
-00e0b580
-00e0bcb0
-00e0bdc0
-00e0bf40
-00e0c1f0
+# <va>  <diff-bytes>  <reason>   (complete, behaviorally equivalent, not byte-exact)
+00e0a9e0 122 palette ramp value: field reads and the x87 ratio formula match exactly, but the original converts float->int with the precise-mode cvtss2si + cmov correction while our /fp:fast build emits cvttss2si + branch, shifting the whole sequence (125 vs 154 B); equiv PASS flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00e0aa80 120 inverse palette ramp: complementary sign of the same x87 formula; only the float->int conversion idiom differs for the /fp:fast build (123 vs 150 B); equiv PASS flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00e0ab30 101 ramp range test: the two callee calls and the 0/vMax comparison are reconstructed, but x87 argument passing and the return ladder differ, and ours faults where the original returns under equiv (118 vs 108 B); equiv FAIL flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00e0abe0 222 angle/altitude trackball clamp: atan2/sqrt/fabs and the three field updates are reconstructed, but the goto ladder into set_angles and the x87 scheduling differ (283 vs 269 B); equiv FAIL flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00e0ad10  558  UpdatePallete 256-step ramp: both output planes, the signed accumulator divisions, the unsigned step division and the fade branch are reconstructed; the accumulator schedule and the packed 16-bit expression differ (563 vs 593 B); equiv FAIL on eax flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00e0af90 498 bounding-screen rect placement: matrix copy, per-axis max/min clamps, the v4C/v0C lookup and all six Set calls are reconstructed, but the copied matrix lives at different frame offsets and codegen differs (591 vs 644 B); equiv UNSUPPORTED (0 valid inputs) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00e0b2c0 98 camera-facing sprite basis: atan2/sqrt/sin/cos formula and the three output lanes match; x87 operand scheduling and one float/double promotion differ (127 vs 137 B); equiv PASS flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00e0b350 670 flags: /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS-
+00e0b580 676 flags: /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS-
+00e0bcb0 162 flags: /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS-
+00e0bdc0 33 flags: /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS-
+00e0bf40 444 flags: /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS-
+00e0c1f0 139 flags: /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS-
 00e0c710
+00e0d2e0 1282 complete; cSPUIMinimapWin camera arrow draw; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast; second RemapX call tail-merged, x87 order differs
+00e0d940 718 complete; cSPUIMinimapWin::OnTick - window vt+0x28 visibility gate, GetElapsedSeconds, rbtree walk (begin + RBTreeIncrement) over the 0x31c event map: 0x40103 icon events (window vt+0xf0 lookup key, parent vt+0x10 -> vt+0xf0 key+1, vt+0x7c show/hide, mTime + 1.0 expiry -> parent vt+0xe0 release + state 0), 0x100 targets (Find 0x137e8e0, direction vt+0x2c, normalize with 1e-8, ProjectCenter, icon reposition), 0x2000 targets (Find 0x4f176642, direction at +0xc0, two repositions), effect refresh gate (0x016a1fa0 / stopwatch 0x016a2028 / 0x015a4cb8 / 0x016a203c, callback 0xe0b990), game-mode gate 0x1654c01/05/02, view angle (WindowManager vt+0x48 -> vt+0x1c), event map find by float angle, icon quad centre -> icon vt+0xc0, target Find 0x17f243b -> vt+0x20 mode, and the 0x18c43e8 / 0x18c6d19 / 0x52aa6122 branch into 0xac80d0 + 0xb69aa0(handle, w, h, tag); size 1210 vs 1275 - block order, float x87/SSE split and register allocation differ throughout flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+00e0de40 79 complete; cSPUIMinimapWin::ProjectEvent(mapPos, out) - GetPlanetModel (null -> 0), terrain null / map set null gate, AngleFromPoint(this, x, y) / mW (fidiv) and y / mH, terrain vt+0xc projection with &uv plus this+0x338/0x344/0x350, ExpandCoord into a local Vec3, copy to out, PlanetModel vt DirectionToSurfacePosition(local, out), copy to out; size identical at 232 - retail keeps the terrain in edi and the map position in ebx (cl 15 swaps them, which flips every address in the body) and materialises the ternary select instead of folding it, so the projection argument cleanup appears as one add esp,0x18 versus the callee-popped add esp,8 flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
 00e0df70 331 FindIcon: complete (find node, normalize dir, anchor window); x87 normalize shape / register scheduling differ; difftest WEAK (15% coverage: random rbtree rarely holds the id; IconTree::Find annotated 0xe5c780)
 00e0e0e0 168 GetInverseOffset: complete; only ecx/edx register swap in the 12-byte position copy
 00e0e1a0 1369 Update: complete (texture setup, palette refresh, scroll state machine); float->int conversions use x87 for colours, register/frame layout differ; difftest WEAK (10% coverage: early returns on global state; RefSlot/ResObj declarations split so 0xb5f950/0x7f54d0 annotations resolve)
@@ -28,3 +32,6 @@
 00e0fb90 3 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 248 bytes - icon-tree mass erase by flag mask not reconstructed.
 00e0fc90 1 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 709 bytes - CRG_Minimap constructor not reconstructed.
 00e0ff80 1 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 213 bytes - minimap helper not reconstructed.
+00e10580 1398 cSPUIMinimapWin::AddIcon: complete (flags/mode -> image id table, WinButton+ButtonDrawableRadio build, map insert, parent/minimap attach); call/vslot sequence identical, size 1680 = 1680; frame layout (0x64 vs 0x54) and register allocation differ (flags /O2 /MD /Gy /TP /arch:SSE /fp:fast)
+00e10e30 2291 cSPUIMinimapWin::draw_trade_routes: both branches (noun-manager road polylines, planet trade-route dot cache with horizon test) complete; same call/vslot sequence, size 0.98x; /O2 register allocation (this in ebx+spill vs edi) and frame layout differ (flags /O2 /MD /Gy /TP /arch:SSE /fp:fast)
+00e11910 150 cDataArray::FindOrInsert: lower_bound + legacy "past the end" guard + insert path complete (162 vs 161 bytes); /O2 keeps the key in ecx and reloads it for the value store where the original keeps it in ebp, shifting the temp/pair address registers (flags /O2 /MD /Gy /TP /arch:SSE /fp:fast)

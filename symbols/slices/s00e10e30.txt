@@ -1,1 +1,4 @@
-00e10e30 ?draw_trade_routes@cSPUIMinimapWin@@IAEXAAVDraw2D@UTFWin@EA@@@Z  # dev PDB name (card)
+00e10e30 ?draw_trade_routes@cSPUIMinimapWin_s00e1_0e30@@QAEXAAVDraw2D_s00e1_0e30@UTFWin@EA@@@Z  # cSPUIMinimapWin_s00e1_0e30::draw_trade_routes migrated from s00e10e30 (verbatim, slice spelling)
+00e118b0 ?insert@cDataArray@@QAE?AUcInsertResult@@ABUcDataInfo@@@Z  # cDataArray::insert migrated from s00e10e30 (verbatim, slice spelling)
+00e11910 ?FindOrInsert@cDataArray@@QAEAAUcDataValue@@I@Z  # cDataArray::FindOrInsert migrated from s00e10e30 (verbatim, slice spelling)
+00e119c0 ?OnRebuild@cSPUIMinimapWin_s00e1_0e30@@QAE_NPAVRenderContext_s00e1_0e30@UTFWin@EA@@@Z  # cSPUIMinimapWin_s00e1_0e30::OnRebuild migrated from s00e10e30 (verbatim, slice spelling)

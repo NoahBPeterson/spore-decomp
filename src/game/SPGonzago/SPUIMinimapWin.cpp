@@ -1,4 +1,4 @@
-// src/game/SPGonzago/SPUIMinimapWin.cpp -- migrated from slice(s) s00e0f050, s00e0df70, s00e0c2a0, s00e0b350, s00e0a4c0 by tools/migrate/rewrite.py
+// src/game/SPGonzago/SPUIMinimapWin.cpp -- migrated from slice(s) s00e10e30, s00e100e0, s00e0d100, s00e0f050, s00e0df70, s00e0c2a0, s00e0b350, s00e0a4c0 by tools/migrate/rewrite.py
 // Object file: SPGonzago/SPUIMinimapWin.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -10,6 +10,11 @@
 #include <intrin.h>
 #include "EA/UTFWin/Image.h"
 #include "EA/UTFWin/Window.h"
+#include "SP/cITerrainSphere.h"
+#include "SP/cPlanetModel.h"
+#include "EA/UTFWin/RenderContext.h"
+#include "EA/UTFWin/Draw2D.h"
+#include "EA/UTFWin/IWindow.h"
 
 // unnamed retail callees and globals (address in the comment)
 extern "C" void*  __cdecl memcpy(void*, const void*, unsigned int);
@@ -28,18 +33,18 @@ typedef unsigned char u8;
 struct Float3 { float x, y, z; };
 struct cPaletteGrid;
 float g_15a4bfc;
+float g_15a4c00;
+float g_16a2024;
+float g_16a203c;
+float g_15a4cb8;
+u32   g_16a2028;
+u32   g_16a202c;
 u8    g_16a1fa0;
 u32   g_16a2040;
 u32   g_16a2044;
 u32   g_16a2048;
 u32   g_16a1f9c;
 u32   g_16a1f98;
-extern "C" void*  __cdecl memcpy(void*, const void*, unsigned int);
-extern "C" double __cdecl sqrt(double);
-extern "C" double __cdecl atan2(double, double);
-extern "C" double __cdecl fabs(double);
-extern "C" double __cdecl sin(double);
-extern "C" double __cdecl cos(double);
 struct IWin;
 struct ISlot {
     virtual void v00();
@@ -178,6 +183,7 @@ struct cPaletteGrid2 {
     u8 pad08[0x204];
     IWin* mTarget;          // +0x20c
 };
+__int64 __fastcall FUN_0093a3a0(void* ecx_this);
 void*  __cdecl FUN_0067dd50();
 float* __cdecl SPUIHelpers_GetBoundingScreenRect(float* out, IWin* win, char flag);
 static float FUN_00e0af90_clamp(float v)
@@ -822,6 +828,924 @@ public:
 };
 // ---- items of slice s00e0f050 end
 
+// ---- items of slice s00e0d100 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C" float GetElapsedSeconds();                                    // 0x00805080
+extern "C" void PlayEvent(void* pHandle, float a, float b, int tag);     // 0x00b69aa0
+extern float    g_fxThreshold;                                           // 0x015a4cb8
+extern float    g_fxScale;                                               // 0x016a203c
+extern float    g_lastDirX, g_lastDirY, g_lastDirZ;                      // 0x016a1fa4 / a8 / ac
+struct Vec3 { float x, y, z; };
+struct Vec2 { float x, y; };
+struct Image_s00e0_d100 { char pad[0x1c]; int mW; int mH; };
+struct Vertex2D {                       // 0x14 bytes
+    float x, y;
+    unsigned int color;
+    float u, v;
+};
+struct Target2D {                       // returned by RenderContext::Begin2D
+virtual void s0();
+virtual void s1();
+virtual void s2();
+virtual void s3();
+virtual void s4();
+virtual void s5();
+virtual void s6();
+virtual void s7();
+virtual void s8();
+virtual void s9();
+virtual void s10();
+virtual void s11();
+virtual void s12();
+virtual void s13();
+virtual void s14();
+virtual void s15();
+virtual void s16();
+virtual void s17();
+virtual void s18();
+virtual void s19();
+    virtual void s20();
+    virtual void DrawQuads(Vertex2D* v, int count, Image_s00e0_d100* img);          // +0x54, ret 0xc
+};
+struct RenderContext {
+    Target2D* Begin2D(int);             // 0x95bc10
+    void End2D();                       // 0x95bb20
+};
+struct MapSet;
+struct ITerrain {
+    virtual int AddRef();
+    virtual int Release();
+    virtual void* GetPropertyList();
+    virtual MapSet* GetTerrainMapSet();                                  // +0xc
+};
+struct PlanetModel_s00e0_d100 {
+    char pad[0x24]; ITerrain* mpTerrain;
+    Vec3* DirectionToSurfacePosition(const Vec3* pDir, Vec3* pOut);     // 0xb815a0 (thiscall ret 8)
+};
+PlanetModel_s00e0_d100* GetPlanetModel();                                           // 0xb3d350 (SP::PlanetModel)
+extern "C" unsigned int GetCurrentGameMode_s00e0_d100();                            // 0xb5b800 (SP::GetCurrentGameMode)
+extern "C" Vec2* ProjectToUV(Vec2* out, MapSet* ms, const Vec3* pos, const Vec3* a, const Vec3* b, float scale, int flag); // 0x00e0b580
+struct MinimapWin_s00e0_d100 {
+    char pad0[0x23c];
+    int mW;                             // +0x23c
+    int mH;                             // +0x240
+    char pad1[0x250 - 0x244];
+    Image_s00e0_d100* mpImage;                     // +0x250
+    char pad2[0x304 - 0x254];
+    Vec3 mCenter;                       // +0x304
+    Vec3 mUp;                           // +0x310
+    char pad3[0x338 - 0x31c];
+    Vec3 mAxisA;                        // +0x338
+    Vec3 mAxisB;                        // +0x344
+    float mScale;                       // +0x350
+
+    bool ProjectCenter(const Vec3* pos, Vec2* out, int flag);           // 0xe0bcb0 (thiscall ret 0xc)
+    float RemapX(float x, float y);                                      // 0xe0aa80 (thiscall ret 8, float in ST0)
+    bool DrawCameraArrow(RenderContext* ctx, int unused);
+};
+static __forceinline float WrapNearest(float x, float ref) {
+    float c = x - 1.0f;
+    if (fabs(x - ref) <= fabs(c - ref)) {
+        c = x;
+        if (fabs((x + 1.0f) - ref) < fabs(x - ref)) c = x + 1.0f;
+    }
+    return c;
+}
+struct IMinimapIcon;                     // icon / window object drawn on the minimap
+struct IMinimapIcon {                    // vtable slots used by this slice
+    virtual void s00();                  // +0x00
+    virtual void s04();                  // +0x04
+    virtual void s08();                  // +0x08
+    virtual void s0c();                  // +0x0c
+    virtual IMinimapIcon* s10();         // +0x10 parent
+    virtual void s14();                  // +0x14
+    virtual void s18();                  // +0x18
+    virtual void s1c();                  // +0x1c
+    virtual void s20();                  // +0x20
+    virtual void s24();                  // +0x24
+    virtual bool s28();                  // +0x28 is-visible
+    virtual void s2c();                  // +0x2c
+    virtual void s30();                  // +0x30
+    virtual void s34();                  // +0x34
+    virtual const float* s38();          // +0x38 quad (4 floats)
+    virtual void s3c();                  // +0x3c
+    virtual void s40();                  // +0x40
+    virtual void s44();                  // +0x44
+    virtual void s48();                  // +0x48
+    virtual void s4c();                  // +0x4c
+    virtual void s50();                  // +0x50
+    virtual void s54();                  // +0x54
+    virtual void s58();                  // +0x58
+    virtual void s5c();                  // +0x5c
+    virtual void s60();                  // +0x60
+    virtual void s64();                  // +0x64
+    virtual void s68();                  // +0x68
+    virtual void s6c(float* pQuad);      // +0x6c set quad
+    virtual void s70();                  // +0x70
+    virtual void s74();                  // +0x74
+    virtual void s78();                  // +0x78
+    virtual void s7c(int a, int b);      // +0x7c set visible
+    virtual void s80();                  // +0x80
+    virtual void s84();                  // +0x84
+    virtual void s88();                  // +0x88
+    virtual void s8c();                  // +0x8c
+    virtual void s90();                  // +0x90
+    virtual void s94();                  // +0x94
+    virtual void s98();                  // +0x98
+    virtual void s9c();                  // +0x9c
+    virtual void sa0();                  // +0xa0
+    virtual void sa4();                  // +0xa4
+    virtual void sa8();                  // +0xa8
+    virtual void sac();                  // +0xac
+    virtual void sb0();                  // +0xb0
+    virtual void sb4();                  // +0xb4
+    virtual void sb8();                  // +0xb8
+    virtual void sbc();                  // +0xbc
+    virtual void sc0(Vec2 size, float* pOut);   // +0xc0
+    virtual void sc4();                  // +0xc4
+    virtual void sc8();                  // +0xc8
+    virtual void scc();                  // +0xcc
+    virtual void sd0();                  // +0xd0
+    virtual void sd4();                  // +0xd4
+    virtual void sd8();                  // +0xd8
+    virtual void sdc();                  // +0xdc
+    virtual void se0(IMinimapIcon* pIcon);      // +0xe0 detach parent
+    virtual void se4();                  // +0xe4
+    virtual void se8();                  // +0xe8
+    virtual void sec(IMinimapIcon* pIcon);      // +0xec attach
+    virtual IMinimapIcon* sf0(uint32_t id, int flag);   // +0xf0 lookup icon by id
+};
+struct IDirectionProvider {              // subobject holding the surface direction
+    virtual void d00();                  // +0x00
+    virtual void d04();                  // +0x04
+    virtual void d08();                  // +0x08
+    virtual void d0c();                  // +0x0c
+    virtual void d10();                  // +0x10
+    virtual void d14();                  // +0x14
+    virtual void d18();                  // +0x18
+    virtual void d1c();                  // +0x1c
+    virtual void d20();                  // +0x20
+    virtual void d24();                  // +0x24
+    virtual void d28();                  // +0x28
+    virtual const Vec3* GetDirection();  // +0x2c
+};
+struct IMinimapTargetA {                 // feedback target, direction subobject at +0x34
+    virtual void a00();                  // +0x00
+    virtual void a04();                  // +0x04
+    virtual void a08();                  // +0x08
+    virtual void* Find(uint32_t id);     // +0x0c
+    char pad_010[0x24];                  // +0x10
+    IDirectionProvider mDirection;       // +0x34
+};
+struct IMinimapTargetB {                 // feedback target, direction subobject at +0xc0
+    virtual void b00();                  // +0x00
+    virtual void b04();                  // +0x04
+    virtual void b08();                  // +0x08
+    virtual void* Find(uint32_t id);     // +0x0c
+    char pad_010[0xb0];                  // +0x10
+    IDirectionProvider mDirection;       // +0xc0
+};
+struct IMinimapTargetC {                 // feedback target exposing its event mode
+    virtual void c00();                  // +0x00
+    virtual void c04();                  // +0x04
+    virtual void c08();                  // +0x08
+    virtual void* Find(uint32_t id);     // +0x0c
+    virtual void c10();                  // +0x10
+    virtual void c14();                  // +0x14
+    virtual void c18();                  // +0x18
+    virtual void c1c();                  // +0x1c
+    virtual void* GetMode();             // +0x20
+};
+struct IMinimapView {                    // current minimap view
+    virtual void v00();                  // +0x00
+    virtual void v04();                  // +0x04
+    virtual void v08();                  // +0x08
+    virtual void v0c();                  // +0x0c
+    virtual void v10();                  // +0x10
+    virtual void v14();                  // +0x14
+    virtual void v18();                  // +0x18
+    virtual float GetAngle();            // +0x1c
+    virtual void* GetMode();             // +0x20
+};
+struct IWindowManager {                  // SP::WindowManager()
+    virtual void w00();                  // +0x00
+    virtual void w04();                  // +0x04
+    virtual void w08();                  // +0x08
+    virtual void w0c();                  // +0x0c
+    virtual void w10();                  // +0x10
+    virtual void w14();                  // +0x14
+    virtual void w18();                  // +0x18
+    virtual void w1c();                  // +0x1c
+    virtual void w20();                  // +0x20
+    virtual void w24();                  // +0x24
+    virtual void w28();                  // +0x28
+    virtual void w2c();                  // +0x2c
+    virtual void w30();                  // +0x30
+    virtual void w34();                  // +0x34
+    virtual void w38();                  // +0x38
+    virtual void w3c();                  // +0x3c
+    virtual void w40();                  // +0x40
+    virtual void w44();                  // +0x44
+    virtual IMinimapView* GetView(int which);   // +0x48
+};
+struct IMapSetProjection {               // ITerrain slot +0x0c is variadic (0 or 4 args)
+    virtual void p00();                  // +0x00
+    virtual void p04();                  // +0x04
+    virtual void p08();                  // +0x08
+    virtual Vec2* Project(Vec2* pUV, const Vec3* pA, const Vec3* pB, float scale);  // +0x0c
+};
+struct MinimapEventNode;                 // eastl rbtree node (event id + feedback event)
+struct MinimapEventTree {                // eastl::rbtree keyed by the event id
+    uint32_t          mSize;             // +0x00 (not touched here)
+    MinimapEventNode* mpRoot;            // +0x04 anchor: parent (end iterator)
+    MinimapEventNode* mpBegin;           // +0x08 anchor: leftmost node
+    MinimapEventNode* mpEnd;             // +0x0c anchor: rightmost node
+    uint32_t          mColor;            // +0x10 anchor: colour
+    MinimapEventNode* find(MinimapEventNode** pFound, const void* pKey);  // 0x00e5c780
+};
+struct cFeedbackEvent;                   // feedback event payload (only referenced here)
+struct AutoRefCountEvent {               // EA::AutoRefCount<cFeedbackEvent> (4 bytes)
+    cFeedbackEvent* mpEvent;             // +0x00
+};
+struct MinimapEventNode {
+    MinimapEventNode* mpParent;          // +0x00
+    MinimapEventNode* mpLeft;            // +0x04
+    MinimapEventNode* mpRight;           // +0x08
+    uint32_t          mColor;            // +0x0c
+    uint32_t          mKey;              // +0x10
+    AutoRefCountEvent mEvent;            // +0x14
+    Vec3              mPos;              // +0x18 direction of the event on the surface
+    uint32_t          mFlags;            // +0x24
+    IMinimapTargetA*  mpTarget;          // +0x28
+    float             mTime;             // +0x2c
+    uint32_t          mState;            // +0x30
+};
+struct cMinimapOverlay {                 // cSPUIMinimapWin (retail layout)
+    char             pad_000[4];         // +0x000
+    IMinimapIcon     mWindow;            // +0x004 polymorphic window subobject
+    char             pad_008[0x230];     // +0x008
+    uint8_t          mIconsHidden;       // +0x238
+    char             pad_239[3];         // +0x239
+    int32_t          mW;                 // +0x23c
+    int32_t          mH;                 // +0x240
+    char             pad_244[0xc];       // +0x244
+    Image_s00e0_d100*           mpImage;            // +0x250
+    char             pad_254[0xc8];      // +0x254
+    MinimapEventTree mEvents;            // +0x31c
+    char             pad_330[8];         // +0x330
+    Vec3             mAxisA;             // +0x338
+    Vec3             mAxisB;             // +0x344
+    float            mScale;             // +0x350
+    char             pad_354[0x638];     // +0x354
+    IMinimapIcon*    mpIcon;             // +0x98c
+
+    void DrawIcon(void* pWindow, float angle, void* pOwner);                  // 0x00e0d100
+    bool ProjectEvent(const Vec2* pMapPos, Vec3* pOut);                       // 0x00e0de40
+    AutoRefCountEvent* FindEvent(uint32_t key);                               // 0x00e0df30
+    uint32_t OnTick();                                                        // 0x00e0d940
+
+    float AngleFromPoint(float x, float y);                                   // 0x00e0a9e0
+    void ComputeIconPositionFromMinimapCoords(const void* pPos, IMinimapIcon* pIcon, int flag);  // 0xe0bf40
+    bool ProjectCenter(const Vec3* pPos, Vec2* pOut, int flag);               // 0xe0bcb0
+    void RefreshEffects(const void* pData, uint32_t a, uint32_t b, int c);    // 0xe0b990
+};
+extern "C" Vec3* ExpandCoord(Vec3* pOut, const Vec2* pUV);               // 0x00e0cea0 (returns pOut)
+extern "C" MinimapEventNode* RBTreeIncrement_s00e0_d100(MinimapEventNode* pNode);   // 0x00921580
+extern "C" IWindowManager* WindowManager();                              // 0x0067caa0
+extern "C" void* EventAction(IMinimapTargetC* pTarget, const void* pEventId);   // 0x00ac80d0
+struct Stopwatch { __int64 GetElapsed(); };                              // 0x0093a3a0
+extern Stopwatch g_minimapStopwatch;                                     // 0x016a2028
+extern uint32_t g_swLo, g_swHi;                                          // 0x016a2028 / 0x016a202c
+extern uint8_t  g_fxEnabled;                                             // 0x016a1fa0
+extern uint32_t g_fxA, g_fxB;                                            // 0x016a1f9c / 0x016a1f98
+extern uint8_t  g_fxData[];                                              // 0x016a2040
+// ---- items of slice s00e0d100 end
+
+// ---- items of slice s00e100e0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern void* g_vtWinButton0[];          // 0x0147f868
+extern void* g_vtWinButton1[];          // 0x0147f748
+extern void* g_vtWinButton2[];          // 0x0147f6d8
+extern void* g_vtDrawable0[];           // 0x0141788c
+extern void* g_vtDrawable1[];           // 0x01417874
+extern void* g_vtDrawable2[];           // 0x0141785c
+extern const char g_cityIconName[];     // "UI/CivMinimap/CityIcon"
+extern const char g_cityIconDrawableName[];
+extern const float g_epsilon;           // 0x013ec4b8
+extern const float g_half;              // 0x01471064 = 0.5
+inline void* operator new(unsigned int, void* p) { return p; }
+namespace Math {
+struct Rectangle {
+    float x1, y1, x2, y2;
+    Rectangle() {}
+    __forceinline Rectangle(float l, float t, float r, float b) : x1(l), y1(t), x2(r), y2(b) {}
+};
+}
+class IQueried {                        // returned by RefObject slot +0x0c
+public:
+virtual void v00();
+virtual void v04();
+virtual void v08();
+virtual void v0c();
+virtual void v10();
+virtual void v14();
+virtual void v18();
+virtual void v1c();
+virtual void v20();
+virtual void v24();
+virtual void v28();
+virtual void v2c();
+virtual void v30();
+virtual void v34();
+virtual void v38();
+virtual void v3c();
+virtual void v40();
+virtual void v44();
+virtual void v48();
+virtual void v4c();
+virtual void v50();
+virtual void v54();
+    virtual bool IsMinimapObject();     // +0x58
+};
+class IQueryable {
+public:
+    virtual int AddRef();
+    virtual int Release();
+    virtual void v08();
+    virtual IQueried* Query(uint32_t typeID);    // +0x0c
+};
+struct cIconInfo {                      // size 0x24
+    uint32_t mType;                     // +0x00
+    float mX, mY, mZ;                   // +0x04 direction
+    uint32_t mFlags;                    // +0x10
+    IQueryable* mpObject;               // +0x14 (ref counted)
+    float mTimeout;                     // +0x18
+    uint32_t mAnimState;                // +0x1c
+    uint32_t mImageID;                  // +0x20
+    __forceinline cIconInfo(const cIconInfo& o)
+        : mType(o.mType), mX(o.mX), mY(o.mY), mZ(o.mZ), mFlags(o.mFlags), mpObject(o.mpObject),
+          mTimeout(o.mTimeout), mAnimState(o.mAnimState), mImageID(o.mImageID)
+    {
+        if (mpObject)
+            mpObject->AddRef();
+    }
+    __forceinline ~cIconInfo()
+    {
+        if (mpObject)
+            mpObject->Release();
+    }
+    cIconInfo& operator=(const cIconInfo& o);        // 0x00e0bdc0
+};
+class Image_s00e1_00e0 {
+public:
+    virtual int AddRef();
+    virtual int Release();  // 0x00957550 (Image::Release)
+    uint32_t pad[7];
+    int mWidth;                         // +0x20
+};
+class IWin_s00e1_00e0 {
+public:
+virtual void v00();
+virtual void v04();
+virtual void v08();
+virtual void v0c();
+virtual void v10();
+virtual void v14();
+virtual void v18();
+virtual void v1c();
+virtual void v20();
+virtual void v24();
+virtual void v28();
+virtual void v2c();
+virtual void v30();
+virtual void v34();
+    virtual const float* GetArea();                         // +0x38
+virtual void v3c();
+virtual void v40();
+virtual void v44();
+virtual void v48();
+    virtual void v4c();
+    virtual void SetID(uint32_t id);                        // +0x50
+virtual void v54();
+virtual void v58();
+    virtual void SetColor(uint32_t color);                  // +0x5c
+    virtual void SetArea(const Math::Rectangle* r);         // +0x60
+    virtual void v64();
+    virtual void SetSize(float w, float h);                 // +0x68
+virtual void v6c();
+virtual void v70();
+virtual void v74();
+virtual void v78();
+    virtual void SetFlag(int flag, int enable);             // +0x7c
+virtual void v80();
+virtual void v84();
+virtual void v88();
+virtual void v8c();
+virtual void v90();
+virtual void v94();
+virtual void v98();
+virtual void v9c();
+virtual void va0();
+virtual void va4();
+virtual void va8();
+    virtual void SetVisible(int v);                         // +0xac
+virtual void vb0();
+virtual void vb4();
+virtual void vb8();
+virtual void vbc();
+virtual void vc0();
+virtual void vc4();
+virtual void vc8();
+virtual void vcc();
+virtual void vd0();
+virtual void vd4();
+    virtual bool AddChild(IWin_s00e1_00e0* child);                     // +0xd8
+virtual void vdc();
+virtual void ve0();
+virtual void ve4();
+    virtual void PlaceAfter(IWin_s00e1_00e0* child);                   // +0xe8
+    virtual void PlaceBefore(IWin_s00e1_00e0* child);                  // +0xec
+    virtual IWin_s00e1_00e0* GetChild(int id, int recurse);            // +0xf0
+};
+class IButtonControl {
+public:
+virtual void v00();
+virtual void v04();
+virtual void v08();
+virtual void v0c();
+    virtual IWin_s00e1_00e0* GetWindow();                              // +0x10
+virtual void v14();
+virtual void v18();
+virtual void v1c();
+virtual void v20();
+virtual void v24();
+virtual void v28();
+virtual void v2c();
+virtual void v30();
+virtual void v34();
+virtual void v38();
+virtual void v3c();
+virtual void v40();
+virtual void v44();
+virtual void v48();
+virtual void v4c();
+virtual void v50();
+virtual void v54();
+virtual void v58();
+virtual void v5c();
+    virtual void SetDrawable(void* drawable);               // +0x60
+};
+class IDrawableSize {
+public:
+virtual void v00();
+virtual void v04();
+virtual void v08();
+virtual void v0c();
+virtual void v10();
+virtual void v14();
+    virtual void SetSize(const float* size, int a, int b);  // +0x18
+};
+class IDrawable {                       // drawable's third interface (object offset +0x0c)
+public:
+virtual void v00();
+virtual void v04();
+virtual void v08();
+virtual void v0c();
+    virtual IDrawableSize* GetSizeIface();                  // +0x10
+    virtual void SetImage(Image_s00e1_00e0* image, int a);             // +0x14
+};
+struct WinButtonObj {
+    void** vt0;
+    void** vt1;
+    uint32_t pad[0x204 / 4 - 1];
+    void** vt2;                         // +0x20c
+    WinButtonObj();                     // 0x00966f90 UI::WinButton::WinButton
+};
+struct DrawableObj {
+    void** vt0;
+    void** vt1;
+    void** vt2;                         // +0x08 (interface at +0x0c in retail)
+    DrawableObj();                      // 0x00966dc0 ButtonDrawableRadio::ButtonDrawableRadio
+};
+class cApp {
+public:
+virtual void v00();
+virtual void v04();
+virtual void v08();
+virtual void v0c();
+virtual void v10();
+virtual void v14();
+virtual void v18();
+virtual void v1c();
+virtual void v20();
+virtual void v24();
+virtual void v28();
+virtual void v2c();
+virtual void v30();
+virtual void v34();
+    virtual uint32_t GetGameMode();                         // +0x38
+};
+cApp* __cdecl App();                                        // 0x0067dd10
+Image_s00e1_00e0* __cdecl GetImageFromLayout(void* layout, uint32_t id);   // 0x008061c0
+void* __cdecl GetAllocator();                               // 0x009512c0
+void* __cdecl TooltipAlloc(unsigned size, unsigned align, const char* name, void* alloc);   // 0x009512d0
+void __cdecl FitWindowToArea(IWin_s00e1_00e0* w, const Math::Rectangle* r);    // 0x00806d10
+struct IconTree_s00e1_00e0 {
+    cIconInfo& At(const uint32_t& key);                     // 0x00e0ff80 (map::operator[])
+};
+class MinimapVt_s00e1_00e0 {
+public:
+virtual void m00();
+virtual void m04();
+virtual void m08();
+virtual void m0c();
+};
+class cSPUIMinimapWin_s00e1_00e0 : public MinimapVt_s00e1_00e0, public IWin_s00e1_00e0 {
+public:
+    uint32_t pad_008[(0x258 - 8) / 4];
+    void* mpLayout;                     // +0x258
+    uint32_t pad_25c[(0x31c - 0x25c) / 4];
+    IconTree_s00e1_00e0 mIconInfos;                // +0x31c
+    uint32_t pad_320[(0x364 - 0x320) / 4 - 1];
+    bool mbTradeRoutesDirty;            // +0x364 (byte at +0x364)
+
+    void FUN_e0bcb0(const float* pos, const float* out, float* extra);     // 0x00e0bcb0
+    void ComputeIconPositionFromMinimapCoords(const float* c, IWin_s00e1_00e0* w, bool f);   // 0x00e0bf40
+    void FUN_e0d100(IWin_s00e1_00e0* w, float f, const float* p);                     // 0x00e0d100
+    IWin_s00e1_00e0* SubWin() { return (IWin_s00e1_00e0*)((char*)this + 4); }
+    bool AddIcon(uint32_t id, const cIconInfo* info, int parentID, bool flag);  // 0x00e10580 (cSPUIMinimapWin::AddIcon)
+};
+static __forceinline uint32_t PickImageID(uint32_t f, uint32_t mode, uint32_t infoImage)
+{
+    uint32_t id = infoImage;
+    if (f & 1) {
+        id = (f & 8) ? 0x5e51b64 : 0x5e51b58;
+    } else if (f & 2) {
+        if (f & 8)
+            id = 0x5e51b4c;
+        else
+            id = ((f & 0x100000) ? 10 : 0) + 0x5e51b25;
+    } else if (f & 0x1000) {
+        id = 0x5e51b2f;
+    } else if (f & 0x10) {
+        id = ((f & 8) ? 0xb : 0) + 0x5e51aef;
+    } else if (f & 0x40000) {
+        id = 0x5e51b03;
+    } else if (f & 0x20) {
+        if (f & 8) {
+            if (mode != 0x1654c10)
+                id = 0x5e51bd7;
+        } else if (f & 0x80000) {
+            id = 0xccd1f01e;
+        } else if (f & 0x100000) {
+            id = 0x71abd9ca;
+        } else {
+            id = ((f & 0x200000) ? 0xadb5da70 : 0) + 0x5e51bce;
+        }
+    } else if (f & 0x40) {
+        if (f & 8)
+            id = 0x5e51b19;
+        else
+            id = ((mode != 0x1654c10) ? 0xfe415759 : 0) + 0x7a3c3c0;
+    } else if (f & 0x80) {
+        if (mode != 0x1654c10)
+            id = 0x5e51b25;
+    } else if (f & 0x100) {
+        id = 0x5e51aef;
+    } else if (f & 0x2000) {
+        id = 0x5e51b19;
+    } else if (f & 0x4000) {
+        id = 0x5e51ad8;
+    } else if (f & 0x10000) {
+        id = 0x5e51bb6;
+    } else if (f & 0x8000) {
+        id = 0x5e51bc1;
+    } else {
+        id = ((f & 0x20000) ? 0x122 : 0) + 0x5e51ad8;
+    }
+    return id;
+}
+// ---- items of slice s00e100e0 end
+
+// ---- items of slice s00e10e30 begin (TODO(rewrite): local stubs, replace by canonical classes)
+struct Vector2 {
+    float x, y;
+};
+struct Vector3_s00e1_0e30 {
+    float x, y, z;
+    Vector3_s00e1_0e30() {}
+    Vector3_s00e1_0e30(float a, float b, float c) : x(a), y(b), z(c) {}
+};
+namespace Math {
+struct Rectangle_s00e1_0e30 {
+    float x1, y1, x2, y2;
+    Rectangle_s00e1_0e30() {}
+    Rectangle_s00e1_0e30(float l, float t, float r, float b) : x1(l), y1(t), x2(r), y2(b) {}
+};
+}
+struct Vector3Vector {
+    Vector3_s00e1_0e30* mpBegin;
+    Vector3_s00e1_0e30* mpEnd;
+    Vector3_s00e1_0e30* mpCapacity;
+    uint32_t mAllocator[2];
+
+    uint32_t size() const { return (uint32_t)(mpEnd - mpBegin); }
+    Vector3_s00e1_0e30* begin() { return mpBegin; }
+    Vector3_s00e1_0e30* end() { return mpEnd; }
+    Vector3_s00e1_0e30& operator[](uint32_t i) { return mpBegin[i]; }
+    Vector3_s00e1_0e30* erase(Vector3_s00e1_0e30* first, Vector3_s00e1_0e30* last);          // 0x0050f740
+    void DoInsertValue(Vector3_s00e1_0e30* position, const Vector3_s00e1_0e30& value);   // 0x004b5ad0
+    void push_back(const Vector3_s00e1_0e30& value)
+    {
+        if (mpEnd < mpCapacity)
+            ::new (mpEnd++) Vector3_s00e1_0e30(value);
+        else
+            DoInsertValue(mpEnd, value);
+    }
+    void clear() { erase(mpBegin, mpEnd); }
+};
+namespace EA {
+namespace UTFWin {
+class Image_s00e1_0e30;
+}
+}
+namespace EA {
+namespace UTFWin {
+class Draw2D_s00e1_0e30 {
+public:
+    virtual void v00();
+    virtual void SetColor(uint32_t color);                                      // +0x04
+virtual void v08();
+virtual void v0c();
+virtual void v10();
+virtual void v14();
+virtual void v18();
+virtual void v1c();
+virtual void v20();
+virtual void v24();
+virtual void v28();
+virtual void v2c();
+virtual void v30();
+virtual void v34();
+virtual void v38();
+virtual void v3c();
+virtual void v40();
+virtual void v44();
+virtual void v48();
+virtual void v4c();
+virtual void v50();
+virtual void v54();
+    virtual void DrawImage(const Math::Rectangle_s00e1_0e30& area, Image_s00e1_0e30* image,
+                           const Math::Rectangle_s00e1_0e30& uv);                         // +0x58
+};
+}
+}
+namespace EA {
+namespace UTFWin {
+class RenderContext_s00e1_0e30 {
+public:
+    Draw2D_s00e1_0e30* Begin2D(int unk);                                   // 0x0095bc10
+    void End2D();                                               // 0x0095bb20
+    void AddRenderable(void* p);                                // 0x0095bbc0
+};
+}
+}
+struct cTradeRoutePoint {
+    Vector3_s00e1_0e30 mPosition;
+    float mSize;            // +0x0c
+    uint32_t pad10[5];
+};
+struct cTradeRoute {
+    uint32_t pad0;
+    cTradeRoutePoint* mpPointsBegin;    // +0x04
+    cTradeRoutePoint* mpPointsEnd;      // +0x08
+    uint32_t NumPoints() const { return (uint32_t)(mpPointsEnd - mpPointsBegin); }
+};
+class cPlanet_s00e1_0e30 {
+public:
+virtual void v00();
+virtual void v04();
+virtual void v08();
+    virtual void* GetHorizonSource();                       // +0x0c
+virtual void v10();
+virtual void v14();
+virtual void v18();
+virtual void v1c();
+virtual void v20();
+virtual void v24();
+virtual void v28();
+virtual void v2c();
+virtual void v30();
+virtual void v34();
+virtual void v38();
+virtual void v3c();
+virtual void v40();
+virtual void v44();
+virtual void v48();
+virtual void v4c();
+virtual void v50();
+virtual void v54();
+virtual void v58();
+virtual void v5c();
+virtual void v60();
+virtual void v64();
+virtual void v68();
+virtual void v6c();
+virtual void v70();
+virtual void v74();
+virtual void v78();
+virtual void v7c();
+virtual void v80();
+virtual void v84();
+virtual void v88();
+virtual void v8c();
+virtual void v90();
+virtual void v94();
+virtual void v98();
+virtual void v9c();
+virtual void va0();
+virtual void va4();
+virtual void va8();
+virtual void vac();
+virtual void vb0();
+virtual void vb4();
+virtual void vb8();
+virtual void vbc();
+    virtual void vc0();
+    virtual cTradeRoute* GetTradeRoute(int index);          // +0xc4
+    virtual int GetTradeRouteCount();                       // +0xc8
+};
+struct cPlanetModel_s00e1_0e30 {
+    uint32_t pad0[9];
+    cPlanet_s00e1_0e30* mpPlanet;      // +0x24
+};
+struct cRouteObject {
+    uint32_t pad0[0x49];
+    int mRouteKind;                     // +0x124 (1 = second dot style)
+    Vector3_s00e1_0e30* mpPointsBegin;             // +0x128
+    Vector3_s00e1_0e30* mpPointsEnd;               // +0x12c
+    uint32_t NumPoints() const { return (uint32_t)(mpPointsEnd - mpPointsBegin); }
+};
+struct cRouteObjectVector {
+    cRouteObject** mpBegin;
+    cRouteObject** mpEnd;
+    uint32_t size() const { return (uint32_t)(mpEnd - mpBegin); }
+    cRouteObject* operator[](uint32_t i) { return mpBegin[i]; }
+};
+struct cGameDataVector {
+    uint32_t pad0;
+    cRouteObjectVector mData;           // +0x04
+};
+typedef void (*GameDataFn)();
+void GameDataFn_cd7d10();
+void GameDataFn_d3d420();
+void GameDataFn_e10060();
+void GameDataFn_b1e500();
+namespace SP {
+uint32_t GetCurrentGameMode();          // 0x00b5b800
+}
+namespace SP {
+cPlanetModel_s00e1_0e30* PlanetModel_s00e1_0e30();            // 0x00b3d350
+}
+namespace SP {
+class cGameNounManager_s00e1_0e30 { public:
+    cGameDataVector* GetGameDataVector(GameDataFn a, GameDataFn b, GameDataFn c, GameDataFn d,
+                                       uint32_t nounID);   // 0x00b21340
+};
+}
+namespace SP {
+cGameNounManager_s00e1_0e30* NounManager();        // 0x00b3d300
+}
+Vector3_s00e1_0e30 GetHorizonPoint(void* source, const Vector2& range, const Vector3_s00e1_0e30& cameraPos,
+                        const Vector3_s00e1_0e30& cameraDir, float cameraParam);
+struct cDotStyle {
+    float mHalfWidth;
+    float mHalfHeight;
+    uint32_t mColor;
+    float mSpacing;
+};
+class IWindow_s00e1_0e30 {
+public:
+virtual void v00();
+virtual void v04();
+virtual void v08();
+virtual void v0c();
+};
+class cHashable {
+public:
+virtual void v00();
+virtual void v04();
+virtual void v08();
+virtual void v0c();
+virtual void v10();
+virtual void v14();
+virtual void v18();
+virtual void v1c();
+virtual void v20();
+virtual void v24();
+virtual void v28();
+virtual void v2c();
+virtual void v30();
+virtual void v34();
+virtual void v38();
+virtual void v3c();
+virtual void v40();
+virtual void v44();
+virtual void v48();
+    virtual uint32_t GetID();                                   // +0x4c
+};
+class cSPUIMinimapWin_s00e1_0e30 {
+public:
+    uint32_t mVtable;                       // +0x000
+    IWindow_s00e1_0e30 mWindow;                        // +0x004
+    uint32_t pad008[0x8d];                  // +0x008 .. +0x23b
+    int mStopwatchField0;                   // +0x23c
+    int mStopwatchField1;                   // +0x240
+    uint32_t pad244;                        // +0x244
+    EA::UTFWin::Image_s00e1_0e30* mpRoadIconImage;     // +0x248
+    EA::UTFWin::Image_s00e1_0e30* mpTexture;           // +0x24c
+    uint32_t pad250[0x3a];                  // +0x250 .. +0x337
+    Vector3_s00e1_0e30 mWorldCameraPos;                // +0x338
+    Vector3_s00e1_0e30 mWorldCameraDir;                // +0x344
+    float mCameraParam;                     // +0x350
+    uint32_t pad354[4];                     // +0x354 .. +0x363
+    bool mbTradeRoutesDirty;                // +0x364
+    Vector3Vector mTradeRouteDots;          // +0x368 .. +0x37b
+    uint32_t pad37c[0x181];                 // +0x37c .. +0x97f
+    cHashable* mpBorderRenderable;          // +0x980
+
+    bool WorldXYZToMinimapXY(const Vector3_s00e1_0e30& pos, Vector2& out, bool clamp);   // 0x00e0bcb0
+    void draw_trade_routes(EA::UTFWin::Draw2D_s00e1_0e30& draw);  // 0x00e10e30 (cSPUIMinimapWin::draw_trade_routes)
+    bool OnRebuild(EA::UTFWin::RenderContext_s00e1_0e30* ctx);                        // 0x00e119c0
+};
+struct IRefCounted {
+    virtual void AddRef();                                      // vtable +0x00
+    virtual void Release();                                     // vtable +0x04
+};
+struct cRefPtr {
+    IRefCounted* mpObject;                                      // +0x00
+    cRefPtr() : mpObject(0) {}
+    cRefPtr(const cRefPtr& other) : mpObject(other.mpObject) {
+        if (mpObject)
+            mpObject->AddRef();
+    }
+    ~cRefPtr() { if (mpObject) mpObject->Release(); }
+};
+struct cDataValue {
+    uint32_t mId;                                               // +0x00
+    bool mbDirty;                                               // +0x04
+    unsigned char mPad05[3];                                    // +0x05
+    cRefPtr mPtr0;                                              // +0x08
+    cRefPtr mPtr1;                                              // +0x0c
+    cDataValue() : mId(0), mbDirty(true), mPtr0(), mPtr1() {}
+    void draw_civilization_borders(EA::UTFWin::RenderContext_s00e1_0e30* ctx,
+                                   cSPUIMinimapWin_s00e1_0e30* win);        // 0x00e0f2c0
+};
+struct cDataInfo {
+    uint32_t mKey;                                              // +0x00
+    cDataValue mValue;                                          // +0x04
+    cDataInfo(uint32_t key) : mKey(key), mValue() {}
+};
+struct cInsertResult {
+    cDataInfo* mpNode;                                          // +0x00
+    bool mbInserted;                                            // +0x04
+    cInsertResult(cDataInfo* node, bool inserted)
+        : mpNode(node), mbInserted(inserted) {}
+};
+struct cDataArray {
+    cDataInfo* mpBegin;                                         // +0x00
+    cDataInfo* mpEnd;                                           // +0x04
+    cDataInfo* mpCapacity;                                      // +0x08
+    uint32_t mPad0c[2];                                         // +0x0c
+    unsigned char mCompare;                                     // +0x14
+
+    cInsertResult insert(const cDataInfo& value);               // 0x00e118b0
+    cDataValue& FindOrInsert(uint32_t key);                     // 0x00e11910
+    cDataInfo* insert_at(cDataInfo* pos, const cDataInfo& value);  // 0x00e10c10
+};
+cDataInfo* lower_bound_DataInfo(cDataInfo* first, cDataInfo* last,
+                                const uint32_t& value, unsigned char cmp);  // 0x00e0e9f0
+void RebuildBaseWindow(IWindow_s00e1_0e30* window);                        // 0x00e0af90
+extern cDataArray gDataMap;                                     // 0x016a204c
+static __forceinline cDataInfo* find_DataInfo(cDataArray& map, const uint32_t& key)
+{
+    cDataInfo* end = map.mpEnd;
+    cDataInfo* it = lower_bound_DataInfo(map.mpBegin, end, key, map.mCompare);
+    if (it == end || key < it->mKey || it == it + 1)
+        it = end;
+    return it;
+}
+// ---- items of slice s00e10e30 end
+
+// @ 0x00e0a950
+bool __cdecl FUN_00e0a950()
+{
+    if ((g_16a2028 | g_16a202c) != 0) {
+        __int64 t = FUN_0093a3a0(&g_16a2028);
+        double d = (double)t;
+        return d * g_16a203c < g_15a4cb8;
+    }
+    return false;
+}
+
 // @ 0x00e0a9a0
 void __cdecl FUN_00e0a9a0(const Float3* p, u32 a, u32 b)
 {
@@ -892,6 +1816,47 @@ bool __fastcall FUN_00e0abc0(cPaletteGrid* ecx_this, void* edx, u32 a, u32 b, u3
 {
     ((IWin*)ecx_this)->v94(d);
     return true;
+}
+
+// @ 0x00e0abe0
+void __fastcall FUN_00e0abe0(cPaletteGrid* ecx_this, void* edx, float a, float b, float c, char d)
+{
+    double ang = (double)g_15a4bfc - atan2((double)b, (double)a);
+    float fa = (float)ang;
+    double sph = atan2((double)c, sqrt((double)a * (double)a + (double)b * (double)b));
+    float fv = (float)sph;
+
+    if (d != 0 || fv < ecx_this->m998) {
+        ecx_this->m998 = fv;
+        if (d != 0)
+            goto set_angles;
+    }
+    if (fv > ecx_this->m99C) {
+        ecx_this->m99C = fv;
+        if (d != 0) {
+        set_angles:
+            ecx_this->m990 = fa;
+            ecx_this->m9A0 = fa;
+            ecx_this->m994 = fa;
+            return;
+        }
+    }
+    if (fabs(ang - (double)ecx_this->m9A0) > (double)g_15a4c00) {
+        if (ecx_this->m9A0 > fa)
+            fa = g_16a2024 + fa;
+        else
+            fa = fa - g_16a2024;
+    }
+    if (fa < ecx_this->m990)
+        ecx_this->m990 = fa;
+    else if (fa > ecx_this->m994)
+        ecx_this->m994 = fa;
+}
+
+// @ 0x00e0ad00
+void __fastcall FUN_00e0ad00(cPaletteGrid* ecx_this, void* edx, u32 flags)
+{
+    ecx_this->m35C |= flags;
 }
 
 // @ 0x00e0ad10
@@ -1404,6 +2369,248 @@ void* cTerrainRenderer::Destroy(u8 flags)
     if ((flags & 1) != 0)
         FUN_00951330(this);
     return this;
+}
+
+// @ 0x00e0d2e0
+bool MinimapWin_s00e0_d100::DrawCameraArrow(RenderContext* ctx, int unused)
+{
+    const Vec3* pc = &mCenter;
+    if ((pc->x * pc->x + pc->y * pc->y) + pc->z * pc->z <= 0.1f) return true;
+    if ((mUp.x * mUp.x + mUp.y * mUp.y) + mUp.z * mUp.z <= 0.9f) return true;
+
+    Target2D* tgt = ctx->Begin2D(0);
+    Vertex2D v[4];
+    v[0].x = 0.0f; v[0].y = 0.0f; v[0].color = 0xffffffff; v[0].u = 0.0f; v[0].v = 0.0f;
+    v[1].color = 0xffffffff; v[1].u = 1.0f; v[1].v = 0.0f;
+    v[2].color = 0xffffffff; v[2].u = 1.0f; v[2].v = 1.0f;
+    v[3].color = 0xffffffff; v[3].u = 0.0f; v[3].v = 1.0f;
+
+    Vec2 p;
+    ProjectCenter(pc, &p, 0);
+
+    float dx, dy;                       // (uninitialised in the original when there is no terrain)
+    PlanetModel_s00e0_d100* pm = GetPlanetModel();
+    ITerrain* ter = pm ? pm->mpTerrain : 0;
+    if (ter) {
+        Vec2 t0, t1, t2;
+        Vec2 tmp;
+        t0 = *ProjectToUV(&tmp, ter->GetTerrainMapSet(), pc, &mAxisA, &mAxisB, mScale, 0);
+        Vec3 q;
+        q.x = mUp.x * 0.3f + pc->x;
+        q.y = pc->y + mUp.y * 0.3f;
+        q.z = pc->z + mUp.z * 0.3f;
+        t1 = *ProjectToUV(&tmp, ter->GetTerrainMapSet(), &q, &mAxisA, &mAxisB, mScale, 0);
+        Vec3 r;
+        r.x = pc->x - mUp.x * 0.3f;
+        r.y = pc->y - mUp.y * 0.3f;
+        r.z = pc->z - mUp.z * 0.3f;
+        t2 = *ProjectToUV(&tmp, ter->GetTerrainMapSet(), &r, &mAxisA, &mAxisB, mScale, 0);
+
+        float rx, ry;
+        unsigned int mode = GetCurrentGameMode_s00e0_d100();
+        bool plain = true;
+        if (mode == 0x1654c05 || mode == 0x1654c04) {
+            t1.x = WrapNearest(t1.x, t0.x);
+            t2.x = WrapNearest(t2.x, t0.x);
+            float d1 = sqrt((t1.x - t0.x) * (t1.x - t0.x) + (t1.y - t0.y) * (t1.y - t0.y));
+            float d2 = sqrt((t0.x - t2.x) * (t0.x - t2.x) + (t0.y - t2.y) * (t0.y - t2.y));
+            if (!(d1 < d2)) {
+                float mx = t0.x * 2.0f;
+                float my = t0.y * 2.0f - t2.y;
+                float cy = my;
+                if (cy <= 0.0f) cy = 0.0f;
+                if (0.999f <= cy) cy = 0.999f;
+                float yy = (float)mH * cy;
+                ry = my * (float)mH;
+                rx = RemapX((float)mW * (mx - t2.x), yy);
+                plain = false;
+            }
+        }
+        if (plain) {
+            ry = (float)mH * t1.y;
+            rx = RemapX((float)mW * t1.x, ry);
+        }
+        dy = ry - p.y;
+        dx = rx - p.x;
+    }
+    Image_s00e0_d100* img = mpImage;
+    float nx = -dx;
+    float s1 = ((float)img->mH / sqrt(dx * dx + dy * dy)) * 0.4f;
+    float A = dx * s1, B = dy * s1;
+    float s2 = ((float)img->mW / sqrt(nx * nx + dy * dy)) * 0.4f;
+    float P = dy * s2, Q = nx * s2;
+    v[0].x = (p.x + A) - P;  v[0].y = (B + p.y) - Q;
+    v[1].x = (P + p.x) + A;  v[1].y = (Q + B) + p.y;
+    v[2].x = ((p.x - A) + P); v[2].y = Q + (p.y - B);
+    v[3].x = ((p.x - A) - P); v[3].y = (p.y - B) - Q;
+    tgt->DrawQuads(v, 1, img);
+    ctx->End2D();
+    return true;
+}
+
+// @ 0x00e0d940
+uint32_t cMinimapOverlay::OnTick()
+{
+    if ((mWindow.s28() & 1) == 0)
+        return 1;
+
+    float now = GetElapsedSeconds();
+    MinimapEventNode* pEnd = (MinimapEventNode*)&mEvents.mpRoot;
+    for (MinimapEventNode* p = mEvents.mpBegin; p != pEnd; p = RBTreeIncrement_s00e0_d100(p)) {
+        IMinimapIcon* pIcon = 0;
+        uint32_t key = p->mKey;
+        if (p->mFlags & 0x40103) {
+            IMinimapIcon* pGroup = mWindow.sf0(key, 1);
+            if (pGroup) {
+                pIcon = pGroup->s10()->sf0(key + 1, 1);
+                if (pIcon && !mIconsHidden) {
+                    if (now > p->mTime) {
+                        pIcon->s7c(1, 0);
+                        if (now > p->mTime + 1.0f) {
+                            pIcon->s10()->se0(pIcon);
+                            pIcon = 0;
+                            p->mState = 0;
+                        }
+                    } else if ((pIcon->s28() & 1) == 0) {
+                        pIcon->s7c(1, 1);
+                    }
+                }
+            }
+        }
+
+        if ((p->mFlags & 0x100) && p->mpTarget) {
+            IMinimapTargetA* pTargetA = (IMinimapTargetA*)p->mpTarget->Find(0x137e8e0);
+            if (pTargetA) {
+                const Vec3* pDir = pTargetA->mDirection.GetDirection();
+                float len2 = pDir->x * pDir->x + pDir->y * pDir->y + pDir->z * pDir->z + 1e-8f;
+                float inv = 1.0f / sqrt((double)len2);
+                p->mPos.x = pDir->x * inv;
+                p->mPos.y = pDir->y * inv;
+                p->mPos.z = pDir->z * inv;
+                if (p->mPos.x != g_lastDirX || p->mPos.y != g_lastDirY || p->mPos.z != g_lastDirZ) {
+                    Vec2 uv;
+                    ProjectCenter(&p->mPos, &uv, 0);
+                    IMinimapIcon* pFound = mWindow.sf0(key, 1);
+                    if (pFound)
+                        ComputeIconPositionFromMinimapCoords(&uv, pFound, 0);
+                }
+            }
+        }
+
+        if ((p->mFlags & 0x2000) && p->mpTarget) {
+            IMinimapTargetB* pTargetB = (IMinimapTargetB*)p->mpTarget->Find(0x4f176642);
+            if (pTargetB) {
+                const Vec3* pDir = pTargetB->mDirection.GetDirection();
+                float len2 = pDir->x * pDir->x + pDir->y * pDir->y + pDir->z * pDir->z + 1e-8f;
+                float inv = 1.0f / sqrt((double)len2);
+                p->mPos.x = pDir->x * inv;
+                p->mPos.y = pDir->y * inv;
+                p->mPos.z = pDir->z * inv;
+                Vec2 uv;
+                ProjectCenter(&p->mPos, &uv, 0);
+                if (pIcon)
+                    ComputeIconPositionFromMinimapCoords(&uv, pIcon, 0);
+                IMinimapIcon* pFound = mWindow.sf0(key, 1);
+                if (pFound)
+                    ComputeIconPositionFromMinimapCoords(&uv, pFound, 0);
+            }
+        }
+    }
+
+    if (g_fxEnabled != 0) {
+        if ((g_swLo == 0 && g_swHi == 0) ||
+            (g_fxThreshold <= (float)(__int64)g_minimapStopwatch.GetElapsed() * g_fxScale))
+            RefreshEffects(g_fxData, g_fxA, g_fxB, 1);
+    }
+
+    unsigned int mode = GetCurrentGameMode_s00e0_d100();
+    if (mode != 0x1654c01 && mode != 0x1654c05 && mode != 0x1654c02)
+        return 1;
+
+    IMinimapView* pView = WindowManager()->GetView(1);
+    if (!pView)
+        return 1;
+
+    float viewAngle = pView->GetAngle();
+    MinimapEventNode* pFound;
+    mEvents.find(&pFound, &viewAngle);
+    if (pFound == pEnd)
+        return 1;
+    if (!pFound->mpTarget)
+        return 1;
+
+    IMinimapIcon* pFocus = mWindow.sf0(pFound->mKey, 1);
+    if (!pFocus)
+        return 1;
+
+    const float* pQuad = pFocus->s38();
+    float halfW = (pQuad[2] - pQuad[0]) * 0.5f;
+    float halfH = (pQuad[3] - pQuad[1]) * 0.5f;
+    Vec2 half;
+    half.x = halfW;
+    half.y = halfH;
+    float size[2];
+    pFocus->sc0(half, size);
+
+    if (!pFound->mpTarget)
+        return 1;
+    IMinimapTargetC* pTargetC = (IMinimapTargetC*)pFound->mpTarget->Find(0x17f243b);
+    if (!pTargetC)
+        return 1;
+
+    void* pEventMode = pTargetC->GetMode();
+    void* pHandle;
+    int tag;
+    if ((uint32_t)pEventMode == 0x18c43e8) {
+        pHandle = EventAction(pTargetC, (const void*)0x18c43e8);
+        tag = 0;
+    } else if ((uint32_t)pEventMode == 0x18c6d19) {
+        pHandle = EventAction(pTargetC, (const void*)0x18c6d19);
+        tag = 0x05b598f6;
+    } else if ((uint32_t)pEventMode == 0x52aa6122) {
+        if (mode != 0x1654c01)
+            return 1;
+        pHandle = EventAction(pTargetC, (const void*)0x52aa6122);
+        tag = 0;
+    } else {
+        return 1;
+    }
+    PlayEvent(pHandle, size[0], size[1], tag);
+    return 1;
+}
+
+// @ 0x00e0de40
+bool cMinimapOverlay::ProjectEvent(const Vec2* pMapPos, Vec3* pOut)
+{
+    PlanetModel_s00e0_d100* pm = GetPlanetModel();
+    ITerrain* ter;
+    if (pm) ter = pm->mpTerrain;
+    else    ter = 0;
+    if (!ter || !ter->GetTerrainMapSet()) return false;
+
+    float angle = AngleFromPoint(pMapPos->x, pMapPos->y);
+    Vec2 uv;
+    uv.x = angle / mW;
+    uv.y = pMapPos->y / (float)mH;
+
+    Vec2* pUV = ((IMapSetProjection*)ter)->Project(&uv, &mAxisA, &mAxisB, mScale);
+    Vec3 local;
+    Vec3* pLocal = ExpandCoord(&local, pUV);
+    *pOut = *pLocal;
+
+    Vec3* pSurface = pm->DirectionToSurfacePosition(&local, pOut);
+    *pOut = *pSurface;
+    return true;
+}
+
+// @ 0x00e0df30
+AutoRefCountEvent* cMinimapOverlay::FindEvent(uint32_t key)
+{
+    MinimapEventNode* pFound;
+    mEvents.find(&pFound, &key);
+    if (pFound != (MinimapEventNode*)&mEvents.mpRoot)
+        return &pFound->mEvent;
+    return 0;
 }
 
 // @ 0x00e0df70
@@ -1934,4 +3141,288 @@ void __thiscall cSPUIMinimapWin_s00e0_f050::CRG_Minimap()
 // @ 0x00e0ff80
 void __thiscall cSPUIMinimapWin_s00e0_f050::FUN_00e0ff80()
 {
+}
+
+// @ 0x00e10580
+bool cSPUIMinimapWin_s00e1_00e0::AddIcon(uint32_t id, const cIconInfo* info, int parentID, bool flag)
+{
+    cIconInfo local(*info);
+    IWin_s00e1_00e0* parent = 0;
+    if (parentID) {
+        parent = SubWin()->GetChild(parentID, 0);
+        if (!parent)
+            return false;
+    }
+    uint32_t mode = App()->GetGameMode();
+    if (!(local.mFlags & 8) && local.mpObject) {
+        IQueried* q = local.mpObject->Query(0x1186577);
+        if (q && q->IsMinimapObject())
+            local.mFlags |= 8;
+    }
+    uint32_t imageID = PickImageID(local.mFlags, mode, local.mImageID);
+
+    Image_s00e1_00e0* image = GetImageFromLayout(mpLayout, imageID);
+    if (image)
+        image->AddRef();
+
+    WinButtonObj* wb = (WinButtonObj*)TooltipAlloc(0x888, 4, g_cityIconName, GetAllocator());
+    IButtonControl* button = 0;
+    if (wb) {
+        new (wb) WinButtonObj();
+        wb->vt0 = g_vtWinButton0;
+        wb->vt1 = g_vtWinButton1;
+        wb->vt2 = g_vtWinButton2;
+        button = (IButtonControl*)&wb->vt2;
+    }
+    IWin_s00e1_00e0* win = button->GetWindow();
+
+    DrawableObj* dr = (DrawableObj*)TooltipAlloc(0x18, 4, g_cityIconDrawableName, GetAllocator());
+    IDrawable* drawable = 0;
+    if (dr) {
+        new (dr) DrawableObj();
+        dr->vt0 = g_vtDrawable0;
+        dr->vt1 = g_vtDrawable1;
+        dr->vt2 = g_vtDrawable2;
+        drawable = (IDrawable*)((char*)dr + 0xc);
+    }
+    drawable->SetImage(image, 0);
+    float size[2];
+    size[0] = size[1] = (float)image->mWidth;
+    drawable->GetSizeIface()->SetSize(size, 0, 0);
+    button->SetDrawable(drawable);
+    win->SetID(id);
+    win->SetVisible(0);
+    win->SetColor(local.mType ? local.mType : (uint32_t)-1);
+    Math::Rectangle area(0.0f, 0.0f, size[0], size[1]);
+    win->SetArea(&area);
+
+    bool result;
+    if (local.mFlags & 2) {
+        if (mode == 0x1654c02) {
+            mbTradeRoutesDirty = true;
+        } else {
+            win->SetSize(size[0] * g_half, size[1] * g_half);
+        }
+    }
+    float inv = 1.0f / (float)sqrt((double)(local.mZ * local.mZ + local.mY * local.mY + local.mX * local.mX + g_epsilon));
+    Vector3 n;
+    n.x = inv * local.mX;
+    n.y = local.mY * inv;
+    n.z = local.mZ * inv;
+    local.mX = n.x;
+    local.mY = n.y;
+    local.mZ = n.z;
+    float f = 0.0f;
+    FUN_e0bcb0(&local.mX, &n.x, flag ? &f : 0);
+    ComputeIconPositionFromMinimapCoords(&n.x, win, false);
+    if (!parent) {
+        mIconInfos.At(id) = local;
+        IWin_s00e1_00e0* self = SubWin();
+        result = self->AddChild(win);
+        if (mode == 0x1654c10) {
+            if (local.mFlags & 0x80)
+                self->PlaceAfter(win);
+            else
+                self->PlaceBefore(win);
+        } else if (!(local.mFlags & 0x18021)) {
+            self->PlaceAfter(win);
+        } else {
+            self->PlaceBefore(win);
+        }
+    } else {
+        const float* a = parent->GetArea();
+        float x1 = a[0], y1 = a[1];
+        Math::Rectangle r(-x1 + x1, -y1 + y1, a[2] + -x1, a[3] + -y1);
+        FitWindowToArea(win, &r);
+        win->SetFlag(1, 1);
+        win->SetFlag(0x10, 1);
+        mIconInfos.At(id) = local;
+        result = parent->AddChild(win);
+        parent->PlaceAfter(win);
+    }
+    if (flag)
+        FUN_e0d100(win, f, &n.x);
+    image->Release();
+    return result;
+}
+
+// @ 0x00e10e30
+void cSPUIMinimapWin_s00e1_0e30::draw_trade_routes(EA::UTFWin::Draw2D_s00e1_0e30& draw)
+{
+    Math::Rectangle_s00e1_0e30 uv(0.0f, 0.0f, 1.0f, 1.0f);
+    uint32_t mode = SP::GetCurrentGameMode();
+    if (mode != 0x1654c01 && mode != 0x1654c02) {
+        cDotStyle styles[2] = {
+            { 0.5f, 0.5f, 0xffbfbfff, 20.0f },
+            { 1.0f, 1.0f, 0xffffffbf, 6.0f },
+        };
+        cRouteObjectVector& routes = SP::NounManager()->GetGameDataVector(
+            (GameDataFn)GameDataFn_cd7d10, (GameDataFn)GameDataFn_d3d420,
+            (GameDataFn)GameDataFn_e10060, (GameDataFn)GameDataFn_b1e500, 0x2b8a4e7)->mData;
+        for (uint32_t i = 0; i < routes.size(); ++i) {
+            cRouteObject* route = routes[i];
+            cDotStyle* style = &styles[0];
+            if (route->mRouteKind == 1)
+                style = &styles[1];
+            if (route->NumPoints() > 1) {
+                float halfWidth = style->mHalfWidth;
+                float halfHeight = style->mHalfHeight;
+                float minDistSq = (halfWidth + halfHeight) * style->mSpacing;
+                Vector3_s00e1_0e30 prev = route->mpPointsBegin[0];
+                Vector2 lastXY;
+                WorldXYZToMinimapXY(prev, lastXY, false);
+                draw.SetColor(style->mColor);
+                draw.DrawImage(Math::Rectangle_s00e1_0e30(lastXY.x - halfWidth, lastXY.y - halfHeight,
+                                               lastXY.x + halfWidth, lastXY.y + halfHeight),
+                               mpRoadIconImage, uv);
+                for (uint32_t j = 1; j < route->NumPoints(); ++j) {
+                    Vector3_s00e1_0e30 cur = route->mpPointsBegin[j];
+                    float dx = cur.x - prev.x;
+                    float dy = cur.y - prev.y;
+                    float dz = cur.z - prev.z;
+                    float step = 2.0f / sqrtf(dx * dx + dy * dy + dz * dz);
+                    float t = 0.0f;
+                    do {
+                        t = step + t;
+                        float s = 1.0f - t;
+                        Vector3_s00e1_0e30 p(prev.x * s + cur.x * t, prev.y * s + cur.y * t, prev.z * s + cur.z * t);
+                        Vector2 xy;
+                        WorldXYZToMinimapXY(p, xy, false);
+                        float ex = xy.x - lastXY.x;
+                        float ey = xy.y - lastXY.y;
+                        if (ex * ex + ey * ey > minDistSq) {
+                            lastXY = xy;
+                            draw.DrawImage(Math::Rectangle_s00e1_0e30(xy.x - halfWidth, xy.y - halfHeight,
+                                                           xy.x + halfWidth, xy.y + halfHeight),
+                                           mpRoadIconImage, uv);
+                        }
+                    } while (t < 1.0f);
+                    prev = cur;
+                }
+            }
+        }
+        return;
+    }
+
+    draw.SetColor(0xffbfbfff);
+    cPlanetModel_s00e1_0e30* model = SP::PlanetModel_s00e1_0e30();
+    cPlanet_s00e1_0e30* planet = model ? model->mpPlanet : 0;
+    if (mbTradeRoutesDirty && planet) {
+        mbTradeRoutesDirty = false;
+        mTradeRouteDots.clear();
+
+        // Points farther from the camera than the horizon are on the far side.
+        Vector2 range = { 0.0f, 1.0f };
+        Vector3_s00e1_0e30 horizon = GetHorizonPoint(planet->GetHorizonSource(), range, mWorldCameraPos,
+                                          mWorldCameraDir, mCameraParam);
+        float inv = 1.0f / sqrtf(horizon.y * horizon.y + horizon.z * horizon.z +
+                                 horizon.x * horizon.x + 1e-8f);
+        float hx = mWorldCameraPos.x - horizon.x * inv;
+        float hy = mWorldCameraPos.y - horizon.y * inv;
+        float hz = mWorldCameraPos.z - horizon.z * inv;
+        float horizonDistSq = hx * hx + hy * hy + hz * hz;
+
+        int count = planet->GetTradeRouteCount();
+        for (int i = 0; i < count; ++i) {
+            cTradeRoute* route = planet->GetTradeRoute(i);
+            if (route && route->NumPoints() > 1) {
+                Vector3_s00e1_0e30 prev = route->mpPointsBegin[0].mPosition;
+                Vector2 lastXY;
+                WorldXYZToMinimapXY(prev, lastXY, false);
+                inv = 1.0f / sqrtf(prev.x * prev.x + prev.y * prev.y + prev.z * prev.z + 1e-8f);
+                hx = mWorldCameraPos.x - prev.x * inv;
+                hy = mWorldCameraPos.y - prev.y * inv;
+                hz = mWorldCameraPos.z - prev.z * inv;
+                if (hx * hx + hy * hy + hz * hz < horizonDistSq)
+                    mTradeRouteDots.push_back(Vector3_s00e1_0e30(lastXY.x, lastXY.y, route->mpPointsBegin[0].mSize));
+
+                for (uint32_t j = 1; j < route->NumPoints(); ++j) {
+                    float size = route->mpPointsBegin[j].mSize;
+                    Vector3_s00e1_0e30 cur = route->mpPointsBegin[j].mPosition;
+                    inv = 1.0f / sqrtf(cur.y * cur.y + cur.z * cur.z + cur.x * cur.x + 1e-8f);
+                    hx = mWorldCameraPos.x - cur.x * inv;
+                    hy = mWorldCameraPos.y - cur.y * inv;
+                    hz = mWorldCameraPos.z - cur.z * inv;
+                    if (hx * hx + hy * hy + hz * hz < horizonDistSq) {
+                        float dx = cur.x - prev.x;
+                        float dy = cur.y - prev.y;
+                        float dz = cur.z - prev.z;
+                        float step = 2.0f / sqrtf(dx * dx + dy * dy + dz * dz);
+                        float t = 0.0f;
+                        do {
+                            t = step + t;
+                            float s = 1.0f - t;
+                            Vector3_s00e1_0e30 p(prev.x * s + cur.x * t, prev.y * s + cur.y * t,
+                                      prev.z * s + cur.z * t);
+                            Vector2 xy;
+                            WorldXYZToMinimapXY(p, xy, false);
+                            float ex = xy.x - lastXY.x;
+                            float ey = xy.y - lastXY.y;
+                            if (ex * ex + ey * ey > 12.0f) {
+                                lastXY = xy;
+                                mTradeRouteDots.push_back(Vector3_s00e1_0e30(xy.x, xy.y, size));
+                            }
+                        } while (t < 1.0f);
+                    }
+                    prev = cur;
+                }
+            }
+        }
+    }
+
+    uint32_t n = mTradeRouteDots.size();
+    for (uint32_t k = 0; k < n; ++k) {
+        Vector3_s00e1_0e30& dot = mTradeRouteDots[k];
+        float r = dot.z * 1.5f;
+        draw.DrawImage(Math::Rectangle_s00e1_0e30(dot.x - r, dot.y - r, dot.x + r, dot.y + r),
+                       mpRoadIconImage, uv);
+    }
+}
+
+// @ 0x00e118b0
+cInsertResult cDataArray::insert(const cDataInfo& value)
+{
+    cDataInfo* end = mpEnd;
+    cDataInfo* it = lower_bound_DataInfo(mpBegin, end, value.mKey, mCompare);
+    if (it != end && !(value.mKey < it->mKey))
+        return cInsertResult(it, false);
+    return cInsertResult(insert_at(it, value), true);
+}
+
+// @ 0x00e11910
+cDataValue& cDataArray::FindOrInsert(uint32_t key)
+{
+    cDataInfo* end = mpEnd;
+    cDataInfo* it = find_DataInfo(*this, key);
+    if (it == end) {
+        it = insert(cDataInfo(key)).mpNode;
+        it->mValue.mId = key;
+        it->mValue.mbDirty = true;
+    }
+    return it->mValue;
+}
+
+// @ 0x00e119c0
+bool cSPUIMinimapWin_s00e1_0e30::OnRebuild(EA::UTFWin::RenderContext_s00e1_0e30* ctx)
+{
+    RebuildBaseWindow(this ? &mWindow : 0);
+    EA::UTFWin::Draw2D_s00e1_0e30* draw = ctx->Begin2D(0);
+    if (mpTexture) {
+        draw->DrawImage(Math::Rectangle_s00e1_0e30(0.0f, 0.0f,
+                                        (float)mStopwatchField0, (float)mStopwatchField1),
+                        mpTexture,
+                        Math::Rectangle_s00e1_0e30(0.0f, 0.0f, 1.0f, 1.0f));
+    }
+    draw_trade_routes(*draw);
+    ctx->End2D();
+    cHashable* border = mpBorderRenderable;
+    if (border) {
+        cDataValue& value = gDataMap.FindOrInsert(border->GetID());
+        if (value.mbDirty) {
+            value.draw_civilization_borders(ctx, this);
+            value.mbDirty = false;
+        }
+        ctx->AddRenderable(value.mPtr0.mpObject);
+    }
+    return true;
 }
