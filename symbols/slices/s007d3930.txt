@@ -16,8 +16,8 @@
 007d4300 ?ReadDescription@@YAXPAXHPAUcGameModelDescription_s007d_3930@SP@@@Z  # ReadDescription migrated from s007d3930 (verbatim, slice spelling)
 007d44a0  Wrapper::Func  # forwards to a virtual at slot 0x16c with (this,1)
 007d44c0 ?MakeState@@YAPAXPAXH@Z  # MakeState migrated from s007d3930 (verbatim, slice spelling)
-007d4540  key-presence test writing a 0x102-tagged key
-007d45d0  RandomRange  # random double in [min,max]
+007d4540 ?TestKey@@YAIPAXPBIPAIH@Z  # TestKey migrated from s007d3930 (verbatim, slice spelling)
+007d45d0 ?RandomRange@@YANMM@Z  # RandomRange migrated from s007d3930 (verbatim, slice spelling)
 007d4620 ?UnknownStore@cEffectParams@@QAEXHPAUIUnknown32@@@Z  # cEffectParams::UnknownStore migrated from s007d3930 (verbatim, slice spelling)
 007d4670 ?Tick@cEffectNode@@QAEXPAX@Z  # cEffectNode::Tick migrated from s007d3930 (verbatim, slice spelling)
 007d4730 ?HandleParam@cEffectNode@@QAEDHPAMPAX@Z  # cEffectNode::HandleParam migrated from s007d3930 (verbatim, slice spelling)
