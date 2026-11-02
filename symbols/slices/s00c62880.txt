@@ -1,6 +1,7 @@
 00c4ad50 ?Init@cSPMission@SP@@UAE_NXZ  # SP::cSPMission::Init (callee of s00c62880, named from the dev publics; slice address comment)
 00c62880 Simulator::cMissionUseTool::cMissionUseTool  # PDB-resolved
-00c62a80 SP::cSPMissionUseTool::Init  # PDB-resolved
+00c62a80 ?M_InitUseTool@@YIXPAXH@Z  # M_InitUseTool migrated from s00c62880 (verbatim, slice spelling)
+00c62b30 ?M_C62b30@@YI_NPAXH@Z  # M_C62b30 migrated from s00c62880 (verbatim, slice spelling)
 00c62cc0 Simulator::cMissionWar::cMissionWar  # PDB-resolved
 00c62ed0 ?M_GetUIMedium@@YIXPAXH0@Z  # M_GetUIMedium migrated from s00c62880 (verbatim, slice spelling)
 00c62f60 ?M_GetUILong@@YIXPAXH0@Z  # M_GetUILong migrated from s00c62880 (verbatim, slice spelling)

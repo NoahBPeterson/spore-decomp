@@ -1,0 +1,3 @@
+# va  diff-bytes  reason (compiled /O2 /MD /Gy /TP /arch:SSE /fp:fast)
+00c62a80 152 cSPMissionUseTool::Init: complete property-vector ingest and 12-byte key append (inline fast path + 0x4e3e10 growth); named property result layout. difftest UNSUPPORTED (0/400 valid; fake-arity/fault-read on opaque property helpers) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00c62b30 349 cSPMissionUseTool::Init: complete base Init, vtable 0x16c/0x170, byte-vector fill, PickPlanet options and cleanup. difftest UNSUPPORTED (0/400 valid; fault-read on opaque PickPlanet/planet helpers) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
