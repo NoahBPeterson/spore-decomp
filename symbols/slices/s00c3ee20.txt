@@ -13,10 +13,10 @@
 00c3f6f0 ??0cSolarHitSphere@@QAE@XZ  # cSolarHitSphere::cSolarHitSphere
 00c3f850 ?Cast@cHitSphere@@QAEPAXPAX@Z  # cHitSphere::Cast migrated from s00c3ee20 (verbatim, slice spelling)
 00c3f890 ?LoadModelChecked@cInteractableObject@@QAE_NPAX@Z  # cInteractableObject::LoadModelChecked migrated from s00c3ee20 (verbatim, slice spelling)
-00c3f8b0 ?SetModelState@cInteractableObject@@QAEXH_N@Z  # void cInteractableObject::SetModelState
+00c3f8b0 ?SetModelState@cInteractableObject@@QAEXH_N@Z  # cInteractableObject::SetModelState migrated from s00c3ee20 (verbatim, slice spelling)
 00c3f920 ?GetFieldValues@cInteractableObject@@QAEHH@Z  # int cInteractableObject::GetFieldValues
-00c3f9b0 ??0cInteractableObject@@QAE@XZ  # cInteractableObject::cInteractableObject
-00c3fa70 ?Destroy@cInteractableObject@@QAEXH@Z  # void cInteractableObject::~cInteractableObject
+00c3f9b0 ??0cInteractableObject@@QAE@XZ  # cInteractableObject::cInteractableObject migrated from s00c3ee20 (verbatim, slice spelling)
+00c3fa70 ?Destroy@cInteractableObject@@QAEXH@Z  # cInteractableObject::Destroy migrated from s00c3ee20 (verbatim, slice spelling)
 00c3fad0 ?ClearEffectState@cInteractableObject@@QAEXXZ  # cInteractableObject::ClearEffectState migrated from s00c3ee20 (verbatim, slice spelling)
 00c3fb00 ?Write@cInteractableObject@@QAE_NPAX@Z  # cInteractableObject::Write migrated from s00c3ee20 (verbatim, slice spelling)
 00c3fba0 ?Read@cInteractableObject@@QAE_NPAX@Z  # cInteractableObject::Read migrated from s00c3ee20 (verbatim, slice spelling)

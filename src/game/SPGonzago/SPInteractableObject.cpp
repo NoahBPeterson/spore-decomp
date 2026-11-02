@@ -211,6 +211,9 @@ bool ReadInteractableSubobject(void* pData);
 void* CastSpatialObjectBase(void* pObject);
 void SetModelVariant(cSpatialObject* pObject, int nVariant, int bA, int bB);
 void ShutdownMarkerExtras();
+void FreeOrnamentMembers();
+void FreeGameDataMembers();
+void FreeInteractableInherited();
 extern const void* sInteractableFields;
 // ---- items of slice s00c3ee20 end
 
@@ -231,6 +234,47 @@ void* cHitSphere::Cast(void* pType)
 bool cInteractableObject::LoadModelChecked(void* pModel)
 {
     return cSpatialObject::LoadModel(pModel);
+}
+
+// @ 0x00c3f8b0
+void cInteractableObject::SetModelState(int nState, bool bForce)
+{
+    if (((uint8_t)nState == mModelStateIndex) && !bForce)
+        return;
+
+    mModelStateIndex = (uint8_t)nState;
+    if (mModelReady == 0)
+        return;
+
+    if (GetModel() != nullptr) {
+        va8(nState, 1, 0);
+    }
+}
+
+// @ 0x00c3f9b0
+cInteractableObject::cInteractableObject()
+{
+    mModelId = 0;
+    mOrnamentId = 0;
+    mScale = 0.0f;
+    mEffectState = 0;
+    mpOwner = nullptr;
+    mDefinitionWord = 0;
+    mPad198[0] = 0;
+    mModelStateIndex = 1;
+}
+
+// @ 0x00c3fa70
+void cInteractableObject::Destroy(int bDelete)
+{
+    (void)bDelete;
+    FreeOrnamentMembers();
+    if (mpOwner != nullptr)
+        mpOwner->Release();
+    if (*(IRefCounted**)((uint8_t*)this + 0x108) != nullptr)
+        (*(IRefCounted**)((uint8_t*)this + 0x108))->Release();
+    FreeInteractableInherited();
+    FreeGameDataMembers();
 }
 
 // @ 0x00c3fad0
