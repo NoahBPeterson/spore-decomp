@@ -1,0 +1,12 @@
+# source  symbol  va  flags
+../src/game/SPGonzago/_at_00e80000.cpp  ?FUN_00e82500@@YAXH@Z  00e82500  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00e80000.cpp  ?FUN_00e85190@@YAXXZ  00e85190  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00e80000.cpp  ?FUN_00e868f0@@YAXPAUSphereTree@@PBUVector3_s00e8_5dc0@@MH@Z  00e868f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00e80000.cpp  ?FUN_00e86ad0@@YAXXZ  00e86ad0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00e80000.cpp  ?FUN_00e86ae0@@YAXXZ  00e86ae0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00e80000.cpp  ?FUN_00e86b60@@YAXXZ  00e86b60  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00e80000.cpp  ?treePush@@YAPAUEffRec@@PAUEffTree@@PAU1@1@Z  00e86d40  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00e80000.cpp  ?treeInsert@@YAXPAUEffTree@@@Z  00e86f70  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00e80000.cpp  ?treeInsertPending@@YAXXZ  00e87000  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00e80000.cpp  ?collectSphere@@YAHPAUEffTree@@PBM1PAPAXHM@Z  00e87200  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00e80000.cpp  ??0cCreatureView@SP@@QAE@XZ  00e8bc80  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

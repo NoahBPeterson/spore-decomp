@@ -1,3 +1,11 @@
-00e85dc0 ComputeShapeMatchGoals  # descriptive: Apq = sum m(x-c)(s q)^T, Jacobi, T = beta*Apq*Aqq/s^2 + (1-beta)*R, goals = (s q) T + c
-00e853c0 ComputeCenterOfMass  # cdecl (n, positions, masses, Vector3* out); starts from the zero vector at 0x016c4584
 00e851c0 JacobiDecompose  # cdecl (const Matrix3& m, Matrix3& V = identity 0x016c4590 then rotations, Matrix3& D = copy of m)
+00e853c0 ComputeCenterOfMass  # cdecl (n, positions, masses, Vector3* out); starts from the zero vector at 0x016c4584
+00e85dc0 ?ComputeShapeMatchGoals@@YAXHPBUVector3_s00e8_5dc0@@PBMABUMatrix3@@0MMPAU1@AAU2@4@Z  # ComputeShapeMatchGoals migrated from s00e85dc0 (verbatim, slice spelling)
+00e86880 ?FUN_00e86880@@YAPAUNode@@PAUSphereTree@@PBUVector3_s00e8_5dc0@@MH@Z  # FUN_00e86880 migrated from s00e85dc0 (verbatim, slice spelling)
+00e868f0 ?FUN_00e868f0@@YAXPAUSphereTree@@PBUVector3_s00e8_5dc0@@MH@Z  # FUN_00e868f0 migrated from s00e85dc0 (verbatim, slice spelling)
+00e86930 ?FUN_00e86930@@YAXPAUSphereTree@@PAUNode@@@Z  # FUN_00e86930 migrated from s00e85dc0 (verbatim, slice spelling)
+00e86980 ?FUN_00e86980@@YAXPAUSphereTree@@PAUNode@@@Z  # FUN_00e86980 migrated from s00e85dc0 (verbatim, slice spelling)
+00e86ad0 ?FUN_00e86ad0@@YAXXZ  # FUN_00e86ad0 migrated from s00e85dc0 (verbatim, slice spelling)
+00e86ae0 ?FUN_00e86ae0@@YAXXZ  # FUN_00e86ae0 migrated from s00e85dc0 (verbatim, slice spelling)
+00e86b60 ?FUN_00e86b60@@YAXXZ  # FUN_00e86b60 migrated from s00e85dc0 (verbatim, slice spelling)
+00e86bb0 ?FUN_00e86bb0@@YAXPBUVector3_s00e8_5dc0@@M0MPAU1@PAM@Z  # FUN_00e86bb0 migrated from s00e85dc0 (verbatim, slice spelling)

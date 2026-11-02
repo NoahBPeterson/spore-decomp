@@ -8,3 +8,6 @@
 00e84d90 ?FUN_00e84d90@@YAXXZ  # FUN_00e84d90 migrated from s00e84850 (verbatim, slice spelling)
 00e84e40 ?FUN_00e84e40@@YAXXZ  # FUN_00e84e40 migrated from s00e84850 (verbatim, slice spelling)
 00e84f30 ?GetPollinatedCell@@YAXXZ  # GetPollinatedCell migrated from s00e84850 (verbatim, slice spelling)
+00e85190 ?FUN_00e85190@@YAXXZ  # FUN_00e85190 migrated from s00e84850 (verbatim, slice spelling)
+00e851c0 ?JacobiDecompose@@YAXXZ  # JacobiDecompose migrated from s00e84850 (verbatim, slice spelling)
+00e853c0 ?ComputeCenterOfMass@@YAXXZ  # ComputeCenterOfMass migrated from s00e84850 (verbatim, slice spelling)

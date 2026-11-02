@@ -6,12 +6,12 @@
 00e821d0 FUN_00e821d0  # load resource by id (returns bool)
 00e82280 ?FUN_00e82280@@YAXXZ  # FUN_00e82280 migrated from s00e819b0 (verbatim, slice spelling)
 00e822c0 ?LoadResource@SP@@YAXPAH@Z  # LoadResource migrated from s00e819b0 (verbatim, slice spelling)
-00e82340 FUN_00e82340  # allocate list node (0x18) and copy key
+00e82340 ?FUN_00e82340@@YGHPAH@Z  # FUN_00e82340 migrated from s00e819b0 (verbatim, slice spelling)
 00e823a0 SP::ResourceGetFromHandle
-00e82420 FUN_00e82420  # find-or-insert key in intrusive list, return value ptr
-00e82490 FUN_00e82490  # init list sentinel
+00e82420 ?FUN_00e82420@@YAPAHHH@Z  # FUN_00e82420 migrated from s00e819b0 (verbatim, slice spelling)
+00e82490 ?FUN_00e82490@@YAXXZ  # FUN_00e82490 migrated from s00e819b0 (verbatim, slice spelling)
 00e824d0 FUN_00e824d0  # destroy list + sentinel
-00e82500 FUN_00e82500  # thiscall wrapper: 0x28,arg
+00e82500 ?FUN_00e82500@@YAXH@Z  # FUN_00e82500 migrated from s00e819b0 (verbatim, slice spelling)
 00e82520 FUN_00e82520  # pack 3 normalized floats to RGB (custom xmm ABI)
 00e82620 ?FUN_00e82620@@YAHHPAH@Z  # FUN_00e82620 migrated from s00e819b0 (verbatim, slice spelling)
 00e82690 ?FUN_00e82690@@YAXHM@Z  # FUN_00e82690 migrated from s00e819b0 (verbatim, slice spelling)

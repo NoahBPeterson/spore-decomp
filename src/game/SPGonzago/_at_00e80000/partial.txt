@@ -1,0 +1,4 @@
+# va  diff-bytes  reason
+00e82340  62  PARTIAL: node allocator; operator_new mechanism and vtable-refcount call shapes differ (difftest FAIL call #0). flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00e82420  55  PARTIAL: intrusive list find-or-insert; the else/tail handling and node ctor argument packing differ (difftest FAIL execution). flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00e82490  18  PARTIAL: sentinel list init; operator_new with the EASTL source string argument differs (difftest FAIL call #0). flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast

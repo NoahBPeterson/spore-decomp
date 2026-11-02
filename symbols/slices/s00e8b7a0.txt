@@ -1,3 +1,4 @@
+00e8bc80 ??0cCreatureView@SP@@QAE@XZ  # cCreatureView::cCreatureView migrated from s00e8b7a0 (verbatim, slice spelling)
 00e8bd10 ?FUN_00e8bd10@SP@@YGPAVcCreatureView@1@PAX@Z  # FUN_00e8bd10 migrated from s00e8b7a0 (verbatim, slice spelling)
 00e8bd70 ?FUN_00e8bd70@cCreatureView@SP@@QAEX_N@Z  # cCreatureView::FUN_00e8bd70 migrated from s00e8b7a0 (verbatim, slice spelling)
 00e8bda0 ?FUN_00e8bda0@cCreatureView@SP@@QAE_NXZ  # cCreatureView::FUN_00e8bda0 migrated from s00e8b7a0 (verbatim, slice spelling)
