@@ -1,15 +1,17 @@
+00c4ad50 ?Init@cSPMission@SP@@UAE_NXZ  # SP::cSPMission::Init (callee of s00c62880, named from the dev publics; slice address comment)
 00c62880 Simulator::cMissionUseTool::cMissionUseTool  # PDB-resolved
 00c62a80 SP::cSPMissionUseTool::Init  # PDB-resolved
 00c62cc0 Simulator::cMissionWar::cMissionWar  # PDB-resolved
-00c62ed0 SP::cSPMissionWar::GetUIMediumDescription  # PDB-resolved
-00c62f60 SP::cSPMissionWar::GetUILongDescription  # PDB-resolved
-00c62ff0 mission-war target score helper
-00c63130 SP::cSPMissionWar::FailureCityDestroyed  # PDB-resolved
-00c63170 SP::cSPMissionWar::OnTimerExpire  # PDB-resolved
-00c631b0 SP::cSPMissionWar::ReturnForRewards  # PDB-resolved
-00c631f0 SP::cSPMissionWar::Update  # PDB candidate
-00c63380 SP::cSPMissionWar::Init  # PDB-resolved
-00c634a0 SP::cSPMissionWar::GetUIShortDescription  # PDB-resolved
-00c63570 SP::cSPMissionWar::GetProgressDisplayText  # PDB-resolved
-00c635c0 SP::cSPMissionWar::GetNumCities  # PDB-resolved
-00c63740 SP::cSPMissionWar::GetTagString  # PDB-resolved
+00c62ed0 ?M_GetUIMedium@@YIXPAXH0@Z  # M_GetUIMedium migrated from s00c62880 (verbatim, slice spelling)
+00c62f60 ?M_GetUILong@@YIXPAXH0@Z  # M_GetUILong migrated from s00c62880 (verbatim, slice spelling)
+00c62ff0 ?M_C62ff0@@YIMPAXHH0@Z  # M_C62ff0 migrated from s00c62880 (verbatim, slice spelling)
+00c63130 ?M_FailureCityDestroyed@@YIXPAXH@Z  # M_FailureCityDestroyed migrated from s00c62880 (verbatim, slice spelling)
+00c63170 ?M_OnTimerExpire@@YIXPAXH@Z  # M_OnTimerExpire migrated from s00c62880 (verbatim, slice spelling)
+00c631b0 ?M_ReturnForRewards@@YIXPAXH@Z  # M_ReturnForRewards migrated from s00c62880 (verbatim, slice spelling)
+00c631f0 ?M_C631f0@@YIHPAXHH@Z  # M_C631f0 migrated from s00c62880 (verbatim, slice spelling)
+00c63330 ?M_C63330@@YIXPAXH@Z  # M_C63330 migrated from s00c62880 (verbatim, slice spelling)
+00c63380 ?M_InitWar@@YI_NPAXH@Z  # M_InitWar migrated from s00c62880 (verbatim, slice spelling)
+00c634a0 ?M_GetUIShort@@YIXPAXH0@Z  # M_GetUIShort migrated from s00c62880 (verbatim, slice spelling)
+00c63570 ?M_GetProgressDisplayText@@YIXPAXH0@Z  # M_GetProgressDisplayText migrated from s00c62880 (verbatim, slice spelling)
+00c635c0 ?M_GetNumCities@@YIHPAXH@Z  # M_GetNumCities migrated from s00c62880 (verbatim, slice spelling)
+00c63740 ?M_GetTagString@@YIIPAXHH0@Z  # M_GetTagString migrated from s00c62880 (verbatim, slice spelling)

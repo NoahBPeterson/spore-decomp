@@ -1,0 +1,8 @@
+# source  symbol  va  flags
+../src/game/SPGonzago/SPMissionWar.cpp  ?M_GetUIMedium@@YIXPAXH0@Z  00c62ed0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPMissionWar.cpp  ?M_GetUILong@@YIXPAXH0@Z  00c62f60  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPMissionWar.cpp  ?M_FailureCityDestroyed@@YIXPAXH@Z  00c63130  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPMissionWar.cpp  ?M_OnTimerExpire@@YIXPAXH@Z  00c63170  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPMissionWar.cpp  ?M_ReturnForRewards@@YIXPAXH@Z  00c631b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPMissionWar.cpp  ?M_C63330@@YIXPAXH@Z  00c63330  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPMissionWar.cpp  ?M_GetProgressDisplayText@@YIXPAXH0@Z  00c63570  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
