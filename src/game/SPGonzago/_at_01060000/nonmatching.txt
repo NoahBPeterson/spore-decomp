@@ -1,0 +1,4 @@
+# va  diff-bytes  reason
+01064000 85 5/5 valid inputs mismatched (first: execution); OnMessage; register-allocation tie - original keeps self in esi + temp in edi, ours swaps (123 vs 131 bytes) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
+01064080 996 5/5 valid inputs mismatched (first: call #1 depth 1 arg order); RefreshFeed; large reconstruction, feed ctor arg/ecx ordering differs (1240 vs 1196 bytes) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
+01065860 109 flags: /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE

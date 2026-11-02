@@ -1,5 +1,8 @@
 01064f00 ?DefineLeftScroll_01064f00@cEmpireB@@QAE_NHPAX@Z  # cEmpireB::DefineLeftScroll_01064f00 migrated from s01064990 (verbatim, slice spelling)
 01064fd0 ?Init_01064fd0@cEmpire_s0106_4990@@QAEXXZ  # cEmpire_s0106_4990::Init_01064fd0 migrated from s01064990 (verbatim, slice spelling)
+01065510 ?Swap_01065510@cString12@@QAEXPAV1@@Z  # cString12::Swap_01065510 migrated from s01064990 (verbatim, slice spelling)
+010655a0 ?PopulateFeed_010655a0@cEmpire@@QAEXXZ  # cEmpire::PopulateFeed_010655a0 migrated from s01064990 (verbatim, slice spelling)
+01065860 ?Resize_01065860@cString12@@QAEXI@Z  # cString12::Resize_01065860 migrated from s01064990 (verbatim, slice spelling)
 01065ab0 ?ShowBakeTimeSplash_01065ab0@cSPUISpace@@QAEXXZ  # cSPUISpace::ShowBakeTimeSplash_01065ab0 migrated from s01064990 (verbatim, slice spelling)
 01065af0 ?HideBakeTimeSplash_01065af0@cSPUISpace@@QAEXXZ  # cSPUISpace::HideBakeTimeSplash_01065af0 migrated from s01064990 (verbatim, slice spelling)
 01065b30 ?IsBakeSplashShown_01065b30@cSPUISpace@@QAE_NXZ  # cSPUISpace::IsBakeSplashShown_01065b30 migrated from s01064990 (verbatim, slice spelling)

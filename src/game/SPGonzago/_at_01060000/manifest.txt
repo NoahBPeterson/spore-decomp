@@ -1,0 +1,2 @@
+# source  symbol  va  flags
+../src/game/SPGonzago/_at_01060000.cpp  ?Swap_01065510@cString12@@QAEXPAV1@@Z  01065510  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
