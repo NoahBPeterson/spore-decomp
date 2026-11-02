@@ -1,3 +1,7 @@
 # source  symbol  va  flags
+../src/game/SPGonzago/SPNpcTribeController.cpp  ?ForEach@@YA_NPAVcTimerFactory@@PAVcTimerMap@@@Z  00cc5010  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPNpcTribeController.cpp  ??0cEventTimerValue@@QAE@ABU0@@Z  00cc5230  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPNpcTribeController.cpp  ?cWorldMapReset@@YAXXZ  00cc5290  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPNpcTribeController.cpp  ?NukeSubtree@cTimerMap@@QAEXPAUcTimerNode@@@Z  00cc5390  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPNpcTribeController.cpp  ??0cEventTimerValue@@QAE@PAPAVcIRefCounted@@ABVcGonzagoTimer@@@Z  00cc53e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPNpcTribeController.cpp  ?FUN_0135d100@@YAXXZ  0135d100  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
