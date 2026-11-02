@@ -1,5 +1,8 @@
 005bfc90 ?SetTagField@cSPEditorNaming@SP@@QAEXPB_W@Z  # SP::cSPEditorNaming::SetTagField (callee of s00634490, named from the dev publics; slice address comment)
 005dd070 ?Show@cSPEditorUI@SP@@QAEXXZ  # SP::cSPEditorUI::Show (callee of s00634490, named from the dev publics; slice address comment)
+00634490 ?RefreshAfterDelete@PhotoBrowser@@QAEXXZ  # PhotoBrowser::RefreshAfterDelete migrated from s00634490 (verbatim, slice spelling)
+00634520 ?NextPhoto@PhotoBrowser@@QAEXXZ  # PhotoBrowser::NextPhoto migrated from s00634490 (verbatim, slice spelling)
+00634570 ?PrevPhoto@PhotoBrowser@@QAEXXZ  # PhotoBrowser::PrevPhoto migrated from s00634490 (verbatim, slice spelling)
 006345b0 ??0cPlayModeTokenTranslator@@QAE@XZ  # cPlayModeTokenTranslator::cPlayModeTokenTranslator migrated from s00634490 (verbatim, slice spelling)
 00634640 FixSlashes  # static helper (edi = wstring*): normalizes \ and / to the property-selected separator and collapses runs
 00634b10 ?AttachWinProc@cSPPlayModeUI_s0063_4490@@QAEXXZ  # cSPPlayModeUI_s0063_4490::AttachWinProc migrated from s00634490 (verbatim, slice spelling)

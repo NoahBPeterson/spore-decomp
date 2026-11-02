@@ -1,4 +1,4 @@
-# va  diff-bytes  reason (compiled with /O2 /MD /Gy /TP /arch:SSE /fp:fast)
+# va  diff-bytes  reason
 0062fee0 39 GetHeaderInfo: complete; shared Get(...) call tail (push 4/2 then common call) not reproduced
 00630360 41 FindPhotoByGuid: complete; original uses 4 callee-saved regs (extra element copy in loop)
 00630470 15 IsPhotosWriting: complete; this/job register swap (edi/esi)
@@ -22,3 +22,4 @@
 00632e90 103 PhotoTypeMap::operator[] (find-or-insert): complete; original passes iterator and value_type by value to DoInsertKey; equiv FAIL (ours faults reading unmapped memory where original returns); marker/symbol now resolves
 00633230 125 MarkPhotoTypeForGuid: complete; find() out-param shape and operator[] call shape differ
 00633440 193 CapturePixels: complete; same entry-address folding as CopyPixelsToRaster
+00634520 32 NextPhoto: complete; original re-reads the vector size after the index increment and again for the clamp (no CSE), ours hoists/CSEs it flags: /O2 /MD /Gy /TP /GS-

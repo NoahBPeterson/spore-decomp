@@ -1,4 +1,4 @@
-// src/game/SPEditors/SPPlayModePhotoBrowser.cpp -- migrated from slice(s) s00633560, s00632780, s00631810, s00630750, s0062f6e0 by tools/migrate/rewrite.py
+// src/game/SPEditors/SPPlayModePhotoBrowser.cpp -- migrated from slice(s) s00634490, s00633560, s00632780, s00631810, s00630750, s0062f6e0 by tools/migrate/rewrite.py
 // Object file: SPEditors/SPPlayModePhotoBrowser.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -14,6 +14,13 @@
 #include "EA/IO/FileStream.h"
 #include "SP/cPlayModePhoto.h"
 #include "SP/cJob.h"
+#include "SP/cPropertyList.h"
+#include "EA/Stopwatch.h"
+#include "SP/cPlayModeTokenTranslator.h"
+#include "SP/cSPEditorNaming.h"
+#include "SP/cSPEditorUI.h"
+#include "SP/cString.h"
+#include "SP/cStringTokenTranslator.h"
 #pragma intrinsic(_InterlockedExchangeAdd, _InterlockedDecrement, _rotl)
 
 // ---- items of slice s0062f6e0 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -175,7 +182,6 @@ extern void __fastcall ExitDeleteMode(void*);
 extern void __fastcall ExitMoveMode(void*);
 typedef void (__thiscall *TF0)(void*);
 // ---- items of slice s00631810 end
-
 
 // ---- items of slice s00632780 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern wchar_t sEmptyWStr[];   // 0x01667bac, the shared empty string
@@ -449,6 +455,52 @@ struct ImageRes {
     void* operator new(unsigned int, char*, int, int, int, int); // 0x00f473a0
 // ---- items of slice s00632780 end
 
+// ---- items of slice s00634490 begin (TODO(rewrite): local stubs, replace by canonical classes)
+struct cJob_s0063_4490 {
+    int ContinueJob();  // 0x0068f970 (cJob::ContinueJob)
+};
+struct PhotoTypeMap_s0063_4490 {
+    uint32_t mCompare;
+    RBAnchor mAnchor;
+    uint32_t mnSize;
+    void DoNuke(RBNode* n);   // 0x009a9600
+    void clear() {
+        DoNuke(mAnchor.mpNodeParent);
+        mAnchor.mpNodeRight = (RBNode*)&mAnchor;
+        mAnchor.mpNodeLeft = (RBNode*)&mAnchor;
+        mAnchor.mpNodeParent = 0;
+        mAnchor.mColor = 0;
+        mnSize = 0;
+    }
+};
+struct PhotoBrowser {
+    virtual void v0();
+    uint32_t mPhotosBegin;      // +0x04
+    uint32_t mPhotosEnd;        // +0x08
+    uint32_t pad0[3];
+    uint32_t mCurrentFirstPhotoIndex;      // +0x18
+    uint32_t mCurrentSelectedPhotoIndex;   // +0x1c
+    uint32_t pad1[(0x68 - 0x20) / 4];
+    PhotoTypeMap_s0063_4490 mPhotoTypeMap;            // +0x68
+    uint32_t pad2[(0xea4 - 0x80) / 4];
+    uint32_t mPhotoCount;                  // +0xea4
+
+    uint32_t Size() const { return (uint32_t)((int)(mPhotosEnd - mPhotosBegin) >> 2); }
+    cJob_s0063_4490* IsPhotosWriting();               // 0x00630470
+    uint32_t PhotoCountChanged();          // 0x00631b30
+    void FUN_00634030();
+    void ClearLoadedPhotos();              // 0x00632b00
+    void ShowImageThumbnail();             // 0x00633cc0
+    void UpdatePhotoCountText();           // 0x00630d10
+    void ReleaseAsyncHandle();             // 0x006303a0
+    void FUN_00633ea0();
+
+    void RefreshAfterDelete();
+    void NextPhoto();
+    void PrevPhoto();
+};
+// ---- items of slice s00634490 end
+
 // @ 0x0062fda0
 void SP::cSPPlayModePhotoBrowser::EnterMoveMode()
 {
@@ -464,11 +516,6 @@ void SP::cSPPlayModePhotoBrowser::EnterMoveMode()
     mUI->SetUIGroupVisible(0x41a30c0, false);
 }
 
-
-
-
-
-
 // @ 0x0062fe40
 void SP::cSPPlayModePhotoBrowser::EnterDeleteMode()
 {
@@ -483,11 +530,6 @@ void SP::cSPPlayModePhotoBrowser::EnterDeleteMode()
     mUI->SetUIGroupVisible(0x41a30c0, false);
     mUI->SetUIGroupVisible(0x410cf00, false);
 }
-
-
-
-
-
 
 // @ 0x0062fee0
 int __stdcall GetHeaderInfo(void* data, int kind)
@@ -513,11 +555,6 @@ int __stdcall GetHeaderInfo(void* data, int kind)
     return 0;
 }
 
-
-
-
-
-
 // @ 0x00630090
 void SP::cSPPlayModePhotoBrowser::SelectAll(bool v)
 {
@@ -530,11 +567,6 @@ void SP::cSPPlayModePhotoBrowser::SelectAll(bool v)
         p->bIsSelected = v;
     }
 }
-
-
-
-
-
 
 // @ 0x006300d0
 UIImageView* __stdcall cSPPlayModePhotoBrowser::GetImageFromRaster(void* raster)
@@ -562,11 +594,6 @@ UIImageView* __stdcall cSPPlayModePhotoBrowser::GetImageFromRaster(void* raster)
     return 0;
 }
 
-
-
-
-
-
 // @ 0x006301a0
 void SP::cSPPlayModePhotoBrowser::ExitDeleteMode()
 {
@@ -587,11 +614,6 @@ void SP::cSPPlayModePhotoBrowser::ExitDeleteMode()
     mUI->ToggleUIGroup(0x3f6c188, false);
     mUI->ToggleUIGroup(0x3f6c1b4, false);
 }
-
-
-
-
-
 
 // @ 0x00630280
 void SP::cSPPlayModePhotoBrowser::ExitMoveMode()
@@ -614,11 +636,6 @@ void SP::cSPPlayModePhotoBrowser::ExitMoveMode()
     mUI->ToggleUIGroup(0x3f6c1b4, false);
 }
 
-
-
-
-
-
 // @ 0x00630360
 cPlayModePhoto* cSPPlayModePhotoBrowser::FindPhotoByGuid(uint32_t guid)
 {
@@ -636,11 +653,6 @@ cPlayModePhoto* cSPPlayModePhotoBrowser::FindPhotoByGuid(uint32_t guid)
     return result;
 }
 
-
-
-
-
-
 // @ 0x006303a0
 void cSPPlayModePhotoBrowser::ReleaseAsyncHandle()
 {
@@ -656,11 +668,6 @@ void cSPPlayModePhotoBrowser::ReleaseAsyncHandle()
         mAsyncHandle = 0;
     }
 }
-
-
-
-
-
 
 // @ 0x00630410
 cJob* cSPPlayModePhotoBrowser::CancelAllPendingLoadJobs()
@@ -681,11 +688,6 @@ cJob* cSPPlayModePhotoBrowser::CancelAllPendingLoadJobs()
     return found;
 }
 
-
-
-
-
-
 // @ 0x00630470
 int cSPPlayModePhotoBrowser::IsPhotosWriting()
 {
@@ -705,11 +707,6 @@ int cSPPlayModePhotoBrowser::IsPhotosWriting()
     }
     return 0;
 }
-
-
-
-
-
 
 // @ 0x006304e0
 bool cSPPlayModePhotoBrowser::AnyWriteJobActive()
@@ -735,11 +732,6 @@ bool cSPPlayModePhotoBrowser::AnyWriteJobActive()
     return any;
 }
 
-
-
-
-
-
 // @ 0x00630540
 JobRef& JobRef::operator=(const JobRef& rhs)
 {
@@ -754,11 +746,6 @@ JobRef& JobRef::operator=(const JobRef& rhs)
     }
     return *this;
 }
-
-
-
-
-
 
 // @ 0x00630580
 void cSPPlayModePhotoBrowser::UpdatePageButtons(int unused)
@@ -775,11 +762,6 @@ void cSPPlayModePhotoBrowser::UpdatePageButtons(int unused)
     }
 }
 
-
-
-
-
-
 // @ 0x00630630
 uint32_t wstring16::find_first_of(const wchar_t* p, uint32_t position) const
 {
@@ -794,22 +776,12 @@ uint32_t wstring16::find_first_of(const wchar_t* p, uint32_t position) const
     return (uint32_t)-1;
 }
 
-
-
-
-
-
 // @ 0x00630690
 int wstring16::compare(uint32_t pos, uint32_t n, const wchar_t* p) const
 {
     uint32_t len = (uint32_t)(mpEnd - mpBegin) - pos;
     return CompareW(mpBegin + pos, mpBegin + pos + min_alt(len, n), p, p + CharStrlen(p));
 }
-
-
-
-
-
 
 // @ 0x006306f0
 LocaleMsg::~LocaleMsg()
@@ -823,11 +795,6 @@ LocaleMsg::~LocaleMsg()
         mask = _rotl(mask, 1);
     }
 }
-
-
-
-
-
 
 // @ 0x00630750
 void* __fastcall FUN_00630750(void* self, short* /*unused edx arg*/, short* first, short* last, int /*unused*/)
@@ -845,10 +812,6 @@ void* __fastcall FUN_00630750(void* self, short* /*unused edx arg*/, short* firs
   *e = 0;
   return self;
 }
-
-
-
-
 
 // @ 0x006307a0
 void __fastcall FUN_006307a0(void* self, int* out, int* pos, unsigned* val, char flag)
@@ -873,10 +836,6 @@ void __fastcall FUN_006307a0(void* self, int* out, int* pos, unsigned* val, char
   *out = (int)node;
 }
 
-
-
-
-
 // @ 0x006308d0
 void* __fastcall FUN_006308d0(void* self, char flag)
 {
@@ -900,17 +859,9 @@ void* __fastcall FUN_006308d0(void* self, char flag)
   return self;
 }
 
-
-
-
-
 // @ 0x00630930
 void __fastcall FUN_00630930(void* self)
 { (void)self; }
-
-
-
-
 
 // @ 0x006309e0
 void* __cdecl FUN_006309e0(void* out, const short* lhs, const WStr* rhs)
@@ -928,10 +879,6 @@ void* __cdecl FUN_006309e0(void* out, const short* lhs, const WStr* rhs)
   o->Append(rhs->begin, rhs->end);
   return out;
 }
-
-
-
-
 
 // @ 0x00630a50
 void __fastcall FUN_00630a50(void* self)
@@ -986,10 +933,6 @@ void __fastcall FUN_00630a50(void* self)
   *(int*)(a + 0xea8) = 0;
 }
 
-
-
-
-
 // @ 0x00630b30
 void __fastcall FUN_00630b30(void* self, int* pos, int* val)
 {
@@ -1022,33 +965,17 @@ void __fastcall FUN_00630b30(void* self, int* pos, int* val)
   v[2] = (int)((char*)dst + cap * 4);
 }
 
-
-
-
-
 // @ 0x00630d10
 void __fastcall FUN_00630d10(void* self)
 { (void)self; }
-
-
-
-
 
 // @ 0x00630f20
 void __fastcall FUN_00630f20(void* self)
 { (void)self; }
 
-
-
-
-
 // @ 0x006312f0
 void __fastcall FUN_006312f0(void* self)
 { (void)self; }
-
-
-
-
 
 // @ 0x00631810
 void __fastcall FUN_00631810(void* self)
@@ -1182,8 +1109,6 @@ bool cSPPlayModePhotoBrowser_s0063_2780::CheckGuidAndType(wstring16_s0063_2780 a
     return ok;
 }
 
-
-
 // @ 0x00632900
 void cSPPlayModePhotoBrowser_s0063_2780::AddPhoto(uint32_t guid, int kind)
 {
@@ -1213,8 +1138,6 @@ void cSPPlayModePhotoBrowser_s0063_2780::AddPhoto(uint32_t guid, int kind)
         FUN_00631df0(p);
 }
 
-
-
 // @ 0x006329b0
 bool cSPPlayModePhotoBrowser_s0063_2780::CopyPixelsToRaster(int idx, uint32_t a, uint32_t b)
 {
@@ -1238,16 +1161,12 @@ bool cSPPlayModePhotoBrowser_s0063_2780::CopyPixelsToRaster(int idx, uint32_t a,
     return true;
 }
 
-
-
 // @ 0x00632ab0
 void cSPPlayModePhotoBrowser_s0063_2780::PushLoaded(uint32_t guid)
 {
     cPlayModePhoto_s0063_2780* p = FindPhotoByGuid(guid);
     mLoaded.push_back(p);
 }
-
-
 
 // @ 0x00632b00
 void cSPPlayModePhotoBrowser_s0063_2780::ClearLoadedPhotos()
@@ -1267,8 +1186,6 @@ void cSPPlayModePhotoBrowser_s0063_2780::ClearLoadedPhotos()
     mLoaded.erase(mLoaded.mpBegin, mLoaded.mpEnd);
 }
 
-
-
 // @ 0x00632ba0
 void cSPPlayModePhotoBrowser_s0063_2780::DeleteAll()
 {
@@ -1282,8 +1199,6 @@ void cSPPlayModePhotoBrowser_s0063_2780::DeleteAll()
     ClearLoadedPhotos();
 }
 
-
-
 // @ 0x00632c00
 void cSPPlayModePhotoBrowser_s0063_2780::MoveAll()
 {
@@ -1296,8 +1211,6 @@ void cSPPlayModePhotoBrowser_s0063_2780::MoveAll()
     ExitMoveMode();
     ClearLoadedPhotos();
 }
-
-
 
 // @ 0x00632c60
 void cSPPlayModePhotoBrowser_s0063_2780::DeleteOne()
@@ -1318,8 +1231,6 @@ void cSPPlayModePhotoBrowser_s0063_2780::DeleteOne()
     }
 }
 
-
-
 // @ 0x00632ce0
 void cSPPlayModePhotoBrowser_s0063_2780::MoveOne()
 {
@@ -1339,8 +1250,6 @@ void cSPPlayModePhotoBrowser_s0063_2780::MoveOne()
     }
 }
 
-
-
 // @ 0x00632d60
 bool cSPPlayModePhotoBrowser_s0063_2780::SaveThumbnail(void* data)
 {
@@ -1359,8 +1268,6 @@ bool cSPPlayModePhotoBrowser_s0063_2780::SaveThumbnail(void* data)
     return true;
 }
 
-
-
 // @ 0x00632e40
 bool cSPPlayModePhotoBrowser_s0063_2780::ResetPhotoMap()
 {
@@ -1372,8 +1279,6 @@ bool cSPPlayModePhotoBrowser_s0063_2780::ResetPhotoMap()
     }
     return false;
 }
-
-
 
 // @ 0x00632e90
 PhotoTypeInfo& PhotoTypeMap::operator[](const uint32_t& key)
@@ -1400,8 +1305,6 @@ PhotoTypeInfo& PhotoTypeMap::operator[](const uint32_t& key)
     }
     return pLowerBound->value;
 }
-
-
 
 // @ 0x00632f30
 void cSPPlayModePhotoBrowser_s0063_2780::Shutdown()
@@ -1439,8 +1342,6 @@ void cSPPlayModePhotoBrowser_s0063_2780::Shutdown()
     } while (--n);
 }
 
-
-
 // @ 0x00632fe0
 void cSPPlayModePhotoBrowser_s0063_2780::Deactivate()
 {
@@ -1461,8 +1362,6 @@ void cSPPlayModePhotoBrowser_s0063_2780::Deactivate()
     ++mDeactivateCount;
 }
 
-
-
 // @ 0x00633080
 void cSPPlayModePhotoBrowser_s0063_2780::SetToLastPage()
 {
@@ -1471,8 +1370,6 @@ void cSPPlayModePhotoBrowser_s0063_2780::SetToLastPage()
     if (mCurrentFirstPhotoIndex != old)
         ClearLoadedPhotos();
 }
-
-
 
 // @ 0x006330b0
 bool cSPPlayModePhotoBrowser_s0063_2780::LoadPhotoThumb(uint32_t idx)
@@ -1505,8 +1402,6 @@ bool cSPPlayModePhotoBrowser_s0063_2780::LoadPhotoThumb(uint32_t idx)
     return result;
 }
 
-
-
 // @ 0x00633230
 bool cSPPlayModePhotoBrowser_s0063_2780::MarkPhotoTypeForGuid(uint32_t guid, int kind, ResourceKey key)
 {
@@ -1537,8 +1432,6 @@ bool cSPPlayModePhotoBrowser_s0063_2780::MarkPhotoTypeForGuid(uint32_t guid, int
     return true;
 }
 
-
-
 // @ 0x006332c0
 bool cSPPlayModePhotoBrowser_s0063_2780::LoadPhotoByKey(const ResourceKey* key)
 {
@@ -1562,8 +1455,6 @@ bool cSPPlayModePhotoBrowser_s0063_2780::LoadPhotoByKey(const ResourceKey* key)
     }
     return ok;
 }
-
-
 
 // @ 0x00633440
 void cSPPlayModePhotoBrowser_s0063_2780::CapturePixels(void* stream, int idx, uint32_t arg3)
@@ -1596,38 +1487,79 @@ void cSPPlayModePhotoBrowser_s0063_2780::CapturePixels(void* stream, int idx, ui
     }
 }
 
-
-
 // @ 0x00633560
 void __fastcall FUN_00633560(void* self)
 { (void)self; }
-
 
 // @ 0x00633760
 void __fastcall FUN_00633760(void* self)
 { (void)self; }
 
-
 // @ 0x006338a0
 void __fastcall FUN_006338a0(void* self)
 { (void)self; }
-
 
 // @ 0x006339e0
 void __fastcall FUN_006339e0(void* self)
 { (void)self; }
 
-
 // @ 0x00633ac0
 void __fastcall FUN_00633ac0(void* self)
 { (void)self; }
-
 
 // @ 0x00633cc0
 void __fastcall FUN_00633cc0(void* self)
 { (void)self; }
 
-
 // @ 0x00634140
 void __fastcall FUN_00634140(void* self)
 { (void)self; }
+
+// @ 0x00634490
+void PhotoBrowser::RefreshAfterDelete()
+{
+    cJob_s0063_4490* job = IsPhotosWriting();
+    if (job) {
+        while (job->ContinueJob() == 4) {
+        }
+    }
+    mPhotoTypeMap.clear();
+    uint32_t n = PhotoCountChanged();
+    if (n != mPhotoCount) {
+        mPhotoCount = n;
+        FUN_00634030();
+    }
+    if (mCurrentFirstPhotoIndex >= 5) {
+        mCurrentFirstPhotoIndex -= 5;
+        ClearLoadedPhotos();
+    }
+    ShowImageThumbnail();
+    UpdatePhotoCountText();
+}
+
+// @ 0x00634520
+void PhotoBrowser::NextPhoto()
+{
+    ++mCurrentSelectedPhotoIndex;
+    if (mCurrentSelectedPhotoIndex >= Size()) {
+        mCurrentSelectedPhotoIndex = Size() - 1;
+        FUN_00633ea0();
+        UpdatePhotoCountText();
+    } else {
+        ReleaseAsyncHandle();
+        FUN_00633ea0();
+        UpdatePhotoCountText();
+    }
+}
+
+// @ 0x00634570
+void PhotoBrowser::PrevPhoto()
+{
+    uint32_t i = mCurrentSelectedPhotoIndex;
+    if (i > 0 && i < Size()) {
+        mCurrentSelectedPhotoIndex = i - 1;
+        ReleaseAsyncHandle();
+    }
+    FUN_00633ea0();
+    UpdatePhotoCountText();
+}
