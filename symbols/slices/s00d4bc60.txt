@@ -9,9 +9,9 @@
 00d4cad0 ?GetActiveEvent@cSPDramaManager_s00d4_bc60@SP@@QAEPAUcDramaEventInstanceData_s00d4_bc60@2@I_N@Z  # cSPDramaManager_s00d4_bc60::GetActiveEvent migrated from s00d4bc60 (verbatim, slice spelling)
 00d4cb30 ?IsDramaEventActive@cSPDramaManager_s00d4_bc60@SP@@QAE_NI@Z  # cSPDramaManager_s00d4_bc60::IsDramaEventActive migrated from s00d4bc60 (verbatim, slice spelling)
 00d4cb50 ?GetActiveEventTuning@cSPDramaManager_s00d4_bc60@SP@@QAEPAXI@Z  # cSPDramaManager_s00d4_bc60::GetActiveEventTuning migrated from s00d4bc60 (verbatim, slice spelling)
-00d4cb70 SP::cSPDramaManager::HandleMeteorImpact  # trigger creatures in an impact radius (approximate)
-00d4cce0 WriteSTLMapT  # serialise the u32->AutoRefCount map
-00d4cda0 DElemVec::insert  # eastl vector<ControlDrawable> insert with growth
+00d4cb70 ?HandleMeteorImpact@cSPDramaManager_s00d4_bc60@SP@@QAEXPAX@Z  # cSPDramaManager_s00d4_bc60::HandleMeteorImpact migrated from s00d4bc60 (verbatim, slice spelling)
+00d4cce0 ?WriteSTLMapT@@YAXPAUISerializer@@PAUVecMapGD@@@Z  # WriteSTLMapT migrated from s00d4bc60 (verbatim, slice spelling)
+00d4cda0 ?insert@DElemVec@@QAEXPAUDElem@@PBU2@@Z  # DElemVec::insert migrated from s00d4bc60 (verbatim, slice spelling)
 00d4cf10 ?FUN_00d4cf10@cDramaEventInstanceData_s00d4_bc60@SP@@QAEPAXII@Z  # cDramaEventInstanceData_s00d4_bc60::FUN_00d4cf10 migrated from s00d4bc60 (verbatim, slice spelling)
 00d4cf70 ?FUN_00d4cf70@cDramaEventInstanceData_s00d4_bc60@SP@@QAEXXZ  # cDramaEventInstanceData_s00d4_bc60::FUN_00d4cf70 migrated from s00d4bc60 (verbatim, slice spelling)
 00d4d030 ?GetGameDataIsUsable@cDramaEventInstanceData_s00d4_bc60@SP@@QAEEXZ  # cDramaEventInstanceData_s00d4_bc60::GetGameDataIsUsable migrated from s00d4bc60 (verbatim, slice spelling)

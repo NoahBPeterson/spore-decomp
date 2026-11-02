@@ -1,4 +1,4 @@
-// src/game/SPGonzago/SPDramaManager.cpp -- migrated from slice(s) s01364b20, s00f21850, s00d50380, s00d4e4a0, s00d4d5c0, s00d4bc60, s00d4a930 by tools/migrate/rewrite.py
+// src/game/SPGonzago/SPDramaManager.cpp -- migrated from slice(s) s00d512f0, s00d4f2e0, s01364b20, s00f21850, s00d50380, s00d4e4a0, s00d4d5c0, s00d4bc60, s00d4a930 by tools/migrate/rewrite.py
 // Object file: SPGonzago/SPDramaManager.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -15,6 +15,9 @@
 #include "SP/cGonzagoTimer.h"
 #include "SP/cVarListSerializer.h"
 #include "SP/cViewer.h"
+#include "SP/cITerrainSphere.h"
+#include <math.h>
+#include <intrin.h>
 
 // unnamed retail callees and globals (address in the comment)
 extern "C" void  operator_delete_array(void *p);                                     // 0xf47380
@@ -224,6 +227,8 @@ virtual void v1c();
 struct PairUR { u32 mKey; void* mValue; };                  // 8-byte vector_map entry
 struct VecMapU32 { u32* mpBegin; u32* mpEnd; u32* mpCap; }; // eastl::vector_map<u32,u32>
 PairUR* __cdecl LowerBound(PairUR* first, PairUR* last, const u32* key, bool flag); // 0x00d01260
+void* __cdecl operator_new(u32 n, const char* pName, int a, int b,
+                           const char* pFile, u32 line);      // 0x00f473a0
 struct RefMap {
     PairUR* mpBegin;                 // +0x00
     PairUR* mpEnd;                   // +0x04
@@ -360,11 +365,14 @@ struct cSPDramaManager_s00d4_bc60 {
 void* __cdecl SP_PlanetModel();               // 0x00b3d350
 void* __cdecl SP_StarManager();               // 0x00b3d2a0
 void* __cdecl SP_PropertyManager();           // 0x0067de30
+void* __cdecl SP_TriggerManager();            // 0x00b3d4d0
 void* __cdecl SP_EventLog();                  // 0x00b3d3e0
+void* __cdecl FUN_00b3d240();                 // 0x00b3d240
 void* __cdecl FUN_00b3d480();                 // 0x00b3d480
 void  __cdecl SetGlobalProperty(u32 id, float v);           // 0x005ca880
 void* __cdecl CreateUFO(u32 type, void* a, void* b);        // 0x0102acb0
 void  __cdecl ApplyFilterConstraints(void* a, char b);      // 0x0102c7f0
+void  __cdecl WriteUint32(void* stream, const u32* v, int n, int endian); // 0x0093aa70
 void  __fastcall FUN_00fc6f00(void* self, Vec3 pos, float a);// 0x00fc6f00
 void  __cdecl FUN_00aca360(void* self, void* o);            // 0x00aca360
 struct RandomLCG {
@@ -504,6 +512,28 @@ struct cNounContainer {
     void FUN_00aca360(void* o);                                 // 0x00aca360
     void FUN_00acc700(void* o);                                 // 0x00acc700
 };
+struct DElem { void* mpDrawable; void* mpRef; };
+struct DElemVec {
+    DElem* mpBegin;                       // +0x00
+    DElem* mpEnd;                         // +0x04
+    DElem* mpCap;                         // +0x08
+    void insert(DElem* pos, const DElem* value);   // 0x00d4cda0
+};
+struct ISerializer {
+virtual void v00();
+virtual void v04();
+virtual void v08();
+virtual void v0c();
+virtual void v10();
+virtual void v14();
+    virtual void* v18();                   // +0x18  stream
+    virtual void  v1c();                   // +0x1c
+    virtual ISerializer* v20();            // +0x20
+virtual void v24();
+virtual void v28();
+    virtual void v2c(void* v);             // +0x2c
+};
+struct VecMapGD { PairUR* mpBegin; PairUR* mpEnd; PairUR* mpCap; };
 struct StrategyCtx { void* mObject; u32 mField04; u32 mField08; u32 mPad0c; u32 mPad10; u32 mPad14; };
 // ---- items of slice s00d4bc60 end
 
@@ -1016,6 +1046,578 @@ extern Attribute g_commandUIAttributes[8];                 // 0x015836c8
 extern Attribute g_mateBehaviourAttributes[8];             // 0x01583b00
 // ---- items of slice s01364b20 end
 
+// ---- items of slice s00d4f2e0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern const float kMilli;      // 0x013f9428  (0.001 ms -> s)
+extern "C" void* __cdecl SP_GameTimeManager();              // 0x00b3d380
+extern "C" void* __cdecl SP_EffectsManager();               // 0x0067ddd0
+extern "C" void* __cdecl FUN_00b3d440(void* a);             // 0x00b3d440
+extern "C" void* __cdecl SP_Matrix3FromQuaternion(void* out, void* q);  // 0x0059c190
+extern "C" bool  FUN_00d4da10();
+typedef unsigned long long u64;
+struct cSPVector2_s00d4_f2e0 { float x, y; };      // SP::cSPVector2 (struct, 8 bytes)
+struct Vec3_s00d4_f2e0 {
+    float x, y, z;
+    Vec3_s00d4_f2e0() {}
+    Vec3_s00d4_f2e0(const Vec3_s00d4_f2e0& o) { x = o.x; y = o.y; z = o.z; }
+};
+inline Vec3_s00d4_f2e0 operator*(const Vec3_s00d4_f2e0& v, float s)
+{
+    Vec3_s00d4_f2e0 r;
+    r.x = v.x * s;
+    r.y = v.y * s;
+    r.z = v.z * s;
+    return r;
+}
+struct VecMapU32_s00d4_f2e0 {
+    u32* mpBegin;   // +0x00
+    u32* mpEnd;     // +0x04
+    u32* mpCap;     // +0x08
+    u32* Index(const u32& key);          // 0x00564a10
+};
+struct Property_s00d4_f2e0 {
+    float* mpData;      // +0x00   the typed value
+    u8     m_pad04[0xc];
+    u8     m_flags10;   // +0x10
+    u8     m_pad11;
+    u16    m_type12;    // +0x12   EA property type tag (0xd == float, 0xa == uint)
+    float* GetFloat();  // 0x0041ea70
+    u32*   GetUInt();   // 0x0041ea00
+};
+class cPropertyList_s00d4_f2e0 {
+  public:
+virtual void v00();
+virtual void v04();
+virtual void v08();
+virtual void v0c();
+virtual void v10();
+virtual void v14();
+virtual void v18();
+virtual void v1c();
+    virtual void v20();
+    virtual bool FindProperty(u32 id, Property_s00d4_f2e0** ppOut);      // +0x24
+};
+struct AnchorPath {
+virtual void b00();
+virtual void b04();
+virtual void b08();
+virtual void b0c();
+virtual void b10();
+virtual void b14();
+virtual void b18();
+virtual void b1c();
+virtual void b20();
+virtual void b24();
+virtual void b28();
+    virtual void* v2c(float value, u8** out, u32 a, u32 b);   // +0x2c
+};
+struct cGameNounManager_s00d4_f2e0 {
+    void* GetAvatar();          // 0x00b1fdb0
+    void* GetPlayerTribe();     // 0x00b1fe90
+    void  RemoveNoun(void* n);  // 0x00b225d0
+};
+struct GameTimeMgr {
+    u64 FUN_00b316c0();          // 0x00b316c0
+};
+extern "C" void  __cdecl DestroyCreature(void* c, u32 flags);    // 0x0102c340
+extern "C" u32   __cdecl FUN_00bc96a0_s00d4_f2e0(void* self, u32 a, u32 b);     // 0x00bc96a0
+extern "C" void  __cdecl FUN_00c38740(void* self, float dt, u64 t);  // 0x00c38740
+extern "C" void  __cdecl FUN_00b09340(void* self, void* a, void* b, u32 c, u32 d); // 0x00b09340
+typedef bool (__thiscall *WriteDataThunk)(void*, void*);
+struct cVarListSerializer_s00d4_f2e0 {
+    u8 m_data[0xa14];
+    void ctor_00692f90(void* obj, const char* name, u32 sig);  // 0x692f90
+    bool serialize_00692900(void* stream);                     // 0x692900
+};
+struct Meteors_s00d4_f2e0 {
+    void** mpBegin;                     // +0x00
+    void** mpEnd;                       // +0x04
+    void** mpCap;                       // +0x08
+    u8     m_pad0c[0x20c];              // +0x0c .. +0x218
+};
+union F2U_s00d4_f2e0 { float f[2]; u32 u[2]; };
+union R2U_s00d4_f2e0 { cSPVector2_s00d4_f2e0 v[2]; u32 u[4]; };
+struct VecMapGD_s00d4_f2e0 {
+    u8*  mpBegin;   // +0x00 (+0x5c overall)
+    u8*  mpEnd;     // +0x04 (+0x60 overall)
+    u8*  mpCap;     // +0x08 (+0x64 overall)
+    u32  mAllocLo;  // +0x0c (+0x68 overall)
+    u32  mAllocHi;  // +0x10 (+0x6c overall)
+    void EraseByKey(const u32* key);      // 0x00d4e8e0
+};
+struct cDramaEventInstanceData_s00d4_f2e0 {
+    u8             m_pad00[0x20];
+    cSPVector2_s00d4_f2e0     m_thresh20;          // +0x20
+    float          m_f28;               // +0x28
+    float          m_f2c;               // +0x2c
+    u8             m_pad30[4];          // +0x30 (bool flag + padding)
+    float          m_f34;               // +0x34  (activation-threshold padding / arg to the property fetch)
+    float          m_f38;               // +0x38  mCheckTime
+    float          m_f3c;               // +0x3c  mDuration
+    cPropertyList_s00d4_f2e0* m_pPropList40;       // +0x40
+    VecMapU32_s00d4_f2e0      m_data44;            // +0x44
+    u8             m_pad50[0xc];        // +0x50 .. +0x5c
+    VecMapGD_s00d4_f2e0       m_gd5c;              // +0x5c  mGameDataMap
+    u8             m_gdSorted70;        // +0x70
+    u8             m_pad71[3];          // +0x71 .. +0x74
+};
+struct cUFOAbductionEvent_s00d4_f2e0 : cDramaEventInstanceData_s00d4_f2e0 {
+    void TriggerEvent();                 // 0x00d4f8f0
+    void ShutdownEvent();                // 0x00d4fb20
+    void TickEvent(float dt);            // 0x00d4fbf0
+};
+namespace SP {
+struct cMeteorStrikeEvent_s00d4_f2e0 : cDramaEventInstanceData_s00d4_f2e0 {
+    u8             m_b74;               // +0x74
+    u8             m_pad75[3];
+    i32            m_meteorCount[2][2]; // +0x78  {current,target} per stream
+    F2U_s00d4_f2e0            m_f88;               // +0x88  strike centre from avatar
+    F2U_s00d4_f2e0            m_f90;               // +0x90  strike range
+    u32            m_u98[2];            // +0x98  effect key
+    R2U_s00d4_f2e0            m_rangeA0;           // +0xa0  spawn-delay range
+    F2U_s00d4_f2e0            m_timerB0;           // +0xb0  current spawn delay
+    float          m_fB8;               // +0xb8
+    float          m_fBC;               // +0xbc
+    float          m_fC0;               // +0xc0
+    float          m_fC4;               // +0xc4
+    Meteors_s00d4_f2e0        m_meteors[2];        // +0xc8, +0x2e0
+
+    cMeteorStrikeEvent_s00d4_f2e0();                // 0x00d4fcf0
+    bool ShouldDeactivate();             // 0x00d4fea0
+    void PostLoad(u32 unused);           // 0x00d4fef0
+    bool ShouldActivate();               // 0x00d4ff50
+    bool Write(void* stream);            // 0x00d50260
+
+    void Clear();                        // 0x00d4e950
+};
+}
+struct PropertyManager_s00d4_f2e0 {
+virtual void v00();
+virtual void v04();
+virtual void v08();
+virtual void v0c();
+virtual void v10();
+virtual void v14();
+virtual void v18();
+virtual void v1c();
+virtual void v20();
+virtual void v24();
+virtual void v28();
+    virtual void v2c(u32 a, u32 b, cPropertyList_s00d4_f2e0** out);          // +0x2c
+};
+struct EventVtbl {
+virtual void s00();
+virtual void s04();
+virtual void s08();
+virtual void s0c();
+virtual void s10();
+virtual void s14();
+virtual void s18();
+virtual void s1c();
+virtual void s20();
+virtual void s24();
+    virtual void s28(u32 flag);                                   // +0x28
+    virtual void s2c();
+    virtual void s30();                                           // +0x30
+};
+struct Reader {
+virtual void r00();
+virtual void r04();
+virtual void r08();
+virtual void r0c();
+virtual void r10();
+virtual void r14();
+    virtual void* v18();                                          // +0x18
+};
+struct Stream {
+virtual void t00();
+virtual void t04();
+virtual void t08();
+virtual void t0c();
+virtual void t10();
+virtual void t14();
+virtual void t18();
+virtual void t1c();
+    virtual Reader* v20();                                        // +0x20
+};
+extern u32 kVtblContentVal0;    // 0x013ec458
+extern u32 kVtblMeteor0;        // 0x0147b640
+extern u32 kVtblMeteor4;        // 0x0147b62c
+struct Matrix3 {
+    float m[9];
+    Matrix3() {}
+    Matrix3(const Matrix3& src);            // 0x0041cb40 copy ctor
+};
+struct EffectHolder;
+struct Quaternion { float x, y, z, w; };    // SP::Quaternion, 16 bytes
+extern const Vec3_s00d4_f2e0    gZeroVec;              // 0x0169e494 default translation
+extern const Matrix3 gIdentityMat;          // 0x0169e4d4 default basis
+struct Transform {
+    u16     mFlags;      // +0x00
+    u16     mRevision;   // +0x02
+    Vec3_s00d4_f2e0    mPos;        // +0x04
+    float   mW;          // +0x10
+    Matrix3 mBasis;      // +0x14
+    Transform()
+        : mFlags(0), mRevision(0), mPos(gZeroVec), mW(1.0f),
+          mBasis(gIdentityMat) {}
+};
+struct EffectHolder {
+    virtual void AddRef();                                 // +0x00
+    virtual void Release();                                // +0x04
+    virtual void h08(u32 arg);                             // +0x08
+    virtual void h0c();                                    // +0x0c
+    virtual void h10();                                    // +0x10
+    virtual void h14();                                    // +0x14
+    virtual void SetTransform(Transform* t);               // +0x18
+};
+struct EffectsManager {
+virtual void v00();
+virtual void v04();
+virtual void v08();
+virtual void v0c();
+virtual void v10();
+virtual void v14();
+virtual void v18();
+virtual void v1c();
+virtual void v20();
+virtual void v24();
+virtual void v28();
+    virtual bool CreateEffect(u32 key, u32 flags, void** out);   // +0x2c
+};
+template <class T>
+struct AutoRefCount {
+    T* mpObject;
+    AutoRefCount() : mpObject(0) {}
+    ~AutoRefCount() { if (mpObject) mpObject->Release(); }
+    void** AsPPVoidParam() {
+        if (mpObject) {
+            T* pTemp = mpObject;
+            mpObject = 0;
+            pTemp->Release();
+        }
+        return (void**)&mpObject;
+    }
+    T* operator->() const { return mpObject; }
+    operator T*() const { return mpObject; }
+};
+namespace SP {
+struct cPlanetModel_s00d4_f2e0 {
+    Vec3_s00d4_f2e0       MakeRandomWorldPosition(const Vec3_s00d4_f2e0& pos, float minD, float maxD);  // 0x00b81780
+    Quaternion BuildSurfaceOrientation(const Vec3_s00d4_f2e0& pos);                          // 0x00b7f190
+};
+}
+// ---- items of slice s00d4f2e0 end
+
+// ---- items of slice s00d512f0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+namespace RT
+{
+    struct Vec3_s00d5_12f0
+    {
+        float x, y, z;
+        Vec3_s00d5_12f0() {}
+        Vec3_s00d5_12f0(const Vec3_s00d5_12f0& v) : x(v.x), y(v.y), z(v.z) {}
+    };
+
+    // Sub-object with a vtable: slot 3 = GetValue (+0xc), slot 11 = GetPosition (+0x2c).
+    struct Holder
+    {
+virtual void s0();
+virtual void s1();
+virtual void s2();
+        virtual unsigned GetValue();                        // +0xc
+virtual void s4();
+virtual void s5();
+virtual void s6();
+virtual void s7();
+virtual void s8();
+virtual void s9();
+virtual void s10();
+        virtual const Vec3_s00d5_12f0* GetPosition();                  // +0x2c
+    };
+
+    struct PtrList { char** mpBegin; char** mpEnd; };
+
+    struct Creature
+    {
+        char   pad[0xb4c];
+        char*  mpSub;                                       // +0xb4c (its +8 sub-object takes Apply)
+        char   pad2[0xe84 - 0xb50];
+        void*  mpSpeciesRecord;                             // +0xe84
+
+        char*  GetSpeciesRecord();                          // 0x00c0c1a0
+    };
+
+    struct Sub8 { void Apply(int zero, int flags, float f, unsigned v); };      // 0x00bc97f0 (ret 0x10)
+    struct CreatureHost                                                         // global at 0x00b3d480
+    {
+        char  pad[0x2c];
+        float mScale;                                                           // +0x2c
+        void Attach(Creature* c);                                               // 0x00acd2d0 (ret 4)
+        int  Place(const Vec3_s00d5_12f0* p, float a, float b);                            // 0x00acc700 (ret 0xc)
+        void FUN_00aca360(Creature* c);                                         // 0x00aca360 (ret 4)
+    };
+    struct PlanetModel
+    {
+        void MakeRandomWorldPosition(Vec3_s00d5_12f0* out, const Vec3_s00d5_12f0* center, float a, float b); // 0x00b81780 (ret 0x10)
+        void SnapB(void* out, const void* in, void* tag);                       // 0x00b82970 (ret 0xc)
+        void BuildSurfaceOrientation2(void* out, const void* in, const void* dir); // 0x00b7f250 (ret 0xc)
+    };
+
+    struct MessageU
+    {
+        union { unsigned id; unsigned short sub; };
+        unsigned short pad4;
+        unsigned short flags;
+    };
+
+    struct Router                                           // 0x00401010 returns the global router
+    {
+virtual void s0();
+virtual void s1();
+virtual void s2();
+virtual void s3();
+virtual void s4();
+virtual void s5();
+virtual void s6();
+virtual void s7();
+virtual void s8();
+virtual void s9();
+virtual void s10();
+virtual void s11();
+virtual void s12();
+virtual void s13();
+virtual void s14();
+virtual void s15();
+virtual void s16();
+virtual void s17();
+virtual void s18();
+        virtual void Send(void* target, MessageU* msg);     // +0x4c
+    };
+
+    // Species object (interface 0x4f396a66): vtable slots 43 (+0xac) and 47 (+0xbc), holder at +0x120.
+    struct Vec3List;
+
+    struct Species
+    {
+virtual void s0();
+virtual void s1();
+virtual void s2();
+virtual void s3();
+virtual void s4();
+virtual void s5();
+virtual void s6();
+virtual void s7();
+virtual void s8();
+virtual void s9();
+virtual void s10();
+virtual void s11();
+virtual void s12();
+virtual void s13();
+virtual void s14();
+virtual void s15();
+virtual void s16();
+virtual void s17();
+virtual void s18();
+virtual void s19();
+virtual void s20();
+virtual void s21();
+virtual void s22();
+virtual void s23();
+virtual void s24();
+virtual void s25();
+virtual void s26();
+virtual void s27();
+virtual void s28();
+virtual void s29();
+virtual void s30();
+virtual void s31();
+virtual void s32();
+virtual void s33();
+virtual void s34();
+virtual void s35();
+virtual void s36();
+virtual void s37();
+virtual void s38();
+virtual void s39();
+virtual void s40();
+virtual void s41();
+virtual void s42();
+        virtual Species* GetLinked();                       // +0xac
+virtual void s44();
+virtual void s45();
+virtual void s46();
+        virtual PtrList* GetList();                         // +0xbc
+
+        Vec3List* GetPoints();                              // 0x00c97020
+    };
+
+    struct Vec3List { Vec3_s00d5_12f0* mpBegin; Vec3_s00d5_12f0* mpEnd; };
+
+    inline Holder* HolderOf(Species* s) { return (Holder*)((char*)s + 0x120); }
+
+    // Ref-counted game object: slot 0 AddRef, 1 Release, 3 Cast(interface id).
+    struct Obj
+    {
+        virtual void AddRef();
+        virtual void Release();
+        virtual void s2();
+        virtual Species* Cast(unsigned interfaceId);        // +0xc
+    };
+
+    struct Herd : Obj
+    {
+virtual void s4();
+virtual void s5();
+virtual void s6();
+virtual void s7();
+        virtual unsigned GetTypeId();                       // +0x20
+virtual void s9();
+virtual void s10();
+virtual void s11();
+virtual void s12();
+virtual void s13();
+virtual void s14();
+virtual void s15();
+virtual void s16();
+virtual void s17();
+virtual void s18();
+        virtual int GetOwnerEmpire();                       // +0x4c
+
+        char          pad04[0x40 - 4];
+        Creature**    mpCreaturesBegin;                     // +0x40
+        Creature**    mpCreaturesEnd;                       // +0x44
+        char          pad48[0xa4 - 0x48];
+        char*         mpInfo;                               // +0xa4
+        char          padA8[0xf4 - 0xa8];
+        unsigned      mGeneration;                          // +0xf4
+        char          padF8[0x124 - 0xf8];
+        int           mActivateBrainLevel;                  // +0x124
+
+        char IsFlagged();                                   // 0x00c6a020
+        const Vec3_s00d5_12f0* GetPosition();                          // 0x00c6acc0
+        int SetPosition(const Vec3_s00d5_12f0* p);                    // 0x00c6ba20
+    };
+
+    // Scenario object (type 0x36be27e): vtable slot 11 (+0x2c) = bool; holder at +0x34.
+    struct Scenario
+    {
+virtual void s0();
+virtual void s1();
+virtual void s2();
+virtual void s3();
+virtual void s4();
+virtual void s5();
+virtual void s6();
+virtual void s7();
+virtual void s8();
+virtual void s9();
+        virtual void s10();
+        virtual char IsFlagged();                           // +0x2c
+
+        char     pad04[0x34 - 4];
+        char     holder[4];                                 // +0x34 (sub-object with vtable)
+        char     pad38[0x10c - 0x38];
+        unsigned mTypeId;                                   // +0x10c
+        unsigned mId;                                       // +0x110
+        char     pad114[0x1a4 - 0x114];
+        Herd*    mpHerd;                                    // +0x1a4
+    };
+
+    inline Holder* HolderOf(Scenario* s) { return (Holder*)((char*)s + 0x34); }
+
+    struct GameDataVec { int pad0; char** mpBegin; char** mpEnd; };
+
+    typedef void (*Fn)();
+
+    struct NounManager
+    {
+        int          GetPlayerEmpireOrMinus1();             // 0x00b1f9d0
+        GameDataVec* GetGameDataVector(Fn a, Fn b, Fn c, Fn d, unsigned type);   // 0x00b21340 (ret 0x14)
+        Herd*        CreateGameData(unsigned type, int id, int zero0, const Vec3_s00d5_12f0* pos, int zero1);   // 0x00b23650 (ret 0x14)
+        void*        GetAvatar();                           // 0x00b1fdb0
+        void         RemoveNoun(void* noun);                // 0x00b225d0 (ret 4)
+    };
+
+    struct ValueMap { unsigned& operator[](const unsigned& key); };            // 0x00564a10 (ret 4)
+
+    struct PairUR { unsigned key; Obj* value; };
+    struct RefMap                                                              // vector_map<uint, ref-counted object>
+    {
+        PairUR* mpBegin;                                                       // +0x00
+        PairUR* mpEnd;                                                         // +0x04
+        char    pad[0x14 - 8];
+        bool    mbFlag;                                                        // +0x14
+        Obj*& operator[](const unsigned& key);                                 // 0x00d4eb30 (ret 4)
+        inline PairUR* find(unsigned key);
+        void Remove(const unsigned& key);                                      // 0x00d4e8e0 (ret 4)
+    };
+
+    // eastl::lower_bound over 8-byte pairs (0x00d01260).  The body is given here (noinline) so the
+    // compiler knows the call writes no memory, as it did when it compiled the original.
+    extern "C" __declspec(noinline) PairUR* __cdecl LowerBound(PairUR* first, PairUR* last, const unsigned* key, bool)
+    {
+        int n = (int)(last - first);
+        while (n > 0)
+        {
+            int half = n >> 1;
+            if (first[half].key < *key)
+            {
+                first += half + 1;
+                n -= half + 1;
+            }
+            else
+                n = half;
+        }
+        return first;
+    }
+
+    inline PairUR* RefMap::find(unsigned keyIn)
+    {
+        const unsigned key = keyIn;
+        PairUR* const e = mpEnd;
+        PairUR* it = LowerBound(mpBegin, e, &key, mbFlag);
+        if (it == e || keyIn < it->key)
+            it = e;
+        else if (it == it + 1)
+            it = e;
+        return it;
+    }
+
+    struct Task
+    {
+        char     pad00[0x40];
+        void*    mpOwner;                                   // +0x40
+        ValueMap mCounters;                                 // +0x44 (vector_map<uint,uint>, 0x18 bytes)
+        char     pad48[0x5c - 0x48];
+        RefMap   mSlots;                                    // +0x5c
+
+        int Activate();                                     // 0x00d51c30
+        void Method1540();                                  // 0x00d51540
+    };
+}
+namespace RT
+{
+    struct PosseSimulator { void RemovePosseMember(Creature* c, int a, int b); };   // 0x00d53490
+    extern "C" PosseSimulator* GetPosseSimulator();                                 // 0x00d539d0
+}
+extern "C"
+{
+    RT::NounManager* __cdecl GetNounManager();              // 0x00b3d300
+    RT::CreatureHost* __cdecl GetCreatureHost();            // 0x00b3d480
+    RT::PlanetModel* __cdecl GetPlanetModel();              // 0x00b3d350
+    RT::Router* __cdecl GetRouter();                        // 0x00401010
+    int __cdecl GetOwnerProperty(void* owner, unsigned id, unsigned defaultValue);     // 0x00ac8fa0
+    char __cdecl LoadScenarioFn(RT::Scenario* s, int a, int b);                        // 0x00b931c0
+    void __cdecl PlaceNewCreature(RT::Vec3_s00d5_12f0* pos, int infoId, int one, RT::Herd* h, int zero, int one2);  // 0x00c099e0
+    void F_cd7d10(); // 0x00cd7d10
+    void F_d3d420(); // 0x00d3d420
+    void F_accbb0(); // 0x00accbb0
+    void F_accc30(); // 0x00accc30
+    void F_ace070(); // 0x00ace070
+    void F_b1e500(); // 0x00b1e500
+}
+// ---- items of slice s00d512f0 end
+
 // @ 0x00d4af70
 void ModeSetter::SetValue(u32 v)
 {
@@ -1443,6 +2045,104 @@ void* SP::cSPDramaManager_s00d4_bc60::GetActiveEventTuning(u32 type)
     cDramaEventInstanceData_s00d4_bc60* e = GetActiveEvent(type, true);
     if (e != 0) return e->mpPropList40;
     return 0;
+}
+
+// @ 0x00d4cb70
+void SP::cSPDramaManager_s00d4_bc60::HandleMeteorImpact(void* impact)
+{
+    if (impact == 0) return;
+    cDramaEventInstanceData_s00d4_bc60* e = GetActiveEvent(3, true);
+    if (e == 0) return;
+    void* gd = ((IInterface*)e)->AsInterface(0x5599ef6);
+    if (gd == 0) return;
+    if (*((u8*)gd + 0x74) == 0) return;
+
+    void* tm = SP_TriggerManager();
+    if (*(u32*)((u8*)tm + 0x2c) == 1) return;
+    if (*(u32*)((u8*)tm + 0x2c) == 2) return;
+
+    Vec3 pos = *(Vec3*)((u8*)(*(void**)((u8*)impact + 0x28)) + 4);
+    float radius = *(float*)((u8*)gd + 0xbc);
+    float f0c4 = *(float*)((u8*)gd + 0xc4);
+    Vec3 zero; zero.x = 0.0f; zero.y = 0.0f; zero.z = 0.0f;
+
+    void* gather = FUN_00b3d240();
+    void* resBegin = 0;
+    void* resEnd = 0;
+    ((void (__thiscall*)(void*, Vec3*, float, Vec3*, u32, u32, u32))
+        (*(void***)gather)[0x48 / 4])(gather, &pos, radius, &zero, 0, 0, 0);
+    (void)resBegin; (void)resEnd;
+
+    i32 count = (i32)(((u8*)resEnd - (u8*)resBegin) >> 2);
+    (void)count; (void)f0c4;
+}
+
+// @ 0x00d4cce0
+void WriteSTLMapT(ISerializer* pIO, VecMapGD* pMap)
+{
+    int n = (int)(pMap->mpEnd - pMap->mpBegin);
+    void* stream = pIO->v20()->v18();
+    WriteUint32(stream, (const u32*)&n, 1, 0);
+
+    for (PairUR* it = pMap->mpBegin; it != pMap->mpEnd; ++it) {
+        void* s = pIO->v20()->v18();
+        u32 key = it->mKey;
+        WriteUint32(s, &key, 1, 0);
+        pIO->v1c();
+        void* v = 0;
+        if (it->mValue != 0) v = ((IInterface*)it->mValue)->AsInterface(0x179c807);
+        pIO->v2c(v);
+        pIO->v1c();
+    }
+    pIO->v1c();
+}
+
+// @ 0x00d4cda0
+void DElemVec::insert(DElem* pos, const DElem* value)
+{
+    if (mpEnd == mpCap) {
+        int n = (int)(mpEnd - mpBegin);
+        int cap = (n > 0) ? n * 2 : 1;
+        DElem* buf = (cap != 0)
+            ? (DElem*)operator_new((u32)(cap * 8), "Simulator", 0, 0, "eastl/allocator.h", 0xd1)
+            : 0;
+        int idx = (int)(pos - mpBegin);
+        for (int i = 0; i < idx; ++i) buf[i] = mpBegin[i];
+        buf[idx] = *value;
+        for (int i = idx; i < n; ++i) buf[i + 1] = mpBegin[i];
+        if (mpBegin != 0) operator_delete_array(mpBegin);
+        mpBegin = buf;
+        mpEnd = buf + n + 1;
+        mpCap = buf + cap;
+        return;
+    }
+
+    if (pos >= mpBegin && pos < mpEnd) ++pos;
+    if (mpEnd != 0) {
+        *mpEnd = *(mpEnd - 1);
+        if (mpEnd->mpRef != 0) {
+            void** vt = *(void***)mpEnd->mpRef;
+            ((void (__thiscall*)(void*))vt[0])(mpEnd->mpRef);
+        }
+    }
+    for (DElem* d = mpEnd - 1; d != pos; --d) *d = *(d - 1);
+    {
+        void* nref = value->mpRef;
+        void* oref = pos->mpRef;
+        pos->mpDrawable = value->mpDrawable;
+        if (nref != oref) {
+            if (nref != 0) {
+                void** vt = *(void***)nref;
+                ((void (__thiscall*)(void*))vt[0])(nref);
+            }
+            pos->mpRef = nref;
+            if (oref != 0) {
+                void** vt = *(void***)oref;
+                ((void (__thiscall*)(void*))vt[1])(oref);
+            }
+        }
+    }
+    mpEnd = mpEnd + 1;
 }
 
 // @ 0x00d4cf10
@@ -2162,6 +2862,221 @@ void __thiscall SP::cTribeFoodRaidEvent_s00d4_e4a0::TickInactiveEvent()
 {
 }
 
+// @ 0x00d4fb20
+void cUFOAbductionEvent_s00d4_f2e0::ShutdownEvent()
+{
+    AudioSystem* sys = (AudioSystem*)GetSystemAT();
+    if (sys != 0) {
+        sys->v38(0x3cdd1a9);
+        sys->v40(0x34753a7, 0xdca3b514);
+        sys->v3c(0x34753aa, 0.0f);
+        sys->v58();
+    }
+
+    u8* begin = m_gd5c.mpBegin;
+    u8* end   = m_gd5c.mpEnd;
+    u32 key   = 0;
+    u8* it = (u8*)MapLowerBound(begin, end, &key, m_gdSorted70);
+    if (it == end || *(u32*)it > key) it = end;
+    if (it == end || *(void**)(it + 4) == 0) return;
+
+    void* obj = *(void**)(it + 4);
+    void* creature = ((PtrThunk2)(*(void***)obj)[3])(obj, 0xb033b403);
+    if (creature != 0) {
+        DestroyCreature(creature, 0);
+        m_gd5c.EraseByKey(&key);
+    }
+}
+
+// @ 0x00d4fbf0
+void cUFOAbductionEvent_s00d4_f2e0::TickEvent(float dt)
+{
+    GameTimeMgr* mgr = (GameTimeMgr*)SP_GameTimeManager();
+    u64 t = mgr->FUN_00b316c0();
+
+    double seconds = (double)(i32)(t & 0x7fffffff) * kMilli;
+    (void)dt;
+
+    u8* begin = m_gd5c.mpBegin;
+    u8* end   = m_gd5c.mpEnd;
+    u32 key   = 0;
+    u8* it = (u8*)MapLowerBound(begin, end, &key, m_gdSorted70);
+    if (it == end || *(u32*)it > key) it = end;
+    if (it == end || *(void**)(it + 4) == 0) return;
+
+    void* obj = *(void**)(it + 4);
+    void* creature = ((PtrThunk2)(*(void***)obj)[3])(obj, 0xb033b403);
+    if (creature == 0) return;
+
+    FUN_00c38740(creature, (float)seconds, t);
+    void* base = *(void**)((u8*)creature + 0x6c8);
+    if ((*(u8*)((u8*)base + 0x5fc) & 2) != 0) {
+        if (FUN_00bc96a0_s00d4_f2e0((u8*)base + 8, 2, 0) == 0) {
+            DestroyCreature(creature, 0);
+            m_gd5c.EraseByKey(&key);
+        }
+    }
+}
+
+// @ 0x00d4fcf0
+SP::cMeteorStrikeEvent_s00d4_f2e0::cMeteorStrikeEvent_s00d4_f2e0()
+{
+    u8* p = (u8*)this;
+    *(u32*)(p + 8)  = 0;
+    *(void**)(p + 4) = (void*)&kVtblContentVal0;
+    *(u8*)(p + 0xc) = 0;
+    *(u32*)(p + 0x14) = 0;
+    *(u32*)(p + 0x18) = 0;
+    *(u32*)(p + 0x1c) = 0;
+    *(float*)(p + 0x28) = 0.0f;
+    *(float*)(p + 0x2c) = 0.0f;
+    *(u8*)(p + 0x30) = 1;
+    *(u32*)(p + 0x34) = 0;
+    *(u32*)(p + 0x38) = 0;
+    *(u32*)(p + 0x3c) = 0;
+    *(u32*)(p + 0x40) = 0;
+    *(u32*)(p + 0x44) = 0;
+    *(u32*)(p + 0x48) = 0;
+    *(u32*)(p + 0x4c) = 0;
+    *(u32*)(p + 0x5c) = 0;
+    *(u32*)(p + 0x60) = 0;
+    *(u32*)(p + 0x64) = 0;
+    *(void**)(p)   = (void*)&kVtblMeteor0;
+    *(void**)(p + 4) = (void*)&kVtblMeteor4;
+    u8* ecx = p + 0xe0;
+    *(u32*)(p + 0xdc) = 0;
+    *(u32*)(p + 0x2f4) = 0;
+    *(u8**)(p + 0xc8) = ecx;
+    *(u8**)(p + 0xcc) = ecx;
+    u8* eax = p + 0x2f8;
+    ecx += 0x200;
+    *(u8**)(p + 0x2e0) = eax;
+    *(u8**)(p + 0x2e4) = eax;
+    *(u8**)(p + 0xd0) = ecx;
+    eax += 0x200;
+    *(u8**)(p + 0x2e8) = eax;
+
+    Clear();
+}
+
+// @ 0x00d4fea0
+bool SP::cMeteorStrikeEvent_s00d4_f2e0::ShouldDeactivate()
+{
+    if (0.0f > m_f2c) goto ret1;
+    if (m_meteorCount[0][0] != m_meteorCount[0][1]) goto ret0;
+    if (m_meteorCount[1][0] != m_meteorCount[1][1]) goto ret0;
+    if (m_meteors[1].mpBegin != m_meteors[1].mpEnd) goto ret0;
+    if (m_meteors[0].mpBegin != m_meteors[0].mpEnd) goto ret0;
+ret1:
+    return 1;
+ret0:
+    return 0;
+}
+
+// @ 0x00d4fef0
+void SP::cMeteorStrikeEvent_s00d4_f2e0::PostLoad(u32 unused)
+{
+    (void)unused;
+    void* mgr = SP_PropertyManager();
+    void* old = m_pPropList40;
+    if (old != 0) {
+        m_pPropList40 = 0;
+        ((VoidThunk)(*(void***)old)[1])(old);
+    }
+    ((PropertyManager_s00d4_f2e0*)mgr)->v2c(*(u32*)&m_f34, *(u32*)&m_f3c, &m_pPropList40);
+    ((EventVtbl*)this)->s28(1);
+    if (m_pad00[0xc] != 0) {
+        ((EventVtbl*)this)->s30();
+    }
+}
+
+// @ 0x00d4ff50
+bool SP::cMeteorStrikeEvent_s00d4_f2e0::ShouldActivate()
+{
+    cGameNounManager_s00d4_f2e0* mgr = (cGameNounManager_s00d4_f2e0*)SP_NounManager();
+    void* avatar = mgr->GetAvatar();
+    if (avatar == 0) return 0;
+
+    float fValue = 0.0f;
+    if (m_pPropList40 != 0) {
+        Property_s00d4_f2e0* p = 0;
+        if (m_pPropList40->FindProperty(0xb753f503, &p) && p->m_type12 == 0xd) {
+            fValue = *p->GetFloat();
+        }
+    }
+
+    u8 head[0x80];
+    u8* outPtr = head;
+    u8* outInit = outPtr;
+    void* r = ((AnchorPath*)((u8*)avatar + 0xc0))->v2c(fValue, &outPtr, 0, 0);
+    FUN_00b3d440(r);
+    FUN_00b09340(r, (void*)(size_t)*(u32*)&fValue, (void*)&outPtr, 0, 0);
+    bool bEmpty = (outPtr == outInit);
+    if (outPtr != 0 && *(u32*)(outPtr - 4) != 0) {
+        FUN_00f47380(outPtr);
+    }
+    return bEmpty;
+}
+
+// @ 0x00d50040
+void* FUN_00d50040(u32 effectKey, const Vec3_s00d4_f2e0& pos, float radius, float maxDist)
+{
+    AutoRefCount<EffectHolder> holder;
+
+    EffectsManager* mgr = (EffectsManager*)SP_EffectsManager();
+    bool ok = mgr->CreateEffect(effectKey, 0, holder.AsPPVoidParam());
+    if (ok) {
+        Vec3_s00d4_f2e0 p = pos;
+        p = ((SP::cPlanetModel_s00d4_f2e0*)SP_PlanetModel())->MakeRandomWorldPosition(p, 0.0f, maxDist);
+
+        Quaternion quat = ((SP::cPlanetModel_s00d4_f2e0*)SP_PlanetModel())->BuildSurfaceOrientation(p);
+
+        Matrix3 mat;
+
+        float fLength = (float)sqrt((double)(p.x * p.x + p.y * p.y + p.z * p.z));
+        float fInv    = 1.0f / fLength;
+        float fScale  = fLength + radius;
+
+        p.x = p.x * fInv;
+        p.y = p.y * fInv;
+        p.z = p.z * fInv;
+        p.x = p.x * fScale;
+        p.y = p.y * fScale;
+        p.z = p.z * fScale;
+
+        Transform t;
+        t.mPos = p;
+        t.mFlags |= 4;
+        t.mRevision++;
+        SP_Matrix3FromQuaternion(&mat, &quat);
+        t.mBasis = mat;
+        t.mRevision++;
+        t.mFlags |= 2;
+
+        holder->SetTransform(&t);
+        holder->h08(0);
+    }
+    return holder;
+}
+
+// @ 0x00d50260
+bool SP::cMeteorStrikeEvent_s00d4_f2e0::Write(void* stream)
+{
+    Stream* s = (Stream*)stream;
+    Reader* reader = s->v20();
+    u32 key = 0x5599ef6;
+    void* istream = reader->v18();
+    FUN_0093aa70(istream, &key, 1, 0);
+    bool ok = ((WriteDataThunk)FUN_00d4da10)(this, stream);
+
+    cVarListSerializer_s00d4_f2e0 local;
+    local.ctor_00692f90(this, (const char*)0x1583998, 0x1a80d26);
+    if (ok) {
+        if (local.serialize_00692900(stream)) return true;
+    }
+    return false;
+}
+
 // @ 0x00d50380
 void SP::cMeteorStrikeEvent_s00d5_0380::LoadAndInitMeteorStrikeData(cPropertyList_s00d5_0380* pList)
 {
@@ -2571,6 +3486,224 @@ void SP::cMeteorStrikeEvent_s00d5_0380::FUN_00d50ef0()
             FUN_00d54330(posse, creature);
         }
     }
+}
+
+// @ 0x00d51540
+void RT::Task::Method1540()
+{
+    unsigned key = 0x609f2f8;
+    PairUR* const end = mSlots.mpEnd;
+    PairUR* it = LowerBound(mSlots.mpBegin, end, &key, mSlots.mbFlag);
+    if (it == end || key < it->key)
+        it = end;
+    else if (it == it + 1)
+        it = end;
+    if (it == mSlots.mpEnd)
+        return;
+
+    Obj* o = it->value;
+    if (o == 0)
+        return;
+    Herd* h = (Herd*)o->Cast(0x52aa6117);
+    if (h == 0)
+        return;
+
+    CreatureHost* host = GetCreatureHost();
+    PosseSimulator* ps = GetPosseSimulator();
+    for (Creature** p = h->mpCreaturesBegin; p != h->mpCreaturesEnd; ++p)
+    {
+        Creature* c = *p;
+        host->FUN_00aca360(c);
+        if (ps != 0)
+            ps->RemovePosseMember(c, 0, 0);
+    }
+    GetNounManager()->RemoveNoun(h);
+    mSlots.Remove(key);
+}
+
+// @ 0x00d51c30
+int RT::Task::Activate()
+{
+    using namespace RT;
+    Vec3_s00d5_12f0 tmpVec;
+    unsigned tmpKey;
+    PairUR* it = mSlots.find(0x5f11333);
+    PairUR* const end = mSlots.mpEnd;
+
+    Species* species;
+    Obj* slotObj;
+    if (it == end || !(slotObj = it->value) || !(species = slotObj->Cast(0x4f396a66)))
+    {
+        tmpKey = 0x5f10ce1;
+        int idx = mCounters[tmpKey];
+        GameDataVec* vec = GetNounManager()->GetGameDataVector(F_cd7d10, F_d3d420, F_accbb0, F_b1e500, 0x18c6d19);
+        if ((int)(vec->mpEnd - vec->mpBegin) <= idx)
+            return (int)&vec->mpBegin;
+        species = (Species*)vec->mpBegin[idx];
+        if (!species)
+            return (int)&vec->mpBegin;
+    }
+
+    int id = GetOwnerProperty(mpOwner, 0x64aaf64e, 0xd00f20e4);
+    const Vec3_s00d5_12f0* pos = HolderOf(species)->GetPosition();
+
+    Herd* best = 0;
+    float bestDist = 90000.0f;
+    int player = GetNounManager()->GetPlayerEmpireOrMinus1();
+    {
+        GameDataVec* vec = GetNounManager()->GetGameDataVector(F_cd7d10, F_d3d420, F_accc30, F_b1e500, 0x1be418e);
+        Herd** p = (Herd**)vec->mpBegin;
+        Herd** pEnd = (Herd**)vec->mpEnd;
+        for (; p != pEnd; ++p)
+        {
+            Herd* h = *p;
+            if (h->IsFlagged() && h->mpCreaturesBegin != h->mpCreaturesEnd && h->GetOwnerEmpire() != player)
+            {
+                char* rec = (*h->mpCreaturesBegin)->GetSpeciesRecord();
+                if (rec && *(int*)(rec + 0x10) == id)
+                {
+                    const Vec3_s00d5_12f0* hp = h->GetPosition();
+                    float dx = pos->x - hp->x;
+                    float dy = pos->y - hp->y;
+                    float dz = pos->z - hp->z;
+                    float d = (dz * dz + dx * dx) + dy * dy;
+                    if (d <= bestDist)
+                    {
+                        best = h;
+                        bestDist = d;
+                    }
+                }
+            }
+        }
+    }
+
+    Scenario* scenario = 0;
+    if (!best)
+    {
+        bestDist = 90000.0f;
+        GameDataVec* vec = GetNounManager()->GetGameDataVector(F_cd7d10, F_d3d420, F_ace070, F_b1e500, 0x36be27e);
+        Scenario** p = (Scenario**)vec->mpBegin;
+        Scenario** pEnd = (Scenario**)vec->mpEnd;
+        for (; p != pEnd; ++p)
+        {
+            Scenario* s = *p;
+            if (!s->IsFlagged() && s->mTypeId == 0x1be418e && (int)s->mId == id)
+            {
+                const Vec3_s00d5_12f0* sp = HolderOf(s)->GetPosition();
+                float dx = pos->x - sp->x;
+                float dy = pos->y - sp->y;
+                float dz = pos->z - sp->z;
+                float d = (dx * dx + dz * dz) + dy * dy;
+                if (d < bestDist)
+                {
+                    bestDist = d;
+                    scenario = s;
+                }
+            }
+        }
+    }
+
+    if (scenario)
+    {
+        int ok = LoadScenarioFn(scenario, -1, -1);
+        if ((char)ok == 0)
+            return ok;
+        best = scenario->mpHerd;
+        if (!best)
+            return ok;
+        int type = best->GetTypeId();
+        if (type != 0x1be418e)
+            return type;
+    }
+    else if (!best)
+    {
+        Herd* created = GetNounManager()->CreateGameData(0x1be418e, id, 0, pos, 0);
+        if (!created)
+            return 0;
+        best = (created->GetTypeId() == 0x1be418e) ? created : 0;
+
+        tmpKey = 0x613614c;
+        mCounters[tmpKey] = 1;
+
+        Vec3_s00d5_12f0& spot = tmpVec;
+        spot = *pos;
+        Vec3List* pts = species->GetPoints();
+        if (pts->mpBegin != pts->mpEnd)
+            spot = pts->mpBegin[0];
+        int n = (int)(pts->mpEnd - pts->mpBegin);
+        for (int i = 0; i < n; i++)
+        {
+            const Vec3_s00d5_12f0& q = pts->mpBegin[i];
+            float dx = pos->x - q.x;
+            float dy = pos->y - q.y;
+            float dz = pos->z - q.z;
+            if (5625.0f < (dz * dz + dy * dy) + dx * dx)
+            {
+                spot = pts->mpBegin[i];
+                break;
+            }
+        }
+        int r = best->SetPosition(&spot);
+        if (!best)
+            return r;
+    }
+
+    tmpKey = 0x5f115ab;
+    if (best)
+    {
+        Obj*& slot = mSlots[tmpKey];
+        Obj* old = slot;
+        if (best != old)
+        {
+            best->AddRef();
+            slot = best;
+            if (old)
+                old->Release();
+        }
+    }
+    else
+        mSlots.Remove(tmpKey);
+
+    if (best->mpCreaturesBegin == best->mpCreaturesEnd)
+    {
+        GetCreatureHost();
+        int info = (int)best->mpInfo;
+        for (unsigned i = 0; i < best->mGeneration; i++)
+        {
+            Vec3_s00d5_12f0& out = tmpVec;
+            GetPlanetModel()->MakeRandomWorldPosition(&out, best->GetPosition(), 3.0f, 6.0f);
+            PlaceNewCreature(&out, info, 1, best, 0, 1);
+        }
+    }
+
+    best->mActivateBrainLevel = -1;
+    MessageU msg;
+    msg.sub = 0;
+    msg.flags = 4;
+    msg.id = 0x609b763;
+    GetRouter()->Send(best->mpInfo + 0x504, &msg);
+
+    Species* linked = species->GetLinked();
+    Species* second = 0;
+    PtrList* list = species->GetList();
+    if ((unsigned)(list->mpEnd - list->mpBegin) > 1)
+        second = ((Species**)species->GetList()->mpBegin)[1];
+    CreatureHost* host = GetCreatureHost();
+    for (unsigned i = 0; i < (unsigned)(best->mpCreaturesEnd - best->mpCreaturesBegin); i++)
+    {
+        Creature* c = best->mpCreaturesBegin[i];
+        host->Attach(c);
+        Holder* hold = second ? HolderOf(second) : HolderOf(linked);
+        unsigned v = hold->GetValue();
+        ((Sub8*)(c->mpSub + 8))->Apply(0, 0x4000, host->mScale, v);
+    }
+
+    tmpKey = 0x5f11011;
+    float zero = 0.0f;
+    mCounters[tmpKey] = *(unsigned*)&zero;
+    tmpKey = 0x5f0f28d;
+    mCounters[tmpKey] = 0;
+    return GetCreatureHost()->Place(best->GetPosition(), 25.0f, 37.5f);
 }
 
 // @ 0x00f21cd0
