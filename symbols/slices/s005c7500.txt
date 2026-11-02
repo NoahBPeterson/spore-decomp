@@ -2,7 +2,7 @@
 005c5de0 ?GetCategory@cSPPalette@SP@@QAEPAVcSPPaletteCategory@2@H@Z  # SP::cSPPalette::GetCategory (callee of s005c7500, named from the dev publics; slice address comment)
 005c6810 ?Init@cSPPaletteItem@SP@@QAE_NABVKey@ResourceMan@EA@@HI@Z  # SP::cSPPaletteItem::Init (callee of s005c7500, named from the dev publics; slice address comment)
 005c7500 ?Init@cSPOLDPaletteItemUI_s005c_7500@SP@@QAEXPAVcSPPaletteItem_s005c_7500@2@PAVUIWindow@2@HPAVcSPSwatch_s005c_7500@2@@Z  # cSPOLDPaletteItemUI_s005c_7500::Init migrated from s005c7500 (verbatim, slice spelling)
-005c7b80  ??0cSPPaletteCursor@SP@@QAE@XZ  # palette cursor ctor (base vptrs + zeroed indices), byte-exact
+005c7b80 ??0cSPPaletteCursor@SP@@QAE@XZ  # cSPPaletteCursor::cSPPaletteCursor migrated from s005c7500 (verbatim, slice spelling)
 005c7bc0  ?SetPalette@cSPPaletteCursor@SP@@QAEXPAVcSPPalette@2@@Z  # sets refcounted mPalette @+0xc, resets indices
 005c7c10  ?Advance@cSPPaletteCursor@SP@@QAE_NXZ  # walks category -> subcategory -> page -> item indices
 005c7d30  ?Current@cSPPaletteCursor@SP@@QAEHPAXPAH11@Z  # resolves current page/item; out-params (row%col)

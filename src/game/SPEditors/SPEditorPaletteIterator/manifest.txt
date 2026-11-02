@@ -1,0 +1,2 @@
+# source  symbol  va  flags
+../src/game/SPEditors/SPEditorPaletteIterator.cpp  ??0cSPPaletteCursor@SP@@QAE@XZ  005c7b80  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
