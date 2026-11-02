@@ -1,11 +1,13 @@
-007f2340 VarMap::GetTokenIndex  # intern a token string, returns its index
-007f2500 ?ArithReset@@YIXPAUVarMap@@@Z  # ArithReset (slice spelling: __fastcall, self in ecx)
-007f2590 VarMap::GetVar  # variable lookup by token name
-007f25c0 VarMap::SetVar  # variable set by token name
-007f2960 ArithReadThing  # read a length-prefixed byte blob
+007f2340 ?GetTokenIndex@VarMap@@QAEIPBD@Z  # VarMap::GetTokenIndex migrated from s007f2340 (verbatim, slice spelling)
+007f2500 ?ArithReset@@YIXPAUVarMap@@@Z  # ArithReset migrated from s007f2340 (verbatim, slice spelling)
+007f2590 ?GetVar@VarMap@@QAEMPBD@Z  # VarMap::GetVar migrated from s007f2340 (verbatim, slice spelling)
+007f25c0 ?SetVar@VarMap@@QAEXPBDM@Z  # VarMap::SetVar migrated from s007f2340 (verbatim, slice spelling)
+007f2600 ?LoadProgram@VarMap@@QAE_NPBQBI@Z  # VarMap::LoadProgram migrated from s007f2340 (verbatim, slice spelling)
+007f2960 ?ArithReadThing@@YA_NPAX0@Z  # ArithReadThing migrated from s007f2340 (verbatim, slice spelling)
 007f29e0 ?ArithReadWrapper@@YGXPAX0HH@Z  # ArithReadWrapper migrated from s007f2340 (verbatim, slice spelling)
 007f2a10 Vec4::push_back  # 4-byte float vector push_back (new-element guard)
 007f2a40 VecU::push_back  # 4-byte integer vector push_back
+007f2a70 ?Execute@VMContext@@QAEIPBUArithCodeVec@@PAMHH@Z  # VMContext::Execute migrated from s007f2340 (verbatim, slice spelling)
 007f30e0 ?Init@IMEProxy@@QAE_NPAXH@Z  # IMEProxy::Init migrated from s007f2340 (verbatim, slice spelling)
 007f31e0 ?SetupDefaultFonts@IMEProxy@@QAEXXZ  # IMEProxy::SetupDefaultFonts migrated from s007f2340 (verbatim, slice spelling)
 007f3320 ?Shutdown@IMEProxy@@QAEXXZ  # IMEProxy::Shutdown migrated from s007f2340 (verbatim, slice spelling)

@@ -8,4 +8,3 @@
 007f20d0 0 token lookup / run emit - hashtable find + vector assign + FUN_007f2a70, skeleton only
 007f21d0 0 cArithmeticaProgram::Copy - per-member vector copy skeleton only
 007f2240 0 LoadArithmeticaFile - resource load with EH skeleton only
-007f2500 0 ArithReset - EH + vector assigns + FUN_007f2a70, skeleton

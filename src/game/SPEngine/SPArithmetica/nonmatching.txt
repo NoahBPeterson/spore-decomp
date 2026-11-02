@@ -1,3 +1,9 @@
 # va diff reason
 007f1820 65 cArithmeticaFactory::WriteResource - register allocation (size kept in edi, writer in esi) differs
 007f1890 52 eastl uninitialized_copy (16-byte) - returns result pointer (original loads it into eax); register assignment differs; flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast; equiv PASS (312 valid, 100% cov)
+007f2340 293 VarMap::GetTokenIndex - token interning/lookup; reconstruction matches the semantics (always-run memcpy + grow/shrink) but the original inlines the eastl string/vector paths, so instruction selection differs flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+007f2500 70 ArithReset - reconstruction omits the original's SEH frame around the two vector clears; those two clears plus the VM Execute call are reproduced flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+007f2590 23 VarMap::GetVar - size computed as end-minus-begin; the compiler keeps begin in the subtract register first (register allocation only) flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+007f2600 829 VarMap::LoadProgram - blob deserialization reconstructed from the decompile's field permutation and cursor logic; instruction selection differs flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+007f2960 90 ArithReadThing - read length-prefixed blob; reconstruction matches the original's calls and arguments but register allocation differs flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+007f2a70 1276 VMContext::Execute - 0x21-op bytecode VM; the original uses a jump table (0x7f3048) with per-op inlined push/pop, ours is a switch flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
