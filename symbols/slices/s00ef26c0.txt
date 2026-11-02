@@ -1,0 +1,8 @@
+00ef26c0 ?RebuildModels@PlanetFlow@@QAEXXZ  # PlanetFlow::RebuildModels migrated from s00ef26c0 (verbatim, slice spelling)
+00ef2940 ?FillPending@PlanetFlow@@QAEXXZ  # PlanetFlow::FillPending migrated from s00ef26c0 (verbatim, slice spelling)
+00ef29c0 ?GlobalMwVector_Clear@@YAXXZ  # GlobalMwVector_Clear migrated from s00ef26c0 (verbatim, slice spelling)
+00ef2a10 ?AdvanceStage@PlanetFlow@@QAEXXZ  # PlanetFlow::AdvanceStage migrated from s00ef26c0 (verbatim, slice spelling)
+00ef2b20 ?FUN_00ef2b20@@YAXM@Z  # FUN_00ef2b20 migrated from s00ef26c0 (verbatim, slice spelling)
+00ef2e90 ?FUN_00ef2e90@@YAXH@Z  # FUN_00ef2e90 migrated from s00ef26c0 (verbatim, slice spelling)
+00ef2f70 ?TickBase@PlayMode@@QAEXH@Z  # PlayMode::TickBase migrated from s00ef26c0 (verbatim, slice spelling)
+00ef2f90 ?TickFull@PlayMode@@QAEXH@Z  # PlayMode::TickFull migrated from s00ef26c0 (verbatim, slice spelling)

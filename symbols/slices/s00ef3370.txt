@@ -1,6 +1,6 @@
 00ef3370 cSPUIAssetView::MessageHandler  # IMsgHandler dispatch, 8 message cases (asset-browser selection, SetAssetData, avatar, object-template query, panel refresh)
 00ef38c0 cSPUIAssetView::Cleanup  # RemoveHandler on the messaging registration, release the AutoRefCount at +0x120, tail-call Cleanup
-00ef3930 FUN_00ef3930  # writes a 3-dword record (0x68715e28, 0x0510a95b, DAT_015acd3c) through the out pointer
+00ef3930 ?FUN_00ef3930@@YGXPAH@Z  # FUN_00ef3930 migrated from s00ef3370 (verbatim, slice spelling)
 00ef3950 cSPUIAssetView::Dtor  # release the text/layout AutoRefCounts at +0x124..+0x148 (toggle slot 0x7c on +0x12c first), tail-call dtor
 00ef3a60 cSPUIAssetView::Refresh  # query the +0x120 type hash; magic 0x24720859 toggles visibility, otherwise set the image from the layout
 00ef3b40 cSPUIAssetView::Ctor  # base ctor, set the IMsgHandler vtable at +0x108 and the view vtables, zero +0x10c..+0x148

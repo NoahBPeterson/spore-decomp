@@ -1,21 +1,19 @@
-# va  name  # evidence
-# scenario checklist / planetary-UI helpers; names unconfirmed
-00efdee0  ScenarioTutorials_PlacePlanetCamera
-00efe110  ScenarioTutorials_UpdateViewMetrics
-00efe240  ScenarioTutorials_RefreshAndUpdate
-00efe260  ScenarioTutorials_SetSelectedObject
-00efe310  ScenarioTutorials_TickStopwatch
-00efe4a0  ScenarioTutorials_SetTargetVisible
-00efe510  ScenarioTutorials_ToggleTarget
-00efe5d0  ScenarioTutorials_HasObject            # 0x20-stride scan over DAT_016c7b88+0x8c
-00efe610  ScenarioTutorials_HasObjectByKey
-00efe630  ScenarioTutorials_CanTrigger
-00efe6a0  ScenarioTutorials_Rating
-00efe870  ScenarioTutorials_FindSurfacePoint      # 0x27e8-stride scan of planet surface list
-00efe8d0  ScenarioTutorials_SetWindowVisible
-00efe930  ScenarioTutorials_SetSelectedWindow
-00efeaa0  ScenarioTutorials_HasPendingSelection
-00efeac0  ScenarioTutorials_HasSelected
-00efeae0  ScenarioTutorials_CheckObject
-00efebb0  ScenarioTutorials_CheckObject2
-00efec90  ScenarioTutorials_ResolveObject
+00efdee0 ?FUN_00efdee0@@YAXXZ  # FUN_00efdee0 migrated from s00efdee0 (verbatim, slice spelling)
+00efe110 ?FUN_00efe110@@YAXXZ  # FUN_00efe110 migrated from s00efdee0 (verbatim, slice spelling)
+00efe240 ?FUN_00efe240@@YAHXZ  # FUN_00efe240 migrated from s00efdee0 (verbatim, slice spelling)
+00efe260 ?FUN_00efe260@@YAXXZ  # FUN_00efe260 migrated from s00efdee0 (verbatim, slice spelling)
+00efe310 ?FUN_00efe310@@YAXH@Z  # FUN_00efe310 migrated from s00efdee0 (verbatim, slice spelling)
+00efe4a0 ?FUN_00efe4a0@@YAXH@Z  # FUN_00efe4a0 migrated from s00efdee0 (verbatim, slice spelling)
+00efe510 ?FUN_00efe510@@YAXM@Z  # FUN_00efe510 migrated from s00efdee0 (verbatim, slice spelling)
+00efe5d0 ?FUN_00efe5d0@@YA_NH@Z  # FUN_00efe5d0 migrated from s00efdee0 (verbatim, slice spelling)
+00efe610 ?FUN_00efe610@@YA_NPAX@Z  # FUN_00efe610 migrated from s00efdee0 (verbatim, slice spelling)
+00efe630 ?FUN_00efe630@@YA_NHPAX@Z  # FUN_00efe630 migrated from s00efdee0 (verbatim, slice spelling)
+00efe6a0 ?FUN_00efe6a0@@YAHH@Z  # FUN_00efe6a0 migrated from s00efdee0 (verbatim, slice spelling)
+00efe870 ?FUN_00efe870@@YAHPAH@Z  # FUN_00efe870 migrated from s00efdee0 (verbatim, slice spelling)
+00efe8d0 ?FUN_00efe8d0@Scene@@QAEXHH@Z  # Scene::FUN_00efe8d0 migrated from s00efdee0 (verbatim, slice spelling)
+00efe930 ?FUN_00efe930@Scene@@QAEXPAX@Z  # Scene::FUN_00efe930 migrated from s00efdee0 (verbatim, slice spelling)
+00efeaa0 ?FUN_00efeaa0@@YIHPAD@Z  # FUN_00efeaa0 migrated from s00efdee0 (verbatim, slice spelling)
+00efeac0 ?FUN_00efeac0@@YG_NH@Z  # FUN_00efeac0 migrated from s00efdee0 (verbatim, slice spelling)
+00efeae0 ?FUN_00efeae0@Scene@@QAE_NH@Z  # Scene::FUN_00efeae0 migrated from s00efdee0 (verbatim, slice spelling)
+00efebb0 ?FUN_00efebb0@Scene@@QAEXPAX@Z  # Scene::FUN_00efebb0 migrated from s00efdee0 (verbatim, slice spelling)
+00efec90 ?FUN_00efec90@Scene@@QAEXPAX@Z  # Scene::FUN_00efec90 migrated from s00efdee0 (verbatim, slice spelling)

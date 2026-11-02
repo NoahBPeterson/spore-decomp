@@ -1,13 +1,28 @@
-# va  name  # evidence
-# free helpers in the scenario-checklist TU; names unconfirmed except the two reused from s00ef6db0
-00efc520  ScenarioTutorials_GetActive  # returns *g_016c7b88 or 0
-00efc530  ScenarioTutorials_IsChecklistType  # compares vtable-slot 0xe result to 5 known type ids
-00efc850  ScenarioTutorials_UpdateInterface  # gSimulator+0x18 -> FUN_00f35f70
-00efc860  ScenarioTutorials_ReleaseInput
-00efc890  ScenarioTutorials_CaptureInput
-00efc8c0  ScenarioTutorials_SetActive
-00efc910  ScenarioTutorials_GetObjectA
-00efcae0  ScenarioTutorials_CloseWindow
-00efcd90  ScenarioTutorials_IsVisible
-00efcfb0  ScenarioTutorials_IsInState2or10
 00efc270  UI::cScenarioTutorialsChecklistUI::HandleMessage2
+00efc4c0 ?FUN_00efc4c0@@YIMPADH@Z  # FUN_00efc4c0 migrated from s00efc270 (verbatim, slice spelling)
+00efc520  ScenarioTutorials_GetActive  # returns *g_016c7b88 or 0
+00efc530 ?FUN_00efc530@@YA_NPAH@Z  # FUN_00efc530 migrated from s00efc270 (verbatim, slice spelling)
+00efc570 ?FUN_00efc570@@YA_NPAX0M@Z  # FUN_00efc570 migrated from s00efc270 (verbatim, slice spelling)
+00efc5f0 ?FUN_00efc5f0@@YAHPAXM@Z  # FUN_00efc5f0 migrated from s00efc270 (verbatim, slice spelling)
+00efc660 ?FUN_00efc660@@YI_NPADHH@Z  # FUN_00efc660 migrated from s00efc270 (verbatim, slice spelling)
+00efc6c0 ?FUN_00efc6c0@@YIXPADHH@Z  # FUN_00efc6c0 migrated from s00efc270 (verbatim, slice spelling)
+00efc6e0 ?FUN_00efc6e0@@YGHPAX@Z  # FUN_00efc6e0 migrated from s00efc270 (verbatim, slice spelling)
+00efc7a0 ?FUN_00efc7a0@@YI_NPAD@Z  # FUN_00efc7a0 migrated from s00efc270 (verbatim, slice spelling)
+00efc7d0 ?FUN_00efc7d0@@YI_NPADHHH@Z  # FUN_00efc7d0 migrated from s00efc270 (verbatim, slice spelling)
+00efc850 ?FUN_00efc850@@YAXXZ  # FUN_00efc850 migrated from s00efc270 (verbatim, slice spelling)
+00efc860 ?FUN_00efc860@@YAXXZ  # FUN_00efc860 migrated from s00efc270 (verbatim, slice spelling)
+00efc890 ?FUN_00efc890@@YAXXZ  # FUN_00efc890 migrated from s00efc270 (verbatim, slice spelling)
+00efc8c0  ScenarioTutorials_SetActive
+00efc8f0 ?FUN_00efc8f0@@YAHXZ  # FUN_00efc8f0 migrated from s00efc270 (verbatim, slice spelling)
+00efc910 ?FUN_00efc910@@YAHXZ  # FUN_00efc910 migrated from s00efc270 (verbatim, slice spelling)
+00efc930 ?FUN_00efc930@@YA_NPAUVec3@@@Z  # FUN_00efc930 migrated from s00efc270 (verbatim, slice spelling)
+00efc9c0 ?FUN_00efc9c0@@YA_NXZ  # FUN_00efc9c0 migrated from s00efc270 (verbatim, slice spelling)
+00efca60 ?FUN_00efca60@@YA_NPAD@Z  # FUN_00efca60 migrated from s00efc270 (verbatim, slice spelling)
+00efcae0 ?FUN_00efcae0@@YAXXZ  # FUN_00efcae0 migrated from s00efc270 (verbatim, slice spelling)
+00efcb40 ?FUN_00efcb40@@YAMPAX@Z  # FUN_00efcb40 migrated from s00efc270 (verbatim, slice spelling)
+00efcbe0 ?FUN_00efcbe0@@YAXPAXH@Z  # FUN_00efcbe0 migrated from s00efc270 (verbatim, slice spelling)
+00efccd0 ?FUN_00efccd0@@YIXPAD@Z  # FUN_00efccd0 migrated from s00efc270 (verbatim, slice spelling)
+00efcd90 ?FUN_00efcd90@@YAHXZ  # FUN_00efcd90 migrated from s00efc270 (verbatim, slice spelling)
+00efcde0 ?FUN_00efcde0@@YIXPAX@Z  # FUN_00efcde0 migrated from s00efc270 (verbatim, slice spelling)
+00efce30 ?FUN_00efce30@@YIXPAX@Z  # FUN_00efce30 migrated from s00efc270 (verbatim, slice spelling)
+00efcfb0 ?FUN_00efcfb0@@YA_NPAD@Z  # FUN_00efcfb0 migrated from s00efc270 (verbatim, slice spelling)

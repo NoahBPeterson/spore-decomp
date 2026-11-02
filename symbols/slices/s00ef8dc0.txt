@@ -1,15 +1,16 @@
-00ef8dc0  Simulator::cScenarioTutorials::SavePrefs  # RemoveHandler + writes two completed-count prefs (0x7abf095/0x7abf09d) then SaveResource
-00ef8ed0  FUN_00ef8ed0  # toggles tutorial page windows by root state, gated by config key 0x4ea96cb
-00ef9000  cTutorialPage::Rebuild  # builds "N of M" caption via SetNumberString + cString args
+008120d0 ?Init@cSPUILayout@@QAE_NABVKey@ResourceMan@EA@@_NI@Z  # cSPUILayout::Init (callee of s00ef8dc0, named from the dev publics; slice address comment)
+00ef8dc0 ?SavePrefs@cScenarioTutorials@@QAEXXZ  # cScenarioTutorials::SavePrefs migrated from s00ef8dc0 (verbatim, slice spelling)
+00ef8ed0 ?FUN_00ef8ed0@@YGX_N@Z  # FUN_00ef8ed0 migrated from s00ef8dc0 (verbatim, slice spelling)
+00ef9000 ?Rebuild@cTutorialPage@@QAEXXZ  # cTutorialPage::Rebuild migrated from s00ef8dc0 (verbatim, slice spelling)
 00ef9180  Simulator::cScenarioTutorials::~cScenarioTutorials  # vtable stores + step hash_set teardown + RemoveHandler
-00ef9290  cTutorialPage::BuildList  # builds lesson group/step rows from cSPUILayout resources
-00ef9830  FUN_00ef9830  # toggle: destroys attached window (vtbl+0x108 / +4) and clears this+0x24
-00ef9880  FUN_00ef9880  # step hash_set ctor, fixed_pool_base::init(this+0x13c, 0x200)
-00ef9950  FUN_00ef9950  # step hash_set ctor, fixed_pool_base::init(this+0x7c, 0x80)
-00ef9af0  Simulator::cScenarioTutorials::OnStepDone  # inserts step, checks group completion, marks group done
-00ef9d00  cTutorialPage::CreateLayout  # new cSPUILayout, Init/SetParentWin/SetReloadCallback then BuildList
-00ef9d90  Simulator::cScenarioTutorials::cScenarioTutorials  # vtable + Stopwatch(this+0x10) + step ctors
-0148b5c8  ??_7cScenarioTutorials@@6BPaintSystem@@@  # primary vtable, stored at +0 by ctor 0xef9d90 / dtor 0xef9180
-0148b5b8  ??_7cScenarioTutorials@@6BContentValidationSummarizer@@@  # secondary vtable at +4
+00ef9290 ?BuildList@cTutorialPage@@QAEXXZ  # cTutorialPage::BuildList migrated from s00ef8dc0 (verbatim, slice spelling)
+00ef9830 ?FUN_00ef9830@@YAXPAXHD@Z  # FUN_00ef9830 migrated from s00ef8dc0 (verbatim, slice spelling)
+00ef9880 ??0StepSetBig@@QAE@ABUHashFn@@ABUEqFn@@@Z  # StepSetBig::StepSetBig migrated from s00ef8dc0 (verbatim, slice spelling)
+00ef9950 ??0StepSetSmall@@QAE@ABUHashFn@@ABUEqFn@@@Z  # StepSetSmall::StepSetSmall migrated from s00ef8dc0 (verbatim, slice spelling)
+00ef9af0 ?OnStepDone@cScenarioTutorials@@QAEXH@Z  # cScenarioTutorials::OnStepDone migrated from s00ef8dc0 (verbatim, slice spelling)
+00ef9d00 ?CreateLayout@cTutorialPage@@QAEXXZ  # cTutorialPage::CreateLayout migrated from s00ef8dc0 (verbatim, slice spelling)
+00ef9d90 ??0cScenarioTutorials@@QAE@XZ  # cScenarioTutorials::cScenarioTutorials migrated from s00ef8dc0 (verbatim, slice spelling)
 013eb394  ??_7PaintSystem@@6B@  # base vtable restored by the dtor
 013ec458  ??_7ContentValidationSummarizer@@6B@  # base vtable restored by the dtor
+0148b5b8  ??_7cScenarioTutorials@@6BContentValidationSummarizer@@@  # secondary vtable at +4
+0148b5c8  ??_7cScenarioTutorials@@6BPaintSystem@@@  # primary vtable, stored at +0 by ctor 0xef9d90 / dtor 0xef9180

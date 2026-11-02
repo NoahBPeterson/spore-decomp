@@ -1,1 +1,12 @@
+00ef40d0 ?FUN_00ef40d0@@YIXPAUcAssetPanel@@@Z  # FUN_00ef40d0 migrated from s00ef40d0 (verbatim, slice spelling)
+00ef4440 ?FUN_00ef4440@@YIPAXPAUcLayerKeyProvider@@PAXH@Z  # FUN_00ef4440 migrated from s00ef40d0 (verbatim, slice spelling)
+00ef4490 ?FUN_00ef4490@@YIXPAUcLayerKeyProvider@@PAXPAUResKey@@@Z  # FUN_00ef4490 migrated from s00ef40d0 (verbatim, slice spelling)
+00ef4520 ?FUN_00ef4520@@YI?AUPair8@@PAX@Z  # FUN_00ef4520 migrated from s00ef40d0 (verbatim, slice spelling)
+00ef4550 ?FUN_00ef4550@@YIPAUcLayerKeyProvider@@PAU1@@Z  # FUN_00ef4550 migrated from s00ef40d0 (verbatim, slice spelling)
+00ef45b0 ?FUN_00ef45b0@@YIPAUcLayerKeyProvider@@PAU1@PAXD@Z  # FUN_00ef45b0 migrated from s00ef40d0 (verbatim, slice spelling)
+00ef4620 ?FUN_00ef4620@@YIXPAUcLayerKeyProvider@@PAX1@Z  # FUN_00ef4620 migrated from s00ef40d0 (verbatim, slice spelling)
+00ef46f0 ?FUN_00ef46f0@@YI_NPAUcAssetPanel@@PAX1PAUMsg@@@Z  # FUN_00ef46f0 migrated from s00ef40d0 (verbatim, slice spelling)
+00ef4940 ?FUN_00ef4940@@YIXPAUcAssetPanel@@@Z  # FUN_00ef4940 migrated from s00ef40d0 (verbatim, slice spelling)
+00ef4bd0 ?FUN_00ef4bd0@@YIXPAUcAssetPanel@@@Z  # FUN_00ef4bd0 migrated from s00ef40d0 (verbatim, slice spelling)
+00ef4e40 ?FUN_00ef4e40@@YIXPAUcAssetPanel@@@Z  # FUN_00ef4e40 migrated from s00ef40d0 (verbatim, slice spelling)
 00ef4f80 cSpinner_Update  # cSpinner::Update: thiscall(int), spinner tick; byte-exact

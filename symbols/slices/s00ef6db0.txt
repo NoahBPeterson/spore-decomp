@@ -1,21 +1,31 @@
-# va  name  # evidence
-# Simulator::cSPScenarioModeSporepediaLargeAssetView (ctor 0x00ef64e0; vtables 0x148b3b4/3c4/3dc/3e8/3f8)
-00ef6db0  Simulator::cSPScenarioModeSporepediaLargeAssetView::Reset  # vt 0x148b3c4 slot 3 (0x148b3d0)
-00ef6ea0  Simulator::cSPScenarioModeSporepediaLargeAssetView::RemoveKey  # same class region
-00ef6f20  Simulator::cSPScenarioModeSporepediaLargeAssetView::HandleMessage  # vt 0x148b3e8 slot 1 (0x148b3ec)
-# UI::cScenarioTutorialsChecklistUI (ctor 0x00ef7900; primary vt 0x148b59c, secondary vt 0x148b58c)
-00ef7900  UI::cScenarioTutorialsChecklistUI::cScenarioTutorialsChecklistUI  # vt; vtable_names.txt
-00ef7950  UI::cScenarioTutorialsChecklistUI::~cScenarioTutorialsChecklistUI  # releases 0x0c..0x20 then base vtables
-00ef7d00  UI::cScenarioTutorialsChecklistUI::vfunc  # secondary vt 0x148b584 slot 0
-# unconfirmed helpers in the same TU, named from the disassembly / callees
-00ef7280  ScenarioTutorials_ConfigEnabled
-00ef72a0  ScenarioTutorials_HasIndex
-00ef72b0  ScenarioTutorials_ClearPending
-00ef72c0  ScenarioTutorials_MarkDirty
-00ef72d0  ScenarioTutorials_IsValidCategory
-00ef7330  ScenarioTutorials_CategoryState
-00ef73c0  ScenarioTutorials_InitPlacement
-00ef7810  ScenarioTutorials_SelectCategory
-00ef78c0  ScenarioTutorials_CountEntries
-00ef7c00  eastl::hashtable::DoRehash
-00ef7ca0  eastl::hashtable::Distance
+00ef6db0 ?Reset@CAssetView@@QAEXXZ  # CAssetView::Reset migrated from s00ef6db0 (verbatim, slice spelling)
+00ef6ea0 ?RemoveKey@CAssetView@@QAE_NPAX@Z  # CAssetView::RemoveKey migrated from s00ef6db0 (verbatim, slice spelling)
+00ef6f20 ?HandleMessage@CAssetView@@QAE_NIPAX@Z  # CAssetView::HandleMessage migrated from s00ef6db0 (verbatim, slice spelling)
+00ef7280 ?FUN_00ef7280@@YAHXZ  # FUN_00ef7280 migrated from s00ef6db0 (verbatim, slice spelling)
+00ef72a0 ?FUN_00ef72a0@@YI_NPAD@Z  # FUN_00ef72a0 migrated from s00ef6db0 (verbatim, slice spelling)
+00ef72b0 ?FUN_00ef72b0@@YIXPAD@Z  # FUN_00ef72b0 migrated from s00ef6db0 (verbatim, slice spelling)
+00ef72c0 ?FUN_00ef72c0@@YIXPAD@Z  # FUN_00ef72c0 migrated from s00ef6db0 (verbatim, slice spelling)
+00ef72d0 ?FUN_00ef72d0@@YGHH@Z  # FUN_00ef72d0 migrated from s00ef6db0 (verbatim, slice spelling)
+00ef7330 ?FUN_00ef7330@@YGHH@Z  # FUN_00ef7330 migrated from s00ef6db0 (verbatim, slice spelling)
+00ef73c0 ?FUN_00ef73c0@@YAXXZ  # FUN_00ef73c0 migrated from s00ef6db0 (verbatim, slice spelling)
+00ef75b0 ?sub_ef75b0@CAssetView@@QAEXHHH@Z  # CAssetView::sub_ef75b0 migrated from s00ef6db0 (verbatim, slice spelling)
+00ef7600 ?sub_ef7600@CAssetView@@QAEXHHH@Z  # CAssetView::sub_ef7600 migrated from s00ef6db0 (verbatim, slice spelling)
+00ef7640 ?sub_ef7640@CAssetView@@QAEXHD@Z  # CAssetView::sub_ef7640 migrated from s00ef6db0 (verbatim, slice spelling)
+00ef76a0 ?sub_ef76a0@CAssetView@@QAEXHD@Z  # CAssetView::sub_ef76a0 migrated from s00ef6db0 (verbatim, slice spelling)
+00ef76f0 ?FUN_00ef76f0@@YA_NXZ  # FUN_00ef76f0 migrated from s00ef6db0 (verbatim, slice spelling)
+00ef7740 ?FUN_00ef7740@@YAHXZ  # FUN_00ef7740 migrated from s00ef6db0 (verbatim, slice spelling)
+00ef7780 ?FUN_00ef7780@@YIHPAD@Z  # FUN_00ef7780 migrated from s00ef6db0 (verbatim, slice spelling)
+00ef77d0 ?FUN_00ef77d0@@YAHXZ  # FUN_00ef77d0 migrated from s00ef6db0 (verbatim, slice spelling)
+00ef7810 ?FUN_00ef7810@@YIXPADD@Z  # FUN_00ef7810 migrated from s00ef6db0 (verbatim, slice spelling)
+00ef78c0 ?FUN_00ef78c0@@YAHXZ  # FUN_00ef78c0 migrated from s00ef6db0 (verbatim, slice spelling)
+00ef7900 ?FUN_00ef7900@@YIIPAD@Z  # FUN_00ef7900 migrated from s00ef6db0 (verbatim, slice spelling)
+00ef7950 ?FUN_00ef7950@@YIXPAD@Z  # FUN_00ef7950 migrated from s00ef6db0 (verbatim, slice spelling)
+00ef79d0 ?sub_ef79d0@CScenarioTutorialsChecklistUI@@QAEXXZ  # CScenarioTutorialsChecklistUI::sub_ef79d0 migrated from s00ef6db0 (verbatim, slice spelling)
+00ef7a00 ?sub_ef7a00@CScenarioTutorialsChecklistUI@@QAEXXZ  # CScenarioTutorialsChecklistUI::sub_ef7a00 migrated from s00ef6db0 (verbatim, slice spelling)
+00ef7a80 ?sub_ef7a80@CScenarioTutorialsChecklistUI@@QAEXXZ  # CScenarioTutorialsChecklistUI::sub_ef7a80 migrated from s00ef6db0 (verbatim, slice spelling)
+00ef7b00 ?sub_ef7b00@CScenarioTutorialsChecklistUI@@QAEXXZ  # CScenarioTutorialsChecklistUI::sub_ef7b00 migrated from s00ef6db0 (verbatim, slice spelling)
+00ef7b40 ?sub_ef7b40@CScenarioTutorialsChecklistUI@@QAEXXZ  # CScenarioTutorialsChecklistUI::sub_ef7b40 migrated from s00ef6db0 (verbatim, slice spelling)
+00ef7c00 ?DoRehash@CHash@@QAEXI@Z  # CHash::DoRehash migrated from s00ef6db0 (verbatim, slice spelling)
+00ef7ca0 ?FUN_00ef7ca0@@YAHHPAHH@Z  # FUN_00ef7ca0 migrated from s00ef6db0 (verbatim, slice spelling)
+00ef7ce0 ?FUN_00ef7ce0@@YIXPAD@Z  # FUN_00ef7ce0 migrated from s00ef6db0 (verbatim, slice spelling)
+00ef7d00 ?FUN_00ef7d00@@YAXXZ  # FUN_00ef7d00 migrated from s00ef6db0 (verbatim, slice spelling)

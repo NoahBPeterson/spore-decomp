@@ -1,5 +1,7 @@
-# va  Name  # evidence
-00efd8e0  ObjPlaneVec  # view-space Vector3 via FUN_00b18e00/FUN_00eebf80 + FUN_0059aed0; implicit ESI return buffer
-00efd6e0  RayHitPlane  # SP::App()->cViewer::GetCameraLocationInfo ray/plane test; implicit ESI/EDI args
-00efd830  ProjectHit  # projects RayHitPlane hit onto a normalized vector; implicit ECX/EAX args
-00efde90  FUN_00efde90  # selection predicate over param+0x20 -> +0x10 -> +0xc object, tests this+4
+00efd020 ?Update@CtlQ@@QAEXXZ  # CtlQ::Update migrated from s00efd020 (verbatim, slice spelling)
+00efd6e0 ?RayHitPlane@@YA_NPBUV3_s00ef_d020@@PAU1@@Z  # RayHitPlane migrated from s00efd020 (verbatim, slice spelling)
+00efd830 ?ProjectHit@@YAXPBUV3_s00ef_d020@@PAU1@PAM@Z  # ProjectHit migrated from s00efd020 (verbatim, slice spelling)
+00efd8e0 ?ObjPlaneVec@@YAPAUV3_s00ef_d020@@PAUObj@@PAU1@@Z  # ObjPlaneVec migrated from s00efd020 (verbatim, slice spelling)
+00efd970 ?PickUpdate@@YADPAUObj@@@Z  # PickUpdate migrated from s00efd020 (verbatim, slice spelling)
+00efdc00 ?ToolSnapUpdate@@YAXXZ  # ToolSnapUpdate migrated from s00efd020 (verbatim, slice spelling)
+00efde90 ?FUN_00efde90@SelCtx@@QAE_NH@Z  # SelCtx::FUN_00efde90 migrated from s00efd020 (verbatim, slice spelling)
