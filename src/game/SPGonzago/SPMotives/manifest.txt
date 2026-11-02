@@ -1,0 +1,2 @@
+# source  symbol  va  flags
+../src/game/SPGonzago/SPMotives.cpp  ?Init@cTuning_b708d0@@QAEXI@Z  00b71480  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

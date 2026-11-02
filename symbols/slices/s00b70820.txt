@@ -1,5 +1,6 @@
 00b70820 ?FUN_00b70820@@YIPAXPAUMotiveObject@@@Z  # FUN_00b70820 migrated from s00b70820 (verbatim, slice spelling)
 00b708d0 ?Load@cTuning_b708d0@@QAEXI@Z  # cTuning_b708d0::Load migrated from s00b70820 (verbatim, slice spelling)
+00b71480 ?Init@cTuning_b708d0@@QAEXI@Z  # cTuning_b708d0::Init migrated from s00b70820 (verbatim, slice spelling)
 00b714a0 ?SerializeObject@cTuning_b708d0@@QAEXPAX@Z  # cTuning_b708d0::SerializeObject migrated from s00b70820 (verbatim, slice spelling)
 00b71510 ?findEvent@MotiveObjectTree@@QAE_NPAX@Z  # MotiveObjectTree::findEvent migrated from s00b70820 (verbatim, slice spelling)
 00b71570 ?FUN_00b71570@@YA_NPAXPAUMapView@@@Z  # FUN_00b71570 migrated from s00b70820 (verbatim, slice spelling)
