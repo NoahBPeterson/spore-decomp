@@ -1,1 +1,1 @@
-0079c960 Clipper::Run  # clips a triangle index list against a sphere (modes 0/2/3), emitting kept triangles and split-edge vertices
+0079c960 ?Run@Clipper@@QAEXPAUMesh_s0079_c960@@PAUTriRange@@PAUUShortVec_s0079_c960@@PAUClipOut@@@Z  # Clipper::Run migrated from s0079c960 (verbatim, slice spelling)

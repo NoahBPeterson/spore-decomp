@@ -1,0 +1,1 @@
+0079d190 ?SplitTriangles@SplitPlane2@@QAEXPAUSplitModel_s0079_d190@@PAUSplitRange@@PAUUShortVec_s0079_d190@@2PAUSplitCtx_s0079_d190@@3@Z  # SplitPlane2::SplitTriangles migrated from s0079d190 (verbatim, slice spelling)

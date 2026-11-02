@@ -1,2 +1,2 @@
-0079dce0 CylinderSlicer::Run  # Claude-coined: cylinder twin of the sphere clipper 0x0079e950 (thiscall, ret 0x18)
 007999a0 Cylinder::Intersect  # Claude-coined: crossing parameter of segment a->b with the cylinder (thiscall on slicer+0xc, x87 return)
+0079dce0 ?Run@CylinderSlicer@@QAEXPAUMesh@@PAUJob_s0079_dce0@@PAUUShortVec_s0079_dce0@@2PAUOut_s0079_dce0@@3@Z  # CylinderSlicer::Run migrated from s0079dce0 (verbatim, slice spelling)

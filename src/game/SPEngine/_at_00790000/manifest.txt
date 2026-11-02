@@ -1,0 +1,14 @@
+# source  symbol  va  flags
+../src/game/SPEngine/_at_00790000.cpp  ?FUN_00796650@@YAXPAUStubHandle@@@Z  00796650  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPEngine/_at_00790000.cpp  ?FUN_00796680@@YAXHHH@Z  00796680  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPEngine/_at_00790000.cpp  ?FUN_007966a0@@YIXH@Z  007966a0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPEngine/_at_00790000.cpp  ?Notify@Mgr@@QAEXH@Z  007990e0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/_at_00790000.cpp  ?c0@VCtor@@QAEPAU1@PAH@Z  007997f0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/_at_00790000.cpp  ?c1@VCtor@@QAEPAU1@PAH@Z  00799940  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/_at_00790000.cpp  ?c2@VCtor@@QAEPAU1@PAH@Z  00799b00  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/_at_00790000.cpp  ?c3@VCtor@@QAEPAU1@PAH@Z  00799c30  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/_at_00790000.cpp  ?c4@VCtor@@QAEPAU1@PAH@Z  00799c70  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/_at_00790000.cpp  ?DestroyRecs@@YGXPAUUShortVecRec@@0@Z  0079b0d0  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPEngine/_at_00790000.cpp  ?AddIndex@SplitCtx@@QAEXG@Z  0079b590  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPEngine/_at_00790000.cpp  ?FinishGroup@SplitCtx@@QAEXXZ  0079b5d0  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPEngine/_at_00790000.cpp  ?Flush@SplitOuter@@QAEXHHHHH@Z  0079b630  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
