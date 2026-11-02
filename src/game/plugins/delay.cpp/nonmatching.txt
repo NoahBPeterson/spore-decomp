@@ -1,0 +1,2 @@
+# <va>  <diff-bytes>  <reason>
+0113cbf0 154 complete; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest PASS (254 valid, 100% cov); the DelayLine::Init sample count now uses the original's SSE cvttss2si (via _mm_cvtt_ss2si); residual diff is /LTCG scheduling

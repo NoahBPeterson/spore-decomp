@@ -6,7 +6,7 @@
 0113bd60 ?FUN_0113bd60@@YAXPAE@Z  # FUN_0113bd60 migrated from s0113baf0 (verbatim, slice spelling)
 0113be10 ?FUN_0113be10@@YA_NPAE@Z  # FUN_0113be10 migrated from s0113baf0 (verbatim, slice spelling)
 0113cb50 rw::audio::core::Delay::RwacTimerClient  # timer callback installed by Delay::CreateInstance
-0113cbf0 rw::audio::core::Delay::CreateInstance  # PDB anchor
+0113cbf0 ?FUN_0113cbf0@@YA_NPAEPAM@Z  # FUN_0113cbf0 migrated from s0113baf0 (verbatim, slice spelling)
 0113ccf0 ?FUN_0113ccf0@@YA_KPAE@Z  # FUN_0113ccf0 migrated from s0113baf0 (verbatim, slice spelling)
 0113cd80 ?FUN_0113cd80@Ctx@@QAE_NPAE@Z  # Ctx::FUN_0113cd80 migrated from s0113baf0 (verbatim, slice spelling)
 0113ce00 rw::audio::core::Dac::Mix  # PDB candidate (caller-single)
