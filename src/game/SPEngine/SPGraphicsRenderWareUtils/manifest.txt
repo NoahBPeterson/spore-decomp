@@ -1,1 +1,8 @@
 # source  symbol  va  flags
+../src/game/SPEngine/SPGraphicsRenderWareUtils.cpp  ?FUN_00761280@@YA?AUD1@@H@Z  00761280  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/SPGraphicsRenderWareUtils.cpp  ?FUN_007612c0@@YA?AUD2@@H@Z  007612c0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/SPGraphicsRenderWareUtils.cpp  ?FUN_00761650@@YAPAXH@Z  00761650  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/SPGraphicsRenderWareUtils.cpp  ?FUN_007616f0@@YAPAXHH@Z  007616f0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/SPGraphicsRenderWareUtils.cpp  ?FUN_007617a0@@YAPAXH@Z  007617a0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/SPGraphicsRenderWareUtils.cpp  ?FUN_00761840@@YAPAXH@Z  00761840  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/SPGraphicsRenderWareUtils.cpp  ?FUN_00761c00@@YAPAXXZ  00761c00  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include

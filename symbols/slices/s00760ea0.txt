@@ -1,7 +1,11 @@
+00761280 ?FUN_00761280@@YA?AUD1@@H@Z  # FUN_00761280 migrated from s00760ea0 (verbatim, slice spelling)
+007612c0 ?FUN_007612c0@@YA?AUD2@@H@Z  # FUN_007612c0 migrated from s00760ea0 (verbatim, slice spelling)
 00761420 ?SP_CreateRaster@@YAPAXHHHHH@Z  # SP_CreateRaster migrated from s00760ea0 (verbatim, slice spelling)
-00761500 ?FUN_00761500@@YAPAXHHHHPAUKDTreeDesc@@@Z  # SP::CreateTriangleKDTreeProcedural (full C++; 0x50 descriptor, __thiscall LockedAligned, 0x38 out-node)
+00761500 ?FUN_00761500@@YAPAXHHHHPAUKDTreeDesc@@@Z  # FUN_00761500 migrated from s00760ea0 (verbatim, slice spelling)
 00761650 ?FUN_00761650@@YAPAXH@Z  # FUN_00761650 migrated from s00760ea0 (verbatim, slice spelling)
 007616f0 ?FUN_007616f0@@YAPAXHH@Z  # FUN_007616f0 migrated from s00760ea0 (verbatim, slice spelling)
 007617a0 ?FUN_007617a0@@YAPAXH@Z  # FUN_007617a0 migrated from s00760ea0 (verbatim, slice spelling)
 00761840 ?FUN_00761840@@YAPAXH@Z  # FUN_00761840 migrated from s00760ea0 (verbatim, slice spelling)
-007618e0 ?FUN_007618e0@@YAXXZ  # SP::ResetGlobalState (full C++; per-global |= chains, SSE 4x4 identity matrix)
+007618e0 ?ResetGlobalState@SP@@YAXXZ  # SP::ResetGlobalState migrated from s00760ea0
+00761b40 ?FUN_00761b40@@YAPAXXZ  # FUN_00761b40 migrated from s00760ea0 (verbatim, slice spelling)
+00761c00 ?FUN_00761c00@@YAPAXXZ  # FUN_00761c00 migrated from s00760ea0 (verbatim, slice spelling)

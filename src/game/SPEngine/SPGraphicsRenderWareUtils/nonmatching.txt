@@ -1,6 +1,6 @@
 # va  diff-bytes  reason
-00761420 127 SP::CreateRaster: EH frame not emitted in one TU
-00761650 86 CreateVertexDescriptor wrapper: EH frame not emitted in one TU
-007616f0 93 CreateVertexBuffer wrapper: EH frame not emitted in one TU
-007617a0 87 CreateCompiledState wrapper: EH frame not emitted in one TU
-00761840 83 CreateMesh wrapper: EH frame not emitted in one TU
+00761420 28 SP::CreateRaster: the 0xfffffdff mask applies to fmt, not flags; __thiscall LockedAligned via g_pSPMemPool; equiv PASS flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+00761500 296 SP::CreateTriangleKDTreeProcedural: full C++ (0x50 descriptor with a KDElem[4] non-trivial member, __thiscall LockedAligned via g_pSPMemPool, 0x38 out-node); size 385 vs 321, SEH frame layout and _eh_vector_destructor_iterator_ state differ; equiv WEAK (90/400 valid inputs, 100% coverage, no mismatch) flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+007618e0 206 ResetGlobalState: full C++ (per-global |= chains, six 2-blocks, SSE 4x4 identity matrix from _HK_REAL_ONE); size 604 vs 599, `and esp,-16` alignment prologue and unpcklps matrix build ordering differ; equiv PASS (400/400) flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+00761b40 149 raster texture builder: abs-loop register allocation (ebx/ebp vs edi/ebx) flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+007625d0 440 Complete vertex-declaration parser: walks 3-char `SemanticStreamType` triples, tags each entry with a counter that starts at the triple count and increments on every `STR` skip-triple, assigns the type byte from the second character ('B'->4/5/8 by B/C/T/V/W kind, 'F'->digit-0x31, 'S'->(c!='2')+6) and the value dword from the first character ('B'0x14,'C'(run!=0)*2+3,'G'0x13,'I'0xe,'N'2,'P'0x10,'T' running index,'V'0,'W'0xf), then fills VectorDescr(count)'s 12-byte entries. 662 bytes vs 662: the two cl jump tables (indexed by `c-'B'` and `p[1]-'B'`) and the `-O2` block ordering were not reproduced. [equiv FAIL -- 5/5 valid inputs mismatched, first execution]. Flags as above. flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
