@@ -1,0 +1,9 @@
+# source  symbol  va  flags
+../src/game/SPMovie/videorenderablemanager.cpp  ?AddToRendererList@VideoRenderableManager@@QAEXPAX@Z  00fce1e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPMovie/videorenderablemanager.cpp  ?GetRendererListSize@VideoRenderableManager@@QAEIXZ  00fce220  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPMovie/videorenderablemanager.cpp  ?AddToDecoderList@VideoRenderableManager@@QAEXPAX@Z  00fce250  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPMovie/videorenderablemanager.cpp  ?GetDecoderListSize@VideoRenderableManager@@QAEIXZ  00fce290  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPMovie/videorenderablemanager.cpp  ?PopFromEmptyList@VideoRenderableManager@@QAEIXZ  00fce2c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPMovie/videorenderablemanager.cpp  ?PeekFilledList@VideoRenderableManager@@QAEIXZ  00fce320  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPMovie/videorenderablemanager.cpp  ?PopFromFilledList@VideoRenderableManager@@QAEIXZ  00fce380  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPMovie/videorenderablemanager.cpp  ?PopFromRendererList@VideoRenderableManager@@QAEIXZ  00fce3e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
