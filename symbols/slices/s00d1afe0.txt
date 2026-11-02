@@ -1,5 +1,5 @@
 00d1afe0 SP::cGameEditInputStrategy::HandleMessage  # preserved from s00d1afe0; nonmatching
 00d1bb60 ?ConstructFields@cGameEditInputStrategy_s00d1_afe0@@QAEPAV1@XZ  # cGameEditInputStrategy_s00d1_afe0::ConstructFields migrated from s00d1afe0 (verbatim, slice spelling)
 00d1bcc0 ?DestroyFields@cGameEditInputStrategy_s00d1_afe0@@QAEXXZ  # cGameEditInputStrategy_s00d1_afe0::DestroyFields migrated from s00d1afe0 (verbatim, slice spelling)
-00d1bf10 SP::cGameEditInputStrategy::MarkEditorActive  # newly claimed; byte-exact
-00d1bf20 SP::cGameEditInputStrategy::ActivateEditor  # newly claimed; nonmatching
+00d1bf10 ?MarkEditorActive@cGameEditInputStrategy@@QAEXXZ  # cGameEditInputStrategy::MarkEditorActive migrated from s00d1afe0 (verbatim, slice spelling)
+00d1bf20 ?ActivateEditor@cGameEditInputStrategy@@QAE_NXZ  # cGameEditInputStrategy::ActivateEditor migrated from s00d1afe0 (verbatim, slice spelling)

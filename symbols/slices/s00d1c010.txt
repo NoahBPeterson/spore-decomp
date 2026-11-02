@@ -6,9 +6,9 @@
 00d1c150 ??0cGameEditModeStrategy@SP@@QAE@XZ  # cGameEditModeStrategy::cGameEditModeStrategy migrated from s00d1c010 (verbatim, slice spelling)
 00d1c200 ??1cGameEditModeStrategy@SP@@QAE@XZ  # cGameEditModeStrategy::~cGameEditModeStrategy migrated from s00d1c010 (verbatim, slice spelling)
 00d1c2e0 ?FUN_00d1c2e0@cGameEditModeStrategy@SP@@QAEEHH@Z  # cGameEditModeStrategy::FUN_00d1c2e0 migrated from s00d1c010 (verbatim, slice spelling)
-00d1c400 SP::cGameEditModeStrategy::FUN_00d1c400  # cIModeStrategy +0x2c (OnMouseDown): ray pick / place selection, else forward to input manager +0x54
+00d1c400 ?FUN_00d1c400@cGameEditModeStrategy@SP@@QAEEHMMH@Z  # cGameEditModeStrategy::FUN_00d1c400 migrated from s00d1c010 (verbatim, slice spelling)
 00d1c560 ?FUN_00d1c560@cGameEditModeStrategyGz@SP@@QAEXHH@Z  # cGameEditModeStrategyGz::FUN_00d1c560 migrated from s00d1c010 (verbatim, slice spelling)
 00d1c5d0 ?Shutdown@cGameEditModeStrategy@SP@@QAEEXZ  # cGameEditModeStrategy::Shutdown migrated from s00d1c010 (verbatim, slice spelling)
 00d1c610 FUN_00d1c610  # EA::COM::interface_cast<SP::cGameplayMarker*,SP::cSpatialObject,EA::AutoRefCount> (PDB name unreliable) -- approximated
-00d1c9e0 SP::cGameEditModeStrategyGz::FUN_00d1c9e0  # cIGonzagoSubsystem +0x18 (PostGameModeTransition); this == object+0x08 -- approximated
-00d1cb00 SP::cGameEditModeStrategy::SaveScenario  # save the edited scenario through the resource manager -- approximated
+00d1c9e0 ?FUN_00d1c9e0@cGameEditModeStrategyGz@SP@@QAEXHPAX@Z  # cGameEditModeStrategyGz::FUN_00d1c9e0 migrated from s00d1c010 (verbatim, slice spelling)
+00d1cb00 ?SaveScenario@cGameEditModeStrategy@SP@@QAEIXZ  # cGameEditModeStrategy::SaveScenario migrated from s00d1c010 (verbatim, slice spelling)

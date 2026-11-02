@@ -1,4 +1,5 @@
 # source  symbol  va  flags
+../src/game/SPGonzago/SPGameEditModeStrategy.cpp  ?MarkEditorActive@cGameEditInputStrategy@@QAEXXZ  00d1bf10  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPGameEditModeStrategy.cpp  ?FUN_00d1c0a0@cGameEditModeStrategy@SP@@QAEXMMH@Z  00d1c0a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPGameEditModeStrategy.cpp  ?FUN_00d1c0d0@cGameEditModeStrategy@SP@@QAEXHMMH@Z  00d1c0d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPGameEditModeStrategy.cpp  ?Init@cGameEditModeStrategy@SP@@QAEEH@Z  00d1c100  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
