@@ -1,13 +1,13 @@
 00782860 E36 vector insert  # insert with reallocation
 00782a60 E36 vector push_back  # fast path + reallocation
-00782b00 cleanup/erase/dispatch  # calls cShadowWorld::Cleanup (0x7806a0) then range helper then virtual +0x24
+00782b00 ?FUN_00782B00@@YIXH@Z  # FUN_00782B00 migrated from s00782860 (verbatim, slice spelling)
 00782b30 temp-E36 push_back wrapper
-00782bb0 factorial helper  # rising/falling factorial over the int table at 0x153a2fc
-00782c90 Matrix44*Vector3  # column-accumulating SSE transform
-00782ce0 weighted 4-vector sum
-00782d40 associated-Legendre normalisation factor (SQRT part)
-00782db0 associated Legendre P_l^m(x)
-00783130 associated Legendre P(l,m) with cos/sin (complex-argument form)
+00782bb0 ?FUN_00782bb0@@YAMH@Z  # FUN_00782bb0 migrated from s00782860 (verbatim, slice spelling)
+00782c90 ?FUN_00782c90@@YAXPAMPBM1@Z  # FUN_00782c90 migrated from s00782860 (verbatim, slice spelling)
+00782ce0 ?FUN_00782ce0@@YAXPAMHPBM1@Z  # FUN_00782ce0 migrated from s00782860 (verbatim, slice spelling)
+00782d40 ?FUN_00782d40@@YAMHH@Z  # FUN_00782d40 migrated from s00782860 (verbatim, slice spelling)
+00782db0 ?FUN_00782db0@@YAMMHM@Z  # FUN_00782db0 migrated from s00782860 (verbatim, slice spelling)
+00783130 ?FUN_00783130@@YAMMIMM@Z  # FUN_00783130 migrated from s00782860 (verbatim, slice spelling)
 007831d0 ?FUN_007831d0@@YAXMPAM@Z  # FUN_007831d0 migrated from s00782860 (verbatim, slice spelling)
 00783380 SH normalisation constants (7 floats) + copy-out
 00783410 ?FUN_00783410@@YAXMHPAM@Z  # FUN_00783410 migrated from s00782860 (verbatim, slice spelling)

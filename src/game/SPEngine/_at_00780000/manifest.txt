@@ -1,0 +1,11 @@
+# source  symbol  va  flags
+../src/game/SPEngine/_at_00780000.cpp  ?MoveBackward12@@YAPAUElem12@@PAU1@00@Z  00780a50  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPEngine/_at_00780000.cpp  ?Construct@E36@@QAEPAU1@PAXUE36Part@@@Z  00781c30  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/_at_00780000.cpp  ?Func_00781CB0@@YAPAUE36@@PAU1@00@Z  00781cb0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/_at_00780000.cpp  ?Func_00782420@@YAPAUE36@@PAU1@00@Z  00782420  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/_at_00780000.cpp  ?Func_00782470@@YAPAUE36@@PAU1@00@Z  00782470  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/_at_00780000.cpp  ?FUN_007825d0@cSWsub@@QAEXPAXI@Z  007825d0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/_at_00780000.cpp  ?FUN_00782660@cSWsub@@QAEXPAXI@Z  00782660  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/_at_00780000.cpp  ?FUN_00782740@cSWsub@@QAEXPAXI@Z  00782740  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/_at_00780000.cpp  ?Func_007827C0@@YIXH@Z  007827c0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/_at_00780000.cpp  ?FUN_00782d40@@YAMHH@Z  00782d40  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

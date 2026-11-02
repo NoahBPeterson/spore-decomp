@@ -2,7 +2,7 @@
 00780210 ?SetLightingWorld@LightingRefHolder@@QAEXPAUIRefCounted@@@Z  # LightingRefHolder::SetLightingWorld migrated from s0077ff30 (verbatim, slice spelling)
 00780250 ?SetFlag@BoolFlagHolder@@QAEX_N@Z  # BoolFlagHolder::SetFlag migrated from s0077ff30 (verbatim, slice spelling)
 00780270 ?AssignRef@@YAXPAPAXPAX@Z  # AssignRef migrated from s0077ff30 (verbatim, slice spelling)
-007806a0 SP::cShadowWorld::Cleanup  # releases render shadow, shadow DB, shadow-map and basis-map rasters
+007806a0 ?Cleanup@cShadowWorld@@QAEXXZ  # cShadowWorld::Cleanup migrated from s0077ff30 (verbatim, slice spelling)
 00780810 SP::cShadowWorld::Apply  # binds basis rasters as render-state textures, acq/release shader resource
-00780a50 MoveBackward12  # eastl move_backward of 12-byte refcounted element; byte-exact
+00780a50 ?MoveBackward12@@YAPAUElem12@@PAU1@00@Z  # MoveBackward12 migrated from s0077ff30 (verbatim, slice spelling)
 00780ab0 SP::cShadowWorld::Update  # PDB caller-scored name; property-driven Init; byte-exact
