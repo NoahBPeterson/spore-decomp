@@ -1,0 +1,3 @@
+# source  symbol  va  flags
+../src/game/SPGonzago/_at_01020000.cpp  ?f0102f820@@YAHPAUcEmpire@@@Z  0102f820  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_01020000.cpp  ?f0102f8c0@cSPSpaceEconomyTuning@@QAEMH@Z  0102f8c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

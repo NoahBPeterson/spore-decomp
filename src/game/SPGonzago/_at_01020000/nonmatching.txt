@@ -1,0 +1,12 @@
+# va  diff-bytes  reason
+010225d0 165 (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) background tick; the original is an 842 byte sequence of per planet terraforming and star charge updates, the reconstruction covers the elapsed time accumulation, the 0x3e8 ms star step and the planet pass through the modelled services only; equiv UNSUPPORTED (unresolved UpdateTerraforming/GetPlanet/Tick/SimulateBackgroundTick) flags: /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+01022920 48 (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) advance background simulation; the control flow matches (nested state test) but clx loads the manager global with the short mov eax,[abs] form while retail keeps it in ecx for the following thiscall, so the encoding is one byte shorter and the state/star registers are swapped; equiv UNSUPPORTED (unresolved GetSolarSystem/SetStarCharge) flags: /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+0102c7f0 99 (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) filter constraints; the constraint, filter and match services are unresolved so both constraint setups and the evaluation chain reduce to calls; equiv UNSUPPORTED (unresolved filter services) flags: /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+0102f0d0 263 flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
+0102f220 149 flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
+0102f340 291 flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
+0102f4a0 252 flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
+0102f5a0 192 flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
+0102f660 157 flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
+0102f710 195 flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
+0102f8d0 256 flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
