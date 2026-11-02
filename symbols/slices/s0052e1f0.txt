@@ -1,3 +1,4 @@
+0052e1f0 ?WriteClearDescription@@YAXPAUIStream_s0052_e1f0@IO@EA@@PAUcSPSkinPaintClearDescription_s0052_e1f0@@@Z  # WriteClearDescription migrated from s0052e1f0 (verbatim, slice spelling)
 0052e520 EA::ArgScript::cCommandStateT<EA::Swarm::cEffectsParser,EA::ArgScript::cCommandBase>::OnRegister  # mState(+0xc)=static_cast(state) then base OnRegister
 0052e5b0 cSPSkinPaintClearEffect::cSPSkinPaintClearEffect  # PDB cSPSkinPaintClearEffect (0x14): cComponentBase + mDesc/mActive, byte-exact
 0052e980 EA::Swarm::cComponentBase::`scalar deleting destructor'  # vptr pair of cComponentBase then RefCountTemplate<int>, byte-exact

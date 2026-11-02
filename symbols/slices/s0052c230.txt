@@ -6,4 +6,5 @@
 0052cf00 ?make_heap@eastl@@YAXPAU?$pair_s0052_c230@HM@1@0USecondGreater@1@@Z  # make_heap migrated from s0052c230 (verbatim, slice spelling)
 0052cf80 ?adjust_heap@eastl@@YAXPAU?$pair_s0052_c230@HM@1@HHHU21@USecondGreater@1@@Z  # adjust_heap migrated from s0052c230 (verbatim, slice spelling)
 0052d160 cSPSkinPaintClearDescription::cSPSkinPaintClearDescription  # PDB layout of cSPSkinPaintClearDescription (0x70) matches every field store
+0052d310 ?WriteClearDescriptionCommand@@YAXPAUcSPSkinPaintClearDescription@@PAUIStream@@@Z  # WriteClearDescriptionCommand migrated from s0052c230 (verbatim, slice spelling)
 0052d330 SWARM_SPSkinPaintClearAddCommands  # card PDB candidate; registers spSkinPaintClear/spSkinPaintSettings
