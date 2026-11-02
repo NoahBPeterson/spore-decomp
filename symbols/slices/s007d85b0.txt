@@ -13,3 +13,5 @@
 007d9120 ?Shutdown@cApp_s007d_85b0@SP@@QAE_NXZ  # cApp_s007d_85b0::Shutdown migrated from s007d85b0 (verbatim, slice spelling)
 007d9260 ?AddAppMode@cApp_s007d_85b0@SP@@QAEXPAXIPBD@Z  # cApp_s007d_85b0::AddAppMode migrated from s007d85b0 (verbatim, slice spelling)
 007d9350 ?Handle@cAppToggleHandler@@QAE_NHH@Z  # cAppToggleHandler::Handle migrated from s007d85b0 (verbatim, slice spelling)
+007d9380 ?Check@cAppHasState@@QAE_NXZ  # cAppHasState::Check migrated from s007d85b0 (verbatim, slice spelling)
+007d93a0 ?SomeBaseDestructor@BaseObj@@QAEXXZ  # BaseObj::SomeBaseDestructor migrated from s007d85b0 (verbatim, slice spelling)

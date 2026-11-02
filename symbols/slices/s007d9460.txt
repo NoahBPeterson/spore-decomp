@@ -1,3 +1,5 @@
 007d9460 ?ConfigUpdated@cMouseCameraController@@QAEXXZ  # cMouseCameraController::ConfigUpdated migrated from s007d9460 (verbatim, slice spelling)
+007d9a50 ?QuatToMatrix@@YAPAXPAXPBM@Z  # QuatToMatrix migrated from s007d9460 (verbatim, slice spelling)
 007d9bd0 ?Begin@cMouseCameraController@@QAE_NHMMH@Z  # cMouseCameraController::Begin migrated from s007d9460 (verbatim, slice spelling)
-007d9fb0 SP::cMouseCameraController::cMouseCameraController  # pdb_candidates caller-single
+007d9c40 ?SetConfigValue@cMouseCameraController@@QAE_NIPBX@Z  # cMouseCameraController::SetConfigValue migrated from s007d9460 (verbatim, slice spelling)
+007d9fb0 ??0cMouseCameraController@@QAE@PAUcPropertyList@@@Z  # cMouseCameraController::cMouseCameraController migrated from s007d9460 (verbatim, slice spelling)
