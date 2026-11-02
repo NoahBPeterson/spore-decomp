@@ -6,7 +6,7 @@
 0102c600 ?IsHostileToAll@@YADPAX@Z  # IsHostileToAll migrated from s0102be20 (verbatim, slice spelling)
 0102c720 ?GetCreatureColorProperty@@YADPAX00@Z  # GetCreatureColorProperty migrated from s0102be20 (verbatim, slice spelling)
 0102c7f0 ?ApplyFilterConstraints@@YAXPAXD@Z  # ApplyFilterConstraints migrated from s0102be20 (verbatim, slice spelling)
-0102c980 ?ClearTradeRoute@@YAXPAX@Z  # void ClearTradeRoute
+0102c980 ?ClearTradeRoute@@YAXPAX@Z  # ClearTradeRoute migrated from s0102be20 (verbatim, slice spelling)
 0102c9e0 ?StartMission@@YAXPAXPAUcMissionData@@0@Z  # StartMission migrated from s0102be20 (verbatim, slice spelling)
 0102caa0 ?CollectSpice@@YAXPAXPAUcMissionData@@@Z  # CollectSpice migrated from s0102be20 (verbatim, slice spelling)
 0102cae0 ?GiveGift@@YAXPAXI@Z  # GiveGift migrated from s0102be20 (verbatim, slice spelling)

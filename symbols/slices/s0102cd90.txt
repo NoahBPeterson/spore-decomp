@@ -1,0 +1,8 @@
+0102cd90 ?TryBreakAlliance@@YAXH@Z  # TryBreakAlliance migrated from s0102cd90 (verbatim, slice spelling)
+0102ce30 ?TryCreateAlliance@@YAXH@Z  # TryCreateAlliance migrated from s0102cd90 (verbatim, slice spelling)
+0102cf10 ?TryPeaceOffer@@YAXHH@Z  # TryPeaceOffer migrated from s0102cd90 (verbatim, slice spelling)
+0102d0b0 ?AttackPlanet@@YAXHH@Z  # AttackPlanet migrated from s0102cd90 (verbatim, slice spelling)
+0102d150 ?GetAttackRequestResponse@@YAHH@Z  # GetAttackRequestResponse migrated from s0102cd90 (verbatim, slice spelling)
+0102d1b0 ?TryPurchaseOffer@@YAXHPAUObj_s0102_cd90@@H@Z  # TryPurchaseOffer migrated from s0102cd90 (verbatim, slice spelling)
+0102d7e0 ?ClearAttackRequest@@YAXXZ  # ClearAttackRequest migrated from s0102cd90 (verbatim, slice spelling)
+0102d820 ?Shutdown@@YAXXZ  # Shutdown migrated from s0102cd90 (verbatim, slice spelling)
