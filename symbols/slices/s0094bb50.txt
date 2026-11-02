@@ -1,6 +1,6 @@
 0094bb50 FUN_0094bb50  # dc: URL setup/parse helper (int this, char* a, char* b) [partial: inlined EASTL]
-0094c130 FUN_0094c130  # dc: numeric-or-dotted address parser (Sockets_ParseAddress)
-0094c190 FUN_0094c190  # dc: inet_addr validity test (Sockets_IPIsValid)
+0094c130 ?Sockets_ParseAddress@@YAIPAD@Z  # Sockets_ParseAddress migrated from s0094bb50 (verbatim, slice spelling)
+0094c190 ?Sockets_IPIsValid@@YA_NPBD@Z  # Sockets_IPIsValid migrated from s0094bb50 (verbatim, slice spelling)
 0094c1b0 ?Sockets_LookupName@@YAIPBDI@Z  # __declspec migrated from s0094bb50 (verbatim, slice spelling)
 0094c1d0 ?Sockets_GetCurrentMachineAddress@@YA_NPAUIPAddress@@I@Z  # Sockets_GetCurrentMachineAddress migrated from s0094bb50 (verbatim, slice spelling)
 0094c260 ??0Manager@@QAE@XZ  # Manager::Manager migrated from s0094bb50 (verbatim, slice spelling)

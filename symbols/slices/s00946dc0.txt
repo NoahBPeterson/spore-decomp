@@ -4,7 +4,7 @@
 00946fe0 ?GetContentTypeString@HTTPMultipartFormDataPostBodyStream@Internet@EA@@UAE_NAAV?$basic_string@DVallocator@eastl@@@eastl@@@Z  # EA::Internet::HTTPMultipartFormDataPostBodyStream::GetContentTypeString migrated from s00946dc0
 00947030 ?AddFormData@HTTPMultipartFormDataPostBodyStream@@QAE_NPBDPAX000@Z  # HTTPMultipartFormDataPostBodyStream::AddFormData migrated from s00946dc0 (verbatim, slice spelling)
 00947270 ?CreateChildStream@HTTPMultipartFormDataPostBodyStream@@QAE_NXZ  # HTTPMultipartFormDataPostBodyStream::CreateChildStream migrated from s00946dc0 (verbatim, slice spelling)
-009473a0 eastl::vector<eastl::string>::DoInsertValue fast-path helper  # descriptive: appends a default (empty) eastl::string; thiscall with the vector in ecx, elements 0x10 bytes, fills {0x1667bac,0x1667bac,0x1667bad}; slow path calls 0x554820 DoInsertValue (no PDB name for this VA)
+009473a0 ?PushEmpty@StrVec@@QAEXXZ  # StrVec::PushEmpty migrated from s00946dc0 (verbatim, slice spelling)
 00947410 ?TimeToSeconds@Internet@EA@@YAIIIIIIIII@Z  # EA::Internet::TimeToSeconds migrated from s00946dc0
 00947480 ?WeekdayStringToInteger@Internet@EA@@YAIPBD_N@Z  # EA::Internet::WeekdayStringToInteger migrated from s00946dc0
 00947500 ?MonthStringToInteger@@YAHPBD@Z  # MonthStringToInteger migrated from s00946dc0 (verbatim, slice spelling)

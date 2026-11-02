@@ -1,15 +1,15 @@
-009413d0 EA::UTFWin::GetVariantOp  # dc: cArray variant dispatch table lookup
-00941440 EA::UTFWin::SetVariantOp  # dc: cArray variant dispatch table store
-009414b0 EA::UTFWin::InvokeVariantOp  # dc: dispatch call
-009414f0 EA::UTFWin::InitVariantTable  # dc: fill 0x400 table + hooks
-00941560 EA::UTFWin::GetVariantOpChecked  # dc: lazy-init wrapper
-00941580 EA::UTFWin::SetVariantOpChecked  # dc: lazy-init wrapper
-009415a0 EA::UTFWin::InvokeVariantOpChecked  # dc: lazy-init wrapper
+009413d0 ?GetVariantOp@@YAPAXHG@Z  # GetVariantOp migrated from s009413d0 (verbatim, slice spelling)
+00941440 ?SetVariantOp@@YAPAXHGPAX@Z  # SetVariantOp migrated from s009413d0 (verbatim, slice spelling)
+009414b0 ?InvokeVariantOp@@YAXHPAX0000@Z  # InvokeVariantOp migrated from s009413d0 (verbatim, slice spelling)
+009414f0 ?InitVariantTable@@YAHXZ  # InitVariantTable migrated from s009413d0 (verbatim, slice spelling)
+00941560 ?GetVariantOpChecked@@YAPAXHG@Z  # GetVariantOpChecked migrated from s009413d0 (verbatim, slice spelling)
+00941580 ?SetVariantOpChecked@@YAPAXHGPAX@Z  # SetVariantOpChecked migrated from s009413d0 (verbatim, slice spelling)
+009415a0 ?InvokeVariantOpChecked@@YAXHPAX0000@Z  # InvokeVariantOpChecked migrated from s009413d0 (verbatim, slice spelling)
 009415f0 ?EncodeBase64@Internet@EA@@YA_NPBDIPADAAI@Z  # EA::Internet::EncodeBase64 migrated from s009413d0
 00941790 ?DecodeBase64Core@@YA_NPBEHPADPAH@Z  # DecodeBase64Core migrated from s009413d0 (verbatim, slice spelling)
 00941a10 EA::Internet::EncodeBase64String  # dc: eastl string wrapper
 00941af0 EA::Internet::DecodeBase64String  # dc: eastl string wrapper
-00941bb0 GetTime64  # dc: _time64(0)
+00941bb0 ?GetTime64@@YA_JXZ  # GetTime64 migrated from s009413d0 (verbatim, slice spelling)
 00941bc0 ?HTTPMethodToString@Internet@EA@@YAPBDW4HTTPMethod@12@@Z  # EA::Internet::HTTPMethodToString migrated from s009413d0
 00941c40 ?HeaderFieldToFieldString@Internet@EA@@YAPBDW4HTTPHeaderField@12@@Z  # EA::Internet::HeaderFieldToFieldString migrated from s009413d0
 00941e80 ?EncodeFormURL@@YAXPBDPAX@Z  # EncodeFormURL migrated from s009413d0 (verbatim, slice spelling)

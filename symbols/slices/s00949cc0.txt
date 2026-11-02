@@ -4,7 +4,7 @@
 00949e10 ?MIMETypeStringToMIMEType@Internet@EA@@YA?AW4MIMEType@12@PBD_NI@Z  # EA::Internet::MIMETypeStringToMIMEType migrated from s00949cc0
 0094a1b0 ?MIMETypesToFileExtension@Internet@EA@@YAHW4MIMEType@12@0PA_WI@Z  # EA::Internet::MIMETypesToFileExtension migrated from s00949cc0
 0094a3f0 EA::Internet::MIMEStringToMIMETypes  # pdb_candidates.json caller-single
-0094a4a0 EA::Internet::URL::GetPort  # strtoul(msComponent[4]); pair of SetPort
+0094a4a0 ?GetPort@URL_s0094_9cc0@Internet@EA@@QAEIXZ  # URL_s0094_9cc0::GetPort migrated from s00949cc0 (verbatim, slice spelling)
 0094a4c0 EA::Internet::URL::URL  # default ctor
 0094a560 EA::Internet::URL::URL  # ctor from const char* (assigns msURL)
 0094a630 EA::Internet::URL::operator=  # copy assignment

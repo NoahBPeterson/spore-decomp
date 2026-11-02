@@ -1,0 +1,12 @@
+# source  symbol  va  flags
+../src/game/UTFSpore_Win32/_at_00940000.cpp  ?GetVariantOp@@YAPAXHG@Z  009413d0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/_at_00940000.cpp  ?SetVariantOp@@YAPAXHGPAX@Z  00941440  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/_at_00940000.cpp  ?InvokeVariantOp@@YAXHPAX0000@Z  009414b0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/_at_00940000.cpp  ?GetVariantOpChecked@@YAPAXHG@Z  00941560  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/_at_00940000.cpp  ?SetVariantOpChecked@@YAPAXHGPAX@Z  00941580  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/_at_00940000.cpp  ?InvokeVariantOpChecked@@YAXHPAX0000@Z  009415a0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/_at_00940000.cpp  ?GetTime64@@YA_JXZ  00941bb0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/_at_00940000.cpp  ?PushEmpty@StrVec@@QAEXXZ  009473a0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/_at_00940000.cpp  ?GetPort@URL_s0094_9cc0@Internet@EA@@QAEIXZ  0094a4a0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/_at_00940000.cpp  ?Sockets_IPIsValid@@YA_NPBD@Z  0094c190  /O2 /MD /Gy /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/_at_00940000.cpp  ?Socket_CloseRaw@@YAXI@Z  0094d350  /O2 /MD /Gy /TP /GS- /Isrc/game/include
