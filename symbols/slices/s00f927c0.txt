@@ -1,0 +1,6 @@
+00f931f0 ?GetVector@cTerrainResourceManager@@QAEXPAM@Z  # cTerrainResourceManager::GetVector migrated from s00f927c0 (verbatim, slice spelling)
+00f932f0 ?Create@cTerrainResourceManager@@QAEPAXPAXHHM@Z  # cTerrainResourceManager::Create migrated from s00f927c0 (verbatim, slice spelling)
+00f933f0 ?GetCount@cTerrainResourceManager@@QAEHH@Z  # cTerrainResourceManager::GetCount migrated from s00f927c0 (verbatim, slice spelling)
+00f93420 ??1cTerrainResourceManager@@UAE@XZ  # cTerrainResourceManager::~cTerrainResourceManager migrated from s00f927c0 (verbatim, slice spelling)
+00f93490 ?GetPlanet@cTerrainResourceManager@@QAE_NPAXHHHM@Z  # cTerrainResourceManager::GetPlanet migrated from s00f927c0 (verbatim, slice spelling)
+00f93560 ?Get@cTerrainResourceManager@@QAEPAXPAH@Z  # cTerrainResourceManager::Get migrated from s00f927c0 (verbatim, slice spelling)

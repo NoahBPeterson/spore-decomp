@@ -1,0 +1,4 @@
+# source  symbol  va  flags
+../src/game/SPTerrain/SPTerrainResourceManager.cpp  ?GetCount@cTerrainResourceManager@@QAEHH@Z  00f933f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPTerrain/SPTerrainResourceManager.cpp  ?FUN_00f939b0@@YIPAXXZ  00f939b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPTerrain/SPTerrainResourceManager.cpp  ?FUN_00f93c00@@YI_NPAVSelf@@@Z  00f93c00  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
