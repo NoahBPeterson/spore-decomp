@@ -1,2 +1,2 @@
-# s01074bb0 recovered names
 01074bb0 SP::cSPUISpace::HandleMessage  # IHandlerRC::HandleMessage(msgID, msg), this = cSPUISpace+0xc; PDB candidate was RefreshActiveToolUI
+01075490 ?F1075490@cTrading@@QAEXXZ  # cTrading::F1075490 migrated from s01074bb0 (verbatim, slice spelling)
