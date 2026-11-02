@@ -2,15 +2,15 @@
 00c3ef00 ?Shutdown@cGameplayMarker@@QAEXXZ  # cGameplayMarker::Shutdown migrated from s00c3ee20 (verbatim, slice spelling)
 00c3efb0 ??0cGameplayMarker@@QAE@XZ  # cGameplayMarker::cGameplayMarker migrated from s00c3ee20 (verbatim, slice spelling)
 00c3f040 ?InitFromDefinition@cGameplayMarker@@QAE_NPAXHH@Z  # cGameplayMarker::InitFromDefinition migrated from s00c3ee20 (verbatim, slice spelling)
-00c3f160 ?SetEffectId@cInteractableObject@@QAEXH@Z  # void cInteractableObject::SetEffectId
-00c3f1d0 ?cGameplayMarkerCast@@YAPAXPAXH@Z  # void* Object::Cast (gameplay marker)
-00c3f1f0 ?Destroy@cGameplayMarker@@QAEXH@Z  # void cGameplayMarker::~cGameplayMarker
-00c3f250 ?Shutdown@cInteractableObject@@QAEXXZ  # void cInteractableObject::Shutdown
-00c3f310 ?RemoveOwner@cGameData@@QAEXXZ  # void cGameData::RemoveOwner
-00c3f340 ?Write@cHitSphere@@QAE_NPAX@Z  # bool cHitSphere::Write (ISimulatorSerializable::Write)
-00c3f4a0 ??0cHitSphere@@QAE@XZ  # cHitSphere::cHitSphere
-00c3f560 ?GetDelegateLowerBound@cHitSphere@@QAEHH@Z  # int cHitSphere::GetDelegateLowerBound
-00c3f6f0 ??0cSolarHitSphere@@QAE@XZ  # cSolarHitSphere::cSolarHitSphere
+00c3f160 ?SetEffectId@cInteractableObject@@QAEXH@Z  # cInteractableObject::SetEffectId migrated from s00c3ee20 (verbatim, slice spelling)
+00c3f1d0 ?cGameplayMarkerCast@@YAPAXPAXH@Z  # cGameplayMarkerCast migrated from s00c3ee20 (verbatim, slice spelling)
+00c3f1f0 ?Destroy@cGameplayMarker@@QAEXH@Z  # cGameplayMarker::Destroy migrated from s00c3ee20 (verbatim, slice spelling)
+00c3f250 ?Shutdown@cInteractableObject@@QAEXXZ  # cInteractableObject::Shutdown migrated from s00c3ee20 (verbatim, slice spelling)
+00c3f310 ?RemoveOwner@cGameData@@QAEXXZ  # cGameData::RemoveOwner migrated from s00c3ee20 (verbatim, slice spelling)
+00c3f340 ?Write@cHitSphere@@QAE_NPAX@Z  # cHitSphere::Write migrated from s00c3ee20 (verbatim, slice spelling)
+00c3f4a0 ??0cHitSphere@@QAE@XZ  # cHitSphere::cHitSphere migrated from s00c3ee20 (verbatim, slice spelling)
+00c3f560 ?GetDelegateLowerBound@cHitSphere@@QAEHH@Z  # cHitSphere::GetDelegateLowerBound migrated from s00c3ee20 (verbatim, slice spelling)
+00c3f6f0 ??0cSolarHitSphere@@QAE@XZ  # cSolarHitSphere::cSolarHitSphere migrated from s00c3ee20 (verbatim, slice spelling)
 00c3f850 ?Cast@cHitSphere@@QAEPAXPAX@Z  # cHitSphere::Cast migrated from s00c3ee20 (verbatim, slice spelling)
 00c3f890 ?LoadModelChecked@cInteractableObject@@QAE_NPAX@Z  # cInteractableObject::LoadModelChecked migrated from s00c3ee20 (verbatim, slice spelling)
 00c3f8b0 ?SetModelState@cInteractableObject@@QAEXH_N@Z  # cInteractableObject::SetModelState migrated from s00c3ee20 (verbatim, slice spelling)

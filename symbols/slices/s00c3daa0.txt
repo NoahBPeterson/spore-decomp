@@ -5,6 +5,18 @@
 00c3dba0 ?InitNPC@cSPGameDataUFO@SP@@QAEXPAVcEmpire@2@H@Z  # SP::cSPGameDataUFO::InitNPC migrated from s00c3daa0
 00c3e010 ?func3e010@UFO@@QAEXPAX@Z  # UFO::func3e010 migrated from s00c3daa0 (verbatim, slice spelling)
 00c3e0b0 ?Init@cSPGameDataUFO@SP@@QAEXW4eUFOType@2@PAVcEmpire@2@@Z  # SP::cSPGameDataUFO::Init migrated from s00c3daa0
+00c3e2c0 ?FUN_00c3e2c0@@YAPAXPAXH@Z  # FUN_00c3e2c0 migrated from s00c3daa0 (verbatim, slice spelling)
+00c3e350 ?FUN_00c3e350@@YIXPAD@Z  # FUN_00c3e350 migrated from s00c3daa0 (verbatim, slice spelling)
+00c3e3b0 ?FUN_00c3e3b0@@YADPADPAX@Z  # FUN_00c3e3b0 migrated from s00c3daa0 (verbatim, slice spelling)
+00c3e460 ?FUN_00c3e460@@YIMPAD@Z  # FUN_00c3e460 migrated from s00c3daa0 (verbatim, slice spelling)
+00c3e490 ?FUN_00c3e490@@YAHPADPAX@Z  # FUN_00c3e490 migrated from s00c3daa0 (verbatim, slice spelling)
+00c3e510 ?f@C3e510@@QAEPAXXZ  # C3e510::f migrated from s00c3daa0 (verbatim, slice spelling)
+00c3e700 ?f@C3e700@@QAEXXZ  # C3e700::f migrated from s00c3daa0 (verbatim, slice spelling)
+00c3e800 ?f@C3e800@@QAEXPAX@Z  # C3e800::f migrated from s00c3daa0 (verbatim, slice spelling)
+00c3e8e0 ?f@C3e8e0@@QAEXPAH@Z  # C3e8e0::f migrated from s00c3daa0 (verbatim, slice spelling)
+00c3e9d0 ?FUN_00c3e9d0@@YADPADPAX@Z  # FUN_00c3e9d0 migrated from s00c3daa0 (verbatim, slice spelling)
+00c3ea80 ?FUN_00c3ea80@@YAPAXXZ  # FUN_00c3ea80 migrated from s00c3daa0 (verbatim, slice spelling)
+00c3eac0 ?f@C3eac0@@QAEPAXPAX@Z  # C3eac0::f migrated from s00c3daa0 (verbatim, slice spelling)
 00c3ebd0 ?f@C3ebd0@@QAEXPAH@Z  # C3ebd0::f migrated from s00c3daa0 (verbatim, slice spelling)
 00c3ec00 ?f@C3ec00@@QAEXPAH@Z  # C3ec00::f migrated from s00c3daa0 (verbatim, slice spelling)
 00c3ed20 ?FUN_00c3ed20@@YADPADPAX@Z  # FUN_00c3ed20 migrated from s00c3daa0 (verbatim, slice spelling)

@@ -1,3 +1,4 @@
+00c368c0 ?FUN_00c368c0@@YIEPAUUfo@@PAXPAUParamObj@@@Z  # FUN_00c368c0 migrated from s00c368c0 (verbatim, slice spelling)
 00c36e80 ?FUN_00c36e80@@YIPAXPAUUfo@@PAXI@Z  # FUN_00c36e80 migrated from s00c368c0 (verbatim, slice spelling)
 00c36ee0 ?FUN_00c36ee0@@YIEPAUUfo@@PAX1@Z  # FUN_00c36ee0 migrated from s00c368c0 (verbatim, slice spelling)
 00c37040 ?FUN_00c37040@@YI_NPAUUfo@@PAX@Z  # FUN_00c37040 migrated from s00c368c0 (verbatim, slice spelling)
