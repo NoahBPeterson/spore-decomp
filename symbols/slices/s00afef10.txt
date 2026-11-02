@@ -1,4 +1,8 @@
 007cd950 ?SetLastAnimationPlayed@cSPEditorAnimatedCreatureData@SP@@QAEXI@Z  # SP::cSPEditorAnimatedCreatureData::SetLastAnimationPlayed (callee of s00afef10, named from the dev publics; slice address comment)
+00afef10 ?Emit@cSurfaceDecal@@QAEXIM@Z  # cSurfaceDecal::Emit migrated from s00afef10 (verbatim, slice spelling)
+00afeff0 ?SortDecals@cSurfaceDecalManager@@QAEXPBVcVector3@@PAVcIntVector@@@Z  # cSurfaceDecalManager::SortDecals migrated from s00afef10 (verbatim, slice spelling)
+00aff070 ?FindFreeDecal@cSurfaceDecalManager@@QAEPAVcSurfaceDecal@@XZ  # cSurfaceDecalManager::FindFreeDecal migrated from s00afef10 (verbatim, slice spelling)
+00aff160 ?SmearBits@@YAII@Z  # SmearBits migrated from s00afef10 (verbatim, slice spelling)
 00aff240 ?GetFruitHeight@cTreeData_s00af_ef10@SP@@QBEMXZ  # cTreeData_s00af_ef10::GetFruitHeight migrated from s00afef10 (verbatim, slice spelling)
 00aff250 ?GetValue@cKeyedValue@@QAEII@Z  # cKeyedValue::GetValue migrated from s00afef10 (verbatim, slice spelling)
 00aff280 ?Initialize@cFruit@Simulator@@QAEXXZ  # cFruit::Initialize migrated from s00afef10 (verbatim, slice spelling)

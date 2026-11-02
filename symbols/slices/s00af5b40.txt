@@ -1,1 +1,3 @@
-00af5b40 ProbeShape  # Claude-coined: tests/pushes a point against a shape record (type at +0x24: sphere, box, rounded polyline, shell); called as ProbeHit from the path tracer 0x00af6bf0
+0044d4f0 ?TransformPoint@cSPTransform@@QBEXAAUcSPVector3@@@Z  # cSPTransform::TransformPoint (callee of s00af5b40, named from the dev publics; slice address comment)
+00af5b40 ?ProbeShape@@YA_NPAUShape@@PBUVec3@@PAU2@_NPADM@Z  # ProbeShape migrated from s00af5b40 (verbatim, slice spelling)
+00af6250 ??4ShapeCopy@@QAEAAU0@ABU0@@Z  # ShapeCopy::operator= migrated from s00af5b40 (verbatim, slice spelling)

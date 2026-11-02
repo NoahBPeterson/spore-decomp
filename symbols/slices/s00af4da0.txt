@@ -1,0 +1,2 @@
+00af4da0 ?InitDefault@SPShape@@QAEPAU1@XZ  # SPShape::InitDefault migrated from s00af4da0 (verbatim, slice spelling)
+00af4f70 _FUN_00af4f70  # FUN_00af4f70 migrated from s00af4da0 (verbatim, slice spelling)

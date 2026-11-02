@@ -1,13 +1,7 @@
-# va  name  # evidence
-# Spore Swarm SurfaceDecalManager decal-emission group (SporeApp.exe 0x00afdfe0..0x00afef00).
-# The three emitter members share the +0x24 mode word and the 0x18-byte decal record vector at
-# +0x50; the other helpers push/erase records and run the quicksort init.  Names are
-# reconstructions from the disassembly cards (tools/matching/card.py); only 00afedf0 is byte-exact
-# and named in manifest.txt.  Member offsets are retail.
-00afdfe0  cSurfaceDecalManager::EmitRing
-00afe3a0  cSurfaceDecalManager::EmitSweep
-00afe670  cSurfaceDecalManager::EmitGrid
-00afec00  cSurfaceDecalManager::EmitCopy
-00afed00  cSurfaceDecalManager::PushDecal
-00afedf0  cSurfaceDecalManager::RemoveDecal
-00afee20  cSurfaceDecalManager::SortDecals
+00afdfe0 ?FUN_00afdfe0@@YIXPAXM@Z  # FUN_00afdfe0 migrated from s00afdfe0 (verbatim, slice spelling)
+00afe3a0 ?FUN_00afe3a0@@YIXPAXM@Z  # FUN_00afe3a0 migrated from s00afdfe0 (verbatim, slice spelling)
+00afe670 ?FUN_00afe670@@YIXPAX0M@Z  # FUN_00afe670 migrated from s00afdfe0 (verbatim, slice spelling)
+00afec00 ?FUN_00afec00@@YIXPAX0PAPAHM@Z  # FUN_00afec00 migrated from s00afdfe0 (verbatim, slice spelling)
+00afed00 ?FUN_00afed00@@YIXPAX00@Z  # FUN_00afed00 migrated from s00afdfe0 (verbatim, slice spelling)
+00afedf0 ?FUN_00afedf0@@YIXPAX00@Z  # FUN_00afedf0 migrated from s00afdfe0 (verbatim, slice spelling)
+00afee20 ?FUN_00afee20@@YAXPAD0USortCtx@@@Z  # FUN_00afee20 migrated from s00afdfe0 (verbatim, slice spelling)

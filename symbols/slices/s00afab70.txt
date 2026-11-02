@@ -1,4 +1,6 @@
 00afab70 ?StartSnapAttractorEffects@cActionCircle_s00af_ab70@SP@@QAEHPBUcSPVector3_s00af_ab70@2@@Z  # cActionCircle_s00af_ab70::StartSnapAttractorEffects migrated from s00afab70 (verbatim, slice spelling)
+00afad30 ?FindSlotByAgent@cActionCircle_s00af_ab70@SP@@QAEHPAVcGameData_s00af_ab70@2@@Z  # cActionCircle_s00af_ab70::FindSlotByAgent migrated from s00afab70 (verbatim, slice spelling)
+00afad70 ?FindClosestFreeSlotPtr@cActionCircle_s00af_ab70@SP@@QAEPAVtSlot@12@PBUcSPVector3_s00af_ab70@2@@Z  # cActionCircle_s00af_ab70::FindClosestFreeSlotPtr migrated from s00afab70 (verbatim, slice spelling)
 00afadb0 ?IsCloser@DistCtx@@QBE_NHH@Z  # DistCtx::IsCloser migrated from s00afab70 (verbatim, slice spelling)
 00afaec0 ?ProjectSlotsOntoPlanet@cActionCircle_s00af_ab70@SP@@QAEXXZ  # cActionCircle_s00af_ab70::ProjectSlotsOntoPlanet migrated from s00afab70 (verbatim, slice spelling)
 00afafd0 ?ClearSlots@cActionCircle_s00af_ab70@SP@@QAEXXZ  # cActionCircle_s00af_ab70::ClearSlots migrated from s00afab70 (verbatim, slice spelling)

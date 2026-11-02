@@ -1,0 +1,3 @@
+00af3e00 ?Assign@cRayQueryBase@@QAEAAU1@ABU1@@Z  # cRayQueryBase::Assign migrated from s00af3e00 (verbatim, slice spelling)
+00af3e50 ?FUN_00af3e50@@YA_NPBUVec3@@0MMMMPAXPAM_N@Z  # FUN_00af3e50 migrated from s00af3e00 (verbatim, slice spelling)
+00af4870 ?FUN_00af4870@@YA_NPBUVec3@@0MMPAXPAM@Z  # FUN_00af4870 migrated from s00af3e00 (verbatim, slice spelling)

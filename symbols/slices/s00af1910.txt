@@ -1,1 +1,1 @@
-00af1910 FUN_00af1910  # undefined4* __thiscall (undefined4*,undefined4*); naked asm, byte-exact
+00af1910 ??4cSweepResult@@QAEAAU0@ABU0@@Z  # cSweepResult::operator= migrated from s00af1910 (verbatim, slice spelling)

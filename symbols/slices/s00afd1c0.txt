@@ -1,0 +1,3 @@
+00afd1c0 ?SetSpiralSlots@cActionCircle_s00af_d1c0@SP@@QAEXMH@Z  # cActionCircle_s00af_d1c0::SetSpiralSlots migrated from s00afd1c0 (verbatim, slice spelling)
+00afd6d0 ?SetRingSlots@cActionCircle_s00af_d1c0@SP@@QAEXMMH@Z  # cActionCircle_s00af_d1c0::SetRingSlots migrated from s00afd1c0 (verbatim, slice spelling)
+00afdc00 ?SetFanSlots@cActionCircle_s00af_d1c0@SP@@QAEXMMH@Z  # cActionCircle_s00af_d1c0::SetFanSlots migrated from s00afd1c0 (verbatim, slice spelling)

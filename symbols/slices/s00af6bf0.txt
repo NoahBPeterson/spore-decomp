@@ -1,1 +1,1 @@
-00af6bf0 TracePlanetPath  # card; calls PlanetModel/af4da0 Hit ctor/af5b40 ProbeHit/af6400 SweepSide
+00af6bf0 ?TracePlanetPath@@YAHPAXPBMMP6AM011MPAUHit_s00af_6bf0@@@Z112HPAHPAMPBU1@H@Z  # TracePlanetPath migrated from s00af6bf0 (verbatim, slice spelling)
