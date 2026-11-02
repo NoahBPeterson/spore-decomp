@@ -16,4 +16,3 @@
 0046d840 656-byte /Od function; only skeleton written
 0046dad0 924-byte /Od function; only skeleton written
 0046de70 1497-byte /Od function; only skeleton written
-00471b50 SP::EditorUtils::AddInitialBoundInfo: 2KB+ stack frame with local Transform/array scratch; only skeleton written

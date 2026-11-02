@@ -1,3 +1,7 @@
+00473140 ??0CharVec@@QAE@ABU0@@Z  # CharVec::CharVec migrated from s00472b80 (verbatim, slice spelling)
+00473270 ?resize@?$vector_s0047_2b80@UAutoRefCount_s0047_2b80@@$03@@QAEXI@Z  # resize migrated from s00472b80 (verbatim, slice spelling)
+00473300 ??1Vec29@@QAE@XZ  # Vec29::~Vec29 migrated from s00472b80 (verbatim, slice spelling)
+00473370 ?resize@Vec29@@QAEXI@Z  # Vec29::resize migrated from s00472b80 (verbatim, slice spelling)
 00473500 ?4?$vector  # vector<Pod12,4>::operator= (mangled ??4?$vector@UPod12@@$03@@...; base identifier so the name matcher finds it; size picks between the Pod12/Pair8 instantiations)
 00473890 vector::reserve  # vector<Pod12,4>::reserve (explicit instantiation)
 00473b00 ?4?$vector  # vector<Pair8,4>::operator= (see 00473500)

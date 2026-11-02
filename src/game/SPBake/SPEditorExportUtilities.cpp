@@ -1,4 +1,4 @@
-// src/game/SPBake/SPEditorExportUtilities.cpp -- migrated from slice(s) s00467a20, s00464300, s00461680, s004614b0, s004604f0, s00471b50, s00470bd0, s0046ff00, s0046f2a0, s0046e450, s0046d660, s0046c900, s0046c000, s0046b8e0, s0046aac0, s00469bb0, s00469500, s004680c0, s00466e20, s00466320, s004655e0, s00464bb0, s004629e0 by tools/migrate/rewrite.py
+// src/game/SPBake/SPEditorExportUtilities.cpp -- migrated from slice(s) s00472b80, s00467a20, s00464300, s00461680, s004614b0, s004604f0, s00471b50, s00470bd0, s0046ff00, s0046f2a0, s0046e450, s0046d660, s0046c900, s0046c000, s0046b8e0, s0046aac0, s00469bb0, s00469500, s004680c0, s00466e20, s00466320, s004655e0, s00464bb0, s004629e0 by tools/migrate/rewrite.py
 // Object file: SPBake/SPEditorExportUtilities.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -28,6 +28,8 @@
 #include "SP/cMWModel.h"
 #include <stdio.h>
 #include <stddef.h>
+#include <math.h>
+#include <stdarg.h>
 
 // unnamed retail callees and globals (address in the comment)
 extern "C" long __cdecl _InterlockedExchangeAdd(long volatile* p, long v);
@@ -2948,11 +2950,23 @@ struct VecIds {
 float FUN_00470f20(Vec4* p);   // defined at 0x00470f20, called earlier in the TU
 
 // ---- items of slice s00471b50 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C" long _InterlockedExchange(long volatile*, long);
+extern int vtbl60[];
+extern float kDefaultBoundRadius;        // 0x1488874
+#pragma intrinsic(_InterlockedExchange)
 template <int N> inline void ScratchSlots_s0047_1b50()
 {
     uint32_t s[N];
     (void)s;
 }
+class ThreadedObject_s0047_1b50 {
+public:
+    void Release();
+};
+struct RefHolderA {
+    ThreadedObject_s0047_1b50* p;
+    ~RefHolderA();
+};
 class DefaultRefCounted_s0047_1b50 {
 public:
     void Release();
@@ -2961,6 +2975,254 @@ struct RefHolderB {
     DefaultRefCounted_s0047_1b50* p;
     ~RefHolderB();
 };
+struct StridedArr {
+    int pad0;
+    int off;
+    unsigned short pad8;
+    unsigned short stride;
+    int get(int);
+};
+struct S60 {
+    void* vt;
+    unsigned short a, b;
+    void* self;
+};
+struct S61 {
+    void* vt;
+    unsigned short a, b;
+    void* self;
+};
+struct S62 {
+    void* vt;
+    unsigned short a, b;
+    void* self;
+};
+void  F_00409c00();     // 0x409c00 __thiscall: 0x18-byte box ctor (min/max, +0..+0x14)
+void  F_00409930();     // 0x409930 __thiscall: 0x38-byte bound-record ctor
+void  F_00402ab0();     // 0x402ab0 __thiscall: 0x24-byte 3x3 matrix ctor (no-op)
+void  F_00409dd0();     // 0x409dd0 __thiscall: accumulate a bound record into a box
+void  F_0043f050();     // 0x43f050 __thiscall: union a box into a box
+void  F_00511140();     // 0x511140 __thiscall: copy a box out to the caller's object
+void* F_0041de20(void* dest, void* a, void* b);   // 0x41de20 cdecl: fills dest, returns dest
+void* F_00401010();     // 0x401010 cdecl: singleton getter (0x15d0c04)
+void  F_004721e0();     // 0x4721e0 __thiscall: copy-construct a 0x1d8-byte element
+typedef void  (__thiscall* TSelf0)(void* self);
+typedef void  (__thiscall* TSelf1)(void* self, void* arg);
+typedef bool  (__thiscall* TSix)(void* self, void* a1, void* a2, void* a3, void* a4, void* a5, void* a6);
+struct Box18 { float v[6]; };            // +0x00 min xyz, +0x0c max xyz
+struct Mat3_ { float m[9]; };            // 0x24 bytes
+struct BoundRec {                        // 0x38 bytes
+    unsigned short flags;                // +0x00
+    unsigned short count;                // +0x02
+    float x, y, z;                       // +0x04
+    float w;                             // +0x10
+    Mat3_ mat;                           // +0x14
+};
+struct Elem1d8 { int w[0x76]; };         // 0x1d8 opaque bytes (an int array keeps /GS quiet)
+namespace rw {
+namespace math {
+namespace fpu {
+template <class T, int Aligned>
+class Vector3Template_s0047_1b50 {
+public:
+    T x, y, z;
+};
+}
+}
+}
+namespace rw {
+namespace math {
+namespace fpu {
+template <class T, int Aligned>
+class Matrix33Template_s0047_1b50 {
+public:
+    Vector3Template_s0047_1b50<T, Aligned> xAxis, yAxis, zAxis;
+    Matrix33Template_s0047_1b50& operator=(const Matrix33Template_s0047_1b50& v);   // 0x41cb40 (cSPMatrix3::Assign)
+};
+}
+}
+}
+struct cSPVector3_s0047_1b50 : public rw::math::fpu::Vector3Template_s0047_1b50<float, 0> {};
+struct cSPMatrix3_s0047_1b50 : public rw::math::fpu::Matrix33Template_s0047_1b50<float, 0> {};
+struct cSPColorRGB_s0047_1b50 : public rw::math::fpu::Vector3Template_s0047_1b50<float, 0> {};
+struct Float8 { float v[8]; };
+struct UInt8  { unsigned int v[8]; };
+struct Int8   { int v[8]; };
+namespace SP {
+struct cSerializedEditorBlock_s0047_1b50 {
+    unsigned int mGroup;             // +0x00
+    unsigned int mInstance;          // +0x04
+    unsigned int mParentIndex;       // +0x08
+    unsigned int mSymmetricIndex;    // +0x0c
+    float mUniformScale;             // +0x10
+    cSPVector3_s0047_1b50 mPosition;            // +0x14
+    cSPVector3_s0047_1b50 mPinningDirection;    // +0x20
+    cSPVector3_s0047_1b50 mPinningOrigin;       // +0x2c
+    cSPMatrix3_s0047_1b50 mBaseOrientation;     // +0x38
+    cSPMatrix3_s0047_1b50 mUserOrientation;     // +0x5c
+    unsigned char mIsSnapped;        // +0x80
+    unsigned char m_RESERVED1;       // +0x81
+    unsigned char m_RESERVED2;       // +0x82
+    unsigned char m_RESERVED3;       // +0x83
+    unsigned int mLimbType;          // +0x84
+    float mMuscleScale;              // +0x88
+    float mBaseJointScale;           // +0x8c
+    unsigned int mNumHandles;        // +0x90
+    Float8 mHandlePositions;         // +0x94
+    UInt8 mHandleAnimations;         // +0xb4
+    unsigned int mNumPaintRegions;   // +0xd4
+    Int8 mPaintRegions;              // +0xd8
+    UInt8 mPaintIDs;                 // +0xf8
+    cSPColorRGB_s0047_1b50 mPaintColor1s[8];    // +0x118
+    cSPColorRGB_s0047_1b50 mPaintColor2s[8];    // +0x178
+
+    cSerializedEditorBlock_s0047_1b50(const cSerializedEditorBlock_s0047_1b50&);
+};
+}
+namespace SP {
+class cEditorResource_s0047_1b50 {
+public:
+    unsigned int mPad00[6];             // +0x00
+    unsigned int mModelType;            // +0x18 (cSerializedEditorModel::mModelType)
+    unsigned int mPad1c[0x1f];          // +0x1c .. +0x97
+    cSerializedEditorBlock_s0047_1b50* mBlocksBegin;   // +0x98
+    cSerializedEditorBlock_s0047_1b50* mBlocksEnd;     // +0x9c
+};
+}
+namespace SP {
+class cPropertyList_s0047_1b50;
+}
+namespace SP {
+namespace EditorUtils {
+    void AddInitialBoundInfo(cEditorResource_s0047_1b50* pResource, cPropertyList_s0047_1b50* pList);
+}
+}
+inline void CopyVec3f(cSPVector3_s0047_1b50* d, const cSPVector3_s0047_1b50* s)
+{
+    d->x = s->x;
+    d->y = s->y;
+    d->z = s->z;
+}
+inline void CopyColorArray(cSPColorRGB_s0047_1b50* d, const cSPColorRGB_s0047_1b50* s, int n)
+{
+    while (--n >= 0)
+    {
+        d->x = s->x;
+        d->y = s->y;
+        d->z = s->z;
+        ++d;
+        ++s;
+    }
+}
+void F_00425990();               // 0x425990 __thiscall: vector<int>::~vector
+struct ObjBase {
+    void* mVtbl;                 // +0x00
+    ObjBase() { mVtbl = (void*)0x13eb938; }
+    ~ObjBase() { mVtbl = (void*)0x13eb938; }
+};
+struct RefCountedBase {
+    void* mVtbl;                 // +0x00
+    volatile long mRefCount;     // +0x04
+    RefCountedBase()
+    {
+        mVtbl = (void*)0x13ef094;
+        long volatile* pRef = &mRefCount;
+        _InterlockedExchange(pRef, 0);
+    }
+    ~RefCountedBase() { mVtbl = (void*)0x13ef094; }
+};
+struct IntVector_s0047_1b50 {
+    int* mpBegin;                // +0x00
+    int* mpEnd;                  // +0x04
+    int* mpCapacity;             // +0x08
+    void Init()
+    {
+        mpBegin = 0;
+        mpEnd = 0;
+        mpCapacity = 0;
+    }
+    ~IntVector_s0047_1b50()
+    {
+        ScratchSlots_s0047_1b50<3>();
+        for (int* p = mpBegin; p < mpEnd; ++p) { }
+        ((TSelf0)F_00425990)(this);
+    }
+    int size() const { return (int)(mpEnd - mpBegin); }
+    int* begin() const { return mpBegin; }
+};
+struct RefTarget {
+    virtual void AddRef();
+};
+struct IntrusivePtr {
+    RefTarget* mPtr;             // +0x00
+    IntrusivePtr& operator=(void* p)
+    {
+        mPtr = (RefTarget*)p;
+        if (mPtr != 0)
+            mPtr->AddRef();
+        return *this;
+    }
+};
+struct BufView {
+    int count;                   // +0x00
+    char* data;                  // +0x04
+    unsigned short maskIdx;      // +0x08
+    unsigned short stride;       // +0x0a
+    IntrusivePtr ref;            // +0x0c
+    void SetCount(int n) { count = n; }
+};
+struct IntVecObj : ObjBase, RefCountedBase {
+    IntVector_s0047_1b50 mVec;              // +0x0c
+    unsigned int mPad18;         // +0x18
+    unsigned int mPad1c;         // +0x1c
+    int mField20;                // +0x20
+
+    IntVecObj();
+    ~IntVecObj();
+    BufView* GetView(BufView* pView);
+};
+struct FixedVecInt1 {
+    int* mpBegin;                // +0x00
+    int* mpEnd;                  // +0x04
+    int* mpCapacity;             // +0x08
+    unsigned int mPad0c;         // +0x0c
+    unsigned int mPad10;         // +0x10
+    unsigned int mHeapFlag;      // +0x14
+    int mBuffer[1];              // +0x18
+    FixedVecInt1(int n, const int& value);
+};
+void F_00474840();               // 0x474840 __thiscall: vector<int>::resize(n, value)
+struct FixedVecU64 {
+    unsigned __int64* mpBegin;        // +0x00
+    unsigned __int64* mpEnd;          // +0x04
+    unsigned __int64* mpCapacity;     // +0x08
+    unsigned int mPad0c;              // +0x0c
+    unsigned int mPad10;              // +0x10
+    unsigned int mHeapFlag;           // +0x14
+    unsigned __int64 mBuffer[64];     // +0x18
+};
+struct FixedVecBox {
+    Box18* mpBegin;                   // +0x00
+    Box18* mpEnd;                     // +0x04
+    Box18* mpCapacity;                // +0x08
+    unsigned int mPad0c;              // +0x0c
+    unsigned int mPad10;              // +0x10
+    unsigned int mHeapFlag;           // +0x14
+    Box18 mBuffer[64];                // +0x18
+};
+struct AllocTagByte { unsigned char b; };
+extern cSPVector3_s0047_1b50 kDefaultBoundCenter;   // 0x15d4034
+void F_00409ce0();               // 0x409ce0 __thiscall: box set center/radius
+void F_0041e770();               // 0x41e770 __thiscall: vector<Box18>::reserve
+void F_0041e8b0();               // 0x41e8b0 __thiscall: vector<Box18>::push_back
+void F_0041da70();               // 0x41da70 __thiscall: fixed_vector<Box18,64> ctor
+void F_0041e730();               // 0x41e730 __thiscall: vector<Box18> dtor
+void F_004756f0();               // 0x4756f0 __thiscall: vector<u64>::resize
+void F_00475800();               // 0x475800 __thiscall: vector<u64>::push_back
+void F_004c5e30();               // 0x4c5e30 __thiscall: fixed_vector<u64,64> ctor
+void F_004cddd0();               // 0x4cddd0 __thiscall: vector<u64> dtor
+void F_00540470();               // 0x540470 __thiscall: vector base ctor (allocator)
+void F_00471000();               // 0x471000 cdecl: bound-info builder overload
 // ---- items of slice s00471b50 end
 
 // ---- items of slice s004604f0 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -2973,7 +3235,7 @@ extern int   g_3e8c[3];             // 0x15d3e8c
     extern float g_f13eecd8; // 0x013eecd8
     extern float g_f13ec480; // 0x013ec480
     extern float g_f1471064; // 0x01471064
-#pragma intrinsic(_InterlockedExchange)
+
 struct RefCounted {
     char         pad[8];
     volatile long mnRefCount;
@@ -3192,6 +3454,131 @@ union Bits {
 
 // forward declarations: helpers defined later in VA order (rewrite.py forward_protos)
 namespace SP { namespace EditorUtils { void AddInitialBoundInfo(SP::cEditorResource * a1, SP::cPropertyList * a2); } }   // defined at 0x00471b50, called earlier in the TU
+
+// ---- items of slice s00472b80 begin (TODO(rewrite): local stubs, replace by canonical classes)
+#pragma intrinsic(strlen_s0047_2b80)
+void* EASTL_Allocate(void* alloc, uint32_t n, uint32_t align, uint32_t flags); // @ 0x0042dee0
+void  EASTL_allocator_deallocate(void* p);                                      // @ 0x00f47380
+template<int N> inline void ScratchSlots_s0047_2b80() { uint32_t s[N]; }
+struct sp_vector_allocator_s0047_2b80 {
+    uint32_t mDummy;
+    void deallocate(void* p, uint32_t) { void* q = p; EASTL_allocator_deallocate(q); }
+};
+struct Counted { void Release(); };                                  // 0x40f360
+struct AutoRefCount_s0047_2b80 {
+    Counted* mpObject;
+    AutoRefCount_s0047_2b80() : mpObject(0) {}
+    ~AutoRefCount_s0047_2b80() { if (mpObject) mpObject->Release(); }
+    static void operator delete(void* p) { EASTL_allocator_deallocate(p); }
+};
+struct Elem29c {
+    char pad[0x158];
+    uint32_t a[64];      // +0x158
+    uint32_t b[16];      // +0x258
+    Counted* m298;       // +0x298
+    Elem29c();                                            // out of line @ 0x475880
+    ~Elem29c() {
+        Counted** p = &m298;
+        if (*p) (*p)->Release();
+    }
+};
+template<class T> struct ResizeHoles { enum { N = 6 }; };
+template<> struct ResizeHoles<AutoRefCount_s0047_2b80> { enum { N = 15 }; };
+template<class T> T* uninitialized_copy_ptr(T* first, T* last, T* dest);   // out of line
+template<class T> inline void destruct(T* first, T* last)
+{ for (; first < last; ++first) first->~T(); }
+template<class T> inline T* CopyRef(T* first, T* last, T* dest)
+{
+    const bool from = false, left = false, pos = false;
+    { uint32_t unused[2]; }
+    T* pSource = first;
+    T* pDest = dest;
+    for (; pSource != last; ++pSource, ++pDest) *pDest = *pSource;
+    return pDest;
+}
+template<class T, int A>
+struct vector_s0047_2b80 {
+    T* mpBegin; T* mpEnd; T* mpCapacity; sp_vector_allocator_s0047_2b80 mAllocator;
+
+    T* DoAllocate(uint32_t n) { return n ? (T*)EASTL_Allocate(&mAllocator, n * sizeof(T), A, 0) : 0; }
+    void DoFree(T* p, uint32_t n) { if (p && ((int*)p)[-1]) mAllocator.deallocate(p, n); }
+
+    void DoInsertValues(T* pos, uint32_t n, const T& v);   // out of line
+    void erase(T* first, T* last);                         // out of line 0x00621f50
+    void insert(T* pos, uint32_t n, const T& v) { DoInsertValues(pos, n, v); }
+
+    vector_s0047_2b80& operator=(const vector_s0047_2b80& x);
+    T* DoRealloc(uint32_t n, T* first, T* last);           // out of line
+    uint32_t size() const { return (uint32_t)(mpEnd - mpBegin); }
+    void reserve(uint32_t n);
+    void resize(uint32_t n);
+};
+template<class T, int A>
+vector_s0047_2b80<T,A>& vector_s0047_2b80<T,A>::operator=(const vector_s0047_2b80& x)
+{
+    if (&x != this) {
+        const uint32_t n = x.size();
+        if (n > (uint32_t)(mpCapacity - mpBegin)) {
+            T* const pNewData = DoRealloc(n, x.mpBegin, x.mpEnd);
+            ScratchSlots_s0047_2b80<9>();
+            destruct(mpBegin, mpEnd);
+            DoFree(mpBegin, (uint32_t)(mpCapacity - mpBegin));
+            mpBegin = pNewData;
+            mpCapacity = mpBegin + n;
+        } else if (n > size()) {
+            CopyRef(x.mpBegin, x.mpBegin + (mpEnd - mpBegin), mpBegin);
+            uninitialized_copy_ptr(x.mpBegin + (mpEnd - mpBegin), x.mpEnd, mpEnd);
+            ScratchSlots_s0047_2b80<8>();
+        } else {
+            T* const position = CopyRef(x.mpBegin, x.mpEnd, mpBegin);
+            destruct(position, mpEnd);
+        }
+        mpEnd = mpBegin + n;
+    }
+    return *this;
+}
+template<class T, int A>
+void vector_s0047_2b80<T,A>::reserve(uint32_t n)
+{
+    if (n > (uint32_t)(mpCapacity - mpBegin)) {
+        T* const pNewData = DoAllocate(n);
+        uninitialized_copy_ptr(mpBegin, mpEnd, pNewData);
+        destruct(mpBegin, mpEnd);
+        DoFree(mpBegin, (uint32_t)(mpCapacity - mpBegin));
+        const int nPrevSize = mpEnd - mpBegin;
+        mpBegin = pNewData;
+        mpEnd = pNewData + nPrevSize;
+        mpCapacity = mpBegin + n;
+    }
+}
+template<class T, int A>
+void vector_s0047_2b80<T,A>::resize(uint32_t n)
+{
+    if (n > size()) {
+        insert(mpEnd, n - size(), T());
+        ScratchSlots_s0047_2b80<ResizeHoles<T>::N>();
+    } else
+        erase(mpBegin + n, mpEnd);
+}
+char* UninitCopyChar(char* first, char* last, char* dest);      // @ 0x00475bd0
+inline char* uninitialized_copy(char* first, char* last, char* dest)
+{
+    ScratchSlots_s0047_2b80<14>();
+    return UninitCopyChar(first, last, dest);
+}
+struct CharVec {
+    char* mpBegin; char* mpEnd; char* mpCapacity; void* mAllocator;
+    CharVec(const CharVec& x);
+};
+struct Vec29 {
+    Elem29c* mpBegin; Elem29c* mpEnd; Elem29c* mpCapacity; void* mAllocator;
+    void DoInsertValues(Elem29c* pos, uint32_t n, const Elem29c& v);   // @ 0x00478e00
+    void erase(Elem29c* first, Elem29c* last);                         // @ 0x00475da0
+    void DoFreeSelf();                                                 // @ 0x00475e90
+    ~Vec29();
+    void resize(uint32_t n);
+};
+// ---- items of slice s00472b80 end
 
 // @ 0x004604f0
 void BuildCreatureMaterialInfo(PtrVector* out, unsigned id, int tex0, int tex1, int unused, char skipLookup)
@@ -5578,12 +5965,164 @@ void FUN_00471830(Editor_s0047_0bd0* self, IPropList_s0047_0bd0* pl)
 }
 
 // @ 0x00471b50
-namespace SP {
-namespace EditorUtils {
-void AddInitialBoundInfo(SP::cEditorResource * a1, SP::cPropertyList * a2)
-{}
+void SP::EditorUtils::AddInitialBoundInfo(SP::cEditorResource_s0047_1b50* pResource, SP::cPropertyList_s0047_1b50* pList)
+{
+    if (pResource == 0)
+        return;
+
+    FixedVecU64 keys;
+    AllocTagByte allocA;
+    ((void (__thiscall*)(void*, const void*))F_00540470)(&keys, &allocA);
+    ((TSelf0)F_004c5e30)(&keys);
+
+    FixedVecBox boxes;
+    AllocTagByte allocB;
+    ((void (__thiscall*)(void*, const void*))F_00540470)(&boxes, &allocB);
+    ((TSelf0)F_0041da70)(&boxes);
+
+    int count = (int)((char*)pResource->mBlocksEnd - (char*)pResource->mBlocksBegin) / 0x1d8;
+    ((void (__thiscall*)(void*, int))F_004756f0)(&keys, count);
+    ((void (__thiscall*)(void*, int))F_0041e770)(&boxes, count);
+
+    for (int i = 0; i < count; ++i) {
+        SP::cSerializedEditorBlock_s0047_1b50* e =
+            (SP::cSerializedEditorBlock_s0047_1b50*)((char*)pResource->mBlocksBegin + i * 0x1d8);
+
+        BoundRec rec;
+        ((TSelf0)F_00409930)(&rec);
+        *(int*)&rec.x = *(int*)&e->mPosition.x;
+        *(int*)&rec.y = *(int*)&e->mPosition.y;
+        *(int*)&rec.z = *(int*)&e->mPosition.z;
+        rec.flags |= 4;
+        ++rec.count;
+        *(int*)&rec.w = *(int*)&e->mUniformScale;
+        ++rec.count;
+
+        Mat3_ hidden;
+        Mat3_* q = (Mat3_*)((void* (__cdecl*)(void*, void*, void*))F_0041de20)
+            (&hidden, &e->mUserOrientation, &e->mBaseOrientation);
+        Mat3_ tmp = *q;
+        rec.mat = tmp;
+        rec.flags |= 2;
+        ++rec.count;
+
+        Box18 box;
+        ((TSelf0)F_00409c00)(&box);
+        void* singleton = ((void* (__cdecl*)())F_00401010)();
+        bool belongs = ((TSix)(*(void***)singleton)[0x54 / 4])
+            (singleton, (void*)*(int*)&e->mInstance, (void*)*(int*)&e->mGroup,
+             (char*)e + 0x94, (void*)*(int*)&e->mNumHandles,
+             &box.v[0], &box.v[3]);
+        (void)belongs;
+
+        if (box.v[0] > box.v[3]) {
+            ((void (__thiscall*)(void*, const void*, float))F_00409ce0)
+                (&box, &kDefaultBoundCenter, kDefaultBoundRadius);
+        }
+        ((TSelf1)F_00409dd0)(&box, &rec);
+        ((TSelf1)F_0041e8b0)(&boxes, &box);
+
+        unsigned __int64 key =
+            ((unsigned __int64)e->mGroup << 32) | (unsigned __int64)e->mInstance;
+        ((TSelf1)F_00475800)(&keys, &key);
+    }
+
+    ((void (__cdecl*)(unsigned __int64*, Box18*, int, int, SP::cPropertyList_s0047_1b50*))F_00471000)
+        ((unsigned __int64*)keys.mpBegin, (Box18*)boxes.mpBegin, count,
+         (int)pResource->mModelType, pList);
+    ((TSelf0)F_0041e730)(&boxes);
+    ((TSelf0)F_004cddd0)(&keys);
 }
-}  // namespace SP::EditorUtils
+
+// @ 0x00471ec0
+void* F_00471ec0(void* self, unsigned char* arg1, float* out)
+{
+    Box18 box;
+    ((TSelf0)F_00409c00)(&box);
+    if (out != 0)
+        *out = 0.0f;
+    unsigned char* arr = arg1 + 0x98;
+    int count = (*(int*)(arr + 4) - *(int*)arr) / 0x1d8;
+    for (int i = 0; i < count; ++i) {
+        Elem1d8 e;
+        char* ep = (char*)&e;
+        ((TSelf1)F_004721e0)(&e, (unsigned char*)*(void**)arr + i * 0x1d8);
+        Box18 b;
+        ((TSelf0)F_00409c00)(&b);
+        void* p = F_00401010();
+        bool ok = ((TSix)(*(void***)p)[0x54 / 4])(p, *(void**)(ep + 4), *(void**)(ep + 0),
+                                                  ep + 0x94, *(void**)(ep + 0x90), &b, &b.v[3]);
+        if (!ok)
+            continue;
+        BoundRec r;
+        ((TSelf0)F_00409930)(&r);
+        *(int*)&r.x = *(int*)(ep + 0x14);
+        *(int*)&r.y = *(int*)(ep + 0x18);
+        *(int*)&r.z = *(int*)(ep + 0x1c);
+        r.flags |= 4;
+        ++r.count;
+        Mat3_ hidden;
+        Mat3_* q = (Mat3_*)F_0041de20(&hidden, ep + 0x5c, ep + 0x38);
+        Mat3_ tmp;
+        ((TSelf0)F_00402ab0)(&tmp);
+        tmp = *q;
+        r.mat = tmp;
+        r.flags |= 2;
+        ++r.count;
+        *(int*)&r.w = *(int*)(ep + 0x10);
+        ++r.count;
+        ((TSelf1)F_00409dd0)(&b, &r);
+        ((TSelf1)F_0043f050)(&box, &b);
+        if (out != 0) {
+            float d0 = fabsf(b.v[3] - b.v[0]);
+            float d1 = fabsf(b.v[4] - b.v[1]);
+            float d2 = fabsf(b.v[5] - b.v[2]);
+            *out = d0 * d1 * d2 + *out;
+        }
+    }
+    ((TSelf1)F_00511140)(self, &box);
+    return self;
+}
+
+// @ 0x004721e0
+SP::cSerializedEditorBlock_s0047_1b50::cSerializedEditorBlock_s0047_1b50(const SP::cSerializedEditorBlock_s0047_1b50& o)
+{
+    mGroup = o.mGroup;
+    mInstance = o.mInstance;
+    mParentIndex = o.mParentIndex;
+    mSymmetricIndex = o.mSymmetricIndex;
+    mUniformScale = o.mUniformScale;
+    CopyVec3f(&mPosition, &o.mPosition);
+    CopyVec3f(&mPinningDirection, &o.mPinningDirection);
+    CopyVec3f(&mPinningOrigin, &o.mPinningOrigin);
+    ScratchSlots_s0047_1b50<9>();
+    mBaseOrientation = o.mBaseOrientation;
+    ScratchSlots_s0047_1b50<9>();
+    mUserOrientation = o.mUserOrientation;
+    mIsSnapped = o.mIsSnapped;
+    m_RESERVED1 = o.m_RESERVED1;
+    m_RESERVED2 = o.m_RESERVED2;
+    m_RESERVED3 = o.m_RESERVED3;
+    mLimbType = o.mLimbType;
+    mMuscleScale = o.mMuscleScale;
+    mBaseJointScale = o.mBaseJointScale;
+    mNumHandles = o.mNumHandles;
+    mHandlePositions = o.mHandlePositions;
+    mHandleAnimations = o.mHandleAnimations;
+    mNumPaintRegions = o.mNumPaintRegions;
+    mPaintRegions = o.mPaintRegions;
+    mPaintIDs = o.mPaintIDs;
+    CopyColorArray(mPaintColor1s, o.mPaintColor1s, 8);
+    CopyColorArray(mPaintColor2s, o.mPaintColor2s, 8);
+}
+
+// @ 0x00472520
+RefHolderA::~RefHolderA()
+{
+    ScratchSlots_s0047_1b50<3>();
+    if (p)
+        p->Release();
+}
 
 // @ 0x00472540
 RefHolderB::~RefHolderB()
@@ -5591,4 +6130,120 @@ RefHolderB::~RefHolderB()
     ScratchSlots_s0047_1b50<3>();
     if (p)
         p->Release();
+}
+
+// @ 0x00472640
+int StridedArr::get(int i)
+{
+    return i * stride + off;
+}
+
+// @ 0x00472660
+S60* __fastcall Init72660(S60* p)
+{
+    p->vt = vtbl60;
+    p->a = 0x218;
+    p->b = 1;
+    p->self = 0;
+    p->vt = vtbl60;
+    p->self = p ? (void*)((char*)p + 0xc) : 0;
+    return p;
+}
+
+// @ 0x004726d0
+S61* __fastcall Init726d0(S61* p)
+{
+    p->vt = vtbl60;
+    p->a = 0x238;
+    p->b = 1;
+    p->self = 0;
+    p->vt = vtbl60;
+    p->self = p ? (void*)((char*)p + 0xc) : 0;
+    return p;
+}
+
+// @ 0x00472860
+IntVecObj::IntVecObj()
+{
+    int dummy;
+    (void)dummy;
+    ObjBase::mVtbl = (void*)0x13ef09c;              // IntVecObj vftables
+    RefCountedBase::mVtbl = (void*)0x13ef098;
+    mVec.Init();
+    mField20 = 0;
+}
+
+// @ 0x004728e0
+BufView* IntVecObj::GetView(BufView* pView)
+{
+    int* pBegin = mVec.begin();
+    IntrusivePtr* pRef;
+    int nCount = mVec.size();
+    pView->count = nCount;
+    pView->data = (char*)pBegin;
+    pView->maskIdx = 4;
+    pView->stride = 4;
+    pRef = &pView->ref;
+    *pRef = this;
+    return pView;
+}
+
+// @ 0x00472990
+FixedVecInt1::FixedVecInt1(int n, const int& value)
+{
+    ScratchSlots_s0047_1b50<0x12>();
+    mpBegin = 0;
+    mpEnd = 0;
+    mpCapacity = 0;
+    mHeapFlag = 0;
+    mpBegin = mBuffer;
+    mpEnd = mpBegin;
+    mpCapacity = mpBegin + 1;
+    ((void (__thiscall*)(void*, int, const int*))F_00474840)(this, n, &value);
+}
+
+// @ 0x00472a00
+S62* __fastcall Init72a00(S62* p)
+{
+    p->vt = vtbl60;
+    p->a = 0x21e;
+    p->b = 0x10;
+    p->self = 0;
+    p->vt = vtbl60;
+    p->self = p ? (void*)((char*)p + 0xc) : 0;
+    return p;
+}
+
+// @ 0x00473140
+CharVec::CharVec(const CharVec& x)
+{
+    const uint32_t n = (uint32_t)(x.mpEnd - x.mpBegin);
+    mpBegin = n ? (char*)EASTL_Allocate(&mAllocator, n, 1, 0) : 0;
+    mpEnd = mpBegin;
+    mpCapacity = mpBegin + n;
+    mpEnd = uninitialized_copy(x.mpBegin, x.mpEnd, mpBegin);
+}
+
+// @ 0x00473270
+template void vector_s0047_2b80<AutoRefCount_s0047_2b80, 4>::resize(uint32_t)
+;
+
+// @ 0x00473300
+Vec29::~Vec29()
+{
+    ScratchSlots_s0047_2b80<5>();
+    Elem29c* const end = mpEnd;
+    for (Elem29c* it = mpBegin; it < end; ++it)
+        it->~Elem29c();
+    DoFreeSelf();
+}
+
+// @ 0x00473370
+void Vec29::resize(uint32_t n)
+{
+    if (n > (uint32_t)(mpEnd - mpBegin)) {
+        Elem29c v;
+        DoInsertValues(mpEnd, n - (uint32_t)(mpEnd - mpBegin), v);
+    } else
+        erase(mpBegin + n, mpEnd);
 }
