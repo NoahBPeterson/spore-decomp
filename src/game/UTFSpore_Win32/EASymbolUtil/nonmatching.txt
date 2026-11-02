@@ -1,0 +1,3 @@
+# va  diff-bytes  reason
+00b210d0 45 hashtable key flatten; MSVC assigns the bucket cursor to edx, the node to eax and the index to esi (original keeps bucket in esi, node in edx, index in eax) and builds the bucket scan as a bottom-tested loop, 103 bytes flags: /O2 /MD /Gy /TP /arch:SSE
+00b21140 16 hashtable lookup + entry invoke; original folds the call through the entry's function pointer into call dword ptr [eax+4], MSVC emits mov edx,[eax+4]/call edx; all other bytes identical, 59 vs 57 bytes flags: /O2 /MD /Gy /TP /arch:SSE

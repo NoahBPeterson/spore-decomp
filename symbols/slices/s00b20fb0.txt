@@ -1,1 +1,4 @@
+00b210d0 ?FUN_00b210d0@HtStrOwner@@QAEXPAII@Z  # HtStrOwner::FUN_00b210d0 migrated from s00b20fb0 (verbatim, slice spelling)
+00b21140 ?FUN_00b21140@HtStrOwner@@QAEI_K@Z  # HtStrOwner::FUN_00b21140 migrated from s00b20fb0 (verbatim, slice spelling)
+00b21180 ?FUN_00b21180@HtStrOwner@@QAEPAU1@E@Z  # HtStrOwner::FUN_00b21180 migrated from s00b20fb0 (verbatim, slice spelling)
 00b21da0 ?FUN_00b21da0@ListSeg@@QAEXPAU1@@Z  # ListSeg::FUN_00b21da0 migrated from s00b20fb0 (verbatim, slice spelling)

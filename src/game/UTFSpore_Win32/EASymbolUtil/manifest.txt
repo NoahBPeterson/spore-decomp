@@ -1,0 +1,2 @@
+# source  symbol  va  flags
+../src/game/UTFSpore_Win32/EASymbolUtil.cpp  ?FUN_00b21180@HtStrOwner@@QAEPAU1@E@Z  00b21180  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
