@@ -1,4 +1,4 @@
-// src/game/UTFSpore_Win32/InputMan.cpp -- migrated from slice(s) s00958a70, s008d2590 by tools/migrate/rewrite.py
+// src/game/UTFSpore_Win32/InputMan.cpp -- migrated from slice(s) s008d1b30, s00958a70, s008d2590 by tools/migrate/rewrite.py
 // Object file: UTFSpore_Win32/InputMan.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -17,6 +17,7 @@ extern "C" __declspec(dllimport) int __stdcall GetSystemMetrics(int nIndex);
 #include "EA/Allocator/ICoreAllocator.h"
 #include "EA/Thread/Mutex.h"
 #include "EA/Text/Typesetter.h"
+#include <intrin.h>
 
 // ---- items of slice s008d2590 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern "C" __declspec(dllimport) unsigned long __stdcall GetTickCount(void);
@@ -438,6 +439,32 @@ struct WM {
     u8     f834;
 };
 // ---- items of slice s00958a70 end
+
+// @ 0x008d1cf0
+bool ApplyThresholds(float v, float noise, float bin, float* out, unsigned short* count, unsigned dt)
+{
+    bool found = false;
+    float a = fabsf(v);
+    if (noise > a)
+        v = 0.0f;
+    else
+        v = (v < -1.0f) ? -1.0f : ((v > 1.0f) ? 1.0f : v);
+    *out = v;
+    if (bin > a) {
+        unsigned short cnt = *count;
+        if (cnt == 0 || cnt == 0xffff)
+            cnt = 0;
+        else
+            cnt = 0xffff;
+        *count = cnt;
+        return found;
+    }
+    if (dt > 200 && *count < 0xfffd) {
+        *count = *count + 1;
+        found = true;
+    }
+    return found;
+}
 
 // @ 0x008d2590
 void EA::Input::InputMan::UpdateController(unsigned idx)
