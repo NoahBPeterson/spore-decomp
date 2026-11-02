@@ -1,4 +1,4 @@
-// src/game/SPGonzago/SPAppData.cpp -- migrated from slice(s) s00e4ba40, s00e4aa60, s00e39ab0, s00453250 by tools/migrate/rewrite.py
+// src/game/SPGonzago/SPAppData.cpp -- migrated from slice(s) s00e4c9e0, s00e49a40, s005f4310, s00e4ba40, s00e4aa60, s00e39ab0, s00453250 by tools/migrate/rewrite.py
 // Object file: SPGonzago/SPAppData.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -17,6 +17,23 @@
 #include "SP/cTypeDef.h"
 #include <intrin.h>
 #include "EA/ResourceMan/FactoryBinary.h"
+#include "EA/Messaging/IHandler.h"
+#include "EA/UTFWin/IWinProc.h"
+#include "EA/UTFWin/IWindow.h"
+#include "EA/Messaging/Server.h"
+#include "EA/Stopwatch.h"
+#include "SP/cICameraController.h"
+#include "SP/cICameraManager.h"
+#include "SP/cModelWorld.h"
+#include "SP/cSPEditorEconomy.h"
+#include "SP/cSPOLDPaletteItemUIDragAndBuy.h"
+#include "SP/cSPPaletteInfo.h"
+#include "SP/cSPPaletteItem.h"
+#include "SP/cSPSwatch.h"
+#include "SP/cString.h"
+#include "cSPUILayeredObject.h"
+#include "cSPUIAnimator.h"
+#include "SP/cSPMission.h"
 
 // ---- items of slice s00453250 begin (TODO(rewrite): local stubs, replace by canonical classes)
 struct Vector3 {
@@ -576,6 +593,132 @@ void* CreateParser(void);                          // 0x008408d0
 void* MessageServer(void);                         // 0x0067dcc0
 // ---- items of slice s00e4ba40 end
 
+// ---- items of slice s005f4310 begin (TODO(rewrite): local stubs, replace by canonical classes)
+namespace SP {
+struct Matrix33_s005f_4310 { float m[9]; };
+}
+namespace SP {
+struct M3A { void Assign(const Matrix33_s005f_4310* src); };                 // 0x0041cb40 (Matrix3::Assign)
+}
+namespace SP {
+void* Matrix33FromEulerXYZ_fpu(Matrix33_s005f_4310* out, const void* euler);  // 0x00453920
+}
+// ---- items of slice s005f4310 end
+
+// ---- items of slice s00e49a40 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern char g_vtbl_014824ec[];      // 0x014824ec vtable of cRefHolder
+extern void  __cdecl FUN_00f47380(void* p);                                                 // 0x00f47380 operator_delete
+extern void* __cdecl FUN_00926020(int size, const char* tag, int a, int b, int c, int d);   // 0x00926020 ZoneObject_new
+struct cFieldDef_s00e4_9a40 {                                      // 0x28 bytes; mf08 == -1 ends the array
+    uint32_t mf00;                                      // +0x00
+    uint32_t mf04;                                      // +0x04
+    int32_t  mf08;                                      // +0x08
+    uint32_t mf0c;                                      // +0x0c
+    int32_t  mChild;                                    // +0x10  a type reference
+    uint32_t mf14;                                      // +0x14  (4 = flag tested by FUN_00e4a960)
+    uint32_t mf18;                                      // +0x18
+    uint32_t mf1c;                                      // +0x1c
+    uint32_t mf20;                                      // +0x20
+    uint32_t mf24;                                      // +0x24
+};
+namespace SP {
+struct cTypeDef_s00e4_9a40 {
+    const char* mpName;                                 // +0x00
+    cFieldDef_s00e4_9a40*  mpFields;                               // +0x04
+    uint32_t    mTypeHash;                              // +0x08
+    uint32_t    mSize;                                  // +0x0c
+    uint32_t    mTypeFlags;                             // +0x10
+    uint32_t    mVersion;                               // +0x14
+    void*       mpVersioningFunction;                   // +0x18
+    void*       mpPostProcessFunction;                  // +0x1c
+    void*       mpPostLoadFunction;                     // +0x20
+    void*       mpPostUnloadFunction;                   // +0x24
+    cTypeDef_s00e4_9a40*   mpNext;                                 // +0x28
+    cTypeDef_s00e4_9a40(const char* name, cFieldDef_s00e4_9a40* fields, uint32_t typeHash, uint32_t size,
+             uint32_t typeFlags, uint32_t version, void* versioningFunction,
+             void* postProcessFunction, void* postLoadFunction, void* postUnloadFunction);
+};
+}
+namespace SP {
+cTypeDef_s00e4_9a40* g_pTypeList;                                  // 0x016ad064
+}
+struct cRefBase { void FUN_008dde10(); };               // 0x008dde10 base destructor (thiscall)
+struct cCallbackTable {                                 // object pointed to by cRefHolder::mpCallbacks
+    uint32_t mpad00[9];                                 // +0x00..0x23
+    void (*mpfn24)(void* arg);                          // +0x24
+};
+struct cRefHolder : cRefBase {
+    void*           mpVtbl;                             // +0x00
+    uint32_t        mpad04[4];                          // +0x04..0x13
+    void*           mpArg;                              // +0x14
+    uint32_t        mf18;                               // +0x18
+    cCallbackTable* mpCallbacks;                        // +0x1c
+    void* FUN_00e4a860(int deleteFlag);
+};
+struct IDatabaseFiles {
+    virtual void s0();                                  // +0x00
+    virtual void Release();                             // +0x04
+virtual void s2();
+virtual void s3();
+virtual void s4();
+virtual void s5();
+    virtual void SetMode(int a, int b, void* c);         // +0x18
+};
+struct cDatabaseDirectoryFiles : IDatabaseFiles {
+    cDatabaseDirectoryFiles* Construct(const wchar_t* path, void* allocator);  // 0x008d7400 (ret 8)
+};
+struct IResManager {
+virtual void m0();
+virtual void m1();
+virtual void m2();
+virtual void m3();
+virtual void m4();
+virtual void m5();
+virtual void m6();
+virtual void m7();
+virtual void m8();
+virtual void m9();
+virtual void m10();
+virtual void m11();
+virtual void m12();
+virtual void m13();
+virtual void m14();
+virtual void m15();
+virtual void m16();
+virtual void m17();
+virtual void m18();
+virtual void m19();
+    virtual void AddDirectory(int a, void* dir, int priority);              // +0x50
+};
+extern IResManager* __cdecl GetManager_s00e4_9a40();               // 0x0067dcd0
+// ---- items of slice s00e49a40 end
+
+// ---- items of slice s00e4c9e0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern void* g_pCellAppData;        // 0x016ad060
+extern void* g_lightCtx;            // 0x016c8b44 (cLocalLightInfo allocator/context pointer)
+static inline void** Vt(void* p) { return *(void***)p; }
+void  operator_delete__(void* p);                       // 0x00f47380
+void  FUN_00e824d0();                                   // 0x00e824d0
+void  FUN_00e4bb10();                                   // 0x00e4bb10
+void  FUN_00b720e0();                                   // 0x00b720e0
+void  FUN_00e84940(int);                                // 0x00e84940
+struct cLightCtx {                                       // ecx = g_lightCtx (0x016c8b44)
+    void Dtor(void* p);                                 // 0x009276c0
+    void* LockedAlloc(int n, int a, int b, int c, int d, int e); // 0x009289f0
+};
+void* EA_ResourceMan_GetManager();                      // 0x0067dcd0
+void* SP_MessageServer();                               // 0x0067dcc0
+struct cCellAppData {                // object at g_pCellAppData
+    char pad00[0x20];
+    void* mp20;                     // +0x20
+    char pad24[0x44 - 0x24];
+    void** mpBegin44;               // +0x44
+    void** mpEnd48;                 // +0x48
+    char pad4c[0x0c];
+    int   mStr28Node;               // (used by dtor path)
+};
+// ---- items of slice s00e4c9e0 end
+
 // @ 0x00453920
 namespace rw { namespace math { namespace fpu {
 Matrix33 Matrix33FromEulerXYZ(const Vector3& e)
@@ -599,6 +742,17 @@ Matrix33 Matrix33FromEulerXYZ(const Vector3& e)
 }
 }}}  // namespace rw::math::fpu
 
+// @ 0x005f4e80
+namespace SP {
+Matrix33_s005f_4310* Matrix3FromEulerXYZ(Matrix33_s005f_4310* out, const void* euler)
+{
+  Matrix33_s005f_4310 tmp;
+  Matrix33_s005f_4310* p = (Matrix33_s005f_4310*)Matrix33FromEulerXYZ_fpu(&tmp, euler);
+  ((M3A*)out)->Assign(p);
+  return out;
+}
+}  // namespace SP
+
 // @ 0x00e39fb0
 void IntRbTree::find(IntRbNode** ppResult, const int32_t* pKey)
 {
@@ -618,6 +772,101 @@ void IntRbTree::find(IntRbNode** ppResult, const int32_t* pKey)
         return;
     }
     *ppResult = pEnd;
+}
+
+// @ 0x00e4a7d0
+SP::cTypeDef_s00e4_9a40::cTypeDef_s00e4_9a40(const char* name, cFieldDef_s00e4_9a40* fields, uint32_t typeHash, uint32_t size, uint32_t typeFlags, uint32_t version, void* versioningFunction, void* postProcessFunction, void* postLoadFunction, void* postUnloadFunction)
+: mpName(name), mpFields(fields), mTypeHash(typeHash), mSize(size), mTypeFlags(typeFlags),
+      mVersion(version), mpVersioningFunction(versioningFunction),
+      mpPostProcessFunction(postProcessFunction), mpPostLoadFunction(postLoadFunction),
+      mpPostUnloadFunction(postUnloadFunction)
+{
+    if (mTypeFlags & 1) {
+        mpNext = SP::g_pTypeList;
+        SP::g_pTypeList = this;
+    }
+}
+
+// @ 0x00e4a860
+void* cRefHolder::FUN_00e4a860(int deleteFlag)
+{
+    mpVtbl = g_vtbl_014824ec;                           // the vtable store of the deleting destructor
+    if (mpCallbacks != 0 && mpCallbacks->mpfn24 != 0)
+        mpCallbacks->mpfn24(mpArg);
+    FUN_008dde10();
+    if (deleteFlag & 1)
+        FUN_00f47380(this);
+    return this;
+}
+
+// @ 0x00e4a8a0
+int32_t FUN_00e4a8a0(int32_t type)
+{
+    if (type > 0xc)
+        return ((const SP::cTypeDef_s00e4_9a40*)type)->mSize;
+    switch (type) {
+    case 1: case 2: case 3: case 5: case 6: case 7: return 4;
+    case 8:  return 0xc;
+    case 10: return 0xa0;
+    case 9:  return 0x24;
+    case 11: return 8;
+    default: break;
+    }
+    return 0;
+}
+
+// @ 0x00e4a910
+bool FUN_00e4a910(int32_t type)
+{
+    if (type <= 0xc)
+        return false;
+    const cFieldDef_s00e4_9a40* field = ((const SP::cTypeDef_s00e4_9a40*)type)->mpFields;
+    if (field->mf08 == -1)
+        return false;
+    uint32_t offset = 0;
+    do {
+        int32_t child = field->mChild;
+        if (child == 3)
+            return true;
+        if (FUN_00e4a910(child) == true)
+            return true;
+        offset += sizeof(cFieldDef_s00e4_9a40);
+        field = (const cFieldDef_s00e4_9a40*)((const char*)((const SP::cTypeDef_s00e4_9a40*)type)->mpFields + offset);
+    } while (field->mf08 != -1);
+    return false;
+}
+
+// @ 0x00e4a960
+bool FUN_00e4a960(int32_t type)
+{
+    if (type <= 0xc)
+        return false;
+    const cFieldDef_s00e4_9a40* field = ((const SP::cTypeDef_s00e4_9a40*)type)->mpFields;
+    if (field->mf08 == -1)
+        return false;
+    uint32_t offset = 0;
+    do {
+        int32_t child = field->mChild;
+        if (child == 3 || field->mf14 == 4)
+            return true;
+        if (FUN_00e4a960(child) == true)
+            return true;
+        offset += sizeof(cFieldDef_s00e4_9a40);
+        field = (const cFieldDef_s00e4_9a40*)((const char*)((const SP::cTypeDef_s00e4_9a40*)type)->mpFields + offset);
+    } while (field->mf08 != -1);
+    return false;
+}
+
+// @ 0x00e4a9f0
+void* FUN_00e4a9f0(const wchar_t* path)
+{
+    cDatabaseDirectoryFiles* files =
+        (cDatabaseDirectoryFiles*)FUN_00926020(0x168, "Simulator", 0, 0, 0, 0);
+    files = files != 0 ? files->Construct(path, 0) : 0;
+    files->Release();
+    files->SetMode(3, 4, 0);
+    GetManager_s00e4_9a40()->AddDirectory(1, files, 100);
+    return files;
 }
 
 // @ 0x00e4aa60
@@ -1498,4 +1747,39 @@ void FUN_00e4c8c0(void)
     void* ms = MessageServer();
     (*(void(__thiscall**)(void*, void*, int, int, int))(*(int*)ms + 0x28))(ms, (void*)FUN_00e4c330, 0, 0x4a4e97f, 0);
     FUN_00e82490();
+}
+
+// @ 0x00e4c9e0
+void FUN_00e4c9e0()
+{
+    FUN_00e824d0();
+    cCellAppData* g = (cCellAppData*)g_pCellAppData;
+    if (g->mp20) {
+        void* o = g->mp20;
+        (*(void(__thiscall**)(void*))((char*)Vt(o) + 0xc))(o);
+        o = g->mp20;
+        (*(void(__thiscall**)(void*))((char*)Vt(o) + 4))(o);
+        ((cCellAppData*)g_pCellAppData)->mp20 = 0;
+    }
+    void* ms = SP_MessageServer();
+    (*(void(__thiscall**)(void*, int*, int, int))((char*)Vt(ms) + 0x30))(ms, (int*)0x00e4c330, 0x4a4e97f, 0xffffd8f1);
+    FUN_00e4bb10();
+    void* rm = EA_ResourceMan_GetManager();
+    (*(void(__thiscall**)(void*, int, void*, int))((char*)Vt(rm) + 0x44))(rm, 0, g_pCellAppData, 0);
+    cCellAppData* g2 = (cCellAppData*)g_pCellAppData;
+    void** it = g2->mpBegin44;
+    while (it != g2->mpEnd48) {
+        ((cLightCtx*)g_lightCtx)->Dtor(*(void**)it);
+        ++it;
+        g2 = (cCellAppData*)g_pCellAppData;
+    }
+    FUN_00b720e0();
+    cCellAppData* g3 = (cCellAppData*)g_pCellAppData;
+    if (g3) {
+        void* v = g3->mpBegin44;
+        if (v && *(int*)((char*)v - 4)) operator_delete__(v);
+        FUN_00e84940(*(int*)((char*)g3 + 0x34));
+        (*(void(__thiscall**)(void*))0x00c2e4e0)((char*)g3 + 4);
+        operator_delete__(g3);
+    }
 }
