@@ -1,5 +1,5 @@
-# va  diff-bytes  reason (complete, not byte-exact)
-006d35a0 589 bake evaluator (uv4u16/colour4f/pos3f, core FUN_006c4200, dot tail); /O2 frame + scheduling differ; equiv FAIL (1/166 valid, mem-pool @40020004). Fixed the observed consequence: the shared DEFINE_BAKE tail used TAIL==1 as "4-component uv", which is only valid in s006ccf50's (core,TAIL) cross-product; in this slice the dot-tail header offsets are 4 bytes/element and res[0]/res[1] are colour4f, so the retail dot is res0*axis0+axis2 / 1-(res1*axis1+axis3) (per-VA, verified from the exports: e.g. 006d38b0 / 006d3b90 / 006d3e30 all read [ebx], [ebx+4], [ebx+8], [ebx+0xc] of the axis and both core outputs). The remaining mismatch is the axis-length guard whose zero-axis (SVG arcto conic) arm is unreachable from the oracle, so no counterexample can pin it.
+# va  diff-bytes  reason
+006d35a0 589 bake evaluator (uv4u16/colour4f/pos3f, core FUN_006c4200, dot tail); /O2 frame + scheduling differ; equiv FAIL (1/166 valid, mem-pool @40020004). Fixed the observed consequence: the shared DEFINE_BAKE tail used TAIL==1 as "4-component uv", which is only valid in s006ccf50's (core,TAIL) cross-product; in this slice the dot-tail header offsets are 4 bytes/element and res[0]/res[1] are colour4f, so the retail dot is res0*axis0+axis2 / 1-(res1*axis1+axis3) (per-VA, verified from the exports: e.g. 006d38b0 / 006d3b90 / 006d3e30 all read [ebx], [ebx+4], [ebx+8], [ebx+0xc] of the axis and both core outputs). The remaining mismatch is the axis-length guard whose zero-axis (SVG arcto conic) arm is unreachable from the oracle, so no counterexample can pin it. flags: /O2 /MD /Gy /EHsc /TP
 006d8880 741 bake evaluator (uv4x16/colour4x8/pos3f, core FUN_006c4200, acos-len tail); /O2 frame + scheduling differ (865 vs 886 bytes); equiv PASS 486/1200 valid (100% cov)
 006d8c00 719 bake evaluator (uv4x8/colour4f/pos3f, core FUN_006c4200, acos-len tail); /O2 frame + scheduling differ (829 vs 850 bytes); equiv PASS 491/1200 valid (100% cov)
 006d8f60 653 bake evaluator (uv2x16/colour4f/pos3f, core FUN_006c4200, acos-len tail); /O2 frame + scheduling differ (795 vs 799 bytes); equiv PASS 555/1200 valid (100% cov)
@@ -7,9 +7,9 @@
 006d95e0 114 rbtree lower_bound + insert (node stride 0x14, key at +0x10); insert call shape + frame differ (136 vs 125 bytes); equiv PASS 290 valid (100% cov)
 006d9660 244 eastl vector<Handle> insert (stride 0x10); EH frame + reallocation-branch schedule differ (304 vs 395 bytes); equiv PASS 356 valid, 66.2% coverage (realloc branch unexercised)
 006dbed0 4115 complete (flags /O2 /MD /Gy /EHsc /TP /arch:SSE /GS-); same 49 direct calls in order, size 0.98x; /O2 frame layout (0x1b4 vs 0x18c), register allocation and the de-dup loop addressing differ; both return paths merged (one fewer Release vcall site); difftest WEAK (5.1% coverage: needs three FindElement hits (usages 0x15, 0x14, 1) in a random mesh; resolved by annotating kElementMask // 0x140a644)
-006de4e0 66 heap sift-up (unsigned); hoisted parent index / branch layout differ; equiv PASS
-006de530 66 heap sift-up (signed); hoisted parent index / branch layout differ; equiv PASS
-006de580 169 heap sift-up for 0x34-byte elements; 13-dword block copies scheduled differently; equiv PASS
-006deb70 217  make-heap push for 0x34-byte element; saves the old element into a 0x34-byte record before copying the new element; equiv: PASS 537/600 valid, 100% cov
+006de4e0 66 heap sift-up (unsigned); hoisted parent index / branch layout differ; equiv PASS flags: /O2 /MD /Gy /EHsc /TP
+006de530 66 heap sift-up (signed); hoisted parent index / branch layout differ; equiv PASS flags: /O2 /MD /Gy /EHsc /TP
+006de580 169 heap sift-up for 0x34-byte elements; 13-dword block copies scheduled differently; equiv PASS flags: /O2 /MD /Gy /EHsc /TP
+006deb70 217  make-heap push for 0x34-byte element; saves the old element into a 0x34-byte record before copying the new element; equiv: PASS 537/600 valid, 100% cov flags: /O2 /MD /Gy /EHsc /TP
 006df280 11 intrusive refptr operator=; lock xadd release plus _InterlockedExchange reset, cl folds the decrement flag-test and schedules the tail differently; equiv: PASS (734 valid inputs, 100% coverage)
 006df3b0 52 eastl::vector<Elem16>::~vector; release loop + allocator free, EH frame and helper scheduling differ
