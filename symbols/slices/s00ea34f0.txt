@@ -4,4 +4,8 @@
 00ea3ab0 ?Destroy@cCityMusicNoteEditor@@QAEXXZ  # cCityMusicNoteEditor::Destroy migrated from s00ea34f0 (verbatim, slice spelling)
 00ea3b50 ?Update@cCityMusicNoteEditor@@QAEXXZ  # cCityMusicNoteEditor::Update migrated from s00ea34f0 (verbatim, slice spelling)
 00ea3c20 ??0cCityMusicNoteEditor@@QAE@PAUcPlayerCityMusicConfig@@@Z  # cCityMusicNoteEditor::cCityMusicNoteEditor migrated from s00ea34f0 (verbatim, slice spelling)
+00ea3d10 ?Insert@cNoteVec@@QAEXPAURefElem@@I0@Z  # cNoteVec::Insert migrated from s00ea34f0 (verbatim, slice spelling)
+00ea3ed0 ?ResetNoteLayouts@cCityMusicNoteEditor@@QAEXXZ  # cCityMusicNoteEditor::ResetNoteLayouts migrated from s00ea34f0 (verbatim, slice spelling)
+00ea3f10 ?DoMessage@cCityMusicNoteEditor@@QAEXXZ  # cCityMusicNoteEditor::DoMessage migrated from s00ea34f0 (verbatim, slice spelling)
+00ea4250 ?SetLayoutAndRebuild@cCityMusicNoteEditor@@QAE_NPAUcUILayout@@_N@Z  # cCityMusicNoteEditor::SetLayoutAndRebuild migrated from s00ea34f0 (verbatim, slice spelling)
 00ea42c0 ?FUN_00ea42c0@@YG_NPBUMatchParam@@PAUParamVec@@@Z  # FUN_00ea42c0 migrated from s00ea34f0 (verbatim, slice spelling)

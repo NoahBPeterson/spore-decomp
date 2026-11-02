@@ -1,2 +1,7 @@
 # source  symbol  va  flags
+../src/game/SPGonzago/SPAudioCityMusicNoteEditor.cpp  ?SetMusic@cCityMusicNoteEditor_s00ea_28f0@@QAEXPAUcPlayerCityMusic_s00ea_28f0@@@Z  00ea2d50  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPAudioCityMusicNoteEditor.cpp  ?SetTempo@cCityMusicNoteEditor_s00ea_28f0@@QAEXI@Z  00ea2f40  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPAudioCityMusicNoteEditor.cpp  ?SetActiveNoteId@cCityMusicNoteEditor_s00ea_28f0@@QAEXI@Z  00ea3390  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPAudioCityMusicNoteEditor.cpp  ?Update@cCityMusicNoteEditor@@QAEXXZ  00ea3b50  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPAudioCityMusicNoteEditor.cpp  ?ResetNoteLayouts@cCityMusicNoteEditor@@QAEXXZ  00ea3ed0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPAudioCityMusicNoteEditor.cpp  ?SetLayoutAndRebuild@cCityMusicNoteEditor@@QAE_NPAUcUILayout@@_N@Z  00ea4250  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include

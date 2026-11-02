@@ -1,4 +1,4 @@
-// src/game/SPGonzago/SPAudioCityMusicNoteEditor.cpp -- migrated from slice(s) s00ea34f0 by tools/migrate/rewrite.py
+// src/game/SPGonzago/SPAudioCityMusicNoteEditor.cpp -- migrated from slice(s) s00ea28f0, s00ea34f0 by tools/migrate/rewrite.py
 // Object file: SPGonzago/SPAudioCityMusicNoteEditor.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -13,15 +13,12 @@ extern void* vtEditorRefCount[];  // 0x014872b0
 extern void* vtEditorBase[];      // 0x013eb938
 extern void* vtRefCountBase[];    // 0x013ec458
 #include <string.h>
+#include <stddef.h>
 
 // ---- items of slice s00ea34f0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 typedef unsigned int   u32;
 typedef int            s32;
 typedef unsigned char  u8;
-extern void* vtEditorMain[];      // 0x014872c0
-extern void* vtEditorRefCount[];  // 0x014872b0
-extern void* vtEditorBase[];      // 0x013eb938
-extern void* vtRefCountBase[];    // 0x013ec458
 template <class T> const T& MinRef(const T& a, const T& b) { return a < b ? a : b; }
 template <class T> const T& MaxRef(const T& a, const T& b) { return a < b ? b : a; }
 struct Vec2 { float x, y; };
@@ -33,7 +30,17 @@ struct ResKey {
 struct RefElem {
   struct cUILayout* mpObject;
 };
+void*  __cdecl operator new(unsigned int size);
 void   __cdecl operator_delete_array(void* p);                             // 0x00f47380
+void*  __cdecl EAAlloc(u32 size, const char* area, int, int,
+                       const char* file, int line);                        // 0x00f473a0
+void*  __cdecl operator new(unsigned int size, const char* area,
+                            int, int, int, int);                           // tagged operator new
+void*  __cdecl memcpy(void* dst, const void* src, unsigned int size);
+void __cdecl uninitialized_copy_RefElem(RefElem* first, RefElem* last, RefElem* dst);  // 0x01022c60
+void __cdecl copy_backward_ool(RefElem* first, RefElem* last, RefElem* dst);           // 0x005c1dc0
+void __cdecl fill_ool(RefElem* first, RefElem* last, const RefElem& value);            // 0x00657f20
+void __cdecl uninitialized_fill_n_ref(RefElem* first, u32 n, const RefElem& value);    // 0x005769d0
 struct Stopwatch {
   union {
     struct {
@@ -181,6 +188,7 @@ struct cCityMusicNoteEditor {
   void SetActiveNoteId(u32 id);                              // 0x00ea3390
   void FastRoundToInt23(u32 note, float value);              // 0x00ea2da0
 };
+void __cdecl RedrawNoteDuration(cUILayout* parent, bool flag);  // 0x00ea30b0
 union MsgValue {
   float mFloat;
   u32   mUInt;
@@ -195,7 +203,299 @@ struct Msg {
   u32        mField_14;           // 0x14
   s32        mParam_18;           // 0x18  integer payload
 };
+extern u32 gNoteLayoutKeys[3];    // 0x014872a4
 // ---- items of slice s00ea34f0 end
+
+// ---- items of slice s00ea28f0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern char* gNoteLayoutTable;                                  // 0x01440aec
+static inline void** VTP(void* p) { return *(void***)p; }
+struct cPlayerCityMusicConfig_s00ea_28f0 {
+    u8    mPad_00[0x10];
+    u32   mMinNotes_10;                  // +0x10
+    u32   mMaxNotes_14;                  // +0x14
+    u8    mPad_18[0x04];
+    float mBeatStep_1c;                  // +0x1c
+    float mBeatMax_20;                   // +0x20
+    u8    mPad_24[0x3c];
+    u32   mRangeMax_60;                  // +0x60
+};
+struct NoteCellVec {
+    NoteCell* mpBegin_00;
+    NoteCell* mpEnd_04;
+    s32 size() const { return (s32)(mpEnd_04 - mpBegin_00); }
+};
+struct cPlayerCityMusic_s00ea_28f0 {
+    void**    mpVtbl_00;                 // +0x00
+    u8        mPad_04[0x154];
+    u32       mActiveNoteId_158;         // +0x158
+    u32       mTempoBits_15c;            // +0x15c
+    u8        mPad_160[0x6c];
+    NoteCellVec mCells_1cc;              // +0x1cc / +0x1d0
+    u8        mPad_1d4[0x0c];
+    float*    mpNotePitches_1e0;         // +0x1e0
+
+    void AddRef() { ((void (__thiscall*)(cPlayerCityMusic_s00ea_28f0*))mpVtbl_00[0])(this); }
+    void Release() { ((void (__thiscall*)(cPlayerCityMusic_s00ea_28f0*))mpVtbl_00[1])(this); }
+    void FUN_00eacf70(bool on);  // 0x00eacf70 (cPlayerCityMusic::FUN_00eacf70)
+};
+struct RefElem_s00ea_28f0 {
+    struct cUILayout_s00ea_28f0* mpObject;
+};
+struct cNoteVec_s00ea_28f0 {
+    RefElem_s00ea_28f0* mpBegin_00;
+    RefElem_s00ea_28f0* mpEnd_04;
+    RefElem_s00ea_28f0* mpCap_08;
+    u32      mAlloc_0c;
+    u32      mAlloc2_10;
+};
+struct cUILayout_s00ea_28f0 {
+    void** mpVtbl_00;
+
+    cUILayout_s00ea_28f0* FindChildWindow(u32 id)
+        { return ((cUILayout_s00ea_28f0* (__thiscall*)(cUILayout_s00ea_28f0*, u32))mpVtbl_00[3])(this, id); }        // +0x0c
+    void* GetChild(void* prev)
+        { return ((void* (__thiscall*)(cUILayout_s00ea_28f0*, void*))mpVtbl_00[0x10c / 4])(this, prev); } // +0x10c
+    cUILayout_s00ea_28f0* NextChild(cUILayout_s00ea_28f0* prev)
+        { return ((cUILayout_s00ea_28f0* (__thiscall*)(cUILayout_s00ea_28f0*, cUILayout_s00ea_28f0*))mpVtbl_00[0x10c / 4])(this, prev); } // +0x10c
+    void SetValue(s32 a, bool b)
+        { ((void (__thiscall*)(cUILayout_s00ea_28f0*, s32, bool))mpVtbl_00[0x28 / 4])(this, a, b); }      // +0x28
+    float* GetRect()
+        { return ((float* (__thiscall*)(cUILayout_s00ea_28f0*))mpVtbl_00[0x38 / 4])(this); }               // +0x38
+    void SetRect4(float* r)
+        { ((void (__thiscall*)(cUILayout_s00ea_28f0*, float*))mpVtbl_00[0x60 / 4])(this, r); }             // +0x60
+    void SetFloat(float v)
+        { ((void (__thiscall*)(cUILayout_s00ea_28f0*, float))mpVtbl_00[0x18 / 4])(this, v); }              // +0x18
+    void SetFlag(s32 a, bool b)
+        { ((void (__thiscall*)(cUILayout_s00ea_28f0*, s32, bool))mpVtbl_00[0x7c / 4])(this, a, b); }       // +0x7c
+    void SetIndex(s32 a)
+        { ((void (__thiscall*)(cUILayout_s00ea_28f0*, s32))mpVtbl_00[0x5c / 4])(this, a); }                // +0x5c
+    void SetRect2(float* r)
+        { ((void (__thiscall*)(cUILayout_s00ea_28f0*, float*))mpVtbl_00[0x6c / 4])(this, r); }             // +0x6c
+
+    cUILayout_s00ea_28f0* FindWindowByID(u32 id, s32 flag);                 // 0x008105b0
+    void SetVisibility(bool visible);                            // 0x00810590
+};
+struct cCityMusicNoteEditor_s00ea_28f0 {
+    void**  mpVtbl_00;                   // 0x00
+    void**  mpVtblRefCount_04;           // 0x04
+    u32     mRefCount_08;                // 0x08
+    cPlayerCityMusicConfig_s00ea_28f0* mConfig_0c;  // 0x0c
+    cPlayerCityMusic_s00ea_28f0* mpMusic_10;        // 0x10
+    cUILayout_s00ea_28f0*      mpLayout_14;         // 0x14
+    cNoteVec_s00ea_28f0 mNoteLayouts_18[3];         // 0x18
+    u8      mEditMode_54;                // 0x54
+    u8      mField_55;                   // 0x55
+    u8      mPad_56[2];
+    u32     mActiveNoteId_58;            // 0x58
+    u32     mTempo_5c;                   // 0x5c
+    s32     mField_60;                   // 0x60
+    float   mOutline_64[4];              // 0x64
+    float   mfNoteWidth_74;              // 0x74
+    float   mfNoteHeight_78;             // 0x78
+    float   mfGridLeft_7c;               // 0x7c
+    float   mfSpacingX_80;               // 0x80
+    float   mfSpacingY_84;               // 0x84
+    float   mfRowHeight_88;              // 0x88
+    u8      mPad_8c[0x2c];
+
+    void SetMusic(cPlayerCityMusic_s00ea_28f0* p);                  // 0x00ea2d50
+    void FastRoundToInt23(u32 note, float value);        // 0x00ea2da0
+    void SetTempo(u32 tempo);                            // 0x00ea2f40
+    void SetSoundProperty(bool up);                      // 0x00ea3040
+    void SetActiveNoteId(u32 id);                        // 0x00ea3390
+    void RedrawMelody(s32 flag);                         // 0x00ea3420
+    void LoopMelody();                                   // 0x00ea3120
+};
+void __cdecl RecursiveButtonSelect(void* window, s32 select);   // 0x00ea03e0
+struct NoteLayoutRow {
+    s32  mNext_00;
+    u8   mPad_04[0x0c];
+};
+// ---- items of slice s00ea28f0 end
+
+// @ 0x00ea2d50
+void cCityMusicNoteEditor_s00ea_28f0::SetMusic(cPlayerCityMusic_s00ea_28f0* p)
+{
+    cPlayerCityMusic_s00ea_28f0* old = mpMusic_10;
+    if (p != old) {
+        if (p)
+            p->AddRef();
+        mpMusic_10 = p;
+        if (old)
+            old->Release();
+    }
+    if (mpMusic_10)
+        mpMusic_10->FUN_00eacf70(mField_60 > 0);
+}
+
+// @ 0x00ea2da0
+void cCityMusicNoteEditor_s00ea_28f0::FastRoundToInt23(u32 note, float value)
+{
+    cUILayout_s00ea_28f0* w0 = mNoteLayouts_18[1].mpBegin_00[note].mpObject->FindWindowByID(0x4506b98, 1);
+    cUILayout_s00ea_28f0* w1 = mNoteLayouts_18[0].mpBegin_00[note].mpObject->FindWindowByID(0x4515be8, 1);
+    cUILayout_s00ea_28f0* w2 = mNoteLayouts_18[1].mpBegin_00[note].mpObject->FindWindowByID(0x4515bb0, 1);
+
+    float* rect = w2->GetRect();
+    float x0 = rect[0];
+    float x2 = rect[2];
+
+    float scale = (1.0f / mConfig_0c->mBeatMax_20) * value;
+    float out[4];
+    out[0] = mOutline_64[0] * scale;
+    out[1] = mOutline_64[1] * scale;
+    out[2] = mOutline_64[2] * scale;
+    out[3] = mOutline_64[3] * scale;
+
+    w0->SetRect4(out);
+    w1->SetRect4(out);
+
+    float ratio = (x0 - out[2]) / ((out[0] - x0) + (x0 - out[2]));
+
+    for (void* it = w1->GetChild(0); it; it = w1->GetChild(it)) {
+        void* a = ((void* (__thiscall*)(void*, u32))VTP(it)[3])(it, 0x8f2b630b);
+        if (a)
+            ((void (__thiscall*)(void*, float))VTP(a)[0x18 / 4])(a, x2);
+        void* b = ((void* (__thiscall*)(void*, u32))VTP(it)[3])(it, 0xaf3dad29);
+        if (b)
+            ((void (__thiscall*)(void*, float))VTP(b)[0x18 / 4])(b, x0);
+    }
+    (void)ratio;
+}
+
+// @ 0x00ea2f40
+void cCityMusicNoteEditor_s00ea_28f0::SetTempo(u32 tempo)
+{
+    if (tempo == mTempo_5c)
+        return;
+
+    float spb;
+    if (mTempo_5c > 0)
+        spb = 60.0f / (float)mTempo_5c;
+    else
+        spb = 0.0f;
+
+    u32 count = (u32)mpMusic_10->mCells_1cc.size();
+    for (u32 i = 0; i < count; ++i) {
+        float v = mpMusic_10->mpNotePitches_1e0[i] * spb;
+        cUILayout_s00ea_28f0* w = mNoteLayouts_18[0].mpBegin_00[i].mpObject->FindWindowByID(0x4515be8, 1);
+        for (cUILayout_s00ea_28f0* it = w->NextChild(0); it; it = w->NextChild(it)) {
+            cUILayout_s00ea_28f0* prop = it->FindChildWindow(0x8f2b630b);
+            if (prop)
+                prop->SetFloat(v);
+        }
+    }
+    mTempo_5c = tempo;
+}
+
+// @ 0x00ea30b0
+void __cdecl RedrawNoteDuration(cUILayout_s00ea_28f0* p, s32 value)
+{
+    s32 first;
+    s32 last;
+    ((void (__thiscall*)(cUILayout_s00ea_28f0*, s32*))p->mpVtbl_00[0xcc / 4])(p, &first);
+    ((void (__thiscall*)(cUILayout_s00ea_28f0*, s32*))p->mpVtbl_00[0xd0 / 4])(p, &last);
+    while (first != last) {
+        NoteLayoutRow* row = (NoteLayoutRow*)(gNoteLayoutTable + first);
+        RedrawNoteDuration((cUILayout_s00ea_28f0*)row, value);
+        first = row->mNext_00;
+    }
+    ((void (__thiscall*)(cUILayout_s00ea_28f0*, s32, s32))p->mpVtbl_00[0x7c / 4])(p, 2, value);
+}
+
+// @ 0x00ea3120
+void cCityMusicNoteEditor_s00ea_28f0::LoopMelody()
+{
+    if (!mpMusic_10)
+        return;
+
+    mTempo_5c = (mpMusic_10->mTempoBits_15c < 1) ? 1 : mpMusic_10->mTempoBits_15c;
+
+    u32 count = (u32)mpMusic_10->mCells_1cc.size();
+
+    cUILayout_s00ea_28f0* a = mpLayout_14->FindWindowByID(0x4ecfe40, 1);
+    cUILayout_s00ea_28f0* b = mpLayout_14->FindWindowByID(0x4ecfe08, 1);
+    if (a && b) {
+        a->SetValue(2, mField_55 && (s32)count < mConfig_0c->mMaxNotes_14);
+        b->SetValue(2, mField_55 && (s32)count > mConfig_0c->mMinNotes_10);
+    }
+
+    cUILayout_s00ea_28f0* c = mpLayout_14->FindWindowByID(0x4efc540, 1);
+    if (c) {
+        cUILayout_s00ea_28f0* h = c->FindChildWindow(0x8ed27e7a);
+        if (h)
+            h->SetValue(4, mField_60 > 0);
+    }
+
+    mfGridLeft_7c = (float)(mConfig_0c->mMaxNotes_14 - (s32)count) * mfSpacingX_80 * 0.5f
+                    + mfNoteWidth_74;
+
+    u32 n = count;
+    for (u32 i = 0; i < n; ++i) {
+        float y = (float)(s32)i * mfSpacingX_80 + mfGridLeft_7c;
+        float x = (float)(s32)(mConfig_0c->mRangeMax_60 - mpMusic_10->mCells_1cc.mpBegin_00[i].mBits)
+                  * mfRowHeight_88 + mfNoteHeight_78;
+
+        FastRoundToInt23(i, mpMusic_10->mpNotePitches_1e0[i]);
+
+        for (int row = 0; row < 3; ++row) {
+            cUILayout_s00ea_28f0* w = mNoteLayouts_18[row].mpBegin_00[i].mpObject->FindWindowByID(0x4515bb0, 1);
+            float r[2];
+            r[0] = x;
+            r[1] = y;
+            w->SetRect2(r);
+            if (row != 1) {
+                u32 icon = mConfig_0c->mRangeMax_60;
+                w->SetIndex(icon);
+            }
+            w->SetVisibility(true);
+        }
+    }
+
+    for (u32 i = n; i < (u32)mConfig_0c->mMaxNotes_14; ++i) {
+        for (int row = 0; row < 3; ++row)
+            mNoteLayouts_18[row].mpBegin_00[i].mpObject->SetVisibility(false);
+    }
+}
+
+// @ 0x00ea3390
+void cCityMusicNoteEditor_s00ea_28f0::SetActiveNoteId(u32 id)
+{
+    u32 old = mActiveNoteId_58;
+    if (id == old)
+        return;
+    if (old) {
+        for (int i = 0; i < 3; ++i) {
+            RecursiveButtonSelect(mNoteLayouts_18[i].mpBegin_00[mActiveNoteId_58 - 1].mpObject
+                                      ->FindWindowByID(0x4515bb0, 1), 0);
+        }
+    }
+    if (id) {
+        for (int i = 0; i < 3; ++i) {
+            RecursiveButtonSelect(mNoteLayouts_18[i].mpBegin_00[id - 1].mpObject
+                                      ->FindWindowByID(0x4515bb0, 1), 1);
+        }
+    }
+    mActiveNoteId_58 = id;
+}
+
+// @ 0x00ea3420
+void cCityMusicNoteEditor_s00ea_28f0::RedrawMelody(s32 flag)
+{
+    mField_55 = (u8)flag;
+    RedrawNoteDuration(mpLayout_14->FindWindowByID(0x4595798, 1), flag);
+
+    u32 count = (u32)mpMusic_10->mCells_1cc.size();
+
+    cUILayout_s00ea_28f0* a = mpLayout_14->FindWindowByID(0x4ecfe40, 1);
+    cUILayout_s00ea_28f0* b = mpLayout_14->FindWindowByID(0x4ecfe08, 1);
+    if (a && b) {
+        a->SetFlag(2, mField_55 && count < mConfig_0c->mMaxNotes_14);
+        if (mField_55 && count > mConfig_0c->mMinNotes_10)
+            b->SetFlag(2, true);
+        else
+            b->SetFlag(2, false);
+    }
+}
 
 // @ 0x00ea34f0
 bool cCityMusicNoteEditor::OnMessage(s32 eventId, Msg* msg)
@@ -446,4 +746,172 @@ cCityMusicNoteEditor::cCityMusicNoteEditor(cPlayerCityMusicConfig* config)
   mfWheelStart_a4 = 0.0f;
   mfWheelCurrent_a8 = 0.0f;
   mWheelTimer_b0.Init(4, false);
+}
+
+// @ 0x00ea3d10
+void cNoteVec::Insert(RefElem* pos, u32 count, RefElem* value)
+{
+  if ((u32)(mpCap_08 - mpEnd_04) < count) {
+    u32 used = (u32)(mpEnd_04 - mpBegin_00);
+    u32 growth = used * 2;
+    if (used == 0)
+      growth = 1;
+    u32 capacity = used + count;
+    if (capacity < growth)
+      capacity = growth;
+
+    RefElem* buffer = 0;
+    if (capacity != 0)
+      buffer = (RefElem*)EAAlloc(capacity * sizeof(RefElem), "Simulator", 0, 0,
+                                 "eastl/allocator.h", 0xd1);
+
+    u32 head = (u32)(pos - mpBegin_00);
+    memcpy(buffer, mpBegin_00, head * sizeof(RefElem));
+    RefElem* middle = buffer + head;
+    uninitialized_fill_n_ref(middle, count, *value);
+    RefElem* tail = middle + count;
+    memcpy(tail, pos, (u32)(mpEnd_04 - pos) * sizeof(RefElem));
+    if (mpBegin_00)
+      operator_delete_array(mpBegin_00);
+    mpBegin_00 = buffer;
+    mpEnd_04 = tail + (mpEnd_04 - pos);
+    mpCap_08 = buffer + capacity;
+  } else if (count != 0) {
+    RefElem item = *value;
+    if (item.mpObject)
+      item.mpObject->AddRef();
+
+    u32 tailCount = (u32)(mpEnd_04 - pos);
+    if (count < tailCount) {
+      RefElem* split = mpEnd_04 - count;
+      uninitialized_copy_RefElem(split, mpEnd_04, mpEnd_04);
+      mpEnd_04 += count;
+      copy_backward_ool(pos, split, mpEnd_04);
+      fill_ool(pos, pos + count, item);
+    } else {
+      uninitialized_fill_n_ref(mpEnd_04, count - tailCount, item);
+      mpEnd_04 += count - tailCount;
+      uninitialized_copy_RefElem(pos, mpEnd_04 - (count - tailCount), mpEnd_04);
+      mpEnd_04 += tailCount;
+      fill_ool(pos, pos + tailCount, item);
+    }
+    if (item.mpObject)
+      item.mpObject->Release();
+  }
+}
+
+// @ 0x00ea3ed0
+void cCityMusicNoteEditor::ResetNoteLayouts()
+{
+  if (mpMusic_10)
+    mpMusic_10->FUN_00eacf70(0);
+  mField_60 = 0;
+  for (s32 i = 0; i < 3; ++i) {
+    cNoteVec& row = mNoteLayouts_18[i];
+    row.Erase(row.mpBegin_00, row.mpEnd_04);
+  }
+}
+
+// @ 0x00ea3f10
+void cCityMusicNoteEditor::DoMessage()
+{
+  cUILayout* parent = mpLayout_14->FindWindowByID(0x41918a2, 1);
+  ResKey key;
+  key.mType_00 = 0;
+  key.mGroup_04 = 0x510a95b;
+  key.mName_08 = 0x40464100;
+
+  for (u32 group = 0; group < 3; ++group) {
+    s32 noteCount = mConfig_0c->mNoteCount_14;
+    cNoteVec& row = mNoteLayouts_18[group];
+
+    if ((u32)(row.mpEnd_04 - row.mpBegin_00) < (u32)noteCount) {
+      RefElem empty;
+      empty.mpObject = 0;
+      row.Insert(row.mpEnd_04,
+                 (u32)noteCount - (u32)(row.mpEnd_04 - row.mpBegin_00), &empty);
+    } else {
+      row.Erase(row.mpBegin_00 + noteCount, row.mpEnd_04);
+    }
+
+    key.mType_00 = gNoteLayoutKeys[group];
+    for (u32 i = 0; i < (u32)mConfig_0c->mNoteCount_14; ++i) {
+      cUILayout* window = (cUILayout*)operator new(0x18, "Audio", 0, 0, 0, 0);
+      if (window) {
+        window->Construct();
+      }
+      RefElem* slot = &row.mpBegin_00[i];
+      cUILayout* previous = slot->mpObject;
+      if (window != previous) {
+        if (window)
+          window->AddRef();
+        slot->mpObject = window;
+        if (previous)
+          previous->Release();
+      }
+      window->Init(key, false, 0x5b598fa);
+
+      if (mEditMode_54 != 0 && group == 2) {
+        cUILayout* noteWindow = window->FindWindowByID(0x4506b88, 1);
+        noteWindow->SetNoteIndex(i);
+        noteWindow->SetEditor(this);
+      } else if (group == 1 && i == 0) {
+        float* outerRect = parent->GetRect();
+        cUILayout* noteRectWindow = window->FindWindowByID(0x4515bb0, 1);
+        float* noteRect = noteRectWindow->GetRect();
+        cUILayout* noteBoxWindow = window->FindWindowByID(0x4506b98, 1);
+        float* noteBox = noteBoxWindow->GetRect4();
+
+        mOutline_64[0] = noteBox[0];
+        mOutline_64[1] = noteBox[1];
+        mOutline_64[2] = noteBox[2];
+        mOutline_64[3] = noteBox[3];
+
+        float ratioX = mOutline_64[2] / (noteRect[2] - noteRect[0]);
+        float ratioY = mOutline_64[3] / (noteRect[3] - noteRect[1]);
+        float count = (float)(u32)mConfig_0c->mNoteCount_14;
+
+        mfSpacingX_80 = (outerRect[2] - outerRect[0]) / (count + ratioX * 2.0f);
+        mfNoteWidth_74 = mfSpacingX_80 * ratioX;
+        mfSpacingY_84 = ((noteRect[3] - noteRect[1]) * mfSpacingX_80)
+                        / (noteRect[2] - noteRect[0]);
+        mfNoteHeight_78 = mfSpacingY_84 * ratioY;
+
+        mOutline_64[2] = mfNoteWidth_74;
+        mOutline_64[3] = mfNoteHeight_78;
+        mOutline_64[0] = -mfNoteWidth_74;
+        mOutline_64[1] = -mfNoteHeight_78;
+
+        u32 range = mConfig_0c->mRangeMax_60 - mConfig_0c->mRangeMin_5c;
+        float rangeF = (float)(u32)range;
+        mfRowHeight_88 = (((outerRect[3] - outerRect[1]) - mfNoteHeight_78 * 2.0f)
+                          - mfSpacingY_84) / rangeF;
+      }
+
+      window->SetParentWin(parent, true, 0x5b598fa);
+      window->SetVisibility(false);
+    }
+  }
+
+  if (mEditMode_54 == 0) {
+    RedrawNoteDuration(parent, false);
+  } else {
+    ((void (__thiscall*)(cUILayout*, void*))((void**)parent->mpVtbl_00)[65])(parent, this);
+  }
+}
+
+// @ 0x00ea4250
+bool cCityMusicNoteEditor::SetLayoutAndRebuild(cUILayout* layout, bool editMode)
+{
+  cUILayout* old = mpLayout_14;
+  if (layout != old) {
+    if (layout)
+      layout->AddRef();
+    mpLayout_14 = layout;
+    if (old)
+      old->Release();
+  }
+  mEditMode_54 = editMode;
+  DoMessage();
+  return true;
 }
