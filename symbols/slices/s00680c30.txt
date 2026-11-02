@@ -1,18 +1,17 @@
-# s00680c30 recovered names (invented stub names; no PDB names exist for these VAs)
-00680c30 ObjC30::ObjC30  # copy ctor: S8 string + M (0x680a50) member at +0x10; called by 0x680fc0
-00680cc0 V48::insert  # eastl vector<72-byte>::insert(pos, value); realloc via EASTL_allocator_allocate line 0xd1
-00680e70 ?4V48  # eastl vector<72-byte>::operator=(const V48*), uses 0x6807a0/0x6803f0/0x680270/0x680420
-00680fc0 Save_00680fc0  # serialize rbtree map: size, per-node key + ObjC30 value via vtbl+0x38 Write
-00681250 ReadVecU32  # stdcall; Read4(count) then count ints push_back'd into vector<unsigned>
-006812c0 LoadEntries  # method; per-entry: two 0x680560 strings, 3 ints, cString::Load, 0x6810e0 add
-00681400 Cls1400::~Cls1400  # dtor: m3c (0x681160), m28 (0x680730), guarded buffer free
-00681480 MapC2::FreeNodes  # recursive chain free, guards p[-1] (x2) and cap-begin>1, then node
-00681500 MapC0::FreeChain2  # recursive chain free with 0x680730 member dtor + guarded string
-00681590 MapV::InsertPair  # rbtree insert with canInsert hint: !allowEquiv && pos!=anchor && *key >= pos->key
-006815f0 MapV::InsertUnique  # rbtree insert_unique: anchor/root/begin at +4/+0xc/+8, key at node+0x10
-00681700 Obj1700::Obj1700  # copy ctor: S8 + 2 float vectors (0x4aa350 reserve + memcpy)
-00681800 Obj1800::Obj1800  # copy ctor: 0x60 pod + M + 4 float vectors
-00681a10 ObjA::ObjA  # copy ctor: 4 dwords + 4 float vectors
-00681b50 ?4ObjB50  # 0x60 pod + V48 (0x680e70) + 4 float vectors (0x50d4e0)
-00681c40 ?4ObjA  # 4 dwords + 4 float vector operator=
-00681e80 CopyBackwardA  # copy_backward of ObjA (0x60 stride), 4 dword moves + 4 operator=
+00680c30 ??0ObjC30@@QAE@ABU0@@Z  # ObjC30::ObjC30 migrated from s00680c30 (verbatim, slice spelling)
+00680cc0 ?insert@V48@@QAEXPAUN48@@ABU2@@Z  # V48::insert migrated from s00680c30 (verbatim, slice spelling)
+00680e70 ??4V48@@QAEAAU0@PBU0@@Z  # V48::operator= migrated from s00680c30 (verbatim, slice spelling)
+00680fc0 ?Save_00680fc0@@YAXPAUWF80@@PAUMapV@@PAUIWrt14@@@Z  # Save_00680fc0 migrated from s00680c30 (verbatim, slice spelling)
+00681250 ?ReadVecU32@@YGXPAUVU32@@PAUIRd12@@@Z  # ReadVecU32 migrated from s00680c30 (verbatim, slice spelling)
+006812c0 ?LoadEntries@MapC0b@@QAEXPAUContC@@PAUIRd12@@@Z  # MapC0b::LoadEntries migrated from s00680c30 (verbatim, slice spelling)
+00681400 ??1Cls1400@@QAE@XZ  # Cls1400::~Cls1400 migrated from s00680c30 (verbatim, slice spelling)
+00681480 ?FreeNodes@MapC2@@QAEXPAUNode1480@@@Z  # MapC2::FreeNodes migrated from s00680c30 (verbatim, slice spelling)
+00681500 ?FreeChain2@MapC0@@QAEXPAUNode15@@@Z  # MapC0::FreeChain2 migrated from s00680c30 (verbatim, slice spelling)
+00681590 ?InsertPair@MapV@@QAEPAPAURNode@@PAPAU2@PAU2@PAH_N@Z  # MapV::InsertPair migrated from s00680c30 (verbatim, slice spelling)
+006815f0 ?InsertUnique@MapV@@QAEXPAUPairOut@@PBHUAllocArg@@@Z  # MapV::InsertUnique migrated from s00680c30 (verbatim, slice spelling)
+00681700 ??0Obj1700@@QAE@ABU0@@Z  # Obj1700::Obj1700 migrated from s00680c30 (verbatim, slice spelling)
+00681800 ??0Obj1800@@QAE@ABU0@@Z  # Obj1800::Obj1800 migrated from s00680c30 (verbatim, slice spelling)
+00681a10 ??0ObjA@@QAE@ABU0@@Z  # ObjA::ObjA migrated from s00680c30 (verbatim, slice spelling)
+00681b50 ??4ObjB50@@QAEAAU0@ABU0@@Z  # ObjB50::operator= migrated from s00680c30 (verbatim, slice spelling)
+00681c40 ??4ObjA@@QAEAAU0@ABU0@@Z  # ObjA::operator= migrated from s00680c30 (verbatim, slice spelling)
+00681e80 ?CopyBackwardA@@YAPAUObjA@@PAU1@00@Z  # CopyBackwardA migrated from s00680c30 (verbatim, slice spelling)

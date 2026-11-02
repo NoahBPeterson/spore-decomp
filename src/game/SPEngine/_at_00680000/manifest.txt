@@ -1,0 +1,21 @@
+# source  symbol  va  flags
+../src/game/SPEngine/_at_00680000.cpp  ?ReadVecU32@@YGXPAUVU32@@PAUIRd12@@@Z  00681250  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/_at_00680000.cpp  ??1Cls1400@@QAE@XZ  00681400  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/_at_00680000.cpp  ?FreeNodes@MapC2@@QAEXPAUNode1480@@@Z  00681480  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/_at_00680000.cpp  ?InsertUnique@MapV@@QAEXPAUPairOut@@PBHUAllocArg@@@Z  006815f0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/_at_00680000.cpp  ??1Cls60@@QAE@XZ  00682060  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/_at_00680000.cpp  ?FreeNodes@Map3@@QAEXPAUNode3@@@Z  00682800  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/_at_00680000.cpp  ?ReadMapA@Factory@@QAEXPAUMapA@@PAUIRd@@@Z  006840d0  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPEngine/_at_00680000.cpp  ?ReadMapC@Factory@@QAEXPAUMapC@@PAUIRd@@@Z  00684a90  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPEngine/_at_00680000.cpp  ?TruncFloat_684be0@@YAHM@Z  00684be0  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPEngine/_at_00680000.cpp  ?EntrySet@@YAXHEHPBUWStrRange@@0@Z  006884f0  /O2 /MD /Gy /TP /EHsc /GS- /Isrc/game/include
+../src/game/SPEngine/_at_00680000.cpp  ?Execute@cRendererCheat@@UAEXPAVcArguments_s0068_7c20@ArgScript@EA@@@Z  00688570  /O2 /MD /Gy /TP /EHsc /GS- /Isrc/game/include
+../src/game/SPEngine/_at_00680000.cpp  ?Shutdown@FreeQueue@@QAEXXZ  0068c4e0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/_at_00680000.cpp  ?FreeQueueCreate@@YAPAUFreeQueue@@XZ  0068c520  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/_at_00680000.cpp  _FUN_0068da90  0068da90  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/_at_00680000.cpp  ?Emit@IWriter@@QAEXHHEIEE@Z  0068dab0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/_at_00680000.cpp  ?MaskInit@Coder@@QAEXXZ  0068ddc0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/_at_00680000.cpp  ??0Coder@@QAE@XZ  0068e610  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/_at_00680000.cpp  ?AssignFill@VecU8@@QAEXIPBX@Z  0068e8a0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/_at_00680000.cpp  ??0RefObj@@QAE@XZ  0068eff0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/_at_00680000.cpp  ??1RefObj@@UAE@XZ  0068f050  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include

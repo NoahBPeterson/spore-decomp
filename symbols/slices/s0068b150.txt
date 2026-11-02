@@ -13,7 +13,7 @@
 0068bf20 ?GetPos@VarMap@@QAEPAUVariant@@PAI@Z  # eastl::map<unsigned,EA::Variant>::operator[]
 0068c020 ?SetParameter@cCommandParameterSet@@QAEXII@Z  # App/cCommandParameterSet.cpp
 0068c040 ??0cCommandServer@@QAE@XZ  # App/cCommandServer.cpp
-0068c140 ?AtomicRead64@@YI_KPC_K@Z  # atomic 64-bit read (lock cmpxchg8b)
-0068c1b0 ?AtomicExchange64@@YI_KPC_K_K@Z  # atomic 64-bit exchange
-0068c220 ?Drain@FreeList@@QAEXXZ  # FreeList drain
-0068c280 ?Push@FreeList@@QAEXII@Z  # FreeList push
+0068c140 ?AtomicRead64@@YI_KPC_K@Z  # AtomicRead64 migrated from s0068b150 (verbatim, slice spelling)
+0068c1b0 ?AtomicExchange64@@YI_KPC_K_K@Z  # AtomicExchange64 migrated from s0068b150 (verbatim, slice spelling)
+0068c220 ?Drain@FreeList@@QAEXXZ  # FreeList::Drain migrated from s0068b150 (verbatim, slice spelling)
+0068c280 ?Push@FreeList@@QAEXII@Z  # FreeList::Push migrated from s0068b150 (verbatim, slice spelling)
