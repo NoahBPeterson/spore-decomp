@@ -1,2 +1,2 @@
-# va  diff-bytes  reason
+# va  reason
 00964040 227  approximate; WinButton caption colour selection stub

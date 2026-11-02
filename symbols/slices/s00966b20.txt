@@ -1,13 +1,13 @@
-00966b20   ?m@S_966b20@@QAEEIPAM@Z                S_966b20::m                 nonmatching (uv rect by switch)
-00966bb0   ?m@S_966bb0@@QAEEIPAM@Z                S_966bb0::m                 nonmatching (uv rect by switch)
-00966c70   ?m@S_966c70@@QAEXXZ                    S_966c70::m                 nonmatching (list walk)
-00966dc0   ?m@S_966dc0@@QAEPAXXZ                  S_966dc0::m                 nonmatching (dead vtable stores)
-00966df0   ?m@S_966df0@@QAEPAXE@Z                 S_966df0::m                 MATCH
-00966e40   ?m@S_966e40@@QAEXXZ                    S_966e40::m                 MATCH
-00966ed0   ?CreateInstance@BasicFactoryStd@@QAEPAUDrawableStd@@IPAX@Z    BasicFactoryStd::CreateInstance    nonmatching (dead vtable stores)
-00966f30   ?CreateInstance@BasicFactoryRadio@@QAEPAUDrawableStd@@IPAX@Z  BasicFactoryRadio::CreateInstance  nonmatching (dead vtable stores)
-00966f90   ?m@S_966f90@@QAEPAXXZ                  S_966f90::m                 nonmatching (WinButton ctor)
-00967120   ?m@S_967120@@QAEPAXE@Z                 S_967120::m                 MATCH
+00966b20 ?m@S_966b20@@QAEEIPAM@Z  # S_966b20::m migrated from s00966b20 (verbatim, slice spelling)
+00966bb0 ?m@S_966bb0@@QAEEIPAM@Z  # S_966bb0::m migrated from s00966b20 (verbatim, slice spelling)
+00966c70 ?m@S_966c70@@QAEXXZ  # S_966c70::m migrated from s00966b20 (verbatim, slice spelling)
+00966dc0 ?m@S_966dc0@@QAEPAXXZ  # S_966dc0::m migrated from s00966b20 (verbatim, slice spelling)
+00966df0 ?m@S_966df0@@QAEPAXE@Z  # S_966df0::m migrated from s00966b20 (verbatim, slice spelling)
+00966e40 ?m@S_966e40@@QAEXXZ  # S_966e40::m migrated from s00966b20 (verbatim, slice spelling)
+00966ed0 ?CreateInstance@BasicFactoryStd@@QAEPAUDrawableStd@@IPAX@Z  # BasicFactoryStd::CreateInstance migrated from s00966b20 (verbatim, slice spelling)
+00966f30 ?CreateInstance@BasicFactoryRadio@@QAEPAUDrawableStd@@IPAX@Z  # BasicFactoryRadio::CreateInstance migrated from s00966b20 (verbatim, slice spelling)
+00966f90 ?m@S_966f90@@QAEPAXXZ  # S_966f90::m migrated from s00966b20 (verbatim, slice spelling)
+00967120 ?m@S_967120@@QAEPAXE@Z  # S_967120::m migrated from s00966b20 (verbatim, slice spelling)
 009671c0   _FUN_009671c0                          FUN_009671c0                nonmatching (CreateDefault)
 00967300   ?m@S_967300@@QAEXM@Z                   S_967300::m                 MATCH
 00967320   ?m@S_967320@@QAEXM@Z                   S_967320::m                 MATCH
