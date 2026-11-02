@@ -1,11 +1,11 @@
 00992480 ?WatchGraph_OnTick@@YIEPADH@Z  # WatchGraph_OnTick migrated from s00992480 (verbatim, slice spelling)
 00992550 ?WatchGraph_scalarDtor@@YIPAXPADHE@Z  # WatchGraph_scalarDtor migrated from s00992480 (verbatim, slice spelling)
-00992600 EA::UTFWinControls::WatchWindow::Clear  # unlink+release every node of the intrusive list at +0x20c (node vt+0)
-00992650 EA::UTFWinControls::WatchWindow::WatchWindow  # base ctor, vtbl 0x14462b0/0x1446190, sentinel +0x20c, two layouts (0x890f50), Trebuchet-Montserrat? TextStyle, styles 0x6fb342b7/0x6fb342b8, SetFlag(8,1)
-00992830 WatchWindow teardown helper  # vptr reset, Clear, GetStyle 0x6fb342b7 + style unregister, base dtor 0x962740
-009928c0 EA::UTFWinControls::WatchWindow::UpdateSize  # rect via vt+0x34, metrics -> +0x214, widest string -> +0x218, ceil size, SetSize via vt+0x60
-00992aa0 EA::UTFWinControls::WatchWindow::OnRebuild  # Begin2D, batch draws (0x91c/0x920), per-node text draw (vt+0x28) + node vt+4, End2D
-00992d10 EA::UTFWinControls::WatchWindow::OnTick  # if byte +0x220, UpdateSize and clear it; repaint via IWindow vt+0x90
+00992600 ?WatchWindow_Clear@@YIXPAD@Z  # WatchWindow_Clear migrated from s00992480 (verbatim, slice spelling)
+00992650 ?WatchWindow_ctor@@YIPAXPADH@Z  # WatchWindow_ctor migrated from s00992480 (verbatim, slice spelling)
+00992830 ?FUN_00992830@@YIXPADH@Z  # FUN_00992830 migrated from s00992480 (verbatim, slice spelling)
+009928c0 ?WatchWindow_UpdateSize@@YIXPAD@Z  # WatchWindow_UpdateSize migrated from s00992480 (verbatim, slice spelling)
+00992aa0 ?FUN_00992aa0@@YIEPADH0@Z  # FUN_00992aa0 migrated from s00992480 (verbatim, slice spelling)
+00992d10 ?WatchWindow_OnTick@@YIEPADH@Z  # WatchWindow_OnTick migrated from s00992480 (verbatim, slice spelling)
 00992dc0 WinXHTML set/clear a bit in flags word +0xa84c
 00992e00 WinXHTML set selection range +0xa858/+0xa85c and repaint  # Page::SetSelectionRange + vt+0x90
 00992e60 WinXHTML set horizontal scroll value +0xa8dc via IWindow vt+0x24/0x78

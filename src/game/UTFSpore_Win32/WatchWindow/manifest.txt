@@ -1,0 +1,2 @@
+# source  symbol  va  flags
+../src/game/UTFSpore_Win32/WatchWindow.cpp  ?WatchWindow_OnTick@@YIEPADH@Z  00992d10  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
