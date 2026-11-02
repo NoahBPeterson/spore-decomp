@@ -1,0 +1,2 @@
+# s01140b70: complete, behavior-equivalent source that is not byte-exact.
+011412b0  183  SNDI_patchtohdr: parse the SNDI tag stream into header/buffers/timestretch arrays; complete; difftest PASS 86.8% cov. flags /vc71 /O2 /MD /Gy /TP
