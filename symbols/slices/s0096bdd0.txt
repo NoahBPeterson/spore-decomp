@@ -1,0 +1,4 @@
+0096bdd0 ?OnMouseMove@WinDialog_s0096_bdd0@@QAE_NMMM@Z  # WinDialog_s0096_bdd0::OnMouseMove migrated from s0096bdd0 (verbatim, slice spelling)
+0096c430 ?DoMessage@WinDialog_s0096_bdd0@@QAE_NPAX@Z  # WinDialog_s0096_bdd0::DoMessage migrated from s0096bdd0 (verbatim, slice spelling)
+0096c4c0 ?FUN_0096c4c0@WinDialog_s0096_bdd0@@QAEHMM@Z  # WinDialog_s0096_bdd0::FUN_0096c4c0 migrated from s0096bdd0 (verbatim, slice spelling)
+0096c5d0 ?OnRebuild@WinDialog_s0096_bdd0@@QAE_NPAX@Z  # WinDialog_s0096_bdd0::OnRebuild migrated from s0096bdd0 (verbatim, slice spelling)
