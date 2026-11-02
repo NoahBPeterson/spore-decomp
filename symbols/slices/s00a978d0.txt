@@ -3,3 +3,7 @@
 00a97f90 ?FUN_00a97f90@@YAXPAXHPAUSwarmDesc@@@Z  # FUN_00a97f90 migrated from s00a978d0 (verbatim, slice spelling)
 00a98480 ?FUN_00a98480@@YAPAXPAXH@Z  # FUN_00a98480 migrated from s00a978d0 (verbatim, slice spelling)
 00a984f0 ?FUN_00a984f0@@YAXXZ  # FUN_00a984f0 migrated from s00a978d0 (verbatim, slice spelling)
+00a98520 ?Destroy@EffectObjB@@QAEXXZ  # EffectObjB::Destroy migrated from s00a978d0 (verbatim, slice spelling)
+00a985c0 ?FUN_00a985c0@@YAXPAXPAUEffectObjB2@@@Z  # FUN_00a985c0 migrated from s00a978d0 (verbatim, slice spelling)
+00a98670 ??0LightEffect@ArgScript@@QAE@XZ  # LightEffect::LightEffect migrated from s00a978d0 (verbatim, slice spelling)
+00a98700 ?Execute@cCameraLifeCommand@@QAEXPAX@Z  # cCameraLifeCommand::Execute migrated from s00a978d0 (verbatim, slice spelling)

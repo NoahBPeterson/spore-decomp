@@ -1,0 +1,5 @@
+# source  symbol  va  flags
+../src/game/Swarm/LightDescription.cpp  ?Destroy@EffectObjB@@QAEXXZ  00a98520  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Swarm/LightDescription.cpp  ?FUN_00a985c0@@YAXPAXPAUEffectObjB2@@@Z  00a985c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Swarm/LightDescription.cpp  ??4LightEffectSub@@QAEAAU0@ABU0@@Z  00a98e40  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /Isrc/game/include
+../src/game/Swarm/LightDescription.cpp  ?Install@LightEffect_s00a9_87c0@@QAEXD@Z  00a98fd0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /Isrc/game/include
