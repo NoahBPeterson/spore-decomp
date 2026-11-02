@@ -1,3 +1,7 @@
+00a83ee0 ?IsRunning@cVisualEffect@Swarm@EA@@UBE_NXZ  # EA::Swarm::cVisualEffect::IsRunning migrated from s00a83c00
+00a840c0 ?SetFloatParams@cVisualEffect_s00a8_3c00@@QAEDIPBMH@Z  # cVisualEffect_s00a8_3c00::SetFloatParams migrated from s00a83c00 (verbatim, slice spelling)
+00a84200 ?SetIntParams@cVisualEffect_s00a8_3c00@@QAEDIPBHH@Z  # cVisualEffect_s00a8_3c00::SetIntParams migrated from s00a83c00 (verbatim, slice spelling)
+00a84330 ?Shutdown@cComponentBaseSub@@QAEXXZ  # cComponentBaseSub::Shutdown migrated from s00a83c00 (verbatim, slice spelling)
 00a84460 ?WriteTransform@@YAPAXPAUIOStream@@PAX@Z  # WriteTransform migrated from s00a83c00 (verbatim, slice spelling)
 00a84510 ?WriteRec@@YAXPAUIOStream@@PAX@Z  # WriteRec migrated from s00a83c00 (verbatim, slice spelling)
 00a846c0 ?WriteRecList@@YAPAXPAUIOStream@@PAX@Z  # WriteRecList migrated from s00a83c00 (verbatim, slice spelling)

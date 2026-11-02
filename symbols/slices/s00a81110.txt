@@ -7,8 +7,8 @@
 00a818f0 ?FUN_00a818f0@@YAXPAM0@Z  # FUN_00a818f0 migrated from s00a81110 (verbatim, slice spelling)
 00a81a20 ?FUN_00a81a20@@YAXPAM0@Z  # FUN_00a81a20 migrated from s00a81110 (verbatim, slice spelling)
 00a81b80 ?FUN_00a81b80@@YAXPAM0@Z  # FUN_00a81b80 migrated from s00a81110 (verbatim, slice spelling)
-00a81d80  cVisualEffect::Release
-00a81db0  cVisualEffect::GetEffectID
-00a81de0  EA::Swarm::SmoothStepClamp
-00a81e50  cVisualEffect::Init
-00a82050  cVisualEffect::Stop
+00a81d80 ?Release@cVisualEffect@Swarm@EA@@UAEHXZ  # EA::Swarm::cVisualEffect::Release migrated from s00a81110
+00a81db0 ?GetEffectID@cVisualEffect@Swarm@EA@@UAE_KXZ  # EA::Swarm::cVisualEffect::GetEffectID migrated from s00a81110
+00a81de0 ?SmoothStepClamp@Swarm@EA@@YAMMMM@Z  # SmoothStepClamp migrated from s00a81110 (verbatim, slice spelling)
+00a81e50 ?Init@cVisualEffect@Swarm@EA@@UAEXPAVcIEffectsWorld@23@PAVcIEffectsManager@23@PAUcEffectParams@23@@Z  # EA::Swarm::cVisualEffect::Init migrated from s00a81110
+00a82050 ?Stop@cVisualEffect@Swarm@EA@@UAEXW4tTransitionType@cIVisualEffect@23@@Z  # EA::Swarm::cVisualEffect::Stop migrated from s00a81110

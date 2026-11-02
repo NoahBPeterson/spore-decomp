@@ -1,0 +1,15 @@
+# source  symbol  va  flags
+../src/game/Swarm/VisualEffect.cpp  ?Release@cVisualEffect@Swarm@EA@@UAEHXZ  00a81d80  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/Swarm/VisualEffect.cpp  ?GetEffectID@cVisualEffect@Swarm@EA@@UAE_KXZ  00a81db0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/Swarm/VisualEffect.cpp  ?SetBone@cVisualEffect@@QAEXPAXH@Z  00a82130  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include
+../src/game/Swarm/VisualEffect.cpp  ?GetBone@cVisualEffect@@QAEPAXH@Z  00a821c0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include
+../src/game/Swarm/VisualEffect.cpp  ?GetVectorParams@cVisualEffect@@QAEPAIIPAI@Z  00a82200  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include
+../src/game/Swarm/VisualEffect.cpp  ?GetFloatParams@cVisualEffect@@QAEPAIIPAI@Z  00a82260  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include
+../src/game/Swarm/VisualEffect.cpp  ?GetIntParams@cVisualEffect@@QAEPAIIPAI@Z  00a822b0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include
+../src/game/Swarm/VisualEffect.cpp  ?GetUnknownParam@cVisualEffect@@QAEII@Z  00a82300  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include
+../src/game/Swarm/VisualEffect.cpp  ?SetIsVisible@cVisualEffect@@QAEXH@Z  00a82330  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include
+../src/game/Swarm/VisualEffect.cpp  ?GetIntParam@cEffectParams@@QAE_NHPAHPAI@Z  00a826c0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include
+../src/game/Swarm/VisualEffect.cpp  ?SetRigidTransform@cVisualEffect@@QAEXPBX@Z  00a82830  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include
+../src/game/Swarm/VisualEffect.cpp  ?SetSourceTransform@cVisualEffect@@QAEXPBX@Z  00a82850  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include
+../src/game/Swarm/VisualEffect.cpp  ?GetTransform@cVisualEffect@@QAEXPAX@Z  00a82870  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include
+../src/game/Swarm/VisualEffect.cpp  ?GetSourceTransform@cVisualEffect@@QAEXPAX@Z  00a82880  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include

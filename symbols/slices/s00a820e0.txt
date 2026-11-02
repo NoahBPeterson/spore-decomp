@@ -1,28 +1,23 @@
-# va  name  # evidence
-# Spore visual-effect slice (cVisualEffect: vft0/vft1 at +0, description at +0x28, flags at
-# +0x2c, bone/param tables and the world/LOD pointers at +0x140..+0x180, float matrix at +0x64).
-# Names are reconstructions from the cards except where the object's mangled name is in
-# manifest.txt.
-00a820e0  cVisualEffect::SetIsHidden
-00a82130  cVisualEffect::SetBone
-00a821c0  cVisualEffect::GetBone
-00a821e0  cVisualEffect::SetVectorParams
-00a82200  cVisualEffect::GetVectorParams
-00a82260  cVisualEffect::GetFloatParams
-00a822b0  cVisualEffect::GetIntParams
-00a82300  cVisualEffect::GetUnknownParam
-00a82330  cVisualEffect::SetIsVisible
+00a820e0 ?SetIsHidden@cVisualEffect@Swarm@EA@@UAEX_N@Z  # EA::Swarm::cVisualEffect::SetIsHidden migrated from s00a820e0
+00a82130 ?SetBone@cVisualEffect@@QAEXPAXH@Z  # cVisualEffect::SetBone migrated from s00a820e0 (verbatim, slice spelling)
+00a821c0 ?GetBone@cVisualEffect@@QAEPAXH@Z  # cVisualEffect::GetBone migrated from s00a820e0 (verbatim, slice spelling)
+00a821e0 ?SetVectorParams@cVisualEffect@@QAEXHHH@Z  # cVisualEffect::SetVectorParams migrated from s00a820e0 (verbatim, slice spelling)
+00a82200 ?GetVectorParams@cVisualEffect@@QAEPAIIPAI@Z  # cVisualEffect::GetVectorParams migrated from s00a820e0 (verbatim, slice spelling)
+00a82260 ?GetFloatParams@cVisualEffect@@QAEPAIIPAI@Z  # cVisualEffect::GetFloatParams migrated from s00a820e0 (verbatim, slice spelling)
+00a822b0 ?GetIntParams@cVisualEffect@@QAEPAIIPAI@Z  # cVisualEffect::GetIntParams migrated from s00a820e0 (verbatim, slice spelling)
+00a82300 ?GetUnknownParam@cVisualEffect@@QAEII@Z  # cVisualEffect::GetUnknownParam migrated from s00a820e0 (verbatim, slice spelling)
+00a82330 ?SetIsVisible@cVisualEffect@@QAEXH@Z  # cVisualEffect::SetIsVisible migrated from s00a820e0 (verbatim, slice spelling)
 00a82370  cVisualEffect::SetDescription
 00a823e0  cVisualEffect::UpdateDescription
-00a82430  cVisualEffect::CheckIfStopped
-00a82500  cVisualEffect::SelectDescriptionState
-00a825c0  cVisualEffect::PrerollEffect
-00a826c0  cEffectParams::GetIntParam
-00a82700  cVisualEffect::Start
-00a82830  cVisualEffect::SetRigidTransform
-00a82850  cVisualEffect::SetSourceTransform
-00a82870  cVisualEffect::GetTransform
-00a82880  cVisualEffect::GetSourceTransform
-00a828a0  cVisualEffect::ApplyParams
-00a82a10  cVisualEffect::ApplyCursorControl
-00a82cc0  cVisualEffect::SetUnknownParam
+00a82430 ?CheckIfStopped@cVisualEffect@@QAE_NXZ  # cVisualEffect::CheckIfStopped migrated from s00a820e0 (verbatim, slice spelling)
+00a82500 ?SelectDescriptionState@cVisualEffect@@QAEXH@Z  # cVisualEffect::SelectDescriptionState migrated from s00a820e0 (verbatim, slice spelling)
+00a825c0 ?PrerollEffect@cVisualEffect@@QAEXHPAH@Z  # cVisualEffect::PrerollEffect migrated from s00a820e0 (verbatim, slice spelling)
+00a826c0 ?GetIntParam@cEffectParams@@QAE_NHPAHPAI@Z  # cEffectParams::GetIntParam migrated from s00a820e0 (verbatim, slice spelling)
+00a82700 ?Start@cVisualEffect@@QAEXH@Z  # cVisualEffect::Start migrated from s00a820e0 (verbatim, slice spelling)
+00a82830 ?SetRigidTransform@cVisualEffect@@QAEXPBX@Z  # cVisualEffect::SetRigidTransform migrated from s00a820e0 (verbatim, slice spelling)
+00a82850 ?SetSourceTransform@cVisualEffect@@QAEXPBX@Z  # cVisualEffect::SetSourceTransform migrated from s00a820e0 (verbatim, slice spelling)
+00a82870 ?GetTransform@cVisualEffect@@QAEXPAX@Z  # cVisualEffect::GetTransform migrated from s00a820e0 (verbatim, slice spelling)
+00a82880 ?GetSourceTransform@cVisualEffect@@QAEXPAX@Z  # cVisualEffect::GetSourceTransform migrated from s00a820e0 (verbatim, slice spelling)
+00a828a0 ?ApplyParams@cVisualEffect@@QAEXXZ  # cVisualEffect::ApplyParams migrated from s00a820e0 (verbatim, slice spelling)
+00a82a10 ?ApplyCursorControl@cVisualEffect@@QAEXPAM@Z  # cVisualEffect::ApplyCursorControl migrated from s00a820e0 (verbatim, slice spelling)
+00a82cc0 ?SetUnknownParam@cVisualEffect@@QAE_NIPAX@Z  # cVisualEffect::SetUnknownParam migrated from s00a820e0 (verbatim, slice spelling)
