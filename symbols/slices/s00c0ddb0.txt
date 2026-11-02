@@ -1,7 +1,7 @@
 00c0ddb0 ?ddb0@CCM@@QAEXPAM@Z  # CCM::ddb0 migrated from s00c0ddb0 (verbatim, slice spelling)
-00c0de30 cCommunity grasped-state query
+00c0de30 ?de30@CCM@@QAEDXZ  # CCM::de30 migrated from s00c0ddb0 (verbatim, slice spelling)
 00c0de60 ?SetGraspedEffectOffsets@cSPCreatureCitizen@SP@@QAEXPBUcreature_body_static_data@nSPCreatureAnim@@PAUcreature_effect@4@@Z  # SP::cSPCreatureCitizen::SetGraspedEffectOffsets migrated from s00c0ddb0
-00c0dee0 find entry in creature list at +0x8c (optional erase)
+00c0dee0 ?dee0@CCM@@QAE_NHPAHD@Z  # CCM::dee0 migrated from s00c0ddb0 (verbatim, slice spelling)
 00c0dfb0 find creature by id -> +0x17c lookup
 00c0dfd0 find creature by id -> +0x8c result
 00c0e000 set creature animation slot +8

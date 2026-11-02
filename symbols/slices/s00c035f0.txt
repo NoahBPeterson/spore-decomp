@@ -1,0 +1,2 @@
+00c03b70 ?funcACh@CreatureBase@@QAE_NM@Z  # CreatureBase::funcACh migrated from s00c035f0 (verbatim, slice spelling)
+00c03ec0 ?func3EC0@CreatureBase@@QAEXM@Z  # CreatureBase::func3EC0 migrated from s00c035f0 (verbatim, slice spelling)

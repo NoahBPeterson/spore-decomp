@@ -1,7 +1,7 @@
 00bffad0 ?func18h@Simulator_ISS@@QAEXMIHIPAX@Z  # partial (see partial.txt): thiscall ret 0x14, Simulator::ISimulatorSerializable vfunc; sub-objects A at this-0x108 and D at this-0xd4
-00c004a0 ?FUN_00c004a0@@YAXXZ  # no PDB entry; cdecl no args, tail-jumps to EA::Audio::Eapd::sys_gui (0x00c2e4e0) when the app mode (0x0168d248) is 4 and not the transient 1/2; also tail-called from 0x00bd8200
-00c004c0 ?FUN_00c004c0@@YI_NPAX0H@Z  # no PDB entry; __fastcall (ecx = this, stack: index), bool; game time via 0x00b3d380/0x00b316c0 Ticks, 64-bit 20000-tick window against the stamp array at this+0x98
-00c00510 ?FUN_00c00510@@YIXPAX0H@Z  # no PDB entry; __fastcall (ecx = this, stack: index); clears the 64-bit stamp at this+0x98+index*8 (xor edx,edx + two stores)
+00c004a0 ?FUN_00c004a0@@YAXXZ  # FUN_00c004a0 migrated from s00bffad0 (verbatim, slice spelling)
+00c004c0 ?FUN_00c004c0@@YI_NPAX0H@Z  # FUN_00c004c0 migrated from s00bffad0 (verbatim, slice spelling)
+00c00510 ?FUN_00c00510@@YIXPAX0H@Z  # FUN_00c00510 migrated from s00bffad0 (verbatim, slice spelling)
 00c00590 ?FUN_00c00590@@YIHPAX0@Z  # FUN_00c00590 migrated from s00bffad0 (verbatim, slice spelling)
 00c005b0 ?FUN_00c005b0@@YIXPAX00@Z  # FUN_00c005b0 migrated from s00bffad0 (verbatim, slice spelling)
 00c00850 ?FUN_00c00850@@YAXPAUElem20@@00@Z  # FUN_00c00850 migrated from s00bffad0 (verbatim, slice spelling)

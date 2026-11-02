@@ -1,0 +1,5 @@
+# source  symbol  va  flags
+../src/game/SPGonzago/_at_00c00000.cpp  ?FUN_00c004a0@@YAXXZ  00c004a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_00c00000.cpp  ?FUN_00c004c0@@YI_NPAX0H@Z  00c004c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_00c00000.cpp  ?FUN_00c00510@@YIXPAX0H@Z  00c00510  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_00c00000.cpp  ?SetHerd@CreatureBase_s00c0_45a0@@QAEXPAX@Z  00c045a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
