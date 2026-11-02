@@ -247,6 +247,31 @@ static inline bool operator==(const Elem16& a, const Elem16& b)
 {
     return FUN_004eb930(a.k, b.k) && a.extra == b.extra;
 }
+static __forceinline bool GetBit(const uint32_t* p, uint32_t i)
+{
+    uint32_t w;
+    bool r;
+    if (i < 0x80) {
+        w = p[i / 32];
+        r = (w & (1u << (i % 32))) != 0;
+    } else {
+        r = false;
+    }
+    return r;
+}
+static __forceinline uint32_t* WordPtr(uint32_t* p, uint32_t i)
+{
+    return &p[i / 32];
+}
+static __forceinline void SetBit(uint32_t* p, uint32_t i, bool v)
+{
+    if (i < 0x80) {
+        if (v)
+            *WordPtr(p, i) |= 1u << (i % 32);
+        else
+            *WordPtr(p, i) &= ~(1u << (i % 32));
+    }
+}
 // ---- items of slice s004eb270 end
 
 // ---- items of slice s004ebe20 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -1340,10 +1365,172 @@ inline bool operator==(const PriorityEntry& e, const TypeKey& k) { return e.mTyp
 inline bool operator==(const PriorityEntry& e, const GroupTypeKey& k) { return (e.mGroup == k.mGroup) && (e.mType == k.mType); }
 // ---- items of slice s004f6630 end
 
-// @ 0x004e9500
-void Body9500(void* a, void* b, void* c)
+// ---- items of slice s004e88a0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern float    g_015da588; // 0x015da588
+extern float    g_015da58c; // 0x015da58c
+extern float    g_015da590; // 0x015da590
+struct Vector3_s004e_88a0 { float x, y, z; };
+struct Matrix33 {
+    float m[9];
+    void Assign(const void* src); // 0x0041cb40
+};
+inline Vector3_s004e_88a0 Row3(const Matrix33& m, int row)
 {
-    (void)a; (void)b; (void)c;
+    Vector3_s004e_88a0 v;
+    v.x = m.m[row * 3 + 0];
+    v.y = m.m[row * 3 + 1];
+    v.z = m.m[row * 3 + 2];
+    return v;
+}
+struct RefVtbl {
+    void (__thiscall* mAddRef)(void* self);              // +0x00
+    void (__thiscall* mRelease)(void* self);             // +0x04
+    void (__thiscall* mSlot08)(void* self);              // +0x08
+    void (__thiscall* mGetBasis)(void* self, void* out); // +0x0c
+};
+struct RefObj {
+    RefVtbl* mVtbl; // +0x00
+};
+struct BuildVtbl {
+    void* mSlots[0x114 / 4];                                                   // +0x00..+0x110
+    char (__thiscall* mBuild)(void* self, void* a, int b, void** out, char c); // +0x114
+};
+struct RenderObj {
+    BuildVtbl* mVtbl;      // +0x00
+    uint32_t   mPad04[3];  // +0x04
+    void*      mp10;       // +0x10
+    uint32_t   mPad14;     // +0x14
+    void*      mp18;       // +0x18
+    uint32_t   mPad1c[11]; // +0x1c
+    Vector3_s004e_88a0    mVec48;     // +0x48
+    uint32_t   mPad54[97]; // +0x54
+    float      mf1d8;      // +0x1d8
+};
+extern Matrix33 g_015da458; // 0x015da458
+Matrix33* Matrix33_Convert(Matrix33* out, const Matrix33* in);                  // 0x0041ded0
+float*    FUN_0041db10(float* out, float* a, float* b);                         // 0x0041db10  (out = a - b)
+float*    MulVectorMatrix(float* out, const float* v, const float* m);          // 0x0041daf0
+Matrix33* MulMatrixMatrix(Matrix33* out, const Matrix33* a, const Matrix33* b); // 0x0041de20
+float*    FUN_00453880(float* out, float* a, float* b);                         // 0x00453880
+void      __fastcall Vector3_CopyCtor(void* self, int, const void* src);        // 0x004098a0
+Vector3_s004e_88a0   FUN_00499b40(Vector3_s004e_88a0 a, Vector3_s004e_88a0 b, Vector3_s004e_88a0 c, Vector3_s004e_88a0 p);             // 0x00499b40
+Matrix33* FUN_00499f10(Matrix33* out, Vector3_s004e_88a0 a, Vector3_s004e_88a0 b, Vector3_s004e_88a0 c);         // 0x00499f10
+void*     __fastcall FUN_004363d0(void* self, int, void* arg);                  // 0x004363d0
+void      FUN_49ef80(void* tracker, void* vec);                                 // 0x0049ef80
+void      __fastcall FUN_004e95e0(void* self, int, void* out1, void* out2);     // 0x004e95e0
+struct RWXform {
+    RenderObj* mp00;   // +0x00  (render object)
+    void*      mp04;   // +0x04  (refcounted object)
+    Vector3_s004e_88a0    mVec08; // +0x08
+    Vector3_s004e_88a0    mVec14; // +0x14
+    Matrix33   mMat20; // +0x20
+    int        mInt44; // +0x44
+    char       mChar48;// +0x48
+
+    RWXform();                                                                              // @ 0x004e8f70
+    void Build(RenderObj* a0, void* a1, float fx, float fy, float fz, void* a5, void* a6);  // @ 0x004e9050
+    char Attach(RenderObj* a0, int a1, char a2);                                            // @ 0x004e9500
+};
+// ---- items of slice s004e88a0 end
+
+// @ 0x004e9050
+void RWXform::Build(RenderObj* a0, void* a1, float fx, float fy, float fz, void* a5, void* a6)
+{
+    Matrix33 local_78;   // the basis matrix; its three rows are the retail local_78/6c/60
+    Matrix33 local_b0, local_cc, local_54;
+    Matrix33 local_fc, local_120, local_148, local_154, local_160, local_16c, local_178;
+    float    local_124;
+    Vector3_s004e_88a0  local_30, local_24;
+    Vector3_s004e_88a0  vf;
+
+    mp00 = a0;
+    if (a1 != mp04) {
+        void* old = mp04;
+        if (a1 != 0)
+            ((RefObj*)a1)->mVtbl->mAddRef(a1);
+        mp04 = a1;
+        if (old != 0)
+            ((RefObj*)old)->mVtbl->mRelease(old);
+    }
+    {
+        // retail walks a dead 3-entry table at 0xc stride.
+        int n = 3;
+        char* p = (char*)&local_78;
+        for (;;) {
+            --n;
+            if (n < 0)
+                break;
+            p += 0xc;
+        }
+    }
+    ((RefObj*)mp04)->mVtbl->mGetBasis(mp04, &local_78);
+
+    void* tracker = FUN_004363d0(a0, 0, &local_b0);
+    FUN_49ef80(tracker, &local_78.m[0]);
+
+    vf.x = fx;
+    vf.y = fy;
+    vf.z = fz;
+    Vector3_s004e_88a0 r0 = Row3(local_78, 0);
+    Vector3_s004e_88a0 r1 = Row3(local_78, 1);
+    Vector3_s004e_88a0 r2 = Row3(local_78, 2);
+    Vector3_s004e_88a0 basis = FUN_00499b40(r0, r1, r2, vf);
+    mVec14.x = basis.x;
+    mVec14.y = basis.y;
+    mVec14.z = basis.z;
+
+    Vector3_s004e_88a0 copy78;
+    Vector3_CopyCtor(&copy78, 0, &local_78);
+    FUN_00499f10(&local_54, copy78, r1, r2);
+
+    if (a6 != 0) {
+        Matrix33* conv = Matrix33_Convert(&local_fc, &local_54);
+        Matrix33* prod = MulMatrixMatrix(&local_120, (const Matrix33*)a6, conv);
+        mMat20 = *prod;
+    } else {
+        mMat20 = g_015da458;
+    }
+
+    if (a5 != 0) {
+        local_124 = mp00->mf1d8;
+        Matrix33_Convert(&local_148, &local_54);
+        FUN_0041db10(&local_154.m[0], (float*)a5, (float*)&vf);
+        MulVectorMatrix(&local_160.m[0], &local_154.m[0], &local_148.m[0]);
+        FUN_00453880(&local_16c.m[0], &local_160.m[0], &local_124);
+        mVec08.x = local_16c.m[0];
+        mVec08.y = local_16c.m[1];
+        mVec08.z = local_16c.m[2];
+    } else {
+        mVec08.x = g_015da588;
+        mVec08.y = g_015da58c;
+        mVec08.z = g_015da590;
+    }
+
+    FUN_004e95e0(this, 0, &local_30, &local_24);
+    FUN_0041db10(&local_178.m[0], &local_30.x, &a0->mVec48.x);
+    local_30.x = local_178.m[0];
+    local_30.y = local_178.m[1];
+    local_30.z = local_178.m[2];
+}
+
+// @ 0x004e9500
+char RWXform::Attach(RenderObj* a0, int a1, char a2)
+{
+    mp00 = a0;
+    if (mp00 == 0 || mp00->mp10 == 0 || mp00->mp18 == 0)
+        return 0;
+    void** slot = &mp04;
+    if (*slot != 0) {
+        void* old = *slot;
+        *slot = 0;
+        ((RefObj*)old)->mVtbl->mRelease(old);
+    }
+    char r = ((RenderObj*)mp00->mp18)->mVtbl->mBuild(mp00->mp18, mp00->mp10, a1, slot, a2);
+    if (r != 0) {
+        mInt44 = a1;
+        mChar48 = a2;
+    }
+    return r;
 }
 
 // @ 0x004e95e0
@@ -1655,9 +1842,19 @@ void FUN_004eb980(void)
 }
 
 // @ 0x004eba00
-void FUN_004eba00(void* a, void* b, void* c)
+void FUN_004eba00(uint32_t* p)
 {
-    (void)a; (void)b; (void)c;
+    if (GetBit(p, 4)) {
+        SetBit(p, 0x14, true);
+        SetBit(p, 0x15, true);
+    }
+    if (GetBit(p, 9)) {
+        SetBit(p, 0x16, true);
+        SetBit(p, 0x17, true);
+        SetBit(p, 0x18, true);
+        SetBit(p, 0x19, true);
+    }
+    SetBit(p, 0x1a, true);
 }
 
 // @ 0x004ebe20

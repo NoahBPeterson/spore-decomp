@@ -1,4 +1,6 @@
 # va  diff-bytes  reason
+004e9050 1434 RWXform::Build (rebuild transform from render object + optional matrix/vector): equiv PASS (253 valid, 100% coverage); /Od frame shape flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+004e9500 156 RWXform::Attach (bind render object, drive builder vtable slot): equiv PASS (354 valid, 100% coverage); /Od frame shape flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
 004e9950 360 complete; recursive child-property walk not byte-exact
 004e9fc0 326 complete; palette build/dispatch loop not byte-exact
 004ea190 143 complete; frame size differs (bitfield-flag construction not reproduced)

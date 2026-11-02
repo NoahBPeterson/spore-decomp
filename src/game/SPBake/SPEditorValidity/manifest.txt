@@ -5,6 +5,7 @@
 ../src/game/SPBake/SPEditorValidity.cpp  ?FUN_004ea920@@YAXHHH@Z  004ea920  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPBake/SPEditorValidity.cpp  ?FUN_004eb930@@YA_NABUDeclareParam@@0@Z  004eb930  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPBake/SPEditorValidity.cpp  ?FUN_004eb980@@YAXXZ  004eb980  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/SPEditorValidity.cpp  ?FUN_004eba00@@YAXPAI@Z  004eba00  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPBake/SPEditorValidity.cpp  ?InitializeValidityData@EditorValidity@SP@@YAXXZ  004ebe20  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPBake/SPEditorValidity.cpp  ?FUN_004edeb0@@YA_NHPAUFlags128@@@Z  004edeb0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPBake/SPEditorValidity.cpp  ?FUN_004edf40@@YA_NPB_WPAUFlags128@@@Z  004edf40  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
