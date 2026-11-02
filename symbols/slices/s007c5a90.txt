@@ -1,6 +1,6 @@
-007c5a90 ?WriteScan@@YAHPAUFILE@@PBEPAE@Z  # WriteScan migrated from s007c5a90 (verbatim, slice spelling)
-007c5b90 ?WriteImage@@YAIPAUFILE@@PBE@Z  # WriteImage migrated from s007c5a90 (verbatim, slice spelling)
-007c5f00 ?WriteImageFile@@YAHPADPAX@Z  # WriteImageFile migrated from s007c5a90 (verbatim, slice spelling)
+007c5a90 WriteScan  # image scanline writer, uses FUN_007c5820/5920
+007c5b90 WriteImage  # image descriptor serializer to FILE
+007c5f00 WriteImageFile  # fopen("wb") + WriteImage + fclose
 007c5f50 IsVistaKB940105Required  # PDB anchor name
 007c6110 ?SetActiveController@cCameraManager@@QAEXPAX@Z  # cCameraManager::SetActiveController migrated from s007c5a90 (verbatim, slice spelling)
 007c6150 ?ActiveControllerID@cCameraManager@@QAEXXZ  # cCameraManager::ActiveControllerID migrated from s007c5a90 (verbatim, slice spelling)

@@ -1,11 +1,3 @@
 007ce500 ?GroundCoverCirclePhysics@@YAHPADM00@Z  # GroundCoverCirclePhysics migrated from s007ce500 (verbatim, slice spelling)
 007cec80 ?InitAppEffects@SP@@YAXXZ  # SP::InitAppEffects migrated from s007ce500
-007ced20 ??1DerivedPaint@@UAE@XZ  # DerivedPaint::~DerivedPaint migrated from s007ce500 (verbatim, slice spelling)
-007cede0 ?DestructRange_7cede0@@YAPAXPAUPropPair_s007c_e500@@0PAD@Z  # DestructRange_7cede0 migrated from s007ce500 (verbatim, slice spelling)
-007cee40 ?CopyRange_7cee40@@YAPAUPropPair_s007c_e500@@PAU1@00@Z  # CopyRange_7cee40 migrated from s007ce500 (verbatim, slice spelling)
-007ceec0 ?CopyBackward_7ceec0@@YAPAUPropPair_s007c_e500@@PAU1@00@Z  # CopyBackward_7ceec0 migrated from s007ce500 (verbatim, slice spelling)
-007cef40 ??0VecHolder@@QAE@XZ  # VecHolder::VecHolder migrated from s007ce500 (verbatim, slice spelling)
 007cef60 ??1VVec@@QAE@XZ  # VVec::~VVec migrated from s007ce500 (verbatim, slice spelling)
-007cefd0 ?DestructRange2_7cefd0@@YGXPAUPropPair_s007c_e500@@0@Z  # DestructRange2_7cefd0 migrated from s007ce500 (verbatim, slice spelling)
-007cf030 ?insert@Vec8@@QAEXPAUP8@@IABU2@@Z  # Vec8::insert migrated from s007ce500 (verbatim, slice spelling)
-007cf1f0 ?insert@Vec8@@QAEXPAUP8@@ABU2@@Z  # Vec8::insert migrated from s007ce500 (verbatim, slice spelling)

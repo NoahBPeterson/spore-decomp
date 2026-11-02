@@ -1,7 +1,3 @@
-007c3ba0 ?FUN_007c3ba0@cViewer@@QAE_NXZ  # cViewer::FUN_007c3ba0 migrated from s007c3ba0 (verbatim, slice spelling)
-007c3c50 ?FUN_007c3c50@cViewer@@QAEXE@Z  # cViewer::FUN_007c3c50 migrated from s007c3ba0 (verbatim, slice spelling)
-007c3c90 ?FUN_007c3c90@cViewer@@QAEMXZ  # cViewer::FUN_007c3c90 migrated from s007c3ba0 (verbatim, slice spelling)
-007c3ca0 ?FUN_007c3ca0@cViewer@@QAEMXZ  # cViewer::FUN_007c3ca0 migrated from s007c3ba0 (verbatim, slice spelling)
 007c3d30 ?GetCameraLocationInfo@cViewer@SP@@QBEXPAUcSPVector3@@000@Z  # SP::cViewer::GetCameraLocationInfo migrated from s007c3ba0
 007c3da0 ?FUN_007c3da0@Matrix44@@QAEXPAM@Z  # Matrix44::FUN_007c3da0 migrated from s007c3ba0 (verbatim, slice spelling)
 007c3de0 ?FUN_007c3de0@@YAXPAX0@Z  # FUN_007c3de0 migrated from s007c3ba0 (verbatim, slice spelling)
