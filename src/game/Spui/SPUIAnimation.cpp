@@ -189,6 +189,7 @@ extern void* g_013f6400;   // animation vtable (temp element +8)
 extern void* g_013f63fc;   // timer vtable (temp element +0x10)
 extern "C" void* __cdecl eastl_alloc(int n, void* a, int b, int c, const char* file, int line);
 extern "C" void  __cdecl eastl_free(void* p);
+extern "C" void    __cdecl anim_copy_body(void* dst, void* src);     // FUN_007f6ff0
 extern "C" void    __cdecl anim_assign(void* dst, void* src);         // 0x007f7970 operator=
 extern "C" void* __cdecl EA_operator_new(unsigned int size, const char* name, int a, int b, int c, int d);
 extern char VtblCAnimInfo;                  // 0x014153bc: cAnimInfo's own vtable
@@ -264,6 +265,11 @@ inline void InfoDefault(AInfo8c_s007f_8540* p) {
     w[0x84 / 4] = 0;
 }
 struct Vec8c_s007f_8540;
+struct Vec8cOps {
+    void CopyCtor(const Vec8c_s007f_8540* src);   // 0x007f8350
+    void Swap(Vec8c_s007f_8540* other);           // 0x007f8970
+    void Dtor();                       // 0x007f6d50
+};
 struct Vec8c_s007f_8540 {
     AInfo8c_s007f_8540* mpBegin;            // +0
     AInfo8c_s007f_8540* mpEnd;              // +4
@@ -280,7 +286,7 @@ struct Vec8c_s007f_8540 {
     void     resize(uint32_t n);                                       // 0x007f8b50
     void     reserve(uint32_t n);                                      // 0x007f90f0
 };
-struct cSPUIAnimator_s007f_8540 {
+class cSPUIAnimator_s007f_8540 { public:
     // vptr at +0 (virtual destructor, slot 0)
     Vec88    mAnimationInfos;    // +4 (begin, end, capacity, allocator)
     float    mLastUpdate;        // +0x14
@@ -307,6 +313,12 @@ struct cSPUIAnimator_s007f_8540 {
         return EA_operator_new((unsigned int)n, name, a, b, c, d);
     }
 };
+struct AnimHolder {
+    uint32_t pad0;               // +0
+    cSPUIAnimator_s007f_8540* mpAnimator;   // +4
+    Vec8c_s007f_8540 mSeq;                  // +8
+    void Append(int anim, IRef* obj, int type);   // 0x007f8fd0
+};
 // ---- items of slice s007f8540 end
 
 // ---- items of slice s007f5300 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -314,6 +326,7 @@ extern const float g_c01;
 #define VTOBJ(p) (*(void***)(p))
 void* __cdecl FUN_009512c0();
 void* __cdecl FUN_009512d0(int size, int align, const char* name, void* caller);
+void  __cdecl deallocate(void* p);
 struct Callee {
     void  f();   // 0x0095bb20 (equiv t3)
     void  f(int);
@@ -337,6 +350,31 @@ struct Callee {
     void* p(int);   // 0x0095bc10 (equiv t3)
     int64_t i64();   // 0x0093a3a0 (equiv t3)
 };
+struct Obj {
+    void  M5300(void* p);
+    int   M53C0(void* p);
+    bool  M53D0();
+    void* M5410(int type);
+    bool  M5460(int v);
+    int   M5490();
+    void  M54B0(int v);
+    bool  M54E0();
+    void  M55B0();
+    bool  M55F0(void* ev);
+    bool  M5660(void* p);
+    void  M5690();
+    void  M56C0();
+    float M56E0();
+    bool  M5710(float v);
+    void  M58E0();
+    bool  M5990();
+    bool  M59E0(void* obj, int a2, int a3, int a4);
+    bool  M5A60(void* ctx);
+    bool  M5BD0(void* out, int, int);
+    Obj*  M5C20();
+    void  M5D00();
+    void* M5FF0(char flags);
+};
 struct AnimatorS {
     char pad0[4];
     char* mBegin;   // +4
@@ -352,6 +390,72 @@ struct AnimatorS {
 typedef void (__cdecl *AnimFn1)(void*, float, float, int, int);
 typedef bool (__cdecl *AnimFn2)(void*, float, float, int, int);
 // ---- items of slice s007f5300 end
+
+// @ 0x007f5f70
+void __stdcall DestroyRange(void* first, void* last)
+{
+    while (first < last) {
+        ((void(__thiscall*)(void*, int))VTOBJ(first)[0])(first, 0);
+        first = (char*)first + 0x8c;
+    }
+}
+
+// @ 0x007f5ff0
+void* Obj::M5FF0(char flags)
+{
+    *(void**)((char*)this + 0) = &g_vt_014153bc;
+    void* p = *(void**)((char*)this + 0x84);
+    if (p)
+        ((FV0)VTOBJ(p)[4 / 4])(p);
+    *(void**)((char*)this + 4) = &g_vt_013f6400;
+    *(void**)((char*)this + 0xc) = &g_vt_013f63fc;
+    void* q = *(void**)((char*)this + 0x10);
+    if (q)
+        ((FV0)VTOBJ(q)[4 / 4])(q);
+    if ((flags & 1) != 0)
+        deallocate(this);
+    return this;
+}
+
+// @ 0x007f6040
+void* __cdecl CreateTimeRamp(void* out, float a, float b, float c)
+{
+    *(void**)out = &g_vt_013f63fc;
+    *(void**)((char*)out + 4) = 0;
+    void* caller = FUN_009512c0();
+    void* mem = FUN_009512d0(0x48, 4, "SPUICreateAnimationTimerRamp", caller);
+    void* obj = mem ? ((Callee*)mem)->ctor() : 0;
+    void* old = *(void**)((char*)out + 4);
+    if (obj != old) {
+        if (obj)
+            ((FV0)VTOBJ(obj)[0])(obj);
+        *(void**)((char*)out + 4) = obj;
+        if (old)
+            ((FV0)VTOBJ(old)[4 / 4])(old);
+    }
+    ((Callee*)obj)->f(a, b, c);
+    return out;
+}
+
+// @ 0x007f60d0
+void* __cdecl CreateTimeSmooth(void* out, float a2, float a3, float a4, float a5, float a6)
+{
+    *(void**)out = &g_vt_013f63fc;
+    *(void**)((char*)out + 4) = 0;
+    void* caller = FUN_009512c0();
+    void* mem = FUN_009512d0(0x48, 4, "cSPUIBehaviorTimeFunctionSmoothRamp", caller);
+    void* obj = mem ? ((Callee*)mem)->ctorff(a3, a4) : 0;
+    void* old = *(void**)((char*)out + 4);
+    if (obj != old) {
+        if (obj)
+            ((FV0)VTOBJ(obj)[0])(obj);
+        *(void**)((char*)out + 4) = obj;
+        if (old)
+            ((FV0)VTOBJ(old)[4 / 4])(old);
+    }
+    ((Callee*)obj)->f(a2, a5, a6);
+    return out;
+}
 
 // @ 0x007f6170
 void* __cdecl CreateTimeDamped(void* out, float a2, float a3, float a4, float a5, float a6, float a7, float a8)
@@ -374,14 +478,11 @@ void* __cdecl CreateTimeDamped(void* out, float a2, float a3, float a4, float a5
 }
 
 // @ 0x007f6210
-// Declared void, not bool: retail leaves eax live at the ret (the caller's eax on the obj==0 arm,
-// the signed-division scratch of the re-evaluated loop bound otherwise). The original symbol is
-// bool, so equiv still compares eax&0xff; declaring a return type here would clobber that value.
-void AnimatorS::RemoveAnimation(void* obj, int type)
+void cSPUIAnimator::RemoveAnimation(EA::COM::IRefCount * obj, unsigned int type)
 {
     if (obj != 0) {
-        for (int i = 0; i < (int)((mEnd - mBegin) / 0x88); ++i) {
-            char* e = mBegin + i * 0x88;
+        for (int i = 0; i < (int)((((char *)mAnimationInfos.mpEnd) - ((char *)mAnimationInfos.mpBegin)) / 0x88); ++i) {
+            char* e = ((char *)mAnimationInfos.mpBegin) + i * 0x88;
             if (*(void**)e == obj && (*(int*)(e + 4) == type || type == -1)) {
                 ((AnimFn1)*(void**)(e + 0xc))(e + 8, 0.0f, 0.0f, 1, 0);
                 void* r = *(void**)e;
@@ -1605,4 +1706,64 @@ void cSPUIAnimator_s007f_8540::AddAnimation(void* anim, IRef* obj, int type)
     e->AssignBody(anim);
     e->animAction((char*)e + 8, 0.0f, 0.0f, 0, 0);
     mB1c = true;
+}
+
+// @ 0x007f8fd0
+void AnimHolder::Append(int anim, IRef* obj, int type)
+{
+    AInfo8cBuf tmp;
+    InfoDefault((AInfo8c_s007f_8540*)&tmp);
+    AInfo8c_s007f_8540* end = mSeq.mpEnd;
+    if (end < mSeq.mpCapacity) {
+        mSeq.mpEnd = end + 1;
+        if (end != 0) InfoCtor(end, (const void*)&tmp);
+    } else {
+        mSeq.insert(end, (const AInfo8c_s007f_8540*)&tmp);
+    }
+    IRef* r = *(IRef**)((char*)&tmp + 0x84);
+    if (r != 0) r->Release();
+    IRef* t = *(IRef**)((char*)&tmp + 0x10);
+    if (t != 0) t->Release();
+    AInfo8c_s007f_8540* e = (AInfo8c_s007f_8540*)((char*)mSeq.mpEnd - 0x8c);
+    anim_copy_body((char*)e + 4, (void*)anim);
+    void* old = e->mpObject;
+    if ((void*)obj != old) {
+        obj = obj->AddRefChain();
+        e->mpObject = obj;
+        if (old) ((IRef*)old)->Release();
+    }
+    e->mType = (uint32_t)type;
+}
+
+// @ 0x007f90f0
+void Vec8c_s007f_8540::reserve(uint32_t n)
+{
+    Vec8c_s007f_8540* v = this;
+    if (n == 0xffffffffu) {
+        Vec8c_s007f_8540 tmp;
+        ((Vec8cOps*)&tmp)->CopyCtor(v);
+        ((Vec8cOps*)v)->Swap(&tmp);
+        ((Vec8cOps*)&tmp)->Dtor();
+        return;
+    }
+    int have = (int)(((char*)v->mpEnd - (char*)v->mpBegin) / 0x8c);
+    if ((uint32_t)have < n) {
+        char* mem = 0;
+        if (n != 0)
+            mem = (char*)eastl_alloc((int)(n * 0x8c), v->mAlloc, 0, 0, "EASTL/allocator.h", 0xd1);
+        char* oldBegin = (char*)v->mpBegin;
+        char* oldEnd   = (char*)v->mpEnd;
+        eastl_uninit_copy((AInfo8c_s007f_8540*)oldBegin, (AInfo8c_s007f_8540*)oldEnd, (AInfo8c_s007f_8540*)mem);
+        eastl_destroy_range((AInfo8c_s007f_8540*)oldBegin, (AInfo8c_s007f_8540*)oldEnd, v->mAlloc);
+        if (oldBegin != 0 && *(int*)(oldBegin - 4) != 0) eastl_free(oldBegin);
+        v->mpBegin    = (AInfo8c_s007f_8540*)mem;
+        v->mpCapacity = (AInfo8c_s007f_8540*)(mem + n * 0x8c);
+        v->mpEnd      = (AInfo8c_s007f_8540*)(mem + have * 0x8c);
+        return;
+    }
+    if (n < (uint32_t)have) v->resize(n);
+    Vec8c_s007f_8540 tmp;
+    ((Vec8cOps*)&tmp)->CopyCtor(v);    /* vector tmp(*this); */
+    ((Vec8cOps*)v)->Swap(&tmp);        /* swap(tmp);        */
+    ((Vec8cOps*)&tmp)->Dtor();         /* ~tmp             */
 }

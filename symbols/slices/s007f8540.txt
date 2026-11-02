@@ -6,8 +6,8 @@
 007f8c20 cSPUIAnimator::~cSPUIAnimator  # PDB symbol name
 007f8d10 ?AddAnimation@cSPUIAnimator_s007f_8540@@QAEXPAXPAUIRef@@H@Z  # cSPUIAnimator_s007f_8540::AddAnimation migrated from s007f8540 (verbatim, slice spelling)
 007f8f00 ?ClearAll@cSPUIAnimator@@QAEXXZ  # cSPUIAnimator::ClearAll reconstructed (slice spelling)
-007f8fd0 ?Append@AnimHolder@@QAEXHPAUIRef@@H@Z  # AnimHolder::Append(anim,obj,type) reconstructed (slice spelling)
-007f90f0 ?reserve@Vec8c@@QAEXI@Z  # Vec8c::reserve reconstructed (slice spelling)
+007f8fd0 ?Append@AnimHolder@@QAEXHPAUIRef@@H@Z  # AnimHolder::Append migrated from s007f8540 (verbatim, slice spelling)
+007f90f0 ?reserve@Vec8c_s007f_8540@@QAEXI@Z  # Vec8c_s007f_8540::reserve migrated from s007f8540 (verbatim, slice spelling)
 007f9230 ?AnimatorAdvance@@YA_NHHHH@Z  # AnimatorAdvance migrated from s007f8540 (verbatim, slice spelling)
 007f9340 ?FUN_007f9340@@YAPAXPAPAX0@Z  # FUN_007f9340 migrated from s007f8540 (verbatim, slice spelling)
 007f93f0 ?Reset@AnimMgr@@QAEXXZ  # AnimMgr::Reset migrated from s007f8540 (verbatim, slice spelling)

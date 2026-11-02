@@ -1,4 +1,8 @@
 # source  symbol  va  flags
+../src/game/Spui/SPUIAnimation.cpp  ?DestroyRange@@YGXPAX0@Z  007f5f70  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/Spui/SPUIAnimation.cpp  ?CreateTimeRamp@@YAPAXPAXMMM@Z  007f6040  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/Spui/SPUIAnimation.cpp  ?CreateTimeSmooth@@YAPAXPAXMMMMM@Z  007f60d0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/Spui/SPUIAnimation.cpp  ?Update@AnimatorS@@QAEXXZ  007f63b0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
 ../src/game/Spui/SPUIAnimation.cpp  ?F65F0@@YA_NPAXHMH@Z  007f65f0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
 ../src/game/Spui/SPUIAnimation.cpp  ?F66F0@@YA_NPAXHMH@Z  007f66f0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
 ../src/game/Spui/SPUIAnimation.cpp  ?F6C30@@YA_NPAXHMH@Z  007f6c30  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include

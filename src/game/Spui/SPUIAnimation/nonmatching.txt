@@ -1,9 +1,9 @@
 # va diff reason
-007f6170 104 complete; ctor/call argument forms differ (mixed int/float params)
-007f6210 50 complete; loop strength-reduction/register allocation differs
+007f5ff0 7 complete; member load hoisted above the vtable stores flags: /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+007f6170 104 complete; ctor/call argument forms differ (mixed int/float params) flags: /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+007f6210 143 complete; loop strength-reduction/register allocation differs (fixed: declare it void, not bool - retail leaves eax live at the ret and the original symbol is bool, so equiv compares eax&0xff; a `return false` clobbers it. Re-evaluating the loop bound in the for condition reproduces retail's signed-division scratch in eax)  [equiv: PASS (334 valid, 65% cov, no mismatch)] flags: /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
 007f62c0 121 complete; keeps `this` in ecx (original re-reads mBegin/mEnd each iteration); _ReadWriteBarrier() stops the loop bound being hoisted into ecx; flags /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast; equiv PASS (249 valid, 100% cov)
-007f6340 89 complete; loop register allocation differs
-007f63b0 163 complete; float timer/vector loop schedule differs
+007f6340 89 complete; loop register allocation differs flags: /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
 007f64d0 28 complete; phase0 frame size / store schedule differs
 007f67f0 195 complete; vtable[0x38] pointer/lerp shape differs
 007f6910 6 complete; return-value cmp scheduled before the last fstp
@@ -37,3 +37,5 @@
 007f89f0 276 Vec8c::insert(AInfo8c* pos,const AInfo8c* value): complete real C++ (__thiscall ret 8; end==capacity -> reallocate + uninit_copy/destroy_range/operator delete[], else copy_backward + in-place copy-construct + self-alias fixup); emitted 341 vs 337 bytes, the branch shape and register schedule differ  flags /O2 /MD /Gy /TP /arch:SSE /fp:fast  [equiv: FAIL 5/5 valid inputs (first mismatch: eax, orig 0x4f580094 vs ours 0x4f580008 - the returned insertion slot differs under the harness's fabricated allocator)]
 007f8b50 116 eastl::vector<cSPUIAnimationSequence::cAnimInfo,eastl::sp_vector_allocator>::resize(uint32_t): complete real C++ (__thiscall ret 4; grow -> Vec8c::insert(end, n-size, default cAnimInfo temp) then release the temp's two RefBase slots in +0x84/+0x10 order, shrink -> erase(begin+n, end)); emitted 173 vs 196 bytes, the original's inline default-temp init order and the duplicated epilogue produced by the early return in the second release block are not reproduced  flags /O2 /MD /Gy /TP /arch:SSE /fp:fast  [equiv: PASS 237 valid inputs, 83.8% coverage]
 007f8d10 343 cSPUIAnimator::AddAnimation: complete (find/append default element/assign); search-loop register allocation and size() reloads differ  flags /O2 /MD /Gy /TP /arch:SSE /fp:fast  [equiv: WEAK 228 valid inputs, 7.6% coverage]
+007f8fd0 215 AnimHolder::Append(int anim,IRef* obj,int type): complete real C++ (__thiscall ret 0xc; vector at +8, inline default cAnimInfo temp, fast path stores mpEnd+0x8c then ctor-copies at the old end, slow path Vec8c::insert, releases the temp's +0x84/+0x10 slots, copies the body to elem+4, AddRef/Release swap into elem+0x84, type at elem+0x88); emitted 282 vs 284 bytes, the test/je fast-path layout and instruction schedule differ  flags /O2 /MD /Gy /TP /arch:SSE /fp:fast  [equiv: FAIL 5/5 valid inputs (first: execution - "fake-arity: no call site before 4ac60000" from the modelled AInfo8cCtor::build stub callee)]
+007f90f0 218 Vec8c::reserve(uint32_t): complete real C++ (__thiscall ret 4; n==-1 early path, capacity check, reallocate + FUN_007f6ea0 uninit-copy + FUN_007f5fa0 destroy + allocator free, then if n<size resize(n) and the shrink tail vector tmp(*this)/swap/~tmp); emitted 286 vs 286 bytes, the prologue/early-branch layout and the frame offsets differ  flags /O2 /MD /Gy /TP /arch:SSE /fp:fast  [equiv: UNSUPPORTED 1 unresolved reference(s): _eastl_alloc]
