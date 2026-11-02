@@ -14,10 +14,10 @@
 00941c40 ?HeaderFieldToFieldString@Internet@EA@@YAPBDW4HTTPHeaderField@12@@Z  # EA::Internet::HeaderFieldToFieldString migrated from s009413d0
 00941e80 ?EncodeFormURL@@YAXPBDPAX@Z  # EncodeFormURL migrated from s009413d0 (verbatim, slice spelling)
 00941f20 ?AllocBuffer@HTTPClient@@QAE_NXZ  # HTTPClient::AllocBuffer migrated from s009413d0 (verbatim, slice spelling)
-00941f90 EA::Internet::HTTPClient::AllocateSocket  # pdb candidate caller-single
-00942010 ?HTTPClientCheckTimeout@@YA_NHPAH@Z  # HTTPClientCheckTimeout migrated from s009413d0 (verbatim, slice spelling)
+00941f90 ?HTTPClientAllocateSocket@@YG_NHPAPAX@Z  # HTTPClientAllocateSocket migrated from s009413d0 (verbatim, slice spelling)
+00942010 ?HTTPClientCheckTimeout@@YG_NHPAH@Z  # HTTPClientCheckTimeout migrated from s009413d0 (verbatim, slice spelling)
 00942050 ?FindHeader@HTTPClient@@QAE_NPADPAXH@Z  # HTTPClient::FindHeader migrated from s009413d0 (verbatim, slice spelling)
-009420e0 EA::Internet::HTTPClient::FindHeaderByField  # dc: HeaderFieldToFieldString + FindHeader
-00942110 ?HTTPClientSendCallback@@YAXHPBDH@Z  # HTTPClientSendCallback migrated from s009413d0 (verbatim, slice spelling)
+009420e0 ?FindHeaderByField@HTTPClient@@QAE_NHPAXH@Z  # HTTPClient::FindHeaderByField migrated from s009413d0 (verbatim, slice spelling)
+00942110 ?SendCallback@HTTPClient@@QAEHPBDH@Z  # HTTPClient::SendCallback migrated from s009413d0 (verbatim, slice spelling)
 00942150 ?SetNotificationTarget@HTTPClient@Internet@EA@@QAEXP6AXPAXPAV123@IPAUJob@123@PAUJobUpdate@123@@Z0@Z  # EA::Internet::HTTPClient::SetNotificationTarget migrated from s009413d0
 009421b0 ?Pump@HTTPClient@@QAEXPAH@Z  # HTTPClient::Pump migrated from s009413d0 (verbatim, slice spelling)
