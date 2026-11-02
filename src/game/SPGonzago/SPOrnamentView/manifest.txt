@@ -2,3 +2,10 @@
 ../src/game/SPGonzago/SPOrnamentView.cpp  ??1cOrnamentView@@UAE@XZ  00e8eaa0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPOrnamentView.cpp  ??0cMineralView@@QAE@XZ  00e8efd0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPOrnamentView.cpp  ??1cMineralView@@UAE@XZ  00e8f000  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPOrnamentView.cpp  ?UpdateLoyaltyBar@cMineralView_e8f0@@QAEPAUcSPUIMeter_e8f0@@PAU2@DI@Z  00e8f120  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPGonzago/SPOrnamentView.cpp  ?GetIsInWorld@cTotemPoleView_s00e8_f0b0@@UAEEXZ  00e8f260  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPOrnamentView.cpp  ?SetIsVisible@cTotemPoleView_s00e8_f0b0@@UAEX_N@Z  00e8f2d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPOrnamentView.cpp  ?GetIsVisible@cTotemPoleView_s00e8_f0b0@@UAEEXZ  00e8f330  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPOrnamentView.cpp  ?Update@cMineralView_s00e8_f0b0@@QAEXPAX0@Z  00e8f490  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPOrnamentView.cpp  ?Update@cTribeFoodMatView@@QAEXPAX0@Z  00e8f6b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPOrnamentView.cpp  ?Update@cInteractableObjectView@@QAEXPAX0@Z  00e8ff10  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
