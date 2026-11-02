@@ -1,6 +1,6 @@
 008c6e80 ?FUN_008c6e80@@YAXXZ  # FUN_008c6e80 migrated from s008c6e80 (verbatim, slice spelling)
 008c75f0 ?FUN_008c75f0@@YAXXZ  # FUN_008c75f0 migrated from s008c6e80 (verbatim, slice spelling)
-008c77d0 ?AllocFreeNodes@T2KReader@@QAEXH@Z  # T2KReader::AllocFreeNodes
-008c7960 ?FreeAllNodes@T2KReader@@QAEXXZ  # T2KReader::FreeAllNodes
-008c79c0 ?ComputeScanBBox@T2KReader@@QAEXXZ  # T2KReader::ComputeScanBBox
-008c7be0 ?ComputeOutlineBBox@@YIXPAHH@Z  # ComputeOutlineBBox
+008c77d0 ?AllocFreeNodes@T2KReader@@QAEXH@Z  # T2KReader::AllocFreeNodes migrated from s008c6e80 (verbatim, slice spelling)
+008c7960 ?FreeAllNodes@T2KReader@@QAEXXZ  # T2KReader::FreeAllNodes migrated from s008c6e80 (verbatim, slice spelling)
+008c79c0 ?ComputeScanBBox@T2KReader@@QAEXXZ  # T2KReader::ComputeScanBBox migrated from s008c6e80 (verbatim, slice spelling)
+008c7be0 ?ComputeOutlineBBox@@YIXPAHH@Z  # ComputeOutlineBBox migrated from s008c6e80 (verbatim, slice spelling)

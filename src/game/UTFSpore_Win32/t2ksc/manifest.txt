@@ -1,0 +1,2 @@
+# source  symbol  va  flags
+../src/game/UTFSpore_Win32/t2ksc.cpp  ?tsi_DeleteScanConv@@YAXPAUtsiScanConv@@@Z  008c9a70  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
