@@ -155,9 +155,21 @@ def main():
         print("\n".join(l for l in r.stdout.splitlines() if not l.startswith(("==", "    "))), flush=True)
     if a.check:
         # only what this run landed in parallel (the serial pass landed in main, gated there)
-        for m in landed:
-            subprocess.run([PY, "tools/migrate/land.py", a.batch, "--check", "--exact", m, "--log",
-                            os.path.join(ROOT, "work", "migrate", "check_%s.log" % a.batch)], cwd=ROOT)
+        # read-only (compiles into the shared object cache, equiv results under per-worker LAND_SCRATCH), so in parallel
+        # too: serially it took 50 min of mig26's 2 h
+        from concurrent.futures import ThreadPoolExecutor
+        def check(km):
+            k, m = km
+            env = dict(os.environ, LAND_SCRATCH=os.path.join(ROOT, "work", "migrate", "land_scratch_check_%d" % (k % a.workers)))
+            return subprocess.run([PY, "tools/migrate/land.py", a.batch, "--check", "--exact", m, "--log", os.devnull], cwd=ROOT, env=env,
+                                  capture_output=True, text=True).stdout
+        with ThreadPoolExecutor(a.workers) as ex:
+            for out in ex.map(check, enumerate(landed)):
+                with open(os.path.join(ROOT, "work", "migrate", "check_%s.log" % a.batch), "a") as f:
+                    f.write("".join(l + "\n" for l in out.splitlines() if not l.startswith("==")))
+                for l in out.splitlines():
+                    if "GATE FAIL" in l:
+                        log(l)
     log("== %s %s: done" % (time.strftime("%Y-%m-%d %H:%M"), a.batch))
 
 
