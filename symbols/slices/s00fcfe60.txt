@@ -1,4 +1,4 @@
-00fcfe60 FUN_00fcfe60
+00fcfe60 ?FUN_00fcfe60@@YAXPAUVp6Ctx@@HH@Z  # FUN_00fcfe60 migrated from s00fcfe60 (verbatim, slice spelling)
 00fd0120 FUN_00fd0120
 00fd0390 FUN_00fd0390
 00fd03c0 FUN_00fd03c0

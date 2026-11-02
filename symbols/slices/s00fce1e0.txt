@@ -1,0 +1,5 @@
+00fcef00 ?DecodeBit@@YAHPAUBitState@@H@Z  # DecodeBit migrated from s00fce1e0 (verbatim, slice spelling)
+00fcef80 ?DecodeBitProb@@YAHPAUBitState@@@Z  # DecodeBitProb migrated from s00fce1e0 (verbatim, slice spelling)
+00fcefe0 ?ReadBits@@YAIPAUBitState@@H@Z  # ReadBits migrated from s00fce1e0 (verbatim, slice spelling)
+00fcf080 ?ReadCachedBits@@YAIPAUBitCache@@H@Z  # ReadCachedBits migrated from s00fce1e0 (verbatim, slice spelling)
+00fcf0e0 ?ReadCachedBit@@YAIPAUBitCache@@@Z  # ReadCachedBit migrated from s00fce1e0 (verbatim, slice spelling)

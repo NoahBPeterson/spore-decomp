@@ -1,0 +1,8 @@
+# source  symbol  va  flags
+../src/game/SPMovie/_at_00fc0000.cpp  ?ValidateChunk@movie@rw@@YAHPBHIIPAUChunkTracker@12@P6A_N0PAX@Z2PAI@Z  00fc85b0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPMovie/_at_00fc0000.cpp  ?IsSCChunk@movie@rw@@YA_NPBD@Z  00fc8640  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPMovie/_at_00fc0000.cpp  ?Ctor3E0@Vp6Ext@@QAEXHHH@Z  00fcd3e0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPMovie/_at_00fc0000.cpp  _FUN_00fcd970  00fcd970  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPMovie/_at_00fc0000.cpp  _FUN_00fcd9a0  00fcd9a0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPMovie/_at_00fc0000.cpp  _FUN_00fcd9e0  00fcd9e0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPMovie/_at_00fc0000.cpp  ?DecodeBit@@YAHPAUBitState@@H@Z  00fcef00  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
