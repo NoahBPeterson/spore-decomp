@@ -1,4 +1,4 @@
-// src/game/SPGonzago/SPUIGlobalUI.cpp -- migrated from slice(s) s00e033d0, s00e02580, s00e01750 by tools/migrate/rewrite.py
+// src/game/SPGonzago/SPUIGlobalUI.cpp -- migrated from slice(s) s00e00760, s00e033d0, s00e02580, s00e01750 by tools/migrate/rewrite.py
 // Object file: SPGonzago/SPUIGlobalUI.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -43,34 +43,6 @@ extern "C" char g_vtblNetworkActivityProc04[];        // @ 0x147f0cc
 extern "C" char g_vtblNetworkActivityProc0c[];        // @ 0x147f0bc
 
 // ---- items of slice s00e01750 begin (TODO(rewrite): local stubs, replace by canonical classes)
-extern "C" void* __cdecl EA_Allocate(uint32_t size, const char* name, int a, int b,
-                                     int c, int d);              // 0xf473a0
-extern "C" void* __cdecl SP_GetCurrentGameMode();                // 0xb5b800
-extern "C" void* __cdecl SP_MessageServer();                     // 0x67dcc0
-extern "C" void* __cdecl SP_WindowManager();                     // 0x67caa0
-extern "C" void* __cdecl SP_GameTimeManager();                   // 0xb3d380
-extern "C" void* __cdecl SP_GetUniverseContext();                // 0x1021080
-extern "C" void* __cdecl SP_GetPlayerHomePlanet();               // 0x1021370
-extern "C" void* __cdecl SP_GetActivePlanet();                   // 0x1021260
-extern "C" void* __cdecl SP_PropertyManager();                   // 0x67de30
-extern "C" void* __cdecl SP_CivModeStrategyGet();                // 0xcf74c0
-extern "C" void* __cdecl SP_TribeModeStrategyInstance();         // 0xcd40b0
-extern "C" void* __cdecl SP_GetSetting3();                       // 0x401030
-extern "C" void* __cdecl SP_SpaceGameGet();                      // 0x1002bd0
-extern "C" char  __cdecl FUN_00e01390();                         // 0xe01390
-extern "C" char  __cdecl FUN_00e014a0();                         // 0xe014a0
-extern "C" void* __cdecl FUN_009512c0();                         // 0x9512c0
-extern "C" void* __cdecl FUN_009512d0(uint32_t, int, const char*, void*); // 0x9512d0
-extern "C" void* __cdecl FUN_00835cc0(void*);                    // 0x835cc0 tooltip ctor
-extern "C" void* __cdecl FUN_00c707e0(void*);                    // 0xc707e0 cPlanet::GetName
-extern "C" void  __cdecl FUN_0064a990(void*);                    // 0x64a990 AdvancedLaunch
-extern "C" void  __cdecl FUN_0064aba0(void*);                    // 0x64aba0 LaunchSporeGuide
-extern "C" void* __cdecl FUN_00fd9c60(void*);                    // 0xfd9c60
-extern "C" void* __cdecl FUN_0067cab0();                         // 0x67cab0
-extern "C" void  __cdecl FUN_00809db0(void*, void*);             // 0x809db0 CalloutMessageBox
-extern "C" void* __cdecl FUN_00a16f40(void*);                    // 0xa16f40 AsPPTypeParam
-extern "C" void  __cdecl FUN_006a12a0(void*, uint32_t, void*);   // 0x6a12a0 GetPropertyAsKeyInstance
-extern "C" void* __cdecl FUN_010666a0();                         // 0x10666a0
 struct GlobalState {                     // @ 0x16c7aa4
     uint8_t pad00[0xcc];
     int     mFieldCC;                    // +0xcc
@@ -79,12 +51,6 @@ struct GlobalState {                     // @ 0x16c7aa4
 extern "C" GlobalState* g_pGlobalState;  // @ 0x16c7aa4
 class cTranslator;                       // cSPEditorShoppingTokenTranslator
 extern "C" cTranslator* g_pTranslator;   // @ 0x15ee298
-extern "C" uint8_t      g_bPaused;       // @ 0x16a1890
-extern "C" char g_vtblContentValidationSummarizer[];  // @ 0x13ec458
-extern "C" char g_vtblListenerBase[];                 // @ 0x13eb384
-extern "C" char g_vtblNetworkActivityProc[];          // @ 0x147f0dc
-extern "C" char g_vtblNetworkActivityProc04[];        // @ 0x147f0cc
-extern "C" char g_vtblNetworkActivityProc0c[];        // @ 0x147f0bc
 class cVtblObj {
 public:
     virtual void* v000();
@@ -359,8 +325,6 @@ struct EffectSlots {
 // ---- items of slice s00e01750 end
 
 // unnamed retail callees and globals that name local stubs (address in the comment)
-extern "C" GlobalState* g_pGlobalState;  // @ 0x16c7aa4
-extern "C" cTranslator* g_pTranslator;   // @ 0x15ee298
 
 // ---- items of slice s00e02580 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern char  g147f09c;        // 0x0147f09c
@@ -368,18 +332,31 @@ extern char  g147f0a0;        // 0x0147f0a0
 extern char  g147f0a4;        // 0x0147f0a4
 extern char  g147f0a8;        // 0x0147f0a8
 extern char  g147f0ac;        // 0x0147f0ac
+extern char  g15a4ae0;        // 0x015a4ae0
+extern void* g169e3e8;        // 0x0169e3e8  gpCreatureTokenTranslator
+extern void* g16c7aa4;        // 0x016c7aa4  (pointer to a global object)
+extern char  gSimulatorName[];    // 0x013f09b4 "Simulator"
+extern char  gRootWinProcName[];  // 0x0147f214 "Simulator/cSPUIGlobalUIRootWinProc"
+extern char  gGlobalOptionsName[];// 0x0147f1fc "UI/cSPUIGlobalOptions"
+typedef unsigned short wchar16;
 typedef unsigned int   uint32;
 void*     MessageServer();                             // 0x0067dcc0
 void*     FUN_00b3d410();                              // 0x00b3d410
 char      FUN_00e00a40();                              // 0x00e00a40
 char      FUN_00e00c40();                              // 0x00e00c40
+char      FUN_00e00d20();                              // 0x00e00d20
 void*     FUN_00b3d380();                              // 0x00b3d380  GameTimeManager
 void*     FUN_00b5b800();                              // 0x00b5b800  GetCurrentGameMode
 void*     FUN_01021080();                              // 0x01021080  GetUniverseContext
+void*     FUN_0080fee0();                              // 0x0080fee0  MultiHeapObject::operator_new
+void*     FUN_00f473a0(uint32 n, const char* file, uint32 a, uint32 b, uint32 c, uint32 d);
+void      FUN_00f47380(void* p);                       // 0x00f47380  operator delete[]
+void      FUN_00e02040(void* a);                       // 0x00e02040  ShowContextSensitiveSporepedia
 void*     FUN_0067cac0();                              // 0x0067cac0  (returns cUIHints*)
 void*     FUN_0067cae0();                              // 0x0067cae0
 void*     FUN_00cf74c0();                              // 0x00cf74c0  cCivModeStrategy::Get
 void*     FUN_00cd40b0();                              // 0x00cd40b0  cTribeModeStrategy::Instance
+void*     FUN_01002bd0();                              // 0x01002bd0  SpaceGameGet
 void      FUN_00e3c6f0(int a, int b);                  // 0x00e3c6f0
 void* __stdcall FUN_00b3d3f0(int a);                   // 0x00b3d3f0
 void* __stdcall FUN_00b3d3e0(int a, int b, int c, int d, int e, int f); // 0x00b3d3e0 EventLog
@@ -387,24 +364,51 @@ void* __stdcall FUN_0067de90(int a);                   // 0x0067de90
 void*     FUN_00572020(void* p, int v);                // 0x00572020
 void*     FUN_00435ed0(uint32 id, void* p);            // 0x00435ed0  KillSetiEffects
 void      FUN_00e009f0();                              // 0x00e009f0  on_ban_content_button
+void      FUN_00809c50(void* p, int a, int b);         // 0x00809c50  SPUIHelpers::EndModal
+void* __fastcall FUN_00644b10(void* self);             // 0x00644b10  (returns self)
+void  __fastcall FUN_00644b60(void* self);             // 0x00644b60  (dtor)
+void* __fastcall FUN_00e00ec0(void* self);             // 0x00e00ec0  ctor
+void* __fastcall FUN_00d486f0(void* self);             // 0x00d486f0  ctor
 void  __fastcall FUN_0067c960(void* self);             // 0x0067c960  cUIHints::Update
 void  __fastcall FUN_005fdf40(void* self);             // 0x005fdf40  AchievementNotifier::Update
 char  __fastcall FUN_00e36fa0(void* self);             // 0x00e36fa0  (thiscall)
 char  __fastcall FUN_00e393b0(void* self);             // 0x00e393b0  (thiscall)
 char  __fastcall FUN_00cd44a0(void* self);             // 0x00cd44a0  (thiscall)
 char  __fastcall FUN_01065e20(void* self);             // 0x01065e20  (thiscall)
+void* __fastcall FUN_00bfc5f0(void* self);             // 0x00bfc5f0  (thiscall)
 void  __fastcall FUN_00e190c0(void* self);             // 0x00e190c0  (thiscall)
 void  __fastcall FUN_00dd8640(void* self);             // 0x00dd8640  PostFeedbackEvent
+struct HintsSink { void Set(void* a); };               // 0x0067ca50
+struct WinProc   { void* ctor(void* owner); };         // 0x00e010c0
 struct Telemetry { void Flush(); };                    // 0x007ebce0
+typedef void   (__thiscall *VF0)(void*);
+typedef void   (__thiscall *VF1)(void*, int);
 typedef void   (__thiscall *VF2)(void*, int, int);
 typedef void   (__thiscall *VF3)(void*, int, int, int);
 typedef void   (__thiscall *VF4)(void*, int, int, int, int);
+typedef void*  (__thiscall *VFP)(void*);
+typedef void*  (__thiscall *VFP2)(void*, int, int);
 typedef char   (__thiscall *VFC)(void*);
+typedef int    (__thiscall *VFCI)(void*);
+struct Layout {                                  // cSPUILayout
+    void* FindWindowByID(uint32 id, int b);      // 0x008105b0
+    void  Shutdown(int v);                       // 0x00811ad0
+};
+struct LayoutManager {                           // cSPUILayoutManager
+    void  SetAllWorldsVisibility(char v);        // 0x008106a0
+    void  Method10660(uint32 id, char v);        // 0x00810660
+    void* GetWorldMainWindow(uint32 id);         // 0x00810620
+};
 struct GameTimeManager {
     void  IncPauseGate(int v);                   // 0x00b32220
     void  DecPauseGate(int v);                   // 0x00b32250
     char  pad_00[0x48];
     uint32 m48;                                  // +0x48
+};
+struct GlobalOptions {                           // UI::cSPUIGlobalOptions
+    char  pad_00[0x14];
+    void* m14;                                   // +0x14
+    void  CreateDialog();                        // 0x00e02430
 };
 struct ObjB {                                    // the object at [this+0x5c]+4
     char  pad_00[0x0c];
@@ -419,6 +423,18 @@ struct ObjB {                                    // the object at [this+0x5c]+4
 struct ObjA {                                    // the object at [this+0x5c]
     char  pad_00[4];
     ObjB* m04;                                   // +0x04
+};
+struct WStr {
+    uint32 begin;                                // +0x00
+    uint32 end;                                  // +0x04
+    uint32 cap;                                  // +0x08
+    uint32 pad;                                  // +0x0c
+    void   assign(const wchar16* first, const wchar16* last);   // 0x00423650
+};
+struct Elem24 {
+    uint32 m00;                                  // +0x00
+    WStr   s1;                                   // +0x04
+    WStr   s2;                                   // +0x14
 };
 class UIThing {
 public:
@@ -618,6 +634,689 @@ static const unsigned kUIStrings       = 0x0147f238;
 static inline void  GameTime_Dec(unsigned gate) { ((TC_VI)0x00b32250)(FUN_00b3d380(), (int)gate); }
 static inline void  GameTime_Inc(unsigned gate) { ((TC_VI)0x00b32220)(FUN_00b3d380(), (int)gate); }
 // ---- items of slice s00e033d0 end
+
+// ---- items of slice s00e00760 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C" void  __cdecl EA_Free(void* p);                       // 0xf47380
+extern "C" void* __cdecl FUN_00b3d4d0();                 // 0x00b3d4d0
+extern "C" void* __cdecl FUN_01015df0();                 // 0x01015df0 universe context
+extern "C" void* __cdecl FUN_00ffbe50();                 // 0x00ffbe50
+extern "C" void* __cdecl FUN_00b3d4a0();                 // 0x00b3d4a0
+extern "C" void  __cdecl FUN_00b32280();
+extern "C" void  __cdecl FUN_00b32250();
+extern "C" void  __cdecl FUN_00b32220();
+extern "C" void  __cdecl FUN_00e3c6f0();
+extern "C" void  __cdecl FUN_006035d0();
+extern "C" void  __cdecl FUN_006a17e0();
+extern "C" void* __stdcall FUN_0080fee0(uint32_t tag);
+extern "C" void* __cdecl FUN_00810620();
+extern "C" float __cdecl FUN_00805080();
+extern "C" void  __cdecl FUN_006b5770();
+extern "C" void  __cdecl FUN_006b5240();
+extern "C" void  __cdecl FUN_00571db0(void*, void*, void*, void*, void*);
+extern "C" void  __cdecl FUN_0093a560();
+extern "C" void  __cdecl FUN_0093a1a0();
+extern "C" void  __cdecl FUN_00808230(void* obj, void* p);   // 0x808230 (cdecl, 2 args)
+extern "C" double __cdecl cos(double);
+extern "C" void* __stdcall FUN_00805070(uint32_t tag);     // 0x00805070 curator lookup
+#pragma intrinsic(cos)
+typedef void  (__thiscall* VFnV)(void*);
+typedef char  (__thiscall* VFnC)(void*);
+typedef int   (__thiscall* VFnI)(void*);
+typedef void* (__thiscall* VFnP)(void*);
+typedef void* (__thiscall* VFnPUI)(void*, uint32_t, int);
+typedef void  (__thiscall* VFnVV)(void*, void*);
+typedef void  (__thiscall* VFnVFF)(void*, float, float);
+#define VSLOT(o, off) (*(void**)((char*)(*(void**)(o)) + (off)))
+extern "C" int   __cdecl FUN_01021080_s00e0_0760();                 // 0x01021080 GetUniverseContext
+struct TC {
+    char  F_00b18e40();                 // 0x00b18e40
+    char  F_00a98020();                 // 0x00a98020
+    char  F_00ae9390();                 // 0x00ae9390
+    int   F_008e7f80();                 // 0x008e7f80
+    void* F_00a1ad60();                 // 0x00a1ad60
+    char  F_006a25a0(uint32_t key);     // 0x006a25a0 property query
+    char  F_00cd44a0();                 // 0x00cd44a0 TerrainNotHasKey
+    char  F_01065e20();                 // 0x01065e20
+    void* F_00bfc5f0();                 // 0x00bfc5f0
+    char  F_00ed9e60(int a);            // 0x00ed9e60
+    void* F_00810620();                 // 0x00810620 CurMgr lookup
+};
+void* g_16c7aa4;
+int g_15fd918;
+float g_16a18d8;
+void* g_15a487c;
+void* g_15a4878;
+int g_15a4848, g_15a483c;
+struct OptObj { void* Ctor(); void Dtor(); void* DelDtor(unsigned int flags); void Reset(); };
+struct OptLayout {
+    uint8_t pad00[0x14];
+    void*   mWin14;      // +0x14
+    void*   mWin18;      // +0x18
+    void*   mWin1c;      // +0x1c
+    void*   mWin20;      // +0x20
+};
+struct WinObj { void* Ctor(void* arg); void Dtor(); };
+struct PodObj { void* Copy(void* o); };
+struct NetObj {
+    void* Ctor();
+    void* DelDtor(unsigned int flags);
+    void  FUN_00e00db0(float dt);
+    char  FUN_00e00e90(uint32_t msg, void* arg);
+    uint8_t pad00[0x10];
+    float   f10;         // +0x10
+    float   f14;         // +0x14
+    float   f18;         // +0x18
+    float   f1c;         // +0x1c
+    float   f20;         // +0x20
+    float   f24;         // +0x24
+    uint8_t f28;         // +0x28
+    uint8_t pad29[3];
+    void*   p2c;         // +0x2c
+    void*   p30;         // +0x30
+};
+struct SPUILayout {
+    void* FindWindowByID(void* id, int a);
+    void  SetVisibility(void* v);
+    char  IsVisible();
+};
+struct StopwatchObj {
+    void  FUN_0093a560(int units, int start);   // EA::Stopwatch::Stopwatch
+    void  FUN_0093a1a0(int units);              // EA::Stopwatch::SetUnits
+    uint64_t mnStartTime;                       // +0x00
+    uint64_t mnTotalElapsedTime;                // +0x08
+    int      mnUnits;                           // +0x10
+    float    mfCyclesToUnitsCoefficient;        // +0x14
+};
+struct RefObj1 { virtual void v0(); virtual void Release(); };                 // Release = vtable+4
+struct RefObj2 { virtual void v0(); virtual void v1(); virtual void Release(); }; // Release = vtable+8
+struct CStringObj { void FUN_006b5240(); };                                    // cString destructor
+struct DirectPropListObj { void FUN_006a17e0(unsigned int key, int value); };   // SetBoolProperty (thiscall)
+struct GameTimeMgrObj { void FUN_00b32280(void* arg); };                        // TogglePauseGate (thiscall)
+struct GUIRootObj {
+    void  resetA();   // 0x0093a2e0 (equiv t3)
+    void  resetB();   // 0x0093a2e0 (equiv t3)
+};
+struct GlobalUI {
+    void* pad0;
+    void* f04;
+    void* f08;
+    void* FindWindowByID(void* id);
+    char  FUN_12d0(void* id, float f);
+    void  SetVisibility(void* v);
+    char  IsVisible();
+    void  FUN_1250(void* x);
+};
+struct MsgSrv { virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3();
+                virtual void v4(); virtual void send(uint32_t, int, int); };
+// ---- items of slice s00e00760 end
+
+// @ 0x00e009f0
+void on_ban_content_button()
+{
+    if (FUN_00dd1230()) {
+        ((MsgSrv*)SP_MessageServer())->send(0x44eaa93, 0, 0);
+    } else if (FUN_00e09540()) {
+        ((MsgSrv*)SP_MessageServer())->send(0x620222b, 0, 0);
+    }
+}
+
+// @ 0x00e00a40
+char IsGameModeAllowed()
+{
+    if (SP_GetCurrentGameMode() == (void*)0x1654c05) {
+        if (FUN_01021080_s00e0_0760() != 1 && FUN_01021080_s00e0_0760() != 2) return 0;
+    }
+    if (SP_GetCurrentGameMode() == (void*)0x1654c02) {
+        if (((TC*)FUN_00cd40b0())->F_00cd44a0()) return 0;
+    }
+    if (SP_GetCurrentGameMode() == (void*)0x1654c10) {
+        if (*(int*)((char*)g_16c7aa4 + 0xcc) != 1) return 0;
+    }
+    return 1;
+}
+
+// @ 0x00e00aa0
+int MenuKind()
+{
+    int r = 0x80;
+    if (SP_GetCurrentGameMode() != (void*)0x1654c00) {
+        r += 1;
+    }
+    return r;
+}
+
+// @ 0x00e00ac0
+char FUN_00e00ac0_impl()
+{
+    void* w = (void*)FUN_00810620();
+    if (w != 0) {
+        void* r = (void*)(*(void*(__thiscall**)(void*, uint32_t, int))(*(void**)((char*)w + 0xf0)))(w, 0x615b50d, 1);
+        if (r != 0) {
+            return (*(char(__thiscall**)(void*))(*(void**)((char*)r + 0x28)))(r) & 1;
+        }
+    }
+    return 0;
+}
+
+// @ 0x00e00b00
+char FUN_00e00b00_impl()
+{
+    char r = 0;
+    void* w = ((TC*)FUN_0080fee0(0x5f1bfc10))->F_00810620();
+    if (w != 0) {
+        void* a = ((VFnPUI)VSLOT(w, 0xf0))(w, 0x615b50d, 1);
+        if (a != 0 && (((VFnC)VSLOT(a, 0x28))(a) & 1)) {
+            void* wm = SP_WindowManager();
+            void* g = ((VFnP)VSLOT(wm, 0x84))(wm);
+            if (g != 0 && ((VFnI)VSLOT(g, 0x1c))(g) == 0x6318e78) {
+                return 1;
+            }
+            void* w2 = ((TC*)FUN_00805070(0x5b598f7))->F_00810620();
+            if (w2 != 0) {
+                void* a2 = ((VFnPUI)VSLOT(w2, 0xf0))(w2, 0x43c8b98, 0);
+                if (a2 != 0 && (((VFnC)VSLOT(a2, 0x28))(a2) & 1)) {
+                    return 1;
+                }
+            }
+        }
+    }
+    return r;
+}
+
+// @ 0x00e00bb0
+void FUN_00e00bb0_impl()
+{ FUN_00809db0(&g_15a4878, &g_15a4848); }
+
+// @ 0x00e00bd0
+void FUN_00e00bd0_impl()
+{ FUN_00809db0(&g_15a4878, &g_15a483c); }
+
+// @ 0x00e00bf0
+void FUN_00e00bf0_impl()
+{
+    if (FUN_00dd1230()) {
+        ((MsgSrv*)SP_MessageServer())->send(0x44eaa93, 0, 0);
+    } else if (FUN_00e09540()) {
+        ((MsgSrv*)SP_MessageServer())->send(0x620222b, 0, 0);
+    }
+    FUN_006035d0();
+}
+
+// @ 0x00e00c40
+char FUN_00e00c40_impl()
+{
+    char prop = (char)((TC*)(uint32_t)g_15fd918)->F_006a25a0(0xd5797c10);
+    bool m = (SP_GetCurrentGameMode() == (void*)0x1654c05);
+    bool b0 = m && (((TC*)SP_SpaceGameGet())->F_00b18e40() != 0);
+    bool b2 = m && (((TC*)FUN_01015df0())->F_00a98020() != 0);
+    bool b1 = m && (((TC*)((char*)((TC*)FUN_00ffbe50())->F_00a1ad60() + 0x508))->F_008e7f80() == 2);
+    bool bv = m && (((uint8_t*)FUN_00ffbe50())[0x18] != 0);
+    if (b0) return 1;
+    if (b1) return 1;
+    if (bv) return 1;
+    if (b2 && prop == 0) return 1;
+    void* g = FUN_00b3d4a0();
+    if (g != 0 && ((TC*)g)->F_00ae9390()) return 1;
+    return 0;
+}
+
+// @ 0x00e00d20
+char FUN_00e00d20_impl()
+{
+    if (SP_GetCurrentGameMode() == (void*)0x1654c00) {
+        return 0;
+    }
+    if (FUN_00e00c40_impl()) {
+        return 0;
+    }
+    if (((TC*)(uint32_t)g_15fd918)->F_006a25a0(0xd5797c10)) {
+        return 1;
+    }
+    if (SP_GetCurrentGameMode() != (void*)0x1654c05) {
+        return 1;
+    }
+    if (((TC*)FUN_01015df0())->F_00a98020()) {
+        return 0;
+    }
+    return 1;
+}
+
+// @ 0x00e00d90
+uint32_t __fastcall FUN_00e00d90_impl(int self)
+{
+    // The binary's `movzx/neg/sbb` is a "byte != 0" test; reading the byte through a bool*
+    // is undefined for values other than 0/1, so test the raw byte instead.
+    uint8_t b = *(uint8_t*)(self + 0x28);
+    return ((uint32_t)-(int)(b != 0) & 2) | 0x410;
+}
+
+// @ 0x00e00db0
+void NetObj::FUN_00e00db0(float dt)
+{
+    float t = FUN_00805080();
+    if (dt > 0.0f) {
+        if (f28 == 0) {
+            f20 = t;
+            f24 = t + dt;
+            f28 = 1;
+            ((VFnVV)VSLOT(p2c, 0x104))(p2c, this);
+        } else {
+            f24 = f20 + dt;
+        }
+    }
+    float delta = t - f20;
+    f20 = t;
+    f1c = f1c - g_16a18d8 * delta * 0.5f;
+    FUN_00808230(p30, &f10);
+    if (f20 > f24) {
+        if (cos(f1c) > 0.98f) {
+            f28 = 0;
+            ((VFnVV)VSLOT(p2c, 0x104))(p2c, this);
+        }
+    }
+}
+
+// @ 0x00e00e90
+char NetObj::FUN_00e00e90(uint32_t msg, void* arg)
+{
+    if (msg == 0x656435b) {
+        ((NetObj*)((char*)this - 0xc))->FUN_00e00db0(*(float*)((char*)arg + 8));
+        return 1;
+    }
+    return 0;
+}
+
+// @ 0x00e00ec0
+void* OptObj::Ctor()
+{
+    void* self = this;
+    *(void**)((char*)self + 4) = (void*)0x13ec458;
+    *(void**)((char*)self + 8) = 0;
+    *(void**)self = (void*)0x147f17c;
+    *(void**)((char*)self + 4) = (void*)0x147f16c;
+    *(void**)((char*)self + 0x10) = 0;
+    *(void**)((char*)self + 0x14) = 0;
+    *(void**)((char*)self + 0x18) = 0;
+    *(void**)((char*)self + 0x1c) = 0;
+    *(void**)((char*)self + 0x20) = 0;
+    *(void**)((char*)self + 0x24) = 0;
+    FUN_006b5770();
+    *(void**)((char*)self + 0x3c) = 0;
+    FUN_006b5770();
+    *(void**)((char*)self + 0x54) = 0;
+    return self;
+}
+
+// @ 0x00e00f40
+void OptObj::Dtor()
+{
+    void* self = this;
+    *(void**)self = (void*)0x147f17c;
+    *(void**)((char*)self + 4) = (void*)0x147f16c;
+    void* p54 = *(void**)((char*)self + 0x54);
+    if (p54 != 0) ((RefObj1*)p54)->Release();
+    ((CStringObj*)((char*)self + 0x40))->FUN_006b5240();
+    void* p3c = *(void**)((char*)self + 0x3c);
+    if (p3c != 0) ((RefObj1*)p3c)->Release();
+    ((CStringObj*)((char*)self + 0x28))->FUN_006b5240();
+    void* p24 = *(void**)((char*)self + 0x24);
+    if (p24 != 0) ((RefObj1*)p24)->Release();
+    void* p20 = *(void**)((char*)self + 0x20);
+    if (p20 != 0) ((RefObj1*)p20)->Release();
+    void* p1c = *(void**)((char*)self + 0x1c);
+    if (p1c != 0) ((RefObj1*)p1c)->Release();
+    void* p18 = *(void**)((char*)self + 0x18);
+    if (p18 != 0) ((RefObj1*)p18)->Release();
+    void* p14 = *(void**)((char*)self + 0x14);
+    if (p14 != 0) ((RefObj1*)p14)->Release();
+    void* p10 = *(void**)((char*)self + 0x10);
+    if (p10 != 0) ((RefObj2*)p10)->Release();
+    *(void**)self = (void*)0x13eb938;
+    *(void**)((char*)self + 4) = (void*)0x13ec458;
+}
+
+// @ 0x00e00fe0
+void OptObj::Reset()
+{
+    void* mode = SP_GetCurrentGameMode();
+    OptLayout* lay = (OptLayout*)this;
+    if (lay->mWin1c != 0) {
+        if (mode == (void*)0x1654c00) {
+            ((VFnVV)VSLOT(lay->mWin1c, 0x108))(lay->mWin1c, this);
+        }
+        if (lay->mWin1c != 0) {
+            void* p = lay->mWin1c;
+            lay->mWin1c = 0;
+            ((VFnV)VSLOT(p, 4))(p);
+        }
+    }
+    if (lay->mWin20 != 0) {
+        if (mode == (void*)0x1654c00) {
+            void* r = ((VFnP)VSLOT(lay->mWin20, 0x10))(lay->mWin20);
+            ((VFnVV)VSLOT(r, 0x108))(r, this);
+        }
+        if (lay->mWin20 != 0) {
+            void* p = lay->mWin20;
+            lay->mWin20 = 0;
+            ((VFnV)VSLOT(p, 4))(p);
+        }
+    }
+    if (lay->mWin14 != 0) {
+        if (mode != (void*)0x1654c00) {
+            ((VFnVV)VSLOT(lay->mWin14, 0x108))(lay->mWin14, this);
+        }
+        if (lay->mWin14 != 0) {
+            void* p = lay->mWin14;
+            lay->mWin14 = 0;
+            ((VFnV)VSLOT(p, 4))(p);
+        }
+    }
+}
+
+// @ 0x00e01090
+void* OptObj::DelDtor(unsigned int flags)
+{
+    void* self = this;
+    *(void**)self = (void*)0x147f198;
+    *(void**)((char*)self + 4) = 0;
+    if (flags & 1) {
+        EA_Free(self);
+    }
+    return self;
+}
+
+// @ 0x00e010c0
+void* WinObj::Ctor(void* arg)
+{
+    void* self = this;
+    *(void**)((char*)self + 4) = (void*)0x13eb384;
+    *(void**)((char*)self + 8) = (void*)0x13ec458;
+    *(void**)((char*)self + 0xc) = 0;
+    *(void**)self = (void*)0x147f1c8;
+    *(void**)((char*)self + 4) = (void*)0x147f1b8;
+    *(void**)((char*)self + 8) = (void*)0x147f1a8;
+    *(void**)((char*)self + 0x10) = 0;
+    *(void**)((char*)self + 0x14) = 0;
+    *(void**)((char*)self + 0x18) = 0;
+    *(void**)((char*)self + 0x1c) = 0;
+    *(void**)((char*)self + 0x20) = 0;
+    *(void**)((char*)self + 0x24) = 0;
+    ((StopwatchObj*)((char*)self + 0x28))->FUN_0093a560(0, 0);
+    ((StopwatchObj*)((char*)self + 0x40))->FUN_0093a560(0, 0);
+    *(void**)((char*)self + 0x58) = 0;
+    *(void**)((char*)self + 0x5c) = arg;
+    g_15a487c = self;
+    ((StopwatchObj*)((char*)self + 0x28))->FUN_0093a1a0(4);
+    ((StopwatchObj*)((char*)self + 0x40))->FUN_0093a1a0(4);
+    void* ms = SP_MessageServer();
+    *(void**)((char*)self + 0x10) = ms;
+    *(void**)((char*)self + 0x14) = (char*)self + 4;
+    *(void**)((char*)self + 0x18) = (void*)0x147f1a4;
+    *(void**)((char*)self + 0x1c) = (void*)1;
+    *(void**)((char*)self + 0x20) = 0;
+    if (ms != 0) {
+        (*(void(__thiscall**)(void*, void*, uint32_t))(*(void**)((char*)ms + 0x24)))(ms, (char*)self + 4, 0x685d440);
+    }
+    return self;
+}
+
+// @ 0x00e011a0
+void WinObj::Dtor()
+{
+    void* self = this;
+    *(void**)self = (void*)0x147f1c8;
+    *(void**)((char*)self + 4) = (void*)0x147f1b8;
+    *(void**)((char*)self + 8) = (void*)0x147f1a8;
+    void* h = *(void**)((char*)self + 0x10);
+    if (h != 0) {
+        void* a1 = *(void**)((char*)self + 0x14);
+        void* a2 = *(void**)((char*)self + 0x18);
+        void* a3 = *(void**)((char*)self + 0x1c);
+        void* a4 = *(void**)((char*)self + 0x20);
+        *(void**)((char*)self + 0x10) = 0;
+        FUN_00571db0(h, a1, a2, a3, a4);
+    }
+    g_15a487c = 0;
+    // The compiler could not prove the callee leaves +0x10 zeroed, so the original has a
+    // second identical teardown block; keep it so a callee that writes +0x10 behaves alike.
+    h = *(void**)((char*)self + 0x10);
+    if (h != 0) {
+        void* a1 = *(void**)((char*)self + 0x14);
+        void* a2 = *(void**)((char*)self + 0x18);
+        void* a3 = *(void**)((char*)self + 0x1c);
+        void* a4 = *(void**)((char*)self + 0x20);
+        *(void**)((char*)self + 0x10) = 0;
+        FUN_00571db0(h, a1, a2, a3, a4);
+    }
+    *(void**)((char*)self + 8) = (void*)0x13ec458;
+    *(void**)((char*)self + 4) = (void*)0x13eb394;
+    *(void**)self = (void*)0x13eb938;
+}
+
+// @ 0x00e01250
+void GlobalUI::FUN_1250(void* x)
+{
+    GUIRootObj* p = (GUIRootObj*)f04;
+    if (p != 0) {
+        p->resetA();
+        p->resetB();
+    }
+    (void)x;
+}
+
+// @ 0x00e01270
+void FUN_00e01270_impl()
+{
+    void* g = SP_GameTimeManager();
+    uint8_t b = *(uint8_t*)((char*)g + 0x48);
+    int v = (~(int)b) & 1;                       // `not al; and al,1`
+    void* propList = (void*)(uint32_t)g_15fd918;
+    ((DirectPropListObj*)propList)->FUN_006a17e0(0x387d0a8u, v);
+    g = SP_GameTimeManager();
+    ((GameTimeMgrObj*)g)->FUN_00b32280((void*)0x4bf38a8);
+}
+
+// @ 0x00e012b0
+void* GlobalUI::FindWindowByID(void* id)
+{
+    SPUILayout* p = (SPUILayout*)f08;
+    if (p != 0) {
+        return p->FindWindowByID(id, 1);
+    }
+    return 0;
+}
+
+// @ 0x00e012d0
+char GlobalUI::FUN_12d0(void* id, float f)
+{
+    SPUILayout* layout = (SPUILayout*)f08;
+    if (layout == 0) return 0;
+    void* w = layout->FindWindowByID(id, 1);
+    if (w == 0) return 0;
+    void* c = ((VFnPUI)VSLOT(w, 0xf0))(w, 0x665fe90, 0);
+    if (c == 0) return 0;
+    float* r = (float*)((VFnP)VSLOT(c, 0x38))(c);
+    float h = r[3] - r[1];
+    float wd = (r[2] - r[0]) * f;
+    ((VFnVFF)VSLOT(w, 0x74))(w, wd, h);
+    return 1;
+}
+
+// @ 0x00e01350
+void GlobalUI::SetVisibility(void* v)
+{
+    SPUILayout* p = (SPUILayout*)f08;
+    if (p != 0) {
+        p->SetVisibility(v);
+    }
+    void* p2 = f04;
+    if (p2 != 0) {
+        SPUILayout* p3 = *(SPUILayout**)((char*)p2 + 0x10);
+        if (p3 != 0) {
+            p3->SetVisibility(v);
+        }
+    }
+}
+
+// @ 0x00e01380
+char GlobalUI::IsVisible()
+{
+    SPUILayout* p = (SPUILayout*)f08;
+    if (p != 0) {
+        return p->IsVisible();
+    }
+    return 0;
+}
+
+// @ 0x00e01390
+char FUN_00e01390_impl()
+{
+    if (FUN_00b3d4d0() != 0) {
+        int v = *(int*)((char*)FUN_00b3d4d0() + 0x2c);
+        if (v == 1 || v == 2) return 0;
+    }
+    void* wm = SP_WindowManager();
+    if (((VFnP)VSLOT(wm, 0x84))(wm) != 0) return 0;
+    if (FUN_00e00c40_impl()) return 0;
+    if (SP_GetCurrentGameMode() == (void*)0x1654c04) {
+        if (((uint8_t*)FUN_00cf74c0())[0x148] != 0) return 0;
+    }
+    if (SP_GetCurrentGameMode() == (void*)0x1654c02) {
+        if (((TC*)FUN_00cd40b0())->F_00cd44a0()) return 0;
+    }
+    if (SP_GetCurrentGameMode() == (void*)0x1654c05) {
+        if (((TC*)FUN_010666a0())->F_01065e20()) return 0;
+    }
+    if (SP_GetCurrentGameMode() == (void*)0x1654c05) {
+        if (((uint8_t*)((TC*)SP_SpaceGameGet())->F_00bfc5f0())[0xa0] != 0) return 0;
+    }
+    if (SP_GetCurrentGameMode() == (void*)0x1654c10) {
+        if (*(int*)((char*)g_16c7aa4 + 0xcc) == 2) {
+            int v = *(int*)((char*)*(void**)((char*)g_16c7aa4 + 0x78) + 0x90);
+            if (v == 6 || v == 5) return 0;
+        }
+    }
+    if (*(int*)((char*)g_16c7aa4 + 0xcc) != 1) return 1;
+    char r = ((TC*)*(void**)((char*)g_16c7aa4 + 0x10))->F_00ed9e60(1);
+    if (r) return 1;
+    return 0;
+}
+
+// @ 0x00e014a0
+char FUN_00e014a0_impl()
+{
+    char bl;
+    if (FUN_00e01390_impl()) {
+        bl = 1;
+    } else {
+        bl = 0;
+        void* w = ((TC*)FUN_0080fee0(0x5f1bfc10))->F_00810620();
+        if (w != 0) {
+            void* a = ((VFnPUI)VSLOT(w, 0xf0))(w, 0x615b50d, 1);
+            if (a != 0) {
+                if (((VFnC)VSLOT(a, 0x28))(a) & 1) bl = 1;
+            }
+        }
+    }
+    if (SP_GetCurrentGameMode() == (void*)0x1654c04) {
+        if (((uint8_t*)FUN_00cf74c0())[0x148] != 0) return 0;
+    }
+    if (SP_GetCurrentGameMode() == (void*)0x1654c02) {
+        if (((TC*)FUN_00cd40b0())->F_00cd44a0()) return 0;
+    }
+    if (SP_GetCurrentGameMode() == (void*)0x1654c05) {
+        if (((TC*)FUN_010666a0())->F_01065e20()) return 0;
+    }
+    if (SP_GetCurrentGameMode() == (void*)0x1654c05) {
+        if (((uint8_t*)((TC*)SP_SpaceGameGet())->F_00bfc5f0())[0xa0] != 0) return 0;
+    }
+    return bl;
+}
+
+// @ 0x00e01570
+void* PodObj::Copy(void* o)
+{
+    void* s = this;
+    *(uint32_t*)s = *(uint32_t*)o;
+    *((uint32_t*)s + 1) = *((uint32_t*)o + 1);
+    *((uint32_t*)s + 2) = *((uint32_t*)o + 2);
+    *((uint32_t*)s + 3) = *((uint32_t*)o + 3);
+    *((uint8_t*)s + 0x10) = *((uint8_t*)o + 0x10);
+    *((uint8_t*)s + 0x11) = *((uint8_t*)o + 0x11);
+    *((uint8_t*)s + 0x12) = *((uint8_t*)o + 0x12);
+    *((uint8_t*)s + 0x13) = *((uint8_t*)o + 0x13);
+    *((uint8_t*)s + 0x14) = *((uint8_t*)o + 0x14);
+    *((uint32_t*)s + 6) = *((uint32_t*)o + 6);
+    *((uint32_t*)s + 7) = *((uint32_t*)o + 7);
+    *((uint32_t*)s + 8) = *((uint32_t*)o + 8);
+    *((uint8_t*)s + 0x24) = *((uint8_t*)o + 0x24);
+    *((uint32_t*)s + 10) = *((uint32_t*)o + 10);
+    *((uint8_t*)s + 0x2c) = *((uint8_t*)o + 0x2c);
+    *((uint32_t*)s + 0xc) = *((uint32_t*)o + 0xc);
+    *((uint32_t*)s + 0xd) = *((uint32_t*)o + 0xd);
+    *((uint32_t*)s + 0xe) = *((uint32_t*)o + 0xe);
+    *((uint32_t*)s + 0xf) = *((uint32_t*)o + 0xf);
+    *((uint32_t*)s + 0x10) = *((uint32_t*)o + 0x10);
+    uint32_t r = *((uint32_t*)o + 0x10);
+    if (r != 0) {
+        (*(void(__thiscall**)(uint32_t))(*(uint32_t*)r + 4))(r);
+    }
+    *((uint32_t*)s + 0x11) = *((uint32_t*)o + 0x11);
+    uint32_t r2 = *((uint32_t*)o + 0x11);
+    if (r2 != 0) {
+        (*(void(__thiscall**)(uint32_t))(*(uint32_t*)r2 + 4))(r2);
+    }
+    return s;
+}
+
+// @ 0x00e01620
+void FUN_00e01620_impl(uint8_t pause)
+{
+    if (pause) {
+        FUN_00b32220();
+        FUN_00e3c6f0();
+    } else {
+        FUN_00b32250();
+    }
+}
+
+// @ 0x00e01690
+void* NetObj::Ctor()
+{
+    void* self = this;
+    *(void**)((char*)self + 4) = (void*)0x13ec458;
+    *(void**)((char*)self + 8) = 0;
+    *(void**)((char*)self + 0xc) = (void*)0x13eb384;
+    *(void**)self = (void*)0x147f0dc;
+    *(void**)((char*)self + 4) = (void*)0x147f0cc;
+    *(void**)((char*)self + 0xc) = (void*)0x147f0bc;
+    *(float*)((char*)self + 0x10) = 0.0f;
+    *(float*)((char*)self + 0x14) = 0.0f;
+    *(float*)((char*)self + 0x18) = 1.0f;
+    *(float*)((char*)self + 0x1c) = 0.0f;
+    *(float*)((char*)self + 0x20) = 0.0f;
+    *(float*)((char*)self + 0x24) = 0.0f;
+    *(uint8_t*)((char*)self + 0x28) = 0;
+    *(void**)((char*)self + 0x2c) = 0;
+    *(void**)((char*)self + 0x30) = 0;
+    return self;
+}
+
+// @ 0x00e016f0
+void* NetObj::DelDtor(unsigned int flags)
+{
+    void* self = this;
+    *(void**)self = (void*)0x147f0dc;
+    *(void**)((char*)self + 4) = (void*)0x147f0cc;
+    *(void**)((char*)self + 0xc) = (void*)0x147f0bc;
+    *(void**)((char*)self + 0xc) = (void*)0x13eb394;
+    *(void**)((char*)self + 4) = (void*)0x13ec458;
+    *(void**)self = (void*)0x13eb938;
+    if (flags & 1) {
+        EA_Free(self);
+    }
+    return self;
+}
 
 // @ 0x00e01750
 char Dispatch(void* self, void* win, void* msg)
@@ -915,6 +1614,387 @@ launch:
 cleanup:
     if (keyed) keyed->v004();
     return;
+}
+
+// @ 0x00e02430
+void CreateOptionsDialog(void* self)
+{ (void)self; }
+
+// @ 0x00e02580
+void UIThing::FUN_00e02580(unsigned char enable)
+{
+    if (FUN_00dd1230() != 0) {
+        void* ms = MessageServer();
+        ((VF3)(*(void***)ms)[0x14 / 4])(ms, 0x44eaa93, 0, 0);
+    } else {
+        if (FUN_00e09540() != 0) {
+            void* ms = MessageServer();
+            ((VF3)(*(void***)ms)[0x14 / 4])(ms, 0x620222b, 0, 0);
+        }
+    }
+    if (m18 != 0)
+        ((VF2)(*(void***)m18)[0x7c / 4])(m18, 1, enable);
+    if (FUN_00b5b800() != (void*)0x01654c00) {
+        GameTimeManager* gm = (GameTimeManager*)FUN_00b3d380();
+        if (enable == 0)
+            gm->DecPauseGate(0x4bf38a4);
+        else
+            gm->IncPauseGate(0x4bf38a4);
+    }
+    LayoutManager* lm = (LayoutManager*)FUN_0080fee0();
+    if (enable != 0)
+        lm->SetAllWorldsVisibility(0);
+    lm->Method10660(0x5b598f7, enable);
+    lm->Method10660(0x5b598f6, enable);
+    lm->Method10660(0x5b598f9, enable);
+    lm->Method10660(0x5f1bfc10, enable);
+    if (enable == 0)
+        lm->SetAllWorldsVisibility(1);
+    Enable(enable);
+    if (m20 != 0)
+        ((VF2)(*(void***)m20)[0x28 / 4])(m20, 4, enable);
+    if (enable == 0) {
+        void* ms = MessageServer();
+        ((VF3)(*(void***)ms)[0x14 / 4])(ms, 0x64a504a, 0, 0);
+        ms = MessageServer();
+        ((VF3)(*(void***)ms)[0x14 / 4])(ms, 0x695d2f5, 0, 0);
+        return;
+    }
+    m0c = 1;
+    char cFlag = FUN_00e00a40();
+    void* w1 = ((Layout*)m10)->FindWindowByID(0x10f366e, 1);
+    void* w2 = ((Layout*)m10)->FindWindowByID(0x44ea79e, 1);
+    void* w3 = ((Layout*)m10)->FindWindowByID(0x62025f9, 1);
+    void* w4 = ((Layout*)m10)->FindWindowByID(0x447060a, 1);
+    if (FUN_00b5b800() == (void*)0x01654c05)
+        FUN_01002bd0();
+    char cVar3 = FUN_00e00c40();
+    char bVar1;
+    if (FUN_00b5b800() == (void*)0x01654c04 &&
+        *(char*)((char*)FUN_00cf74c0() + 0x148) == 1)
+        bVar1 = 1;
+    else if (FUN_00b5b800() == (void*)0x01654c02 && FUN_00cd44a0(FUN_00cd40b0()) == 1)
+        bVar1 = 1;
+    else if (FUN_00b5b800() == (void*)0x01654c05 &&
+             FUN_01065e20(FUN_010666a0()) == 1)
+        bVar1 = 1;
+    else if (FUN_00b5b800() == (void*)0x01654c05 &&
+             *(char*)((char*)FUN_00bfc5f0(FUN_01002bd0()) + 0xa0) != 0)
+        bVar1 = 1;
+    else
+        bVar1 = 0;
+    char cVar2;
+    if (cFlag != 0 && cVar3 == 0)
+        cVar2 = 1;
+    else
+        cVar2 = 0;
+    if (w4 != 0)
+        ((VF2)(*(void***)w4)[0x7c / 4])(w4, 2, !bVar1);
+    if (w2 != 0) {
+        uint32 v;
+        if (cVar3 != 0 || FUN_00b5b800() == (void*)0x01654c00)
+            v = 0;
+        else
+            v = 1;
+        ((VF2)(*(void***)w2)[0x7c / 4])(w2, 2, v);
+    }
+    if (w3 != 0) {
+        uint32 v;
+        if (bVar1 != 0)
+            v = 0;
+        else if (FUN_00e00d20() != 0)
+            v = 1;
+        else
+            v = 0;
+        ((VF2)(*(void***)w3)[0x7c / 4])(w3, 2, v);
+    }
+    if (w1 == 0)
+        goto LAB_msg_show;
+    ((VF2)(*(void***)w1)[0x7c / 4])(w1, 2, cVar2);
+    if (cVar2 == 0) {
+        if (FUN_00b5b800() == (void*)0x01654c10) {
+            void* g = g16c7aa4;
+            if (*(int*)((char*)g + 0xcc) != 2 || *(int*)((char*)g + 0xd0) != 2)
+                goto LAB_msg_show;
+            ((VF1)(*(void***)w1)[0x104 / 4])(w1, (int)m3c);
+        } else if (FUN_00b5b800() != (void*)0x01654c05) {
+            ((VF1)(*(void***)w1)[0x104 / 4])(w1, (int)m54);
+        } else {
+            ((VF1)(*(void***)w1)[0x104 / 4])(w1, (int)m3c);
+        }
+    } else {
+        ((VF1)(*(void***)w1)[0x108 / 4])(w1, (int)m3c);
+        ((VF1)(*(void***)w1)[0x108 / 4])(w1, (int)m54);
+    }
+LAB_msg_show:
+    {
+        void* ms = MessageServer();
+        ((VF3)(*(void***)ms)[0x14 / 4])(ms, 0x64a5044, 0, 0);
+        ms = MessageServer();
+        ((VF3)(*(void***)ms)[0x14 / 4])(ms, 0x695d2ed, 0, 0);
+    }
+}
+
+// @ 0x00e02900
+void UIThing::FUN_00e02900()
+{
+    if (FUN_00dd1230() != 0) {
+        void* ms = MessageServer();
+        ((VF3)(*(void***)ms)[0x14 / 4])(ms, 0x44eaa93, 0, 0);
+        return FUN_00e02200();
+    }
+    if (FUN_00e09540() != 0) {
+        void* ms = MessageServer();
+        ((VF3)(*(void***)ms)[0x14 / 4])(ms, 0x620222b, 0, 0);
+    }
+    return FUN_00e02200();
+}
+
+// @ 0x00e02950
+void UIThing::FUN_00e02950()
+{
+    char cVar2 = FUN_00dd1230();
+    if (FUN_00dd1230() != 0) {
+        void* ms = MessageServer();
+        ((VF3)(*(void***)ms)[0x14 / 4])(ms, 0x44eaa93, 0, 0);
+    } else {
+        if (FUN_00e09540() != 0) {
+            void* ms = MessageServer();
+            ((VF3)(*(void***)ms)[0x14 / 4])(ms, 0x620222b, 0, 0);
+        }
+    }
+    if (cVar2 != 0)
+        return;
+    {
+        void* ms = MessageServer();
+        ((VF3)(*(void***)ms)[0x14 / 4])(ms, 0x44eaa93, 0, 0);
+    }
+    if (m5c == 0)
+        return;
+    ObjB* obj = m5c->m04;
+    if (obj == 0)
+        return;
+    if (obj->m1c != 0)
+        ((VF2)(*(void***)obj->m1c)[0x7c / 4])(obj->m1c, 1, 0);
+    if (FUN_00b5b800() != (void*)0x01654c00)
+        FUN_00809c50((void*)obj->m14, 0, 0);
+    if (obj->m24 != 0) {
+        ((VF1)(*(void***)obj->m24)[0xc / 4])(obj->m24, 0);
+        void* p = obj->m24;
+        if (p != 0) {
+            obj->m24 = 0;
+            return ((VF0)(*(void***)p)[4 / 4])(p);
+        }
+    }
+}
+
+// @ 0x00e02a20
+void UIThing::FUN_00e02a20()
+{
+    char cVar2 = FUN_00e09540();
+    if (FUN_00dd1230() != 0) {
+        void* ms = MessageServer();
+        ((VF3)(*(void***)ms)[0x14 / 4])(ms, 0x44eaa93, 0, 0);
+    } else {
+        if (FUN_00e09540() != 0) {
+            void* ms = MessageServer();
+            ((VF3)(*(void***)ms)[0x14 / 4])(ms, 0x620222b, 0, 0);
+        }
+    }
+    if (cVar2 != 0)
+        return;
+    {
+        void* ms = MessageServer();
+        ((VF3)(*(void***)ms)[0x14 / 4])(ms, 0x620222b, 0, 0);
+    }
+    if (m5c == 0)
+        return;
+    ObjB* obj = m5c->m04;
+    if (obj == 0)
+        return;
+    if (obj->m1c != 0)
+        ((VF2)(*(void***)obj->m1c)[0x7c / 4])(obj->m1c, 1, 0);
+    if (FUN_00b5b800() != (void*)0x01654c00)
+        FUN_00809c50((void*)obj->m14, 0, 0);
+    if (obj->m24 != 0) {
+        ((VF1)(*(void***)obj->m24)[0xc / 4])(obj->m24, 0);
+        void* p = obj->m24;
+        if (p != 0) {
+            obj->m24 = 0;
+            return ((VF0)(*(void***)p)[4 / 4])(p);
+        }
+    }
+}
+
+// @ 0x00e02af0
+char UIThing::FUN_00e02af0()
+{
+    GlobalOptions* piVar4 = 0;
+    ObjB* piVar2 = 0;
+    if (m08 != 0) {
+        piVar2 = (ObjB*)((Layout*)m08)->FindWindowByID(0xffffffff, 1);
+        if (piVar2 != 0) {
+            void* pv = FUN_00f473a0(0x60, gRootWinProcName, 0, 0, 0, 0);
+            void* obj = 0;
+            if (pv != 0)
+                obj = ((WinProc*)pv)->ctor(this);
+            ((VF1)(*(void***)piVar2)[0x104 / 4])(piVar2, (int)obj);
+            if (m08 != 0) {
+                if (((Layout*)m08)->FindWindowByID(0x10ed874, 1) != 0)
+                    goto LAB_end;
+            }
+            void* g = FUN_00f473a0(0x58, gGlobalOptionsName, 0, 0, 0, 0);
+            if (g != 0)
+                piVar4 = (GlobalOptions*)FUN_00e00ec0(g);
+            GlobalOptions* piVar1 = (GlobalOptions*)m04;
+            if (piVar4 != piVar1) {
+                if (piVar4 != 0)
+                    ((VF0)(*(void***)piVar4)[0])(piVar4);
+                m04 = piVar4;
+                if (piVar1 != 0)
+                    ((VF0)(*(void***)piVar1)[1])(piVar1);
+            }
+            ((GlobalOptions*)m04)->CreateDialog();
+            void* q = ((GlobalOptions*)m04)->m14;
+            if (q != 0)
+                ((VF1)(*(void***)q)[0x104 / 4])(q, (int)obj);
+        }
+    }
+LAB_end:
+    ((HintsSink*)FUN_0067cac0())->Set(&g15a4ae0);
+    {
+        void* r = FUN_00f473a0(0x30, gSimulatorName, 0, 0, 0, 0);
+        void* gp;
+        if (r == 0)
+            gp = 0;
+        else
+            gp = FUN_00d486f0(r);
+        g169e3e8 = gp;
+        void* q2 = FUN_0067de40();
+        void* q3 = ((VFP)(*(void***)q2)[0x20 / 4])(q2);
+        ((VF1)(*(void***)q3)[0x1c / 4])(q3, (int)gp);
+    }
+    return piVar2 != 0;
+}
+
+// @ 0x00e02c40
+void FUN_00e02c40()
+{
+    char buf[0x48];
+    void* r = FUN_00644b10(buf);
+    FUN_00e02040(r);
+    FUN_00644b60(buf);
+}
+
+// @ 0x00e02c60
+void __stdcall FUN_00e02c60(Elem24* begin, Elem24* end)
+{
+    for (; begin < end; begin += 1) {
+        if (((int)((begin->s2.cap - begin->s2.begin) & 0xfffffffeu) > 2) &&
+            begin->s2.begin != 0)
+            FUN_00f47380((void*)begin->s2.begin);
+        if (((int)((begin->s1.cap - begin->s1.begin) & 0xfffffffeu) > 2) &&
+            begin->s1.begin != 0)
+            FUN_00f47380((void*)begin->s1.begin);
+    }
+}
+
+// @ 0x00e02cc0
+Elem24* FUN_00e02cc0(Elem24* begin, Elem24* end, Elem24* dst)
+{
+    if (begin != end) {
+        do {
+            if (((int)((begin->s2.cap - begin->s2.begin) & 0xfffffffeu) > 2) &&
+                begin->s2.begin != 0)
+                FUN_00f47380((void*)begin->s2.begin);
+            if (((int)((begin->s1.cap - begin->s1.begin) & 0xfffffffeu) > 2) &&
+                begin->s1.begin != 0)
+                FUN_00f47380((void*)begin->s1.begin);
+            begin += 1;
+            dst += 1;
+        } while (begin != end);
+    }
+    return dst;
+}
+
+// @ 0x00e02d30
+Elem24* FUN_00e02d30(Elem24* src, Elem24* srcEnd, Elem24* dst)
+{
+    if (src != srcEnd) {
+        do {
+            dst->m00 = src->m00;
+            WStr* ss1 = &src->s1;
+            WStr* ss2 = &src->s2;
+            WStr* ds1 = &dst->s1;
+            WStr* ds2 = &dst->s2;
+            if (ss1 != ds1)
+                ds1->assign((const wchar16*)ss1->begin, (const wchar16*)ss1->end);
+            if (ss2 != ds2)
+                ds2->assign((const wchar16*)ss2->begin, (const wchar16*)ss2->end);
+            src += 1;
+            dst += 1;
+        } while (src != srcEnd);
+    }
+    return dst;
+}
+
+// @ 0x00e02da0
+Elem24* FUN_00e02da0(Elem24* first, Elem24* last, Elem24* dstEnd)
+{
+    if (last != first) {
+        do {
+            last -= 1;
+            dstEnd -= 1;
+            dstEnd->m00 = last->m00;
+            if (&last->s1 != &dstEnd->s1)
+                dstEnd->s1.assign((const wchar16*)last->s1.begin, (const wchar16*)last->s1.end);
+            if (&last->s2 != &dstEnd->s2)
+                dstEnd->s2.assign((const wchar16*)last->s2.begin, (const wchar16*)last->s2.end);
+        } while (last != first);
+    }
+    return dstEnd;
+}
+
+// @ 0x00e02e10
+void UIThing::FUN_00e02e10()
+{
+    char c = 0;
+    void* w = ((LayoutManager*)FUN_0080fee0())->GetWorldMainWindow(0x5f1bfc10);
+    if (w != 0) {
+        void* x = ((VFP2)(*(void***)w)[0xf0 / 4])(w, 0x615b50d, 1);
+        if (x != 0) {
+            c = ((VFC)(*(void***)x)[0x28 / 4])(x);
+            if ((c & 1) != 0)
+                FUN_00e02580(0);
+        }
+    }
+    if (m10 != 0) {
+        ((Layout*)m10)->Shutdown(1);
+        if (m10 != 0) {
+            void* p = m10;
+            m10 = 0;
+            ((VF0)(*(void***)p)[8 / 4])(p);
+        }
+    }
+}
+
+// @ 0x00e02e80
+void UIThing::FUN_00e02e80()
+{
+    if (m18 == 0)
+        return;
+    FUN_00572020(&g147f0a0, 1);
+    FUN_00435ed0(0x5da7b944, &g147f0a0);
+    unsigned char bl = 0;
+    void* w = ((LayoutManager*)FUN_0080fee0())->GetWorldMainWindow(0x5f1bfc10);
+    if (w != 0) {
+        void* x = ((VFP2)(*(void***)w)[0xf0 / 4])(w, 0x615b50d, 1);
+        if (x != 0) {
+            bl = (unsigned char)((VFCI)(*(void***)x)[0x28 / 4])(x);
+            bl &= 1;
+        }
+    }
+    FUN_00e02580(bl == 0);
 }
 
 // @ 0x00e02f00

@@ -1,13 +1,34 @@
 00e00760 SP::cSPUIGlobalUIRootWinProc::ShowContextSporepedia  # context sporepedia
 00e008e0 SP::cSPUIGlobalUIRootWinProc::cSPUIGlobalUIRootWinProc  # manager ctor
 00e00970 SP::cSPUIGlobalUIRootWinProc::~cSPUIGlobalUIRootWinProc  # manager dtor
-00e009f0 cSPUIGlobalUIRootWinProc::on_ban_content_button  # PDB name
-00e00ec0 UI::cSPUIGlobalOptions::cSPUIGlobalOptions  # PDB name
-00e00f40 UI::cSPUIGlobalOptions::~cSPUIGlobalOptions  # dtor
-00e01090 UI::cSPUIGlobalOptions scalar deleting dtor  # vtable 0x147f198
-00e010c0 Simulator::cSPUIGlobalUIRootWinProc::cSPUIGlobalUIRootWinProc  # PDB name
-00e011a0 Simulator::cSPUIGlobalUIRootWinProc::~cSPUIGlobalUIRootWinProc  # dtor
-00e012b0 cSPUIGlobalUI::FindWindowByID  # PDB name
-00e01350 cSPUIGlobalUI::SetVisibility  # PDB name
-00e01690 UI::NetworkActivityProc::NetworkActivityProc  # PDB name
-00e016f0 UI::NetworkActivityProc scalar deleting dtor  # vtable 0x147f0dc
+00e009f0 ?on_ban_content_button@@YAXXZ  # on_ban_content_button migrated from s00e00760 (verbatim, slice spelling)
+00e00a40 ?IsGameModeAllowed@@YADXZ  # IsGameModeAllowed migrated from s00e00760 (verbatim, slice spelling)
+00e00aa0 ?MenuKind@@YAHXZ  # MenuKind migrated from s00e00760 (verbatim, slice spelling)
+00e00ac0 ?FUN_00e00ac0_impl@@YADXZ  # FUN_00e00ac0_impl migrated from s00e00760 (verbatim, slice spelling)
+00e00b00 ?FUN_00e00b00_impl@@YADXZ  # FUN_00e00b00_impl migrated from s00e00760 (verbatim, slice spelling)
+00e00bb0 ?FUN_00e00bb0_impl@@YAXXZ  # FUN_00e00bb0_impl migrated from s00e00760 (verbatim, slice spelling)
+00e00bd0 ?FUN_00e00bd0_impl@@YAXXZ  # FUN_00e00bd0_impl migrated from s00e00760 (verbatim, slice spelling)
+00e00bf0 ?FUN_00e00bf0_impl@@YAXXZ  # FUN_00e00bf0_impl migrated from s00e00760 (verbatim, slice spelling)
+00e00c40 ?FUN_00e00c40_impl@@YADXZ  # FUN_00e00c40_impl migrated from s00e00760 (verbatim, slice spelling)
+00e00d20 ?FUN_00e00d20_impl@@YADXZ  # FUN_00e00d20_impl migrated from s00e00760 (verbatim, slice spelling)
+00e00d90 ?FUN_00e00d90_impl@@YIIH@Z  # FUN_00e00d90_impl migrated from s00e00760 (verbatim, slice spelling)
+00e00db0 ?FUN_00e00db0@NetObj@@QAEXM@Z  # NetObj::FUN_00e00db0 migrated from s00e00760 (verbatim, slice spelling)
+00e00e90 ?FUN_00e00e90@NetObj@@QAEDIPAX@Z  # NetObj::FUN_00e00e90 migrated from s00e00760 (verbatim, slice spelling)
+00e00ec0 ?Ctor@OptObj@@QAEPAXXZ  # OptObj::Ctor migrated from s00e00760 (verbatim, slice spelling)
+00e00f40 ?Dtor@OptObj@@QAEXXZ  # OptObj::Dtor migrated from s00e00760 (verbatim, slice spelling)
+00e00fe0 ?Reset@OptObj@@QAEXXZ  # OptObj::Reset migrated from s00e00760 (verbatim, slice spelling)
+00e01090 ?DelDtor@OptObj@@QAEPAXI@Z  # OptObj::DelDtor migrated from s00e00760 (verbatim, slice spelling)
+00e010c0 ?Ctor@WinObj@@QAEPAXPAX@Z  # WinObj::Ctor migrated from s00e00760 (verbatim, slice spelling)
+00e011a0 ?Dtor@WinObj@@QAEXXZ  # WinObj::Dtor migrated from s00e00760 (verbatim, slice spelling)
+00e01250 ?FUN_1250@GlobalUI@@QAEXPAX@Z  # GlobalUI::FUN_1250 migrated from s00e00760 (verbatim, slice spelling)
+00e01270 ?FUN_00e01270_impl@@YAXXZ  # FUN_00e01270_impl migrated from s00e00760 (verbatim, slice spelling)
+00e012b0 ?FindWindowByID@GlobalUI@@QAEPAXPAX@Z  # GlobalUI::FindWindowByID migrated from s00e00760 (verbatim, slice spelling)
+00e012d0 ?FUN_12d0@GlobalUI@@QAEDPAXM@Z  # GlobalUI::FUN_12d0 migrated from s00e00760 (verbatim, slice spelling)
+00e01350 ?SetVisibility@GlobalUI@@QAEXPAX@Z  # GlobalUI::SetVisibility migrated from s00e00760 (verbatim, slice spelling)
+00e01380 ?IsVisible@GlobalUI@@QAEDXZ  # GlobalUI::IsVisible migrated from s00e00760 (verbatim, slice spelling)
+00e01390 ?FUN_00e01390_impl@@YADXZ  # FUN_00e01390_impl migrated from s00e00760 (verbatim, slice spelling)
+00e014a0 ?FUN_00e014a0_impl@@YADXZ  # FUN_00e014a0_impl migrated from s00e00760 (verbatim, slice spelling)
+00e01570 ?Copy@PodObj@@QAEPAXPAX@Z  # PodObj::Copy migrated from s00e00760 (verbatim, slice spelling)
+00e01620 ?FUN_00e01620_impl@@YAXE@Z  # FUN_00e01620_impl migrated from s00e00760 (verbatim, slice spelling)
+00e01690 ?Ctor@NetObj@@QAEPAXXZ  # NetObj::Ctor migrated from s00e00760 (verbatim, slice spelling)
+00e016f0 ?DelDtor@NetObj@@QAEPAXI@Z  # NetObj::DelDtor migrated from s00e00760 (verbatim, slice spelling)

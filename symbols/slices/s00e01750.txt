@@ -6,4 +6,4 @@
 00e01db0 ?OnModalWindowEnd@cSPUIGlobalUIRootWinProc@@QAEXII@Z  # cSPUIGlobalUIRootWinProc::OnModalWindowEnd migrated from s00e01750 (verbatim, slice spelling)
 00e02040 ?ShowContextSensitiveSporepedia@@YAXPAX@Z  # ShowContextSensitiveSporepedia migrated from s00e01750 (verbatim, slice spelling)
 00e02200 ?ShowContextSensitiveSporeGuide@@YAXPAX@Z  # ShowContextSensitiveSporeGuide migrated from s00e01750 (verbatim, slice spelling)
-00e02430 SP::cSPUIGlobalOptions::CreateDialog  # creates layout + tooltips
+00e02430 ?CreateOptionsDialog@@YAXPAX@Z  # CreateOptionsDialog migrated from s00e01750 (verbatim, slice spelling)
