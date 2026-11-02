@@ -1,5 +1,13 @@
 00ac7fe0 SP::cGonzagoSubsystem::`scalar deleting destructor'  # dtor calls 0xb5b9a0 cGonzagoSubsystem::~cGonzagoSubsystem; vtables 0x1459fc8/0x1459fc0
 00ac84f0 SP::cCityVisualizer  # calls 0xd58b10 cCityVisualizer::CitizenNeedsRemoval on [this+0xa4]
 00ac8550 SP::cVarListSerializer  # constructs cVarListSerializer at 0x692f90 and Serialize at 0x692900
-00ac8750 EA::IO  # WriteBool/ReadBool adapters 0x93ac80/0x93a9a0/0x93aa70
-00ac8930 SP  # 0xc-stride range of polymorphic objects, slot0(v=0)
+00ac86b0 ?FUN_00ac86b0@CVis@@QAEXH@Z  # CVis::FUN_00ac86b0 migrated from s00ac7ab0 (verbatim, slice spelling)
+00ac8750 ?FUN_00ac8750@@YA_NPAUSerObj@@H@Z  # FUN_00ac8750 migrated from s00ac7ab0 (verbatim, slice spelling)
+00ac8780 ?FUN_00ac8780@@YA_NPAUSerObj@@PAD@Z  # FUN_00ac8780 migrated from s00ac7ab0 (verbatim, slice spelling)
+00ac87c0 ?FUN_00ac87c0@@YA_NPAUSerObj@@H@Z  # FUN_00ac87c0 migrated from s00ac7ab0 (verbatim, slice spelling)
+00ac87f0 ?FUN_00ac87f0@@YA_NPAUSerObj@@H@Z  # FUN_00ac87f0 migrated from s00ac7ab0 (verbatim, slice spelling)
+00ac88f0 ?FUN_00ac88f0@@YA_NPAUSerObj@@PAM@Z  # FUN_00ac88f0 migrated from s00ac7ab0 (verbatim, slice spelling)
+00ac8930 ?FUN_00ac8930@@YGXPAD0@Z  # FUN_00ac8930 migrated from s00ac7ab0 (verbatim, slice spelling)
+00ac8980 ?assign@RefPtr@@QAEPAU1@PAPAX@Z  # RefPtr::assign migrated from s00ac7ab0 (verbatim, slice spelling)
+00ac89e0 ?FUN_00ac89e0@@YAPAPAXPAPAX00@Z  # FUN_00ac89e0 migrated from s00ac7ab0 (verbatim, slice spelling)
+00ac8a30 ?FUN_00ac8a30@@YAPAPAXPAX0PAPAX@Z  # FUN_00ac8a30 migrated from s00ac7ab0 (verbatim, slice spelling)

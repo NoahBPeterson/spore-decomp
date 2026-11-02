@@ -1,4 +1,11 @@
-00acc390 SP::`anonymous namespace'::sGetClosestRare                   # PDB candidate (caller-scored)
-00acc800 SP::`anonymous namespace'::LoadSelector                      # PDB candidate (caller-scored)
+00acc2d0 ?FUN_00acc2d0@@YAPAHPAH00@Z  # FUN_00acc2d0 migrated from s00acc140 (verbatim, slice spelling)
+00acc330 ?FUN_00acc330@@YAPAHHHPAH@Z  # FUN_00acc330 migrated from s00acc140 (verbatim, slice spelling)
+00acc390 ?FUN_00acc390@VO_s00ac_c140@@QAEXXZ  # VO_s00ac_c140::FUN_00acc390 migrated from s00acc140 (verbatim, slice spelling)
+00acc610 ?FUN_00acc610@VO_s00ac_c140@@QAEXPAX@Z  # VO_s00ac_c140::FUN_00acc610 migrated from s00acc140 (verbatim, slice spelling)
+00acc700 ?FUN_00acc700@VO_s00ac_c140@@QAEXPAXMM@Z  # VO_s00ac_c140::FUN_00acc700 migrated from s00acc140 (verbatim, slice spelling)
+00acc770 ?FUN_00acc770@VO_s00ac_c140@@QAEXXZ  # VO_s00ac_c140::FUN_00acc770 migrated from s00acc140 (verbatim, slice spelling)
+00acc800 ?FUN_00acc800@@YGXPAUKeyVec@@@Z  # FUN_00acc800 migrated from s00acc140 (verbatim, slice spelling)
+00acc9b0 ?FUN_00acc9b0@VO_s00ac_c140@@QAEXI@Z  # VO_s00ac_c140::FUN_00acc9b0 migrated from s00acc140 (verbatim, slice spelling)
 00acca00 ?FUN_00acca00@@YA_NPAH0@Z  # FUN_00acca00 migrated from s00acc140 (verbatim, slice spelling)
+00accd70 ?FUN_00accd70@@YAXHI@Z  # FUN_00accd70 migrated from s00acc140 (verbatim, slice spelling)
 00accf80 SP::cCityVisualizer::SetupCultureStages                      # Ghidra symbol

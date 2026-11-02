@@ -29,5 +29,7 @@
 00abfe50 ??0cInteractionStack@@QAE@XZ  # cInteractionStack::cInteractionStack migrated from s00abf0b0 (verbatim, slice spelling)
 00abfec0 ??1cInteractionStack@@UAE@XZ  # cInteractionStack::~cInteractionStack migrated from s00abf0b0 (verbatim, slice spelling)
 00abfee0 ?SetFlag@cInteractionStack@@QAEX_N@Z  # cInteractionStack::SetFlag migrated from s00abf0b0 (verbatim, slice spelling)
+00ac0010 ?Lookup@tVarMap@@QAEPAUtPairNode@@PBI@Z  # tVarMap::Lookup migrated from s00abf0b0 (verbatim, slice spelling)
+00ac00a0 ?Remove@cInteractionStack@@QAEXPAVcInteraction@@@Z  # cInteractionStack::Remove migrated from s00abf0b0 (verbatim, slice spelling)
 01459ac4 ??_7cInteraction_s00ab_f0b0@@6BtRefCount@@@  # secondary vtable (tRefCount base at +4; slice comment "vtables 0x01459ad8 / 0x01459ac4")
 01459ad8 ??_7cInteraction_s00ab_f0b0@@6BtIUnknown@@@  # primary vtable of the verbatim cInteraction stub (generated header: cInteraction vtable 0x01459ad8 {for EA::COM::IUnknown32}); binds the ctor's vtable store
