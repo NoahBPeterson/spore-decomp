@@ -1,0 +1,24 @@
+# source  symbol  va  flags
+../src/game/SPBake/_at_004a0000.cpp  ?AllocNode@DequeBase@@QAEPAXXZ  004ab320  /Od /Ob1 /MD /Gy /TP /Isrc/game/include
+../src/game/SPBake/_at_004a0000.cpp  ?DequeAlloc@DequeBase@@QAEXI@Z  004ab350  /Od /Ob1 /MD /Gy /TP /Isrc/game/include
+../src/game/SPBake/_at_004a0000.cpp  ?GetRootSpine@cSPEditorModel_s004a_c610@SP@@QAEPAVcSPEditorBlock_s004a_c610@2@XZ  004ac610  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/_at_004a0000.cpp  ?GetUnmatchedSpine@cSPEditorModel_s004a_c610@SP@@QAEPAVcSPEditorBlock_s004a_c610@2@XZ  004ac710  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/_at_004a0000.cpp  ?RemoveBlock@cSPEditorModel_s004a_c610@SP@@QAEXPAVcSPEditorBlock_s004a_c610@2@_N1@Z  004ac8b0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/_at_004a0000.cpp  ?DeleteBlock@cSPEditorModel_s004a_c610@SP@@QAE_NPAVcSPEditorBlock_s004a_c610@2@_N@Z  004acab0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/_at_004a0000.cpp  ?GetStats@cSPEditorModel_s004a_c610@SP@@QAEXPAH00PAM0@Z  004acd20  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/_at_004a0000.cpp  ?IsAnyBlockAnimating@cSPEditorModel_s004a_c610@SP@@QAE_NXZ  004acfd0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/_at_004a0000.cpp  ?IsAnyBlockPlaying@cSPEditorModel_s004a_c610@SP@@QAE_NXZ  004ad070  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/_at_004a0000.cpp  ?StopAnimations@cSPEditorModel_s004a_c610@SP@@QAEXXZ  004ad110  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/_at_004a0000.cpp  ?ResetAnimations@cSPEditorModel_s004a_c610@SP@@QAEXXZ  004ad1a0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/_at_004a0000.cpp  ?SetModelFlags@cSPEditorModel_s004a_c610@SP@@QAEXH@Z  004ad210  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/_at_004a0000.cpp  ?ClearBlocks@cSPEditorModel_s004a_c610@SP@@QAEXXZ  004ad280  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/_at_004a0000.cpp  ?Clear@cSPEditorModel_s004a_c610@SP@@QAEXXZ  004ad330  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/_at_004a0000.cpp  ?GetBoundingBox@cSPEditorModel_s004a_d550@SP@@QAE?AUcSPBoundingBox_s004a_d550@@_N@Z  004ad550  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPBake/_at_004a0000.cpp  ?GetBlockBoundingBoxes@cSPEditorModel_s004a_d550@SP@@QAEXAAU?$vector_s004a_d550@UcSPBoundingBox_s004a_d550@@@@@Z  004ad6f0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPBake/_at_004a0000.cpp  ?SetBBoxesOverride@cSPEditorModel_s004a_d550@SP@@QAEXABU?$vector_s004a_d550@UcSPBoundingBox_s004a_d550@@@@@Z  004ada40  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPBake/_at_004a0000.cpp  ?GetSkinEffect@cSPEditorModel_s004a_d550@SP@@QAEIH@Z  004adc60  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPBake/_at_004a0000.cpp  ?GetSkinEffectSeed@cSPEditorModel_s004a_d550@SP@@QAEIH@Z  004adc80  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPBake/_at_004a0000.cpp  ?GetSkinColor@cSPEditorModel_s004a_d550@SP@@QAE?AUcSPColorRGB_s004a_d550@@H@Z  004adca0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPBake/_at_004a0000.cpp  ?SetSkinEffect@cSPEditorModel_s004a_d550@SP@@QAEXHI@Z  004adcf0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPBake/_at_004a0000.cpp  ?SetSkinEffectSeed@cSPEditorModel_s004a_d550@SP@@QAEXHI@Z  004add10  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPBake/_at_004a0000.cpp  ?SetSkinColor@cSPEditorModel_s004a_d550@SP@@QAEXHUcSPColorRGB_s004a_d550@@@Z  004add30  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

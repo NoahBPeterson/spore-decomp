@@ -1,0 +1,2 @@
+004ab690 ??0cSPEditorModel_s004a_b690@SP@@QAE@XZ  # cSPEditorModel_s004a_b690::cSPEditorModel migrated from s004ab690 (verbatim, slice spelling)
+004aba00 ?ModelTeardown@cSPEditorModel_s004a_b690@SP@@QAEXXZ  # cSPEditorModel_s004a_b690::ModelTeardown migrated from s004ab690 (verbatim, slice spelling)
