@@ -1,10 +1,15 @@
-0082f020 SPUIShader2D::Cleanup  # g_pShader2D @0x164e910, tail-calls 0x7c3c10
+0082ec70 ?Process@SPUIShader2D@@QAEXPAXI@Z  # SPUIShader2D::Process migrated from s0082ec70 (verbatim, slice spelling)
+0082f020 ?Cleanup@SPUIShader2D@@QAEXXZ  # SPUIShader2D::Cleanup migrated from s0082ec70 (verbatim, slice spelling)
 0082f0b0 UTFWin::cSPUIMaterialWinProc::cSPUIMaterialWinProc  # vt PDB
-0082f110 cSPUIMaterialWinProc::`scalar deleting destructor'  # vtable 0x141a5e8, ret 4
-0082f410 ?Construct@cSPUIShaderProxy_s0082_ec70@@QAEPAU1@XZ  # cSPUIShaderProxy_s0082_ec70::Construct migrated from s0082ec70 (verbatim, slice spelling)
+0082f110 ?Destroy@cSPUIMaterialWinProc@@QAEPAXI@Z  # cSPUIMaterialWinProc::Destroy migrated from s0082ec70 (verbatim, slice spelling)
+0082f170 ?insert@u32vector@@QAEXPAIABI@Z  # u32vector::insert migrated from s0082ec70 (verbatim, slice spelling)
+0082f280 ?insert@Vec4vector@@QAEXPAUVec4@@ABU2@@Z  # Vec4vector::insert migrated from s0082ec70 (verbatim, slice spelling)
+0082f3a0 ?emplace@Vec4vector@@QAEPAUVec4@@PAU2@ABU2@@Z  # Vec4vector::emplace migrated from s0082ec70 (verbatim, slice spelling)
+0082f410 ?Construct@cSPUIShaderProxy_s0082_ec70@@QAEPAV1@XZ  # cSPUIShaderProxy_s0082_ec70::Construct migrated from s0082ec70 (verbatim, slice spelling)
 0082f500 cSPUIShaderProxy::~cSPUIShaderProxy  # PDB dtor
 0082f5c0 ?GetParam@cSPUIShaderProxy_s0082_ec70@@QAE_NIPAI00@Z  # cSPUIShaderProxy_s0082_ec70::GetParam migrated from s0082ec70 (verbatim, slice spelling)
 0082f630 ?AcquireShaderProxy@@YAPAXXZ  # AcquireShaderProxy migrated from s0082ec70 (verbatim, slice spelling)
 0082f6e0 ?GetShaderProxy@@YAPAXXZ  # GetShaderProxy migrated from s0082ec70 (verbatim, slice spelling)
-0082f760 EA::UTFWin::Init2DSystem  # Ghidra PDB candidate
-0082f8a0 EA::UTFWin::Shutdown2DSystem  # pairs with 0082f760
+0082f760 ?Init2DSystem@@YA_NXZ  # Init2DSystem migrated from s0082ec70 (verbatim, slice spelling)
+0082f8a0 ?Shutdown2DSystem@@YAXXZ  # Shutdown2DSystem migrated from s0082ec70 (verbatim, slice spelling)
+0082f930 ?findInsert@ParamMap@@QAEPAIPAI@Z  # ParamMap::findInsert migrated from s0082ec70 (verbatim, slice spelling)

@@ -1,4 +1,4 @@
-0082f9a0 ShaderProxy::SetFromArgScript  # SPUI shader proxy material/arg parser (PDB candidate cSPUIShaderProxy::SetMaterialName)
+0082f9a0 ?SetFromArgScript@ShaderProxy@@QAE_NPB_W@Z  # ShaderProxy::SetFromArgScript migrated from s0082f9a0 (verbatim, slice spelling)
 00830150 cDropShadowDescriptor::SetMode2  # sets +4 and floats +0x1c/+0x20 by enum
 00830280 cDropShadowDescriptor::SetMode1  # sets +0 and floats +0x14/+0x18 by enum
 00830380 ?FillDefaults@@YAXPAUShadowDesc@@PBU1@@Z  # FillDefaults migrated from s0082f9a0 (verbatim, slice spelling)

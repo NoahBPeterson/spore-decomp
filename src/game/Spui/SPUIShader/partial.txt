@@ -1,3 +1,2 @@
 # va  diff-bytes  reason
-0082e6b0 11  one-line thunk to 0x82e550; argument source unclear
-0082e6c0 37  release path only; d3d/device calls not reconstructed
+0082e890   742  not reconstructed: EmbeddedState transform flush (strip-mined 20-byte vertex copies, opaque rw calls) flags: /O2 /MD /Gy /TP /fp:fast /arch:SSE2
