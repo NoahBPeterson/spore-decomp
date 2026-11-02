@@ -1,5 +1,5 @@
 00ce2330 FUN_00ce2330  # bool: pending order -> clear that plan step's workers; writes float 0 to out
-00ce23b0 ?GetStatString@cTribePlanner_s00ce_2330@@QAEPB_WH@Z  # cTribePlanner_s00ce_2330::GetStatString migrated from s00ce2330 (verbatim, slice spelling)
+00ce23b0 ?GetStatString@cTribePlanner@SP@@UAEPB_WW4eStatStringType@cGonzagoSimulator@2@@Z  # SP::cTribePlanner::GetStatString migrated from s00ce2330
 00ce2420 cTribePlanner::Write  # version 0x9098aeb2, cVarListSerializer, plan groups + steps
 00ce27a0 ?FUN_00ce27a0@@YAXPAHPAUPtrVector@@@Z  # FUN_00ce27a0 migrated from s00ce2330 (verbatim, slice spelling)
 00ce2880 ?FUN_00ce2880@cTribePlanData_s00ce_2330@@QAEPAU1@PBU1@@Z  # cTribePlanData_s00ce_2330::FUN_00ce2880 migrated from s00ce2330 (verbatim, slice spelling)
@@ -13,9 +13,9 @@
 00ce2c10 ?FUN_00ce2c10@@YAPAUPlannerGroup@@PAU1@00@Z  # FUN_00ce2c10 migrated from s00ce2330 (verbatim, slice spelling)
 00ce2c70 ?FUN_00ce2c70@@YGXPAUPlannerGroup@@0@Z  # FUN_00ce2c70 migrated from s00ce2330 (verbatim, slice spelling)
 00ce2d20 ?GetTribePlanConfiguration@SP@@YAPAUcTribePlanConfiguration_s00ce_2330@@I@Z  # SP::GetTribePlanConfiguration migrated from s00ce2330
-00ce2ee0 cTribePlanData::GetConfiguration  # lazy cached mID -> configuration lookup
-00ce2f00 SP::FindFirstEligiblePlanStep  # first eligible step index or 0xffffffff
-00ce3020 SP::DeactivatePlan  # release/reset a plan entry and pop the matching pending order
+00ce2ee0 ?GetConfiguration@cTribePlanData_s00ce_2330@@QAEPAUcTribePlanConfiguration_s00ce_2330@@XZ  # cTribePlanData_s00ce_2330::GetConfiguration migrated from s00ce2330 (verbatim, slice spelling)
+00ce2f00 ?FUN_00ce2f00@@YAIPAUcTribePlannerContext_s00ce_2330@@ID@Z  # FUN_00ce2f00 migrated from s00ce2330 (verbatim, slice spelling)
+00ce3020 ?DeactivatePlan@@YAXPAUcTribePlannerContext_s00ce_2330@@IID@Z  # DeactivatePlan migrated from s00ce2330 (verbatim, slice spelling)
 00ce30d0 ?FUN_00ce30d0@@YAMPAUcTribePlannerContext_s00ce_2330@@IIIPAUbehavior_stimuli@@PAE@Z  # FUN_00ce30d0 migrated from s00ce2330 (verbatim, slice spelling)
 00ce3120 ?FUN_00ce3120@@YAMPAUcTribePlannerContext_s00ce_2330@@IIIPAUbehavior_stimuli@@PAE@Z  # FUN_00ce3120 migrated from s00ce2330 (verbatim, slice spelling)
 00ce3170 ?FUN_00ce3170@@YAMPAUcTribePlannerContext_s00ce_2330@@IIIPAUbehavior_stimuli@@PAE@Z  # FUN_00ce3170 migrated from s00ce2330 (verbatim, slice spelling)

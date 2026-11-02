@@ -37,6 +37,31 @@ extern void* GetSystemAT(void);                                                 
 extern void __cdecl operator_delete(void* pBlock);
 
 // ---- items of slice s00cdfea0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+struct cTribePlanConfiguration {
+    float    mInitialCheckTimeDelay;   // +0x00
+    float    mCheckTime;               // +0x04
+    float    mTimeBetweenExecution;    // +0x08
+    uint32_t mFrequency;               // +0x0c
+    uint32_t mRequiredTools;           // +0x10
+    uint32_t mDesiredTools;            // +0x14
+    uint32_t mNumRequiredAdults;       // +0x18
+    uint32_t mNumDesiredAdults;        // +0x1c
+    uint32_t mMinTargetPopulation;     // +0x20
+    uint32_t mMaxTargetPopulation;     // +0x24
+    int32_t  mMinRelationshipToTarget; // +0x28
+    int32_t  mMaxRelationshipToTarget; // +0x2c
+    float    mFoodRate;                // +0x30
+    int32_t  mRequiredFood;            // +0x34
+    int32_t  mDesiredFood;             // +0x38
+    uint8_t  mbExcludeChieftain;       // +0x3c
+    uint8_t  mPad3d[3];                // +0x3d
+    uint32_t mModificationCount;       // +0x40
+    uint32_t mDebugName[4];            // +0x44  eastl::basic_string<wchar_t> (4 words)
+    void*    mpPropertyList;           // +0x54
+};
+extern void __fastcall GetAny(void* pStimuli);                                   // 0x00d997e0
+extern void* FUN_00d99420(void* pObject, int iFilter);                           // 0x00d99420
+extern void FUN_00d996e0(void* pList, void* pStimuli);                           // 0x00d996e0
 struct Variant {
     union {
         int32_t  i;
@@ -74,7 +99,7 @@ enum {
     kPropNumRequiredAdults     = 0x21c67d75,
     kPropNumDesiredAdults      = 0xbc88805a,
 };
-struct cTribePlanConfiguration {
+struct cTribePlanConfiguration_s00cd_fea0 {
     float    mInitialCheckTimeDelay;   // +0x00
     float    mCheckTime;               // +0x04
     float    mTimeBetweenExecution;    // +0x08
@@ -112,7 +137,18 @@ struct cTribePlanData {
     uint8_t  mbCheck;             // +0x18
     uint8_t  mPad19[3];           // +0x19
     WorkerList mWorkers;          // +0x1c
-    cTribePlanConfiguration* mpConfiguration;   // +0x50
+    cTribePlanConfiguration_s00cd_fea0* mpConfiguration;   // +0x50
+};
+struct PlanEntry {
+    float    mPosition[3];        // +0x00
+    uint32_t mPad0c[8];           // +0x0c .. +0x2b
+    uint32_t mPad2c;              // +0x2c
+    float    mScale;              // +0x30
+    uint32_t mPad34;              // +0x34
+    uint32_t mPad38;              // +0x38
+    uint8_t  mByte3c;             // +0x3c
+    uint8_t  mPad3d[3];           // +0x3d
+    void*    mpObject;            // +0x40  AutoRefCount payload (AddRef/Release)
 };
 struct cAIFlags;
 struct cCitizen {
@@ -185,19 +221,9 @@ struct Vec3 {
     float y;    // +0x04
     float z;    // +0x08
 };
-extern int* FUN_00bca2c0(void);                                                  // 0x00bca2c0
-extern void FUN_00bcb3d0(void);                                                  // 0x00bcb3d0
-extern void FUN_00bc86e0(double dTime, void* pTree, void* pArg, void* pBlocks,
-                         void* pFree, int iAlign);                               // 0x00bc86e0
-extern void* GameTimeManager(void);                                              // 0x00b31670
-extern unsigned long long FUN_00b316c0(void);                                    // 0x00b316c0
-extern int FUN_00b3d230(void);                                                   // 0x00b3d230
-extern void* FUN_00bcaf70(void* pTable, int iPlanIndex, int iFlag);              // 0x00bcaf70
-extern void FUN_00bcaf40(void* pNoun);                                           // 0x00bcaf40
 extern void FUN_00bc97f0(int iA, uint32_t uFlags, float fRange, int iB);         // 0x00bc97f0
-extern void ForceOrdersUpdate(void* pCitizen);                        // cSPCreatureCitizen
-extern void EraseRange(void* pBegin, void* pEnd);                                // eastl::vector::erase
-extern void RestartTimer(void* pTimer);                                          // SP::cSPTimer::Restart
+extern void FUN_00ce0bf0(uint32_t* pResult, const void* pSource);                // 0x00ce0bf0
+extern void FUN_00ce0c50(uint32_t* pResult, uint32_t* pValue, uint32_t uFlags);  // 0x00ce0c50
 extern void AssignVariantUInt(Variant* pVariant, uint32_t uValue);               // Variant::operator=
 extern void GetOrderPosition(void* pOrder, Vec3* pPosition);                     // +0x120 vtable +0x2c
 extern bool GetPropertyAsUint32Array(cPropertyList* pList, uint32_t uPropertyId,
@@ -205,9 +231,8 @@ extern bool GetPropertyAsUint32Array(cPropertyList* pList, uint32_t uPropertyId,
 extern void* EventLog(uint32_t uId, uint32_t uSubId, void* pPos, int iA, int iB, int iC);
 extern void PostFeedbackEvent(void* pLog, uint32_t uId, uint32_t uSubId, void* pPos,
                               int iA, int iB, int iC);
-extern void* GetSystemAT(void);                                                  // EA::Audio::GetSystemAT
 extern void Start3dSoundByName(uint32_t uName, int iHandle, float x, float y, float z);
-extern void __cdecl operator_delete(void* pBlock);
+PlanEntry* FUN_00cdffc0(PlanEntry* pThis, const PlanEntry* pSrc);
 PlanTableEntry* FUN_00ce0e60(PlanTable* pTable, uint32_t uPlanId, uint32_t uIndex);
 static bool ReadVariant(cPropertyList* pList, uint32_t uPropertyId, Variant** ppValue)
 {
@@ -254,15 +279,6 @@ static bool VariantBool(const Variant* pValue)
 // ---- items of slice s00cdfea0 end
 
 // unnamed retail callees and globals that name local stubs (address in the comment)
-extern void FUN_00bc97f0(int iA, uint32_t uFlags, float fRange, int iB);         // 0x00bc97f0
-extern void AssignVariantUInt(Variant* pVariant, uint32_t uValue);               // Variant::operator=
-extern void GetOrderPosition(void* pOrder, Vec3* pPosition);                     // +0x120 vtable +0x2c
-extern bool GetPropertyAsUint32Array(cPropertyList* pList, uint32_t uPropertyId,
-                                     uint32_t** ppArray, int* piCount);          // property helper
-extern void* EventLog(uint32_t uId, uint32_t uSubId, void* pPos, int iA, int iB, int iC);
-extern void PostFeedbackEvent(void* pLog, uint32_t uId, uint32_t uSubId, void* pPos,
-                              int iA, int iB, int iC);
-extern void Start3dSoundByName(uint32_t uName, int iHandle, float x, float y, float z);
 
 // ---- items of slice s00ce1390 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern unsigned g_defaultUInt;      // 0x015d1164
@@ -270,6 +286,7 @@ extern bool     g_bool_01581374;    // 0x01581374
 extern float    g_zero;             // 0x01485378
 extern float    g_two;              // 0x01470f1c
 extern float    g_f_01473c70;       // 0x01473c70
+extern float    g_fltMax;           // 0x01477928
 #pragma pack(push, 1)
 #pragma pack(pop)
 #define VSLOT(n) virtual void _v##n();
@@ -313,6 +330,14 @@ struct IInterface {
     VSLOT(0) VSLOT(1) VSLOT(2)
     virtual void* AsInterface(uint32_t id);         // +0x0c, 0x4f396a66 = cTribe
 };
+struct IGetPos {
+    VSLOTS_0_10
+    virtual Vector3* GetPosition();                 // +0x2c
+};
+struct IBool11 {
+    VSLOTS_0_10
+    virtual bool IsBusy();                          // +0x2c
+};
 struct IGetId {
     VSLOTS_0_18
     virtual int GetId();                            // +0x4c
@@ -321,14 +346,27 @@ struct IGetRadius {
     VSLOTS_0_23
     virtual float GetRadius();                      // +0x60
 };
+struct ICast46 {
+    VSLOTS_0_45
+    virtual void* Cast(uint32_t id);                // +0xb8
+};
 struct IProx48 {
     VSLOTS_0_47
     virtual bool IsNear(void* pOther, float a, float b);   // +0xc0
 };
 struct Vector3;
+struct PtrList {                                    // pair of pointers
+    void** mpBegin;                                 // +0x00
+    void** mpEnd;                                   // +0x04
+};
 struct Vec3List {
     Vector3* mpBegin;                               // +0x00
     Vector3* mpEnd;                                 // +0x04
+};
+struct C0Obj {
+    VSLOTS_0_10
+    virtual Vector3* GetPosition();                 // +0x2c
+    PtrList* GetAttackables();                      // 0x00c420d0
 };
 struct cAgentOrder;
 struct cCreature;
@@ -427,10 +465,17 @@ struct cEventLog {
     int PostFeedbackEvent(unsigned a, unsigned b, int c, int d, int e, int f);   // 0x00dd8640
 };
 cEventLog* EventLog();                              // 0x00b3d3e0
+struct RandomLinearCongruential {
+    unsigned RandomUint32Uniform(unsigned n);       // 0x00a68fb0
+};
+extern RandomLinearCongruential g_random;           // 0x01601760
 bool HasPendingOrder(cTribePlanData_s00ce_1390* plan, int orderType);   // 0x00ce0b60
+void* FUN_00ac80d0(void* p, uint32_t type);                  // 0x00ac80d0
+void* FUN_00d99500(void* p);                                 // 0x00d99500
 struct CongState { int mOrderType; int mOrderId; int mPhase; float mTimer; };
 struct StealState { int mOrderType; int mOrderId; float mTimer; };
 struct GiftState { int mOrderType; int mOrderId; float mTimer; };
+struct HuntState { int mOrderType; int mOrderId; Vector3 mTargetPos; float mTimer; };
 struct GatherState { int mOrderType; int mOrderId; float mTimer; };
 struct WaterState { int mOrderType; int mOrderId; float mTimer; };
 // ---- items of slice s00ce1390 end
@@ -440,10 +485,7 @@ namespace SP {
  class cTribePlanConfiguration; 
 }
 extern uint32_t g_defaultUInt;              // 0x015d1164
-extern wchar_t  g_emptyString16[2];         // 0x01667bac
-extern uint32_t g_statInit;                 // 0x0169b3ac
 extern float    g_closestWaterZero[3];      // 0x0169b3d8
-extern "C" int  __cdecl atexit(void (__cdecl*)(void));
 extern "C" void __cdecl memmove(void* pDst, const void* pSrc, unsigned nCount);
 extern "C" void __cdecl operator_delete_array(void* pMemory);
 struct IInterface_s00ce_2330 {                                     // EA::COM::IUnknown32-lookalike
@@ -533,8 +575,8 @@ struct cTribePlanData_s00ce_2330 {                                 // size 0x58
     WorkerList_s00ce_2330 mWorkers;                                // +0x1c
     cTribePlanConfiguration_s00ce_2330* mpConfiguration;           // +0x54
 
-    cTribePlanData_s00ce_2330* FUN_00ce2880(const cTribePlanData_s00ce_2330* pSrc);
-    cTribePlanData_s00ce_2330* FUN_00ce28e0(const cTribePlanData_s00ce_2330* pSrc);
+    cTribePlanData_s00ce_2330* FUN_00ce2880(const cTribePlanData_s00ce_2330* pSrc);  // 0x00ce2880 (cTribePlanData::FUN_00ce2880)
+    cTribePlanData_s00ce_2330* FUN_00ce28e0(const cTribePlanData_s00ce_2330* pSrc);  // 0x00ce28e0 (cTribePlanData::FUN_00ce28e0)
     void FUN_00ce0f70();                                // 0x00ce0f70 (release workers)
     cTribePlanConfiguration_s00ce_2330* GetConfiguration();  // 0x00ce2ee0 (cTribePlanData::GetConfiguration)
 };
@@ -619,11 +661,12 @@ struct PlanConfigNode {
     cTribePlanConfiguration_s00ce_2330 mConfiguration;             // +0x04 (retail embeds the config inline)
     PlanConfigNode* mpNext;                             // chain link (at +0x48 in retail buckets)
 };
-extern String16 g_statString;               // 0x0169b39c
 void __cdecl g_statStringDtor(void);        // 0x013c4880
 void __cdecl g_planCfgTableDtor(void);      // 0x013c48b0
 int  __cdecl WStr_Format(void* pDest, const wchar_t* pFormat, ...);          // 0x0041e050
 void __cdecl ReadInt32(void* pStream, void* pData, int nCount, int nArg);           // 0x0093a9e0
+PlannerGroup* __cdecl LowerBound(const PlannerGroup* pFirst, const PlannerGroup* pLast,
+                                 const uint32_t* pKey, uint8_t uCompare);            // 0x00612db0
 void* __stdcall FUN_00af13b0(cTribe* pTribe, int nKind, int nArg);                    // 0x00af13b0
 bool  __fastcall FUN_00af0c90(void* pLayoutManager);                                 // 0x00af0c90
 bool  __fastcall FUN_00c8e850(void* pObject);                                        // 0x00c8e850
@@ -635,6 +678,7 @@ void  __fastcall GetAny(behavior_stimuli* pStimuli);                            
 void* __cdecl PropertyManager();                                                     // 0x0067de30
 int   __fastcall FUN_00ce0ed0(void* pTable, const void* pEntry);                     // 0x00ce0ed0
 void  __fastcall LoadTuning(cTribePlanConfiguration_s00ce_2330* pThis);                         // 0x00ce0150
+cTribePlanConfiguration_s00ce_2330* __cdecl GetTribePlanConfiguration_s00ce_2330(uint32_t uTribeId);       // 0x00ce2d20
 struct PtrVector {
     uint32_t* mpBegin;                                  // +0x00
     uint32_t* mpEnd;                                    // +0x04
@@ -642,6 +686,9 @@ struct PtrVector {
     void reserve(uint32_t uCount);
     void push_back(const uint32_t& uValue);
 };
+extern wchar_t  g_emptyString16[2];         // 0x01667bac
+extern uint32_t g_statInit;                 // 0x0169b3ac
+extern String16 g_statString;               // 0x0169b39c
 extern uint32_t g_planCfgInit;              // 0x0169b3d0
 extern float    g_planCfgLoadFactor;        // 0x0169b3c0
 extern float    g_planCfgGrowthFactor;      // 0x0169b3c4
@@ -651,6 +698,7 @@ extern uint32_t g_planCfgBuilt;             // 0x0169b3bc
 extern uint32_t g_planCfgZero;              // 0x0169b3c8
 extern void*    g_planCfgEmptyBucket;       // 0x0154df28
 extern char     g_planTable[1];             // 0x0169b3b0 (cTribePlanData plan table)
+extern "C" int  __cdecl atexit(void (__cdecl*)(void));
 // ---- items of slice s00ce2330 end
 
 // callees this slice defines outside this object (rewrite.py held_callee_protos)
@@ -840,11 +888,50 @@ int GetToolOrderSlot(void* pTool);
 extern const char kEastlAllocatorFile[];                       // allocator.h source path
 void* operator_new(size_t nSize, const char* pName, int a, int b, const void* pFile, int nLine);
 void* FUN_00ce29c0(void** ppResult, void* pFirst, void* pLast, void* pDest, void* pOwner);
+void* FUN_00ce2b30(void* pFirst, void* pLast, void* pDest);
+void  FUN_00ce0e00(void* pFirst, void* pLast);                 // vector<PlannerGroup>::DoDestroyValues
+void* FUN_00ce2cc0(void* pThis, uint32_t nCount, void* pFirst, void* pLast);
+void* FUN_00ce2930(void* pFirst, void* pLast, void* pDest);
+void  FUN_00ce0d90(void* pFirst, void* pLast, void* pDest);
+void  FUN_00ce2ab0(void* pDest, uint32_t nCount, void* pValue, void* pOwner);
+void  FUN_00ce2880(void* pValue);
+void  FUN_00ce2a50(void* pFirst, void* pLast, void* pValue);
+void  FUN_00ce2ba0(void* pFirst, void* pLast, void* pDest);
 struct PlannerGroup_s00ce_4e10;
 struct PlannerStepData;
 struct PlannerGroupVector;
+struct PlannerStepVector;
 void* FUN_00ce4e10(void* pFirst, void* pLast, void* pDest);    // copy-construct a group range
+void  FUN_00ce2c10(void* pFirst, void* pLast, void* pDest);
+void* FUN_00ce4c40(void* pVector);                             // CopyPlannerVector
+void  FUN_00ce4ca0(void* pFirst, void* pLast, void* pDest, void* pOwner);
+void  FUN_00ce4d60(void* pDest, uint32_t nCount, void* pValue, void* pOwner);
+void  FUN_00ce5a40(void* pFirst, void* pLast, void* pDest);
+void  FUN_00ce5650(PlannerStepData* pEnd, PlannerStepData* pNewEnd);
 void* FUN_00ce5a00(void* a, void* b, void* c);
+class cBehaviorTreeData_s00ce_4e10 {
+public:
+    uint32_t mPad00[0x19c];                         // +0x00 (0x670 bytes)
+};
+void __fastcall FUN_00bcae90(cBehaviorTreeData_s00ce_4e10* pThis, void* pUnused);
+class ContentValidationSummarizer {
+public:
+    virtual void Summarize();                       // +0x00
+
+    uint32_t    mPad04;                             // +0x04
+};
+class cGonzagoSimulator_s00ce_4e10 : public ContentValidationSummarizer {
+public:
+    cGonzagoSimulator_s00ce_4e10();                            // 0x00b5b6c0
+    virtual void Update();                          // +0x08 0x00ce48f0
+};
+class ITracerBase {
+public:
+    virtual void TraceBegin();                      // +0x00
+    virtual void TraceEnd();                        // +0x04
+
+    uint32_t    mPad04;                             // +0x04
+};
 struct SpSortedVector8 {                            // fixed_vector<T, 8> with inline storage
     void        Destroy();                          // 0x00ae6970 eastl vector destructor
 
@@ -920,6 +1007,135 @@ struct PlannerGroupVector {                         // eastl::vector<PlannerGrou
     void                FUN_00ce5ff0();
     PlannerGroup_s00ce_4e10*       FUN_00ce6040(PlannerGroup_s00ce_4e10* pPos, PlannerGroup_s00ce_4e10* pValue);
 };
+struct PlannerStepVector {                          // eastl::vector<cTribePlanData>
+    PlannerStepData* mpBegin;                       // +0x00
+    PlannerStepData* mpEnd;                         // +0x04
+    PlannerStepData* mpCapacity;                    // +0x08
+
+    void FUN_00ce56a0(PlannerStepData* pEnd, const PlannerStepData* pValue);   // insert into full storage
+    void FUN_00ce57e0(PlannerStepData* pPos, uint32_t nCount, const PlannerStepData* pValue);
+    void FUN_00ce5a80();
+    void FUN_00ce5b30(uint32_t nCount);
+};
+class SpVectorFloat_s00ce_4e10 {
+public:
+    void resize(int32_t nCount);                    // 0x004afc80
+
+    float*      mpBegin;                            // +0x00
+    float*      mpEnd;                              // +0x04
+    float*      mpCapacity;                         // +0x08
+    uint8_t     mPad0c[0x08];                       // +0x0c
+    uint32_t    mUnused14;                          // +0x14
+    float       mBuffer[12];                        // +0x18
+};
+class cTribe;
+class cTribePlanner_s00ce_4e10 : public cGonzagoSimulator_s00ce_4e10, public ITracerBase {
+public:
+    cTribePlanner_s00ce_4e10();                                // 0x00ce55a0
+    ~cTribePlanner_s00ce_4e10();                               // 0x00ce4ed0
+
+    cBehaviorTreeData_s00ce_4e10*  mpBehaviorTreeData;         // +0x10
+    PlannerGroup_s00ce_4e10*       mpPlansBegin;               // +0x14
+    PlannerGroup_s00ce_4e10*       mpPlansEnd;                 // +0x18
+    PlannerGroup_s00ce_4e10*       mpPlansCapacity;            // +0x1c
+    uint8_t             mPad20[0x0c];               // +0x20
+    SpVectorFloat_s00ce_4e10       mTimeBetweenPlanExecutionByType;   // +0x2c
+    cTribe*             mpTribe;                    // +0x74
+    float               mAccumulatedDeltaTime;      // +0x78
+};
+void* FUN_00bca2c0_s00ce_4e10();                               // cAgentOrderManager::FirstPending
+void* FUN_00ce0e60(void* pTable, uint32_t uPlanId, uint32_t uIndex);
+bool  FUN_00cdfea0(void* pOrder);
+void  FUN_00cdff70(void* pOrder);
+void  FUN_009fbc50(void* pTarget, float fX, float fY, float fZ);
+void  FUN_00b3d2c0(void* pObj);
+float FUN_00d00a10(void* a, void* b, uint32_t c);
+int32_t FUN_00d00780(float fValue);
+void  FUN_00c27db0(uint32_t uOrderType);
+void* FUN_00af9f30();
+int32_t FUN_00c9d110();
+struct Vec3_s00ce_4e10 {
+    float mX;
+    float mY;
+    float mZ;
+};
+class cCombatant {
+public:
+    int32_t GetDamageState();                       // 0x00bca... (inlined by the caller)
+    uint32_t mPad00[0x48];                          // +0x00 .. +0x11f
+};
+class cGameObject {
+public:
+    virtual Vec3_s00ce_4e10* GetPosition();                    // +0x2c
+    uint32_t mPad04[0x2c];                          // +0x04 .. +0xbf
+    void*    mpVtblC0;                              // +0xc0 (secondary interface)
+};
+class cSPCreatureCitizen_s00ce_4e10 {
+public:
+    void GiveOrder(int32_t nOrder, void* pTool, void* pParam);  // 0x00c275b0 (cSPCreatureCitizen::GiveOrder)
+    uint32_t mPad00[0x16c];                         // +0x00 .. +0x5a7
+    cGameObject* mpTarget;                          // +0x5a8
+    uint8_t  mByteB5e;                              // +0xb5e
+};
+struct PlanKey {
+    uint32_t mPlanId;                               // +0x00
+    uint32_t mIndex;                                // +0x04
+    float    mTimeout;                              // +0x08
+    Vec3_s00ce_4e10     mPosition;                             // +0x0c
+};
+class cPlanOrder {                                  // the planner's active plan object
+public:
+    virtual void  v00();                            // +0x00
+    virtual void  v04();                            // +0x04
+    virtual void* GetInterface(uint32_t uKey);      // +0x0c
+    virtual void  v10();
+    virtual void  v14();
+    virtual void  v18();
+    virtual void  v1c();
+    virtual void  v20();
+    virtual void  v24();
+    virtual void  v28();
+    virtual void  v2c();
+    virtual void  v30();
+    virtual void  v34();
+    virtual void  v38();
+    virtual void  v3c();
+    virtual void  v40();
+    virtual void  v44();
+    virtual void  v48();
+    virtual void* GetOwner(uint32_t uIndex);        // +0x4c
+    virtual void  v50();
+    virtual void  v54();
+    virtual void  v58();
+    virtual void  v5c();
+    virtual void  v60();
+    virtual void  v64();
+    virtual void  v68();
+    virtual void  v6c();
+    virtual void  v70();
+    virtual void  v74();
+    virtual void  v78();
+    virtual void  v7c();
+    virtual void  v80();
+    virtual void  v84();
+    virtual void  v88();
+    virtual void  v8c();
+    virtual void* GetTarget();                      // +0x90
+    virtual void  v94();
+    virtual void  v98();
+    virtual void  v9c();
+    virtual void  va0();
+    virtual void  va4();
+    virtual void  va8();
+    virtual void* GetGroup();                       // +0xac
+    virtual void  vb0();
+    virtual void  vb4();
+    virtual void  vb8();
+    virtual void* GetMembers();                     // +0xbc
+
+    uint32_t mPad04[0x44];                          // +0x04 .. +0x123
+    void*    mpGroup122;                            // +0x124
+};
 // ---- items of slice s00ce4e10 end
 
 // ---- items of slice s0135d100 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -984,6 +1200,20 @@ bool FUN_00cdfea0(cCitizen* pMember)
     return true;
 }
 
+// @ 0x00cdfef0
+long double FUN_00cdfef0(int iNode, int iUnused1, int iUnused2, int iUnused3, void* pStimuli, bool* pbOut, int iUnused5, int* pParams)
+{
+    if (pStimuli)
+        GetAny(pStimuli);
+
+    *pbOut = true;
+
+    void* pObject = (void*)(*(int*)(*(int*)(iNode + 4) + 0x10) + 0x1d0);
+    void* pList = FUN_00d99420(pObject, pParams[0x2d / 4]);
+    FUN_00d996e0(pList, pStimuli);
+    return 1.0;
+}
+
 // @ 0x00cdff70
 int** __fastcall FUN_00cdff70(int*** pIter)
 {
@@ -997,8 +1227,27 @@ int** __fastcall FUN_00cdff70(int*** pIter)
     }
 }
 
+// @ 0x00cdffc0
+PlanEntry* FUN_00cdffc0(PlanEntry* pThis, const PlanEntry* pSrc)
+{
+    pThis->mPosition[0] = pSrc->mPosition[0];
+    pThis->mPosition[1] = pSrc->mPosition[1];
+    pThis->mPosition[2] = pSrc->mPosition[2];
+    for (int i = 0; i < 8; ++i)
+        pThis->mPad0c[i] = pSrc->mPad0c[i];
+    pThis->mPad2c = pSrc->mPad2c;
+    pThis->mScale = pSrc->mScale;
+    pThis->mPad34 = pSrc->mPad34;
+    pThis->mPad38 = pSrc->mPad38;
+    pThis->mByte3c = pSrc->mByte3c;
+    pThis->mpObject = pSrc->mpObject;
+    if (pThis->mpObject)
+        (*(void (__thiscall**)(void*))pThis->mpObject) (pThis->mpObject);
+    return pThis;
+}
+
 // @ 0x00ce0150
-void LoadTuning(cTribePlanConfiguration* pThis)
+void LoadTuning(cTribePlanConfiguration_s00cd_fea0* pThis)
 {
     Variant* pValue = 0;
     cPropertyList* pList = (cPropertyList*)pThis->mpPropertyList;
@@ -1090,6 +1339,20 @@ void Shutdown(cTribePlanner* pThis)
     }
 }
 
+// @ 0x00ce0b20
+int** FUN_00ce0b20(int** pIter, int** pSource, uint32_t uUnused)
+{
+    int* pBegin = *pSource;
+    pIter[0] = pBegin;
+    int* pEnd = pSource[1];
+    pIter[1] = pEnd;
+    if (pBegin != pEnd) {
+        if (!FUN_00cdfea0((cCitizen*)*pBegin))
+            FUN_00cdff70((int***)pIter);
+    }
+    return pIter;
+}
+
 // @ 0x00ce0b60
 bool FUN_00ce0b60(WorkerList* pWorkers, int iPlanId)
 {
@@ -1147,6 +1410,46 @@ void FUN_00ce0e00(char* pBegin, char* pEnd)
         if (pBlock && *(int*)((char*)pBlock - 4) != 0)
             operator_delete((char*)pBlock - 4);
     }
+}
+
+// @ 0x00ce0e60
+PlanTableEntry* FUN_00ce0e60(PlanTable* pTable, uint32_t uPlanId, uint32_t uIndex)
+{
+    PlanTableEntry* pEnd = pTable->mpEnd;
+    PlanTableEntry* pEntry = pTable->mpBegin;
+    while (pEntry != pEnd && pEntry->mKey < uPlanId)
+        ++pEntry;
+    if (pEntry == pEnd || uPlanId < pEntry->mKey)
+        pEntry = pEnd;
+    if (pEntry != pEnd) {
+        uint32_t uCount = (uint32_t)(((char*)pEntry->mpEnd - (char*)pEntry->mpBegin) / 0x58);
+        if (uIndex < uCount)
+            return (PlanTableEntry*)((char*)pEntry->mpBegin + uIndex * 0x58);
+    }
+    return 0;
+}
+
+// @ 0x00ce0ed0
+int FUN_00ce0ed0(PlanTable* pTable, const PlanEntry* pOrder)
+{
+    uint32_t uEntry[2] = { 0, 0 };
+    FUN_00ce0bf0(uEntry, pOrder);
+
+    uint32_t uCurrent = pTable->mpEntries[pTable->mEntryIndex];
+    if (uEntry[0] != uCurrent)
+        return (int)(uEntry[0] + 4);
+
+    PlanEntry entry;
+    uint32_t uValue[18];
+    uValue[0] = *(const uint32_t*)pOrder;
+    entry.mpObject = 0;
+    FUN_00cdffc0(&entry, pOrder);
+    uEntry[0] &= 0xffffff00u;
+    FUN_00ce0c50(uEntry, uValue, uEntry[0]);
+    int iResult = (int)(uEntry[0] + 4);
+    if (entry.mpObject)
+        (*(void (__thiscall**)(void*))(*(int*)entry.mpObject + 4)) (entry.mpObject);
+    return iResult;
 }
 
 // @ 0x00ce0f70
@@ -1414,6 +1717,69 @@ bool PLANNER_STEALING_FOOD_Activate(cTribePlannerContext* ctx, int, int, int, in
     return false;
 }
 
+// @ 0x00ce1810
+bool PLANNER_STEALING_FOOD_Tick(cTribePlannerContext* ctx, int, int, int, int, StealState* st, WorkerFilter*, float dt)
+{
+    cTribe* ourTribe = ctx->mpTribe;
+    cAgentOrder* order = ctx->mpTribePlanner->mpOrderManager->FirstPending();
+    if (order) {
+        cTribePlanData_s00ce_1390* plan = ctx->mpTribePlanner->GetPlanData(st->mOrderType, st->mOrderId);
+        if (plan) {
+            void* tgt = order->mpTarget;
+            if (tgt) {
+                cTribe* target = (cTribe*)((IInterface*)tgt)->AsInterface(0x4f396a66);
+                if (target) {
+                    if (g_bool_01581374) {
+                        float score = RelationshipManager()->d00a10(
+                            ourTribe->AsGetId()->GetId(), target->AsGetId()->GetId(), 1);
+                        if (RelationshipManager()->d00780(score) >= 2) return false;
+                    }
+                }
+            }
+        }
+    }
+    float t = st->mTimer - dt;
+    if (t > g_zero) {
+        st->mTimer = t;
+        return true;
+    }
+    st->mTimer = t;
+    st->mTimer = g_two;
+    if (!order) return false;
+    return HasPendingOrder((cTribePlanData_s00ce_1390*)0, 8);
+}
+
+// @ 0x00ce18f0
+bool PLANNER_GIFTING_Activate(cTribePlannerContext* ctx, int, int, int, int, GiftState* st)
+{
+    st->mOrderType = -1;
+    st->mOrderId = -1;
+    cAgentOrder* order = ctx->mpTribePlanner->mpOrderManager->FirstPending();
+    if (order) {
+        st->mOrderType = order->mType;
+        unsigned key = *order->mParam.GetUInt();
+        st->mOrderId = key;
+        cTribePlanData_s00ce_1390* plan = ctx->mpTribePlanner->GetPlanData(st->mOrderType, key);
+        if (plan) {
+            if (order->mpTarget) {
+                cTribe* target = (cTribe*)order->mpTarget->AsInterface(0x4f396a66);
+                if (target) {
+                    plan->mState = 4;
+                    int four = 4;
+                    order->mOption.SetInt(&four);
+                    st->mTimer = 0.0f;
+                    WorkerIter it(&plan->mWorkers);
+                    for (; it.mCur != it.mEnd; it.Advance()) {
+                        (*it.mCur)->GiveOrder(9, target, 0);
+                    }
+                    return true;
+                }
+            }
+        }
+    }
+    return false;
+}
+
 // @ 0x00ce1a20
 bool PLANNER_GIFTING_Tick(cTribePlannerContext* ctx, int, int, int, int, GiftState* st, WorkerFilter*, float dt)
 {
@@ -1429,6 +1795,69 @@ bool PLANNER_GIFTING_Tick(cTribePlannerContext* ctx, int, int, int, int, GiftSta
         return HasPendingOrder(plan, 9);
     }
     return false;
+}
+
+// @ 0x00ce1c90
+bool PLANNER_HUNTING_Tick(cTribePlannerContext* ctx, int, int, int, int, HuntState* st, WorkerFilter*, float dt)
+{
+    float t = st->mTimer - dt;
+    if (t > g_zero) {
+        st->mTimer = t;
+        return true;
+    }
+    st->mTimer = t;
+    st->mTimer = g_two;
+    if (!ctx->mpTribePlanner->mpOrderManager->FirstPending()) return false;
+    cTribePlanData_s00ce_1390* plan = ctx->mpTribePlanner->GetPlanData(st->mOrderType, st->mOrderId);
+    if (!plan) return false;
+    WorkerIter it(&plan->mWorkers);
+    for (; it.mCur != it.mEnd; it.Advance()) {
+        if (it.mFilter.Pass(*it.mCur)) break;
+    }
+    if (it.mCur == it.mEnd) return false;
+    unsigned n = (unsigned)(plan->mWorkers.mpEnd - plan->mWorkers.mpBegin);
+    cCreature* hunter = plan->mWorkers.mpBegin[g_random.RandomUint32Uniform(n)];
+    if (((IBool11*)hunter)->IsBusy()) return true;
+    if (hunter->mFlagB5E) return true;
+    C0Obj* me = (C0Obj*)((char*)hunter + 0xc0);
+    Vector3* myPos = me->GetPosition();
+    int myId = ((IGetId*)hunter)->GetId();
+    float best = g_fltMax;
+    cCreature* target = 0;
+    PtrList* cand = me->GetAttackables();
+    for (void** p = cand->mpBegin; p != cand->mpEnd; ++p) {
+        cCreature* c = (cCreature*)*p;
+        if (!c) continue;
+        void* iface = ((ICast46*)c)->Cast(0x17f243b);
+        if (!iface) continue;
+        void* obj = FUN_00ac80d0(iface, 0x18eb45e);
+        if (!obj) continue;
+        cCreature* other = (cCreature*)FUN_00d99500(obj);
+        if (!other) continue;
+        if (!other->IsFlagB34()) continue;
+        if (other->HasSubFlag388()) continue;
+        if (((IGetId*)other)->GetId() == myId) continue;
+        Vector3* oPos = ((IGetPos*)((char*)other + 0xc0))->GetPosition();
+        float dx = myPos->x - oPos->x, dy = myPos->y - oPos->y, dz = myPos->z - oPos->z;
+        float d2 = dx * dx + dy * dy + dz * dz;
+        if (!(best > d2)) continue;
+        float d = sqrtf(d2);
+        if (!hunter->IsNearSelf(other, 1.0f, d)) {
+            if (!((IProx48*)hunter)->IsNear(other, 1.0f, d)) continue;
+        }
+        best = d2;
+        target = other;
+    }
+    if (!target) return true;
+    WorkerIter it2;
+    it2.Init(&plan->mWorkers, &it2.mFilter);
+    for (; it2.mCur != it2.mEnd; it2.Advance()) {
+        cCreature* c = *it2.mCur;
+        cAgentOrder* o = c->mpOrderManager->FirstPending();
+        if (o && o->mType == 0xa) continue;
+        c->GiveOrder(0xa, target, 0);
+    }
+    return true;
 }
 
 // @ 0x00ce20d0
@@ -1466,7 +1895,7 @@ bool PLANNER_WATERING_Tick(cTribePlannerContext* ctx, int, int, int, int, WaterS
 }
 
 // @ 0x00ce23b0
-const wchar_t* cTribePlanner_s00ce_2330::GetStatString(int nWhich)
+wchar_t const * SP::cTribePlanner::GetStatString(SP::cGonzagoSimulator::eStatStringType nWhich)
 {
     if ((g_statInit & 1) == 0) {
         g_statInit |= 1;
@@ -1476,7 +1905,7 @@ const wchar_t* cTribePlanner_s00ce_2330::GetStatString(int nWhich)
         atexit(g_statStringDtor);
     }
     if (nWhich == 2)
-        WStr_Format(&g_statString, L"Tribe Planner 0x%08x", (uint32_t)mpTribe);
+        WStr_Format(&g_statString, L"Tribe Planner 0x%08x", (uint32_t)mpTribe.mpObject);
     return g_statString.mpBegin;
 }
 
@@ -1774,6 +2203,77 @@ cTribePlanConfiguration_s00ce_2330 * GetTribePlanConfiguration(unsigned int uTri
     return 0;
 }
 }  // namespace SP
+
+// @ 0x00ce2ee0
+cTribePlanConfiguration_s00ce_2330* cTribePlanData_s00ce_2330::GetConfiguration()
+{
+    if (mpConfiguration == 0)
+        mpConfiguration = GetTribePlanConfiguration_s00ce_2330(mID);
+    return mpConfiguration;
+}
+
+// @ 0x00ce2f00
+uint32_t FUN_00ce2f00(cTribePlannerContext_s00ce_2330* pContext, uint32_t uKey, char bIgnore)
+{
+    cTribePlanner_s00ce_2330* pPlanner = pContext->mpTribePlanner;
+    PlannerGroup* pPlansEnd = pPlanner->mpPlansEnd;
+    PlannerGroup* pFound = LowerBound(pPlanner->mpPlansBegin, pPlansEnd, &uKey, pPlanner->mPlansCompare);
+    PlannerGroup* pGroup = pPlansEnd;
+    if (pFound != pPlansEnd && pFound->mPlanType <= uKey && pFound != pFound + 1)
+        pGroup = pFound;
+
+    if (pGroup == pPlansEnd)
+        return 0xffffffffu;
+
+    cTribePlanData_s00ce_2330* pStepBegin = pGroup->mSteps.mpBegin;
+    cTribePlanData_s00ce_2330* pStepEnd = pGroup->mSteps.mpEnd;
+    uint32_t uCount = (uint32_t)(pStepEnd - pStepBegin);
+    for (uint32_t uIndex = 0; uIndex < uCount; ++uIndex) {
+        cTribePlanData_s00ce_2330* pStep = pStepBegin + uIndex;
+        if (pStep->mpConfiguration == 0)
+            pStep->mpConfiguration = GetTribePlanConfiguration_s00ce_2330(pStep->mID);
+        cTribePlanConfiguration_s00ce_2330* pConfig = pStep->mpConfiguration;
+        if ((pStep->mFrequency == 0xffffffffu || pStep->mFrequency != 0)
+            && pStep->mbCheck != 0
+            && ((pConfig->mMinRelationshipToTarget == -1 && pConfig->mMaxRelationshipToTarget == -1)
+                || (pConfig->mMinRelationshipToTarget <= pContext->mAttitudeToTarget
+                    && pContext->mAttitudeToTarget <= pConfig->mMaxRelationshipToTarget))
+            && (((pConfig->mNumRequiredAdults <= pContext->mNumAdults
+                  || pContext->mMaxAdults < pConfig->mNumRequiredAdults)
+                 && pConfig->mRequiredFood <= pContext->mCurrentFood
+                 && (pContext->mToolsMask & pConfig->mRequiredTools) == pConfig->mRequiredTools
+                 && pConfig->mMinTargetPopulation <= pContext->mTargetPopulation
+                 && pContext->mTargetPopulation <= pConfig->mMaxTargetPopulation)
+                || bIgnore == 0))
+            return uIndex;
+    }
+    return 0xffffffffu;
+}
+
+// @ 0x00ce3020
+void DeactivatePlan(cTribePlannerContext_s00ce_2330* pContext, uint32_t uPlanType, uint32_t uIndex, char bRelease)
+{
+    cTribePlanner_s00ce_2330* pPlanner = pContext->mpTribePlanner;
+    cTribePlanData_s00ce_2330* pEntry = pPlanner->GetPlanData(uPlanType, uIndex);
+    if (pEntry != 0) {
+        if (bRelease != 0)
+            pEntry->FUN_00ce0f70();
+        if (pEntry->mState == 4 && uIndex < 0xc) {
+            if (pEntry->mpConfiguration == 0)
+                pEntry->mpConfiguration = GetTribePlanConfiguration_s00ce_2330(pEntry->mID);
+            pPlanner->mTimeBetweenPlanExecutionByType.mpBegin[uIndex] =
+                pEntry->mpConfiguration->mTimeBetweenExecution;
+        }
+        pEntry->mWorkers.erase(pEntry->mWorkers.mpBegin, pEntry->mWorkers.mpEnd);
+        pEntry->mFoodAccumulated = 0.0f;
+        pEntry->mFoodRequired = 0;
+        pEntry->mState = 0;
+    }
+
+    cAgentOrder_s00ce_2330* pOrder = pPlanner->mpBehaviorTreeData->FirstPending();
+    if (pOrder != 0 && pOrder->mType == (int)uPlanType)
+        pPlanner->mpBehaviorTreeData->PopFront();
+}
 
 // @ 0x00ce30d0
 float FUN_00ce30d0(cTribePlannerContext_s00ce_2330* pContext, uint32_t uArg2, uint32_t uArg3, uint32_t uArg4, behavior_stimuli* pStimuli, uint8_t* pOut)
@@ -2309,6 +2809,374 @@ void* FUN_00ce4e10(void* pFirst, void* pLast, void* pDest)
     return pOut;
 }
 
+// @ 0x00ce4ed0
+cTribePlanner_s00ce_4e10::~cTribePlanner_s00ce_4e10()
+{
+    if (mpBehaviorTreeData) {
+        FUN_00bcae90(mpBehaviorTreeData, 0);
+        operator_delete_array(mpBehaviorTreeData);
+    }
+    if (mpTribe) {
+        ITracerBase* pTribe = (ITracerBase*)mpTribe;
+        pTribe->TraceEnd();                          // vtable slot used as Release by the tribe
+    }
+    PlannerGroup_s00ce_4e10* pTimesBegin = (PlannerGroup_s00ce_4e10*)mTimeBetweenPlanExecutionByType.mpBegin;
+    if (pTimesBegin) {
+        if (((int32_t*)pTimesBegin)[-1] != 0)
+            operator_delete_array(pTimesBegin);
+    }
+    PlannerGroupVector* pPlans = (PlannerGroupVector*)&mpPlansBegin;
+    pPlans->DoDestroyValues(mpPlansBegin, mpPlansEnd);
+    PlannerGroup_s00ce_4e10* pPlansBegin = pPlans->mpBegin;
+    if (pPlansBegin)
+        operator_delete_array(pPlansBegin);
+}
+
+// @ 0x00ce5050
+PlannerGroupVector* PlannerGroupVector::FUN_00ce5050(const PlannerGroupVector* pOther)
+{
+    PlannerGroupVector* pVec = this;
+    if (pOther == pVec)
+        return pVec;
+
+    PlannerGroup_s00ce_4e10* pSource = pOther->mpBegin;
+    uint32_t nSource = (uint32_t)((char*)pOther->mpEnd - (char*)pSource) / 0x18;
+    PlannerGroup_s00ce_4e10* pBegin = pVec->mpBegin;
+    uint32_t nCapacity = (uint32_t)((char*)pVec->mpCapacity - (char*)pBegin) / 0x18;
+
+    if (nCapacity < nSource) {
+        PlannerGroup_s00ce_4e10* pNew = (PlannerGroup_s00ce_4e10*)FUN_00ce2cc0(pVec, nSource, pSource, pOther->mpEnd);
+        FUN_00ce0e00(pVec->mpBegin, pVec->mpEnd);
+        if (pVec->mpBegin) {
+            if (((int32_t*)pVec->mpBegin)[-1] != 0)
+                operator_delete_array(pVec->mpBegin);
+        }
+        pVec->mpEnd = (PlannerGroup_s00ce_4e10*)((char*)pNew + nSource * 0x18);
+        pVec->mpBegin = pNew;
+        pVec->mpCapacity = pVec->mpEnd;
+        return pVec;
+    }
+
+    uint32_t nSize = (uint32_t)((char*)pVec->mpEnd - (char*)pBegin) / 0x18;
+    if (nSize < nSource) {
+        FUN_00ce2b30(pSource, (char*)pSource + nSize * 0x18, pBegin);
+        PlannerGroup_s00ce_4e10* pIn = (PlannerGroup_s00ce_4e10*)((char*)pSource + nSize * 0x18);
+        PlannerGroup_s00ce_4e10* pOtherEnd = pOther->mpEnd;
+        void* pResult = nullptr;
+        FUN_00ce29c0(&pResult, pIn, pOtherEnd, pVec->mpEnd, pOtherEnd);
+        pVec->mpEnd = (PlannerGroup_s00ce_4e10*)((char*)pVec->mpBegin + nSource * 0x18);
+        return pVec;
+    }
+
+    PlannerGroup_s00ce_4e10* pEnd = (PlannerGroup_s00ce_4e10*)FUN_00ce2b30(pSource, pOther->mpEnd, pBegin);
+    FUN_00ce0e00(pEnd, pVec->mpEnd);
+    pVec->mpEnd = (PlannerGroup_s00ce_4e10*)((char*)pVec->mpBegin + nSource * 0x18);
+    return pVec;
+}
+
+// @ 0x00ce5190
+int32_t PLANNER_RAIDING_Tick(PlannerGroupVector* pPlans, uint32_t uUnused, float fTimeout, void* pTargetPos, float fDuration, void* pPlanTable, PlanKey* pKey, cSPCreatureCitizen_s00ce_4e10* pOwner)
+{
+    (void)pPlans;
+    void* pOrder = FUN_00bca2c0_s00ce_4e10();
+    if (!pOrder)
+        return 0;
+
+    void* pPlanData = FUN_00ce0e60(pPlanTable, pKey->mPlanId, pKey->mIndex);
+    if (!pPlanData)
+        return 0;
+
+    PlannerStepData* pFirst = (PlannerStepData*)((char*)pPlanData + 0x1c);
+    void** ppCur = (void**)pFirst;
+    void** ppEnd = (void**)((char*)pPlanData + 0x20);
+    if (ppCur == ppEnd)
+        return 0;
+
+    if (!FUN_00cdfea0(*ppCur))
+        FUN_00cdff70(*ppCur);
+    if (ppCur == ppEnd)
+        return 0;
+
+    cGameObject* pFirstMember = (cGameObject*)*ppCur;
+    Vec3_s00ce_4e10* pPos = pFirstMember->GetPosition();
+    FUN_009fbc50(pTargetPos, pPos->mX, pPos->mY, pPos->mZ);
+
+    if (!pOwner || !pOwner->mpTarget)
+        return 0;
+
+    cPlanOrder* pPlan = (cPlanOrder*)pOrder;
+    if (!pPlan->GetInterface(0x4f396a66))
+        return 0;
+
+    pKey->mTimeout = pKey->mTimeout - fDuration;
+    if (pKey->mTimeout >= 0.0f)
+        return 1;
+
+    pKey->mTimeout = 2.0f;
+    void* pCombat = pPlan->GetOwner(1);
+    void* pOwnerObj = pPlan->GetOwner((uint32_t)pCombat);
+    FUN_00b3d2c0(pOwnerObj);
+    float fValue = FUN_00d00a10(pOwnerObj, pCombat, 1);
+    FUN_00b3d2c0(*(void**)&fValue);
+    if (FUN_00d00780(fValue) > 1)
+        return 0;
+
+    cCombatant* pTarget = (cCombatant*)pPlan->GetGroup();
+    cCombatant* pFound = nullptr;
+    void** ppMembers = (void**)pPlan->GetMembers();
+    uint32_t nMembers = (uint32_t)((char*)ppMembers[1] - (char*)ppMembers[0]) / 4;
+    if (nMembers != 0) {
+        for (uint32_t i = 0; i < nMembers; ++i) {
+            cGameObject* pMember = (cGameObject*)((void**)ppMembers)[i];
+            uint8_t nType = 0;
+            (void)nType;
+            if (pMember) {
+                int32_t nState = ((cCombatant*)((char*)pMember + 0x120))->GetDamageState();
+                if (nState != 2) {
+                    FUN_00c27db0(0);
+                    if (FUN_00af9f30() && FUN_00c9d110() == 1)
+                        pFound = (cCombatant*)((char*)pMember + 0x120);
+                }
+            }
+        }
+    }
+
+    if (!pFound) {
+        pFound = *(cCombatant**)((char*)pTarget + 0x120);
+        int32_t nState = pFound ? pFound->GetDamageState() : 2;
+        if (nState != 2 && pTarget) {
+            for (void** ppIt = ppCur; ppIt != ppEnd; ++ppIt) {
+                cSPCreatureCitizen_s00ce_4e10* pCitizen = (cSPCreatureCitizen_s00ce_4e10*)*ppIt;
+                if (!FUN_00bca2c0_s00ce_4e10()) {
+                    void* pTool = pPlan->GetOwner(nullptr);
+                    pCitizen->GiveOrder(0xf, pTool, nullptr);
+                }
+                FUN_00cdff70(pCitizen);
+            }
+            return 1;
+        }
+        return 0;
+    }
+
+    for (void** ppIt = ppCur; ppIt != ppEnd; ++ppIt) {
+        cSPCreatureCitizen_s00ce_4e10* pCitizen = (cSPCreatureCitizen_s00ce_4e10*)*ppIt;
+        if (!FUN_00bca2c0_s00ce_4e10()) {
+            void* pTool = ((cPlanOrder*)pFound)->GetOwner(nullptr);
+            pCitizen->GiveOrder(0xf, pTool, nullptr);
+        }
+        FUN_00cdff70(pCitizen);
+    }
+    return 1;
+}
+
+// @ 0x00ce57e0
+void PlannerStepVector::FUN_00ce57e0(PlannerStepData* pPos, uint32_t nCount, const PlannerStepData* pValue)
+{
+    PlannerStepVector* pVec = this;
+    if ((uint32_t)((char*)pVec->mpCapacity - (char*)pVec->mpEnd) / 0x58 >= nCount) {
+        if (nCount == 0)
+            return;
+        FUN_00ce2880((void*)pValue);
+        PlannerStepData* pEnd = pVec->mpEnd;
+        uint32_t nTail = (uint32_t)((char*)pVec->mpEnd - (char*)pPos) / 0x58;
+        if (nTail <= nCount) {
+            FUN_00ce2ab0(pEnd, nCount - nTail, (void*)pValue, pPos);
+            pVec->mpEnd = (PlannerStepData*)((char*)pVec->mpEnd + (nCount - nTail) * 0x58);
+            void* pResult = nullptr;
+            FUN_00ce29c0(&pResult, pPos, pEnd, pVec->mpEnd, pPos);
+            pVec->mpEnd = (PlannerStepData*)((char*)pVec->mpEnd + nTail * 0x58);
+            FUN_00ce2a50(pPos, pEnd, (void*)pValue);
+            return;
+        }
+        PlannerStepData* pMoveStart = (PlannerStepData*)((char*)pEnd + nCount * -0x58);
+        void* pResult = nullptr;
+        FUN_00ce29c0(&pResult, pMoveStart, pEnd, pEnd, pEnd);
+        pVec->mpEnd = (PlannerStepData*)((char*)pVec->mpEnd + nCount * 0x58);
+        FUN_00ce2ba0(pPos, pMoveStart, pEnd);
+        FUN_00ce2a50(pPos, (char*)pPos + nCount * 0x58, (void*)pValue);
+        return;
+    }
+
+    uint32_t nSize = (uint32_t)((char*)pVec->mpEnd - (char*)pVec->mpBegin) / 0x58;
+    uint32_t nNewCapacity = nSize * 2;
+    if (nSize == 0)
+        nNewCapacity = 1;
+    uint32_t nRequired = nSize + nCount;
+    if (nRequired < nNewCapacity)
+        nRequired = nNewCapacity;
+    PlannerStepData* pNew = nullptr;
+    if (nRequired != 0)
+        pNew = (PlannerStepData*)operator_new(nRequired * 0x58, "Simulator", 0, 0,
+                                              kEastlAllocatorFile, 0xd1);
+    PlannerStepData* pOldBegin = pVec->mpBegin;
+    PlannerStepData* pOldEnd = pVec->mpEnd;
+    void* pMid = FUN_00ce2930(pOldBegin, pPos, pNew);
+    FUN_00ce0d90(pOldBegin, pPos, pNew);
+    void* pTest = nullptr;
+    FUN_00ce2ab0(pMid, nCount, (void*)pValue, pMid);
+    PlannerStepData* pAfterNew = (PlannerStepData*)((char*)pMid + nCount * 0x58);
+    void* pTail = FUN_00ce2930(pPos, pOldEnd, pAfterNew);
+    FUN_00ce0d90(pPos, pOldEnd, pAfterNew);
+    if (pOldBegin) {
+        if (((int32_t*)pOldBegin)[-1] != 0)
+            operator_delete_array(pOldBegin);
+    }
+    (void)pTest;
+    pVec->mpEnd = (PlannerStepData*)pTail;
+    pVec->mpBegin = pNew;
+    pVec->mpCapacity = (PlannerStepData*)((char*)pNew + nRequired * 0x58);
+}
+
+// @ 0x00ce5a80
+void PlannerStepVector::FUN_00ce5a80()
+{
+    PlannerStepVector* pVec = this;
+    if (pVec->mpEnd < pVec->mpCapacity) {
+        PlannerStepData* pNew = pVec->mpEnd;
+        pVec->mpEnd = pNew + 1;
+        if (pNew)
+            pNew->Init();
+        return;
+    }
+    PlannerStepData value;
+    pVec->FUN_00ce56a0(pVec->mpEnd, &value);
+    value.mWorkers.Destroy();
+}
+
+// @ 0x00ce5b30
+void PlannerStepVector::FUN_00ce5b30(uint32_t nCount)
+{
+    PlannerStepVector* pVec = this;
+    PlannerStepData* pEnd = pVec->mpEnd;
+    PlannerStepData* pBegin = pVec->mpBegin;
+    uint32_t nSize = (uint32_t)((char*)pEnd - (char*)pBegin) / 0x58;
+    if (nSize < nCount) {
+        PlannerStepData value;
+        pVec->FUN_00ce57e0(pEnd, nCount - nSize, &value);
+        value.mWorkers.Destroy();
+        return;
+    }
+    FUN_00ce5650((PlannerStepData*)((char*)pBegin + nCount * 0x58), pEnd);
+}
+
+// @ 0x00ce5c40
+void PlannerGroupVector::FUN_00ce5c40(PlannerGroup_s00ce_4e10* pPos, uint32_t nCount, PlannerGroup_s00ce_4e10* pValue)
+{
+    PlannerGroupVector* pVec = this;
+    if ((uint32_t)((char*)pVec->mpCapacity - (char*)pVec->mpEnd) / 0x18 >= nCount) {
+        if (nCount == 0)
+            return;
+        PlannerGroup_s00ce_4e10 value = *pValue;
+        FUN_00ce4c40(&value.mpStepsBegin);
+        PlannerGroup_s00ce_4e10* pEnd = pVec->mpEnd;
+        uint32_t nTail = (uint32_t)((char*)pVec->mpEnd - (char*)pPos) / 0x18;
+        if (nCount < nTail) {
+            FUN_00ce4ca0((char*)pEnd + nCount * -0x18, pEnd, pEnd, pEnd);
+            pVec->mpEnd = (PlannerGroup_s00ce_4e10*)((char*)pVec->mpEnd + nCount * 0x18);
+            FUN_00ce5a40(pPos, (char*)pEnd + nCount * -0x18, pEnd);
+            PlannerGroup_s00ce_4e10* pIt = (PlannerGroup_s00ce_4e10*)((char*)pPos + nCount * 0x18);
+            for (; pPos != pIt; ++pPos) {
+                pPos->mPlanType = value.mPlanType;
+                ((PlannerGroupVector*)&pPos->mpStepsBegin)->FUN_00ce5050(
+                             (const PlannerGroupVector*)&value.mpStepsBegin);
+            }
+        } else {
+            FUN_00ce4d60(pEnd, nCount - nTail, &value, pPos);
+            pVec->mpEnd = (PlannerGroup_s00ce_4e10*)((char*)pVec->mpEnd + (nCount - nTail) * 0x18);
+            FUN_00ce4ca0(pPos, pPos, pEnd, pVec->mpEnd);
+            pVec->mpEnd = (PlannerGroup_s00ce_4e10*)((char*)pVec->mpEnd + nTail * 0x18);
+            PlannerGroup_s00ce_4e10* pIt = (PlannerGroup_s00ce_4e10*)((char*)pPos + nTail * 0x18);
+            for (; pPos != pIt; ++pPos) {
+                pPos->mPlanType = value.mPlanType;
+                ((PlannerGroupVector*)&pPos->mpStepsBegin)->FUN_00ce5050(
+                             (const PlannerGroupVector*)&value.mpStepsBegin);
+            }
+        }
+        FUN_00ce0e00((PlannerGroup_s00ce_4e10*)value.mpStepsBegin, (void*)value.mpStepsCapacity);
+        if (value.mpStepsBegin) {
+            if (((int32_t*)value.mpStepsBegin)[-1] != 0)
+                operator_delete_array(value.mpStepsBegin);
+        }
+        return;
+    }
+
+    uint32_t nSize = (uint32_t)((char*)pVec->mpEnd - (char*)pVec->mpBegin) / 0x18;
+    uint32_t nNewCapacity = nSize * 2;
+    if (nSize == 0)
+        nNewCapacity = 1;
+    uint32_t nRequired = nSize + nCount;
+    if (nRequired < nNewCapacity)
+        nRequired = nNewCapacity;
+    PlannerGroup_s00ce_4e10* pNew = nullptr;
+    if (nRequired != 0)
+        pNew = (PlannerGroup_s00ce_4e10*)operator_new(nRequired * 0x18, "Simulator", 0, 0,
+                                           kEastlAllocatorFile, 0xd1);
+    PlannerGroup_s00ce_4e10* pOldBegin = pVec->mpBegin;
+    PlannerGroup_s00ce_4e10* pOldEnd = pVec->mpEnd;
+    void* pMid = FUN_00ce4e10(pOldBegin, pPos, pNew);
+    FUN_00ce2c10(pOldBegin, pPos, pNew);
+    void* pResult = nullptr;
+    FUN_00ce4d60(pMid, nCount, (void*)pValue, pMid);
+    PlannerGroup_s00ce_4e10* pAfterNew = (PlannerGroup_s00ce_4e10*)((char*)pMid + nCount * 0x18);
+    void* pTail = FUN_00ce4e10(pPos, pOldEnd, pAfterNew);
+    FUN_00ce2c10(pPos, pOldEnd, pAfterNew);
+    if (pOldBegin)
+        operator_delete_array(pOldBegin);
+    (void)pResult;
+    pVec->mpEnd = (PlannerGroup_s00ce_4e10*)pTail;
+    pVec->mpBegin = pNew;
+    pVec->mpCapacity = (PlannerGroup_s00ce_4e10*)((char*)pNew + nRequired * 0x18);
+}
+
+// @ 0x00ce5e90
+void PlannerGroupVector::FUN_00ce5e90(PlannerGroup_s00ce_4e10* pPos, PlannerGroup_s00ce_4e10* pValue)
+{
+    PlannerGroupVector* pVec = this;
+    PlannerGroup_s00ce_4e10* pEnd = pVec->mpEnd;
+    if (pEnd != pVec->mpCapacity) {
+        if (pPos <= pValue && pValue < pEnd)
+            ++pValue;
+        if (pEnd) {
+            pEnd->mPlanType = pEnd[-1].mPlanType;
+            ((PlannerGroupVector*)&pEnd->mpStepsBegin)->CopyFrom(
+                (const PlannerGroupVector*)&pEnd[-1].mpStepsBegin);
+        }
+        FUN_00ce5a40(pPos, pVec->mpEnd - 1, pVec->mpEnd);
+        pPos->mPlanType = pValue->mPlanType;
+        ((PlannerGroupVector*)&pPos->mpStepsBegin)->FUN_00ce5050(
+                     (const PlannerGroupVector*)&pValue->mpStepsBegin);
+        pVec->mpEnd = pVec->mpEnd + 1;
+        return;
+    }
+
+    uint32_t nNewCapacity = (uint32_t)((char*)pEnd - (char*)pVec->mpBegin) / 0x18;
+    PlannerGroup_s00ce_4e10* pNew = nullptr;
+    if (nNewCapacity == 0) {
+        nNewCapacity = 1;
+    } else {
+        nNewCapacity *= 2;
+    }
+    if (nNewCapacity != 0)
+        pNew = (PlannerGroup_s00ce_4e10*)operator_new(nNewCapacity * 0x18, "Simulator", 0, 0,
+                                           kEastlAllocatorFile, 0xd1);
+    PlannerGroup_s00ce_4e10* pOldBegin = pVec->mpBegin;
+    PlannerGroup_s00ce_4e10* pMid = (PlannerGroup_s00ce_4e10*)FUN_00ce4e10(pOldBegin, pPos, pNew);
+    FUN_00ce2c10(pOldBegin, pPos, pNew);
+    if (pMid) {
+        pMid->mPlanType = pValue->mPlanType;
+        ((PlannerGroupVector*)&pMid->mpStepsBegin)->CopyFrom(
+            (const PlannerGroupVector*)&pValue->mpStepsBegin);
+    }
+    PlannerGroup_s00ce_4e10* pOldEnd = pVec->mpEnd;
+    void* pTail = FUN_00ce4e10(pPos, pOldEnd, pMid + 1);
+    FUN_00ce2c10(pPos, pOldEnd, pMid + 1);
+    if (pVec->mpBegin)
+        operator_delete_array(pVec->mpBegin);
+    pVec->mpEnd = (PlannerGroup_s00ce_4e10*)pTail;
+    pVec->mpBegin = pNew;
+    pVec->mpCapacity = (PlannerGroup_s00ce_4e10*)((char*)pNew + nNewCapacity * 0x18);
+}
+
 // @ 0x00ce5ff0
 void PlannerGroupVector::FUN_00ce5ff0()
 {
@@ -2321,6 +3189,25 @@ void PlannerGroupVector::FUN_00ce5ff0()
     // folds back to the start of the vector
     pVec->mpEnd = (PlannerGroup_s00ce_4e10*)((char*)pVec->mpEnd +
                                   (((char*)pEnd - (char*)pBegin) / -0x18) * 0x18);
+}
+
+// @ 0x00ce6040
+PlannerGroup_s00ce_4e10* PlannerGroupVector::FUN_00ce6040(PlannerGroup_s00ce_4e10* pPos, PlannerGroup_s00ce_4e10* pValue)
+{
+    PlannerGroupVector* pVec = this;
+    int32_t nIndex = (int32_t)(pPos - pVec->mpBegin);
+    if (pPos == pVec->mpEnd && pVec->mpEnd != pVec->mpCapacity) {
+        PlannerGroup_s00ce_4e10* pEnd = pVec->mpEnd;
+        pVec->mpEnd = pEnd + 1;
+        if (pEnd) {
+            pEnd->mPlanType = pValue->mPlanType;
+            ((PlannerGroupVector*)&pEnd->mpStepsBegin)->CopyFrom(
+                (const PlannerGroupVector*)&pValue->mpStepsBegin);
+        }
+    } else {
+        pVec->FUN_00ce5e90(pPos, pValue);
+    }
+    return (PlannerGroup_s00ce_4e10*)((char*)pVec->mpBegin + nIndex * 0x18);
 }
 
 // @ 0x0135e000
