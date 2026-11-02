@@ -1,0 +1,5 @@
+0090dd30 ?normalScanText@@YAHPAUNormalScanner@@PBE1PAPBE@Z  # normalScanText migrated from s0090dd30 (verbatim, slice spelling)
+0090e1f0 ?normalScanElement@@YAHPAUNormalScanner@@PBE1PAPBE@Z  # normalScanElement migrated from s0090dd30 (verbatim, slice spelling)
+0090e490 ?normalScanContent@@YAHPAUNormalScanner@@PBE1PAPBE@Z  # normalScanContent migrated from s0090dd30 (verbatim, slice spelling)
+0090e6a0 ?normalScanAttValue@@YAHPAUNormalScanner@@PBE1PAPBE@Z  # normalScanAttValue migrated from s0090dd30 (verbatim, slice spelling)
+0090e890 ?normalScanPast@@YAHPAUNormalScanner@@PBE1IPAPBE@Z  # normalScanPast migrated from s0090dd30 (verbatim, slice spelling)

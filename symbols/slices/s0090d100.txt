@@ -1,0 +1,6 @@
+0090d100 ?FUN_0090d100@@YAHPAXPBE1PAPBE@Z  # FUN_0090d100 migrated from s0090d100 (verbatim, slice spelling)
+0090d320 ?FUN_0090d320@@YAHPAXPBE1PAPBE@Z  # FUN_0090d320 migrated from s0090d100 (verbatim, slice spelling)
+0090d580 ?FUN_0090d580@@YAHPAXPBE1PAPBE@Z  # FUN_0090d580 migrated from s0090d100 (verbatim, slice spelling)
+0090d5d0 ?FUN_0090d5d0@@YAHPAXPBE1PAPBE@Z  # FUN_0090d5d0 migrated from s0090d100 (verbatim, slice spelling)
+0090d630 ?FUN_0090d630@@YAHPAXPBE1PAPBE@Z  # FUN_0090d630 migrated from s0090d100 (verbatim, slice spelling)
+0090d830 ?FUN_0090d830@@YAHPAXPBE1PAPBE@Z  # FUN_0090d830 migrated from s0090d100 (verbatim, slice spelling)
