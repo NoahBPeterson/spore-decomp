@@ -1,1 +1,6 @@
 00d60f00 SP::cCityVisualizer::SetCity  # PDB candidate (caller-scored); swaps the visualised city (city at retail +0xaf0)
+00d61b20 ?FUN_00d61b20@@YAXPAUCreature@@@Z  # FUN_00d61b20 migrated from s00d60ce0 (verbatim, slice spelling)
+00d61b50 ?FUN_00d61b50@@YAMH@Z  # FUN_00d61b50 migrated from s00d60ce0 (verbatim, slice spelling)
+00d61b80 ?FUN_00d61b80@@YAXPAUCreatureB@@HHHHPAH@Z  # FUN_00d61b80 migrated from s00d60ce0 (verbatim, slice spelling)
+00d61bb0 ?FUN_00d61bb0@@YAMXZ  # FUN_00d61bb0 migrated from s00d60ce0 (verbatim, slice spelling)
+00d61be0 ?FUN_00d61be0@@YAMPAX@Z  # FUN_00d61be0 migrated from s00d60ce0 (verbatim, slice spelling)

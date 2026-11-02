@@ -1,2 +1,7 @@
+00d65250 ?Remove@IntrusiveList@@QAEXPAPAUIRef@@@Z  # IntrusiveList::Remove migrated from s00d65250 (verbatim, slice spelling)
+00d652a0 ?Alloc@Pool@@QAEPAXPAPAUIRef@@@Z  # Pool::Alloc migrated from s00d65250 (verbatim, slice spelling)
+00d652f0 ?FUN_00d652f0@@YAXPAUIRef@@@Z  # FUN_00d652f0 migrated from s00d65250 (verbatim, slice spelling)
+00d65330 ?FUN_00d65330@@YAIPAHIIHIPAUAimResult@@@Z  # FUN_00d65330 migrated from s00d65250 (verbatim, slice spelling)
+00d65850 ?FUN_00d65850@@YI_NPAH@Z  # FUN_00d65850 migrated from s00d65250 (verbatim, slice spelling)
 00d65c40 ?FIGHT_Tick@@YAIHPAXPAH@Z  # FIGHT_Tick migrated from s00d65250 (verbatim, slice spelling)
 00d660a0 ?FindNext@RecordArray@@QAEHH@Z  # RecordArray::FindNext migrated from s00d65250 (verbatim, slice spelling)

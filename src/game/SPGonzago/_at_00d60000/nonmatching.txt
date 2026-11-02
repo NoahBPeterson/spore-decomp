@@ -1,0 +1,8 @@
+# va  diff-bytes  reason
+00d61e40 261 baby-fight idle wait (/O2 /MD /Gy /TP /arch:SSE /fp:fast): complete reconstruction (ours 458 vs 454).  The owner-slot read, the state machine and the call sequence (PlayAnimation, v84, MoveToPointAtSpeed, DirectionToSurfacePosition, MakeRandomWorldPosition) line up, but the FP block that builds the direction offset and scales it by the reciprocal length is compiled differently: the original keeps the three components in xmm registers with a movaps/mulss chain and reuses the reciprocal unchanged, ours spills the intermediate to [esp+0x14] and re-materialises the products, and the `fmul [1.25f]` / `fadd` constants land in a different operand order.  MSVC scheduling / register-allocation artifact. flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00d65250 8 IntrusiveList::Remove: unlink register allocation differs (prev/next in eax/ecx vs ecx/edx); 77 bytes flags: /O2 /MD /Gy /TP /arch:SSE
+00d652a0 77 Pool::Alloc: allocator base hoisted differently; 81 vs 70 bytes flags: /O2 /MD /Gy /TP /arch:SSE
+00d652f0 50 FUN_00d652f0: object kept in ecx instead of esi; 60 vs 62 bytes flags: /O2 /MD /Gy /TP /arch:SSE
+00d65330 111 target selection: aim/world state opaque, loop abbreviated; 135 vs 459 bytes flags: /O2 /MD /Gy /TP /arch:SSE
+00d65850 5 symbol extent covers the following body too (388 bytes); 32 bytes emitted flags: /O2 /MD /Gy /TP /arch:SSE
+00d6f590 1 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 453 bytes - class-dance behaviour packet body not reconstructed. flags: /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
