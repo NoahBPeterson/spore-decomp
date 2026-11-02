@@ -1,4 +1,4 @@
-# va  diff-bytes  reason
+# va  diff-bytes  reason (complete, not byte-exact)
 0064e5d0 132 complete cell-position helper; uses round-to-nearest _mm_cvtss_si32 (cvtss2si) not truncation; mirrored in src/game/SPEditors/SPUIAssetGrid.cpp; equiv PASS 600 valid, 100% coverage flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 0064e740 10 5-arg value constructor complete; argument/payload register allocation differs from the original, not byte-exact flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 0064e7d0 162 visibility/bounds predicate complete (index/count and +0x2c guards, +0x38 virtual overlap call, both float range checks); 169 vs 164 bytes: VC9 spills the float values live across the call through x87 (fld/fstp) where retail uses plain movss plus a reuse of the dead incoming-argument slot; equiv WEAK 295 valid, 35.7% coverage flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
