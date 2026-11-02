@@ -1,3 +1,4 @@
+00a01810 ?qb_set_query@@YAXPAVanim_qb@@HH_N@Z  # qb_set_query migrated from s00a01810 (verbatim, slice spelling)
 00a01b50 ?qb_enable@@YA_NPAVanim_qb@@H@Z  # qb_enable migrated from s00a01810 (verbatim, slice spelling)
 00a01c10 anim_qb::anim_qb  # PDB has no name; layout matches ModAPI anim_qb (0xfd0)
 00a01c70 anim_qb::~anim_qb  # byte-exact; layout matches ModAPI anim_qb

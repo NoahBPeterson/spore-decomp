@@ -1,9 +1,9 @@
-00a00980 nSPCreatureAnim::queued_blender::ClearQueued          # command-table clear; class from caller-single PDB at 00a010c0
-00a00f10 nSPCreatureAnim::queued_blender::Deactivate               # frees/clears an active command slot
+00a00980 ?ClearQueued@QueuedBlender_s00a0_0980@@QAEXXZ  # QueuedBlender_s00a0_0980::ClearQueued migrated from s00a00980 (verbatim, slice spelling)
+00a009e0 ?FUN_00a009e0@@YAIPAUQueuedBlender_s00a0_0980@@@Z  # FUN_00a009e0 migrated from s00a00980 (verbatim, slice spelling)
+00a00b10 ?FUN_00a00b10@@YAPAUAnimCommand@@PAUQueuedBlender_s00a0_0980@@PAU1@II@Z  # FUN_00a00b10 migrated from s00a00980 (verbatim, slice spelling)
+00a00c40 ?FUN_00a00c40@QueuedBlender_s00a0_0980@@QAEXI@Z  # QueuedBlender_s00a0_0980::FUN_00a00c40 migrated from s00a00980 (verbatim, slice spelling)
 00a00d50 nSPCreatureAnim::queued_blender::Activate                 # sets a command active (calls 009a2cc0 etc.)
-00a01050 nSPCreatureAnim::queued_blender::RebuildActive            # scans mActive, recomputes mPrimary via 009ff380
-00a010c0 nSPCreatureAnim::queued_blender::UpdateCreatureBodies     # PDB candidate (caller-single)
-00a00b10 nSPCreatureAnim::queued_blender::QueueCommand             # allocates a new anim_command and links it
-00a009e0 nSPCreatureAnim::queued_blender::NextFreeCommand          # scans for a free command slot
-00a00c40 nSPCreatureAnim::queued_blender::ReplaceDefault           # moves the default command into a slot
+00a00f10 nSPCreatureAnim::queued_blender::Deactivate               # frees/clears an active command slot
 00a00f90 nSPCreatureAnim::queued_blender::ReleaseCommand           # releases/unlinks a command
+00a01050 ?FUN_00a01050@QueuedBlender_s00a0_0980@@QAEXI@Z  # QueuedBlender_s00a0_0980::FUN_00a01050 migrated from s00a00980 (verbatim, slice spelling)
+00a010c0 ?UpdateCreatureBodies@QueuedBlender_s00a0_0980@@QAEXIMMIIIM@Z  # QueuedBlender_s00a0_0980::UpdateCreatureBodies migrated from s00a00980 (verbatim, slice spelling)

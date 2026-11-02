@@ -1,0 +1,7 @@
+# va  diff-bytes  reason
+00a006f0 49 SelectPending: complete; goal pointer/register scheduling and loop shape differ flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00a009e0 222 complete; /O2 register allocation of the scan loop differs (source uses explicit index/pointer locals) flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
+00a00b10 181 complete; list-splice shape and command-ctor call schedule differ from retail flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
+00a00c40 199 complete; callee-saved register assignment (param/src/dst) differs from retail flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
+00a010c0 1408 complete; UpdateCreatureBodies reconstructed: facility bake/ease path, per-command weight bake, default-command refresh, directional-flag scan, animation tick/status 1/2/3 handling, command retirement/replacement and mPrimary/mActive maintenance; 1758 vs 1860 bytes, status==2 ceil/modf timing and the mA0/mSeq comparison are approximations. [equiv: FAIL 1/252 valid, memory pool mismatch at the mPrimary/mQueueHead fields] flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
+00a01810 491 anim_qb query-activation helper; WEAK (572 valid, 35.7% coverage); switch/free-slot scan scheduling differs flags: /O2 /MD /Gy /EHsc /TP

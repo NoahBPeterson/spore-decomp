@@ -1,4 +1,6 @@
 009ffb50 ??4AnimGoal_s009f_fa00@@QAEPAU0@PAU0@@Z  # AnimGoal_s009f_fa00::operator= migrated from s009ffa00 (verbatim, slice spelling)
 009ffe10 ResolveGoalPair  # fills {goal, linked goal} from a packed handle (slot*0xf0, generation at +0xb4)
 00a00490 AnimGoal::Reset  # resets fields, releases goal object to pool 0x166c064
+00a006f0 ?SelectPending@QueuedBlender@@QAEXI@Z  # QueuedBlender::SelectPending migrated from s009ffa00 (verbatim, slice spelling)
 00a007d0 QueuedBlender::ResetAll  # resets 16 goals, clears queues
+00a008b0 ?ClearPendingGoal@QueuedBlender@@QAEXXZ  # QueuedBlender::ClearPendingGoal migrated from s009ffa00 (verbatim, slice spelling)

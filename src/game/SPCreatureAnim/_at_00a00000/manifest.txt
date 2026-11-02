@@ -1,0 +1,4 @@
+# source  symbol  va  flags
+../src/game/SPCreatureAnim/_at_00a00000.cpp  ?ClearPendingGoal@QueuedBlender@@QAEXXZ  00a008b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPCreatureAnim/_at_00a00000.cpp  ?ClearQueued@QueuedBlender_s00a0_0980@@QAEXXZ  00a00980  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPCreatureAnim/_at_00a00000.cpp  ?FUN_00a01050@QueuedBlender_s00a0_0980@@QAEXI@Z  00a01050  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
