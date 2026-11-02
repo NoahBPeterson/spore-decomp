@@ -1,7 +1,13 @@
 007a41c0 ?FUN_007a41c0@@YAPAXPAX@Z  # FUN_007a41c0 migrated from s007a41c0 (verbatim, slice spelling)
-007a4220 SP::cStaticBuffer::~cStaticBuffer  # PDB name
-007a4710 SP::cStaticBuffer::Flush  # PDB name
-007a47c0 SP::cStaticBuffer::GetVertexBuffer  # PDB name
+007a4220 ??1cStaticBuffer@@QAE@XZ  # cStaticBuffer::~cStaticBuffer migrated from s007a41c0 (verbatim, slice spelling)
+007a4320 ?FUN_007a4320@@YAXXZ  # FUN_007a4320 migrated from s007a41c0 (verbatim, slice spelling)
+007a4380 ?Ctor@cStaticBuffer@@QAEPAU1@II@Z  # cStaticBuffer::Ctor migrated from s007a41c0 (verbatim, slice spelling)
+007a4420 ?Ctor@cStaticBufferDraw_s007a_41c0@@QAEXIIII@Z  # cStaticBufferDraw_s007a_41c0::Ctor migrated from s007a41c0 (verbatim, slice spelling)
+007a44b0 ?grow@MeshVector@@QAEXPAUMeshElement@@0@Z  # MeshVector::grow migrated from s007a41c0 (verbatim, slice spelling)
+007a4600 ?push_back@MeshVector@@QAEXPAUMeshElement@@@Z  # MeshVector::push_back migrated from s007a41c0 (verbatim, slice spelling)
+007a4650 ?SnapshotPending@cStaticBuffer@@QAEXXZ  # cStaticBuffer::SnapshotPending migrated from s007a41c0 (verbatim, slice spelling)
+007a4710 ?Flush@cStaticBuffer@@QAEXXZ  # cStaticBuffer::Flush migrated from s007a41c0 (verbatim, slice spelling)
+007a47c0 ?GetVertexBuffer@cStaticBuffer@@QAEIIPAI0@Z  # cStaticBuffer::GetVertexBuffer migrated from s007a41c0 (verbatim, slice spelling)
 007a49e0 ?FUN_007a49e0@@YAHIIIII@Z  # FUN_007a49e0 migrated from s007a41c0 (verbatim, slice spelling)
 007a4a60 ?SetDebugParam@cGraphicsSystem_s007a_41c0@@QAEXG@Z  # cGraphicsSystem_s007a_41c0::SetDebugParam migrated from s007a41c0 (verbatim, slice spelling)
 007a4a80 ?ShouldShowDebug@cGraphicsSystem_s007a_41c0@@QAEIXZ  # cGraphicsSystem_s007a_41c0::ShouldShowDebug migrated from s007a41c0 (verbatim, slice spelling)

@@ -1,4 +1,4 @@
-007a3ce0 SP::cStaticBufferDraw::SetVertexFormat  # fills 12-entry format table via FUN_007c3af0 once, stores into this+0x44
+007a3ce0 ?SetVertexFormat@cStaticBufferDraw@@QAEXH@Z  # cStaticBufferDraw::SetVertexFormat migrated from s007a3260 (verbatim, slice spelling)
 007a3de0 ?sInstanceReset@cStaticBufferDraw@@SAXXZ  # cStaticBufferDraw::sInstanceReset migrated from s007a3260 (verbatim, slice spelling)
 007a3df0 ??0cStaticBufferDraw@@QAE@XZ  # cStaticBufferDraw::cStaticBufferDraw migrated from s007a3260 (verbatim, slice spelling)
 007a3e60 ?Dispatch@cStaticBuffer@@QAEXPAUDrawStats@@PAUShaderData@@@Z  # cStaticBuffer::Dispatch migrated from s007a3260 (verbatim, slice spelling)
