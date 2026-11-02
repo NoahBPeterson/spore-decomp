@@ -1,4 +1,4 @@
-# va  reason
+# va  diff-bytes  reason  (incomplete / approximate, or equiv did not confirm: not counted as decompiled)
 00e3a000  464  approximate; EvalCatmullRom2D is written as the compact closed-form Catmull-Rom polynomial for x and y, but the original pre-scales coefficients by 0.5, keeps ~8 xmm temporaries and spills 6 of them to its 0x20-byte frame, so the arithmetic sequence and frame do not correspond (340 vs 550 bytes) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
 00e3a990  299  (/O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-) cSPUITimeline::FindNextTrack: 299-byte rbtree walk over timeline tracks with a cTimelineTrack virtual protocol (IsEnabled +0x28, GetRange +0x38, GetTime +0xc4); only the null-return skeleton is reconstructed. flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
 00e3aac0  300  (/O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-) cSPUITimeline::FindPreviousTrack: 300-byte reverse rbtree walk, same track virtual protocol as 00e3a990; skeleton only. flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
