@@ -3,7 +3,7 @@
 00950ef0 ?HandleMessageExt@Window_s0095_ff20@@QAE_NHPAUUIMessage@@@Z  # Window_s0095_ff20::HandleMessageExt migrated from s00950bb0 (verbatim, slice spelling)
 00951240 ?AsInterfaceA@CustomWinProc_s0095_0bb0@UTFWin@EA@@QAEPAXH@Z  # AsInterfaceA migrated from s00950bb0 (verbatim, slice spelling)
 009512d0 ?AllocAligned@@YAPAXHHHPAH@Z  # AllocAligned migrated from s00950bb0 (verbatim, slice spelling)
-00951330 EA::UTFWin::MultiHeapObject::operator delete  # pdb_names callee-single
+00951330 ?operator_delete@MultiHeapObject_s0095_0bb0@UTFWin@EA@@SAXPAX@Z  # operator_delete migrated from s00950bb0 (verbatim, slice spelling)
 009513d0 ?InitArray8@@YA_NPAHHH0@Z  # InitArray8 migrated from s00950bb0 (verbatim, slice spelling)
 009514a0 ?Release@CustomWinProc_s0095_0bb0@UTFWin@EA@@QAEHXZ  # CustomWinProc_s0095_0bb0::Release migrated from s00950bb0 (verbatim, slice spelling)
 009514d0 ?ForwardCall514d0@@YA_NPAH0@Z  # ForwardCall514d0 migrated from s00950bb0 (verbatim, slice spelling)

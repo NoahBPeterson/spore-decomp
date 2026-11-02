@@ -1,0 +1,2 @@
+# source  symbol  va  flags
+../src/game/UTFSpore_Win32/allocator1.cpp  ?operator_delete@MultiHeapObject_s0095_0bb0@UTFWin@EA@@SAXPAX@Z  00951330  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
