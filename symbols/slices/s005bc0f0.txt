@@ -1,4 +1,8 @@
-005bc0f0 ?DoOnMouseMove@cSPEditorManipulationStacking@SP@@UAE_NMMH@Z  # cSPEditorManipulationStacking::DoOnMouseMove
+00448e90 ?SetPosition@cSPEditorBlock@SP@@QAEXABUcSPVector3@@_N@Z  # SP::cSPEditorBlock::SetPosition (callee of s005bc0f0, named from the dev publics; slice address comment)
+0049c0f0 ?SetIsOnGround@cSPEditorBlock@SP@@QAEX_N@Z  # SP::cSPEditorBlock::SetIsOnGround (callee of s005bc0f0, named from the dev publics; slice address comment)
+004ad450 ?GetPhysicsWorld@cSPEditorModel@SP@@QAEPAVcSPEditorPhysicsWorld@2@XZ  # SP::cSPEditorModel::GetPhysicsWorld (callee of s005bc0f0, named from the dev publics; slice address comment)
+004adc40 ?UsingSymmetry@cSPEditorModel@SP@@QBE_NXZ  # SP::cSPEditorModel::UsingSymmetry (callee of s005bc0f0, named from the dev publics; slice address comment)
+005bc0f0 ?DoOnMouseMove@cSPEditorManipulationStacking@SP@@UAE_NMMH@Z  # cSPEditorManipulationStacking::DoOnMouseMove migrated from s005bc0f0 (verbatim, slice spelling)
 005bc630 ?OnMouseUp@cSPEditorManipulationStackingSimple@SP@@UAE_NIMMI@Z  # cSPEditorManipulationStackingSimple::OnMouseUp
 005bc7f0 ?Init@cSPEditorManipulationStackingSimple@SP@@QAEXPAPAVcSPEditorBlock_s005b_c0f0@2@UcSPVector3_s005b_c0f0@@@Z  # cSPEditorManipulationStackingSimple::Init migrated from s005bc0f0 (verbatim, slice spelling)
 005bc860 ??0cSPEditorManipulationStackingSimple@SP@@QAE@XZ  # cSPEditorManipulationStackingSimple::cSPEditorManipulationStackingSimple migrated from s005bc0f0 (verbatim, slice spelling)

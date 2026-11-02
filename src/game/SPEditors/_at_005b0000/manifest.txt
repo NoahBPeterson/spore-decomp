@@ -1,0 +1,7 @@
+# source  symbol  va  flags
+../src/game/SPEditors/_at_005b0000.cpp  ??0S80@@QAE@MMMMMM@Z  005b1080  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/_at_005b0000.cpp  ?Init@cSPEditorManipulationSpine@SP@@QAEXPAVcSPEditorBlock_s005b_7460@2@UcSPVector3_s005b_7460@@PAVcSPEditorSpine_s005b_7460@2@@Z  005b7460  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/_at_005b0000.cpp  ??0cSPEditorManipulationSpine@SP@@QAE@XZ  005b7490  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/_at_005b0000.cpp  ?OnMouseUp@cSPEditorManipulationSpine@SP@@QAE_NHMMH@Z  005b74f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/_at_005b0000.cpp  ?DoOnMouseDown@cSPEditorManipulationSpine@SP@@QAE_NHMMH@Z  005b75e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/_at_005b0000.cpp  ?DoOnMouseMove@cSPEditorManipulationSpine@SP@@QAE_NMMH@Z  005b7720  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

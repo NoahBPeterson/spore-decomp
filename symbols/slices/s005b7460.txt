@@ -1,8 +1,8 @@
-005b7460 SP::cSPEditorManipulationSpine::Init  # dev PDB method list (39 bytes), byte-exact
-005b7490 SP::cSPEditorManipulationSpine::cSPEditorManipulationSpine  # ctor shape, size 67 = dev 67
-005b74f0 SP::cSPEditorManipulationSpine::OnMouseUp  # dev PDB method, 4-arg mouse handler
-005b75e0 SP::cSPEditorManipulationSpine::DoOnMouseDown  # dev PDB method
-005b7720 SP::cSPEditorManipulationSpine::DoOnMouseMove  # dev PDB method
+005b7460 ?Init@cSPEditorManipulationSpine@SP@@QAEXPAVcSPEditorBlock_s005b_7460@2@UcSPVector3_s005b_7460@@PAVcSPEditorSpine_s005b_7460@2@@Z  # cSPEditorManipulationSpine::Init migrated from s005b7460 (verbatim, slice spelling)
+005b7490 ??0cSPEditorManipulationSpine@SP@@QAE@XZ  # cSPEditorManipulationSpine::cSPEditorManipulationSpine migrated from s005b7460 (verbatim, slice spelling)
+005b74f0 ?OnMouseUp@cSPEditorManipulationSpine@SP@@QAE_NHMMH@Z  # cSPEditorManipulationSpine::OnMouseUp migrated from s005b7460 (verbatim, slice spelling)
+005b75e0 ?DoOnMouseDown@cSPEditorManipulationSpine@SP@@QAE_NHMMH@Z  # cSPEditorManipulationSpine::DoOnMouseDown migrated from s005b7460 (verbatim, slice spelling)
+005b7720 ?DoOnMouseMove@cSPEditorManipulationSpine@SP@@QAE_NMMH@Z  # cSPEditorManipulationSpine::DoOnMouseMove migrated from s005b7460 (verbatim, slice spelling)
 005b7880 eastl::insertion_sort<float*>  # called by quick_sort<float*>
 005b78d0 eastl::insertion_sort_simple<float*>  # called by quick_sort<float*>
 005b7920 ?OnMouseUp@cSPEditorManipulationSpineResize@SP@@QAE_NHMMH@Z  # cSPEditorManipulationSpineResize::OnMouseUp migrated from s005b7460 (verbatim, slice spelling)
