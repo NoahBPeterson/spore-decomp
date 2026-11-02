@@ -1,17 +1,27 @@
-0041cb40 Matrix3::Assign  # three Vector3 rows copied via Vector3 copy ctor
-0041cc20 VirtualRefPtr::VirtualRefPtr  # stores ptr, virtual slot 0 AddRef
-0041cc60 TargetPtr::Assign  # refcount at +4, DefaultRefCounted::Release call
-0041ccc0 TargetPtr::Init
+00404f90 ?Release@ThreadedObject@@QAEXXZ
+0041cb40 ?Assign@Matrix3_s0041_cb40@@QAEAAU1@ABU1@@Z  # Matrix3_s0041_cb40::Assign migrated from s0041cb40 (verbatim, slice spelling)
+0041cc20 ??0VirtualRefPtr@@QAE@PAUVirtualRefObject@@@Z  # VirtualRefPtr::VirtualRefPtr migrated from s0041cb40 (verbatim, slice spelling)
+0041cc60 ?Assign@TargetPtr@@QAEAAU1@PAUDefaultRefCounted_s0041_cb40@@@Z  # TargetPtr::Assign migrated from s0041cb40 (verbatim, slice spelling)
+0041ccc0 ?Init@TargetPtr@@QAEAAU1@PAUDefaultRefCounted_s0041_cb40@@@Z  # TargetPtr::Init migrated from s0041cb40 (verbatim, slice spelling)
+0041cd10 ?Assign@SharedPtr@@QAEAAU1@PAUSharedObject@@@Z  # SharedPtr::Assign migrated from s0041cb40 (verbatim, slice spelling)
 0041cd60 ?A?$HashMap  # find / end / insert pattern
 0041ce60 ?A?$HashMap  # HashMap<Key8,int>::operator[]
+0041cf00 ??0?$FixedVector@$0MA@@@QAE@XZ  # FixedVector migrated from s0041cb40 (verbatim, slice spelling)
+0041cf70 ??0?$FixedVector@$0DIA@@@QAE@XZ  # FixedVector migrated from s0041cb40 (verbatim, slice spelling)
+0041cfe0 ??0?$FixedVector@$0EA@@@QAE@XZ  # FixedVector migrated from s0041cb40 (verbatim, slice spelling)
+0041d050 ??0?$FixedVector@$0BAA@@@QAE@XZ  # FixedVector migrated from s0041cb40 (verbatim, slice spelling)
+0041d0c0 ??0?$FixedVector@$0BAA@@@QAE@I@Z  # FixedVector migrated from s0041cb40 (verbatim, slice spelling)
+0041d140 ?Assign@RangeOwner@@QAEAAU1@ABU1@@Z  # RangeOwner::Assign migrated from s0041cb40 (verbatim, slice spelling)
+0041d1a0 ??0FlagObject@@QAE@PAX@Z  # FlagObject::FlagObject migrated from s0041cb40 (verbatim, slice spelling)
 0041d1f0 ?A?$HashMap  # HashMap<ThreadedPtr,int>::operator[]
 0041d2c0 ?A?$HashMap  # HashMap<uint32,float>::operator[]
-0041fb20 ?find@?$HashMap@UKey8@@UVirtualRefPtr@@@@QAE?AUIterator@1@ABUKey8@@@Z  # callee annotation
-0041fc40 ?DoInsert@?$HashMap@UKey8@@UVirtualRefPtr@@@@QAE?AUInsertResult@1@ABUvalue_type@1@UInsertTag@@@Z
+0041d360 ??0?$FixedBuffer@$0CAA@@@QAE@XZ  # FixedBuffer migrated from s0041cb40 (verbatim, slice spelling)
+0041d3c0 ??0?$FixedBuffer@$0KA@@@QAE@XZ  # FixedBuffer migrated from s0041cb40 (verbatim, slice spelling)
+0041d420 ??0?$FixedVector@$0BIA@@@QAE@XZ  # InlineScratch48 migrated from s0041cb40 (verbatim, slice spelling)
 0041fb20 ?find@?$HashMap@UKey8@@H@@QAE?AUIterator@1@ABUKey8@@@Z
+0041fc40 ?DoInsert@?$HashMap@UKey8@@UVirtualRefPtr@@@@QAE?AUInsertResult@1@ABUvalue_type@1@UInsertTag@@@Z
 0041fe00 ?DoInsert@?$HashMap@UKey8@@H@@QAE?AUInsertResult@1@ABUvalue_type@1@UInsertTag@@@Z
 00420b50 ?find@?$HashMap@UThreadedPtr@@H@@QAE?AUIterator@1@ABUThreadedPtr@@@Z
 00420c70 ?DoInsert@?$HashMap@UThreadedPtr@@H@@QAE?AUInsertResult@1@ABUvalue_type@1@UInsertTag@@@Z
-00404f90 ?Release@ThreadedObject@@QAEXXZ
 00421950 ?find@?$HashMap@IM@@QAE?AUIterator@1@ABI@Z
 00421a50 ?DoInsert@?$HashMap@IM@@QAE?AUInsertResult@1@ABUvalue_type@1@UInsertTag@@@Z
