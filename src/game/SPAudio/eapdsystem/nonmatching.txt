@@ -1,3 +1,16 @@
 # va  diff-bytes  reason
-00a681e0  11  singleton teardown; local allocator-guard reg allocation (esi vs ecx reload), EH frame [equiv: WEAK 31.8% cov]
-00a683b0 1 CallbackManager dtor; EH state index (n dtor under state 2, original 0) [equiv: UNSUPPORTED unresolved dtor refs]
+00a52ff0 285 Group::Init: not emitted as a symbol of similar size (inlined / different COMDAT split); logic modeled from the card ; difftest UNSUPPORTED (0/400 valid inputs; all 400 discard as fault(read) - the Eapd Group layout the harness would have to synthesise is not modelled; 0/168 insns covered) flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+00a53210 14 Init@FixedPool: imul scheduled before the mnNodeSize store (2-instruction scheduler swap) ; difftest WEAK (249 valid, 33% cov) flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+00a53360 162 FixedHashtableAllocator::InitBuckets: x87 bucket-count computation; no symbol of similar size emitted ; difftest UNSUPPORTED (0/400 valid inputs; discards fake-arity=192, fault(write)=182, fault(pool-limit)=23; 0/91 insns covered) flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+00a53b20 20 Play::~Play: UpdatePlaying() inlined call sequence; 20 diff bytes (run_all-measured) ; difftest UNSUPPORTED (0/400 valid inputs; discards fault(write)=184, fault(read)=180, fault(pool-limit)=29; 0/25 insns covered) flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+00a67810 49 SymbolManager::SymbolManager ctor: complete; EASTL member-init order / scheduling differ; flags /O2 /MD /Gy /EHsc /TP /GS- /fp:fast /arch:SSE; difftest PASS (400 valid, 100% cov)
+00a67d30 18 FixedHashtableAllocator::DestroyAllocator: complete; FixedPool teardown register reuse differs; flags /O2 /MD /Gy /EHsc /TP /GS- /fp:fast /arch:SSE; difftest PASS (400 valid, 100% cov)
+00a67d90 208 FixedHashtableAllocator::Initialize: complete; pool alloc/commit loop shape differs; flags /O2 /MD /Gy /EHsc /TP /GS- /fp:fast /arch:SSE; difftest UNSUPPORTED (0/400 valid)
+00a67e80 41 TaskList::Destroy: complete; allocator dtor + vtable store scheduling differ; flags /O2 /MD /Gy /EHsc /TP /GS- /fp:fast /arch:SSE; difftest UNSUPPORTED (harness UcError)
+00a67f60 135 Hashtable::RehashTo: complete; bucket rehash loop + register allocation differ; flags /O2 /MD /Gy /EHsc /TP /GS- /fp:fast /arch:SSE; difftest FAIL (5/14 valid)
+00a681e0  11  singleton teardown; local allocator-guard reg allocation (esi vs ecx reload), EH frame [equiv: WEAK 31.8% cov] flags: /O2 /MD /Gy /EHsc /TP /GS-
+00a683b0 1 CallbackManager dtor; EH state index (n dtor under state 2, original 0) [equiv: UNSUPPORTED unresolved dtor refs] flags: /O2 /MD /Gy /EHsc /TP /GS-
+00a68430 137 hash table erase; iterator return NRVO and it.node/it.bucket register split (size 151 vs 168) [flags /O2 /MD /Gy /EHsc /TP /GS-] [equiv: UNSUPPORTED 0/400 valid, fault(read)/pool-limit]
+00a68890 140 Eapd System::Init; boolean and-chain and nested cleanup branch shape (size 245 vs 248) [flags /O2 /MD /Gy /EHsc /TP /GS-] [equiv: UNSUPPORTED 0/400 valid, fault(write)/pool-limit]
+00a68cb0 102 CreateSingleton ctor; EH state numbering off by one and member-init scheduling (size 268 vs 277) [flags /O2 /MD /Gy /EHsc /TP /GS-] [equiv: PASS]
+00a68e90  221  singleton create/teardown; no SEH frame and devirtualized vtable-slot allocator call (size 204 vs 284) [flags /O2 /MD /Gy /EHsc /TP /GS-] [equiv: PASS]

@@ -23,7 +23,7 @@
 00a52c00 ?FUN_00a52c00@@YAXPAD@Z  # complete, non-exact
 00a52c80 ?groupsize_symbol@@YAXPADHH@Z  # complete, non-exact
 00a52d00 ?a_group_setup@@YAEXZ  # complete, non-exact
-00a52da0 ?FUN_00a52da0@@YAXPAH00@Z  # byte-exact
+00a52da0 ?FUN_00a52da0@@YAXPAH00@Z  # FUN_00a52da0 migrated from s00a52080 (verbatim, slice spelling)
 00a52dd0 ?Insert@PairVec@@QAEXHIPAH@Z  # complete, non-exact
 00a52f70 ?Init@GroupHelp@@QAEPAXH@Z  # complete, non-exact
 00a52fa0 ?Resize@PairVec@@QAEXI@Z  # complete, non-exact

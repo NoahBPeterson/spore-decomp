@@ -1,4 +1,27 @@
 # source  symbol  va  flags
+../src/game/SPAudio/eapdsystem.cpp  ?FUN_00a52da0@@YAXPAH00@Z  00a52da0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdsystem.cpp  ??1FixedPool@Eapd@Audio@EA@@QAE@XZ  00a531b0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdsystem.cpp  ?Alloc@FixedPool@Eapd@Audio@EA@@QAEPAXXZ  00a532b0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdsystem.cpp  ?artists_play_setname@Eapd@Audio@EA@@YAXPAUt_play@123@IPBD@Z  00a53310  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdsystem.cpp  ??1VoiceList@Eapd@Audio@EA@@QAE@XZ  00a53790  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdsystem.cpp  ??1ParamTable@Eapd@Audio@EA@@QAE@XZ  00a538e0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdsystem.cpp  ?Shutdown@System_s00a6_70b0@@QAE_NXZ  00a678d0  /O2 /MD /Gy /EHsc /TP /GS- /fp:fast /arch:SSE /Isrc/game/include
+../src/game/SPAudio/eapdsystem.cpp  ?SetMaximumDrift@System_s00a6_70b0@@QAEXM@Z  00a67960  /O2 /MD /Gy /EHsc /TP /GS- /fp:fast /arch:SSE /Isrc/game/include
+../src/game/SPAudio/eapdsystem.cpp  ?FindInstanceSym@System_s00a6_70b0@@QAE_NII@Z  00a67990  /O2 /MD /Gy /EHsc /TP /GS- /fp:fast /arch:SSE /Isrc/game/include
+../src/game/SPAudio/eapdsystem.cpp  ?GetInstanceFlag@System_s00a6_70b0@@QAE_NI@Z  00a679f0  /O2 /MD /Gy /EHsc /TP /GS- /fp:fast /arch:SSE /Isrc/game/include
+../src/game/SPAudio/eapdsystem.cpp  ?SetInstanceX@System_s00a6_70b0@@QAE_NII@Z  00a67a20  /O2 /MD /Gy /EHsc /TP /GS- /fp:fast /arch:SSE /Isrc/game/include
+../src/game/SPAudio/eapdsystem.cpp  ?InstanceVfn10@System_s00a6_70b0@@QAE_NIIM@Z  00a67a50  /O2 /MD /Gy /EHsc /TP /GS- /fp:fast /arch:SSE /Isrc/game/include
+../src/game/SPAudio/eapdsystem.cpp  ?InstanceVfnC@System_s00a6_70b0@@QAE_NIII@Z  00a67a90  /O2 /MD /Gy /EHsc /TP /GS- /fp:fast /arch:SSE /Isrc/game/include
+../src/game/SPAudio/eapdsystem.cpp  ?InstanceVfn14@System_s00a6_70b0@@QAE_NII@Z  00a67ad0  /O2 /MD /Gy /EHsc /TP /GS- /fp:fast /arch:SSE /Isrc/game/include
+../src/game/SPAudio/eapdsystem.cpp  ?InputVfn10@System_s00a6_70b0@@QAEXIM@Z  00a67b10  /O2 /MD /Gy /EHsc /TP /GS- /fp:fast /arch:SSE /Isrc/game/include
+../src/game/SPAudio/eapdsystem.cpp  ?AssetInstanceOpA@System_s00a6_70b0@@QAE_NIIPAI@Z  00a67b60  /O2 /MD /Gy /EHsc /TP /GS- /fp:fast /arch:SSE /Isrc/game/include
+../src/game/SPAudio/eapdsystem.cpp  ?AssetInstanceOpB@System_s00a6_70b0@@QAE_NI@Z  00a67bb0  /O2 /MD /Gy /EHsc /TP /GS- /fp:fast /arch:SSE /Isrc/game/include
+../src/game/SPAudio/eapdsystem.cpp  ?AssetOpC@System_s00a6_70b0@@QAE_NI@Z  00a67c00  /O2 /MD /Gy /EHsc /TP /GS- /fp:fast /arch:SSE /Isrc/game/include
+../src/game/SPAudio/eapdsystem.cpp  ?SysGfxStubFree@@YGXPAX@Z  00a67c50  /O2 /MD /Gy /EHsc /TP /GS- /fp:fast /arch:SSE /Isrc/game/include
+../src/game/SPAudio/eapdsystem.cpp  ?GetVoiceStartTime@System_s00a6_70b0@@SAMM@Z  00a67c70  /O2 /MD /Gy /EHsc /TP /GS- /fp:fast /arch:SSE /Isrc/game/include
+../src/game/SPAudio/eapdsystem.cpp  ?GetVoiceManager@@YAPAXXZ  00a67d00  /O2 /MD /Gy /EHsc /TP /GS- /fp:fast /arch:SSE /Isrc/game/include
+../src/game/SPAudio/eapdsystem.cpp  ?Update@System_s00a6_70b0@@QAEXN@Z  00a68010  /O2 /MD /Gy /EHsc /TP /GS- /fp:fast /arch:SSE /Isrc/game/include
+../src/game/SPAudio/eapdsystem.cpp  ?UpdateNoTime@System_s00a6_70b0@@QAEXXZ  00a680c0  /O2 /MD /Gy /EHsc /TP /GS- /fp:fast /arch:SSE /Isrc/game/include
 ../src/game/SPAudio/eapdsystem.cpp  ?GetInfoA@EapdInfo@@QAEXPAH@Z  00a68140  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPAudio/eapdsystem.cpp  ?GetInfoB@EapdInfo@@QAEXPAH@Z  00a68190  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPAudio/eapdsystem.cpp  ?RemoveKey@KeyList@@QAEXPBH@Z  00a68280  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
@@ -8,5 +31,6 @@
 ../src/game/SPAudio/eapdsystem.cpp  ?PushTask@EapdTasks@@QAEXPAX@Z  00a685a0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPAudio/eapdsystem.cpp  ?Init@EapdAssets@@QAE_NHHH@Z  00a685e0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
 ../src/game/SPAudio/eapdsystem.cpp  ??1NodePool@@QAE@XZ  00a687f0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPAudio/eapdsystem.cpp  ??0FixedInputManagerS@@QAE@XZ  00a68bf0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/SPAudio/eapdsystem.cpp  ??1EapdSystemFull@@UAE@XZ  00a68dd0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/SPAudio/eapdsystem.cpp  ?ScalarDtor@EapdSystem@@QAEPAXH@Z  00a68e80  /O2 /MD /Gy /EHsc /TP /Isrc/game/include

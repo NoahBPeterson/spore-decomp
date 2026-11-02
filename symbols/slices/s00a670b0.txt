@@ -16,25 +16,25 @@
 00a675f0 ?gensym@@YAPAUt_symbol@Eapd@Audio@EA@@PAU1234@PBD@Z  # gensym migrated from s00a670b0 (verbatim, slice spelling)
 00a67620 ?pd_bind@@YA_NPAXUt_symbol@Eapd@Audio@EA@@@Z  # pd_bind migrated from s00a670b0 (verbatim, slice spelling)
 00a67670 ?Init@SymbolManager_s00a6_70b0@@QAE_NIIIIIP6AIPBD@Z@Z  # SymbolManager_s00a6_70b0::Init migrated from s00a670b0 (verbatim, slice spelling)
-00a67810 ??0SymbolManager@@QAE@XZ  # SymbolManager::SymbolManager
-00a678d0 ?Shutdown@System@@QAE_NXZ  # System::Shutdown
-00a67960 ?SetMaximumDrift@System@@QAEXM@Z  # System::SetMaximumDrift
-00a67990 ?FindInstanceSym@System@@QAE_NII@Z  # System::FindInstanceSym
-00a679f0 ?GetInstanceFlag@System@@QAE_NI@Z  # System::GetInstanceFlag
-00a67a20 ?SetInstanceX@System@@QAE_NII@Z  # System::SetInstanceX
-00a67a50 ?InstanceVfn10@System@@QAE_NIIM@Z  # System::InstanceVfn10
-00a67a90 ?InstanceVfnC@System@@QAE_NIII@Z  # System::InstanceVfnC
-00a67ad0 ?InstanceVfn14@System@@QAE_NII@Z  # System::InstanceVfn14
-00a67b10 ?InputVfn10@System@@QAEXIM@Z  # System::InputVfn10
-00a67b60 ?AssetInstanceOpA@System@@QAE_NIIPAI@Z  # System::AssetInstanceOpA
-00a67bb0 ?AssetInstanceOpB@System@@QAE_NI@Z  # System::AssetInstanceOpB
-00a67c00 ?AssetOpC@System@@QAE_NI@Z  # System::AssetOpC
-00a67c50 ?SysGfxStubFree@@YGXPAX@Z  # SysGfxStubFree
-00a67c70 ?GetVoiceStartTime@System@@SAMM@Z  # System::GetVoiceStartTime
-00a67d00 ?GetVoiceManager@@YAPAXXZ  # GetVoiceManager
-00a67d30 ?DestroyAllocator@FixedHashtableAllocator@@QAEXXZ  # FixedHashtableAllocator::DestroyAllocator
-00a67d90 ?Initialize@FixedHashtableAllocator@@QAE_NIHH@Z  # FixedHashtableAllocator::Initialize
-00a67e80 ?Destroy@TaskList@@QAEXXZ  # TaskList::Destroy
-00a67f60 ?RehashTo@Hashtable@@QAEXI@Z  # Hashtable::RehashTo
-00a68010 ?Update@System@@QAEXN@Z  # System::Update
-00a680c0 ?UpdateNoTime@System@@QAEXXZ  # System::UpdateNoTime
+00a67810 ??0SymbolManager@@QAE@XZ  # SymbolManager::SymbolManager migrated from s00a670b0 (verbatim, slice spelling)
+00a678d0 ?Shutdown@System_s00a6_70b0@@QAE_NXZ  # System_s00a6_70b0::Shutdown migrated from s00a670b0 (verbatim, slice spelling)
+00a67960 ?SetMaximumDrift@System_s00a6_70b0@@QAEXM@Z  # System_s00a6_70b0::SetMaximumDrift migrated from s00a670b0 (verbatim, slice spelling)
+00a67990 ?FindInstanceSym@System_s00a6_70b0@@QAE_NII@Z  # System_s00a6_70b0::FindInstanceSym migrated from s00a670b0 (verbatim, slice spelling)
+00a679f0 ?GetInstanceFlag@System_s00a6_70b0@@QAE_NI@Z  # System_s00a6_70b0::GetInstanceFlag migrated from s00a670b0 (verbatim, slice spelling)
+00a67a20 ?SetInstanceX@System_s00a6_70b0@@QAE_NII@Z  # System_s00a6_70b0::SetInstanceX migrated from s00a670b0 (verbatim, slice spelling)
+00a67a50 ?InstanceVfn10@System_s00a6_70b0@@QAE_NIIM@Z  # System_s00a6_70b0::InstanceVfn10 migrated from s00a670b0 (verbatim, slice spelling)
+00a67a90 ?InstanceVfnC@System_s00a6_70b0@@QAE_NIII@Z  # System_s00a6_70b0::InstanceVfnC migrated from s00a670b0 (verbatim, slice spelling)
+00a67ad0 ?InstanceVfn14@System_s00a6_70b0@@QAE_NII@Z  # System_s00a6_70b0::InstanceVfn14 migrated from s00a670b0 (verbatim, slice spelling)
+00a67b10 ?InputVfn10@System_s00a6_70b0@@QAEXIM@Z  # System_s00a6_70b0::InputVfn10 migrated from s00a670b0 (verbatim, slice spelling)
+00a67b60 ?AssetInstanceOpA@System_s00a6_70b0@@QAE_NIIPAI@Z  # System_s00a6_70b0::AssetInstanceOpA migrated from s00a670b0 (verbatim, slice spelling)
+00a67bb0 ?AssetInstanceOpB@System_s00a6_70b0@@QAE_NI@Z  # System_s00a6_70b0::AssetInstanceOpB migrated from s00a670b0 (verbatim, slice spelling)
+00a67c00 ?AssetOpC@System_s00a6_70b0@@QAE_NI@Z  # System_s00a6_70b0::AssetOpC migrated from s00a670b0 (verbatim, slice spelling)
+00a67c50 ?SysGfxStubFree@@YGXPAX@Z  # SysGfxStubFree migrated from s00a670b0 (verbatim, slice spelling)
+00a67c70 ?GetVoiceStartTime@System_s00a6_70b0@@SAMM@Z  # System_s00a6_70b0::GetVoiceStartTime migrated from s00a670b0 (verbatim, slice spelling)
+00a67d00 ?GetVoiceManager@@YAPAXXZ  # GetVoiceManager migrated from s00a670b0 (verbatim, slice spelling)
+00a67d30 ?DestroyAllocator@FixedHashtableAllocator_s00a6_70b0@@QAEXXZ  # FixedHashtableAllocator_s00a6_70b0::DestroyAllocator migrated from s00a670b0 (verbatim, slice spelling)
+00a67d90 ?Initialize@FixedHashtableAllocator_s00a6_70b0@@QAE_NIHH@Z  # FixedHashtableAllocator_s00a6_70b0::Initialize migrated from s00a670b0 (verbatim, slice spelling)
+00a67e80 ?Destroy@TaskList_s00a6_70b0@@QAEXXZ  # TaskList_s00a6_70b0::Destroy migrated from s00a670b0 (verbatim, slice spelling)
+00a67f60 ?RehashTo@Hashtable@@QAEXI@Z  # Hashtable::RehashTo migrated from s00a670b0 (verbatim, slice spelling)
+00a68010 ?Update@System_s00a6_70b0@@QAEXN@Z  # System_s00a6_70b0::Update migrated from s00a670b0 (verbatim, slice spelling)
+00a680c0 ?UpdateNoTime@System_s00a6_70b0@@QAEXXZ  # System_s00a6_70b0::UpdateNoTime migrated from s00a670b0 (verbatim, slice spelling)
