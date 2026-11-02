@@ -1,0 +1,6 @@
+00bbd730 ?FUN_00bbd730@@YGXPAHD@Z  # FUN_00bbd730 migrated from s00bbd730 (verbatim, slice spelling)
+00bbdbf0 ?FUN_00bbdbf0@@YGXPAMM@Z  # FUN_00bbdbf0 migrated from s00bbd730 (verbatim, slice spelling)
+00bbdff0 ?FUN_00bbdff0@@YGXPAMM@Z  # FUN_00bbdff0 migrated from s00bbd730 (verbatim, slice spelling)
+00bbe370 ?check_requirements@TerraformingManager@@QAE_NH@Z  # TerraformingManager::check_requirements migrated from s00bbd730 (verbatim, slice spelling)
+00bbe470 ?unlocked_count@TerraformingManager@@QAEHH@Z  # TerraformingManager::unlocked_count migrated from s00bbd730 (verbatim, slice spelling)
+00bbe5c0 ?has_unlocks@TerraformingManager@@QAE_NH@Z  # TerraformingManager::has_unlocks migrated from s00bbd730 (verbatim, slice spelling)

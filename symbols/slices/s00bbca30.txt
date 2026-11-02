@@ -1,1 +1,7 @@
+00bbcb10 ?FUN_00bbcb10@TObj@@QAEXPAX0@Z  # TObj::FUN_00bbcb10 migrated from s00bbca30 (verbatim, slice spelling)
+00bbcd40 ?FUN_00bbcd40@@YA_NHH@Z  # FUN_00bbcd40 migrated from s00bbca30 (verbatim, slice spelling)
 00bbd0a0 ?FUN_00bbd0a0@TObj@@QAEXH@Z  # TObj::FUN_00bbd0a0 migrated from s00bbca30 (verbatim, slice spelling)
+00bbd0e0 ?FUN_00bbd0e0@TObj@@QAEPAHPAHHPAPAH@Z  # TObj::FUN_00bbd0e0 migrated from s00bbca30 (verbatim, slice spelling)
+00bbd180 ?FUN_00bbd180@@YAXPAHHHHHP6A_NHH@Z@Z  # FUN_00bbd180 migrated from s00bbca30 (verbatim, slice spelling)
+00bbd1f0 ?FUN_00bbd1f0@@YAXPAHHHPAXP6A_NHH@Z@Z  # FUN_00bbd1f0 migrated from s00bbca30 (verbatim, slice spelling)
+00bbd6c0 ?FUN_00bbd6c0@@YGXPAH@Z  # FUN_00bbd6c0 migrated from s00bbca30 (verbatim, slice spelling)

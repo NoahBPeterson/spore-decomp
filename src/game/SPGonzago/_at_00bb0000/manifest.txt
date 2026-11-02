@@ -1,0 +1,13 @@
+# source  symbol  va  flags
+../src/game/SPGonzago/_at_00bb0000.cpp  ?TerraVectorCount@@YIHPAX@Z  00bbc840  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00bb0000.cpp  ?FUN_00bbcb10@TObj@@QAEXPAX0@Z  00bbcb10  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00bb0000.cpp  ?check_requirements@TerraformingManager@@QAE_NH@Z  00bbe370  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/_at_00bb0000.cpp  ?has_unlocks@TerraformingManager@@QAE_NH@Z  00bbe5c0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/_at_00bb0000.cpp  ?FUN_00bbe8c0@SimAllocHelper@@QAEPAXPBUNode18@@@Z  00bbe8c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00bb0000.cpp  ?FUN_00bbe910@SimListHelper@@QAEXHPAH@Z  00bbe910  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00bb0000.cpp  ?FUN_00bbf130@@YAXPAPAURefObj@@00P6A_NPAX1@Z@Z  00bbf130  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00bb0000.cpp  ?FUN_00bbf730@SimSelf_s00bb_f630@@QAEHPBHM@Z  00bbf730  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00bb0000.cpp  ?insertion_sort@@YAXPAUElem12@@0UKeyIntern@@PAUAllocNode@@@Z  00bbfa30  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00bb0000.cpp  ?median@@YAPAUElem12@@PAU1@00UKeyIntern@@PAUAllocNode@@@Z  00bbfbf0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00bb0000.cpp  ?sift_down@@YAXPAUElem12@@HHU1@UKeyIntern@@PAUAllocNode@@@Z  00bbfdc0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00bb0000.cpp  ?FUN_00bbfe80@SimSelf_s00bb_f630@@QAEXXZ  00bbfe80  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

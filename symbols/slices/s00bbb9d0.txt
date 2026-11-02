@@ -16,12 +16,12 @@
 00bbc460 ?Store3B@KeySink@@QAEXHHH@Z  # KeySink::Store3B migrated from s00bbb9d0 (verbatim, slice spelling)
 00bbc4a0 ?StoreEmpty@KeySink@@QAIXXZ  # KeySink::StoreEmpty migrated from s00bbb9d0 (verbatim, slice spelling)
 00bbc540 ?CargoSlotsUpdate@@YGXPAHPAX@Z  # CargoSlotsUpdate migrated from s00bbb9d0 (verbatim, slice spelling)
-00bbc630    CityLessBuildings                 order two city objects by building count
+00bbc630 ?CityLessBuildings@@YA_NPAX0@Z  # CityLessBuildings migrated from s00bbb9d0 (verbatim, slice spelling)
 00bbc670    PlanetTerraformDist               terraform distance for a planet record
 00bbc6a0    PlanetTerraformAtLeast            planet terraform level >= threshold
-00bbc700    RecordMinSelect                   select record pointer with lowest key in range
-00bbc760    RecordInsertionSort               insertion sort of record pointers (callback compare)
-00bbc7c0    RecordMedian3                     median-of-three record pointer selection (callback compare)
-00bbc840    TerraVectorCount                  record count of this object's two vector pairs
+00bbc700 ?RecordMinSelect@@YAPAPAXPAPAX0@Z  # RecordMinSelect migrated from s00bbb9d0 (verbatim, slice spelling)
+00bbc760 ?RecordInsertionSort@@YAXPAPAX0P6A_NPAX1@Z@Z  # RecordInsertionSort migrated from s00bbb9d0 (verbatim, slice spelling)
+00bbc7c0 ?RecordMedian3@@YAPAPAXPAPAX00P6A_NPAX1@Z@Z  # RecordMedian3 migrated from s00bbb9d0 (verbatim, slice spelling)
+00bbc840 ?TerraVectorCount@@YIHPAX@Z  # TerraVectorCount migrated from s00bbb9d0 (verbatim, slice spelling)
 00bbc870    fn_bbc870                         resource key at n-th entry with given emblem type
 00bbc950    fn_bbc950                         resource key at k-th entry with no emblem
