@@ -6,7 +6,7 @@
 00a36490 ?ReadTuningValues@cAmbienceLayer@Audio@SP@@QAE_NXZ  # SP::Audio::cAmbienceLayer::ReadTuningValues, slice s00a35d20
 00a36570 ?Init@cAmbienceLayer@Audio@SP@@QAE_NXZ  # SP::Audio::cAmbienceLayer::Init, slice s00a35d20
 00a366e0 ?fA366e0@@YAPAXH@Z  # fixed-size-block allocator helper, slice s00a35d20
-00a36750 ?ShouldUpdate@PrimitiveAggregate@Audio@EA@@QAE_NI@Z  # EA::Audio::PrimitiveAggregate::ShouldUpdate, slice s00a35d20
+00a36750 ?ShouldUpdate@PrimitiveAggregate_s00a3_5d20@Audio@EA@@QAE_NI@Z  # ShouldUpdate migrated from s00a35d20 (verbatim, slice spelling)
 00a367a0 ?CalculateAggregate@PrimitiveAggregate@Audio@EA@@QAEMXZ  # EA::Audio::PrimitiveAggregate::CalculateAggregate, slice s00a35d20
 00a36990 ?SetParam@PrimitiveAggregate@Audio@EA@@QAEXMH@Z  # EA::Audio::PrimitiveAggregate::SetParam, slice s00a35d20
 00a36a10 ?dtor@S106@@QAEXXZ  # S106 destructor / vector-of-autoref teardown, slice s00a35d20

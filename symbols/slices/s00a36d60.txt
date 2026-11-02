@@ -1,1 +1,2 @@
+00a37b10 ??0cEmitterEAPD@@QAE@XZ  # cEmitterEAPD::cEmitterEAPD migrated from s00a36d60 (verbatim, slice spelling)
 00a37b70 ?ComputeGainAttenuation@cEmitterModelSound@@QAEMPAX000@Z  # cEmitterModelSound::ComputeGainAttenuation migrated from s00a36d60 (verbatim, slice spelling)

@@ -15,7 +15,7 @@
 00a38a50 ?Create@cEmitterModelSound@Audio@SP@@QAE_NII@Z  # SP::Audio::cEmitterModelSound::Create, slice s00a37dd0
 00a38b30 ??1cEmitterModelSound@Audio@SP@@QAE@XZ  # SP::Audio::cEmitterModelSound::~cEmitterModelSound, slice s00a37dd0
 00a38c70 ??0cEmitterModelSound@Audio@SP@@QAE@XZ  # SP::Audio::cEmitterModelSound::cEmitterModelSound, slice s00a37dd0
-00a38d90 ??0cEmitterSndPlayer@Audio@SP@@QAE@XZ  # SP::Audio::cEmitterSndPlayer::cEmitterSndPlayer, slice s00a37dd0
+00a38d90 ??0cEmitterSndPlayer@Audio@SP@@QAE@XZ  # cEmitterSndPlayer migrated from s00a37dd0 (verbatim, slice spelling)
 00a38dd0 ?Create@cEmitterSndPlayer@Audio@SP@@QAE_NXZ  # SP::Audio::cEmitterSndPlayer::Create, slice s00a37dd0
 00a38de0 ?SetProperty@cEmitterSndPlayer@Audio@SP@@QAE_NHMI@Z  # SP::Audio::cEmitterSndPlayer::SetProperty, slice s00a37dd0
 00a38e20 ?UpdateParameters@cEmitterSndPlayer@Audio@SP@@QAEXMI@Z  # SP::Audio::cEmitterSndPlayer::UpdateParameters, slice s00a37dd0

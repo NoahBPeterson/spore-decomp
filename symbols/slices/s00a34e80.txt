@@ -1,3 +1,6 @@
+00a34e80 ?FUN_00a34e80@@YIXPAH@Z  # FUN_00a34e80 migrated from s00a34e80 (verbatim, slice spelling)
+00a34e90 ?FUN_00a34e90@@YAHXZ  # FUN_00a34e90 migrated from s00a34e80 (verbatim, slice spelling)
+00a34eb0 ?FUN_00a34eb0@@YIXPAH@Z  # FUN_00a34eb0 migrated from s00a34e80 (verbatim, slice spelling)
 00a34ee0 ?UpdatePrimitives@AmbLayer@@QAEXMH@Z  # AmbLayer::UpdatePrimitives migrated from s00a34e80 (verbatim, slice spelling)
 00a34fa0 ?call@F_a34fa0@@QAE_NHH@Z  # F_a34fa0::call migrated from s00a34e80 (verbatim, slice spelling)
 00a34fd0 ?FUN_00a34fd0@@YAPAXPAX00@Z  # FUN_00a34fd0 migrated from s00a34e80 (verbatim, slice spelling)

@@ -1,11 +1,11 @@
 00a3ec00 pixie_use  # EAPd pixie "use" method: converts a name to 16-bit, resolves a key via ObjectError()->Slot78, stores key[3] into Pixie@+0x28, then Pixie::Read
 00a3ed00 pixie_new  # EAPd pixie_new: pd_new(spPixieClass), getbytes(0x34,"EAPd/Pixie"), inits Pixie fields, two outlet_new, optional pixie_use(argc==1)
 00a3edb0 Pixie_Register  # SP::Audio::Pixie::Register: gensym "list"/"pixie"/"read"/"use"/"bang", class_new(spPixieClass), class_addmethod
-00a3eef0 sendgame_new  # EAPd sendgame_new: pd_new(spSendGameClass), stores two args at +0x28/+0x2c, symbolinlet_new
-00a3ef30 sendgame_anything  # SP::Audio::SendGame::Anything: GetSystemAT()->Slot1ac() debug ctx, prints symbol/args, M_0f940
+00a3eef0 ?sendgame_new@@YAHHH@Z  # sendgame_new migrated from s00a3ec00 (verbatim, slice spelling)
+00a3ef30 ?sendgame_anything@@YAXHHHHPAH@Z  # sendgame_anything migrated from s00a3ec00 (verbatim, slice spelling)
 00a3f000 SendGame_Register  # SP::Audio::SendGame::Register: gensym "sendgame", class_new(spSendGameClass), class_addanything
-00a3f050 TrackList::FindByName  # linear scan of a vector<Track> comparing with the eastl hashtable KeyEq (0x555020)
-00a3f090 trixie_read  # SP::Audio EAPd "read": shuffler/rythm selector dispatch, outlet_list/outlet_bang over TrackEntry items
+00a3f050 ?FindByName@TrackList@@QAEPAUTrack@@PAX@Z  # TrackList::FindByName migrated from s00a3ec00 (verbatim, slice spelling)
+00a3f090 ?trixie_read@@YAXHHHHPAH@Z  # trixie_read migrated from s00a3ec00 (verbatim, slice spelling)
 00a3f300 FUN_00a3f300  # eastl uninitialized forward range copy of 0x20-stride elements (3 dwords + vector<_atom> copy ctor)
 00a3f3a0 TrackEntry::~TrackEntry  # 0x24 element: string + vector<tItem> dtor, frame-less (throw())
 00a3f3f0 FUN_00a3f3f0  # destroy range of 0x24 TrackEntry elements (string + vector<tItem>), returns advanced accumulator

@@ -1,4 +1,7 @@
-00a3bc70 SP::Audio::cListener::Update  # PDB candidate; recomputes listener position/orientation from the camera (or boom anchor) and posts message 0x20c089c + AudioSystem listener set
-00a1a1c0 EA::Audio::ResponseCurve::GetMinInput  # thiscall(float* out) -> bool; first key's x, false when the key array is empty
-00a1a1a0 EA::Audio::ResponseCurve::GetMaxInput  # thiscall(float* out) -> bool; last key's x (elem -0x14), false when empty
 0041ded0 Matrix33_Convert  # cdecl(out 3x3, in 3x3), /Od loops over 3x3 (transpose-style copy), used for the listener matrix
+00a1a1a0 EA::Audio::ResponseCurve::GetMaxInput  # thiscall(float* out) -> bool; last key's x (elem -0x14), false when empty
+00a1a1c0 EA::Audio::ResponseCurve::GetMinInput  # thiscall(float* out) -> bool; first key's x, false when the key array is empty
+00a1a9d0 ?InitFromConfiguration@ResponseCurve@Audio@EA@@QAE_NPAVIConfiguration@23@I@Z  # EA::Audio::ResponseCurve::InitFromConfiguration (callee of s00a3bc70, named from the dev publics; slice address comment)
+00a3bc70 ?Update@cListener@@QAEXPAUcViewer@@@Z  # cListener::Update migrated from s00a3bc70 (verbatim, slice spelling)
+00a3cac0 ?FUN_00a3cac0@@YAXPAUcMapDescription@@PAUIWriter@IO@EA@@@Z  # FUN_00a3cac0 migrated from s00a3bc70 (verbatim, slice spelling)
+00a3cb20 ?FUN_00a3cb20@@YAPAUcMapDescription@@PAUIReader@IO@EA@@H@Z  # FUN_00a3cb20 migrated from s00a3bc70 (verbatim, slice spelling)
