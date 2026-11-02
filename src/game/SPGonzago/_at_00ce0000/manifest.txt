@@ -1,0 +1,8 @@
+# source  symbol  va  flags
+../src/game/SPGonzago/_at_00ce0000.cpp  ?GetValue188@cTribeTokenTranslator@SP@@QAENH@Z  00ce68f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00ce0000.cpp  ?GetValue19c@cTribeTokenTranslator@SP@@QAENH@Z  00ce6910  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00ce0000.cpp  ?FUN_00ce8d80@@YIXPAX0@Z  00ce8d80  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00ce0000.cpp  ?FUN_00ce8db0@@YIPAXPAX0@Z  00ce8db0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00ce0000.cpp  ?FUN_00ce90a0@@YIXPAX00@Z  00ce90a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00ce0000.cpp  ??1cBuildingTuning@SP@@QAE@XZ  00cecd50  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00ce0000.cpp  ??0cBuildingTuning@SP@@QAE@XZ  00cece70  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

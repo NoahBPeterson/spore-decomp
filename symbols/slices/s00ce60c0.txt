@@ -1,0 +1,2 @@
+00ce68f0 ?GetValue188@cTribeTokenTranslator@SP@@QAENH@Z  # cTribeTokenTranslator::GetValue188 migrated from s00ce60c0 (verbatim, slice spelling)
+00ce6910 ?GetValue19c@cTribeTokenTranslator@SP@@QAENH@Z  # cTribeTokenTranslator::GetValue19c migrated from s00ce60c0 (verbatim, slice spelling)
