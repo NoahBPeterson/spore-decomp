@@ -1,12 +1,3 @@
-00a56460 ?atan_new@Eapd@Audio@EA@@YAPAXXZ  # atan_new migrated from s00a56460 (verbatim, slice spelling)
-00a564f0 ?atan2_new@Eapd@Audio@EA@@YAPAXXZ  # atan2_new migrated from s00a56460 (verbatim, slice spelling)
-00a56540 ?atan2_float@Eapd@Audio@EA@@YAXPAXM@Z  # atan2_float migrated from s00a56460 (verbatim, slice spelling)
-00a565d0 ?sqrt_new@Eapd@Audio@EA@@YAPAXXZ  # sqrt_new migrated from s00a56460 (verbatim, slice spelling)
-00a56670 ?log_new@Eapd@Audio@EA@@YAPAXXZ  # log_new migrated from s00a56460 (verbatim, slice spelling)
-00a56720 ?exp_new@Eapd@Audio@EA@@YAPAXXZ  # exp_new migrated from s00a56460 (verbatim, slice spelling)
-00a567e0 ?abs_new@Eapd@Audio@EA@@YAPAXXZ  # abs_new migrated from s00a56460 (verbatim, slice spelling)
-00a56870 ?clip_new@Eapd@Audio@EA@@YAPAXMM@Z  # clip_new migrated from s00a56460 (verbatim, slice spelling)
-00a568d0 ?clip_float@Eapd@Audio@EA@@YAXPAXM@Z  # clip_float migrated from s00a56460 (verbatim, slice spelling)
 0x00a56460 atan_new    # EA::Audio::Eapd::atan_new; pd_new(spAtanClass)/outlet_new
 0x00a56490 atan_float  # EA::Audio::Eapd::atan_float; fpatan body (not in batch)
 0x00a564f0 atan2_new   # EA::Audio::Eapd::atan2_new

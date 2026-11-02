@@ -11,5 +11,5 @@
 00a51e60 ?gatom_vis@Eapd@Audio@EA@@YAXPAUt_gobj@123@PAUt_glist@123@H@Z  # gatom_vis migrated from s00a510e0 (verbatim, slice spelling)
 00a51f40 EA::Audio::Eapd::graphics_objects_init  # PDB candidate
 00a51f90 EA::Audio::Eapd::control_objects_init  # PDB candidate
-00a52000 ?audio_objects_init@Eapd@Audio@EA@@YA_NXZ  # audio_objects_init migrated from s00a510e0 (verbatim, slice spelling)
-00a52020 ?mtof@Eapd@Audio@EA@@YANM@Z  # mtof migrated from s00a510e0 (verbatim, slice spelling)
+00a52000 EA::Audio::Eapd::audio_objects_init  # PDB candidate
+00a52020 EA::Audio::Eapd::mtof  # Pd mtof: 8.1758*exp(0.0577622*f), clamped at 1499

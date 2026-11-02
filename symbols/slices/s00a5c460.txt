@@ -1,4 +1,3 @@
-00a5c8e0 ?alist_anything@Eapd@Audio@EA@@YAXPAUt_alist@123@Ut_symbol_s00a5_c460@123@HPAUt_atom@123@@Z  # alist_anything migrated from s00a5c460 (verbatim, slice spelling)
 0x00a5c460  change_float  # float handler: store and forward to all outlets with recursion guard
 0x00a5c4c0  change_set  # unconditional value store
 0x00a5c4d0  change_setup  # class_new(change) + bang/float/set methods
@@ -26,7 +25,7 @@
 0x00a5d0d0  list_split_anything  # wrap selector+args as a list and split
 0x00a5d180  list_split_setup  # list split class
 0x00a5d200  list_trim_new  # list trim constructor
-0x00a5d230  list_trim_list  # trim handler, referenced by list_trim_setup; boundary helper just past this slice
 0x00a5d290  list_trim_setup  # list trim class
 0x00a5d310  list_message_new  # list message constructor: symbol inlet + anything outlet
 0x00a5d360  list_message_list  # forward with selector, or promote stored selector
+0x00a5d230  list_trim_list  # trim handler, referenced by list_trim_setup; boundary helper just past this slice
