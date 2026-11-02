@@ -7,5 +7,8 @@
 00516e10 ?GetBoundingBox@cMeshAORender_s0051_69d0@nSPSkinner@@UAE_NAAUBoundingBox@@AAM@Z  # cMeshAORender_s0051_69d0::GetBoundingBox migrated from s005169d0 (verbatim, slice spelling)
 00516eb0 ?Rebuild@cMeshAORender_s0051_69d0@nSPSkinner@@QAEXXZ  # cMeshAORender_s0051_69d0::Rebuild migrated from s005169d0 (verbatim, slice spelling)
 00517160 ?Run@cJobBase@@UAEXHHHH@Z  # cJobBase::Run migrated from s005169d0 (verbatim, slice spelling)
+00517240 ??0JobDesc@@QAE@XZ  # JobDesc::JobDesc migrated from s005169d0 (verbatim, slice spelling)
 005172c0 ?Schedule@cJobBase@@QAEXXZ  # cJobBase::Schedule migrated from s005169d0 (verbatim, slice spelling)
+00517310 ??0cAOBakeJob@@QAE@PAU?$SimpleVector@H@@_N@Z  # cAOBakeJob::cAOBakeJob migrated from s005169d0 (verbatim, slice spelling)
 005173a0 ??0cJobBase@@QAE@XZ  # cJobBase::cJobBase migrated from s005169d0 (verbatim, slice spelling)
+007a4420 ?Begin@cStaticBufferDraw@SP@@QAEXPAVCompiledState@graphics@rw@@W4tPrim@cBufferDraw@2@W4tFormat@72@H@Z  # SP::cStaticBufferDraw::Begin (callee of s005169d0, named from the dev publics; slice address comment)

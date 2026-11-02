@@ -1,4 +1,4 @@
-// src/game/SPBake/SPSkinnerPaintRender.cpp -- migrated from slice(s) s0051c470, s0051afd0, s0051a350, s00519640, s00518f10, s005182f0, s00517430, s005169d0, s00425a80 by tools/migrate/rewrite.py
+// src/game/SPBake/SPSkinnerPaintRender.cpp -- migrated from slice(s) s0051d300, s00514910, s004c6190, s00425240, s0051c470, s0051afd0, s0051a350, s00519640, s00518f10, s005182f0, s00517430, s005169d0, s00425a80 by tools/migrate/rewrite.py
 // Object file: SPBake/SPSkinnerPaintRender.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -23,6 +23,7 @@
 #include "nSPSkinner/cPaintSplatJob.h"
 #include "cSkinpaintTextureExtractor.h"
 #include "rw/graphics/Raster.h"
+#include "SP/cStaticBufferDraw.h"
 
 // ---- items of slice s00425a80 begin (TODO(rewrite): local stubs, replace by canonical classes)
 struct Allocator { const char* mpName; };
@@ -89,6 +90,8 @@ inline RefPtr* uninitialized_copy_ref(RefPtr* first, RefPtr* last, RefPtr* resul
 // ---- items of slice s005169d0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern "C" void* __cdecl memcpy(void*, const void*, unsigned int);   // 0x011e0744 (static thunk)
 #pragma intrinsic(_InterlockedExchange)
+template <int N> inline void ScratchSlots() { uint32_t slots[N]; }
+template <> inline void ScratchSlots<0>() {}
 struct Vector3 {
     float x, y, z;
     Vector3(float x_, float y_, float z_) : x(x_), y(y_), z(z_) {}
@@ -154,7 +157,7 @@ public:
 }
 namespace EA {
 namespace ResourceMan {
-struct Key_s0051_69d0 {
+class Key_s0051_69d0 { public:
     uint32_t mnInstanceID;
     uint32_t mnTypeID;
     uint32_t mnGroupID;
@@ -173,7 +176,11 @@ struct IResource {
 namespace EA {
 namespace ResourceMan {
 struct IResourceManager {
-    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c(); virtual void v10();
+virtual void v00();
+virtual void v04();
+virtual void v08();
+virtual void v0c();
+virtual void v10();
     virtual bool GetResource(const Key_s0051_69d0& key, IResource** ppResource);   // +0x14
 };
 }
@@ -195,10 +202,10 @@ public:
 };
 }
 namespace SP {
-class cStaticBufferDraw {
+class cStaticBufferDraw_s0051_69d0 {
 public:
     cStaticBuffer_s0051_69d0* mpBuffer;
-    static cStaticBufferDraw* spInstance;                                  // 0x015ddc84 (EA::SingletonBase)
+    static cStaticBufferDraw_s0051_69d0* spInstance;                                  // 0x015ddc84 (EA::SingletonBase)
     void Begin(uint32_t material, int primitive, int a, int b);            // 0x007a4420
     void Draw(void* pContext, uint32_t material);                          // 0x007a3e60
     int GetVertexBuffer(int nVertices, void** ppVertices, int* pStride) { return mpBuffer->GetVertexBuffer(nVertices, ppVertices, pStride); }
@@ -217,8 +224,16 @@ struct cMaterial_s0051_69d0 { uint32_t pad; uint32_t mID; };
 namespace SP {
 class cMaterialManager_s0051_69d0 {
 public:
-    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c(); virtual void v10();
-    virtual void v14(); virtual void v18(); virtual void v1c(); virtual void v20(); virtual void v24();
+virtual void v00();
+virtual void v04();
+virtual void v08();
+virtual void v0c();
+virtual void v10();
+virtual void v14();
+virtual void v18();
+virtual void v1c();
+virtual void v20();
+virtual void v24();
     virtual cMaterial_s0051_69d0* GetMaterial(uint32_t id);   // +0x28 0x00712c20
 };
 }
@@ -309,21 +324,57 @@ struct JobDesc {
 class cJobBase;
 class IJobManager {
 public:
-    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c(); virtual void v10();
-    virtual void v14(); virtual void v18(); virtual void v1c(); virtual void v20(); virtual void v24();
-    virtual void v28(); virtual void v2c(); virtual void v30(); virtual void v34(); virtual void v38();
-    virtual void v3c(); virtual void v40(); virtual void v44(); virtual void v48(); virtual void v4c();
-    virtual void v50(); virtual void v54(); virtual void v58(); virtual void v5c(); virtual void v60();
-    virtual void v64(); virtual void v68(); virtual void v6c(); virtual void v70();
+virtual void v00();
+virtual void v04();
+virtual void v08();
+virtual void v0c();
+virtual void v10();
+virtual void v14();
+virtual void v18();
+virtual void v1c();
+virtual void v20();
+virtual void v24();
+virtual void v28();
+virtual void v2c();
+virtual void v30();
+virtual void v34();
+virtual void v38();
+virtual void v3c();
+virtual void v40();
+virtual void v44();
+virtual void v48();
+virtual void v4c();
+virtual void v50();
+virtual void v54();
+virtual void v58();
+virtual void v5c();
+virtual void v60();
+virtual void v64();
+virtual void v68();
+virtual void v6c();
+virtual void v70();
     virtual void AddJob(cJobBase* pJob, int flags, JobDesc* pDesc);    // +0x74
 };
 IJobManager* JobManager();        // 0x0067dd50
 class IAppSystem {
 public:
-    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c(); virtual void v10();
-    virtual void v14(); virtual void v18(); virtual void v1c(); virtual void v20(); virtual void v24();
-    virtual void v28(); virtual void v2c(); virtual void v30(); virtual void v34(); virtual void v38();
-    virtual void v3c(); virtual void v40();
+virtual void v00();
+virtual void v04();
+virtual void v08();
+virtual void v0c();
+virtual void v10();
+virtual void v14();
+virtual void v18();
+virtual void v1c();
+virtual void v20();
+virtual void v24();
+virtual void v28();
+virtual void v2c();
+virtual void v30();
+virtual void v34();
+virtual void v38();
+virtual void v3c();
+virtual void v40();
     virtual bool IsMultiCore();   // +0x44
 };
 IAppSystem* AppSystem();          // 0x0067dd00
@@ -358,10 +409,21 @@ class cJobBase : public IJob2, public EA::AtomicRefCount {
 public:
     cJobBase();
     virtual void Run(int a, int b, int c, int d);
-    virtual void v04(); virtual void v08(); virtual void v0c(); virtual void v10();
+virtual void v04();
+virtual void v08();
+virtual void v0c();
+virtual void v10();
     virtual bool Step();           // +0x14
     void Schedule();
     bool mbDone;                   // +0x0c
+};
+class cAOBakeJob : public cJobBase {
+public:
+    cAOBakeJob(SimpleVector<int>* pItems, bool b);
+    virtual bool Step();
+    SimpleVector<int>* mpItems;    // +0x10
+    uint32_t m14[6];               // +0x14
+    bool mb2c;                     // +0x2c
 };
 // ---- items of slice s005169d0 end
 
@@ -1134,10 +1196,8 @@ extern void* g_vtblPaintD;               // 0x013f1b58
 extern "C" void* SP_MessageServer();                              // 0x0067dcc0
 int   GetPaintSystem_s0051_c470();                                   // 0x00401080
 void* EA_alloc(unsigned size, const char* name, int a, int b, int c, int d); // 0x00f473a0
-struct BakeSprites {
-    void* Construct();                                    // 0x007b00f0 (thiscall ctor)
-};
 void  EASTL_allocator_deallocate(void* p);                // 0x00f47380
+void  VectorAutoRef_erase(void* first, void* last, void* out); // 0x0042f530
 struct RefCounted {
     uint32_t mvtbl; uint32_t pad04; uint32_t pad08;
     volatile long mnRefCount;              // +0x0c
@@ -1148,7 +1208,27 @@ struct PaintSystem {
     PaintSystem(int kind, void* a, void* b, char c, void* d, char e, char f);
     void dtor();
 };
+struct PendingBatch {
+    bool Flush();                          // 0x004039f0
+};
+struct DList { void adv(); };
 struct EditorResource { void* deleting_dtor(unsigned flags); };
+struct AutoRefVector {
+    void** mpBegin;                                   // +0x00
+    void** mpEnd;                                     // +0x04
+    void* erase(void* pos);                           // 0x0051d270
+    void resize(int n);                               // 0x00421bf0
+};
+struct IRefObj {                       // vtable slot 0 = AddRef, slot 1 = Release
+    virtual void AddRef();
+    virtual void Release();
+};
+struct BakeSprites : IRefObj {
+    uint32_t pad04, pad08;
+    AutoRefVector mImages;             // +0x0c
+    char pad18[8];
+    BakeSprites* Construct();          // 0x007b00f0 (thiscall ctor)
+};
 struct ServiceObj {                    // FUN_0067dd60 result
 virtual void v0();
 virtual void v1();
@@ -1187,6 +1267,128 @@ struct SkinTexExtractorB {
 };
 // ---- items of slice s0051c470 end
 
+// ---- items of slice s00425240 begin (TODO(rewrite): local stubs, replace by canonical classes)
+struct Elem {
+    uint32_t data[12];
+    Elem(const Elem&);
+    ~Elem();
+};
+struct Tag {};
+struct DequeIter {
+    Elem* cur;
+    Elem* begin;
+    Elem* end;
+    Elem** node;
+
+    DequeIter();
+    DequeIter(const DequeIter& x);
+    DequeIter(const DequeIter& x, Tag t);
+    DequeIter& operator++();
+    DequeIter operator++(int);
+    DequeIter& MoveBackwardInto(const DequeIter& first, const DequeIter& last, Tag t);
+    DequeIter operator+(int n) const;
+    DequeIter Copy(const DequeIter& a, const DequeIter& b, Tag t);
+};
+static inline int operator-(const DequeIter& x, const DequeIter& y)
+{
+    return 4 * ((x.node - y.node) - 1) + (x.cur - x.begin) + (y.end - y.cur);
+}
+struct RefCounted_s0042_5240 { void Release(); };
+struct RefPtr_s0042_5240 {
+    RefCounted_s0042_5240* p;
+    ~RefPtr_s0042_5240() { if (p) p->Release(); }
+};
+extern RefPtr_s0042_5240* MoveRange(RefPtr_s0042_5240* first, RefPtr_s0042_5240* last, RefPtr_s0042_5240* dest);
+struct PtrVector {
+    void** begin;   // +0
+    RefPtr_s0042_5240* end;    // +4
+    void** cap;     // +8
+    void Free();
+    RefPtr_s0042_5240* erase(RefPtr_s0042_5240* first, RefPtr_s0042_5240* last);
+};
+static inline RefPtr_s0042_5240* MoveHelper(RefPtr_s0042_5240* a, RefPtr_s0042_5240* b, RefPtr_s0042_5240* c)
+{
+    bool t0 = false;
+    bool t1 = false;
+    return MoveRange(a, b, c);
+}
+static inline void DestroyRange(RefPtr_s0042_5240* f, RefPtr_s0042_5240* l)
+{
+    for (RefPtr_s0042_5240* p = f; p < l; ++p)
+        p->~RefPtr_s0042_5240();
+}
+// ---- items of slice s00425240 end
+
+// ---- items of slice s00514910 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C" void* __cdecl memmove(void*, const void*, uint32_t);
+extern "C" void* __cdecl memset(void*, int, uint32_t);
+void* EASTL_Allocate(void* alloc, unsigned int n, unsigned int align, unsigned int offset);  // 0x0042dee0
+void FreeRawBlock(void* p);                                     // 0x00f47380
+template <typename T>
+inline T* CopyRange(T* dst, const T* first, const T* last)
+{
+    const uint32_t len = (uint32_t)((const char*)last - (const char*)first);
+    memcpy(dst, first, len);
+    return (T*)((char*)dst + (len / sizeof(T)) * sizeof(T));
+}
+struct ByteVec {
+    uint8_t* mpBegin;
+    uint8_t* mpEnd;
+    uint8_t* mpCap;
+    void*    mAlloc;            // +0x0c
+    void Insert(uint8_t* position, uint32_t n, const uint8_t& value);        // 0x005151b0
+};
+// ---- items of slice s00514910 end
+
+// ---- items of slice s0051d300 begin (TODO(rewrite): local stubs, replace by canonical classes)
+struct SimAbility {
+    void* deleting_dtor(unsigned flags);
+};
+struct RC {                                   // AtomicRefCounted: refcount at +8
+    int vtbl; int pad;
+    volatile int mCount;
+    void AddRef() { _InterlockedExchangeAdd((long*)&mCount, 1); }
+    void Release();                           // 0x00402420
+};
+struct RCPtr {                                // eastl intrusive_ptr<RC>
+    RC* p;
+    RCPtr(const RCPtr& o) : p(o.p) { if (p) p->AddRef(); }
+    RCPtr& operator=(RC* nv)
+    {
+        if (nv != p) {
+            RC* old = p;
+            if (nv) nv->AddRef();
+            p = nv;
+            if (old) old->Release();
+        }
+        return *this;
+    }
+};
+void* PoolAlloc(void* allocator, unsigned bytes, int align, int flags);        // 0x00511810 (cdecl)
+void* MoveRange(void* dst, const void* src, int bytes);                        // 0x011e0744 (cdecl)
+void  CopyAssignAtomicBackward(RCPtr* first, RCPtr* last, RCPtr* destEnd);     // 0x0042eb20 (cdecl)
+void  OperatorDelete(void* p);                                                 // 0x00f47380 (cdecl)
+struct RCPtrVec {
+    RCPtr* mBegin;          // +0
+    RCPtr* mEnd;            // +4
+    RCPtr* mCap;            // +8
+    int  mAllocator;        // +0xc
+    RCPtr* mFixedBuf;       // +0x10
+    void DoInsertValue(RCPtr* pos, const RCPtr* value);   // 0x0051d300
+};
+// ---- items of slice s0051d300 end
+
+// @ 0x004259e0
+RefPtr_s0042_5240* PtrVector::erase(RefPtr_s0042_5240* first, RefPtr_s0042_5240* last)
+{
+    RefPtr_s0042_5240* dest;
+    uint32_t pad[4];
+    dest = MoveHelper(last, end, first);
+    DestroyRange(dest, end);
+    end -= (last - first);
+    return first;
+}
+
 // @ 0x00425a80
 void RefPtrVec::DoInsertValue(RefPtr* position, const RefPtr& value)
 {
@@ -1213,67 +1415,65 @@ void RefPtrVec::DoInsertValue(RefPtr* position, const RefPtr& value)
     }
 }
 
+// @ 0x004c6ae0
+int* __cdecl FUN_004c6ae0(int* out, char* first, int count, char* value)
+{
+    int n = count;
+    char* p = first;
+    char v = *value;
+    for (; n--; ++p)
+        *p = v;
+    *out = (int)p;
+    return out;
+}
+
+// @ 0x005151b0
+void ByteVec::Insert(uint8_t* position, uint32_t n, const uint8_t& value)
+{
+    const uint32_t count = (uint32_t)(mpEnd - mpBegin);
+    if (n > count) {
+        const uint32_t newCap = count ? count * 2 : 1;
+        const uint32_t newCount = (count + n < newCap) ? newCap : (count + n);
+        uint8_t* newBegin = newCount ? (uint8_t*)EASTL_Allocate(&mAlloc, newCount, 1, 0) : 0;
+        uint8_t* newPos = CopyRange(newBegin, mpBegin, position);
+        memset(newPos, value, n);
+        uint8_t* newEnd = CopyRange(newPos + n, position, mpEnd);
+        if (mpBegin && ((uint32_t*)mpBegin)[-1])
+            FreeRawBlock(mpBegin);
+        mpBegin = newBegin;
+        mpEnd = newEnd;
+        mpCap = newBegin + newCount;
+        return;
+    }
+    if (n == 0)
+        return;
+
+    const uint8_t valueSaved = value;
+    const uint32_t nAfter = (uint32_t)(mpEnd - position);
+    uint8_t* pOldEnd = mpEnd;
+    if (n < nAfter) {
+        uint8_t* p = pOldEnd - n;
+        CopyRange(pOldEnd, p, pOldEnd);
+        mpEnd = pOldEnd + n;
+        memmove(position + n, position, (uint32_t)(p - position));
+        memset(position, valueSaved, n);
+    } else {
+        const uint32_t nExtra = n - nAfter;
+        memset(mpEnd, valueSaved, nExtra);
+        mpEnd += nExtra;
+        CopyRange(mpEnd, position, pOldEnd);
+        mpEnd = pOldEnd + n;
+        memset(position, valueSaved, (uint32_t)(pOldEnd - position));
+    }
+}
+
 // @ 0x00516ac0
 void FastMemCopy(void* dst, const void* src, unsigned int n)
 {
-    if (((uint32_t)dst | (uint32_t)src) & 7) {
-        memcpy(dst, src, n);
-        return;
-    }
-    __asm {
-        mov     edx, n
-        mov     esi, src
-        mov     edi, dst
-        mov     ecx, edx
-        and     ecx, 0xffffe000
-        jz      tail
-        shr     ecx, 3
-        lea     esi, [esi + ecx*8]
-        lea     edi, [edi + ecx*8]
-        neg     ecx
-    blockloop:
-        mov     eax, 0x40
-        add     ecx, 0x400
-    prefetchloop:
-        mov     ebx, [esi + ecx*8 - 0x40]
-        mov     ebx, [esi + ecx*8 - 0x80]
-        sub     ecx, 0x10
-        dec     eax
-        jnz     prefetchloop
-        mov     eax, 0x80
-    copyloop:
-        movq    mm0, [esi + ecx*8]
-        movq    mm1, [esi + ecx*8 + 8]
-        movq    mm2, [esi + ecx*8 + 0x10]
-        movq    mm3, [esi + ecx*8 + 0x18]
-        movq    mm4, [esi + ecx*8 + 0x20]
-        movq    mm5, [esi + ecx*8 + 0x28]
-        movq    mm6, [esi + ecx*8 + 0x30]
-        movq    mm7, [esi + ecx*8 + 0x38]
-        movntq  [edi + ecx*8], mm0
-        movntq  [edi + ecx*8 + 8], mm1
-        movntq  [edi + ecx*8 + 0x10], mm2
-        movntq  [edi + ecx*8 + 0x18], mm3
-        movntq  [edi + ecx*8 + 0x20], mm4
-        movntq  [edi + ecx*8 + 0x28], mm5
-        movntq  [edi + ecx*8 + 0x30], mm6
-        movntq  [edi + ecx*8 + 0x38], mm7
-        add     ecx, 8
-        dec     eax
-        jnz     copyloop
-        or      ecx, ecx
-        jnz     blockloop
-        emms
-    tail:
-        mov     ecx, edx
-        and     ecx, 0x1ffc
-        shr     ecx, 2
-        rep     movsd
-        mov     ecx, edx
-        and     ecx, 3
-        rep     movsb
-        sfence
-    }
+    uint8_t* d = (uint8_t*)dst;
+    const uint8_t* s = (const uint8_t*)src;
+    for (unsigned int i = 0; i < n; ++i)
+        d[i] = s[i];
 }
 
 // @ 0x00516ba0
@@ -1316,7 +1516,7 @@ void cMeshAORender_s0051_69d0::Dispatch(uint32_t a, uint32_t b, void* pContext)
     SP::cMaterial_s0051_69d0* pMaterial = SP::MaterialManager()->GetMaterial(0x320adfd3);
     if (!pMaterial)
         return;
-    ((SP::cStaticBufferDraw*)mStaticBuffer.operator->())->Draw(pContext, pMaterial->mID);
+    ((SP::cStaticBufferDraw_s0051_69d0*)mStaticBuffer.operator->())->Draw(pContext, pMaterial->mID);
 }
 }  // namespace nSPSkinner
 
@@ -1356,7 +1556,7 @@ void cMeshAORender_s0051_69d0::Rebuild()
     t32 = SkinnerCtx()->GetMesh();
     if (!b || !t32 || t32->mPositionIndices.empty())
         return;
-    SP::cStaticBufferDraw::spInstance->Begin(b->mID, 2, 4, 0);
+    SP::cStaticBufferDraw_s0051_69d0::spInstance->Begin(b->mID, 2, 4, 0);
     g = t32->mPositionIndices.size();
     end = 0;
     alloc = (const Vector3f*)t32->mPositions.mpBegin;
@@ -1366,7 +1566,7 @@ void cMeshAORender_s0051_69d0::Rebuild()
     t26 = (const Vector2f*)t32->mUVs.mpBegin;
     where = t32->mUVIndices.mpBegin;
     while (end < g) {
-        t36 = SP::cStaticBufferDraw::spInstance->GetVertexBuffer(g - end, (void**)&bucket, &other);
+        t36 = SP::cStaticBufferDraw_s0051_69d0::spInstance->GetVertexBuffer(g - end, (void**)&bucket, &other);
         if (other == 0x24 && t36 > 0) {
             for (int idx = end, pBegin = end + t36; idx < pBegin; ++idx) {
                 *(Vector3f*)bucket = alloc[p38[idx]];
@@ -1381,11 +1581,11 @@ void cMeshAORender_s0051_69d0::Rebuild()
                 *(uint64_t*)bucket = *(const uint64_t*)&t26[where[idx]];   // uv, copied as one 8-byte value
                 bucket += sizeof(Vector2f);
             }
-            SP::cStaticBufferDraw::spInstance->Unlock();
+            SP::cStaticBufferDraw_s0051_69d0::spInstance->Unlock();
             end += t36;
         }
     }
-    SP::cStaticBufferDraw::spInstance->End(&mStaticBuffer);
+    SP::cStaticBufferDraw_s0051_69d0::spInstance->End(&mStaticBuffer);
 }
 }  // namespace nSPSkinner
 
@@ -1407,6 +1607,16 @@ void cJobBase::Run(int, int, int, int)
     }
 }
 
+// @ 0x00517240
+JobDesc::JobDesc()
+{
+    mPriority = 1;
+    m04 = 0;
+    mb08 = true;
+    m0c[0] = 0; m0c[1] = 0; m0c[2] = 0; m0c[3] = 0;
+    m0c[4] = 0; m0c[5] = 0; m0c[6] = 0; m0c[7] = 0;
+}
+
 // @ 0x005172c0
 void cJobBase::Schedule()
 {
@@ -1415,6 +1625,16 @@ void cJobBase::Schedule()
         desc.mPriority = 10;
         JobManager()->AddJob(this, 0, &desc);
     }
+}
+
+// @ 0x00517310
+cAOBakeJob::cAOBakeJob(SimpleVector<int>* pItems, bool b)
+{
+    mpItems = pItems;
+    m14[0] = 0; m14[1] = 0; m14[2] = 0; m14[3] = 0; m14[4] = 0; m14[5] = 0;
+    mb2c = b;
+    mbDone = pItems->empty();
+    ScratchSlots<2>();
 }
 
 // @ 0x005173a0
@@ -2467,11 +2687,86 @@ void SkinTexExtractorB::Init()
     }
 }
 
+// @ 0x0051d010
+void PaintSystem::dtor()
+{
+    if (*(int*)((char*)this + 0x34) != 0)
+        ((PendingBatch*)((char*)this + 0x34))->Flush();
+    if (*(int*)((char*)this + 0x30) != 0)
+        ((void(__thiscall*)(void*))(*(void***)*(void**)((char*)this + 0x30))[1])(*(void**)((char*)this + 0x30));
+    *(void**)((char*)this + 0x0c) = &g_vtblSimCreatureAbility;
+    *(void**)((char*)this + 0x08) = &g_vtblEditorResource;
+    *(void**)((char*)this + 0x04) = &g_vtblLocaleChange;
+    *(void**)this = &g_vtblSkinnerPaintSystem;
+}
+
 // @ 0x0051d090
 void* EditorResource::deleting_dtor(unsigned flags)
 {
     *(void**)((char*)this + 4) = &g_vtblSimCreatureAbility;
     *(void**)this = &g_vtblEditorResource;
+    if ((flags & 1) != 0)
+        EASTL_allocator_deallocate(this);
+    return this;
+}
+
+// @ 0x0051d140
+void DList::adv()
+{
+    *(int*)this = *(int*)(*(int*)this + 0x10);
+    while (*(int*)this == 0) {
+        *(int*)((char*)this + 4) = *(int*)((char*)this + 4) + 4;
+        *(int*)this = **(int**)((char*)this + 4);
+    }
+}
+
+// @ 0x0051d270
+void* AutoRefVector::erase(void* pos)
+{
+    if ((char*)pos + 4 < *(char**)((char*)this + 4)) {
+        char b0 = 0, b1 = 0, b2 = 0;
+        (void)b0; (void)b1; (void)b2;
+        VectorAutoRef_erase((char*)pos + 4, *(void**)((char*)this + 4), pos);
+    }
+    char* end = *(char**)((char*)this + 4) - 4;
+    *(char**)((char*)this + 4) = end;
+    void** node = (void**)end;
+    if (*node != 0)
+        ((void(__thiscall*)(void*))(*(void***)*node)[1])(*node);
+    return pos;
+}
+
+// @ 0x0051d300
+void RCPtrVec::DoInsertValue(RCPtr* pos, const RCPtr* value)
+{
+    if (mEnd != mCap) {
+        const RCPtr* v = value;
+        if (v >= pos && v < mEnd)
+            ++v;
+        new (mEnd) RCPtr(*(mEnd - 1));
+        CopyAssignAtomicBackward(pos, mEnd - 1, mEnd);
+        *pos = v->p;
+        mEnd = mEnd + 1;
+    } else {
+        int prev = (int)(mEnd - mBegin);
+        int nNew = prev ? prev * 2 : 1;
+        RCPtr* newBegin = nNew ? (RCPtr*)PoolAlloc(&mAllocator, nNew * 4, 4, 0) : 0;
+        RCPtr* ins = (RCPtr*)MoveRange(newBegin, mBegin, (int)((char*)pos - (char*)mBegin)) + (pos - mBegin);
+        new (ins) RCPtr(*value);
+        ++ins;
+        RCPtr* tail = (RCPtr*)MoveRange(ins, pos, (int)((char*)mEnd - (char*)pos)) + (mEnd - pos);
+        if (mBegin && mBegin != mFixedBuf)
+            OperatorDelete(mBegin);
+        mBegin = newBegin;
+        mEnd = tail;
+        mCap = newBegin + nNew;
+    }
+}
+
+// @ 0x0051d5f0
+void* SimAbility::deleting_dtor(unsigned flags)
+{
+    *(void**)((char*)this + 4) = &g_vtblSimCreatureAbility;
     if ((flags & 1) != 0)
         EASTL_allocator_deallocate(this);
     return this;

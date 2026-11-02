@@ -5,6 +5,6 @@
 004c69b0 ?FUN_004c69b0@@YAPAUElem@@PAU1@00@Z  # FUN_004c69b0 migrated from s004c6190 (verbatim, slice spelling)
 004c69e0 ?FUN_004c69e0@@YAPAUElem@@PAU1@00@Z  # FUN_004c69e0 migrated from s004c6190 (verbatim, slice spelling)
 004c6a70 ?FUN_004c6a70@@YAPAUElem@@PAU1@00@Z  # FUN_004c6a70 migrated from s004c6190 (verbatim, slice spelling)
-004c6ae0  uninitialized_fill_n  # byte fill, writes the resulting cursor to *out
+004c6ae0 ?FUN_004c6ae0@@YAPAHPAHPADH1@Z  # FUN_004c6ae0 migrated from s004c6190 (verbatim, slice spelling)
 004c6b30 ?FUN_004c6b30@@YAPAHPAHPAX11@Z  # FUN_004c6b30 migrated from s004c6190 (verbatim, slice spelling)
 004c6ba0 ?FUN_004c6ba0@@YIPAXPADH@Z  # FUN_004c6ba0 migrated from s004c6190 (verbatim, slice spelling)

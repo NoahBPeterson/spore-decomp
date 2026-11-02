@@ -10,3 +10,4 @@
 00425600 Deque_erase
 004256e0 Deque_clear
 00425860 Deque_ctor
+004259e0 ?erase@PtrVector@@QAEPAURefPtr_s0042_5240@@PAU2@0@Z  # PtrVector::erase migrated from s00425240 (verbatim, slice spelling)

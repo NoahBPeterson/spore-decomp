@@ -1,4 +1,5 @@
-0051d5f0 ??_G...  # scalar deleting dtor (vtbl 0x13ef094 at +4)
+0051d300 ?DoInsertValue@RCPtrVec@@QAEXPAURCPtr@@PBU2@@Z  # RCPtrVec::DoInsertValue migrated from s0051d300 (verbatim, slice spelling)
+0051d5f0 ?deleting_dtor@SimAbility@@QAEPAXI@Z  # SimAbility::deleting_dtor migrated from s0051d300 (verbatim, slice spelling)
 0051d690 ??0Bitmap@@QAE@HHH@Z  # Bitmap::Bitmap migrated from s0051d300 (verbatim, slice spelling)
 0051d720 ?Sample@Sampler@@QAEXMPAUSrcA@@HHPAUS6@@PAUOutB@@@Z  # Sampler::Sample migrated from s0051d300 (verbatim, slice spelling)
 0051df40 ??0ThreadedResObj@@QAE@XZ  # ThreadedResObj::ThreadedResObj migrated from s0051d300 (verbatim, slice spelling)

@@ -1,5 +1,9 @@
 # <va>  <diff-bytes>  <reason>
+004259e0 2 PtrVector::erase(first,last): instruction-identical, only 2 tag-byte frame slots differ flags: /Od /Ob1 /MD /Gy /EHsc /TP
 00425a80 629 RefPtrVec::DoInsertValue (vector<intrusive_ptr<AtomicRefCounted>>): logic, inline layers, lock xadd and tag bytes right, but original keeps (last-first)>>2 in ESI across the memcpy call (push esi, frame 0x84) while every spelling tried evaluates it after the call; dead stack slots before the copy_backward args and tag-byte order also unresolved, so all frame offsets shift
+004c6ae0 8 diff=8  uninitialized_fill_n; complete, 78 bytes (exact size). `while (n--)` byte fill with the `++p` increment in the /Od `for` increment block; stores the final cursor through *out and returns out. Only delta is the /Od local-slot numbering (p/v land in -4/-5 vs -8/-1). [equiv: PASS] flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+005151b0 545 complete: byte-strided vector Insert(position, n, value) -- memset fill of the gap plus memmove/copy of the tail, growth path doubles capacity, fills past the end and copies the tail into the new block before freeing the old; equiv WEAK (199 valid, 6.1% coverage -- all agreeing, random objects fault before the deep paths); 612 vs 1088 B (inline helper temps in the retail build) flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+00516ac0 59 FastMemCopy: hand-written MMX non-temporal block copy (the 52-instruction __asm transcription was removed by the 2026-10-18 asm audit). movntq 64-byte stores, a prefetch loop, a rep movsd/movsb tail and sfence; no MSVC C++ expression emits that sequence, so the C++ body is a plain byte loop (size 66 vs 224). [equiv: WEAK 285 valid inputs, no mismatch, coverage 39.4%] flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
 00517430 3088 nSPSkinner::cPaintRenderJob::RenderInternal: complete (all stages, batches, switches, draw); /Od frame layout and inline vector helper slots differ
 005182f0 133 cPaintRenderJob::Render: complete (stage dispatch + spin loop); this/app slot order differs
 005183c0 1307 nSPSkinner::cPaintDilateJob::Render: complete (stage 0 quad+mesh triangles, stage>0 multipass ping-pong); /Od frame/inline-temp slots differ
@@ -15,5 +19,8 @@
 0051a9a0 214 /Od arg stores; complete 10-arg ctor reconstruction
 0051aaa0 101 /Od refcount release pattern differs; complete Release reconstruction
 0051ab50 705 /Od int-iterator loop shape differs; complete PreloadTextures reconstruction
-0051c470 330 /Od MI vtable stores + EASTL member-init schedule differ; complete PaintSystem ctor
-0051c640 9 cSkinpaintTextureExtractor secondary-base init (96-byte head of the 2462-byte extent): complete; this/svc /Od slot order swapped [equiv: PASS 391 valid, 100% coverage]
+0051c470 306 /Od MI vtable stores + EASTL member-init schedule differ; complete PaintSystem ctor. equiv PASS after: the Graphics::BakeSprites ctor (0x007b00f0) is a plain thiscall (this in ecx, no stack args) via BakeSprites::Construct(); the smart-pointer AddRef/Release call vtable[0]/vtable[1] directly; retail does not zero +0x48. flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+0051c640 9 cSkinpaintTextureExtractor secondary-base init (96-byte head of the 2462-byte extent): complete; this/svc /Od slot order swapped [equiv: PASS 391 valid, 100% coverage] flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+0051d010 71 /Od base-vtable restore differs; complete PaintSystem dtor. equiv PASS after: PendingBatch::Flush() (0x004039f0) is a thiscall on this+0x34 with no stack args. flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+0051d270 91 /Od erase tag-arg slots / symbol size mismatch; complete AutoRefVector::erase flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+0051d300 554 complete fixed_vector<intrusive_ptr>::DoInsertValue; original inlines the move/uninitialized-copy helpers with extra flag locals (frame 0x84 vs mine) flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
