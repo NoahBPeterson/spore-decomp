@@ -1,0 +1,4 @@
+# va  diff-bytes  reason
+01370950 11 "ProgressBarSuccessSound" node: values equal, but the original keeps the three zero value words in three separate callee-saved registers (esi/edi/ebx) live across the FNVHash call, ours reuses one zeroed eax; equiv UNSUPPORTED (0/400 inputs valid, every run discarded on import _decode_pointer) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
+013709b0 11 "ProgressBarFailSound" node: same three-separate-zeroed-registers difference as 01370950; equiv UNSUPPORTED (0/400 inputs valid, every run discarded on import _decode_pointer) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
+013717e0 11 "BackgroundEffectID" node: same three-separate-zeroed-registers difference as 01370950; equiv UNSUPPORTED (0/400 inputs valid, every run discarded on import _decode_pointer) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast

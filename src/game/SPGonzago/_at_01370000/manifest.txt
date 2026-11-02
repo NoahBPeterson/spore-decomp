@@ -1,0 +1,11 @@
+# source  symbol  va  flags
+../src/game/SPGonzago/_at_01370000.cpp  ?init_15a51bc@@YAXXZ  01370490  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_01370000.cpp  ?init_16ac5e0@@YAXXZ  013716e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_01370000.cpp  ?init_16ace34@@YAXXZ  01373000  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_01370000.cpp  ?init_16ace50@@YAXXZ  01373090  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_01370000.cpp  ?InitLineColorBottom@@YAXXZ  01373120  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_01370000.cpp  ?InitLineColorDropShadow@@YAXXZ  013731b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_01370000.cpp  ?InitLineColorBorder@@YAXXZ  01373220  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_01370000.cpp  ?FUN_0137ec20@@YAXXZ  0137ec20  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_01370000.cpp  ?FUN_0137ec40@@YAXXZ  0137ec40  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_01370000.cpp  ?FUN_0137ec60@@YAXXZ  0137ec60  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

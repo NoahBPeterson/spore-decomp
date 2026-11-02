@@ -1,2 +1,5 @@
+0137ec20 ?FUN_0137ec20@@YAXXZ  # FUN_0137ec20 migrated from s0137d820 (verbatim, slice spelling)
+0137ec40 ?FUN_0137ec40@@YAXXZ  # FUN_0137ec40 migrated from s0137d820 (verbatim, slice spelling)
+0137ec60 ?FUN_0137ec60@@YAXXZ  # FUN_0137ec60 migrated from s0137d820 (verbatim, slice spelling)
 0137ed40 ?FUN_0137ed40@@YAXXZ  # FUN_0137ed40 migrated from s0137d820 (verbatim, slice spelling)
 0137edc0 ?FUN_0137edc0@@YAXXZ  # FUN_0137edc0 migrated from s0137d820 (verbatim, slice spelling)
