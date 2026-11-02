@@ -7,6 +7,7 @@
 00f92c20 ?GetNormalAt@cTerrainMapSet@@QAEXPAUcSPVector3_s00f9_27c0@@PBU2@@Z  # cTerrainMapSet::GetNormalAt migrated from s00f927c0 (verbatim, slice spelling)
 00f92e30 ?Build@TerrainRect@@QAEXPAUcTerrainMapU16@@HHHHH@Z  # TerrainRect::Build migrated from s00f927c0 (verbatim, slice spelling)
 00f92ff0 ?Set@TerrainRect@@QAEXPAUcTerrainMapU16@@HPBM@Z  # TerrainRect::Set migrated from s00f927c0 (verbatim, slice spelling)
+00f93190 ?TerrainMapSetCheck@@YG_NPAX@Z  # TerrainMapSetCheck migrated from s00f927c0 (verbatim, slice spelling)
 00f931f0 ?GetVector@cTerrainResourceManager@@QAEXPAM@Z  # cTerrainResourceManager::GetVector migrated from s00f927c0 (verbatim, slice spelling)
 00f932f0 ?Create@cTerrainResourceManager@@QAEPAXPAXHHM@Z  # cTerrainResourceManager::Create migrated from s00f927c0 (verbatim, slice spelling)
 00f933f0 ?GetCount@cTerrainResourceManager@@QAEHH@Z  # cTerrainResourceManager::GetCount migrated from s00f927c0 (verbatim, slice spelling)
