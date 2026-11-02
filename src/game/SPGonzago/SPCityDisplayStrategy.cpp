@@ -1,4 +1,4 @@
-// src/game/SPGonzago/SPCityDisplayStrategy.cpp -- migrated from slice(s) s00cec6d0, s00ceb710, s00cea090, s00ce90c0, s00ae3ed0 by tools/migrate/rewrite.py
+// src/game/SPGonzago/SPCityDisplayStrategy.cpp -- migrated from slice(s) s00ce8160, s00b8bb70, s00cec6d0, s00ceb710, s00cea090, s00ce90c0, s00ae3ed0 by tools/migrate/rewrite.py
 // Object file: SPGonzago/SPCityDisplayStrategy.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -13,6 +13,10 @@
 #include <math.h>
 #include "SP/cGameNounManager.h"
 #include "SP/cString.h"
+#include "SP/cCity.h"
+#include "SP/cCivilization.h"
+#include "SP/cPlanet.h"
+#include "SP/cRenderer.h"
 #pragma intrinsic(_InterlockedExchangeAdd)
 
 // ---- items of slice s00ae3ed0 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -224,8 +228,26 @@ typedef unsigned int uint;
 typedef unsigned char u8;
 typedef unsigned int u32;
 void* __cdecl FUN_00f473a0(uint, const char*, int, int, const char*, int); // 0x00f473a0 operator new
+void  __cdecl FUN_00ce8d00(void*, void*, void*);                   // 0x00ce8d00
+void* __cdecl FUN_00cf74c0();                                      // 0x00cf74c0 cCivModeStrategy::Get
+void  __cdecl FUN_00cf74d0();                                      // 0x00cf74d0
 void* __cdecl FUN_00b3d280();                                      // 0x00b3d280 GetCameraCtl
+void* __cdecl FUN_00b3d350();                                      // 0x00b3d350 PlanetModel
+void* __cdecl FUN_00b30d70();                                      // 0x00b30d70 GetGameTerrainCursor
+void* __cdecl FUN_0067ddd0();                                      // 0x0067ddd0 EffectsManager
+void* __cdecl FUN_00a206f0();                                      // 0x00a206f0 EA::Audio::GetSystemAT
+u8    __cdecl FUN_00e01380(void*);                                 // 0x00e01380
+void* __cdecl FUN_00b10260(void*);                                 // 0x00b10260 cTerrainCameraController::GetTarget
+void* __cdecl FUN_00ca10a0();                                      // 0x00ca10a0
+void  __cdecl FUN_00b146a0(void*, int, int);                       // 0x00b146a0
+void  __cdecl FUN_00e05930(void*, int);                            // 0x00e05930
+void* __cdecl FUN_00cf8d70(void*, void*);                          // 0x00cf8d70 SetCameraTrackObject
+uint  __cdecl FUN_00e23250();                                      // 0x00e23250 item count (static)
+void  __cdecl FUN_00ca3350(void*, int);                            // 0x00ca3350
+void  __cdecl FUN_00bfc5e0(void*, int);                            // 0x00bfc5e0
+void  __cdecl FUN_00c9e870(void*, u32);                            // 0x00c9e870
 struct Vec4 { float x, y, z, w; };
+Vec4* __cdecl SPUIHelpers_GetMainWindowArea(Vec4* out); // 0x00805ea0
 struct CIcon {
     void  Refresh();          // 0x00e21960
     void  RefreshAlt();       // 0x00e21980
@@ -237,6 +259,20 @@ struct CSPUILayout {
     void* GetLayout();                 // 0x0093b6c0 (on cSPUIGlobalUICiv)
     void* FindWindowByID(u32 id, int); // 0x008105b0
     void  Shutdown(uint);              // 0x00811ad0
+};
+struct Sub34 {
+    void* mpVtbl;            // +0x00
+    char  pad04[0x2c - 4];
+};
+struct EffectHandle {
+    void* mpVtbl;            // +0x00
+    void* mpField4;          // +0x04
+};
+struct MapValue {
+    char  pad00[0x34];
+    Sub34 mSub34;            // +0x34 : embedded, first word is a vtable
+    char  pad6c[0x4a8];      // to +0x508
+    void* mField508;         // +0x508
 };
 struct cSPUIPosse {
     char   pad00[0xa4];
@@ -262,12 +298,21 @@ struct CTaskSource {
     char pad00[0x10];
     int  mTask;   // +0x10
 };
+struct RefPtr {
+    static void AddRef(void* p)  { if (p) ((void(__thiscall*)(void*))(*(void**)p))(p); }
+    static void Release(void* p) { if (p) ((void(__thiscall*)(void*))((*(void***)p)[1]))(p); }
+};
 struct cTerrainCamera {
     char pad00[0x14];
     u8   mbFlag14;  // +0x14
     u8   mbFlag15;  // +0x15
     u8   mbFlag16;  // +0x16
     u8   mbFlag17;  // +0x17
+};
+struct cPlanetModel_s00ce_90c0 {
+    char pad00[0x64];
+    int  mContinentFlags;  // +0x64
+    void* __thiscall GetContinent(void* key);   // 0x00b88590
 };
 struct CDS {
     void*  mpVtbl;                    // +0x00
@@ -317,18 +362,48 @@ struct CDS {
     void UpdateVehicleContinent(cGameData* vehicle); // 0x00ce9d30
     void BuildEffectDesc(int type, int variant);     // 0x00ce9e20
 };
+struct EffectTarget {
+    void* mpVtbl;     // +0x00
+    void* mField4;    // +0x04
+    u8    mField8;    // +0x08
+    char  pad09[0xc - 9];
+    u32   mColor;     // +0x0c
+    int   mType;      // +0x10
+    int   mVariant;   // +0x14
+};
+struct EffectDesc {
+    u32   mId;        // +0x00
+    u32   mField4;    // +0x04
+    u8    mbField8;   // +0x08
+    char  pad09[0xc - 9];
+    u8    mbFlagC;    // +0x0c
+    u8    mbFlagD;    // +0x0d
+    u8    mbFlagE;    // +0x0e
+    u8    mbFlagF;    // +0x0f
+    float mFloat10;   // +0x10
+    u32   mField14;   // +0x14
+    u32   mField18;   // +0x18
+    u32   mField1c;   // +0x1c
+};
 // ---- items of slice s00ce90c0 end
 
 // ---- items of slice s00cea090 begin (TODO(rewrite): local stubs, replace by canonical classes)
 void* __cdecl FUN_00f473a0(uint, const char*, int, int, int, int); // 0x00f473a0 EAAllocate
 void  __cdecl FUN_00f47380(void*);                                 // 0x00f47380 operator delete
-void* __cdecl FUN_00a206f0();                                      // 0x00a206f0 EA::Audio::GetSystemAT
+void* __cdecl FUN_00cf74f0(void*);                                 // 0x00cf74f0 GetState
+void* __cdecl FUN_00b3d300();                                      // 0x00b3d300 NounManager
+void* __cdecl FUN_00b25fb0(void*);                                 // 0x00b25fb0 GetPlayerCivilization
+void* __cdecl FUN_00bda200(void*, int, int*);                      // 0x00bda200
 void* __cdecl FUN_0067dcc0();                                      // 0x0067dcc0 MessageServer
 void* __cdecl FUN_00b3d3e0();                                      // 0x00b3d3e0 EventLog
+void* __cdecl FUN_00e24c90(void*, void*);                          // 0x00e24c90 cSPUIPosse::FindItem
 void  __cdecl FUN_00af1430(void*);                                 // 0x00af1430 TimerOwner::Dtor
 void* __cdecl FUN_00921580(void*);                                 // 0x00921580 RBTreeIncrement
 void  __cdecl FUN_00921880(void*, void*);                          // 0x00921880 RBTreeErase
 void  __cdecl FUN_00f240d0(void*, int*);                           // 0x00f240d0 EventTree::Destroy
+void  __cdecl FUN_0040ce80(void*);                                 // 0x0040ce80
+void  __cdecl FUN_00f33a80(void*, void*, void*);                   // 0x00f33a80
+void* __cdecl FUN_00537dc0(void*, const void*);                    // 0x00537dc0 cSPTransformOps::Assign
 struct RBTH { void __thiscall Fn(void*, void*); };
 struct LayoutObj {
     void* __thiscall ctor0();
@@ -368,15 +443,15 @@ struct CDS_s00ce_a090 {
     void*  mpSelEff4;      // +0x11c
     char   pad_end[0];
 
-    void Init();
+    void Init();  // 0x00cea090 (CDS::Init)
     void Update();
     void Update2(void* a, int b);
     void Refresh();
     void Assign(void* other);
-    void RemoveVehicle(void* out, void* node);
-    int  EraseKey(void* key);
-    void Destruct();
-    void* ctor(void* a);
+    void RemoveVehicle(void* out, void* node);  // 0x00ceaac0 (CDS::RemoveVehicle)
+    int  EraseKey(void* key);  // 0x00ceab20 (CDS::EraseKey)
+    void Destruct();  // 0x00ceac50 (CDS::Destruct)
+    void* ctor(void* a);  // 0x00ceb090 (CDS::ctor)
 };
 // ---- items of slice s00cea090 end
 
@@ -788,6 +863,409 @@ public:
 void __cdecl FUN_00ce8f70(void* pNoun, void* pMinimap);                         // 0x00ce8f70
 // ---- items of slice s00cec6d0 end
 
+// ---- items of slice s00b8bb70 begin (TODO(rewrite): local stubs, replace by canonical classes)
+#pragma intrinsic(_InterlockedExchangeAdd, _InterlockedExchange, _InterlockedDecrement)
+struct SVector3 {
+    float x, y, z;
+};
+void* operator new(size_t size, const char* pName, int nFlags, unsigned nDebugFlags,
+                   const char* pFile, int nLine);
+class RCSub {
+public:
+    virtual void Del(int);
+    volatile long mnRefCount;                  // +0x04
+    long Release()
+    {
+        long n = _InterlockedDecrement(&mnRefCount);
+        if (n == 0) {
+            _InterlockedExchange(&mnRefCount, 1);
+            if (this)
+                Del(1);
+        }
+        return n;
+    }
+};
+class cMinimapGfx {
+public:
+    char     pad00[0x0c];
+    bool     mbDirty;                          // +0x0c
+    char     pad0d[0x24 - 0x0d];
+    RCSub*   mpRefObject;                      // +0x24
+    bool     mbActive;                         // +0x28
+};
+class cPlanet {
+public:
+    void SetRampEnabled(bool bEnabled);        // 0x00fbd6b0
+};
+class IWorldEditor {
+public:
+virtual void v00();
+virtual void v04();
+virtual void v08();
+virtual void v0c();
+    virtual cPlanet* v10();                    // +0x10
+virtual void v14();
+virtual void v18();
+virtual void v1c();
+virtual void v20();
+virtual void v24();
+virtual void v28();
+virtual void v2c();
+virtual void v30();
+virtual void v34();
+virtual void v38();
+virtual void v3c();
+virtual void v40();
+virtual void v44();
+virtual void v48();
+virtual void v4c();
+virtual void v50();
+virtual void v54();
+virtual void v58();
+virtual void v5c();
+virtual void v60();
+virtual void v64();
+virtual void v68();
+virtual void v6c();
+virtual void v70();
+virtual void v74();
+virtual void v78();
+virtual void v7c();
+virtual void v80();
+virtual void v84();
+virtual void v88();
+virtual void v8c();
+virtual void v90();
+virtual void v94();
+virtual void v98();
+virtual void v9c();
+virtual void vA0();
+virtual void vA4();
+virtual void vA8();
+virtual void vAC();
+virtual void vB0();
+virtual void vB4();
+virtual void vB8();
+virtual void vBC();
+virtual void vC0();
+virtual void vC4();
+virtual void vC8();
+virtual void vCC();
+virtual void vD0();
+virtual void vD4();
+virtual void vD8();
+virtual void vDC();
+virtual void vE0();
+virtual void vE4();
+virtual void vE8();
+virtual void vEC();
+virtual void vF0();
+virtual void vF4();
+virtual void vF8();
+virtual void vFC();
+virtual void v100();
+virtual void v104();
+virtual void v108();
+virtual void v10C();
+    virtual void ShutdownScene();              // +0x110
+};
+class IPlanetSphere {
+public:
+virtual void v00();
+virtual void v04();
+virtual void v08();
+virtual void v0c();
+virtual void v10();
+virtual void v14();
+virtual void v18();
+virtual void v1c();
+virtual void v20();
+virtual void v24();
+virtual void v28();
+virtual void v2c();
+virtual void v30();
+virtual void v34();
+virtual void v38();
+virtual void v3c();
+virtual void v40();
+virtual void v44();
+virtual void v48();
+virtual void v4c();
+virtual void v50();
+virtual void v54();
+virtual void v58();
+virtual void v5c();
+virtual void v60();
+virtual void v64();
+virtual void v68();
+virtual void v6c();
+virtual void v70();
+virtual void v74();
+virtual void v78();
+virtual void v7c();
+virtual void v80();
+virtual void v84();
+virtual void v88();
+virtual void v8c();
+    virtual void SetInputManager(void* pManager);        // +0x90
+virtual void v94();
+virtual void v98();
+virtual void v9c();
+    virtual void vA0();
+    virtual void vA4();                        // +0xa4
+    virtual void vA8();
+    virtual void vAC();                        // +0xac
+virtual void vB0();
+virtual void vB4();
+virtual void vB8();
+virtual void vBC();
+virtual void vC0();
+virtual void vC4();
+virtual void vC8();
+virtual void vCC();
+virtual void vD0();
+virtual void vD4();
+virtual void vD8();
+virtual void vDC();
+virtual void vE0();
+virtual void vE4();
+virtual void vE8();
+    virtual void vEC();                        // +0xec
+virtual void vF0();
+virtual void vF4();
+    virtual void vF8();                        // +0xf8
+};
+struct CityPair {
+    void* mpFirst;
+    void* mpSecond;
+};
+struct LandRoute {
+    uint8_t mData[0x1c];
+};
+class CityPairVector {
+public:
+    CityPair* mpBegin;                         // +0x00
+    CityPair* mpEnd;                           // +0x04
+    CityPair* mpCapacity;                      // +0x08
+    uint32_t  mAllocator;                      // +0x0c
+    void EraseRange(CityPair* pFirst, CityPair* pLast);        // 0x00d018d0
+    void Clear() { EraseRange(mpBegin, mpEnd); }
+};
+class LandRouteVector {
+public:
+    LandRoute* mpBegin;                        // +0x00
+    LandRoute* mpEnd;                          // +0x04
+    LandRoute* mpCapacity;                     // +0x08
+    uint32_t   mAllocator;                     // +0x0c
+    void EraseRange(LandRoute* pFirst, LandRoute* pLast);      // 0x00b897d0
+    void Clear() { EraseRange(mpBegin, mpEnd); }
+};
+class cCivilization {
+public:
+virtual void v00();
+virtual void v04();
+virtual void v08();
+virtual void v0c();
+virtual void v10();
+virtual void v14();
+virtual void v18();
+virtual void v1c();
+virtual void v20();
+virtual void v24();
+virtual void v28();
+virtual void v2c();
+virtual void v30();
+virtual void v34();
+virtual void v38();
+virtual void v3c();
+virtual void v40();
+virtual void v44();
+virtual void v48();
+    virtual int GetID();                       // +0x4c
+};
+class IPositionSource {
+public:
+virtual void v00();
+virtual void v04();
+virtual void v08();
+virtual void v0c();
+virtual void v10();
+virtual void v14();
+virtual void v18();
+virtual void v1c();
+virtual void v20();
+virtual void v24();
+virtual void v28();
+    virtual const SVector3* GetPosition();     // +0x2c
+};
+class cCity {
+public:
+virtual void v00();
+virtual void v04();
+virtual void v08();
+virtual void v0c();
+virtual void v10();
+virtual void v14();
+virtual void v18();
+virtual void v1c();
+virtual void v20();
+virtual void v24();
+virtual void v28();
+virtual void v2c();
+virtual void v30();
+virtual void v34();
+virtual void v38();
+virtual void v3c();
+virtual void v40();
+virtual void v44();
+virtual void v48();
+    virtual int GetOwnerID(bool bPrimary);     // +0x4c
+    char              pad04[0x34 - 0x04];
+    IPositionSource   mNodeValue;              // +0x34
+    char              pad38[0x120 - 0x38];
+    IPositionSource   mPosition;               // +0x120
+    cCivilization*    GetCivilization();       // 0x00bd9bf0
+};
+class cPlaceholder {
+public:
+    char              pad00[0x34];
+    IPositionSource   mNodeValue;              // +0x34
+};
+struct GraphNodeValue {
+    uint32_t mValue[3];
+};
+struct GraphNode {
+    int32_t         mnID;                      // +0x00
+    GraphNodeValue  mValue;                    // +0x04
+    bool            mbResourceNode;            // +0x10
+    bool            mbDirty;                   // +0x11
+    uint16_t        pad12;
+    cCity*          mpCity;                    // +0x14
+};
+class GraphNodeVector {
+public:
+    GraphNode* mpBegin;                        // +0x00
+    GraphNode* mpEnd;                          // +0x04
+    GraphNode* mpCapacity;                     // +0x08
+    uint32_t   mAllocator;                     // +0x0c
+};
+template <class T>
+struct SpVector {
+    T*       mpBegin;                          // +0x00
+    T*       mpEnd;                            // +0x04
+    T*       mpCapacity;                       // +0x08
+    uint32_t mAllocator;                       // +0x0c
+};
+struct tGameDataVector {
+    uint32_t            pad00;
+    SpVector<cCity*>    mData;                 // +0x04
+};
+class cGameNounManager {
+public:
+    tGameDataVector* GetGameDataVector(void* pfnA, void* pfnB, void* pfnC,
+                                       void* pfnD, void* pFilter);      // 0x00b21340
+};
+class cEffMgr {
+public:
+    char pad00[0xac];
+    int  mnSlotCount;                          // +0xac
+};
+namespace Simulator {
+struct SimSlot {
+    uint32_t mnNounID;                         // +0x00
+    char     pad04[0x2c];
+    bool     mbInactive;                       // +0x30
+    char     pad31[0x64 - 0x31];
+};
+}
+namespace Simulator {
+struct SimSlotVector {
+    SimSlot* mpBegin;                          // +0x00
+    SimSlot* mpEnd;                            // +0x04
+    SimSlot* mpCapacity;                       // +0x08
+    uint32_t mAllocator;                       // +0x0c
+};
+}
+namespace Simulator {
+class SimSingleton {
+public:
+    char          pad00[0x14];
+    SimSlotVector mVec;                        // +0x14
+    char          pad24[0xc8 - 0x24];
+    SimSingleton();                            // 0x00ae5c30
+    static SimSingleton* sInstance;            // 0x0167a60c
+};
+}
+struct IVec3U {
+    uint32_t mX, mY, mZ;
+    IVec3U() {}
+    IVec3U(uint32_t x, uint32_t y, uint32_t z) : mX(x), mY(y), mZ(z) {}
+};
+class cPlanetModel_s00b8_bb70 {
+public:
+    char            pad00[0x20];
+    IWorldEditor*   mpWorldEditor;             // +0x20
+    IPlanetSphere*  mpISphere;                 // +0x24
+    char            pad28[0x2c - 0x28];
+    IVec3U          mField2C;                  // +0x2c
+    uint16_t*       mpIndexBegin;              // +0x38
+    uint16_t*       mpIndexEnd;                // +0x3c
+    char            pad40[0x48 - 0x40];
+    bool            mbRegistered;              // +0x48
+    char            pad49[0x4c - 0x49];
+    uint32_t*       mContinentMap;             // +0x4c
+    char            pad50[0x64 - 0x50];
+    uint8_t*        mContinentAboveWater;      // +0x64
+    char            pad68[0x7c - 0x68];
+    uint32_t*       mpCellNibbles;             // +0x7c
+    GraphNodeVector mNodes;                    // +0x80
+    char            pad90[0x94 - 0x90];
+    uint8_t*        mpZoneMap;                 // +0x94
+    uint8_t*        mpZoneMapEnd;              // +0x98
+    char            pad9c[0xa8 - 0x9c];
+    cMinimapGfx*    mpMinimapGfx;              // +0xa8
+    CityPairVector  mSeaTradeRoutes;           // +0xac
+    char            padBC[0xc0 - 0xbc];
+    CityPairVector  mLandTradeRoutes;          // +0xc0
+    char            padD0[0xd4 - 0xd0];
+    LandRouteVector mPathRoutes;               // +0xd4
+    char            padE4[0xe8 - 0xe4];
+    bool            mbSeaRoutesDirty;          // +0xe8
+    bool            mbLandRoutesDirty;         // +0xe9
+    bool            mbPathRoutesDirty;         // +0xea
+
+    bool RayCast(const SVector3* pOrigin, float fDirection, SVector3* pOut,
+                 float fRadius, bool bLayer, uint32_t nMask);          // 0x00b88770
+    bool FindClosestWater(const SVector3* pOrigin, float fDirection,
+                          SVector3* pOut);                             // 0x00b8bb70
+    void Reset();                                                      // 0x00b87bb0
+    int  AddNode(const SVector3* pValue, bool bResourceNode);          // 0x00b86500
+    void SetNodeFlag(int nIndex, bool bValue);                         // 0x00b7ea30
+    void SetNodeID(int nIndex, int nValue);                            // 0x00b841a0
+    int  GetContinent(const SVector3* pPosition);                      // 0x00b88590
+    void BuildPoliticalZoneMap();                                      // 0x00b8aea0
+    void Shutdown();                                                   // 0x00b8c0f0
+    void AddResourceNodes();                                           // 0x00b8bba0
+};
+extern "C" cGameNounManager* __cdecl NounManager_s00b8_bb70();                    // 0x00b3d300
+extern "C" cEffMgr* __cdecl GetEffMgr();                               // 0x00b26930
+extern "C" cPlaceholder* __cdecl FindPlaceholder(int nID);             // 0x00b993c0
+extern "C" void* __cdecl GetCurrentGameMode_s00b8_bb70();                         // 0x00b5b800
+// ---- items of slice s00b8bb70 end
+
+// ---- items of slice s00ce8160 begin (TODO(rewrite): local stubs, replace by canonical classes)
+typedef          int   s32;
+void* __cdecl SP_NounManager();                      // 0x00b3d300 SP::NounManager
+void* __cdecl SP_PlanetModel();                      // 0x00b3d350 SP::PlanetModel
+void  __cdecl FUN_00e0f9c0(void* self, void* obj, int a, int b); // 0x00e0f9c0 cSPUIMinimapWin::RemoveIcon
+void  __cdecl FUN_00e10580(void* self, void* obj, void* data, int a, int b); // 0x00e10580 cSPUIMinimapWin::AddIcon
+void* __cdecl FUN_00bd9bf0(void* self);              // 0x00bd9bf0 SP::cCity::GetCivilization
+void* __cdecl FUN_00b25f40(void* self, u32 id);      // 0x00b25f40 FindNounByID
+void* __cdecl FUN_00b6f310(void* self);              // 0x00b6f310
+void* __cdecl FUN_00b81780(void* self, void* out, void* a, void* b, void* c); // 0x00b81780 MakeRandomWorldPosition
+void* __cdecl FUN_00bfc490(void* self);              // 0x00bfc490
+// ---- items of slice s00ce8160 end
+
 // @ 0x00ae4ec0
 namespace SP {
 void cCityDisplayStrategy::UpdateMinimapCityIcon(int icon)
@@ -837,6 +1315,334 @@ void cCityDisplayStrategy::UpdateMinimapCityIcon(int icon)
   }
 }
 }  // namespace SP
+
+// @ 0x00b8bba0
+void cPlanetModel_s00b8_bb70::AddResourceNodes()
+{
+    if (mpISphere == 0)
+        return;
+
+    Reset();
+
+    if (GetCurrentGameMode_s00b8_bb70() != (void*)0x1654c04)
+        return;
+
+    int nSlots = GetEffMgr()->mnSlotCount;
+    for (int i = 0; i < nSlots; ++i) {
+        Simulator::SimSingleton* pSim = Simulator::SimSingleton::sInstance;
+        if (pSim == 0)
+            pSim = Simulator::SimSingleton::sInstance =
+                new ("Simulator/SimSingleton", 0, 0, 0, 0) Simulator::SimSingleton();
+
+        Simulator::SimSlot* pSlot = &pSim->mVec.mpBegin[i];
+        if (pSlot->mbInactive == false) {
+            cPlaceholder* pPlaceholder = FindPlaceholder(pSlot->mnNounID);
+            if (pPlaceholder != 0) {
+                int nIndex = AddNode(pPlaceholder->mNodeValue.GetPosition(), true);
+                SetNodeFlag(nIndex, true);
+            }
+        }
+    }
+
+    SpVector<cCity*>& cityList = NounManager_s00b8_bb70()->GetGameDataVector(
+        (void*)0xcd7d10, (void*)0xd3d420, (void*)0xacdff0, (void*)0xb1e500,
+        (void*)0x18c43e8)->mData;
+    int nCities = (int)(cityList.mpEnd - cityList.mpBegin);
+    for (int i = 0; i < nCities; ++i) {
+        int nIndex = AddNode(cityList.mpBegin[i]->mPosition.GetPosition(), true);
+        if (nIndex > 0 && nIndex < (uint32_t)(mNodes.mpEnd - mNodes.mpBegin) &&
+            mNodes.mpBegin[nIndex].mbDirty != true) {
+            mNodes.mpBegin[nIndex].mbDirty = true;
+            mpMinimapGfx->mbDirty = true;
+        }
+    }
+
+    SpVector<cCity*>& resourceList = NounManager_s00b8_bb70()->GetGameDataVector(
+        (void*)0xcd7d10, (void*)0xd3d420, (void*)0xae5ea0, (void*)0xb1e500,
+        (void*)0x403df5c)->mData;
+    int nResources = (int)(resourceList.mpEnd - resourceList.mpBegin);
+    for (int i = 0; i < nResources; ++i) {
+        cCity* pEntity = resourceList.mpBegin[i];
+        int nContinent = GetContinent(pEntity->mNodeValue.GetPosition());
+        if (mContinentAboveWater[nContinent]) {
+            int nIndex = AddNode(pEntity->mNodeValue.GetPosition(), false);
+            SetNodeID(nIndex, pEntity->GetOwnerID(false));
+            if (nIndex > 0 && nIndex < (uint32_t)(mNodes.mpEnd - mNodes.mpBegin) &&
+                mNodes.mpBegin[nIndex].mbDirty != true) {
+                mNodes.mpBegin[nIndex].mbDirty = true;
+                mpMinimapGfx->mbDirty = true;
+            }
+        }
+    }
+
+    BuildPoliticalZoneMap();
+
+    int nNodeCount = (int)(mNodes.mpEnd - mNodes.mpBegin);
+    for (int i = 1; i < nNodeCount; ++i)
+        mNodes.mpBegin[i].mpCity = 0;
+
+    for (int i = 0; i < nCities; ++i) {
+        cCity* pCity = cityList.mpBegin[i];
+        if (pCity != 0 && pCity->GetCivilization() != 0) {
+            const SVector3* pPos = pCity->mPosition.GetPosition();
+            float ax = fabsf(pPos->x);
+            float ay = fabsf(pPos->y);
+            float az = fabsf(pPos->z);
+            int nFirst;
+            int nSecond;
+            int nFace;
+            if (az < ax || az < ay) {
+                if (ay < ax) {
+                    nFirst  = (int)((pPos->y / pPos->x + 1.0f) * 32.0f);
+                    nSecond = (int)((pPos->z / ax + 1.0f) * 32.0f);
+                    nFace   = (pPos->x < 0.0f) ? 3 : 2;
+                } else {
+                    nFirst  = (int)((pPos->z / pPos->y + 1.0f) * 32.0f);
+                    nSecond = (int)((pPos->x / ay + 1.0f) * 32.0f);
+                    nFace   = (pPos->y < 0.0f) ? 5 : 4;
+                }
+            } else {
+                nFirst  = (int)((pPos->x / pPos->z + 1.0f) * 32.0f);
+                nSecond = (int)((pPos->y / az + 1.0f) * 32.0f);
+                nFace   = (pPos->z < 0.0f) ? 1 : 0;
+            }
+            if (nFirst == 0x40)
+                nFirst = 0x3f;
+            if (nSecond == 0x40)
+                nSecond = 0x3f;
+            int nZone = mpZoneMap[(nFace * 0x40 + nSecond) * 0x40 + nFirst];
+            if (nZone > 0 && mNodes.mpBegin[nZone].mbResourceNode)
+                mNodes.mpBegin[nZone].mpCity = pCity;
+        }
+    }
+
+    nNodeCount = (int)(mNodes.mpEnd - mNodes.mpBegin);
+    for (int i = 1; i < nNodeCount; ++i) {
+        GraphNode& node = mNodes.mpBegin[i];
+        if (node.mbResourceNode) {
+            int nCiv = -1;
+            if (node.mpCity != 0)
+                nCiv = node.mpCity->GetCivilization()->GetID();
+            if (node.mnID != nCiv) {
+                mpMinimapGfx->mbDirty = true;
+                node.mnID = nCiv;
+                node.mbDirty = true;
+            }
+        }
+    }
+}
+
+// @ 0x00ce8d00
+void __fastcall FUN_00ce8d00(void* self, void* /*edx*/, void* cmd, void* owner)
+{
+  char* o = (char*)owner;
+  float r = ((float(__thiscall*)(void*))FUN_00bfc490)(o + 0x508);
+  void* self2 = cmd;
+  void** vtbl = *(void***)self2;
+  if (r < *(float*)0x013ef74c) {
+    ((void(__thiscall*)(void*, int, int))vtbl[0x84 / 4])(self2, 0, 2);
+  } else if (o[0xbcc] != 0) {
+    ((void(__thiscall*)(void*, int, int))vtbl[0x84 / 4])(self2, 0, 1);
+  } else {
+    ((void(__thiscall*)(void*, int, int))vtbl[0x84 / 4])(self2, 0, 0);
+  }
+}
+
+// @ 0x00ce8de0
+void __fastcall FUN_00ce8de0(void* self, void* /*edx*/, char* city)
+{
+  char* p = (char*)self;
+  void* win = *(void**)(p + 0xf0);
+  if (win == 0) return;
+
+  struct IconData {
+    u32 color;   // +0
+    float x;     // +4
+    float y;     // +8
+    float z;     // +0xc
+    u32 flags;   // +0x10
+    u32 pad;     // +0x14
+    u32 pad2;    // +0x18
+    void* ref;   // +0x1c
+  } icon;
+  icon.color = 0;
+  icon.x = 0.0f;
+  icon.y = 0.0f;
+  icon.z = 0.0f;
+  icon.flags = 1;
+  icon.pad = 0;
+  icon.pad2 = 0;
+  icon.ref = 0;
+
+  ((void(__thiscall*)(void*, void*, int, int))FUN_00e0f9c0)(win, city, 1, 0);
+  icon.flags = 1;
+
+  char* comp = city + 0x120;
+  u8 c = ((u8(__thiscall*)(void*))(*(void***)comp)[0x58 / 4])(comp);
+  if (c != 0) icon.flags |= 8;
+
+  float* pos = (float*)((void*(__thiscall*)(void*))(*(void***)comp)[0x2c / 4])(comp);
+  icon.x = pos[0];
+  icon.y = pos[1];
+  icon.z = pos[2];
+  void* civ = FUN_00bd9bf0(city);
+  icon.color = (u32)FUN_00b6f310((char*)civ + 0x3c);
+
+  char* oldRef = (char*)icon.ref;
+  if (city != oldRef) {
+    ((void(__thiscall*)(void*))(*(void***)city)[0 / 4])(city);
+    icon.ref = city;
+    if (oldRef != 0) {
+      ((void(__thiscall*)(void*))(*(void***)oldRef)[4 / 4])(oldRef);
+    }
+  }
+  ((void(__thiscall*)(void*, void*, void*, int, int))FUN_00e10580)(win, city, &icon, 0, 0);
+  void* r = icon.ref;
+  if (r != 0) {
+    ((void(__thiscall*)(void*))(*(void***)r)[4 / 4])(r);
+  }
+}
+
+// @ 0x00ce8f70
+void __cdecl FUN_00ce8f70(void* obj, void* win)
+{
+  char* o = (char*)obj;
+  ((void(__thiscall*)(void*, void*, int, int))FUN_00e0f9c0)(win, o, 1, 0);
+
+  struct IconData {
+    u32 color;   // +0
+    float x;     // +4
+    float y;     // +8
+    float z;     // +0xc
+    u32 flags;   // +0x10
+    u32 pad;     // +0x14
+    u32 pad2;    // +0x18
+    u32 pad3;    // +0x1c
+    void* ref;   // +0x20
+  } icon;
+  icon.color = 0xff808080;
+  icon.x = 0.0f;
+  icon.y = 0.0f;
+  icon.z = 0.0f;
+  icon.flags = 0x4000;
+  icon.pad = 0;
+  icon.pad2 = 0;
+  icon.pad3 = 0;
+  icon.ref = 0;
+
+  s32 id = ((s32(__thiscall*)(void*))(*(void***)o)[0x4c / 4])(o);
+  if (id != -1) {
+    void* nm = SP_NounManager();
+    char* noun = (char*)FUN_00b25f40(nm, (u32)id);
+    if (noun != 0) {
+      icon.color = (u32)FUN_00b6f310(noun + 0x3c);
+    }
+  }
+
+  float s = *(float*)0x013eecd8;
+  ((void(__thiscall*)(void*))(*(void***)(o + 0x34))[0x2c / 4])(o + 0x34);
+  (void)s;
+  void* pm = SP_PlanetModel();
+  FUN_00b81780(pm, &icon.x, (void*)0x41a00000, (void*)0x41a00000, 0);
+
+  char* oldRef = (char*)icon.ref;
+  if (o != oldRef) {
+    ((void(__thiscall*)(void*))(*(void***)o)[0 / 4])(o);
+    icon.ref = o;
+    if (oldRef != 0) {
+      ((void(__thiscall*)(void*))(*(void***)oldRef)[4 / 4])(oldRef);
+    }
+  }
+  FUN_00e10580(win, o, &icon, 0, 0);
+  void* r = icon.ref;
+  if (r != 0) {
+    ((void(__thiscall*)(void*))(*(void***)r)[4 / 4])(r);
+  }
+}
+
+// @ 0x00ce90c0
+void CDS::GodModeUpdateReticles()
+{
+    int counts[4];
+    int smooth[4];
+    float widths[4];
+    float fAcc = 0.0f;
+    float fMaxW = 0.0f;
+    float fSumW = 0.0f;
+    float fLimit;
+    int iter = 0;
+    int i;
+    int ci, cj, sel;
+
+    counts[0] = mPosses[0]->ItemCount();
+    counts[1] = mPosses[1]->ItemCount();
+    counts[2] = mPosses[2]->ItemCount();
+    counts[3] = mPosses[3]->ItemCount();
+    smooth[0] = counts[0];
+    smooth[1] = counts[1];
+    smooth[2] = counts[2];
+    smooth[3] = counts[3];
+
+    float area[4];
+    SPUIHelpers_GetMainWindowArea((Vec4*)area);
+    fLimit = (area[3] - area[2]) - 100.0f;
+
+    do {
+        fSumW = 0.0f;
+        ci = smooth[0];
+        cj = counts[0];
+        sel = 0;
+        if (!(ci > 0 || (ci == 0 && counts[0] <= 0x400))) {
+            ci = 0;
+            cj = 0x400;
+        }
+        if (ci < smooth[1] || (ci == smooth[1] && cj <= counts[1])) {
+            sel = 1;
+            ci = smooth[1];
+            cj = counts[1];
+        }
+        if (ci < smooth[2] || (ci == smooth[2] && cj <= counts[2])) {
+            sel = 2;
+            ci = smooth[2];
+            cj = counts[2];
+        }
+        if (ci < smooth[3] || (ci == smooth[3] && cj <= counts[3])) {
+            sel = 3;
+        }
+        if (iter > 0) {
+            smooth[sel] = (smooth[sel] + 1) >> 1;
+        }
+        for (i = 0; i < 4; i++) {
+            cSPUIPosse* p = mPosses[i];
+            Vec4* r = ((Vec4*(__thiscall*)(void*, Vec4*, int, int, float))
+                       (*(void**)(*(char**)p + 0x98)))(p, (Vec4*)0, counts[i], smooth[i], -1.0f);
+            widths[i] = r->w - r->z;
+            if (fAcc < r->y - r->x) fAcc = r->y - r->x;
+            fSumW += r->w - r->z;
+        }
+        iter++;
+    } while (fLimit <= fSumW);
+
+    fSumW = 100.0f;
+    for (i = 0; i < 4; i++) {
+        cSPUIPosse* p = mPosses[i];
+        ((void(__thiscall*)(void*, int, float, int, int))
+         (*(void**)(*(char**)p + 0x90)))(p, 0, fSumW, 0, 0);
+        ((void(__thiscall*)(void*, float))
+         (*(void**)(*(char**)p + 0x94)))(p, fMaxW);
+        fSumW += widths[i];
+    }
+
+    if (mpGlobalCivUI != 0 && FUN_00e01380(mpGlobalCivUI) != 0) {
+        for (i = 0; i < 4; i++) {
+            cSPUIPosse* p = mPosses[i];
+            if (p != 0) {
+                ((void(__thiscall*)(void*, int))
+                 (*(void**)(*(char**)p + 0xc0)))(p, p->ItemCount() != 0);
+            }
+        }
+    }
+}
 
 // @ 0x00ce9460
 void CDS::SetVehicleTask(cGameData* data, cGameData* vehicle)
@@ -924,6 +1730,337 @@ void CDS::UpdateUI(int dummy)
     }
 }
 
+// @ 0x00ce96b0
+void CDS::SetReticlesVisible(u8 visible)
+{
+    if (mpTargetingReticle != 0) {
+        void* p = mpTargetingReticle;
+        ((void(__thiscall*)(void*, int))(*(void**)(*(char**)p + 0xc)))(p, visible != 0);
+        p = mpTargetingReticle;
+        mpTargetingReticle = 0;
+        if (p != 0) {
+            ((void(__thiscall*)(void*))(*(void**)(*(char**)p + 4)))(p);
+        }
+    }
+    if (mpExtraReticle != 0) {
+        void* p = mpExtraReticle;
+        ((void(__thiscall*)(void*, int))(*(void**)(*(char**)p + 0xc)))(p, visible != 0);
+        p = mpExtraReticle;
+        mpExtraReticle = 0;
+        if (p != 0) {
+            ((void(__thiscall*)(void*))(*(void**)(*(char**)p + 4)))(p);
+        }
+    }
+    if (mpErrorReticle != 0) {
+        void* p = mpErrorReticle;
+        ((void(__thiscall*)(void*, int))(*(void**)(*(char**)p + 0xc)))(p, visible != 0);
+        p = mpErrorReticle;
+        mpErrorReticle = 0;
+        if (p != 0) {
+            ((void(__thiscall*)(void*))(*(void**)(*(char**)p + 4)))(p);
+        }
+    }
+    int i;
+    for (i = 0; i < 3; i++) {
+        void* snd = mAudioSounds[i];
+        void* sys = FUN_00a206f0();
+        if (sys != 0) {
+            ((void(__thiscall*)(void*, u32))(*(void**)(*(char**)sys + 0x38)))(sys, 0x347536b);
+            ((void(__thiscall*)(void*, u32, void*))(*(void**)(*(char**)sys + 0x40)))(sys, 0x3475385, snd);
+            ((void(__thiscall*)(void*, u32, int))(*(void**)(*(char**)sys + 0x40)))(sys, 0x34753a0, 1);
+            ((void(__thiscall*)(void*))(*(void**)(*(char**)sys + 0x58)))(sys);
+        }
+    }
+}
+
+// @ 0x00ce97e0
+void CDS::ShutdownAll()
+{
+    int i;
+    ((CSPUILayout*)mpPosseIconLayout)->Shutdown(1);
+    void* layout = mpPosseIconLayout;
+    if (layout != 0) {
+        mpPosseIconLayout = 0;
+        ((void(__thiscall*)(void*))(*(void**)(*(char**)layout + 8)))(layout);
+    }
+    EffectHandle* e;
+    e = (EffectHandle*)mpSelEff0;
+    {
+        void* mgr = FUN_0067ddd0();
+        void* sub = ((void*(__thiscall*)(void*))(*(void**)(*(char**)mgr + 0x5c)))(mgr);
+        void* sub2 = ((void*(__thiscall*)(void*))(*(void**)(*(char**)sub + 0x20)))(sub);
+        ((void(__thiscall*)(void*, void*))(*(void**)(*(char**)sub2 + 0x1c)))(sub2, e->mpField4);
+    }
+    e = (EffectHandle*)mpSelEff1;
+    {
+        void* mgr = FUN_0067ddd0();
+        void* sub = ((void*(__thiscall*)(void*))(*(void**)(*(char**)mgr + 0x5c)))(mgr);
+        void* sub2 = ((void*(__thiscall*)(void*))(*(void**)(*(char**)sub + 0x20)))(sub);
+        ((void(__thiscall*)(void*, void*))(*(void**)(*(char**)sub2 + 0x1c)))(sub2, e->mpField4);
+    }
+    e = (EffectHandle*)mpSelEff2;
+    {
+        void* mgr = FUN_0067ddd0();
+        void* sub = ((void*(__thiscall*)(void*))(*(void**)(*(char**)mgr + 0x5c)))(mgr);
+        void* sub2 = ((void*(__thiscall*)(void*))(*(void**)(*(char**)sub + 0x20)))(sub);
+        ((void(__thiscall*)(void*, void*))(*(void**)(*(char**)sub2 + 0x1c)))(sub2, e->mpField4);
+    }
+    e = (EffectHandle*)mpSelEff3;
+    {
+        void* mgr = FUN_0067ddd0();
+        void* sub = ((void*(__thiscall*)(void*))(*(void**)(*(char**)mgr + 0x5c)))(mgr);
+        void* sub2 = ((void*(__thiscall*)(void*))(*(void**)(*(char**)sub + 0x20)))(sub);
+        ((void(__thiscall*)(void*, void*))(*(void**)(*(char**)sub2 + 0x1c)))(sub2, e->mpField4);
+    }
+    e = (EffectHandle*)mpSelEff4;
+    {
+        void* mgr = FUN_0067ddd0();
+        void* sub = ((void*(__thiscall*)(void*))(*(void**)(*(char**)mgr + 0x5c)))(mgr);
+        void* sub2 = ((void*(__thiscall*)(void*))(*(void**)(*(char**)sub + 0x20)))(sub);
+        ((void(__thiscall*)(void*, void*))(*(void**)(*(char**)sub2 + 0x1c)))(sub2, e->mpField4);
+    }
+    SetReticlesVisible(1);
+    for (i = 0; i < 3; i++) {
+        void* snd = mAudioSounds[i];
+        if (snd != 0) {
+            void* sys = FUN_00a206f0();
+            if (sys != 0) {
+                ((void(__thiscall*)(void*, void*))(*(void**)(*(char**)sys + 0x2c)))(sys, snd);
+            }
+            mAudioSounds[i] = 0;
+        }
+    }
+}
+
+// @ 0x00ce9920
+int CDS::HandleMessage(int msgID, void* msg)
+{
+    char* m = (char*)msg;
+    void* key = *(void**)(m + 8);
+    if (key == 0) return 1;
+
+    if (msgID == 0x3deb129) {
+        u8 bDone = 0;
+        int idx = 0;
+        char* anchor = (char*)this + 0x48;
+        do {
+            if (bDone) return 1;
+            char* end = anchor;
+            char* node = *(char**)(end + 4);
+            while (node != end && !bDone) {
+                if (*(void**)(node + 0x14) == key) {
+                    MapValue* vel = *(MapValue**)(node + 0x10);
+                    u32 flags = *(u32*)(m + 0x10);
+                    void** vt = (void**)vel->mSub34.mpVtbl;
+                    u8 b = ((u8(__thiscall*)(void*))vt[0x50 / 4])(&vel->mSub34);
+                    u8 bNew = (u8)(flags & 1) != 0;
+                    if (bNew) b = (b == 0);
+                    bDone = bNew;
+                    FUN_00ca3350(&vel->mSub34, bNew);
+                    FUN_00bfc5e0(&vel->mField508, (u8)(flags & 2) != 0);
+                    FUN_00c9e870(vel, flags);
+                    void* cur = FUN_00b30d70();
+                    ((void(__thiscall*)(void*))(*(void**)(*(char**)cur + 0x74)))(cur);
+                    cur = FUN_00b30d70();
+                    ((void(__thiscall*)(void*))(*(void**)(*(char**)cur + 0xc8)))(cur);
+                    if (b != 0) {
+                        FUN_00e05930(*(void**)((char*)this + 0x2c), -1);
+                    }
+                    FUN_00cf74d0();
+                }
+                node = (char*)FUN_00921580(node);
+            }
+            idx++;
+            anchor += 0x1c;
+        } while (idx < 4);
+        return 1;
+    }
+    if (msgID == 0x3deb12a) {
+        u8 bDone = 0;
+        int idx = 0;
+        char* anchor = (char*)this + 0x48;
+        while (!bDone) {
+            char* end = anchor;
+            char* node = *(char**)(end + 4);
+            for (; node != end; node = (char*)FUN_00921580(node)) {
+                if (*(void**)(node + 0x14) == key) {
+                    MapValue* vel = *(MapValue**)(node + 0x10);
+                    bDone = 1;
+                    void* cam = FUN_00b3d280();
+                    FUN_00b10260(cam);
+                    void** vt = (void**)vel->mSub34.mpVtbl;
+                    void* p = ((void*(__thiscall*)(void*, int, int))vt[0x2c / 4])(&vel->mSub34, 1, 1);
+                    void* cam2 = FUN_00b3d280();
+                    FUN_00b146a0(cam2, (int)p, 1);
+                    void* civ = FUN_00cf74c0();
+                    FUN_00cf8d70(civ, (void*)0);
+                }
+            }
+            idx++;
+            anchor += 0x1c;
+            if (idx >= 4) return 1;
+        }
+        return 1;
+    }
+    if (msgID == 0x61ed580 && key != 0) {
+        cSPUIPosse** posses = (cSPUIPosse**)((char*)this + 0x34);
+        int n = 4;
+        do {
+            cSPUIPosse* p = *posses;
+            if (p != 0) {
+                if (p == key && p->ItemCount() != (int)FUN_00e23250()) {
+                    ((CIcon*)p)->RefreshAlt();
+                } else {
+                    ((CIcon*)p)->Refresh();
+                }
+            }
+            posses++;
+        } while (--n);
+        return 1;
+    }
+    return 1;
+}
+
+// @ 0x00ce9b70
+void CDS::SelectVehicle(void* vehicle, int flag, int param4)
+{
+    int i;
+    for (i = 0; i < 4; i++) {
+        char* anchor = (char*)this + 0x80 + i * 0x1c;
+        RefPtr::AddRef(vehicle);
+        char* parent = *(char**)(anchor + 8);
+        char* best = anchor;
+        while (parent != 0) {
+            if (*(void**)(parent + 0x10) < vehicle) {
+                parent = *(char**)(parent + 4);
+            } else {
+                best = parent;
+                parent = *(char**)(parent);
+            }
+        }
+        char* found = (best != anchor && *(void**)(best + 0x10) <= vehicle) ? best : anchor;
+        RefPtr::Release(vehicle);
+        if (found != anchor) {
+            void* key = *(void**)(found + 0x14);
+            void* item = ((CIcon*)mPosses[i])->FindItem(key);
+            if (item != 0) {
+                if (flag != 0) {
+                    ((CIcon*)item)->SetEnabled((u8)param4);
+                }
+                SetVehicleTask((cGameData*)item, (cGameData*)vehicle);
+                FUN_00ce8d00(item, vehicle, 0);
+            }
+            return;
+        }
+    }
+}
+
+// @ 0x00ce9c30
+void CDS::RefreshVehicleIcons(cGameData* vehicle)
+{
+    int idx = vehicle->mCivIndex;
+    if (mPosses[idx] == 0) return;
+    char* anchor = (char*)this + idx * 0x1c + 0x80;
+    char* node = *(char**)(anchor + 4);
+    cPlanetModel_s00ce_90c0* pm;
+    for (; node != anchor; node = (char*)FUN_00921580(node)) {
+        cGameData* other = *(cGameData**)(node + 0x10);
+        void* item = ((CIcon*)mPosses[idx])->FindItem(*(void**)(node + 0x14));
+        if (other == 0 || item == 0) continue;
+        if (other->mContinent != vehicle->mContinent) continue;
+        pm = (cPlanetModel_s00ce_90c0*)FUN_00b3d350();
+        if (pm == 0) continue;
+        if (other->mContinent == 0) {
+            void* ka = ((void*(__thiscall*)(void*))(*(void**)(*(char**)vehicle + 0x2c)))((char*)vehicle + 0x34);
+            void* cb = pm->GetContinent(ka);
+            void* kb = ((void*(__thiscall*)(void*))(*(void**)(*(char**)other + 0x2c)))((char*)other + 0x34);
+            void* cc = pm->GetContinent(kb);
+            if (cc != cb) continue;
+        }
+        ((void(__thiscall*)(void*, int))(*(void**)(*(char**)item + 0xb8)))(item, 2);
+    }
+}
+
+// @ 0x00ce9d30
+void CDS::UpdateVehicleContinent(cGameData* vehicle)
+{
+    cPlanetModel_s00ce_90c0* pm = (cPlanetModel_s00ce_90c0*)FUN_00b3d350();
+    if (pm == 0) return;
+    void* cont = pm->GetContinent(vehicle);
+    u8 flag = *(u8*)((char*)cont + pm->mContinentFlags);
+
+    int idx;
+    for (idx = 0; idx < 4; idx++) {
+        cSPUIPosse* posse = mPosses[idx];
+        if (posse == 0) continue;
+        char* anchor = (char*)this + 0x80 + idx * 0x1c;
+        char* node = *(char**)(anchor + 4);
+        for (; node != anchor; node = (char*)FUN_00921580(node)) {
+            cGameData* other = *(cGameData**)(node + 0x10);
+            void* item = ((CIcon*)posse)->FindItem(*(void**)(node + 0x14));
+            if (other == 0 || item == 0) continue;
+            u32 u = other->mContinent;
+            if (u != 2) {
+                if (u != (flag == 0)) continue;
+                if (u != 2) {
+                    void* kb = ((void*(__thiscall*)(void*))(*(void**)(*(char**)other + 0x2c)))((char*)other + 0x34);
+                    void* cc = pm->GetContinent(kb);
+                    if (cc != cont) continue;
+                }
+            }
+            ((void(__thiscall*)(void*, int))(*(void**)(*(char**)item + 0xb8)))(item, 2);
+        }
+    }
+}
+
+// @ 0x00ce9e20
+void CDS::BuildEffectDesc(int type, int variant)
+{
+    EffectTarget* self = (EffectTarget*)this;
+    void* mgr = FUN_0067ddd0();
+    void* sub = ((void*(__thiscall*)(void*))(*(void**)(*(char**)mgr + 0x5c)))(mgr);
+    void* fx = ((void*(__thiscall*)(void*))(*(void**)(*(char**)sub + 0x20)))(sub);
+
+    EffectDesc desc;
+    desc.mbField8 = 0;
+    desc.mField18 = 0xffffffff;
+    desc.mField1c = 0xffffffff;
+    self->mVariant = variant;
+    desc.mbFlagF = 0;
+    desc.mFloat10 = 0.0f;
+    if (type == 2) {
+        desc.mId = 0x784c7cc8;
+    } else {
+        desc.mId = 0xd21f4398;
+        if (variant != 0) desc.mId = 0x748de859;
+    }
+    desc.mbFlagD = (type == 1);
+    desc.mField4 = 0;
+    desc.mbFlagC = 0;
+    desc.mbFlagE = 3;
+    ((void(__thiscall*)(void*, EffectTarget*, EffectDesc*, void*))
+     (*(void**)(*(char**)fx + 0x18)))(fx, self, &desc, &self->mField4);
+    ((void(__thiscall*)(void*, void*, u8))
+     (*(void**)(*(char**)fx + 0x10)))(fx, &self->mField8, desc.mbField8);
+    desc.mField14 = 0;
+    desc.mField18 = 0;
+    desc.mField1c = 0;
+    void* c = FUN_00ca10a0();
+    float fArg = (type == 1) ? 0.5f : 1.0f;
+    ((void(__thiscall*)(void*, void*, void*, float))
+     (*(void**)(*(char**)fx + 0x20)))(fx, &self->mField4, c, fArg);
+    ((void(__thiscall*)(void*, void*, int))
+     (*(void**)(*(char**)fx + 0x24)))(fx, &self->mField4, 1);
+
+    float f = (type == 1) ? 0.5f : 1.0f;
+    float fv = (f >= 0.0f) ? f : 0.0f;
+    float fscaled = fv * 255.0f;
+    if (fscaled > 255.0f) fscaled = 255.0f;
+    u32 alpha = (u32)(int)fscaled;
+    self->mColor = ((alpha & 0xff) << 24) | (0xff << 16) | (0xf2 << 8) | 0x99;
+    self->mType = type;
+}
+
 // @ 0x00cea030
 void* __fastcall FUN_00cea030(void* unused1, void* unused2, void** src)
 {
@@ -995,6 +2132,136 @@ void CDS_s00ce_a090::Init()
         }
         *(void**)arr = r;
         arr += 4;
+    } while (--n);
+}
+
+// @ 0x00cea1a0
+void CDS_s00ce_a090::Update()
+{
+    char* self = (char*)this;
+    char* st = (char*)FUN_00cf74f0(FUN_00cf74c0());
+    int idx = *(int*)(st + 0x140);
+    if (idx == -1) return;
+
+    char* reticle = self + 0xf4;
+    void* fx;
+    if (*(void**)(self + 0xf4) == 0) {
+        fx = FUN_0067ddd0();
+        void* cur = *(void**)reticle;
+        if (cur != 0) {
+            *(void**)reticle = 0;
+            typedef void(__thiscall* Rel)(void*);
+            ((Rel)(*(void**)(*(char**)cur + 4)))(cur);
+        }
+        typedef char(__thiscall* Mk)(void*, int, int, void*);
+        char ok = ((Mk)(*(void**)(*(char**)fx + 0x2c)))(fx, *(int*)(idx * 4 + 0x1477f40), 0, reticle);
+        if (ok) {
+            void* e = *(void**)reticle;
+            typedef void(__thiscall* P)(void*, int);
+            ((P)(*(void**)(*(char**)e + 8)))(e, 0);
+        }
+    }
+
+    char* reticle2 = self + 0xfc;
+    if (*(void**)(self + 0xfc) == 0) {
+        fx = FUN_0067ddd0();
+        void* cur = *(void**)reticle2;
+        if (cur != 0) {
+            *(void**)reticle2 = 0;
+            typedef void(__thiscall* Rel)(void*);
+            ((Rel)(*(void**)(*(char**)cur + 4)))(cur);
+        }
+        typedef char(__thiscall* Mk)(void*, int, int, void*);
+        char ok = ((Mk)(*(void**)(*(char**)fx + 0x2c)))(fx, 0x78beeec5, 0, reticle2);
+        if (ok) {
+            void* e = *(void**)reticle2;
+            typedef void(__thiscall* P)(void*, int);
+            ((P)(*(void**)(*(char**)e + 8)))(e, 0);
+        }
+    }
+
+    if (*(int*)(idx * 4 + 0x1477f10) != 0) {
+        char* r3 = self + 0xf8;
+        fx = FUN_0067ddd0();
+        void* cur = *(void**)r3;
+        if (cur != 0) {
+            *(void**)r3 = 0;
+            typedef void(__thiscall* Rel)(void*);
+            ((Rel)(*(void**)(*(char**)cur + 4)))(cur);
+        }
+        typedef char(__thiscall* Mk)(void*, int, int, void*);
+        char ok = ((Mk)(*(void**)(*(char**)fx + 0x2c)))(fx, *(int*)(idx * 4 + 0x1477f40), 0, r3);
+        if (ok) {
+            void* e = *(void**)r3;
+            typedef void(__thiscall* P)(void*, int);
+            ((P)(*(void**)(*(char**)e + 8)))(e, 0);
+        }
+    }
+
+    void* mode = *(void**)st;
+    typedef void(__thiscall* GV)(void*);
+    int v = (int)(((GV*)(*(void**)((char*)mode + 0x34)))[0], *(void**)((char*)mode + 0x34));
+    (void)v;
+}
+
+// @ 0x00cea6f0
+void CDS_s00ce_a090::Update2(void* a, int b)
+{
+    int idx;
+    char* st = (char*)FUN_00cf74f0(FUN_00cf74c0());
+    idx = *(int*)(st + 0x140);
+    if (idx == -1) return;
+    void* ref = *(void**)(idx * 4 + 0x1477f70);
+    if (ref == 0) return;
+
+    char buf[0x10];
+    FUN_00bda200(buf, idx, (int*)a);
+    void* fx = FUN_0067ddd0();
+    typedef char(__thiscall* Mk)(void*, void*, int, void*);
+    char ok = ((Mk)(*(void**)(*(char**)fx + 0x2c)))(fx, *(void**)(idx * 4 + 0x1477f70), 0, buf);
+    if (!ok) return;
+    (void)b;
+}
+
+// @ 0x00cea970
+void CDS_s00ce_a090::Refresh()
+{
+    char* self = (char*)this;
+    void* cam = FUN_00b3d280();
+    if (cam != 0) {
+        void* minimap = *(void**)self ? 0 : *(void**)(self + 0xf0);
+        (void)minimap;
+        if (*(void**)(self + 0xf0) != 0) {
+            char tmp[0x10];
+            typedef void* (__thiscall* M)(void*, void*);
+            char* r = (char*)((M)0xb13900)(cam, tmp);
+            typedef void* (__thiscall* M2)(void*);
+            void* r2 = ((M2)0xb10200)(cam);
+            (void)r; (void)r2;
+        }
+    }
+    void* nm = FUN_00b3d300();
+    void* civ = FUN_00b25fb0(nm);
+    Update();
+    if (*(int*)(self + 0x64) != 0 && civ != 0) {
+        float f = *(float*)((char*)civ + 0x98);
+        int n = (int)f;
+        float fn = (float)n;
+        if (f < fn) n -= 1;
+        void* v = *(void**)(self + 0x64);
+        void* ms = FUN_00cf74c0();
+        float r = ((float(__thiscall*)(void*, int))0xcf8e20)(ms, n);
+        typedef void(__thiscall* S)(void*, float);
+        ((S)0xe04540)(v, r);
+    }
+    void* posses = self + 0x6c;
+    int n = 4;
+    do {
+        if (*(void**)posses != 0) {
+            void* item = FUN_00e24c90(*(void**)posses, 0);
+            (void)item;
+        }
+        posses = (char*)posses + 4;
     } while (--n);
 }
 
@@ -1176,6 +2443,50 @@ void CDS_s00ce_a090::Destruct()
 
     *(int*)(self + 0x38) = 0x13eb394;
     FUN_00af1430(self);
+}
+
+// @ 0x00ceae70
+void CDS_s00ce_a090::Assign(void* other)
+{
+    (void)other;
+    void* gm = (void*)0x1654c04;
+    if (((void* (*)())0xb5b800)() != gm) return;
+    char* self = (char*)this;
+    char* o = (char*)other;
+    typedef char(__thiscall* IsX)(void*);
+    char al = ((IsX)(*(void**)(*(char**)(o + 0x34) + 0x58)))(o + 0x34);
+    int idx = *(int*)(o + 0xb20);
+    if (*(void**)(self + idx * 4 + 0x6c) == 0) return;
+    if (!al) return;
+    (void)idx;
+}
+
+// @ 0x00ceaf70
+void* __cdecl FUN_00ceaf70(void* self, void* a, void* b)
+{
+    char* s = (char*)self;
+    void* end = *(void**)(s + 4);
+    void* from = a;
+    if (end == *(void**)(s + 8)) {
+        // need to grow
+        int cur = (int)end - *(int*)(s);
+        (void)cur;
+    }
+    {
+        char* dest = (char*)end + 0x38;
+        (void)dest;
+    }
+    if (end != *(void**)(s + 8)) {
+        void* src = b;
+        if ((char*)b >= (char*)a && (char*)b < (char*)end) src = (char*)b + 0x38;
+        if (end != 0) FUN_0040ce80((char*)end - 0x38);
+        void* e2 = *(void**)(s + 4);
+        FUN_00f33a80(e2, (char*)e2 - 0x38, from);
+        FUN_00537dc0(a, src);
+        *(void**)(s + 4) = (char*)(*(void**)(s + 4)) + 0x38;
+        return a;
+    }
+    return 0;
 }
 
 // @ 0x00ceb090
