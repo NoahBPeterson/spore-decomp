@@ -1,0 +1,8 @@
+01098e50 ?applyAccumulator@hkBoxMotion_s0109_8e50@@UAEPBVhkVelocityAccumulator_s0109_8e50@@ABVhkStepInfo_s0109_8e50@@PBV2@@Z  # hkBoxMotion_s0109_8e50::applyAccumulator migrated from s01098e50 (verbatim, slice spelling)
+010992e0 _FUN_010992e0@8  # FUN_010992e0 migrated from s01098e50 (verbatim, slice spelling)
+01099330 ?buildJacobian@hkBallAndSocketConstraintData@@UAEXABVhkConstraintQueryIn_s0109_8e50@@PAX@Z  # hkBallAndSocketConstraintData::buildJacobian migrated from s01098e50 (verbatim, slice spelling)
+01099430 ??0hkStepInfo_s0109_8e50@@QAE@MM@Z  # hkStepInfo_s0109_8e50::hkStepInfo migrated from s01098e50 (verbatim, slice spelling)
+01099480 ?simulateToi@hkBackstepSimulation@@UAEXPAVhkWorld_s0109_8e50@@AAUhkToiEvent@@M@Z  # hkBackstepSimulation::simulateToi migrated from s01098e50 (verbatim, slice spelling)
+01099670 ?processAgentResetCollisionInformation@hkDiscreteSimulation@@UAEXPAXPBX0@Z  # hkDiscreteSimulation::processAgentResetCollisionInformation migrated from s01098e50 (verbatim, slice spelling)
+01099690 ?stepIntegrate@hkDiscreteSimulation@@UAEXPAVhkWorld_s0109_8e50@@ABVhkStepInfo_s0109_8e50@@@Z  # hkDiscreteSimulation::stepIntegrate migrated from s01098e50 (verbatim, slice spelling)
+01099cb0 ?FUN_01099cb0@@YGXPAXH0@Z  # FUN_01099cb0 migrated from s01098e50 (verbatim, slice spelling)

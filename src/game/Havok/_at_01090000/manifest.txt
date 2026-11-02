@@ -1,0 +1,25 @@
+# source  symbol  va  flags
+../src/game/Havok/_at_01090000.cpp  ?isValid@hkPulleyConstraintData@@QBE?AVhkBool_s0109_1a60@@XZ  01091ff0  /O2 /MD /Gy /TP /vc71 /Isrc/game/include
+../src/game/Havok/_at_01090000.cpp  ?scalarDeletingDtor@hkConstraintAtomBase@@QAEPAXE@Z  010921f0  /O2 /MD /Gy /TP /vc71 /Isrc/game/include
+../src/game/Havok/_at_01090000.cpp  ?getConstraintInfo@hkPoweredChainData@@UBEXAAUhkConstraintInfo@@@Z  01093660  /vc71 /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/Havok/_at_01090000.cpp  ?getRuntimeInfo@hkPoweredChainData@@UBEXVhkBool_s0109_2e10@@AAURuntimeInfo@hkConstraintData_s0109_2e10@@@Z  010936a0  /vc71 /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/Havok/_at_01090000.cpp  ?AdjustCost@cSPToolStrategy@SP@@QAEHH@Z  010937e0  /vc71 /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/Havok/_at_01090000.cpp  ??1hkPoweredChainData@@UAE@XZ  01093810  /vc71 /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/Havok/_at_01090000.cpp  ?Destroy@cCurveContainer@@QAEXXZ  01094bc0  /vc71 /O2 /MD /Gy /TP /fp:fast /Isrc/game/include
+../src/game/Havok/_at_01090000.cpp  ?To20@cStreamProxy@@QAEXPAUcCmdState@@@Z  01094d50  /vc71 /O2 /MD /Gy /TP /fp:fast /Isrc/game/include
+../src/game/Havok/_at_01090000.cpp  ?To1c@cStreamProxy@@QAEXPAUcBlob48@@PAX@Z  01094d90  /vc71 /O2 /MD /Gy /TP /fp:fast /Isrc/game/include
+../src/game/Havok/_at_01090000.cpp  ?To08@cStreamProxy@@QAEPAXPAX@Z  01094dd0  /vc71 /O2 /MD /Gy /TP /fp:fast /Isrc/game/include
+../src/game/Havok/_at_01090000.cpp  ?Destroy@cStreamProxy@@QAEPAXH@Z  01094e10  /vc71 /O2 /MD /Gy /TP /fp:fast /Isrc/game/include
+../src/game/Havok/_at_01090000.cpp  ?IsClosed@cKeyFrameCurve@@QAEPADPAD@Z  01094e60  /vc71 /O2 /MD /Gy /TP /fp:fast /Isrc/game/include
+../src/game/Havok/_at_01090000.cpp  ?getEnd@hkLinearParametricCurve@@QAEMXZ  01095740  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/Havok/_at_01090000.cpp  ?getRuntimeInfo@hkHingeConstraintData@@UBEXVhkBool_s0109_60e0@@AAURuntimeInfo@hkConstraintData_s0109_60e0@@@Z  01096b60  /vc71 /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/Havok/_at_01090000.cpp  ?isValid@hkHingeConstraintData@@UBE?AVhkBool_s0109_60e0@@XZ  01096b90  /vc71 /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/Havok/_at_01090000.cpp  ??0hkFixedRigidMotion@@QAE@ABVhkVector4_s0109_60e0@@ABVhkQuaternion_s0109_60e0@@@Z  01097110  /vc71 /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/Havok/_at_01090000.cpp  _FUN_01097130@8  01097130  /vc71 /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/Havok/_at_01090000.cpp  ?setInertiaLocal@hkBoxMotion@@UAEXABVhkMatrix3_s0109_8200@@@Z  01098200  /vc71 /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/Havok/_at_01090000.cpp  ?setInertiaInvLocal@hkBoxMotion@@UAEXABVhkMatrix3_s0109_8200@@@Z  010982b0  /vc71 /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/Havok/_at_01090000.cpp  ?setMassInv@hkBoxMotion@@UAEXM@Z  01098410  /vc71 /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/Havok/_at_01090000.cpp  _FUN_010992e0@8  010992e0  /vc71 /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/Havok/_at_01090000.cpp  ??0hkStepInfo_s0109_8e50@@QAE@MM@Z  01099430  /vc71 /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/Havok/_at_01090000.cpp  ?processAgentResetCollisionInformation@hkDiscreteSimulation@@UAEXPAXPBX0@Z  01099670  /vc71 /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/Havok/_at_01090000.cpp  ?subConstraintInfo@hkSimpleConstraintOwner_s0109_f870@@UAEXPAUhkConstraintInstance_s0109_f870@@AAUhkConstraintInfo_s0109_f870@@@Z  0109f900  /vc71 /O2 /MD /Gy /EHsc /TP /Isrc/game/include
