@@ -1,4 +1,14 @@
-00bd1cd0 cAimController::Update  # vehicle (type 0x436f315) aim/facing: face target else wander, slerp orientation; PDB candidate name SP::cVehicle::UpdateHostiles is wrong
 00449c20 SP::normalized_safe  # cdecl sret(Vec3 out, const Vec3* in)
 00576b00 AxisAngleMatrix  # cdecl sret(Matrix33 out, const Vec3* axis, float angle)
 0059ab10 IsFinite  # cdecl bool(float): exponent field check
+00bd1ab0 ?PushCoord@cBuilding@@QAEXI@Z  # cBuilding::PushCoord migrated from s00bd1820 (verbatim, slice spelling)
+00bd1af0 ??0cBuildingCityHall@@QAE@XZ  # cBuildingCityHall::cBuildingCityHall migrated from s00bd1820 (verbatim, slice spelling)
+00bd1b70 ??0cBuildingIndustry@@QAE@XZ  # cBuildingIndustry::cBuildingIndustry migrated from s00bd1820 (verbatim, slice spelling)
+00bd1bb0 ?Delete@cBuildingIndustry@@QAEPAXE@Z  # cBuildingIndustry::Delete migrated from s00bd1820 (verbatim, slice spelling)
+00bd1c00 ??0cBuildingHouse@@QAE@XZ  # cBuildingHouse::cBuildingHouse migrated from s00bd1820 (verbatim, slice spelling)
+00bd1c40 ??0cBuildingEntertainment@@QAE@XZ  # cBuildingEntertainment::cBuildingEntertainment migrated from s00bd1820 (verbatim, slice spelling)
+00bd1c80 ?Delete@cBuildingEntertainment@@QAEPAXE@Z  # cBuildingEntertainment::Delete migrated from s00bd1820 (verbatim, slice spelling)
+00bd1cd0 ?Update@cAimController@@QAEXPAUcAimUpdateArgs@@@Z  # cAimController::Update migrated from s00bd1820 (verbatim, slice spelling)
+00bd2310 ?Init@cSPCreatureCitizen@@QAEXPAUcCitizenData@@@Z  # cSPCreatureCitizen::Init migrated from s00bd1820 (verbatim, slice spelling)
+00bd2560 ?Fn_00bd2560@@YIXPAUcFlattenOuter@@PAXPAUcStr8@@@Z  # Fn_00bd2560 migrated from s00bd1820 (verbatim, slice spelling)
+00bd2600 ??0cBuildingScenario@@QAE@XZ  # cBuildingScenario::cBuildingScenario migrated from s00bd1820 (verbatim, slice spelling)
