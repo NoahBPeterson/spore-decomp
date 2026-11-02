@@ -1,0 +1,5 @@
+# va  diff-bytes  reason (complete behaviourally-equivalent source, not byte-exact)
+007b1f40 650 raster->ARGB8888 dispatch - complete; DXT1/3/5 + D3D9 raw path; register allocation and shrink-wrap differ. flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast (inline x87 fsqrt).
+007b2270 131 complete; 32bpp row blit, pixel-by-pixel 4-byte copy. Original keeps the row pointers in ecx/esi and walks the pixel index in eax; MSVC gives us pointer-walking with a countdown, so the void_hides_eax leftover (a dead pointer) differs. callerdeps 007b2270 eax -> SAFE (the only caller ignores it). flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
+007b2320 104 complete; 8bpp row blit. Memory/pool state matches; the only mismatch is the void_hides_eax leftover (original ends with eax = x+w, ours with a row pointer). callerdeps 007b2320 eax -> SAFE. flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
+007b2380 528 complete; per-face mip blit + image write; loop/register allocation differs. equiv WEAK (247 valid inputs, 3.2% coverage) flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
