@@ -1,0 +1,2 @@
+# va  diff-bytes  reason   (flags: /vc71 /O2 /MD /Gy /TP /arch:SSE2)
+011495b0 377 complete EaLayer3DecBase::SkipBlocks (skip-count / latency / version logic, 16-bit reversed adds over the request descriptor, per-core frame skip). Not byte-exact. difftest PASS 290 valid, 70.8% coverage. flags /vc71 /O2 /MD /Gy /TP /arch:SSE2
