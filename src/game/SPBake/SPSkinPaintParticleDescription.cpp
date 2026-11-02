@@ -1,4 +1,4 @@
-// src/game/SPBake/SPSkinPaintParticleDescription.cpp -- migrated from slice(s) s0053b930, s0053acc0, s00539d70, s00538e90 by tools/migrate/rewrite.py
+// src/game/SPBake/SPSkinPaintParticleDescription.cpp -- migrated from slice(s) s0053c6f0, s0053b930, s0053acc0, s00539d70, s00538e90 by tools/migrate/rewrite.py
 // Object file: SPBake/SPSkinPaintParticleDescription.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -470,38 +470,84 @@ struct PaintCompatB { PaintCompatB* Ctor1f0(); };
 // ---- items of slice s0053acc0 end
 
 // ---- items of slice s0053b930 begin (TODO(rewrite): local stubs, replace by canonical classes)
-struct cSPVector3_s0053_b930 { float x, y, z; cSPVector3_s0053_b930() {} cSPVector3_s0053_b930(float a, float b, float c) : x(a), y(b), z(c) {} };
+struct cSPVector3_s0053_b930 {
+    float x, y, z;
+    cSPVector3_s0053_b930() {}
+    cSPVector3_s0053_b930(float a, float b, float c) : x(a), y(b), z(c) {}
+    float& operator[](int i) { return (&x)[i]; }
+};
+namespace EA {
+namespace IO {
+ struct IStream_s0053_b930 {}; 
+}
+}
+bool ReadInt32(EA::IO::IStream_s0053_b930*, int32_t*, size_t, int);           // @ 0x93a780
+bool WriteUInt32(EA::IO::IStream_s0053_b930*, const uint32_t*, size_t, int);  // @ 0x93aa70
 namespace EA {
 namespace ArgScript {
-struct cIParser_s0053_b930 {
+class cIParser_s0053_b930 { public:
 #define PV(n) virtual void pv##n();
     PV(0) PV(1) PV(2) PV(3) PV(4) PV(5) PV(6) PV(7) PV(8) PV(9) PV(10) PV(11) PV(12) PV(13) PV(14) PV(15)
     PV(16) PV(17) PV(18) PV(19) PV(20) PV(21) PV(22) PV(23) PV(24) PV(25) PV(26) PV(27) PV(28) PV(29)
     PV(30) PV(31) PV(32) PV(33) PV(34)
-    virtual void V35();                                          // +0x8c
-    PV(36) virtual float GetFloat(const char*);                  // +0x98
-    PV(39) PV(40) PV(41) virtual cSPVector3_s0053_b930 GetVector(const char*); // +0xa8
+    virtual void PushBlock(void* cmd);                           // +0x8c
+    PV(36) PV(37)
+    virtual float GetFloat(const char*);                         // +0x98
+    PV(39) PV(40) PV(41)
+    virtual cSPVector3_s0053_b930* GetVector(cSPVector3_s0053_b930* out, const char*); // +0xa8
 #undef PV
 };
 }
 }
 namespace EA {
 namespace ArgScript {
-struct cICommand_s0053_b930 { virtual void AddRef(); virtual void Release(); virtual void Cast(); };
+class cICommand_s0053_b930 {
+    public: virtual void AddRef();
+    virtual void Release();
+    virtual void Cast();
+};
 }
 }
 namespace EA {
 namespace ArgScript {
-struct cCommandBase_s0053_b930 : cICommand_s0053_b930 { cIParser_s0053_b930* mParser; int mRefCount; };
+class cCommandBase_s0053_b930 : public cICommand_s0053_b930 { public: cIParser_s0053_b930* mParser; int mRefCount; };
 }
 }
 void RegisterPaintVar(EA::ArgScript::cCommandBase_s0053_b930* a, const char* name, void* cmd); // vtable +0x18
 void* PaintCompatCtor(void*);                                         // 0x53b1f0
 void* PaintVarModifierCtor(void*);                                    // 0x83?
+void VecResize(void* vec, unsigned n);                                // 0x4cd3c0
 // ---- items of slice s0053b930 end
 
 // forward declarations: helpers defined later in VA order (rewrite.py forward_protos)
 cSPVector3_s0053_8e90* normalized(cSPVector3_s0053_8e90* out, const cSPVector3_s0053_8e90& in);   // defined at 0x00539440, called earlier in the TU
+
+// ---- items of slice s0053c6f0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+struct Entry20 {
+    float m[4];
+    uint8_t mA, mB, mC, mD;
+};
+struct Allocator { void* mpPool; void* mpReserved; };
+template <typename T>
+struct SimpleVector {
+    T* mpBegin;             // +0x00
+    T* mpEnd;               // +0x04
+    T* mpCapacity;          // +0x08
+    Allocator mAllocator;   // +0x0c
+    uint32_t size() const { return (uint32_t)(mpEnd - mpBegin); }
+    T& operator[](uint32_t i) { return mpBegin[i]; }
+    void resize(uint32_t n, const T& value);                // 0x5370b0
+    void push_back(const T& value);                         // 0x537130 / 0x4547f0 / 0x4227f0
+    void insert(T* position, uint32_t n, const T& value);   // 0x53cd80
+};
+void* EASTL_Allocate(Allocator* alloc, uint32_t n, uint32_t align, uint32_t offset); // 0x42dee0
+void* CopyRange(const void* first, const void* last, void* dst);                      // 0x47b3d0
+void MoveBack(Entry20* first, Entry20* last, Entry20* dstEnd);                        // 0x537240
+// ---- items of slice s0053c6f0 end
+
+// forward declarations: helpers defined later in VA order (rewrite.py forward_protos)
+void** UninitCopy20(void** out, Entry20* first, Entry20* last, Entry20* dst, uint8_t /*isPod*/);   // defined at 0x0053d1a0, called earlier in the TU
+void* UninitFill20(Entry20* dst, int n, const Entry20* value, uint8_t /*isPod*/);   // defined at 0x0053d230, called earlier in the TU
 
 // @ 0x00538e90
 void cSPSkinPaintParticledelayCommand::Execute(cArguments_s0053_8e90& args)
@@ -1138,4 +1184,111 @@ void RegisterPaintEvalCommands(EA::ArgScript::cCommandBase_s0053_b930* cmds)
     void* b = EASTL_allocator_allocate(0x10, "ArgScript/PaintCompat", 0, 0, 0, 0);
     if (b) { PaintCompatCtor(b); *(void**)b = (void*)0x13f33b8; }
     RegisterPaintVar(cmds, "comparePosition", b);
+}
+
+// @ 0x0053bc90
+EA::IO::IStream_s0053_b930* ReadIntVec(EA::IO::IStream_s0053_b930* s, int** vec)
+{
+    uint32_t n = 0;
+    ReadInt32(s, (int32_t*)&n, 1, 0);
+    VecResize(vec, n);
+    for (uint32_t i = 0; i < n; ++i)
+        ReadInt32(s, (*vec) + i, 1, 0);
+    return s;
+}
+
+// @ 0x0053bd00
+EA::IO::IStream_s0053_b930* WriteIntVec(EA::IO::IStream_s0053_b930* s, int** vec)
+{
+    uint32_t n = (uint32_t)(vec[1] - vec[0]) >> 2;
+    WriteUInt32(s, &n, 1, 0);
+    for (uint32_t i = 0; i < n; ++i) {
+        uint32_t v = (uint32_t)(*vec)[i];
+        WriteUInt32(s, &v, 1, 0);
+    }
+    return s;
+}
+
+// @ 0x0053cca0
+void* PaintVarModifierCtor(void* p)
+{
+    *(void**)p = (void*)0x13f3f10;
+    return p;
+}
+
+// @ 0x0053cd80
+template <> void SimpleVector<Entry20>::insert(Entry20* position, uint32_t n, const Entry20& value)
+{
+    if ((uint32_t)((mpCapacity - mpEnd) / 20) < n) {
+        // grow: double (or 1) the capacity, but at least old size + n
+        uint32_t oldSize = (uint32_t)((mpEnd - mpBegin) / 20);
+        uint32_t newCapacity = oldSize > 0 ? oldSize * 2 : 1;
+        if (newCapacity <= oldSize + n)
+            newCapacity = oldSize + n;
+        Entry20* newBegin = newCapacity ? (Entry20*)EASTL_Allocate(&mAllocator, newCapacity * 20, 4, 0) : 0;
+        Entry20* next = (Entry20*)CopyRange(mpBegin, position, newBegin);
+        UninitFill20(next, n, &value, 0);
+        next = (Entry20*)CopyRange(position, mpEnd, next + n);
+        if (mpBegin && *(uint32_t*)((char*)mpBegin - 4) != 0)
+            operator delete(mpBegin);
+        mpBegin = newBegin;
+        mpEnd = next;
+        mpCapacity = (Entry20*)((char*)newBegin + newCapacity * 20);
+    } else if (n != 0) {
+        Entry20 saved(value);
+        uint32_t tail = (uint32_t)((mpEnd - position) / 20);
+        Entry20* oldEnd = mpEnd;
+        if (n < tail) {
+            Entry20* out;
+            UninitCopy20((void**)&out, mpEnd - n, mpEnd, mpEnd, 0);
+            mpEnd = mpEnd + n;
+            Entry20* src = oldEnd - n;
+            Entry20* dst = oldEnd;
+            while (src != position) {
+                --src;
+                --dst;
+                *dst = *src;
+            }
+            for (Entry20* p = position; p != position + n; ++p)
+                *p = saved;
+        } else {
+            UninitFill20(mpEnd, n - tail, &saved, 0);
+            mpEnd = mpEnd + (n - tail);
+            MoveBack(position, oldEnd, mpEnd);
+            mpEnd = mpEnd + tail;
+            for (Entry20* p = position; p != oldEnd; ++p)
+                *p = saved;
+        }
+    }
+}
+
+// @ 0x0053d1a0
+void** UninitCopy20(void** out, Entry20* first, Entry20* last, Entry20* dst, uint8_t /*isPod*/)
+{
+    Entry20* d = dst;
+    for (; first != last; ++first) {
+        if (d) {
+            d->m[0] = first->m[0]; d->m[1] = first->m[1]; d->m[2] = first->m[2]; d->m[3] = first->m[3];
+            d->mA = first->mA; d->mB = first->mB; d->mC = first->mC; d->mD = first->mD;
+        }
+        ++d;
+    }
+    *out = d;
+    return out;
+}
+
+// @ 0x0053d230
+void* UninitFill20(Entry20* dst, int n, const Entry20* value, uint8_t /*isPod*/)
+{
+    Entry20* d = dst;
+    Entry20* result = dst;
+    for (; n != 0; --n) {
+        result = d;
+        if (d) {
+            d->m[0] = value->m[0]; d->m[1] = value->m[1]; d->m[2] = value->m[2]; d->m[3] = value->m[3];
+            d->mA = value->mA; d->mB = value->mB; d->mC = value->mC; d->mD = value->mD;
+        }
+        ++d;
+    }
+    return result;
 }

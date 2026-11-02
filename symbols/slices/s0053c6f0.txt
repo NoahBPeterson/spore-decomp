@@ -1,3 +1,7 @@
+0053cca0 ?PaintVarModifierCtor@@YAPAXPAX@Z  # PaintVarModifierCtor migrated from s0053c6f0 (verbatim, slice spelling)
+0053cd80 ?insert@?$SimpleVector@UEntry20@@@@QAEXPAUEntry20@@IABU2@@Z  # insert migrated from s0053c6f0 (verbatim, slice spelling)
+0053d1a0 ?UninitCopy20@@YAPAPAXPAPAXPAUEntry20@@11E@Z  # UninitCopy20 migrated from s0053c6f0 (verbatim, slice spelling)
+0053d230 ?UninitFill20@@YAPAXPAUEntry20@@HPBU1@E@Z  # UninitFill20 migrated from s0053c6f0 (verbatim, slice spelling)
 0x0053c6f0 `anonymous namespace'::cPaintCopyVariableCommand::Execute
 0x0053c930 `anonymous namespace'::cPaintAddVaryCommand::Execute  # vary/offset options over eval list
 0x0053cca0 ArgScript::PaintVarModifier::PaintVarModifier  # PDB name
