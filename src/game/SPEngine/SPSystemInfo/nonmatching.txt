@@ -1,0 +1,3 @@
+# va  diff-bytes  reason
+006b8680 1073 /O2 /MD /Gy /GS- /EHsc /TP /arch:SSE; complete SP::GetSystemInfo; the 11-instruction cpuid asm block was replaced by the __cpuid intrinsic (leaf 0; vendor bytes stored as EBX,EDX,ECX and vendor[12]=0 exactly as before) so no asm transcription is left; every other statement unchanged, call sequence identical; difftest equiv=UNSUPPORTED(0/400 valid: every input is discarded at the import GetComputerNameExA, which the harness does not emulate) flags: /O2 /MD /Gy /GS- /EHsc /TP /arch:SSE
+006b8ca0 97 complete; drive hash wrapper, arg-shuffle/setne differ flags: /O2 /MD /Gy /GS- /EHsc /TP /arch:SSE

@@ -1,5 +1,5 @@
 006b8680 SP::GetSystemInfo  # PDB anchor
-006b8ca0 FUN_006b8ca0  # drive hash (PDB candidate GetShaderInfo)
+006b8ca0 ?FUN_006b8ca0@@YAII@Z  # FUN_006b8ca0 migrated from s006b8680 (verbatim, slice spelling)
 006b8d60 ?FUN_006b8d60@@YAHPBDPA_WH@Z  # FUN_006b8d60 migrated from s006b8680 (verbatim, slice spelling)
 006b8db0 FUN_006b8db0  # UTF-16 -> UTF-8 with capacity
 006b8e10 ?FUN_006b8e10@@YAHPB_WH0HI@Z  # FUN_006b8e10 migrated from s006b8680 (verbatim, slice spelling)
