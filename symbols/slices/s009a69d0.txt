@@ -1,1 +1,2 @@
-009a6e60 nSPCreatureAnim::HandleEventType  # Claude-coined from the caller-scored PDB candidate nSPCreatureAnim::HandleEventType (symbols/pdb_candidates.json); unverified
+009a6dd0 ?equal_range@EapdHashTable@@QAE?AUhashtable_range@eastl@@ABI@Z  # EapdHashTable::equal_range migrated from s009a69d0 (verbatim, slice spelling)
+009a6e60 ?HandleEventType@@YAXPAXPAUcreature_instance_data_s009a_69d0@nSPCreatureAnim@@100IIIPBM22M2HH1PBIIIPAUcreature_event_data@@H@Z  # HandleEventType migrated from s009a69d0 (verbatim, slice spelling)

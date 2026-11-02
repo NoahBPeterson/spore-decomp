@@ -1,21 +1,21 @@
-00a670b0 ?BindingsListDispatch@SymbolManager@@QAEXIIIIII@Z  # SymbolManager::BindingsListDispatch
-00a67130 ?BindingsTypedmessDispatch@SymbolManager@@QAEXIIIIII@Z  # SymbolManager::BindingsTypedmessDispatch
-00a671b0 ?sys_vgui@@YAXIII@Z  # sys_vgui
-00a671d0 ?EapdBindRemove@@YAXII@Z  # EapdBindRemove
-00a671f0 ?pd_findbyclass@@YAPAPAUt_class@Eapd@Audio@EA@@III@Z  # pd_findbyclass
-00a67210 ?pd_send_bang@@YAXII@Z  # pd_send_bang
-00a67230 ?pd_send_float@@YAXIIM@Z  # pd_send_float
-00a67250 ?pd_send_symbol@@YAXIIII@Z  # pd_send_symbol
-00a67280 ?pd_list_bindings@@YAXIIIIII@Z  # pd_list_bindings
-00a672b0 ?pd_typedmess_bindings@@YAXIIIIII@Z  # pd_typedmess_bindings
-00a672e0 ?Destroy@Hashtable@@QAEXXZ  # Hashtable::Destroy
-00a67370 ?DoInsertValue@Hashtable@@QAEPAUIterator@@PAU2@PBUKeyValue@@PBI@Z  # Hashtable::DoInsertValue
-00a67440 ?Init@Hashtable@@QAE_NIII@Z  # Hashtable::Init
-00a674e0 ?InsertSymbol@SymbolManager@@QAE_NIPBDPAUt_symbol@Eapd@Audio@EA@@@Z  # SymbolManager::InsertSymbol
-00a67570 ?GetSymbolFromName@SymbolManager@@QAE_NPBDPAUt_symbol@Eapd@Audio@EA@@@Z  # SymbolManager::GetSymbolFromName
-00a675f0 ?gensym@@YAPAUt_symbol@Eapd@Audio@EA@@PAU1234@PBD@Z  # gensym
-00a67620 ?pd_bind@@YA_NPAXUt_symbol@Eapd@Audio@EA@@@Z  # pd_bind
-00a67670 ?Init@SymbolManager@@QAE_NIIIIIP6AIPBD@Z@Z  # SymbolManager::Init
+00a670b0 ?BindingsListDispatch@SymbolManager_s00a6_70b0@@QAEXIIIIII@Z  # SymbolManager_s00a6_70b0::BindingsListDispatch migrated from s00a670b0 (verbatim, slice spelling)
+00a67130 ?BindingsTypedmessDispatch@SymbolManager_s00a6_70b0@@QAEXIIIIII@Z  # SymbolManager_s00a6_70b0::BindingsTypedmessDispatch migrated from s00a670b0 (verbatim, slice spelling)
+00a671b0 ?sys_vgui@@YAXIII@Z  # sys_vgui migrated from s00a670b0 (verbatim, slice spelling)
+00a671d0 ?EapdBindRemove@@YAXII@Z  # EapdBindRemove migrated from s00a670b0 (verbatim, slice spelling)
+00a671f0 ?pd_findbyclass@@YAPAPAUt_class@Eapd@Audio@EA@@III@Z  # pd_findbyclass migrated from s00a670b0 (verbatim, slice spelling)
+00a67210 ?pd_send_bang@@YAXII@Z  # pd_send_bang migrated from s00a670b0 (verbatim, slice spelling)
+00a67230 ?pd_send_float@@YAXIIM@Z  # pd_send_float migrated from s00a670b0 (verbatim, slice spelling)
+00a67250 ?pd_send_symbol@@YAXIIII@Z  # pd_send_symbol migrated from s00a670b0 (verbatim, slice spelling)
+00a67280 ?pd_list_bindings@@YAXIIIIII@Z  # pd_list_bindings migrated from s00a670b0 (verbatim, slice spelling)
+00a672b0 ?pd_typedmess_bindings@@YAXIIIIII@Z  # pd_typedmess_bindings migrated from s00a670b0 (verbatim, slice spelling)
+00a672e0 ?Destroy@Hashtable_s00a6_70b0@@QAEXXZ  # Hashtable_s00a6_70b0::Destroy migrated from s00a670b0 (verbatim, slice spelling)
+00a67370 ?DoInsertValue@Hashtable_s00a6_70b0@@QAEPAUIterator@@PAU2@PBUKeyValue@@PBI@Z  # Hashtable_s00a6_70b0::DoInsertValue migrated from s00a670b0 (verbatim, slice spelling)
+00a67440 ?Init@Hashtable_s00a6_70b0@@QAE_NIII@Z  # Hashtable_s00a6_70b0::Init migrated from s00a670b0 (verbatim, slice spelling)
+00a674e0 ?InsertSymbol@SymbolManager_s00a6_70b0@@QAE_NIPBDPAUt_symbol@Eapd@Audio@EA@@@Z  # SymbolManager_s00a6_70b0::InsertSymbol migrated from s00a670b0 (verbatim, slice spelling)
+00a67570 ?GetSymbolFromName@SymbolManager_s00a6_70b0@@QAE_NPBDPAUt_symbol@Eapd@Audio@EA@@@Z  # SymbolManager_s00a6_70b0::GetSymbolFromName migrated from s00a670b0 (verbatim, slice spelling)
+00a675f0 ?gensym@@YAPAUt_symbol@Eapd@Audio@EA@@PAU1234@PBD@Z  # gensym migrated from s00a670b0 (verbatim, slice spelling)
+00a67620 ?pd_bind@@YA_NPAXUt_symbol@Eapd@Audio@EA@@@Z  # pd_bind migrated from s00a670b0 (verbatim, slice spelling)
+00a67670 ?Init@SymbolManager_s00a6_70b0@@QAE_NIIIIIP6AIPBD@Z@Z  # SymbolManager_s00a6_70b0::Init migrated from s00a670b0 (verbatim, slice spelling)
 00a67810 ??0SymbolManager@@QAE@XZ  # SymbolManager::SymbolManager
 00a678d0 ?Shutdown@System@@QAE_NXZ  # System::Shutdown
 00a67960 ?SetMaximumDrift@System@@QAEXM@Z  # System::SetMaximumDrift

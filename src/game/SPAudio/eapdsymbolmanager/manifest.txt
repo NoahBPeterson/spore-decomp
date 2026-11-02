@@ -1,1 +1,13 @@
 # source  symbol  va  flags
+../src/game/SPAudio/eapdsymbolmanager.cpp  ?GetC4@EapdRec@@QAEXPAI00@Z  00a66c60  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdsymbolmanager.cpp  ?GetC8@EapdRec@@QAEXPAI00@Z  00a66c90  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdsymbolmanager.cpp  ?sys_vgui@@YAXIII@Z  00a671b0  /O2 /MD /Gy /EHsc /TP /GS- /fp:fast /arch:SSE /Isrc/game/include
+../src/game/SPAudio/eapdsymbolmanager.cpp  ?EapdBindRemove@@YAXII@Z  00a671d0  /O2 /MD /Gy /EHsc /TP /GS- /fp:fast /arch:SSE /Isrc/game/include
+../src/game/SPAudio/eapdsymbolmanager.cpp  ?pd_findbyclass@@YAPAPAUt_class@Eapd@Audio@EA@@III@Z  00a671f0  /O2 /MD /Gy /EHsc /TP /GS- /fp:fast /arch:SSE /Isrc/game/include
+../src/game/SPAudio/eapdsymbolmanager.cpp  ?pd_send_bang@@YAXII@Z  00a67210  /O2 /MD /Gy /EHsc /TP /GS- /fp:fast /arch:SSE /Isrc/game/include
+../src/game/SPAudio/eapdsymbolmanager.cpp  ?pd_send_float@@YAXIIM@Z  00a67230  /O2 /MD /Gy /EHsc /TP /GS- /fp:fast /arch:SSE /Isrc/game/include
+../src/game/SPAudio/eapdsymbolmanager.cpp  ?pd_send_symbol@@YAXIIII@Z  00a67250  /O2 /MD /Gy /EHsc /TP /GS- /fp:fast /arch:SSE /Isrc/game/include
+../src/game/SPAudio/eapdsymbolmanager.cpp  ?pd_list_bindings@@YAXIIIIII@Z  00a67280  /O2 /MD /Gy /EHsc /TP /GS- /fp:fast /arch:SSE /Isrc/game/include
+../src/game/SPAudio/eapdsymbolmanager.cpp  ?pd_typedmess_bindings@@YAXIIIIII@Z  00a672b0  /O2 /MD /Gy /EHsc /TP /GS- /fp:fast /arch:SSE /Isrc/game/include
+../src/game/SPAudio/eapdsymbolmanager.cpp  ?gensym@@YAPAUt_symbol@Eapd@Audio@EA@@PAU1234@PBD@Z  00a675f0  /O2 /MD /Gy /EHsc /TP /GS- /fp:fast /arch:SSE /Isrc/game/include
+../src/game/SPAudio/eapdsymbolmanager.cpp  ?Init@SymbolManager_s00a6_70b0@@QAE_NIIIIIP6AIPBD@Z@Z  00a67670  /O2 /MD /Gy /EHsc /TP /GS- /fp:fast /arch:SSE /Isrc/game/include
