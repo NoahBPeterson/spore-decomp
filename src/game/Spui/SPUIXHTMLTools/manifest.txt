@@ -1,3 +1,7 @@
 # source  symbol  va  flags
+../src/game/Spui/SPUIXHTMLTools.cpp  ?FindFrom@UShortVec@@QAEHGI@Z  008364c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Spui/SPUIXHTMLTools.cpp  ?ReverseFind@UShortVec@@QAEHGI@Z  00836500  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Spui/SPUIXHTMLTools.cpp  ?ReserveBuffer@BoolVec@@QAEXI@Z  00836620  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/Spui/SPUIXHTMLTools.cpp  ??1cDataURI@@QAE@XZ  00836990  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Spui/SPUIXHTMLTools.cpp  ?AssignCStr@RawFixed@@QAEPAU1@PB_W@Z  008369e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/Spui/SPUIXHTMLTools.cpp  ?Reserve2@RawFixed@@QAEXI@Z  00837230  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

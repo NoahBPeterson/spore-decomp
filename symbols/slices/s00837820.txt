@@ -1,5 +1,5 @@
-00837820 ?FUN_00837820@@YAHPAH@Z  # FUN_00837820 migrated from s00837820 (verbatim, slice spelling)
-00837c90  cSPUIXHTMLDataURIHandler::ProcessRequest  # PDB candidate (caller-single)
+00837820 ?GetStream@cDataURI_s0083_7820@@QAE_NPAPAX@Z  # cDataURI_s0083_7820::GetStream migrated from s00837820 (verbatim, slice spelling)
+00837c90 ?ProcessRequest@cSPUInHandler@@QAE_NPAUResourceRequest@@H@Z  # cSPUInHandler::ProcessRequest migrated from s00837820 (verbatim, slice spelling)
 00837ed0  cArguments::Advance  # decrement main-arg window
 00837ee0  cArguments::HasArgument  # _stricmp over mOptionArguments names
 00837f40 ?FindUnprocessed@cArguments@@QAEXXZ  # cArguments::FindUnprocessed migrated from s00837820 (verbatim, slice spelling)
