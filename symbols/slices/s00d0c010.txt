@@ -1,4 +1,7 @@
+00d0c010 ?FUN_00d0c010@SP@@YIXPAUcCommunityEditor_s00d0_c010@1@@Z  # FUN_00d0c010 migrated from s00d0c010 (verbatim, slice spelling)
 00d0c170 ?UpdateRotationSound@cTribeToolView_s00d0_c010@SP@@QAE_NXZ  # cTribeToolView_s00d0_c010::UpdateRotationSound migrated from s00d0c010 (verbatim, slice spelling)
+00d0c5b0 ?FUN_00d0c5b0@SP@@YIXPAUcCommunityEditor_s00d0_c010@1@HH@Z  # FUN_00d0c5b0 migrated from s00d0c010 (verbatim, slice spelling)
+00d0c760 ?FUN_00d0c760@SP@@YIXPAUcCommunityEditor_s00d0_c010@1@@Z  # FUN_00d0c760 migrated from s00d0c010 (verbatim, slice spelling)
 00d0c820 ?UpdateSwatchForModelType@cCommunityEditor_s00d0_c010@SP@@QAEXHPBUtVec3@2@0@Z  # cCommunityEditor_s00d0_c010::UpdateSwatchForModelType migrated from s00d0c010 (verbatim, slice spelling)
 00d0c8e0 ?FUN_00d0c8e0@cListOwner@SP@@QAEXPAUtListChild@2@@Z  # cListOwner::FUN_00d0c8e0 migrated from s00d0c010 (verbatim, slice spelling)
 00d0c970 ?FUN_00d0c970@SP@@YIXPAUcMapInsert@1@HPAPAUtTreeNode@1@PAUtMapValue@1@PAU31@_N@Z  # FUN_00d0c970 migrated from s00d0c010 (verbatim, slice spelling)

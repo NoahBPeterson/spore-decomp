@@ -1,2 +1,2 @@
-00d0e0c0 SP::cCommunityEditor::HandleSwatchRolloverOn  # header of s00d130d0 names it; byte-exact
-00d0def0 SP::cCommunityEditor::HandleSwatchRolloverOff  # card/Pdb name; resolves swatch planner/palette item and switches placement mode
+00d0def0 ?HandleSwatchRolloverOff@cCommunityEditor_s00d0_def0@SP@@QAEXPAVcSPSwatchPlanner@2@@Z  # cCommunityEditor_s00d0_def0::HandleSwatchRolloverOff migrated from s00d0def0 (verbatim, slice spelling)
+00d0e0c0 ?HandleSwatchRolloverOn@cCommunityEditor_s00d0_def0@SP@@QAEXPAVcSwatch_s00d0_def0@2@@Z  # cCommunityEditor_s00d0_def0::HandleSwatchRolloverOn migrated from s00d0def0 (verbatim, slice spelling)

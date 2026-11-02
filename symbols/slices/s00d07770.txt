@@ -1,6 +1,8 @@
 00d07770 ?FillCounts@C103@@QAEXXZ  # C103::FillCounts migrated from s00d07770 (verbatim, slice spelling)
 00d07890 ?Destroy@C103@@QAEPAXE@Z  # C103::Destroy migrated from s00d07770 (verbatim, slice spelling)
 00d078d0 ?CreateLayout@C103@@QAEEPAX@Z  # C103::CreateLayout migrated from s00d07770 (verbatim, slice spelling)
+00d07a40 ?Init@C103@@QAEPAXPAX@Z  # C103::Init migrated from s00d07770 (verbatim, slice spelling)
+00d07ab0 ?PickEventId@C103@@QAEEXZ  # C103::PickEventId migrated from s00d07770 (verbatim, slice spelling)
 00d07bb0 ?GetValue@C103@@QAEHH@Z  # C103::GetValue migrated from s00d07770 (verbatim, slice spelling)
 00d07ca0 ?SetValue@C103@@QAEXHH@Z  # C103::SetValue migrated from s00d07770 (verbatim, slice spelling)
 00d07d00 ?GetFlag@C103@@QAEHH@Z  # C103::GetFlag migrated from s00d07770 (verbatim, slice spelling)

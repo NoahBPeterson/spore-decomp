@@ -8,6 +8,8 @@
 00d06f00 ?FUN_00d06f00@SP@@YIXPAXH@Z  # FUN_00d06f00 migrated from s00d06710 (verbatim, slice spelling)
 00d070b0 ?FUN_00d070b0@cCountedSlot@SP@@QAEPAXI@Z  # cCountedSlot::FUN_00d070b0 migrated from s00d06710 (verbatim, slice spelling)
 00d070f0 ?E207@SP@@YAXXZ  # E207 migrated from s00d06710 (verbatim, slice spelling)
+00d07420 ?FUN_00d07420@cCountedSlot2@SP@@QAEPAV12@PAVcRefCounted@2@@Z  # cCountedSlot2::FUN_00d07420 migrated from s00d06710 (verbatim, slice spelling)
 00d07470 ?FUN_00d07470@SP@@YIXPAXH@Z  # FUN_00d07470 migrated from s00d06710 (verbatim, slice spelling)
 00d07590 ?FUN_00d07590@SP@@YIXPAXH@Z  # FUN_00d07590 migrated from s00d06710 (verbatim, slice spelling)
 00d075d0 ?FUN_00d075d0@SP@@YIXPAXH@Z  # FUN_00d075d0 migrated from s00d06710 (verbatim, slice spelling)
+00d07720 ?FUN_00d07720@cCountedSlot3@SP@@QAEPAV12@PAVcRefCounted@2@@Z  # cCountedSlot3::FUN_00d07720 migrated from s00d06710 (verbatim, slice spelling)

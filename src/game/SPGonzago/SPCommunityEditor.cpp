@@ -1,4 +1,4 @@
-// src/game/SPGonzago/SPCommunityEditor.cpp -- migrated from slice(s) s00d130d0, s00d124e0, s00d10840, s00d0e170, s00d0d0e0, s00d0c010, s00d0b090, s00d0a160, s00d091c0, s00d084d0, s00bf4170, s00afab70, s004215f0 by tools/migrate/rewrite.py
+// src/game/SPGonzago/SPCommunityEditor.cpp -- migrated from slice(s) s00d11730, s00d0fcc0, s00d0def0, s00d07770, s00d06710, s00d130d0, s00d124e0, s00d10840, s00d0e170, s00d0d0e0, s00d0c010, s00d0b090, s00d0a160, s00d091c0, s00d084d0, s00bf4170, s00afab70, s004215f0 by tools/migrate/rewrite.py
 // Object file: SPGonzago/SPCommunityEditor.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -32,6 +32,7 @@
 #include "SP/cRotationRing.h"
 #include "SP/cTribeTool.h"
 #include "SP/cVehicle.h"
+#include "SP/cRelationshipManager.h"
 
 // ---- items of slice s004215f0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 struct Unknown { virtual void v0(); virtual void v1(); virtual void v2(); virtual void* Query(uint32_t iid); };
@@ -235,6 +236,7 @@ void RefreshCityStatistics(cCommunityEditor* pEditor);        // 0x00bf3b50
 extern "C" void* __cdecl SP_GameInputManager();                      // 0x00b3d250
 extern "C" void* __cdecl GetCameraCtl();                             // 0x00b3d280
 extern "C" void* __cdecl SP_App();                                   // 0x0067dd10
+extern "C" void* __cdecl FUN_0067caf0();                             // 0x0067caf0
 extern "C" void  __cdecl sub_64a990(void*);                          // 0x0064a990
 extern "C" char  __cdecl FUN_00b673c0(void*);                        // 0x00b673c0
 extern "C" char  __cdecl FUN_00b188b0(void*);                        // 0x00b188b0
@@ -252,9 +254,29 @@ typedef void* (__thiscall* FnP1)(void*, u32);
 typedef void* (__thiscall* FnP0)(void*);
 typedef void  (__thiscall* Fn3S)(void*, u32, const char*);
 extern "C" u32   __cdecl SP_GetCurrentGameMode();                    // 0x00b5b800
+extern "C" void* __cdecl GameTimeManager_s00d0_84d0();                          // 0x00b3d380
+extern "C" void* __cdecl FUN_0067cac0_s00d0_84d0();                             // 0x0067cac0
 extern "C" void  __cdecl FUN_00572020(void*, u32);                   // 0x00572020
+extern "C" u32   __cdecl SP_GetPlayerEmpireID();                     // 0x01021090
+extern "C" float __cdecl FUN_00bcde40(u32);                          // 0x00bcde40
+extern "C" float __cdecl FUN_00bcde70(u32);                          // 0x00bcde70
+extern "C" float __cdecl FUN_00bcdea0(u32);                          // 0x00bcdea0
+extern "C" float __cdecl FUN_00bce400(u32);                          // 0x00bce400
 struct CameraCtl {
     void Do(u32* v, u32 a);              // 0x00b13bb0
+};
+struct HudObj {
+    u8  mPad00[0x18];
+    u32 mn18;
+    u8  mPad1C[0x0c];
+    u32 mn28;
+    char IsSet();                        // 0x00678ed0
+};
+struct HintsObj {
+    char SetFlag(int a, char b);         // 0x0067c420
+};
+struct GameTime {
+    u32 DecPauseGate(u32 id);            // 0x00b32250
 };
 struct CivObj {
     float GetCost(u32 a, u32 b);         // 0x00bf2170
@@ -971,10 +993,51 @@ static const u16 kPreviewName[] = { 'P','r','e','v','i','e','w','M','o','d','e',
 struct V3 { float x, y, z; };
 struct Quat { float x, y, z, w; };
 struct Matrix33 { float m[9]; void Assign(const Matrix33* src); };
+struct EffectTransform {
+    uint16_t flags;      // +0x00
+    uint16_t counter;    // +0x02
+    float    x, y, z;    // +0x04
+    float    w;          // +0x10
+    Matrix33 m;          // +0x14
+};
 uint32_t __cdecl FNVHash(const char* s, uint32_t seed, int lowercase);   // 0x00932e80
 static inline uint32_t id(const char* s) { return FNVHash(s, 0x811c9dc5, 1); }
 uint32_t __cdecl SPIDFromName(const char* name);                        // 0x00571cf0
 float GetPropertyF(uint32_t group, int, uint32_t prop, float def);       // 0x00bcea30
+void* operator new(unsigned int size, const char* pName, int flags, unsigned int debugFlags,
+                   const char* pFile, int line);                         // 0x00f473a0
+struct IMessageServer_s00d0_b090 {
+virtual void v0();
+virtual void v1();
+virtual void v2();
+virtual void v3();
+virtual void v4();
+    virtual void PostMSG(uint32_t msgID, void* msg, int flags);          // +0x14
+};
+IMessageServer_s00d0_b090* MessageServer_s00d0_b090();                                        // 0x0067dcc0
+struct cEffectsManager_s00d0_b090 {
+virtual void v0();
+virtual void v1();
+virtual void v2();
+virtual void v3();
+virtual void v4();
+virtual void v5();
+virtual void v6();
+virtual void v7();
+virtual void v8();
+virtual void v9();
+    virtual bool GetEffect(uint32_t id, int group, void** out);          // +0x2c
+};
+cEffectsManager_s00d0_b090* EffectsManager_s00d0_b090();                                       // 0x0067ddd0
+class cEffect { public:
+    virtual void v00();
+    virtual void v01();
+    virtual int  Release();                              // +0x08
+virtual void v03();
+virtual void v04();
+virtual void v05();
+    virtual void ApplyOrientation(void* orient);         // +0x18
+};
 class cSpatialObject_s00d0_b090;
 class cCommunity_s00d0_b090;
 class cEditorEconomy;
@@ -1108,11 +1171,46 @@ public:
     const Matrix33* BuildSurfaceOrientation(const V3* pos, const V3* dir); // 0x00b7f190
 };
 cPlanetModel_s00d0_b090* PlanetModel();                        // 0x00b3d350
+const Matrix33* Matrix3FromQuaternion(Matrix33* out, const Quat* q);       // 0x0059c190
+class cGameNounManager_s00d0_b090 { public: void RemoveNoun(void* noun); };           // 0x00b225d0
+cGameNounManager_s00d0_b090* NounManager_s00d0_b090();                                           // 0x00b3d300
 void* FUN_00fcc210(void* elem);            // 0x00fcc210
 bool  FUN_00c3f540(void* obj);             // 0x00c3f540
 int   GetFileCount(void* obj);             // 0x008e7f80 (cCombatant::GetDamageState shape)
 enum { kTypeCity = 0xee9b2232, kTypeTribe = 0x4f396a66,
        kCastCombatant = 0xe9cb8ba, kCastSnap = 0x436f315, kCastSnapOut = 0x1186577 };
+class cBehaviorMessage_s00d0_b090 { public:      // +0x00 (vptr)
+    virtual void _v00();
+    virtual int  AddRef();
+    virtual int  Release();
+    volatile long mnRefCount;         // +0x04
+    cBehaviorMessage_s00d0_b090() { _InterlockedExchange(&mnRefCount, 0); }
+};
+struct cMessageHeader {
+    int      mField8;                 // +0x08
+    uint32_t field_C[9];              // +0x0c
+    uint32_t mMessageID;              // +0x30
+    uint32_t field_34;                // +0x34
+    cMessageHeader() : mMessageID(0) {}
+};
+class cEditorBehaviorMessage1 : public cMessageHeader, public cBehaviorMessage_s00d0_b090 { public:
+    uint32_t mField38;                // +0x38
+    uint32_t pad3c;
+    cEditorBehaviorMessage1() : mField38(0) {}
+    virtual void _v00();
+};
+class cEditorBehaviorMessage2 : public cMessageHeader, public cBehaviorMessage_s00d0_b090 { public:
+    uint32_t mField38;
+    uint32_t pad3c;
+    cEditorBehaviorMessage2() : mField38(0) {}
+    virtual void _v00();
+};
+class cEditorBehaviorMessage3 : public cMessageHeader, public cBehaviorMessage_s00d0_b090 { public:
+    uint32_t mField38;
+    uint32_t pad3c;
+    cEditorBehaviorMessage3() : mField38(0) {}
+    virtual void _v00();
+};
 // ---- items of slice s00d0b090 end
 
 // ---- items of slice s00d0c010 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -3257,6 +3355,648 @@ static bool sDecorHintShown;    // 0x0169d588
 }
 // ---- items of slice s00d130d0 end
 
+// ---- items of slice s00d06710 begin (TODO(rewrite): local stubs, replace by canonical classes)
+namespace SP {
+class cRefCounted {
+public:
+    virtual void r00();                                  // +0x00 add reference
+    virtual void Release();                              // +0x04
+    virtual void Destroy();                              // +0x08
+};
+}
+namespace SP {
+struct cSlotVTable { int mSlot0; };
+}
+namespace SP {
+extern cSlotVTable gSlotVtbl2;                           // 0x014790a0
+}
+namespace SP {
+extern cSlotVTable gSlotVtbl3;                           // 0x014790d0
+}
+namespace SP {
+class cCountedSlot2 {
+public:
+    void* volatile          mpVtbl;                      // +0x00
+    cRefCounted*            mpField4;                    // +0x04
+    cRefCounted* volatile   mpField8;                    // +0x08
+
+    cCountedSlot2* FUN_00d07420(cRefCounted* p);
+};
+}
+namespace SP {
+class cCountedSlot3 {
+public:
+    void* volatile          mpVtbl;                      // +0x00
+    cRefCounted*            mpField4;                    // +0x04
+    cRefCounted* volatile   mpField8;                    // +0x08
+
+    cCountedSlot3* FUN_00d07720(cRefCounted* p);
+};
+}
+// ---- items of slice s00d06710 end
+
+// ---- items of slice s00d07770 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern void* g_vtbl_14790fc;      // 0x014790fc
+void* __cdecl FUN_008014a0();                      // 0x008014a0
+void* __cdecl FUN_0067cab0(u32);                   // 0x0067cab0
+int   __cdecl FUN_00d09740(void*);                 // 0x00d09740
+struct Ext {
+    void* NounMgr(void*);                          // 0x00b3d300
+    void* NounLookup(void*);                       // 0x00b25f40
+    void* DictGet(int, int, int);                  // 0x00bf0c60
+    void* FindWindowByID(unsigned id, int b);      // 0x008105b0
+    void* DialogCtor();                            // 0x00810000
+    int   LayoutInit(const void*, int, unsigned);  // 0x008120d0
+    int   SetParentWin(void*, int, unsigned);      // 0x008121b0
+    void* FUN_b6f0c0(int);                         // 0x00b6f0c0
+    void* Singleton();                             // 0x00b3d240
+    u8    FindLocal(u32);                          // 0x00801bb0
+    void* FindLocalV(unsigned);                    // vtable +0xc lookup
+
+    void* Civ();                                   // 0x00bd9bf0
+    int   V_bd9bb0();                              // 0x00bd9bb0
+    int   V_bd9b70();                              // 0x00bd9b70
+    int   V_bd8a00();                              // 0x00bd8a00
+    int   V_bd8b10();                              // 0x00bd8b10
+    int   V_bd8110();                              // 0x00bd8110
+    int   V_bd89c0();                              // 0x00bd89c0
+    int   V_bd8aa0();                              // 0x00bd8aa0
+    int   VehicleSpecialty();                      // 0x00bd81d0
+    int   V_bf1fd0(int);                           // 0x00bf1fd0
+    int   V_bf0c50();                              // 0x00bf0c50
+    int   V_113ab90();                             // 0x0113ab90
+    int   AddCivicRadius(float, int);              // 0x00befd80
+    int   SpendMoney(float);                       // 0x00bef710
+    void  SendChanged();                           // 0x005a7840
+    int   V_c8e6f0();                              // 0x00c8e6f0
+    void  V_c8f660(int);                           // 0x00c8f660
+    u8    V_c31a00(int);                           // 0x00c31a00
+    int   V_c30cb0();                              // 0x00c30cb0
+    int   V_bdb930(int);                           // 0x00bdb930
+    u8    V_cd6e40(int);                           // 0x00cd6e40
+    u8    V_cd6ef0(int);                           // 0x00cd6ef0
+    void* ToolOfType(int);                         // 0x00c8f6e0
+    int   GetFileCount();                          // 0x008e7f80
+
+    u8    GetPropertyAsKeyInstance(int, void*);    // 0x006a12a0
+    u8    TryGetUIntProperty(int, void*);          // 0x00410370
+    u8    GetPropertyAsText(int, void*);           // 0x006a1360
+    u8    StrLoad(int, int, int);                  // 0x006b54b0
+    int*  PropGetInt();                            // 0x0041e990
+    u32*  PropGetUInt();                           // 0x0041ea00
+};
+struct C103 {
+    void  FillCounts();                    // 0x00d07770
+    void* Destroy(u8 flags);               // 0x00d07890
+    u8    CreateLayout(void* param);       // 0x00d078d0
+    void* Init(void* param);               // 0x00d07a40
+    u8    PickEventId();                   // 0x00d07ab0
+    int   GetValue(int which);             // 0x00d07bb0
+    void  SetValue(int which, int amount); // 0x00d07ca0
+    int   GetFlag(int which);              // 0x00d07d00
+    void  SetFlag(int which, int v);       // 0x00d07d20
+    u8    CanAffordScalar(int desc, int amount); // 0x00d07d50
+    int   GetTribeValue(int which);        // 0x00d07d70
+    void  SetTribeValue(int which, int v); // 0x00d07e10
+    int   CanAffordEmpire(int* desc);      // 0x00d07e40
+    u8    TribeHasTool(int* desc);         // 0x00d081f0
+    int   CanAffordTribe(int* desc);       // 0x00d082a0
+};
+// ---- items of slice s00d07770 end
+
+// ---- items of slice s00d0def0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C" void* FUN_00d08ec0(void* p);                       // 0x00D08EC0
+extern "C" int   FUN_00d08ee0(void* p);                       // 0x00D08EE0
+extern "C" int   WeaponClassFromHash(uint32_t hash);          // 0x00C9ED00
+namespace SP {
+class cPaletteItem {
+public:
+    char     pad00[0x24];                  // +0x00
+    uint32_t mTypeID;                      // +0x24
+};
+}
+namespace SP {
+class cCommunity_s00d0_def0 {
+public:
+    virtual void  v00();                   // +0x00
+    virtual void  v04();                   // +0x04
+    virtual void  v08();                   // +0x08
+    virtual void* Cast(uint32_t id);       // +0x0c
+};
+}
+namespace SP {
+class cSPSwatchPlanner {
+public:
+    virtual void  v00();                   // +0x00
+    virtual void  v04();                   // +0x04
+    virtual void  v08();                   // +0x08
+    virtual void* Cast(uint32_t id);       // +0x0c
+    virtual void* GetItem();               // +0x10
+    char      pad04[0x38];                 // +0x04..+0x3b
+    uint32_t  mField3c;                    // +0x3c
+    bool      CanDrag();                   // 0x005F1460
+};
+}
+namespace SP {
+class cSPPaletteSwatch {
+public:
+    bool          IsItemAvailable();       // 0x005F33C0
+    bool          CheckType();             // 0x005F22D0
+    cPaletteItem* GetItem();               // 0x005F33F0
+};
+}
+namespace SP {
+class cSwatch_s00d0_def0 {
+public:
+    virtual int AddRef();                  // +0x00
+    virtual int Release();                 // +0x04
+    virtual void VSlot08();                // +0x08
+    virtual void* Cast(uint32_t type);     // +0x0c
+};
+}
+namespace SP {
+class cCastResult {
+public:
+    virtual void VSlot00();                // +0x00
+    virtual void VSlot04();                // +0x04
+    virtual void VSlot08();                // +0x08
+    virtual void VSlot0c();                // +0x0c
+    virtual void* GetItem();               // +0x10
+};
+}
+namespace SP {
+class cCastItemOwner {
+public:
+    cPaletteItem* GetItemField180();
+};
+}
+namespace SP {
+class cCommunityEditor_s00d0_def0 {
+public:
+    char        pad000[0x40];              // +0x00..+0x3f
+    cCommunity_s00d0_def0* mpCommunity;               // +0x40
+    char        pad044[0xc0 - 0x44];       // +0x44..+0xbf
+    void*       mpManipulatedObject;       // +0xc0
+    char        pad0c4[0xf4 - 0xc4];       // +0xc4..+0xf3
+    uint32_t    mLastSwapPointIndex;       // +0xf4
+    char        pad0f8[0x184];             // +0xf8..+0x27b
+    uint32_t    mPendingActionHash;        // +0x27c
+
+    void FUN_00d0db30();                   // 0x00D0DB30 (thiscall, no args)
+    void StartVehicleAttractorEffects(void* value); // 0x00D0DDC0
+    void HandleSwatchRolloverOff(cSPSwatchPlanner* pSwatch); // 0x00D0DEF0
+    void FUN_00d0dea0();                   // 0x00D0DEA0 (thiscall, no args)
+    void HandleSwatchRolloverOn(cSwatch_s00d0_def0* pSwatch); // 0x00D0E0C0
+};
+}
+int __fastcall   FUN_00bd7f40(void* p);                       // 0x00BD7F40
+int __fastcall   FUN_00bd7f50(void* p);                       // 0x00BD7F50
+int __fastcall   FUN_00bd7f60(void* p);                       // 0x00BD7F60
+// ---- items of slice s00d0def0 end
+
+// ---- items of slice s00d0fcc0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern int g_169d580;                                   // 0x0169d580
+void __cdecl operator_delete_array(void* p);   // 0x00f47380 (operator delete[])
+struct WStr {
+  wchar_t* mb;
+  wchar_t* me;
+  wchar_t* mc;
+  int mAlloc;
+  void RangeInit(const wchar_t* p);   // 0x00579A90 basic_string::RangeInitialize
+  WStr(const wchar_t* p) { mb = 0; me = 0; mc = 0; RangeInit(p); }
+  ~WStr() {
+    if ((((char*)mc - (char*)mb) & ~1) > 2) {
+      if (mb) operator_delete_array(mb);
+    }
+  }
+};
+#define VT(o, off) ((*(void***)(o))[(off) / 4])
+#define VCALL0(R, o, off) (((R(__thiscall*)(void*))VT(o, off))(o))
+#define VCALL1(R, T, o, off, a) (((R(__thiscall*)(void*, T))VT(o, off))(o, a))
+struct Any;
+struct PtrVec_s00d0_fcc0 { Any** b; Any** e; };
+struct Any {
+  char pad0[0x34];
+  char sub34[4];                      // embedded sub-object at +0x34 (has its own vtable)
+  char pad38[0x192 - 0x38];
+  char b192;
+  Any* Bce470();                      // 0x00bce470
+  void C3f160(void* a);               // 0x00c3f160
+  Any* Bd81f0();                      // 0x00bd81f0
+  void Ff14f0(WStr* s);               // 0x00ff14f0
+  void Ff1510(WStr* s);               // 0x00ff1510
+  void Be5700(void* vec);             // 0x00be5700
+  Any* C71040(int a);                 // 0x00c71040
+  void Ff3190(void* a);               // 0x00ff3190
+  PtrVec_s00d0_fcc0* Bef6c0();                   // 0x00bef6c0
+  void Bd9e50();                      // 0x00bd9e50
+  void Hints_Update();                // 0x0067c350
+  void Hints_SetEnabled();            // 0x0067c420
+  void E14c10(int a);                 // 0x00e14c10
+  void Cd6e90();                      // 0x00cd6e90
+  void Shutdown5bfb90();              // 0x005bfb90 (cSPEditorNaming::Shutdown)
+  void CityMusicShutdown();           // 0x00ea13e0
+  void CityMusicSetVisibility(int v); // 0x00ea0010
+  int FindCategoryIndex();            // 0x005ca9c0
+  void PaletteShutdown();             // 0x005cba90
+  void F5c5c20();                     // 0x005c5c20
+  void LayoutSetVisibility(int v);    // 0x00810590
+  Any* FindWindowByID(unsigned id, int a);   // 0x008105b0
+  void DecPauseGate(unsigned id);     // 0x00b32250
+  void SetBoolProperty(unsigned key, int v); // 0x006a17e0
+  void RemoveNoun(unsigned id);       // 0x00b225d0
+  Any* GetPlayerCivilization();       // 0x00b25fb0
+  void F80dc50();                     // 0x0080dc50
+};
+struct Cam {
+  char pad0[0x10];
+  char b10;
+  char pad11;
+  char b12;
+  void F11870(void* a);               // 0x00b11870
+  void F0f700(float a, float b);      // 0x00b0f700 (ret 8)
+  void SetYaw(float y);               // 0x00b10470
+  void F13bb0(V3* v, int a);          // 0x00b13bb0
+  void F10340(float x, float y, float z);   // 0x00b10340 (ret 0xc)
+};
+struct VecStub {
+  void* b;
+  void* e;
+  void* c;
+  void Erase(void* first, void* last);   // 0x00e25bd0 (vector<AutoRefCount<..>>::erase, ret 8)
+};
+struct Fixed32 {
+  Any** mpBegin;
+  Any** mpEnd;
+  Any** mpCap;
+  void* mName;
+  Any** mpPool;
+  void* mPad;
+  Any* mBuf[32];
+  Fixed32() {
+    mpBegin = mBuf; mpEnd = mBuf; mpPool = mBuf; mpCap = mBuf + 32;
+  }
+};
+unsigned __cdecl GetCurrentGameMode_s00d0_fcc0();                  // 0x00b5b800
+Any* NounManager_s00d0_fcc0();                                     // 0x00b3d300
+Any* GetActivePlanet_s00d0_fcc0();                                 // 0x01021260
+void __cdecl FUN_00d49450();                            // 0x00d49450
+void __cdecl RemoveHandler(void* server, void* handler, void* ids, int count, int prio);  // 0x00571db0
+Any* FUN_00b3d230_s00d0_fcc0();                                    // 0x00b3d230
+Any* __stdcall GetHints(int a, int b);                  // 0x0067cac0 (ret 8)
+Any* __stdcall AddBoundingBox(void* w);                 // 0x0067cad0 (ret 4)
+Any* FUN_00b3d400_s00d0_fcc0();                                    // 0x00b3d400
+Any* TribeModeInstance();                               // 0x00cd40b0
+Any* GameTimeManager_s00d0_fcc0();                                 // 0x00b3d380
+Any* EffectsManager_s00d0_fcc0();                                  // 0x0067ddd0
+Any* MessageServer_s00d0_fcc0();                                   // 0x0067dcc0
+Any* GameInputManager_s00d0_fcc0();                                // 0x00b3d250
+Cam* FUN_00b3d280_s00d0_fcc0();                                    // 0x00b3d280
+extern Any* g_PropList;                                 // 0x015fd918
+struct cGameData;
+struct Slot {                     // SP::cActionCircle::tSlot (0x18 bytes)
+  char pad0[0xc];
+  V3   mPos;                      // +0x0c
+  int  SlotId();                  // 0x00fcc210 (reads ecx)
+  void Clear();                   // 0x00afa0a0
+  void Reserve(cGameData* d);     // 0x00afa030 (ret 4)
+};
+struct ActionCircle {
+  char pad0[0x50];
+  Slot* mSlots;                   // +0x50
+  int ReserveSlot(void* data);    // 0x00afab70 (ret 4)
+};
+struct MapBase {                  // rbtree anchor
+  void* mpNodeLeft;               // +0x00
+  void* mpNodeRight;              // +0x04
+  void* mpNodeParent;             // +0x08 (root)
+  int   mColor;                   // +0x0c
+};
+struct MapNodeV3 {
+  MapNodeV3* mLeft;               // +0x00
+  MapNodeV3* mRight;              // +0x04
+  MapNodeV3* mParent;             // +0x08
+  int        mColor;              // +0x0c
+  unsigned   mKey;                // +0x10
+  V3         mValue;              // +0x14
+};
+struct V3Map {
+  void*    mAlloc;                // +0x00
+  MapBase  mAnchor;               // +0x04
+  int      mSize;                 // +0x14
+  V3* FindOrAdd(Any* const& key);                        // 0x00d0fee0 (ret 4)
+  void InsertNode(MapNodeV3** out, MapNodeV3* hint, const unsigned* key, unsigned keyAsInt);  // 0x00d0d010 (ret 0x10)
+};
+struct MapKey2 { unsigned lo, hi; };
+struct MapNodeK2 {
+  MapNodeK2* mLeft;               // +0x00
+  MapNodeK2* mRight;              // +0x04
+  MapNodeK2* mParent;             // +0x08
+  int        mColor;              // +0x0c
+  MapKey2    mKey;                // +0x10
+  char       mValue[0x20];        // +0x18
+};
+struct Key2Map {
+  void*    mAlloc;                // +0x00
+  MapBase  mAnchor;               // +0x04
+  int      mSize;                 // +0x14
+  MapNodeK2* FindLowerBound(MapNodeK2** out, const MapKey2* key);   // 0x00d0a630
+  void BuildValue(void* dst);                                       // 0x00d0a670
+  void InsertPair(MapNodeK2** out, MapNodeK2* hint, const MapKey2* key);   // 0x00d0d0e0
+  void* GetOrCreate(const MapKey2& key);                                   // 0x00d0ff80 (ret 4)
+};
+struct cPlanetModel_s00d0_fcc0 {
+  void DirectionToSurfacePosition(V3* out, const V3* pos);   // 0x00b815a0 (ret 8)
+};
+cPlanetModel_s00d0_fcc0* PlanetModel_s00d0_fcc0();                            // 0x00b3d350
+Any* FUN_00b33e60(Any* obj);                            // 0x00b33e60
+void* FUN_00ae66d0(Any* obj);                           // 0x00ae66d0
+struct CE_s00d0_fcc0 {
+  char pad0[0x14];
+  void* ahServer;         // +0x14 AutoHandler
+  void* ahHandler;
+  void* ahIds;
+  int ahCount;
+  int ahPrio;
+  char pad28[0x40 - 0x28];
+  Any* community;         // +0x40
+  int lastShop;           // +0x44
+  int recentlyEdited;     // +0x48
+  char pad4c[0x78 - 0x4c];
+  Any* limit;             // +0x78
+  Any* sellback;          // +0x7c
+  void* editorUIvft;      // +0x80
+  char pad84[4];
+  char editorUI[0x18];    // +0x88 (cSPUILayout)
+  Any* paletteData;       // +0xa0
+  Any* paletteUI;         // +0xa4
+  void* winRoot;          // +0xa8
+  Any* ring;              // +0xac
+  Any* manip;             // +0xb0
+  Any* selected;          // +0xb4
+  char padb8[4];
+  unsigned nounId;        // +0xbc
+  Any* placementObj;      // +0xc0
+  int fieldC4;            // +0xc4
+  Any* swapObject;        // +0xc8
+  char padcc[0xf4 - 0xcc];
+  ActionCircle* actionCircle;   // +0xf4
+  int slotIndex;          // +0xf8
+  int slotA;              // +0xfc
+  int slotB;              // +0x100
+  int curSlotIndex;       // +0x104
+  char pad108[0x114 - 0x108];
+  V3Map swapMap;          // +0x114
+  char pad128[0x130 - 0x128];
+  VecStub vA;             // +0x130
+  char pad13c[0x144 - 0x13c];
+  VecStub vB;             // +0x144
+  char pad150[0x1dc - 0x150];
+  VecStub vC;             // +0x1dc
+  char pad1e8[0x1f0 - 0x1e8];
+  VecStub vD;             // +0x1f0
+  char pad1fc[0x204 - 0x1fc];
+  int reason;             // +0x204
+  char pad208;
+  unsigned char effByte;           // +0x209
+  char pad20a[0x2c4 - 0x20a];
+  void* camArg;           // +0x2c4
+  char pad2c8[0x2d8 - 0x2c8];
+  V3 camPos;              // +0x2d8
+  float camX, camY, camZ; // +0x2e4
+  Any* camCommunity;      // +0x2f0
+  int categoryIndex;      // +0x2f4
+
+  void D0dea0();          // 0x00d0dea0
+  void D0c760();          // 0x00d0c760
+  void D0cec0();          // 0x00d0cec0
+  void D0bf80();          // 0x00d0bf80
+  void __thiscall Deactivate(int reasonArg, bool flag);   // 0x00d100b0 (ret 8)
+  void SetManipulatedObject(Any* obj);    // 0x00d09f60 (ret 4)
+  void SetObjectSpecificData();           // 0x00d09ad0
+  void ComputeMouseOffset(Any* obj);      // 0x00d0a040 (ret 4)
+  V3*  GetCommunityCenter(int a);         // 0x00d09960 (ret 4)
+  void SetPlacementAnchor(V3 v);          // 0x00d08aa0 (ret 0xc, V3 by value)
+  void ResetPlacement();                  // 0x00d0db30
+  void RebuildPlacement();                // 0x00d0a540
+  int  StartObjectPlacement(Any* obj);    // 0x00d0fcc0 (ret 4)
+  void HandleSwapObject();                // 0x00d10720
+};
+// ---- items of slice s00d0fcc0 end
+
+// ---- items of slice s00d11730 begin (TODO(rewrite): local stubs, replace by canonical classes)
+struct SVec3 { float x, y, z; };                    // plain POD triple (copied through integer registers)
+struct Vec3c {                                      // by-value argument flavour: user copy ctor (fld/fstp)
+    float x, y, z;
+    Vec3c() {}
+    Vec3c(const Vec3c& o) : x(o.x), y(o.y), z(o.z) {}
+    Vec3c(const SVec3& o) : x(o.x), y(o.y), z(o.z) {}
+};
+struct IVisualEffect {
+    virtual int AddRef();                                                   // +0x00
+    virtual int Release();                                                  // +0x04
+    virtual void Start(int hard);                                           // +0x08
+    virtual int Stop(int hard);                                             // +0x0c
+    virtual int IsRunning();                                                // +0x10
+    virtual void v14();                                                     // +0x14
+    virtual void SetSourceTransform(const void* xform);                     // +0x18
+virtual void v1c();
+virtual void v20();
+virtual void v24();
+virtual void v28();
+virtual void v2c();
+virtual void v30();
+virtual void v34();
+virtual void v38();
+    virtual void v3c();
+    virtual bool SetVectorParams(int param, const Vec3c* data, int count);  // +0x40
+    virtual bool SetFloatParams(int param, const float* data, int count);   // +0x44
+    virtual bool SetIntParams(int param, const int* data, int count);       // +0x48
+virtual void v4c();
+virtual void v50();
+    virtual const float* GetFloatParams(int param, int* count);             // +0x54
+virtual void v58();
+virtual void v5c();
+    virtual uint32_t GetEffectID();                                         // +0x60
+};
+template <class T> struct Ref {                                             // EA::AutoRefCount
+    T* p;
+    Ref& operator=(T* q) {
+        if (q != p) { T* old = p; if (q) q->AddRef(); p = q; if (old) old->Release(); }
+        return *this;
+    }
+    T* operator->() const { return p; }
+};
+struct tBuildingLinkEffect {
+    Ref<IVisualEffect> mLinkEffect;                                         // +0x00
+    Ref<IVisualEffect> mIconEffect;                                         // +0x04
+    SVec3 mPos1;                                                            // +0x08
+    SVec3 mPos2;                                                            // +0x14
+    int mState;                                                             // +0x20
+    unsigned mTimer;                                                        // +0x24
+    bool mTicked;                                                           // +0x28
+};
+struct Key { int a, b; };
+struct Node { Node* r; Node* l; Node* p; int color; Key key; tBuildingLinkEffect value; };
+struct Iter { Node* node; Iter() {} };
+struct LinkMap {                                                            // eastl::map<pair<int,int>, tBuildingLinkEffect>
+    int      mPad00;                                                        // +0x00
+    Node*    mpAnchorParent;                                                // +0x04
+    Node*    mpAnchorLeft;                                                  // +0x08  (begin)
+    Node*    mpAnchorRight;                                                 // +0x0c
+    uint32_t mAnchorColor;                                                  // +0x10
+    int      mCount;                                                        // +0x14
+    Iter find(const Key& k);                                                // 0x00d0bd60 (thiscall, sret)
+    tBuildingLinkEffect& operator[](const Key& k);                          // 0x00d0ff80 (thiscall)
+    Node* End() { return mpAnchorParent; }
+    Node* Begin() { return mpAnchorLeft; }
+};
+struct IEditorObj {
+    virtual void   s00();                                   // +0x00
+    virtual void   s01();                                   // +0x04
+    virtual void   s02();                                   // +0x08
+    virtual void*  GetObject(uint32_t nID);                 // +0x0c
+    virtual void   s04();                                   // +0x10
+    virtual void   s05();                                   // +0x14
+    virtual void   AttachObject(int nSlot, void* pObject);  // +0x18
+    virtual IEditorObj* GetViewport(void* pRect, void* pPoint);  // +0x1c
+    virtual void   s08();                                   // +0x20
+    virtual void   s09();                                   // +0x24
+    virtual void   s10();                                   // +0x28
+    virtual SVec3* GetPosition();                           // +0x2c
+    virtual SVec3* GetPositionCopy();                       // +0x30
+    virtual void   s13();                                   // +0x34
+    virtual uint32_t GetKind();                             // +0x38
+    virtual void*  GetSelection();                          // +0x3c
+virtual void   s16();
+virtual void s17();
+virtual void s18();
+virtual void s19();
+    virtual void*  GetUiRoot();                             // +0x50
+virtual void   s21();
+virtual void s22();
+    virtual void*  GetColor(void* pSelf, void* pOut, int nIndex, void* pArg, float fValue);  // +0x5c
+virtual void   s24();
+virtual void s25();
+virtual void s26();
+    virtual int    GetSlotOffset();                         // +0x6c
+virtual void   s28();
+virtual void s29();
+virtual void s30();
+virtual void s31();
+virtual void   s32();
+virtual void s33();
+virtual void s34();
+virtual void s35();
+virtual void   s36();
+virtual void s37();
+virtual void s38();
+virtual void s39();
+virtual void   s40();
+virtual void s41();
+virtual void s42();
+virtual void s43();
+virtual void   s44();
+virtual void s45();
+    virtual void*  FindEditorObject(uint32_t nID);          // +0xb8
+
+    void ApplyViewport(void* pRect, void* pPoint);          // 0x007c4900 (thiscall)
+    void DisbandUnit(char bFlag);                           // 0x00caa610 (thiscall)
+};
+struct ICreatureProxy : IEditorObj {                        // proxy with the placed flag
+    uint8_t mPad04[0x289 - 4];
+    bool    mbPlaced;                                       // +0x289
+};
+struct IEffectHost {                                        // manager/audio host (+0x3c/+0x5c)
+virtual void   s00();
+virtual void s01();
+virtual void s02();
+virtual void s03();
+virtual void   s04();
+virtual void s05();
+virtual void s06();
+virtual void s07();
+    virtual void*  s08();                                   // +0x20
+virtual void   s09();
+virtual void s10();
+virtual void s11();
+virtual void s12();
+virtual void   s13();
+virtual void s14();
+    virtual void   GetSelectionSlots(void* pOut, int nCount);   // +0x3c
+virtual void   s16();
+virtual void s17();
+virtual void s18();
+virtual void s19();
+virtual void   s20();
+virtual void s21();
+virtual void s22();
+    virtual void   AddEffect(uint32_t nID, const SVec3* pPos);  // +0x5c
+};
+struct IWinProc {
+virtual void s0();
+virtual void s1();
+    virtual void Hide();                                    // +0x08
+    void HideWin();                                         // 0x005cc690 (thiscall)
+};
+struct IPalette {
+    int GetCurrentCategoryIndex();                          // 0x005ca9c0
+};
+struct PlacementTrail {
+    SVec3* Add(IEditorObj** ppVehicle);                     // 0x00d0fee0
+};
+struct VehicleList {
+    IEditorObj** mpBegin;                                   // +0x00
+    IEditorObj** mpEnd;                                     // +0x04
+    void erase(IEditorObj** ppSlot);                        // 0x00bf3420
+    IEditorObj** find(IEditorObj* p) {
+        IEditorObj** pIt = mpBegin;
+        while (pIt != mpEnd && *pIt != p) ++pIt;
+        return pIt;
+    }
+};
+struct cCommunityEditor_s00d1_1730;
+IEditorObj*  App_s00d1_1730();                                         // 0x0067dd10
+IEffectHost* FUN_00b3d240_s00d1_1730();                                // 0x00b3d240
+float        DistancePointSegment(const SVec3* pA, const SVec3* pB,
+                                  const SVec3* pC, float fD);   // 0x00698e00
+IEditorObj*  PlanetModel(const SVec3* pOut1, const SVec3* pOut2,
+                         const SVec3* pIn);                 // 0x00b3d350
+void         BuildSurfaceOrientation(IEditorObj* pModel);   // 0x00b7f1f0
+IEffectHost* GetAudioSystem();                              // 0x00a206f0 (EA::Audio::GetSystemAT)
+void         KillSetiEffects(uint32_t nID, void* pAudio);            // 0x00435ed0
+struct cCommunityEditor_s00d1_1730 {
+    uint8_t         mPad00[0x40];
+    IEditorObj*     mpSelection;                            // +0x40
+    uint8_t         mPad44[0x68 - 0x44];
+    IEditorObj*     mpPlacementServices;                    // +0x68
+    uint8_t         mPad6c[0x7c - 0x6c];
+    IWinProc*       mpSellBackRollover;                     // +0x7c
+    uint8_t         mPad80[0x84 - 0x80];
+    IWinProc*       mpEditorWin;                            // +0x84
+    uint8_t         mPad88[0xb4 - 0x88];
+    IPalette*       mpPalette;                              // +0xb4
+    uint8_t         mPadB8[0xc0 - 0xb8];
+    Ref<IEditorObj> mPlacementVehicle;                      // +0xc0
+    uint8_t         mPadC4[0xf8 - 0xc4];
+    int             mCurrentSlot;                           // +0xf8
+    uint8_t         mPadFC[0x108 - 0xfc];
+    SVec3           mPlanetOffset;                          // +0x108
+    PlacementTrail  mTrail;                                 // +0x114
+    uint8_t         mPad118[0x1f0 - 0x118];
+    VehicleList     mPotentialVehicles;                     // +0x1f0
+
+    const SVec3* GetCommunityCenter();                                      // 0x00d09960 (thiscall)
+    void RefreshOrCreateBuildingLinkEffect(LinkMap* map, int a, int b, SVec3 p1, SVec3 p2, int type);  // 0x00d11950 (cCommunityEditor::RefreshOrCreateBuildingLinkEffect)
+    void ResetPlacementVisual();                                            // 0x00d0dea0 (thiscall)
+    void SetManipulatedObject(void* pObject);                               // 0x00d09f60 (thiscall)
+    void UpdatePlacementOverlay();                                          // 0x00d0a5b0 (thiscall)
+    IEditorObj* FadeOutVehicle(IEditorObj* pVehicle);                       // 0x00d0a3f0 (thiscall)
+    int  EndVehiclePlacement(int nArg0, int nArg1);                         // 0x00d11730
+    void UpdateBuildingLinkEffects(LinkMap* map, int nMode, void* pArg);    // 0x00d11f80
+};
+// ---- items of slice s00d11730 end
+
 // @ 0x00421eb0
 void* __cdecl QueryA(Unknown** ref)
 {
@@ -3386,6 +4126,105 @@ void cCommunityEditor::CreateVehicleFromModelType(cCity* pCity, const Vec3* pPos
     }
 }
 
+// @ 0x00d07420
+namespace SP {
+cCountedSlot2* __thiscall cCountedSlot2::FUN_00d07420(cRefCounted* p)
+{
+    mpVtbl = &gSlotVtbl2;
+    mpField4 = 0;
+    mpField8 = 0;
+    cRefCounted* pOld = mpField8;
+    if (p != pOld) {
+        if (p)
+            p->r00();
+        mpField8 = p;
+        if (pOld)
+            pOld->Release();
+    }
+    return this;
+}
+}  // namespace SP
+
+// @ 0x00d07720
+namespace SP {
+cCountedSlot3* __thiscall cCountedSlot3::FUN_00d07720(cRefCounted* p)
+{
+    mpVtbl = &gSlotVtbl3;
+    mpField4 = 0;
+    mpField8 = 0;
+    cRefCounted* pOld = mpField8;
+    if (p != pOld) {
+        if (p)
+            p->r00();
+        mpField8 = p;
+        if (pOld)
+            pOld->Release();
+    }
+    return this;
+}
+}  // namespace SP
+
+// @ 0x00d07a40
+void* C103::Init(void* param)
+{
+    int* p = (int*)this;
+    FUN_008014a0();
+    p[2] = (int)param;
+    *(void**)p = &g_vtbl_14790fc;
+    return this;
+}
+
+// @ 0x00d07ab0
+u8 C103::PickEventId()
+{
+    void* q = FUN_00b3d240();
+    void* mgr = (*(void*(__thiscall**)(void*))((char*)*(void**)q + 0x34))(q);
+    u32 id;
+    if (mgr != 0) {
+        void* v1 = ((Ext*)mgr)->FindLocalV(0xe89adf71);
+        void* v2 = ((Ext*)mgr)->FindLocalV(0xe9cb8ba);
+        void* v3 = ((Ext*)mgr)->FindLocalV(0x137e8e0);
+        void* v4 = ((Ext*)mgr)->FindLocalV(0x436f315);
+        void* v5 = ((Ext*)mgr)->FindLocalV(0x175cdc9);
+        void* v6;
+        u8 ok;
+        if (v1 != 0) {
+            ok = (*(u8(__thiscall**)(void*))((char*)*(void**)v1 + 0x10))(v1);
+            if (ok == 0) goto fallback;
+        }
+        if (v2 == 0) {
+            if (v3 == 0) {
+                if (v4 == 0) {
+                    if (v5 == 0) goto fallback;
+                    v6 = (char*)v5 + 0x70;
+                } else {
+                    v6 = (char*)v4 + 0x34;
+                }
+                ok = (*(u8(__thiscall**)(void*))((char*)*(void**)v6 + 0x58))(v6);
+            } else {
+                v6 = (char*)v3 + 0x34;
+                ok = (*(u8(__thiscall**)(void*))((char*)*(void**)v6 + 0x58))(v6);
+                if (ok == 0) goto fallback;
+                ok = (u8)FUN_00d09740(v3);
+            }
+        } else {
+            v6 = (char*)v2 + 0x34;
+            ok = (*(u8(__thiscall**)(void*))((char*)*(void**)v6 + 0x58))(v6);
+            if (ok == 0) goto fallback;
+            ok = (u8)FUN_00d09740(v2);
+        }
+        if (ok != 0) {
+            id = 0x648fbf1;
+            goto dispatch;
+        }
+    }
+fallback:
+    id = 0x1002;
+dispatch:
+    ((Ext*)FUN_0067cab0(id))->FindLocal(id);
+    return 0;
+}
+
 // @ 0x00d08930
 void FUN_00d08930()
 {
@@ -3399,6 +4238,28 @@ void FUN_00d08930()
     ((Fn3S)(*(void***)mgr)[0x40 / 4])(mgr, 0x3e84, (const char*)0x1479234);
     ((Fn3S)(*(void***)mgr)[0x40 / 4])(mgr, 0x3e85, (const char*)0x1479218);
     ((Fn3S)(*(void***)mgr)[0x40 / 4])(mgr, 0x3e86, (const char*)0x1479200);
+}
+
+// @ 0x00d089d0
+int FUN_00d089d0(u32 modelType, u32 subType)
+{
+    u32 empire = SP_GetPlayerEmpireID();
+    if (modelType == 0x81c74dbc) {
+        if (subType < 0x4e3f7778) {
+            if (subType == 0x4e3f7777)
+                return (int)FUN_00bcde70(empire);
+            if (subType == 0x99e92f05)
+                return 0;
+            if (subType == 0x47c10953)
+                return (int)FUN_00bcde40(empire);
+        } else if (subType == 0x72c49181) {
+            return (int)FUN_00bcdea0(empire);
+        }
+        return 0x19;
+    }
+    if (modelType == 0x142462a)
+        return (int)FUN_00bce400(empire);
+    return -1;
 }
 
 // @ 0x00d08a70
@@ -3545,6 +4406,17 @@ char __stdcall FUN_00d08d80(Req8D80* req)
     }
 ret1:
     return 1;
+}
+
+// @ 0x00d08f60
+void FUN_00d08f60()
+{
+    GameTime* gt = (GameTime*)GameTimeManager_s00d0_84d0();
+    gt->DecPauseGate(0x4bf38a7);
+    void* hud = FUN_0067caf0();
+    if (((HudObj*)hud)->IsSet()) {
+        ((HintsObj*)FUN_0067cac0_s00d0_84d0())->SetFlag(1, 1);
+    }
 }
 
 // @ 0x00d08fa0
@@ -4568,6 +5440,59 @@ int cCommunityEditor_s00d0_b090::GetIndexOfClosestSnapPoint(void* a, void* snapP
     return bestIdx;
 }
 
+// @ 0x00d0ba80
+void* cCommunityEditor_s00d0_b090::CreateOneShotEffect(int id, float x, float y, float z)
+{
+    cEffect* effect = 0;
+    EffectsManager_s00d0_b090()->GetEffect(0, id, (void**)&effect);
+    if (effect) {
+        V3 pos;
+        pos.x = x; pos.y = y; pos.z = z;
+        EffectTransform t;
+        t.m.Assign((const Matrix33*)0x0169d5f0);
+        const Matrix33* orient = PlanetModel()->BuildSurfaceOrientation(&pos, &pos);
+        Matrix3FromQuaternion(&t.m, (const Quat*)orient);
+        effect->ApplyOrientation(&t);
+        effect->Release();
+    }
+    return effect;
+}
+
+// @ 0x00d0bbd0
+void cCommunityEditor_s00d0_b090::FUN_00d0bbd0(void** effectOut, float x, float y, float z)
+{
+    EffectsManager_s00d0_b090()->GetEffect(mEffectID, 0, effectOut);
+    if (*effectOut) {
+        V3 pos;
+        pos.x = x; pos.y = y; pos.z = z;
+        EffectTransform t;
+        t.m.Assign((const Matrix33*)0x0169d5f0);
+        const Matrix33* orient = PlanetModel()->BuildSurfaceOrientation(&pos, &pos);
+        Matrix3FromQuaternion(&t.m, (const Quat*)orient);
+        ((cEffect*)*effectOut)->ApplyOrientation(&t);
+        ((cEffect*)*effectOut)->Release();
+    }
+}
+
+// @ 0x00d0bcf0
+void cCommunityEditor_s00d0_b090::SetSelectedObject(cSpatialObject_s00d0_b090* o)
+{
+    mpSelectedObject = o;
+    if (o) {
+        cSpatialObject_s00d0_b090* anchor = (cSpatialObject_s00d0_b090*)o->Cast(0xe89adf71);
+        if (anchor) {
+            if (((bool(__thiscall*)(void*))((*(void***)anchor)[5]))(anchor)) {
+                FUN_00d0b010(true);
+                return;
+            }
+        }
+    }
+    if (mpRotationNoun) {
+        NounManager_s00d0_b090()->RemoveNoun((void*)mpRotationNoun);
+        mpRotationNoun = 0;
+    }
+}
+
 // @ 0x00d0bd60
 uint32_t* cIntPairTree::lower_bound(int* key, void** out)
 {
@@ -4595,6 +5520,103 @@ uint32_t* cIntPairTree::lower_bound(int* key, void** out)
     *out = head;
     return head;
 }
+
+// @ 0x00d0bdd0
+void __cdecl PostEditorBehaviorMessage1(uint32_t a, uint32_t msgID)
+{
+    if (msgID == (uint32_t)-0xf || msgID == 0x1511161) {
+        cEditorBehaviorMessage1* msg = new ("App", 0, 0, 0, 0) cEditorBehaviorMessage1();
+        AutoRefCount<cEditorBehaviorMessage1> ref(msg);
+        msg->mMessageID = 0x63bdfbe;
+        msg->mField8 = msgID;
+        MessageServer_s00d0_b090()->PostMSG(msg->mMessageID, msg, 0);
+    }
+}
+
+// @ 0x00d0be60
+void __cdecl PostEditorBehaviorMessage2(uint32_t a, uint32_t msgID)
+{
+    if (msgID == (uint32_t)-0xf || msgID == 0x1511161) {
+        cEditorBehaviorMessage2* msg = new ("App", 0, 0, 0, 0) cEditorBehaviorMessage2();
+        AutoRefCount<cEditorBehaviorMessage2> ref(msg);
+        msg->mMessageID = 0x63c0504;
+        msg->mField8 = msgID;
+        MessageServer_s00d0_b090()->PostMSG(msg->mMessageID, msg, 0);
+    }
+}
+
+// @ 0x00d0bef0
+void __cdecl PostEditorBehaviorMessage3(uint32_t a, uint32_t msgID)
+{
+    if (msgID == (uint32_t)-0xf || msgID == 0x1511161) {
+        cEditorBehaviorMessage3* msg = new ("App", 0, 0, 0, 0) cEditorBehaviorMessage3();
+        AutoRefCount<cEditorBehaviorMessage3> ref(msg);
+        msg->mMessageID = 0x63c0580;
+        msg->mField8 = msgID;
+        MessageServer_s00d0_b090()->PostMSG(msg->mMessageID, msg, 0);
+    }
+}
+
+// @ 0x00d0bf80
+void cCommunityEditor_s00d0_b090::ClearResources()
+{
+    SetManipulatedObject(0);
+    mpSelectedObject = 0;
+    if (mpRotationNoun) {
+        NounManager_s00d0_b090()->RemoveNoun((void*)mpRotationNoun);
+        mpRotationNoun = 0;
+    }
+    if (mBudget.mpObject) {
+        mBudget.mpObject->Shutdown();
+        cSPEditorBudget* b = mBudget.mpObject;
+        if (b) {
+            mBudget.mpObject = 0;
+            b->Dtor();
+        }
+    }
+    if (mEconomy.mpObject) {
+        cEditorEconomy* e = mEconomy.mpObject;
+        mEconomy.mpObject = 0;
+        if (--e->mnRefCount == 0) {
+            e->mnRefCount = 1;
+            e->Dtor(1);
+        }
+    }
+    cCommunity_s00d0_b090* c = mpCommunity.mpObject;
+    if (c) {
+        mpCommunity.mpObject = 0;
+        c->Release();
+    }
+}
+
+// @ 0x00d0c010
+namespace SP {
+void __fastcall FUN_00d0c010(cCommunityEditor_s00d0_c010* this_)
+{
+    if (!this_)
+        return;
+}
+}  // namespace SP
+
+// @ 0x00d0c5b0
+namespace SP {
+void __fastcall FUN_00d0c5b0(cCommunityEditor_s00d0_c010* this_, int unused, int param)
+{
+    (void)unused;
+    if (!this_)
+        return;
+    (void)param;
+}
+}  // namespace SP
+
+// @ 0x00d0c760
+namespace SP {
+void __fastcall FUN_00d0c760(cCommunityEditor_s00d0_c010* this_)
+{
+    if (!this_)
+        return;
+}
+}  // namespace SP
 
 // @ 0x00d0c820
 namespace SP {
@@ -4727,6 +5749,123 @@ void CE::StartVehicleAttractorEffects(void* param_2)
     this->mSpan.push_back(local);
     if (local != 0)
         local->Release();
+}
+
+// @ 0x00d0def0
+void SP::cCommunityEditor_s00d0_def0::HandleSwatchRolloverOff(SP::cSPSwatchPlanner* pSwatch)
+{
+    if (pSwatch == 0)
+        return;
+
+    SP::cSPSwatchPlanner* first =
+        (SP::cSPSwatchPlanner*)pSwatch->Cast(0x87e8a1af);
+    SP::cSPPaletteSwatch* second =
+        (SP::cSPPaletteSwatch*)pSwatch->Cast(0x3349c94);
+
+    if (first != 0) {
+        if (!first->CanDrag())
+            return;
+
+        SP::cPaletteItem* item = (SP::cPaletteItem*)first->GetItem();
+        uint32_t type = item->mTypeID;
+        switch (type) {
+        case 0x142462a: {
+            void* cast = FUN_00d08ec0(&mpCommunity);
+            int value = FUN_00bd7f60(cast);
+            mPendingActionHash = 0xf089377b;
+            mLastSwapPointIndex = (uint32_t)value;
+            FUN_00d0db30();
+            return;
+        }
+        case 0x4d863c8b: {
+            void* cast = 0;
+            if (mpCommunity != 0)
+                cast = mpCommunity->Cast(0xee9b2232);
+            int value = FUN_00bd7f50(cast);
+            mPendingActionHash = 0xf081d484;
+            mLastSwapPointIndex = (uint32_t)value;
+            FUN_00d0db30();
+            return;
+        }
+        case 0x8bfac054:
+            if (first->mField3c == 0x98e03c0d)
+                return;
+            StartVehicleAttractorEffects((void*)WeaponClassFromHash(first->mField3c));
+            return;
+        case 0x81c74dbc: {
+            void* cast = 0;
+            if (mpCommunity != 0)
+                cast = mpCommunity->Cast(0xee9b2232);
+            int value = FUN_00bd7f40(cast);
+            mPendingActionHash = 0x9fdf8751;
+            mLastSwapPointIndex = (uint32_t)value;
+            FUN_00d0db30();
+            return;
+        }
+        case 0xfcafd26:
+            break;
+        default:
+            return;
+        }
+    } else {
+        if (second == 0)
+            return;
+        if (!second->IsItemAvailable())
+            return;
+        if (!second->CheckType())
+            return;
+
+        SP::cPaletteItem* item = second->GetItem();
+        uint32_t type = item->mTypeID;
+        switch (type) {
+        case 0x4d863c8b: {
+            void* cast = FUN_00d08ec0(&mpCommunity);
+            int value = FUN_00bd7f50(cast);
+            mPendingActionHash = 0xf081d484;
+            mLastSwapPointIndex = (uint32_t)value;
+            FUN_00d0db30();
+            return;
+        }
+        case 0xfcafd26:
+            break;
+        default:
+            return;
+        }
+    }
+
+    int value = FUN_00d08ee0(&mpCommunity);
+    mPendingActionHash = 0xeeef054f;
+    mLastSwapPointIndex = (uint32_t)(value + 0x3b4);
+    FUN_00d0db30();
+}
+
+// @ 0x00d0e0c0
+void SP::cCommunityEditor_s00d0_def0::HandleSwatchRolloverOn(SP::cSwatch_s00d0_def0* pSwatch)
+{
+    if (pSwatch == 0) return;
+    SP::cCastResult* pA = (SP::cCastResult*)pSwatch->Cast(0x87e8a1af);
+    SP::cCastResult* pB = (SP::cCastResult*)pSwatch->Cast(0x3349c94);
+    SP::cPaletteItem* pItem;
+    if (!pB) {
+        if (!pA) return;
+        pItem = (SP::cPaletteItem*)pA->GetItem();
+    } else {
+        if (pA) pItem = (SP::cPaletteItem*)pA->GetItem();
+        else pItem = ((SP::cCastItemOwner*)pB)->GetItemField180();
+    }
+
+    uint32_t type = pItem->mTypeID;
+    if (type <= 0x4d863c8b) {
+        if (type != 0x4d863c8b && type != 0x142462a && type != 0xfcafd26) return;
+    } else {
+        if (type != 0x81c74dbc && type != 0x8bfac054) return;
+    }
+
+    if (mpManipulatedObject == 0) {
+        FUN_00d0dea0();
+        mLastSwapPointIndex = 0;
+        mPendingActionHash = 0;
+    }
 }
 
 // @ 0x00d0e170
@@ -5111,6 +6250,323 @@ void SP::cCommunityEditor_s00d0_e170::Activate(SP::cCommunity_s00d0_e170* commun
     }
 }
 
+// @ 0x00d0fcc0
+int CE_s00d0_fcc0::StartObjectPlacement(Any* obj)
+{
+  SetManipulatedObject(0);
+  unsigned noun = nounId;
+  fieldC4 = 0;
+  if (noun != 0) {
+    NounManager_s00d0_fcc0()->RemoveNoun(noun);
+    nounId = 0;
+  }
+  swapObject = 0;
+  slotIndex = -1;
+  slotA = -1;
+  slotB = -1;
+  curSlotIndex = -1;
+  if (community != 0)
+    (void)VCALL1(void*, unsigned, community, 0xc, 0xee9b2232);
+  Any* q;
+  if (community != 0)
+    q = (Any*)VCALL1(void*, unsigned, community, 0xc, 0x4f396a66);
+  else
+    q = 0;
+  if (obj == 0)
+    return 2;
+  if (!VCALL0(char, obj, 0x58))
+    return 2;
+  Any* info = (Any*)VCALL1(void*, unsigned, obj, 0xb8, 0xe89adf71);
+  if (info == 0)
+    return 2;
+  char flag = VCALL0(char, info, 0x10);
+  Any* data = (Any*)VCALL1(void*, unsigned, obj, 0xb8, 0x17f243b);
+  if (q != 0 && data != 0 && (unsigned)VCALL0(int, data, 0x38) == 0x175cdc9)
+    return 2;
+  if (!flag)
+    return 2;
+  if (FUN_00b33e60(obj) == 0) {
+    V3* c = GetCommunityCenter(0);
+    SetPlacementAnchor(*c);
+  }
+  SetManipulatedObject(obj);
+  SetObjectSpecificData();
+  ComputeMouseOffset(placementObj);
+  slotIndex = actionCircle->ReserveSlot(VCALL0(void*, placementObj, 0x2c));
+  Slot* slot = &actionCircle->mSlots[slotIndex];
+  if (slot->SlotId() != (int)VCALL1(void*, unsigned, placementObj, 0xb8, 0x17f243b))
+    slotIndex = -1;
+  actionCircle->mSlots[slotIndex].Clear();
+  ResetPlacement();
+  actionCircle->mSlots[slotIndex].Reserve((cGameData*)FUN_00ae66d0(placementObj));
+  slotA = slotIndex;
+  slotB = slotIndex;
+  RebuildPlacement();
+  return 0;
+}
+
+// @ 0x00d0fee0
+V3* V3Map::FindOrAdd(Any* const& key)
+{
+  unsigned k = (unsigned)key;
+  MapNodeV3* n = (MapNodeV3*)mAnchor.mpNodeParent;
+  MapNodeV3* lb = (MapNodeV3*)&mAnchor;
+  while (n != 0) {
+    if (n->mKey < k)
+      n = n->mLeft;
+    else {
+      lb = n;
+      n = n->mRight;
+    }
+  }
+  if (lb != (MapNodeV3*)&mAnchor && k >= lb->mKey)
+    return &lb->mValue;
+  unsigned kk = k;
+  float f = *(float*)&k;
+  V3 v;
+  v.x = f;
+  v.y = f;
+  v.z = f;
+  MapNodeV3* out;
+  InsertNode(&out, lb, &kk, k);
+  return &out->mValue;
+}
+
+// @ 0x00d0ff80
+void* Key2Map::GetOrCreate(const MapKey2& key)
+{
+  MapNodeK2* n;
+  FindLowerBound(&n, &key);
+  if (n != (MapNodeK2*)&mAnchor) {
+    if (n->mKey.lo < key.lo)
+      return n->mValue;
+    if (n->mKey.lo == key.lo && key.hi >= n->mKey.hi)
+      return n->mValue;
+  }
+  MapNodeK2* out;
+  InsertPair(&out, n, &key);
+  return out->mValue;
+}
+
+// @ 0x00d100b0
+void CE_s00d0_fcc0::Deactivate(int reasonArg, bool flag)
+{
+  int i;
+  if (community != 0) {
+  if (GetCurrentGameMode_s00d0_fcc0() == 0x1654c05) {
+    if (NounManager_s00d0_fcc0() != 0) {
+      Any* civ = NounManager_s00d0_fcc0()->GetPlayerCivilization();
+      if (civ != 0 && GetActivePlanet_s00d0_fcc0() != 0) {
+        int id = VCALL0(int, civ, 0x4c);
+        Any* x = GetActivePlanet_s00d0_fcc0()->C71040(id);
+        if (x != 0)
+          x->Ff3190((char*)civ + 0x6c);
+        PtrVec_s00d0_fcc0* pv = civ->Bef6c0();
+        int n = (int)(pv->e - pv->b);
+        for (i = 0; i < n; i++) {
+          Any* e = civ->Bef6c0()->b[i];
+          if (e != 0)
+            e->Bd9e50();
+        }
+      }
+    }
+  } else {
+    if (GetCurrentGameMode_s00d0_fcc0() == 0x1654c02)
+      FUN_00d49450();
+  }
+  reason = reasonArg;
+  if (ahServer != 0) {
+    void* srv = ahServer;
+    ahServer = 0;
+    RemoveHandler(srv, ahHandler, ahIds, ahCount, ahPrio);
+  }
+  if (lastShop != 0) {
+    Any* o = FUN_00b3d230_s00d0_fcc0();
+    VCALL1(void, int, o, 0x40, lastShop);
+  }
+  GetHints(0, 1)->Hints_Update();
+  GetHints(effByte, 1)->Hints_SetEnabled();
+  if (paletteUI != 0) {
+    paletteUI->Shutdown5bfb90();
+    Any* p = paletteUI;
+    if (p != 0) {
+      paletteUI = 0;
+      VCALL0(void, p, 4);
+    }
+  }
+  if (sellback != 0) {
+    VCALL0(void, sellback, 4);
+    operator_delete_array(sellback);
+    sellback = 0;
+    editorUIvft = 0;
+  }
+  if (ring != 0) {
+    ring->CityMusicShutdown();
+    Any* p = ring;
+    if (p != 0) {
+      ring = 0;
+      VCALL0(void, p, 4);
+    }
+  }
+  D0dea0();
+  if (community != 0) {
+    Any* q = (Any*)VCALL1(void*, unsigned, community, 0xc, 0xee9b2232);
+    if (q != 0) {
+      Fixed32 vec;
+      q->b192 = 0;
+      q->Be5700(&vec);
+      int n = (int)(vec.mpEnd - vec.mpBegin);
+      for (int k = 0; k < n; k++) {
+        Any* e = vec.mpBegin[k];
+        if (e != 0 && e->Bce470() != 0) {
+          Any* e2 = vec.mpBegin[k];
+          void* r = VCALL1(void*, float, e2->sub34, 0x2c, 6.0f);
+          e2->Bce470()->C3f160(r);
+        }
+      }
+      Any* w = q->Bd81f0();
+      if (w != 0) {
+        void* sub = q->sub34;
+        {
+          WStr s((const wchar_t*)VCALL0(void*, sub, 4));
+          w->Ff14f0(&s);
+        }
+        {
+          WStr s((const wchar_t*)VCALL0(void*, sub, 0xc));
+          w->Ff1510(&s);
+        }
+      }
+      if (reasonArg == 0 && FUN_00b3d400_s00d0_fcc0() != 0)
+        FUN_00b3d400_s00d0_fcc0()->E14c10(1);
+      {
+        Any** pc = vec.mpBegin;
+        Any** pe = vec.mpEnd;
+        for (; pc < pe; ++pc)
+          if (*pc) VCALL0(void, *pc, 4);
+        Any** pb = vec.mpBegin;
+        if (pb && pb != vec.mpPool) operator_delete_array(pb);
+      }
+    }
+  }
+  if (community != 0) {
+    Any* q = (Any*)VCALL1(void*, unsigned, community, 0xc, 0x4f396a66);
+    if (q != 0) {
+      q->b192 = 0;
+      Any* win = ((Any*)(editorUI))->FindWindowByID(0x563fa08, 1);
+      if (win != 0)
+        ((void(__thiscall*)(void*, int, int))VT(win, 0x7c))(win, 1, 0);
+      TribeModeInstance()->Cd6e90();
+    }
+  }
+  if (community != 0) {
+    D0c760();
+    if (reason == 0) {
+      recentlyEdited = -1;
+      g_PropList->SetBoolProperty(0x387d0a8, 1);
+      GameTimeManager_s00d0_fcc0()->DecPauseGate(0x4bf38a6);
+    }
+    Cam* cam = FUN_00b3d280_s00d0_fcc0();
+    if (cam != 0) {
+      if (camArg != 0)
+        cam->F11870(camArg);
+      cam->b10 = 1;
+      cam->F0f700(0.0f, 0.0f);
+      if (cam->b12 != 0)
+        cam->SetYaw(0.0f);
+      if (community == camCommunity) {
+        V3 v = camPos;
+        if (FUN_00b3d280_s00d0_fcc0() != 0)
+          FUN_00b3d280_s00d0_fcc0()->F13bb0(&v, 0);
+      }
+      cam->F10340(camX, camY, camZ);
+    }
+    if (ring != 0)
+      ring->CityMusicSetVisibility(0);
+    D0cec0();
+    if (selected != 0) {
+      categoryIndex = selected->FindCategoryIndex();
+      selected->PaletteShutdown();
+      Any* p = selected;
+      if (p != 0) {
+        selected = 0;
+        VCALL0(void, p, 4);
+      }
+    }
+    if (limit != 0) {
+      Any* p = limit;
+      limit = 0;
+      VCALL0(void, p, 4);
+    }
+    if (manip != 0) {
+      manip->F5c5c20();
+      Any* p = manip;
+      if (p != 0) {
+        manip = 0;
+        VCALL0(void, p, 8);
+      }
+    }
+    if (paletteData != 0) {
+      VCALL0(void, paletteData, 0x24);
+      Any* p = paletteData;
+      if (p != 0) {
+        paletteData = 0;
+        VCALL0(void, p, 4);
+      }
+    }
+    ((Any*)editorUI)->LayoutSetVisibility(0);
+    Any* fx = 0;
+    Any* mgr = EffectsManager_s00d0_fcc0();
+    char ok = ((char(__thiscall*)(void*, unsigned, int, Any**))VT(mgr, 0x2c))(mgr, 0xb2540a24, 0, &fx);
+    if (ok != 0)
+      ((void(__thiscall*)(void*, int))VT(fx, 8))(fx, 0);
+    Any* ms = MessageServer_s00d0_fcc0();
+    ((void(__thiscall*)(void*, unsigned, void*, int))VT(ms, 0x14))(ms, 0x3e9a625, this, 0);
+    if (flag) {
+      Any* gi = GameInputManager_s00d0_fcc0();
+      ((void(__thiscall*)(void*, int, int))VT(gi, 0x64))(gi, 0x3e86, 1);
+    }
+  }
+  unsigned noun = nounId;
+  fieldC4 = 0;
+  if (noun != 0) {
+    NounManager_s00d0_fcc0()->RemoveNoun(noun);
+    nounId = 0;
+  }
+  vA.Erase(vA.b, vA.e);
+  vB.Erase(vB.b, vB.e);
+  vC.Erase(vC.b, vC.e);
+  vD.Erase(vD.b, vD.e);
+  D0bf80();
+  AddBoundingBox(winRoot)->F80dc50();
+  g_169d580 = 0;
+  }
+}
+
+// @ 0x00d10720
+void CE_s00d0_fcc0::HandleSwapObject()
+{
+  if (swapObject == 0)
+    return;
+  V3& p = actionCircle->mSlots[curSlotIndex].mPos;
+  V3 pos;
+  pos.x = p.x;
+  pos.y = p.y;
+  pos.z = p.z;
+  V3 out;
+  if (VCALL1(void*, unsigned, swapObject, 0xb8, 0x436f315)) {
+    out.x = pos.x;
+    out.y = pos.y;
+    out.z = pos.z;
+  } else {
+    PlanetModel_s00d0_fcc0()->DirectionToSurfacePosition(&out, &pos);
+  }
+  *swapMap.FindOrAdd(swapObject) = out;
+  actionCircle->mSlots[curSlotIndex].Reserve(
+      (cGameData*)(swapObject ? VCALL1(void*, unsigned, swapObject, 0xb8, 0x17f243b) : 0));
+  swapObject = 0;
+  curSlotIndex = -1;
+}
+
 // @ 0x00d10840
 namespace SP {
 bool cCommunityEditor_s00d1_0840::UpdateObjectPlacement(void* pWindow, void* pMessage)
@@ -5373,6 +6829,77 @@ bool cCommunityEditor_s00d1_0840::EndObjectPlacement(void* pWindow, void* pMessa
     return false;
 }
 }  // namespace SP
+
+// @ 0x00d11730
+int cCommunityEditor_s00d1_1730::EndVehiclePlacement(int nArg0, int nArg1)
+{
+    if (mpSelection)
+        mpSelection->GetObject(0xee9b2232);
+
+    ICreatureProxy* pVehicle = 0;
+    if (mPlacementVehicle.p)
+        pVehicle = (ICreatureProxy*)mPlacementVehicle.p->FindEditorObject(0x137e8e0);
+    if (pVehicle) {
+        IEditorObj* pUi = (IEditorObj*)App_s00d1_1730()->GetUiRoot();
+        SVec3 rect;
+        SVec3 point;
+        IEditorObj* pViewport = pUi->GetViewport(&rect, &point);
+        pViewport->ApplyViewport(&rect, &point);
+
+        IEffectHost* pSelection = FUN_00b3d240_s00d1_1730();
+        SVec3 slotPos;
+        pSelection->GetSelectionSlots(&slotPos, 1);
+
+        SVec3 probe;
+        SVec3 pickPoint;
+        float fDist = DistancePointSegment(&pickPoint, &mPlanetOffset, &slotPos, 0.0f);
+        (void)fDist;
+
+        SVec3 surface;
+        IEditorObj* pModel = PlanetModel(&probe, &surface, pVehicle->GetPositionCopy());
+        BuildSurfaceOrientation(pModel);
+
+        float dx = probe.x - mPlanetOffset.x;
+        float dy = probe.y - mPlanetOffset.y;
+        float dz = probe.z - mPlanetOffset.z;
+        float fSurfaceDist = sqrtf(dx * dx + dy * dy + dz * dz);
+        if (fSurfaceDist < 15.0f) {
+            SVec3* pTrail = mTrail.Add(&mPlacementVehicle.p);
+            *pTrail = mPlanetOffset;
+        } else {
+            IEditorObj* pFaded = FadeOutVehicle(pVehicle);
+            mpPlacementServices->AttachObject(0, pFaded);
+
+            IEffectHost* pHost = FUN_00b3d240_s00d1_1730();
+            char colorBuf[0x0c];
+            void* pColor = mPlacementVehicle.p->GetColor(mPlacementVehicle.p, colorBuf,
+                                                        -1, pFaded, 1.0f);
+            (void)pColor;
+            SVec3* pPos = mPlacementVehicle.p->GetPosition();
+            pHost->AddEffect(0x64bf470, pPos);
+
+            IEffectHost* pAudio = GetAudioSystem();
+            void* pAudioValue = 0;
+            if (pAudio)
+                pAudioValue = pAudio->s08();
+            KillSetiEffects(0x275cdfce, pAudioValue);
+            pFaded->DisbandUnit(0);
+
+            IEditorObj** pFound = mPotentialVehicles.find(pFaded);
+            if (pFound != mPotentialVehicles.mpEnd)
+                mPotentialVehicles.erase(pFound);
+        }
+    }
+
+    ResetPlacementVisual();
+    SetManipulatedObject(0);
+    if (mpEditorWin)
+        mpEditorWin->HideWin();
+    if (mpSellBackRollover)
+        mpSellBackRollover->Hide();
+    UpdatePlacementOverlay();
+    return 0;
+}
 
 // @ 0x00d12fc0
 void Class12::FUN_00d12fc0()

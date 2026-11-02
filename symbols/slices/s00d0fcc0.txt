@@ -1,5 +1,5 @@
-00d100b0 SP::cCommunityEditor::Deactivate  # PDB name; retail layout
-00d0fcc0 SP::cCommunityEditor::StartObjectPlacement  # PDB name; Any* argument, ret 4
-00d0fee0 V3Map::FindOrAdd  # coined: eastl map<Any*,V3>::operator[] of the map at +0x114
-00d0ff80 Key2Map::GetOrCreate  # coined: 8-byte-key map find-or-insert
-00d10720 SP::cCommunityEditor::HandleSwapObject  # PDB name
+00d0fcc0 ?StartObjectPlacement@CE_s00d0_fcc0@@QAEHPAUAny@@@Z  # CE_s00d0_fcc0::StartObjectPlacement migrated from s00d0fcc0 (verbatim, slice spelling)
+00d0fee0 ?FindOrAdd@V3Map@@QAEPAUV3@@ABQAUAny@@@Z  # V3Map::FindOrAdd migrated from s00d0fcc0 (verbatim, slice spelling)
+00d0ff80 ?GetOrCreate@Key2Map@@QAEPAXABUMapKey2@@@Z  # Key2Map::GetOrCreate migrated from s00d0fcc0 (verbatim, slice spelling)
+00d100b0 ?Deactivate@CE_s00d0_fcc0@@QAEXH_N@Z  # CE_s00d0_fcc0::Deactivate migrated from s00d0fcc0 (verbatim, slice spelling)
+00d10720 ?HandleSwapObject@CE_s00d0_fcc0@@QAEXXZ  # CE_s00d0_fcc0::HandleSwapObject migrated from s00d0fcc0 (verbatim, slice spelling)
