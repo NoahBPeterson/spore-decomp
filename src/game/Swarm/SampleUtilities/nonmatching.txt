@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+00a7c630 160 SquareToCircle: warps a square sample onto the unit disk via a runtime (sin,cos) table. Compiles; equivalence FAIL (input 0: memory writes 0.0 vs -0.0 for the negated-x sample; the retail sign convention differs). Not byte-exact (318 vs 399 bytes): the 16-entry sin/cos table at 0x1677840 is runtime-filled and the fold `t - (int)(s+0xb4c00000)*pi/8` plus x87/SSE scheduling are approximated. flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast

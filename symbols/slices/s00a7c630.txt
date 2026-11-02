@@ -1,4 +1,4 @@
-00a7c630  EA::Swarm::SquareToCircle  # cdecl (float* out, float a, float b); warp a square sample onto the unit disk using a runtime (sin,cos) table
+00a7c630 ?SquareToCircle@@YAXPAMMM@Z  # SquareToCircle migrated from s00a7c630 (verbatim, slice spelling)
 00a7c7c0  OctantClassify  # cdecl (float a, float b, float c) -> int; classify |a|,|b|,|c| into one of six cube-face regions (0..5)
 00a7c860  EA::Swarm::SquareToSphere  # cdecl (float* out, float a, float b, float c); map a cube sample onto the unit sphere (x87 fsin/fsqrt per face)
 00a7ca40  ZeroStub  # stdcall (float,float,float) -> float; returns 0.0 (default sampler stub)
