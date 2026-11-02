@@ -1,11 +1,11 @@
 00fd90c0 ?Init@MovieSys@@QAE_NXZ  # MovieSys::Init migrated from s00fd90c0 (verbatim, slice spelling)
 00fd9460 ?f9460@Vid@@QAEXPAX@Z  # Vid::f9460 migrated from s00fd90c0 (verbatim, slice spelling)
-00fd9480 ?f9480@Vid@@QAEEH@Z           # PDB candidate rw::movie::VideoRenderer_Rw4::ConvertRenderableToRaster
+00fd9480 ?f9480@Vid@@QAEEH@Z  # Vid::f9480 migrated from s00fd90c0 (verbatim, slice spelling)
 00fd9610 ?f9610@Vid@@QAEXH@Z  # Vid::f9610 migrated from s00fd90c0 (verbatim, slice spelling)
-00fd9680 ?f9680@Vid@@QAEPAU1@XZ        # VideoRenderer_Rw4 constructor (returns this)
-00fd96d0 ?f96d0@Vid@@QAEXXZ            # VideoRenderer_Rw4 releasing destructor
-00fd9750 ?f9750@Vid@@QAEXHHH@Z         # VideoRenderer_Rw4 set source size/resource
-00fd97c0 ?f97c0@Vid@@QAEXPAX@Z         # PDB candidate rw::movie::VideoRenderer_Rw4::Render
+00fd9680 ?f9680@Vid@@QAEPAU1@XZ  # Vid::f9680 migrated from s00fd90c0 (verbatim, slice spelling)
+00fd96d0 ?f96d0@Vid@@QAEXXZ  # Vid::f96d0 migrated from s00fd90c0 (verbatim, slice spelling)
+00fd9750 ?f9750@Vid@@QAEXHHH@Z  # Vid::f9750 migrated from s00fd90c0 (verbatim, slice spelling)
+00fd97c0 ?f97c0@Vid@@QAEXPAX@Z  # Vid::f97c0 migrated from s00fd90c0 (verbatim, slice spelling)
 00fd9b70 ?f9b70@Vid@@QAEXHHHHI@Z  # Vid::f9b70 migrated from s00fd90c0 (verbatim, slice spelling)
 00fd9c90 ?f9c90@AppMode@@QAEXH@Z  # AppMode::f9c90 migrated from s00fd90c0 (verbatim, slice spelling)
 00fd9ce0 ?f9ce0@AppMode@@QAEDHH@Z  # AppMode::f9ce0 migrated from s00fd90c0 (verbatim, slice spelling)
