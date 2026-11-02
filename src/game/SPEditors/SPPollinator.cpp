@@ -742,9 +742,26 @@ struct TxQueue {
         }
     }
 };
+struct cTxKind2 : public ITx {
+    cTxKind2* Construct(int kind, uint32_t a, uint32_t b);  // 0x00618da0 (ret 0xc)
+};
+void* __cdecl PoolAllocKind2(uint32_t size);                 // 0x006158b0
+struct U64FixedVec20;
+struct cTxFeedGet : public ITx {
+    cTxFeedGet* Construct(U64FixedVec20* pIds);              // 0x0061c5e0 (ret 4)
+};
+void* __cdecl PoolAllocFeedGet(uint32_t size);               // 0x006158e0
+struct __declspec(align(8)) DateTime {  // EA::DateTime::DateTime
+    u64 mTime;
+    void FUN_0092e3d0(int);                  // Set(0x0092e3d0)
+    void FUN_0092e470(int unit, int value);  // Add(0x0092e470)
+};
+struct AppProps2 { char pad[0x118]; int mBlocked; };
+struct AppProps { char pad[0x3c]; AppProps2* mpState; };
+extern AppProps* gpAppProps;  // 0x015fd918
 namespace SP {
 namespace Pollen {
-struct cAssetDirectory_s0061_2270 {
+class cAssetDirectory_s0061_2270 { public:
     void Flush();  // 0x0054efb0
     u64 GetLastRefreshTime(uint32_t key);                         // 0x0054e9a0 (ret 4, edx:eax)
     bool GetServerId(const ResourceKey_s0061_2270* pKey, u64* pId, bool b);  // 0x0054e530 (ret 0xc)
@@ -804,6 +821,59 @@ inline void CVec::push_back(const Constraint_s0061_2270& v) {
 }
 }
 namespace SP {
+struct KeyVec {
+    ResourceKey_s0061_2270* mpBegin;
+    ResourceKey_s0061_2270* mpEnd;
+    ResourceKey_s0061_2270* mpCapacity;
+    KeyVec() : mpBegin(0), mpEnd(0), mpCapacity(0) {}
+    ~KeyVec() { if (mpBegin && ((int*)mpBegin)[-1]) operator delete[](mpBegin); }
+    size_t size() const { return (size_t)(mpEnd - mpBegin); }
+};
+}
+namespace SP {
+struct U64Vec {
+    u64* mpBegin;
+    u64* mpEnd;
+    u64* mpCapacity;
+    U64Vec() : mpBegin(0), mpEnd(0), mpCapacity(0) {}
+    ~U64Vec() { if (mpBegin && ((int*)mpBegin)[-1]) operator delete[](mpBegin); }
+    void reserve(size_t n);               // 0x004756f0 (ret 4)
+    void DoInsertValue(u64* pos, const u64& v);  // 0x004786e0 (ret 8)
+    size_t size() const { return (size_t)(mpEnd - mpBegin); }
+    void push_back(const u64& v) {
+        if (mpEnd < mpCapacity) {
+            ::new (mpEnd++) u64(v);
+        } else {
+            DoInsertValue(mpEnd, v);
+        }
+    }
+};
+}
+namespace SP {
+struct ConstraintRaw { uint32_t w[9]; };
+}
+namespace SP {
+struct IObjectTemplateDB {
+virtual void v00();
+virtual void v01();
+virtual void v02();
+virtual void v03();
+virtual void v04();
+virtual void v05();
+virtual void v06();
+virtual void v07();
+virtual void v08();
+virtual void v09();
+virtual void v0a();
+virtual void v0b();
+    virtual void v0c();
+    virtual bool __cdecl Query(KeyVec* pResults, ConstraintRaw first, ConstraintRaw second);
+};
+}
+namespace SP {
+IObjectTemplateDB* ObjectTemplateDB();  // 0x0067cb40
+}
+namespace SP {
 struct U32Range { uint32_t* mpBegin; uint32_t* mpEnd; };
 }
 namespace SP {
@@ -814,7 +884,7 @@ struct cFilterOwner {
 };
 }
 namespace SP {
-struct cPollinator_s0061_2270 {
+class cPollinator_s0061_2270 { public:
     virtual void v0();
     virtual bool HandleMessage(uint32_t id, void* msg);  // 0x00611860 (SP::cPollinator::HandleMessage)
     char pad4[4];
@@ -843,8 +913,17 @@ namespace SP {
 cPollinator_s0061_2270* GetPollinator();  // 0x0067cb30
 }
 struct cMessageServer {
-    virtual void s0(); virtual void s1(); virtual void s2(); virtual void s3(); virtual void s4(); virtual void s5();
-    virtual void s6(); virtual void s7(); virtual void s8(); virtual void s9(); virtual void s10();
+virtual void s0();
+virtual void s1();
+virtual void s2();
+virtual void s3();
+virtual void s4();
+virtual void s5();
+virtual void s6();
+virtual void s7();
+virtual void s8();
+virtual void s9();
+virtual void s10();
     virtual void SetHandlerPriority(void* pHandler, uint32_t id, int priority);  // +0x2c
 };
 cMessageServer* GetMessageServer();  // 0x0067dcc0
@@ -853,6 +932,43 @@ struct FloodHandler {
     int mnFlood;  // cheat + 0x14
     bool HandleMessage(uint32_t id, void* pMessage);
 };
+struct JobRecord {
+    char pad[0x44];
+    uint32_t mPendingBegin;  // +0x44
+    uint32_t mPendingEnd;    // +0x48
+    char pad2[0x18];
+    uint32_t mKey;           // +0x64
+    uint32_t mState;         // +0x68
+    char pad3[4];
+};
+struct U64FixedVec20 {
+    u64* mpBegin;
+    u64* mpEnd;
+    u64* mpCapacity;
+    uint32_t mAllocName;
+    uint32_t mAllocFlags;
+    uint32_t mCookie;
+    u64 mBuffer[20];
+    U64FixedVec20() : mCookie(0) {
+        mpBegin = mpEnd = mBuffer;
+        mpCapacity = mBuffer + 20;
+    }
+    ~U64FixedVec20() { if (mpBegin && ((int*)mpBegin)[-1]) operator delete[](mpBegin); }
+    void DoInsertValue(u64* pos, const u64& v);  // 0x004786e0 (ret 8)
+    size_t size() const { return (size_t)(mpEnd - mpBegin); }
+    void push_back(const u64& v) {
+        if (mpEnd < mpCapacity) {
+            ::new (mpEnd++) u64(v);
+        } else {
+            DoInsertValue(mpEnd, v);
+        }
+    }
+    void erase(u64* first, u64* last) {
+        memmove(first, last, (char*)mpEnd - (char*)last);
+        mpEnd -= (last - first);
+    }
+    void clear() { erase(mpBegin, mpEnd); }
+};
 // ---- items of slice s00612270 end
 
 // ---- items of slice s0060d860 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -860,7 +976,7 @@ extern "C" long _InterlockedDecrement(volatile long*);
 #pragma intrinsic(_InterlockedExchangeAdd, _InterlockedExchange, _InterlockedDecrement)
 namespace EA {
 namespace ResourceMan {
-struct Key_s0060_d860 {
+class Key_s0060_d860 { public:
     uint32_t instanceID, typeID, groupID;
 };
 }
@@ -877,7 +993,7 @@ struct AtomicInt {
 };
 }
 namespace EA {
-struct RefCounted_s0060_d860 {
+class RefCounted_s0060_d860 { public:
     virtual ~RefCounted_s0060_d860();
     AtomicInt mRefCount;
     void AddRef() { mRefCount.Increment(); }
@@ -892,7 +1008,7 @@ struct RefCounted_s0060_d860 {
 }
 namespace EA {
 template <class T>
-struct AutoRefCount_s0060_d860 {
+class AutoRefCount_s0060_d860 { public:
     T* mpObject;
     ~AutoRefCount_s0060_d860() {
         if (mpObject) mpObject->Release();
@@ -915,12 +1031,12 @@ struct Variant_s0060_d860 {
     Variant_s0060_d860(const U64Pair* p) {
         mTypeId = 0;
         mFlags = 0;
-        Construct(p);
+        Construct(p);  // 0x0093dd80 (EA::Variant::Construct)
     }
     Variant_s0060_d860(uint32_t a, uint32_t b) {
         mFlags = 0;
         mTypeId = 0;
-        Construct(0xc, 0x18, a, 8, b);
+        Construct(0xc, 0x18, a, 8, b);  // 0x0093dd80 (EA::Variant::Construct)
     }
     ~Variant_s0060_d860() {
         if (mFlags & 4) Destruct(0);
@@ -960,7 +1076,7 @@ struct QueuedPtr {
     }
 };
 namespace eastl {
-struct allocator_s0060_d860 {
+class allocator_s0060_d860 { public:
     void* allocate(size_t n) { return EASTL_allocator_allocate(n, "Editor", 0, 0, EASTL_ALLOCATOR_FILE, 0xd1); }
     void deallocate(void* p) { EASTL_allocator_deallocate(p); }
 };
@@ -1004,7 +1120,7 @@ inline bool operator!=(const DequeIterator_s0060_d860<T>& a, const DequeIterator
 }
 namespace eastl {
 template <class T, int kSubarraySize = 64>
-struct deque_s0060_d860 {
+class deque_s0060_d860 { public:
     typedef DequeIterator_s0060_d860<T, kSubarraySize> iterator;
     T** mpPtrArray;
     uint32_t mnPtrArraySize;
@@ -1041,7 +1157,7 @@ deque_s0060_d860<T, N>::~deque_s0060_d860() {
 }
 namespace SP {
 namespace Pollen {
-struct cAssetMetadata_s0060_d860 {
+class cAssetMetadata_s0060_d860 { public:
     virtual int AddRef();
     virtual int Release();
     const EA::U64Pair* GetServerId();  // 0x005507a0 (not virtual)
@@ -1055,14 +1171,14 @@ bool GetAssetMetadata(const Key_s0060_d860& key, cAssetMetadata_s0060_d860** ppM
 }
 namespace SP {
 namespace Pollen {
-struct cAssetDirectory_s0060_d860 {
+class cAssetDirectory_s0060_d860 { public:
     bool GetLocalKey(uint64_t serverId, Key_s0060_d860* pKey) const;                       // 0x0054e460
     bool GetServerId(const Key_s0060_d860& key, uint64_t* pServerId, bool bLoad) const;    // 0x0054e530
 };
 }
 }
 namespace SP {
-struct cPropertyManager_s0060_d860 {
+class cPropertyManager_s0060_d860 { public:
     void SetProperty(uint32_t id, EA::Variant_s0060_d860* v);                              // 0x0061fdb0
     void SetProperty2(uint32_t id, uint32_t lo, uint32_t hi, EA::Variant_s0060_d860* v);   // 0x0061fee0
 };
@@ -1071,7 +1187,7 @@ namespace SP {
 cPropertyManager_s0060_d860* GetPropertyManager();  // 0x0061df20
 }
 namespace SP {
-struct cPollinator_s0060_d860 {
+class cPollinator_s0060_d860 { public:
     virtual void v0();
     virtual bool HandleMessage(uint32_t id, void* msg);  // 0x00611860 (SP::cPollinator::HandleMessage)
     char pad[0x54];
@@ -2482,6 +2598,81 @@ bool cPollinator_s0061_1860::HandleMessage(uint32_t messageID, void* pMessage)
     return true;
 }
 }  // namespace SP
+
+// @ 0x00612270
+void SP::cPollinator_s0061_2270::ProcessTransactionTick()
+{
+    if (!mbEnabled) return;
+    if (gpAppProps->mpState->mBlocked != 0) return;
+
+    DateTime dt;
+    dt.FUN_0092e3d0(1);
+    dt.FUN_0092e470(9, -mRefreshInterval);
+    const u64 now = dt.mTime;
+
+    JobRecord* const pEndB = (JobRecord*)mpRecordsBEnd;
+    for (JobRecord* r = (JobRecord*)mpRecordsB; r != pEndB; ++r) {
+        if (r->mPendingBegin != r->mPendingEnd && mpAsssetDirectory->GetLastRefreshTime(r->mKey) < now) {
+            void* const pMem = PoolAllocKind2(0xf0);
+            cTxKind2* const pTx = pMem ? ((cTxKind2*)pMem)->Construct(2, r->mPendingBegin, r->mKey) : 0;
+            mQueue.Push(pTx, r->mState == 0xb);
+        }
+    }
+    JobRecord* const pEndA = (JobRecord*)mpRecordsAEnd;
+    for (JobRecord* r = (JobRecord*)mpRecordsA; r != pEndA; ++r) {
+        if (r->mPendingBegin != r->mPendingEnd && mpAsssetDirectory->GetLastRefreshTime(r->mKey) < now) {
+            void* const pMem = PoolAllocKind2(0xf0);
+            cTxKind2* const pTx = pMem ? ((cTxKind2*)pMem)->Construct(2, r->mPendingBegin, r->mKey) : 0;
+            if (pTx) { AutoTx tx(pTx); mQueue.push_back(tx); }
+        }
+    }
+    JobRecord* const pEndC = (JobRecord*)mpRecordsCEnd;
+    for (JobRecord* r = (JobRecord*)mpRecordsC; r != pEndC; ++r) {
+        if (r->mPendingBegin != r->mPendingEnd && mpAsssetDirectory->GetLastRefreshTime(r->mKey) < now) {
+            void* const pMem = PoolAllocKind2(0xf0);
+            cTxKind2* const pTx = pMem ? ((cTxKind2*)pMem)->Construct(2, r->mPendingBegin, r->mKey) : 0;
+            if (pTx) { AutoTx tx(pTx); mQueue.push_back(tx); }
+        }
+    }
+
+    if (mpAsssetDirectory->GetLastRefreshTime(0xa86067e7) < now) {
+        using namespace FunctionalMatch;
+        CVec filters;
+        U32Range* const pList = mpFilters->GetList();
+        for (uint32_t* p = pList->mpBegin; p != pList->mpEnd; ++p)
+            filters.push_back(Constraint_s0061_2270(0x2dd90af, 0, *p));
+
+        KeyVec results;
+        IObjectTemplateDB* const pDb = ObjectTemplateDB();
+        bool bFound;
+        {
+            Constraint_s0061_2270 sentinel(0);
+            Constraint_s0061_2270 anyOf(0, filters);
+            bFound = pDb->Query(&results, *(ConstraintRaw*)&anyOf, *(ConstraintRaw*)&sentinel);
+        }
+        if (bFound) {
+            U64Vec ids;
+            ids.reserve(results.size());
+            for (uint32_t i = 0; i < results.size(); ++i) {
+                u64 id;
+                if (mpAsssetDirectory->GetServerId(&results.mpBegin[i], &id, false)) ids.push_back(id);
+            }
+            U64FixedVec20 batch;
+            const uint32_t n = (uint32_t)ids.size();
+            const u64* pId = ids.mpBegin;
+            for (uint32_t i = 0; i < n; ++i, ++pId) {
+                batch.push_back(*pId);
+                if (batch.size() == 20 || i == n - 1) {
+                    void* const pMem = PoolAllocFeedGet(0xf0);
+                    cTxFeedGet* const pTx = pMem ? ((cTxFeedGet*)pMem)->Construct(&batch) : 0;
+                    if (pTx) { AutoTx tx(pTx); mQueue.push_back(tx); }
+                    batch.clear();
+                }
+            }
+        }
+    }
+    ProcessTransactionQueue();
+}
 
 // @ 0x00612980
 bool FloodHandler::HandleMessage(uint32_t id, void* pMessage)

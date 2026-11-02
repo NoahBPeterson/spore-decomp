@@ -3,8 +3,8 @@
 0060d240 31 AtomicRef::reset: complete; same dec/register difference and the original keeps the inner delete-this null check
 0060d3c0 39 deque DoReallocPtrArray: complete; only register assignment of mpPtrArray/mItBegin node differs
 0060d7a0 8 Pollinator::cJobResultMessage ctor: complete; mov edx,1 is scheduled after the add ecx,4
-0060d860 11 id struct locals: stack slot/reg order
-0060d920 6 reg order of id lo/hi loads
+0060d860 11 id struct locals: stack slot/reg order flags: /O2 /MD /Gy /TP /arch:SSE /GS-
+0060d920 6 reg order of id lo/hi loads flags: /O2 /MD /Gy /TP /arch:SSE /GS-
 006103d0 90 SP::cPollinator::GetAssetFeed candidate (137 B): behaviorally complete; register allocation and the inlined deque fast path differ.
 00610460 85 SP::cPollinator::EatFeed candidate (132 B): behaviorally complete; see above.
 006104f0 78 SP::cPollinator::CreateMyFeed (222 B): behaviorally complete (sprintf args and deque push omitted in the outline).
@@ -14,4 +14,5 @@
 00610810 83 SP::cPollinator::UnsubscribeToFeed (129 B): behaviorally complete outline.
 00610c20 109 SP::cPollinator::GetAssetFeedEx candidate (137 B): behaviorally complete poster; register/inline-shape differ.
 00611860 2083 complete (every message id/arm, all calls; size 2574 vs 2563 = 1.004x, 98/98 calls, same per-target call counts incl. 1 inlined + 4 called string dtors); residual: stack-slot packing (orig frame 0x88 with separate slots per Variant, mine 0x78), block placement of the shared Add(0,0) failure path, one erase call site tail-merged
-00612980 50 vptr/this-cast scheduling (pCheat computed after MessageServer call)
+00612270 1385 ProcessTransactionTick complete: iterator/AutoRef register allocation and block layout of the 3 queue loops differ flags: /O2 /MD /Gy /TP /arch:SSE /GS-
+00612980 50 complete; priority constant is -9999 (not -10000), vptr/this-cast scheduling differs; equiv PASS 595 valid, 100% coverage (slice and src/game/SPEditors/SPPollinator.cpp) flags: /O2 /MD /Gy /TP /arch:SSE /GS-
