@@ -8,3 +8,4 @@
 00980490 ?Destroy@CascadeEffect@UTFWinControls@EA@@QAEPAU123@E@Z  # CascadeEffect::Destroy migrated from s0097f390 (verbatim, slice spelling)
 00980520 ?Process2@IOwner@UTFWinControls@EA@@QAE_NPAUIObj@23@PAUArg2@23@@Z  # IOwner::Process2 migrated from s0097f390 (verbatim, slice spelling)
 00980580 ?Apply@FloatHolder@UTFWinControls@EA@@QAEXPAUFloatSink@23@@Z  # FloatHolder::Apply migrated from s0097f390 (verbatim, slice spelling)
+00980680 ?CreateInstance@BasicFactory_PerspectiveEffect@UTFWinControls@EA@@QAEPAXPAX0@Z  # BasicFactory_PerspectiveEffect::CreateInstance migrated from s0097f390 (verbatim, slice spelling)

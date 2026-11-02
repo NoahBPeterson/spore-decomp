@@ -1,0 +1,2 @@
+# source  symbol  va  flags
+../src/game/UTFSpore_Win32/PerspectiveEffect.cpp  ?CreateInstance@BasicFactory_PerspectiveEffect@UTFWinControls@EA@@QAEPAXPAX0@Z  00980680  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
