@@ -1,6 +1,15 @@
+009ffa00 ?LoadGoalChildren@@YA_NPAUQueuedBlender_s009f_fa00@@PAUAnimGoal_s009f_fa00@@@Z  # LoadGoalChildren migrated from s009ffa00 (verbatim, slice spelling)
 009ffb50 ??4AnimGoal_s009f_fa00@@QAEPAU0@PAU0@@Z  # AnimGoal_s009f_fa00::operator= migrated from s009ffa00 (verbatim, slice spelling)
-009ffe10 ResolveGoalPair  # fills {goal, linked goal} from a packed handle (slot*0xf0, generation at +0xb4)
-00a00490 AnimGoal::Reset  # resets fields, releases goal object to pool 0x166c064
+009ffdb0 ?IsPendingGoal@@YA_NPAUQueuedBlender_s009f_fa00@@I@Z  # IsPendingGoal migrated from s009ffa00 (verbatim, slice spelling)
+009ffe10 ?ResolveGoalPair@@YAXPAUGoalPair@@PAUQueuedBlender_s009f_fa00@@I@Z  # ResolveGoalPair migrated from s009ffa00 (verbatim, slice spelling)
+00a00180 ?SetGoalFieldE0@@YAHPAUQueuedBlender_s009f_fa00@@IHH@Z  # SetGoalFieldE0 migrated from s009ffa00 (verbatim, slice spelling)
+00a002f0 ?SetGoalFlagD4@@YAHPAUQueuedBlender_s009f_fa00@@ID@Z  # SetGoalFlagD4 migrated from s009ffa00 (verbatim, slice spelling)
+00a00340 ?SetGoalFieldCC@@YAHPAUQueuedBlender_s009f_fa00@@IM@Z  # SetGoalFieldCC migrated from s009ffa00 (verbatim, slice spelling)
+00a003c0 ?ScaleGoalFieldD0@@YAHPAUQueuedBlender_s009f_fa00@@IM@Z  # ScaleGoalFieldD0 migrated from s009ffa00 (verbatim, slice spelling)
+00a00450 ?SetGoalFieldE8@@YA_NPAUQueuedBlender_s009f_fa00@@IHH@Z  # SetGoalFieldE8 migrated from s009ffa00 (verbatim, slice spelling)
+00a00490 ?Reset@AnimGoal_s009f_fa00@@QAEXXZ  # AnimGoal_s009f_fa00::Reset migrated from s009ffa00 (verbatim, slice spelling)
+00a00670 ?Stop@AnimGoal_s009f_fa00@@QAEXDD@Z  # AnimGoal_s009f_fa00::Stop migrated from s009ffa00 (verbatim, slice spelling)
 00a006f0 ?SelectPending@QueuedBlender@@QAEXI@Z  # QueuedBlender::SelectPending migrated from s009ffa00 (verbatim, slice spelling)
-00a007d0 QueuedBlender::ResetAll  # resets 16 goals, clears queues
+00a007d0 ?ResetAll@QueuedBlender_s009f_fa00@@QAEXD@Z  # QueuedBlender_s009f_fa00::ResetAll migrated from s009ffa00 (verbatim, slice spelling)
 00a008b0 ?ClearPendingGoal@QueuedBlender@@QAEXXZ  # QueuedBlender::ClearPendingGoal migrated from s009ffa00 (verbatim, slice spelling)
+00a00910 ?SetCreature@QueuedBlender_s009f_fa00@@QAEXPAUCreatureInst_s009f_fa00@@H@Z  # QueuedBlender_s009f_fa00::SetCreature migrated from s009ffa00 (verbatim, slice spelling)

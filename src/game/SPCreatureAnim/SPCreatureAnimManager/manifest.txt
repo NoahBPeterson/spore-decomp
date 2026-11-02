@@ -1,3 +1,82 @@
 # source  symbol  va  flags
+../src/game/SPCreatureAnim/SPCreatureAnimManager.cpp  ?FindGoalByHandle@@YAPAUAnimGoal@@PAUQueuedBlender@@I@Z  009ff6f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPCreatureAnim/SPCreatureAnimManager.cpp  ?GetCurrentGoal@@YAPAUAnimGoal@@PAUQueuedBlender@@@Z  009ff750  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPCreatureAnim/SPCreatureAnimManager.cpp  ?FindGoalValue@@YAHPAUQueuedBlender@@I@Z  009ff7a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPCreatureAnim/SPCreatureAnimManager.cpp  ?FindGoalByID@@YA_NPAUQueuedBlender@@HPAH@Z  009ff7c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPCreatureAnim/SPCreatureAnimManager.cpp  ?IsPendingGoal@@YA_NPAUQueuedBlender_s009f_fa00@@I@Z  009ffdb0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPCreatureAnim/SPCreatureAnimManager.cpp  ?ResolveGoalPair@@YAXPAUGoalPair@@PAUQueuedBlender_s009f_fa00@@I@Z  009ffe10  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPCreatureAnim/SPCreatureAnimManager.cpp  ?SetGoalFieldE0@@YAHPAUQueuedBlender_s009f_fa00@@IHH@Z  00a00180  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPCreatureAnim/SPCreatureAnimManager.cpp  ?SetGoalFlagD4@@YAHPAUQueuedBlender_s009f_fa00@@ID@Z  00a002f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPCreatureAnim/SPCreatureAnimManager.cpp  ?SetGoalFieldCC@@YAHPAUQueuedBlender_s009f_fa00@@IM@Z  00a00340  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPCreatureAnim/SPCreatureAnimManager.cpp  ?ScaleGoalFieldD0@@YAHPAUQueuedBlender_s009f_fa00@@IM@Z  00a003c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPCreatureAnim/SPCreatureAnimManager.cpp  ?SetGoalFieldE8@@YA_NPAUQueuedBlender_s009f_fa00@@IHH@Z  00a00450  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPCreatureAnim/SPCreatureAnimManager.cpp  ?Stop@AnimGoal_s009f_fa00@@QAEXDD@Z  00a00670  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPCreatureAnim/SPCreatureAnimManager.cpp  ?ResetAll@QueuedBlender_s009f_fa00@@QAEXD@Z  00a007d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPCreatureAnim/SPCreatureAnimManager.cpp  ?SetCreature@QueuedBlender_s009f_fa00@@QAEXPAUCreatureInst_s009f_fa00@@H@Z  00a00910  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPCreatureAnim/SPCreatureAnimManager.cpp  ?FUN_00a00f90@QueuedBlender_s00a0_0980@@QAEXPAUAnimCommand@@I@Z  00a00f90  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPCreatureAnim/SPCreatureAnimManager.cpp  ??1anim_qb@@QAE@XZ  00a01c70  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPCreatureAnim/SPCreatureAnimManager.cpp  ?Foo@anim_qb@@QAEXHH@Z  00a01f10  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPCreatureAnim/SPCreatureAnimManager.cpp  ?IsOrientStartAnim@cAnimatingCreature@@QAE_NI@Z  00a02710  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPCreatureAnim/SPCreatureAnimManager.cpp  ?IsOrientStopAnim@cAnimatingCreature@@QAE_NI@Z  00a02740  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPCreatureAnim/SPCreatureAnimManager.cpp  ?IsRestIdleAnim@@YG_NI@Z  00a02800  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPCreatureAnim/SPCreatureAnimManager.cpp  ?IsMoveIdleAnim@@YG_NI@Z  00a02840  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPCreatureAnim/SPCreatureAnimManager.cpp  ?Forward@cAnimatingCreature_s00a0_27a0@@QAEXHHH@Z  00a02a00  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPCreatureAnim/SPCreatureAnimManager.cpp  ?Attach@cAnimatingCreature_s00a0_27a0@@QAE_NH@Z  00a02ab0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPCreatureAnim/SPCreatureAnimManager.cpp  ?Detach@cAnimatingCreature_s00a0_27a0@@QAE_NH@Z  00a02b00  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPCreatureAnim/SPCreatureAnimManager.cpp  ?QueryA@cAnimatingCreature_s00a0_27a0@@QAE_NH@Z  00a02b40  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPCreatureAnim/SPCreatureAnimManager.cpp  ?QueryB@cAnimatingCreature_s00a0_27a0@@QAE_NH@Z  00a02b70  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPCreatureAnim/SPCreatureAnimManager.cpp  ?Selector@cAnimatingCreature_s00a0_27a0@@QAEHXZ  00a02bd0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPCreatureAnim/SPCreatureAnimManager.cpp  ?SetMode@cAnimatingCreature_s00a0_27a0@@QAEXPBHE@Z  00a02bf0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPCreatureAnim/SPCreatureAnimManager.cpp  ?Swap48@cAnimatingCreature_s00a0_27a0@@QAEEE@Z  00a02cd0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPCreatureAnim/SPCreatureAnimManager.cpp  ?Set38@cAnimatingCreature_s00a0_27a0@@QAEXEHH@Z  00a02ce0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPCreatureAnim/SPCreatureAnimManager.cpp  ?SetSel@cAnimatingCreature_s00a0_27a0@@QAEXHH@Z  00a02d00  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPCreatureAnim/SPCreatureAnimManager.cpp  ?Forward5@@YGXHHHHH@Z  00a02d40  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPCreatureAnim/SPCreatureAnimManager.cpp  ?RootOnly@RootThunk@@QAEPAXPAX@Z  00a02d70  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPCreatureAnim/SPCreatureAnimManager.cpp  ?FUN_00a03e80@@YAXPAUDebugTarget@@PBM1M11IH@Z  00a03e80  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPCreatureAnim/SPCreatureAnimManager.cpp  ?FUN_00a04550@cAnimatingCreature_s00a0_3da0@@QAEXHPBM@Z  00a04550  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPCreatureAnim/SPCreatureAnimManager.cpp  ?FUN_00a048b0@cAnimatingCreature_s00a0_3da0@@QAEHHHHH@Z  00a048b0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPCreatureAnim/SPCreatureAnimManager.cpp  ?FUN_00a04940@cAnimatingCreature_s00a0_3da0@@QAE_NH@Z  00a04940  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPCreatureAnim/SPCreatureAnimManager.cpp  ?FUN_00a04990@cAnimatingCreature_s00a0_3da0@@QAE_NH@Z  00a04990  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPCreatureAnim/SPCreatureAnimManager.cpp  ?FUN_00a04ab0@cAnimatingCreature_s00a0_3da0@@QAEXE@Z  00a04ab0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPCreatureAnim/SPCreatureAnimManager.cpp  ?FUN_00a04ad0@cAnimatingCreature_s00a0_3da0@@QAEXH@Z  00a04ad0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPCreatureAnim/SPCreatureAnimManager.cpp  ?FUN_00a04ca0@cAnimatingCreature_s00a0_3da0@@QAEXE@Z  00a04ca0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPCreatureAnim/SPCreatureAnimManager.cpp  ?FUN_00a04cc0@cAnimatingCreature_s00a0_3da0@@QAEXE@Z  00a04cc0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPCreatureAnim/SPCreatureAnimManager.cpp  ?GetCurrentAnimation@cAnimatingCreature_s00a0_4d20@@QAEXPAIPAMPAH2@Z  00a05150  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPCreatureAnim/SPCreatureAnimManager.cpp  ?MarkWorldRegion@cAnimatingCreature_s00a0_4d20@@QAEX_N@Z  00a05220  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPCreatureAnim/SPCreatureAnimManager.cpp  ?Release@cAnimatingCreature_s00a0_4d20@@QAEHXZ  00a05270  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPCreatureAnim/SPCreatureAnimManager.cpp  ?GetStateA@AnimPimpl@@QAEHXZ  00a055a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPCreatureAnim/SPCreatureAnimManager.cpp  ?GetStateB@AnimPimpl@@QAEHHH@Z  00a055c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPCreatureAnim/SPCreatureAnimManager.cpp  ?GetStateC@AnimPimpl@@QAEHHH@Z  00a055e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPCreatureAnim/SPCreatureAnimManager.cpp  ?GetStateD@AnimPimpl@@QAEHXZ  00a05610  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPCreatureAnim/SPCreatureAnimManager.cpp  ?GetGlobalThing@@YAPAXXZ  00a056e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPCreatureAnim/SPCreatureAnimManager.cpp  ?SwapStaticData@StaticDataSlot@@QAEPAPAXPAPAUCreatureStaticData@@@Z  00a056f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPCreatureAnim/SPCreatureAnimManager.cpp  ??0anim_creature_s00a0_5c20@@QAE@ABUVector3_s00a0_5c20@@ABUVector4_s00a0_5c20@@@Z  00a05d60  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPCreatureAnim/SPCreatureAnimManager.cpp  ?Set0c@Cmd@@QAEXPAUCArgs@@@Z  00a07ae0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPCreatureAnim/SPCreatureAnimManager.cpp  ?Set34@Cmd@@QAEXPAUCArgs@@@Z  00a07b70  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPCreatureAnim/SPCreatureAnimManager.cpp  ?Set28@Cmd@@QAEXPAUCArgs@@@Z  00a07ba0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPCreatureAnim/SPCreatureAnimManager.cpp  ?Set29@Cmd@@QAEXPAUCArgs@@@Z  00a07c00  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPCreatureAnim/SPCreatureAnimManager.cpp  ?Mask2c@Cmd@@QAEXPAUCArgs@@@Z  00a07c30  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPCreatureAnim/SPCreatureAnimManager.cpp  ?Mask30@Cmd@@QAEXPAUCArgs@@@Z  00a07cb0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPCreatureAnim/SPCreatureAnimManager.cpp  ?Set2a@Cmd@@QAEXPAUCArgs@@@Z  00a07d60  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPCreatureAnim/SPCreatureAnimManager.cpp  ?FUN_00a08180@@YGPAXPBI@Z  00a08180  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPCreatureAnim/SPCreatureAnimManager.cpp  ?scalar_deleting_destructor@cAnimatingCreature_s00a0_8b00@@QAEPAXE@Z  00a08cb0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPCreatureAnim/SPCreatureAnimManager.cpp  ?OnRegisterAnimCommand@OnRegObj@@QAEXPAXH@Z  00a08cf0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPCreatureAnim/SPCreatureAnimManager.cpp  ?OnRegisterAnim@OnRegObj@@QAEXPAXH@Z  00a08fc0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPCreatureAnim/SPCreatureAnimManager.cpp  ?OnRegisterChoice@OnRegObj@@QAEXPAXH@Z  00a09020  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPCreatureAnim/SPCreatureAnimManager.cpp  ?FUN_00a09630@@YAPAURec@@PAU1@00@Z  00a09630  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPCreatureAnim/SPCreatureAnimManager.cpp  ?FUN_00a09680@@YAPAURec@@PAU1@00@Z  00a09680  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPCreatureAnim/SPCreatureAnimManager.cpp  ?FUN_00a096e0@@YAPAURec@@PAU1@00@Z  00a096e0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPCreatureAnim/SPCreatureAnimManager.cpp  ?FUN_00a09810@@YGXPAURec@@0@Z  00a09810  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPCreatureAnim/SPCreatureAnimManager.cpp  ?Destroy@MapA@@QAEXPAUMapNodeA@@@Z  00a09850  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPCreatureAnim/SPCreatureAnimManager.cpp  ?Destroy@MapB@@QAEXPAUMapNodeB@@@Z  00a09890  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPCreatureAnim/SPCreatureAnimManager.cpp  ?ReverseCopySubs@@YAPAUSub_s00a0_bcf0@@PAU1@00@Z  00a0c230  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPCreatureAnim/SPCreatureAnimManager.cpp  ?c640@AnimFbOwner@@QAEIIPAI@Z  00a0c640  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPCreatureAnim/SPCreatureAnimManager.cpp  ?c670@AnimFbOwner@@QAEXIPAI@Z  00a0c670  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPCreatureAnim/SPCreatureAnimManager.cpp  ?FUN_00a0d3e0@@YAPAUKF@@PAU1@00@Z  00a0d3e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPCreatureAnim/SPCreatureAnimManager.cpp  ?Clear@ViewerData@@QAEXXZ  00a0d420  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPCreatureAnim/SPCreatureAnimManager.cpp  ?nukeSubtree@AnimTree@@QAEXPAUAnimNode_s00a0_d2d0@@@Z  00a0d9c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPCreatureAnim/SPCreatureAnimManager.cpp  ??4S@@QAEAAU0@ABU0@@Z  00a0df30  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPCreatureAnim/SPCreatureAnimManager.cpp  ?ResetCmd@Cmd_s00a0_d2d0@@QAEXPAX@Z  00a0e2e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPCreatureAnim/SPCreatureAnimManager.cpp  ?AddProb@Cmd_s00a0_d2d0@@QAEXPAX@Z  00a0e350  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPCreatureAnim/SPCreatureAnimManager.cpp  ?SetName@Cmd_s00a0_d2d0@@QAEXPAX@Z  00a0e3f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPCreatureAnim/SPCreatureAnimManager.cpp  ??0AnimParseContext@@QAE@PAUEntryMap@@@Z  00a0e4c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

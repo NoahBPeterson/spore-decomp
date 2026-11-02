@@ -1,1 +1,5 @@
+00a0e4c0 ??0AnimParseContext@@QAE@PAUEntryMap@@@Z  # AnimParseContext::AnimParseContext migrated from s00a0e4c0 (verbatim, slice spelling)
+00a0e530 ?GetOrInsert@EntryMap@@QAEPAUEntry@@PBI@Z  # EntryMap::GetOrInsert migrated from s00a0e4c0 (verbatim, slice spelling)
+00a0e690 ?OnEndBlock@AnimCommandA@@QAEXD@Z  # AnimCommandA::OnEndBlock migrated from s00a0e4c0 (verbatim, slice spelling)
+00a0e840 ?OnEndBlock@AnimCommandB@@QAEXD@Z  # AnimCommandB::OnEndBlock migrated from s00a0e4c0 (verbatim, slice spelling)
 00a0ea10 ?ReadAnimTable@@YG_NPAUIFile@@@Z  # ReadAnimTable migrated from s00a0e4c0 (verbatim, slice spelling)

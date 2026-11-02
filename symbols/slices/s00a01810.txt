@@ -1,7 +1,11 @@
 00a01810 ?qb_set_query@@YAXPAVanim_qb@@HH_N@Z  # qb_set_query migrated from s00a01810 (verbatim, slice spelling)
+00a01a00 ?qb_add_query@@YAHPAVanim_qb@@HPAUAnimReference@@I@Z  # qb_add_query migrated from s00a01810 (verbatim, slice spelling)
 00a01b50 ?qb_enable@@YA_NPAVanim_qb@@H@Z  # qb_enable migrated from s00a01810 (verbatim, slice spelling)
-00a01c10 anim_qb::anim_qb  # PDB has no name; layout matches ModAPI anim_qb (0xfd0)
-00a01c70 anim_qb::~anim_qb  # byte-exact; layout matches ModAPI anim_qb
-00a01f10 anim_qb::Foo  # byte-exact; thin wrapper over 0x9ff6f0/0xa00f90
+00a01c10 ??0anim_qb@@QAE@XZ  # anim_qb::anim_qb migrated from s00a01810 (verbatim, slice spelling)
+00a01c70 ??1anim_qb@@QAE@XZ  # anim_qb::~anim_qb migrated from s00a01810 (verbatim, slice spelling)
+00a01cd0 ?UpdateQuery@anim_qb@@QAEXIM@Z  # anim_qb::UpdateQuery migrated from s00a01810 (verbatim, slice spelling)
+00a01f10 ?Foo@anim_qb@@QAEXHH@Z  # anim_qb::Foo migrated from s00a01810 (verbatim, slice spelling)
+00a01f40 ?Update@anim_qb@@QAEXM_NHH@Z  # anim_qb::Update migrated from s00a01810 (verbatim, slice spelling)
+00a02440 ?Bar@anim_qb@@QAE_NH@Z  # anim_qb::Bar migrated from s00a01810 (verbatim, slice spelling)
 00a02710 ?IsOrientStartAnim@cAnimatingCreature@@QAE_NI@Z  # None migrated from s00a01810 (verbatim, slice spelling)
 00a02740 ?IsOrientStopAnim@cAnimatingCreature@@QAE_NI@Z  # None migrated from s00a01810 (verbatim, slice spelling)

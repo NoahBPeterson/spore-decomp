@@ -1,0 +1,7 @@
+00a05c20 ?RegisterCreature@@YAXPAUanim_creature_s00a0_5c20@@@Z  # RegisterCreature migrated from s00a05c20 (verbatim, slice spelling)
+00a05d60 ??0anim_creature_s00a0_5c20@@QAE@ABUVector3_s00a0_5c20@@ABUVector4_s00a0_5c20@@@Z  # anim_creature_s00a0_5c20::anim_creature migrated from s00a05c20 (verbatim, slice spelling)
+00a05ee0 ?GetFeedbackRecords@@YAIIIPAUOutRec@@IPAI@Z  # GetFeedbackRecords migrated from s00a05c20 (verbatim, slice spelling)
+00a060a0 ?GetFeedbackValue@anim_creature_s00a0_5c20@@QAEMI@Z  # anim_creature_s00a0_5c20::GetFeedbackValue migrated from s00a05c20 (verbatim, slice spelling)
+00a06250 ?SetTargetRoot@anim_creature_s00a0_5c20@@QAEXPAU1@@Z  # anim_creature_s00a0_5c20::SetTargetRoot migrated from s00a05c20 (verbatim, slice spelling)
+00a062a0 ?SetTargetBody@anim_creature_s00a0_5c20@@QAEXPAU1@I@Z  # anim_creature_s00a0_5c20::SetTargetBody migrated from s00a05c20 (verbatim, slice spelling)
+00a06310 ?UpdateAutoBaking@AnimWorld_s00a0_5c20@@QAEXMPAUcViewer_s00a0_5c20@@@Z  # AnimWorld_s00a0_5c20::UpdateAutoBaking migrated from s00a05c20 (verbatim, slice spelling)

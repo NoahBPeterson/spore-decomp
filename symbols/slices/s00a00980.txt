@@ -2,8 +2,8 @@
 00a009e0 ?FUN_00a009e0@@YAIPAUQueuedBlender_s00a0_0980@@@Z  # FUN_00a009e0 migrated from s00a00980 (verbatim, slice spelling)
 00a00b10 ?FUN_00a00b10@@YAPAUAnimCommand@@PAUQueuedBlender_s00a0_0980@@PAU1@II@Z  # FUN_00a00b10 migrated from s00a00980 (verbatim, slice spelling)
 00a00c40 ?FUN_00a00c40@QueuedBlender_s00a0_0980@@QAEXI@Z  # QueuedBlender_s00a0_0980::FUN_00a00c40 migrated from s00a00980 (verbatim, slice spelling)
-00a00d50 nSPCreatureAnim::queued_blender::Activate                 # sets a command active (calls 009a2cc0 etc.)
+00a00d50 ?Activate@QueuedBlender_s00a0_0980@@QAEXID@Z  # QueuedBlender_s00a0_0980::Activate migrated from s00a00980 (verbatim, slice spelling)
 00a00f10 nSPCreatureAnim::queued_blender::Deactivate               # frees/clears an active command slot
-00a00f90 nSPCreatureAnim::queued_blender::ReleaseCommand           # releases/unlinks a command
+00a00f90 ?FUN_00a00f90@QueuedBlender_s00a0_0980@@QAEXPAUAnimCommand@@I@Z  # QueuedBlender_s00a0_0980::FUN_00a00f90 migrated from s00a00980 (verbatim, slice spelling)
 00a01050 ?FUN_00a01050@QueuedBlender_s00a0_0980@@QAEXI@Z  # QueuedBlender_s00a0_0980::FUN_00a01050 migrated from s00a00980 (verbatim, slice spelling)
 00a010c0 ?UpdateCreatureBodies@QueuedBlender_s00a0_0980@@QAEXIMMIIIM@Z  # QueuedBlender_s00a0_0980::UpdateCreatureBodies migrated from s00a00980 (verbatim, slice spelling)
