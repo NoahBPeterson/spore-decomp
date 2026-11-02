@@ -1,0 +1,4 @@
+# source  symbol  va  flags
+../src/game/SPBake/_at_00530000.cpp  ?DoInsertValue@?$fixed_vector_s0053_2f80@U?$pair_s0053_2f80@IM@eastl@@@eastl@@QAEXPAU?$pair_s0053_2f80@IM@2@ABU32@@Z  00533960  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/_at_00530000.cpp  ?CreateSwarmObject@@YAPAUcSwarmObject@@I@Z  00533ce0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/_at_00530000.cpp  ?ClearFlag@cFlagHolder@@QAEXH@Z  00533d80  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
