@@ -1,4 +1,4 @@
-// src/game/SPGonzago/SPCreatureModeStrategy.cpp -- migrated from slice(s) s01364b20, s00d47630, s00d463a0, s00d425f0, s00d40930, s00d3f9e0, s00d3d870, s00d3b920, s00d3a830, s00d38930, s00d377f0, s00d2dd20, s00b8c330 by tools/migrate/rewrite.py
+// src/game/SPGonzago/SPCreatureModeStrategy.cpp -- migrated from slice(s) s00d48010, s00d41a70, s00d41560, s00d3c970, s01364b20, s00d47630, s00d463a0, s00d425f0, s00d40930, s00d3f9e0, s00d3d870, s00d3b920, s00d3a830, s00d38930, s00d377f0, s00d2dd20, s00b8c330 by tools/migrate/rewrite.py
 // Object file: SPGonzago/SPCreatureModeStrategy.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -29,6 +29,10 @@ extern int g_ResourceNodesDirty;                      // 0x16881ec
 #include "SP/cSpatialObject.h"
 #include "SP/cCollectableItems.h"
 #include "SP/cPropertyManager.h"
+#include "SP/cInputStrategy.h"
+#include "eastl/allocator.h"
+#include "SP/cAnimState.h"
+#include "SP/cHerd.h"
 #pragma warning(disable: 4035)
 #pragma warning(default: 4035)
 
@@ -537,18 +541,72 @@ void* GetCurrentGameMode();                              // 0x00b5b800
 // ---- items of slice s00d377f0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern "C" void* __cdecl X_NounManager();                      // 0x00b3d300
 extern "C" void* __cdecl X_GameInputManager();                 // 0x00b3d250
+extern "C" void* __cdecl X_GetCardPanel();                     // 0x00b3d400
+extern "C" void* __cdecl X_CreatureModeStrategy_Instance();    // 0x00d38840
+extern "C" void* __cdecl X_FUN_00d99500(void*);                // 0x00d99500
 typedef unsigned char  u8;
 typedef unsigned int   u32;
+struct RectT_M { u32 a, b, c; };
 typedef void  (__thiscall *FnV0)(void*);
 typedef int   (__thiscall *FnI0)(void*);
+typedef bool  (__thiscall *FnB0)(void*);
 typedef void  (__thiscall *FnVIFFI)(void*, int, float, float, int);
 static inline void** VTBL(void* p) { return *(void***)p; }
+extern u8* g_sTestSystem;                  // 0x0015fd928
 struct NounVec {                           // cGameNounManager::GetGameDataVector result
     u32   mField00;                        // +0x00
     void** mpBegin;                        // +0x04
     void** mpEnd;                          // +0x08
     u32   mField0c;                        // +0x0c
     u32   mField10;                        // +0x10
+};
+struct HashTable {                         // eastl hash_map sub-object
+    u32   mField00;                        // +0x00
+    u32*  mpBuckets;                       // +0x04
+    u32   mBucketCount;                    // +0x08
+    u32   mSize;                           // +0x0c
+    u32   mField10;                        // +0x10
+    u32   mField14;                        // +0x14
+    u32   mField18;                        // +0x18
+    u32   mField1c;                        // +0x1c
+    void  Find(void* outIter, void* key);  // 0x00833840
+    void* FUN_d380c0(u32* key);            // 0x00d380c0  find-or-insert, returns &value
+    int   Erase(u32* key);                 // 0x00d37fe0
+    int   EraseU32(u32* key);              // 0x00b6faa0
+    void  FUN_b6fe40(void*, void*, void*);// 0x00b6fe40
+};
+struct HashTableU32 {                      // eastl hash_map<uint> sub-object (0x1c bytes)
+    u32   mField00;                        // +0x00
+    u32*  mpBuckets;                       // +0x04
+    u32   mBucketCount;                    // +0x08
+    u32   mSize;                           // +0x0c
+    u32   mField10;                        // +0x10
+    u32   mField14;                        // +0x14
+    u32   mField18;                        // +0x18
+    int   EraseU32(void* key);             // 0x00b6faa0
+};
+struct ARCList {                           // eastl vector<AutoRefCount<mission>>
+    void* mpBegin;                         // +0x00
+    void* mpEnd;                           // +0x04
+    void* mpCapacity;                      // +0x08
+    void* Erase(void* first, void* last);  // 0x00e25bd0
+    void  PushBack(void* value);           // 0x00e1c7f0
+};
+struct cMission {                          // the mission object held by an AutoRefCount
+    bool  FUN_c2f300();                    // 0x00c2f300
+    void  FUN_c2fc80();                    // 0x00c2fc80
+    void  FUN_c2fc10();                    // 0x00c2fc10
+    void  FUN_c2ebc0();                    // 0x00c2ebc0
+    void* FUN_c2e7a0();                    // 0x00c2e7a0  mission key
+    void* FUN_c2e780();                    // 0x00c2e780  species profile
+    void  FUN_c30100(u32);                 // 0x00c30100  cSPCreatureNestMission::Init
+    void  FUN_c301c0(void*);               // 0x00c301c0
+};
+struct cARC {                              // EA::AutoRefCount<mission>
+    void* mpObj;                           // +0x00
+    cARC* Assign(void* p);                 // 0x00b5f950
+    void  FUN_ac9480(cARC* src);           // 0x00ac9480
+    void  FUN_572660(void* p);             // 0x00572660  AutoRefCount ctor
 };
 struct cGameNounManager_s00d3_77f0 {
     void*     GetAvatar();                                     // 0x00b1fdb0
@@ -566,6 +624,67 @@ struct cTerrainSphere_s00d3_77f0 {
     float FUN_c75680(int which);           // 0x00c75680
     void  FUN_c78420(void* event);         // 0x00c78420
     bool  FUN_00594330();                  // 0x00594330
+};
+struct cMissionCardPanel {
+    void RemoveMissionCard(void* mission);                     // 0x00e17fb0
+    void SetupMissionCard(void* mission, int a, int b, int c); // 0x00e18200
+    void ExpandMissionCard(int);                               // 0x00e15b90
+    void CollapseMissionCard(void* mission);                   // 0x00e15c00
+    void SetPanelArea(RectT_M area);                           // 0x00e14d00
+};
+struct cCreatureBase {                     // cSPCreatureBase / cGameData-derived
+    u8  mPad0000[0xb28];
+    u32 mSpeciesKey_b28;                   // +0xb28  (ResourceMan::Key)
+    u32 mSpeciesKey_b2c;                   // +0xb2c
+    u32 mSpeciesKey_b30;                   // +0xb30
+    void* ApplyCombatTarget();             // 0x00c0ee90
+    bool  Flag388();                       // 0x00c0c0e0
+    void* GetSpeciesProfile();             // 0x00c0bbd0
+};
+class cSPMissionManagerBase {
+public:
+    void  InitBase();                          // 0x00b70820   base ctor
+    void  TermBase();                          // 0x00b705a0   base dtor
+    bool  WriteBase(void* stream);             // 0x00b6f570
+    bool  ReadBase(void* stream);              // 0x00b6f5e0
+    void  RefreshCards();                      // 0x00b6f760
+    void  FUN_b70070();                        // 0x00b70070
+    bool  IsTrackedBase(void* p);              // 0x00b6f800
+    void  NotifyAll();                         // 0x00b6f7d0
+    void  FUN_b6f650(void* a, void* b);        // 0x00b6f650
+};
+class cSPCreatureMissionManager : public cSPMissionManagerBase {
+public:
+    void*  mpVtbl00;                       // +0x00
+    u32    mField04;                       // +0x04
+    void*  mpVtbl08;                       // +0x08
+    u32    mField0c;                       // +0x0c
+    void*  mpVtbl10;                       // +0x10
+    ARCList mMissionList;                  // +0x14
+    u32    mField20;                       // +0x20
+    u32    mField24;                       // +0x24
+    HashTableU32 mCreatureMissions;         // +0x28
+    u32    mField44;                       // +0x44
+    HashTable mSpeciesMissions;            // +0x48
+    cARC   mDisplayedSpeciesMission;       // +0x68
+    cARC   mDisplayedTutorialMission;      // +0x6c
+    u8     mbMissionDataDirty;             // +0x70
+    u8     mPad71[3];                      // +0x71
+    cARC   mNestMission;                   // +0x74
+    u8     mNestFlag78;                    // +0x78
+    u8     mPad79[3];                      // +0x79
+    cARC   mSpeciesMission;                // +0x7c
+public:
+    cSPCreatureMissionManager* Init();                            // 0x00d37cf0
+    bool  Write(void* stream);                                    // 0x00d37d80
+    bool  Read(void* stream);                                     // 0x00d37e10
+    void  SetupNestMissionCard();                                 // 0x00d37ea0
+    void  ReleaseNestMission();                                   // 0x00d37ed0
+    bool  IsTracked(void* p);                                     // 0x00d37ef0
+    void  SetCardArea(u32 a, u32 b, u32 c);                       // 0x00d37f10
+    void* ScalarDeletingDtor(u32 flags);                          // 0x00d37f50
+    void  OnTick(void* a, void* b);                               // 0x00d38150
+    void  SweepDeadMissions(void* unused);                        // 0x00d38530
 };
 class cCreatureLevelUpScenario {
 public:
@@ -778,6 +897,12 @@ float g_collisionRadiusSq;                                 // 0x01582f38
 // ---- items of slice s00d3a830 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern void* vtbl_cContentValidationSummarizer_0147abec;   // 0x0147abec
 extern void* vtbl_cContentValidationSummarizer_013ec458;   // 0x013ec458
+extern float gPlanetFocusX;      // 0x0167ea30
+extern float gPlanetFocusY;      // 0x0167ea34
+extern float gPlanetFocusZ;      // 0x0167ea38
+extern float gLastSurfaceX;      // 0x0169e298
+extern float gLastSurfaceY;      // 0x0169e29c
+extern float gLastSurfaceZ;      // 0x0169e2a0
 struct Vec3 { float x, y, z; };
 class CachedObject                    // vtable: +4 release, +8 set, +0xc stop, +0x10 active
 {
@@ -897,6 +1022,13 @@ public:
     char  padc4[0xb20 - 0xc4];
     void* mpExtra_b20;                                  // +0xb20
 };
+class cPlanetModel_s00d3_a830
+{
+public:
+    float* GetUpVector();                         // vtable +0x2c
+    void   ArcPosition(Vec3* out, const float* a, const Vec3* b, float s); // 0x00b81c80
+};
+cPlanetModel_s00d3_a830* PlanetModel_s00d3_a830();                      // 0x00b3d350
 class cScenarioEntry                    // dispatch target with a vtable
 {
 public:
@@ -952,6 +1084,33 @@ public:
     Vec3* CalcVisiblePosition(Vec3* out, const Vec3* in, float maxAngle); // 0x00d3b0c0
 };
 extern cCreatureModeStrategy_s00d3_a830* spInstance_cCreatureModeStrategy;   // 0x0169e294
+struct cBroadcastPayload { void* mpAvatar; uint32_t pad; uint32_t pad2; };
+class cGameInputManager
+{
+public:
+    virtual void v0();
+    virtual void v1();
+    virtual void v2();
+    virtual void v3();
+    virtual void v4();
+    virtual void v5();
+    virtual void v6();
+    virtual void v7();
+    virtual void v8();
+    virtual void v9();
+    virtual void v10();
+    virtual void v11();
+    virtual void v12();
+    virtual void v13();
+    virtual void v14();
+    virtual void v15();
+    virtual void v16();
+    virtual bool IsKeyHandled(int key, int state);   // vtable +0x44
+    virtual void v18();
+    virtual int  HandleKey(int key, int state);      // vtable +0x4c
+};
+cGameInputManager* GameInputManager();            // 0x00b3d250
+bool VerbTray_HandleKeyPress(int key);            // 0x00d4a4a0
 struct SortEntry { void* mpObject; int32_t mnKey; };
 void HeapAdjustUp(SortEntry* v, int top, int hole, void* value, int key);   // 0x00d38c50
 void HeapAdjust(SortEntry* v, int top, int n, int hole, void* value, int key, int cmp); // 0x00d39d50
@@ -960,6 +1119,27 @@ void HeapSort(SortEntry* begin, SortEntry* end, int cmp);    // 0x00d3b480
 void Shuffle(SortEntry* begin, SortEntry* end, void* rng);   // 0x00d3b520
 SortEntry* Partition(SortEntry* begin, SortEntry* end, void* value, int key, int cmp); // 0x00d3b5d0
 void QuickSort(SortEntry* begin, SortEntry* mid, SortEntry* end, int cmp); // 0x00d3b620
+void HeapSortIntro(SortEntry* begin, SortEntry* end, int depth, int cmp);  // 0x00d3b7c0
+struct Key { uint32_t mLow; uint32_t mHigh; };
+class cMapBase
+{
+public:
+    char pad00[0x14];
+    int  mnSize;                  // +0x14
+    void* mpFreeList;             // +0x18
+    char pad1c[0x20 - 0x1c];
+    void* mpPoolBegin;            // +0x20
+    void* mpPoolEnd;              // +0x24
+    void* mpPoolAlloc;            // +0x28
+
+    void InsertNode(void** out, void* parent, const Key* key, char allowDup);
+};
+void MapCollect(cMapBase* self, void* vec, uint32_t id);            // 0x00596fc0
+void MapErase(cMapBase* self, uint32_t low, uint32_t high);         // 0x00596d70
+int  PropMask(uint32_t key, uint32_t key2);                         // 0x00d3a710
+void RBTreeInsert(void* node, void* parent, void* header, int side); // 0x009216a0
+void* AllocSimulatorNode(void* size, const char* name, int flags, int align,
+                         const char* file, int line);               // 0x00f473a0
 void  operator_delete_array(void* p);                               // 0x00f47380
 class RefObj
 {
@@ -993,7 +1173,21 @@ public:
 
     void* ScalarDeletingDestructor(unsigned int flags);
 };
+struct EntryVec { SortEntry* mpBegin; SortEntry* mpEnd; SortEntry* mpCapacity;
+                  void Reserve(uint32_t n); };   // 0x004756f0
+class cMaskMap : public cMapBase
+{
+public:
+    void RemoveByMask(unsigned int mask);
+};
 class cAvatarExtra { public: char pad00[0x618]; int mnFlag618; };
+float GetPropertyFloat(cPropertyList_s00d3_a830* pl, uint32_t id, float def);   // 0x004e1c70
+float Acos(float x);                                                 // 0x011e08c8
+struct Matrix33 { float m[9]; float& operator[](int i) { return m[i]; } };
+float* AvatarForward(cAvatar_s00d3_a830* av);                        // 0x00c0e580
+int  GetRenderInstance(int obj);                          // placeholder
+void Matrix3FromQuaternion(float* out, void* quat);       // 0x006ba620 region
+void BuildRotation(float* out, const Vec3* axis, float angle); // 0x00453b20
 // ---- items of slice s00d3a830 end
 
 // ---- items of slice s00d3b920 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -1004,6 +1198,7 @@ extern "C" char g_vtblCreatureModeHandler[];       // SP::cCreatureModeStrategy 
 extern "C" char g_vtblCreatureModeRefCount[];      // cRefCount base vtable
 extern "C" char g_vtblCreatureModeGonzago[];       // SP::cIGonzagoSubsystem vtable
 typedef unsigned short u16;
+typedef unsigned long long u64;
 struct VectorStore {
     void* mpBegin;                                 // 0x00
     void* mpEnd;                                   // 0x04
@@ -1019,6 +1214,21 @@ struct cSPVector3_s00d3_b920 {
 struct cSPVectorRange {
     cSPVector3_s00d3_b920* mpFirst;                           // 0x00
     cSPVector3_s00d3_b920* mpLast;                            // 0x04
+};
+struct cRBNode {
+    cRBNode* mpLeft;                               // 0x00
+    cRBNode* mpRight;                              // 0x04
+    cRBNode* mpParent;                             // 0x08
+    u8       mbColor;                              // 0x0c
+    u8       mPad0d[3];
+    u32      mKeyFirst;                            // 0x10
+    u32      mKeySecond;                           // 0x14
+};
+struct cKeyMap {                                   // the map FUN_00d3bcc0 searches
+    u8       mPad000[0x08];
+    cRBNode* mpHead;                               // 0x08  sentinel node
+    cRBNode* mpRoot;                               // 0x0c
+    u32**    LowerBound(u32** result, u32* key);   // 0x00d3bcc0
 };
 struct cCreatureModeStrategy_s00d3_b920 {                     // SP::cCreatureModeStrategy
     void* mpVtblMode;                              // 0x000  SP::cIModeStrategy vtable
@@ -1089,7 +1299,13 @@ void* __cdecl   FUN_0067caf0();                    // 0x0067caf0
 void* __stdcall FUN_00b3d240(int a);               // 0x00b3d240
 void  __cdecl   FUN_00d3bea0();                    // 0x00d3bea0
 u32   __cdecl   FUN_00b95240(float f, u32 packed); // 0x00b95240
+void* __cdecl   FUN_00b3d350();                    // 0x00b3d350 (SP::PlanetModel)
+void  __cdecl   FUN_00e0ad00(int a);               // 0x00e0ad00
 void  __cdecl   FUN_00e0be50();                    // 0x00e0be50
+void  __cdecl   FUN_00d3b880(u32** result, cRBNode* node, u32* key, u8 inserted);  // 0x00d3b880
+void* __cdecl   FUN_00d48ae0();                    // 0x00d48ae0
+void* __cdecl   FUN_00b6c280();                    // 0x00b6c280
+void  __cdecl   FUN_00d2cea0();                    // 0x00d2cea0
 void* __cdecl   EA_Audio_GetSystemAT();            // 0x00a206f0
 void* __cdecl   FUN_00b3d300();                    // 0x00b3d300 (SP::NounManager)
 void* __cdecl   FUN_00b1fdb0();                    // 0x00b1fdb0 (GetAvatar)
@@ -1099,6 +1315,7 @@ void* __cdecl   FUN_00d4d6c0();                    // 0x00d4d6c0
 void* __cdecl   FUN_00c6acc0();                    // 0x00c6acc0
 void* __cdecl   FUN_00c6ee40();                    // 0x00c6ee40
 void* __cdecl   FUN_00bc3130();                    // 0x00bc3130
+void  __cdecl   FUN_00594ee0();                    // 0x00594ee0
 void  __cdecl   FUN_00e0fc90();                    // 0x00e0fc90
 void* __cdecl   FUN_009512c0();                    // 0x009512c0
 void* __cdecl   FUN_009512d0();                    // 0x009512d0
@@ -1112,7 +1329,11 @@ struct cStopwatchBase        { void ctor(int a, bool b); };   // 0x0093a560
 struct cVectorBase           { void dtor(); };                // 0x005c7f10
 void  __cdecl   FUN_00f47380(void* p);             // 0x00f47380 (operator_delete_array)
 void  __cdecl   FUN_00571db0(int a, void* b, void* c, void* d, u32 e);  // 0x00571db0
+void  __cdecl   FUN_00e0fb50();                    // 0x00e0fb50 (RemoveAllIcons)
+void* __cdecl   FUN_009215c0(void* node);          // 0x009215c0 (eastl::RBTreeDecrement)
 void  __cdecl   FUN_00594870(void* a, void* b, u32 c);   // 0x00595870
+u32   __cdecl   FUN_00a68fb0(u32 a);               // 0x00a68fb0 (RandomUint32Uniform)
+void  __cdecl   FUN_007b1950();                    // 0x007b1950
 static cCreatureModeGlobals& gModes = *(cCreatureModeGlobals*)0x0169e2a8;
 static cCreatureModeStrategy_s00d3_b920* gStrategy = 0;       // _spInstance_cCreatureModeStrategy
 static inline void  VT_04_0(void* p) { ((void (__thiscall*)(void*))((void***)p)[1])(p); }
@@ -1121,6 +1342,7 @@ static inline void  VT_0C_1(void* p, int a) { ((void (__thiscall*)(void*, int))(
 static inline void  VT_38_1(void* p, u32 a) { ((void (__thiscall*)(void*, u32))((void***)p)[0x38 / 4])(p, a); }
 static inline void  VT_40_1(void* p, u32 a, u32 b) { ((void (__thiscall*)(void*, u32, u32))((void***)p)[0x40 / 4])(p, a, b); }
 static inline void  VT_58_0(void* p) { ((void (__thiscall*)(void*))((void***)p)[0x58 / 4])(p); }
+static inline void  VT_C0_1(void* p, u32 a) { ((void (__thiscall*)(void*, u32))((void***)p)[0xc0 / 4])(p, a); }
 struct cDeactivateNotifyA { void Notify(); };      // 0x0067a120
 struct cDeactivateNotifyB { void Notify(); };      // 0x00b33ce0
 struct cDeactivateNotifyC { void Notify(); };      // 0x00b33cf0
@@ -1573,6 +1795,10 @@ struct Scenario {
 // ---- items of slice s00d3f9e0 end
 
 // ---- items of slice s00d40930 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern int   gSelectedPlanetIndex;                               // DAT_0169e370
+extern float gAvatarHerdPosX;                                    // DAT_0167ea30
+extern float gAvatarHerdPosY;                                    // DAT_0167ea34
+extern float gAvatarHerdPosZ;                                    // DAT_0167ea38
 struct cVec3 {
     float x;    // +0x00
     float y;    // +0x04
@@ -1614,14 +1840,23 @@ struct cAvatarHerd {
     uint8_t  mPad0f4[0x160 - 0xf4];// +0x0f4
     void*    mNest;               // +0x160
 };
+struct cGameDataVec {
+    void**   mBegin;              // +0x04
+    void**   mEnd;                // +0x08
+};
 struct cGameNounManager_s00d4_0930 {
     void* GetSelectedAnimal();                                   // 0x00989360
     void* GetAvatar();                                           // 0x00b1fdb0
     void* GetGameDataVector(void* f1, void* f2, void* f3, void* f4, void* tag); // 0x00b21340
 };
 void*  NounManager_s00d4_0930();                                            // 0x00b3d300
+void*  PlanetModel_s00d4_0930();                                            // 0x00b3d350
 void*  GetTriggerMgr_s00d4_0930();                                          // 0x00b3d4d0
 void   LoadCreatureGameplayTuning(uint32_t id, uint32_t tag);    // 0x00d3d870
+void*  GetPosition(void* obj);                                   // 0x00c6acc0
+void*  GetContinent(void* planet, const cVec3* pos);             // 0x00b88590
+void*  GetSetting9();                                            // 0x00401090
+void*  GetAvatarProfile(void* speciesMgr);                       // 0x004df420
 void*  GetAvatarHerd(void* avatar);                              // 0x00c04590
 int    GetDesiredAvatarHerd(uint8_t includeLoose);               // 0x00d40b40
 struct cSubTarget {
@@ -1824,6 +2059,7 @@ typedef u8     (__thiscall *TFbmsg)(void*, u32, void*);
 typedef void   (__thiscall *TFmsg)(void*, void*);
 typedef void   (__thiscall *TFmsgv)(void*, s32);
 void  __cdecl FUN_0093a780(void* stream, void* out, s32 count, s32 flag); // 0x0093a780 EA::IO::ReadInt32
+void* __cdecl FUN_00f473a0(void* alloc, const char* name, s32 a, s32 b, const char* file, s32 line); // 0x00f473a0 operator_new
 void* __cdecl FUN_00b3d3e0(void);             // 0x00b3d3e0 SP::EventLog
 void* __cdecl FUN_00d67dd0(void);             // 0x00d67dd0 SP::EffectsManagerPtr
 void* __cdecl FUN_00b18e00(void* strat);      // 0x00b18e00
@@ -1834,6 +2070,8 @@ void  __cdecl FUN_0059c190(void* out, u32 quat);  // 0x0059c190 Matrix3FromQuate
 void  __cdecl FUN_00571d40(void* msgsub, u32 v);  // 0x00571d40
 void  __cdecl FUN_00434040(void* msg);            // 0x00434040 XformMsg::XformMsg (thiscall ecx=msg)
 void* __cdecl FUN_00921340(u32 n);            // 0x00921340
+u32   __cdecl FUN_00d46af0(void* a, void* b, void* c); // 0x00d46af0
+void  __cdecl FUN_00d46a10(void* out, void* a, void* b, void* c, void* d); // 0x00d46a10
 void  __stdcall FUN_00d47160(void* pos, void* val);  // 0x00d47160
 struct PropC {
   u32 m00;
@@ -1876,6 +2114,16 @@ struct TrigVec {
   TrigVec*  Assign(TrigVec* src);                          // 0x00d47020
   TrigInfo* Grow(s32 n, TrigInfo* first, TrigInfo* last);  // 0x00d46bd0
   void      DestroyRange(TrigInfo* first, TrigInfo* last); // 0x00d3b320
+};
+struct BigC {
+  void*    f0;      // +0x00
+  void*    f4;      // +0x04
+  TrigVec  vec;     // +0x08
+  u8       buf[0x160]; // +0x20 inline element storage
+  u8       f180;    // +0x180
+  u8       f181[3];
+  u32      f184;    // +0x184
+  BigC*    CopyCtor(void* src);                       // 0x00d47320
 };
 struct UVec3 { u32 x, y, z; };
 struct SpVec3 {
@@ -1960,11 +2208,28 @@ __forceinline void* GetStream(void* reader) {
   void* o = ((TFp)(*(void***)reader)[0x20 / 4])(reader);
   return ((TFp)(*(void***)o)[0x18 / 4])(o);
 }
+struct HashMap2C {
+  u8     pad0[4];
+  void** mBuckets;  // +0x04
+  u32    mIndex;    // +0x08
+  void   FindLocal(void* out, void* key);  // 0x00d46b70
+  void   Insert(void* a, void* b, void* c); // 0x00d47430
+};
+struct SrcTrig {
+  void*   f0;        // +0x00
+  TrigVec vec;       // +0x04
+  u8      buf[0x160];// +0x1c inline element storage
+  u8      flag;      // +0x17c
+};
 // ---- items of slice s00d463a0 end
 
 // ---- items of slice s00d47630 begin (TODO(rewrite): local stubs, replace by canonical classes)
 typedef signed   int     i32;
+typedef unsigned __int64 u64_s00d4_7630;
+typedef float            f32;
+typedef double           f64;
 void FUN_00f473a0(void* p);                 // operator delete (0x00f473a0, pool entry)
+void FUN_00d38f40();                         // 0x00d38f40 (ecx = this)
 struct cNodePool {
     u8      pad_00[4];                          // +0x00
     void*   mpTail;                             // +0x04  first detached node
@@ -2062,6 +2327,38 @@ struct cCreatureTriggerSystem {
     bool         EvaluateTrigger(cTriggerRec* t, void* owner, void* obj); // 0x00d46c30
     void         ReadTrigger(cTriggerRec* rec);                        // 0x00d46730
 };
+struct cCollectableItems {                      // big stack container built by 0x00598470
+    cNodePool mPool;                            // +0x000
+    u8        pad_34[0x888 - 0x34];             // +0x034
+    void Ctor(u8* a, u8* b);                    // 0x00598470
+    void Deinit(void* first, u32 count);        // 0x00597b30
+};
+struct cItemSource {                            // argA of FUN_00d47ea0
+    u8   Init(cCollectableItems* obj, void* f, void* b);        // 0x00597f00
+    u8   Commit(void* g, u32 lo, u32 hi, void* f);              // 0x005976d0
+};
+struct cRandomGlobal {                          // global object at 0x01601760
+    f64 RandomDouble();                         // 0x009360d0
+};
+struct cAppObj {
+    void** mVtbl_00;                            // +0x00
+    void* V_50();                               // slot 0x50
+};
+struct cAppInterface {
+    void** mVtbl_00;                            // +0x00
+    void Reg_20(u32 msgId, void* handler);      // slot 0x20
+};
+void*       SP_App();                           // 0x0067dd10
+void*       GetMessagingServer();               // 0x00883860
+void        FUN_00d2a600();                     // 0x00d2a600 message handler
+void*       operator_new(u32 size, const char* tag, i32 a, i32 b, i32 c, i32 d); // 0x00f473a0
+struct cCreatureModeStrategy_s00d4_7630 {
+    u8   pad_00[0x200];                         // layout opaque in this slice
+    u32 Init();                                                         // 0x00d47960
+    u8  FUN_00d47ea0(void* a, void* b, f32 c, f32 d, void* e, void* f, void* g); // 0x00d47ea0
+    void FUN_00d38f40();                                                // 0x00d38f40
+    u64_s00d4_7630 FUN_00d3bfa0(void** out, u32 p2, u32 p3, void* p4);             // 0x00d3bfa0
+};
 // ---- items of slice s00d47630 end
 
 // ---- items of slice s01364b20 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -2106,6 +2403,831 @@ struct Attribute {
 using Simulator::Attribute;
 extern Attribute g_creatureEditorAttributes[3];            // 0x015833f0
 // ---- items of slice s01364b20 end
+
+// callees this slice defines outside this object (rewrite.py held_callee_protos)
+void** X_FUN_00d38080(void** first, void** last, void** value);  // 0x00d38080 (stays in the slice: not this object's)
+
+// ---- items of slice s00d3c970 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern float* DAT_0169e35c;                                     // vector begin
+extern float* DAT_0169e360;                                     // vector end
+extern "C" void Fn_00d3c3b0();                                  // 0x00d3c3b0
+extern "C" void __cdecl RemoveHandler(void* a, void* b, void* c, void* d, unsigned int e); // 0x00571db0
+extern int* Fn_00d3b3c0(int* pSrcBegin, int* pSrcEnd, int* pDst);          // 0x00d3b3c0
+extern void Fn_00f47380(void* p);                                          // 0x00f47380
+extern unsigned char g_bUnlockFlag;                     // 0x0169e290
+extern float g_fUnlockX;                                // 0x0169e298
+extern float g_fUnlockY;                                // 0x0169e29c
+extern float g_fUnlockZ;                                // 0x0169e2a0
+struct TutorialState {                                          // global at 0x169e230
+    virtual void v00();                                         // +0x00
+    virtual void v01();                                         // +0x04
+    virtual void v02();                                         // +0x08
+    virtual void v03();                                         // +0x0c
+    virtual void Lock(int a, int b);                            // +0x10
+    void SetStageA(uint32_t id);                                // 0x00b700f0
+    void SetStageB(uint32_t id);                                // 0x00b706a0
+    void SetStageC(uint32_t id);                                // 0x00b707a0
+};
+TutorialState* GetTutorialState();                              // 0x00d37cb0
+void MarkEventAsOccurred(uint32_t id);                          // 0x00d387c0 (anonymous namespace)
+struct Controller {                                             // Achievements::Controller
+    uint32_t GetRequiredCount(uint32_t id);                     // 0x006766e0
+    bool     IsAwarded(uint32_t id);                            // 0x00675e80
+    void     AwardAchievement(uint32_t id);                     // 0x00676710
+    void     AutoTest(uint32_t id, int n);                      // 0x00676e90
+};
+Controller* AchievementsController();                           // 0x00675250
+struct IdVec { int* mpBegin; };
+struct Item { char pad[0x104]; uint32_t mHi; uint32_t mLo; };   // +0x104 / +0x108
+struct Record { Item* mpItem; char pad[0x2bc - 4]; };
+struct RecordMgr { char pad[0x2e4]; Record* mpRecords; };
+struct HolderB54 { char pad[0x17c]; RecordMgr* mpMgr; };
+struct SpeciesProfile {
+    char pad[0x594];
+    float mfCount;                                              // +0x594
+    char pad598[0x5d4 - 0x598];
+    uint32_t m5d4, m5d8, m5dc, m5e0, m5e4, m5e8, m5ec, m5f0, m5f4;   // +0x5d4..
+    char pad5f8[0x600 - 0x5f8];
+    uint32_t m600, m604;
+    char pad608[0x610 - 0x608];
+    uint32_t m610, m614;
+    char pad618[0x61c - 0x618];
+    uint32_t m61c;
+    IdVec* GetIds(HolderB54* h);                                // 0x004d9030
+};
+struct cSPCreatureBase_s00d3_c970 {                                        // the avatar
+    char pad[0xb20];
+    SpeciesProfile* mpProfile;                                  // +0xb20
+    char padb24[0xb34 - 0xb24];
+    int mb34;
+    char padb38[0xb54 - 0xb38];
+    HolderB54* mpB54;                                           // +0xb54
+    char padb58[0xb5e - 0xb58];
+    bool mbB5e;
+    bool FUN_c0b780();                                          // 0x00c0b780
+    bool FUN_c0b7a0();                                          // 0x00c0b7a0
+    bool FUN_c0b770();                                          // 0x00c0b770
+    cSPCreatureBase_s00d3_c970* FUN_c0ee90();                              // 0x00c0ee90
+    SpeciesProfile* GetSpeciesProfile();                        // 0x00c0bbd0
+    void* FUN_c0bc00(void* a, void* b, void* c);                // 0x00c0bc00
+};
+struct TerrainSphere { float FUN_c75680(int i); };              // 0x00c75680
+struct cGameNounManager_s00d3_c970 {
+    cSPCreatureBase_s00d3_c970* GetAvatar();                               // 0x00b1fdb0
+    TerrainSphere* GetCurrentTerrainSphere();                   // 0x00f67d90
+};
+cGameNounManager_s00d3_c970* NounManager_s00d3_c970();                                // 0x00b3d300
+struct Msg { uint32_t a, b, c, d; };
+struct MessageServer { void Send(uint32_t id, Msg* m, void* cin); };   // 0x00adde90
+MessageServer* GetMessageServer();                              // 0x00b3d4d0
+struct InsRes { void* it; bool ok; };
+struct Tree64 {
+    char pad[0xc];
+    void* mpRoot;
+    uint32_t pad10;
+    uint32_t mnSize;
+    uint32_t pool[(0x340 - 0x18) / 4];
+    Tree64();                                                   // 0x00d3b760
+    void Insert(InsRes* out, const uint64_t* key);              // 0x00d3ca60
+    void DoNuke(void* root);                                    // 0x00d3b370
+    ~Tree64() { DoNuke(mpRoot); }
+};
+inline uint64_t MakeKey(uint32_t hi, uint32_t lo) { return ((uint64_t)hi << 32) | lo; }
+struct DramaManager { char pad[0x10]; bool mbFlag; void FUN_d4d5c0(int n); };   // 0x00d4d5c0
+DramaManager* GetDramaManager();                                // 0x00d51660
+struct TestSystem { char pad[0x70]; void* mpNext; };
+extern TestSystem* sTestSystem;                                 // 0x015fd928
+struct ConfigMgr { virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3(); virtual void v4();
+virtual void v5();
+virtual void v6();
+virtual void v7();
+virtual void v8();
+virtual void v9();
+                   virtual void v10(); virtual void v11(); virtual int Query(uint32_t id); };   // +0x30
+ConfigMgr* ConfigManager();                                     // 0x0067dd30
+float FUN_d2e360();                                             // 0x00d2e360
+namespace SP {
+class cCreatureModeStrategy_s00d3_c970 {
+public:
+    bool HasCreatureTutorialOccurred(uint32_t id);              // 0x00d38980
+    int  RunCinematicIfNotOccurred(const char* name, uint32_t id, int flag);   // 0x00d399b0
+    void AddStat(int a, int b);                                 // 0x00d39670
+    void RunCinematic(const char* name, uint32_t id);           // 0x00d389d0
+    bool FUN_d38900();                                          // 0x00d38900
+    void FUN_d38930(uint32_t id);                               // 0x00d38930
+    void SignalCreatureEvent(uint32_t eventId);                 // 0x00d3cdc0
+    char mPad00[0xdd];
+    bool mbDD;                                                  // +0xdd
+};
+}
+struct cRefCounted {
+    virtual void v00();                                         // +0x00
+    virtual void Release();                                     // +0x04
+};
+struct cInputStrategy_s00d3_c970 {
+    char mPad00[0x38];
+    cRefCounted mRef;                                           // +0x38
+    void Detach();                                              // 0x00d2cea0
+};
+struct cRefVector {
+    void** mpBegin;                                             // +0x00
+    void** mpEnd;                                               // +0x04
+    void** erase(void** pBegin, void** pEnd);                   // 0x005c2170
+};
+extern SP::cCreatureModeStrategy_s00d3_c970* g_pCreatureStrategy;          // 0x0169e294
+extern cRefCounted* g_pGlobalRef;                               // 0x0169e3e4
+struct cStrategyFields {
+    char mPad00[0x68];
+    cInputStrategy_s00d3_c970* mpInput;                                    // +0x68
+    char mPad6c[0x70 - 0x6c];
+    void* mpMsg0;                                               // +0x70
+    void* mpMsg4;                                               // +0x74
+    void* mpMsg8;                                               // +0x78
+    void* mpMsgC;                                               // +0x7c
+    unsigned int mnMsg10;                                       // +0x80
+    char mPad84[0xb4 - 0x84];
+    cRefCounted* mpRefB4;                                       // +0xb4
+    cRefCounted* mpRefB8;                                       // +0xb8
+    cRefVector mScenarios;                                      // +0xbc
+    bool Shutdown();
+};
+struct cLogVec {
+    void** mpBegin;                                             // +0x00
+    void** mpEnd;                                               // +0x04
+    void** erase(void** pBegin, void** pEnd);                   // 0x00e25bd0
+};
+struct cLogHolder {
+    char mPad00[4];
+    cLogVec mList;                                              // +0x04
+};
+struct cIntVector;
+extern void Fn_00a69490(void** ppOther, int* pSrcMid, int* pSrcEnd,
+                        int* pDstEnd, cIntVector* pOther);                 // 0x00a69490
+struct cIntVector {
+    int* mpBegin;                                               // +0x00
+    int* mpEnd;                                                 // +0x04
+    int* mpCap;                                                 // +0x08
+    cIntVector* Assign(cIntVector* pOther);
+    int* AllocCopy(int nCount, int* pBegin, int* pEnd);         // 0x00d3b570
+    void DestroyRange(int* pBegin, int* pEnd);                  // 0x004e3210
+};
+struct cEntry {
+    unsigned int mId;                                           // +0x00
+    int mValue;                                                 // +0x04
+};
+extern cEntry* g_pEntries;                                      // 0x01583298
+extern cEntry* g_pEntriesEnd;                                   // 0x0158329c
+struct cProperty;
+class cPropertyObject {
+public:
+virtual void v00();
+virtual void v01();
+virtual void v02();
+virtual void v03();
+virtual void v04();
+virtual void v05();
+virtual void v06();
+virtual void v07();
+    virtual void v08();
+    virtual bool GetProperty(unsigned int nId, cProperty** ppProp);  // +0x24
+};
+struct cProperty {
+    char mPad00[0x12];
+    unsigned short mType;                                       // +0x12
+    int* GetInt();                                              // 0x0041e990
+};
+extern "C" void __cdecl Fn_00d3bc40(cEntry* pBegin, cEntry* pEnd, void* pContext); // 0x00d3bc40
+static __forceinline void ImportIntProperty(cPropertyObject* pObj,
+                                            unsigned int nPropId,
+                                            unsigned int nEntryId,
+                                            cProperty** ppProp)
+{
+    if (pObj->GetProperty(nPropId, ppProp) && (*ppProp)->mType == 9) {
+        int nValue = *(*ppProp)->GetInt();
+        cEntry* e = g_pEntries;
+        while (e != g_pEntriesEnd && e->mId != nEntryId)
+            ++e;
+        if (e != g_pEntriesEnd)
+            e->mValue = nValue;
+    }
+}
+struct Vector3f { float x, y, z; };
+struct Quaternionf { float x, y, z, w; };
+struct Matrix33f { float m[9]; };
+struct XformMsg {                       // 0x38 bytes; ctor @ 0x434040
+    unsigned short flags;               // +0x00
+    unsigned short count;               // +0x02
+    Vector3f pos;                       // +0x04
+    float scale;                        // +0x10
+    Matrix33f rot;                      // +0x14
+    XformMsg();
+};
+void SplitItemId(unsigned long long id, unsigned int* pHi, unsigned int* pLo);   // 0x00593960
+struct cScaleHolder {
+    char mPad00[0x14];
+    float mScale;                       // +0x14
+};
+class cUnlockOwner {
+public:
+    virtual void v00();                                 // +0x00
+    virtual void v04();                                 // +0x04
+    virtual void v08();                                 // +0x08
+    virtual cUnlockOwner* GetChild(unsigned int id);    // +0x0c
+    virtual void v10();                                 // +0x10
+    virtual void v14();                                 // +0x14
+    virtual void v18();                                 // +0x18
+    virtual void v1c();                                 // +0x1c
+    virtual void v20();                                 // +0x20
+    virtual void v24();                                 // +0x24
+    virtual void v28();                                 // +0x28
+    virtual Vector3f* GetDirection();                   // +0x2c
+    virtual void v30();                                 // +0x30
+    virtual void v34();                                 // +0x34
+    virtual void v38();                                 // +0x38
+    virtual void v3c();                                 // +0x3c
+    virtual void v40();                                 // +0x40
+    virtual void v44();                                 // +0x44
+    virtual void v48();                                 // +0x48
+    virtual void v4c();                                 // +0x4c
+    virtual void v50();                                 // +0x50
+    virtual void v54();                                 // +0x54
+    virtual void v58();                                 // +0x58
+    virtual void v5c();                                 // +0x5c
+    virtual void v60();                                 // +0x60
+    virtual void v64();                                 // +0x64
+    virtual cScaleHolder* GetScaleHolder();             // +0x68
+};
+class cPlanetModel_s00d3_c970 {
+public:
+    Quaternionf BuildSurfaceOrientation(const Vector3f& pos);      // 0x00b7f190
+};
+cPlanetModel_s00d3_c970* PlanetModel_s00d3_c970();                                       // 0x00b3d350
+Matrix33f& Matrix3FromQuaternion(Matrix33f& out, const Quaternionf& q);   // 0x0059c190
+class IEffectObj {
+public:
+    virtual void v00();                                 // +0x00
+    virtual void Release();                             // +0x04
+    virtual void Start(int flag);                       // +0x08
+    virtual void v0c();                                 // +0x0c
+    virtual void v10();                                 // +0x10
+    virtual void v14();                                 // +0x14
+    virtual void SetTransform(XformMsg* msg);           // +0x18
+};
+class cEffectsMgr {
+public:
+    virtual void e00();                                 // +0x00
+    virtual void e04();                                 // +0x04
+    virtual void e08();                                 // +0x08
+    virtual void e0c();                                 // +0x0c
+    virtual void e10();                                 // +0x10
+    virtual void e14();                                 // +0x14
+    virtual void e18();                                 // +0x18
+    virtual void e1c();                                 // +0x1c
+    virtual void e20();                                 // +0x20
+    virtual void e24();                                 // +0x24
+    virtual void e28();                                 // +0x28
+    virtual bool CreateEffect(unsigned int key, int unused, IEffectObj** ppOut);   // +0x2c
+};
+cEffectsMgr* EffectsManagerPtr();                       // 0x0067ddd0
+class IPropObj {
+public:
+    virtual void p00();                                 // +0x00
+    virtual void Release();                             // +0x04
+};
+class cPropMgr {
+public:
+    virtual void r00();                                 // +0x00
+    virtual void r04();                                 // +0x04
+    virtual void r08();                                 // +0x08
+    virtual void r0c();                                 // +0x0c
+    virtual void r10();                                 // +0x10
+    virtual void r14();                                 // +0x14
+    virtual void r18();                                 // +0x18
+    virtual void r1c();                                 // +0x1c
+    virtual void r20();                                 // +0x20
+    virtual void r24();                                 // +0x24
+    virtual void r28();                                 // +0x28
+    virtual bool FindProperty(unsigned int a, unsigned int b, void** ppOut);   // +0x2c
+};
+cPropMgr* PropertyManagerPtr();                         // 0x0067de30
+struct CardArea {
+    unsigned int x, y, z;
+    CardArea(unsigned int a, unsigned int b, unsigned int c) : x(a), y(b), z(c) {}
+};
+class cMissionManager {
+public:
+    virtual void m00();                                 // +0x00
+    virtual void m04();                                 // +0x04
+    virtual void m08();                                 // +0x08
+    virtual void m0c();                                 // +0x0c
+    virtual void m10();                                 // +0x10
+    virtual void m14();                                 // +0x14
+    virtual void m18();                                 // +0x18
+    virtual void m1c();                                 // +0x1c
+    virtual void m20();                                 // +0x20
+    virtual void m24();                                 // +0x24
+    virtual void FUN_0a(void* p);                       // +0x28
+    void SetCardArea(CardArea area);                    // 0x00d37f10
+};
+extern cMissionManager* g_pMissionManager;              // 0x0169e230
+class cCollectableItems_s00d3_c970 {
+public:
+    unsigned int GetItemFlags(unsigned long long id);   // 0x00596e40
+};
+class cPanel {
+public:
+    void FUN_00e19350(unsigned int key, int arg);       // 0x00e19350
+};
+void* Fn_00b3d3f0(int a, void* b);                      // 0x00b3d3f0
+struct Triple { unsigned int a, b, c; };
+void Fn_00e39710(unsigned int id, void* p);             // 0x00e39710
+unsigned int GetGameModeId();                           // 0x00b5b800
+// ---- items of slice s00d3c970 end
+
+// ---- items of slice s00d41560 begin
+#pragma warning(disable : 4100)
+// ---- items of slice s00d41560 end
+
+// ---- items of slice s00d41a70 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern double     g_MatecallTime;        // 0x0169e2c0
+extern int        g_MatecallState;       // 0x0169e2c8
+struct Vector3_s00d4_1a70 { float x, y, z; };
+inline Vector3_s00d4_1a70 operator-(const Vector3_s00d4_1a70& a, const Vector3_s00d4_1a70& b)
+{
+    Vector3_s00d4_1a70 r;
+    r.x = a.x - b.x;
+    r.y = a.y - b.y;
+    r.z = a.z - b.z;
+    return r;
+}
+namespace SP {
+class IAudioSystem {
+public:
+virtual void _v00();
+virtual void _v04();
+virtual void _v08();
+virtual void _v0c();
+virtual void _v10();
+virtual void _v14();
+virtual void _v18();
+virtual void _v1c();
+virtual void _v20();
+virtual void _v24();
+virtual void _v28();
+virtual void _v2c();
+virtual void _v30();
+virtual void _v34();
+    /* 38h */ virtual void BeginMessage(uint32_t msg);
+    /* 3ch */ virtual void SetParamFloat(uint32_t key, float value);
+    /* 40h */ virtual void SetParam(uint32_t key, uint32_t value);
+virtual void _v44();
+virtual void _v48();
+virtual void _v4c();
+virtual void _v50();
+    virtual void _v54();
+    /* 58h */ virtual void SendMessage();
+};  // namespace SP
+}
+namespace EA {
+namespace Audio {
+ SP::IAudioSystem* GetSystemAT_s00d4_1a70();   // 0x00a206f0
+}
+}
+class cSpatialObject_s00d4_1a70 {   // subobject at +0xc0 of a creature
+public:
+virtual void _v00();
+virtual void _v04();
+virtual void _v08();
+virtual void _v0c();
+virtual void _v10();
+virtual void _v14();
+virtual void _v18();
+virtual void _v1c();
+virtual void _v20();
+virtual void _v24();
+virtual void _v28();
+    /* 2ch */ virtual const Vector3_s00d4_1a70& GetPosition();
+};
+struct cIdleAnimInfo { uint32_t pad00[3]; uint32_t mID; };            // +0x0c
+struct cAnimState_s00d4_1a70    { uint32_t pad00[3]; int mState; };              // +0x0c
+struct cAnimOwner {   // object at +8 of the avatar's +0xb4c
+    cIdleAnimInfo* GetIdle(int kind, int flags);                      // 0x00bc96a0 (ICF name: PlayIdleAnimation)
+};
+struct cAvatarAnim {   // the avatar's +0xb4c
+    uint32_t pad00[2];
+    cAnimOwner mOwner;                                                // +0x08
+    uint32_t pad0c[(0x1d8 - 0xc) / 4];
+    uint32_t mMode;                                                   // +0x1d8
+};
+struct cSpecies { float GetScale(); };                                 // 0x004d46b0 (SpeciesDB::GetScale)
+struct cSpeciesData_s00d4_1a70 { uint32_t pad[0x598 / 4]; float mValue598; };     // the avatar's +0xb20
+struct cTimer5a8 { float Get(); };                                     // 0x00bfc490
+class cCreatureMain_s00d4_1a70 {
+public:
+virtual void _v00();
+virtual void _v04();
+virtual void _v08();
+virtual void _v0c();
+virtual void _v10();
+virtual void _v14();
+virtual void _v18();
+virtual void _v1c();
+virtual void _v20();
+virtual void _v24();
+virtual void _v28();
+virtual void _v2c();
+virtual void _v30();
+virtual void _v34();
+virtual void _v38();
+virtual void _v3c();
+virtual void _v40();
+virtual void _v44();
+virtual void _v48();
+virtual void _v4c();
+virtual void _v50();
+virtual void _v54();
+virtual void _v58();
+virtual void _v5c();
+virtual void _v60();
+virtual void _v64();
+virtual void _v68();
+virtual void _v6c();
+virtual void _v70();
+virtual void _v74();
+virtual void _v78();
+virtual void _v7c();
+virtual void _v80();
+virtual void _v84();
+virtual void _v88();
+virtual void _v8c();
+virtual void _v90();
+virtual void _v94();
+virtual void _v98();
+virtual void _v9c();
+virtual void _va0();
+virtual void _va4();
+virtual void _va8();
+virtual void _vac();
+    virtual void _vb0();
+    /* b4h */ virtual cAnimState_s00d4_1a70* GetAnimState(uint32_t id);
+virtual void _vb8();
+virtual void _vbc();
+virtual void _vc0();
+virtual void _vc4();
+virtual void _vc8();
+virtual void _vcc();
+virtual void _vd0();
+virtual void _vd4();
+    /* d8h */ virtual int GetValueD8();
+
+    uint32_t padMain[(0xc0 - 4) / 4];
+};
+class cCreature : public cCreatureMain_s00d4_1a70, public cSpatialObject_s00d4_1a70 {   // cSpatialObject at +0xc0
+public:
+    cTimer5a8* Timer() { return (cTimer5a8*)((char*)this + 0x5a8); }
+
+    struct cCreatureInfo* GetInfo();                                   // 0x00c04590
+    bool IsKindB(cCreature* other);                                    // 0x00c0b8a0
+    int  GetValueB750();                                               // 0x00c0b750
+    float GetValueB9c0();                                              // 0x00c0b9c0
+    int  GetValue2c70();                                               // 0x00c02c70
+    bool GetFlagB770();                                                // 0x00c0b770
+    bool GetFlagC130();                                                // 0x00c0c130
+    void StartIndependentSound(const char* name, const Vector3_s00d4_1a70* pos, void* handles);  // 0x00c1db40
+
+    uint32_t padA[(0xb20 - 0xc4) / 4];
+    cSpeciesData_s00d4_1a70* mpSpecies;                                           // +0xb20
+    uint32_t padB24[(0xb4c - 0xb24) / 4];
+    cAvatarAnim* mpAnim;                                               // +0xb4c
+    uint32_t padB50[2];
+    uint32_t mFlags;                                                   // +0xb58
+    uint32_t padB5c[(0x1124 - 0xb5c) / 4];
+    struct cEntry_s00d4_1a70** mpNearBegin;                                       // +0x1124
+    struct cEntry_s00d4_1a70** mpNearEnd;                                         // +0x1128
+    uint32_t pad112c[(0x140c - 0x112c) / 4];
+    struct cEntry_s00d4_1a70** mpObjBegin;                                        // +0x140c
+    struct cEntry_s00d4_1a70** mpObjEnd;                                          // +0x1410
+};
+struct cCreatureInfo { uint32_t pad[0x15c / 4]; int mKind; };         // +0x15c
+class cObject {   // what a cEntry of the object list points to
+public:
+virtual void _v00();
+virtual void _v04();
+virtual void _v08();
+    /* 0ch */ virtual struct cObjectTarget* Cast(uint32_t typeID);
+};
+class cObjectTargetMain {
+public:
+    virtual void _v00();
+    uint32_t padMain[(0x34 - 4) / 4];
+};
+struct cObjectTarget : public cObjectTargetMain, public cSpatialObject_s00d4_1a70 {   // cSpatialObject at +0x34
+    bool IsAudible();                                                  // 0x00c6aa50
+};
+struct cEntry_s00d4_1a70 { uint32_t pad00[2]; void* mpObject; };                  // +0x08
+cCreature* CreatureCast(void* p);                                      // 0x00d99500 (cdecl)
+struct NearPred { bool operator()(cEntry_s00d4_1a70* e) const; };                 // 0x00c02600
+struct ObjPred  { bool operator()(cEntry_s00d4_1a70* e) const; };                 // 0x00c03520
+struct NearIterator {
+    cEntry_s00d4_1a70** mpCur;
+    cEntry_s00d4_1a70** mpEnd;
+    NearPred mPred;
+    NearIterator& Advance();                                           // 0x00b3d850 (operator++)
+    NearIterator(cEntry_s00d4_1a70** b, cEntry_s00d4_1a70** e) : mpCur(b), mpEnd(e)
+    {
+        if (mpCur != mpEnd && !mPred(*mpCur))
+            Advance();
+    }
+    void operator++()
+    {
+        do { ++mpCur; } while (mpCur != mpEnd && !mPred(*mpCur));
+    }
+    cEntry_s00d4_1a70* operator*() const { return *mpCur; }
+};
+struct ObjIterator {
+    cEntry_s00d4_1a70** mpCur;
+    cEntry_s00d4_1a70** mpEnd;
+    ObjPred mPred;
+    ObjIterator(cEntry_s00d4_1a70** b, cEntry_s00d4_1a70** e) : mpCur(b), mpEnd(e)
+    {
+        if (mpCur != mpEnd && !mPred(*mpCur))
+            ++*this;
+    }
+    void operator++()
+    {
+        do { ++mpCur; } while (mpCur != mpEnd && !mPred(*mpCur));
+    }
+};
+struct cHerd_s00d4_1a70 { void* GetLeader(); };                                    // 0x00c6acc0
+cHerd_s00d4_1a70* GetDesiredAvatarHerd_s00d4_1a70(int);                                       // 0x00d40b40
+double GetTime();                                                       // 0x00c0e480
+class cCreatureModeStrategy_s00d4_1a70 {
+public:
+    uint32_t pad00[0x24 / 4];
+    uint32_t mCount24;                                                  // +0x24
+    Vector3_s00d4_1a70 CalcVisiblePosition(void* target, float distance);          // 0x00d3b0c0
+    static cCreatureModeStrategy_s00d4_1a70* spInstance;                           // 0x0169e294
+};
+struct UIntVector {   // eastl::vector<uint32_t>
+    uint32_t* mpBegin;
+    uint32_t* mpEnd;
+    uint32_t size() const { return (uint32_t)(mpEnd - mpBegin); }
+    void erase(uint32_t* first, uint32_t* last)
+    {
+        memmove(first, last, (char*)mpEnd - (char*)last);
+        mpEnd = mpEnd - (last - first);
+    }
+    void clear() { erase(mpBegin, mpEnd); }
+};
+extern UIntVector g_MatecallSounds;      // 0x0169e2a8
+struct AudioTuning { float mScale; float pad04[2]; float mLimit0c; float mLimit10; };
+extern AudioTuning g_AudioTuning;        // 0x01687a00
+static __forceinline void SetGlobalParam(uint32_t name, float value)
+{
+    SP::IAudioSystem* audio = EA::Audio::GetSystemAT_s00d4_1a70();
+    if (audio) {
+        audio->BeginMessage(0x3cdd1a9);
+        audio->SetParam(0x34753a7, name);
+        audio->SetParamFloat(0x34753aa, value);
+        audio->SendMessage();
+    }
+}
+template <class A, class B>
+static __forceinline float DistanceSquared(A* from, B* to)
+{
+    const Vector3_s00d4_1a70& a = from->GetPosition();
+    const Vector3_s00d4_1a70& b = to->GetPosition();
+    Vector3_s00d4_1a70 d = b - a;
+    return d.z * d.z + d.y * d.y + d.x * d.x;
+}
+namespace SP {
+struct AppObj2;
+}
+namespace SP {
+struct AppObj3;
+}
+namespace SP {
+struct AppObj;
+}
+namespace SP {
+struct AppObjBase {
+virtual void v00();
+virtual void v04();
+virtual void v08();
+virtual void v0c();
+virtual void v10();
+virtual void v14();
+virtual void v18();
+virtual void v1c();
+virtual void v20();
+virtual void v24();
+virtual void v28();
+virtual void v2c();
+virtual void v30();
+virtual void v34();
+virtual void v38();
+virtual void v3c();
+virtual void v40();
+virtual void v44();
+virtual void v48();
+virtual void v4c();
+};
+}
+namespace SP {
+struct AppObj : AppObjBase {
+    virtual AppObj2* GetAt50();       // +0x50
+};
+}
+namespace SP {
+struct AppObj2Base {
+virtual void v00();
+virtual void v04();
+virtual void v08();
+virtual void v0c();
+virtual void v10();
+virtual void v14();
+virtual void v18();
+virtual void v1c();
+virtual void v20();
+virtual void v24();
+virtual void v28();
+virtual void v2c();
+virtual void v30();
+virtual void v34();
+};
+}
+namespace SP {
+struct AppObj2 : AppObj2Base {
+    virtual AppObj3* GetAt38();       // +0x38
+};
+}
+namespace SP {
+struct AppObj3 {
+virtual void v00();
+virtual void v04();
+virtual void v08();
+    virtual void* Cast(uint32_t type); // +0x0c
+};
+}
+namespace SP {
+struct cCreatureCamera {
+    void ReloadTuning();              // 0x00d247f0
+};
+}
+namespace SP {
+struct cDisplayStrategy {
+    void ReloadTuning();              // 0x00d2c280
+    void ReadText_00c2e4e0();         // 0x00c2e4e0
+};
+}
+namespace SP {
+struct Thing64 {
+virtual void v00();
+virtual void v04();
+    virtual void v08();               // +0x08
+};
+}
+namespace SP {
+struct cReloadOwner {
+    char          pad000[0x64];
+    Thing64*      mp64;               // +0x64
+    cDisplayStrategy* mp68;           // +0x68
+
+    void ReloadTuning();              // 0x00d42570
+};
+}
+namespace SP {
+struct cMotiveTuning {
+    void Init(uint32_t hash);         // 0x00b71480
+};
+}
+namespace SP {
+extern cMotiveTuning g_motiveTuning;  // 0x01687a00
+}
+namespace SP {
+AppObj* __cdecl App_s00d4_1a70();                // 0x0067dd10
+}
+// ---- items of slice s00d41a70 end
+
+// ---- items of slice s00d48010 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern const float kSearchRadius0;                   // 0x01582f68
+extern const float kSearchRadius1;                   // 0x01582f6c
+extern const float kSlotRadius0;                     // 0x01582f70
+extern const float kSlotRadius1;                     // 0x01582f74
+extern const float kChanceNear;                      // 0x01582f78
+extern const float kChanceFar;                       // 0x01582f7c
+extern const float kMsToSec;                        // 0x013f9428 (0.001f)
+extern const float kTimerLimit;                      // 0x01582f84
+void operator delete[](void* p);   // 0x00f47380
+struct ItemPair { uint32_t a, b; };
+struct ItemVector
+{
+    ItemPair* mpBegin;
+    ItemPair* mpEnd;
+    ItemPair* mpCapacity;
+    ItemPair* mpBuffer;
+    ItemPair mBuffer[8];
+    ItemVector() : mpBegin(mBuffer), mpEnd(mBuffer), mpCapacity(mBuffer + 8), mpBuffer(mBuffer) {}
+};
+class cItemTracker   // object at terrain sphere +0x10e8
+{
+public:
+    int  GetNumSlots(int arg);          // 0x00593a10 (ret 4)
+    void AddTotal(int n);               // 0x005939b0 (ret 4)
+};
+class cTerrainSphere_s00d4_8010
+{
+public:
+    uint32_t pad00[0x10e8 / 4];
+    cItemTracker* mpTracker;            // +0x10e8
+    uint32_t pad10ec[(0x10fc - 0x10ec) / 4];
+    uint32_t mKind;                     // +0x10fc
+};
+class cSporeCreature;
+struct CreatureCounters { char pad[0x608]; uint32_t count0; uint32_t count1; };   // at creature +0xb20
+struct CreatureBrain { char pad[0x17c]; int mState; };                                // at creature +0xb54
+class cTimerRef   // SP::cSPTimer at creature +0xfe0
+{
+public:
+    uint32_t pad00[6];
+    char mRunning;                      // +0x18
+    bool IsRunning();                   // 0x00feba90
+    uint64_t GetElapsedTime();          // 0x00bc3190
+};
+class cSporeCreature
+{
+public:
+    uint32_t pad00[0xb20 / 4];
+    CreatureCounters* mpCounters;       // +0xb20
+    uint32_t padb24;
+    char mPadStats[0x2c];               // +0xb28 (passed by address)
+    uint32_t padb54[1];
+    CreatureBrain* mpBrain;             // +0xb54
+    uint32_t mFlags;                    // +0xb58
+    char padb5c[0xfe0 - 0xb5c];
+    cTimerRef mTimer;                   // +0xfe0
+    // at +0xc0: sub-object with virtual slot 0x58 (IsInPosse)
+    void* GetTargetKey();               // 0x00c0bc00 (returns a pointer to the key to search for)
+    bool IsFollower();                  // 0x00c0b770
+    struct TuningData* GetTuning();     // 0x00c0c1a0
+};
+struct TuningData { char pad[0x32c]; int mItemSlot; };
+class cNounManager_s00d4_8010
+{
+public:
+    cSporeCreature* GetAvatar();                     // 0x00b1fdb0
+    cTerrainSphere_s00d4_8010* GetCurrentTerrainSphere();       // 0x00f67d90
+};
+cNounManager_s00d4_8010* NounManager_s00d4_8010();                         // 0x00b3d300
+int GetCurrentGameMode_s00d4_8010();                            // 0x00b5b800
+void* CastGameObject(void* obj, uint32_t typeID);   // 0x00ac80d0 (cdecl)
+class cGlobalMood   // returned by 0x00b3d4c0
+{
+public:
+    int Query(void* subject, int a, int b);          // 0x00ba3f90 (ret 0xc)
+};
+cGlobalMood* GetGlobalMood();                        // 0x00b3d4c0
+struct RandomLinearCongruential_s00d4_8010
+{
+    double RandomDoubleUniform();   // 0x009360d0
+};
+extern RandomLinearCongruential_s00d4_8010 sMathRandom;         // 0x01601760
+struct ScenarioEvent
+{
+    cSporeCreature* actor;              // +0
+    cSporeCreature* other;              // +4
+    int value;                          // +8
+};
+class cCreatureCollectableItemsScenario
+{
+public:
+    bool EvaluateEvent(uint32_t eventID, ScenarioEvent* ev);                                       // 0x00d48010
+
+    bool FindItems(cItemTracker* t, void* key, float r0, float r1, ItemVector* out, int a, int b);   // 0x00d47ea0 (ret 0x1c)
+    void NotifyUnlockedItem(uint32_t a, uint32_t b, cSporeCreature* who, cItemTracker* t, bool first); // 0x00d3d4f0 (ret 0x14)
+    void Finish();                                                                                  // 0x00d40930
+    void ReportMood(cItemTracker* t, int code);                                                     // 0x00d3b690 (ret 8)
+};
+static inline void FreeVector(ItemVector& v)
+{
+    if (v.mpBegin != 0 && v.mpBegin != v.mpBuffer)
+        operator delete[](v.mpBegin);
+}
+void operator delete(void* p);                                    // 0x00f47380
+class cSPUILayout_s00d4_8010
+{
+public:
+    void* FindWindowByID(uint32_t windowID, int unused);   // 0x008105b0 (ret 8)
+};
+cSPUILayout_s00d4_8010* FUN_00d39000();      // 0x00d39000
+cSPUILayout_s00d4_8010* FUN_00cc8990();      // 0x00cc8990
+class cUILayoutManager
+{
+public:
+    cSPUILayout_s00d4_8010* GetCurrentLayout();    // 0x00ef0dc0
+};
+extern cUILayoutManager* gUILayoutManager;   // 0x016c7aa4
+// ---- items of slice s00d48010 end
 
 // @ 0x00b8c330
 void cPlanetModel_s00b8_c330::UpdateMinimap(int arg0, int arg1, int modeOverride)
@@ -2279,6 +3401,174 @@ void ResetCreatureModeState()
     g_0169e370.mFlags38 |= 0x40000000;
     g_0169e370.mFlags3c |= 0x20;
     g_0169e370.mMode = 1;
+}
+
+// @ 0x00d37f10
+void cSPCreatureMissionManager::SetCardArea(u32 a, u32 b, u32 c)
+{
+    if (mNestFlag78 == 0 && mNestMission.mpObj != 0)
+    {
+        mNestFlag78 = 1;
+        ((cMission*)mNestMission.mpObj)->FUN_c2ebc0();
+    }
+    RectT_M area = { a, b, c };
+    ((cMissionCardPanel*)X_GetCardPanel())->SetPanelArea(area);
+}
+
+// @ 0x00d38150
+void cSPCreatureMissionManager::OnTick(void* a, void* b)
+{
+    cMissionCardPanel* panel = (cMissionCardPanel*)X_GetCardPanel();
+
+    if (mSpeciesMission.mpObj != 0 && ((cMission*)mSpeciesMission.mpObj)->FUN_c2f300() && panel != 0)
+    {
+        if (mDisplayedSpeciesMission.mpObj != 0)
+        {
+            panel->RemoveMissionCard(mDisplayedSpeciesMission.mpObj);
+            ((cMission*)mDisplayedSpeciesMission.mpObj)->FUN_c2fc80();
+            if (mDisplayedSpeciesMission.mpObj != 0)
+            {
+                void* p = mDisplayedSpeciesMission.mpObj;
+                mDisplayedSpeciesMission.mpObj = 0;
+                ((FnV0)VTBL(p)[1])(p);
+            }
+        }
+        mDisplayedSpeciesMission.FUN_ac9480(&mSpeciesMission);
+        panel->SetupMissionCard(mDisplayedSpeciesMission.mpObj, 0, 1, 0);
+        panel->ExpandMissionCard((int)mDisplayedSpeciesMission.mpObj);
+        if (mSpeciesMission.mpObj != 0)
+        {
+            void* p = mSpeciesMission.mpObj;
+            mSpeciesMission.mpObj = 0;
+            ((FnV0)VTBL(p)[1])(p);
+        }
+    }
+
+    NotifyAll();
+
+    if (mbMissionDataDirty == 0)
+        return;
+
+    cGameNounManager_s00d3_77f0* nm = (cGameNounManager_s00d3_77f0*)X_NounManager();
+    void* av = nm->GetAvatar();
+    cCreatureBase* cr = (cCreatureBase*)X_FUN_00d99500(((cCreatureBase*)av)->ApplyCombatTarget());
+
+    if (cr != 0 &&
+        !((FnB0)VTBL(cr)[0xd0 / 4])(cr) &&
+        !cr->Flag388())
+    {
+        void* key = (void*)((char*)cr + 0xb28);
+
+        void* it;
+        mSpeciesMissions.Find(&it, key);
+        if (it == *(void**)((u8*)mSpeciesMissions.mpBuckets + mSpeciesMissions.mBucketCount * 4))
+        {
+            cGameNounManager_s00d3_77f0* nm2 = (cGameNounManager_s00d3_77f0*)X_NounManager();
+            cMission* mission = (cMission*)nm2->CreateNoun(0x1406a572);
+            mission->FUN_c301c0(cr);
+            cARC* slot = (cARC*)mSpeciesMissions.FUN_d380c0((u32*)key);
+            slot->Assign(mission);
+            cARC tmp;
+            tmp.FUN_572660(mission);
+            mMissionList.PushBack(&tmp);
+            if (tmp.mpObj != 0)
+            {
+                void* p = tmp.mpObj;
+                tmp.mpObj = 0;
+                ((FnV0)VTBL(p)[1])(p);
+            }
+        }
+
+        cARC* slot2 = (cARC*)mSpeciesMissions.FUN_d380c0((u32*)key);
+        void* candidate = slot2->mpObj;
+
+        if (mDisplayedSpeciesMission.mpObj != 0)
+        {
+            ((cMission*)mDisplayedSpeciesMission.mpObj)->FUN_c2e780();
+            void* prof = cr->GetSpeciesProfile();
+            if (slot2->mpObj == prof)
+                goto afterDisplay;
+        }
+        if (mSpeciesMission.mpObj != candidate)
+        {
+            mSpeciesMission.Assign(candidate);
+            ((cMission*)mSpeciesMission.mpObj)->FUN_c2fc10();
+        }
+    }
+    else
+    {
+        if (mDisplayedSpeciesMission.mpObj != 0 && panel != 0)
+            panel->CollapseMissionCard(mDisplayedSpeciesMission.mpObj);
+    }
+
+afterDisplay:
+    if (mDisplayedSpeciesMission.mpObj != 0)
+        ((FnV0)VTBL(mDisplayedSpeciesMission.mpObj)[0x80 / 4])(mDisplayedSpeciesMission.mpObj);
+
+    cTerrainEditor* te = (cTerrainEditor*)X_NounManager();
+    cTerrainSphere_s00d3_77f0* ts = (cTerrainSphere_s00d3_77f0*)te->GetCurrentTerrainSphere();
+    if (ts->mpSomething10e8 != 0 &&
+        (g_sTestSystem == 0 || *(void**)(g_sTestSystem + 0x70) == (void*)(g_sTestSystem + 0x70)) &&
+        *(u8*)((char*)X_CreatureModeStrategy_Instance() + 0xdd) != 0)
+    {
+        bool allowSpawn = !ts->FUN_00594330();
+
+        if (!allowSpawn && mNestMission.mpObj != 0 &&
+            ((FnI0)VTBL(mNestMission.mpObj)[0x60 / 4])(mNestMission.mpObj) != 5)
+        {
+            ((cMission*)mNestMission.mpObj)->FUN_c2ebc0();
+        }
+
+        if (mNestMission.mpObj != 0 &&
+            ((FnI0)VTBL(mNestMission.mpObj)[0x60 / 4])(mNestMission.mpObj) == 5 &&
+            !((FnB0)VTBL(mNestMission.mpObj)[0x64 / 4])(mNestMission.mpObj))
+        {
+            if (panel != 0)
+                panel->RemoveMissionCard(mNestMission.mpObj);
+
+            void* newEnd = X_FUN_00d38080((void**)mMissionList.mpBegin,
+                                          (void**)mMissionList.mpEnd,
+                                          (void**)&mNestMission);
+            mMissionList.Erase(newEnd, mMissionList.mpEnd);
+
+            ((FnV0)VTBL(mNestMission.mpObj)[0x44 / 4])(mNestMission.mpObj);
+
+            void* p = mNestMission.mpObj;
+            X_NounManager();
+            ((cGameNounManager_s00d3_77f0*)X_NounManager())->RemoveNoun(p);
+            if (mNestMission.mpObj != 0)
+            {
+                void* pp = mNestMission.mpObj;
+                mNestMission.mpObj = 0;
+                ((FnV0)VTBL(pp)[1])(pp);
+            }
+        }
+
+        if (!allowSpawn && mNestMission.mpObj == 0)
+        {
+            cGameNounManager_s00d3_77f0* nm3 = (cGameNounManager_s00d3_77f0*)X_NounManager();
+            cMission* mission = (cMission*)nm3->CreateNoun(0x14d9597f);
+            mNestMission.Assign(mission);
+            if (mNestFlag78 != 0)
+                ((cMission*)mNestMission.mpObj)->FUN_c30100(0x134711cf);
+            else
+                ((cMission*)mNestMission.mpObj)->FUN_c30100(0xc0ecaaae);
+            cARC tmp;
+            tmp.FUN_572660(mission);
+            mMissionList.PushBack(&tmp);
+            if (tmp.mpObj != 0)
+            {
+                void* p = tmp.mpObj;
+                tmp.mpObj = 0;
+                ((FnV0)VTBL(p)[1])(p);
+            }
+            if (panel != 0)
+                panel->SetupMissionCard(mNestMission.mpObj, 0, 1, 1);
+        }
+    }
+
+    FUN_b6f650(a, b);
+    mbMissionDataDirty = 0;
 }
 
 // @ 0x00d387c0
@@ -2668,6 +3958,188 @@ void ResetModeResources()
     factory->Get(0x4cab5702, 0, (void**)&GetModeWorld()->mpCached);
 }
 
+// @ 0x00d3aa70
+void HandleSimulationUpdate()
+{
+    cCreatureModeStrategy_s00d3_a830* self = spInstance_cCreatureModeStrategy;
+    if (self->mpTexturePreload == 0)
+        return;
+
+    cAvatar_s00d3_a830* av = GetAvatar(NounManager());
+    float* fwd = AvatarForward(av);
+
+    float f15 = fwd[0];
+    float f17 = fwd[1];
+    float f10 = fwd[2];
+    float inv = 1.0f / sqrtf((f15 * f15 + (f10 * f10 + f17 * f17)) + 1e-08f);
+    float nx = inv * f15;
+    float ny = f17 * inv;
+    float nz = f10 * inv;
+
+    int bounds = GetRenderInstance((int)av->mpThing_c0);
+    float span = *(float*)((char*)bounds + 0x14) - *(float*)((char*)bounds + 8);
+    float px = (span * nx) * 0.5f + f15;
+    float py = (span * nz) * 0.5f + f17;
+    float pz = (span * ny) * 0.5f + f10;
+
+    float dx = gPlanetFocusX - px;
+    float dz = gPlanetFocusZ - pz;
+    float dy = gPlanetFocusY - py;
+    float dInv = 1.0f / (sqrtf(dy * dy + (dz * dz + dx * dx)) + 1.5258789e-05f);
+    dx *= dInv;
+    dz *= dInv;
+    dy *= dInv;
+
+    if (dx == gLastSurfaceX && dz == gLastSurfaceZ && dy == gLastSurfaceY)
+        return;
+
+    float basis[9];
+    Matrix33 orient;
+    Matrix3FromQuaternion(basis, 0);   // avatar orientation quaternion
+    orient[0] = -dy * nz - -dz * ny;
+    orient[1] = ny * -dx - -dy * nx;
+    orient[2] = -dz * nx - nz * -dx;
+
+    float dot = (dx * nx + dy * ny) + dz * nz;
+    float limit = GetPropertyFloat(self->mpCreaturePropList, 0xc1fe457d, 0.7f);
+    if (dot < limit)
+    {
+        float ang = Acos(dot);
+        (void)ang;
+        Matrix33 extra;
+        BuildRotation(extra.m, (Vec3*)&orient, -(ang - 0.0f));
+        // (rotate basis by extra)
+    }
+
+    (void)basis;
+    return;
+}
+
+// @ 0x00d3aea0
+void SkipToGame()
+{
+    cBroadcastPayload ev;
+    ev.mpAvatar = GetAvatar(NounManager());
+    ev.pad = 0;
+    ev.pad2 = 0;
+    cCreatureModeStrategy_s00d3_a830* self = spInstance_cCreatureModeStrategy;
+    for (cScenarioEntry** it = self->mScenariosBegin; it != self->mScenariosEnd; ++it)
+        (*it)->HandleEvent(0x533535dd, &ev);
+}
+
+// @ 0x00d3af00
+void cCreatureModeStrategy_s00d3_a830::SwitchToMode(int mode)
+{
+    if (mGameMode == mode)
+        return;
+
+    if (mode == 0)   // kMODE_PLAYING
+    {
+        cBroadcastPayload ev;
+        ev.mpAvatar = 0;
+        ev.pad = 0;
+        ev.pad2 = 0;
+        for (cScenarioEntry** it = mScenariosBegin; it != mScenariosEnd; ++it)
+            (*it)->HandleEvent(0xd3353633, &ev);
+
+        cAvatar_s00d3_a830* av = GetAvatar(NounManager());
+        if (av != 0)
+            av->SetModePlaying(0, 0, 0);       // vtable +0x84
+
+        if (mpInputStrategy != 0)
+        {
+            mpInputStrategy->SetInputPriorityStrategy(0);
+            mpInputStrategy->mbFlag54 = true;
+        }
+    }
+    else if (mode == 1)   // kMODE_ENDING
+    {
+        mpInputStrategy->SetInputPriorityStrategy(1);
+        mGameMode = mode;
+        return;
+    }
+    else if (mode == 4)   // kMODE_DEFAULT
+    {
+        mpInputStrategy->mbFlag54 = true;
+        mGameMode = mode;
+        return;
+    }
+    mGameMode = mode;
+}
+
+// @ 0x00d3aff0
+bool cCreatureModeStrategy_s00d3_a830::OnKeyDown(int key, int state)
+{
+    if (GameInputManager()->IsKeyHandled(key, state))
+        return true;
+
+    bool handled;
+    switch (state)
+    {
+    case 0:  handled = true;              break;
+    case 1:  handled = (key == 0x10);     break;
+    case 2:  handled = (key == 0x11);     break;
+    case 4:  handled = (key == 0x12);     break;
+    default: handled = false;             break;
+    }
+    if (handled && VerbTray_HandleKeyPress(key))
+        return true;
+
+    if (state == 0 && key == 0x1b)
+    {
+        cBroadcastPayload ev;
+        ev.mpAvatar = 0;
+        ev.pad = 0;
+        ev.pad2 = 0;
+        for (cScenarioEntry** it = mScenariosBegin; it != mScenariosEnd; ++it)
+            (*it)->HandleEvent(0xd3353632, &ev);
+    }
+    return GameInputManager()->HandleKey(key, state) != 0;
+}
+
+// @ 0x00d3b0c0
+Vec3* cCreatureModeStrategy_s00d3_a830::CalcVisiblePosition(Vec3* out, const Vec3* in, float maxAngle)
+{
+    out->x = in->x;
+    out->y = in->y;
+    out->z = in->z;
+
+    cAvatar_s00d3_a830* av = GetAvatar(NounManager());
+    if (av == 0)
+        return out;
+
+    cPlanetModel_s00d3_a830* pm = PlanetModel_s00d3_a830();
+    float* up = av->mpThing_c0->GetUpVector();
+
+    float f1 = up[0];
+    float f2 = up[1];
+    float f3 = up[2];
+
+    Vec3 dir;
+    dir.x = f1 * (1.0f / sqrtf((f2 * f2 + f3 * f3) + f1 * f1));
+
+    float angle = Acos(dir.x);
+
+    float limit;
+    if (maxAngle <= 1.5258789e-05f)
+        limit = GetPropertyFloat(mpCreaturePropList, 0x58cc10b4, 30.0f);
+    else
+        limit = maxAngle;
+    (void)limit;
+
+    float angle2 = Acos(f2 * (1.0f / sqrtf(f3 * f3 + (f2 * f2 + f1 * f1))));
+
+    if (angle2 < angle)
+    {
+        float s = angle2 * sqrtf((f2 * f2 + f3 * f3) + f1 * f1);
+        pm->ArcPosition(&dir, up, in, s);
+        out->x = dir.x;
+        out->y = dir.y;
+        out->z = dir.z;
+    }
+    return out;
+}
+
 // @ 0x00d3b320
 void __stdcall ScenarioDestroy(RefPair* begin, RefPair* end)
 {
@@ -2829,6 +4301,102 @@ void QuickSort(SortEntry* begin, SortEntry* mid, SortEntry* end, int cmp)
     HeapSort(begin, mid, cmp);
 }
 
+// @ 0x00d3b690
+void cMaskMap::RemoveByMask(unsigned int mask)
+{
+    EntryVec vec;
+    vec.mpBegin = 0;
+    vec.mpEnd = 0;
+    vec.mpCapacity = 0;
+    vec.Reserve(0x20);
+    MapCollect(this, &vec, 0x887c91bb);
+
+    uint32_t count = (uint32_t)((char*)vec.mpEnd - (char*)vec.mpBegin) >> 3;
+    for (uint32_t i = 0; i < count; ++i)
+    {
+        SortEntry* p = vec.mpBegin + i;
+        uint32_t low  = (uint32_t)p->mpObject;
+        uint32_t high = (uint32_t)(((uint64_t)(uint32_t)p->mpObject) >> 32);
+        if (low == 0x32ac9620 || low == 0x3a3c49a5 || low == 0xfe534766)
+            continue;
+        int m = PropMask(low, high);
+        if (((uint32_t)m & mask) != 0)
+            MapErase(this, (uint32_t)p->mpObject, high);
+    }
+    if (vec.mpBegin != 0 && ((int*)vec.mpBegin)[-1] != 0)
+        operator_delete_array(vec.mpBegin);
+}
+
+// @ 0x00d3b7c0
+void HeapSortIntro(SortEntry* begin, SortEntry* end, int depth, int cmp)
+{
+    for (;;)
+    {
+        if (((int)((char*)end - (char*)begin) & 0xfffffff8) <= 0xe0)
+            break;
+        if (depth <= 0)
+            break;
+
+        int   iVar1 = begin->mnKey;
+        int   n = (int)(end - begin);
+        SortEntry* mid = begin + n / 2;
+        int   iVar7 = mid->mnKey;
+        int   iVar2 = iVar7;
+        SortEntry* puVar3 = mid;
+        SortEntry* puVar6 = begin;
+        if (iVar7 < iVar1)
+        {
+            iVar2 = iVar1;
+            puVar3 = begin;
+            puVar6 = mid;
+            iVar1 = iVar7;
+        }
+        if (iVar1 <= (end - 1)->mnKey)
+        {
+            puVar6 = puVar3;
+            if ((end - 1)->mnKey < iVar2)
+                puVar6 = end - 1;
+        }
+        SortEntry* pivot = puVar6;
+
+        SortEntry* pos = Partition(begin, end, pivot->mpObject, pivot->mnKey, cmp);
+        --depth;
+        HeapSortIntro(pos, end, depth, cmp);
+        end = pos;
+    }
+    if (depth == 0)
+        QuickSort(begin, end, end, cmp);
+}
+
+// @ 0x00d3b880
+void cMapBase::InsertNode(void** out, void* parent, const Key* key, char allowDup)
+{
+    int side;
+    if (!allowDup && parent != (void*)((char*)this + 4) &&
+        !(key->mHigh < *(uint32_t*)((char*)parent + 0x14) ||
+          (key->mHigh == *(uint32_t*)((char*)parent + 0x14) &&
+           key->mLow < *(uint32_t*)((char*)parent + 0x10))))
+        side = 1;
+    else
+        side = 0;
+
+    char* node = (char*)mpFreeList;
+    if (node != 0)
+        mpFreeList = *(void**)node;
+    else
+        node = (char*)AllocSimulatorNode(mpPoolAlloc, "Simulator", 0, 0,
+                                         "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h", 0xd1);
+    char* slot = node + 0x10;
+    if (slot != 0)
+    {
+        *(uint32_t*)slot = key->mLow;
+        *(uint32_t*)(slot + 4) = key->mHigh;
+    }
+    RBTreeInsert(node, parent, (char*)this + 4, side);
+    ++mnSize;
+    *out = node;
+}
+
 // @ 0x00d3b920
 cSPVector3_s00d3_b920** FUN_00d3b920(cSPVector3_s00d3_b920** cursor, cSPVectorRange range, cSPVector3_s00d3_b920* out)
 {
@@ -2956,6 +4524,42 @@ void cCreatureModeStrategy_s00d3_b920::dtor()
     ((cGonzagoSubsystemBase*)mSubsystem)->dtor();
 }
 
+// @ 0x00d3bcc0
+u32** cKeyMap::LowerBound(u32** result, u32* key)
+{
+    cRBNode* node = (cRBNode*)&mpHead;                  // walk starts at the header
+    bool wentLeft = true;
+    if (mpRoot) {
+        cRBNode* cur = mpRoot;
+        do {
+            node = cur;
+            if ((u32)cur->mKeyFirst < key[1] ||
+                ((u32)cur->mKeyFirst <= key[1] && (u32)cur->mKeySecond <= key[0]))
+                wentLeft = false;
+            else
+                wentLeft = true;
+            cur = wentLeft ? (cRBNode*)cur->mpRight : (cRBNode*)cur->mpLeft;
+        } while (cur);
+    }
+    cRBNode* lower = node;
+    if (wentLeft) {
+        if (node == mpHead)
+            goto insert;
+        lower = (cRBNode*)FUN_009215c0(node);
+    }
+    if (key[1] < (u32)lower->mKeyFirst ||
+        (key[1] <= (u32)lower->mKeyFirst && key[0] <= (u32)lower->mKeySecond)) {
+        *result = (u32*)lower;
+        *(u8*)(result + 1) = 0;
+        return result;
+    }
+insert:
+    FUN_00d3b880(result, node, key, 0);
+    *result = (u32*)key;
+    *(u8*)(result + 1) = 1;
+    return result;
+}
+
 // @ 0x00d3bdb0
 void FUN_00d3bdb0(char enable)
 {
@@ -2987,6 +4591,61 @@ void FUN_00d3bdb0(char enable)
     }
 }
 
+// @ 0x00d3bea0
+void FUN_00d3bea0()
+{
+    if (gModes.mpCurrentAudio != 0) {
+        VT_0C_1(gModes.mpCurrentAudio, 1);
+        void* p = gModes.mpCurrentAudio;
+        gModes.mpCurrentAudio = 0;
+        VT_04_0(p);
+    }
+    gModes.mbField024 = 1;
+    FUN_00d3bdb0(1);
+    u32* begin = gModes.mpSoundIds;
+    u32* end = gModes.mpSoundIdsEnd;
+    gModes.mbField024 = 0;
+    FUN_00594870(begin, end, 0);
+    gModes.mbField018 = 0;
+    gModes.mpSoundIdsEnd = end - (end - begin);
+    gModes.mbNeedsSoundFlush = 0;
+}
+
+// @ 0x00d3bf30
+u32 __fastcall FUN_00d3bf30(int self)
+{
+    u32 i = 0;
+    *(u8*)(self + 0x30) = 0;
+    void* planet = FUN_00b3d350();                     // SP::PlanetModel()
+    void* audio = *(void**)((char*)planet + 0x24);
+    u32 count = (u32)(*(u32**)(self + 0xc) - *(u32**)(self + 8));
+    if (count != 0) {
+        do {
+            VT_C0_1(audio, *(u32*)(*(u32*)(self + 8) + i * 4));
+            ++i;
+        } while (i < count);
+    }
+    u32* begin = *(u32**)(self + 8);
+    u32* end = *(u32**)(self + 0xc);
+    FUN_00594870(begin, end, 0);
+    *(u32*)(self + 0xc) = (u32)(end - (end - begin));
+    *(u32*)(self + 0x34) = 0xbf800000;                 // -1.0f
+    return 1;
+}
+
+// @ 0x00d3bfa0
+u64 FUN_00d3bfa0(int self, char a2, int a3, int a4)
+{
+    // NOTE: the original is a 954-byte routine that mixes the map lookup above with
+    // the random-number and effect spawn paths.  Only the entry sequence could be
+    // reconstructed faithfully; the remaining logic is left out.
+    FUN_00594ee0();
+    u32 v = 0;
+    if (a2 != 0)
+        v = FUN_00a68fb0(1);
+    return (u64)v;
+}
+
 // @ 0x00d3c380
 void cCreatureModeStrategy_s00d3_b920::Deactivate()
 {
@@ -2997,6 +4656,24 @@ void cCreatureModeStrategy_s00d3_b920::Deactivate()
     void* c = FUN_00b3d240(0);
     ((cDeactivateNotifyC*)c)->Notify();
     FUN_00d3bea0();
+}
+
+// @ 0x00d3c3b0
+void FUN_00d3c3b0()
+{
+    u8* p1 = (u8*)0x01583354;
+    u8* p2 = (u8*)0x01583358;
+    *(u8*)0x01583344 = 1;
+    *(u8*)0x01583345 = 1;
+    *(u32*)0x01583348 = 0;
+    *(u32*)0x0158334c = 0;
+    *(u32*)0x01583350 = 0;
+    FUN_00594870(p1, p2, 0);
+    *(u32*)0x01583358 = (u32)(p2 - (p2 - p1));
+    if (*(void**)0x0169e3e4 != 0) {
+        FUN_00e0fb50();                                // cSPUIMinimapWin::RemoveAllIcons()
+        FUN_00e0ad00(4);
+    }
 }
 
 // @ 0x00d3c430
@@ -3014,6 +4691,37 @@ void FUN_00d3c430()
     FUN_00c707e0();
 }
 
+// @ 0x00d3c610
+void FUN_00d3c610()
+{
+    FUN_00d3c3b0();
+    if (*(void**)0x0169e3e4 != 0) {
+        void* p = *(void**)0x0169e3e4;
+        *(void**)0x0169e3e4 = 0;
+        VT_04_0(p);
+    }
+    FUN_00d48ae0();
+    FUN_00b6c280();
+    cCreatureModeStrategy_s00d3_b920* s = gStrategy;
+    if (s->mpEditorSession != 0) {
+        FUN_00d2cea0();
+        void* e = s->mpEditorSession;
+        if (e) {
+            s->mpEditorSession = 0;
+            VT_04_0(*(void**)((char*)e + 0x38));
+        }
+    }
+    if (s->mpField0d4 != 0) {
+        FUN_007b1950();
+        void* q = s->mpField0d4;
+        if (q) {
+            s->mpField0d4 = 0;
+            VT_04_0(q);
+            return;
+        }
+    }
+}
+
 // @ 0x00d3c6a0
 void FUN_00d3c6a0()
 {
@@ -3027,6 +4735,335 @@ void FUN_00d3c6a0()
     FUN_00c6acc0();
     FUN_00c6ee40();
     FUN_00bc3130();
+}
+
+// @ 0x00d3c970
+cIntVector* cIntVector::Assign(cIntVector* pOther)
+{
+    cIntVector* pSrc = pOther;
+    if (pSrc == this)
+        return this;
+
+    int* pSrcBegin = pSrc->mpBegin;
+    int* pSrcEnd = pSrc->mpEnd;
+    unsigned int nNew = (unsigned int)(pSrcEnd - pSrcBegin);
+    unsigned int nCap = (unsigned int)(mpCap - mpBegin);
+    if (nNew > nCap) {
+        int* pNew = AllocCopy(nNew, pSrcBegin, pSrcEnd);
+        DestroyRange(mpBegin, mpEnd);
+        if (mpBegin != 0 && ((int*)mpBegin)[-1] != 0)
+            Fn_00f47380(mpBegin);
+        mpCap = pNew + nNew;
+        mpEnd = pNew + nNew;
+        mpBegin = pNew;
+        return this;
+    }
+
+    unsigned int nCur = (unsigned int)(mpEnd - mpBegin);
+    if (nNew > nCur) {
+        Fn_00d3b3c0(pSrcBegin, pSrcBegin + nCur, mpBegin);
+        Fn_00a69490((void**)&pOther, pSrc->mpBegin + (mpEnd - mpBegin),
+                    pSrc->mpEnd, mpEnd, pSrc);
+        mpEnd = mpBegin + nNew;
+        return this;
+    }
+
+    int* pNewEnd = Fn_00d3b3c0(pSrcBegin, pSrcEnd, mpBegin);
+    DestroyRange(pNewEnd, mpEnd);
+    mpEnd = mpBegin + nNew;
+    return this;
+}
+
+// @ 0x00d3ca90
+void Fn_00d3ca90(cPropertyObject* pObj)
+{
+    cProperty* pProp;
+    if (pObj) {
+        ImportIntProperty(pObj, 0x816e292, 0x887c91bb, &pProp);
+        ImportIntProperty(pObj, 0xdda63aed, 0x9d62e363, &pProp);
+        ImportIntProperty(pObj, 0xc77a6c53, 0x91ca5e8c, &pProp);
+        ImportIntProperty(pObj, 0xda7e582a, 0xde8f240b, &pProp);
+        ImportIntProperty(pObj, 0xd0780e75, 0x228d8f36, &pProp);
+        ImportIntProperty(pObj, 0x261fa6b9, 0x7f466450, &pProp);
+        ImportIntProperty(pObj, 0x80b1e465, 0xa0325a4f, &pProp);
+    }
+    Fn_00d3bc40(g_pEntries, g_pEntriesEnd, pProp);
+}
+
+// @ 0x00d3cd00
+bool cStrategyFields::Shutdown()
+{
+    if (mpInput) {
+        mpInput->Detach();
+        cInputStrategy_s00d3_c970* pIn = mpInput;
+        if (pIn) {
+            mpInput = 0;
+            pIn->mRef.Release();
+        }
+    }
+    Fn_00d3c3b0();
+    if (g_pGlobalRef) {
+        cRefCounted* pRef = g_pGlobalRef;
+        g_pGlobalRef = 0;
+        pRef->Release();
+    }
+    if (mpRefB4) {
+        cRefCounted* pRef = mpRefB4;
+        mpRefB4 = 0;
+        pRef->Release();
+    }
+    if (mpRefB8) {
+        cRefCounted* pRef = mpRefB8;
+        mpRefB8 = 0;
+        pRef->Release();
+    }
+    mScenarios.erase(mScenarios.mpBegin, mScenarios.mpEnd);
+    if (mpMsg0) {
+        void* p0 = mpMsg0;
+        void* p4 = mpMsg4;
+        void* p8 = mpMsg8;
+        void* pC = mpMsgC;
+        unsigned int n = mnMsg10;
+        mpMsg0 = 0;
+        RemoveHandler(p0, p4, p8, pC, n);
+    }
+    return true;
+}
+
+// @ 0x00d3cdc0
+void SP::cCreatureModeStrategy_s00d3_c970::SignalCreatureEvent(uint32_t eventId)
+{
+    TutorialState* state = GetTutorialState();
+    switch (eventId) {
+    case 0x335dd8bb:
+        state->SetStageC(0x85aca414);
+        MarkEventAsOccurred(0x56b6c955);
+        return;
+    case 0x135f21b5: {
+        cSPCreatureBase_s00d3_c970* avatar = NounManager_s00d3_c970()->GetAvatar();
+        if (avatar) {
+            SpeciesProfile* prof = avatar->mpProfile;
+            int required = (int)AchievementsController()->GetRequiredCount(0x58ab9d73);
+            if (avatar->mpB54 && !AchievementsController()->IsAwarded(0x58ab9d73)) {
+                if ((int)prof->mfCount >= required) {
+                    Tree64 tree;
+                    IdVec* ids = avatar->mpProfile->GetIds(avatar->mpB54);
+                    for (uint32_t i = 0; (float)i < prof->mfCount; i++) {
+                        Item* item = avatar->mpB54->mpMgr->mpRecords[ids->mpBegin[i]].mpItem;
+                        uint64_t key = MakeKey(item->mHi, item->mLo);
+                        InsRes r;
+                        tree.Insert(&r, &key);
+                    }
+                    if ((int)tree.mnSize >= required)
+                        AchievementsController()->AwardAchievement(0x58ab9d73);
+                }
+            }
+            int n = 0;
+            if (prof->m5d4 >= 5) n++;
+            if (prof->m5d8 >= 5) n++;
+            if (prof->m5dc >= 5) n++;
+            if (prof->m5e0 >= 5) n++;
+            if (prof->m5e4 >= 5) n++;
+            if (prof->m5e8 >= 5) n++;
+            if (prof->m5ec >= 5) n++;
+            if (prof->m5f0 >= 5) n++;
+            if (prof->m5f4 >= 5) n++;
+            if (prof->m600 >= 5) n++;
+            if (prof->m604 >= 5) n++;
+            if (prof->m610 >= 5) n++;
+            if (prof->m614 >= 5) n++;
+            if (prof->m61c >= 5) n++;
+            if ((uint32_t)n >= AchievementsController()->GetRequiredCount(0x7055b10b))
+                AchievementsController()->AwardAchievement(0x7055b10b);
+        }
+        return;
+    }
+    case 0x533535d6: {
+        if (HasCreatureTutorialOccurred(0x7aee5ee7))
+            return;
+        state->SetStageA(0x22c77df1);
+        state->SetStageA(0x8d61d137);
+        state->SetStageA(0x4ad11866);
+        cSPCreatureBase_s00d3_c970* avatar = NounManager_s00d3_c970()->GetAvatar();
+        if (avatar->FUN_c0b780() && avatar->FUN_c0b7a0()) {
+            state->SetStageB(0x8d61d137);
+            return;
+        }
+        if (avatar->FUN_c0b780()) {
+            state->SetStageB(0x22c77df1);
+            return;
+        }
+        state->SetStageB(0x4ad11866);
+        return;
+    }
+    case 0x533535d8: {
+        if (!HasCreatureTutorialOccurred(0xea7666af)) {
+            Msg msg;
+            msg.b = 0;
+            msg.c = 0;
+            msg.d = 0x9569a644;
+            float f0 = NounManager_s00d3_c970()->GetCurrentTerrainSphere()->FUN_c75680(0);
+            float f1 = NounManager_s00d3_c970()->GetCurrentTerrainSphere()->FUN_c75680(1);
+            if (f0 == 0.0f && f1 == 0.0f)
+                msg.a = 0x4599f0e;
+            else if (f0 > f1)
+                msg.a = 0x61d8186;
+            else
+                msg.a = 0x61d8045;
+            int cin = RunCinematicIfNotOccurred("CRG_FirstDNA", 0xea7666af, 0);
+            if (cin != 0)
+                GetMessageServer()->Send(0x7046e98b, &msg, (void*)cin);
+        }
+        cSPCreatureBase_s00d3_c970* avatar = NounManager_s00d3_c970()->GetAvatar();
+        float* pThresh = DAT_0169e35c;
+        if (pThresh != DAT_0169e360 && *pThresh <= FUN_d2e360() && avatar->FUN_c0b770() &&
+            !avatar->mbB5e && !HasCreatureTutorialOccurred(0x56b6c955))
+            state->SetStageB(0x85aca414);
+        if (FUN_d38900()) {
+            state->SetStageB(0xf3e5f2c5);
+            return;
+        }
+        return;
+    }
+    case 0x533535d9:
+        RunCinematicIfNotOccurred("CRG_FirstPartUnlock", 0xb721f66f, 0);
+        AddStat(1, 0);
+        return;
+    case 0x533535da:
+        RunCinematicIfNotOccurred("CRG_FirstPosse", 0x532fb9d6, 0);
+        return;
+    case 0x533535db: {
+        cSPCreatureBase_s00d3_c970* avatar = NounManager_s00d3_c970()->GetAvatar();
+        cSPCreatureBase_s00d3_c970* target = avatar->FUN_c0ee90();
+        if (target && target->GetSpeciesProfile() != avatar->GetSpeciesProfile()) {
+            RunCinematicIfNotOccurred("CRG_TargetedCreature", 0x135f531f, 0);
+            FUN_d38930(0xfeee0549);
+            GetDramaManager()->mbFlag = false;
+            state->SetStageC(0x861883b4);
+            return;
+        }
+        return;
+    }
+    case 0xd3353639:
+        AchievementsController()->AutoTest(0xba577381, 1);
+        GetDramaManager()->FUN_d4d5c0(8);
+        return;
+    case 0xd35dd8c3:
+        MarkEventAsOccurred(0x7aee5ee7);
+        state->SetStageC(0x22c77df1);
+        state->SetStageC(0x8d61d137);
+        state->SetStageC(0x4ad11866);
+        if (!HasCreatureTutorialOccurred(0xfeee0549)) {
+            GetDramaManager()->mbFlag = true;
+            state->SetStageB(0x861883b4);
+            return;
+        }
+        return;
+    case 0xd3e071da:
+        if (!sTestSystem || sTestSystem->mpNext == (char*)sTestSystem + 0x70) {
+            if (ConfigManager()->Query(0x4ea96cb) && !HasCreatureTutorialOccurred(0x33e07240))
+                RunCinematic("CRG_SocialFailure", 0x33e07240);
+        }
+        return;
+    }
+}
+
+// @ 0x00d3d420
+void Fn_00d3d420(cLogHolder* p)
+{
+    void** pEnd = p->mList.mpEnd;
+    void** pBegin = p->mList.mpBegin;
+    p->mList.erase(pBegin, pEnd);
+}
+
+// @ 0x00d3d4c0
+void Fn_00d3d4c0()
+{
+    SP::cCreatureModeStrategy_s00d3_c970* pStrategy = g_pCreatureStrategy;
+    pStrategy->mbDD = 1;
+    pStrategy->SignalCreatureEvent(0x533535d6);
+    TutorialState* state = GetTutorialState();
+    state->Lock(0, 0);
+}
+
+// @ 0x00d3d4f0
+void __stdcall Fn_00d3d4f0(unsigned long long nItemId, cUnlockOwner* pOwner, cCollectableItems_s00d3_c970* pItems, bool bFlag)
+{
+    Vector3f pos;
+    pos.x = g_fUnlockX;
+    pos.y = g_fUnlockY;
+    pos.z = g_fUnlockZ;
+
+    if (pOwner != 0) {
+        cUnlockOwner* pObj = pOwner->GetChild(0x1186577);
+        if (pObj != 0) {
+            Vector3f* pDir = pObj->GetDirection();
+            pos = *pDir;
+            float fInv = 1.0f / sqrtf(pos.z * pos.z + pos.x * pos.x + pos.y * pos.y);
+            Vector3f unit;
+            unit.x = pos.x * fInv;
+            unit.y = pos.y * fInv;
+            unit.z = pos.z * fInv;
+            float fScale = pObj->GetScaleHolder()->mScale;
+            pos.x += unit.x * fScale;
+            pos.y += unit.y * fScale;
+            pos.z += unit.z * fScale;
+        }
+    }
+
+    unsigned int nHi;
+    unsigned int nLo;
+    SplitItemId(nItemId, &nHi, &nLo);
+
+    if (GetGameModeId() == 0x1654c01) {
+        SP::cCreatureModeStrategy_s00d3_c970* pStrategy = g_pCreatureStrategy;
+        GetTutorialState();
+        pStrategy->RunCinematicIfNotOccurred("CRG_FirstPartUnlock", 0xb721f66f, 0);
+        pStrategy->AddStat(1, 0);
+        if (bFlag || g_bUnlockFlag != 0)
+            g_pMissionManager->SetCardArea(CardArea(nLo, 0xb1b104, nHi));
+        cPanel* pPanel = (cPanel*)Fn_00b3d3f0(-0xf, (void*)nLo);
+        pPanel->FUN_00e19350(0xfffffff1u, (int)nLo);
+        cSPCreatureBase_s00d3_c970* pAvatar = NounManager_s00d3_c970()->GetAvatar();
+        if (pAvatar != 0) {
+            Triple areaA = { 0, 0, 0 };
+            Triple areaB = { 0, 0, 0 };
+            Triple item = { nLo, 0xb1b104, nHi };
+            void* pOut = pAvatar->FUN_c0bc00(&areaA, &areaB, &item);
+            Fn_00e39710(0xae2329c6, pOut);
+        }
+    }
+
+    cPropMgr* pPropMgr = PropertyManagerPtr();
+    void* pProp = 0;
+    if (pPropMgr->FindProperty(nLo, nHi, &pProp)) {
+        unsigned int nItem = pItems->GetItemFlags(nItemId);
+        if (nItem != 0 && bFlag) {
+            IEffectObj* pEffect = 0;
+            cEffectsMgr* pEffects = EffectsManagerPtr();
+            if (pEffect != 0)
+                pEffect->Release();
+            if (pEffects->CreateEffect(nItem, 0, &pEffect)) {
+                XformMsg msg;
+                msg.flags |= 4;
+                msg.pos = pos;
+                ++msg.count;
+                Quaternionf quat = PlanetModel_s00d3_c970()->BuildSurfaceOrientation(pos);
+                Matrix33f mat;
+                Matrix3FromQuaternion(mat, quat);
+                msg.rot = mat;
+                msg.flags |= 2;
+                ++msg.count;
+                pEffect->SetTransform(&msg);
+                pEffect->Start(0);
+            }
+            if (pEffect != 0)
+                pEffect->Release();
+        }
+    }
+    g_pMissionManager->FUN_0a(0);
+    if (pProp != 0)
+        ((IPropObj*)pProp)->Release();
 }
 
 // @ 0x00d3d870
@@ -3644,6 +5681,56 @@ int Scenario::Finish()
     return 1;
 }
 
+// @ 0x00d40b40
+int GetDesiredAvatarHerd(uint8_t includeLoose)
+{
+    cGameNounManager_s00d4_0930* nm = (cGameNounManager_s00d4_0930*)NounManager_s00d4_0930();
+    cHerdObj* current = (cHerdObj*)nm->GetSelectedAnimal();
+    PlanetModel_s00d4_0930();
+    if (!includeLoose
+        && gSelectedPlanetIndex >= current->mRangeMin
+        && gSelectedPlanetIndex <= current->mRangeMax) {
+        return (int)current;
+    }
+
+    void* myContinent = GetContinent(PlanetModel_s00d4_0930(), (const cVec3*)GetPosition(current));
+    float best = 3.402823466e+38F;
+    void* profile = GetAvatarProfile(GetSetting9());
+
+    cGameNounManager_s00d4_0930* nm2 = (cGameNounManager_s00d4_0930*)NounManager_s00d4_0930();
+    cGameDataVec* vec = (cGameDataVec*)nm2->GetGameDataVector((void*)0x00cd7d10, (void*)0x00d3d420,
+                                                              (void*)0x00accc30, (void*)0x00b1e500,
+                                                              (void*)0x01be418e);
+    void** it = vec->mBegin;
+    void** end = vec->mEnd;
+    if (it == end) {
+        return (int)current;
+    }
+    for (; it != end; it++) {
+        cHerdObj* obj = (cHerdObj*)*it;
+        if (obj->mProfileId != (uint32_t)profile || obj->mNest == 0) {
+            continue;
+        }
+        if (gSelectedPlanetIndex < obj->mRangeMin || gSelectedPlanetIndex > obj->mRangeMax) {
+            continue;
+        }
+        void* continent = GetContinent(PlanetModel_s00d4_0930(), (const cVec3*)GetPosition(obj));
+        if ((int)myContinent != (int)continent) {
+            continue;
+        }
+        const cVec3* pos = (const cVec3*)GetPosition(obj);
+        float dx = gAvatarHerdPosX - pos->x;
+        float dy = gAvatarHerdPosY - pos->y;
+        float dz = gAvatarHerdPosZ - pos->z;
+        float dist = dx * dx + dy * dy + dz * dz;
+        if (dist < best) {
+            current = obj;
+            best = dist;
+        }
+    }
+    return (int)current;
+}
+
 // @ 0x00d40e70
 void FUN_00d40e70(void)
 {
@@ -3702,6 +5789,145 @@ void __stdcall FUN_00d414e0(uint32_t tuningId)
     case 3: LoadCreatureGameplayTuning(0xf71fa311, 0x7c340397); return;
     case 4: return;
     }
+}
+
+// @ 0x00d41560
+void __cdecl FUN_00d41560()
+{
+}
+
+// @ 0x00d41a70
+void SetGlobalAudioProperties(cCreature* avatar)
+{
+    cCreatureModeStrategy_s00d4_1a70* strategy = cCreatureModeStrategy_s00d4_1a70::spInstance;
+    if (!strategy)
+        return;
+
+    float nearestB = 3.402823466e+38F;
+    float nearestA = 3.402823466e+38F;
+    {   // (the block scopes give the original's frame: both iterators and `pos` share one slot,
+        //  and nothing address-taken is live at the end, so the last SendMessage is a tail call)
+    for (NearIterator it(avatar->mpNearBegin, avatar->mpNearEnd); it.mpCur != it.mpEnd; ++it) {
+        cCreature* creature = CreatureCast((*it)->mpObject);
+        if (creature) {
+            if (creature->GetInfo()->mKind == 1) {
+                float d = DistanceSquared(creature, avatar);
+                if (d < nearestA)
+                    nearestA = d;
+            }
+            if (avatar->IsKindB(creature)) {
+                float d = DistanceSquared(creature, avatar);
+                if (d < nearestB)
+                    nearestB = d;
+            }
+        }
+    }
+    }
+
+    bool flag6 = (avatar->mFlags >> 6) & 1;
+    bool idleState = false;
+    if (avatar->mpAnim->mMode == 0xd2f1ed12) {
+        cIdleAnimInfo* idle = avatar->mpAnim->mOwner.GetIdle(0x20, 0);
+        if (idle)
+            idleState = avatar->GetAnimState(idle->mID)->mState == 1;
+    }
+    bool zero598 = true;
+    if (avatar->mpSpecies->mValue598 != 0.0f)
+        zero598 = false;
+    float valueB750 = (float)avatar->GetValueB750() * 0.33333334f;
+    void* leader = GetDesiredAvatarHerd_s00d4_1a70(0)->GetLeader();
+
+    cAvatarAnim* anim = avatar->mpAnim;
+    if (anim) {
+        if (anim->mMode == 0x2d852ed) {
+            g_MatecallTime = GetTime();
+        } else if (g_MatecallSounds.mpBegin != g_MatecallSounds.mpEnd
+                   && (float)(GetTime() - g_MatecallTime) > 5.0f) {
+            for (uint32_t i = 0, n = g_MatecallSounds.size(); i < n; ++i) {
+                uint32_t sound = g_MatecallSounds.mpBegin[i];
+                SP::IAudioSystem* audio = EA::Audio::GetSystemAT_s00d4_1a70();
+                if (audio) {
+                    audio->BeginMessage(0x347536b);
+                    audio->SetParam(0x3475385, sound);
+                    audio->SetParam(0x34753a0, 0);
+                    audio->SendMessage();
+                }
+            }
+            g_MatecallSounds.clear();
+            switch (g_MatecallState) {
+            case 1: {
+                Vector3_s00d4_1a70 pos = cCreatureModeStrategy_s00d4_1a70::spInstance->CalcVisiblePosition(leader, 30.0f);
+                avatar->StartIndependentSound("soc_matecall_2_stop", &pos, &g_MatecallSounds);
+                g_MatecallTime = GetTime();
+                g_MatecallState = 2;
+                break;
+            }
+            case 2:
+                g_MatecallState = 0;
+                break;
+            }
+        }
+    }
+
+    float nearestObj = 3.402823466e+38F;
+    {
+    for (ObjIterator it(avatar->mpObjBegin, avatar->mpObjEnd); it.mpCur != it.mpEnd; ++it) {
+        cObject* object = (cObject*)(*it.mpCur)->mpObject;
+        if (object) {
+            cObjectTarget* target = object->Cast(0x1b92b27);
+            if (target && target->IsAudible()) {
+                float d = DistanceSquared(target, avatar);
+                if (d < nearestObj)
+                    nearestObj = d;
+            }
+        }
+    }
+    }
+
+    float timer = avatar->Timer()->Get();
+    SetGlobalParam(0x1a7b91f7, timer);
+    SetGlobalParam(0x5f301f0c, timer * g_AudioTuning.mScale < g_AudioTuning.mLimit0c ? 1.0f : 0.0f);
+    SetGlobalParam(0x81d19469, timer * g_AudioTuning.mScale < g_AudioTuning.mLimit10 ? 1.0f : 0.0f);
+    SetGlobalParam(0x304f73f0, avatar->GetValueB9c0() * 0.01f);
+    SetGlobalParam(0xaba89849, sqrtf(nearestB));
+    SetGlobalParam(0xe356f907, sqrtf(nearestA));
+    SetGlobalParam(0xee7fb4b4, (float)avatar->GetValueD8());
+    SetGlobalParam(0x75a853ba, sqrtf(nearestObj));
+    SetGlobalParam(0x6ff2604a, (float)(avatar->GetValue2c70() > 0));
+    SetGlobalParam(0xc6182545, (float)!avatar->GetFlagB770());
+    SetGlobalParam(0xe1a7e909, (float)avatar->GetFlagC130());
+    SetGlobalParam(0x8208c446, (float)strategy->mCount24);
+    SetGlobalParam(0x1ca50e46, (float)idleState);
+    SetGlobalParam(0x4c6d557b, ((cSpecies*)avatar->mpSpecies)->GetScale() * 0.1f);
+    SetGlobalParam(0x8ac976a3, (float)flag6);
+    SetGlobalParam(0x6e44f8c0, (float)zero598);
+    SetGlobalParam(0x8b24520a, valueB750);
+}
+
+// @ 0x00d42570
+void SP::cReloadOwner::ReloadTuning()
+{
+    SP::g_motiveTuning.Init(0xad56080c);
+
+    SP::AppObj3* stage2 = SP::App_s00d4_1a70()->GetAt50()->GetAt38();
+    if (stage2 != 0) {
+        SP::cCreatureCamera* camera =
+            (SP::cCreatureCamera*)stage2->Cast(0x2a7ecd2);
+        if (camera != 0)
+            camera->ReloadTuning();
+    }
+
+    SP::Thing64* p64 = mp64;
+    if (p64 != 0)
+        p64->v08();
+
+    if (mp68 != 0)
+        mp68->ReloadTuning();
+
+    LoadCreatureGameplayTuning(0xad56080c, 0x7c340397);
+
+    if (mp68 != 0)
+        mp68->ReadText_00c2e4e0();
 }
 
 // @ 0x00d425f0
@@ -4021,6 +6247,75 @@ void __stdcall FUN_00d46730(TrigInfo* info)
   }
 }
 
+// @ 0x00d46900
+TrigInfo* __fastcall FUN_00d46900(TrigInfo* self, void* dummy, TrigInfo* src)
+{
+  (void)dummy;
+  self->mRef0 = src->mRef0;
+  if (self->mRef0 != 0) ((TFv)(*(void***)self->mRef0)[0])(self->mRef0);
+  self->mField4 = src->mField4;
+  self->mField8 = src->mField8;
+  self->mFieldC = src->mFieldC;
+  self->mField10 = src->mField10;
+  self->mField14 = src->mField14;
+  self->mField18 = src->mField18;
+  self->mField1C = src->mField1C;
+  self->mField20 = src->mField20;
+  self->mField24 = src->mField24;
+  self->mRef28 = src->mRef28;
+  if (self->mRef28 != 0) ((TFv)(*(void***)self->mRef28)[0])(self->mRef28);
+  return self;
+}
+
+// @ 0x00d46970
+TrigInfo* __fastcall FUN_00d46970(TrigInfo* self, void* dummy, TrigInfo* src)
+{
+  (void)dummy;
+  if (src->mRef0 != self->mRef0) {
+    void* n = src->mRef0;
+    void* o = self->mRef0;
+    if (n != 0) ((TFv)(*(void***)n)[0])(n);
+    self->mRef0 = n;
+    if (o != 0) ((TFv)(*(void***)o)[4 / 4])(o);
+  }
+  self->mField4 = src->mField4;
+  self->mField8 = src->mField8;
+  self->mFieldC = src->mFieldC;
+  self->mField10 = src->mField10;
+  self->mField14 = src->mField14;
+  self->mField18 = src->mField18;
+  self->mField1C = src->mField1C;
+  self->mField20 = src->mField20;
+  self->mField24 = src->mField24;
+  {
+    void* n = src->mRef28;
+    if (n != self->mRef28) {
+      void* o = self->mRef28;
+      if (n != 0) ((TFv)(*(void***)n)[0])(n);
+      self->mRef28 = n;
+      if (o != 0) ((TFv)(*(void***)o)[4 / 4])(o);
+    }
+  }
+  return self;
+}
+
+// @ 0x00d46a90
+void* __cdecl FUN_00d46a90(void* a, void* b, void* out)
+{
+  while (a != b) {
+    TrigInfo* e = (TrigInfo*)a;
+    void* p = e->mRef28;
+    if (p != 0) ((TFv1)(*(void***)p)[0xc / 4])(p, 0);
+    p = e->mRef28;
+    if (p != 0) ((TFv)(*(void***)p)[4 / 4])(p);
+    p = e->mRef0;
+    if (p != 0) ((TFv)(*(void***)p)[4 / 4])(p);
+    a = (char*)a + 0x2c;
+    out = (char*)out + 0x2c;
+  }
+  return out;
+}
+
 // @ 0x00d46c30
 u8 __cdecl FUN_00d46c30(TrigInfo* info, void* strat, void* creature)
 {
@@ -4140,6 +6435,36 @@ u8 __cdecl FUN_00d46c30(TrigInfo* info, void* strat, void* creature)
   return 1;
 }
 
+// @ 0x00d47020
+TrigVec* __fastcall FUN_00d47020(TrigVec* self, void* dummy, TrigVec* src)
+{
+  (void)dummy;
+  if (src == self) return self;
+  s32 n = (s32)(((char*)src->mEnd - (char*)src->mBegin) / 0x2c);
+  if ((s32)(((char*)self->mCap - (char*)self->mBegin) / 0x2c) < n) {
+    TrigInfo* nb = self->Grow(n, src->mBegin, src->mEnd);
+    self->DestroyRange(self->mBegin, self->mEnd);
+    if (self->mBegin != 0 && *(s32*)((char*)self->mBegin - 4) != 0)
+      FUN_00f47380(self->mBegin);
+    self->mEnd = (TrigInfo*)((char*)nb + n * 0x2c);
+    self->mBegin = nb;
+    self->mCap = (TrigInfo*)((char*)nb + n * 0x2c);
+    return self;
+  }
+  s32 size = (s32)(((char*)self->mEnd - (char*)self->mBegin) / 0x2c);
+  if (size < n) {
+    FUN_00d46af0(src->mBegin, (char*)src->mBegin + size * 0x2c, self->mBegin);
+    void* tmp[8];
+    FUN_00d46a10(tmp, (char*)src->mBegin + size * 0x2c, src->mEnd, self->mEnd, src->mEnd);
+    self->mEnd = (TrigInfo*)((char*)self->mBegin + n * 0x2c);
+    return self;
+  }
+  TrigInfo* end = (TrigInfo*)FUN_00d46af0(src->mBegin, src->mEnd, self->mBegin);
+  self->DestroyRange(end, self->mEnd);
+  self->mEnd = (TrigInfo*)((char*)self->mBegin + n * 0x2c);
+  return self;
+}
+
 // @ 0x00d472a0
 void __fastcall FUN_00d472a0(TrigVec* self, void* dummy)
 {
@@ -4165,6 +6490,92 @@ void __fastcall FUN_00d472a0(TrigVec* self, void* dummy)
     void* r0 = tmp.mRef0;
     if (r0 != 0) ((TFv)(*(void***)r0)[4 / 4])(r0);
   }
+}
+
+// @ 0x00d47320
+BigC* __fastcall FUN_00d47320(BigC* self, void* dummy, BigC* src)
+{
+  (void)dummy;
+  self->f0 = src->f0;
+  self->f4 = src->f4;
+  if (self->f4 != 0) ((TFv)(*(void***)self->f4)[0])(self->f4);
+  TrigVec* v = &self->vec;
+  char* buf = (char*)v + 0x18;
+  v->mBegin = (TrigInfo*)buf;
+  v->mEnd = (TrigInfo*)buf;
+  v->mCount = 0;
+  v->mCap = (TrigInfo*)(buf + 0x160);
+  v->Assign(&src->vec);
+  self->f180 = src->f180;
+  return self;
+}
+
+// @ 0x00d47380
+BigC* __fastcall FUN_00d47380(BigC* self, void* dummy, void* p2, void* p3)
+{
+  (void)dummy;
+  self->f0 = *(void**)p2;
+  self->f4 = *(void**)p3;
+  if (self->f4 != 0) ((TFv)(*(void***)self->f4)[0])(self->f4);
+  TrigVec* v = &self->vec;
+  char* buf = (char*)v + 0x18;
+  v->mBegin = (TrigInfo*)buf;
+  v->mEnd = (TrigInfo*)buf;
+  v->mCount = 0;
+  v->mCap = (TrigInfo*)(buf + 0x160);
+  v->Assign((TrigVec*)((char*)p3 + 4));
+  self->f180 = *(u8*)((char*)p3 + 0x17c);
+  return self;
+}
+
+// @ 0x00d473e0
+void* __fastcall FUN_00d473e0(void* self, void* dummy, u32 arg)
+{
+  (void)dummy;
+  BigC* obj = *(BigC**)((char*)self + 0x1c);
+  if (obj != 0) {
+    *(void**)((char*)self + 0x1c) = *(void**)obj;
+  } else {
+    obj = (BigC*)FUN_00f473a0(*(void**)((char*)self + 0x2c), (const char*)0x13f09b4, 0, 0,
+                               (const char*)0x13ebb38, 0xd1);
+  }
+  if (obj != 0) {
+    obj->CopyCtor((void*)arg);
+  }
+  obj->f184 = 0;
+  return obj;
+}
+
+// @ 0x00d47510
+int __fastcall FUN_00d47510(HashMap2C* self, void* dummy, void* param)
+{
+  (void)dummy;
+  int local[3];
+  self->FindLocal(local, param);
+  if (local[0] != (int)self->mBuckets[self->mIndex]) return local[0] + 4;
+
+  SrcTrig src;
+  src.f0 = 0;
+  src.vec.mBegin = (TrigInfo*)src.buf;
+  src.vec.mEnd = (TrigInfo*)src.buf;
+  src.vec.mCap = (TrigInfo*)(src.buf + 0x160);
+  src.vec.mCount = 0;
+  src.flag = 0;
+
+  BigC dst;
+  BigC* built = FUN_00d47380(&dst, 0, param, &src);
+  self->Insert(&src, built, (void*)(u32)(local[0] & 0xffffff00));
+
+  int result = local[0] + 4;
+  dst.vec.DestroyRange(dst.vec.mBegin, dst.vec.mEnd);
+  if (dst.vec.mBegin != 0 && *(s32*)((char*)dst.vec.mBegin - 4) != 0)
+    FUN_00f47380(dst.vec.mBegin);
+  if (dst.f4 != 0) ((TFv)(*(void***)dst.f4)[4 / 4])(dst.f4);
+  src.vec.DestroyRange(src.vec.mBegin, src.vec.mEnd);
+  if (src.vec.mBegin != 0 && *(s32*)((char*)src.vec.mBegin - 4) != 0)
+    FUN_00f47380(src.vec.mBegin);
+  if (src.f0 != 0) ((TFv)(*(void***)src.f0)[4 / 4])(src.f0);
+  return result;
 }
 
 // @ 0x00d47630
@@ -4299,6 +6710,299 @@ bool cCreatureTriggerSystem::EvaluateEvent(u32 eventID, cTriggerEvent* ev)
         }
     }
     return false;
+}
+
+// @ 0x00d47960
+u32 cCreatureModeStrategy_s00d4_7630::Init()
+{
+    // The original is dominated by inlined eastl template bodies
+    // (sp_vector<AutoRefCount<cCreatureModeScenario>>::push_back plus its slow
+    // path 0x00f14270, the 0x00d46610 fixed_hash_map constructor, AutoRefCount
+    // add/release) and by six cCreatureModeScenario allocations.  Only the
+    // outer operations are modelled here.
+    cAppInterface* app = (cAppInterface*)((cAppObj*)SP_App())->V_50();
+    app->Reg_20(0x2a7ecd6, (void*)&FUN_00d2a600);
+
+    // message registration against EA::Messaging::GetServer()
+    (void)GetMessagingServer();
+
+    // six possible scenarios pushed into mPossibleScenarios (sizes and vtables)
+    operator_new(0x38,   "Simulator", 0, 0, 0, 0);
+    operator_new(8,      "Simulator", 0, 0, 0, 0);
+    operator_new(0x65cc, "Simulator", 0, 0, 0, 0);
+    operator_new(0x18,   "Simulator", 0, 0, 0, 0);
+    operator_new(8,      "Simulator", 0, 0, 0, 0);
+    operator_new(8,      "Simulator", 0, 0, 0, 0);
+
+    // AppProperties (0x015fd918) slot 0x24 with property 0x64a44a8, followed by
+    // cProperty::GetBool (0x0041e920) and GetPropertyAsKeyArray().
+    // Finally the global 8-byte (key, value) filter list at 0x01583298 is seeded
+    // with (0x887c91bb,0x32) (0x9d62e363,0x32) (0x91ca5e8c,0x32)
+    // (0x228d8f36,0x32) (0xde8f240b,0x32) (0x7f466450,0x19) (0xa0325a4f,0x19).
+    return 1;
+}
+
+// @ 0x00d47ea0
+u8 cCreatureModeStrategy_s00d4_7630::FUN_00d47ea0(void* a, void* b, f32 c, f32 d, void* e, void* f, void* g)
+{
+    FUN_00d38f40();
+
+    u8 flag = 0;
+    cCollectableItems obj;
+    obj.Ctor(&flag, &flag);
+    cItemSource* source = (cItemSource*)a;
+    source->Init(&obj, f, b);
+
+    u8 result = 0;
+    void* out = 0;
+    u64_s00d4_7630 v;
+    f64 rnd;
+
+    rnd = ((cRandomGlobal*)0x1601760)->RandomDouble();
+    if (c > (f32)rnd) {
+        v = FUN_00d3bfa0(&out, 1, 1, f);
+        if (v != (u64_s00d4_7630)-1) {
+            result = source->Commit(g, (u32)v, (u32)(v >> 32), f);
+            goto done;
+        }
+    }
+    rnd = ((cRandomGlobal*)0x1601760)->RandomDouble();
+    if (d > (f32)rnd) {
+        v = FUN_00d3bfa0(&out, 0, (f == (void*)1) ? 2 : 1, f);
+        if (v != (u64_s00d4_7630)-1) {
+            result = source->Commit(g, (u32)v, (u32)(v >> 32), f);
+            goto done;
+        }
+    }
+    v = FUN_00d3bfa0(&out, 0, 2, f);
+    if (v != (u64_s00d4_7630)-1) {
+        result = source->Commit(g, (u32)v, (u32)(v >> 32), f);
+        goto done;
+    }
+    v = FUN_00d3bfa0(&out, 0, 2, (void*)-1);
+    if (v != (u64_s00d4_7630)-1)
+        result = source->Commit(g, (u32)v, (u32)(v >> 32), f);
+
+done:
+    obj.Deinit(obj.mPool.mpTail, obj.mPool.mCount);
+    u8* p = (u8*)obj.mPool.mpTail;
+    obj.mPool.mField_0c = 0;
+    if (obj.mPool.mCount > 1 && p != (u8*)obj.mPool.mpSentinel) {
+        if (p >= obj.mPool.mpPoolLo && p < obj.mPool.mpPoolHi) {
+            *(void**)p = obj.mPool.mpFreeHead;
+            return result;
+        }
+        FUN_00f47380(p);
+    }
+    return result;
+}
+
+// @ 0x00d48010
+bool cCreatureCollectableItemsScenario::EvaluateEvent(uint32_t eventID, ScenarioEvent* ev)
+{
+    if (ev->actor == 0)
+        return false;
+    if (ev->actor != NounManager_s00d4_8010()->GetAvatar() && eventID != 0xd335362c)
+        return false;
+
+    switch (eventID)
+    {
+    case 0x5371f11:
+    {
+        cTerrainSphere_s00d4_8010* sphere = NounManager_s00d4_8010()->GetCurrentTerrainSphere();
+        cSporeCreature* avatar = NounManager_s00d4_8010()->GetAvatar();
+        if (sphere == 0 || sphere->mpTracker == 0 || avatar == 0)
+            return true;
+        int value = ev->value;
+        ItemVector vec;
+        if (FindItems(sphere->mpTracker, avatar->GetTargetKey(), kSearchRadius0, kSearchRadius1, &vec, value, -1))
+        {
+            bool first = true;
+            for (ItemPair* p = vec.mpBegin; p != vec.mpEnd; ++p)
+            {
+                NotifyUnlockedItem(p->a, p->b, ev->actor, sphere->mpTracker, first);
+                first = false;
+            }
+        }
+        Finish();
+        FreeVector(vec);
+        return true;
+    }
+
+    case 0x49b56d7:
+    {
+        cTerrainSphere_s00d4_8010* sphere = NounManager_s00d4_8010()->GetCurrentTerrainSphere();
+        cSporeCreature* avatar = NounManager_s00d4_8010()->GetAvatar();
+        if (sphere != 0 && sphere->mpTracker != 0 && avatar != 0)
+        {
+            int slot = ((int (__thiscall*)(void*))(*(void***)avatar)[0xd8 / 4])(avatar);
+            int n = sphere->mpTracker->GetNumSlots(slot);
+            int i = 0;
+            if (n > 0)
+            {
+                do
+                {
+                    cItemTracker* t = sphere->mpTracker;
+                    ItemVector vec;
+                    if (FindItems(t, avatar->GetTargetKey(), kSlotRadius0, kSlotRadius1, &vec, -1, n - i))
+                    {
+                        bool first = true;
+                        for (ItemPair* p = vec.mpBegin; p != vec.mpEnd; ++p)
+                        {
+                            ++i;
+                            NotifyUnlockedItem(p->a, p->b, ev->actor, sphere->mpTracker, first);
+                            first = false;
+                        }
+                    }
+                    else
+                        ++i;
+                    FreeVector(vec);
+                } while (i < n);
+            }
+            Finish();
+        }
+        return true;
+    }
+
+    case 0x61b1320:
+    {
+        cTerrainSphere_s00d4_8010* sphere = NounManager_s00d4_8010()->GetCurrentTerrainSphere();
+        NounManager_s00d4_8010()->GetAvatar();
+        if (sphere != 0 && sphere->mpTracker != 0 && ev->actor != 0)
+        {
+            cItemTracker* t = sphere->mpTracker;
+            uint32_t kind = sphere->mKind;
+            int code;
+            if (kind == 0xa8ec6f99)
+                code = 6;
+            else if (kind == 0xcfb01b93)
+                code = 3;
+            else if (kind == 0x5ece4770)
+                code = 5;
+            else
+            {
+                CreatureCounters* c = ev->actor->mpCounters;
+                float a = (float)c->count0;
+                code = 6;
+                if (a > 0.0f)
+                {
+                    float b = (float)c->count1;
+                    if (b > 0.0f)
+                        code = 5;
+                    else
+                        code = 3;
+                }
+            }
+            ReportMood(t, code);
+        }
+        return true;
+    }
+
+    case 0xd3353635:
+    {
+        cTerrainSphere_s00d4_8010* sphere = NounManager_s00d4_8010()->GetCurrentTerrainSphere();
+        if (sphere != 0 && sphere->mpTracker != 0)
+            sphere->mpTracker->AddTotal(ev->value);
+        return true;
+    }
+
+    case 0x60b4123:
+    case 0xd335362c:
+    case 0xd335363a:
+    {
+        cTerrainSphere_s00d4_8010* sphere = NounManager_s00d4_8010()->GetCurrentTerrainSphere();
+        cSporeCreature* avatar = NounManager_s00d4_8010()->GetAvatar();
+        if (sphere == 0 || sphere->mpTracker == 0 || avatar == 0 || ev->actor == 0)
+            return true;
+
+        bool eligible = true;
+        int a = -1;
+        uint32_t b = 1;
+        if (GetCurrentGameMode_s00d4_8010() == 0x1654c05)
+            eligible = false;
+
+        cSporeCreature* target = 0;
+        bool skipSearch = false;
+        if (ev->other != 0)
+        {
+            target = (cSporeCreature*)CastGameObject(ev->other, 0x18eb45e);
+            if (target != 0)
+            {
+                if (eventID == 0xd335362c && eligible)
+                {
+                    void* stats = (char*)ev->actor + 0xc0;
+                    bool inPosse = ((bool (__thiscall*)(void*))(*(void***)stats)[0x58 / 4])(stats);
+                    if (inPosse)
+                        eligible = true;
+                    else
+                    {
+                        int mood = GetGlobalMood()->Query((char*)ev->actor + 0xb28, 0, 0);
+                        bool recent = false;
+                        if (mood == 6 && target->mTimer.IsRunning())
+                        {
+                            double ms = (double)target->mTimer.GetElapsedTime();
+                            if (ms * kMsToSec < kTimerLimit)
+                                recent = true;
+                        }
+                        eligible = recent;
+                    }
+                }
+                // eligibility gates on the other creature
+                if (target->mpBrain == 0 || target->mpBrain->mState == 0 || (target->mFlags & 2) != 0 ||
+                    avatar->mpCounters == target->mpCounters || !target->IsFollower() || !eligible)
+                    return true;
+                a = target->GetTuning()->mItemSlot;
+                if (a != -1)
+                    b = 0xffffffff;
+                float roll = (float)sMathRandom.RandomDoubleUniform();
+                float limit = (target->mFlags & 1) ? kChanceNear : kChanceFar;
+                if (!(limit >= roll))
+                    return true;
+            }
+            else if (!eligible)
+                return true;
+        }
+        else if (!eligible)
+            return true;
+
+        cItemTracker* t = sphere->mpTracker;
+        ItemVector vec;
+        if (FindItems(t, avatar->GetTargetKey(), kSearchRadius0, kSearchRadius1, &vec, a, b))
+        {
+            bool first = true;
+            for (ItemPair* p = vec.mpBegin; p != vec.mpEnd; ++p)
+            {
+                cSporeCreature* who = ev->other;
+                if (who == 0)
+                    who = avatar;
+                NotifyUnlockedItem(p->a, p->b, who, sphere->mpTracker, first);
+                first = false;
+            }
+            if (target != 0)
+                target->mFlags |= 2;
+        }
+        Finish();
+        FreeVector(vec);
+        return true;
+    }
+
+    default:
+        return false;
+    }
+}
+
+// @ 0x00d48b50
+void* GetCreatureGUIWindow(uint32_t windowID)
+{
+    cSPUILayout_s00d4_8010* layout;
+    switch (GetCurrentGameMode_s00d4_8010())
+    {
+    case 0x1654c01: layout = FUN_00d39000(); break;
+    case 0x1654c02: layout = FUN_00cc8990(); break;
+    case 0x1654c10: layout = gUILayoutManager->GetCurrentLayout(); break;
+    default: layout = 0; break;
+    }
+    return layout->FindWindowByID(windowID, 1);
 }
 
 // @ 0x01364b20

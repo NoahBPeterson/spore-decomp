@@ -1,0 +1,7 @@
+00d3c970 ?Assign@cIntVector@@QAEPAU1@PAU1@@Z  # cIntVector::Assign migrated from s00d3c970 (verbatim, slice spelling)
+00d3ca90 ?Fn_00d3ca90@@YAXPAVcPropertyObject@@@Z  # Fn_00d3ca90 migrated from s00d3c970 (verbatim, slice spelling)
+00d3cd00 ?Shutdown@cStrategyFields@@QAE_NXZ  # cStrategyFields::Shutdown migrated from s00d3c970 (verbatim, slice spelling)
+00d3cdc0 ?SignalCreatureEvent@cCreatureModeStrategy_s00d3_c970@SP@@QAEXI@Z  # cCreatureModeStrategy_s00d3_c970::SignalCreatureEvent migrated from s00d3c970 (verbatim, slice spelling)
+00d3d420 ?Fn_00d3d420@@YAXPAUcLogHolder@@@Z  # Fn_00d3d420 migrated from s00d3c970 (verbatim, slice spelling)
+00d3d4c0 ?Fn_00d3d4c0@@YAXXZ  # Fn_00d3d4c0 migrated from s00d3c970 (verbatim, slice spelling)
+00d3d4f0 ?Fn_00d3d4f0@@YGX_KPAVcUnlockOwner@@PAVcCollectableItems_s00d3_c970@@_N@Z  # Fn_00d3d4f0 migrated from s00d3c970 (verbatim, slice spelling)

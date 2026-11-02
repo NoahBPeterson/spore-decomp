@@ -23,8 +23,8 @@
 00d47630 ?GetTrigger@cCreatureTriggerSystem@@QAEPAUcTriggerRec@@IPAUcTriggerOwner@@@Z  # cCreatureTriggerSystem::GetTrigger migrated from s00d47630 (verbatim, slice spelling)
 00d47850 ?FUN_00d47850@cContentValidationSummarizer_s00d4_7630@@QAEXXZ  # cContentValidationSummarizer_s00d4_7630::FUN_00d47850 migrated from s00d47630 (verbatim, slice spelling)
 00d478b0 ?EvaluateEvent@cCreatureTriggerSystem@@QAE_NIPAUcTriggerEvent@@@Z  # cCreatureTriggerSystem::EvaluateEvent migrated from s00d47630 (verbatim, slice spelling)
-00d47960  SP::cCreatureModeStrategy::Init  # thiscall, no args, returns 1
-00d47ea0  SP::cCreatureModeStrategy::FUN_00d47ea0  # (a, b, c, d, e, f, g) ret 0x1c, collectable roll
+00d47960 ?Init@cCreatureModeStrategy_s00d4_7630@@QAEIXZ  # cCreatureModeStrategy_s00d4_7630::Init migrated from s00d47630 (verbatim, slice spelling)
+00d47ea0 ?FUN_00d47ea0@cCreatureModeStrategy_s00d4_7630@@QAEEPAX0MM000@Z  # cCreatureModeStrategy_s00d4_7630::FUN_00d47ea0 migrated from s00d47630 (verbatim, slice spelling)
 00d47f40  FUN_00d47f40  # post-roll path helper (inside 00d47ea0 region)
 00f14270  sp_vector slow push_back  # used by Init
 00f47380  operator delete  # single-arg (used by FUN_00d47ea0 teardown)

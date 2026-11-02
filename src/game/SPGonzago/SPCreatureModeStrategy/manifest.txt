@@ -26,8 +26,17 @@
 ../src/game/SPGonzago/SPCreatureModeStrategy.cpp  ?HeapMake@@YAXPAUSortEntry@@0H@Z  00d3b430  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
 ../src/game/SPGonzago/SPCreatureModeStrategy.cpp  ?FUN_00d3b970@@YAXPAUcSPVector3_s00d3_b920@@IPBU1@@Z  00d3b970  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPCreatureModeStrategy.cpp  ?Deactivate@cCreatureModeStrategy_s00d3_b920@@QAEXXZ  00d3c380  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPGonzago/SPCreatureModeStrategy.cpp  ?Shutdown@cStrategyFields@@QAE_NXZ  00d3cd00  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCreatureModeStrategy.cpp  ?Fn_00d3d4c0@@YAXXZ  00d3d4c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPCreatureModeStrategy.cpp  ?FreeLists@NodePool@@QAEXPAPAUNode@@I@Z  00d3f9e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPCreatureModeStrategy.cpp  ?FUN_00d414e0@@YGXI@Z  00d414e0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPGonzago/SPCreatureModeStrategy.cpp  ?SetGlobalAudioProperties@@YAXPAVcCreature@@@Z  00d41a70  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCreatureModeStrategy.cpp  ?ReloadTuning@cReloadOwner@SP@@QAEXXZ  00d42570  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPCreatureModeStrategy.cpp  ?FUN_00d466f0@@YIEPAX00@Z  00d466f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCreatureModeStrategy.cpp  ?FUN_00d46900@@YIPAUTrigInfo@@PAU1@PAX0@Z  00d46900  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCreatureModeStrategy.cpp  ?FUN_00d46a90@@YAPAXPAX00@Z  00d46a90  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCreatureModeStrategy.cpp  ?FUN_00d47320@@YIPAUBigC@@PAU1@PAX0@Z  00d47320  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCreatureModeStrategy.cpp  ?FUN_00d47380@@YIPAUBigC@@PAU1@PAX11@Z  00d47380  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPCreatureModeStrategy.cpp  ?FUN_00d47850@cContentValidationSummarizer_s00d4_7630@@QAEXXZ  00d47850  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPCreatureModeStrategy.cpp  ?EvaluateEvent@cCreatureTriggerSystem@@QAE_NIPAUcTriggerEvent@@@Z  00d478b0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCreatureModeStrategy.cpp  ?GetCreatureGUIWindow@@YAPAXI@Z  00d48b50  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

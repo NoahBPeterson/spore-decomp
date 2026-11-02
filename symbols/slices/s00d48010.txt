@@ -1,6 +1,7 @@
-00d48010 `anonymous namespace'::cCreatureCollectableItemsScenario::EvaluateEvent  # PDB candidate (caller-scored), symbols/pdb_candidates.json
+00d48010 ?EvaluateEvent@cCreatureCollectableItemsScenario@@QAE_NIPAUScenarioEvent@@@Z  # cCreatureCollectableItemsScenario::EvaluateEvent migrated from s00d48010 (verbatim, slice spelling)
 00d486f0 ??0cCreatureTokenTranslator@@QAE@XZ  # cCreatureTokenTranslator::cCreatureTokenTranslator migrated from s00d48010 (verbatim, slice spelling)
 00d48750 ?TranslateToken@cCreatureTokenTranslator@@UAE_NPB_WPAUWString@@@Z  # cCreatureTokenTranslator::TranslateToken migrated from s00d48010 (verbatim, slice spelling)
 00d48a00 ?InitButtonTable@@YAXXZ  # InitButtonTable migrated from s00d48010 (verbatim, slice spelling)
 00d48ae0 ?FreeButtonTable@@YAXXZ  # FreeButtonTable migrated from s00d48010 (verbatim, slice spelling)
 00d48b00 ?SelectAbility@@YAXH@Z  # SelectAbility migrated from s00d48010 (verbatim, slice spelling)
+00d48b50 ?GetCreatureGUIWindow@@YAPAXI@Z  # GetCreatureGUIWindow migrated from s00d48010 (verbatim, slice spelling)

@@ -1,2 +1,2 @@
-00d41a70 `anonymous namespace'::SetGlobalAudioProperties  # dev-PDB name via pdb_names.json (dev 0x00857a40); byte-exact
-00d42570 SP::cCreatureModeStrategy::ReloadTuning  # reloads motive/camera/display tuning and creature gameplay tuning
+00d41a70 ?SetGlobalAudioProperties@@YAXPAVcCreature@@@Z  # SetGlobalAudioProperties migrated from s00d41a70 (verbatim, slice spelling)
+00d42570 ?ReloadTuning@cReloadOwner@SP@@QAEXXZ  # cReloadOwner::ReloadTuning migrated from s00d41a70 (verbatim, slice spelling)

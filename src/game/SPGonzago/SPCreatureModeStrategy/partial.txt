@@ -1,1 +1,16 @@
 # va  diff-bytes  reason
+00d3aa70  - flags: /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE
+00d3aea0  - flags: /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE
+00d3af00  - flags: /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE
+00d3aff0  - flags: /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE
+00d3b0c0  - flags: /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE
+00d3b690  - flags: /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE
+00d3b7c0  - flags: /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE
+00d3b880  - flags: /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE
+00d3bcc0  - flags: /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS-
+00d3bea0  - flags: /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS-
+00d3bf30  - flags: /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS-
+00d3bfa0  - flags: /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS-
+00d3c3b0  - flags: /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS-
+00d3c610  - flags: /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS-
+00d47960  1338  Init: skeleton/approximate - the message-handler registration (SP::App 0x67dd10 -> slot 0x50 -> slot 0x20 with 0x2a7ecd6 / FUN_00d2a600), the EA::Messaging registration (0x883860), the six cCreatureModeScenario allocations (sizes 0x38/8/0x65cc/0x18/8/8, vtables 0x147abec/0x147abcc/0x147adf8/0x147ab44/0x147abac) and the seven global (key,value) filter appends at 0x01583298 are named, but the inlined eastl sp_vector<AutoRefCount<...>>::push_back (0x00f14270 slow path) / fixed_hash_map ctor (0x00d46610) / AutoRefCount bodies are summarised rather than reproduced (169 vs 1338 bytes). equiv UNSUPPORTED (2 unresolved references: ?V_50@cAppObj@@QAEPAXXZ, ?Reg_20@cAppInterface@@QAEXIPAX@Z) flags: /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
