@@ -5,9 +5,9 @@
 011597d0 ?ReaderTable_Init2@core@audio@rw@@YAXXZ  # installs 8 more reader-table slots
 01159810 ?ReaderTable_Init3@core@audio@rw@@YAXXZ  # installs the last 8 reader-table slots
 01159850 ?InstallDoInsertValue@core@audio@rw@@YAHPAX@Z  # sets the insert-callback slot, returns 1
-01159860 ?LoadBitRegister@HELPER_CMpegBase@core@audio@rw@@QAEXXZ  # refill 24-bit shift register while < 24 bits
-011598a0 ?GetBits@HELPER_CMpegBase@core@audio@rw@@QAEGH@Z  # read n bits, MSB first; source spelling (u16 result)
-01159920 ??1HELPER_CEALayer3@core@audio@rw@@QAE@XZ  # scalar deleting dtor: reset vftable, free decoded frame
-01159950 ?GetSideInfo@HELPER_CEALayer3@core@audio@rw@@QAE_NH@Z  # parse Layer III side info (bool result in al); source spelling
+01159860 ?LoadBitRegister@HELPER_CMpegBase@core@audio@rw@@QAEXXZ  # HELPER_CMpegBase::LoadBitRegister migrated from s01159630 (verbatim, slice spelling)
+011598a0 ?GetBits@HELPER_CMpegBase@core@audio@rw@@QAEGH@Z  # HELPER_CMpegBase::GetBits migrated from s01159630 (verbatim, slice spelling)
+01159920 ??1HELPER_CEALayer3@core@audio@rw@@QAE@XZ  # HELPER_CEALayer3::~HELPER_CEALayer3 migrated from s01159630 (verbatim, slice spelling)
+01159950 ?GetSideInfo@HELPER_CEALayer3@core@audio@rw@@QAE_NH@Z  # HELPER_CEALayer3::GetSideInfo migrated from s01159630 (verbatim, slice spelling)
 01159cc0 ?GetScaleFactors@HELPER_CEALayer3@core@audio@rw@@QAEXHH@Z  # HELPER_CEALayer3::GetScaleFactors migrated from s01159630 (verbatim, slice spelling)
-0115a380 ?Huffman_UnpackTableSet@HELPER_CEALayer3@core@audio@rw@@QAEXHIPAX@Z  # build the Huffman decode table set for one granule
+0115a380 ?Huffman_UnpackTableSet@HELPER_CEALayer3@core@audio@rw@@QAEXHIPAX@Z  # HELPER_CEALayer3::Huffman_UnpackTableSet migrated from s01159630 (verbatim, slice spelling)

@@ -1,2 +1,5 @@
 # source  symbol  va  flags
+../src/game/ealayer30/helper_lbmpeg_ealayer3.cpp.cpp  ??1HELPER_CEALayer3@core@audio@rw@@QAE@XZ  01159920  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/ealayer30/helper_lbmpeg_ealayer3.cpp.cpp  ?GetScaleFactors@HELPER_CEALayer3@core@audio@rw@@QAEXHH@Z  01159cc0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/ealayer30/helper_lbmpeg_ealayer3.cpp.cpp  ?Decode@HELPER_CEALayer3_s0115_a5b0@core@audio@rw@@QAEXXZ  0115b3b0  /O2 /Ob2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/ealayer30/helper_lbmpeg_ealayer3.cpp.cpp  ?Destroy@HELPER_CEALayer3_s0115_a5b0@core@audio@rw@@QAEPAXI@Z  0115b400  /O2 /Ob2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
