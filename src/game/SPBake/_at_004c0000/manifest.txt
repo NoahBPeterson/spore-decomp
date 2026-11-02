@@ -1,0 +1,10 @@
+# source  symbol  va  flags
+../src/game/SPBake/_at_004c0000.cpp  ?GetSceneObject@cSPEditorSkinManager_s004c_38e0@SP@@QAEPAXI@Z  004c45d0  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
+../src/game/SPBake/_at_004c0000.cpp  ?Update5200@Ed@@QAE_NPAUSkinDesc@@@Z  004c5200  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
+../src/game/SPBake/_at_004c0000.cpp  ?Get5910@Ed@@QAEXPAPAUTex@@0@Z  004c5910  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
+../src/game/SPBake/_at_004c0000.cpp  ?Diag5980@Ed@@QAEXPB_W0@Z  004c5980  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
+../src/game/SPBake/_at_004c0000.cpp  ?PopBack6070@PairVec@@QAEXXZ  004c6070  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
+../src/game/SPBake/_at_004c0000.cpp  ?FUN_004c69e0@@YAPAUElem@@PAU1@00@Z  004c69e0  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
+../src/game/SPBake/_at_004c0000.cpp  ??1SkinObj_s004c_6df0@@QAE@XZ  004c72f0  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
+../src/game/SPBake/_at_004c0000.cpp  ??0SkinBuildData@@QAE@XZ  004cbdf0  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
+../src/game/SPBake/_at_004c0000.cpp  ??0fixed_hash_map@eastl@@QAE@ABU?$hash_s004c_d1b0@I@1@ABU?$equal_to_s004c_d1b0@I@1@@Z  004cd1b0  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include

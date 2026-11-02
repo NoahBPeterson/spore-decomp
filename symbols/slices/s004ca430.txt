@@ -1,1 +1,1 @@
-004ca430  SP::EditorObject::Update  # editor object lazy-init of two refcounted sub-objects; stub name (receiver class not in 2008 PDB)
+004ca430 ?Update@EditorObject@@QAEXM@Z  # EditorObject::Update migrated from s004ca430 (verbatim, slice spelling)

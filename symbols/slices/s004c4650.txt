@@ -1,1 +1,11 @@
-004c49e0 SP::cSPEditorSkinManager::GetSkin  # switch on skin id, returns +0x18/+0x1c
+004c49e0 ?GetSkin@cSPEditorSkinManager_s004c_4650@SP@@QAEPAXI@Z  # cSPEditorSkinManager_s004c_4650::GetSkin migrated from s004c4650 (verbatim, slice spelling)
+004c4a30 ?PickSkin@cSPEditorSkinManager_s004c_4650@SP@@QAE_NIUcSPVector3@2@0PAU32@1PAMD@Z  # cSPEditorSkinManager_s004c_4650::PickSkin migrated from s004c4650 (verbatim, slice spelling)
+004c4d30 ?GetBlockOnSkin@cSPEditorSkinManager_s004c_4650@SP@@QAEPAVcSPEditorBlock_s004c_4650@2@IUcSPVector3@2@@Z  # cSPEditorSkinManager_s004c_4650::GetBlockOnSkin migrated from s004c4650 (verbatim, slice spelling)
+004c4eb0 ?DetachSkinParts@cSPEditorSkinManager_s004c_4650@SP@@QAEXXZ  # cSPEditorSkinManager_s004c_4650::DetachSkinParts migrated from s004c4650 (verbatim, slice spelling)
+004c4f60 ?SetDefaultMaterial@cSPEditorSkinManager_s004c_4650@SP@@QAEXI@Z  # cSPEditorSkinManager_s004c_4650::SetDefaultMaterial migrated from s004c4650 (verbatim, slice spelling)
+004c5030 ?SetDefaultMaterialToDetachedLimb@cSPEditorSkinManager_s004c_4650@SP@@QAEXIPBX@Z  # cSPEditorSkinManager_s004c_4650::SetDefaultMaterialToDetachedLimb migrated from s004c4650 (verbatim, slice spelling)
+004c5100 ?SetSkinResolutions@cSPEditorSkinManager_s004c_4650@SP@@QAEXMM@Z  # cSPEditorSkinManager_s004c_4650::SetSkinResolutions migrated from s004c4650 (verbatim, slice spelling)
+004ccb70 ?GetBlockOnSkin@cSPEditorSkinPart@SP@@QBEPAVcSPEditorBlock@2@UcSPVector3@@@Z  # SP::cSPEditorSkinPart::GetBlockOnSkin (callee of s004c4650, named from the dev publics; slice address comment)
+004cced0 ?Shutdown@cSPEditorSkinPart@SP@@QAEXXZ  # SP::cSPEditorSkinPart::Shutdown (callee of s004c4650, named from the dev publics; slice address comment)
+004cd020 ?SetDefaultMaterial@cSPEditorSkinPart@SP@@QAEXI@Z  # SP::cSPEditorSkinPart::SetDefaultMaterial (callee of s004c4650, named from the dev publics; slice address comment)
+004cd060 ?SetSkinResolutions@cSPEditorSkinPart@SP@@QAEXMM@Z  # SP::cSPEditorSkinPart::SetSkinResolutions (callee of s004c4650, named from the dev publics; slice address comment)

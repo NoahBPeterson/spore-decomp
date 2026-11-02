@@ -1,1 +1,4 @@
-004cbdf0  SkinBuildData::SkinBuildData  # 6-vector skin-data default ctor (first vector node-weight w/ tag allocator)
+004cb340 ?BuildMesh@cSkinObject_s004c_b340@SP@@QAE_NXZ  # cSkinObject_s004c_b340::BuildMesh migrated from s004cb340 (verbatim, slice spelling)
+004cb820 ?BuildBones@cSkinObject_s004c_b340@SP@@QAEHXZ  # cSkinObject_s004c_b340::BuildBones migrated from s004cb340 (verbatim, slice spelling)
+004cbdf0 ??0SkinBuildData@@QAE@XZ  # SkinBuildData::SkinBuildData migrated from s004cb340 (verbatim, slice spelling)
+004cbf00 ?FUN_004cbf00@SkinPartBuilder@@QAEXPAX0PAUPartCtx@@@Z  # SkinPartBuilder::FUN_004cbf00 migrated from s004cb340 (verbatim, slice spelling)

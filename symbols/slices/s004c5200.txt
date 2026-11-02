@@ -1,0 +1,4 @@
+004c5200 ?Update5200@Ed@@QAE_NPAUSkinDesc@@@Z  # Ed::Update5200 migrated from s004c5200 (verbatim, slice spelling)
+004c5910 ?Get5910@Ed@@QAEXPAPAUTex@@0@Z  # Ed::Get5910 migrated from s004c5200 (verbatim, slice spelling)
+004c5980 ?Diag5980@Ed@@QAEXPB_W0@Z  # Ed::Diag5980 migrated from s004c5200 (verbatim, slice spelling)
+004c6070 ?PopBack6070@PairVec@@QAEXXZ  # PairVec::PopBack6070 migrated from s004c5200 (verbatim, slice spelling)
