@@ -3,9 +3,9 @@
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
 #include "game/types.h"
-#include "SP/cSpaceTradeRouteManager.h"
 #include "SP/cCivData.h"
 #include "SP/cGonzagoSubsystem.h"
+#include "SP/cSpaceTradeRouteManager.h"
 #include "SP/cStarManager.h"
 #include "SP/cTerrainSphere.h"
 #include "SP/cTradeRouteData.h"
@@ -76,6 +76,7 @@ void* cRouteNode_Alloc(size_t nSize, const char* pName, int nA, int nB,
 void cRouteNode_Free(void* pMemory);                            // 0x00f47380
 void RBTreeInsertNode(void* pNew, void* pParent, void* pAnchor,
                       uint8_t bSide);                           // 0x009216a0
+void RBTreeEraseNode(void* pNode, void* pAnchor);               // 0x00921880
 extern float gCityRadius;               // 0x015b7d08
 extern float gMinusOne;                 // 0x013eb1bc
 extern float gFullProgress;             // 0x013ec4d0
@@ -453,6 +454,14 @@ cRouteNode** cTradeRouteTree::DoInsertValue(cRouteNode** ppOut, const cTradeRout
     return ppOut;
 }
 
+// @ 0x01038250
+void cSpaceTradeRouteManager::Destroy()
+{
+    mpVtable = (void*)0x1499a3c;
+    cRBNodeBase* pRoot = mRoutes.mAnchor.mpNodeParent;
+    mRoutes.erase(pRoot);
+}
+
 // @ 0x01038270
 bool cSpaceTradeRouteManager::Read(cStreamHandle* pStream)
 {
@@ -469,4 +478,52 @@ bool cSpaceTradeRouteManager::Read(cStreamHandle* pStream)
     EA_IO_ReadInt32(pRaw, &nVersion, 1, 0);
     cVarListSerializer serializer(this, &gRouteManagerSerializerList, 0x1a80d26);
     return serializer.SerializeIn(pStream);
+}
+
+// @ 0x01038300
+int cSpaceTradeRouteManager::RemoveTradeRoute(void* pSystem)
+{
+    uint32_t nPlayer = cSPLivingUniverse_GetPlayerEmpireID();
+    uint32_t nSystem = *(uint32_t*)((char*)pSystem + 0x70);
+    int nRemoved = 0;
+    cRBNodeBase* pNode = mRoutes.mAnchor.mpNodeLeft;
+    while (pNode != &mRoutes.mAnchor) {
+        cRouteNode* pRoute = (cRouteNode*)pNode;
+        if ((pRoute->mData.mnSystemA == nSystem && pRoute->mData.mnEmpireB == nPlayer)
+            || (pRoute->mData.mnSystemB == nSystem && pRoute->mData.mnEmpireA == nPlayer)) {
+            --mRoutes.mnSize;
+            cRBNodeBase* pNext = eastl_RBTreeIncrement(pNode);
+            RBTreeEraseNode(pNode, &mRoutes.mAnchor);
+            pRoute->mData.mpVtable = (void*)0x1499a30;
+            cRouteNode_Free(pNode);
+            pNode = pNext;
+            ++nRemoved;
+        } else {
+            pNode = eastl_RBTreeIncrement(pNode);
+        }
+    }
+    return nRemoved;
+}
+
+// @ 0x010383a0
+bool cSpaceTradeRouteManager::RemoveAllTradeRoutesFromSystem(void* pSystem)
+{
+    uint32_t nSystem = *(uint32_t*)((char*)pSystem + 0x70);
+    bool bRemoved = false;
+    cRBNodeBase* pNode = mRoutes.mAnchor.mpNodeLeft;
+    while (pNode != &mRoutes.mAnchor) {
+        cRouteNode* pRoute = (cRouteNode*)pNode;
+        if (pRoute->mData.mnSystemA == nSystem || pRoute->mData.mnSystemB == nSystem) {
+            --mRoutes.mnSize;
+            cRBNodeBase* pNext = eastl_RBTreeIncrement(pNode);
+            RBTreeEraseNode(pNode, &mRoutes.mAnchor);
+            pRoute->mData.mpVtable = (void*)0x1499a30;
+            cRouteNode_Free(pNode);
+            pNode = pNext;
+            bRemoved = true;
+        } else {
+            pNode = eastl_RBTreeIncrement(pNode);
+        }
+    }
+    return bRemoved;
 }
