@@ -16,13 +16,13 @@
 00e186d0  cUIMissionCardPanel::OnNotify(a, b) -> void  # rebuild layout via cConnectionDialog, Init/SetParentWin/FindWindowByID, vtbl[0x104] (NOT byte-exact; see nonmatching.txt)
 00e18810  cUIMissionCardPanel::ShutdownCard() -> void  # release card, shutdown layout, reset field
 00e18860 ?SetVisibleSlot@cUIMissionCardPanel@@QAEXH@Z  # cUIMissionCardPanel::SetVisibleSlot migrated from s00e17c10 (verbatim, slice spelling)
-00e188b0  cUIMissionCardPanel::InitHints(param) -> void*  # operator_new 0x18 -> cConnectionDialog ctor, swap @0x30, layout Init, SetVisibility, FindWindowByID, vtbl[0x104] (NOT byte-exact; see nonmatching.txt)
-00e18980  cUIMissionCardPanel::DestroyMembers() -> void  # reset vtables, free tree, RemoveHandler, release handler/layout (NOT byte-exact; see nonmatching.txt)
-00e18a30  cUIMissionCardPanel::ShutdownA() -> void  # unregister handler hash 0xf45f7d78, clear tree, hide layout (NOT byte-exact; see nonmatching.txt)
-00e18a90  cUIMissionCardPanel::ClearTree() -> void  # free tree @0x34 and reset sentinel
+00e188b0 ?InitHints@cUIMissionCardPanel@@QAEPAXPAX@Z  # cUIMissionCardPanel::InitHints migrated from s00e17c10 (verbatim, slice spelling)
+00e18980 ?DestroyMembers@cUIMissionCardPanel@@QAEXXZ  # cUIMissionCardPanel::DestroyMembers migrated from s00e17c10 (verbatim, slice spelling)
+00e18a30 ?ShutdownA@cUIMissionCardPanel@@QAEXXZ  # cUIMissionCardPanel::ShutdownA migrated from s00e17c10 (verbatim, slice spelling)
+00e18a90 ?ClearTree@cUIMissionCardPanel@@QAEXXZ  # cUIMissionCardPanel::ClearTree migrated from s00e17c10 (verbatim, slice spelling)
 00e18ac0  cUIMissionCardPanel::ForEach(a, b) -> void  # field @0x58 hook then tree walk calling vtbl[0x18](b) (NOT byte-exact; see nonmatching.txt)
-00e18b10  cUIMissionCardPanel::FindMission(id) -> void*  # rbtree find @0x3c, return node @+0x14
-00e18b50  cUIMissionCardPanel::ShutdownB() -> void  # unregister handler 0x6244208, free trees @0x74/@0x40 releasing children (NOT byte-exact; see nonmatching.txt)
-00e18bb0  cUIMissionCardPanel::Construct(param) -> void*  # ctor: set vtables, init fields, register message handler (NOT byte-exact; see nonmatching.txt)
-00e18c70  cUIMissionCardPanel::ShouldShow(id) -> bool  # visObj + IsVisible + current-mission check (NOT byte-exact; see nonmatching.txt)
-00e18cb0  cUIMissionCardPanel::SetSlotAndMission(slot, mission) -> void  # rbtree find, window slot rebind, swap current mission (NOT byte-exact; see nonmatching.txt)
+00e18b10 ?FindMission@cUIMissionCardPanel@@QAEPAXI@Z  # cUIMissionCardPanel::FindMission migrated from s00e17c10 (verbatim, slice spelling)
+00e18b50 ?ShutdownB@cUIMissionCardPanel@@QAEXXZ  # cUIMissionCardPanel::ShutdownB migrated from s00e17c10 (verbatim, slice spelling)
+00e18bb0 ?Construct@cUIMissionCardPanel@@QAEPAXXZ  # cUIMissionCardPanel::Construct migrated from s00e17c10 (verbatim, slice spelling)
+00e18c70 ?ShouldShow@cUIMissionCardPanel@@QAE_NI@Z  # cUIMissionCardPanel::ShouldShow migrated from s00e17c10 (verbatim, slice spelling)
+00e18cb0 ?SetSlotAndMission@cUIMissionCardPanel@@QAEXI@Z  # cUIMissionCardPanel::SetSlotAndMission migrated from s00e17c10 (verbatim, slice spelling)
