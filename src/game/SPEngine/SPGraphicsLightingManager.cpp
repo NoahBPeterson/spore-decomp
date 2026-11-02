@@ -22,6 +22,7 @@
 #include "EA/ResourceMan/Key.h"
 #include "EA/AutoRefCount.h"
 #include "SP/cLocalLightInfo.h"
+#include "SP/cMaterialManager.h"
 #pragma intrinsic(_InterlockedExchange)
 
 // ---- items of slice s007046e0 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -118,9 +119,20 @@ struct Big5b50 {
 // ---- items of slice s00705660 end
 
 // ---- items of slice s00706170 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern const char s_013eb8a4[];                   // 0x013eb8a4 "Graphics"
+extern const char s_013ebb38[];                   // 0x013ebb38 EA allocator tag
 extern float g_0162991c, g_016299f4, g_01629ad8, g_01629928;     // 0x0162991c, 0x016299f4, 0x01629ad8, 0x01629928
+extern const float  kOne;                 // 0x01485720  1.0f
+extern const float  g_negOne;             // 0x013eb1bc -1.0f
+extern const float  g_f13ec480;           // 0x013ec480
+extern const float  g_f140c6e4;           // 0x0140c6e4
+extern const float  g_f13ec5b4;           // 0x013ec5b4
+extern const float  g_f1471064;           // 0x01471064
+extern const float  g_f13f08c0;           // 0x013f08c0
 void* sub_f473d0(int, int, int, const char*, int, int, const char*, int);
+void* sub_f473a0(unsigned, const char*, int, int, int, int);
 void  sub_705b50(void);                           // copy-ctor body (0x00705b50)
+void  sub_705c80(void);                           // pool grow helper (0x00705c80)
 struct IVoid { virtual void v0(); virtual void v1(); };
 struct W6870 {
     int* m0;
@@ -158,6 +170,13 @@ struct W68c0 {
 struct Vec20 { void* b; void* e; void* c; Vec20* init(int n, int unused); };
 struct Vec10 { void* b; void* e; void* c; Vec10* init(int n, int unused); };
 struct E9 { int a; float b, c, d, e, f, g, h, i; };
+struct E144 {
+    void*  p0;              // 0x00
+    char   pad04[0xa4];     // 0x04
+    void*  pA8;             // 0xa8
+    char   padAC[0x10];     // 0xac
+    void*  pBC;             // 0xbc
+};
 struct TreeFind { void find(void* result, void* key); };
 struct W6840 {
     char pad0[0x2c];        // 0x00
@@ -166,7 +185,6 @@ struct W6840 {
 };
 struct Vec3f { float x, y, z; };
 struct Mat3f { float m[9]; };
-struct V4Ret { __m128 v; float f(int i) const { return ((const float*)&v)[i]; } };
 void SH_Accumulate(const float* dir, int n, const __m128* in, __m128* out);      // 0x00794e60 -> 0x00784560
 void SH_RotateZHAdd(const float* dir, int n, const __m128* in, __m128* out);     // 0x00794e70 -> 0x00785500
 void SH_Rotate(const Mat3f* m, int n, const __m128* in, __m128* out);            // 0x00795eb0 -> 0x007864c0
@@ -188,14 +206,47 @@ virtual void q9();
 virtual void q10();
     virtual float* Query(float* scratch, const Vec3f* pos);                      // +0x2c
 };
+struct Q4 { uint32_t x, y, z, w; };
+extern const Vec3f  g_litTriple;          // 0x01629884  (g84,g88,g8c)
+extern const Q4     g_litQuad;            // 0x01629864
 struct LightCfg {
-    char pad00[0xbc];
+    void* m00; void* m04;            // +0x00 (zeroed as integers, like the two embedded vectors)
+    float m08, m0c, m10;             // +0x08
+    float m14;                       // +0x14
+    float m18, m1c;                  // +0x18
+    float m20;                       // +0x20
+    float m24, m28, m2c;             // +0x24
+    float m30;                       // +0x30
+    float m34, m38;                  // +0x34
+    float m3c;                       // +0x3c
+    float m40, m44, m48;             // +0x40
+    float m4c;                       // +0x4c
+    float m50, m54;                  // +0x50
+    float m58;                       // +0x58
+    float m5c, m60, m64;             // +0x5c
+    float m68;                       // +0x68
+    float m6c, m70;                  // +0x6c
+    float m74;                       // +0x74
+    float m78, m7c, m80;             // +0x78
+    float m84, m88;                  // +0x84
+    float m8c, m90, m94;             // +0x8c
+    float m98, m9c, ma0;             // +0x98
+    char  ma4;                       // +0xa4
+    char  pada5[3];                  // +0xa5
+    void** a8Begin;                  // +0xa8
+    void** a8End;                    // +0xac
+    void** a8Cap;                    // +0xb0
+    uint32_t padb4[2];               // +0xb4
     __m128* vecBegin;                // +0xbc
     __m128* vecEnd;                  // +0xc0
-    char padc4[0x18];
+    __m128* vecCap;                  // +0xc4
+    uint32_t padc8[2];               // +0xc8
+    float md0;                       // +0xd0
+    float md4, md8;                  // +0xd4
     float groundScaleB;              // +0xdc
     float groundScaleA;              // +0xe0
-    char pade4[0x20];
+    Q4    me4;                       // +0xe4
+    Q4    mf4;                       // +0xf4
     float zhColor[4];                // +0x104
     float riseBias;                  // +0x114
     float riseScale;                 // +0x118
@@ -203,6 +254,12 @@ struct LightCfg {
     float setScale;                  // +0x120
     float baseA;                     // +0x124
     float baseB;                     // +0x128
+    float m12c;                      // +0x12c
+    float m130;                      // +0x130
+    char  m134;                      // +0x134
+    char  pad135[3];                 // +0x135
+    float m138, m13c, m140;          // +0x138
+    LightCfg();
 };
 struct EnvSample {
     char pad00;
@@ -238,6 +295,21 @@ static inline void Clamp01(float* x, const float* hi)
 {
     _mm_store_ss(x, _mm_min_ss(_mm_max_ss(_mm_setzero_ps(), _mm_load_ss(x)), _mm_load_ss(hi)));
 }
+struct CfgRec {
+    int   i00, i04, i08;             // +0x00
+    float f0c, f10, f14, f18, f1c;   // +0x0c
+    int   i20, i24, i28;             // +0x20
+};
+struct CfgPool {
+    CfgRec** begin;                  // +0x00
+    int      cap;                    // +0x04
+    uint32_t pad08[4];               // +0x08
+    CfgRec*  last;                   // +0x18
+    CfgRec*  cur;                    // +0x1c
+    CfgRec*  curEnd;                 // +0x20
+    CfgRec** end;                    // +0x24
+    void push(const CfgRec* src);
+};
 // ---- items of slice s00706170 end
 
 // ---- items of slice s007070d0 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -1238,13 +1310,6 @@ struct LConfigVec {
     LConfig* Erase(LConfig* first, LConfig* last);                   // 0x70ce80
 };
 LConfig* __cdecl LConfig_Default(LConfig* out);                      // 0x70dd50
-void ReloadLightingStates(void* self);  // 0x70e160
-struct MsgReg { virtual void a0(); virtual void a1(); virtual void a2(); virtual void a3();
-virtual void a4();
-virtual void a5();
-virtual void a6();
-virtual void a7();
-                virtual void a8(void*, int); virtual void a9(); virtual void a10(); virtual void a11(); };
 void __cdecl FillLightingStateFromConfig(void* a, void* b);   // 0x0070aed0
 void __cdecl RBTreeInc(void* n);                              // 0x00921580
 namespace __equiv_ann1 {
@@ -1252,17 +1317,88 @@ struct LConfig {
     ~LConfig();   // 0x00f47380 (equiv t3)
 };
 }
+void* __cdecl MessageServer_s0070_de90(void);          // 0x0067dcc0
+struct LConfig_s0070_de90 {
+    void* mpProperty;               // +0x000
+    int mPad04, mPad08, mPad0c, mPad10, mPad14, mPad18, mPad1c, mPad20;
+    int mPad24, mPad28, mPad2c, mPad30, mPad34, mPad38, mPad3c, mPad40;
+    int mPad44, mPad48, mPad4c, mPad50, mPad54, mPad58, mPad5c, mPad60;
+    int mPad64, mPad68, mPad6c, mPad70, mPad74, mPad78, mPad7c, mPad80;
+    int mPad84, mPad88, mPad8c, mPad90, mPad94, mPad98, mPad9c, mPadA0;
+    int mPadA4, mPadA8, mPadAc, mPadB0, mPadB4, mPadB8, mPadBc, mPadC0;
+    int mPadC4, mPadC8, mPadCc, mPadD0, mPadD4, mPadD8, mPadDc, mPadE0;
+    int mPadE4, mPadE8, mPadEc, mPadF0, mPadF4, mPadF8, mPadFc, mPad100;
+    int mPad104, mPad108, mPad10c, mPad110, mPad114, mPad118, mPad11c, mPad120;
+    int mPad124, mPad128, mPad12c, mPad130, mPad134, mPad138, mPad13c, mPad140;
+    LConfig_s0070_de90();                      // 0x00706dd0
+    LConfig_s0070_de90(const LConfig_s0070_de90&);
+    LConfig_s0070_de90& operator=(const LConfig_s0070_de90&);
+    ~LConfig_s0070_de90();                     // 0x007067f0
+};
+struct LConfigVec_s0070_de90 {
+    LConfig_s0070_de90* mpBegin; LConfig_s0070_de90* mpEnd; LConfig_s0070_de90* mpCap;
+    void DoInsertValues(LConfig_s0070_de90* pos, unsigned n, const LConfig_s0070_de90& v); // 0x70d080
+    LConfig_s0070_de90* Erase(LConfig_s0070_de90* first, LConfig_s0070_de90* last);                   // 0x70ce80
+    void push_back(const LConfig_s0070_de90& v);                                // 0x70dd50
+    void Resize(unsigned n);                                         // 0x70e060
+};
+struct WorldNode {
+    WorldNode* mpNext;      // +0x00  tree linkage
+    void* mpParent;         // +0x04
+    void* mpRight;          // +0x08
+    char _pad0c[8];         // +0x0c
+    void* mpWorld;          // +0x14
+};
+struct WorldTree {
+    WorldNode* mpRoot;      // +0x00  anchor node; its address is the end sentinel
+};
+struct LightingMgr {
+    char mPad00[0x18];              // +0x00
+    LConfigVec_s0070_de90 mConfigs;            // +0x18
+    char mPad2c[4];                 // +0x2c
+    WorldTree mWorlds;              // +0x30
+    void FillLightingStateFromConfig(void* prop, LConfig_s0070_de90* cfg);   // 0x0070aed0
+    void Reload();                  // 0x0070e160
+};
+struct MsgReg { virtual void a0(); virtual void a1(); virtual void a2(); virtual void a3();
+virtual void a4();
+virtual void a5();
+virtual void a6();
+virtual void a7();
+                virtual void a8(void*, int); virtual void a9(); virtual void a10(); virtual void a11(); };
+struct MsgRegOwner { char MsgRegister(); };
+namespace __equiv_ann1 {
+struct LConfig_s0070_de90 {
+    ~LConfig_s0070_de90();   // 0x00f47380 (equiv t3)
+};
+}
 // ---- items of slice s0070de90 end
 
 // ---- items of slice s00782860 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern float g_1485544;
+extern float g_140ebbc;
+extern float g_140ebb8;
 extern float g_153ae10;
+extern float g_1633e44, g_1633e50, g_1633e58, g_1633e60;
+extern int   g_1633e48, g_1633e68;
+extern float g_1633e4c, g_1633e54, g_1633e5c, g_1633e64;
 extern float g_16340e0, g_16341d8, g_1634090, g_1634068, g_16340d8, g_1634108, g_16340a0;
 #pragma intrinsic(_InterlockedExchangeAdd)
+struct Vector4_s0078_2860 { float x, y, z, w; };
 // ---- items of slice s00782860 end
 
 // ---- items of slice s009272c0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C" __declspec(dllimport) void* __stdcall VirtualAlloc(void*, unsigned, unsigned, unsigned);
 extern "C" __declspec(dllimport) void  __stdcall EnterCriticalSection(void*);
 extern "C" __declspec(dllimport) void  __stdcall LeaveCriticalSection(void*);
+extern "C" void* __cdecl operator_new(unsigned, const char*, int, int, const char*, int); // 0x00f473a0
+extern "C" void* __cdecl operator_new__(void*, int, unsigned);                            // 0x011e073e
+extern "C" void* __cdecl Pool_26100(void*);          // 0x00926100
+extern "C" void  __cdecl Pool_26840(void*, int);     // 0x00926840
+extern "C" void* __cdecl Pool_26c20(void*, unsigned, int); // 0x00926c20
+extern "C" void* __cdecl Pool_28df0();               // 0x00928df0
+extern void* g_poolHookList;   // 0x01668ec0
+typedef void (__thiscall* PoolCreateSegmentFn)(void*, unsigned*, unsigned, int, int, unsigned, unsigned);
 struct CriSec {
     uint8_t pad[0x18];
     int     ref;      // +0x18
@@ -1273,6 +1409,50 @@ struct cLocalLightInfo_s0092_72c0 {
     void Sub(int);    // 0x00926fd0
     void Release(int param);  // @ 0x009276c0
 };
+struct MemPool {
+    uint8_t  m[0x510];
+    void  Init(int, int, int, int, int, int);       // 0x00927860
+    void* Alloc(unsigned);                          // 0x009272c0
+    void  ShrinkHeap();                             // 0x00927700
+    bool  Dispose();                                // 0x00927a50
+    bool  LazyInit(int, int, int, int, int, int);   // 0x009274d0
+    static MemPool* Create(int, int, int, int, int, int);
+};
+#define F32(o) (*(uint32_t*)((char*)this + (o)))
+static __forceinline void* Pool_FinishChunk(MemPool* self, uint32_t* chunk, unsigned n, bool fresh)
+{
+    uint32_t size = chunk[1] & 0x7ffffff8;
+    if (n < size) {
+        chunk[1] = n | 1;
+        uint32_t* rem = (uint32_t*)((char*)chunk + n);
+        size -= n;
+        rem[0] = n;
+        rem[1] = size;
+        *(uint32_t*)((char*)rem + size) = size;
+        uint32_t* top = *(uint32_t**)((char*)self + 0x440);
+        if (fresh) {
+            *(uint32_t**)((char*)self + 0x440) = rem;
+            rem[3] = (uint32_t)rem;
+            *(uint32_t*)(top + 8) = *(uint32_t*)(top + 0xc);
+            if (*(uint8_t*)((char*)self + 0x46c) == 0)
+                *(uint32_t*)((char*)self + 0x468) =
+                    ((*(uint32_t*)((char*)top + 4) >> 1) & 0x3ffffffc) + (uint32_t)top;
+        } else {
+            uint32_t tail = *(uint32_t*)((char*)self + 0x3c);
+            rem[2] = (uint32_t)((char*)self + 0x30);
+            rem[3] = tail;
+            *(uint32_t*)((char*)self + 0x3c) = (uint32_t)rem;
+            *(uint32_t*)(tail + 8) = (uint32_t)rem;
+        }
+    }
+    return chunk;
+}
+MemPool* MemPool::Create(int a, int b, int c, int d, int e, int f)
+{
+    MemPool* p = (MemPool*)operator_new(sizeof(MemPool), "EASTL", 0, 0, "allocator.h", 0xd1);
+    p->Init(a, b, c, d, e, f);
+    return p;
+}
 // ---- items of slice s009272c0 end
 
 // callees this slice defines outside this object (rewrite.py held_callee_protos)
@@ -1845,12 +2025,17 @@ unsigned W69e0::next(unsigned idx)
 }
 
 // @ 0x00706ab0
-Vector4* UninitCopyVec4(Vector4* first, Vector4* last, Vector4* result)
+__m128* FUN_00706ab0(__m128* first, __m128* last, __m128* out)
 {
-    Vector4* p = result;
-    for (; first != last; ++first, ++p)
-        *(__m128*)p = *(const __m128*)first;
-    return p;
+    if (first != last) {
+        int offset = (int)((char*)first - (char*)out);
+        do {
+            if (out != 0)
+                *(__m128*)out = *(__m128*)((char*)out + offset);
+            out = (__m128*)((char*)out + 16);
+        } while ((__m128*)((char*)out + offset) != last);
+    }
+    return out;
 }
 
 // @ 0x00706af0
@@ -1870,8 +2055,48 @@ Vec20* Vec20::init(int n, int unused)
 }
 
 // @ 0x00706b50
-void FUN_00706b50(void* self, void* a)
-{ (void)self; (void)a; }
+void CfgPool::push(const CfgRec* src)
+{
+    CfgRec tmp;
+    tmp.i00 = src->i00;
+    tmp.i04 = src->i04;
+    tmp.i08 = src->i08;
+    tmp.f0c = src->f0c;
+    tmp.f10 = src->f10;
+    tmp.f14 = src->f14;
+    tmp.f18 = src->f18;
+    tmp.f1c = src->f1c;
+    tmp.i20 = src->i20;
+    tmp.i24 = src->i24;
+    tmp.i28 = src->i28;
+
+    if ((int)(end - begin) + 1 >= cap)
+        ((void(__thiscall*)(CfgPool*, int, int))sub_705c80)(this, 1, 1);
+
+    CfgRec* node = (CfgRec*)sub_f473a0(0xb0, s_013eb8a4, 0, 0, (int)s_013ebb38, 0xd1);
+    end[1] = node;
+
+    CfgRec* dst = last;
+    if (dst != 0) {
+        dst->i00 = tmp.i00;
+        dst->i04 = tmp.i04;
+        dst->i08 = tmp.i08;
+        dst->f0c = tmp.f0c;
+        dst->f10 = tmp.f10;
+        dst->f14 = tmp.f14;
+        dst->f18 = tmp.f18;
+        dst->f1c = tmp.f1c;
+        dst->i20 = tmp.i20;
+        dst->i24 = tmp.i24;
+        dst->i28 = tmp.i28;
+    }
+
+    CfgRec** p = end + 1;
+    end = p;
+    cur = *p;
+    curEnd = (CfgRec*)((char*)cur + 0xb0);
+    last = cur;
+}
 
 // @ 0x00706c80
 E9** FUN_00706c80(E9** out, E9* first, E9* last, E9* dst)
@@ -1914,9 +2139,110 @@ Vec10* Vec10::init(int n, int unused)
     return this;
 }
 
+// @ 0x00706d60
+int FUN_00706d60(E144* first, E144* last, int result)
+{
+    if (first == last)
+        return result;
+    do {
+        void* p = first->pBC;
+        if (p != 0 && *(int*)((char*)p - 4) != 0)
+            sub_f47380(p);
+        p = first->pA8;
+        if (p != 0 && *(int*)((char*)p - 4) != 0)
+            sub_f47380(p);
+        if (first->p0 != 0)
+            ((IVoid*)first->p0)->v1();
+        first = (E144*)((char*)first + 0x144);
+        result += 0x144;
+    } while (first != last);
+    return result;
+}
+
 // @ 0x00706dd0
-void FUN_00706dd0(void* self)
-{ (void)self; }
+LightCfg::LightCfg()
+{
+    const float one = kOne;
+    const float negOne = g_negOne;
+
+    m00 = 0;
+    m04 = 0;
+    m08 = g_litTriple.x;
+    m0c = g_litTriple.y;
+    m10 = g_litTriple.z;
+    m14 = one;
+    m20 = negOne;
+    m18 = 0.0f;
+    m1c = 0.0f;
+    m24 = g_litTriple.x;
+    m28 = g_litTriple.y;
+    m2c = g_litTriple.z;
+    m30 = one;
+    m34 = 0.0f;
+    m38 = 0.0f;
+    m3c = negOne;
+    m40 = g_litTriple.x;
+    m44 = g_litTriple.y;
+    m48 = g_litTriple.z;
+    m4c = one;
+    m50 = 0.0f;
+    m54 = 0.0f;
+    m58 = negOne;
+    m5c = g_litTriple.x;
+    m60 = g_litTriple.y;
+    m64 = g_litTriple.z;
+    m68 = one;
+    m6c = 0.0f;
+    m70 = 0.0f;
+    m74 = negOne;
+    m78 = g_litTriple.x;
+    m7c = g_litTriple.y;
+    m80 = g_litTriple.z;
+    m84 = one;
+    m88 = g_f140c6e4;
+    m8c = 0.0f;
+    m90 = 0.0f;
+    m94 = 0.0f;
+    m98 = g_litTriple.x;
+    m9c = g_litTriple.y;
+    ma0 = g_litTriple.z;
+    ma4 = 0;
+    a8Begin = 0;
+    a8End = 0;
+    a8Cap = 0;
+    vecBegin = 0;
+    vecEnd = 0;
+    vecCap = 0;
+    md4 = one;
+    md8 = one;
+    md0 = 0.0f;
+    groundScaleB = 0.0f;
+    groundScaleA = 0.0f;
+    riseBias = g_f13ec480;
+    riseScale = g_f140c6e4;
+    setBias = g_f13ec480;
+    setScale = g_f140c6e4;
+    baseA = 0.0f;
+    baseB = 0.0f;
+    m12c = g_f13ec5b4;
+    m130 = 0.0f;
+    m134 = 1;
+    m138 = g_f1471064;
+    m13c = g_f13f08c0;
+    m140 = 0.0f;
+    me4.x = g_litQuad.x;
+    me4.y = g_litQuad.y;
+    me4.z = g_litQuad.z;
+    me4.w = g_litQuad.w;
+    mf4.x = g_litQuad.x;
+    mf4.y = g_litQuad.y;
+    mf4.z = g_litQuad.z;
+    mf4.w = g_litQuad.w;
+    *(uint32_t*)&zhColor[0] = g_litQuad.x;
+    *(uint32_t*)&zhColor[1] = g_litQuad.y;
+    *(uint32_t*)&zhColor[2] = g_litQuad.z;
+    *(uint32_t*)&zhColor[3] = g_litQuad.w;
+}
 
 // @ 0x007070d0
 void SP::cLightingWorld::UpdateLightPosition(unsigned int id, cSPVector3 const & pos)
@@ -3744,11 +4070,11 @@ int cLightingManager_HandleMessage(void* self, int msg, void* data)
 }
 
 // @ 0x0070e280
-bool SP::cLightingManager::Init()
+char MsgRegOwner::MsgRegister()
 {
     void* self = this;
-    ((void(__thiscall*)(void*))ReloadLightingStates)(self);
-    void* ms = MessageServer();
+    ((LightingMgr*)self)->Reload();
+    void* ms = MessageServer_s0070_de90();
     if (ms != 0)
     {
         if (self != 0)
@@ -3776,22 +4102,201 @@ void FUN_007831d0(float x, float* out)
     out[6] = ((-((x3 * 35.0f + (((x2 * x2) * x3) * 33.0f - (x3 * x2) * 63.0f)) - x * 5.0f) * g_16340a0) * g_153ae10) * 2.0f;
 }
 
+// @ 0x00783380
+void FUN_00783380(float* out)
+{
+    if ((g_1633e68 & 1) == 0) {
+        g_1633e68 |= 1;
+        g_1633e4c = (float)sqrt((double)g_153ae10);
+        g_1633e54 = 0;
+        g_1633e5c = 0;
+        g_1633e64 = 0;
+        g_1633e50 = (float)sqrt((double)(g_153ae10 * g_1485544));
+        g_1633e58 = -(float)sqrt((double)(g_153ae10 * g_140ebbc));
+        g_1633e60 = (float)sqrt((double)(g_153ae10 * g_140ebb8));
+    }
+    struct SH7 { float v[7]; };
+    *(SH7*)out = *(SH7*)&g_1633e4c;
+}
+
 // @ 0x00783410
 void FUN_00783410(float angle, int n, float* v)
 {
-    if (n <= 1)
+    if (n < 2)
         return;
     float co = (float)cos((double)angle);
     float si = (float)sin((double)angle);
-    float* p = v + 4;
-    // first column pair rotation (2x2)
-    float a = p[-4], b = p[-3], c = p[-2], d = p[-1];
-    p[-4] = co * a - si * p[0];
-    p[-3] = co * b - si * p[1];
-    p[-2] = co * c - si * p[2];
-    p[-1] = co * d - si * p[3];
-    (void)a; (void)b; (void)c; (void)d;
-    // remaining blocks (see partial.txt)
+    Vector4_s0078_2860* q = (Vector4_s0078_2860*)v;
+
+    __m128 CO = _mm_set_ss(co);
+    __m128 SI = _mm_set_ss(si);
+    __m128 cob = _mm_set1_ps(co);
+    __m128 sib = _mm_set1_ps(si);
+
+    __m128 lo1 = _mm_loadu_ps((const float*)&q[1]);
+    __m128 hi1 = _mm_loadu_ps((const float*)&q[3]);
+    _mm_storeu_ps((float*)&q[3], _mm_sub_ps(_mm_mul_ps(hi1, cob), _mm_mul_ps(lo1, sib)));
+    _mm_storeu_ps((float*)&q[1], _mm_add_ps(_mm_mul_ps(lo1, cob), _mm_mul_ps(hi1, sib)));
+
+    if (n < 3)
+        return;
+
+    float cs[1024];
+    cs[0] = co;
+    cs[1] = si;
+    for (int i = 2; i < n; i++) {
+        int pi = 2 * (i - 1);
+        __m128 cp = _mm_set_ss(cs[pi - 2]);
+        __m128 sp = _mm_set_ss(cs[pi - 1]);
+        __m128 c = _mm_sub_ss(_mm_mul_ss(cp, CO), _mm_mul_ss(sp, SI));
+        __m128 s = _mm_add_ss(_mm_mul_ss(cp, SI), _mm_mul_ss(sp, CO));
+        cs[pi] = _mm_cvtss_f32(c);
+        cs[pi + 1] = _mm_cvtss_f32(s);
+        for (int m = i; m >= 1; m--) {
+            __m128 cm = _mm_set1_ps(cs[2 * (m - 1)]);
+            __m128 sm = _mm_set1_ps(cs[2 * (m - 1) + 1]);
+            int lidx = i * i + i - m;
+            int hidx = i * i + i + m;
+            __m128 lv = _mm_loadu_ps((const float*)&q[lidx]);
+            __m128 hv = _mm_loadu_ps((const float*)&q[hidx]);
+            _mm_storeu_ps((float*)&q[hidx], _mm_sub_ps(_mm_mul_ps(cm, hv), _mm_mul_ps(sm, lv)));
+            _mm_storeu_ps((float*)&q[lidx], _mm_add_ps(_mm_mul_ps(sm, hv), _mm_mul_ps(cm, lv)));
+        }
+    }
+}
+
+// @ 0x009272c0
+void* MemPool::Alloc(unsigned n)
+{
+    uint32_t* seg    = *(uint32_t**)((char*)this + 0x460);
+    uint32_t* sentin = (uint32_t*)((char*)this + 0x448);
+    uint32_t got = 0;
+    bool fresh = false;
+    uint32_t* chunk = 0;
+
+    if (seg != sentin) {
+        do {
+            if (n <= (uint32_t)(seg[2] - seg[1])) {
+                got = n;
+                if (n < F32(0x4dc)) got = F32(0x4dc);
+                uint32_t avail = seg[2] - seg[1];
+                if (avail < got) got = avail;
+                if (VirtualAlloc((void*)(seg[1] + (int)seg), got, 0x1000, 4) == 0)
+                    seg[2] = seg[1];
+                break;
+            }
+            seg = (uint32_t*)seg[6];
+        } while (seg != sentin);
+
+        if (seg != sentin) {
+            uint32_t used = seg[1];
+            uint32_t size = got;
+            if (used != 0) {
+                uint32_t* prev = (uint32_t*)((uint32_t)seg + used - 0x10);
+                if ((*(uint32_t*)((uint32_t)seg + used - 0xc) & 1) == 0) {
+                    chunk = (uint32_t*)((uint32_t)prev - *prev);   // merge with prev
+                    *(uint32_t*)(chunk[2] + 0xc) = chunk[3];
+                    *(uint32_t*)(chunk[3] + 8)   = chunk[2];
+                    size = *prev + got;
+                    chunk[1] = size | 1;
+                    fresh = (chunk == *(uint32_t**)((char*)this + 0x440));
+                } else {
+                    prev[1] = got | 1;
+                    chunk = prev;
+                }
+                uint32_t* bound = (uint32_t*)((char*)chunk + size);
+                bound[0] = size;
+                bound[1] = 8;
+                bound[2] = 8;
+                bound[3] = 9;
+            } else {
+                chunk = (uint32_t*)(((uint32_t)seg + 0x27) & ~7u);   // (seg+39)&~7
+                uint32_t tail = (uint32_t)seg + (got - (uint32_t)chunk);
+                uint32_t tsz  = tail & ~7u;
+                uint32_t tprev = tsz - 0x10;
+                seg[0] = (uint32_t)chunk;                    // seg size
+                chunk[1] = (tail & 0x80000007u) | 1 | tprev;
+                chunk[0] = 0;
+                *(uint32_t*)(tprev + (uint32_t)chunk) = tprev;
+                *(uint32_t*)((uint32_t)chunk + tsz - 0xc) = 8;
+                *(uint32_t*)((uint32_t)chunk + tsz - 8) = 8;
+                *(uint32_t*)((uint32_t)chunk + tsz - 4) = 9;
+                Pool_26840(chunk, 1);
+                fresh = true;
+            }
+            seg[1] = seg[1] + got;
+        }
+    }
+
+    if (chunk == 0) {
+        chunk = (uint32_t*)Pool_26c20((char*)this, n, 0);
+        if (chunk == 0) return 0;
+        Pool_26840(chunk, 1);
+        fresh = true;
+    }
+    return Pool_FinishChunk(this, chunk, n, fresh);
+}
+
+// @ 0x009274d0
+bool MemPool::LazyInit(int a, int b, int c, int d, int e, int f)
+{
+    int* bin;
+    if (*(uint8_t*)this == 0) {
+        *(uint8_t*)this = 1;
+        if (F32(0x4e4) == 0)
+            F32(0x4e4) = (uint32_t)Pool_26100((char*)this + 0x4e8);
+        CriSec* cs = (CriSec*)F32(0x4e4);
+        if (cs != 0) {
+            EnterCriticalSection(cs);
+            cs->ref++;
+        }
+        F32(0x004) = 0x40;
+        F32(0x008) = 0; F32(0x00c) = 0; F32(0x010) = 0; F32(0x014) = 0;
+        F32(0x018) = 0; F32(0x01c) = 0; F32(0x020) = 0; F32(0x024) = 0;
+        F32(0x028) = 0; F32(0x02c) = 0;
+        operator_new__((char*)this + 0x30, 0, 0x400);
+        /* 0x7f bin headers, each self-linked at +8/+0xc, step 8 */
+        bin = (int*)((char*)this + 0x30);
+        for (int i = 0x7f; i != 0; --i) {
+            bin[2] = (int)bin;
+            bin[3] = (int)bin;
+            bin += 2;
+        }
+        F32(0x430) = 0; F32(0x434) = 0; F32(0x438) = 0; F32(0x43c) = 0;
+        F32(0x440) = (uint32_t)((char*)this + 0x30);
+        F32(0x444) = 0;
+        F32(0x448) = 0; F32(0x44c) = 0; F32(0x450) = 0; F32(0x454) = 0;
+        F32(0x458) = 0; F32(0x45c) = 0; F32(0x460) = 0; F32(0x464) = 0;
+        F32(0x460) = (uint32_t)((char*)this + 0x448);
+        F32(0x464) = (uint32_t)((char*)this + 0x448);
+        F32(0x004) = (F32(0x004) & 1) | 0x48;
+        bin = (int*)((char*)this + 0x49c);
+        F32(0x468) = 0;
+        *(uint8_t*)((char*)this + 0x46c) = 0;
+        F32(0x488) = 0; F32(0x48c) = 0;
+        F32(0x490) = 0x10000;
+        F32(0x494) = 0x20000;
+        *(uint8_t*)((char*)this + 0x498) = 0;
+        bin[0] = 0; bin[1] = 0; bin[2] = 0; bin[3] = 0;
+        F32(0x4a4) = (uint32_t)((char*)this + 0x49c);
+        F32(0x4a8) = (uint32_t)((char*)this + 0x49c);
+        F32(0x4c8) = 0x40000;
+        F32(0x4cc) = 0x10000;
+        F32(0x4d0) = F32(0x440);
+        F32(0x4d4) = (uint32_t)Pool_28df0();
+        if (cs != 0) {
+            cs->ref--;
+            LeaveCriticalSection(cs);
+        }
+    }
+    if (a != 0 || b != 0)
+        ((PoolCreateSegmentFn)0x00927140)(this, (unsigned*)a, (unsigned)b, c, d, e, f);
+    if (*(uint8_t*)((char*)this + 0x50c) == 0) {
+        *(uint8_t*)((char*)this + 0x50c) = 1;
+        for (void** p = (void**)g_poolHookList; p != 0; p = (void**)p[2])
+            ((void(__cdecl*)(void*, int, void*))p[0])(this, 1, p[1]);
+    }
+    return true;
 }
 
 // @ 0x009276c0

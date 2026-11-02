@@ -3,8 +3,6 @@
 00705c80  -  skeleton only (EASTL vector DoInsertValue for bit-packed vector)
 00705db0  -  skeleton only (EASTL vector reserve/init for bit-packed vector)
 00705f40  -  skeleton only (556-byte lighting update not reconstructed)
-00706b50  -  skeleton only (289-byte vector push_back of 0xb0-byte records)
-00706dd0  -  skeleton only (756-byte SP::cLightingConfig constructor)
 00708100 563 EH construct-range helper: only a skeleton, EH funclets and sub-object construction not reproduced
 00708500 128 EH uninitialized-copy helper: skeleton, EH cleanup path and element construct not reproduced
 007085a0 365 cLightingWorld::RemoveLight: approximate; linked-list of cell samples and manager virtual dispatch not fully reconstructed
@@ -28,4 +26,3 @@
 0070cce0 401 slot_vector_base<cLocalLightInfo>::create: not reconstructed (skeleton only)
 0070d850  999   SP::cLightingWorld::AddLight; slot/cell bookkeeping omitted (assembly-free outline only)
 0070de90  364   cLightingManager message handler; RBTree notify loop omitted
-00783410  n/a  PARTIAL: only the first 2x2 column rotation is translated; the remaining block loops are omitted

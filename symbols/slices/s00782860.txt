@@ -9,5 +9,5 @@
 00782db0 ?FUN_00782db0@@YAMMHM@Z  # FUN_00782db0 migrated from s00782860 (verbatim, slice spelling)
 00783130 ?FUN_00783130@@YAMMIMM@Z  # FUN_00783130 migrated from s00782860 (verbatim, slice spelling)
 007831d0 ?FUN_007831d0@@YAXMPAM@Z  # FUN_007831d0 migrated from s00782860 (verbatim, slice spelling)
-00783380 SH normalisation constants (7 floats) + copy-out
+00783380 ?FUN_00783380@@YAXPAM@Z  # FUN_00783380 migrated from s00782860 (verbatim, slice spelling)
 00783410 ?FUN_00783410@@YAXMHPAM@Z  # FUN_00783410 migrated from s00782860 (verbatim, slice spelling)

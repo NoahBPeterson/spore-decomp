@@ -26,4 +26,5 @@
 ../src/game/SPEngine/SPGraphicsLightingManager.cpp  ?GetLocalShaderData@cLightingWorld@@QAEXPAX@Z  00707740  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsLightingManager.cpp  ?ReleaseLocalCache@cLightingWorld_s0070_8100@@QAEXPAX@Z  00707790  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsLightingManager.cpp  ?Update@cLightingManager@SP@@UAEXI@Z  0070ae40  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPEngine/SPGraphicsLightingManager.cpp  ?FUN_00783380@@YAXPAM@Z  00783380  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsLightingManager.cpp  ?Release@cLocalLightInfo_s0092_72c0@@QAEXH@Z  009276c0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
