@@ -1,1 +1,6 @@
+008bfc10 ?FUN_008bfc10@@YAXPAD@Z  # FUN_008bfc10 migrated from s008bfc10 (verbatim, slice spelling)
+008bfd50 ?T2K_NewTransformationInternal@@YAXPADPAHHHH@Z  # T2K_NewTransformationInternal migrated from s008bfc10 (verbatim, slice spelling)
+008bfe80 ?ConcatFontMatrix@@YAXPAHPAD@Z  # ConcatFontMatrix migrated from s008bfc10 (verbatim, slice spelling)
 008c0000 ?T2K_NewTransformation@@YAXPADHHHPAHH1@Z  # T2K_NewTransformation migrated from s008bfc10 (verbatim, slice spelling)
+008c0650 ?T2K_PurgeMemoryInternal@@YAXPADH@Z  # T2K_PurgeMemoryInternal migrated from s008bfc10 (verbatim, slice spelling)
+008c0710 ?T2K_PurgeMemory@@YAXPADHPAH@Z  # T2K_PurgeMemory migrated from s008bfc10 (verbatim, slice spelling)

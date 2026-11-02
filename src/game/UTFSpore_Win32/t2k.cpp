@@ -23,50 +23,12 @@ extern "C" void T2K_TransformYFunits(void* t, short units, int* outScaled, int* 
 #include <string.h>
 
 // ---- items of slice s008bfc10 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C" void Delete_GlyphClass(void* p);                                  // 0x008b0280
 #define I32(p, o) (*(int*)((char*)(p) + (o)))
 #define I16(p, o) (*(short*)((char*)(p) + (o)))
 #define U16(p, o) (*(unsigned short*)((char*)(p) + (o)))
 #define I8(p, o) (*(char*)((char*)(p) + (o)))
 #define PTR(p, o) (*(char**)((char*)(p) + (o)))
-extern "C" void tsi_Error(void* mem, int code);                              // 0x008d10c0
-extern "C" void tsi_EmergencyShutDown(void* mem);                            // 0x008d1210
-extern "C" void* tsi_AllocMem(void* mem, int size);                          // 0x008d1260
-extern "C" int util_FixMul(int a, int b);                                    // 0x008d1590
-extern "C" int util_FixDiv(int a, int b);                                    // 0x008d16d0
-extern "C" int util_EuclidianDistance(int a, int b);                         // 0x008d17d0
-extern "C" unsigned short GetUPEM(void* sfnt);                               // 0x008ceb70
-extern "C" int GetNumGlyphs_sfntClass(void* sfnt);                           // 0x008cef90
-extern "C" void setT2KScaleFactors(int ppem, int upem, void* out);           // 0x008cd1b0
-extern "C" void GetFontWideSbitMetrics(void* a, void* b, int xppem, int yppem, void* hor, void* ver);   // 0x008c4f40
-extern "C" void FUN_008cf460(void* sfnt, void* hor, void* ver);              // 0x008cf460
-extern "C" void FUN_008ccbb0(void* a, int b, int c);                         // 0x008ccbb0
-extern "C" void T2K_TransformXFunits(void* t, short units, int* outScaled, int* outRounded);   // 0x008bfdb0
-extern "C" void T2K_TransformYFunits(void* t, short units, int* outScaled, int* outRounded);   // 0x008bfe10
-static void FUN_008bfc10(char* t)
-{
-    int x = I32(t, 0x128);
-    if (I32(t, 0x16c) != x || I32(t, 0x170) != I32(t, 0x12c)) {
-        char* sfnt = PTR(t, 0x184);
-        if (I32(sfnt, 0x44) != 0) {
-            I8(t, 0x174) = 0;
-            FUN_008ccbb0(PTR(sfnt, 0x44), I32(t, 0x128), I32(t, 0x12c));
-        }
-        I32(t, 0x16c) = I32(t, 0x128);
-        I32(t, 0x170) = I32(t, 0x12c);
-    }
-}
-static void T2K_NewTransformationInternal(char* t, int* m, int arg, int x, int y)
-{
-    I32(t, 8) = m[0];
-    I32(t, 0xc) = m[1];
-    I32(t, 0x10) = m[2];
-    I32(t, 0x14) = m[3];
-    I32(t, 0x1c) = (I32(t, 8) == 0x10000 && I32(t, 0xc) == 0 && I32(t, 0x10) == 0 && I32(t, 0x14) == 0x10000) ? 1 : 0;
-    I32(t, 0x128) = x;
-    I32(t, 0x12c) = y;
-    if (arg != 0)
-        FUN_008bfc10(t);
-}
 static char* FUN_008bf2b0(int n, void* mem)
 {
     char* p = (char*)tsi_AllocMem(mem, 0x18);
@@ -81,27 +43,6 @@ static char* FUN_008bf2b0(int n, void* mem)
     PTR(p, 0x10) = buf;
     PTR(p, 0x14) = buf + (I32(p, 0xc) >> 1);
     return p;
-}
-static void ConcatFontMatrix(int* m, char* sfnt)
-{
-#define A20(o) I32(PTR(sfnt, 0x20), o)
-#define A24(o) I32(PTR(sfnt, 0x24), o)
-    if (PTR(sfnt, 0x20) != 0) {
-        m[0] = util_FixMul(A20(0x20c), m[1]) + util_FixMul(A20(0x204), m[0]);
-        m[2] = util_FixMul(A20(0x20c), m[3]) + util_FixMul(A20(0x204), m[2]);
-        int t1 = util_FixMul(A20(0x208), m[0]);
-        t1 += util_FixMul(A20(0x210), m[1]);
-        m[1] = t1;
-        m[3] = util_FixMul(A20(0x210), m[3]) + util_FixMul(A20(0x208), m[2]);
-    }
-    if (PTR(sfnt, 0x24) != 0) {
-        m[0] = util_FixMul(A24(0x4e0), m[1]) + util_FixMul(A24(0x4d8), m[0]);
-        m[2] = util_FixMul(A24(0x4e0), m[3]) + util_FixMul(A24(0x4d8), m[2]);
-        m[1] = util_FixMul(A24(0x4e4), m[1]) + util_FixMul(A24(0x4dc), m[0]);
-        m[3] = util_FixMul(A24(0x4e4), m[3]) + util_FixMul(A24(0x4dc), m[2]);
-    }
-#undef A20
-#undef A24
 }
 struct FontWideMetrics {
     int valid;                      // +0
@@ -155,6 +96,89 @@ static __declspec(noinline) void scalePoints(short* src, int* dst, void* scale, 
     }
 }
 // ---- items of slice s008c0760 end
+
+// @ 0x008bfc10
+static void FUN_008bfc10(char* t)
+{
+    int x = I32(t, 0x128);
+    if (I32(t, 0x16c) != x || I32(t, 0x170) != I32(t, 0x12c)) {
+        char* sfnt = PTR(t, 0x184);
+        if (I32(sfnt, 0x44) != 0) {
+            I8(t, 0x174) = 0;
+            FUN_008ccbb0(PTR(sfnt, 0x44), I32(t, 0x128), I32(t, 0x12c));
+        }
+        I32(t, 0x16c) = I32(t, 0x128);
+        I32(t, 0x170) = I32(t, 0x12c);
+    }
+}
+
+// @ 0x008bfd50
+static void T2K_NewTransformationInternal(char* t, int* m, int arg, int x, int y)
+{
+    I32(t, 8) = m[0];
+    I32(t, 0xc) = m[1];
+    I32(t, 0x10) = m[2];
+    I32(t, 0x14) = m[3];
+    I32(t, 0x1c) = (I32(t, 8) == 0x10000 && I32(t, 0xc) == 0 && I32(t, 0x10) == 0 && I32(t, 0x14) == 0x10000) ? 1 : 0;
+    I32(t, 0x128) = x;
+    I32(t, 0x12c) = y;
+    if (arg != 0)
+        FUN_008bfc10(t);
+}
+
+// @ 0x008bfdb0
+void T2K_TransformXFunits(void* t, short units, int* outScaled, int* outRounded)
+{
+    int scaled = util_FixMul((int)units << 16, I32(t, 0x138));
+    int rounded = 0;
+    if (I32(t, 0x1c) == 0) {
+        int a = util_FixMul(I32(t, 8), scaled);
+        rounded = util_FixMul(I32(t, 0x10), scaled);
+        *outScaled = a;
+        *outRounded = rounded;
+    } else {
+        *outScaled = scaled;
+        *outRounded = rounded;
+    }
+}
+
+// @ 0x008bfe10
+void T2K_TransformYFunits(void* t, short units, int* outScaled, int* outRounded)
+{
+    int scaled = util_FixMul((int)units << 16, I32(t, 0x13c));
+    int rounded = 0;
+    if (I32(t, 0x1c) == 0) {
+        int a = util_FixMul(I32(t, 0xc), scaled);
+        rounded = util_FixMul(I32(t, 0x14), scaled);
+        *outScaled = a;
+        *outRounded = rounded;
+    } else {
+        *outScaled = rounded;
+        *outRounded = scaled;
+    }
+}
+
+// @ 0x008bfe80
+static void ConcatFontMatrix(int* m, char* sfnt)
+{
+#define A20(o) I32(PTR(sfnt, 0x20), o)
+#define A24(o) I32(PTR(sfnt, 0x24), o)
+    if (PTR(sfnt, 0x20) != 0) {
+        m[0] = util_FixMul(A20(0x20c), m[1]) + util_FixMul(A20(0x204), m[0]);
+        m[2] = util_FixMul(A20(0x20c), m[3]) + util_FixMul(A20(0x204), m[2]);
+        int t1 = util_FixMul(A20(0x208), m[0]);
+        m[1] = t1 + util_FixMul(A20(0x210), m[1]);
+        m[3] = util_FixMul(A20(0x210), m[3]) + util_FixMul(A20(0x208), m[2]);
+    }
+    if (PTR(sfnt, 0x24) != 0) {
+        m[0] = util_FixMul(A24(0x4e0), m[1]) + util_FixMul(A24(0x4d8), m[0]);
+        m[2] = util_FixMul(A24(0x4e0), m[3]) + util_FixMul(A24(0x4d8), m[2]);
+        m[1] = util_FixMul(A24(0x4e4), m[1]) + util_FixMul(A24(0x4dc), m[0]);
+        m[3] = util_FixMul(A24(0x4e4), m[3]) + util_FixMul(A24(0x4dc), m[2]);
+    }
+#undef A20
+#undef A24
+}
 
 // @ 0x008c0000
 void T2K_NewTransformation(char* t, int arg, int ptSizeX, int ptSizeY, int* matrixIn, int wantSbit, int* errOut)
@@ -312,6 +336,46 @@ void T2K_NewTransformation(char* t, int arg, int ptSizeX, int ptSizeY, int* matr
     } else {
         tsi_EmergencyShutDown(PTR(t, 4));
     }
+}
+
+// @ 0x008c0650
+static void T2K_PurgeMemoryInternal(char* t, int level)
+{
+    Delete_GlyphClass(PTR(t, 0x104));
+    I32(t, 0x104) = 0;
+    if (level > 0) {
+        void* p = PTR(t, 0x118);
+        if (p != 0 && I32(t, 0x30) != 0) {
+            char* mem = PTR(t, 4);
+            if (p == PTR(mem, 0x64))
+                I32(mem, 0x9c) = 1;
+            else
+                tsi_DeAllocMem(mem, p);
+            I32(t, 0x118) = 0;
+            if (level > 99 && (unsigned)I32(mem, 0x80) > 0x100) {
+                tsi_DeAllocMem(mem, PTR(mem, 0x64));
+                I32(PTR(t, 4), 0x64) = 0;
+                I32(PTR(t, 4), 0x80) = 0;
+                I32(PTR(t, 4), 0x9c) = 1;
+            }
+        }
+        if (I32(t, 0x11c) != 0 && I32(t, 0x34) != 0) {
+            tsi_DeAllocMem(PTR(t, 4), PTR(t, 0x11c));
+            I32(t, 0x11c) = 0;
+        }
+    }
+}
+
+// @ 0x008c0710
+void T2K_PurgeMemory(char* t, int level, int* errOut)
+{
+    int err = setjmp(*(jmp_buf*)(PTR(t, 4) + 0x10));
+    *errOut = err;
+    if (err == 0) {
+        T2K_PurgeMemoryInternal(t, level);
+        return;
+    }
+    tsi_EmergencyShutDown(PTR(t, 4));
 }
 
 // @ 0x008c0760
