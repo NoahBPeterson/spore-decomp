@@ -1,7 +1,7 @@
 0095d000 ?BltEdgeStretch@Drawing@UTFWin@EA@@YAXPAUCanvas@23@PBM1PAUImage_s0095_d000@23@1MM@Z  # BltEdgeStretch migrated from s0095d000 (verbatim, slice spelling)
 0095d540 ?GradientBox@Drawing@UTFWin@EA@@YAXPAUCanvas@23@PBM111@Z  # GradientBox migrated from s0095d000 (verbatim, slice spelling)
 0095d780 ?DrawStdButton@Drawing@UTFWin@EA@@YAXPAUCanvas@23@PBMIIM@Z  # DrawStdButton migrated from s0095d000 (verbatim, slice spelling)
-0095da40 FUN_0095da40 # unnamed bevel frame helper
+0095da40 ?DrawBevel@Drawing@UTFWin@EA@@YAXPAUCanvas@23@PBMIM@Z  # DrawBevel migrated from s0095d000 (verbatim, slice spelling)
 0095db50 ?SerWalk@@YA_NPAUSerItem@@PAI@Z  # SerWalk migrated from s0095d000 (verbatim, slice spelling)
 0095dbd0 ?Build@PropInfo@@QAE_NPAUSerItem@@0IPAHH@Z  # PropInfo::Build migrated from s0095d000 (verbatim, slice spelling)
 0095dd00 ?FindProp@SerItem@@QAEPAUPropInfo@@PAU1@IPAH@Z  # SerItem::FindProp migrated from s0095d000 (verbatim, slice spelling)

@@ -1,0 +1,6 @@
+0095c260 ?FUN_0095c260@@YAXPAUIRenderer_s0095_c260@EA@@PBURectF_s0095_c260@2@1PAX1@Z  # FUN_0095c260 migrated from s0095c260 (verbatim, slice spelling)
+0095c420 ?FUN_0095c420@@YAXPAUIRenderer_s0095_c260@EA@@PBURectF_s0095_c260@2@PAUTileSource@2@MMMM@Z  # FUN_0095c420 migrated from s0095c260 (verbatim, slice spelling)
+0095c5f0 ?FUN_0095c5f0@@YAXPAUIRenderer_s0095_c260@EA@@PBURectF_s0095_c260@2@1PAUTileSource@2@MMMM@Z  # FUN_0095c5f0 migrated from s0095c260 (verbatim, slice spelling)
+0095c800 ?FUN_0095c800@@YAXPAUIRenderer_s0095_c260@EA@@PBURectF_s0095_c260@2@1PAUTileSource@2@MM@Z  # FUN_0095c800 migrated from s0095c260 (verbatim, slice spelling)
+0095c920 ?FUN_0095c920@@YAXPAUIRenderer_s0095_c260@EA@@PBURectF_s0095_c260@2@1PAUTileSource@2@MM@Z  # FUN_0095c920 migrated from s0095c260 (verbatim, slice spelling)
+0095ca40 ?FUN_0095ca40@@YAXPAUIRenderer_s0095_c260@EA@@PBURectF_s0095_c260@2@1PAUTileSource@2@PBMMM@Z  # FUN_0095ca40 migrated from s0095c260 (verbatim, slice spelling)

@@ -1,4 +1,4 @@
-// src/game/UTFSpore_Win32/RenderUtils.cpp -- migrated from slice(s) s0095d000, s0095b310 by tools/migrate/rewrite.py
+// src/game/UTFSpore_Win32/RenderUtils.cpp -- migrated from slice(s) s0095c260, s0095d000, s0095b310 by tools/migrate/rewrite.py
 // Object file: UTFSpore_Win32/RenderUtils.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -181,15 +181,29 @@ namespace UTFWin {
 struct Canvas {
     virtual void v00();
     virtual void SetColor(uint32_t);                                  // +0x04
-    virtual void v02(); virtual void v03(); virtual void v04(); virtual void v05();
-    virtual void v06(); virtual void v07(); virtual void v08(); virtual void v09();
-    virtual void v10(); virtual void v11(); virtual void v12(); virtual void v13();
-    virtual void v14(float, float, float, float);                     // +0x38
-    virtual void FillQuad();                                          // +0x3c
-    virtual void v16(); virtual void v17();
-    virtual void DrawQuad(const void*, float, const void*, float,
-                          const void*, float, const void*, float);    // +0x48
-    virtual void v19(); virtual void v20(); virtual void v21();
+virtual void v02();
+virtual void v03();
+virtual void v04();
+virtual void v05();
+virtual void v06();
+virtual void v07();
+virtual void v08();
+virtual void v09();
+virtual void v10();
+virtual void v11();
+virtual void v12();
+virtual void v13();
+    virtual void FillRectangle(uint32_t color, float x0, float y0, float x1); // +0x38
+    virtual void v15();                                               // +0x3c
+virtual void v16();
+virtual void v17();
+    virtual void FillQuadGradient(const float* topRight, uint32_t topRightColor,
+                                  const float* topLeft, uint32_t topLeftColor,
+                                  const float* bottomLeft, uint32_t bottomLeftColor,
+                                  const float* bottomRight, uint32_t bottomRightColor); // +0x48
+virtual void v19();
+virtual void v20();
+virtual void v21();
     virtual void DrawImage(const float* rect, Image_s0095_d000* img, const float* uv); // +0x58
 };
 }
@@ -225,7 +239,78 @@ void __cdecl DrawStdButton(Canvas*, const float* rect, uint32_t color, uint32_t 
 }
 }
 }
+namespace EA {
+namespace UTFWin {
+namespace Drawing {
+void __cdecl DrawBevel(Canvas*, const float* rect, uint32_t color, float width);      // 0x95da40
+}
+}
+}
 // ---- items of slice s0095d000 end
+
+// ---- items of slice s0095c260 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C" __declspec(dllimport) double __cdecl ceil(double);
+extern "C" __declspec(dllimport) double __cdecl floor(double);
+double iat_floor(double x) { return floor(x); }
+namespace EA {
+struct RectF_s0095_c260 {
+  RectF_s0095_c260() {}
+  RectF_s0095_c260(float l, float t, float r, float b) : mLeft(l), mTop(t), mRight(r), mBottom(b) {}
+  float mLeft, mTop, mRight, mBottom;
+  bool Intersect(RectF_s0095_c260 const& a, RectF_s0095_c260 const& b);  // 0x00634b60 (RectF::Intersect)
+};
+}
+namespace EA {
+struct IRenderer_s0095_c260 {
+  virtual void v00();
+  virtual void v01();
+  virtual void v02();
+  virtual void v03();
+  virtual void v04();
+  virtual void v05();
+  virtual void v06();
+  virtual void v07();
+  virtual void v08();
+  virtual void v09();
+  virtual void v10();
+  virtual void v11();
+  virtual void v12();
+  virtual void v13();
+  virtual void v14();
+  virtual void v15();
+  virtual void v16();
+  virtual void v17();
+  virtual void v18();
+  virtual void v19();
+  virtual void v20();
+  virtual void v21();
+  virtual void DrawImage(RectF_s0095_c260 const* pDst, void* pObj, RectF_s0095_c260 const* pUV);  // +0x58
+};
+}
+namespace EA {
+struct TileSource {
+  char mPad[0x1c];
+  int mWidth;   // +0x1c
+  int mHeight;  // +0x20
+};
+}
+using EA::IRenderer_s0095_c260;
+using EA::RectF_s0095_c260;
+using EA::TileSource;
+void DrawClippedRect(IRenderer_s0095_c260* pRenderer, RectF_s0095_c260 const* pRect, void* pObj, RectF_s0095_c260 const* pDst);
+void FUN_0095c260(IRenderer_s0095_c260* pRenderer, RectF_s0095_c260 const* pDst, RectF_s0095_c260 const* pUV, void* pObj,
+                  RectF_s0095_c260 const* pClip);
+void FUN_0095c420(IRenderer_s0095_c260* pRenderer, RectF_s0095_c260 const* pDst, TileSource* pObj, float sx, float sy,
+                  float offx, float offy);
+void FUN_0095c5f0(IRenderer_s0095_c260* pRenderer, RectF_s0095_c260 const* pDst, RectF_s0095_c260 const* pUV, TileSource* pObj,
+                  float sx, float sy, float offx, float offy);
+void FUN_0095c800(IRenderer_s0095_c260* pRenderer, RectF_s0095_c260 const* pDst, RectF_s0095_c260 const* pUV, TileSource* pObj,
+                  float sx, float offx);
+void FUN_0095c920(IRenderer_s0095_c260* pRenderer, RectF_s0095_c260 const* pDst, RectF_s0095_c260 const* pUV, TileSource* pObj,
+                  float sy, float offy);
+void FUN_0095ca40(IRenderer_s0095_c260* pRenderer, RectF_s0095_c260 const* pDst, RectF_s0095_c260 const* pUV, TileSource* pObj,
+                  float const* pSlices, float sx, float sy);
+// ---- items of slice s0095c260 end
 
 // @ 0x0095c0d0
 void __cdecl DrawClippedRect(IRenderer* obj, const RectF* a, const RectF* c, const RectF* b)
@@ -258,37 +343,260 @@ void __cdecl DrawClippedRect(IRenderer* obj, const RectF* a, const RectF* c, con
     obj->DrawRect(&R, c, &uv);
 }
 
+// @ 0x0095c260
+void FUN_0095c260(IRenderer_s0095_c260* pRenderer, RectF_s0095_c260 const* pDst, RectF_s0095_c260 const* pUV, void* pObj, RectF_s0095_c260 const* pClip)
+{
+  float left = pDst->mLeft;
+  if (left >= pClip->mLeft && pDst->mRight <= pClip->mRight && pDst->mTop >= pClip->mTop &&
+      pDst->mBottom <= pClip->mBottom) {
+    pRenderer->DrawImage(pDst, pObj, pUV);
+    return;
+  }
+  float w = pDst->mRight - left;
+  float h = pDst->mBottom - pDst->mTop;
+  if (1.0f > w || 1.0f > h) return;
+  RectF_s0095_c260 inter(*pDst);
+  inter.Intersect(*pDst, *pClip);
+  if (inter.mLeft != inter.mRight && inter.mTop != inter.mBottom) {
+    float invW = 1.0f / w;
+    float invH = 1.0f / h;
+    float uvW = pUV->mRight - pUV->mLeft;
+    float uvH = pUV->mBottom - pUV->mTop;
+    RectF_s0095_c260 u;
+    u.mLeft = (inter.mLeft - left) * invW * uvW + pUV->mLeft;
+    u.mRight = (inter.mRight - left) * invW * uvW + pUV->mLeft;
+    u.mTop = (inter.mTop - pDst->mTop) * invH * uvH + pUV->mTop;
+    u.mBottom = (inter.mBottom - pDst->mTop) * invH * uvH + pUV->mTop;
+    pRenderer->DrawImage(&inter, pObj, &u);
+  }
+}
+
+// @ 0x0095c420
+void FUN_0095c420(IRenderer_s0095_c260* pRenderer, RectF_s0095_c260 const* pDst, TileSource* pObj, float sx, float sy, float offx, float offy)
+{
+  float w = (float)pObj->mWidth * sx;
+  float h = (float)pObj->mHeight * sy;
+  if (1.0f > w || 1.0f > h) return;
+  if (offx > 0.0f) {
+    offx = offx - (float)ceil((double)(offx / w)) * w;
+  } else if (offx <= w) {
+    offx = (float)iat_floor((double)-(offx / w)) * w + offx;
+  }
+  if (offy > 0.0f) {
+    offy = offy - (float)ceil((double)(offy / h)) * h;
+  } else if (offy <= h) {
+    offy = (float)iat_floor((double)-(offy / h)) * h + offy;
+  }
+  float y = pDst->mTop + offy;
+  if (y < pDst->mBottom) {
+    do {
+      float x = pDst->mLeft + offx;
+      while (x < pDst->mRight) {
+        float nx = x + w;
+        RectF_s0095_c260 tile(x, y, nx, y + h);
+        DrawClippedRect(pRenderer, &tile, pObj, pDst);
+        x = nx;
+      }
+      y += h;
+    } while (y < pDst->mBottom);
+  }
+}
+
+// @ 0x0095c5f0
+void FUN_0095c5f0(IRenderer_s0095_c260* pRenderer, RectF_s0095_c260 const* pDst, RectF_s0095_c260 const* pUV, TileSource* pObj, float sx, float sy, float offx, float offy)
+{
+  float w = ((pUV->mRight - pUV->mLeft) * (float)pObj->mWidth) * sx;
+  float h = ((pUV->mBottom - pUV->mTop) * (float)pObj->mHeight) * sy;
+  if (1.0f > w || 1.0f > h) return;
+  if (offx > 0.0f) {
+    offx = offx - (float)ceil((double)(offx / w)) * w;
+  } else if (offx <= w) {
+    offx = (float)iat_floor((double)-(offx / w)) * w + offx;
+  }
+  if (offy > 0.0f) {
+    offy = offy - (float)ceil((double)(offy / h)) * h;
+  } else if (offy <= h) {
+    offy = (float)iat_floor((double)-(offy / h)) * h + offy;
+  }
+  float y = pDst->mTop + offy;
+  if (y < pDst->mBottom) {
+    do {
+      float x = pDst->mLeft + offx;
+      while (x < pDst->mRight) {
+        float nx = x + w;
+        RectF_s0095_c260 tile(x, y, nx, y + h);
+        FUN_0095c260(pRenderer, &tile, pUV, pObj, pDst);
+        x = nx;
+      }
+      y += h;
+    } while (y < pDst->mBottom);
+  }
+}
+
+// @ 0x0095c800
+void FUN_0095c800(IRenderer_s0095_c260* pRenderer, RectF_s0095_c260 const* pDst, RectF_s0095_c260 const* pUV, TileSource* pObj, float sx, float offx)
+{
+  float w = ((pUV->mRight - pUV->mLeft) * (float)pObj->mWidth) * sx;
+  if (1.0f > w) return;
+  if (offx > 0.0f) {
+    offx = offx - (float)ceil((double)(offx / w)) * w;
+  } else if (offx <= w) {
+    offx = (float)iat_floor((double)-(offx / w)) * w + offx;
+  }
+  float x = pDst->mLeft + offx;
+  if (x < pDst->mRight) {
+    do {
+      float nx = x + w;
+      RectF_s0095_c260 tile(x, pDst->mTop, nx, pDst->mBottom);
+      FUN_0095c260(pRenderer, &tile, pUV, pObj, pDst);
+      x = nx;
+    } while (x < pDst->mRight);
+  }
+}
+
+// @ 0x0095c920
+void FUN_0095c920(IRenderer_s0095_c260* pRenderer, RectF_s0095_c260 const* pDst, RectF_s0095_c260 const* pUV, TileSource* pObj, float sy, float offy)
+{
+  float h = ((pUV->mBottom - pUV->mTop) * (float)pObj->mHeight) * sy;
+  if (1.0f > h) return;
+  if (offy > 0.0f) {
+    offy = offy - (float)ceil((double)(offy / h)) * h;
+  } else if (offy <= h) {
+    offy = (float)iat_floor((double)-(offy / h)) * h + offy;
+  }
+  float y = pDst->mTop + offy;
+  if (y < pDst->mBottom) {
+    do {
+      float ny = y + h;
+      RectF_s0095_c260 tile(pDst->mLeft, y, pDst->mRight, ny);
+      FUN_0095c260(pRenderer, &tile, pUV, pObj, pDst);
+      y = ny;
+    } while (y < pDst->mBottom);
+  }
+}
+
+// @ 0x0095ca40
+void FUN_0095ca40(IRenderer_s0095_c260* pRenderer, RectF_s0095_c260 const* pDst, RectF_s0095_c260 const* pUV, TileSource* pObj, float const* pSlices, float sx, float sy)
+{
+  float a = pSlices[0];
+  float b = pSlices[1];
+  float c = pSlices[2];
+  float d = pSlices[3];
+  float uvW = pUV->mRight - pUV->mLeft;
+  float uvH = pUV->mBottom - pUV->mTop;
+  float wStep = ((float)pObj->mWidth * uvW) * sx;
+  float hStep = ((float)pObj->mHeight * uvH) * sy;
+
+  float left = pDst->mLeft + a * wStep;
+  float top = pDst->mTop + b * hStep;
+  float right = pDst->mRight - (1.0f - c) * wStep;
+  float bottom = pDst->mBottom - (1.0f - d) * hStep;
+  if (left > right) {
+    left = (left + right) * 0.5f;
+    right = left;
+  }
+  if (top > bottom) {
+    top = (top + bottom) * 0.5f;
+    bottom = top;
+  }
+
+  float ul = pUV->mLeft + uvW * a;
+  float ut = pUV->mTop + uvH * b;
+  float ur = pUV->mLeft + uvW * c;
+  float ub = pUV->mTop + uvH * d;
+
+  RectF_s0095_c260 uvTL(pUV->mLeft, pUV->mTop, ul, ut);
+  RectF_s0095_c260 dstTL(pDst->mLeft, pDst->mTop, left, top);
+  pRenderer->DrawImage(&dstTL, pObj, &uvTL);
+
+  RectF_s0095_c260 uvTR(ur, pUV->mTop, pUV->mRight, ut);
+  RectF_s0095_c260 dstTR(right, pDst->mTop, pDst->mRight, top);
+  pRenderer->DrawImage(&dstTR, pObj, &uvTR);
+
+  RectF_s0095_c260 uvBL(pUV->mLeft, ub, ul, pUV->mBottom);
+  RectF_s0095_c260 dstBL(pDst->mLeft, bottom, left, pDst->mBottom);
+  pRenderer->DrawImage(&dstBL, pObj, &uvBL);
+
+  RectF_s0095_c260 uvBR(ur, ub, pUV->mRight, pUV->mBottom);
+  RectF_s0095_c260 dstBR(right, bottom, pDst->mRight, pDst->mBottom);
+  pRenderer->DrawImage(&dstBR, pObj, &uvBR);
+
+  if (left < right) {
+    RectF_s0095_c260 dstTop(left, pDst->mTop, right, top);
+    RectF_s0095_c260 uvTop(ul, pUV->mTop, ur, ut);
+    FUN_0095c800(pRenderer, &dstTop, &uvTop, pObj, sx, 0.0f);
+    RectF_s0095_c260 dstBot(left, bottom, right, pDst->mBottom);
+    RectF_s0095_c260 uvBot(ul, ub, ur, pUV->mBottom);
+    FUN_0095c800(pRenderer, &dstBot, &uvBot, pObj, sx, 0.0f);
+  }
+  if (top < bottom) {
+    RectF_s0095_c260 dstLeft(pDst->mLeft, top, left, bottom);
+    RectF_s0095_c260 uvLeft(pUV->mLeft, ut, ul, ub);
+    FUN_0095c920(pRenderer, &dstLeft, &uvLeft, pObj, sy, 0.0f);
+    RectF_s0095_c260 dstRight(right, top, pDst->mRight, bottom);
+    RectF_s0095_c260 uvRight(ur, ut, pUV->mRight, ub);
+    FUN_0095c920(pRenderer, &dstRight, &uvRight, pObj, sy, 0.0f);
+  }
+  if (left != right && top != bottom) {
+    RectF_s0095_c260 dstMid(left, top, right, bottom);
+    RectF_s0095_c260 uvMid(ul, ut, ur, ub);
+    FUN_0095c5f0(pRenderer, &dstMid, &uvMid, pObj, sx, sy, 0.0f, 0.0f);
+  }
+}
+
 // @ 0x0095d000
 namespace EA { namespace UTFWin { namespace Drawing {
 void __cdecl BltEdgeStretch(Canvas* c, const float* dest, const float* edge, Image_s0095_d000* img, const float* uv, float sx, float sy)
 {
-    float iw = (float)img->width;
-    float ih = (float)img->height;
-    float dw = edge[2] - edge[0];
-    float dh = edge[3] - edge[1];
-    float du = iw * dw * sx;
-    float dv = ih * dh * sy;
+    float ew = edge[2] - edge[0];               // xmm0 - horizontal extent of the uv border box
+    float eh = edge[3] - edge[1];               // xmm1 - vertical extent
+    float du = (float)img->width * ew * sx;     // xmm3 - tile width
+    float dv = (float)img->height * eh * sy;    // xmm4 - tile height
+
     float fx0 = uv[0] * du + dest[0];
     float fy0 = uv[1] * dv + dest[1];
     float fx1 = dest[2] - (1.0f - uv[2]) * du;
     float fy1 = dest[3] - (1.0f - uv[3]) * dv;
-    if (!(fx1 >= fx0)) { fx0 = fx1 = (fx1 + fx0) * 0.5f; }
-    if (!(fy1 >= fy0)) { fy0 = fy1 = (fy1 + fy0) * 0.5f; }
+    if (fx1 < fx0) { fx0 = fx1 = (fx1 + fx0) * 0.5f; }
+    if (fy1 < fy0) { fy0 = fy1 = (fy1 + fy0) * 0.5f; }
 
-    float xs[4] = { dest[0], fx0, fx1, dest[2] };
-    float ys[4] = { dest[1], fy0, fy1, dest[3] };
-    float us[4] = { edge[0], uv[0], uv[2], edge[2] };
-    float vs[4] = { edge[1], uv[1], uv[3], edge[3] };
+    // Scratch area reused as the destination rect / uv rect of every blit below.
+    float q[8];
+    q[0] = edge[0]; q[1] = edge[1]; q[2] = edge[2]; q[3] = edge[3];
 
-    // corners (always)
-    for (int i = 0; i < 3; i++) {
-        for (int j = 0; j < 3; j++) {
-            if ((i == 1 && !(fx1 > fx0)) || (j == 1 && !(fy1 > fy0)))
-                continue;
-            float r[4] = { xs[i], ys[j], xs[i + 1], ys[j + 1] };
-            float t[4] = { us[i], vs[j], us[i + 1], vs[j + 1] };
-            c->DrawImage(r, img, t);
-        }
+    // top-left corner
+    q[4] = dest[0]; q[5] = dest[1]; q[6] = fx0; q[7] = fy0;
+    { float u[4] = { q[0], q[1], q[4] + ew * uv[0], q[1] + eh * uv[1] }; c->DrawImage(q + 4, img, u); }
+    // top-right corner
+    q[4] = fx1; q[5] = dest[1]; q[6] = dest[2]; q[7] = fy0;
+    { float u[4] = { q[0], q[5], q[4] + ew * uv[2], q[5] + eh * uv[1] }; c->DrawImage(q + 4, img, u); }
+    // bottom-left corner
+    q[4] = dest[0]; q[5] = fy1; q[6] = fx0; q[7] = dest[3];
+    { float u[4] = { q[5], q[1], q[6], q[2] }; c->DrawImage(q + 4, img, u); }
+    // bottom-right corner
+    q[4] = fx1; q[5] = fy1; q[6] = dest[2]; q[7] = dest[3];
+    { float u[4] = { q[4], q[5], fx1, fy1 }; c->DrawImage(q + 4, img, u); }
+
+    if (fx1 - fx0 > 0.0f) {
+        // top band
+        q[4] = fx0; q[5] = dest[1]; q[6] = fx1; q[7] = fy0;
+        { float u[4] = { q[0], q[5], q[6], q[2] }; c->DrawImage(q + 4, img, u); }
+        // bottom band
+        q[4] = fx0; q[5] = fy1; q[6] = fx1; q[7] = dest[3];
+        { float u[4] = { q[4], q[5], q[6], q[7] }; c->DrawImage(q + 4, img, u); }
+    }
+    if (fy1 - fy0 > 0.0f) {
+        // left band
+        q[4] = dest[0]; q[5] = fy0; q[6] = fx0; q[7] = fy1;
+        { float u[4] = { q[4], q[5], q[6], q[7] }; c->DrawImage(q + 4, img, u); }
+        // right band
+        q[4] = fx1; q[5] = fy0; q[6] = dest[2]; q[7] = fy1;
+        { float u[4] = { q[4], q[5], q[6], q[7] }; c->DrawImage(q + 4, img, u); }
+    }
+    if (fx0 != fx1 && fy0 != fy1) {
+        // centre
+        q[4] = fx0; q[5] = fy0; q[6] = fx1; q[7] = fy1;
+        { float u[4] = { q[4], q[5], q[6], q[7] }; c->DrawImage(q + 4, img, u); }
     }
 }
 }}}  // namespace EA::UTFWin::Drawing
@@ -297,30 +605,30 @@ void __cdecl BltEdgeStretch(Canvas* c, const float* dest, const float* edge, Ima
 namespace EA { namespace UTFWin { namespace Drawing {
 void __cdecl GradientBox(Canvas* c, const float* outer, const float* inner, const float* colOuter, const float* colInner)
 {
-    if (outer[0] == outer[2])
+    if (outer[0] == outer[2] || outer[1] == outer[3])
         return;
-    if (outer[1] == outer[3])
-        return;
-    float ox0 = outer[0], oy0 = outer[1], ox1 = outer[2], oy1 = outer[3];
-    float ix0 = inner[0], iy0 = inner[1], ix1 = inner[2], iy1 = inner[3];
-    struct P { float x, y; };
-    // top, bottom, left, right bands, each as a quad with outer/inner colours
-    {
-        P p0 = { ox0, oy0 }, p1 = { ox1, oy0 }, p2 = { ix0, iy0 }, p3 = { ix1, iy0 };
-        c->DrawQuad(&p0, colOuter[0], &p1, colOuter[2], &p2, colInner[0], &p3, colInner[2]);
-    }
-    {
-        P p0 = { ox0, oy1 }, p1 = { ox1, oy1 }, p2 = { ix0, iy1 }, p3 = { ix1, iy1 };
-        c->DrawQuad(&p0, colOuter[1], &p1, colOuter[3], &p2, colInner[1], &p3, colInner[3]);
-    }
-    {
-        P p0 = { ox0, oy0 }, p1 = { ox0, oy1 }, p2 = { ix0, iy0 }, p3 = { ix0, iy1 };
-        c->DrawQuad(&p0, colOuter[0], &p1, colOuter[1], &p2, colInner[0], &p3, colInner[1]);
-    }
-    {
-        P p0 = { ox1, oy0 }, p1 = { ox1, oy1 }, p2 = { ix1, iy0 }, p3 = { ix1, iy1 };
-        c->DrawQuad(&p0, colOuter[2], &p1, colOuter[3], &p2, colInner[2], &p3, colInner[3]);
-    }
+
+    // The gradient colour arrays arrive as raw ARGB words stored behind a "const float*" API.
+    const uint32_t* co = (const uint32_t*)colOuter;
+    const uint32_t* ci = (const uint32_t*)colInner;
+
+    float oTL[2] = { outer[0], outer[1] };
+    float oTR[2] = { outer[2], outer[1] };
+    float oBL[2] = { outer[0], outer[3] };
+    float oBR[2] = { outer[2], outer[3] };
+    float iTL[2] = { inner[0], inner[1] };
+    float iTR[2] = { inner[2], inner[1] };
+    float iBL[2] = { inner[0], inner[3] };
+    float iBR[2] = { inner[2], inner[3] };
+
+    // left band
+    c->FillQuadGradient(oTL, co[0], iTL, ci[0], iBL, ci[0], oBL, co[0]);
+    // top band
+    c->FillQuadGradient(oTL, co[1], oTR, co[1], iTR, ci[1], iTL, ci[1]);
+    // right band
+    c->FillQuadGradient(iTR, ci[2], oTR, co[2], oBR, co[2], iBR, ci[2]);
+    // bottom band
+    c->FillQuadGradient(iBL, ci[3], iBR, ci[3], oBR, co[3], oBL, co[3]);
 }
 }}}  // namespace EA::UTFWin::Drawing
 
@@ -328,15 +636,16 @@ void __cdecl GradientBox(Canvas* c, const float* outer, const float* inner, cons
 namespace EA { namespace UTFWin { namespace Drawing {
 void __cdecl DrawStdButton(Canvas* c, const float* rect, uint32_t color, uint32_t state, float thickness)
 {
+    float inner[4];
+    inner[0] = rect[0] + 3.0f;
+    inner[1] = rect[1] + 3.0f;
+    inner[2] = rect[2] - 3.0f;
+    inner[3] = rect[3] - 3.0f;
     (void)thickness;
-    float x0 = rect[0] + 3.0f;
-    float y0 = rect[1] + 3.0f;
-    float x1 = rect[2] - 3.0f;
-    float y1 = rect[3] - 3.0f;
-    uint32_t local_30, local_2c, local_28, local_24;
-    uint32_t local_10, local_c, local_8, local_4;
-    uint32_t uVar2, uVar1;
+
     uint32_t col = color;
+    uint32_t g[4];             // four gradient colours (g[0]..g[3] = original local_30..local_24)
+    uint32_t hi;               // the "highlight" endpoint colour
 
     if ((state & 8) == 0) {
         switch (state & 7) {
@@ -345,44 +654,79 @@ void __cdecl DrawStdButton(Canvas* c, const float* rect, uint32_t color, uint32_
         case 2:
             col = Color::Lerp(col, col | 0xffffff, 0.4f);
             break;
-        case 3: goto CASED0;
+        case 3: goto CASE_8_0_3;
         default: goto DEFAULT_;
         }
-        local_30 = Color::Lerp(col, col | 0xffffff, 0.6f);
-        local_2c = Color::Lerp(col, col | 0xffffff, 0.9f);
-        uVar2 = col & 0xff000000;
+        g[0] = Color::Lerp(col, col | 0xffffff, 0.6f);
+        g[1] = Color::Lerp(col, col | 0xffffff, 0.9f);
+        hi = col & 0xff000000;
     } else {
         switch (state & 7) {
         case 0:
         case 3:
-        CASED0:
+        CASE_8_0_3:
             col = Color::Lerp(col, col & 0xff000000, 0.1f);
             break;
         case 1:
         LAB_866:
             col = Color::Lerp(col, 0xff7f7f7f, 0.2f);
-            local_30 = Color::Lerp(col, col | 0xffffff, 0.2f);
-            local_2c = Color::Lerp(col, col | 0xffffff, 0.3f);
-            uVar2 = col & 0xff000000;
-            local_28 = Color::Lerp(col, uVar2, 0.2f);
-            uVar1 = 0x3e99999a;
-            goto LAB_945;
+            g[0] = Color::Lerp(col, col | 0xffffff, 0.2f);
+            g[1] = Color::Lerp(col, col | 0xffffff, 0.3f);
+            hi = col & 0xff000000;
+            g[2] = Color::Lerp(col, hi, 0.2f);
+            goto FINISH_HI03;
         case 2: break;
         default: goto DEFAULT_;
         }
-        local_30 = Color::Lerp(col, col & 0xff000000, 0.4f);
-        local_2c = Color::Lerp(col, col & 0xff000000, 0.7f);
-        uVar2 = col | 0xffffff;
+        g[0] = Color::Lerp(col, col & 0xff000000, 0.4f);
+        g[1] = Color::Lerp(col, col & 0xff000000, 0.7f);
+        hi = col | 0xffffff;
     }
-    local_28 = Color::Lerp(col, uVar2, 0.4f);
-    uVar1 = 0x3f333333;
-LAB_945:
-    local_24 = Color::Lerp(col, uVar2, *(float*)&uVar1);
+    g[2] = Color::Lerp(col, hi, 0.4f);
+    g[3] = Color::Lerp(col, hi, 0.7f);
+    goto DRAW;
+
+FINISH_HI03:
+    g[3] = Color::Lerp(col, hi, 0.3f);
+    goto DRAW;
+
 DEFAULT_:
-    local_10 = col; local_c = col; local_8 = col; local_4 = col;
-    GradientBox(c, rect, (const float*)&x0, (const float*)&local_30, (const float*)&local_10);
+    // The original's default case (state&7 > 3) jumps straight to the draw with the four
+    // gradient colours left uninitialised; keep that shape (no writes here).
+DRAW:
+    {
+        uint32_t fill[4] = { col, col, col, col };
+        GradientBox(c, rect, inner, (const float*)g, (const float*)fill);
+    }
     c->SetColor(col);
-    c->v14((float)local_24, x0, y0, x1);
-    (void)y1; (void)local_28;
+    c->FillRectangle(g[3], inner[0], inner[1], inner[2]);
+}
+}}}  // namespace EA::UTFWin::Drawing
+
+// @ 0x0095da40
+namespace EA { namespace UTFWin { namespace Drawing {
+void __cdecl DrawBevel(Canvas* c, const float* rect, uint32_t color, float width)
+{
+    // The colour arrays are raw ARGB words behind a "const float*" API (cleared first, then
+    // filled with the flat colour), matching the original's integer stores.
+    uint32_t colInner[4] = { 0, 0, 0, 0 };
+    uint32_t colOuter[4] = { color, color, color, color };
+
+    float half = width * 0.5f;
+
+    float outerHalf[4];
+    outerHalf[0] = rect[0] - half;
+    outerHalf[1] = rect[1] - half;
+    outerHalf[2] = rect[2] + half;
+    outerHalf[3] = rect[3] + half;
+
+    float outerFull[4];
+    outerFull[0] = rect[0] - width;
+    outerFull[1] = rect[1] - width;
+    outerFull[2] = rect[2] + width;
+    outerFull[3] = rect[3] + width;
+
+    GradientBox(c, outerHalf, rect, (const float*)colOuter, (const float*)colInner);
+    GradientBox(c, outerFull, outerHalf, (const float*)colInner, (const float*)colOuter);
 }
 }}}  // namespace EA::UTFWin::Drawing
