@@ -1,1 +1,7 @@
+0047db30 ?Init@cSPEditorHandle@SP@@UAEXPAVcSPEditorBlock@2@_NII@Z  # SP::cSPEditorHandle::Init (callee of s0047f520, named from the dev publics; slice address comment)
+0047f520 ?BallConnector_Dtor@@YIXPAUcSPEditorHandle_s0047_f520@@@Z  # BallConnector_Dtor migrated from s0047f520 (verbatim, slice spelling)
+0047f550 ?QueryInterface@BallConnectorIface@@QAEPAXI@Z  # BallConnectorIface::QueryInterface migrated from s0047f520 (verbatim, slice spelling)
+0047f5a0 ?cSPEditorHandle_UpdateModelTransforms@@YIXPAUcSPEditorHandle_s0047_f520@@@Z  # cSPEditorHandle_UpdateModelTransforms migrated from s0047f520 (verbatim, slice spelling)
 0047f720 ?BallConnector_Init@@YIXPAUcSPEditorHandle@@HPAX@Z  # BallConnector_Init migrated from s0047f520 (verbatim, slice spelling)
+0047f960 ?cSPEditorHandle_GetBlockOffset@@YIPAUVec3@@PAUcSPEditorHandle_s0047_f520@@HPAU1@@Z  # cSPEditorHandle_GetBlockOffset migrated from s0047f520 (verbatim, slice spelling)
+0047f9e0 ?cSPEditorHandle_GetTuningVec90@@YIPAUVec3@@PAXHPAU1@@Z  # cSPEditorHandle_GetTuningVec90 migrated from s0047f520 (verbatim, slice spelling)

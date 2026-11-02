@@ -1,5 +1,5 @@
 0047e4b0 ?SetModelFlags@cSPEditorHandle_s0047_e4b0@@QAEI_NE@Z  # cSPEditorHandle_s0047_e4b0::SetModelFlags migrated from s0047e4b0 (verbatim, slice spelling)
-0047e600  SP::cSPEditorHandle::GetPosition  # returns mBlock->+0x48 or a default vector
+0047e600 ?GetPosition@cSPEditorHandle@@QAEPAXPAX@Z  # cSPEditorHandle::GetPosition migrated from s0047e4b0 (verbatim, slice spelling)
 0047e6e0 ?GetHandleAlphaForState@cSPEditorHandle_s0047_e4b0@@QAEMH@Z  # cSPEditorHandle_s0047_e4b0::GetHandleAlphaForState migrated from s0047e4b0 (verbatim, slice spelling)
 0047e830 ?GetOverdrawHandleAlphaForState@cSPEditorHandle_s0047_e4b0@@QAEMH@Z  # cSPEditorHandle_s0047_e4b0::GetOverdrawHandleAlphaForState migrated from s0047e4b0 (verbatim, slice spelling)
 0047e980 ?GetHandleColorForState@cSPEditorHandle_s0047_e4b0@@QAEPAXPAXH@Z  # cSPEditorHandle_s0047_e4b0::GetHandleColorForState migrated from s0047e4b0 (verbatim, slice spelling)
@@ -7,6 +7,6 @@
 0047ebe0  Vector3 zero helper  # returns {0,0,0} via sret
 0047ec40  SP::cSPEditorHandle::SetState  # state transition; calls Model::SetFlag (0x00437f70)
 0047f290  SP::cSPEditorHandle::IsFlagSet  # tests flag bit 0 of mModel/mOverdrawModel
-0047f3b0  SP::cSPEditorHandle::SetStateFlags  # vcall slot 12 with (1,0) and (3,1)
-0047f3e0  SP::cSPEditorHandle::SetScale  # scale = s*mDefaultScale on both models
-0047f4b0  SP::cSPEditorHandle::ConstructDerived  # derived ctor: calls base ctor 0x0047d6a0 then sets vptrs
+0047f3b0 ?SetStateFlags@cSPEditorHandle@@QAEXXZ  # cSPEditorHandle::SetStateFlags migrated from s0047e4b0 (verbatim, slice spelling)
+0047f3e0 ?SetScale@cSPEditorHandle@@QAEIM@Z  # cSPEditorHandle::SetScale migrated from s0047e4b0 (verbatim, slice spelling)
+0047f4b0 ?ConstructDerived@cSPEditorHandle@@QAEPAU1@XZ  # cSPEditorHandle::ConstructDerived migrated from s0047e4b0 (verbatim, slice spelling)
