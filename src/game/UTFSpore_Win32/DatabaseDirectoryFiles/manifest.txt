@@ -1,1 +1,6 @@
 # source  symbol  va  flags
+../src/game/UTFSpore_Win32/DatabaseDirectoryFiles.cpp  ?Cast@DatabaseDirectoryFiles_s008d_5340@ResourceMan@EA@@QAEPAXI@Z  008d5da0  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/DatabaseDirectoryFiles.cpp  ?SetMutexLocked@DatabaseDirectoryFiles_s008d_5340@ResourceMan@EA@@QAEX_N@Z  008d5de0  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/DatabaseDirectoryFiles.cpp  ?OpenRecordFromPath@DatabaseDirectoryFiles_s008d_5340@ResourceMan@EA@@QAE_NPB_WPAX@Z  008d5ea0  /O2 /MD /Gy /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/DatabaseDirectoryFiles.cpp  ?Initialize@BackgroundRecordLoad@@QAEPAXPAXPBUKey_s008d_5340@ResourceMan@EA@@@Z  008d60d0  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/DatabaseDirectoryFiles.cpp  ?FUN_008d61a0@@YGIPAUListOwner@@@Z  008d61a0  /O2 /MD /Gy /TP /Isrc/game/include
