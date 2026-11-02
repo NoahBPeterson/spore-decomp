@@ -1,2 +1,4 @@
 # source  symbol  va  flags
 ../src/game/Spui/SPUIStringBinder.cpp  ?f@C_802870@@QAEII@Z  00802870  /O2 /MD /Gy /TP /arch:SSE2 /Isrc/game/include
+../src/game/Spui/SPUIStringBinder.cpp  ?f_803730@@YAXPAX0@Z  00803730  /O2 /MD /Gy /TP /arch:SSE2 /Isrc/game/include
+../src/game/Spui/SPUIStringBinder.cpp  ?f_803750@@YAXPAX0@Z  00803750  /O2 /MD /Gy /TP /arch:SSE2 /Isrc/game/include

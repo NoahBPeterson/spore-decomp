@@ -31,9 +31,16 @@ struct C_801d80 { uint8_t f(void* param_2, int param_3, int param_4); };
 
 // ---- items of slice s00802a30 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern char sb_a[], sb_b[], sb_c[];
+#define VFN(p, off) (*(void***)(p))[((off) >> 2)]
+void* __cdecl EA_UTFWin_GetManager();
 struct C_803020 {
   char data[0x50];
   C_803020* Ctor();
+};
+struct CheatCtx { char pad[0x12]; uint8_t f11; };
+struct Cmd {
+  char data[0x40];
+  void Handle(int cmd, void* ctx);
 };
 // ---- items of slice s00802a30 end
 
@@ -80,4 +87,46 @@ int cSPUIDebugConsole_DoMessage(void* self, void* msg, void* data)
 {
   (void)self; (void)msg; (void)data;
   return 0;
+}
+
+// @ 0x00803730
+void __cdecl f_803730(void* a, void* b)
+{
+  ((void (__thiscall*)(void*, void*, void*))VFN(a, 4))(a, *(void**)b, b);
+}
+
+// @ 0x00803750
+void __cdecl f_803750(void* a, void* b)
+{
+  uint32_t buf[7];
+  *(void**)((char*)buf + 8) = *(void**)b;
+  *(void**)((char*)buf + 0x18) = b;
+  void* mgr = EA_UTFWin_GetManager();
+  ((void (__thiscall*)(void*, int, void*, void*, int))VFN(mgr, 0x10))(mgr, 0, a, buf, 0);
+}
+
+// @ 0x00803790
+void Cmd::Handle(int cmd, void* ctx)
+{
+  char* p = (char*)this;
+  CheatCtx* c = (CheatCtx*)ctx;
+  uint32_t key = (uint32_t)cmd + 0xf841dbbc;
+  if (key > 3)
+    return;
+  switch (key) {
+    case 0:
+      if (c->f11)
+        return;
+      c->f11 = 1;
+      break;
+    case 1:
+      break;
+    case 2:
+      if (c->f11)
+        c->f11 = 0;
+      break;
+    case 3:
+      break;
+  }
+  (void)p;
 }

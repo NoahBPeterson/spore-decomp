@@ -8,6 +8,6 @@
 00803020 ?Ctor@C_803020@@QAEPAU1@XZ  # C_803020::Ctor migrated from s00802a30 (verbatim, slice spelling)
 00803140 cSPUIDebugConsole::~cSPUIDebugConsole  # PDB candidate; deletes allocator + vector + wraps
 00803220 ?cSPUIDebugConsole_DoMessage@@YAHPAX00@Z  # cSPUIDebugConsole_DoMessage migrated from s00802a30 (verbatim, slice spelling)
-00803730 DebugMessageThunk  # dispatches *msg through a->vtable[1]
-00803750 DebugMessagePost  # EA::UTFWin::GetManager()->PostMessage(0,arg,&msg,0)
-00803790 cSPUIDebugConsole::OnCheatCommand  # 0x7BE2444..0x7BE2447 hit-test state machine
+00803730 ?f_803730@@YAXPAX0@Z  # f_803730 migrated from s00802a30 (verbatim, slice spelling)
+00803750 ?f_803750@@YAXPAX0@Z  # f_803750 migrated from s00802a30 (verbatim, slice spelling)
+00803790 ?Handle@Cmd@@QAEXHPAX@Z  # Cmd::Handle migrated from s00802a30 (verbatim, slice spelling)
