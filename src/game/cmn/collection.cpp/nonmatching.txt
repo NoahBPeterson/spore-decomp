@@ -1,0 +1,4 @@
+# va  diff-bytes  reason
+01133ad0 122 complete Collection::AddCapacity: Alloc a node block (count*0xc+8), link it, seed `count` free nodes, mCapacity += count; object-heavy, no valid inputs; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv UNSUPPORTED 0/400 valid (fault(fetch)).
+01133bd0 78 complete Collection::FUN_01133bd0: take a node from the free list (AddCapacity if empty) and push it on the used list; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv PASS 344/400 81.8% cov.
+01133c90 258 complete FUN_01133c90: shrink - release fully-used node blocks back to the allocator; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv WEAK 360/400 valid 15.5% cov.
