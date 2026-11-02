@@ -1,0 +1,6 @@
+# source  symbol  va  flags
+../src/game/SPAudio/eapdio.cpp  ?vinlet_free@Eapd@@YAXPAUTX@1@@Z  00a61510  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdio.cpp  ?voutlet_bang@Eapd@@YAXPAUTX@1@@Z  00a616b0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdio.cpp  ?voutlet_symbol@Eapd@@YAXPAUTX@1@Ut_symbol@1@@Z  00a61710  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdio.cpp  ?voutlet_free@Eapd@@YAXPAUTX@1@@Z  00a61790  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdio.cpp  ?g_io_setup@Eapd@@YAEXZ  00a618a0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
