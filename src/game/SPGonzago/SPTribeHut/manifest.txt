@@ -1,3 +1,8 @@
 # source  symbol  va  flags
 ../src/game/SPGonzago/SPTribeHut.cpp  ?Start3dSoundByName@@YAXIIMMM@Z  00571f80  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPGonzago/SPTribeHut.cpp  ?TribalEvent@cGameData@@QAEXH@Z  00c9be90  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPTribeHut.cpp  ?SetRefCountDelta@cTribeHut@@QAEXD@Z  00c9bef0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPTribeHut.cpp  ??0cTribeHut@@QAE@XZ  00c9bf90  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPTribeHut.cpp  ??1cTribeHut@@UAE@XZ  00c9c120  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPTribeHut.cpp  ?FUN_00c9c2c0@@YGXPAUcByteBuffer@@@Z  00c9c2c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPTribeHut.cpp  ?FUN_01356230@@YAXXZ  01356230  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include

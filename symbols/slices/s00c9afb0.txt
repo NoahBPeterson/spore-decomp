@@ -12,8 +12,8 @@
 00c9bda0 ??_GcTribeFoodMat@@UAEPAXI@Z  # cTribeFoodMat::~cTribeFoodMat migrated from s00c9afb0 (verbatim, slice spelling)
 00c9bdf0 ?Cast@cTribeHut_s00c9_afb0@@QAEPAXH@Z  # cTribeHut_s00c9_afb0::Cast migrated from s00c9afb0 (verbatim, slice spelling)
 00c9be50 SP::cSpatialObject::OnExtentsChanged  # Claude-coined; forwards to SetLocalExtents then notifies the owner's handler
-00c9be90 SP::cGameData::TribalEvent  # Claude-coined; posts a 0x498ef27 event carrying the outer position and a serialised blob
-00c9bef0 SP::cTribeHut::SetRefCountDelta  # Claude-coined; +/-1 on the hut ref count at +0x238
-00c9bf30 SP::cTribeHut::UpdateEmpireColor  # Claude-coined; on water, pushes the player empire id and the hut float +0x124 into the spatial sub-object
-00c9bf90 SP::cTribeHut::cTribeHut  # PDB name; zeroes +0x1e8..+0x23c, builds the Gonzago timer, culls against 0x157c3b4
-00c9c120 SP::cTribeHut::~cTribeHut  # PDB name; vtable stores, timer/member releases, combatant/interaction/spatial/game-data dtors
+00c9be90 ?TribalEvent@cGameData@@QAEXH@Z  # cGameData::TribalEvent migrated from s00c9afb0 (verbatim, slice spelling)
+00c9bef0 ?SetRefCountDelta@cTribeHut@@QAEXD@Z  # cTribeHut::SetRefCountDelta migrated from s00c9afb0 (verbatim, slice spelling)
+00c9bf30 ?UpdateEmpireColor@cTribeHut@@QAEXXZ  # cTribeHut::UpdateEmpireColor migrated from s00c9afb0 (verbatim, slice spelling)
+00c9bf90 ??0cTribeHut@@QAE@XZ  # cTribeHut::cTribeHut migrated from s00c9afb0 (verbatim, slice spelling)
+00c9c120 ??1cTribeHut@@UAE@XZ  # cTribeHut::~cTribeHut migrated from s00c9afb0 (verbatim, slice spelling)

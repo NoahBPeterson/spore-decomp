@@ -1,2 +1,11 @@
-00c9c8a0 SP::cTribeHut::TakeHit  # PDB candidate; cCombatant::TakeHit override (this = cCombatant subobject hut+0x120), calls cCombatant::TakeHit 0xbfcdd0
+00c9c1b0 ?RemoveOwner@cTribeTool@@QAEXXZ  # cTribeTool::RemoveOwner migrated from s00c9c1b0 (verbatim, slice spelling)
+00c9c250 ?SetOwnerIface@cTribeTool@@QAEXPAX@Z  # cTribeTool::SetOwnerIface migrated from s00c9c1b0 (verbatim, slice spelling)
+00c9c2c0 ?FUN_00c9c2c0@@YGXPAUcByteBuffer@@@Z  # FUN_00c9c2c0 migrated from s00c9c1b0 (verbatim, slice spelling)
+00c9c2e0 ?HasToolNoun@cTribeTool@@QAE_NXZ  # cTribeTool::HasToolNoun migrated from s00c9c1b0 (verbatim, slice spelling)
+00c9c310 ?Serialize_Write@cTribeTool@@QAE_NPAX@Z  # cTribeTool::Serialize_Write migrated from s00c9c1b0 (verbatim, slice spelling)
+00c9c3c0 ?Serialize_Read@cTribeTool@@QAE_NPAX@Z  # cTribeTool::Serialize_Read migrated from s00c9c1b0 (verbatim, slice spelling)
+00c9c500 ?SetupTribeHut@cTribeTool@@QAEXH@Z  # cTribeTool::SetupTribeHut migrated from s00c9c1b0 (verbatim, slice spelling)
+00c9c5e0 ?GetToolPosition@cTribeTool@@QAEIPAX@Z  # cTribeTool::GetToolPosition migrated from s00c9c1b0 (verbatim, slice spelling)
+00c9c680 ?RefreshModelProps@cTribeTool@@QAEXXZ  # cTribeTool::RefreshModelProps migrated from s00c9c1b0 (verbatim, slice spelling)
+00c9c8a0 ?TakeHit@cTribeHut_s00c9_c1b0@@QAEXMHIIPAUIHutInteractor@@@Z  # cTribeHut_s00c9_c1b0::TakeHit migrated from s00c9c1b0 (verbatim, slice spelling)
 00c9cec0 ?FUN_00c9cec0@@YAIH@Z  # FUN_00c9cec0 migrated from s00c9c1b0 (verbatim, slice spelling)
