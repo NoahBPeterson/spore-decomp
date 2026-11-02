@@ -1,0 +1,5 @@
+# source  symbol  va  flags
+../src/game/SPTerrain/SPTerrainMapSet.cpp  ?Init@HeightRanges@@QAEPAU1@XZ  00f92540  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPTerrain/SPTerrainMapSet.cpp  ?GetHeightRange@cTerrainMapSet@@QAEXHHHHPAM0@Z  00f929c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPTerrain/SPTerrainMapSet.cpp  ?ReleaseMaps@cTerrainMapSet@@QAEXXZ  00f92b90  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPTerrain/SPTerrainMapSet.cpp  ?RegisterMap@cTerrainMapSet@@QAEXHPAUcTerrainMapBase@@@Z  00f92be0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
