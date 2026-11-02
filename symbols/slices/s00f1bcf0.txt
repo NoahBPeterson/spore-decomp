@@ -1,0 +1,5 @@
+00f1bcf0 ?GetName@cSPEditorVerbTray@@QAEXHPAUWString_s00f1_bcf0@@@Z  # cSPEditorVerbTray::GetName migrated from s00f1bcf0 (verbatim, slice spelling)
+00f1be10 ?Refresh@cSPEditorVerbTray@@QAEXPAX0@Z  # cSPEditorVerbTray::Refresh migrated from s00f1bcf0 (verbatim, slice spelling)
+00f1c030 ?FindPair@cSPEditorVerbTray@@QAEHHHDPAH0@Z  # cSPEditorVerbTray::FindPair migrated from s00f1bcf0 (verbatim, slice spelling)
+00f1c2f0 ?Toggle@cSPEditorVerbTray@@QAEXXZ  # cSPEditorVerbTray::Toggle migrated from s00f1bcf0 (verbatim, slice spelling)
+00f1c4b0 ?Step@cSPEditorVerbTray@@QAE_NXZ  # cSPEditorVerbTray::Step migrated from s00f1bcf0 (verbatim, slice spelling)

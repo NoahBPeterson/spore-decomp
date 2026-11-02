@@ -1,0 +1,43 @@
+# source  symbol  va  flags
+../src/game/SPGonzago/_at_00f10000.cpp  ?FUN_00f12090@QI@@QAEII@Z  00f12090  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_00f10000.cpp  ?FUN_00f120c0@KeyForwarder@@QAEXI@Z  00f120c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_00f10000.cpp  ?Shutdown@cScenarioUnlockItemUI@@QAEXXZ  00f12270  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_00f10000.cpp  ?FUN_00f126d0@Host@@QAEXXZ  00f126d0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/_at_00f10000.cpp  ?FUN_00f128f0@Host@@QAEXXZ  00f128f0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/_at_00f10000.cpp  ?FUN_00f12970@Host@@QAEXXZ  00f12970  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/_at_00f10000.cpp  ?FUN_00f12a60@Host@@QAEXXZ  00f12a60  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/_at_00f10000.cpp  ?FUN_00f12b00@Host@@QAEPAU1@I@Z  00f12b00  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/_at_00f10000.cpp  ?FUN_00f12de0@Host@@QAEXXZ  00f12de0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/_at_00f10000.cpp  _FUN_00f13330@8  00f13330  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/SPGonzago/_at_00f10000.cpp  @FUN_00f13370@12  00f13370  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/SPGonzago/_at_00f10000.cpp  @FUN_00f13890@4  00f13890  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/SPGonzago/_at_00f10000.cpp  @FUN_00f138c0@4  00f138c0  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/SPGonzago/_at_00f10000.cpp  ?FUN_00f139f0@RewardUI@@QAEXXZ  00f139f0  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/SPGonzago/_at_00f10000.cpp  @FUN_00f140c0@12  00f140c0  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/SPGonzago/_at_00f10000.cpp  ??4Rec70@@QAEPAU0@ABU0@@Z  00f147e0  /O2 /MD /Gy /TP /GS- /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/_at_00f10000.cpp  ?Reset@Owner@@QAEXXZ  00f14980  /O2 /MD /Gy /TP /GS- /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/_at_00f10000.cpp  ?Update@Owner@@QAEXABURecV@@@Z  00f14d90  /O2 /MD /Gy /TP /GS- /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/_at_00f10000.cpp  ?Cleanup@PartHolder@@QAEXXZ  00f16260  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00f10000.cpp  ?Resize@cItemVector@@QAEXI@Z  00f17a70  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/_at_00f10000.cpp  ?Shutdown@cSPUIProgress@@QAEXXZ  00f17ea0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/_at_00f10000.cpp  ?Clear@cScenarioPlayProgressBar@UI@@QAEXXZ  00f18d60  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_00f10000.cpp  ?cScenarioPlayProgressBar_HasFlag@UI@@YA_NXZ  00f18ff0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00f10000.cpp  ?Release@cScenarioPlayProgressBar_s00f1_8eb0@UI@@QAEXXZ  00f19130  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00f10000.cpp  ?GetProgressF@cScenarioPlayProgressBar_s00f1_8eb0@UI@@QAEMXZ  00f19160  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00f10000.cpp  ?IsEnabled@cScenarioPlayProgressBar_s00f1_8eb0@UI@@QAEPAXXZ  00f191a0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00f10000.cpp  ?cScenarioPlayProgressBar_IsReady@UI@@YA_NXZ  00f19640  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00f10000.cpp  ?Apply@cScenarioPlayProgressBar_s00f1_8eb0@UI@@QAEX_N0@Z  00f198f0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00f10000.cpp  ?GetByte@cScenarioPlayProgressBar_s00f1_8eb0@UI@@QAEEH@Z  00f19be0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00f10000.cpp  ?GetField@cScenarioPlayProgressBar_s00f1_8eb0@UI@@QAEHH@Z  00f19c00  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00f10000.cpp  ?GetField2@cScenarioPlayProgressBar_s00f1_8eb0@UI@@QAEHH@Z  00f19c20  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00f10000.cpp  ?GetField3@cScenarioPlayProgressBar_s00f1_8eb0@UI@@QAEHH@Z  00f19c40  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00f10000.cpp  ?GetDelta@cScenarioPlayProgressBar_s00f1_8eb0@UI@@QAEHH@Z  00f19c60  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00f10000.cpp  ?TryAdd@PB@@QAEDPAX@Z  00f1b2f0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00f10000.cpp  ?SetKind@PB@@QAEXH@Z  00f1b360  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00f10000.cpp  ?SetText@PB@@QAEXH@Z  00f1b640  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00f10000.cpp  ?GetNameC@PB@@QAEXHPAUWString@@@Z  00f1bcb0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00f10000.cpp  ?GetNameD@PB@@QAEXHPAUWString@@@Z  00f1bcd0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00f10000.cpp  ?destroyRange@GoalVec@@QAEXPAUGoal@@0@Z  00f1dfa0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00f10000.cpp  ??1Bar@@QAE@XZ  00f1e580  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00f10000.cpp  ?Init@Bar@@QAEXXZ  00f1e620  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00f10000.cpp  ??4Goal@@QAEAAU0@ABU0@@Z  00f1e810  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include

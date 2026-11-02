@@ -1,4 +1,7 @@
-00f17870 ?StartNextAnimation@cSPUIProgress@@QAEXXZ  # nonmatching (64; complete)
-00f17a70 ?Resize@cItemVector@@QAEXI@Z  # MATCH
-00f17b00 ?Init@cSimScreen@@QAE_NPAUIUiEffect@@ABUKey@ResourceMan@EA@@@Z  # nonmatching (729; complete)
-00f17ea0 ?Shutdown@cSPUIProgress@@QAEXXZ  # MATCH
+005c5de0 ?GetCategory@cSPPalette@SP@@QAEPAVcSPPaletteCategory@2@H@Z  # SP::cSPPalette::GetCategory (callee of s00f170c0, named from the dev publics; slice address comment)
+005c6340 ?Init@cSPPalette@SP@@QAE_NABVKey@ResourceMan@EA@@W4eModelType@2@I@Z  # SP::cSPPalette::Init (callee of s00f170c0, named from the dev publics; slice address comment)
+00f170c0 ?DoMessage@cSPUIProgress@@QAE_NIPAH@Z  # cSPUIProgress::DoMessage migrated from s00f170c0 (verbatim, slice spelling)
+00f17870 ?StartNextAnimation@cSPUIProgress@@QAEXXZ  # cSPUIProgress::StartNextAnimation migrated from s00f170c0 (verbatim, slice spelling)
+00f17a70 ?Resize@cItemVector@@QAEXI@Z  # cItemVector::Resize migrated from s00f170c0 (verbatim, slice spelling)
+00f17b00 ?Init@cSimScreen@@QAE_NPAUIUiEffect@@ABUKey_s00f1_70c0@ResourceMan@EA@@@Z  # cSimScreen::Init migrated from s00f170c0 (verbatim, slice spelling)
+00f17ea0 ?Shutdown@cSPUIProgress@@QAEXXZ  # cSPUIProgress::Shutdown migrated from s00f170c0 (verbatim, slice spelling)

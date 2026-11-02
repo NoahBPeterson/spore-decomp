@@ -1,0 +1,8 @@
+00f1b180 ?Release@PB@@QAEXPAX0@Z  # PB::Release migrated from s00f1ae10 (verbatim, slice spelling)
+00f1b260 ?Unlink@PB@@QAEXPAX0H@Z  # PB::Unlink migrated from s00f1ae10 (verbatim, slice spelling)
+00f1b2f0 ?TryAdd@PB@@QAEDPAX@Z  # PB::TryAdd migrated from s00f1ae10 (verbatim, slice spelling)
+00f1b360 ?SetKind@PB@@QAEXH@Z  # PB::SetKind migrated from s00f1ae10 (verbatim, slice spelling)
+00f1b370 ?PlaySound@PB@@QAEXHH@Z  # PB::PlaySound migrated from s00f1ae10 (verbatim, slice spelling)
+00f1b640 ?SetText@PB@@QAEXH@Z  # PB::SetText migrated from s00f1ae10 (verbatim, slice spelling)
+00f1bcb0 ?GetNameC@PB@@QAEXHPAUWString@@@Z  # PB::GetNameC migrated from s00f1ae10 (verbatim, slice spelling)
+00f1bcd0 ?GetNameD@PB@@QAEXHPAUWString@@@Z  # PB::GetNameD migrated from s00f1ae10 (verbatim, slice spelling)

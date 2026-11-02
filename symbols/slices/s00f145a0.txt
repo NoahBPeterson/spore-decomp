@@ -1,8 +1,8 @@
-00f145a0 FUN_00f145a0  # __thiscall list/record routine; naked asm, byte-exact
-00f14690 FUN_00f14690  # __thiscall record/string routine; naked asm, byte-exact
-00f147e0 FUN_00f147e0  # __thiscall routine (4 virtual calls); naked asm, byte-exact
-00f14980 FUN_00f14980  # __fastcall small helper; naked asm, byte-exact
-00f149d0 FUN_00f149d0  # __thiscall UI layout routine (cSPUILayout); naked asm, byte-exact
-00f14b30 FUN_00f14b30  # helper calling FUN_00f149d0; naked asm, byte-exact
-00f14ba0 FUN_00f14ba0  # helper iterating the object list; naked asm, byte-exact
-00f14d90 FUN_00f14d90  # UI/editor routine (cSPEditorVerbIconTray); naked asm, byte-exact
+00f145a0 ?assign@Vec12@@QAEPAU1@PBU1@@Z  # Vec12::assign migrated from s00f145a0 (verbatim, slice spelling)
+00f14690 ?CopyFrom@Rec70@@QAEPAU1@ABU1@@Z  # Rec70::CopyFrom migrated from s00f145a0 (verbatim, slice spelling)
+00f147e0 ??4Rec70@@QAEPAU0@ABU0@@Z  # Rec70::operator= migrated from s00f145a0 (verbatim, slice spelling)
+00f14980 ?Reset@Owner@@QAEXXZ  # Owner::Reset migrated from s00f145a0 (verbatim, slice spelling)
+00f149d0 ?Setup@Owner@@QAEXPB_WHI@Z  # Owner::Setup migrated from s00f145a0 (verbatim, slice spelling)
+00f14b30 ?SetLocalized@Owner@@QAEXHABVcString@@I@Z  # Owner::SetLocalized migrated from s00f145a0 (verbatim, slice spelling)
+00f14ba0 ?SetPlain@Owner@@QAEXHI@Z  # Owner::SetPlain migrated from s00f145a0 (verbatim, slice spelling)
+00f14d90 ?Update@Owner@@QAEXABURecV@@@Z  # Owner::Update migrated from s00f145a0 (verbatim, slice spelling)

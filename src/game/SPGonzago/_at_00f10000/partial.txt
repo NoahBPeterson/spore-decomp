@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+00f19220  -    KindOk: prologue (null test, vtable slot 0xb8 lookup of 0x175cdc9, null test, field +0x38, subtract 6) is correct, but the original then runs a 10-entry switch via a byte table at 0xf19264 and a jump table at 0xf1925c. The reconstruction currently returns true unconditionally — switch table not decoded. flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
