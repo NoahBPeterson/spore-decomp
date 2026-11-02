@@ -1,0 +1,8 @@
+# source  symbol  va  flags
+../src/game/SPEngine/SPSaveAsync.cpp  ??1JobHolder6@@QAE@XZ  006b4340  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPSaveAsync.cpp  ?FUN_006b4390@@YAIPAPAUObjSec6@@@Z  006b4390  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPSaveAsync.cpp  ??0JobHolder6@@QAE@XZ  006b43b0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPSaveAsync.cpp  ?Finish@Job6B@@QAE_NPAUJobCtx6@@@Z  006b4610  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPSaveAsync.cpp  ?FUN_006b4780@@YAXXZ  006b4780  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPSaveAsync.cpp  ?FUN_006b47a0@@YAXPAUcJob@@@Z  006b47a0  /O2 /MD /Gy /EHsc /GS- /TP /Isrc/game/include
+../src/game/SPEngine/SPSaveAsync.cpp  ?FUN_006b4840@@YAXXZ  006b4840  /O2 /MD /Gy /EHsc /GS- /TP /Isrc/game/include

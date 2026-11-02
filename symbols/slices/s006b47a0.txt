@@ -3,12 +3,12 @@
 00691380 ?AddDependency@cJob@SP@@QAEXPAV12@@Z  # SP::cJob::AddDependency (callee of s006b47a0, named from the dev publics; slice address comment)
 006913c0 ?AddWeakDependency@cJob@SP@@QAEXPAV12@@Z  # SP::cJob::AddWeakDependency (callee of s006b47a0, named from the dev publics; slice address comment)
 006926b0 ?Wait@cJob@SP@@QAEXXZ  # SP::cJob::Wait (callee of s006b47a0, named from the dev publics; slice address comment)
-006b47a0 async-save cJob setter  # EA::Thread mutex + refcounted swap
-006b4840 async-save cJob clear
-006b48d0 async-save request ctor  # two vptrs + nested GraphicsFactoryAsyncRequest at +0x20
-006b4a10 async-save prepare
-006b4b60 async-save submit  # ResourceMan::GetManager
-006b4ce0 async-save completion
+006b47a0 ?FUN_006b47a0@@YAXPAUcJob@@@Z  # FUN_006b47a0 migrated from s006b47a0 (verbatim, slice spelling)
+006b4840 ?FUN_006b4840@@YAXXZ  # FUN_006b4840 migrated from s006b47a0 (verbatim, slice spelling)
+006b48d0 ??0AsyncSave@@QAE@PAUIRefC_s006b_47a0@@PAXPAUKey3@@@Z  # AsyncSave::AsyncSave migrated from s006b47a0 (verbatim, slice spelling)
+006b4a10 ?Finish@AsyncSave@@QAE_NPAUcJob@@@Z  # AsyncSave::Finish migrated from s006b47a0 (verbatim, slice spelling)
+006b4b60 ?FUN_006b4b60@@YADPAX0PAUIResProv@@PAUKey3@@@Z  # FUN_006b4b60 migrated from s006b47a0 (verbatim, slice spelling)
+006b4ce0 ?Complete@JobBaseB@@UAE_NXZ  # JobBaseB::Complete migrated from s006b47a0 (verbatim, slice spelling)
 006b4f40 ?FUN_006b4f40@@YA_NPBD@Z  # FUN_006b4f40 migrated from s006b47a0 (verbatim, slice spelling)
 006b4f60 ??0CSink@@QAE@II@Z  # CSink::CSink migrated from s006b47a0 (verbatim, slice spelling)
 006b4f90 ?FUN_006b4f90@CSink@@QAEX_N@Z  # CSink::FUN_006b4f90 migrated from s006b47a0 (verbatim, slice spelling)
