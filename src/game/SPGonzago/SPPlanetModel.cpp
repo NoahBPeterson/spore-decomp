@@ -1,4 +1,4 @@
-// src/game/SPGonzago/SPPlanetModel.cpp -- migrated from slice(s) s00b8d190, s00b8aea0, s00b8a760, s00b89a30, s00b894a0, s00b85380, s00b80630, s00b7f920 by tools/migrate/rewrite.py
+// src/game/SPGonzago/SPPlanetModel.cpp -- migrated from slice(s) s00b8bb70, s00b87dc0, s00b84270, s00b832d0, s00b815a0, s00b7ea80, s00472b80, s00b8d190, s00b8aea0, s00b8a760, s00b89a30, s00b894a0, s00b85380, s00b80630, s00b7f920 by tools/migrate/rewrite.py
 // Object file: SPGonzago/SPPlanetModel.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -12,6 +12,15 @@
 #include "SP/cTerrainMapSet.h"
 #include <math.h>
 #include <intrin.h>
+#include <stdarg.h>
+#include "SP/cTerrainSphere.h"
+#include <xmmintrin.h>
+#include "SP/cPoliticalZone.h"
+#include "cSPVector3.h"
+#include "SP/cCity.h"
+#include "SP/cCivilization.h"
+#include "SP/cPlanet.h"
+#include "SP/cRenderer.h"
 
 // unnamed retail callees and globals (address in the comment)
 extern "C" void* __cdecl memcpy(void*, const void*, unsigned int);
@@ -102,12 +111,14 @@ public:
 // ---- items of slice s00b7f920 end
 
 // ---- items of slice s00b80630 begin (TODO(rewrite): local stubs, replace by canonical classes)
-extern "C" float sqrtf(float);
-extern "C" void  operator_delete_array(void *p);                                     // 0xf47380
 extern "C" long __cdecl _InterlockedExchangeAdd(volatile long *, long);
 extern "C" long __cdecl _InterlockedExchange(volatile long *, long);
-extern "C" long __cdecl _InterlockedDecrement(volatile long *);
+extern "C" float sqrtf(float);
+extern "C" void  operator_delete_array(void *p);                                     // 0xf47380
 extern const float kOne;      // 0x1485720 = 1.0f
+extern const float kEps;      // 0x146543c = 1.5258789e-05f
+extern const float k64;       // 0x140f334 = 64.0f
+extern const float k128;      // 0x1400a58 = 128.0f
 extern "C" void *FUN_0067dd50();                    // 0x0067dd50
 extern "C" void *FUN_00761cf0(int n);               // 0x00761cf0
 extern "C" void  FUN_007a4650();                    // 0x007a4650
@@ -120,6 +131,7 @@ typedef unsigned int   u32;
 typedef unsigned char  u8;
 #define FORCEINLINE __forceinline
 extern "C" void *operator_new(u32 n, const char *pFile, int a, int b, int c, int d); // 0xf473a0
+extern const u8    gPlaneOrder[]; // 0x14653b8 face-permutation table
 struct Mode;
 struct Layer;
 struct RefObj {
@@ -285,6 +297,27 @@ struct Draw {
     void Flush();                                            // 0x007a4710
     void GetVertexBuffer(int a, void *b, void *c);           // 0x007a47c0
 };
+struct StampState {
+    u8    m_pad00[0x4c];
+    u32  *m_bits;   // +0x4c
+    u8    m_pad50[0x2c];
+    u8   *m_mask;   // +0x7c
+
+    void Stamp(const float *pDir, float radius, u32 planeMask);   // 0x00b81020
+};
+struct SearchCoord {
+    int m_a;   // +0x00
+    int m_b;   // +0x04
+    int m_c;   // +0x08
+};
+struct StampSpan {
+    u32 m_plane;   // +0x00
+    int m_minB;    // +0x04
+    int m_minC;    // +0x08
+    int m_maxB;    // +0x0c
+    int m_maxC;    // +0x10
+};
+extern "C" int FUN_00685450(int maxVal, int *pCoord, int count, StampSpan *pOut); // 0x685450
 extern "C" float acosf(float);
 extern const float kHalf;     // 0x1471064 = 0.5f
 extern const float kNegOne;   // 0x13eb1bc = -1.0f
@@ -1195,6 +1228,1081 @@ struct cPlanetModel_s00b8_d190 {
 };
 // ---- items of slice s00b8d190 end
 
+// ---- items of slice s00472b80 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C" unsigned int __cdecl strlen(const char* p);                          // inlined (intrinsic)
+#pragma intrinsic(strlen)
+void* EASTL_Allocate(void* alloc, uint32_t n, uint32_t align, uint32_t flags); // @ 0x0042dee0
+void  EASTL_allocator_deallocate(void* p);                                      // @ 0x00f47380
+template<int N> inline void ScratchSlots() { uint32_t s[N]; }
+struct sp_vector_allocator_s0047_2b80 {
+    uint32_t mDummy;
+    void deallocate(void* p, uint32_t) { void* q = p; EASTL_allocator_deallocate(q); }
+};
+struct Counted { void Release(); };                                  // 0x40f360
+struct AutoRefCount {
+    Counted* mpObject;
+    AutoRefCount() : mpObject(0) {}
+    ~AutoRefCount() { if (mpObject) mpObject->Release(); }
+    static void operator delete(void* p) { EASTL_allocator_deallocate(p); }
+};
+struct Pod12 { float x, y, z; };                                     // 12-byte POD
+template<class T> struct ResizeHoles { enum { N = 6 }; };
+template<> struct ResizeHoles<AutoRefCount> { enum { N = 15 }; };
+template<class T> T* uninitialized_copy_ptr(T* first, T* last, T* dest);   // out of line
+template<class T> inline void destruct(T* first, T* last)
+{ for (; first < last; ++first) first->~T(); }
+template<class T> inline T* CopyRef(T* first, T* last, T* dest)
+{
+    const bool from = false, left = false, pos = false;
+    { uint32_t unused[2]; }
+    T* pSource = first;
+    T* pDest = dest;
+    for (; pSource != last; ++pSource, ++pDest) *pDest = *pSource;
+    return pDest;
+}
+template<class T, int A>
+struct vector_s0047_2b80 {
+    T* mpBegin; T* mpEnd; T* mpCapacity; sp_vector_allocator_s0047_2b80 mAllocator;
+
+    T* DoAllocate(uint32_t n) { return n ? (T*)EASTL_Allocate(&mAllocator, n * sizeof(T), A, 0) : 0; }
+    void DoFree(T* p, uint32_t n) { if (p && ((int*)p)[-1]) mAllocator.deallocate(p, n); }
+
+    void DoInsertValues(T* pos, uint32_t n, const T& v);   // out of line
+    void erase(T* first, T* last);                         // out of line 0x00621f50
+    void insert(T* pos, uint32_t n, const T& v) { DoInsertValues(pos, n, v); }
+
+    vector_s0047_2b80& operator=(const vector_s0047_2b80& x);
+    T* DoRealloc(uint32_t n, T* first, T* last);           // out of line
+    uint32_t size() const { return (uint32_t)(mpEnd - mpBegin); }
+    void reserve(uint32_t n);
+    void resize(uint32_t n);
+};
+template<class T, int A>
+vector_s0047_2b80<T,A>& vector_s0047_2b80<T,A>::operator=(const vector_s0047_2b80& x)
+{
+    if (&x != this) {
+        const uint32_t n = x.size();
+        if (n > (uint32_t)(mpCapacity - mpBegin)) {
+            T* const pNewData = DoRealloc(n, x.mpBegin, x.mpEnd);
+            ScratchSlots<9>();
+            destruct(mpBegin, mpEnd);
+            DoFree(mpBegin, (uint32_t)(mpCapacity - mpBegin));
+            mpBegin = pNewData;
+            mpCapacity = mpBegin + n;
+        } else if (n > size()) {
+            CopyRef(x.mpBegin, x.mpBegin + (mpEnd - mpBegin), mpBegin);
+            uninitialized_copy_ptr(x.mpBegin + (mpEnd - mpBegin), x.mpEnd, mpEnd);
+            ScratchSlots<8>();
+        } else {
+            T* const position = CopyRef(x.mpBegin, x.mpEnd, mpBegin);
+            destruct(position, mpEnd);
+        }
+        mpEnd = mpBegin + n;
+    }
+    return *this;
+}
+template<class T, int A>
+void vector_s0047_2b80<T,A>::reserve(uint32_t n)
+{
+    if (n > (uint32_t)(mpCapacity - mpBegin)) {
+        T* const pNewData = DoAllocate(n);
+        uninitialized_copy_ptr(mpBegin, mpEnd, pNewData);
+        destruct(mpBegin, mpEnd);
+        DoFree(mpBegin, (uint32_t)(mpCapacity - mpBegin));
+        const int nPrevSize = mpEnd - mpBegin;
+        mpBegin = pNewData;
+        mpEnd = pNewData + nPrevSize;
+        mpCapacity = mpBegin + n;
+    }
+}
+template<class T, int A>
+void vector_s0047_2b80<T,A>::resize(uint32_t n)
+{
+    if (n > size()) {
+        insert(mpEnd, n - size(), T());
+        ScratchSlots<ResizeHoles<T>::N>();
+    } else
+        erase(mpBegin + n, mpEnd);
+}
+// ---- items of slice s00472b80 end
+
+// ---- items of slice s00b7ea80 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern float DAT_016881f0, DAT_016881f4, DAT_016881f8;
+#define VTC(p, off) (*(void**)((char*)(*(void**)(p)) + (off)))
+struct Quat { float x, y, z, w; };
+struct S18 { int a; float b, c, d; char e; char f; int g; };  // +0x12..+0x13 implicit padding
+struct S24a { float a, b, c, d; int e; float f, g, h; int i; };
+struct S24b { float a, b, c, d, e, f; int g; float h, i; };
+struct cTerrainMapSet_s00b7_ea80 {
+    float GetFloat(float* uv);                                   // SP::cTerrainMap<unsigned>::GetFloat 0x00f88650
+    float GetHeightAt();                                         // cTerrainMapSet::GetHeightAt 0x00f927c0
+};
+struct cTerrainData {
+    void        FUN_00f92c20(Vec3* out, const Vec3* dir);   // 0x00f92c20 surface normal of a direction
+};
+struct cPlanetModel_s00b7_ea80 {
+    char  pad0[0x1c];
+    int   f1c;           // +0x1c
+    void* mpSphere;      // +0x20
+    void* mpISphere;     // +0x24
+    float f28;           // +0x28
+    char  pad1[0x94 - 0x2c];
+    int   f94;           // +0x94
+    char  pad2[0xec - 0x98];
+    int   fec;           // +0xec
+
+    int   FUN_ea80(const Vec3* v);                    // 0x00b7ea80
+    float FUN_ec50();                                 // 0x00b7ec50
+    float FUN_ecc0(const Vec3* v);                    // 0x00b7ecc0
+    void  FUN_ee70(Vec3* out, Vec3* in);              // 0x00b7ee70
+    float GetRadiusAt(unsigned coords);               // 0x00b7ef70
+    float FUN_efe0(float p);                          // 0x00b7efe0
+    void  FUN_f060(Vec3* out, const Vec3* v, float* frac); // 0x00b7f060
+    char  FUN_00b7e3e0(const Vec3* v);                // 0x00b7e3e0
+    int   FUN_00b7f4a0(unsigned n);                   // 0x00b7f4a0
+    void  FUN_f390(int v);                            // 0x00b7f390
+    void  FUN_f510(unsigned n);                       // 0x00b7f510
+
+    Quat* BuildSurfaceOrientation(Quat* out, const Vec3* a);                     // 0x00b7f190
+    Quat* BuildSurfaceOrientation_2(Quat* out, const Vec3* a, const Vec3* b);    // 0x00b7f1f0
+    Quat* BuildSurfaceOrientation2(Quat* out, const Vec3* a, const Vec3* b);     // 0x00b7f250
+    Quat* BuildPitchedSurfaceOrientation(Quat* out, const Vec3* a, const Vec3* b, float c); // 0x00b7f2b0
+    Quat* BuildSurfaceNormalOrientation(Quat* out, const Vec3* a, const Vec3* b, float c);  // 0x00b7f320
+};
+// ---- items of slice s00b7ea80 end
+
+// ---- items of slice s00b815a0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern void* DAT_0167ecd0;
+typedef unsigned int uint;
+struct RadialRay {
+    float pos[4];                          // +0x00
+    float h0, h1;                          // +0x10, +0x14
+};
+struct RayHitResult {
+    int   status;                          // +0x00
+    int   pad04[3];                        // +0x04
+    float pos[4];                          // +0x10
+    void* normalOut;                       // +0x20
+    void* distOut;                         // +0x24
+    void* userData;                        // +0x28
+    void* entity;                          // +0x2c
+};
+float* FUN_0059aed0(float* out, const float* a, const float* b);    // 0x0059aed0
+int   FUN_00b3d310();                                                // 0x00b3d310
+void  FUN_00b65b10(const RadialRay* ray, void* world, void* obj, bool useWorld, unsigned int filterInfo, RayHitResult* out); // 0x00b65b10
+struct cPlanetModel_s00b8_15a0 {
+    char  pad0[0x20];
+    void* mpSphere;      // +0x20
+    void* mpISphere;     // +0x24
+    float f28;           // +0x28
+    char  pad1[0xf0 - 0x2c];
+    char  f0;            // +0xf0
+
+    long double GetRadiusAt(uint coords);                            // 0x00b7ef70
+    void  DirectionToSurfacePosition(Vec3* out, const Vec3* dir);    // 0x00b815a0
+    void  FUN_00b81630(Vec3* out, const Vec3* dir);                  // 0x00b81630
+    Vec3* FUN_00b816f0(Vec3* out, const Vec3* dir);                  // 0x00b816f0
+    void  FUN_00b81720(Vec3* out);                                   // 0x00b81720
+    void  MakeRandomWorldPosition(Vec3* out, const Vec3* dir, float a, float b); // 0x00b81780
+    void  FUN_00b81a40(Vec3* out, const Vec3* dir, float a, float b);            // 0x00b81a40
+    void  FUN_00b81c80(Vec3* out, const Vec3* a, const Vec3* b, float s);        // 0x00b81c80
+    int   IsPositionBelowSurface(const Vec3* dir);                   // 0x00b81f90
+    Vec3* FUN_00b82060(Vec3* out, int a, int b);                     // 0x00b82060
+    void  FUN_00b82110(Vec3* out, Vec3* a, Vec3* b);                 // 0x00b82110
+    long double FUN_00b82310(void* param);                           // 0x00b82310
+};
+// ---- items of slice s00b815a0 end
+
+// ---- items of slice s00b832d0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern const float kSpiralMaxAngle;             // 0x01688274
+extern const float kBasis9[9];                  // 0x01688284
+extern const float kNoTerrain;                  // 0x0156b624
+extern const float kHeightUnit;                 // 0x0140d4f8
+#pragma warning(disable: 4100)
+struct Vec3POD { float x, y, z; };
+struct cTerrainMapSet_s00b8_32d0 {
+    char pad0[0x34];
+    float f34;                                  // mRadius
+    float f38;                                  // mMaxHeight
+    float f3c;                                  // mWaterHeight
+    float GetHeightAt(const Vec3POD* pos);      // 0x00f927c0, thiscall ret 4
+};
+struct cITerrainSphere {
+    virtual void s0();
+    virtual void s1();
+    virtual void s2();
+    virtual cTerrainMapSet_s00b8_32d0* s3();               // +0xC
+};
+struct cPlanetModel_s00b8_32d0 {
+    char pad0[0x20];
+    void* mpSphere;                             // +0x20
+    cITerrainSphere* mpISphere;                 // +0x24
+    char pad1[0x4c - 0x28];
+    void* mpContinentMap;                       // +0x4c
+    char pad2[0x7c - 0x50];
+    void* mpBitmap;                             // +0x7c
+    char pad3[0xf0 - 0x80];
+    char mFlagF0;                               // +0xf0
+
+    bool FUN_00b832d0(const float* dir, float step);
+    float FUN_00b83620(int a, float b);
+    uint FUN_00b83870(int arg);
+    void FUN_00b83c40(const float* dir, float radius, uint flags, char (*cb)(float*));
+    void MakeRandomWorldPosition(Vec3POD* out, int a, float b, float c);  // 0x00b81780 (cPlanetModel::MakeRandomWorldPosition)
+};
+cPlanetModel_s00b8_32d0* PlanetModel_s00b8_32d0();                    // 0x00b3d350, cdecl
+void QuaternionFromDirections(float* out, const float* a, const float* b); // 0x698180, cdecl
+void FUN_00ac1510(unsigned x, unsigned y, unsigned z, float* out);         // 0x00ac1510, cdecl
+void* PropertyManager();                        // 0x67de30, cdecl
+void* MessageServer();                          // 0x67dcc0, cdecl
+extern const Vec3POD kQuatRef;                  // 0x01688278
+struct HashTableA {
+    char pad0[4];
+    int* table;      // +4
+    uint size;       // +8
+    int** Find(int** out, int* key);
+};
+struct MessageBasicRC5 {
+    void* vftable;          // +0
+    int mRefCount;          // +4
+    int mId;                // +8
+    int mFieldC;            // +0xc
+    int mField10;           // +0x10
+    int mField14;           // +0x14
+    int mField18;           // +0x18
+    int mField1c;           // +0x1c
+};
+struct ColorVector {
+    char pad0[0x80];
+    int mBegin;             // +0x80
+    int mEnd;               // +0x84
+    char pad2[0xa8 - 0x88];
+    void* mOwner;           // +0xa8
+    void DoInsertValue(uint index, uint value, int param4);
+};
+// ---- items of slice s00b832d0 end
+
+// ---- items of slice s00b84270 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern char kEventModifierVtbl;   // 0x013ef094
+void* __cdecl operator_new_eastl(unsigned int size, const char* name, int flags, int align,
+                                 const char* file, int line);   // 0x00f473a0
+void __cdecl operator_delete_eastl(void* p);                    // 0x00f47380
+void* __cdecl MemCpy(void* dst, const void* src, unsigned int n);  // 0x011e0744
+struct U16Vec {
+    uint16_t* mpBegin;      // +0x00
+    uint16_t* mpEnd;        // +0x04
+    uint16_t* mpCapacity;   // +0x08
+    int mAllocator[2];      // +0x0c
+
+    void Reserve(unsigned int n);
+};
+struct Vec14 {
+    void* mpBegin;     // +0x00
+    void* mpEnd;       // +0x04
+    void* mpCapacity;  // +0x08
+    int   mAllocator[2];
+
+    void Copy(const Vec14& other);   // 0x00473460
+};
+struct Elem1C {
+    uint32_t mA;    // +0x00
+    uint32_t mB;    // +0x04
+    Vec14    mVec;  // +0x08
+};
+struct IntVector {
+    uint32_t* mpBegin;      // +0x00
+    uint32_t* mpEnd;        // +0x04
+    uint32_t* mpCapacity;   // +0x08
+    int mAllocator[2];      // +0x0c
+
+    void Free()
+    {
+        if (mpBegin && ((int32_t*)mpBegin)[-1] != 0)
+            operator_delete_eastl(mpBegin);
+    }
+
+    ~IntVector() { Free(); }
+};
+struct IntVectorVec {
+    IntVector* mpBegin;      // +0x00
+    IntVector* mpEnd;        // +0x04
+    IntVector* mpCapacity;   // +0x08
+    int mAllocator[2];       // +0x0c
+
+    void DestroyRange(void* first, void* last);   // 0x01023030
+
+    ~IntVectorVec()
+    {
+        DestroyRange(mpBegin, mpEnd);
+        if (mpBegin && ((int32_t*)mpBegin)[-1] != 0)
+            operator_delete_eastl(mpBegin);
+    }
+};
+struct EventModifier {
+    virtual void s0();
+    virtual void s1();
+    virtual void s2();
+};
+struct ScalarList {
+    void* mpVtbl;            // +0x00
+    int   m04;               // +0x04
+    EventModifier* mp08;     // +0x08
+    IntVectorVec mVec0c;     // +0x0c
+    IntVectorVec mVec20;     // +0x20
+    IntVector mVec34;        // +0x34
+
+    void Dtor();
+};
+// ---- items of slice s00b84270 end
+
+// ---- items of slice s00b87dc0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+void* __cdecl MemMove(void* dst, const void* src, unsigned int n);   // 0x011e0744 (memcpy thunk)
+namespace SP {
+uint16_t __cdecl FloatToHeight16(float v);                                       // 0x00b7e680
+}
+namespace SP {
+struct UnionFind {
+  uint16_t* mpBegin;
+  uint16_t* mpEnd;
+  uint16_t* mpCapacity;
+  UnionFind() : mpBegin(0), mpEnd(0), mpCapacity(0) {}
+  ~UnionFind()
+  {
+    if (mpBegin && ((int*)mpBegin)[-1] != 0)
+      operator_delete__(mpBegin);
+  }
+  void reserve(unsigned int n);                       // 0x00b849e0, ret 4
+  uint16_t Union(uint32_t a, uint32_t b);             // 0x00b7e6f0, ret 8
+  int Flatten(int limit, uint32_t seed);              // 0x00b7e790, ret 8
+};
+}
+namespace SP {
+struct ByteVector {
+  uint8_t* mpBegin;
+  uint8_t* mpEnd;
+  uint8_t* mpCapacity;
+  void DoInsertValues(uint8_t* pos, unsigned int n, const uint8_t* value);   // 0x005151b0, ret 0xc
+  __forceinline void resize(unsigned int n)
+  {
+    const unsigned int sz = (unsigned int)(mpEnd - mpBegin);
+    if (n > sz) {
+      uint8_t fill = 0;
+      DoInsertValues(mpEnd, n - sz, &fill);
+    } else {
+      uint8_t* first = mpBegin + n;
+      uint8_t* last = mpEnd;
+      MemMove(first, last, (unsigned int)(mpEnd - last));
+      mpEnd = mpEnd + (first - last);
+    }
+  }
+};
+}
+namespace SP {
+struct UIntVector {
+  uint32_t* mpBegin;
+  uint32_t* mpEnd;
+  uint32_t* mpCapacity;
+  void DoInsertValues(uint32_t* pos, unsigned int n, const uint32_t* value);   // 0x004cea40, ret 0xc
+  __forceinline void clear()
+  {
+    uint32_t* first = mpBegin;
+    uint32_t* last = mpEnd;
+    MemMove(first, last, (unsigned int)((char*)mpEnd - (char*)last));
+    mpEnd = (uint32_t*)((char*)mpEnd + (first - last) * 4);
+  }
+  __forceinline void resize(unsigned int n)
+  {
+    const unsigned int sz = (unsigned int)(mpEnd - mpBegin);
+    if (n > sz) {
+      uint32_t fill = 0;
+      DoInsertValues(mpEnd, n - sz, &fill);
+    } else {
+      uint32_t* first = mpBegin + n;
+      uint32_t* last = mpEnd;
+      MemMove(first, last, (unsigned int)((char*)mpEnd - (char*)last));
+      mpEnd = (uint32_t*)((char*)mpEnd + (first - last) * 4);
+    }
+  }
+};
+}
+namespace SP {
+struct cTerrainHeights {
+  char pad[0x10];
+  uint8_t* mpData;          // +0x10: 4 uint16 samples per cell quad, 0x1000 bytes per cell row
+};
+}
+namespace SP {
+class cTerrainMap { public:
+  char pad[8];
+  cTerrainHeights* mpHeights;   // +8
+  float GetWaterLevel();        // 0x00b7e0a0: fld [this+0x3c]
+};
+}
+namespace SP {
+class cTerrainSphere_s00b8_7dc0 { public:
+  virtual void v0();
+  virtual void v1();
+  virtual void v2();
+  virtual cTerrainMap* GetMap();   // slot 3
+};
+}
+namespace SP {
+struct Vector3_s00b8_7dc0 {
+  float x, y, z;
+};
+}
+namespace SP {
+struct Element20 {
+  uint32_t mData[5];
+  Element20(const Element20& o);                  // 0x473460 (eastl::vector<cSPVector3> copy ctor)
+  Element20& operator=(const Element20& o);       // 0x473500
+};
+}
+namespace SP {
+void FUN_00b85980(Element20* first, Element20* last, Element20* dest);   // 0x00b85980
+}
+namespace SP {
+struct Vector20 {
+  Element20* mpBegin;
+  Element20* mpEnd;
+  Element20* mpCapacity;
+  void insert(Element20* pos, const Element20* value);   // 0x00b88430, ret 8
+};
+}
+namespace SP {
+void* operator new[](unsigned int size, const char* name, int flags,
+                     unsigned int debugFlags, const char* file, int line); // 0x00f473a0
+}
+namespace SP {
+class cPlanetModel_s00b8_7dc0 {
+ public:
+  void ComputeContinents();
+  void Refresh();                                       // 0x00b88420
+  uint32_t GetCellValue(const Vector3_s00b8_7dc0* dir);            // 0x00b88590
+
+  char pad00[0x24];
+  cTerrainSphere_s00b8_7dc0* mpISphere;              // +0x24
+  char pad28[0x4c - 0x28];
+  uint32_t* mContinentMap;                // +0x4c  (6 * 128 * 128 cells)
+  UIntVector mContinentAreas;             // +0x50
+  char pad5c[0x64 - 0x5c];
+  ByteVector mContinentAboveWater;        // +0x64
+  char pad70[0x78 - 0x70];
+  bool mContinentMapDirty;                // +0x78
+  char pad79[3];
+  uint8_t* mCellNibbles;                  // +0x7c  (one nibble per cell)
+};
+}
+// ---- items of slice s00b87dc0 end
+
+// ---- items of slice s00b8bb70 begin (TODO(rewrite): local stubs, replace by canonical classes)
+struct SVector3 {
+    float x, y, z;
+};
+class RCSub {
+public:
+    virtual void Del(int);
+    volatile long mnRefCount;                  // +0x04
+    long Release()
+    {
+        long n = _InterlockedDecrement(&mnRefCount);
+        if (n == 0) {
+            _InterlockedExchange(&mnRefCount, 1);
+            if (this)
+                Del(1);
+        }
+        return n;
+    }
+};
+class cMinimapGfx {
+public:
+    char     pad00[0x0c];
+    bool     mbDirty;                          // +0x0c
+    char     pad0d[0x24 - 0x0d];
+    RCSub*   mpRefObject;                      // +0x24
+    bool     mbActive;                         // +0x28
+};
+class cPlanet {
+public:
+    void SetRampEnabled(bool bEnabled);        // 0x00fbd6b0
+};
+class IWorldEditor {
+public:
+virtual void v00();
+virtual void v04();
+virtual void v08();
+virtual void v0c();
+    virtual cPlanet* v10();                    // +0x10
+virtual void v14();
+virtual void v18();
+virtual void v1c();
+virtual void v20();
+virtual void v24();
+virtual void v28();
+virtual void v2c();
+virtual void v30();
+virtual void v34();
+virtual void v38();
+virtual void v3c();
+virtual void v40();
+virtual void v44();
+virtual void v48();
+virtual void v4c();
+virtual void v50();
+virtual void v54();
+virtual void v58();
+virtual void v5c();
+virtual void v60();
+virtual void v64();
+virtual void v68();
+virtual void v6c();
+virtual void v70();
+virtual void v74();
+virtual void v78();
+virtual void v7c();
+virtual void v80();
+virtual void v84();
+virtual void v88();
+virtual void v8c();
+virtual void v90();
+virtual void v94();
+virtual void v98();
+virtual void v9c();
+virtual void vA0();
+virtual void vA4();
+virtual void vA8();
+virtual void vAC();
+virtual void vB0();
+virtual void vB4();
+virtual void vB8();
+virtual void vBC();
+virtual void vC0();
+virtual void vC4();
+virtual void vC8();
+virtual void vCC();
+virtual void vD0();
+virtual void vD4();
+virtual void vD8();
+virtual void vDC();
+virtual void vE0();
+virtual void vE4();
+virtual void vE8();
+virtual void vEC();
+virtual void vF0();
+virtual void vF4();
+virtual void vF8();
+virtual void vFC();
+virtual void v100();
+virtual void v104();
+virtual void v108();
+virtual void v10C();
+    virtual void ShutdownScene();              // +0x110
+};
+class IPlanetSphere {
+public:
+virtual void v00();
+virtual void v04();
+virtual void v08();
+virtual void v0c();
+virtual void v10();
+virtual void v14();
+virtual void v18();
+virtual void v1c();
+virtual void v20();
+virtual void v24();
+virtual void v28();
+virtual void v2c();
+virtual void v30();
+virtual void v34();
+virtual void v38();
+virtual void v3c();
+virtual void v40();
+virtual void v44();
+virtual void v48();
+virtual void v4c();
+virtual void v50();
+virtual void v54();
+virtual void v58();
+virtual void v5c();
+virtual void v60();
+virtual void v64();
+virtual void v68();
+virtual void v6c();
+virtual void v70();
+virtual void v74();
+virtual void v78();
+virtual void v7c();
+virtual void v80();
+virtual void v84();
+virtual void v88();
+virtual void v8c();
+    virtual void SetInputManager(void* pManager);        // +0x90
+virtual void v94();
+virtual void v98();
+virtual void v9c();
+    virtual void vA0();
+    virtual void vA4();                        // +0xa4
+    virtual void vA8();
+    virtual void vAC();                        // +0xac
+virtual void vB0();
+virtual void vB4();
+virtual void vB8();
+virtual void vBC();
+virtual void vC0();
+virtual void vC4();
+virtual void vC8();
+virtual void vCC();
+virtual void vD0();
+virtual void vD4();
+virtual void vD8();
+virtual void vDC();
+virtual void vE0();
+virtual void vE4();
+virtual void vE8();
+    virtual void vEC();                        // +0xec
+virtual void vF0();
+virtual void vF4();
+    virtual void vF8();                        // +0xf8
+};
+struct CityPair {
+    void* mpFirst;
+    void* mpSecond;
+};
+struct LandRoute {
+    uint8_t mData[0x1c];
+};
+class CityPairVector {
+public:
+    CityPair* mpBegin;                         // +0x00
+    CityPair* mpEnd;                           // +0x04
+    CityPair* mpCapacity;                      // +0x08
+    uint32_t  mAllocator;                      // +0x0c
+    void EraseRange(CityPair* pFirst, CityPair* pLast);        // 0x00d018d0
+    void Clear() { EraseRange(mpBegin, mpEnd); }
+};
+class LandRouteVector {
+public:
+    LandRoute* mpBegin;                        // +0x00
+    LandRoute* mpEnd;                          // +0x04
+    LandRoute* mpCapacity;                     // +0x08
+    uint32_t   mAllocator;                     // +0x0c
+    void EraseRange(LandRoute* pFirst, LandRoute* pLast);      // 0x00b897d0
+    void Clear() { EraseRange(mpBegin, mpEnd); }
+};
+class cCivilization {
+public:
+virtual void v00();
+virtual void v04();
+virtual void v08();
+virtual void v0c();
+virtual void v10();
+virtual void v14();
+virtual void v18();
+virtual void v1c();
+virtual void v20();
+virtual void v24();
+virtual void v28();
+virtual void v2c();
+virtual void v30();
+virtual void v34();
+virtual void v38();
+virtual void v3c();
+virtual void v40();
+virtual void v44();
+virtual void v48();
+    virtual int GetID();                       // +0x4c
+};
+class IPositionSource {
+public:
+virtual void v00();
+virtual void v04();
+virtual void v08();
+virtual void v0c();
+virtual void v10();
+virtual void v14();
+virtual void v18();
+virtual void v1c();
+virtual void v20();
+virtual void v24();
+virtual void v28();
+    virtual const SVector3* GetPosition();     // +0x2c
+};
+class cCity {
+public:
+virtual void v00();
+virtual void v04();
+virtual void v08();
+virtual void v0c();
+virtual void v10();
+virtual void v14();
+virtual void v18();
+virtual void v1c();
+virtual void v20();
+virtual void v24();
+virtual void v28();
+virtual void v2c();
+virtual void v30();
+virtual void v34();
+virtual void v38();
+virtual void v3c();
+virtual void v40();
+virtual void v44();
+virtual void v48();
+    virtual int GetOwnerID(bool bPrimary);     // +0x4c
+    char              pad04[0x34 - 0x04];
+    IPositionSource   mNodeValue;              // +0x34
+    char              pad38[0x120 - 0x38];
+    IPositionSource   mPosition;               // +0x120
+    cCivilization*    GetCivilization();       // 0x00bd9bf0
+};
+struct GraphNodeValue {
+    uint32_t mValue[3];
+};
+struct GraphNode {
+    int32_t         mnID;                      // +0x00
+    GraphNodeValue  mValue;                    // +0x04
+    bool            mbResourceNode;            // +0x10
+    bool            mbDirty;                   // +0x11
+    uint16_t        pad12;
+    cCity*          mpCity;                    // +0x14
+};
+class GraphNodeVector {
+public:
+    GraphNode* mpBegin;                        // +0x00
+    GraphNode* mpEnd;                          // +0x04
+    GraphNode* mpCapacity;                     // +0x08
+    uint32_t   mAllocator;                     // +0x0c
+};
+struct IVec3U {
+    uint32_t mX, mY, mZ;
+    IVec3U() {}
+    IVec3U(uint32_t x, uint32_t y, uint32_t z) : mX(x), mY(y), mZ(z) {}
+};
+class cPlanetModel_s00b8_bb70 {
+public:
+    char            pad00[0x20];
+    IWorldEditor*   mpWorldEditor;             // +0x20
+    IPlanetSphere*  mpISphere;                 // +0x24
+    char            pad28[0x2c - 0x28];
+    IVec3U          mField2C;                  // +0x2c
+    uint16_t*       mpIndexBegin;              // +0x38
+    uint16_t*       mpIndexEnd;                // +0x3c
+    char            pad40[0x48 - 0x40];
+    bool            mbRegistered;              // +0x48
+    char            pad49[0x4c - 0x49];
+    uint32_t*       mContinentMap;             // +0x4c
+    char            pad50[0x64 - 0x50];
+    uint8_t*        mContinentAboveWater;      // +0x64
+    char            pad68[0x7c - 0x68];
+    uint32_t*       mpCellNibbles;             // +0x7c
+    GraphNodeVector mNodes;                    // +0x80
+    char            pad90[0x94 - 0x90];
+    uint8_t*        mpZoneMap;                 // +0x94
+    uint8_t*        mpZoneMapEnd;              // +0x98
+    char            pad9c[0xa8 - 0x9c];
+    cMinimapGfx*    mpMinimapGfx;              // +0xa8
+    CityPairVector  mSeaTradeRoutes;           // +0xac
+    char            padBC[0xc0 - 0xbc];
+    CityPairVector  mLandTradeRoutes;          // +0xc0
+    char            padD0[0xd4 - 0xd0];
+    LandRouteVector mPathRoutes;               // +0xd4
+    char            padE4[0xe8 - 0xe4];
+    bool            mbSeaRoutesDirty;          // +0xe8
+    bool            mbLandRoutesDirty;         // +0xe9
+    bool            mbPathRoutesDirty;         // +0xea
+
+    bool RayCast(const SVector3* pOrigin, float fDirection, SVector3* pOut,
+                 float fRadius, bool bLayer, uint32_t nMask);          // 0x00b88770
+    bool FindClosestWater(const SVector3* pOrigin, float fDirection,
+                          SVector3* pOut);                             // 0x00b8bb70
+    void Reset();                                                      // 0x00b87bb0
+    int  AddNode(const SVector3* pValue, bool bResourceNode);          // 0x00b86500
+    void SetNodeFlag(int nIndex, bool bValue);                         // 0x00b7ea30
+    void SetNodeID(int nIndex, int nValue);                            // 0x00b841a0
+    int  GetContinent(const SVector3* pPosition);                      // 0x00b88590
+    void BuildPoliticalZoneMap();                                      // 0x00b8aea0
+    void Shutdown();                                                   // 0x00b8c0f0
+    void AddResourceNodes();                                           // 0x00b8bba0
+};
+// ---- items of slice s00b8bb70 end
+
+// @ 0x00473500
+template vector_s0047_2b80<Pod12, 4>& vector_s0047_2b80<Pod12, 4>::operator=(const vector_s0047_2b80<Pod12, 4>&)
+;
+
+// @ 0x00473890
+template void vector_s0047_2b80<Pod12, 4>::reserve(uint32_t)
+;
+
+// @ 0x00b7ea80
+#pragma optimize("s", on)
+int cPlanetModel_s00b7_ea80::FUN_ea80(const Vec3* v)
+{
+    float x = v->x, ax = fabsf(x);
+    float y = v->y, ay = fabsf(y);
+    float z = v->z, az = fabsf(z);
+    int i7, i8, i9;
+    if (az < ax || az < ay) {
+        if (ay < ax) {
+            i7 = (int)((y / x + 1.0f) * 32.0f);
+            i8 = (int)((z / ax + 1.0f) * 32.0f);
+            i9 = (x < 0.0f) ? 3 : 2;
+        } else {
+            i7 = (int)((z / y + 1.0f) * 32.0f);
+            i8 = (int)((x / ay + 1.0f) * 32.0f);
+            i9 = (y < 0.0f) ? 5 : 4;
+        }
+    } else {
+        i7 = (int)((x / z + 1.0f) * 32.0f);
+        i8 = (int)((y / az + 1.0f) * 32.0f);
+        i9 = (z < 0.0f) ? 1 : 0;
+    }
+    if (i7 == 0x40) i7 = 0x3f;
+    if (i8 == 0x40) i8 = 0x3f;
+    return (int)*(char*)((i9 * 0x40 + i8) * 0x40 + f94 + i7);
+}
+#pragma optimize("t", on)
+
+// @ 0x00b7ecc0
+float cPlanetModel_s00b7_ea80::FUN_ecc0(const Vec3* v)
+{
+    int m0 = ((int(__thiscall*)(void*))VTC(mpISphere, 0xc))(mpISphere);
+    void* map = *(void**)(m0 + 0xc);
+    float f1 = v->x, f2 = v->y, f3 = v->z;
+    float a1 = fabsf(f1), a2 = fabsf(f2), a3 = fabsf(f3);
+    // cube-face UV sample: u, v and the face index live in one 12-byte record
+    struct CubeUV { float u, v; int face; } uv;
+    if (a3 >= a1 && a3 >= a2) {
+        uv.u = (f1 / f3 + 1.0f) * 0.5f;
+        uv.v = (f2 / a3 + 1.0f) * 0.5f;
+        uv.face = (f3 < 0.0f) ? 1 : 0;
+    } else if (a2 >= a1) {
+        uv.u = (f3 / f2 + 1.0f) * 0.5f;
+        uv.v = (f1 / a2 + 1.0f) * 0.5f;
+        uv.face = (f2 < 0.0f) ? 5 : 4;
+    } else {
+        uv.u = (f2 / f1 + 1.0f) * 0.5f;
+        uv.v = (f3 / a1 + 1.0f) * 0.5f;
+        uv.face = (f1 < 0.0f) ? 3 : 2;
+    }
+    int m1 = ((int(__thiscall*)(void*))VTC(mpISphere, 0xc))(mpISphere);
+    float h = *(float*)(m1 + 0x38);
+    float r = ((cTerrainMapSet_s00b7_ea80*)map)->GetFloat((float*)&uv);
+    return r * h;
+}
+
+// @ 0x00b7ee70
+void cPlanetModel_s00b7_ea80::FUN_ee70(Vec3* out, Vec3* in)
+{
+    Vec3 n;
+    cTerrainData* d = (cTerrainData*)((void*(__thiscall*)(void*))VTC(mpISphere, 0xc))(mpISphere);
+    d->FUN_00f92c20(&n, in);          // surface normal of `in`
+    float x = in->x, y = in->y, z = in->z;
+    float inv = 1.0f / sqrtf(x * x + y * y + z * z);
+    float nx = n.x, ny = n.y, nz = n.z;
+    float a = ny * (inv * z) - nz * (inv * y);
+    float b = nx * (inv * y) - ny * (x * inv);
+    float c = nz * (x * inv) - nx * (inv * z);
+    out->x = c * nz - b * ny;
+    out->y = b * nx - nz * a;
+    out->z = ny * a - c * nx;
+}
+
+// @ 0x00b7ef70
+float cPlanetModel_s00b7_ea80::GetRadiusAt(unsigned coords)
+{
+    if (mpSphere) {
+        cTerrainMapSet_s00b7_ea80* map = (cTerrainMapSet_s00b7_ea80*)((void*(__thiscall*)(void*, unsigned))VTC(mpISphere, 0xc))(mpISphere, coords);
+        return map->GetHeightAt();
+    }
+    if (mpISphere) {
+        int m = ((int(__thiscall*)(void*))VTC(mpISphere, 0xc))(mpISphere);
+        if (m) {
+            int m2 = ((int(__thiscall*)(void*))VTC(mpISphere, 0xc))(mpISphere);
+            float r = *(float*)(m2 + 0x34);
+            return r;
+        }
+    }
+    float r = 500.0f;
+    return r;
+}
+
+// @ 0x00b7f060
+void cPlanetModel_s00b7_ea80::FUN_f060(Vec3* out, const Vec3* v, float* frac)
+{
+    void* s = mpISphere;
+    int m = ((int(__thiscall*)(void*))VTC(s, 0xc))(s);
+    float lo = *(float*)(m + 0x48);
+    float hi = *(float*)(m + 0x4c);
+    float r = FUN_ecc0(v);
+    if (lo < r && !FUN_00b7e3e0(v)) {
+        *frac = (r - lo) / (hi - lo);
+        Vec3 n;
+        FUN_ee70(&n, (Vec3*)v);
+        float inv = 1.0f / sqrtf(n.x * n.x + n.z * n.z + n.y * n.y + 1e-08f);
+        out->x = -(inv * n.x);
+        out->y = -(inv * n.y);
+        out->z = -(inv * n.z);
+        return;
+    }
+    out->x = DAT_016881f0;
+    out->y = DAT_016881f4;
+    out->z = DAT_016881f8;
+}
+
+// @ 0x00b7f510
+void cPlanetModel_s00b7_ea80::FUN_f510(unsigned n)
+{
+    int table = FUN_00b7f4a0(n);
+    unsigned i = 0;
+    if (*(unsigned*)((char*)this + 8) != 0) {
+        do {
+            int node = *(int*)(*(int*)((char*)this + 4) + i * 4);
+            while (node) {
+                unsigned h = (unsigned)(*(int*)(node + 8) * 0xfd + *(int*)node * 0x25 + *(int*)(node + 4)) % n;
+                *(int*)(*(int*)((char*)this + 4) + i * 4) = *(int*)(node + 0x20);
+                *(int*)(node + 0x20) = *(int*)(table + h * 4);
+                *(int*)(table + h * 4) = node;
+                node = *(int*)(*(int*)((char*)this + 4) + i * 4);
+            }
+            i++;
+        } while (i < *(unsigned*)((char*)this + 8));
+    }
+    int p = *(int*)((char*)this + 4);
+    if (*(unsigned*)((char*)this + 8) > 1 && p != *(int*)((char*)this + 0x30)) {
+        if (p >= *(int*)((char*)this + 0x24) && p < *(int*)((char*)this + 0x28)) {
+            *(int*)p = *(int*)((char*)this + 0x1c);
+            *(int*)((char*)this + 0x1c) = p;
+            *(int*)((char*)this + 4) = table;
+            *(unsigned*)((char*)this + 8) = n;
+            return;
+        }
+        operator_delete__((void*)p);
+    }
+    *(int*)((char*)this + 4) = table;
+    *(unsigned*)((char*)this + 8) = n;
+}
+
+// @ 0x00b7f5c0
+S18** FUN_00b7f5c0(S18** out, const S18* first, const S18* last, S18* dst)
+{
+    *out = dst;
+    if (first != last) {
+        do {
+            if (dst) {
+                dst->a = first->a; dst->b = first->b; dst->c = first->c; dst->d = first->d;
+                dst->e = first->e; dst->f = first->f; dst->g = first->g;
+            }
+            first++;
+            dst++;
+        } while (first != last);
+        *out = dst;
+    }
+    return out;
+}
+
+// @ 0x00b7f630
+S18* FUN_00b7f630(const S18* first, const S18* last, S18* dst)
+{
+    while (first != last) {
+        if (dst) {
+            dst->a = first->a; dst->b = first->b; dst->c = first->c; dst->d = first->d;
+            dst->e = first->e; dst->f = first->f; dst->g = first->g;
+        }
+        first++;
+        dst++;
+    }
+    return dst;
+}
+
+// @ 0x00b7f710
+S24a* FUN_00b7f710(const S24a* first, const S24a* last, S24a* dst)
+{
+    while (first != last) {
+        if (dst) {
+            dst->a = first->a; dst->b = first->b; dst->c = first->c; dst->d = first->d;
+            dst->e = first->e; dst->f = first->f; dst->g = first->g; dst->h = first->h;
+            dst->i = first->i;
+        }
+        first++;
+        dst++;
+    }
+    return dst;
+}
+
+// @ 0x00b7f780
+void FUN_00b7f780(S24b** out, const S24b* first, const S24b* last, S24b* dst)
+{
+    *out = dst;
+    if (first != last) {
+        do {
+            if (dst) {
+                dst->a = first->a; dst->b = first->b; dst->c = first->c; dst->d = first->d;
+                dst->e = first->e; dst->f = first->f; dst->g = first->g; dst->h = first->h;
+                dst->i = first->i;
+            }
+            first++;
+            dst++;
+        } while (first != last);
+        *out = dst;
+    }
+}
+
+// @ 0x00b7f800
+void* FUN_00b7f800(S24b* dst, unsigned count, const S24b* src)
+{
+    // The original only touches eax after the count>0 test, so a count==0 call hands
+    // back the caller's incoming eax unchanged; leave that path without a return.
+    if (count != 0) {
+        S24b* d = dst;
+        do {
+            if (d) {
+                d->a = src->a; d->b = src->b; d->c = src->c; d->d = src->d;
+                d->e = src->e; d->f = src->f; d->g = src->g; d->h = src->h;
+                d->i = src->i;
+            }
+            --count;
+            ++d;
+        } while (count != 0);
+        // The retail loop keeps its cursor biased to the `f` member (+0x14) in eax.
+        return (char*)d + 0x14;
+    }
+}
+
+// @ 0x00b7f860
+void* FUN_00b7f860(S18* dst, unsigned count, const S18* src)
+{
+    // See FUN_00b7f800: void return, count==0 leaves eax untouched in the original.
+    if (count != 0) {
+        S18* d = dst;
+        do {
+            if (d) {
+                d->a = src->a; d->b = src->b; d->c = src->c; d->d = src->d;
+                d->e = src->e; d->f = src->f; d->g = src->g;
+            }
+            --count;
+            ++d;
+        } while (count != 0);
+        // The retail loop keeps its cursor biased to the `d` member (+0xc) in eax.
+        return (char*)d + 0x0c;
+    }
+}
+
+// @ 0x00b7f8b0
+S24b* FUN_00b7f8b0(const S24b* first, const S24b* last, S24b* dst)
+{
+    while (first != last) {
+        if (dst) {
+            dst->a = first->a; dst->b = first->b; dst->c = first->c; dst->d = first->d;
+            dst->e = first->e; dst->f = first->f; dst->g = first->g; dst->h = first->h;
+            dst->i = first->i;
+        }
+        first++;
+        dst++;
+    }
+    return dst;
+}
+
 // @ 0x00b7f920
 void cArcRibbon::DrawArc(const Vector3& a, const Vector3& b, uint32_t color)
 {
@@ -1596,6 +2704,103 @@ Mode *Mode::DeleteInstance(u32 flags)
     return this;
 }
 
+// @ 0x00b81020
+void StampState::Stamp(const float *pDir, float radius, u32 planeMask)
+{
+    float vx = pDir[0];
+    float vy = pDir[1];
+    float vz = pDir[2];
+    float len = sqrtf(vx * vx + vy * vy + vz * vz);
+    if (len <= kEps)
+        return;
+
+    float inv = kOne / len;
+    float scaled = inv * k128 * radius;
+    int steps = (int)scaled;
+    if ((float)steps < scaled)
+        steps++;
+    if (steps == 0)
+        return;
+
+    vx *= inv;
+    vy *= inv;
+    vz *= inv;
+    float reach = (inv * radius) * (inv * radius);
+
+    float ax = vx < 0.0f ? -vx : vx;
+    float ay = vy < 0.0f ? -vy : vy;
+    float az = vz < 0.0f ? -vz : vz;
+
+    int ca, cb, plane;
+    if (az < ax || az < ay) {
+        if (ay < ax) {
+            ca = (int)((vy / vx + kOne) * k64);
+            cb = (int)((vz / ax + kOne) * k64);
+            plane = vx < 0.0f ? 3 : 2;
+        } else {
+            ca = (int)((vz / vy + kOne) * k64);
+            cb = (int)((vx / ay + kOne) * k64);
+            plane = vy < 0.0f ? 5 : 4;
+        }
+    } else {
+        ca = (int)((vx / vz + kOne) * k64);
+        cb = (int)((vy / az + kOne) * k64);
+        plane = vz < 0.0f ? 1 : 0;
+    }
+    if (ca == 0x80) ca = 0x7f;
+    if (cb == 0x80) cb = 0x7f;
+
+    SearchCoord coord;
+    coord.m_a = ca;
+    coord.m_b = cb;
+    coord.m_c = plane;
+
+    StampSpan spans[29];
+    int nSpans = FUN_00685450(0x80, &coord.m_a, steps, spans);
+    if (nSpans <= 0)
+        return;
+
+    u8 *pMask = m_mask;
+    u32 *pBits = m_bits;
+    u32 andMask = planeMask & 0x3c000000u;
+    u8 sel0 = (u8)(andMask >> 0x16);
+    u8 sel1 = (u8)(andMask >> 0x1a);
+    u8 sel[2] = { sel0, sel1 };
+
+    for (int s = 0; s < nSpans; s++) {
+        StampSpan *pSpan = &spans[s];
+        for (int c = pSpan->m_minC; c < pSpan->m_maxC; c++) {
+            for (int b = pSpan->m_minB; b < pSpan->m_maxB; b++) {
+                u32 idx = (pSpan->m_plane * 0x80 + (u32)c) * 0x80 + (u32)b;
+                u8 *pCell = pMask + (idx >> 1);
+                u8 cell = *pCell;
+                u8 mask = sel[idx & 1];
+                if ((mask & cell) == 0)
+                    continue;
+
+                const u8 *order = &gPlaneOrder[(pSpan->m_plane >> 1) * 4];
+                float fbx = ((float)b + 0.5f) * 0.015625f - kOne;
+                float fcy = ((float)c + 0.5f) * 0.015625f - kOne;
+                float invLen = kOne / sqrtf(fcy * fcy + fbx * fbx + kOne);
+                float sgn = (pSpan->m_plane & 1) ? -invLen : invLen;
+
+                float normal[3];
+                normal[order[0]] = sgn * fbx;
+                normal[order[1]] = invLen * fcy;
+                normal[order[2]] = sgn;
+
+                float dx = normal[0] - vx;
+                float dy = normal[1] - vy;
+                float dz = normal[2] - vz;
+                if (dx * dx + dy * dy + dz * dz <= reach) {
+                    *pCell = (u8)(~mask & cell);
+                    pBits[idx] &= ~andMask;
+                }
+            }
+        }
+    }
+}
+
 // @ 0x00b81470
 float SP::cPlanetModel::DistanceBetweenPoints(cSPVector3 const & a, cSPVector3 const & b) const
 {
@@ -1621,6 +2826,350 @@ float SP::cPlanetModel::DistanceBetweenPoints(cSPVector3 const & a, cSPVector3 c
 
     float angle = acosf(dot);
     return angle * ((r1 + r2) * kHalf);
+}
+
+// @ 0x00b81c80
+void cPlanetModel_s00b8_15a0::FUN_00b81c80(Vec3* out, const Vec3* pa, const Vec3* pb, float s)
+{
+    Vec3 va, vb;
+    va.x = pa->x;
+    float l1 = 1.0f / sqrtf((va.x * va.x + pa->y * pa->y) + pa->z * pa->z);
+    va.x = va.x * l1;
+    va.z = l1 * pa->z;
+    va.y = l1 * pa->y;
+
+    vb.x = pb->x;
+    float l2 = 1.0f / sqrtf((vb.x * vb.x + pb->y * pb->y) + pb->z * pb->z);
+    vb.x = vb.x * l2;
+    vb.y = pb->y * l2;
+    vb.z = pb->z * l2;
+
+    float r = (float)GetRadiusAt((uint)&va);
+
+    float cx = vb.z * va.y - va.z * vb.y;
+    float cy = va.z * vb.x - vb.z * va.x;
+    float cz = vb.y * va.x - vb.x * va.y;
+    float inv = 1.0f / sqrtf(cy * cy + (cz * cz + cx * cx));
+    float sn, cs;
+    if ((vb.z * va.z + vb.y * va.y) + vb.x * va.x <= 0.0f) {
+        float t = (s / r) * -0.5f;
+        sn = sinf(t);
+        cs = cosf(t);
+    } else {
+        float t = (s / r) * 0.5f;
+        sn = sinf(t);
+        cs = cosf(t);
+    }
+    Quat q;
+    q.w = cs;
+    q.x = sn * (inv * cx);
+    q.y = (cy * inv) * sn;
+    q.z = (cz * inv) * sn;
+    Vec3 axis;
+    axis.x = q.x;
+    axis.y = q.y;
+    axis.z = q.z;
+    float* p = FUN_0059aed0((float*)&axis, (const float*)&va, (const float*)&q);
+    float rx = p[0], ry = p[1], rz = p[2];
+    float rr2 = (float)GetRadiusAt((uint)&rx);
+    float inv2 = 1.0f / sqrtf((ry * ry + (rz * rz + rx * rx)) + 1e-8f);
+    out->x = (inv2 * rx) * rr2;
+    out->y = (ry * inv2) * rr2;
+    out->z = (rz * inv2) * rr2;
+}
+
+// @ 0x00b82310
+long double cPlanetModel_s00b8_15a0::FUN_00b82310(void* param)
+{
+    int h = FUN_00b3d310();
+    if (*(int*)(h + 0x20) != 0)
+        return GetRadiusAt((uint)param);
+
+    Vec3 d;
+    DirectionToSurfacePosition(&d, (const Vec3*)param);
+    float f1 = d.z * d.z + (d.x * d.x + d.y * d.y);
+    float f2 = sqrtf(f1);
+    float f5;
+    if (mpISphere != 0) {
+        int m = ((int(__thiscall*)(void*))VTC(mpISphere, 0xc))(mpISphere);
+        if (m != 0) {
+            int m2 = ((int(__thiscall*)(void*))VTC(mpISphere, 0xc))(mpISphere);
+            f5 = *(float*)(m2 + 0x34);
+        } else {
+            f5 = 500.0f;
+        }
+    } else {
+        f5 = 500.0f;
+    }
+    float height = f5 * 2.0f - f2;
+
+    RadialRay ray;
+    ray.pos[0] = d.x;
+    ray.pos[1] = d.y;
+    ray.pos[2] = d.z;
+    ray.pos[3] = 0.0f;
+    ray.h0 = height;
+    ray.h1 = 0.0f;
+
+    RayHitResult hit;
+    hit.normalOut = 0;
+    hit.distOut = 0;
+    hit.userData = 0;
+    hit.entity = 0;
+    FUN_00b65b10(&ray, DAT_0167ecd0, 0, true, 6, &hit);
+    if (hit.status != 0) {
+        float v = (hit.pos[1] * hit.pos[1] + hit.pos[2] * hit.pos[2]) + hit.pos[0] * hit.pos[0];
+        if (f1 < v)
+            return (long double)sqrtf(v);
+    }
+    return (long double)f2;
+}
+
+// @ 0x00b832d0
+bool cPlanetModel_s00b8_32d0::FUN_00b832d0(const float* dir, float step)
+{
+    float local_38 = dir[0];
+    if ((dir[1] * dir[1] + dir[2] * dir[2]) + local_38 * local_38 != 0.0f) {
+        float local_30 = 1.0f / (float)sqrt((double)((dir[1] * dir[1] + dir[2] * dir[2]) + local_38 * local_38));
+        local_38 = local_38 * local_30;
+        float local_34 = local_30 * dir[1];
+        local_30 = local_30 * dir[2];
+        float local_10[4];
+        QuaternionFromDirections(local_10, (const float*)&kQuatRef, &local_38);
+        float local_20[3];
+        float* pfVar5 = FUN_0059aed0(local_20, kBasis9, local_10);
+        float fVar1 = pfVar5[0];
+        float fVar2 = pfVar5[1];
+        float fVar3 = pfVar5[2];
+        float angle = 0.0f;
+        if (0.0f < kSpiralMaxAngle) {
+            do {
+                float s = (float)sin((double)(angle * 0.5f));
+                float c = (float)cos((double)(angle * 0.5f));
+                float fVar10 = local_34 * s;
+                float fVar11 = local_30 * s;
+                float fVar9 = s * local_38;
+                float local_2c = ((c * fVar10 + fVar11 * fVar9) * fVar3 +
+                                  (fVar10 * fVar9 - c * fVar11) * fVar2) * 2.0f +
+                                 (1.0f - (fVar11 * fVar11 + fVar10 * fVar10) * 2.0f) * fVar1;
+                float local_28 = ((fVar11 * fVar10 - c * fVar9) * fVar3 +
+                                  (c * fVar11 + fVar10 * fVar9) * fVar1) * 2.0f +
+                                 (1.0f - (fVar11 * fVar11 + fVar9 * fVar9) * 2.0f) * fVar2;
+                float local_24 = ((c * fVar9 + fVar11 * fVar10) * fVar2 +
+                                  (fVar11 * fVar9 - c * fVar10) * fVar1) * 2.0f +
+                                 (1.0f - (fVar9 * fVar9 + fVar10 * fVar10) * 2.0f) * fVar3;
+                local_2c = (dir[0] + local_2c * step) + local_2c;
+                local_28 = (local_28 * step + dir[1]) + local_28;
+                local_24 = (local_24 * step + dir[2]) + local_24;
+                if (mpISphere != 0) {
+                    Vec3POD p;
+                    p.x = local_2c; p.y = local_28; p.z = local_24;
+                    cTerrainMapSet_s00b8_32d0* pcVar6 = mpISphere->s3();
+                    float h = pcVar6->GetHeightAt(&p);
+                    cTerrainMapSet_s00b8_32d0* pc2 = mpISphere->s3();
+                    if (h < pc2->f3c * pc2->f38 + pc2->f34)
+                        return 1;
+                }
+                angle = angle + 1.0f / step;
+            } while (angle < kSpiralMaxAngle);
+        }
+    }
+    return 0;
+}
+
+// @ 0x00b83620
+float cPlanetModel_s00b8_32d0::FUN_00b83620(int a, float b)
+{
+    int iVar3 = 0;
+    int iVar4 = 100;
+    do {
+        Vec3POD local_c;
+        MakeRandomWorldPosition(&local_c, a, 0.0f, b);
+        if (mpISphere != 0) {
+            float h = mpISphere->s3()->GetHeightAt(&local_c);
+            cTerrainMapSet_s00b8_32d0* m = mpISphere->s3();
+            if (h < m->f3c * m->f38 + m->f34)
+                iVar3 = iVar3 + 1;
+        }
+        iVar4 = iVar4 - 1;
+    } while (iVar4 != 0);
+    return (float)iVar3 * 0.01f;
+}
+
+// @ 0x00b836b0
+float FUN_00b836b0(uint param_1, uint param_2)
+{
+    cPlanetModel_s00b8_32d0* iVar2 = PlanetModel_s00b8_32d0();
+    int iVar4 = *(int*)((char*)iVar2 + 0x4c);
+    cTerrainMapSet_s00b8_32d0* iVar3 = iVar2->mpISphere->s3();
+    float fVar5 = iVar3->f34;
+    uint uVar1 = *(uint*)(iVar4 + (((param_2 >> 8 & 0xff) + (param_2 >> 0x11) * 0x80) * 0x80 +
+                                   (param_2 & 0xff)) * 4);
+    float fVar6 = iVar3->f38;
+    float fVar7;
+    if (iVar2->mpISphere == 0) {
+        fVar7 = 0.0f;
+    } else {
+        cTerrainMapSet_s00b8_32d0* p = iVar2->mpISphere->s3();
+        fVar7 = p->f3c * p->f38 + p->f34;
+    }
+    fVar5 = ((float)(int)((uVar1 & 0xffff) - 0x8000) * fVar6) * kHeightUnit + fVar5;
+    if (fVar7 <= fVar5)
+        return kNoTerrain;
+    fVar5 = (fVar7 - fVar5) * 0.06666667f;
+    float fStack_10 = 0.0f;
+    if (0.0f <= fVar5)
+        fStack_10 = fVar5;
+    if (1.0f <= fStack_10)
+        fStack_10 = 1.0f;
+    float fVar5b = fStack_10 * 9.0f;
+    Vec3POD A, B;
+    FUN_00ac1510(param_1 >> 0x11, param_1 & 0xff, param_1 >> 8 & 0xff, (float*)&A);
+    FUN_00ac1510(param_2 >> 0x11, param_2 & 0xff, param_2 >> 8 & 0xff, (float*)&B);
+    float dz = B.z - A.z;
+    if (iVar2->mpISphere == 0) {
+        fVar6 = 0.0f;
+    } else {
+        cTerrainMapSet_s00b8_32d0* p = iVar2->mpISphere->s3();
+        fVar6 = p->f3c * p->f38 + p->f34;
+    }
+    return fVar6 * (float)sqrtf(((B.y - A.y) * (B.y - A.y) + (B.x - A.x) * (B.x - A.x)) + dz * dz) *
+           (10.0f - fVar5b);
+}
+
+// @ 0x00b83870
+uint cPlanetModel_s00b8_32d0::FUN_00b83870(int arg)
+{
+    void* pm = PropertyManager();
+    int listA = 0, listB = 0;
+    // mpISphere slot +0xb4: return two parallel arrays (A stride 0xc, B stride 0x38) + count.
+    uint count = ((uint (__thiscall*)(void*, int*, int*))(*(void***)mpISphere)[0xb4 / 4])(mpISphere, &listA, &listB);
+    float* ref = (float*)((char*)this + 0x28);
+    for (uint i = 0; i < count; ++i) {
+        int item = listA + (int)i * 0xc;
+        void* prop = 0;
+        ((char (__thiscall*)(void*, int, int, void**))(*(void***)pm)[0x2c / 4])(
+            pm, *(int*)(item), *(int*)(item + 8), &prop);
+        if (prop != 0) {
+            float va = 0.0f, vb = 0.0f;
+            char fa = 0, fb = 0;
+            void* p = 0;
+            if (((char (__thiscall*)(void*, int, void**))(*(void***)prop)[0x24 / 4])(prop, 0x254cf89, &p) &&
+                p != 0 && *(short*)((char*)p + 0x12) == 0xd) {
+                if ((*(unsigned char*)((char*)p + 0x10) & 0x30) != 0)
+                    p = *(void**)p;
+                va = *(float*)p;
+                fa = 1;
+            }
+            p = 0;
+            if (((char (__thiscall*)(void*, int, void**))(*(void***)prop)[0x24 / 4])(prop, 0x4ee9f45, &p) &&
+                p != 0 && *(short*)((char*)p + 0x12) == 0xd) {
+                if ((*(unsigned char*)((char*)p + 0x10) & 0x30) != 0)
+                    p = *(void**)p;
+                vb = *(float*)p;
+                fb = 1;
+            }
+            if (fa || fb) {
+                float v = (vb > va) ? vb : va;
+                float* pos = (float*)(listB + (int)i * 0x38);
+                float dx = pos[1] - ref[0];
+                float dy = pos[2] - ref[1];
+                float dz = pos[3] - ref[2];
+                if (v * v >= dx * dx + dz * dz + dy * dy)
+                    return 1;
+            }
+        }
+        if (prop != 0)
+            ((void (__thiscall*)(void*))(*(void***)prop)[4 / 4])(prop);
+    }
+    return 0;
+}
+
+// @ 0x00b83af0
+int** HashTableA::Find(int** out, int* key)
+{
+    uint uVar2 = (uint)(*key * 0x25 + key[2] * 0xfd + key[1]) % size;
+    int* p = table;
+    int* slot = p + uVar2;
+    int* node = (int*)p[uVar2];
+    for (; node != 0; node = (int*)node[8]) {
+        if ((*key == node[0]) && (key[1] == node[1]) && (key[2] == node[2]))
+            break;
+    }
+    if (node == 0) {
+        slot = p + size;
+        node = (int*)*slot;
+    }
+    out[0] = node;
+    out[1] = slot;
+    return out;
+}
+
+// @ 0x00b841a0
+void ColorVector::DoInsertValue(uint index, uint value, int param4)
+{
+    if ((0 < (int)index) && (index < (uint)((mEnd - mBegin) / 0x18))) {
+        uint* puVar3 = (uint*)(mBegin + index * 0x18);
+        if (*puVar3 != value) {
+            *puVar3 = value;
+            *(char*)((char*)mOwner + 0xc) = 1;
+            MessageBasicRC5 local_40;
+            local_40.mId = 0x66603cd;
+            local_40.mRefCount = 0;
+            local_40.vftable = 0;
+            local_40.mFieldC = 0;
+            local_40.mField10 = value;
+            void** piVar1 = (void**)MessageServer();
+            ((void (__thiscall*)(void*, int, void*, int))(*(void***)piVar1)[0x14 / 4])(piVar1, 0x66603cd, &local_40, 0);
+        }
+        int iVar2 = mBegin + index * 0x18;
+        if (*(char*)(iVar2 + 0x10) != '\0')
+            *(int*)(iVar2 + 0x14) = param4;
+    }
+}
+
+// @ 0x00b849e0
+void U16Vec::Reserve(unsigned int n)
+{
+    if (n > (uint32_t)(mpCapacity - mpBegin)) {
+        uint16_t* pNew = n
+            ? (uint16_t*)operator_new_eastl(n * 2, "Simulator", 0, 0, ALLOC_FILE, 0xd1)
+            : 0;
+        MemCpy(pNew, mpBegin, (uint32_t)((char*)mpEnd - (char*)mpBegin));
+        if (mpBegin && ((int32_t*)mpBegin)[-1] != 0)
+            operator_delete_eastl(mpBegin);
+        uint16_t* pNewEnd = pNew + (mpEnd - mpBegin);
+        uint16_t* pNewCap = pNew + n;
+        mpBegin = pNew;
+        mpEnd = pNewEnd;
+        mpCapacity = pNewCap;
+    }
+}
+
+// @ 0x00b850c0
+Elem1C* UninitCopy1C(const Elem1C* first, const Elem1C* last, Elem1C* dst)
+{
+    while (first != last) {
+        if (dst) {
+            dst->mA = first->mA;
+            dst->mB = first->mB;
+            dst->mVec.Copy(first->mVec);
+        }
+        first += 1;
+        dst += 1;
+    }
+    return dst;
+}
+
+// @ 0x00b85110
+void ScalarList::Dtor()
+{
+    mVec34.~IntVector();
+    mVec20.~IntVectorVec();
+    mVec0c.~IntVectorVec();
+    if (mp08)
+        mp08->s2();
+    mpVtbl = &kEventModifierVtbl;
 }
 
 // @ 0x00b85380
@@ -2165,6 +3714,250 @@ cGonzagoListener *cGonzagoListener::Ctor()
     return this;
 }
 
+// @ 0x00b87dc0
+namespace SP {
+void cPlanetModel_s00b8_7dc0::ComputeContinents()
+{
+  if (!mContinentMap || !mpISphere)
+    return;
+
+  const unsigned int threshold = FloatToHeight16(mpISphere->GetMap()->GetWaterLevel());
+  const uint8_t* heights = mpISphere->GetMap()->mpHeights->mpData;
+  uint32_t* cells = mContinentMap;
+
+  UnionFind uf;
+  uf.reserve(0x10000);
+  {
+    uint16_t* p = uf.mpEnd;
+    int i = 0;
+    do {
+      *p = (uint16_t)i;
+      i++;
+      p++;
+    } while (i < 0x10000);
+    uf.mpEnd = p;
+  }
+
+  // Pass 1: classify every cell (land bit 30, partial-water bit 31, attribute word) from its
+  // 2x2 block of height samples and label connected runs with union-find.
+  const __m64 thr = _mm_set1_pi32((int)threshold - 1);
+  const __m64 zero = _mm_setzero_si64();
+  const __m64 ones = _mm_set1_pi32(-1);
+  uint32_t nextLabel = 1;
+  int rowBase = 0;
+  const uint8_t* rowPtr = heights;
+  uint32_t* prev = cells - 1;
+  do {
+    uint32_t row = 0;
+    do {
+      uint32_t col = 0;
+      const uint8_t* sample = rowPtr;
+      const uint8_t* info = rowPtr + 0x804;
+      do {
+        __m64 anyAbove = zero;
+        __m64 allAbove = ones;
+        const uint8_t* q = sample;
+        int k = 2;
+        do {
+          __m64 v = *(const __m64*)q;
+          __m64 lo = _mm_cmpgt_pi32(_mm_unpacklo_pi16(v, zero), thr);
+          __m64 hi = _mm_cmpgt_pi32(_mm_unpackhi_pi16(v, zero), thr);
+          anyAbove = _mm_or_si64(anyAbove, lo);
+          anyAbove = _mm_or_si64(anyAbove, hi);
+          allAbove = _mm_and_si64(allAbove, lo);
+          allAbove = _mm_and_si64(allAbove, hi);
+          q += 0x800;
+        } while (--k);
+        uint32_t land = (anyAbove.m64_u32[1] | anyAbove.m64_u32[0]) & 0x40000000;
+        uint32_t cell = (~(allAbove.m64_u32[1] & allAbove.m64_u32[0]) & 0x80000000) |
+                        *(const uint16_t*)info | land;
+        prev[1] = cell;
+
+        bool hasUp = false;
+        if (row != 0 && (cells[rowBase + col - 0x80] & 0x40000000) == land)
+          hasUp = true;
+        bool hasLeft = false;
+        if (col != 0 && (prev[0] & 0x40000000) == land)
+          hasLeft = true;
+
+        if (hasUp) {
+          if (hasLeft) {
+            uint32_t upLabel = cells[rowBase + col - 0x80] & 0x3fff0000;
+            uint32_t leftLabel = prev[0] & 0x3fff0000;
+            if (upLabel == leftLabel) {
+              prev[1] = cell | upLabel;
+            } else {
+              uint16_t merged = uf.Union(upLabel >> 16, leftLabel >> 16);
+              prev[1] |= (uint32_t)merged << 16;
+            }
+          } else {
+            prev[1] = (cells[rowBase + col - 0x80] & 0x3fff0000) | cell;
+          }
+        } else if (hasLeft) {
+          prev[1] = (prev[0] & 0x3fff0000) | cell;
+        } else {
+          prev[1] = ((nextLabel & 0x3fff) << 16) | cell;
+          nextLabel++;
+        }
+        sample += 8;
+        info += 8;
+        col++;
+        prev++;
+      } while (col < 0x80);
+      rowPtr += 0x1000;
+      rowBase += 0x80;
+      row++;
+    } while (row < 0x80);
+  } while (rowBase < 0x18000);
+  _mm_empty();
+
+  // Pass 2: merge labels across the cube-face seams (faces 0-3 against their higher neighbours).
+  int startX[4] = {0, 0, 0x7f, 0x7f};
+  int startY[4] = {0, 0x7f, 0x7f, 0};
+  int stepX[4] = {1, 0, -1, 0};
+  int stepY[4] = {0, -1, 0, 1};
+  int outX[4] = {0, -1, 0, 1};
+  int outY[4] = {-1, 0, 1, 0};
+  int faceRow = 0;
+  for (int f = 0; faceRow < 0x200; f++, faceRow += 0x80) {
+    for (int j = 0; j < 4; j++) {
+      int face = f;
+      int x = outX[j] + startX[j];
+      int y = outY[j] + startY[j];
+      int dx = stepX[j];
+      int dy = stepY[j];
+      WrapCubeFace(0x80, &face, &x, &y, &dx, &dy);
+      if (f < face) {
+        uint32_t* cur = cells + (faceRow + startY[j]) * 0x80 + startX[j];
+        int stride = stepY[j] * 0x80 + stepX[j];
+        for (uint32_t t = 0; t < 0x80; t++) {
+          uint32_t other = cells[(face * 0x80 + y) * 0x80 + (dy * 0x80 + dx) * t + x];
+          if (((other ^ *cur) & 0x40000000) == 0)
+            uf.Union((*cur >> 16) & 0x3fff, (other >> 16) & 0x3fff);
+          cur += stride;
+        }
+      }
+    }
+  }
+
+  const unsigned int regions = (unsigned int)uf.Flatten(nextLabel, 0x3ff);
+  mContinentAboveWater.resize(regions);
+  mContinentAreas.clear();
+  mContinentAreas.resize(regions);
+
+  // Pass 3: replace the provisional labels by the flattened ones, accumulate the region areas and
+  // above-water flags, and fold in the per-cell attribute nibble (two cells per byte).
+  const uint8_t* nibbles = mCellNibbles;
+  uint8_t* aboveWater = mContinentAboveWater.mpBegin;
+  uint32_t* areas = mContinentAreas.mpBegin;
+  uint32_t* end = cells + 0x18000;
+  for (uint32_t* p = cells; p < end; p += 2) {
+    uint32_t b = *nibbles++;
+    uint32_t c0 = p[0];
+    uint32_t id0 = uf.mpBegin[((const uint16_t*)p)[1] & 0x3fff] & 0x3ff;
+    uint32_t n0 = (c0 & 0xc000ffff) | ((((b & 0xf0) << 6) | id0) << 16);
+    p[0] = n0;
+    aboveWater[id0] = (uint8_t)((n0 >> 30) & 1);
+    areas[id0]++;
+
+    uint32_t c1 = p[1];
+    uint32_t id1 = uf.mpBegin[((const uint16_t*)p)[3] & 0x3fff] & 0x3ff;
+    uint32_t n1 = (c1 & 0xc000ffff) | ((((b & 0xf) << 10) | id1) << 16);
+    p[1] = n1;
+    aboveWater[id1] = (uint8_t)((n1 >> 30) & 1);
+    areas[id1]++;
+  }
+  mContinentMapDirty = false;
+}
+}  // namespace SP
+
+// @ 0x00b88420
+namespace SP {
+void cPlanetModel_s00b8_7dc0::Refresh()
+{
+  if (mContinentMapDirty) {
+    mContinentMapDirty = false;
+    ComputeContinents();
+  }
+}
+}  // namespace SP
+
+// @ 0x00b88430
+namespace SP {
+void Vector20::insert(Element20* pos, const Element20* value)
+{
+  if (mpEnd != mpCapacity) {
+    const Element20* v = value;
+    if (v >= pos && v < mpEnd)
+      v = v + 1;
+    if (mpEnd)
+      new (mpEnd) Element20(*(mpEnd - 1));
+    FUN_00b85980(pos, mpEnd - 1, mpEnd);
+    *pos = *v;
+    ++mpEnd;
+  } else {
+    unsigned int count = (unsigned int)(mpEnd - mpBegin);
+    unsigned int newCapacity = count ? count * 2 : 1;
+    Element20* buffer = newCapacity
+        ? (Element20*)operator new[](newCapacity * sizeof(Element20),
+            (const char*)0x13f09b4, 0, 0, (const char*)0x13ebb38, 0xd1)
+        : 0;
+    unsigned int prefixBytes = (unsigned int)((char*)pos - (char*)mpBegin);
+    Element20* newPos = (Element20*)MemMove(buffer, mpBegin, prefixBytes) + (pos - mpBegin);
+    if (newPos)
+      new (newPos) Element20(*value);
+    unsigned int suffixBytes = (unsigned int)((char*)mpEnd - (char*)pos);
+    Element20* newEnd = (Element20*)MemMove(newPos + 1, pos, suffixBytes) + (mpEnd - pos);
+    if (mpBegin && ((int*)mpBegin)[-1] != 0)
+      operator_delete__(mpBegin);
+    mpBegin = buffer;
+    mpEnd = newEnd;
+    mpCapacity = buffer + newCapacity;
+  }
+}
+}  // namespace SP
+
+// @ 0x00b88590
+namespace SP {
+uint32_t cPlanetModel_s00b8_7dc0::GetCellValue(const Vector3_s00b8_7dc0* dir)
+{
+  if (mContinentMapDirty) {
+    mContinentMapDirty = false;
+    ComputeContinents();
+  }
+
+  float x = dir->x;
+  float y = dir->y;
+  float z = dir->z;
+  float ax = (float)fabs((double)x);
+  float ay = (float)fabs((double)y);
+  float az = (float)fabs((double)z);
+
+  int u;
+  int v;
+  int face;
+  if (az >= ax && az >= ay) {
+    u = (int)((x / z + 1.0f) * 64.0f);
+    v = (int)((y / az + 1.0f) * 64.0f);
+    face = z < 0.0f ? 1 : 0;
+  } else if (ay >= ax) {
+    u = (int)((z / y + 1.0f) * 64.0f);
+    v = (int)((x / ay + 1.0f) * 64.0f);
+    face = y < 0.0f ? 5 : 4;
+  } else {
+    u = (int)((y / x + 1.0f) * 64.0f);
+    v = (int)((z / ax + 1.0f) * 64.0f);
+    face = x < 0.0f ? 3 : 2;
+  }
+
+  if (u == 0x80) u = 0x7f;
+  if (v == 0x80) v = 0x7f;
+  unsigned int index = (unsigned int)(((face << 7) + v) << 7) + (unsigned int)u;
+  const uint16_t* cellWords = (const uint16_t*)mContinentMap;
+  return cellWords[index * 2 + 1] & 0x3ff;
+}
+}  // namespace SP
+
 // @ 0x00b894a0
 int32_t cCellGrid::CellFromDirection(float* dir)
 {
@@ -2682,6 +4475,12 @@ void cPlanetModel_s00b8_aea0::BuildPoliticalZoneMap()
 }
 }  // namespace SP
 
+// @ 0x00b8bb70
+bool cPlanetModel_s00b8_bb70::FindClosestWater(const SVector3* pOrigin, float fDirection, SVector3* pOut)
+{
+    return RayCast(pOrigin, fDirection, pOut, 1.0f, true, 0);
+}
+
 // @ 0x00b8d2a0
 bool cPlanetModel_s00b8_d190::HandleMessage(uint32_t id, void* msg)
 {
@@ -2700,4 +4499,14 @@ bool cPlanetModel_s00b8_d190::HandleMessage(uint32_t id, void* msg)
         mField78 = 1;
     }
     return false;
+}
+
+// @ 0x00b8d2f0
+void cPlanetModel_s00b8_d190::FUN_00b8d2f0()
+{
+    if (mField20 != 0) {
+        mField20->v43();
+        FUN_00b8c0f0();
+    }
+    mFieldEC = -1;
 }

@@ -4,8 +4,8 @@
 00b81720 FUN_00b81720  # cPlanetModel::random direction scaled to surface radius
 00b81780 MakeRandomWorldPosition  # cPlanetModel::MakeRandomWorldPosition
 00b81a40 FUN_00b81a40  # cPlanetModel::MakeRandomWorldPosition (no flag/range branch)
-00b81c80 FUN_00b81c80  # cPlanetModel::arc position between two directions
+00b81c80 ?FUN_00b81c80@cPlanetModel_s00b8_15a0@@QAEXPAUVec3@@PBU2@1M@Z  # cPlanetModel_s00b8_15a0::FUN_00b81c80 migrated from s00b815a0 (verbatim, slice spelling)
 00b81f90 IsPositionBelowSurface  # cPlanetModel::IsPositionBelowSurface
 00b82060 FUN_00b82060  # cPlanetModel::surface position for coords
 00b82110 FUN_00b82110  # cPlanetModel::projected position pick
-00b82310 FUN_00b82310  # cPlanetModel::subdivided surface radius
+00b82310 ?FUN_00b82310@cPlanetModel_s00b8_15a0@@QAEOPAX@Z  # cPlanetModel_s00b8_15a0::FUN_00b82310 migrated from s00b815a0 (verbatim, slice spelling)

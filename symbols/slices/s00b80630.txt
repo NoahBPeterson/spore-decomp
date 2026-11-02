@@ -10,5 +10,5 @@
 00b80e40 ?StopAudio@Layer@@QAEXXZ  # Layer::StopAudio migrated from s00b80630 (verbatim, slice spelling)
 00b80ea0 ?DispatchEvent@Layer@@QAEXPAXH00@Z  # Layer::DispatchEvent migrated from s00b80630 (verbatim, slice spelling)
 00b80ff0 ?DeleteInstance@Mode@@QAEPAU1@I@Z  # Mode::DeleteInstance migrated from s00b80630 (verbatim, slice spelling)
-00b81020  StampState::Stamp(pDir, radius, planeMask) -> void  # terrain-sphere stamping: reject zero direction, scale radius to a 128-grid step count, pick dominant axis, compute two face coordinates, FUN_00685450 -> spans; per cell test the two-bit coverage mask, rebuild the surface normal from the face permutation table 0x14653b8, and clear mask/bit-plane bits within the angular reach
+00b81020 ?Stamp@StampState@@QAEXPBMMI@Z  # StampState::Stamp migrated from s00b80630 (verbatim, slice spelling)
 00b81470 ?DistanceBetweenPoints@cPlanetModel@SP@@QBEMABUcSPVector3@@0@Z  # SP::cPlanetModel::DistanceBetweenPoints migrated from s00b80630

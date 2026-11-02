@@ -1,6 +1,6 @@
 00b8d190 FUN_00b8d190  # Ghidra FUN; minimap blit/scroll helper: clamps the source and destination row rectangles, walks the clamped rows through the source surface at +0xd8 and restores the scissor; not reconstructed
 00b8d2a0 ?HandleMessage@cPlanetModel_s00b8_d190@@QAE_NIPAX@Z  # cPlanetModel_s00b8_d190::HandleMessage migrated from s00b8d190 (verbatim, slice spelling)
-00b8d2f0 FUN_00b8d2f0  # Ghidra FUN; reset the model's star/minimap state: clear the star handle at +0x184, the count at +0x194 and the mode word at +0x28, then release the two owned-pointer containers; byte-exact
+00b8d2f0 ?FUN_00b8d2f0@cPlanetModel_s00b8_d190@@QAEXXZ  # cPlanetModel_s00b8_d190::FUN_00b8d2f0 migrated from s00b8d190 (verbatim, slice spelling)
 00b8d320 FUN_00b8d320  # Ghidra FUN; begin a minimap interaction: stop the audio layer, destroy the sub-object at +(-4) and rebuild the mode/flag and cursor state; not reconstructed
 00b8d420 FUN_00b8d420  # Ghidra FUN; minimap draw: early-out on a null cursor, build the clip rectangle from the layout helper at +0x128, draw each cell and refresh the minimap; not reconstructed
 00b8d750 FUN_00b8d750  # Ghidra FUN; rebuild the minimap after a cursor change: re-derive the row/column counts, re-clamp the cell origin and re-emit UpdateMinimap; not reconstructed

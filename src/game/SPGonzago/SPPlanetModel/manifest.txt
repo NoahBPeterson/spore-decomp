@@ -5,6 +5,10 @@
 ../src/game/SPGonzago/SPPlanetModel.cpp  ?SetMaterialC@Mode@@QAEXPAX@Z  00b80b00  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPGonzago/SPPlanetModel.cpp  ?StopAudio@Layer@@QAEXXZ  00b80e40  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPGonzago/SPPlanetModel.cpp  ?DeleteInstance@Mode@@QAEPAU1@I@Z  00b80ff0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPGonzago/SPPlanetModel.cpp  ?FUN_00b83620@cPlanetModel_s00b8_32d0@@QAEMHM@Z  00b83620  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPPlanetModel.cpp  ?Reserve@U16Vec@@QAEXI@Z  00b849e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPPlanetModel.cpp  ?UninitCopy1C@@YAPAUElem1C@@PBU1@0PAU1@@Z  00b850c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPPlanetModel.cpp  ?Dtor@ScalarList@@QAEXXZ  00b85110  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPPlanetModel.cpp  ?AllocAndCopy@@YGPAXIPBX0@Z  00b85930  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPPlanetModel.cpp  ?insert@SpVector3@@QAEPAUVec3f@@PAU2@PBU2@@Z  00b85d40  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPPlanetModel.cpp  ?push_back@Vertex3DVec@@QAEXPBUVertex3D@@@Z  00b85db0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
@@ -12,5 +16,8 @@
 ../src/game/SPGonzago/SPPlanetModel.cpp  ?CopyCtor@ByteVec@@QAEPAXPBU1@@Z  00b85fb0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPPlanetModel.cpp  ?CopyVec20BForward@@YAPAIPAI00@Z  00b86350  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPPlanetModel.cpp  ?CopyVec20BBackward@@YAPAIPAI00@Z  00b86390  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPPlanetModel.cpp  ?Refresh@cPlanetModel_s00b8_7dc0@SP@@QAEXXZ  00b88420  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPPlanetModel.cpp  ?PushDefault@OuterVec@@QAEXXZ  00b89770  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPPlanetModel.cpp  ?AddBoundary@cNatlBounds@@QAEXPBUVec3@@0II@Z  00b899b0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPPlanetModel.cpp  ?FindClosestWater@cPlanetModel_s00b8_bb70@@QAE_NPBUSVector3@@MPAU2@@Z  00b8bb70  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPPlanetModel.cpp  ?FUN_00b8d2f0@cPlanetModel_s00b8_d190@@QAEXXZ  00b8d2f0  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
