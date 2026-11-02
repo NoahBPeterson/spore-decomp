@@ -1,7 +1,7 @@
-006fc540  eastl::vector<...>::set_capacity    # PDB candidate
-006fc6a0  SP::ClearPSFragment                  # PDB
-006fc780  SP fragment-block append/move
-006fcb90  SP fragment region clear
+006fc540 ?set_capacity@Vec25@@QAEXI@Z  # Vec25::set_capacity migrated from s006fc540 (verbatim, slice spelling)
+006fc6a0 ?ClearPSFragment@SP@@YAXH@Z  # SP::ClearPSFragment migrated from s006fc540
+006fc780 ?ReadFragmentTable@@YAXPAX@Z  # ReadFragmentTable migrated from s006fc540 (verbatim, slice spelling)
+006fcb90 ?FilterFragmentRegions@@YAHHPAXPAD@Z  # FilterFragmentRegions migrated from s006fc540 (verbatim, slice spelling)
 006fcdc0  EA::IO read of a fragment-decl record
 006fceb0  EA::IO write of a fragment-decl record
 006fcf90  SP::cFragmentShader::Write           # PDB candidate
