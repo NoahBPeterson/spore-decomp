@@ -186,18 +186,36 @@ struct IWin {
     virtual void i1d();
     virtual void i1e();
     virtual void vSetFlags(int a, int b);              // vtbl+0x7c (31)
-    virtual void i32(); virtual void i33(); virtual void i34(); virtual void i35();
-    virtual void i36(); virtual void i37(); virtual void i38(); virtual void i39();
-    virtual void i40(); virtual void i41(); virtual void i42(); virtual void i43();
-    virtual void i44(); virtual void i45(); virtual void i46();
+virtual void i32();
+virtual void i33();
+virtual void i34();
+virtual void i35();
+virtual void i36();
+virtual void i37();
+virtual void i38();
+virtual void i39();
+virtual void i40();
+virtual void i41();
+virtual void i42();
+virtual void i43();
+virtual void i44();
+virtual void i45();
+virtual void i46();
     virtual bool vHitLocal(V2 p);                      // vtbl+0xbc (47)
     virtual void i48();
     virtual V2 vToLocal(V2 p);                         // vtbl+0xc4 (49)
     virtual bool vHit(V2 p, V2* out);                  // vtbl+0xc8 (50)
-    virtual void i51(); virtual void i52(); virtual void i53(); virtual void i54();
-    virtual void i55(); virtual void i56(); virtual void i57();
+virtual void i51();
+virtual void i52();
+virtual void i53();
+virtual void i54();
+virtual void i55();
+virtual void i56();
+virtual void i57();
     virtual void vSetOwner(IWin* w);                   // vtbl+0xe8 (58)
-    virtual void i59(); virtual void i60(); virtual void i61();
+virtual void i59();
+virtual void i60();
+virtual void i61();
     virtual bool vAccepts(IWin* w);                    // vtbl+0xf8 (62)
 };
 struct Base0 { virtual void b0(); virtual void Release(); };
@@ -386,15 +404,15 @@ struct TC {
 };
 #define TH(x) ((TC*)(x))
 struct W_s0095_9780 {
-    char GV(int a, int b, void* c, int d, int e);                  // 0x00959640
+    bool GV(int a, int b, void* c, int d, int e);                  // 0x00959640
     void RenderWindow(int win, void* ctx);                         // 0x0095a510
     void a0b0(int p2, int* p3);                                    // 0x0095a0b0
     void fe0(int win);                                             // 0x00959fe0
     void cf0(int p2, int p3);                                      // 0x00959cf0
-    int  b70(int p2, int p3);                                      // 0x00959b70
+    bool b70(int p2, int p3);                                      // 0x00959b70
     void DetachWindow(void* win);                                  // 0x00959e00
     void UpdateRenderState(int win, char p3, char p4);             // 0x0095a140
-    char Fn00959780(int* ev, char p3);                             // 0x00959780
+    bool Fn00959780(int* ev, char p3);                             // 0x00959780
 };
 #define VFP(off) (*(void**)((char*)*(void**)this + (off)))
 // ---- items of slice s00959780 end
@@ -540,21 +558,38 @@ struct IRenderable {
     virtual void Render(RenderCtx_s0095_b310* c);                              // +0xc
 };
 struct IRenderMode_s0095_b310 {
-    virtual void m0(); virtual void m1(); virtual void m2(); virtual void m3();
+virtual void m0();
+virtual void m1();
+virtual void m2();
+virtual void m3();
     virtual void Begin();                                           // +0x10
     virtual void Render(IRenderable* r, RenderCtx_s0095_b310* c);              // +0x14
     virtual void End();                                             // +0x18
     virtual bool vFlag();                                           // +0x1c
 };
 struct IRenderer_s0095_b310 {
-    virtual void AddRef(); virtual void Release(); virtual void r2();
+virtual void AddRef();
+virtual void Release();
+virtual void r2();
     virtual bool NeedsPrepass();                                    // +0xc
     virtual void* CreateData(IWin* w);                              // +0x10
     virtual void  FreeData(void* d);                                // +0x14
     virtual void  RenderBatch(void* data, RenderCtx_s0095_b310* c, Node** begin, int n, int flag);   // +0x18
-    virtual void r7(); virtual void r8(); virtual void r9(); virtual void r10(); virtual void r11();
-    virtual void r12(); virtual void r13(); virtual void r14(); virtual void r15(); virtual void r16();
-    virtual void r17(); virtual void r18(); virtual void r19(); virtual void r20(); virtual void r21();
+virtual void r7();
+virtual void r8();
+virtual void r9();
+virtual void r10();
+virtual void r11();
+virtual void r12();
+virtual void r13();
+virtual void r14();
+virtual void r15();
+virtual void r16();
+virtual void r17();
+virtual void r18();
+virtual void r19();
+virtual void r20();
+virtual void r21();
     virtual void DrawRect(const RectF_s0095_b310* dst, const RectF_s0095_b310* clip, const RectF_s0095_b310* uv);   // +0x58
 };
 struct Base2D_s0095_b310 {                                                  // size 0x24
@@ -600,15 +635,15 @@ struct RenderCtx_s0095_b310 {
     // @ 0x95bb80
     RenderCtx_s0095_b310(void* a) : mode(0), defMode(0), mat(0), colorMod(0xffffffff), chunks(0), batch(a) {}
     // @ 0x95bb20
-    void __thiscall End2D();
+    void __thiscall End2D();  // 0x0095bb20 (RenderCtx::End2D)
     // @ 0x95bbc0
-    void __thiscall AddRenderable(IRenderable* r);
+    void __thiscall AddRenderable(IRenderable* r);  // 0x0095bbc0 (RenderCtx::AddRenderable)
     // @ 0x95bc10
-    Batch2D_s0095_b310* __thiscall Begin2D(IRenderMode_s0095_b310* m);
+    Batch2D_s0095_b310* __thiscall Begin2D(IRenderMode_s0095_b310* m);  // 0x0095bc10 (RenderCtx::Begin2D)
     // @ 0x95bc40
-    Node** __thiscall RenderBatch(Node** pIt, DispEntry* head, int flag);
+    Node** __thiscall RenderBatch(Node** pIt, DispEntry* head, int flag);  // 0x0095bc40 (RenderCtx::RenderBatch)
     // @ 0x95bd60
-    void __thiscall RenderList(Node* lst, const RectF_s0095_b310* r);
+    void __thiscall RenderList(Node* lst, const RectF_s0095_b310* r);  // 0x0095bd60 (RenderCtx::RenderList)
 };
 extern DispEntry* __cdecl AllocDisplayListEntry_s0095_b310();                   // 0x956ff0
 extern u32 g_tbl_1440748[29];
@@ -1339,6 +1374,88 @@ IWin* __thiscall WM::FindWindowAt(const V2* pt)
     return 0;
 }
 
+// @ 0x009592a0
+void __thiscall WM::LinkTickable(Win* w)
+{
+    if (!(w->b31 & 1) && !(w->flags & 8)) {
+        if (*(u32*)((u8*)w + 0x1c))
+            F9587d0(w);
+        return;
+    }
+    if (*(u32*)((u8*)w + 0x1c) == 0) {
+        Node* n = &w->n18;
+        Node* a = &lB.n;
+        n->prev = a->prev;
+        n->next = a;
+        a->prev = n;
+        n->prev->next = n;
+    }
+}
+
+// @ 0x009592e0
+bool __thiscall WM::DispatchTree(Msg* m, bool flag)
+{
+    if (flag) {
+        Win* t = static_cast<Win*>(m->src);
+        if (DispatchMsgToWindow(t, m, 1)) {
+            IHook* h = hook;
+            if (h) {
+                Win* t2 = static_cast<Win*>(m->src);
+                IWin* a = t2;
+                h->Notify(4, a, m);
+            }
+            return false;
+        }
+    }
+    Win* t = static_cast<Win*>(m->dst);
+    for (; t; t = t->parent) {
+        if (DispatchMsgToWindow(t, m, 0)) {
+            IHook* h = hook;
+            if (h) {
+                IWin* a = t;
+                h->Notify(4, a, m);
+            }
+            return true;
+        }
+    }
+    {
+        IHook* h = hook;
+        if (h)
+            h->Notify(5, 0, m);
+    }
+    return false;
+}
+
+// @ 0x009593d0
+bool __thiscall WM::DispatchUp(Win* w, Msg* m, bool flag)
+{
+    Win* p = w->parent;
+    if (p && DispatchUp(p, m, flag))
+        return true;
+    if (DispatchMsgToWindow(w, m, 0)) {
+        IHook* h = hook;
+        if (h)
+            h->Notify(4, w, m);
+        return true;
+    }
+    if (flag) {
+        Win* t = static_cast<Win*>(m->src);
+        if (DispatchMsgToWindow(t, m, 1)) {
+            IHook* h = hook;
+            if (h) {
+                Win* t2 = static_cast<Win*>(m->src);
+                IWin* a = t2;
+                h->Notify(4, a, m);
+            }
+            return true;
+        }
+    }
+    IHook* h2 = hook;
+    if (h2 && (IWin*)w == m->dst)
+        h2->Notify(5, 0, m);
+    return false;
+}
+
 // @ 0x009594b0
 bool __thiscall WM::PopFocus(IWin* w, IWin* arg)
 {
@@ -1408,8 +1525,164 @@ void __thiscall MsgList::InsertRange(Node* where, Iter first, Iter last, int tag
     } while (first.n != last.n);
 }
 
+// @ 0x00959780
+bool W_s0095_9780::Fn00959780(int* ev, char p3)
+{
+    bool ret = false;
+    int id = ev[2];
+    if (id == 0x4ecd5687) {
+        float f1 = F32(ev, 0xc);
+        float f2 = F32(ev, 0x10);
+        F32(this, 0xa8) = f1 * 0.5f;
+        F32(this, 0xac) = f2 * 0.5f;
+        F32(this, 0xb0) = 2.0f / f1;
+        F32(this, 0xb4) = 2.0f / f2;
+        void* im = PTR(this, 4);
+        if (im != 0) {
+            float r[4];
+            r[0] = 0.0f;
+            r[1] = 0.0f;
+            r[2] = f1;
+            r[3] = f2;
+            void* obj = (char*)im + 4;
+            ((void(__thiscall*)(void*, void*))*(void**)((char*)*(void**)obj + 0x60))(obj, r);
+        }
+        return 1;
+    }
+    if (id == 0x74d2e9) {
+        ((void(__cdecl*)(void*, int))PTR(ev, 0xc))((void*)ev[4], (int)this);
+        if (ev[4] != 0) {
+            void* o = (void*)ev[4];
+            ((void(__thiscall*)(void*))*(void**)((char*)*(void**)o + 4))(o);
+            return 0;
+        }
+        return ret;
+    }
+    if (PTR(this, 4) == 0)
+        return ret;
+
+    switch (id) {
+    case 1:
+    case 2:
+    case 5: {
+        int idx = ev[3];
+        int* piVar2 = (int*)(B(this) + idx * 0x28 + 0x68c);
+        if (I32(this, idx * 0x28 + 0x68c) != 0) {
+            if (piVar2[5] != 0) {
+                int t[7];
+                memcpy(t, piVar2 + 3, 28);
+                piVar2[5] = 0;
+                Fn00959780(t, 0);
+            }
+            int iv = *piVar2;
+            int t[7];
+            memcpy(t, ev, 28);
+            if (id == 1) {
+                t[2] = 3;
+                iv = iv ? iv + 4 : 0;
+                ret = GV(0, iv, t, 1, 1);
+            } else if (id == 2) {
+                t[2] = 4;
+                iv = iv ? iv + 4 : 0;
+                ret = GV(0, iv, t, 1, 1);
+            }
+            if (ret == 0) {
+                int jv = *piVar2;
+                jv = jv ? jv + 4 : 0;
+                ret = ((bool(__thiscall*)(void*, int, void*, int*, int))VFP(0x10))
+                    (this, 0, (void*)jv, ev, 1);
+            }
+        }
+        return ret;
+    }
+    case 0x19:
+    case 0x1a: {
+        int idx = ev[3];
+        int* piVar2 = (int*)(B(this) + idx * 0x28 + 0x68c);
+        if (I32(this, idx * 0x28 + 0x68c) != 0) {
+            if (piVar2[5] != 0) {
+                int t[7];
+                memcpy(t, piVar2 + 3, 28);
+                piVar2[5] = 0;
+                Fn00959780(t, 0);
+            }
+            int jv = *piVar2;
+            jv = jv ? jv + 4 : 0;
+            ret = ((bool(__thiscall*)(void*, int, void*, int*, int))VFP(0x10))
+                (this, 0, (void*)jv, ev, 1);
+        }
+        return ret;
+    }
+    case 3:
+    case 4:
+    case 0xb:
+    case 0xc:
+    case 0xd:
+    case 0xe:
+    case 0xf:
+    case 0x10:
+    case 0x11:
+    case 0x12:
+    case 0x13:
+    case 0x14:
+    case 0x15:
+    case 0x16:
+    case 0x17:
+    case 0x18:
+        return ret;
+    case 6:
+    case 7:
+    case 8:
+    case 9: {
+        F32(this, 0xbc) = F32(ev, 0xc);
+        F32(this, 0xc0) = F32(ev, 0x10);
+        float local[2];
+        local[0] = -1000.0f;
+        local[1] = -1000.0f;
+        int* r = (int*)TH(this)->GetPositionStatic(local, id == 6);
+        if (r != 0) {
+            if (p3 != 0) {
+                unsigned u3 = ((unsigned(__thiscall*)(void*))*(void**)((char*)*(void**)r + 0x28))(r);
+                unsigned u4 = U32(this, 0x6c8);
+                if (((u4 == 0) || (u4 == (unsigned)id)) && ((u3 >> 7 & 1) != 0)) {
+                    if (id == 8) {
+                        memcpy((void*)(B(this) + 0x6c0), ev, 28);
+                        return 1;
+                    }
+                    if (id == 9) {
+                        I32(this, 0x6d8) = I32(this, 0x6d8) + ev[6];
+                        return 1;
+                    }
+                } else if (u4 != 0) {
+                    int t[7];
+                    memcpy(t, (void*)(B(this) + 0x6c0), 28);
+                    I32(this, 0x6c8) = 0;
+                    Fn00959780(t, 0);
+                }
+            }
+            int loc[7];
+            float* lf = (float*)loc;
+            loc[2] = ev[2];
+            lf[3] = local[0];
+            lf[4] = local[1];
+            loc[5] = ev[5];
+            loc[6] = ev[6];
+            bool u = ((bool(__thiscall*)(void*, int, int*, void*, int))
+                VFP(0x10))(this, 0, r, loc, 0);
+            return u;
+        }
+        return ret;
+    }
+    case 10:
+        ((int(__thiscall*)(void*, int, int))VFP(0x4c))(this, ev[3], 0);
+        return ret;
+    default:
+        return ret;
+    }
+}
+
 // @ 0x00959b70
-int W_s0095_9780::b70(int p2, int p3)
+bool W_s0095_9780::b70(int p2, int p3)
 {
     p3 = p3 ? p3 - 4 : 0;
     int* piVar1 = (int*)(B(this) + p2 * 0x28 + 0x68c);
@@ -2341,6 +2614,12 @@ void __thiscall WM::Shutdown()
     DestroyDisplayList(&lF.n);
     DestroyDisplayList(&lD.n);
     DestroyDisplayList(&lE.n);
+}
+
+// @ 0x0095b8c0
+WM::~WM()
+{
+    Shutdown();
 }
 
 // @ 0x0095ba70

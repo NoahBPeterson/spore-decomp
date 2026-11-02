@@ -1,5 +1,5 @@
-00959780 W::Fn00959780  # EA::UTFWin::WindowMgr message dispatcher: switch on event id (1..0x1a, 0x4ecd5687, 0x74d2e9)
-00959b70 ?b70@W_s0095_9780@@QAEHHH@Z  # W_s0095_9780::b70 migrated from s00959780 (verbatim, slice spelling)
+00959780 ?Fn00959780@W_s0095_9780@@QAE_NPAHD@Z  # W_s0095_9780::Fn00959780 migrated from s00959780 (verbatim, slice spelling)
+00959b70 ?b70@W_s0095_9780@@QAE_NHH@Z  # W_s0095_9780::b70 migrated from s00959780 (verbatim, slice spelling)
 00959cf0 ?cf0@W_s0095_9780@@QAEXHH@Z  # W_s0095_9780::cf0 migrated from s00959780 (verbatim, slice spelling)
 00959e00 ?DetachWindow@W_s0095_9780@@QAEXPAX@Z  # W_s0095_9780::DetachWindow migrated from s00959780 (verbatim, slice spelling)
 00959fe0 ?fe0@W_s0095_9780@@QAEXH@Z  # W_s0095_9780::fe0 migrated from s00959780 (verbatim, slice spelling)

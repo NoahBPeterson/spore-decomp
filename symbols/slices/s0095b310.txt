@@ -5,6 +5,7 @@
 0095a580 ?BuildDisplayList@WM@@QAEXPAUNode@@PAUWin@@PAX@Z  # WindowMgr display-list builder
 0095b310 ?UpdateVisuals@WM@@QAEXXZ  # WM::UpdateVisuals migrated from s0095b310 (verbatim, slice spelling)
 0095b860 ?Shutdown@WM@@QAEXXZ  # WM::Shutdown migrated from s0095b310 (verbatim, slice spelling)
+0095b8c0 ??1WM@@UAE@XZ  # WM::~WM migrated from s0095b310 (verbatim, slice spelling)
 0095ba70 ?GetTableEntry@@YAII@Z  # GetTableEntry migrated from s0095b310 (verbatim, slice spelling)
 0095ba90 ?Swap@Chunk@@QAEXPAU1@@Z  # Chunk::Swap migrated from s0095b310 (verbatim, slice spelling)
 0095bb20 ?End2D@RenderCtx@@QAEXXZ  # RenderCtx::End2D migrated from s0095b310 (verbatim, slice spelling)

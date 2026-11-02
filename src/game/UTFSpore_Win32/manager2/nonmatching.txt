@@ -9,10 +9,16 @@
 009587d0 27 Fn009587d0: complete (unlink node, fix intrusive list at this+0x20 else this+0x18); regalloc differ; difftest WEAK (303 valid, 58.1% coverage)
 00958860 1 Fn00958860: complete (guard flags&0x40, insert node, mark successors 0x80); 1 byte differs (js vs jl on sign test); difftest PASS (394 valid, 100.0% coverage)
 009588c0 1 Fn009588c0: complete (guard flags&0x20, insert node, mark successors 0x80); 1 byte differs (js vs jl on sign test); difftest PASS (394 valid, 100.0% coverage)
-00958cf0 521 WindowMgr ctor complete; member-init list order/hoisting (lea before GetAlloc call) differs; difftest PASS (fix: Mutex/Typesetter ctor annotations moved onto the ctor declarations)
-00958fa0 124 SendModifiedMsg complete; this spilled to stack in original (unknown RAII/inline helper), regs differ
-009594b0 152 PopFocus complete; original reloads cur member (no CSE) and different branch layout
-00959cf0 126 cf0: complete (slot-change notify via vtable slot 0x4c + GameViewManager event 0xb); regalloc/branch layout differ; difftest PASS (217 valid inputs, 64.2% coverage)
+00958cf0 521 WindowMgr ctor complete; member-init list order/hoisting (lea before GetAlloc call) differs; difftest PASS (fix: Mutex/Typesetter ctor annotations moved onto the ctor declarations) flags: /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+00958fa0 123 SendModifiedMsg complete; the original's dispatch window and msg.dst are the SECOND stack argument (mov ebp,[esp+0x30]; ebp = w-4, msg.dst = ebp+4) while msg.src is the first, so the model's parameter names are swapped to IWin* src, IWin* w, Msg* m. Remaining diff is register/scheduling allocation (this kept in eax vs edx; msg.dst store inside the branch vs sunk after the hook load). equiv: replay clean; sweeps UNSUPPORTED (0/800 seed 1, 0/400 seed 7 valid: generated this/hook state faults the original) flags: /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+009594b0 152 PopFocus complete; original reloads cur member (no CSE) and different branch layout flags: /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+00959780 809 Fn00959780 (message dispatcher, bool): complete; fixed Mouse x/y float stores at +0xbc/+0xc0, the 28-byte msg temp, im+4 object, cdecl arg order, bool returns; regalloc/switch layout differ; difftest PASS (2918/3000 valid, 60.7% coverage); /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2 /fp:fast flags: /O2 /MD /Gy /EHsc /TP /GS-
+00959b70 276 b70: complete (bool slot-setup predicate); movzx/lea reg choices + add-vs-sub -4 differ; difftest WEAK (4101 valid, 38.8% coverage, no mismatch); /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2 /fp:fast flags: /O2 /MD /Gy /EHsc /TP /GS-
+00959cf0 126 cf0: complete (slot-change notify via vtable slot 0x4c + GameViewManager event 0xb); regalloc/branch layout differ; difftest PASS (217 valid inputs, 64.2% coverage) flags: /O2 /MD /Gy /EHsc /TP /GS-
+00959e00 402 DetachWindow: complete; regalloc/order differ; /O2 /MD /Gy /EHsc /TP /GS-; difftest UNSUPPORTED (0/400 valid; fault(read) 398 -> dereferences ctx-owned pointers) flags: /O2 /MD /Gy /EHsc /TP /GS-
+00959fe0 156 fe0: complete; ebx-vs-edx argv reg + folded null test differ; /O2 /MD /Gy /EHsc /TP /GS-; difftest UNSUPPORTED (0/400 valid; fake-arity 211, fault(read) 182 -> vtable calls through win+4) flags: /O2 /MD /Gy /EHsc /TP /GS-
+0095a140 771 UpdateRenderState: complete (ours 1200B vs orig 973B); regalloc/order differ; /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2; difftest UNSUPPORTED (0/400 valid; fault(read) 356, fake-arity 39) flags: /O2 /MD /Gy /EHsc /TP /GS-
+0095a510 5 RenderWindow: complete; lea reg choice for &ev and win+4 differ; /O2 /MD /Gy /EHsc /TP /GS-; difftest UNSUPPORTED (0/400 valid; fake-arity 210, fault(read) 179) flags: /O2 /MD /Gy /EHsc /TP /GS-
 0095a580 359 BuildDisplayList complete; original inlines the DLEntry fill at both bit0x10 sites (~260B, no FillDLEntry helper) and uses a 0x3c38 chkstk frame; call/reg layout differs
 0095a870 60 AssignFrom complete; erase/insert call sites construct Iter temporaries with the MSVC push-ecx aggregate idiom, loop is a do-while with a shared erase epilogue; regs/flow differ
 0095a9a0 195 PostMsg complete; original spills &mxC to a push-ecx stack slot and schedules the two rep-movsd copies differently; difftest PASS (equivalence)
@@ -20,5 +26,5 @@
 0095afd0 85 Swap complete; mismatch path uses a tag local reusing the arg1 home slot and the push-ecx InsertRange idiom; regs differ
 0095b080 494 SetMainWindow complete; large register/flow differences (vtable call scheduling, separate old/old2 paths); difftest WEAK
 0095b290 87 FlushMessageQueue complete; register allocation (this / &mxC / &q1) differs from the original's edi/ebx/esi choice
-0095b310 1254 WM::UpdateVisuals complete (all list splices written via helpers); inlined intrusive-list code and register allocation differ
-0095ba90 63 Chunk::Swap complete; cl emits cmova for the unsigned max, original uses a branch
+0095b310 1254 WM::UpdateVisuals complete (all list splices written via helpers); inlined intrusive-list code and register allocation differ flags: /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+0095ba90 63 Chunk::Swap complete; cl emits cmova for the unsigned max, original uses a branch flags: /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
