@@ -1,0 +1,11 @@
+# source  symbol  va  flags
+../src/game/SPEngine/_at_006c0000.cpp  ?StateFromGlobal@@YAHPAI@Z  006c1c30  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/_at_006c0000.cpp  ?Assign@KeyPack@@QAEXPBI000@Z  006c2740  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/_at_006c0000.cpp  ?CopyFrom@Rec16@@QAEPAU1@PBU1@@Z  006c2ad0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/_at_006c0000.cpp  ?ScaleMatrixReversed@@YAPAMPAMPBMM@Z  006c2cd0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/_at_006c0000.cpp  ?PopHeap@@YAXPAURec24@@0@Z  006c2e00  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/_at_006c0000.cpp  ?MakeHeap@@YAXPAURec24@@0@Z  006c33b0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/_at_006c0000.cpp  ?SortHeap@@YAXPAURec24@@0@Z  006c3430  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/_at_006c0000.cpp  ?GetPartition@@YAPAURec24_s006c_3b90@@PAU1@0U1@@Z  006c4870  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/_at_006c0000.cpp  ?PartialSort@@YAXPAURec24_s006c_3b90@@00@Z  006c4960  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/_at_006c0000.cpp  ?QuickSortImpl@@YAXPAURec24_s006c_4a70@@0H@Z  006c4a70  /O2 /MD /Gy /EHsc /TP /Isrc/game/include

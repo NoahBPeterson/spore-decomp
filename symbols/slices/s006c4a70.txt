@@ -1,0 +1,2 @@
+006c4a70 ?QuickSortImpl@@YAXPAURec24_s006c_4a70@@0H@Z  # QuickSortImpl migrated from s006c4a70 (verbatim, slice spelling)
+006c4c20 ?QuickSort@@YAXPAURec24_s006c_4a70@@0@Z  # QuickSort migrated from s006c4a70 (verbatim, slice spelling)

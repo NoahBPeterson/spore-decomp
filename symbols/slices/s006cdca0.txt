@@ -2,4 +2,4 @@
 006ce000 Bake_6ce000   # core FUN_006c3550; dot tail (axis.x*res.x+axis.z)
 006ce2e0 Bake_6ce2e0  # core FUN_006c3550; dot tail
 006ce580 Bake_6ce580  # core FUN_006c3550; dot tail
-006ce860 Bake_6ce860   # core FUN_006c3780; dot tail
+006ce860 ?Bake_6ce860@@YA_NPAMHPAUElemTable@@PAUBakeEntry@@PAUStreamDesc@@0PAUScaleInfo@@HHH@Z  # Bake_6ce860 migrated from s006cdca0 (verbatim, slice spelling)

@@ -1,0 +1,4 @@
+006c3b90 ?FUN_006c3b90@@YAPAMPAM0PBM11PBHH@Z  # FUN_006c3b90 migrated from s006c3b90 (verbatim, slice spelling)
+006c4200 ?FUN_006c4200@@YAPAMPAM0PBM11PBHH@Z  # FUN_006c4200 migrated from s006c3b90 (verbatim, slice spelling)
+006c4870 ?GetPartition@@YAPAURec24_s006c_3b90@@PAU1@0U1@@Z  # GetPartition migrated from s006c3b90 (verbatim, slice spelling)
+006c4960 ?PartialSort@@YAXPAURec24_s006c_3b90@@00@Z  # PartialSort migrated from s006c3b90 (verbatim, slice spelling)
