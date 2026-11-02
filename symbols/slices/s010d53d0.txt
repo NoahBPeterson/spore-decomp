@@ -1,7 +1,5 @@
-# slice s010d53d0 (Havok 3.1.0 hkSphereBoxAgent / hkSymmetricSphereBoxAgent) - confident names
-# VA        name                                                 note
-010d53d0    hkSphereBoxAgent::processCollision                   sphere-vs-box separating normal + cached contact point
-010d5850    hkSphereBoxAgent::getClosestPoints                   same query, point handed to hkCdPointCollector
-010d5ca0    hkSphereBoxAgent::staticGetClosestPoints             identical body to 010d5850, no cached state
-010d60f0    hkSphereBoxAgent::staticGetPenetrations              clamps centre, bounded-sphere overlap -> hkCdBodyPairCollector
-010d63a0    hkSymmetricSphereBoxAgent::getClosestPoints         hkSymmetricAgent wrapper, calls with the bodies swapped
+010d53d0 ?processCollision@hkSphereBoxAgent@@UAEXABVhkCdBody_s010d_53d0@@0ABUhkProcessCollisionInput_s010d_53d0@@AAUhkProcessCollisionOutput_s010d_53d0@@@Z  # hkSphereBoxAgent::processCollision migrated from s010d53d0 (verbatim, slice spelling)
+010d5850 ?getClosestPoints@hkSphereBoxAgent@@UAEXABVhkCdBody_s010d_53d0@@0ABUhkCollisionInput_s010d_53d0@@AAVhkCdPointCollector_s010d_53d0@@@Z  # hkSphereBoxAgent::getClosestPoints migrated from s010d53d0 (verbatim, slice spelling)
+010d5ca0 ?staticGetClosestPoints@hkSphereBoxAgent@@SAXABVhkCdBody_s010d_53d0@@0ABUhkCollisionInput_s010d_53d0@@AAVhkCdPointCollector_s010d_53d0@@@Z  # hkSphereBoxAgent::staticGetClosestPoints migrated from s010d53d0 (verbatim, slice spelling)
+010d60f0 ?staticGetPenetrations@hkSphereBoxAgent@@SAXABVhkCdBody_s010d_53d0@@0ABUhkCollisionInput_s010d_53d0@@AAVhkCdBodyPairCollector_s010d_53d0@@@Z  # hkSphereBoxAgent::staticGetPenetrations migrated from s010d53d0 (verbatim, slice spelling)
+010d63a0 ?getClosestPoints@hkSymmetricSphereBoxAgent@@UAEXABVhkCdBody_s010d_53d0@@0ABUhkCollisionInput_s010d_53d0@@AAVhkCdPointCollector_s010d_53d0@@@Z  # hkSymmetricSphereBoxAgent::getClosestPoints migrated from s010d53d0 (verbatim, slice spelling)

@@ -1,0 +1,5 @@
+010d4070 ?getPenetrationsWrapper@hkCapsuleTriangleAgent_s010d_37d0@@QAEXPBX00PAX@Z  # hkCapsuleTriangleAgent_s010d_37d0::getPenetrationsWrapper migrated from s010d37d0 (verbatim, slice spelling)
+010d40f0 ?getClosestPointsWrapper@hkCapsuleTriangleAgent_s010d_37d0@@QAEXPBX00PAX@Z  # hkCapsuleTriangleAgent_s010d_37d0::getClosestPointsWrapper migrated from s010d37d0 (verbatim, slice spelling)
+010d4170 ?processCollisionThunk@hkCapsuleTriangleAgent_s010d_37d0@@QAEXPBX00PAX@Z  # hkCapsuleTriangleAgent_s010d_37d0::processCollisionThunk migrated from s010d37d0 (verbatim, slice spelling)
+010d4280 _hkCapsuleCapsuleAgent__create  # hkCapsuleCapsuleAgent__create migrated from s010d37d0 (verbatim, slice spelling)
+010d42c0 ?processCollision@hkCapsuleCapsuleAgent@@QAEXPBX00PAX@Z  # hkCapsuleCapsuleAgent::processCollision migrated from s010d37d0 (verbatim, slice spelling)

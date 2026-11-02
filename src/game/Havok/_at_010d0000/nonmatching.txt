@@ -1,0 +1,53 @@
+# va  diff-bytes  reason
+010d0070 37 createMultiSphereTriangleAgent: complete. Allocates 0x2c/0x1c, sets size/flags/contactMgr/vtable 0x014a4508 and four 0xffffffff contact ids, then setupClosestPointTriangleCache from bodyB. difftest UNSUPPORTED, 0/400 valid (fake allocator path faults). Not byte-exact: same size, eax/edx register allocation and store scheduling differ. Flags /vc71 /O2 /MD /Gy /EHsc /TP
+010d00d0 41 createTriangleMultiSphereAgent: complete. Same allocation/ids as 010d0070, cache from bodyA, then vtable 0x014a453c. difftest UNSUPPORTED, 0/400 valid (fake allocator path faults). Not byte-exact: same size, eax/edx register allocation and store scheduling differ. Flags /vc71 /O2 /MD /Gy /EHsc /TP
+010d0130 1808 processCollision: complete (timer, vertex/sphere transform, closestPointTriangle per sphere, contact point append with contactMgr add/remove id, reversed id slot index); size 2017 = original; frame 0x154 vs 0x134, x87 scheduling/register allocation differ. Flags /vc71 /O2 /MD /Gy /EHsc /TP
+010d0920 1855 FAIL-KEPT checker call-recording artifact: the retail reports every sphere, but the first collector vcall's [eax+4] operand sits on a not-yet-materialised pool page, so the code hook's target evaluation fails and drops that call from the depth-1 trace while the CPU's retried read materialises the page and fake_call still counts it (orig fakes=5 with 4 recorded calls, ours 5/5). Temporarily skipping only sphere 0's report in ours makes the replay report "first difference: None" (calls, fakes, memory, imports all equal), proving the retail condition distance < radiusSum+tol matches ours. equiv FAIL 5/157 valid, coverage 95.2%. flags: /O2 /MD /Gy /TP
+010d1100 1896 FAIL-KEPT same checker artifact in the static variant: the retail's hidden first fake is the sphere-0 report (orig setup,CP,CP,fake,CP,fake with fakes=3 vs ours setup,CP,fake,CP,fake,CP,fake); the hidden fake's target/this/args equal the other report fakes. equiv FAIL 5/620 valid, coverage 95.1%. flags: /O2 /MD /Gy /TP
+010d18c0 1414 complete hkMultiSphereTriangleAgent::getPenetrations; x87 scheduling and transform-copy spelling differ (frame 0x144 vs 0x134); difftest PASS (281 valid, 100% cov) flags: /vc71 /O2 /MD /Gy /TP
+010d1f40 1480 complete hkMultiSphereTriangleAgent::staticGetPenetrations; same x87 scheduling difference; difftest PASS (284 valid, 100% cov) flags: /vc71 /O2 /MD /Gy /TP
+010d28c0 1154 hkCapsuleTriangleAgent::processCollision; complete; builds capSeg/triVerts in world space, calls util with singleCheck=1 and cache this+0x14, loops 3 contacts (append to *output when w<tol, else mgr->removePoint); logic and branch structure match retail, diff is x87 schedule/register allocation; equiv PASS 388 valid inputs, 92.5% insn coverage flags: /vc71 /O2 /MD /Gy /TP
+010d2d80 1051 hkCapsuleTriangleAgent::getClosestPoints; complete; same world-space build with singleCheck=0, cache this+0x14, picks the contact with the smaller .w (tie/NaN -> contact0) and appends via collector.addCdPoint only when its w<tol; logic matches retail, diff is x87 schedule/register allocation; equiv PASS 393 valid inputs, 88.0% coverage flags: /vc71 /O2 /MD /Gy /TP
+010d32a0 1084 hkCapsuleTriangleAgent::staticGetClosestPoints; complete (static variant; local cache buffer filled by hkCollideTriangleUtilSetupCache @0x01105e90 over bodyB.m_shape+0x10); same min-.w pick and w<tol collector append; logic matches retail, diff is x87 schedule/register allocation; equiv PASS 248 valid inputs, 88.1% coverage flags: /vc71 /O2 /MD /Gy /TP
+010d4170 25 hkCapsuleTriangleAgent::processCollisionThunk; logic identical; the entire diff is an esi/edi callee-saved swap (not source-controllable); equiv PASS 384 valid inputs, 78.6% coverage flags: /vc71 /O2 /MD /Gy /TP
+010d42c0 1007 hkCapsuleCapsuleAgent::processCollision; complete thiscall member (agent keys at this+0xc, contact mgr at this+8, contact stride 0x30, tolerance at input+8, append when w<tol else removePoint); equiv FAIL 5/7 valid inputs -- on adversarial random inputs the differing manifold .w values steer the branch differently (ours 0 fakes vs orig 3) and our append writes past the output buffer (UC_ERR_WRITE_UNMAPPED at eip=30000402); not confirmed fixable flags: /vc71 /O2 /MD /Gy /TP
+010d4730 784 hkCapsuleCapsuleAgent::getClosestPoints; complete (monitor timer scope, both world-space capsule segments via the 12-scalar transform spelling, hkCollideCapsuleUtilClostestPointCapsVsCaps then collector vtable slot 1 when it reports 0); size 975 vs 969; x87 load schedule/register allocation differ; equiv PASS 399 valid inputs, 90.1% coverage flags: /vc71 /O2 /MD /Gy /TP
+010d4b00 782 hkCapsuleCapsuleAgent::staticGetClosestPoints; complete (identical body to 010d4730, static entry so `ret` instead of `ret 0x10`); size 973 vs 967; same x87 schedule difference; equiv PASS 394 valid inputs, 90.1% coverage flags: /vc71 /O2 /MD /Gy /TP
+010d4ed0 904 hkCapsuleCapsuleAgent::staticGetPenetrations; complete (4 world-space segment endpoints, direction vectors by subtraction, hkCollideTriangleUtil::closestLineSegLineSeg with a 0x24-byte result, addCdBodyPair when distanceSquared < (rA+rB)^2); size 1109 vs 1072, frame 0xc4 vs 0xe4; remaining diff is x87 schedule plus 32 extra bytes of reserved scratch; equiv PASS 398 valid inputs, 90.8% coverage flags: /vc71 /O2 /MD /Gy /TP
+010d53d0 909 hkSphereBoxAgent::processCollision: complete (sphere-vs-box separating normal + cached contact point refresh); all semantics match - x87 min/inside-test/sign-XOR reproductions verified by difftest, incl. the 1/dist denormal overflow the retail code avoids by scaling the per-axis penetration before the tolerance test; the remaining 918 diff bytes are x87 register-allocation/scheduling (ours 1146 B vs 1137 B); flags /vc71 /O2 /MD /Gy /TP; equiv PASS (243/400 valid inputs, 82.8% coverage)
+010d5850 818 hkSphereBoxAgent::getClosestPoints: complete; identical body to 010d5ca0 (differ only by `ret 0x10` vs `ret`); collector call at the tail is a virtual addCdPoint(&point); the same x87 scheduling drift remains (ours 986 B vs 1104 B); flags /vc71 /O2 /MD /Gy /TP; equiv PASS (261/400 valid inputs, 85.8% coverage)
+010d5ca0 816 hkSphereBoxAgent::staticGetClosestPoints: complete; identical body to 010d5850 (plain `ret`); flags /vc71 /O2 /MD /Gy /TP; equiv PASS (226/400 valid inputs, 87.8% coverage)
+010d60f0 405 hkSphereBoxAgent::staticGetPenetrations: complete (clamp sphere centre into box space, transform back, bounded-sphere overlap test, addCdBodyPair); ours 555 B vs 522 B - the extra size is a tail-call/collector-call layout difference plus the 3 clamp sequences being emitted inline instead of sharing the `sign(min(|p|,halfExtent))` idiom; flags /vc71 /O2 /MD /Gy /TP; equiv PASS (263/400 valid inputs, 84.3% coverage)
+010d66e0 646 hkSphereTriangleAgent::processCollision; complete (monitor scope, three world-space triangle vertices, closestPointTriangle, drop the cached contact when rA+rB+tolerance <= distance else build the manifold point and create/refresh the contact); size 759 vs 922; x87 schedule and frame 0x64 vs 0x84 differ; difftest 131/134 valid inputs identical with --no-fake-calls, the 3 residual mismatches fault in the out-of-slice closestPointTriangle fake flags: /vc71 /O2 /MD /Gy /TP
+010d6a80 568 hkSphereTriangleAgent::getClosestPoints; complete (same query using the agent's cached triangle, addCdPoint when distance < rA+rB+tolerance); size 682 vs 885; x87 schedule/register allocation differ; equiv PASS 267 valid inputs, 89.5% coverage flags: /vc71 /O2 /MD /Gy /TP
+010d6e00 576 hkSphereTriangleAgent::staticGetClosestPoints; complete (rebuilds the triangle cache with setupClosestPointTriangleCache then queries); size 716 vs 907; same schedule difference; equiv PASS 216 valid inputs, 89.7% coverage flags: /vc71 /O2 /MD /Gy /TP
+010d7190 205 hkSphereTriangleAgent::getPenetrations; complete (sphere centre into the triangle's local frame by basis rows, closestPointTriangle against the shape's local vertices, addCdBodyPair when distance < rA+rB); size 351 vs 353; remaining diff is register allocation (esi/edi/ebx) and the monitor slot; equiv PASS 250 valid inputs, 77.8% coverage flags: /vc71 /O2 /MD /Gy /TP
+010d7300 257 hkSphereTriangleAgent::staticGetPenetrations; complete (cache rebuilt each call); size 386 vs 360; same schedule difference; equiv PASS 248 valid inputs, 78.5% coverage flags: /vc71 /O2 /MD /Gy /TP
+010dce00 2 havok-equivalent flags: /vc71 /O2 /MD /Gy /TP
+010dce40 217 havok-equivalent flags: /vc71 /O2 /MD /Gy /TP
+010dd180 33 havok-equivalent flags: /vc71 /O2 /MD /Gy /TP
+010dd1d0 41 havok-equivalent; default PASS 329/100%, replay PASS flags: /vc71 /O2 /MD /Gy /TP
+010dd260 42 havok-equivalent; default PASS 400/100%, replay PASS flags: /vc71 /O2 /MD /Gy /TP
+010dd300 79 havok-equivalent flags: /vc71 /O2 /MD /Gy /TP
+010dd380 6 havok-equivalent flags: /vc71 /O2 /MD /Gy /TP
+010dd580 168 havok-equivalent flags: /vc71 /O2 /MD /Gy /TP
+010dd640 240 havok-equivalent flags: /vc71 /O2 /MD /Gy /TP
+010dd7b0 405 havok-equivalent flags: /vc71 /O2 /MD /Gy /TP
+010dda70 225 havok-equivalent flags: /vc71 /O2 /MD /Gy /TP
+010ddc30 247 havok-equivalent flags: /vc71 /O2 /MD /Gy /TP
+010dde90 2 havok-equivalent flags: /vc71 /O2 /MD /Gy /TP
+010df100 36 destroy: reset vptr to 0x013ef094 after the array deallocation and before the optional flags&1 deallocation (the store was missing; replay originally left 3f82063e at [this]); difftest PASS 222 valid inputs / 60.0% coverage; remaining diff is vc71 x87/register scheduling (size 82 vs 86). flags: /vc71 /O2 /MD /Gy /EHsc /TP
+010df160 234 havok-equivalent flags: /vc71 /O2 /MD /Gy /EHsc /TP
+010df280 58 havok-equivalent flags: /vc71 /O2 /MD /Gy /EHsc /TP
+010df3d0 4 havok-equivalent flags: /vc71 /O2 /MD /Gy /EHsc /TP
+010df440 200 havok-equivalent flags: /vc71 /O2 /MD /Gy /EHsc /TP
+010df500 40 havok-equivalent flags: /vc71 /O2 /MD /Gy /EHsc /TP
+010df5d0 63 havok-equivalent; difftest PASS (1200 inputs, 100% cov) flags: /vc71 /O2 /MD /Gy /EHsc /TP
+010df6b0 192 havok-equivalent flags: /vc71 /O2 /MD /Gy /EHsc /TP
+010df7a0 390 havok-equivalent flags: /vc71 /O2 /MD /Gy /EHsc /TP
+010df9e0 138 havok-equivalent flags: /vc71 /O2 /MD /Gy /EHsc /TP
+010dfae0 145 havok-equivalent flags: /vc71 /O2 /MD /Gy /EHsc /TP
+010dfc00 132 havok-equivalent flags: /vc71 /O2 /MD /Gy /EHsc /TP
+010dfd00 165 havok-equivalent flags: /vc71 /O2 /MD /Gy /EHsc /TP
+010dfe10 118 havok-equivalent flags: /vc71 /O2 /MD /Gy /EHsc /TP
+010dff10 165 havok-equivalent flags: /vc71 /O2 /MD /Gy /EHsc /TP
