@@ -1,0 +1,4 @@
+# source  symbol  va  flags
+../src/game/SPTerrain/_at_00f40000.cpp  ?SetParam@cTerrainBrushEffect@@QAE_NHPAMH@Z  00f4b110  /O2 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
+../src/game/SPTerrain/_at_00f40000.cpp  ?CopyF7@@YAPAUF7@@PAU1@00@Z  00f4b1d0  /O2 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
+../src/game/SPTerrain/_at_00f40000.cpp  ?push_back@?$vector_s00f4_baa0@UcBrushVertex_s00f4_baa0@SP@@Usp_vector_allocator_s00f4_baa0@eastl@@@eastl@@QAEXXZ  00f4c150  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
