@@ -1,0 +1,6 @@
+# va  diff-bytes  reason
+0113ad10 22 complete; flags /vc71 /O2 /MD /Gy /TP; difftest PASS (400 valid, 100% cov); cl folds the 6-iteration do/while into a countdown (dec/jne) instead of the original's sub/jns
+0113b060 342 complete; flags /vc71 /O2 /MD /Gy /TP; difftest UNSUPPORTED (0/400 valid: faults on the required System/Alloc setup; import:memset discards)
+0114ee60 142 PeakingIir2::CalculateFilterCoefficients: complete RBJ peaking EQ (cos/sin/sqrt, k=1/(alpha+1), A1/A2/B0/B1=A1/B2). Flags /O2 /MD /Gy /TP /arch:SSE /fp:fast. difftest PASS (399 valid, 100% coverage); chk diff 145 bytes (ours 175 vs 172) - xmm6/xmm5 keeps a second 1.0f copy and v13 lands in a different register.
+0114f100 736 Iir2Filter: complete 256-sample biquad recurrence y = x0*b0 + x1*b1 + x2*b2 - y1*a1 - y2*a2 with separate input/output history (no transposed DF2), 8x unrolled and heavily spilled. Flags /O2 /MD /Gy /TP /arch:SSE /fp:fast. difftest FAIL (1/400 inputs, 1-ulp float rounding, 100% coverage: /fp:fast reassociates the accumulators and retail's order is x[n-2]*b2, x[n]*b0, x[n-1]*b1, bias, then the two feedback terms); chk diff 849 bytes (ours 883 vs 996).
+0114fab0 559 /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast  diff 870 UNSUPPORTED (equiv: 0/400 inputs valid; discards budget=148, fault(read)=120, fault(write)=58) flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast

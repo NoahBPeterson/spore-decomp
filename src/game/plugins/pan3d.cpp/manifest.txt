@@ -1,0 +1,2 @@
+# source  symbol  va  flags
+../src/game/plugins/pan3d.cpp.cpp  ?ClearIirState@@YIXPAMH@Z  0114f4f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

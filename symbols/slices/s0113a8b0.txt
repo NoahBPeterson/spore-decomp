@@ -7,6 +7,7 @@
 0113ac20 ?FUN_0113ac20@@YAIPAE@Z  # FUN_0113ac20 migrated from s0113a8b0 (verbatim, slice spelling)
 0113ac40 ?FUN_0113ac40@@YA_NPAE@Z  # FUN_0113ac40 migrated from s0113a8b0 (verbatim, slice spelling)
 0113ac60 ?FUN_0113ac60@Ctx@@QAEXHPAI@Z  # Ctx::FUN_0113ac60 migrated from s0113a8b0 (verbatim, slice spelling)
+0113ad10 ?FUN_0113ad10@@YAXPAEH@Z  # FUN_0113ad10 migrated from s0113a8b0 (verbatim, slice spelling)
 0113ae30 ?FUN_0113ae30@Ctx@@QAEXXZ  # Ctx::FUN_0113ae30 migrated from s0113a8b0 (verbatim, slice spelling)
 0113ae50 ?FUN_0113ae50@@YAXPAE@Z  # FUN_0113ae50 migrated from s0113a8b0 (verbatim, slice spelling)
 0113aeb0 ?FUN_0113aeb0@@YA_NPAE@Z  # FUN_0113aeb0 migrated from s0113a8b0 (verbatim, slice spelling)
@@ -14,7 +15,7 @@
 0113af90 ?FUN_0113af90@Ctx@@QAEXXZ  # Ctx::FUN_0113af90 migrated from s0113a8b0 (verbatim, slice spelling)
 0113afc0 ?FUN_0113afc0@@YAIPAI@Z  # FUN_0113afc0 migrated from s0113a8b0 (verbatim, slice spelling)
 0113b000 ?FUN_0113b000@@YAIPAE@Z  # FUN_0113b000 migrated from s0113a8b0 (verbatim, slice spelling)
-0113b060 rw::audio::core::Pan3D::CreateInstance  # PDB anchor
+0113b060 ?FUN_0113b060@@YA_NPAE0@Z  # FUN_0113b060 migrated from s0113a8b0 (verbatim, slice spelling)
 0113b290 ?FUN_0113b290@Ctx@@QAEXHPAI@Z  # Ctx::FUN_0113b290 migrated from s0113a8b0 (verbatim, slice spelling)
 0113b330 ?FUN_0113b330@Ctx@@QAEXXZ  # Ctx::FUN_0113b330 migrated from s0113a8b0 (verbatim, slice spelling)
 0113b5b0 ?FUN_0113b5b0@@YA_NPAEPAM@Z  # FUN_0113b5b0 migrated from s0113a8b0 (verbatim, slice spelling)
