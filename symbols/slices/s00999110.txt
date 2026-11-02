@@ -3,3 +3,4 @@
 00999820 ??0UIStringMan@@QAE@PAX@Z  # UIStringMan::UIStringMan migrated from s00999110 (verbatim, slice spelling)
 00999850 ??1UIStringMan@@UAE@XZ  # UIStringMan::~UIStringMan migrated from s00999110 (verbatim, slice spelling)
 00999890 ?f@S99890@@QAE_NPAI@Z  # S99890::f migrated from s00999110 (verbatim, slice spelling)
+00999930 ?Open@StringManMgr@@QAEXXZ  # StringManMgr::Open migrated from s00999110 (verbatim, slice spelling)
