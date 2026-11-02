@@ -1,16 +1,16 @@
-0114da70 CombFilterFunc  # 4-lane SSE feedback-comb recurrence (denormal-flush 1e-18)
-0114dc20 CombFilter::CombFilterApplyFunc  # dispatch: memset on crossfade else CombFilterFunc, latch mfState
-0114dca0 CombFilter::CombFilterResetFunc  # clears mfState@+0x20, returns self
-0114dcb0 CombFilter::SetGains  # stores gain1..4 @+0x10..+0x1C
-0114dce0 CombFilter::CombFilter  # ctor: apply/reset=0, channels=1, readLength=2, gains/state=0
-0114dd20 AllPassFilterFunc  # 4-lane SSE all-pass recurrence (denormal-flush 1e-18)
-0114e1b0 AllPassFilter::AllPassFilterApplyFunc  # dispatch: memset on crossfade else AllPassFilterFunc
-0114e230 AllPassFilter::AllPassFilter  # ctor: apply/reset=0, channels=1, readLength=1, gains=0
-0114e260 ReverbIR1::Process  # impulse-response reverb Process (FastFirEngine @+0x50, state @+0xE8)
-0114e300 FastFirEngine::FastFirEngine  # ctor (running-state slots)
-0114e340 FastFirEngine::~FastFirEngine  # PDB candidate (dev 014d15c4)
-0114e370 FastFirEngine::SetChannels  # stores in/out channel counts @+0x74/+0x78, returns 1
-0114e390 FastFirEngine::EstimateLoad  # x87 partition-load estimate (log2 form)
+0114da70 ?CombFilterFunc@core@audio@rw@@YAMHMMMMMPAM000H@Z  # CombFilterFunc migrated from s0114da70 (verbatim, slice spelling)
+0114dc20 ?CombFilterApply@core@audio@rw@@YAPAXPAVCombFilter@123@HHHPAUTapContext@123@@Z  # CombFilterApply migrated from s0114da70 (verbatim, slice spelling)
+0114dca0 ?CombFilterReset@core@audio@rw@@YAPAVCombFilter@123@PAV4123@@Z  # CombFilterReset migrated from s0114da70 (verbatim, slice spelling)
+0114dcb0 ?SetGains@CombFilter@core@audio@rw@@QAEXMMMM@Z  # SetGains migrated from s0114da70 (verbatim, slice spelling)
+0114dce0 ??0CombFilter@core@audio@rw@@QAE@XZ  # CombFilter migrated from s0114da70 (verbatim, slice spelling)
+0114dd20 ?AllPassFilterFunc@core@audio@rw@@YAXHMMPAM000H@Z  # AllPassFilterFunc migrated from s0114da70 (verbatim, slice spelling)
+0114e1b0 ?AllPassFilterApply@core@audio@rw@@YAPAXPAVAllPassFilter@123@HHHPAUTapContext@123@@Z  # AllPassFilterApply migrated from s0114da70 (verbatim, slice spelling)
+0114e230 ??0AllPassFilter@core@audio@rw@@QAE@XZ  # AllPassFilter migrated from s0114da70 (verbatim, slice spelling)
+0114e260 ?Process@ReverbIR1@core@audio@rw@@SAHPAV1234@PAUAudioProcessContext@234@@Z  # Process migrated from s0114da70 (verbatim, slice spelling)
+0114e300 ??0FastFirEngine@core@audio@rw@@QAE@XZ  # FastFirEngine migrated from s0114da70 (verbatim, slice spelling)
+0114e340 ??1FastFirEngine@core@audio@rw@@QAE@XZ  # ~FastFirEngine migrated from s0114da70 (verbatim, slice spelling)
+0114e370 ?SetChannels@FastFirEngine@core@audio@rw@@QAEHHH@Z  # SetChannels migrated from s0114da70 (verbatim, slice spelling)
+0114e390 ?EstimateLoad@FastFirEngine@core@audio@rw@@QAEMHHHH@Z  # EstimateLoad migrated from s0114da70 (verbatim, slice spelling)
 0114e400 ?LoadDistributionCalc@FastFirEngine@core@audio@rw@@QAEXHH@Z  # FastFirEngine::LoadDistributionCalc migrated from s0114da70 (verbatim, slice spelling)
 0114e580 ?Reset@FastFirEngine@core@audio@rw@@QAEXXZ  # FastFirEngine::Reset migrated from s0114da70 (verbatim, slice spelling)
 0114e5e0 ?Configure@FastFirEngine@core@audio@rw@@QAEHHHHHHHPAF@Z  # FastFirEngine::Configure migrated from s0114da70 (verbatim, slice spelling)

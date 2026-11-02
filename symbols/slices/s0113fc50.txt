@@ -4,23 +4,23 @@
 0113fdd0 ?F_0113fdd0@@YAHHHH@Z  # F_0113fdd0 migrated from s0113fc50 (verbatim, slice spelling)
 0113fec0 ?F_0113fec0@@YAXH@Z  # F_0113fec0 migrated from s0113fc50 (verbatim, slice spelling)
 0113ff00 ?F_0113ff00@@YAHHH@Z  # F_0113ff00 migrated from s0113fc50 (verbatim, slice spelling)
-01140030 F_01140030  # dc: apply lowpass to a play
-011400a0 F_011400a0  # dc: apply highpass to a play
-01140110 F_01140110  # dc: scan buffer for a 4-byte tag ("data" special)
-01140190 F_01140190  # dc: SND 10-byte extended float -> double
-01140290 F_01140290  # dc: wrapper that leaves the extended float in st0
-011402f0 SndDecoder::DecodeS16  # dc: 8-bit signed -> 16-bit
-01140380 Snd::CSign8IntDecS16::SetState  # PDB
-011403b0 SndDecoder::DecodeRaw  # dc: 16-bit big-endian -> host
-01140460 SndDecoder::DecodeSwap  # dc: 16-bit byte swap
-011404f0 SndDecoder::Dtor  # dc: scalar deleting destructor (vtable 0x14cafa0)
-01140530 SndDecoder::Setup  # dc: bind source buffer / count
-01140560 SndDecoder::DecodeMul  # dc: 8-bit unsigned -> 16-bit
-011405e0 SNDCTRL_filteradd  # PDB candidate
-01140650 F_01140650  # dc: apply per-channel mix gains
-011406e0 F_011406e0  # dc: reset or alternate the voice gain table
-01140760 F_01140760  # dc: platform init (0x16e7bfc=1)
-01140780 F_01140780  # dc: apply global state to the renderer
+01140030 ?F_01140030@@YAHHH@Z  # F_01140030 migrated from s0113fc50 (verbatim, slice spelling)
+011400a0 ?F_011400a0@@YAHHH@Z  # F_011400a0 migrated from s0113fc50 (verbatim, slice spelling)
+01140110 ?F_01140110@@YAPADPADIH@Z  # F_01140110 migrated from s0113fc50 (verbatim, slice spelling)
+01140190 ?F_01140190@@YAMPAE@Z  # F_01140190 migrated from s0113fc50 (verbatim, slice spelling)
+01140290 ?F_01140290@@YAMPAX@Z  # F_01140290 migrated from s0113fc50 (verbatim, slice spelling)
+011402f0 ?DecodeS16@SndDecoder@@QAEXHH@Z  # SndDecoder::DecodeS16 migrated from s0113fc50 (verbatim, slice spelling)
+01140380 ?SetState@SndDecoder@@QAEXPAF@Z  # SndDecoder::SetState migrated from s0113fc50 (verbatim, slice spelling)
+011403b0 ?DecodeRaw@SndDecoder@@QAEXHH@Z  # SndDecoder::DecodeRaw migrated from s0113fc50 (verbatim, slice spelling)
+01140460 ?DecodeSwap@SndDecoder@@QAEXHH@Z  # SndDecoder::DecodeSwap migrated from s0113fc50 (verbatim, slice spelling)
+011404f0 ?Dtor@SndDecoder@@QAEPAXE@Z  # SndDecoder::Dtor migrated from s0113fc50 (verbatim, slice spelling)
+01140530 ?Setup@SndDecoder@@QAEHPAXHH@Z  # SndDecoder::Setup migrated from s0113fc50 (verbatim, slice spelling)
+01140560 ?DecodeMul@SndDecoder@@QAEXHH@Z  # SndDecoder::DecodeMul migrated from s0113fc50 (verbatim, slice spelling)
+011405e0 ?F_011405e0@@YAHHH@Z  # F_011405e0 migrated from s0113fc50 (verbatim, slice spelling)
+01140650 ?FUN_01140650@@YAXH@Z  # FUN_01140650 migrated from s0113fc50 (verbatim, slice spelling)
+011406e0 ?FUN_011406e0@@YAXH@Z  # FUN_011406e0 migrated from s0113fc50 (verbatim, slice spelling)
+01140760 ?F_01140760@@YAHXZ  # F_01140760 migrated from s0113fc50 (verbatim, slice spelling)
+01140780 ?F_01140780@@YAHXZ  # F_01140780 migrated from s0113fc50 (verbatim, slice spelling)
 01140810 SNDPLATFORM_init  # PDB anchor
 01140870 SNDPLATFORM_restore  # PDB
 01140890 ?F_01140890@@YAHH@Z  # F_01140890 migrated from s0113fc50 (verbatim, slice spelling)
@@ -30,4 +30,4 @@
 01140a20 ?F_01140a20@@YAHH@Z  # F_01140a20 migrated from s0113fc50 (verbatim, slice spelling)
 01140a70 ?F_01140a70@@YAHHH@Z  # F_01140a70 migrated from s0113fc50 (verbatim, slice spelling)
 01140ab0 SNDPLATFORM_stop  # PDB
-01140b20 SNDPLATFORM_filteradd  # PDB candidate
+01140b20 ?F_01140b20@@YAHHH@Z  # F_01140b20 migrated from s0113fc50 (verbatim, slice spelling)

@@ -7,6 +7,6 @@
 0114d770 DelayLine::Release  # System::Free(mpBuffer); clears mpLocalBuffer/mpFilter/miMaxDelaySamples
 0114d7b0 DelayLine::Init  # PDB name (dev 014d0d85)
 0114d840 DelayLine::Resize  # PDB candidate (dev 014d0e4c)
-0114d9d0 DelayLine::Reset  # available=capacity, writePhase=guard, clean=0, readPosition=arg
+0114d9d0 ?Reset@DelayLine@core@audio@rw@@QAEXH@Z  # DelayLine::Reset migrated from s0114cb60 (verbatim, slice spelling)
 0114d9f0 DelayLine::CalcChannelPointers  # fills {start,end,loopEnd,cursor}
 0114da40 DelayLine::WrapCursor  # cursor-backOffset with ring-body wrap
