@@ -1,5 +1,5 @@
 00b84270  cModelTestCheat::Execute() -> bool  # thiscall: terrain-box rebuild + model/prop sync for the model-test cheat
-00b84730  cPlanetModel::FindSurfacePosition(Vector3* out) -> void  # thiscall ret 4, SP::cPlanetModel random-surface-point walk (gold8)
+00b84730 ?FindSurfacePosition@cPlanetModel_s00b8_4270__g8@@QAEXPAUVector3_s00b8_4270__g8@@@Z  # cPlanetModel_s00b8_4270__g8::FindSurfacePosition migrated from s00b84270 (verbatim, slice spelling)
 00b848f0  HashMap::Insert(InsertResult* out, const u32* key, void* unused) -> void  # eastl hashtable unique-key insert (ret 0xc)
 00b849e0 ?Reserve@U16Vec@@QAEXI@Z  # U16Vec::Reserve migrated from s00b84270 (verbatim, slice spelling)
 00b84b10  Vec18Vec::CopyCtor(const Vec18Vec* pSrc) -> Vec18Vec*  # eastl vector<0x18-byte> copy-ctor (ret 4)

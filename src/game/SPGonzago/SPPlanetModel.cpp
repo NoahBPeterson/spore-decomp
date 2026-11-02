@@ -1444,9 +1444,9 @@ struct cPlanetModel_s00b8_32d0 {
     char pad3[0xf0 - 0x80];
     char mFlagF0;                               // +0xf0
 
-    bool FUN_00b832d0(const float* dir, float step);
-    float FUN_00b83620(int a, float b);
-    uint FUN_00b83870(int arg);
+    bool FUN_00b832d0(const float* dir, float step);  // 0x00b832d0 (cPlanetModel::FUN_00b832d0)
+    float FUN_00b83620(int a, float b);  // 0x00b83620 (cPlanetModel::FUN_00b83620)
+    uint FUN_00b83870(int arg);  // 0x00b83870 (cPlanetModel::FUN_00b83870)
     void FUN_00b83c40(const float* dir, float radius, uint flags, char (*cb)(float*));
     void MakeRandomWorldPosition(Vec3POD* out, int a, float b, float c);  // 0x00b81780 (cPlanetModel::MakeRandomWorldPosition)
 };
@@ -2025,6 +2025,34 @@ public:
     void AddResourceNodes();                                           // 0x00b8bba0
 };
 // ---- items of slice s00b8bb70 end
+
+// ---- items of slice s00b84270_g8 begin (TODO(rewrite): local stubs, replace by canonical classes)
+struct Vector3_s00b8_4270__g8 {
+    float x, y, z;
+};
+struct cTerrainMapSet_s00b8_4270__g8 {
+    char  pad00[0x34];
+    float mRadius;          // +0x34
+    float mMaxHeight;       // +0x38
+    float mWaterHeight;     // +0x3c
+    float GetHeightAt(const Vector3_s00b8_4270__g8& p);                    // 0x00f927c0
+};
+struct ISphere_s00b8_4270__g8 {
+    virtual void v00();
+    virtual void v01();
+    virtual void v02();
+    virtual cTerrainMapSet_s00b8_4270__g8* GetMap();                       // slot +0x0c
+};
+struct cPlanetModel_s00b8_4270__g8 {
+    char      pad00[0x20];
+    void*     mpSphere;     // +0x20
+    ISphere_s00b8_4270__g8*  mpISphere;    // +0x24
+    float GetRadiusAt(const Vector3_s00b8_4270__g8& p);                    // 0x00b7ef70
+    void  FindSurfacePosition(Vector3_s00b8_4270__g8* out);                // 0x00b84730
+};
+void RandomDirection3(Vector3_s00b8_4270__g8* out);                       // 0x00b7e560
+extern Vector3_s00b8_4270__g8 gNoSurfacePosition;                          // 0x016881f0
+// ---- items of slice s00b84270_g8 end
 
 // @ 0x00473500
 template vector_s0047_2b80<Pod12, 4>& vector_s0047_2b80<Pod12, 4>::operator=(const vector_s0047_2b80<Pod12, 4>&)
@@ -3125,6 +3153,56 @@ void ColorVector::DoInsertValue(uint index, uint value, int param4)
         int iVar2 = mBegin + index * 0x18;
         if (*(char*)(iVar2 + 0x10) != '\0')
             *(int*)(iVar2 + 0x14) = param4;
+    }
+}
+
+// @ 0x00b84730
+void cPlanetModel_s00b8_4270__g8::FindSurfacePosition(Vector3_s00b8_4270__g8* out)
+{
+    Vector3_s00b8_4270__g8 pos;
+    Vector3_s00b8_4270__g8 dir;
+    RandomDirection3(&dir);
+    volatile float radius = GetRadiusAt(dir);
+    pos.x = dir.x * radius;
+    pos.y = dir.y * radius;
+    pos.z = dir.z * radius;
+
+    int i = 0;
+    do {
+        int prev = i;
+        i = prev + 1;
+        if (mpISphere == 0)
+            break;
+        float height = mpISphere->GetMap()->GetHeightAt(pos);
+        cTerrainMapSet_s00b8_4270__g8* terrain = mpISphere->GetMap();
+        float water = terrain->mWaterHeight * terrain->mMaxHeight + terrain->mRadius;
+        if (water <= height)
+            break;
+
+        Vector3_s00b8_4270__g8 ndir;
+        RandomDirection3(&ndir);
+        float r;
+        if (mpSphere != 0) {
+            r = mpISphere->GetMap()->GetHeightAt(ndir);
+        } else if (mpISphere != 0 && mpISphere->GetMap() != 0) {
+            r = mpISphere->GetMap()->mRadius;
+        } else {
+            r = 500.0f;
+        }
+        dir.x = ndir.x * r;
+        dir.y = ndir.y * r;
+        dir.z = ndir.z * r;
+        pos = dir;
+    } while (i < 10000);
+
+    if (i < 10000) {
+        out->x = pos.x;
+        out->y = pos.y;
+        out->z = pos.z;
+    } else {
+        out->x = gNoSurfacePosition.x;
+        out->y = gNoSurfacePosition.y;
+        out->z = gNoSurfacePosition.z;
     }
 }
 
