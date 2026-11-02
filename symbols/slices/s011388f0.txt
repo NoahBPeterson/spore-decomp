@@ -18,7 +18,7 @@
 011393d0 ?FUN_011393d0@core@audio@rw@@YAXPAX@Z  # FUN_011393d0 migrated from s011388f0 (verbatim, slice spelling)
 01139450 ?FUN_01139450@core@audio@rw@@YA_NPAX@Z  # FUN_01139450 migrated from s011388f0 (verbatim, slice spelling)
 011394b0 ?F_4b0@AudioObj@core@audio@rw@@QAEXXZ  # AudioObj::F_4b0 migrated from s011388f0 (verbatim, slice spelling)
-01139500  rw::audio::core::SampleCapture::StartHandler  # PDB anchor
+01139500 ?FUN_01139500@core@audio@rw@@YAHPAX@Z  # FUN_01139500 migrated from s011388f0 (verbatim, slice spelling)
 01139660 ?F_660@AudioObj@core@audio@rw@@QAEXHPAH@Z  # AudioObj::F_660 migrated from s011388f0 (verbatim, slice spelling)
 01139730 ?F_730@AudioObj@core@audio@rw@@QAEXXZ  # AudioObj::F_730 migrated from s011388f0 (verbatim, slice spelling)
 01139770 ?FUN_01139770@core@audio@rw@@YAHPAX@Z  # FUN_01139770 migrated from s011388f0 (verbatim, slice spelling)

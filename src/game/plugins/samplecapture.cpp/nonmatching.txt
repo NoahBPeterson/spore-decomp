@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+01139500 211 complete SampleCapture::StartHandler; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest UNSUPPORTED (streams fault on the random object graph; 1 unresolved reference _ceil)
