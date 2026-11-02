@@ -12,5 +12,7 @@
 00c7dc20 ?ClearOne@cTargetList@@QAEXXZ  # cTargetList::ClearOne migrated from s00c7d120 (verbatim, slice spelling)
 00c7dc70 ?SortVec@@YAXPAPAX0UVec3_s00c7_d120@@@Z  # SortVec migrated from s00c7d120 (verbatim, slice spelling)
 00c7dcb0 ?Update@cTargetList@@QAEXXZ  # cTargetList::Update migrated from s00c7d120 (verbatim, slice spelling)
+00c7dfe0 ?Write@cTargetList@@QAE_NPAX@Z  # cTargetList::Write migrated from s00c7d120 (verbatim, slice spelling)
+00c7e0a0 ?Read@cTargetList@@QAE_NPAX@Z  # cTargetList::Read migrated from s00c7d120 (verbatim, slice spelling)
 00c7e160 ?AdvanceIndex@@YG_NPAX@Z  # AdvanceIndex migrated from s00c7d120 (verbatim, slice spelling)
 00c7e1a0 ?Get@cTargetList@@QAEPAXPAH@Z  # cTargetList::Get migrated from s00c7d120 (verbatim, slice spelling)

@@ -1,4 +1,11 @@
 # source  symbol  va  flags
+../src/game/SPGonzago/SPSimPlanetLowLOD.cpp  ?Write@cTargetList@@QAE_NPAX@Z  00c7dfe0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPSimPlanetLowLOD.cpp  ?Read@cTargetList@@QAE_NPAX@Z  00c7e0a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPSimPlanetLowLOD.cpp  ?FUN_00c7e9b0@CS@@QAE_NHH@Z  00c7e9b0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPSimPlanetLowLOD.cpp  ?FUN_00c7e9f0@@YA_NPAXPAPAX@Z  00c7e9f0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPSimPlanetLowLOD.cpp  ?ctor_00c7ea70@CS@@QAEPAXXZ  00c7ea70  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPSimPlanetLowLOD.cpp  ?FUN_00c7ead0@CS@@QAEXPAH@Z  00c7ead0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPSimPlanetLowLOD.cpp  ?FUN_00c7ed50@@YGXHHHHPAH@Z  00c7ed50  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPSimPlanetLowLOD.cpp  ?FUN_00c7f300@@YIEPAX0PAIMMM@Z  00c7f300  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPSimPlanetLowLOD.cpp  ?FUN_00c7f430@@YIEPAX0PAHPAM@Z  00c7f430  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPSimPlanetLowLOD.cpp  ?FUN_00c7f560@@YIPAPAXPAX0PAPAXPAI@Z  00c7f560  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
