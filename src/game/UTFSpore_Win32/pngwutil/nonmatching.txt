@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+00877da0 489 diff; complete; png_write_compressed: the original uses a private register convention (type=EAX, png_ptr=EDX, len=ECX, data=[esp+4], vec=EDI) with a matching bespoke prologue/epilogue and an eastl-style vector append, so the standalone cdecl reconstruction cannot reproduce the entry sequence byte-for-byte (size 614 vs 634); equiv UNSUPPORTED (7 unresolved references: _snprintf, png_warning, deflate, png_error, png_malloc, ...) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-

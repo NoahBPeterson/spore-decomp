@@ -1,0 +1,2 @@
+00877d30 ?png_write_sig@@YAXPAUPngStruct@@@Z  # png_write_sig migrated from s008752b0 (verbatim, slice spelling)
+00877da0 ?png_write_compressed@@YAHHPAUPngStruct@@IPAEPAH@Z  # png_write_compressed migrated from s008752b0 (verbatim, slice spelling)
