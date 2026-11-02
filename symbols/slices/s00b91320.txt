@@ -1,0 +1,6 @@
+00b91320 ?MarkSphere@cCubeGrid@@QAEXPBUVec3@@MI@Z  # cCubeGrid::MarkSphere migrated from s00b91320 (verbatim, slice spelling)
+00b91750 ?CheckCell@cCubeGrid@@QAE_NHHH@Z  # cCubeGrid::CheckCell migrated from s00b91320 (verbatim, slice spelling)
+00b917b0 ?GetHeight@cCubeGrid@@QAEMPBH@Z  # cCubeGrid::GetHeight migrated from s00b91320 (verbatim, slice spelling)
+00b91810 ?GrowRegion@cCubeGrid@@QAEXPBHPAURegion@@@Z  # cCubeGrid::GrowRegion migrated from s00b91320 (verbatim, slice spelling)
+00b920b0 ?GetCellDir@cCubeGrid@@QAE_NIHHHPAUVec3@@@Z  # cCubeGrid::GetCellDir migrated from s00b91320 (verbatim, slice spelling)
+00b92280 ?PlanetModelIndexInRange@@YG_NII@Z  # PlanetModelIndexInRange migrated from s00b91320 (verbatim, slice spelling)

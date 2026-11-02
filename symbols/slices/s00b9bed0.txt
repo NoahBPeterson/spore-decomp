@@ -1,2 +1,8 @@
 00b88590 ?GetContinent@cPlanetModel@SP@@QBEHABUcSPVector3@@@Z  # SP::cPlanetModel::GetContinent (callee of s00b9bed0, named from the dev publics; slice address comment)
+00b9bed0 ?FUN_00b9bed0@@YAXPAX@Z  # FUN_00b9bed0 migrated from s00b9bed0 (verbatim, slice spelling)
+00b9c180 ?Find@StarTable@@QAEHPBH@Z  # StarTable::Find migrated from s00b9bed0 (verbatim, slice spelling)
+00b9c250 ?FUN_00b9c250@TObj@@QAEXXZ  # TObj::FUN_00b9c250 migrated from s00b9bed0 (verbatim, slice spelling)
+00b9c5b0 ?FUN_00b9c5b0@@YAXPAVTObj@@@Z  # FUN_00b9c5b0 migrated from s00b9bed0 (verbatim, slice spelling)
+00b9c5c0 ?FUN_00b9c5c0@TObj@@QAEXXZ  # TObj::FUN_00b9c5c0 migrated from s00b9bed0 (verbatim, slice spelling)
 00b9c630 ?Read@Clue@@QAEXPAUGenParams@@HM@Z  # Clue::Read migrated from s00b9bed0 (verbatim, slice spelling)
+00b9c830 ?FUN_00b9c830@@YAXHPAMMHH@Z  # FUN_00b9c830 migrated from s00b9bed0 (verbatim, slice spelling)

@@ -1,0 +1,6 @@
+00b94150 ?FUN_00b94150@@YAPAXPAX00D@Z  # FUN_00b94150 migrated from s00b94150 (verbatim, slice spelling)
+00b94420 ?FUN_00b94420@@YADPAXPAMMMM@Z  # FUN_00b94420 migrated from s00b94150 (verbatim, slice spelling)
+00b94670 ?FUN_00b94670@@YA_NPAXPAMMMMMM@Z  # FUN_00b94670 migrated from s00b94150 (verbatim, slice spelling)
+00b94a90 ??0CA@@QAE@MM@Z  # CA::CA migrated from s00b94150 (verbatim, slice spelling)
+00b95050 ??0CB@@QAE@XZ  # CB::CB migrated from s00b94150 (verbatim, slice spelling)
+00b95070 ??1CB@@UAE@XZ  # CB::~CB migrated from s00b94150 (verbatim, slice spelling)

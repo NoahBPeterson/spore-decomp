@@ -1,3 +1,9 @@
-00b983b0 SP::cSpotGrid::FinishRegions  # fastcall this=grid; sorts the region list by area, grows rectangles over fully covered neighbours, recomputes border flags, drops dead regions (called by SetupPlanetSpots when bFillRegions)
+004df550 ?GetProfile@cSPEditorSpeciesManager@SP@@QAEPBUcSpeciesProfile@2@ABVKey@ResourceMan@EA@@@Z  # SP::cSPEditorSpeciesManager::GetProfile (callee of s00b981a0, named from the dev publics; slice address comment)
 00b90730 RegionAreaGreater  # pass-by-pointer comparator: return b->area(+0xc) < a->area; pushed as the sort predicate
+00b981a0 ?Add@cChildList@@QAEXII@Z  # cChildList::Add migrated from s00b981a0 (verbatim, slice spelling)
+00b98230 ?Insert@cSpawnTable@@QAEPAUInsertResult@@PAU2@PBUEntry@@@Z  # cSpawnTable::Insert migrated from s00b981a0 (verbatim, slice spelling)
+00b98270 ?AllocNode@cSpawnTable@@QAEPAVNode@@PBUNodeSource@@@Z  # cSpawnTable::AllocNode migrated from s00b981a0 (verbatim, slice spelling)
+00b982e0 ?DestroyBuckets@cSpawnTable@@QAEXPAPAVNode@@I@Z  # cSpawnTable::DestroyBuckets migrated from s00b981a0 (verbatim, slice spelling)
+00b983b0 ?FinishRegions@cSpotGrid@@QAEXXZ  # cSpotGrid::FinishRegions migrated from s00b981a0 (verbatim, slice spelling)
+00b98c00 ?FUN_00b98c00@@YA_NPAVIOSource@@@Z  # FUN_00b98c00 migrated from s00b981a0 (verbatim, slice spelling)
 00bbf6c0 SortRegions  # eastl::sort(first, last, pred): introsort(2*log2 n) then insertion sorts

@@ -11,4 +11,6 @@
 00b8ff60 ?FUN_00b8ff60@S@@QAEXXZ  # S::FUN_00b8ff60 migrated from s00b8f230 (verbatim, slice spelling)
 00b8ff90 ?FUN_00b8ff90@S@@QAEPAXXZ  # S::FUN_00b8ff90 migrated from s00b8f230 (verbatim, slice spelling)
 00b8ffd0 ?FUN_00b8ffd0@S@@QAEPAXD@Z  # S::FUN_00b8ffd0 migrated from s00b8f230 (verbatim, slice spelling)
-00b90410 SP::cPlantSpeciesManager::GetSpeciesFromID  # rbtree find with lazy load through GetPlantProfile + FUN_00b900a0 when the +0x38 flag is set
+00b90010 ?FUN_00b90010@S@@QAEPAXPAX@Z  # S::FUN_00b90010 migrated from s00b8f230 (verbatim, slice spelling)
+00b900a0 ?FUN_00b900a0@S@@QAEXPAX@Z  # S::FUN_00b900a0 migrated from s00b8f230 (verbatim, slice spelling)
+00b90410 ?FUN_00b90410@S@@QAEPAXPAX@Z  # S::FUN_00b90410 migrated from s00b8f230 (verbatim, slice spelling)
