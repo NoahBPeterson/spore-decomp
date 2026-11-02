@@ -1,1 +1,9 @@
-008af670 ReadDeltaXYValue  # T2K glyph delta (dx,dy) decoder; Ghidra name
+008af670 ?ReadDeltaXYValue@@YAIPAUInputStream@@PAF1@Z  # ReadDeltaXYValue migrated from s008af670 (verbatim, slice spelling)
+008afd50 ?glyph_AllocContours@@YAXPAUGlyphClass@@F@Z  # glyph_AllocContours migrated from s008af670 (verbatim, slice spelling)
+008afde0 ?glyph_CloseContour@@YAXPAUGlyphClass@@@Z  # glyph_CloseContour migrated from s008af670 (verbatim, slice spelling)
+008afee0 ?Add_GlyphClass@@YAXPAPAUGlyphClass@@PAU1@IHH@Z  # Add_GlyphClass migrated from s008af670 (verbatim, slice spelling)
+008b0230 ?AllocGlyphPointMemory@@YAXPAUGlyphClass@@H@Z  # AllocGlyphPointMemory migrated from s008af670 (verbatim, slice spelling)
+008b0280 ?Delete_GlyphClass@@YAXPAUGlyphClass@@@Z  # Delete_GlyphClass migrated from s008af670 (verbatim, slice spelling)
+008b0320 ?glyph_AddPoint@@YAXPAUGlyphClass@@HHE@Z  # glyph_AddPoint migrated from s008af670 (verbatim, slice spelling)
+008b0440 ?glyph_StartLine@@YAXPAUGlyphClass@@HH@Z  # glyph_StartLine migrated from s008af670 (verbatim, slice spelling)
+008b0480 ?New_EmptyGlyph@@YAPAUGlyphClass@@PAUtsiMemObject@@HFFF@Z  # New_EmptyGlyph migrated from s008af670 (verbatim, slice spelling)

@@ -1,0 +1,6 @@
+# source  symbol  va  flags
+../src/game/UTFSpore_Win32/glyph.cpp  ?ReadDeltaXYValue@@YAIPAUInputStream@@PAF1@Z  008af670  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/glyph.cpp  ?glyph_AllocContours@@YAXPAUGlyphClass@@F@Z  008afd50  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/glyph.cpp  ?Delete_GlyphClass@@YAXPAUGlyphClass@@@Z  008b0280  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/glyph.cpp  ?glyph_StartLine@@YAXPAUGlyphClass@@HH@Z  008b0440  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/glyph.cpp  ?New_EmptyGlyph@@YAPAUGlyphClass@@PAUtsiMemObject@@HFFF@Z  008b0480  /O2 /MD /Gy /TP /Isrc/game/include
