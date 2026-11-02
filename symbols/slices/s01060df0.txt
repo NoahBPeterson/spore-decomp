@@ -1,1 +1,1 @@
-01060df0 SP::cUFOLocomotion::UpdatePlanetLocomotion  # PDB candidate (caller-single)
+01060df0 ?UpdatePlanetLocomotion@cUFOLocomotion_s0106_0df0@SP@@QAEXPAUcLocomotionContext@2@I@Z  # cUFOLocomotion_s0106_0df0::UpdatePlanetLocomotion migrated from s01060df0 (verbatim, slice spelling)

@@ -1,0 +1,3 @@
+0105f2d0 ?UpdateSolarGalaxyLocomotion@cUFOLocomotion_s0105_f2d0@@QAEXPAVcUFOState@@H@Z  # cUFOLocomotion_s0105_f2d0::UpdateSolarGalaxyLocomotion migrated from s0105f2d0 (verbatim, slice spelling)
+0105f760 ?UpdateSolarAvoidance@@YAXPAVcUFOShipState@@MH@Z  # UpdateSolarAvoidance migrated from s0105f2d0 (verbatim, slice spelling)
+0105fbc0 ?UpdateSolarBody@@YGPAVcSPVector3_s0105_f2d0@@PAV1@PAVcUFOShipState@@@Z  # UpdateSolarBody migrated from s0105f2d0 (verbatim, slice spelling)
