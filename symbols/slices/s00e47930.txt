@@ -1,1 +1,1 @@
-00e47930 cEditorVerbIconPanel::RefreshUI  # retail editor verb-icon panel UI refresh; PDB caller-scored name StartCharge not trusted
+00e47930 ?RefreshUI@cEditorVerbIconPanel@@QAEXXZ  # cEditorVerbIconPanel::RefreshUI migrated from s00e47930 (verbatim, slice spelling)

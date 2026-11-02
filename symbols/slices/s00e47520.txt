@@ -1,2 +1,2 @@
-00e47520 FUN_00e47520  # void __thiscall (int,undefined4,int); naked asm, byte-exact
-00e47700 FUN_00e47700  # void __thiscall (int,int*); naked asm, byte-exact
+00e47520 ?FUN_00e47520@PL@@QAEXHPAU1@@Z  # PL::FUN_00e47520 migrated from s00e47520 (verbatim, slice spelling)
+00e47700 ?FUN_00e47700@PL@@QAEXPAUPtrVec@@@Z  # PL::FUN_00e47700 migrated from s00e47520 (verbatim, slice spelling)

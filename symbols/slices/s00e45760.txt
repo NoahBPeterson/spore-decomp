@@ -1,14 +1,13 @@
-; slice s00e45760 = 0x00e45760..0x00e46450 (SPUI timeline / property layout) - exact decorated names
+00e45760 ?DoMessage@cSPUITimeline_s00e4_5760@@QAE_NHPAH@Z  # cSPUITimeline_s00e4_5760::DoMessage migrated from s00e45760 (verbatim, slice spelling)
+00e45e90 ?FUN_00e45e90@@YAXHPAUIntVector@@IH@Z  # FUN_00e45e90 migrated from s00e45760 (verbatim, slice spelling)
+00e45fe0 ?IsMember@VecContainer@@QAE_NH@Z  # VecContainer::IsMember migrated from s00e45760 (verbatim, slice spelling)
+00e46020 ?SetVisibleRecursive@VisNode@@QAEXD@Z  # VisNode::SetVisibleRecursive migrated from s00e45760 (verbatim, slice spelling)
+00e460d0 ?FUN_00e460d0@cSPUITimeline_s00e4_5760@@QAEMXZ  # cSPUITimeline_s00e4_5760::FUN_00e460d0 migrated from s00e45760 (verbatim, slice spelling)
+00e46140 ?FUN_00e46140@cSPUITimeline_s00e4_5760@@QAEXPAX@Z  # cSPUITimeline_s00e4_5760::FUN_00e46140 migrated from s00e45760 (verbatim, slice spelling)
+00e46180 ?FUN_00e46180@cSPUITimeline_s00e4_5760@@QAEXPAX@Z  # cSPUITimeline_s00e4_5760::FUN_00e46180 migrated from s00e45760 (verbatim, slice spelling)
+00e461c0 ?GetItemColor@cSPUITimeline_s00e4_5760@@QAEXPAXI@Z  # cSPUITimeline_s00e4_5760::GetItemColor migrated from s00e45760 (verbatim, slice spelling)
+00e46210 ?SetItemColor@cSPUITimeline_s00e4_5760@@QAEXIE@Z  # cSPUITimeline_s00e4_5760::SetItemColor migrated from s00e45760 (verbatim, slice spelling)
+00e46260 ?Construct@PropLayoutCtor@@QAEPAVcSPUIPropertyLayout_s00e4_5760@@XZ  # PropLayoutCtor::Construct migrated from s00e45760 (verbatim, slice spelling)
+00e462c0 ?InitLayout@cSPUIPropertyLayout_s00e4_5760@@QAEDPAH@Z  # cSPUIPropertyLayout_s00e4_5760::InitLayout migrated from s00e45760 (verbatim, slice spelling)
+00e463d0 ?OnLayoutMessage@cSPUIPropertyLayout_s00e4_5760@@QAEIHPAH@Z  # cSPUIPropertyLayout_s00e4_5760::OnLayoutMessage migrated from s00e45760 (verbatim, slice spelling)
 ; manifest.txt has no byte-exact rows for this slice; every target is in nonmatching.txt
-00e45760 ?DoMessage@cSPUITimeline@@QAE_NHPAH@Z  # complete, non-exact
-00e45e90 ?FUN_00e45e90@@YAXHPAUIntVector@@IH@Z  # complete, non-exact
-00e45fe0 ?IsMember@VecContainer@@QAE_NH@Z  # complete, non-exact
-00e46020 ?SetVisibleRecursive@VisNode@@QAEXD@Z  # complete, non-exact
-00e460d0 ?FUN_00e460d0@cSPUITimeline@@QAEMXZ  # complete, non-exact
-00e46140 ?FUN_00e46140@cSPUITimeline@@QAEXPAX@Z  # complete, non-exact
-00e46180 ?FUN_00e46180@cSPUITimeline@@QAEXPAX@Z  # complete, non-exact
-00e461c0 ?GetItemColor@cSPUITimeline@@QAEXPAXI@Z  # complete, non-exact
-00e46210 ?SetItemColor@cSPUITimeline@@QAEXIE@Z  # complete, non-exact
-00e46260 ?Construct@PropLayoutCtor@@QAEPAUcSPUIPropertyLayout@@XZ  # complete, non-exact
-00e462c0 ?InitLayout@cSPUIPropertyLayout@@QAEDPAH@Z  # complete, non-exact
-00e463d0 ?OnLayoutMessage@cSPUIPropertyLayout@@QAEIHPAH@Z  # complete, non-exact

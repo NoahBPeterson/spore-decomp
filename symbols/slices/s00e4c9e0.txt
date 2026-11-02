@@ -1,7 +1,6 @@
-# slice s00e4c9e0 names (evidence)
 00e4c9e0  CellAppDataShutdownForApp     # app-data teardown (g_pCellAppData 0x16ad060)
 00e4cad0  AdvectMap_CatalogLoad          # hash + DataDir build of layer catalog entry
-00e4cc10  AdvectMap_HashName             # FNV1 of a name unless already hashed (stdcall)
+00e4cc10 ?FUN_00e4cc10@@YGXPAF@Z  # FUN_00e4cc10 migrated from s00e4c9e0 (verbatim, slice spelling)
 00e4cc50  SP::LoadAdvectMap              # resource-manager load with fallback key
 00e4cce0  LayerCatalog_GetEntry          # (&g_15a758c)[idx*4]
 00e4ccf0  SP::sIsLayerDataPacked
