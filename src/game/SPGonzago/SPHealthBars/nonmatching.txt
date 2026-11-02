@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+0059d960 41 cSPEditorAnimatedEventInfo ctor: complete; two-phase vptr stores + atomic refcount init layout flags: /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
