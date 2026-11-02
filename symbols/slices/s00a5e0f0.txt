@@ -20,6 +20,6 @@
 00a5eda0 random_bang  # PD random_bang (RandomUint32UniformN, then float out)
 00a5ee30 frandom_bang  # PD frandom_bang (value * NextFloat)
 00a5eea0 x_random_setup  # registers "random"/"frandom" classes and the shared "seed" method; seeds from GetThreadTime
-00a5efd0 spin_bang  # clock objects: re-arm unless paused
-00a5f000 spin_stop  # clock objects: unset unless paused
-00a5f030 spin_float  # clock objects: clamp period to >=0 unless paused
+00a5efd0 ?spin_bang@Eapd@Audio@EA@@YAXPAD@Z  # spin_bang migrated from s00a5e0f0 (verbatim, slice spelling)
+00a5f000 ?spin_stop@Eapd@Audio@EA@@YAXPAD@Z  # spin_stop migrated from s00a5e0f0 (verbatim, slice spelling)
+00a5f030 ?spin_float@Eapd@Audio@EA@@YAXPADM@Z  # spin_float migrated from s00a5e0f0 (verbatim, slice spelling)

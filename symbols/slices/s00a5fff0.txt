@@ -1,2 +1,7 @@
+00a5fff0 ?pipe_flush@Eapd@Audio@EA@@YAXPAX@Z  # pipe_flush migrated from s00a5fff0 (verbatim, slice spelling)
+00a60020 ?pipe_clear@Eapd@Audio@EA@@YAXPAD@Z  # pipe_clear migrated from s00a5fff0 (verbatim, slice spelling)
+00a60050 ?pipe_pause@Eapd@Audio@EA@@YAXPADM@Z  # pipe_pause migrated from s00a5fff0 (verbatim, slice spelling)
+00a600d0 ?pipe_free@Eapd@Audio@EA@@YAXPAD@Z  # pipe_free migrated from s00a5fff0 (verbatim, slice spelling)
+00a60470 ?x_time_setup@Eapd@Audio@EA@@YA_NXZ  # EA::Audio::Eapd::x_time_setup migrated from s00a5fff0
 00a604a0 ?function_inrange@Eapd@Audio@EA@@YAXPADMM@Z  # function_inrange migrated from s00a5fff0 (verbatim, slice spelling)
 00a604e0 ?function_outrange@Eapd@Audio@EA@@YAXPADMM@Z  # function_outrange migrated from s00a5fff0 (verbatim, slice spelling)

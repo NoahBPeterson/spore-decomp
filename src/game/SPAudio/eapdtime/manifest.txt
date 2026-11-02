@@ -1,0 +1,25 @@
+# source  symbol  va  flags
+../src/game/SPAudio/eapdtime.cpp  ?spin_bang@Eapd@Audio@EA@@YAXPAD@Z  00a5efd0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdtime.cpp  ?spin_stop@Eapd@Audio@EA@@YAXPAD@Z  00a5f000  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdtime.cpp  ?spin_float@Eapd@Audio@EA@@YAXPADM@Z  00a5f030  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdtime.cpp  ?delay_doaddfloat@Eapd@Audio@EA@@YAXPADM@Z  00a5f070  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdtime.cpp  ?delay_pause@Eapd@Audio@EA@@YAXPADM@Z  00a5f0e0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdtime.cpp  ?delay_new@Eapd@Audio@EA@@YAPAXM@Z  00a5f120  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdtime.cpp  ?metro_tick@Eapd@Audio@EA@@YAXPAD@Z  00a5f300  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdtime.cpp  ?metro_float@Eapd@Audio@EA@@YAXPADM@Z  00a5f340  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdtime.cpp  ?metro_bang@Eapd@Audio@EA@@YAXPAD@Z  00a5f3c0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdtime.cpp  ?metro_stop@Eapd@Audio@EA@@YAXPAD@Z  00a5f3f0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdtime.cpp  ?metro_ft1@Eapd@Audio@EA@@YAXPADM@Z  00a5f420  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdtime.cpp  ?metro_free@Eapd@Audio@EA@@YAXPAD@Z  00a5f460  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdtime.cpp  ?line_ft1@Eapd@Audio@EA@@YAXPADM@Z  00a5f8b0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdtime.cpp  ?line_stop@Eapd@Audio@EA@@YAXPAD@Z  00a5f8e0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdtime.cpp  ?line_set@Eapd@Audio@EA@@YAXPADM@Z  00a5f910  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdtime.cpp  ?line_pause@Eapd@Audio@EA@@YAXPADM@Z  00a5f950  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdtime.cpp  ?line_new@Eapd@Audio@EA@@YAPAXMM@Z  00a5f9f0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdtime.cpp  ?timer_bang@Eapd@Audio@EA@@YAXPAD@Z  00a5fc10  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdtime.cpp  ?timer_pause@Eapd@Audio@EA@@YAXPADM@Z  00a5fc80  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdtime.cpp  ?timer_new@Eapd@Audio@EA@@YAPAXXZ  00a5fce0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdtime.cpp  ?pipe_flush@Eapd@Audio@EA@@YAXPAX@Z  00a5fff0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPAudio/eapdtime.cpp  ?pipe_clear@Eapd@Audio@EA@@YAXPAD@Z  00a60020  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPAudio/eapdtime.cpp  ?pipe_pause@Eapd@Audio@EA@@YAXPADM@Z  00a60050  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPAudio/eapdtime.cpp  ?x_time_setup@Eapd@Audio@EA@@YA_NXZ  00a60470  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
