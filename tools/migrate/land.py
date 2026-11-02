@@ -67,19 +67,21 @@ def gate(m, log):
     d, stem = os.path.split(m)
     tu = "src/game/%s/%s.cpp" % (d, stem)
     if not os.path.exists(os.path.join(ROOT, tu)):
-        return False, "no TU written"
+        return False, "no TU written", set()
     rc, out = run([PY, "tools/matching/run_all.py", "--manifest", "src/game/%s/%s/manifest.txt" % (d, stem)])
     last = out.strip().splitlines()[-1] if out.strip() else ""
     mm = re.match(r"(\d+) / (\d+) functions byte-exact", last)
     if not mm or mm.group(1) != mm.group(2):
-        return False, "run_all: " + last
+        bad = {p[2] for p in (l.split() for l in out.splitlines()) if len(p) >= 3 and p[0] == "FAIL" and re.match(r"[0-9a-f]{8}$", p[2])}
+        return False, "run_all: " + last, bad
     rc, out = run([PY, "tools/matching/asm_audit.py", "--all-rows", tu])
     if rc:
-        return False, "asm audit: " + out.strip()[:200]
+        return False, "asm audit: " + out.strip()[:200], set()
     rc, out = run([PY, "tools/migrate/samecode.py", tu])
     if "Traceback" in out:
         # mig27 SPUIBehavior: the traceback's first line was gated as a row ("verdict None -> None at Traceback")
-        return False, "samecode crashed: " + out.strip().splitlines()[-1][:200]
+        return False, "samecode crashed: " + out.strip().splitlines()[-1][:200], set()
+    drops = []
     for line in out.splitlines():
         p = line.split()
         if len(p) < 2 or p[1] == "SAME" or not re.match(r"[0-9a-f]{8}$", p[0]):
@@ -98,8 +100,11 @@ def gate(m, log):
         after = verdict(js)
         log("    %s %s -> equiv %s (sweep had %s)" % (va, " ".join(p[1:])[:80], after, before))
         if after is None or (before is not None and RANK.get(after, 0) < RANK.get(before, 0)):
-            return False, "verdict %s -> %s at %s" % (before, after, va)
-    return True, last
+            # every row is checked, so one retry can drop all of them (land_module)
+            drops.append((va, before, after))
+    if drops:
+        return False, "; ".join("verdict %s -> %s at %s" % (b, f, va) for va, b, f in drops)[:400], {va for va, _b, _f in drops}
+    return True, last, set()
 
 
 def main():
@@ -127,7 +132,7 @@ def main():
     log("== %s %s: %d modules" % (time.strftime("%Y-%m-%d %H:%M"), a.batch, len(mods)))
     for m in mods if a.check else []:
         if os.path.exists(os.path.join(ROOT, module_files(m)[0])):
-            ok, why = gate(m, log)
+            ok, why, _bad = gate(m, log)
             log("%s: %s %s" % (m, "GATE OK" if ok else "GATE FAIL", why))
     for m in mods if not a.check else []:
         # stdout only: git warns on stderr about a directory that does not exist yet (src/game/Havok/)
@@ -138,45 +143,69 @@ def main():
             continue
         sids = [e["id"] for e in ents if e["module"] == m]
         t0 = time.time()
-        why_none = {}
-        before = markers_at_head(m)
-        # a slice whose listed functions live in a flag-variant source (s00a80240_g7.cpp) needs one more rewrite.py run per
-        # variant, which the plain run names in a VARIANT SOURCE line (mig33: 10 modules rolled back with nothing written)
-        todo = [(sid, None) for sid in sids]
-        while todo:
-            sid, var = todo.pop(0)
-            rc, out = run([PY, "tools/migrate/rewrite.py", sid, "--module", m, "--batch", a.batch,
-                           "--scratch", os.path.join(SCRATCH, "rw"), "--apply", "--quiet"] + (["--variant", var] if var is not None else []))
-            if var is None:
-                todo[:0] = [(sid, v.strip('"')) for v in re.findall(r"(?m)^VARIANT SOURCE: .* --variant (\S+)$", out)]
-            if rc:
-                log("  %s %s: rewrite exit %d: %s" % (m, sid, rc, out.strip().splitlines()[-1][:200] if out.strip() else ""))
-            elif "COMPILE FAILED" in out:
-                # rewrite.py restores the TU and exits 0: the gate then passes the unchanged TU and commit_obj.sh finds nothing
-                # to commit (mig27: 20 modules logged as "nothing added to commit")
-                err = next((l.strip() for l in out.splitlines() if re.search(r"error C\d+", l)), "?")
-                why_none.setdefault("compile failed", []).append(sid)
-                log("  %s %s: rewrite COMPILE FAILED: %s" % (m, sid, re.sub(r"^.*\\src\\game\\", "", err)[:200]))
-            elif "no reconstructed functions" in out:
-                # markers only in a banner or after macro lines (s006d0940 DEFINE_BAKE), or the code is a vendored
-                # #include (s008894a0 EAWebKit): nothing rewrite.py can move
-                why_none.setdefault("no line-start markers", []).append(sid)
-        if not (markers_now(m) - before):
-            # nothing new reached the TU: commit_obj.sh would fail on an empty commit (mig27: 20 modules)
-            rollback(m, sids)
-            log("%s: ROLLED BACK (%d slices, %.0fs) no new function written%s" % (
-                m, len(sids), time.time() - t0,
-                "".join("; %s: %s" % (k, " ".join(v)) for k, v in sorted(why_none.items())) or "; every listed function stayed in its slice"))
-            continue
-        ok, why = gate(m, log)
-        if ok:
-            # the gate just ran run_all and the asm audit on these files: commit_obj.sh need not repeat them
-            rc, out = run(["env", "LAND_GATED=1", "bash", "tools/migrate/commit_obj.sh", a.batch, m])
-            ok, why = rc == 0, (out.strip().splitlines() or [""])[-1][:200]
-        if not ok:
-            rollback(m, sids)
-        log("%s: %s (%d slices, %.0fs) %s" % (m, "LANDED" if ok else "ROLLED BACK", len(sids), time.time() - t0, why))
+        dropped, bname, rounds = set(), a.batch, 0
+        try:
+            while True:
+                ok, why, bad = land_once(m, sids, bname, a.batch, log)
+                head = markers_at_head(m)
+                new = {e for e in bad if e.lstrip("0") not in head}
+                # the gate named failing functions, all of them new: land the rest without them (mig34: 9 of 14 objects of
+                # 16-20 slices rolled back on one or a few rows).  A failing row that was landed before, a non-row failure
+                # (compile, audit, commit) or a 4th round ends it
+                if ok or not bad or new != bad or rounds == 3:
+                    break
+                rounds += 1
+                dropped |= bad
+                log("  %s: retry %d without %s (%s)" % (m, rounds, " ".join(sorted(dropped)), why[:160]))
+                bname = "_land_%s_%d" % (os.path.basename(m), os.getpid())
+                json.dump([dict(e, vas=[v for v in e["vas"] if v not in dropped]) if e["module"] == m else e for e in ents],
+                          open(os.path.join(ROOT, "work", "batches", bname + ".json"), "w"))
+        finally:
+            if bname != a.batch:
+                os.remove(os.path.join(ROOT, "work", "batches", bname + ".json"))
+        log("%s: %s (%d slices, %.0fs) %s%s" % (m, "LANDED" if ok else "ROLLED BACK", len(sids), time.time() - t0, why,
+                                                "; left in slices: " + " ".join(sorted(dropped)) if ok and dropped else ""))
 
+
+def land_once(m, sids, bname, batch, log):
+    """rewrite every slice of the module from batch file bname, gate, commit (commit_obj.sh reads the real batch's slice
+    list) or roll back.  -> (ok, why, VAs the gate named)"""
+    why_none = {}
+    before = markers_at_head(m)
+    # a slice whose listed functions live in a flag-variant source (s00a80240_g7.cpp) needs one more rewrite.py run per
+    # variant, which the plain run names in a VARIANT SOURCE line (mig33: 10 modules rolled back with nothing written)
+    todo = [(sid, None) for sid in sids]
+    while todo:
+        sid, var = todo.pop(0)
+        rc, out = run([PY, "tools/migrate/rewrite.py", sid, "--module", m, "--batch", bname,
+                       "--scratch", os.path.join(SCRATCH, "rw"), "--apply", "--quiet"] + (["--variant", var] if var is not None else []))
+        if var is None:
+            todo[:0] = [(sid, v.strip('"')) for v in re.findall(r"(?m)^VARIANT SOURCE: .* --variant (\S+)$", out)]
+        if rc:
+            log("  %s %s: rewrite exit %d: %s" % (m, sid, rc, out.strip().splitlines()[-1][:200] if out.strip() else ""))
+        elif "COMPILE FAILED" in out:
+            # rewrite.py restores the TU and exits 0: the gate then passes the unchanged TU and commit_obj.sh finds nothing
+            # to commit (mig27: 20 modules logged as "nothing added to commit")
+            err = next((l.strip() for l in out.splitlines() if re.search(r"error C\d+", l)), "?")
+            why_none.setdefault("compile failed", []).append(sid)
+            log("  %s %s: rewrite COMPILE FAILED: %s" % (m, sid, re.sub(r"^.*\\src\\game\\", "", err)[:200]))
+        elif "no reconstructed functions" in out:
+            # markers only in a banner or after macro lines (s006d0940 DEFINE_BAKE), or the code is a vendored
+            # #include (s008894a0 EAWebKit): nothing rewrite.py can move
+            why_none.setdefault("no line-start markers", []).append(sid)
+    if not (markers_now(m) - before):
+        # nothing new reached the TU: commit_obj.sh would fail on an empty commit (mig27: 20 modules)
+        rollback(m, sids)
+        return False, "no new function written%s" % (
+            "".join("; %s: %s" % (k, " ".join(v)) for k, v in sorted(why_none.items())) or "; every listed function stayed in its slice"), set()
+    ok, why, bad = gate(m, log)
+    if ok:
+        # the gate just ran run_all and the asm audit on these files: commit_obj.sh need not repeat them
+        rc, out = run(["env", "LAND_GATED=1", "bash", "tools/migrate/commit_obj.sh", batch, m])
+        ok, why = rc == 0, (out.strip().splitlines() or [""])[-1][:200]
+    if not ok:
+        rollback(m, sids)
+    return ok, why, bad
 
 if __name__ == "__main__":
     main()
