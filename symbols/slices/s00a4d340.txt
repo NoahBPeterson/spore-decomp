@@ -1,5 +1,5 @@
 00a4d340 EA::Audio::Eapd::glist_add  # PDB name; Pd glist_add, tail-append
-00a4d3e0 EA::Audio::Eapd::glist_retext  # PDB candidate; find rtext then rtext_retext
+00a4d3e0 ?glist_retext@Eapd@Audio@EA@@YAXPAUt_glist@123@PAUt_text@123@@Z  # glist_retext migrated from s00a4d340 (verbatim, slice spelling)
 00a4d440 ?canvas_rminlet@Eapd@Audio@EA@@YAXPAUt_glist@123@PAUt_inlet@123@@Z  # canvas_rminlet migrated from s00a4d340 (verbatim, slice spelling)
 00a4d4d0 ?canvas_resortinlets@Eapd@Audio@EA@@YAXPAUt_glist@123@@Z  # canvas_resortinlets migrated from s00a4d340 (verbatim, slice spelling)
 00a4d610 ?canvas_rmoutlet@Eapd@Audio@EA@@YAXPAUt_glist@123@PAUt_outlet@123@@Z  # canvas_rmoutlet migrated from s00a4d340 (verbatim, slice spelling)

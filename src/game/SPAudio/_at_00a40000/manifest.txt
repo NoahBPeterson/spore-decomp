@@ -1,0 +1,12 @@
+# source  symbol  va  flags
+../src/game/SPAudio/_at_00a40000.cpp  ?FUN_00a416e0@@YGHPAHI@Z  00a416e0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/_at_00a40000.cpp  ??1cSound@Audio@SP@@UAE@XZ  00a41e10  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/_at_00a40000.cpp  ?ConstructcEmitterSndPlayer@@YAPAVcEmitterSndPlayer@Audio@SP@@XZ  00a420d0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/_at_00a40000.cpp  ?ConstructcEmitterEAPD@@YAPAVcEmitterEAPD@Audio@SP@@XZ  00a42130  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/_at_00a40000.cpp  ?binbuf_vectortext@Eapd@Audio@EA@@YAXHPBUt_atom@123@PADH@Z  00a46bc0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/_at_00a40000.cpp  ?pd_defaultbang@Eapd@Audio@EA@@YAXPAPAUt_class@123@@Z  00a47cb0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPAudio/_at_00a40000.cpp  ?pd_defaultlist@Eapd@Audio@EA@@YAXPAPAUt_class@123@Ut_symbol@123@HPAUt_atom_s00a4_78b0@123@@Z  00a47d70  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPAudio/_at_00a40000.cpp  ?clock_setftime@Eapd@Audio@EA@@YAXN@Z  00a492c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/_at_00a40000.cpp  ?conf_init@Eapd@Audio@EA@@YA_NXZ  00a495e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/_at_00a40000.cpp  ?FUN_00a49720@Eapd@Audio@EA@@YAXPAUt_inlet@123@Ut_symbol@123@@Z  00a49720  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/_at_00a40000.cpp  ?glist_retext@Eapd@Audio@EA@@YAXPAUt_glist@123@PAUt_text@123@@Z  00a4d3e0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include

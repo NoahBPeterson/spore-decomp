@@ -1,5 +1,5 @@
 00a49670 resizebytes  # (ptr, oldsize, newsize, tag): clamp both sizes to >=1, alloc via System::GetAllocator()->Alloc, zero-fill, grow/shrink copy split, Free(ptr)
-00a49720 inlet_setempty  # (t_inlet*, t_symbol): sets i_symempty (0x167589c companion setter; symbol by value)
+00a49720 ?FUN_00a49720@Eapd@Audio@EA@@YAXPAUt_inlet@123@Ut_symbol@123@@Z  # FUN_00a49720 migrated from s00a49670 (verbatim, slice spelling)
 00a49740 ?inlet_new@Eapd@Audio@EA@@YAPAUt_inlet@123@PAUt_object@123@PAPAUt_class@123@Ut_symbol@123@2@Z  # inlet_new migrated from s00a49670 (verbatim, slice spelling)
 00a497d0 ?inlet_bang@Eapd@Audio@EA@@YAXPAUt_inlet@123@@Z  # inlet_bang migrated from s00a49670 (verbatim, slice spelling)
 00a49810 ?inlet_float@Eapd@Audio@EA@@YAXPAUt_inlet@123@M@Z  # inlet_float migrated from s00a49670 (verbatim, slice spelling)
@@ -28,8 +28,8 @@
 00a4a100 ?FUN_00a4a100@Eapd@Audio@EA@@YAPAXPAUt_object@123@PAPAUt_outlet@123@H@Z  # FUN_00a4a100 migrated from s00a49670 (verbatim, slice spelling)
 00a4a130 ?FUN_00a4a130@Eapd@Audio@EA@@YAPAUt_outconnect@123@PAU4123@PAPAUt_object@123@PAPAUt_inlet@123@PAH@Z  # FUN_00a4a130 migrated from s00a49670 (verbatim, slice spelling)
 00a4a1c0 ?pd_checkobject@Eapd@Audio@EA@@YAPAUt_object@123@PAPAUt_class@123@@Z  # pd_checkobject migrated from s00a49670 (verbatim, slice spelling)
-00a4a1e0 obj_moveinletfirst  # move inlet i to the head of x->te_inlet
-00a4a220 obj_moveoutletfirst  # move outlet o to the head of x->te_outlet
+00a4a1e0 ?FUN_00a4a1e0@Eapd@Audio@EA@@YAXPAUt_object@123@PAUt_inlet@123@@Z  # FUN_00a4a1e0 migrated from s00a49670 (verbatim, slice spelling)
+00a4a220 ?FUN_00a4a220@Eapd@Audio@EA@@YAXPAUt_object@123@PAUt_outlet@123@@Z  # FUN_00a4a220 migrated from s00a49670 (verbatim, slice spelling)
 00a4a260 glist_doupdatewindowlist  # (glist, buf): if gl_havewindow and strlen(buf)+strlen(gl_name)+100 <= 1024 sprintf "{%s .x%lx} " and strcat; recurse into gl_list members whose g_pd == gpCanvasClass
 00a4a320 canvas_updatewindowlist  # buf = "pdtk_updatewindowlist {", walk gpCanvasList via gl_nextwin, append "}\n", sys_gui(buf)
 00a4a3c0 canvas_removewindow  # remove x from gpCanvasList (head or gl_nextwin scan); arg2 in edx (LTCG register ABI)

@@ -1,0 +1,3 @@
+00a41e10 ??1cSound@Audio@SP@@UAE@XZ  # cSound::~cSound migrated from s00a41c40 (verbatim, slice spelling)
+00a420d0 ?ConstructcEmitterSndPlayer@@YAPAVcEmitterSndPlayer@Audio@SP@@XZ  # ConstructcEmitterSndPlayer migrated from s00a41c40 (verbatim, slice spelling)
+00a42130 ?ConstructcEmitterEAPD@@YAPAVcEmitterEAPD@Audio@SP@@XZ  # ConstructcEmitterEAPD migrated from s00a41c40 (verbatim, slice spelling)

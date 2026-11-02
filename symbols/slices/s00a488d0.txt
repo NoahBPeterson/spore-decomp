@@ -24,8 +24,8 @@
 00a49220  EA::Audio::Eapd::clock_gettimesince  # (s_time-systime)*0x1454428
 00a49240  EA::Audio::Eapd::clock_getlogicaltimeafter  # s_time + arg (via 0x1454428 scaling)
 00a49260  EA::Audio::Eapd::clock_free  # unlink + freebytes(c,0x18)
-00a492c0  EA::Audio::Eapd::clock_setftime  # s_time=s_realtime=arg
-00a492e0  EA::Audio::Eapd::sched_tick  # advance s_systime/s_time and drain due clocks (sys_lock + method(owner))
+00a492c0 ?clock_setftime@Eapd@Audio@EA@@YAXN@Z  # clock_setftime migrated from s00a488d0 (verbatim, slice spelling)
+00a492e0 ?sched_tick@Eapd@Audio@EA@@YAXM@Z  # sched_tick migrated from s00a488d0 (verbatim, slice spelling)
 00a49390  EA::Audio::Eapd::pd_new  # getbytes(c_size); g_pd=c; if c_patchable init save/gop/anything fields
 00a493d0  EA::Audio::Eapd::pd_free  # freemethod; drain save/gop/binbuf when patchable; freebytes
 00a49450  EA::Audio::Eapd::sys_register_loader  # register a loader node against s_stack key globals
@@ -35,6 +35,6 @@
 00a49570  EA::Audio::Eapd::outlet_float  # dispatch float method
 00a49590  EA::Audio::Eapd::pd_symbol  # dispatch symbol method
 00a495b0  EA::Audio::Eapd::pd_list  # dispatch list method with the "list" t_symbol
-00a495e0  EA::Audio::Eapd::conf_init  # size-class stub
+00a495e0 ?conf_init@Eapd@Audio@EA@@YA_NXZ  # conf_init migrated from s00a488d0 (verbatim, slice spelling)
 00a49610  EA::Audio::Eapd::getbytes  # pdinstance()->alloc(n,tag) then memfill
 00a49650  EA::Audio::Eapd::freebytes  # pdinstance()->freemem(p)

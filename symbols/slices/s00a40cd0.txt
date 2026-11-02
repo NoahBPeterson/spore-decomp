@@ -5,3 +5,7 @@
 00a40cd0 ?trixie_use@@YAXHHH@Z  # trixie_use migrated from s00a40cd0 (verbatim, slice spelling)
 00a40dd0 ?trixie_new@@YAHHHHH@Z  # trixie_new migrated from s00a40cd0 (verbatim, slice spelling)
 00a40e80 ?SP_Audio_Trixie_Register@@YAHXZ  # SP_Audio_Trixie_Register migrated from s00a40cd0 (verbatim, slice spelling)
+00a416e0 ?FUN_00a416e0@@YGHPAHI@Z  # FUN_00a416e0 migrated from s00a40cd0 (verbatim, slice spelling)
+00a41710 ?Dtor@AddRefObj@@QAEXXZ  # AddRefObj::Dtor migrated from s00a40cd0 (verbatim, slice spelling)
+00a417b0 ?Run@FactoryObj@@QAEDHPAHHH@Z  # FactoryObj::Run migrated from s00a40cd0 (verbatim, slice spelling)
+00a418b0 ?FUN_00a418b0@@YGEHHHH@Z  # FUN_00a418b0 migrated from s00a40cd0 (verbatim, slice spelling)

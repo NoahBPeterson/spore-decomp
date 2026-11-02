@@ -1,7 +1,5 @@
-; slice s00a469b0 = 0x00a469b0..0xa477a0 - exact decorated names for the difftest resolver
-; (manifest rows are byte-exact; the rest are the nonmatching.txt entries)
 00a469b0 ?atom_string@Eapd@Audio@EA@@YAXPBUt_atom@123@PADH@Z  # atom_string
-00a46bc0 ?binbuf_vectortext@Eapd@Audio@EA@@YAXHPBUt_atom@123@PADH@Z  # byte-exact
+00a46bc0 ?binbuf_vectortext@Eapd@Audio@EA@@YAXHPBUt_atom@123@PADH@Z  # binbuf_vectortext migrated from s00a469b0 (verbatim, slice spelling)
 00a46c20 ?binbuf_new@Eapd@Audio@EA@@YAPAUt_binbuf@123@XZ  # byte-exact
 00a46c50 ?binbuf_free@Eapd@Audio@EA@@YAXPAUt_binbuf@123@@Z  # byte-exact
 00a46c80 ?binbuf_clear@Eapd@Audio@EA@@YAXPAUt_binbuf@123@@Z  # byte-exact
@@ -14,3 +12,4 @@
 00a47570 ?binbuf_addtext@Eapd@Audio@EA@@YAXPAUt_binbuf@123@HPBUt_atom@123@@Z  # binbuf_addtext
 00a47780 ?binbuf_gettextbuf@Eapd@Audio@EA@@YAXPAUt_binbuf@123@PADH@Z  # byte-exact
 00a477a0 ?binbuf_realizedollsym@Eapd@Audio@EA@@YAHUt_symbol@123@HPBUt_atom@123@HPAU4123@@Z  # binbuf_realizedollsym
+; (manifest rows are byte-exact; the rest are the nonmatching.txt entries)
