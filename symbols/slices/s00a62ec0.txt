@@ -10,7 +10,7 @@
 00a630c0 ?x_input_setup@Eapd@Audio@EA@@YA_NXZ  # EA::Audio::Eapd::x_input_setup migrated from s00a62ec0
 00a632e0  EA::Audio::Eapd::instance_new
 00a63310 ?busy_float@Eapd@Audio@EA@@YAXPAUXThisInstance@123@M@Z  # busy_float migrated from s00a62ec0 (verbatim, slice spelling)
-00a63350  EA::Audio::Eapd::x_thisinstance_setup
+00a63350 ?x_thisinstance_setup@Eapd@Audio@EA@@YA_NXZ  # EA::Audio::Eapd::x_thisinstance_setup migrated from s00a62ec0
 00a633e0 ?StoreFlag@XThisInstance@Eapd@Audio@EA@@QAE_NE@Z  # XThisInstance::StoreFlag migrated from s00a62ec0 (verbatim, slice spelling)
 00a634a0 ?InputParseSymbols@Eapd@Audio@EA@@YI_NHPAPADPAD0PAUPgSymbol@123@PAH3@Z  # InputParseSymbols migrated from s00a62ec0 (verbatim, slice spelling)
 00a635d0 ?GetGroupSymbol@Eapd@Audio@EA@@YAPAUPgSymbol@123@PAU4123@@Z  # GetGroupSymbol migrated from s00a62ec0 (verbatim, slice spelling)
