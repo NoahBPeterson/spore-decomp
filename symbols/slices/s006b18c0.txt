@@ -1,8 +1,8 @@
 006909b0 ?GetStatus@cJob@SP@@QBE?AW4tJobStatus@2@XZ  # SP::cJob::GetStatus (callee of s006b18c0, named from the dev publics; slice address comment)
-006b18c0 CacheMgr::Notify  # LRU cache event dispatch: key build, map find, touch / add-from-event / add-from-stream and the 64-bit byte counter
-006b19e0 CacheMgr::ReleaseArea  # map erase (RBTreeIncrement/Erase + EAFree), intrusive unlink, owned-buffer free, mb15 = 1
-006b1ab0 CacheMgr::Destructor  # Shutdown, sub-destruct, job/stream release, list free, map nuke, owner refcount release, base vtable reset
-006b1b80 CacheMgr::Update  # event pump, byte budget from the App property list, eviction loop, tracer scope and job restart
+006b18c0 ?Notify@CacheMgr@@QAEXPAUCacheEvent@@@Z  # CacheMgr::Notify migrated from s006b18c0 (verbatim, slice spelling)
+006b19e0 ?ReleaseArea@CacheMgr@@QAEXPAUListNode@@@Z  # CacheMgr::ReleaseArea migrated from s006b18c0 (verbatim, slice spelling)
+006b1ab0 ?Destructor@CacheMgr@@QAEXXZ  # CacheMgr::Destructor migrated from s006b18c0 (verbatim, slice spelling)
+006b1b80 ?Update@CacheMgr@@QAEXXZ  # CacheMgr::Update migrated from s006b18c0 (verbatim, slice spelling)
 006b1d40 ?SetSaveAreaFlag@@YAXE@Z  # SetSaveAreaFlag migrated from s006b18c0 (verbatim, slice spelling)
 006b1d50 ?SP_SaveResource@@YAXPAXID@Z  # SP_SaveResource migrated from s006b18c0 (verbatim, slice spelling)
 006b1dc0 ?Ctor@RefPair@@QAEPAU1@PAURefA@@PAURefB@@@Z  # RefPair::Ctor migrated from s006b18c0 (verbatim, slice spelling)

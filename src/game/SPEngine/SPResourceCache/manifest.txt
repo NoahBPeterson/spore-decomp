@@ -1,4 +1,11 @@
 # source  symbol  va  flags
+../src/game/SPEngine/SPResourceCache.cpp  ?FUN_006af5c0@@YGXPAX@Z  006af5c0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/SPResourceCache.cpp  ?FUN_006af940@@YI_NH@Z  006af940  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/SPResourceCache.cpp  ?FUN_006afae0@@YIXPAX@Z  006afae0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/SPResourceCache.cpp  ?f@Cfb20@@QAE_NPAX00@Z  006afb20  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/SPResourceCache.cpp  ?FUN_006afb60@@YIXPAX@Z  006afb60  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/SPResourceCache.cpp  ?f@Cfb860@@QAEDPAH@Z  006afbe0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/SPResourceCache.cpp  ?FUN_006b05d0@@YG_NPAX@Z  006b05d0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPEngine/SPResourceCache.cpp  ?A@Cache@@QAEXPAUKey12@@H@Z  006b0ce0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/SPEngine/SPResourceCache.cpp  ?B@Cache@@QAEXPAUKey12@@@Z  006b0d20  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/SPEngine/SPResourceCache.cpp  ?C@Cache@@QAEXPAUKey12@@@Z  006b0d60  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include

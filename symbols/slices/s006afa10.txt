@@ -1,9 +1,25 @@
-006afae0 (async request teardown: flush + release)  # dc
-006afb20 (async request completion dispatch)  # dc
-006afb60 (async request flush: two vtable calls)  # dc
-006afbe0 (record-adapter accept filter)  # dc
-006afa90 (resource Async QueryInterface-style cast)  # dc
-006afe40 (intrusive doubly-linked-list splice)  # dc
-006b0530 (node clone/create)  # dc
-006b08a0 (LRU cache node alloc)  # dc
-006afe80 (async job submit)  # dc
+006afa10 ?FUN_006afa10@@YIXPAX@Z  # FUN_006afa10 migrated from s006afa10 (verbatim, slice spelling)
+006afa90 ?Query@CAfa90@@QAEPAXH@Z  # CAfa90::Query migrated from s006afa10 (verbatim, slice spelling)
+006afae0 ?FUN_006afae0@@YIXPAX@Z  # FUN_006afae0 migrated from s006afa10 (verbatim, slice spelling)
+006afb20 ?f@Cfb20@@QAE_NPAX00@Z  # Cfb20::f migrated from s006afa10 (verbatim, slice spelling)
+006afb60 ?FUN_006afb60@@YIXPAX@Z  # FUN_006afb60 migrated from s006afa10 (verbatim, slice spelling)
+006afbe0 ?f@Cfb860@@QAEDPAH@Z  # Cfb860::f migrated from s006afa10 (verbatim, slice spelling)
+006afc40 ?f@C_6afc40@@QAE_JH_J@Z  # C_6afc40::f migrated from s006afa10 (verbatim, slice spelling)
+006afcb0 ?FUN_006afcb0@@YIXPA_J@Z  # FUN_006afcb0 migrated from s006afa10 (verbatim, slice spelling)
+006afd10 ?f@C_6afd10@@QAEX_J@Z  # C_6afd10::f migrated from s006afa10 (verbatim, slice spelling)
+006afdd0 ?FUN_006afdd0@@YIXPAD@Z  # FUN_006afdd0 migrated from s006afa10 (verbatim, slice spelling)
+006afe40 ?f@CAfe40@@QAEXPAULN@@@Z  # CAfe40::f migrated from s006afa10 (verbatim, slice spelling)
+006afe80 ?FUN_006afe80@@YAXXZ  # FUN_006afe80 migrated from s006afa10 (verbatim, slice spelling)
+006aff70 ?f@C_6aff70@@QAEPAXPAX0@Z  # C_6aff70::f migrated from s006afa10 (verbatim, slice spelling)
+006b0020 ?FUN_006b0020@@YI_NPAD@Z  # FUN_006b0020 migrated from s006afa10 (verbatim, slice spelling)
+006b00a0 ?FUN_006b00a0@@YAPAXHH@Z  # FUN_006b00a0 migrated from s006afa10 (verbatim, slice spelling)
+006b0130 ?f@C_6b0130@@QAE_NHPAI0HHH@Z  # C_6b0130::f migrated from s006afa10 (verbatim, slice spelling)
+006b02b0 ?FUN_006b02b0@@YIXPAD@Z  # FUN_006b02b0 migrated from s006afa10 (verbatim, slice spelling)
+006b0300 ?f@C_6b0300@@QAE_NPAX@Z  # C_6b0300::f migrated from s006afa10 (verbatim, slice spelling)
+006b04a0 ?f@C_6b04a0@@QAEPAXPAPAXPADPAID@Z  # C_6b04a0::f migrated from s006afa10 (verbatim, slice spelling)
+006b0530 ?FUN_006b0530@@YGPAXPAX@Z  # FUN_006b0530 migrated from s006afa10 (verbatim, slice spelling)
+006b05d0 ?FUN_006b05d0@@YG_NPAX@Z  # FUN_006b05d0 migrated from s006afa10 (verbatim, slice spelling)
+006b0670 ?f@C_6b0670@@QAEPAXPAXPAIH@Z  # C_6b0670::f migrated from s006afa10 (verbatim, slice spelling)
+006b0720 ?f@C_6b0720@@QAEPAXPAX0@Z  # C_6b0720::f migrated from s006afa10 (verbatim, slice spelling)
+006b08a0 ?FUN_006b08a0@@YGPAXPAX0@Z  # FUN_006b08a0 migrated from s006afa10 (verbatim, slice spelling)
+006b0900 ?FUN_006b0900@@YIPAXPAD@Z  # FUN_006b0900 migrated from s006afa10 (verbatim, slice spelling)
