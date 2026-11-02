@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+01396110 51 init_15b4568: complete; 5 records at 0x15b4568..0x15b4658 (names 0x1494424/414/404/3f8/3f0, hashes 0x374176b/796/811/81f/82d, sizes 0/4/0x10/0x14/0x20); same .rdata template + copy loop shape (90 vs 514 B); equiv FAIL (5/5 inputs, uninitialised +0x0c..+0x14 dwords only) flags: /O2 /MD /Gy /EHsc /TP
