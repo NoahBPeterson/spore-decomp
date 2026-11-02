@@ -15,3 +15,4 @@
 008e4b10 ?AddSubElement@Element@@QAEEPBG@Z  # Element::AddSubElement migrated from s008e4310 (verbatim, slice spelling)
 008e5210 ?HandleEvent@Form@@QAEXPAXH@Z  # Form::HandleEvent migrated from s008e4310 (verbatim, slice spelling)
 008e52b0 ?Init@Node@@QAEPAXPAXH@Z  # Node::Init migrated from s008e4310 (verbatim, slice spelling)
+008e52f0 ?AsElement@Node@@QAEPAUElement@@XZ  # Node::AsElement migrated from s008e4310 (verbatim, slice spelling)

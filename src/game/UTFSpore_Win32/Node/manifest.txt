@@ -1,0 +1,2 @@
+# source  symbol  va  flags
+../src/game/UTFSpore_Win32/Node.cpp  ?AsElement@Node@@QAEPAUElement@@XZ  008e52f0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
