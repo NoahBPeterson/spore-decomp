@@ -229,11 +229,24 @@ struct cPlanetSearch {                                      // pick request buil
     cPlanetSearch();                                        // 0x00ba7bd0
     ~cPlanetSearch();                                       // 0x00ba8220
 };
+struct cTerraformingManager_s00c4_a850 {
+    ResourceKey* GetKey(ResourceKey* pOut, int32_t nLevel, int32_t nIndex, void* pPlanet);   // 0x00bbc950
+    ResourceKey* GetKeyC(ResourceKey* pOut, int32_t nLevel, void* pPlanet);                  // 0x00bbca30
+    int32_t      GetLevel();                                // 0x00bbce40
+};
+cTerraformingManager_s00c4_a850*  __stdcall TerraformingManager();                 // 0x00b3d430
+cTerraformingManager_s00c4_a850*  __stdcall TerraformingManager(void* pPlanet);    // 0x00b3d430
+extern ResourceKey kUndefinedTerraformKey;                  // 0x0168f5f4
 extern ResourceKey kDeliveryTargetKey;                      // 0x0168f784
+static bool IsUndefinedKey(const ResourceKey& rKey)
+{
+    return rKey.mInstanceID == kUndefinedTerraformKey.mInstanceID &&
+           rKey.mGroupID == kUndefinedTerraformKey.mGroupID &&
+           rKey.mTypeID == kUndefinedTerraformKey.mTypeID;
+}
 // ---- items of slice s00c4a850 end
 
 // unnamed retail callees and globals that name local stubs (address in the comment)
-extern ResourceKey kDeliveryTargetKey;                      // 0x0168f784
 
 // ---- items of slice s00c4bc00 begin (TODO(rewrite): local stubs, replace by canonical classes)
 #pragma warning(disable : 4100)
@@ -499,6 +512,24 @@ class cSPMissionBiosphere_s00c4_cb90 : public cSPMission_s00c4_cb90 {
 };
 // ---- items of slice s00c4cb90 end
 
+// @ 0x00c4b8f0
+int32_t __cdecl GetTerraformableLevel(void* pPlanet)
+{
+    cTerraformingManager_s00c4_a850* pManager = TerraformingManager();
+    ResourceKey keyA;
+    ResourceKey keyB;
+    ResourceKey keyC;
+    for (int32_t nLevel = 3; nLevel > 0; --nLevel) {
+        if (!IsUndefinedKey(*pManager->GetKey(&keyA, nLevel, 0, pPlanet)))
+            return nLevel;
+        if (!IsUndefinedKey(*pManager->GetKey(&keyB, nLevel, 1, pPlanet)))
+            return nLevel;
+        if (!IsUndefinedKey(*pManager->GetKeyC(&keyC, nLevel, pPlanet)))
+            return nLevel;
+    }
+    return 0;
+}
+
 // @ 0x00c4baa0
 bool cSPMissionMultiDelivery::InitWrapper()
 {
@@ -531,6 +562,15 @@ int32_t cSPMissionMultiDelivery::GetCountB()
         return mField204;
     return 0;
 }
+
+// @ 0x00c4bc00
+namespace SP {
+void __fastcall FUN_00c4bc00(cSPMissionBase_s00c4_bc00* this_, int unused, void* pParam)
+{
+    (void)this_;
+    (void)pParam;
+}
+}  // namespace SP
 
 // @ 0x00c4bca0
 namespace SP {
@@ -566,6 +606,22 @@ void __fastcall FUN_00c4bd30(cSPMissionBase_s00c4_bc00* this_, int unused, tUSho
         return;
     }
     this_->FUN_00c48db0(pVector);
+}
+}  // namespace SP
+
+// @ 0x00c4bea0
+namespace SP {
+void __fastcall FUN_00c4bea0(cSPMissionBase_s00c4_bc00* this_, int unused)
+{
+    (void)this_;
+}
+}  // namespace SP
+
+// @ 0x00c4bf10
+namespace SP {
+void __fastcall FUN_00c4bf10(cSPMissionBase_s00c4_bc00* this_, int unused)
+{
+    (void)this_;
 }
 }  // namespace SP
 

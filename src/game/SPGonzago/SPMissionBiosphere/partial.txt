@@ -1,1 +1,2 @@
 # va  diff-bytes  reason
+00c4b8f0  127  GetTerraformableLevel: same 3..1 level loop, the two indexed key lookups (0x00bbc950), the plain key lookup (0x00bbca30) and the three-field comparison against the undefined-terraform key, but retail keeps the not-found result in ebp and emits the loop-alignment nop we do not (size 195 vs 207). flags /O2 /MD /Gy /TP /arch:SSE /fp:fast, equiv PASS (352 valid inputs, 90.7% coverage)
