@@ -1,0 +1,20 @@
+# va  diff-bytes  reason
+00fcc260 119 FindNode(key,cmp): mHead walk; cmp slot0 thiscall, or first-byte compare over mElementSize when cmp is null; regalloc differs. flags /O2 /MD /Gy /EHsc /TP /arch:SSE; difftest PASS (288 valid, 100.0% coverage)
+00fcc330 8 IsMember(node): scans head chain comparing pointers, returns found flag; tail/return-block layout differs (cmp operand order + alignment padding). flags /O2 /MD /Gy /EHsc /TP /arch:SSE; difftest PASS (336 valid, 95.8% coverage)
+00fcc370 246 Append(src,ctx): GetCount/GetIterator + forward node chain; SetData(value,size,ctx); frame/regalloc differ. flags /O2 /MD /Gy /EHsc /TP /arch:SSE; difftest WEAK (151 valid, 8.9% coverage)
+00fcc470 268 Prepend(src,ctx): prepends src chain before mHead; SetData(value,size,ctx); loop shape/regalloc differ. flags /O2 /MD /Gy /EHsc /TP /arch:SSE; difftest WEAK (218 valid, 22.7% coverage)
+00fcc5c0 246 InsertBefore(src,at,ctx): forward chain + GetPrev splice; frame/regalloc differ. flags /O2 /MD /Gy /EHsc /TP /arch:SSE; difftest UNSUPPORTED (0/400 valid, fake-arity/read discards)
+00fcc700 222 InsertAfter(src,at,ctx): forward chain + splice after at; mTail=last; frame/regalloc differ. flags /O2 /MD /Gy /EHsc /TP /arch:SSE; difftest UNSUPPORTED (0/400 valid)
+00fcc810 261 InsertAt(src,idx): alloc nodes, splice at idx via IList vtable slot +0x30; frame/regalloc differ. flags /O2 /MD /Gy /EHsc /TP /arch:SSE; difftest WEAK (302 valid, 7.4% coverage)
+00fcc960 306 Merge(src,cmp,ctx): clone src chain then merge splice with cmp slot0; regalloc differs. flags /O2 /MD /Gy /EHsc /TP /arch:SSE; difftest UNSUPPORTED (0/400 valid)
+00fccae0 108 Remove(node,cb): GetPrev unlink + optional data callback + allocator Free; regalloc differs. flags /O2 /MD /Gy /EHsc /TP /arch:SSE; difftest WEAK (332 valid, 35.2% coverage)
+00fccb80 151 RemoveIf(key,cmp,cb): head/prev unlink + optional callback; branch layout differs. flags /O2 /MD /Gy /EHsc /TP /arch:SSE; difftest WEAK (272 valid, 15.1% coverage)
+00fccc40 95 Clear(cb): walk + free nodes with optional callback; branch layout differs. flags /O2 /MD /Gy /EHsc /TP /arch:SSE; difftest WEAK (264 valid, 28.3% coverage)
+00fccd00 152 Permute(idx): temp index array + relink; register allocation/branch layout differ. flags /O2 /MD /Gy /EHsc /TP /arch:SSE; difftest WEAK (276 valid, 12.9% coverage)
+00fcce30 36 InvokeKey(a,b): triple vtable dispatch through *b, *a and mHead; regalloc differs. flags /O2 /MD /Gy /EHsc /TP /arch:SSE; difftest UNSUPPORTED (0/400 valid)
+00fcce70 127 Sort(sorter,cmp): temp node array + sorter slot0(temp,len,4,&adapter); regalloc differs. flags /O2 /MD /Gy /EHsc /TP /arch:SSE; difftest WEAK (281 valid, 11.2% coverage)
+00fccf40 97 LoadNewNode(a,b): alloc + set vtable/pad + SetData(a,size,b); regalloc differs. flags /O2 /MD /Gy /EHsc /TP /arch:SSE; difftest UNSUPPORTED (0/400 valid)
+00fcd170 48 InsertAtOne(a,idx,b): LoadNewNode + splice at idx; regalloc differs. flags /O2 /MD /Gy /EHsc /TP /arch:SSE; difftest WEAK (288 valid, 13.2% coverage)
+00fcd210 219 rw::SList::InsertSorted; template-instantiated list insert (LoadNewNode helper, vtbl-based splice). Not byte-exact: node-splice register allocation differs. flags /O2 /MD /Gy /EHsc /TP. difftest: UNSUPPORTED original reads ecx at entry (thiscall member); structural match.
+00fcd320 65 compare+insert trampoline; vtbl[0] getter then memcpy/compare. Not byte-exact: register allocation. flags /O2 /MD /Gy /EHsc /TP. difftest: UNSUPPORTED unresolved ref ?Get@Vp6Tramp@@QAEPAXXZ (getter extern, same call shape as retail).
+00fcd370 65 compare+insert trampoline (src/dst swapped vs 00fcd320). Not byte-exact: register allocation. flags /O2 /MD /Gy /EHsc /TP. difftest: UNSUPPORTED unresolved ref ?Get@Vp6Tramp@@QAEPAXXZ.

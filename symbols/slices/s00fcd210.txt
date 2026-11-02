@@ -1,3 +1,5 @@
+00fcd320 ?Method320@Vp6Tramp@@QAEHHHPAH@Z  # Vp6Tramp::Method320 migrated from s00fcd210 (verbatim, slice spelling)
+00fcd370 ?Method370@Vp6Tramp@@QAEHHHPAH@Z  # Vp6Tramp::Method370 migrated from s00fcd210 (verbatim, slice spelling)
 00fcd3c0 ?Ctor3c0@Vp6Ext@@QAEXXZ  # Vp6Ext::Ctor3c0 migrated from s00fcd210 (verbatim, slice spelling)
 00fcd3e0 ?Ctor3E0@Vp6Ext@@QAEXHHH@Z  # Vp6Ext::Ctor3E0 migrated from s00fcd210 (verbatim, slice spelling)
 00fcd430 ?Method430@Vp6Stream43@@QAEXXZ  # Vp6Stream43::Method430 migrated from s00fcd210 (verbatim, slice spelling)

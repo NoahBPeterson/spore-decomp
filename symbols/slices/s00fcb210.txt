@@ -20,3 +20,4 @@
 00fcbfd0 ?SetVideoScaleY@MovieRenderer_s00fc_b210@movie@rw@@QAEXM@Z  # MovieRenderer_s00fc_b210::SetVideoScaleY migrated from s00fcb210 (verbatim, slice spelling)
 00fcc010 ?SetRenderCallback@MovieRenderer_s00fc_b210@movie@rw@@QAEXPAX0@Z  # MovieRenderer_s00fc_b210::SetRenderCallback migrated from s00fcb210 (verbatim, slice spelling)
 00fcc060 ?Stop@MovieRenderer_s00fc_b210@movie@rw@@QAEXXZ  # MovieRenderer_s00fc_b210::Stop migrated from s00fcb210 (verbatim, slice spelling)
+00fcc220 ?GetNode@SList@rw@@QBEPAXI@Z  # SList::GetNode migrated from s00fcb210 (verbatim, slice spelling)

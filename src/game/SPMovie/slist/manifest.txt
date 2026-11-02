@@ -1,0 +1,10 @@
+# source  symbol  va  flags
+../src/game/SPMovie/slist.cpp  ?GetNode@SList@rw@@QBEPAXI@Z  00fcc220  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPMovie/slist.cpp  ?GetPrev@SList_s00fc_c260@rw@@QAEPAVSNode@2@PAV32@@Z  00fcc2e0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPMovie/slist.cpp  ?Reverse@SList_s00fc_c260@rw@@QAEHXZ  00fccca0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPMovie/slist.cpp  ?Dtor@SList_s00fc_c260@rw@@QAEPAXI@Z  00fccde0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPMovie/slist.cpp  ?ScalarDeletingDtor@SList_s00fc_c260@rw@@QAEPAXI@Z  00fccfb0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPMovie/slist.cpp  ?AppendOne@SList_s00fc_c260@rw@@QAEHHH@Z  00fccfe0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPMovie/slist.cpp  ?PrependOne@SList_s00fc_c260@rw@@QAEHHH@Z  00fcd030  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPMovie/slist.cpp  ?InsertBeforeOne@SList_s00fc_c260@rw@@QAEHHPAVSNode@2@PAX@Z  00fcd080  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPMovie/slist.cpp  ?InsertAfterOne@SList_s00fc_c260@rw@@QAEHHPAVSNode@2@PAX@Z  00fcd120  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
