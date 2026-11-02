@@ -1,2 +1,4 @@
 # source  symbol  va  flags
+../src/game/SPGonzago/InteractionTarget.cpp  ?ctor@cInteractionTarget@@QAEPAU1@XZ  00ac03d0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/InteractionTarget.cpp  ?FUN_00ac0520@cInteractionTarget@@QAEXXZ  00ac0520  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/InteractionTarget.cpp  ?FUN_00ac0540@cInteractionTarget@@QAEPAU1@D@Z  00ac0540  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include

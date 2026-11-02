@@ -1,1 +1,3 @@
 # va  diff-bytes  reason
+00ac0340 132 /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast incomplete: difftest FAIL (5/5 esp); vtable-slot erase path pops a different stack amount than the original, size 123 vs 136 flags: /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+00ac03f0 95 /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast incomplete: difftest FAIL (5/5 execution); slot-vector iterator advance left as an unresolved SlotIter_inc stub, size 107 vs 95 flags: /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
