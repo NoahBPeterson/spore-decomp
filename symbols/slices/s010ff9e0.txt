@@ -1,1 +1,1 @@
-010ff9e0 hkPredGskAgent3::process  # havok_names.txt mangled name
+010ff9e0 ?process@@YAPAXABUhkAgent3ProcessInput_s010f_f9e0@@PAUhkAgentEntry_s010f_f9e0@@PAXPAVhkVector4_s010f_f9e0@@AAUhkProcessCollisionOutput_s010f_f9e0@@@Z  # process migrated from s010ff9e0 (verbatim, slice spelling)

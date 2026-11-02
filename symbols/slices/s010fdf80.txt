@@ -1,1 +1,1 @@
-010fdf80 ?process@hkPredGskCylinderAgent3@@  # exact mangled name from index; __cdecl, void* ret, 5959 bytes
+010fdf80 ?process@@YAPAXABUhkAgent3ProcessInput_s010f_df80@@PAUhkAgentEntry_s010f_df80@@PAXPAVhkVector4_s010f_df80@@AAUhkProcessCollisionOutput_s010f_df80@@@Z  # process migrated from s010fdf80 (verbatim, slice spelling)

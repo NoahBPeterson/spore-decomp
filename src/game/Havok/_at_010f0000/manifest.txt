@@ -1,0 +1,4 @@
+# source  symbol  va  flags
+../src/game/Havok/_at_010f0000.cpp  ??4hkSolverInfo_s010e_f580@@QAEAAU0@ABU0@@Z  010f0260  /O2 /MD /Gy /TP /fp:fast /Isrc/game/include
+../src/game/Havok/_at_010f0000.cpp  _hkBoxBoxAgent3_removePoint  010fdae0  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/Havok/_at_010f0000.cpp  _hkBoxBoxAgent3_create  010fdb50  /O2 /MD /Gy /TP /Isrc/game/include

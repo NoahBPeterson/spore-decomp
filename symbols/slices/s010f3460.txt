@@ -1,6 +1,6 @@
-010f3460  hkContinuousSimulation::reintegrateAndRecollideEntities  # PDB mangled
-010f3600  hkContinuousSimulation::collide  # PDB mangled
-010f3a40  hkContinuousSimulation::simulateToi  # PDB mangled
-010f1df0 hkContinuousSimulation::collideEntitiesBroadPhaseContinuous  # name inferred: LtBroadPhase/InitMem/StCalcAabbs timers, (entities,n,world,flag)
 010f0b00 hkContinuousSimulation::addToiEvent  # name inferred: appends a 0x40-byte hkToiEvent built from hkProcessCollisionOutput + agent entry to m_toiEvents (+0x18)
+010f1df0 hkContinuousSimulation::collideEntitiesBroadPhaseContinuous  # name inferred: LtBroadPhase/InitMem/StCalcAabbs timers, (entities,n,world,flag)
+010f3460 ?reintegrateAndRecollideEntities@hkContinuousSimulation_s010f_3460@@UAEXPAPAVhkEntity_s010f_3460@@HPAVhkWorld_s010f_3460@@@Z  # hkContinuousSimulation_s010f_3460::reintegrateAndRecollideEntities migrated from s010f3460 (verbatim, slice spelling)
+010f3600 ?collide@hkContinuousSimulation_s010f_3460@@QAEXPAVhkWorld_s010f_3460@@ABVhkStepInfo_s010f_3460@@@Z  # hkContinuousSimulation_s010f_3460::collide migrated from s010f3460 (verbatim, slice spelling)
+010f3a40 ?simulateToi@hkContinuousSimulation_s010f_3460@@QAEXPAVhkWorld_s010f_3460@@AAUhkToiEvent_s010f_3460@@M@Z  # hkContinuousSimulation_s010f_3460::simulateToi migrated from s010f3460 (verbatim, slice spelling)
 010fc180 hkAgentNnMachine_processAgent  # name inferred: (hkAgentNnEntry*, hkProcessCollisionInput&, hkProcessCollisionOutput&) cdecl, called per collision entry
