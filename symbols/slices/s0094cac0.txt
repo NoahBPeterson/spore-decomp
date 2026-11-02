@@ -1,0 +1,19 @@
+0094d300 ?Destroy2@Socket@@QAEXXZ  # Socket::Destroy2 migrated from s0094cac0 (verbatim, slice spelling)
+0094d360 ?QueryInterface@Socket@@QAEIH@Z  # Socket::QueryInterface migrated from s0094cac0 (verbatim, slice spelling)
+0094d410 ?Bind@Socket@@QAE_NPBX@Z  # Socket::Bind migrated from s0094cac0 (verbatim, slice spelling)
+0094d470 ?Fn0094d470@Socket@@QAE_NH@Z  # Socket::Fn0094d470 migrated from s0094cac0 (verbatim, slice spelling)
+0094d4b0 ?Fn0094d4b0@Socket@@QAE_NXZ  # Socket::Fn0094d4b0 migrated from s0094cac0 (verbatim, slice spelling)
+0094d500 ?SetStyle@Socket@Sockets@EA@@UAE_NHHH@Z  # EA::Sockets::Socket::SetStyle migrated from s0094cac0
+0094d520 ?SetAddressRaw@Socket@@QAE_NPBX@Z  # Socket::SetAddressRaw migrated from s0094cac0 (verbatim, slice spelling)
+0094d550 ?GetPeerNameRaw@Socket@@QAE_NPAXPAI@Z  # Socket::GetPeerNameRaw migrated from s0094cac0 (verbatim, slice spelling)
+0094d5a0 ?SetPeerAddressRaw@Socket@@QAE_NPBX@Z  # Socket::SetPeerAddressRaw migrated from s0094cac0 (verbatim, slice spelling)
+0094d5c0 ?GetWaitingDataSize@Socket@Sockets@EA@@UAEHI@Z  # EA::Sockets::Socket::GetWaitingDataSize migrated from s0094cac0
+0094d690 ?IsWaitingDataAvailable@Socket@Sockets@EA@@UAE_NI@Z  # EA::Sockets::Socket::IsWaitingDataAvailable migrated from s0094cac0
+0094d730 ?IsWritable@Socket@Sockets@EA@@UAE_NI@Z  # EA::Sockets::Socket::IsWritable migrated from s0094cac0
+0094d7d0 ?IsReadableAndOrWritable@Socket@Sockets@EA@@UAEHW4IOType@23@I@Z  # EA::Sockets::Socket::IsReadableAndOrWritable migrated from s0094cac0
+0094d960 ?SetOptInt@Socket@@QAE_NE@Z  # Socket::SetOptInt migrated from s0094cac0 (verbatim, slice spelling)
+0094da20 ?SetOptInt2@Socket@@QAE_NE@Z  # Socket::SetOptInt2 migrated from s0094cac0 (verbatim, slice spelling)
+0094da70 ?GetLingerOption@Socket@Sockets@EA@@UAE_NAA_NAAI@Z  # EA::Sockets::Socket::GetLingerOption migrated from s0094cac0
+0094daf0 ?SetLingerOpt@Socket@@QAE_NEG@Z  # Socket::SetLingerOpt migrated from s0094cac0 (verbatim, slice spelling)
+0094db50 ?GetNonBlocking@Socket@@QAE_NPAE@Z  # Socket::GetNonBlocking migrated from s0094cac0 (verbatim, slice spelling)
+0094db60 ?SetNonBlockingOption@Socket@Sockets@EA@@UAE_N_N@Z  # EA::Sockets::Socket::SetNonBlockingOption migrated from s0094cac0
