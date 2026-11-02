@@ -1,0 +1,2 @@
+# source  symbol  va  flags
+../src/game/SPGonzago/SPMissionRequisiteParser.cpp  ?FUN_00fef6d0@@YAPAUcReqElem@@PAU1@00@Z  00fef6d0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
