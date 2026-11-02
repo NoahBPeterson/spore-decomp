@@ -1,4 +1,4 @@
-// src/game/SPEngine/SPGameCommand.cpp -- migrated from slice(s) s00689ee0, s00688dd0 by tools/migrate/rewrite.py
+// src/game/SPEngine/SPGameCommand.cpp -- migrated from slice(s) s0068b150, s00689ee0, s00688dd0 by tools/migrate/rewrite.py
 // Object file: SPEngine/SPGameCommand.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -9,6 +9,7 @@
 #include "EA/Variant.h"
 #include <string.h>
 #include <new>
+#include "SP/cMessageCommandDispatcher.h"
 
 // ---- items of slice s00688dd0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 typedef unsigned int   uint32;
@@ -337,6 +338,279 @@ struct WVec16L {   // vector<WStr>: 3 pointers, inline destructor
 };
 extern "C" wch  gLiteral1403384[];         // 0x1403384 format literal
 // ---- items of slice s00689ee0 end
+
+// ---- items of slice s0068b150 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C" int  __cdecl atexit(void(__cdecl* )());                           // 0x011E07EF (E8)
+extern wchar_t gEmptyW;                      // 0x01667BAC
+extern wchar_t gEmptyWEnd;                   // 0x01667BAE
+extern void*   gVtCpsBase2[1];               // 0x013EF094
+extern void*   gVtCpsPri[1];                 // 0x01403310
+extern void*   gVtCpsSec[1];                 // 0x0140330C
+extern void*   gVtCmdSrv[1];                 // 0x01403410
+extern void*   gVtEditorRes[1];              // 0x013EB938
+extern char    gDefaultWStrInited;           // 0x015FF8DC
+extern void*   gDefaultWStr[3];              // 0x015FF8CC
+extern "C" void __cdecl gFun13BEB80();       // 0x013BEB80 atexit dtor
+typedef unsigned char  uint8;
+void  EAFree(void* p);                                                       // 0x00F47380 cdecl
+void* EAAllocate(unsigned n, const char* name, int a, int b, const char* f, int l); // 0x00F473A0 cdecl
+void* FUN_0068A2E0();                        // 0x0068A2E0 cdecl
+void  FUN_00689EE0(void* out);               // 0x00689EE0 thiscall(out)
+void  FUN_0068A000(void* out);               // 0x0068A000 thiscall(out)
+void  FUN_00689DC0(void* p, int a, int b);   // 0x00689DC0 thiscall(p,a,b)
+void  FUN_00D167E0();                        // 0x00D167E0 cdecl
+void* operator new(unsigned int, void*);
+struct WStr_s0068_b150 {
+    wchar_t* mpBegin;
+    wchar_t* mpEnd;
+    wchar_t* mpCapacity;
+    void*    mAllocator;
+
+    WStr_s0068_b150() { mpBegin = &gEmptyW; mpEnd = &gEmptyW; mpCapacity = &gEmptyWEnd; }
+    ~WStr_s0068_b150() { if ((((char*)mpCapacity - (char*)mpBegin) & ~1) > 2 && mpBegin) EAFree(mpBegin); }
+    WStr_s0068_b150(const wchar_t* s);                                   // 0x0056E2D0
+    WStr_s0068_b150& operator=(const WStr_s0068_b150& x)
+    {
+        if (this != &x)
+            Assign(x.mpBegin, x.mpEnd);
+        return *this;
+    }
+    WStr_s0068_b150& operator=(const wchar_t* s);                        // 0x005C3D90
+    WStr_s0068_b150& Assign(const wchar_t* b, const wchar_t* e);         // 0x00423650
+    WStr_s0068_b150& Append(const wchar_t* b, const wchar_t* e);         // 0x00429580
+    void  Resize(unsigned n);                                 // 0x00429520
+    void  push_back(unsigned c);                              // 0x004F6510
+};
+struct Variant_s0068_b150 {
+    char           mGeneric[0x10];
+    unsigned short mFlags;    // +0x10
+    unsigned short mTypeId;   // +0x12
+
+    Variant_s0068_b150& operator=(unsigned v);                           // 0x00542B80
+    void     Destruct(int b);                                 // 0x0093DB80
+    void     CtorFromValue(unsigned v);                       // 0x00689E80
+};
+struct IRefCounted {
+    virtual void AddRef() {}        // slot 0
+    virtual void Release() {}       // slot 1
+    virtual void s2();
+    virtual void s3();
+    virtual void Init();            // slot 4 (+0x10)
+    virtual void Deinit();          // slot 5 (+0x14)
+    virtual void s6();
+    virtual void s7();
+    virtual void s8();
+    virtual void s9();
+    virtual void s10();
+    virtual void s11();
+    virtual void s12();
+    virtual void s13();
+    virtual void s14();
+    virtual void s15();
+    virtual void s16();
+    virtual void s17();
+    virtual void s18();
+    virtual void s19();
+};
+template <class T>
+struct AutoRefCount {
+    T* mpObject;
+    AutoRefCount() : mpObject(0) {}
+    ~AutoRefCount() { if (mpObject) ((IRefCounted*)mpObject)->Release(); }
+    T* operator=(T* p)
+    {
+        T* old = mpObject;
+        if (p != old) {
+            if (p)
+                ((IRefCounted*)p)->AddRef();
+            mpObject = p;
+            if (old)
+                ((IRefCounted*)old)->Release();
+        }
+        return p;
+    }
+};
+struct RbNode {
+    RbNode* mpRight;
+    RbNode* mpLeft;
+    RbNode* mpParent;
+    uint8   mColor;
+};
+void* RbTreeIncrement(RbNode* n);                             // 0x00921580 cdecl
+void  RbTreeErase(RbNode* n, RbNode* anchor);                 // 0x00921880 cdecl
+struct RbTreeBase {
+    char    pad0[4];
+    RbNode  mAnchor;      // +0x04
+    uint32  mnSize;       // +0x14
+
+    void  DoNuke(RbNode* node);                       // 0x00EB6280 (extern)
+    void  Find(void* out, void* key);                 // 0x00E5C780 (extern)
+    void* Insert(void* a, void* b, void* c);          // 0x0068BB50 (extern)
+    __forceinline void reset()
+    {
+        mAnchor.mpRight  = &mAnchor;
+        mAnchor.mpLeft   = &mAnchor;
+        mAnchor.mpParent = 0;
+        mAnchor.mColor   = 0;
+        mnSize           = 0;
+    }
+};
+struct CmdInfoNode {
+    RbNode  mBase;        // +0x00
+    uint32  mKey;         // +0x10
+    uint32  mnID;         // +0x14
+    WStr_s0068_b150    msName;       // +0x18
+    WStr_s0068_b150    msTypeInfo;   // +0x28
+};
+struct VarMapNode {
+    RbNode  mBase;      // +0x00
+    uint32  mKey;       // +0x10
+    Variant_s0068_b150 mValue;     // +0x14
+};
+struct VarMap : RbTreeBase {
+    Variant_s0068_b150* GetPos(uint32* key);                             // 0x0068BF20 (below)
+};
+class cCommandParameterSet_s0068_b150 {
+public:
+    void*   mVt0;         // +0x00
+    void*   mVt4;         // +0x04
+    void*   m08;
+    VarMap  mParams;      // +0x0c (0x18 bytes)
+    char    m24[0x14];    // +0x24 .. +0x38
+    uint16  m38;
+    uint16  m3A;
+
+    void* operator new(unsigned s) { return EAAllocate(s, "App/cCommandParameterSet", 0, 0, 0, 0); }
+    cCommandParameterSet_s0068_b150()
+    {
+        mVt4 = &gVtCpsBase2;
+        m08  = 0;
+        mVt0 = &gVtCpsPri;
+        mVt4 = &gVtCpsSec;
+        mParams.reset();
+        m38 = 0;
+        m3A = 0;
+    }
+    void SetParameter(uint32 id, uint32 value);   // 0x0068C020
+    bool CompareParameterString(WStr_s0068_b150* out);       // 0x0068B370
+};
+struct ICommandParamSetVt {
+    virtual void AddRef();       // slot 0
+    virtual void Release();      // slot 1
+    virtual void s2();
+    virtual void s3();
+};
+struct IParamSet {
+    virtual void p0();
+    virtual void p1();
+    virtual void p2();
+    virtual void p3();
+    virtual void p4();
+    virtual void p5();
+    virtual void* GetValue(int i);      // slot 6  (+0x18)
+    virtual void p7();
+    virtual void p8();
+    virtual void p9();
+    virtual void p10();
+    virtual void p11();
+    virtual void p12();
+    virtual void p13();
+    virtual int  First();               // slot 14 (+0x38)
+    virtual int  Next(int i);           // slot 15 (+0x3c)
+};
+class cStringCommandGenerator_s0068_b150 : public IRefCounted {
+public:
+    uint32_t mBase[8];   // +0x04..+0x24
+    cStringCommandGenerator_s0068_b150();                  // 0x0068AF10 (defined elsewhere)
+    void* operator new(unsigned s) { return EAAllocate(s, "App/cStringCommandGenerator", 0, 0, 0, 0); }
+    void ProcessToken(WStr_s0068_b150* a, WStr_s0068_b150* b);        // 0x0068A320
+    bool ConvertCommandToString(int pCmd, IParamSet* pSet, WStr_s0068_b150* out);  // 0x0068B150
+};
+class cMessageCommandDispatcher : public IRefCounted {
+public:
+    uint32_t mBase[0x11];  // +0x04..+0x48
+    cMessageCommandDispatcher();                // 0x00689D40 (defined elsewhere)
+    void* operator new(unsigned s) { return EAAllocate(s, "App/cMessageCommandDispatcher", 0, 0, 0, 0); }
+};
+struct ICommandServerVt {
+    virtual void i0();
+    virtual void Release();             // slot 1  (+0x04)
+    virtual void i2();
+    virtual void i3();
+    virtual void i4();                  // slot 4  (+0x10)
+    virtual void i5();                  // slot 5  (+0x14)
+    virtual void i6();
+    virtual void i7();
+    virtual void i8();
+    virtual void RegisterCmd(unsigned id, const wchar_t* name, void* p); // slot 9 (+0x24)
+    virtual void i10();
+    virtual void i11();
+    virtual bool ProcessCommand(int pCmd, WStr_s0068_b150* out, int b); // slot 12 (+0x30)
+    virtual void i13();
+    virtual void i14();
+    virtual void i15();                 // slot 15 (+0x3c)
+    virtual void SetGenerator(IRefCounted* g);   // slot 16 (+0x40)
+    virtual void i17();
+    virtual bool HasSet();              // slot 18 (+0x48)
+    virtual void SetDispatcher(IRefCounted* d);  // slot 19 (+0x4c)
+};
+struct UintVec {
+    unsigned* mpBegin;
+    unsigned* mpEnd;
+    unsigned* mpCapacity;
+    void*     mAllocator;
+
+    void DoInsertValue(unsigned* pos, const unsigned& v);     // 0x004558A0
+    __forceinline void push_back(const unsigned& v)
+    {
+        unsigned* e = mpEnd;
+        if (e < mpCapacity) {
+            mpEnd = e + 1;
+            if (e)
+                *e = v;
+        } else {
+            DoInsertValue(e, v);
+        }
+    }
+};
+class cCommandServer_s0068_b150 : public ICommandServerVt {
+public:
+    struct CmdMap : RbTreeBase {
+        void  DestroyNodes(RbNode* node);              // 0x0068B9D0
+        void  DestroyNode(RbNode* node, void** itOut); // 0x0068B950
+        ~CmdMap() { DestroyNodes(mAnchor.mpParent); }
+    };
+    struct GenSet : RbTreeBase {
+        ~GenSet() { DoNuke(mAnchor.mpParent); }
+    };
+
+    CmdMap                 mCommandInfoMap;             // +0x04
+    AutoRefCount<IRefCounted>               m1cRef;                     // +0x1c
+    AutoRefCount<IRefCounted>               mpCommandDispatcher;        // +0x20
+    AutoRefCount<cMessageCommandDispatcher> mpMessageCommandDispatcher; // +0x24
+    AutoRefCount<cStringCommandGenerator_s0068_b150>   mpStringCommandGenerator;   // +0x28
+    GenSet                 mCommandGeneratorSet;        // +0x2c
+    bool                   mb48;                        // +0x48
+
+    bool Shutdown();                                    // 0x0068BCF0
+    bool InitDispatchers();                              // 0x0068B760
+    cCommandServer_s0068_b150();                                   // 0x0068C040
+    ~cCommandServer_s0068_b150();                                  // 0x0068BC50
+    bool RegisterCommand(uint32 id, const wchar_t* name, void* p3); // 0x0068BDA0
+    bool UnregisterCommand(uint32 id);                  // 0x0068BEC0
+    void EnumerateCommands(UintVec& out);               // 0x0068B900
+};
+cCommandServer_s0068_b150* gpCommandServer;   // 0x015FF660
+struct GenOwner {
+    char pad0[0x38];
+    AutoRefCount<cCommandParameterSet_s0068_b150>    mParams0;    // +0x38
+    AutoRefCount<cCommandParameterSet_s0068_b150>    mParams1;    // +0x3c
+    AutoRefCount<cStringCommandGenerator_s0068_b150> mGenerator;  // +0x40
+    char m44[4];
+
+    bool InitGenerators();               // 0x0068B5B0
+};
+// ---- items of slice s0068b150 end
 
 // @ 0x006895f0
 bool SP::cCommandParameterSet::ValidateParameter(unsigned int a, unsigned int b)
@@ -950,4 +1224,315 @@ bool cStringCommandGenerator::SetParameterCount(WStr* str, u32* outId, cCommandP
         }
     }
     return false;
+}
+
+// @ 0x0068b150
+bool cStringCommandGenerator_s0068_b150::ConvertCommandToString(int pCmd, IParamSet* pSet, WStr_s0068_b150* out)
+{
+    if (out->mpBegin != out->mpEnd) {
+        *(uint16*)out->mpBegin = 0;
+        out->mpEnd = out->mpBegin;
+    }
+    if (gpCommandServer == 0)
+        return false;
+
+    WStr_s0068_b150 local;
+    if (!gpCommandServer->ProcessCommand(pCmd, &local, 0))
+        return false;
+
+    ProcessToken(&local, &local);
+    out->Append(local.mpBegin, local.mpEnd);
+
+    if (pSet) {
+        for (int idx = pSet->First(); idx != -1; idx = pSet->Next(idx)) {
+            unsigned v = (unsigned)pSet->GetValue(idx);
+            Variant_s0068_b150 temp;
+            temp.CtorFromValue(v);
+
+            wchar_t* s;
+            if (temp.mTypeId == 0x13 || temp.mTypeId == 0x10) {
+                if (temp.mFlags & 0x30)
+                    s = *(wchar_t**)temp.mGeneric;
+                else
+                    s = temp.mTypeId ? (wchar_t*)&temp : 0;
+            } else {
+                s = (wchar_t*)FUN_0068A2E0();
+            }
+
+            local = WStr_s0068_b150(s);
+            ProcessToken(&local, &local);
+            out->push_back(' ');
+            out->Append(local.mpBegin, local.mpEnd);
+            if (temp.mFlags & 4)
+                temp.Destruct(0);
+        }
+    }
+    return true;
+}
+
+// @ 0x0068b370
+bool cCommandParameterSet_s0068_b150::CompareParameterString(WStr_s0068_b150* out)
+{
+    out->Resize(0);
+    WStr_s0068_b150 local;
+
+    RbNode* it  = mParams.mAnchor.mpLeft;
+    RbNode* end = &mParams.mAnchor;
+    for (; it != end; it = (RbNode*)RbTreeIncrement(it)) {
+        unsigned v = ((VarMapNode*)it)->mKey;
+        Variant_s0068_b150 temp;
+        temp.mFlags  = 0x13;
+        temp.mTypeId = 0x0b;
+        temp = v;
+
+        wchar_t* s;
+        if (temp.mTypeId == 0x13 || temp.mTypeId == 0x10) {
+            if (temp.mFlags & 0x30)
+                s = *(wchar_t**)temp.mGeneric;
+            else
+                s = temp.mTypeId ? (wchar_t*)&temp : 0;
+        } else {
+            if (!gDefaultWStrInited) {
+                gDefaultWStrInited = 1;
+                gDefaultWStr[0] = &gEmptyW;
+                gDefaultWStr[1] = &gEmptyW;
+                gDefaultWStr[2] = &gEmptyWEnd;
+                atexit(&gFun13BEB80);
+            }
+            s = (wchar_t*)gDefaultWStr;
+        }
+
+        local = WStr_s0068_b150(s);
+        out->Append(local.mpBegin, local.mpEnd);
+        if (temp.mFlags & 4)
+            temp.Destruct(0);
+    }
+    return true;
+}
+
+// @ 0x0068b5b0
+bool GenOwner::InitGenerators()
+{
+    if (mParams0.mpObject == 0) {
+        cCommandParameterSet_s0068_b150* p = new cCommandParameterSet_s0068_b150();
+        mParams0 = p;
+    }
+    if (mParams1.mpObject == 0) {
+        cCommandParameterSet_s0068_b150* p = new cCommandParameterSet_s0068_b150();
+        mParams1 = p;
+    }
+    if (mGenerator.mpObject == 0) {
+        cStringCommandGenerator_s0068_b150* p = new cStringCommandGenerator_s0068_b150();
+        mGenerator = p;
+        if (mGenerator.mpObject)
+            ((IRefCounted*)mGenerator.mpObject)->Init();
+    }
+    return true;
+}
+
+// @ 0x0068b760
+bool cCommandServer_s0068_b150::InitDispatchers()
+{
+    if (!HasSet()) {
+        cMessageCommandDispatcher* d = new cMessageCommandDispatcher();
+        mpMessageCommandDispatcher = d;
+        if (mpMessageCommandDispatcher.mpObject)
+            ((IRefCounted*)mpMessageCommandDispatcher.mpObject)->Init();
+        SetDispatcher((IRefCounted*)mpMessageCommandDispatcher.mpObject);
+    }
+    {
+        cStringCommandGenerator_s0068_b150* g = new cStringCommandGenerator_s0068_b150();
+        mpStringCommandGenerator = g;
+        if (mpStringCommandGenerator.mpObject)
+            ((IRefCounted*)mpStringCommandGenerator.mpObject)->Init();
+        SetGenerator((IRefCounted*)mpStringCommandGenerator.mpObject);
+    }
+    return true;
+}
+
+// @ 0x0068b880
+void __stdcall CreateParameterSet(cCommandParameterSet_s0068_b150** out)
+{
+    cCommandParameterSet_s0068_b150* p = new cCommandParameterSet_s0068_b150();
+    *out = p;
+    ((ICommandParamSetVt*)p)->AddRef();
+}
+
+// @ 0x0068b900
+void cCommandServer_s0068_b150::EnumerateCommands(UintVec& out)
+{
+    RbNode* it  = mCommandInfoMap.mAnchor.mpLeft;
+    RbNode* end = &mCommandInfoMap.mAnchor;
+    if (it != end) {
+        do {
+            unsigned v = ((CmdInfoNode*)it)->mKey;
+            out.push_back(v);
+            it = (RbNode*)RbTreeIncrement(it);
+        } while (it != end);
+    }
+}
+
+// @ 0x0068b950
+void cCommandServer_s0068_b150::CmdMap::DestroyNode(RbNode* node, void** itOut)
+{
+    --mnSize;
+    RbNode* next = (RbNode*)RbTreeIncrement(node);
+    RbTreeErase(node, &mAnchor);
+    ((CmdInfoNode*)node)->msTypeInfo.~WStr_s0068_b150();
+    ((CmdInfoNode*)node)->msName.~WStr_s0068_b150();
+    EAFree(node);
+    *itOut = next;
+}
+
+// @ 0x0068b9d0
+void cCommandServer_s0068_b150::CmdMap::DestroyNodes(RbNode* node)
+{
+    while (node) {
+        DestroyNodes(node->mpRight);
+        RbNode* parent = node->mpLeft;
+        ((CmdInfoNode*)node)->msTypeInfo.~WStr_s0068_b150();
+        ((CmdInfoNode*)node)->msName.~WStr_s0068_b150();
+        EAFree(node);
+        node = parent;
+    }
+}
+
+// @ 0x0068bc50
+cCommandServer_s0068_b150::~cCommandServer_s0068_b150()
+{
+    *(void**)this = &gVtCmdSrv;
+    mCommandGeneratorSet.~GenSet();
+    if (mpStringCommandGenerator.mpObject)
+        ((IRefCounted*)mpStringCommandGenerator.mpObject)->Release();
+    if (mpMessageCommandDispatcher.mpObject)
+        ((IRefCounted*)mpMessageCommandDispatcher.mpObject)->Release();
+    if (mpCommandDispatcher.mpObject)
+        ((IRefCounted*)mpCommandDispatcher.mpObject)->Release();
+    mCommandInfoMap.~CmdMap();
+    *(void**)this = &gVtEditorRes;
+}
+
+// @ 0x0068bcf0
+bool cCommandServer_s0068_b150::Shutdown()
+{
+    mCommandInfoMap.DestroyNodes(mCommandInfoMap.mAnchor.mpParent);
+    mCommandInfoMap.reset();
+    this->SetDispatcher(0);
+    if (mpMessageCommandDispatcher.mpObject)
+        ((IRefCounted*)mpMessageCommandDispatcher.mpObject)->Deinit();
+    if (mpMessageCommandDispatcher.mpObject) {
+        IRefCounted* old = (IRefCounted*)mpMessageCommandDispatcher.mpObject;
+        mpMessageCommandDispatcher.mpObject = 0;
+        old->Release();
+    }
+    if (mpStringCommandGenerator.mpObject)
+        ((IRefCounted*)mpStringCommandGenerator.mpObject)->Deinit();
+    if (mpStringCommandGenerator.mpObject) {
+        IRefCounted* old = (IRefCounted*)mpStringCommandGenerator.mpObject;
+        mpStringCommandGenerator.mpObject = 0;
+        old->Release();
+    }
+    for (RbNode* it = mCommandGeneratorSet.mAnchor.mpLeft;
+         it != &mCommandGeneratorSet.mAnchor; it = (RbNode*)RbTreeIncrement(it)) {
+    }
+    mCommandGeneratorSet.DoNuke(mCommandGeneratorSet.mAnchor.mpParent);
+    mCommandGeneratorSet.reset();
+    return true;
+}
+
+// @ 0x0068bda0
+bool cCommandServer_s0068_b150::RegisterCommand(uint32 id, const wchar_t* name, void* p3)
+{
+    (void)p3;
+    if (id == 0 || name == 0)
+        return false;
+    void* it;
+    mCommandInfoMap.Find(&it, &id);
+    if (*(RbNode**)it != &mCommandInfoMap.mAnchor)
+        return false;
+
+    WStr_s0068_b150 a;
+    WStr_s0068_b150 b;
+    FUN_00689EE0(&a);
+    FUN_0068A000(&b);
+    void* nodeOut = 0;
+    mCommandInfoMap.Insert(&nodeOut, &b, &a);
+    CmdInfoNode* node = (CmdInfoNode*)nodeOut;
+    node->mnID = id;
+    node->msName = name;
+    this->RegisterCmd(id, name, p3);
+    FUN_00689DC0(&node->mnID, 1, 0);
+    FUN_00D167E0();
+    return true;
+}
+
+// @ 0x0068bec0
+bool cCommandServer_s0068_b150::UnregisterCommand(uint32 id)
+{
+    RbNode* it;
+    mCommandInfoMap.Find(&it, &id);
+    if (it == &mCommandInfoMap.mAnchor)
+        return false;
+    FUN_00689DC0(&((CmdInfoNode*)it)->mnID, 0, 0);
+    RbNode* next;
+    mCommandInfoMap.DestroyNode(it, (void**)&next);
+    return true;
+}
+
+// @ 0x0068bf20
+__declspec(noinline) Variant_s0068_b150* VarMap::GetPos(uint32* key)
+{
+    RbNode* y = &mAnchor;
+    RbNode* x = mAnchor.mpParent;
+    while (x) {
+        if (!(*key < *(uint32*)((char*)x + 0x10))) {
+            y = x;
+            x = x->mpLeft;
+        } else {
+            x = x->mpRight;
+        }
+    }
+    if (y == &mAnchor || *key < *(uint32*)((char*)y + 0x10)) {
+        Variant_s0068_b150 v1;
+        v1.mFlags  = 0;
+        v1.mTypeId = 0;
+        *(uint32*)&v1.mGeneric[0] = *key;
+        Variant_s0068_b150 v2;
+        v2.mFlags  = 0;
+        v2.mTypeId = 0;
+        v2 = *(uint32*)key;
+        y = (RbNode*)Insert(y, key, &v2);
+        if (v2.mFlags & 4)
+            v2.Destruct(0);
+        if (v1.mFlags & 4)
+            v1.Destruct(0);
+    }
+    return (Variant_s0068_b150*)((char*)y + 0x14);
+}
+
+// @ 0x0068c020
+void cCommandParameterSet_s0068_b150::SetParameter(uint32 id, uint32 value)
+{
+    Variant_s0068_b150* slot = mParams.GetPos(&id);
+    *slot = value;
+}
+
+// @ 0x0068c040
+cCommandServer_s0068_b150::cCommandServer_s0068_b150()
+{
+    *(void**)this = &gVtCmdSrv;
+    mCommandInfoMap.reset();
+    m1cRef.mpObject = 0;
+    mpCommandDispatcher.mpObject = 0;
+    mpMessageCommandDispatcher.mpObject = 0;
+    mpStringCommandGenerator.mpObject = 0;
+    {
+        RbNode* a = &mCommandGeneratorSet.mAnchor;
+        a->mpRight = a;
+        a->mpLeft  = a;
+        a->mpParent = 0;
+        a->mColor  = 0;
+        mCommandGeneratorSet.mnSize = 0;
+    }
+    mb48 = false;
 }

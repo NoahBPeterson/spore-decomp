@@ -19,3 +19,15 @@
 0068ad30 25 cCommandParameterSet ctor: vtable stores and map anchor init correct, cl reorders/CSEs the zero stores
 0068ad90 290 ExecuteCommand: variant type selection, locale path and cleanup present, scheduling/regalloc differ throughout
 0068af10 45 cStringCommandGenerator ctor: vtable stores + parameter-set new correct, EH frame around new-expression differs
+0068b150 388 complete; difftest WEAK (400 valid inputs, 15.3% coverage; /O2 /MD /Gy /EHsc /TP /GS-) flags: /O2 /MD /Gy /EHsc /TP /GS-
+0068b370 255 complete; difftest UNSUPPORTED (0/400 valid inputs; /O2 /MD /Gy /EHsc /TP /GS-) flags: /O2 /MD /Gy /EHsc /TP /GS-
+0068b5b0 281 complete; difftest FAIL (5/36 valid inputs; /O2 /MD /Gy /EHsc /TP /GS-) flags: /O2 /MD /Gy /EHsc /TP /GS-
+0068b760 148 complete; difftest UNSUPPORTED (0/400 valid inputs; /O2 /MD /Gy /EHsc /TP /GS-) flags: /O2 /MD /Gy /EHsc /TP /GS-
+0068b880 69 complete; difftest FAIL (5/7 valid inputs; /O2 /MD /Gy /EHsc /TP /GS-) flags: /O2 /MD /Gy /EHsc /TP /GS-
+0068b950 92 complete; difftest FAIL (5/5 valid inputs; /O2 /MD /Gy /EHsc /TP /GS-) flags: /O2 /MD /Gy /EHsc /TP /GS-
+0068bc50 196 complete; difftest FAIL (5/5 valid inputs; /O2 /MD /Gy /EHsc /TP /GS-) flags: /O2 /MD /Gy /EHsc /TP /GS-
+0068bcf0 19 complete; difftest PASS (288 valid inputs, 93.1% coverage; /O2 /MD /Gy /EHsc /TP /GS-) flags: /O2 /MD /Gy /EHsc /TP /GS-
+0068bda0 302 complete; difftest FAIL (5/12 valid inputs; /O2 /MD /Gy /EHsc /TP /GS-) flags: /O2 /MD /Gy /EHsc /TP /GS-
+0068bec0 79 complete; difftest WEAK (382 valid inputs, 53.7% coverage; /O2 /MD /Gy /EHsc /TP /GS-) flags: /O2 /MD /Gy /EHsc /TP /GS-
+0068bf20 140 complete; difftest FAIL (5/6 valid inputs; /O2 /MD /Gy /EHsc /TP /GS-) flags: /O2 /MD /Gy /EHsc /TP /GS-
+0068c040 48 complete; difftest FAIL (5/5 valid inputs; /O2 /MD /Gy /EHsc /TP /GS-) flags: /O2 /MD /Gy /EHsc /TP /GS-

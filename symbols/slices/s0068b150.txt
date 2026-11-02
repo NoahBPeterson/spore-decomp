@@ -1,18 +1,18 @@
-0068b150 ?ConvertCommandToString@cStringCommandGenerator@@QAE_NHPAUIParamSet@@PAUWStr@@@Z  # App/cStringCommandGenerator.cpp
-0068b370 ?CompareParameterString@cCommandParameterSet@@QAE_NPAUWStr@@@Z  # App/cCommandParameterSet.cpp
-0068b5b0 ?InitGenerators@GenOwner@@QAE_NXZ  # GenOwner::InitGenerators
-0068b760 ?InitDispatchers@cCommandServer@@QAE_NXZ  # App/cCommandServer.cpp
-0068b880 ?CreateParameterSet@@YGXPAPAVcCommandParameterSet@@@Z  # CreateParameterSet
-0068b900 ?EnumerateCommands@cCommandServer@@QAEXAAUUintVec@@@Z  # App/cCommandServer.cpp
-0068b950 ?DestroyNode@CmdMap@cCommandServer@@QAEXPAURbNode@@PAPAX@Z  # CmdMap node destructor
-0068b9d0 ?DestroyNodes@CmdMap@cCommandServer@@QAEXPAURbNode@@@Z  # App/cCommandServer.cpp
-0068bc50 ??1cCommandServer@@QAE@XZ  # App/cCommandServer.cpp
-0068bcf0 ?Shutdown@cCommandServer@@QAE_NXZ  # App/cCommandServer.cpp
-0068bda0 ?RegisterCommand@cCommandServer@@QAE_NIPB_WPAX@Z  # App/cCommandServer.cpp
-0068bec0 ?UnregisterCommand@cCommandServer@@QAE_NI@Z  # App/cCommandServer.cpp
-0068bf20 ?GetPos@VarMap@@QAEPAUVariant@@PAI@Z  # eastl::map<unsigned,EA::Variant>::operator[]
-0068c020 ?SetParameter@cCommandParameterSet@@QAEXII@Z  # App/cCommandParameterSet.cpp
-0068c040 ??0cCommandServer@@QAE@XZ  # App/cCommandServer.cpp
+0068b150 ?ConvertCommandToString@cStringCommandGenerator_s0068_b150@@QAE_NHPAUIParamSet@@PAUWStr_s0068_b150@@@Z  # cStringCommandGenerator_s0068_b150::ConvertCommandToString migrated from s0068b150 (verbatim, slice spelling)
+0068b370 ?CompareParameterString@cCommandParameterSet_s0068_b150@@QAE_NPAUWStr_s0068_b150@@@Z  # cCommandParameterSet_s0068_b150::CompareParameterString migrated from s0068b150 (verbatim, slice spelling)
+0068b5b0 ?InitGenerators@GenOwner@@QAE_NXZ  # GenOwner::InitGenerators migrated from s0068b150 (verbatim, slice spelling)
+0068b760 ?InitDispatchers@cCommandServer_s0068_b150@@QAE_NXZ  # cCommandServer_s0068_b150::InitDispatchers migrated from s0068b150 (verbatim, slice spelling)
+0068b880 ?CreateParameterSet@@YGXPAPAVcCommandParameterSet_s0068_b150@@@Z  # CreateParameterSet migrated from s0068b150 (verbatim, slice spelling)
+0068b900 ?EnumerateCommands@cCommandServer_s0068_b150@@QAEXAAUUintVec@@@Z  # cCommandServer_s0068_b150::EnumerateCommands migrated from s0068b150 (verbatim, slice spelling)
+0068b950 ?DestroyNode@CmdMap@cCommandServer_s0068_b150@@QAEXPAURbNode@@PAPAX@Z  # DestroyNode migrated from s0068b150 (verbatim, slice spelling)
+0068b9d0 ?DestroyNodes@CmdMap@cCommandServer_s0068_b150@@QAEXPAURbNode@@@Z  # DestroyNodes migrated from s0068b150 (verbatim, slice spelling)
+0068bc50 ??1cCommandServer_s0068_b150@@QAE@XZ  # cCommandServer_s0068_b150::~cCommandServer migrated from s0068b150 (verbatim, slice spelling)
+0068bcf0 ?Shutdown@cCommandServer_s0068_b150@@QAE_NXZ  # cCommandServer_s0068_b150::Shutdown migrated from s0068b150 (verbatim, slice spelling)
+0068bda0 ?RegisterCommand@cCommandServer_s0068_b150@@QAE_NIPB_WPAX@Z  # cCommandServer_s0068_b150::RegisterCommand migrated from s0068b150 (verbatim, slice spelling)
+0068bec0 ?UnregisterCommand@cCommandServer_s0068_b150@@QAE_NI@Z  # cCommandServer_s0068_b150::UnregisterCommand migrated from s0068b150 (verbatim, slice spelling)
+0068bf20 ?GetPos@VarMap@@QAEPAUVariant_s0068_b150@@PAI@Z  # VarMap::GetPos migrated from s0068b150 (verbatim, slice spelling)
+0068c020 ?SetParameter@cCommandParameterSet_s0068_b150@@QAEXII@Z  # cCommandParameterSet_s0068_b150::SetParameter migrated from s0068b150 (verbatim, slice spelling)
+0068c040 ??0cCommandServer_s0068_b150@@QAE@XZ  # cCommandServer_s0068_b150::cCommandServer migrated from s0068b150 (verbatim, slice spelling)
 0068c140 ?AtomicRead64@@YI_KPC_K@Z  # AtomicRead64 migrated from s0068b150 (verbatim, slice spelling)
 0068c1b0 ?AtomicExchange64@@YI_KPC_K_K@Z  # AtomicExchange64 migrated from s0068b150 (verbatim, slice spelling)
 0068c220 ?Drain@FreeList@@QAEXXZ  # FreeList::Drain migrated from s0068b150 (verbatim, slice spelling)

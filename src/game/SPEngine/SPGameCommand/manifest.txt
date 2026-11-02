@@ -16,3 +16,6 @@
 ../src/game/SPEngine/SPGameCommand.cpp  _FUN_0068a2e0  0068a2e0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/SPEngine/SPGameCommand.cpp  ?GetCommandInfo@cCommandServer@@QAE_NIPAUWStr@@0@Z  0068a3f0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/SPEngine/SPGameCommand.cpp  ?SetParameterCount@cStringCommandGenerator@@QAE_NPAUWStr@@PAIPAPAUcCommandParameterSet@@@Z  0068b000  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPGameCommand.cpp  ?EnumerateCommands@cCommandServer_s0068_b150@@QAEXAAUUintVec@@@Z  0068b900  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPGameCommand.cpp  ?DestroyNodes@CmdMap@cCommandServer_s0068_b150@@QAEXPAURbNode@@@Z  0068b9d0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPGameCommand.cpp  ?SetParameter@cCommandParameterSet_s0068_b150@@QAEXII@Z  0068c020  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
