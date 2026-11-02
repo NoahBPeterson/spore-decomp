@@ -4,9 +4,11 @@
 0061de00 ?HandleResult@cHandshakeTransaction_s0061_d240@Pollen@SP@@QAE_NHPAX0@Z  # cHandshakeTransaction_s0061_d240::HandleResult migrated from s0061d240 (verbatim, slice spelling)
 0061dea0 wrapper over 0x0093abd0  # calls (a,b,-1,0), returns a
 0061df40 eastl intrusive ref wrapper ctor  # stores ptr, AddRef via vtable slot 1
-0061df60 eastl::find_first_not_of  # forward scan
-0061dfa0 eastl::find_last_not_of  # backward scan
-0061dfe0 PollenNotifyHelper  # MessageServer + release two members
-0061e180 guarded bool getter  # EnterCriticalSection/LeaveCriticalSection around flag at +0x68
+0061df60 ?FindFirstNotOf@Pollen@SP@@YAPBDPBD000@Z  # FindFirstNotOf migrated from s0061d240 (verbatim, slice spelling)
+0061dfa0 ?FindLastNotOf@Pollen@SP@@YAPBDPBD000@Z  # FindLastNotOf migrated from s0061d240 (verbatim, slice spelling)
+0061dfe0 ?PollenNotifyHelper@Pollen@SP@@YAXPAX@Z  # PollenNotifyHelper migrated from s0061d240 (verbatim, slice spelling)
+0061e040 ?PollenHelper311@Pollen@SP@@YAPAXPAX00@Z  # PollenHelper311 migrated from s0061d240 (verbatim, slice spelling)
+0061e180 ?Get@GuardedFlag@Pollen@SP@@QBE_NXZ  # GuardedFlag::Get migrated from s0061d240 (verbatim, slice spelling)
+0061e1a0 ?PollenCtor78@Pollen@SP@@YAPAXPAX00@Z  # PollenCtor78 migrated from s0061d240 (verbatim, slice spelling)
 0061e200 ?erase@String8@Pollen@SP@@QAEPAU123@II@Z  # String8::erase migrated from s0061d240 (verbatim, slice spelling)
 008120d0 ?Init@cSPUILayout@@QAE_NABVKey@ResourceMan@EA@@_NI@Z  # cSPUILayout::Init (callee of s0061d240, named from the dev publics; slice address comment)

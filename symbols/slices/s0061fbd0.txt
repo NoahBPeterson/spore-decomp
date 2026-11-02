@@ -1,3 +1,5 @@
+0061fdb0 ?QueueEvent@cPollinatorJobHost@Pollen@SP@@QAE_NPAXPAUPollEvent@23@@Z  # cPollinatorJobHost::QueueEvent migrated from s0061fbd0 (verbatim, slice spelling)
+0061fee0 ?QueueEvent4@cPollinatorJobHost@Pollen@SP@@QAE_NPAX00PAUPollEvent@23@@Z  # cPollinatorJobHost::QueueEvent4 migrated from s0061fbd0 (verbatim, slice spelling)
 00620050 SP::Pollen::cRegistrationDialog::Show  # byte-exact: SetFlag(1,b) on the root window then Begin/EndModal
 006200c0 ?AutoSizeButtons@cRegistrationDialog_s0061_fbd0@Pollen@SP@@QAEXXZ  # cRegistrationDialog_s0061_fbd0::AutoSizeButtons migrated from s0061fbd0 (verbatim, slice spelling)
 00620110 ?SetControlsEnabled@cRegistrationDialog_s0061_fbd0@Pollen@SP@@QAEX_N@Z  # cRegistrationDialog_s0061_fbd0::SetControlsEnabled migrated from s0061fbd0 (verbatim, slice spelling)

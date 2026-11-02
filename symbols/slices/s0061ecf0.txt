@@ -1,8 +1,8 @@
-0061ecf0 cEventDisplay::Show  # prints "<event verb (0x..), timestamp..>" + EA::Variant array to a list sink
-0061f3a0 cFeedManager::OnPoll  # builds a 0x214 "Pollinator" request and enqueues a cJob
-0061f530 cFeedManager::Pump  # opens/advances the encrypted event stream
-0061f670 cFeedManager::Load  # opens feed file via FileStream + cEncryptedStream, scans for "<event>"
-0061f9f0 cFeedManager::StartJob  # critical-section guarded one-shot job launch
-0061faf0 cFeedManager::Init  # registers IHandler with the message server for 0x44db12e/0x685f4af
-0061fb50 cFeedManager::HandleMessage  # Messaging::IHandler override (this at +0x38)
-0061fbc0 cFeedManager::Dispatch2  # thin wrapper calling StartJob
+0061ecf0 ?Show@cEventDisplay@@QAE_NPAUIEventSink@@@Z  # cEventDisplay::Show migrated from s0061ecf0 (verbatim, slice spelling)
+0061f3a0 ?OnPoll@cFeedManager@@QAEXPAX@Z  # cFeedManager::OnPoll migrated from s0061ecf0 (verbatim, slice spelling)
+0061f530 ?Pump@cFeedManager@@QAE_NPAX@Z  # cFeedManager::Pump migrated from s0061ecf0 (verbatim, slice spelling)
+0061f670 ?Load@cFeedManager@@QAE_NPAX@Z  # cFeedManager::Load migrated from s0061ecf0 (verbatim, slice spelling)
+0061f9f0 ?StartJob@cFeedManager@@QAE_NXZ  # cFeedManager::StartJob migrated from s0061ecf0 (verbatim, slice spelling)
+0061faf0 ?Init@cFeedManager@@QAEXXZ  # cFeedManager::Init migrated from s0061ecf0 (verbatim, slice spelling)
+0061fb50 ?HandleMessage@cFeedManager@@UAE_NIPAX@Z  # cFeedManager::HandleMessage migrated from s0061ecf0 (verbatim, slice spelling)
+0061fbc0 ?Dispatch2@cFeedManager@@QAE_NIPAX@Z  # cFeedManager::Dispatch2 migrated from s0061ecf0 (verbatim, slice spelling)

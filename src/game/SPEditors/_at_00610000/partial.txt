@@ -1,0 +1,4 @@
+# va  diff-bytes  reason
+0061dfe0  na  PollenNotifyHelper: skeleton; MessageServer call + two Release calls omitted flags: /O2 /MD /Gy /TP /arch:SSE
+0061e040  na  Pollen helper (311 bytes): skeleton; not identified flags: /O2 /MD /Gy /TP /arch:SSE
+0061e1a0  na  0x13fca98 MI transaction ctor: skeleton; dual vtable + AddRef omitted flags: /O2 /MD /Gy /TP /arch:SSE
