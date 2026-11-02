@@ -1,4 +1,4 @@
-// src/game/SPGonzago/SPCreatureCitizen.cpp -- migrated from slice(s) s01335f70, s00da7780, s00c267e0, s00c25a50, s00c23f80, s00c22fc0, s00c22010 by tools/migrate/rewrite.py
+// src/game/SPGonzago/SPCreatureCitizen.cpp -- migrated from slice(s) s00c278e0, s00c24e80, s00c0ddb0, s01335f70, s00da7780, s00c267e0, s00c25a50, s00c23f80, s00c22fc0, s00c22010 by tools/migrate/rewrite.py
 // Object file: SPGonzago/SPCreatureCitizen.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -22,6 +22,10 @@
 #include "SP/cGonzagoTimer.h"
 #include <stdlib.h>
 #include <float.h>
+#include "SP/cActionCircle.h"
+#include "SP/cTribe.h"
+#include <math.h>
+#include <string.h>
 
 // unnamed retail callees and globals (address in the comment)
 extern float g_1687A00;   // 0x01687a00
@@ -811,6 +815,10 @@ public:
     f32          mf_10;                     // +0x10
     f32          mf_14;                     // +0x14
 };
+extern const f32 _HK_REAL_ZERO;             // 0x01485378
+extern f32 DAT_0168dbb0;                    // 0x0168dbb0
+extern f32 DAT_0168dbb4;                    // 0x0168dbb4
+extern f32 DAT_0168dbb8;                    // 0x0168dbb8
 extern f32 DAT_0146aa40;                    // 0x0146aa40 (FLT_MAX)
 extern u32 DAT_0169ef30;                    // 0x0169ef30
 extern u32 DAT_0169f028;                    // 0x0169f028
@@ -850,13 +858,13 @@ public:
 
     // slice targets
     bool  FUN_00c25a50(void* pTree);
-    void  FUN_00c25f80();
-    i32_s00c2_5a50   FUN_00c26120();
-    i32_s00c2_5a50   FUN_00c26170();
-    void  FUN_00c26310(void* pTree);
+    void  FUN_00c25f80();  // 0x00c25f80 (cSPCreatureCitizen::FUN_00c25f80)
+    i32_s00c2_5a50   FUN_00c26120();  // 0x00c26120 (cSPCreatureCitizen::FUN_00c26120)
+    i32_s00c2_5a50   FUN_00c26170();  // 0x00c26170 (cSPCreatureCitizen::FUN_00c26170)
+    void  FUN_00c26310(void* pTree);  // 0x00c26310 (cSPCreatureCitizen::FUN_00c26310)
     bool  IsWaitingForTool(i32_s00c2_5a50 nTool);  // 0x00c26380 (cSPCreatureCitizen::IsWaitingForTool)
-    void  SetToolOnAnimEvent(i32_s00c2_5a50 nTool);
-    void  FUN_00c26450();
+    void  SetToolOnAnimEvent(i32_s00c2_5a50 nTool);  // 0x00c263e0 (cSPCreatureCitizen::SetToolOnAnimEvent)
+    void  FUN_00c26450();  // 0x00c26450 (cSPCreatureCitizen::FUN_00c26450)
 
     // fields
     u8   mPad_000[0x34];
@@ -1102,6 +1110,7 @@ float g_fMaxFloat = 3.402823466e38f;
 typedef int            i32_s00da_7780;
 struct Creature;
 struct cTribe;
+struct IdleBlock;
 struct PtrVec { Creature** mBegin; Creature** mEnd; };
 struct AutoRefCount {
     u32  mPtr;
@@ -1187,6 +1196,34 @@ struct cTribe {
     void FUN_00c950f0(Creature* p);
     void V_9c(Creature* p, u32 a) { (*(void (__thiscall**)(void*, Creature*, u32))(*(char**)this + 0x9c))(this, p, a); }
 };
+struct TriggerMgr {
+    void* vptr;                            // +0x00
+    u8  pad_004[0x28];
+    i32_s00da_7780 mField2c;                          // +0x2c
+    u8  FUN_00adb360(void* o);
+    void goExit();
+};
+struct OrderMgr {
+    void* vptr;                            // +0x00
+    u32 FUN_00bc3db0(u32 a);
+    u8 FUN_00bc3df0(u32 a);
+    u32 FUN_00bc5040(u32 a);
+};
+struct Mgr310 {
+    void* vptr;                            // +0x00
+    void FUN_00b453a0();
+    void FUN_00b45410();
+};
+struct IdleBlock {
+    i32_s00da_7780 mField00;                          // +0x00
+    i32_s00da_7780 mField04;                          // +0x04
+    i32_s00da_7780 mField08;                          // +0x08
+    i32_s00da_7780 mField0c;                          // +0x0c
+    f32 mField10;                          // +0x10
+    Creature* mpCreature14;                // +0x14
+    void PickNewActivity();
+};
+struct S24 { f32 mT00; u8 mByte04; u8 pad05[3]; i32_s00da_7780 mField08; };
 struct S28 { u8 pad0[0x10]; i32_s00da_7780 mField10; };
 struct Creature {
     void* vptr;                            // +0x000
@@ -1232,6 +1269,9 @@ struct Creature {
     u8    FUN_00c04710();
     void  FUN_00c0bf10(u32 a0, u32 a1, u32 a2, u32 a3, f32 f4, u32 a5, u32 a6, u32 a7, u32 a8, u32 a9, u32 a10);
 };
+OrderMgr* FUN_00b3d4e0();
+TriggerMgr* FUN_00b3d4d0();
+Mgr310* __stdcall FUN_00b3d310(void* o);
 // ---- items of slice s00da7780 end
 
 // ---- items of slice s01335f70 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -1270,6 +1310,299 @@ extern AttrDesc g_tbl_15721f0[];   // 0x015721f0  table written by $E401
     d.mFn34 = (void*)s34; d.mFn38 = (void*)s38;                 \
     d.mOffset = of; g_tbl_15721f0[i] = d;
 // ---- items of slice s01335f70 end
+
+// ---- items of slice s00c0ddb0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+struct F_b3050  { char  __thiscall f(int, int); };    // 0x009b3050
+#define GF(a)   (*(float*)(a))
+// ---- items of slice s00c0ddb0 end
+
+// ---- items of slice s00c24e80 begin (TODO(rewrite): local stubs, replace by canonical classes)
+struct cCreatureBaseOps
+{
+    void  SpawnEffect(int, int, int, int, float, int, int, int, int, int, int); // 0x00c0bf10
+    char  TestFlag(int);                                                        // 0x00c0e0c0
+    char  InterruptAnimation(int, void*, int);                                  // 0x00c12310
+    char  PlayAnimation(int, int, void*);                                       // 0x00c12190
+    int   WaitForAnimEventOrEnd(int, u32*, int, int, int);                      // 0x00c14ef0
+    bool  AnimationFinished(int);                                               // 0x00c123f0
+    void  SetToolEffect(u32, u32);                                              // 0x00c24f40
+};
+typedef char (__thiscall* FnCharThis)(void*);
+struct Citizen48
+{
+    void*  mVtbl;               // 0x00000
+    u8     pad_004[0x00034 - 0x00004];
+    u8     mBundleListBase;     // 0x00034  cGameBundleContainer::mBundleList (ecx = this+0x34)
+    u8     pad_035[0x000c0 - 0x00035];
+    void*  mSubC0Vtbl;          // 0x000c0  sub-object vtable (ecx = this+0xc0)
+    u8     pad_c4[0x00b20 - 0x000c4];
+    void*  mFieldB20;           // 0x00b20  (float "scale" at +0x590)
+    u8     pad_b24[0x00b54 - 0x00b24];
+    void*  mFieldB54;           // 0x00b54
+    u8     pad_b58[0x00fc4 - 0x00b58];
+    void*  mpBehaviorTreeData;  // 0x00fc4
+    void*  mpInteractor;        // 0x00fc8  mpWhoIsInteractingWithMe.mpObject
+    u8     pad_fcc[0x00ffc - 0x00fcc];
+    u32    mFoodValue;          // 0x00ffc
+    u8     pad_1000[0x01002 - 0x01000];
+    u8     mField1002;          // 0x01002
+    u8     pad_1003[0x01010 - 0x01003];
+    void*  mField1010;          // 0x01010
+    void*  mField1014;          // 0x01014
+    u8     pad_1018[0x0102c - 0x01018];
+    u32    mField102C;          // 0x0102c
+
+    int   FUN_00c0f4f0();                             // 0x00c0f4f0
+    void  SetToolTarget(float, float, float);         // 0x00c234a0
+    char  TestFlag(int);                              // 0x00c0e0c0
+    char  PlayAnimation(int, int, void*);             // 0x00c12190
+    bool  AnimationFinished(int);                     // 0x00c123f0
+    int   WaitForAnimEventOrEnd(int, u32*, int, int, int); // 0x00c14ef0
+
+    void  FUN_00c24040(void*);                        // 0x00c24040
+    bool  DetachBodyEffectById(void*, void*);         // 0x00c15150
+    void  FUN_00c17d60(int, void*, int, void*, int); // 0x00c17d60
+    void* FUN_00c0dfb0(void*);                        // 0x00c0dfb0
+    void  FUN_00c0de60(void*, void*);                 // 0x00c0de60
+    void* FUN_00c23f80(int, int, int, void*);         // 0x00c23f80
+    bool  IsLeader();                                 // 0x00c232d0
+    char  FUN_00c0b780();                             // 0x00c0b780
+};
+struct XformMsg48
+{
+    u16   mField00;
+    u16   mField02;                                   // incremented by 1 before SetXform
+    u32   mField04;
+    u16   mField08;
+    u16   mField0A;
+    u32   mField0C;
+    float mField10;                                   // the distance
+    u32   mField14;
+    u32   mField18;
+    u32   mField1C;
+    u32   mField20;
+    u32   mField24;
+    u32   mField28;
+    u32   mField2C;
+    u32   mField30;
+    u32   mField34;
+
+    void  FUN_00434040();                             // 0x00434040 ctor
+};
+void* __cdecl FUN_00c9cec0_s00c2_4e80(int);                      // 0x00c9cec0
+struct Community48 { void* FUN_00c00650(); };         // 0x00c00650 (ecx = cCommunity*)
+struct Effect150 { bool FUN_009b3050(u32, u32); };    // 0x009b3050 (ecx = effect+0x150)
+struct BundleList48 { u32 FUN_00cee330(); };          // 0x00cee330 (ecx = self+0x34)
+struct Pair48 { void* a; void* b; };                  // 8-byte {bt, interactor} pair
+struct ObjTiny48 { u32 FUN_00ac7ab0(); };             // 0x00ac7ab0 (ecx = object)
+void  __cdecl FUN_00c10330_c(void*, u32, void*, int, void*, int);  // 0x00c10330
+void* __stdcall FUN_00b3d2b0_c(float, void*, u32);                 // 0x00b3d2b0
+typedef void* (__thiscall* FnPtrThis)(void*);
+typedef void  (__thiscall* FnMsgThis)(void*, void*);
+typedef void  (__thiscall* Fn3This)(void*, int, void*, int);
+#define G1485378  (*(const float*)0x01485378)   //  _HK_REAL_ZERO
+#define G1581334  (*(const float*)0x01581334)   //  dist multiplier (0.0)
+#define G1581338  (*(const float*)0x01581338)   //  dist reset value (0.0)
+#define G168dcc8  (*(const float*)0x0168dcc8)
+#define G168dccc  (*(const float*)0x0168dccc)
+#define G168dcd0  (*(const float*)0x0168dcd0)
+__forceinline static void SpawnTail48(Citizen48* self, u32 d)
+{
+    void* btv = self->mpBehaviorTreeData;
+    char* eff = (char*)btv + 0x2735300;
+    self->FUN_00c24040(btv);
+    self->DetachBodyEffectById(eff, (void*)d);
+    if (btv == self->mpBehaviorTreeData)
+        self->mFoodValue = 0;
+
+    void* rr = ((FnPtrThis)((void**)self->mSubC0Vtbl)[0x68 / 4])((char*)self + 0xc0);
+    float dist = (*(float*)((char*)rr + 0x14) - *(float*)((char*)rr + 8)) * G1581334;
+    self->FUN_00c17d60(0, btv, 0, eff, 1);
+
+    void* found = self->FUN_00c0dfb0(eff);
+    if (found == 0)
+        return;
+    if (self->mField1014 == 0)
+        return;
+
+    int   a   = *(int*)((char*)found + 8);
+    char* t   = (char*)self->mFieldB54;
+    char* u   = *(char**)(t + 0x17c);
+    char* v   = *(char**)(u + 0x2e4);
+    void* val = *(void**)(v + a * 0x2bc);
+    self->FUN_00c0de60(val, found);
+    self->FUN_00c23f80(0, 0, a, 0);
+
+    void* o8c = *(void**)((char*)found + 0x8c);
+    if (o8c == 0)
+        return;
+    XformMsg48 msg;
+    msg.FUN_00434040();
+    o8c = *(void**)((char*)found + 0x8c);
+    ((FnMsgThis)((void**)o8c)[0x20 / 4])(o8c, &msg);
+    *(u16*)&msg.mField02 += 1;
+    msg.mField10 = dist;
+    o8c = *(void**)((char*)found + 0x8c);
+    ((FnMsgThis)((void**)o8c)[0x18 / 4])(o8c, &msg);
+}
+// ---- items of slice s00c24e80 end
+
+// ---- items of slice s00c278e0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+typedef int            i32_s00c2_78e0;
+struct Vec3_s00c2_78e0 { f32 x, y, z; };
+class cVTable_s00c2_78e0 { public: void* mpSlots[0x100]; };
+class cDispatchObject_s00c2_78e0 {
+public:
+    void* Call(i32_s00c2_78e0 nSlot) {
+        return ((void* (__thiscall*)(cDispatchObject_s00c2_78e0*))mpTable->mpSlots[nSlot >> 2])(this);
+    }
+    i32_s00c2_78e0 CallInt(i32_s00c2_78e0 nSlot) {
+        return ((i32_s00c2_78e0 (__thiscall*)(cDispatchObject_s00c2_78e0*))mpTable->mpSlots[nSlot >> 2])(this);
+    }
+    f32 CallFloat(i32_s00c2_78e0 nSlot) {
+        return ((f32 (__thiscall*)(cDispatchObject_s00c2_78e0*))mpTable->mpSlots[nSlot >> 2])(this);
+    }
+    void CallVoid(i32_s00c2_78e0 nSlot) {
+        ((void (__thiscall*)(cDispatchObject_s00c2_78e0*))mpTable->mpSlots[nSlot >> 2])(this);
+    }
+    void CallVoidArg(i32_s00c2_78e0 nSlot, i32_s00c2_78e0 nArg) {
+        ((void (__thiscall*)(cDispatchObject_s00c2_78e0*, i32_s00c2_78e0))mpTable->mpSlots[nSlot >> 2])(this, nArg);
+    }
+    void* CallArg(i32_s00c2_78e0 nSlot, void* pArg) {
+        return ((void* (__thiscall*)(cDispatchObject_s00c2_78e0*, void*))mpTable->mpSlots[nSlot >> 2])(this, pArg);
+    }
+    cVTable_s00c2_78e0* mpTable;                           // +0x000
+};
+class cRefVector {
+public:
+    void Resize(i32_s00c2_78e0 nCount, void* pSrc);        // 0x00b93c60
+    void Erase(void* pBegin, void* pEnd);       // 0x00e25bd0
+
+    void* mpBegin;                              // +0x000
+    void* mpEnd;                                // +0x004
+    void* mpCapacity;                           // +0x008
+};
+void __cdecl CopyRefRange(void** ppCursor, void** pBegin, void** pEnd, void* pDest,
+                          void* pExtra);        // 0x00dc6730
+class cActionCircle {
+public:
+    cActionCircle* FUN_00afba10();              // 0x00afba10 (construct)
+    void FUN_00afbad0();                        // 0x00afbad0 (destroy)
+    cActionCircle* CopyFrom(cActionCircle* pSrc);   // 0x00c278e0
+
+    f32 m00, m04, m08, m0c, m10, m14, m18, m1c, m20;   // +0x00
+    i32_s00c2_78e0 m24;                                    // +0x24
+    u8  m28;                                    // +0x28
+    u8  mPad29[3];                              // +0x29
+    f32 m2c, m30, m34, m38;                     // +0x2c
+    cRefVector mVec;                            // +0x3c
+    void* m48;                                  // +0x48
+    u8  mPad4c[4];                              // +0x4c
+    cStarRecordVector mStars;                   // +0x50
+    u8 mPad5c[0x0c];                            // +0x5c
+};
+class cCreatureBase_s00c2_78e0 {
+public:
+    void FUN_00c1fe80();                        // 0x00c1fe80
+    void FUN_00c1c8e0();                        // 0x00c1c8e0
+    i32_s00c2_78e0  FUN_00c0c2f0();                        // 0x00c0c2f0
+    bool Flag388();                             // 0x00c0c0e0
+    void* FUN_00c0b750();                       // 0x00c0b750
+    void* FUN_00c04590();                       // 0x00c04590
+    void* GetTribe();                           // 0x00c22f50
+    void* FUN_00c41ec0();                       // 0x00c41ec0
+    void funcC4h();                             // 0x00c27b70
+    void MoveToPointAndFacingAtSpeed(i32_s00c2_78e0 nMode, float* pPos, float* pDir, f32 s0, f32 s1); // 0x00c1c5c0
+    void MoveToPointAtSpeedPathPlan(void* pPlan, i32_s00c2_78e0* pTarget, f32 s0, f32 s1, i32_s00c2_78e0 nZero); // 0x00c1c310
+
+    u8   mPad000[0x110];                        // +0x000
+    u32  m110;                                  // +0x110
+    u8   mPad114[0x23];                         // +0x114
+    u8   m137;                                  // +0x137
+    u8   mPad138[0x118];                        // +0x138
+    Vec3_s00c2_78e0 m250;                                  // +0x250
+    u8   m25c;                                  // +0x25c
+    u8   mPad25d[0xd3];                         // +0x25d
+    u32  m330;                                  // +0x330
+    u8   mPad334[0xcdc];                        // +0x334
+    cRefCounted* mpOwnerCity;                   // +0x1010
+    cRefCounted* mpOwnerTribe;                  // +0x1014
+    cRefVector   mVec1018;                      // +0x1018
+    i32_s00c2_78e0  mnSpecializedTool;                     // +0x1024
+    cRefCounted* mpHitSphere;                   // +0x1028
+    i32_s00c2_78e0  mnToolEffectIndex;                     // +0x102c
+    cRefCounted* mpNoun;                        // +0x1030
+};
+class cCreatureCitizen_s00c2_78e0 {
+public:
+    void SetSpecializedTool(i32_s00c2_78e0 nTool);         // 0x00c279a0
+    void* FUN_00c27dd0(void* pObj);             // 0x00c27dd0
+    void MoveToPointAndFacingAtSpeed(i32_s00c2_78e0 nMode, float* pPos, float* pDir, f32 s0, f32 s1); // 0x00c1c5c0
+
+    u8   mPad000[0xe8c];                        // +0x000
+    i32_s00c2_78e0  mnE8c;                                 // +0x0e8c
+    i32_s00c2_78e0  mnE90;                                 // +0x0e90
+    f32  mfE94;                                 // +0x0e94
+    void* mpE98;                                // +0x0e98
+    void* mpE9c;                                // +0x0e9c
+    u8   mPadEA0[0x170];                        // +0x0ea0
+    cRefCounted* mpOwnerCity;                   // +0x1010
+    cRefCounted* mpOwnerTribe;                  // +0x1014
+    u8   mPad1018[0x14];                        // +0x1018
+    i32_s00c2_78e0  mnToolEffectIndex;                     // +0x102c
+};
+class cEditorList {
+public:
+    void* First();                              // 0x00cee330
+    u8 mPad[0x24];
+};
+class cGameData_s00c2_78e0 {
+public:
+    void RemoveOwner();                         // 0x00c27be0
+    void FUN_00c1c8e0();                        // 0x00c1c8e0
+
+    u8   mPad000[0x34];                         // +0x000
+    cEditorList mEditor;                        // +0x034
+    u8   mField58[0xfb8];                       // +0x058
+    cRefCounted* mpOwnerCity;                   // +0x1010
+    cRefCounted* mpOwnerTribe;                  // +0x1014
+    cRefVector   mVec1018;                      // +0x1018
+    u8   mPad1024[0x0c];                        // +0x1024
+    cRefCounted* mpNoun;                        // +0x1030
+};
+class cGameNounManager_s00c2_78e0 {
+public:
+    void RemoveNoun(void* pNoun);               // 0x00b225d0
+};
+class cGroundEditorRes {
+public:
+    void* getContainer();                       // 0x00ac79d0
+    void  FUN_00ac79e0(void* pObj, void* pField);   // 0x00ac79e0
+    void  FUN_00ac7de0(void* pObj, void* pContainer); // 0x00ac7de0
+};
+class cTribeStrategyObject {
+public:
+    void FUN_00cca880(void* pCitizen, i32_s00c2_78e0 nTool);   // 0x00cca880
+};
+void* __cdecl FUN_00b3d260();                   // 0x00b3d260
+void* __cdecl cTribeModeStrategy_Instance();    // 0x00cd40b0
+void  __cdecl FUN_00c0d3a0(void* pSelf);        // 0x00c0d3a0
+// ---- items of slice s00c278e0 end
+
+// @ 0x00c0de60
+void SP::cSPCreatureCitizen::SetGraspedEffectOffsets(nSPCreatureAnim::creature_body_static_data const * param_2, nSPCreatureAnim::creature_effect * param_3)
+{
+    int param_3_v = (int)param_3;
+    int param_2_v = (int)param_2;
+    char* edi = (char*)param_2_v + 0x150;
+    if (!((F_b3050*)edi)->f(0x70737267, 0)) {
+        if (!((F_b3050*)edi)->f(0x74756f6d, 0)) return;
+    }
+    float f1 = GF((char*)this + 0x124);
+    GF((char*)param_3_v + 0xc) = f1 * GF((char*)param_2_v + 0x330);
+    GF((char*)param_3_v + 0x10) = GF((char*)param_2_v + 0x334) * f1;
+    GF((char*)param_3_v + 0x14) = GF((char*)param_2_v + 0x338) * f1;
+}
 
 // @ 0x00c22530
 float cInteractionAgent::FUN_00c22530()
@@ -2636,6 +2969,356 @@ f64 cCreatureBase_s00c2_3f80::FUN_00c24df0()
     return (f64)base * (f64)scale;
 }
 
+// @ 0x00c24e80
+void __fastcall FUN_00c24e80(void* self_, int, float param_3)
+{
+    char* self = (char*)self_;
+
+    if (*(u32*)(self + 0x1014) == 0)
+        return;
+    if (*(u32*)(*(char**)(self + 0xb4c)) == 0)
+        return;
+
+    void* obj = self + 0xc0;
+    char ok = ((FnCharThis)(*(void***)obj)[0x16])(obj);
+    if (ok != 0)
+    {
+        float v = param_3 * 0.5f;
+        if (v < 3.0f) v = 3.0f;
+        if (v > 5.0f) v = 5.0f;
+        param_3 = v;
+    }
+    ((cCreatureBaseOps*)self_)->SpawnEffect(0, 0x10000, 0, 0x10000, param_3, 0, 0x10, 0, 0, 0, 0);
+}
+
+// @ 0x00c24f40
+void __fastcall FUN_00c24f40(void* self_, int, u32 param_2, void* param_3)
+{
+    Citizen48* self = (Citizen48*)self_;
+    void* bt = param_3;
+    if ((int)param_3 == -1)
+        bt = self->mpBehaviorTreeData;
+
+    self->FUN_00c24040(bt);
+
+    char* effect = (char*)bt + 0x2735300;             // local_3c
+    self->DetachBodyEffectById(effect, (void*)1);
+
+    if (bt == self->mpBehaviorTreeData)
+        self->mFoodValue = param_2;
+
+    void* r = ((FnPtrThis)((void**)self->mSubC0Vtbl)[0x68 / 4])((char*)self_ + 0xc0);
+    float dist = (*(float*)((char*)r + 0x14) - *(float*)((char*)r + 8)) * G1581334;
+
+    int  iVar7   = 0;
+    bool bVar2   = false;
+    void* local58 = 0;
+
+    switch (param_2)
+    {
+    case 1:
+        bVar2 = true;  iVar7 = (int)0xdbfd6844;
+        local58 = *(void**)((char*)FUN_00c9cec0_s00c2_4e80(1) + 0x30);   break;
+    case 2:
+        bVar2 = true;  iVar7 = (int)0xdbfd6847;
+        local58 = *(void**)((char*)FUN_00c9cec0_s00c2_4e80(2) + 0x30);   break;
+    case 3:
+        bVar2 = true;  iVar7 = (int)0xdbfd6846;
+        local58 = *(void**)((char*)FUN_00c9cec0_s00c2_4e80(3) + 0x30);   break;
+    case 4:
+    {
+        void* cm = self->mField1010 ? self->mField1010 : self->mField1014;
+        if ((cm != 0 && ((Community48*)cm)->FUN_00c00650() == self_) || self->mField102C == 8)
+        {
+            bVar2 = true;
+            iVar7 = (self->IsLeader() ? 0x694b4df0 : 0) + 0x1cf84d57;
+            local58 = *(void**)((char*)FUN_00c9cec0_s00c2_4e80(8) + 0x30);
+        }
+        break;
+    }
+    case 5:
+    {
+        void* cm = self->mField1010 ? self->mField1010 : self->mField1014;
+        if ((cm == 0 || ((Community48*)cm)->FUN_00c00650() != self_) && self->mField102C != 8)
+        {
+            bVar2 = false; iVar7 = (int)0x3a887470;
+        }
+        else
+        {
+            bVar2 = true;
+            iVar7 = (self->IsLeader() ? 0x48e62a90 : 0) + 0xce7cd1c8;
+        }
+        break;
+    }
+    case 6:
+    {
+        void* cm = self->mField1010 ? self->mField1010 : self->mField1014;
+        if ((cm == 0 || ((Community48*)cm)->FUN_00c00650() != self_) && self->mField102C != 8)
+        {
+            bVar2 = false; iVar7 = (int)0x1192b368;
+        }
+        else
+        {
+            bVar2 = true;
+            iVar7 = (self->IsLeader() ? 0x7e324150 : 0) + 0x51fe9fb0;
+        }
+        break;
+    }
+    case 7:  iVar7 = (int)0xae024c94; dist = G1581338; break;
+    case 8:  iVar7 = (self->FUN_00c0b780() ? 0x28f5c108 : 0) + 0x1192b368;
+             dist = G1581338; break;
+    case 9:  iVar7 = (int)0xdc87ff23; dist = G1581338; break;
+    case 10: iVar7 = (int)0x1192b368; dist = G1581338; break;
+    case 11: iVar7 = (int)0xb4dd0222; break;
+    case 12: bVar2 = true; iVar7 = (int)0x5223cf1e; break;
+    case 13:
+        bVar2 = true;  iVar7 = (int)0xb9319ac6;
+        local58 = *(void**)((char*)FUN_00c9cec0_s00c2_4e80(5) + 0x30);   break;
+    case 14:
+        bVar2 = true;  iVar7 = (int)0x59867820;
+        local58 = *(void**)((char*)FUN_00c9cec0_s00c2_4e80(4) + 0x30);   break;
+    case 15:
+        bVar2 = true;  iVar7 = (int)0xf8122731;
+        local58 = *(void**)((char*)FUN_00c9cec0_s00c2_4e80(6) + 0x30);   break;
+    case 16:
+        bVar2 = true;  iVar7 = (int)0x759b0e13;
+        local58 = *(void**)((char*)FUN_00c9cec0_s00c2_4e80(7) + 0x30);   break;
+    case 17:
+        bVar2 = true;  iVar7 = (int)0x86439b47;
+        local58 = *(void**)((char*)FUN_00c9cec0_s00c2_4e80(0xb) + 0x30); break;
+    case 18:
+        bVar2 = true;  iVar7 = (int)0x792e9926;
+        local58 = *(void**)((char*)FUN_00c9cec0_s00c2_4e80(9) + 0x30);   break;
+    case 19: iVar7 = (int)0xd72f5830; break;
+    case 20: iVar7 = (int)0xc4717433; break;
+    case 21: iVar7 = (int)0xa8f747ae; break;
+    case 22: iVar7 = (int)0x2b4d0331; break;
+    case 23: iVar7 = (int)0x541b4a0d; dist = G1581338; break;
+    }
+
+    self->FUN_00c17d60(iVar7 != 0, bt, iVar7, effect, 1);
+
+    void* found = self->FUN_00c0dfb0(effect);
+    if (found == 0)
+        return;
+    if (self->mField1014 == 0)
+        return;
+
+    int   a   = *(int*)((char*)found + 8);
+    char* t   = (char*)self->mFieldB54;
+    char* u   = *(char**)(t + 0x17c);
+    char* v   = *(char**)(u + 0x2e4);
+    void* val = *(void**)(v + a * 0x2bc);
+    self->FUN_00c0de60(val, found);
+
+    void* rr = self->FUN_00c23f80((int)param_2, iVar7, a, local58);
+    if (param_2 == 0x14 && rr != 0)
+    {
+        char* e = (char*)found;
+        if (*(u8*)((char*)rr + 0x18) == 0 && ((Effect150*)(effect + 0x150))->FUN_009b3050(0x70737267, 0) != 0)
+        {
+            *(float*)(e + 0x18) = 0.0f;
+            *(float*)(e + 0x1c) = 0.0f;
+            *(float*)(e + 0x20) = 0.0f;
+            *(float*)(e + 0x24) = 1.0f;              // 0x1485720 (_HK_REAL_ONE)
+        }
+        else if (((Effect150*)(effect + 0x150))->FUN_009b3050(0x74756f6d, 0) != 0)
+        {
+            *(float*)(e + 0x18) = -0.866025388f;     // 0x146aaf4
+            *(float*)(e + 0x1c) = 0.0f;
+            *(float*)(e + 0x20) = 0.0f;
+            *(float*)(e + 0x24) = 0.5f;              // 0x1471064
+        }
+    }
+
+    void* obj8c = *(void**)((char*)found + 0x8c);
+    if (obj8c == 0)
+        return;
+
+    if (bVar2)
+    {
+        void* res = ((FnPtrThis)((void**)self->mVtbl)[0xe0 / 4])(self_);
+        ((Fn3This)((void**)obj8c)[0x44 / 4])(obj8c, 5, res, 3);
+    }
+
+    XformMsg48 msg;
+    msg.FUN_00434040();
+    void* obj8c2 = *(void**)((char*)found + 0x8c);
+    ((FnMsgThis)((void**)obj8c2)[0x20 / 4])(obj8c2, &msg);
+
+    void* obj8c3 = *(void**)((char*)found + 0x8c);
+    msg.mField02 += 1;
+    msg.mField10 = dist;
+    ((FnMsgThis)((void**)obj8c3)[0x18 / 4])(obj8c3, &msg);
+}
+
+// @ 0x00c25480
+bool __fastcall FUN_00c25480(void* self_, int, u32 arg1, u32 arg2)
+{
+    char* self = (char*)self_;
+
+    if (*(u32*)(self + 0xffc) == arg1)
+        return ((cCreatureBaseOps*)self_)->AnimationFinished(0x2c39200);
+
+    if (((cCreatureBaseOps*)self_)->TestFlag(0x2c39200) != 0)
+    {
+        u32 evt = 0xffffffff;
+        if (((cCreatureBaseOps*)self_)->WaitForAnimEventOrEnd(0x7d7502fc, &evt, 0x2c39200, 0, 1) != 0)
+            ((cCreatureBaseOps*)self_)->SetToolEffect(arg1, evt);
+        return false;
+    }
+
+    if ((u8)arg2 != 0)
+    {
+        ((cCreatureBaseOps*)self_)->InterruptAnimation(0x2c39200, *(void**)(self + 0xfc4), 0);
+        return false;
+    }
+    ((cCreatureBaseOps*)self_)->PlayAnimation(0x2c39200, 1, *(void**)(self + 0xfc4));
+    return false;
+}
+
+// @ 0x00c25530
+bool __fastcall FUN_00c25530(void* self_, int, u32 param_2)
+{
+    Citizen48*    self    = (Citizen48*)self_;
+    BundleList48* bundles = (BundleList48*)&self->mBundleListBase;
+    u32 local44 = 0xffffffff;
+    Pair48 pair;
+    int iVar4 = self->FUN_00c0f4f0();        // signed in retail (jg/jl on ebx)
+
+    if (*(float*)(*(char**)&self->mFieldB20 + 0x590) == G1485378)   // _HK_REAL_ZERO
+        iVar4 = 1;
+
+    if (bundles->FUN_00cee330() != 0)
+    {
+        if (iVar4 > 2)
+            goto L_558d;
+        if (self->mFoodValue != 0)
+            goto L_567d;
+        if (iVar4 < 2)
+            goto L_55c8;
+    L_558d:
+        if (self->AnimationFinished(0x2c39200) != 0 && self->AnimationFinished(0x66e50fc) != 0)
+            return 1;
+        return 0;
+    L_55c8:
+        if (self->mField1002 != 1)
+            return self->AnimationFinished(0x4ffb325);   // bool: raw eax, not zero-extended
+        if (self->TestFlag(0x4ffb325) == 0)
+        {
+            self->PlayAnimation(0x4ffb325, 1, self->mpInteractor);
+            return 0;
+        }
+        param_2 = 0xffffffff;
+        if (self->WaitForAnimEventOrEnd(0xbfa50b5a, &param_2, 0x4ffb325, 0, 1) == 0)
+            return 0;
+        self->SetToolTarget(G168dcc8, G168dccc, G168dcd0);
+        return 0;
+    }
+
+L_567d:
+    if (self->TestFlag(0x66e50fc) != 0 || self->TestFlag(0x2c39200) != 0)
+        goto L_5782;
+    if (bundles->FUN_00cee330() != 0)
+        goto L_574b;
+    if (iVar4 == 2)
+    {
+        if (self->mFoodValue != 0)
+        {
+            u32 pa = (u32)self->PlayAnimation(0x66e50fc, 1, (void*)0xffffffff);
+            pair.a = self->mpBehaviorTreeData;
+            pair.b = self->mpInteractor;
+            FUN_00c10330_c(self_, pa, &pair, 2, &pair, 2);
+            return 0;
+        }
+    }
+    else if (iVar4 == 1)
+    {
+        self->PlayAnimation(0x2c39200, 1, self->mpBehaviorTreeData);
+        return 0;
+    }
+    self->PlayAnimation(0x2c39200, 1, self->mpInteractor);
+    return 0;
+
+L_574b:
+    if (iVar4 > 2)
+        goto L_5a38;
+    if (self->mFoodValue == 0)
+        goto L_5a38;
+    self->PlayAnimation(0x2c39200, 1, self->mpBehaviorTreeData);
+    return 0;
+
+L_5782:
+    local44 = 0xffffffff;
+    if (self->mFoodValue == 0)
+        goto L_58e5;
+    if (iVar4 == 2)
+        goto L_57a9;
+    if (self->mField1002 != 0)
+        goto L_58e5;
+L_57a9:
+    {
+        u32 sig = (bundles->FUN_00cee330() != 0) ? 0x7d7502fc : 0xe95450e;
+        if (self->WaitForAnimEventOrEnd(sig, &local44, 0xffffffff, 0, 1) == 0)
+            goto L_58e5;
+        SpawnTail48(self, 1);
+    }
+L_58e5:
+    if (bundles->FUN_00cee330() != 0)
+        goto L_5a38;
+    if (self->WaitForAnimEventOrEnd(0x7d7502fc, &local44, 0xffffffff, 0, 1) == 0)
+        goto L_5a38;
+    if (iVar4 != 1)
+        goto L_5a20;
+    SpawnTail48(self, iVar4);
+
+L_5a20:
+    {
+        void* obj = FUN_00b3d2b0_c(G1581334, bundles, param_2);
+        ((ObjTiny48*)obj)->FUN_00ac7ab0();
+    }
+
+L_5a38:
+    return 0;
+}
+
+// @ 0x00c25a50
+bool cSPCreatureCitizen_s00c2_5a50::FUN_00c25a50(void* pTree)
+{
+    i32_s00c2_5a50 local_4c = FUN_00c0f4f0();
+    if (*(f32*)((char*)mp_b20 + 0x590) == _HK_REAL_ZERO)
+        local_4c = 1;
+    i32_s00c2_5a50 animId = (local_4c > 1 ? 1 : 0) + 0x66897b4;
+    void* local_48 = FUN_00c0fa70(0x800780, 0);
+    if (local_48 == 0) {
+        if (mb_1002 != 0) {
+            if (AnimationFinished((u32)animId)) {
+                if (AnimationFinished(0x2796b30))
+                    return true;
+            }
+            return false;
+        }
+        if (FUN_00c0e0c0(0x2796b30) == 0) {
+            i32_s00c2_5a50 obj = (i32_s00c2_5a50)(intptr_t)FUN_00cee330(&mSub_034);
+            if (obj != 0)
+                obj += 0x34;
+            else
+                obj = 0;
+            i32_s00c2_5a50 r = PlayAnimationWithTarget(0x2796b30, obj, -1, (i32_s00c2_5a50)(intptr_t)mpInteract_fc8);
+            return (r & 0xffffff00) != 0;
+        }
+        if ((char)WaitForAnimEventOrEnd(0xbfa50b5a, &pTree, 0x2796b30, 0, 1)) {
+            mf_1004 = DAT_0168dbb0;
+            mf_1008 = DAT_0168dbb4;
+            mf_100c = DAT_0168dbb8;
+            mb_1002 = 1;
+            PerformSocialAction((i32_s00c2_5a50)(intptr_t)FUN_00cee330(&mSub_034), 0xffffffff);
+        }
+        return false;
+    }
+    return false;
+}
+
 // @ 0x00c25f80
 void cSPCreatureCitizen_s00c2_5a50::FUN_00c25f80()
 {
@@ -3240,6 +3923,220 @@ void cCreatureCitizen::SetCreatureName(const char* pName)
     }
 }
 
+// @ 0x00c278e0
+cActionCircle* cActionCircle::CopyFrom(cActionCircle* pSrc)
+{
+    m00 = pSrc->m00;
+    m04 = pSrc->m04;
+    m08 = pSrc->m08;
+    m0c = pSrc->m0c;
+    m10 = pSrc->m10;
+    m14 = pSrc->m14;
+    m18 = pSrc->m18;
+    m1c = pSrc->m1c;
+    m20 = pSrc->m20;
+    m24 = pSrc->m24;
+    m28 = pSrc->m28;
+    m2c = pSrc->m2c;
+    m30 = pSrc->m30;
+    m34 = pSrc->m34;
+    m38 = pSrc->m38;
+
+    i32_s00c2_78e0 nCount = (i32_s00c2_78e0)(((u8*)pSrc->mVec.mpEnd - (u8*)pSrc->mVec.mpBegin) >> 2);
+    mVec.Resize(nCount, &pSrc->m48);
+
+    void* pCursor = mVec.mpBegin;
+    CopyRefRange(&pCursor, (void**)pSrc->mVec.mpBegin, (void**)pSrc->mVec.mpEnd,
+                 mVec.mpBegin, pSrc);
+    mVec.mpEnd = pCursor;
+
+    mStars.CopyFrom(&pSrc->mStars);
+    return this;
+}
+
+// @ 0x00c279a0
+void cCreatureCitizen_s00c2_78e0::SetSpecializedTool(i32_s00c2_78e0 nTool)
+{
+    i32_s00c2_78e0 nOld = mnToolEffectIndex;
+    mnToolEffectIndex = nTool;
+
+    if (nTool == 0) {
+        cCommunity* pOwner = (cCommunity*)mpOwnerCity;
+        if (pOwner == nullptr)
+            pOwner = (cCommunity*)mpOwnerTribe;
+        if (pOwner != nullptr) {
+            if (pOwner->GetLeader() == this)
+                mnToolEffectIndex = 0xb;
+        }
+    }
+
+    if (nOld != mnToolEffectIndex) {
+        mnE8c = -1;
+        mnE90 = -1;
+        mfE94 = 0.0f;
+
+        u8* pBegin = (u8*)mpE98;
+        u8* pEnd   = (u8*)mpE9c;
+        memcpy(pBegin, pEnd, 0);
+        mpE9c = (u8*)mpE9c + (((i32_s00c2_78e0)(pEnd - pBegin) >> 2) * -4);
+    }
+
+    ((cDispatchObject_s00c2_78e0*)this)->CallVoidArg(0xac, 1);
+
+    void* pStrategy = cTribeModeStrategy_Instance();
+    if (((cDispatchObject_s00c2_78e0*)pStrategy)->CallInt(0x6c) != 0) {
+        void* pStrategy2 = cTribeModeStrategy_Instance();
+        void* pObj = ((cDispatchObject_s00c2_78e0*)pStrategy2)->Call(0x6c);
+        ((cTribeStrategyObject*)pObj)->FUN_00cca880(this, nOld);
+    }
+}
+
+// @ 0x00c27b70
+void cCreatureBase_s00c2_78e0::funcC4h()
+{
+    FUN_00c1fe80();
+
+    if (mpOwnerCity != nullptr) {
+        cRefCounted* pCity = mpOwnerCity;
+        mpOwnerCity = nullptr;
+        pCity->Release();
+    }
+    if (mpOwnerTribe != nullptr) {
+        cRefCounted* pTribe = mpOwnerTribe;
+        mpOwnerTribe = nullptr;
+        pTribe->Release();
+    }
+
+    mVec1018.Erase(mVec1018.mpBegin, mVec1018.mpEnd);
+    mnToolEffectIndex = 0;
+}
+
+// @ 0x00c27be0
+void cGameData_s00c2_78e0::RemoveOwner()
+{
+    if (mpNoun != nullptr)
+        ((cGameNounManager_s00c2_78e0*)FUN_00b3d300())->RemoveNoun(mpNoun);
+
+    if (mpNoun != nullptr) {
+        cRefCounted* pNoun = mpNoun;
+        mpNoun = nullptr;
+        pNoun->Release();
+    }
+
+    if (mpOwnerTribe != nullptr)
+        FUN_00c0d3a0(this);
+
+    void* pObj = mEditor.First();
+    if (pObj != nullptr) {
+        void* pContainer = ((cGroundEditorRes*)FUN_00b3d2b0())->getContainer();
+        if (pContainer != nullptr) {
+            void* pContainer2 = ((cGroundEditorRes*)FUN_00b3d2b0())->getContainer();
+            ((cGroundEditorRes*)FUN_00b3d2b0())->FUN_00ac7de0(pObj, pContainer2);
+        }
+        else {
+            ((cGroundEditorRes*)FUN_00b3d2b0())->FUN_00ac79e0(pObj, &mEditor);
+        }
+    }
+
+    ((cDispatchObject_s00c2_78e0*)FUN_00b3d260())->CallArg(0x3c, mField58);
+    FUN_00c1c8e0();
+
+    mVec1018.Erase(mVec1018.mpBegin, mVec1018.mpEnd);
+
+    if (mpOwnerCity != nullptr) {
+        cRefCounted* pCity = mpOwnerCity;
+        mpOwnerCity = nullptr;
+        pCity->Release();
+    }
+    if (mpOwnerTribe != nullptr) {
+        cRefCounted* pTribe = mpOwnerTribe;
+        mpOwnerTribe = nullptr;
+        pTribe->Release();
+    }
+}
+
+// @ 0x00da7c50
+void FUN_00da7c50(Creature* p, i32_s00da_7780, i32_s00da_7780, i32_s00da_7780, i32_s00da_7780, IdleBlock* s)
+{
+    if (s->mField0c != 0 && s->mField08 != -1)
+        p->GetTribe()->FindSpot(s->mField0c, s->mField08);
+    if (p->mByte_b5e == 0) {
+        p->mObjC0.V_ec();
+        u8 b = (p->mObjC0.V_f8() == 0);
+        p->FUN_00c14750(b);
+    }
+}
+
+// @ 0x00da7dc0
+void FUN_00da7dc0(Creature* p, i32_s00da_7780, i32_s00da_7780, i32_s00da_7780, i32_s00da_7780, IdleBlock* s)
+{
+    p->d0c0(6, 0);
+    u8 b = (p->mObjC0.V_f8() == 0);
+    p->FUN_00c14750(b);
+    if (s->mField04 != -1) {
+        cTribe* t = s->mpCreature14->GetTribe();
+        t->mSub558.FUN_00cc7f90(s->mField04);
+        s->mField04 = -1;
+    }
+}
+
+// @ 0x00da7e20
+bool FUN_00da7e20(Creature* p, Creature* q)
+{
+    Creature* a = p->FUN_00bc9b10();
+    i32_s00da_7780 iVar2 = (i32_s00da_7780)a->GetTribe();
+    i32_s00da_7780 iVar3 = (i32_s00da_7780)q->GetTribe();
+    if (iVar3 == iVar2) {
+        iVar2 = a->FUN_00c0ee60();
+        iVar3 = q->FUN_00c0ee60();
+        if (iVar3 == iVar2)
+            return 1;
+    }
+    return 0;
+}
+
+// @ 0x00da7fc0
+bool FUN_00da7fc0(Creature* p, i32_s00da_7780, i32_s00da_7780, i32_s00da_7780, i32_s00da_7780 mode, S24* s, i32_s00da_7780, f32 dt)
+{
+    if (mode == 1) {
+        i32_s00da_7780 t = FUN_00b3d4d0()->mField2c;
+        if (t != 1 && t != 2)
+            return 0;
+    }
+    p->GetTribe();
+    if (s->mField08 != -1) {
+        OrderMgr* m = FUN_00b3d4e0();
+        if (m->FUN_00bc3db0(s->mField08) != 0) {
+            s->mT00 -= dt;
+            if (s->mT00 < 0.0f)
+                return 0;
+        }
+        s->mByte04 = 1;
+        return m->FUN_00bc3df0(s->mField08) == 0;
+    }
+    return 0;
+}
+
+// @ 0x00da8050
+void FUN_00da8050(Creature* p, i32_s00da_7780, i32_s00da_7780, i32_s00da_7780, i32_s00da_7780 mode, S24* s)
+{
+    cTribe* t = p->GetTribe();
+    if (s->mField08 != -1) {
+        if (t->mField26c == s->mField08) {
+            t->mField26c = -1;
+            if (s->mByte04 != 0)
+                t->mTimer270.Restart();
+        }
+        FUN_00b3d4e0()->FUN_00bc5040(s->mField08);
+        if (mode == 1 && FUN_00b3d4d0()->mField2c == 2)
+            FUN_00b3d4d0()->goExit();
+    }
+    p->mObjC0.V_ec();
+    p->FUN_00c14750(1);
+    Mgr310* m = FUN_00b3d310(&p->mObjC0);
+    m->FUN_00b453a0();
+}
+
 // @ 0x00da80f0
 bool FUN_00da80f0(Creature* p, Creature* q)
 {
@@ -3274,6 +4171,12 @@ f32 FUN_00da8190(Creature* p)
     if (a != b)
         return 1.0f;
     return 0.0f;
+}
+
+// @ 0x00da81c0
+bool FUN_00da81c0(Creature* p)
+{
+    return p->FUN_00c25480(p->FUN_00c26120(), 0) == 0;
 }
 
 // @ 0x01335fe0

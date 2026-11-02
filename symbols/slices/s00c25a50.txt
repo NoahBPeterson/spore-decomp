@@ -1,4 +1,4 @@
-00c25a50 SP::cSPCreatureCitizen::FUN_00c25a50(void*)            ; 0x00c25a50  thiscall ret 4: tree-interaction animation state (countdown local, 0x2796b30 anim, +0x1002 flag, +0x1004/8/c offsets)
+00c25a50 ?FUN_00c25a50@cSPCreatureCitizen_s00c2_5a50@@QAE_NPAX@Z  # cSPCreatureCitizen_s00c2_5a50::FUN_00c25a50 migrated from s00c25a50 (verbatim, slice spelling)
 00c25f80 ?FUN_00c25f80@cSPCreatureCitizen_s00c2_5a50@@QAEXXZ  # cSPCreatureCitizen_s00c2_5a50::FUN_00c25f80 migrated from s00c25a50 (verbatim, slice spelling)
 00c26120 ?FUN_00c26120@cSPCreatureCitizen_s00c2_5a50@@QAEHXZ  # cSPCreatureCitizen_s00c2_5a50::FUN_00c26120 migrated from s00c25a50 (verbatim, slice spelling)
 00c26170 ?FUN_00c26170@cSPCreatureCitizen_s00c2_5a50@@QAEHXZ  # cSPCreatureCitizen_s00c2_5a50::FUN_00c26170 migrated from s00c25a50 (verbatim, slice spelling)
