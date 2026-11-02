@@ -1,21 +1,21 @@
-007d56f0  eastl::vector<0x78-record>::DoInsertValue
+007d56f0 ?SetTransforms@cGameModelEffect@@UAEXABUcTransform@@0@Z  # cGameModelEffect::SetTransforms migrated from s007d56f0 (verbatim, slice spelling)
 007d5a30 ??1CtrlVec@@QAE@XZ  # CtrlVec::~CtrlVec migrated from s007d56f0 (verbatim, slice spelling)
 007d5aa0 ?UninitCopyElem78@@YAPAPADPAPADPAD11PBX@Z  # UninitCopyElem78 migrated from s007d56f0 (verbatim, slice spelling)
 007d5af0 ??0cGameModelEffect@@QAE@PAXH@Z  # cGameModelEffect::cGameModelEffect migrated from s007d56f0 (verbatim, slice spelling)
 007d5c50 ??1cGameModelEffect@@UAE@XZ  # cGameModelEffect::~cGameModelEffect migrated from s007d56f0 (verbatim, slice spelling)
 007d5d50 ??0cSplitManager@@QAE@XZ  # cSplitManager::cSplitManager migrated from s007d56f0 (verbatim, slice spelling)
-007d5dc0  cGameModelEffect::Unload  # IComponent slot 1 (Dispose)
+007d5dc0 ?Unload@cGameModelEffect@@QAEXXZ  # cGameModelEffect::Unload migrated from s007d56f0 (verbatim, slice spelling)
 007d5e60 ?FindGameModel@cGameModelEffect@@QAEXXZ  # cGameModelEffect::FindGameModel migrated from s007d56f0 (verbatim, slice spelling)
 007d6030 ?DoInsertValues@AnimVec@@QAEXPAUcAnimationInfo@@IPBU2@@Z  # AnimVec::DoInsertValues migrated from s007d56f0 (verbatim, slice spelling)
 007d61f0 ?AllocAndCopy78@@YGPAXIPAD0@Z  # AllocAndCopy78 migrated from s007d56f0 (verbatim, slice spelling)
 007d6250 ?CopyElems78@@YAPAUElem78@@PAU1@00@Z  # CopyElems78 migrated from s007d56f0 (verbatim, slice spelling)
 007d62d0  deleting destructor (curve vector + vtable)
-007d6320  vector copy ctor (allocate + uninitialized_copy)
+007d6320 ??0Vec78@@QAE@ABU0@@Z  # Vec78::Vec78 migrated from s007d56f0 (verbatim, slice spelling)
 007d6380 ??0cMapResA@@QAE@ABURbMap@@@Z  # MakeMapResA migrated from s007d56f0 (verbatim, slice spelling)
 007d63e0  editor-component deleting destructor
 007d6440 ??0cMapResB@@QAE@ABURbMap@@PBMPAUGmeRefCount@@@Z  # cMapResB::cMapResB migrated from s007d56f0 (verbatim, slice spelling)
 007d6500  cMapResB::~cMapResB
-007d6620  resource complex function
+007d6620 ?DoInsertValue@CtrlVec@@QAEXPAUcSplitController@@ABU2@@Z  # CtrlVec::DoInsertValue migrated from s007d56f0 (verbatim, slice spelling)
 013eb938  ??_7GmeEditorResBase@@6B@
 013ef094  ??_7GmeRefCount@@6B@
 013f21d4  ??_7GmeIComponent@@6B@

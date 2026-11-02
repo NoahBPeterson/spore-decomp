@@ -3,4 +3,7 @@
 ../src/game/SPEngine/SPAppGameModelEffect.cpp  ?SetVisible@EffOwner@@QAEXH@Z  007d4820  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/SPEngine/SPAppGameModelEffect.cpp  ?Allocate@VecOut@@QAEPAU1@IPAX@Z  007d48e0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/SPEngine/SPAppGameModelEffect.cpp  ??1cEffectParams_s007d_4a40@@QAE@XZ  007d4ae0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPAppGameModelEffect.cpp  ??0Elem40@@QAE@ABU0@@Z  007d5300  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPAppGameModelEffect.cpp  ?CopyElem38@@YAPAXPAX0PBX@Z  007d5590  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/SPEngine/SPAppGameModelEffect.cpp  ??0cEffectParams_s007d_4a40@@QAE@XZ  007d55e0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPAppGameModelEffect.cpp  ?AddSplitInstance@cSplitManager_s007d_67e0@@QAEPAUcSplitInstanceRef@@PAU2@HHH@Z  007d7640  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include

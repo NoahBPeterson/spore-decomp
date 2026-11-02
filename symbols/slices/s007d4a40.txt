@@ -1,11 +1,11 @@
 007d4a40 ?Init@TransformInit@@QAEPAXPBXPAXD@Z  # TransformInit::Init migrated from s007d4a40 (verbatim, slice spelling)
 007d4ae0 ??1cEffectParams_s007d_4a40@@QAE@XZ  # cEffectParams_s007d_4a40::~cEffectParams migrated from s007d4a40 (verbatim, slice spelling)
-007d4b60  cEffectParams::Handle  # key change (kind 6) + component notify
-007d4c60  cEffectParams::Handle2  # kinds 1/3/6 + component notify
-007d4dd0  cEffectParams effect update
-007d5240  large transform ctor
-007d5300  Elem40 copy ctor (0x40-byte element)
-007d53a0  Elem40 range copy
-007d5520  cSPTransform backward copy (0x40 stride)
-007d5590  cSPTransform-ish element copy (calls Matrix3::Assign + 0x537f40)
+007d4b60 ?Handle@cEffectParams_s007d_4a40@@QAE_NHPAXH@Z  # cEffectParams_s007d_4a40::Handle migrated from s007d4a40 (verbatim, slice spelling)
+007d4c60 ?Handle2@cEffectParams_s007d_4a40@@QAEDHPAX@Z  # cEffectParams_s007d_4a40::Handle2 migrated from s007d4a40 (verbatim, slice spelling)
+007d4dd0 ?Tick@cEffectParams_s007d_4a40@@QAEXMMH@Z  # cEffectParams_s007d_4a40::Tick migrated from s007d4a40 (verbatim, slice spelling)
+007d5240 ?Init@TransformBig@@QAEPAXHIMMMMUMatrix3@@PAUObj@@@Z  # Init migrated from s007d4a40 (verbatim, slice spelling)
+007d5300 ??0Elem40@@QAE@ABU0@@Z  # Elem40::Elem40 migrated from s007d4a40 (verbatim, slice spelling)
+007d53a0 ?CopyElemRange40@@YAPAXPAX00@Z  # CopyElemRange40 migrated from s007d4a40 (verbatim, slice spelling)
+007d5520 ?CopyBackwardsTransforms@@YAPAXPAX00@Z  # CopyBackwardsTransforms migrated from s007d4a40 (verbatim, slice spelling)
+007d5590 ?CopyElem38@@YAPAXPAX0PBX@Z  # CopyElem38 migrated from s007d4a40 (verbatim, slice spelling)
 007d55e0 ??0cEffectParams_s007d_4a40@@QAE@XZ  # cEffectParams_s007d_4a40::cEffectParams migrated from s007d4a40 (verbatim, slice spelling)

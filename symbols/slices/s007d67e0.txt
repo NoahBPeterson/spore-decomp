@@ -7,5 +7,6 @@
 007d71b0 ?CopyAssignForward@@YAPAUcSplitInstanceList@@PBU1@0PAU1@@Z  # CopyAssignForward migrated from s007d67e0 (verbatim, slice spelling)
 007d71f0 ?CopyAssignBackward@@YAPAUcSplitInstanceList@@PBU1@0PAU1@@Z  # CopyAssignBackward migrated from s007d67e0 (verbatim, slice spelling)
 007d7240 ?AssignValueRange@@YAXPAUcSplitInstanceList@@0PBU1@@Z  # AssignValueRange migrated from s007d67e0 (verbatim, slice spelling)
+007d72e0 ?DoInsertValues@ListVector@@QAEXPAUcSplitInstanceList@@IABU2@@Z  # ListVector::DoInsertValues migrated from s007d67e0 (verbatim, slice spelling)
 007d7560 ?resize@ListVector@@QAEXI@Z  # ListVector::resize migrated from s007d67e0 (verbatim, slice spelling)
-007d7640 SP::cSplitManager::AddSplitInstance  # pdb_candidates caller-single
+007d7640 ?AddSplitInstance@cSplitManager_s007d_67e0@@QAEPAUcSplitInstanceRef@@PAU2@HHH@Z  # cSplitManager_s007d_67e0::AddSplitInstance migrated from s007d67e0 (verbatim, slice spelling)

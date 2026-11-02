@@ -1,5 +1,5 @@
-007d76d0 SP::cGameModelEffect::HandleSplitCommand  # pdb_candidates caller-single
-007d7a10 SP::cGameModelEffect::Init  # pdb_candidates caller-scored
+007d76d0 ?HandleSplitCommand@cGameModelEffect_s007d_76d0@@QAE_NHPAXHHH@Z  # cGameModelEffect_s007d_76d0::HandleSplitCommand migrated from s007d76d0 (verbatim, slice spelling)
+007d7a10 ?Init@cGameModelEffect_s007d_76d0@@QAEXHPAXH@Z  # cGameModelEffect_s007d_76d0::Init migrated from s007d76d0 (verbatim, slice spelling)
 007d7ce0 ?FilterAbilityType@@YG_NHHH@Z  # FilterAbilityType migrated from s007d76d0 (verbatim, slice spelling)
 007d7d00 ?Destroy@cAbilityCmd@@QAEXXZ  # cAbilityCmd::Destroy migrated from s007d76d0 (verbatim, slice spelling)
 007d7d70 ?SetIface@cAbilityCmd@@QAEXHHH@Z  # cAbilityCmd::SetIface migrated from s007d76d0 (verbatim, slice spelling)
