@@ -5,3 +5,6 @@
 ../src/game/UTFSpore_Win32/EAStreamBuffer.cpp  ?GetAvailable@StreamBuffer@IO@EA@@UBEHXZ  0093aef0  /O2 /MD /Gy /TP /Isrc/game/include
 ../src/game/UTFSpore_Win32/EAStreamBuffer.cpp  ?SetSize@StreamBuffer@IO@EA@@UAE_NI@Z  0093b050  /O2 /MD /Gy /TP /Isrc/game/include
 ../src/game/UTFSpore_Win32/EAStreamBuffer.cpp  ?Flush@StreamBuffer@IO@EA@@UAE_NXZ  0093b300  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/EAStreamBuffer.cpp  ?FillWriteBuffer@StreamBuffer@IO@EA@@QAE_NPBDI@Z  0093b310  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/EAStreamBuffer.cpp  ??0StreamBuffer@IO@EA@@QAE@IIPAVIStream_s0093_a9d0@12@@Z  0093b530  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/EAStreamBuffer.cpp  ??1StreamBuffer@IO@EA@@UAE@XZ  0093b5a0  /O2 /MD /Gy /TP /Isrc/game/include

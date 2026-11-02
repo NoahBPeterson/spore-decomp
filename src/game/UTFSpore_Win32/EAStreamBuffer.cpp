@@ -15,6 +15,25 @@ typedef unsigned int size_type;
 extern "C" void* MemCpyThunk(void* dst, const void* src, size_t n);   // 0x011e0744 (memcpy thunk)
 namespace EA {
 namespace IO {
+struct CoreAllocator;
+}
+}
+namespace EA {
+namespace IO {
+extern CoreAllocator* gpCoreAllocator;                                // 0x016c8b44
+}
+}
+namespace EA {
+namespace IO {
+struct CoreAllocator {
+    void* Alloc(size_type size, int a, int b, int c, int d, int e);   // 0x009289f0 (equiv t2)
+    void* Realloc(void* p, size_type size);
+    void  Free(void* p);
+};
+}
+}
+namespace EA {
+namespace IO {
 class IStream_s0093_a9d0 {
 public:
     virtual             ~IStream_s0093_a9d0() {}                 // +00 dtor
@@ -31,7 +50,7 @@ public:
     virtual int         GetAvailable() const;        // +2c
     virtual int         Read(void* pData, size_t nSize);     // +30
     virtual bool        Flush();                     // +34
-    virtual int         Write(const void* pData, size_t nSize); // +38
+    virtual bool        Write(const void* pData, size_t nSize); // +38
 };
 }
 }
@@ -60,10 +79,10 @@ public:
     virtual int       GetAvailable() const;
     virtual int       Read(void* pData, size_t nSize);
     virtual bool      Flush();
-    virtual int       Write(const void* pData, size_t nSize);
+    virtual bool      Write(const void* pData, size_t nSize);
 
     bool FillWriteBuffer(const char* pData, size_type nSize);
-    bool FlushWriteBuffer();
+    __declspec(noinline) bool FlushWriteBuffer();
 
     IStream_s0093_a9d0*  mpStream;                   // +04
     int       mnRefCount;                 // +08
@@ -141,6 +160,71 @@ int StreamBuffer::GetAvailable() const
 }
 }}  // namespace EA::IO
 
+// @ 0x0093af00
+namespace EA { namespace IO {
+bool StreamBuffer::FlushWriteBuffer()
+{
+    if (mnWriteBufferUsed != 0) {
+        if (mpStream->Write(mpWriteBuffer, mnWriteBufferUsed) == 0) {
+            size_type pos = mpStream->GetPosition(0);
+            mnPositionInternal = pos;
+            mnWriteBufferStartPosition = pos;
+            mnWriteBufferUsed = 0;
+            return false;
+        }
+        mnPositionInternal += mnWriteBufferUsed;
+        mnWriteBufferStartPosition = mnPositionInternal;
+        mnWriteBufferUsed = 0;
+    }
+    return true;
+}
+}}  // namespace EA::IO
+
+// @ 0x0093af60
+namespace EA { namespace IO {
+bool StreamBuffer::SetBufferSizes(size_type readSize, size_type writeSize)
+{
+    if (readSize == -1)
+        readSize = 2000;
+    readSize &= 0xfffffffe;
+    if (readSize - 1 < 3)
+        readSize = 4;
+    else if (readSize > 16000000)
+        readSize = 16000000;
+    if (readSize < mnReadBufferSize) {
+        mnReadBufferStartPosition = 0;
+        mnReadBufferUsed = 0;
+    }
+    char* oldRead = mpReadBuffer;
+    char* newRead = oldRead == 0 ? (char*)gpCoreAllocator->Alloc(readSize, 0, 0, 0, 0, 0)
+                                 : (char*)gpCoreAllocator->Realloc(oldRead, readSize);
+    mpReadBuffer = newRead;
+    if (newRead == 0)
+        mpReadBuffer = oldRead;
+    else
+        mnReadBufferSize = readSize;
+
+    if (writeSize == -1)
+        writeSize = 2000;
+    writeSize &= 0xfffffffe;
+    if (writeSize - 1 < 3)
+        writeSize = 4;
+    else if (writeSize > 16000000)
+        writeSize = 16000000;
+    if (writeSize < mnWriteBufferSize)
+        FlushWriteBuffer();
+    char* oldWrite = mpWriteBuffer;
+    char* newWrite = oldWrite == 0 ? (char*)gpCoreAllocator->Alloc(writeSize, 0, 0, 0, 0, 0)
+                                   : (char*)gpCoreAllocator->Realloc(oldWrite, writeSize);
+    mpWriteBuffer = newWrite;
+    if (newWrite != 0)
+        mnWriteBufferSize = writeSize;
+    else
+        mpWriteBuffer = oldWrite;
+    return true;
+}
+}}  // namespace EA::IO
+
 // @ 0x0093b050
 namespace EA { namespace IO {
 bool StreamBuffer::SetSize(size_type size)
@@ -163,32 +247,38 @@ bool StreamBuffer::SetSize(size_type size)
 namespace EA { namespace IO {
 bool StreamBuffer::SetPosition(int distance, int type)
 {
-    if (mpStream == 0)
-        return false;
-    int newPos;
-    if (type == 1)
-        newPos = distance + mnPositionExternal;
-    else if (type == 2) {
-        newPos = distance + GetSize();
-    } else
-        newPos = distance;
+    bool ok = false;
+    if (mpStream != 0) {
+        int base = distance;
+        int newPos;
+        if (type == 1)
+            newPos = base + mnPositionExternal;
+        else if (type == 2)
+            newPos = base + GetSize();
+        else
+            newPos = base;
 
-    if (mnReadBufferUsed == 0 || newPos < 0) {
-        if (newPos != (size_type)mnPositionExternal) {
-            FlushWriteBuffer();
-            if (!mpStream->SetPosition(newPos, 0)) {
-                size_type pos = mpStream->GetPosition(0);
-                mnPositionInternal = pos;
-                mnPositionExternal = pos;
-                return false;
+        if (mnReadBufferUsed == 0 || newPos < 0) {
+            if (newPos != (size_type)mnPositionExternal) {
+                FlushWriteBuffer();
+                if (mpStream->SetPosition(newPos, 0)) {
+                    mnPositionInternal = newPos;
+                    mnPositionExternal = newPos;
+                    ok = true;
+                } else {
+                    newPos = mpStream->GetPosition(0);
+                    mnPositionInternal = newPos;
+                    mnPositionExternal = newPos;
+                }
+            } else {
+                ok = true;
             }
-            mnPositionInternal = newPos;
+        } else {
             mnPositionExternal = newPos;
+            ok = true;
         }
-    } else {
-        mnPositionExternal = newPos;
     }
-    return true;
+    return ok;
 }
 }}  // namespace EA::IO
 
@@ -285,6 +375,71 @@ bool StreamBuffer::Flush()
 }
 }}  // namespace EA::IO
 
+// @ 0x0093b310
+namespace EA { namespace IO {
+bool StreamBuffer::FillWriteBuffer(const char* pData, size_type nSize)
+{
+    bool bReturnValue = true;
+    if (nSize > 0) {
+        if (mnWriteBufferUsed == 0)
+            mnWriteBufferStartPosition = mnPositionInternal;
+        if ((mnWriteBufferUsed + nSize) <= mnWriteBufferSize) {
+            MemCpyThunk(mpWriteBuffer + mnWriteBufferUsed, pData, (size_t)nSize);
+            mnWriteBufferUsed += nSize;
+        } else {
+            while (nSize && bReturnValue) {
+                const size_type nSizeToBuffer =
+                    (mnWriteBufferSize - mnWriteBufferUsed < nSize)
+                        ? (mnWriteBufferSize - mnWriteBufferUsed) : nSize;
+                if (nSizeToBuffer) {
+                    MemCpyThunk(mpWriteBuffer + mnWriteBufferUsed, pData, (size_t)nSizeToBuffer);
+                    mnWriteBufferUsed += nSizeToBuffer;
+                    pData += nSizeToBuffer;
+                    nSize -= nSizeToBuffer;
+                }
+                if (mnWriteBufferUsed == mnWriteBufferSize)
+                    bReturnValue = FlushWriteBuffer();
+            }
+        }
+    }
+    return bReturnValue;
+}
+}}  // namespace EA::IO
+
+// @ 0x0093b3c0
+namespace EA { namespace IO {
+bool StreamBuffer::SetStream(IStream_s0093_a9d0* pStream)
+{
+    bool result = true;
+    if (pStream != mpStream) {
+        if (mpStream != 0) {
+            FlushWriteBuffer();
+            mnReadBufferStartPosition = 0;
+            mnReadBufferUsed = 0;
+            mnWriteBufferStartPosition = 0;
+            mnWriteBufferUsed = 0;
+            mnPositionExternal = 0;
+            mnPositionInternal = 0;
+        }
+        if (pStream != 0) {
+            pStream->AddRef();
+            if (pStream->GetAccessFlags() == 0) {
+                result = false;
+            } else {
+                size_type pos = pStream->GetPosition(0);
+                mnPositionExternal = pos;
+                mnPositionInternal = pos;
+            }
+        }
+        if (mpStream != 0)
+            mpStream->Release();
+        mpStream = pStream;
+        return result;
+    }
+    return true;
+}
+}}  // namespace EA::IO
+
 // @ 0x0093b450
 namespace EA { namespace IO {
 bool StreamBuffer::Close()
@@ -304,10 +459,10 @@ bool StreamBuffer::Close()
 
 // @ 0x0093b490
 namespace EA { namespace IO {
-int StreamBuffer::Write(const void* pData, size_t nSize)
+bool StreamBuffer::Write(const void* pData, size_t nSize)
 {
     if (mpStream == 0)
-        return 0;
+        return false;
     if (mnReadBufferUsed != 0) {
         mnReadBufferStartPosition = 0;
         mnReadBufferUsed = 0;
@@ -315,19 +470,56 @@ int StreamBuffer::Write(const void* pData, size_t nSize)
             mpStream->SetPosition(mnPositionExternal, 0);
     }
     if (mnWriteBufferSize != 0) {
-        int r = FillWriteBuffer((const char*)pData, nSize) ? 1 : 0;
+        bool r = FillWriteBuffer((const char*)pData, nSize);
         mnPositionExternal += nSize;
         return r;
     }
-    bool ok = mpStream->Write(pData, nSize) != 0;
+    bool ok = mpStream->Write(pData, nSize);
     if (ok) {
         mnPositionInternal += nSize;
         mnPositionExternal = mnPositionInternal;
-        return 1;
+        return true;
     }
     size_type pos = mpStream->GetPosition(0);
     mnPositionInternal = pos;
     mnPositionExternal = pos;
-    return 0;
+    return false;
+}
+}}  // namespace EA::IO
+
+// @ 0x0093b530
+namespace EA { namespace IO {
+StreamBuffer::StreamBuffer(size_type nReadBufferSize, size_type nWriteBufferSize, IStream_s0093_a9d0* pStream)
+: mpStream(0), mnRefCount(0), mnPositionExternal(0), mnPositionInternal(0),
+      mpReadBuffer(0), mnReadBufferSize(0), mnReadBufferStartPosition(0), mnReadBufferUsed(0),
+      mpWriteBuffer(0), mnWriteBufferSize(0), mnWriteBufferStartPosition(0), mnWriteBufferUsed(0)
+{
+    if (nReadBufferSize != -2 && nWriteBufferSize != -2)
+        SetBufferSizes(nReadBufferSize, nWriteBufferSize);
+    if (pStream != 0)
+        SetStream(pStream);
+}
+}}  // namespace EA::IO
+
+// @ 0x0093b5a0
+namespace EA { namespace IO {
+StreamBuffer::~StreamBuffer()
+{
+    if (mpStream != 0) {
+        FlushWriteBuffer();
+        mnReadBufferStartPosition = 0;
+        mnReadBufferUsed = 0;
+        mnWriteBufferStartPosition = 0;
+        mnWriteBufferUsed = 0;
+        mnPositionExternal = 0;
+        mnPositionInternal = 0;
+        if (mpStream != 0)
+            mpStream->Release();
+        mpStream = 0;
+    }
+    if (mpReadBuffer != 0)
+        gpCoreAllocator->Free(mpReadBuffer);
+    if (mpWriteBuffer != 0)
+        gpCoreAllocator->Free(mpWriteBuffer);
 }
 }}  // namespace EA::IO

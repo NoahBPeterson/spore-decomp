@@ -1,6 +1,9 @@
 # va  diff-bytes  reason
-0093ae80 1 complete: StreamBuffer::GetSize, one branch lands on a different ret
-0093b0a0 131 complete: StreamBuffer::SetPosition, scheduling differs
-0093b140 376 complete: StreamBuffer::Read, buffer-management schedule differs
-0093b450 38 complete: Close, field-store ordering differs
-0093b490 95 complete: Write, branch layout differs
+0093ae80 1 complete: StreamBuffer::GetSize, one branch lands on a different ret flags: /O2 /MD /Gy /TP
+0093af00 75 complete: FlushWriteBuffer, register allocation differs flags: /O2 /MD /Gy /TP
+0093af60 124 complete: SetBufferSizes, allocator call/loop scheduling differs flags: /O2 /MD /Gy /TP
+0093b0a0 127 complete: StreamBuffer::SetPosition, GetSize slot and branch layout differ flags: /O2 /MD /Gy /TP
+0093b140 376 complete: StreamBuffer::Read, buffer-management schedule differs; equivalence FAIL on ecx (original push/pop ecx scratch slot) flags: /O2 /MD /Gy /TP
+0093b3c0 105 complete: SetStream, refcount/field ordering differs flags: /O2 /MD /Gy /TP
+0093b450 38 complete: Close, field-store ordering differs flags: /O2 /MD /Gy /TP
+0093b490 64 complete: Write, branch layout differs flags: /O2 /MD /Gy /TP
