@@ -1,0 +1,5 @@
+# <va>  <diff-bytes>  <reason>
+0051d690 9 /Od frame is 0x14 in the original (this at ebp-0x14, 0xc bytes of unidentified locals) vs 8 in ours; complete Bitmap ctor; difftest PASS after fixing the base ctor call (0x432960 is thiscall on this, was cdecl with this as first arg) and Memset32 reading the stored buffer member flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+0051d720 1961 complete sampler (all paths, calls, clamps); original inlines item-vector size/begin helpers differently, frame 0x12c vs 0x110 flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+0051e180 5 complete PaintSystem ctor; only the 2-dword /Od scratch gap lands before the second FixedVec temp instead of after (slot order); difftest PASS after annotating BBox::Reset/AllocFixed/Sub94 (one declaration per line) and modelling the vtables so they map by content (RootA/Base0/SimBase slots, novtable SimBaseP for the 0x5288e0 adjustor thunk) flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+0051e340 8 /Od this/n slot assignment swap only; complete RefHolder::AddRef flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
