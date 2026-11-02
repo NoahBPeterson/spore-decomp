@@ -1,9 +1,9 @@
-005d4630 ?Drag@SpineHandle@SPB@@QAE_NPAPAUSpineNode@2@MMMMMM@Z  # SPB::SpineHandle::Drag (mouse-move continuation of StartDrag)
-005d47c0 ?DoInsertValue@CircleVec@SPB@@QAEXPAUCircle@2@ABU32@@Z  # SPB::CircleVec::DoInsertValue
-005d4970 ?FUN_005d4970@SpineHandle@SPB@@QAE_NXZ  # SPB::SpineHandle belt-of-circles builder
-005d4fe0 ?AbsAngleTimes@@YIMPAX@Z  # AbsAngleTimes (slice spelling)
+005d4630 ?Drag@SpineHandle_s005d_4630@SPB@@QAE_NPAPAUSpineNode_s005d_4630@2@MMMMMM@Z  # SpineHandle_s005d_4630::Drag migrated from s005d4630 (verbatim, slice spelling)
+005d47c0 ?DoInsertValue@CircleVec_s005d_4630@SPB@@QAEXPAUCircle_s005d_4630@2@ABU32@@Z  # CircleVec_s005d_4630::DoInsertValue migrated from s005d4630 (verbatim, slice spelling)
+005d4970 ?FUN_005d4970@SpineHandle_s005d_4630@SPB@@QAE_NXZ  # SpineHandle_s005d_4630::FUN_005d4970 migrated from s005d4630 (verbatim, slice spelling)
+005d4fe0 ?AbsAngleTimes@@YIMPAX@Z  # AbsAngleTimes migrated from s005d4630 (verbatim, slice spelling)
 005d4ff0 ?CrossSideCcw@@YA_NPAM00@Z  # CrossSideCcw migrated from s005d4630 (verbatim, slice spelling)
-005d5050 ?Walk@PathCurve@@QAEPAMPAMM@Z  # PathCurve::Walk
+005d5050 ?Walk@PathCurve@@QAEPAMPAMM@Z  # PathCurve::Walk migrated from s005d4630 (verbatim, slice spelling)
 005d5120 ?CopyE20Range@@YAPAUE20@@UE20Iter@@00@Z  # eastl::uninitialized_copy_ptr<PathIntersection>
 005d5160 ?Arc@Curve2D@@QAEXPAMM@Z  # Curve2D::Arc
 005d51e0 ?SegmentLength@@YIMPAX@Z  # SegmentLength (slice spelling)

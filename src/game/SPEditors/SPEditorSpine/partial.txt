@@ -19,7 +19,3 @@
 005d1ba0  407  helper not reconstructed (skeleton)
 005d1d40  292  cSPEditorSpine::UpdateVertebraeOrderAndCollisionFilters not reconstructed (skeleton)
 005d1e70  183  rbtree teardown helper not reconstructed (skeleton)
-005d1f30  1350  tree rebuild not reconstructed (skeleton)
-005d2480  309   per-vertebra update not reconstructed (skeleton)
-005d25c0  372   per-vertebra update not reconstructed (skeleton)
-005d5050  203   curve/segment virtual-walk helper not reconstructed (skeleton)

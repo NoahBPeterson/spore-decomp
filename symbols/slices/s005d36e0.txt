@@ -1,0 +1,5 @@
+00448e90 ?SetPosition@cSPEditorBlock@SP@@QAEXABUcSPVector3@@_N@Z  # SP::cSPEditorBlock::SetPosition (callee of s005d36e0, named from the dev publics; slice address comment)
+005a8970 ?Init@cSPEditorHandleSpine@SP@@QAEXPAVcSPEditorBlock@2@ABUcSPVector3@@ABUcSPMatrix3@@@Z  # SP::cSPEditorHandleSpine::Init (callee of s005d36e0, named from the dev publics; slice address comment)
+005d36e0 ?FUN_005d36e0@cSPEditorSpine@@QAEXPAUcEditorCtx@@PAUcSPEditorBlock@@I@Z  # cSPEditorSpine::FUN_005d36e0 migrated from s005d36e0 (verbatim, slice spelling)
+005d3f10 ?FUN_005d3f10@cSPEditorSpine@@QAEXPAUcBlockList@@PAUcSPEditorBlock@@@Z  # cSPEditorSpine::FUN_005d3f10 migrated from s005d36e0 (verbatim, slice spelling)
+005d43d0 ?FUN_005d43d0@cSPEditorSpine@@QAE_NPAPAUcSPEditorBlock@@MMMMMM@Z  # cSPEditorSpine::FUN_005d43d0 migrated from s005d36e0 (verbatim, slice spelling)

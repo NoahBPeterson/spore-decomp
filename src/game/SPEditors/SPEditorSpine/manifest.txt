@@ -9,4 +9,14 @@
 ../src/game/SPEditors/SPEditorSpine.cpp  ?GetFirstLeg@cSPEditorSpine_s005d_02d0@SP@@QAEPAULeg@2@XZ  005d0ce0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEditors/SPEditorSpine.cpp  ?GetLastLeg@cSPEditorSpine_s005d_02d0@SP@@QAEPAULeg@2@XZ  005d0d90  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEditors/SPEditorSpine.cpp  ?SetFlag@cSpine75@SP@@QAEX_NH@Z  005d1600  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPEditorSpine.cpp  ?SetTuning@cSpine76@SP@@QAEXH@Z  005d2740  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPEditorSpine.cpp  ?FUN_005d31b0@Spine@@QAEXXZ  005d31b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPEditorSpine.cpp  ?FUN_005d35c0@Spine@@QAEXXZ  005d35c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPEditorSpine.cpp  ?AbsAngleTimes@@YIMPAX@Z  005d4fe0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEditors/SPEditorSpine.cpp  ?CrossSideCcw@@YA_NPAM00@Z  005d4ff0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPEditorSpine.cpp  ?Walk@PathCurve@@QAEPAMPAMM@Z  005d5050  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPEditorSpine.cpp  ??0cPathSegmentList@@QAE@XZ  005d57b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPEditors/SPEditorSpine.cpp  ??0cPathShape@@QAE@HPBX@Z  005d57d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPEditors/SPEditorSpine.cpp  ?AddArc@cPathSegmentList@@QAEXABUPoint2@@M0M@Z  005d5a30  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPEditors/SPEditorSpine.cpp  ?AddLine@cPathSegmentList@@QAEXABUPoint2@@0@Z  005d5ad0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPEditors/SPEditorSpine.cpp  ?IntersectLine@cPathShape@@QAEXABUVector2@@0PAV1@@Z  005d5cf0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
