@@ -1,5 +1,5 @@
-00992480 EA::UTFWinControls::WatchGraph::OnTick  # sample each history node (vt+4) into mRing[+0x224], advance ring, repaint via IWindow vt+0x90
-00992550 EA::UTFWinControls::WatchGraph::`scalar deleting destructor'  # vptr 0x1446078/0x1445f58, Clear, intrusive-list dtor, base dtor, conditional operator delete
+00992480 ?WatchGraph_OnTick@@YIEPADH@Z  # WatchGraph_OnTick migrated from s00992480 (verbatim, slice spelling)
+00992550 ?WatchGraph_scalarDtor@@YIPAXPADHE@Z  # WatchGraph_scalarDtor migrated from s00992480 (verbatim, slice spelling)
 00992600 EA::UTFWinControls::WatchWindow::Clear  # unlink+release every node of the intrusive list at +0x20c (node vt+0)
 00992650 EA::UTFWinControls::WatchWindow::WatchWindow  # base ctor, vtbl 0x14462b0/0x1446190, sentinel +0x20c, two layouts (0x890f50), Trebuchet-Montserrat? TextStyle, styles 0x6fb342b7/0x6fb342b8, SetFlag(8,1)
 00992830 WatchWindow teardown helper  # vptr reset, Clear, GetStyle 0x6fb342b7 + style unregister, base dtor 0x962740
