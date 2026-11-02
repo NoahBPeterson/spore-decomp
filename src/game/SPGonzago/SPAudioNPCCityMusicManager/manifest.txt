@@ -1,0 +1,2 @@
+# source  symbol  va  flags
+../src/game/SPGonzago/SPAudioNPCCityMusicManager.cpp  ?ClearChannelMaps@cNPCCityMusicManager@Audio@SP@@QAEXXZ  00eab520  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

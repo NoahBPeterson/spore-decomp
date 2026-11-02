@@ -7,9 +7,9 @@
 00eab410 ??0cNPCCityMusic@Audio@SP@@QAE@I@Z  # cNPCCityMusic::cNPCCityMusic migrated from s00eaa9a0 (verbatim, slice spelling)
 00eab4a0 ??0cNPCCityMusic@Audio@SP@@QAE@XZ  # cNPCCityMusic::cNPCCityMusic migrated from s00eaa9a0 (verbatim, slice spelling)
 00eab4d0 ?Destroy@cNPCCityMusic@Audio@SP@@QAEPAV123@H@Z  # cNPCCityMusic::Destroy migrated from s00eaa9a0 (verbatim, slice spelling)
-00eab520 SP::Audio::cNPCCityMusicManager::ClearChannelMaps  # void(); frees bucket nodes in all five channel maps; byte-exact
-00eab560 SP::Audio::cNPCCityMusicManager::AcquireChannel  # ChannelNode*(uint32_t id); min-refcount/random tie pick; diff 229
-00eab650 SP::Audio::cNPCCityMusicManager::AddChannelRef  # void(uint32_t id, void* key); find/insert + increment; diff 99
-00eab690 SP::Audio::cNPCCityMusicManager::ReleaseChannel  # void(uint32_t id, void* key); find + decrement positive refcount; diff 74
-00eab6e0 SP::Audio::cNPCCityMusicManager::InitGonzagoSubsystem  # void(); creates subsystem, registers five channel groups; diff 295
+00eab520 ?ClearChannelMaps@cNPCCityMusicManager@Audio@SP@@QAEXXZ  # cNPCCityMusicManager::ClearChannelMaps migrated from s00eaa9a0 (verbatim, slice spelling)
+00eab560 ?AcquireChannel@cNPCCityMusicManager@Audio@SP@@QAEPAUChannelNode@23@I@Z  # cNPCCityMusicManager::AcquireChannel migrated from s00eaa9a0 (verbatim, slice spelling)
+00eab650 ?AddChannelRef@cNPCCityMusicManager@Audio@SP@@QAEXIPAX@Z  # cNPCCityMusicManager::AddChannelRef migrated from s00eaa9a0 (verbatim, slice spelling)
+00eab690 ?ReleaseChannel@cNPCCityMusicManager@Audio@SP@@QAEXIPAX@Z  # cNPCCityMusicManager::ReleaseChannel migrated from s00eaa9a0 (verbatim, slice spelling)
+00eab6e0 ?InitGonzagoSubsystem@cNPCCityMusicManager@Audio@SP@@QAEXXZ  # cNPCCityMusicManager::InitGonzagoSubsystem migrated from s00eaa9a0 (verbatim, slice spelling)
 00eab860 ?SetGonzagoEnabled@cNPCCityMusic@Audio@SP@@QAEX_N@Z  # cNPCCityMusic::SetGonzagoEnabled migrated from s00eaa9a0 (verbatim, slice spelling)
