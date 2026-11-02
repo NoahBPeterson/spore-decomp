@@ -1,4 +1,16 @@
 # source  symbol  va  flags
+../src/game/SPAudio/AudioSound.cpp  ?IsFlag2@Sound_s00a1_a590@@QAE_NXZ  00a1ad40  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/AudioSound.cpp  ?PausedIgnoring@Sound@Audio@EA@@UAE_NI@Z  00a1ae00  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/AudioSound.cpp  ?IsFlag80@Sound_s00a1_a590@@QAE_NXZ  00a1ae20  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/AudioSound.cpp  ?GetDoubleC8@Sound_s00a1_a590@@QAENXZ  00a1ae40  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/AudioSound.cpp  ?Bit3@Sound_s00a1_a590@@QAEEXZ  00a1af50  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/AudioSound.cpp  ?ShouldPauseForLowGain@Sound_s00a1_a590@@QAE_NM@Z  00a1af80  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/AudioSound.cpp  ?Contains@SoundGraph@@QAE_NPAX@Z  00a1b440  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/AudioSound.cpp  ?Set@LerpF_s00a1_b480@@QAEXABMM@Z  00a1b660  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPAudio/AudioSound.cpp  ?Pause@Sound_s00a1_b480@@QAEH_NIM0@Z  00a1bf50  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPAudio/AudioSound.cpp  ?CalculateDistanceToListener@Sound_s00a1_b480@@QAE_NXZ  00a1c290  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPAudio/AudioSound.cpp  ?ConfigurePrimitives@Sound@@QAE_NXZ  00a1c460  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPAudio/AudioSound.cpp  ?GetPropertyInternal@Sound_s00a1_d400@@QAE_NIPAM@Z  00a1d400  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPAudio/AudioSound.cpp  ?HasProperty@Sound_s00a1_d400@@QAE_NI@Z  00a1d6d0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPAudio/AudioSound.cpp  ?ReleaseAllCells@Sound74@@QAEXXZ  00a1e660  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
 ../src/game/SPAudio/AudioSound.cpp  ?Release@Sound@Audio@EA@@UAEHXZ  00a37c10  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
