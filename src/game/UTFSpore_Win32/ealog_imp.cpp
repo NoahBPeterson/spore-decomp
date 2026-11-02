@@ -1,4 +1,4 @@
-// src/game/UTFSpore_Win32/ealog_imp.cpp -- migrated from slice(s) s009245b0, s009234f0, s00922500, s00696c80 by tools/migrate/rewrite.py
+// src/game/UTFSpore_Win32/ealog_imp.cpp -- migrated from slice(s) s00697c40, s006775f0, s009245b0, s009234f0, s00922500, s00696c80 by tools/migrate/rewrite.py
 // Object file: UTFSpore_Win32/ealog_imp.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -30,18 +30,40 @@
 #include <stddef.h>
 #include <stdio.h>
 #include <time.h>
+#include "SP/cString.h"
+#include "EA/Variant.h"
+#include "EA/CommandLine.h"
 
 // ---- items of slice s00696c80 begin (TODO(rewrite): local stubs, replace by canonical classes)
+namespace EA {
+namespace Thread {
+class Mutex_s0069_6c80 {
+ public:
+  void Lock(unsigned int timeout); // 0x9221b0 (arg: pointer to an ms timeout; -1 = block)
+  void Unlock();                   // 0x922270
+};  // namespace Thread
+}
+}
 namespace EA {
 namespace Trace {
 class Server_s0069_6c80 {
  public:
-  char pad0[0x94];
-  bool mEnabled;                             // +0x94
-  bool IsFiltered(unsigned int category);    // 0x923930
-  int ShouldLog(unsigned int category);      // 0x697b80
-};  // namespace Trace
-}  // namespace EA
+virtual void* v00();
+virtual void* v04();
+virtual void* v08();
+virtual void* v0c();
+virtual void* v10();
+virtual void* v14();
+  virtual void* v18();                                     // +0x18
+  char pad_04[0x34];                                       // +0x04..+0x38
+  EA::Thread::Mutex_s0069_6c80 mMutex;                                // +0x38
+  char padMut[0x94 - 0x38 - sizeof(EA::Thread::Mutex_s0069_6c80)];    // ..+0x94
+  bool mEnabled;                                           // +0x94
+  bool IsFiltered(unsigned int category);                  // 0x923930
+  int ShouldLog(unsigned int category);                    // 0x697b80
+  void AssertControl();                                    // 0x697bb0
+};
+}
 }
 // ---- items of slice s00696c80 end
 
@@ -448,7 +470,11 @@ public:
 };
 }
 }
+namespace EA {
+namespace Trace {
 extern "C" void* __cdecl eanew6(int size, const char* name, int a, int b, int c, int d);
+}
+}
 namespace EA {
 namespace Trace {
 struct IObj {                       // IRefCount-style: AddRef, Release, ?, Cast
@@ -461,7 +487,7 @@ struct IObj {                       // IRefCount-style: AddRef, Release, ?, Cast
 }
 namespace EA {
 namespace Trace {
-struct ILogFilter_s0092_45b0 : IObj {
+class ILogFilter_s0092_45b0 : public IObj { public:
     virtual void v4();
     virtual void v5();
     virtual void SetName(const char*);   // +0x18
@@ -472,7 +498,7 @@ struct ILogFilter_s0092_45b0 : IObj {
 }
 namespace EA {
 namespace Trace {
-struct ILogFormatter_s0092_45b0 : IObj {
+class ILogFormatter_s0092_45b0 : public IObj { public:
     virtual void v4();
     virtual void SetName(const char*);   // +0x14
     virtual void v6();
@@ -482,12 +508,14 @@ struct ILogFormatter_s0092_45b0 : IObj {
 }
 namespace EA {
 namespace Trace {
-struct ILogReporter_s0092_45b0 : IObj {
+class ILogReporter_s0092_45b0 : public IObj { public:
     virtual void v4();
     virtual void v5();
     virtual void v6();
     virtual const char* GetName();             // +0x1c
-    virtual void v8(); virtual void v9(); virtual void v10();
+virtual void v8();
+virtual void v9();
+virtual void v10();
     virtual void SetFilter(ILogFilter_s0092_45b0*);       // +0x2c
     virtual ILogFilter_s0092_45b0* GetFilter();           // +0x30
     virtual void SetFormatter(ILogFormatter_s0092_45b0*); // +0x34
@@ -503,7 +531,8 @@ struct LogRecordInfo { int pad0[3]; int level; const char* group; const char* fi
 namespace EA {
 namespace Trace {
 struct ILogRecord {
-    virtual void v0(); virtual void v1();
+virtual void v0();
+virtual void v1();
     virtual const char* GetGroup();   // +0x08
     virtual const char* GetText();    // +0x0c
     int pad4, pad8;
@@ -548,7 +577,7 @@ struct Stopwatch {
 }
 namespace EA {
 namespace Trace {
-struct LogFormatterFancy_s0092_45b0 : ILogFormatter_s0092_45b0 {
+class LogFormatterFancy_s0092_45b0 : public ILogFormatter_s0092_45b0 { public:
     int mnRefCount;
     char mName[0x21c - 8];
     unsigned short mnFlags;              // +0x21c
@@ -565,7 +594,7 @@ struct LogFormatterFancy_s0092_45b0 : ILogFormatter_s0092_45b0 {
 }
 namespace EA {
 namespace Trace {
-struct LogFormatterSimple_s0092_45b0 : ILogFormatter_s0092_45b0 {
+class LogFormatterSimple_s0092_45b0 : public ILogFormatter_s0092_45b0 { public:
     char pad[0x81c - 4];
     FString mLine;                       // +0x81c
     LogFormatterSimple_s0092_45b0(const char* name); // 0x009243d0
@@ -590,9 +619,14 @@ struct RBIter { RBNode_s0092_45b0* mpNode; };
 }
 namespace EA {
 namespace Trace {
+struct InsertTag { bool b; };            // EASTL bool tag, passed by value (one byte + padding)
+}
+}
+namespace EA {
+namespace Trace {
 struct GroupLevelMap {                   // eastl::map<const char*, int, KeyLess, EASTLCoreAllocator>
     void find(RBIter* out, const char** key);                 // 0x00923ac0
-    void DoInsertValue(void* out, void* val, int flag);       // 0x00924060
+    void DoInsertValue(void* out, void* val, InsertTag tag);  // 0x00924060
 };
 }
 }
@@ -608,7 +642,7 @@ struct ICoreAllocator { static ICoreAllocator* GetDefaultAllocator(); };  // 0x0
 }
 namespace EA {
 namespace Trace {
-struct LogFilterGroupLevels_s0092_45b0 : ILogFilter_s0092_45b0 {
+class LogFilterGroupLevels_s0092_45b0 : public ILogFilter_s0092_45b0 { public:
     int mnRefCount;                      // +0x04
     char* mNameBegin;                    // +0x08
     char* mNameEnd;                      // +0x0c
@@ -654,13 +688,18 @@ struct ILogReporterVec {
 }
 namespace EA {
 namespace Trace {
-struct IServer_s0092_45b0 {
-    virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3();
-    virtual void v4(); virtual void v5();
+class IServer_s0092_45b0 { public:
+virtual void v0();
+virtual void v1();
+virtual void v2();
+virtual void v3();
+virtual void v4();
+virtual void v5();
     virtual void ApplyReporters();                              // +0x18
     virtual bool AddLogReporter(ILogReporter_s0092_45b0* r);               // +0x1c
     virtual void RemoveReporter(ILogReporter_s0092_45b0* r);               // +0x20
-    virtual void v9(); virtual void v10();
+virtual void v9();
+virtual void v10();
     virtual bool FindReporter(const char* name, ILogReporter_s0092_45b0** out);  // +0x2c
     ~IServer_s0092_45b0() {}
 };
@@ -673,7 +712,7 @@ struct ITracerBase { virtual void t0(); ~ITracerBase() {} };
 }
 namespace EA {
 namespace Trace {
-struct Server_s0092_45b0 : IServer_s0092_45b0, ITracerBase {
+class Server_s0092_45b0 : public IServer_s0092_45b0, public ITracerBase { public:
     int pad8;
     char* mpHeapBuffer;                   // +0x0c
     int pad10, pad14;
@@ -693,7 +732,7 @@ struct Server_s0092_45b0 : IServer_s0092_45b0, ITracerBase {
 }
 namespace EA {
 namespace Trace {
-struct LogReporter_s0092_45b0 { LogReporter_s0092_45b0(const char* name); };      // 0x00924170
+class LogReporter_s0092_45b0 { public: LogReporter_s0092_45b0(const char* name); };      // 0x00924170
 }
 }
 namespace EA {
@@ -703,6 +742,298 @@ extern char g_vtbl_ReporterDebugger[], g_vtbl_ReporterDialog[], g_vtbl_Server_b[
 }
 // ---- items of slice s009245b0 end
 
+// ---- items of slice s006775f0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+struct CamObj0;
+struct Vector2 {
+    float x, y;
+    Vector2() {}
+    Vector2(float px, float py) { x = px; y = py; }
+    Vector2(const Vector2& o) { x = o.x; y = o.y; }
+};
+struct RefObj {
+    virtual void AddRef();                      // +0x00
+    virtual void Release();                     // +0x04
+    virtual void v02();
+    virtual int GetSub(int key);                // +0x0c = slot 3
+    virtual CamObj0* GetCam();                  // +0x10 = slot 4
+virtual void v05();
+virtual void v06();
+    virtual int  GetType();                     // +0x1c = slot 7
+virtual void v08();
+virtual void v09();
+virtual void v0A();
+virtual void v0B();
+virtual void v0C();
+virtual void v0D();
+    virtual void* GetRect2();                   // +0x38 = slot 14
+virtual void v0F();
+virtual void v10();
+virtual void v11();
+virtual void v12();
+    virtual int  GetSelf();                     // +0x4c = slot 19
+virtual void v14();
+virtual void v15();
+virtual void v16();
+virtual void v17();
+virtual void v1B();
+virtual void v1C();
+virtual void v1D();
+virtual void v1E();
+    virtual void SetView(float x, float y);     // +0x70 = slot 28
+virtual void v1F();
+virtual void v20();
+virtual void v21();
+virtual void v22();
+virtual void v23();
+virtual void v24();
+    virtual void SetSel(void*);                 // +0x8c = slot 35
+    virtual void Refresh();                     // +0x90 = slot 36
+virtual void v25();
+virtual void v26();
+virtual void v27();
+virtual void v28();
+virtual void v29();
+virtual void v2A();
+virtual void v2B();
+virtual void v2C();
+    virtual RefObj* GetData(int key);           // +0xb4 = slot 45
+    virtual void SetData(int key, void* val);   // +0xb8 = slot 46
+virtual void v2F();
+virtual void v30();
+virtual void v31();
+virtual void v32();
+virtual void v33();
+virtual void v34();
+virtual void v35();
+virtual void v36();
+virtual void v37();
+virtual void v38();
+virtual void v39();
+virtual void v3A();
+virtual void v3B();
+virtual void v3C();
+virtual void v3D();
+virtual void v3E();
+virtual void v3F();
+virtual void v40();
+    virtual void HandleSelect(void*);           // +0x104 = slot 65
+};
+struct CamObj0 {
+virtual void c00();
+virtual void c01();
+virtual void c02();
+virtual void c03();
+virtual void c04();
+virtual void c05();
+virtual void c06();
+virtual void c07();
+virtual void c08();
+virtual void c09();
+virtual void c0A();
+virtual void c0B();
+virtual void c0C();
+virtual void c0D();
+virtual void c0E();
+virtual void c0F();
+virtual void c10();
+virtual void c11();
+virtual void c12();
+virtual void c13();
+virtual void c14();
+virtual void c15();
+virtual void c16();
+virtual void c17();
+virtual void c18();
+virtual void c19();
+virtual void c1A();
+virtual void c1B();
+virtual void c1C();
+virtual void c1D();
+virtual void c1E();
+virtual void c1F();
+virtual void c20();
+virtual void c21();
+virtual void c22();
+virtual void c23();
+virtual void c24();
+virtual void c25();
+virtual void c26();
+virtual void c27();
+virtual void c28();
+virtual void c29();
+virtual void c2A();
+virtual void c2B();
+virtual void c2C();
+virtual void c2D();
+virtual void c2E();
+virtual void c2F();
+    virtual void c30();
+    virtual void ShowVec(Vector2 v, Vector2* out);   // +0xc4 = slot 49
+virtual void c50();
+virtual void c51();
+virtual void c52();
+virtual void c53();
+virtual void c54();
+virtual void c55();
+virtual void c56();
+virtual void c57();
+    virtual void SetThing(void*);               // +0xe8 = slot 58
+};
+struct AutoRef_s0067_75f0 { RefObj* mpObj; };
+struct CopyImpl {
+    static AutoRef_s0067_75f0* do_copy(const AutoRef_s0067_75f0* first, const AutoRef_s0067_75f0* last, AutoRef_s0067_75f0* dest);
+};
+// ---- items of slice s006775f0 end
+
+// ---- items of slice s00697c40 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C" double __cdecl sqrt(double);
+extern "C" double __cdecl fabs(double);
+#pragma intrinsic(sqrt, fabs)
+namespace eastl {
+void FreeWStringBuffer(void* p) throw();   // operator delete(void*)
+}
+namespace eastl {
+struct WStringAllocator {
+  void deallocate(void* p, unsigned n) { FreeWStringBuffer(p); }
+};
+}
+namespace eastl {
+extern wchar_t gEmptyWString[1];
+}
+namespace eastl {
+struct WString {
+  wchar_t* mpBegin;
+  wchar_t* mpEnd;
+  wchar_t* mpCapacity;
+  WStringAllocator mAllocator;
+
+  WString() : mpBegin(gEmptyWString), mpEnd(gEmptyWString), mpCapacity(gEmptyWString + 1) {}
+  void DoFree(wchar_t* p, unsigned n) { if (p) mAllocator.deallocate(p, n); }
+  ~WString() { if ((mpCapacity - mpBegin) > 1) DoFree(mpBegin, (unsigned)(mpCapacity - mpBegin)); }
+
+  WString& assign(const wchar_t* pBegin, const wchar_t* pEnd);  // 0x423650
+};
+}
+namespace eastl {
+inline size_t WStrlen(const wchar_t* p) {
+  const wchar_t* q = p;
+  while (*q) ++q;
+  return (size_t)(q - p);
+}
+}
+namespace EA {
+namespace Trace {
+void ServerRefreshAsserts(void* self);  // 0x697bb0
+}
+}
+namespace EA {
+namespace Trace {
+class Server_s0069_7c40 {
+ public:
+  char pad0[0x68];
+  eastl::WString mName0;  // +0x68
+  eastl::WString mName1;  // +0x78
+  eastl::WString mName2;  // +0x88
+
+  __declspec(noinline) void RefreshAsserts();
+  void SetNames(const wchar_t* a, const wchar_t* b, const wchar_t* c);
+};
+}
+}
+namespace EA {
+namespace Trace {
+__declspec(noinline) void Server_s0069_7c40::RefreshAsserts() { ServerRefreshAsserts(this); }
+}
+}
+namespace EA {
+namespace Trace {
+struct ILogManager;
+}
+}
+namespace EA {
+namespace Trace {
+class IServer_s0069_7c40 { public:
+  virtual int AddRef();          // +0x00
+  virtual int Release();         // +0x04
+  virtual void s2();
+  virtual void s3();
+  virtual ILogManager* s4();     // +0x10
+  virtual void s5();             // +0x14
+  virtual void s6();
+  virtual void s7();
+};
+}
+}
+namespace EA {
+namespace Trace {
+class ITracer_s0069_7c40 { public:
+  virtual int AddRef();
+  virtual int Release();
+  virtual void t2();
+  virtual void t3();
+  virtual void t4();
+};
+}
+}
+namespace EA {
+namespace Trace {
+struct ServerBase : IServer_s0069_7c40, ITracer_s0069_7c40 {
+  char pad[0x60];
+  ServerBase();
+  ~ServerBase();
+};
+}
+}
+namespace EA {
+namespace Trace {
+class TempTraceHelperMap { public:
+  char pad[0x58];
+  TempTraceHelperMap* Init();   // 0x009259d0
+  void Destroy();               // 0x009257a0
+};
+}
+}
+namespace EA {
+namespace Trace {
+class LogManager : public ServerBase {
+ public:
+  LogManager();
+  ~LogManager();
+  eastl::WString mName0;          // +0x68
+  eastl::WString mName1;          // +0x78
+  eastl::WString mName2;          // +0x88
+  bool mbField98;                 // +0x98
+  char mPad99[7];
+  TempTraceHelperMap mHelperMap;  // +0xa0
+};
+}
+}
+// ---- items of slice s00697c40 end
+
+// @ 0x006782c0
+AutoRef_s0067_75f0* CopyImpl::do_copy(const AutoRef_s0067_75f0* first, const AutoRef_s0067_75f0* last, AutoRef_s0067_75f0* dest)
+{
+    if (first != last)
+    {
+        do
+        {
+            RefObj* src = first->mpObj;
+            RefObj* old = dest->mpObj;
+            if (src != old)
+            {
+                if (src)
+                    src->AddRef();
+                dest->mpObj = src;
+                if (old)
+                    old->Release();
+            }
+            ++first;
+            ++dest;
+        } while (first != last);
+    }
+    return (AutoRef_s0067_75f0*)dest;
+}
+
 // @ 0x00697b80
 namespace EA { namespace Trace {
 int Server_s0069_6c80::ShouldLog(unsigned int category)
@@ -711,6 +1042,32 @@ int Server_s0069_6c80::ShouldLog(unsigned int category)
     if (!IsFiltered(category)) return 0;
   }
   return 1;
+}
+}}  // namespace EA::Trace
+
+// @ 0x00697e00
+namespace EA { namespace Trace {
+LogManager::LogManager()
+{
+  mbField98 = true;
+  mHelperMap.Init();
+}
+}}  // namespace EA::Trace
+
+// @ 0x00697ee0
+namespace EA { namespace Trace {
+LogManager::~LogManager()
+{ mHelperMap.Destroy(); }
+}}  // namespace EA::Trace
+
+// @ 0x00698030
+namespace EA { namespace Trace {
+void Server_s0069_7c40::SetNames(const wchar_t* a, const wchar_t* b, const wchar_t* c)
+{
+  mName0.assign(a, a + eastl::WStrlen(a));
+  mName1.assign(b, b + eastl::WStrlen(b));
+  mName2.assign(c, c + eastl::WStrlen(c));
+  RefreshAsserts();
 }
 }}  // namespace EA::Trace
 
@@ -1391,14 +1748,16 @@ void EA::Trace::LogFormatterFancy_s0092_34f0::SetName(const char* name)
 }
 
 // @ 0x009245b0
-EA::Trace::ILogFormatter * EA::Trace::LogFormatterFancy::Clone()
+namespace EA { namespace Trace {
+ILogFormatter_s0092_45b0* LogFormatterFancy_s0092_45b0::Clone()
 {
     void* m = eanew6(0xa58, "EATrace/LogFormatterFancy/LogFormatterFancy", 0, 0, 0, 0);
-    LogFormatterFancy* r = m ? new (m) LogFormatterFancy(*(const char**)((char*)this + 8)) : 0;
+    LogFormatterFancy_s0092_45b0* r = m ? new (m) LogFormatterFancy_s0092_45b0(*(const char**)((char*)this + 8)) : 0;
     r->mnFlags = mnFlags;
     r->mnFileInfoLevel = mnFileInfoLevel;
     return r;
 }
+}}  // namespace EA::Trace
 
 // @ 0x00924600
 namespace EA { namespace Trace {
@@ -1406,8 +1765,7 @@ void LogFilterGroupLevels_s0092_45b0::AddGroupLevel(const char* group, int level
 {
     if (group && *group) {
         RBIter it;
-        const char* key = group;
-        ((GroupLevelMap*)&mapBase)->find(&it, &key);
+        ((GroupLevelMap*)&mapBase)->find(&it, &group);
         if ((RBNodeBase_s0092_45b0*)it.mpNode == &mAnchor) {
             size_t n = strlen(group) + 1;
             char* copy = (char*)eanew6((int)n, "EATrace/LogFilterGroupLevels/GroupContainer/char[]", 0, 0, 0, 0);
@@ -1417,9 +1775,8 @@ void LogFilterGroupLevels_s0092_45b0::AddGroupLevel(const char* group, int level
             do { c = *s; ((char*)s)[off] = c; ++s; } while (c != 0);
             struct { const char* k; int v; } val = { copy, level };
             char out[8];
-            // EASTL's bool tag: the original's compiler stores a 0 byte into the dead
-            // `level` parameter slot, so the dword pushed is level's upper 24 bits.
-            int tag = level & ~0xff;
+            InsertTag tag;
+            tag.b = false;
             ((GroupLevelMap*)&mapBase)->DoInsertValue(out, &val, tag);
         } else {
             it.mpNode->value = level;
@@ -1549,12 +1906,14 @@ done:
 }}  // namespace EA::Trace
 
 // @ 0x00924a50
-void EA::Trace::Server::RemoveAllLogReporters()
+namespace EA { namespace Trace {
+void Server_s0092_45b0::RemoveAllLogReporters()
 {
-    mMutex.Lock(g_timeout_143dc78);
+    mMutex.Lock(&g_timeout_143dc78);
     mLogReporters.erase(mLogReporters.mpBegin, mLogReporters.mpEnd);
     mMutex.Unlock();
 }
+}}  // namespace EA::Trace
 
 // @ 0x00924a80
 namespace EA { namespace Trace {

@@ -11,6 +11,6 @@
 00678050 AcquireSlotIf  # bind a slot when the callback matches
 006780a0 DequeBaseB4::DoReallocPtrArray  # deque pointer-array growth (EAAllocate)
 006781d0 DequeBaseB4::DoInit  # deque init: pointer array + first subarray
-006782c0 CopyImpl::do_copy  # AutoRef copy-construct helper
+006782c0 ?do_copy@CopyImpl@@SAPAUAutoRef_s0067_75f0@@PBU2@0PAU2@@Z  # CopyImpl::do_copy migrated from s006775f0 (verbatim, slice spelling)
 00678310 FindWindowShow  # find-window visitor; show the matched window
 00678370 SelectWindow  # find-window visitor; select the matched window
