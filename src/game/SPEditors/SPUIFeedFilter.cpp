@@ -13,6 +13,7 @@
 #include "cSPUIAnimator.h"
 #include "SP/FunctionalMatch/Constraint.h"
 #include <new>
+#include "SP/cString.h"
 
 // ---- items of slice s0065ea00 begin (TODO(rewrite): local stubs, replace by canonical classes)
 typedef void(__thiscall* FnP)(void*);
@@ -406,34 +407,10 @@ struct TexTable {
 // ---- items of slice s0065f970 end
 
 // ---- items of slice s00660dd0 begin (TODO(rewrite): local stubs, replace by canonical classes)
-extern "C" void  FUN_00d0c930(void* p);
-extern "C" void  FUN_00646d70(void* first, void* last);
-extern "C" void* SP_PropertyManager(); // 0x0067de30
-extern "C" void  FUN_0066a5e0(void* self, int a, int b);
-extern "C" void* FUN_00660720(void* a, void* b);
-extern "C" void  EA_Messaging_RemoveHandler(void* a, void* b, void* c, void* d, void* e);
 extern "C" void  DoCopyKeys(void* first, void* last, void* dest);
-extern "C" void  Fun0066_0ad0(void* a, void* b, void* c, void* d, void* e);   // 0x00660ad0 (equiv t1)
-extern "C" void* Fun0066_0b30(void* a, void* b, void* c);   // 0x00660b30 (equiv t1)
-extern "C" void  Fun0066_0510(void* a, void* b, void* c);   // 0x00660510 (equiv t1)
-extern "C" void* Fun0066_0d70(void* a, void* b, void* c);   // 0x00660d70 (equiv t1)
-extern "C" void* Fun0066_0fc0(unsigned n, void* a, void* b);
 extern "C" void* FUN_006603d0();   // 0x006603d0  AreaRec::AssignChecked (__thiscall dst,key,src; ret 8)
 extern "C" void  FUN_00660ca0();   // 0x00660ca0  map node insert (__thiscall map,out,node,value,key; ret 0x10)
 extern "C" char  FUN_006a12a0(void* obj, int k, void* out);
-struct Blob14 { uint8_t x[0x14]; void Assign(Blob14* src); void FUN_006606a0(Blob14* src); };
-struct E34 {
-    uint32_t a;          // 0x00
-    uint8_t  b;          // 0x04
-    char     pad5[3];
-    Blob14   c;          // 0x08
-    uint8_t  d;          // 0x1c
-    char     pad1d[3];
-    Blob14   e;          // 0x20
-};
-struct Vec34 { E34* begin; E34* end; E34* cap; void FUN_00661670(); void FUN_00661700(); void DestroyRange(E34* first, E34* last); };   // DestroyRange: 0x00646d70
-
-// 0x24-byte map entry: unsigned key followed by the 0x20-byte value.
 struct MapVal20 {
     void*   mp0;        // +0x00  refcounted object
     uint8_t mb4;        // +0x04
@@ -462,6 +439,29 @@ struct MapRoot34 {
     MapNode24* pRoot;   // +0x0c
     void* FUN_006612b0(void* key);
 };
+struct Key3 { uint32_t a, b, c; };
+extern "C" void  FUN_00d0c930(void* p);
+extern "C" void  FUN_00646d70(void* first, void* last);
+extern "C" void* SP_PropertyManager(); // 0x0067de30
+extern "C" void  FUN_0066a5e0(void* self, int a, int b);
+extern "C" void* FUN_00660720(void* a, void* b);
+extern "C" void  EA_Messaging_RemoveHandler(void* a, void* b, void* c, void* d, void* e);
+extern "C" void  Fun0066_0ad0(void* a, void* b, void* c, void* d, void* e);   // 0x00660ad0 (equiv t1)
+extern "C" void* Fun0066_0b30(void* a, void* b, void* c);   // 0x00660b30 (equiv t1)
+extern "C" void  Fun0066_0510(void* a, void* b, void* c);   // 0x00660510 (equiv t1)
+extern "C" void* Fun0066_0d70(void* a, void* b, void* c);   // 0x00660d70 (equiv t1)
+extern "C" void* Fun0066_0fc0(unsigned n, void* a, void* b);
+struct Blob14 { uint8_t x[0x14]; void Assign(Blob14* src); void FUN_006606a0(Blob14* src); };
+struct E34 {
+    uint32_t a;          // 0x00
+    uint8_t  b;          // 0x04
+    char     pad5[3];
+    Blob14   c;          // 0x08
+    uint8_t  d;          // 0x1c
+    char     pad1d[3];
+    Blob14   e;          // 0x20
+};
+struct Vec34 { E34* begin; E34* end; E34* cap; void FUN_00661670(); void FUN_00661700(); void DestroyRange(E34* first, E34* last); };   // DestroyRange: 0x00646d70
 struct SubD8 { void FUN_0065f9e0(); };
 struct cSPUIFeedFilter {
     void* vt;                          // 0x00
@@ -509,7 +509,6 @@ struct cSPUIFeedFilter {
     bool AllHaveAssets(unsigned key);                  // 0x00661b10
     bool MatchRecursive(unsigned key, int* pCount);    // 0x00661c00
 };
-struct Key3 { uint32_t a, b, c; };
 uint32_t* __cdecl LowerBoundU32(uint32_t* first, uint32_t* last, const uint32_t* val, unsigned char flag);   // 0x00555a20
 struct PropertyList {
     virtual void AddRef();
@@ -608,28 +607,78 @@ struct Blob14 {
 
 // ---- items of slice s00661d10 begin (TODO(rewrite): local stubs, replace by canonical classes)
 struct IWindow_s0066_1d10 {
-    virtual void      s00(); virtual int Release();
-    virtual void      s02(); virtual IWindow_s0066_1d10* FindWindow(uint32_t id);
-    virtual IWindow_s0066_1d10*  GetSomething(); virtual void s05(); virtual void s06(); virtual void s07();
-    virtual void      s08(); virtual void s09(); virtual uint32_t GetFlags(); virtual void s11();
-    virtual void      s12(); virtual float* GetArea(); virtual void s14(); virtual void s15();
-    virtual void      s16(); virtual void s17(); virtual void s18(); virtual void s19();
-    virtual void      s20(); virtual void s21(); virtual void s22(); virtual void s23();
-    virtual void      s24(); virtual void SetLocation(float, float); virtual void s26();
-    virtual void      s27(); virtual void s28(); virtual void s29(); virtual void s30();
-    virtual void      SetFlag(int, bool); virtual void s32(); virtual void s33(); virtual void s34();
-    virtual void      s35(); virtual void s36(); virtual void s37(); virtual void s38();
-    virtual void      s39(); virtual void s40(); virtual void s41(); virtual void s42();
-    virtual void      s43(); virtual void s44(); virtual void s45(); virtual void s46();
-    virtual void      s47(); virtual void s48(); virtual void s49(); virtual void s50();
-    virtual void      s51(); virtual void s52(); virtual void s53(); virtual void s54();
-    virtual void      s55(); virtual void s56(IWindow_s0066_1d10*); virtual void s57(); virtual void s58();
-    virtual void      s59(); virtual IWindow_s0066_1d10* FindWindowByID(uint32_t id, bool recurse);
-    virtual void      s61(); virtual void s62(); virtual void s63(); virtual void s64();
-    virtual void      SetReloadCallback(void*); virtual void AttachProc(void*);
+virtual void      s00();
+virtual int Release();
+virtual void      s02();
+virtual IWindow_s0066_1d10* FindWindow(uint32_t id);
+virtual IWindow_s0066_1d10*  GetSomething();
+virtual void s05();
+virtual void s06();
+virtual void s07();
+virtual void      s08();
+virtual void s09();
+virtual uint32_t GetFlags();
+virtual void s11();
+virtual void      s12();
+virtual float* GetArea();
+virtual void s14();
+virtual void s15();
+virtual void      s16();
+virtual void s17();
+virtual void s18();
+virtual void s19();
+virtual void      s20();
+virtual void s21();
+virtual void s22();
+virtual void s23();
+virtual void      s24();
+virtual void SetLocation(float, float);
+virtual void s26();
+virtual void      s27();
+virtual void s28();
+virtual void s29();
+virtual void s30();
+virtual void      SetFlag(int, bool);
+virtual void s32();
+virtual void s33();
+virtual void s34();
+virtual void      s35();
+virtual void s36();
+virtual void s37();
+virtual void s38();
+virtual void      s39();
+virtual void s40();
+virtual void s41();
+virtual void s42();
+virtual void      s43();
+virtual void s44();
+virtual void s45();
+virtual void s46();
+virtual void      s47();
+virtual void s48();
+virtual void s49();
+virtual void s50();
+virtual void      s51();
+virtual void s52();
+virtual void s53();
+virtual void s54();
+virtual void      s55();
+virtual void s56(IWindow_s0066_1d10*);
+virtual void s57();
+virtual void s58();
+virtual void      s59();
+virtual IWindow_s0066_1d10* FindWindowByID(uint32_t id, bool recurse);
+virtual void      s61();
+virtual void s62();
+virtual void s63();
+virtual void s64();
+virtual void      SetReloadCallback(void*);
+virtual void AttachProc(void*);
 };
-struct cSPUILayout_s0066_1d10 {
-    virtual void s0(); virtual void s1(); virtual int Release();
+class cSPUILayout_s0066_1d10 { public:
+virtual void s0();
+virtual void s1();
+virtual int Release();
     void Shutdown(bool);                                   // 0x00811ad0
     IWindow_s0066_1d10* FindWindowByID(uint32_t, bool);               // 0x008105b0
     void Init(const uint32_t* area, int a, uint32_t key);  // 0x008120d0
@@ -639,14 +688,27 @@ struct cSPUILayout_s0066_1d10 {
     char pad[0x18 - 4];
 };
 struct AudioAT {
-    virtual void a0(); virtual void a1(); virtual void a2(); virtual void a3();
-    virtual void a4(); virtual void a5(); virtual void a6(); virtual void a7();
+virtual void a0();
+virtual void a1();
+virtual void a2();
+virtual void a3();
+virtual void a4();
+virtual void a5();
+virtual void a6();
+virtual void a7();
     virtual void* Slot20();                                // +0x20
 };
 struct IMessageServer {
-    virtual void s0(); virtual void s1(); virtual void s2(); virtual void s3(); virtual void s4();
+virtual void s0();
+virtual void s1();
+virtual void s2();
+virtual void s3();
+virtual void s4();
     virtual void PostMessage(uint32_t id, uint32_t a, uint32_t b);   // +0x14
 };
+void  __cdecl ReloadCallback(void* self, void* layout, char b);                          // 0x0065faa0
+void  __cdecl FUN_00660b90(void* self);                                                  // 0x00660b90
+void  __cdecl FUN_00661900(void* a, void* b);                                            // 0x00661900
 IMessageServer* __cdecl SP_MessageServer();                                              // 0x0067dcc0
 void* __cdecl SP_GetSystemAT();                                                          // 0x00a206f0
 void  __cdecl SP_KillSetiEffects(uint32_t id, void* at);                                 // 0x00435ed0
@@ -658,6 +720,15 @@ struct FeedTreeNode_s0066_1d10 {
     IWindow_s0066_1d10* mWin;     // +0x14
     bool b18;          // +0x18
     bool b19;          // +0x19
+};
+struct FeedSub {
+    void FUN_00661700();          // 0x00661700 (thiscall)
+    void FUN_00661390(void* arg); // 0x00661390 (thiscall, 1 arg)
+};
+struct FeedFilterA_s0066_1d10 {
+    int m0, m4; IWindow_s0066_1d10* m8; IWindow_s0066_1d10* mWin[4];
+    void Update4();               // 0x0065f970
+    void FUN_0065f820(void* arg); // 0x0065f820
 };
 struct FeedList {
     char      pad00[0x10];
@@ -724,34 +795,77 @@ struct FeedList {
 struct CFVec2 { float x, y; };
 struct CFKey { uint32_t a, b, c; };
 struct CFWin {                                   // UTFWin window (slots by index)
-    virtual void v0(); virtual int Release();
-    virtual void v2(); virtual void v3();
+virtual void v0();
+virtual int Release();
+virtual void v2();
+virtual void v3();
     virtual CFWin* GetInner();                   // 4  +0x10
-    virtual void v5(); virtual void v6();
+virtual void v5();
+virtual void v6();
     virtual int GetTypeId();                     // 7  +0x1c
-    virtual void v8(); virtual void v9(); virtual void v10(); virtual void v11(); virtual void v12(); virtual void v13();
+virtual void v8();
+virtual void v9();
+virtual void v10();
+virtual void v11();
+virtual void v12();
+virtual void v13();
     virtual float* GetArea();                    // 14 +0x38
-    virtual void v15(); virtual void v16();
+virtual void v15();
+virtual void v16();
     virtual void SetCmd(uint32_t id);            // 17 +0x44
-    virtual void v18(); virtual void v19(); virtual void v20(); virtual void v21(); virtual void v22(); virtual void v23();
-    virtual void v24(); virtual void v25(); virtual void v26(); virtual void v27();
+virtual void v18();
+virtual void v19();
+virtual void v20();
+virtual void v21();
+virtual void v22();
+virtual void v23();
+virtual void v24();
+virtual void v25();
+virtual void v26();
+virtual void v27();
     virtual void SetLocation(float x, float y);  // 28 +0x70
     virtual void SetSize(float w, float h);      // 29 +0x74
-    virtual void v30(); virtual void v31();
+virtual void v30();
+virtual void v31();
     virtual void SetCaption(const wchar_t* t);   // 32 +0x80
     virtual void SetFlag2(uint32_t id);          // 33 +0x84
-    virtual void v34(); virtual void v35();
+virtual void v34();
+virtual void v35();
     virtual void Finish();                       // 36 +0x90
-    virtual void v37(); virtual void v38(); virtual void v39(); virtual void v40(); virtual void v41();
+virtual void v37();
+virtual void v38();
+virtual void v39();
+virtual void v40();
+virtual void v41();
     virtual uint32_t GetHandle();                // 42 +0xa8
-    virtual void v43(); virtual void v44(); virtual void v45(); virtual void v46(); virtual void v47(); virtual void v48();
-    virtual void v49(); virtual void v50(); virtual void v51(); virtual void v52(); virtual void v53(); virtual void v54();
-    virtual void v55(); virtual void v56(); virtual void v57(); virtual void v58(); virtual void v59(); virtual void v60();
-    virtual void v61(); virtual void v62(); virtual void v63(); virtual void v64();
+virtual void v43();
+virtual void v44();
+virtual void v45();
+virtual void v46();
+virtual void v47();
+virtual void v48();
+virtual void v49();
+virtual void v50();
+virtual void v51();
+virtual void v52();
+virtual void v53();
+virtual void v54();
+virtual void v55();
+virtual void v56();
+virtual void v57();
+virtual void v58();
+virtual void v59();
+virtual void v60();
+virtual void v61();
+virtual void v62();
+virtual void v63();
+virtual void v64();
     virtual void AddProc(void* p);               // 65 +0x104
 };
 struct CFLayout {
-    virtual void s0(); virtual void s1(); virtual int Release();
+virtual void s0();
+virtual void s1();
+virtual int Release();
     CFLayout* Construct();                               // 0x00810000
     void Init(const CFKey* k, int a, uint32_t key);      // 0x008120d0
     void SetParentWin(CFWin* w, int a, uint32_t key);    // 0x008121b0
@@ -780,7 +894,12 @@ struct CFString {
 };
 struct CFPlist { virtual void a0(); virtual void Release(); };
 struct CFPropMgr { virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3(); virtual void v4();
-    virtual void v5(); virtual void v6(); virtual void v7(); virtual void v8(); virtual void v9(); virtual void v10();
+virtual void v5();
+virtual void v6();
+virtual void v7();
+virtual void v8();
+virtual void v9();
+virtual void v10();
     virtual void GetPropertyList(int key, uint32_t id, CFPlist** out); };   // 11 +0x2c
 struct CFValue {                                 // map value (tree node + 0x14)
     CFWinRef win; bool b4; bool b5; char pad6[2];
@@ -1570,7 +1689,7 @@ void Vec34::FUN_00661670()
     if (pc && *(int*)((char*)pc - 4) != 0) EASTL_allocator_deallocate(pc);
 }
 
-// @ 0x00661700  vector<E34> range assign + destroy, then end -= (end-begin)/0x34*0x34
+// @ 0x00661700
 void Vec34::FUN_00661700()
 {
     Vec34* v = this;
@@ -1856,6 +1975,104 @@ void FeedList::CreateFilterButtons(int key, int flag, int depth, int* counter)
         }
         props->Release();
     }
+}
+
+// @ 0x006624d0
+void FeedList::FUN_006624d0(int param)
+{
+    int local = 0;
+    CreateFilterButtons(param, 1, 0, &local);
+    bool b = local != 1;
+    for (FeedTreeNode_s0066_1d10* it = mBegin; it != (FeedTreeNode_s0066_1d10*)&mEnd; it = (FeedTreeNode_s0066_1d10*)RBTreeIncrement(it)) {
+        if (it->b18) {
+            IWindow_s0066_1d10* w = it->mWin;
+            if (w) {
+                w->SetFlag(2, b);
+            }
+        }
+    }
+}
+
+// @ 0x00662540
+void FeedList::FUN_00662540()
+{
+    for (FeedTreeNode_s0066_1d10* it = mBegin; it != (FeedTreeNode_s0066_1d10*)&mEnd; it = (FeedTreeNode_s0066_1d10*)RBTreeIncrement(it)) {
+        it->b18 = false;
+        it->b19 = false;
+    }
+    if (m14 != 0 && m18 != 0) {
+        FUN_006624d0(m14);
+        DoMessage();
+        ((FeedFilterA_s0066_1d10*)((char*)this + 0xd8))->Update4();
+        ((FeedSub*)((char*)this + 0x30))->FUN_00661700();
+        FUN_00661900((void*)m14, (char*)this + 0x30);
+        if (m14 == m18) {
+            ((FeedSub*)((char*)this + 0x1c))->FUN_00661390((char*)this + 0x30);
+            GetSupportedFilterTypes(m18);
+            return;
+        }
+        ((FeedSub*)((char*)this + 0x1c))->FUN_00661700();
+        FUN_00661900((void*)m18, (char*)this + 0x1c);
+        GetSupportedFilterTypes(m18);
+    }
+}
+
+// @ 0x006625f0
+void FeedList::FUN_006625f0(int* param2, void* param3)
+{
+    IWindow_s0066_1d10* old68 = m68;
+    if (param2 != (int*)old68) {
+        if (param2) ((IWindow_s0066_1d10*)param2)->s00();
+        m68 = (IWindow_s0066_1d10*)param2;
+        if (old68) old68->Release();
+    }
+    m14 = (int)param3;
+    m18 = (int)param3;
+    cSPUILayout_s0066_1d10* nl = (cSPUILayout_s0066_1d10*)EASTL_allocator_allocate(0x18, "Sporepedia", 0, 0, 0, 0);
+    if (nl) nl = nl->Construct();
+    cSPUILayout_s0066_1d10* old = mLayout64;
+    if (nl != old) {
+        if (nl) nl->s1();
+        mLayout64 = nl;
+        if (old) old->Release();
+    }
+    uint32_t area[3];
+    area[0] = 0xab75403;
+    area[1] = 0x510a95b;
+    area[2] = *(uint32_t*)0x1526fb4;
+    mLayout64->Init(area, 1, 0x5b598fa);
+    mLayout64->SetParentWin(m68, 1, 0x5b598fa);
+    mLayout64->SetReloadCallback((void*)0x65faa0, this);
+    ReloadCallback(this, mLayout64, 1);
+    if (m74) {
+        float* a = m74->GetArea();
+        float* b = m74->GetArea();
+        m90 = b[0];
+        m94 = a[1];
+        float* c = m74->GetArea();
+        m98 = c[2] - c[0];
+    }
+    ((FeedFilterA_s0066_1d10*)((char*)this + 0xd8))->FUN_0065f820(m78);
+    FUN_00662540();
+}
+
+// @ 0x00662750
+void FeedList::FUN_00662750(int param2, int param3, char param4)
+{
+    if (param2 == 0) {
+        m18 = param3;
+    } else {
+        int old = m14;
+        m14 = param2;
+        if (param4 == 0 || old == m18) {
+            m18 = param3;
+        } else {
+            if (!FUN_00661c00(param2, 0)) m18 = param3;
+        }
+        FUN_00660b90(this);
+    }
+    FUN_00662540();
+    SP_MessageServer()->PostMessage(0xd43aca3c, 0, 0);
 }
 
 // @ 0x006627d0

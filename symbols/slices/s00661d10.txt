@@ -1,4 +1,8 @@
 00661d10 ?CreateFilterButtons@FeedList@@QAEXHHHPAH@Z  # FeedList::CreateFilterButtons migrated from s00661d10 (verbatim, slice spelling)
+006624d0 ?FUN_006624d0@FeedList@@QAEXH@Z  # FeedList::FUN_006624d0 migrated from s00661d10 (verbatim, slice spelling)
+00662540 ?FUN_00662540@FeedList@@QAEXXZ  # FeedList::FUN_00662540 migrated from s00661d10 (verbatim, slice spelling)
+006625f0 ?FUN_006625f0@FeedList@@QAEXPAHPAX@Z  # FeedList::FUN_006625f0 migrated from s00661d10 (verbatim, slice spelling)
+00662750 ?FUN_00662750@FeedList@@QAEXHHD@Z  # FeedList::FUN_00662750 migrated from s00661d10 (verbatim, slice spelling)
 006627d0 ?FUN_006627d0@FeedList@@QAE_NPAXPAH@Z  # FeedList::FUN_006627d0 migrated from s00661d10 (verbatim, slice spelling)
 006628d0 ?FUN_006628d0@FeedList@@QAEXXZ  # FeedList::FUN_006628d0 migrated from s00661d10 (verbatim, slice spelling)
 00662920 ?FUN_00662920@FeedList@@QAEX_N@Z  # FeedList::FUN_00662920 migrated from s00661d10 (verbatim, slice spelling)
