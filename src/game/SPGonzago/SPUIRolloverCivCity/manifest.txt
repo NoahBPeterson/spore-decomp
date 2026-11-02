@@ -1,1 +1,10 @@
 # source  symbol  va  flags
+../src/game/SPGonzago/SPUIRolloverCivCity.cpp  ?Init@cSPUIRolloverCivCityVehicle@@QAE_NI@Z  00e2a550  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPUIRolloverCivCity.cpp  ?GetEventFlags@cSPUIRolloverPropertyFlags@@QAEIXZ  00e2a5f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPUIRolloverCivCity.cpp  ?SetShown@cSPUICursorLayoutWidget@@QAEX_N@Z  00e2a600  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPUIRolloverCivCity.cpp  ?Initialize@cSPUIRolloverCivCityVehicleCtor@@QAEPAU1@XZ  00e2a640  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPUIRolloverCivCity.cpp  ?GetEventFlags@cSPUIRolloverVehicleFlags@@QAEIXZ  00e2a690  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPUIRolloverCivCity.cpp  ?GetEventFlags@cSPUIRolloverCityFlags@@QAEIXZ  00e2a6a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPUIRolloverCivCity.cpp  ?HideRelationshipRollover@cSPUIRolloverRelationship@@QAEXXZ  00e2a6c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPUIRolloverCivCity.cpp  ?read_properties@cSPUIRolloverCivCityHall@@QAEXXZ  00e2acc0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPUIRolloverCivCity.cpp  ?Initialize@cSPUIRolloverCivCityVehicle_s00e2_b9d0@civroll@@QAE_NXZ  00e2c1e0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include

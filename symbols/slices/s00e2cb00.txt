@@ -1,7 +1,7 @@
 00828250 ?Init@cSPUIPropertyLayout@@UAE_NXZ  # cSPUIPropertyLayout::Init (callee of s00e2cb00, named from the dev publics; slice address comment)
 00e2cb00 ?GetStringSlot@cStringMap@@QAEAAVcString_s00e2_cb00@SP@@I@Z  # cStringMap::GetStringSlot migrated from s00e2cb00 (verbatim, slice spelling)
 00e2cba0 ?Init@cSPUIRolloverCivRelationship@@QAE_NXZ  # cSPUIRolloverCivRelationship::Init migrated from s00e2cb00 (verbatim, slice spelling)
-00e2cce0 ?Read@cRelationshipValues@@QAEAAV1@II@Z  # cRelationshipValues& cRelationshipValues::Read(uint32_t, uint32_t) - rebuilds the event id -> relationship value cache for a civ pair
+00e2cce0 ?Read@cRelationshipValues@@QAEAAV1@II@Z  # cRelationshipValues::Read migrated from s00e2cb00 (verbatim, slice spelling)
 00e2cd70 ?RelationshipInsertionSort@@YAXAAUcAbsValueLess@@PAI1@Z  # RelationshipInsertionSort migrated from s00e2cb00 (verbatim, slice spelling)
 00e2ce30 ?RelationshipInsertionSortTail@@YAXAAUcAbsValueLess@@PAI1@Z  # RelationshipInsertionSortTail migrated from s00e2cb00 (verbatim, slice spelling)
 00e2ced0 ?RelationshipMedianOfThree@@YAPAIAAUcAbsValueLess@@PAI11@Z  # RelationshipMedianOfThree migrated from s00e2cb00 (verbatim, slice spelling)
@@ -10,6 +10,6 @@
 00e2d220 ?RelationshipAdjustHeap@@YAXAAUcAbsValueLess@@PAIHHI@Z  # RelationshipAdjustHeap migrated from s00e2cb00 (verbatim, slice spelling)
 00e2d300 ?RelationshipMakeHeap@@YAXAAUcAbsValueLess@@PAI1@Z  # RelationshipMakeHeap migrated from s00e2cb00 (verbatim, slice spelling)
 00e2d360 ?RelationshipSortHeap@@YAXAAUcAbsValueLess@@PAI1@Z  # RelationshipSortHeap migrated from s00e2cb00 (verbatim, slice spelling)
-00e2d430 ?RelationshipPartialSort@@YAXAAUcAbsValueLess@@PAI11@Z  # void RelationshipPartialSort(cAbsValueLess&, uint32_t*, uint32_t*, uint32_t*) - the introsort fallback: partial sort of the range
-00e2d520 ?RelationshipIntrosortLoop@@YAXAAUcAbsValueLess@@PAI1H@Z  # void RelationshipIntrosortLoop(cAbsValueLess&, uint32_t*, uint32_t*, int32_t) - the introsort loop (median-of-three, partition, depth limit)
+00e2d430 ?RelationshipPartialSort@@YAXAAUcAbsValueLess@@PAI11@Z  # RelationshipPartialSort migrated from s00e2cb00 (verbatim, slice spelling)
+00e2d520 ?RelationshipIntrosortLoop@@YAXAAUcAbsValueLess@@PAI1H@Z  # RelationshipIntrosortLoop migrated from s00e2cb00 (verbatim, slice spelling)
 00e2d5f0 ?RelationshipSort@@YAXAAUcAbsValueLess@@PAI1@Z  # RelationshipSort migrated from s00e2cb00 (verbatim, slice spelling)
