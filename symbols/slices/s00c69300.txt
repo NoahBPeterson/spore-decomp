@@ -1,1 +1,3 @@
 00c69db0 ?Cast@cObject@@QAEPAXH@Z  # cObject::Cast migrated from s00c69300 (verbatim, slice spelling)
+00c69e30 ?SP_ObjectCheck@@YAHPAX@Z  # SP_ObjectCheck migrated from s00c69300 (verbatim, slice spelling)
+00c69ff0 ?SetTarget@cHerd@@QAEXPBUcVec3@@@Z  # cHerd::SetTarget migrated from s00c69300 (verbatim, slice spelling)

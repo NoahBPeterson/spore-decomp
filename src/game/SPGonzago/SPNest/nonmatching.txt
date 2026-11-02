@@ -1,4 +1,4 @@
-# va diff flags difftest
+# va  diff-bytes  reason
 00c6a550 239 Complete cEgg::Write serialisation; residual is call/stack scheduling + tag-constant setup order.
 00c6a6e0 102 Complete egg state machine; residual is SetState scheduling order (mov eax,[esi+0x1f4] before store).
 00c6a7f0 115 Complete extents setter; residual is fabs/constant-fold ordering and register allocation.
@@ -19,9 +19,16 @@
 00c6b440 227 Complete cHerd::OnAnimalRemoved; residual is refcount/list-loop register allocation.
 00c6b540 76 Complete SpawnAnimalsIfUnderfilled; residual is position-select branch and call setup scheduling.
 00c6b5b0 104 Complete FindWateringHole; residual is float-select and position-select scheduling.
-00c6c630 1 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 303 bytes - game-data serialisation helper not reconstructed.
-00c6c760 1 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 349 bytes - ISimulatorSerializable::Write not reconstructed.
-00c6c8c0 62 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 802 bytes - cGameData::RemoveOwner not reconstructed.
-00c6cbf0 1 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 347 bytes - game-data serialisation helper not reconstructed.
-00c6cf10 1 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 477 bytes - cHerd::AddEggInNest not reconstructed.
-00c6e8f0 1100 /O2 /MD /Gy /TP /arch:SSE /fp:fast FAIL execution (external callee ABI 0x00b7ef9e)
+00c6bd60 23 list-node recycler: instruction stream is equivalent, only callee-saved register assignment differs (retail keeps node in esi and copies it to edi; MSVC 2008 assigns edi to the list head). equiv=UNSUPPORTED (0/400 inputs valid; all fault on pool reads) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00c6bf20 382 Vector2 "list"/"type" serializer: retail shares one empty-string path for the name/type wstrings; ours keeps the empty-name branch separate. equiv=UNSUPPORTED (0/400 inputs valid; every input hits import _fcvt) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00c6c390 244 list<AutoRefCount> serializer: retail evaluates the empty-list early-out and caches the wstring in a tighter frame. equiv=FAIL (return eax&0xffff 0xc401 vs 1) -- retail leaves a non-zero high byte of eax on return flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00c6c4e0 240 list<EA::ResourceMan::Key> serializer: same shape as 00c6c390 with a 0xc element stride. equiv=FAIL (return eax&0xffff 0xff01 vs 1) -- retail leaves a non-zero high byte of eax on return flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00c6c630 1 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 303 bytes - game-data serialisation helper not reconstructed. flags: /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+00c6c760 1 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 349 bytes - ISimulatorSerializable::Write not reconstructed. flags: /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+00c6c8c0 62 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 802 bytes - cGameData::RemoveOwner not reconstructed. flags: /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+00c6cbf0 1 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 347 bytes - game-data serialisation helper not reconstructed. flags: /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+00c6ce30 1 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 213 bytes - vector deserialisation: memcpy-shift of a 4-byte-slot vector with the end adjustment, then a count read through virtual +0x20/+0x18 and EA::IO::ReadInt32, a call into FUN_00d01790 and a push_back loop guarded by the same count; not reconstructed within the remaining budget. flags: /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+00c6cf10 1 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 477 bytes - cHerd::AddEggInNest not reconstructed. flags: /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+00c6e710 478 /O2 /MD /Gy /TP /arch:SSE /fp:fast WEAK 13.3% coverage, equivalence-only (unresolved imports) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00c6e8f0 1100 /O2 /MD /Gy /TP /arch:SSE /fp:fast FAIL execution (external callee ABI 0x00b7ef9e) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
+0134d380 1881 table of 43 Attribute records completed: the mInitialPosition default's guarded function-local vec3 static is now named directly (sHerdDefaultVec3[3] at 0x01693e40 + init guard sHerdDefaultVec3Guard at 0x01693e4c) because clang folds an empty-ctor static into object-private data (MSVC keeps the 12 zero bytes and sets the guard bit); equivalence PASS 400/400 inputs, 100% coverage, no mismatches; chk diff 2102 -> 2057 of 4318 bytes (cl callback-constant scheduling and store order) flags: /O2 /MD /Gy /EHsc /TP

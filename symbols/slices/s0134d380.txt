@@ -1,2 +1,3 @@
 00675ca0 FUN_00675ca0  # uint32_t ToXml attribute callback (referenced as data from InitHerdAttributes 0134d380)
 00b20510 FUN_00b20510  # Read attribute callback (referenced as data from InitHerdAttributes 0134d380)
+0134d380 ?InitHerdAttributes@Simulator@@YAXXZ  # InitHerdAttributes migrated from s0134d380 (verbatim, slice spelling)

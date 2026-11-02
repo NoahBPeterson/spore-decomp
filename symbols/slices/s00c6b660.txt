@@ -1,0 +1,4 @@
+00c6bdc0 ?GetWateringHolePosition@cHerd_s00c6_b660@SP@@QAEPAUVec3@2@XZ  # cHerd_s00c6_b660::GetWateringHolePosition migrated from s00c6b660 (verbatim, slice spelling)
+00c6bf20 ?FUN_00c6bf20@@YAEPAPAXHPBXH@Z  # FUN_00c6bf20 migrated from s00c6b660 (verbatim, slice spelling)
+00c6c390 ?FUN_00c6c390@@YAEPAPAXH0@Z  # FUN_00c6c390 migrated from s00c6b660 (verbatim, slice spelling)
+00c6c4e0 ?FUN_00c6c4e0@@YAEPAPAXH0@Z  # FUN_00c6c4e0 migrated from s00c6b660 (verbatim, slice spelling)
