@@ -1,0 +1,4 @@
+00a1a590 ?SetResponseCurveData@ResponseCurve@Audio@EA@@QAE_NPBMH@Z  # EA::Audio::ResponseCurve::SetResponseCurveData migrated from s00a1a590
+00a1a9d0 ?InitFromConfiguration@ResponseCurve_s00a1_a590@@QAE_NPAXI@Z  # ResponseCurve_s00a1_a590::InitFromConfiguration migrated from s00a1a590 (verbatim, slice spelling)
+00a1aa50 ??0ResponseCurve_s00a1_a590@@QAE@XZ  # ResponseCurve_s00a1_a590::ResponseCurve migrated from s00a1a590 (verbatim, slice spelling)
+00a1aad0 ?ParseString@ResponseCurve_s00a1_a590@@QAEEPADD@Z  # ResponseCurve_s00a1_a590::ParseString migrated from s00a1a590 (verbatim, slice spelling)

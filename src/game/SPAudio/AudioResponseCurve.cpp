@@ -1,4 +1,4 @@
-// src/game/SPAudio/AudioResponseCurve.cpp -- migrated from slice(s) s00a196f0, s009515e0 by tools/migrate/rewrite.py
+// src/game/SPAudio/AudioResponseCurve.cpp -- migrated from slice(s) s00a1a590, s00a196f0, s009515e0 by tools/migrate/rewrite.py
 // Object file: SPAudio/AudioResponseCurve.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -6,6 +6,9 @@
 #include <string.h>
 #include <new>
 #include "EA/Audio/ResponseCurve.h"
+#include "EA/Audio/Envelope.h"
+#include "EA/Audio/ResourceInstrumentBank.h"
+#include "EA/Audio/Sound.h"
 
 // ---- items of slice s009515e0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 namespace eastl {
@@ -72,6 +75,46 @@ struct RcdVec {
     void resize(unsigned n);
 };
 // ---- items of slice s00a196f0 end
+
+// ---- items of slice s00a1a590 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C" void  __cdecl FUN_00f47380(void* p);          // operator delete
+static __forceinline void** VtOf(void* p) { return *(void***)p; }
+void  __cdecl FUN_00ab94c0(void* self, uint32_t cap);    // FloatVec::reserve
+void  __cdecl FUN_00a1a1e0(void* vec, float* val);       // FloatVec::push_back
+void  __cdecl FUN_00a1a500(void* vec, uint32_t n);       // RcdVec::resize
+double __cdecl FUN_0092dc50(const char* s, float* out);  // eastl::atof
+int   __cdecl isalnum(int c);                            // CRT import (via 0x13cc510 thunk)
+struct FloatVec_s00a1_a590 {
+    float* mpBegin;       // +0x00
+    float* mpEnd;         // +0x04
+    float* mpCapacity;    // +0x08
+    float* mpPoolBegin;   // +0x0c
+    char   mPool[0x100];  // +0x10
+};
+struct ResponseCurve_s00a1_a590 {
+    ResponseCurveData* mpBegin;    // +0x00
+    ResponseCurveData* mpEnd;      // +0x04
+    ResponseCurveData* mpCapacity; // +0x08
+    uint8_t            pad0c[4];
+    ResponseCurveData* mpPoolBegin;// +0x10
+    uint8_t            pad14[4];
+    ResponseCurveData  mBuffer[42];// +0x18
+    uint32_t           mCount;     // +0x360
+
+    bool  SetResponseCurveData(const float* pts, int32_t n);  // 0x00a1a590 (ResponseCurve::SetResponseCurveData)
+    bool  InitFromConfiguration(void* cfg, uint32_t key);  // 0x00a1a9d0 (ResponseCurve::InitFromConfiguration)
+    ResponseCurve_s00a1_a590();
+    uint8_t ParseString(char* str, char sep);
+};
+// ---- items of slice s00a1a590 end
+
+// @ 0x00951bb0
+Rec20* uninitialized_copy_Rec20(const Rec20* first, const Rec20* last, Rec20* dest)
+{
+  for (; first != last; ++first, ++dest)
+    ::new (dest) Rec20(*first);
+  return dest;
+}
 
 // @ 0x00951bf0
 Rec20* copy_Rec20(const Rec20* first, const Rec20* last, Rec20* dest)
@@ -257,4 +300,149 @@ void RcdVec::resize(unsigned n)
     ResponseCurveData* first = mpBegin + n;
     f_00951bf0(end, end, first);
     mpEnd = (ResponseCurveData*)((char*)end + ((int)((char*)first - (char*)end) / 0x14) * 0x14);
+}
+
+// @ 0x00a1a590
+bool EA::Audio::ResponseCurve::SetResponseCurveData(float const * pts, int n)
+{
+    // clear() then resize(): the end pointer is rewound to begin and the vector re-grown
+    // to n entries.
+    mResponseCurveDataArray.mpEnd = mResponseCurveDataArray.mpBegin;
+    FUN_00a1a500(this, (uint32_t)n);
+
+    // The retail body fills four entries per iteration with an identical block; the shape
+    // below is the same computation for one entry at a time.
+    for (int32_t i = 0; i < n; ++i) {
+        float in = pts[i * 2];
+        float out = pts[i * 2 + 1];
+        float prevIn, prevOut;
+        if (i == 0) {
+            prevIn = in - 0.0000000001f;
+            prevOut = out;
+        } else {
+            prevIn = pts[i * 2 - 2];
+            prevOut = pts[i * 2 - 1];
+        }
+        float delta = out - prevOut;
+        float ratio;
+        if (delta != 0.0f) {
+            if (delta * 0.0000000001f < (in - prevIn))
+                ratio = delta / (in - prevIn);
+            else
+                ratio = delta;
+        } else {
+            ratio = 0.0f;
+        }
+        ResponseCurveData* e = mResponseCurveDataArray.mpBegin + i;
+        e->mfInputValue = in;
+        e->mfOutputValue = out;
+        e->mfPreviousInputValue = prevIn;
+        e->mfPreviousOutputValue = prevOut;
+        e->mfDeltaRatio = ratio;
+    }
+
+    mnResponseCurveDataArraySize = (uint32_t)(((char*)mResponseCurveDataArray.mpEnd - (char*)mResponseCurveDataArray.mpBegin) / 0x14);
+    return mResponseCurveDataArray.mpBegin != mResponseCurveDataArray.mpEnd;
+}
+
+// @ 0x00a1a9d0
+bool ResponseCurve_s00a1_a590::InitFromConfiguration(void* cfg, uint32_t key)
+{
+    float def[4];
+    def[0] = 0.0f;
+    def[1] = 0.0f;
+    def[2] = 1.0f;
+    def[3] = 1.0f;
+    SetResponseCurveData(def, 2);
+
+    if (cfg == 0)
+        return false;
+
+    float* pData = 0;
+    float  count = 0.0f;
+    if (!((int(__thiscall*)(void*, uint32_t, void*, void*))VtOf(cfg)[0x44 / 4])(cfg, key, &count, &pData))
+        return false;
+
+    SetResponseCurveData(pData, (int)count >> 1);
+    return true;
+}
+
+// @ 0x00a1aa50
+ResponseCurve_s00a1_a590::ResponseCurve_s00a1_a590()
+{
+    mpPoolBegin = &mBuffer[0];
+    mpEnd = &mBuffer[0];
+    mpBegin = &mBuffer[0];
+    mpCapacity = &mBuffer[42];
+    mCount = 0;
+
+    float def[4];
+    def[0] = 0.0f;
+    def[1] = 0.0f;
+    def[2] = 1.0f;
+    def[3] = 1.0f;
+    SetResponseCurveData(def, 2);
+}
+
+// @ 0x00a1aad0
+uint8_t ResponseCurve_s00a1_a590::ParseString(char* str, char sep)
+{
+    // Without an explicit separator, take the first non-alphanumeric character.
+    if (sep == '\0') {
+        for (char* p = str; *p != '\0'; ++p) {
+            if (isalnum((int)*p) == 0) {
+                sep = *p;
+                break;
+            }
+        }
+    }
+
+    // Count the separator occurrences (plus one).
+    uint32_t count = 1;
+    for (char* p = str; *p != '\0'; ++p) {
+        if (*p == sep)
+            ++count;
+    }
+
+    // An odd number of fields cannot form (x,y) pairs.
+    if ((count & 1) != 0)
+        return 0;
+
+    FloatVec_s00a1_a590 vec;
+    vec.mpBegin = 0;
+    vec.mpEnd = 0;
+    vec.mpCapacity = 0;
+    vec.mpPoolBegin = (float*)vec.mPool;
+    FUN_00ab94c0(&vec, count);
+
+    uint32_t i = 0;
+    for (;;) {
+        char buf[128];
+        uint32_t j = 0;
+        while (str[i] != '\0' && str[i] != sep) {
+            if (j < 0x7f) {
+                buf[j] = str[i];
+                ++j;
+            }
+            ++i;
+        }
+        buf[j] = '\0';
+
+        float value = (float)FUN_0092dc50(buf, 0);
+
+        if (vec.mpEnd < vec.mpCapacity)
+            *vec.mpEnd++ = value;
+        else
+            FUN_00a1a1e0(&vec, &value);
+
+        if (str[i] == '\0')
+            break;
+        ++i;
+    }
+
+    uint8_t ok = SetResponseCurveData(vec.mpBegin, (int32_t)(count / 2));
+
+    if (vec.mpBegin != 0 && vec.mpBegin != (float*)vec.mPool)
+        FUN_00f47380(vec.mpBegin);
+    return ok;
 }
