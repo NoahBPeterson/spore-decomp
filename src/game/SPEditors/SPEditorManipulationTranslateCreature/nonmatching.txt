@@ -1,3 +1,8 @@
-# va  diff-bytes  reason
-005bd7c0 516 cSPEditorManipulationTranslateCreature::PickPlaneOfSymmetry; complete, float math scheduling and Vec3 temp copies differ (618 vs 779 bytes)
+# va        diff-bytes  reason
+005bd7c0 516 cSPEditorManipulationTranslateCreature::PickPlaneOfSymmetry; complete, float math scheduling and Vec3 temp copies differ (618 vs 779 bytes) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
+005bdb60 15 PosMap (eastl::map<block*,Vec3>) DoInsertValueImpl; complete, key store order and size++ scheduling differ; difftest PASS after fixing the operator new file-name literal (allocator.h) and the declaration's @-marker that made the checker test ~ModelRef flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
+005bde60 26 complete; eastl::vector<SP::cSPEditorLimbStructure*>::clear (release+destroy each, memcpy tail); size 100 vs 103; equiv PASS (276 valid inputs) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
+005bded0 84 complete; std::map<float,cSPVector3> find-or-insert returning &value; size 93 vs 153; equiv FAIL (execution) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
+005bdf70 983 complete; cSPEditorManipulationTranslateCreature::CalcBoundsForMovement; size 1198 vs 1422; equiv FAIL (call #0 depth 1) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
+005be500 1078 complete; cSPEditorManipulationTranslateCreature::ApplyPlanarSymmetry; size 1235 vs 1519; equiv FAIL (execution) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 005beaf0 361 cSPEditorManipulationTranslateCreature::DoOnMouseDown: history copies scheduled differently, frame 0x44 vs 0x38

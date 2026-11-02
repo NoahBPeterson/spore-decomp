@@ -1,5 +1,5 @@
 005bdca0 ?init@CSpEditorManip@@QAEPAU1@XZ  # CSpEditorManip::init migrated from s005bdca0 (verbatim, slice spelling)
-005bde60 ?fn5de60@cSPEditorManipulationTranslateCreature@@QAEXXZ  # eastl::vector<SP::cSPEditorLimbStructure*>::clear (Release/Destroy + memcpy tail)
-005bded0 ?fn5ded0@cSPEditorManipulationTranslateCreature@@QAEPAMPAM@Z  # std::map<float,cSPVector3> find-or-insert, returns &value
-005bdf70 ?CalcBoundsForMovement@cSPEditorManipulationTranslateCreature@@QAEXPAM00PAX@Z  # SP::cSPEditorManipulationTranslateCreature::CalcBoundsForMovement (from PDB)
-005be500 ?fn5e500@cSPEditorManipulationTranslateCreature@@QAEIMM@Z  # SP::cSPEditorManipulationTranslateCreature planar-symmetry apply/repin
+005bde60 ?fn5de60@cSPEditorManipulationTranslateCreature_s005b_dca0@@QAEXXZ  # cSPEditorManipulationTranslateCreature_s005b_dca0::fn5de60 migrated from s005bdca0 (verbatim, slice spelling)
+005bded0 ?fn5ded0@cSPEditorManipulationTranslateCreature_s005b_dca0@@QAEPAMPAM@Z  # cSPEditorManipulationTranslateCreature_s005b_dca0::fn5ded0 migrated from s005bdca0 (verbatim, slice spelling)
+005bdf70 ?CalcBoundsForMovement@cSPEditorManipulationTranslateCreature_s005b_dca0@@QAEXPAM00PAX@Z  # cSPEditorManipulationTranslateCreature_s005b_dca0::CalcBoundsForMovement migrated from s005bdca0 (verbatim, slice spelling)
+005be500 ?fn5e500@cSPEditorManipulationTranslateCreature_s005b_dca0@@QAEIMM@Z  # cSPEditorManipulationTranslateCreature_s005b_dca0::fn5e500 migrated from s005bdca0 (verbatim, slice spelling)

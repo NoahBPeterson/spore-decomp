@@ -4,3 +4,5 @@
 005bd650 ?OnMouseUp@cSPEditorManipulationTranslateCreature@SP@@QAE_NHHHH@Z  # cSPEditorManipulationTranslateCreature::OnMouseUp migrated from s005bccc0 (verbatim, slice spelling)
 005bd750 ?SetTargets@cSPEditorManipulationTranslateCreature@SP@@QAEXPAUcSPEditorModel_s005b_ccc0@@PAUcSPEditorSpine_s005b_ccc0@@@Z  # cSPEditorManipulationTranslateCreature::SetTargets migrated from s005bccc0 (verbatim, slice spelling)
 005bd7c0 ?PickPlaneOfSymmetry@cSPEditorManipulationTranslateCreature@SP@@QAEPAUVec3@@PAU3@MMM@Z  # cSPEditorManipulationTranslateCreature::PickPlaneOfSymmetry migrated from s005bccc0 (verbatim, slice spelling)
+005bdad0 ??1cSPEditorManipulationTranslateCreature@SP@@UAE@XZ  # cSPEditorManipulationTranslateCreature::~cSPEditorManipulationTranslateCreature migrated from s005bccc0 (verbatim, slice spelling)
+005bdb60 ?DoInsertValueImpl@PosMap@SP@@QAEPAUIter@12@PAU312@PAXPBUValue@12@_N@Z  # PosMap::DoInsertValueImpl migrated from s005bccc0 (verbatim, slice spelling)
