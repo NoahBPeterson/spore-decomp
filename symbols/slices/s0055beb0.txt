@@ -1,5 +1,5 @@
-0055beb0 ?Description@cFunctionalTestCheat@SP@@UBEPBDW4tHelpType@ArgScript@EA@@@Z  # SP::cFunctionalTestCheat::Description migrated from s0055beb0
-0055bee0 ?IsEnabled@cFunctionalTestCheat_s0055_beb0@SP@@QAE_NXZ  # cFunctionalTestCheat_s0055_beb0::IsEnabled migrated from s0055beb0 (verbatim, slice spelling)
+0055beb0 ?Description@cFunctionalTestCheat_s0055_beb0@SP@@QAEPBDH@Z  # Description migrated from s0055beb0 (verbatim, slice spelling)
+0055bee0 ?IsEnabled@cFunctionalTestCheat_s0055_beb0@SP@@QAE_NXZ  # IsEnabled migrated from s0055beb0 (verbatim, slice spelling)
 0055bf10 ??0cResFinal_s0055_beb0@@QAE@XZ  # cResFinal_s0055_beb0::cResFinal migrated from s0055beb0 (verbatim, slice spelling)
 0055bf50 ??0cSummarizerFinal_s0055_beb0@@QAE@XZ  # cSummarizerFinal_s0055_beb0::cSummarizerFinal migrated from s0055beb0 (verbatim, slice spelling)
 0055bfb0 ?Shutdown@cSPObjectTemplateDB_s0055_beb0@SP@@QAE_NXZ  # cSPObjectTemplateDB_s0055_beb0::Shutdown migrated from s0055beb0 (verbatim, slice spelling)
@@ -7,5 +7,7 @@
 0055c3c0 ?HandleMessage@cSPObjectTemplateDB_s0055_beb0@SP@@UAE_NIPAX@Z  # cSPObjectTemplateDB_s0055_beb0::HandleMessage migrated from s0055beb0 (verbatim, slice spelling)
 0055c640 ?CreateObjectTemplateDB@SP@@YAPAVObjectTemplateDB_s0055_beb0@Editor@@XZ  # CreateObjectTemplateDB migrated from s0055beb0 (verbatim, slice spelling)
 0055c690 ?AsInterface@cSPObjectTemplateDB_s0055_beb0@SP@@QAEPAXI@Z  # cSPObjectTemplateDB_s0055_beb0::AsInterface migrated from s0055beb0 (verbatim, slice spelling)
-0055c6f0 SP::cSPObjectTemplateDB::SaveAssetParameters  # PDB candidate (caller-scored), byte-exact
-0055cb50 SP::cSPObjectTemplateDB::LoadAssetParameters  # PDB candidate (caller-scored), byte-exact
+0055c6f0 ?SaveAssetParameters@@YA_NPBUResKey@@PBU?$ParamVec@UAssetParam@@@@PBU?$ParamVec@UExtraParam@@@@@Z  # SaveAssetParameters migrated from s0055beb0 (verbatim, slice spelling)
+0055c9e0 ?WriteExtraParameters@@YA_NPAUIStream_s0055_beb0@IO@EA@@PBU?$ParamVec@UExtraParam@@@@@Z  # WriteExtraParameters migrated from s0055beb0 (verbatim, slice spelling)
+0055cb50 ?LoadAssetParameters@@YA_NPAUIStream_s0055_beb0@IO@EA@@PAU?$ParamVec@UAssetParam@@@@PAU?$ParamVec@UExtraParam@@@@@Z  # LoadAssetParameters migrated from s0055beb0 (verbatim, slice spelling)
+0055cd90 ?LoadAssetParametersFromKey@@YA_NPBUResKey@@PAU?$ParamVec@UAssetParam@@@@PAU?$ParamVec@UExtraParam@@@@@Z  # LoadAssetParametersFromKey migrated from s0055beb0 (verbatim, slice spelling)

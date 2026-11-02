@@ -1,0 +1,3 @@
+00564720 ?reserve@?$vector_s0056_46b0@UPod50@@Vallocator_s0056_46b0@eastl@@@eastl@@QAEXI@Z  # reserve migrated from s005646b0 (verbatim, slice spelling)
+00564820 ?push_back@?$vector_s0056_46b0@URecord50@@Vallocator_s0056_46b0@eastl@@@eastl@@QAEXXZ  # push_back migrated from s005646b0 (verbatim, slice spelling)
+00564960 ?insert@?$vector_set_s0056_46b0@IU?$less_s0056_46b0@I@eastl@@Vallocator_s0056_46b0@2@V?$vector_s0056_46b0@IVallocator_s0056_46b0@eastl@@@2@@eastl@@QAE?AU?$pair_s0056_46b0@PAI_N@2@ABI@Z  # insert migrated from s005646b0 (verbatim, slice spelling)

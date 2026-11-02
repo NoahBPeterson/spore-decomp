@@ -1,8 +1,12 @@
-005609a0 ?FUN_005609a0@SP@@YA_NPAX0D@Z  # FUN_005609a0 migrated from s005609a0 (verbatim, slice spelling)
-00560c30 SP::cSPObjectTemplateDB::AddAsset  # grows mAssetList and initialises an AssetInfo
+005609a0 ?FUN_005609a0@EcxStub9a@SP@@QAE_NPAXD@Z  # EcxStub9a::FUN_005609a0 migrated from s005609a0 (verbatim, slice spelling)
+00560c30 ?FUN_00560c30@EcxStub9a@SP@@QAEHPAX@Z  # EcxStub9a::FUN_00560c30 migrated from s005609a0 (verbatim, slice spelling)
 00560d20 SP::AssetInfoKeyEqual  # compares instance id and group id only
-00560d60 SP::cSPObjectTemplateDB::RegisterAsset  # PDB caller-scored candidate
-00561090 SP::cEditorResource::cEditorResource  # sets the multiple vtables of the resource wrapper
+00560d60 ?FUN_00560d60@EcxStub9a@SP@@QAE_NPAX@Z  # EcxStub9a::FUN_00560d60 migrated from s005609a0 (verbatim, slice spelling)
+00560f20 ?FUN_00560f20@SP@@YAXPAX0D@Z  # FUN_00560f20 migrated from s005609a0 (verbatim, slice spelling)
+00561090 ?FUN_00561090_@EcxStub9a@SP@@QAEPAXXZ  # EcxStub9a::FUN_00561090_ migrated from s005609a0 (verbatim, slice spelling)
 00561150 ?f@CEditorResourceThunk@SP@@UAEHPAX@Z  # CEditorResourceThunk::f migrated from s005609a0 (verbatim, slice spelling)
 005611b0 SP::cEditorResource::~cEditorResource  # destroys the wrapper's vectors and vtables
-00561340 ?FUN_00561340@SP@@YA_NPAX00@Z  # FUN_00561340 migrated from s005609a0 (verbatim, slice spelling)
+00561220 ?FUN_00561220@EcxStub9a@SP@@QAEXPAX@Z  # EcxStub9a::FUN_00561220 migrated from s005609a0 (verbatim, slice spelling)
+00561340 ?FUN_00561340@EcxStub9a@SP@@QAE_NPAX@Z  # EcxStub9a::FUN_00561340 migrated from s005609a0 (verbatim, slice spelling)
+00561850 ?FUN_00561850@cSPObjectTemplateDB_s0056_09a0@SP@@QAEXH@Z  # cSPObjectTemplateDB_s0056_09a0::FUN_00561850 migrated from s005609a0 (verbatim, slice spelling)
+006909b0 ?GetStatus@cJob@SP@@QBE?AW4tJobStatus@2@XZ  # SP::cJob::GetStatus (callee of s005609a0, named from the dev publics; slice address comment)
