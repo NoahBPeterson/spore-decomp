@@ -1,2 +1,2 @@
-00cb1110 DoInsertValue  # eastl::hashtable<...>::DoInsertValue (trace-cache map insert, sret + value + tag)
+00cb1110 ?DoInsertValue@Ht@@QAE?AUInsertResult@@ABUValue@@_N@Z  # Ht::DoInsertValue migrated from s00cb1110 (verbatim, slice spelling)
 00cb1210 FUN_00cb1210   # get-or-create cached trace record in the global table at 0x0157d30c

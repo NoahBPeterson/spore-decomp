@@ -1,0 +1,2 @@
+# source  symbol  va  flags
+../src/game/SPGonzago/_at_00cb0000.cpp  ?DoInsertValue@Ht@@QAE?AUInsertResult@@ABUValue@@_N@Z  00cb1110  /O2 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
