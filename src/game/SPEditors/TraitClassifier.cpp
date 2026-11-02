@@ -13,12 +13,14 @@
 #include <string.h>
 #define __PLACEMENT_NEW_INLINE   // the slices' own placement new/delete win over <new>'s (rewrite.py)
 #include <new>
+#include "SP/Traits/cClassifierFactory.h"
 inline void operator delete(void*, void*) {}   // placement delete (<new>'s is skipped, rewrite.py)
 
 // unnamed retail callees and globals (address in the comment)
 extern wchar_t g_emptyWStr[];   // 0x01667bac
 
 // ---- items of slice s0056a7b0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+struct cID { uint32_t cls; uint32_t type; };
 extern "C" double __cdecl fabs(double);
 #pragma intrinsic(fabs)
 template <int N> inline void ScratchSlots() { uint32_t s[N]; }
@@ -113,8 +115,8 @@ struct Creature {
     Block* mpBegin;       // +0x98
     Block* mpEnd;         // +0x9c
 };
-struct cID { uint32_t cls; uint32_t type; };
-struct FVEntry { cID id; float weight; };
+struct cID_s0056_a7b0 { uint32_t cls; uint32_t type; };
+struct FVEntry { cID_s0056_a7b0 id; float weight; };
 struct cFeatureVector_s0056_a7b0 {
     FVEntry* mpBegin;
     FVEntry* mpEnd;
@@ -124,19 +126,19 @@ struct cFeatureVector_s0056_a7b0 {
     float mLen;                                  // +0x18
     cFeatureVector_s0056_a7b0();                            // @ 0x00571640
     ~cFeatureVector_s0056_a7b0();                           // @ 0x00564470
-    float add(const cID& id, float weight);      // @ 0x00571790
+    float add(const cID_s0056_a7b0& id, float weight);      // @ 0x00571790
 };
 struct AnnotPair {
-    cID first;
+    cID_s0056_a7b0 first;
     Annot second;
-    AnnotPair(const cID& id, Annot& a) : first(id), second(a) {}
+    AnnotPair(const cID_s0056_a7b0& id, Annot& a) : first(id), second(a) {}
 };
 struct AnnotInsRes { AnnotPair* first; bool second; AnnotInsRes() {} };
 struct cAnnotatedFeatureVector {
     char mMap[0x18];
     float mLen;                                                  // +0x18
     AnnotInsRes insert(const AnnotPair& p);                      // @ 0x0056e580
-    float Add(const cID& id, Annot a);                           // @ 0x0056aec0
+    float Add(const cID_s0056_a7b0& id, Annot a);                           // @ 0x0056aec0
 };
 struct cBlockTypePercentClassifier {
 virtual void v0();
@@ -852,6 +854,29 @@ struct Vec12Vector {
     void DoAssign(const Vec12* first, const Vec12* last, const FalseTag& tag);
 };
 struct Key { uint32_t a; uint32_t b; };
+struct SetPair { void* first; void* second; };
+struct VectorSetU32 {
+    void*    mpBegin;                   // +0
+    void*    mpEnd;                     // +4  (0x015e4a20)
+    void*    mpCapacity;                // +8
+    uint32_t mAllocator;                // +0xc
+    void  insert(void* position, const void* value);      // 0x00554020
+    void  eraseKey(const void* value);                    // 0x005540d0
+    void  equal_range(SetPair* out, const void* value);   // 0x00555980
+};
+VectorSetU32 g_rigBlockSet;             // 0x015e4a1c
+struct Elem1cB {                        // 0x1c-byte element: 4-byte key + 0x18-byte payload
+    uint32_t key;                       // +0
+    struct Payload {
+        char b[0x18];
+        void DoDestroyValues();         // 0x00553fb0 (thiscall ret 0)
+        void AssignFrom(const void* src);  // 0x0050d440 (thiscall ret 4)
+    } body;                            // +4
+    // An explicit p->~Elem1cB() makes cl /Od emit the destroy call plus the
+    // guarded "scalar deleting destructor" tail (operator delete) seen in the original.
+    ~Elem1cB() { body.DoDestroyValues(); }
+};
+Elem1cB* UninitCopyB(Elem1cB* first, Elem1cB* last, Elem1cB* dst);   // 0x00570400 (cdecl)
 struct Str16 {                          // eastl::basic_string<wchar_t> (16 bytes with allocator)
     wchar_t* mpBegin; wchar_t* mpEnd; wchar_t* mpCapacity; uint32_t mAlloc;
     Str16(const Str16& x);              // 0x0056e2d0
@@ -1290,6 +1315,46 @@ virtual void v5();
     virtual const wchar_t* GetName();                                                       // 0x18
     bool DescribeTraits(Creature_s0056_d2b0* c, float** weights, cAnnotatedFeatureVector_s0056_d2b0* out);   // 0x0056dbe0
 };
+template <class A, class B> struct Pair2 {
+    A first;
+    B second;
+    Pair2() {}
+    Pair2(A a, B b) : first(a), second(b) {}
+};
+struct cIClassifier;
+struct cClassifierFactory {
+    virtual cIClassifier* Create();   // vtbl[0]
+};
+struct FactoryEntry {                 // eastl::pair<uint32_t, cClassifierFactory*>
+    uint32_t first;
+    cClassifierFactory* second;
+};
+struct FactoryMap_s0056_d2b0 {                   // eastl::vector_map<uint32_t, cClassifierFactory*>
+    typedef FactoryEntry* iterator;
+    FactoryEntry* mpBegin;            // +0x0
+    FactoryEntry* mpEnd;              // +0x4
+    FactoryEntry* mpCapacity;         // +0x8
+    uint32_t mAllocator;              // +0xc
+    iterator begin() { return mpBegin; }
+    iterator end() { return mpEnd; }
+    Pair2<iterator, iterator> equal_range(const uint32_t& k);   // 0x0056f3e0
+};
+struct IRefObj {
+    virtual ~IRefObj();
+    virtual int AddRef();             // vtbl[1]
+    virtual int Release();            // vtbl[2]
+    virtual int RefCount();           // vtbl[3]
+};
+struct cIClassifier : IRefObj {
+    virtual void v10() = 0;
+    virtual void v14() = 0;
+    virtual void v18() = 0;
+    virtual void v1c() = 0;
+};
+struct cClassifierRegistry {
+    FactoryMap_s0056_d2b0 mFactories;                          // +0x0 (mpBegin / mpEnd are the two iterators)
+    bool Find(uint32_t id, cIClassifier** out);     // 0x0056def0
+};
 // ---- items of slice s0056d2b0 end
 
 // @ 0x0056a7b0
@@ -1321,7 +1386,7 @@ bool cTallnessClassifier::ExtractTraits(Creature* c, float** weights, cFeatureVe
         float part, s;
         if (right > data) { part = right; s = data; }
         else { part = data; s = right; }
-        cID begin;
+        cID_s0056_a7b0 begin;
         begin.cls = 0x227f195;
         begin.type = 0;
         fv->add(begin, d * 100.0f / part);
@@ -1416,7 +1481,7 @@ bool cBlockTypePercentClassifier::ExtractTraits(Creature* c, float** weights, cF
         Block* n10 = c->mpEnd;
         for (; t32 != n10 && p30; t32++) {
             uint32_t* block = (uint32_t*)t32;
-            cID buf;
+            cID_s0056_a7b0 buf;
             buf.cls = 0x1f71e85;
             buf.type = block[1];
             fv->add(buf, (*weights)[t32 - begin]);
@@ -1436,7 +1501,7 @@ bool cBlockTypePercentClassifier::DescribeTraits(Creature* c, float** weights, c
         Block* num = c->mpEnd;
         for (; pl != num && p30; pl++) {
             uint32_t* j = (uint32_t*)pl;
-            cID w;
+            cID_s0056_a7b0 w;
             w.cls = 0x1f71e85;
             w.type = j[1];
             PListRefInline weight;
@@ -1472,7 +1537,7 @@ bool cEditorRigBlockType::ExtractTraits(Creature* c, float** weights, cFeatureVe
             if (p32) {
                 uint32_t n37[3] = { 0, 0, 0 };
                 if (SP::GetPropertyAsKey(t25.get(), 0x186609d, n37)) {
-                    cID buf;
+                    cID_s0056_a7b0 buf;
                     buf.cls = 0x4ea801f;
                     buf.type = n37[0];
                     fv->add(buf, (*weights)[t32 - begin]);
@@ -1501,7 +1566,7 @@ bool cEditorRigBlockType::DescribeTraits(Creature* c, float** weights, cAnnotate
                 WString n37;
                 uint32_t buf[3] = { 0, 0, 0 };
                 if (SP::GetPropertyAsKey(t25.get(), 0x186609d, buf)) {
-                    cID owner;
+                    cID_s0056_a7b0 owner;
                     owner.cls = 0x4ea801f;
                     owner.type = buf[0];
                     if (n37.empty())
@@ -2238,6 +2303,34 @@ bool cTextureClassifier_s0056_d2b0::DescribeTraits(Creature_s0056_d2b0* c, float
     return true;
 }
 
+// @ 0x0056def0
+bool cClassifierRegistry::Find(uint32_t id, cIClassifier** out)
+{
+    FactoryMap_s0056_d2b0::iterator itEnd;
+    cIClassifier* c;
+    Pair2<FactoryMap_s0056_d2b0::iterator, FactoryMap_s0056_d2b0::iterator> range = mFactories.equal_range(id);
+    FactoryMap_s0056_d2b0::iterator it;
+    ScratchSlots<5>();
+    if (range.first != range.second)
+        it = range.first;
+    else
+    {
+        itEnd = mFactories.end();
+        it = itEnd;
+    }
+    if (it != mFactories.end())
+    {
+        c = it->second->Create();
+        if (c != 0)
+        {
+            c->AddRef();
+            *out = c;
+            return true;
+        }
+    }
+    return false;
+}
+
 // @ 0x0056ee90
 template SP::Traits::cIClassifier_s0056_df80* SP::Traits::tClassifierFactory<SP::Traits::cRigBlockTag_s0056_df80>::Create()
 ;
@@ -2390,5 +2483,64 @@ void HashTable::DoFreeNodes(HashNode** pNodeArray, uint32_t n)
             DoFreeNode(pTempNode);
         }
         pNodeArray[i] = 0;
+    }
+}
+
+// @ 0x005702c0
+void* CopyDestroyRange1c(void* first, void* last, void* dst)
+{
+    void* p30 = UninitCopyB((Elem1cB*)first, (Elem1cB*)last, (Elem1cB*)dst);
+    uint32_t v[8];
+    uint32_t t32[10];
+    bool t21 = false;   // unused initialised local: cl /Od still materialises the store
+    uint32_t n30[4];
+    char* owner = (char*)dst;
+    char* b = (char*)first;
+    for (; b != last; b += 0x1c, owner += 0x1c) {
+        ((Elem1cB*)b)->~Elem1cB();
+    }
+    return p30;
+}
+
+// @ 0x00570330
+ElemI* UninitCopy(ElemI* first, ElemI* last, ElemI* dst)
+{
+    const bool bUnused = false;
+    ScratchSlots<4>();
+    ElemI* out = dst;
+    ElemI* src = first;
+    for (; src != last; ++src, ++out) {
+        ElemI* pElem = out;
+        ElemI* pCreated;
+        if (pElem != 0) {
+            pElem->key = src->key;
+            pElem->meta.CopyInit(&src->meta);
+            pCreated = pElem;
+        } else {
+            pCreated = 0;
+        }
+        (void)pCreated;
+    }
+    ElemI* result = out;
+    const bool bBlocks = false;
+    ElemI* freeDst = dst;
+    ElemI* freeSrc = first;
+    for (; freeSrc != last; ++freeSrc, ++freeDst) {
+        freeSrc->~ElemI();
+    }
+    (void)bUnused;
+    (void)bBlocks;
+    return result;
+}
+
+// @ 0x00570480
+void RigBlockSetInsert(uint32_t key, bool bInsert)
+{
+    SetPair stack;
+    ScratchSlots<22>();
+    if (bInsert) {
+        g_rigBlockSet.insert(&stack, &key);
+    } else {
+        g_rigBlockSet.eraseKey(&key);
     }
 }

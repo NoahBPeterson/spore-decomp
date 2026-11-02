@@ -31,3 +31,5 @@
 ../src/game/SPEditors/TraitClassifier.cpp  ?DoAssign@Vec12Vector@@QAEXPBUVec12@@0ABUFalseTag@@@Z  0056fee0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEditors/TraitClassifier.cpp  ?LowerBoundPair@@YAPAUPair8@@PAU1@0PBU1@@Z  005701b0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEditors/TraitClassifier.cpp  ?DoFreeNodes@HashTable@@QAEXPAPAUHashNode@@I@Z  00570230  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/TraitClassifier.cpp  ?CopyDestroyRange1c@@YAPAXPAX00@Z  005702c0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/TraitClassifier.cpp  ?RigBlockSetInsert@@YAXI_N@Z  00570480  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
