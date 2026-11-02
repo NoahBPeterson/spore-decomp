@@ -8,4 +8,4 @@
 005f8a70 ?GetMappedKey@cKeyMappingTable@@QAE_NABVKey_s005f_7da0@ResourceMan@EA@@PAV234@@Z  # cKeyMappingTable::GetMappedKey migrated from s005f7da0 (verbatim, slice spelling)
 005f8e40 ??1cKeyNameRecord@@QAE@XZ  # cKeyNameRecord::~cKeyNameRecord migrated from s005f7da0 (verbatim, slice spelling)
 005f8f30 eastl::basic_string<char>::basic_string  # (size_type n, char c, const allocator&) fill ctor
-005f8f80 eastl::basic_string<wchar_t>::replace  # replace(size_type,size_type,const T*) forwarding to 0x5f8400
+005f8f80 ?replace@?$basic_string_s005f_7da0@_W@eastl@@QAEAAV12@IIPB_W@Z  # replace migrated from s005f7da0 (verbatim, slice spelling)

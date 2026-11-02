@@ -1,5 +1,4 @@
 # va  diff-bytes  reason
-005f9310  -  SP::Thumbnail::cImportExport::SetupExportFolderPath: skeleton only
 005f9470  -  hash-table insert variant (FNV wchar hash + bucket): skeleton only
 005f95a0  -  unnamed 212-byte helper: skeleton only
 005f9680  -  unnamed 63-byte helper: skeleton only

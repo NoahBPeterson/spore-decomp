@@ -1,4 +1,5 @@
-# va  diff-bytes  reason
+# va  diff-bytes  reason (compiled with /O2 /MD /Gy /TP /arch:SSE /fp:fast)
+005f9310 154 complete; SP::Thumbnail::cImportExport::SetupExportFolderPath: frame layout differs (orig `sub esp,0x14` for the cString temp; cl pushes ebx) and the inlined WEnd recomputes end from strlen (`sub/sar/lea`). flags /O2 /MD /Gy /TP /arch:SSE /fp:fast [equiv: UNSUPPORTED]
 005f9920 1386 WriteAssetDataToImage: complete; callee-saved register assignment (edi/esi/ebp order) and frame size differ
 005fa100 4 string-key hashtable erase: complete; ecx/edx swap in second equal-loop; difftest PASS after fixing StrNode::next offset (0x14 -> 0x10, spurious pad after the 16-byte key)
 005fa1d0 33 hashtable bucket teardown A (string node free loop): complete; current/next register allocation is swapped (esi/edi)
