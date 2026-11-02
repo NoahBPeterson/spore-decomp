@@ -1,8 +1,10 @@
-// src/game/SPAudio/eapdgraph.cpp -- migrated from slice(s) s00a4d340 by tools/migrate/rewrite.py
+// src/game/SPAudio/eapdgraph.cpp -- migrated from slice(s) s00a4e2e0, s00a4d340 by tools/migrate/rewrite.py
 // Object file: SPAudio/eapdgraph.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
 #include "game/types.h"
+#include <stdio.h>
+#include <string.h>
 
 // ---- items of slice s00a4d340 begin (TODO(rewrite): local stubs, replace by canonical classes)
 namespace EA {
@@ -427,6 +429,337 @@ extern "C" int sprintf(char*, const char*, ...);
 }
 }
 // ---- items of slice s00a4d340 end
+
+// ---- items of slice s00a4e2e0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+namespace EA {
+namespace Audio {
+namespace Eapd {
+struct t_binbuf;
+}
+}
+}
+namespace EA {
+namespace Audio {
+namespace Eapd {
+struct t_gobj_s00a4_e2e0;
+}
+}
+}
+namespace EA {
+namespace Audio {
+namespace Eapd {
+struct t_glist_s00a4_e2e0;
+}
+}
+}
+namespace EA {
+namespace Audio {
+namespace Eapd {
+struct t_rtext_s00a4_e2e0;
+}
+}
+}
+namespace EA {
+namespace Audio {
+namespace Eapd {
+struct t_editor_s00a4_e2e0 {
+    uint32_t     pad00[3];
+    t_rtext_s00a4_e2e0*     e_rtextlist;    // +0x0c  list of live t_rtext items
+    uint32_t     pad10;
+    t_rtext_s00a4_e2e0*     e_textedfor;    // +0x14
+    uint32_t     pad18[14];
+    unsigned     e_flags;        // +0x50: bit 0x10 = textdirty
+};
+}
+}
+}
+namespace EA {
+namespace Audio {
+namespace Eapd {
+struct t_gobj_s00a4_e2e0 {
+    t_class* g_pd;      // +0x00
+    t_gobj_s00a4_e2e0*  g_next;    // +0x04
+};
+}
+}
+}
+namespace EA {
+namespace Audio {
+namespace Eapd {
+struct t_text_s00a4_e2e0 : t_gobj_s00a4_e2e0 {
+    t_binbuf* te_binbuf;    // +0x08
+    void*     te_outlet;    // +0x0c
+    void*     te_inlet;     // +0x10
+    int16_t   te_xpix;      // +0x14
+    int16_t   te_ypix;      // +0x16
+    int16_t   te_width;     // +0x18
+    int16_t   pad1a;        // +0x1a
+    unsigned  te_type;      // +0x1c: low 2 bits
+    t_glist_s00a4_e2e0*  te_owner;     // +0x24
+    t_glist_s00a4_e2e0*  te_glist;     // +0x28
+    char      te_tag[0x34]; // +0x2c
+    void*     te_next;      // +0x60
+};
+}
+}
+}
+namespace EA {
+namespace Audio {
+namespace Eapd {
+struct t_glist_s00a4_e2e0 {
+    uint32_t  pad00[0x28 / 4];
+    t_gobj_s00a4_e2e0*   gl_list;      // +0x28
+    t_glist_s00a4_e2e0*  gl_owner;     // +0x2c
+    uint32_t  pad30[2];
+    float     gl_x1;        // +0x38
+    float     gl_y1;        // +0x3c
+    float     gl_x2;        // +0x40
+    float     gl_y2;        // +0x44
+    uint32_t  pad48[6];
+    t_editor_s00a4_e2e0* gl_editor;    // +0x60
+    uint32_t  pad64[5];
+    uint32_t  gl_flags;     // +0x78: 0x100 = graph widget, 1 = "goprect"
+};
+}
+}
+}
+namespace EA {
+namespace Audio {
+namespace Eapd {
+enum { GL_GOPRECT = 0x01, GL_ISGRAPH = 0x100 };
+}
+}
+}
+namespace EA {
+namespace Audio {
+namespace Eapd {
+struct t_rtext_s00a4_e2e0 {
+    char*     rt_buf;       // +0x00 shared string from binbuf_gettext
+    int       rt_bufsize;   // +0x04
+    int       rt_selectfrom;// +0x08
+    int       rt_selectto;  // +0x0c
+    int       rt_active;    // +0x10
+    int       rt_xpix;      // +0x14
+    int       rt_ypix;      // +0x18
+    int       rt_width;     // +0x1c
+    int       rt_height;    // +0x20
+    t_text_s00a4_e2e0*   rt_owner;     // +0x24
+    t_glist_s00a4_e2e0*  rt_glist;     // +0x28
+    char      rt_tag[0x34]; // +0x2c
+    t_rtext_s00a4_e2e0*  rt_next;      // +0x60
+};
+}
+}
+}
+namespace EA {
+namespace Audio {
+namespace Eapd {
+struct t_linetraverser {
+    uint32_t pad00[0x44 / 4];
+    int      tr_lx1;        // +0x44
+    int      tr_ly1;        // +0x48
+    int      tr_lx2;        // +0x4c
+    int      tr_ly2;        // +0x50
+    uint32_t pad54[2];      // +0x54
+};
+}
+}
+}
+namespace EA {
+namespace Audio {
+namespace Eapd {
+extern int g_text_widgetbehavior[];  // 0x1554364
+}
+}
+}
+namespace EA {
+namespace Audio {
+namespace Eapd {
+t_glist_s00a4_e2e0*  glist_getcanvas(t_glist_s00a4_e2e0* x);                                 // 0xa4d410
+}
+}
+}
+namespace EA {
+namespace Audio {
+namespace Eapd {
+int       glist_isvisible(t_glist_s00a4_e2e0* x);                                 // 0xa4ab40
+}
+}
+}
+namespace EA {
+namespace Audio {
+namespace Eapd {
+int       glist_istoplevel(t_glist_s00a4_e2e0* x);                                // 0xa4ab70
+}
+}
+}
+namespace EA {
+namespace Audio {
+namespace Eapd {
+int       canvas_showtext(t_glist_s00a4_e2e0* x);                                 // 0xa4add0
+}
+}
+}
+namespace EA {
+namespace Audio {
+namespace Eapd {
+void      canvas_create_editor(t_glist_s00a4_e2e0* x, int flag);                  // 0xa4aac0
+}
+}
+}
+namespace EA {
+namespace Audio {
+namespace Eapd {
+void      canvas_drawredrect(t_glist_s00a4_e2e0* x, int doit);                    // 0xa4a9a0
+}
+}
+}
+namespace EA {
+namespace Audio {
+namespace Eapd {
+void      canvas_fixlinesfor(t_glist_s00a4_e2e0* parent, t_gobj_s00a4_e2e0* x);              // 0xa4b1c0
+}
+}
+}
+namespace EA {
+namespace Audio {
+namespace Eapd {
+void      glist_delete(t_glist_s00a4_e2e0* x, t_gobj_s00a4_e2e0* y);                         // 0xa4de50
+}
+}
+}
+namespace EA {
+namespace Audio {
+namespace Eapd {
+void      gobj_vis(t_gobj_s00a4_e2e0* x, t_glist_s00a4_e2e0* parent, int flag);              // 0xa4c6d0
+}
+}
+}
+namespace EA {
+namespace Audio {
+namespace Eapd {
+void      gobj_getrect(t_gobj_s00a4_e2e0* x, t_glist_s00a4_e2e0* g, int*, int*, int*, int*); // 0xa4c630
+}
+}
+}
+namespace EA {
+namespace Audio {
+namespace Eapd {
+void      graph_getrect(t_gobj_s00a4_e2e0* x, t_glist_s00a4_e2e0* g, int*, int*, int*, int*); // 0xa4daf0
+}
+}
+}
+namespace EA {
+namespace Audio {
+namespace Eapd {
+void      graph_graphrect(t_gobj_s00a4_e2e0* x, t_glist_s00a4_e2e0* g, int*, int*, int*, int*); // 0xa4da60
+}
+}
+}
+namespace EA {
+namespace Audio {
+namespace Eapd {
+void      linetraverser_start(t_linetraverser* tr, t_glist_s00a4_e2e0* x);        // 0xa4a640
+}
+}
+}
+namespace EA {
+namespace Audio {
+namespace Eapd {
+t_gobj_s00a4_e2e0*   linetraverser_next(t_linetraverser* tr);                     // 0xa4af60
+}
+}
+}
+namespace EA {
+namespace Audio {
+namespace Eapd {
+void      glist_eraseiofor(t_glist_s00a4_e2e0* x, t_text_s00a4_e2e0* o, const char* tag);    // 0xa51450
+}
+}
+}
+namespace EA {
+namespace Audio {
+namespace Eapd {
+void      glist_drawiofor(t_glist_s00a4_e2e0* x, t_text_s00a4_e2e0* o, int firsttime,
+                          const char* tag, int x1, int y1, int x2, int y2); // 0xa510e0
+}
+}
+}
+namespace EA {
+namespace Audio {
+namespace Eapd {
+void      SetSerializer(const char* fmt, ...);                         // 0xc2e4e0
+}
+}
+}
+namespace EA {
+namespace Audio {
+namespace Eapd {
+static inline uint32_t gobj_flags(t_gobj_s00a4_e2e0* x)
+{
+    return ((t_glist_s00a4_e2e0*)x)->gl_flags;  // +0x78
+}
+}
+}
+}
+namespace EA {
+namespace Audio {
+namespace Eapd {
+void graph_objvis(t_gobj_s00a4_e2e0* z, int flag);                                  // 0xa4e2e0
+}
+}
+}
+namespace EA {
+namespace Audio {
+namespace Eapd {
+void graph_vis(t_gobj_s00a4_e2e0* x, t_glist_s00a4_e2e0* glist, int selected);                 // 0xa4e390
+}
+}
+}
+namespace EA {
+namespace Audio {
+namespace Eapd {
+void graph_delete(t_glist_s00a4_e2e0* x, t_glist_s00a4_e2e0* glist);                           // 0xa4e520
+}
+}
+}
+namespace EA {
+namespace Audio {
+namespace Eapd {
+void glist_redraw(t_glist_s00a4_e2e0* x);                                           // 0xa4e560
+}
+}
+}
+namespace EA {
+namespace Audio {
+namespace Eapd {
+void graph_displace(t_gobj_s00a4_e2e0* x, t_glist_s00a4_e2e0* glist, int dx, int dy);          // 0xa4e660
+}
+}
+}
+namespace EA {
+namespace Audio {
+namespace Eapd {
+__declspec(noinline)
+t_rtext_s00a4_e2e0* glist_findrtext_s00a4_e2e0(t_glist_s00a4_e2e0* x, t_text_s00a4_e2e0* y);                         // 0xa4efb0
+}
+}
+}
+namespace EA {
+namespace Audio {
+namespace Eapd {
+void rtext_draw(t_rtext_s00a4_e2e0* x);                                             // 0xa4f050
+}
+}
+}
+namespace EA {
+namespace Audio {
+namespace Eapd {
+void rtext_erase(t_rtext_s00a4_e2e0* x);                                            // 0xa4f080
+}
+}
+}
+// ---- items of slice s00a4e2e0 end
 
 // @ 0x00a4d410
 namespace EA { namespace Audio { namespace Eapd {
@@ -891,5 +1224,121 @@ namespace EA { namespace Audio { namespace Eapd {
 float glist_dpixtody(t_glist* x, float dypix)
 {
     return (glist_pixelstoy(x, 1) - glist_pixelstoy(x, 0)) * dypix;
+}
+}}}  // namespace EA::Audio::Eapd
+
+// @ 0x00a4e2e0
+namespace EA { namespace Audio { namespace Eapd {
+void graph_objvis(t_gobj_s00a4_e2e0* z, int flag)
+{
+    t_glist_s00a4_e2e0* x = (t_glist_s00a4_e2e0*)z;
+    int gx1, gy1, gx2, gy2;
+    int x1, y1, x2, y2;
+
+    graph_graphrect(z, x->gl_owner, &gx1, &gy1, &gx2, &gy2);
+    for (t_gobj_s00a4_e2e0* y = x->gl_list; y; y = y->g_next) {
+        gobj_getrect(y, x->gl_owner, &x1, &y1, &x2, &y2);
+        if (x1 >= gx1 && x1 <= gx2 && x2 >= gx1 && x2 <= gx2 &&
+            y1 >= gy1 && y1 <= gy2 && y2 >= gy1 && y2 <= gy2)
+            gobj_vis(y, x->gl_owner, flag);
+    }
+}
+}}}  // namespace EA::Audio::Eapd
+
+// @ 0x00a4e390
+namespace EA { namespace Audio { namespace Eapd {
+void graph_vis(t_gobj_s00a4_e2e0* z, t_glist_s00a4_e2e0* glist, int vis)
+{
+    t_glist_s00a4_e2e0* x = (t_glist_s00a4_e2e0*)z;
+    char tag[52];
+    int x1, y1, x2, y2;
+
+    if (!(x->gl_flags & GL_ISGRAPH)) {
+        ((void (*)(t_gobj_s00a4_e2e0*, t_glist_s00a4_e2e0*, int))g_text_widgetbehavior[5])(z, glist, vis);
+        return;
+    }
+    sprintf(tag, "graph%lx", x);
+    if (vis == 0) {
+        rtext_erase(glist_findrtext_s00a4_e2e0(glist, (t_text_s00a4_e2e0*)z));
+        glist_eraseiofor(glist, (t_text_s00a4_e2e0*)z, tag);
+        SetSerializer(".x%lx.c delete %s\n", glist_getcanvas(x->gl_owner), tag);
+        if (!(x->gl_flags & GL_GOPRECT)) {
+            graph_objvis(z, 0);
+            canvas_create_editor(x, 0);
+            return;
+        }
+    } else {
+        graph_getrect(z, glist, &x1, &y1, &x2, &y2);
+        if (!(x->gl_flags & GL_GOPRECT)) {
+            SetSerializer(".x%lx.c create polygon %d %d %d %d %d %d %d %d %d %d"
+                          " -tags %s -fill white -outline black \n",
+                          glist_getcanvas(x->gl_owner),
+                          x1, y1, x1, y2, x2, y2, x2, y1, x1, y1, tag);
+            canvas_create_editor(x, 1);
+            graph_objvis(z, 1);
+        } else {
+            SetSerializer(".x%lx.c create polygon %d %d %d %d %d %d %d %d %d %d"
+                          " -tags %s -fill gray -outline black \n",
+                          glist_getcanvas(x->gl_owner),
+                          x1, y1, x1, y2, x2, y2, x2, y1, x1, y1, tag);
+        }
+        if (canvas_showtext(x))
+            rtext_draw(glist_findrtext_s00a4_e2e0(glist, (t_text_s00a4_e2e0*)z));
+        glist_drawiofor(glist, (t_text_s00a4_e2e0*)z, 1, tag, x1, y1, x2, y2);
+    }
+}
+}}}  // namespace EA::Audio::Eapd
+
+// @ 0x00a4e520
+namespace EA { namespace Audio { namespace Eapd {
+void graph_delete(t_glist_s00a4_e2e0* x, t_glist_s00a4_e2e0* glist)
+{
+    ((void (*)(t_glist_s00a4_e2e0*, t_glist_s00a4_e2e0*))g_text_widgetbehavior[4])(x, glist);
+    while (x->gl_list)
+        glist_delete(x, x->gl_list);
+}
+}}}  // namespace EA::Audio::Eapd
+
+// @ 0x00a4e560
+namespace EA { namespace Audio { namespace Eapd {
+void glist_redraw(t_glist_s00a4_e2e0* x)
+{
+    t_linetraverser t;
+
+    if (!glist_isvisible(x))
+        return;
+    if (glist_istoplevel(x)) {
+        for (t_gobj_s00a4_e2e0* y = x->gl_list; y; y = y->g_next) {
+            gobj_vis(y, x, 0);
+            gobj_vis(y, x, 1);
+        }
+        linetraverser_start(&t, x);
+        for (t_gobj_s00a4_e2e0* y = linetraverser_next(&t); y; y = linetraverser_next(&t))
+            SetSerializer(".x%lx.c coords l%lx %d %d %d %d\n", glist_getcanvas(x), y,
+                          t.tr_lx1, t.tr_ly1, t.tr_lx2, t.tr_ly2);
+        canvas_drawredrect(x, 0);
+        if (x->gl_flags & 0x80)
+            canvas_drawredrect(x, 1);
+    }
+    if (x->gl_owner && glist_isvisible(x->gl_owner)) {
+        graph_vis((t_gobj_s00a4_e2e0*)x, x->gl_owner, 0);
+        graph_vis((t_gobj_s00a4_e2e0*)x, x->gl_owner, 1);
+    }
+}
+}}}  // namespace EA::Audio::Eapd
+
+// @ 0x00a4e660
+namespace EA { namespace Audio { namespace Eapd {
+void graph_displace(t_gobj_s00a4_e2e0* x, t_glist_s00a4_e2e0* glist, int dx, int dy)
+{
+    if (!(gobj_flags(x) & GL_ISGRAPH)) {
+        ((void (*)(t_gobj_s00a4_e2e0*, t_glist_s00a4_e2e0*, int, int))g_text_widgetbehavior[1])(x, glist, dx, dy);
+        return;
+    }
+    t_text_s00a4_e2e0* t = (t_text_s00a4_e2e0*)x;
+    t->te_xpix = (int16_t)(t->te_xpix + (int16_t)dx);
+    t->te_ypix = (int16_t)(t->te_ypix + (int16_t)dy);
+    glist_redraw((t_glist_s00a4_e2e0*)x);
+    canvas_fixlinesfor(glist_getcanvas(glist), x);
 }
 }}}  // namespace EA::Audio::Eapd

@@ -19,3 +19,6 @@
 ../src/game/SPAudio/eapdgraph.cpp  ?glist_pixelstoy@Eapd@Audio@EA@@YAMPAUt_glist@123@M@Z  00a4e1c0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPAudio/eapdgraph.cpp  ?glist_dpixtodx@Eapd@Audio@EA@@YAMPAUt_glist@123@M@Z  00a4e260  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPAudio/eapdgraph.cpp  ?glist_dpixtody@Eapd@Audio@EA@@YAMPAUt_glist@123@M@Z  00a4e2a0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdgraph.cpp  ?graph_delete@Eapd@Audio@EA@@YAXPAUt_glist_s00a4_e2e0@123@0@Z  00a4e520  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdgraph.cpp  ?glist_redraw@Eapd@Audio@EA@@YAXPAUt_glist_s00a4_e2e0@123@@Z  00a4e560  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdgraph.cpp  ?graph_displace@Eapd@Audio@EA@@YAXPAUt_gobj_s00a4_e2e0@123@PAUt_glist_s00a4_e2e0@123@HH@Z  00a4e660  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
