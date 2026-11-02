@@ -1,6 +1,6 @@
+00934460 ?DoNukeSubtree@PosMap@@QAEXPAUMapNode@@@Z  # PosMap::DoNukeSubtree migrated from s00934260 (verbatim, slice spelling)
 009344b0 ?WriteEntry@IniFile_s0093_4260@@QAE_NPB_W00@Z  # IniFile_s0093_4260::WriteEntry migrated from s00934260 (verbatim, slice spelling)
-00934460 ?DoNukeSubtree@PosMap@@QAEXPAUMapNode@@@Z  # eastl::rbtree<WString,pair<const WString,long>>::DoNukeSubtree
-00934d00 ?EnumerateSections@IniFile@@QAEHP6A_NPB_WPAIPAX@Z2@Z  # EA::IO::IniFile::EnumerateSections
-00934ef0 ?insert@PairVec@@QAEXPAUPairStr@@ABU2@@Z  # eastl::vector<pair<WString,WString>>::insert
-00935040 ??1IniFile@@QAE@XZ  # EA::IO::IniFile::~IniFile
-00935080 ?Close@IniFile@@UAE_NXZ  # EA::IO::IniFile::Close
+00934d00 ?EnumerateSections@IniFile_s0093_4260@@QAEHP6A_NPB_WPAIPAX@Z2@Z  # IniFile_s0093_4260::EnumerateSections migrated from s00934260 (verbatim, slice spelling)
+00934ef0 ?insert@PairVec@@QAEXPAUPairStr@@ABU2@@Z  # PairVec::insert migrated from s00934260 (verbatim, slice spelling)
+00935040 ??1IniFile_s0093_4260@@QAE@XZ  # IniFile_s0093_4260::~IniFile migrated from s00934260 (verbatim, slice spelling)
+00935080 ?Close@IniFile_s0093_4260@@UAE_NXZ  # IniFile_s0093_4260::Close migrated from s00934260 (verbatim, slice spelling)
