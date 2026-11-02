@@ -1,11 +1,11 @@
-00c88e30 SP::cSpatialObject::funcE30  # PDB name (card); ray/sphere visibility test
+00c88e30 ?funcE30@cSO@@QAE_NXZ  # cSO::funcE30 migrated from s00c88e30 (verbatim, slice spelling)
 00c89020 ?func78h@cSO@@QAEXPAUcSPVector3_s00c8_8e30@@@Z  # cSO::func78h migrated from s00c88e30 (verbatim, slice spelling)
 00c890c0 ?GetCommunityName@cSO@@QAEXPAUcSPVector3_s00c8_8e30@@@Z  # cSO::GetCommunityName migrated from s00c88e30 (verbatim, slice spelling)
-00c89160 SP::cSpatialObject::SetLocalExtents  # PDB name (callee-single)
-00c893b0 SP::cSpatialObject::func9Ch  # PDB name (card)
-00c893f0 SP::cSpatialObject::func93F0  # PDB name (card); scale-to-fit
-00c89630 SP::cSpatialObject::cSpatialObject  # PDB name (callee-single)
-00c897e0 SP::cSpatialObject::LocalToWorldTransform  # PDB name (callee-single)
-00c89890 SP::cSpatialObject::SetModel  # PDB name (card)
-00c898f0 SP::cSpatialObject::funcA4h  # PDB name (card); release model refs
-00c899a0 SP::cSpatialObject::func7Ch  # PDB name (card); screen-space projection test
+00c89160 ?SetLocalExtents@cSO@@QAEXPAMM@Z  # cSO::SetLocalExtents migrated from s00c88e30 (verbatim, slice spelling)
+00c893b0 ?func9C@cSO@@QAE_NXZ  # cSO::func9C migrated from s00c88e30 (verbatim, slice spelling)
+00c893f0 ?func93F0@cSO@@QAEXPAM0@Z  # cSO::func93F0 migrated from s00c88e30 (verbatim, slice spelling)
+00c89630 ??0cSO@@QAE@XZ  # cSO::cSO migrated from s00c88e30 (verbatim, slice spelling)
+00c897e0 ?LocalToWorldTransform@cSO@@QAEXPAUTransform@@@Z  # cSO::LocalToWorldTransform migrated from s00c88e30 (verbatim, slice spelling)
+00c89890 ?SetModel@cSO@@QAEXHPAX@Z  # cSO::SetModel migrated from s00c88e30 (verbatim, slice spelling)
+00c898f0 ?funcA4h@cSO@@QAEXXZ  # cSO::funcA4h migrated from s00c88e30 (verbatim, slice spelling)
+00c899a0 ?func7Ch@cSO@@QAE_NDPAM@Z  # cSO::func7Ch migrated from s00c88e30 (verbatim, slice spelling)

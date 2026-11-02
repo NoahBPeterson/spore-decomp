@@ -1,10 +1,10 @@
-00c89d60  FUN_00c89d60  # effect-list world transform update (vector at +0x30/+0x31)
-00c8a020  FUN_00c8a020  # find effect by id in +0xc0 vector, set +0x14
-00c8a110  FUN_00c8a110  # find effect by id, set byte +0x10
-00c8a200  FUN_00c8a200  # find effect by id, set +0x18 and recompute position
-00c8a420  FUN_00c8a420  # destructor: vtable 0x1473758, release +0xa0, refcount +0x9c
-00c8a480  Simulator::cSpatialObject::cSpatialObject_funcB4h  # eastl string assign wrapper
-00c8a4a0  SP::cSpatialObject::GetWorldExtents  # PDB name
-00c8a550  SP::cSpatialObject::LoadModel  # PDB name (prev SetModelWorld)
+00c89d60 ?F89d60@@YIXPAUSpatial@@HPBUSpatialXform@@@Z  # F89d60 migrated from s00c89d60 (verbatim, slice spelling)
+00c8a020 ?F8a020@@YIXPAUSpatial@@HHM@Z  # F8a020 migrated from s00c89d60 (verbatim, slice spelling)
+00c8a110 ?F8a110@@YIXPAUSpatial@@HHD@Z  # F8a110 migrated from s00c89d60 (verbatim, slice spelling)
+00c8a200 ?F8a200@@YIXPAUSpatial@@HHM@Z  # F8a200 migrated from s00c89d60 (verbatim, slice spelling)
+00c8a420 ?F8a420@@YIXPAUSpatial@@@Z  # F8a420 migrated from s00c89d60 (verbatim, slice spelling)
+00c8a480 ?F8a480@@YGXPAUStrAssigner@@@Z  # F8a480 migrated from s00c89d60 (verbatim, slice spelling)
+00c8a4a0 ?GetWorldExtents@@YIPAUcSPBoundingBox_s00c8_9d60@@PAUSpatial@@HPAU1@@Z  # GetWorldExtents migrated from s00c89d60 (verbatim, slice spelling)
+00c8a550 ?LoadModel@@YI_NPAUSpatial@@PAX1@Z  # LoadModel migrated from s00c89d60 (verbatim, slice spelling)
 00c8a890  eastl::vector<SP::cSpatialObjectView::tEffectInfo,eastl::sp_vector_allocator>::erase  # PDB name
 00c8a910  FUN_00c8a910  # eastl vector grow/insert at +0xc0

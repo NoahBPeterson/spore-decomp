@@ -29,7 +29,7 @@
 00c889c0 ?StopEffect@Effects@@QAEXHH@Z  # Effects::StopEffect migrated from s00c87be0 (verbatim, slice spelling)
 00c88a00 ?F00@Effects@@QAEXHM@Z  # Effects::F00 migrated from s00c87be0 (verbatim, slice spelling)
 00c88a30 ?F30@Effects@@QAEXHPAH@Z  # Effects::F30 migrated from s00c87be0 (verbatim, slice spelling)
-00c88a90 SP::cSpatialObject::Write  # PDB name
+00c88a90 ?Write@cSpatialObject@@QAEXPAX@Z  # cSpatialObject::Write migrated from s00c87be0 (verbatim, slice spelling)
 00c88ba0 FUN_00c88ba0  # helper
 00c88c30 FUN_00c88c30  # helper
 00c88d90 FUN_00c88d90  # helper

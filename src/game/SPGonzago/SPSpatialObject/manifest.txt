@@ -1,0 +1,5 @@
+# source  symbol  va  flags
+../src/game/SPGonzago/SPSpatialObject.cpp  ?SetModel@cSO@@QAEXHPAX@Z  00c89890  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPSpatialObject.cpp  ?F8a420@@YIXPAUSpatial@@@Z  00c8a420  /O2 /MD /Gy /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPSpatialObject.cpp  ?F8a480@@YGXPAUStrAssigner@@@Z  00c8a480  /O2 /MD /Gy /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPSpatialObject.cpp  ?InitSpatialObjectAttributes@@YAXXZ  01353d90  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
