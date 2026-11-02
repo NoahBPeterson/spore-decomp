@@ -1,0 +1,3 @@
+# source  symbol  va  flags
+../src/game/SPAudio/eapdguistubs.cpp  ?g_toggle_setup@Eapd@@YAEXZ  00a60ef0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdguistubs.cpp  ?g_hslider_setup@Eapd@@YAEXZ  00a61250  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include

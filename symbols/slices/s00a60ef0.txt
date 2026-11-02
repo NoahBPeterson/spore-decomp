@@ -1,8 +1,8 @@
-00a60ef0 ?g_toggle_setup@Eapd@@YAEXZ  # byte-exact
-00a60fd0 ?slider_new@Eapd@@YAPAXUt_symbol@1@0HPAUt_atom@1@@Z  # complete, non-exact
-00a61180 ?slider_float@Eapd@@YAXPAUTX@1@@Z  # complete, non-exact
-00a61200 ?slider_setfloat@Eapd@@YAXPAUTX@1@M@Z  # complete, non-exact
-00a61250 ?g_hslider_setup@Eapd@@YAEXZ  # byte-exact
+00a60ef0 ?g_toggle_setup@Eapd@@YAEXZ  # g_toggle_setup migrated from s00a60ef0 (verbatim, slice spelling)
+00a60fd0 ?slider_new@Eapd@@YAPAXUt_symbol_s00a6_0ef0@1@0HPAUt_atom_s00a6_0ef0@1@@Z  # slider_new migrated from s00a60ef0 (verbatim, slice spelling)
+00a61180 ?slider_float@Eapd@@YAXPAUTX@1@@Z  # slider_float migrated from s00a60ef0 (verbatim, slice spelling)
+00a61200 ?slider_setfloat@Eapd@@YAXPAUTX@1@M@Z  # slider_setfloat migrated from s00a60ef0 (verbatim, slice spelling)
+00a61250 ?g_hslider_setup@Eapd@@YAEXZ  # g_hslider_setup migrated from s00a60ef0 (verbatim, slice spelling)
 00a613c0 ?vinlet_new@Eapd@@YAPAXHPAUt_atom@1@@Z  # vinlet_new migrated from s00a60ef0 (verbatim, slice spelling)
 00a61460 ?inlet_float_all@Eapd@@YAXPAUTX@1@M@Z  # inlet_float_all migrated from s00a60ef0 (verbatim, slice spelling)
 00a61510 ?vinlet_free@Eapd@@YAXPAUTX@1@@Z  # byte-exact

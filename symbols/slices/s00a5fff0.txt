@@ -5,3 +5,12 @@
 00a60470 ?x_time_setup@Eapd@Audio@EA@@YA_NXZ  # EA::Audio::Eapd::x_time_setup migrated from s00a5fff0
 00a604a0 ?function_inrange@Eapd@Audio@EA@@YAXPADMM@Z  # function_inrange migrated from s00a5fff0 (verbatim, slice spelling)
 00a604e0 ?function_outrange@Eapd@Audio@EA@@YAXPADMM@Z  # function_outrange migrated from s00a5fff0 (verbatim, slice spelling)
+00a60aa0 ?bng_new@Eapd@Audio@EA@@YAPAXPAX0HPAUt_atom@123@@Z  # bng_new migrated from s00a5fff0 (verbatim, slice spelling)
+00a60b70 ?bng_any@Eapd@Audio@EA@@YAXPAD@Z  # bng_any migrated from s00a5fff0 (verbatim, slice spelling)
+00a60bb0 ?bng_loadbang@Eapd@Audio@EA@@YAXPAD@Z  # bng_loadbang migrated from s00a5fff0 (verbatim, slice spelling)
+00a60bf0 ?g_bng_setup@Eapd@Audio@EA@@YA_NXZ  # EA::Audio::Eapd::g_bng_setup migrated from s00a5fff0
+00a60ce0 ?toggle_new@Eapd@Audio@EA@@YAPAXPAX0HPAUt_atom@123@@Z  # toggle_new migrated from s00a5fff0 (verbatim, slice spelling)
+00a60df0 ?toggle_output@Eapd@Audio@EA@@YIXPAUToggle@123@@Z  # toggle_output migrated from s00a5fff0 (verbatim, slice spelling)
+00a60e70 ?toggle_bang@Eapd@Audio@EA@@YAXPAD@Z  # toggle_bang migrated from s00a5fff0 (verbatim, slice spelling)
+00a60e90 ?toggle_float@Eapd@Audio@EA@@YAXPADM@Z  # toggle_float migrated from s00a5fff0 (verbatim, slice spelling)
+00a60ed0 ?toggle_loadbang@Eapd@Audio@EA@@YAXPAD@Z  # toggle_loadbang migrated from s00a5fff0 (verbatim, slice spelling)
