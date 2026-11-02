@@ -7,10 +7,10 @@
 00ea9790 ?IsMixableKey@Audio@SP@@YG_NI@Z  # IsMixableKey migrated from s00ea8f90 (verbatim, slice spelling)
 00ea9880 ?UpdateSounds@cMixModeManager_s00ea_8f90@Audio@SP@@QAEXM@Z  # cMixModeManager_s00ea_8f90::UpdateSounds migrated from s00ea8f90 (verbatim, slice spelling)
 00ea99a0 ?RemoveSound@cMixModeManager_s00ea_8f90@Audio@SP@@QAEXI_N@Z  # cMixModeManager_s00ea_8f90::RemoveSound migrated from s00ea8f90 (verbatim, slice spelling)
-00ea9a40 SP::Audio::cMixModeManager::StartMode(unsigned int)  # PDB FUN_00ea9a40
-00ea9a80 SP::Audio::cMixModeManager::StopMode(unsigned int, bool)  # PDB FUN_00ea9a80
-00ea9ac0 SP::Audio::cMixModeManager::IsModeActive(unsigned int)  # PDB FUN_00ea9ac0
+00ea9a40 ?StartMode@cMixModeManager_s00ea_8f90@Audio@SP@@QAEXI@Z  # cMixModeManager_s00ea_8f90::StartMode migrated from s00ea8f90 (verbatim, slice spelling)
+00ea9a80 ?StopMode@cMixModeManager_s00ea_8f90@Audio@SP@@QAEXI_N@Z  # cMixModeManager_s00ea_8f90::StopMode migrated from s00ea8f90 (verbatim, slice spelling)
+00ea9ac0 ?IsModeActive@cMixModeManager_s00ea_8f90@Audio@SP@@QAE_NI@Z  # cMixModeManager_s00ea_8f90::IsModeActive migrated from s00ea8f90 (verbatim, slice spelling)
 00ea9b00 ?RegisterSound@cMixModeManager_s00ea_8f90@Audio@SP@@QAEXI@Z  # cMixModeManager_s00ea_8f90::RegisterSound migrated from s00ea8f90 (verbatim, slice spelling)
-00ea9bb0 SP::Audio::MessageModeMap::find(unsigned int) const  # PDB FUN_00ea9bb0
-00ea9c20 SP::Audio::`anonymous namespace'::cFactoryMixMode::scalar_deleting_destructor  # PDB FUN_00ea9c20
-00ea9c70 SP::Audio::cMixModeManager::Shutdown  # PDB FUN_00ea9c70
+00ea9bb0 ?find@MessageModeMap_s00ea_8f90@Audio@SP@@QBEPAUKeyModePair_s00ea_8f90@23@ABI@Z  # MessageModeMap_s00ea_8f90::find migrated from s00ea8f90 (verbatim, slice spelling)
+00ea9c20 ?scalar_deleting_destructor@cFactoryMixMode_s00ea_8f90@Audio@SP@@QAEPAXE@Z  # cFactoryMixMode_s00ea_8f90::scalar_deleting_destructor migrated from s00ea8f90 (verbatim, slice spelling)
+00ea9c70 ?Shutdown@cMixModeManager_s00ea_8f90@Audio@SP@@QAEXXZ  # cMixModeManager_s00ea_8f90::Shutdown migrated from s00ea8f90 (verbatim, slice spelling)

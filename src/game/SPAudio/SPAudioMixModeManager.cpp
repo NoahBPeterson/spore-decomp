@@ -1,4 +1,4 @@
-// src/game/SPAudio/SPAudioMixModeManager.cpp -- migrated from slice(s) s00eaa9a0, s00ea9dd0 by tools/migrate/rewrite.py
+// src/game/SPAudio/SPAudioMixModeManager.cpp -- migrated from slice(s) s00ea8f90, s00eaa9a0, s00ea9dd0 by tools/migrate/rewrite.py
 // Object file: SPAudio/SPAudioMixModeManager.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -7,6 +7,7 @@
 #include "SP/Audio/cMixModeManager.h"
 #include "EA/Messaging/AutoHandler.h"
 #include "EA/Allocator/ZoneObject.h"
+#include <string.h>
 #pragma warning(disable: 4100)
 
 // ---- items of slice s00ea9dd0 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -364,6 +365,366 @@ struct __declspec(align(8)) KeyVector {
 }
 }
 // ---- items of slice s00eaa9a0 end
+
+// ---- items of slice s00ea8f90 begin (TODO(rewrite): local stubs, replace by canonical classes)
+typedef unsigned int   u32;
+void* __cdecl  GetSystemAT_s00ea_8f90();                          // 0x00a206f0  EA::Audio::GetSystemAT
+void  __cdecl  operator_delete(void*);                 // 0x00f47380
+void* __cdecl  LowerBoundPair(void*, void*, void*, unsigned char); // 0x005701b0
+void  __cdecl  DoNukeSubtree(void*);                   // 0x009a9600
+void  __cdecl  ZoneObject_delete(void*);               // 0x00926060
+void  __cdecl  RemoveHandler(void*, void*, void*, void*, void*);   // 0x00571db0
+static inline void* VT(void* obj, int off) { return ((void**) (*(void**) obj))[off / 4]; }
+typedef void  (__thiscall *Fn0)(void*);
+typedef void  (__thiscall *Fn1u)(void*, u32);
+typedef void  (__thiscall *Fn2u)(void*, u32, u32);
+typedef float (__thiscall *Fnf0)(void*);
+namespace SP {
+namespace Audio {
+class cMixMode_s00ea_8f90;
+}
+}
+namespace SP {
+namespace Audio {
+class cMixModeManager_s00ea_8f90;
+}
+}
+namespace SP {
+namespace Audio {
+struct SoundVector {
+    u32* mBegin;   // +0x00
+    u32* mEnd;     // +0x04
+    u32* mCap;     // +0x08
+    u32  mAlloc[2];// +0x0c
+    void VectorInsert(u32* pos, const u32* value);   // 0x00ea9440
+};
+}
+}
+namespace SP {
+namespace Audio {
+struct ModeNode_s00ea_8f90 {
+    u32        first;    // +0x00 key
+    cMixMode_s00ea_8f90*  second;   // +0x04 value
+    ModeNode_s00ea_8f90*  mpNext;   // +0x08
+};
+}
+}
+namespace SP {
+namespace Audio {
+struct ModeIterator_s00ea_8f90 {
+    ModeNode_s00ea_8f90*  mpNode;       // +0x00
+    ModeNode_s00ea_8f90** mpBucket;     // +0x04
+    ModeIterator_s00ea_8f90() {}        // non-trivial: returned via hidden pointer (as eastl does)
+    ModeNode_s00ea_8f90* operator->() const { return mpNode; }
+};
+}
+}
+namespace SP {
+namespace Audio {
+struct ModeMap {                       // 0x20 bytes
+    u32         mPolicy;               // +0x00
+    ModeNode_s00ea_8f90**  mpBucketArray;         // +0x04
+    u32         mnBucketCount;         // +0x08
+    u32         mnElementCount;        // +0x0c
+    char        mAllocator[0x10];      // +0x10
+    ModeIterator_s00ea_8f90 find(const u32& key) const;   // 0x00645ed0 (shared hashtable::find)
+    ModeNode_s00ea_8f90* end_node() const { return mpBucketArray[mnBucketCount]; }
+    void DoFreeNodes(ModeNode_s00ea_8f90** bucketArray, u32 bucketCount);   // 0x00961d60
+};
+}
+}
+namespace SP {
+namespace Audio {
+struct SoundNode {
+    u32        key;            // +0x00
+    u32        instanceId;     // +0x04
+    u32        refCount;       // +0x08
+    float      fSecsSinceStop; // +0x0c
+    SoundNode* mpNext;         // +0x10
+};
+}
+}
+namespace SP {
+namespace Audio {
+struct SoundIterator {
+    SoundNode*  mpNode;
+    SoundNode** mpBucket;
+    SoundIterator() {}
+    SoundIterator(SoundNode* n, SoundNode** b) : mpNode(n), mpBucket(b) {}
+    SoundNode* operator->() const { return mpNode; }
+};
+}
+}
+namespace SP {
+namespace Audio {
+struct SoundMap {                      // 0x20 bytes
+    u32          mPolicy;              // +0x00
+    SoundNode**  mpBucketArray;        // +0x04
+    u32          mnBucketCount;        // +0x08
+    u32          mnElementCount;       // +0x0c
+    char         mAllocator[0x10];     // +0x10
+    SoundIterator find(const u32& key) const;  // 0x00db4780
+    SoundNode* end_node() const { return mpBucketArray[mnBucketCount]; }
+    SoundIterator erase(SoundIterator it);     // 0x00b4f930
+    void insert(SoundIterator* sret, const void* value, u32 flag);  // 0x00ad9370
+    void DoFreeNodes(SoundNode** bucketArray, u32 bucketCount);  // 0x007611f0
+};
+}
+}
+namespace SP {
+namespace Audio {
+struct Key { u32 instanceID; u32 typeID; u32 groupID; };
+}
+}
+namespace SP {
+namespace Audio {
+class cMixMode_s00ea_8f90 {
+ public:
+    void*    mVtbl0;       // +0x00
+    void*    mVtbl1;       // +0x04
+    void*    mVtbl2;       // +0x08
+    int      m0c;          // +0x0c
+    bool     mbDirty;      // +0x10
+    char     pad11[3];     // +0x11
+    float    mValue;       // +0x14
+    void*    mpConfig;     // +0x18
+    int      m1c;          // +0x1c
+    int      m20;          // +0x20
+    cMixModeManager_s00ea_8f90* mManager;  // +0x24
+    u32      mKeyInstance; // +0x28
+    u32      mKeyType;     // +0x2c
+    u32      mKeyGroup;    // +0x30
+    SoundVector mA;        // +0x34 (start sounds)
+    SoundVector mB;        // +0x48 (pause/instance sounds)
+    SoundVector mC;        // +0x5c
+    bool     mb70;         // +0x70
+    bool     mbRunning;    // +0x71
+
+    cMixMode_s00ea_8f90(cMixModeManager_s00ea_8f90* mgr, Key key);   // 0x00ea9320
+    ~cMixMode_s00ea_8f90();                               // 0x00ea93c0
+    bool Start();                              // 0x00ea8f90
+    bool Stop(bool flag);                      // 0x00ea9260
+    bool IsRunning();                          // 0x00ea8ec0 (external)
+    void ConfigurePrimitive();                 // 0x00ea9550
+};
+}
+}
+namespace SP {
+namespace Audio {
+class cMixModeManager_s00ea_8f90 {
+ public:
+    void*    m00;               // +0x00  (vftable 0)
+    void*    m04;               // +0x04  (vftable 1)
+    int      m08;               // +0x08
+    ModeMap  mModes;            // +0x0c
+    SoundMap mSounds;           // +0x2c
+    void*    mhServer;          // +0x4c
+    void*    mhHandler;         // +0x50
+    void*    mhIds;             // +0x54
+    u32      mhCount;           // +0x58
+    int      mhPriority;        // +0x5c
+    u32      mCurrentContext;   // +0x60
+    u32      mCurrentPauseElements; // +0x64
+    bool     mbFlag68;          // +0x68
+
+    void StartMode(u32 id);                     // 0x00ea9a40
+    void StopMode(u32 id, bool flag);           // 0x00ea9a80
+    bool IsModeActive(u32 id);                  // 0x00ea9ac0
+    void RegisterSound(u32 id);                 // 0x00ea9b00
+    void RemoveSound(u32 id, bool flag);        // 0x00ea99a0
+    void UpdateSounds(float dt);                // 0x00ea9880
+    void Shutdown();                            // 0x00ea9c70
+};
+}
+}
+namespace SP {
+namespace Audio {
+struct KeyModePair_s00ea_8f90 { u32 first; u32 second; };
+}
+}
+namespace SP {
+namespace Audio {
+struct MessageModeMap_s00ea_8f90 {
+    KeyModePair_s00ea_8f90* mpBegin;      // +0x00
+    KeyModePair_s00ea_8f90* mpEnd;        // +0x04
+    KeyModePair_s00ea_8f90* mpCapacity;   // +0x08
+    u32          mAlloc[2];    // +0x0c
+    char         mFlag14;      // +0x14
+    KeyModePair_s00ea_8f90* find(const u32& key) const;   // 0x00ea9bb0
+    KeyModePair_s00ea_8f90* end() const { return mpEnd; }
+};
+}
+}
+namespace SP {
+namespace Audio {
+struct MixModeMutex {                 // EA::Thread::Mutex (0x30 bytes)
+    char m[0x30];
+    void Dtor();                      // 0x00922130  (??1Mutex@Thread@EA@@QAE@XZ)
+};
+}
+}
+namespace SP {
+namespace Audio {
+struct MixModeRbtree {                // rbtree<unsigned int, ...>
+    char  m00[0x0c];
+    void* mpRoot;                     // +0x0c
+    char  m10[0x0c];
+    void  DoNukeSubtree(void* node);  // 0x009a9600
+};
+}
+}
+namespace SP {
+namespace Audio {
+class cFactoryMixMode_s00ea_8f90 {
+ public:
+    void*         mVtbl;         // +0x00
+    char          m04[0x0c];     // +0x04
+    MixModeMutex  mMutex;        // +0x10
+    MixModeRbtree mTree;         // +0x40
+    u32*          mpVecBegin;    // +0x5c
+    char          m60[0x04];     // +0x60
+    u32*          mpVecEnd;      // +0x64
+
+    void* scalar_deleting_destructor(unsigned char flags);   // 0x00ea9c20
+};
+}
+}
+namespace SP {
+namespace Audio {
+ void ConfigureVector(SoundVector* v, void* cfg, u32 id); 
+}  // 0x00ea9550 (defined below; used by a stub's inline body)
+}
+namespace SP {
+namespace Audio {
+void cMixMode_s00ea_8f90::ConfigurePrimitive()
+{
+    bool restart = (((Fnf0) VT(this, 0x1c))(this) != 0.0f);
+    if (restart)
+        Stop(false);
+
+    ConfigureVector(&mA, mpConfig, 0x6c4692b7u);
+    ConfigureVector(&mB, mpConfig, 0x4a253755u);
+    ConfigureVector(&mC, mpConfig, 0xecdc329du);
+
+    if (restart)
+        Start();
+}
+}
+}
+// ---- items of slice s00ea8f90 end
+
+// @ 0x00ea9a40
+namespace SP { namespace Audio {
+void cMixModeManager_s00ea_8f90::StartMode(u32 id)
+{
+    ModeIterator_s00ea_8f90 it = mModes.find(id);
+    if (mModes.end_node() != it.mpNode)
+        it.mpNode->second->Start();
+}
+}}  // namespace SP::Audio
+
+// @ 0x00ea9a80
+namespace SP { namespace Audio {
+void cMixModeManager_s00ea_8f90::StopMode(u32 id, bool flag)
+{
+    ModeIterator_s00ea_8f90 it = mModes.find(id);
+    if (mModes.end_node() != it.mpNode)
+        it.mpNode->second->Stop(flag);
+}
+}}  // namespace SP::Audio
+
+// @ 0x00ea9ac0
+namespace SP { namespace Audio {
+bool cMixModeManager_s00ea_8f90::IsModeActive(u32 id)
+{
+    ModeIterator_s00ea_8f90 it = mModes.find(id);
+    if (mModes.end_node() == it.mpNode)
+        return false;
+    return it.mpNode->second->IsRunning();
+}
+}}  // namespace SP::Audio
+
+// @ 0x00ea9bb0
+namespace SP { namespace Audio {
+KeyModePair_s00ea_8f90* MessageModeMap_s00ea_8f90::find(const u32& key) const
+{
+    KeyModePair_s00ea_8f90* end = mpEnd;
+    KeyModePair_s00ea_8f90* it = (KeyModePair_s00ea_8f90*) LowerBoundPair(mpBegin, end, (void*) &key, (unsigned char) mFlag14);
+    if (it == end || key < it->first || it == it + 1)
+        it = end;
+    return it;
+}
+}}  // namespace SP::Audio
+
+// @ 0x00ea9c20
+namespace SP { namespace Audio {
+void* cFactoryMixMode_s00ea_8f90::scalar_deleting_destructor(unsigned char flags)
+{
+    char* b = (char*) mpVecBegin;
+    char* e = (char*) mpVecEnd;
+    if ((int) (e - b) > 1 && b != 0)
+        operator_delete(b);
+    void* root = mTree.mpRoot;
+    mTree.DoNukeSubtree(root);
+    mMutex.Dtor();
+    mVtbl = (void*) 0x13effb8;
+    if (flags & 1)
+        ZoneObject_delete(this);
+    return this;
+}
+}}  // namespace SP::Audio
+
+// @ 0x00ea9c70
+namespace SP { namespace Audio {
+void cMixModeManager_s00ea_8f90::Shutdown()
+{
+    // 1) stop every mix mode still registered in mModes
+    ModeNode_s00ea_8f90** bucket = mModes.mpBucketArray;
+    ModeNode_s00ea_8f90* node = *bucket;
+    while (node == 0)
+        node = *++bucket;
+    ModeNode_s00ea_8f90* last = mModes.mpBucketArray[mModes.mnBucketCount];
+    while (node != last) {
+        node->second->Stop(false);
+        node = node->mpNext;
+        while (node == 0)
+            node = *++bucket;
+    }
+    mModes.DoFreeNodes(mModes.mpBucketArray, mModes.mnBucketCount);
+    mModes.mnElementCount = 0;
+
+    // 2) tear down every lingering sound instance in mSounds
+    SoundNode** sbucket = mSounds.mpBucketArray;
+    SoundNode* snode = *sbucket;
+    while (snode == 0)
+        snode = *++sbucket;
+    SoundNode* slast = mSounds.mpBucketArray[mSounds.mnBucketCount];
+    while (snode != slast) {
+        void* sys = GetSystemAT_s00ea_8f90();
+        if (sys != 0) {
+            ((Fn1u) VT(sys, 0x38))(sys, 0x347536bu);
+            ((Fn2u) VT(sys, 0x40))(sys, 0x3475385u, snode->instanceId);
+            ((Fn2u) VT(sys, 0x40))(sys, 0x34753a0u, 0);
+            ((Fn0)  VT(sys, 0x58))(sys);
+            sys = GetSystemAT_s00ea_8f90();
+            if (sys != 0)
+                ((Fn1u) VT(sys, 0x2c))(sys, snode->instanceId);
+        }
+        snode = snode->mpNext;
+        while (snode == 0)
+            snode = *++sbucket;
+    }
+    mSounds.DoFreeNodes(mSounds.mpBucketArray, mSounds.mnBucketCount);
+    mSounds.mnElementCount = 0;
+
+    // 3) detach the message handler
+    if (mhServer != 0) {
+        void* server = mhServer;
+        mhServer = 0;
+        RemoveHandler(server, mhHandler, mhIds, (void*) (size_t) mhCount, (void*) (size_t) mhPriority);
+    }
+}
+}}  // namespace SP::Audio
 
 // @ 0x00ea9dd0
 namespace SP { namespace Audio {
