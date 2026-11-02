@@ -1,1 +1,5 @@
 00526430 ?empty@VectorU32@@QBE_NXZ  # VectorU32::empty migrated from s00525360 (verbatim, slice spelling)
+00526450 ?resize@VectorElem40@@QAEXI@Z  # VectorElem40::resize migrated from s00525360 (verbatim, slice spelling)
+005264d0 ?set_capacity@VectorElem40@@QAEXI@Z  # VectorElem40::set_capacity migrated from s00525360 (verbatim, slice spelling)
+00526660 ??1Elem38@@QAE@XZ  # Elem38::~Elem38 migrated from s00525360 (verbatim, slice spelling)
+005266a0 ??1PoolPtr@@QAE@XZ  # PoolPtr::~PoolPtr migrated from s00525360 (verbatim, slice spelling)

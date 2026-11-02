@@ -1,7 +1,9 @@
+0052c2e0 ?insert@?$vector_s0052_c230@U?$pair_s0052_c230@HM@eastl@@@eastl@@QAEPAU?$pair_s0052_c230@HM@2@PAU32@ABU32@@Z  # insert migrated from s0052c230 (verbatim, slice spelling)
+0052c570 ?DoAssignValues@?$vector_s0052_c230@U?$pair_s0052_c230@HM@eastl@@@eastl@@QAEXIABU?$pair_s0052_c230@HM@2@@Z  # DoAssignValues migrated from s0052c230 (verbatim, slice spelling)
+0052c950 ?quick_sort_impl_helper@eastl@@YAXPAU?$pair_s0052_c230@HM@1@0HUSecondGreater@1@@Z  # quick_sort_impl_helper migrated from s0052c230 (verbatim, slice spelling)
+0052cc10 ?get_partition@eastl@@YAPAU?$pair_s0052_c230@HM@1@PAU21@0U21@USecondGreater@1@@Z  # get_partition migrated from s0052c230 (verbatim, slice spelling)
+0052ccd0 ?partial_sort@eastl@@YAXPAU?$pair_s0052_c230@HM@1@00USecondGreater@1@@Z  # partial_sort migrated from s0052c230 (verbatim, slice spelling)
+0052cf00 ?make_heap@eastl@@YAXPAU?$pair_s0052_c230@HM@1@0USecondGreater@1@@Z  # make_heap migrated from s0052c230 (verbatim, slice spelling)
+0052cf80 ?adjust_heap@eastl@@YAXPAU?$pair_s0052_c230@HM@1@HHHU21@USecondGreater@1@@Z  # adjust_heap migrated from s0052c230 (verbatim, slice spelling)
 0052d160 cSPSkinPaintClearDescription::cSPSkinPaintClearDescription  # PDB layout of cSPSkinPaintClearDescription (0x70) matches every field store
 0052d330 SWARM_SPSkinPaintClearAddCommands  # card PDB candidate; registers spSkinPaintClear/spSkinPaintSettings
-0052c950 eastl::Internal::quick_sort_impl_helper<eastl::pair<int,float>*>  # EASTL introsort loop shape, limit 28, byte-exact
-0052cc10 eastl::get_partition<eastl::pair<int,float>*>  # byte-exact EASTL get_partition
-0052ccd0 eastl::partial_sort<eastl::pair<int,float>*>  # byte-exact EASTL partial_sort (make_heap + sort_heap inlined)
-0052cf00 eastl::make_heap<eastl::pair<int,float>*>  # byte-exact
-0052cf80 eastl::adjust_heap<eastl::pair<int,float>*>  # byte-exact (promote_heap inlined)
