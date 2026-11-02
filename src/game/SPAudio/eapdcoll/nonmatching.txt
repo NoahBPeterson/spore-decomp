@@ -1,0 +1,25 @@
+# Slice s00a59690 -- EA::Audio::Eapd: functions reconstructed and complete in
+00a57750 169 CollPool::Init(count): free old buffer + prime grow + FixedPool::Init branch; structure/regalloc differ (compiled 200 vs original 232). flags /O2 /MD /Gy /EHsc /TP; difftest UNSUPPORTED (0/400 valid, fake-arity/write faults)
+00a57840 31 SpliceNodes(a,b,c,d): ring relink with A=d->prev/B=A->next/C=c->prev; branch/regalloc differ. flags /O2 /MD /Gy /EHsc /TP; difftest PASS (392 valid, 100% coverage)
+00a57a20 111 Lookup(out,key): hash+finds bucket, returns found node or end-sentinel bucket; store scheduling differs. flags /O2 /MD /Gy /EHsc /TP /arch:SSE; difftest PASS (265 valid, 90% coverage)
+00a57c60 103 Float_(x,f,b): lookup + emit floats + outlet_list; original's LookupKey third key dword is an uninitialized stack slot (0xcccccccc under the harness); ours passes the float bits instead (MSVC folds the dead uninitialized local) - LookupKey/HashOf ignore key+0x10 for types 1/2, so semantics match (benign). flags /O2 /MD /Gy /EHsc /TP; difftest FAIL (5/5 valid, first: LookupKey arg #3)
+00a57d20 53 Symbol_(x,a,b): lookup + outlet_symbol + outlet_list; regalloc differs. flags /O2 /MD /Gy /EHsc /TP; difftest PASS (202 valid, 61.4% coverage)
+00a582f0 110 CollReadClassNew(): gensym/class_new/class_add* registration chain; boom/order differ (compiled 242 vs original 238). flags /O2 /MD /Gy /EHsc /TP; difftest UNSUPPORTED (0/400 valid, externs unresolved)
+00a58480 207 CollTable::InsertIns(out,key,unused): 3 stack args (ret 0xc), Find + policy Rehash + AllocNode + bucket insert; frame/regalloc differ (compiled 242 vs original 225). flags /O2 /MD /Gy /EHsc /TP; difftest PASS (261 valid, 77.3% coverage)
+00a58570 263 CollLess::Less(a,b): key comparator (type@8, float/int@0xc, string@0x10) with swap logic; string loop and branch layout differ. flags /O2 /MD /Gy /EHsc /TP /arch:SSE; difftest WEAK (200 valid, 58.8% coverage)
+00a587a0 185 flags: /O2 /MD /Gy /EHsc /TP
+00a58950 99 flags: /O2 /MD /Gy /EHsc /TP
+00a589e0 90 flags: /O2 /MD /Gy /EHsc /TP
+00a58a70 103 flags: /O2 /MD /Gy /EHsc /TP
+00a58b00 98 flags: /O2 /MD /Gy /EHsc /TP
+00a58ba0 206 flags: /O2 /MD /Gy /EHsc /TP
+00a58cf0 191 flags: /O2 /MD /Gy /EHsc /TP
+00a58ec0 60 flags: /O2 /MD /Gy /EHsc /TP
+00a58fa0 182 flags: /O2 /MD /Gy /EHsc /TP
+00a59150 20 flags: /O2 /MD /Gy /EHsc /TP
+00a591c0 20 flags: /O2 /MD /Gy /EHsc /TP
+00a592f0 130 flags: /O2 /MD /Gy /EHsc /TP
+00a593e0 315 flags: /O2 /MD /Gy /EHsc /TP
+00a59630 30 flags: /O2 /MD /Gy /EHsc /TP
+00a59690 40 UNSUP  coll-class registration; 562B of class_new/class_addmethod/class_addlist calls flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00a598d0 79 UNSUP  ANDs the three coll-registration sub-bootstraps flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast

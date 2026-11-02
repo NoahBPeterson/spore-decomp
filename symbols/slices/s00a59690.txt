@@ -1,0 +1,2 @@
+00a59690 ?x_coll_setup@@YA_NXZ  # x_coll_setup migrated from s00a59690 (verbatim, slice spelling)
+00a598d0 ?FUN_00a598d0@@YAEXZ  # FUN_00a598d0 migrated from s00a59690 (verbatim, slice spelling)
