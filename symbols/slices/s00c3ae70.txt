@@ -1,0 +1,5 @@
+00c3b560 ?OnMessage@cSPGameDataUFO_s00c3_ae70@@QAE_NIH@Z  # cSPGameDataUFO_s00c3_ae70::OnMessage migrated from s00c3ae70 (verbatim, slice spelling)
+00c3b7f0 ?Init@cUFOKinestheticsTuning_s00c3_ae70@@QAEXXZ  # cUFOKinestheticsTuning_s00c3_ae70::Init migrated from s00c3ae70 (verbatim, slice spelling)
+00c3b880 ?GetGalaxyWarpMultiplier@cUFOKinestheticsTuning_s00c3_ae70@@QAEMHH@Z  # cUFOKinestheticsTuning_s00c3_ae70::GetGalaxyWarpMultiplier migrated from s00c3ae70 (verbatim, slice spelling)
+00c3bc80 ?GetFieldValues@cSPGameDataUFO_s00c3_ae70@@QAEHPAX@Z  # cSPGameDataUFO_s00c3_ae70::GetFieldValues migrated from s00c3ae70 (verbatim, slice spelling)
+00c3be10 ?GetScaleRadius@cSPGameDataUFO_s00c3_ae70@@QAEMXZ  # cSPGameDataUFO_s00c3_ae70::GetScaleRadius migrated from s00c3ae70 (verbatim, slice spelling)

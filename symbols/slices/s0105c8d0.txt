@@ -1,1 +1,5 @@
-0105c9d0 SteeredObject_UpdateHeading  # Claude-coined: re-seats position on the anchor sphere, blends velocity toward heading, re-aims target
+0105c8d0 ?GetMaxHeight@@YGXPAUcSPGameDataUFO_s0105_c8d0@@@Z  # GetMaxHeight migrated from s0105c8d0 (verbatim, slice spelling)
+0105c9d0 ?FUN_0105c9d0@@YGXPAUcSteered@@PBUVector3_s0105_c8d0@@1M@Z  # FUN_0105c9d0 migrated from s0105c8d0 (verbatim, slice spelling)
+0105d180 ?FUN_0105d180@@YIPAXPAUcSummarizerD180@@@Z  # FUN_0105d180 migrated from s0105c8d0 (verbatim, slice spelling)
+0105d1d0 ?FUN_0105d1d0@@YIPAXPAUcSummarizerD1D0@@@Z  # FUN_0105d1d0 migrated from s0105c8d0 (verbatim, slice spelling)
+0105d200 ?UpdateWarpMode@@YGXPAUcSPGameDataUFO_s0105_c8d0@@PBUVector3_s0105_c8d0@@@Z  # UpdateWarpMode migrated from s0105c8d0 (verbatim, slice spelling)

@@ -1,4 +1,4 @@
-// src/game/SPGonzago/SPGameDataUFO.cpp -- migrated from slice(s) s00c3daa0, s00c3cd60, s00c3bfe0, s00c38d00, s00c389f0, s00c368c0 by tools/migrate/rewrite.py
+// src/game/SPGonzago/SPGameDataUFO.cpp -- migrated from slice(s) s0105c8d0, s0105b960, s00c3ae70, s00c3a180, s00c3daa0, s00c3cd60, s00c3bfe0, s00c38d00, s00c389f0, s00c368c0 by tools/migrate/rewrite.py
 // Object file: SPGonzago/SPGameDataUFO.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -25,6 +25,11 @@ extern float       g_kEpsilon;     // 0x0146bb74
 #include "EA/Swarm/cIVisualEffect.h"
 #include "SP/cSpatialObject.h"
 #include <stdlib.h>
+#include "SP/cCameraManager.h"
+#include "SP/cInteractionTarget.h"
+#include "SP/cViewer.h"
+#include "SP/cGameNounManager.h"
+#include "SP/cSPTimer.h"
 
 // ---- items of slice s00c368c0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 typedef unsigned int   u32;
@@ -1244,6 +1249,889 @@ extern float gF_142eae0;   // 0x0142eae0  float constant
 extern void* g_168df68;    // 0x0168df68
 // ---- items of slice s00c3daa0 end
 
+// ---- items of slice s00c3a180 begin (TODO(rewrite): local stubs, replace by canonical classes)
+struct IRefObject_s00c3_a180 {
+    virtual void q00();                    // +0x00
+    virtual int  AddRef();                 // +0x04
+    virtual int  Release();                // +0x08
+};
+void* __cdecl GetSpaceCombatTuning_s00c3_a180();       // 0x01029940
+int   __cdecl GetPropertyAsFloatArray(void* pList, int id, int* pCount, float** pArray); // 0x006a08b0
+void* __cdecl EraseToolEntry(void* p, void* q);   // 0x00b3d390
+char  __cdecl UTFWin_Window_Initialize();          // 0x00b1fbf0 (bool)
+void  __cdecl FUN_006a0ae0(void* pVector, int id, int* pCount, int* pBase); // 0x006a0ae0 (vector reserve)
+struct Fn0104e340 {
+    char __thiscall f(unsigned int toolId);    // 0x0104e340  CreateToolFromToolID (ret 4)
+};
+static const int kPropGalaxyWarpTime = 0x5c8077c;
+struct IHandler_s00c3_a180 {
+virtual void v000();
+virtual void v004();
+virtual void v008();
+virtual void v00c();
+virtual void v010();
+virtual void v014();
+virtual void v018();
+virtual void v01c();
+virtual void v020();
+virtual void v024();
+virtual void v028();
+virtual void v02c();
+virtual void v030();
+virtual void v034();
+virtual void v038();
+virtual void v03c();
+virtual void v040();
+virtual void v044();
+virtual void v048();
+};
+struct cUFOKinestheticsTuning_s00c3_a180 : public IHandler_s00c3_a180 {
+    void* mpPropList;                        // +0x04
+    U8 mf008[0x1e4 - 0x08];                  // +0x08 .. +0x1e3 (opaque tuning scalars)
+
+    void  ReadProps();                       // 0x00c38d00
+    float GetGalaxyWarpTime(int warpMode, float unused, float t);  // 0x00c3a1b0 (cUFOKinestheticsTuning::GetGalaxyWarpTime)
+    char  HandleMessage(int messageID, int arg);
+};
+struct cSPGameDataUFO_s00c3_a180 {
+    void* mpVftbl0;                          // +0x000
+    U8 pad004[48];                           // +0x004
+    void* mpVftbl34;                         // +0x034
+    U8 pad038[0x288 - 0x38];                 // +0x038
+    IRefObject_s00c3_a180* mp288;                       // +0x288
+    U8 pad28c[0x508 - 0x28c];                // +0x28c
+    void* mpVftbl508;                        // +0x508
+    U8 pad50c[0x5f4 - 0x50c];                // +0x50c .. +0x5f3
+    float mDestZ;                            // +0x5f4 orthogonal component (z)
+    float mDestX;                            // +0x5f8 orthogonal component (x)
+    float mDestY;                            // +0x5fc orthogonal component (y)
+    U8 pad600[0x648 - 0x600];                // +0x600 .. +0x647
+    U8 mTimer648[0x20];                      // +0x648 cSPTimer
+    U8 pad668[0x68c - 0x668];                // +0x668
+    IRefObject_s00c3_a180* mp68c;                       // +0x68c
+    U8 pad690[0x710 - 0x690];                // +0x690
+    IRefObject_s00c3_a180* mp710;                       // +0x710
+    int   mUFOType;                          // +0x714
+    float mCurX;                             // +0x718
+    float mCurY;                             // +0x71c
+    float mCurZ;                             // +0x720
+    U8 pad724[0x74c - 0x724];                // +0x724 .. +0x74b
+    U8    mb74c;                             // +0x74c
+    U8    pad74d[3];                         // +0x74d
+    Vector3 mDestination;                    // +0x750
+    IRefObject_s00c3_a180* mp75c;                       // +0x75c
+    IRefObject_s00c3_a180* mp760;                       // +0x760
+    U8 pad764[0x790 - 0x764];                // +0x764
+    IRefObject_s00c3_a180* mp790;                       // +0x790
+    IRefObject_s00c3_a180* mp794;                       // +0x794
+    IRefObject_s00c3_a180* mp798;                       // +0x798
+    IRefObject_s00c3_a180* mp79c;                       // +0x79c
+    IRefObject_s00c3_a180* mp7a0;                       // +0x7a0
+    IRefObject_s00c3_a180* mp7a4;                       // +0x7a4
+    IRefObject_s00c3_a180* mp7a8;                       // +0x7a8
+    IRefObject_s00c3_a180* mp7ac;                       // +0x7ac
+    void* mp7b0;                             // +0x7b0 (cCivData*)
+    U8 pad7b4[0x7bc - 0x7b4];                // +0x7b4
+    int   mInt7bc;                           // +0x7bc
+    U8 pad7c0[0x7d8 - 0x7c0];                // +0x7c0
+    IRefObject_s00c3_a180* mp7d8;                       // +0x7d8
+    U8 pad7dc[0x7f0 - 0x7dc];                // +0x7dc
+    IRefObject_s00c3_a180* mp7f0;                       // +0x7f0
+    U8 pad7f4[0x800 - 0x7f4];                // +0x7f4
+    void* mp800;                             // +0x800
+    void* mp804;                             // +0x804
+    void* mp808;                             // +0x808
+    void* mp80c;                             // +0x80c
+    int   md810;                             // +0x810
+    int   md814;                             // +0x814
+
+    int   HandleMessage(int messageID, int arg);
+    void  OnContextChange(int context);  // 0x00c3a2b0 (cSPGameDataUFO::OnContextChange)
+    void  ShutdownInternal();
+    void  SetNPCTool(void* pTool);
+    void  SetNPCToolIndexed(void* pTool, int index);
+    char  Initialize();
+    char  vtableSlot40Wrapper(int arg);
+    void  SetFacing(const Vector3* pFacing);
+    float GetContextScale();
+};
+struct FnB183F0 { char __thiscall f(int arg); };   // 0x00b183f0 cGameData::vtableSlot40 (ret 4)
+struct FnC385D0 { void __thiscall f(); };           // 0x00c385d0
+static inline void vcall_release8(IRefObject_s00c3_a180* p)          // vtable +0x8
+{
+    (*(void (__thiscall**)(void*))((U8*)*(void**)p + 0x8))(p);
+}
+// ---- items of slice s00c3a180 end
+
+// ---- items of slice s00c3ae70 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern float gF_1471064;   // 0.5
+#pragma intrinsic(sqrt, fabs)
+struct Vector3_s00c3_ae70 {
+    float x, y, z;
+    Vector3_s00c3_ae70() {}
+    Vector3_s00c3_ae70(float ax, float ay, float az) : x(ax), y(ay), z(az) {}
+    Vector3_s00c3_ae70(const Vector3_s00c3_ae70& o) : x(o.x), y(o.y), z(o.z) {}
+};
+struct IRefObject_s00c3_ae70 {
+    virtual void q00();                    // +0x00
+    virtual int  AddRef();                 // +0x04
+    virtual int  Release();                // +0x08
+};
+struct IReleased {
+    virtual void q00();                    // +0x00
+    virtual int  Release();                // +0x04
+};
+void* __cdecl PropertyManager();            // 0x0067de30
+void* __cdecl SpaceGameGet_s00c3_ae70();               // 0x01002bd0
+struct FnB18E40 { bool  __thiscall f(); };           // 0x00b18e40 (bool in AL)
+struct FnC382E0 { void  __thiscall f(); };           // 0x00c382e0
+struct Fn1005C60{ float __thiscall f(int); };        // 0x01005c60 GetWarpScale (this=SpaceGame)
+struct FnB18420 { int   __thiscall f(void*); };      // 0x00b18420 cGameData::WriteAsText (ret 4)
+struct FnC0AF90 { int   __thiscall f(void*); };      // 0x00c0af90 cLocomotiveObject::GetFieldValues
+int __cdecl FUN_6a08b0(void* pList, int id, int* pCount, float** pArray);  // 0x006a08b0
+struct RefHolder_s00c3_ae70 {
+    IRefObject_s00c3_ae70* mpObject;                                       // +0
+    RefHolder_s00c3_ae70() : mpObject(0) {}
+    RefHolder_s00c3_ae70& operator=(IRefObject_s00c3_ae70* p)
+    {
+        if (mpObject != p) {
+            if (p) p->AddRef();
+            IRefObject_s00c3_ae70* pOld = mpObject;
+            mpObject = p;
+            if (pOld) pOld->Release();
+        }
+        return *this;
+    }
+};
+struct IHandler_s00c3_ae70 {
+    virtual void v000();
+    virtual void v004();
+    virtual void v008();
+    virtual void v00c();
+    virtual void v010();
+    virtual void v014();
+    virtual void v018();
+    virtual void v01c();
+    virtual void v020();
+    virtual void v024();
+    virtual void v028();
+    virtual void v02c();
+    virtual void v030();
+    virtual void v034();
+    virtual void v038();
+    virtual void v03c();
+    virtual void v040();
+    virtual void v044();
+    virtual void v048();
+};
+struct cUFOKinestheticsTuning_s00c3_ae70 : public IHandler_s00c3_ae70 {
+    void* mpPropList;                        // +0x04
+    float mHitTerrainDamage;                 // +0x08
+    float mMinAltitude;                      // +0x0C
+    float mMaxAltitude;                      // +0x10
+    float mDamageToDestScale;                // +0x14
+    float mDamageToVelocityScale;            // +0x18
+    float mHitSphereRadius;                  // +0x1C
+    float mHitSphereActiveDistance;          // +0x20
+    float mMinExtent;                        // +0x24
+    float mBomberScale;                      // +0x28
+    float mFighterScale;                     // +0x2C
+    float mUberTurretScale;                  // +0x30
+    float mAllyScale;                        // +0x34
+    float mPlumpDistance;                    // +0x38
+    float mPlumpScale;                       // +0x3C
+    float mPlumpTransitionScale;             // +0x40
+    float mNPCPlumpScale;                    // +0x44
+    float mBasePlanetScale;                  // +0x48
+    float mVelocityFactor;                   // +0x4C
+    float mVelocityFactorNPC;                // +0x50
+    float mFighterVelocityFactor;            // +0x54
+    float mUberTurretVelocityFactor;         // +0x58
+    float mAllyVelocityFactor;               // +0x5C
+    float mKeyboardMovementSpeedZoomedOut;   // +0x60
+    float mKeyboardMovementSpeedZoomedIn;    // +0x64
+    float mKeyboardAccelerationZoomedOut;    // +0x68
+    float mKeyboardAccelerationZoomedIn;     // +0x6C
+    float mBomberVelocityFactor;             // +0x70
+    float mVelocityFactorZoomedOut;          // +0x74
+    float mMouseMovementSpeedZoomedOut;      // +0x78
+    float mMouseMovementSpeedZoomedIn;       // +0x7C
+    float mMouseRotationSpeedZoomedOut;      // +0x80
+    float mMouseRotationSpeedZoomedIn;       // +0x84
+    float mLeavePlanetTimePad;               // +0x88
+    float mMaxRotation;                      // +0x8C
+    float mTargetFallOffRadius;              // +0x90
+    float mBrakeFactor;                      // +0x94
+    float mBrakeOvershootFactor;             // +0x98
+    float mAccelerationFactor;               // +0x9C
+    float mAccelerationFactorNPC;            // +0xA0
+    float mVerticalAcclerationDown;          // +0xA4
+    float mVerticalAcclerationUp;            // +0xA8
+    float mCollisionElasticity;              // +0xAC
+    float mCollisionRestitution;             // +0xB0
+    float mRotationPercentageRate;           // +0xB4
+    float mNoseTiltFactor;                   // +0xB8
+    float mNoseTiltRate;                     // +0xBC
+    float mMaxNoseTilt;                      // +0xC0
+    float mVerticalTiltFactor;               // +0xC4
+    float mMaxVerticalTilt;                  // +0xC8
+    float mBankTiltFactor;                   // +0xCC
+    float mBankTiltRate;                     // +0xD0
+    float mMaxBankTilt;                      // +0xD4
+    float mEscapeSequenceSpinRate;           // +0xD8
+    float mEscapeSequenceVelocity;           // +0xDC
+    float mTrailEffectAlwaysOn;              // +0xE0
+    float mEffectMaxSpeedPlanet;             // +0xE4
+    float mEffectMaxSpeedSolar;              // +0xE8
+    float mEffectMaxSpeedGalaxy;             // +0xEC
+    float mTrailEffectMinSize;               // +0xF0
+    float mMaxAltitudeDestinationDelta;      // +0xF4
+    float mSolarSpeed;                       // +0xF8
+    float mSolarAcceleration;                // +0xFC
+    float mGalaxySpeed;                      // +0x100
+    float mGalaxyAcceleration;               // +0x104
+    float mSolarMinPlump;                    // +0x108
+    float mSolarMaxPlump;                    // +0x10C
+    float mGalaxyMinPlump;                   // +0x110
+    float mGalaxyMaxPlump;                   // +0x114
+    float mGalaxyMinPlumpDistance;           // +0x118
+    float mGalaxyMaxPlumpDistance;           // +0x11C
+    float mBaseUFODamagePush;                // +0x120
+    float mMaxUFODamagePush;                 // +0x124
+    float mUFODamageVelocityDecayRate;       // +0x128
+    float mAltMaxAltitude;                   // +0x12C
+    float mAltPlumpDistance;                 // +0x130
+    float mAltVelocityFactorZoomedOut;       // +0x134
+    float mExtra138;                         // +0x138
+    float mExtra13c;                         // +0x13C
+    float mExtra140;                         // +0x140
+    float mExtra144;                         // +0x144
+    float mExtra148;                         // +0x148
+    float mExtra14c;                         // +0x14C
+    float mExtra150;                         // +0x150
+    float m2HitTerrainDamage;                // +0x154
+    float m2MinAltitude;                     // +0x158
+    float m2MaxAltitude;                     // +0x15C
+    float m2DamageToDestScale;               // +0x160
+    float m2DamageToVelocityScale;           // +0x164
+    float m2HitSphereRadius;                 // +0x168
+    float m2HitSphereActiveDistance;         // +0x16C
+    float m2MinExtent;                       // +0x170
+    float m2BomberScale;                     // +0x174
+    float m2FighterScale;                    // +0x178
+    float m2UberTurretScale;                 // +0x17C
+    float m2AllyScale;                       // +0x180
+    float m2PlumpDistance;                   // +0x184
+    float m2PlumpScale;                      // +0x188
+    float m2PlumpTransitionScale;            // +0x18C
+    float m2NPCPlumpScale;                   // +0x190
+    float m2BasePlanetScale;                 // +0x194
+    float m2VelocityFactor;                  // +0x198
+    float m2VelocityFactorNPC;               // +0x19C
+    float m2FighterVelocityFactor;           // +0x1A0
+    float m2UberTurretVelocityFactor;        // +0x1A4
+    U32   md1a8;                             // +0x1A8 (MessageServer*)
+    U32   md1ac;                             // +0x1AC (this)
+    U32   md1b0;                             // +0x1B0 (= 0x146bb64)
+    U32   md1b4;                             // +0x1B4 (= 1)
+    U32   md1b8;                             // +0x1B8 (= 0)
+
+    void  ReadProps();                       // 0x00c38d00
+    void  Init();
+    float GetGalaxyWarpMultiplier(int index, int warpMode);  // 0x00c3b880 (cUFOKinestheticsTuning::GetGalaxyWarpMultiplier)
+};
+struct cSPGameDataUFO_s00c3_ae70 {
+    // --- flat retail layout: vtable pointers of the four subobjects are at
+    // +0x000 (cGameData), +0x034 (cLocomotiveObject), +0x108, +0x508 (cCombatant),
+    // +0x5d0 (cInteractionTarget), +0x5e8.
+    // --- methods defined in this slice
+    float GetScale();
+    void  UpdateScale();
+    void  UpdateDestinationFromTarget();
+    bool  OnMessage(U32 messageID, int arg);
+    void  SetNPCTool(void* pTool);
+    int   ClearAttackBehaviorTarget(IRefObject_s00c3_ae70* pTarget);   // this is the +0x7a8 target 0x00c3b630
+    int   ClearDefenseBehaviorTarget(IRefObject_s00c3_ae70* pTarget);  // this is the +0x7ac target
+    int   GetFieldValues(void* pOut);  // 0x00c3bc80 (cSPGameDataUFO::GetFieldValues)
+    float GetScaleRadius();
+    void  SetHeading(const Vector3_s00c3_ae70* pDir);
+    void  Destroy();
+
+    // --- helpers in the same module
+    float GetScaleFactor();       // 0x00c3ad40
+
+    // --- fields (flat retail layout; offsets are exact)
+    void* mpVftbl0;                        // +0x000
+    U8 pad004[48];                         // +0x004
+    void* mpVftbl34;                       // +0x034
+    U8 pad038[28];                         // +0x038
+    float mf054;                           // +0x054
+    float mf058;                           // +0x058
+    float mf05c;                           // +0x05c
+    float mf060;                           // +0x060
+    float mf064;                           // +0x064
+    float mf068;                           // +0x068
+    float mf06c;                           // +0x06c
+    float mf070;                           // +0x070
+    float mf074;                           // +0x074
+    float mf078;                           // +0x078
+    float mf07c;                           // +0x07c
+    float mf080;                           // +0x080
+    U32 mFlags84;                          // +0x084
+    U8 pad088[8];                          // +0x088
+    float mf090;                           // +0x090
+    float mf094;                           // +0x094
+    U8 pad098[112];                        // +0x098
+    void* mpVftbl108;                      // +0x108
+    U8 pad10c[280];                        // +0x10c
+    int mInt224;                           // +0x224
+    int mInt228;                           // +0x228
+    U8 pad22c[732];                        // +0x22c
+    void* mpVftbl508;                      // +0x508
+    U8 pad50c[196];                        // +0x50c
+    void* mpVftbl5d0;                      // +0x5d0
+    U8 pad5d4[20];                         // +0x5d4
+    void* mpVftbl5e8;                      // +0x5e8
+    U8 pad5ec[160];                        // +0x5ec
+    void* mp68c;                           // +0x68c
+    U8 pad690[56];                         // +0x690
+    void* mp6c8;                           // +0x6c8
+    U32 md6cc;                             // +0x6cc
+    U32 mTimer6d0[8];                      // +0x6d0
+    U32 mTimer6f0[8];                      // +0x6f0
+    U32 md710;                             // +0x710
+    int mUFOType;                          // +0x714
+    float mf718;                           // +0x718
+    float mf71c;                           // +0x71c
+    float mf720;                           // +0x720
+    U8 pad724[40];                         // +0x724
+    U8 mb74c;                              // +0x74c
+    U8 pad74d[3];                          // +0x74d
+    Vector3_s00c3_ae70 mDestination;                  // +0x750
+    RefHolder_s00c3_ae70 mRef75C;                     // +0x75c
+    RefHolder_s00c3_ae70 mRef760;                     // +0x760
+    int mInt764;                           // +0x764
+    float mf768;                           // +0x768
+    int md76c;                             // +0x76c
+    U32 md770[0x18 / 4];                   // +0x770
+    U32 md788;                             // +0x788
+    U32 md78c;                             // +0x78c
+    RefHolder_s00c3_ae70 mRef790;                     // +0x790
+    RefHolder_s00c3_ae70 mRef794;                     // +0x794
+    RefHolder_s00c3_ae70 mRef798;                     // +0x798
+    RefHolder_s00c3_ae70 mRef79c;                     // +0x79c
+    RefHolder_s00c3_ae70 mRef7a0;                     // +0x7a0
+    RefHolder_s00c3_ae70 mRef7a4;                     // +0x7a4
+    RefHolder_s00c3_ae70 mRef7a8;                     // +0x7a8
+    RefHolder_s00c3_ae70 mRef7ac;                     // +0x7ac
+    void* mp7b0;                           // +0x7b0
+    U8 pad7b4[4];                          // +0x7b4
+    U32 mTimer7b8[8];                      // +0x7b8
+    RefHolder_s00c3_ae70 mRef7d8;                     // +0x7d8
+    U32 mFlags7dc;                         // +0x7dc
+    void* mp7e0;                           // +0x7e0
+    void* mp7e4;                           // +0x7e4
+    void* mp7e8;                           // +0x7e8
+    U8 pad7ec[4];                          // +0x7ec
+    RefHolder_s00c3_ae70 mRef7f0;                     // +0x7f0
+    U8 pad7f4[12];                         // +0x7f4
+    void* mp800;                           // +0x800
+    void* mp804;                           // +0x804
+    void* mp808;                           // +0x808
+    void* mp80c;                           // +0x80c
+    int md810;                             // +0x810
+    int md814;                             // +0x814
+};
+struct cVarListSerializer_s00c3_ae70 {
+    U32 md[0xa14 / 4];
+    void ctor(void* pA, void* pB, int pC);   // 0x00692f90
+    int  GetFields(void* pOut);              // 0x00695960
+};
+// ---- items of slice s00c3ae70 end
+
+// ---- items of slice s0105b960 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C" double __cdecl sqrt(double);
+extern float g_radius10;                         // 0x01473c70 = 10.0f
+extern float g_scale12;                          // 0x013f6b68 = 12.0f
+extern float g_scale6;                           // 0x0147b9f0 = 6.0f
+extern float g_scale15;                          // 0x014007f4 = 15.0f
+extern float g_scale2p4;                         // 0x0149bfc4 = 2.4f
+extern float g_one;                              // 0x01485720 = 1.0f
+extern float g_ratio0p2;                         // 0x015b8ddc = 0.2f
+extern float g_ratio0p5;                         // 0x015b8dd8 = 0.5f
+#pragma intrinsic(sqrt)
+struct Vector3_s0105_b960 {
+    float x, y, z;
+    Vector3_s0105_b960() {}
+    Vector3_s0105_b960(float a, float b, float c) : x(a), y(b), z(c) {}
+    Vector3_s0105_b960(const Vector3_s0105_b960& v) : x(v.x), y(v.y), z(v.z) {}
+};
+inline Vector3_s0105_b960 operator*(const Vector3_s0105_b960& v, float s)
+{
+    Vector3_s0105_b960 r;
+    r.x = v.x * s;
+    r.y = v.y * s;
+    r.z = v.z * s;
+    return r;
+}
+inline Vector3_s0105_b960 operator-(const Vector3_s0105_b960& a, const Vector3_s0105_b960& b)
+{
+    Vector3_s0105_b960 r;
+    r.x = a.x - b.x;
+    r.y = a.y - b.y;
+    r.z = a.z - b.z;
+    return r;
+}
+inline float Length(const Vector3_s0105_b960& v)
+{
+    return (float)sqrt((double)(v.z * v.z + v.y * v.y + v.x * v.x));
+}
+struct ResourceKey_s0105_b960 {
+    uint32_t mInstanceID;                        // +0x00
+    uint32_t mTypeID;                            // +0x04
+    uint32_t mGroupID;                           // +0x08
+};
+extern Vector3_s0105_b960 g_upAxis;                         // 0x015b8db4 = (0, 0, 1)
+class cGameObject;
+class cSpaceToolData_s0105_b960;
+class cSpaceShip;
+class cLocatable;
+class cPlanetModel;
+class cApp;
+class cConfigNode;
+void* GetTriggerMgr();                                               // 0x00b3d4d0
+cPlanetModel* PlanetModel_s0105_b960();                                         // 0x00b3d350 (getter)
+cApp* App();                                                          // 0x0067dd10
+int  FUN_00c70880(cSpaceToolData_s0105_b960* pTool);                             // 0x00c70880
+bool FUN_00c71540(cSpaceToolData_s0105_b960* pTool);                             // 0x00c71540
+void* FUN_00c37360();                                                 // 0x00c37360 (sim tuning block)
+float FUN_01017030(int which);                                        // 0x01017030
+float FUN_01017070(int which);                                        // 0x01017070
+class cLocatable {                                // transform sub-object (embedded at +0x34 / +0x120)
+public:
+virtual void v00();
+virtual void v01();
+virtual void v02();
+virtual void v03();
+virtual void v04();
+virtual void v05();
+virtual void v06();
+virtual void v07();
+virtual void v08();
+virtual void v09();
+virtual void v0a();
+    virtual const Vector3_s0105_b960* GetPosition();                        // +0x2c
+virtual void v0c();
+virtual void v0d();
+virtual void v0e();
+virtual void v0f();
+virtual void v10();
+virtual void v11();
+virtual void v12();
+virtual void v13();
+virtual void v14();
+virtual void v15();
+    virtual bool IsActive();                                     // +0x58
+virtual void v17();
+virtual void v18();
+virtual void v19();
+virtual void v1a();
+    virtual void v1b();
+    virtual float GetRadius();                                   // +0x70
+virtual void v1d();
+virtual void v1e();
+virtual void v1f();
+virtual void v20();
+virtual void v21();
+virtual void v22();
+virtual void v23();
+virtual void v24();
+virtual void v25();
+virtual void v26();
+virtual void v27();
+virtual void v28();
+virtual void v29();
+virtual void v2a();
+virtual void v2b();
+virtual void v2c();
+virtual void v2d();
+    virtual cGameObject* Cast(uint32_t typeID);                  // +0xb8
+};
+class cGameObject {
+public:
+    virtual void AddRef();                                       // +0x00
+virtual void v01();
+virtual void v02();
+virtual void v03();
+    virtual void Release();                                      // +0x04
+virtual void v05();
+virtual void v06();
+virtual void v07();
+virtual void v08();
+virtual void v09();
+virtual void v0a();
+virtual void v0b();
+virtual void v0c();
+virtual void v0d();
+virtual void v0e();
+virtual void v0f();
+virtual void v10();
+virtual void v11();
+virtual void v12();
+    virtual uint32_t GetPoliticalID();                           // +0x4c
+virtual void v14();
+virtual void v15();
+virtual void v16();
+virtual void v17();
+virtual void v18();
+virtual void v19();
+virtual void v1a();
+virtual void v1b();
+virtual void v1c();
+virtual void v1d();
+virtual void v1e();
+virtual void v1f();
+virtual void v20();
+virtual void v21();
+virtual void v22();
+virtual void v23();
+virtual void v24();
+virtual void v25();
+virtual void v26();
+virtual void v27();
+virtual void v28();
+virtual void v29();
+virtual void v2a();
+virtual void v2b();
+virtual void v2c();
+virtual void v2d();
+    virtual cGameObject* Cast(uint32_t typeID);                  // +0xb8
+    uint32_t pad04[(0x34 - 0x04) / 4];                           // +0x04
+    cLocatable mLocation;                                        // +0x34
+    void FUN_00c389c0(int a, int b);                             // 0x00c389c0
+};
+class cSpaceToolData_s0105_b960 {
+public:
+virtual void v00();
+virtual void v01();
+virtual void v02();
+virtual void v03();
+virtual void v04();
+virtual void v05();
+    virtual const ResourceKey_s0105_b960& GetToolID();                      // +0x18
+    virtual void* CreateImpact();                                 // +0x1c (no stack args)
+    uint32_t pad20[(0x30 - 0x04) / 4];                            // +0x04
+    void* mpToolProperties;                                      // +0x30 (property list)
+    uint32_t pad34[(0x114 - 0x34) / 4];                           // +0x34
+    cLocatable* mpToolOwner;                                     // +0x114 (owner transform)
+    uint32_t pad118[(0x124 - 0x118) / 4];                         // +0x118
+    cGameObject* mpOwnerObject;                                  // +0x124
+    uint32_t pad128[(0x170 - 0x128) / 4];                         // +0x128
+    uint32_t mLastErrorID;                                       // +0x170
+    float FUN_0104bdb0();                                        // 0x0104bdb0 (first scalar, ecx = this)
+};
+class cPlanetModel {
+public:
+    bool FUN_00b7e3e0(const Vector3_s0105_b960& position);                   // 0x00b7e3e0
+    const Vector3_s0105_b960* FUN_00b81630(Vector3_s0105_b960* out, const Vector3_s0105_b960& position);  // 0x00b81630
+    Quaternion* BuildSurfaceOrientation(Quaternion* out, const Vector3_s0105_b960& position);  // 0x00b7f190
+};
+class cSpaceShip {
+public:
+virtual void v00();
+virtual void v01();
+virtual void v02();
+virtual void v03();
+virtual void v04();
+virtual void v05();
+virtual void v06();
+virtual void v07();
+virtual void v08();
+virtual void v09();
+virtual void v0a();
+virtual void v0b();
+virtual void v0c();
+virtual void v0d();
+virtual void v0e();
+virtual void v0f();
+virtual void v10();
+virtual void v11();
+virtual void v12();
+    uint32_t pad04[(0x34 - 0x04) / 4];                            // +0x04
+    cLocatable mLocation;                                         // +0x34 (vptr-only view of the sub-object)
+    uint32_t pad48[(0x750 - 0x38) / 4];                           // +0x38
+    Vector3_s0105_b960 mDirection;                                           // +0x750
+    float mPad75c;                                                // +0x75c
+    float mPad760[2];                                             // +0x760
+    float mRadius;                                                // +0x768
+    float GetReach();                                             // 0x00c37120
+};
+class cConfigNode {
+public:
+virtual void v00();
+virtual void v01();
+virtual void v02();
+    virtual cConfigNode* GetTag(uint32_t typeID);                   // +0x0c
+virtual void v04();
+virtual void v05();
+virtual void v06();
+virtual void v07();
+virtual void v08();
+virtual void v09();
+virtual void v0a();
+virtual void v0b();
+virtual void v0c();
+virtual void v0d();
+    virtual cConfigNode* GetSubNode();                              // +0x38
+virtual void v0f();
+virtual void v10();
+virtual void v11();
+virtual void v12();
+virtual void v13();
+virtual void v14();
+virtual void v15();
+virtual void v16();
+    virtual float GetFloat();                                       // +0x5c
+};
+class cApp {
+public:
+virtual void v00();
+virtual void v01();
+virtual void v02();
+virtual void v03();
+virtual void v04();
+virtual void v05();
+virtual void v06();
+virtual void v07();
+virtual void v08();
+virtual void v09();
+virtual void v0a();
+virtual void v0b();
+virtual void v0c();
+virtual void v0d();
+virtual void v0e();
+virtual void v0f();
+virtual void v10();
+virtual void v11();
+virtual void v12();
+virtual void v13();
+    virtual cConfigNode* GetModeHolder();                            // +0x50
+};
+static float TagFloat(cConfigNode* node, uint32_t tagID, const float& dflt)
+{
+    if (node) {
+        cConfigNode* tag = node->GetTag(tagID);
+        if (tag)
+            return tag->GetFloat();
+    }
+    return dflt;
+}
+// ---- items of slice s0105b960 end
+
+// ---- items of slice s0105c8d0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern const float kCoupling;                           // 0x015b8df4 = 5.0
+extern const float kMinSpeed;                           // 0x015b8df0 = 0.001
+extern const float kHeadingDot;                         // 0x015b8dec = -0.8
+extern const float kRetargetDist;                       // 0x015b8de8 = 5.0
+extern const float kDirDot;                             // 0x015b8de4 = -0.8
+extern const float kLead;                               // 0x015b8de0 = 2.0
+extern void* g_vtCVS[];                 // 0x013ec458
+extern void* g_vtD180Class[];           // 0x0149bfc8
+extern void* g_vtD180Base[];            // 0x01475114
+extern void* g_vtD1D0Class[];           // 0x0149bfd8
+extern uint32_t g_warpAxisKey;                          // 0x016e2160
+extern const float kMsToSeconds;                        // 0x013f9428 (0.001f)
+extern const float kMinWarpExtent;                      // 0x0149bfc0 (1.5258789e-05f)
+extern const float kWarpFacingThreshold;                // 0x01486cd8 (0.999f)
+#define VPAD(n) virtual void vpad##n()
+struct Vector3_s0105_c8d0 {
+    float x, y, z;
+    Vector3_s0105_c8d0() {}
+    Vector3_s0105_c8d0(float a, float b, float c) : x(a), y(b), z(c) {}
+};
+Vector3_s0105_c8d0 normalized_safe(const Vector3_s0105_c8d0& v);              // 0x00449c20 (cdecl, hidden sret)
+struct cSpatialPart {                                   // sub-object at +0x34
+VPAD(0);
+VPAD(1);
+VPAD(2);
+VPAD(3);
+VPAD(4);
+VPAD(5);
+VPAD(6);
+VPAD(7);
+VPAD(8);
+VPAD(9);
+VPAD(10);
+    virtual const Vector3_s0105_c8d0* GetPosition();               // +0x2c
+};
+struct cSPTimer {
+    void Stop();                                        // 0x00bc3110
+    void Restart();                                     // 0x00bc3130
+    void Clear();                                       // 0x00bc3170
+    uint64_t GetElapsedTime();                          // 0x00bc3190
+    bool IsRunning();                                   // 0x00feba90
+};
+struct cSteerConfig {                                   // singleton at 0x0168df68
+    uint32_t pad00[0x11c / 4];
+    float mGalaxyMaxPlumpDistance;                      // +0x11c
+    uint32_t pad120[(0x184 - 0x120) / 4];
+    uint8_t mbGalaxyWarpEnabled;                        // +0x184
+    float GetBlend();                                   // 0x00c37470 (+0xc8)
+    float GetDamping();                                 // 0x00c37480 (+0xcc)
+    float GetKinestheticBlend();                        // 0x00a0ab60
+    float GetGalaxyWarpMultiplier(int kind, int mode);  // 0x00c3b880
+    float GetGalaxyWarpTime(int kind, int mode, float dist);    // 0x00c3a1b0
+};
+cSteerConfig* SteerConfig();                            // 0x00c37360
+struct cSteered {
+    uint32_t pad00[0x34 / 4];
+    cSpatialPart mAnchor;                               // +0x34
+    uint32_t pad38[(0x60c - 0x38) / 4];
+    Vector3_s0105_c8d0 mPush;                                      // +0x60c
+    uint32_t pad618[(0x624 - 0x618) / 4];
+    uint8_t mb624;
+    uint8_t pad625[0x648 - 0x625];
+    cSPTimer mTimerA;                                   // +0x648
+    uint32_t pad64c[(0x668 - 0x64c) / 4];
+    cSPTimer mTimerB;                                   // +0x668
+    uint32_t pad66c[(0x718 - 0x66c) / 4];
+    Vector3_s0105_c8d0 mPos;                                       // +0x718
+    Vector3_s0105_c8d0 mVel;                                       // +0x724
+    uint32_t pad730[(0x74c - 0x730) / 4];
+    uint8_t mbTargetValid;                              // +0x74c
+    uint8_t pad74d[3];
+    Vector3_s0105_c8d0 mTarget;                                    // +0x750
+    uint32_t pad75c[(0x768 - 0x75c) / 4];
+    float mTargetDist;                                  // +0x768 (read via GetTargetDist)
+
+    float GetTargetDist();                              // 0x00c37120
+    void SetTargetDist(float d);                        // 0x00c3daa0
+    float GetFollowDist();                              // 0x00c3be10
+    void SetFollow(float w, const Vector3_s0105_c8d0* v);          // 0x00c3db50
+};
+struct cWarpDaemon {                                    // drive object at +0x508 (vtable)
+VPAD(0);
+VPAD(1);
+VPAD(2);
+VPAD(3);
+VPAD(4);
+VPAD(5);
+VPAD(6);
+VPAD(7);
+VPAD(8);
+VPAD(9);
+VPAD(10);
+VPAD(11);
+VPAD(12);
+VPAD(13);
+    virtual void StartWarp();                           // +0x38
+};
+struct cMaterialTable {                                 // object at +0x730 (opaque storage)
+    uint32_t pad00[(0x76c - 0x730) / 4];
+};
+const Vector3_s0105_c8d0* RotateByQuat(Vector3_s0105_c8d0* out, const void* key, const cMaterialTable* table);  // 0x0059aed0
+struct cSPGameDataUFO_s0105_c8d0 {                                 // the UFO's state block (0x718 = position)
+    uint32_t pad00[0x508 / 4];
+    cWarpDaemon mWarpDaemon;                            // +0x508 (vptr; 15 vtable slots)
+    uint8_t pad50c[0x628 - 0x50c];
+    cSPTimer mWarpClock;                                // +0x628 (methods only)
+    uint8_t pad629[0x714 - 0x629];
+    int mMode;                                          // +0x714
+    Vector3_s0105_c8d0 mPos;                                       // +0x718
+    Vector3_s0105_c8d0 mVel;                                       // +0x724
+    cMaterialTable mMaterial;                           // +0x730
+    int mWarpState;                                     // +0x76c
+    uint8_t pad770[0x7f4 - 0x770];
+    float mWarpSpeed;                                   // +0x7f4
+    bool CanWarp();                                     // 0x00c37040
+};
+struct cPlanetModel_s0105_c8d0 {
+    float FUN_b7e4d0();                                 // 0x00b7e4d0
+};
+cPlanetModel_s0105_c8d0* PlanetModel_s0105_c8d0();                            // 0x00b3d350
+struct cSPSpacePlanetCameraController {
+    float GetMouseWheelSpeed();                         // 0x01017e80
+};
+struct cControllerHolder {
+VPAD(0);
+VPAD(1);
+VPAD(2);
+    virtual cSPSpacePlanetCameraController* FindController(uint32_t key);   // +0x0c
+};
+struct cAppInner {
+VPAD(0);
+VPAD(1);
+VPAD(2);
+VPAD(3);
+VPAD(4);
+VPAD(5);
+VPAD(6);
+VPAD(7);
+VPAD(8);
+VPAD(9);
+VPAD(10);
+VPAD(11);
+VPAD(12);
+VPAD(13);
+    virtual cControllerHolder* GetControllers();        // +0x38
+};
+struct cAppObj {
+VPAD(0);
+VPAD(1);
+VPAD(2);
+VPAD(3);
+VPAD(4);
+VPAD(5);
+VPAD(6);
+VPAD(7);
+VPAD(8);
+VPAD(9);
+VPAD(10);
+VPAD(11);
+VPAD(12);
+VPAD(13);
+VPAD(14);
+VPAD(15);
+VPAD(16);
+VPAD(17);
+VPAD(18);
+VPAD(19);
+    virtual cAppInner* GetSimulator();                  // +0x50
+};
+cAppObj* App_s0105_c8d0();                                         // 0x0067dd10
+extern const Vector3_s0105_c8d0 kDefaultSummarizerExtents;         // 0x016e2114
+struct cSummarizerD180 {
+    void** mClassVt;                    // +0x00
+    uint32_t mPad04;                    // +0x04
+    void** volatile mBaseVt;            // +0x08
+    uint32_t mField0C;                  // +0x0c
+    Vector3_s0105_c8d0 mExtents;                   // +0x10
+};
+struct cSummarizerD1D0 {
+    void** mClassVt;                    // +0x00
+    uint32_t mPad04;                    // +0x04
+    void** volatile mBaseVt;            // +0x08
+    uint32_t mField0C;                  // +0x0c
+};
+struct cSPPlayerInventory {
+    uint32_t pad00[0x76c / 4];
+    int mWarpMode;                                      // +0x76c
+};
+struct cSPSimulatorSpaceGame_s0105_c8d0 {
+    cSPPlayerInventory* GetPlayerInventory();           // 0x00a1ad60
+    float GetMaxTravelDistance();                       // 0x00ffbfc0
+};
+cSPSimulatorSpaceGame_s0105_c8d0* GetUFOSimulator_s0105_c8d0();               // 0x00ffbe50
+__forceinline float Length_s0105_c8d0(const Vector3_s0105_c8d0& v)
+{
+    return sqrtf(v.x * v.x + v.y * v.y + v.z * v.z);
+}
+__forceinline float Distance(const Vector3_s0105_c8d0& a, const Vector3_s0105_c8d0& b)
+{
+    return sqrtf((a.x - b.x) * (a.x - b.x) + (a.y - b.y) * (a.y - b.y) + (a.z - b.z) * (a.z - b.z));
+}
+// ---- items of slice s0105c8d0 end
+
 // @ 0x00c36e80
 void* __fastcall FUN_00c36e80(Ufo* self, void* dummy, u32 key)
 {
@@ -1772,6 +2660,184 @@ void cUFOKinestheticsTuning::ReadProps()
   GetFloatProp(mPropList.mpObject, 0x65ba2dc, m2VelocityFactorNPC);
   GetFloatProp(mPropList.mpObject, 0x65ba2f3, m2FighterVelocityFactor);
   GetFloatProp(mPropList.mpObject, 0x65ba2f6, m2UberTurretVelocityFactor);
+}
+
+// @ 0x00c3a180
+char cUFOKinestheticsTuning_s00c3_a180::HandleMessage(int messageID, int arg)
+{
+    if (messageID == 0xf62def && *(int*)(arg + 0x18) == (int)0x99fb6f5b)
+        this->ReadProps();
+    return 0;
+}
+
+// @ 0x00c3a1b0
+float cUFOKinestheticsTuning_s00c3_a180::GetGalaxyWarpTime(int warpMode, float unused, float t)
+{
+    (void)unused;
+    float* pArray = 0;
+    int    count  = 0;
+    GetPropertyAsFloatArray(this->mpPropList, kPropGalaxyWarpTime, &count, &pArray);
+
+    switch (warpMode)
+    {
+    case 2:
+        if (count > 1)
+            return (pArray[1] - pArray[0]) * t + pArray[0];
+        break;
+    case 4:
+        if (count > 2)
+            return pArray[2];
+        break;
+    default:
+        break;
+    }
+    return 1.0f;
+}
+
+// @ 0x00c3a220
+void enableWeapon(int toolID, int weaponLevel, IRefObject_s00c3_a180** ppSlot)
+{
+    int base  = 0;
+    int count = 0;
+    void* pTuning = GetSpaceCombatTuning_s00c3_a180();
+    FUN_006a0ae0(*(void**)((U8*)pTuning + 8), toolID, &count, &base);
+
+    if (count <= weaponLevel)
+    {
+        if (count > 0)
+            weaponLevel = count - 1;
+        if (count <= weaponLevel)
+            return;
+    }
+
+    void* pEntry = (void*)(base + weaponLevel * 0xc);
+    IRefObject_s00c3_a180* pOld = *ppSlot;
+    if (pOld != 0)
+    {
+        *ppSlot = 0;
+        vcall_release8(pOld);           // vtable +0x8
+    }
+    void* pEntryResult = EraseToolEntry(pEntry, ppSlot);
+    // CreateToolFromToolID is `?CreateToolFromToolID@cSPToolManager@@QAE_NI@Z`; its `this`
+    // (ecx) is the erase result and the tool id is the stack argument.  MSVC /O2 folds the
+    // `mov ecx, eax` here, so the encoded call differs from the original even though the
+    // observable behaviour is the same (see nonmatching.txt).
+    ((Fn0104e340*)pEntryResult)->f((unsigned int)(U32)pEntry);
+}
+
+// @ 0x00c3a9f0
+char cSPGameDataUFO_s00c3_a180::Initialize()
+{
+    if (this->mInt7bc == 0)
+        return UTFWin_Window_Initialize();
+    return 0;
+}
+
+// @ 0x00c3aa10
+char cSPGameDataUFO_s00c3_a180::vtableSlot40Wrapper(int arg)
+{
+    char ok = ((FnB183F0*)this)->f(arg);
+    if (ok != 0)
+        ((FnC385D0*)this)->f();
+    return ok;
+}
+
+// @ 0x00c3b560
+bool cSPGameDataUFO_s00c3_ae70::OnMessage(U32 messageID, int arg)
+{
+    (void)arg;
+    if ((messageID == 0x44f1189 || messageID == 0x67b2a95) && *(int*)((char*)this + 0x208) != 0) {
+        void* pSpaceGame = SpaceGameGet_s00c3_ae70();
+        if (((FnB18E40*)pSpaceGame)->f()) {
+            void* pServer = MessageServer();
+            typedef int (__thiscall* Vf)(void*, U32, int, int, int);
+            ((Vf)(*(void**)(*(char**)pServer + 0x18)))(pServer, 0x67b2a95, 0, 0, 0);
+            return false;
+        }
+        ((FnC382E0*)((char*)this - 0x5e8))->f();
+    }
+    return false;
+}
+
+// @ 0x00c3b7f0
+void cUFOKinestheticsTuning_s00c3_ae70::Init()
+{
+    void* pManager = PropertyManager();
+    if (mpPropList != 0) {
+        void* pOld = mpPropList;
+        mpPropList = 0;
+        ((IReleased*)pOld)->Release();
+    }
+    typedef void (__thiscall* Vf)(void*, U32, int, void*);
+    ((Vf)(*(void**)(*(char**)pManager + 0x2c)))(pManager, 0x99fb6f5b, 0x2ae0c7e, &mpPropList);
+    ReadProps();
+    void* pServer = MessageServer();
+    md1a8 = (U32)pServer;
+    md1ac = (U32)this;
+    md1b0 = 0x146bb64;
+    md1b4 = 1;
+    md1b8 = 0;
+    if (pServer != 0) {
+        if (this != 0) {
+            typedef int (__thiscall* Vf2)(void*, void*, U32);
+            ((Vf2)(*(void**)(*(char**)pServer + 0x24)))(pServer, this, 0xf62def);
+        }
+    }
+}
+
+// @ 0x00c3b880
+float cUFOKinestheticsTuning_s00c3_ae70::GetGalaxyWarpMultiplier(int index, int warpMode)
+{
+    float factor = gF_1485720;
+    if (warpMode == 0) {
+        void* pSpaceGame = SpaceGameGet_s00c3_ae70();
+        if ((*(U8*)((char*)pSpaceGame + 0xc4) & 0x20) != 0)
+            factor = ((Fn1005C60*)pSpaceGame)->f(5);
+    } else if (warpMode == 4) {
+        factor = m2PlumpScale;   // +0x188
+    }
+
+    int count = 0;
+    float* array = 0;
+    FUN_6a08b0(mpPropList, 0x5c80689, &count, &array);
+    int i = index - 1;
+    if (i < count)
+        return array[i] * factor;
+    return factor;
+}
+
+// @ 0x00c3bc80
+int cSPGameDataUFO_s00c3_ae70::GetFieldValues(void* pOut)
+{
+    cVarListSerializer_s00c3_ae70 localA14;    // +0x508 serialiser (constructed first, lower in the frame)
+    cVarListSerializer_s00c3_ae70 local1428;   // `this` serialiser
+
+    int sum = ((FnB18420*)this)->f(pOut);
+    sum += ((FnC0AF90*)((char*)this + 0x34))->f(pOut);
+
+    localA14.ctor((char*)this + 0x508, (void*)0x1570858, 0x1a80d26);
+    sum += localA14.GetFields(pOut);
+
+    local1428.ctor(this, (void*)0x1573290, 0x1a80d26);
+    sum += local1428.GetFields(pOut);
+
+    return sum;
+}
+
+// @ 0x00c3be10
+float cSPGameDataUFO_s00c3_ae70::GetScaleRadius()
+{
+    float v[3];
+    v[0] = mf078 - mf06c;
+    v[1] = mf07c - mf070;
+    v[2] = mf080 - mf074;
+    float* pExtent = v + 1;
+    if (!(v[0] < v[1]))
+        pExtent = v;
+    if (v[2] > *pExtent)
+        pExtent = v + 2;
+
+    return GetScale() * *pExtent * gF_1471064;
 }
 
 // @ 0x00c3bfe0
@@ -2470,4 +3536,327 @@ void SP::cSPGameDataUFO::Init(SP::eUFOType a, SP::cEmpire * empire)
     }
     ((Fn3dba0*)self)->f((int)empire, -1.0f);
     ((FnC43fe0*)(self + 0x34))->f((void*)0xb4c850);
+}
+
+// @ 0x0105c3d0
+void FUN_0105c3d0(Vector3_s0105_b960* out, cSpaceToolData_s0105_b960* pTool, float t)
+{
+    float radius;
+    int mode = *(int*)((char*)GetTriggerMgr() + 0x2c);
+    if (mode == 1 || mode == 2) {
+        float editorScale = FUN_00c70880(pTool) == 1 ? g_scale12 : g_scale6;
+        radius = (t + 1.0f) * editorScale;
+    } else {
+        float base = TagFloat(App()->GetModeHolder()->GetSubNode(), 0x303154cc, g_radius10);
+        float* tuning = (float*)FUN_00c37360();
+        float low = tuning[0x13c / 4];
+        float probeA = FUN_01017030(1);
+        const float& near = (low > probeA) ? low : probeA;
+        float high = tuning[0x140 / 4];
+        float probeB = FUN_01017070(1);
+        const float& far = (probeB > high) ? probeB : high;
+        float ratio = (base - near) / (far - near);
+        float minScale = 0.0f;
+        float maxScale = 1.0f;
+        if (ratio < minScale)
+            ratio = minScale;
+        if (ratio > maxScale)
+            ratio = maxScale;
+        float mid = (tuning[0x138 / 4] - tuning[0x134 / 4]) * ratio + tuning[0x134 / 4];
+        float scale;
+        if (FUN_00c70880(pTool) == 1)
+            scale = g_scale15;
+        else if (FUN_00c71540(pTool))
+            scale = g_scale2p4;
+        else
+            scale = g_scale6;
+        radius = scale * mid;
+    }
+    out->z = g_upAxis.z * radius;
+    out->y = g_upAxis.y * radius;
+    out->x = g_upAxis.x * radius;
+}
+
+// @ 0x0105c5d0
+void FUN_0105c5d0(Vector3_s0105_b960* out, cSpaceToolData_s0105_b960* pTool, float t)
+{
+    float radius;
+    int mode = *(int*)((char*)GetTriggerMgr() + 0x2c);
+    if (mode == 1 || mode == 2) {
+        float base = TagFloat(App()->GetModeHolder()->GetSubNode(), 0x303154cc, g_one);
+        float scaled = g_ratio0p2 * base;
+        const float& limit = (g_ratio0p5 > scaled) ? scaled : g_ratio0p5;
+        radius = (t + 1.0f) * limit;
+    } else {
+        float base = TagFloat(App()->GetModeHolder()->GetSubNode(), 0x303154cc, g_one);
+        float* tuning = (float*)FUN_00c37360();
+        float low = tuning[0x164 / 4];
+        float probeA = FUN_01017030(2);
+        const float& near = (low > probeA) ? low : probeA;
+        float high = tuning[0x168 / 4];
+        float probeB = FUN_01017070(2);
+        const float& far = (probeB > high) ? probeB : high;
+        float ratio = (base - near) / (far - near);
+        float minScale = 0.0f;
+        float maxScale = 1.0f;
+        if (ratio < minScale)
+            ratio = minScale;
+        if (ratio > maxScale)
+            ratio = maxScale;
+        radius = (tuning[0x160 / 4] - tuning[0x15c / 4]) * ratio + tuning[0x15c / 4];
+    }
+    out->z = g_upAxis.z * radius;
+    out->y = g_upAxis.y * radius;
+    out->x = g_upAxis.x * radius;
+}
+
+// @ 0x0105c7e0
+void FUN_0105c7e0(cSpaceShip* ship, const Vector3_s0105_b960& position, float extra)
+{
+    Vector3_s0105_b960 surface;
+    const Vector3_s0105_b960* offset = PlanetModel_s0105_b960()->FUN_00b81630(&surface, position);
+    float radius = Length(*offset) + extra;
+    float reach = ship->GetReach();
+    if (radius > reach) {
+        ship->mRadius = radius;
+        reach = radius;
+    }
+    float inv = 1.0f / Length(ship->mDirection);
+    Vector3_s0105_b960 dir = ship->mDirection * inv;
+    ship->mDirection.x = dir.x * reach;
+    ship->mDirection.y = dir.y * reach;
+    ship->mDirection.z = dir.z * reach;
+}
+
+// @ 0x0105c8d0
+void __stdcall GetMaxHeight(cSPGameDataUFO_s0105_c8d0* o)
+{
+    float len = sqrtf(o->mPos.x * o->mPos.x + o->mPos.y * o->mPos.y + o->mPos.z * o->mPos.z);
+    float cap = SteerConfig()->GetKinestheticBlend() + PlanetModel_s0105_c8d0()->FUN_b7e4d0();
+    float ratio;
+    if (o->mMode == 0) {
+        cControllerHolder* holder = App_s0105_c8d0()->GetSimulator()->GetControllers();
+        if (holder) {
+            cSPSpacePlanetCameraController* ctl = holder->FindController(0x303154cd);
+            if (ctl) {
+                float wheel = ctl->GetMouseWheelSpeed();
+                if (wheel < len) {
+                    ratio = wheel / len;
+                    goto apply;
+                }
+                return;
+            }
+        }
+    }
+    if (!(len > cap))
+        return;
+    ratio = cap / len;
+apply:
+    {
+        o->mPos.x = o->mPos.x * ratio;
+        o->mPos.y = o->mPos.y * ratio;
+        o->mPos.z = o->mPos.z * ratio;
+    }
+}
+
+// @ 0x0105c9d0
+void __stdcall FUN_0105c9d0(cSteered* o, const Vector3_s0105_c8d0* a2, const Vector3_s0105_c8d0* a3, float a4)
+{
+    const Vector3_s0105_c8d0* c = o->mAnchor.GetPosition();
+    Vector3_s0105_c8d0 pos = o->mPos;
+    float iu = 1.0f / sqrtf(pos.x * pos.x + pos.y * pos.y + pos.z * pos.z + 1e-8f);
+    Vector3_s0105_c8d0 up(pos.x * iu, pos.y * iu, pos.z * iu);
+    Vector3_s0105_c8d0 d(pos.x - c->x, pos.y - c->y, pos.z - c->z);
+    float speed = sqrtf(o->mVel.x * o->mVel.x + o->mVel.y * o->mVel.y + o->mVel.z * o->mVel.z);
+    float dl = sqrtf(d.x * d.x + d.y * d.y + d.z * d.z);
+    float delta = dl - sqrtf(a2->x * a2->x + a2->y * a2->y + a2->z * a2->z);
+    float id = 1.0f / sqrtf(d.x * d.x + d.y * d.y + d.z * d.z + 1e-8f);
+    o->mPos.x = a2->x + (c->x + (id * d.x) * delta);
+    o->mPos.y = a2->y + (c->y + (id * d.y) * delta);
+    o->mPos.z = a2->z + (c->z + (id * d.z) * delta);
+
+    float blend = SteerConfig()->GetBlend();
+    float damp = SteerConfig()->GetDamping();
+    float k = fabsf(o->mVel.x * a3->x + o->mVel.z * a3->z + o->mVel.y * a3->y) * (blend + 1.0f);
+    Vector3_s0105_c8d0 t(a3->x * k, a3->y * k, a3->z * k);
+    o->mPush.y += t.y * kCoupling;
+    o->mPush.x += t.x * kCoupling;
+    o->mPush.z += t.z * kCoupling;
+    Vector3_s0105_c8d0 nv(t.x + o->mVel.x, o->mVel.y + t.y, o->mVel.z + t.z);
+    if (nv.z * nv.z + nv.y * nv.y + nv.x * nv.x < 1.52587890625e-05f)
+        nv = up;
+
+    Vector3_s0105_c8d0 heading;
+    const Vector3_s0105_c8d0* h;
+    if (speed > 1.52587890625e-05f) {
+        float vx = o->mVel.x, vy = o->mVel.y, vz = o->mVel.z;
+        float iv = 1.0f / sqrtf(vz * vz + vy * vy + vx * vx + 1e-8f);
+        heading = Vector3_s0105_c8d0(iv * vx, iv * vy, iv * vz);
+        h = &heading;
+    } else {
+        h = &up;
+    }
+    float dot = (h->z * a3->z + h->y * a3->y) + h->x * a3->x;
+    float blendDot = dot + 1.0f;
+    float in = 1.0f / sqrtf(nv.x * nv.x + nv.y * nv.y + nv.z * nv.z + 1e-8f);
+    Vector3_s0105_c8d0 nd(in * nv.x, nv.y * in, in * nv.z);
+    if (blendDot <= 0.0f)
+        blendDot = 0.0f;
+    if (1.0f <= blendDot)
+        blendDot = 1.0f;
+    const float* sp = &speed;
+    if (speed <= kMinSpeed)
+        sp = &kMinSpeed;
+    float nspeed = *sp * ((1.0f - damp) * blendDot + damp);
+    o->mVel.x = nd.x * nspeed;
+    o->mVel.y = nd.y * nspeed;
+    o->mVel.z = nd.z * nspeed;
+
+    float len;
+    bool reaim = true;
+    if (!o->mbTargetValid && !(dot < kHeadingDot)) {
+        Vector3_s0105_c8d0 tg(o->mTarget.x - pos.x, o->mTarget.y - pos.y, o->mTarget.z - pos.z);
+        float tl = sqrtf(tg.y * tg.y + tg.z * tg.z + tg.x * tg.x);
+        if (!(tl < kRetargetDist)) {
+            Vector3_s0105_c8d0 dir = normalized_safe(tg);
+            const Vector3_s0105_c8d0& aim = normalized_safe(*a2);
+            if (!((aim.y * dir.y + aim.z * dir.z) + dir.x * aim.x < kDirDot))
+                reaim = false;
+        }
+    }
+    if (reaim) {
+        float l2 = a2->x * a2->x + a2->y * a2->y + a2->z * a2->z;
+        float lead = sqrtf(l2) + kLead;
+        float il = 1.0f / sqrtf(l2 + 1e-8f);
+        o->mTarget.x = (a2->x * il) * lead + pos.x;
+        o->mTarget.y = (a2->y * il) * lead + pos.y;
+        o->mTarget.z = (a2->z * il) * lead + pos.z;
+        o->mbTargetValid = 0;
+        o->mTimerA.Stop();
+        o->mb624 = 0;
+        len = sqrtf(o->mTarget.x * o->mTarget.x + o->mTarget.y * o->mTarget.y + o->mTarget.z * o->mTarget.z);
+        o->SetTargetDist(len);
+    } else {
+        len = sqrtf(o->mTarget.x * o->mTarget.x + o->mTarget.y * o->mTarget.y + o->mTarget.z * o->mTarget.z);
+        if (len > o->GetTargetDist())
+            o->SetTargetDist(len);
+    }
+    o->mTimerB.Restart();
+    float f = o->GetFollowDist();
+    float ia = 1.0f / sqrtf(a2->z * a2->z + (a2->y * a2->y + a2->x * a2->x) + 1e-8f);
+    Vector3_s0105_c8d0 np(o->mPos.x - (a2->x * ia) * f, o->mPos.y - (a2->y * ia) * f, o->mPos.z - (a2->z * ia) * f);
+    o->SetFollow(a4, &np);
+}
+
+// @ 0x0105d180
+void* __fastcall FUN_0105d180(cSummarizerD180* s)
+{
+    s->mBaseVt = g_vtCVS;
+    s->mField0C = 0;
+    s->mClassVt = g_vtD180Class;
+    s->mBaseVt = g_vtD180Base;
+    s->mExtents.x = kDefaultSummarizerExtents.x;
+    s->mExtents.y = kDefaultSummarizerExtents.y;
+    s->mExtents.z = kDefaultSummarizerExtents.z;
+    return s;
+}
+
+// @ 0x0105d1d0
+void* __fastcall FUN_0105d1d0(cSummarizerD1D0* s)
+{
+    s->mBaseVt = g_vtCVS;
+    s->mField0C = 0;
+    s->mClassVt = g_vtD1D0Class;
+    s->mBaseVt = g_vtD180Base;
+    return s;
+}
+
+// @ 0x0105d200
+void __stdcall UpdateWarpMode(cSPGameDataUFO_s0105_c8d0* ufo, const Vector3_s0105_c8d0* dest)
+{
+    cSteerConfig* cfg = SteerConfig();
+
+    if (!cfg->mbGalaxyWarpEnabled) {
+        if (ufo->mWarpState == 0) {
+            ufo->mWarpState = ufo->CanWarp() ? 3 : 1;
+            return;
+        }
+        if (ufo->mMode == 0 && ufo->mWarpSpeed <= 0.0f)
+            ufo->mWarpState = 1;
+        return;
+    }
+
+    cSPPlayerInventory* inv = GetUFOSimulator_s0105_c8d0()->GetPlayerInventory();
+    if (ufo->mMode == 3 && inv->mWarpMode != 1 &&
+        (ufo->mWarpState == 1 || ufo->mWarpState == 4))
+        ufo->mWarpState = 0;
+
+    if (ufo->mWarpState == 4) {
+        float reach = cfg->GetGalaxyWarpMultiplier(4, ufo->mMode) * cfg->mGalaxyMaxPlumpDistance;
+        float ms = (Distance(ufo->mPos, *dest) / reach) * kMsToSeconds;
+        float warpTime = cfg->GetGalaxyWarpTime(4, ufo->mMode, 0.0f);
+        if (ms > warpTime * 2.0f)
+            ufo->mWarpState = 0;
+    }
+
+    if (ufo->mWarpState == 0) {
+        ufo->mWarpState = 1;
+        if (ufo->CanWarp()) {
+            ufo->mWarpDaemon.StartWarp();
+            float dist = Distance(ufo->mPos, *dest);
+            float plump = cfg->mGalaxyMaxPlumpDistance;
+            float m1 = cfg->GetGalaxyWarpMultiplier(1, ufo->mMode) * plump;
+            float m3 = cfg->GetGalaxyWarpMultiplier(3, ufo->mMode) * plump;
+            float travel = GetUFOSimulator_s0105_c8d0()->GetMaxTravelDistance();
+            float warpTime = cfg->GetGalaxyWarpTime(2, ufo->mMode, dist / travel);
+            if ((dist / m3) * kMsToSeconds + warpTime < (dist / m1) * kMsToSeconds) {
+                ufo->mWarpState = 2;
+                ufo->mWarpClock.Restart();
+            }
+        }
+    }
+
+    if (ufo->mWarpState == 2) {
+        if (!ufo->mWarpClock.IsRunning())
+            ufo->mWarpClock.Restart();
+        float elapsed = (float)ufo->mWarpClock.GetElapsedTime() * kMsToSeconds;
+        float dist = Distance(ufo->mPos, *dest);
+        float travel = GetUFOSimulator_s0105_c8d0()->GetMaxTravelDistance();
+        float warpTime = cfg->GetGalaxyWarpTime(2, ufo->mMode, dist / travel);
+        if (elapsed > warpTime) {
+            Vector3_s0105_c8d0 axisTmp;
+            const Vector3_s0105_c8d0* axis = RotateByQuat(&axisTmp, &g_warpAxisKey, &ufo->mMaterial);
+            Vector3_s0105_c8d0 toDest(dest->x - ufo->mPos.x, dest->y - ufo->mPos.y, dest->z - ufo->mPos.z);
+            Vector3_s0105_c8d0 dir = normalized_safe(toDest);
+            if (kWarpFacingThreshold < dir.x * axis->x + dir.y * axis->y + dir.z * axis->z) {
+                ufo->mWarpState = 3;
+                float reach = cfg->GetGalaxyWarpMultiplier(3, ufo->mMode) * cfg->mGalaxyMaxPlumpDistance;
+                float len = Length_s0105_c8d0(ufo->mVel);
+                if (len > kMinWarpExtent) {
+                    float s = reach / len;
+                    ufo->mVel.x = ufo->mVel.x * s;
+                    ufo->mVel.y = ufo->mVel.y * s;
+                    ufo->mVel.z = ufo->mVel.z * s;
+                }
+            }
+        }
+        return;
+    }
+
+    if (ufo->mWarpState == 3) {
+        float reach = cfg->GetGalaxyWarpMultiplier(4, ufo->mMode) * cfg->mGalaxyMaxPlumpDistance;
+        float ms = (Distance(ufo->mPos, *dest) / reach) * kMsToSeconds;
+        float warpTime = cfg->GetGalaxyWarpTime(4, ufo->mMode, 0.0f);
+        if (!(ms < warpTime))
+            return;
+        ufo->mWarpState = 4;
+        float len = Length_s0105_c8d0(ufo->mVel);
+        if (len > kMinWarpExtent) {
+            float s = reach / len;
+            ufo->mVel.x = ufo->mVel.x * s;
+            ufo->mVel.y = ufo->mVel.y * s;
+            ufo->mVel.z = ufo->mVel.z * s;
+        }
+        ufo->mWarpClock.Clear();
+    }
 }
