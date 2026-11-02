@@ -1,4 +1,4 @@
-// src/game/UTFSpore_Win32/XHTMLFrameSet.cpp -- migrated from slice(s) s00996f10 by tools/migrate/rewrite.py
+// src/game/UTFSpore_Win32/XHTMLFrameSet.cpp -- migrated from slice(s) s00995b20, s00996f10 by tools/migrate/rewrite.py
 // Object file: UTFSpore_Win32/XHTMLFrameSet.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -27,20 +27,6 @@ extern "C" int g_listNodeOffset;                        // 0x1440aec
 #pragma intrinsic(_InterlockedExchangeAdd, _InterlockedExchange)
 
 // ---- items of slice s00996f10 begin (TODO(rewrite): local stubs, replace by canonical classes)
-extern "C" void* FUN_009512c0(void);                                    // 0x9512c0
-extern "C" void* FUN_009512d0(int size, int align, const char* name, void* alloc); // 0x9512d0
-extern "C" void  FUN_00f47380(void* p);                                 // operator delete
-extern "C" void  FUN_00993390(void* self);                              // 0x993390
-extern "C" void* FUN_008fe480(void);                                    // XHTML::Resource::GetResourceProvider
-extern "C" void  FUN_00992e60(void* a);                                // 0x992e60 (thiscall, see casts)
-extern "C" void  FUN_00992ea0(void* a);                                // 0x992ea0
-extern "C" void  FUN_00997720(void);                                   // job callback
-extern "C" void* WinXHTML_ctor(void* mem);                             // 0x993c10 thiscall
-extern "C" void  FUN_009968f0(void);                                 // 0x9968f0
-extern "C" int   FUN_00932f30(const wchar_t* s, unsigned seed, int a);   // FNV1_String16
-extern "C" void* FUN_00d01260(void* a, void* b, void* c, void* d); // lower_bound (d = empty compare object by value)
-extern "C" void  FUN_009970e0(void* a, void* b, void* c);               // vector<map pair>::insert
-extern "C" void FUN_00996460(void* p);                                  // 0x996460 deque::clear
 #define VF(o, off, sig) ((sig)(*(void***)(o))[(off) / 4])
 struct DqIter {
     char* cur; char* begin; char* end; char** arr;
@@ -153,7 +139,6 @@ struct FrameMapPair { unsigned hash; void* win; };
 struct FrameMapVM {                      // vector_map<hash, WinXHTML*> part of cXHTMLFrameSet
     bool insert(void* win, const wchar_t* name);
 };
-extern "C" int g_listNodeOffset;                        // 0x1440aec
 struct FrameSetExt {
     bool __thiscall AddFrameEntry(void* win, const wchar_t* name); // 0x997350
 };
@@ -169,13 +154,383 @@ struct FixedWString96 {                 // eastl::fixed_string<wchar_t, 96> on t
     wchar_t mBuffer[96];
 };
 struct WString { wchar_t* mpBegin; wchar_t* mpEnd; wchar_t* mpCapacity; int mAlloc; };
-// ---- items of slice s00996f10 end
-
-// unnamed retail callees and globals that name local stubs (address in the comment)
+struct PtrStack {
+    void** b; void** e; void** c;
+    void __thiscall DoInsertValue(void** pos, void** v);   // 0x630b30
+    void push_back(void* v)
+    {
+        void** p = e;
+        if (p < c) {
+            e = p + 1;
+            if (p) *p = v;
+        } else {
+            DoInsertValue(p, &v);
+        }
+    }
+};
 extern "C" void  FUN_008e4b10(void* a, void* b);                        // 0x8e4b10
 extern "C" void  FUN_008e4f00(void* a, void* b, void* c);               // 0x8e4f00
 extern "C" void  FUN_00579a90(void* str, void* a, void* b, int c, int d, int e); // RangeInitialize
 extern "C" void  FUN_00599bb0(void* str, void* src);                    // string operator+=
+// ---- items of slice s00996f10 end
+
+// unnamed retail callees and globals that name local stubs (address in the comment)
+
+// ---- items of slice s00995b20 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C" void __stdcall FUN_00883de0(int a, int b);
+extern "C" char* __cdecl FUN_0099efa0(const char* first, const char* last, char* out);
+extern "C" void* __cdecl FUN_00f473a0(uint32_t n, const char* name, int a, int b, const char* file, int line);
+class JobQueue {
+public:
+    uint32_t f00;   // @+0x00
+    uint32_t f04;   // @+0x04
+    uint32_t f08;   // @+0x08
+    uint32_t f0c;   // @+0x0c
+    uint32_t f10;   // @+0x10
+    uint32_t f14;   // @+0x14
+    uint32_t f18;   // @+0x18
+    uint32_t f1c;   // @+0x1c
+    uint32_t f20;   // @+0x20
+    uint32_t f24;   // @+0x24
+    void FUN_00996640();
+    void FUN_009966b0(uint32_t n);
+    void FUN_009968f0(void* e);
+    void Zero() { f00=0; f04=0; f08=0; f0c=0; f10=0; f14=0; f18=0; f1c=0; f20=0; f24=0; }
+};
+#define EASTL_ALLOC_FILE "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h"
+#define EASTL_NEW(n) FUN_00f473a0((n), "EASTL", 0, 0, EASTL_ALLOC_FILE, 0xd1)
+class cXHTMLFrameSet_s0099_5b20 {
+public:
+    void*    mVftable;              // @0x00 (AddRef vtable)
+    void*    mVftable2;             // @0x04
+    uint32_t mField08;              // @0x08
+    void*    mField0c;              // @0x0c
+    uint32_t mField10;              // @0x10
+    uint32_t mField14;              // @0x14
+    uint32_t mField18;              // @0x18
+    uint32_t mField1c;              // @0x1c
+    uint8_t  mField20;              // @0x20
+    uint8_t  mPad21[3];
+    JobQueue mJobQueue;             // @0x24 (0x28 bytes)
+    uint32_t mField4c;              // @0x4c
+    uint32_t mField50;              // @0x50
+    uint32_t mField54;              // @0x54
+    uint32_t mField58;              // @0x58
+    uint32_t mField5c;              // @0x5c
+    uint32_t mField60;              // @0x60
+
+    cXHTMLFrameSet_s0099_5b20(void* frameFactory);
+    void FUN_00996280(uint32_t a, uint32_t b, uint32_t c, uint32_t d);
+    bool FUN_00996410(void* a, void* b);
+    ~cXHTMLFrameSet_s0099_5b20();
+    void* FUN_00996a80(uint8_t flags);
+    void FUN_009968f0(uint32_t* e);
+    void FUN_00996bb0(uint32_t* a, uint32_t* b);
+    uint32_t GetFrame(const uint16_t* str);  // 0x00996d40 (cXHTMLFrameSet::GetFrame)
+};
+#define EA_DELETE_ARRAY(p) FUN_00f47380(p)
+struct XDomElement;
+class WinXHTML_ {
+public:
+    void FUN_00992e60(uint32_t v);
+    void FUN_00992ea0(uint32_t v);
+    void FUN_00995b20(XDomElement* fc, const uint16_t* value);
+    void FUN_00995ea0(XDomElement* fc, void* out);
+    bool FUN_009960b0(float x, float y, uint32_t button, uint32_t flags);
+};
+#define VF_s0099_5b20(p, i) (*(void**)((char*)(*(void**)(p)) + (i) * 4))
+template <class T> inline const T& eastl_max(const T& a, const T& b) { return a > b ? a : b; }
+struct JobIter {
+    int*  mpCurrent;            // @0x00
+    int*  mpBegin;              // @0x04
+    int*  mpEnd;                // @0x08
+    int** mpCurrentArrayPtr;    // @0x0c
+    JobIter& operator+=(int n);
+};
+extern "C" uint32_t  __cdecl FNV1_String16(const uint16_t* s, uint32_t base, int n);
+extern "C" uint32_t* __cdecl FUN_00d01260_s0099_5b20(uint32_t* begin, uint32_t* end, uint32_t* key, uint8_t compare);
+struct DqIt {
+    uint32_t*  mpCurrent;            // @0x00
+    uint32_t*  mpBegin;              // @0x04
+    uint32_t*  mpEnd;                // @0x08
+    uint32_t** mpCurrentArrayPtr;    // @0x0c
+};
+class Vec8 {
+public:
+    uint32_t* mpBegin;      // @0x00
+    uint32_t* mpEnd;        // @0x04
+    uint32_t* mpCapacity;   // @0x08
+    void insert(uint32_t* pos, uint32_t* value);
+};
+struct XDomElement {
+    void*         mpVtbl;        // @0x00 (Node vtable)
+    XDomElement*  mpNext;        // @0x04 (intrusive_list_node.mpNext)
+    XDomElement*  mpPrev;        // @0x08
+    uint32_t      mnType;        // @0x0c
+    void*         mpDocument;    // @0x10
+    XDomElement*  mpParent;      // @0x14
+    XDomElement*  mpChildFirst;  // @0x18 (child-list anchor .mpNext)
+    XDomElement*  mpChildLast;   // @0x1c
+    uint8_t       mPad20[0x08];  // @0x20
+    uint32_t      mElementType;  // @0x28
+    uint8_t       mPad2c[0x18];  // @0x2c
+    void*         mpFormObj;     // @0x44 (object whose vtable[3] yields IFormControlMgr)
+};
+// ---- items of slice s00995b20 end
+
+// @ 0x00996280
+void __thiscall cXHTMLFrameSet_s0099_5b20::FUN_00996280(uint32_t a, uint32_t b, uint32_t c, uint32_t d)
+{
+    mField54 = a;
+    mField58 = b;
+    mField5c = c;
+    mField60 = d;
+}
+
+// @ 0x009962a0
+DqIt __cdecl FUN_009962a0(DqIt first, DqIt last, DqIt result)
+{
+    while (first.mpCurrent != last.mpCurrent) {
+        *(uint32_t*)(result.mpCurrent + 0) = *(uint32_t*)(first.mpCurrent + 0);
+        *(uint32_t*)(result.mpCurrent + 1) = *(uint32_t*)(first.mpCurrent + 1);
+        *(uint32_t*)(result.mpCurrent + 2) = *(uint32_t*)(first.mpCurrent + 2);
+        result.mpCurrent += 3;
+        if (result.mpCurrent == result.mpEnd) {
+            result.mpCurrentArrayPtr += 1;
+            result.mpBegin = *result.mpCurrentArrayPtr;
+            result.mpEnd = result.mpBegin + 0x30;
+            result.mpCurrent = result.mpBegin;
+        }
+        first.mpCurrent += 3;
+        if (first.mpCurrent == first.mpEnd) {
+            first.mpCurrentArrayPtr += 1;
+            first.mpBegin = *first.mpCurrentArrayPtr;
+            first.mpEnd = first.mpBegin + 0x30;
+            first.mpCurrent = first.mpBegin;
+        }
+    }
+    return result;
+}
+
+// @ 0x00996360
+DqIt __cdecl FUN_00996360(DqIt first, DqIt last, DqIt result)
+{
+    while (first.mpCurrent != last.mpCurrent) {
+        if (first.mpCurrent == first.mpBegin) {
+            first.mpCurrentArrayPtr -= 1;
+            first.mpBegin = *first.mpCurrentArrayPtr;
+            first.mpCurrent = first.mpBegin + 0x30;
+        }
+        if (result.mpCurrent == result.mpBegin) {
+            result.mpCurrentArrayPtr -= 1;
+            result.mpBegin = *result.mpCurrentArrayPtr;
+            result.mpEnd = result.mpBegin + 0x30;
+            result.mpCurrent = result.mpBegin + 0x30;
+        }
+        first.mpCurrent -= 3;
+        result.mpCurrent -= 3;
+        *(uint32_t*)(result.mpCurrent + 0) = *(uint32_t*)(first.mpCurrent + 0);
+        *(uint32_t*)(result.mpCurrent + 1) = *(uint32_t*)(first.mpCurrent + 1);
+        *(uint32_t*)(result.mpCurrent + 2) = *(uint32_t*)(first.mpCurrent + 2);
+    }
+    return result;
+}
+
+// @ 0x00996410
+bool __thiscall cXHTMLFrameSet_s0099_5b20::FUN_00996410(void* a, void* b)
+{
+    if (*(int*)((char*)b + 8) == 0x51a1a2d && a != 0) {
+        void* obj = ((void*(__thiscall*)(void*, int))VF_s0099_5b20(a, 0xc / 4))(a, 0x4d044f3);
+        if (obj != 0) {
+            ((WinXHTML_*)obj)->FUN_00992e60(mField54);
+            ((WinXHTML_*)obj)->FUN_00992ea0(mField58);
+        }
+    }
+    return false;
+}
+
+// @ 0x009964c0
+JobIter& __thiscall JobIter::operator+=(int n)
+{
+    int idx = (int)((char*)mpCurrent - (char*)mpBegin) / 12;
+    unsigned u = (unsigned)(idx + n);
+    if (u < 0x10) {
+        mpCurrent = (int*)((char*)mpCurrent + n * 12);
+        return *this;
+    }
+    int blk = (int)(u + 0x1000000) / 16 - 0x100000;
+    int** newPtr = mpCurrentArrayPtr + blk;
+    mpCurrentArrayPtr = newPtr;
+    mpBegin = *newPtr;
+    mpEnd = (int*)((char*)mpBegin + 0xc0);
+    mpCurrent = (int*)((char*)mpBegin + (int)(u + (unsigned)(blk * -16)) * 12);
+    return *this;
+}
+
+// @ 0x009966b0
+void __thiscall JobQueue::FUN_009966b0(uint32_t n)
+{
+    uint32_t nCount = (n >> 4) + 1;
+    uint32_t cnt = eastl_max(nCount + 2, (uint32_t)8);
+    f04 = cnt;
+    int* pool = (int*)EASTL_NEW(cnt * 4);
+    int* p0 = pool + ((cnt - nCount) >> 1);
+    int* p1 = p0 + nCount;
+    f00 = (uint32_t)pool;
+    for (int* p = p0; p < p1; p++)
+        *p = (int)EASTL_NEW(0xc0);
+    f14 = (uint32_t)p0;
+    uint32_t t = *(uint32_t*)p0;
+    f0c = t;
+    f10 = t + 0xc0;
+    f08 = f0c;
+    f24 = (uint32_t)(p1 - 1);
+    uint32_t t2 = *(uint32_t*)(p1 - 1);
+    f1c = t2;
+    f20 = t2 + 0xc0;
+    f18 = f1c + (n & 0xf) * 0xc;
+}
+
+// @ 0x009968a0
+__thiscall cXHTMLFrameSet_s0099_5b20::~cXHTMLFrameSet_s0099_5b20()
+{
+    *(uint32_t*)((char*)this + 0x00) = 0x14467bc;
+    *(uint32_t*)((char*)this + 0x04) = 0x14467ac;
+    ((JobQueue*)((char*)this + 0x24))->FUN_00996640();
+    if (mField0c != 0)
+        EA_DELETE_ARRAY(mField0c);
+    *(uint32_t*)((char*)this + 0x04) = 0x13ec458;
+    *(uint32_t*)((char*)this + 0x00) = 0x13eb938;
+}
+
+// @ 0x009968f0
+void __thiscall JobQueue::FUN_009968f0(void* e)
+{
+    uint32_t v0 = *(uint32_t*)((char*)e + 0);
+    uint32_t v1 = *(uint32_t*)((char*)e + 4);
+    uint32_t v2 = *(uint32_t*)((char*)e + 8);
+    if (((int32_t)(f24 - f00) >> 2) + 1 >= (int32_t)f04)
+        FUN_00883de0(1, 1);
+    uint32_t blk = (uint32_t)EASTL_NEW(0xc0);
+    *(uint32_t*)(f24 + 4) = blk;
+    uint32_t dst = f18;
+    if (dst != 0) {
+        *(uint32_t*)(dst + 0) = v0;
+        *(uint32_t*)(dst + 4) = v1;
+        *(uint32_t*)(dst + 8) = v2;
+    }
+    uint32_t old = f24;
+    f24 = old + 4;
+    uint32_t nb = *(uint32_t*)(old + 4);
+    f1c = nb;
+    f20 = f1c + 0xc0;
+    f18 = f1c;
+}
+
+// @ 0x00996a80
+void* __thiscall cXHTMLFrameSet_s0099_5b20::FUN_00996a80(uint8_t flags)
+{
+    *(uint32_t*)((char*)this + 0x00) = 0x14467bc;
+    *(uint32_t*)((char*)this + 0x04) = 0x14467ac;
+    ((JobQueue*)((char*)this + 0x24))->FUN_00996640();
+    if (mField0c != 0)
+        EA_DELETE_ARRAY(mField0c);
+    *(uint32_t*)((char*)this + 0x04) = 0x13ec458;
+    *(uint32_t*)((char*)this + 0x00) = 0x13eb938;
+    if ((flags & 1) != 0)
+        EA_DELETE_ARRAY(this);
+    return this;
+}
+
+// @ 0x00996bb0
+void __thiscall Vec8::insert(uint32_t* pos, uint32_t* value)
+{
+    uint32_t* e = mpEnd;
+    if (e != mpCapacity) {
+        uint32_t* v = value;
+        if (v >= pos && v < e)
+            v = v + 2;
+        if (e != 0) {
+            e[0] = e[-2];
+            e[1] = e[-1];
+        }
+        uint32_t* cur = mpEnd;
+        uint32_t* dst = mpEnd;
+        while ((cur = cur - 2) != pos) {
+            dst[-2] = cur[-2];
+            dst[-1] = cur[-1];
+            dst -= 2;
+        }
+        pos[0] = v[0];
+        pos[1] = v[1];
+        mpEnd += 2;
+        return;
+    }
+    int count = (int)((char*)e - (char*)mpBegin) >> 3;
+    uint32_t* nb;
+    int newCap;
+    if (count == 0) {
+        newCap = 1;
+    } else {
+        newCap = count * 2;
+    }
+    if (newCap != 0)
+        nb = (uint32_t*)EASTL_NEW(newCap * 8);
+    else
+        nb = 0;
+    uint32_t* p1 = (uint32_t*)FUN_0099efa0((const char*)mpBegin, (const char*)pos, (char*)nb);
+    if (p1 != 0) {
+        p1[0] = ((uint32_t*)value)[0];
+        p1[1] = ((uint32_t*)value)[1];
+    }
+    uint32_t* p2 = (uint32_t*)FUN_0099efa0((const char*)pos, (const char*)mpEnd, (char*)(p1 + 2));
+    if (mpBegin != 0)
+        EA_DELETE_ARRAY(mpBegin);
+    mpBegin = nb;
+    mpEnd = p2;
+    mpCapacity = nb + newCap * 2;
+}
+
+// @ 0x00996cc0
+__thiscall cXHTMLFrameSet_s0099_5b20::cXHTMLFrameSet_s0099_5b20(void* frameFactory)
+{
+    *(void* volatile*)((char*)this + 4) = (void*)0x13ec458;
+    mField08  = 0;
+    mVftable  = (void*)0x14467bc;
+    mVftable2 = (void*)0x14467ac;
+    mField0c  = 0;
+    mField10  = 0;
+    mField14  = 0;
+    JobQueue* q = &mJobQueue;
+    q->Zero();
+    mJobQueue.FUN_009966b0(0);
+    mField50 = (uint32_t)frameFactory;
+    mField5c = 0x1003;
+    mField60 = 0x1003;
+    mField54 = 0x1002;
+    mField58 = 0x1006;
+}
+
+// @ 0x00996d40
+uint32_t __thiscall cXHTMLFrameSet_s0099_5b20::GetFrame(const uint16_t* str)
+{
+    uint32_t hash = FNV1_String16(str, 0x811c9dc5, 0);
+    uint32_t* end = (uint32_t*)mField10;
+    uint32_t key = hash;
+    uint32_t* it = FUN_00d01260_s0099_5b20((uint32_t*)mField0c, end, &key, mField20);
+    if (it != end && !(key < *it) && it != it + 2)
+        return it[1];
+    return 0;
+}
+
+// @ 0x00996da0
+void __cdecl FUN_00996da0(const uint16_t* name, const uint16_t* value, void* params)
+{
+    (void)name;
+    (void)value;
+    (void)params;
+    // incomplete
+}
 
 // @ 0x00996f10
 DqIter* JobDeque::erase(DqIter* out, DqIter pos)
@@ -482,4 +837,28 @@ bool EA::UTFWinExtras::cXHTMLFrameSet::HandleFormSubmit(EA::UTFWin::IWindow * p,
     if ((fs.mpCapacity - fs.mpBegin) > 1 && fs.mpBegin && fs.mpBegin != fs.mpPoolBegin)
         FUN_00f47380(fs.mpBegin);
     return result;
+}
+
+// @ 0x009979f0
+bool FrameSet::FindFrames(void* root, int id)
+{
+    char* self = (char*)this;
+    if (root) {
+        PtrStack st;
+        st.b = 0; st.e = 0; st.c = 0;
+        st.DoInsertValue(0, &root);
+        while (st.b != st.e) {
+            void* w = *--st.e;
+            if (VF(w, 0x1c, int(__thiscall*)(void*))(w) == id)
+                w = ((FrameSet*)self)->CreateFrame(w);
+            int end;
+            VF(w, 0xcc, void(__thiscall*)(void*, void**))(w, &root);
+            VF(w, 0xd0, void(__thiscall*)(void*, int*))(w, &end);
+            for (; (int)root != end; root = *(void**)root)
+                st.push_back((void*)((int)root + g_listNodeOffset));
+        }
+        if (st.b && ((int*)st.b)[-1])
+            FUN_00f47380(st.b);
+    }
+    return *(int*)(self + 0xc) != *(int*)(self + 0x10);
 }

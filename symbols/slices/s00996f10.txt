@@ -6,6 +6,7 @@
 009973e0 ?CreateFrame@FrameSet@@QAEPAXPAX@Z  # FrameSet::CreateFrame migrated from s00996f10 (verbatim, slice spelling)
 00997730 ?HandleLocationChange@FrameSet@@QAE_NPAHPAXPA_WH@Z  # FrameSet::HandleLocationChange migrated from s00996f10 (verbatim, slice spelling)
 009978b0 ?HandleFormSubmit@cXHTMLFrameSet@UTFWinExtras@EA@@QAE_NPAVIWindow@UTFWin@3@PAVForm@DOM@XHTML@3@@Z  # EA::UTFWinExtras::cXHTMLFrameSet::HandleFormSubmit migrated from s00996f10
+009979f0 ?FindFrames@FrameSet@@QAE_NPAXH@Z  # FrameSet::FindFrames migrated from s00996f10 (verbatim, slice spelling)
 00997b10 ?push_back@VecPB@@QAEXPAI@Z  # VecPB::push_back migrated from s00996f10 (verbatim, slice spelling)
 00997b60 ?ctor@Obj33@@QAEPAU1@XZ  # Obj33::ctor migrated from s00996f10 (verbatim, slice spelling)
 00997ba0 ?clear@Obj33@@QAEXXZ  # Obj33::clear migrated from s00996f10 (verbatim, slice spelling)

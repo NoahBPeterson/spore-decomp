@@ -1,2 +1,7 @@
 # source  symbol  va  flags
+../src/game/UTFSpore_Win32/XHTMLFrameSet.cpp  ?FUN_00996280@cXHTMLFrameSet_s0099_5b20@@QAEXIIII@Z  00996280  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/XHTMLFrameSet.cpp  ?FUN_00996410@cXHTMLFrameSet_s0099_5b20@@QAE_NPAX0@Z  00996410  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/XHTMLFrameSet.cpp  ??YJobIter@@QAEAAU0@H@Z  009964c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/XHTMLFrameSet.cpp  ??1cXHTMLFrameSet_s0099_5b20@@QAE@XZ  009968a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/XHTMLFrameSet.cpp  ?FUN_00996a80@cXHTMLFrameSet_s0099_5b20@@QAEPAXE@Z  00996a80  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/UTFSpore_Win32/XHTMLFrameSet.cpp  ?LoadRequestCallback@cXHTMLFrameSet@@QAEXPAH@Z  009972a0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include

@@ -1,1 +1,2 @@
 # va  diff-bytes  reason   (incomplete / approximate)
+00996da0  360  incomplete: 360-byte cXHTMLFrameSet::FormParamCallback(wchar_t const*,wchar_t const*,void*) (1 byte of 360 emitted); the URL-encoding / name=value accumulation is not reconstructed — it needs the eastl basic_string globals 0x014467d8 / 0x014467dc plus ConvertToString8 and Internet::URL::ConvertPathToEncodedForm; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast; equiv FAIL (5/51 valid inputs mismatched, memory pool write)
