@@ -1,3 +1,6 @@
+00763cb0 ?FUN_763cb0@@YAIPAUEmbeddedState@@PAURasterThing@@@Z  # FUN_763cb0 migrated from s00763cb0 (verbatim, slice spelling)
+00763df0 ?FUN_763df0@@YAHPAX0@Z  # FUN_763df0 migrated from s00763cb0 (verbatim, slice spelling)
+007640c0 ?FUN_7640c0@@YIPAXPAX@Z  # FUN_7640c0 migrated from s00763cb0 (verbatim, slice spelling)
 007641c0 ?Init@cGraphicsResourceFactory@SP@@UAE_NXZ  # SP::cGraphicsResourceFactory::Init migrated from s00763cb0
 00764220 ??0Arena98@@QAE@XZ  # Arena98::Arena98 migrated from s00763cb0 (verbatim, slice spelling)
 007642c0 ??1D7642c0@@QAE@XZ  # D7642c0::~D7642c0 migrated from s00763cb0 (verbatim, slice spelling)

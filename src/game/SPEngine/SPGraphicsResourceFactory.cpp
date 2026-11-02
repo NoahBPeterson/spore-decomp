@@ -1,4 +1,4 @@
-// src/game/SPEngine/SPGraphicsResourceFactory.cpp -- migrated from slice(s) s00769f20, s00769310, s007689a0, s00767ee0, s00766fa0, s00765f80, s00764df0, s00763cb0, s00762d70, s00682f40 by tools/migrate/rewrite.py
+// src/game/SPEngine/SPGraphicsResourceFactory.cpp -- migrated from slice(s) s00761dc0, s00769f20, s00769310, s007689a0, s00767ee0, s00766fa0, s00765f80, s00764df0, s00763cb0, s00762d70, s00682f40 by tools/migrate/rewrite.py
 // Object file: SPEngine/SPGraphicsResourceFactory.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -15,6 +15,8 @@
 #include "rw/graphics/VertexBuffer.h"
 #include "SP/cJob.h"
 #include "rw/graphics/EmbeddedState.h"
+#include <xmmintrin.h>
+#include "SP/cJobLock.h"
 
 // ---- items of slice s00682f40 begin (TODO(rewrite): local stubs, replace by canonical classes)
 struct RefCounted {
@@ -28,10 +30,35 @@ struct RefCounted {
 // ---- items of slice s00762d70 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern "C" void  __cdecl EA_Delete(void* p);                                                  // 0x0f47380
 extern "C" bool  __cdecl EA_IO_ReadInt32(void* stream, void* dst, int count, int flags);      // 0x093a780
+extern "C" void* __cdecl GetGlobal67dd60();                                                   // 0x067dd60
 extern "C" void* __cdecl GetGlobal67de80();                                                   // 0x067de80
+extern "C" void* __cdecl MaterialManager();                                                   // 0x067dd70
 extern "C" void* __cdecl CreateRasterFn(int w, int h, int a, int b, int c);                   // 0x0761420
 extern unsigned char g_flags1630180;   // 0x01630180
+extern void* g_sAppProperties;         // 0x015fd918
+extern void* g_arena16303f0;           // 0x016303f0
+extern void* g_arena16303f4;           // 0x016303f4
 extern int g_word160077c;              // 0x0160077c
+extern char g_140e00c[];               // 0x0140e00c
+extern "C" void* __fastcall F_68c140(const void* key8);                       // 0x0068c140 AtomicRead64
+extern "C" void  __fastcall F_68c1b0(const void* key8, unsigned __int64 val); // 0x0068c1b0 AtomicExchange64
+extern "C" void  __cdecl F_87cde0(void* stream);                                  // 0x0087cde0 stream ctor
+extern "C" bool  __cdecl F_87ce00(void* stream, const char* name);                // 0x0087ce00 open
+extern "C" bool  __cdecl F_87d0b0(void* stream, void* a, void* b);                // 0x0087d0b0 read header
+extern "C" void* __cdecl F_87ced0(void* stream, int flags);                       // 0x0087ced0 get record
+extern "C" bool  __cdecl F_87cf00(void* stream, void* rec, void* dst, int size);  // 0x0087cf00 decompress
+extern "C" void  __cdecl F_87cef0(void* stream, void* rec);                       // 0x0087cef0 release record
+extern "C" void  __cdecl F_87ce90(void* stream);                                  // 0x0087ce90
+extern "C" void  __cdecl F_87d070(void* stream);                                  // 0x0087d070 dtor/closer
+extern "C" void* __cdecl F_11e2fe0(void* scope);                       // 0x011e2fe0 scope ctor
+extern "C" bool  __cdecl F_11e3350(void* stream, void* out, int flags);// 0x011e3350 begin
+extern "C" bool  __cdecl F_11e34d0(void* scope);                       // 0x011e34d0 advance
+extern "C" bool  __cdecl F_11e3c50(void* scope, void* cb);             // 0x011e3c50 set callback
+extern "C" bool  __cdecl F_11e3940(void* scope);                       // 0x011e3940 advance
+extern "C" void  __cdecl F_11e2690(void* scope);                       // 0x011e2690 scope dtor
+extern "C" void* __cdecl F_11e0744(void* dst, void* src, int n);       // 0x011e0744 memcpy-ish
+extern void* g_dev16f89d0;                                            // 0x016f89d0 device singleton
+extern "C" void* __cdecl EA_New_s0076_2d70(uint32_t size, const char* file, int a, int b, int c, int d); // 0x0f473a0
 struct RefVec {
     void* b; void* e; void* c;
     RefVec() { b = 0; e = 0; c = 0; }
@@ -39,7 +66,11 @@ struct RefVec {
     void destroy();   // 0x0041eb80
 };
 struct Raster { void D3D9GetStreamedMipLevelSize(unsigned char*, int); }; // 0x011f0270
+struct Arena_s0076_2d70 { unsigned char f(void* addr, unsigned n); };           // vtbl +0x38 call
 struct IObj { virtual void s0(); virtual void s1(); virtual void s2(int); };
+struct Color3 { int r, g, b; };
+struct KeyDef { int a, b; int key; };
+extern Color3 g_colors[];              // 0x016304bc
 namespace SP {
 struct cRasterFromGimexLoadState_s0076_2d70 {
     uint32_t mFormat; uint32_t mWidth; uint32_t mHeight;
@@ -47,6 +78,11 @@ struct cRasterFromGimexLoadState_s0076_2d70 {
 };
 }
 using SP::cRasterFromGimexLoadState_s0076_2d70;
+struct Map762fa0 {
+    int field0; int field4; int field8; int fieldC;
+    void* Insert(void* out, const void* key);   // 0x00762fa0
+    void  Append(const void* key);              // 0x00763130
+};
 struct IUnknown32 {
 virtual void u0();
 virtual void u1();
@@ -72,14 +108,31 @@ struct CEditorRes : cResourceBase_s0076_2d70 {
 };
 struct EhItem { void* p; int x; ~EhItem(); };
 struct EhHolder { char pad[0x44]; EhItem a[4]; EhItem b[4]; ~EhHolder(); };
+struct GimexRecord { char pad[0x10]; int mWidth; int mHeight; int mBpp; };
+struct StreamObj { char pad[0x20]; };
 struct OutRaster { char pad[0x18]; void* mData; };
+struct RasterFactory {
+    bool LoadAndCreateRaster(cRasterFromGimexLoadState_s0076_2d70* state, int a, int b, void* out3);
+};
 struct V3 { int x, y, z; };
+struct UniqVec {
+    char pad[0x134];
+    int mCount;
+    int mArr[16];
+    void AddUnique(int v);
+};
 extern "C" void  __cdecl RemoveRegistrationCallback(int id, void* cb);                        // 0x06ad070
 // ---- items of slice s00762d70 end
 
 // ---- items of slice s00763cb0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 __declspec(noinline) bool __cdecl FUN_763fd0(void* arena) { (void)arena; return false; }       // 00763fd0
+bool __cdecl FUN_763fd0(void* arena);           // 0x00763fd0
+extern "C" int   __cdecl FUN_011f06c0(void* a, void* b);               // 0x011f06c0
 extern float g_one_01485720;    // 0x01485720
+extern void*    g_texStageRaster0;                   // 0x016303f8
+extern void*    g_texStageRaster1;                   // 0x016303fc
+extern uint32_t g_texStageCreate[3];                 // 0x016304d4 / d8 / dc
+extern uint32_t g_texStageRasterType[3];             // 0x016304c8 / cc / d0
 #pragma pack(push, 1)
 #pragma pack(pop)
 struct RasterCtx { char Create(void* a, void* b, void* c); };
@@ -287,7 +340,6 @@ void Done();
 int __cdecl ArenaStart(void* arena, ArenaIter* it, void* owner, int* flag);   // 0x011e3c70
 unsigned int __cdecl FixupNext(ArenaIter*);     // 0x011e39e0 rw::core::arena::Arena::FixupNext
 unsigned int __cdecl DestructNext(ArenaIter*);  // 0x011e2330 rw::core::arena::Arena::DestructNext
-bool __cdecl FUN_763fd0(void* arena);           // 0x00763fd0
 namespace SP {
 class cGraphicsResourceFactory_s0076_3cb0 {
 public:
@@ -297,6 +349,18 @@ public:
     bool BuildArena(Stm7* s, Registry* reg, const V3u* pv); // 00764ce0 0x00764ce0
 };
 }
+struct EmbeddedState {
+    char     pad0[0x10];
+    uint32_t dirtyBits;                              // +0x10
+    unsigned int GetTextureStageState(int stage);    // 0x011ee870
+    void         SetRaster(int stage, void* raster); // 0x011ee6b0
+};
+struct RasterThing {
+    void FUN_00763c60(unsigned state);               // 0x00763c60
+};
+struct Managed { void* value; uint8_t flags; };      // +0 flags bit0
+void* __cdecl GetRasterMgr();                        // 0x0067dd60
+uint32_t __cdecl FUN_011ed690(void* hard, void* raster);   // 0x011ed690
 extern "C" void* __cdecl AddRegistrationCallback(int id, void* cb);   // 0x06adfe0
 extern "C" void* __cdecl ArenaTypeRegGetType(int t);                   // 0x011e22c0
 extern "C" void* __cdecl GetManager();                                 // 0x067dcd0
@@ -331,8 +395,14 @@ struct D765ac0 {
     Vec v78;                 // +0x78
     ~D765ac0();
 };
-struct Resource_s0076_4df0 : IUnknown32 {
-    AtomicInt mRefCount; int k0, k1, k2;
+struct IUnknown32_s0076_4df0 {
+    virtual void u0();
+    virtual void u1();
+    virtual void u2();
+};
+struct AtomicInt_s0076_4df0 { int v; int operator=(int x) { return _InterlockedExchange((volatile long*)&v, x); } };
+struct Resource_s0076_4df0 : IUnknown32_s0076_4df0 {
+    AtomicInt_s0076_4df0 mRefCount; int k0, k1, k2;
     Resource_s0076_4df0() { mRefCount = 0; k0 = 0; k1 = 0; k2 = 0; }
 };
 struct cResourceBase_s0076_4df0 : Resource_s0076_4df0 { int* cb; cResourceBase_s0076_4df0() { cb = 0; } };
@@ -372,7 +442,7 @@ namespace SP {
 class cGraphicsResourceFactory_s0076_4df0 {
 public:
     bool CreateRasterFromArena(CreateRasterIn* in, void* z, CreateRasterOut* out);   // 00764df0 0x00764df0
-    bool Fn7655f0(void* a, void* b, void* c);                                        // 007655f0
+    bool Fn7655f0(void* a, void* b, void* c);                                        // 007655f0 0x007655f0
 };
 }
 struct ResMgr { virtual void v0(); virtual void v1(); virtual void v2();
@@ -559,6 +629,60 @@ struct AsyncReqC {
     ReqState st;                // +0x2c
     bool Start(JobRefL* out);
 };
+struct Rec7c_s0076_4df0 {  // 0x00422fd0 thiscall, ret 4
+    char raw[0x7c];
+    Rec7c_s0076_4df0(const Rec7c_s0076_4df0& o);
+    void Assign(const Rec7c_s0076_4df0& o);
+};
+void __cdecl FUN_764700(void*);
+void __cdecl FUN_764710(void*);
+struct AsyncReqA {
+    char pad0[0x10];
+    IKeyObj* obj;               // +0x10
+    void* f14;                  // +0x14
+    uint32_t id18;              // +0x18
+    char pad1c[0x10];
+    uint32_t f2c;               // +0x2c
+    char pad30[0x14];
+    void* f44;                  // +0x44
+    char pad48[0xb4];
+    uint32_t state;             // +0xfc
+    bool Start(JobRefL* out);
+};
+namespace EA {
+struct AtomicInt_s0076_4df0 { long mValue; long operator++(int) { volatile long* r = &mValue; return _InterlockedExchangeAdd(r, 1); } };
+}
+namespace EA {
+class RefCountTemplate_s0076_4df0 { public:
+    RefCountTemplate_s0076_4df0() { volatile long* r = &mnRefCount.mValue; _InterlockedExchange(r, 0); }
+    virtual ~RefCountTemplate_s0076_4df0() {}
+    int AddRef() { return mnRefCount++ + 1; }
+    int Release();
+    AtomicInt_s0076_4df0 mnRefCount;               // +4
+};
+}
+namespace EA {
+template<class T> struct AutoRefCountX {
+    T* mpObject;
+    AutoRefCountX() : mpObject(0) {}
+    AutoRefCountX(T* p) : mpObject(p) { if (mpObject) mpObject->AddRef(); }
+    ~AutoRefCountX() { if (mpObject) mpObject->Release(); }
+};
+}
+namespace EA {
+namespace ResourceMan {
+class Factory_s0076_4df0 : public EA::RefCountTemplate_s0076_4df0 { public:};
+}
+}
+struct cJobLock_s0076_4df0 : EA::RefCountTemplate_s0076_4df0 {          // size 0x40
+    char pad8[0x38];
+    cJobLock_s0076_4df0();                                   // 0x0068eff0
+};
+void* operator new(size_t, const char*, int, int, int, int);
+struct GrfCtor : EA::ResourceMan::Factory_s0076_4df0 {
+    EA::AutoRefCountX<cJobLock_s0076_4df0> mPrestreamMemoryBufferLock;   // +8
+    GrfCtor();
+};
 // ---- items of slice s00764df0 end
 
 // ---- items of slice s00765f80 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -614,6 +738,7 @@ virtual void eB();
     IRef* m1c;                // +0x1c
     void* Delete(unsigned flags);   // 0x00765f80 (scalar deleting destructor)
 };
+IResEd::~IResEd() { if (m1c) m1c->Release(); }
 struct BaseP {
 virtual void p0();
 virtual void p1();
@@ -895,8 +1020,46 @@ virtual void g9();
 bool __stdcall CreateByType(void** out, uint32_t type, int sub);  // 0x007666a0 (stays in the slice: not this object's)
 
 // ---- items of slice s00766fa0 begin (TODO(rewrite): local stubs, replace by canonical classes)
-extern "C" void  __cdecl FUN_00763f50(void* a, void* b, void* c);
 bool __stdcall FUN_00764320(void* a, void* b, void* c);
+struct PaintHolder {
+    char pad[0x20];
+    bool FUN_00767170(void* a, void* b, void* c);
+};
+extern char g_file[];
+extern "C" bool __cdecl ReadValue(void* stream, void* dst, int n);                     // 0x93a6c0
+extern "C" bool __cdecl WriteValue(void* stream, const void* src, int n);              // 0x93a890
+extern "C" bool __cdecl ReadTripletG(void* stream, void* dst, int n);                  // 0x692740
+extern "C" void* __cdecl Alloc6(uint32_t size, const char* name, int a, int b, const char* file, int line); // 0xf473a0
+extern "C" void  __cdecl Dealloc(void* p);                                             // 0xf47380
+extern "C" void  __cdecl FUN_005965b0(void* out);
+extern "C" void  __cdecl FUN_00764ff0(void* a, void* b, void* c, void* d);
+extern "C" void  __cdecl FUN_00757fb0(void* a, void* b, void* c);
+extern "C" void  __cdecl FUN_007664b0(void* a, void* b, void* c);
+extern "C" void* __cdecl FUN_00765230(void* a, void* b, void* c, void* d);
+extern "C" void* __cdecl FUN_00757ee0(void* a, void* b, void* c);
+extern "C" void* __cdecl FUN_00757f70(void* a, void* b, void* c);
+extern "C" void  __cdecl FUN_00763f50(void* a, void* b, void* c);
+extern "C" void  __cdecl FUN_0068f9b0(void* p);
+extern "C" void  __cdecl FUN_006909b0(void* p);
+extern "C" void* __cdecl FUN_0067dd60(void);                                           // 0x67dd60
+extern "C" bool  __cdecl FUN_0071f8f0(void* stream, void* out);
+extern "C" int   __cdecl FUN_0071ddc0(void* obj, int a, int b, int c, int d);
+extern "C" void  __cdecl Reserve765a10(void* vec, uint32_t n);                         // 0x765a10
+extern "C" void  __cdecl VPtrPush(void* vec, const void* v);                           // 0x766910
+extern "C" void* __cdecl Fake78050(int v);                                             // 0x778050 table lookup
+extern "C" void* __cdecl ResolveColorSlot(void* a, void* b);                           // 0x7633a0
+extern "C" void* __cdecl FUN_007640c0(void* p);      // 0x7640c0
+int   __fastcall JobRelease(void* self, int);                    // 0x690120
+void  __fastcall JobInit(void* self, int, void* arg);            // 0x68f9b0
+void  __fastcall JobAddDep(void* self, int, void* dep);          // 0x691380
+void  __fastcall JobGetStatus(void* self, int);                  // 0x6909b0
+void  __fastcall CtorEditor(void* self, int);                    // 0x40d010
+void  __fastcall VecResizeInt(void* self, int, int count, void* value);  // 0x767700
+void* __stdcall LockedAlloc(int size, int, int, int, int, int); // 0x9289f0
+void  __fastcall GetImageResource2(void* self, int, int img);    // 0x576650
+void  __fastcall RefVecPush2(void* self, int, void** p);         // 0x41ef20
+void  __fastcall RemoveRC2(void* self, int, void* p);            // 0x714050
+bool  __cdecl HasRoom(void* stream, int a, int b);               // 0x93a890
 struct PaintObj {
     uint32_t mVersion;        // +0
     uint32_t mA;              // +4
@@ -910,9 +1073,15 @@ struct PaintObj {
     char mVec1[0x24];         // +0x78
     void Destroy();           // 0x765ac0
 };
-struct PaintHolder {
-    char pad[0x20];
-    bool FUN_00767170(void* a, void* b, void* c);
+struct F67270 {
+    char pad0[0xc];
+    int mC;                   // +0xc
+    char pad10[4];
+    int m14;                  // +0x14
+    char pad18[0x10];
+    void* m28;                // +0x28
+    char m2c[8];              // +0x2c
+    void Method(int, int);
 };
 struct VBig2 {
     char* b;
@@ -921,17 +1090,20 @@ struct VBig2 {
     void Resize(uint32_t n);
     void InsertGrow(char* pos, uint32_t n, void* value);  // 0x7662d0
 };
+struct V7c { char* b; char* e; char* c; void Insert(int, char*, uint32_t, char*); };
+struct JobOwner {
+    char pad[4];
+    bool BuildJob(int* a, int* b, unsigned char c);
+};
 // ---- items of slice s00766fa0 end
 
 // callees this slice defines outside this object (rewrite.py held_callee_protos)
 bool __stdcall ReadPaintStuff(PaintObj* obj, void* stream, void* p3);  // 0x00766fa0 (stays in the slice: not this object's)
 
 // ---- items of slice s00767ee0 begin (TODO(rewrite): local stubs, replace by canonical classes)
-extern "C" void  __fastcall FUN_007642c0(void* self);                                // 0x7642c0 (thiscall)
-extern "C" void  __cdecl FUN_00764760(void* self, int v);                              // 0x764760 (thiscall)
 extern "C" void  __cdecl FUN_0041f2d0(void* p);                                        // 0x41f2d0
-extern "C" void  __cdecl FUN_00700670(void* a, void* b);                               // 0x700670
-extern "C" void  __cdecl FUN_00767350(void* self, void* pos, uint32_t n, void* value); // 0x767350
+void __cdecl UnionDestroy(void* p, int type);          // 0x7668c0
+void __fastcall FUN_007642c0(void* self);              // 0x7642c0
 struct Raster_s0076_7ee0 {
     char pad0[4];
     int mFlags;               // +0x4
@@ -946,9 +1118,19 @@ struct C68200 {
     int mD0;                  // +0xd0
     void Release();
 };
-// The 0x7c-byte element temp Resize builds on the stack: both helpers take the buffer in ecx
-// (0x764760 reads/writes (%esi).., 0x41f2d0 touches +0x74/+0x78), so they are members of the temp
-// type and are called through the object.
+struct C68240 {
+    void* m0;                 // +0x00
+    void* m4;                 // +0x04
+    void* m8;                 // +0x08
+    int   mc;                 // +0x0c
+    void* m10;                // +0x10
+    int   m14;                // +0x14
+    char  m18[0x7c];          // +0x18 inline storage
+    C68240(void* arg);
+    // 0x00767760 takes this in ecx (0x767762 mov %ecx,%edi; reads 0x0/0x4(%edi)) and the count as
+    // its single stack argument, so it must be called as a member, not as a cdecl free function.
+    void RegisterJob(void* arg);                               // 0x00767760
+};
 struct Tmp7c {
     char raw[0x7c];
     void Init(int v);          // 0x00764760
@@ -962,13 +1144,130 @@ struct V7cB {
     void InsertFill(char* pos, uint32_t n, void* value);       // 0x00767350
     void DestroyRange(char* first, char* last);                // 0x00700670
 };
-struct C68370 {
-    void* m0; void* m4; void* m8; void* mc; void* m10; void* m14;
-    int   m18; int m1c; int m20; int m24; void* m28;
-    char pad2c[0xd0];
-    int   mFC; int m100; void* m104; void* m108; void* m10c; void* m118;
-    void* m19c; void* m1a0; void* m1a4; void* m1b0; char m334;
-    C68370(void* a, int* b, void* c, int* d, void* e);
+struct AtomicInt_s0076_7ee0 {
+    volatile long mValue;
+    AtomicInt_s0076_7ee0(long n = 0) { _InterlockedExchange(&mValue, n); }
+};
+struct BakeIRef {
+    virtual int AddRef() = 0;
+    virtual int Release() = 0;
+    virtual ~BakeIRef() {}
+};
+struct BakeLayer : BakeIRef {
+    virtual void DrawLayer() = 0;
+};
+struct BakeRef {
+    virtual ~BakeRef() {}
+    AtomicInt_s0076_7ee0 mRefCount;
+};
+struct IObj_s0076_7ee0 {
+    virtual void v0();
+    virtual int  AddRef();
+    virtual int  Release();
+    virtual int  GetKind();
+    virtual void v4();
+    virtual void v5();
+    virtual IObj_s0076_7ee0* GetChild();
+};
+struct IRefB {
+    virtual int AddRef() = 0;
+    virtual int Release() = 0;
+};
+template <class T>
+struct AutoRef_s0076_7ee0 {
+    T* mpObject;
+    AutoRef_s0076_7ee0() : mpObject(0) {}
+    AutoRef_s0076_7ee0(T* p) : mpObject(p) { if (mpObject) mpObject->AddRef(); }
+    ~AutoRef_s0076_7ee0() { if (mpObject) mpObject->Release(); }
+    AutoRef_s0076_7ee0& operator=(T* p) {
+        if (p != mpObject) {
+            T* old = mpObject;
+            if (p) p->AddRef();
+            mpObject = p;
+            if (old) old->Release();
+        }
+        return *this;
+    }
+    operator T*() const { return mpObject; }
+    T* operator->() const { return mpObject; }
+};
+struct UnionState {
+    char mBytes[0xd0];
+    int  mType;
+    UnionState() : mType(0) {}
+    ~UnionState();
+};
+UnionState::~UnionState()
+{
+    if (mType) {
+        if (mType == 5) FUN_007642c0(mBytes);
+        else            UnionDestroy(mBytes, mType);
+        mType = 0;
+    }
+}
+struct VecA {
+    IRefB** mpBegin;                    // +0x00
+    IRefB** mpEnd;                      // +0x04
+    IRefB** mpCapacity;                 // +0x08
+    uint32_t mAllocator[2];             // +0x0c
+    uint32_t mFlag;                     // +0x14
+    void*   mStorage[0x80 / 4];         // +0x18
+    VecA()
+    {
+        mpBegin = (IRefB**)mStorage;
+        mpEnd   = mpBegin;
+        mFlag = 0;
+        mpCapacity = (IRefB**)((char*)mpBegin + 0x80);
+    }
+    ~VecA();                            // 0x4b5440
+};
+struct VecB {
+    void** mpBegin;                     // +0x00
+    void** mpEnd;                       // +0x04
+    void** mpCapacity;                  // +0x08
+    uint32_t mAllocator[2];             // +0x0c
+    uint32_t mFlag;                     // +0x14
+    void*  mStorage[0x180 / 4];         // +0x18
+    VecB()
+    {
+        mpBegin = mStorage;
+        mpEnd   = mpBegin;
+        mFlag = 0;
+        mpCapacity = (void**)((char*)mpBegin + 0x180);
+    }
+    ~VecB()
+    {
+        if (mpBegin && ((int*)mpBegin)[-1] != 0)
+            Dealloc(mpBegin);
+    }
+};
+void* operator new(unsigned size, const char* name, int, int, int, int);
+struct Child : IObj_s0076_7ee0 {
+    Child(int, int, IObj_s0076_7ee0*);             // 0x93b530
+    char mPad[0x30];                    // sizeof == 0x34
+};
+class C68370 : public BakeLayer, public BakeRef {
+public:
+    virtual int  AddRef();
+    virtual int  Release();
+    virtual void DrawLayer();
+
+    C68370(IRefB* a, IObj_s0076_7ee0* b, int* c, IObj_s0076_7ee0* d, int e);
+    ~C68370();
+
+    AutoRef_s0076_7ee0<IObj_s0076_7ee0> m_pC;                 // +0x0c
+    AutoRef_s0076_7ee0<IObj_s0076_7ee0> m_pE;                 // +0x10
+    AutoRef_s0076_7ee0<IRefB> m_pA;                // +0x14
+    int   m_v18;                        // +0x18
+    int   m_v1c;                        // +0x1c
+    int   m_v20;                        // +0x20
+    int   m_v24;                        // +0x24
+    AutoRef_s0076_7ee0<IObj_s0076_7ee0> m_p28;                // +0x28
+    UnionState m_state;                 // +0x2c
+    AutoRef_s0076_7ee0<IRefB> m_100;               // +0x100
+    VecA  m_vecA;                       // +0x104
+    VecB  m_vecB;                       // +0x19c
+    char  m334;                         // +0x334
 };
 // ---- items of slice s00767ee0 end
 
@@ -1070,32 +1369,108 @@ struct StreamRef {                                 // EA::AutoRefCount<Stream>
 // ---- items of slice s007689a0 end
 
 // ---- items of slice s00769310 begin (TODO(rewrite): local stubs, replace by canonical classes)
-extern "C" void* __cdecl Alloc6(uint32_t size, const char* name, int a, int b, const char* file, int line); // 0xf473a0
-extern "C" void  __cdecl FUN_007006d0(void* p);                                        // 0x7006d0
-extern "C" char  __cdecl FUN_007638a0(void* a, void* b, void* c, void* d);             // 0x7638a0
 extern "C" char  __cdecl FUN_00767170(void* a, void* b, void* c);                      // 0x767170
 extern "C" char  __cdecl ReadMaterialList(void* a, void* b, void* c);                  // 0x767c80
-extern "C" char  __cdecl FUN_00764ce0(void* a, void* b, void* c);                      // 0x764ce0
-extern "C" char  __cdecl FUN_007637d0(void* a, void* b, int c, void* d);               // 0x7637d0
-extern "C" char  __cdecl ReadResourcePCAWeights(void* a, void* b, void* c);            // 0x763950
-extern "C" char  __cdecl FUN_00769cf0(void* a, void* b, void* c);                      // 0x769cf0
+extern "C" void  __cdecl FUN_007006d0(void* p);                                        // 0x7006d0
+extern "C" char  __cdecl FUN_007638a0(void* a, void* b, void* c, void* d);             // 0x7638a0
 extern "C" char  __cdecl FUN_00769310b(void* a, void* b, void* c, void* d);            // 0x769310
 extern "C" void* __cdecl FUN_0093b530(int a, int b, void* c);                          // 0x93b530
+struct M69310 { char Meth(int a, int b, int c); };
+struct cGraphicsResourceFactory {
+    char ReadResourceFromStream(int* src, void* a2, int* obj, uint32_t kind);
+
+    char ReadPCAWeights(void* holder, void* a2, void* obj);            // 0x763950
+    char ReadVia69cf0(void* holder, void* a2, void* obj);              // 0x769cf0
+    char ReadMaterialList_(void* holder, void* a2, void* obj);         // 0x767c80
+    char ReadVia64ce0(void* holder, void* a2, void* obj);              // 0x764ce0
+    char ReadVia637d0(void* holder, void* a2, int four, void* obj);    // 0x7637d0
+    char ReadVia67170(void* holder, void* a2, void* obj);              // 0x767170
+};
 // ---- items of slice s00769310 end
 
 // ---- items of slice s00769f20 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern "C" void* __cdecl Node8F4d0(void);                                             // 0x68f4d0
 extern "C" void* __cdecl FUN_0067de70();                                              // 0x67de70
-extern "C" void* __cdecl FUN_00768370v(void* a, void* b, void* c, void* d, void* e);  // 0x768370
-extern "C" char  __cdecl FUN_007666a0v(void* a, void* b, void* c);                    // 0x7666a0
 extern "C" char  __cdecl FUN_00769d80v(void* a, void* b, void* c, void* d);           // 0x769d80
-extern "C" char  __cdecl FUN_00765b30v(void* a, void* b);                             // 0x765b30
-extern "C" char  __cdecl FUN_00765d30v(void* a, void* b);                             // 0x765d30
-extern "C" char  __cdecl FUN_007652c0v(void* a, void* b);                             // 0x7652c0
 extern "C" char  __cdecl FUN_007655f0b(void* a, void* b, void* c);   // 0x7655f0
 extern "C" bool  __fastcall ArmDecodeB(void* self, int, int);         // 0x7677c0
 extern "C" char  __cdecl FUN_0076a940v(void* a, void* b, void* c, void* d, void* e);   // 0x76a940
-struct C69a9 { char pad0[0x10]; void* m10; char pad14[4]; int m18; char pad1c[0x18]; };
+struct M69d80 { char Meth(int a, int b, int c); };
+struct cJob;
+struct JobRefL_s0076_9f20;
+struct cJob {
+    void* mpCallback;              // +0x00
+    void* mpCallbackData;          // +0x04
+    char pad08[0x10];
+    uint32_t mFlags;               // +0x18
+    void SetCallback(void* f, void* d) { mpCallback = f; mpCallbackData = d; }
+    int  AddRef();                 // 0x0068f950
+    int  Release();                // 0x00690120
+    void SetExtra(void* owner);    // 0x0068f9b0
+    void Submit();                 // 0x006909b0
+    void AddDependency(cJob* other);       // 0x00691380
+    void AddWeakDependency(cJob* other);   // 0x006913c0
+};
+struct JobRefL_s0076_9f20 {
+    cJob* p;
+    JobRefL_s0076_9f20() : p(0) {}
+    ~JobRefL_s0076_9f20() { Reset(); }
+    void Reset() { if (p) { cJob* t = p; p = 0; t->Release(); } }
+};
+struct IJobMgr_s0076_9f20 {
+virtual void v0();
+virtual void v1();
+virtual void v2();
+virtual void v3();
+    virtual bool CreateJob(JobRefL_s0076_9f20* out);     // slot 4 (+0x10)
+virtual void v5();
+virtual void v6();
+virtual void v7();
+    virtual void Lock();                      // slot 8 (+0x20)
+    virtual void Unlock();                    // slot 9 (+0x24)
+};
+struct JobLockTable {
+    bool TryLockJobs(JobRefL_s0076_9f20* a, JobRefL_s0076_9f20* b); // 0x0068f350
+};
+struct IConvCtx {
+virtual void v0();
+virtual void v1();
+virtual void v2();
+virtual void v3();
+    virtual RecInfo* Info();          // slot 4 (+0x10)
+virtual void v5();
+virtual void v6();
+virtual void v7();
+    virtual void Begin();             // slot 8 (+0x20)
+    virtual void End();               // slot 9 (+0x24)
+};
+struct IRefObj_s0076_9f20 {
+    virtual void AddRef();
+    virtual void Release();
+};
+struct Grf {
+    char pad0[0xc];
+    void* pC;                      // +0x0c
+    IConvCtx* p10;                 // +0x10
+    char pad14[4];
+    uint32_t type18;               // +0x18
+    char pad1c[0xe0];
+    uint32_t stateFC;              // +0xfc
+};
+struct ConvObj { void* Init(void* res, void* a, void* b, void* c, void* d); }; // 0x00768370
+struct AsyncResMgr { bool AllocateRequest(void* type, IRefObj_s0076_9f20** req, JobRefL_s0076_9f20* job); }; // 0x006af150
+char __fastcall StartReqA(void* self, int, void** out);   // 0x007652c0
+char __fastcall StartReqB(void* self, int, void** out);   // 0x00765b30
+char __fastcall StartReqC(void* self, int, void** out);   // 0x00765d30
+char __fastcall CreateByType(void* self, int, void** out, void* p5, uint32_t type); // 0x007666a0
+static __forceinline IJobMgr_s0076_9f20* GetJobManager_s0076_9f20() { return (IJobMgr_s0076_9f20*)Node8F4d0(); }
+static __forceinline bool CreateJobInto(IJobMgr_s0076_9f20* jm, JobRefL_s0076_9f20& r) {
+    r.Reset();
+    return jm->CreateJob(&r);
+}
+static __forceinline JobLockTable* LockTable(void* self) {
+    return *(JobLockTable**)((char*)*(void**)((char*)self + 0xc) + 8);
+}
 // ---- items of slice s00769f20 end
 
 // callees this slice defines outside this object (rewrite.py held_callee_protos)
@@ -1103,35 +1478,296 @@ bool __fastcall SetupJobChain(void* self, int, int unused);  // 0x00769f20 (stay
 bool __fastcall CreateRequestJob(void* self, int, void* out);  // 0x0076a400 (stays in the slice: not this object's)
 bool __fastcall TryLockChain(void* self, int, int unused);  // 0x0076a4d0 (stays in the slice: not this object's)
 
+// ---- items of slice s00761dc0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C" void  __cdecl operator_delete_(void* p);
+extern "C" void* __cdecl FUN_00928a30(void* a, void* b, int c, int d, int e, int f, int g, int h);
+extern "C" void* __cdecl FUN_011f51d0(void* p, ...);
+extern "C" void* __cdecl FUN_011f36d0(void* p, int a, int b, int c);
+extern "C" void* __cdecl FUN_011f5010(void* p, int a, int b, int c, int d, int e);
+void __fastcall FUN_011f3580(void* p);  // 0x011f3580
+void __fastcall FUN_011f4e90(void* p);  // 0x011f4e90
+namespace SP {
+struct Alloc16c8b44 {
+    void  Free(void* p);
+    void* allocate(int a, int b, int c, int d, int e, int f, int g, int h);
+};
+}
+extern SP::Alloc16c8b44* g_alloc;
+struct Map262890 {
+    char pad0[4];
+    void* buckets;               // +0x4
+    unsigned int bucketCount;    // +0x8
+    unsigned int count;          // +0xc
+    int erase(unsigned int* key);   // @ 0x762890
+};
+extern Map262890 g_map1538ff0;
+extern Map262890 g_map1539010;
+struct Iter { void* node; void* bucket; unsigned char inserted; char pad[3]; };   // eastl hashtable iterator
+struct Hash262b00 {
+    char pad0[4];
+    void* buckets;               // +0x04
+    unsigned int bucketCount;    // +0x08
+    void find(Iter* out, const void* key);   // 0x00db4780
+    int findInsert(unsigned int* key);       // @ 0x762b00
+};
+// ---- items of slice s00761dc0 end
+
+// callees this slice defines outside this object (rewrite.py held_callee_protos)
+void* __stdcall MakeObj762f30(const int* src);  // 0x00762f30 (stays in the slice: not this object's)
+
 // @ 0x00683f10
 int RefCounted::AddRef()
 {
     return (int)((_InterlockedExchangeAdd((volatile long*)&mRef, 2) + 2) >> 1);
 }
 
+// @ 0x00762890
+int Map262890::erase(unsigned int* key)
+{
+    unsigned int before = count;
+    unsigned int b = *key % bucketCount;
+    unsigned int* slot = (unsigned int*)((char*)buckets + b * 4);
+    if (*slot != 0) {
+        unsigned int* e;
+        do {
+            e = (unsigned int*)*slot;
+            if (*key == *e) break;
+            slot = e + 4;
+        } while (e[4] != 0);
+        while (*slot != 0 && *key == **(unsigned int**)slot) {
+            unsigned int* cur = (unsigned int*)*slot;
+            *slot = cur[4];
+            operator_delete_(cur);
+            count--;
+        }
+    }
+    return (int)(before - count);
+}
+
+// @ 0x00762a00
+void __cdecl FUN_00762a00(void* p)
+{
+    unsigned int key = (unsigned int)p;
+    g_map1538ff0.erase(&key);
+    FUN_011f3580(p);
+    g_alloc->Free(p);
+}
+
+// @ 0x00762a30
+void __cdecl FUN_00762a30(void* p)
+{
+    unsigned int key = (unsigned int)p;
+    g_map1539010.erase(&key);
+    FUN_011f4e90(p);
+    g_alloc->Free(p);
+}
+
+// @ 0x00762b70
+void* __cdecl FUN_00762b70(int a, int b, int c, void* out)
+{
+    int desc[8];
+    FUN_011f51d0(desc, a, b, c);
+    int local[4];
+    local[0] = (int)FUN_00928a30((void*)desc[0], (void*)desc[4], 0, 0, 0, 0, 0, 0);
+    local[1] = 0; local[2] = 0; local[3] = 0;
+    void* r = FUN_011f36d0(local, a, b, c);
+    int zeroKey[3] = { 0, 0, 0 };
+    int* src = out ? (int*)out : zeroKey;
+    Hash262b00* h = (Hash262b00*)0x1538ff0;
+    int* slot = (int*)h->findInsert((unsigned int*)&r);
+    slot[0] = src[0];
+    slot[1] = src[1];
+    slot[2] = src[2];
+    return r;
+}
+
+// @ 0x00762c60
+void* __cdecl FUN_00762c60(int a, int b, int c, int d, int e, void* out)
+{
+    int desc[8];
+    FUN_011f51d0(desc, a, b, c, d, e);
+    int local[4];
+    local[0] = (int)FUN_00928a30((void*)desc[0], (void*)desc[4], 0, 0, 0, 0, 0, 0);
+    local[1] = 0; local[2] = 0; local[3] = 0;
+    void* r = FUN_011f5010(local, a, b, c, d, e);
+    int zeroKey[3] = { 0, 0, 0 };
+    int* src = out ? (int*)out : zeroKey;
+    Hash262b00* h = (Hash262b00*)0x1539010;
+    int* slot = (int*)h->findInsert((unsigned int*)&r);
+    slot[0] = src[0];
+    slot[1] = src[1];
+    slot[2] = src[2];
+    return r;
+}
+
+// @ 0x00762fa0
+void* Map762fa0::Insert(void* out, const void* key)
+{
+    unsigned __int64 node8 = *(const unsigned __int64*)((char*)this + 0);
+    void* slot = F_68c140(&node8);
+    if (slot == 0) {
+        void* obj = MakeObj762f30((const int*)key);
+        F_68c1b0(out, (unsigned __int64)(size_t)obj);
+        return out;
+    }
+    for (;;) {
+        void* e = F_68c140(&node8);
+        unsigned __int64 inner = *(unsigned __int64*)((char*)e + 8);
+        void* cur = F_68c140(&inner);
+        unsigned __int64 oldv = *(unsigned __int64*)&node8;
+        (void)cur; (void)oldv;
+        unsigned __int64 nw = node8 + 1;
+        unsigned __int64 prev = *(volatile unsigned __int64*)((char*)this + 0);
+        if (_InterlockedCompareExchange64((volatile __int64*)((char*)this + 0),
+                (__int64)nw, (__int64)prev) == (__int64)prev) {
+            unsigned __int64 z = 0;
+            F_68c1b0(&z, 0);
+            void* e3 = F_68c140(&node8);
+            *(int*)((char*)e3 + 8)  = (int)(nw & 0xffffffffu);
+            *(int*)((char*)e3 + 0xc) = (int)(nw >> 32);
+            if (key) {
+                *(int*)((char*)e3 + 0) = *(const int*)key;
+                *(int*)((char*)e3 + 4) = *((const int*)key + 1);
+            }
+            *(unsigned __int64*)out = node8;
+            return out;
+        }
+    }
+}
+
 // @ 0x00763100
 CEditorRes::CEditorRes()
 {}
 
+// @ 0x00763130
+void Map762fa0::Append(const void* key)
+{
+    int out[2];
+    Insert(out, key);
+    const int* k = (const int*)key;
+    unsigned __int64 node8 = *(const unsigned __int64*)k;
+    for (;;) {
+        void* e = F_68c140(&node8);
+        unsigned __int64 inner = *(unsigned __int64*)((char*)e + 8);
+        void* e2 = F_68c140(&inner);
+        *(int*)((char*)e2 + 8) = k[0];
+        *(int*)((char*)e2 + 0xc) = k[1];
+        unsigned __int64 nw = node8 + 1;
+        unsigned __int64 prev = *(volatile unsigned __int64*)((char*)this + 8);
+        if (_InterlockedCompareExchange64((volatile __int64*)((char*)this + 8),
+                (__int64)nw, (__int64)prev) == (__int64)prev)
+            return;
+    }
+}
+
 // @ 0x00763250
 int __fastcall Release763250(void* self)
 {
-    volatile int* rc = (volatile int*)((char*)self + 4);
+    void* p = self;
+    volatile int* rc = (volatile int*)((char*)p + 4);
     int n = _InterlockedExchangeAdd((volatile long*)rc, -2) - 2;
     if (n == 0) {
         _InterlockedExchange((volatile long*)rc, 2);
-        if (g_flags1630180 != 0 || g_word160077c != *(int*)__readfsdword(0x18)) {
-            void* o = GetGlobal67de80();
-            (void)o; (void)self;
-        } else if (self != 0) {
-            ((IObj*)self)->s2(1);
+        int tid = (int)__readfsdword(0x18);
+        if (g_flags1630180 != 0 || g_word160077c != tid) {
+            Map762fa0* map = (Map762fa0*)GetGlobal67de80();
+            int key[2];
+            key[0] = (int)p;
+            key[1] = 0x762f10;
+            map->Append(key);
+        } else if (p != 0) {
+            ((IObj*)p)->s2(1);
         }
     } else if (n == 3) {
-        void* p = *(void**)((char*)self + 0x14);
-        if (p != 0)
-            (*(void(__thiscall**)(void*, void*))p)(*(void**)p, self);
+        char* slot = (char*)p + 0x14;
+        if (*(void**)slot != 0) {
+            void* cb = *(void**)slot;
+            void* fn = *(void**)*(void**)cb;
+            ((void(__thiscall*)(void*, void*))fn)(cb, p);
+        }
     }
     return n;
+}
+
+// @ 0x007632f0
+void __cdecl SwapRasterMode(char sel, int v)
+{
+    if (GetGlobal67dd60() != 0) {
+        void* o = GetGlobal67dd60();
+        void** vt = *(void***)o;
+        if (sel) {
+            void* fn = vt[0x6c / 4];
+            ((void(__thiscall*)(void*, int))fn)(o, v);
+            void* mm = MaterialManager();
+            void** mvt = *(void***)mm;
+            void* mfn = mvt[0x50 / 4];
+            ((void(__thiscall*)(void*, int))mfn)(mm, v);
+        } else {
+            void* fn = vt[0x70 / 4];
+            ((void(__thiscall*)(void*, int))fn)(o, v);
+            void* mm = MaterialManager();
+            void** mvt = *(void***)mm;
+            void* mfn = mvt[0x54 / 4];
+            ((void(__thiscall*)(void*, int))mfn)(mm, v);
+        }
+    }
+}
+
+// @ 0x00763340
+bool __cdecl ReadRasterTriplet(void* stream, int* p, int io)
+{
+    return EA_IO_ReadInt32(stream, p, 1, io)
+        && EA_IO_ReadInt32(stream, p + 2, 1, io)
+        && EA_IO_ReadInt32(stream, p + 1, 1, io);
+}
+
+// @ 0x007633a0
+void __cdecl ResolveColor(Color3* out, KeyDef* def)
+{
+    void* p = g_sAppProperties;
+    if (*(int*)((char*)(*(int*)((char*)p + 0x3c)) + 0x130) != 0) {
+        int key = def->key;
+        if ((key & 0xc0000000u) == 0x40000000u
+            && (key & 0xff00u) == 0x2900u
+            && (key & 0xffu) != 0
+            && (unsigned)((((unsigned)key >> 16) & 0xff) - 0x61) <= 5u) {
+            switch (((unsigned)key >> 16) & 0xff) {
+            case 0x61: case 0x62: case 0x66:
+                *out = g_colors[2];
+                return;
+            case 0x63: case 0x64: case 0x65:
+                *out = g_colors[key & 0xff];
+                return;
+            }
+        }
+    }
+    *out = *(Color3*)def;
+}
+
+// @ 0x00763490
+unsigned char __cdecl ArenaWrite(void* buf, int n, unsigned total)
+{
+    unsigned char ok = 1;
+    if (g_arena16303f0 == 0)
+        return 0;
+    if (g_arena16303f4 != 0)
+        *(int*)g_arena16303f4 += n + total;
+    if (total != 0) {
+        while (total != 0) {
+            unsigned chunk = total;
+            if (total > 0x20)
+                chunk = 0x20;
+            ok = ((Arena_s0076_2d70*)g_arena16303f0)->f(g_140e00c, chunk);
+            total -= chunk;
+            if (!ok)
+                return 0;
+        }
+        if (!ok)
+            return 0;
+    }
+    if (n != 0)
+        ok = ((Arena_s0076_2d70*)g_arena16303f0)->f(buf, n);
+    return ok;
 }
 
 // @ 0x00763520
@@ -1170,9 +1806,35 @@ EhHolder::~EhHolder()
 {}
 
 // @ 0x00763620
-bool __cdecl LoadRasterHeader(cRasterFromGimexLoadState_s0076_2d70* s, const char* name, void* unused)
+bool __stdcall LoadRasterHeader(cRasterFromGimexLoadState_s0076_2d70* s, const char* name, void* unused)
 {
-    (void)s; (void)name; (void)unused; return false;
+    StreamObj stream;
+    F_87cde0(&stream);
+    if (!F_87ce00(&stream, name)) {
+        F_87d070(&stream);
+        return false;
+    }
+    char inner[4];
+    if (!F_87d0b0(&stream, (void*)name, inner)) {
+        F_87d070(&stream);
+        return false;
+    }
+    GimexRecord* rec = (GimexRecord*)F_87ced0(&stream, 0);
+    bool ok = false;
+    if (rec != 0 && rec->mBpp == 0x20) {
+        s->mWidth  = rec->mWidth;
+        s->mHeight = rec->mHeight;
+        s->mBpp    = 0x20;
+        s->mPitch  = rec->mWidth * 4;
+        s->mSize   = s->mPitch * s->mHeight;
+        s->mData   = (unsigned char*)EA_New_s0076_2d70(s->mSize, (const char*)0x140e02c, 0, 0, 0, 0);
+        ok = F_87cf00(&stream, rec, s->mData, s->mSize);
+        F_87cef0(&stream, rec);
+    }
+    F_87ce90(&stream);
+    F_87d070(&stream);
+    (void)unused;
+    return ok;
 }
 
 // @ 0x00763770
@@ -1190,9 +1852,21 @@ bool __stdcall CreateRasterFromState(cRasterFromGimexLoadState_s0076_2d70* s, in
 }
 
 // @ 0x007637d0
-bool __stdcall LoadAndCreateRaster(cRasterFromGimexLoadState_s0076_2d70* src, int a, int b, int* out3)
+bool RasterFactory::LoadAndCreateRaster(cRasterFromGimexLoadState_s0076_2d70* state, int a, int b, void* out3)
 {
-    (void)src; (void)a; (void)b; (void)out3; return false;
+    char  buf[0x1c];
+    *(int*)(buf + 0x10) = 0;
+    if (!LoadRasterHeader((cRasterFromGimexLoadState_s0076_2d70*)buf, 0, 0))
+        return false;
+    // NB: the original allocates a small scratch vector at [esp+0x24] here
+    if (!CreateRasterFromState((cRasterFromGimexLoadState_s0076_2d70*)buf, 0, 0))
+        return false;
+    int* src = (int*)out3;
+    ((int*)b)[2] = src[0];
+    ((int*)b)[3] = src[1];
+    ((int*)b)[4] = src[2];
+    (void)state; (void)a;
+    return true;
 }
 
 // @ 0x007638a0
@@ -1215,9 +1889,183 @@ bool __stdcall ReadTriplets(void* stream, int, int, int)
 }
 
 // @ 0x00763950
-bool SP::cGraphicsResourceFactory::ReadResourcePCAWeights(EA::IO::IStream * a, EA::ResourceMan::Resource * b, EA::ResourceMan::Key const & a3)
+bool SP::cGraphicsResourceFactory::ReadResourcePCAWeights(EA::IO::IStream * stream, EA::ResourceMan::Resource * resource, EA::ResourceMan::Key const & key)
 {
-    (void)a; (void)b; return false;
+    (void)key;
+    char* res = (char*)resource;
+    int   hdr[6];
+    int   flag = 0;
+    int   tag;
+    if (!EA_IO_ReadInt32(stream, &tag, 1, flag))
+        return false;
+    if (tag == (int)0xeeffeeff)      flag = 1;
+    else if (tag == (int)0xffeeffee) flag = 0;
+    else return false;
+    if (!EA_IO_ReadInt32(stream, &hdr[1], 1, flag)) return false;
+    if (hdr[1] != 2) return false;
+    if (!EA_IO_ReadInt32(stream, &hdr[0], 1, flag)) return false;
+    if (hdr[0] > 4) return false;
+    int* pGroup = (int*)(res + 0x18);
+    if (!EA_IO_ReadInt32(stream, pGroup, 1, flag)) return false;
+    if (*pGroup > 0x3c) return false;
+    if (!EA_IO_ReadInt32(stream, &hdr[2], 1, flag)) return false;
+    if (hdr[2] != 0x10) return false;
+    if (!EA_IO_ReadInt32(stream, &hdr[3], 1, flag)) return false;
+    if (hdr[3] != 2) return false;
+    int count = (*pGroup * 0x110) >> 2;
+    if (!EA_IO_ReadInt32(stream, res + 0x24, count, flag)) return false;
+    *(float*)(res + 4) = *(float*)0x14853e0;
+    *(unsigned char*)(res + 8) = 1;
+    return true;
+}
+
+// @ 0x00763a80
+bool __stdcall WriteResourceArena(int* res, int flags)
+{
+    void* stream = *(void**)((char*)res + 0x18);
+    char  scope[0x130];
+    F_11e2fe0(scope);
+    void* arena = 0;
+    if (!F_11e3350(stream, &arena, 0)) {
+        F_11e2690(scope);
+        return false;
+    }
+    while (F_11e34d0(scope)) { }
+    g_arena16303f0 = arena;
+    if (!F_11e3c50(scope, (void*)0x763490)) {
+        F_11e2690(scope);
+        return false;
+    }
+    while (F_11e3940(scope)) { }
+    g_arena16303f0 = 0;
+    F_11e2690(scope);
+    (void)flags;
+    return true;
+}
+
+// @ 0x00763b80
+bool __cdecl DrawRaster(void* a, int b, int c, unsigned char d)
+{
+    char* p = (char*)a;
+    void* tex = *(void**)(p + 8);
+    int   v0  = 0;
+    ((void(__thiscall*)(void*, int, int, int))((*(void***)tex)[0x48 / 4]))(
+        tex, *(unsigned char*)(p + 0x12), (int)d, (int)&v0);
+    void* obj = (void*)v0;
+    int   width  = *(unsigned short*)(p + 0xc);
+    int   height = *(unsigned short*)(p + 0xe);
+    char  local[8] = { 0, 0, 0, 0, 0, 0, 0, 0 };
+    ((void(__thiscall*)(void*, void*))((*(void***)obj)[0x30 / 4]))(obj, local);
+    void* dev = *(void**)g_dev16f89d0;
+    ((void(__thiscall*)(void*, int, int, int, int, int))((*(void***)dev)[0x90 / 4]))(
+        dev, width, height, *(int*)local, 2, (int)local);
+    ((void(__thiscall*)(void*, int))((*(void***)dev)[0x80 / 4]))(dev, v0);
+    ((void(__thiscall*)(void*, void*, int, int))((*(void***)obj)[0x34 / 4]))(obj, local, 0, 0x10);
+    F_11e0744((void*)b, (void*)*(int*)(local + 4), *(int*)local * height);
+    ((void(__thiscall*)(void*))((*(void***)obj)[0x38 / 4]))(obj);
+    ((void(__thiscall*)(void*))((*(void***)obj)[8 / 4]))((void*)v0);
+    ((void(__thiscall*)(void*))((*(void***)tex)[8 / 4]))(tex);
+    (void)c;
+    return true;
+}
+
+// @ 0x00763c60
+void UniqVec::AddUnique(int v)
+{
+    int n = mCount;
+    if (n >= 16)
+        return;
+    for (int i = 0; i < n; i++) {
+        if (v == mArr[i])
+            return;
+    }
+    mArr[n] = v;
+    mCount++;
+}
+
+// @ 0x00763cb0
+uint32_t __cdecl FUN_763cb0(EmbeddedState* hard, RasterThing* raster)
+{
+    if (g_texStageRaster0 == 0) {
+        typedef void* (__thiscall *FnCreate)(void*, V3u, int);
+        typedef void  (__thiscall *FnRelease)(void*, void*);
+        void* mgr = GetRasterMgr();
+        Managed* m = (Managed*)((FnCreate)((*(void***)mgr)[0x1c / 4]))(mgr, *(const V3u*)g_texStageCreate, 0);
+        if ((m->flags & 1) == 0) {
+            void* mgr2 = GetRasterMgr();
+            ((FnRelease)((*(void***)mgr2)[0x34 / 4]))(mgr2, m);
+        }
+        g_texStageRaster0 = m->value;
+
+        mgr = GetRasterMgr();
+        Managed* m2 = (Managed*)((FnCreate)((*(void***)mgr)[0x1c / 4]))(mgr, *(const V3u*)g_texStageRasterType, 0);
+        if ((m2->flags & 1) == 0) {
+            void* mgr2 = GetRasterMgr();
+            ((FnRelease)((*(void***)mgr2)[0x34 / 4]))(mgr2, m2);
+        }
+        g_texStageRaster1 = m2->value;
+    }
+
+    uint32_t result = FUN_011ed690(hard, raster);
+
+    void* props = g_sAppProperties;
+    if (*(uint32_t*)((char*)(*(uint32_t*)((char*)props + 0x3c)) + 0x130) != 0) {
+        uint32_t bit = 1;
+        for (int stage = 0; stage < 4; ++stage, bit = _rotl(bit, 1)) {
+            if ((hard->dirtyBits & bit) == 0)
+                return result;
+            if (stage > 0) {
+                raster->FUN_00763c60(hard->GetTextureStageState(stage));
+                void* r;
+                if (stage == 1)
+                    r = g_texStageRaster0;
+                else if (stage == 2)
+                    r = g_texStageRaster1;
+                else
+                    r = 0;
+                hard->SetRaster(stage, r);
+            }
+        }
+    }
+    return result;
+}
+
+// @ 0x00763df0
+int __cdecl FUN_763df0(void* a, void* b)
+{
+    void* p = g_sAppProperties;
+    int c = *(int*)((char*)p + 0x3c);
+    if (*(int*)((char*)c + 0x130) != 0) {
+        int n = *(int*)((char*)b + 0x134);
+        int i = 0;
+        if (n > 0) {
+            int* arr = (int*)((char*)b + 0x138);
+            do {
+                if (a == (void*)*arr) {
+                    *(int*)((char*)a + 8) = 0;
+                    return 1;
+                }
+                i++;
+                arr++;
+            } while (i < n);
+        }
+    }
+    return FUN_011f06c0(a, b);
+}
+
+// @ 0x007640c0
+void* __fastcall FUN_7640c0(void* self)
+{
+    uint32_t* p = (uint32_t*)self;
+    p[0] = 0x013f1ab0;                 // first vtable (primary base)
+    p[1] = 0x013ef094;                 // second vtable (secondary base)
+    _InterlockedExchange((volatile long*)(p + 2), 0);   // atomic refcount init at +8
+    p[0] = 0x0140e044;                 // final first vtable
+    p[1] = 0x0140e040;                 // final second vtable
+    p[3] = 0;                          // +0x0c
+    p[4] = 0;                          // +0x10
+    *((uint8_t*)p + 0x18) = 1;         // +0x18
+    return self;
 }
 
 // @ 0x007641c0
@@ -1516,6 +2364,59 @@ void Loader29::WrapDf0(int)
         b334 = 1;
 }
 
+// @ 0x00765230
+void __cdecl FUN_765230(Rec7c_s0076_4df0* p, unsigned count, const Rec7c_s0076_4df0& value)
+{
+    for (unsigned i = count; i > 0; --i) {
+        if (p)
+            new ((void*)p) Rec7c_s0076_4df0(value);
+        p = (Rec7c_s0076_4df0*)((char*)p + 0x7c);
+    }
+}
+
+// @ 0x007652c0
+bool AsyncReqA::Start(JobRefL* out)
+{
+    if (id18 != 0x2f4e681c)
+        return false;
+    state = 1;
+    f44 = 0;
+    if (obj->Info()->f4 != 0x2f7d0004)
+        return false;
+    f2c = 4;
+    JobLockL lock(GetJobManager());
+    JobRefL a;
+    {
+        IJobMgr* m = GetJobManager();
+        a.Reset();
+        if (!m->CreateJob(&a))
+            return false;
+    }
+    JobRefL b;
+    {
+        IJobMgr* m = GetJobManager();
+        b.Reset();
+        if (!m->CreateJob(&b))
+            return false;
+    }
+    a.p->SetCallback((void*)FUN_764700, this);
+    a.p->mFlags = 4;
+    a.p->SetOwner(this);
+    a.p->Queue();
+    b.p->SetCallback((void*)FUN_764710, this);
+    b.p->mFlags = 1;
+    b.p->SetOwner(this);
+    b.p->AddDependency(a.p);
+    b.p->Queue();
+    out->p = b.p;
+    b.p = 0;
+    return true;
+}
+
+// @ 0x007654f0
+GrfCtor::GrfCtor()
+: mPrestreamMemoryBufferLock(new ("Graphics", 0, 0, 0, 0) cJobLock_s0076_4df0()) {}
+
 // @ 0x007655f0
 bool SP::cGraphicsResourceFactory_s0076_4df0::Fn7655f0(void* a, void* b, void* c)
 {
@@ -1667,12 +2568,9 @@ D765f10::D765f10(void* arg)
     f18 = 0;
     f1c = arg;
     if (arg)
-        ((IUnknown32*)arg)->u0();
+        ((IUnknown32_s0076_4df0*)arg)->u0();
     f18 = 0;
 }
-
-IResEd::~IResEd()
-{ if (m1c) m1c->Release(); }
 
 // @ 0x00765f80
 void* IResEd::Delete(unsigned flags)
@@ -2061,6 +2959,56 @@ bool Factory::CreateResource(int* src, void** out, int a, int b)
     return false;
 }
 
+// @ 0x00766fa0
+bool __stdcall ReadPaintStuff(PaintObj* obj, void* stream, void* p3)
+{
+    (void)p3;
+    if (!ReadInt32(stream, &obj->mVersion, 1, 1))
+        return false;
+    if (obj->mVersion > 1)
+        return false;
+    if (!ReadInt32(stream, &obj->mA, 1, 1))
+        return false;
+    if (!ReadInt32(stream, &obj->mB, 1, 1))
+        return false;
+    if (!ReadTripletG(stream, &obj->mC, 1))
+        return false;
+    if (!ReadTripletG(stream, &obj->mFlags, 1))
+        return false;
+    if (!ReadTripletG(stream, &obj->mD, 1))
+        return false;
+    if (obj->mVersion == 0) {
+        obj->mByte18 = 0;
+        obj->mCount = 1;
+    } else {
+        obj->mByte18 = (unsigned char)((obj->mFlags >> 0xc) & 1);
+        obj->mCount = obj->mByte18 ? 6u : 1u;
+    }
+    if (!WriteValue(stream, &obj->mC, 4))
+        return false;
+    Reserve765a10(&obj->mVec0, obj->mC);
+    Reserve765a10(obj->mVec1, obj->mCount * obj->mB);
+    if (obj->mB != 0) {
+        uint32_t i = 0;
+        do {
+            uint32_t n;
+            if (!ReadInt32(stream, &n, 1, 1))
+                return false;
+            FUN_005965b0(&n);
+            if (obj->mCount != 0) {
+                uint32_t j = 0;
+                do {
+                    if (!WriteValue(stream, &n, 1))
+                        return false;
+                    void* p = Alloc6(n, "Graphics", 0, 0, 0, 0);
+                    VPtrPush(&obj->mVec1, &p);
+                } while (++j < obj->mCount);
+            }
+        } while (++i < obj->mB);
+    }
+    return true;
+}
+
 // @ 0x00767170
 bool PaintHolder::FUN_00767170(void* a, void* b, void* c)
 {
@@ -2080,6 +3028,13 @@ bool PaintHolder::FUN_00767170(void* a, void* b, void* c)
     return false;
 }
 
+// @ 0x00767270
+void F67270::Method(int, int unused)
+{
+    (void)unused;
+    ReadPaintStuff((PaintObj*)m2c, m28, (void*)m14);
+}
+
 // @ 0x00767290
 void VBig2::Resize(uint32_t n)
 {
@@ -2094,6 +3049,253 @@ void VBig2::Resize(uint32_t n)
     FUN_00763f50(oldEnd, oldEnd, dst);
     uint32_t count = (uint32_t)((oldEnd - dst) / 0xa0);
     e = e - count * 0xa0;
+}
+
+// @ 0x00767350
+void V7c::Insert(int, char* pos, uint32_t n, char* value)
+{
+    uint32_t size = (uint32_t)((e - b) / 0x7c);
+    if (size < n) {
+        uint32_t cap = size * 2;
+        if (size == 0) cap = 1;
+        uint32_t need = size + n;
+        if (need < cap) need = cap;
+        char* nb = need ? (char*)Alloc6(need * 0x7c, "Graphics", 0, 0, g_file, 0xd1) : 0;
+        char* p = (char*)FUN_00757ee0(b, pos, nb);
+        FUN_00757f70(b, pos, nb);
+        FUN_00765230(p, (void*)(size_t)n, value, b);
+        char* ne = (char*)FUN_00757ee0(pos, e, p + n * 0x7c);
+        FUN_00757f70(pos, e, p + n * 0x7c);
+        if (b && *(int*)(b - 4) != 0)
+            Dealloc(b);
+        e = ne;
+        b = nb;
+        c = nb + need * 0x7c;
+    } else if (n) {
+        char* end = e;
+        uint32_t right = (uint32_t)((end - pos) / 0x7c);
+        if (n < right) {
+            char* edge = end - n * 0x7c;
+            char tmp[0x7c];
+            FUN_00764ff0(&tmp, edge, end, end);
+            e = end + n * 0x7c;
+            FUN_00757fb0(pos, edge, end);
+            FUN_007664b0(pos, n * 0x7c + pos, tmp);
+            FUN_0041f2d0(&tmp);
+        } else {
+            char tmp[0x7c];
+            FUN_00765230(end, (void*)(size_t)(n - right), tmp, 0);
+            e = end + (n - right) * 0x7c;
+            FUN_00764ff0(&tmp, pos, end, e);
+            e = e + right * 0x7c;
+            FUN_007664b0(pos, end, tmp);
+            FUN_0041f2d0(&tmp);
+        }
+    }
+}
+
+// @ 0x00767590
+bool JobOwner::BuildJob(int* a, int* b, unsigned char c)
+{
+    int* h = (int*)Alloc6(0x1c, "Graphics", 0, 0, 0, 0);
+    if (h)
+        h = (int*)FUN_007640c0(h);
+    if (!h)
+        return false;
+    if (a != (int*)h[3]) {
+        if (a) ((void(__thiscall**)(void*))*(void***)a)[0](a);
+        h[3] = (int)a;
+    }
+    if (b != (int*)h[4]) {
+        if (b) ((void(__thiscall**)(void*))*(void***)b)[1](b);
+        h[4] = (int)b;
+    }
+    h[5] = 0x4755bcf;
+    *(unsigned char*)(h + 6) = c;
+    if (b) ((void(__thiscall**)(void*))*(void***)b)[8](b);
+    void* node = Node8F4d0();
+    int local = 0;
+    ((void(__thiscall**)(void*, int*))*(void***)node)[4](node, &local);
+    FUN_0068f9b0(h);
+    FUN_006909b0((void*)local);
+    if (h) ((void(__thiscall**)(void*))*(void***)h)[1](h);
+    return true;
+}
+
+// @ 0x007677c0
+bool __fastcall ArmDecode(void* self, int, int outPtr)
+{
+    char* s = (char*)self;
+    if (*(int*)(s + 0x18) != 0x2f4e681c)
+        return false;
+    *(int*)(s + 0xfc) = 4;
+    char* e = s + 0x64;
+    *(char**)(s + 0x5c) = e;
+    *(char**)(s + 0x50) = e;
+    *(char**)(s + 0x4c) = e;
+    *(char**)(s + 0x54) = e + 0x40;
+    char* f = s + 0xbc;
+    *(char**)(s + 0xb4) = f;
+    *(char**)(s + 0xa8) = f;
+    *(char**)(s + 0xa4) = f;
+    *(char**)(s + 0xac) = f + 0x40;
+
+    void* a = Node8F4d0();
+    ((void(__thiscall*)(void*))(*(void***)a)[8])(a);
+
+    void* local = 0;
+    void* b = Node8F4d0();
+    if (!((bool(__thiscall*)(void*, void**))(*(void***)b)[4])(b, &local)) {
+        if (local) JobRelease(local, 0);
+        ((void(__thiscall*)(void*))(*(void***)a)[9])(a);
+        return false;
+    }
+
+    void* local2 = 0;
+    void* c = Node8F4d0();
+    if (!((bool(__thiscall*)(void*, void**))(*(void***)c)[4])(c, &local2)) {
+        if (local2) JobRelease(local2, 0);
+        if (local) JobRelease(local, 0);
+        ((void(__thiscall*)(void*))(*(void***)a)[9])(a);
+        return false;
+    }
+
+    *(int*)local = 0x767320;
+    *(void**)((char*)local + 4) = s;
+    *(int*)((char*)local + 0x18) = 4;
+    JobInit(local, 0, s);
+    JobGetStatus(local, 0);
+
+    *(int*)local2 = 0x7646f0;
+    *(void**)((char*)local2 + 4) = s;
+    *(int*)((char*)local2 + 0x18) = 1;
+    JobInit(local2, 0, s);
+    JobAddDep(local2, 0, local);
+    JobGetStatus(local2, 0);
+    *(void**)outPtr = local2;
+
+    if (local) JobRelease(local, 0);
+    ((void(__thiscall*)(void*))(*(void***)a)[9])(a);
+    return true;
+}
+
+// @ 0x007679f0
+bool __stdcall ReadAbilityList(void* stream, char* obj, void* key)
+{
+    (void)key;
+    uint32_t count = 0;
+    if (!ReadValue(stream, &count, 4))
+        return false;
+    if (!HasRoom(stream, 4, (int)count))
+        return false;
+    uint32_t zero = 0;
+    VecResizeInt(obj + 8, 0, (int)count, &zero);
+    for (uint32_t i = 0; i < count; i++) {
+        uint32_t kind;
+        if (!ReadValue(stream, &kind, 4))
+            return false;
+        void* p;
+        if (kind == 0x20d) {
+            p = Alloc6(0x70, "Editor", 0, 0, 0, 0);
+            if (p) CtorEditor(p, 0);
+            uint32_t n;
+            if (!ReadValue(stream, &n, 4) || n > 6)
+                return false;
+            *(uint32_t*)((char*)p + 0xc) = n;
+            char* item = (char*)p + 0x10;
+            for (uint32_t j = 0; j < n; j++, item += 0x10) {
+                if (!ReadValue(stream, item, 0x10))
+                    return false;
+                int in[3] = {0, 0, 0};
+                int out[3];
+                if (!ReadValue(stream, &in[0], 4) || !ReadValue(stream, &in[2], 4))
+                    return false;
+                int* r = (int*)ResolveColorSlot(out, in);
+                in[0] = r[0];
+                in[1] = r[1];
+                in[2] = r[2];
+                void* mm = FUN_0067dd60();
+                int img = ((int(__thiscall*)(void*, int, int, int))(*(void***)mm)[8])(mm, in[0], in[2], 4);
+                GetImageResource2(item + 4, 0, img);
+            }
+        } else {
+            int size = (int)(size_t)Fake78050((int)kind);
+            p = LockedAlloc(size + 0xc, 0, 0, 0, 0, 0);
+            if (p) {
+                *(short*)((char*)p + 4) = (short)kind;
+                *(void**)p = (void*)0x13ef094;
+                *(unsigned short*)((char*)p + 6) = (unsigned short)size;
+                *(void**)((char*)p + 8) = (char*)p + 0xc;
+            }
+            if (!ReadValue(stream, *(void**)((char*)p + 8), size)) {
+                ((void(__thiscall*)(void*, int))(*(void***)p)[0])(p, 1);
+                return false;
+            }
+        }
+        *(void**)(*(int*)(obj + 8) + i * 4) = p;
+    }
+    return true;
+}
+
+// @ 0x00767c80
+bool __stdcall ReadMaterialList(void* stream, char* obj, uint32_t* key3)
+{
+    *(uint32_t*)(obj + 8) = key3[0];
+    *(uint32_t*)(obj + 0xc) = key3[1];
+    *(uint32_t*)(obj + 0x10) = key3[2];
+    int one;
+    if (!ReadInt32(stream, &one, 1, 0) || one != 1)
+        return false;
+    int count;
+    if (!ReadInt32(stream, &count, 1, 0))
+        return false;
+    for (int i = 0; i < count; i++) {
+        void* p = 0;
+        if (!FUN_0071f8f0(stream, &p)) {
+            if (p) {
+                volatile int* rc = (volatile int*)((char*)p + 4);
+                if (_InterlockedExchangeAdd((volatile long*)rc, -1) - 1 == 0) {
+                    _InterlockedExchange((volatile long*)rc, 1);
+                    ((void(__thiscall*)(void*, int))(*(void***)p)[0])(p, 1);
+                }
+            }
+            return false;
+        }
+        RefVecPush2(obj + 0x18, 0, &p);
+        if (p) {
+            volatile int* rc = (volatile int*)((char*)p + 4);
+            if (_InterlockedExchangeAdd((volatile long*)rc, -1) - 1 == 0) {
+                _InterlockedExchange((volatile long*)rc, 1);
+                ((void(__thiscall*)(void*, int))(*(void***)p)[0])(p, 1);
+            }
+        }
+    }
+    for (int i = 0; i < count; i++) {
+        int e = *(int*)(*(int*)(obj + 0x18) + i * 4);
+        int idx = FUN_0071ddc0((void*)e, 0x15, 0, 6, 8);
+        if (idx >= 0) {
+            char* slot = (char*)(idx * 0x20 + 0x10 + *(int*)(e + 8));
+            void* local = 0;
+            void* mm = MaterialManager();
+            int r = ((int(__thiscall*)(void*, void*, void*, void*, void*, void*))(*(void***)mm)[0x48 / 4])(
+                mm, stream, *(void**)slot, *((void**)slot + 1), &local, key3);
+            if (r < 0) {
+                if (local) ((void(__thiscall*)(void*))(*(void***)local)[1])(local);
+                return false;
+            }
+            if (local) {
+                RemoveRC2(local, 0, *((void**)slot + 3));
+                void* old = *((void**)slot + 3);
+                if (local != old) {
+                    ((void(__thiscall*)(void*))(*(void***)local)[0])(local);
+                    *((void**)slot + 3) = local;
+                    if (old) ((void(__thiscall*)(void*))(*(void***)old)[1])(old);
+                }
+            }
+            if (local) ((void(__thiscall*)(void*))(*(void***)local)[1])(local);
+        }
+    }
+    return true;
 }
 
 // @ 0x00767ee0
@@ -2120,6 +3322,17 @@ void C68200::Release()
     }
 }
 
+// @ 0x00768240
+C68240::C68240(void* arg)
+{
+    char* base = m18;
+    m10 = base;
+    m4 = base;
+    m0 = base;
+    m8 = base + 0x80;
+    RegisterJob(arg);
+}
+
 // @ 0x007682a0
 void V7cB::Resize(uint32_t n)
 {
@@ -2135,34 +3348,16 @@ void V7cB::Resize(uint32_t n)
 }
 
 // @ 0x00768370
-C68370::C68370(void* a, int* b, void* c, int* d, void* e)
+C68370::C68370(IRefB* a, IObj_s0076_7ee0* b, int* c, IObj_s0076_7ee0* d, int e)
+: m_pC(b), m_pE(d), m_pA(a), m_v18(e), m_v1c(c[0]), m_v20(c[1]), m_v24(c[2])
 {
-    m0 = (void*)0;            // vtable (masked)
-    m4 = (void*)0;
-    _InterlockedExchange((volatile long*)&m8, 0);
-    m0 = (void*)0;
-    m4 = (void*)0;
-    mc = b;
-    if (b) ((void(__thiscall**)(void*))*(void***)b)[1](b);
-    m10 = e;
-    if (e) ((void(__thiscall**)(void*))*(void***)e)[1](e);
-    m14 = a;
-    if (a) ((void(__thiscall**)(void*))*(void***)a)[0](a);
-    m18 = 0; // param_6 (int) - approximated
-    m1c = d[0];
-    m20 = d[1];
-    m24 = d[2];
-    m28 = 0;
-    mFC = 0; m100 = 0;
-    m104 = (char*)this + 0x11c;
-    m108 = (char*)this + 0x11c;
-    m10c = (char*)this + 0x19c;
-    m118 = 0;
-    m19c = (char*)this + 0x1b4;
-    m1a0 = (char*)this + 0x1b4;
-    m1a4 = (char*)this + 0x334;
-    m1b0 = 0;
     m334 = 0;
+    IObj_s0076_7ee0* p = m_pE->GetChild();
+    if (p) {
+        if (p->GetKind() == 0x34722300)
+            p = new ("Graphics", 0, 0, 0, 0) Child(0x2000, 0, p);
+        m_p28 = p;
+    }
 }
 
 // @ 0x00769200
@@ -2200,6 +3395,23 @@ bool Factory_s0076_89a0::WriteResource(void* obj, void* src, void* u3, void* u4)
     return false;
 }
 
+// @ 0x00769cb0
+char __fastcall Func69cb0(void* self, int, int unused)
+{
+    (void)unused;
+    char* s = (char*)self;
+    void* obj = *(void**)(s + 0x10);
+    int uVar5 = *(int*)(s + 0x2c);
+    int a14 = *(int*)(s + 0x14);
+    int a28 = *(int*)(s + 0x28);
+    int ebp = *(int*)(s + 0xc);
+    int v = ((int(__thiscall**)(void*, int))*(void***)obj)[4](obj, uVar5);
+    char c = ((M69310*)ebp)->Meth(a28, a14, v);
+    if (c)
+        *(char*)(s + 0x334) = 1;
+    return c;
+}
+
 // @ 0x00769cf0
 char __fastcall Func69cf0(void* self, int, void* stream, void* a2, void* a3)
 {
@@ -2216,21 +3428,7 @@ char __fastcall Func69cf0(void* self, int, void* stream, void* a2, void* a3)
 }
 
 // @ 0x00769d80
-// The reader is a cGraphicsResourceFactory member: the original takes `this` in ecx and four
-// stack arguments (it ends with `ret 0x10`), and every dispatch target is a __thiscall on the
-// same factory (ecx = the factory, three stack arguments).
-struct cGraphicsResourceFactoryStream {
-    char ReadResourceFromStream(int* src, void* a2, int* obj, uint32_t kind);
-
-    char ReadPCAWeights_(void* holder, void* a2, void* obj);           // 0x763950
-    char ReadVia69cf0_(void* holder, void* a2, void* obj);             // 0x769cf0
-    char ReadMaterialList_(void* holder, void* a2, void* obj);         // 0x767c80
-    char ReadVia64ce0_(void* holder, void* a2, void* obj);             // 0x764ce0
-    char ReadVia637d0_(void* holder, void* a2, int four, void* obj);   // 0x7637d0
-    char ReadVia67170_(void* holder, void* a2, void* obj);             // 0x767170
-};
-
-char cGraphicsResourceFactoryStream::ReadResourceFromStream(int* src, void* a2, int* obj, uint32_t kind)
+char cGraphicsResourceFactory::ReadResourceFromStream(int* src, void* a2, int* obj, uint32_t kind)
 {
     int* holder = 0;
     int* arg = src;
@@ -2249,20 +3447,20 @@ char cGraphicsResourceFactoryStream::ReadResourceFromStream(int* src, void* a2, 
     bool handled = true;
     if (type <= 0x2cb4f2f) {
         if (type == 0x2cb4f2f)
-            r = ReadPCAWeights_(arg, a2, obj);
+            r = ReadPCAWeights(arg, a2, obj);
         else if (type == 0xe6bce5)
-            r = ReadVia69cf0_(arg, a2, obj);
+            r = ReadVia69cf0(arg, a2, obj);
         else if (type == 0x1c135da)
             r = ReadMaterialList_(arg, a2, obj);
         else
             handled = false;
     } else if (type == 0x2f4e681b) {
-        r = ReadVia64ce0_(arg, a2, obj);
+        r = ReadVia64ce0(arg, a2, obj);
     } else if (type == 0x2f4e681c && kind <= 0x2f7d0004) {
         if (kind == 0x2f7d0004)
-            r = ReadVia637d0_(arg, a2, 4, obj);
+            r = ReadVia637d0(arg, a2, 4, obj);
         else if (kind != 0x2f4e681b && kind == 0x2f4e681c)
-            r = ReadVia67170_(arg, a2, obj);
+            r = ReadVia67170(arg, a2, obj);
         else
             handled = false;
     } else {
@@ -2276,6 +3474,83 @@ char cGraphicsResourceFactoryStream::ReadResourceFromStream(int* src, void* a2, 
     if (holder)
         ((void(__thiscall**)(int*))*(void***)holder)[2](holder);
     return r;
+}
+
+// @ 0x00769f20
+bool __fastcall SetupJobChain(void* self, int, void** out)
+{
+    Grf* s = (Grf*)self;
+    s->stateFC = 3;
+    IJobMgr_s0076_9f20* jm = GetJobManager_s0076_9f20();
+    jm->Lock();
+
+    JobRefL_s0076_9f20 j1, j2, j3, j4;
+    if (!CreateJobInto(GetJobManager_s0076_9f20(), j1)) { jm->Unlock(); return false; }
+    if (!CreateJobInto(GetJobManager_s0076_9f20(), j2)) { j1.Reset(); jm->Unlock(); return false; }
+    if (!CreateJobInto(GetJobManager_s0076_9f20(), j3)) { j2.Reset(); j1.Reset(); jm->Unlock(); return false; }
+    if (!CreateJobInto(GetJobManager_s0076_9f20(), j4)) { j3.Reset(); j2.Reset(); j1.Reset(); jm->Unlock(); return false; }
+
+    JobRefL_s0076_9f20 l1, l2;
+    if (!LockTable(self)->TryLockJobs(&l1, &l2)) {
+        l2.Reset(); l1.Reset();
+        j4.Reset(); j3.Reset(); j2.Reset(); j1.Reset();
+        jm->Unlock();
+        return false;
+    }
+
+    j1.p->SetCallback((void*)0x767330, self);
+    j1.p->mFlags = 4;
+    j1.p->SetExtra(self);
+    j1.p->Submit();
+
+    j2.p->SetCallback((void*)0x767340, self);
+    j2.p->mFlags = 0x80000000;
+    j2.p->SetExtra(self);
+    j2.p->AddDependency(j1.p);
+    j2.p->Submit();
+
+    l1.p->AddDependency(j2.p);
+    l1.p->Submit();
+
+    j3.p->SetCallback((void*)0x765190, self);
+    j3.p->mFlags = 4;
+    j3.p->SetExtra(self);
+    j3.p->AddDependency(l1.p);
+    j3.p->Submit();
+
+    j4.p->SetCallback((void*)0x769d70, self);
+    j4.p->mFlags = 1;
+    j4.p->SetExtra(self);
+    j4.p->AddDependency(j3.p);
+    j4.p->Submit();
+
+    l2.p->AddDependency(j4.p);
+    l2.p->Submit();
+
+    *out = j4.p;
+    j4.p = 0;
+
+    l2.Reset(); l1.Reset();
+    j4.Reset(); j3.Reset(); j2.Reset(); j1.Reset();
+    jm->Unlock();
+    return true;
+}
+
+// @ 0x0076a300
+char __fastcall Func76a300(void* self, int, int unused)
+{
+    (void)unused;
+    char* s = (char*)self;
+    void* obj = *(void**)(s + 0x10);
+    int uVar5 = *(int*)(s + 0x18);
+    int a14 = *(int*)(s + 0x14);
+    int a28 = *(int*)(s + 0x28);
+    int ebp = *(int*)(s + 0xc);
+    int v = ((int(__thiscall**)(void*, int))*(void***)obj)[4](obj, uVar5);
+    char c = ((M69d80*)ebp)->Meth(a28, a14, v);
+    if (c)
+        *(char*)(s + 0x334) = 1;
+    return c;
 }
 
 // @ 0x0076a340
@@ -2302,54 +3577,205 @@ char __fastcall ReadResource(void* self, int, void* a1, void* a2, void* a3)
     return FUN_00769d80v(u, a1, &t, t);
 }
 
-// @ 0x0076a720
-bool __fastcall CanConvert(void* self, int, void* out)
+// @ 0x0076a400
+bool __fastcall CreateRequestJob(void* self, int, void* out)
 {
-    C69a9* s = (C69a9*)self;
-    void* a = Node8F4d0();
-    ((void(__thiscall**)(void*))*(void***)a)[8](a);
-    int holder = 0;
-    int type = s->m18;
-    char r;
-    if (type < 0x2f4e681c) {
-        if (type == 0x2f4e681b) r = FUN_00765b30v(self, &holder);
-        else if (type == 0xe6bce5) r = SetupJobChain(self, 0, 0);
-        else if (type == 0x1c135da) r = TryLockChain(self, 0, 0);
-        else r = CreateRequestJob(self, 0, &holder);
-    } else if (type == 0x2f4e681c) {
-        void* p = (void*)((int(__thiscall**)(void*))*(void***)s->m10)[4](s->m10);
-        uint32_t sub = *(uint32_t*)((char*)p + 4);
-        if (sub < 0x2f7d0005) {
-            if (sub == 0x2f7d0004) r = FUN_007652c0v(self, &holder);
-            else if (sub == 0x2f4e681b) r = FUN_00765d30v(self, &holder);
-            else if (sub == 0x2f4e681c) r = ArmDecodeB(self, 0, 0);
-            else return false;
-        } else if (sub == 0x2f7d0007) r = FUN_007652c0v(self, &holder);
-        else return false;
-    } else {
-        r = CreateRequestJob(self, 0, &holder);
-    }
-    if (!r)
+    void* n = Node8F4d0();
+    int local = 0;
+    (void)local;
+    if (!((bool(__thiscall**)(void*, int*))*(void***)n)[4](n, &local))
         return false;
-    *(void**)out = (void*)holder;
+    char* lp = (char*)local;
+    *(void**)(lp) = (void*)0;          // callback
+    *(void**)(lp + 4) = self;
+    *(int*)(lp + 0x18) = 1;
+    FUN_0068f9b0(self);
+    FUN_006909b0(lp);
+    *(void**)out = lp;
+    return true;
+}
+
+// @ 0x0076a4d0
+bool __fastcall TryLockChain(void* self, int, void** out)
+{
+    IJobMgr_s0076_9f20* jm = GetJobManager_s0076_9f20();
+    jm->Lock();
+
+    JobRefL_s0076_9f20 j1, j2;
+    if (!CreateJobInto(GetJobManager_s0076_9f20(), j1)) { jm->Unlock(); return false; }
+    if (!CreateJobInto(GetJobManager_s0076_9f20(), j2)) { j1.Reset(); jm->Unlock(); return false; }
+
+    JobRefL_s0076_9f20 a, b;
+    if (!LockTable(self)->TryLockJobs(&a, &b)) {
+        b.Reset(); a.Reset();
+        j2.Reset(); j1.Reset();
+        jm->Unlock();
+        return false;
+    }
+
+    a.p->Submit();
+
+    j1.p->SetCallback((void*)0x765190, self);
+    j1.p->mFlags = 4;
+    j1.p->SetExtra(self);
+    j1.p->AddDependency(a.p);
+    j1.p->Submit();
+
+    j2.p->SetCallback((void*)0x76a3f0, self);
+    j2.p->mFlags = 1;
+    j2.p->SetExtra(self);
+    j2.p->AddDependency(j1.p);
+    j2.p->Submit();
+
+    b.p->AddDependency(j2.p);
+    b.p->Submit();
+
+    *out = j2.p;
+    j2.p = 0;
+
+    b.Reset(); a.Reset();
+    j2.Reset(); j1.Reset();
+    jm->Unlock();
+    return true;
+}
+
+// @ 0x0076a720
+bool __fastcall CanConvert(void* self, int, void** out)
+{
+    Grf* s = (Grf*)self;
+    IJobMgr_s0076_9f20* jm = GetJobManager_s0076_9f20();
+    jm->Lock();
+
+    JobRefL_s0076_9f20 job;
+    uint32_t type = s->type18;
+    char ok;
+    if (type <= 0x2f4e681b) {
+        if (type == 0x2f4e681b)
+            ok = StartReqB(self, 0, (void**)&job.p);
+        else if (type == 0xe6bce5)
+            ok = SetupJobChain(self, 0, (void**)&job.p);
+        else if (type == 0x1c135da)
+            ok = TryLockChain(self, 0, (void**)&job.p);
+        else
+            ok = CreateRequestJob(self, 0, &job.p);
+    } else if (type == 0x2f4e681c) {
+        RecInfo* info = s->p10->Info();
+        uint32_t sub = info->f4;
+        if (sub <= 0x2f7d0004) {
+            if (sub == 0x2f7d0004)
+                ok = StartReqA(self, 0, (void**)&job.p);
+            else if (sub == 0x2f4e681b)
+                ok = StartReqC(self, 0, (void**)&job.p);
+            else if (sub == 0x2f4e681c)
+                ok = ArmDecodeB(self, 0, (int)(size_t)&job.p);
+            else {
+                jm->Unlock();
+                return false;
+            }
+        } else if (sub == 0x2f7d0007) {
+            ok = StartReqA(self, 0, (void**)&job.p);
+        } else {
+            jm->Unlock();
+            return false;
+        }
+    } else {
+        ok = CreateRequestJob(self, 0, &job.p);
+    }
+
+    if (!ok) {
+        job.Reset();
+        jm->Unlock();
+        return false;
+    }
+
+    JobRefL_s0076_9f20 j2;
+    if (!CreateJobInto(GetJobManager_s0076_9f20(), j2)) {
+        j2.Reset();
+        job.Reset();
+        jm->Unlock();
+        return false;
+    }
+
+    j2.p->SetCallback((void*)0x765180, self);
+    j2.p->SetExtra(self);
+    j2.p->AddWeakDependency(job.p);
+
+    *out = j2.p;
+    j2.p = 0;
+
+    job.Reset();
+    jm->Unlock();
     return true;
 }
 
 // @ 0x0076a940
-bool __cdecl CreateConvertedResourceAsync(void* a, void* b, void* c, int* d, void* e)
+bool __cdecl CreateConvertedResourceAsync(void* out, void* a, void* b, IConvCtx* c, void* d)
 {
-    if (!FUN_0067de70())
+    void* mgr = FUN_0067de70();
+    if (!mgr)
         return false;
-    void* res = 0;
-    int t = ((int(__thiscall**)(int*))*(void***)d)[4](d);
-    if (!FUN_007666a0v(&res, e, *(void**)((char*)t + 4)))
+
+    IRefObj_s0076_9f20* res = 0;
+    RecInfo* info = c->Info();
+    if (!CreateByType(a, 0, (void**)&res, d, info->f4)) {
+        if (res)
+            res->Release();
         return false;
-    void* job = Alloc6(0x338, "Graphics", 0, 0, 0, 0);
-    if (job)
-        job = FUN_00768370v(res, b, c, d, e);
-    if (job)
-        ((void(__thiscall**)(void*))*(void***)job)[0](job);
-    ((void(__thiscall**)(int*))*(void***)d)[8](d);
+    }
+
+    void* mem = Alloc6(0x338, "Graphics", 0, 0, 0, 0);
+    ConvObj* conv = mem ? (ConvObj*)((ConvObj*)mem)->Init(res, a, b, c, d) : 0;
+    if (conv)
+        ((IRefObj_s0076_9f20*)conv)->AddRef();
+
+    c->Begin();
+
+    IJobMgr_s0076_9f20* jm = GetJobManager_s0076_9f20();
+    jm->Lock();
+
+    JobRefL_s0076_9f20 job;
+    if (!CanConvert(conv, 0, (void**)&job.p)) {
+        c->End();
+        job.Reset();
+        jm->Unlock();
+        if (conv)
+            ((IRefObj_s0076_9f20*)conv)->Release();
+        if (res)
+            res->Release();
+        return false;
+    }
+
+    JobRefL_s0076_9f20 jobcopy;
+    jobcopy.p = job.p;
+    if (jobcopy.p)
+        jobcopy.p->AddRef();
+
+    IRefObj_s0076_9f20* req = 0;
+    bool ok = ((AsyncResMgr*)mgr)->AllocateRequest(b, &req, &jobcopy);
+    job.p->Submit();
+
+    if (!ok) {
+        if (req)
+            req->Release();
+        jobcopy.Reset();
+        job.Reset();
+        jm->Unlock();
+        if (conv)
+            ((IRefObj_s0076_9f20*)conv)->Release();
+        if (res)
+            res->Release();
+        return false;
+    }
+
+    *(void**)out = req;
+
+    jobcopy.Reset();
+    job.Reset();
+    jm->Unlock();
+    if (conv)
+        ((IRefObj_s0076_9f20*)conv)->Release();
+    if (res)
+        res->Release();
     return true;
 }
 

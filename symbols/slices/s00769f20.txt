@@ -1,8 +1,11 @@
-00769f20 SetupJobChain  # PDB candidate cGraphicsResourceAsyncRequest chain; 3 sub-jobs + callback
-0076a300 Func76a300  # PDB candidate cGraphicsResourceAsyncRequest::LoadSimple
+0068f950 ?AddRef@cJob@SP@@QAEHXZ  # SP::cJob::AddRef (callee of s00769f20, named from the dev publics; slice address comment)
+00691380 ?AddDependency@cJob@SP@@QAEXPAV12@@Z  # SP::cJob::AddDependency (callee of s00769f20, named from the dev publics; slice address comment)
+006913c0 ?AddWeakDependency@cJob@SP@@QAEXPAV12@@Z  # SP::cJob::AddWeakDependency (callee of s00769f20, named from the dev publics; slice address comment)
+00769f20 ?SetupJobChain@@YI_NPAXHPAPAX@Z  # SetupJobChain migrated from s00769f20 (verbatim, slice spelling)
+0076a300 ?Func76a300@@YIDPAXHH@Z  # Func76a300 migrated from s00769f20 (verbatim, slice spelling)
 0076a340 ?ReadResource@@YIDPAXH000@Z  # ReadResource migrated from s00769f20 (verbatim, slice spelling)
-0076a400 CreateRequestJob  # single async request job registration
-0076a4d0 TryLockChain  # try-locks two jobs and chains a 4-step job
-0076a720 ?CanConvert@@YI_NPAXH0@Z  # CanConvert migrated from s00769f20 (verbatim, slice spelling)
-0076a940 ?CreateConvertedResourceAsync@@YA_NPAX00PAH0@Z  # CreateConvertedResourceAsync migrated from s00769f20 (verbatim, slice spelling)
+0076a400 ?CreateRequestJob@@YI_NPAXH0@Z  # CreateRequestJob migrated from s00769f20 (verbatim, slice spelling)
+0076a4d0 ?TryLockChain@@YI_NPAXHPAPAX@Z  # TryLockChain migrated from s00769f20 (verbatim, slice spelling)
+0076a720 ?CanConvert@@YI_NPAXHPAPAX@Z  # CanConvert migrated from s00769f20 (verbatim, slice spelling)
+0076a940 ?CreateConvertedResourceAsync@@YA_NPAX00PAUIConvCtx@@0@Z  # CreateConvertedResourceAsync migrated from s00769f20 (verbatim, slice spelling)
 0076ac30 ?CreateResourceAsync@@YI_NPAXH00PAH00H@Z  # CreateResourceAsync migrated from s00769f20 (verbatim, slice spelling)

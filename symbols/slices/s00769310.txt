@@ -1,4 +1,4 @@
 00769310 SP::cGraphicsResourceFactory::ReadResourceGameModel  # game-model reader
-00769cb0 Func69cb0  # forwards member 0xc/0x10/0x14/0x28/0x2c to ReadResourceGameModel, sets flag +0x334
+00769cb0 ?Func69cb0@@YIDPAXHH@Z  # Func69cb0 migrated from s00769310 (verbatim, slice spelling)
 00769cf0 ?Func69cf0@@YIDPAXH000@Z  # Func69cf0 migrated from s00769310 (verbatim, slice spelling)
-00769d80 ?ReadResourceFromStream@@YIDPAXHPAH10@Z  # ReadResourceFromStream migrated from s00769310 (verbatim, slice spelling)
+00769d80 ?ReadResourceFromStream@cGraphicsResourceFactory@@QAEDPAHPAX0I@Z  # cGraphicsResourceFactory::ReadResourceFromStream migrated from s00769310 (verbatim, slice spelling)
