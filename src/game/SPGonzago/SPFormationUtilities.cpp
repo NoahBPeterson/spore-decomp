@@ -1,4 +1,4 @@
-// src/game/SPGonzago/SPFormationUtilities.cpp -- migrated from slice(s) s00afab70 by tools/migrate/rewrite.py
+// src/game/SPGonzago/SPFormationUtilities.cpp -- migrated from slice(s) s00afbaf0, s00afab70 by tools/migrate/rewrite.py
 // Object file: SPGonzago/SPFormationUtilities.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -178,6 +178,45 @@ struct RandomLinearCongruential_s00af_ab70 {
   u32 RandomUint32Uniform(u32 n);                                 // 0xa68fb0
 };
 // ---- items of slice s00afab70 end
+
+// ---- items of slice s00afbaf0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern float    g_fSpace;           // 0x0167aec4
+extern float    g_fSpaceB;          // 0x0167aec8
+extern float    g_fSpaceC;          // 0x0167aecc
+struct tFloat4 {
+    float       x;
+    float       y;
+    float       z;
+    void*       pCtx;
+
+    tFloat4() {}
+    tFloat4(const tFloat4& o) { x = o.x; y = o.y; z = o.z; pCtx = o.pCtx; }
+    ~tFloat4() {}
+};
+void    __stdcall FUN_00afb0d0(void* pOut, const void* pKey);                   // 0x00afb0d0
+void    __cdecl FUN_00afb8f0(int32_t* pBase, int32_t nFirst, int32_t nCount, int32_t nRoot,
+                             int32_t nKey, tFloat4 v);                          // 0x00afb8f0
+void    __cdecl FUN_00afbf40(int32_t* pBase, int32_t* pLast, tFloat4 v);        // 0x00afbf40
+void    __cdecl FUN_00afbfb0(int32_t* pBase, int32_t* pLast, tFloat4 v);        // 0x00afbfb0
+struct tInsertArgs {
+    int32_t     nKey;                               // +0x00
+    float       f0;                                 // +0x04
+    float       f1;                                 // +0x08
+    float       f2;                                 // +0x0c
+    float       f3;                                 // +0x10
+    float       f4;                                 // +0x14
+    float       f5;                                 // +0x18
+    float       f6;                                 // +0x1c
+};
+struct cSearchHost {
+    int32_t     mnField00;                          // +0x00
+    int32_t*    mpTable;                            // +0x04
+    int32_t     mnIndex;                            // +0x08
+
+    int32_t*    FindAndInsert(const void* pKey);    // 0x00afc030
+    void        FUN_00afb7e0(void* pA, void* pB, int32_t nFlags); // 0x00afb7e0
+};
+// ---- items of slice s00afbaf0 end
 
 // @ 0x00afadb0
 bool DistCtx::IsCloser(int a, int b) const
@@ -492,4 +531,54 @@ SP::cActionCircle_s00af_ab70::~cActionCircle_s00af_ab70()
 {
   mSlots.Destroy();
   mAgents.Destroy();
+}
+
+// @ 0x00afbf40
+void __cdecl FUN_00afbf40(int32_t* pBase, int32_t* pLast, tFloat4 v)
+{
+    int32_t nCount = (int32_t)(pLast - pBase);
+    if (nCount >= 2) {
+        int32_t i = ((nCount - 2) >> 1) + 1;
+        do {
+            i = i - 1;
+            FUN_00afb8f0(pBase, i, nCount, i, pBase[i], v);
+        } while (i != 0);
+    }
+}
+
+// @ 0x00afbfb0
+void __cdecl FUN_00afbfb0(int32_t* pBase, int32_t* pLast, tFloat4 v)
+{
+    int32_t nCount = (int32_t)((char*)pLast - (char*)pBase) >> 2;
+    if (nCount > 1) {
+        int32_t* p = pLast - 1;
+        do {
+            int32_t nKey = *p;
+            *p = *pBase;
+            FUN_00afb8f0(pBase, 0, nCount - 1, 0, nKey, v);
+            p = p - 1;
+            nCount = (int32_t)(p + 1 - pBase);
+        } while (nCount > 1);
+    }
+}
+
+// @ 0x00afc030
+int32_t* cSearchHost::FindAndInsert(const void* pKey)
+{
+    int32_t aSlot[3];
+    FUN_00afb0d0(aSlot, pKey);
+    if (aSlot[0] == mpTable[mnIndex]) {
+        tInsertArgs aValue;
+        aValue.nKey = *(int32_t*)pKey;
+        pKey = (const void*)((uint32_t)pKey & 0xFFFFFF00);
+        aValue.f0 = 0.0f;
+        aValue.f1 = g_fSpace;
+        aValue.f2 = g_fSpaceB;
+        aValue.f3 = g_fSpaceC;
+        aValue.f4 = g_fSpace;
+        aValue.f5 = g_fSpaceB;
+        aValue.f6 = g_fSpaceC;
+        FUN_00afb7e0(aSlot, &aValue, (int32_t)pKey);
+    }
+    return (int32_t*)(aSlot[0] + 4);
 }
