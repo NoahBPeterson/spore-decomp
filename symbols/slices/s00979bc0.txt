@@ -1,3 +1,3 @@
-00979bc0 ?CopyCellData@WinGrid@@QAE_NHHHH_N@Z  # EA::UTFWinControls::WinGrid::CopyCellData (5-arg overload) derived in s00979bc0
-00979db0 ?GetColumnWidthInternal@WinGrid@@QAEMH@Z  # EA::UTFWinControls::WinGrid::GetColumnWidthInternal derived in s00979bc0
-00979f10 ?GetRowHeightInternal@WinGrid@@QAEMH@Z  # EA::UTFWinControls::WinGrid::GetRowHeightInternal derived in s00979bc0
+00979bc0 ?CopyCellData@WinGrid_s0097_9bc0@@QAE_NHHHH_N@Z  # WinGrid_s0097_9bc0::CopyCellData migrated from s00979bc0 (verbatim, slice spelling)
+00979db0 ?GetColumnWidthInternal@WinGrid_s0097_9bc0@@QAEMH@Z  # WinGrid_s0097_9bc0::GetColumnWidthInternal migrated from s00979bc0 (verbatim, slice spelling)
+00979f10 ?GetRowHeightInternal@WinGrid_s0097_9bc0@@QAEMH@Z  # WinGrid_s0097_9bc0::GetRowHeightInternal migrated from s00979bc0 (verbatim, slice spelling)

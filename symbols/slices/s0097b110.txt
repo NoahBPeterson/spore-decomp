@@ -1,7 +1,8 @@
-0097b110 ?ScrollCellsVertically@WinGrid@@QAEXH@Z  # EA::UTFWinControls::WinGrid::ScrollCellsVertically derived in s0097b110
-0097b230 ?ScrollCellsHorizontally@WinGrid@@QAEXH@Z  # EA::UTFWinControls::WinGrid::ScrollCellsHorizontally derived in s0097b110
-0097b350 ?CopyColumns@WinGrid@@QAEXHHH_N@Z  # EA::UTFWinControls::WinGrid::CopyColumns derived in s0097b110
-0097b630 ?CopyRows@WinGrid@@QAEXHHH_N@Z  # EA::UTFWinControls::WinGrid::CopyRows derived in s0097b110
-0097b910 ?GetCellRect@WinGrid@@QAEXHHAAURectT@Gr@@@Z  # EA::UTFWinControls::WinGrid::GetCellRect derived in s0097b110
-0097ba60 ?ResizeColumnToFitCellWindows@WinGrid@@QAEXHH@Z  # EA::UTFWinControls::WinGrid::ResizeColumnToFitCellWindows derived in s0097b110
-0097bc80 ?RecalculateAll@WinGrid@@QAEXXZ  # EA::UTFWinControls::WinGrid::RecalculateAll derived in s0097b110
+00974d80 ?TestForPossibleScrollBarAdditionOrRemoval@WinGrid@UTFWinControls@EA@@IAE_NXZ  # EA::UTFWinControls::WinGrid::TestForPossibleScrollBarAdditionOrRemoval (callee of s0097b110, named from the dev publics; slice address comment)
+0097b110 ?ScrollCellsVertically@WinGridIface_s0097_b110@Gr@@QAE_NH@Z  # WinGridIface_s0097_b110::ScrollCellsVertically migrated from s0097b110 (verbatim, slice spelling)
+0097b230 ?ScrollCellsHorizontally@WinGridIface_s0097_b110@Gr@@QAE_NH@Z  # WinGridIface_s0097_b110::ScrollCellsHorizontally migrated from s0097b110 (verbatim, slice spelling)
+0097b350 ?CopyColumns@WinGridIface_s0097_b110@Gr@@QAE_NHHHH@Z  # WinGridIface_s0097_b110::CopyColumns migrated from s0097b110 (verbatim, slice spelling)
+0097b630 ?CopyRows@WinGridIface_s0097_b110@Gr@@QAE_NHHHH@Z  # WinGridIface_s0097_b110::CopyRows migrated from s0097b110 (verbatim, slice spelling)
+0097b910 ?GetCellRect@WinGridIface_s0097_b110@Gr@@QAE_NHHPAU?$RectT@M@2@@Z  # WinGridIface_s0097_b110::GetCellRect migrated from s0097b110 (verbatim, slice spelling)
+0097ba60 ?ResizeColumnToFitCellWindows@WinGridIface_s0097_b110@Gr@@QAEXHH@Z  # WinGridIface_s0097_b110::ResizeColumnToFitCellWindows migrated from s0097b110 (verbatim, slice spelling)
+0097bc80 ?RecalculateAll@WinGrid_s0097_b110@Gr@@QAE_NXZ  # WinGrid_s0097_b110::RecalculateAll migrated from s0097b110 (verbatim, slice spelling)

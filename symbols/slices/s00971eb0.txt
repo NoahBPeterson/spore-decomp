@@ -1,0 +1,3 @@
+00972d30 ?clear@CellList@UTFWinControls@EA@@QAEXXZ  # CellList::clear migrated from s00971eb0 (verbatim, slice spelling)
+00972d60 ?find@CellRbtree@UTFWinControls@EA@@QAEXPAPAUCellNode@23@PBUCellData_s0097_1eb0@23@@Z  # CellRbtree::find migrated from s00971eb0 (verbatim, slice spelling)
+00972dd0 ?AllocateNode@CellRbtree@UTFWinControls@EA@@QAEPAUCellNode@23@PBUCellData_s0097_1eb0@23@PAX@Z  # CellRbtree::AllocateNode migrated from s00971eb0 (verbatim, slice spelling)

@@ -1,0 +1,2 @@
+00950bb0 ?DoMessage@CustomWindow@UTFWin@EA@@UAE_NABVMessage@23@@Z  # EA::UTFWin::CustomWindow::DoMessage (callee of s00970f30, named from the dev publics; slice address comment)
+009719a0 ?InvalidateLayout@Window@UTFWinControls@EA@@UAEXXZ  # Window::InvalidateLayout migrated from s00970f30 (verbatim, slice spelling)

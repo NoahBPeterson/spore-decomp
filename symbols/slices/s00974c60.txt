@@ -1,0 +1,5 @@
+00975300 ?push_back@CellList_s0097_4c60@UTFWinControls@EA@@QAEXPBH@Z  # CellList_s0097_4c60::push_back migrated from s00974c60 (verbatim, slice spelling)
+00975350 ?GetMinMaxUsedColForRow@SparseMatrix_s0097_4c60@UTFWinControls@EA@@QAE_NHPAH0@Z  # SparseMatrix_s0097_4c60::GetMinMaxUsedColForRow migrated from s00974c60 (verbatim, slice spelling)
+009753c0 ?Init@EColIterB@@QAEXH@Z  # EColIterB::Init migrated from s00974c60 (verbatim, slice spelling)
+009753f0 ?DoInsertValue@CellRbtree_s0097_4c60@UTFWinControls@EA@@QAEPAXPBUCellData_s0097_4c60@23@PAX@Z  # CellRbtree_s0097_4c60::DoInsertValue migrated from s00974c60 (verbatim, slice spelling)
+00975e00 ?MergeSelection@@YAPAHPAH0000P6AHHH@ZPAPBH_N@Z  # MergeSelection migrated from s00974c60 (verbatim, slice spelling)

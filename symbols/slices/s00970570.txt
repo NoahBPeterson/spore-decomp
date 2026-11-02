@@ -1,3 +1,4 @@
+00950bb0 ?DoMessage@CustomWindow@UTFWin@EA@@UAE_NABVMessage@23@@Z  # EA::UTFWin::CustomWindow::DoMessage (callee of s00970570, named from the dev publics; slice address comment)
 00970570 ?OnFocusChange@WinGrid@UTFWinControls@EA@@QAE_NHPAUIWindow@23@@Z  # EA::UTFWinControls::WinGrid::OnFocusChange migrated from s00970570 (verbatim, slice spelling)
 00970610 ?GetDefaultTextStyle@IWinGrid@UTFWinControls@EA@@QAE_NPAH@Z  # EA::UTFWinControls::IWinGrid::GetDefaultTextStyle migrated from s00970570 (verbatim, slice spelling)
 00970630 ?SetDefaultTextColor@IWinGrid@UTFWinControls@EA@@QAE_NHI@Z  # EA::UTFWinControls::IWinGrid::SetDefaultTextColor migrated from s00970570 (verbatim, slice spelling)
@@ -33,7 +34,7 @@
 00970c10 ?SetExtraDataObject@IWinGrid@UTFWinControls@EA@@QAE_NPAX@Z  # EA::UTFWinControls::IWinGrid::SetExtraDataObject migrated from s00970570 (verbatim, slice spelling)
 00970c30 ?SetSoundID@IWinGrid@UTFWinControls@EA@@QAE_NHH@Z  # EA::UTFWinControls::IWinGrid::SetSoundID migrated from s00970570 (verbatim, slice spelling)
 00970c50 ?FUN_970c50@WinGrid@UTFWinControls@EA@@QAEXH@Z  # EA::UTFWinControls::WinGrid::FUN_970c50 migrated from s00970570 (verbatim, slice spelling)
-00970c70 ?NormalizeRect@CRect@UTFWinControls@EA@@QAEXXZ  # EA::UTFWinControls::CRect::NormalizeRect migrated from s00970570 (verbatim, slice spelling)
+00970c70 ?NormalizeRect@CRect@UTFWinControls@EA@@QAEXXZ  # CRect::NormalizeRect migrated from s00970570 (verbatim, slice spelling)
 00970d20 ?SerUpdate@WinGrid@UTFWinControls@EA@@UAEXXZ  # EA::UTFWinControls::WinGrid::SerUpdate migrated from s00970570 (verbatim, slice spelling)
 00970d70 ?DoMessage@WinGrid@UTFWinControls@EA@@UAE_NPAH@Z  # EA::UTFWinControls::WinGrid::DoMessage migrated from s00970570 (verbatim, slice spelling)
 00970de0 ?GetGridArea@IWinGrid@UTFWinControls@EA@@UAE_NPAURectF@23@@Z  # EA::UTFWinControls::IWinGrid::GetGridArea migrated from s00970570 (verbatim, slice spelling)
