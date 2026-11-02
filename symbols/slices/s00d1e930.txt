@@ -1,0 +1,6 @@
+00d1f070 ?destroy@AbilitySet@@QAEXXZ  # AbilitySet::destroy migrated from s00d1e930 (verbatim, slice spelling)
+00d1f160 ?FUN_00d1f160@@YAXIPAIHPAPAX@Z  # FUN_00d1f160 migrated from s00d1e930 (verbatim, slice spelling)
+00d1f250 ?FUN_00d1f250@@YAXPAPAXI@Z  # FUN_00d1f250 migrated from s00d1e930 (verbatim, slice spelling)
+00d1f2a0 ?FUN_00d1f2a0@@YAXXZ  # FUN_00d1f2a0 migrated from s00d1e930 (verbatim, slice spelling)
+00d1f3c0 ?FUN_00d1f3c0@@YAXXZ  # FUN_00d1f3c0 migrated from s00d1e930 (verbatim, slice spelling)
+00d1f400 ?FUN_00d1f400@@YA_NI@Z  # FUN_00d1f400 migrated from s00d1e930 (verbatim, slice spelling)

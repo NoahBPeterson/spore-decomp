@@ -1,5 +1,7 @@
+00697a50 ?OnKeyDown@cLocalInputState@SP@@QAEXII@Z  # SP::cLocalInputState::OnKeyDown (callee of s00d1f650, named from the dev publics; slice address comment)
+00697b40 ?OnMouseWheel@cLocalInputState@SP@@QAEXHMMI@Z  # SP::cLocalInputState::OnMouseWheel (callee of s00d1f650, named from the dev publics; slice address comment)
 00d1f650 SP::CanUseAbility  # 74-case ability-type dispatch (types 0xd..0x56) to 12 distinct actions: mode/script/animation gates + spatial-target checks (complete, nonmatching - FAIL)
-00d1fa20 SP::IsAbilityAvailable  # ability-slot/current-mode gate + tribe tool-type switch (5/6/7 -> 4/5/6, 0x2b -> 3, 0x3a -> 1, 0x3b -> 2) (complete, nonmatching - WEAK)
+00d1fa20 ?F_d1fa20@@YAEPAH@Z  # F_d1fa20 migrated from s00d1f650 (verbatim, slice spelling)
 00d1fb30 SP::ValidateAbilityTarget  # eastl::vector<cSpatialObject*> terrain scan; 55-entry type dispatch (5/6/7 -> tools 4/5/6, 0x2b/0x3a/0x3b -> tools 3/1/2); returns 0/13/14/15/1 (complete, nonmatching - WEAK)
 00d1fe00 SP::ActivateAbilityTarget  # same terrain scan + dispatch, then 0xd1e5c0 slot lookup, >=g_kOne gate and 0xbc97f0 activation anim (complete, nonmatching - WEAK)
 00d200a0 SP::ScoreAbilityRange  # range probe (0xd1e830/0xd1e610), caster vtable slot 0xb0 distance, tool-index matched terrain scan, max score (complete, nonmatching - WEAK)

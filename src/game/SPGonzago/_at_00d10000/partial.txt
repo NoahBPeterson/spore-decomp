@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+00d15090  38  FUN_00d15090: same noun-manager call, the two player/cheat lookups and the guarded call, but the argument frame is one dword larger than retail (104 vs 103 bytes) and the scheduling around the conditional block differs. flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-, equiv WEAK (400 valid inputs, 16.2% coverage)
