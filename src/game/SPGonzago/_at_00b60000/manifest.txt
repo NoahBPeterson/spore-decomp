@@ -1,0 +1,30 @@
+# source  symbol  va  flags
+../src/game/SPGonzago/_at_00b60000.cpp  ?FSet@WndObj@@QAEXHD@Z  00b639b0  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_00b60000.cpp  ?FGet@WndObj@@QAEXHPAE@Z  00b639f0  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_00b60000.cpp  ?FUN_00b63f70@@YAHHH@Z  00b63f70  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_00b60000.cpp  ?FUN_00b665c0@@YAXPBURadialRay@@PAVcPlanetModel@@PAURayHitResult@@@Z  00b665c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00b60000.cpp  ?FUN_00b66740@@YAXPBURadialRay@@MPAVcPlanetModel@@PAURayHitResult@@@Z  00b66740  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00b60000.cpp  ?FUN_00b668c0@@YAXPAURadialRay@@PAVcPlanetModel@@PAVhkWorld_s00b6_5b10@@PAURayObj@@_NPAURayHitResult@@4@Z  00b668c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00b60000.cpp  ?FUN_00b669b0@@YAXPAURadialRay@@PAVcPlanetModel@@PAVhkWorld_s00b6_5b10@@PAURayObjList@@_NPAURayHitResult@@4@Z  00b669b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00b60000.cpp  ?FUN_00b673c0@@YA_NPAX@Z  00b673c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00b60000.cpp  ?FUN_00b674d0@@YAHI@Z  00b674d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00b60000.cpp  ?FUN_00b67530@@YAHID@Z  00b67530  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00b60000.cpp  ?FUN_00b675a0@@YAHI@Z  00b675a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00b60000.cpp  ?FUN_00b676a0@@YAXXZ  00b676a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00b60000.cpp  ?FUN_00b677a0@@YAII@Z  00b677a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00b60000.cpp  ?FUN_00b67c70@@YAHPAUObj@@@Z  00b67c70  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00b60000.cpp  ?FUN_00b68090@@YAHPAUObj@@@Z  00b68090  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00b60000.cpp  ?RemoveUICtx@@YAXH@Z  00b6c200  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00b60000.cpp  ?RefreshUITooltips@@YAXXZ  00b6c280  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00b60000.cpp  ?FUN_00b6e1e0@@YADH@Z  00b6e1e0  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_00b60000.cpp  ?GetInterface@cSimUIObject@@QAEPAXI@Z  00b6e210  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_00b60000.cpp  ?FUN_00b6e250@@YAHXZ  00b6e250  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_00b60000.cpp  ?FUN_00b6e270@@YAHH@Z  00b6e270  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_00b60000.cpp  ?FUN_00b6e290@@YAHH@Z  00b6e290  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_00b60000.cpp  ?FUN_00b6e2b0@@YAHH@Z  00b6e2b0  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_00b60000.cpp  ?ShutdownColorManager@@YAXXZ  00b6e6d0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/_at_00b60000.cpp  ??1cColorSet@@UAE@XZ  00b6edf0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/_at_00b60000.cpp  ?clear@cColorSet@@QAEXXZ  00b6ee10  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/_at_00b60000.cpp  ?GetColor@@YAAAUVec3@@I@Z  00b6f0c0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/_at_00b60000.cpp  ?SetBaseColor@@YAXUVec3@@@Z  00b6f140  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/_at_00b60000.cpp  ??0cColorSet@@QAE@XZ  00b6f280  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
