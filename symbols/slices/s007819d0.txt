@@ -1,5 +1,5 @@
-007819d0 ShadowSub::TryApply  # conditional apply/notify; owns enable flags at +4/+5/+6 and a ref at +0x10
-00781a60 Vec12::ConstructRange  # allocates n*0xc and uninitialized-copies; byte-exact pattern target
+007819d0 ?TryApply@ShadowSub@@QAEXH@Z  # ShadowSub::TryApply migrated from s007819d0 (verbatim, slice spelling)
+00781a60 ?ConstructRange@Vec12@@QAEPAU1@ABU1@@Z  # Vec12::ConstructRange migrated from s007819d0 (verbatim, slice spelling)
 00781b10 ?Destroy@Vec12@@QAEXXZ  # Vec12::Destroy migrated from s007819d0 (verbatim, slice spelling)
 00781b80 ?Func_00781B80@@YAPAUE36@@PAU1@00@Z  # Func_00781B80 migrated from s007819d0 (verbatim, slice spelling)
 00781c30 ?Construct@E36@@QAEPAU1@PAXUE36Part@@@Z  # E36::Construct migrated from s007819d0 (verbatim, slice spelling)
@@ -7,10 +7,10 @@
 00781cf0 ?FUN_00781CF0@@YIXPAX@Z  # FUN_00781CF0 migrated from s007819d0 (verbatim, slice spelling)
 00781d60 ?cShadowWorld_ctor@@YAPAUcShadowWorld_s0078_19d0@@PAU1@@Z  # cShadowWorld_ctor migrated from s007819d0 (verbatim, slice spelling)
 007821b0 ?cShadowWorld_dtor@@YAXPAUcShadowWorld_s0078_19d0@@@Z  # cShadowWorld_dtor migrated from s007819d0 (verbatim, slice spelling)
-00782270 Vec12::Assign  # vector assignment with reallocation
+00782270 ?Assign@Vec12@@QAEPAU1@ABU1@@Z  # Vec12::Assign migrated from s007819d0 (verbatim, slice spelling)
 00782420 ?Func_00782420@@YAPAUE36@@PAU1@00@Z  # Func_00782420 migrated from s007819d0 (verbatim, slice spelling)
 00782470 ?Func_00782470@@YAPAUE36@@PAU1@00@Z  # Func_00782470 migrated from s007819d0 (verbatim, slice spelling)
-007824e0 pop_back-like helper
+007824e0 ?FUN_007824e0@cSWsub@@QAEXXZ  # cSWsub::FUN_007824e0 migrated from s007819d0 (verbatim, slice spelling)
 00782540 push_back(E36)
 007825d0 ?FUN_007825d0@cSWsub@@QAEXPAXI@Z  # cSWsub::FUN_007825d0 migrated from s007819d0 (verbatim, slice spelling)
 00782660 ?FUN_00782660@cSWsub@@QAEXPAXI@Z  # cSWsub::FUN_00782660 migrated from s007819d0 (verbatim, slice spelling)

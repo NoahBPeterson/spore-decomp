@@ -1,5 +1,5 @@
-00782860 E36 vector insert  # insert with reallocation
-00782a60 E36 vector push_back  # fast path + reallocation
+00782860 ?FUN_00782860@@YIXHHPBUE36_s0078_2860@@0@Z  # FUN_00782860 migrated from s00782860 (verbatim, slice spelling)
+00782a60 ?FUN_00782A60@@YIXHHPBUE36_s0078_2860@@@Z  # FUN_00782A60 migrated from s00782860 (verbatim, slice spelling)
 00782b00 ?FUN_00782B00@@YIXH@Z  # FUN_00782B00 migrated from s00782860 (verbatim, slice spelling)
 00782b30 temp-E36 push_back wrapper
 00782bb0 ?FUN_00782bb0@@YAMH@Z  # FUN_00782bb0 migrated from s00782860 (verbatim, slice spelling)

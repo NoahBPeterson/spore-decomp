@@ -1,1 +1,4 @@
-00780b70 SP::cAppModeTerrainEditor::HandleSimulationUpdate  # PDB caller-scored candidate (Ghidra also suggests cSPSimulatorSpaceGame::PlanetContextActivate)
+00780ab0 ?Update@cShadowWorld@SP@@QAEXXZ  # SP::cShadowWorld::Update (callee of s00780b70, named from the dev publics; slice address comment)
+00780b70 ?UpdateShadows@cShadowUpdater@@QAEXXZ  # cShadowUpdater::UpdateShadows migrated from s00780b70 (verbatim, slice spelling)
+007c40c0 ?GetViewWindow@cViewer@SP@@QAEXPAM0@Z  # SP::cViewer::GetViewWindow (callee of s00780b70, named from the dev publics; slice address comment)
+007c5440 ?SetViewWindow@cViewer@SP@@QAEXMM@Z  # SP::cViewer::SetViewWindow (callee of s00780b70, named from the dev publics; slice address comment)
