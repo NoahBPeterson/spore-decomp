@@ -1,10 +1,14 @@
-// src/game/SPGonzago/SPUIEventLog.cpp -- migrated from slice(s) s00dd7970, s00dd6a70, s00dd5a30 by tools/migrate/rewrite.py
+// src/game/SPGonzago/SPUIEventLog.cpp -- migrated from slice(s) s00dd4b20, s00dd7970, s00dd6a70, s00dd5a30 by tools/migrate/rewrite.py
 // Object file: SPGonzago/SPUIEventLog.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
 #include "game/types.h"
 #include "cSPUIAnimator.h"
 #include "cSPUILayout.h"
+#include "SP/cEmpire.h"
+#include "SP/cPlanet.h"
+#include "SP/cStarManager.h"
+#include "SP/cString.h"
 
 // unnamed retail callees and globals (address in the comment)
 extern uint32_t g_016a0958;      // next instance id
@@ -23,6 +27,8 @@ extern const char g_015d9c70;
 #pragma pack(push, 4)
 
 // ---- items of slice s00dd5a30 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern uint32_t g_016a095c;      // iconic-mode image layout id
+extern float g_01486110;         // +5.0 area padding
 struct Object {
     virtual int AddRef();          // +0x00 slot 0
     virtual int Release();         // +0x04 slot 1
@@ -30,6 +36,11 @@ struct Object {
 };
 struct IUnknown32 : Object {
     virtual void* QueryInterface(uint32_t id);   // +0x0c slot 3
+};
+struct IRigHost : Object {
+    virtual void* QueryInterface(uint32_t id);
+    char pad0c[0x75 - 0x0c];
+    uint8_t mByte75;   // +0x75
 };
 struct IWindow : Object {
     virtual void* QueryInterface(uint32_t id);       // +0x0c
@@ -131,19 +142,17 @@ class cSPUIAnimator_s00dd_5a30 {
 namespace SPUIHelpers {
 float GetElapsedSeconds();                                       // 0x00805080
 }
-extern uint32_t g_016a0958;      // next instance id
-extern float g_016a0960;         // default position x
-extern float g_016a0964;         // default position y
-extern float g_016a0968;         // default position z
-extern float g_016a09ac;         // animation duration
-extern float g_016a0a5c;         // iconic-mode lead time
-extern float g_016a0adc;         // iconic-mode threshold
-extern float g_016a0afc;         // fade-in delay
-extern float g_0143c70;          // 10.0f (time to live)
-extern float g_013eb1bc;         // -1.0f
-extern float g_01477fbc;         // 100.0f
-extern wchar_t g_01667bac[];     // eastl empty string storage
-extern const char g_015d9c70;
+namespace SPUIHelpers {
+void AnchorWindowToWindow(IWindow* a, IWindow* b, int c, int d); // 0x00807340
+}
+namespace SPUIHelpers {
+void* GetImageFromLayout(uint32_t id, int a);                    // 0x008061c0
+}
+struct Drawable : Object {
+    virtual void d08();
+    virtual void* QueryInterface(uint32_t id);                   // slot 3, +0x0c
+    void SetImageIcon(int a, void* image);                       // 0x00831760 (non-virtual)
+};
 bool CompareEventStrings(const void* a, const void* b);           // 0x0087d9a0
 void Pollinator(void* child, float* rect);                       // 0x00806d10
 cSPUILayout_s00dd_5a30* create_event_layout();                              // 0x00dd5990
@@ -414,6 +423,80 @@ struct cSPUIEventLog_s00dd_6a70 {
 };
 // ---- items of slice s00dd6a70 end
 
+// ---- items of slice s00dd4b20 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern const wchar_t gEventLogItemName[];                          // 0x0147cdf0
+extern const char gEventLogLayoutName[];                           // 0x0147ce0c
+struct ChildIter {
+    void* mpNode;
+    ChildIter() : mpNode(0) {}
+    ChildIter(const ChildIter& x) : mpNode(x.mpNode) {}
+};
+struct IWindow_s00dd_4b20 {
+    virtual void v00();                                            // slot 0 (+0x00)
+    virtual void v01();                                            // slot 1 (+0x04)
+    virtual void v02();                                            // slot 2 (+0x08)
+    virtual void* Cast(uint32_t id);                               // slot 3 (+0x0c)
+    virtual IWindow_s00dd_4b20* GetChildHost();                               // slot 4 (+0x10)
+    PV2                                                            // slots 5..6
+    virtual uint32_t GetID();                                      // slot 7 (+0x1c)
+    PV8 PV2 PV                                                     // slots 8..18
+    virtual int GetSelectionState(int arg);                        // slot 19 (+0x4c)
+    PV2 PV                                                         // slots 20..22
+    virtual void SetShade(uint32_t color);                         // slot 23 (+0x5c)
+    PV4 PV2 PV                                                     // slots 24..30
+    virtual void SetFlag(int flag, bool on);                       // slot 31 (+0x7c)
+    virtual void SetCaption(const wchar_t* text);                  // slot 32 (+0x80)
+    PV8 PV2                                                        // slots 33..42
+    virtual void SetColor(uint32_t color);                         // slot 43 (+0xac)
+    PV4 PV2 PV                                                     // slots 44..50
+    virtual ChildIter GetChildListBegin();                         // slot 51 (+0xcc)
+    virtual ChildIter GetChildListEnd();                           // slot 52 (+0xd0)
+    PV4 PV2 PV                                                     // slots 53..59
+    virtual IWindow_s00dd_4b20* FindWindowByID(uint32_t id, bool recursive);  // slot 60 (+0xf0)
+};
+class cSPUILayout_s00dd_4b20 { public:
+    virtual void v00();                                            // +0x00
+    virtual int AddRef();                                          // +0x04
+    virtual int Release();                                         // +0x08
+    cSPUILayout_s00dd_4b20* ctor();                                           // 0x00810000 (returns this)
+    bool Init(const wchar_t* name, int a, bool b, uint32_t c);     // 0x00812160
+    void Shutdown(unsigned int b);                                 // 0x00811ad0
+    void SetVisibility(int b);                                     // 0x00810590
+    IWindow_s00dd_4b20* FindWindowByID(uint32_t id, bool recursive);          // 0x008105b0
+};
+void* __cdecl SPUIOperatorNew(int size, const char* name, int a, int b, int c, int d);   // 0x00f473a0
+extern cSPUILayout_s00dd_4b20** gpLayoutStackBegin;                           // 0x015a2c40
+extern cSPUILayout_s00dd_4b20** gpLayoutStackEnd;                             // 0x015a2c44
+// ---- items of slice s00dd4b20 end
+
+// @ 0x00dd5950
+void ShutdownLayoutStack()
+{
+    while (gpLayoutStackBegin != gpLayoutStackEnd) {
+        cSPUILayout_s00dd_4b20* layout = gpLayoutStackEnd[-1];
+        --gpLayoutStackEnd;
+        layout->Shutdown(1);
+        layout->Release();
+    }
+}
+
+// @ 0x00dd5990
+cSPUILayout_s00dd_4b20* GetEventLogItemLayout()
+{
+    if (gpLayoutStackBegin != gpLayoutStackEnd) {
+        cSPUILayout_s00dd_4b20* layout = gpLayoutStackEnd[-1];
+        --gpLayoutStackEnd;
+        layout->SetVisibility(1);
+        return layout;
+    }
+
+    cSPUILayout_s00dd_4b20* layout = (cSPUILayout_s00dd_4b20*)SPUIOperatorNew(0x18, gEventLogLayoutName, 0, 0, 0, 0);
+    layout = layout ? layout->ctor() : 0;
+    layout->AddRef();
+    layout->Init(gEventLogItemName, 0x40464100, true, 0x3469e7a3);
+    layout->SetVisibility(1);
+    return layout;
+}
 
 // @ 0x00dd5a30
 void cSPUIEventLog::show_iconic_text(cFeedbackEvent* ev, bool iconic)
@@ -568,6 +651,99 @@ cFeedbackEvent::cFeedbackEvent()
         Pollinator(cur, rect);
         ((IWindow*)cur)->SetShadeColor(0);
         cur = w->ChildrenNext(&it);
+    }
+}
+
+// @ 0x00dd60c0
+void cSPUIEventLog::update_event_ui_state(cFeedbackEvent* ev)
+{
+    IWindow* win = ev->mpItemLayout->FindWindowByID(0x47d4388, 1);
+    if (!win)
+        return;
+    IWindow* ctl = (IWindow*)win->QueryInterface(0xf15f4bd);
+    if (!ctl)
+        return;
+    if (((ev->mEventString.mpEnd - ev->mEventString.mpBegin) >> 1) == 0)
+        return;
+    IWindow* item = ev->mpItemLayout->FindWindowByID(0x35ee914, 1);
+
+    bool flag;
+    if (ev->m60 != 0 ||
+        ev->mPosition[0] != g_016a0960 ||
+        ev->mPosition[1] != g_016a0964 ||
+        ev->mPosition[2] != g_016a0968) {
+        flag = true;
+    } else if (ev->mpUserData) {
+        IRigHost* q = (IRigHost*)ev->mpUserData->QueryInterface(0x1186577);
+        flag = (q && q->mByte75 != 0);
+    } else {
+        flag = false;
+    }
+    (void)flag;
+
+    IWindow* owner = ctl->GetOwner();
+    owner->SetPosition(mLogPosition[0], 0.0f);
+    IWindow* inner = owner->GetOwner();
+    const float* r = inner->GetRealArea();
+    float area[4] = { r[0], r[1], r[2], r[3] };
+    if ((ev->mFlags >> 3) & 1) {
+        ctl->SetShadeColor(0);
+        inner->SetSize(area[2] - area[0], area[3] - area[1]);
+    }
+    ev->mBackGroundId = 0x3fffadc;
+    if (ev->mFlags & 1) {
+        ctl->s18();
+        const float* ir = inner->GetRealArea();
+        float size[4] = { 0.0f, 0.0f, (ir[2] - ir[0]) + g_01486110, ir[3] - ir[1] };
+        inner->SetArea(size[0], size[1], size[2], size[3]);
+        const float* ir2 = inner->GetRealArea();
+        float w = ir2[2] - ir2[0];
+        float h = ir2[3] - ir2[1];
+        inner->GetOwner()->SetSize(w, h);
+        ev->m90 = w;
+    }
+    IWindow* target = inner->GetOwner();
+    IWindow* hit = target->FindWindowByID(0x3fffadc, 1);
+    bool isTarget = (ev->mBackGroundId == 0x3fffadc);
+    hit->SetFlag(1, isTarget);
+    target->GetRealArea();
+    IWindow* iconWnd = hit->FindWindowByID(0x35f06c8, 1);
+    iconWnd->SetShadeColor(0xffffff);
+    IWindow* anchor = ev->mpItemLayout->FindWindowByID(0x40005d8, 1);
+    anchor->SetShadeColor(0xffffff);
+    SPUIHelpers::AnchorWindowToWindow(iconWnd, anchor, 0x300, 0);
+    IWindow* root = ev->mpItemLayout->FindWindowByID(0x35f06c8, 1);
+    root->SetShadeColor(0xffffff);
+    void* it;
+    root->ChildrenBegin(&it);
+    for (IWindow* ch = (IWindow*)root->ChildrenNext(&it); ch;
+         ch = (IWindow*)root->ChildrenNext(&it)) {
+        void* draw = ch->GetDrawable();
+        int id = ch->GetControlID();
+        bool want;
+        if (draw) {
+            want = (ev->m60b == 1) && (id - 0x3ffb8f0 == (int)ev->mCategory);
+        } else {
+            want = (ev->m60b != 0) ? false : (id - 0x3fe9970 == (int)ev->mCategory);
+        }
+        ch->SetFlag(1, want);
+        if (ev->mCategory == 6 && ch->IsFlagSet() && g_016a095c) {
+            void* img = SPUIHelpers::GetImageFromLayout(g_016a095c, ev->mScaleIndex);
+            if (img)
+                ((Drawable*)img)->AddRef();
+            void* d = ch->GetDrawable();
+            if (d)
+                d = ((Drawable*)d)->QueryInterface(0x53eb526);
+            if (img) {
+                if (d)
+                    ((Drawable*)d)->SetImageIcon(0, img);
+                ((Drawable*)img)->Release();
+            }
+        }
+        if ((ev->mFlags >> 3) & 1) {
+            ch->AddWinProc(it);
+            ev->mFlags &= ~8u;
+        }
     }
 }
 

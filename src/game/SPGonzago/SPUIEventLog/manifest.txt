@@ -1,4 +1,6 @@
 # source  symbol  va  flags
+../src/game/SPGonzago/SPUIEventLog.cpp  ?ShutdownLayoutStack@@YAXXZ  00dd5950  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPUIEventLog.cpp  ?GetEventLogItemLayout@@YAPAVcSPUILayout_s00dd_4b20@@XZ  00dd5990  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPUIEventLog.cpp  ?GetEventInstanceID@cSPUIEventLog@@QAEPAVcFeedbackEvent@@II@Z  00dd5d80  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPUIEventLog.cpp  ?find_in_history@cSPUIEventLog@@QAEPAVcFeedbackEvent@@PAV2@@Z  00dd5dd0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPUIEventLog.cpp  ?Update@BytePropertyCache@@QAE_NPAX@Z  00dd5e30  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

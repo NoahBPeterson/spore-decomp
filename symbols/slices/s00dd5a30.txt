@@ -4,6 +4,7 @@
 00dd5dd0 ?find_in_history@cSPUIEventLog@@QAEPAVcFeedbackEvent@@PAV2@@Z  # cSPUIEventLog::find_in_history migrated from s00dd5a30 (verbatim, slice spelling)
 00dd5e30 ?Update@BytePropertyCache@@QAE_NPAX@Z  # BytePropertyCache::Update migrated from s00dd5a30 (verbatim, slice spelling)
 00dd5e90 ??0cFeedbackEvent@@QAE@XZ  # cFeedbackEvent::cFeedbackEvent migrated from s00dd5a30 (verbatim, slice spelling)
+00dd60c0 ?update_event_ui_state@cSPUIEventLog@@QAEXPAVcFeedbackEvent@@@Z  # cSPUIEventLog::update_event_ui_state migrated from s00dd5a30 (verbatim, slice spelling)
 00dd6570 ?show_text@cSPUIEventLog@@QAEXPAVcFeedbackEvent@@_N@Z  # cSPUIEventLog::show_text migrated from s00dd5a30 (verbatim, slice spelling)
 00dd6710 ?find_event@cSPUIEventLog@@QAEPAVcFeedbackEvent@@I@Z  # cSPUIEventLog::find_event migrated from s00dd5a30 (verbatim, slice spelling)
 00dd67d0 ?EventDoNotAddToHistory@cSPUIEventLog@@QAE_NII@Z  # cSPUIEventLog::EventDoNotAddToHistory migrated from s00dd5a30 (verbatim, slice spelling)
