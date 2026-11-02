@@ -1,7 +1,6 @@
-# Slice s0110a0d0 names. Havok 3.1.0 hkBoxBoxCollisionDetection region.
-0110a0d0 hkBoxBoxCollisionDetection::faceAVertexBValidationDataFromFeatureIndex  # dev-PDB mangled name
-0110a2b0 hkBoxBoxCollisionDetection::faceBVertexAValidationDataFromFeatureIndex  # dev-PDB mangled name
-0110a4b0 hkBoxBoxCollisionDetection::edgeEdgeValidationDataFromFeatureIndex  # dev-PDB mangled name
-0110a600 box-box manifold setup helper
-0110a9c0 hkBoxBoxCollisionDetection::addAdditionalEdgeHelper  # dev-PDB mangled name
-0110ac90 additional-edge fan-out dispatcher (calls addAdditionalEdgeHelper 4x)
+0110a0d0 ?faceAVertexBValidationDataFromFeatureIndex@hkBoxBoxCollisionDetection_s0110_a0d0@@QBEXAAUhkFeaturePointCache_s0110_a0d0@@M@Z  # hkBoxBoxCollisionDetection_s0110_a0d0::faceAVertexBValidationDataFromFeatureIndex migrated from s0110a0d0 (verbatim, slice spelling)
+0110a2b0 ?faceBVertexAValidationDataFromFeatureIndex@hkBoxBoxCollisionDetection_s0110_a0d0@@QBEXAAUhkFeaturePointCache_s0110_a0d0@@H@Z  # hkBoxBoxCollisionDetection_s0110_a0d0::faceBVertexAValidationDataFromFeatureIndex migrated from s0110a0d0 (verbatim, slice spelling)
+0110a4b0 ?edgeEdgeValidationDataFromFeatureIndex@hkBoxBoxCollisionDetection_s0110_a0d0@@QBEXAAUhkFeaturePointCache_s0110_a0d0@@@Z  # hkBoxBoxCollisionDetection_s0110_a0d0::edgeEdgeValidationDataFromFeatureIndex migrated from s0110a0d0 (verbatim, slice spelling)
+0110a600 ?FUN_0110a600@hkBoxBoxCollisionDetection_s0110_a0d0@@QBEPADPADAAUhkFeaturePointCache_s0110_a0d0@@@Z  # hkBoxBoxCollisionDetection_s0110_a0d0::FUN_0110a600 migrated from s0110a0d0 (verbatim, slice spelling)
+0110a9c0 ?addAdditionalEdgeHelper@hkBoxBoxCollisionDetection_s0110_a0d0@@QBEXAAUhkBoxBoxManifold_s0110_a0d0@@AAUhkFeatureContactPoint_s0110_a0d0@@M@Z  # hkBoxBoxCollisionDetection_s0110_a0d0::addAdditionalEdgeHelper migrated from s0110a0d0 (verbatim, slice spelling)
+0110ac90 ?FUN_0110ac90@hkBoxBoxCollisionDetection_s0110_a0d0@@QAEXAAUhkBoxBoxManifold_s0110_a0d0@@PAX1HH11M@Z  # hkBoxBoxCollisionDetection_s0110_a0d0::FUN_0110ac90 migrated from s0110a0d0 (verbatim, slice spelling)

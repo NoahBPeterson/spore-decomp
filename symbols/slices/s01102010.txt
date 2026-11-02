@@ -1,0 +1,1 @@
+01102010 ?queryRay@hkMoppLongRayVirtualMachine@@QAEXPAUhkMoppState@@PBEPAM@Z  # hkMoppLongRayVirtualMachine::queryRay migrated from s01102010 (verbatim, slice spelling)

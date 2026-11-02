@@ -1,1 +1,1 @@
-0110b3a0 ?calcManifold@hkBoxBoxCollisionDetection@@QBEXAAVhkBoxBoxManifold@@@Z  # havok_names.txt (real mangled name)
+0110b3a0 ?calcManifold@hkBoxBoxCollisionDetection_s0110_b3a0@@QBEXAAVhkBoxBoxManifold_s0110_b3a0@@@Z  # hkBoxBoxCollisionDetection_s0110_b3a0::calcManifold migrated from s0110b3a0 (verbatim, slice spelling)

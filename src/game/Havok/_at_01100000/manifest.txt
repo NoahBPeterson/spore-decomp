@@ -1,0 +1,2 @@
+# source  symbol  va  flags
+../src/game/Havok/_at_01100000.cpp  ?FUN_01100cf0@@YAHPAVhkCollisionDispatcher_s0110_0cf0@@HH@Z  01100cf0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include

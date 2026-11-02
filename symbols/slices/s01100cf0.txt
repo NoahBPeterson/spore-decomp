@@ -1,1 +1,3 @@
+01100cf0 ?FUN_01100cf0@@YAHPAVhkCollisionDispatcher_s0110_0cf0@@HH@Z  # FUN_01100cf0 migrated from s01100cf0 (verbatim, slice spelling)
+011013f0 ?querySphere@hkMoppSphereVirtualMachine@@QAEXPBUhkMoppCode@@ABUhkSphere@@PAX@Z  # hkMoppSphereVirtualMachine::querySphere migrated from s01100cf0 (verbatim, slice spelling)
 011014d0 hkMoppObbVirtualMachine::queryObb  # PDB-less; assert string cites .

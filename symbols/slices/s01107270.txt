@@ -1,1 +1,1 @@
-01107270 hkCollideCapsuleUtilManifoldCapsVsTriangle  # calls ManifoldCapsVsCaps + closestLineSegLineSeg; capsule vs triangle manifold
+01107270 ?hkCollideCapsuleUtilManifoldCapsVsTriangle@@YAXPBMM0M0MHPAUhkContactPointF@@@Z  # hkCollideCapsuleUtilManifoldCapsVsTriangle migrated from s01107270 (verbatim, slice spelling)
