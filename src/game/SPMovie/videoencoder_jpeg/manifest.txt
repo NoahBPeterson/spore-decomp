@@ -1,0 +1,6 @@
+# source  symbol  va  flags
+../src/game/SPMovie/videoencoder_jpeg.cpp  ?Init@VideoEncoder_Jpeg@@QAEXPAUICoreAllocator@@@Z  00fcda60  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPMovie/videoencoder_jpeg.cpp  ?GetSuggestedDecoderBufferSize@VideoEncoder_Jpeg@@QAEIXZ  00fcdb00  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPMovie/videoencoder_jpeg.cpp  ?SetBitsPerSecond@VideoEncoder_Jpeg@@QAEXI@Z  00fcdc40  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPMovie/videoencoder_jpeg.cpp  ?GetBitsPerSecond@VideoEncoder_Jpeg@@QAEIXZ  00fcdc60  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPMovie/videoencoder_jpeg.cpp  ?SetQuality@VideoEncoder_Jpeg@@QAEXI@Z  00fcdc80  /O2 /MD /Gy /EHsc /TP /Isrc/game/include

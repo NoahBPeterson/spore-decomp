@@ -1,0 +1,4 @@
+# va  diff-bytes  reason
+00fcdaa0 32 VideoEncoder_Jpeg::Shutdown. Not byte-exact: vtable-call scheduling / register allocation around the allocator Free call. flags /O2 /MD /Gy /EHsc /TP. difftest: WEAK 306 valid, 58.8% coverage.
+00fcdb20 132 pixel-format conversion dispatcher (switch 0/3/4/1/2 + vector insert for case 1). Not byte-exact: jump-table emission order and loop register assignment differ. flags /O2 /MD /Gy /EHsc /TP. difftest: FAIL esp delta (+0x14 vs +0x4) — switch-lowered epilogue shape differs.
+00fcdcb0 329 VideoEncoder_Jpeg::Encode. Reconstructed faithfully from the Ghidra decompile (libjpeg std_error/create/set_defaults/set_quality/start/write_scanlines/finish/destroy, allocator Line Buffer, per-row FUN_00fcdb20, encoded-data callback, frame counter). Not byte-exact: large libjpeg-driven body, scheduling differs. flags /O2 /MD /Gy /EHsc /TP. difftest: UNSUPPORTED unresolved _FUN_00fcdc10 [annotation-implausible].
