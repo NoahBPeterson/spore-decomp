@@ -11,15 +11,15 @@
 007e0c90 ?Execute@cSplitModelKernelOriginCommand@@QAEXAAVcArguments_s007e_06b0@ArgScript@EA@@@Z  # cSplitModelKernelOriginCommand::Execute migrated from s007e06b0 (verbatim, slice spelling)
 007e0d60 ?Execute@cSplitModelKernelDirectionCommand@@QAEXAAVcArguments_s007e_06b0@ArgScript@EA@@@Z  # cSplitModelKernelDirectionCommand::Execute migrated from s007e06b0 (verbatim, slice spelling)
 007e0e30 ?Execute@cSplitModelKernelEffectCommand@@QAEXAAVcArguments_s007e_06b0@ArgScript@EA@@@Z  # cSplitModelKernelEffectCommand::Execute migrated from s007e06b0 (verbatim, slice spelling)
-007e0f00 SP::cSplitControllerEffect::finalize instances  # touches +0x14/0x18/0x1c
-007e0f70 SP::cSplitControllerEffect::~cSplitControllerEffect  # two vptrs, frees +0x1c, releases +0x18
-007e1010 SP::cSplitControllerEffect::cSplitControllerEffect  # inits +0x30 transform
-007e10c0 SP::cSplitControllerEffect::AddSplitInstance/AddInstance  # matrix update
-007e12b0 eastl::vector<...>::reserve/resize  # capacity check, EAlloc2 0x99efa0
-007e1450 SP::cSplitControllerEffect::CopyFrom  # copies +0x28.., rbtree iterate
-007e1540 SP::cSplitControllerEffect::OnMessage  # field10 = vtbl[0xa0]; CopyFrom(vtbl[0xc])
-007e1580 SP::cSplitControllerEffect::HandleMessage  # type==5 -> CopyFrom
-007e15b0 SP::cSplitControllerEffect::Start  # PDB caller-single
+007e0f00 ?UpdateInstances@cSplitControllerEffect@@QAEXH@Z  # cSplitControllerEffect::UpdateInstances migrated from s007e06b0 (verbatim, slice spelling)
+007e0f70 ??1cSplitControllerEffect@@QAE@XZ  # cSplitControllerEffect::~cSplitControllerEffect migrated from s007e06b0 (verbatim, slice spelling)
+007e1010 ??0cSplitControllerEffect@@QAE@PAX@Z  # cSplitControllerEffect::cSplitControllerEffect migrated from s007e06b0 (verbatim, slice spelling)
+007e10c0 ?AddInstance@cSplitControllerEffect@@QAEXHPAX@Z  # cSplitControllerEffect::AddInstance migrated from s007e06b0 (verbatim, slice spelling)
+007e12b0 ?resize@MyVector8@@QAEXI@Z  # MyVector8::resize migrated from s007e06b0 (verbatim, slice spelling)
+007e1450 ?CopyFrom@cSplitControllerEffect@@QAEXPAX@Z  # cSplitControllerEffect::CopyFrom migrated from s007e06b0 (verbatim, slice spelling)
+007e1540 ?OnMessage@cSplitControllerEffect@@QAEXPAXPAUVtblObj@@0@Z  # cSplitControllerEffect::OnMessage migrated from s007e06b0 (verbatim, slice spelling)
+007e1580 ?HandleMessage@cSplitControllerEffect@@QAEDHPAUVtblObj@@@Z  # cSplitControllerEffect::HandleMessage migrated from s007e06b0 (verbatim, slice spelling)
+007e15b0 ?Start@cSplitControllerEffect@@QAEXH@Z  # cSplitControllerEffect::Start migrated from s007e06b0 (verbatim, slice spelling)
 007e1650 ?Shutdown@cAppStateManager@@QAE_NXZ  # cAppStateManager::Shutdown migrated from s007e06b0 (verbatim, slice spelling)
 007e1710 ?StateOccurredPreviously@cAppStateManager@@QAE_NPAX@Z  # cAppStateManager::StateOccurredPreviously migrated from s007e06b0 (verbatim, slice spelling)
 007e1760 ?Forward@cForwarder@@QAEXHH@Z  # cForwarder::Forward migrated from s007e06b0 (verbatim, slice spelling)

@@ -1,1 +1,1 @@
-007efd10 VolState::BuildSlices  # view-aligned slicing of the 8-corner volume box (vertex+count vectors out); name is descriptive
+007efd10 ?BuildSlices@VolState_s007e_fd10@@QAEXMMMAAUSliceVertexVector@@AAUUIntVector@@@Z  # VolState_s007e_fd10::BuildSlices migrated from s007efd10 (verbatim, slice spelling)

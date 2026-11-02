@@ -1,0 +1,12 @@
+# source  symbol  va  flags
+../src/game/SPEngine/_at_007e0000.cpp  ?UpdateInstances@cSplitControllerEffect@@QAEXH@Z  007e0f00  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPEngine/_at_007e0000.cpp  ?OnMessage@cSplitControllerEffect@@QAEXPAXPAUVtblObj@@0@Z  007e1540  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPEngine/_at_007e0000.cpp  ?HandleMessage@cSplitControllerEffect@@QAEDHPAUVtblObj@@@Z  007e1580  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPEngine/_at_007e0000.cpp  ?Slot1@CTrack@@QAEXXZ  007ef350  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/_at_007e0000.cpp  ?Slot2@CTrack@@QAEXH@Z  007ef370  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/_at_007e0000.cpp  ?Slot3@CTrack@@QAEXH@Z  007ef3a0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/_at_007e0000.cpp  ?SiftUp@@YAXPAUHeapNode@@HHU1@UEmptyCmp@@@Z  007ef3d0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/_at_007e0000.cpp  ?SetKey@CTrack@@QAE_NHPAUKeyFrame@@H@Z  007ef450  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/_at_007e0000.cpp  ?Eval@CTrack@@QAEXHMH@Z  007ef480  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/_at_007e0000.cpp  ?AdjustHeap@@YAXPAUHeapNode@@HHHU1@UEmptyCmp@@@Z  007ef4a0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/_at_007e0000.cpp  ?MakeHeap@@YAXPAUHeapNode@@0UEmptyCmp@@@Z  007ef5d0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
