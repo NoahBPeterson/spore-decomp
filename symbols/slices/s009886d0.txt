@@ -17,20 +17,20 @@
 00989000 ?m_989000@WinText@@QAEPAU1@XZ  # WinText::m_989000 migrated from s009886d0 (verbatim, slice spelling)
 009890d0 ?m_9890d0@WinText@@QAEPAU1@E@Z  # WinText::m_9890d0 migrated from s009886d0 (verbatim, slice spelling)
 00989130 ?Factory@WinText@@SAPAU1@PAX@Z  # WinText::Factory migrated from s009886d0 (verbatim, slice spelling)
-00989240   ?m_989240@WinText@@QAEXI@Z                  m_989240    MATCH
-00989290   ?m_989290@WinText@@QAEII@Z                  m_989290    MATCH  (get slot)
-009892b0   ?m_9892b0@WinText@@QAEXII@Z                 m_9892b0    MATCH  (set slot)
-00989370   ?m_989370@WinText@@QAEXI@Z                  m_989370    MATCH
-00989390   ?m_989390@WinText@@QAEXIII@Z                m_989390    MATCH
-009893b0   ?m_9893b0@WinText@@QAEXII@Z                 m_9893b0    MATCH
-009893d0   ?m_9893d0@WinText@@QAEXI@Z                  m_9893d0    MATCH
-00989410   ?m_989410@WinText@@QAEXIE@Z                 m_989410    nonmatching  (38)
-00989450   ?m_989450@WinText@@QAEHHHHHH@Z              m_989450    MATCH  (ret -1)
-00989460   ?m_989460@WinText@@QAEXI@Z                  m_989460    MATCH
-009894a0   ?m_9894a0@WinText@@QAEII@Z                  m_9894a0    MATCH
-009894c0   ?m_9894c0@WinText@@QAEDHHHH@Z               m_9894c0    MATCH
-00989500   ?m_989500@WinText@@QAEIII@Z                 m_989500    nonmatching  (115)
-00989660   ?m_989660@WinText@@QAEXE@Z                  m_989660    nonmatching  (40)
+00989240 ?m_989240@WinText@@QAEXI@Z  # WinText::m_989240 migrated from s009886d0 (verbatim, slice spelling)
+00989290 ?m_989290@WinText@@QAEII@Z  # WinText::m_989290 migrated from s009886d0 (verbatim, slice spelling)
+009892b0 ?m_9892b0@WinText@@QAEXII@Z  # WinText::m_9892b0 migrated from s009886d0 (verbatim, slice spelling)
+00989370 ?m_989370@WinText@@QAEXI@Z  # WinText::m_989370 migrated from s009886d0 (verbatim, slice spelling)
+00989390 ?m_989390@WinText@@QAEXIII@Z  # WinText::m_989390 migrated from s009886d0 (verbatim, slice spelling)
+009893b0 ?m_9893b0@WinText@@QAEXII@Z  # WinText::m_9893b0 migrated from s009886d0 (verbatim, slice spelling)
+009893d0 ?m_9893d0@WinText@@QAEXI@Z  # WinText::m_9893d0 migrated from s009886d0 (verbatim, slice spelling)
+00989410 ?m_989410@WinText@@QAEXIE@Z  # WinText::m_989410 migrated from s009886d0 (verbatim, slice spelling)
+00989450 ?m_989450@WinText@@QAEHHHHHH@Z  # WinText::m_989450 migrated from s009886d0 (verbatim, slice spelling)
+00989460 ?m_989460@WinText@@QAEXI@Z  # WinText::m_989460 migrated from s009886d0 (verbatim, slice spelling)
+009894a0 ?m_9894a0@WinText@@QAEII@Z  # WinText::m_9894a0 migrated from s009886d0 (verbatim, slice spelling)
+009894c0 ?m_9894c0@WinText@@QAEDHHHH@Z  # WinText::m_9894c0 migrated from s009886d0 (verbatim, slice spelling)
+00989500 ?m_989500@WinText@@QAEIII@Z  # WinText::m_989500 migrated from s009886d0 (verbatim, slice spelling)
+00989660 ?m_989660@WinText@@QAEXE@Z  # WinText::m_989660 migrated from s009886d0 (verbatim, slice spelling)
 009896d0   _sub_9896d0                                 sub_9896d0   nonmatching  (35)  (cdecl)
 00989740   _sub_989740                                 sub_989740   nonmatching  (25)  eq FAIL(eax-only)
 00989790   _sub_989790                                 sub_989790   nonmatching  (24)  eq FAIL(eax-only)
