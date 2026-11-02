@@ -1,0 +1,4 @@
+008722c0 _png_decompress_chunk  # png_decompress_chunk migrated from s00871d50 (verbatim, slice spelling)
+00872970 _png_do_read_interlace  # png_do_read_interlace migrated from s00871d50 (verbatim, slice spelling)
+008733a0 _png_handle_IHDR  # png_handle_IHDR migrated from s00871d50 (verbatim, slice spelling)
+00873750 _png_handle_gAMA  # png_handle_gAMA migrated from s00871d50 (verbatim, slice spelling)
