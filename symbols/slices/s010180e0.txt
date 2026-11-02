@@ -1,1 +1,2 @@
 010180e0 ConeClip::Clip  # name is a guess (clips a point against a 4-plane wedge around a direction); no PDB candidate
+010187c0 ?GetCurrentZoom@cSPSpacePlanetCameraController_s0101_80e0@SP@@QAEMXZ  # cSPSpacePlanetCameraController_s0101_80e0::GetCurrentZoom migrated from s010180e0 (verbatim, slice spelling)

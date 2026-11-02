@@ -1,1 +1,2 @@
 # va  diff-bytes  reason  (incomplete / approximate source; not counted as decompiled)
+01020eb0  size  camera mouse-wheel: approximate; the /100 clamp and GameTimeManager gating are sketched, the switch body is stubbed. flags: /O2 /MD /Gy /TP /arch:SSE
