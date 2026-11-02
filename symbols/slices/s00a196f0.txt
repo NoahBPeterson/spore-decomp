@@ -1,3 +1,8 @@
+00a196f0 ?ReadVariant@ResConfig@@QAEDPAUIOReader@@PAUVariant_s00a1_96f0@@@Z  # ResConfig::ReadVariant migrated from s00a196f0 (verbatim, slice spelling)
+00a19d60 ??0FactoryConfiguration_s00a1_96f0@@QAE@XZ  # FactoryConfiguration_s00a1_96f0::FactoryConfiguration migrated from s00a196f0 (verbatim, slice spelling)
+00a19e00 ??1FactoryConfiguration_s00a1_96f0@@QAE@XZ  # FactoryConfiguration_s00a1_96f0::~FactoryConfiguration migrated from s00a196f0 (verbatim, slice spelling)
+00a19e90 ?Read@ResConfig@@QAEDPAUIOReader@@@Z  # ResConfig::Read migrated from s00a196f0 (verbatim, slice spelling)
+00a19fb0 ?SetParent_00a19fb0@@YADPAUResConfig@@PAX111@Z  # SetParent_00a19fb0 migrated from s00a196f0 (verbatim, slice spelling)
 00a1a110 ?GetOutputValue@ResponseCurve@Audio@EA@@QBEMM@Z  # EA::Audio::ResponseCurve::GetOutputValue migrated from s00a196f0
 00a1a1a0 ?GetMaxInput@ResponseCurve@@QAE_NPAM@Z  # ResponseCurve::GetMaxInput migrated from s00a196f0 (verbatim, slice spelling)
 00a1a1c0 ?GetMinInput@ResponseCurve@@QAE_NPAM@Z  # ResponseCurve::GetMinInput migrated from s00a196f0 (verbatim, slice spelling)

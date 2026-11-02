@@ -1,1 +1,6 @@
-00a18d90 ?AddLegacyPropertyTypes@FactoryConfiguration@Audio@EA@@QAEXXZ  # FactoryConfiguration::AddLegacyPropertyTypes migrated from s00a187f0 (verbatim, slice spelling)
+00a187f0 ?HasProperty@IConfigurationView@@QAE_NI@Z  # IConfigurationView::HasProperty migrated from s00a187f0 (verbatim, slice spelling)
+00a18850 ?GetProperty@IConfigurationView@@QAE_NIPAPAX@Z  # IConfigurationView::GetProperty migrated from s00a187f0 (verbatim, slice spelling)
+00a18910 ?UpdateAggregatedProperties@ResourceConfiguration_s00a1_87f0@@QAEXXZ  # ResourceConfiguration_s00a1_87f0::UpdateAggregatedProperties migrated from s00a187f0 (verbatim, slice spelling)
+00a18d20 ?ReadStringFromStream@@YG_NPAUIOReader_s00a1_87f0@@PAUWString@@@Z  # ReadStringFromStream migrated from s00a187f0 (verbatim, slice spelling)
+00a18d90 ?AddLegacyPropertyTypes@FactoryConfiguration@Audio@EA@@QAEXXZ  # AddLegacyPropertyTypes migrated from s00a187f0 (verbatim, slice spelling)
+00a19600 ?SetProperty@IConfigurationView@@QAEXIPBUVariant_s00a1_87f0@@@Z  # IConfigurationView::SetProperty migrated from s00a187f0 (verbatim, slice spelling)

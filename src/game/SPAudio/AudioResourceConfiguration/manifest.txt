@@ -3,4 +3,13 @@
 ../src/game/SPAudio/AudioResourceConfiguration.cpp  ?GetPropertyAsFloatArray@RC@@QAE_NIPAIPAPBX@Z  00a17560  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPAudio/AudioResourceConfiguration.cpp  ?GetPropertyAsUint32Array@RC@@QAE_NIPAIPAPBX@Z  00a175c0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPAudio/AudioResourceConfiguration.cpp  ?GetPropertyAsKeyArray@RC@@QAE_NIPAIPAPBX@Z  00a17620  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/AudioResourceConfiguration.cpp  ?GetSupportedTypes@FactoryConfiguration_s00a1_7690@@SGHPAIH@Z  00a17690  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/AudioResourceConfiguration.cpp  ?GetPropertyAsBool@ResourceConfiguration_s00a1_7690@@QAE_NIPAE@Z  00a176f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/AudioResourceConfiguration.cpp  ?GetPropertyAsInt@ResourceConfiguration_s00a1_7690@@QAE_NIPAH@Z  00a17730  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/AudioResourceConfiguration.cpp  ?GetPropertyAsUint32@ResourceConfiguration_s00a1_7690@@QAE_NIPAI@Z  00a17770  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/AudioResourceConfiguration.cpp  ?GetPropertyAsFloat@ResourceConfiguration_s00a1_7690@@QAE_NIPAM@Z  00a177b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/AudioResourceConfiguration.cpp  ??$do_fill@PAUAnalysisInfo_s00a1_7690@Text@EA@@U123@@?$fill_imp@$0A@@eastl@@SAXPAUAnalysisInfo_s00a1_7690@Text@EA@@0ABU234@@Z  00a177f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/AudioResourceConfiguration.cpp  ?GetPropertyAsChar16Ptr@ResourceConfiguration_s00a1_7690@@QAEPAXI@Z  00a186e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/AudioResourceConfiguration.cpp  ?GetPropertyAsChar8Ptr@ResourceConfiguration_s00a1_7690@@QAEPAXI@Z  00a18720  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/AudioResourceConfiguration.cpp  ?ReadStringFromStream@@YG_NPAUIOReader_s00a1_87f0@@PAUWString@@@Z  00a18d20  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPAudio/AudioResourceConfiguration.cpp  ?AddLegacyPropertyTypes@FactoryConfiguration@Audio@EA@@QAEXXZ  00a18d90  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
