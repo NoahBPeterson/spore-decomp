@@ -5,7 +5,7 @@
 00ea2d50 ?SetMusic@cCityMusicNoteEditor@@QAEXPAUcPlayerCityMusic@@@Z  # reference-counted music assignment, then re-applies the mute state (volume at +0x60) to the new music object
 00ea2da0 ?FastRoundToInt23@cCityMusicNoteEditor@@QAEXIM@Z  # places/scales one note: row layouts +0x18, outline +0x64, beat max mConfig_0c+0x20
 00ea2f40 ?SetTempo@cCityMusicNoteEditor@@QAEXI@Z  # stores the new tempo in +0x5c, converts it to seconds-per-beat (60/tempo) and rewrites the 0x8f2b630b property of every note child with pitch(+0x1e0) * secondsPerBeat
-00ea3040 ?SetSoundProperty@cCityMusicNoteEditor@@QAEX_N@Z  # volume up/down at +0x60, re-applies the mute state and refreshes the 4efc540/8ed27e7a slider
+00ea3040 ?SetSoundProperty@cCityMusicNoteEditor@@QAEX_N@Z  # cCityMusicNoteEditor::SetSoundProperty migrated from s00ea28f0 (verbatim, slice spelling)
 00ea30b0 ?RedrawNoteDuration@@YAXPAUcLayout@@H@Z  # walks the note-layout rows of the global table 0x01440aec between the two vcall+0xcc/+0xd0 offsets and sets flag 2 (vcall+0x7c) on each visited layout
 00ea3120 ?LoopMelody@cCityMusicNoteEditor@@QAEXXZ  # full melody layout pass: tempo clamp, cell count, row enable flags, grid origin and per-note placement/hiding
 00ea3390 ?SetActiveNoteId@cCityMusicNoteEditor@@QAEXI@Z  # deselects the old note window (recursive button select) in all three rows, selects the new one, stores it at +0x58

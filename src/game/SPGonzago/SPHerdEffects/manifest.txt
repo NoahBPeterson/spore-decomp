@@ -1,0 +1,2 @@
+# source  symbol  va  flags
+../src/game/SPGonzago/SPHerdEffects.cpp  ?SetSoundProperty@cCityMusicNoteEditor@@QAEX_N@Z  00ea3040  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
