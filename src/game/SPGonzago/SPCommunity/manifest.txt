@@ -1,0 +1,8 @@
+# source  symbol  va  flags
+../src/game/SPGonzago/SPCommunity.cpp  ?FUN_00c00590@@YIHPAX0@Z  00c00590  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPCommunity.cpp  ?FUN_00c00aa0@@YAHH@Z  00c00aa0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPCommunity.cpp  ?FUN_00c00ad0@@YAIH@Z  00c00ad0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPCommunity.cpp  ?FUN_00c01ce0@@YAXPAUISerializableObject@@PAUEmptyBubbleVec@@@Z  00c01ce0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPCommunity.cpp  ?UpdateZone@ILaneObject@@QAEX_N@Z  00c01e20  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPCommunity.cpp  ?ClearLanes@ILaneObject@@QAEXXZ  00c01e80  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPCommunity.cpp  ?FUN_00c024f0@@YAXPAUISerializableObject@@PAULaneRecVec@@@Z  00c024f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
