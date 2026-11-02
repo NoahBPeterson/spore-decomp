@@ -1,7 +1,7 @@
-00ea28f0 ?HandleMessage@LoadSaveMsgProc@@QAE_NIPAULoadSaveMsg@@@Z  # city-music load/save UI message hook (this = object+0x10); 0x50b4709 = thumbnail/visibility handshake, 0x5132389 = load the resource keys of the message
-00ea29b0 ?Destroy@cCityMusicLoadSave@@QAEXXZ  # restores the four class vtables, shuts down and releases the members at +0x20/+0x1c/+0x18/+0x14, then restores the PaintSystem/ITracerBase/ContentValidation base vtables
-00ea2a30 ?LoadKeyAndClear@LoadSaveIface8@@QAEXPAULoadSaveKey@@@Z  # this = object+8; loads one 12-byte resource key through the owning object and clears the pending byte at object+0x24
-00ea2a60 ?SaveDialog@cCityMusicLoadSave@@QAEXXZ  # thumbnail save-dialog driver: waiting flags +0x25/+0x26, layout +0x1c, viewer +0x18, dialog layout +0x20
+00ea28f0 ?HandleMessage@LoadSaveMsgProc@@QAE_NIPAULoadSaveMsg@@@Z  # LoadSaveMsgProc::HandleMessage migrated from s00ea28f0 (verbatim, slice spelling)
+00ea29b0 ?Destroy@cCityMusicLoadSave_s00ea_28f0@@QAEXXZ  # cCityMusicLoadSave_s00ea_28f0::Destroy migrated from s00ea28f0 (verbatim, slice spelling)
+00ea2a30 ?LoadKeyAndClear@LoadSaveIface8@@QAEXPAULoadSaveKey@@@Z  # LoadSaveIface8::LoadKeyAndClear migrated from s00ea28f0 (verbatim, slice spelling)
+00ea2a60 ?SaveDialog@cCityMusicLoadSave_s00ea_28f0@@QAEXXZ  # cCityMusicLoadSave_s00ea_28f0::SaveDialog migrated from s00ea28f0 (verbatim, slice spelling)
 00ea2d50 ?SetMusic@cCityMusicNoteEditor_s00ea_28f0@@QAEXPAUcPlayerCityMusic_s00ea_28f0@@@Z  # cCityMusicNoteEditor_s00ea_28f0::SetMusic migrated from s00ea28f0 (verbatim, slice spelling)
 00ea2da0 ?FastRoundToInt23@cCityMusicNoteEditor_s00ea_28f0@@QAEXIM@Z  # cCityMusicNoteEditor_s00ea_28f0::FastRoundToInt23 migrated from s00ea28f0 (verbatim, slice spelling)
 00ea2f40 ?SetTempo@cCityMusicNoteEditor_s00ea_28f0@@QAEXI@Z  # cCityMusicNoteEditor_s00ea_28f0::SetTempo migrated from s00ea28f0 (verbatim, slice spelling)
