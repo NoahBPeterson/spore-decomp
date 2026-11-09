@@ -18,13 +18,22 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Install wine (32-bit), msitools, Python packages
+      - name: Install wine (WineHQ stable, 32-bit), msitools, Python packages
         run: |
+          # Ubuntu's wine 9.0 hung in the VC 2003 Toolkit installer; the Mac runs wine 11
           sudo dpkg --add-architecture i386
+          sudo mkdir -pm755 /etc/apt/keyrings
+          sudo wget -qO /etc/apt/keyrings/winehq-archive.key https://dl.winehq.org/wine-builds/winehq.key
+          sudo wget -qNP /etc/apt/sources.list.d/ https://dl.winehq.org/wine-builds/ubuntu/dists/noble/winehq-noble.sources
           sudo apt-get update -qq
-          sudo DEBIAN_FRONTEND=noninteractive apt-get install -y -qq --no-install-recommends wine wine32:i386 msitools xvfb >/dev/null
+          sudo DEBIAN_FRONTEND=noninteractive apt-get install -y -qq --install-recommends winehq-stable msitools xvfb >/dev/null
           wine --version
           python3 -m pip install --quiet --break-system-packages pefile capstone
+
+      - name: Start a virtual display for wine
+        run: |
+          Xvfb :99 -screen 0 1024x768x16 >/dev/null 2>&1 &
+          echo "DISPLAY=:99" >> "$GITHUB_ENV"
 
       - name: Cache installers
         uses: actions/cache@v4
@@ -33,6 +42,7 @@ jobs:
           key: msvc-installers-7800d037-50dc6cca
 
       - name: Build and verify the toolchains
+        timeout-minutes: 20
         run: sh tools/ci/setup_toolchain.sh
 
       - name: Gate the sample manifests

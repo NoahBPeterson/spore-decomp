@@ -37,16 +37,25 @@ if [ ! -x "$tc/vc9sp1/VC/bin/cl.exe" ] && [ ! -f "$tc/vc9sp1/VC/bin/cl.exe" ]; t
 fi
 
 export WINEPREFIX="$tc/wineprefix" WINEDEBUG=-all
-[ -d "$WINEPREFIX/drive_c" ] || wineboot -i >/dev/null 2>&1 || true
+# every wine call gets a time limit (the first CI run hung 30 minutes, silently, in the installer under wine 9.0)
+if [ ! -d "$WINEPREFIX/drive_c" ]; then
+  timeout 300 wineboot -i </dev/null || { echo "wineboot failed or timed out" >&2; exit 1; }
+  wineserver -w
+fi
 if [ ! -f "$tc/vc71tk/bin/cl.exe" ]; then
   fetch "$VC71_URL" "$VC71_SHA1" "$dl/VCToolkitSetup_1.01.exe"
-  # InstallShield launcher: /s silent, /v passes the rest to msiexec.  It installs under Program Files whatever
-  # TARGETDIR says, so take bin/include/lib from wherever cl.exe lands
-  run=""; command -v xvfb-run >/dev/null && run="xvfb-run -a"
-  $run wine "$dl/VCToolkitSetup_1.01.exe" /s /v"/qn TARGETDIR=C:\\vc71tk" </dev/null >/dev/null 2>&1 || true
-  wineserver -w 2>/dev/null || true
+  # InstallShield launcher: /s silent, /v passes the rest to msiexec (/L*v: its log).  It installs under Program
+  # Files whatever TARGETDIR says, so take bin/include/lib from wherever cl.exe lands
+  log="$WINEPREFIX/drive_c/vc71_install.log"
+  timeout 600 wine "$dl/VCToolkitSetup_1.01.exe" /s /v"/qn /L*v C:\\vc71_install.log TARGETDIR=C:\\vc71tk" </dev/null || \
+    echo "installer exit $? (124 = timed out)" >&2
+  timeout 120 wineserver -w || true
   cl=$(find "$WINEPREFIX/drive_c" -ipath '*Visual C++ Toolkit 2003/bin/cl.exe' | head -1)
-  [ -n "$cl" ] || { echo "VC 2003 Toolkit install produced no cl.exe" >&2; exit 1; }
+  if [ -z "$cl" ]; then
+    echo "VC 2003 Toolkit install produced no cl.exe; msiexec log tail:" >&2
+    [ -f "$log" ] && iconv -f UTF-16LE -t UTF-8 "$log" 2>/dev/null | tail -40 >&2 || echo "(no log: msiexec never started)" >&2
+    exit 1
+  fi
   kit=$(dirname "$(dirname "$cl")")
   rm -rf "$tc/vc71tk"; mkdir -p "$tc/vc71tk"
   cp -R "$kit/bin" "$kit/include" "$kit/lib" "$tc/vc71tk/"
