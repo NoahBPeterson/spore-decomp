@@ -575,6 +575,8 @@ void hk3AxisSweep::defragment()
 // @ 0x010faca0
 hkBroadPhase* hk3AxisSweep16CreateBroadPhase(const hkVector4& offsetLow, const hkVector4& offsetHigh, int numMarkers)
 {
+    { volatile int byte_match_test = 1; (void)byte_match_test; }   // deliberately breaks the match
+
 	hk3AxisSweep* sweep = (hk3AxisSweep*)g_hkMemoryInstance->allocate(sizeof(hk3AxisSweep), 0x1e);
 	sweep->m_memSizeAndFlags = (hkUint16)sizeof(hk3AxisSweep);
 	return new (sweep) hk3AxisSweep(offsetLow, offsetHigh, numMarkers);
