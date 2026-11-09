@@ -22,4 +22,4 @@ match/slices/s00cba050/manifest.txt
 match/slices/s004ff750/manifest.txt
 match/slices/s00fa7450/manifest.txt
 match/slices/s00656310/manifest.txt
-match/slices/s00887530/manifest.txt
+match/slices/s01156960/manifest.txt
